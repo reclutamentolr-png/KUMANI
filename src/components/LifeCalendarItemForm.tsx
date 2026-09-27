@@ -266,6 +266,7 @@ export default function LifeCalendarItemForm(props: Props) {
             </label>
           ))}
         </div>
+        <p className="mt-2 text-xs text-gray-500">{t('reminderHint')}</p>
       </div>
 
       <div>

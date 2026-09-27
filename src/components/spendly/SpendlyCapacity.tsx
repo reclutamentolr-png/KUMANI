@@ -13,6 +13,7 @@ import {
   MONTH_SHORT_IT,
   type SpendlyIncome,
   type SpendlyFixedExpense,
+  type SpendlyFixedPayment,
   type SpendlyVariableExpense,
   type BudgetStatus,
 } from '@/lib/spendly'
@@ -26,11 +27,13 @@ const STATUS_STYLE: Record<BudgetStatus, { bar: string; text: string; icon: type
 export default function SpendlyCapacity({
   income,
   fixedExpenses,
+  payments = [],
   variableExpenses,
   year,
 }: {
   income: SpendlyIncome[]
   fixedExpenses: SpendlyFixedExpense[]
+  payments?: SpendlyFixedPayment[]
   variableExpenses: SpendlyVariableExpense[]
   year: number
 }) {
@@ -38,9 +41,9 @@ export default function SpendlyCapacity({
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1)
 
   const capacities = useMemo(() => {
-    const totals = computeMonthlyTotals(income, fixedExpenses, variableExpenses, year)
+    const totals = computeMonthlyTotals(income, fixedExpenses, variableExpenses, year, payments)
     return totals.map(computeMonthCapacity)
-  }, [income, fixedExpenses, variableExpenses, year])
+  }, [income, fixedExpenses, variableExpenses, year, payments])
 
   const selected = capacities[selectedMonth - 1]
   const style = STATUS_STYLE[selected.status]

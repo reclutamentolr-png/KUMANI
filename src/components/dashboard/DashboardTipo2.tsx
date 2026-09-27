@@ -30,6 +30,7 @@ export default async function DashboardTipo2({
   proToolNames,
   favoriteToolNames,
   proTrialDaysLeft = null,
+  agenda = null,
   network,
   userId,
 }: {
@@ -44,6 +45,8 @@ export default async function DashboardTipo2({
   // Prova Pro in corso: il riquadro dell'abbonamento propone Pro come
   // scelta principale e il Base come alternativa.
   proTrialDaysLeft?: number | null
+  // Riquadro "I prossimi giorni" (agenda unica), già pronto dal server
+  agenda?: React.ReactNode
   network: DashboardNetworkData
   userId: string
 }) {
@@ -87,6 +90,8 @@ export default async function DashboardTipo2({
 
       {/* Novità di Affinity Amicizie (solo per chi partecipa) */}
       <AffinityBadge />
+
+      {agenda}
 
       {/* Striscia di stato compatta */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

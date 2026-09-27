@@ -29,9 +29,16 @@ async function requireActiveLifeCalendarAccess(): Promise<
   return { ok: true, userId: user.id }
 }
 
+// "Personalizzato" richiede un numero di giorni valido: senza, al rinnovo la
+// scadenza veniva archiviata invece di spostarsi avanti.
+function invalidCustomRecurrence(form: LifeCalendarItemFormData): boolean {
+  return form.recurrence === 'custom' && !(Number(form.recurrenceCustomDays) >= 1)
+}
+
 export async function createItem(form: LifeCalendarItemFormData): Promise<ActionResult<{ id: string }>> {
   const gate = await requireActiveLifeCalendarAccess()
   if (!gate.ok) return { success: false, message: gate.message }
+  if (invalidCustomRecurrence(form)) return { success: false, message: 'customDaysRequired' }
 
   const supabase = await createClient()
   const { data, error } = await supabase
@@ -62,6 +69,7 @@ export async function createItem(form: LifeCalendarItemFormData): Promise<Action
 export async function updateItem(id: string, form: LifeCalendarItemFormData): Promise<ActionResult<null>> {
   const gate = await requireActiveLifeCalendarAccess()
   if (!gate.ok) return { success: false, message: gate.message }
+  if (invalidCustomRecurrence(form)) return { success: false, message: 'customDaysRequired' }
 
   const supabase = await createClient()
   const { error } = await supabase

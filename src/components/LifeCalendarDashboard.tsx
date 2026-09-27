@@ -3,7 +3,9 @@
 import { useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import Link from '@/components/LocalizedLink'
-import { Search, PlusCircle, CalendarClock } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { Search, PlusCircle, CalendarClock, Archive, X } from 'lucide-react'
+import { deleteProfile } from '@/app/actions/lifeCalendar'
 import LifeCalendarItemCard from '@/components/LifeCalendarItemCard'
 import { getItemStatus, CATEGORIES, type Category, type ItemStatus } from '@/lib/lifeCalendar'
 
@@ -19,12 +21,31 @@ type Item = {
 
 type Profile = { id: string; name: string }
 
-export default function LifeCalendarDashboard({ items, profiles }: { items: Item[]; profiles: Profile[] }) {
+type ArchivedItem = { id: string; title: string; category: string; due_date: string }
+
+export default function LifeCalendarDashboard({
+  items,
+  profiles,
+  archived = [],
+}: {
+  items: Item[]
+  profiles: Profile[]
+  archived?: ArchivedItem[]
+}) {
   const t = useTranslations('lifeCalendar')
   const [search, setSearch] = useState('')
   const [categoryFilter, setCategoryFilter] = useState<Category | 'all'>('all')
   const [profileFilter, setProfileFilter] = useState<string | 'all'>('all')
   const [statusFilter, setStatusFilter] = useState<ItemStatus | 'all'>('all')
+  const router = useRouter()
+  const [showArchive, setShowArchive] = useState(false)
+  const [manageProfiles, setManageProfiles] = useState(false)
+
+  const removeProfile = async (profile: Profile) => {
+    if (!confirm(t('deleteProfileConfirm', { name: profile.name }))) return
+    await deleteProfile(profile.id)
+    router.refresh()
+  }
 
   const summary = useMemo(() => {
     const counts: Record<ItemStatus, number> = { regular: 0, upcoming: 0, urgent: 0, expired: 0 }
@@ -85,6 +106,15 @@ export default function LifeCalendarDashboard({ items, profiles }: { items: Item
             ))}
           </select>
           {profiles.length > 0 && (
+            <button
+              type="button"
+              onClick={() => setManageProfiles((v) => !v)}
+              className="px-3 py-2 border-2 border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:border-amber-400 bg-white"
+            >
+              {t('manageProfiles')}
+            </button>
+          )}
+          {profiles.length > 0 && (
             <select
               value={profileFilter}
               onChange={(e) => setProfileFilter(e.target.value)}
@@ -100,6 +130,22 @@ export default function LifeCalendarDashboard({ items, profiles }: { items: Item
           )}
         </div>
 
+        {manageProfiles && profiles.length > 0 && (
+          <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 p-3">
+            <p className="mb-2 text-xs text-amber-800">{t('manageProfilesHint')}</p>
+            <div className="flex flex-wrap gap-2">
+              {profiles.map((profile) => (
+                <span key={profile.id} className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 text-sm text-gray-700 border border-amber-200">
+                  {profile.name}
+                  <button type="button" onClick={() => removeProfile(profile)} className="text-gray-400 hover:text-red-600" aria-label={t('delete')}>
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
         {filteredItems.length > 0 ? (
           <div className="space-y-3">
             {filteredItems.map((item) => (
@@ -113,6 +159,31 @@ export default function LifeCalendarDashboard({ items, profiles }: { items: Item
           </div>
         )}
       </div>
+
+      {archived.length > 0 && (
+        <div className="bg-white rounded-2xl border border-gray-200 p-5">
+          <button type="button" onClick={() => setShowArchive((v) => !v)} className="flex w-full items-center justify-between text-left font-semibold text-gray-700">
+            <span className="flex items-center gap-2">
+              <Archive className="h-4 w-4 text-gray-400" /> {t('archiveTitle', { count: archived.length })}
+            </span>
+            <span className="text-sm text-amber-700">{showArchive ? t('hide') : t('show')}</span>
+          </button>
+          {showArchive && (
+            <ul className="mt-3 divide-y divide-gray-100">
+              {archived.map((item) => (
+                <li key={item.id}>
+                  <Link href={`/marketplace/life-calendar/${item.id}`} className="flex items-center justify-between gap-3 py-2.5 text-sm hover:text-amber-700">
+                    <span className="truncate text-gray-700">{item.title}</span>
+                    <span className="shrink-0 text-xs text-gray-400">
+                      {t(`category_${item.category}`)} · {new Date(`${item.due_date}T12:00:00Z`).toLocaleDateString('it-IT')}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
 
       <Link
         href="/marketplace/life-calendar/new"

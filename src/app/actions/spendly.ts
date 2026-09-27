@@ -280,3 +280,24 @@ export async function deleteVariableExpense(id: string): Promise<ActionResult<nu
 
   return { success: true, data: null }
 }
+
+// ---------- Bollette ----------
+
+// Disattiva una bolletta (contratto chiuso: dal mese prossimo non si ripete
+// più, lo storico resta) o la riattiva.
+export async function setBillActive(id: string, active: boolean): Promise<ActionResult<null>> {
+  const gate = await requireActiveSpendlyAccess()
+  if (!gate.ok) return { success: false, message: gate.message }
+
+  const supabase = await createClient()
+  const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Rome' }).format(new Date())
+  const { data: bill } = await supabase.from('spendly_fixed_expenses').select('start_date').eq('id', id).eq('user_id', gate.userId).maybeSingle()
+  if (!bill) return { success: false, message: 'saveError' }
+  const { error } = await supabase
+    .from('spendly_fixed_expenses')
+    .update({ end_date: active ? null : today < bill.start_date ? bill.start_date : today, updated_at: new Date().toISOString() })
+    .eq('id', id)
+    .eq('user_id', gate.userId)
+  if (error) return { success: false, message: 'saveError' }
+  return { success: true, data: null }
+}

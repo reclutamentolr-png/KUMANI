@@ -21,6 +21,9 @@ import DashboardTipo2 from '@/components/dashboard/DashboardTipo2'
 import ProArea from '@/components/dashboard/ProArea'
 import ProTeaser from '@/components/dashboard/ProTeaser'
 import { getProAreaStats } from '@/lib/proAreaStats'
+import UpcomingAgenda from '@/components/agenda/UpcomingAgenda'
+import { loadAgenda } from '@/lib/agenda-server'
+import { addDays, todayKey } from '@/lib/agenda'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 
 export const dynamic = 'force-dynamic'
@@ -121,6 +124,26 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   const proToolNames = visibleTools.filter((tool) => requiredPlan(tool.toolName) === 'pro').map((tool) => tool.toolName)
   const favoriteToolNames = await getFavoriteToolNames(supabase, user.id)
 
+  // "I prossimi giorni": appuntamenti, promemoria, bollette e scadenze dei
+  // prossimi 7 giorni (più quelle scadute negli ultimi 60), dagli strumenti
+  // che l'utente può usare.
+  const agendaSources = {
+    memolife: isToolEnabled('memolife'),
+    spendly: isToolEnabled('spendly'),
+    lifeCalendar: isToolEnabled('life-calendar'),
+  }
+  const agendaToday = todayKey()
+  const hasAgenda = agendaSources.memolife || agendaSources.spendly || agendaSources.lifeCalendar
+  const agendaEvents = hasAgenda
+    ? await loadAgenda(supabase, user.id, {
+        from: agendaToday,
+        to: addDays(agendaToday, 6),
+        overdueSince: addDays(agendaToday, -60),
+        sources: agendaSources,
+        useReminders: true,
+      })
+    : []
+
   return (
     <div className="min-h-screen bg-[var(--background)]" suppressHydrationWarning>
       <ImpersonationBanner />
@@ -173,6 +196,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
           proToolNames={proToolNames}
           favoriteToolNames={favoriteToolNames}
           proTrialDaysLeft={proTrial?.daysLeft ?? null}
+          agenda={hasAgenda ? <UpcomingAgenda events={agendaEvents} today={agendaToday} sources={agendaSources} /> : null}
           network={network}
           userId={user.id}
         />

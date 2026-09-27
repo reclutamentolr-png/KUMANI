@@ -4,7 +4,7 @@
 // che nei componenti client).
 
 export type IncomeType = 'fissa' | 'variabile'
-export type FixedExpenseFrequency = 'mensile' | 'bimestrale' | 'trimestrale' | 'semestrale' | 'annuale'
+export type FixedExpenseFrequency = 'mensile' | 'bimestrale' | 'trimestrale' | 'semestrale' | 'annuale' | 'una_tantum'
 export type BudgetStatus = 'positivo' | 'in_guardia' | 'critico'
 
 export const INCOME_CATEGORIES = ['stipendio', 'bonus', 'freelance', 'vendite', 'altro'] as const
@@ -76,6 +76,7 @@ const FREQUENCY_STEP: Record<FixedExpenseFrequency, number> = {
   trimestrale: 3,
   semestrale: 6,
   annuale: 12,
+  una_tantum: 0,
 }
 
 /** Anno corrente reale (non hardcoded, per non richiedere di ricordarsi di
@@ -127,8 +128,42 @@ export function fixedExpenseAppliesToMonth(expense: SpendlyFixedExpense, year: n
     if (targetIdx > endIdx) return false
   }
   if (expense.frequency === 'mensile') return true
+  // Una tantum: solo nel mese della data indicata.
+  if (expense.frequency === 'una_tantum') return targetIdx === startIdx
   const step = FREQUENCY_STEP[expense.frequency]
   return (targetIdx - startIdx) % step === 0
+}
+
+/** Primo giorno del mese (chiave di una singola scadenza): '2026-10-01'. */
+export function periodOf(year: number, month: number): string {
+  return `${year}-${String(month).padStart(2, '0')}-01`
+}
+
+/**
+ * Data di scadenza di una spesa fissa nel mese indicato ('YYYY-MM-DD'), o
+ * null se in quel mese non è dovuta. Il giorno è il "giorno di scadenza"
+ * (billing_day) o, se manca, quello della data di inizio; nei mesi più corti
+ * si usa l'ultimo giorno (es. 31 → 30 novembre). Una tantum: la data esatta.
+ */
+export function fixedExpenseDueDate(expense: SpendlyFixedExpense, year: number, month: number): string | null {
+  if (!fixedExpenseAppliesToMonth(expense, year, month)) return null
+  if (expense.frequency === 'una_tantum') return expense.start_date
+  const wanted = expense.billing_day ?? Number(expense.start_date.slice(8, 10))
+  const lastDay = new Date(Date.UTC(year, month, 0)).getUTCDate()
+  return `${year}-${String(month).padStart(2, '0')}-${String(Math.min(wanted, lastDay)).padStart(2, '0')}`
+}
+
+/** Pagamento registrato per una scadenza (importo reale pagato). */
+export interface SpendlyFixedPayment {
+  expense_id: string
+  period: string
+  amount: number
+  paid_on: string
+}
+
+/** Chiave "spesa:mese" per ritrovare in fretta il pagamento di una scadenza. */
+export function paymentKey(expenseId: string, period: string): string {
+  return `${expenseId}:${period}`
 }
 
 export function formatCurrency(amount: number): string {
@@ -153,8 +188,11 @@ export function computeMonthlyTotals(
   income: SpendlyIncome[],
   fixedExpenses: SpendlyFixedExpense[],
   variableExpenses: SpendlyVariableExpense[],
-  year: number
+  year: number,
+  // Scadenze già pagate: nel mese conta l'importo reale al posto della stima.
+  payments: SpendlyFixedPayment[] = []
 ): MonthTotals[] {
+  const paid = new Map(payments.map((p) => [paymentKey(p.expense_id, p.period), Number(p.amount)]))
   const months: MonthTotals[] = Array.from({ length: 12 }, (_, i) => ({
     month: i + 1,
     income: 0,
@@ -173,7 +211,7 @@ export function computeMonthlyTotals(
   for (const item of fixedExpenses) {
     for (const bucket of months) {
       if (fixedExpenseAppliesToMonth(item, year, bucket.month)) {
-        bucket.fixedExpenses += item.amount
+        bucket.fixedExpenses += paid.get(paymentKey(item.id, periodOf(year, bucket.month))) ?? item.amount
       }
     }
   }

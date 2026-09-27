@@ -3,11 +3,12 @@
 import { usePathname } from 'next/navigation'
 import Link from '@/components/LocalizedLink'
 import { useTranslations } from 'next-intl'
-import { LayoutDashboard, TrendingUp, Repeat, Wallet, Gauge } from 'lucide-react'
+import { LayoutDashboard, TrendingUp, Repeat, Wallet, Gauge, Receipt } from 'lucide-react'
 
 const TABS = [
   { href: '/marketplace/spendly', icon: LayoutDashboard, key: 'navDashboard' },
   { href: '/marketplace/spendly/entrate', icon: TrendingUp, key: 'navIncome' },
+  { href: '/marketplace/spendly/bollette', icon: Receipt, key: 'navBills' },
   { href: '/marketplace/spendly/spese-fisse', icon: Repeat, key: 'navFixedExpenses' },
   { href: '/marketplace/spendly/spese-variabili', icon: Wallet, key: 'navVariableExpenses' },
   { href: '/marketplace/spendly/capienza', icon: Gauge, key: 'navCapacity' },

@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import SpendlyCapacity from '@/components/spendly/SpendlyCapacity'
-import type { SpendlyIncome, SpendlyFixedExpense, SpendlyVariableExpense } from '@/lib/spendly'
+import type { SpendlyIncome, SpendlyFixedExpense, SpendlyFixedPayment, SpendlyVariableExpense } from '@/lib/spendly'
 
 export default async function SpendlyCapacityPage({
   searchParams,
@@ -17,7 +17,7 @@ export default async function SpendlyCapacityPage({
   } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const [{ data: income }, { data: fixedExpenses }, { data: variableExpenses }] = await Promise.all([
+  const [{ data: income }, { data: fixedExpenses }, { data: variableExpenses }, { data: payments }] = await Promise.all([
     supabase
       .from('spendly_income')
       .select('id, description, amount, income_type, category, income_date, notes')
@@ -38,6 +38,13 @@ export default async function SpendlyCapacityPage({
       .gte('expense_date', `${year}-01-01`)
       .lte('expense_date', `${year}-12-31`)
       .returns<SpendlyVariableExpense[]>(),
+    supabase
+      .from('spendly_fixed_payments')
+      .select('expense_id, period, amount, paid_on')
+      .eq('user_id', user.id)
+      .gte('period', `${year}-01-01`)
+      .lte('period', `${year}-12-01`)
+      .returns<SpendlyFixedPayment[]>(),
   ])
 
   return (
@@ -45,6 +52,7 @@ export default async function SpendlyCapacityPage({
       income={income || []}
       fixedExpenses={fixedExpenses || []}
       variableExpenses={variableExpenses || []}
+      payments={payments || []}
       year={year}
     />
   )

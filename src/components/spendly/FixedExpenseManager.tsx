@@ -3,17 +3,24 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { Plus, Repeat, Calculator, CalendarDays, Pencil, Trash2 } from 'lucide-react'
+import { Plus, Repeat, Calculator, CalendarDays, Pencil, Trash2, CheckCircle2, AlertCircle, Undo2 } from 'lucide-react'
 import SpendlyModal from './SpendlyModal'
+import Link from '@/components/LocalizedLink'
 import KpiCard from './KpiCard'
 import YearSelect from './YearSelect'
 import { createFixedExpense, updateFixedExpense, deleteFixedExpense } from '@/app/actions/spendly'
+import { markBillPaid, unmarkBillPaid } from '@/app/actions/agenda'
+import { todayKey } from '@/lib/agenda'
 import {
   FIXED_EXPENSE_CATEGORIES,
   formatCurrency,
   currentYearOnly,
   fixedExpenseAppliesToMonth,
+  fixedExpenseDueDate,
+  paymentKey,
+  periodOf,
   type SpendlyFixedExpense,
+  type SpendlyFixedPayment,
   type FixedExpenseCategory,
   type FixedExpenseFrequency,
 } from '@/lib/spendly'
@@ -34,6 +41,7 @@ const FREQUENCY_KEY: Record<FixedExpenseFrequency, string> = {
   trimestrale: 'frequencyQuarterly',
   semestrale: 'frequencySemiannual',
   annuale: 'frequencyAnnual',
+  una_tantum: 'frequencyOneOff',
 }
 
 type FormState = {
@@ -47,22 +55,75 @@ type FormState = {
   notes: string
 }
 
+// Giorno di oggi in Italia (toISOString darebbe il giorno UTC).
 function todayISO() {
-  return new Date().toISOString().slice(0, 10)
+  return todayKey()
 }
+
+const formatDay = (key: string) => new Date(`${key}T12:00:00Z`).toLocaleDateString('it-IT')
 
 function emptyForm(): FormState {
-  return { description: '', amount: '', frequency: 'mensile', category: 'mutuo_affitto', startDate: todayISO(), endDate: '', billingDay: '1', notes: '' }
+  return { description: '', amount: '', frequency: 'mensile', category: 'mutuo_affitto', startDate: todayISO(), endDate: '', billingDay: '', notes: '' }
 }
 
-export default function FixedExpenseManager({ items, year }: { items: SpendlyFixedExpense[]; year: number }) {
+export default function FixedExpenseManager({
+  items,
+  payments = [],
+  year,
+  autoOpen = false,
+}: {
+  items: SpendlyFixedExpense[]
+  payments?: SpendlyFixedPayment[]
+  year: number
+  // Arrivando da "+ Aggiungi → Bolletta" il modulo si apre subito
+  autoOpen?: boolean
+}) {
   const t = useTranslations('spendly')
   const router = useRouter()
-  const [modalOpen, setModalOpen] = useState(false)
+  const [modalOpen, setModalOpen] = useState(autoOpen)
   const [editing, setEditing] = useState<SpendlyFixedExpense | null>(null)
   const [form, setForm] = useState<FormState>(emptyForm())
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [paying, setPaying] = useState<string | null>(null)
+
+  // Scadenze del mese: questo mese per l'anno corrente (più le non pagate
+  // dei mesi precedenti), altrimenti nessuna.
+  const today = todayISO()
+  const paid = new Map(payments.map((p) => [paymentKey(p.expense_id, p.period), p]))
+  const isCurrentYear = Number(today.slice(0, 4)) === year
+  const thisMonth = Number(today.slice(5, 7))
+  const dueRows = isCurrentYear
+    ? Array.from({ length: thisMonth }, (_, i) => i + 1).flatMap((month) =>
+        items.flatMap((item) => {
+          const date = fixedExpenseDueDate(item, year, month)
+          if (!date) return []
+          const period = periodOf(year, month)
+          const payment = paid.get(paymentKey(item.id, period))
+          // Mesi passati: solo quelle ancora da pagare.
+          if (month < thisMonth && payment) return []
+          return [{ item, date, period, payment }]
+        })
+      ).sort((a, b) => a.date.localeCompare(b.date))
+    : []
+
+  const pay = async (row: (typeof dueRows)[number]) => {
+    const answer = prompt(t('paidAmountPrompt', { name: row.item.description }), String(row.item.amount).replace('.', ','))
+    if (answer === null) return
+    const amount = parseFloat(answer.replace(',', '.'))
+    if (Number.isNaN(amount) || amount < 0) return
+    setPaying(row.period + row.item.id)
+    await markBillPaid(row.item.id, row.period, amount)
+    setPaying(null)
+    router.refresh()
+  }
+
+  const unpay = async (row: (typeof dueRows)[number]) => {
+    setPaying(row.period + row.item.id)
+    await unmarkBillPaid(row.item.id, row.period)
+    setPaying(null)
+    router.refresh()
+  }
 
   // Somma solo le scadenze che ricorrono davvero nell'anno selezionato,
   // mese per mese a partire da start_date (e fino a end_date) — non basta
@@ -122,14 +183,16 @@ export default function FixedExpenseManager({ items, year }: { items: SpendlyFix
       return
     }
 
+    // Una tantum: una sola scadenza, alla data indicata.
+    const oneOff = form.frequency === 'una_tantum'
     const payload = {
       description: form.description.trim(),
       amount,
       frequency: form.frequency,
       category: form.category,
       startDate: form.startDate,
-      endDate: form.endDate || null,
-      billingDay: form.billingDay ? parseInt(form.billingDay, 10) : null,
+      endDate: oneOff ? form.startDate : form.endDate || null,
+      billingDay: oneOff ? Number(form.startDate.slice(8, 10)) : form.billingDay ? parseInt(form.billingDay, 10) : Number(form.startDate.slice(8, 10)),
       notes: form.notes,
     }
 
@@ -157,6 +220,9 @@ export default function FixedExpenseManager({ items, year }: { items: SpendlyFix
         <div>
           <h2 className="text-2xl font-bold text-[var(--ink)]">{t('fixedExpensesPageTitle')}</h2>
           <p className="text-sm text-[var(--muted)]">{t('fixedExpensesPageDescription')}</p>
+          <Link href="/marketplace/spendly/bollette" className="mt-1 inline-block text-xs font-semibold text-[var(--gold)] hover:underline">
+            {t('billsMovedHint')}
+          </Link>
         </div>
         <div className="flex items-center gap-3">
           <YearSelect year={year} years={currentYearOnly()} />
@@ -175,6 +241,72 @@ export default function FixedExpenseManager({ items, year }: { items: SpendlyFix
         <KpiCard label={t('monthlyQuota')} value={formatCurrency(monthlyQuota)} icon={Calculator} />
         <KpiCard label={t('entryCount')} value={String(items.length)} icon={CalendarDays} />
       </div>
+
+      {isCurrentYear && (
+        <div className="mb-6 rounded-2xl border border-[var(--gold)]/30 bg-[var(--paper)] p-5">
+          <h3 className="mb-1 flex items-center gap-2 font-bold text-[var(--ink)]">
+            <CalendarDays className="h-5 w-5 text-[var(--gold)]" /> {t('dueThisMonth')}
+          </h3>
+          <p className="mb-4 text-xs text-[var(--muted)]">{t('dueThisMonthHint')}</p>
+          {dueRows.length === 0 ? (
+            <p className="text-sm text-[var(--muted)]">{t('noDueThisMonth')}</p>
+          ) : (
+            <ul className="space-y-2">
+              {dueRows.map((row) => {
+                const overdue = !row.payment && row.date < today
+                return (
+                  <li
+                    key={row.item.id + row.period}
+                    className={`flex flex-wrap items-center justify-between gap-3 rounded-xl border px-4 py-3 ${
+                      row.payment ? 'border-emerald-200 bg-emerald-50/60' : overdue ? 'border-red-200 bg-red-50/60' : 'border-[var(--gold)]/20 bg-white'
+                    }`}
+                  >
+                    <div className="min-w-0">
+                      <p className="flex items-center gap-1.5 font-medium text-[var(--ink)]">
+                        {row.payment ? (
+                          <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                        ) : overdue ? (
+                          <AlertCircle className="h-4 w-4 text-red-600" />
+                        ) : null}
+                        {row.item.description}
+                      </p>
+                      <p className="text-xs text-[var(--muted)]">
+                        {row.payment
+                          ? t('paidOn', { amount: formatCurrency(row.payment.amount) })
+                          : overdue
+                            ? t('overdueSince', { date: formatDay(row.date) })
+                            : t('dueOn', { date: formatDay(row.date) })}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {!row.payment && <span className="text-sm font-semibold text-[var(--ink)]">{formatCurrency(row.item.amount)}</span>}
+                      {row.payment ? (
+                        <button
+                          type="button"
+                          disabled={paying === row.period + row.item.id}
+                          onClick={() => unpay(row)}
+                          className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-[var(--muted)] hover:bg-[var(--background)] disabled:opacity-50"
+                        >
+                          <Undo2 className="h-3.5 w-3.5" /> {t('undoPaid')}
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          disabled={paying === row.period + row.item.id}
+                          onClick={() => pay(row)}
+                          className="flex items-center gap-1 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-emerald-700 disabled:opacity-50"
+                        >
+                          <CheckCircle2 className="h-3.5 w-3.5" /> {t('markPaid')}
+                        </button>
+                      )}
+                    </div>
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+        </div>
+      )}
 
       <div className="rounded-2xl border border-[var(--gold)]/20 bg-[var(--paper)] overflow-hidden">
         {items.length === 0 ? (
@@ -195,8 +327,11 @@ export default function FixedExpenseManager({ items, year }: { items: SpendlyFix
                         {t(FREQUENCY_KEY[item.frequency])}
                       </span>
                       <span>
-                        {new Date(item.start_date).toLocaleDateString('it-IT')}
-                        {item.end_date ? ` → ${new Date(item.end_date).toLocaleDateString('it-IT')}` : ''}
+                        {item.frequency === 'una_tantum'
+                          ? t('dueOn', { date: formatDay(item.start_date) })
+                          : `${t('dueEveryDay', { day: item.billing_day ?? Number(item.start_date.slice(8, 10)) })} · ${formatDay(item.start_date)}${
+                              item.end_date ? ` → ${formatDay(item.end_date)}` : ''
+                            }`}
                       </span>
                     </div>
                   </div>
@@ -264,7 +399,7 @@ export default function FixedExpenseManager({ items, year }: { items: SpendlyFix
                 onChange={(e) => setForm({ ...form, category: e.target.value as FixedExpenseCategory })}
                 className="w-full p-2.5 border border-[var(--gold)]/30 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
               >
-                {FIXED_EXPENSE_CATEGORIES.map((c) => (
+                {FIXED_EXPENSE_CATEGORIES.filter((c) => c !== 'bollette').map((c) => (
                   <option key={c} value={c}>
                     {t(CATEGORY_KEY[c])}
                   </option>
@@ -272,8 +407,10 @@ export default function FixedExpenseManager({ items, year }: { items: SpendlyFix
               </select>
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-[var(--ink)] mb-1">{t('startDateField')}</label>
+              <div className={form.frequency === 'una_tantum' ? 'col-span-2' : ''}>
+                <label className="block text-sm font-medium text-[var(--ink)] mb-1">
+                  {form.frequency === 'una_tantum' ? t('dueDateField') : t('startDateField')}
+                </label>
                 <input
                   type="date"
                   value={form.startDate}
@@ -282,7 +419,7 @@ export default function FixedExpenseManager({ items, year }: { items: SpendlyFix
                   required
                 />
               </div>
-              <div>
+              <div className={form.frequency === 'una_tantum' ? 'hidden' : ''}>
                 <label className="block text-sm font-medium text-[var(--ink)] mb-1">{t('endDateField')}</label>
                 <input
                   type="date"
@@ -294,17 +431,21 @@ export default function FixedExpenseManager({ items, year }: { items: SpendlyFix
                 />
               </div>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-[var(--ink)] mb-1">{t('billingDayField')}</label>
-              <input
-                type="number"
-                min={1}
-                max={31}
-                value={form.billingDay}
-                onChange={(e) => setForm({ ...form, billingDay: e.target.value })}
-                className="w-full p-2.5 border border-[var(--gold)]/30 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
-              />
-            </div>
+            {form.frequency !== 'una_tantum' && (
+              <div>
+                <label className="block text-sm font-medium text-[var(--ink)] mb-1">{t('dueDayField')}</label>
+                <input
+                  type="number"
+                  min={1}
+                  max={31}
+                  value={form.billingDay}
+                  placeholder={form.startDate ? String(Number(form.startDate.slice(8, 10))) : ''}
+                  onChange={(e) => setForm({ ...form, billingDay: e.target.value })}
+                  className="w-full p-2.5 border border-[var(--gold)]/30 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                />
+                <p className="mt-1 text-xs text-[var(--muted)]">{t('dueDayHint')}</p>
+              </div>
+            )}
             <div>
               <label className="block text-sm font-medium text-[var(--ink)] mb-1">{t('notesField')}</label>
               <textarea

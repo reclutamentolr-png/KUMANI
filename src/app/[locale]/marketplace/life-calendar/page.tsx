@@ -54,6 +54,15 @@ export default async function LifeCalendarPage() {
     .eq('user_id', user.id)
     .order('name')
 
+  // Scadenze completate (una tantum): consultabili nell'archivio
+  const { data: archived } = await supabase
+    .from('life_calendar_items')
+    .select('id, title, category, due_date')
+    .eq('user_id', user.id)
+    .eq('status', 'archived')
+    .order('updated_at', { ascending: false })
+    .limit(100)
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
       <header className="bg-white shadow-sm border-b sticky top-0 z-10">
@@ -82,7 +91,7 @@ export default async function LifeCalendarPage() {
           <p className="text-gray-600 max-w-2xl mx-auto text-lg">{t('heroDescription')}</p>
         </div>
 
-        <LifeCalendarDashboard items={items} profiles={profiles || []} />
+        <LifeCalendarDashboard items={items} profiles={profiles || []} archived={archived || []} />
       </main>
     </div>
   )

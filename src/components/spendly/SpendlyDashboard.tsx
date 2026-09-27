@@ -16,6 +16,7 @@ import {
   VARIABLE_EXPENSE_CATEGORIES,
   type SpendlyIncome,
   type SpendlyFixedExpense,
+  type SpendlyFixedPayment,
   type SpendlyVariableExpense,
   type VariableExpenseCategory,
 } from '@/lib/spendly'
@@ -33,11 +34,13 @@ const CATEGORY_KEY: Record<VariableExpenseCategory, string> = {
 export default function SpendlyDashboard({
   income,
   fixedExpenses,
+  payments = [],
   variableExpenses,
   year,
 }: {
   income: SpendlyIncome[]
   fixedExpenses: SpendlyFixedExpense[]
+  payments?: SpendlyFixedPayment[]
   variableExpenses: SpendlyVariableExpense[]
   year: number
 }) {
@@ -45,8 +48,8 @@ export default function SpendlyDashboard({
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1)
 
   const monthly = useMemo(
-    () => computeMonthlyTotals(income, fixedExpenses, variableExpenses, year),
-    [income, fixedExpenses, variableExpenses, year]
+    () => computeMonthlyTotals(income, fixedExpenses, variableExpenses, year, payments),
+    [income, fixedExpenses, variableExpenses, year, payments]
   )
 
   const totalIncome = monthly.reduce((s, m) => s + m.income, 0)
