@@ -1,7 +1,6 @@
 import { getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
 import UnreadMessagesBadge from '@/components/UnreadMessagesBadge'
-import CommunityPreview from './CommunityPreview'
 import KumanoDelGiornoPreview from './KumanoDelGiornoPreview'
 import CategoryToolsAccordion from './CategoryToolsAccordion'
 import InfoPopover from '@/components/InfoPopover'
@@ -23,7 +22,6 @@ import AffinityBadge from './AffinityBadge'
 export default async function DashboardTipo2({
   profile,
   shareUrl,
-  recentListings,
   unreadMessagesCount,
   visibleTools,
   lockedToolNames,
@@ -32,11 +30,9 @@ export default async function DashboardTipo2({
   proTrialDaysLeft = null,
   agenda = null,
   network,
-  userId,
 }: {
   profile: any
   shareUrl: string
-  recentListings: any[]
   unreadMessagesCount: number
   visibleTools: MarketplaceTool[]
   lockedToolNames: string[]
@@ -48,7 +44,6 @@ export default async function DashboardTipo2({
   // Riquadro "I prossimi giorni" (agenda unica), già pronto dal server
   agenda?: React.ReactNode
   network: DashboardNetworkData
-  userId: string
 }) {
   const t = await getTranslations('dashboard')
   const marketplaceT = await getTranslations('marketplace')
@@ -68,9 +63,18 @@ export default async function DashboardTipo2({
     svago: marketplaceT('categorySvago'),
     community: marketplaceT('categoryCommunity'),
   }
-  const toolsByCategory = MARKETPLACE_CATEGORIES.filter((category) => category !== 'community')
-    .map((category) => ({ category, tools: visibleTools.filter((tool) => tool.category === category) }))
-    .filter((group) => group.tools.length > 0)
+  // Community: Bacheca, Kumano del Giorno e Kordata (sezioni della
+  // piattaforma, non strumenti del Marketplace: niente stella preferiti).
+  const communityItems = [
+    { toolName: 'community-listings', href: '/marketplace/listings', iconName: 'Tag', title: marketplaceT('listings'), description: marketplaceT('listingsDescription') },
+    { toolName: 'community-spotlight', href: '/marketplace/spotlight', iconName: 'Star', title: marketplaceT('kumanoDelGiorno'), description: marketplaceT('kumanoDelGiornoDescription') },
+    { toolName: 'community-convivio', href: '/marketplace/convivio', iconName: 'HandPlatter', title: marketplaceT('convivio'), description: marketplaceT('convivioDescription') },
+  ].map((item) => ({ ...item, gradient: 'bg-[var(--ink)]', color: 'gold', category: 'community' })) as unknown as MarketplaceTool[]
+
+  const toolsByCategory = MARKETPLACE_CATEGORIES.map((category) => ({
+    category,
+    tools: category === 'community' ? communityItems : visibleTools.filter((tool) => tool.category === category),
+  })).filter((group) => group.tools.length > 0)
 
   return (
     <>
@@ -194,10 +198,8 @@ export default async function DashboardTipo2({
 
       <KumanoDelGiornoPreview />
 
-      {/* Riga secondaria: community + rete */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-        <CommunityPreview recentListings={recentListings} userId={userId} />
-
+      {/* Riepilogo della rete (gli annunci sono nella categoria Community) */}
+      <div>
         <div className="rounded-xl border border-[var(--gold)]/25 bg-[var(--paper)] p-6 shadow-sm">
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-lg font-bold text-[var(--ink)] flex items-center gap-2">

@@ -48,6 +48,7 @@ import type { LocalizedText, MessageType } from '@/lib/adminMessages'
 import { SPOTLIGHT_HOME_MIN_POOL } from '@/lib/spotlight'
 import KuManagementPanel from '@/components/admin/KuManagementPanel'
 import AffinityReportsPanel from '@/components/admin/AffinityReportsPanel'
+import ConvivioReportsPanel from '@/components/admin/ConvivioReportsPanel'
 import {
   LayoutDashboard,
   Star,
@@ -940,6 +941,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
   { id: 'listingReports', label: 'Bacheca', Icon: Flag, permission: 'listings.read' as Permission },
   { id: 'spotlight', label: 'Kumano del Giorno', Icon: Star, permission: 'listings.read' as Permission },
   { id: 'affinity', label: 'Affinity', Icon: Flag, permission: 'listings.read' as Permission },
+  { id: 'convivio', label: 'Kordata', Icon: Flag, permission: 'listings.read' as Permission },
   { id: 'coupons', label: 'Coupon', Icon: Ticket, permission: 'coupons.read' as Permission },
   { id: 'vouchers', label: 'Voucher', Icon: BadgeCheck, permission: 'vouchers.read' as Permission },
   { id: 'rewards', label: 'Premi', Icon: Gift, permission: 'rewards.read' as Permission },
@@ -2829,6 +2831,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
         {activeSection === 'spotlight' && renderSpotlight()}
         {activeSection === 'kuManagement' && <KuManagementPanel />}
         {activeSection === 'affinity' && <AffinityReportsPanel />}
+        {activeSection === 'convivio' && <ConvivioReportsPanel locale={locale} />}
         {activeSection === 'settings' && renderSettings()}
       </div>
 

@@ -6,7 +6,7 @@ import Link from '@/components/LocalizedLink'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 import type { MarketplaceTool, MarketplaceCategory } from '@/lib/marketplaceTools'
 import FavoriteStarButton from '@/components/FavoriteStarButton'
-import { Megaphone, ShieldCheck, CalendarClock, Waves, Briefcase, ChevronDown, ChevronUp, Smartphone, Lock, Zap, HeartHandshake, PartyPopper } from 'lucide-react'
+import { Megaphone, ShieldCheck, CalendarClock, Waves, Briefcase, ChevronDown, ChevronUp, Smartphone, Lock, Zap, HeartHandshake, PartyPopper, Users } from 'lucide-react'
 
 const CATEGORY_ICONS: Record<MarketplaceCategory, typeof Megaphone> = {
   marketing: Megaphone,
@@ -16,7 +16,7 @@ const CATEGORY_ICONS: Record<MarketplaceCategory, typeof Megaphone> = {
   lavoro: Briefcase,
   affinity: HeartHandshake,
   svago: PartyPopper,
-  community: Waves,
+  community: Users,
 }
 
 // Each category is its own closed card, same collapsed-until-clicked
@@ -104,7 +104,9 @@ export default function CategoryToolsAccordion({
                 href={`${tool.href}?from=dashboard`}
                 className="group relative rounded-xl border border-[var(--gold)]/25 bg-[var(--background)] p-4 transition-all hover:-translate-y-0.5 hover:border-[var(--gold)]/60 hover:shadow-md"
               >
-                <FavoriteStarButton toolName={tool.toolName} initialIsFavorite={favoriteToolNames.includes(tool.toolName)} variant="light" />
+                {(tool.category as string) !== 'community' && (
+                  <FavoriteStarButton toolName={tool.toolName} initialIsFavorite={favoriteToolNames.includes(tool.toolName)} variant="light" />
+                )}
                 {isPro && (
                   <span className="absolute left-14 top-[22px] rounded-full bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-1.5 py-0.5 text-[9px] font-extrabold tracking-wider text-[var(--ink)]">
                     PRO

@@ -5,7 +5,7 @@ import DashboardHeaderActions from '@/components/DashboardHeaderActions'
 import ActivityTracker from '@/components/ActivityTracker'
 import ChatModalWrapper from '@/components/ChatModalWrapper'
 import ListingDetailModalWrapper from '@/components/ListingDetailModalWrapper'
-import { getActiveListings, getUnreadMessagesCount } from '@/lib/listings-server'
+import { getUnreadMessagesCount } from '@/lib/listings-server'
 import ImpersonationBanner from '@/components/ImpersonationBanner'
 import InstallAppPrompt from '@/components/InstallAppPrompt'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
@@ -70,8 +70,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   // 6. URL di condivisione
   const shareUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/${locale}/ref/${profile?.referral_code}`
 
-  // 7. Annunci recenti + messaggi non letti
-  const recentListings = await getActiveListings({ limit: 3 })
+  // 7. Messaggi non letti
   const unreadMessagesCount = await getUnreadMessagesCount(user.id)
 
   // 8. Strumenti Marketplace attivi e piano dell'utente (Area Professionisti
@@ -189,7 +188,6 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
         <DashboardTipo2
           profile={profile}
           shareUrl={shareUrl}
-          recentListings={recentListings}
           unreadMessagesCount={unreadMessagesCount || 0}
           visibleTools={visibleTools}
           lockedToolNames={lockedToolNames}
@@ -198,7 +196,6 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
           proTrialDaysLeft={proTrial?.daysLeft ?? null}
           agenda={hasAgenda ? <UpcomingAgenda events={agendaEvents} today={agendaToday} sources={agendaSources} /> : null}
           network={network}
-          userId={user.id}
         />
       </main>
 

@@ -1099,3 +1099,38 @@ export async function resolveAffinityReport(reportId: string, blockUser: boolean
   }
   return { success: true }
 }
+
+// ============================================================
+// Convivio: segnalazioni e annullamento cordate
+// ============================================================
+
+export async function listConvivioReports() {
+  const admin = await verifyAdmin('listings.read')
+  if (!admin) return { reports: [], error: 'Non autorizzato' }
+  const { data, error } = await getServiceClient()
+    .from('convivio_reports')
+    .select('id, reason, status, created_at, group:convivio_groups(id, title, status, supplier_name, leader:profiles!convivio_groups_leader_id_fkey(first_name, last_name, email)), reporter:profiles!convivio_reports_reporter_fkey(first_name, last_name, email)')
+    .order('status', { ascending: false })
+    .order('created_at', { ascending: false })
+    .limit(200)
+  if (error) return { reports: [], error: error.message }
+  return { reports: data ?? [], error: null }
+}
+
+// Chiude la segnalazione; con cancelGroup annulla anche la cordata.
+export async function resolveConvivioReport(reportId: string, cancelGroup: boolean) {
+  const admin = await verifyAdmin('listings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  const service = getServiceClient()
+  const { data: report, error } = await service.from('convivio_reports').update({ status: 'closed' }).eq('id', reportId).select('group_id').single()
+  if (error || !report) return { success: false, error: error?.message || 'Segnalazione non trovata' }
+  if (cancelGroup) {
+    const { error: cancelError } = await service
+      .from('convivio_groups')
+      .update({ status: 'cancelled', updated_at: new Date().toISOString() })
+      .eq('id', report.group_id)
+      .in('status', ['open', 'ordered'])
+    if (cancelError) return { success: false, error: cancelError.message }
+  }
+  return { success: true }
+}

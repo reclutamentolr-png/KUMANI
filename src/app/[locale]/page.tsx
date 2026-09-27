@@ -13,7 +13,10 @@ import {
   Wallet,
   Gem,
   Share2,
-  Trophy
+  Trophy,
+  HandPlatter,
+  Briefcase,
+  Check
 } from 'lucide-react'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import Logo from '@/components/Logo'
@@ -23,12 +26,17 @@ import HomeKumanoDelGiorno from '@/components/spotlight/HomeKumanoDelGiorno'
 export default function LandingPage() {
   const t = useTranslations('landingHome')
 
-  // Solo 2 card: il codice referral e il riconoscimento pubblico. Niente
-  // "struttura a matrice" in evidenza — non deve sembrare un network.
+  // Codice referral, riconoscimento pubblico e Kordata (acquisti di gruppo).
+  // Niente "struttura a matrice" in evidenza — non deve sembrare un network.
   const communityCards = [
     { icon: Share2, title: t('communityCard1Title'), desc: t('communityCard1Description') },
-    { icon: Trophy, title: t('communityCard3Title'), desc: t('communityCard3Description') }
+    { icon: Trophy, title: t('communityCard3Title'), desc: t('communityCard3Description') },
+    { icon: HandPlatter, title: t('communityKordataTitle'), desc: t('communityKordataDescription') }
   ]
+
+  // Piani: Base per tutti, Pro per chi lavora con i clienti (prova gratuita).
+  const baseFeatures = [1, 2, 3, 4].map((n) => t(`planBaseFeature${n}`))
+  const proFeatures = [1, 2, 3, 4].map((n) => t(`planProFeature${n}`))
 
   const steps = [
     { step: '1', icon: Zap, title: t('step1Title'), desc: t('step1Description') },
@@ -150,7 +158,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-8 max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8 max-w-5xl mx-auto">
             {communityCards.map((card, index) => (
               <div key={index} className="rounded-2xl p-6 border border-[var(--gold)]/15 bg-white/[0.03] hover:border-[var(--gold)]/40 transition-colors">
                 <div className="w-11 h-11 rounded-lg bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] flex items-center justify-center mb-4">
@@ -163,7 +171,7 @@ export default function LandingPage() {
           </div>
 
           {/* Box trasparenza: i badge di community non sono compensi */}
-          <div className="bg-white/[0.03] border border-[var(--gold)]/30 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 max-w-3xl mx-auto">
+          <div className="bg-white/[0.03] border border-[var(--gold)]/30 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 max-w-5xl mx-auto">
             <Shield className="w-8 h-8 text-[var(--gold-bright)] flex-shrink-0" />
             <p className="text-gray-200 text-sm sm:text-base leading-relaxed">
               <strong className="text-[var(--gold-bright)]">{t('communityTransparencyLead')}</strong> {t('communityTransparencyRest')}
@@ -190,6 +198,76 @@ export default function LandingPage() {
           </div>
 
           <HomeToolsGrid />
+        </div>
+      </section>
+
+      {/* 💳 SEZIONE: I PIANI — Base per tutti, Pro per i professionisti */}
+      <section className="py-12 sm:py-20 bg-black/20">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10 sm:mb-14">
+            <div className="inline-flex items-center gap-2 bg-[var(--gold)]/10 border border-[var(--gold)]/30 px-4 py-1.5 rounded-full text-sm font-medium text-[var(--gold-bright)] mb-4">
+              <Wallet className="w-4 h-4" />
+              {t('plansEyebrow')}
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-bold text-white mb-4 break-words">
+              {t('plansTitle')} <span className="bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] bg-clip-text text-transparent">{t('plansAccent')}</span>
+            </h2>
+            <p className="text-base sm:text-xl text-gray-300 max-w-3xl mx-auto">{t('plansDescription')}</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+            <div className="flex flex-col rounded-3xl border border-[var(--gold)]/20 bg-white/[0.03] p-6 sm:p-8">
+              <h3 className="text-xl font-bold text-white">{t('planBaseName')}</h3>
+              <p className="mt-1 text-sm text-gray-400">{t('planBaseDescription')}</p>
+              <p className="mt-5 flex items-baseline gap-1.5">
+                <span className="text-4xl font-bold text-white">49 €</span>
+                <span className="text-gray-400">{t('planPerYear')}</span>
+              </p>
+              <ul className="mt-6 flex-1 space-y-3">
+                {baseFeatures.map((feature, index) => (
+                  <li key={index} className="flex items-start gap-2.5 text-sm text-gray-300">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--gold-bright)]" /> {feature}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/register"
+                className="mt-8 inline-flex items-center justify-center gap-2 rounded-lg border border-[var(--gold)]/40 bg-white/5 px-6 py-3 font-bold text-white transition-all hover:bg-white/10"
+              >
+                {t('planBaseCta')}
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+
+            <div className="relative flex flex-col rounded-3xl border-2 border-[var(--gold)] bg-gradient-to-br from-[var(--gold)]/15 via-white/[0.04] to-transparent p-6 shadow-[0_18px_50px_rgba(199,154,59,0.2)] sm:p-8">
+              <span className="absolute -top-3 right-6 rounded-full bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-3 py-1 text-xs font-bold uppercase tracking-wide text-[var(--ink)] shadow">
+                {t('planProBadge')}
+              </span>
+              <h3 className="flex items-center gap-2 text-xl font-bold text-white">
+                <Briefcase className="h-5 w-5 text-[var(--gold-bright)]" /> {t('planProName')}
+              </h3>
+              <p className="mt-1 text-sm text-gray-300">{t('planProDescription')}</p>
+              <p className="mt-5 flex items-baseline gap-1.5">
+                <span className="text-4xl font-bold text-[var(--gold-bright)]">149 €</span>
+                <span className="text-gray-400">{t('planPerYear')}</span>
+              </p>
+              <ul className="mt-6 flex-1 space-y-3">
+                {proFeatures.map((feature, index) => (
+                  <li key={index} className="flex items-start gap-2.5 text-sm text-gray-200">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--gold-bright)]" /> {feature}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/register?plan=pro"
+                className="mt-8 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3 font-bold text-[var(--ink)] shadow-xl transition-all hover:brightness-110"
+              >
+                {t('planProCta')}
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <p className="mt-3 text-center text-xs text-gray-400">{t('planProTrialNote')}</p>
+            </div>
+          </div>
         </div>
       </section>
 

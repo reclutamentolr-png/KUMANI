@@ -1,5 +1,5 @@
 import { getTranslations } from 'next-intl/server'
-import { ArrowRight, Briefcase, Crown, Hourglass, Smartphone } from 'lucide-react'
+import { ArrowRight, Briefcase, Crown, HandPlatter, Hourglass, Smartphone } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 import type { MarketplaceTool } from '@/lib/marketplaceTools'
@@ -122,6 +122,22 @@ export default async function ProArea({
             </Link>
           )
         })}
+        {/* Convivio: offerte di gruppo e richieste dei capocordata */}
+        <Link
+          href="/marketplace/convivio/fornitore"
+          className="group flex items-start gap-3 rounded-xl border border-white/10 bg-white/[0.04] p-4 transition-colors hover:border-[var(--gold)]/60 hover:bg-white/[0.07]"
+        >
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)]">
+            <HandPlatter className="h-4.5 w-4.5" strokeWidth={1.8} />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="flex items-center justify-between gap-2 text-sm font-bold">
+              <span className="truncate">{t('convivioTitle')}</span>
+              <ArrowRight className="h-3.5 w-3.5 shrink-0 text-[var(--gold-bright)] transition-transform group-hover:translate-x-0.5" />
+            </p>
+            <p className="mt-1 line-clamp-2 text-xs leading-5 text-white/60">{t('convivioHint')}</p>
+          </div>
+        </Link>
       </div>
     </section>
   )

@@ -59,7 +59,7 @@ export default async function MarketplacePage({ params }: { params: Promise<{ lo
     category,
     label: categoryLabels[category],
     description: categoryDescriptions[category],
-    toolCount: category === 'community' ? 1 : visibleTools.filter((tool) => tool.category === category).length,
+    toolCount: category === 'community' ? 3 : visibleTools.filter((tool) => tool.category === category).length,
   })).filter((tile) => tile.toolCount > 0)
 
   return (

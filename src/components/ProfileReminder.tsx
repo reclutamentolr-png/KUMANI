@@ -16,7 +16,7 @@ const DELAY_MS = 15 * 60 * 1000
 const MAX_PER_SESSION = 2
 
 // Pagine pubbliche (menù, tessere, pagine condivise): mai il popup.
-const PUBLIC_PREFIXES = ['/m/', '/f/', '/strumenti/', '/affinity/duo/', '/veritas/', '/cv/', '/o/', '/q/']
+const PUBLIC_PREFIXES = ['/m/', '/f/', '/strumenti/', '/affinity/duo/', '/veritas/', '/convivio/', '/cv/', '/o/', '/q/']
 
 type ReminderState = { next: number; shown: number }
 

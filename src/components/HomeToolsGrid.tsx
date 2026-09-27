@@ -23,6 +23,11 @@ import {
   Flower2,
   Star,
   Stamp,
+  Wand2,
+  UtensilsCrossed,
+  HeartHandshake,
+  VenetianMask,
+  HandPlatter,
   Info,
   X,
   ChevronDown,
@@ -30,7 +35,7 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 
-type Category = 'marketing' | 'security' | 'personal' | 'wellness' | 'lavoro' | 'community'
+type Category = 'marketing' | 'security' | 'personal' | 'wellness' | 'lavoro' | 'affinity' | 'svago' | 'community'
 
 type Tool = {
   icon: LucideIcon
@@ -39,7 +44,7 @@ type Tool = {
   category: Category
 }
 
-const CATEGORY_ORDER: Category[] = ['marketing', 'security', 'personal', 'wellness', 'lavoro', 'community']
+const CATEGORY_ORDER: Category[] = ['marketing', 'security', 'personal', 'wellness', 'lavoro', 'affinity', 'svago', 'community']
 
 const CATEGORY_ICON: Record<Category, LucideIcon> = {
   marketing: Megaphone,
@@ -47,6 +52,8 @@ const CATEGORY_ICON: Record<Category, LucideIcon> = {
   personal: CalendarClock,
   wellness: Waves,
   lavoro: Briefcase,
+  affinity: HeartHandshake,
+  svago: VenetianMask,
   community: Tag,
 }
 
@@ -83,6 +90,8 @@ export default function HomeToolsGrid() {
     { icon: MessageCircle, title: t('toolWhatsappTitle'), desc: t('toolWhatsappDescription'), category: 'marketing' },
     { icon: QrCode, title: t('toolQrProTitle'), desc: t('toolQrProDescription'), category: 'marketing' },
     { icon: Stamp, title: tc('fidelity'), desc: tc('fidelityDescription'), category: 'marketing' },
+    { icon: Wand2, title: t('toolOffermakerTitle'), desc: t('toolOffermakerDescription'), category: 'marketing' },
+    { icon: UtensilsCrossed, title: tc('menu'), desc: tc('menuDescription'), category: 'marketing' },
     { icon: ShieldCheck, title: t('toolSvatTitle'), desc: t('toolSvatDescription'), category: 'security' },
     { icon: Brain, title: t('toolMemolifeTitle'), desc: t('toolMemolifeDescription'), category: 'personal' },
     { icon: CalendarClock, title: t('toolLifeCalendarTitle'), desc: t('toolLifeCalendarDescription'), category: 'personal' },
@@ -94,8 +103,11 @@ export default function HomeToolsGrid() {
     { icon: Stethoscope, title: tc('aureya'), desc: tc('aureyaDescription'), category: 'wellness' },
     { icon: FileSpreadsheet, title: tc('preventivi'), desc: tc('preventiviDescription'), category: 'lavoro' },
     { icon: FileUser, title: tc('kumaniCv'), desc: tc('kumaniCvDescription'), category: 'lavoro' },
+    { icon: HeartHandshake, title: tc('affinity'), desc: tc('affinityDescription'), category: 'affinity' },
+    { icon: VenetianMask, title: tc('veritas'), desc: tc('veritasDescription'), category: 'svago' },
     { icon: Tag, title: t('toolListingsTitle'), desc: t('toolListingsDescription'), category: 'community' },
     { icon: Star, title: tc('kumanoDelGiorno'), desc: tc('kumanoDelGiornoDescription'), category: 'community' },
+    { icon: HandPlatter, title: tc('convivio'), desc: tc('convivioDescription'), category: 'community' },
   ]
 
   const CATEGORY_LABEL: Record<Category, string> = {
@@ -104,6 +116,8 @@ export default function HomeToolsGrid() {
     personal: tc('categoryPersonal'),
     wellness: tc('categoryWellness'),
     lavoro: tc('categoryLavoro'),
+    affinity: tc('categoryAffinity'),
+    svago: tc('categorySvago'),
     community: tc('categoryCommunity'),
   }
 
