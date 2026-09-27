@@ -58,42 +58,47 @@ export default async function DigitalReceiptDetailPage({
     : receipt.confirmed_at
       ? t('statusConfirmed')
       : t('statusPending')
+  const statusColor = receipt.returned_at
+    ? 'bg-[var(--ink)] text-[var(--gold-bright)]'
+    : receipt.confirmed_at
+      ? 'bg-green-100 text-green-700'
+      : 'bg-amber-100 text-amber-800'
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[var(--gold-pale)]">
-      <header className="border-b border-[var(--gold)]/25 bg-[var(--ink)] sticky top-0 z-10 shadow-sm">
+    <div className="min-h-screen bg-[var(--background)]">
+      <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <Link
             href="/marketplace/digital-receipt"
-            className="flex items-center gap-2 text-white hover:text-[var(--gold-bright)] font-medium transition-colors"
+            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
           >
             <ArrowLeft className="w-5 h-5" />
             {t('title')}
           </Link>
-          <h1 className="text-lg font-semibold text-white truncate max-w-xs">{receipt.object_name}</h1>
+          <h1 className="font-semibold tracking-wide truncate max-w-[50%] sm:max-w-xs">{receipt.object_name}</h1>
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 sm:p-8">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
+        <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 items-center">
             <div className="sm:col-span-2 space-y-4">
               <div>
-                <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-[var(--gold-pale)] text-[var(--ink)]">
+                <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${statusColor}`}>
                   {statusLabel}
                 </span>
               </div>
               <div>
-                <p className="text-xs text-gray-500 mb-1">{t('shareLinkLabel')}</p>
+                <p className="text-xs font-semibold uppercase tracking-wide text-[var(--gold)] mb-1">{t('shareLinkLabel')}</p>
                 <div className="flex items-center gap-2">
-                  <code className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 break-all">
+                  <code className="flex-1 bg-[var(--background)] border border-[var(--gold)]/20 rounded-lg px-3 py-2 text-sm text-gray-700 break-all">
                     {receiptUrl}
                   </code>
                   <CopyLinkButton url={receiptUrl} />
                 </div>
               </div>
               <p className="text-sm text-gray-600">
-                {t('recipientField')}: <span className="font-medium text-gray-900">{receipt.recipient_name}</span>
+                {t('recipientField')}: <span className="font-medium text-[var(--ink)]">{receipt.recipient_name}</span>
               </p>
             </div>
 

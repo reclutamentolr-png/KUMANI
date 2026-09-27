@@ -2,7 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { getTranslations, getLocale } from 'next-intl/server'
 import ToolBackLink from '@/components/ToolBackLink'
-import { ArrowLeft, FileCheck2, Sparkles } from 'lucide-react'
+import Link from '@/components/LocalizedLink'
+import { ArrowLeft, FileCheck2, Sparkles, PlusCircle } from 'lucide-react'
 import { hasActiveDigitalReceiptAccess } from '@/lib/digitalReceipt-server'
 import DigitalReceiptDashboard from '@/components/DigitalReceiptDashboard'
 
@@ -27,31 +28,44 @@ export default async function DigitalReceiptPage() {
     .eq('user_id', user.id)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[var(--gold-pale)]">
-      <header className="border-b border-[var(--gold)]/25 bg-[var(--ink)] sticky top-0 z-10 shadow-sm">
+    <div className="min-h-screen bg-[var(--background)]">
+      <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <ToolBackLink
-            className="flex items-center gap-2 text-white hover:text-[var(--gold-bright)] font-medium transition-colors"
+            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
             dashboardLabel={<><ArrowLeft className="w-5 h-5" /> {commonT('backToDashboard')}</>}
           >
             <ArrowLeft className="w-5 h-5" />
             {t('backToMarketplace')}
           </ToolBackLink>
-          <h1 className="flex items-center gap-2 text-lg font-semibold text-white">
+          <h1 className="flex items-center gap-2 font-semibold tracking-wide">
             <FileCheck2 className="h-5 w-5 text-[var(--gold-bright)]" />
             {t('title')}
           </h1>
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 bg-[var(--gold-pale)] text-[var(--ink)] px-4 py-1.5 rounded-full text-sm font-medium mb-4">
-            <Sparkles className="w-4 h-4 text-[var(--gold)]" />
-            {t('badge')}
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div className="relative mb-8 overflow-hidden rounded-3xl bg-[var(--ink)] p-6 text-white shadow-[0_14px_40px_rgba(23,23,23,0.25)] sm:p-8">
+          <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full border border-[var(--gold)]/25 bg-[var(--gold)]/10" />
+          <div className="pointer-events-none absolute -bottom-20 right-24 h-40 w-40 rounded-full border border-[var(--gold)]/15" />
+          <div className="relative flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+            <div className="max-w-xl">
+              <div className="inline-flex items-center gap-2 bg-[var(--gold)]/15 text-[var(--gold-bright)] px-4 py-1.5 rounded-full text-sm font-medium mb-4">
+                <Sparkles className="w-4 h-4" />
+                {t('badge')}
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-bold mb-3">{t('heroTitle')}</h2>
+              <p className="text-white/70 text-base sm:text-lg">{t('heroDescription')}</p>
+            </div>
+            <Link
+              href="/marketplace/digital-receipt/new"
+              className="flex shrink-0 items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] rounded-xl font-bold shadow-md hover:brightness-105 transition-all"
+            >
+              <PlusCircle className="w-5 h-5" />
+              {t('newReceipt')}
+            </Link>
           </div>
-          <h2 className="text-4xl font-bold text-gray-900 mb-3">{t('heroTitle')}</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto text-lg">{t('heroDescription')}</p>
         </div>
 
         <DigitalReceiptDashboard receipts={receipts || []} />

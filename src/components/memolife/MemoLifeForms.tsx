@@ -61,7 +61,7 @@ function Actions({ busy, error, onDelete, deleteConfirm }: { busy: boolean; erro
         ) : (
           <span />
         )}
-        <button type="submit" disabled={busy} className="flex items-center gap-2 rounded-xl bg-[var(--ink)] px-6 py-2.5 font-bold text-white disabled:opacity-50">
+        <button type="submit" disabled={busy} className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-2.5 font-bold text-[var(--ink)] shadow-md hover:brightness-110 disabled:opacity-50">
           {busy && <LoaderCircle className="h-4 w-4 animate-spin" />} {t('save')}
         </button>
       </div>

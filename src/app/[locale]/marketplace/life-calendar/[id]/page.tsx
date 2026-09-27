@@ -49,21 +49,21 @@ export default async function LifeCalendarItemDetailPage({
     .order('renewed_at', { ascending: false })
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
-      <header className="bg-white shadow-sm border-b sticky top-0 z-10">
+    <div className="min-h-screen bg-[var(--background)]">
+      <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <Link
             href="/marketplace/life-calendar"
-            className="flex items-center gap-2 text-gray-600 hover:text-amber-600 font-medium transition-colors"
+            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
           >
             <ArrowLeft className="w-5 h-5" />
             {t('title')}
           </Link>
-          <h1 className="text-lg font-semibold text-gray-800 truncate max-w-xs">{item.title}</h1>
+          <h1 className="font-semibold tracking-wide truncate max-w-[50%] sm:max-w-xs">{item.title}</h1>
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
+      <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
         <LifeCalendarItemForm
           mode="edit"
           id={item.id}
@@ -81,16 +81,16 @@ export default async function LifeCalendarItemDetailPage({
         />
 
         {renewals && renewals.length > 0 && (
-          <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 sm:p-8">
-            <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-800 mb-4">
-              <History className="w-5 h-5 text-amber-600" />
+          <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8">
+            <h3 className="flex items-center gap-2 text-lg font-semibold text-[var(--ink)] mb-4">
+              <History className="w-5 h-5 text-[var(--gold)]" />
               {t('history')}
             </h3>
             <div className="space-y-2">
               {renewals.map((renewal) => (
-                <div key={renewal.id} className="flex items-center justify-between text-sm border-b border-gray-100 pb-2">
-                  <span className="text-gray-600">{new Date(renewal.renewed_at).toLocaleDateString()}</span>
-                  <span className="text-gray-800">
+                <div key={renewal.id} className="flex flex-col gap-0.5 text-sm border-b border-[var(--gold)]/15 pb-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                  <span className="text-[var(--muted)]">{new Date(renewal.renewed_at).toLocaleDateString()}</span>
+                  <span className="text-[var(--ink)] sm:text-right">
                     {t('renewedFrom', { date: new Date(renewal.previous_due_date).toLocaleDateString() })}
                     {renewal.new_due_date &&
                       ` → ${new Date(renewal.new_due_date).toLocaleDateString()}`}

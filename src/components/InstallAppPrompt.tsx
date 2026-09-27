@@ -73,10 +73,10 @@ export default function InstallAppPrompt() {
     <div className="fixed inset-0 z-[9998] bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4">
       <div className="bg-white w-full max-w-md rounded-t-3xl sm:rounded-2xl shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-5 text-white relative">
+        <div className="relative border-b border-[var(--gold)]/25 bg-[var(--ink)] p-5 text-white">
           <button
             onClick={handleDismiss}
-            className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors"
+            className="absolute top-4 right-4 text-white/70 hover:text-[var(--gold-bright)] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -84,7 +84,7 @@ export default function InstallAppPrompt() {
             <Logo size={48} className="flex-shrink-0" />
             <div>
               <h3 className="font-bold text-lg">{t('installTitle')}</h3>
-              <p className="text-indigo-100 text-sm">{t('installDesc')}</p>
+              <p className="text-[var(--gold-pale)] text-sm">{t('installDesc')}</p>
             </div>
           </div>
         </div>
@@ -94,14 +94,14 @@ export default function InstallAppPrompt() {
             /* ✅ iPhone/iPad: istruzioni passo-passo */
             <div className="space-y-3">
               <p className="text-sm text-gray-600">{t('installIOS')}</p>
-              <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
-                <div className="w-9 h-9 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center flex-shrink-0">
+              <div className="flex items-center gap-3 p-3 bg-[var(--paper)] border border-[var(--gold)]/20 rounded-xl">
+                <div className="w-9 h-9 rounded-full bg-[var(--ink)] text-[var(--gold-bright)] flex items-center justify-center flex-shrink-0">
                   <Share className="w-4 h-4" />
                 </div>
                 <p className="text-sm text-gray-700"><strong>1.</strong> {t('installStep1')} <strong>{t('shareButton')}</strong> {t('installStep1Lower')}</p>
               </div>
-              <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
-                <div className="w-9 h-9 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center flex-shrink-0">
+              <div className="flex items-center gap-3 p-3 bg-[var(--paper)] border border-[var(--gold)]/20 rounded-xl">
+                <div className="w-9 h-9 rounded-full bg-[var(--ink)] text-[var(--gold-bright)] flex items-center justify-center flex-shrink-0">
                   <PlusSquare className="w-4 h-4" />
                 </div>
                 <p className="text-sm text-gray-700"><strong>2.</strong> {t('installStep2')} <strong>{t('addToHome')}</strong></p>
@@ -116,7 +116,7 @@ export default function InstallAppPrompt() {
             {deferredPrompt && (
               <button
                 onClick={handleInstall}
-                className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all"
+                className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] py-3 rounded-xl font-bold hover:brightness-110 transition-all"
               >
                 <Download className="w-4 h-4" />
                 {t('installNow')}
@@ -126,8 +126,8 @@ export default function InstallAppPrompt() {
               onClick={handleDismiss}
               className={`py-3 rounded-xl font-semibold transition-colors ${
                 deferredPrompt
-                  ? 'px-4 bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  : 'flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700'
+                  ? 'px-4 border border-[var(--gold)]/40 text-[var(--ink)] hover:border-[var(--gold)] hover:bg-[var(--paper)]'
+                  : 'flex-1 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] font-bold hover:brightness-110'
               }`}
             >
               {deferredPrompt ? t('notNow') : t('gotIt')}

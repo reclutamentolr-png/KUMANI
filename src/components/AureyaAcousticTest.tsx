@@ -162,10 +162,13 @@ export default function AureyaAcousticTest({
   const currentStep = STEPS[stepIndex]
 
   return (
-    <div className="rounded-[1.75rem] border border-[var(--gold)]/20 bg-white shadow-[0_20px_60px_rgba(23,23,23,0.12)]">
-      <div className="border-b border-[var(--gold)]/20 p-6 sm:p-8">
-        <h1 className="text-2xl font-bold text-slate-950 sm:text-3xl">{t('title')}</h1>
-        <p className="mt-2 text-slate-600">{t('intro')}</p>
+    <div className="overflow-hidden rounded-3xl border border-[var(--gold)]/25 bg-[var(--paper)] shadow-[0_14px_40px_rgba(23,23,23,0.12)]">
+      <div className="relative overflow-hidden bg-[var(--ink)] p-6 text-white sm:p-8">
+        <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full border border-[var(--gold)]/25 bg-[var(--gold)]/10" />
+        <div className="relative">
+          <h1 className="text-2xl font-bold sm:text-3xl">{t('title')}</h1>
+          <p className="mt-2 text-white/70">{t('intro')}</p>
+        </div>
       </div>
 
       {phase === 'device-check' && (
@@ -175,8 +178,8 @@ export default function AureyaAcousticTest({
             <p className="text-sm leading-6 text-amber-800">{t('medicalDisclaimer')}</p>
           </div>
 
-          <h2 className="mb-2 font-bold text-slate-900">{t('deviceCheckTitle')}</h2>
-          <p className="mb-4 text-sm leading-6 text-slate-600">
+          <h2 className="mb-2 font-bold text-[var(--ink)]">{t('deviceCheckTitle')}</h2>
+          <p className="mb-4 text-sm leading-6 text-[var(--muted)]">
             {isMobile ? t('deviceCheckMobileWarning') : t('deviceCheckBody')}
           </p>
 
@@ -184,18 +187,18 @@ export default function AureyaAcousticTest({
             <button
               type="button"
               onClick={() => setDevice('headphones')}
-              className={`flex items-center gap-3 rounded-2xl border p-4 text-left transition-all ${device === 'headphones' ? 'border-[var(--gold)] bg-[var(--gold-pale)] shadow-sm' : 'border-slate-200 hover:border-[var(--gold)]/40'}`}
+              className={`flex items-center gap-3 rounded-2xl border p-4 text-left transition-all ${device === 'headphones' ? 'border-[var(--gold)] bg-[var(--gold-pale)] shadow-sm' : 'border-[var(--gold)]/20 bg-white hover:border-[var(--gold)]/40'}`}
             >
               <Headphones className="h-6 w-6 text-[var(--gold)]" />
-              <span className="font-semibold text-slate-900">{t('deviceHeadphones')}</span>
+              <span className="font-semibold text-[var(--ink)]">{t('deviceHeadphones')}</span>
             </button>
             <button
               type="button"
               onClick={() => setDevice('speaker')}
-              className={`flex items-center gap-3 rounded-2xl border p-4 text-left transition-all ${device === 'speaker' ? 'border-[var(--gold)] bg-[var(--gold-pale)] shadow-sm' : 'border-slate-200 hover:border-[var(--gold)]/40'}`}
+              className={`flex items-center gap-3 rounded-2xl border p-4 text-left transition-all ${device === 'speaker' ? 'border-[var(--gold)] bg-[var(--gold-pale)] shadow-sm' : 'border-[var(--gold)]/20 bg-white hover:border-[var(--gold)]/40'}`}
             >
               <Volume2 className="h-6 w-6 text-[var(--gold)]" />
-              <span className="font-semibold text-slate-900">{t('deviceSpeaker')}</span>
+              <span className="font-semibold text-[var(--ink)]">{t('deviceSpeaker')}</span>
             </button>
           </div>
 
@@ -203,7 +206,7 @@ export default function AureyaAcousticTest({
             type="button"
             disabled={!device}
             onClick={() => setPhase('instructions')}
-            className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--ink)] px-6 py-3 font-semibold text-white shadow-sm transition-colors hover:bg-[var(--ink-soft)] disabled:cursor-not-allowed disabled:opacity-40"
+            className="mt-6 inline-flex items-center gap-2 rounded-full px-6 py-3 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] font-bold text-[var(--ink)] shadow-md transition-all hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-40"
           >
             {t('continueButton')}
           </button>
@@ -212,12 +215,12 @@ export default function AureyaAcousticTest({
 
       {phase === 'instructions' && (
         <div className="p-6 sm:p-8">
-          <h2 className="mb-2 font-bold text-slate-900">{t('instructionsTitle')}</h2>
-          <p className="mb-6 text-sm leading-6 text-slate-600">{t('instructionsBody')}</p>
+          <h2 className="mb-2 font-bold text-[var(--ink)]">{t('instructionsTitle')}</h2>
+          <p className="mb-6 text-sm leading-6 text-[var(--muted)]">{t('instructionsBody')}</p>
           <button
             type="button"
             onClick={startTest}
-            className="inline-flex items-center gap-2 rounded-full bg-[var(--ink)] px-6 py-3 font-semibold text-white shadow-sm transition-colors hover:bg-[var(--ink-soft)]"
+            className="inline-flex items-center gap-2 rounded-full px-6 py-3 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] font-bold text-[var(--ink)] shadow-md transition-all hover:brightness-105"
           >
             <PlayCircle className="h-5 w-5" /> {t('startButton')}
           </button>
@@ -231,26 +234,26 @@ export default function AureyaAcousticTest({
           </p>
           <div className="my-8 flex flex-col items-center gap-3">
             <Ear className={`h-12 w-12 text-[var(--gold)] ${currentStep.ear === 'left' ? '-scale-x-100' : ''}`} />
-            <p className="text-lg font-bold text-slate-900">
+            <p className="text-lg font-bold text-[var(--ink)]">
               {currentStep.ear === 'left' ? t('earLeft') : t('earRight')}
             </p>
-            <p className="text-sm text-slate-500">{t('frequencyLabel', { frequency: currentStep.frequency })}</p>
+            <p className="text-sm text-[var(--muted)]">{t('frequencyLabel', { frequency: currentStep.frequency })}</p>
           </div>
           <button
             type="button"
             onClick={handleHeard}
-            className="inline-flex items-center gap-2 rounded-full bg-[var(--ink)] px-8 py-4 text-lg font-bold text-white shadow-lg transition-transform hover:scale-[1.03]"
+            className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-8 py-4 text-lg font-bold text-[var(--ink)] shadow-lg transition-transform hover:scale-[1.03]"
           >
             {t('hearButton')}
           </button>
-          <p className="mt-4 text-xs text-slate-500">{t('autoAdvanceHint')}</p>
+          <p className="mt-4 text-xs text-[var(--muted)]">{t('autoAdvanceHint')}</p>
           <button
             type="button"
             onClick={() => {
               stopTone()
               restart()
             }}
-            className="mt-6 inline-flex items-center gap-2 text-xs font-semibold text-gray-500 hover:text-red-600 transition-colors"
+            className="mt-6 inline-flex items-center gap-2 text-xs font-semibold text-[var(--muted)] hover:text-red-600 transition-colors"
           >
             <StopCircle className="h-4 w-4" /> {t('stopButton')}
           </button>
@@ -258,16 +261,16 @@ export default function AureyaAcousticTest({
       )}
 
       {phase === 'saving' && (
-        <div className="p-6 sm:p-8 text-center text-slate-600">{t('savingLabel')}</div>
+        <div className="p-6 sm:p-8 text-center text-[var(--muted)]">{t('savingLabel')}</div>
       )}
 
       {phase === 'results' && score !== null && (
         <div className="p-6 sm:p-8">
-          <h2 className="mb-1 font-bold text-slate-900">{t('resultsTitle')}</h2>
-          <p className="mb-6 text-sm text-slate-600">{t('resultsSummary', { score })}</p>
+          <h2 className="mb-1 font-bold text-[var(--ink)]">{t('resultsTitle')}</h2>
+          <p className="mb-6 text-sm text-[var(--muted)]">{t('resultsSummary', { score })}</p>
 
           {previousScore !== null && previousTestedAt && (
-            <p className="mb-6 rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
+            <p className="mb-6 rounded-2xl border border-[var(--gold)]/25 bg-[var(--gold-pale)] p-4 text-sm text-[var(--ink)]">
               {t('resultsComparison', {
                 score,
                 previousScore,
@@ -282,12 +285,12 @@ export default function AureyaAcousticTest({
           <button
             type="button"
             onClick={restart}
-            className="inline-flex items-center gap-2 rounded-full border border-[var(--gold)]/40 px-5 py-3 font-semibold text-[var(--gold)] transition-colors hover:bg-[var(--gold-pale)]"
+            className="inline-flex items-center gap-2 rounded-full border border-[var(--gold)]/60 px-5 py-3 font-semibold text-[var(--ink)] transition-colors hover:bg-[var(--gold-pale)]"
           >
             <RotateCcw className="h-4 w-4" /> {t('restartButton')}
           </button>
 
-          <p className="mt-8 text-xs leading-5 text-slate-500">{t('medicalDisclaimer')}</p>
+          <p className="mt-8 text-xs leading-5 text-[var(--muted)]">{t('medicalDisclaimer')}</p>
         </div>
       )}
     </div>

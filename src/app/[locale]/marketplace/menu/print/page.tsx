@@ -37,9 +37,9 @@ export default async function MenuPrintPage({
   const usedAllergens = MENU_ALLERGENS.filter((a) => items.some((item) => item.allergens.includes(a)))
 
   return (
-    <div className="min-h-screen bg-gray-100 print:bg-white">
-      <div className="mx-auto flex max-w-[210mm] flex-wrap items-center justify-between gap-3 px-4 py-4 print:hidden">
-        <Link href="/marketplace/menu" className="text-sm font-semibold text-gray-600 hover:text-gray-900">
+    <div className="min-h-screen bg-[var(--background)] px-4 py-4 print:bg-white print:p-0">
+      <div className="mx-auto mb-4 flex max-w-[210mm] flex-wrap items-center justify-between gap-3 rounded-2xl border border-[var(--gold)]/25 bg-white px-4 py-4 shadow-sm print:hidden">
+        <Link href="/marketplace/menu" className="text-sm font-semibold text-[var(--ink)] transition-colors hover:text-[var(--gold)]">
           ← {tb('backToBuilder')}
         </Link>
         <div className="flex flex-wrap items-center gap-2">
@@ -47,14 +47,14 @@ export default async function MenuPrintPage({
             <a
               key={l}
               href={`?lang=${l}`}
-              className={`rounded-full px-3 py-1 text-xs font-semibold ${l === lang ? 'bg-gray-900 text-white' : 'bg-white text-gray-700'}`}
+              className={`rounded-full px-3 py-1 text-xs font-semibold ${l === lang ? 'bg-[var(--ink)] text-white' : 'border border-[var(--gold)]/40 bg-white text-[var(--ink)] hover:bg-[var(--gold-pale)]'}`}
             >
               {MENU_LOCALE_NAMES[l]}
             </a>
           ))}
           <PrintButton label={tb('print')} />
         </div>
-        <p className="w-full text-xs text-gray-500">{tb('printPdfHint')}</p>
+        <p className="w-full text-xs text-[var(--muted)]">{tb('printPdfHint')}</p>
       </div>
 
       <article lang={lang} className="mx-auto max-w-[210mm] bg-white px-[16mm] py-[14mm] font-serif text-gray-900 shadow print:shadow-none">

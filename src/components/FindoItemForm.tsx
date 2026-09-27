@@ -122,19 +122,19 @@ export default function FindoItemForm(props: Props) {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 sm:p-8 space-y-6">
+    <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8 space-y-6">
       <div className="flex flex-col items-center gap-3">
         <div
           onClick={() => fileInputRef.current?.click()}
-          className="w-28 h-28 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center cursor-pointer hover:border-amber-500 transition-all overflow-hidden bg-gray-50"
+          className="w-28 h-28 rounded-xl border-2 border-dashed border-[var(--gold)]/40 flex items-center justify-center cursor-pointer hover:border-[var(--gold)] transition-all overflow-hidden bg-[var(--paper)]"
         >
           {uploadingPhoto ? (
-            <LoaderCircle className="w-6 h-6 text-gray-400 animate-spin" />
+            <LoaderCircle className="w-6 h-6 text-[var(--gold)] animate-spin" />
           ) : photoUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={photoUrl} alt="" className="w-full h-full object-cover" />
           ) : (
-            <Camera className="w-8 h-8 text-gray-300" />
+            <Camera className="w-8 h-8 text-[var(--gold)]" />
           )}
         </div>
         <input
@@ -151,29 +151,29 @@ export default function FindoItemForm(props: Props) {
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
-          className="text-sm font-medium text-amber-600 hover:underline"
+          className="text-sm font-medium text-[var(--gold)] hover:underline"
         >
           {photoUrl ? t('changePhoto') : t('addPhoto')}
         </button>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">{t('nameField')}</label>
+        <label className="block text-sm font-medium text-[var(--ink)] mb-1">{t('nameField')}</label>
         <input
           type="text"
           value={form.name}
           onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
           placeholder={t('namePlaceholder')}
-          className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm"
+          className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">{t('locationLabel')}</label>
+        <label className="block text-sm font-medium text-[var(--ink)] mb-2">{t('locationLabel')}</label>
         <select
           value={form.locationId ?? ''}
           onChange={(e) => setForm((prev) => ({ ...prev, locationId: e.target.value || null }))}
-          className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm bg-white mb-2"
+          className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm bg-white mb-2"
         >
           <option value="">{t('noLocation')}</option>
           {locationOptions.map((opt) => (
@@ -190,31 +190,31 @@ export default function FindoItemForm(props: Props) {
               value={newLocationName}
               onChange={(e) => setNewLocationName(e.target.value)}
               placeholder={t('locationNamePlaceholder')}
-              className="flex-1 px-3 py-2 border-2 border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+              className="flex-1 px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg text-sm focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30"
               autoFocus
             />
             <button
               type="button"
               onClick={handleAddLocation}
               disabled={!newLocationName.trim()}
-              className="px-3 py-2 rounded-lg text-sm font-medium bg-amber-600 text-white hover:bg-amber-700 disabled:opacity-50"
+              className="px-3 py-2 rounded-lg text-sm bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] font-bold shadow-sm hover:brightness-105 transition-all disabled:opacity-50"
             >
               {t('add')}
             </button>
           </div>
         ) : (
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <button
               type="button"
               onClick={() => setAddingLocation(true)}
-              className="flex items-center gap-1 text-sm font-medium text-amber-600 hover:underline"
+              className="flex items-center gap-1 text-sm font-medium text-[var(--gold)] hover:underline"
             >
               <PlusCircle className="w-4 h-4" />
               {t('quickAddLocation')}
             </button>
             <Link
               href="/marketplace/findo/locations"
-              className="flex items-center gap-1 text-sm font-medium text-gray-500 hover:underline"
+              className="flex items-center gap-1 text-sm font-medium text-[var(--muted)] hover:text-[var(--ink)] hover:underline"
             >
               <MapPin className="w-4 h-4" />
               {t('manageLocations')}
@@ -224,24 +224,24 @@ export default function FindoItemForm(props: Props) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">{t('categoryLabel')}</label>
+        <label className="block text-sm font-medium text-[var(--ink)] mb-1">{t('categoryLabel')}</label>
         <input
           type="text"
           value={form.category}
           onChange={(e) => setForm((prev) => ({ ...prev, category: e.target.value }))}
           placeholder={t('categoryPlaceholder')}
-          className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm"
+          className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">{t('tagsLabel')}</label>
+        <label className="block text-sm font-medium text-[var(--ink)] mb-1">{t('tagsLabel')}</label>
         <input
           type="text"
           value={tagsInput}
           onChange={(e) => setTagsInput(e.target.value)}
           placeholder={t('tagsPlaceholder')}
-          className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm"
+          className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
         />
       </div>
 
@@ -255,7 +255,7 @@ export default function FindoItemForm(props: Props) {
       <button
         onClick={handleSubmit}
         disabled={!isValid || saving || uploadingPhoto}
-        className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-amber-600 to-orange-600 text-white rounded-xl font-semibold hover:from-amber-700 hover:to-orange-700 transition-all disabled:opacity-50"
+        className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] rounded-xl font-bold shadow-md hover:brightness-105 transition-all disabled:opacity-50"
       >
         {saving ? (
           <>

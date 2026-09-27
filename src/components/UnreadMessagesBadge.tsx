@@ -22,7 +22,7 @@ export default function UnreadMessagesBadge({ initialCount }: { initialCount: nu
     return (
       <Link 
         href="/marketplace/chat" 
-        className="mb-3 inline-flex items-center gap-1.5 text-xs font-bold text-red-600 bg-red-50 px-3 py-1.5 rounded-full border border-red-200 hover:bg-red-100 transition-colors animate-pulse"
+        className="mb-3 inline-flex items-center gap-1.5 text-xs font-bold text-[var(--ink)] bg-[var(--gold)] px-3 py-1.5 rounded-full border border-[var(--gold)] hover:bg-[var(--gold-bright)] transition-colors animate-pulse"
       >
         <MessageCircle className="w-3 h-3" />
         {count === 1 ? t('newMessage') : t('newMessages', { count })}
@@ -33,7 +33,7 @@ export default function UnreadMessagesBadge({ initialCount }: { initialCount: nu
   return (
     <Link 
       href="/marketplace/chat" 
-      className="mb-3 inline-flex items-center gap-1.5 text-xs font-medium text-indigo-700 bg-indigo-50 px-3 py-1.5 rounded-full border border-indigo-200 hover:bg-indigo-100 transition-colors"
+      className="mb-3 inline-flex items-center gap-1.5 text-xs font-medium text-[var(--ink)] bg-[var(--gold-pale)]/40 px-3 py-1.5 rounded-full border border-[var(--gold)]/40 hover:bg-[var(--gold-pale)]/70 transition-colors"
     >
       <Mail className="w-3 h-3" />
       {t('readMessages')}

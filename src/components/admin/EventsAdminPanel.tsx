@@ -1,12 +1,14 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { Ban, Check, ExternalLink, Flag, LoaderCircle, Percent, X } from 'lucide-react'
+import { Ban, Check, ExternalLink, Flag, LoaderCircle, Percent, Star, Trash2, X } from 'lucide-react'
 import {
   adminBanEvent,
+  adminDeleteEventReview,
   adminGetEventsFeePercent,
   adminListEventFees,
   adminListEventReports,
+  adminListEventReviews,
   adminListEvents,
   adminResolveEventReport,
   adminReviewEvent,
@@ -18,7 +20,8 @@ type Person = { first_name: string | null; last_name: string | null; email: stri
 type AdminEvent = Awaited<ReturnType<typeof adminListEvents>>['events'][number] & { organizer: Person }
 type AdminReport = Awaited<ReturnType<typeof adminListEventReports>>['reports'][number]
 type AdminFee = Awaited<ReturnType<typeof adminListEventFees>>['fees'][number]
-type Tab = 'pending' | 'published' | 'reports' | 'fees'
+type AdminReview = Awaited<ReturnType<typeof adminListEventReviews>>['reviews'][number]
+type Tab = 'pending' | 'published' | 'reports' | 'reviews' | 'fees'
 
 const name = (p: Person) => (p ? `${p.first_name ?? ''} ${p.last_name ?? ''}`.trim() || p.email || '—' : '—')
 const money = (v: number) => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(Number(v))
@@ -32,6 +35,7 @@ export default function EventsAdminPanel({ locale }: { locale: string }) {
   const [events, setEvents] = useState<AdminEvent[] | null>(null)
   const [reports, setReports] = useState<AdminReport[] | null>(null)
   const [fees, setFees] = useState<AdminFee[] | null>(null)
+  const [reviews, setReviews] = useState<AdminReview[] | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [working, setWorking] = useState<string | null>(null)
   const [percent, setPercent] = useState('')
@@ -48,6 +52,11 @@ export default function EventsAdminPanel({ locale }: { locale: string }) {
       setReports(null)
       const result = await adminListEventReports()
       setReports(result.reports)
+      setError(result.error)
+    } else if (current === 'reviews') {
+      setReviews(null)
+      const result = await adminListEventReviews()
+      setReviews(result.reviews)
       setError(result.error)
     } else {
       setFees(null)
@@ -100,6 +109,7 @@ export default function EventsAdminPanel({ locale }: { locale: string }) {
     { key: 'pending', label: 'Da approvare' },
     { key: 'published', label: 'Pubblicati' },
     { key: 'reports', label: 'Segnalazioni' },
+    { key: 'reviews', label: 'Recensioni' },
     { key: 'fees', label: 'Commissioni' },
   ]
 
@@ -120,7 +130,7 @@ export default function EventsAdminPanel({ locale }: { locale: string }) {
       <div>
         <h2 className="text-2xl font-bold text-gray-900">KUMANI Events</h2>
         <p className="mt-1 text-gray-600">
-          I primi 2 eventi di ogni organizzatore (max 20 posti) vanno approvati qui; dal terzo in poi si pubblicano da soli (max 100 posti).
+          Gli eventi dei nuovi organizzatori (max 20 posti) vanno approvati qui; gli organizzatori fidati (almeno 2 eventi conclusi e buone recensioni) pubblicano da soli (max 100 posti), i Super Organizer fino a 300 posti con commissione ridotta.
           Il prezzo si paga all&apos;organizzatore sul posto: a evento concluso KUMANI calcola la commissione, pagata con carta.
         </p>
       </div>
@@ -280,6 +290,46 @@ export default function EventsAdminPanel({ locale }: { locale: string }) {
                         )}
                       </div>
                     )}
+                  </div>
+                ))}
+              </div>
+            ))}
+
+      {tab === 'reviews' &&
+        (reviews === null
+          ? spinner
+          : reviews.length === 0
+            ? empty('Nessuna recensione.')
+            : (
+              <div className="space-y-3">
+                {reviews.map((review) => (
+                  <div key={review.id} className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div className="text-sm">
+                        <p className="flex items-center gap-1.5 font-semibold text-gray-900">
+                          {review.event?.title ?? '—'} {review.event && eventLink(review.event.id)}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          Organizzatore {name(review.organizer)} · recensione di {name(review.reviewer)} · {when(review.created_at)}
+                        </p>
+                      </div>
+                      <span className="flex items-center gap-0.5" aria-label={`${review.rating} stelle su 5`}>
+                        {[1, 2, 3, 4, 5].map((n) => (
+                          <Star key={n} className={`h-4 w-4 ${n <= review.rating ? 'fill-amber-400 text-amber-400' : 'text-gray-300'}`} />
+                        ))}
+                      </span>
+                    </div>
+                    {review.comment && <p className="mt-3 whitespace-pre-wrap rounded-lg bg-gray-50 px-3 py-2 text-sm text-gray-800">{review.comment}</p>}
+                    <div className="mt-3">
+                      <button
+                        type="button"
+                        disabled={working === review.id}
+                        onClick={() => confirm("Eliminare questa recensione? La media dell'organizzatore verrà ricalcolata.") && run(review.id, () => adminDeleteEventReview(review.id))}
+                        className="flex items-center gap-1 rounded-lg border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50 disabled:opacity-50"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" /> Elimina recensione
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>

@@ -195,8 +195,8 @@ export default function ConvivioDetailView({ initial, siteUrl, myReferral }: { i
 
           {editing ? (
             <div className="mt-4 space-y-3">
-              <textarea className="w-full rounded-xl border border-gray-300 p-3 text-sm" rows={4} maxLength={2000} value={info.description} onChange={(e) => setInfo({ ...info, description: e.target.value })} />
-              <textarea className="w-full rounded-xl border border-gray-300 p-3 text-sm" rows={3} maxLength={1000} value={info.pickup} onChange={(e) => setInfo({ ...info, pickup: e.target.value })} />
+              <textarea className="w-full rounded-xl border border-[var(--gold)]/30 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 p-3 text-sm" rows={4} maxLength={2000} value={info.description} onChange={(e) => setInfo({ ...info, description: e.target.value })} />
+              <textarea className="w-full rounded-xl border border-[var(--gold)]/30 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 p-3 text-sm" rows={3} maxLength={1000} value={info.pickup} onChange={(e) => setInfo({ ...info, pickup: e.target.value })} />
               <div className="flex gap-2">
                 <button
                   type="button"
@@ -217,7 +217,7 @@ export default function ConvivioDetailView({ initial, siteUrl, myReferral }: { i
           ) : (
             <>
               {data.description && <p className="mt-4 whitespace-pre-wrap text-sm leading-6 text-gray-700">{data.description}</p>}
-              <div className="mt-4 rounded-xl border border-gray-100 bg-gray-50 p-4">
+              <div className="mt-4 rounded-xl border border-[var(--gold)]/15 bg-[var(--background)] p-4">
                 <p className="mb-1 flex items-center gap-1.5 text-sm font-bold text-[var(--ink)]">
                   <Truck className="h-4 w-4 text-[var(--gold)]" /> {t('pickupTitle')}
                 </p>
@@ -228,11 +228,11 @@ export default function ConvivioDetailView({ initial, siteUrl, myReferral }: { i
           )}
 
           <div className="mt-4 flex flex-wrap items-center gap-2">
-            <button type="button" onClick={share} className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-2 text-sm font-semibold text-[var(--ink)] hover:bg-gray-50">
+            <button type="button" onClick={share} className="flex items-center gap-1.5 rounded-lg border border-[var(--gold)]/40 px-3 py-2 text-sm font-semibold text-[var(--ink)] hover:bg-[var(--gold-pale)]">
               <Share2 className="h-4 w-4" /> {t('share')}
             </button>
             {data.is_leader && !editing && ['open', 'ordered'].includes(data.status) && (
-              <button type="button" onClick={() => setEditing(true)} className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-2 text-sm font-semibold text-[var(--ink)] hover:bg-gray-50">
+              <button type="button" onClick={() => setEditing(true)} className="flex items-center gap-1.5 rounded-lg border border-[var(--gold)]/40 px-3 py-2 text-sm font-semibold text-[var(--ink)] hover:bg-[var(--gold-pale)]">
                 <Pencil className="h-4 w-4" /> {t('editInfo')}
               </button>
             )}
@@ -261,7 +261,7 @@ export default function ConvivioDetailView({ initial, siteUrl, myReferral }: { i
               >
                 <MessageCircle className="h-5 w-5" /> {t('inviteWhatsApp')}
               </button>
-              <button type="button" onClick={share} className="flex items-center gap-2 rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm font-semibold text-[var(--ink)]">
+              <button type="button" onClick={share} className="flex items-center gap-2 rounded-xl border border-[var(--gold)]/40 bg-white px-4 py-3 text-sm font-semibold text-[var(--ink)]">
                 <Share2 className="h-4 w-4" /> {t('otherApps')}
               </button>
             </div>
@@ -276,7 +276,7 @@ export default function ConvivioDetailView({ initial, siteUrl, myReferral }: { i
             {open ? (
               <>
                 <div className="flex flex-wrap items-center gap-3">
-                  <div className="flex items-center rounded-xl border border-gray-300">
+                  <div className="flex items-center rounded-xl border border-[var(--gold)]/30">
                     <button type="button" onClick={() => setQuantity((q) => Math.max(1, q - 1))} className="p-2.5" aria-label="-">
                       <Minus className="h-4 w-4" />
                     </button>
@@ -294,7 +294,7 @@ export default function ConvivioDetailView({ initial, siteUrl, myReferral }: { i
                   onChange={(e) => setNote(e.target.value)}
                   maxLength={200}
                   placeholder={t('notePlaceholder')}
-                  className="mt-3 w-full rounded-xl border border-gray-300 px-3 py-2 text-sm"
+                  className="mt-3 w-full rounded-xl border border-[var(--gold)]/30 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 px-3 py-2 text-sm"
                 />
                 {data.supplier_kumani && (
                   <label className="mt-3 flex items-start gap-2 text-sm text-gray-700">
@@ -337,10 +337,11 @@ export default function ConvivioDetailView({ initial, siteUrl, myReferral }: { i
             <p className="mt-1 text-sm text-gray-700">
               {t('supplierRequestBody', { price: formatEuro(data.group_price, locale), min: data.min_participants })}
             </p>
+            <p className="mt-1 text-xs text-gray-600">{t('feeAcceptNotice')}</p>
             {counter ? (
               <div className="mt-3 grid grid-cols-2 gap-3">
-                <input className="rounded-xl border border-gray-300 px-3 py-2 text-sm" inputMode="decimal" value={counter.price} placeholder={t('fieldPrice')} onChange={(e) => setCounter({ ...counter, price: e.target.value })} />
-                <input className="rounded-xl border border-gray-300 px-3 py-2 text-sm" type="number" min={2} value={counter.min} placeholder={t('fieldMin')} onChange={(e) => setCounter({ ...counter, min: e.target.value })} />
+                <input className="rounded-xl border border-[var(--gold)]/30 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 px-3 py-2 text-sm" inputMode="decimal" value={counter.price} placeholder={t('fieldPrice')} onChange={(e) => setCounter({ ...counter, price: e.target.value })} />
+                <input className="rounded-xl border border-[var(--gold)]/30 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 px-3 py-2 text-sm" type="number" min={2} value={counter.min} placeholder={t('fieldMin')} onChange={(e) => setCounter({ ...counter, min: e.target.value })} />
                 <button
                   type="button"
                   disabled={busy}
@@ -361,7 +362,7 @@ export default function ConvivioDetailView({ initial, siteUrl, myReferral }: { i
                 <button
                   type="button"
                   onClick={() => setCounter({ price: String(data.group_price).replace('.', ','), min: String(data.min_participants) })}
-                  className="rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-[var(--ink)]"
+                  className="rounded-xl border border-[var(--gold)]/40 bg-white px-4 py-2.5 text-sm font-semibold text-[var(--ink)]"
                 >
                   {t('supplierCounter')}
                 </button>
@@ -379,7 +380,7 @@ export default function ConvivioDetailView({ initial, siteUrl, myReferral }: { i
         )}
 
         {data.is_leader && data.supplier_status === 'counter' && data.status === 'awaiting_supplier' && (
-          <div className="rounded-2xl border-2 border-sky-300 bg-sky-50 p-5">
+          <div className="rounded-2xl border-2 border-[var(--gold)]/60 bg-[var(--gold-pale)]/60 p-5">
             <p className="font-bold text-[var(--ink)]">{t('counterReceived', { name: data.supplier_name })}</p>
             <p className="mt-1 text-sm text-gray-700">
               {t('counterDetails', { price: formatEuro(data.counter_price ?? data.group_price, locale), min: data.counter_min ?? data.min_participants })}
@@ -442,7 +443,7 @@ export default function ConvivioDetailView({ initial, siteUrl, myReferral }: { i
                       key={target}
                       type="button"
                       onClick={() => setReview({ target, rating: 5, comment: '' })}
-                      className="flex items-center gap-1 rounded-xl border border-gray-300 px-3 py-2 text-sm font-semibold text-[var(--ink)] hover:bg-gray-50"
+                      className="flex items-center gap-1 rounded-xl border border-[var(--gold)]/30 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 px-3 py-2 text-sm font-semibold text-[var(--ink)] hover:bg-gray-50"
                     >
                       <Star className="h-4 w-4 text-amber-400" /> {t(target === 'supplier' ? 'reviewSupplier' : 'reviewLeader')}
                     </button>
@@ -459,7 +460,7 @@ export default function ConvivioDetailView({ initial, siteUrl, myReferral }: { i
                   ))}
                 </div>
                 <textarea
-                  className="w-full rounded-xl border border-gray-300 p-3 text-sm"
+                  className="w-full rounded-xl border border-[var(--gold)]/30 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 p-3 text-sm"
                   rows={2}
                   maxLength={300}
                   value={review.comment}
@@ -554,7 +555,7 @@ export default function ConvivioDetailView({ initial, siteUrl, myReferral }: { i
               )}
             </div>
             <div className="flex h-[420px] flex-col rounded-2xl border border-[var(--gold)]/25 bg-white shadow-sm">
-              <p className="border-b border-gray-100 px-5 py-3 font-bold text-[var(--ink)]">{t('chatTitle')}</p>
+              <p className="border-b border-[var(--gold)]/15 px-5 py-3 font-bold text-[var(--ink)]">{t('chatTitle')}</p>
               <div className="flex-1 space-y-2 overflow-y-auto px-4 py-3">
                 {messages.length === 0 ? (
                   <p className="py-8 text-center text-sm text-[var(--muted)]">{t('chatEmpty')}</p>
@@ -584,9 +585,9 @@ export default function ConvivioDetailView({ initial, siteUrl, myReferral }: { i
                   if (result !== 'ok') setNotice(t(`error_${result}`))
                   refresh()
                 }}
-                className="flex gap-2 border-t border-gray-100 p-3"
+                className="flex gap-2 border-t border-[var(--gold)]/15 p-3"
               >
-                <input value={text} onChange={(e) => setText(e.target.value)} maxLength={1000} placeholder={t('chatPlaceholder')} className="flex-1 rounded-xl border border-gray-300 px-3 py-2 text-sm" />
+                <input value={text} onChange={(e) => setText(e.target.value)} maxLength={1000} placeholder={t('chatPlaceholder')} className="flex-1 rounded-xl border border-[var(--gold)]/30 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 px-3 py-2 text-sm" />
                 <button type="submit" disabled={!text.trim()} className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--ink)] text-[var(--gold-bright)] disabled:opacity-40" aria-label={t('send')}>
                   <Send className="h-4 w-4" />
                 </button>

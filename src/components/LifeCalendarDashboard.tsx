@@ -21,6 +21,13 @@ type Item = {
 
 type Profile = { id: string; name: string }
 
+const STATUS_ACCENT: Record<ItemStatus, string> = {
+  regular: 'bg-green-500',
+  upcoming: 'bg-[var(--gold-bright)]',
+  urgent: 'bg-amber-600',
+  expired: 'bg-red-600',
+}
+
 type ArchivedItem = { id: string; title: string; category: string; due_date: string }
 
 export default function LifeCalendarDashboard({
@@ -71,32 +78,35 @@ export default function LifeCalendarDashboard({
           <button
             key={status}
             onClick={() => setStatusFilter(statusFilter === status ? 'all' : status)}
-            className={`bg-white rounded-xl border p-4 text-left transition-all ${
-              statusFilter === status ? 'border-amber-600 ring-2 ring-amber-200' : 'border-gray-200'
+            className={`bg-white rounded-2xl border p-4 text-left shadow-sm transition-all ${
+              statusFilter === status ? 'border-[var(--gold)] ring-2 ring-[var(--gold)]/30' : 'border-[var(--gold)]/25 hover:border-[var(--gold)]/50'
             }`}
           >
-            <div className="text-2xl font-bold text-gray-900">{summary[status]}</div>
-            <div className="text-xs text-gray-500 mt-1">{t(`status_${status}`)}</div>
+            <div className="flex items-center justify-between gap-2">
+              <div className="text-2xl font-bold text-[var(--ink)]">{summary[status]}</div>
+              <span className={`h-3 w-3 rounded-full shrink-0 ${STATUS_ACCENT[status]}`} />
+            </div>
+            <div className="text-xs text-[var(--muted)] mt-1">{t(`status_${status}`)}</div>
           </button>
         ))}
       </div>
 
-      <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-6">
+      <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6">
         <div className="flex flex-col sm:flex-row gap-3 mb-4">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--gold)]" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder={t('searchPlaceholder')}
-              className="w-full pl-9 pr-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm"
+              className="w-full pl-9 pr-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
             />
           </div>
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value as Category | 'all')}
-            className="px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm bg-white"
+            className="px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm bg-white"
           >
             <option value="all">{t('allCategories')}</option>
             {CATEGORIES.map((category) => (
@@ -109,7 +119,7 @@ export default function LifeCalendarDashboard({
             <button
               type="button"
               onClick={() => setManageProfiles((v) => !v)}
-              className="px-3 py-2 border-2 border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:border-amber-400 bg-white"
+              className="px-3 py-2 border-2 border-[var(--gold)]/40 rounded-lg text-sm font-medium text-[var(--ink)] hover:border-[var(--gold)] hover:bg-[var(--gold-pale)] bg-white transition-colors"
             >
               {t('manageProfiles')}
             </button>
@@ -118,7 +128,7 @@ export default function LifeCalendarDashboard({
             <select
               value={profileFilter}
               onChange={(e) => setProfileFilter(e.target.value)}
-              className="px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm bg-white"
+              className="px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm bg-white"
             >
               <option value="all">{t('allProfiles')}</option>
               {profiles.map((profile) => (
@@ -131,11 +141,11 @@ export default function LifeCalendarDashboard({
         </div>
 
         {manageProfiles && profiles.length > 0 && (
-          <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 p-3">
-            <p className="mb-2 text-xs text-amber-800">{t('manageProfilesHint')}</p>
+          <div className="mb-4 rounded-xl border border-[var(--gold)]/30 bg-[var(--gold-pale)] p-3">
+            <p className="mb-2 text-xs text-[var(--ink)]/80">{t('manageProfilesHint')}</p>
             <div className="flex flex-wrap gap-2">
               {profiles.map((profile) => (
-                <span key={profile.id} className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 text-sm text-gray-700 border border-amber-200">
+                <span key={profile.id} className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 text-sm text-[var(--ink)] border border-[var(--gold)]/30">
                   {profile.name}
                   <button type="button" onClick={() => removeProfile(profile)} className="text-gray-400 hover:text-red-600" aria-label={t('delete')}>
                     <X className="h-3.5 w-3.5" />
@@ -153,28 +163,28 @@ export default function LifeCalendarDashboard({
             ))}
           </div>
         ) : (
-          <div className="text-center py-16 text-gray-400">
-            <CalendarClock className="w-12 h-12 mx-auto mb-4" />
+          <div className="text-center py-16 rounded-xl border border-dashed border-[var(--gold)]/40 text-[var(--muted)]">
+            <CalendarClock className="w-12 h-12 mx-auto mb-4 text-[var(--gold)]" />
             <p>{items.length === 0 ? t('noItemsYet') : t('noResults')}</p>
           </div>
         )}
       </div>
 
       {archived.length > 0 && (
-        <div className="bg-white rounded-2xl border border-gray-200 p-5">
-          <button type="button" onClick={() => setShowArchive((v) => !v)} className="flex w-full items-center justify-between text-left font-semibold text-gray-700">
+        <div className="bg-white rounded-2xl border border-[var(--gold)]/25 shadow-sm p-5">
+          <button type="button" onClick={() => setShowArchive((v) => !v)} className="flex w-full items-center justify-between gap-3 text-left font-semibold text-[var(--ink)]">
             <span className="flex items-center gap-2">
-              <Archive className="h-4 w-4 text-gray-400" /> {t('archiveTitle', { count: archived.length })}
+              <Archive className="h-4 w-4 text-[var(--gold)]" /> {t('archiveTitle', { count: archived.length })}
             </span>
-            <span className="text-sm text-amber-700">{showArchive ? t('hide') : t('show')}</span>
+            <span className="shrink-0 text-sm font-semibold text-[var(--gold)]">{showArchive ? t('hide') : t('show')}</span>
           </button>
           {showArchive && (
-            <ul className="mt-3 divide-y divide-gray-100">
+            <ul className="mt-3 divide-y divide-[var(--gold)]/15">
               {archived.map((item) => (
                 <li key={item.id}>
-                  <Link href={`/marketplace/life-calendar/${item.id}`} className="flex items-center justify-between gap-3 py-2.5 text-sm hover:text-amber-700">
-                    <span className="truncate text-gray-700">{item.title}</span>
-                    <span className="shrink-0 text-xs text-gray-400">
+                  <Link href={`/marketplace/life-calendar/${item.id}`} className="flex items-center justify-between gap-3 py-2.5 text-sm hover:text-[var(--gold)]">
+                    <span className="truncate text-[var(--ink)]">{item.title}</span>
+                    <span className="shrink-0 text-xs text-[var(--muted)]">
                       {t(`category_${item.category}`)} · {new Date(`${item.due_date}T12:00:00Z`).toLocaleDateString('it-IT')}
                     </span>
                   </Link>
@@ -187,7 +197,7 @@ export default function LifeCalendarDashboard({
 
       <Link
         href="/marketplace/life-calendar/new"
-        className="fixed bottom-6 right-6 flex items-center gap-2 px-6 py-4 bg-gradient-to-r from-amber-600 to-orange-600 text-white rounded-full font-semibold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
+        className="fixed bottom-6 right-6 z-10 flex items-center gap-2 px-6 py-4 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] rounded-full font-bold shadow-lg hover:brightness-105 hover:shadow-xl hover:-translate-y-0.5 transition-all"
       >
         <PlusCircle className="w-5 h-5" />
         {t('newItem')}

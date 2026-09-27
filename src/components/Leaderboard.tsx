@@ -140,40 +140,40 @@ export default function Leaderboard({ currentUserId }: LeaderboardProps) {
   const displayedEntries = viewMode === 'top10' ? allEntries.slice(0, 10) : allEntries.slice(0, 100)
 
   const getRankIcon = (rank: number) => {
-    if (rank === 1) return <Crown className="w-5 h-5 text-yellow-500" />
+    if (rank === 1) return <Crown className="w-5 h-5 text-[var(--gold)]" />
     if (rank === 2) return <Medal className="w-5 h-5 text-gray-400" />
     if (rank === 3) return <Award className="w-5 h-5 text-amber-600" />
     return <span className="w-5 h-5 flex items-center justify-center text-sm font-bold text-gray-500">{rank}</span>
   }
 
   const getRankBg = (rank: number) => {
-    if (rank === 1) return 'bg-gradient-to-r from-yellow-50 to-amber-50 border-yellow-200'
+    if (rank === 1) return 'bg-gradient-to-r from-[var(--gold-pale)]/60 to-[var(--paper)] border-[var(--gold)]/40'
     if (rank === 2) return 'bg-gradient-to-r from-gray-50 to-slate-50 border-gray-200'
-    if (rank === 3) return 'bg-gradient-to-r from-amber-50 to-orange-50 border-amber-200'
-    return 'bg-white border-gray-200'
+    if (rank === 3) return 'bg-gradient-to-r from-amber-50 to-[var(--paper)] border-amber-200'
+    return 'bg-white border-[var(--gold)]/15'
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+    <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
-        <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-          <Trophy className="w-6 h-6 text-yellow-500" />
+        <h2 className="text-xl font-bold text-[var(--ink)] flex items-center gap-2">
+          <Trophy className="w-6 h-6 text-[var(--gold)]" />
           {t('leaderboard')}
         </h2>
         
         <div className="flex items-center gap-3">
           {userRank && (
-            <div className="flex items-center gap-1 text-sm text-indigo-600 font-medium bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">
+            <div className="flex items-center gap-1 text-sm text-[var(--gold-bright)] font-semibold bg-[var(--ink)] px-3 py-1 rounded-full border border-[var(--gold)]/40">
               <TrendingUp className="w-4 h-4" />
               {t('yourRank', { rank: userRank })}
             </div>
           )}
           
-          <div className="flex bg-gray-100 rounded-lg p-1">
+          <div className="flex bg-[var(--paper)] border border-[var(--gold)]/20 rounded-lg p-1">
             <button
               onClick={() => setViewMode('top10')}
               className={`px-3 py-1 text-xs font-semibold rounded-md transition-all ${
-                viewMode === 'top10' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+                viewMode === 'top10' ? 'bg-[var(--ink)] text-[var(--gold-bright)] shadow-sm' : 'text-[var(--muted)] hover:text-[var(--ink)]'
               }`}
             >
               Top 10
@@ -181,7 +181,7 @@ export default function Leaderboard({ currentUserId }: LeaderboardProps) {
             <button
               onClick={() => setViewMode('top100')}
               className={`px-3 py-1 text-xs font-semibold rounded-md transition-all ${
-                viewMode === 'top100' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+                viewMode === 'top100' ? 'bg-[var(--ink)] text-[var(--gold-bright)] shadow-sm' : 'text-[var(--muted)] hover:text-[var(--ink)]'
               }`}
             >
               Top 100
@@ -198,7 +198,7 @@ export default function Leaderboard({ currentUserId }: LeaderboardProps) {
 
       {loading ? (
         <div className="text-center py-8 text-gray-500 flex flex-col items-center gap-2">
-          <div className="w-6 h-6 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-6 h-6 border-2 border-[var(--gold)] border-t-transparent rounded-full animate-spin"></div>
           <span>{t('loadingLeaderboard')}</span>
         </div>
       ) : displayedEntries.length === 0 ? (
@@ -213,7 +213,7 @@ export default function Leaderboard({ currentUserId }: LeaderboardProps) {
                 key={entry.id}
                 className={`flex items-center gap-3 p-3 rounded-lg border transition-all ${
                   isCurrentUser 
-                    ? 'bg-indigo-50 border-indigo-300 shadow-sm ring-1 ring-indigo-200' 
+                    ? 'bg-[var(--gold-pale)]/50 border-[var(--gold)] shadow-sm ring-2 ring-[var(--gold)]/40' 
                     : getRankBg(rank)
                 }`}
               >
@@ -222,11 +222,11 @@ export default function Leaderboard({ currentUserId }: LeaderboardProps) {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className={`font-semibold truncate ${isCurrentUser ? 'text-indigo-900' : 'text-gray-900'}`}>
+                    <span className={`font-semibold truncate ${isCurrentUser ? 'text-[var(--ink)]' : 'text-gray-900'}`}>
                       {entry.first_name} {entry.last_name}
                     </span>
                     {isCurrentUser && (
-                      <span className="text-[10px] bg-indigo-600 text-white px-1.5 py-0.5 rounded-full font-bold uppercase tracking-wider">
+                      <span className="text-[10px] bg-[var(--ink)] text-[var(--gold-bright)] px-1.5 py-0.5 rounded-full font-bold uppercase tracking-wider">
                         {t('youLabel')}
                       </span>
                     )}

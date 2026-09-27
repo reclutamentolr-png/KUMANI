@@ -117,7 +117,7 @@ export default function AffinityGame({ initial, siteUrl }: { initial: Saved | nu
   if (mode === 'intro' || !saved) {
     return (
       <div className="mx-auto max-w-xl text-center">
-        <p className="text-lg leading-8 text-slate-600">{t('intro')}</p>
+        <p className="text-lg leading-8 text-[var(--muted)]">{t('intro')}</p>
         {error && <p className="mt-4 rounded-xl bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-800">{error}</p>}
         <button
           type="button"
@@ -174,7 +174,7 @@ export default function AffinityGame({ initial, siteUrl }: { initial: Saved | nu
           <HeartHandshake className="mt-0.5 h-7 w-7 shrink-0 text-[var(--gold)]" />
           <div className="flex-1">
             <h3 className="font-bold text-[var(--ink)]">{t('duoTitle')}</h3>
-            <p className="mt-1 text-sm leading-6 text-slate-600">{t('duoBody')}</p>
+            <p className="mt-1 text-sm leading-6 text-[var(--muted)]">{t('duoBody')}</p>
             <button
               type="button"
               onClick={shareDuo}

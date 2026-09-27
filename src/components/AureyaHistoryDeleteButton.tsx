@@ -30,7 +30,7 @@ export default function AureyaHistoryDeleteButton({ id }: { id: string }) {
       disabled={deleting}
       title={t('deleteButtonLabel')}
       aria-label={t('deleteButtonLabel')}
-      className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
+      className="p-1.5 text-[var(--muted)] hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
     >
       {deleting ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
     </button>

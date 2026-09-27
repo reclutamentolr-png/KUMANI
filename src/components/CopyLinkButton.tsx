@@ -6,12 +6,12 @@ import { useTranslations } from 'next-intl'
 
 export default function CopyLinkButton({
   url,
-  colorClassName = 'bg-pink-600 hover:bg-pink-700 text-white',
+  colorClassName = 'bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] hover:brightness-110 text-[var(--ink)] font-bold',
 }: {
   url: string
   // Lets a specific tool page override the accent color (this component is
   // shared across several tools with their own individual color schemes);
-  // defaults to the original pink so those other pages are unaffected.
+  // defaults to the KUMANI gold gradient.
   colorClassName?: string
 }) {
   const t = useTranslations('marketplace')

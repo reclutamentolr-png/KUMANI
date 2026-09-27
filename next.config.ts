@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
   experimental: {
     // Foto del menu fino a 2MB: margine per l'overhead multipart
     serverActions: {
-      bodySizeLimit: '3mb',
+      bodySizeLimit: '6mb',
     },
   },
 };

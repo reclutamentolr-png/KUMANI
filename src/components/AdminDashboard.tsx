@@ -54,6 +54,11 @@ import KuManagementPanel from '@/components/admin/KuManagementPanel'
 import AffinityReportsPanel from '@/components/admin/AffinityReportsPanel'
 import ConvivioReportsPanel from '@/components/admin/ConvivioReportsPanel'
 import EventsAdminPanel from '@/components/admin/EventsAdminPanel'
+import IdentityVerificationsPanel from '@/components/admin/IdentityVerificationsPanel'
+import ConvivioFeesPanel from '@/components/admin/ConvivioFeesPanel'
+import ContactMessagesPanel from '@/components/admin/ContactMessagesPanel'
+import ProfileRequestsPanel from '@/components/admin/ProfileRequestsPanel'
+import AccountDeletionsPanel from '@/components/admin/AccountDeletionsPanel'
 import {
   LayoutDashboard,
   CalendarDays,
@@ -85,7 +90,12 @@ import {
   Megaphone,
   Mail,
   Send,
-  LoaderCircle
+  LoaderCircle,
+  ScanFace,
+  HandCoins,
+  Inbox,
+  UserPen,
+  UserX
 } from 'lucide-react'
 
 type AdminDashboardProps = {
@@ -108,6 +118,58 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
     window.history.replaceState(window.history.state, '', url)
   }, [activeSection])
   const supabase = createClient()
+
+  // Pallini oro nel menu: code da gestire + novità dall'ultima visita di
+  // questo admin a ciascuna sezione (RPC admin_section_badges).
+  const [badges, setBadges] = useState<Record<string, number>>({})
+  const loadBadges = async () => {
+    try {
+      const { data, error } = await supabase.rpc('admin_section_badges')
+      if (error || !data || typeof data !== 'object' || Array.isArray(data)) return
+      const next: Record<string, number> = {}
+      for (const [key, value] of Object.entries(data as Record<string, unknown>)) {
+        const n = Number(value)
+        if (Number.isFinite(n) && n > 0) next[key] = n
+      }
+      setBadges(next)
+    } catch (error) {
+      console.error('Errore caricamento pallini admin:', error)
+    }
+  }
+
+  // Aggiornamento ogni 60 s, solo con la scheda visibile (e subito al ritorno).
+  useEffect(() => {
+    const tick = () => {
+      if (document.visibilityState === 'visible') loadBadges()
+    }
+    const interval = setInterval(tick, 60000)
+    document.addEventListener('visibilitychange', tick)
+    return () => {
+      clearInterval(interval)
+      document.removeEventListener('visibilitychange', tick)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Apertura di una sezione: segna come "vista" (azzera le novità, le code
+  // restano finché non vengono gestite) e ricarica i pallini.
+  useEffect(() => {
+    let cancelled = false
+    ;(async () => {
+      try {
+        await supabase.rpc('admin_mark_section_seen', { p_section: activeSection })
+      } catch (error) {
+        console.error('Errore admin_mark_section_seen:', error)
+      }
+      if (!cancelled) await loadBadges()
+    })()
+    return () => {
+      cancelled = true
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeSection])
+
+  const badgeLabel = (count: number) => (count > 99 ? '99+' : String(count))
 
   const [stats, setStats] = useState({ totalUsers: 0, activeUsers: 0, totalNodes: 0, blockedUsers: 0 })
   const [onlineUsers, setOnlineUsers] = useState(0)
@@ -488,6 +550,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
     const result = await moderateSpotlightProfile(profileId, status)
     if (result.success) {
       setSpotlightProfiles((prev) => prev.map((p) => (p.id === profileId ? { ...p, moderation_status: status } : p)))
+      loadBadges()
     } else {
       alert(result.error || 'Errore durante la moderazione.')
     }
@@ -497,6 +560,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
     const result = await dismissListingReport(reportId)
     if (result.success) {
       setListingReports((prev) => prev.filter((r) => r.id !== reportId))
+      loadBadges()
     } else {
       alert(result.error || 'Errore durante la rimozione della segnalazione.')
     }
@@ -507,6 +571,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
     const result = await deleteReportedListing(listingId)
     if (result.success) {
       setListingReports((prev) => prev.filter((r) => r.listing_id !== listingId))
+      loadBadges()
     } else {
       alert(result.error || 'Errore durante l\'eliminazione dell\'annuncio.')
     }
@@ -617,6 +682,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
           r.id === redemptionId ? { ...r, fulfilled_at: new Date().toISOString(), fulfillment_code: code } : r
         )
       )
+      loadBadges()
       setFulfillCodeInputs((prev) => {
         const next = { ...prev }
         delete next[redemptionId]
@@ -931,6 +997,8 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
   const menuItems = [
   { id: 'overview', label: 'Panoramica', Icon: LayoutDashboard, permission: 'stats.read' as Permission },
   { id: 'users', label: 'Utenti', Icon: Users, permission: 'users.read' as Permission },
+  { id: 'profileRequests', label: 'Richieste dati anagrafici', Icon: UserPen, permission: 'users.read' as Permission },
+  { id: 'accountDeletions', label: 'Cancellazione account', Icon: UserX, permission: 'users.read' as Permission },
   { id: 'matrix', label: 'Matrice', Icon: GitBranch, permission: 'matrix.read' as Permission },
   { id: 'marketplace', label: 'Ecosistema (strumenti)', Icon: ShoppingBag, permission: 'marketplace.read' as Permission },
   { id: 'listingReports', label: 'Bacheca', Icon: Flag, permission: 'listings.read' as Permission },
@@ -938,11 +1006,14 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
   { id: 'affinity', label: 'Affinity', Icon: Flag, permission: 'listings.read' as Permission },
   { id: 'convivio', label: 'Kordata', Icon: Flag, permission: 'listings.read' as Permission },
   { id: 'events', label: 'Eventi', Icon: CalendarDays, permission: 'listings.read' as Permission },
+  { id: 'identity', label: 'Verifica identità', Icon: ScanFace, permission: 'users.read' as Permission },
+  { id: 'convivioFees', label: 'Commissioni Kordata', Icon: HandCoins, permission: 'listings.read' as Permission },
   { id: 'coupons', label: 'Coupon', Icon: Ticket, permission: 'coupons.read' as Permission },
   { id: 'vouchers', label: 'Voucher', Icon: BadgeCheck, permission: 'vouchers.read' as Permission },
   { id: 'rewards', label: 'Premi', Icon: Gift, permission: 'rewards.read' as Permission },
   { id: 'kuManagement', label: 'Gestione KU', Icon: Coins, permission: 'settings.read' as Permission },
   { id: 'messages', label: 'Messaggi', Icon: MessageSquare, permission: 'messages.read' as Permission },
+  { id: 'contactMessages', label: 'Messaggi dal sito', Icon: Inbox, permission: 'support.read' as Permission },
   { id: 'financials', label: 'Amministrazione', Icon: PiggyBank, permission: 'stats.read' as Permission },
   { id: 'settings', label: 'Impostazioni', Icon: Settings, permission: 'settings.read' as Permission },
 ]
@@ -1538,7 +1609,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
                       href={`/${locale}/admin/voucher-batch/${b.id}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs font-semibold text-indigo-700 mr-3"
+                      className="text-xs font-semibold text-[var(--ink)] hover:text-[var(--gold)] mr-3"
                     >
                       Stampa cartoncini
                     </a>
@@ -2798,24 +2869,41 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
       <div className="lg:col-span-1">
         <nav className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 space-y-2 sticky top-4">
-          {availableMenuItems.map(item => (
-            <button 
-              key={item.id} 
-              onClick={() => setActiveSection(item.id)} 
-              className={`w-full text-left px-4 py-3 rounded-lg transition-colors flex items-center gap-3 ${
-                activeSection === item.id ? 'bg-[var(--ink)] text-white shadow-md' : 'hover:bg-gray-100 text-gray-700'
-              }`}
-            >
-              <item.Icon className="w-5 h-5" />
-              <span className="font-medium">{item.label}</span>
-            </button>
-          ))}
+          {availableMenuItems.map(item => {
+            const count = badges[item.id] ?? 0
+            return (
+              <button
+                key={item.id}
+                onClick={() => setActiveSection(item.id)}
+                title={count > 0 ? `${item.label}: ${count} ${count === 1 ? 'elemento' : 'elementi'} da vedere o gestire` : undefined}
+                className={`w-full text-left px-4 py-3 rounded-lg transition-colors flex items-center gap-3 ${
+                  activeSection === item.id ? 'bg-[var(--ink)] text-white shadow-md' : 'hover:bg-gray-100 text-gray-700'
+                }`}
+              >
+                <span className="relative shrink-0">
+                  <item.Icon className="w-5 h-5" />
+                  {count > 0 && (
+                    <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-[var(--gold)] ring-2 ring-white" aria-hidden="true" />
+                  )}
+                </span>
+                <span className="font-medium flex-1 min-w-0">{item.label}</span>
+                {count > 0 && (
+                  <span className="shrink-0 rounded-full bg-[var(--gold)] px-1.5 py-0.5 text-[10px] font-bold leading-none text-white">
+                    <span className="sr-only">Da gestire: </span>
+                    {badgeLabel(count)}
+                  </span>
+                )}
+              </button>
+            )
+          })}
         </nav>
       </div>
 
       <div className="lg:col-span-3 space-y-6">
         {activeSection === 'overview' && renderOverview()}
         {activeSection === 'users' && renderUsers()}
+        {activeSection === 'profileRequests' && <ProfileRequestsPanel onChanged={loadBadges} />}
+        {activeSection === 'accountDeletions' && <AccountDeletionsPanel onChanged={loadBadges} />}
         {activeSection === 'matrix' && renderMatrix()}
         {activeSection === 'marketplace' && renderMarketplace()}
         {activeSection === 'coupons' && renderCoupons()}
@@ -2829,6 +2917,9 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
         {activeSection === 'affinity' && <AffinityReportsPanel />}
         {activeSection === 'convivio' && <ConvivioReportsPanel locale={locale} />}
         {activeSection === 'events' && <EventsAdminPanel locale={locale} />}
+        {activeSection === 'identity' && <IdentityVerificationsPanel />}
+        {activeSection === 'convivioFees' && <ConvivioFeesPanel locale={locale} />}
+        {activeSection === 'contactMessages' && <ContactMessagesPanel />}
         {activeSection === 'settings' && renderSettings()}
       </div>
 

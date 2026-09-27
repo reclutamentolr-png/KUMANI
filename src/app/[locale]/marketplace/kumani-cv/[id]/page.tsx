@@ -62,34 +62,34 @@ export default async function CvDetailPage({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[var(--gold-pale)]">
-      <header className="border-b border-[var(--gold)]/25 bg-[var(--ink)] sticky top-0 z-10 shadow-sm">
+    <div className="min-h-screen bg-[var(--background)]">
+      <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <Link
             href={`/marketplace/kumani-cv${backSuffix}`}
-            className="flex items-center gap-2 text-white hover:text-[var(--gold-bright)] font-medium transition-colors"
+            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
           >
             <ArrowLeft className="w-5 h-5" />
             {t('title')}
           </Link>
-          <h1 className="text-lg font-semibold text-white truncate max-w-xs">{cv.title}</h1>
+          <h1 className="font-semibold tracking-wide truncate max-w-[50%] sm:max-w-xs">{cv.title}</h1>
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 sm:p-8">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
+        <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 items-center">
             <div className="sm:col-span-2 space-y-4">
               <div>
-                <p className="text-xs text-gray-500 mb-1">{t('publicLinkLabel')}</p>
+                <p className="text-xs font-semibold text-[var(--gold)] uppercase tracking-wide mb-1">{t('publicLinkLabel')}</p>
                 <div className="flex items-center gap-2">
-                  <code className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 break-all">
+                  <code className="flex-1 min-w-0 bg-[var(--paper)] border border-[var(--gold)]/25 rounded-lg px-3 py-2 text-sm text-[var(--ink)] break-all">
                     {publicUrl}
                   </code>
                   <CopyLinkButton url={publicUrl} />
                 </div>
               </div>
-              <p className="text-sm text-gray-600">{t('livingCvHint')}</p>
+              <p className="text-sm text-[var(--muted)]">{t('livingCvHint')}</p>
             </div>
 
             <div className="flex justify-center">
@@ -112,7 +112,7 @@ export default async function CvDetailPage({
           <CvShareButtons cv={cv} photoUrl={photoUrl} publicUrl={publicUrl} />
         </div>
 
-        <div className="bg-gray-100 rounded-2xl border border-gray-200 overflow-hidden">
+        <div className="bg-[var(--paper)] rounded-2xl border border-[var(--gold)]/25 shadow-sm overflow-hidden">
           <CvTemplateRenderer template={cv.template} cv={previewData} />
         </div>
       </main>

@@ -85,11 +85,11 @@ export default function QuoteBusinessProfileForm({ initialProfile, initialLogoUr
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 sm:p-8 space-y-6">
+    <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8 space-y-6">
       <div className="flex flex-col items-center gap-3">
         <div
           onClick={() => fileInputRef.current?.click()}
-          className="w-28 h-28 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center cursor-pointer hover:border-[var(--gold)] transition-all overflow-hidden bg-gray-50"
+          className="w-28 h-28 rounded-xl border-2 border-dashed border-[var(--gold)]/40 flex items-center justify-center cursor-pointer hover:border-[var(--gold)] transition-all overflow-hidden bg-[var(--gold-pale)]/40"
         >
           {uploadingLogo ? (
             <LoaderCircle className="w-6 h-6 text-gray-400 animate-spin" />
@@ -125,7 +125,7 @@ export default function QuoteBusinessProfileForm({ initialProfile, initialLogoUr
             value={form.companyName}
             onChange={(e) => setForm((prev) => ({ ...prev, companyName: e.target.value }))}
             placeholder={t('companyNamePlaceholder')}
-            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] text-sm"
+            className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
           />
         </div>
         <div>
@@ -134,7 +134,7 @@ export default function QuoteBusinessProfileForm({ initialProfile, initialLogoUr
             type="text"
             value={form.vatNumber}
             onChange={(e) => setForm((prev) => ({ ...prev, vatNumber: e.target.value }))}
-            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] text-sm"
+            className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
           />
         </div>
         <div className="sm:col-span-2">
@@ -143,7 +143,7 @@ export default function QuoteBusinessProfileForm({ initialProfile, initialLogoUr
             type="text"
             value={form.address}
             onChange={(e) => setForm((prev) => ({ ...prev, address: e.target.value }))}
-            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] text-sm"
+            className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
           />
         </div>
         <div>
@@ -152,7 +152,7 @@ export default function QuoteBusinessProfileForm({ initialProfile, initialLogoUr
             type="text"
             value={form.city}
             onChange={(e) => setForm((prev) => ({ ...prev, city: e.target.value }))}
-            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] text-sm"
+            className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
           />
         </div>
         <div>
@@ -161,7 +161,7 @@ export default function QuoteBusinessProfileForm({ initialProfile, initialLogoUr
             type="text"
             value={form.postalCode}
             onChange={(e) => setForm((prev) => ({ ...prev, postalCode: e.target.value }))}
-            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] text-sm"
+            className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
           />
         </div>
         <div>
@@ -170,7 +170,7 @@ export default function QuoteBusinessProfileForm({ initialProfile, initialLogoUr
             type="text"
             value={form.province}
             onChange={(e) => setForm((prev) => ({ ...prev, province: e.target.value }))}
-            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] text-sm"
+            className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
           />
         </div>
         <div>
@@ -179,7 +179,7 @@ export default function QuoteBusinessProfileForm({ initialProfile, initialLogoUr
             type="email"
             value={form.email}
             onChange={(e) => setForm((prev) => ({ ...prev, email: e.target.value }))}
-            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] text-sm"
+            className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
           />
         </div>
         <div>
@@ -188,7 +188,7 @@ export default function QuoteBusinessProfileForm({ initialProfile, initialLogoUr
             type="email"
             value={form.pec}
             onChange={(e) => setForm((prev) => ({ ...prev, pec: e.target.value }))}
-            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] text-sm"
+            className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
           />
         </div>
         <div>
@@ -197,7 +197,7 @@ export default function QuoteBusinessProfileForm({ initialProfile, initialLogoUr
             type="text"
             value={form.phone}
             onChange={(e) => setForm((prev) => ({ ...prev, phone: e.target.value }))}
-            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] text-sm"
+            className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
           />
         </div>
       </div>
@@ -222,7 +222,7 @@ export default function QuoteBusinessProfileForm({ initialProfile, initialLogoUr
       <button
         onClick={handleSubmit}
         disabled={!isValid || saving || uploadingLogo}
-        className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-[var(--ink)] hover:bg-[var(--ink-soft)] text-white rounded-xl font-semibold transition-all disabled:opacity-50"
+        className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] rounded-xl font-bold shadow-md hover:brightness-105 transition-all disabled:opacity-50"
       >
         {saving ? (
           <>

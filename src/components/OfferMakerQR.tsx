@@ -21,7 +21,7 @@ export default function OfferMakerQR({
   bgColor = '#ffffff',
   generatingLabel,
   downloadLabel,
-  accentClassName = 'bg-violet-600 hover:bg-violet-700',
+  accentClassName = 'bg-[var(--ink)] hover:bg-[var(--ink-soft)]',
 }: Props) {
   const [qrDataUrl, setQrDataUrl] = useState('')
   const [loading, setLoading] = useState(true)
@@ -62,7 +62,7 @@ export default function OfferMakerQR({
           <span className="text-xs text-gray-400">{generatingLabel}</span>
         </div>
       ) : (
-        <div className="p-3 bg-white rounded-xl border border-gray-200 shadow-sm">
+        <div className="p-3 bg-white rounded-xl border border-[var(--gold)]/25 shadow-sm">
           <img src={qrDataUrl} alt="QR Code" className="w-40 h-40" />
         </div>
       )}

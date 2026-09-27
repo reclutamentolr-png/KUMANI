@@ -10,7 +10,7 @@ export const STATUS_STYLE: Record<string, string> = {
   awaiting_supplier: 'bg-amber-100 text-amber-800',
   declined: 'bg-red-100 text-red-700',
   reached: 'bg-[var(--gold-pale)] text-[var(--ink)]',
-  ordered: 'bg-sky-100 text-sky-800',
+  ordered: 'bg-[var(--ink)] text-[var(--gold-bright)]',
   completed: 'bg-gray-100 text-gray-700',
   failed: 'bg-red-100 text-red-700',
   cancelled: 'bg-red-100 text-red-700',
@@ -21,7 +21,7 @@ export function ProgressBar({ people, min, max }: { people: number; min: number;
   const percent = Math.min(100, Math.round((people / Math.max(target, 1)) * 100))
   const minMark = max ? Math.round((min / max) * 100) : 100
   return (
-    <div className="relative h-2.5 overflow-hidden rounded-full bg-gray-100">
+    <div className="relative h-2.5 overflow-hidden rounded-full bg-[var(--gold-pale)]">
       <div className={`h-full rounded-full ${people >= min ? 'bg-emerald-500' : 'bg-[var(--gold)]'}`} style={{ width: `${percent}%` }} />
       {max && <span className="absolute top-0 h-full w-0.5 bg-[var(--ink)]/40" style={{ left: `${minMark}%` }} />}
     </div>

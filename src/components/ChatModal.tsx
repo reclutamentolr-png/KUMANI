@@ -136,31 +136,31 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
       <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] flex flex-col" onClick={e => e.stopPropagation()}>
         
         {/* Header con info chiare sulla conversazione */}
-        <div className="flex justify-between items-center p-5 border-b border-gray-200 bg-gradient-to-r from-indigo-50 to-purple-50">
+        <div className="flex justify-between items-center p-5 border-b border-[var(--gold)]/25 bg-[var(--paper)]">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center flex-shrink-0">
-              <MessageCircle className="w-6 h-6 text-white" />
+            <div className="w-12 h-12 rounded-full bg-[var(--ink)] flex items-center justify-center flex-shrink-0">
+              <MessageCircle className="w-6 h-6 text-[var(--gold-bright)]" />
             </div>
             <div>
-              <h3 className="font-bold text-gray-900">
+              <h3 className="font-bold text-[var(--ink)]">
                 Conversazione con {listing.profiles?.first_name} {listing.profiles?.last_name}
               </h3>
-              <div className="flex items-center gap-1.5 text-xs text-gray-600 mt-0.5">
-                <Tag className="w-3 h-3" />
+              <div className="flex items-center gap-1.5 text-xs text-[var(--muted)] mt-0.5">
+                <Tag className="w-3 h-3 text-[var(--gold)]" />
                 <span className="truncate max-w-[200px]">{listing.title}</span>
               </div>
             </div>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-100 transition-colors">
+          <button onClick={onClose} className="text-[var(--muted)] hover:text-[var(--ink)] p-2 rounded-full hover:bg-[var(--gold)]/10 transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Area messaggi */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50">
+        <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-[var(--background)]">
           {messages.length === 0 ? (
             <div className="text-center text-gray-500 py-12">
-              <MessageCircle className="w-16 h-16 mx-auto mb-3 opacity-30" />
+              <MessageCircle className="w-16 h-16 mx-auto mb-3 text-[var(--gold)] opacity-40" />
               <p className="font-medium">Nessun messaggio in questa conversazione</p>
               <p className="text-sm mt-1">Inizia tu la conversazione!</p>
             </div>
@@ -176,12 +176,12 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
                     <div
                       className={`max-w-[75%] p-3 rounded-2xl shadow-sm ${
                         isMe
-                          ? 'bg-gradient-to-br from-indigo-600 to-purple-600 text-white rounded-br-sm'
-                          : 'bg-white text-gray-900 border border-gray-200 rounded-bl-sm'
+                          ? 'bg-[var(--ink)] text-white border border-[var(--gold)]/30 rounded-br-sm'
+                          : 'bg-white text-[var(--ink)] border border-[var(--gold)]/25 rounded-bl-sm'
                       }`}
                     >
                       <p className="text-sm whitespace-pre-wrap break-words">{msg.content}</p>
-                      <p className={`text-xs mt-1 ${isMe ? 'text-indigo-100' : 'text-gray-500'}`}>
+                      <p className={`text-xs mt-1 ${isMe ? 'text-[var(--gold-pale)]/80' : 'text-[var(--muted)]'}`}>
                         {new Date(msg.created_at).toLocaleString('it-IT', { 
                           day: '2-digit', 
                           month: '2-digit', 
@@ -199,7 +199,7 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
         </div>
 
         {/* Input messaggio */}
-        <div className="p-4 border-t border-gray-200 bg-white">
+        <div className="p-4 border-t border-[var(--gold)]/25 bg-white">
           <div className="flex gap-2">
             <input
               type="text"
@@ -212,12 +212,12 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
                 }
               }}
               placeholder={`Scrivi a ${listing.profiles?.first_name}...`}
-              className="flex-1 px-4 py-2.5 border border-gray-300 rounded-full focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
+              className="flex-1 px-4 py-2.5 border border-[var(--gold)]/30 rounded-full focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 outline-none"
             />
             <button
               onClick={sendMessage}
               disabled={loading || !newMessage.trim()}
-              className="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-full flex items-center gap-2 font-medium shadow-md transition-all"
+              className="px-5 py-2.5 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed text-[var(--ink)] rounded-full flex items-center gap-2 font-bold shadow-md transition-all"
             >
               <Send className="w-4 h-4" />
               Invia

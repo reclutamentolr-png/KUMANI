@@ -38,55 +38,58 @@ export default async function WhatsAppPage({ params }: { params: Promise<{ local
   const referralUrl = `${baseUrl}/${locale}/ref/${profile.referral_code}`
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50">
-      <header className="bg-white shadow-sm border-b sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+    <div className="min-h-screen bg-[var(--background)]">
+      <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
           <ToolBackLink
-            className="flex items-center gap-2 text-gray-600 hover:text-green-600 transition-colors font-medium"
+            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
             dashboardLabel={<><ArrowLeft className="w-5 h-5" /> {commonT('backToDashboard')}</>}
           >
             <ArrowLeft className="w-5 h-5" />
             {t('back')}
           </ToolBackLink>
           <div className="flex items-center gap-2">
-            <div className="bg-gradient-to-br from-green-400 to-emerald-600 p-2 rounded-lg">
-              <MessageCircle className="w-5 h-5 text-white" />
-            </div>
-            <h1 className="text-xl font-bold text-gray-800">{t('title')}</h1>
+            <MessageCircle className="h-5 w-5 text-[var(--gold-bright)]" />
+            <h1 className="font-semibold tracking-wide">{t('title')}</h1>
           </div>
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 bg-green-100 text-green-700 px-4 py-1.5 rounded-full text-sm font-medium mb-4">
-            <Sparkles className="w-4 h-4" />
-            {t('badge')}
+      <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
+        {/* Hero */}
+        <div className="relative mb-8 overflow-hidden rounded-3xl bg-[var(--ink)] p-6 text-white shadow-[0_14px_40px_rgba(23,23,23,0.25)] sm:p-8">
+          <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full border border-[var(--gold)]/25 bg-[var(--gold)]/10" />
+          <div className="pointer-events-none absolute -bottom-20 right-24 h-40 w-40 rounded-full border border-[var(--gold)]/15" />
+          <div className="relative max-w-2xl">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[var(--gold)]/15 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[var(--gold-bright)]">
+              <Sparkles className="w-4 h-4" />
+              {t('badge')}
+            </div>
+            <h2 className="text-3xl font-bold sm:text-4xl">
+              {t('heroTitle')}
+            </h2>
+            <p className="mt-2 text-white/70 sm:text-lg">
+              {t('heroDescription')}
+            </p>
           </div>
-          <h2 className="text-4xl font-bold text-gray-900 mb-3">
-            {t('heroTitle')}
-          </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-            {t('heroDescription')}
-          </p>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-          <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-            <Users className="w-8 h-8 text-green-600 mb-2" />
-            <h3 className="font-semibold text-gray-900 mb-1">{t('templatesTitle')}</h3>
-            <p className="text-sm text-gray-600">{t('templatesDescription')}</p>
+        <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div className="rounded-2xl border border-[var(--gold)]/25 bg-white p-5 shadow-sm">
+            <Users className="mb-2 h-8 w-8 text-[var(--gold)]" />
+            <h3 className="mb-1 font-semibold text-[var(--ink)]">{t('templatesTitle')}</h3>
+            <p className="text-sm text-[var(--muted)]">{t('templatesDescription')}</p>
           </div>
-          <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-            <Send className="w-8 h-8 text-emerald-600 mb-2" />
-            <h3 className="font-semibold text-gray-900 mb-1">{t('sendTitle')}</h3>
-            <p className="text-sm text-gray-600">{t('sendDescription')}</p>
+          <div className="rounded-2xl border border-[var(--gold)]/25 bg-white p-5 shadow-sm">
+            <Send className="mb-2 h-8 w-8 text-[var(--gold)]" />
+            <h3 className="mb-1 font-semibold text-[var(--ink)]">{t('sendTitle')}</h3>
+            <p className="text-sm text-[var(--muted)]">{t('sendDescription')}</p>
           </div>
-          <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-            <TrendingUp className="w-8 h-8 text-teal-600 mb-2" />
-            <h3 className="font-semibold text-gray-900 mb-1">{t('linkTitle')}</h3>
-            <p className="text-sm text-gray-600">{t('linkDescription')}</p>
+          <div className="rounded-2xl border border-[var(--gold)]/25 bg-white p-5 shadow-sm">
+            <TrendingUp className="mb-2 h-8 w-8 text-[var(--gold)]" />
+            <h3 className="mb-1 font-semibold text-[var(--ink)]">{t('linkTitle')}</h3>
+            <p className="text-sm text-[var(--muted)]">{t('linkDescription')}</p>
           </div>
         </div>
 
@@ -94,22 +97,23 @@ export default async function WhatsAppPage({ params }: { params: Promise<{ local
         <WhatsAppTemplates referralUrl={referralUrl} />
 
         {/* Tips */}
-        <div className="mt-10 bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl p-6 text-white">
-          <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
-            <Sparkles className="w-5 h-5" />
+        <div className="relative mt-8 overflow-hidden rounded-2xl bg-gradient-to-r from-[var(--ink)] to-[#292722] p-6 text-white">
+          <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full border border-[var(--gold)]/20" />
+          <h3 className="relative mb-3 flex items-center gap-2 text-lg font-bold">
+            <Sparkles className="h-5 w-5 text-[var(--gold-bright)]" />
             {t('tipsTitle')}
           </h3>
-          <ul className="space-y-2 text-green-50 text-sm">
+          <ul className="relative space-y-2 text-sm text-white/75">
             <li className="flex items-start gap-2">
-              <span className="text-white font-bold">•</span>
+              <span className="font-bold text-[var(--gold-bright)]">•</span>
               <span>{t('tipOne')}</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-white font-bold">•</span>
+              <span className="font-bold text-[var(--gold-bright)]">•</span>
               <span>{t('tipTwo')}</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-white font-bold">•</span>
+              <span className="font-bold text-[var(--gold-bright)]">•</span>
               <span>{t('tipThree')}</span>
             </li>
           </ul>

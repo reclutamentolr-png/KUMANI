@@ -193,7 +193,7 @@ export default function VeritasRoom({
     setTimeout(() => URL.revokeObjectURL(url), 2000)
   }
 
-  const panel = 'rounded-3xl border border-violet-300/20 bg-white/[0.04] p-5 sm:p-6'
+  const panel = 'rounded-3xl border border-[var(--gold)]/20 bg-white/[0.04] p-5 sm:p-6'
   const goldButton =
     'inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3.5 font-bold text-[var(--ink)] disabled:opacity-50'
 
@@ -225,7 +225,7 @@ export default function VeritasRoom({
           maxLength={20}
           required
           placeholder={t('nicknamePlaceholder')}
-          className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-center text-lg text-white placeholder:text-white/40 focus:border-[var(--gold)] focus:outline-none"
+          className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-center text-lg text-white placeholder:text-white/40 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30"
         />
         {error && <p className="text-sm font-semibold text-amber-300">{error}</p>}
         <button type="submit" disabled={busy || !nickname.trim()} className={goldButton}>
@@ -306,7 +306,7 @@ export default function VeritasRoom({
         <div className={`${panel} space-y-5 text-center`}>
           <p className="text-sm uppercase tracking-[0.2em] text-white/60">{t('lobbyTitle')}</p>
           <p className="font-mono text-5xl font-bold tracking-[0.25em] text-[var(--gold-bright)]">{game.code}</p>
-          <button type="button" onClick={shareRoom} className="inline-flex items-center gap-2 rounded-xl border border-white/20 px-4 py-2.5 text-sm font-semibold">
+          <button type="button" onClick={shareRoom} className="inline-flex items-center gap-2 rounded-xl border border-[var(--gold)]/40 px-4 py-2.5 text-sm font-semibold text-[var(--gold-bright)] transition-colors hover:bg-[var(--gold)]/10">
             <Share2 className="h-4 w-4" /> {t('invite')}
           </button>
           <div>
@@ -350,7 +350,7 @@ export default function VeritasRoom({
             maxLength={280}
             rows={3}
             placeholder={t('answerPlaceholder')}
-            className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white placeholder:text-white/40 focus:border-[var(--gold)] focus:outline-none"
+            className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white placeholder:text-white/40 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30"
           />
           <button
             type="button"
@@ -435,7 +435,7 @@ export default function VeritasRoom({
           <Crown className="mx-auto h-12 w-12 text-[var(--gold-bright)]" />
           <p className="text-2xl font-bold">{t('winnerLine', { name: game.players[0]?.nickname ?? '' })}</p>
           <Scoreboard players={game.players} me={game.me} />
-          <button type="button" onClick={shareResult} className="inline-flex items-center gap-2 rounded-xl border border-white/20 px-4 py-2.5 text-sm font-semibold">
+          <button type="button" onClick={shareResult} className="inline-flex items-center gap-2 rounded-xl border border-[var(--gold)]/40 px-4 py-2.5 text-sm font-semibold text-[var(--gold-bright)] transition-colors hover:bg-[var(--gold)]/10">
             <Share2 className="h-4 w-4" /> {t('shareResult')}
           </button>
           {game.is_host && (

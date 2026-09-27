@@ -18,6 +18,7 @@ import {
   BadgeCheck,
   Network,
   PartyPopper,
+  Hourglass,
 } from 'lucide-react'
 import { fetchDirectSponsored } from '@/lib/directAffiliates'
 import { isActiveSubscription } from '@/lib/subscriptionGate'
@@ -28,7 +29,7 @@ import WalletCouponsList from '@/components/WalletCouponsList'
 import WalletVoucherSection from '@/components/WalletVoucherSection'
 import KuRewardsSection from '@/components/ku/KuRewardsSection'
 import { loadKuWalletData } from '@/lib/ku-server'
-import { listMyPasses } from '@/app/actions/events'
+import { getMyAttendedCount, listMyPasses } from '@/app/actions/events'
 import { EVENT_TYPE_EMOJI, formatEventDate } from '@/lib/events'
 
 function WalletSection({
@@ -99,7 +100,7 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
 
   const couponsList = coupons || []
   const myVouchers = await listMyVouchers()
-  const eventPasses = await listMyPasses()
+  const [eventPasses, attendedCount] = await Promise.all([listMyPasses(), getMyAttendedCount()])
 
   // Piano effettivo (la prova Pro conta come Pro): stesso calcolo degli strumenti.
   const { data: plan } = await supabase.rpc('my_plan')
@@ -150,6 +151,12 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
 
         {/* Pass degli eventi a cui sono iscritto (il QR si apre nella pagina dell'evento) */}
         <WalletSection icon={<PartyPopper className="h-5 w-5 text-[var(--gold)]" />} title={t('eventPassesTitle')}>
+          {/* "C'ero": eventi a cui sono davvero entrato (check-in fatto) */}
+          {attendedCount > 0 && (
+            <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--gold)]/50 bg-[var(--gold-pale)] px-3 py-1.5 text-sm font-bold text-[var(--ink)]">
+              <span aria-hidden="true">🎉</span> {t('eventAttendedBadge', { count: attendedCount })}
+            </p>
+          )}
           {eventPasses.length === 0 ? (
             <div className="flex flex-wrap items-center justify-between gap-3">
               <p className="text-sm text-[var(--muted)]">{t('eventPassesEmpty')}</p>
@@ -173,7 +180,13 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
                         {pass.city ? ` · ${pass.city}` : ''}
                       </span>
                     </span>
-                    <span className="shrink-0 rounded-lg bg-[var(--gold)] px-2.5 py-1 text-xs font-bold text-[var(--ink)]">{t('eventPassShow')}</span>
+                    {pass.my_status === 'waitlist' ? (
+                      <span className="flex shrink-0 items-center gap-1 rounded-lg border border-dashed border-[var(--gold)] px-2.5 py-1 text-xs font-bold text-[var(--ink)]">
+                        <Hourglass className="h-3.5 w-3.5" /> {t('eventPassWaitlist')}
+                      </span>
+                    ) : (
+                      <span className="shrink-0 rounded-lg bg-[var(--gold)] px-2.5 py-1 text-xs font-bold text-[var(--ink)]">{t('eventPassShow')}</span>
+                    )}
                   </Link>
                 </li>
               ))}

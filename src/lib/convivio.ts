@@ -58,6 +58,11 @@ export type ConvivioLeaderStatus = {
   terms: boolean
   blocked: boolean
   days_left: number
+  // Identità: tax_code = verificata (codice fiscale o documento approvato)
+  has_tax_code?: boolean
+  identity_pending?: boolean
+  identity_last_status?: 'pending' | 'approved' | 'rejected' | null
+  identity_rejected_note?: string | null
   verified: boolean
 }
 
@@ -73,6 +78,11 @@ export function formatEuro(value: number, locale: string): string {
 export type ConvivioSupplier = {
   business_name: string
   vat_number: string
+  // Paese della partita IVA ed esito della verifica (scritto solo dal server)
+  vat_country?: string
+  vat_status?: 'unverified' | 'valid' | 'invalid'
+  vat_checked_at?: string | null
+  vat_registered_name?: string | null
   city: string
   category: ConvivioCategory
   description: string

@@ -142,16 +142,16 @@ export default function LandingPage() {
           {/* Stats */}
           <div className="grid grid-cols-3 gap-3 sm:gap-6 max-w-xl mx-auto">
             <div>
-              <div className="text-2xl sm:text-3xl font-bold text-white">10K+</div>
-              <div className="text-xs sm:text-sm text-gray-400">{t('statActiveEntrepreneurs')}</div>
+              <div className="text-2xl sm:text-3xl font-bold text-white">7</div>
+              <div className="text-xs sm:text-sm text-gray-400">{t('statLanguagesLabel')}</div>
             </div>
             <div>
-              <div className="text-2xl sm:text-3xl font-bold text-[var(--gold-bright)]">49€</div>
-              <div className="text-xs sm:text-sm text-gray-400">{t('statYearlyLabel')}</div>
+              <div className="text-2xl sm:text-3xl font-bold text-[var(--gold-bright)]">{t('statWeeklyValue')}</div>
+              <div className="text-xs sm:text-sm text-gray-400">{t('statWeeklyLabel')}</div>
             </div>
             <div>
-              <div className="text-2xl sm:text-3xl font-bold text-white">50+</div>
-              <div className="text-xs sm:text-sm text-gray-400">{t('statCountriesLabel')}</div>
+              <div className="text-2xl sm:text-3xl font-bold text-white">25+</div>
+              <div className="text-xs sm:text-sm text-gray-400">{t('statServicesLabel')}</div>
             </div>
           </div>
         </div>
@@ -214,6 +214,47 @@ export default function LandingPage() {
           </div>
 
           <HomeToolsGrid />
+
+          {/* Per professionisti e imprenditori: gli strumenti del piano Pro */}
+          <div className="mt-10 overflow-hidden rounded-3xl border-2 border-[var(--gold)] bg-gradient-to-br from-[var(--gold)]/20 via-white/[0.04] to-transparent p-6 shadow-[0_18px_50px_rgba(199,154,59,0.2)] sm:p-8">
+            <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr] lg:items-center">
+              <div>
+                <p className="inline-flex items-center gap-2 rounded-full bg-[var(--gold)] px-3 py-1 text-xs font-bold uppercase tracking-wide text-[var(--ink)]">
+                  <Briefcase className="h-3.5 w-3.5" /> {t('proBannerEyebrow')}
+                </p>
+                <h3 className="mt-4 text-2xl font-bold text-white sm:text-3xl">{t('proBannerTitle')}</h3>
+                <p className="mt-3 leading-relaxed text-gray-300">{t('proBannerText')}</p>
+                <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                  <Link
+                    href="/pro"
+                    className="inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3 font-bold text-[var(--ink)] shadow-xl hover:brightness-110"
+                  >
+                    {t('proBannerCta')} <ArrowRight className="h-4 w-4" />
+                  </Link>
+                  <Link
+                    href="/register?plan=pro"
+                    className="inline-flex items-center justify-center rounded-lg border border-[var(--gold)]/50 px-6 py-3 font-semibold text-white hover:bg-white/10"
+                  >
+                    {t('proBannerTrial')}
+                  </Link>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2.5">
+                {[
+                  { icon: Ticket, label: 'Fidelity' },
+                  { icon: UtensilsCrossed, label: 'KUMANI Menu' },
+                  { icon: Briefcase, label: t('proToolQuotes') },
+                  { icon: Check, label: t('proToolReceipts') },
+                  { icon: Sparkles, label: 'OfferMaker AI' },
+                  { icon: HandPlatter, label: 'Kordata Pro' },
+                ].map((item) => (
+                  <div key={item.label} className="flex items-center gap-2 rounded-xl border border-[var(--gold)]/20 bg-white/[0.05] px-3 py-2.5 text-sm font-semibold text-white">
+                    <item.icon className="h-4 w-4 shrink-0 text-[var(--gold-bright)]" /> {item.label}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
 
           {/* Come si parlano gli strumenti */}
           <div className="mt-10 rounded-3xl border border-[var(--gold)]/25 bg-gradient-to-br from-[var(--gold)]/10 via-white/[0.03] to-transparent p-6 sm:p-8">

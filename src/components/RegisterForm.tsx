@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl' // ✅ Aggiungilo qui
 import Link from 'next/link'
 import { europeanCountries } from '@/lib/european-countries'
-import { User, Mail, Lock, MapPin, AlertCircle, Loader2, Home, ShieldCheck, CheckCircle, Briefcase } from 'lucide-react'
+import { User, Mail, Lock, MapPin, AlertCircle, Loader2, Home, ShieldCheck, CheckCircle, Briefcase, Info } from 'lucide-react'
 import Logo from '@/components/Logo'
 
 const RESEND_COOLDOWN_SECONDS = 30
@@ -306,7 +306,7 @@ export default function RegisterForm() {
     <>
       <Link
         href="/"
-        className="absolute top-6 left-6 flex items-center gap-2 text-gray-600 hover:text-indigo-600 transition-colors font-semibold"
+        className="absolute top-6 left-6 flex items-center gap-2 text-[var(--ink-soft)] hover:text-[var(--gold)] transition-colors font-semibold"
       >
         <Logo size={32} />
         <Home className="w-4 h-4 sm:hidden" />
@@ -328,14 +328,14 @@ export default function RegisterForm() {
               <label htmlFor="first_name" className="block text-sm font-medium text-gray-700 mb-1">{t('firstName')}</label>
               <div className="relative">
                 <User className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
-                <input id="first_name" type="text" required value={formData.first_name} onChange={(e) => setFormData({ ...formData, first_name: e.target.value })} className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+                <input id="first_name" type="text" required value={formData.first_name} onChange={(e) => setFormData({ ...formData, first_name: e.target.value })} className="w-full pl-10 pr-4 py-2.5 border border-stone-300 rounded-lg focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 focus:outline-none" />
               </div>
             </div>
             <div>
               <label htmlFor="last_name" className="block text-sm font-medium text-gray-700 mb-1">{t('lastName')}</label>
               <div className="relative">
                 <User className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
-                <input id="last_name" type="text" required value={formData.last_name} onChange={(e) => setFormData({ ...formData, last_name: e.target.value })} className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+                <input id="last_name" type="text" required value={formData.last_name} onChange={(e) => setFormData({ ...formData, last_name: e.target.value })} className="w-full pl-10 pr-4 py-2.5 border border-stone-300 rounded-lg focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 focus:outline-none" />
               </div>
             </div>
           </div>
@@ -344,7 +344,7 @@ export default function RegisterForm() {
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">{t('email')}</label>
             <div className="relative">
               <Mail className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
-              <input id="email" type="email" required value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+              <input id="email" type="email" required value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full pl-10 pr-4 py-2.5 border border-stone-300 rounded-lg focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 focus:outline-none" />
             </div>
           </div>
 
@@ -352,7 +352,7 @@ export default function RegisterForm() {
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">{t('passwordMinChars')}</label>
             <div className="relative">
               <Lock className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
-              <input id="password" type="password" required minLength={6} value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="••••••••" />
+              <input id="password" type="password" required minLength={6} value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} className="w-full pl-10 pr-4 py-2.5 border border-stone-300 rounded-lg focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 focus:outline-none" placeholder="••••••••" />
             </div>
           </div>
 
@@ -360,20 +360,26 @@ export default function RegisterForm() {
             <label htmlFor="country_code" className="block text-sm font-medium text-gray-700 mb-1">{t('country')}</label>
             <div className="relative">
               <MapPin className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
-              <select id="country_code" required value={formData.country_code} onChange={(e) => setFormData({ ...formData, country_code: e.target.value })} className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
+              <select id="country_code" required value={formData.country_code} onChange={(e) => setFormData({ ...formData, country_code: e.target.value })} className="w-full pl-10 pr-4 py-2.5 border border-stone-300 rounded-lg focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 focus:outline-none bg-white">
                 <option value="">{t('selectCountry')}</option>
                 {europeanCountries.map((country) => (
                   <option key={country.code} value={country.code}>{country.name}</option>
                 ))}
               </select>
             </div>
+            {/* Fuori dall'Italia: avviso informativo (non cambia la registrazione) */}
+            {formData.country_code && formData.country_code !== 'IT' && (
+              <p className="mt-2 flex items-start gap-2 rounded-lg border border-[var(--gold)]/25 bg-[var(--gold)]/5 px-3 py-2 text-xs text-gray-600">
+                <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--gold)]" /> {t('countryOutsideItalyNote')}
+              </p>
+            )}
           </div>
 
           <div>
             <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">{t('cityOptional')}</label>
             <div className="relative">
               <MapPin className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
-              <input id="city" type="text" maxLength={80} value={formData.city} onChange={(e) => setFormData({ ...formData, city: e.target.value })} className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+              <input id="city" type="text" maxLength={80} value={formData.city} onChange={(e) => setFormData({ ...formData, city: e.target.value })} className="w-full pl-10 pr-4 py-2.5 border border-stone-300 rounded-lg focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 focus:outline-none" />
             </div>
           </div>
 
@@ -386,7 +392,7 @@ export default function RegisterForm() {
               type="text"
               value={formData.referral_code}
               onChange={(e) => setFormData({ ...formData, referral_code: e.target.value.toUpperCase() })}
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono tracking-wider"
+              className="w-full px-4 py-2.5 border border-stone-300 rounded-lg focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 focus:outline-none font-mono tracking-wider"
               placeholder="ES. IT-10000-Q"
             />
             <p className="text-xs text-gray-500 mt-1">{t('referralRequired')}</p>
@@ -395,7 +401,7 @@ export default function RegisterForm() {
           <label
             htmlFor="professional"
             className={`flex cursor-pointer items-start gap-3 rounded-lg border p-3 transition-colors ${
-              formData.professional ? 'border-amber-400 bg-amber-50' : 'border-gray-300 hover:border-gray-400'
+              formData.professional ? 'border-[var(--gold)] bg-[var(--gold-pale)]/40' : 'border-stone-300 hover:border-[var(--gold)]/60'
             }`}
           >
             <input
@@ -403,11 +409,11 @@ export default function RegisterForm() {
               type="checkbox"
               checked={formData.professional}
               onChange={(e) => setFormData({ ...formData, professional: e.target.checked })}
-              className="mt-1 h-4 w-4 accent-amber-500"
+              className="mt-1 h-4 w-4 accent-[var(--gold)]"
             />
             <span>
-              <span className="flex items-center gap-1.5 text-sm font-semibold text-gray-800">
-                <Briefcase className="h-4 w-4 text-amber-600" /> {t('professionalLabel')}
+              <span className="flex items-center gap-1.5 text-sm font-semibold text-[var(--ink)]">
+                <Briefcase className="h-4 w-4 text-[var(--gold)]" /> {t('professionalLabel')}
               </span>
               <span className="mt-0.5 block text-xs text-gray-500">{t('professionalHint')}</span>
             </span>
@@ -422,7 +428,7 @@ export default function RegisterForm() {
               type="text"
               value={formData.voucher_code}
               onChange={(e) => setFormData({ ...formData, voucher_code: e.target.value.toUpperCase() })}
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono tracking-wider"
+              className="w-full px-4 py-2.5 border border-stone-300 rounded-lg focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 focus:outline-none font-mono tracking-wider"
               placeholder="KVA-..."
             />
             <p className="text-xs text-gray-500 mt-1">{t('voucherCodeHint')}</p>
@@ -431,7 +437,7 @@ export default function RegisterForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400 text-white font-bold rounded-lg transition-colors shadow-lg"
+            className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed text-[var(--ink)] font-bold rounded-xl transition-all shadow-lg"
           >
             {loading ? (
               <>
@@ -448,10 +454,10 @@ export default function RegisterForm() {
       {step === 'verify' && (
         <div className={`space-y-4 ${error ? 'mt-4' : 'mt-8'}`}>
           <div className="text-center">
-            <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <ShieldCheck className="w-6 h-6 text-indigo-600" />
+            <div className="w-12 h-12 bg-[var(--ink)] rounded-full flex items-center justify-center mx-auto mb-4">
+              <ShieldCheck className="w-6 h-6 text-[var(--gold-bright)]" />
             </div>
-            <h2 className="text-lg font-bold text-gray-900">{t('verifyEmailTitle')}</h2>
+            <h2 className="text-lg font-bold text-[var(--ink)]">{t('verifyEmailTitle')}</h2>
             <p className="mt-1 text-sm text-gray-600">{t('verifyEmailDescription', { email: formData.email })}</p>
           </div>
 
@@ -470,7 +476,7 @@ export default function RegisterForm() {
                 required
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono tracking-[0.3em] text-center text-lg"
+                className="w-full px-4 py-2.5 border border-stone-300 rounded-lg focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 focus:outline-none font-mono tracking-[0.3em] text-center text-lg"
                 placeholder="123456"
               />
             </div>
@@ -478,7 +484,7 @@ export default function RegisterForm() {
             <button
               type="submit"
               disabled={loading || code.trim().length === 0}
-              className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400 text-white font-bold rounded-lg transition-colors shadow-lg"
+              className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed text-[var(--ink)] font-bold rounded-xl transition-all shadow-lg"
             >
               {loading ? (
                 <>
@@ -495,7 +501,7 @@ export default function RegisterForm() {
             <button
               type="button"
               onClick={() => { setStep('form'); setError(null); setResendMessage(null) }}
-              className="font-medium text-gray-500 hover:text-indigo-600"
+              className="font-medium text-[var(--muted)] hover:text-[var(--gold)]"
             >
               {t('backToForm')}
             </button>
@@ -503,7 +509,7 @@ export default function RegisterForm() {
               type="button"
               onClick={handleResend}
               disabled={resendCooldown > 0}
-              className="font-medium text-indigo-600 hover:text-indigo-800 disabled:text-gray-400"
+              className="font-medium text-[var(--gold)] hover:text-[var(--ink)] disabled:text-gray-400"
             >
               {resendCooldown > 0 ? t('resendCodeIn', { seconds: resendCooldown }) : t('resendCode')}
             </button>

@@ -3,9 +3,10 @@ import { SITE_URL } from '@/lib/siteUrl'
 
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
-import { randomBytes } from 'crypto'
+import { createHash, randomBytes } from 'crypto'
 import type { Permission } from '@/lib/admin-permissions'
 import { generateShortCode } from '@/lib/shortLink'
+import { getStripe } from '@/lib/stripe'
 import { updateTag } from 'next/cache'
 import { SPOTLIGHT_HOME_CACHE_TAG, type SpotlightModerationStatus } from '@/lib/spotlight'
 
@@ -1404,4 +1405,777 @@ export async function adminSetEventsFeePercent(percent: number) {
     .upsert({ key: 'events_fee_percent', value: JSON.stringify(value) }, { onConflict: 'key' })
   if (error) return { success: false, error: error.message }
   return { success: true }
+}
+
+// ============================================================
+// Verifica d'identità con documento (chi non ha il codice fiscale italiano)
+// ============================================================
+
+const IDENTITY_BUCKET = 'identity-docs'
+
+export type AdminIdentityVerification = {
+  id: string
+  user_id: string
+  doc_type: 'passport' | 'id_card' | 'driving_license' | 'residence_permit'
+  country_code: string
+  status: 'pending' | 'approved' | 'rejected'
+  review_note: string | null
+  created_at: string
+  reviewed_at: string | null
+  reviewed_by: string | null
+  has_file: boolean
+  is_pdf: boolean
+  // Link temporaneo (10 minuti) solo per le richieste in attesa
+  signed_url: string | null
+  user: { first_name: string | null; last_name: string | null; email: string | null; date_of_birth: string | null } | null
+  reviewer: AdminPerson | null
+}
+
+type IdentityRow = {
+  id: string
+  user_id: string
+  doc_type: AdminIdentityVerification['doc_type']
+  country_code: string
+  file_path: string | null
+  status: AdminIdentityVerification['status']
+  review_note: string | null
+  created_at: string
+  reviewed_at: string | null
+  reviewed_by: string | null
+}
+
+type IdentityProfile = { id: string; first_name: string | null; last_name: string | null; email: string | null; date_of_birth: string | null }
+
+export async function adminListIdentityVerifications(status: 'pending' | 'reviewed') {
+  const admin = await verifyAdmin('users.read')
+  if (!admin) return { items: [] as AdminIdentityVerification[], error: 'Non autorizzato' }
+  const service = getServiceClient()
+  const base = service
+    .from('identity_verifications')
+    .select('id, user_id, doc_type, country_code, file_path, status, review_note, created_at, reviewed_at, reviewed_by')
+  const { data, error } = await (status === 'pending'
+    ? base.eq('status', 'pending').order('created_at', { ascending: true })
+    : base.neq('status', 'pending').order('reviewed_at', { ascending: false })
+  ).limit(200)
+  if (error) return { items: [] as AdminIdentityVerification[], error: error.message }
+  const rows = (data ?? []) as IdentityRow[]
+
+  const userIds = [...new Set(rows.map((r) => r.user_id))]
+  const [profiles, reviewers] = await Promise.all([
+    (async () => {
+      if (userIds.length === 0) return [] as IdentityProfile[]
+      const { data: found } = await service.from('profiles').select('id, first_name, last_name, email, date_of_birth').in('id', userIds)
+      return (found ?? []) as IdentityProfile[]
+    })(),
+    eventPeople(rows.map((r) => r.reviewed_by ?? '')),
+  ])
+  const byId = Object.fromEntries(profiles.map((p) => [p.id, p]))
+
+  const items = await Promise.all(
+    rows.map(async (r): Promise<AdminIdentityVerification> => {
+      let signedUrl: string | null = null
+      if (r.status === 'pending' && r.file_path) {
+        const { data: signed } = await service.storage.from(IDENTITY_BUCKET).createSignedUrl(r.file_path, 600)
+        signedUrl = signed?.signedUrl ?? null
+      }
+      const p = byId[r.user_id]
+      return {
+        id: r.id,
+        user_id: r.user_id,
+        doc_type: r.doc_type,
+        country_code: r.country_code,
+        status: r.status,
+        review_note: r.review_note,
+        created_at: r.created_at,
+        reviewed_at: r.reviewed_at,
+        reviewed_by: r.reviewed_by,
+        has_file: !!r.file_path,
+        is_pdf: !!r.file_path && r.file_path.toLowerCase().endsWith('.pdf'),
+        signed_url: signedUrl,
+        user: p ? { first_name: p.first_name, last_name: p.last_name, email: p.email, date_of_birth: p.date_of_birth } : null,
+        reviewer: r.reviewed_by ? (reviewers[r.reviewed_by] ?? null) : null,
+      }
+    }),
+  )
+  return { items, error: null }
+}
+
+// Approva o rifiuta (con nota obbligatoria) un documento; poi la foto si
+// cancella dallo storage: resta solo l'esito.
+export async function adminReviewIdentity(id: string, approve: boolean, note: string): Promise<{ success: boolean; error?: string; warning?: string }> {
+  const admin = await verifyAdmin('users.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!EVENT_ID_RE.test(id)) return { success: false, error: 'Richiesta non valida' }
+  const text = note.trim().slice(0, 1000)
+  if (!approve && !text) return { success: false, error: 'Scrivi il motivo del rifiuto' }
+  const service = getServiceClient()
+  const { data, error } = await service
+    .from('identity_verifications')
+    .update({ status: approve ? 'approved' : 'rejected', review_note: text || null, reviewed_at: new Date().toISOString(), reviewed_by: admin.id })
+    .eq('id', id)
+    .eq('status', 'pending')
+    .select('id, file_path')
+  if (error) return { success: false, error: error.code === '23505' ? 'Questo utente ha già una richiesta approvata o in attesa' : error.message }
+  if (!data?.length) return { success: false, error: 'Richiesta non più in attesa' }
+
+  const filePath = data[0].file_path as string | null
+  if (filePath) {
+    const { error: removeError } = await service.storage.from(IDENTITY_BUCKET).remove([filePath])
+    if (removeError) {
+      console.error('[Admin] identity doc remove failed:', removeError.message)
+      return { success: true, warning: 'Esito salvato, ma il file non è stato cancellato: riprova più tardi.' }
+    }
+    await service.from('identity_verifications').update({ file_path: null }).eq('id', id)
+  }
+  return { success: true }
+}
+
+// ============================================================
+// Kordata: commissioni KUMANI a carico dei fornitori Pro
+// ============================================================
+
+export async function adminListConvivioFees() {
+  const admin = await verifyAdmin('listings.read')
+  if (!admin) return { fees: [], error: 'Non autorizzato' }
+  const { data, error } = await getServiceClient()
+    .from('convivio_fees')
+    .select('id, supplier_id, quantity, price, percent, amount, status, created_at, paid_at, group:convivio_groups(id, title, status)')
+    .order('status', { ascending: true })
+    .order('created_at', { ascending: false })
+    .limit(300)
+  if (error) return { fees: [], error: error.message }
+  const rows = (data ?? []) as unknown as {
+    id: string
+    supplier_id: string
+    quantity: number
+    price: number
+    percent: number
+    amount: number
+    status: 'due' | 'paid' | 'waived'
+    created_at: string
+    paid_at: string | null
+    group: { id: string; title: string; status: string } | null
+  }[]
+  const supplierIds = [...new Set(rows.map((f) => f.supplier_id))]
+  const people = await eventPeople(supplierIds)
+  const { data: businesses } = supplierIds.length
+    ? await getServiceClient()
+        .from('convivio_suppliers')
+        .select('user_id, business_name, vat_number, vat_status, vat_registered_name')
+        .in('user_id', supplierIds)
+    : { data: [] }
+  const business = new Map(
+    ((businesses ?? []) as {
+      user_id: string
+      business_name: string
+      vat_number: string
+      vat_status: 'unverified' | 'valid' | 'invalid'
+      vat_registered_name: string | null
+    }[]).map((b) => [b.user_id, b]),
+  )
+  return {
+    fees: rows.map((f) => ({ ...f, supplier: people[f.supplier_id] ?? null, business: business.get(f.supplier_id) ?? null })),
+    error: null,
+  }
+}
+
+// Condona una commissione Kordata ancora da pagare.
+export async function adminWaiveConvivioFee(feeId: string) {
+  const admin = await verifyAdmin('listings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!EVENT_ID_RE.test(feeId)) return { success: false, error: 'Commissione non valida' }
+  const { error } = await getServiceClient().from('convivio_fees').update({ status: 'waived' }).eq('id', feeId).eq('status', 'due')
+  if (error) return { success: false, error: error.message }
+  return { success: true }
+}
+
+// Percentuale trattenuta da KUMANI sulle Kordate (system_settings
+// 'convivio_fee_percent', stringa JSON, es. '"3"'): si fissa su ogni Kordata
+// quando il fornitore conferma.
+export async function adminGetConvivioFeePercent() {
+  const admin = await verifyAdmin('settings.read')
+  if (!admin) return { percent: null, error: 'Non autorizzato' }
+  const { data } = await getServiceClient().from('system_settings').select('value').eq('key', 'convivio_fee_percent').maybeSingle()
+  let percent = 3
+  if (data?.value != null) {
+    const raw = String(data.value)
+    let parsed = Number.NaN
+    try {
+      parsed = Number(JSON.parse(raw))
+    } catch {
+      parsed = Number(raw.replace(/"/g, ''))
+    }
+    if (Number.isFinite(parsed)) percent = parsed
+  }
+  return { percent, error: null }
+}
+
+export async function adminSetConvivioFeePercent(percent: number) {
+  const admin = await verifyAdmin('settings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!Number.isFinite(percent) || percent < 0 || percent > 30) return { success: false, error: 'La percentuale deve essere tra 0 e 30' }
+  const value = String(Math.round(percent * 100) / 100)
+  const { error } = await getServiceClient()
+    .from('system_settings')
+    .upsert({ key: 'convivio_fee_percent', value: JSON.stringify(value) }, { onConflict: 'key' })
+  if (error) return { success: false, error: error.message }
+  return { success: true }
+}
+
+// ============================================================
+// KUMANI Events — Fase 2: recensioni (moderazione)
+// ============================================================
+
+export async function adminListEventReviews() {
+  const admin = await verifyAdmin('listings.write')
+  if (!admin) return { reviews: [], error: 'Non autorizzato' }
+  const { data, error } = await getServiceClient()
+    .from('event_reviews')
+    .select('id, rating, comment, created_at, updated_at, reviewer, organizer_id, event:events(id, title, starts_at)')
+    .order('created_at', { ascending: false })
+    .limit(200)
+  if (error) return { reviews: [], error: error.message }
+  const rows = (data ?? []) as unknown as {
+    id: string
+    rating: number
+    comment: string | null
+    created_at: string
+    updated_at: string
+    reviewer: string
+    organizer_id: string
+    event: { id: string; title: string; starts_at: string } | null
+  }[]
+  const people = await eventPeople(rows.flatMap((r) => [r.reviewer, r.organizer_id]))
+  return {
+    reviews: rows.map((r) => ({ ...r, reviewer: people[r.reviewer] ?? null, organizer: people[r.organizer_id] ?? null })),
+    error: null,
+  }
+}
+
+// Elimina una recensione (offensiva, falsa, fuori luogo): la media dell'organizzatore si ricalcola da sola.
+export async function adminDeleteEventReview(reviewId: string) {
+  const admin = await verifyAdmin('listings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!EVENT_ID_RE.test(reviewId)) return { success: false, error: 'Recensione non valida' }
+  const { error } = await getServiceClient().from('event_reviews').delete().eq('id', reviewId)
+  if (error) return { success: false, error: error.message }
+  return { success: true }
+}
+
+// ============================================================
+// Messaggi dal sito (modulo della pagina Contatti)
+// ============================================================
+
+export type AdminContactMessage = {
+  id: string
+  user_id: string | null
+  name: string
+  email: string
+  topic: 'support' | 'billing' | 'pro' | 'partnership' | 'privacy' | 'other'
+  message: string
+  locale: string | null
+  status: 'new' | 'handled'
+  created_at: string
+  handled_at: string | null
+}
+
+const CONTACT_MESSAGE_ID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+export async function adminListContactMessages(status: 'new' | 'handled' | 'all' = 'new') {
+  const admin = await verifyAdmin('support.read')
+  if (!admin) return { messages: [] as AdminContactMessage[], error: 'Non autorizzato' }
+  let query = getServiceClient()
+    .from('contact_messages')
+    .select('id, user_id, name, email, topic, message, locale, status, created_at, handled_at')
+    .order('created_at', { ascending: false })
+    .limit(300)
+  if (status !== 'all') query = query.eq('status', status)
+  const { data, error } = await query
+  if (error) return { messages: [] as AdminContactMessage[], error: error.message }
+  return { messages: (data ?? []) as AdminContactMessage[], error: null }
+}
+
+export async function adminSetContactMessageStatus(id: string, status: 'new' | 'handled') {
+  const admin = await verifyAdmin('support.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!CONTACT_MESSAGE_ID_RE.test(id)) return { success: false, error: 'Messaggio non valido' }
+  if (status !== 'new' && status !== 'handled') return { success: false, error: 'Stato non valido' }
+  const { error } = await getServiceClient()
+    .from('contact_messages')
+    .update({ status, handled_at: status === 'handled' ? new Date().toISOString() : null })
+    .eq('id', id)
+  if (error) return { success: false, error: error.message }
+  return { success: true }
+}
+
+// ---------------------------------------------------------------------------
+// Richieste di cambio dati anagrafici (profilo completo = dati bloccati: li
+// cambia solo lo Staff, su richiesta motivata dell'utente)
+// ---------------------------------------------------------------------------
+// Non esportata: un file 'use server' può esportare solo funzioni async.
+const PROFILE_LOCKED_FIELDS = [
+  'first_name', 'last_name', 'date_of_birth', 'gender', 'phone', 'country_code',
+  'city', 'province', 'address', 'postal_code', 'occupation',
+] as const
+const PROFILE_LOCKED_SET = new Set<string>(PROFILE_LOCKED_FIELDS)
+
+export type AdminProfileRequest = {
+  id: string
+  user_id: string
+  reason: string
+  requested: Record<string, string | null>
+  previous: Record<string, string | null>
+  status: 'pending' | 'approved' | 'rejected' | 'cancelled'
+  staff_note: string | null
+  created_at: string
+  reviewed_at: string | null
+  user: {
+    first_name: string | null
+    last_name: string | null
+    email: string | null
+    has_tax_code: boolean
+    current: Record<string, string | null>
+  } | null
+  reviewer: { first_name: string | null; last_name: string | null; email: string | null } | null
+}
+
+const PROFILE_REQUEST_ID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+export async function adminListProfileRequests(status: 'pending' | 'handled' = 'pending') {
+  const admin = await verifyAdmin('users.read')
+  if (!admin) return { items: [] as AdminProfileRequest[], error: 'Non autorizzato' as string | null }
+  const service = getServiceClient()
+  let query = service
+    .from('profile_change_requests')
+    .select('id, user_id, reason, requested, previous, status, staff_note, created_at, reviewed_at, reviewed_by')
+    .limit(200)
+  query = status === 'pending'
+    ? query.eq('status', 'pending').order('created_at', { ascending: true })
+    : query.neq('status', 'pending').order('reviewed_at', { ascending: false, nullsFirst: false })
+  const { data, error } = await query
+  if (error) return { items: [] as AdminProfileRequest[], error: error.message as string | null }
+  const rows = (data ?? []) as (Omit<AdminProfileRequest, 'user' | 'reviewer'> & { reviewed_by: string | null })[]
+
+  const ids = [...new Set(rows.flatMap((r) => [r.user_id, r.reviewed_by]).filter((v): v is string => Boolean(v)))]
+  const people = new Map<string, Record<string, unknown>>()
+  if (ids.length > 0) {
+    const { data: profileRows, error: profileError } = await service
+      .from('profiles')
+      .select(`id, email, tax_code, ${PROFILE_LOCKED_FIELDS.join(', ')}`)
+      .in('id', ids)
+    if (profileError) return { items: [] as AdminProfileRequest[], error: profileError.message as string | null }
+    for (const p of (profileRows ?? []) as unknown as Record<string, unknown>[]) people.set(String(p.id), p)
+  }
+  const str = (v: unknown) => (v === null || v === undefined ? null : String(v))
+
+  const items: AdminProfileRequest[] = rows.map(({ reviewed_by, ...r }) => {
+    const u = people.get(r.user_id)
+    const rev = reviewed_by ? people.get(reviewed_by) : undefined
+    return {
+      ...r,
+      requested: r.requested ?? {},
+      previous: r.previous ?? {},
+      user: u
+        ? {
+            first_name: str(u.first_name),
+            last_name: str(u.last_name),
+            email: str(u.email),
+            has_tax_code: Boolean(u.tax_code),
+            current: Object.fromEntries(PROFILE_LOCKED_FIELDS.map((f) => [f, str(u[f])])),
+          }
+        : null,
+      reviewer: rev ? { first_name: str(rev.first_name), last_name: str(rev.last_name), email: str(rev.email) } : null,
+    }
+  })
+  return { items, error: null as string | null }
+}
+
+async function loadPendingProfileRequest(id: string) {
+  if (typeof id !== 'string' || !PROFILE_REQUEST_ID_RE.test(id)) return { request: null, error: 'Richiesta non valida' }
+  const { data, error } = await getServiceClient()
+    .from('profile_change_requests')
+    .select('id, user_id, status')
+    .eq('id', id)
+    .maybeSingle()
+  if (error) return { request: null, error: error.message }
+  if (!data) return { request: null, error: 'Richiesta non trovata' }
+  if (data.status !== 'pending') return { request: null, error: 'La richiesta è già stata gestita' }
+  return { request: data as { id: string; user_id: string; status: string }, error: null }
+}
+
+export async function adminApproveProfileRequest(id: string, values: Record<string, string>, note?: string) {
+  const admin = await verifyAdmin('users.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  const { request, error: loadError } = await loadPendingProfileRequest(id)
+  if (!request) return { success: false, error: loadError ?? 'Richiesta non valida' }
+
+  if (!values || typeof values !== 'object') return { success: false, error: 'Valori non validi' }
+  const patch: Record<string, string> = {}
+  for (const [field, raw] of Object.entries(values)) {
+    if (!PROFILE_LOCKED_SET.has(field)) return { success: false, error: `Campo non modificabile: ${field}` }
+    const value = typeof raw === 'string' ? raw.trim() : ''
+    if (!value) return { success: false, error: `Il campo ${field} non può essere vuoto` }
+    if (value.length > 200) return { success: false, error: `Il campo ${field} è troppo lungo` }
+    if (field === 'date_of_birth') {
+      const parsed = new Date(`${value}T00:00:00Z`)
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(value) || Number.isNaN(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== value) {
+        return { success: false, error: 'Data di nascita non valida (formato AAAA-MM-GG)' }
+      }
+    }
+    patch[field] = field === 'country_code' ? value.toUpperCase() : value
+  }
+  if (Object.keys(patch).length === 0) return { success: false, error: 'Nessun valore da applicare' }
+
+  const service = getServiceClient()
+  // Client di servizio: il blocco del profilo vale solo per l'utente, e
+  // profile_completed_at resta invariato.
+  const { error: profileError } = await service.from('profiles').update(patch).eq('id', request.user_id)
+  if (profileError) return { success: false, error: profileError.message }
+
+  const { error } = await service
+    .from('profile_change_requests')
+    .update({
+      status: 'approved',
+      staff_note: note?.trim() ? note.trim().slice(0, 1000) : null,
+      reviewed_at: new Date().toISOString(),
+      reviewed_by: admin.id,
+    })
+    .eq('id', id)
+    .eq('status', 'pending')
+  if (error) return { success: false, error: error.message }
+  return { success: true, error: null }
+}
+
+async function closeProfileRequest(id: string, status: 'rejected' | 'cancelled', note: string | undefined, noteRequired: boolean) {
+  const admin = await verifyAdmin('users.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  const cleanNote = (typeof note === 'string' ? note : '').trim().slice(0, 1000)
+  if (noteRequired && !cleanNote) return { success: false, error: "Scrivi il motivo (lo vede l'utente)" }
+  const { request, error: loadError } = await loadPendingProfileRequest(id)
+  if (!request) return { success: false, error: loadError ?? 'Richiesta non valida' }
+  const { error } = await getServiceClient()
+    .from('profile_change_requests')
+    .update({
+      status,
+      staff_note: cleanNote || null,
+      reviewed_at: new Date().toISOString(),
+      reviewed_by: admin.id,
+    })
+    .eq('id', id)
+    .eq('status', 'pending')
+  if (error) return { success: false, error: error.message }
+  return { success: true, error: null }
+}
+
+export async function adminRejectProfileRequest(id: string, note: string) {
+  return closeProfileRequest(id, 'rejected', note, true)
+}
+
+export async function adminCancelProfileRequest(id: string, note?: string) {
+  return closeProfileRequest(id, 'cancelled', note, false)
+}
+
+// ============================================================
+// Cancellazione dell'account (GDPR, art. 17)
+// ============================================================
+
+export type AdminDeletionRequest = {
+  id: string
+  user_id: string | null
+  reason: string | null
+  status: 'pending' | 'completed' | 'cancelled'
+  requested_at: string
+  processed_at: string | null
+  staff_note: string | null
+  user: {
+    first_name: string | null
+    last_name: string | null
+    email: string | null
+    created_at: string | null
+    subscription_status: string | null
+    subscription_source: string | null
+    subscription_expires_at: string | null
+    is_admin: boolean
+    deleted_at: string | null
+    invitees: number
+  } | null
+  processor: AdminPerson | null
+}
+
+type DeletionRow = Omit<AdminDeletionRequest, 'user' | 'processor'> & { processed_by: string | null }
+
+const DELETION_ID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+// Bucket dove i file dell'utente stanno nella cartella `${userId}/`.
+const USER_FILE_BUCKETS = ['identity-docs', 'cv-photos', 'quote-logos-v2', 'menu-photos', 'findo-photos']
+const DELETED_EMAIL_RE = /@deleted\.invalid$/i
+
+export async function adminListDeletionRequests(status: 'pending' | 'handled' = 'pending') {
+  const admin = await verifyAdmin('users.read')
+  if (!admin) return { items: [] as AdminDeletionRequest[], error: 'Non autorizzato' as string | null }
+  const service = getServiceClient()
+  let query = service
+    .from('account_deletion_requests')
+    .select('id, user_id, reason, status, requested_at, processed_at, processed_by, staff_note')
+    .limit(200)
+  query = status === 'pending'
+    ? query.eq('status', 'pending').order('requested_at', { ascending: true })
+    : query.neq('status', 'pending').order('processed_at', { ascending: false, nullsFirst: false })
+  const { data, error } = await query
+  if (error) return { items: [] as AdminDeletionRequest[], error: error.message as string | null }
+  const rows = (data ?? []) as DeletionRow[]
+
+  const userIds = [...new Set(rows.map((r) => r.user_id).filter((v): v is string => Boolean(v)))]
+  type DeletionProfile = {
+    id: string
+    first_name: string | null
+    last_name: string | null
+    email: string | null
+    created_at: string | null
+    subscription_status: string | null
+    subscription_source: string | null
+    subscription_expires_at: string | null
+    is_admin: boolean | null
+    deleted_at: string | null
+  }
+  const [profiles, processors, invitees] = await Promise.all([
+    (async () => {
+      if (userIds.length === 0) return [] as DeletionProfile[]
+      const { data: found } = await service
+        .from('profiles')
+        .select('id, first_name, last_name, email, created_at, subscription_status, subscription_source, subscription_expires_at, is_admin, deleted_at')
+        .in('id', userIds)
+      return (found ?? []) as DeletionProfile[]
+    })(),
+    eventPeople(rows.map((r) => r.processed_by ?? '')),
+    Promise.all(
+      userIds.map(async (id) => {
+        const { count } = await service.from('profiles').select('id', { count: 'exact', head: true }).eq('sponsor_id', id)
+        return [id, count ?? 0] as const
+      }),
+    ),
+  ])
+  const byId = new Map(profiles.map((p) => [p.id, p]))
+  const inviteesById = new Map(invitees)
+
+  const items: AdminDeletionRequest[] = rows.map(({ processed_by, ...r }) => {
+    const p = r.user_id ? byId.get(r.user_id) : undefined
+    return {
+      ...r,
+      user: p
+        ? {
+            first_name: p.first_name,
+            last_name: p.last_name,
+            email: p.email,
+            created_at: p.created_at,
+            subscription_status: p.subscription_status,
+            subscription_source: p.subscription_source,
+            subscription_expires_at: p.subscription_expires_at,
+            is_admin: Boolean(p.is_admin),
+            deleted_at: p.deleted_at,
+            invitees: inviteesById.get(p.id) ?? 0,
+          }
+        : null,
+      processor: processed_by ? (processors[processed_by] ?? null) : null,
+    }
+  })
+  return { items, error: null as string | null }
+}
+
+async function loadPendingDeletionRequest(id: string) {
+  if (typeof id !== 'string' || !DELETION_ID_RE.test(id)) return { request: null, error: 'Richiesta non valida' }
+  const { data, error } = await getServiceClient()
+    .from('account_deletion_requests')
+    .select('id, user_id, status')
+    .eq('id', id)
+    .maybeSingle()
+  if (error) return { request: null, error: error.message }
+  if (!data) return { request: null, error: 'Richiesta non trovata' }
+  if (data.status !== 'pending') return { request: null, error: 'La richiesta è già stata gestita' }
+  return { request: data as { id: string; user_id: string | null; status: string }, error: null }
+}
+
+// Cancella TUTTI gli abbonamenti Stripe in corso dell'utente (per email del
+// cliente e per metadata.userId), subito e senza rimborso del periodo residuo.
+async function cancelStripeSubscriptionsFor(userId: string, emails: string[]) {
+  const stripe = getStripe()
+  const live = new Set(['active', 'trialing', 'past_due', 'unpaid', 'incomplete'])
+  const toCancel = new Set<string>()
+
+  for (const email of emails) {
+    const customers = await stripe.customers.list({ email, limit: 100 })
+    for (const customer of customers.data) {
+      for await (const sub of stripe.subscriptions.list({ customer: customer.id, status: 'all', limit: 100 })) {
+        if (live.has(sub.status)) toCancel.add(sub.id)
+      }
+    }
+  }
+  // Abbonamenti legati all'utente ma su un cliente con un'altra email
+  try {
+    const found = await stripe.subscriptions.search({ query: `metadata['userId']:'${userId}'`, limit: 100 })
+    for (const sub of found.data) if (live.has(sub.status)) toCancel.add(sub.id)
+  } catch (err) {
+    // La ricerca non è disponibile in tutte le regioni: basta la ricerca per email
+    console.error('[Admin] stripe subscriptions.search failed:', err instanceof Error ? err.message : err)
+  }
+
+  for (const id of toCancel) {
+    await stripe.subscriptions.cancel(id, { invoice_now: false, prorate: false })
+  }
+  return toCancel.size
+}
+
+async function removeUserFolder(bucket: string, userId: string) {
+  const storage = getServiceClient().storage.from(bucket)
+  let removed = 0
+  // Si ripete finché la cartella risulta vuota (list restituisce pagine limitate)
+  for (let round = 0; round < 20; round++) {
+    const { data, error } = await storage.list(userId, { limit: 1000 })
+    // Bucket inesistente in questo ambiente: niente da cancellare
+    if (error && /not.?found/i.test(error.message)) break
+    if (error) throw new Error(error.message)
+    const paths = (data ?? []).filter((f) => f.name && f.id).map((f) => `${userId}/${f.name}`)
+    if (paths.length === 0) break
+    const { error: removeError } = await storage.remove(paths)
+    if (removeError) throw new Error(removeError.message)
+    removed += paths.length
+    if (paths.length < 1000) break
+  }
+  return removed
+}
+
+// Esegue la cancellazione: abbonamenti Stripe, file, anonimizzazione del
+// profilo e chiusura dell'accesso. Ogni passo è ripetibile: se qualcosa
+// fallisce la richiesta resta in attesa e si può rilanciare.
+export async function adminExecuteDeletion(
+  requestId: string,
+  note: string,
+): Promise<{ success: boolean; error?: string; warnings?: string[] }> {
+  const admin = await verifyAdmin('users.delete')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  const { request, error: loadError } = await loadPendingDeletionRequest(requestId)
+  if (!request) return { success: false, error: loadError ?? 'Richiesta non valida' }
+  const userId = request.user_id
+  if (!userId) return { success: false, error: "L'account collegato alla richiesta non esiste più" }
+  if (userId === admin.id) return { success: false, error: 'Non puoi eseguire la cancellazione del tuo account' }
+  if (await isFullAdmin(userId)) {
+    return { success: false, error: "L'utente è un amministratore completo: togli prima i privilegi di amministratore" }
+  }
+
+  const service = getServiceClient()
+  const warnings: string[] = []
+  const cleanNote = (typeof note === 'string' ? note : '').trim().slice(0, 1000)
+
+  // 1. Email (dall'accesso e dal profilo: se un tentativo precedente ha già
+  //    anonimizzato il profilo, l'email originale resta nell'account auth)
+  const [{ data: authData, error: authError }, { data: profile }] = await Promise.all([
+    service.auth.admin.getUserById(userId),
+    service.from('profiles').select('email').eq('id', userId).maybeSingle(),
+  ])
+  if (authError && !/not.?found/i.test(authError.message)) return { success: false, error: `Lettura account: ${authError.message}` }
+  const authUser = authData?.user ?? null
+  const emails = [
+    ...new Set(
+      [authUser?.email, profile?.email as string | null | undefined]
+        .filter((e): e is string => typeof e === 'string' && e.includes('@') && !DELETED_EMAIL_RE.test(e))
+        .flatMap((e) => [e.trim(), e.trim().toLowerCase()]),
+    ),
+  ]
+  const originalEmail = emails[0]?.toLowerCase() ?? null
+  const emailHash = originalEmail ? createHash('sha256').update(originalEmail).digest('hex') : null
+
+  // 2. Abbonamenti Stripe: se fallisce ci si ferma (nulla è stato ancora
+  //    modificato) per non continuare ad addebitare un account cancellato.
+  try {
+    if (process.env.STRIPE_SECRET_KEY) {
+      const cancelled = await cancelStripeSubscriptionsFor(userId, emails)
+      if (cancelled > 0) warnings.push(`Abbonamenti Stripe annullati: ${cancelled}`)
+    } else {
+      warnings.push('Stripe non configurato: verifica a mano che non ci siano abbonamenti attivi')
+    }
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err)
+    console.error('[Admin] account deletion stripe failed:', message)
+    return { success: false, error: `Annullamento abbonamento Stripe non riuscito (nessun dato modificato): ${message}` }
+  }
+
+  // 3. File negli storage (best effort)
+  for (const bucket of USER_FILE_BUCKETS) {
+    try {
+      await removeUserFolder(bucket, userId)
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err)
+      console.error(`[Admin] account deletion storage ${bucket} failed:`, message)
+      warnings.push(`File non cancellati nel bucket ${bucket}: ${message}`)
+    }
+  }
+
+  // Eventuale ruolo Staff (non completo): tolto prima di chiudere l'account
+  const { error: roleError } = await service.from('admin_users').delete().eq('user_id', userId)
+  if (roleError) warnings.push(`Ruolo Staff non rimosso: ${roleError.message}`)
+
+  // 4. Anonimizzazione del profilo e dei contenuti (atomica, in SQL)
+  const { error: anonymizeError } = await service.rpc('account_anonymize', { p_uid: userId })
+  if (anonymizeError) {
+    console.error('[Admin] account_anonymize failed:', anonymizeError.message)
+    return { success: false, error: `Anonimizzazione non riuscita: ${anonymizeError.message}`, warnings }
+  }
+
+  // 5. Chiusura dell'accesso: email e password sostituite, metadati svuotati,
+  //    account bannato (le sessioni aperte non possono più rinnovarsi).
+  if (authUser) {
+    const clearedMetadata = Object.fromEntries(Object.keys(authUser.user_metadata ?? {}).map((key) => [key, null]))
+    const { error: closeError } = await service.auth.admin.updateUserById(userId, {
+      email: `deleted-${userId}@deleted.invalid`,
+      email_confirm: true,
+      password: randomBytes(32).toString('base64url'),
+      user_metadata: clearedMetadata,
+      ban_duration: '876000h',
+    })
+    if (closeError) {
+      console.error('[Admin] account deletion auth close failed:', closeError.message)
+      return {
+        success: false,
+        error: `Profilo anonimizzato, ma la chiusura dell'accesso non è riuscita (${closeError.message}). La richiesta resta in attesa: riprova "Esegui cancellazione".`,
+        warnings,
+      }
+    }
+  } else {
+    warnings.push('Account di accesso non trovato: già chiuso')
+  }
+
+  // 6. Richiesta completata
+  const update: Record<string, unknown> = {
+    status: 'completed',
+    processed_at: new Date().toISOString(),
+    processed_by: admin.id,
+    staff_note: cleanNote || null,
+  }
+  if (emailHash) update.email_hash = emailHash
+  const { error: doneError } = await service
+    .from('account_deletion_requests')
+    .update(update)
+    .eq('id', request.id)
+    .eq('status', 'pending')
+  if (doneError) {
+    console.error('[Admin] account deletion request update failed:', doneError.message)
+    warnings.push(`Account cancellato, ma la richiesta non è stata segnata come completata: ${doneError.message}`)
+  }
+  return { success: true, warnings }
+}
+
+export async function adminCancelDeletion(requestId: string, note: string) {
+  const admin = (await verifyAdmin('users.delete')) ?? (await verifyAdmin('users.write'))
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  const cleanNote = (typeof note === 'string' ? note : '').trim().slice(0, 1000)
+  const { request, error: loadError } = await loadPendingDeletionRequest(requestId)
+  if (!request) return { success: false, error: loadError ?? 'Richiesta non valida' }
+  const { data, error } = await getServiceClient()
+    .from('account_deletion_requests')
+    .update({ status: 'cancelled', processed_at: new Date().toISOString(), processed_by: admin.id, staff_note: cleanNote || null })
+    .eq('id', request.id)
+    .eq('status', 'pending')
+    .select('id')
+  if (error) return { success: false, error: error.message }
+  if (!data?.length) return { success: false, error: 'La richiesta è già stata gestita' }
+  return { success: true, error: null }
 }

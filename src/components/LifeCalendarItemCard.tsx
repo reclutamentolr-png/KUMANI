@@ -19,9 +19,9 @@ type Item = {
 
 const STATUS_DOT: Record<ItemStatus, string> = {
   regular: 'bg-green-500',
-  upcoming: 'bg-yellow-500',
-  urgent: 'bg-red-500',
-  expired: 'bg-gray-800',
+  upcoming: 'bg-[var(--gold-bright)]',
+  urgent: 'bg-amber-600',
+  expired: 'bg-red-600',
 }
 
 export default function LifeCalendarItemCard({ item }: { item: Item }) {
@@ -67,12 +67,12 @@ export default function LifeCalendarItemCard({ item }: { item: Item }) {
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+    <div className="bg-white rounded-xl border border-[var(--gold)]/20 shadow-sm hover:border-[var(--gold)]/50 transition-colors p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center gap-4">
       <div className="flex items-start gap-3 flex-1 min-w-0">
-        <span className={`mt-1.5 w-3 h-3 rounded-full shrink-0 ${STATUS_DOT[status]}`} />
+        <span className={`mt-1.5 w-3 h-3 rounded-full shrink-0 ring-2 ring-white shadow ${STATUS_DOT[status]}`} />
         <div className="min-w-0">
-          <h3 className="font-semibold text-gray-900 truncate">{item.title}</h3>
-          <p className="text-xs text-gray-500 mt-0.5">
+          <h3 className="font-semibold text-[var(--ink)] truncate">{item.title}</h3>
+          <p className="text-xs text-[var(--muted)] mt-0.5">
             {t(`category_${item.category}`)}
             {item.profile_name ? ` · ${item.profile_name}` : ''}
             {' · '}
@@ -80,9 +80,9 @@ export default function LifeCalendarItemCard({ item }: { item: Item }) {
           </p>
           <p className="text-sm mt-1">
             {status === 'expired' ? (
-              <span className="text-gray-800 font-medium">{t('expiredSince', { count: Math.abs(days) })}</span>
+              <span className="text-red-700 font-medium">{t('expiredSince', { count: Math.abs(days) })}</span>
             ) : (
-              <span className="text-gray-600">
+              <span className={status === 'urgent' ? 'text-amber-700 font-medium' : 'text-[var(--muted)]'}>
                 {t('dueIn', { count: days })} · {new Date(item.due_date).toLocaleDateString()}
               </span>
             )}
@@ -90,13 +90,13 @@ export default function LifeCalendarItemCard({ item }: { item: Item }) {
         </div>
       </div>
 
-      <div className="flex items-center gap-2 shrink-0">
+      <div className="flex flex-wrap items-center gap-2 shrink-0">
         <button
           onClick={handleMarkHandled}
           disabled={handling}
           title={isRecurring ? t('markHandledHint') : t('archiveHint')}
           className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all disabled:opacity-50 ${
-            isRecurring ? 'bg-green-50 text-green-700 hover:bg-green-100' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            isRecurring ? 'bg-green-50 text-green-700 hover:bg-green-100' : 'border border-[var(--gold)]/40 bg-white text-[var(--ink)] hover:bg-[var(--gold-pale)]'
           }`}
         >
           {handling ? (
@@ -110,7 +110,7 @@ export default function LifeCalendarItemCard({ item }: { item: Item }) {
         </button>
         <Link
           href={`/marketplace/life-calendar/${item.id}`}
-          className="px-3 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all"
+          className="px-3 py-2 rounded-lg text-sm font-medium border border-[var(--gold)]/40 bg-white text-[var(--ink)] hover:bg-[var(--gold-pale)] transition-all"
         >
           {t('details')}
         </Link>

@@ -2,13 +2,15 @@
 
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
-import { normalizeTaxCode, validateTaxCode } from '@/lib/codiceFiscale'
+import { checkVat, verifyVies } from '@/lib/vat'
+import { acceptRules, verifyTaxCode } from '@/app/actions/verification'
 import type { ConvivioCard, ConvivioDetail, ConvivioLeaderStatus, ConvivioMessage, MySupplierInfo, SupplierSearchResult } from '@/lib/convivio'
 
 // Convivio: le regole (verifica, soglia, adesioni, chat) sono nelle funzioni
-// SQL convivio_*; qui solo il passaggio dal browser, più la verifica del
-// codice fiscale (che scrive con il client di servizio dopo i controlli).
+// SQL convivio_*; qui solo il passaggio dal browser. La verifica d'identità
+// e le regole sono in actions/verification.
 
+// Client di servizio: solo il server scrive l'esito della verifica VIES.
 const getServiceClient = () =>
   createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
     auth: { autoRefreshToken: false, persistSession: false },
@@ -29,35 +31,13 @@ export async function getLeaderStatus(): Promise<ConvivioLeaderStatus | null> {
 }
 
 // Diventare capocordata: codice fiscale verificato + accettazione regole.
+// (La verifica completa, anche con documento, è in actions/verification.)
 export async function becomeLeader(taxCode: string, acceptTerms: boolean): Promise<{ success: boolean; error?: string }> {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  if (!user) return { success: false, error: 'notLoggedIn' }
   if (!acceptTerms) return { success: false, error: 'terms' }
-
-  const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<{ first_name: string; last_name: string; date_of_birth: string | null }>()
-  if (!profile) return { success: false, error: 'notLoggedIn' }
-  const birthDate = profile.date_of_birth && profile.date_of_birth !== '2000-01-01' ? profile.date_of_birth : null
-  if (!birthDate) return { success: false, error: 'birthdateMissing' }
-
-  const code = normalizeTaxCode(taxCode)
-  const problem = validateTaxCode(code, { firstName: profile.first_name ?? '', lastName: profile.last_name ?? '', birthDate })
-  if (problem) return { success: false, error: `taxCode_${problem}` }
-
-  // Un codice fiscale già verificato non si sostituisce (altrimenti si
-  // libererebbe per un secondo account); account bloccati esclusi.
-  const service = getServiceClient()
-  const { data: current } = await service.from('profiles').select('tax_code, is_blocked').eq('id', user.id).maybeSingle()
-  if (current?.is_blocked) return { success: false, error: 'saveError' }
-  if (current?.tax_code && current.tax_code !== code) return { success: false, error: 'taxCode_used' }
-
-  const { error } = await service
-    .from('profiles')
-    .update({ tax_code: code, convivio_terms_at: new Date().toISOString() })
-    .eq('id', user.id)
-  if (error) return { success: false, error: error.code === '23505' ? 'taxCode_used' : 'saveError' }
+  const verified = await verifyTaxCode(taxCode)
+  if (!verified.success) return { success: false, error: verified.error === 'blocked' ? 'saveError' : verified.error }
+  const accepted = await acceptRules('kordata')
+  if (!accepted.success) return { success: false, error: accepted.error === 'blocked' ? 'saveError' : accepted.error }
   return { success: true }
 }
 
@@ -135,24 +115,61 @@ export async function getMySupplier(): Promise<MySupplierInfo | null> {
   return rpc<MySupplierInfo>('convivio_my_supplier')
 }
 
+// Salva la scheda fornitore. La partita IVA si controlla qui (formato per
+// paese, cifra di controllo italiana); per i paesi UE si prova la verifica
+// sul VIES, che però non blocca mai il salvataggio.
+// Esiti: 'ok' | 'ok_vies_invalid' | 'ok_vies_unavailable' | codice d'errore.
 export async function saveSupplier(input: {
   businessName: string
   vatNumber: string
+  vatCountry?: string
   city: string
   category: string
   description: string
   accepts: boolean
 }): Promise<string> {
-  return (
-    (await rpc<string>('convivio_supplier_save', {
-      p_business: input.businessName,
-      p_vat: input.vatNumber,
-      p_city: input.city,
-      p_category: input.category,
-      p_description: input.description,
-      p_accepts: input.accepts,
-    })) ?? 'saveError'
-  )
+  const vat = checkVat(input.vatCountry || 'IT', input.vatNumber)
+  if (!vat.ok) {
+    return vat.reason === 'checksum' ? 'invalid_vat_checksum' : vat.reason === 'country' ? 'invalid_vat_country' : 'invalid_vat'
+  }
+
+  const saved = await rpc<string>('convivio_supplier_save', {
+    p_business: input.businessName,
+    p_vat: vat.normalized,
+    p_city: input.city,
+    p_category: input.category,
+    p_description: input.description,
+    p_accepts: input.accepts,
+    p_vat_country: vat.country,
+  })
+  if (saved !== 'ok') return saved ?? 'saveError'
+  // Fuori UE non c'è una verifica online: resta "da verificare"
+  if (!vat.eu) return 'ok'
+
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return 'ok'
+
+  const vies = await verifyVies(vat.normalized)
+  if (vies.status === 'unavailable') return 'ok_vies_unavailable'
+
+  const { error } = await getServiceClient()
+    .from('convivio_suppliers')
+    .update({
+      vat_status: vies.status,
+      vat_checked_at: new Date().toISOString(),
+      vat_registered_name: vies.status === 'valid' ? (vies.name ?? null) : null,
+    })
+    .eq('user_id', user.id)
+    // Solo se il numero è ancora quello appena verificato
+    .eq('vat_number', vat.normalized)
+  if (error) {
+    console.error('[Kordata] VIES status update failed:', error.message)
+    return 'ok_vies_unavailable'
+  }
+  return vies.status === 'valid' ? 'ok' : 'ok_vies_invalid'
 }
 
 export async function searchSuppliers(query: string): Promise<SupplierSearchResult[]> {
@@ -169,4 +186,25 @@ export async function answerCounter(id: string, accept: boolean): Promise<string
 
 export async function reviewConvivio(id: string, target: 'supplier' | 'leader', rating: number, comment: string): Promise<string> {
   return (await rpc<string>('convivio_review', { p_group: id, p_target: target, p_rating: rating, p_comment: comment })) ?? 'saveError'
+}
+
+// ---------- Commissione KUMANI a carico del fornitore Pro ----------
+
+export type ConvivioFee = {
+  id: string
+  group_id: string
+  title: string
+  quantity: number
+  price: number
+  percent: number
+  amount: number
+  status: 'due' | 'paid' | 'waived'
+  created_at: string
+}
+
+export type ConvivioMyFees = { percent: number; fees: ConvivioFee[] }
+
+export async function getMyConvivioFees(): Promise<ConvivioMyFees> {
+  const data = await rpc<ConvivioMyFees>('convivio_my_fees')
+  return { percent: Number(data?.percent ?? 3), fees: data?.fees ?? [] }
 }

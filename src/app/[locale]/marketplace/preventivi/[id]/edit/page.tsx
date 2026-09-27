@@ -60,24 +60,24 @@ export default async function EditQuotePage({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[var(--gold-pale)]">
-      <header className="border-b border-[var(--gold)]/25 bg-[var(--ink)] sticky top-0 z-10 shadow-sm">
+    <div className="min-h-screen bg-[var(--background)]">
+      <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <Link
             href={`/marketplace/preventivi/${id}${backSuffix}`}
-            className="flex items-center gap-2 text-white hover:text-[var(--gold-bright)] font-medium transition-colors"
+            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
           >
             <ArrowLeft className="w-5 h-5" />
             {t('quoteNumberLabel', { number: quote.quote_number })}
           </Link>
-          <h1 className="flex items-center gap-2 text-lg font-semibold text-white">
+          <h1 className="flex items-center gap-2 font-semibold tracking-wide">
             <FileSpreadsheet className="h-5 w-5 text-[var(--gold-bright)]" />
             {t('editQuote')}
           </h1>
         </div>
       </header>
 
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <QuoteForm issuer={profile || null} logoUrl={logoUrl} mode="edit" quoteId={quote.id} initialData={initialData} />
       </main>
     </div>

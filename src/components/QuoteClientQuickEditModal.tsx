@@ -13,7 +13,7 @@ type Props = {
 }
 
 const inputClass =
-  'w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] text-sm'
+  'w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm'
 const labelClass = 'block text-sm font-medium text-gray-700 mb-1'
 
 export default function QuoteClientQuickEditModal({ client, onClose, onSaved }: Props) {
@@ -57,12 +57,12 @@ export default function QuoteClientQuickEditModal({ client, onClose, onSaved }: 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-      <div className="relative w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+      <div className="relative w-full max-w-md rounded-2xl border border-[var(--gold)]/25 bg-white p-6 shadow-2xl">
         <button onClick={onClose} aria-label="Close" className="absolute right-4 top-4 text-gray-400 hover:text-gray-600">
           <X className="h-5 w-5" />
         </button>
 
-        <h3 className="font-bold text-gray-900 mb-4">{t('editSavedClientTitle')}</h3>
+        <h3 className="font-bold text-[var(--ink)] mb-4">{t('editSavedClientTitle')}</h3>
 
         <div className="space-y-3">
           <div>
@@ -115,14 +115,14 @@ export default function QuoteClientQuickEditModal({ client, onClose, onSaved }: 
         <div className="mt-5 flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 px-4 py-2.5 rounded-xl font-medium text-sm bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all"
+            className="flex-1 px-4 py-2.5 rounded-xl font-medium text-sm border border-[var(--gold)]/40 bg-white text-[var(--ink)] hover:bg-[var(--gold-pale)] transition-all"
           >
             {t('cancelAction')}
           </button>
           <button
             onClick={handleSave}
             disabled={!form.name.trim() || saving}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm bg-[var(--ink)] text-white hover:bg-[var(--ink-soft)] transition-all disabled:opacity-50"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] font-bold shadow-md hover:brightness-105 transition-all disabled:opacity-50"
           >
             {saving ? <LoaderCircle className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
             {t('saveChangesAction')}

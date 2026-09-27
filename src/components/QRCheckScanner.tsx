@@ -82,7 +82,7 @@ function getDestination(result: QRAnalysis): string {
 
 function IndicatorIcon({ type }: { type: 'ok' | 'warning' | 'risk' }) {
   if (type === 'ok') return <CheckCircle className="h-4 w-4 text-green-500 shrink-0" />
-  if (type === 'warning') return <AlertTriangle className="h-4 w-4 text-yellow-500 shrink-0" />
+  if (type === 'warning') return <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0" />
   return <XCircle className="h-4 w-4 text-red-500 shrink-0" />
 }
 
@@ -263,16 +263,16 @@ export default function QRCheckScanner() {
     result?.analysis.badge === 'green'
       ? 'text-green-600 bg-green-100'
       : result?.analysis.badge === 'yellow'
-        ? 'text-yellow-700 bg-yellow-100'
+        ? 'text-amber-700 bg-amber-100'
         : 'text-red-600 bg-red-100'
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 sm:p-8">
+    <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8">
       <div className="flex items-center gap-2 mb-1">
-        <QrCode className="w-5 h-5 text-blue-600" />
-        <h3 className="text-lg font-semibold text-gray-800">{t('title')}</h3>
+        <QrCode className="w-5 h-5 text-[var(--gold)]" />
+        <h3 className="text-lg font-semibold text-[var(--ink)]">{t('title')}</h3>
       </div>
-      <p className="text-sm text-gray-500 mb-6">{t('subtitle')}</p>
+      <p className="text-sm text-[var(--muted)] mb-6">{t('subtitle')}</p>
 
       <canvas ref={canvasRef} className="hidden" />
       <input
@@ -295,7 +295,7 @@ export default function QRCheckScanner() {
             className="absolute top-3 right-3 bg-white/90 hover:bg-white rounded-full p-2 shadow"
             aria-label="Close"
           >
-            <X className="w-5 h-5 text-gray-700" />
+            <X className="w-5 h-5 text-[var(--ink)]" />
           </button>
         </div>
       )}
@@ -304,14 +304,14 @@ export default function QRCheckScanner() {
         <div className="flex flex-col sm:flex-row gap-3">
           <button
             onClick={startCamera}
-            className="flex-1 flex items-center justify-center gap-2 px-5 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all"
+            className="flex-1 flex items-center justify-center gap-2 px-5 py-4 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] rounded-xl font-bold shadow-md hover:brightness-105 transition-all"
           >
             <Camera className="w-5 h-5" />
             {t('scanCamera')}
           </button>
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="flex-1 flex items-center justify-center gap-2 px-5 py-4 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-semibold transition-all"
+            className="flex-1 flex items-center justify-center gap-2 px-5 py-4 bg-white border border-[var(--gold)]/40 hover:border-[var(--gold)] text-[var(--ink)] rounded-xl font-semibold transition-all"
           >
             <Upload className="w-5 h-5" />
             {t('uploadImage')}
@@ -321,8 +321,8 @@ export default function QRCheckScanner() {
 
       {analyzing && (
         <div className="text-center py-10">
-          <LoaderCircle className="w-10 h-10 text-blue-600 mx-auto mb-3 animate-spin" />
-          <p className="text-gray-600">{t('scanning')}</p>
+          <LoaderCircle className="w-10 h-10 text-[var(--gold)] mx-auto mb-3 animate-spin" />
+          <p className="text-[var(--muted)]">{t('scanning')}</p>
         </div>
       )}
 
@@ -332,7 +332,7 @@ export default function QRCheckScanner() {
           <p className="text-red-800 text-sm">{error}</p>
           <button
             onClick={reset}
-            className="mt-3 inline-flex items-center gap-2 text-sm text-blue-600 hover:underline"
+            className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-[var(--ink)] hover:text-[var(--gold)] hover:underline"
           >
             <RefreshCw className="w-4 h-4" />
             {t('uploadImage')}
@@ -343,25 +343,25 @@ export default function QRCheckScanner() {
       {result && !analyzing && (
         <div className="space-y-5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+            <span className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">
               {t(TYPE_LABEL_KEY[result.type])}
             </span>
             <span className={`px-3 py-1 rounded-full text-xs font-bold ${riskColor}`}>{t(riskLevelKey)}</span>
           </div>
 
-          <div className="bg-gray-50 rounded-xl p-4">
-            <p className="text-xs text-gray-500 mb-1">{t('destination')}</p>
-            <p className="font-medium text-gray-800 break-all">{getDestination(result)}</p>
+          <div className="bg-[var(--gold-pale)]/60 border border-[var(--gold)]/20 rounded-xl p-4">
+            <p className="text-xs text-[var(--muted)] mb-1">{t('destination')}</p>
+            <p className="font-medium text-[var(--ink)] break-all">{getDestination(result)}</p>
           </div>
 
-          <p className="text-sm text-gray-600">{t(aiExplanationKey)}</p>
+          <p className="text-sm text-[var(--muted)]">{t(aiExplanationKey)}</p>
 
           {result.analysis.redirectChain && result.analysis.redirectChain.length > 0 && (
             <div>
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">{t('redirect')}</p>
+              <p className="text-xs font-semibold text-[var(--muted)] uppercase tracking-wide mb-2">{t('redirect')}</p>
               <div className="space-y-1">
                 {result.analysis.redirectChain.map((hop, i) => (
-                  <p key={i} className="text-sm text-gray-600 break-all">
+                  <p key={i} className="text-sm text-[var(--muted)] break-all">
                     {i > 0 && `${t('redirectTo')} → `}
                     {hop.url}
                   </p>
@@ -372,12 +372,12 @@ export default function QRCheckScanner() {
 
           {result.analysis.indicators.length > 0 && (
             <div>
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+              <p className="text-xs font-semibold text-[var(--muted)] uppercase tracking-wide mb-2">
                 {t('riskIndicators')}
               </p>
               <div className="space-y-2">
                 {result.analysis.indicators.map((ind, i) => (
-                  <div key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                  <div key={i} className="flex items-start gap-2 text-sm text-[var(--ink)]">
                     <IndicatorIcon type={ind.type} />
                     {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                     <span>{t(ind.key as any, ind.params as any)}</span>
@@ -388,9 +388,9 @@ export default function QRCheckScanner() {
           )}
 
           {result.analysis.recommendations.length > 0 && (
-            <div className="bg-blue-50 rounded-xl p-4 space-y-1">
+            <div className="bg-[var(--gold-pale)] border border-[var(--gold)]/30 rounded-xl p-4 space-y-1">
               {result.analysis.recommendations.map((rec, i) => (
-                <p key={i} className="text-sm text-blue-800">
+                <p key={i} className="text-sm text-[var(--ink)]">
                   {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                   • {t(rec as any)}
                 </p>
@@ -419,7 +419,7 @@ export default function QRCheckScanner() {
                 className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-sm transition-all ${
                   result.analysis.badge === 'red'
                     ? 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                    : 'bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] font-bold shadow-md hover:brightness-105'
                 }`}
               >
                 <ExternalLink className="w-4 h-4" />
@@ -431,18 +431,18 @@ export default function QRCheckScanner() {
               <div className="relative">
                 <button
                   onClick={() => setReportOpen((v) => !v)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-sm bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all"
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-sm bg-white border border-[var(--gold)]/40 text-[var(--ink)] hover:border-[var(--gold)] transition-all"
                 >
                   <Flag className="w-4 h-4" />
                   {t('reportIssue')}
                 </button>
                 {reportOpen && (
-                  <div className="absolute z-10 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden min-w-40">
+                  <div className="absolute z-10 mt-2 bg-white border border-[var(--gold)]/25 rounded-xl shadow-lg overflow-hidden min-w-40">
                     {REPORT_TYPES.map((rt) => (
                       <button
                         key={rt}
                         onClick={() => submitReport(rt)}
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                        className="block w-full text-left px-4 py-2 text-sm text-[var(--ink)] hover:bg-[var(--gold-pale)]"
                       >
                         {t(rt === 'impersonation' ? 'impersonationReport' : rt)}
                       </button>
@@ -465,14 +465,14 @@ export default function QRCheckScanner() {
 
             <button
               onClick={reset}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-sm bg-blue-100 text-blue-700 hover:bg-blue-200 transition-all"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-sm bg-[var(--ink)] text-white hover:bg-[var(--ink-soft)] transition-all"
             >
               <RefreshCw className="w-4 h-4" />
               {t('uploadImage')}
             </button>
           </div>
 
-          <p className="text-xs text-gray-400 text-center pt-2">{t('disclaimer')}</p>
+          <p className="text-xs text-[var(--muted)] text-center pt-2">{t('disclaimer')}</p>
         </div>
       )}
     </div>

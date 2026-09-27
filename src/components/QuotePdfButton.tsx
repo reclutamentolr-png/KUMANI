@@ -55,7 +55,7 @@ export default function QuotePdfButton({ quote, issuer, logoUrl }: Props) {
     <button
       onClick={handleDownload}
       disabled={generating}
-      className="flex items-center gap-2 px-5 py-3 rounded-xl font-medium text-sm bg-[var(--gold-pale)] text-[var(--ink)] hover:bg-[var(--gold-pale)]/70 transition-all disabled:opacity-50"
+      className="flex items-center gap-2 px-5 py-3 rounded-xl text-sm bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] font-bold shadow-md hover:brightness-105 transition-all disabled:opacity-50"
     >
       {generating ? <LoaderCircle className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
       {generating ? t('generatingPdf') : t('downloadPdf')}

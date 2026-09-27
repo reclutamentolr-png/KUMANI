@@ -41,7 +41,7 @@ export default async function DigitalReceiptPublicPage({
     : null
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-cyan-50">
+    <div className="min-h-screen bg-[var(--background)]">
       <DigitalReceiptPublicView receipt={{ ...data, photo_url: photoUrl }} />
     </div>
   )

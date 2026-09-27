@@ -23,7 +23,7 @@ export default async function ConvivioPage({ params }: { params: Promise<{ local
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-          <Link href="/dashboard" className="flex items-center gap-2 text-sm font-medium hover:text-[var(--gold-bright)]">
+          <Link href="/dashboard" className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]">
             <ArrowLeft className="h-5 w-5" /> {commonT('backToDashboard')}
           </Link>
           <div className="flex items-center gap-2">
@@ -33,10 +33,17 @@ export default async function ConvivioPage({ params }: { params: Promise<{ local
         </div>
       </header>
       <main className="mx-auto max-w-6xl px-4 py-8">
-        <div className="mb-8 max-w-2xl">
-          <h1 className="text-3xl font-bold text-[var(--ink)] sm:text-4xl">Kordata</h1>
-          <p className="mt-2 text-lg font-semibold text-[var(--gold)]">{t('tagline')}</p>
-          <p className="mt-2 text-[var(--muted)]">{t('intro')}</p>
+        <div className="relative mb-8 overflow-hidden rounded-3xl bg-[var(--ink)] p-6 text-white shadow-[0_14px_40px_rgba(23,23,23,0.25)] sm:p-8">
+          <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full border border-[var(--gold)]/25 bg-[var(--gold)]/10" />
+          <div className="pointer-events-none absolute -bottom-20 right-24 h-40 w-40 rounded-full border border-[var(--gold)]/15" />
+          <div className="relative max-w-2xl">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[var(--gold)]/15 px-4 py-1.5 text-sm font-medium text-[var(--gold-bright)]">
+              <HandPlatter className="h-4 w-4" />
+              {t('tagline')}
+            </div>
+            <h1 className="text-3xl font-bold sm:text-4xl">Kordata</h1>
+            <p className="mt-3 text-base text-white/70 sm:text-lg">{t('intro')}</p>
+          </div>
         </div>
         <ConvivioHome open={open} mine={mine} leader={leader} isPro={!!supplier?.is_pro} />
       </main>

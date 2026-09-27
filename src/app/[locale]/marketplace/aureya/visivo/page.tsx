@@ -30,12 +30,12 @@ export default async function AureyaVisualPage() {
     .maybeSingle()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[var(--gold-pale)]">
-      <header className="sticky top-0 z-10 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[var(--background)]">
+      <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
+        <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <Link
             href="/marketplace/aureya"
-            className="flex items-center gap-2 text-sm font-medium text-white transition-colors hover:text-[var(--gold-bright)]"
+            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
           >
             <ArrowLeft className="h-5 w-5" /> {t('backToAureya')}
           </Link>
@@ -46,7 +46,7 @@ export default async function AureyaVisualPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-16 lg:px-8">
+      <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
         <AureyaVisualFieldTest previousScore={previous?.score ?? null} previousTestedAt={previous?.tested_at ?? null} />
       </main>
     </div>

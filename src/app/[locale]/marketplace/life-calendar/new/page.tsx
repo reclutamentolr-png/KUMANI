@@ -27,24 +27,24 @@ export default async function NewLifeCalendarItemPage() {
     .order('name')
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
-      <header className="bg-white shadow-sm border-b sticky top-0 z-10">
+    <div className="min-h-screen bg-[var(--background)]">
+      <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <Link
             href="/marketplace/life-calendar"
-            className="flex items-center gap-2 text-gray-600 hover:text-amber-600 font-medium transition-colors"
+            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
           >
             <ArrowLeft className="w-5 h-5" />
             {t('title')}
           </Link>
-          <h1 className="flex items-center gap-2 text-lg font-semibold text-gray-800">
-            <CalendarClock className="h-5 w-5 text-amber-600" />
+          <h1 className="flex items-center gap-2 font-semibold tracking-wide">
+            <CalendarClock className="h-5 w-5 text-[var(--gold-bright)]" />
             {t('newItem')}
           </h1>
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <LifeCalendarItemForm mode="create" profiles={profiles || []} />
       </main>
     </div>

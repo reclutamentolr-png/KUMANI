@@ -2,10 +2,10 @@ import { cache } from 'react'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getLocale, getTranslations } from 'next-intl/server'
-import { ArrowLeft, Ban, CalendarDays, CalendarHeart, Clock, Euro, Hourglass, Languages, Lock, MapPin, ShieldCheck, TriangleAlert, Users, Video } from 'lucide-react'
+import { ArrowLeft, Ban, CalendarDays, CalendarHeart, Clock, Euro, Hourglass, Languages, Lock, MapPin, MessageSquareQuote, ShieldCheck, TriangleAlert, UserRound, Users, Video } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import EventActions from '@/components/events/EventActions'
-import { EventFlags, PriceBadge, SpotsBadge, TrustedBadge, formatEventPrice } from '@/components/events/EventBadges'
+import { EventFlags, LevelBadge, PriceBadge, RatingBadge, SpotsBadge, Stars, formatEventPrice, formatRating } from '@/components/events/EventBadges'
 import ViewerTime from '@/components/events/ViewerTime'
 import { getEvent } from '@/app/actions/events'
 import { EVENT_TYPE_EMOJI, countryName, formatEventDate, languageName, utcToZoned } from '@/lib/events'
@@ -70,6 +70,12 @@ export default async function EventPage({ params, searchParams }: Props) {
   const place = [event.city, countryName(event.country_code, locale)].filter(Boolean).join(', ')
   const showsPlace = event.mode !== 'online'
   const showsOnline = event.mode !== 'in_person'
+  const level = event.organizer_level ?? (event.organizer_trusted ? 'trusted' : 'new')
+  const reviews = event.reviews ?? []
+  const reviewsCount = Number(event.organizer_reviews ?? 0)
+  const full = event.people >= event.capacity
+  const waitlistCount = Number(event.waitlist ?? 0)
+  const reviewDate = (iso: string) => new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(iso))
   const unlocked = !!event.address || !!event.map_link || !!event.online_link || event.is_organizer || !!event.my_pass
 
   return (
@@ -113,11 +119,12 @@ export default async function EventPage({ params, searchParams }: Props) {
           <p className="mt-2 text-lg font-medium text-[var(--gold-pale)] first-letter:uppercase">{formatEventDate(event.starts_at, event.timezone, locale)}</p>
           <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-white/70">
             <span>{t('organizedBy', { name: event.organizer_name })}</span>
-            {event.organizer_trusted && <TrustedBadge dark />}
+            <LevelBadge level={level} dark />
+            <RatingBadge rating={event.organizer_rating} reviews={event.organizer_reviews} dark />
           </div>
           <div className="mt-4 flex flex-wrap gap-1.5">
             <PriceBadge event={event} dark />
-            <SpotsBadge event={event} dark />
+            <SpotsBadge event={event} dark closed={started || event.ended} />
             <EventFlags event={event} dark />
           </div>
         </section>
@@ -173,8 +180,11 @@ export default async function EventPage({ params, searchParams }: Props) {
               <InfoRow icon={<Users className="h-5 w-5" />} label={t('places')}>
                 <p className="font-semibold text-[var(--ink)]">{t('peopleOfCapacity', { people: event.people, capacity: event.capacity })}</p>
                 <p className="text-sm text-[var(--muted)]">
-                  {event.people >= event.capacity ? t('full') : t('spotsLeft', { count: event.capacity - event.people })}
+                  {full ? (started || event.ended ? t('full') : t('fullWaitlistOpen')) : t('spotsLeft', { count: event.capacity - event.people })}
                 </p>
+                {full && waitlistCount > 0 && !event.ended && (
+                  <p className="text-sm font-semibold text-[var(--ink-soft)]">{t('waitlistInfo', { count: waitlistCount })}</p>
+                )}
               </InfoRow>
 
               <InfoRow icon={<Euro className="h-5 w-5" />} label={t('price')}>
@@ -190,6 +200,57 @@ export default async function EventPage({ params, searchParams }: Props) {
               <h2 className="mb-2 font-bold text-[var(--ink)]">{t('aboutEvent')}</h2>
               <p className="whitespace-pre-line break-words text-sm leading-6 text-[var(--ink-soft)]">{event.description}</p>
             </section>
+
+            {/* Organizzatore: livello e reputazione */}
+            <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+              <h2 className="mb-3 font-bold text-[var(--ink)]">{t('organizerBoxTitle')}</h2>
+              <div className="flex items-start gap-3">
+                <div
+                  className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full ${
+                    level === 'super' ? 'bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)]' : 'bg-[var(--ink)] text-[var(--gold-bright)]'
+                  }`}
+                >
+                  <UserRound className="h-6 w-6" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="font-bold text-[var(--ink)]">{event.organizer_name}</p>
+                    <LevelBadge level={level} showNew />
+                  </div>
+                  {reviewsCount > 0 && event.organizer_rating != null ? (
+                    <p className="mt-1 flex flex-wrap items-center gap-2 text-sm text-[var(--ink-soft)]">
+                      <Stars rating={Number(event.organizer_rating)} />
+                      <span className="font-semibold">{t('ratingSummary', { rating: formatRating(Number(event.organizer_rating), locale), count: reviewsCount })}</span>
+                    </p>
+                  ) : (
+                    <p className="mt-1 text-sm text-[var(--muted)]">{t('noReviewsYet')}</p>
+                  )}
+                  <p className="mt-2 text-xs leading-5 text-[var(--muted)]">{t(`level_${level}_text`)}</p>
+                </div>
+              </div>
+            </section>
+
+            {/* Recensioni dei partecipanti */}
+            {reviews.length > 0 && (
+              <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+                <h2 className="flex items-center gap-2 font-bold text-[var(--ink)]">
+                  <MessageSquareQuote className="h-5 w-5 text-[var(--gold)]" /> {t('reviewsTitle')}
+                </h2>
+                <p className="mt-0.5 text-xs text-[var(--muted)]">{t('reviewsSubtitle', { name: event.organizer_name })}</p>
+                <ul className="mt-3 divide-y divide-gray-100">
+                  {reviews.map((review, index) => (
+                    <li key={`${review.created_at}-${index}`} className="py-3">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <Stars rating={review.rating} size="h-3.5 w-3.5" />
+                        <span className="text-xs text-[var(--muted)]">{reviewDate(review.created_at)}</span>
+                      </div>
+                      {review.comment && <p className="mt-1.5 whitespace-pre-line break-words text-sm text-[var(--ink-soft)]">{review.comment}</p>}
+                      <p className="mt-1 text-xs text-[var(--muted)]">{t('reviewBy', { name: review.name, event: review.event_title })}</p>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
           </div>
 
           <div className="space-y-5">

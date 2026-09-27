@@ -77,7 +77,7 @@ export default function AffinityFriends({ myMap }: { myMap: AffinityMap }) {
       <HeartHandshake className="mt-0.5 h-7 w-7 shrink-0 text-[var(--gold)]" />
       <div>
         <h3 className="font-bold text-[var(--ink)]">{t('f_title')}</h3>
-        <p className="mt-1 text-sm leading-6 text-slate-600">{t('f_subtitle', { count: data.per_week })}</p>
+        <p className="mt-1 text-sm leading-6 text-[var(--muted)]">{t('f_subtitle', { count: data.per_week })}</p>
       </div>
     </div>
   )
@@ -115,7 +115,7 @@ export default function AffinityFriends({ myMap }: { myMap: AffinityMap }) {
     return (
       <div className="space-y-4 rounded-2xl border border-[var(--gold)]/25 bg-white p-6">
         {header}
-        <ul className="space-y-1.5 text-sm text-slate-600">
+        <ul className="space-y-1.5 text-sm text-[var(--muted)]">
           <li>• {t('f_rule1')}</li>
           <li>• {t('f_rule2')}</li>
           <li>• {t('f_rule3')}</li>
@@ -131,7 +131,7 @@ export default function AffinityFriends({ myMap }: { myMap: AffinityMap }) {
                   type="button"
                   onClick={() => setForm({ ...form, languages: on ? form.languages.filter((x) => x !== l) : [...form.languages, l] })}
                   className={`rounded-full border px-3 py-1.5 text-xs font-semibold ${
-                    on ? 'border-[var(--ink)] bg-[var(--ink)] text-[var(--gold-bright)]' : 'border-gray-300 text-gray-600'
+                    on ? 'border-[var(--ink)] bg-[var(--ink)] text-[var(--gold-bright)]' : 'border-[var(--gold)]/30 text-[var(--muted)] hover:border-[var(--gold)]'
                   }`}
                 >
                   {MENU_LOCALE_NAMES[l]}
@@ -148,7 +148,7 @@ export default function AffinityFriends({ myMap }: { myMap: AffinityMap }) {
             rows={2}
             placeholder={t('f_bioPlaceholder')}
             onChange={(e) => setForm({ ...form, bio: e.target.value })}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[var(--gold)] focus:outline-none"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30"
           />
         </div>
         {!data.opted_in && (
@@ -239,7 +239,7 @@ export default function AffinityFriends({ myMap }: { myMap: AffinityMap }) {
       ) : (
         <ul className="space-y-4">
           {visible.map((intro) => (
-            <li key={intro.id} className="rounded-2xl border border-gray-200 p-4">
+            <li key={intro.id} className="rounded-2xl border border-[var(--gold)]/20 p-4">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[var(--ink)] text-[var(--gold-bright)]">

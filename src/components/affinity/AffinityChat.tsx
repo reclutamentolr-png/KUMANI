@@ -91,7 +91,7 @@ export default function AffinityChat({ introId, name, onClose }: { introId: stri
             maxLength={1000}
             rows={1}
             placeholder={t('f_chatPlaceholder')}
-            className="max-h-28 flex-1 resize-none rounded-xl border border-gray-300 px-3 py-2 text-sm focus:border-[var(--gold)] focus:outline-none"
+            className="max-h-28 flex-1 resize-none rounded-xl border border-gray-300 px-3 py-2 text-sm focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30"
           />
           <button
             type="submit"

@@ -48,7 +48,7 @@ export default function DigitalReceiptActions({
         <button
           onClick={handleConfirmReturn}
           disabled={returning}
-          className="flex items-center gap-2 px-5 py-3 rounded-xl font-medium text-sm bg-[var(--gold-pale)] text-[var(--ink)] hover:bg-[var(--gold-pale)]/70 transition-all disabled:opacity-50"
+          className="flex items-center gap-2 px-5 py-3 rounded-xl font-medium text-sm bg-[var(--ink)] text-white hover:bg-[var(--ink-soft)] transition-all disabled:opacity-50"
         >
           {returning ? <LoaderCircle className="w-4 h-4 animate-spin" /> : <Undo2 className="w-4 h-4" />}
           {t('confirmReturnAction')}

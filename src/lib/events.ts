@@ -61,7 +61,16 @@ export type EventCard = {
   organizer_name: string
   organizer_referral: string | null
   organizer_trusted: boolean
+  // Fase 2: lista d'attesa e reputazione dell'organizzatore
+  waitlist?: number
+  organizer_level?: OrganizerLevel
+  organizer_rating?: number | null
+  organizer_reviews?: number
 }
+
+export type OrganizerLevel = 'new' | 'trusted' | 'super'
+
+export type EventReview = { rating: number; comment: string | null; name: string; event_title: string; created_at: string }
 
 export type EventDetail = EventCard & {
   is_organizer: boolean
@@ -69,18 +78,31 @@ export type EventDetail = EventCard & {
   address: string | null
   map_link: string | null
   online_link: string | null
-  my_status: 'registered' | 'cancelled' | 'checked_in' | 'no_show' | null
+  my_status: 'registered' | 'waitlist' | 'cancelled' | 'checked_in' | 'no_show' | null
   my_pass: string | null
   fee_percent: number | null
+  my_waitlist_position?: number | null
+  can_review?: boolean
+  my_review?: { rating: number; comment: string | null } | null
+  reviews?: EventReview[]
 }
 
 export type EventFeeInfo = { id: string; amount: number; status: 'due' | 'paid' | 'waived'; participants: number; percent: number }
 
 export type OrganizedEvent = EventCard & { review_note: string | null; checked_in: number; fee: EventFeeInfo | null }
 
-export type EventPassItem = EventCard & { pass: string; my_status: 'registered' | 'checked_in' }
+export type EventPassItem = EventCard & { pass: string | null; my_status: 'registered' | 'checked_in' | 'waitlist' }
 
-export type EventAttendee = { id: string; name: string; status: 'registered' | 'checked_in' | 'no_show'; checked_in_at: string | null; code: string }
+export type EventAttendee = {
+  id: string
+  name: string
+  status: 'registered' | 'waitlist' | 'checked_in' | 'no_show'
+  checked_in_at: string | null
+  code: string
+  // Assenze e presenze ad altri eventi (affidabilità)
+  no_shows?: number
+  attended?: number
+}
 
 export type OrganizerStatus = {
   account_age: boolean
@@ -90,11 +112,23 @@ export type OrganizerStatus = {
   terms: boolean
   blocked: boolean
   days_left: number
+  // Identità: tax_code = verificata (codice fiscale o documento approvato)
+  has_tax_code?: boolean
+  identity_pending?: boolean
+  identity_last_status?: 'pending' | 'approved' | 'rejected' | null
+  identity_rejected_note?: string | null
   verified: boolean
   plan: boolean
   trusted: boolean
   fees_due: number
   fee_percent: number
+  // Fase 2: livello e reputazione
+  level?: OrganizerLevel
+  avg_rating?: number | null
+  reviews?: number
+  concluded?: number
+  banned_recent?: number
+  max_capacity?: number
 }
 
 export type EventFee = {

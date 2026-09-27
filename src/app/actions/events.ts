@@ -138,9 +138,9 @@ export async function cancelEvent(eventId: string): Promise<string> {
   return (await rpc<string>('event_cancel', { p_event: eventId })) ?? 'saveError'
 }
 
-export async function registerToEvent(eventId: string): Promise<{ pass?: string; error?: string }> {
+export async function registerToEvent(eventId: string): Promise<{ pass?: string; waitlist?: boolean; error?: string }> {
   if (!UUID_RE.test(eventId)) return { error: 'invalid' }
-  return (await rpc<{ pass?: string; error?: string }>('event_register', { p_event: eventId })) ?? { error: 'saveError' }
+  return (await rpc<{ pass?: string; waitlist?: boolean; error?: string }>('event_register', { p_event: eventId })) ?? { error: 'saveError' }
 }
 
 export async function unregisterFromEvent(eventId: string): Promise<string> {
@@ -166,4 +166,15 @@ export async function openPass(token: string): Promise<{ result: string; name?: 
 export async function reportEvent(eventId: string, reason: string): Promise<string> {
   if (!UUID_RE.test(eventId)) return 'invalid'
   return (await rpc<string>('event_report', { p_event: eventId, p_reason: reason.slice(0, 1000) })) ?? 'saveError'
+}
+
+// Fase 2: recensione dopo l'evento (1–5 stelle, commento facoltativo)
+export async function reviewEvent(eventId: string, rating: number, comment: string): Promise<string> {
+  if (!UUID_RE.test(eventId) || !Number.isInteger(rating) || rating < 1 || rating > 5) return 'invalid'
+  return (await rpc<string>('event_review', { p_event: eventId, p_rating: rating, p_comment: comment.trim().slice(0, 500) })) ?? 'saveError'
+}
+
+// "C'ero": eventi a cui sono davvero entrato
+export async function getMyAttendedCount(): Promise<number> {
+  return (await rpc<number>('event_my_attended')) ?? 0
 }

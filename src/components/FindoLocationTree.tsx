@@ -46,17 +46,17 @@ function LocationNode({ node, depth }: { node: FindoLocationNode; depth: number 
     <div style={{ marginLeft: depth * 20 }}>
       <div className="flex items-center gap-2 py-1.5 group">
         {node.children.length > 0 ? (
-          <button onClick={() => setExpanded((v) => !v)} className="text-gray-400 hover:text-gray-600">
+          <button onClick={() => setExpanded((v) => !v)} className="text-[var(--muted)] hover:text-[var(--ink)]">
             {expanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
           </button>
         ) : (
           <span className="w-4" />
         )}
-        <MapPin className="w-4 h-4 text-amber-600 shrink-0" />
-        <span className="text-sm font-medium text-gray-800">{node.name}</span>
+        <MapPin className="w-4 h-4 text-[var(--gold)] shrink-0" />
+        <span className="text-sm font-medium text-[var(--ink)]">{node.name}</span>
         <button
           onClick={() => setAdding((v) => !v)}
-          className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-amber-600 transition-opacity"
+          className="sm:opacity-0 sm:group-hover:opacity-100 text-[var(--muted)] hover:text-[var(--gold)] transition-opacity"
           title={t('addSubLocation')}
         >
           <PlusCircle className="w-4 h-4" />
@@ -64,7 +64,7 @@ function LocationNode({ node, depth }: { node: FindoLocationNode; depth: number 
         <button
           onClick={handleDelete}
           disabled={deleting}
-          className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-600 transition-opacity disabled:opacity-50"
+          className="sm:opacity-0 sm:group-hover:opacity-100 text-[var(--muted)] hover:text-red-600 transition-opacity disabled:opacity-50"
           title={t('deleteLocation')}
         >
           {deleting ? <LoaderCircle className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
@@ -78,13 +78,13 @@ function LocationNode({ node, depth }: { node: FindoLocationNode; depth: number 
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
             placeholder={t('locationNamePlaceholder')}
-            className="px-2 py-1 border-2 border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+            className="px-2 py-1 border-2 border-[var(--gold)]/20 rounded-lg text-sm focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30"
             autoFocus
           />
           <button
             onClick={handleAddChild}
             disabled={saving || !newName.trim()}
-            className="px-2 py-1 rounded-lg text-xs font-medium bg-amber-600 text-white hover:bg-amber-700 disabled:opacity-50"
+            className="px-2 py-1 rounded-lg text-xs bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] font-bold shadow-sm hover:brightness-105 disabled:opacity-50"
           >
             {t('add')}
           </button>
@@ -117,7 +117,7 @@ export default function FindoLocationTree({ locations }: { locations: FindoLocat
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 sm:p-8">
+    <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8">
       {tree.length > 0 ? (
         <div className="mb-4">
           {tree.map((node) => (
@@ -125,21 +125,21 @@ export default function FindoLocationTree({ locations }: { locations: FindoLocat
           ))}
         </div>
       ) : (
-        <p className="text-sm text-gray-400 mb-4">{t('noLocationsYet')}</p>
+        <p className="text-sm text-[var(--muted)] mb-4">{t('noLocationsYet')}</p>
       )}
 
-      <div className="flex items-center gap-2 pt-4 border-t border-gray-100">
+      <div className="flex flex-col gap-2 pt-4 border-t border-[var(--gold)]/15 sm:flex-row sm:items-center">
         <input
           type="text"
           value={newRootName}
           onChange={(e) => setNewRootName(e.target.value)}
           placeholder={t('newRootLocationPlaceholder')}
-          className="flex-1 px-3 py-2 border-2 border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+          className="flex-1 px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg text-sm focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30"
         />
         <button
           onClick={handleAddRoot}
           disabled={saving || !newRootName.trim()}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-amber-600 text-white hover:bg-amber-700 disabled:opacity-50"
+          className="flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] font-bold shadow-sm hover:brightness-105 transition-all disabled:opacity-50"
         >
           <PlusCircle className="w-4 h-4" />
           {t('addRootLocation')}

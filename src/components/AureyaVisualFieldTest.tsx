@@ -203,10 +203,13 @@ export default function AureyaVisualFieldTest({
   const currentEye = EYE_ORDER[eyeIndex]
 
   return (
-    <div className="rounded-[1.75rem] border border-[var(--gold)]/20 bg-white shadow-[0_20px_60px_rgba(23,23,23,0.1)]">
-      <div className="border-b border-[var(--gold)]/20 p-6 sm:p-8">
-        <h1 className="text-2xl font-bold text-slate-950 sm:text-3xl">{t('title')}</h1>
-        <p className="mt-2 text-slate-600">{t('intro')}</p>
+    <div className="overflow-hidden rounded-3xl border border-[var(--gold)]/25 bg-[var(--paper)] shadow-[0_14px_40px_rgba(23,23,23,0.12)]">
+      <div className="relative overflow-hidden bg-[var(--ink)] p-6 text-white sm:p-8">
+        <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full border border-[var(--gold)]/25 bg-[var(--gold)]/10" />
+        <div className="relative">
+          <h1 className="text-2xl font-bold sm:text-3xl">{t('title')}</h1>
+          <p className="mt-2 text-white/70">{t('intro')}</p>
+        </div>
       </div>
 
       {phase === 'instructions' && (
@@ -215,12 +218,12 @@ export default function AureyaVisualFieldTest({
             <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
             <p className="text-sm leading-6 text-amber-800">{t('medicalDisclaimer')}</p>
           </div>
-          <h2 className="mb-2 font-bold text-slate-900">{t('instructionsTitle')}</h2>
-          <p className="mb-6 whitespace-pre-line text-sm leading-6 text-slate-600">{t('instructionsBody')}</p>
+          <h2 className="mb-2 font-bold text-[var(--ink)]">{t('instructionsTitle')}</h2>
+          <p className="mb-6 whitespace-pre-line text-sm leading-6 text-[var(--muted)]">{t('instructionsBody')}</p>
           <button
             type="button"
             onClick={() => setPhase('eye-ready')}
-            className="inline-flex items-center gap-2 rounded-full bg-[var(--ink)] px-6 py-3 font-semibold text-white shadow-sm transition-colors hover:bg-[var(--ink-soft)]"
+            className="inline-flex items-center gap-2 rounded-full px-6 py-3 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] font-bold text-[var(--ink)] shadow-md transition-all hover:brightness-105"
           >
             <PlayCircle className="h-5 w-5" /> {t('startButton')}
           </button>
@@ -230,14 +233,14 @@ export default function AureyaVisualFieldTest({
       {phase === 'eye-ready' && (
         <div className="p-6 sm:p-8 text-center">
           <EyeIcon className={`mx-auto mb-4 h-12 w-12 text-[var(--gold)] ${currentEye === 'left' ? '-scale-x-100' : ''}`} />
-          <h2 className="mb-2 font-bold text-slate-900">
+          <h2 className="mb-2 font-bold text-[var(--ink)]">
             {currentEye === 'left' ? t('coverRightEye') : t('coverLeftEye')}
           </h2>
-          <p className="mb-6 text-sm leading-6 text-slate-600">{t('eyeReadyHint')}</p>
+          <p className="mb-6 text-sm leading-6 text-[var(--muted)]">{t('eyeReadyHint')}</p>
           <button
             type="button"
             onClick={startEye}
-            className="inline-flex items-center gap-2 rounded-full bg-[var(--ink)] px-6 py-3 font-semibold text-white shadow-sm transition-colors hover:bg-[var(--ink-soft)]"
+            className="inline-flex items-center gap-2 rounded-full px-6 py-3 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] font-bold text-[var(--ink)] shadow-md transition-all hover:brightness-105"
           >
             {currentEye === 'left' ? t('startLeftEye') : t('startRightEye')}
           </button>
@@ -271,7 +274,7 @@ export default function AureyaVisualFieldTest({
               />
             )}
           </div>
-          <p className="mt-4 text-center text-sm text-slate-500">{t('respondHint')}</p>
+          <p className="mt-4 text-center text-sm text-[var(--muted)]">{t('respondHint')}</p>
           <div className="mt-4 text-center">
             <button
               type="button"
@@ -282,7 +285,7 @@ export default function AureyaVisualFieldTest({
                 setActiveTrial(null)
                 restart()
               }}
-              className="inline-flex items-center gap-2 text-xs font-semibold text-gray-500 hover:text-red-600 transition-colors"
+              className="inline-flex items-center gap-2 text-xs font-semibold text-[var(--muted)] hover:text-red-600 transition-colors"
             >
               <StopCircle className="h-4 w-4" /> {t('stopButton')}
             </button>
@@ -290,21 +293,21 @@ export default function AureyaVisualFieldTest({
         </div>
       )}
 
-      {phase === 'saving' && <div className="p-6 sm:p-8 text-center text-slate-600">{t('savingLabel')}</div>}
+      {phase === 'saving' && <div className="p-6 sm:p-8 text-center text-[var(--muted)]">{t('savingLabel')}</div>}
 
       {phase === 'results' && score !== null && (
         <div className="p-6 sm:p-8">
-          <h2 className="mb-1 font-bold text-slate-900">{t('resultsTitle')}</h2>
-          <p className="mb-6 text-sm text-slate-600">{t('resultsSummary', { score })}</p>
+          <h2 className="mb-1 font-bold text-[var(--ink)]">{t('resultsTitle')}</h2>
+          <p className="mb-6 text-sm text-[var(--muted)]">{t('resultsSummary', { score })}</p>
 
           <div className="mb-6 grid gap-3 sm:grid-cols-2">
             {eyeResults.map((eyeResult) => (
-              <div key={eyeResult.eye} className="rounded-2xl border border-slate-200 p-4">
-                <p className="text-xs font-bold uppercase tracking-[0.15em] text-slate-500">
+              <div key={eyeResult.eye} className="rounded-2xl border border-[var(--gold)]/25 bg-white p-4">
+                <p className="text-xs font-bold uppercase tracking-[0.15em] text-[var(--muted)]">
                   {eyeResult.eye === 'left' ? t('eyeLeftLabel') : t('eyeRightLabel')}
                 </p>
-                <p className="mt-1 text-2xl font-bold text-slate-900">{eyeResult.score}%</p>
-                <p className="mt-1 text-xs text-slate-500">
+                <p className="mt-1 text-2xl font-bold text-[var(--ink)]">{eyeResult.score}%</p>
+                <p className="mt-1 text-xs text-[var(--muted)]">
                   {t('falsePositivesLabel', { count: eyeResult.falsePositives, total: eyeResult.catchTrials })}
                 </p>
               </div>
@@ -312,7 +315,7 @@ export default function AureyaVisualFieldTest({
           </div>
 
           {previousScore !== null && previousTestedAt && (
-            <p className="mb-6 rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
+            <p className="mb-6 rounded-2xl border border-[var(--gold)]/25 bg-[var(--gold-pale)] p-4 text-sm text-[var(--ink)]">
               {t('resultsComparison', {
                 score,
                 previousScore,
@@ -327,12 +330,12 @@ export default function AureyaVisualFieldTest({
           <button
             type="button"
             onClick={restart}
-            className="inline-flex items-center gap-2 rounded-full border border-[var(--gold)]/40 px-5 py-3 font-semibold text-[var(--gold)] transition-colors hover:bg-[var(--gold-pale)]"
+            className="inline-flex items-center gap-2 rounded-full border border-[var(--gold)]/60 px-5 py-3 font-semibold text-[var(--ink)] transition-colors hover:bg-[var(--gold-pale)]"
           >
             <RotateCcw className="h-4 w-4" /> {t('restartButton')}
           </button>
 
-          <p className="mt-8 text-xs leading-5 text-slate-500">{t('medicalDisclaimer')}</p>
+          <p className="mt-8 text-xs leading-5 text-[var(--muted)]">{t('medicalDisclaimer')}</p>
         </div>
       )}
     </div>

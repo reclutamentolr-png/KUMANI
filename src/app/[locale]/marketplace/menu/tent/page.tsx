@@ -32,13 +32,13 @@ export default async function MenuTentPage({ params }: { params: Promise<{ local
   )
 
   return (
-    <div className="min-h-screen bg-gray-100 print:bg-white">
-      <div className="mx-auto flex max-w-[210mm] flex-wrap items-center justify-between gap-3 px-4 py-4 print:hidden">
-        <Link href="/marketplace/menu" className="text-sm font-semibold text-gray-600 hover:text-gray-900">
+    <div className="min-h-screen bg-[var(--background)] px-4 py-4 print:bg-white print:p-0">
+      <div className="mx-auto mb-4 flex max-w-[210mm] flex-wrap items-center justify-between gap-3 rounded-2xl border border-[var(--gold)]/25 bg-white px-4 py-4 shadow-sm print:hidden">
+        <Link href="/marketplace/menu" className="text-sm font-semibold text-[var(--ink)] transition-colors hover:text-[var(--gold)]">
           ← {tb('backToBuilder')}
         </Link>
         <PrintButton label={tb('print')} />
-        <p className="w-full text-xs text-gray-500">{tb('tentHint')}</p>
+        <p className="w-full text-xs text-[var(--muted)]">{tb('tentHint')}</p>
       </div>
 
       <div className="mx-auto grid max-w-[210mm] grid-cols-2 gap-[6mm] bg-white p-[8mm] shadow print:shadow-none">

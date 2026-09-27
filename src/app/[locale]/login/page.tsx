@@ -130,9 +130,9 @@ export default function LoginPage() {
           <div className="relative border border-[var(--gold)]/35 bg-[var(--paper)] px-4 py-8 shadow-[0_20px_55px_rgba(23,23,23,0.14)] sm:rounded-2xl sm:px-10">
             {error && (
               <div className={`mb-4 border-l-4 p-4 rounded-r ${
-                error.includes('bloccato') ? 'bg-orange-50 border-orange-400' : 'bg-red-50 border-red-400'
+                error.includes('bloccato') ? 'bg-amber-50 border-amber-400' : 'bg-red-50 border-red-400'
               }`}>
-                <p className={`text-sm font-medium ${error.includes('bloccato') ? 'text-orange-700' : 'text-red-700'}`}>
+                <p className={`text-sm font-medium ${error.includes('bloccato') ? 'text-amber-700' : 'text-red-700'}`}>
                   {error}
                 </p>
               </div>

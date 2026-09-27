@@ -248,7 +248,7 @@ export default function MemoLifeApp({
               <button
                 type="button"
                 onClick={() => setEditor({ kind: 'appointment', draft: { title: '', date: selectedDay, time: '09:00', description: '' } })}
-                className="flex items-center gap-1 rounded-lg border border-gray-300 px-2.5 py-1.5 text-xs font-semibold text-[var(--ink)] hover:bg-gray-50"
+                className="flex items-center gap-1 rounded-lg border border-[var(--gold)]/40 bg-white px-2.5 py-1.5 text-xs font-semibold text-[var(--ink)] hover:bg-[var(--gold-pale)]"
               >
                 <Plus className="h-3.5 w-3.5" /> {t('add_appointment')}
               </button>
@@ -268,7 +268,7 @@ export default function MemoLifeApp({
             {openTasks.map((task) => {
               const late = task.due_date && task.due_date < today
               return (
-                <li key={task.id} className={`flex items-center gap-3 rounded-xl border bg-white px-3 py-2.5 ${late ? 'border-red-200' : 'border-gray-100'}`}>
+                <li key={task.id} className={`flex items-center gap-3 rounded-xl border bg-white px-3 py-2.5 ${late ? 'border-red-200' : 'border-[var(--gold)]/20'}`}>
                   <button
                     type="button"
                     onClick={async () => {
@@ -338,7 +338,7 @@ export default function MemoLifeApp({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={t('search')}
-            className="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-9 pr-3 text-sm focus:border-[var(--gold)] focus:outline-none"
+            className="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-9 pr-3 text-sm focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30"
           />
         </div>
       )}
@@ -371,7 +371,7 @@ export default function MemoLifeApp({
             {visibleContacts.map((c) => {
               const digits = (c.phone ?? '').replace(/[^\d+]/g, '').replace(/^\+/, '')
               return (
-                <li key={c.id} className="flex items-center gap-3 rounded-xl border border-gray-100 bg-white px-3 py-2.5">
+                <li key={c.id} className="flex items-center gap-3 rounded-xl border border-[var(--gold)]/20 bg-white px-3 py-2.5">
                   <button
                     type="button"
                     onClick={() =>
@@ -430,7 +430,7 @@ export default function MemoLifeApp({
               { key: 'appointment', icon: CalendarClock, color: 'bg-sky-500', open: () => setEditor({ kind: 'appointment', draft: { title: '', date: tab === 'calendar' ? selectedDay : today, time: '09:00', description: '' } }) },
               { key: 'task', icon: CheckCircle2, color: 'bg-violet-500', open: () => setEditor({ kind: 'task', draft: { title: '', dueDate: '', priority: 'medium', description: '' } }) },
               { key: 'note', icon: NotebookPen, color: 'bg-amber-400', open: () => setEditor({ kind: 'note', draft: { title: '', content: '' } }) },
-              { key: 'contact', icon: BookUser, color: 'bg-slate-500', open: () => setEditor({ kind: 'contact', draft: { name: '', phone: '', email: '', company: '', notes: '' } }) },
+              { key: 'contact', icon: BookUser, color: 'bg-[var(--ink)]', open: () => setEditor({ kind: 'contact', draft: { name: '', phone: '', email: '', company: '', notes: '' } }) },
             ].map(({ key, icon: Icon, color, open }) => (
               <button key={key} type="button" onClick={open} className="flex w-full items-center gap-3 rounded-xl border border-gray-200 p-3 text-left hover:border-[var(--gold)] hover:bg-[var(--gold-pale)]/40">
                 <span className={`flex h-10 w-10 items-center justify-center rounded-lg text-white ${color}`}>

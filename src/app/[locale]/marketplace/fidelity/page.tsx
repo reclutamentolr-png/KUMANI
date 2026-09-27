@@ -79,12 +79,12 @@ export default async function FidelityManagePage() {
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      <header className="sticky top-0 z-10 border-b border-[var(--gold)]/25 bg-[var(--ink)]">
+      <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          <Link href="/dashboard" className="flex items-center gap-2 font-medium text-white/70 transition-colors hover:text-[var(--gold-bright)]">
+          <Link href="/dashboard" className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]">
             <ArrowLeft className="h-5 w-5" /> {commonT('backToDashboard')}
           </Link>
-          <h1 className="flex items-center gap-2 text-lg font-semibold text-white">
+          <h1 className="flex items-center gap-2 font-semibold tracking-wide">
             <Stamp className="h-5 w-5 text-[var(--gold-bright)]" /> {t('title')}
           </h1>
         </div>
@@ -92,29 +92,56 @@ export default async function FidelityManagePage() {
 
       <main className="mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
         {!card ? (
-          <div className="mx-auto max-w-xl rounded-2xl border border-[var(--gold)]/20 bg-[var(--paper)] p-6 sm:p-8">
-            <h2 className="text-xl font-bold text-[var(--ink)]">{t('createTitle')}</h2>
-            <p className="mb-6 mt-1 text-sm text-[var(--muted)]">{t('createDescription')}</p>
-            <FidelitySettingsForm card={null} />
-          </div>
+          <>
+            <div className="relative mx-auto max-w-xl overflow-hidden rounded-3xl bg-[var(--ink)] p-6 text-white shadow-[0_14px_40px_rgba(23,23,23,0.25)] sm:p-8">
+              <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full border border-[var(--gold)]/25 bg-[var(--gold)]/10" />
+              <div className="pointer-events-none absolute -bottom-20 left-10 h-36 w-36 rounded-full border border-[var(--gold)]/15" />
+              <div className="relative">
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[var(--gold)]/15 px-4 py-1.5 text-sm font-medium text-[var(--gold-bright)]">
+                  <Stamp className="h-4 w-4" />
+                  {t('title')}
+                </div>
+                <h2 className="text-2xl font-bold sm:text-3xl">{t('createTitle')}</h2>
+                <p className="mt-2 text-sm text-white/70 sm:text-base">{t('createDescription')}</p>
+              </div>
+            </div>
+            <div className="mx-auto max-w-xl rounded-2xl border border-[var(--gold)]/25 bg-[var(--paper)] p-6 shadow-sm sm:p-8">
+              <FidelitySettingsForm card={null} />
+            </div>
+          </>
         ) : (
           <>
-            <div className="flex flex-col items-start gap-4 rounded-2xl bg-gradient-to-r from-[var(--ink)] to-[#292722] p-6 text-white sm:flex-row sm:items-center">
-              <div className="flex-1">
-                <p className="text-lg font-bold">{t('cassaCtaTitle')}</p>
-                <p className="mt-1 text-sm text-white/70">{t('cassaCtaText')}</p>
+            <div className="relative overflow-hidden rounded-3xl bg-[var(--ink)] p-6 text-white shadow-[0_14px_40px_rgba(23,23,23,0.25)] sm:p-8">
+              <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full border border-[var(--gold)]/25 bg-[var(--gold)]/10" />
+              <div className="pointer-events-none absolute -bottom-20 right-24 h-40 w-40 rounded-full border border-[var(--gold)]/15" />
+              <div className="relative">
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[var(--gold)]/15 px-4 py-1.5 text-sm font-medium text-[var(--gold-bright)]">
+                  <Stamp className="h-4 w-4" />
+                  {t('title')}
+                </div>
+                <h2 className="break-words text-2xl font-bold sm:text-3xl">{card.business_name}</h2>
+                <p className="mt-1 flex items-center gap-2 text-sm font-semibold text-[var(--gold-bright)] sm:text-base">
+                  <Gift className="h-4 w-4 shrink-0" />
+                  {t('cardSummary', { stamps: card.stamps_needed, prize: card.prize })}
+                </p>
+                <div className="mt-6 flex flex-col items-start gap-4 border-t border-white/10 pt-5 sm:flex-row sm:items-center">
+                  <div className="flex-1">
+                    <p className="font-bold">{t('cassaCtaTitle')}</p>
+                    <p className="mt-1 text-sm text-white/70">{t('cassaCtaText')}</p>
+                  </div>
+                  <Link
+                    href={`/f/cassa/${card.id}`}
+                    className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-5 py-3 font-bold text-[var(--ink)] shadow-md transition-all hover:brightness-105"
+                  >
+                    <MonitorSmartphone className="h-5 w-5" /> {t('openCassa')}
+                  </Link>
+                </div>
               </div>
-              <Link
-                href={`/f/cassa/${card.id}`}
-                className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-5 py-3 font-bold text-[var(--ink)]"
-              >
-                <MonitorSmartphone className="h-5 w-5" /> {t('openCassa')}
-              </Link>
             </div>
 
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
               {kpis.map((kpi) => (
-                <div key={kpi.label} className="rounded-xl border border-[var(--gold)]/20 bg-[var(--paper)] p-4">
+                <div key={kpi.label} className="rounded-xl border border-[var(--gold)]/25 bg-[var(--paper)] p-4">
                   <kpi.icon className="mb-2 h-5 w-5 text-[var(--gold)]" />
                   <p className="text-2xl font-bold text-[var(--ink)]">{kpi.value}</p>
                   <p className="text-xs text-[var(--muted)]">{kpi.label}</p>
@@ -122,7 +149,7 @@ export default async function FidelityManagePage() {
               ))}
             </div>
 
-            <section className="rounded-2xl border border-[var(--gold)]/20 bg-[var(--paper)] p-6">
+            <section className="rounded-2xl border border-[var(--gold)]/25 bg-[var(--paper)] p-6">
               <h2 className="text-lg font-bold text-[var(--ink)]">{t('statsTitle')}</h2>
               <p className="mb-4 text-xs text-[var(--muted)]">{t('statsTimezoneNote', { tz: FIDELITY_STATS_TIMEZONE })}</p>
               {!hasActivity ? (
@@ -150,12 +177,12 @@ export default async function FidelityManagePage() {
               )}
             </section>
 
-            <section className="rounded-2xl border border-[var(--gold)]/20 bg-[var(--paper)] p-6">
+            <section className="rounded-2xl border border-[var(--gold)]/25 bg-[var(--paper)] p-6">
               <h2 className="mb-4 text-lg font-bold text-[var(--ink)]">{t('settingsTitle')}</h2>
               <FidelitySettingsPanel card={card} customersCount={members.length} />
             </section>
 
-            <section className="rounded-2xl border border-[var(--gold)]/20 bg-[var(--paper)] p-6">
+            <section className="rounded-2xl border border-[var(--gold)]/25 bg-[var(--paper)] p-6">
               <h2 className="text-lg font-bold text-[var(--ink)]">{t('customersTitle')}</h2>
               <p className="mb-4 text-sm text-[var(--muted)]">{t('customersDescription')}</p>
               <FidelityCustomers card={card} members={members} />

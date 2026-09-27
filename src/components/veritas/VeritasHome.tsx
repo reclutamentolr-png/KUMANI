@@ -34,7 +34,7 @@ export default function VeritasHome({ defaultNickname }: { defaultNickname: stri
     router.push(`/${locale}/veritas/${result.code}`)
   }
 
-  const input = 'w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-[var(--gold)] focus:outline-none'
+  const input = 'w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30'
 
   return (
     <div className="grid gap-5 md:grid-cols-2">

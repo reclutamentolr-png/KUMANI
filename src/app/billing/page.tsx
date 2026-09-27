@@ -7,10 +7,11 @@ import { getTranslations } from 'next-intl/server'
 import type Stripe from 'stripe'
 import { getStripe } from '@/lib/stripe'
 import { isActiveSubscription } from '@/lib/subscriptionGate'
+import { findStripeSubscriptionForUser, subscriptionPeriodEnd } from '@/lib/stripeCustomer'
 import { locales, defaultLocale } from '../../../i18n'
 
 type BillingPageProps = {
-  searchParams: Promise<{ success?: string; session_id?: string; canceled?: string; error?: string }>
+  searchParams: Promise<{ success?: string; session_id?: string; canceled?: string; error?: string; portal?: string }>
 }
 
 type BillingProfile = {
@@ -24,6 +25,7 @@ type BillingProfile = {
 // vecchi, cronologia del browser): ci pensa il webhook.
 const MAX_SESSION_AGE_MS = 24 * 60 * 60 * 1000
 const isRecentSession = (createdSeconds: number) => Date.now() - createdSeconds * 1000 < MAX_SESSION_AGE_MS
+const isInFuture = (ms: number) => ms > Date.now()
 
 export default async function BillingPage({ searchParams }: BillingPageProps) {
   const supabase = await createClient()
@@ -36,7 +38,7 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
   const locale = cookieLocale && locales.includes(cookieLocale) ? cookieLocale : defaultLocale
   const t = await getTranslations({ locale, namespace: 'billingPage' })
 
-  const { success, session_id, canceled, error: checkoutError } = await searchParams
+  const { success, session_id, canceled, error: checkoutError, portal } = await searchParams
 
   // get_my_profile: l'email non è più leggibile con una select diretta.
   let { data: profile } = await supabase
@@ -95,15 +97,57 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
           profile = updated
         }
       }
-    } catch (err: any) {
-      console.error('❌ Errore verifica sessione Stripe su /billing:', err.message)
+    } catch (err) {
+      console.error('❌ Errore verifica sessione Stripe su /billing:', err instanceof Error ? err.message : err)
     }
   }
 
   const isActive = isActiveSubscription(profile)
   const planName = profile?.subscription_plan === 'pro' ? t('planPro') : t('planBase')
+  const dateFormat = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric' })
   const expiresOn = isActive && profile?.subscription_expires_at
-    ? new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(profile.subscription_expires_at))
+    ? dateFormat.format(new Date(profile.subscription_expires_at))
+    : null
+
+  // Origine dell'abbonamento (carta / voucher / admin) e prova Pro: servono a
+  // capire se c'è qualcosa da gestire o disdire su Stripe.
+  const { data: extra } = await supabase
+    .from('profiles')
+    .select('subscription_source, pro_trial_ends_at')
+    .eq('id', user.id)
+    .maybeSingle<{ subscription_source: string | null; pro_trial_ends_at: string | null }>()
+  const source = extra?.subscription_source ?? null
+  const isStripeSubscriber = isActive && source === 'stripe'
+  const isPrepaid = isActive && (source === 'voucher' || source === 'admin')
+  const trialEndMs = extra?.pro_trial_ends_at ? new Date(extra.pro_trial_ends_at).getTime() : 0
+  const trialEndsOn = isInFuture(trialEndMs) && !(isActive && profile?.subscription_plan === 'pro')
+    ? dateFormat.format(new Date(trialEndMs))
+    : null
+
+  // Stato reale dell'abbonamento su Stripe (disdetta programmata / rinnovo):
+  // best effort, se Stripe non risponde la pagina resta utilizzabile.
+  let stripeState: { cancelOn: string | null; renewsOn: string | null } | null = null
+  if (isStripeSubscriber) {
+    try {
+      const found = await findStripeSubscriptionForUser(user.id, user.email)
+      const sub = found?.subscription
+      if (sub) {
+        const periodEnd = subscriptionPeriodEnd(sub)
+        const scheduledEnd = sub.cancel_at ?? (sub.cancel_at_period_end ? periodEnd : undefined)
+        stripeState = {
+          cancelOn: scheduledEnd ? dateFormat.format(new Date(scheduledEnd * 1000)) : null,
+          renewsOn: !scheduledEnd && periodEnd ? dateFormat.format(new Date(periodEnd * 1000)) : null,
+        }
+      }
+    } catch (err) {
+      console.error('❌ Lettura stato abbonamento Stripe su /billing:', err instanceof Error ? err.message : err)
+    }
+  }
+
+  const portalNotice =
+    portal === 'error' ? t('portalError')
+    : portal === 'none' ? t('portalNone')
+    : portal === 'not_configured' ? t('portalNotConfigured')
     : null
 
   return (
@@ -113,6 +157,17 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
         {!isActive && (checkoutError === 'true' || canceled === 'true') && (
           <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
             {checkoutError === 'true' ? t('errorNotice') : t('canceledNotice')}
+          </div>
+        )}
+
+        {portalNotice && (
+          <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+            {portalNotice}
+          </div>
+        )}
+        {portal === 'return' && (
+          <div className="mb-6 rounded-lg border border-green-200 bg-green-50 p-3 text-sm text-green-800">
+            {t('portalReturn')}
           </div>
         )}
 
@@ -144,6 +199,44 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
             <p>{t('statusLabel')} <strong>{t('statusActive', { plan: planName })}</strong></p>
             {expiresOn && <p className="text-xs mt-1">{t('validUntil', { date: expiresOn })}</p>}
             <p className="text-xs mt-1">{t('billingEmail', { email: profile?.email ?? '' })}</p>
+          </div>
+        )}
+
+        {isStripeSubscriber && (
+          <div className="mt-6 rounded-xl border border-gray-200 p-5 text-left">
+            <h2 className="text-base font-bold text-gray-900">{t('manageTitle')}</h2>
+            <p className="mt-1 text-sm text-gray-600">{t('manageText')}</p>
+
+            {stripeState?.cancelOn && (
+              <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+                {t('cancelScheduled', { date: stripeState.cancelOn })}
+              </div>
+            )}
+            {stripeState?.renewsOn && (
+              <p className="mt-3 text-sm text-gray-700">{t('renewsOn', { date: stripeState.renewsOn })}</p>
+            )}
+
+            <form action="/api/billing/portal" method="POST" className="mt-4">
+              <button
+                type="submit"
+                className="w-full rounded-xl border border-indigo-600 px-6 py-3 font-bold text-indigo-600 transition-all hover:bg-indigo-50"
+              >
+                {t('manageCta')}
+              </button>
+            </form>
+            <p className="mt-2 text-xs text-gray-500">{t('manageStripeNote')}</p>
+          </div>
+        )}
+
+        {isPrepaid && (
+          <div className="mt-6 rounded-xl border border-gray-200 bg-gray-50 p-4 text-left text-sm text-gray-700">
+            {expiresOn ? t('prepaidNote', { date: expiresOn }) : t('prepaidNoteNoDate')}
+          </div>
+        )}
+
+        {trialEndsOn && (
+          <div className="mt-6 rounded-xl border border-indigo-200 bg-indigo-50 p-4 text-left text-sm text-indigo-800">
+            {t('trialNote', { date: trialEndsOn })}
           </div>
         )}
 

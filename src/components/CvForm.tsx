@@ -63,8 +63,8 @@ function defaultForm(): CvFormData {
 }
 
 const inputClass =
-  'w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] text-sm'
-const labelClass = 'block text-sm font-medium text-gray-700 mb-1'
+  'w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm bg-white'
+const labelClass = 'block text-sm font-medium text-[var(--ink)] mb-1'
 
 export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Props) {
   const t = useTranslations('kumaniCv')
@@ -161,7 +161,7 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
   }
 
   const editorPane = (
-    <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 sm:p-8 space-y-8">
+    <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8 space-y-8">
       {/* Meta */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="sm:col-span-2">
@@ -199,15 +199,15 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
       <div className="flex items-center gap-4">
         <div
           onClick={() => fileInputRef.current?.click()}
-          className="w-20 h-20 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center cursor-pointer hover:border-[var(--gold)] transition-all overflow-hidden bg-gray-50 shrink-0"
+          className="w-20 h-20 rounded-xl border-2 border-dashed border-[var(--gold)]/40 flex items-center justify-center cursor-pointer hover:border-[var(--gold)] transition-all overflow-hidden bg-[var(--paper)] shrink-0"
         >
           {uploadingPhoto ? (
-            <LoaderCircle className="w-5 h-5 text-gray-400 animate-spin" />
+            <LoaderCircle className="w-5 h-5 text-[var(--gold)] animate-spin" />
           ) : photoUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={photoUrl} alt="" className="w-full h-full object-cover" />
           ) : (
-            <ImagePlus className="w-6 h-6 text-gray-300" />
+            <ImagePlus className="w-6 h-6 text-[var(--gold)]" />
           )}
         </div>
         <div>
@@ -225,7 +225,7 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
           <button type="button" onClick={() => fileInputRef.current?.click()} className="text-sm font-medium text-[var(--gold)] hover:underline">
             {photoUrl ? t('changePhoto') : t('addPhoto')}
           </button>
-          <p className="text-xs text-gray-400 mt-1">{t('photoFormatHint')}</p>
+          <p className="text-xs text-[var(--muted)] mt-1">{t('photoFormatHint')}</p>
         </div>
       </div>
 
@@ -258,11 +258,11 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
       </div>
 
       {/* Experiences */}
-      <div className="border-t border-gray-100 pt-6">
-        <h3 className="font-bold text-gray-900 mb-4">{t('experienceSection')}</h3>
+      <div className="border-t border-[var(--gold)]/15 pt-6">
+        <h3 className="font-bold text-[var(--ink)] mb-4">{t('experienceSection')}</h3>
         <div className="space-y-5">
           {form.experiences.map((exp, i) => (
-            <div key={i} className="p-4 bg-gray-50 rounded-xl space-y-3">
+            <div key={i} className="p-4 bg-[var(--paper)] border border-[var(--gold)]/20 rounded-xl space-y-3">
               <div className="flex justify-end">
                 <button type="button" onClick={() => setForm((p) => ({ ...p, experiences: p.experiences.filter((_, idx) => idx !== i) }))} className="text-red-500 hover:text-red-700">
                   <Trash2 className="w-4 h-4" />
@@ -275,11 +275,11 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <p className="text-xs font-medium text-gray-500 mb-1">{t('startDateField')}</p>
+                  <p className="text-xs font-medium text-[var(--muted)] mb-1">{t('startDateField')}</p>
                   <MonthYearPicker value={exp.startDate} onChange={(v) => setForm((p) => ({ ...p, experiences: p.experiences.map((x, idx) => (idx === i ? { ...x, startDate: v } : x)) }))} />
                 </div>
                 <div>
-                  <p className="text-xs font-medium text-gray-500 mb-1">{t('endDateField')}</p>
+                  <p className="text-xs font-medium text-[var(--muted)] mb-1">{t('endDateField')}</p>
                   <MonthYearPicker
                     value={exp.endDate}
                     disabled={exp.current}
@@ -287,8 +287,8 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
                   />
                 </div>
               </div>
-              <label className="flex items-center gap-2 text-xs text-gray-600">
-                <input type="checkbox" checked={exp.current} onChange={(e) => setForm((p) => ({ ...p, experiences: p.experiences.map((x, idx) => (idx === i ? { ...x, current: e.target.checked } : x)) }))} className="rounded text-[var(--gold)]" />
+              <label className="flex items-center gap-2 text-xs text-[var(--muted)]">
+                <input type="checkbox" checked={exp.current} onChange={(e) => setForm((p) => ({ ...p, experiences: p.experiences.map((x, idx) => (idx === i ? { ...x, current: e.target.checked } : x)) }))} className="rounded text-[var(--gold)] accent-[var(--gold)]" />
                 {t('currentField')}
               </label>
               <textarea placeholder={t('descriptionField')} value={exp.description} onChange={(e) => setForm((p) => ({ ...p, experiences: p.experiences.map((x, idx) => (idx === i ? { ...x, description: e.target.value } : x)) }))} rows={2} className={inputClass} />
@@ -301,11 +301,11 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
       </div>
 
       {/* Education */}
-      <div className="border-t border-gray-100 pt-6">
-        <h3 className="font-bold text-gray-900 mb-4">{t('educationSection')}</h3>
+      <div className="border-t border-[var(--gold)]/15 pt-6">
+        <h3 className="font-bold text-[var(--ink)] mb-4">{t('educationSection')}</h3>
         <div className="space-y-5">
           {form.education.map((ed, i) => (
-            <div key={i} className="p-4 bg-gray-50 rounded-xl space-y-3">
+            <div key={i} className="p-4 bg-[var(--paper)] border border-[var(--gold)]/20 rounded-xl space-y-3">
               <div className="flex justify-end">
                 <button type="button" onClick={() => setForm((p) => ({ ...p, education: p.education.filter((_, idx) => idx !== i) }))} className="text-red-500 hover:text-red-700">
                   <Trash2 className="w-4 h-4" />
@@ -318,11 +318,11 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <p className="text-xs font-medium text-gray-500 mb-1">{t('startDateField')}</p>
+                  <p className="text-xs font-medium text-[var(--muted)] mb-1">{t('startDateField')}</p>
                   <MonthYearPicker value={ed.startDate} onChange={(v) => setForm((p) => ({ ...p, education: p.education.map((x, idx) => (idx === i ? { ...x, startDate: v } : x)) }))} />
                 </div>
                 <div>
-                  <p className="text-xs font-medium text-gray-500 mb-1">{t('endDateField')}</p>
+                  <p className="text-xs font-medium text-[var(--muted)] mb-1">{t('endDateField')}</p>
                   <MonthYearPicker
                     value={ed.endDate}
                     disabled={ed.current}
@@ -330,8 +330,8 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
                   />
                 </div>
               </div>
-              <label className="flex items-center gap-2 text-xs text-gray-600">
-                <input type="checkbox" checked={ed.current} onChange={(e) => setForm((p) => ({ ...p, education: p.education.map((x, idx) => (idx === i ? { ...x, current: e.target.checked } : x)) }))} className="rounded text-[var(--gold)]" />
+              <label className="flex items-center gap-2 text-xs text-[var(--muted)]">
+                <input type="checkbox" checked={ed.current} onChange={(e) => setForm((p) => ({ ...p, education: p.education.map((x, idx) => (idx === i ? { ...x, current: e.target.checked } : x)) }))} className="rounded text-[var(--gold)] accent-[var(--gold)]" />
                 {t('currentField')}
               </label>
             </div>
@@ -343,11 +343,11 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
       </div>
 
       {/* Skills */}
-      <div className="border-t border-gray-100 pt-6">
-        <h3 className="font-bold text-gray-900 mb-4">{t('skillsSection')}</h3>
+      <div className="border-t border-[var(--gold)]/15 pt-6">
+        <h3 className="font-bold text-[var(--ink)] mb-4">{t('skillsSection')}</h3>
         <div className="space-y-3">
           {form.skills.map((s, i) => (
-            <div key={i} className="p-4 bg-gray-50 rounded-xl space-y-3">
+            <div key={i} className="p-4 bg-[var(--paper)] border border-[var(--gold)]/20 rounded-xl space-y-3">
               <div className="flex justify-end">
                 <button type="button" onClick={() => setForm((p) => ({ ...p, skills: p.skills.filter((_, idx) => idx !== i) }))} className="text-red-500 hover:text-red-700">
                   <Trash2 className="w-4 h-4" />
@@ -370,11 +370,11 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
       </div>
 
       {/* Languages */}
-      <div className="border-t border-gray-100 pt-6">
-        <h3 className="font-bold text-gray-900 mb-4">{t('languagesSection')}</h3>
+      <div className="border-t border-[var(--gold)]/15 pt-6">
+        <h3 className="font-bold text-[var(--ink)] mb-4">{t('languagesSection')}</h3>
         <div className="space-y-3">
           {form.languages.map((l, i) => (
-            <div key={i} className="p-4 bg-gray-50 rounded-xl space-y-3">
+            <div key={i} className="p-4 bg-[var(--paper)] border border-[var(--gold)]/20 rounded-xl space-y-3">
               <div className="flex justify-end">
                 <button type="button" onClick={() => setForm((p) => ({ ...p, languages: p.languages.filter((_, idx) => idx !== i) }))} className="text-red-500 hover:text-red-700">
                   <Trash2 className="w-4 h-4" />
@@ -397,11 +397,11 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
       </div>
 
       {/* Certifications */}
-      <div className="border-t border-gray-100 pt-6">
-        <h3 className="font-bold text-gray-900 mb-4">{t('certificationsSection')}</h3>
+      <div className="border-t border-[var(--gold)]/15 pt-6">
+        <h3 className="font-bold text-[var(--ink)] mb-4">{t('certificationsSection')}</h3>
         <div className="space-y-3">
           {form.certifications.map((c, i) => (
-            <div key={i} className="p-4 bg-gray-50 rounded-xl space-y-3">
+            <div key={i} className="p-4 bg-[var(--paper)] border border-[var(--gold)]/20 rounded-xl space-y-3">
               <div className="flex justify-end">
                 <button type="button" onClick={() => setForm((p) => ({ ...p, certifications: p.certifications.filter((_, idx) => idx !== i) }))} className="text-red-500 hover:text-red-700">
                   <Trash2 className="w-4 h-4" />
@@ -412,7 +412,7 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
                 <input placeholder={t('issuerPlaceholder')} value={c.issuer} onChange={(e) => setForm((p) => ({ ...p, certifications: p.certifications.map((x, idx) => (idx === i ? { ...x, issuer: e.target.value } : x)) }))} className={inputClass} />
               </div>
               <div className="sm:w-1/2">
-                <p className="text-xs font-medium text-gray-500 mb-1">{t('certificationDateField')}</p>
+                <p className="text-xs font-medium text-[var(--muted)] mb-1">{t('certificationDateField')}</p>
                 <MonthYearPicker value={c.date} onChange={(v) => setForm((p) => ({ ...p, certifications: p.certifications.map((x, idx) => (idx === i ? { ...x, date: v } : x)) }))} />
               </div>
             </div>
@@ -424,11 +424,11 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
       </div>
 
       {/* Links */}
-      <div className="border-t border-gray-100 pt-6">
-        <h3 className="font-bold text-gray-900 mb-4">{t('linksSection')}</h3>
+      <div className="border-t border-[var(--gold)]/15 pt-6">
+        <h3 className="font-bold text-[var(--ink)] mb-4">{t('linksSection')}</h3>
         <div className="space-y-3">
           {form.links.map((l, i) => (
-            <div key={i} className="p-4 bg-gray-50 rounded-xl space-y-3">
+            <div key={i} className="p-4 bg-[var(--paper)] border border-[var(--gold)]/20 rounded-xl space-y-3">
               <div className="flex justify-end">
                 <button type="button" onClick={() => setForm((p) => ({ ...p, links: p.links.filter((_, idx) => idx !== i) }))} className="text-red-500 hover:text-red-700">
                   <Trash2 className="w-4 h-4" />
@@ -457,14 +457,14 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
       <button
         type="button"
         onClick={() => router.back()}
-        className="px-6 py-3 rounded-xl font-semibold text-sm bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all"
+        className="px-6 py-3 rounded-xl font-semibold text-sm border border-[var(--gold)]/40 bg-white text-[var(--ink)] hover:bg-[var(--gold-pale)] transition-all"
       >
         {t('cancelAction')}
       </button>
       <button
         onClick={handleSubmit}
         disabled={!isValid || saving}
-        className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-[var(--ink)] hover:bg-[var(--ink-soft)] text-white rounded-xl font-semibold transition-all disabled:opacity-50"
+        className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] rounded-xl font-bold shadow-md hover:brightness-105 transition-all disabled:opacity-50"
       >
         {saving ? (
           <>
@@ -481,7 +481,7 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
   )
 
   const previewPane = (
-    <div className="bg-gray-100 rounded-2xl border border-gray-200 overflow-hidden lg:sticky lg:top-6">
+    <div className="bg-[var(--paper)] rounded-2xl border border-[var(--gold)]/25 shadow-sm overflow-hidden lg:sticky lg:top-24">
       <div className="max-h-[calc(100vh-6rem)] overflow-y-auto">
         <CvTemplateRenderer template={form.template} cv={previewData} />
       </div>
@@ -491,11 +491,11 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
   return (
     <div>
       {/* Mobile toggle */}
-      <div className="flex lg:hidden mb-4 rounded-xl border border-gray-200 overflow-hidden">
-        <button type="button" onClick={() => setMobileView('edit')} className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 text-sm font-medium ${mobileView === 'edit' ? 'bg-[var(--ink)] text-white' : 'bg-white text-gray-600'}`}>
+      <div className="flex lg:hidden mb-4 rounded-xl border border-[var(--gold)]/30 overflow-hidden">
+        <button type="button" onClick={() => setMobileView('edit')} className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 text-sm font-medium ${mobileView === 'edit' ? 'bg-[var(--ink)] text-[var(--gold-bright)]' : 'bg-white text-[var(--muted)]'}`}>
           <Pencil className="w-4 h-4" /> {t('editTab')}
         </button>
-        <button type="button" onClick={() => setMobileView('preview')} className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 text-sm font-medium ${mobileView === 'preview' ? 'bg-[var(--ink)] text-white' : 'bg-white text-gray-600'}`}>
+        <button type="button" onClick={() => setMobileView('preview')} className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 text-sm font-medium ${mobileView === 'preview' ? 'bg-[var(--ink)] text-[var(--gold-bright)]' : 'bg-white text-[var(--muted)]'}`}>
           <Eye className="w-4 h-4" /> {t('previewTab')}
         </button>
       </div>

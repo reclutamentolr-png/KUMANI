@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
 import { getStripe } from '@/lib/stripe'
-import { markEventFeesPaid } from '@/lib/eventFees'
+import { isPlatformFeeType, markPlatformFeesPaid } from '@/lib/eventFees'
 
 // Creato alla richiesta e non al caricamento del modulo: così `next build`
 // non fallisce se le variabili d'ambiente non sono disponibili in build.
@@ -29,14 +29,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: err.message }, { status: 400 })
   }
 
-  // KUMANI Events: pagamento delle commissioni. Gestito a parte e mai come
-  // abbonamento (i suoi metadati non hanno userId).
-  if (event.type === 'checkout.session.completed' && (event.data.object as Stripe.Checkout.Session).metadata?.type === 'event_fee') {
+  // Commissioni KUMANI (Events: 'event_fee', Kordata: 'convivio_fee').
+  // Gestite a parte e mai come abbonamento (i loro metadati non hanno userId).
+  if (event.type === 'checkout.session.completed' && isPlatformFeeType((event.data.object as Stripe.Checkout.Session).metadata?.type)) {
+    const feeSession = event.data.object as Stripe.Checkout.Session
     try {
-      await markEventFeesPaid((event.data.object as Stripe.Checkout.Session).id)
+      await markPlatformFeesPaid(feeSession.id)
       return NextResponse.json({ received: true })
     } catch (err) {
-      console.error('❌ Commissioni Events non aggiornate:', err instanceof Error ? err.message : err)
+      console.error(`❌ Commissioni (${feeSession.metadata?.type}) non aggiornate:`, err instanceof Error ? err.message : err)
       return NextResponse.json({ error: 'db_update_failed' }, { status: 500 })
     }
   }
@@ -88,7 +89,11 @@ export async function POST(req: NextRequest) {
     const subscription = event.data.object as any
     const userId = subscription.metadata?.userId
     if (userId) {
-      const newStatus = subscription.status === 'active' ? 'active' : 'inactive'
+      // Attivo anche in prova e durante i nuovi tentativi di addebito
+      // (past_due); disdetto o scaduto → 'free' (i valori ammessi nel
+      // database sono free/active/suspended: 'inactive' faceva fallire
+      // l'aggiornamento e l'utente restava attivo).
+      const newStatus = ['active', 'trialing', 'past_due'].includes(subscription.status) ? 'active' : 'free'
 
       const updateData: Record<string, any> = {
         subscription_status: newStatus,

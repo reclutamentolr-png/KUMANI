@@ -8,12 +8,17 @@ import { Permission } from '@/lib/admin-permissions'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-// ✅ Tutti i permessi gestiti dal pannello
+// Tutti i permessi del pannello (admin completo): stesso elenco del tipo
+// Permission in src/lib/admin-permissions.ts, così una nuova sezione non
+// resta nascosta a chi ha pieni poteri.
 const ALL_PERMISSIONS: Permission[] = [
-  'stats.read',
   'users.read',
+  'users.write',
+  'users.delete',
   'matrix.read',
+  'matrix.write',
   'marketplace.read',
+  'marketplace.write',
   'listings.read',
   'listings.write',
   'coupons.read',
@@ -24,7 +29,11 @@ const ALL_PERMISSIONS: Permission[] = [
   'rewards.write',
   'messages.read',
   'messages.write',
-  'settings.read'
+  'stats.read',
+  'support.read',
+  'support.write',
+  'settings.read',
+  'settings.write',
 ]
 
 export default async function AdminPage({

@@ -60,26 +60,26 @@ export default function WhatsAppTemplates({ referralUrl }: WhatsAppTemplatesProp
   return (
     <div className="space-y-4">
       {templates.map((template) => (
-        <div key={template.id} className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-          <div className="p-6">
-            <div className="flex items-start justify-between mb-3">
+        <div key={template.id} className="bg-white rounded-2xl border border-[var(--gold)]/25 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+          <div className="p-5 sm:p-6">
+            <div className="flex items-start justify-between gap-3 mb-3">
               <div>
-                <h3 className="text-lg font-bold text-gray-900">{template.title}</h3>
-                <span className="inline-block mt-1 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">
+                <h3 className="text-lg font-bold text-[var(--ink)]">{template.title}</h3>
+                <span className="inline-block mt-1 text-xs bg-[var(--gold)]/15 text-[var(--ink)] px-2 py-0.5 rounded-full font-semibold">
                   {template.tone}
                 </span>
               </div>
-              <MessageSquare className="w-6 h-6 text-green-500" />
+              <MessageSquare className="w-6 h-6 shrink-0 text-[var(--gold)]" />
             </div>
             
-            <div className="bg-gray-50 rounded-lg p-4 mb-4 border-l-4 border-green-500">
-              <p className="text-gray-700 text-sm whitespace-pre-wrap">{template.message}</p>
+            <div className="bg-[var(--paper)] rounded-lg p-4 mb-4 border-l-4 border-[var(--gold)]">
+              <p className="text-[var(--ink-soft)] text-sm whitespace-pre-wrap break-words">{template.message}</p>
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex flex-col gap-2 sm:flex-row">
               <button
                 onClick={() => handleCopy(template)}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors"
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-[var(--ink)] hover:bg-[var(--ink-soft)] text-white rounded-lg font-semibold transition-colors"
               >
                 <Copy className="w-4 h-4" />
                 {copiedId === template.id ? t('copied') : t('copyMsg')}
@@ -88,7 +88,7 @@ export default function WhatsAppTemplates({ referralUrl }: WhatsAppTemplatesProp
                 href={`https://wa.me/?text=${encodeURIComponent(template.message)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition-colors"
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-[#25D366] hover:bg-[#1ebe5a] text-white rounded-lg font-semibold transition-colors"
               >
                 <Send className="w-4 h-4" />
                 {t('sendWhatsApp')}

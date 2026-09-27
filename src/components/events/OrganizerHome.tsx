@@ -10,6 +10,7 @@ import {
   CheckCircle2,
   CreditCard,
   ExternalLink,
+  Hourglass,
   LoaderCircle,
   MapPin,
   Pencil,
@@ -23,11 +24,13 @@ import {
 } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { Sheet } from '@/components/memolife/MemoLifeForms'
-import { LeaderSetup } from '@/components/convivio/ConvivioHome'
+import VerificationSetup from '@/components/verification/VerificationSetup'
 import { cancelEvent, getEvent, type EventFormInput } from '@/app/actions/events'
 import { EVENT_TYPE_EMOJI, MIN_FEE_PAYMENT, formatEventDate, type EventFee, type EventPassItem, type OrganizedEvent, type OrganizerStatus } from '@/lib/events'
 import EventForm from './EventForm'
 import EventAttendees from './EventAttendees'
+import OrganizerReputation from './OrganizerReputation'
+import { LevelBadge } from './EventBadges'
 
 type Notice = 'paid' | 'pending' | 'canceled' | 'error' | 'none' | null
 type SheetState =
@@ -67,7 +70,8 @@ export default function OrganizerHome({
 
   const money = (value: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(value)
   const percent = status?.fee_percent ?? 0
-  const maxCapacity = status?.trusted ? 100 : 20
+  // Posti massimi secondo il livello (20 / 100 / 300)
+  const maxCapacity = status?.max_capacity ?? (status?.trusted ? 100 : 20)
   const dueTotal = Math.round(fees.filter((f) => f.status === 'due').reduce((sum, f) => sum + Number(f.amount), 0) * 100) / 100
   const feesBlock = dueTotal >= MIN_FEE_PAYMENT
   const canCreate = !!status?.verified && !!status?.plan && !status?.blocked && !feesBlock
@@ -160,9 +164,7 @@ export default function OrganizerHome({
                   </p>
                 )}
                 {status.trusted ? (
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--gold-pale)] px-3 py-1 text-xs font-bold text-[var(--ink)]">
-                    <BadgeCheck className="h-4 w-4 text-[var(--gold)]" /> {t('trusted')}
-                  </span>
+                  <LevelBadge level={status.level ?? 'trusted'} />
                 ) : (
                   <p className="text-sm text-gray-600">{t('newOrganizerNote')}</p>
                 )}
@@ -185,6 +187,9 @@ export default function OrganizerHome({
           )}
         </div>
       </section>
+
+      {/* Reputazione e livello */}
+      {status?.verified && !status.blocked && <OrganizerReputation status={status} />}
 
       {/* Commissioni */}
       {fees.length > 0 && (
@@ -345,18 +350,31 @@ export default function OrganizerHome({
                     {EVENT_TYPE_EMOJI[pass.type]} {pass.title}
                   </p>
                   <span
-                    className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
-                      pass.status === 'cancelled' ? 'bg-red-100 text-red-700' : pass.my_status === 'checked_in' ? 'bg-emerald-100 text-emerald-700' : 'bg-[var(--gold-pale)] text-[var(--ink)]'
+                    className={`flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold ${
+                      pass.status === 'cancelled'
+                        ? 'bg-red-100 text-red-700'
+                        : pass.my_status === 'checked_in'
+                          ? 'bg-emerald-100 text-emerald-700'
+                          : pass.my_status === 'waitlist'
+                            ? 'border border-dashed border-[var(--gold)] bg-white text-[var(--ink)]'
+                            : 'bg-[var(--gold-pale)] text-[var(--ink)]'
                     }`}
                   >
+                    {pass.my_status === 'waitlist' && pass.status !== 'cancelled' && <Hourglass className="h-3 w-3" />}
                     {pass.status === 'cancelled' ? t('status_cancelled') : t(`pass_${pass.my_status}`)}
                   </span>
                 </div>
                 <p className="text-sm capitalize text-gray-700">{formatEventDate(pass.starts_at, pass.timezone, locale)}</p>
                 {pass.city && <p className="text-xs text-[var(--muted)]">{pass.city}</p>}
-                <p className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-[var(--gold)]">
-                  <QrCode className="h-4 w-4" /> {t('showPass')}
-                </p>
+                {pass.pass ? (
+                  <p className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-[var(--gold)]">
+                    <QrCode className="h-4 w-4" /> {t('showPass')}
+                  </p>
+                ) : (
+                  <p className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-[var(--muted)]">
+                    <ExternalLink className="h-4 w-4" /> {t('waitlistPassNote')}
+                  </p>
+                )}
               </Link>
             ))}
           </div>
@@ -365,7 +383,8 @@ export default function OrganizerHome({
 
       {/* Finestre */}
       {sheet?.kind === 'setup' && status && (
-        <LeaderSetup
+        <VerificationSetup
+          kind="events"
           status={status}
           title={t('setupTitle')}
           intro={t('setupIntro')}

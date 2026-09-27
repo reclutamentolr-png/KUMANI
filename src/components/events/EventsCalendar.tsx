@@ -14,7 +14,7 @@ import {
   type EventCard,
   type EventType,
 } from '@/lib/events'
-import { EventFlags, PriceBadge, SpotsBadge, TrustedBadge } from './EventBadges'
+import { EventFlags, LevelBadge, PriceBadge, RatingBadge, SpotsBadge } from './EventBadges'
 import ViewerTime from './ViewerTime'
 
 type Range = 'all' | 'week' | 'month'
@@ -252,13 +252,14 @@ export function EventListCard({ event }: { event: EventCard }) {
 
       <div className="mb-3 mt-3 flex flex-wrap gap-1.5">
         <PriceBadge event={event} />
-        <SpotsBadge event={event} />
+        <SpotsBadge event={event} closed={event.ended} />
         <EventFlags event={event} />
       </div>
 
       <div className="mt-auto flex flex-wrap items-center gap-2 border-t border-gray-100 pt-3 text-xs text-[var(--muted)]">
         <span>{t('organizedBy', { name: event.organizer_name })}</span>
-        {event.organizer_trusted && <TrustedBadge />}
+        <LevelBadge level={event.organizer_level ?? (event.organizer_trusted ? 'trusted' : 'new')} />
+        <RatingBadge rating={event.organizer_rating} reviews={event.organizer_reviews} />
       </div>
     </Link>
   )

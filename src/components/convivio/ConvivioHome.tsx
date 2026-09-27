@@ -3,16 +3,12 @@
 import { useEffect, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
-import { BadgeCheck, CheckCircle2, Circle, LoaderCircle, Plus, ShieldCheck, Store, XCircle } from 'lucide-react'
+import { Plus, ShieldCheck, Store } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
-import { Sheet } from '@/components/memolife/MemoLifeForms'
-import { becomeLeader } from '@/app/actions/convivio'
+import VerificationSetup from '@/components/verification/VerificationSetup'
 import { CONVIVIO_CATEGORIES, type ConvivioCard, type ConvivioLeaderStatus } from '@/lib/convivio'
 import ConvivioCardItem from './ConvivioCardItem'
 import ConvivioCreateForm from './ConvivioCreateForm'
-
-const input = 'w-full rounded-xl border border-gray-300 px-3 py-2.5 text-[15px] focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30'
-const label = 'mb-1 block text-sm font-semibold text-gray-700'
 
 // Convivio: cordate aperte e "le mie", filtro per categoria, "Proponi un
 // Convivio" (con la verifica del capocordata quando serve).
@@ -53,7 +49,7 @@ export default function ConvivioHome({
               key={key}
               type="button"
               onClick={() => setTab(key)}
-              className={`rounded-lg px-4 py-2 text-sm font-semibold ${tab === key ? 'bg-[var(--ink)] text-white' : 'text-[var(--muted)]'}`}
+              className={`rounded-lg px-4 py-2 text-sm font-semibold ${tab === key ? 'bg-[var(--ink)] text-white' : 'text-[var(--muted)] hover:text-[var(--ink)]'}`}
             >
               {t(key === 'open' ? 'tabOpen' : 'tabMine')} {key === 'mine' && mine.length > 0 ? `(${mine.length})` : ''}
             </button>
@@ -85,7 +81,7 @@ export default function ConvivioHome({
             type="button"
             onClick={() => setCategory(c)}
             className={`rounded-full border px-3 py-1.5 text-xs font-semibold ${
-              category === c ? 'border-[var(--ink)] bg-[var(--ink)] text-white' : 'border-gray-200 bg-white text-gray-600'
+              category === c ? 'border-[var(--ink)] bg-[var(--ink)] text-white' : 'border-[var(--gold)]/25 bg-white text-[var(--muted)] hover:border-[var(--gold)]/60'
             }`}
           >
             {c === 'all' ? t('allCategories') : t(`category_${c}`)}
@@ -109,7 +105,9 @@ export default function ConvivioHome({
         <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[var(--gold)]" /> {t('paymentsNotice')}
       </p>
 
-      {sheet === 'setup' && leader && <LeaderSetup status={leader} onClose={() => setSheet(null)} onDone={() => (router.refresh(), setSheet('create'))} />}
+      {sheet === 'setup' && leader && (
+        <VerificationSetup kind="kordata" status={leader} onClose={() => setSheet(null)} onDone={() => (router.refresh(), setSheet('create'))} />
+      )}
       {sheet === 'create' && (
         <ConvivioCreateForm
           mode="leader"
@@ -118,122 +116,5 @@ export default function ConvivioHome({
         />
       )}
     </div>
-  )
-}
-
-// Esportato anche per KUMANI Events (stessa verifica "Kumano Verificato"):
-// title e intro facoltativi sostituiscono titolo e introduzione.
-export function LeaderSetup({
-  status,
-  onClose,
-  onDone,
-  title,
-  intro,
-}: {
-  status: ConvivioLeaderStatus
-  onClose: () => void
-  onDone: () => void
-  title?: string
-  intro?: string
-}) {
-  const t = useTranslations('convivio')
-  const [taxCode, setTaxCode] = useState('')
-  const [terms, setTerms] = useState(false)
-  const [busy, setBusy] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [local, setLocal] = useState(status)
-
-  // Prima l'abbonamento (senza non contano i 30 giorni), poi i 30 giorni di
-  // abbonamento, poi il profilo. Se manca uno di questi non si prosegue.
-  const checks: { key: keyof ConvivioLeaderStatus; text: string; action?: React.ReactNode }[] = [
-    {
-      key: 'subscription',
-      text: t('check_subscription'),
-      action: !local.subscription && (
-        <Link href={{ pathname: '/billing' }} className="text-xs font-semibold text-[var(--gold)] underline">
-          {t('activate')}
-        </Link>
-      ),
-    },
-    {
-      key: 'account_age',
-      text: local.account_age ? t('check_account_age') : local.subscription ? t('check_account_age_wait', { days: local.days_left }) : t('check_account_age'),
-    },
-    { key: 'profile', text: t('check_profile'), action: !local.profile && <span className="text-xs text-[var(--muted)]">{t('check_profile_hint')}</span> },
-  ]
-  const basicsOk = local.subscription && local.account_age && local.profile && !local.blocked
-
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setBusy(true)
-    setError(null)
-    const result = await becomeLeader(taxCode, terms)
-    setBusy(false)
-    if (!result.success) {
-      setError(t(`error_${result.error ?? 'saveError'}`))
-      return
-    }
-    const next = { ...local, tax_code: true, terms: true }
-    setLocal(next)
-    if (next.account_age && next.subscription && next.profile && !next.blocked) onDone()
-  }
-
-  return (
-    <Sheet title={title ?? t('setupTitle')} onClose={onClose}>
-      <p className="mb-4 text-sm text-gray-600">{intro ?? t('setupIntro')}</p>
-      <ul className="mb-5 space-y-2">
-        {checks.map((c) => (
-          <li key={c.key} className="flex items-start gap-2 text-sm">
-            {local[c.key] ? <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" /> : <XCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-600" />}
-            <span className={`flex-1 ${local[c.key] ? '' : 'font-semibold text-red-700'}`}>
-              {c.text} {c.action}
-            </span>
-          </li>
-        ))}
-        <li className="flex items-start gap-2 text-sm">
-          {local.tax_code && local.terms ? <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" /> : <Circle className="mt-0.5 h-5 w-5 shrink-0 text-gray-300" />}
-          <span>{t('check_tax_code')}</span>
-        </li>
-      </ul>
-
-      {!basicsOk && (
-        <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-800">{t('requirementsMissing')}</p>
-      )}
-
-      {basicsOk && !(local.tax_code && local.terms) && (
-        <form onSubmit={submit} className="space-y-4 rounded-xl border border-[var(--gold)]/30 bg-[var(--gold-pale)]/40 p-4">
-          <div>
-            <label className={label}>{t('taxCode')}</label>
-            <input
-              className={`${input} font-mono uppercase tracking-wider`}
-              value={taxCode}
-              maxLength={16}
-              required
-              placeholder="RSSMRA80A01H501U"
-              onChange={(e) => setTaxCode(e.target.value.toUpperCase().replace(/\s/g, ''))}
-            />
-            <p className="mt-1 text-xs text-gray-500">{t('taxCodeHint')}</p>
-          </div>
-          <div className="rounded-lg bg-white p-3 text-xs leading-5 text-gray-600">
-            <p className="mb-1 font-semibold text-gray-800">{t('rulesTitle')}</p>
-            <ul className="list-disc space-y-1 pl-4">
-              <li>{t('rule1')}</li>
-              <li>{t('rule2')}</li>
-              <li>{t('rule3')}</li>
-              <li>{t('rule4')}</li>
-            </ul>
-          </div>
-          <label className="flex items-start gap-2 text-sm text-gray-700">
-            <input type="checkbox" checked={terms} onChange={(e) => setTerms(e.target.checked)} className="mt-0.5 h-4 w-4 accent-[var(--gold)]" />
-            {t('acceptRules')}
-          </label>
-          {error && <p className="text-sm font-semibold text-red-600">{error}</p>}
-          <button type="submit" disabled={busy || !terms || taxCode.length !== 16} className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--ink)] px-5 py-3 font-bold text-white disabled:opacity-50">
-            {busy ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <BadgeCheck className="h-4 w-4" />} {t('verifyMe')}
-          </button>
-        </form>
-      )}
-
-    </Sheet>
   )
 }

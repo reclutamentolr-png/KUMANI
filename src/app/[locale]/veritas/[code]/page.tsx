@@ -24,7 +24,7 @@ export default async function VeritasRoomPage({ params }: { params: Promise<{ co
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#1f1a2e] to-[#141311] px-4 py-8 text-white">
+    <div className="min-h-screen bg-gradient-to-b from-[var(--ink-soft)] to-[var(--ink)] px-4 py-8 text-white">
       <div className="mx-auto max-w-xl">
         <Link href={user ? '/marketplace/veritas' : '/'} className="mb-6 flex items-center justify-center gap-2">
           <Logo size={36} className="h-9 w-9" />

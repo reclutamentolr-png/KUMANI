@@ -57,9 +57,9 @@ export default function DigitalReceiptPublicView({ receipt: initial }: { receipt
 
   return (
     <div className="max-w-lg mx-auto px-4 sm:px-6 py-12">
-      <div className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
-        <div className="bg-[var(--ink)] p-6 text-white text-center">
-          <div className="inline-flex items-center gap-2 bg-white/20 px-3 py-1 rounded-full text-xs font-medium mb-3">
+      <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 overflow-hidden">
+        <div className="bg-[var(--ink)] p-6 text-white text-center border-b-2 border-[var(--gold)]">
+          <div className="inline-flex items-center gap-2 bg-[var(--gold)]/15 text-[var(--gold-bright)] px-3 py-1 rounded-full text-xs font-medium mb-3">
             <Icon className="w-3.5 h-3.5" />
             {t(`template_${receipt.template}`)}
           </div>
@@ -74,41 +74,41 @@ export default function DigitalReceiptPublicView({ receipt: initial }: { receipt
 
         <div className="p-6 space-y-3 text-sm">
           {receipt.serial_number && (
-            <div className="flex justify-between border-b border-gray-100 pb-2">
+            <div className="flex justify-between border-b border-[var(--gold)]/15 pb-2">
               <span className="text-gray-500">{t('serialField')}</span>
-              <span className="text-gray-900 font-medium">{receipt.serial_number}</span>
+              <span className="text-[var(--ink)] font-medium">{receipt.serial_number}</span>
             </div>
           )}
-          <div className="flex justify-between border-b border-gray-100 pb-2">
+          <div className="flex justify-between border-b border-[var(--gold)]/15 pb-2">
             <span className="text-gray-500">{t('recipientField')}</span>
-            <span className="text-gray-900 font-medium">{receipt.recipient_name}</span>
+            <span className="text-[var(--ink)] font-medium">{receipt.recipient_name}</span>
           </div>
-          <div className="flex justify-between border-b border-gray-100 pb-2">
+          <div className="flex justify-between border-b border-[var(--gold)]/15 pb-2">
             <span className="text-gray-500">{t('dateField')}</span>
-            <span className="text-gray-900 font-medium">{new Date(receipt.delivery_date).toLocaleDateString()}</span>
+            <span className="text-[var(--ink)] font-medium">{new Date(receipt.delivery_date).toLocaleDateString()}</span>
           </div>
           {receipt.reason && (
-            <div className="flex justify-between border-b border-gray-100 pb-2">
+            <div className="flex justify-between border-b border-[var(--gold)]/15 pb-2">
               <span className="text-gray-500">{t('reasonField')}</span>
-              <span className="text-gray-900 font-medium">{receipt.reason}</span>
+              <span className="text-[var(--ink)] font-medium">{receipt.reason}</span>
             </div>
           )}
           {receipt.quantity !== null && (
-            <div className="flex justify-between border-b border-gray-100 pb-2">
+            <div className="flex justify-between border-b border-[var(--gold)]/15 pb-2">
               <span className="text-gray-500">{t('quantityField')}</span>
-              <span className="text-gray-900 font-medium">{receipt.quantity}</span>
+              <span className="text-[var(--ink)] font-medium">{receipt.quantity}</span>
             </div>
           )}
           {receipt.declared_value !== null && (
-            <div className="flex justify-between border-b border-gray-100 pb-2">
+            <div className="flex justify-between border-b border-[var(--gold)]/15 pb-2">
               <span className="text-gray-500">{t('valueField')}</span>
-              <span className="text-gray-900 font-medium">€{receipt.declared_value}</span>
+              <span className="text-[var(--ink)] font-medium">€{receipt.declared_value}</span>
             </div>
           )}
           {receipt.expected_return_date && (
-            <div className="flex justify-between border-b border-gray-100 pb-2">
+            <div className="flex justify-between border-b border-[var(--gold)]/15 pb-2">
               <span className="text-gray-500">{t('expectedReturnField')}</span>
-              <span className="text-gray-900 font-medium">{new Date(receipt.expected_return_date).toLocaleDateString()}</span>
+              <span className="text-[var(--ink)] font-medium">{new Date(receipt.expected_return_date).toLocaleDateString()}</span>
             </div>
           )}
           {receipt.notes && (
@@ -121,12 +121,12 @@ export default function DigitalReceiptPublicView({ receipt: initial }: { receipt
 
         <div className="p-6 pt-0">
           {receipt.returned_at ? (
-            <div className="flex items-center justify-center gap-2 py-3 rounded-xl bg-blue-50 text-blue-700 font-semibold">
+            <div className="flex items-center justify-center gap-2 py-3 rounded-xl bg-[var(--ink)] text-[var(--gold-bright)] font-semibold">
               <CheckCircle2 className="w-5 h-5" />
               {t('returnedOn', { date: new Date(receipt.returned_at).toLocaleDateString() })}
             </div>
           ) : receipt.confirmed_at ? (
-            <div className="flex items-center justify-center gap-2 py-3 rounded-xl bg-green-50 text-green-700 font-semibold">
+            <div className="flex items-center justify-center gap-2 py-3 rounded-xl bg-green-50 text-green-700 font-semibold border border-green-200">
               <CheckCircle2 className="w-5 h-5" />
               {t('confirmedOn', { date: new Date(receipt.confirmed_at).toLocaleDateString() })}
             </div>
@@ -140,7 +140,7 @@ export default function DigitalReceiptPublicView({ receipt: initial }: { receipt
               <button
                 onClick={handleConfirm}
                 disabled={confirming}
-                className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-[var(--ink)] hover:bg-[var(--ink-soft)] text-white rounded-xl font-semibold transition-all disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] rounded-xl font-bold shadow-md hover:brightness-105 transition-all disabled:opacity-50"
               >
                 {confirming ? <Clock className="w-5 h-5 animate-spin" /> : <CheckCircle2 className="w-5 h-5" />}
                 {t('confirmReceipt')}

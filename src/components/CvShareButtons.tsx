@@ -100,7 +100,7 @@ export default function CvShareButtons({ cv, photoUrl, publicUrl }: Props) {
           </a>
           <a
             href={mailHref}
-            className="flex items-center gap-2 px-5 py-3 rounded-xl font-medium text-sm bg-blue-50 text-blue-700 hover:bg-blue-100 transition-all"
+            className="flex items-center gap-2 px-5 py-3 rounded-xl font-medium text-sm bg-[var(--ink)] text-white hover:bg-[var(--ink-soft)] transition-all"
           >
             <Mail className="w-4 h-4" />
             {t('shareEmail')}
@@ -111,13 +111,13 @@ export default function CvShareButtons({ cv, photoUrl, publicUrl }: Props) {
       <button
         onClick={handlePrint}
         disabled={busy === 'print'}
-        className="flex items-center gap-2 px-5 py-3 rounded-xl font-medium text-sm bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all disabled:opacity-50"
+        className="flex items-center gap-2 px-5 py-3 rounded-xl font-medium text-sm border border-[var(--gold)]/40 bg-white text-[var(--ink)] hover:bg-[var(--gold-pale)] transition-all disabled:opacity-50"
       >
         {busy === 'print' ? <LoaderCircle className="w-4 h-4 animate-spin" /> : <Printer className="w-4 h-4" />}
         {t('printAction')}
       </button>
 
-      {!nativeSupported && <p className="w-full text-xs text-gray-400">{t('shareManualAttachHint')}</p>}
+      {!nativeSupported && <p className="w-full text-xs text-[var(--muted)]">{t('shareManualAttachHint')}</p>}
     </div>
   )
 }

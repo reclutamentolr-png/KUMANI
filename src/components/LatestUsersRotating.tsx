@@ -60,9 +60,9 @@ export default function LatestUsersRotating() {
   const user = users[currentIndex]
 
   return (
-    <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 w-full max-w-sm mx-auto">
+    <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-[var(--gold)]/30 w-full max-w-sm mx-auto">
       <div className="flex items-center gap-2 mb-4">
-        <Sparkles className="w-5 h-5 text-yellow-400" />
+        <Sparkles className="w-5 h-5 text-[var(--gold-bright)]" />
         <h3 className="text-lg font-bold text-white">{t('latestUsers')}</h3>
       </div>
 
@@ -71,8 +71,8 @@ export default function LatestUsersRotating() {
         <div className="bg-white/5 rounded-xl p-4 border border-white/10">
           <div className="flex items-center gap-4">
             {/* Avatar */}
-            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center flex-shrink-0 shadow-lg">
-              <span className="text-white font-bold text-xl">
+            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] flex items-center justify-center flex-shrink-0 shadow-lg">
+              <span className="text-[var(--ink)] font-bold text-xl">
                 {user.first_name?.[0] || user.username?.[0] || 'U'}
                 {user.last_name?.[0] || ''}
               </span>
@@ -83,7 +83,7 @@ export default function LatestUsersRotating() {
               <p className="font-bold text-white text-lg truncate">
                 {user.first_name} {user.last_name}
               </p>
-              <p className="text-sm text-indigo-300 font-mono truncate">
+              <p className="text-sm text-[var(--gold-pale)] font-mono truncate">
                 {user.referral_code}
               </p>
               <div className="flex items-center gap-2 mt-1">
@@ -102,7 +102,7 @@ export default function LatestUsersRotating() {
               key={index}
               className={`h-1.5 rounded-full transition-all ${
                 index === currentIndex
-                  ? 'bg-yellow-400 w-6'
+                  ? 'bg-[var(--gold-bright)] w-6'
                   : 'bg-white/30 w-1.5'
               }`}
             />

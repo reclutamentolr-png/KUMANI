@@ -43,16 +43,16 @@ export default function FindoMovePanel({
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 sm:p-8">
-      <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-800 mb-4">
-        <ArrowRightLeft className="w-5 h-5 text-amber-600" />
+    <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8">
+      <h3 className="flex items-center gap-2 text-lg font-semibold text-[var(--ink)] mb-4">
+        <ArrowRightLeft className="w-5 h-5 text-[var(--gold)]" />
         {t('movePanelTitle')}
       </h3>
       <div className="flex flex-col sm:flex-row gap-3">
         <select
           value={selected}
           onChange={(e) => setSelected(e.target.value)}
-          className="flex-1 px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm bg-white"
+          className="flex-1 px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm bg-white"
         >
           <option value="">{t('noLocation')}</option>
           {locationOptions.map((opt) => (
@@ -64,7 +64,7 @@ export default function FindoMovePanel({
         <button
           onClick={handleMove}
           disabled={moving || selected === (currentLocationId ?? '')}
-          className="flex items-center justify-center gap-2 px-5 py-2 rounded-lg text-sm font-semibold bg-amber-600 text-white hover:bg-amber-700 transition-all disabled:opacity-50"
+          className="flex items-center justify-center gap-2 px-5 py-2 rounded-lg text-sm bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] font-bold shadow-sm hover:brightness-105 transition-all disabled:opacity-50"
         >
           {moving ? <LoaderCircle className="w-4 h-4 animate-spin" /> : <ArrowRightLeft className="w-4 h-4" />}
           {t('moveHere')}

@@ -28,7 +28,7 @@ function emptyForm(profile: SpotlightProfile | null): FormState {
   }
 }
 
-const grayButton = 'rounded-lg bg-gray-100 px-4 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200 disabled:opacity-50'
+const grayButton = 'rounded-lg border border-[var(--gold)]/40 bg-white px-4 py-2.5 text-sm font-medium text-[var(--ink)] transition-colors hover:bg-[var(--gold-pale)] disabled:opacity-50'
 
 export default function SpotlightForm({
   profile,
@@ -142,7 +142,7 @@ export default function SpotlightForm({
     </div>
   ) : profile && !showForm && (
     profile.is_opted_in && profile.moderation_status === 'pending' ? (
-      <p className="mb-4 flex items-center gap-2 rounded-lg border border-purple-300 bg-purple-50 px-4 py-3 text-sm font-semibold text-purple-700 animate-pulse">
+      <p className="mb-4 flex items-center gap-2 rounded-lg border border-[var(--gold)]/40 bg-[var(--gold-pale)] px-4 py-3 text-sm font-semibold text-[var(--ink)] animate-pulse">
         <Clock className="h-4 w-4 flex-shrink-0" />
         {t('statusPending')}
       </p>
@@ -174,7 +174,7 @@ export default function SpotlightForm({
                 onClick={() => setEditing(true)}
                 title={t('edit')}
                 aria-label={t('edit')}
-                className="rounded-lg bg-gray-100 p-2 text-gray-700 transition-colors hover:bg-gray-200"
+                className="rounded-lg border border-[var(--gold)]/30 bg-white p-2 text-[var(--ink)] transition-colors hover:bg-[var(--gold-pale)]"
               >
                 <Pencil className="h-4 w-4" />
               </button>
@@ -373,7 +373,7 @@ export default function SpotlightForm({
               </>
             ) : (
               <>
-                <Clock className="mx-auto mb-3 h-12 w-12 text-purple-600" />
+                <Clock className="mx-auto mb-3 h-12 w-12 text-[var(--gold)]" />
                 <p className="text-lg font-bold text-[var(--ink)]">{t('savedPendingTitle')}</p>
                 <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{t('savedPendingText')}</p>
               </>

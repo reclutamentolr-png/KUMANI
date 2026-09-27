@@ -30,7 +30,7 @@ export default function QuoteActions({ id }: { id: string }) {
     <div className="flex flex-wrap items-center gap-3">
       <Link
         href={`/marketplace/preventivi/${id}/edit${fromDashboardSuffix}`}
-        className="flex items-center gap-2 px-5 py-3 rounded-xl font-medium text-sm bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all"
+        className="flex items-center gap-2 px-5 py-3 rounded-xl font-medium text-sm border border-[var(--gold)]/40 bg-white text-[var(--ink)] hover:bg-[var(--gold-pale)] transition-all"
       >
         <Pencil className="w-4 h-4" />
         {t('editQuote')}

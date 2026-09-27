@@ -114,33 +114,33 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
     }
   }
 
-  if (loading) return <div className="text-center py-8 text-gray-500">{t('loadingEditor')}</div>
+  if (loading) return <div className="text-center py-8 text-[var(--muted)]">{t('loadingEditor')}</div>
 
   const previewStyle = resolveBioTheme(theme)
   const displayName = [firstName, lastName].filter(Boolean).join(' ')
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 items-start">
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
-        <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+      <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-5 sm:p-6">
+        <h3 className="text-lg font-bold text-[var(--ink)] mb-4 flex items-center gap-2">
           <LinkIcon className="w-5 h-5 text-[var(--gold)]" />
           {t('editPage')}
         </h3>
 
         {/* Bio Text */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">{t('bioTextLabel')}</label>
+          <label className="block text-sm font-semibold text-[var(--ink)] mb-2">{t('bioTextLabel')}</label>
           <textarea
             value={bioText}
             onChange={(e) => setBioText(e.target.value)}
             placeholder={t('bioTextPlaceholder')}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none h-24 resize-none"
+            className="w-full p-3 border border-[var(--gold)]/30 rounded-lg focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 h-24 resize-none"
           />
         </div>
 
         {/* Theme Picker */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">{t('bioThemeLabel')}</label>
+          <label className="block text-sm font-semibold text-[var(--ink)] mb-2">{t('bioThemeLabel')}</label>
           <div className="flex flex-wrap gap-2">
             {ALL_BIO_THEME_KEYS.map((key) => {
               const style = BIO_THEMES[key]
@@ -177,10 +177,10 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
         {/* Links Manager */}
         <div className="mb-6">
           <div className="flex justify-between items-center mb-3">
-            <label className="block text-sm font-medium text-gray-700">{t('customLinks')}</label>
+            <label className="block text-sm font-semibold text-[var(--ink)]">{t('customLinks')}</label>
             <button
               onClick={addLink}
-              className="text-sm flex items-center gap-1 text-[var(--gold)] hover:text-[var(--ink)] font-medium"
+              className="text-sm flex items-center gap-1 rounded-lg border border-[var(--gold)]/40 px-3 py-1.5 text-[var(--ink)] hover:bg-[var(--gold)]/10 font-semibold transition-colors"
             >
               <Plus className="w-4 h-4" /> {t('addLink')}
             </button>
@@ -188,11 +188,11 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
 
           <div className="space-y-3">
             {links.map((link) => (
-              <div key={link.id} className="flex gap-2 items-start bg-gray-50 p-3 rounded-lg border border-gray-200">
+              <div key={link.id} className="flex gap-2 items-start bg-[var(--paper)] p-3 rounded-lg border border-[var(--gold)]/20">
                 <select
                   value={link.icon}
                   onChange={(e) => updateLink(link.id, 'icon', e.target.value)}
-                  className="w-36 shrink-0 p-2 border border-gray-300 rounded bg-white text-sm"
+                  className="w-36 shrink-0 p-2 border border-[var(--gold)]/30 rounded-lg bg-white text-sm focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30"
                 >
                   <option value="default">🔗 {t('link')}</option>
                   <option value="website">🌍 {t('website')}</option>
@@ -207,14 +207,14 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
                     placeholder={t('linkTitlePlaceholder')}
                     value={link.title}
                     onChange={(e) => updateLink(link.id, 'title', e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded text-sm"
+                    className="w-full p-2 border border-[var(--gold)]/30 rounded-lg bg-white text-sm focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30"
                   />
                   <input
                     type="text"
                     placeholder={URL_PLACEHOLDER_MAP[link.icon] || t('linkUrlPlaceholder')}
                     value={link.url}
                     onChange={(e) => updateLink(link.id, 'url', e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded text-sm font-mono"
+                    className="w-full p-2 border border-[var(--gold)]/30 rounded-lg bg-white text-sm font-mono focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30"
                   />
                 </div>
 
@@ -229,7 +229,7 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
             ))}
 
             {links.length === 0 && (
-              <p className="text-sm text-gray-500 text-center py-4 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+              <p className="text-sm text-[var(--muted)] text-center py-4 bg-[var(--paper)] rounded-lg border border-dashed border-[var(--gold)]/30">
                 {t('noCustomLinks')}
               </p>
             )}
@@ -237,7 +237,7 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
         </div>
 
         {/* Save Button */}
-        <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
+        <div className="flex flex-wrap items-center justify-end gap-3 pt-4 border-t border-[var(--gold)]/20">
           {justSaved && (
             <span className="text-sm text-green-600 font-medium flex items-center gap-1">
               <Check className="w-4 h-4" /> {t('savedSuccess')}
@@ -246,7 +246,7 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
           <button
             onClick={handleSave}
             disabled={saving}
-            className="flex items-center gap-2 px-6 py-3 bg-[var(--ink)] hover:bg-[var(--ink-soft)] disabled:bg-gray-400 text-white rounded-lg font-semibold transition-colors"
+            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] hover:brightness-105 disabled:opacity-50 text-[var(--ink)] rounded-lg font-bold transition"
           >
             <Save className="w-4 h-4" />
             {saving ? t('saving') : t('savePage')}
@@ -257,8 +257,8 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
       {/* Live Preview — driven by this component's own state, so it reflects
           every keystroke and every save immediately, unlike the old static
           mockup that never read the real bio/links at all. */}
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 lg:sticky lg:top-24">
-        <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+      <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-5 sm:p-6 lg:sticky lg:top-24">
+        <h3 className="text-lg font-bold text-[var(--ink)] mb-4 flex items-center gap-2">
           {t('previewOf')}
         </h3>
         <div className={`rounded-2xl p-6 text-center ${previewStyle.pageBg}`}>

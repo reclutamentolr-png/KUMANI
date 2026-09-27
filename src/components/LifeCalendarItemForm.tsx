@@ -125,20 +125,20 @@ export default function LifeCalendarItemForm(props: Props) {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 sm:p-8 space-y-6">
+    <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8 space-y-6">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">{t('titleField')}</label>
+        <label className="block text-sm font-medium text-[var(--ink)] mb-1">{t('titleField')}</label>
         <input
           type="text"
           value={form.title}
           onChange={(e) => setForm((prev) => ({ ...prev, title: e.target.value }))}
           placeholder={t('titlePlaceholder')}
-          className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm"
+          className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">{t('categoryLabel')}</label>
+        <label className="block text-sm font-medium text-[var(--ink)] mb-2">{t('categoryLabel')}</label>
         <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
           {CATEGORIES.map((category) => {
             const Icon = CATEGORY_ICONS[category]
@@ -149,8 +149,8 @@ export default function LifeCalendarItemForm(props: Props) {
                 onClick={() => setCategory(category)}
                 className={`flex flex-col items-center gap-1 px-2 py-3 rounded-lg text-xs font-medium border-2 transition-all ${
                   form.category === category
-                    ? 'border-amber-600 bg-amber-50 text-amber-700'
-                    : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                    ? 'border-[var(--gold)] bg-[var(--gold-pale)] text-[var(--ink)]'
+                    : 'border-[var(--gold)]/20 text-[var(--muted)] hover:border-[var(--gold)]/50'
                 }`}
               >
                 <Icon className="w-5 h-5" />
@@ -162,16 +162,16 @@ export default function LifeCalendarItemForm(props: Props) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">{t('profileLabel')}</label>
-        <p className="text-xs text-gray-500 mb-2">{t('profileHint')}</p>
+        <label className="block text-sm font-medium text-[var(--ink)] mb-1">{t('profileLabel')}</label>
+        <p className="text-xs text-[var(--muted)] mb-2">{t('profileHint')}</p>
         <div className="flex flex-wrap gap-2 mb-2">
           <button
             type="button"
             onClick={() => setForm((prev) => ({ ...prev, profileId: null }))}
             className={`px-3 py-2 rounded-lg text-sm font-medium border-2 transition-all ${
               form.profileId === null
-                ? 'border-amber-600 bg-amber-50 text-amber-700'
-                : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                ? 'border-[var(--gold)] bg-[var(--gold-pale)] text-[var(--ink)]'
+                : 'border-[var(--gold)]/20 text-[var(--muted)] hover:border-[var(--gold)]/50'
             }`}
           >
             {t('noProfile')}
@@ -183,8 +183,8 @@ export default function LifeCalendarItemForm(props: Props) {
               onClick={() => setForm((prev) => ({ ...prev, profileId: profile.id }))}
               className={`px-3 py-2 rounded-lg text-sm font-medium border-2 transition-all ${
                 form.profileId === profile.id
-                  ? 'border-amber-600 bg-amber-50 text-amber-700'
-                  : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                  ? 'border-[var(--gold)] bg-[var(--gold-pale)] text-[var(--ink)]'
+                  : 'border-[var(--gold)]/20 text-[var(--muted)] hover:border-[var(--gold)]/50'
               }`}
             >
               {profile.name}
@@ -197,13 +197,13 @@ export default function LifeCalendarItemForm(props: Props) {
             value={newProfileName}
             onChange={(e) => setNewProfileName(e.target.value)}
             placeholder={t('newProfilePlaceholder')}
-            className="flex-1 px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm"
+            className="flex-1 px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
           />
           <button
             type="button"
             onClick={handleAddProfile}
             disabled={addingProfile || !newProfileName.trim()}
-            className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all disabled:opacity-50"
+            className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium border border-[var(--gold)]/40 bg-white text-[var(--ink)] hover:bg-[var(--gold-pale)] transition-all disabled:opacity-50"
           >
             <PlusCircle className="w-4 h-4" />
             {t('addProfile')}
@@ -212,26 +212,26 @@ export default function LifeCalendarItemForm(props: Props) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">{t('dueDateLabel')}</label>
+        <label className="block text-sm font-medium text-[var(--ink)] mb-1">{t('dueDateLabel')}</label>
         <input
           type="date"
           value={form.dueDate}
           onChange={(e) => setForm((prev) => ({ ...prev, dueDate: e.target.value }))}
-          className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm"
+          className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">{t('recurrenceLabel')}</label>
+        <label className="block text-sm font-medium text-[var(--ink)] mb-2">{t('recurrenceLabel')}</label>
         <div className="space-y-2">
           {RECURRENCE_OPTIONS.map((option) => (
-            <label key={option} className="flex items-center gap-2 text-sm text-gray-700">
+            <label key={option} className="flex items-center gap-2 text-sm text-[var(--ink)]">
               <input
                 type="radio"
                 name="recurrence"
                 checked={form.recurrence === option}
                 onChange={() => setForm((prev) => ({ ...prev, recurrence: option as Recurrence }))}
-                className="text-amber-600 focus:ring-amber-500"
+                className="text-[var(--gold)] accent-[var(--gold)] focus:ring-[var(--gold)]"
               />
               {t(`recurrence_${option}`)}
             </label>
@@ -245,37 +245,37 @@ export default function LifeCalendarItemForm(props: Props) {
                 setForm((prev) => ({ ...prev, recurrenceCustomDays: e.target.value ? Number(e.target.value) : null }))
               }
               placeholder={t('customDaysPlaceholder')}
-              className="ml-6 w-40 px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm"
+              className="ml-6 w-40 px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
             />
           )}
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">{t('reminderLabel')}</label>
+        <label className="block text-sm font-medium text-[var(--ink)] mb-2">{t('reminderLabel')}</label>
         <div className="flex flex-wrap gap-3">
           {REMINDER_CHOICES.map((days) => (
-            <label key={days} className="flex items-center gap-1.5 text-sm text-gray-700">
+            <label key={days} className="flex items-center gap-1.5 text-sm text-[var(--ink)]">
               <input
                 type="checkbox"
                 checked={form.reminderOffsets.includes(days)}
                 onChange={() => toggleReminder(days)}
-                className="rounded text-amber-600 focus:ring-amber-500"
+                className="rounded text-[var(--gold)] accent-[var(--gold)] focus:ring-[var(--gold)]"
               />
               {t('daysBefore', { count: days })}
             </label>
           ))}
         </div>
-        <p className="mt-2 text-xs text-gray-500">{t('reminderHint')}</p>
+        <p className="mt-2 text-xs text-[var(--muted)]">{t('reminderHint')}</p>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">{t('notesLabel')}</label>
+        <label className="block text-sm font-medium text-[var(--ink)] mb-1">{t('notesLabel')}</label>
         <textarea
           value={form.notes}
           onChange={(e) => setForm((prev) => ({ ...prev, notes: e.target.value }))}
           rows={3}
-          className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm"
+          className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
         />
       </div>
 
@@ -289,7 +289,7 @@ export default function LifeCalendarItemForm(props: Props) {
       <button
         onClick={handleSubmit}
         disabled={!isValid || saving}
-        className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-amber-600 to-orange-600 text-white rounded-xl font-semibold hover:from-amber-700 hover:to-orange-700 transition-all disabled:opacity-50"
+        className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] rounded-xl font-bold shadow-md hover:brightness-105 transition-all disabled:opacity-50"
       >
         {saving ? (
           <>

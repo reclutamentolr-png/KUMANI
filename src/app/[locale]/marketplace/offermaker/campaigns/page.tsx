@@ -21,29 +21,30 @@ export default async function OfferMakerCampaignsPage() {
     .order('created_at', { ascending: false })
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-purple-50">
-      <header className="bg-white shadow-sm border-b sticky top-0 z-10">
+    <div className="min-h-screen bg-[var(--background)]">
+      <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <Link
             href="/marketplace/offermaker"
-            className="flex items-center gap-2 text-gray-600 hover:text-violet-600 font-medium transition-colors"
+            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
           >
             <ArrowLeft className="w-5 h-5" />
             {t('backToMarketplace')}
           </Link>
-          <h1 className="flex items-center gap-2 text-lg font-semibold text-gray-800">
-            <ListChecks className="h-5 w-5 text-violet-600" />
+          <h1 className="flex items-center gap-2 font-semibold tracking-wide">
+            <ListChecks className="h-5 w-5 text-[var(--gold-bright)]" />
             {t('myCampaigns')}
           </h1>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl font-bold text-gray-900">{t('myCampaigns')}</h2>
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div className="relative mb-8 flex flex-col gap-4 overflow-hidden rounded-3xl bg-[var(--ink)] p-6 text-white shadow-[0_14px_40px_rgba(23,23,23,0.25)] sm:flex-row sm:items-center sm:justify-between sm:p-8">
+          <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full border border-[var(--gold)]/25 bg-[var(--gold)]/10" />
+          <h2 className="relative text-2xl font-bold sm:text-3xl">{t('myCampaigns')}</h2>
           <Link
             href="/marketplace/offermaker"
-            className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-xl font-semibold hover:from-violet-700 hover:to-purple-700 transition-all"
+            className="relative flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] rounded-xl font-bold shadow-md hover:brightness-105 transition-all"
           >
             <PlusCircle className="w-5 h-5" />
             {t('newCampaign')}
@@ -57,8 +58,8 @@ export default async function OfferMakerCampaignsPage() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-16 text-gray-400">
-            <ListChecks className="w-12 h-12 mx-auto mb-4" />
+          <div className="text-center py-16 rounded-2xl border border-dashed border-[var(--gold)]/40 bg-white text-[var(--muted)]">
+            <ListChecks className="w-12 h-12 mx-auto mb-4 text-[var(--gold)]" />
             <p>{t('noCampaignsYet')}</p>
           </div>
         )}

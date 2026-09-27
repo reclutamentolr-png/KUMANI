@@ -98,7 +98,7 @@ export default async function SpotlightPage() {
           <p className="rounded-2xl border border-[var(--gold)]/20 bg-[var(--paper)] p-6 text-sm text-[var(--muted)]">{t('noKumanoToday')}</p>
         )}
 
-        <div className="mt-8 rounded-2xl border border-[var(--gold)]/25 bg-gradient-to-r from-[var(--ink)] to-[#292722] p-6 text-center text-white">
+        <div className="mt-8 rounded-2xl border border-[var(--gold)]/25 bg-gradient-to-r from-[var(--ink)] to-[var(--ink-soft)] p-6 text-center text-white">
           <p className="text-lg font-bold">{t('ctaJoin')}</p>
           <Link
             href="/marketplace/spotlight"

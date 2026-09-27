@@ -63,21 +63,21 @@ export default async function FindoItemDetailPage({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
-      <header className="bg-white shadow-sm border-b sticky top-0 z-10">
+    <div className="min-h-screen bg-[var(--background)]">
+      <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <Link
             href="/marketplace/findo"
-            className="flex items-center gap-2 text-gray-600 hover:text-amber-600 font-medium transition-colors"
+            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
           >
             <ArrowLeft className="w-5 h-5" />
             {t('title')}
           </Link>
-          <h1 className="text-lg font-semibold text-gray-800 truncate max-w-xs">{item.name}</h1>
+          <h1 className="font-semibold tracking-wide truncate max-w-[50%] sm:max-w-xs">{item.name}</h1>
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
+      <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
         <FindoItemForm
           mode="edit"
           id={item.id}
@@ -89,16 +89,16 @@ export default async function FindoItemDetailPage({
         <FindoMovePanel itemId={item.id} currentLocationId={item.location_id} locations={locations || []} />
 
         {moves && moves.length > 0 && (
-          <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 sm:p-8">
-            <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-800 mb-4">
-              <History className="w-5 h-5 text-amber-600" />
+          <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8">
+            <h3 className="flex items-center gap-2 text-lg font-semibold text-[var(--ink)] mb-4">
+              <History className="w-5 h-5 text-[var(--gold)]" />
               {t('history')}
             </h3>
             <div className="space-y-2">
               {moves.map((move) => (
-                <div key={move.id} className="flex items-center justify-between text-sm border-b border-gray-100 pb-2 gap-4">
-                  <span className="text-gray-600 shrink-0">{new Date(move.moved_at).toLocaleDateString()}</span>
-                  <span className="text-gray-800 text-right">
+                <div key={move.id} className="flex flex-col gap-0.5 text-sm border-b border-[var(--gold)]/15 pb-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                  <span className="text-[var(--muted)] shrink-0">{new Date(move.moved_at).toLocaleDateString()}</span>
+                  <span className="text-[var(--ink)] sm:text-right">
                     {move.previous_location_path || t('noLocation')} → {move.new_location_path || t('noLocation')}
                   </span>
                 </div>

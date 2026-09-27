@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { AlertTriangle, CheckCircle2, Clock, LoaderCircle, QrCode, RefreshCw, UserCheck, Users, XCircle } from 'lucide-react'
+import { AlertTriangle, CheckCircle2, Clock, Hourglass, LoaderCircle, QrCode, RefreshCw, UserCheck, Users, XCircle } from 'lucide-react'
 import { checkInPass, getAttendees } from '@/app/actions/events'
 import { formatEventDate, type EventAttendee, type OrganizedEvent } from '@/lib/events'
 import EventScanner from './EventScanner'
@@ -42,7 +42,29 @@ export default function EventAttendees({ event }: { event: OrganizedEvent }) {
   )
   const onCancel = useCallback(() => setScanning(false), [])
 
-  const checkedIn = attendees?.filter((a) => a.status === 'checked_in').length ?? 0
+  // Iscritti veri e propri e lista d'attesa (già in ordine di arrivo)
+  const registered = attendees?.filter((a) => a.status !== 'waitlist') ?? null
+  const waitlist = attendees?.filter((a) => a.status === 'waitlist') ?? []
+  const checkedIn = registered?.filter((a) => a.status === 'checked_in').length ?? 0
+
+  // Affidabilità: assenze e presenze ad altri eventi KUMANI
+  const reliability = (a: EventAttendee) => (
+    <>
+      {(a.no_shows ?? 0) > 0 && (
+        <span
+          title={t('noShowsTitle')}
+          className={`shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-bold ${(a.no_shows ?? 0) >= 2 ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-600'}`}
+        >
+          {t('noShowsBadge', { count: a.no_shows ?? 0 })}
+        </span>
+      )}
+      {(a.attended ?? 0) > 0 && (
+        <span title={t('attendedTitle')} className="shrink-0 rounded-full bg-emerald-50 px-1.5 py-0.5 text-[10px] font-bold text-emerald-700">
+          {t('attendedBadge', { count: a.attended ?? 0 })}
+        </span>
+      )}
+    </>
+  )
 
   const resultBox = (() => {
     if (!result) return null
@@ -69,11 +91,16 @@ export default function EventAttendees({ event }: { event: OrganizedEvent }) {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600">
         <span className="flex items-center gap-1.5">
-          <Users className="h-4 w-4 text-[var(--gold)]" /> {t('attendeesCount', { count: attendees?.length ?? event.people, capacity: event.capacity })}
+          <Users className="h-4 w-4 text-[var(--gold)]" /> {t('attendeesCount', { count: registered?.length ?? event.people, capacity: event.capacity })}
         </span>
         <span className="flex items-center gap-1.5">
           <UserCheck className="h-4 w-4 text-emerald-600" /> {t('checkedInCount', { count: attendees ? checkedIn : event.checked_in })}
         </span>
+        {waitlist.length > 0 && (
+          <span className="flex items-center gap-1.5">
+            <Hourglass className="h-4 w-4 text-[var(--gold)]" /> {t('waitlistCount', { count: waitlist.length })}
+          </span>
+        )}
       </div>
 
       {scanning ? (
@@ -105,17 +132,20 @@ export default function EventAttendees({ event }: { event: OrganizedEvent }) {
             <RefreshCw className="h-4 w-4" />
           </button>
         </div>
-        {attendees === null ? (
+        {registered === null ? (
           <div className="flex justify-center py-6">
             <LoaderCircle className="h-5 w-5 animate-spin text-gray-400" />
           </div>
-        ) : attendees.length === 0 ? (
+        ) : registered.length === 0 ? (
           <p className="rounded-xl border border-dashed border-gray-200 p-6 text-center text-sm text-[var(--muted)]">{t('attendeesEmpty')}</p>
         ) : (
           <ul className="divide-y divide-gray-100 rounded-xl border border-gray-200">
-            {attendees.map((a) => (
+            {registered.map((a) => (
               <li key={a.id} className="flex items-center justify-between gap-3 px-3 py-2.5 text-sm">
-                <span className="min-w-0 flex-1 truncate font-medium text-[var(--ink)]">{a.name || '—'}</span>
+                <span className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
+                  <span className="truncate font-medium text-[var(--ink)]">{a.name || '—'}</span>
+                  {reliability(a)}
+                </span>
                 <span className="font-mono text-xs tracking-widest text-gray-500">{a.code}</span>
                 <span
                   className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
@@ -129,6 +159,28 @@ export default function EventAttendees({ event }: { event: OrganizedEvent }) {
           </ul>
         )}
       </div>
+
+      {/* Lista d'attesa: il primo entra da solo se si libera un posto */}
+      {waitlist.length > 0 && (
+        <div>
+          <p className="flex items-center gap-1.5 text-sm font-semibold text-gray-700">
+            <Hourglass className="h-4 w-4 text-[var(--gold)]" /> {t('waitlistTitle')}
+          </p>
+          <p className="mb-2 text-xs text-[var(--muted)]">{t('waitlistHint')}</p>
+          <ol className="divide-y divide-gray-100 rounded-xl border border-dashed border-[var(--gold)]/50 bg-[var(--gold-pale)]/20">
+            {waitlist.map((a, index) => (
+              <li key={a.id} className="flex items-center gap-3 px-3 py-2.5 text-sm">
+                <span className="w-6 shrink-0 text-center text-xs font-bold text-[var(--gold)]">{index + 1}</span>
+                <span className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
+                  <span className="truncate font-medium text-[var(--ink)]">{a.name || '—'}</span>
+                  {reliability(a)}
+                </span>
+                <span className="rounded-full bg-white px-2 py-0.5 text-xs font-semibold text-gray-600">{t('attendee_waitlist')}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
     </div>
   )
 }

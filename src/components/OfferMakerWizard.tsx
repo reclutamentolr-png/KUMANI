@@ -88,13 +88,13 @@ export default function OfferMakerWizard({ initialWhatsapp }: Props) {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 sm:p-8">
+    <div className="bg-white rounded-2xl shadow-[0_14px_40px_rgba(23,23,23,0.08)] border border-[var(--gold)]/25 p-6 sm:p-8">
       <div className="flex items-center gap-2 mb-6">
         {Array.from({ length: TOTAL_STEPS }, (_, i) => i + 1).map((s) => (
           <div
             key={s}
             className={`h-2 flex-1 rounded-full transition-all ${
-              s <= step ? 'bg-violet-600' : 'bg-gray-200'
+              s <= step ? 'bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)]' : 'bg-[var(--gold)]/15'
             }`}
           />
         ))}
@@ -102,7 +102,7 @@ export default function OfferMakerWizard({ initialWhatsapp }: Props) {
 
       {step === 1 && (
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-800">{t('step1Title')}</h3>
+          <h3 className="text-lg font-bold text-[var(--ink)]">{t('step1Title')}</h3>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">{t('whatOfferLabel')}</label>
             <textarea
@@ -110,7 +110,7 @@ export default function OfferMakerWizard({ initialWhatsapp }: Props) {
               onChange={(e) => setAnswer('whatOffer', e.target.value)}
               placeholder={t('whatOfferPlaceholder')}
               rows={3}
-              className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm text-[var(--ink)]"
             />
           </div>
           <div>
@@ -120,7 +120,7 @@ export default function OfferMakerWizard({ initialWhatsapp }: Props) {
               value={answers.priceInfo}
               onChange={(e) => setAnswer('priceInfo', e.target.value)}
               placeholder={t('pricePlaceholder')}
-              className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm text-[var(--ink)]"
             />
           </div>
         </div>
@@ -128,7 +128,7 @@ export default function OfferMakerWizard({ initialWhatsapp }: Props) {
 
       {step === 2 && (
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-800">{t('step2Title')}</h3>
+          <h3 className="text-lg font-bold text-[var(--ink)]">{t('step2Title')}</h3>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">{t('targetAudienceLabel')}</label>
             <textarea
@@ -136,7 +136,7 @@ export default function OfferMakerWizard({ initialWhatsapp }: Props) {
               onChange={(e) => setAnswer('targetAudience', e.target.value)}
               placeholder={t('targetAudiencePlaceholder')}
               rows={2}
-              className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm text-[var(--ink)]"
             />
           </div>
           <div>
@@ -146,7 +146,7 @@ export default function OfferMakerWizard({ initialWhatsapp }: Props) {
               value={answers.locationInfo}
               onChange={(e) => setAnswer('locationInfo', e.target.value)}
               placeholder={t('locationPlaceholder')}
-              className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm text-[var(--ink)]"
             />
           </div>
         </div>
@@ -154,7 +154,7 @@ export default function OfferMakerWizard({ initialWhatsapp }: Props) {
 
       {step === 3 && (
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-800">{t('step3Title')}</h3>
+          <h3 className="text-lg font-bold text-[var(--ink)]">{t('step3Title')}</h3>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">{t('strengthPointLabel')}</label>
             <textarea
@@ -162,7 +162,7 @@ export default function OfferMakerWizard({ initialWhatsapp }: Props) {
               onChange={(e) => setAnswer('strengthPoint', e.target.value)}
               placeholder={t('strengthPointPlaceholder')}
               rows={2}
-              className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm text-[var(--ink)]"
             />
           </div>
           <div>
@@ -175,8 +175,8 @@ export default function OfferMakerWizard({ initialWhatsapp }: Props) {
                   onClick={() => setAnswer('objective', obj)}
                   className={`px-3 py-2 rounded-lg text-sm font-medium border-2 transition-all ${
                     answers.objective === obj
-                      ? 'border-violet-600 bg-violet-50 text-violet-700'
-                      : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                      ? 'border-[var(--ink)] bg-[var(--gold-pale)] text-[var(--ink)]'
+                      : 'border-[var(--gold)]/20 text-gray-600 hover:border-[var(--gold)]/60'
                   }`}
                 >
                   {t(`objective_${obj}`)}
@@ -189,7 +189,7 @@ export default function OfferMakerWizard({ initialWhatsapp }: Props) {
 
       {step === 4 && (
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-800">{t('step4Title')}</h3>
+          <h3 className="text-lg font-bold text-[var(--ink)]">{t('step4Title')}</h3>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">{t('toneLabel')}</label>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -200,8 +200,8 @@ export default function OfferMakerWizard({ initialWhatsapp }: Props) {
                   onClick={() => setAnswer('tone', tone)}
                   className={`px-3 py-2 rounded-lg text-sm font-medium border-2 transition-all ${
                     answers.tone === tone
-                      ? 'border-violet-600 bg-violet-50 text-violet-700'
-                      : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                      ? 'border-[var(--ink)] bg-[var(--gold-pale)] text-[var(--ink)]'
+                      : 'border-[var(--gold)]/20 text-gray-600 hover:border-[var(--gold)]/60'
                   }`}
                 >
                   {t(`tone_${tone}`)}
@@ -216,7 +216,7 @@ export default function OfferMakerWizard({ initialWhatsapp }: Props) {
               value={answers.contactWhatsapp}
               onChange={(e) => setAnswer('contactWhatsapp', e.target.value)}
               placeholder={t('whatsappNumberPlaceholder')}
-              className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm text-[var(--ink)]"
             />
           </div>
         </div>
@@ -234,7 +234,7 @@ export default function OfferMakerWizard({ initialWhatsapp }: Props) {
           <button
             onClick={() => setStep(step - 1)}
             disabled={generating}
-            className="px-5 py-3 rounded-xl font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 transition-all disabled:opacity-50"
+            className="px-5 py-3 rounded-xl font-medium text-[var(--ink)] border border-[var(--gold)]/40 bg-white hover:bg-[var(--gold-pale)] transition-all disabled:opacity-50"
           >
             {t('back')}
           </button>
@@ -242,7 +242,7 @@ export default function OfferMakerWizard({ initialWhatsapp }: Props) {
         <button
           onClick={handleNext}
           disabled={!canAdvance || generating}
-          className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-xl font-semibold hover:from-violet-700 hover:to-purple-700 transition-all disabled:opacity-50"
+          className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] rounded-xl font-bold shadow-md hover:brightness-105 transition-all disabled:opacity-50"
         >
           {generating ? (
             <>

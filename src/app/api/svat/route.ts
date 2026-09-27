@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { fetchWhoisText, parseWhois } from '@/lib/whois'
+import { parseVatInput, prettyVat, registryLookupUrl, verifyVies } from '@/lib/vat'
 
 interface SVATCheck {
   id: string
@@ -38,16 +39,29 @@ export async function POST(request: NextRequest) {
 
   const body = await request.json()
   const { input } = body
+  // Due ricerche separate: 'website' (solo sito) o 'vat' (solo partita IVA).
+  // Senza mode si indovina dall'input, come prima.
+  const mode: 'website' | 'vat' | 'auto' = body.mode === 'vat' || body.mode === 'website' ? body.mode : 'auto'
   if (!input || typeof input !== 'string') {
     return NextResponse.json({ error: 'Input required' }, { status: 400 })
   }
 
-  const isURL = input.startsWith('http') || input.startsWith('www.') || input.includes('.')
+  const checks: SVATCheck[] = []
+
+  // Partita IVA (es. IT12345678901 o 11 cifre): controlli sull'azienda
+  const vat = mode === 'website' ? null : mode === 'vat' ? (parseVatInput(input) ?? { ok: false as const, reason: 'format' as const }) : parseVatInput(input)
+  if (vat) {
+    checks.push(...(await checkCompany(vat)))
+  }
+
+  const looksLikeURL = input.startsWith('http') || input.startsWith('www.') || input.includes('.')
+  if (mode === 'website' && !looksLikeURL) {
+    return NextResponse.json({ error: 'invalidUrl' }, { status: 400 })
+  }
+  const isURL = !vat && looksLikeURL
   const domain = isURL
     ? input.replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0]
     : input
-
-  const checks: SVATCheck[] = []
 
   if (isURL) {
     // Shared lookups: WHOIS (checkWHOIS + checkDomainAge) and the homepage
@@ -75,7 +89,6 @@ export async function POST(request: NextRequest) {
       checkLegalPages(pagePromise),
       checkReviews(pagePromise),
       checkBusinessModel(pagePromise),
-      checkVIES(input),
     ])
 
     results.forEach((r) => {
@@ -1020,62 +1033,64 @@ async function checkAbuseIPDB(domain: string, url: string): Promise<SVATCheck | 
   }
 }
 
-// VAT validation via VIES
-async function checkVIES(input: string): Promise<SVATCheck | null> {
-  const vatRegex = /^IT\d{11}$/i
-  if (!vatRegex.test(input.replace(/\s/g, ''))) return null
+// Verifica azienda da partita IVA: formato e cifra di controllo, VIES
+// (Commissione Europea: stato, ragione sociale, indirizzo) e rimando alla
+// scheda su Ufficio Camerale per sede, ATECO e stato (solo Italia, manuale).
+async function checkCompany(vat: NonNullable<ReturnType<typeof parseVatInput>>): Promise<SVATCheck[]> {
+  if (!vat.ok) {
+    return [{
+      id: 'vatFormat',
+      name: 'checkVatFormat',
+      status: 'risk',
+      points: -45,
+      details: vat.reason === 'checksum' ? 'Cifra di controllo errata' : 'Formato non valido',
+      detailsKey: vat.reason === 'checksum' ? 'vatChecksumInvalid' : 'vatFormatInvalid',
+    }]
+  }
+  const shown = prettyVat(vat.normalized)
+  const checks: SVATCheck[] = [{
+    id: 'vatFormat',
+    name: 'checkVatFormat',
+    status: 'ok',
+    points: 5,
+    details: shown,
+    detailsKey: 'vatFormatOk',
+    detailsInterp: { vat: shown },
+  }]
 
-  try {
-    const vatNumber = input.replace(/\s/g, '')
-
-    const xmlBody = `<?xml version="1.0" encoding="UTF-8"?>
-<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Body>
-    <checkVat xmlns="urn:ec.europa.eu:Taxation_Customs:WS:DimB:checkVat:1.0">
-      <wsdl:countryCode>${vatNumber.substring(0, 2)}</wsdl:countryCode>
-      <wsdl:vatNumber>${vatNumber.substring(2)}</wsdl:vatNumber>
-    </checkVat>
-  </soap:Body>
-</soap:Envelope>`
-
-    const res = await fetch('https://ec.europa.eu/taxation_customs/vies/services/checkVatService', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'text/xml; charset=utf-8',
-        'SOAPAction': 'urn:ec.europa.eu:Taxation_Customs:WS:DimB:checkVat:1.0/checkVat',
-      },
-      body: xmlBody,
-    })
-
-    if (!res.ok) return null
-
-    const xml = await res.text()
-    const isValid = /<valid>true<\/valid>/i.test(xml)
-
-    if (isValid) {
-      return {
-        id: 'vies',
-        name: 'checkVIES',
-        status: 'ok',
-        points: 15,
-        details: 'Valid VAT number confirmed by EU VIES',
-        detailsKey: 'viesValid',
-        source: 'VIES - European Commission',
-        sourceUrl: 'https://ec.europa.eu/taxation_customs/vies/',
-      }
-    }
-
-    return {
+  const vies = await verifyVies(vat.normalized)
+  const viesSource = { source: 'VIES - European Commission', sourceUrl: 'https://ec.europa.eu/taxation_customs/vies/' }
+  if (vies.status === 'valid') {
+    const name = vies.name ?? '—'
+    const address = vies.address ?? '—'
+    checks.push({
       id: 'vies',
       name: 'checkVIES',
-      status: 'risk',
-      points: -25,
-      details: 'Invalid or inactive VAT number',
-      detailsKey: 'viesInvalid',
-      source: 'VIES - European Commission',
-      sourceUrl: 'https://ec.europa.eu/taxation_customs/vies/',
-    }
-  } catch {
-    return null
+      status: 'ok',
+      points: 25,
+      details: `${name} — ${address}`,
+      detailsKey: 'viesValidCompany',
+      detailsInterp: { name, address },
+      ...viesSource,
+    })
+  } else if (vies.status === 'invalid') {
+    checks.push({ id: 'vies', name: 'checkVIES', status: 'risk', points: -40, details: 'Invalid or inactive VAT number', detailsKey: 'viesInvalid', ...viesSource })
+  } else {
+    checks.push({ id: 'vies', name: 'checkVIES', status: 'check', points: 0, details: 'VIES unavailable', detailsKey: 'viesUnavailable', ...viesSource })
   }
+
+  const registryUrl = registryLookupUrl(vat.normalized)
+  if (registryUrl) {
+    checks.push({
+      id: 'registry',
+      name: 'checkRegistry',
+      status: 'check',
+      points: 0,
+      details: 'Ufficio Camerale',
+      detailsKey: 'registryManual',
+      source: 'Ufficio Camerale',
+      sourceUrl: registryUrl,
+    })
+  }
+  return checks
 }

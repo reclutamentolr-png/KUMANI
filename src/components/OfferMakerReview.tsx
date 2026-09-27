@@ -68,8 +68,8 @@ export default function OfferMakerReview(props: Props) {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 sm:p-8 space-y-6">
-      <h3 className="text-lg font-semibold text-gray-800">{t('reviewTitle')}</h3>
+    <div className="bg-white rounded-2xl shadow-[0_14px_40px_rgba(23,23,23,0.08)] border border-[var(--gold)]/25 p-6 sm:p-8 space-y-6">
+      <h3 className="text-lg font-bold text-[var(--ink)]">{t('reviewTitle')}</h3>
 
       <div className="space-y-4">
         {FIELD_ORDER.map(({ key, labelKey, multiline }) => (
@@ -80,14 +80,14 @@ export default function OfferMakerReview(props: Props) {
                 value={draft[key]}
                 onChange={(e) => setField(key, e.target.value)}
                 rows={3}
-                className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-sm"
+                className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm text-[var(--ink)]"
               />
             ) : (
               <input
                 type="text"
                 value={draft[key]}
                 onChange={(e) => setField(key, e.target.value)}
-                className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-sm"
+                className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm text-[var(--ink)]"
               />
             )}
           </div>
@@ -113,7 +113,7 @@ export default function OfferMakerReview(props: Props) {
           <button
             onClick={props.onBack}
             disabled={saving}
-            className="px-5 py-3 rounded-xl font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 transition-all disabled:opacity-50"
+            className="px-5 py-3 rounded-xl font-medium text-[var(--ink)] border border-[var(--gold)]/40 bg-white hover:bg-[var(--gold-pale)] transition-all disabled:opacity-50"
           >
             {t('back')}
           </button>
@@ -121,7 +121,7 @@ export default function OfferMakerReview(props: Props) {
         <button
           onClick={handleSubmit}
           disabled={saving}
-          className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-xl font-semibold hover:from-violet-700 hover:to-purple-700 transition-all disabled:opacity-50"
+          className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] rounded-xl font-bold shadow-md hover:brightness-105 transition-all disabled:opacity-50"
         >
           {saving ? (
             <>

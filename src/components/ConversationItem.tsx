@@ -78,12 +78,12 @@ export default function ConversationItem({
   if (deleted) return null
 
   return (
-    <div className={`relative bg-white rounded-xl border p-4 hover:shadow-md transition-all ${
-      unread > 0 ? 'border-indigo-300 bg-indigo-50/30' : 'border-gray-200'
+    <div className={`relative bg-white rounded-2xl border p-4 hover:shadow-md transition-all ${
+      unread > 0 ? 'border-[var(--gold)]/60 bg-[var(--gold-pale)]/30' : 'border-[var(--gold)]/25'
     }`}>
       <button onClick={handleClick} className="w-full flex items-start gap-4 text-left">
         <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${
-          unread > 0 ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-500'
+          unread > 0 ? 'bg-[var(--ink)] text-[var(--gold-bright)]' : 'bg-[var(--paper)] text-[var(--muted)]'
         }`}>
           {listingId ? <FileText className="w-6 h-6" /> : <User className="w-6 h-6" />}
         </div>
@@ -91,11 +91,11 @@ export default function ConversationItem({
         <div className="flex-1 min-w-0">
           <div className="flex justify-between items-start mb-1">
             <div className="flex items-center gap-2 flex-1 min-w-0">
-              <h3 className={`font-semibold truncate ${unread > 0 ? 'text-gray-900' : 'text-gray-700'}`}>
+              <h3 className={`font-semibold truncate ${unread > 0 ? 'text-[var(--ink)]' : 'text-[var(--ink-soft)]'}`}>
                 {listingTitle}
               </h3>
               {unread > 0 && (
-                <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full flex-shrink-0">
+                <span className="bg-[var(--gold)] text-[var(--ink)] text-xs font-bold px-2 py-0.5 rounded-full flex-shrink-0">
                   {unread === 1 ? '1 nuovo' : `${unread} nuovi`}
                 </span>
               )}
@@ -116,8 +116,8 @@ export default function ConversationItem({
             )}
           </div>
 
-          <p className="text-sm text-gray-600 mb-1">{otherUserName}</p>
-          <p className={`text-sm truncate ${unread > 0 ? 'text-gray-900 font-medium' : 'text-gray-500'}`}>
+          <p className="text-sm text-[var(--muted)] mb-1">{otherUserName}</p>
+          <p className={`text-sm truncate ${unread > 0 ? 'text-[var(--ink)] font-medium' : 'text-[var(--muted)]'}`}>
             {lastMessage}
           </p>
         </div>

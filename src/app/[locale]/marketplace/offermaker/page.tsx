@@ -25,40 +25,44 @@ export default async function OfferMakerPage() {
   const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<{ phone: string | null }>()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-purple-50">
-      <header className="bg-white shadow-sm border-b sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+    <div className="min-h-screen bg-[var(--background)]">
+      <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center gap-3">
           <ToolBackLink
-            className="flex items-center gap-2 text-gray-600 hover:text-violet-600 font-medium transition-colors"
+            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
             dashboardLabel={<><ArrowLeft className="w-5 h-5" /> {commonT('backToDashboard')}</>}
           >
             <ArrowLeft className="w-5 h-5" />
             {t('backToMarketplace')}
           </ToolBackLink>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             <Link
               href="/marketplace/offermaker/campaigns"
-              className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-violet-600 transition-colors"
+              className="flex items-center gap-2 text-sm font-medium text-white/80 hover:text-[var(--gold-bright)] transition-colors"
             >
               <ListChecks className="w-4 h-4" />
               {t('myCampaigns')}
             </Link>
-            <h1 className="flex items-center gap-2 text-lg font-semibold text-gray-800">
-              <Wand2 className="h-5 w-5 text-violet-600" />
+            <h1 className="flex items-center gap-2 font-semibold tracking-wide">
+              <Wand2 className="h-5 w-5 text-[var(--gold-bright)]" />
               {t('title')}
             </h1>
           </div>
         </div>
       </header>
 
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 bg-violet-100 text-violet-700 px-4 py-1.5 rounded-full text-sm font-medium mb-4">
-            <Sparkles className="w-4 h-4" />
-            {t('badge')}
+      <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div className="relative mb-8 overflow-hidden rounded-3xl bg-[var(--ink)] p-6 text-center text-white shadow-[0_14px_40px_rgba(23,23,23,0.25)] sm:p-8">
+          <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full border border-[var(--gold)]/25 bg-[var(--gold)]/10" />
+          <div className="pointer-events-none absolute -bottom-20 left-10 h-40 w-40 rounded-full border border-[var(--gold)]/15" />
+          <div className="relative">
+            <div className="inline-flex items-center gap-2 bg-[var(--gold)]/15 text-[var(--gold-bright)] px-4 py-1.5 rounded-full text-sm font-medium mb-4">
+              <Sparkles className="w-4 h-4" />
+              {t('badge')}
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-3">{t('heroTitle')}</h2>
+            <p className="text-white/70 max-w-2xl mx-auto text-base sm:text-lg">{t('heroDescription')}</p>
           </div>
-          <h2 className="text-4xl font-bold text-gray-900 mb-3">{t('heroTitle')}</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto text-lg">{t('heroDescription')}</p>
         </div>
 
         <OfferMakerWizard initialWhatsapp={profile?.phone || ''} />

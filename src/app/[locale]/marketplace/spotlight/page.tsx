@@ -37,7 +37,7 @@ export default async function SpotlightManagePage({ params }: { params: Promise<
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      <header className="sticky top-0 z-10 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
+      <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <Link href="/dashboard" className="flex items-center gap-2 text-sm font-medium text-white transition-colors hover:text-[var(--gold-bright)]">
             <ArrowLeft className="h-5 w-5" /> {t('backToDashboard')}
@@ -50,12 +50,16 @@ export default async function SpotlightManagePage({ params }: { params: Promise<
       </header>
 
       <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mx-auto mb-8 max-w-2xl text-center">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--gold)]/40 bg-[var(--gold-pale)] px-4 py-1.5 text-sm font-semibold text-[var(--ink)] shadow-sm">
-            <Sparkles className="h-4 w-4 text-[var(--gold)]" /> {t('eyebrow')}
+        <div className="relative mb-8 overflow-hidden rounded-3xl bg-[var(--ink)] p-6 text-center text-white shadow-[0_14px_40px_rgba(23,23,23,0.25)] sm:p-8">
+          <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full border border-[var(--gold)]/25 bg-[var(--gold)]/10" />
+          <div className="pointer-events-none absolute -bottom-20 left-10 h-40 w-40 rounded-full border border-[var(--gold)]/15" />
+          <div className="relative mx-auto max-w-2xl">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[var(--gold)]/15 px-4 py-1.5 text-sm font-semibold text-[var(--gold-bright)]">
+              <Sparkles className="h-4 w-4" /> {t('eyebrow')}
+            </div>
+            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{t('title')}</h1>
+            <p className="mt-4 text-base leading-7 text-white/70">{t('subtitle')}</p>
           </div>
-          <h1 className="text-3xl font-bold tracking-tight text-[var(--ink)] sm:text-4xl">{t('title')}</h1>
-          <p className="mt-4 text-base leading-7 text-[var(--muted)]">{t('subtitle')}</p>
         </div>
 
         {isTodaysKumano && (

@@ -7,7 +7,7 @@ import { Sheet } from '@/components/memolife/MemoLifeForms'
 import { createConvivio, searchSuppliers } from '@/app/actions/convivio'
 import { CONVIVIO_CATEGORIES, type SupplierSearchResult } from '@/lib/convivio'
 
-const input = 'w-full rounded-xl border border-gray-300 px-3 py-2.5 text-[15px] focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30'
+const input = 'w-full rounded-xl border border-[var(--gold)]/30 px-3 py-2.5 text-[15px] focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30'
 const label = 'mb-1 block text-sm font-semibold text-gray-700'
 
 // Nuovo Convivio. mode 'leader': il capocordata sceglie un fornitore esterno
@@ -124,7 +124,7 @@ export default function ConvivioCreateForm({
         ) : (
           <div>
             <label className={label}>{t('fieldSupplier')}</label>
-            <div className="mb-2 flex rounded-xl border border-gray-200 p-1">
+            <div className="mb-2 flex rounded-xl border border-[var(--gold)]/25 p-1">
               {(['external', 'kumani'] as const).map((m) => (
                 <button
                   key={m}
@@ -219,7 +219,7 @@ export default function ConvivioCreateForm({
           <textarea className={input} rows={2} maxLength={1000} value={form.pickup} required placeholder={t('fieldPickupPlaceholder')} onChange={(e) => setForm({ ...form, pickup: e.target.value })} />
           <p className="mt-1 text-xs text-gray-500">{mode === 'own' ? t('fieldPickupHintOwn') : t('fieldPickupHint')}</p>
         </div>
-        {mode === 'leader' && supplierMode === 'kumani' && <p className="rounded-xl bg-sky-50 px-3 py-2 text-xs text-sky-800">{t('supplierConfirmNote')}</p>}
+        {mode === 'leader' && supplierMode === 'kumani' && <p className="rounded-xl border border-[var(--gold)]/30 bg-[var(--gold-pale)]/60 px-3 py-2 text-xs text-[var(--ink)]">{t('supplierConfirmNote')}</p>}
         {error && <p className="text-sm font-semibold text-red-600">{error}</p>}
         <button type="submit" disabled={busy} className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-5 py-3 font-bold text-[var(--ink)] disabled:opacity-50">
           {busy && <LoaderCircle className="h-4 w-4 animate-spin" />} {mode === 'leader' && supplierMode === 'kumani' ? t('sendToSupplier') : t('publish')}

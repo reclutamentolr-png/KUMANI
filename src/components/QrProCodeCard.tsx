@@ -45,13 +45,13 @@ export default function QrProCodeCard({ qrCode }: { qrCode: QrCode }) {
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+    <div className="bg-white rounded-2xl border border-[var(--gold)]/25 shadow-sm p-5 transition-shadow hover:shadow-md flex flex-col sm:flex-row sm:items-center gap-4">
       <div className="flex items-center gap-3 flex-1 min-w-0">
         <div className="shrink-0 w-10 h-10 rounded-lg bg-[var(--gold-pale)] text-[var(--gold)] flex items-center justify-center">
           <Icon className="w-5 h-5" />
         </div>
         <div className="min-w-0">
-          <h3 className="font-semibold text-gray-900 truncate">{qrCode.label}</h3>
+          <h3 className="font-semibold text-[var(--ink)] truncate">{qrCode.label}</h3>
           <p className="text-xs text-gray-500">
             {t(`type_${qrCode.content_type}`)} · {t('createdOn')} {new Date(qrCode.created_at).toLocaleDateString()}
           </p>
@@ -59,14 +59,14 @@ export default function QrProCodeCard({ qrCode }: { qrCode: QrCode }) {
       </div>
 
       <div className="flex items-center gap-1 text-sm text-gray-600 shrink-0">
-        <MousePointerClick className="w-4 h-4" />
+        <MousePointerClick className="w-4 h-4 text-[var(--gold)]" />
         {qrCode.click_count} {t('clicks')}
       </div>
 
       <div className="flex items-center gap-2 shrink-0">
         <Link
           href={`/marketplace/qr-code-pro/${qrCode.id}`}
-          className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium bg-[var(--gold-pale)] text-[var(--ink)] hover:bg-[var(--gold-pale)]/70 transition-all"
+          className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium bg-[var(--ink)] text-white hover:bg-[var(--ink-soft)] transition-all"
         >
           <Pencil className="w-4 h-4" />
           {t('edit')}

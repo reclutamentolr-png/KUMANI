@@ -33,11 +33,11 @@ export default async function LinkInBioPage({ params }: { params: Promise<{ loca
 
   if (!profile.referral_code) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col">
-        <header className="border-b border-[var(--gold)]/25 bg-[var(--ink)] shadow-sm">
+      <div className="min-h-screen bg-[var(--background)] flex flex-col">
+        <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <ToolBackLink
-              className="flex items-center gap-2 text-white hover:text-[var(--gold-bright)] transition-colors font-medium"
+              className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
               dashboardLabel={<><ArrowLeft className="w-5 h-5" /> {commonT('backToDashboard')}</>}
             >
               <ArrowLeft className="w-5 h-5" /> {t('backToMarketplace')}
@@ -48,7 +48,7 @@ export default async function LinkInBioPage({ params }: { params: Promise<{ loca
           <div className="bg-[var(--gold-pale)] border border-[var(--gold)]/40 rounded-2xl p-8 max-w-md text-center">
             <AlertTriangle className="w-12 h-12 text-[var(--gold)] mx-auto mb-4" />
             <h2 className="text-xl font-bold text-[var(--ink)] mb-2">{t('referralCodeMissing')}</h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-[var(--muted)] mb-6">
               {t('referralCodeNeeded')}
             </p>
             <Link
@@ -68,11 +68,11 @@ export default async function LinkInBioPage({ params }: { params: Promise<{ loca
   const bioUrl = `${baseUrl}/${locale}/ref/${profile.referral_code}/bio`
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[var(--gold-pale)]">
-      <header className="border-b border-[var(--gold)]/25 bg-[var(--ink)] sticky top-0 z-10 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+    <div className="min-h-screen bg-[var(--background)]">
+      <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
           <ToolBackLink
-            className="flex items-center gap-2 text-white hover:text-[var(--gold-bright)] transition-colors font-medium"
+            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
             dashboardLabel={<><ArrowLeft className="w-5 h-5" /> {commonT('backToDashboard')}</>}
           >
             <ArrowLeft className="w-5 h-5" />
@@ -80,23 +80,27 @@ export default async function LinkInBioPage({ params }: { params: Promise<{ loca
           </ToolBackLink>
           <div className="flex items-center gap-2">
             <Link2 className="w-5 h-5 text-[var(--gold-bright)]" />
-            <h1 className="text-xl font-bold text-white">{t('linkInBio')}</h1>
+            <h1 className="font-semibold tracking-wide">{t('linkInBio')}</h1>
           </div>
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 bg-[var(--gold-pale)] text-[var(--ink)] px-4 py-1.5 rounded-full text-sm font-medium mb-4">
-            <Sparkles className="w-4 h-4 text-[var(--gold)]" />
-            {t('linkInBioIntro')}
+      <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="relative mb-8 overflow-hidden rounded-3xl bg-[var(--ink)] p-6 text-white shadow-[0_14px_40px_rgba(23,23,23,0.25)] sm:p-8">
+          <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full border border-[var(--gold)]/25 bg-[var(--gold)]/10" />
+          <div className="pointer-events-none absolute -bottom-20 right-24 h-40 w-40 rounded-full border border-[var(--gold)]/15" />
+          <div className="relative max-w-2xl">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[var(--gold)]/15 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[var(--gold-bright)]">
+              <Sparkles className="w-4 h-4" />
+              {t('linkInBioIntro')}
+            </div>
+            <h2 className="text-3xl font-bold sm:text-4xl">
+              {t('linkInBioSubtitle')}
+            </h2>
+            <p className="mt-2 text-white/70 sm:text-lg">
+              {t('linkInBioDesc')}
+            </p>
           </div>
-          <h2 className="text-4xl font-bold text-gray-900 mb-3">
-            {t('linkInBioSubtitle')}
-          </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-            {t('linkInBioDesc')}
-          </p>
         </div>
 
         {/* Editor reale + anteprima live (la stessa istanza di stato guida
@@ -105,8 +109,8 @@ export default async function LinkInBioPage({ params }: { params: Promise<{ loca
         <LinkInBioEditor userId={user.id} firstName={profile.first_name} lastName={profile.last_name} />
 
         {/* URL della Bio con pulsante copia */}
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 mb-8">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+        <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 mb-8">
+          <label className="block text-sm font-semibold text-[var(--ink)] mb-2">
             {t('linkInBio')} ({t('savePrompt')})
           </label>
           <div className="flex flex-col sm:flex-row gap-2">
@@ -114,7 +118,7 @@ export default async function LinkInBioPage({ params }: { params: Promise<{ loca
               type="text"
               readOnly
               value={bioUrl}
-              className="flex-1 bg-gray-50 border border-gray-300 rounded-lg px-4 py-3 text-sm font-mono text-gray-700 focus:outline-none"
+              className="min-w-0 flex-1 bg-[var(--paper)] border border-[var(--gold)]/25 rounded-lg px-4 py-3 text-sm font-mono text-[var(--ink)] focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30"
             />
             <CopyLinkButton url={bioUrl} colorClassName="bg-[var(--ink)] hover:bg-[var(--ink-soft)] text-white" />
           </div>
@@ -126,12 +130,12 @@ export default async function LinkInBioPage({ params }: { params: Promise<{ loca
             href={bioUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-[var(--gold)] hover:bg-[var(--gold-bright)] text-[var(--ink)] px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
           >
             <ExternalLink className="w-5 h-5" />
             {t('visitBio')}
           </a>
-          <p className="text-sm text-gray-500 mt-3">{t('savePrompt')}</p>
+          <p className="text-sm text-[var(--muted)] mt-3">{t('savePrompt')}</p>
         </div>
       </main>
     </div>

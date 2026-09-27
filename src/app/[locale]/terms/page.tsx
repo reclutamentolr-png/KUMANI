@@ -67,7 +67,7 @@ export default function TermsPage() {
             <li><a href="#sez-10" className="hover:underline">10. Limitazioni di responsabilità</a></li>
             <li><a href="#sez-11" className="hover:underline">11. Modifiche, manutenzione e continuità</a></li>
             <li><a href="#sez-12" className="hover:underline">12. Recesso, sospensione e chiusura</a></li>
-            <li><a href="#sez-13" className="hover:underline">13. Legge applicabile e foro competente</a></li>
+            <li><a href="#sez-13" className="hover:underline">13. Legge applicabile, foro e utilizzo fuori dall&apos;Italia</a></li>
             <li><a href="#sez-14" className="hover:underline">14. Contatti</a></li>
           </ol>
         </nav>
@@ -96,6 +96,9 @@ export default function TermsPage() {
               <p>
                 L&apos;accesso ai servizi riservati richiede la creazione di un account con dati reali, aggiornati e completi.
                 È consentito un solo account per persona: la creazione di account multipli o falsi costituisce violazione grave dei Termini.
+                Per continuare a usare la Piattaforma è necessario completare il profilo; una volta completato, i dati anagrafici
+                (nome, cognome, data di nascita, recapiti e residenza, professione) possono essere modificati solo tramite richiesta
+                motivata dal proprio profilo, esaminata dallo Staff, a tutela della sicurezza della community.
               </p>
               <p>
                 L&apos;utente è responsabile della custodia delle proprie credenziali e di tutte le attività svolte con il proprio account.
@@ -147,6 +150,25 @@ export default function TermsPage() {
                 dell&apos;evento, calcolata sul prezzo dichiarato per il numero di iscritti; finché la commissione non è pagata
                 l&apos;organizzatore non può pubblicare nuovi eventi. Gli importi inferiori al minimo pagabile con carta si sommano ai
                 successivi. I dati degli iscritti sono visibili solo all&apos;organizzatore e usati solo per la gestione dell&apos;evento.
+                Dopo l&apos;evento i partecipanti possono lasciare una recensione (voto e commento, pubblicati con il solo nome):
+                la media delle recensioni e lo storico degli eventi determinano il livello dell&apos;organizzatore, che può anche
+                essere ridotto in caso di valutazioni basse o eventi rimossi dallo Staff. Quando l&apos;organizzatore usa il check-in,
+                le assenze degli iscritti sono registrate e mostrate agli organizzatori dei loro eventi successivi.
+              </p>
+              <p>
+                <strong className="text-gray-900">Acquisti di gruppo (Kordata).</strong> Le Kordate sono proposte da utenti verificati
+                (capocordata) e il pagamento avviene direttamente tra partecipanti e fornitore: la Piattaforma non incassa somme per
+                conto terzi. Quando una Kordata con un fornitore professionista iscritto alla Piattaforma diventa &ldquo;ordinata&rdquo;,
+                la Piattaforma applica al fornitore una commissione di gestione pari alla percentuale comunicata al momento della sua
+                accettazione, calcolata sul prezzo di gruppo per le quantità prenotate; finché la commissione non è pagata il fornitore
+                non può accettare nuove Kordate. Gli importi inferiori al minimo pagabile con carta si sommano ai successivi.
+              </p>
+              <p>
+                <strong className="text-gray-900">Verifica dell&apos;identità.</strong> Per proporre Kordate od organizzare eventi è
+                richiesta un&apos;identità verificata: tramite codice fiscale italiano oppure tramite un documento d&apos;identità
+                (passaporto, carta d&apos;identità, patente o permesso di soggiorno) esaminato dallo Staff. L&apos;immagine del documento
+                è conservata in un archivio privato, è visibile solo allo Staff incaricato e viene cancellata subito dopo la verifica:
+                la Piattaforma conserva soltanto l&apos;esito (approvata o respinta), il tipo di documento e il paese di rilascio.
               </p>
               <p>
                 I servizi sono forniti nello stato in cui si trovano e secondo disponibilità. La Piattaforma non costituisce proposta di
@@ -315,12 +337,29 @@ export default function TermsPage() {
 
           {/* 13 */}
           <section id="sez-13" className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 scroll-mt-24">
-            <h2 className="text-xl font-bold text-gray-900 mb-3">13. Legge applicabile e foro competente</h2>
-            <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
+            <h2 className="text-xl font-bold text-gray-900 mb-3">13. Legge applicabile, foro e utilizzo fuori dall&apos;Italia</h2>
+            <div className="text-gray-600 space-y-3 text-sm sm:text-base leading-relaxed">
+            <p>
               I presenti Termini sono regolati dalla legge italiana. Per le controversie con utenti consumatori è competente
               il foro previsto inderogabilmente dalla legge; per gli altri utenti, il foro del luogo di stabilimento del gestore della Piattaforma.
               È fatta salva la possibilità di ricorrere a procedure di risoluzione alternativa delle controversie (ADR/ODR).
+              Restano comunque applicabili le norme inderogabili a tutela dei consumatori del Paese di residenza dell&apos;utente.
             </p>
+            <p>
+              La Piattaforma nasce in Italia e alcune funzionalità sono progettate secondo la normativa italiana: la verifica
+              dell&apos;identità tramite codice fiscale, i riferimenti fiscali di preventivi e ricevute digitali, il Programma
+              Vantaggi (inquadrato secondo la disciplina italiana delle manifestazioni a premio), gli acquisti di gruppo (Kordata)
+              e gli eventi con pagamento sul posto. Negli altri Paesi, dove vigono leggi diverse (ad esempio su tutela dei
+              consumatori, promozioni a premi, eventi, fatturazione, strumenti legati al benessere e alla salute, età minima),
+              alcune funzionalità potrebbero essere ridotte, modificate, richiedere verifiche diverse o non essere disponibili.
+            </p>
+            <p>
+              L&apos;utente che utilizza la Piattaforma fuori dall&apos;Italia è tenuto a rispettare le norme del proprio Paese,
+              in particolare quando vende beni o servizi (fornitori Kordata, organizzatori di eventi, professionisti) e per i
+              relativi adempimenti fiscali. La Piattaforma può limitare l&apos;accesso a singole funzionalità in determinati Paesi
+              quando ciò sia necessario per rispettare la normativa locale.
+            </p>
+            </div>
           </section>
 
           {/* 14 */}

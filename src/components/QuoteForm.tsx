@@ -140,14 +140,14 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData 
     <>
     <div className="space-y-6">
       {/* Issuer block — read-only, edited only from its own page */}
-      <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 flex items-center justify-between gap-4 flex-wrap">
+      <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-4">
           {logoUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={logoUrl} alt="" className="w-14 h-14 rounded-lg object-contain border border-gray-100 bg-gray-50 p-1" />
+            <img src={logoUrl} alt="" className="w-14 h-14 rounded-lg object-contain border border-[var(--gold)]/20 bg-[var(--background)] p-1" />
           ) : null}
           <div>
-            <p className="font-bold text-gray-900">{issuer?.company_name || t('businessProfileMissing')}</p>
+            <p className="font-bold text-[var(--ink)]">{issuer?.company_name || t('businessProfileMissing')}</p>
             {issuer?.vat_number && <p className="text-xs text-gray-500">{issuer.vat_number}</p>}
           </div>
         </div>
@@ -160,13 +160,13 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData 
         </Link>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 sm:p-8 space-y-6">
+      <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8 space-y-6">
         <div>
           <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
-            <h3 className="font-bold text-gray-900">{t('clientSectionTitle')}</h3>
+            <h3 className="font-bold text-[var(--ink)]">{t('clientSectionTitle')}</h3>
             {savedClients.length > 0 && (
               <div className="flex items-center gap-2">
-                <User className="w-4 h-4 text-gray-400" />
+                <User className="w-4 h-4 text-[var(--gold)]" />
                 <select
                   value={selectedClientId}
                   onChange={(e) => handleSelectSavedClient(e.target.value)}
@@ -199,7 +199,7 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData 
                 type="text"
                 value={form.clientName}
                 onChange={(e) => setForm((prev) => ({ ...prev, clientName: e.target.value }))}
-                className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] text-sm"
+                className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
               />
             </div>
             <div>
@@ -208,7 +208,7 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData 
                 type="text"
                 value={form.clientVat}
                 onChange={(e) => setForm((prev) => ({ ...prev, clientVat: e.target.value }))}
-                className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] text-sm"
+                className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
               />
             </div>
             <div>
@@ -217,7 +217,7 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData 
                 type="email"
                 value={form.clientPec}
                 onChange={(e) => setForm((prev) => ({ ...prev, clientPec: e.target.value }))}
-                className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] text-sm"
+                className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
               />
             </div>
             <div className="sm:col-span-2">
@@ -226,7 +226,7 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData 
                 type="text"
                 value={form.clientAddress}
                 onChange={(e) => setForm((prev) => ({ ...prev, clientAddress: e.target.value }))}
-                className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] text-sm"
+                className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
               />
             </div>
             <div>
@@ -235,7 +235,7 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData 
                 type="text"
                 value={form.clientCity}
                 onChange={(e) => setForm((prev) => ({ ...prev, clientCity: e.target.value }))}
-                className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] text-sm"
+                className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
               />
             </div>
             <div>
@@ -244,7 +244,7 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData 
                 type="text"
                 value={form.clientPostalCode}
                 onChange={(e) => setForm((prev) => ({ ...prev, clientPostalCode: e.target.value }))}
-                className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] text-sm"
+                className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
               />
             </div>
             <div>
@@ -253,7 +253,7 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData 
                 type="email"
                 value={form.clientEmail}
                 onChange={(e) => setForm((prev) => ({ ...prev, clientEmail: e.target.value }))}
-                className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] text-sm"
+                className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
               />
             </div>
             <div>
@@ -262,20 +262,20 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData 
                 type="text"
                 value={form.clientPhone}
                 onChange={(e) => setForm((prev) => ({ ...prev, clientPhone: e.target.value }))}
-                className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] text-sm"
+                className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
               />
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-gray-100 pt-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-[var(--gold)]/15 pt-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">{t('issueDateField')}</label>
             <input
               type="date"
               value={form.issueDate}
               onChange={(e) => setForm((prev) => ({ ...prev, issueDate: e.target.value }))}
-              className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] text-sm"
+              className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
             />
           </div>
           <div>
@@ -284,13 +284,13 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData 
               type="date"
               value={form.validUntil}
               onChange={(e) => setForm((prev) => ({ ...prev, validUntil: e.target.value }))}
-              className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] text-sm"
+              className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
             />
           </div>
         </div>
 
-        <div className="border-t border-gray-100 pt-6">
-          <h3 className="font-bold text-gray-900 mb-4">{t('itemsSectionTitle')}</h3>
+        <div className="border-t border-[var(--gold)]/15 pt-6">
+          <h3 className="font-bold text-[var(--ink)] mb-4">{t('itemsSectionTitle')}</h3>
           <div className="space-y-3">
             {form.items.map((item, index) => (
               <div key={index} className="grid grid-cols-12 gap-2 items-start">
@@ -299,7 +299,7 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData 
                   value={item.description}
                   onChange={(e) => updateItem(index, { description: e.target.value })}
                   placeholder={t('itemDescriptionPlaceholder')}
-                  className="col-span-6 px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] text-sm"
+                  className="col-span-6 px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
                 />
                 <input
                   type="number"
@@ -308,7 +308,7 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData 
                   value={item.quantity}
                   onChange={(e) => updateItem(index, { quantity: Number(e.target.value) || 0 })}
                   placeholder={t('itemQuantityPlaceholder')}
-                  className="col-span-2 px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] text-sm"
+                  className="col-span-2 px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
                 />
                 <input
                   type="number"
@@ -317,7 +317,7 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData 
                   value={item.unitPrice}
                   onChange={(e) => updateItem(index, { unitPrice: Number(e.target.value) || 0 })}
                   placeholder={t('itemPricePlaceholder')}
-                  className="col-span-3 px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] text-sm"
+                  className="col-span-3 px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
                 />
                 <button
                   type="button"
@@ -349,7 +349,7 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData 
           </div>
         </div>
 
-        <div className="border-t border-gray-100 pt-6">
+        <div className="border-t border-[var(--gold)]/15 pt-6">
           <label className="block text-sm font-medium text-gray-700 mb-1">{t('paymentInfoField')}</label>
           <p className="text-xs text-gray-400 mb-2">{t('paymentInfoHint')}</p>
           <textarea
@@ -357,17 +357,17 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData 
             onChange={(e) => setForm((prev) => ({ ...prev, paymentInfo: e.target.value }))}
             placeholder={t('paymentInfoPlaceholder')}
             rows={3}
-            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] text-sm"
+            className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
           />
         </div>
 
-        <div className="border-t border-gray-100 pt-6">
+        <div className="border-t border-[var(--gold)]/15 pt-6">
           <label className="block text-sm font-medium text-gray-700 mb-1">{t('notesField')}</label>
           <textarea
             value={form.notes}
             onChange={(e) => setForm((prev) => ({ ...prev, notes: e.target.value }))}
             rows={3}
-            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)] text-sm"
+            className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
           />
         </div>
 
@@ -382,14 +382,14 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData 
         <button
           type="button"
           onClick={() => router.back()}
-          className="px-6 py-3 rounded-xl font-semibold text-sm bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all"
+          className="px-6 py-3 rounded-xl font-semibold text-sm border border-[var(--gold)]/40 bg-white text-[var(--ink)] hover:bg-[var(--gold-pale)] transition-all"
         >
           {t('cancelAction')}
         </button>
         <button
           onClick={handleSubmit}
           disabled={!isValid || saving}
-          className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-[var(--ink)] hover:bg-[var(--ink-soft)] text-white rounded-xl font-semibold transition-all disabled:opacity-50"
+          className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] rounded-xl font-bold shadow-md hover:brightness-105 transition-all disabled:opacity-50"
         >
           {saving ? (
             <>
