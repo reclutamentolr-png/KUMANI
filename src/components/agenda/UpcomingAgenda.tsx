@@ -62,6 +62,16 @@ export default function UpcomingAgenda({ events, today, sources }: { events: Age
   const rangeLabel = `${new Date(`${start}T12:00:00Z`).toLocaleDateString(locale, { day: 'numeric', month: 'short', timeZone: 'UTC' })} – ${new Date(
     `${end}T12:00:00Z`
   ).toLocaleDateString(locale, { day: 'numeric', month: 'short', timeZone: 'UTC' })}`
+  // Mese (o mesi) della settimana mostrata, es. "Settembre 2026" oppure
+  // "Settembre – Ottobre 2026": senza, dai soli numeri non si capisce il mese.
+  const monthOf = (key: string, withYear: boolean) =>
+    new Date(`${key}T12:00:00Z`).toLocaleDateString(locale, { month: 'long', ...(withYear ? { year: 'numeric' } : {}), timeZone: 'UTC' })
+  const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1)
+  const sameMonth = start.slice(0, 7) === end.slice(0, 7)
+  const sameYear = start.slice(0, 4) === end.slice(0, 4)
+  const monthLabel = sameMonth
+    ? capitalize(monthOf(start, true))
+    : `${capitalize(monthOf(start, !sameYear))} – ${capitalize(monthOf(end, true))}`
   const shown = list.slice(0, MAX_ROWS)
 
   return (
@@ -87,15 +97,20 @@ export default function UpcomingAgenda({ events, today, sources }: { events: Age
         <button type="button" onClick={() => moveWeek(-1)} className="rounded-lg p-1.5 text-[var(--muted)] hover:bg-gray-100 hover:text-[var(--ink)]" aria-label={t('previousWeek')}>
           <ChevronLeft className="h-5 w-5" />
         </button>
-        <span className="flex items-center gap-2 text-sm font-semibold text-[var(--ink)]">
-          {loading && <LoaderCircle className="h-4 w-4 animate-spin text-[var(--gold)]" />}
-          {week === 0 ? t('thisWeek') : rangeLabel}
-          {week !== 0 && (
-            <button type="button" onClick={() => moveWeek(-week)} className="text-xs font-semibold text-[var(--gold)] hover:underline">
-              {t('goToday')}
-            </button>
-          )}
-        </span>
+        <div className="flex flex-col items-center text-center">
+          <span className="flex items-center gap-2 text-base font-bold text-[var(--ink)]">
+            {loading && <LoaderCircle className="h-4 w-4 animate-spin text-[var(--gold)]" />}
+            {monthLabel}
+          </span>
+          <span className="flex items-center gap-2 text-xs font-medium text-[var(--muted)]">
+            {week === 0 ? t('thisWeek') : rangeLabel}
+            {week !== 0 && (
+              <button type="button" onClick={() => moveWeek(-week)} className="font-semibold text-[var(--gold)] hover:underline">
+                {t('goToday')}
+              </button>
+            )}
+          </span>
+        </div>
         <button type="button" onClick={() => moveWeek(1)} className="rounded-lg p-1.5 text-[var(--muted)] hover:bg-gray-100 hover:text-[var(--ink)]" aria-label={t('nextWeek')}>
           <ChevronRight className="h-5 w-5" />
         </button>
@@ -122,6 +137,12 @@ export default function UpcomingAgenda({ events, today, sources }: { events: Age
                 {d.toLocaleDateString(locale, { weekday: 'short', timeZone: 'UTC' })}
               </span>
               <span className="text-base font-bold">{d.getUTCDate()}</span>
+              {/* Primo giorno di un nuovo mese dentro la settimana: sigla del mese */}
+              {d.getUTCDate() === 1 && (
+                <span className={`-mt-0.5 text-[9px] font-bold uppercase ${isSelected ? 'text-[var(--gold-bright)]' : 'text-[var(--gold)]'}`}>
+                  {d.toLocaleDateString(locale, { month: 'short', timeZone: 'UTC' })}
+                </span>
+              )}
               <span className="mt-0.5 flex h-1.5 gap-0.5">
                 {kinds.map((kind) => (
                   <span key={kind} className={`h-1.5 w-1.5 rounded-full ${KIND_COLOR[kind]}`} />

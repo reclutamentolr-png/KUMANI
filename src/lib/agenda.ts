@@ -6,7 +6,7 @@
 
 export const AGENDA_TIMEZONE = 'Europe/Rome'
 
-export type AgendaKind = 'appointment' | 'task' | 'bill' | 'deadline'
+export type AgendaKind = 'appointment' | 'task' | 'bill' | 'deadline' | 'trip' | 'event'
 
 export type AgendaEvent = {
   key: string
@@ -22,6 +22,10 @@ export type AgendaEvent = {
   note?: string | null
   priority?: string | null
   recurring?: boolean
+  // KUMANI Travel: partenza o rientro del viaggio (refId = id del viaggio)
+  tripEdge?: 'start' | 'end'
+  // KUMANI Events: l'utente è l'organizzatore (refId = id dell'evento)
+  organizing?: boolean
 }
 
 // Giorno di calendario a Roma di un istante ('2026-10-16').
@@ -75,7 +79,7 @@ export function romeToInstant(date: string, time: string): string {
 }
 
 export function sortAgenda(events: AgendaEvent[]): AgendaEvent[] {
-  const order: Record<AgendaKind, number> = { bill: 0, deadline: 1, task: 2, appointment: 3 }
+  const order: Record<AgendaKind, number> = { trip: -1, bill: 0, deadline: 1, task: 2, appointment: 3, event: 3 }
   return [...events].sort(
     (a, b) => a.date.localeCompare(b.date) || (a.time ?? '').localeCompare(b.time ?? '') || order[a.kind] - order[b.kind]
   )
@@ -85,7 +89,7 @@ export type AgendaStatus = 'overdue' | 'today' | 'soon' | 'later' | 'done'
 
 export function agendaStatus(event: AgendaEvent, today: string): AgendaStatus {
   if (event.done) return 'done'
-  if (event.date < today) return event.kind === 'appointment' ? 'done' : 'overdue'
+  if (event.date < today) return event.kind === 'appointment' || event.kind === 'trip' || event.kind === 'event' ? 'done' : 'overdue'
   if (event.date === today) return 'today'
   return daysBetween(today, event.date) <= 3 ? 'soon' : 'later'
 }

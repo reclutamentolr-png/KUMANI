@@ -121,7 +121,21 @@ export default function ConvivioHome({
   )
 }
 
-function LeaderSetup({ status, onClose, onDone }: { status: ConvivioLeaderStatus; onClose: () => void; onDone: () => void }) {
+// Esportato anche per KUMANI Events (stessa verifica "Kumano Verificato"):
+// title e intro facoltativi sostituiscono titolo e introduzione.
+export function LeaderSetup({
+  status,
+  onClose,
+  onDone,
+  title,
+  intro,
+}: {
+  status: ConvivioLeaderStatus
+  onClose: () => void
+  onDone: () => void
+  title?: string
+  intro?: string
+}) {
   const t = useTranslations('convivio')
   const [taxCode, setTaxCode] = useState('')
   const [terms, setTerms] = useState(false)
@@ -165,8 +179,8 @@ function LeaderSetup({ status, onClose, onDone }: { status: ConvivioLeaderStatus
   }
 
   return (
-    <Sheet title={t('setupTitle')} onClose={onClose}>
-      <p className="mb-4 text-sm text-gray-600">{t('setupIntro')}</p>
+    <Sheet title={title ?? t('setupTitle')} onClose={onClose}>
+      <p className="mb-4 text-sm text-gray-600">{intro ?? t('setupIntro')}</p>
       <ul className="mb-5 space-y-2">
         {checks.map((c) => (
           <li key={c.key} className="flex items-start gap-2 text-sm">

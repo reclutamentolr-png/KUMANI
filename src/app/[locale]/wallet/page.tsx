@@ -17,6 +17,7 @@ import {
   ArrowRight,
   BadgeCheck,
   Network,
+  PartyPopper,
 } from 'lucide-react'
 import { fetchDirectSponsored } from '@/lib/directAffiliates'
 import { isActiveSubscription } from '@/lib/subscriptionGate'
@@ -27,6 +28,8 @@ import WalletCouponsList from '@/components/WalletCouponsList'
 import WalletVoucherSection from '@/components/WalletVoucherSection'
 import KuRewardsSection from '@/components/ku/KuRewardsSection'
 import { loadKuWalletData } from '@/lib/ku-server'
+import { listMyPasses } from '@/app/actions/events'
+import { EVENT_TYPE_EMOJI, formatEventDate } from '@/lib/events'
 
 function WalletSection({
   icon,
@@ -96,6 +99,13 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
 
   const couponsList = coupons || []
   const myVouchers = await listMyVouchers()
+  const eventPasses = await listMyPasses()
+
+  // Piano effettivo (la prova Pro conta come Pro): stesso calcolo degli strumenti.
+  const { data: plan } = await supabase.rpc('my_plan')
+  const onProTrial =
+    plan === 'pro' && profile.pro_trial_ends_at && new Date(profile.pro_trial_ends_at).getTime() > new Date().getTime() && profile.subscription_plan !== 'pro'
+  const planName = plan === 'pro' ? (onProTrial ? t('planProTrial') : t('planPro')) : plan === 'base' ? t('planBase') : null
 
   const baseUrl = SITE_URL
   const referralUrl = `${baseUrl}/${locale}/ref/${profile.referral_code}`
@@ -131,10 +141,44 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
             lastName={profile.last_name}
             memberId={profile.referral_code}
             memberSince={memberSince}
-            planLabel={profile.subscription_status === 'active' ? td('subscriptionActive') : td('freePlan')}
+            planLabel={planName ? td('subscriptionActive') : td('freePlan')}
+            planName={planName}
             rankLabel={currentRank ? td(currentRank.labelKey) : null}
             qrUrl={referralUrl}
           />
+        </WalletSection>
+
+        {/* Pass degli eventi a cui sono iscritto (il QR si apre nella pagina dell'evento) */}
+        <WalletSection icon={<PartyPopper className="h-5 w-5 text-[var(--gold)]" />} title={t('eventPassesTitle')}>
+          {eventPasses.length === 0 ? (
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <p className="text-sm text-[var(--muted)]">{t('eventPassesEmpty')}</p>
+              <Link href="/events" className="rounded-lg bg-[var(--ink)] px-3 py-2 text-sm font-semibold text-white">
+                {t('eventPassesCta')}
+              </Link>
+            </div>
+          ) : (
+            <ul className="space-y-2">
+              {eventPasses.map((pass) => (
+                <li key={pass.id}>
+                  <Link
+                    href={`/events/${pass.id}`}
+                    className="flex items-center gap-3 rounded-xl border border-[var(--gold)]/25 bg-white px-4 py-3 transition-colors hover:border-[var(--gold)]"
+                  >
+                    <span className="text-2xl">{EVENT_TYPE_EMOJI[pass.type]}</span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate font-semibold text-[var(--ink)]">{pass.title}</span>
+                      <span className="block truncate text-xs text-[var(--muted)]">
+                        {formatEventDate(pass.starts_at, pass.timezone, locale)}
+                        {pass.city ? ` · ${pass.city}` : ''}
+                      </span>
+                    </span>
+                    <span className="shrink-0 rounded-lg bg-[var(--gold)] px-2.5 py-1 text-xs font-bold text-[var(--ink)]">{t('eventPassShow')}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
         </WalletSection>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">

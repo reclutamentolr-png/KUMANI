@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
 import { getStripe } from '@/lib/stripe'
+import { markEventFeesPaid } from '@/lib/eventFees'
 
 // Creato alla richiesta e non al caricamento del modulo: così `next build`
 // non fallisce se le variabili d'ambiente non sono disponibili in build.
@@ -26,6 +27,18 @@ export async function POST(req: NextRequest) {
   } catch (err: any) {
     console.error('❌ Errore verifica webhook (firma sbagliata?):', err.message)
     return NextResponse.json({ error: err.message }, { status: 400 })
+  }
+
+  // KUMANI Events: pagamento delle commissioni. Gestito a parte e mai come
+  // abbonamento (i suoi metadati non hanno userId).
+  if (event.type === 'checkout.session.completed' && (event.data.object as Stripe.Checkout.Session).metadata?.type === 'event_fee') {
+    try {
+      await markEventFeesPaid((event.data.object as Stripe.Checkout.Session).id)
+      return NextResponse.json({ received: true })
+    } catch (err) {
+      console.error('❌ Commissioni Events non aggiornate:', err instanceof Error ? err.message : err)
+      return NextResponse.json({ error: 'db_update_failed' }, { status: 500 })
+    }
   }
 
   if (event.type === 'checkout.session.completed') {

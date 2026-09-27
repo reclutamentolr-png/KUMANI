@@ -53,8 +53,10 @@ import { SPOTLIGHT_HOME_MIN_POOL } from '@/lib/spotlight'
 import KuManagementPanel from '@/components/admin/KuManagementPanel'
 import AffinityReportsPanel from '@/components/admin/AffinityReportsPanel'
 import ConvivioReportsPanel from '@/components/admin/ConvivioReportsPanel'
+import EventsAdminPanel from '@/components/admin/EventsAdminPanel'
 import {
   LayoutDashboard,
+  CalendarDays,
   Star,
   Coins,
   Users,
@@ -930,11 +932,12 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
   { id: 'overview', label: 'Panoramica', Icon: LayoutDashboard, permission: 'stats.read' as Permission },
   { id: 'users', label: 'Utenti', Icon: Users, permission: 'users.read' as Permission },
   { id: 'matrix', label: 'Matrice', Icon: GitBranch, permission: 'matrix.read' as Permission },
-  { id: 'marketplace', label: 'Marketplace', Icon: ShoppingBag, permission: 'marketplace.read' as Permission },
+  { id: 'marketplace', label: 'Ecosistema (strumenti)', Icon: ShoppingBag, permission: 'marketplace.read' as Permission },
   { id: 'listingReports', label: 'Bacheca', Icon: Flag, permission: 'listings.read' as Permission },
   { id: 'spotlight', label: 'Kumano del Giorno', Icon: Star, permission: 'listings.read' as Permission },
   { id: 'affinity', label: 'Affinity', Icon: Flag, permission: 'listings.read' as Permission },
   { id: 'convivio', label: 'Kordata', Icon: Flag, permission: 'listings.read' as Permission },
+  { id: 'events', label: 'Eventi', Icon: CalendarDays, permission: 'listings.read' as Permission },
   { id: 'coupons', label: 'Coupon', Icon: Ticket, permission: 'coupons.read' as Permission },
   { id: 'vouchers', label: 'Voucher', Icon: BadgeCheck, permission: 'vouchers.read' as Permission },
   { id: 'rewards', label: 'Premi', Icon: Gift, permission: 'rewards.read' as Permission },
@@ -1635,7 +1638,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-2">Descrizione (opzionale)</label>
               <textarea
-                placeholder="Es. Valido su un ordine dal Marketplace"
+                placeholder="Es. Valido su uno strumento dell'Ecosistema"
                 value={couponForm.description}
                 onChange={(e) => setCouponForm({ ...couponForm, description: e.target.value })}
                 className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none h-20"
@@ -2825,6 +2828,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
         {activeSection === 'kuManagement' && <KuManagementPanel />}
         {activeSection === 'affinity' && <AffinityReportsPanel />}
         {activeSection === 'convivio' && <ConvivioReportsPanel locale={locale} />}
+        {activeSection === 'events' && <EventsAdminPanel locale={locale} />}
         {activeSection === 'settings' && renderSettings()}
       </div>
 

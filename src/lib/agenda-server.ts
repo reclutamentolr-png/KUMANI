@@ -146,6 +146,65 @@ export async function loadAgenda(supabase: SupabaseClient, userId: string, optio
     )
   }
 
+  // KUMANI Travel: partenza e rientro dei viaggi di cui si fa parte (anche
+  // senza abbonamento: le RLS mostrano solo i viaggi dei membri).
+  jobs.push(
+    (async () => {
+      const { data } = await supabase
+        .from('trips')
+        .select('id, title, starts_on, ends_on, cover_emoji')
+        .not('starts_on', 'is', null)
+        .lte('starts_on', to)
+        .gte('ends_on', from)
+      for (const trip of data ?? []) {
+        const title = `${trip.cover_emoji} ${trip.title}`
+        const start = trip.starts_on as string
+        const end = (trip.ends_on as string | null) ?? start
+        if (start >= from && start <= to) {
+          events.push({ key: `trip:${trip.id}:start`, kind: 'trip', date: start, time: null, title, amount: null, done: false, refId: trip.id, tripEdge: 'start' })
+        }
+        if (end !== start && end >= from && end <= to) {
+          events.push({ key: `trip:${trip.id}:end`, kind: 'trip', date: end, time: null, title, amount: null, done: false, refId: trip.id, tripEdge: 'end' })
+        }
+      }
+    })()
+  )
+
+  // KUMANI Events: eventi a cui sono iscritto e quelli che organizzo
+  // (orari mostrati in ora italiana, come il resto dell'agenda).
+  const eventFrom = `${addDays(from, -1)}T00:00:00Z`
+  const eventTo = `${addDays(to, 1)}T23:59:59Z`
+  const pushEvent = (e: { id: string; title: string; starts_at: string; type: string }, organizing: boolean) => {
+    const instant = new Date(e.starts_at)
+    const date = dateKeyOf(instant)
+    if (date < from || date > to) return
+    if (events.some((existing) => existing.key === `event:${e.id}`)) return
+    events.push({ key: `event:${e.id}`, kind: 'event', date, time: timeOf(instant), title: e.title, amount: null, done: false, refId: e.id, organizing })
+  }
+  jobs.push(
+    (async () => {
+      const [{ data: registrations }, { data: organized }] = await Promise.all([
+        supabase
+          .from('event_participants')
+          .select('status, events(id, title, starts_at, type, status)')
+          .eq('user_id', userId)
+          .in('status', ['registered', 'checked_in']),
+        supabase
+          .from('events')
+          .select('id, title, starts_at, type, status')
+          .eq('organizer_id', userId)
+          .in('status', ['published', 'pending'])
+          .gte('starts_at', eventFrom)
+          .lte('starts_at', eventTo),
+      ])
+      for (const e of organized ?? []) pushEvent(e, true)
+      for (const row of registrations ?? []) {
+        const e = (Array.isArray(row.events) ? row.events[0] : row.events) as { id: string; title: string; starts_at: string; type: string; status: string } | null
+        if (e && e.status === 'published') pushEvent(e, false)
+      }
+    })()
+  )
+
   await Promise.all(jobs)
   return sortAgenda(events)
 }

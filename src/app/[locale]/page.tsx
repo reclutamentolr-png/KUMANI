@@ -16,7 +16,12 @@ import {
   Trophy,
   HandPlatter,
   Briefcase,
-  Check
+  Check,
+  CalendarDays,
+  Plane,
+  UtensilsCrossed,
+  Coins,
+  PartyPopper
 } from 'lucide-react'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import Logo from '@/components/Logo'
@@ -32,6 +37,17 @@ export default function LandingPage() {
     { icon: Share2, title: t('communityCard1Title'), desc: t('communityCard1Description') },
     { icon: Trophy, title: t('communityCard3Title'), desc: t('communityCard3Description') },
     { icon: HandPlatter, title: t('communityKordataTitle'), desc: t('communityKordataDescription') }
+  ]
+
+  // L'Ecosistema: come gli strumenti si alimentano a vicenda (solo
+  // collegamenti che esistono davvero; Events è segnato "in arrivo").
+  const synergies = [
+    { icon: CalendarDays, title: t('synergy1Title'), desc: t('synergy1Text'), soon: false },
+    { icon: Plane, title: t('synergy2Title'), desc: t('synergy2Text'), soon: false },
+    { icon: UtensilsCrossed, title: t('synergy3Title'), desc: t('synergy3Text'), soon: false },
+    { icon: HandPlatter, title: t('synergy4Title'), desc: t('synergy4Text'), soon: false },
+    { icon: Coins, title: t('synergy5Title'), desc: t('synergy5Text'), soon: false },
+    { icon: PartyPopper, title: t('synergy6Title'), desc: t('synergy6Text'), soon: false },
   ]
 
   // Piani: Base per tutti, Pro per chi lavora con i clienti (prova gratuita).
@@ -198,6 +214,29 @@ export default function LandingPage() {
           </div>
 
           <HomeToolsGrid />
+
+          {/* Come si parlano gli strumenti */}
+          <div className="mt-10 rounded-3xl border border-[var(--gold)]/25 bg-gradient-to-br from-[var(--gold)]/10 via-white/[0.03] to-transparent p-6 sm:p-8">
+            <h3 className="text-xl font-bold text-white sm:text-2xl">{t('synergyTitle')}</h3>
+            <p className="mt-1 text-sm text-gray-300 sm:text-base">{t('synergySubtitle')}</p>
+            <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {synergies.map((item, index) => (
+                <div
+                  key={index}
+                  className={`relative rounded-2xl border p-4 ${item.soon ? 'border-dashed border-[var(--gold)]/50 bg-transparent' : 'border-[var(--gold)]/15 bg-white/[0.04]'}`}
+                >
+                  {item.soon && (
+                    <span className="absolute right-3 top-3 rounded-full bg-[var(--gold)] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[var(--ink)]">
+                      {t('comingSoon')}
+                    </span>
+                  )}
+                  <item.icon className="mb-2 h-6 w-6 text-[var(--gold-bright)]" />
+                  <p className="pr-16 font-bold text-white">{item.title}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-gray-400">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 

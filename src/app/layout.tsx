@@ -29,10 +29,10 @@ export const metadata: Metadata = {
     template: "%s | Kumani",
   },
   description:
-    "Kumani è la community di strumenti professionali per chi lavora in proprio: QR code dinamici, link in bio, verifica anti-truffa e altro ancora, tutti in un unico marketplace. Prezzo onesto, regole pubbliche, zero promesse vuote.",
+    "Kumani è la community di strumenti professionali per chi lavora in proprio: QR code dinamici, link in bio, verifica anti-truffa e altro ancora, tutti collegati nell'Ecosistema KUMANI. Prezzo onesto, regole pubbliche, zero promesse vuote.",
   keywords: [
     "strumenti professionali",
-    "marketplace digitale",
+    "ecosistema digitale",
     "QR code dinamico",
     "link in bio",
     "business digitale",

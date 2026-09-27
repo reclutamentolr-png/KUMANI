@@ -22,6 +22,8 @@ import {
   Tag,
   Star,
   HandPlatter,
+  Plane,
+  PartyPopper,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -53,4 +55,6 @@ export const marketplaceIconMap: Record<string, LucideIcon> = {
   Tag,
   Star,
   HandPlatter,
+  Plane,
+  PartyPopper,
 }

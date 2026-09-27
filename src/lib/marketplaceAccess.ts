@@ -5,11 +5,19 @@ export type ToolDisabledReason = 'offline' | 'subscription' | 'pro'
 
 export interface MarketplaceAccessState {
   userPlan: UserPlan
+  // Solo prova Pro, senza abbonamento pagato: aperti Pro e Free, non il Base
+  trialOnly: boolean
   isSettingEnabled: (toolName: string) => boolean
   isToolEnabled: (toolName: string) => boolean
   requiredPlan: (toolName: string) => RequiredPlan
   disabledReason: (toolName: string) => ToolDisabledReason | undefined
 }
+
+// Strumenti che si aprono per tutti i registrati anche senza il piano: il
+// piano serve solo per alcune azioni, controllate lato database (es. Travel:
+// chi è invitato vede i viaggi condivisi con lui, solo creare richiede il
+// piano, vedi trip_create).
+export const OPEN_TO_ALL_MEMBERS = ['travel']
 
 type SettingRow = { tool_name: string; is_enabled: boolean; required_plan?: RequiredPlan }
 
@@ -45,15 +53,24 @@ export async function getMarketplaceAccessState(supabase: SupabaseClient, userId
     if (profile?.subscription_status === 'active' && (expires === null || expires > new Date().getTime())) userPlan = 'base'
   }
 
+  // Prova Pro gratuita: apre gli strumenti Pro, non quelli del piano Base
+  // (stessa regola di tool_access nel database).
+  let trialOnly = false
+  const trialResult = await supabase.rpc('my_trial_only')
+  if (!trialResult.error) trialOnly = trialResult.data === true
+
   const isSettingEnabled = (toolName: string) => byTool.get(toolName)?.is_enabled !== false
   const requiredPlan = (toolName: string): RequiredPlan =>
     byTool.get(toolName)?.required_plan ?? (LEGACY_PAID_TOOLS.includes(toolName) ? 'base' : 'free')
-  const isToolEnabled = (toolName: string) => isSettingEnabled(toolName) && planCovers(userPlan, requiredPlan(toolName))
+  const isToolEnabled = (toolName: string) =>
+    isSettingEnabled(toolName) &&
+    (OPEN_TO_ALL_MEMBERS.includes(toolName) ||
+      (planCovers(userPlan, requiredPlan(toolName)) && !(trialOnly && requiredPlan(toolName) === 'base')))
   const disabledReason = (toolName: string): ToolDisabledReason | undefined => {
     if (!isSettingEnabled(toolName)) return 'offline'
     if (isToolEnabled(toolName)) return undefined
     return requiredPlan(toolName) === 'pro' ? 'pro' : 'subscription'
   }
 
-  return { userPlan, isSettingEnabled, isToolEnabled, requiredPlan, disabledReason }
+  return { userPlan, trialOnly, isSettingEnabled, isToolEnabled, requiredPlan, disabledReason }
 }

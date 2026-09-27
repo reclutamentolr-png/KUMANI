@@ -1220,3 +1220,188 @@ export async function resolveConvivioReport(reportId: string, cancelGroup: boole
   }
   return { success: true }
 }
+
+// ============================================================
+// KUMANI Events: approvazione, segnalazioni, commissioni
+// ============================================================
+
+const EVENT_ID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+type AdminPerson = { id: string; first_name: string | null; last_name: string | null; email: string | null }
+
+// Organizzatori e segnalatori puntano ad auth.users: i profili si leggono a parte.
+async function eventPeople(ids: string[]): Promise<Record<string, AdminPerson>> {
+  const unique = [...new Set(ids.filter(Boolean))]
+  if (unique.length === 0) return {}
+  const { data } = await getServiceClient().from('profiles').select('id, first_name, last_name, email').in('id', unique)
+  return Object.fromEntries((data ?? []).map((p) => [p.id, p as AdminPerson]))
+}
+
+export async function adminListEvents(filter: 'pending' | 'published' | 'reported') {
+  const admin = await verifyAdmin('listings.read')
+  if (!admin) return { events: [], error: 'Non autorizzato' }
+  const service = getServiceClient()
+  const columns = 'id, organizer_id, title, description, type, mode, starts_at, ends_at, timezone, city, country_code, capacity, price, is_18plus, status, review_note, created_at'
+  let query = service.from('events').select(columns)
+  if (filter === 'reported') {
+    const { data: reports } = await service.from('event_reports').select('event_id').eq('status', 'open').limit(500)
+    const ids = [...new Set((reports ?? []).map((r) => r.event_id as string))]
+    if (ids.length === 0) return { events: [], error: null }
+    query = query.in('id', ids)
+  } else {
+    query = query.eq('status', filter)
+  }
+  const { data, error } = await query.order('starts_at', { ascending: filter === 'pending' }).limit(200)
+  if (error) return { events: [], error: error.message }
+  const rows = data ?? []
+  const counts: Record<string, number> = {}
+  const [people] = await Promise.all([
+    eventPeople(rows.map((e) => e.organizer_id as string)),
+    (async () => {
+      if (rows.length === 0) return
+      const { data: participants } = await service
+        .from('event_participants')
+        .select('event_id')
+        .in('event_id', rows.map((e) => e.id))
+        .in('status', ['registered', 'checked_in', 'no_show'])
+      for (const p of participants ?? []) counts[p.event_id] = (counts[p.event_id] ?? 0) + 1
+    })(),
+  ])
+  return {
+    events: rows.map((e) => ({ ...e, people: counts[e.id] ?? 0, organizer: people[e.organizer_id as string] ?? null })),
+    error: null,
+  }
+}
+
+// Approva (pubblica) o rifiuta con una nota un evento in attesa.
+export async function adminReviewEvent(eventId: string, approve: boolean, note: string) {
+  const admin = await verifyAdmin('listings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!EVENT_ID_RE.test(eventId)) return { success: false, error: 'Evento non valido' }
+  const text = note.trim().slice(0, 1000)
+  if (!approve && !text) return { success: false, error: 'Scrivi il motivo del rifiuto' }
+  const { data, error } = await getServiceClient()
+    .from('events')
+    .update({ status: approve ? 'published' : 'rejected', review_note: text || null, updated_at: new Date().toISOString() })
+    .eq('id', eventId)
+    .eq('status', 'pending')
+    .select('id')
+  if (error) return { success: false, error: error.message }
+  if (!data?.length) return { success: false, error: 'Evento non più in attesa' }
+  return { success: true }
+}
+
+// Blocca un evento (sparisce dal calendario e l'organizzatore non lo modifica più).
+export async function adminBanEvent(eventId: string, note: string) {
+  const admin = await verifyAdmin('listings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!EVENT_ID_RE.test(eventId)) return { success: false, error: 'Evento non valido' }
+  const { error } = await getServiceClient()
+    .from('events')
+    .update({ status: 'banned', review_note: note.trim().slice(0, 1000) || null, updated_at: new Date().toISOString() })
+    .eq('id', eventId)
+  if (error) return { success: false, error: error.message }
+  return { success: true }
+}
+
+export async function adminListEventReports() {
+  const admin = await verifyAdmin('listings.read')
+  if (!admin) return { reports: [], error: 'Non autorizzato' }
+  const { data, error } = await getServiceClient()
+    .from('event_reports')
+    .select('id, reason, status, created_at, reporter, event:events(id, title, status, organizer_id, starts_at)')
+    .order('status', { ascending: false })
+    .order('created_at', { ascending: false })
+    .limit(200)
+  if (error) return { reports: [], error: error.message }
+  const rows = (data ?? []) as unknown as {
+    id: string
+    reason: string
+    status: 'open' | 'closed'
+    created_at: string
+    reporter: string
+    event: { id: string; title: string; status: string; organizer_id: string; starts_at: string } | null
+  }[]
+  const people = await eventPeople(rows.flatMap((r) => [r.reporter, r.event?.organizer_id ?? '']))
+  return {
+    reports: rows.map((r) => ({ ...r, reporter: people[r.reporter] ?? null, organizer: r.event ? (people[r.event.organizer_id] ?? null) : null })),
+    error: null,
+  }
+}
+
+export async function adminResolveEventReport(reportId: string) {
+  const admin = await verifyAdmin('listings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!EVENT_ID_RE.test(reportId)) return { success: false, error: 'Segnalazione non valida' }
+  const { error } = await getServiceClient().from('event_reports').update({ status: 'closed' }).eq('id', reportId)
+  if (error) return { success: false, error: error.message }
+  return { success: true }
+}
+
+export async function adminListEventFees() {
+  const admin = await verifyAdmin('listings.read')
+  if (!admin) return { fees: [], error: 'Non autorizzato' }
+  const { data, error } = await getServiceClient()
+    .from('event_fees')
+    .select('id, organizer_id, participants, price, percent, amount, status, created_at, paid_at, event:events(id, title, starts_at)')
+    .order('status', { ascending: true })
+    .order('created_at', { ascending: false })
+    .limit(300)
+  if (error) return { fees: [], error: error.message }
+  const rows = (data ?? []) as unknown as {
+    id: string
+    organizer_id: string
+    participants: number
+    price: number
+    percent: number
+    amount: number
+    status: 'due' | 'paid' | 'waived'
+    created_at: string
+    paid_at: string | null
+    event: { id: string; title: string; starts_at: string } | null
+  }[]
+  const people = await eventPeople(rows.map((f) => f.organizer_id))
+  return { fees: rows.map((f) => ({ ...f, organizer: people[f.organizer_id] ?? null })), error: null }
+}
+
+// Condona una commissione ancora da pagare.
+export async function adminWaiveEventFee(feeId: string) {
+  const admin = await verifyAdmin('listings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!EVENT_ID_RE.test(feeId)) return { success: false, error: 'Commissione non valida' }
+  const { error } = await getServiceClient().from('event_fees').update({ status: 'waived' }).eq('id', feeId).eq('status', 'due')
+  if (error) return { success: false, error: error.message }
+  return { success: true }
+}
+
+// Percentuale trattenuta da KUMANI (system_settings 'events_fee_percent',
+// salvata come stringa JSON, es. '"5"'): vale per gli eventi creati dopo.
+export async function adminGetEventsFeePercent() {
+  const admin = await verifyAdmin('settings.read')
+  if (!admin) return { percent: null, error: 'Non autorizzato' }
+  const { data } = await getServiceClient().from('system_settings').select('value').eq('key', 'events_fee_percent').maybeSingle()
+  let percent = 5
+  if (data?.value != null) {
+    const raw = String(data.value)
+    let parsed = Number.NaN
+    try {
+      parsed = Number(JSON.parse(raw))
+    } catch {
+      parsed = Number(raw.replace(/"/g, ''))
+    }
+    if (Number.isFinite(parsed)) percent = parsed
+  }
+  return { percent, error: null }
+}
+
+export async function adminSetEventsFeePercent(percent: number) {
+  const admin = await verifyAdmin('settings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!Number.isFinite(percent) || percent < 0 || percent > 30) return { success: false, error: 'La percentuale deve essere tra 0 e 30' }
+  const value = String(Math.round(percent * 100) / 100)
+  const { error } = await getServiceClient()
+    .from('system_settings')
+    .upsert({ key: 'events_fee_percent', value: JSON.stringify(value) }, { onConflict: 'key' })
+  if (error) return { success: false, error: error.message }
+  return { success: true }
+}

@@ -69,6 +69,7 @@ export default async function DashboardTipo2({
     { toolName: 'community-listings', href: '/marketplace/listings', iconName: 'Tag', title: marketplaceT('listings'), description: marketplaceT('listingsDescription') },
     { toolName: 'community-spotlight', href: '/marketplace/spotlight', iconName: 'Star', title: marketplaceT('kumanoDelGiorno'), description: marketplaceT('kumanoDelGiornoDescription') },
     { toolName: 'community-convivio', href: '/marketplace/convivio', iconName: 'HandPlatter', title: marketplaceT('convivio'), description: marketplaceT('convivioDescription') },
+    { toolName: 'community-events', href: '/events', iconName: 'PartyPopper', title: marketplaceT('events'), description: marketplaceT('eventsDescription') },
   ].map((item) => ({ ...item, gradient: 'bg-[var(--ink)]', color: 'gold', category: 'community' })) as unknown as MarketplaceTool[]
 
   const toolsByCategory = MARKETPLACE_CATEGORIES.map((category) => ({

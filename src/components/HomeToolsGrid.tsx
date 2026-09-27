@@ -28,6 +28,8 @@ import {
   HeartHandshake,
   VenetianMask,
   HandPlatter,
+  Plane,
+  PartyPopper,
   Info,
   X,
   ChevronDown,
@@ -98,6 +100,7 @@ export default function HomeToolsGrid() {
     { icon: PackageSearch, title: t('toolFindoTitle'), desc: t('toolFindoDescription'), category: 'personal' },
     { icon: FileCheck2, title: t('toolDigitalReceiptTitle'), desc: t('toolDigitalReceiptDescription'), category: 'personal' },
     { icon: PiggyBank, title: tc('spendly'), desc: tc('spendlyDescription'), category: 'personal' },
+    { icon: Plane, title: tc('travel'), desc: tc('travelDescription'), category: 'personal' },
     { icon: Flower2, title: tc('mandala'), desc: tc('mandalaDescription'), category: 'wellness' },
     { icon: Waves, title: t('toolNeurobalanceTitle'), desc: t('toolNeurobalanceDescription'), category: 'wellness' },
     { icon: Stethoscope, title: tc('aureya'), desc: tc('aureyaDescription'), category: 'wellness' },
@@ -108,6 +111,7 @@ export default function HomeToolsGrid() {
     { icon: Tag, title: t('toolListingsTitle'), desc: t('toolListingsDescription'), category: 'community' },
     { icon: Star, title: tc('kumanoDelGiorno'), desc: tc('kumanoDelGiornoDescription'), category: 'community' },
     { icon: HandPlatter, title: tc('convivio'), desc: tc('convivioDescription'), category: 'community' },
+    { icon: PartyPopper, title: tc('events'), desc: tc('eventsDescription'), category: 'community' },
   ]
 
   const CATEGORY_LABEL: Record<Category, string> = {

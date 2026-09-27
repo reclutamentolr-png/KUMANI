@@ -9,6 +9,8 @@ type Props = {
   memberId: string | null
   memberSince: string
   planLabel: string
+  // Tipo di abbonamento attivo (Base, Pro, Pro in prova), mostrato in verde
+  planName?: string | null
   rankLabel: string | null
   qrUrl: string
 }
@@ -19,6 +21,7 @@ export default function WalletMembershipCard({
   memberId,
   memberSince,
   planLabel,
+  planName,
   rankLabel,
   qrUrl,
 }: Props) {
@@ -43,7 +46,14 @@ export default function WalletMembershipCard({
             </div>
             <div>
               <p className="text-xs text-stone-400">{t('currentPlan')}</p>
-              <p className="font-semibold text-white">{planLabel}</p>
+              <p className="flex flex-wrap items-center gap-1.5 font-semibold text-white">
+                {planLabel}
+                {planName && (
+                  <span className="rounded-full border border-emerald-400/40 bg-emerald-500/15 px-2 py-0.5 text-xs font-bold text-emerald-400">
+                    {planName}
+                  </span>
+                )}
+              </p>
             </div>
             <div>
               <p className="text-xs text-stone-400">{t('currentRank')}</p>

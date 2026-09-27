@@ -152,6 +152,19 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       requiresSubscription: true,
     },
     {
+      // Pagine sotto /viaggi (non /marketplace): gli invitati entrano anche
+      // senza abbonamento, il piano serve solo per creare un viaggio.
+      toolName: 'travel',
+      href: '/viaggi',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'Plane',
+      title: t('travel'),
+      description: t('travelDescription'),
+      color: 'gold',
+      category: 'personal',
+      requiresSubscription: true,
+    },
+    {
       toolName: 'mandala',
       href: '/marketplace/mandala',
       gradient: 'bg-[var(--ink)]',

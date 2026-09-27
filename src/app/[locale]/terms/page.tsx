@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     'Termini di servizio della piattaforma Kumani e regolamento trasparente del Programma Vantaggi: punti, bonus, coupon e iniziative esclusive.'
 }
 
-const LAST_UPDATE = '21 settembre 2026'
+const LAST_UPDATE = '27 settembre 2026'
 
 export default function TermsPage() {
   return (
@@ -58,7 +58,7 @@ export default function TermsPage() {
             <li><a href="#sez-1" className="hover:underline">1. Oggetto e ambito di applicazione</a></li>
             <li><a href="#sez-2" className="hover:underline">2. Registrazione e account</a></li>
             <li><a href="#sez-3" className="hover:underline">3. Abbonamento e corrispettivi</a></li>
-            <li><a href="#sez-4" className="hover:underline">4. Servizi del Marketplace</a></li>
+            <li><a href="#sez-4" className="hover:underline">4. Servizi dell&apos;Ecosistema KUMANI</a></li>
             <li><a href="#sez-5" className="hover:underline">5. Bacheca annunci e contenuti degli utenti</a></li>
             <li><a href="#sez-6" className="hover:underline">6. Punti e classifica di attività</a></li>
             <li><a href="#sez-7" className="hover:underline">7. Regolamento Programma Vantaggi</a></li>
@@ -80,7 +80,7 @@ export default function TermsPage() {
               <p>
                 I presenti Termini di Servizio (di seguito, i &ldquo;Termini&rdquo;) disciplinano l&apos;accesso e l&apos;utilizzo della
                 piattaforma Kumani (di seguito, &ldquo;Kumani&rdquo; o la &ldquo;Piattaforma&rdquo;),
-                compresi il Marketplace, gli strumenti digitali in esso inclusi e il Programma Vantaggi descritto all&apos;articolo 7.
+                compresi l&apos;Ecosistema KUMANI (l&apos;insieme degli strumenti digitali offerti dalla Piattaforma, collegati tra loro), gli strumenti in esso inclusi e il Programma Vantaggi descritto all&apos;articolo 7.
               </p>
               <p>
                 Registrandosi o utilizzando la Piattaforma, l&apos;utente accetta integralmente i presenti Termini.
@@ -109,8 +109,10 @@ export default function TermsPage() {
             <h2 className="text-xl font-bold text-gray-900 mb-3">3. Abbonamento e corrispettivi</h2>
             <div className="text-gray-600 space-y-3 text-sm sm:text-base leading-relaxed">
               <p>
-                L&apos;accesso al Marketplace e ai suoi strumenti è offerto in abbonamento al prezzo pubblicato sulla Piattaforma
-                (attualmente 49€/anno). Non sono previsti costi nascosti né corrispettivi ulteriori per le funzionalità incluse.
+                L&apos;accesso all&apos;Ecosistema KUMANI e ai suoi strumenti è offerto in abbonamento ai prezzi pubblicati sulla Piattaforma
+                (attualmente piano Base 49€/anno e piano Pro 149€/anno). Il piano Pro include gli strumenti del piano Base; alcuni strumenti
+                sono gratuiti per tutti gli iscritti. Il periodo di prova gratuito del piano Pro, quando offerto, dà accesso ai soli strumenti
+                Pro e gratuiti e non si rinnova in automatico. Non sono previsti costi nascosti né corrispettivi ulteriori per le funzionalità incluse.
               </p>
               <p>
                 I pagamenti sono gestiti da provider terzi autorizzati. L&apos;abbonamento si rinnova automaticamente salvo disdetta:
@@ -121,12 +123,30 @@ export default function TermsPage() {
 
           {/* 4 */}
           <section id="sez-4" className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 scroll-mt-24">
-            <h2 className="text-xl font-bold text-gray-900 mb-3">4. Servizi del Marketplace</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-3">4. Servizi dell&apos;Ecosistema KUMANI</h2>
             <div className="text-gray-600 space-y-3 text-sm sm:text-base leading-relaxed">
               <p>
                 La Piattaforma mette a disposizione strumenti digitali quali, a titolo esemplificativo: generatore di QR code dinamici,
-                pagina Link in Bio, template di messaggistica, strumenti di organizzazione personale (MemoLife), bacheca annunci e
-                ulteriori funzionalità che potranno essere aggiunte o aggiornate nel tempo.
+                pagina Link in Bio, template di messaggistica, strumenti di organizzazione personale (MemoLife, Spendly, Life Calendar),
+                strumenti per professionisti (piano Pro), strumenti di gruppo (Kordata, KUMANI Travel, KUMANI Events), bacheca annunci e ulteriori
+                funzionalità che potranno essere aggiunte o aggiornate nel tempo. Gli strumenti dell&apos;Ecosistema possono scambiarsi
+                dati dello stesso utente (ad esempio le scadenze mostrate in un&apos;unica agenda) solo per il funzionamento dei servizi.
+              </p>
+              <p>
+                <strong className="text-gray-900">Eventi della community (KUMANI Events).</strong> Gli eventi sono organizzati dagli
+                utenti verificati, che ne sono gli unici responsabili (svolgimento, sicurezza del luogo, autorizzazioni e obblighi fiscali).
+                La Piattaforma fornisce gli strumenti (pubblicazione, iscrizioni, pass e check-in), approva i primi eventi di ogni
+                organizzatore e può rimuovere eventi o sospendere organizzatori in caso di segnalazioni fondate. Sono vietati eventi a
+                scopo politico o religioso proselitistico, gioco d&apos;azzardo e contenuti per adulti non dichiarati come 18+.
+                Organizzatori e partecipanti accettano un codice di condotta basato su rispetto reciproco e assenza di molestie.
+              </p>
+              <p>
+                Il prezzo eventualmente indicato dall&apos;organizzatore è dichiarato a titolo informativo e si paga direttamente
+                all&apos;organizzatore: la Piattaforma non incassa somme per conto dei partecipanti. A evento concluso la Piattaforma
+                applica all&apos;organizzatore una commissione di gestione pari alla percentuale pubblicata al momento della creazione
+                dell&apos;evento, calcolata sul prezzo dichiarato per il numero di iscritti; finché la commissione non è pagata
+                l&apos;organizzatore non può pubblicare nuovi eventi. Gli importi inferiori al minimo pagabile con carta si sommano ai
+                successivi. I dati degli iscritti sono visibili solo all&apos;organizzatore e usati solo per la gestione dell&apos;evento.
               </p>
               <p>
                 I servizi sono forniti nello stato in cui si trovano e secondo disponibilità. La Piattaforma non costituisce proposta di
@@ -189,7 +209,7 @@ export default function TermsPage() {
               </p>
               <p>
                 <strong className="text-gray-900">7.2 Tipologie di vantaggi.</strong> Il programma può riconoscere: (a) coupon di sconto
-                utilizzabili nel Marketplace o con partner aderenti; (b) bonus punti; (c) periodi gratuiti di servizi premium;
+                utilizzabili nell&apos;Ecosistema KUMANI o con partner aderenti; (b) bonus punti; (c) periodi gratuiti di servizi premium;
                 (d) accesso a iniziative esclusive riservate ai membri attivi.
               </p>
               <p>
