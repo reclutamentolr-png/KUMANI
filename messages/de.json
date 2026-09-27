@@ -657,6 +657,9 @@
     "memolife": "MemoLife"
   },
   "marketplace": {
+    "goToSpotlight": "Zum Schaufenster",
+    "kumanoDelGiorno": "Kumano des Tages",
+    "kumanoDelGiornoDescription": "Jeden Tag stellt die Community eine Geschichte ins Schaufenster. Erzähl deine: echte Sichtbarkeit, keine Ranglisten.",
     "listingsHowItWorks": "So funktioniert die Pinnwand",
     "listingActive": "Aktiv",
     "convivio": "Kordata",
@@ -1427,6 +1430,7 @@
     "securitySection": "Sicherheit & Schutz"
   },
   "offermaker": {
+    "aiLimitReached": "Du hast das Tageslimit für KI-Generierungen erreicht – versuch es morgen wieder.",
     "title": "OfferMaker AI",
     "backToMarketplace": "Zurück zum Marketplace",
     "badge": "KI-Angebotsgenerator",
@@ -1504,6 +1508,7 @@
     "deleteError": "Die Kampagne konnte nicht gelöscht werden. Versuche es erneut."
   },
   "qrCodePro": {
+    "invalidUrl": "Gib einen gültigen Link ein, der mit http:// oder https:// beginnt",
     "title": "QR Code PRO",
     "backToMarketplace": "Zurück zum Marketplace",
     "badge": "Dynamische, nachverfolgbare QR-Codes",
@@ -2078,6 +2083,42 @@
     "footerTagline": "Hände, die dir eine Hand reichen."
   },
   "spotlight": {
+    "backToDashboard": "Zurück zum Dashboard",
+    "eyebrow": "Schaufenster der Community",
+    "title": "Kumano des Tages",
+    "subtitle": "Jeden Tag stellt die Community einen Menschen vor: seine Geschichte, seine Stadt, sein Handwerk. Heute könntest du es sein.",
+    "youAreTodaysKumano": "Heute bist du der Kumano des Tages!",
+    "formTitle": "Erzähl deine Geschichte",
+    "formDescription": "Fülle dein Profil aus, um in die Rotation des Schaufensters zu kommen. Keine Nachnamen, keine öffentlichen Kontakte: nur deine Geschichte.",
+    "displayNameField": "Vorname oder Spitzname",
+    "displayNameHint": "Nie den Nachnamen: nur Vorname oder Spitzname.",
+    "cityField": "Stadt",
+    "countryField": "Land",
+    "professionField": "Beruf oder Leidenschaft",
+    "storyField": "Deine Geschichte",
+    "storyHint": "Kurz und menschlich, in 20 Sekunden lesbar (etwa 300 Zeichen).",
+    "favoriteToolsField": "Deine liebsten KUMANI-Tools",
+    "consentLabel": "Ich bin einverstanden, der Community mit Name, Stadt und Geschichte gezeigt zu werden.",
+    "consentRequired": "Du musst zustimmen, um dein Profil zu speichern.",
+    "save": "Speichern und ins Schaufenster",
+    "saving": "Wird gespeichert...",
+    "saveError": "Fehler beim Speichern. Bitte erneut versuchen.",
+    "notAuthenticated": "Du musst dich anmelden, um dein Profil zu speichern.",
+    "statusActive": "Du bist für die Community sichtbar: du kannst als Kumano des Tages ausgewählt werden.",
+    "statusInactive": "Dein Profil ist deaktiviert: es erscheint nicht im Schaufenster, bis du es wieder aktivierst.",
+    "revoke": "Mein Schaufenster deaktivieren",
+    "revokeConfirm": "Schaufenster deaktivieren? Du erscheinst nicht mehr in den nächsten Auswahlen, deine Daten bleiben aber gespeichert.",
+    "delete": "Mein Profil endgültig löschen",
+    "deleteConfirm": "Profil endgültig löschen? Es wird auch aus dem öffentlichen Archiv entfernt. Nicht rückgängig zu machen.",
+    "viewPublicPage": "Öffentliches Schaufenster ansehen",
+    "publicHeader": "KUMANI besteht aus Händen. Jeden Tag erzählen wir von einer.",
+    "todaysKumano": "Der Kumano von heute",
+    "noKumanoToday": "Noch keine Geschichte im Schaufenster: erzähl als Erste(r) deine.",
+    "archiveTitle": "Das Geschichtenarchiv",
+    "archiveEmpty": "Im Archiv gibt es noch keine Geschichten.",
+    "ctaJoin": "Willst du auch ins Schaufenster?",
+    "ctaJoinButton": "Erzähl deine Geschichte",
+    "candidateNote": "Um ausgewählt zu werden, musst du oben dein Profil ausgefüllt haben.",
     "statusPending": "Deine Geschichte wird geprüft: Sie erscheint im Schaufenster, sobald das Team sie freigibt.",
     "statusRejected": "Deine Geschichte wurde nicht freigegeben. Bearbeite sie und speichere erneut, um sie wieder zur Prüfung einzureichen.",
     "homeConsentLabel": "Ich bin einverstanden, dass meine Geschichte auch auf der Startseite erscheint, sichtbar für alle Besucher von KUMANI.",
@@ -3149,5 +3190,31 @@
     "error_not_member": "Mach mit, um im Chat zu schreiben.",
     "error_empty": "Schreib eine Nachricht.",
     "error_rate_limited": "Du hast das heutige Nachrichtenlimit erreicht."
+  },
+  "errorPages": {
+    "errorTitle": "Etwas ist schiefgelaufen",
+    "errorDescription": "Ein unerwarteter Fehler ist aufgetreten. Versuche es erneut – wenn das Problem bleibt, komm später wieder.",
+    "retry": "Erneut versuchen",
+    "backHome": "Zur Startseite",
+    "goDashboard": "Zum Dashboard",
+    "notFoundTitle": "Seite nicht gefunden",
+    "notFoundDescription": "Die aufgerufene Adresse existiert nicht oder wurde verschoben."
+  },
+  "billingPage": {
+    "titleActive": "Abo aktiv",
+    "titleInactive": "Schließe dein Abo ab",
+    "activeText": "Danke! Dein Tarif {plan} ist aktiv. Du hast Zugriff auf alle Marketplace-Dienste.",
+    "inactiveText": "Aktiviere deinen Tarif für nur 49 €/Jahr und schalte alle Marketplace-Tools frei.",
+    "subscribeCta": "Jetzt für 49 €/Jahr abonnieren",
+    "statusLabel": "Status:",
+    "statusActive": "Aktiv ({plan})",
+    "validUntil": "Gültig bis {date}",
+    "billingEmail": "Rechnungs-E-Mail: {email}",
+    "planBase": "Base",
+    "planPro": "Pro",
+    "discoverPro": "Bist du Profi? Entdecke den Pro-Tarif →",
+    "backToDashboard": "← Zurück zum Dashboard",
+    "errorNotice": "Bei der Zahlung ist ein Fehler aufgetreten. Bitte versuche es gleich noch einmal.",
+    "canceledNotice": "Zahlung abgebrochen: Es wurde nichts abgebucht."
   }
 }

@@ -9,12 +9,14 @@ import KpiCard from './KpiCard'
 import YearSelect from './YearSelect'
 import CategoryDonutChart from './charts/CategoryDonutChart'
 import { createVariableExpense, updateVariableExpense, deleteVariableExpense } from '@/app/actions/spendly'
+import { todayKey } from '@/lib/agenda'
 import {
   VARIABLE_EXPENSE_CATEGORIES,
   formatCurrency,
   currentYearOnly,
   type SpendlyVariableExpense,
   type VariableExpenseCategory,
+  parseAmount,
 } from '@/lib/spendly'
 
 const CATEGORY_KEY: Record<VariableExpenseCategory, string> = {
@@ -35,8 +37,9 @@ type FormState = {
   notes: string
 }
 
+// Giorno di oggi in Italia (toISOString darebbe il giorno UTC).
 function todayISO() {
-  return new Date().toISOString().slice(0, 10)
+  return todayKey()
 }
 
 function emptyForm(): FormState {
@@ -48,7 +51,7 @@ export default function VariableExpenseManager({ items, year }: { items: Spendly
   const router = useRouter()
   const [modalOpen, setModalOpen] = useState(false)
   const [editing, setEditing] = useState<SpendlyVariableExpense | null>(null)
-  const [form, setForm] = useState<FormState>(emptyForm())
+  const [form, setForm] = useState<FormState>(emptyForm)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -70,7 +73,7 @@ export default function VariableExpenseManager({ items, year }: { items: Spendly
     setEditing(item)
     setForm({
       description: item.description,
-      amount: String(item.amount),
+      amount: String(item.amount).replace('.', ','),
       expenseDate: item.expense_date,
       category: item.category,
       notes: item.notes || '',
@@ -84,7 +87,7 @@ export default function VariableExpenseManager({ items, year }: { items: Spendly
     setSaving(true)
     setError(null)
 
-    const amount = parseFloat(form.amount.replace(',', '.'))
+    const amount = parseAmount(form.amount)
     if (!form.description.trim() || Number.isNaN(amount) || amount < 0 || !form.expenseDate) {
       setError(t('saveError'))
       setSaving(false)

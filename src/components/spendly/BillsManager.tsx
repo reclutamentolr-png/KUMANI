@@ -11,6 +11,7 @@ import { addDays } from '@/lib/agenda'
 import {
   fixedExpenseDueDate,
   formatCurrency,
+  parseAmount,
   paymentKey,
   periodOf,
   type FixedExpenseFrequency,
@@ -98,28 +99,43 @@ export default function BillsManager({
 
   const history = (bill: SpendlyFixedExpense) => payments.filter((p) => p.expense_id === bill.id).slice(0, 6)
 
-  const pay = async (o: Occurrence) => {
-    const answer = prompt(t('paidAmountPrompt', { name: o.bill.description }), String(o.bill.amount).replace('.', ','))
-    if (answer === null) return
-    const amount = parseFloat(answer.replace(',', '.'))
-    if (Number.isNaN(amount) || amount < 0) return
-    setBusy(o.bill.id + o.period)
-    await markBillPaid(o.bill.id, o.period, amount)
-    setBusy(null)
+  // Azione rapida: lo stato "busy" si azzera sempre, anche se l'azione
+  // fallisce (false o { success: false }), e in quel caso si avvisa l'utente.
+  const quick = async (
+    busyKey: string | null,
+    action: () => Promise<boolean | { success: boolean }>,
+    errorKey: 'saveError' | 'deleteError' = 'saveError'
+  ) => {
+    if (busyKey) setBusy(busyKey)
+    let ok = false
+    try {
+      const result = await action()
+      ok = typeof result === 'boolean' ? result : result.success
+    } catch (err) {
+      console.error('[Spendly] bill action failed:', err)
+    } finally {
+      if (busyKey) setBusy(null)
+    }
+    if (!ok) alert(t(errorKey))
     router.refresh()
   }
 
+  const pay = async (o: Occurrence) => {
+    const answer = prompt(t('paidAmountPrompt', { name: o.bill.description }), String(o.bill.amount).replace('.', ','))
+    if (answer === null) return
+    const amount = parseAmount(answer)
+    if (Number.isNaN(amount) || amount < 0) return
+    await quick(o.bill.id + o.period, () => markBillPaid(o.bill.id, o.period, amount))
+  }
+
   const unpay = async (o: Occurrence) => {
-    setBusy(o.bill.id + o.period)
-    await unmarkBillPaid(o.bill.id, o.period)
-    setBusy(null)
-    router.refresh()
+    await quick(o.bill.id + o.period, () => unmarkBillPaid(o.bill.id, o.period))
   }
 
   const save = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!form) return
-    const amount = parseFloat(form.amount.replace(',', '.'))
+    const amount = parseAmount(form.amount)
     if (!form.description.trim() || Number.isNaN(amount) || amount < 0 || !form.date) {
       setError(t('saveError'))
       return
@@ -134,12 +150,20 @@ export default function BillsManager({
       frequency: form.frequency,
       category: 'bollette' as const,
       startDate: form.date,
-      endDate: oneOff ? form.date : (original?.end_date ?? null),
+      // Da una tantum a ricorrente: la vecchia end_date (= data della spesa)
+      // va tolta, altrimenti la bolletta finirebbe dopo un solo mese.
+      endDate: oneOff ? form.date : original?.frequency === 'una_tantum' ? null : (original?.end_date ?? null),
       billingDay: Number(form.date.slice(8, 10)),
       notes: form.notes,
     }
-    const result = form.id ? await updateFixedExpense(form.id, payload) : await createFixedExpense(payload)
-    setSaving(false)
+    let result: { success: boolean } = { success: false }
+    try {
+      result = form.id ? await updateFixedExpense(form.id, payload) : await createFixedExpense(payload)
+    } catch (err) {
+      console.error('[Spendly] bill save failed:', err)
+    } finally {
+      setSaving(false)
+    }
     if (!result.success) {
       setError(t('saveError'))
       return
@@ -216,8 +240,7 @@ export default function BillsManager({
                 type="button"
                 onClick={async () => {
                   if (!inactiveBill && !confirm(t('deactivateConfirm', { name: bill.description }))) return
-                  await setBillActive(bill.id, inactiveBill)
-                  router.refresh()
+                  await quick(null, () => setBillActive(bill.id, inactiveBill))
                 }}
                 className="rounded-md p-1.5 hover:bg-gray-100 hover:text-[var(--ink)]"
                 title={inactiveBill ? t('reactivateBill') : t('deactivateBill')}
@@ -230,8 +253,7 @@ export default function BillsManager({
               type="button"
               onClick={async () => {
                 if (!confirm(t('deleteBillConfirm', { name: bill.description }))) return
-                await deleteFixedExpense(bill.id)
-                router.refresh()
+                await quick(null, () => deleteFixedExpense(bill.id), 'deleteError')
               }}
               className="rounded-md p-1.5 hover:bg-red-50 hover:text-red-600"
               aria-label={t('delete')}

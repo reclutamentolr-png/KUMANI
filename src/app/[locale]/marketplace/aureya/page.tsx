@@ -13,7 +13,8 @@ interface ResultRow {
   tested_at: string
 }
 
-export default async function AureyaPage() {
+export default async function AureyaPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
   const t = await getTranslations('aureya')
   const commonT = await getTranslations('common')
 
@@ -21,11 +22,11 @@ export default async function AureyaPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  if (!user) redirect(`/${locale}/login`)
 
   const hasAccess = await hasActiveAureyaAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect('/marketplace')
+    redirect(`/${locale}/marketplace`)
   }
 
   const { data: history } = await supabase

@@ -1,7 +1,9 @@
 import { createClient } from '@/lib/supabase/server'
+import { getLocale } from 'next-intl/server'
 import { redirect } from 'next/navigation'
 import FixedExpenseManager from '@/components/spendly/FixedExpenseManager'
 import type { SpendlyFixedExpense, SpendlyFixedPayment } from '@/lib/spendly'
+import { currentYear } from '@/lib/spendly'
 
 export default async function SpendlyFixedExpensesPage({
   searchParams,
@@ -9,13 +11,13 @@ export default async function SpendlyFixedExpensesPage({
   searchParams: Promise<{ year?: string; new?: string }>
 }) {
   const { year: yearParam, new: openNew } = await searchParams
-  const year = yearParam ? parseInt(yearParam, 10) : new Date().getFullYear()
+  const year = yearParam ? parseInt(yearParam, 10) : currentYear()
 
   const supabase = await createClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  if (!user) redirect(`/${await getLocale()}/login`)
 
   // Mostra le spese fisse ancora "attive" durante l'anno selezionato: sono
   // iniziate entro il 31/12 dell'anno e non sono ancora terminate prima del

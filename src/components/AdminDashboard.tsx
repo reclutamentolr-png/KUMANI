@@ -6,6 +6,10 @@ import { hasPermission, Permission } from '@/lib/admin-permissions'
 import MatrixTree from '@/components/MatrixTree'
 import {
   adminUpdateProfile,
+  adminSaveSystemSettings,
+  adminSetToolEnabled,
+  adminSetUserRole,
+  adminGetUserRole,
   impersonateUser,
   createCoupon,
   listCoupons,
@@ -631,11 +635,11 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
 
   const toggleToolEnabled = async (toolName: string, currentStatus: boolean) => {
     setSavingTool(toolName)
-    const { error } = await supabase.from('marketplace_settings').update({ is_enabled: !currentStatus, updated_at: new Date().toISOString() }).eq('tool_name', toolName)
-    if (!error) {
+    const result = await adminSetToolEnabled(toolName, !currentStatus)
+    if (result.success) {
       await loadMarketplaceData()
     } else {
-      alert('Errore durante l\'aggiornamento')
+      alert('Errore durante l\'aggiornamento: ' + (result.error || ''))
     }
     setSavingTool(null)
   }
@@ -705,14 +709,9 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
   const saveSystemSettings = async () => {
     setSavingSettings(true)
     try {
-      const rows = Object.entries(systemSettings).map(([key, value]) => ({
-        key,
-        value: JSON.stringify(value)
-      }))
-      for (const row of rows) {
-        await supabase.from('system_settings').upsert(row, { onConflict: 'key' })
-      }
-      alert('✅ Impostazioni salvate con successo!')
+      const result = await adminSaveSystemSettings(systemSettings)
+      if (result.success) alert('✅ Impostazioni salvate con successo!')
+      else alert('❌ Errore durante il salvataggio: ' + (result.error || ''))
     } catch (error) {
       alert('❌ Errore durante il salvataggio')
     }
@@ -805,25 +804,19 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
   const openManageModal = async (user: any) => {
     setSelectedUser(user)
     setIsModalOpen(true)
-    const { data: roles } = await supabase.from('admin_roles').select('id, name').order('name')
-    setAvailableRoles(roles || [])
-    const { data: adminRecord } = await supabase.from('admin_users').select('role_id').eq('user_id', user.id).single()
-    setUserCurrentRoleId(adminRecord?.role_id || 'none')
+    const { roles, roleId } = await adminGetUserRole(user.id)
+    setAvailableRoles(roles)
+    setUserCurrentRoleId(roleId || 'none')
   }
 
   const handleSaveUserManagement = async () => {
     if (!selectedUser) return
     setIsSaving(true)
     try {
-      if (userCurrentRoleId === 'none') {
-        await supabase.from('admin_users').delete().eq('user_id', selectedUser.id)
-      } else {
-        await supabase.from('admin_users').upsert({
-          user_id: selectedUser.id,
-          role_id: userCurrentRoleId,
-          assigned_by: userId,
-          notes: 'Assegnato da Pannello Admin'
-        }, { onConflict: 'user_id' })
+      const result = await adminSetUserRole(selectedUser.id, userCurrentRoleId === 'none' ? null : userCurrentRoleId)
+      if (!result.success) {
+        alert('❌ ' + (result.error || 'Errore durante il salvataggio.'))
+        return
       }
       await loadUsers()
       setIsModalOpen(false)

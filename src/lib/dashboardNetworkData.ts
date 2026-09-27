@@ -1,3 +1,4 @@
+import { SITE_URL } from '@/lib/siteUrl'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { isActiveSubscription } from './subscriptionGate'
 import { fetchDirectSponsored } from './directAffiliates'
@@ -192,7 +193,7 @@ export async function getDashboardNetworkData(
   // al Bonus Struttura). Idempotente: una volta per invitato.
   await supabase.rpc('claim_pro_invite_bonus')
 
-  const loginUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/${locale}/login`
+  const loginUrl = `${SITE_URL}/${locale}/login`
 
   return {
     rootNode,

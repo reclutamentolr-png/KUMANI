@@ -1,3 +1,4 @@
+import { SITE_URL } from '@/lib/siteUrl'
 import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { ArrowLeft, HeartHandshake } from 'lucide-react'
@@ -38,7 +39,7 @@ export default async function AffinityPage({ params }: { params: Promise<{ local
           <h1 className="text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl">Affinity</h1>
           <p className="mt-3 text-lg font-semibold text-[var(--gold)]">{t('tagline')}</p>
         </div>
-        <AffinityGame initial={initial} siteUrl={process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'} />
+        <AffinityGame initial={initial} siteUrl={SITE_URL} />
         <p className="mx-auto mt-10 max-w-2xl text-center text-xs leading-5 text-slate-500">{t('disclaimer')}</p>
       </main>
     </div>

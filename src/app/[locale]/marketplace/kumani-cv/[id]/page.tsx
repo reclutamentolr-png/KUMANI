@@ -1,3 +1,4 @@
+import { SITE_URL } from '@/lib/siteUrl'
 import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
@@ -40,7 +41,7 @@ export default async function CvDetailPage({
 
   const photoUrl = cv.photo_path ? supabase.storage.from('cv-photos').getPublicUrl(cv.photo_path).data.publicUrl : null
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const baseUrl = SITE_URL
   const publicUrl = locale === defaultLocale ? `${baseUrl}/cv/${cv.code}` : `${baseUrl}/${locale}/cv/${cv.code}`
 
   const previewData = {

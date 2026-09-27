@@ -1,3 +1,4 @@
+import { SITE_URL } from '@/lib/siteUrl'
 import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import QRCode from 'qrcode'
@@ -21,7 +22,7 @@ export default async function MenuTentPage({ params }: { params: Promise<{ local
   if (!menu) redirect(`/${locale}/marketplace/menu`)
 
   const tb = await getTranslations('menuBuilder')
-  const site = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const site = SITE_URL
   const qr = await QRCode.toDataURL(`${site}/m/${menu.token}`, { width: 480, margin: 1 })
   const invitations = await Promise.all(
     [menu.default_locale, ...menu.languages.filter((l) => l !== menu.default_locale)].map(async (l) => {

@@ -1,3 +1,4 @@
+import { SITE_URL } from '@/lib/siteUrl'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from '@/components/LocalizedLink'
@@ -62,7 +63,7 @@ export default async function LinkInBioPage({ params }: { params: Promise<{ loca
     )
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const baseUrl = SITE_URL
   
   const bioUrl = `${baseUrl}/${locale}/ref/${profile.referral_code}/bio`
 

@@ -20,6 +20,7 @@ import {
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { createReceipt } from '@/app/actions/digitalReceipt'
+import { todayKey } from '@/lib/agenda'
 import {
   RECEIPT_TEMPLATES,
   validatePhotoFile,
@@ -46,7 +47,8 @@ function defaultForm(): DigitalReceiptFormData {
     objectName: '',
     serialNumber: '',
     recipientName: '',
-    deliveryDate: new Date().toISOString().slice(0, 10),
+    // Giorno di oggi in Italia (toISOString darebbe il giorno UTC)
+    deliveryDate: todayKey(),
     reason: '',
     notes: '',
     quantity: null,
@@ -63,7 +65,7 @@ export default function DigitalReceiptForm() {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [receiptId] = useState(() => crypto.randomUUID())
-  const [form, setForm] = useState<DigitalReceiptFormData>(defaultForm())
+  const [form, setForm] = useState<DigitalReceiptFormData>(defaultForm)
   const [photoUrl, setPhotoUrl] = useState<string | null>(null)
   const [photoPath, setPhotoPath] = useState<string | null>(null)
   const [uploadingPhoto, setUploadingPhoto] = useState(false)

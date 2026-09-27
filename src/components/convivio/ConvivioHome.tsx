@@ -136,7 +136,7 @@ function LeaderSetup({ status, onClose, onDone }: { status: ConvivioLeaderStatus
       key: 'subscription',
       text: t('check_subscription'),
       action: !local.subscription && (
-        <Link href="/billing" className="text-xs font-semibold text-[var(--gold)] underline">
+        <Link href={{ pathname: '/billing' }} className="text-xs font-semibold text-[var(--gold)] underline">
           {t('activate')}
         </Link>
       ),

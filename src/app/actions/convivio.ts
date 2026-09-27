@@ -46,7 +46,14 @@ export async function becomeLeader(taxCode: string, acceptTerms: boolean): Promi
   const problem = validateTaxCode(code, { firstName: profile.first_name ?? '', lastName: profile.last_name ?? '', birthDate })
   if (problem) return { success: false, error: `taxCode_${problem}` }
 
-  const { error } = await getServiceClient()
+  // Un codice fiscale già verificato non si sostituisce (altrimenti si
+  // libererebbe per un secondo account); account bloccati esclusi.
+  const service = getServiceClient()
+  const { data: current } = await service.from('profiles').select('tax_code, is_blocked').eq('id', user.id).maybeSingle()
+  if (current?.is_blocked) return { success: false, error: 'saveError' }
+  if (current?.tax_code && current.tax_code !== code) return { success: false, error: 'taxCode_used' }
+
+  const { error } = await service
     .from('profiles')
     .update({ tax_code: code, convivio_terms_at: new Date().toISOString() })
     .eq('id', user.id)

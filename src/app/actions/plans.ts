@@ -55,18 +55,30 @@ export async function upgradeToPro(): Promise<{ success: boolean; reason?: 'not_
     const item = subscription?.items.data[0]
     if (!subscription || !item) return { success: false, reason: 'not_stripe' }
 
+    // error_if_incomplete: se l'addebito della differenza fallisce Stripe
+    // annulla il cambio di prezzo e lancia un errore (niente Pro non pagato).
     const updated = await stripe.subscriptions.update(subscription.id, {
       items: [{ id: item.id, price: proPrice }],
       proration_behavior: 'always_invoice',
+      payment_behavior: 'error_if_incomplete',
       metadata: { ...subscription.metadata, userId: user.id, plan: 'pro' },
+      expand: ['latest_invoice'],
     })
+
+    const invoice = updated.latest_invoice
+    const invoicePaid = !invoice || (typeof invoice !== 'string' && invoice.status === 'paid')
+    if (updated.status !== 'active' || !invoicePaid) {
+      console.error('Passaggio a Pro non pagato:', updated.id, updated.status, typeof invoice === 'string' ? invoice : invoice?.status)
+      return { success: false, reason: 'stripe_error' }
+    }
 
     // Il webhook customer.subscription.updated fa lo stesso: qui si aggiorna
     // subito per non far aspettare l'utente.
-    await service
+    const { error: updateError } = await service
       .from('profiles')
-      .update({ subscription_plan: 'pro', subscription_status: updated.status === 'active' ? 'active' : profile.subscription_status })
+      .update({ subscription_plan: 'pro', subscription_status: 'active', subscription_source: 'stripe' })
       .eq('id', user.id)
+    if (updateError) console.error('Errore salvataggio piano Pro (arriverà col webhook):', updateError.message)
 
     revalidatePath('/dashboard')
     revalidatePath('/pro')

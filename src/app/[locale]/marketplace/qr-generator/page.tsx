@@ -1,3 +1,4 @@
+import { SITE_URL } from '@/lib/siteUrl'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslations } from 'next-intl/server'
 import { redirect } from 'next/navigation'
@@ -32,7 +33,7 @@ export default async function QRGeneratorPage({ params }: { params: Promise<{ lo
 
   if (!profile) redirect('/dashboard')
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const baseUrl = SITE_URL
   
   // ✅ URL CORRETTO: include la lingua dinamica (es. /it/ref/CODICE)
   const referralUrl = `${baseUrl}/${locale}/ref/${profile.referral_code}`

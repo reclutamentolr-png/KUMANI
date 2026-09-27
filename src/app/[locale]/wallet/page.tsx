@@ -1,3 +1,4 @@
+import { SITE_URL } from '@/lib/siteUrl'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
@@ -96,7 +97,7 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
   const couponsList = coupons || []
   const myVouchers = await listMyVouchers()
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const baseUrl = SITE_URL
   const referralUrl = `${baseUrl}/${locale}/ref/${profile.referral_code}`
   const memberSince = new Date(profile.created_at).toLocaleDateString(locale, {
     day: 'numeric',

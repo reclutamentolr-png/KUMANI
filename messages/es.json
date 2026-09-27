@@ -657,6 +657,9 @@
     "memolife": "MemoLife"
   },
   "marketplace": {
+    "goToSpotlight": "Descubre el escaparate",
+    "kumanoDelGiorno": "Kumano del Día",
+    "kumanoDelGiornoDescription": "Cada día la comunidad pone una historia en el escaparate. Cuenta la tuya: visibilidad real, cero clasificaciones.",
     "listingsHowItWorks": "Cómo funciona el tablón",
     "listingActive": "Activo",
     "convivio": "Kordata",
@@ -1427,6 +1430,7 @@
     "securitySection": "Seguridad y Protección"
   },
   "offermaker": {
+    "aiLimitReached": "Has alcanzado el límite diario de generaciones con IA: inténtalo mañana.",
     "title": "OfferMaker AI",
     "backToMarketplace": "Volver al Marketplace",
     "badge": "Generador de Ofertas con IA",
@@ -1504,6 +1508,7 @@
     "deleteError": "No se pudo eliminar la campaña. Inténtalo de nuevo."
   },
   "qrCodePro": {
+    "invalidUrl": "Introduce un enlace válido que empiece por http:// o https://",
     "title": "QR Code PRO",
     "backToMarketplace": "Volver al Marketplace",
     "badge": "Códigos QR Dinámicos y Rastreables",
@@ -2078,6 +2083,42 @@
     "footerTagline": "Manos que te echan una mano."
   },
   "spotlight": {
+    "backToDashboard": "Volver al panel",
+    "eyebrow": "Escaparate de la comunidad",
+    "title": "Kumano del Día",
+    "subtitle": "Cada día la comunidad pone en el escaparate a una persona: su historia, su ciudad, su oficio. Hoy podrías ser tú.",
+    "youAreTodaysKumano": "¡Hoy eres tú el Kumano del Día!",
+    "formTitle": "Cuenta tu historia",
+    "formDescription": "Completa tu perfil para entrar en la rotación del escaparate. Sin apellidos ni contactos públicos: solo tu historia.",
+    "displayNameField": "Nombre o apodo",
+    "displayNameHint": "Nunca el apellido: solo nombre o apodo.",
+    "cityField": "Ciudad",
+    "countryField": "País",
+    "professionField": "Oficio o pasión",
+    "storyField": "Tu historia",
+    "storyHint": "Breve y humana, legible en 20 segundos (unos 300 caracteres).",
+    "favoriteToolsField": "Tus herramientas KUMANI favoritas",
+    "consentLabel": "Acepto aparecer ante la comunidad con mi nombre, ciudad e historia.",
+    "consentRequired": "Debes aceptar el consentimiento para guardar tu perfil.",
+    "save": "Guardar y entrar en el escaparate",
+    "saving": "Guardando...",
+    "saveError": "Error al guardar. Inténtalo de nuevo.",
+    "notAuthenticated": "Debes iniciar sesión para guardar tu perfil.",
+    "statusActive": "Eres visible para la comunidad: puedes ser elegido/a Kumano del Día.",
+    "statusInactive": "Tu perfil está desactivado: no aparecerá en el escaparate hasta que lo reactives.",
+    "revoke": "Desactivar mi escaparate",
+    "revokeConfirm": "¿Desactivar tu escaparate? No aparecerás en las próximas selecciones, pero tus datos se conservan.",
+    "delete": "Eliminar definitivamente mi perfil",
+    "deleteConfirm": "¿Eliminar definitivamente tu perfil? También se quitará del archivo público. Acción irreversible.",
+    "viewPublicPage": "Ver el escaparate público",
+    "publicHeader": "KUMANI está hecha de manos. Cada día contamos una.",
+    "todaysKumano": "El Kumano de hoy",
+    "noKumanoToday": "Aún no hay historias en el escaparate: sé el primero en contarte.",
+    "archiveTitle": "El archivo de historias",
+    "archiveEmpty": "Todavía no hay historias en el archivo.",
+    "ctaJoin": "¿Quieres estar tú también en el escaparate?",
+    "ctaJoinButton": "Cuenta tu historia",
+    "candidateNote": "Para ser seleccionado/a debes haber completado tu perfil arriba.",
     "statusPending": "Tu historia está en revisión: aparecerá en el escaparate en cuanto el equipo la apruebe.",
     "statusRejected": "Tu historia no ha sido aprobada. Edítala y guárdala de nuevo para volver a enviarla a revisión.",
     "homeConsentLabel": "Acepto que mi historia aparezca también en la página de inicio, visible para cualquiera que visite KUMANI.",
@@ -3149,5 +3190,31 @@
     "error_not_member": "Únete para escribir en el chat.",
     "error_empty": "Escribe un mensaje.",
     "error_rate_limited": "Has alcanzado el límite de mensajes de hoy."
+  },
+  "errorPages": {
+    "errorTitle": "Algo salió mal",
+    "errorDescription": "Se produjo un error inesperado. Inténtalo de nuevo: si el problema continúa, vuelve más tarde.",
+    "retry": "Reintentar",
+    "backHome": "Volver al inicio",
+    "goDashboard": "Ir al panel",
+    "notFoundTitle": "Página no encontrada",
+    "notFoundDescription": "La dirección que abriste no existe o se ha movido."
+  },
+  "billingPage": {
+    "titleActive": "Suscripción activa",
+    "titleInactive": "Completa tu suscripción",
+    "activeText": "¡Gracias! Tu plan {plan} está activo. Tienes acceso a todos los servicios del Marketplace.",
+    "inactiveText": "Activa tu plan por solo 49 €/año y desbloquea todas las herramientas del Marketplace.",
+    "subscribeCta": "Suscríbete por 49 €/año",
+    "statusLabel": "Estado:",
+    "statusActive": "Activo ({plan})",
+    "validUntil": "Válido hasta el {date}",
+    "billingEmail": "Correo de facturación: {email}",
+    "planBase": "Base",
+    "planPro": "Pro",
+    "discoverPro": "¿Eres profesional? Descubre el plan Pro →",
+    "backToDashboard": "← Volver al panel",
+    "errorNotice": "Se produjo un error durante el pago. Inténtalo de nuevo en un momento.",
+    "canceledNotice": "Pago cancelado: no se ha realizado ningún cargo."
   }
 }

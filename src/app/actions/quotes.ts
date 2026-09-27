@@ -70,7 +70,8 @@ export async function saveIssuerProfile(
   // Only overwrite logo_path when a new logo was actually uploaded in this
   // save — passing null here would wipe a previously saved logo every time
   // the profile is edited without touching the logo field.
-  if (logoPath) payload.logo_path = logoPath
+  // Solo percorsi nella cartella dell'utente (come saveMenuItem)
+  if (logoPath && logoPath.startsWith(`${gate.userId}/`) && !logoPath.includes('..')) payload.logo_path = logoPath
 
   const { error } = await supabase.from('quote_issuer_profiles').upsert(payload, { onConflict: 'user_id' })
 

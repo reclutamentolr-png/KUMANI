@@ -3,6 +3,8 @@
 // qui, solo funzioni deterministiche testabili e riusabili sia lato server
 // che nei componenti client).
 
+import { todayKey } from '@/lib/agenda'
+
 export type IncomeType = 'fissa' | 'variabile'
 export type FixedExpenseFrequency = 'mensile' | 'bimestrale' | 'trimestrale' | 'semestrale' | 'annuale' | 'una_tantum'
 export type BudgetStatus = 'positivo' | 'in_guardia' | 'critico'
@@ -82,7 +84,9 @@ const FREQUENCY_STEP: Record<FixedExpenseFrequency, number> = {
 /** Anno corrente reale (non hardcoded, per non richiedere di ricordarsi di
  * aggiornare la lista ogni gennaio). */
 export function currentYear(): number {
-  return new Date().getFullYear()
+  // Dal giorno di calendario a Roma, non dall'ora del server (UTC): la notte
+  // di San Silvestro il server sarebbe ancora nell'anno vecchio.
+  return Number(todayKey().slice(0, 4))
 }
 
 /** Anni selezionabili nella Dashboard: dal 2024 all'anno corrente (mai un
@@ -164,6 +168,54 @@ export interface SpendlyFixedPayment {
 /** Chiave "spesa:mese" per ritrovare in fretta il pagamento di una scadenza. */
 export function paymentKey(expenseId: string, period: string): string {
   return `${expenseId}:${period}`
+}
+
+/**
+ * Importo digitato dall'utente -> numero (NaN se non valido). Regole:
+ * - spazi, apostrofi e simbolo € vengono ignorati;
+ * - con sia '.' sia ',' il separatore che compare per ultimo è quello dei
+ *   decimali, l'altro delle migliaia ("1.234,56" e "1,234.56" -> 1234.56);
+ * - un separatore ripetuto è sempre delle migliaia ("1.234.567" -> 1234567);
+ * - una sola ',' è il separatore decimale ("1234,56" -> 1234.56);
+ * - un solo '.' è delle migliaia solo se seguito da esattamente 3 cifre e
+ *   preceduto da 1-3 cifre senza zero iniziale ("1.234" -> 1234, uso
+ *   italiano), altrimenti è decimale ("12.5" -> 12.5, "0.500" -> 0.5).
+ * I gruppi delle migliaia devono essere di 3 cifre ("1.23.4" -> NaN).
+ */
+export function parseAmount(input: string): number {
+  const s = input.replace(/[\s '€]/g, '')
+  const m = /^(-?)([\d.,]+)$/.exec(s)
+  if (!m || !/\d/.test(m[2])) return NaN
+  const sign = m[1] === '-' ? -1 : 1
+  const body = m[2]
+  const lastDot = body.lastIndexOf('.')
+  const lastComma = body.lastIndexOf(',')
+  const grouped = (part: string, sep: string) =>
+    (sep === '.' ? /^\d{1,3}(\.\d{3})+$/ : /^\d{1,3}(,\d{3})+$/).test(part)
+
+  let intPart = body
+  let decPart = ''
+  if (lastDot >= 0 && lastComma >= 0) {
+    const decIdx = Math.max(lastDot, lastComma)
+    const thouSep = lastDot > lastComma ? ',' : '.'
+    intPart = body.slice(0, decIdx)
+    decPart = body.slice(decIdx + 1)
+    if (!grouped(intPart, thouSep)) return NaN
+    intPart = intPart.split(thouSep).join('')
+  } else if (lastDot >= 0 || lastComma >= 0) {
+    const sep = lastDot >= 0 ? '.' : ','
+    const count = body.split(sep).length - 1
+    if (count > 1 || (sep === '.' && /^[1-9]\d{0,2}\.\d{3}$/.test(body))) {
+      if (!grouped(body, sep)) return NaN
+      intPart = body.split(sep).join('')
+    } else {
+      const idx = body.indexOf(sep)
+      intPart = body.slice(0, idx)
+      decPart = body.slice(idx + 1)
+    }
+  }
+  if (!/^\d*$/.test(intPart) || !/^\d*$/.test(decPart) || (intPart + decPart) === '') return NaN
+  return sign * Number(`${intPart || '0'}.${decPart || '0'}`)
 }
 
 export function formatCurrency(amount: number): string {

@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import {
@@ -96,12 +96,22 @@ export default function MemoLifeApp({
   const [query, setQuery] = useState('')
   const [showDone, setShowDone] = useState(false)
 
-  // Mese mostrato nel calendario (rilegge anche dopo ogni modifica)
+  // Mese mostrato nel calendario (rilegge anche dopo ogni modifica).
+  // Ogni richiesta ha un numero progressivo: una risposta arrivata dopo che
+  // l'utente ha già cambiato mese viene ignorata.
+  const monthRequest = useRef(0)
   const loadMonth = useCallback(async (year: number, month: number) => {
+    const request = ++monthRequest.current
     setLoadingMonth(true)
-    const range = monthRange(year, month)
-    setCalendarEvents(await getAgendaRange(range.from, range.to))
-    setLoadingMonth(false)
+    try {
+      const range = monthRange(year, month)
+      const events = await getAgendaRange(range.from, range.to)
+      if (request === monthRequest.current) setCalendarEvents(events)
+    } catch (err) {
+      console.error('[MemoLife] loadMonth failed:', err)
+    } finally {
+      if (request === monthRequest.current) setLoadingMonth(false)
+    }
   }, [])
 
   const isCurrentMonth = view.year === Number(today.slice(0, 4)) && view.month === Number(today.slice(5, 7))
@@ -125,8 +135,12 @@ export default function MemoLifeApp({
           })()
     setView(next)
     setSelectedDay(delta === 'today' ? today : `${next.year}-${String(next.month).padStart(2, '0')}-01`)
-    if (next.year === Number(today.slice(0, 4)) && next.month === Number(today.slice(5, 7))) setCalendarEvents(monthEvents)
-    else loadMonth(next.year, next.month)
+    if (next.year === Number(today.slice(0, 4)) && next.month === Number(today.slice(5, 7))) {
+      // Mese corrente già noto: invalida eventuali richieste in corso
+      monthRequest.current++
+      setLoadingMonth(false)
+      setCalendarEvents(monthEvents)
+    } else loadMonth(next.year, next.month)
   }
 
   // Apre la scheda giusta toccando un evento

@@ -31,6 +31,30 @@ async function requireActiveDigitalReceiptAccess(): Promise<
   return { ok: true, userId: user.id }
 }
 
+// Promemoria Life Calendar collegato a una ricevuta: archiviato quando
+// l'oggetto è restituito, eliminato quando la ricevuta non esiste più.
+// Non bloccante: un errore qui non deve far fallire l'azione principale.
+async function closeLinkedLifeCalendarItem(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userId: string,
+  itemId: string | null | undefined,
+  mode: 'archive' | 'delete'
+): Promise<void> {
+  if (!itemId) return
+  const query =
+    mode === 'archive'
+      ? supabase
+          .from('life_calendar_items')
+          .update({ status: 'archived', updated_at: new Date().toISOString() })
+          .eq('id', itemId)
+          .eq('user_id', userId)
+      : supabase.from('life_calendar_items').delete().eq('id', itemId).eq('user_id', userId)
+  const { error } = await query
+  if (error) {
+    console.error(`[DigitalReceipt] Life Calendar reminder ${mode} failed (non-blocking):`, error)
+  }
+}
+
 export async function createReceipt(
   form: DigitalReceiptFormData,
   photoPath: string | null
@@ -94,10 +118,13 @@ export async function createReceipt(
 
     if (error && error.code !== '23505') {
       console.error('[DigitalReceipt] createReceipt failed:', error)
+      // La ricevuta non è stata salvata: niente promemoria orfano.
+      await closeLinkedLifeCalendarItem(supabase, gate.userId, lifeCalendarItemId, 'delete')
       return { success: false, message: 'saveError' }
     }
   }
 
+  await closeLinkedLifeCalendarItem(supabase, gate.userId, lifeCalendarItemId, 'delete')
   return { success: false, message: 'saveError' }
 }
 
@@ -155,7 +182,7 @@ export async function deleteReceipt(id: string): Promise<ActionResult<null>> {
 
   const { data: receipt } = await supabase
     .from('digital_receipts')
-    .select('photo_path')
+    .select('photo_path, life_calendar_item_id')
     .eq('id', id)
     .eq('user_id', gate.userId)
     .single()
@@ -171,6 +198,8 @@ export async function deleteReceipt(id: string): Promise<ActionResult<null>> {
     await supabase.storage.from('receipt-photos-v2').remove([receipt.photo_path])
   }
 
+  await closeLinkedLifeCalendarItem(supabase, gate.userId, receipt?.life_calendar_item_id, 'delete')
+
   return { success: true, data: null }
 }
 
@@ -179,17 +208,22 @@ export async function confirmReturn(id: string): Promise<ActionResult<null>> {
   if (!gate.ok) return { success: false, message: gate.message }
 
   const supabase = await createClient()
-  const { error } = await supabase
+  const { data: updated, error } = await supabase
     .from('digital_receipts')
     .update({ returned_at: new Date().toISOString(), updated_at: new Date().toISOString() })
     .eq('id', id)
     .eq('user_id', gate.userId)
     .eq('template', 'loan')
+    .select('life_calendar_item_id')
+    .maybeSingle()
 
   if (error) {
     console.error('[DigitalReceipt] confirmReturn failed:', error)
     return { success: false, message: 'saveError' }
   }
+
+  // Oggetto restituito: il promemoria di restituzione non serve più.
+  await closeLinkedLifeCalendarItem(supabase, gate.userId, updated?.life_calendar_item_id, 'archive')
 
   return { success: true, data: null }
 }

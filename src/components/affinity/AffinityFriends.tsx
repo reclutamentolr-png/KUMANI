@@ -89,7 +89,7 @@ export default function AffinityFriends({ myMap }: { myMap: AffinityMap }) {
         {header}
         <p className="rounded-xl bg-[var(--gold-pale)] px-4 py-3 text-sm text-[var(--ink)]">{t(`f_req_${data.status}`)}</p>
         {data.status === 'no_plan' && (
-          <Link href="/billing" className="inline-flex rounded-lg bg-[var(--ink)] px-4 py-2.5 text-sm font-semibold text-white">
+          <Link href={{ pathname: '/billing' }} className="inline-flex rounded-lg bg-[var(--ink)] px-4 py-2.5 text-sm font-semibold text-white">
             {t('f_subscribe')}
           </Link>
         )}

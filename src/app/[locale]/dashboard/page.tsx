@@ -1,3 +1,4 @@
+import { SITE_URL } from '@/lib/siteUrl'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
@@ -68,7 +69,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   }
 
   // 6. URL di condivisione
-  const shareUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/${locale}/ref/${profile?.referral_code}`
+  const shareUrl = `${SITE_URL}/${locale}/ref/${profile?.referral_code}`
 
   // 7. Messaggi non letti
   const unreadMessagesCount = await getUnreadMessagesCount(user.id)

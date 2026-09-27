@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
 import { ArrowLeft, History } from 'lucide-react'
 import { hasActiveLifeCalendarAccess } from '@/lib/lifeCalendar-server'
@@ -20,11 +20,11 @@ export default async function LifeCalendarItemDetailPage({
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  if (!user) redirect(`/${await getLocale()}/login`)
 
   const hasAccess = await hasActiveLifeCalendarAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect('/marketplace')
+    redirect(`/${await getLocale()}/marketplace`)
   }
 
   const { data: item } = await supabase

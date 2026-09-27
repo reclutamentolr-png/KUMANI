@@ -8,6 +8,12 @@ import { getStripe } from '@/lib/stripe'
 const getSupabaseAdmin = () =>
   createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
+// Fine del periodo corrente (secondi Unix): sull'abbonamento nelle API
+// Stripe meno recenti, sulla prima voce in quelle nuove.
+type PeriodSource = { current_period_end?: number; items?: { data?: Array<{ current_period_end?: number }> } }
+const getPeriodEnd = (sub: PeriodSource | null | undefined): number | null =>
+  sub?.current_period_end ?? sub?.items?.data?.[0]?.current_period_end ?? null
+
 export async function POST(req: NextRequest) {
   const supabaseAdmin = getSupabaseAdmin()
   const body = await req.text()
@@ -26,12 +32,21 @@ export async function POST(req: NextRequest) {
     const session = event.data.object as Stripe.Checkout.Session
     const userId = session.metadata?.userId
 
-    // Calculate subscription expiry: 1 year from activation (annual plan,
-    // 49€/anno). This is an immediate estimate shown right after checkout;
-    // it self-corrects to Stripe's real current_period_end once the
-    // customer.subscription.updated event arrives below.
+    // Scadenza: la fine del periodo reale dell'abbonamento Stripe. Se non si
+    // riesce a leggerla si stima 1 anno (piano annuale); si corregge comunque
+    // col successivo customer.subscription.updated.
     const now = new Date()
-    const expiresAt = new Date(now.setFullYear(now.getFullYear() + 1))
+    let expiresAt = new Date(now.setFullYear(now.getFullYear() + 1))
+    const subscriptionId = typeof session.subscription === 'string' ? session.subscription : session.subscription?.id
+    if (subscriptionId) {
+      try {
+        const sub = await getStripe().subscriptions.retrieve(subscriptionId)
+        const periodEnd = getPeriodEnd(sub)
+        if (periodEnd) expiresAt = new Date(periodEnd * 1000)
+      } catch (err) {
+        console.error('⚠️ Impossibile leggere l\'abbonamento Stripe, scadenza stimata:', err instanceof Error ? err.message : err)
+      }
+    }
 
     if (userId) {
       const { data, error } = await supabaseAdmin
@@ -47,6 +62,8 @@ export async function POST(req: NextRequest) {
       
       if (error) {
         console.error('❌ Errore Supabase:', error.message)
+        // 500 → Stripe ritenta l'invio dell'evento più tardi.
+        return NextResponse.json({ error: 'db_update_failed' }, { status: 500 })
       } else if (!data || data.length === 0) {
         console.error('⚠️ NESSUNA RIGA AGGIORNATA! UserId non trovato.')
       }
@@ -71,9 +88,11 @@ export async function POST(req: NextRequest) {
         updateData.subscription_plan = priceId === process.env.STRIPE_PRICE_ID_PRO ? 'pro' : 'base'
       }
 
-      // Calculate next billing date
-      if (subscription.current_period_end) {
-        updateData.subscription_expires_at = new Date(subscription.current_period_end * 1000).toISOString()
+      // Prossimo rinnovo: nelle versioni recenti dell'API Stripe
+      // current_period_end sta sulle voci dell'abbonamento, non più su di esso.
+      const periodEnd = getPeriodEnd(subscription)
+      if (periodEnd) {
+        updateData.subscription_expires_at = new Date(periodEnd * 1000).toISOString()
       }
 
       const { error } = await supabaseAdmin
@@ -83,6 +102,8 @@ export async function POST(req: NextRequest) {
 
       if (error) {
         console.error('❌ Errore aggiornamento subscription:', error.message)
+        // 500 → Stripe ritenta l'invio dell'evento più tardi.
+        return NextResponse.json({ error: 'db_update_failed' }, { status: 500 })
       }
     }
   }

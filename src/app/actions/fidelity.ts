@@ -291,6 +291,8 @@ export async function applyFidelityToMember(
   kind: FidelityKind,
   quantity: number
 ): Promise<{ success: true; status: FidelityStatus; stampsCount: number; stampsNeeded: number; nextStampAt: string | null } | Fail<'unauthorized' | 'notFound'>> {
+  // Whitelist del tipo di operazione: il client potrebbe inviare valori arbitrari
+  if (!(['stamp', 'redeem', 'review'] as const).includes(kind)) return { success: false, message: 'unauthorized' }
   if (!(await hasCassaAccess(cardId))) return { success: false, message: 'unauthorized' }
 
   const service = getFidelityServiceClient()

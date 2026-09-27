@@ -1,3 +1,4 @@
+import { SITE_URL } from '@/lib/siteUrl'
 import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
@@ -22,11 +23,11 @@ export default async function DigitalReceiptDetailPage({
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  if (!user) redirect(`/${locale}/login`)
 
   const hasAccess = await hasActiveDigitalReceiptAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect('/marketplace')
+    redirect(`/${locale}/marketplace`)
   }
 
   const { data: receipt } = await supabase
@@ -48,7 +49,7 @@ export default async function DigitalReceiptDetailPage({
     ? supabase.storage.from('receipt-photos-v2').getPublicUrl(receipt.photo_path).data.publicUrl
     : null
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const baseUrl = SITE_URL
   const receiptUrl =
     locale === defaultLocale ? `${baseUrl}/ricevute/${receipt.code}` : `${baseUrl}/${locale}/ricevute/${receipt.code}`
 

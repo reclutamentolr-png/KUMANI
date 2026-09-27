@@ -1,15 +1,17 @@
+import { SITE_URL } from '@/lib/siteUrl'
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { getStripe } from '@/lib/stripe'
+import { isActiveSubscription } from '@/lib/subscriptionGate'
 
 export async function POST(request: Request) {
-  const base = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+  const base = SITE_URL
   try {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.redirect(new URL('/register', base))
+      return NextResponse.redirect(new URL('/register', base), 303)
     }
 
     // Piano scelto: Base (49 €/anno, default) o Pro (149 €/anno, ?plan=pro).
@@ -23,14 +25,17 @@ export async function POST(request: Request) {
     // dalla pagina Pro (Stripe calcola la differenza sull'abbonamento attuale).
     const { data: current } = await supabase
       .from('profiles')
-      .select('subscription_status, subscription_source, subscription_expires_at')
+      .select('subscription_status, subscription_source, subscription_expires_at, subscription_plan')
       .eq('id', user.id)
       .maybeSingle()
-    const hasStripeSubscription =
-      current?.subscription_status === 'active' &&
-      current?.subscription_source === 'stripe' &&
-      (!current?.subscription_expires_at || new Date(current.subscription_expires_at) > new Date())
+    const hasActiveSubscription = isActiveSubscription(current)
+    const hasStripeSubscription = hasActiveSubscription && current?.subscription_source === 'stripe'
     if (hasStripeSubscription) {
+      return NextResponse.redirect(new URL(plan === 'pro' ? '/pro' : '/billing', base), 303)
+    }
+    // Abbonamento già attivo (anche da voucher): niente secondo pagamento per
+    // lo stesso piano. Il Pro resta acquistabile da chi ha solo il Base.
+    if (hasActiveSubscription && (plan === 'base' || current?.subscription_plan === 'pro')) {
       return NextResponse.redirect(new URL(plan === 'pro' ? '/pro' : '/billing', base), 303)
     }
 
@@ -60,8 +65,8 @@ export async function POST(request: Request) {
       // session_id nell'URL permette a /billing di verificare e attivare
       // l'abbonamento anche se il webhook non arriva (es. in locale senza
       // `stripe listen` in ascolto).
-      success_url: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/billing?success=true&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/billing?canceled=true`,
+      success_url: `${SITE_URL}/billing?success=true&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${SITE_URL}/billing?canceled=true`,
       customer_email: user.email,
     })
 
@@ -74,6 +79,6 @@ export async function POST(request: Request) {
     
   } catch (error: any) {
     console.error('❌ Errore Stripe Checkout:', error)
-    return NextResponse.redirect(new URL('/billing?error=true', process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'))
+    return NextResponse.redirect(new URL('/billing?error=true', SITE_URL), 303)
   }
 }

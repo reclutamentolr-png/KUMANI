@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
 import ToolBackLink from '@/components/ToolBackLink'
 import { ArrowLeft, PackageSearch, Sparkles } from 'lucide-react'
 import { hasActiveFindoAccess } from '@/lib/findo-server'
@@ -15,11 +15,11 @@ export default async function FindoPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  if (!user) redirect(`/${await getLocale()}/login`)
 
   const hasAccess = await hasActiveFindoAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect('/marketplace')
+    redirect(`/${await getLocale()}/marketplace`)
   }
 
   const { data: locations } = await supabase

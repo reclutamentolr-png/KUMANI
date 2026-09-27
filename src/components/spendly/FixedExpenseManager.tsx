@@ -14,6 +14,7 @@ import { todayKey } from '@/lib/agenda'
 import {
   FIXED_EXPENSE_CATEGORIES,
   formatCurrency,
+  parseAmount,
   currentYearOnly,
   fixedExpenseAppliesToMonth,
   fixedExpenseDueDate,
@@ -82,7 +83,7 @@ export default function FixedExpenseManager({
   const router = useRouter()
   const [modalOpen, setModalOpen] = useState(autoOpen)
   const [editing, setEditing] = useState<SpendlyFixedExpense | null>(null)
-  const [form, setForm] = useState<FormState>(emptyForm())
+  const [form, setForm] = useState<FormState>(emptyForm)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [paying, setPaying] = useState<string | null>(null)
@@ -107,22 +108,32 @@ export default function FixedExpenseManager({
       ).sort((a, b) => a.date.localeCompare(b.date))
     : []
 
-  const pay = async (row: (typeof dueRows)[number]) => {
-    const answer = prompt(t('paidAmountPrompt', { name: row.item.description }), String(row.item.amount).replace('.', ','))
-    if (answer === null) return
-    const amount = parseFloat(answer.replace(',', '.'))
-    if (Number.isNaN(amount) || amount < 0) return
+  // Pagata / annulla: lo stato "paying" si azzera sempre, anche se l'azione
+  // fallisce, e in quel caso si avvisa l'utente.
+  const runPayment = async (row: (typeof dueRows)[number], action: () => Promise<boolean>) => {
     setPaying(row.period + row.item.id)
-    await markBillPaid(row.item.id, row.period, amount)
-    setPaying(null)
+    let ok = false
+    try {
+      ok = await action()
+    } catch (err) {
+      console.error('[Spendly] payment action failed:', err)
+    } finally {
+      setPaying(null)
+    }
+    if (!ok) alert(t('saveError'))
     router.refresh()
   }
 
+  const pay = async (row: (typeof dueRows)[number]) => {
+    const answer = prompt(t('paidAmountPrompt', { name: row.item.description }), String(row.item.amount).replace('.', ','))
+    if (answer === null) return
+    const amount = parseAmount(answer)
+    if (Number.isNaN(amount) || amount < 0) return
+    await runPayment(row, () => markBillPaid(row.item.id, row.period, amount))
+  }
+
   const unpay = async (row: (typeof dueRows)[number]) => {
-    setPaying(row.period + row.item.id)
-    await unmarkBillPaid(row.item.id, row.period)
-    setPaying(null)
-    router.refresh()
+    await runPayment(row, () => unmarkBillPaid(row.item.id, row.period))
   }
 
   // Somma solo le scadenze che ricorrono davvero nell'anno selezionato,
@@ -138,7 +149,7 @@ export default function FixedExpenseManager({
   // Media Spesa Fissa Mensile = media semplice degli importi delle spese
   // fisse in scadenza nel mese corrente (non il totale annuo diviso 12):
   // es. due spese da 573 e 300 dovute questo mese danno una media di 436,5.
-  const currentMonth = new Date().getMonth() + 1
+  const currentMonth = thisMonth
   const currentMonthItems = items.filter((i) => fixedExpenseAppliesToMonth(i, year, currentMonth))
   const monthlyQuota =
     currentMonthItems.length > 0 ? currentMonthItems.reduce((sum, i) => sum + i.amount, 0) / currentMonthItems.length : 0
@@ -154,11 +165,12 @@ export default function FixedExpenseManager({
     setEditing(item)
     setForm({
       description: item.description,
-      amount: String(item.amount),
+      amount: String(item.amount).replace('.', ','),
       frequency: item.frequency,
       category: item.category,
       startDate: item.start_date,
-      endDate: item.end_date || '',
+      // Una tantum: end_date coincide con la data, non è una vera data di fine
+      endDate: item.frequency === 'una_tantum' ? '' : item.end_date || '',
       billingDay: item.billing_day ? String(item.billing_day) : '',
       notes: item.notes || '',
     })
@@ -171,7 +183,7 @@ export default function FixedExpenseManager({
     setSaving(true)
     setError(null)
 
-    const amount = parseFloat(form.amount.replace(',', '.'))
+    const amount = parseAmount(form.amount)
     if (!form.description.trim() || Number.isNaN(amount) || amount < 0 || !form.startDate) {
       setError(t('saveError'))
       setSaving(false)
@@ -210,8 +222,12 @@ export default function FixedExpenseManager({
 
   const handleDelete = async (id: string) => {
     if (!confirm(t('deleteConfirm'))) return
-    const result = await deleteFixedExpense(id)
-    if (result.success) router.refresh()
+    const result = await deleteFixedExpense(id).catch(() => ({ success: false as const }))
+    if (!result.success) {
+      alert(t('deleteError'))
+      return
+    }
+    router.refresh()
   }
 
   return (

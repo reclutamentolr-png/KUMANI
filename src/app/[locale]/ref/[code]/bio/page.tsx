@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { SITE_URL } from '@/lib/siteUrl'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { notFound } from 'next/navigation' // ✅ IMPORT AGGIUNTO PER RISOLVERE TS2304
 import {
@@ -23,8 +23,6 @@ export default async function LinkInBioPublicPage({ params }: { params: Promise<
   const resolvedParams = await params
   const code = resolvedParams.code
   
-  const supabase = await createClient()
-
   // 1. Trova il profilo. I visitatori anonimi non leggono più la tabella
   // profiles: la pagina bio (pubblica per scelta del titolare) la legge lato
   // server con service role, solo le colonne che mostra.
@@ -51,23 +49,31 @@ export default async function LinkInBioPublicPage({ params }: { params: Promise<
     notFound()
   }
 
-  // 2. Trova la bio e i link personalizzati (se esistono)
-  // Qui TypeScript ora sa al 100% che 'profile' NON è null
-  const { data: linkInBio } = await supabase
+  // 2. Trova la bio e i link personalizzati (se esistono).
+  // La RLS di link_in_bio consente la lettura solo al proprietario: la pagina
+  // è pubblica, quindi leggiamo con service role, solo le colonne mostrate e
+  // solo la riga di questo profilo.
+  const { data: linkInBio } = await service
     .from('link_in_bio')
-    .select('*')
+    .select('bio_text, links, theme')
     .eq('user_id', profile.id)
-    .single()
+    .maybeSingle()
 
   // Solo i link che il Kumano ha effettivamente inserito nell'editor — niente
   // link "Unisciti al mio team" iniettato automaticamente: la pagina deve
   // riflettere esattamente ciò che è stato scritto, non aggiungere contenuti
   // extra il visitatore non ha chiesto di vedere.
-  const links: { id: string; title: string; url: string; icon: string; enabled: boolean }[] = linkInBio?.links
-    ? JSON.parse(linkInBio.links)
-    : []
+  // Tollerante: links può arrivare come stringa JSON o già come array (jsonb)
+  type BioLink = { id: string; title: string; url: string; icon: string; enabled: boolean }
+  let links: BioLink[] = []
+  try {
+    const raw: unknown = typeof linkInBio?.links === 'string' ? JSON.parse(linkInBio.links) : linkInBio?.links
+    links = Array.isArray(raw) ? (raw as BioLink[]) : []
+  } catch {
+    links = []
+  }
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const baseUrl = SITE_URL
   const profileUrl = `${baseUrl}/ref/${code}`
   const theme = resolveBioTheme(linkInBio?.theme)
 

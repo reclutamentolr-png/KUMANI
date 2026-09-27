@@ -5,6 +5,7 @@ import { awardToolPoint } from '@/lib/toolPoints'
 import { normalizeLinkUrl } from '@/lib/linkUtils'
 import { PREMIUM_BIO_THEME_KEYS, type BioThemeKey } from '@/lib/linkInBioThemes'
 import { KU_UNLOCK_LINKINBIO_THEMES } from '@/lib/ku'
+import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 
 type LinkItem = {
   id: string
@@ -20,6 +21,11 @@ export async function saveLinkInBio(bioText: string, links: LinkItem[], theme: B
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) return { success: false }
+
+  // Gating del piano: stessa regola degli altri strumenti (can_use_tool)
+  if (!(await hasActiveToolAccess(supabase, user.id, 'link-in-bio'))) {
+    return { success: false, message: 'subscriptionRequired' }
+  }
 
   if (PREMIUM_BIO_THEME_KEYS.includes(theme)) {
     const { data: unlock } = await supabase

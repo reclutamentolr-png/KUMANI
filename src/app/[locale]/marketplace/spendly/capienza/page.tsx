@@ -1,7 +1,9 @@
 import { createClient } from '@/lib/supabase/server'
+import { getLocale } from 'next-intl/server'
 import { redirect } from 'next/navigation'
 import SpendlyCapacity from '@/components/spendly/SpendlyCapacity'
 import type { SpendlyIncome, SpendlyFixedExpense, SpendlyFixedPayment, SpendlyVariableExpense } from '@/lib/spendly'
+import { currentYear } from '@/lib/spendly'
 
 export default async function SpendlyCapacityPage({
   searchParams,
@@ -9,13 +11,13 @@ export default async function SpendlyCapacityPage({
   searchParams: Promise<{ year?: string }>
 }) {
   const { year: yearParam } = await searchParams
-  const year = yearParam ? parseInt(yearParam, 10) : new Date().getFullYear()
+  const year = yearParam ? parseInt(yearParam, 10) : currentYear()
 
   const supabase = await createClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  if (!user) redirect(`/${await getLocale()}/login`)
 
   const [{ data: income }, { data: fixedExpenses }, { data: variableExpenses }, { data: payments }] = await Promise.all([
     supabase

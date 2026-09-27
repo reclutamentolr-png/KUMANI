@@ -1,3 +1,4 @@
+import { getLocale } from 'next-intl/server'
 import { redirect } from 'next/navigation'
 import BillsManager from '@/components/spendly/BillsManager'
 import { createClient } from '@/lib/supabase/server'
@@ -13,7 +14,7 @@ export default async function SpendlyBillsPage({ searchParams }: { searchParams:
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  if (!user) redirect(`/${await getLocale()}/login`)
 
   const { data: bills } = await supabase
     .from('spendly_fixed_expenses')

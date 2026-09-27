@@ -231,74 +231,73 @@ export async function markMessagesAsRead(userId: string, otherUserId: string, li
   return { success: true, data }
 }
 
-// ✅ CANCELLAZIONE CONVERSAZIONE - FIX TS: filtri applicati PRIMA di eseguire la query
+// CANCELLAZIONE CONVERSAZIONE: può cancellarla solo chi l'ha iniziata.
+// L'utente arriva SEMPRE dalla sessione (mai dal client) e gli id vengono
+// validati come UUID prima di finire nel filtro: la cancellazione usa il
+// service client, quindi un filtro manipolato potrebbe toccare altre chat.
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
 export async function deleteConversationAction(
-  currentUserId: string, 
-  otherUserId: string, 
+  _currentUserId: string,
+  otherUserId: string,
   listingId?: string
 ) {
-  console.log('🗑️ [DELETE] === INIZIO CANCELLAZIONE CONVERSAZIONE ===')
-
   const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { success: false, error: 'Non autenticato' }
+  const currentUserId = user.id
+
+  if (!UUID_RE.test(otherUserId) || (listingId && listingId !== 'direct' && !UUID_RE.test(listingId))) {
+    return { success: false, error: 'Conversazione non valida' }
+  }
+  const conversationFilter = `and(sender_id.eq.${currentUserId},receiver_id.eq.${otherUserId}),and(sender_id.eq.${otherUserId},receiver_id.eq.${currentUserId})`
 
   // STEP 1: Verifica chi ha iniziato la conversazione
-  // ✅ Costruisco la query SENZA .single(), applico il filtro opzionale, poi eseguo
-  let firstMessageQuery: any = supabase
+  let firstMessageQuery = supabase
     .from('messages')
     .select('sender_id')
-    .or(`and(sender_id.eq.${currentUserId},receiver_id.eq.${otherUserId}),and(sender_id.eq.${otherUserId},receiver_id.eq.${currentUserId})`)
-    .order('created_at', { ascending: true })
-    .limit(1)
-
-  if (listingId) {
-    firstMessageQuery = firstMessageQuery.eq('listing_id', listingId)
-  }
+    .or(conversationFilter)
+  if (listingId === 'direct') firstMessageQuery = firstMessageQuery.is('listing_id', null)
+  else if (listingId) firstMessageQuery = firstMessageQuery.eq('listing_id', listingId)
 
   const { data: firstMessages, error: firstMsgError } = await firstMessageQuery
+    .order('created_at', { ascending: true })
+    .limit(1)
   const firstMessage = firstMessages?.[0]
 
   if (firstMsgError || !firstMessage) {
-    console.error('❌ [DELETE] Nessun messaggio trovato:', firstMsgError?.message)
     return { success: false, error: 'Conversazione non trovata' }
   }
 
   if (firstMessage.sender_id !== currentUserId) {
-    console.log('⛔ [DELETE] Utente non autorizzato')
-    return { 
-      success: false, 
-      error: 'Non hai i permessi per cancellare questa conversazione' 
+    return {
+      success: false,
+      error: 'Non hai i permessi per cancellare questa conversazione'
     }
   }
 
-  console.log('✅ [DELETE] Utente autorizzato, procedo con cancellazione HARD')
-
-  // STEP 2: Cancellazione con SERVICE CLIENT (bypass RLS)
+  // STEP 2: Cancellazione con SERVICE CLIENT (bypass RLS), solo tra i due utenti
   const supabaseAdmin = getServiceClient()
 
-  let deleteQuery: any = supabaseAdmin
+  let deleteQuery = supabaseAdmin
     .from('messages')
     .delete()
-    .or(`and(sender_id.eq.${currentUserId},receiver_id.eq.${otherUserId}),and(sender_id.eq.${otherUserId},receiver_id.eq.${currentUserId})`)
-    .select('id')
+    .or(conversationFilter)
+  if (listingId === 'direct') deleteQuery = deleteQuery.is('listing_id', null)
+  else if (listingId) deleteQuery = deleteQuery.eq('listing_id', listingId)
 
-  if (listingId) {
-    deleteQuery = deleteQuery.eq('listing_id', listingId)
-  }
-
-  const { data: deletedMessages, error: deleteError } = await deleteQuery
+  const { data: deletedMessages, error: deleteError } = await deleteQuery.select('id')
 
   if (deleteError) {
-    console.error('❌ [DELETE] Errore cancellazione:', deleteError.message)
+    console.error('Errore cancellazione conversazione:', deleteError.message)
     return { success: false, error: deleteError.message }
   }
 
   const deletedCount = deletedMessages?.length || 0
-  console.log(`✅ [DELETE] Cancellati ${deletedCount} messaggi dal DB`)
 
   // STEP 3: Invalida la cache di Next.js
   revalidatePath('/marketplace/chat')
   revalidatePath('/marketplace')
 
-  console.log('🗑️ [DELETE] === FINE CANCELLAZIONE ===')
   return { success: true, deletedCount }
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { todayKey } from '@/lib/agenda'
 import { useTranslations } from 'next-intl'
 import { ChevronLeft, ChevronRight, TrendingUp, Repeat, Wallet, CheckCircle2, AlertTriangle, XCircle } from 'lucide-react'
 import YearSelect from './YearSelect'
@@ -38,7 +39,7 @@ export default function SpendlyCapacity({
   year: number
 }) {
   const t = useTranslations('spendly')
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1)
+  const [selectedMonth, setSelectedMonth] = useState(() => Number(todayKey().slice(5, 7)))
 
   const capacities = useMemo(() => {
     const totals = computeMonthlyTotals(income, fixedExpenses, variableExpenses, year, payments)

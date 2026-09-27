@@ -1,3 +1,4 @@
+import { SITE_URL } from '@/lib/siteUrl'
 import { notFound, redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { ArrowLeft, HandPlatter } from 'lucide-react'
@@ -33,7 +34,7 @@ export default async function ConvivioDetailPage({ params }: { params: Promise<{
         </div>
       </header>
       <main className="mx-auto max-w-6xl px-4 py-8">
-        <ConvivioDetailView initial={detail} siteUrl={process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'} myReferral={me?.referral_code ?? null} />
+        <ConvivioDetailView initial={detail} siteUrl={SITE_URL} myReferral={me?.referral_code ?? null} />
       </main>
     </div>
   )

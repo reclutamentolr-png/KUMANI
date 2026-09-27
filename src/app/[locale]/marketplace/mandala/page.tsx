@@ -1,3 +1,4 @@
+import { SITE_URL } from '@/lib/siteUrl'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslations } from 'next-intl/server'
 import { redirect } from 'next/navigation'
@@ -14,7 +15,7 @@ export default async function MandalaPage({ params }: { params: Promise<{ locale
   if (!user) redirect(`/${locale}/login`)
 
   const { data: profile } = await supabase.from('profiles').select('referral_code').eq('id', user.id).single()
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const baseUrl = SITE_URL
   const referralUrl = profile?.referral_code ? `${baseUrl}/${locale}/ref/${profile.referral_code}` : `${baseUrl}/${locale}`
 
   return (

@@ -8,6 +8,7 @@ import SpendlyModal from './SpendlyModal'
 import KpiCard from './KpiCard'
 import YearSelect from './YearSelect'
 import { createIncome, updateIncome, deleteIncome } from '@/app/actions/spendly'
+import { todayKey } from '@/lib/agenda'
 import {
   INCOME_CATEGORIES,
   formatCurrency,
@@ -15,6 +16,7 @@ import {
   type SpendlyIncome,
   type IncomeCategory,
   type IncomeType,
+  parseAmount,
 } from '@/lib/spendly'
 
 const CATEGORY_KEY: Record<IncomeCategory, string> = {
@@ -34,8 +36,9 @@ type FormState = {
   notes: string
 }
 
+// Giorno di oggi in Italia (toISOString darebbe il giorno UTC).
 function todayISO() {
-  return new Date().toISOString().slice(0, 10)
+  return todayKey()
 }
 
 function emptyForm(): FormState {
@@ -47,7 +50,7 @@ export default function IncomeManager({ items, year }: { items: SpendlyIncome[];
   const router = useRouter()
   const [modalOpen, setModalOpen] = useState(false)
   const [editing, setEditing] = useState<SpendlyIncome | null>(null)
-  const [form, setForm] = useState<FormState>(emptyForm())
+  const [form, setForm] = useState<FormState>(emptyForm)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -66,7 +69,7 @@ export default function IncomeManager({ items, year }: { items: SpendlyIncome[];
     setEditing(item)
     setForm({
       description: item.description,
-      amount: String(item.amount),
+      amount: String(item.amount).replace('.', ','),
       incomeType: item.income_type,
       category: item.category,
       incomeDate: item.income_date,
@@ -81,7 +84,7 @@ export default function IncomeManager({ items, year }: { items: SpendlyIncome[];
     setSaving(true)
     setError(null)
 
-    const amount = parseFloat(form.amount.replace(',', '.'))
+    const amount = parseAmount(form.amount)
     if (!form.description.trim() || Number.isNaN(amount) || amount < 0 || !form.incomeDate) {
       setError(t('saveError'))
       setSaving(false)

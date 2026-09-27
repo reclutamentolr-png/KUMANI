@@ -46,7 +46,7 @@ export default function ForgotPasswordPage() {
     // link nell'email resta l'unico modo reale con cui l'utente può arrivare
     // a reimpostare la password: lo teniamo attivo come fallback.
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/reset-password`,
+      redirectTo: `${window.location.origin}/${locale}/reset-password`,
     })
 
     if (resetError) {
@@ -104,7 +104,7 @@ export default function ForgotPasswordPage() {
     setError(null)
     setResendMessage(null)
     const { error: resendError } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/reset-password`,
+      redirectTo: `${window.location.origin}/${locale}/reset-password`,
     })
     if (resendError) {
       setError(resendError.message)

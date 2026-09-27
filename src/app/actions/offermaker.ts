@@ -35,6 +35,25 @@ async function requireActiveOfferMakerSubscription(): Promise<
   return { ok: true, userId: user.id }
 }
 
+// Limite giornaliero di generazioni AI per utente (tabella offermaker_ai_usage,
+// stessa forma di menu_ai_usage) e lunghezza massima di ogni risposta.
+const OFFERMAKER_AI_DAILY_RUNS = 10
+const MAX_ANSWER_LENGTH = 500
+
+function clampAnswers(answers: OfferFormAnswers): OfferFormAnswers {
+  const clip = (v: unknown) => (typeof v === 'string' ? v.slice(0, MAX_ANSWER_LENGTH) : '')
+  return {
+    whatOffer: clip(answers?.whatOffer),
+    targetAudience: clip(answers?.targetAudience),
+    priceInfo: clip(answers?.priceInfo),
+    locationInfo: clip(answers?.locationInfo),
+    strengthPoint: clip(answers?.strengthPoint),
+    objective: clip(answers?.objective).slice(0, 40) as OfferFormAnswers['objective'],
+    tone: clip(answers?.tone).slice(0, 40) as OfferFormAnswers['tone'],
+    contactWhatsapp: clip(answers?.contactWhatsapp).slice(0, 40),
+  }
+}
+
 function buildGenerationPrompt(answers: OfferFormAnswers): string {
   const objectiveLabels: Record<string, string> = {
     call: 'telefonate',
@@ -73,7 +92,7 @@ potenziali clienti: una "soft" (leggera, informale), una "direct" (diretta, con 
 }
 
 export async function generateOfferDraft(
-  answers: OfferFormAnswers
+  rawAnswers: OfferFormAnswers
 ): Promise<ActionResult<GeneratedCampaignDraft>> {
   const gate = await requireActiveOfferMakerSubscription()
   if (!gate.ok) {
@@ -87,6 +106,29 @@ export async function generateOfferDraft(
     if (err instanceof MissingApiKeyError) {
       return { success: false, message: 'missingApiKey' }
     }
+    return { success: false, message: 'generateError' }
+  }
+
+  const answers = clampAnswers(rawAnswers)
+
+  // Limite giornaliero: contato solo dopo aver verificato che la chiave API
+  // esista (una chiave mancante non deve consumare la quota), prima della chiamata.
+  const supabase = await createClient()
+  const today = new Date().toISOString().slice(0, 10)
+  const { data: usage } = await supabase
+    .from('offermaker_ai_usage')
+    .select('runs')
+    .eq('owner_id', gate.userId)
+    .eq('used_on', today)
+    .maybeSingle()
+  if ((usage?.runs ?? 0) >= OFFERMAKER_AI_DAILY_RUNS) {
+    return { success: false, message: 'aiLimitReached' }
+  }
+  const { error: usageError } = await supabase
+    .from('offermaker_ai_usage')
+    .upsert({ owner_id: gate.userId, used_on: today, runs: (usage?.runs ?? 0) + 1 }, { onConflict: 'owner_id,used_on' })
+  if (usageError) {
+    console.error('[OfferMaker] usage update failed:', usageError)
     return { success: false, message: 'generateError' }
   }
 

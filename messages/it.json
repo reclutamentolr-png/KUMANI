@@ -1263,6 +1263,7 @@
     }
   },
   "offermaker": {
+    "aiLimitReached": "Hai raggiunto il limite giornaliero di generazioni AI: riprova domani.",
     "title": "OfferMaker AI",
     "backToMarketplace": "Torna al Marketplace",
     "badge": "Generatore di Offerte AI",
@@ -1340,6 +1341,7 @@
     "deleteError": "Non è stato possibile eliminare la campagna. Riprova."
   },
   "qrCodePro": {
+    "invalidUrl": "Inserisci un link valido che inizi con http:// o https://",
     "title": "QR Code PRO",
     "backToMarketplace": "Torna al Marketplace",
     "badge": "QR Dinamici e Tracciabili",
@@ -3122,5 +3124,31 @@
     "error_not_member": "Aderisci per scrivere nella chat.",
     "error_empty": "Scrivi un messaggio.",
     "error_rate_limited": "Hai raggiunto il limite di messaggi per oggi."
+  },
+  "errorPages": {
+    "errorTitle": "Qualcosa è andato storto",
+    "errorDescription": "Si è verificato un errore imprevisto. Riprova: se il problema continua, torna più tardi.",
+    "retry": "Riprova",
+    "backHome": "Torna alla Home",
+    "goDashboard": "Vai alla Dashboard",
+    "notFoundTitle": "Pagina non trovata",
+    "notFoundDescription": "L’indirizzo che hai aperto non esiste o è stato spostato."
+  },
+  "billingPage": {
+    "titleActive": "Abbonamento Attivo",
+    "titleInactive": "Completa il tuo Abbonamento",
+    "activeText": "Grazie! Il tuo piano {plan} è attivo. Hai accesso a tutti i servizi del Marketplace.",
+    "inactiveText": "Attiva il tuo piano a soli 49€/anno per sbloccare tutti gli strumenti del Marketplace.",
+    "subscribeCta": "Abbonati ora per 49€/anno",
+    "statusLabel": "Stato:",
+    "statusActive": "Attivo ({plan})",
+    "validUntil": "Valido fino al {date}",
+    "billingEmail": "Email fatturazione: {email}",
+    "planBase": "Base",
+    "planPro": "Pro",
+    "discoverPro": "Sei un professionista? Scopri il piano Pro →",
+    "backToDashboard": "← Torna alla Dashboard",
+    "errorNotice": "Si è verificato un errore durante il pagamento. Riprova tra qualche istante.",
+    "canceledNotice": "Pagamento annullato: nessun addebito è stato effettuato."
   }
 }

@@ -42,10 +42,17 @@ function toRow(form: CvFormData) {
   }
 }
 
-export async function createCv(form: CvFormData, photoPath: string | null): Promise<ActionResult<{ id: string; code: string }>> {
+// Accetta solo percorsi foto nella cartella dell'utente (come saveMenuItem):
+// altrimenti si potrebbe puntare (e poi cancellare) la foto di un altro utente.
+function ownPhotoPath(path: string | null, userId: string): string | null {
+  return path && path.startsWith(`${userId}/`) && !path.includes('..') ? path : null
+}
+
+export async function createCv(form: CvFormData, rawPhotoPath: string | null): Promise<ActionResult<{ id: string; code: string }>> {
   const gate = await requireActiveCvAccess()
   if (!gate.ok) return { success: false, message: gate.message }
 
+  const photoPath = ownPhotoPath(rawPhotoPath, gate.userId)
   const supabase = await createClient()
 
   for (let attempt = 0; attempt < 5; attempt++) {
@@ -70,9 +77,11 @@ export async function createCv(form: CvFormData, photoPath: string | null): Prom
   return { success: false, message: 'saveError' }
 }
 
-export async function updateCv(id: string, form: CvFormData, photoPath: string | null): Promise<ActionResult<null>> {
+export async function updateCv(id: string, form: CvFormData, rawPhotoPath: string | null): Promise<ActionResult<null>> {
   const gate = await requireActiveCvAccess()
   if (!gate.ok) return { success: false, message: gate.message }
+
+  const photoPath = ownPhotoPath(rawPhotoPath, gate.userId)
 
   const supabase = await createClient()
 

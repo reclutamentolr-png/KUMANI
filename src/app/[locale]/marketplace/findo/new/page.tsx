@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
 import { ArrowLeft, PackageSearch } from 'lucide-react'
 import { hasActiveFindoAccess } from '@/lib/findo-server'
@@ -14,11 +14,11 @@ export default async function NewFindoItemPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  if (!user) redirect(`/${await getLocale()}/login`)
 
   const hasAccess = await hasActiveFindoAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect('/marketplace')
+    redirect(`/${await getLocale()}/marketplace`)
   }
 
   const { data: locations } = await supabase

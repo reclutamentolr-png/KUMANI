@@ -79,7 +79,7 @@ export default function CategoryToolsAccordion({
               return (
                 <Link
                   key={tool.toolName}
-                  href={isPro ? `/pro?tool=${tool.toolName}` : '/billing'}
+                  href={isPro ? `/pro?tool=${tool.toolName}` : { pathname: '/billing' }}
                   className="group relative rounded-xl border border-[var(--gold)]/25 bg-[var(--background)] p-4 opacity-50 transition-opacity hover:opacity-80"
                   title={isPro ? t('proRequired') : t('subscriptionRequired')}
                 >

@@ -163,6 +163,15 @@ export default function RegisterForm() {
         throw new Error(t('errorCreatingUser'))
       }
 
+      // Con la conferma email attiva Supabase non dà errore per un'email già
+      // registrata (per non rivelarla): restituisce un utente finto senza
+      // identità. Stesso percorso di "already registered" qui sopra, invece
+      // di restare in attesa di un codice che non arriverà mai.
+      if (authData.user.identities?.length === 0) {
+        if (await resumeIncompleteRegistration(cleanReferralCode, cleanVoucherCode)) return
+        throw new Error(t('emailAlreadyRegistered'))
+      }
+
       // Se il progetto Supabase ha la conferma email disattivata (o il
       // provider di default in free tier, che non permette template
       // personalizzati con il codice), signUp restituisce già una sessione

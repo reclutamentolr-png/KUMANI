@@ -65,29 +65,43 @@ export function daysUntil(dueDate: string): number {
   return Math.round((due.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
 }
 
+// Somma mesi a una data 'YYYY-MM-DD' in UTC, fermandosi all'ultimo giorno del
+// mese di arrivo (31/01 + 1 mese = 28/02, non 03/03; 29/02 + 1 anno = 28/02).
+function addMonthsClamped(dateStr: string, months: number): string {
+  const y = Number(dateStr.slice(0, 4))
+  const m = Number(dateStr.slice(5, 7)) - 1
+  const d = Number(dateStr.slice(8, 10))
+  const target = new Date(Date.UTC(y, m + months, 1))
+  const lastDay = new Date(Date.UTC(target.getUTCFullYear(), target.getUTCMonth() + 1, 0)).getUTCDate()
+  target.setUTCDate(Math.min(d, lastDay))
+  return target.toISOString().slice(0, 10)
+}
+
+// Prossima scadenza dopo `steps` ricorrenze (default 1) a partire da
+// currentDueDate. Con steps > 1 si calcola sempre dalla data di partenza, così
+// il giorno del mese non "scivola" per effetto del clamp a fine mese.
 export function computeNextDueDate(
   currentDueDate: string,
   recurrence: Recurrence,
-  customDays: number | null
+  customDays: number | null,
+  steps: number = 1
 ): string | null {
-  const date = new Date(currentDueDate)
+  const base = currentDueDate.slice(0, 10)
   switch (recurrence) {
     case 'monthly':
-      date.setMonth(date.getMonth() + 1)
-      break
+      return addMonthsClamped(base, steps)
     case 'yearly':
-      date.setFullYear(date.getFullYear() + 1)
-      break
+      return addMonthsClamped(base, 12 * steps)
     case 'every_2_years':
-      date.setFullYear(date.getFullYear() + 2)
-      break
-    case 'custom':
+      return addMonthsClamped(base, 24 * steps)
+    case 'custom': {
       if (!customDays) return null
-      date.setDate(date.getDate() + customDays)
-      break
+      const date = new Date(`${base}T12:00:00Z`)
+      date.setUTCDate(date.getUTCDate() + customDays * steps)
+      return date.toISOString().slice(0, 10)
+    }
     case 'none':
     default:
       return null
   }
-  return date.toISOString().slice(0, 10)
 }

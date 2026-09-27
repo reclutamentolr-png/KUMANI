@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { hasActiveLifeCalendarAccess } from '@/lib/lifeCalendar-server'
 import { computeNextDueDate, type LifeCalendarItemFormData } from '@/lib/lifeCalendar'
 import { awardToolPoint } from '@/lib/toolPoints'
+import { todayKey } from '@/lib/agenda'
 
 type ActionResult<T> =
   | { success: true; data: T }
@@ -129,7 +130,13 @@ export async function markHandled(
     return { success: false, message: 'saveError' }
   }
 
-  const nextDueDate = computeNextDueDate(item.due_date, item.recurrence, item.recurrence_custom_days)
+  // La nuova scadenza deve cadere da oggi in poi (fuso di Roma): se la voce era
+  // scaduta da più periodi si avanza più volte, con un tetto di sicurezza.
+  const today = todayKey()
+  let nextDueDate = computeNextDueDate(item.due_date, item.recurrence, item.recurrence_custom_days)
+  for (let steps = 2; nextDueDate && nextDueDate < today && steps <= 1000; steps++) {
+    nextDueDate = computeNextDueDate(item.due_date, item.recurrence, item.recurrence_custom_days, steps)
+  }
 
   const { error: renewalError } = await supabase.from('life_calendar_renewals').insert({
     item_id: item.id,

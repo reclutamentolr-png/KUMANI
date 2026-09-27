@@ -64,7 +64,9 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
       if (data) {
         setBioText(data.bio_text || '')
         try {
-          const parsed: LinkItem[] = data.links ? JSON.parse(data.links) : []
+          // Tollerante: links può essere una stringa JSON o già un array (jsonb)
+          const raw: unknown = typeof data.links === 'string' ? JSON.parse(data.links) : data.links
+          const parsed: LinkItem[] = Array.isArray(raw) ? (raw as LinkItem[]) : []
           // Show the bare value (email/number) in the input, not the stored
           // mailto:/tel:/wa.me form — also cleans up rows saved before this
           // fix existed (which had the wrong scheme prepended).

@@ -377,6 +377,14 @@ export async function translateMenuMissing(): Promise<
   }
   if (!entries.length) return { success: false, message: 'nothingToTranslate' }
 
+  // Senza chiave API non si consuma la quota giornaliera.
+  try {
+    getAnthropicClient()
+  } catch (err) {
+    if (err instanceof MissingApiKeyError) return { success: false, message: 'aiUnavailable' }
+    throw err
+  }
+
   // Limite giornaliero (contato prima della chiamata, anche se poi fallisce).
   const service = getServiceClient()
   const today = new Date().toISOString().slice(0, 10)

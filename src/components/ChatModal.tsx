@@ -105,11 +105,13 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
             console.log('📨 Nuovo messaggio ricevuto in tempo reale:', payload.new)
             setMessages((prev) => [...prev, payload.new])
             
-            // Segna il nuovo messaggio come letto immediatamente
-            supabase
+            // Segna il nuovo messaggio come letto immediatamente (le query
+            // supabase-js partono solo con then/await)
+            void supabase
               .from('messages')
               .update({ is_read: true })
               .eq('id', payload.new.id)
+              .then(() => window.dispatchEvent(new CustomEvent('refreshUnreadCount')))
             
             // Suono di notifica
             try {

@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
 import SpendlyNav from '@/components/spendly/SpendlyNav'
 import { ArrowLeft, PiggyBank } from 'lucide-react'
@@ -18,11 +18,11 @@ export default async function SpendlyLayout({ children }: { children: React.Reac
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  if (!user) redirect(`/${await getLocale()}/login`)
 
   const hasAccess = await hasActiveSpendlyAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect('/marketplace')
+    redirect(`/${await getLocale()}/marketplace`)
   }
 
   return (

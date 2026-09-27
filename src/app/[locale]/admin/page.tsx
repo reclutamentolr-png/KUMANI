@@ -70,7 +70,8 @@ export default async function AdminPage({
     : (roles?.permissions || [])
 
   // ✅ WILDCARD: se il ruolo ha ["*"], espandi in tutti i permessi
-  const permissions: Permission[] = rawPermissions.includes('*')
+  // Anche profiles.is_admin è un admin completo (come in verifyAdmin lato server).
+  const permissions: Permission[] = profile?.is_admin || rawPermissions.includes('*')
     ? ALL_PERMISSIONS
     : (rawPermissions as Permission[])
 

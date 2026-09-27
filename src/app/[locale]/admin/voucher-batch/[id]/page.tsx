@@ -1,3 +1,4 @@
+import { SITE_URL } from '@/lib/siteUrl'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import QRCode from 'qrcode'
@@ -17,7 +18,7 @@ export default async function VoucherBatchPrintPage({ params }: { params: Promis
   if (!batch) notFound()
   const t = await getTranslations('voucherCard')
 
-  const site = (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000').replace(/\/+$/, '')
+  const site = (process.env.NEXT_PUBLIC_SITE_URL || SITE_URL).replace(/\/+$/, '')
   const available = codes.filter((c) => c.status === 'active')
   const cards = await Promise.all(
     available.map(async (c) => ({

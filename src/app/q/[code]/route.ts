@@ -10,8 +10,16 @@ interface QrDestinationRow {
 function buildTargetUrl(row: QrDestinationRow): string | null {
   const d = row.destination
   switch (row.content_type) {
-    case 'link':
-      return d.url || null
+    case 'link': {
+      // Solo URL http/https: niente javascript:, data:, ecc. (open redirect)
+      if (!d.url) return null
+      try {
+        const parsed = new URL(d.url)
+        return parsed.protocol === 'http:' || parsed.protocol === 'https:' ? parsed.toString() : null
+      } catch {
+        return null
+      }
+    }
     case 'whatsapp': {
       if (!d.phone) return null
       const digits = d.phone.replace(/[^\d+]/g, '').replace(/^\+/, '')
@@ -55,17 +63,35 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   if (data.content_type === 'vcard') {
     const vcard = data.destination as unknown as VcardDestination
     const vcf = buildVcardContent(vcard)
-    const fileName = [vcard.firstName, vcard.lastName].filter(Boolean).join('-') || 'contact'
+    const rawName = [vcard.firstName, vcard.lastName]
+      .filter(Boolean)
+      .join('-')
+      .replace(/[\u0000-\u001f\u007f"\\/]/g, '')
+      .trim()
+    // Fallback ASCII sicuro (header HTTP accetta solo Latin-1) + filename* UTF-8 per i nomi non latini
+    const asciiName =
+      rawName
+        .replace(/[^A-Za-z0-9_-]/g, '_')
+        .replace(/_+/g, '_')
+        .replace(/^_+|_+$/g, '') || 'contact'
+    const utf8Name = encodeURIComponent(`${rawName || 'contact'}.vcf`).replace(
+      /['()*]/g,
+      (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`
+    )
     return new NextResponse(vcf, {
       status: 200,
       headers: {
         'Content-Type': 'text/vcard; charset=utf-8',
-        'Content-Disposition': `attachment; filename="${fileName}.vcf"`,
+        'Content-Disposition': `attachment; filename="${asciiName}.vcf"; filename*=UTF-8''${utf8Name}`,
       },
     })
   }
 
   const target = buildTargetUrl(data)
+  if (!target && data.content_type === 'link') {
+    // Destinazione non http(s): non reindirizziamo
+    return new NextResponse('Not found', { status: 404 })
+  }
   if (!target) {
     return NextResponse.redirect(new URL('/', request.url), 307)
   }

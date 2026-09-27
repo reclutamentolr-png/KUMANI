@@ -55,15 +55,23 @@ export function monthRange(year: number, month: number): { from: string; to: str
   return { from: `${year}-${mm}-01`, to: `${year}-${mm}-${String(last).padStart(2, '0')}` }
 }
 
-// Istante UTC di un giorno + ora italiani (per salvare un appuntamento).
-export function romeToInstant(date: string, time: string): string {
-  const guess = new Date(`${date}T${time}:00Z`)
-  // Differenza tra l'ora di Roma e UTC in quel momento (1 o 2 ore).
-  const romeHour = Number(new Intl.DateTimeFormat('en-GB', { timeZone: AGENDA_TIMEZONE, hour: '2-digit', hour12: false }).format(guess))
-  let offset = romeHour - guess.getUTCHours()
+// Differenza in ore tra l'ora di Roma e UTC in un dato istante (1 o 2 ore).
+function romeOffsetHours(instant: Date): number {
+  const romeHour = Number(new Intl.DateTimeFormat('en-GB', { timeZone: AGENDA_TIMEZONE, hour: '2-digit', hourCycle: 'h23' }).format(instant))
+  let offset = romeHour - instant.getUTCHours()
   if (offset > 12) offset -= 24
   if (offset < -12) offset += 24
-  return new Date(guess.getTime() - offset * 3600000).toISOString()
+  return offset
+}
+
+// Istante UTC di un giorno + ora italiani (per salvare un appuntamento).
+// L'offset va ricalcolato sull'istante ottenuto: a cavallo del cambio d'ora
+// legale quello stimato sull'ora "come se fosse UTC" può essere sbagliato.
+export function romeToInstant(date: string, time: string): string {
+  const guess = new Date(`${date}T${time}:00Z`)
+  const first = new Date(guess.getTime() - romeOffsetHours(guess) * 3600000)
+  const second = new Date(guess.getTime() - romeOffsetHours(first) * 3600000)
+  return second.toISOString()
 }
 
 export function sortAgenda(events: AgendaEvent[]): AgendaEvent[] {

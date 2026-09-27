@@ -1,3 +1,4 @@
+import { SITE_URL } from '@/lib/siteUrl'
 import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
@@ -30,7 +31,7 @@ export default async function OfferMakerCampaignDetailPage({
 
   if (!campaign) notFound()
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const baseUrl = SITE_URL
   const shortLink = `${baseUrl}/o/${campaign.code}`
   const landingUrl = `${baseUrl}/offerte/${campaign.code}`
 

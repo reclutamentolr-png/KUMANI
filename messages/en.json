@@ -641,6 +641,9 @@
     "memolife": "MemoLife"
   },
   "marketplace": {
+    "goToSpotlight": "Discover the showcase",
+    "kumanoDelGiorno": "Kumano of the Day",
+    "kumanoDelGiornoDescription": "Every day the community showcases one story. Tell yours: real visibility, zero rankings.",
     "listingsHowItWorks": "How the board works",
     "listingActive": "Active",
     "convivio": "Kordata",
@@ -1398,6 +1401,7 @@
     "securitySection": "Security & Protection"
   },
   "offermaker": {
+    "aiLimitReached": "You’ve reached today’s AI generation limit: try again tomorrow.",
     "title": "OfferMaker AI",
     "backToMarketplace": "Back to Marketplace",
     "badge": "AI Offer Generator",
@@ -1475,6 +1479,7 @@
     "deleteError": "Could not delete the campaign. Please try again."
   },
   "qrCodePro": {
+    "invalidUrl": "Enter a valid link starting with http:// or https://",
     "title": "QR Code PRO",
     "backToMarketplace": "Back to Marketplace",
     "badge": "Dynamic, Trackable QR Codes",
@@ -2049,6 +2054,42 @@
     "footerTagline": "Hands that lend you a hand."
   },
   "spotlight": {
+    "backToDashboard": "Back to Dashboard",
+    "eyebrow": "Community showcase",
+    "title": "Kumano of the Day",
+    "subtitle": "Every day the community showcases one person: their story, their city, their craft. Today it could be you.",
+    "youAreTodaysKumano": "Today you are the Kumano of the Day!",
+    "formTitle": "Tell your story",
+    "formDescription": "Fill in your profile to join the showcase rotation. No surnames, no public contacts: just your story.",
+    "displayNameField": "Name or nickname",
+    "displayNameHint": "Never your surname: just first name or nickname.",
+    "cityField": "City",
+    "countryField": "Country",
+    "professionField": "Job or passion",
+    "storyField": "Your story",
+    "storyHint": "Short and human, readable in 20 seconds (about 300 characters).",
+    "favoriteToolsField": "Your favourite KUMANI tools",
+    "consentLabel": "I agree to be shown to the community with my name, city and story.",
+    "consentRequired": "You must give your consent to save your profile.",
+    "save": "Save and join the showcase",
+    "saving": "Saving...",
+    "saveError": "Error while saving. Please try again.",
+    "notAuthenticated": "You need to log in to save your profile.",
+    "statusActive": "You are visible to the community: you can be chosen as Kumano of the Day.",
+    "statusInactive": "Your profile is deactivated: it won’t appear in the showcase until you reactivate it.",
+    "revoke": "Deactivate my showcase",
+    "revokeConfirm": "Deactivate your showcase? You won’t appear in future selections, but your data stays saved.",
+    "delete": "Permanently delete my profile",
+    "deleteConfirm": "Permanently delete your profile? It will also be removed from the public archive. This cannot be undone.",
+    "viewPublicPage": "See the public showcase",
+    "publicHeader": "KUMANI is made of hands. Every day we tell the story of one.",
+    "todaysKumano": "Today’s Kumano",
+    "noKumanoToday": "No story in the showcase yet: be the first to tell yours.",
+    "archiveTitle": "The story archive",
+    "archiveEmpty": "There are no stories in the archive yet.",
+    "ctaJoin": "Want to be in the showcase too?",
+    "ctaJoinButton": "Tell your story",
+    "candidateNote": "To be selected you must have filled in your profile above.",
     "statusPending": "Your story is under review: it will be featured as soon as the team approves it.",
     "statusRejected": "Your story was not approved. Edit it and save again to resubmit it for review.",
     "homeConsentLabel": "I agree that my story may also appear on the home page, visible to anyone visiting KUMANI.",
@@ -3120,5 +3161,31 @@
     "error_not_member": "Join to write in the chat.",
     "error_empty": "Write a message.",
     "error_rate_limited": "You've reached today's message limit."
+  },
+  "errorPages": {
+    "errorTitle": "Something went wrong",
+    "errorDescription": "An unexpected error occurred. Please try again: if the problem persists, come back later.",
+    "retry": "Try again",
+    "backHome": "Back to Home",
+    "goDashboard": "Go to Dashboard",
+    "notFoundTitle": "Page not found",
+    "notFoundDescription": "The address you opened doesn’t exist or has been moved."
+  },
+  "billingPage": {
+    "titleActive": "Subscription active",
+    "titleInactive": "Complete your subscription",
+    "activeText": "Thank you! Your {plan} plan is active. You have access to all Marketplace services.",
+    "inactiveText": "Activate your plan for just €49/year to unlock all Marketplace tools.",
+    "subscribeCta": "Subscribe now for €49/year",
+    "statusLabel": "Status:",
+    "statusActive": "Active ({plan})",
+    "validUntil": "Valid until {date}",
+    "billingEmail": "Billing email: {email}",
+    "planBase": "Base",
+    "planPro": "Pro",
+    "discoverPro": "Are you a professional? Discover the Pro plan →",
+    "backToDashboard": "← Back to Dashboard",
+    "errorNotice": "Something went wrong with the payment. Please try again in a moment.",
+    "canceledNotice": "Payment canceled: you have not been charged."
   }
 }

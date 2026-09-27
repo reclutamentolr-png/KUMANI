@@ -1,4 +1,5 @@
 'use server'
+import { SITE_URL } from '@/lib/siteUrl'
 
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
@@ -52,11 +53,91 @@ async function verifyAdmin(requiredPermission?: Permission) {
   return null
 }
 
+// Admin "pieno": profiles.is_admin oppure un ruolo con il permesso '*'.
+// Solo loro possono nominare altri admin o impersonare un admin.
+async function isFullAdmin(userId: string) {
+  const supabaseAdmin = getServiceClient()
+  const [{ data: profile }, { data: adminRecord }] = await Promise.all([
+    supabaseAdmin.from('profiles').select('is_admin').eq('id', userId).maybeSingle(),
+    supabaseAdmin.from('admin_users').select('admin_roles(permissions)').eq('user_id', userId).maybeSingle(),
+  ])
+  if (profile?.is_admin) return true
+  const roles = adminRecord?.admin_roles as { permissions?: string[] } | { permissions?: string[] }[] | null | undefined
+  const permissions = Array.isArray(roles) ? (roles[0]?.permissions ?? []) : (roles?.permissions ?? [])
+  return permissions.includes('*')
+}
+
+// Colonne del profilo modificabili dal pannello admin: tutto il resto
+// (punti community, sponsor, piano Pro, ecc.) passa dalle funzioni dedicate.
+const ADMIN_EDITABLE_PROFILE_FIELDS = new Set([
+  'first_name', 'last_name', 'username', 'phone', 'country_code', 'date_of_birth', 'occupation',
+  'referral_code', 'daily_points', 'subscription_status', 'subscription_expires_at', 'subscription_source',
+  'is_blocked', 'is_admin',
+])
+
+// Impostazioni di sistema: salvate lato server (prima partivano dal browser e
+// qualsiasi membro dello Staff poteva cambiarle, a prescindere dal ruolo).
+export async function adminSaveSystemSettings(settings: Record<string, unknown>) {
+  const admin = await verifyAdmin('settings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  const rows = Object.entries(settings).map(([key, value]) => ({ key, value: JSON.stringify(value) }))
+  const { error } = await getServiceClient().from('system_settings').upsert(rows, { onConflict: 'key' })
+  if (error) return { success: false, error: error.message }
+  return { success: true }
+}
+
+export async function adminSetToolEnabled(toolName: string, enabled: boolean) {
+  const admin = await verifyAdmin('marketplace.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  const { error } = await getServiceClient()
+    .from('marketplace_settings')
+    .update({ is_enabled: enabled, updated_at: new Date().toISOString() })
+    .eq('tool_name', toolName)
+  if (error) return { success: false, error: error.message }
+  return { success: true }
+}
+
+// Assegna o toglie un ruolo Staff: solo un admin completo può farlo.
+export async function adminSetUserRole(userId: string, roleId: string | null) {
+  const admin = await verifyAdmin('users.write')
+  if (!admin || !(await isFullAdmin(admin.id))) return { success: false, error: 'Solo un amministratore completo può assegnare ruoli' }
+  const service = getServiceClient()
+  const { error } = roleId
+    ? await service.from('admin_users').upsert(
+        { user_id: userId, role_id: roleId, assigned_by: admin.id, notes: 'Assegnato da Pannello Admin' },
+        { onConflict: 'user_id' }
+      )
+    : await service.from('admin_users').delete().eq('user_id', userId)
+  if (error) return { success: false, error: error.message }
+  return { success: true }
+}
+
+export async function adminGetUserRole(userId: string) {
+  const admin = await verifyAdmin('users.read')
+  if (!admin) return { roleId: null as string | null, roles: [] as { id: string; name: string }[] }
+  const service = getServiceClient()
+  const [{ data: roles }, { data: record }] = await Promise.all([
+    service.from('admin_roles').select('id, name').order('name'),
+    service.from('admin_users').select('role_id').eq('user_id', userId).maybeSingle(),
+  ])
+  return { roleId: (record?.role_id as string | null) ?? null, roles: (roles ?? []) as { id: string; name: string }[] }
+}
+
 export async function adminUpdateProfile(userId: string, profileData: Record<string, unknown>) {
   const admin = await verifyAdmin('users.write')
   if (!admin) return { success: false, error: 'Non autorizzato' }
 
+  const unknownField = Object.keys(profileData).find((key) => !ADMIN_EDITABLE_PROFILE_FIELDS.has(key))
+  if (unknownField) return { success: false, error: `Campo non modificabile: ${unknownField}` }
+
   const supabaseAdmin = getServiceClient()
+  if ('is_admin' in profileData) {
+    const { data: current } = await supabaseAdmin.from('profiles').select('is_admin').eq('id', userId).maybeSingle()
+    if (Boolean(current?.is_admin) !== Boolean(profileData.is_admin) && !(await isFullAdmin(admin.id))) {
+      return { success: false, error: 'Solo un amministratore completo può cambiare i privilegi admin' }
+    }
+  }
+
   const { error } = await supabaseAdmin
     .from('profiles')
     .update(profileData)
@@ -74,8 +155,13 @@ export async function impersonateUser(userId: string) {
   const admin = await verifyAdmin('users.write')
   if (!admin) return { success: false, error: 'Non autorizzato' }
 
+  // Un admin con permessi limitati non può entrare nell'account di un admin.
+  if (userId !== admin.id && (await isFullAdmin(userId)) && !(await isFullAdmin(admin.id))) {
+    return { success: false, error: 'Non puoi impersonare un amministratore' }
+  }
+
   const supabaseAdmin = getServiceClient()
-  const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const base = SITE_URL
 
   // Recupera email utente target
   const { data: userData, error: userError } = await supabaseAdmin.auth.admin.getUserById(userId)

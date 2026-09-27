@@ -6,6 +6,7 @@ import { CalendarClock, Check, CheckCircle2, FileBadge, LoaderCircle, Receipt, R
 import { markBillPaid, setTaskDone, unmarkBillPaid } from '@/app/actions/agenda'
 import { markHandled } from '@/app/actions/lifeCalendar'
 import { agendaStatus, daysBetween, type AgendaEvent } from '@/lib/agenda'
+import { parseAmount } from '@/lib/spendly'
 
 const KIND_ICON = { appointment: CalendarClock, task: CheckCircle2, bill: Receipt, deadline: FileBadge }
 export const KIND_COLOR = {
@@ -37,17 +38,27 @@ export default function AgendaEventRow({
   const status = agendaStatus(event, today)
   const Icon = KIND_ICON[event.kind]
 
-  const run = async (action: () => Promise<unknown>) => {
+  // Azione rapida: lo spinner si spegne sempre, anche se l'azione fallisce
+  // (false o { success: false }), e in quel caso l'utente viene avvisato.
+  const run = async (action: () => Promise<boolean | { success: boolean }>) => {
     setBusy(true)
-    await action()
-    setBusy(false)
+    let ok = false
+    try {
+      const result = await action()
+      ok = typeof result === 'boolean' ? result : result.success
+    } catch (err) {
+      console.error('[Agenda] quick action failed:', err)
+    } finally {
+      setBusy(false)
+    }
+    if (!ok) alert(t('errorSave'))
     onChanged()
   }
 
   const payBill = () => {
     const answer = prompt(t('paidAmountPrompt', { name: event.title }), String(event.amount ?? 0).replace('.', ','))
     if (answer === null) return
-    const amount = parseFloat(answer.replace(',', '.'))
+    const amount = parseAmount(answer)
     if (Number.isNaN(amount) || amount < 0) return
     run(() => markBillPaid(event.refId, event.period ?? '', amount))
   }

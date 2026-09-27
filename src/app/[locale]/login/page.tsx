@@ -55,12 +55,41 @@ export default function LoginPage() {
       }
 
       // Accesso creato ma registrazione mai completata (nessun profilo): si
+      // prova a completarla subito con i dati salvati da RegisterForm nei
+      // metadata dell'utente. Se non riesce (es. invito non più valido) si
       // completa da "Registrati" con la stessa email e password.
       if (!profile && profileError?.code === 'PGRST116') {
-        await supabase.auth.signOut()
-        setError(t('registrationIncomplete'))
-        setLoading(false)
-        return
+        const meta = (authData.user.user_metadata ?? {}) as {
+          first_name?: string
+          last_name?: string
+          country_code?: string
+          city?: string
+          referral_code?: string
+          voucher_code?: string
+          professional?: boolean
+        }
+        const { data: status, error: registrationError } = meta.first_name && meta.last_name && meta.country_code
+          ? await supabase.rpc('complete_registration', {
+              p_first_name: meta.first_name,
+              p_last_name: meta.last_name,
+              p_country: meta.country_code,
+              p_city: meta.city ?? '',
+              p_referral_code: meta.referral_code ?? '',
+            })
+          : { data: null, error: null }
+
+        if (registrationError || status !== 'ok') {
+          await supabase.auth.signOut()
+          setError(t('registrationIncomplete'))
+          setLoading(false)
+          return
+        }
+
+        // Come in RegisterForm: coupon e prova Pro, senza bloccare l'accesso
+        // se non vanno a buon fine (si riprovano dalla dashboard).
+        const voucherCode = (meta.voucher_code ?? '').trim().toUpperCase()
+        if (voucherCode) await supabase.rpc('redeem_subscription_voucher', { p_code: voucherCode })
+        if (meta.professional) await supabase.rpc('start_pro_trial')
       }
 
       if (profile?.is_blocked) {

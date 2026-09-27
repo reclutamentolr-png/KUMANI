@@ -1,3 +1,4 @@
+import { SITE_URL } from '@/lib/siteUrl'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
@@ -46,7 +47,7 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
     loginUrl,
   } = network
 
-  const shareUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/${locale}/ref/${profile?.referral_code}`
+  const shareUrl = `${SITE_URL}/${locale}/ref/${profile?.referral_code}`
 
   return (
     <div className="min-h-screen bg-[var(--background)]">

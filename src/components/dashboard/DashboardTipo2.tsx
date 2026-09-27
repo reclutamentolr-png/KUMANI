@@ -143,7 +143,7 @@ export default async function DashboardTipo2({
                 >
                   <Crown className="h-4 w-4" /> {pt('activatePro')}
                 </Link>
-                <Link href="/billing" className="block text-center text-xs font-medium text-[var(--muted)] underline-offset-2 hover:text-[var(--ink)] hover:underline">
+                <Link href={{ pathname: '/billing' }} className="block text-center text-xs font-medium text-[var(--muted)] underline-offset-2 hover:text-[var(--ink)] hover:underline">
                   {pt('orBaseOnly')}
                 </Link>
                 <VoucherActivationButton />
@@ -157,7 +157,7 @@ export default async function DashboardTipo2({
               </div>
               <div className="mt-2 space-y-1.5">
                 <Link
-                  href="/billing"
+                  href={{ pathname: '/billing' }}
                   className="block text-center rounded-lg bg-[var(--ink)] px-3 py-2 text-sm font-semibold text-white hover:bg-[var(--ink-soft)]"
                 >
                   {t('subscribeNow')}

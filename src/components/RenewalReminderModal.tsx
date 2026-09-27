@@ -48,7 +48,7 @@ export default function RenewalReminderModal({ expiresAt, daysLeft }: Props) {
 
         <div className="mt-6 flex flex-col gap-2">
           <Link
-            href="/billing"
+            href={{ pathname: '/billing' }}
             className="w-full rounded-xl bg-[var(--ink)] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[var(--ink-soft)]"
           >
             {t('renewalReminderCta')}

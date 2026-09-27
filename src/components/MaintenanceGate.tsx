@@ -13,8 +13,13 @@ export default function MaintenanceGate({ children }: MaintenanceGateProps) {
   const pathname = usePathname()
   const [status, setStatus] = useState<{ enabled: boolean; message: string } | null>(null)
 
-  // Route sempre accessibili
-  const isExempt = pathname?.includes('/admin') || pathname?.includes('/auth/')
+  // Route sempre accessibili: admin, callback auth e le pagine di accesso
+  // (con o senza prefisso lingua), così un admin può entrare anche durante
+  // la manutenzione.
+  const isExempt =
+    pathname?.includes('/admin') ||
+    pathname?.includes('/auth/') ||
+    /^(\/[a-z]{2})?\/(login|forgot-password|reset-password)(\/|$)/.test(pathname ?? '')
 
   useEffect(() => {
     if (isExempt) {

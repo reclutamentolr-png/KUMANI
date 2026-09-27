@@ -62,7 +62,7 @@ export default async function ProArea({
           <div className="text-right text-xs">
             <p className="font-semibold text-emerald-300">{t('planActive')}</p>
             {renewsOn && <p className="mt-0.5 text-white/60">{t('renewsOn', { date: renewsOn })}</p>}
-            <Link href="/billing" className="mt-1 inline-block text-white/70 underline-offset-2 hover:text-white hover:underline">
+            <Link href={{ pathname: '/billing' }} className="mt-1 inline-block text-white/70 underline-offset-2 hover:text-white hover:underline">
               {t('manageSubscription')}
             </Link>
           </div>

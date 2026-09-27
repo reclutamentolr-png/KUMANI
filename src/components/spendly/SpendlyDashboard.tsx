@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { todayKey } from '@/lib/agenda'
 import { useTranslations } from 'next-intl'
 import { TrendingUp, Repeat, Wallet, PiggyBank, AlertTriangle } from 'lucide-react'
 import KpiCard from './KpiCard'
@@ -45,7 +46,7 @@ export default function SpendlyDashboard({
   year: number
 }) {
   const t = useTranslations('spendly')
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1)
+  const [selectedMonth, setSelectedMonth] = useState(() => Number(todayKey().slice(5, 7)))
 
   const monthly = useMemo(
     () => computeMonthlyTotals(income, fixedExpenses, variableExpenses, year, payments),
