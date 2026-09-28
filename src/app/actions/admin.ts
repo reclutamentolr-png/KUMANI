@@ -88,6 +88,7 @@ const GENERAL_SETTINGS_KEYS = new Set([
   'veritas_write_seconds', 'veritas_vote_seconds', 'veritas_reveal_seconds',
   'verifoto_daily_user', 'verifoto_monthly_ops',
   'mosaic_pixels_day', 'mosaic_bonus_pixels', 'mosaic_min_login_days',
+  'fabula_min_login_days', 'fabula_hide_after_reports',
 ])
 
 // Salva solo le impostazioni cambiate (il modulo manda le differenze), così
@@ -2458,12 +2459,24 @@ export async function adminSaveMosaicSeason(
   }
   const { data: current } = await service.from('mosaic_seasons').select('width, height').eq('id', seasonId).maybeSingle()
   if (!current) return { success: false, error: 'Stagione non trovata' }
-  if (current.width !== input.width || current.height !== input.height) {
+  const resized = current.width !== input.width || current.height !== input.height
+  if (resized) {
     const { count } = await service.from('mosaic_pixels').select('season_id', { count: 'exact', head: true }).eq('season_id', seasonId)
     if (count) return { success: false, error: 'La tela ha già delle tessere: la dimensione non si può più cambiare' }
   }
-  const { error } = await service.from('mosaic_seasons').update(row).eq('id', seasonId)
-  return error ? { success: false, error: error.message } : { success: true }
+  // Con una nuova dimensione la sagoma non combacia più: si toglie, e si
+  // eliminano le zone protette che escono dalla tela
+  const { error } = await service
+    .from('mosaic_seasons')
+    .update(resized ? { ...row, template: null } : row)
+    .eq('id', seasonId)
+  if (error) return { success: false, error: error.message }
+  if (resized) {
+    const { data: zones } = await service.from('mosaic_zones').select('id, x, y, w, h').eq('season_id', seasonId)
+    const outside = (zones ?? []).filter((z) => z.x + z.w > input.width || z.y + z.h > input.height).map((z) => z.id as string)
+    if (outside.length) await service.from('mosaic_zones').delete().in('id', outside)
+  }
+  return { success: true }
 }
 
 export async function adminDeleteMosaicSeason(seasonId: string) {
@@ -2481,4 +2494,183 @@ export async function adminClearMosaicUser(seasonId: string, userId: string) {
   if (!EVENT_ID_RE.test(seasonId) || !EVENT_ID_RE.test(userId)) return { success: false, error: 'Dati non validi' }
   const { data, error } = await getServiceClient().rpc('mosaic_admin_clear_user', { p_season: seasonId, p_user: userId })
   return error ? { success: false, error: error.message } : { success: true, removed: Number(data ?? 0) }
+}
+
+// ------------------------------------------------------------
+// KUMANI Mosaic: editor dello Staff (tela, zone, sagoma, segnalazioni)
+// ------------------------------------------------------------
+
+type MosaicRect = { x: number; y: number; w: number; h: number }
+const validRect = (r: MosaicRect) =>
+  [r.x, r.y, r.w, r.h].every(Number.isInteger) && r.x >= 0 && r.y >= 0 && r.w >= 1 && r.h >= 1 && r.w <= 256 && r.h <= 256
+
+export async function adminGetMosaicEditor(seasonId: string) {
+  const admin = await verifyAdmin('listings.read')
+  if (!admin || !EVENT_ID_RE.test(seasonId)) return { data: null, error: 'Non autorizzato' }
+  const { data, error } = await getServiceClient().rpc('mosaic_admin_canvas', { p_season: seasonId })
+  return {
+    data: data as { canvas: string | null; template: string | null; zones: { id: string; x: number; y: number; w: number; h: number; label: string | null }[] } | null,
+    error: error?.message ?? null,
+  }
+}
+
+export async function adminMosaicAreaPeople(seasonId: string, rect: MosaicRect) {
+  const admin = await verifyAdmin('listings.read')
+  if (!admin || !EVENT_ID_RE.test(seasonId) || !validRect(rect)) return { rows: [] as Record<string, unknown>[], error: 'Non autorizzato' }
+  const { data, error } = await getServiceClient().rpc('mosaic_admin_area_people', { p_season: seasonId, p_x: rect.x, p_y: rect.y, p_w: rect.w, p_h: rect.h })
+  return { rows: (data ?? []) as Record<string, unknown>[], error: error?.message ?? null }
+}
+
+export async function adminMosaicClearArea(seasonId: string, rect: MosaicRect) {
+  const admin = await verifyAdmin('listings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!EVENT_ID_RE.test(seasonId) || !validRect(rect)) return { success: false, error: 'Area non valida' }
+  const { data, error } = await getServiceClient().rpc('mosaic_admin_clear_area', { p_season: seasonId, p_x: rect.x, p_y: rect.y, p_w: rect.w, p_h: rect.h })
+  return error ? { success: false, error: error.message } : { success: true, removed: Number(data ?? 0) }
+}
+
+// Disegno dello Staff: c = colore 0..31, -1 = cancella
+export async function adminMosaicPaint(seasonId: string, cells: { x: number; y: number; c: number }[]) {
+  const admin = await verifyAdmin('listings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!EVENT_ID_RE.test(seasonId) || !Array.isArray(cells) || cells.length === 0 || cells.length > 20000) return { success: false, error: 'Disegno non valido' }
+  const clean = cells.filter((c) => [c.x, c.y, c.c].every(Number.isInteger) && c.c >= -1 && c.c <= 31).map(({ x, y, c }) => ({ x, y, c }))
+  const { data, error } = await getServiceClient().rpc('mosaic_admin_paint', { p_season: seasonId, p_cells: clean })
+  if (error) return { success: false, error: error.message }
+  if (Number(data) < 0) return { success: false, error: 'Stagione non trovata' }
+  return { success: true, painted: Number(data) }
+}
+
+export async function adminMosaicSetTemplate(seasonId: string, template: string | null) {
+  const admin = await verifyAdmin('settings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!EVENT_ID_RE.test(seasonId) || (template !== null && (template.length > 100000 || !/^[A-Za-z0-9+/=]+$/.test(template)))) {
+    return { success: false, error: 'Sagoma non valida' }
+  }
+  const { data, error } = await getServiceClient().rpc('mosaic_admin_set_template', { p_season: seasonId, p_template: template })
+  if (error) return { success: false, error: error.message }
+  if (data !== 'ok') return { success: false, error: data === 'size' ? 'La sagoma non ha la dimensione della tela' : 'Stagione non trovata' }
+  return { success: true }
+}
+
+export async function adminMosaicAddZone(seasonId: string, rect: MosaicRect, label: string) {
+  const admin = await verifyAdmin('settings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!EVENT_ID_RE.test(seasonId) || !validRect(rect)) return { success: false, error: 'Area non valida' }
+  const { error } = await getServiceClient()
+    .from('mosaic_zones')
+    .insert({ season_id: seasonId, x: rect.x, y: rect.y, w: rect.w, h: rect.h, label: label.trim().slice(0, 60) || null })
+  return error ? { success: false, error: error.message } : { success: true }
+}
+
+export async function adminMosaicDeleteZone(zoneId: string) {
+  const admin = await verifyAdmin('settings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!EVENT_ID_RE.test(zoneId)) return { success: false, error: 'Zona non valida' }
+  const { error } = await getServiceClient().from('mosaic_zones').delete().eq('id', zoneId)
+  return error ? { success: false, error: error.message } : { success: true }
+}
+
+export type MosaicAdminReport = {
+  id: string
+  season_id: string
+  season_title: string
+  x: number
+  y: number
+  w: number
+  h: number
+  reason: string
+  note: string | null
+  status: string
+  created_at: string
+  reporter_name: string
+}
+
+export async function adminListMosaicReports() {
+  const admin = await verifyAdmin('listings.read')
+  if (!admin) return { reports: [] as MosaicAdminReport[], error: 'Non autorizzato' }
+  const service = getServiceClient()
+  const { data, error } = await service
+    .from('mosaic_reports')
+    .select('id, season_id, reporter, x, y, w, h, reason, note, status, created_at, season:mosaic_seasons(title)')
+    .order('status', { ascending: false })
+    .order('created_at', { ascending: false })
+    .limit(200)
+  if (error) return { reports: [] as MosaicAdminReport[], error: error.message }
+  const rows = (data ?? []) as unknown as (Omit<MosaicAdminReport, 'season_title' | 'reporter_name'> & { reporter: string | null; season: { title: string } | null })[]
+  const ids = [...new Set(rows.map((r) => r.reporter).filter((id): id is string => !!id))]
+  const { data: people } = ids.length ? await service.from('profiles').select('id, first_name, last_name, email').in('id', ids) : { data: [] }
+  const names = new Map((people ?? []).map((p) => [p.id as string, `${p.first_name ?? ''} ${p.last_name ?? ''}`.trim() || (p.email as string) || '—']))
+  return {
+    reports: rows.map(({ reporter, season, ...r }) => ({ ...r, season_title: season?.title ?? '—', reporter_name: (reporter && names.get(reporter)) || '—' })),
+    error: null,
+  }
+}
+
+export async function adminCloseMosaicReport(reportId: string) {
+  const admin = await verifyAdmin('listings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!EVENT_ID_RE.test(reportId)) return { success: false, error: 'Segnalazione non valida' }
+  const { error } = await getServiceClient().from('mosaic_reports').update({ status: 'closed' }).eq('id', reportId)
+  return error ? { success: false, error: error.message } : { success: true }
+}
+
+// ============================================================
+// Kumani Fabula: storie in attesa, nascoste, segnalate e parole filtrate
+// ============================================================
+
+export async function adminListFabula(view: 'pending' | 'hidden' | 'published' | 'words') {
+  const admin = await verifyAdmin('listings.read')
+  if (!admin) return { rows: [] as Record<string, unknown>[], error: 'Non autorizzato' }
+  const service = getServiceClient()
+  if (view === 'words') {
+    const { data, error } = await service.from('fabula_banned_words').select('word').order('word')
+    return { rows: (data ?? []) as Record<string, unknown>[], error: error?.message ?? null }
+  }
+  const { data, error } = await service
+    .from('fabula_stories')
+    .select('id, user_id, roll_date, dice, title, body, locale, status, created_at, updated_at, reports:fabula_reports(id, reason, status)')
+    .eq('status', view)
+    .order('updated_at', { ascending: false })
+    .limit(200)
+  if (error) return { rows: [] as Record<string, unknown>[], error: error.message }
+  const rows = (data ?? []) as Record<string, unknown>[]
+  const ids = [...new Set(rows.map((r) => r.user_id as string))]
+  const { data: people } = ids.length ? await service.from('profiles').select('id, first_name, last_name, email').in('id', ids) : { data: [] }
+  const byId = new Map((people ?? []).map((p) => [p.id as string, p]))
+  return { rows: rows.map((r) => ({ ...r, author: byId.get(r.user_id as string) ?? null })), error: null }
+}
+
+// Decisione dello Staff su una storia: pubblicarla, rimuoverla o renderla privata;
+// le segnalazioni aperte si chiudono
+export async function adminSetFabulaStatus(storyId: string, status: 'published' | 'removed' | 'private') {
+  const admin = await verifyAdmin('listings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!EVENT_ID_RE.test(storyId) || !['published', 'removed', 'private'].includes(status)) return { success: false, error: 'Dati non validi' }
+  const service = getServiceClient()
+  // "Rendi privata" dello Staff è definitivo: l'autore non può ripubblicarla
+  const { error } = await service
+    .from('fabula_stories')
+    .update({ status, staff_locked: status !== 'published', updated_at: new Date().toISOString() })
+    .eq('id', storyId)
+  if (error) return { success: false, error: error.message }
+  await service.from('fabula_reports').update({ status: 'closed' }).eq('story_id', storyId).eq('status', 'open')
+  return { success: true }
+}
+
+export async function adminAddFabulaWord(word: string) {
+  const admin = await verifyAdmin('settings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  const clean = word.trim().toLowerCase()
+  // Solo lettere (anche accentate e cirilliche) e spazi: la parola diventa un'espressione di ricerca
+  if (clean.length < 2 || clean.length > 40 || !/^[\p{L} ]+$/u.test(clean)) return { success: false, error: 'Usa solo lettere (2-40)' }
+  const { error } = await getServiceClient().from('fabula_banned_words').upsert({ word: clean }, { onConflict: 'word' })
+  return error ? { success: false, error: error.message } : { success: true }
+}
+
+export async function adminRemoveFabulaWord(word: string) {
+  const admin = await verifyAdmin('settings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  const { error } = await getServiceClient().from('fabula_banned_words').delete().eq('word', word)
+  return error ? { success: false, error: error.message } : { success: true }
 }

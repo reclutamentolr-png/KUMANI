@@ -28,6 +28,7 @@ import {
   Hourglass,
   Warehouse,
   Grid3x3,
+  Dices,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -65,4 +66,5 @@ export const marketplaceIconMap: Record<string, LucideIcon> = {
   Hourglass,
   Warehouse,
   Grid3x3,
+  Dices,
 }

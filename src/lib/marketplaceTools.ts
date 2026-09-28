@@ -281,5 +281,15 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       color: 'gold',
       category: 'svago',
     },
+    {
+      toolName: 'fabula',
+      href: '/marketplace/fabula',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'Dices',
+      title: t('fabula'),
+      description: t('fabulaDescription'),
+      color: 'gold',
+      category: 'svago',
+    },
   ]
 }

@@ -57,6 +57,7 @@ import ConvivioReportsPanel from '@/components/admin/ConvivioReportsPanel'
 import EventsAdminPanel from '@/components/admin/EventsAdminPanel'
 import TimebankAdminPanel from '@/components/admin/TimebankAdminPanel'
 import MosaicAdminPanel from '@/components/admin/MosaicAdminPanel'
+import FabulaAdminPanel from '@/components/admin/FabulaAdminPanel'
 import IdentityVerificationsPanel from '@/components/admin/IdentityVerificationsPanel'
 import ConvivioFeesPanel from '@/components/admin/ConvivioFeesPanel'
 import ContactMessagesPanel from '@/components/admin/ContactMessagesPanel'
@@ -101,6 +102,7 @@ import {
   UserX,
   Hourglass,
   Grid3x3,
+  Dices,
 } from 'lucide-react'
 
 type AdminDashboardProps = {
@@ -265,7 +267,9 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
     verifoto_monthly_ops: 1800,
     mosaic_pixels_day: 3,
     mosaic_bonus_pixels: 1,
-    mosaic_min_login_days: 7
+    mosaic_min_login_days: 7,
+    fabula_min_login_days: 7,
+    fabula_hide_after_reports: 3
   })
   // Valori letti all'apertura: si salvano solo i campi cambiati
   const [savedSettings, setSavedSettings] = useState<Record<string, any>>({})
@@ -1035,6 +1039,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
   { id: 'convivioFees', label: 'Commissioni Kordata', Icon: HandCoins, permission: 'listings.read' as Permission },
   { id: 'timebank', label: 'Time Bank', Icon: Hourglass, permission: 'listings.read' as Permission },
   { id: 'mosaic', label: 'Mosaic', Icon: Grid3x3, permission: 'listings.read' as Permission },
+  { id: 'fabula', label: 'Fabula', Icon: Dices, permission: 'listings.read' as Permission },
   { id: 'coupons', label: 'Coupon', Icon: Ticket, permission: 'coupons.read' as Permission },
   { id: 'vouchers', label: 'Voucher', Icon: BadgeCheck, permission: 'vouchers.read' as Permission },
   { id: 'rewards', label: 'Premi', Icon: Gift, permission: 'rewards.read' as Permission },
@@ -2643,6 +2648,30 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
               Dimensione e date delle stagioni si gestiscono in Admin → Mosaic.
             </p>
           </div>
+          <div>
+            <p className="block text-sm font-medium text-gray-700 mb-2">Kumani Fabula</p>
+            <div className="grid grid-cols-2 gap-3 max-w-md">
+              {([
+                ['fabula_min_login_days', 'Giorni di accesso per pubblicare subito', 7, 0, 365],
+                ['fabula_hide_after_reports', 'Segnalazioni per nascondere una storia', 3, 1, 20],
+              ] as const).map(([key, labelText, fallback, min, max]) => (
+                <label key={key} className="text-xs text-gray-600">
+                  {labelText}
+                  <input
+                    type="number"
+                    min={min}
+                    max={max}
+                    value={systemSettings[key] ?? fallback}
+                    onChange={(e) => setSystemSettings({ ...systemSettings, [key]: Math.min(max, Math.max(min, parseInt(e.target.value, 10) || min)) })}
+                    className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                  />
+                </label>
+              ))}
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              Chi ha meno giorni di accesso, o scrive una parola filtrata, pubblica in attesa del controllo in Admin → Fabula.
+            </p>
+          </div>
         </div>
 
         <div className="rounded-xl border border-gray-200 p-4">
@@ -3060,6 +3089,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
         {activeSection === 'convivioFees' && <ConvivioFeesPanel locale={locale} canReadSettings={hasPermission(permissions, 'settings.read')} />}
         {activeSection === 'timebank' && <TimebankAdminPanel />}
         {activeSection === 'mosaic' && <MosaicAdminPanel />}
+        {activeSection === 'fabula' && <FabulaAdminPanel />}
         {activeSection === 'contactMessages' && <ContactMessagesPanel />}
         {activeSection === 'settings' && renderSettings()}
       </div>

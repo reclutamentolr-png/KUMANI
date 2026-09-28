@@ -3,14 +3,25 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import type { RealtimeChannel } from '@supabase/supabase-js'
-import { Check, Download, Hourglass, Minus, Plus, Radio, Sparkles } from 'lucide-react'
+import { Check, Clapperboard, Download, Eye, EyeOff, Flag, Hourglass, Lock, Minus, Plus, Radio, Share2, Sparkles, Trophy } from 'lucide-react'
+import { Sheet } from '@/components/memolife/MemoLifeForms'
 import { createClient } from '@/lib/supabase/client'
-import { getMosaicCanvas, placeMosaicPixel } from '@/app/actions/mosaic'
-import { MOSAIC_PALETTE, decodeCanvas, hexToRgb, secondsToRomeMidnight, type MosaicStatus } from '@/lib/mosaic'
+import { getMosaicCell, getMosaicStatus, placeMosaicPixel, reportMosaicArea } from '@/app/actions/mosaic'
+import {
+  MOSAIC_PALETTE,
+  MOSAIC_REPORT_REASONS,
+  MOSAICIST_TILES,
+  cellRgb,
+  decodeCanvas,
+  inZone,
+  paintCells,
+  secondsToRomeMidnight,
+  type MosaicReportReason,
+  type MosaicStatus,
+} from '@/lib/mosaic'
+import { MosaicBadgesList, MosaicShare, MosaicTimelapse } from './MosaicExtras'
 
-const EMPTY_RGB: [number, number, number] = [239, 234, 224] // casella libera (beige chiaro)
 const ZOOMS = [1, 2, 4, 8]
-const LUT = MOSAIC_PALETTE.map(hexToRgb)
 
 const clock = (seconds: number) =>
   [Math.floor(seconds / 3600), Math.floor((seconds % 3600) / 60), seconds % 60].map((n) => String(n).padStart(2, '0')).join(':')
@@ -24,7 +35,8 @@ export default function MosaicBoard({ status }: { status: MosaicStatus }) {
   const size = season.width * season.height
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const cells = useRef<Uint8Array>(decodeCanvas(status.canvas, size))
+  const [initialCells] = useState(() => decodeCanvas(status.canvas, size))
+  const cells = useRef<Uint8Array>(initialCells)
   const [filled, setFilled] = useState(season.filled)
   const [mine, setMine] = useState(season.mine)
   const [contributors, setContributors] = useState(season.contributors)
@@ -34,40 +46,55 @@ export default function MosaicBoard({ status }: { status: MosaicStatus }) {
   const [selected, setSelected] = useState<{ x: number; y: number } | null>(null)
   const [color, setColor] = useState(10)
   const [busy, setBusy] = useState(false)
-  const [notice, setNotice] = useState<{ text: string; ok: boolean } | null>(null)
+  const [notice, setNotice] = useState<{ text: string; tone: 'ok' | 'error' | 'info' } | null>(null)
+  const [extra, setExtra] = useState<'timelapse' | 'share' | null>(null)
+  const [placedNowAt, setPlacedNowAt] = useState(0)
+  const placedNow = placedNowAt > 0
   const [live, setLive] = useState(false)
   const [countdown, setCountdown] = useState<number | null>(null)
+  const [reportAt, setReportAt] = useState<{ x: number; y: number } | null>(null)
+  const [reporting, setReporting] = useState<{ x: number; y: number; reason: MosaicReportReason; note: string } | null>(null)
+
+  // Sagoma guida (disegno leggero sotto le caselle vuote) e zone dello Staff
+  const zones = useMemo(() => season.zones ?? [], [season.zones])
+  const guide = useMemo(() => (season.template ? decodeCanvas(season.template, size) : null), [season.template, size])
+  const [showGuide, setShowGuide] = useState(true)
+  const activeGuide = useRef<Uint8Array | null>(guide)
 
   const canPlace = status.online && status.eligible && left > 0
 
   // Disegno della tela: un pixel del canvas per ogni casella
   const paintAll = useCallback(() => {
     const ctx = canvasRef.current?.getContext('2d')
-    if (!ctx) return
-    const img = ctx.createImageData(season.width, season.height)
-    cells.current.forEach((value, i) => {
-      const [r, g, b] = value ? LUT[value - 1] : EMPTY_RGB
-      img.data.set([r, g, b, 255], i * 4)
-    })
-    ctx.putImageData(img, 0, 0)
+    if (ctx) paintCells(ctx, cells.current, season.width, season.height, undefined, activeGuide.current)
   }, [season.width, season.height])
 
   const paintCell = useCallback(
     (x: number, y: number, value: number) => {
       const ctx = canvasRef.current?.getContext('2d')
       if (!ctx) return
-      const [r, g, b] = value ? LUT[value - 1] : EMPTY_RGB
+      const [r, g, b] = cellRgb(value, activeGuide.current?.[y * season.width + x] ?? 0)
       ctx.fillStyle = `rgb(${r},${g},${b})`
       ctx.fillRect(x, y, 1, 1)
     },
-    [],
+    [season.width],
   )
 
+  const toggleGuide = () => {
+    activeGuide.current = showGuide ? null : guide
+    setShowGuide(!showGuide)
+    paintAll()
+  }
+
+  // Stato aggiornato dal server: tela, numeri della stagione e tessere di oggi
   const reload = useCallback(async () => {
-    const data = await getMosaicCanvas(season.id)
-    if (data === null) return
-    cells.current = decodeCanvas(data, size)
-    setFilled(cells.current.reduce((n, v) => n + (v ? 1 : 0), 0))
+    const fresh = await getMosaicStatus()
+    if (!fresh?.season || fresh.season.id !== season.id) return
+    cells.current = decodeCanvas(fresh.canvas, size)
+    setFilled(fresh.season.filled)
+    setMine(fresh.season.mine)
+    setContributors(fresh.season.contributors)
+    setLeft(fresh.allowance.left)
     paintAll()
   }, [season.id, size, paintAll])
 
@@ -104,7 +131,11 @@ export default function MosaicBoard({ status }: { status: MosaicStatus }) {
           setSelected((current) => (current && current.x === x && current.y === y ? null : current))
         })
         .on('broadcast', { event: 'reload' }, () => reload())
-        .subscribe((state) => setLive(state === 'SUBSCRIBED'))
+        .subscribe((state) => {
+          setLive(state === 'SUBSCRIBED')
+          // Le tessere piazzate prima del collegamento non arrivano dal canale
+          if (state === 'SUBSCRIBED') reload()
+        })
     })()
     const onVisible = () => document.visibilityState === 'visible' && reload()
     document.addEventListener('visibilitychange', onVisible)
@@ -118,57 +149,113 @@ export default function MosaicBoard({ status }: { status: MosaicStatus }) {
   // Conto alla rovescia per le tessere di domani
   useEffect(() => {
     if (left > 0 || !status.eligible) return
-    const tick = () => setCountdown(secondsToRomeMidnight())
+    const tick = () => {
+      const seconds = secondsToRomeMidnight()
+      setCountdown(seconds)
+      if (seconds <= 1) setTimeout(reload, 2000)
+    }
     const timer = setInterval(tick, 1000)
     const first = setTimeout(tick, 0)
     return () => {
       clearInterval(timer)
       clearTimeout(first)
     }
-  }, [left, status.eligible])
+  }, [left, status.eligible, reload])
 
-  const pick = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const dateTime = useMemo(
+    () => new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Rome' }),
+    [locale],
+  )
+
+  const pick = async (e: React.MouseEvent<HTMLCanvasElement>) => {
     const rect = e.currentTarget.getBoundingClientRect()
     const x = Math.floor(((e.clientX - rect.left) / rect.width) * season.width)
     const y = Math.floor(((e.clientY - rect.top) / rect.height) * season.height)
     if (x < 0 || y < 0 || x >= season.width || y >= season.height) return
+    setReportAt(null)
     if (cells.current[y * season.width + x]) {
+      // Casella occupata: quando è stata piazzata (mai da chi) e si può segnalare
       setSelected(null)
-      setNotice({ text: t('cellTaken'), ok: false })
+      setReportAt({ x, y })
+      const info = await getMosaicCell(season.id, x, y)
+      setNotice(
+        info
+          ? { text: t(info.mine ? 'cellInfoMine' : 'cellInfo', { date: dateTime.format(new Date(info.placed_at)) }), tone: 'info' }
+          : { text: t('cellTaken'), tone: 'info' },
+      )
+      return
+    }
+    if (inZone(zones, x, y)) {
+      setSelected(null)
+      setNotice({ text: t('zoneReserved'), tone: 'info' })
       return
     }
     setNotice(null)
     setSelected({ x, y })
+    // Casella con la sagoma: si propone il colore previsto
+    const hint = guide?.[y * season.width + x]
+    if (hint && activeGuide.current) setColor(hint - 1)
+  }
+
+  const sendReport = async () => {
+    if (!reporting) return
+    setBusy(true)
+    const result = await reportMosaicArea(season.id, reporting.x, reporting.y, reporting.reason, reporting.note)
+    setBusy(false)
+    setReporting(null)
+    setReportAt(null)
+    setNotice(
+      result === 'ok'
+        ? { text: t('reportSent'), tone: 'ok' }
+        : { text: t.has(`error_${result}`) ? t(`error_${result}`) : t('error_saveError'), tone: 'error' },
+    )
   }
 
   const place = async () => {
     if (!selected || !canPlace || busy) return
     const { x, y } = selected
     const i = y * season.width + x
-    if (cells.current[i]) return setNotice({ text: t('cellTaken'), ok: false })
+    if (cells.current[i]) return setNotice({ text: t('cellTaken'), tone: 'error' })
     setBusy(true)
-    // Subito sulla tela; se il server rifiuta si ricarica lo stato vero
+    // Subito sulla tela; se il server rifiuta (o la rete cade) si torna indietro
     cells.current[i] = color + 1
     paintCell(x, y, color + 1)
     setFilled((n) => n + 1)
-    const result = await placeMosaicPixel(season.id, x, y, color)
-    setBusy(false)
+    let result: Awaited<ReturnType<typeof placeMosaicPixel>>
+    try {
+      result = await placeMosaicPixel(season.id, x, y, color)
+    } catch {
+      result = { error: 'saveError' }
+    } finally {
+      setBusy(false)
+    }
     setSelected(null)
+    if (!result.ok && cells.current[i] === color + 1) {
+      cells.current[i] = 0
+      paintCell(x, y, 0)
+      setFilled((n) => Math.max(0, n - 1))
+    }
     if (result.ok) {
       setLeft(result.left ?? Math.max(0, left - 1))
       if (mine === 0) setContributors((n) => n + 1)
       setMine((n) => n + 1)
-      setNotice({ text: t('placed'), ok: true })
+      setPlacedNowAt((at) => at || Date.now())
+      setNotice({ text: t('placed'), tone: 'ok' })
       return
     }
     if (result.error === 'no_pixels') setLeft(0)
-    setNotice({ text: t.has(`error_${result.error}`) ? t(`error_${result.error}`) : t('error_saveError'), ok: false })
+    setNotice({ text: t.has(`error_${result.error}`) ? t(`error_${result.error}`) : t('error_saveError'), tone: 'error' })
     await reload()
   }
 
   const download = () => {
-    const source = canvasRef.current
-    if (!source) return
+    // Solo le tessere (senza la sagoma guida)
+    const source = document.createElement('canvas')
+    source.width = season.width
+    source.height = season.height
+    const sourceCtx = source.getContext('2d')
+    if (!sourceCtx) return
+    paintCells(sourceCtx, cells.current, season.width, season.height)
     const scale = Math.max(1, Math.floor(1024 / season.width))
     const out = document.createElement('canvas')
     out.width = season.width * scale
@@ -182,13 +269,24 @@ export default function MosaicBoard({ status }: { status: MosaicStatus }) {
       const url = URL.createObjectURL(blob)
       const link = document.createElement('a')
       link.href = url
-      link.download = `kumani-mosaic-${season.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.png`
+      const slug = season.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+      link.download = slug ? `kumani-mosaic-${slug}.png` : 'kumani-mosaic.png'
       link.click()
       setTimeout(() => URL.revokeObjectURL(url), 1000)
     }, 'image/png')
   }
 
+  // Riconoscimenti aggiornati anche durante la visita (la tessera appena messa conta)
+  const badges = {
+    ...season.badges,
+    mosaicist: season.badges.mosaicist || mine >= MOSAICIST_TILES,
+    cofounder: season.badges.cofounder || (placedNow && placedNowAt < new Date(season.starts_at).getTime() + 86400000),
+  }
   const percent = Math.floor((filled / size) * 100)
+  const shareInfo = useMemo(
+    () => ({ id: season.id, title: season.title, width: season.width, height: season.height, contributors, mine }),
+    [season.id, season.title, season.width, season.height, contributors, mine],
+  )
   const dateFormat = useMemo(() => new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', timeZone: 'Europe/Rome' }), [locale])
   const zoomIndex = ZOOMS.indexOf(zoom)
 
@@ -210,7 +308,7 @@ export default function MosaicBoard({ status }: { status: MosaicStatus }) {
             >
               <Minus className="h-4 w-4" />
             </button>
-            <span className="w-10 text-center text-xs font-bold text-gray-600">{zoom}×</span>
+            <span className="w-8 text-center text-xs font-bold text-gray-600">{zoom}×</span>
             <button
               type="button"
               onClick={() => setZoom(ZOOMS[Math.min(ZOOMS.length - 1, zoomIndex + 1)])}
@@ -219,6 +317,35 @@ export default function MosaicBoard({ status }: { status: MosaicStatus }) {
               className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-700 disabled:opacity-40"
             >
               <Plus className="h-4 w-4" />
+            </button>
+            {guide && (
+              <button
+                type="button"
+                onClick={toggleGuide}
+                aria-label={showGuide ? t('guideHide') : t('guideShow')}
+                title={showGuide ? t('guideHide') : t('guideShow')}
+                className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-700"
+              >
+                {showGuide ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => setExtra('timelapse')}
+              aria-label={t('timelapse')}
+              title={t('timelapse')}
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-700"
+            >
+              <Clapperboard className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => setExtra('share')}
+              aria-label={t('share')}
+              title={t('share')}
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-700"
+            >
+              <Share2 className="h-4 w-4" />
             </button>
             <button
               type="button"
@@ -250,6 +377,25 @@ export default function MosaicBoard({ status }: { status: MosaicStatus }) {
                 }}
               />
             )}
+            {zones.map((zone, index) => (
+              <div
+                key={index}
+                className="pointer-events-none absolute flex items-start justify-start border border-[var(--ink)]/60"
+                style={{
+                  left: `${(zone.x / season.width) * 100}%`,
+                  top: `${(zone.y / season.height) * 100}%`,
+                  width: `${(zone.w / season.width) * 100}%`,
+                  height: `${(zone.h / season.height) * 100}%`,
+                  backgroundImage: 'repeating-linear-gradient(45deg, rgba(23,23,23,.10) 0 2px, transparent 2px 6px)',
+                }}
+              >
+                {cellPx * Math.min(zone.w, zone.h) >= 28 && (
+                  <span className="m-0.5 flex items-center gap-0.5 rounded bg-[var(--ink)]/80 px-1 text-[10px] font-semibold text-white">
+                    <Lock className="h-2.5 w-2.5" /> {zone.label || t('zoneLabel')}
+                  </span>
+                )}
+              </div>
+            ))}
             {selected && (
               <div
                 className="pointer-events-none absolute animate-pulse ring-2 ring-[var(--ink)] ring-offset-1"
@@ -278,6 +424,16 @@ export default function MosaicBoard({ status }: { status: MosaicStatus }) {
           <p className="mt-1 text-xs text-[var(--muted)]">{t('contributors', { count: contributors })}</p>
           <p className="mt-1 text-xs text-[var(--muted)]">{t('seasonEnds', { date: dateFormat.format(new Date(season.ends_at)) })}</p>
           <p className="mt-3 text-sm text-gray-700">{t('mine', { count: mine })}</p>
+          {filled >= size && (
+            <p className="mt-3 flex items-center gap-2 rounded-lg bg-[var(--gold)]/15 px-3 py-2 text-sm font-bold text-[var(--ink)]">
+              <Trophy className="h-4 w-4 text-[var(--gold)]" /> {t('completed')}
+            </p>
+          )}
+        </div>
+
+        <div className="rounded-2xl border border-[var(--gold)]/25 bg-white p-5 shadow-sm">
+          <p className="mb-3 font-bold text-[var(--ink)]">{t('badgesTitle')}</p>
+          <MosaicBadgesList badges={badges} />
         </div>
 
         {!status.eligible ? (
@@ -334,9 +490,59 @@ export default function MosaicBoard({ status }: { status: MosaicStatus }) {
         )}
 
         {notice && (
-          <p className={`rounded-xl px-4 py-3 text-sm font-semibold ${notice.ok ? 'bg-emerald-50 text-emerald-800' : 'bg-red-50 text-red-700'}`}>{notice.text}</p>
+          <div className={`rounded-xl px-4 py-3 text-sm font-semibold ${notice.tone === 'ok' ? 'bg-emerald-50 text-emerald-800' : notice.tone === 'info' ? 'bg-gray-100 text-gray-700' : 'bg-red-50 text-red-700'}`}>
+            <p>{notice.text}</p>
+            {reportAt && (
+              <button
+                type="button"
+                onClick={() => setReporting({ ...reportAt, reason: 'offensive', note: '' })}
+                className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-red-700 hover:underline"
+              >
+                <Flag className="h-3.5 w-3.5" /> {t('reportArea')}
+              </button>
+            )}
+          </div>
         )}
       </div>
+
+      {reporting && (
+        <Sheet title={t('reportTitle')} onClose={() => setReporting(null)}>
+          <p className="mb-3 text-sm text-[var(--muted)]">{t('reportIntro')}</p>
+          <div className="space-y-2">
+            {MOSAIC_REPORT_REASONS.map((reason) => (
+              <label key={reason} className="flex items-center gap-2 rounded-lg border border-gray-200 p-3 text-sm text-gray-800">
+                <input
+                  type="radio"
+                  name="mosaic-report"
+                  className="h-4 w-4 accent-[var(--ink)]"
+                  checked={reporting.reason === reason}
+                  onChange={() => setReporting({ ...reporting, reason })}
+                />
+                {t(`reportReason_${reason}`)}
+              </label>
+            ))}
+          </div>
+          <textarea
+            value={reporting.note}
+            onChange={(e) => setReporting({ ...reporting, note: e.target.value })}
+            maxLength={300}
+            rows={3}
+            placeholder={t('reportNote')}
+            className="mt-3 w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--gold)]"
+          />
+          <button
+            type="button"
+            onClick={sendReport}
+            disabled={busy}
+            className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--ink)] px-4 py-3 text-sm font-bold text-white disabled:opacity-40"
+          >
+            <Flag className="h-4 w-4 text-[var(--gold-bright)]" /> {t('reportSend')}
+          </button>
+        </Sheet>
+      )}
+
+      {extra === 'timelapse' && <MosaicTimelapse season={shareInfo} onClose={() => setExtra(null)} />}
+      {extra === 'share' && <MosaicShare season={shareInfo} onClose={() => setExtra(null)} />}
     </div>
   )
 }

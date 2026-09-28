@@ -1,15 +1,21 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { Eraser, LoaderCircle, Pencil, Plus, Trash2, Users } from 'lucide-react'
+import { Check, Eraser, Flag, Grid3x3, LoaderCircle, Pencil, Plus, Trash2, Users } from 'lucide-react'
 import {
   adminClearMosaicUser,
+  adminCloseMosaicReport,
   adminDeleteMosaicSeason,
+  adminListMosaicReports,
   adminListMosaicContributors,
   adminListMosaicSeasons,
   adminSaveMosaicSeason,
+  type MosaicAdminReport,
   type MosaicAdminSeason,
 } from '@/app/actions/admin'
+import MosaicAdminEditor from './MosaicAdminEditor'
+
+const REASON: Record<string, string> = { offensive: 'Offensiva', advertising: 'Pubblicità', other: 'Altro' }
 
 type Form = { title: string; theme: string; width: number; height: number; startsAt: string; endsAt: string }
 
@@ -35,12 +41,22 @@ export default function MosaicAdminPanel() {
   const [editing, setEditing] = useState<{ id: string | null; form: Form } | null>(null)
   const [saving, setSaving] = useState(false)
   const [people, setPeople] = useState<{ seasonId: string; rows: Record<string, unknown>[] | null } | null>(null)
+  const [reports, setReports] = useState<MosaicAdminReport[]>([])
+  const [showClosed, setShowClosed] = useState(false)
+  const [canvasFor, setCanvasFor] = useState<{ seasonId: string; focus: { x: number; y: number; w: number; h: number } | null; key: number } | null>(null)
 
   const load = useCallback(async () => {
-    const result = await adminListMosaicSeasons()
+    const [result, list] = await Promise.all([adminListMosaicSeasons(), adminListMosaicReports()])
     setSeasons(result.seasons)
-    setError(result.error)
+    setReports(list.reports)
+    setError(result.error ?? list.error)
   }, [])
+
+  const closeReport = async (id: string) => {
+    const result = await adminCloseMosaicReport(id)
+    if (!result.success) return alert('Errore: ' + (result.error ?? ''))
+    await load()
+  }
 
   useEffect(() => {
     // Caricamento iniziale dal server (setState asincrono)
@@ -107,6 +123,59 @@ export default function MosaicAdminPanel() {
       </div>
 
       {error && <p className="rounded-lg bg-red-50 p-3 text-sm text-red-700">{error}</p>}
+
+      <div className="rounded-xl border border-gray-200 bg-white p-4">
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <p className="flex items-center gap-2 font-semibold text-gray-900">
+            <Flag className="h-4 w-4 text-red-600" /> Segnalazioni ({reports.filter((r) => r.status === 'open').length} aperte)
+          </p>
+          <label className="flex items-center gap-1.5 text-xs text-gray-600">
+            <input type="checkbox" checked={showClosed} onChange={(e) => setShowClosed(e.target.checked)} /> Mostra anche le chiuse
+          </label>
+        </div>
+        {reports.filter((r) => showClosed || r.status === 'open').length === 0 ? (
+          <p className="text-sm text-gray-500">Nessuna segnalazione aperta.</p>
+        ) : (
+          <ul className="divide-y divide-gray-100">
+            {reports
+              .filter((r) => showClosed || r.status === 'open')
+              .map((report) => (
+                <li key={report.id} className="flex flex-wrap items-start justify-between gap-3 py-2.5">
+                  <div className="text-sm">
+                    <p className="font-semibold text-gray-900">
+                      {REASON[report.reason] ?? report.reason} · {report.season_title}
+                      {report.status === 'closed' && <span className="ml-2 rounded-full bg-gray-100 px-2 py-0.5 text-[11px] text-gray-600">Chiusa</span>}
+                    </p>
+                    {report.note && <p className="text-gray-700">“{report.note}”</p>}
+                    <p className="text-xs text-gray-500">
+                      Area ({report.x + 1}, {report.y + 1}) {report.w}×{report.h} · da {report.reporter_name} · {when(report.created_at)}
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setCanvasFor({ seasonId: report.season_id, focus: { x: report.x, y: report.y, w: report.w, h: report.h }, key: Date.now() })
+                      }
+                      className="flex items-center gap-1 rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-semibold text-gray-700"
+                    >
+                      <Grid3x3 className="h-3.5 w-3.5" /> Apri sulla tela
+                    </button>
+                    {report.status === 'open' && (
+                      <button
+                        type="button"
+                        onClick={() => closeReport(report.id)}
+                        className="flex items-center gap-1 rounded-lg bg-[var(--ink)] px-3 py-1.5 text-xs font-semibold text-white"
+                      >
+                        <Check className="h-3.5 w-3.5" /> Chiudi
+                      </button>
+                    )}
+                  </div>
+                </li>
+              ))}
+          </ul>
+        )}
+      </div>
 
       {editing && (
         <div className="space-y-3 rounded-xl border border-[var(--gold)]/40 bg-white p-4">
@@ -183,7 +252,14 @@ export default function MosaicAdminPanel() {
                       {season.filled} / {total} tessere ({Math.floor((season.filled / total) * 100)}%) · {season.contributors} partecipanti
                     </p>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setCanvasFor(canvasFor?.seasonId === season.id ? null : { seasonId: season.id, focus: null, key: Date.now() })}
+                      className="flex items-center gap-1 rounded-lg bg-[var(--ink)] px-3 py-1.5 text-xs font-semibold text-white"
+                    >
+                      <Grid3x3 className="h-3.5 w-3.5" /> Tela
+                    </button>
                     <button
                       type="button"
                       onClick={() => showPeople(season.id)}
@@ -219,6 +295,10 @@ export default function MosaicAdminPanel() {
                     </button>
                   </div>
                 </div>
+
+                {canvasFor?.seasonId === season.id && (
+                  <MosaicAdminEditor key={canvasFor.key} season={season} focus={canvasFor.focus} onClose={() => setCanvasFor(null)} onChanged={load} />
+                )}
 
                 {people?.seasonId === season.id && (
                   <div className="mt-4 border-t border-gray-100 pt-3">

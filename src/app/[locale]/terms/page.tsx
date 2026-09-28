@@ -161,6 +161,14 @@ export default function TermsPage() {
                 Piattaforma.
               </p>
               <p>
+                <strong className="text-gray-900">Storie (Kumani Fabula).</strong> È un gioco gratuito di scrittura creativa. Le storie restano
+                private finché l&apos;utente non sceglie di pubblicarle nella galleria, dove sono visibili agli iscritti con il nome e l&apos;iniziale
+                del cognome dell&apos;autore. Chi pubblica dichiara che il testo è suo e concede alla Piattaforma di mostrarlo nella galleria e nelle
+                immagini di condivisione; può ritirarlo o cancellarlo in ogni momento. Non sono ammessi contenuti offensivi, discriminatori,
+                pubblicitari, illegali o che riguardano persone reali senza il loro consenso. Le storie dei nuovi iscritti e quelle segnalate
+                possono essere controllate, nascoste o rimosse dallo Staff.
+              </p>
+              <p>
                 <strong className="text-gray-900">Strumenti di verifica (SVAT, VeriFoto).</strong> I risultati sono indizi automatici e non
                 costituiscono una perizia né una garanzia sull&apos;affidabilità di siti, aziende o immagini. In VeriFoto i controlli di base
                 avvengono sul dispositivo dell&apos;utente senza caricare la foto; solo se l&apos;utente lo sceglie, una copia ridotta e priva di

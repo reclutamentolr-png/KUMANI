@@ -1,5 +1,6 @@
 import { getLocale, getTranslations } from 'next-intl/server'
-import { ArrowLeft, Grid3x3 } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Grid3x3, Images } from 'lucide-react'
+import Link from '@/components/LocalizedLink'
 import ToolBackLink from '@/components/ToolBackLink'
 import MosaicBoard from '@/components/mosaic/MosaicBoard'
 import { SuspendedBanner } from '@/components/ServiceSuspended'
@@ -62,6 +63,22 @@ export default async function MosaicPage() {
           </div>
         )}
 
+        {status?.has_archive && (
+          <Link
+            href="/marketplace/mosaic/archivio"
+            className="group mt-6 flex items-center justify-between gap-3 rounded-2xl border border-[var(--gold)]/40 bg-[var(--ink)] p-5 text-white shadow-sm"
+          >
+            <span className="flex items-center gap-3">
+              <Images className="h-6 w-6 text-[var(--gold-bright)]" />
+              <span>
+                <span className="block font-bold">{t('archiveTitle')}</span>
+                <span className="block text-sm text-white/70">{t('archiveLinkText')}</span>
+              </span>
+            </span>
+            <ArrowRight className="h-5 w-5 text-[var(--gold-bright)] transition-transform group-hover:translate-x-1" />
+          </Link>
+        )}
+
         <div className="mt-8 rounded-2xl border border-[var(--gold)]/25 bg-white p-6 shadow-sm">
           <h2 className="mb-3 font-bold text-[var(--ink)]">{t('howTitle')}</h2>
           <ol className="space-y-2 text-sm leading-6 text-[var(--muted)]">
@@ -69,6 +86,7 @@ export default async function MosaicPage() {
             <li>2. {t('rule2')}</li>
             <li>3. {t('rule3')}</li>
             <li>4. {t('rule4')}</li>
+            <li>5. {t('rule5')}</li>
           </ol>
         </div>
       </main>

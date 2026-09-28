@@ -11,7 +11,7 @@ const intlMiddleware = createMiddleware({
 });
 
 // Strumenti che, spenti in Admin, restano aperti in sola lettura.
-const READ_ONLY_WHEN_OFF = ['convivio', 'listings', 'chat', 'timebank', 'mosaic'];
+const READ_ONLY_WHEN_OFF = ['convivio', 'listings', 'chat', 'timebank', 'mosaic', 'fabula'];
 
 // Strumenti a pagamento: se il controllo del piano (can_use_tool) non riesce
 // per un errore momentaneo, l'accesso viene negato (meglio "riprova" che

@@ -2,7 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { awardToolPoint } from '@/lib/toolPoints'
-import type { MosaicStatus } from '@/lib/mosaic'
+import { MOSAIC_REPORT_REASONS, type MosaicArchiveSeason, type MosaicStatus } from '@/lib/mosaic'
 
 // KUMANI Mosaic: le regole (stagione, tessere al giorno, bonus, giorni di
 // accesso, caselle già occupate) sono nelle funzioni SQL mosaic_*.
@@ -39,4 +39,42 @@ export async function placeMosaicPixel(seasonId: string, x: number, y: number, c
   const result = data as { ok?: boolean; left?: number; error?: string }
   if (result.ok) await awardToolPoint('mosaic')
   return result
+}
+
+// Storia dell'opera per il timelapse e la card da condividere
+export async function getMosaicTimeline(seasonId: string): Promise<string | null> {
+  if (!UUID_RE.test(seasonId)) return null
+  const supabase = await createClient()
+  const { data } = await supabase.rpc('mosaic_timeline', { p_season: seasonId })
+  return (data as string | null) ?? null
+}
+
+// Quando è stata piazzata una tessera (e se è tua); mai da chi
+export async function getMosaicCell(seasonId: string, x: number, y: number): Promise<{ placed_at: string; mine: boolean } | null> {
+  if (!UUID_RE.test(seasonId) || ![x, y].every(Number.isInteger)) return null
+  const supabase = await createClient()
+  const { data } = await supabase.rpc('mosaic_cell', { p_season: seasonId, p_x: x, p_y: y })
+  return (data as { placed_at: string; mine: boolean } | null) ?? null
+}
+
+export async function getMosaicArchive(): Promise<MosaicArchiveSeason[]> {
+  const supabase = await createClient()
+  const { data, error } = await supabase.rpc('mosaic_archive')
+  if (error) {
+    console.error('[Mosaic] archive failed:', error.message)
+    return []
+  }
+  return (data ?? []) as MosaicArchiveSeason[]
+}
+
+// Segnalazione di un'area (scritte offensive, pubblicità…)
+export async function reportMosaicArea(seasonId: string, x: number, y: number, reason: string, note: string): Promise<string> {
+  if (!UUID_RE.test(seasonId) || ![x, y].every(Number.isInteger) || !(MOSAIC_REPORT_REASONS as readonly string[]).includes(reason)) return 'invalid'
+  const supabase = await createClient()
+  const { data, error } = await supabase.rpc('mosaic_report', { p_season: seasonId, p_x: x, p_y: y, p_reason: reason, p_note: note.trim().slice(0, 300) })
+  if (error) {
+    console.error('[Mosaic] report failed:', error.message)
+    return 'saveError'
+  }
+  return data as string
 }
