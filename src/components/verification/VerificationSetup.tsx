@@ -31,7 +31,7 @@ export type VerificationStatus = {
   identity_rejected_note?: string | null
 }
 
-type Kind = 'kordata' | 'events'
+type Kind = 'kordata' | 'events' | 'timebank'
 
 const DOC_TYPES: IdentityDocType[] = ['id_card', 'passport', 'residence_permit', 'driving_license']
 const FILE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf']
@@ -176,7 +176,9 @@ export default function VerificationSetup({
     applied({ terms: true })
   }
 
-  const checks: { key: string; ok: boolean; pending?: boolean; text: string; action?: React.ReactNode }[] = [
+  // Time Bank: gratis (niente abbonamento), 30 giorni dall'iscrizione, maggiorenni
+  const timebank = kind === 'timebank'
+  const allChecks: { key: string; ok: boolean; pending?: boolean; text: string; action?: React.ReactNode }[] = [
     {
       key: 'subscription',
       ok: s.subscription,
@@ -190,18 +192,35 @@ export default function VerificationSetup({
     {
       key: 'account_age',
       ok: s.account_age,
-      text: !s.account_age && s.subscription ? tc('check_account_age_wait', { days: s.days_left }) : tc('check_account_age'),
+      text: timebank
+        ? !s.account_age
+          ? t('timebank_check_account_age_wait', { days: s.days_left })
+          : t('timebank_check_account_age')
+        : !s.account_age && s.subscription
+          ? tc('check_account_age_wait', { days: s.days_left })
+          : tc('check_account_age'),
     },
-    { key: 'profile', ok: s.profile, text: tc('check_profile'), action: !s.profile && <span className="text-xs text-[var(--muted)]">{tc('check_profile_hint')}</span> },
+    {
+      key: 'profile',
+      ok: s.profile,
+      text: timebank ? t('timebank_check_profile') : tc('check_profile'),
+      action: !s.profile && <span className="text-xs text-[var(--muted)]">{tc('check_profile_hint')}</span>,
+    },
     { key: 'identity', ok: s.tax_code, pending: !s.tax_code && s.identity_pending, text: !s.tax_code && s.identity_pending ? t('check_identity_pending') : t('check_identity') },
     { key: 'rules', ok: s.terms, text: t(`check_rules_${kind}`) },
   ]
+  const checks = timebank ? allChecks.filter((c) => c.key !== 'subscription') : allChecks
 
-  const rules = kind === 'kordata' ? [tc('rule1'), tc('rule2'), tc('rule3'), tc('rule4')] : [t('events_rule1'), t('events_rule2'), t('events_rule3'), t('events_rule4')]
+  const rules =
+    kind === 'kordata'
+      ? [tc('rule1'), tc('rule2'), tc('rule3'), tc('rule4')]
+      : timebank
+        ? [t('timebank_rule1'), t('timebank_rule2'), t('timebank_rule3'), t('timebank_rule4'), t('timebank_rule5')]
+        : [t('events_rule1'), t('events_rule2'), t('events_rule3'), t('events_rule4')]
 
   return (
-    <Sheet title={title ?? (kind === 'kordata' ? tc('setupTitle') : t('title_events'))} onClose={onClose}>
-      <p className="mb-4 text-sm text-gray-600">{intro ?? (kind === 'kordata' ? tc('setupIntro') : t('intro_events'))}</p>
+    <Sheet title={title ?? (kind === 'kordata' ? tc('setupTitle') : t(`title_${kind}`))} onClose={onClose}>
+      <p className="mb-4 text-sm text-gray-600">{intro ?? (kind === 'kordata' ? tc('setupIntro') : t(`intro_${kind}`))}</p>
 
       <ul className="mb-5 space-y-2">
         {checks.map((c) => (
@@ -382,7 +401,7 @@ export default function VerificationSetup({
       {canProceed && !s.terms && (
         <section className="mb-4 rounded-xl border border-[var(--gold)]/30 bg-[var(--gold-pale)]/40 p-4">
           <h4 className="mb-2 flex items-center gap-2 font-bold text-[var(--ink)]">
-            <ScrollText className="h-5 w-5 text-[var(--gold)]" /> {kind === 'kordata' ? tc('rulesTitle') : t('events_rulesTitle')}
+            <ScrollText className="h-5 w-5 text-[var(--gold)]" /> {kind === 'kordata' ? tc('rulesTitle') : t(`${kind}_rulesTitle`)}
           </h4>
           <ul className="mb-3 list-disc space-y-1 rounded-lg bg-white p-3 pl-7 text-xs leading-5 text-gray-600">
             {rules.map((rule) => (
@@ -391,7 +410,7 @@ export default function VerificationSetup({
           </ul>
           <label className="mb-3 flex items-start gap-2 text-sm text-gray-700">
             <input type="checkbox" checked={rulesChecked} onChange={(e) => setRulesChecked(e.target.checked)} className="mt-0.5 h-4 w-4 accent-[var(--gold)]" />
-            {kind === 'kordata' ? tc('acceptRules') : t('events_acceptRules')}
+            {kind === 'kordata' ? tc('acceptRules') : t(`${kind}_acceptRules`)}
           </label>
           {error?.step === 'rules' && <p className="mb-3 text-sm font-semibold text-red-600">{error.message}</p>}
           <button type="button" onClick={submitRules} disabled={busy !== null || !rulesChecked} className={primaryButton}>

@@ -24,6 +24,10 @@ import {
   HandPlatter,
   Plane,
   PartyPopper,
+  ScanEye,
+  Hourglass,
+  Warehouse,
+  Grid3x3,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -57,4 +61,8 @@ export const marketplaceIconMap: Record<string, LucideIcon> = {
   HandPlatter,
   Plane,
   PartyPopper,
+  ScanEye,
+  Hourglass,
+  Warehouse,
+  Grid3x3,
 }

@@ -55,6 +55,8 @@ import KuManagementPanel from '@/components/admin/KuManagementPanel'
 import AffinityReportsPanel from '@/components/admin/AffinityReportsPanel'
 import ConvivioReportsPanel from '@/components/admin/ConvivioReportsPanel'
 import EventsAdminPanel from '@/components/admin/EventsAdminPanel'
+import TimebankAdminPanel from '@/components/admin/TimebankAdminPanel'
+import MosaicAdminPanel from '@/components/admin/MosaicAdminPanel'
 import IdentityVerificationsPanel from '@/components/admin/IdentityVerificationsPanel'
 import ConvivioFeesPanel from '@/components/admin/ConvivioFeesPanel'
 import ContactMessagesPanel from '@/components/admin/ContactMessagesPanel'
@@ -96,7 +98,9 @@ import {
   HandCoins,
   Inbox,
   UserPen,
-  UserX
+  UserX,
+  Hourglass,
+  Grid3x3,
 } from 'lucide-react'
 
 type AdminDashboardProps = {
@@ -256,7 +260,12 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
     menu_ai_daily_runs: 5,
     veritas_write_seconds: 90,
     veritas_vote_seconds: 45,
-    veritas_reveal_seconds: 15
+    veritas_reveal_seconds: 15,
+    verifoto_daily_user: 1,
+    verifoto_monthly_ops: 1800,
+    mosaic_pixels_day: 3,
+    mosaic_bonus_pixels: 1,
+    mosaic_min_login_days: 7
   })
   // Valori letti all'apertura: si salvano solo i campi cambiati
   const [savedSettings, setSavedSettings] = useState<Record<string, any>>({})
@@ -1024,6 +1033,8 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
   { id: 'events', label: 'Eventi', Icon: CalendarDays, permission: 'listings.read' as Permission },
   { id: 'identity', label: 'Verifica identità', Icon: ScanFace, permission: 'users.read' as Permission },
   { id: 'convivioFees', label: 'Commissioni Kordata', Icon: HandCoins, permission: 'listings.read' as Permission },
+  { id: 'timebank', label: 'Time Bank', Icon: Hourglass, permission: 'listings.read' as Permission },
+  { id: 'mosaic', label: 'Mosaic', Icon: Grid3x3, permission: 'listings.read' as Permission },
   { id: 'coupons', label: 'Coupon', Icon: Ticket, permission: 'coupons.read' as Permission },
   { id: 'vouchers', label: 'Voucher', Icon: BadgeCheck, permission: 'vouchers.read' as Permission },
   { id: 'rewards', label: 'Premi', Icon: Gift, permission: 'rewards.read' as Permission },
@@ -2554,6 +2565,37 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
             <p className="text-xs text-gray-500 mt-1">Ogni traduzione ha un piccolo costo sulla chiave AI del progetto.</p>
           </div>
           <div>
+            <p className="block text-sm font-medium text-gray-700 mb-2">VeriFoto: rilevatore AI (Sightengine, quota gratuita)</p>
+            <div className="grid grid-cols-2 gap-3 max-w-md">
+              <label className="text-xs text-gray-600">
+                Analisi per utente al giorno
+                <input
+                  type="number"
+                  min="0"
+                  max="50"
+                  value={systemSettings.verifoto_daily_user ?? 1}
+                  onChange={(e) => setSystemSettings({ ...systemSettings, verifoto_daily_user: Math.max(0, parseInt(e.target.value, 10) || 0) })}
+                  className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                />
+              </label>
+              <label className="text-xs text-gray-600">
+                Operazioni al mese (tetto)
+                <input
+                  type="number"
+                  min="0"
+                  max="2000"
+                  value={systemSettings.verifoto_monthly_ops ?? 1800}
+                  onChange={(e) => setSystemSettings({ ...systemSettings, verifoto_monthly_ops: Math.min(2000, Math.max(0, parseInt(e.target.value, 10) || 0)) })}
+                  className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                />
+              </label>
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              Il piano gratuito di Sightengine include 2.000 operazioni al mese: oltre si paga. Tieni il tetto sotto 2.000 per restare gratis
+              (ogni analisi consuma le operazioni indicate da Sightengine, di solito alcune per foto).
+            </p>
+          </div>
+          <div>
             <p className="block text-sm font-medium text-gray-700 mb-2">Veritas: durata delle fasi (secondi)</p>
             <div className="grid grid-cols-3 gap-3 max-w-md">
               {([
@@ -2574,6 +2616,32 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
                 </label>
               ))}
             </div>
+          </div>
+          <div>
+            <p className="block text-sm font-medium text-gray-700 mb-2">KUMANI Mosaic</p>
+            <div className="grid grid-cols-3 gap-3 max-w-md">
+              {([
+                ['mosaic_pixels_day', 'Tessere al giorno', 3, 1, 50],
+                ['mosaic_bonus_pixels', 'Tessere bonus', 1, 0, 10],
+                ['mosaic_min_login_days', 'Giorni di accesso minimi', 7, 0, 365],
+              ] as const).map(([key, labelText, fallback, min, max]) => (
+                <label key={key} className="text-xs text-gray-600">
+                  {labelText}
+                  <input
+                    type="number"
+                    min={min}
+                    max={max}
+                    value={systemSettings[key] ?? fallback}
+                    onChange={(e) => setSystemSettings({ ...systemSettings, [key]: Math.min(max, Math.max(min, parseInt(e.target.value, 10) || min)) })}
+                    className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                  />
+                </label>
+              ))}
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              Il bonus arriva a chi oggi ha usato un altro servizio KUMANI. Un giorno di accesso = il KU di accesso giornaliero.
+              Dimensione e date delle stagioni si gestiscono in Admin → Mosaic.
+            </p>
           </div>
         </div>
 
@@ -2990,6 +3058,8 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
         )}
         {activeSection === 'identity' && <IdentityVerificationsPanel />}
         {activeSection === 'convivioFees' && <ConvivioFeesPanel locale={locale} canReadSettings={hasPermission(permissions, 'settings.read')} />}
+        {activeSection === 'timebank' && <TimebankAdminPanel />}
+        {activeSection === 'mosaic' && <MosaicAdminPanel />}
         {activeSection === 'contactMessages' && <ContactMessagesPanel />}
         {activeSection === 'settings' && renderSettings()}
       </div>

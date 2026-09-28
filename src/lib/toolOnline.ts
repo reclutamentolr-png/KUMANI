@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 // Interruttore Admin (marketplace_settings.is_enabled) per i servizi fuori da
 // /marketplace: Travel ed Events restano in sola lettura, Veritas e Affinity
 // si fermano. Senza riga o in caso di errore il servizio resta acceso.
-export type SwitchableTool = 'travel' | 'events' | 'veritas' | 'affinity' | 'convivio' | 'listings' | 'chat' | 'spotlight'
+export type SwitchableTool = 'travel' | 'events' | 'veritas' | 'affinity' | 'convivio' | 'listings' | 'chat' | 'spotlight' | 'timebank'
 
 export async function isToolOnline(tool: SwitchableTool): Promise<boolean> {
   const supabase = await createClient()

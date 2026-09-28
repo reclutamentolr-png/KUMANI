@@ -86,6 +86,8 @@ const GENERAL_SETTINGS_KEYS = new Set([
   'activity_thanks_points', 'pro_invite_extra_points', 'pro_trial_days', 'affinity_intros_per_week',
   'listing_feature_cost_7d', 'listing_feature_cost_15d', 'menu_ai_daily_runs',
   'veritas_write_seconds', 'veritas_vote_seconds', 'veritas_reveal_seconds',
+  'verifoto_daily_user', 'verifoto_monthly_ops',
+  'mosaic_pixels_day', 'mosaic_bonus_pixels', 'mosaic_min_login_days',
 ])
 
 // Salva solo le impostazioni cambiate (il modulo manda le differenze), così
@@ -2316,4 +2318,167 @@ export async function adminCancelDeletion(requestId: string, note: string) {
   if (error) return { success: false, error: error.message }
   if (!data?.length) return { success: false, error: 'La richiesta è già stata gestita' }
   return { success: true, error: null }
+}
+
+// ============================================================
+// KUMANI Time Bank: contestazioni, segnalazioni, annunci
+// ============================================================
+
+export async function adminListTimebank(view: 'disputes' | 'reports' | 'exchanges' | 'posts') {
+  const admin = await verifyAdmin('listings.read')
+  if (!admin) return { rows: [] as Record<string, unknown>[], error: 'Non autorizzato' }
+  const service = getServiceClient()
+  if (view === 'reports') {
+    const { data, error } = await service
+      .from('timebank_reports')
+      .select('id, reporter, target_user, post_id, exchange_id, reason, status, created_at, post:timebank_posts(title)')
+      .order('status', { ascending: false })
+      .order('created_at', { ascending: false })
+      .limit(200)
+    if (error) return { rows: [], error: error.message }
+    const rows = (data ?? []) as unknown as { reporter: string; target_user: string | null }[]
+    const people = await eventPeople(rows.flatMap((r) => [r.reporter, r.target_user ?? '']))
+    return {
+      rows: rows.map((r) => ({ ...r, reporter_person: people[r.reporter] ?? null, target_person: r.target_user ? (people[r.target_user] ?? null) : null })),
+      error: null,
+    }
+  }
+  if (view === 'posts') {
+    const { data, error } = await service
+      .from('timebank_posts')
+      .select('id, user_id, kind, title, description, category, hours, mode, city, status, created_at')
+      .neq('status', 'removed')
+      .order('created_at', { ascending: false })
+      .limit(200)
+    if (error) return { rows: [], error: error.message }
+    const rows = (data ?? []) as { user_id: string }[]
+    const people = await eventPeople(rows.map((r) => r.user_id))
+    return { rows: rows.map((r) => ({ ...r, person: people[r.user_id] ?? null })), error: null }
+  }
+  let query = service
+    .from('timebank_exchanges')
+    .select('id, giver_id, receiver_id, hours, status, note, scheduled_on, dispute_reason, dispute_by, staff_note, created_at, completed_at, post:timebank_posts(title)')
+  query = view === 'disputes' ? query.eq('status', 'disputed') : query
+  const { data, error } = await query.order('created_at', { ascending: false }).limit(200)
+  if (error) return { rows: [], error: error.message }
+  const rows = (data ?? []) as unknown as { giver_id: string; receiver_id: string }[]
+  const people = await eventPeople(rows.flatMap((r) => [r.giver_id, r.receiver_id]))
+  return { rows: rows.map((r) => ({ ...r, giver: people[r.giver_id] ?? null, receiver: people[r.receiver_id] ?? null })), error: null }
+}
+
+// Decisione su una contestazione: completare (le ore passano) o annullare
+export async function adminResolveTimebankDispute(exchangeId: string, complete: boolean, note: string) {
+  const admin = await verifyAdmin('listings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!EVENT_ID_RE.test(exchangeId)) return { success: false, error: 'Scambio non valido' }
+  const { data, error } = await getServiceClient().rpc('timebank_admin_resolve', { p_exchange: exchangeId, p_complete: complete, p_note: note.trim().slice(0, 1000) })
+  if (error) return { success: false, error: error.message }
+  if (data !== 'ok') return { success: false, error: 'Contestazione non più aperta' }
+  return { success: true }
+}
+
+export async function adminCloseTimebankReport(reportId: string) {
+  const admin = await verifyAdmin('listings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!EVENT_ID_RE.test(reportId)) return { success: false, error: 'Segnalazione non valida' }
+  const { error } = await getServiceClient().from('timebank_reports').update({ status: 'closed' }).eq('id', reportId)
+  if (error) return { success: false, error: error.message }
+  return { success: true }
+}
+
+export async function adminRemoveTimebankPost(postId: string) {
+  const admin = await verifyAdmin('listings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!EVENT_ID_RE.test(postId)) return { success: false, error: 'Annuncio non valido' }
+  const { error } = await getServiceClient().from('timebank_posts').update({ status: 'removed', updated_at: new Date().toISOString() }).eq('id', postId)
+  if (error) return { success: false, error: error.message }
+  return { success: true }
+}
+
+// ============================================================
+// KUMANI Mosaic: stagioni e moderazione
+// ============================================================
+
+export type MosaicAdminSeason = {
+  id: string
+  title: string
+  theme: string | null
+  width: number
+  height: number
+  starts_at: string
+  ends_at: string
+  filled: number
+  contributors: number
+  current: boolean
+}
+
+export async function adminListMosaicSeasons() {
+  const admin = await verifyAdmin('listings.read')
+  if (!admin) return { seasons: [] as MosaicAdminSeason[], error: 'Non autorizzato' }
+  const { data, error } = await getServiceClient().rpc('mosaic_admin_seasons')
+  return { seasons: (data ?? []) as MosaicAdminSeason[], error: error?.message ?? null }
+}
+
+export async function adminListMosaicContributors(seasonId: string) {
+  const admin = await verifyAdmin('listings.read')
+  if (!admin || !EVENT_ID_RE.test(seasonId)) return { rows: [] as Record<string, unknown>[], error: 'Non autorizzato' }
+  const { data, error } = await getServiceClient().rpc('mosaic_admin_contributors', { p_season: seasonId })
+  return { rows: (data ?? []) as Record<string, unknown>[], error: error?.message ?? null }
+}
+
+// Nuova stagione o modifica. La dimensione si cambia solo finché la tela è
+// vuota; due stagioni non possono sovrapporsi.
+export async function adminSaveMosaicSeason(
+  seasonId: string | null,
+  input: { title: string; theme: string; width: number; height: number; startsAt: string; endsAt: string },
+) {
+  const admin = await verifyAdmin('settings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (seasonId && !EVENT_ID_RE.test(seasonId)) return { success: false, error: 'Stagione non valida' }
+  const title = input.title.trim().slice(0, 80)
+  const theme = input.theme.trim().slice(0, 200)
+  const starts = new Date(input.startsAt)
+  const ends = new Date(input.endsAt)
+  if (!title) return { success: false, error: 'Serve un titolo' }
+  if (![input.width, input.height].every((n) => Number.isInteger(n) && n >= 16 && n <= 256)) {
+    return { success: false, error: 'La tela va da 16 a 256 caselle per lato' }
+  }
+  if (Number.isNaN(starts.getTime()) || Number.isNaN(ends.getTime()) || ends <= starts) {
+    return { success: false, error: 'Date non valide: la fine deve essere dopo l’inizio' }
+  }
+  const service = getServiceClient()
+  let overlap = service.from('mosaic_seasons').select('id, title').lt('starts_at', ends.toISOString()).gt('ends_at', starts.toISOString())
+  if (seasonId) overlap = overlap.neq('id', seasonId)
+  const { data: clash } = await overlap.limit(1)
+  if (clash?.length) return { success: false, error: `Le date si sovrappongono alla stagione "${clash[0].title}"` }
+  const row = { title, theme: theme || null, width: input.width, height: input.height, starts_at: starts.toISOString(), ends_at: ends.toISOString() }
+  if (!seasonId) {
+    const { error } = await service.from('mosaic_seasons').insert(row)
+    return error ? { success: false, error: error.message } : { success: true }
+  }
+  const { data: current } = await service.from('mosaic_seasons').select('width, height').eq('id', seasonId).maybeSingle()
+  if (!current) return { success: false, error: 'Stagione non trovata' }
+  if (current.width !== input.width || current.height !== input.height) {
+    const { count } = await service.from('mosaic_pixels').select('season_id', { count: 'exact', head: true }).eq('season_id', seasonId)
+    if (count) return { success: false, error: 'La tela ha già delle tessere: la dimensione non si può più cambiare' }
+  }
+  const { error } = await service.from('mosaic_seasons').update(row).eq('id', seasonId)
+  return error ? { success: false, error: error.message } : { success: true }
+}
+
+export async function adminDeleteMosaicSeason(seasonId: string) {
+  const admin = await verifyAdmin('settings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!EVENT_ID_RE.test(seasonId)) return { success: false, error: 'Stagione non valida' }
+  const { error } = await getServiceClient().from('mosaic_seasons').delete().eq('id', seasonId)
+  return error ? { success: false, error: error.message } : { success: true }
+}
+
+// Vandalismo: toglie tutte le tessere di una persona nella stagione
+export async function adminClearMosaicUser(seasonId: string, userId: string) {
+  const admin = await verifyAdmin('listings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!EVENT_ID_RE.test(seasonId) || !EVENT_ID_RE.test(userId)) return { success: false, error: 'Dati non validi' }
+  const { data, error } = await getServiceClient().rpc('mosaic_admin_clear_user', { p_season: seasonId, p_user: userId })
+  return error ? { success: false, error: error.message } : { success: true, removed: Number(data ?? 0) }
 }

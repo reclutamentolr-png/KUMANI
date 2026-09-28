@@ -142,6 +142,32 @@ export default function TermsPage() {
                 dati dello stesso utente (ad esempio le scadenze mostrate in un&apos;unica agenda) solo per il funzionamento dei servizi.
               </p>
               <p>
+                <strong className="text-gray-900">Banca del tempo (KUMANI Time Bank).</strong> È un servizio gratuito di aiuto reciproco tra
+                utenti verificati e maggiorenni: un&apos;ora di aiuto dato vale un&apos;ora di aiuto da ricevere, qualunque sia il servizio. Le ore
+                non hanno valore economico, non si acquistano, non si rimborsano e non si convertono in denaro, punti o sconti. Gli scambi sono
+                occasionali e gratuiti tra privati: sono esclusi il lavoro continuativo, le consulenze professionali (legali, fiscali, mediche,
+                psicologiche) e i lavori pericolosi. La Piattaforma mette in contatto le persone e non esegue né garantisce i servizi: ciascun
+                partecipante è responsabile di ciò che offre e di come lo svolge, anche verso terzi. Ogni scambio va confermato da entrambe le
+                parti; in caso di contestazione decide lo Staff, che può rimuovere annunci e sospendere chi non rispetta le regole. La Piattaforma
+                può stabilire limiti di saldo e di ore per prevenire abusi.
+              </p>
+              <p>
+                <strong className="text-gray-900">Opera collettiva (KUMANI Mosaic).</strong> È un gioco gratuito in cui gli utenti piazzano
+                ogni giorno alcune tessere colorate su una tela comune. Le tessere piazzate formano un&apos;opera collettiva della community:
+                partecipando, l&apos;utente accetta che il proprio contributo resti nell&apos;opera anche dopo la chiusura della stagione o la
+                cancellazione dell&apos;account (in forma anonima) e che la Piattaforma possa mostrarla e condividerla. Non è permesso comporre
+                scritte o immagini offensive, discriminatorie, pubblicitarie o illegali: lo Staff può togliere le tessere di chi non rispetta
+                le regole e sospenderne la partecipazione. Il numero di tessere al giorno e i requisiti per partecipare sono stabiliti dalla
+                Piattaforma.
+              </p>
+              <p>
+                <strong className="text-gray-900">Strumenti di verifica (SVAT, VeriFoto).</strong> I risultati sono indizi automatici e non
+                costituiscono una perizia né una garanzia sull&apos;affidabilità di siti, aziende o immagini. In VeriFoto i controlli di base
+                avvengono sul dispositivo dell&apos;utente senza caricare la foto; solo se l&apos;utente lo sceglie, una copia ridotta e priva di
+                metadati viene inviata a un fornitore esterno di rilevamento (Sightengine) per l&apos;analisi e non viene conservata dalla
+                Piattaforma. L&apos;utente deve caricare solo immagini che ha il diritto di usare.
+              </p>
+              <p>
                 <strong className="text-gray-900">Eventi della community (KUMANI Events).</strong> Gli eventi sono organizzati dagli
                 utenti verificati, che ne sono gli unici responsabili (svolgimento, sicurezza del luogo, autorizzazioni e obblighi fiscali).
                 La Piattaforma fornisce gli strumenti (pubblicazione, iscrizioni, pass e check-in), approva i primi eventi di ogni

@@ -8,6 +8,7 @@ import {
   CheckCircle2,
   Target,
   Sparkles,
+  Warehouse,
   Ticket,
   BadgePercent,
   Wallet,
@@ -246,7 +247,7 @@ export default function LandingPage() {
                   { icon: UtensilsCrossed, label: 'KUMANI Menu' },
                   { icon: Briefcase, label: t('proToolQuotes') },
                   { icon: Check, label: t('proToolReceipts') },
-                  { icon: Sparkles, label: 'OfferMaker AI' },
+                  { icon: Warehouse, label: 'Magazzino PRO' },
                   { icon: HandPlatter, label: 'Kordata Pro' },
                 ].map((item) => (
                   <div key={item.label} className="flex items-center gap-2 rounded-xl border border-[var(--gold)]/20 bg-white/[0.05] px-3 py-2.5 text-sm font-semibold text-white">

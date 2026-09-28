@@ -119,8 +119,8 @@ export async function submitIdentityDocument(formData: FormData): Promise<Result
 }
 
 // Regole accettate: Kordata (capocordata) oppure Events (organizzatore).
-export async function acceptRules(kind: 'kordata' | 'events'): Promise<Result> {
-  if (kind !== 'kordata' && kind !== 'events') return { success: false, error: 'saveError' }
+export async function acceptRules(kind: 'kordata' | 'events' | 'timebank'): Promise<Result> {
+  if (kind !== 'kordata' && kind !== 'events' && kind !== 'timebank') return { success: false, error: 'saveError' }
   const userId = await currentUserId()
   if (!userId) return { success: false, error: 'notLoggedIn' }
 
@@ -128,7 +128,7 @@ export async function acceptRules(kind: 'kordata' | 'events'): Promise<Result> {
   const { data: profile } = await service.from('profiles').select('is_blocked').eq('id', userId).maybeSingle()
   if (!profile || profile.is_blocked) return { success: false, error: 'blocked' }
 
-  const column = kind === 'kordata' ? 'convivio_terms_at' : 'events_terms_at'
+  const column = kind === 'kordata' ? 'convivio_terms_at' : kind === 'events' ? 'events_terms_at' : 'timebank_terms_at'
   const { error } = await service
     .from('profiles')
     .update({ [column]: new Date().toISOString() })

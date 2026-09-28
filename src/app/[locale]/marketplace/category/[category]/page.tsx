@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import Link from '@/components/LocalizedLink'
 import { getTranslations } from 'next-intl/server'
-import { ArrowLeft, ArrowRight, HandPlatter, Sparkles, Star, Tag } from 'lucide-react'
+import { ArrowLeft, ArrowRight, HandPlatter, Hourglass, PartyPopper, Sparkles, Star, Tag } from 'lucide-react'
 import MarketplaceCard from '@/components/MarketplaceCard'
 import { getMarketplaceAccessState } from '@/lib/marketplaceAccess'
 import { getMarketplaceTools, MARKETPLACE_CATEGORIES, type MarketplaceCategory } from '@/lib/marketplaceTools'
@@ -115,6 +115,44 @@ export default async function MarketplaceCategoryPage({
                 <p className="mb-4 text-sm leading-6 text-stone-300">{t('convivioDescription')}</p>
                 <div className="mt-auto flex items-center text-sm font-semibold text-[var(--gold-bright)] transition-transform group-hover:translate-x-1">
                   {t('goToConvivio')}
+                  <ArrowRight className="ml-1 h-4 w-4" />
+                </div>
+              </div>
+            </Link>
+            <Link
+              href="/events"
+              className="group relative flex min-h-[356px] h-full flex-col overflow-hidden rounded-xl border border-[var(--gold)]/45 bg-[var(--ink)] p-6 text-white shadow-[0_12px_35px_rgba(23,23,23,0.14)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--gold-bright)] hover:shadow-[0_18px_45px_rgba(23,23,23,0.24)]"
+            >
+              <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full border border-[var(--gold)]/30 bg-[var(--gold)]/10 transition-transform duration-500 group-hover:scale-125"></div>
+              <div className="absolute -bottom-16 -left-8 h-36 w-36 rounded-full border border-[var(--gold)]/20 bg-[var(--gold)]/5"></div>
+
+              <div className="relative z-10 flex h-full flex-col">
+                <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-xl border border-[var(--gold)]/55 bg-[var(--gold)]/10 shadow-md">
+                  <PartyPopper className="h-7 w-7 text-[var(--gold-bright)]" />
+                </div>
+                <h3 className="mb-1 text-xl font-bold text-white">{t('events')}</h3>
+                <p className="mb-4 text-sm leading-6 text-stone-300">{t('eventsDescription')}</p>
+                <div className="mt-auto flex items-center text-sm font-semibold text-[var(--gold-bright)] transition-transform group-hover:translate-x-1">
+                  {t('goToEvents')}
+                  <ArrowRight className="ml-1 h-4 w-4" />
+                </div>
+              </div>
+            </Link>
+            <Link
+              href="/marketplace/timebank"
+              className="group relative flex min-h-[356px] h-full flex-col overflow-hidden rounded-xl border border-[var(--gold)]/45 bg-[var(--ink)] p-6 text-white shadow-[0_12px_35px_rgba(23,23,23,0.14)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--gold-bright)] hover:shadow-[0_18px_45px_rgba(23,23,23,0.24)]"
+            >
+              <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full border border-[var(--gold)]/30 bg-[var(--gold)]/10 transition-transform duration-500 group-hover:scale-125"></div>
+              <div className="absolute -bottom-16 -left-8 h-36 w-36 rounded-full border border-[var(--gold)]/20 bg-[var(--gold)]/5"></div>
+
+              <div className="relative z-10 flex h-full flex-col">
+                <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-xl border border-[var(--gold)]/55 bg-[var(--gold)]/10 shadow-md">
+                  <Hourglass className="h-7 w-7 text-[var(--gold-bright)]" />
+                </div>
+                <h3 className="mb-1 text-xl font-bold text-white">{t('timebank')}</h3>
+                <p className="mb-4 text-sm leading-6 text-stone-300">{t('timebankDescription')}</p>
+                <div className="mt-auto flex items-center text-sm font-semibold text-[var(--gold-bright)] transition-transform group-hover:translate-x-1">
+                  {t('goToTimebank')}
                   <ArrowRight className="ml-1 h-4 w-4" />
                 </div>
               </div>
