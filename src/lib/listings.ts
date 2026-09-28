@@ -13,7 +13,6 @@ export type ListingCategory =
   | 'colf_badanti'
   | 'agricoltura'
   | 'animali'
-  | 'lavoro'
   | 'impresa'
   | 'servizi'
 
@@ -49,7 +48,6 @@ export const CATEGORY_LABELS: Record<ListingCategory, string> = {
   colf_badanti: 'Colf, Badanti e Baby Sitter',
   agricoltura: 'Agricoltura e Giardinaggio',
   animali: 'Animali',
-  lavoro: 'Lavoro',
   impresa: 'Per la tua Impresa',
   servizi: 'Servizi'
 }
@@ -64,7 +62,6 @@ export const CATEGORY_ICONS: Record<ListingCategory, string> = {
   colf_badanti: '🧹',
   agricoltura: '🌱',
   animali: '🐾',
-  lavoro: '💼',
   impresa: '🏢',
   servizi: '🔧'
 }
@@ -81,7 +78,6 @@ export const CATEGORY_I18N_KEYS: Record<ListingCategory, string> = {
   colf_badanti: 'catColfBadanti',
   agricoltura: 'catAgricoltura',
   animali: 'catAnimali',
-  lavoro: 'catLavoro',
   impresa: 'catImpresa',
   servizi: 'catServizi'
 }
@@ -96,7 +92,6 @@ export const ALL_LISTING_CATEGORIES: ListingCategory[] = [
   'colf_badanti',
   'agricoltura',
   'animali',
-  'lavoro',
   'impresa',
   'servizi'
 ]

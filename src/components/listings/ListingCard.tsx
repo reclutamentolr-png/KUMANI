@@ -16,7 +16,6 @@ export const CATEGORY_STYLE: Record<ListingCategory, { band: string; chip: strin
   colf_badanti: { band: 'from-teal-500 to-teal-700', chip: 'bg-teal-50 text-teal-800 border-teal-200' },
   agricoltura: { band: 'from-green-600 to-green-800', chip: 'bg-green-50 text-green-800 border-green-200' },
   animali: { band: 'from-orange-500 to-orange-700', chip: 'bg-orange-50 text-orange-800 border-orange-200' },
-  lavoro: { band: 'from-slate-600 to-slate-800', chip: 'bg-slate-100 text-slate-800 border-slate-200' },
   impresa: { band: 'from-violet-500 to-violet-700', chip: 'bg-violet-50 text-violet-800 border-violet-200' },
   servizi: { band: 'from-[#c79a3b] to-[#a67c26]', chip: 'bg-[var(--gold-pale)] text-[var(--ink)] border-[var(--gold)]/40' },
 }
