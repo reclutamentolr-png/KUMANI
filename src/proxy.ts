@@ -10,10 +10,13 @@ const intlMiddleware = createMiddleware({
   localePrefix: 'as-needed'
 });
 
-// Fallback usato solo se la migrazione dei piani (can_use_tool) non è ancora
-// applicata. La regola vera è nel database: piano richiesto da ogni
-// strumento deciso dall'admin (Admin → Marketplace), vedi can_use_tool().
-const REQUIRES_SUBSCRIPTION = [
+// Strumenti che, spenti in Admin, restano aperti in sola lettura.
+const READ_ONLY_WHEN_OFF = ['convivio', 'listings', 'chat'];
+
+// Strumenti a pagamento: se il controllo del piano (can_use_tool) non riesce
+// per un errore momentaneo, l'accesso viene negato (meglio "riprova" che
+// aprire uno strumento Pro a chi ha il Base). La regola vera è nel database.
+const PAID_TOOLS = [
   'link-in-bio',
   'memolife',
   'neurobalance',
@@ -26,7 +29,14 @@ const REQUIRES_SUBSCRIPTION = [
   'aureya',
   'spendly',
   'fidelity',
+  'menu',
+  'preventivi',
+  'kumani-cv',
+  'spotlight',
 ];
+
+// Pagine sempre raggiungibili durante la manutenzione (accesso dello Staff).
+const MAINTENANCE_EXEMPT = /^\/(admin|auth|login|forgot-password|reset-password|maintenance)(\/|$)/;
 
 // Extracts the tool name from a path like /marketplace/memolife/new or
 // /en/marketplace/memolife/new, after stripping an optional locale prefix.
@@ -66,6 +76,26 @@ export async function proxy(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // Manutenzione (Admin → Impostazioni): vale davvero, non solo a schermo.
+  // Chi non è Staff viene portato alla pagina di manutenzione e i salvataggi
+  // (server action / POST) sono rifiutati. I webhook Stripe (/api) passano.
+  {
+    const segments = request.nextUrl.pathname.split('/').filter(Boolean);
+    const hasLocale = !!segments[0] && locales.includes(segments[0]);
+    const localePrefix = hasLocale ? `/${segments[0]}` : '';
+    const barePath = '/' + (hasLocale ? segments.slice(1) : segments).join('/');
+    if (!MAINTENANCE_EXEMPT.test(barePath)) {
+      const { data: maintenance, error: maintenanceError } = await supabase.rpc('maintenance_status');
+      const state = maintenance as { enabled?: boolean; staff?: boolean } | null;
+      if (!maintenanceError && state?.enabled && !state.staff) {
+        if (request.method !== 'GET' || request.headers.has('next-action')) {
+          return new NextResponse('KUMANI è in manutenzione. Riprova tra poco.', { status: 503 });
+        }
+        return NextResponse.redirect(new URL(`${localePrefix}/maintenance`, request.url));
+      }
+    }
+  }
+
   // Server-side enforcement of the subscription-required tools: every UI
   // entry point (marketplace grid, dashboard tool list) is supposed to
   // hide/disable these for a non-active user, but that's presentation
@@ -88,29 +118,25 @@ export async function proxy(request: NextRequest) {
       // bacheca o categorie, non passano da qui). Strumento Pro senza piano
       // Pro → pagina "Passa a Pro"; altrimenti dashboard con "Abbonati ora".
       if (access.known && !access.allowed) {
+        // Kordata, Bacheca e chat spente dallo Staff restano consultabili in
+        // sola lettura (la pagina mostra il banner "sospeso", le scritture
+        // sono bloccate dal database): si passa se il motivo è solo lo spegnimento.
+        if (READ_ONLY_WHEN_OFF.includes(toolName) && access.required_plan === 'free') {
+          const { data: online } = await supabase.rpc('tool_online', { p_tool: toolName });
+          if (online === false) return response;
+        }
         const target = access.required_plan === 'pro' ? `${localePrefix}/pro?tool=${toolName}` : `${localePrefix}/dashboard`;
         return NextResponse.redirect(new URL(target, request.url));
       }
       return response;
     }
   }
-  if (user && toolName && REQUIRES_SUBSCRIPTION.includes(toolName)) {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('subscription_status, subscription_expires_at')
-      .eq('id', user.id)
-      .single();
-
-    const isActive =
-      profile?.subscription_status === 'active' &&
-      (!profile.subscription_expires_at || new Date(profile.subscription_expires_at).getTime() > Date.now());
-
-    if (!isActive) {
-      const segments = request.nextUrl.pathname.split('/').filter(Boolean);
-      const localePrefix = segments[0] && locales.includes(segments[0]) ? `/${segments[0]}` : '';
-      const redirectUrl = new URL(`${localePrefix}/dashboard`, request.url);
-      return NextResponse.redirect(redirectUrl);
-    }
+  // Controllo del piano non riuscito: strumenti a pagamento chiusi (si torna
+  // alla dashboard e si riprova), mai aperti a tutti.
+  if (user && toolName && PAID_TOOLS.includes(toolName)) {
+    const segments = request.nextUrl.pathname.split('/').filter(Boolean);
+    const localePrefix = segments[0] && locales.includes(segments[0]) ? `/${segments[0]}` : '';
+    return NextResponse.redirect(new URL(`${localePrefix}/dashboard`, request.url));
   }
 
   return response;

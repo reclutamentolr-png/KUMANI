@@ -5,6 +5,8 @@ import { ArrowLeft, Star } from 'lucide-react'
 import SpotlightCard from '@/components/spotlight/SpotlightCard'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { isEmptySpotlightProfile, type SpotlightProfile } from '@/lib/spotlight'
+import { ServiceStopped } from '@/components/ServiceSuspended'
+import { isToolOnline } from '@/lib/toolOnline'
 
 interface ArchiveRow {
   day: string
@@ -21,6 +23,7 @@ interface ArchiveRow {
 // è la "vetrina" pensata per essere condivisa e vista anche da chi non è
 // ancora iscritto a KUMANI.
 export default async function SpotlightPage() {
+  if (!(await isToolOnline('spotlight'))) return <ServiceStopped />
   const t = await getTranslations('spotlight')
   const tm = await getTranslations('marketplace')
   const commonT = await getTranslations('common')

@@ -89,10 +89,13 @@ export async function hasCassaAccess(cardId: string): Promise<boolean> {
   } = await supabase.auth.getUser()
 
   const service = getFidelityServiceClient()
-  if (user) {
-    const { data: card } = await service.from('fidelity_cards').select('owner_id').eq('id', cardId).maybeSingle()
-    if (card?.owner_id === user.id) return true
-  }
+  const { data: card } = await service.from('fidelity_cards').select('owner_id').eq('id', cardId).maybeSingle()
+  if (!card) return false
+  // La cassa funziona solo se il titolare ha ancora la Kumi Card nel piano e
+  // lo Staff non ha spento lo strumento (come nel menù e negli eventi).
+  const { data: access } = await service.rpc('tool_access', { p_user_id: card.owner_id, p_tool: 'fidelity' }).maybeSingle<{ allowed: boolean }>()
+  if (!access?.allowed) return false
+  if (user && card.owner_id === user.id) return true
 
   const secret = (await cookies()).get(cassaCookieName(cardId))?.value
   if (!secret) return false

@@ -5,6 +5,8 @@ import { getUserConversations } from '@/lib/listings-server'
 import { ArrowLeft, MessageCircle } from 'lucide-react'
 import ChatModalWrapper from '@/components/ChatModalWrapper'
 import ConversationItem from '@/components/ConversationItem' // ✅ Import del componente client separato
+import { SuspendedBanner } from '@/components/ServiceSuspended'
+import { isToolOnline } from '@/lib/toolOnline'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -16,6 +18,8 @@ export default async function ChatInboxPage({ params }: { params: Promise<{ loca
   if (!user) redirect(`/${locale}/login`)
 
   const conversations = await getUserConversations(user.id)
+
+  const online = await isToolOnline('chat')
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -36,6 +40,8 @@ export default async function ChatInboxPage({ params }: { params: Promise<{ loca
       </header>
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        {!online && <SuspendedBanner className="mb-6" />}
         {conversations.length === 0 ? (
           <div className="bg-white rounded-2xl border border-[var(--gold)]/25 p-12 text-center">
             <MessageCircle className="w-16 h-16 text-[var(--gold)]/50 mx-auto mb-4" />

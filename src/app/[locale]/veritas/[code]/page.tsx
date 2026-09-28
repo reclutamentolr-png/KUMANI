@@ -5,10 +5,13 @@ import VeritasRoom from '@/components/veritas/VeritasRoom'
 import { getVeritasRoom } from '@/app/actions/veritas'
 import { createClient } from '@/lib/supabase/server'
 import { isRoomCode } from '@/lib/veritas'
+import { ServiceStopped } from '@/components/ServiceSuspended'
+import { isToolOnline } from '@/lib/toolOnline'
 
 // Stanza di Veritas (/veritas/<codice>): pubblica, si gioca anche senza account.
 export default async function VeritasRoomPage({ params }: { params: Promise<{ code: string }> }) {
   const { code: rawCode } = await params
+  if (!(await isToolOnline('veritas'))) return <ServiceStopped />
   const code = rawCode.toUpperCase()
   const t = await getTranslations('veritas')
   const info = isRoomCode(code) ? await getVeritasRoom(code) : null

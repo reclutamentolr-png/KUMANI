@@ -2,9 +2,12 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { awardToolPoint } from '@/lib/toolPoints'
+import { isToolOnline } from '@/lib/toolOnline'
 import {
   EVENT_LANGUAGES,
+  EVENT_MAX_SERIES_DATES,
   EVENT_MODES,
+  EVENT_REPEATS,
   EVENT_TYPES,
   zonedToUtc,
   type EventAttendee,
@@ -12,6 +15,7 @@ import {
   type EventDetail,
   type EventFee,
   type EventPassItem,
+  type EventStampStatus,
   type OrganizedEvent,
   type OrganizerStatus,
 } from '@/lib/events'
@@ -80,12 +84,25 @@ export type EventFormInput = {
   is18plus: boolean
   kidsFriendly: boolean
   rulesAccepted: boolean
+  // Fase 3: date ripetute (solo alla creazione), timbro Kumi Card e
+  // modifiche estese alle date successive della serie
+  repeat: string
+  repeatCount: string
+  fidelityStamp: boolean
+  applyToSeries: boolean
 }
 
-export async function saveEvent(eventId: string | null, input: EventFormInput): Promise<{ id?: string; status?: string; error?: string; max?: number }> {
+export async function saveEvent(
+  eventId: string | null,
+  input: EventFormInput,
+): Promise<{ id?: string; status?: string; error?: string; max?: number; dates?: number }> {
+  if (!(await isToolOnline('events'))) return { error: 'suspended' }
   if (eventId && !UUID_RE.test(eventId)) return { error: 'invalid' }
   if (!(EVENT_TYPES as readonly string[]).includes(input.type) || !(EVENT_MODES as readonly string[]).includes(input.mode)) return { error: 'invalid' }
   if (!DATE_RE.test(input.date) || !TIME_RE.test(input.time)) return { error: 'invalid' }
+  const repeat = !eventId && (EVENT_REPEATS as readonly string[]).includes(input.repeat) ? input.repeat : 'none'
+  const repeatCount = Number.parseInt(input.repeatCount, 10) || 0
+  if (repeat !== 'none' && (repeatCount < 2 || repeatCount > EVENT_MAX_SERIES_DATES)) return { error: 'repeat_count' }
   let timezone = input.timezone || 'Europe/Rome'
   try {
     new Intl.DateTimeFormat('en', { timeZone: timezone })
@@ -126,24 +143,32 @@ export async function saveEvent(eventId: string | null, input: EventFormInput): 
     is_18plus: input.is18plus,
     kids_friendly: input.kidsFriendly,
     rules_accepted: input.rulesAccepted,
+    repeat,
+    repeat_count: repeat === 'none' ? 1 : repeatCount,
+    fidelity_stamp: input.fidelityStamp,
+    apply_to_series: !!eventId && input.applyToSeries,
   }
-  const result = await rpc<{ id?: string; status?: string; error?: string; max?: number }>('event_save', { p_event: eventId, p: payload })
+  const result = await rpc<{ id?: string; status?: string; error?: string; max?: number; dates?: number }>('event_save', { p_event: eventId, p: payload })
   if (!result) return { error: 'saveError' }
   if (result.id && !eventId) await awardToolPoint('events')
   return result
 }
 
-export async function cancelEvent(eventId: string): Promise<string> {
+// following: annulla anche le date successive della stessa serie
+export async function cancelEvent(eventId: string, following = false): Promise<string> {
+  if (!(await isToolOnline('events'))) return 'suspended'
   if (!UUID_RE.test(eventId)) return 'invalid'
-  return (await rpc<string>('event_cancel', { p_event: eventId })) ?? 'saveError'
+  return (await rpc<string>('event_cancel', { p_event: eventId, p_following: following })) ?? 'saveError'
 }
 
 export async function registerToEvent(eventId: string): Promise<{ pass?: string; waitlist?: boolean; error?: string }> {
+  if (!(await isToolOnline('events'))) return { error: 'suspended' }
   if (!UUID_RE.test(eventId)) return { error: 'invalid' }
   return (await rpc<{ pass?: string; waitlist?: boolean; error?: string }>('event_register', { p_event: eventId })) ?? { error: 'saveError' }
 }
 
 export async function unregisterFromEvent(eventId: string): Promise<string> {
+  if (!(await isToolOnline('events'))) return 'suspended'
   if (!UUID_RE.test(eventId)) return 'invalid'
   return (await rpc<string>('event_unregister', { p_event: eventId })) ?? 'saveError'
 }
@@ -153,14 +178,18 @@ export async function getAttendees(eventId: string): Promise<EventAttendee[]> {
   return (await rpc<EventAttendee[]>('event_attendees', { p_event: eventId })) ?? []
 }
 
-export async function checkInPass(eventId: string, code: string): Promise<{ result: string; name?: string; at?: string }> {
+export type CheckInResult = { result: string; name?: string; at?: string; stamp?: EventStampStatus | null }
+
+export async function checkInPass(eventId: string, code: string): Promise<CheckInResult> {
+  if (!(await isToolOnline('events'))) return { result: 'suspended' }
   if (!UUID_RE.test(eventId)) return { result: 'invalid' }
-  return (await rpc<{ result: string; name?: string; at?: string }>('event_checkin', { p_event: eventId, p_code: code.trim().slice(0, 300) })) ?? { result: 'invalid' }
+  return (await rpc<CheckInResult>('event_checkin', { p_event: eventId, p_code: code.trim().slice(0, 300) })) ?? { result: 'invalid' }
 }
 
-export async function openPass(token: string): Promise<{ result: string; name?: string; event_id?: string; role?: string }> {
+export async function openPass(token: string): Promise<CheckInResult & { event_id?: string; role?: string }> {
+  if (!(await isToolOnline('events'))) return { result: 'suspended', role: 'organizer' }
   if (!/^[A-Z0-9]{6,20}$/i.test(token)) return { result: 'invalid' }
-  return (await rpc<{ result: string; name?: string; event_id?: string; role?: string }>('event_pass_open', { p_token: token })) ?? { result: 'invalid' }
+  return (await rpc<CheckInResult & { event_id?: string; role?: string }>('event_pass_open', { p_token: token })) ?? { result: 'invalid' }
 }
 
 export async function reportEvent(eventId: string, reason: string): Promise<string> {
@@ -170,6 +199,7 @@ export async function reportEvent(eventId: string, reason: string): Promise<stri
 
 // Fase 2: recensione dopo l'evento (1–5 stelle, commento facoltativo)
 export async function reviewEvent(eventId: string, rating: number, comment: string): Promise<string> {
+  if (!(await isToolOnline('events'))) return 'suspended'
   if (!UUID_RE.test(eventId) || !Number.isInteger(rating) || rating < 1 || rating > 5) return 'invalid'
   return (await rpc<string>('event_review', { p_event: eventId, p_rating: rating, p_comment: comment.trim().slice(0, 500) })) ?? 'saveError'
 }

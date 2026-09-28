@@ -9,6 +9,7 @@ import { createClient } from '@/lib/supabase/server'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 import type { UserPlan } from '@/lib/plans'
+import { getPlanPrices } from '@/lib/planPrices'
 
 // Pagina "KUMANI Pro": strumenti del piano Pro (decisi dall'admin in
 // Admin → Marketplace), prezzo e pulsante adatto alla situazione:
@@ -29,16 +30,17 @@ export default async function ProPage({
   const service = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
     auth: { autoRefreshToken: false, persistSession: false },
   })
-  const [{ data: settings }, { data: priceRow }, { data: trialDaysRow }] = await Promise.all([
+  const [{ data: settings }, planPrices, { data: trialDaysRow }] = await Promise.all([
     service.from('marketplace_settings').select('tool_name, is_enabled, required_plan'),
-    service.from('system_settings').select('value').eq('key', 'pro_price_eur').maybeSingle(),
+    // Prezzo vero, letto da Stripe
+    getPlanPrices(),
     service.from('system_settings').select('value').eq('key', 'pro_trial_days').maybeSingle(),
   ])
   const proToolNames = new Set(
     (settings ?? []).filter((s: { is_enabled: boolean; required_plan?: string }) => s.is_enabled && s.required_plan === 'pro').map((s: { tool_name: string }) => s.tool_name)
   )
   const proTools = getMarketplaceTools(tm).filter((tool) => proToolNames.has(tool.toolName))
-  const price = Number(String(priceRow?.value ?? '149').replace(/"/g, '')) || 149
+  const price = planPrices.pro
   const highlighted = proTools.find((tool) => tool.toolName === highlightTool)
 
   const supabase = await createClient()

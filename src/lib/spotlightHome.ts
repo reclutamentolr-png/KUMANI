@@ -35,6 +35,12 @@ const fetchHomeKumano = unstable_cache(
   { tags: [SPOTLIGHT_HOME_CACHE_TAG], revalidate: 3600 }
 )
 
+// Spotlight spento dallo Staff (Admin): niente fascia in Home.
+export async function isSpotlightOnline(): Promise<boolean> {
+  const { data, error } = await getAnonClient().rpc('tool_online', { p_tool: 'spotlight' })
+  return error ? true : data !== false
+}
+
 export function getHomeKumano(): Promise<HomeKumano | null> {
   return fetchHomeKumano(new Date().toISOString().slice(0, 10))
 }

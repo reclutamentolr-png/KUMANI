@@ -66,7 +66,25 @@ export type EventCard = {
   organizer_level?: OrganizerLevel
   organizer_rating?: number | null
   organizer_reviews?: number
+  // Fase 3: serie di date e timbro Kumi Card
+  series_id?: string | null
+  fidelity_stamp?: boolean
+  fidelity_business?: string | null
 }
+
+export const EVENT_REPEATS = ['none', 'weekly', 'biweekly', 'monthly'] as const
+export type EventRepeat = (typeof EVENT_REPEATS)[number]
+export const EVENT_MAX_SERIES_DATES = 12
+
+// Esito del timbro Kumi Card al check-in (fidelity_apply)
+export type EventStampStatus = 'ok' | 'too_soon' | 'full' | 'inactive' | 'not_found' | 'error'
+
+// Esito del timbro Kumi Card → chiave di testo (events.stamp_*)
+export function stampKey(stamp: string): string {
+  return ['ok', 'too_soon', 'full', 'inactive'].includes(stamp) ? `stamp_${stamp}` : 'stamp_error'
+}
+
+export type EventSeriesDate = { id: string; starts_at: string; status: EventCard['status']; people: number; capacity: number }
 
 export type OrganizerLevel = 'new' | 'trusted' | 'super'
 
@@ -85,6 +103,9 @@ export type EventDetail = EventCard & {
   can_review?: boolean
   my_review?: { rating: number; comment: string | null } | null
   reviews?: EventReview[]
+  series?: EventSeriesDate[] | null
+  my_stamp_status?: EventStampStatus | null
+  my_card_token?: string | null
 }
 
 export type EventFeeInfo = { id: string; amount: number; status: 'due' | 'paid' | 'waived'; participants: number; percent: number }
@@ -129,6 +150,8 @@ export type OrganizerStatus = {
   concluded?: number
   banned_recent?: number
   max_capacity?: number
+  // Fase 3: Kumi Card attiva dell'organizzatore (per il timbro al check-in)
+  fidelity_card?: { business_name: string; prize: string; stamps_needed: number } | null
 }
 
 export type EventFee = {
@@ -174,10 +197,21 @@ export function zonedToUtc(date: string, time: string, timeZone: string): string
   return new Date(second).toISOString()
 }
 
+// Fuso che il browser/Node conosce; altrimenti Europe/Rome (un fuso strano
+// salvato nel database non deve far fallire le pagine).
+function safeTimeZone(timeZone: string): string {
+  try {
+    new Intl.DateTimeFormat('en', { timeZone })
+    return timeZone
+  } catch {
+    return 'Europe/Rome'
+  }
+}
+
 // Istante UTC → data e ora locali nel fuso indicato ('2027-04-02', '09:30').
 export function utcToZoned(iso: string, timeZone: string): { date: string; time: string } {
   const parts = new Intl.DateTimeFormat('en-CA', {
-    timeZone,
+    timeZone: safeTimeZone(timeZone),
     hourCycle: 'h23',
     year: 'numeric',
     month: '2-digit',
@@ -191,7 +225,7 @@ export function utcToZoned(iso: string, timeZone: string): { date: string; time:
 
 export function formatEventDate(iso: string, timeZone: string, locale: string, withWeekday = true): string {
   return new Intl.DateTimeFormat(locale, {
-    timeZone,
+    timeZone: safeTimeZone(timeZone),
     ...(withWeekday ? { weekday: 'long' } : {}),
     day: 'numeric',
     month: 'long',

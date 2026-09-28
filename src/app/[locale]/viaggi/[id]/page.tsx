@@ -7,6 +7,8 @@ import { getTripBundle } from '@/app/actions/travel'
 import { todayKey } from '@/lib/agenda'
 import { SITE_URL } from '@/lib/siteUrl'
 import { createClient } from '@/lib/supabase/server'
+import { SuspendedBanner } from '@/components/ServiceSuspended'
+import { isToolOnline } from '@/lib/toolOnline'
 
 // Scheda di un viaggio: solo per i membri (trip_detail restituisce null agli altri).
 export default async function TripPage({ params }: { params: Promise<{ locale: string; id: string }> }) {
@@ -25,6 +27,7 @@ export default async function TripPage({ params }: { params: Promise<{ locale: s
     supabase.rpc('can_use_tool', { p_tool: 'life-calendar' }).maybeSingle<{ allowed: boolean }>(),
   ])
   if (!bundle) notFound()
+  const online = await isToolOnline('travel')
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -40,6 +43,7 @@ export default async function TripPage({ params }: { params: Promise<{ locale: s
         </div>
       </header>
       <main className="mx-auto max-w-4xl px-4 py-8">
+        {!online && <SuspendedBanner className="mb-6" />}
         <TravelWorkspace initial={bundle} today={todayKey()} siteUrl={SITE_URL} myReferral={me?.referral_code ?? null} myUserId={user.id} hasLifeCalendar={!!lifeCalendar?.allowed} />
       </main>
     </div>

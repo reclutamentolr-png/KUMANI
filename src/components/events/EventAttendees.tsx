@@ -2,17 +2,18 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { AlertTriangle, CheckCircle2, Clock, Hourglass, LoaderCircle, QrCode, RefreshCw, UserCheck, Users, XCircle } from 'lucide-react'
-import { checkInPass, getAttendees } from '@/app/actions/events'
-import { formatEventDate, type EventAttendee, type OrganizedEvent } from '@/lib/events'
+import { AlertTriangle, CheckCircle2, Clock, Hourglass, LoaderCircle, QrCode, RefreshCw, Stamp, UserCheck, Users, XCircle } from 'lucide-react'
+import { checkInPass, getAttendees, type CheckInResult } from '@/app/actions/events'
+import { formatEventDate, stampKey, type EventAttendee, type OrganizedEvent } from '@/lib/events'
 import EventScanner from './EventScanner'
 
-type ScanResult = { result: string; name?: string; at?: string }
+type ScanResult = CheckInResult
 
 // Iscritti di un evento e check-in all'ingresso: elenco con codice e stato,
 // "Scansiona pass" con la fotocamera (o codice a 6 cifre) e risultato grande.
 export default function EventAttendees({ event }: { event: OrganizedEvent }) {
   const t = useTranslations('eventsOrganizer')
+  const te = useTranslations('events')
   const locale = useLocale()
   const [attendees, setAttendees] = useState<EventAttendee[] | null>(null)
   const [scanning, setScanning] = useState(false)
@@ -74,7 +75,7 @@ export default function EventAttendees({ event }: { event: OrganizedEvent }) {
       not_today: { box: 'border-amber-300 bg-amber-50 text-amber-800', icon: <Clock className="h-14 w-14 text-amber-500" /> },
     }
     const style = styles[result.result] ?? { box: 'border-red-300 bg-red-50 text-red-800', icon: <XCircle className="h-14 w-14 text-red-600" /> }
-    const key = ['ok', 'already', 'not_today', 'not_allowed'].includes(result.result) ? result.result : 'invalid'
+    const key = ['ok', 'already', 'not_today', 'not_allowed', 'suspended'].includes(result.result) ? result.result : 'invalid'
     return (
       <div className={`flex flex-col items-center gap-2 rounded-2xl border-2 p-6 text-center ${style.box}`}>
         {style.icon}
@@ -82,6 +83,11 @@ export default function EventAttendees({ event }: { event: OrganizedEvent }) {
         {result.name && <p className="text-xl font-semibold">{result.name}</p>}
         {result.result === 'already' && result.at && (
           <p className="text-sm">{t('scanAlreadyAt', { time: formatEventDate(result.at, event.timezone, locale, false) })}</p>
+        )}
+        {result.result === 'ok' && result.stamp && (
+          <p className="mt-1 flex items-center gap-1.5 rounded-full bg-white/70 px-3 py-1 text-sm font-semibold text-[var(--ink)]">
+            <Stamp className="h-4 w-4 text-[var(--gold)]" /> {te(stampKey(result.stamp))}
+          </p>
         )}
       </div>
     )

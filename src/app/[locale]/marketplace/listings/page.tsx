@@ -14,6 +14,8 @@ import ListingDetailModalWrapper from '@/components/ListingDetailModalWrapper'
 import EditListingButton from '@/components/EditListingButton'
 import EditListingModalWrapper from '@/components/EditListingModalWrapper'
 import ListingCard, { CATEGORY_STYLE } from '@/components/listings/ListingCard'
+import { SuspendedBanner } from '@/components/ServiceSuspended'
+import { isToolOnline } from '@/lib/toolOnline'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -80,6 +82,8 @@ export default async function ListingsPage({
   const euro = (value: number | string) =>
     new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2 }).format(Number(value))
 
+  const online = await isToolOnline('listings')
+
   return (
     <div className="min-h-screen bg-[var(--background)]">
       {/* Header */}
@@ -97,6 +101,8 @@ export default async function ListingsPage({
       </header>
 
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+
+        {!online && <SuspendedBanner className="mb-6" />}
         {/* Intestazione: punti, nuovo annuncio, come funziona */}
         <div className="relative mb-8 overflow-hidden rounded-3xl bg-[var(--ink)] p-6 text-white shadow-[0_14px_40px_rgba(23,23,23,0.25)] sm:p-8">
           <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full border border-[var(--gold)]/25 bg-[var(--gold)]/10" />

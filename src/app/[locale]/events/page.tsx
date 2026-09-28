@@ -5,6 +5,8 @@ import Link from '@/components/LocalizedLink'
 import EventsCalendar from '@/components/events/EventsCalendar'
 import { listEvents } from '@/app/actions/events'
 import { createClient } from '@/lib/supabase/server'
+import { SuspendedBanner } from '@/components/ServiceSuspended'
+import { isToolOnline } from '@/lib/toolOnline'
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('events')
@@ -25,6 +27,8 @@ export default async function EventsPage() {
     },
   ] = await Promise.all([listEvents(), supabase.auth.getUser()])
   const loggedIn = !!user
+
+  const online = await isToolOnline('events')
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -64,6 +68,7 @@ export default async function EventsPage() {
       </section>
 
       <main className="mx-auto max-w-6xl px-4 py-8">
+        {!online && <SuspendedBanner className="mb-6" />}
         <EventsCalendar events={events} loggedIn={loggedIn} />
       </main>
     </div>

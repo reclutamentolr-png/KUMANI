@@ -18,6 +18,7 @@ import {
 import ShareButton from '@/components/ShareButton'
 import { resolveBioTheme } from '@/lib/linkInBioThemes'
 import { normalizeLinkUrl } from '@/lib/linkUtils'
+import PublicPageOffline from '@/components/PublicPageOffline'
 
 export default async function LinkInBioPublicPage({ params }: { params: Promise<{ code: string }> }) {
   const resolvedParams = await params
@@ -48,6 +49,11 @@ export default async function LinkInBioPublicPage({ params }: { params: Promise<
   if (error || !profile) {
     notFound()
   }
+
+  // Piano scaduto o Link in bio spento dallo Staff: pagina offline (i dati
+  // restano salvati e tornano visibili al rinnovo).
+  const { data: status } = await service.rpc('public_page_status', { p_kind: 'bio', p_code: code })
+  if (status === 'offline') return <PublicPageOffline kind="profile" />
 
   // 2. Trova la bio e i link personalizzati (se esistono).
   // La RLS di link_in_bio consente la lettura solo al proprietario: la pagina

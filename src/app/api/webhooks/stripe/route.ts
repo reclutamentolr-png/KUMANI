@@ -95,6 +95,19 @@ export async function POST(req: NextRequest) {
       // l'aggiornamento e l'utente restava attivo).
       const newStatus = ['active', 'trialing', 'past_due'].includes(subscription.status) ? 'active' : 'free'
 
+      // Piano attivato da voucher o dallo Staff: la fine di un vecchio
+      // abbonamento Stripe non lo cancella, e la scadenza non torna indietro.
+      const { data: current } = await supabaseAdmin
+        .from('profiles')
+        .select('subscription_status, subscription_source, subscription_expires_at')
+        .eq('id', userId)
+        .maybeSingle()
+      const manualPlan = !!current?.subscription_source && current.subscription_source !== 'stripe' && current.subscription_status === 'active'
+      if (newStatus === 'free' && manualPlan) {
+        console.log(`ℹ️ Abbonamento Stripe chiuso per ${userId}: piano ${current?.subscription_source} mantenuto`)
+        return NextResponse.json({ received: true })
+      }
+
       const updateData: Record<string, any> = {
         subscription_status: newStatus,
         subscription_source: newStatus === 'active' ? 'stripe' : null,
@@ -110,7 +123,9 @@ export async function POST(req: NextRequest) {
       // current_period_end sta sulle voci dell'abbonamento, non più su di esso.
       const periodEnd = getPeriodEnd(subscription)
       if (periodEnd) {
-        updateData.subscription_expires_at = new Date(periodEnd * 1000).toISOString()
+        const stripeEnd = periodEnd * 1000
+        const manualEnd = manualPlan && current?.subscription_expires_at ? new Date(current.subscription_expires_at).getTime() : 0
+        updateData.subscription_expires_at = new Date(Math.max(stripeEnd, manualEnd)).toISOString()
       }
 
       const { error } = await supabaseAdmin

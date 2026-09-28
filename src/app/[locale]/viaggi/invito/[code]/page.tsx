@@ -6,6 +6,8 @@ import Logo from '@/components/Logo'
 import JoinTripButton from '@/components/travel/JoinTripButton'
 import { createClient } from '@/lib/supabase/server'
 import { formatTripDates, type TripPublic } from '@/lib/travel'
+import { SuspendedBanner } from '@/components/ServiceSuspended'
+import { isToolOnline } from '@/lib/toolOnline'
 
 // Pagina del link di invito (condiviso su WhatsApp): cosa è il viaggio e chi
 // lo organizza. Per entrare serve un account KUMANI, anche senza abbonamento;
@@ -35,6 +37,7 @@ export default async function TripInvitePage({
     if (id) redirect(`${locale === 'it' ? '' : `/${locale}`}/viaggi/${id}`)
   }
 
+  const online = await isToolOnline('travel')
   const refCode = typeof ref === 'string' ? ref.trim().toUpperCase() : ''
   const sponsor = /^[A-Z0-9-]{3,32}$/.test(refCode) ? refCode : trip.creator_referral
   const dates = formatTripDates(trip, locale)
@@ -69,7 +72,9 @@ export default async function TripInvitePage({
           </div>
           <p className="mt-5 text-sm leading-6 text-white/70">{t('invitePitch')}</p>
 
-          {auth.user ? (
+          {!online ? (
+            <SuspendedBanner className="mt-6 text-left" />
+          ) : auth.user ? (
             <JoinTripButton code={normalized} />
           ) : (
             <>
@@ -79,7 +84,10 @@ export default async function TripInvitePage({
               >
                 {t('registerToJoin')}
               </Link>
-              <Link href="/login" className="mt-3 block text-center text-sm text-white/70 hover:text-white">
+              <Link
+                href={`/login?next=${encodeURIComponent(`/viaggi/invito/${normalized}`)}`}
+                className="mt-3 block text-center text-sm text-white/70 hover:text-white"
+              >
                 {t('alreadyMember')}
               </Link>
               <p className="mt-4 text-xs text-white/50">{t('registerThenCode', { code: trip.code })}</p>

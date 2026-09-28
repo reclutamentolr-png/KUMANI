@@ -6,6 +6,8 @@ import SupplierArea from '@/components/convivio/SupplierArea'
 import { getMyConvivioFees, getMySupplier, listConvivi } from '@/app/actions/convivio'
 import { markConvivioFeesPaid } from '@/lib/eventFees'
 import { createClient } from '@/lib/supabase/server'
+import { SuspendedBanner } from '@/components/ServiceSuspended'
+import { isToolOnline } from '@/lib/toolOnline'
 
 // Convivio → Area fornitore (professionisti Pro)
 export default async function ConvivioSupplierPage({
@@ -46,6 +48,8 @@ export default async function ConvivioSupplierPage({
     supabase.from('profiles').select('country_code').eq('id', user.id).maybeSingle(),
   ])
 
+  const online = await isToolOnline('convivio')
+
   return (
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
@@ -60,6 +64,7 @@ export default async function ConvivioSupplierPage({
         </div>
       </header>
       <main className="mx-auto max-w-6xl px-4 py-8">
+        {!online && <SuspendedBanner className="mb-6" />}
         <div className="relative mb-6 overflow-hidden rounded-3xl bg-[var(--ink)] p-6 text-white shadow-[0_14px_40px_rgba(23,23,23,0.25)] sm:p-8">
           <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full border border-[var(--gold)]/25 bg-[var(--gold)]/10" />
           <div className="pointer-events-none absolute -bottom-20 right-24 h-40 w-40 rounded-full border border-[var(--gold)]/15" />

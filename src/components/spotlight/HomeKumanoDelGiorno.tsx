@@ -3,7 +3,7 @@ import Link from '@/components/LocalizedLink'
 import Logo from '@/components/Logo'
 import { ArrowRight, Sun } from 'lucide-react'
 import { SPOTLIGHT_LOCALE_FLAGS } from '@/lib/spotlight'
-import { getHomeKumano } from '@/lib/spotlightHome'
+import { getHomeKumano, isSpotlightOnline } from '@/lib/spotlightHome'
 
 // Fascia "Oggi in community" della landing pubblica: una storia vera,
 // consensata e moderata, al posto del vecchio carosello "ultimi iscritti".
@@ -14,6 +14,7 @@ import { getHomeKumano } from '@/lib/spotlightHome'
 export default async function HomeKumanoDelGiorno() {
   const t = await getTranslations('spotlightHome')
   const locale = await getLocale()
+  if (!(await isSpotlightOnline())) return null
   const kumano = await getHomeKumano()
 
   // Cold start: finché il pool home è sotto soglia, storia curata dal team

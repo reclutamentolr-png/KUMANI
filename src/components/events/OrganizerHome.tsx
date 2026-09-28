@@ -3,25 +3,7 @@
 import { useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
-import {
-  AlertTriangle,
-  BadgeCheck,
-  CalendarDays,
-  CheckCircle2,
-  CreditCard,
-  ExternalLink,
-  Hourglass,
-  LoaderCircle,
-  MapPin,
-  Pencil,
-  Plus,
-  QrCode,
-  ShieldCheck,
-  Ticket,
-  UserCheck,
-  Users,
-  XCircle,
-} from 'lucide-react'
+import { AlertTriangle, BadgeCheck, CalendarDays, CheckCircle2, CreditCard, ExternalLink, Hourglass, LoaderCircle, MapPin, Pencil, Plus, QrCode, Repeat, ShieldCheck, Stamp, Ticket, UserCheck, Users, XCircle } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { Sheet } from '@/components/memolife/MemoLifeForms'
 import VerificationSetup from '@/components/verification/VerificationSetup'
@@ -38,11 +20,16 @@ type SheetState =
   | { kind: 'create' }
   | { kind: 'edit'; event: OrganizedEvent; initial: Partial<Pick<EventFormInput, 'address' | 'mapLink' | 'onlineLink'>> }
   | { kind: 'attendees'; event: OrganizedEvent }
-  | { kind: 'saved'; id: string; status: string; edited: boolean }
+  | { kind: 'saved'; id: string; status: string; edited: boolean; dates?: number }
   | null
 
 // Area personale di KUMANI Events: stato di organizzatore (verifica, piano,
 // fidato), commissioni da pagare, i miei eventi con check-in e i miei pass.
+// Evento già iniziato: non si annulla più (fuori dal componente: render puro)
+function hasStarted(iso: string): boolean {
+  return new Date(iso).getTime() <= Date.now()
+}
+
 export default function OrganizerHome({
   status,
   organized,
@@ -80,17 +67,24 @@ export default function OrganizerHome({
     setWorking(event.id)
     const detail = await getEvent(event.id)
     setWorking(null)
+    // Senza i dati privati (indirizzo, link) il salvataggio li cancellerebbe
+    if (!detail) {
+      alert(t('error_saveError'))
+      return
+    }
     setSheet({
       kind: 'edit',
       event,
-      initial: { address: detail?.address ?? '', mapLink: detail?.map_link ?? '', onlineLink: detail?.online_link ?? '' },
+      initial: { address: detail.address ?? '', mapLink: detail.map_link ?? '', onlineLink: detail.online_link ?? '' },
     })
   }
 
   const doCancel = async (event: OrganizedEvent) => {
     if (!confirm(t('cancelConfirm', { title: event.title }))) return
+    // Date ripetute: si può annullare anche il resto della serie
+    const following = !!event.series_id && confirm(t('cancelSeriesConfirm'))
     setWorking(event.id)
-    const result = await cancelEvent(event.id)
+    const result = await cancelEvent(event.id, following)
     setWorking(null)
     if (result !== 'ok') alert(t.has(`error_${result}`) ? t(`error_${result}`) : t('error_saveError'))
     router.refresh()
@@ -260,6 +254,20 @@ export default function OrganizerHome({
                       <MapPin className="h-3.5 w-3.5" /> {event.city}
                     </p>
                   )}
+                  {(event.series_id || event.fidelity_stamp) && (
+                    <div className="mt-1.5 flex flex-wrap gap-1.5">
+                      {event.series_id && (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-semibold text-gray-600">
+                          <Repeat className="h-3 w-3" /> {t('seriesBadge')}
+                        </span>
+                      )}
+                      {event.fidelity_stamp && (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-[var(--gold-pale)] px-2 py-0.5 text-[11px] font-semibold text-[var(--ink)]">
+                          <Stamp className="h-3 w-3 text-[var(--gold)]" /> {t('fidelityBadge')}
+                        </span>
+                      )}
+                    </div>
+                  )}
                   <div className="mt-2 flex flex-wrap gap-3 text-xs text-gray-600">
                     <span className="flex items-center gap-1">
                       <Users className="h-3.5 w-3.5 text-[var(--gold)]" /> {event.people}/{event.capacity}
@@ -307,7 +315,7 @@ export default function OrganizerHome({
                         <QrCode className="h-3.5 w-3.5" /> {t('attendeesCta')}
                       </button>
                     )}
-                    {active && (
+                    {active && !hasStarted(event.starts_at) && (
                       <button
                         type="button"
                         disabled={working === event.id}
@@ -402,8 +410,9 @@ export default function OrganizerHome({
             initial={sheet.kind === 'edit' ? sheet.initial : undefined}
             maxCapacity={maxCapacity}
             feePercent={percent}
+            fidelityCard={status?.fidelity_card ?? null}
             onSaved={(result) => {
-              setSheet({ kind: 'saved', id: result.id, status: result.status, edited: sheet.kind === 'edit' })
+              setSheet({ kind: 'saved', id: result.id, status: result.status, edited: sheet.kind === 'edit', dates: result.dates })
               router.refresh()
             }}
           />
@@ -418,6 +427,7 @@ export default function OrganizerHome({
               <AlertTriangle className="mx-auto h-14 w-14 text-amber-500" />
             )}
             <p className="text-sm text-gray-700">{sheet.status === 'published' ? t('resultPublished') : t('resultPending')}</p>
+            {(sheet.dates ?? 1) > 1 && <p className="text-sm font-semibold text-[var(--ink)]">{t('resultSeries', { count: sheet.dates ?? 1 })}</p>}
             <Link
               href={`/events/${sheet.id}`}
               className="inline-flex items-center gap-2 rounded-xl bg-[var(--ink)] px-5 py-2.5 text-sm font-bold text-white"

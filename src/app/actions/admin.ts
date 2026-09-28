@@ -9,6 +9,7 @@ import { generateShortCode } from '@/lib/shortLink'
 import { getStripe } from '@/lib/stripe'
 import { updateTag } from 'next/cache'
 import { SPOTLIGHT_HOME_CACHE_TAG, type SpotlightModerationStatus } from '@/lib/spotlight'
+import { getPlanPrices } from '@/lib/planPrices'
 
 const getServiceClient = () =>
   createServiceClient(
@@ -73,18 +74,39 @@ async function isFullAdmin(userId: string) {
 const ADMIN_EDITABLE_PROFILE_FIELDS = new Set([
   'first_name', 'last_name', 'username', 'phone', 'country_code', 'date_of_birth', 'occupation',
   'referral_code', 'daily_points', 'subscription_status', 'subscription_expires_at', 'subscription_source',
-  'is_blocked', 'is_admin',
+  'subscription_plan', 'is_blocked', 'is_admin',
 ])
 
 // Impostazioni di sistema: salvate lato server (prima partivano dal browser e
 // qualsiasi membro dello Staff poteva cambiarle, a prescindere dal ruolo).
+// Chiavi modificabili dal modulo Impostazioni: commissioni, account KUMANI e
+// il resto hanno i loro pannelli, e non vanno mai riscritte da qui.
+const GENERAL_SETTINGS_KEYS = new Set([
+  'maintenance_mode', 'maintenance_message', 'matrix_slot_bonus_points', 'matrix_spillover_bonus_points',
+  'activity_thanks_points', 'pro_invite_extra_points', 'pro_trial_days', 'affinity_intros_per_week',
+  'listing_feature_cost_7d', 'listing_feature_cost_15d', 'menu_ai_daily_runs',
+  'veritas_write_seconds', 'veritas_vote_seconds', 'veritas_reveal_seconds',
+])
+
+// Salva solo le impostazioni cambiate (il modulo manda le differenze), così
+// non riporta indietro modifiche fatte nel frattempo da altri o da altri pannelli.
 export async function adminSaveSystemSettings(settings: Record<string, unknown>) {
   const admin = await verifyAdmin('settings.write')
   if (!admin) return { success: false, error: 'Non autorizzato' }
+  const unknown = Object.keys(settings).find((key) => !GENERAL_SETTINGS_KEYS.has(key))
+  if (unknown) return { success: false, error: `Impostazione non modificabile da qui: ${unknown}` }
+  if (Object.keys(settings).length === 0) return { success: true }
   const rows = Object.entries(settings).map(([key, value]) => ({ key, value: JSON.stringify(value) }))
   const { error } = await getServiceClient().from('system_settings').upsert(rows, { onConflict: 'key' })
   if (error) return { success: false, error: error.message }
   return { success: true }
+}
+
+// Prezzi dei piani come li vede il sito (letti da Stripe)
+export async function adminGetPlanPrices() {
+  const admin = await verifyAdmin('settings.read')
+  if (!admin) return null
+  return getPlanPrices()
 }
 
 export async function adminSetToolEnabled(toolName: string, enabled: boolean) {
@@ -131,7 +153,15 @@ export async function adminUpdateProfile(userId: string, profileData: Record<str
   const unknownField = Object.keys(profileData).find((key) => !ADMIN_EDITABLE_PROFILE_FIELDS.has(key))
   if (unknownField) return { success: false, error: `Campo non modificabile: ${unknownField}` }
 
+  if ('subscription_plan' in profileData && !['base', 'pro'].includes(String(profileData.subscription_plan))) {
+    return { success: false, error: 'Piano non valido (base o pro)' }
+  }
   const supabaseAdmin = getServiceClient()
+  if ('is_blocked' in profileData && !profileData.is_blocked) {
+    // Un account cancellato (GDPR) resta chiuso per sempre
+    const { data: current } = await supabaseAdmin.from('profiles').select('deleted_at').eq('id', userId).maybeSingle()
+    if (current?.deleted_at) return { success: false, error: 'Account cancellato: non si può sbloccare' }
+  }
   if ('is_admin' in profileData) {
     const { data: current } = await supabaseAdmin.from('profiles').select('is_admin').eq('id', userId).maybeSingle()
     if (Boolean(current?.is_admin) !== Boolean(profileData.is_admin) && !(await isFullAdmin(admin.id))) {
@@ -147,6 +177,18 @@ export async function adminUpdateProfile(userId: string, profileData: Record<str
   if (error) {
     console.error('Errore aggiornamento profilo:', error)
     return { success: false, error: error.message }
+  }
+
+  // Blocco: anche l'accesso viene chiuso (le sessioni aperte non si rinnovano
+  // più e non si può rientrare, nemmeno con "password dimenticata").
+  if ('is_blocked' in profileData) {
+    const { error: banError } = await supabaseAdmin.auth.admin.updateUserById(userId, {
+      ban_duration: profileData.is_blocked ? '876000h' : 'none',
+    })
+    if (banError) {
+      console.error('[Admin] auth ban failed:', banError.message)
+      return { success: true, warning: `Profilo aggiornato, ma l'accesso non è stato ${profileData.is_blocked ? 'bloccato' : 'riaperto'}: ${banError.message}` }
+    }
   }
   return { success: true }
 }
@@ -609,7 +651,8 @@ export async function getAdminFinancialSummary() {
     return Number.isFinite(parsed) ? parsed : fallback
   }
 
-  const subscriptionPrice = await readNumberSetting('subscription_price_eur', 49)
+  // Prezzo Base vero, letto da Stripe (riserva: impostazioni salvate)
+  const subscriptionPrice = (await getPlanPrices()).base
   const matrixBonusPerSlot = await readNumberSetting('matrix_slot_bonus_points', 5)
   const matrixSpilloverBonusPerSlot = await readNumberSetting('matrix_spillover_bonus_points', 5)
 
@@ -1183,6 +1226,9 @@ export async function resolveAffinityReport(reportId: string, blockUser: boolean
   if (blockUser) {
     const { error: blockError } = await service.from('profiles').update({ is_blocked: true }).eq('id', report.reported)
     if (blockError) return { success: false, error: blockError.message }
+    // Accesso chiuso anche lato login (come dal pannello Utenti)
+    const { error: banError } = await service.auth.admin.updateUserById(report.reported, { ban_duration: '876000h' })
+    if (banError) return { success: true, warning: `Utente bloccato, ma l'accesso non è stato chiuso: ${banError.message}` }
   }
   return { success: true }
 }
@@ -1218,6 +1264,9 @@ export async function resolveConvivioReport(reportId: string, cancelGroup: boole
       .eq('id', report.group_id)
       .in('status', ['open', 'ordered'])
     if (cancelError) return { success: false, error: cancelError.message }
+    // Kordata annullata: la commissione del fornitore non è più dovuta
+    const { error: feeError } = await service.from('convivio_fees').update({ status: 'waived' }).eq('group_id', report.group_id).eq('status', 'due')
+    if (feeError) return { success: true, warning: `Kordata annullata, ma la commissione non è stata condonata: ${feeError.message}` }
   }
   return { success: true }
 }
@@ -1238,17 +1287,22 @@ async function eventPeople(ids: string[]): Promise<Record<string, AdminPerson>> 
   return Object.fromEntries((data ?? []).map((p) => [p.id, p as AdminPerson]))
 }
 
-export async function adminListEvents(filter: 'pending' | 'published' | 'reported') {
+export async function adminListEvents(filter: 'pending' | 'published' | 'reported' | 'closed') {
   const admin = await verifyAdmin('listings.read')
   if (!admin) return { events: [], error: 'Non autorizzato' }
   const service = getServiceClient()
-  const columns = 'id, organizer_id, title, description, type, mode, starts_at, ends_at, timezone, city, country_code, capacity, price, is_18plus, status, review_note, created_at'
+  // Anche luogo esatto e link: lo Staff deve vedere cosa approva
+  const columns =
+    'id, organizer_id, title, description, type, mode, starts_at, ends_at, timezone, venue_name, address, city, country_code, map_link, online_link, languages, capacity, price, is_18plus, kids_friendly, status, review_note, created_at, series_id, fidelity_stamp'
   let query = service.from('events').select(columns)
   if (filter === 'reported') {
     const { data: reports } = await service.from('event_reports').select('event_id').eq('status', 'open').limit(500)
     const ids = [...new Set((reports ?? []).map((r) => r.event_id as string))]
     if (ids.length === 0) return { events: [], error: null }
     query = query.in('id', ids)
+  } else if (filter === 'closed') {
+    // Decisi: rifiutati, bloccati, annullati (per rivedere o sbloccare)
+    query = query.in('status', ['rejected', 'banned', 'cancelled'])
   } else {
     query = query.eq('status', filter)
   }
@@ -1274,34 +1328,87 @@ export async function adminListEvents(filter: 'pending' | 'published' | 'reporte
   }
 }
 
-// Approva (pubblica) o rifiuta con una nota un evento in attesa.
+// Approva (pubblica) o rifiuta con una nota un evento in attesa. Per le date
+// ripetute la decisione vale per tutte le date della serie ancora in attesa.
 export async function adminReviewEvent(eventId: string, approve: boolean, note: string) {
   const admin = await verifyAdmin('listings.write')
   if (!admin) return { success: false, error: 'Non autorizzato' }
   if (!EVENT_ID_RE.test(eventId)) return { success: false, error: 'Evento non valido' }
   const text = note.trim().slice(0, 1000)
   if (!approve && !text) return { success: false, error: 'Scrivi il motivo del rifiuto' }
-  const { data, error } = await getServiceClient()
-    .from('events')
-    .update({ status: approve ? 'published' : 'rejected', review_note: text || null, updated_at: new Date().toISOString() })
-    .eq('id', eventId)
-    .eq('status', 'pending')
-    .select('id')
+  const service = getServiceClient()
+  const changes = { status: approve ? 'published' : 'rejected', review_note: text || null, updated_at: new Date().toISOString() }
+  // Versione vista dallo Staff: le date della serie modificate dopo (a parte)
+  // restano in attesa e vanno riviste una per una.
+  const { data: reviewed } = await service.from('events').select('series_id, updated_at').eq('id', eventId).eq('status', 'pending').maybeSingle()
+  if (!reviewed) return { success: false, error: 'Evento non più in attesa' }
+  const { data, error } = await service.from('events').update(changes).eq('id', eventId).eq('status', 'pending').select('id')
   if (error) return { success: false, error: error.message }
   if (!data?.length) return { success: false, error: 'Evento non più in attesa' }
-  return { success: true }
+  const approvedIds = [eventId]
+  let warning: string | undefined
+  if (reviewed.series_id) {
+    const { data: siblings, error: seriesError } = await service
+      .from('events')
+      .update(changes)
+      .eq('series_id', reviewed.series_id)
+      .eq('status', 'pending')
+      .lte('updated_at', reviewed.updated_at)
+      .select('id')
+    if (seriesError) warning = `Data approvata, ma le altre date della serie non sono state aggiornate: ${seriesError.message}`
+    else approvedIds.push(...(siblings ?? []).map((s) => s.id as string))
+  }
+  // Pubblicato: chi era in lista d'attesa entra se ci sono posti
+  if (approve) {
+    for (const id of approvedIds) await service.rpc('event_promote_waitlist', { p_event: id })
+  }
+  return warning ? { success: true, warning } : { success: true }
 }
 
-// Blocca un evento (sparisce dal calendario e l'organizzatore non lo modifica più).
-export async function adminBanEvent(eventId: string, note: string) {
+// Blocca un evento (sparisce dal calendario e l'organizzatore non lo modifica
+// più). Con wholeSeries blocca anche le date successive della stessa serie.
+export async function adminBanEvent(eventId: string, note: string, wholeSeries = false) {
   const admin = await verifyAdmin('listings.write')
   if (!admin) return { success: false, error: 'Non autorizzato' }
   if (!EVENT_ID_RE.test(eventId)) return { success: false, error: 'Evento non valido' }
-  const { error } = await getServiceClient()
+  const service = getServiceClient()
+  const changes = { status: 'banned', review_note: note.trim().slice(0, 1000) || null, updated_at: new Date().toISOString() }
+  const { data, error } = await service
     .from('events')
-    .update({ status: 'banned', review_note: note.trim().slice(0, 1000) || null, updated_at: new Date().toISOString() })
+    .update(changes)
     .eq('id', eventId)
+    .in('status', ['pending', 'published'])
+    .select('series_id, starts_at')
   if (error) return { success: false, error: error.message }
+  if (!data?.length) return { success: false, error: 'Evento già chiuso (rifiutato, annullato o bloccato)' }
+  if (wholeSeries && data[0].series_id) {
+    const { error: seriesError } = await service
+      .from('events')
+      .update(changes)
+      .eq('series_id', data[0].series_id)
+      .in('status', ['pending', 'published'])
+      .gt('starts_at', data[0].starts_at)
+    if (seriesError) return { success: true, warning: `Data bloccata, ma non le successive: ${seriesError.message}` }
+  }
+  return { success: true }
+}
+
+// Sblocca un evento bloccato per errore (solo se non è ancora iniziato).
+export async function adminUnbanEvent(eventId: string) {
+  const admin = await verifyAdmin('listings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!EVENT_ID_RE.test(eventId)) return { success: false, error: 'Evento non valido' }
+  const service = getServiceClient()
+  const { data, error } = await service
+    .from('events')
+    .update({ status: 'published', review_note: null, updated_at: new Date().toISOString() })
+    .eq('id', eventId)
+    .eq('status', 'banned')
+    .gt('starts_at', new Date().toISOString())
+    .select('id')
+  if (error) return { success: false, error: error.message }
+  if (!data?.length) return { success: false, error: 'Solo eventi bloccati e non ancora iniziati si possono sbloccare' }
+  await service.rpc('event_promote_waitlist', { p_event: eventId })
   return { success: true }
 }
 
@@ -1342,7 +1449,21 @@ export async function adminResolveEventReport(reportId: string) {
 export async function adminListEventFees() {
   const admin = await verifyAdmin('listings.read')
   if (!admin) return { fees: [], error: 'Non autorizzato' }
-  const { data, error } = await getServiceClient()
+  // Le commissioni nascono quando l'organizzatore torna su Events: qui si
+  // calcolano anche per chi non è più rientrato dopo un evento a pagamento.
+  const service = getServiceClient()
+  const { data: unsettled } = await service
+    .from('events')
+    .select('organizer_id')
+    .eq('status', 'published')
+    .gt('price', 0)
+    .gt('fee_percent', 0)
+    .lt('starts_at', new Date().toISOString())
+    .limit(1000)
+  for (const organizerId of new Set((unsettled ?? []).map((e) => e.organizer_id as string))) {
+    await service.rpc('events_settle_fees', { p_uid: organizerId })
+  }
+  const { data, error } = await service
     .from('event_fees')
     .select('id, organizer_id, participants, price, percent, amount, status, created_at, paid_at, event:events(id, title, starts_at)')
     .order('status', { ascending: true })
@@ -1377,11 +1498,15 @@ export async function adminWaiveEventFee(feeId: string) {
 
 // Percentuale trattenuta da KUMANI (system_settings 'events_fee_percent',
 // salvata come stringa JSON, es. '"5"'): vale per gli eventi creati dopo.
-export async function adminGetEventsFeePercent() {
+// kind 'super': percentuale ridotta dei Super Organizer ('events_fee_percent_super', default 3)
+const EVENT_FEE_KEYS = { standard: { key: 'events_fee_percent', fallback: 5 }, super: { key: 'events_fee_percent_super', fallback: 3 } } as const
+
+export async function adminGetEventsFeePercent(kind: 'standard' | 'super' = 'standard') {
   const admin = await verifyAdmin('settings.read')
   if (!admin) return { percent: null, error: 'Non autorizzato' }
-  const { data } = await getServiceClient().from('system_settings').select('value').eq('key', 'events_fee_percent').maybeSingle()
-  let percent = 5
+  const setting = EVENT_FEE_KEYS[kind] ?? EVENT_FEE_KEYS.standard
+  const { data } = await getServiceClient().from('system_settings').select('value').eq('key', setting.key).maybeSingle()
+  let percent: number = setting.fallback
   if (data?.value != null) {
     const raw = String(data.value)
     let parsed = Number.NaN
@@ -1395,14 +1520,15 @@ export async function adminGetEventsFeePercent() {
   return { percent, error: null }
 }
 
-export async function adminSetEventsFeePercent(percent: number) {
+export async function adminSetEventsFeePercent(percent: number, kind: 'standard' | 'super' = 'standard') {
   const admin = await verifyAdmin('settings.write')
   if (!admin) return { success: false, error: 'Non autorizzato' }
   if (!Number.isFinite(percent) || percent < 0 || percent > 30) return { success: false, error: 'La percentuale deve essere tra 0 e 30' }
+  const setting = EVENT_FEE_KEYS[kind] ?? EVENT_FEE_KEYS.standard
   const value = String(Math.round(percent * 100) / 100)
   const { error } = await getServiceClient()
     .from('system_settings')
-    .upsert({ key: 'events_fee_percent', value: JSON.stringify(value) }, { onConflict: 'key' })
+    .upsert({ key: setting.key, value: JSON.stringify(value) }, { onConflict: 'key' })
   if (error) return { success: false, error: error.message }
   return { success: true }
 }
@@ -1459,6 +1585,16 @@ export async function adminListIdentityVerifications(status: 'pending' | 'review
   ).limit(200)
   if (error) return { items: [] as AdminIdentityVerification[], error: error.message }
   const rows = (data ?? []) as IdentityRow[]
+  // Documenti di richieste già decise rimasti nello storage (cancellazione
+  // fallita in precedenza): si riprova qui, a ogni apertura della lista.
+  const leftovers = rows.filter((r) => r.status !== 'pending' && r.file_path)
+  if (leftovers.length > 0) {
+    const { error: removeError } = await service.storage.from(IDENTITY_BUCKET).remove(leftovers.map((r) => r.file_path as string))
+    if (!removeError) {
+      await service.from('identity_verifications').update({ file_path: null }).in('id', leftovers.map((r) => r.id))
+      for (const r of leftovers) r.file_path = null
+    }
+  }
 
   const userIds = [...new Set(rows.map((r) => r.user_id))]
   const [profiles, reviewers] = await Promise.all([
@@ -1627,7 +1763,7 @@ export async function adminSetConvivioFeePercent(percent: number) {
 // ============================================================
 
 export async function adminListEventReviews() {
-  const admin = await verifyAdmin('listings.write')
+  const admin = await verifyAdmin('listings.read')
   if (!admin) return { reviews: [], error: 'Non autorizzato' }
   const { data, error } = await getServiceClient()
     .from('event_reviews')
@@ -1906,7 +2042,9 @@ type DeletionRow = Omit<AdminDeletionRequest, 'user' | 'processor'> & { processe
 
 const DELETION_ID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 // Bucket dove i file dell'utente stanno nella cartella `${userId}/`.
-const USER_FILE_BUCKETS = ['identity-docs', 'cv-photos', 'quote-logos-v2', 'menu-photos', 'findo-photos']
+// Cartelle "<userId>/…" da svuotare alla cancellazione dell'account
+// (reward-images contiene solo immagini caricate dallo Staff)
+const USER_FILE_BUCKETS = ['identity-docs', 'cv-photos', 'quote-logos-v2', 'menu-photos', 'findo-photos', 'receipt-photos-v2']
 const DELETED_EMAIL_RE = /@deleted\.invalid$/i
 
 export async function adminListDeletionRequests(status: 'pending' | 'handled' = 'pending') {

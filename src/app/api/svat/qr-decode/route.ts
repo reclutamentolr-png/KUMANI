@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { fetchWhoisText, parseWhois } from '@/lib/whois'
 
@@ -61,6 +62,10 @@ export async function POST(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+  // Piano e interruttore Admin (SVAT spento = niente verifiche, anche via API)
+  if (!(await hasActiveToolAccess(supabase, user.id, 'svat'))) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
   try {

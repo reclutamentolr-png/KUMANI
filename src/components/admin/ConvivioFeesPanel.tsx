@@ -14,7 +14,7 @@ const when = (iso: string) => new Intl.DateTimeFormat('it-IT', { timeZone: 'Euro
 
 // Admin → Commissioni Kordata: percentuale trattenuta da KUMANI sulle Kordate
 // con fornitore Pro, elenco delle commissioni e condono.
-export default function ConvivioFeesPanel({ locale }: { locale: string }) {
+export default function ConvivioFeesPanel({ locale, canReadSettings = true }: { locale: string; canReadSettings?: boolean }) {
   const [fees, setFees] = useState<AdminConvivioFee[] | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [working, setWorking] = useState<string | null>(null)
@@ -33,10 +33,12 @@ export default function ConvivioFeesPanel({ locale }: { locale: string }) {
     // Caricamento dal server (setState asincrono)
     // eslint-disable-next-line react-hooks/set-state-in-effect
     load()
+    // La percentuale è un'impostazione: solo con i permessi delle Impostazioni
+    if (!canReadSettings) return
     adminGetConvivioFeePercent().then((result) => {
       if (result.percent !== null) setPercent(String(result.percent))
     })
-  }, [load])
+  }, [load, canReadSettings])
 
   const waive = async (fee: AdminConvivioFee) => {
     if (!confirm(`Condonare la commissione di ${money(fee.amount)} per "${fee.group?.title ?? '—'}"?`)) return
@@ -68,6 +70,7 @@ export default function ConvivioFeesPanel({ locale }: { locale: string }) {
         </p>
       </div>
 
+      {canReadSettings && (
       <form onSubmit={savePercent} className="flex flex-wrap items-end gap-3 rounded-xl border border-gray-200 bg-white p-4">
         <div>
           <label className="mb-1 block text-sm font-semibold text-gray-700">Commissione KUMANI (%)</label>
@@ -90,6 +93,7 @@ export default function ConvivioFeesPanel({ locale }: { locale: string }) {
         <p className="text-xs text-gray-500">Da 0 a 30. Si fissa su ogni Kordata quando il fornitore la conferma (le Kordate già confermate non cambiano).</p>
         {percentSaved && <p className="w-full text-sm font-semibold text-gray-700">{percentSaved}</p>}
       </form>
+      )}
 
       {fees && fees.length > 0 && (
         <div className="grid gap-3 sm:grid-cols-2">

@@ -6,6 +6,8 @@ import Link from '@/components/LocalizedLink'
 import ConvivioDetailView from '@/components/convivio/ConvivioDetailView'
 import { getConvivio } from '@/app/actions/convivio'
 import { createClient } from '@/lib/supabase/server'
+import { SuspendedBanner } from '@/components/ServiceSuspended'
+import { isToolOnline } from '@/lib/toolOnline'
 
 export default async function ConvivioDetailPage({ params }: { params: Promise<{ locale: string; id: string }> }) {
   const { locale, id } = await params
@@ -19,6 +21,8 @@ export default async function ConvivioDetailPage({ params }: { params: Promise<{
 
   const [detail, { data: me }] = await Promise.all([getConvivio(id), supabase.from('profiles').select('referral_code').eq('id', user.id).maybeSingle()])
   if (!detail) notFound()
+
+  const online = await isToolOnline('convivio')
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -34,6 +38,7 @@ export default async function ConvivioDetailPage({ params }: { params: Promise<{
         </div>
       </header>
       <main className="mx-auto max-w-6xl px-4 py-8">
+        {!online && <SuspendedBanner className="mb-6" />}
         <ConvivioDetailView initial={detail} siteUrl={SITE_URL} myReferral={me?.referral_code ?? null} />
       </main>
     </div>

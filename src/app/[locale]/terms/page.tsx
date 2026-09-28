@@ -121,6 +121,12 @@ export default function TermsPage() {
                 I pagamenti sono gestiti da provider terzi autorizzati. L&apos;abbonamento si rinnova automaticamente salvo disdetta:
                 l&apos;utente può annullare in qualsiasi momento e continuerà a usufruire dei servizi fino al termine del periodo già pagato.
               </p>
+              <p>
+                Alla scadenza del piano i contenuti restano salvati e consultabili dal titolare, ma non si possono creare o modificare
+                contenuti degli strumenti non più inclusi. Le pagine pubbliche collegate (ad esempio Link in bio e CV) non sono più
+                visibili ai visitatori finché il piano non viene rinnovato; le Ricevute Digitali, che sono condivise con un&apos;altra
+                parte, restano consultabili online per 12 mesi dalla scadenza del piano.
+              </p>
             </div>
           </section>
 
@@ -154,6 +160,14 @@ export default function TermsPage() {
                 la media delle recensioni e lo storico degli eventi determinano il livello dell&apos;organizzatore, che può anche
                 essere ridotto in caso di valutazioni basse o eventi rimossi dallo Staff. Quando l&apos;organizzatore usa il check-in,
                 le assenze degli iscritti sono registrate e mostrate agli organizzatori dei loro eventi successivi.
+              </p>
+              <p>
+                Un evento può ripetersi su più date (serie): ogni data è un evento a sé, con iscrizioni, check-in, recensioni e
+                commissione propri. Se l&apos;organizzatore ha una Kumi Card attiva e lo indica nell&apos;evento, chi fa il check-in
+                riceve in automatico un timbro sulla Kumi Card dell&apos;organizzatore, secondo le regole di quella tessera: la
+                tessera viene creata e collegata all&apos;account del partecipante, che la ritrova nella scheda dell&apos;evento, e
+                l&apos;organizzatore vede tra i clienti della sua Kumi Card il nome e l&apos;iniziale del cognome, i timbri e i premi
+                ritirati. L&apos;informazione è indicata nella scheda dell&apos;evento prima dell&apos;iscrizione.
               </p>
               <p>
                 <strong className="text-gray-900">Acquisti di gruppo (Kordata).</strong> Le Kordate sono proposte da utenti verificati
@@ -331,6 +345,11 @@ export default function TermsPage() {
               </p>
               <p>
                 La Piattaforma potrà sospendere o chiudere gli account in violazione dei Termini, con conseguente decadenza dei vantaggi maturati.
+              </p>
+              <p>
+                Durante la sospensione l&apos;accesso è bloccato e i contenuti pubblici dell&apos;account (annunci in Bacheca, presenza nelle
+                classifiche e in Spotlight, Link in bio e CV) non sono visibili agli altri utenti; il codice d&apos;invito non può essere usato
+                per nuove registrazioni. I contenuti non vengono cancellati e tornano visibili se la sospensione viene revocata.
               </p>
             </div>
           </section>

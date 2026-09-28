@@ -1,5 +1,5 @@
 import { useLocale, useTranslations } from 'next-intl'
-import { Baby, BadgeCheck, Crown, Sprout, Star } from 'lucide-react'
+import { Baby, BadgeCheck, Crown, Repeat, Sprout, Stamp, Star } from 'lucide-react'
 import type { EventCard, OrganizerLevel } from '@/lib/events'
 
 // Piccoli elementi condivisi tra calendario e scheda evento.
@@ -32,7 +32,13 @@ export function PriceBadge({ event, dark = false }: { event: Pick<EventCard, 'pr
   )
 }
 
-export function EventFlags({ event, dark = false }: { event: Pick<EventCard, 'is_18plus' | 'kids_friendly'>; dark?: boolean }) {
+export function EventFlags({
+  event,
+  dark = false,
+}: {
+  event: Pick<EventCard, 'is_18plus' | 'kids_friendly'> & Partial<Pick<EventCard, 'series_id' | 'fidelity_stamp' | 'fidelity_business'>>
+  dark?: boolean
+}) {
   const t = useTranslations('events')
   return (
     <>
@@ -42,6 +48,18 @@ export function EventFlags({ event, dark = false }: { event: Pick<EventCard, 'is
       {event.kids_friendly && (
         <span className={`flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold ${dark ? 'bg-sky-400/15 text-sky-300' : 'bg-sky-50 text-sky-700'}`}>
           <Baby className="h-3.5 w-3.5" /> {t('kidsFriendly')}
+        </span>
+      )}
+      {event.series_id && (
+        <span className={`flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold ${dark ? 'bg-white/10 text-white/80' : 'bg-gray-100 text-gray-700'}`}>
+          <Repeat className="h-3.5 w-3.5" /> {t('recurring')}
+        </span>
+      )}
+      {event.fidelity_stamp && event.fidelity_business && (
+        <span
+          className={`flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold ${dark ? 'bg-[var(--gold)]/15 text-[var(--gold-bright)]' : 'bg-[var(--gold-pale)] text-[var(--ink)]'}`}
+        >
+          <Stamp className="h-3.5 w-3.5" /> {t('kumiCardStamp')}
         </span>
       )}
     </>

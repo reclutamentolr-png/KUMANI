@@ -18,32 +18,6 @@ export function isActiveSubscription(profile: SubscriptionProfile | null | undef
 }
 
 /**
- * Checks for an active subscription. Falls back to a column-less select when
- * `subscription_expires_at` doesn't exist yet on this database (that migration
- * may not be applied), same defensive pattern as marketplace/page.tsx.
- */
-async function getSubscriptionProfile(
-  supabase: SupabaseClient,
-  userId: string
-): Promise<SubscriptionProfile | null> {
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('subscription_status, subscription_expires_at')
-    .eq('id', userId)
-    .single()
-
-  if (!error) return data
-
-  const { data: fallback } = await supabase
-    .from('profiles')
-    .select('subscription_status')
-    .eq('id', userId)
-    .single()
-
-  return fallback
-}
-
-/**
  * Gate used by premium marketplace tools that must re-check access server-side
  * (not just hide the marketplace card). The real rule lives in the database:
  * can_use_tool() checks the admin on/off toggle and whether the user's plan
@@ -60,19 +34,8 @@ export async function hasActiveToolAccess(
     .maybeSingle<{ allowed: boolean; required_plan: string; known: boolean }>()
   if (!error && data) return data.allowed
 
-  // Fallback finché la migrazione dei piani non è applicata: regola storica
-  // (abbonamento attivo + strumento acceso).
-  const profile = await getSubscriptionProfile(supabase, userId)
-
-  if (!isActiveSubscription(profile)) return false
-
-  const { data: toolSetting } = await supabase
-    .from('marketplace_settings')
-    .select('is_enabled')
-    .eq('tool_name', toolName)
-    .single()
-
-  if (toolSetting && toolSetting.is_enabled === false) return false
-
-  return true
+  // Controllo non riuscito (errore momentaneo del database): meglio negare
+  // e far riprovare che aprire uno strumento Pro a chi ha il Base.
+  console.error(`[subscriptionGate] can_use_tool(${toolName}) failed for ${userId}:`, error?.message ?? 'no data')
+  return false
 }

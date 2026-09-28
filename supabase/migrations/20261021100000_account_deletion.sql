@@ -98,6 +98,12 @@ begin
   delete from public.menus where owner_id = p_uid;
   delete from public.menu_ai_usage where owner_id = p_uid;
   delete from public.fidelity_cards where owner_id = p_uid;
+  -- Tessere Kumi Card collegate all'account dai check-in agli eventi
+  -- (colonna aggiunta da Events fase 3: controllo per l'ordine di applicazione)
+  if exists (select 1 from information_schema.columns
+             where table_schema = 'public' and table_name = 'fidelity_members' and column_name = 'user_id') then
+    execute 'delete from public.fidelity_members where user_id = $1' using p_uid;
+  end if;
   delete from public.aureya_test_results where user_id = p_uid;
   delete from public.marketplace_favorites where user_id = p_uid;
   delete from public.marketplace_usage where user_id = p_uid;

@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { awardToolPoint } from '@/lib/toolPoints'
+import { isToolOnline } from '@/lib/toolOnline'
 import {
   CURRENCIES,
   DOC_TYPES,
@@ -28,7 +29,22 @@ const clean = (value: string | null | undefined, max: number) => {
   const text = (value ?? '').trim().slice(0, max)
   return text === '' ? null : text
 }
-const validDate = (value: string | null | undefined) => (value && DATE_RE.test(value) ? value : null)
+// Data reale (niente 2026-13-45): il giorno deve esistere nel calendario.
+const validDate = (value: string | null | undefined) => {
+  if (!value || !DATE_RE.test(value)) return null
+  const date = new Date(`${value}T00:00:00Z`)
+  return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value ? value : null
+}
+
+// Importi scritti a mano: "12,50", "1.234,56", "1,234.56", "1 234". L'ultimo
+// punto o virgola è il separatore dei decimali, gli altri sono migliaia.
+const parseNumber = (value: string) => {
+  const text = value.replace(/[\s']/g, '')
+  if (text === '') return Number.NaN
+  const decimal = Math.max(text.lastIndexOf(','), text.lastIndexOf('.'))
+  if (decimal < 0) return Number(text)
+  return Number(`${text.slice(0, decimal).replace(/[.,]/g, '')}.${text.slice(decimal + 1)}`)
+}
 
 export async function listTrips(): Promise<TripSummary[]> {
   const supabase = await createClient()
@@ -48,6 +64,7 @@ export async function createTrip(input: {
   emoji: string
   checklist: string[]
 }): Promise<Result> {
+  if (!(await isToolOnline('travel'))) return { success: false, error: 'suspended' }
   const title = clean(input.title, 80)
   if (!title) return { success: false, error: 'invalid' }
   const startsOn = validDate(input.startsOn)
@@ -74,6 +91,7 @@ export async function createTrip(input: {
 }
 
 export async function joinTrip(code: string): Promise<Result> {
+  if (!(await isToolOnline('travel'))) return { success: false, error: 'suspended' }
   const normalized = code.trim().toUpperCase()
   if (!/^[A-Z0-9]{4,12}$/.test(normalized)) return { success: false, error: 'not_found' }
   const supabase = await createClient()
@@ -88,6 +106,17 @@ export async function joinTrip(code: string): Promise<Result> {
   }
   const result = data as { id?: string; error?: string }
   return result?.id ? { success: true, id: result.id } : { success: false, error: result?.error ?? 'saveError' }
+}
+
+// Nuovo codice invito (solo organizzatore): il vecchio link smette di
+// funzionare e chi era uscito o è stato tolto può rientrare solo con questo.
+export async function rotateInviteCode(tripId: string): Promise<{ success: true; code: string } | { success: false; error: string }> {
+  if (!(await isToolOnline('travel'))) return { success: false, error: 'suspended' }
+  if (!UUID_RE.test(tripId)) return { success: false, error: 'invalid' }
+  const supabase = await createClient()
+  const { data, error } = await supabase.rpc('trip_rotate_code', { p_trip: tripId })
+  if (error || typeof data !== 'string') return { success: false, error: error ? 'saveError' : 'not_allowed' }
+  return { success: true, code: data }
 }
 
 export type TripBundle = {
@@ -134,6 +163,7 @@ export async function updateTrip(
   tripId: string,
   input: { title: string; destination: string; startsOn: string; endsOn: string; emoji: string; membersCanEdit: boolean; baseCurrency?: string }
 ): Promise<Result> {
+  if (!(await isToolOnline('travel'))) return { success: false, error: 'suspended' }
   const title = clean(input.title, 80)
   if (!UUID_RE.test(tripId) || !title) return { success: false, error: 'invalid' }
   const startsOn = validDate(input.startsOn)
@@ -170,6 +200,7 @@ export async function updateTrip(
 }
 
 export async function deleteTrip(tripId: string): Promise<Result> {
+  if (!(await isToolOnline('travel'))) return { success: false, error: 'suspended' }
   if (!UUID_RE.test(tripId)) return { success: false, error: 'invalid' }
   const supabase = await createClient()
   const { data, error } = await supabase.from('trips').delete().eq('id', tripId).select('id')
@@ -178,6 +209,7 @@ export async function deleteTrip(tripId: string): Promise<Result> {
 }
 
 export async function removeTripMember(memberId: string): Promise<Result> {
+  if (!(await isToolOnline('travel'))) return { success: false, error: 'suspended' }
   if (!UUID_RE.test(memberId)) return { success: false, error: 'invalid' }
   const supabase = await createClient()
   const { data, error } = await supabase.rpc('trip_remove_member', { p_member: memberId })
@@ -199,14 +231,14 @@ export async function saveActivity(
     responsibleId: string
   }
 ): Promise<Result> {
+  if (!(await isToolOnline('travel'))) return { success: false, error: 'suspended' }
   const title = clean(input.title, 120)
   const day = validDate(input.day)
   if (!UUID_RE.test(tripId) || !title || !day) return { success: false, error: 'invalid' }
   const time = input.time && TIME_RE.test(input.time) ? input.time : null
   const mapLink = clean(input.mapLink, 500)
   if (mapLink && !/^https?:\/\//i.test(mapLink)) return { success: false, error: 'invalidLink' }
-  const costText = input.cost.replace(/\s/g, '').replace(',', '.')
-  const cost = costText === '' ? null : Number(costText)
+  const cost = input.cost.trim() === '' ? null : parseNumber(input.cost)
   if (cost !== null && (!Number.isFinite(cost) || cost < 0)) return { success: false, error: 'invalid' }
   const responsibleId = input.responsibleId && UUID_RE.test(input.responsibleId) ? input.responsibleId : null
 
@@ -242,6 +274,7 @@ export async function saveActivity(
 }
 
 export async function deleteActivity(activityId: string): Promise<Result> {
+  if (!(await isToolOnline('travel'))) return { success: false, error: 'suspended' }
   if (!UUID_RE.test(activityId)) return { success: false, error: 'invalid' }
   const supabase = await createClient()
   const { data, error } = await supabase.from('trip_activities').delete().eq('id', activityId).select('id')
@@ -250,6 +283,7 @@ export async function deleteActivity(activityId: string): Promise<Result> {
 }
 
 export async function addChecklistItem(tripId: string, title: string, assignedTo: string): Promise<Result> {
+  if (!(await isToolOnline('travel'))) return { success: false, error: 'suspended' }
   const text = clean(title, 120)
   if (!UUID_RE.test(tripId) || !text) return { success: false, error: 'invalid' }
   const supabase = await createClient()
@@ -265,6 +299,7 @@ export async function addChecklistItem(tripId: string, title: string, assignedTo
 }
 
 export async function updateChecklistItem(itemId: string, patch: { done?: boolean; assignedTo?: string | null }): Promise<Result> {
+  if (!(await isToolOnline('travel'))) return { success: false, error: 'suspended' }
   if (!UUID_RE.test(itemId)) return { success: false, error: 'invalid' }
   const supabase = await createClient()
   const {
@@ -283,6 +318,7 @@ export async function updateChecklistItem(itemId: string, patch: { done?: boolea
 }
 
 export async function deleteChecklistItem(itemId: string): Promise<Result> {
+  if (!(await isToolOnline('travel'))) return { success: false, error: 'suspended' }
   if (!UUID_RE.test(itemId)) return { success: false, error: 'invalid' }
   const supabase = await createClient()
   const { data, error } = await supabase.from('trip_checklist').delete().eq('id', itemId).select('id')
@@ -293,8 +329,6 @@ export async function deleteChecklistItem(itemId: string): Promise<Result> {
 // ---------------------------------------------------------------------------
 // Fase 2: spese, rimborsi, documenti
 // ---------------------------------------------------------------------------
-
-const parseNumber = (value: string) => Number(value.replace(/\s/g, '').replace(',', '.'))
 
 export async function saveExpense(
   tripId: string,
@@ -310,13 +344,15 @@ export async function saveExpense(
     splitBetween: string[]
   }
 ): Promise<Result> {
+  if (!(await isToolOnline('travel'))) return { success: false, error: 'suspended' }
   const description = clean(input.description, 120)
   const spentOn = validDate(input.spentOn)
   const amount = parseNumber(input.amount)
   const currency = input.currency.toUpperCase()
   const split = [...new Set(input.splitBetween.filter((id) => UUID_RE.test(id)))]
   if (!UUID_RE.test(tripId) || !description || !spentOn || !UUID_RE.test(input.paidBy) || split.length === 0) return { success: false, error: 'invalid' }
-  if (!Number.isFinite(amount) || amount <= 0 || amount > 10_000_000) return { success: false, error: 'amount' }
+  // Almeno 1 centesimo dopo l'arrotondamento (il database rifiuta 0)
+  if (!Number.isFinite(amount) || Math.round(amount * 100) <= 0 || amount > 10_000_000) return { success: false, error: 'amount' }
   if (!/^[A-Z]{3}$/.test(currency)) return { success: false, error: 'invalid' }
   const category = (EXPENSE_CATEGORIES as readonly string[]).includes(input.category) ? input.category : 'other'
 
@@ -356,6 +392,7 @@ export async function saveExpense(
 }
 
 export async function deleteExpense(expenseId: string): Promise<Result> {
+  if (!(await isToolOnline('travel'))) return { success: false, error: 'suspended' }
   if (!UUID_RE.test(expenseId)) return { success: false, error: 'invalid' }
   const supabase = await createClient()
   const { data, error } = await supabase.from('trip_expenses').delete().eq('id', expenseId).select('id')
@@ -365,6 +402,7 @@ export async function deleteExpense(expenseId: string): Promise<Result> {
 
 // Registra un rimborso (importo in centesimi, nella valuta del viaggio).
 export async function addSettlement(tripId: string, fromMember: string, toMember: string, amountCents: number): Promise<Result> {
+  if (!(await isToolOnline('travel'))) return { success: false, error: 'suspended' }
   if (![tripId, fromMember, toMember].every((id) => UUID_RE.test(id)) || fromMember === toMember) return { success: false, error: 'invalid' }
   if (!Number.isInteger(amountCents) || amountCents <= 0) return { success: false, error: 'amount' }
   const supabase = await createClient()
@@ -380,6 +418,7 @@ export async function addSettlement(tripId: string, fromMember: string, toMember
 }
 
 export async function deleteSettlement(settlementId: string): Promise<Result> {
+  if (!(await isToolOnline('travel'))) return { success: false, error: 'suspended' }
   if (!UUID_RE.test(settlementId)) return { success: false, error: 'invalid' }
   const supabase = await createClient()
   const { data, error } = await supabase.from('trip_settlements').delete().eq('id', settlementId).select('id')
@@ -389,6 +428,7 @@ export async function deleteSettlement(settlementId: string): Promise<Result> {
 
 // Documenti richiesti per il viaggio (lo decide l'organizzatore).
 export async function setRequiredDocs(tripId: string, docs: string[]): Promise<Result> {
+  if (!(await isToolOnline('travel'))) return { success: false, error: 'suspended' }
   if (!UUID_RE.test(tripId)) return { success: false, error: 'invalid' }
   const list = [...new Set(docs.filter((d) => (DOC_TYPES as readonly string[]).includes(d)))]
   const supabase = await createClient()
@@ -403,6 +443,7 @@ export async function saveDocument(
   tripId: string,
   input: { id?: string; docType: string; label: string; expiresOn: string; addToLifeCalendar: boolean; reminderTitle: string }
 ): Promise<Result> {
+  if (!(await isToolOnline('travel'))) return { success: false, error: 'suspended' }
   if (!UUID_RE.test(tripId) || !(DOC_TYPES as readonly string[]).includes(input.docType)) return { success: false, error: 'invalid' }
   const expiresOn = validDate(input.expiresOn)
   const supabase = await createClient()
@@ -421,23 +462,32 @@ export async function saveDocument(
     lifeCalendarId = data.life_calendar_item_id
   }
 
+  // Scadenza tolta: via anche il promemoria collegato nello scadenziario
+  if (!expiresOn && lifeCalendarId) {
+    const { error } = await supabase.from('life_calendar_items').delete().eq('id', lifeCalendarId).eq('user_id', user.id)
+    if (error) return { success: false, error: 'saveError' }
+    lifeCalendarId = null
+  }
+
   // Scadenziario personale (Life Calendar): crea o aggiorna il promemoria.
   if (expiresOn && (input.addToLifeCalendar || lifeCalendarId)) {
     const { data: access } = await supabase.rpc('can_use_tool', { p_tool: 'life-calendar' }).maybeSingle<{ allowed: boolean }>()
     if (access?.allowed) {
       const title = clean(input.reminderTitle, 120) ?? input.docType
       if (lifeCalendarId) {
-        await supabase
+        const { error } = await supabase
           .from('life_calendar_items')
           .update({ title, due_date: expiresOn, updated_at: new Date().toISOString() })
           .eq('id', lifeCalendarId)
           .eq('user_id', user.id)
+        if (error) return { success: false, error: 'saveError' }
       } else {
-        const { data: item } = await supabase
+        const { data: item, error } = await supabase
           .from('life_calendar_items')
           .insert({ user_id: user.id, title, category: 'travel', due_date: expiresOn, reminder_offsets: [90, 30, 7], recurrence: 'none' })
           .select('id')
           .single()
+        if (error) return { success: false, error: 'saveError' }
         lifeCalendarId = item?.id ?? null
       }
     }
@@ -461,9 +511,17 @@ export async function saveDocument(
 }
 
 export async function deleteDocument(documentId: string): Promise<Result> {
+  if (!(await isToolOnline('travel'))) return { success: false, error: 'suspended' }
   if (!UUID_RE.test(documentId)) return { success: false, error: 'invalid' }
   const supabase = await createClient()
-  const { data, error } = await supabase.from('trip_documents').delete().eq('id', documentId).select('id')
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return { success: false, error: 'not_allowed' }
+  const { data, error } = await supabase.from('trip_documents').delete().eq('id', documentId).select('id, life_calendar_item_id')
   if (error || !data?.length) return { success: false, error: 'saveError' }
+  // Promemoria collegato nello scadenziario: non serve più
+  const linked = data[0].life_calendar_item_id as string | null
+  if (linked) await supabase.from('life_calendar_items').delete().eq('id', linked).eq('user_id', user.id)
   return { success: true }
 }

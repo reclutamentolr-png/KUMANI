@@ -27,6 +27,7 @@ import LanguageSwitcher from '@/components/LanguageSwitcher'
 import Logo from '@/components/Logo'
 import HomeToolsGrid from '@/components/HomeToolsGrid'
 import HomeKumanoDelGiorno from '@/components/spotlight/HomeKumanoDelGiorno'
+import HomeUpcomingEvents from '@/components/events/HomeUpcomingEvents'
 
 export default function LandingPage() {
   const t = useTranslations('landingHome')
@@ -355,6 +356,9 @@ export default function LandingPage() {
           strumenti e prima dei vantaggi. Solo storie approvate e con
           consenso home esplicito; fallback curato sotto la soglia minima. */}
       <HomeKumanoDelGiorno />
+
+      {/* 📅 PROSSIMI EVENTI — KUMANI Events, una data per serie */}
+      <HomeUpcomingEvents />
 
       {/* 🎟️ SEZIONE: PROGRAMMA BONUS & COUPON */}
       <section className="py-12 sm:py-20 bg-black/20">

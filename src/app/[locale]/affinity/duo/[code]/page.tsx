@@ -4,6 +4,8 @@ import Logo from '@/components/Logo'
 import AffinityDuo from '@/components/affinity/AffinityDuo'
 import { createClient } from '@/lib/supabase/server'
 import { isAffinityArchetype, isAffinityMap, type AffinityArchetype, type AffinityMap } from '@/lib/affinity'
+import { ServiceStopped } from '@/components/ServiceSuspended'
+import { isToolOnline } from '@/lib/toolOnline'
 
 type DuoRow = { first_name: string | null; archetype: string; map: unknown; referral_code: string | null }
 
@@ -11,6 +13,7 @@ type DuoRow = { first_name: string | null; archetype: string; map: unknown; refe
 // anche senza account.
 export default async function AffinityDuoPage({ params }: { params: Promise<{ code: string }> }) {
   const { code } = await params
+  if (!(await isToolOnline('affinity'))) return <ServiceStopped />
   const t = await getTranslations('affinity')
   const supabase = await createClient()
   const {

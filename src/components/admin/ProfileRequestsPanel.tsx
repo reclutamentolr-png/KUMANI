@@ -228,7 +228,19 @@ export default function ProfileRequestsPanel({ onChanged }: { onChanged?: () => 
                               )}
                             </td>
                             <td className="px-3 py-2">
-                              {pending ? (
+                              {pending && field === 'gender' ? (
+                                // Il database accetta solo M / F / O
+                                <select
+                                  value={edited[field] ?? ''}
+                                  onChange={(e) => setValue(item.id, field, e.target.value)}
+                                  className="w-full min-w-[10rem] rounded-lg border border-gray-300 px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--gold)]"
+                                >
+                                  <option value="">—</option>
+                                  <option value="M">M</option>
+                                  <option value="F">F</option>
+                                  <option value="O">Altro (O)</option>
+                                </select>
+                              ) : pending ? (
                                 <input
                                   type={field === 'date_of_birth' ? 'date' : 'text'}
                                   value={edited[field] ?? ''}

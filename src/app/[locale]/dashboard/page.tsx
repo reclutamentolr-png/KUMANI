@@ -26,6 +26,7 @@ import UpcomingAgenda from '@/components/agenda/UpcomingAgenda'
 import { loadAgenda } from '@/lib/agenda-server'
 import { addDays, todayKey } from '@/lib/agenda'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
+import { getPlanPrices } from '@/lib/planPrices'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -97,14 +98,14 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     })
       .from('system_settings')
       .select('key, value')
-      .in('key', ['pro_trial_days', 'pro_price_eur'])
+      .in('key', ['pro_trial_days'])
     const setting = (key: string, fallback: number) =>
       Number(String(planSettings?.find((row) => row.key === key)?.value ?? fallback).replace(/"/g, '')) || fallback
     proTrial = {
       daysLeft: Math.ceil((trialEnd - nowMs) / (1000 * 60 * 60 * 24)),
       totalDays: setting('pro_trial_days', 15),
       endsOn: new Date(trialEnd).toLocaleDateString(locale),
-      price: setting('pro_price_eur', 149),
+      price: (await getPlanPrices()).pro,
     }
   }
   if (isPro && proTools.length > 0) {

@@ -5,6 +5,8 @@ import Link from '@/components/LocalizedLink'
 import ConvivioHome from '@/components/convivio/ConvivioHome'
 import { getLeaderStatus, getMySupplier, listConvivi } from '@/app/actions/convivio'
 import { createClient } from '@/lib/supabase/server'
+import { SuspendedBanner } from '@/components/ServiceSuspended'
+import { isToolOnline } from '@/lib/toolOnline'
 
 // Kordata (Community): acquisti di gruppo proposti dai Kumani.
 export default async function ConvivioPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -18,6 +20,8 @@ export default async function ConvivioPage({ params }: { params: Promise<{ local
   if (!user) redirect(`/${locale}/login`)
 
   const [open, mine, leader, supplier] = await Promise.all([listConvivi('open'), listConvivi('mine'), getLeaderStatus(), getMySupplier()])
+
+  const online = await isToolOnline('convivio')
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -33,6 +37,7 @@ export default async function ConvivioPage({ params }: { params: Promise<{ local
         </div>
       </header>
       <main className="mx-auto max-w-6xl px-4 py-8">
+        {!online && <SuspendedBanner className="mb-6" />}
         <div className="relative mb-8 overflow-hidden rounded-3xl bg-[var(--ink)] p-6 text-white shadow-[0_14px_40px_rgba(23,23,23,0.25)] sm:p-8">
           <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full border border-[var(--gold)]/25 bg-[var(--gold)]/10" />
           <div className="pointer-events-none absolute -bottom-20 right-24 h-40 w-40 rounded-full border border-[var(--gold)]/15" />

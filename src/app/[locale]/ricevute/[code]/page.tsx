@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import type { ReceiptTemplate } from '@/lib/digitalReceipt'
 import DigitalReceiptPublicView from '@/components/DigitalReceiptPublicView'
+import PublicPageOffline from '@/components/PublicPageOffline'
 
 interface PublicReceiptRow {
   code: string
@@ -33,6 +34,9 @@ export default async function DigitalReceiptPublicPage({
     .single<PublicReceiptRow>()
 
   if (error || !data) {
+    // Esiste ma è scaduta (oltre 12 mesi dalla fine del piano del titolare)
+    const { data: status } = await supabase.rpc('public_page_status', { p_kind: 'receipt', p_code: code })
+    if (status === 'offline') return <PublicPageOffline kind="receipt" />
     notFound()
   }
 

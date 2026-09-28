@@ -6,6 +6,8 @@ import TravelHome from '@/components/travel/TravelHome'
 import { listTrips } from '@/app/actions/travel'
 import { todayKey } from '@/lib/agenda'
 import { createClient } from '@/lib/supabase/server'
+import { SuspendedBanner } from '@/components/ServiceSuspended'
+import { isToolOnline } from '@/lib/toolOnline'
 
 // KUMANI Travel: i miei viaggi. Fuori da /marketplace di proposito: chi è
 // stato invitato entra anche senza abbonamento; solo creare un viaggio
@@ -24,6 +26,8 @@ export default async function TravelPage({ params }: { params: Promise<{ locale:
     listTrips(),
     supabase.rpc('can_use_tool', { p_tool: 'travel' }).maybeSingle<{ allowed: boolean }>(),
   ])
+
+  const online = await isToolOnline('travel')
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -44,7 +48,8 @@ export default async function TravelPage({ params }: { params: Promise<{ locale:
           <p className="mt-2 text-lg font-semibold text-[var(--gold)]">{t('tagline')}</p>
           <p className="mt-2 text-[var(--muted)]">{t('intro')}</p>
         </div>
-        <TravelHome trips={trips} canCreate={!!access?.allowed} today={todayKey()} />
+        {!online && <SuspendedBanner className="mb-6" />}
+        <TravelHome trips={trips} canCreate={online && !!access?.allowed} today={todayKey()} />
       </main>
     </div>
   )

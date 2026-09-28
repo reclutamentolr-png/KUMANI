@@ -2,6 +2,7 @@
 
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
+import { isToolOnline } from '@/lib/toolOnline'
 import { checkVat, verifyVies } from '@/lib/vat'
 import { acceptRules, verifyTaxCode } from '@/app/actions/verification'
 import type { ConvivioCard, ConvivioDetail, ConvivioLeaderStatus, ConvivioMessage, MySupplierInfo, SupplierSearchResult } from '@/lib/convivio'
@@ -33,6 +34,7 @@ export async function getLeaderStatus(): Promise<ConvivioLeaderStatus | null> {
 // Diventare capocordata: codice fiscale verificato + accettazione regole.
 // (La verifica completa, anche con documento, è in actions/verification.)
 export async function becomeLeader(taxCode: string, acceptTerms: boolean): Promise<{ success: boolean; error?: string }> {
+  if (!(await isToolOnline('convivio'))) return { success: false, error: 'suspended' }
   if (!acceptTerms) return { success: false, error: 'terms' }
   const verified = await verifyTaxCode(taxCode)
   if (!verified.success) return { success: false, error: verified.error === 'blocked' ? 'saveError' : verified.error }
@@ -64,6 +66,7 @@ export async function createConvivio(input: {
   // Fornitore KUMANI: se è l'utente stesso è un'offerta del fornitore Pro
   supplierId?: string | null
 }): Promise<{ id?: string; error?: string }> {
+  if (!(await isToolOnline('convivio'))) return { error: 'suspended' }
   const result = await rpc<{ id?: string; error?: string }>('convivio_create', {
     p_title: input.title,
     p_description: input.description,
@@ -82,18 +85,22 @@ export async function createConvivio(input: {
 }
 
 export async function updateConvivioInfo(id: string, description: string, pickup: string): Promise<string> {
+  if (!(await isToolOnline('convivio'))) return 'suspended'
   return (await rpc<string>('convivio_update_info', { p_group: id, p_description: description, p_pickup: pickup })) ?? 'saveError'
 }
 
 export async function joinConvivio(id: string, quantity: number, note: string, sharePhone: boolean): Promise<string> {
+  if (!(await isToolOnline('convivio'))) return 'suspended'
   return (await rpc<string>('convivio_join', { p_group: id, p_quantity: quantity, p_note: note, p_share_phone: sharePhone })) ?? 'saveError'
 }
 
 export async function leaveConvivio(id: string): Promise<string> {
+  if (!(await isToolOnline('convivio'))) return 'suspended'
   return (await rpc<string>('convivio_leave', { p_group: id })) ?? 'saveError'
 }
 
 export async function setConvivioStatus(id: string, status: 'ordered' | 'completed' | 'cancelled'): Promise<string> {
+  if (!(await isToolOnline('convivio'))) return 'suspended'
   return (await rpc<string>('convivio_set_status', { p_group: id, p_status: status })) ?? 'saveError'
 }
 
@@ -102,6 +109,7 @@ export async function getConvivioMessages(id: string): Promise<ConvivioMessage[]
 }
 
 export async function sendConvivioMessage(id: string, body: string): Promise<string> {
+  if (!(await isToolOnline('convivio'))) return 'suspended'
   return (await rpc<string>('convivio_send', { p_group: id, p_body: body })) ?? 'saveError'
 }
 
@@ -128,6 +136,7 @@ export async function saveSupplier(input: {
   description: string
   accepts: boolean
 }): Promise<string> {
+  if (!(await isToolOnline('convivio'))) return 'suspended'
   const vat = checkVat(input.vatCountry || 'IT', input.vatNumber)
   if (!vat.ok) {
     return vat.reason === 'checksum' ? 'invalid_vat_checksum' : vat.reason === 'country' ? 'invalid_vat_country' : 'invalid_vat'
@@ -177,14 +186,17 @@ export async function searchSuppliers(query: string): Promise<SupplierSearchResu
 }
 
 export async function supplierRespond(id: string, action: 'accept' | 'decline' | 'counter', price?: number | null, min?: number | null): Promise<string> {
+  if (!(await isToolOnline('convivio'))) return 'suspended'
   return (await rpc<string>('convivio_supplier_respond', { p_group: id, p_action: action, p_price: price ?? null, p_min: min ?? null })) ?? 'saveError'
 }
 
 export async function answerCounter(id: string, accept: boolean): Promise<string> {
+  if (!(await isToolOnline('convivio'))) return 'suspended'
   return (await rpc<string>('convivio_counter_answer', { p_group: id, p_accept: accept })) ?? 'saveError'
 }
 
 export async function reviewConvivio(id: string, target: 'supplier' | 'leader', rating: number, comment: string): Promise<string> {
+  if (!(await isToolOnline('convivio'))) return 'suspended'
   return (await rpc<string>('convivio_review', { p_group: id, p_target: target, p_rating: rating, p_comment: comment })) ?? 'saveError'
 }
 

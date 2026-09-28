@@ -10,7 +10,7 @@ import { Sheet } from '@/components/memolife/MemoLifeForms'
 import { registerToEvent, reportEvent, reviewEvent, unregisterFromEvent } from '@/app/actions/events'
 import { eventPassUrl, formatEventDate, type EventDetail } from '@/lib/events'
 
-const REGISTER_ERRORS = ['full', 'age', 'started', 'organizer', 'not_available', 'not_logged', 'not_allowed', 'invalid']
+const REGISTER_ERRORS = ['full', 'age', 'started', 'organizer', 'not_available', 'not_logged', 'not_allowed', 'invalid', 'suspended']
 
 const goldButton =
   'flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3.5 font-bold text-[var(--ink)] disabled:opacity-60'
@@ -88,7 +88,7 @@ export default function EventActions({
     if (result === 'ok') {
       setJustWaitlisted(false)
       router.refresh()
-    } else setError(t(result === 'not_allowed' ? 'error_unregisterClosed' : 'error_saveError'))
+    } else setError(t(result === 'not_allowed' ? 'error_unregisterClosed' : result === 'suspended' ? 'error_suspended' : 'error_saveError'))
   }
 
   const saveReview = async () => {

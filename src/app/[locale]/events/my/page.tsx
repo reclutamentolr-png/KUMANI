@@ -6,6 +6,8 @@ import OrganizerHome from '@/components/events/OrganizerHome'
 import { getOrganizerStatus, listMyFees, listMyOrganized, listMyPasses } from '@/app/actions/events'
 import { markEventFeesPaid } from '@/lib/eventFees'
 import { createClient } from '@/lib/supabase/server'
+import { SuspendedBanner } from '@/components/ServiceSuspended'
+import { isToolOnline } from '@/lib/toolOnline'
 
 // KUMANI Events: area personale. Organizzatore (verifica, commissioni, i miei
 // eventi, iscritti e check-in) e partecipante (i miei pass).
@@ -41,6 +43,8 @@ export default async function EventsMyPage({
 
   const [status, organized, passes, fees] = await Promise.all([getOrganizerStatus(), listMyOrganized(), listMyPasses(), listMyFees()])
 
+  const online = await isToolOnline('events')
+
   return (
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
@@ -59,6 +63,7 @@ export default async function EventsMyPage({
           <h1 className="text-3xl font-bold text-[var(--ink)] sm:text-4xl">{t('title')}</h1>
           <p className="mt-2 text-[var(--muted)]">{t('intro')}</p>
         </div>
+        {!online && <SuspendedBanner className="mb-6" />}
         <OrganizerHome
           status={status}
           organized={organized}

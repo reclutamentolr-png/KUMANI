@@ -7,6 +7,7 @@ import MatrixTree from '@/components/MatrixTree'
 import {
   adminUpdateProfile,
   adminSaveSystemSettings,
+  adminGetPlanPrices,
   adminSetToolEnabled,
   adminSetUserRole,
   adminGetUserRole,
@@ -252,8 +253,14 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
     affinity_intros_per_week: 3,
     listing_feature_cost_7d: 20,
     listing_feature_cost_15d: 35,
-    subscription_price_eur: 49
+    menu_ai_daily_runs: 5,
+    veritas_write_seconds: 90,
+    veritas_vote_seconds: 45,
+    veritas_reveal_seconds: 15
   })
+  // Valori letti all'apertura: si salvano solo i campi cambiati
+  const [savedSettings, setSavedSettings] = useState<Record<string, any>>({})
+  const [planPrices, setPlanPrices] = useState<{ base: number; pro: number; source: 'stripe' | 'settings' } | null>(null)
   const [savingSettings, setSavingSettings] = useState(false)
   const [houseAccount, setHouseAccount] = useState<any>(null)
   const [houseEmail, setHouseEmail] = useState('')
@@ -760,6 +767,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
 
   const loadSystemSettings = async () => {
     loadHouseAccount()
+    adminGetPlanPrices().then(setPlanPrices)
     const { data } = await supabase.from('system_settings').select('key, value')
     if (data) {
       const settingsObj: Record<string, any> = { ...systemSettings }
@@ -771,14 +779,21 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
         }
       })
       setSystemSettings(settingsObj)
+      setSavedSettings(settingsObj)
     }
   }
 
   const saveSystemSettings = async () => {
     setSavingSettings(true)
     try {
-      const result = await adminSaveSystemSettings(systemSettings)
-      if (result.success) alert('✅ Impostazioni salvate con successo!')
+      const changed = Object.fromEntries(
+        Object.entries(systemSettings).filter(([key, value]) => JSON.stringify(value) !== JSON.stringify(savedSettings[key]))
+      )
+      const result = await adminSaveSystemSettings(changed)
+      if (result.success) {
+        setSavedSettings({ ...savedSettings, ...changed })
+        alert(Object.keys(changed).length ? '✅ Impostazioni salvate con successo!' : 'Nessuna modifica da salvare.')
+      }
       else alert('❌ Errore durante il salvataggio: ' + (result.error || ''))
     } catch (error) {
       alert('❌ Errore durante il salvataggio')
@@ -925,6 +940,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
         referral_code: data.referral_code || '',
         daily_points: data.daily_points || 0,
         subscription_status: data.subscription_status || 'free',
+        subscription_plan: data.subscription_plan === 'pro' ? 'pro' : 'base',
         subscription_expires_at: data.subscription_expires_at ? data.subscription_expires_at.slice(0, 10) : '',
         is_admin: data.is_admin || false
       })
@@ -2505,21 +2521,59 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
             <BadgeCheck className="w-4 h-4" />
-            Prezzo Abbonamento
+            Prezzi degli abbonamenti
           </label>
           <p className="text-xs text-gray-500 mb-3">
-            Valore in euro di un abbonamento annuale — usato per calcolare il valore reale di voucher e per il
-            riepilogo finanziario in Amministrazione. Non cambia il prezzo su Stripe: quello si aggiorna a parte.
+            Letti direttamente da Stripe (i prezzi usati dal checkout): sono quelli mostrati sul sito e usati per il
+            riepilogo finanziario. Per cambiarli si modifica il prezzo su Stripe; il sito si aggiorna entro un&apos;ora.
           </p>
-          <div className="flex items-center gap-2 max-w-xs">
+          {planPrices ? (
+            <div className="flex flex-wrap gap-3 text-sm">
+              <span className="rounded-lg bg-gray-100 px-3 py-2 font-semibold text-gray-800">Base: {planPrices.base} € / anno</span>
+              <span className="rounded-lg bg-gray-100 px-3 py-2 font-semibold text-gray-800">Pro: {planPrices.pro} € / anno</span>
+              {planPrices.source !== 'stripe' && (
+                <span className="rounded-lg bg-amber-50 px-3 py-2 text-amber-800">Stripe non raggiungibile: valori di riserva salvati</span>
+              )}
+            </div>
+          ) : (
+            <p className="text-sm text-gray-400">Caricamento…</p>
+          )}
+        </div>
+
+        <div className="rounded-xl border border-gray-200 p-4 space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Traduzioni AI del Menù al giorno (per ristorante)</label>
             <input
               type="number"
               min="0"
-              value={systemSettings.subscription_price_eur ?? 49}
-              onChange={(e) => setSystemSettings({ ...systemSettings, subscription_price_eur: parseInt(e.target.value, 10) || 0 })}
-              className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+              max="100"
+              value={systemSettings.menu_ai_daily_runs ?? 5}
+              onChange={(e) => setSystemSettings({ ...systemSettings, menu_ai_daily_runs: Math.max(0, parseInt(e.target.value, 10) || 0) })}
+              className="w-full max-w-xs p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
             />
-            <span className="text-sm text-gray-500 whitespace-nowrap">€ / anno</span>
+            <p className="text-xs text-gray-500 mt-1">Ogni traduzione ha un piccolo costo sulla chiave AI del progetto.</p>
+          </div>
+          <div>
+            <p className="block text-sm font-medium text-gray-700 mb-2">Veritas: durata delle fasi (secondi)</p>
+            <div className="grid grid-cols-3 gap-3 max-w-md">
+              {([
+                ['veritas_write_seconds', 'Scrittura', 90],
+                ['veritas_vote_seconds', 'Voto', 45],
+                ['veritas_reveal_seconds', 'Rivelazione', 15],
+              ] as const).map(([key, labelText, fallback]) => (
+                <label key={key} className="text-xs text-gray-600">
+                  {labelText}
+                  <input
+                    type="number"
+                    min="5"
+                    max="600"
+                    value={systemSettings[key] ?? fallback}
+                    onChange={(e) => setSystemSettings({ ...systemSettings, [key]: Math.max(5, parseInt(e.target.value, 10) || 5) })}
+                    className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                  />
+                </label>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -2838,6 +2892,17 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
                 <option value="active">Active</option>
                 <option value="expired">Expired</option>
               </select></div>
+            <div><label className="block text-sm font-medium text-gray-700 mb-1">Piano</label>
+              <select
+                value={profileForm.subscription_plan || 'base'}
+                onChange={(e) => setProfileForm({ ...profileForm, subscription_plan: e.target.value })}
+                className="w-full p-2 border rounded-lg"
+              >
+                <option value="base">Base</option>
+                <option value="pro">Pro</option>
+              </select>
+              <p className="text-xs text-gray-400 mt-1">Vale quando l&apos;abbonamento è attivo (strumenti Base o anche Pro)</p>
+            </div>
             <div><label className="block text-sm font-medium text-gray-700 mb-1">Scadenza abbonamento</label>
               <input
                 type="date"
@@ -2903,7 +2968,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
         {activeSection === 'overview' && renderOverview()}
         {activeSection === 'users' && renderUsers()}
         {activeSection === 'profileRequests' && <ProfileRequestsPanel onChanged={loadBadges} />}
-        {activeSection === 'accountDeletions' && <AccountDeletionsPanel onChanged={loadBadges} />}
+        {activeSection === 'accountDeletions' && <AccountDeletionsPanel onChanged={loadBadges} canDelete={hasPermission(permissions, 'users.delete')} />}
         {activeSection === 'matrix' && renderMatrix()}
         {activeSection === 'marketplace' && renderMarketplace()}
         {activeSection === 'coupons' && renderCoupons()}
@@ -2916,9 +2981,15 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
         {activeSection === 'kuManagement' && <KuManagementPanel />}
         {activeSection === 'affinity' && <AffinityReportsPanel />}
         {activeSection === 'convivio' && <ConvivioReportsPanel locale={locale} />}
-        {activeSection === 'events' && <EventsAdminPanel locale={locale} />}
+        {activeSection === 'events' && (
+          <EventsAdminPanel
+            locale={locale}
+            canReadSettings={hasPermission(permissions, 'settings.read')}
+            canWrite={hasPermission(permissions, 'listings.write')}
+          />
+        )}
         {activeSection === 'identity' && <IdentityVerificationsPanel />}
-        {activeSection === 'convivioFees' && <ConvivioFeesPanel locale={locale} />}
+        {activeSection === 'convivioFees' && <ConvivioFeesPanel locale={locale} canReadSettings={hasPermission(permissions, 'settings.read')} />}
         {activeSection === 'contactMessages' && <ContactMessagesPanel />}
         {activeSection === 'settings' && renderSettings()}
       </div>

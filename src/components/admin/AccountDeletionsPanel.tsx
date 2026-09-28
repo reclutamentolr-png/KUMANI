@@ -39,7 +39,7 @@ function planLabel(user: NonNullable<AdminDeletionRequest['user']>) {
 // utenti dal profilo. L'esecuzione è irreversibile: abbonamenti Stripe
 // annullati, file e contenuti personali cancellati, profilo anonimizzato e
 // accesso chiuso. Va completata entro 30 giorni dalla richiesta.
-export default function AccountDeletionsPanel({ onChanged }: { onChanged?: () => void }) {
+export default function AccountDeletionsPanel({ onChanged, canDelete = true }: { onChanged?: () => void; canDelete?: boolean }) {
   const [tab, setTab] = useState<Tab>('pending')
   const [items, setItems] = useState<AdminDeletionRequest[] | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -231,7 +231,8 @@ export default function AccountDeletionsPanel({ onChanged }: { onChanged?: () =>
                     <div className="flex flex-wrap gap-2">
                       <button
                         type="button"
-                        disabled={busy || !item.user_id}
+                        disabled={busy || !item.user_id || !canDelete}
+                        title={canDelete ? undefined : 'Serve il permesso "users.delete" (Super Admin)'}
                         onClick={() => execute(item)}
                         className="flex items-center gap-1 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-red-700 disabled:opacity-50"
                       >

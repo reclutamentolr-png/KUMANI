@@ -2,15 +2,17 @@ import { cache } from 'react'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getLocale, getTranslations } from 'next-intl/server'
-import { ArrowLeft, Ban, CalendarDays, CalendarHeart, Clock, Euro, Hourglass, Languages, Lock, MapPin, MessageSquareQuote, ShieldCheck, TriangleAlert, UserRound, Users, Video } from 'lucide-react'
+import { ArrowLeft, Ban, CalendarDays, CalendarHeart, ChevronRight, Clock, Euro, Hourglass, Languages, Lock, MapPin, MessageSquareQuote, Repeat, ShieldCheck, Stamp, TriangleAlert, UserRound, Users, Video } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import EventActions from '@/components/events/EventActions'
 import { EventFlags, LevelBadge, PriceBadge, RatingBadge, SpotsBadge, Stars, formatEventPrice, formatRating } from '@/components/events/EventBadges'
 import ViewerTime from '@/components/events/ViewerTime'
 import { getEvent } from '@/app/actions/events'
-import { EVENT_TYPE_EMOJI, countryName, formatEventDate, languageName, utcToZoned } from '@/lib/events'
+import { EVENT_TYPE_EMOJI, countryName, formatEventDate, languageName, stampKey, utcToZoned } from '@/lib/events'
 import { SITE_URL } from '@/lib/siteUrl'
 import { createClient } from '@/lib/supabase/server'
+import { SuspendedBanner } from '@/components/ServiceSuspended'
+import { isToolOnline } from '@/lib/toolOnline'
 
 type Props = {
   params: Promise<{ id: string }>
@@ -47,6 +49,7 @@ export default async function EventPage({ params, searchParams }: Props) {
     },
   ] = await Promise.all([loadEvent(id), supabase.auth.getUser()])
   if (!event) notFound()
+  const online = await isToolOnline('events')
 
   let myReferral: string | null = null
   if (user) {
@@ -76,6 +79,7 @@ export default async function EventPage({ params, searchParams }: Props) {
   const full = event.people >= event.capacity
   const waitlistCount = Number(event.waitlist ?? 0)
   const reviewDate = (iso: string) => new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(iso))
+  const seriesDates = event.series ?? []
   const unlocked = !!event.address || !!event.map_link || !!event.online_link || event.is_organizer || !!event.my_pass
 
   return (
@@ -93,6 +97,7 @@ export default async function EventPage({ params, searchParams }: Props) {
       </header>
 
       <main className="mx-auto max-w-4xl space-y-5 px-4 py-6 sm:py-8">
+        {!online && <SuspendedBanner />}
         {/* Stato */}
         {event.status === 'pending' && event.is_organizer && (
           <Banner tone="amber" icon={<Hourglass className="h-5 w-5 shrink-0" />} title={t('statusPendingTitle')} text={t('statusPendingText')} />
@@ -201,6 +206,33 @@ export default async function EventPage({ params, searchParams }: Props) {
               <p className="whitespace-pre-line break-words text-sm leading-6 text-[var(--ink-soft)]">{event.description}</p>
             </section>
 
+            {/* Altre date della stessa serie */}
+            {seriesDates.length > 0 && (
+              <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+                <h2 className="flex items-center gap-2 font-bold text-[var(--ink)]">
+                  <Repeat className="h-5 w-5 text-[var(--gold)]" /> {t('seriesTitle')}
+                </h2>
+                <p className="mt-0.5 text-xs text-[var(--muted)]">{t('seriesSubtitle')}</p>
+                <ul className="mt-3 divide-y divide-gray-100">
+                  {seriesDates.map((date) => (
+                    <li key={date.id}>
+                      <Link href={`/events/${date.id}`} className="flex items-center justify-between gap-3 py-2.5 hover:text-[var(--gold)]">
+                        <span className="text-sm font-semibold text-[var(--ink)] first-letter:uppercase">{formatEventDate(date.starts_at, event.timezone, locale)}</span>
+                        <span className="flex shrink-0 items-center gap-1 text-xs text-[var(--muted)]">
+                          {date.status !== 'published'
+                            ? t(`seriesStatus_${date.status}`)
+                            : date.people >= date.capacity
+                              ? t('full')
+                              : t('spotsLeft', { count: date.capacity - date.people })}
+                          <ChevronRight className="h-4 w-4" />
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
             {/* Organizzatore: livello e reputazione */}
             <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
               <h2 className="mb-3 font-bold text-[var(--ink)]">{t('organizerBoxTitle')}</h2>
@@ -256,6 +288,27 @@ export default async function EventPage({ params, searchParams }: Props) {
           <div className="space-y-5">
             {(event.status === 'published' || event.is_organizer) && (
               <EventActions event={event} loggedIn={!!user} sponsor={sponsor} siteUrl={SITE_URL} myReferral={myReferral} started={started} />
+            )}
+
+            {/* Timbro Kumi Card per chi entra */}
+            {event.fidelity_stamp && event.fidelity_business && (
+              <section className="rounded-2xl border border-[var(--gold)]/30 bg-white p-5 shadow-sm">
+                <h2 className="flex items-center gap-2 font-bold text-[var(--ink)]">
+                  <Stamp className="h-5 w-5 text-[var(--gold)]" /> {t('kumiCardTitle')}
+                </h2>
+                <p className="mt-2 text-sm text-[var(--ink-soft)]">{t('kumiCardText', { business: event.fidelity_business })}</p>
+                {event.my_stamp_status && (
+                  <p className="mt-2 text-sm font-semibold text-[var(--ink)]">{t(stampKey(event.my_stamp_status))}</p>
+                )}
+                {event.my_card_token && (
+                  <Link
+                    href={`/f/${event.my_card_token}`}
+                    className="mt-3 flex items-center justify-center gap-2 rounded-xl bg-[var(--ink)] px-4 py-2.5 text-sm font-bold text-white hover:bg-[var(--ink-soft)]"
+                  >
+                    <Stamp className="h-4 w-4 text-[var(--gold-bright)]" /> {t('kumiCardOpen')}
+                  </Link>
+                )}
+              </section>
             )}
 
             {/* Codice di condotta */}

@@ -45,7 +45,9 @@ export default function TravelBudget({
     value: expenses.filter((e) => e.category === c).reduce((sum, e) => sum + Math.round(e.amount * e.rate_to_base * 100), 0),
   })).filter((x) => x.value > 0)
 
-  const canSettle = (from: string, to: string) => detail.is_owner || from === me || to === me
+  // Il rimborso lo conferma chi riceve i soldi (o l'organizzatore): chi deve
+  // pagare non può azzerare da solo il proprio debito.
+  const canSettle = (to: string) => detail.is_owner || to === me
   const canManage = (createdBy: string) => detail.is_owner || createdBy === myUserId
 
   const settle = async (from: string, to: string, amount: number) => {
@@ -117,7 +119,7 @@ export default function TravelBudget({
                 <ArrowRight className="h-4 w-4 text-[var(--muted)]" />
                 <span className={`font-semibold ${tr.to === me ? 'text-emerald-700' : 'text-[var(--ink)]'}`}>{name(tr.to)}</span>
                 <span className="ml-auto font-bold text-[var(--ink)]">{fromCents(tr.amount)}</span>
-                {canSettle(tr.from, tr.to) && (
+                {canSettle(tr.to) && (
                   <button
                     type="button"
                     disabled={busy !== null}
@@ -139,7 +141,7 @@ export default function TravelBudget({
                 <li key={s.id} className="flex items-center gap-2 text-[var(--muted)]">
                   <Check className="h-4 w-4 text-emerald-600" />
                   {t('settlementLine', { from: name(s.from_member), to: name(s.to_member), amount: money(s.amount) })}
-                  {canManage(s.created_by) && (
+                  {(canManage(s.created_by) || s.to_member === me) && (
                     <button type="button" onClick={() => undoSettlement(s.id)} disabled={busy !== null} className="ml-auto rounded p-1 text-gray-400 hover:bg-gray-100" aria-label={t('undo')}>
                       <Undo2 className="h-4 w-4" />
                     </button>

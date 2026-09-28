@@ -16,6 +16,7 @@ import {
   MapPin,
   MessageCircle,
   Plus,
+  RefreshCw,
   Settings,
   Trash2,
   UserPlus,
@@ -31,6 +32,7 @@ import {
   deleteTrip,
   getTripBundle,
   removeTripMember,
+  rotateInviteCode,
   updateChecklistItem,
   updateTrip,
   type TripBundle,
@@ -129,7 +131,8 @@ export default function TravelWorkspace({
   const dates = formatTripDates(detail, locale)
   const memberName = (id: string | null) => detail.members.find((m) => m.id === id)?.name ?? null
   const myMemberId = detail.my_member_id
-  const money = (value: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(value)
+  // Costi delle attività nella valuta del viaggio (come nel budget)
+  const money = (value: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: detail.base_currency || 'EUR' }).format(value)
 
   // Invito: link con il codice invito KUMANI di chi condivide
   const inviteUrl = `${siteUrl}/viaggi/invito/${detail.invite_code}${myReferral ? `?ref=${encodeURIComponent(myReferral)}` : ''}`
@@ -514,6 +517,20 @@ export default function TravelWorkspace({
             {copied ? <Check className="h-5 w-5 text-emerald-600" /> : <Copy className="h-5 w-5" />} {copied ? t('copied') : t('copyLink')}
           </button>
           <p className="mt-3 break-all text-center text-xs text-[var(--muted)]">{inviteUrl}</p>
+          {detail.is_owner && (
+            <button
+              type="button"
+              onClick={async () => {
+                if (!confirm(t('rotateCodeConfirm'))) return
+                const result = await rotateInviteCode(detail.id)
+                if (!result.success) alert(t(`error_${result.error}`))
+                await refresh()
+              }}
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl py-2 text-sm font-semibold text-[var(--muted)] hover:text-[var(--ink)]"
+            >
+              <RefreshCw className="h-4 w-4" /> {t('rotateCode')}
+            </button>
+          )}
         </Sheet>
       )}
 

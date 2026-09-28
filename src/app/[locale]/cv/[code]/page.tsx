@@ -5,6 +5,7 @@ import Link from '@/components/LocalizedLink'
 import { Crown } from 'lucide-react'
 import CvTemplateRenderer from '@/components/cv/CvTemplateRenderer'
 import type { CvTemplate, CvLink, CvExperience, CvEducation, CvSkill, CvLanguage, CvCertification } from '@/lib/cv'
+import PublicPageOffline from '@/components/PublicPageOffline'
 
 interface PublicCvRow {
   code: string
@@ -35,6 +36,9 @@ export default async function CvPublicPage({ params }: { params: Promise<{ code:
   const { data, error } = await supabase.rpc('get_cv_by_code', { p_code: code }).single<PublicCvRow>()
 
   if (error || !data) {
+    // Esiste ma il titolare non ha più il piano: "non disponibile"
+    const { data: status } = await supabase.rpc('public_page_status', { p_kind: 'cv', p_code: code })
+    if (status === 'offline') return <PublicPageOffline kind="profile" />
     notFound()
   }
 

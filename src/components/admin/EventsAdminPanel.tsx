@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { Ban, Check, ExternalLink, Flag, LoaderCircle, Percent, Star, Trash2, X } from 'lucide-react'
+import { Ban, Check, ExternalLink, Flag, LoaderCircle, Percent, RotateCcw, Star, Trash2, X } from 'lucide-react'
 import {
   adminBanEvent,
   adminDeleteEventReview,
@@ -13,6 +13,7 @@ import {
   adminResolveEventReport,
   adminReviewEvent,
   adminSetEventsFeePercent,
+  adminUnbanEvent,
   adminWaiveEventFee,
 } from '@/app/actions/admin'
 
@@ -21,7 +22,7 @@ type AdminEvent = Awaited<ReturnType<typeof adminListEvents>>['events'][number] 
 type AdminReport = Awaited<ReturnType<typeof adminListEventReports>>['reports'][number]
 type AdminFee = Awaited<ReturnType<typeof adminListEventFees>>['fees'][number]
 type AdminReview = Awaited<ReturnType<typeof adminListEventReviews>>['reviews'][number]
-type Tab = 'pending' | 'published' | 'reports' | 'reviews' | 'fees'
+type Tab = 'pending' | 'published' | 'closed' | 'reports' | 'reviews' | 'fees'
 
 const name = (p: Person) => (p ? `${p.first_name ?? ''} ${p.last_name ?? ''}`.trim() || p.email || '—' : '—')
 const money = (v: number) => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(Number(v))
@@ -30,7 +31,16 @@ const when = (iso: string, tz = 'Europe/Rome') =>
 
 // Admin → Eventi: approvazione dei primi eventi dei nuovi organizzatori,
 // eventi pubblicati (blocco), segnalazioni e commissioni KUMANI.
-export default function EventsAdminPanel({ locale }: { locale: string }) {
+export default function EventsAdminPanel({
+  locale,
+  canReadSettings = true,
+  canWrite = true,
+}: {
+  locale: string
+  // Percentuali: servono i permessi delle Impostazioni
+  canReadSettings?: boolean
+  canWrite?: boolean
+}) {
   const [tab, setTab] = useState<Tab>('pending')
   const [events, setEvents] = useState<AdminEvent[] | null>(null)
   const [reports, setReports] = useState<AdminReport[] | null>(null)
@@ -39,11 +49,12 @@ export default function EventsAdminPanel({ locale }: { locale: string }) {
   const [error, setError] = useState<string | null>(null)
   const [working, setWorking] = useState<string | null>(null)
   const [percent, setPercent] = useState('')
+  const [superPercent, setSuperPercent] = useState('')
   const [percentSaved, setPercentSaved] = useState<string | null>(null)
 
   const load = useCallback(async (current: Tab) => {
     setError(null)
-    if (current === 'pending' || current === 'published') {
+    if (current === 'pending' || current === 'published' || current === 'closed') {
       setEvents(null)
       const result = await adminListEvents(current)
       setEvents(result.events as AdminEvent[])
@@ -73,16 +84,21 @@ export default function EventsAdminPanel({ locale }: { locale: string }) {
   }, [load, tab])
 
   useEffect(() => {
-    adminGetEventsFeePercent().then((result) => {
+    if (!canReadSettings) return
+    adminGetEventsFeePercent('standard').then((result) => {
       if (result.percent !== null) setPercent(String(result.percent))
     })
-  }, [])
+    adminGetEventsFeePercent('super').then((result) => {
+      if (result.percent !== null) setSuperPercent(String(result.percent))
+    })
+  }, [canReadSettings])
 
-  const run = async (id: string, action: () => Promise<{ success: boolean; error?: string }>) => {
+  const run = async (id: string, action: () => Promise<{ success: boolean; error?: string; warning?: string }>) => {
     setWorking(id)
     const result = await action()
     setWorking(null)
     if (!result.success) alert('Errore: ' + (result.error ?? ''))
+    else if (result.warning) alert(result.warning)
     await load(tab)
   }
 
@@ -92,22 +108,27 @@ export default function EventsAdminPanel({ locale }: { locale: string }) {
     run(event.id, () => adminReviewEvent(event.id, approve, note ?? ''))
   }
 
-  const ban = (id: string, title: string) => {
-    const note = prompt(`Bloccare "${title}"? Scrivi il motivo (lo vede l'organizzatore):`)
+  const ban = (event: Pick<AdminEvent, 'id' | 'title' | 'series_id'>) => {
+    const note = prompt(`Bloccare "${event.title}"? Scrivi il motivo (lo vede l'organizzatore):`)
     if (note === null) return
-    run(id, () => adminBanEvent(id, note))
+    const wholeSeries = !!event.series_id && confirm('È una serie di date: bloccare anche tutte le date successive? (Annulla = solo questa data)')
+    run(event.id, () => adminBanEvent(event.id, note, wholeSeries))
   }
 
   const savePercent = async (e: React.FormEvent) => {
     e.preventDefault()
-    const value = Number(percent.replace(',', '.'))
-    const result = await adminSetEventsFeePercent(value)
-    setPercentSaved(result.success ? 'Salvato' : `Errore: ${result.error}`)
+    const [standard, reduced] = await Promise.all([
+      adminSetEventsFeePercent(Number(percent.replace(',', '.')), 'standard'),
+      adminSetEventsFeePercent(Number(superPercent.replace(',', '.')), 'super'),
+    ])
+    const failed = [standard, reduced].find((r) => !r.success)
+    setPercentSaved(failed ? `Errore: ${failed.error}` : 'Salvato')
   }
 
   const tabs: { key: Tab; label: string }[] = [
     { key: 'pending', label: 'Da approvare' },
     { key: 'published', label: 'Pubblicati' },
+    { key: 'closed', label: 'Rifiutati / bloccati' },
     { key: 'reports', label: 'Segnalazioni' },
     { key: 'reviews', label: 'Recensioni' },
     { key: 'fees', label: 'Commissioni' },
@@ -135,6 +156,7 @@ export default function EventsAdminPanel({ locale }: { locale: string }) {
         </p>
       </div>
 
+      {canReadSettings && (
       <form onSubmit={savePercent} className="flex flex-wrap items-end gap-3 rounded-xl border border-gray-200 bg-white p-4">
         <div>
           <label className="mb-1 block text-sm font-semibold text-gray-700">Commissione KUMANI (%)</label>
@@ -151,12 +173,28 @@ export default function EventsAdminPanel({ locale }: { locale: string }) {
             <Percent className="h-4 w-4 text-gray-400" />
           </div>
         </div>
+        <div>
+          <label className="mb-1 block text-sm font-semibold text-gray-700">Super Organizer (%)</label>
+          <div className="flex items-center gap-2">
+            <input
+              value={superPercent}
+              onChange={(e) => {
+                setSuperPercent(e.target.value.replace(/[^0-9.,]/g, ''))
+                setPercentSaved(null)
+              }}
+              inputMode="decimal"
+              className="w-24 rounded-lg border border-gray-300 px-3 py-2"
+            />
+            <Percent className="h-4 w-4 text-gray-400" />
+          </div>
+        </div>
         <button type="submit" className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-semibold text-white">
           Salva
         </button>
         <p className="text-xs text-gray-500">Da 0 a 30. Vale per i nuovi eventi (ogni evento conserva la percentuale con cui è stato creato).</p>
         {percentSaved && <p className="w-full text-sm font-semibold text-gray-700">{percentSaved}</p>}
       </form>
+      )}
 
       <div className="flex flex-wrap gap-2">
         {tabs.map((t) => (
@@ -173,11 +211,11 @@ export default function EventsAdminPanel({ locale }: { locale: string }) {
 
       {error && <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
 
-      {(tab === 'pending' || tab === 'published') &&
+      {(tab === 'pending' || tab === 'published' || tab === 'closed') &&
         (events === null
           ? spinner
           : events.length === 0
-            ? empty(tab === 'pending' ? 'Nessun evento da approvare.' : 'Nessun evento pubblicato.')
+            ? empty(tab === 'pending' ? 'Nessun evento da approvare.' : tab === 'closed' ? 'Nessun evento rifiutato, bloccato o annullato.' : 'Nessun evento pubblicato.')
             : (
               <div className="space-y-3">
                 {events.map((event) => (
@@ -193,13 +231,45 @@ export default function EventsAdminPanel({ locale }: { locale: string }) {
                         <p className="text-xs text-gray-500">
                           Organizzatore {name(event.organizer)} · {event.people}/{event.capacity} iscritti · {Number(event.price) > 0 ? money(event.price) : 'gratis'}
                           {event.is_18plus ? ' · 18+' : ''}
+                          {event.fidelity_stamp ? ' · timbro Kumi Card' : ''}
+                          {event.kids_friendly ? ' · adatto ai bambini' : ''}
                         </p>
+                        {(event.venue_name || event.address) && (
+                          <p className="text-xs text-gray-700">
+                            Luogo: {[event.venue_name, event.address].filter(Boolean).join(' · ')}
+                          </p>
+                        )}
+                        <p className="flex flex-wrap gap-3 text-xs">
+                          {event.map_link && (
+                            <a href={event.map_link} target="_blank" rel="noopener noreferrer" className="font-semibold text-amber-700 hover:underline">
+                              Mappa
+                            </a>
+                          )}
+                          {event.online_link && (
+                            <a href={event.online_link} target="_blank" rel="noopener noreferrer nofollow" className="font-semibold text-amber-700 hover:underline">
+                              Link online: {event.online_link}
+                            </a>
+                          )}
+                          {event.ends_at && <span className="text-gray-500">Fine: {when(event.ends_at, event.timezone)}</span>}
+                          {(event.languages ?? []).length > 0 && <span className="text-gray-500">Lingue: {(event.languages ?? []).join(', ')}</span>}
+                        </p>
+                        {tab === 'closed' && (
+                          <p className="text-xs font-semibold text-gray-700">
+                            Stato: {event.status === 'banned' ? 'bloccato' : event.status === 'rejected' ? 'rifiutato' : 'annullato'}
+                            {event.review_note ? ` · Nota: ${event.review_note}` : ''}
+                          </p>
+                        )}
+                        {event.series_id && tab === 'pending' && (
+                          <p className="text-xs font-semibold text-amber-700">
+                            Date ripetute: approvando o rifiutando questa data, la decisione vale per tutte le date della serie in attesa.
+                          </p>
+                        )}
                       </div>
                       <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-600">{event.type}</span>
                     </div>
                     <p className="mt-3 max-h-40 overflow-y-auto whitespace-pre-wrap rounded-lg bg-gray-50 px-3 py-2 text-sm text-gray-800">{event.description}</p>
                     <div className="mt-3 flex flex-wrap gap-2">
-                      {tab === 'pending' && (
+                      {canWrite && tab === 'pending' && (
                         <>
                           <button
                             type="button"
@@ -219,14 +289,26 @@ export default function EventsAdminPanel({ locale }: { locale: string }) {
                           </button>
                         </>
                       )}
-                      <button
-                        type="button"
-                        disabled={working === event.id}
-                        onClick={() => ban(event.id, event.title)}
-                        className="flex items-center gap-1 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-red-700 disabled:opacity-50"
-                      >
-                        <Ban className="h-3.5 w-3.5" /> Blocca
-                      </button>
+                      {canWrite && tab !== 'closed' && (
+                        <button
+                          type="button"
+                          disabled={working === event.id}
+                          onClick={() => ban(event)}
+                          className="flex items-center gap-1 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-red-700 disabled:opacity-50"
+                        >
+                          <Ban className="h-3.5 w-3.5" /> Blocca
+                        </button>
+                      )}
+                      {canWrite && tab === 'closed' && event.status === 'banned' && (
+                        <button
+                          type="button"
+                          disabled={working === event.id}
+                          onClick={() => confirm(`Sbloccare e ripubblicare "${event.title}"?`) && run(event.id, () => adminUnbanEvent(event.id))}
+                          className="flex items-center gap-1 rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                        >
+                          <RotateCcw className="h-3.5 w-3.5" /> Sblocca
+                        </button>
+                      )}
                     </div>
                   </div>
                 ))}

@@ -2,12 +2,14 @@
 
 import { useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { LoaderCircle, Lock, ShieldCheck } from 'lucide-react'
+import { LoaderCircle, Lock, Repeat, ShieldCheck, Stamp } from 'lucide-react'
 import { saveEvent, type EventFormInput } from '@/app/actions/events'
 import {
   EVENT_COUNTRIES,
   EVENT_LANGUAGES,
+  EVENT_MAX_SERIES_DATES,
   EVENT_MODES,
+  EVENT_REPEATS,
   EVENT_TIMEZONES,
   EVENT_TYPES,
   EVENT_TYPE_EMOJI,
@@ -15,6 +17,7 @@ import {
   languageName,
   utcToZoned,
   type OrganizedEvent,
+  type OrganizerStatus,
 } from '@/lib/events'
 
 const input = 'w-full rounded-xl border border-gray-300 px-3 py-2.5 text-[15px] focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30'
@@ -60,10 +63,14 @@ function fromEvent(event: OrganizedEvent): EventFormInput {
     is18plus: event.is_18plus,
     kidsFriendly: event.kids_friendly,
     rulesAccepted: false,
+    repeat: 'none',
+    repeatCount: '4',
+    fidelityStamp: !!event.fidelity_stamp,
+    applyToSeries: false,
   }
 }
 
-function emptyForm(locale: string): EventFormInput {
+function emptyForm(locale: string, hasCard: boolean): EventFormInput {
   return {
     title: '',
     description: '',
@@ -86,6 +93,10 @@ function emptyForm(locale: string): EventFormInput {
     is18plus: false,
     kidsFriendly: false,
     rulesAccepted: false,
+    repeat: 'none',
+    repeatCount: '4',
+    fidelityStamp: hasCard,
+    applyToSeries: false,
   }
 }
 
@@ -96,6 +107,7 @@ export default function EventForm({
   initial,
   maxCapacity,
   feePercent,
+  fidelityCard,
   onSaved,
 }: {
   event?: OrganizedEvent | null
@@ -103,12 +115,14 @@ export default function EventForm({
   initial?: Partial<Pick<EventFormInput, 'address' | 'mapLink' | 'onlineLink'>>
   maxCapacity: number
   feePercent: number
-  onSaved: (result: { id: string; status: string }) => void
+  // Kumi Card attiva dell'organizzatore: abilita il timbro a chi entra
+  fidelityCard?: OrganizerStatus['fidelity_card']
+  onSaved: (result: { id: string; status: string; dates?: number }) => void
 }) {
   const t = useTranslations('eventsOrganizer')
   const te = useTranslations('events')
   const locale = useLocale()
-  const [form, setForm] = useState<EventFormInput>(() => (event ? { ...fromEvent(event), ...initial } : emptyForm(locale)))
+  const [form, setForm] = useState<EventFormInput>(() => (event ? { ...fromEvent(event), ...initial } : emptyForm(locale, !!fidelityCard)))
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -134,7 +148,7 @@ export default function EventForm({
       setError(code === 'capacity' ? t('error_capacity', { max: result.max ?? maxCapacity }) : t.has(`error_${code}`) ? t(`error_${code}`) : t('error_saveError'))
       return
     }
-    onSaved({ id: result.id, status: result.status ?? 'pending' })
+    onSaved({ id: result.id, status: result.status ?? 'pending', dates: result.dates })
   }
 
   return (
@@ -212,6 +226,45 @@ export default function EventForm({
         </div>
       </div>
       <p className={hint}>{t('fieldEndHint')}</p>
+
+      {/* Date ripetute: solo alla creazione, ogni data è poi un evento a sé */}
+      {!event && (
+        <div className="rounded-xl border border-gray-200 bg-gray-50/60 p-4">
+          <label className={`${label} flex items-center gap-1.5`}>
+            <Repeat className="h-4 w-4 text-[var(--gold)]" /> {t('fieldRepeat')}
+          </label>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            {EVENT_REPEATS.map((repeat) => (
+              <button
+                key={repeat}
+                type="button"
+                onClick={() => set('repeat', repeat)}
+                className={`rounded-xl border px-2 py-2 text-sm font-semibold ${
+                  form.repeat === repeat ? 'border-[var(--ink)] bg-[var(--gold-pale)] text-[var(--ink)]' : 'border-gray-200 bg-white text-gray-600'
+                }`}
+              >
+                {t(`repeat_${repeat}`)}
+              </button>
+            ))}
+          </div>
+          {form.repeat !== 'none' && (
+            <div className="mt-3">
+              <label className={label}>{t('fieldRepeatCount')}</label>
+              <input
+                type="number"
+                inputMode="numeric"
+                className={input}
+                min={2}
+                max={EVENT_MAX_SERIES_DATES}
+                required
+                value={form.repeatCount}
+                onChange={(e) => set('repeatCount', e.target.value)}
+              />
+              <p className={hint}>{t('fieldRepeatHint', { max: EVENT_MAX_SERIES_DATES })}</p>
+            </div>
+          )}
+        </div>
+      )}
 
       <div>
         <label className={label}>{t('fieldTimezone')}</label>
@@ -329,6 +382,36 @@ export default function EventForm({
         </label>
       </div>
 
+      {(fidelityCard || form.fidelityStamp) && (
+        <label className="flex items-start gap-3 rounded-xl border border-[var(--gold)]/30 bg-[var(--gold-pale)]/40 p-4 text-sm text-gray-700">
+          <input
+            type="checkbox"
+            className="mt-0.5 h-4 w-4 accent-[var(--ink)]"
+            checked={form.fidelityStamp}
+            disabled={!fidelityCard}
+            onChange={(e) => set('fidelityStamp', e.target.checked)}
+          />
+          <span>
+            <strong className="flex items-center gap-1.5 text-[var(--ink)]">
+              <Stamp className="h-4 w-4 text-[var(--gold)]" /> {t('fieldFidelity')}
+            </strong>
+            {fidelityCard
+              ? t('fieldFidelityHint', { business: fidelityCard.business_name, prize: fidelityCard.prize, stamps: fidelityCard.stamps_needed })
+              : t('fieldFidelityInactive')}
+          </span>
+        </label>
+      )}
+
+      {event?.series_id && (
+        <label className="flex items-start gap-3 rounded-xl border border-gray-200 bg-gray-50/60 p-4 text-sm text-gray-700">
+          <input type="checkbox" className="mt-0.5 h-4 w-4 accent-[var(--ink)]" checked={form.applyToSeries} onChange={(e) => set('applyToSeries', e.target.checked)} />
+          <span>
+            <strong className="block text-[var(--ink)]">{t('fieldApplyToSeries')}</strong>
+            {t('fieldApplyToSeriesHint')}
+          </span>
+        </label>
+      )}
+
       <div className="rounded-xl border border-[var(--gold)]/30 bg-white p-4 text-xs leading-5 text-gray-600">
         <p className="mb-1 flex items-center gap-1.5 text-sm font-semibold text-gray-800">
           <ShieldCheck className="h-4 w-4 text-[var(--gold)]" /> {t('conductTitle')}
@@ -354,7 +437,7 @@ export default function EventForm({
         className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-5 py-3 font-bold text-[var(--ink)] disabled:opacity-60"
       >
         {busy && <LoaderCircle className="h-4 w-4 animate-spin" />}
-        {event ? t('saveChanges') : t('createCta')}
+        {event ? t('saveChanges') : form.repeat !== 'none' ? t('createSeriesCta', { count: Number.parseInt(form.repeatCount, 10) || 0 }) : t('createCta')}
       </button>
       {!event && <p className="text-center text-xs text-[var(--muted)]">{maxCapacity <= 20 ? t('createNoteNew') : t('createNoteTrusted')}</p>}
     </form>

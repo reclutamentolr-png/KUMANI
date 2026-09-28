@@ -30,14 +30,31 @@ export async function markPlatformFeesPaid(sessionId: string, options: { expecte
   const service = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
     auth: { autoRefreshToken: false, persistSession: false },
   })
-  const { error } = await service
+  // Commissioni pagate con questa sessione: gli id nei metadati (vale anche se
+  // nel frattempo è stato aperto un altro checkout, che ha sovrascritto
+  // stripe_session_id). Per le sessioni vecchie senza id: il session id.
+  const feeIds = (session.metadata?.feeIds ?? '').split(',').filter((id) => /^[0-9a-f-]{36}$/i.test(id))
+  let query = service.from(target.table).select('id, amount, status').eq(target.ownerColumn, owner)
+  query = feeIds.length ? query.in('id', feeIds) : query.eq('stripe_session_id', sessionId)
+  const { data: rows, error: readError } = await query
+  if (readError) throw new Error(readError.message)
+  const due = (rows ?? []).filter((row) => row.status === 'due')
+  if (due.length === 0) return (rows ?? []).length > 0 // già segnate pagate (webhook + pagina di ritorno)
+  // L'importo pagato deve coprire le commissioni che si segnano pagate
+  const dueCents = Math.round(due.reduce((sum, row) => sum + Number(row.amount), 0) * 100)
+  if ((session.amount_total ?? 0) < dueCents) {
+    console.error(`[Fees] session ${sessionId}: paid ${session.amount_total} < due ${dueCents}`)
+    return false
+  }
+  const { data: updated, error } = await service
     .from(target.table)
-    .update({ status: 'paid', paid_at: new Date().toISOString() })
-    .eq('stripe_session_id', sessionId)
+    .update({ status: 'paid', paid_at: new Date().toISOString(), stripe_session_id: sessionId })
+    .in('id', due.map((row) => row.id))
     .eq(target.ownerColumn, owner)
     .eq('status', 'due')
+    .select('id')
   if (error) throw new Error(error.message)
-  return true
+  return (updated ?? []).length > 0
 }
 
 // KUMANI Events (organizzatore)

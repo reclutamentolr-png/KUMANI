@@ -2,6 +2,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { isToolOnline } from '@/lib/toolOnline'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { revalidatePath } from 'next/cache'
 import { LISTING_COST, type CreateListingData, type UpdateListingData } from '@/lib/listings'
@@ -15,6 +16,7 @@ const getServiceClient = () =>
   )
 
 export async function createListingAction(data: CreateListingData) {
+  if (!(await isToolOnline('listings'))) return { success: false, message: 'La Bacheca è momentaneamente sospesa: puoi consultare gli annunci ma non pubblicare o modificare.' }
   const supabase = await createClient()
 
   // The acting user is always the authenticated session, never data.userId
@@ -102,6 +104,7 @@ export async function createListingAction(data: CreateListingData) {
 // filtered .update() relying on the existing RLS UPDATE policy as a second
 // layer. Doesn't touch points/cost — editing is free, only creation costs.
 export async function updateListingAction(listingId: string, data: UpdateListingData) {
+  if (!(await isToolOnline('listings'))) return { success: false, message: 'La Bacheca è momentaneamente sospesa: puoi consultare gli annunci ma non pubblicare o modificare.' }
   const supabase = await createClient()
   const {
     data: { user },
@@ -165,6 +168,7 @@ export async function deleteListingAction(listingId: string, userId: string) {
 // authenticated session, not a client-supplied userId, same reasoning as
 // createListingAction.
 export async function republishListingAction(listingId: string) {
+  if (!(await isToolOnline('listings'))) return { success: false, message: 'La Bacheca è momentaneamente sospesa: puoi consultare gli annunci ma non pubblicare o modificare.' }
   const supabase = await createClient()
   const {
     data: { user },

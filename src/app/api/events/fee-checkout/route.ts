@@ -22,7 +22,9 @@ export async function POST(request: Request) {
     if (!user) return back(`${localePrefix}/login`)
 
     const { data } = await supabase.rpc('event_my_fees')
-    const due = ((data as EventFee[] | null) ?? []).filter((fee) => fee.status === 'due')
+    // Al massimo 12 per pagamento: gli id devono stare tutti nei metadati
+    // Stripe (500 caratteri), che il webhook usa per segnarle pagate.
+    const due = ((data as EventFee[] | null) ?? []).filter((fee) => fee.status === 'due').slice(0, 12)
     const total = Math.round(due.reduce((sum, fee) => sum + Number(fee.amount), 0) * 100)
     if (total < MIN_FEE_PAYMENT * 100) return back(`${localePrefix}/events/my?fee=none`)
 
@@ -39,7 +41,7 @@ export async function POST(request: Request) {
           },
         },
       ],
-      metadata: { type: 'event_fee', organizerId: user.id, feeIds: due.map((fee) => fee.id).join(',').slice(0, 480) },
+      metadata: { type: 'event_fee', organizerId: user.id, feeIds: due.map((fee) => fee.id).join(',') },
       success_url: `${SITE_URL}${localePrefix}/events/my?fee_session={CHECKOUT_SESSION_ID}`,
       cancel_url: `${SITE_URL}${localePrefix}/events/my?fee=canceled`,
     })

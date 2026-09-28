@@ -3,6 +3,8 @@ import { getLocale, getTranslations } from 'next-intl/server'
 import { CalendarHeart, CircleCheck, CircleX, Clock, LogIn, ShieldAlert, TriangleAlert } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { openPass } from '@/app/actions/events'
+import { stampKey } from '@/lib/events'
+import { SuspendedBanner } from '@/components/ServiceSuspended'
 import { createClient } from '@/lib/supabase/server'
 
 // Pagina aperta inquadrando il QR di un pass con la fotocamera del telefono.
@@ -53,6 +55,15 @@ export default async function EventPassPage({ params }: { params: Promise<{ toke
     )
   }
 
+  // Events sospeso dallo Staff: niente check-in
+  if (result.result === 'suspended') {
+    return (
+      <Shell>
+        <SuspendedBanner className="text-left" />
+      </Shell>
+    )
+  }
+
   // Esito del check-in per l'organizzatore: verde, ambra o rosso, ben visibile.
   const outcome = (['ok', 'already', 'invalid', 'not_today'] as const).find((code) => code === result.result) ?? 'invalid'
   const style = {
@@ -69,6 +80,9 @@ export default async function EventPassPage({ params }: { params: Promise<{ toke
         <p className="mt-4 text-3xl font-black uppercase tracking-wide">{t(`checkin_${outcome}`)}</p>
         {result.name && <p className="mt-2 text-xl font-bold">{result.name}</p>}
         <p className="mt-2 text-sm opacity-85">{t(`checkin_${outcome}Text`)}</p>
+        {outcome === 'ok' && result.stamp && (
+          <p className="mt-3 inline-block rounded-full bg-white/20 px-3 py-1 text-sm font-semibold">🎟️ {t(stampKey(result.stamp))}</p>
+        )}
       </div>
       <Link
         href={result.event_id ? `/events/my?event=${result.event_id}` : '/events/my'}

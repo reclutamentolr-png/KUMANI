@@ -104,7 +104,11 @@ export default function LoginPage() {
       resetProfileReminder()
     }
 
-    router.push(`/${locale}/dashboard`)
+    // ?next=/viaggi/invito/CODICE: dopo l'accesso si torna alla pagina di
+    // partenza (solo percorsi interni, mai altri siti).
+    const next = new URLSearchParams(window.location.search).get('next') ?? ''
+    const safeNext = /^\/(?!\/)[A-Za-z0-9/_\-.?=&%]*$/.test(next) ? next : null
+    router.push(safeNext ? `/${locale}${safeNext}` : `/${locale}/dashboard`)
     router.refresh()
   }
 
