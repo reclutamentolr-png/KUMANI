@@ -1,6 +1,7 @@
 import { SITE_URL } from '@/lib/siteUrl'
 import type { MyProfile } from '@/lib/myProfile'
-import type { SupabaseClient } from '@supabase/supabase-js'
+import { createClient, type SupabaseClient } from '@supabase/supabase-js'
+import { after } from 'next/server'
 import { isActiveSubscription } from './subscriptionGate'
 import { fetchDirectSponsored } from './directAffiliates'
 import { getCurrentRank, getNewlyAchievedRank, getUnclaimedRankBonuses } from './ranks'
@@ -16,19 +17,25 @@ export async function getDashboardNetworkData(
   supabase: SupabaseClient,
   user: { id: string },
   profile: MyProfile | null,
-  locale: string
+  locale: string,
+  // tree: albero completo della rete (solo la pagina "La mia rete"; la
+  // dashboard mostra un riepilogo e non lo carica, altrimenti chi sta in
+  // cima leggerebbe tutta la matrice). claims: 'inline' riscuote i bonus
+  // prima di rispondere, 'skip' li lascia a deferNetworkClaims().
+  options: { tree?: boolean; claims?: 'inline' | 'skip' } = {}
 ) {
+  const { tree = true, claims: claimsMode = 'inline' } = options
   // Bonus da riscuotere (vedi claimNetworkBonuses): partono subito, uno
   // dopo l'altro come prima, ma in parallelo alle letture invece che dopo.
-  const claims = claimNetworkBonuses(supabase)
+  const claims = claimsMode === 'inline' ? claimNetworkBonuses(supabase) : Promise.resolve()
 
   // Letture indipendenti tutte insieme: nodo matrice dell'utente, i propri
   // discendenti (solo nome e stato attivo, calcolati dal database: niente
   // cognome o codice di chi è finito sotto di noi), lo sponsor (il KUMI) e
   // gli invitati diretti.
   const [{ data: userNode }, { data: downlineRows, error: matrixError }, { data: sponsorData }, directSponsored] = await Promise.all([
-    supabase.from('matrix_nodes').select('*').eq('user_id', user.id).single(),
-    supabase.rpc('get_my_downline'),
+    tree ? supabase.from('matrix_nodes').select('*').eq('user_id', user.id).single() : Promise.resolve({ data: null, error: null }),
+    tree ? supabase.rpc('get_my_downline') : Promise.resolve({ data: null, error: null }),
     supabase
       .rpc('get_my_sponsor')
       .maybeSingle<{ first_name: string | null; last_name: string | null; referral_code: string | null }>(),
@@ -180,4 +187,27 @@ async function claimNetworkBonuses(supabase: SupabaseClient) {
   // Extra Pro: invitato diretto che paga il piano Pro con carta (si somma
   // al Bonus Struttura). Idempotente: una volta per invitato.
   await supabase.rpc('claim_pro_invite_bonus')
+}
+
+// Riscuote i bonus della rete DOPO aver risposto (non cambiano nulla di
+// quello che la pagina mostra: i punti sono già stati letti), così la
+// pagina non aspetta 5 richieste in fila. Dopo la risposta i cookie non si
+// possono più leggere: si usa il token della sessione appena verificata.
+export async function deferNetworkClaims(supabase: SupabaseClient) {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+  const token = session?.access_token
+  if (!token) return
+  after(async () => {
+    const client = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
+      global: { headers: { Authorization: `Bearer ${token}` } },
+      auth: { persistSession: false, autoRefreshToken: false },
+    })
+    try {
+      await claimNetworkBonuses(client)
+    } catch (error) {
+      console.error('[deferNetworkClaims]', error)
+    }
+  })
 }

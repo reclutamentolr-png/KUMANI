@@ -19,6 +19,7 @@ export type MyProfile = Record<string, unknown> & {
   subscription_expires_at: string | null
   pro_trial_ends_at: string | null
   profile_completed_at: string | null
+  is_admin: boolean | null
   qualifications_seen: string[] | null
   rank_bonuses_claimed: string[] | null
 }

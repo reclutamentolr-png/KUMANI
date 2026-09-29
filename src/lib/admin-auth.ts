@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 export type Permission = 
   | '*' 
@@ -95,4 +96,14 @@ export async function isAdmin(): Promise<boolean> {
   } catch {
     return false
   }
+}
+
+// Versione veloce per la dashboard (solo per mostrare il pulsante Admin):
+// una sola lettura, ruolo con i suoi permessi. Chi ha profiles.is_admin lo
+// sa già dal profilo. La protezione vera resta nella pagina Admin.
+export async function hasAdminRole(supabase: SupabaseClient, userId: string): Promise<boolean> {
+  const { data } = await supabase.from('admin_users').select('admin_roles(permissions)').eq('user_id', userId).maybeSingle()
+  const roles = data?.admin_roles as { permissions?: string[] | null } | { permissions?: string[] | null }[] | null | undefined
+  const permissions = Array.isArray(roles) ? roles[0]?.permissions : roles?.permissions
+  return Array.isArray(permissions) && permissions.length > 0
 }

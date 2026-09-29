@@ -13,8 +13,8 @@ import LanguageSwitcher from '@/components/LanguageSwitcher'
 import RankAchievementModal from '@/components/RankAchievementModal'
 import RenewalReminderModal from '@/components/RenewalReminderModal'
 import AdminMessagePopup from '@/components/AdminMessagePopup'
-import { isAdmin } from '@/lib/admin-auth'
-import { getDashboardNetworkData } from '@/lib/dashboardNetworkData'
+import { hasAdminRole } from '@/lib/admin-auth'
+import { deferNetworkClaims, getDashboardNetworkData } from '@/lib/dashboardNetworkData'
 import { getMarketplaceAccessState } from '@/lib/marketplaceAccess'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { getFavoriteToolNames } from '@/lib/favorites'
@@ -52,14 +52,15 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   // dashboard impiegava secondi): ruolo admin, profilo completo (solo
   // tramite get_my_profile(): le colonne personali non sono leggibili
   // direttamente), messaggi non letti, piano e strumenti, preferiti.
-  const [userIsAdmin, { data: profile }, unreadMessagesCount, access, favoriteToolNames] = await Promise.all([
-    isAdmin(),
+  const [adminRole, { data: profile }, unreadMessagesCount, access, favoriteToolNames] = await Promise.all([
+    hasAdminRole(supabase, user.id),
     supabase.rpc('get_my_profile').maybeSingle<MyProfile>(),
     getUnreadMessagesCount(user.id),
     getMarketplaceAccessState(supabase, user.id),
     getFavoriteToolNames(supabase, user.id),
   ])
   const { userPlan, isSettingEnabled, isToolEnabled, requiredPlan } = access
+  const userIsAdmin = adminRole || profile?.is_admin === true
 
   // Promemoria di rinnovo: mostrato ogni volta che entra in dashboard negli
   // ultimi 15 giorni prima della scadenza (a differenza del popup qualifiche,
@@ -138,7 +139,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   const [network, agendaEvents, trial, stats] = await Promise.all([
     // La dashboard mostra solo un riepilogo della rete (il dettaglio è in
     // /dashboard/rete), ma servono anche per i popup qualifiche/rinnovo.
-    getDashboardNetworkData(supabase, user, profile, locale),
+    getDashboardNetworkData(supabase, user, profile, locale, { tree: false, claims: 'skip' }),
     hasAgenda
       ? loadAgenda(supabase, user.id, {
           from: agendaToday,
@@ -152,6 +153,8 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     isPro && proTools.length > 0 ? getProAreaStats(supabase, user.id) : Promise.resolve(null),
   ])
   const { newlyAchievedRank } = network
+  // Bonus della rete: dopo aver mostrato la pagina
+  await deferNetworkClaims(supabase)
   proTrial = trial
   if (stats) {
     proAreaStats = stats
