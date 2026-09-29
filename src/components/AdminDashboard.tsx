@@ -171,7 +171,9 @@ type AdminDashboardProps = {
 
 export default function AdminDashboard({ userId, permissions, userName, locale, initialSection }: AdminDashboardProps) {
   const [activeSection, setActiveSection] = useState(initialSection || 'overview')
-  const [openGroups, setOpenGroups] = useState<Set<string>>(new Set())
+  // Menu a sinistra "a fisarmonica": un solo gruppo aperto alla volta.
+  // undefined = segue la sezione aperta; null = tutti chiusi.
+  const [openGroup, setOpenGroup] = useState<string | null | undefined>(undefined)
   // Strumenti e interruttori: gruppi chiusi finché non si aprono
   const [openToolGroups, setOpenToolGroups] = useState<Set<string>>(new Set())
 
@@ -426,6 +428,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
 
   const viewUserMatrix = (user: AdminUserRow) => {
     setActiveSection('matrix')
+    setOpenGroup(undefined)
     setMatrixPickedUser({ id: user.id, first_name: user.first_name ?? null, last_name: user.last_name ?? null, referral_code: user.referral_code ?? null, email: user.email ?? null })
     setTimeout(() => {
       loadMatrixForUser(user.id)
@@ -1109,22 +1112,18 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
 
   const availableMenuItems = menuItems.filter(item => hasPermission(permissions, item.permission))
 
-  // Gruppi con almeno una voce consentita dal ruolo; il gruppo della sezione
-  // aperta è sempre espanso, gli altri si aprono e chiudono a mano.
+  // Gruppi con almeno una voce consentita dal ruolo. Si apre un gruppo alla
+  // volta (aprendone uno gli altri si chiudono) e ognuno si può chiudere,
+  // anche quello della sezione in cui ci si trova.
   const menuGroups = MENU_GROUPS.map((group) => ({
     ...group,
     items: availableMenuItems.filter((item) => item.group === group.id),
   })).filter((group) => group.items.length > 0)
   const activeGroup = availableMenuItems.find((item) => item.id === activeSection)?.group
   const pendingItems = availableMenuItems.filter((item) => (badges[item.id] ?? 0) > 0)
+  const currentOpenGroup = openGroup === undefined ? activeGroup : openGroup
   const toggleGroup = (groupId: string) => {
-    setOpenGroups((prev) => {
-      const next = new Set(prev)
-      if (groupId === activeGroup) return next
-      if (next.has(groupId)) next.delete(groupId)
-      else next.add(groupId)
-      return next
-    })
+    setOpenGroup(currentOpenGroup === groupId ? null : groupId)
   }
 
   const renderMenuButton = (item: (typeof availableMenuItems)[number]) => {
@@ -1132,7 +1131,11 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
     return (
       <button
         key={item.id}
-        onClick={() => setActiveSection(item.id)}
+        onClick={() => {
+          setActiveSection(item.id)
+          // Anche da "Da gestire": si apre il gruppo della voce scelta
+          setOpenGroup(item.group)
+        }}
         title={count > 0 ? `${item.label}: ${count} ${count === 1 ? 'elemento' : 'elementi'} da vedere o gestire` : undefined}
         className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
           activeSection === item.id ? 'bg-[var(--ink)] text-white shadow-md' : 'text-gray-700 hover:bg-gray-100'
@@ -3212,7 +3215,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
           )}
 
           {menuGroups.map((group) => {
-            const isOpen = openGroups.has(group.id) || group.id === activeGroup
+            const isOpen = currentOpenGroup === group.id
             const groupCount = group.items.reduce((sum, item) => sum + (badges[item.id] ?? 0), 0)
             return (
               <div key={group.id}>
