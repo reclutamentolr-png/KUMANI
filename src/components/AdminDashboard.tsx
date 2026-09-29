@@ -84,6 +84,7 @@ import ConvivioFeesPanel from '@/components/admin/ConvivioFeesPanel'
 import ContactMessagesPanel from '@/components/admin/ContactMessagesPanel'
 import ProfileRequestsPanel from '@/components/admin/ProfileRequestsPanel'
 import AccountDeletionsPanel from '@/components/admin/AccountDeletionsPanel'
+import { startImpersonation } from '@/lib/impersonation'
 import {
   LayoutDashboard,
   CalendarDays,
@@ -169,7 +170,7 @@ type AdminDashboardProps = {
   initialSection?: string // da ?section= nell'URL, vedi admin/page.tsx
 }
 
-export default function AdminDashboard({ userId, permissions, userName, locale, initialSection }: AdminDashboardProps) {
+export default function AdminDashboard({ permissions, userName, locale, initialSection }: AdminDashboardProps) {
   const [activeSection, setActiveSection] = useState(initialSection || 'overview')
   // Menu a sinistra "a fisarmonica": un solo gruppo aperto alla volta.
   // undefined = segue la sezione aperta; null = tutti chiusi.
@@ -1059,16 +1060,17 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
 
     // ✅ IMPERSONIFICAZIONE: stessa scheda + link di ripristino admin
   const handleImpersonate = async (user: AdminUserRow) => {
-    if (!confirm(`Vuoi impersonare ${user.first_name} ${user.last_name}?\n\nVerrai loggato come questo utente.\nPotrai tornare al tuo account admin in qualsiasi momento con il pulsante "Torna Admin" del banner giallo.`)) return
+    if (!confirm(`Vuoi impersonare ${user.first_name} ${user.last_name}?\n\nVerrai loggato come questo utente.\nPotrai tornare al tuo account admin in qualsiasi momento con il pulsante "Torna Admin" della fascia arancione.
+
+L'accesso viene registrato.`)) return
 
     setImpersonatingId(user.id)
     try {
       const result = await impersonateUser(user.id)
 
       if (result.success && result.targetUrl && result.adminRestoreUrl) {
-        // ✅ Salva il link di ripristino admin prima di cambiare sessione
-        localStorage.setItem('impersonation_restore', result.adminRestoreUrl)
-        localStorage.setItem('impersonatingAdmin', userId)
+        // Link per tornare admin e nome, solo nella memoria di questa scheda
+        startImpersonation(result.adminRestoreUrl, userName.split(' ')[0] || userName)
 
         // ✅ Naviga al magic link dell'utente target (stessa scheda)
         window.location.href = result.targetUrl

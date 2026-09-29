@@ -1,68 +1,38 @@
 'use client'
 
-import { useEffect, useState, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
 import { AlertTriangle, Shield } from 'lucide-react'
+import { endImpersonation, readImpersonation } from '@/lib/impersonation'
 
-function ImpersonationBannerContent() {
+// Fascia arancione durante l'impersonificazione, in cima a ogni pagina.
+// Fa parte della pagina (non galleggia sopra), così non copre l'intestazione.
+// I dati stanno nella memoria della sola scheda (vedi lib/impersonation).
+export default function ImpersonationBanner() {
   const t = useTranslations('dashboard')
-  const searchParams = useSearchParams()
-  const [mounted, setMounted] = useState(false)
-  const [isVisible, setIsVisible] = useState(false)
-  const [adminName, setAdminName] = useState<string>('')
+  const [session, setSession] = useState<{ restoreUrl: string; adminName: string } | null>(null)
 
-  const fetchAdminName = async (adminId: string) => {
-    try {
-      const supabase = createClient()
-      const { data } = await supabase
-        .from('profiles')
-        .select('first_name')
-        .eq('id', adminId)
-        .single()
-
-      if (data) setAdminName(data.first_name)
-    } catch {}
-  }
-
-  // Si legge l'indirizzo e la memoria del browser solo dopo l'apertura della
-  // pagina (sul server non esistono): è il compito di questo effetto
+  // La memoria della scheda esiste solo nel browser, dopo l'apertura
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMounted(true)
-
-    const imp = searchParams.get('impersonating')
-    if (imp) {
-      setIsVisible(true)
-      localStorage.setItem('impersonatingAdmin', imp)
-      fetchAdminName(imp)
-    } else {
-      const saved = localStorage.getItem('impersonatingAdmin')
-      if (saved) {
-        setIsVisible(true)
-        fetchAdminName(saved)
-      }
-    }
-  }, [searchParams])
+    setSession(readImpersonation())
+  }, [])
 
   const handleExit = async () => {
     if (!confirm(t('exitImpersonation'))) return
-
-    const restoreUrl = localStorage.getItem('impersonation_restore')
-    localStorage.removeItem('impersonation_restore')
-    localStorage.removeItem('impersonatingAdmin')
-
-    const supabase = createClient()
-    await supabase.auth.signOut()
-
+    const restoreUrl = session?.restoreUrl
+    endImpersonation()
+    // Si chiude solo la sessione di questo browser: l'utente resta collegato
+    // sui suoi dispositivi (senza scope 'local' lo si scollegava ovunque)
+    await createClient().auth.signOut({ scope: 'local' })
     window.location.href = restoreUrl || '/login'
   }
 
-  if (!mounted || !isVisible) return null
+  if (!session) return null
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-[9999] bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-white shadow-lg">
+    <div className="relative z-40 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3 flex-1 min-w-0">
           <div className="bg-white/20 p-2 rounded-full flex-shrink-0">
@@ -72,7 +42,7 @@ function ImpersonationBannerContent() {
             <p className="font-bold text-sm">{t('impersonationActive')}</p>
             <p className="text-xs text-amber-50 truncate">
               {t('impersonationDesc')}
-              {adminName && <> {t('adminAccount')} <strong>{adminName}</strong></>}
+              {session.adminName && <> {t('adminAccount')} <strong>{session.adminName}</strong></>}
             </p>
           </div>
         </div>
@@ -85,13 +55,5 @@ function ImpersonationBannerContent() {
         </button>
       </div>
     </div>
-  )
-}
-
-export default function ImpersonationBanner() {
-  return (
-    <Suspense fallback={null}>
-      <ImpersonationBannerContent />
-    </Suspense>
   )
 }

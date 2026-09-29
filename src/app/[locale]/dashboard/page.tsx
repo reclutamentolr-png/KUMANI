@@ -7,7 +7,6 @@ import ActivityTracker from '@/components/ActivityTracker'
 import ChatModalWrapper from '@/components/ChatModalWrapper'
 import ListingDetailModalWrapper from '@/components/ListingDetailModalWrapper'
 import { getUnreadMessagesCount } from '@/lib/listings-server'
-import ImpersonationBanner from '@/components/ImpersonationBanner'
 import InstallAppPrompt from '@/components/InstallAppPrompt'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import RankAchievementModal from '@/components/RankAchievementModal'
@@ -165,7 +164,6 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
 
   return (
     <div className="min-h-screen bg-[var(--background)]" suppressHydrationWarning>
-      <ImpersonationBanner />
 
       {newlyAchievedRank ? (
         <RankAchievementModal

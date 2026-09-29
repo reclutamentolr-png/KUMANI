@@ -8,6 +8,7 @@ import { useLocale } from 'next-intl'
 import Link from '@/components/LocalizedLink'
 import { Mail, Lock, Loader2 } from 'lucide-react'
 import { awardDailyPoint } from '@/app/actions/award-daily-point'
+import { endImpersonation } from '@/lib/impersonation'
 import { resetProfileReminder } from '@/components/ProfileReminder'
 import MaintenanceGate from '@/components/MaintenanceGate'
 import Logo from '@/components/Logo'
@@ -102,6 +103,8 @@ export default function LoginPage() {
       await awardDailyPoint()
       // Nuovo accesso: il promemoria "completa il profilo" riparte da zero.
       resetProfileReminder()
+      // Accesso normale: nessuna impersonificazione in corso in questa scheda
+      endImpersonation()
     }
 
     // ?next=/viaggi/invito/CODICE: dopo l'accesso si torna alla pagina di

@@ -203,12 +203,22 @@ export async function impersonateUser(userId: string) {
   const admin = await verifyAdmin('users.write')
   if (!admin) return { success: false, error: 'Non autorizzato' }
 
-  // Un admin con permessi limitati non può entrare nell'account di un admin.
-  if (userId !== admin.id && (await isFullAdmin(userId)) && !(await isFullAdmin(admin.id))) {
-    return { success: false, error: 'Non puoi impersonare un amministratore' }
-  }
+  if (userId === admin.id) return { success: false, error: 'Sei già in questo account' }
 
   const supabaseAdmin = getServiceClient()
+
+  // Solo un amministratore completo può entrare nell'account di un altro
+  // membro dello Staff (anche con permessi limitati): altrimenti uno Staff
+  // potrebbe prendere i permessi di un collega.
+  if (!(await isFullAdmin(admin.id))) {
+    const [{ data: targetProfile }, { data: targetStaff }] = await Promise.all([
+      supabaseAdmin.from('profiles').select('is_admin').eq('id', userId).maybeSingle(),
+      supabaseAdmin.from('admin_users').select('user_id').eq('user_id', userId).maybeSingle(),
+    ])
+    if (targetProfile?.is_admin || targetStaff) {
+      return { success: false, error: 'Non puoi impersonare un membro dello Staff' }
+    }
+  }
   const base = SITE_URL
 
   // Recupera email utente target
@@ -226,7 +236,7 @@ export async function impersonateUser(userId: string) {
     type: 'magiclink',
     email: userData.user.email,
     options: {
-      redirectTo: `${base}/it/auth/impersonate-callback?impersonating=${admin.id}`
+      redirectTo: `${base}/it/auth/impersonate-callback`
     }
   })
   if (e1) return { success: false, error: e1.message }
@@ -242,6 +252,14 @@ export async function impersonateUser(userId: string) {
     }
   })
   if (e2) return { success: false, error: e2.message }
+
+  // Registro obbligatorio: senza traccia (chi, in quale account, quando)
+  // l'accesso non si concede.
+  const { error: logError } = await supabaseAdmin.from('admin_impersonations').insert({ admin_id: admin.id, target_id: userId })
+  if (logError) {
+    console.error('[impersonateUser] registro non scritto:', logError.message)
+    return { success: false, error: 'Registro delle impersonificazioni non disponibile' }
+  }
 
   return {
     success: true,

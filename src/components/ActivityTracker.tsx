@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { readImpersonation } from '@/lib/impersonation'
 
 type ActivityTrackerProps = {
   userId: string
@@ -20,6 +21,8 @@ export default function ActivityTracker({ userId }: ActivityTrackerProps) {
 
     const updateLastSeen = () => {
       if (document.visibilityState !== 'visible') return
+      // Lo Staff che impersona non deve far risultare l'utente online
+      if (readImpersonation()) return
       if (Date.now() - lastUpdate < EVERY_MS - 1000) return
       lastUpdate = Date.now()
       void supabase.from('profiles').update({ last_seen: new Date().toISOString() }).eq('id', userId).then(() => {})
