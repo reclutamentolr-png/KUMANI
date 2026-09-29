@@ -43,7 +43,7 @@ export default async function AntitruffaPage() {
     data: { user },
   } = await supabase.auth.getUser()
   const { data: me } = user
-    ? await supabase.from('profiles').select('referral_code').eq('id', user.id).maybeSingle()
+    ? await supabase.rpc('get_my_profile').maybeSingle<{ referral_code: string | null }>()
     : { data: null }
   const shareUrl = guideShareUrl(locale, me?.referral_code)
 

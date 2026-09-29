@@ -29,7 +29,7 @@ export default async function QuoteDetailPage({
 
   const hasAccess = await hasActivePreventiviAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect('/marketplace')
+    redirect('/dashboard')
   }
 
   const { data: quote } = await supabase.from('quotes').select('*').eq('id', id).eq('user_id', user.id).single()

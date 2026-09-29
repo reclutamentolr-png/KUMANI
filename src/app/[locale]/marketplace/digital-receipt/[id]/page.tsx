@@ -27,7 +27,7 @@ export default async function DigitalReceiptDetailPage({
 
   const hasAccess = await hasActiveDigitalReceiptAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect(`/${locale}/marketplace`)
+    redirect(`/${locale}/dashboard`)
   }
 
   const { data: receipt } = await supabase

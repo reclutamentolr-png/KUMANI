@@ -28,8 +28,13 @@ type SettingRow = { tool_name: string; is_enabled: boolean; required_plan?: Requ
  * resta can_use_tool() lato database/middleware: qui è solo presentazione.
  */
 export async function getMarketplaceAccessState(supabase: SupabaseClient, userId: string): Promise<MarketplaceAccessState> {
+  // Impostazioni, piano e prova Pro: tre letture indipendenti, insieme
+  const [withPlan, planResult, trialResult] = await Promise.all([
+    supabase.from('marketplace_settings').select('tool_name, is_enabled, required_plan'),
+    supabase.rpc('my_plan'),
+    supabase.rpc('my_trial_only'),
+  ])
   let settings: SettingRow[] = []
-  const withPlan = await supabase.from('marketplace_settings').select('tool_name, is_enabled, required_plan')
   if (!withPlan.error) {
     settings = (withPlan.data ?? []) as SettingRow[]
   } else {
@@ -39,7 +44,6 @@ export async function getMarketplaceAccessState(supabase: SupabaseClient, userId
   const byTool = new Map(settings.map((row) => [row.tool_name, row]))
 
   let userPlan: UserPlan = 'none'
-  const planResult = await supabase.rpc('my_plan')
   if (!planResult.error && typeof planResult.data === 'string') {
     userPlan = planResult.data as UserPlan
   } else {
@@ -56,7 +60,6 @@ export async function getMarketplaceAccessState(supabase: SupabaseClient, userId
   // Prova Pro gratuita: apre gli strumenti Pro, non quelli del piano Base
   // (stessa regola di tool_access nel database).
   let trialOnly = false
-  const trialResult = await supabase.rpc('my_trial_only')
   if (!trialResult.error) trialOnly = trialResult.data === true
 
   const isSettingEnabled = (toolName: string) => byTool.get(toolName)?.is_enabled !== false

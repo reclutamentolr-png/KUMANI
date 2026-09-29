@@ -25,7 +25,7 @@ export default async function FindoItemDetailPage({
 
   const hasAccess = await hasActiveFindoAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect(`/${await getLocale()}/marketplace`)
+    redirect(`/${await getLocale()}/dashboard`)
   }
 
   const { data: item } = await supabase

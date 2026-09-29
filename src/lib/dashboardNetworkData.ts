@@ -22,12 +22,22 @@ export async function getDashboardNetworkData(
   } | null,
   locale: string
 ) {
-  // Recupera il nodo matrice dell'utente corrente
-  const { data: userNode } = await supabase.from('matrix_nodes').select('*').eq('user_id', user.id).single()
+  // Bonus da riscuotere (vedi claimNetworkBonuses): partono subito, uno
+  // dopo l'altro come prima, ma in parallelo alle letture invece che dopo.
+  const claims = claimNetworkBonuses(supabase)
 
-  // I propri discendenti nella matrice: solo nome e stato attivo, calcolati
-  // dal database (niente cognome o codice di chi è finito sotto di noi).
-  const { data: downlineRows, error: matrixError } = await supabase.rpc('get_my_downline')
+  // Letture indipendenti tutte insieme: nodo matrice dell'utente, i propri
+  // discendenti (solo nome e stato attivo, calcolati dal database: niente
+  // cognome o codice di chi è finito sotto di noi), lo sponsor (il KUMI) e
+  // gli invitati diretti.
+  const [{ data: userNode }, { data: downlineRows, error: matrixError }, { data: sponsorData }, directSponsored] = await Promise.all([
+    supabase.from('matrix_nodes').select('*').eq('user_id', user.id).single(),
+    supabase.rpc('get_my_downline'),
+    supabase
+      .rpc('get_my_sponsor')
+      .maybeSingle<{ first_name: string | null; last_name: string | null; referral_code: string | null }>(),
+    fetchDirectSponsored(supabase),
+  ])
   const downlineData = ((downlineRows ?? []) as Array<{
     id: string
     user_id: string
@@ -80,18 +90,12 @@ export async function getDashboardNetworkData(
   )
   const userNodeId = userNode?.id
 
-  // RECUPERA LO SPONSOR (il KUMI)
-  const { data: sponsorData } = await supabase
-    .rpc('get_my_sponsor')
-    .maybeSingle<{ first_name: string | null; last_name: string | null; referral_code: string | null }>()
-
   // QUALIFICHE — basate su quanti utenti QUESTO utente ha sponsorizzato
   // personalmente (profiles.sponsor_id) E CHE SONO ATTIVI (abbonamento
   // pagante), non sui figli diretti nella matrice (matrix_nodes.parent_id,
   // level1Count, che è bloccato a 5 dallo spillover) e non su sponsorizzati
   // non paganti: Rising Star/Diamond misurano un team di persone attive,
   // non solo registrate.
-  const directSponsored = await fetchDirectSponsored(supabase)
   const directActiveSponsored = directSponsored.filter(isActiveSubscription)
   const directSponsorCount = directActiveSponsored.length
   const directSponsoredWithStatus = directSponsored.map((p) => ({ ...p, is_active: isActiveSubscription(p) }))
@@ -128,30 +132,7 @@ export async function getDashboardNetworkData(
   for (const rank of unclaimedBonuses) {
     await supabase.rpc('claim_rank_bonus', { p_rank_key: rank.key })
   }
-
-  // "Bonus Struttura": pays out for matrix slots filled since the last
-  // check, whether by personal sponsorship or by someone else's spillover
-  // landing in one of this Kumano's 5 direct positions — see
-  // claim_matrix_slot_bonus() for why spillover recipients otherwise get
-  // nothing from the compensation plan. Idempotent and self-verifying, same
-  // pattern as claim_rank_bonus above, safe to call on every dashboard load.
-  await supabase.rpc('claim_matrix_slot_bonus')
-
-  // Pays for direct sponsees beyond this Kumano's own 5 matrix slots (see
-  // directSponsorInSpilloverCount above): claim_matrix_slot_bonus only
-  // covers the 5 slots physically under this Kumano's node, so a 6th+
-  // personal referral who spills over elsewhere in the tree otherwise earns
-  // nothing here. Same idempotent, self-verifying pattern.
-  await supabase.rpc('claim_sponsor_overflow_bonus')
-
-  // "Ringraziamento attività": per chi si è iscritto senza invito ed è stato
-  // abbinato a questo Kumano attivo, quando paga davvero il primo
-  // abbonamento. Idempotente come i claim sopra.
-  await supabase.rpc('claim_activity_thanks')
-
-  // Extra Pro: invitato diretto che paga il piano Pro con carta (si somma
-  // al Bonus Struttura). Idempotente: una volta per invitato.
-  await supabase.rpc('claim_pro_invite_bonus')
+  await claims
 
   const loginUrl = `${SITE_URL}/${locale}/login`
 
@@ -176,3 +157,31 @@ export async function getDashboardNetworkData(
 }
 
 export type DashboardNetworkData = Awaited<ReturnType<typeof getDashboardNetworkData>>
+
+// Bonus della rete riscossi a ogni apertura della dashboard (tutti
+// idempotenti e verificati dal database), uno dopo l'altro.
+async function claimNetworkBonuses(supabase: SupabaseClient) {
+  // "Bonus Struttura": pays out for matrix slots filled since the last
+  // check, whether by personal sponsorship or by someone else's spillover
+  // landing in one of this Kumano's 5 direct positions — see
+  // claim_matrix_slot_bonus() for why spillover recipients otherwise get
+  // nothing from the compensation plan. Idempotent and self-verifying, same
+  // pattern as claim_rank_bonus above, safe to call on every dashboard load.
+  await supabase.rpc('claim_matrix_slot_bonus')
+
+  // Pays for direct sponsees beyond this Kumano's own 5 matrix slots (see
+  // directSponsorInSpilloverCount above): claim_matrix_slot_bonus only
+  // covers the 5 slots physically under this Kumano's node, so a 6th+
+  // personal referral who spills over elsewhere in the tree otherwise earns
+  // nothing here. Same idempotent, self-verifying pattern.
+  await supabase.rpc('claim_sponsor_overflow_bonus')
+
+  // "Ringraziamento attività": per chi si è iscritto senza invito ed è stato
+  // abbinato a questo Kumano attivo, quando paga davvero il primo
+  // abbonamento. Idempotente come i claim sopra.
+  await supabase.rpc('claim_activity_thanks')
+
+  // Extra Pro: invitato diretto che paga il piano Pro con carta (si somma
+  // al Bonus Struttura). Idempotente: una volta per invitato.
+  await supabase.rpc('claim_pro_invite_bonus')
+}

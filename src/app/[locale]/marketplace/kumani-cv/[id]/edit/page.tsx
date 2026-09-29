@@ -27,7 +27,7 @@ export default async function EditCvPage({
 
   const hasAccess = await hasActiveCvAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect('/marketplace')
+    redirect('/dashboard')
   }
 
   const { data: cv } = await supabase.from('cvs').select('*').eq('id', id).eq('user_id', user.id).single()

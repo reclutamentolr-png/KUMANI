@@ -24,7 +24,7 @@ export default async function LifeCalendarItemDetailPage({
 
   const hasAccess = await hasActiveLifeCalendarAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect(`/${await getLocale()}/marketplace`)
+    redirect(`/${await getLocale()}/dashboard`)
   }
 
   const { data: item } = await supabase

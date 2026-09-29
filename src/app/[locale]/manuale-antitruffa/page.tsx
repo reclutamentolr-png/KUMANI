@@ -51,7 +51,7 @@ export default async function ManualePreviewPage({ searchParams }: Props) {
   // di chi l'ha invitato (così la catena resta a chi ha condiviso per primo)
   let shareCode = inviter?.referral_code ?? null
   if (user) {
-    const { data: me } = await supabase.from('profiles').select('referral_code').eq('id', user.id).maybeSingle()
+    const { data: me } = await supabase.rpc('get_my_profile').maybeSingle<{ referral_code: string | null }>()
     shareCode = me?.referral_code ?? shareCode
   }
   const shareUrl = guideShareUrl(locale, shareCode)

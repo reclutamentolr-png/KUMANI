@@ -45,18 +45,18 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     redirect(`/${locale}/login`)
   }
 
-  // 2. Verifica se l'utente è amministratore
-  const userIsAdmin = await isAdmin()
-
-  // 3. Recupera dati profilo
-  // Profilo completo (dati personali inclusi) solo tramite get_my_profile():
-  // dal browser/sessione utente le colonne personali non sono più leggibili.
-  const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<Record<string, any>>()
-
-  // 4. Dati "rete": la dashboard mostra solo un riepilogo (il dettaglio è in
-  //    /dashboard/rete), ma servono anche per i popup qualifiche/rinnovo.
-  const network = await getDashboardNetworkData(supabase, user, profile, locale)
-  const { newlyAchievedRank } = network
+  // 2-3, 7-8. Richieste indipendenti tutte insieme (una alla volta la
+  // dashboard impiegava secondi): ruolo admin, profilo completo (solo
+  // tramite get_my_profile(): le colonne personali non sono leggibili
+  // direttamente), messaggi non letti, piano e strumenti, preferiti.
+  const [userIsAdmin, { data: profile }, unreadMessagesCount, access, favoriteToolNames] = await Promise.all([
+    isAdmin(),
+    supabase.rpc('get_my_profile').maybeSingle<Record<string, any>>(),
+    getUnreadMessagesCount(user.id),
+    getMarketplaceAccessState(supabase, user.id),
+    getFavoriteToolNames(supabase, user.id),
+  ])
+  const { userPlan, isSettingEnabled, isToolEnabled, requiredPlan } = access
 
   // Promemoria di rinnovo: mostrato ogni volta che entra in dashboard negli
   // ultimi 15 giorni prima della scadenza (a differenza del popup qualifiche,
@@ -72,12 +72,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   // 6. URL di condivisione
   const shareUrl = `${SITE_URL}/${locale}/ref/${profile?.referral_code}`
 
-  // 7. Messaggi non letti
-  const unreadMessagesCount = await getUnreadMessagesCount(user.id)
-
-  // 8. Strumenti Marketplace attivi e piano dell'utente (Area Professionisti
-  //    per tutti i layout; lista strumenti e preferiti solo per Tipo 2)
-  const { userPlan, isSettingEnabled, isToolEnabled, requiredPlan } = await getMarketplaceAccessState(supabase, user.id)
+  // Strumenti attivi e piano dell'utente (Area Professionisti e categorie)
   const enabledTools = getMarketplaceTools(marketplaceT).filter((tool) => isSettingEnabled(tool.toolName))
   const proTools = enabledTools.filter((tool) => requiredPlan(tool.toolName) === 'pro')
   const isPro = userPlan === 'pro'
@@ -86,13 +81,14 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   let proAreaStats: Awaited<ReturnType<typeof getProAreaStats>> = {}
   let proRenewsOn: string | null = null
   // Prova Pro in corso (non ancora pagato): giorni rimasti, scadenza, prezzo.
-  let proTrial: { daysLeft: number; totalDays: number; endsOn: string; price: number } | null = null
+  type ProTrial = { daysLeft: number; totalDays: number; endsOn: string; price: number }
+  let proTrial: ProTrial | null = null
   const paidPro = profile?.subscription_status === 'active' && profile?.subscription_plan === 'pro'
   const trialEnd = profile?.pro_trial_ends_at ? new Date(profile.pro_trial_ends_at).getTime() : 0
   const nowMs = new Date().getTime()
   // Prova finita senza passare a Pro: l'invito in dashboard lo dice.
   const proTrialExpired = !isPro && trialEnd > 0 && trialEnd <= nowMs
-  if (isPro && !paidPro && trialEnd > nowMs) {
+  const loadProTrial = async (): Promise<ProTrial> => {
     const { data: planSettings } = await createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
       auth: { autoRefreshToken: false, persistSession: false },
     })
@@ -101,17 +97,11 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
       .in('key', ['pro_trial_days'])
     const setting = (key: string, fallback: number) =>
       Number(String(planSettings?.find((row) => row.key === key)?.value ?? fallback).replace(/"/g, '')) || fallback
-    proTrial = {
+    return {
       daysLeft: Math.ceil((trialEnd - nowMs) / (1000 * 60 * 60 * 24)),
       totalDays: setting('pro_trial_days', 15),
       endsOn: new Date(trialEnd).toLocaleDateString(locale),
       price: (await getPlanPrices()).pro,
-    }
-  }
-  if (isPro && proTools.length > 0) {
-    proAreaStats = await getProAreaStats(supabase, user.id)
-    if (!proTrial && profile?.subscription_expires_at) {
-      proRenewsOn = new Date(profile.subscription_expires_at).toLocaleDateString(locale)
     }
   }
 
@@ -123,7 +113,6 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   // marketplace category grid already makes via MarketplaceCard.
   const lockedToolNames = visibleTools.filter((tool) => !isToolEnabled(tool.toolName)).map((tool) => tool.toolName)
   const proToolNames = visibleTools.filter((tool) => requiredPlan(tool.toolName) === 'pro').map((tool) => tool.toolName)
-  const favoriteToolNames = await getFavoriteToolNames(supabase, user.id)
 
   // "I prossimi giorni": appuntamenti, promemoria, bollette e scadenze dei
   // prossimi 7 giorni (più quelle scadute negli ultimi 60), dagli strumenti
@@ -135,15 +124,33 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   }
   const agendaToday = todayKey()
   const hasAgenda = agendaSources.memolife || agendaSources.spendly || agendaSources.lifeCalendar
-  const agendaEvents = hasAgenda
-    ? await loadAgenda(supabase, user.id, {
-        from: agendaToday,
-        to: addDays(agendaToday, 6),
-        overdueSince: addDays(agendaToday, -60),
-        sources: agendaSources,
-        useReminders: true,
-      })
-    : []
+
+  // 4. Rete (serve il profilo), agenda, prova Pro e dati dell'Area
+  //    Professionisti: anche queste insieme.
+  const [network, agendaEvents, trial, stats] = await Promise.all([
+    // La dashboard mostra solo un riepilogo della rete (il dettaglio è in
+    // /dashboard/rete), ma servono anche per i popup qualifiche/rinnovo.
+    getDashboardNetworkData(supabase, user, profile, locale),
+    hasAgenda
+      ? loadAgenda(supabase, user.id, {
+          from: agendaToday,
+          to: addDays(agendaToday, 6),
+          overdueSince: addDays(agendaToday, -60),
+          sources: agendaSources,
+          useReminders: true,
+        })
+      : Promise.resolve([]),
+    isPro && !paidPro && trialEnd > nowMs ? loadProTrial() : Promise.resolve(null),
+    isPro && proTools.length > 0 ? getProAreaStats(supabase, user.id) : Promise.resolve(null),
+  ])
+  const { newlyAchievedRank } = network
+  proTrial = trial
+  if (stats) {
+    proAreaStats = stats
+    if (!proTrial && profile?.subscription_expires_at) {
+      proRenewsOn = new Date(profile.subscription_expires_at).toLocaleDateString(locale)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-[var(--background)]" suppressHydrationWarning>

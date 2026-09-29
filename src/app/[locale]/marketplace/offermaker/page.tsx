@@ -19,7 +19,7 @@ export default async function OfferMakerPage() {
 
   const hasAccess = await hasActiveOfferMakerAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect('/marketplace')
+    redirect('/dashboard')
   }
 
   const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<{ phone: string | null }>()

@@ -21,7 +21,7 @@ export default async function KumaniCvPage({ searchParams }: { searchParams: Pro
 
   const hasAccess = await hasActiveCvAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect('/marketplace')
+    redirect('/dashboard')
   }
 
   const { data: cvs } = await supabase

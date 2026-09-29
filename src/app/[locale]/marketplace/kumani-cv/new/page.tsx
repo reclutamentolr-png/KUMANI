@@ -19,7 +19,7 @@ export default async function NewCvPage({ searchParams }: { searchParams: Promis
 
   const hasAccess = await hasActiveCvAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect('/marketplace')
+    redirect('/dashboard')
   }
 
   return (

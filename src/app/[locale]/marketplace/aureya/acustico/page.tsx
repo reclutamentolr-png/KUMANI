@@ -17,7 +17,7 @@ export default async function AureyaAcousticPage() {
 
   const hasAccess = await hasActiveAureyaAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect('/marketplace')
+    redirect('/dashboard')
   }
 
   const { data: previous } = await supabase

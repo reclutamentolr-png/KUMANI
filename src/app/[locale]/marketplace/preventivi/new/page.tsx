@@ -19,7 +19,7 @@ export default async function NewQuotePage({ searchParams }: { searchParams: Pro
 
   const hasAccess = await hasActivePreventiviAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect('/marketplace')
+    redirect('/dashboard')
   }
 
   const { data: profile } = await supabase

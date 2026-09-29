@@ -1,30 +1,21 @@
-'use client'
-
-import { useSearchParams } from 'next/navigation'
 import Link from '@/components/LocalizedLink'
 import type { ComponentProps, ReactNode } from 'react'
 
-// Marketplace tool pages link "back" to /marketplace by default — correct
-// when the user browsed in via the Marketplace category grid. But Tipo 2's
-// dashboard links directly into tools (bypassing /marketplace entirely),
-// tagging its links with ?from=dashboard so both the destination AND the
-// visible label switch to "Torna alla Dashboard" instead of "Torna al
-// Marketplace" — showing the marketplace label while landing on /dashboard
-// would read as a mistake.
+// Pulsante "Torna alla Dashboard" in cima agli strumenti. La dashboard è
+// l'unico punto di partenza (la vecchia griglia /marketplace del Tipo 1 non
+// c'è più), quindi si torna sempre lì, anche se il ?from=dashboard si perde
+// passando da una sottopagina all'altra. `children` (la vecchia etichetta
+// "Torna all'Ecosistema") resta accettato solo per compatibilità.
 export default function ToolBackLink({
-  children,
   dashboardLabel,
   ...props
 }: Omit<ComponentProps<typeof Link>, 'href' | 'children'> & {
-  children: ReactNode
+  children?: ReactNode
   dashboardLabel: ReactNode
 }) {
-  const searchParams = useSearchParams()
-  const cameFromDashboard = searchParams.get('from') === 'dashboard'
-
   return (
-    <Link href={cameFromDashboard ? '/dashboard' : '/marketplace'} {...props}>
-      {cameFromDashboard ? dashboardLabel : children}
+    <Link href="/dashboard" {...props}>
+      {dashboardLabel}
     </Link>
   )
 }

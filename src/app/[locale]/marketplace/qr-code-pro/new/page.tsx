@@ -17,7 +17,7 @@ export default async function NewQrCodePage() {
 
   const hasAccess = await hasActiveQrProAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect('/marketplace')
+    redirect('/dashboard')
   }
 
   return (

@@ -26,7 +26,7 @@ export default async function AureyaPage({ params }: { params: Promise<{ locale:
 
   const hasAccess = await hasActiveAureyaAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect(`/${locale}/marketplace`)
+    redirect(`/${locale}/dashboard`)
   }
 
   const { data: history } = await supabase

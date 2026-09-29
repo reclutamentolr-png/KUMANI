@@ -79,6 +79,28 @@ export async function proxy(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // Controllo del piano per gli strumenti (vedi sotto): parte subito, in
+  // parallelo al controllo della manutenzione, invece che dopo.
+  const toolName = extractToolName(request.nextUrl.pathname);
+
+  // Gli strumenti sono solo per chi ha fatto l'accesso: prima alcune pagine
+  // (es. CheckMail, VeriFoto, OXYGEN) si aprivano anche senza login, perché
+  // il controllo del piano qui sotto scatta solo per gli utenti collegati.
+  // Il Manuale Anti-Truffa porta invece alla sua anteprima pubblica.
+  if (!user && toolName) {
+    const segments = request.nextUrl.pathname.split('/').filter(Boolean);
+    const localePrefix = segments[0] && locales.includes(segments[0]) ? `/${segments[0]}` : '';
+    // Dopo l'accesso si torna qui (?next=, senza lingua: la aggiunge il login)
+    const barePath = '/' + (localePrefix ? segments.slice(1) : segments).join('/');
+    const next = encodeURIComponent(barePath + request.nextUrl.search);
+    const target = toolName === 'antitruffa' ? `${localePrefix}/manuale-antitruffa` : `${localePrefix}/login?next=${next}`;
+    return NextResponse.redirect(new URL(target, request.url));
+  }
+  const accessCheck =
+    user && toolName
+      ? supabase.rpc('can_use_tool', { p_tool: toolName }).maybeSingle<{ allowed: boolean; required_plan: string; known: boolean }>()
+      : null;
+
   // Manutenzione (Admin → Impostazioni): vale davvero, non solo a schermo.
   // Chi non è Staff viene portato alla pagina di manutenzione e i salvataggi
   // (server action / POST) sono rifiutati. I webhook Stripe (/api) passano.
@@ -108,13 +130,10 @@ export async function proxy(request: NextRequest) {
   // courtesy on top of it. Free/unauthenticated visitors are bounced to
   // /dashboard, where both "Abbonati ora" and "Attiva tramite Voucher"
   // are one click away.
-  const toolName = extractToolName(request.nextUrl.pathname);
-  if (user && toolName) {
+  if (user && toolName && accessCheck) {
     const segments = request.nextUrl.pathname.split('/').filter(Boolean);
     const localePrefix = segments[0] && locales.includes(segments[0]) ? `/${segments[0]}` : '';
-    const { data: access, error: accessError } = await supabase
-      .rpc('can_use_tool', { p_tool: toolName })
-      .maybeSingle<{ allowed: boolean; required_plan: string; known: boolean }>();
+    const { data: access, error: accessError } = await accessCheck;
 
     if (!accessError && access) {
       // Solo gli strumenti censiti (le altre pagine del marketplace, es.

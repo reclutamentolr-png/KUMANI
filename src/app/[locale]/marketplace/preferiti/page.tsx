@@ -55,10 +55,10 @@ export default async function MarketplaceFavoritesPage({
       <header className="border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-[0_8px_30px_rgba(23,23,23,0.18)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <Link
-            href={fromDashboard ? '/dashboard' : '/marketplace'}
+            href="/dashboard"
             className="flex items-center gap-2 text-sm font-semibold text-[var(--gold-bright)] transition-colors hover:text-white"
           >
-            <ArrowLeft className="h-4 w-4" /> {fromDashboard ? commonT('backToDashboard') : t('backToMarketplace')}
+            <ArrowLeft className="h-4 w-4" /> {commonT('backToDashboard')}
           </Link>
           <h1 className="flex items-center gap-2 text-lg font-semibold tracking-tight text-white">
             <Star className="h-5 w-5 text-[var(--gold-bright)]" fill="currentColor" /> {t('favoritesTitle')}
@@ -78,7 +78,7 @@ export default async function MarketplaceFavoritesPage({
             <h3 className="mb-2 text-lg font-bold text-[var(--ink)]">{t('noFavoritesTitle')}</h3>
             <p className="mx-auto max-w-md text-sm leading-6 text-[var(--muted)]">{t('noFavoritesBody')}</p>
             <Link
-              href="/marketplace"
+              href="/dashboard"
               className="mt-5 inline-flex items-center gap-2 rounded-lg bg-[var(--ink)] px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-colors hover:bg-[var(--ink-soft)]"
             >
               {t('browseMarketplace')}

@@ -21,7 +21,7 @@ export default async function PreventiviPage({ searchParams }: { searchParams: P
 
   const hasAccess = await hasActivePreventiviAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect('/marketplace')
+    redirect('/dashboard')
   }
 
   const { data: quotes } = await supabase

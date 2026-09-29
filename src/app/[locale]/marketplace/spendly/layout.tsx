@@ -23,7 +23,7 @@ export default async function SpendlyLayout({ children }: { children: React.Reac
 
   const hasAccess = await hasActiveSpendlyAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect(`/${await getLocale()}/marketplace`)
+    redirect(`/${await getLocale()}/dashboard`)
   }
 
   return (

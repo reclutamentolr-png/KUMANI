@@ -27,7 +27,7 @@ export default async function FidelityManagePage() {
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) redirect('/login')
-  if (!(await hasActiveToolAccess(supabase, user.id, 'fidelity'))) redirect('/marketplace')
+  if (!(await hasActiveToolAccess(supabase, user.id, 'fidelity'))) redirect('/dashboard')
 
   const { data: card } = await supabase.from('fidelity_cards').select(CARD_COLUMNS).eq('owner_id', user.id).maybeSingle<FidelityCard>()
 

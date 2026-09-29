@@ -18,7 +18,7 @@ export default async function FindoLocationsPage() {
 
   const hasAccess = await hasActiveFindoAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect(`/${await getLocale()}/marketplace`)
+    redirect(`/${await getLocale()}/dashboard`)
   }
 
   const { data: locations } = await supabase

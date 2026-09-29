@@ -23,7 +23,7 @@ export default async function QuoteBusinessProfilePage({
 
   const hasAccess = await hasActivePreventiviAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect('/marketplace')
+    redirect('/dashboard')
   }
 
   const { data: profile } = await supabase

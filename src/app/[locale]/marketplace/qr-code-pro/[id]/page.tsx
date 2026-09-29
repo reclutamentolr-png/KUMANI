@@ -26,7 +26,7 @@ export default async function QrCodeDetailPage({
 
   const hasAccess = await hasActiveQrProAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect('/marketplace')
+    redirect('/dashboard')
   }
 
   const { data: qrCode } = await supabase
