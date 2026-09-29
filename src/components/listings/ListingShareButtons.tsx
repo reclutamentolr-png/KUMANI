@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { Check, Link2, Mail, MessageCircle, Send, Share2 } from 'lucide-react'
 
 // Condivisione di un annuncio della Bacheca. Il link apre la Bacheca con
@@ -9,6 +9,7 @@ import { Check, Link2, Mail, MessageCircle, Send, Share2 } from 'lucide-react'
 // prima dal login e poi torna all'annuncio.
 export default function ListingShareButtons({ listingId, title }: { listingId: string; title: string }) {
   const t = useTranslations('marketplace')
+  const locale = useLocale()
   const [url, setUrl] = useState('')
   const [canNativeShare, setCanNativeShare] = useState(false)
   const [copied, setCopied] = useState(false)
@@ -16,10 +17,11 @@ export default function ListingShareButtons({ listingId, title }: { listingId: s
   // Calcolati dopo il montaggio (il popup può essere reso anche dal server)
   useEffect(() => {
     queueMicrotask(() => {
-      setUrl(`${window.location.origin}${window.location.pathname}?listing=${listingId}`)
+      // Sempre la Bacheca (l'italiano è senza prefisso nell'indirizzo)
+      setUrl(`${window.location.origin}${locale === 'it' ? '' : `/${locale}`}/marketplace/listings?listing=${listingId}`)
       setCanNativeShare(typeof navigator !== 'undefined' && typeof navigator.share === 'function')
     })
-  }, [listingId])
+  }, [listingId, locale])
 
   if (!url) return null
 

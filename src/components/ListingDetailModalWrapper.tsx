@@ -39,7 +39,15 @@ export default function ListingDetailModalWrapper({
   return (
     <ListingDetailModal
       isOpen={open}
-      onClose={() => setOpen(false)}
+      onClose={() => {
+        setOpen(false)
+        // Aperto da un link condiviso: via ?listing= così ricaricando non si riapre
+        const url = new URL(window.location.href)
+        if (url.searchParams.has('listing')) {
+          url.searchParams.delete('listing')
+          window.history.replaceState(null, '', url.pathname + url.search)
+        }
+      }}
       listing={listing}
       authorName={authorName}
       isOwn={isOwn}

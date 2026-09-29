@@ -19,6 +19,12 @@ import ListingsFilters from '@/components/listings/ListingsFilters'
 import { SuspendedBanner } from '@/components/ServiceSuspended'
 import { isToolOnline } from '@/lib/toolOnline'
 
+// Parole senza significato nella ricerca (articoli, preposizioni) in 7 lingue
+const SEARCH_STOPWORDS = new Set([
+  'del', 'dei', 'della', 'delle', 'degli', 'dal', 'dai', 'dalla', 'nel', 'nei', 'nella', 'sul', 'sui', 'sulla', 'per', 'con', 'tra', 'fra', 'gli', 'una', 'uno', 'che', 'non',
+  'the', 'and', 'for', 'with', 'from', 'les', 'des', 'une', 'pour', 'avec', 'dans', 'las', 'los', 'por', 'para', 'con', 'una', 'das', 'dos', 'uma', 'com', 'der', 'die', 'und', 'mit', 'für', 'для',
+])
+
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
@@ -53,14 +59,14 @@ export default async function ListingsPage({
   const defaultCountry = isListingCountry(profileCountry) ? profileCountry : ''
   const requestedCountry = (rawCountry ?? '').toUpperCase()
   const country = requestedCountry === 'ALL' ? '' : isListingCountry(requestedCountry) ? requestedCountry : rawCountry ? '' : defaultCountry
-  const city = cleanListingCity(cleanListingSearch(rawCity)) ?? ''
+  const city = cleanListingCity(rawCity) ?? ''
 
   // Una condizione per parola (max 5); ogni parola trova anche le categorie
   // per nome (es. "animali")
   const search = {
     terms: query
       .split(' ')
-      .filter((word) => word.length > 1)
+      .filter((word) => word.length > 2 && !SEARCH_STOPWORDS.has(word.toLowerCase()))
       .slice(0, 5)
       // Parole di 5+ lettere senza la vocale finale: "informatica" trova anche
       // "informatico", "bicicletta" anche "biciclette"
@@ -216,7 +222,7 @@ export default async function ListingsPage({
           query={query}
           country={country || 'all'}
           city={city}
-          hasFilters={Boolean(category || query || city)}
+          hasFilters={Boolean(category || query || city || country)}
           labels={{
             what: t('searchWhat'),
             searchPlaceholder: t('searchListingsPlaceholder'),
@@ -349,7 +355,7 @@ export default async function ListingsPage({
             <div className="rounded-3xl border-2 border-dashed border-[var(--gold)]/40 bg-white/70 p-10 text-center">
               <h3 className="mb-2 text-lg font-bold text-[var(--ink)]">{t('noListingsFound')}</h3>
               <p className="mb-5 text-gray-500">{t('noListingsFoundHint')}</p>
-              <Link href="/marketplace/listings" className="inline-flex items-center gap-2 rounded-xl bg-[var(--ink)] px-5 py-3 font-bold text-[var(--gold-bright)]">
+              <Link href="/marketplace/listings?country=all" className="inline-flex items-center gap-2 rounded-xl bg-[var(--ink)] px-5 py-3 font-bold text-[var(--gold-bright)]">
                 {t('clearFilters')}
               </Link>
             </div>

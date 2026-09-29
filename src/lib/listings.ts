@@ -12,9 +12,10 @@ export function isListingCountry(code: string | null | undefined): code is strin
 }
 
 // Città scritta dall'utente: spazi in ordine, massimo 80 caratteri, prima
-// lettera maiuscola ("milano" -> "Milano"). Il confronto è senza maiuscole.
+// lettera maiuscola ("milano" -> "Milano"), apostrofi tenuti ("L'Aquila").
+// Il confronto è senza maiuscole; nel filtro la città sta tra virgolette.
 export function cleanListingCity(raw: string | null | undefined): string | null {
-  const city = (raw ?? '').replace(/[,()*%\\:"'`]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 80)
+  const city = (raw ?? '').replace(/[,()*%\\:"`]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 80)
   return city ? city.charAt(0).toUpperCase() + city.slice(1) : null
 }
 

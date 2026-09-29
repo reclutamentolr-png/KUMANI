@@ -90,7 +90,7 @@ export default function ListingDetailModal({ isOpen, onClose, listing, authorNam
             )}
             {listing.created_at && (
               <span className="flex items-center gap-1">
-                <Calendar className="w-3 h-3" /> {t('postedOn', { date: new Date(listing.created_at).toLocaleDateString(locale) })}
+                <Calendar className="w-3 h-3" /> {t('postedOn', { date: new Date(listing.created_at).toLocaleDateString(locale, { timeZone: 'Europe/Rome' }) })}
               </span>
             )}
           </div>

@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { X, AlertCircle, CheckCircle2 } from 'lucide-react'
 import { updateListingAction } from '@/app/actions/listings'
-import { type ListingCategory, CATEGORY_ICONS, CATEGORY_I18N_KEYS, ALL_LISTING_CATEGORIES } from '@/lib/listings'
+import { type ListingCategory, CATEGORY_ICONS, CATEGORY_I18N_KEYS, ALL_LISTING_CATEGORIES, isListingCountry } from '@/lib/listings'
 import ListingLocationFields, { type ListingLocationValue } from '@/components/listings/ListingLocationFields'
 
 type Props = {
@@ -28,7 +28,7 @@ export default function EditListingModal({ isOpen, onClose, listing, citiesByCou
     imageUrl: listing?.image_url || '',
   })
   const [location, setLocation] = useState<ListingLocationValue>({
-    countryCode: listing?.country_code || '',
+    countryCode: isListingCountry(listing?.country_code) ? listing.country_code : '',
     city: listing?.city || '',
     isRemote: Boolean(listing?.is_remote),
   })
