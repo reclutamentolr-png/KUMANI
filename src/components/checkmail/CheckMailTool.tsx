@@ -188,7 +188,7 @@ function HowTo({ title, items }: { title: string; items: string[] }) {
 export function CheckMailResult({ result, onNew }: { result: OkResult; onNew: () => void }) {
   const t = useTranslations('checkmail')
   const style = LEVEL_STYLE[result.level]
-  const signals = result.findings.filter((f) => f.points > 0 && !f.key.startsWith('ai_'))
+  const signals = result.findings.filter((f) => f.points > 0)
   const notes = result.findings.filter((f) => f.points === 0)
 
   return (
@@ -250,8 +250,8 @@ export function CheckMailResult({ result, onNew }: { result: OkResult; onNew: ()
             </p>
             {result.ai.reasons.length > 0 && (
               <ul className="mt-2 space-y-1.5">
-                {result.ai.reasons.map((reason) => (
-                  <li key={reason} className="text-sm text-gray-700">
+                {result.ai.reasons.map((reason, index) => (
+                  <li key={index} className="text-sm text-gray-700">
                     • {reason}
                   </li>
                 ))}

@@ -26,7 +26,8 @@ export async function assessWithAi(verdict: Verdict, locale: string): Promise<Ai
     technical_signals: verdict.findings.map((f) => f.key),
     text: verdict.textSample,
   }
-  const message = await client.messages.create({
+  const message = await client.messages.create(
+    {
     model: ANTHROPIC_MODEL,
     max_tokens: 800,
     tools: [
@@ -67,7 +68,10 @@ export async function assessWithAi(verdict: Verdict, locale: string): Promise<Ai
         ].join('\n'),
       },
     ],
-  })
+    },
+    // Risposta in tempi brevi: oltre si usano solo i controlli tecnici
+    { timeout: 20_000, maxRetries: 0 }
+  )
   const toolUse = message.content.find((block): block is Extract<typeof block, { type: 'tool_use' }> => block.type === 'tool_use')
   const input = toolUse?.input as Partial<AiAssessment> | undefined
   if (!input || typeof input.risk !== 'number') return null

@@ -23,7 +23,7 @@ export type Verdict = {
   // memoria per la sola durata dell'analisi, non va mai salvato
   textSample: string
 }
-export type CheckMailInput = { raw?: string; text?: string; sender?: string; subject?: string }
+export type CheckMailInput = { raw?: string | ArrayBuffer; text?: string; sender?: string; subject?: string }
 export type CheckMailOptions = {
   // Controlli di rete (età del dominio, record MX); false = solo analisi locale
   network?: boolean
@@ -33,7 +33,9 @@ export type CheckMailOptions = {
 // ─── Marchi più imitati e loro domini ufficiali ──────────────────────────
 // Se un'email dice di essere uno di questi ma il dominio non è tra quelli
 // ufficiali, è il segnale più forte di truffa.
-const BRANDS: { name: string; words: string[]; domains: string[] }[] = [
+// words: frasi cercate senza maiuscole; acronyms: sigle cercate solo in
+// MAIUSCOLO ("TIM", non il nome "Tim").
+const BRANDS: { name: string; words: string[]; acronyms?: string[]; domains: string[] }[] = [
   { name: 'PayPal', words: ['paypal'], domains: ['paypal.com', 'paypal.it', 'paypal.me'] },
   { name: 'Amazon', words: ['amazon'], domains: ['amazon.it', 'amazon.com', 'amazon.de', 'amazon.fr', 'amazon.es', 'amazon.co.uk', 'amazon.eu', 'amazonses.com', 'marketplace.amazon.it', 'amazonaws.com', 'aws.amazon.com', 'awstrack.me', 'primevideo.com', 'audible.it'] },
   { name: 'Poste Italiane', words: ['poste italiane', 'posteitaliane', 'bancoposta', 'postepay'], domains: ['poste.it', 'posteitaliane.it', 'postepay.it'] },
@@ -47,22 +49,22 @@ const BRANDS: { name: string; words: string[]; domains: string[] }[] = [
   { name: 'Satispay', words: ['satispay'], domains: ['satispay.com'] },
   { name: 'Revolut', words: ['revolut'], domains: ['revolut.com'] },
   { name: 'N26', words: ['n26'], domains: ['n26.com'] },
-  { name: 'Apple', words: ['apple', 'icloud', 'itunes'], domains: ['apple.com', 'icloud.com', 'email.apple.com', 'id.apple.com'] },
-  { name: 'Microsoft', words: ['microsoft', 'outlook', 'office 365', 'office365', 'onedrive'], domains: ['microsoft.com', 'outlook.com', 'office.com', 'live.com', 'microsoftonline.com', 'accountprotection.microsoft.com'] },
-  { name: 'Google', words: ['google', 'gmail'], domains: ['google.com', 'accounts.google.com', 'gmail.com', 'youtube.com'] },
+  { name: 'Apple', words: ['apple id', 'id apple', 'icloud', 'itunes', 'apple pay', 'apple store', 'app store'], domains: ['apple.com', 'icloud.com', 'email.apple.com', 'id.apple.com'] },
+  { name: 'Microsoft', words: ['microsoft', 'microsoft outlook', 'office 365', 'office365', 'onedrive'], domains: ['microsoft.com', 'outlook.com', 'outlook.it', 'office.com', 'live.com', 'live.it', 'hotmail.com', 'hotmail.it', 'microsoftonline.com', 'accountprotection.microsoft.com'] },
+  { name: 'Google', words: ['google account', 'account google', 'gmail', 'google drive', 'google pay', 'google workspace'], domains: ['google.com', 'google.it', 'accounts.google.com', 'gmail.com', 'googlemail.com', 'youtube.com'] },
   { name: 'Netflix', words: ['netflix'], domains: ['netflix.com', 'mailer.netflix.com'] },
   { name: 'Facebook / Meta', words: ['facebook', 'meta business', 'instagram', 'whatsapp'], domains: ['facebook.com', 'facebookmail.com', 'meta.com', 'instagram.com', 'mail.instagram.com', 'whatsapp.com'] },
   { name: 'DHL', words: ['dhl'], domains: ['dhl.com', 'dhl.it', 'dhl.de'] },
-  { name: 'BRT', words: ['bartolini', 'brt '], domains: ['brt.it'] },
-  { name: 'GLS', words: ['gls'], domains: ['gls-italy.com', 'gls-group.eu', 'gls-group.com'] },
-  { name: 'UPS', words: ['ups'], domains: ['ups.com'] },
+  { name: 'BRT', words: ['bartolini'], acronyms: ['BRT'], domains: ['brt.it'] },
+  { name: 'GLS', words: ['gls italy'], acronyms: ['GLS'], domains: ['gls-italy.com', 'gls-group.eu', 'gls-group.com'] },
+  { name: 'UPS', words: ['ups express'], acronyms: ['UPS'], domains: ['ups.com'] },
   { name: 'FedEx', words: ['fedex'], domains: ['fedex.com'] },
   { name: 'SDA', words: ['sda express', 'sda corriere'], domains: ['sda.it'] },
   { name: 'Agenzia delle Entrate', words: ['agenzia delle entrate', 'agenziaentrate'], domains: ['agenziaentrate.it', 'agenziaentrate.gov.it', 'pec.agenziaentrate.it'] },
   { name: 'INPS', words: ['inps'], domains: ['inps.it', 'postacert.inps.gov.it'] },
   { name: 'Aruba', words: ['aruba'], domains: ['aruba.it', 'staff.aruba.it', 'arubapec.it'] },
   { name: 'Enel', words: ['enel'], domains: ['enel.it', 'enel.com'] },
-  { name: 'TIM', words: ['tim '], domains: ['tim.it', 'telecomitalia.it'] },
+  { name: 'TIM', words: ['telecom italia', 'tim spa', 'mytim'], acronyms: ['TIM'], domains: ['tim.it', 'telecomitalia.it'] },
   { name: 'Vodafone', words: ['vodafone'], domains: ['vodafone.it', 'vodafone.com'] },
   { name: 'Iliad', words: ['iliad'], domains: ['iliad.it'] },
   { name: 'eBay', words: ['ebay'], domains: ['ebay.it', 'ebay.com'] },
@@ -73,6 +75,7 @@ const FREE_MAIL = new Set([
   'gmail.com', 'googlemail.com', 'outlook.com', 'hotmail.com', 'hotmail.it', 'live.com', 'live.it', 'yahoo.com', 'yahoo.it',
   'libero.it', 'virgilio.it', 'tiscali.it', 'alice.it', 'tin.it', 'icloud.com', 'me.com', 'aol.com', 'gmx.com', 'gmx.de',
   'web.de', 'mail.ru', 'yandex.ru', 'proton.me', 'protonmail.com', 'orange.fr', 'free.fr', 'laposte.net',
+  'outlook.it', 'ymail.com', 'mail.com', 'email.com', 'gmx.it', 'inwind.it', 'hotmail.co.uk', 'yahoo.co.uk', 'msn.com',
 ])
 
 // Servizi che le newsletter vere usano per contare i clic: il link passa da
@@ -90,6 +93,12 @@ const SHORTENERS = new Set(['flowto.it', 'x.gd', 'v.gd', 'u.to', 'cutt.us', 'sho
 const RISKY_TLDS = new Set(['top', 'xyz', 'icu', 'click', 'link', 'cfd', 'sbs', 'rest', 'monster', 'quest', 'zip', 'mov', 'buzz', 'cyou', 'shop', 'online', 'site', 'live', 'support', 'lat', 'bond'])
 const DANGEROUS_EXT = new Set(['exe', 'scr', 'js', 'jse', 'vbs', 'vbe', 'bat', 'cmd', 'com', 'pif', 'iso', 'img', 'lnk', 'hta', 'docm', 'xlsm', 'pptm', 'jar', 'msi', 'ps1', 'wsf', 'reg', 'cab', 'apk', 'svg'])
 const ARCHIVE_EXT = new Set(['zip', 'rar', '7z', 'gz', 'tar', 'ace', 'arj'])
+// Parole comuni simili a nomi di marchi ("cloud" e "icloud"): non sono imitazioni
+// Lettere cirilliche identiche a quelle latine (а е о р с у х і ј ѕ ...)
+const HOMOGLYPHS = new Set([...'аеорсухіјѕԁһԛԝАВЕКМНОРСТХІЈЅ'])
+const COMMON_WORDS = new Set(['cloud', 'mail', 'email', 'post', 'posta', 'posten', 'poster', 'apply', 'live', 'office'])
+// Estensioni di file che nel testo di un link non sono domini ("fattura.pdf")
+const FILE_EXT = new Set(['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'csv', 'jpg', 'jpeg', 'png', 'gif', 'zip', 'rar', 'js', 'ts', 'html', 'htm', 'php', 'asp', 'aspx', 'mp3', 'mp4', 'eml', 'msg'])
 // Suffissi a due livelli più comuni (per ricavare il dominio "vero")
 const TWO_LEVEL_SUFFIXES = new Set(['co.uk', 'org.uk', 'ac.uk', 'gov.uk', 'com.br', 'com.au', 'co.jp', 'com.tr', 'com.mx', 'co.za', 'com.ar', 'gov.it', 'co.in', 'com.cn', 'com.ru', 'co.nz', 'com.es', 'com.pt'])
 
@@ -131,10 +140,10 @@ const CONTENT_RULES: { key: string; points: number; phrases: string[] }[] = [
     key: 'content_payment_pressure',
     points: 15,
     phrases: [
-      'gift card', 'carta regalo', 'buono regalo', 'bitcoin', 'criptovalut', 'nuove coordinate bancarie', 'nuovo iban', 'cambio iban', 'bonifico urgente', 'paga la multa', 'pagamento in sospeso', 'fattura non pagata',
+      'gift card', 'carta regalo', 'buono regalo', 'bitcoin', 'criptovalute', 'criptovaluta', 'nuove coordinate bancarie', 'nuovo iban', 'cambio iban', 'bonifico urgente', 'paga la multa', 'pagamento in sospeso', 'fattura non pagata',
       'new bank details', 'changed bank details', 'wire transfer', 'unpaid invoice', 'outstanding payment', 'pay the fine', 'cryptocurrency',
       'tarjeta regalo', 'nuevos datos bancarios', 'carte cadeau', 'nouvelles coordonnees bancaires', 'cartao presente', 'novos dados bancarios',
-      'geschenkkarte', 'neue bankverbindung', 'подарочная карта', 'новые реквизиты', 'криптовалют',
+      'geschenkkarte', 'neue bankverbindung', 'подарочная карта', 'новые реквизиты', 'криптовалюта', 'криптовалюту', 'криптовалюты',
     ],
   },
   {
@@ -176,10 +185,24 @@ const CONTENT_RULES: { key: string; points: number; phrases: string[] }[] = [
     ],
   },
 ]
+// Frasi pronte per la ricerca: normalizzate come il testo (così "й" di
+// "никому" coincide) e cercate come parole intere ("досрочно" non contiene
+// "срочно", "Sofortüberweisung" non è "sofort").
+function phraseRegex(phrase: string) {
+  const escaped = normalize(phrase).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  return new RegExp(`(?:^|[^\\p{L}\\p{N}])${escaped}(?=[^\\p{L}\\p{N}]|$)`, 'u')
+}
+const CONTENT_MATCHERS = CONTENT_RULES.map((rule) => ({
+  key: rule.key,
+  points: rule.points,
+  phrases: rule.phrases.map((phrase) => ({ phrase, re: phraseRegex(phrase) })),
+}))
+const CREDENTIAL_MATCHERS = CONTENT_MATCHERS.find((rule) => rule.key === 'content_credentials')!.phrases
+
 // Segnaposto di un modello di truffa dimenticati nel testo
 const TEMPLATE_PLACEHOLDERS = ['tuodominio.it', 'tuodominio.com', 'yourdomain.com', 'example.com', 'dominio.it', '[nome]', '[name]', '{{', '%%name', '[cliente]', '[email]']
 
-const GENERIC_GREETINGS = ['gentile cliente', 'caro cliente', 'gentile utente', 'dear customer', 'dear user', 'dear client', 'estimado cliente', 'cher client', 'caro cliente', 'prezado cliente', 'sehr geehrter kunde', 'уважаемый клиент']
+const GENERIC_GREETINGS = ['gentile cliente', 'caro cliente', 'gentile utente', 'dear customer', 'dear user', 'dear client', 'estimado cliente', 'cher client', 'prezado cliente', 'sehr geehrter kunde', 'уважаемый клиент'].map(phraseRegex)
 
 // ─── Utilità ─────────────────────────────────────────────────────────────
 function normalize(text: string) {
@@ -206,9 +229,16 @@ function domainOf(address: string | null | undefined): string | null {
   return address.slice(at + 1).trim().toLowerCase().replace(/[>\s].*$/, '') || null
 }
 
+// Ufficiale anche lo stesso nome del marchio con un suffisso nazionale o
+// .com/.net/.org/.eu (amazon.nl, paypal.de, google.it), non con estensioni
+// da truffa (paypal.top resta un'imitazione).
 function isOfficial(domain: string, brand: (typeof BRANDS)[number]) {
   const reg = registrableDomain(domain)
-  return brand.domains.some((d) => domain === d || domain.endsWith(`.${d}`) || reg === registrableDomain(d))
+  if (brand.domains.some((d) => domain === d || domain.endsWith(`.${d}`) || reg === registrableDomain(d))) return true
+  const [label, ...rest] = reg.split('.')
+  const tld = rest.join('.')
+  const regularTld = /^[a-z]{2}$/.test(tld) || ['com', 'net', 'org', 'eu'].includes(tld) || TWO_LEVEL_SUFFIXES.has(tld)
+  return regularTld && brand.domains.some((d) => registrableDomain(d).split('.')[0] === label && label.length >= 4)
 }
 
 function levenshtein(a: string, b: string) {
@@ -224,6 +254,7 @@ function levenshtein(a: string, b: string) {
 // oppure con il nome del marchio dentro (paypal-sicurezza.com).
 function lookalikeBrand(domain: string): (typeof BRANDS)[number] | null {
   const reg = registrableDomain(domain)
+  if (FREE_MAIL.has(reg)) return null
   const label = reg.split('.')[0].replace(/0/g, 'o').replace(/1/g, 'l').replace(/rn/g, 'm')
   // Parti del nome separate da trattini: "paypal-sicurezza" -> paypal, sicurezza
   // (il marchio conta solo come parola intera: "delivery" non contiene "live")
@@ -233,7 +264,11 @@ function lookalikeBrand(domain: string): (typeof BRANDS)[number] | null {
     for (const official of brand.domains) {
       const officialLabel = registrableDomain(official).split('.')[0]
       if (officialLabel.length < 4) continue
-      const similar = label === officialLabel || (officialLabel.length >= 5 && levenshtein(label, officialLabel) === 1)
+      // Stesso nome ma estensione da truffa (paypal.top), oppure una lettera
+      // di differenza su nomi lunghi (paypa1, amazom), non su parole comuni
+      const similar =
+        label === officialLabel ||
+        (officialLabel.length >= 6 && label.length >= 5 && !COMMON_WORDS.has(label) && levenshtein(label, officialLabel) === 1)
       const contains =
         (officialLabel.length >= 5 && tokens.length > 1 && tokens.includes(officialLabel)) ||
         (officialLabel.length >= 6 && label !== officialLabel && (label.startsWith(officialLabel) || label.endsWith(officialLabel)))
@@ -243,10 +278,17 @@ function lookalikeBrand(domain: string): (typeof BRANDS)[number] | null {
   return null
 }
 
+const BRAND_MATCHERS = BRANDS.map((brand) => ({
+  brand,
+  words: brand.words.map(phraseRegex),
+  acronyms: (brand.acronyms ?? []).map((acronym) => new RegExp(`(?:^|[^A-Za-z0-9])${acronym}(?=[^A-Za-z0-9]|$)`)),
+}))
+
 function claimedBrand(texts: string[]): (typeof BRANDS)[number] | null {
-  const hay = ` ${normalize(texts.join(' '))} `
-  for (const brand of BRANDS) {
-    if (brand.words.some((word) => new RegExp(`(^|[^a-z0-9])${word.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}([^a-z0-9]|$)`).test(hay))) return brand
+  const original = texts.join(' ')
+  const hay = normalize(original)
+  for (const { brand, words, acronyms } of BRAND_MATCHERS) {
+    if (words.some((re) => re.test(hay)) || acronyms.some((re) => re.test(original))) return brand
   }
   return null
 }
@@ -265,9 +307,30 @@ function extractLinks(html: string | undefined, text: string | undefined): Link[
     }
   }
   if (html) {
-    const anchor = /<a\b[^>]*?href\s*=\s*(["'])(.*?)\1[^>]*>([\s\S]*?)<\/a>/gi
-    let match: RegExpExecArray | null
-    while ((match = anchor.exec(html))) push(match[2].replace(/&amp;/g, '&'), match[3].replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' '))
+    // Scansione lineare dei tag <a ...>...</a> (niente espressioni che
+    // possono bloccarsi su HTML costruito apposta)
+    const lower = html.toLowerCase()
+    let from = 0
+    let examined = 0
+    // Posizione del prossimo "</a" (ricordata: niente ricerche ripetute fino
+    // in fondo quando le chiusure mancano)
+    let nextClose = 0
+    while (links.length < 500 && examined++ < 5000) {
+      const start = lower.indexOf('<a', from)
+      if (start < 0) break
+      const next = lower.charAt(start + 2)
+      const tagEnd = lower.indexOf('>', start)
+      if (tagEnd < 0) break
+      from = tagEnd + 1
+      if (next && !/[\s>]/.test(next)) continue
+      const tag = html.slice(start, Math.min(tagEnd, start + 2000))
+      const href = tag.match(/href\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i)
+      if (!href) continue
+      if (nextClose !== -1 && nextClose < tagEnd) nextClose = lower.indexOf('</a', tagEnd)
+      const close = nextClose
+      const inner = html.slice(tagEnd + 1, close < 0 ? tagEnd + 1 : Math.min(close, tagEnd + 1 + 500))
+      push((href[1] ?? href[2] ?? href[3] ?? '').replace(/&amp;/g, '&'), inner.replace(/<[^<>]{0,500}>/g, ' ').replace(/&nbsp;/g, ' '))
+    }
   }
   const plain = text ?? ''
   for (const match of plain.matchAll(/https?:\/\/[^\s<>"')\]]+/gi)) push(match[0], '')
@@ -276,11 +339,26 @@ function extractLinks(html: string | undefined, text: string | undefined): Link[
   return links.filter((l) => (seen.has(l.href + '|' + l.text) ? false : (seen.add(l.href + '|' + l.text), true)))
 }
 
+// Toglie i blocchi <style>/<script> con una scansione lineare
+function stripBlocks(html: string, tag: string) {
+  const lower = html.toLowerCase()
+  let out = ''
+  let from = 0
+  for (;;) {
+    const start = lower.indexOf(`<${tag}`, from)
+    if (start < 0) break
+    const end = lower.indexOf(`</${tag}`, start)
+    out += html.slice(from, start) + ' '
+    if (end < 0) return out
+    const close = lower.indexOf('>', end)
+    from = close < 0 ? html.length : close + 1
+  }
+  return out + html.slice(from)
+}
+
 function htmlToText(html: string) {
-  return html
-    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
-    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
-    .replace(/<[^>]+>/g, ' ')
+  return stripBlocks(stripBlocks(html, 'style'), 'script')
+    .replace(/<[^<>]{0,2000}>/g, ' ')
     .replace(/&nbsp;/g, ' ')
     .replace(/&amp;/g, '&')
 }
@@ -344,12 +422,39 @@ async function hasMx(domain: string, fetchImpl: typeof fetch): Promise<boolean |
   try {
     const res = await fetchImpl(`https://dns.google/resolve?name=${encodeURIComponent(registrableDomain(domain))}&type=MX`, { signal: AbortSignal.timeout(5000) })
     if (!res.ok) return null
-    const data = (await res.json()) as { Status?: number; Answer?: unknown[] }
-    if (data.Status === 3) return false // dominio inesistente
-    return Array.isArray(data.Answer) && data.Answer.length > 0
+    const data = (await res.json()) as { Status?: number }
+    // Solo un dominio inesistente conta: senza MX la posta può arrivare lo
+    // stesso all'indirizzo del dominio
+    return data.Status === 3 ? false : true
   } catch {
     return null
   }
+}
+
+// Età del dominio del mittente e dei primi link, esistenza del dominio del
+// mittente. Esportata: il sito la esegue in parallelo alla lettura con l'IA.
+export async function networkFindings(summary: Verdict['summary'], fetchImpl: typeof fetch = fetch): Promise<Finding[]> {
+  const found: Finding[] = []
+  const fromDomain = domainOf(summary.fromAddress)
+  const domains = [...new Set([fromDomain, ...summary.linkDomains.slice(0, 3)].filter((d): d is string => !!d).map(registrableDomain))]
+    .filter((d) => !FREE_MAIL.has(d) && !BRANDS.some((b) => b.domains.some((o) => registrableDomain(o) === d)))
+    .slice(0, 4)
+  const [ages, mx] = await Promise.all([
+    Promise.all(domains.map(async (d) => ({ d, age: await domainAgeDays(d, fetchImpl) }))),
+    fromDomain && !FREE_MAIL.has(registrableDomain(fromDomain)) ? hasMx(fromDomain, fetchImpl) : Promise.resolve(null),
+  ])
+  const youngest = ages.filter((a) => a.age !== null).sort((a, b) => a.age! - b.age!)[0]
+  if (youngest && youngest.age! < 30) found.push({ key: 'domain_very_new', severity: 'high', points: 30, params: { domain: youngest.d, days: youngest.age! } })
+  else if (youngest && youngest.age! < 180) found.push({ key: 'domain_new', severity: 'medium', points: 10, params: { domain: youngest.d, days: youngest.age! } })
+  if (mx === false && fromDomain) found.push({ key: 'sender_no_mx', severity: 'medium', points: 15, params: { domain: fromDomain } })
+  return found
+}
+
+// Aggiunge segnali a un risultato e ricalcola il punteggio
+export function withFindings(verdict: Verdict, extra: Finding[]): Verdict {
+  if (extra.length === 0) return verdict
+  const findings = [...verdict.findings, ...extra].sort((a, b) => b.points - a.points)
+  return { ...verdict, findings, ...scoreFindings(findings) }
 }
 
 // Punteggio: le frasi del testo insieme non superano 35 (troppe email vere
@@ -378,9 +483,17 @@ export async function analyzeEmail(input: CheckMailInput, options: CheckMailOpti
   let authResults: string | null = null
   let attachments: { filename: string | null; mimeType: string }[] = []
 
-  if (input.raw && /^[\w-]+:\s/m.test(input.raw.slice(0, 4000))) {
+  // Sorgente vero solo se la prima riga è un'intestazione e ce n'è almeno una
+  // tipica delle email; altrimenti è testo incollato ("Oggetto: ..." compreso)
+  const head = typeof input.raw === 'string' ? input.raw.slice(0, 8000) : input.raw ? new TextDecoder('latin1').decode(input.raw.slice(0, 8000)) : ''
+  const firstLine = head.split(/\r?\n/).find((line) => line.trim()) ?? ''
+  const looksLikeSource =
+    /^[\w-]+:/.test(firstLine) && /^(from|received|return-path|message-id|delivered-to|mime-version|authentication-results|dkim-signature):/im.test(head)
+  let parsed = false
+  if (input.raw && looksLikeSource) {
     const email = await PostalMime.parse(input.raw)
-    hasHeaders = email.headers.length > 3
+    parsed = true
+    hasHeaders = email.headers.some((h) => ['received', 'authentication-results', 'return-path', 'message-id'].includes(h.key))
     if (email.from && 'address' in email.from && email.from.address) {
       fromAddress = email.from.address.toLowerCase()
       fromName = email.from.name || null
@@ -392,15 +505,25 @@ export async function analyzeEmail(input: CheckMailInput, options: CheckMailOpti
     replyTo = firstReply && 'address' in firstReply ? (firstReply.address ?? null) : null
     returnPath = email.returnPath ?? null
     authResults = email.headers.find((h) => h.key === 'authentication-results')?.value ?? null
-    attachments = email.attachments.filter((a) => a.disposition !== 'inline' || a.filename).map((a) => ({ filename: a.filename, mimeType: a.mimeType }))
-  } else if (input.raw) {
-    text = input.raw
+    // Immagini inline del corpo (logo con Content-ID) non sono allegati
+    attachments = email.attachments
+      .filter((a) => a.disposition === 'attachment' || (!a.contentId && a.disposition !== 'inline' && a.filename))
+      .map((a) => ({ filename: a.filename, mimeType: a.mimeType }))
+    if (!email.html && !email.text && !hasHeaders) parsed = false
   }
+  if (input.raw && !parsed) {
+    text = typeof input.raw === 'string' ? input.raw : new TextDecoder('utf-8').decode(input.raw)
+  }
+  // Tetto al testo analizzato (le email vere stanno ben sotto)
+  if (html && html.length > 300_000) html = html.slice(0, 300_000)
+  if (text && text.length > 300_000) text = text.slice(0, 300_000)
   if (!fromAddress && input.sender) {
-    const match = input.sender.match(/[^\s<>"]+@[^\s<>"]+/)
-    fromAddress = match ? match[0].toLowerCase() : null
-    fromName = input.sender.replace(/<[^>]*>/, '').replace(/["']/g, '').trim() || null
-    if (fromName && fromName.toLowerCase() === fromAddress) fromName = null
+    // "support@paypal.com" <x@evil.com>: il mittente vero è x@evil.com
+    const angle = input.sender.match(/<\s*([^<>\s]+@[^<>\s]+)\s*>/)
+    const bare = input.sender.match(/[^\s<>"]+@[^\s<>"]+/)
+    fromAddress = (angle?.[1] ?? bare?.[0] ?? '').toLowerCase() || null
+    fromName = input.sender.replace(/<[^<>]*>/g, '').replace(/["']/g, '').trim() || null
+    if (!angle && fromName && fromName.toLowerCase() === fromAddress) fromName = null
   }
 
   const fromDomain = domainOf(fromAddress)
@@ -450,9 +573,16 @@ export async function analyzeEmail(input: CheckMailInput, options: CheckMailOpti
   // 4. Link
   const mismatches = new Set<string>()
   for (const link of links) {
-    const shown = link.text.match(/(?:https?:\/\/)?((?:[a-z0-9-]+\.)+[a-z]{2,})/i)?.[1]?.toLowerCase()
     if (CLICK_TRACKERS.has(registrableDomain(link.host)) || CLICK_TRACKERS.has(link.host)) continue
-    if (shown && registrableDomain(shown) !== registrableDomain(link.host)) mismatches.add(`${shown} → ${link.host}`)
+    const label = link.text.replace(/\s+/g, ' ').trim()
+    if (!label || label.length > 200) continue
+    // Il testo deve essere un indirizzo intero ("www.poste.it", "https://...")
+    const shown = label.match(/^(?:https?:\/\/)?((?:[a-z0-9-]+\.)+[a-z]{2,})(?:[/?#:]\S*)?$/i)?.[1]?.toLowerCase()
+    if (!shown || FILE_EXT.has(shown.split('.').pop() ?? '')) continue
+    if (registrableDomain(shown) === registrableDomain(link.host)) continue
+    // Due domini ufficiali dello stesso marchio (paypal.me -> paypal.com)
+    if (BRANDS.some((b) => isOfficial(shown, b) && isOfficial(link.host, b))) continue
+    mismatches.add(`${shown} → ${link.host}`)
   }
   if (mismatches.size > 0) add('link_text_mismatch', 'high', 25, { example: [...mismatches][0] })
   if (linkHosts.some((h) => /^\d{1,3}(\.\d{1,3}){3}$/.test(h))) add('link_ip', 'high', 25)
@@ -464,7 +594,8 @@ export async function analyzeEmail(input: CheckMailInput, options: CheckMailOpti
   if (lookLinks.length > 0) add('lookalike_link', 'high', 30, { brand: lookLinks[0].b!.name, domain: lookLinks[0].h })
   if (linkHosts.some((h) => h.includes('xn--'))) add('idn_link', 'medium', 15)
   if (brand && links.length > 0 && !linkHosts.some((h) => isOfficial(h, brand))) {
-    const credentialAsk = CONTENT_RULES[2].phrases.some((p) => normalize(bodyText).includes(p))
+    const normalizedBody = normalize(bodyText)
+    const credentialAsk = CREDENTIAL_MATCHERS.some((m) => m.re.test(normalizedBody))
     if (credentialAsk) add('brand_links_offsite', 'high', 20, { brand: brand.name, domain: linkHosts[0] })
   }
 
@@ -480,18 +611,19 @@ export async function analyzeEmail(input: CheckMailInput, options: CheckMailOpti
 
   // 6. Contenuto
   const normalized = normalize(`${subject ?? ''} ${bodyText}`)
-  for (const rule of CONTENT_RULES) {
-    const hit = rule.phrases.find((p) => normalized.includes(p))
-    if (hit) {
-      add(rule.key, 'medium', rule.points, { phrase: hit })
-    }
+  for (const rule of CONTENT_MATCHERS) {
+    const hit = rule.phrases.find((p) => p.re.test(normalized))
+    if (hit) add(rule.key, 'medium', rule.points, { phrase: hit.phrase })
   }
-  if (GENERIC_GREETINGS.some((g) => normalized.includes(g))) add('generic_greeting', 'low', 5)
+  if (GENERIC_GREETINGS.some((re) => re.test(normalized))) add('generic_greeting', 'low', 5)
   // Parole con lettere latine e cirilliche/greche mescolate ("Рuоі ассеdеrе"):
   // trucco per ingannare i filtri, non capita nei testi veri
-  const mixedWords = (`${subject ?? ''} ${bodyText}`.match(/[\p{L}]+/gu) ?? []).filter(
-    (word) => /[a-z]/i.test(word) && /[Ͱ-ϿЀ-ӿ]/.test(word)
-  )
+  // (solo lettere cirilliche uguali a quelle latine: "SMSки" o "50 μg" non contano)
+  const mixedWords = (`${subject ?? ''} ${bodyText}`.match(/[\p{L}]+/gu) ?? []).filter((word) => {
+    const latin = (word.match(/[a-z]/gi) ?? []).length
+    const cyrillic = word.match(/[\u0400-\u04ff]/g) ?? []
+    return latin > 0 && cyrillic.length > 0 && latin >= cyrillic.length && cyrillic.every((c) => HOMOGLYPHS.has(c))
+  })
   if (mixedWords.length >= 2) add('mixed_script', 'high', 30, { example: mixedWords[0] })
   const placeholder = TEMPLATE_PLACEHOLDERS.find((t) => normalized.includes(t))
   if (placeholder) add('template_placeholder', 'medium', 15, { text: placeholder })
@@ -505,22 +637,16 @@ export async function analyzeEmail(input: CheckMailInput, options: CheckMailOpti
     return reg !== fromReg && !CLICK_TRACKERS.has(reg) && !CLICK_TRACKERS.has(h) && !['googleapis.com', 'gstatic.com', 'w3.org'].includes(reg)
   })
   const ownLinks = linkHosts.filter((h) => fromReg && registrableDomain(h) === fromReg)
-  if (pressure && foreignLinks.length > 0 && ownLinks.length === 0) add('pressure_foreign_link', 'high', 25, { domain: foreignLinks[0] })
+  if (pressure && fromReg && foreignLinks.length > 0 && ownLinks.length === 0) add('pressure_foreign_link', 'high', 25, { domain: foreignLinks[0] })
 
-  // 7. Rete: età del dominio del mittente e dei primi link, MX del mittente
+  // 7. Rete (facoltativa): età dei domini ed esistenza del mittente
   if (options.network) {
-    const fetchImpl = options.fetchImpl ?? fetch
-    const domains = [...new Set([fromDomain, ...linkHosts.slice(0, 3)].filter((d): d is string => !!d).map(registrableDomain))]
-      .filter((d) => !FREE_MAIL.has(d) && !BRANDS.some((b) => b.domains.some((o) => registrableDomain(o) === d)))
-      .slice(0, 4)
-    const ages = await Promise.all(domains.map(async (d) => ({ d, age: await domainAgeDays(d, fetchImpl) })))
-    const youngest = ages.filter((a) => a.age !== null).sort((a, b) => a.age! - b.age!)[0]
-    if (youngest && youngest.age! < 30) add('domain_very_new', 'high', 30, { domain: youngest.d, days: youngest.age! })
-    else if (youngest && youngest.age! < 180) add('domain_new', 'medium', 10, { domain: youngest.d, days: youngest.age! })
-    if (fromDomain && !FREE_MAIL.has(registrableDomain(fromDomain))) {
-      const mx = await hasMx(fromDomain, fetchImpl)
-      if (mx === false) add('sender_no_mx', 'medium', 15, { domain: fromDomain })
-    }
+    findings.push(
+      ...(await networkFindings(
+        { fromAddress, fromName, subject, linkDomains: linkHosts.slice(0, 10), hasHeaders, attachmentNames: [] },
+        options.fetchImpl ?? fetch
+      ))
+    )
   }
 
   const { score, level } = scoreFindings(findings)
