@@ -10,9 +10,7 @@ import {
   Gift,
   Sparkles,
   Award,
-  TicketCheck,
   Receipt,
-  BadgePercent,
   IdCard,
   ArrowRight,
   BadgeCheck,
@@ -24,6 +22,7 @@ import { fetchDirectSponsored } from '@/lib/directAffiliates'
 import { isActiveSubscription } from '@/lib/subscriptionGate'
 import { getCurrentRank, RANKS } from '@/lib/ranks'
 import { listMyVouchers } from '@/app/actions/vouchers'
+import { listMyRedemptions } from '@/app/actions/rewards'
 import WalletMembershipCard from '@/components/WalletMembershipCard'
 import WalletCouponsList from '@/components/WalletCouponsList'
 import WalletVoucherSection from '@/components/WalletVoucherSection'
@@ -33,28 +32,23 @@ import { getMyAttendedCount, listMyPasses } from '@/app/actions/events'
 import { EVENT_TYPE_EMOJI, formatEventDate } from '@/lib/events'
 
 function WalletSection({
+  id,
   icon,
   title,
-  comingSoonLabel,
   children,
 }: {
+  id?: string
   icon: React.ReactNode
   title: string
-  comingSoonLabel?: string
   children: React.ReactNode
 }) {
   return (
-    <div className="rounded-xl border border-[var(--gold)]/25 bg-[var(--paper)] p-6 shadow-sm">
+    <div id={id} className="scroll-mt-6 rounded-xl border border-[var(--gold)]/25 bg-[var(--paper)] p-6 shadow-sm">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="flex items-center gap-2 text-lg font-bold text-[var(--ink)]">
           {icon}
           {title}
         </h3>
-        {comingSoonLabel && (
-          <span className="rounded-full border border-[var(--gold)]/40 bg-[var(--gold-pale)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-[var(--ink-soft)]">
-            {comingSoonLabel}
-          </span>
-        )}
       </div>
       {children}
     </div>
@@ -100,6 +94,15 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
 
   const couponsList = coupons || []
   const myVouchers = await listMyVouchers()
+  // Premi riscattati dal Catalogo Premi: in preparazione finché lo Staff non
+  // li evade (il codice arriva poi tra i Coupon)
+  const myRedemptions = (await listMyRedemptions()) as unknown as {
+    id: string
+    points_spent: number
+    redeemed_at: string
+    fulfilled_at: string | null
+    reward_catalog: { title: string | null; image_url: string | null } | { title: string | null; image_url: string | null }[] | null
+  }[]
   const [eventPasses, attendedCount] = await Promise.all([listMyPasses(), getMyAttendedCount()])
 
   // Piano effettivo (la prova Pro conta come Pro): stesso calcolo degli strumenti.
@@ -283,8 +286,71 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
           </Link>
         </WalletSection>
 
+        {/* I miei premi: riscatti dal Catalogo Premi e il loro stato */}
+        <WalletSection icon={<Gift className="h-5 w-5 text-[var(--gold)]" />} title={t('rewardsTitle')}>
+          {myRedemptions.length === 0 ? (
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <p className="text-sm text-[var(--muted)]">{t('rewardsEmpty')}</p>
+              <Link href="/rewards" className="rounded-lg bg-[var(--ink)] px-3 py-2 text-sm font-semibold text-white">
+                {t('networkPointsCta')}
+              </Link>
+            </div>
+          ) : (
+            <>
+              <ul className="space-y-2">
+                {myRedemptions.map((redemption) => {
+                  const reward = Array.isArray(redemption.reward_catalog) ? redemption.reward_catalog[0] : redemption.reward_catalog
+                  const delivered = Boolean(redemption.fulfilled_at)
+                  return (
+                    <li key={redemption.id} className="flex items-center gap-3 rounded-xl border border-[var(--gold)]/25 bg-white px-4 py-3">
+                      {reward?.image_url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={reward.image_url} alt="" className="h-11 w-11 shrink-0 rounded-lg object-cover" />
+                      ) : (
+                        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[var(--gold-pale)]">
+                          <Gift className="h-5 w-5 text-[var(--gold)]" />
+                        </span>
+                      )}
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate font-semibold text-[var(--ink)]">{reward?.title || t('rewardFallbackTitle')}</span>
+                        <span className="block truncate text-xs text-[var(--muted)]">
+                          {t('rewardSpent', {
+                            points: redemption.points_spent,
+                            date: new Date(redemption.redeemed_at).toLocaleDateString(locale),
+                          })}
+                        </span>
+                        <span className="mt-0.5 block text-xs text-[var(--muted)]">
+                          {delivered ? (
+                            <a href="#wallet-coupon" className="font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
+                              {t('rewardDeliveredHint')}
+                            </a>
+                          ) : (
+                            t('rewardPendingHint')
+                          )}
+                        </span>
+                      </span>
+                      {delivered ? (
+                        <span className="flex shrink-0 items-center gap-1 rounded-lg bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700">
+                          <BadgeCheck className="h-3.5 w-3.5" /> {t('rewardDelivered')}
+                        </span>
+                      ) : (
+                        <span className="flex shrink-0 items-center gap-1 rounded-lg border border-dashed border-[var(--gold)] px-2.5 py-1 text-xs font-bold text-[var(--ink)]">
+                          <Hourglass className="h-3.5 w-3.5" /> {t('rewardPending')}
+                        </span>
+                      )}
+                    </li>
+                  )
+                })}
+              </ul>
+              <Link href="/rewards" className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
+                {t('networkPointsCta')} <ArrowRight className="h-4 w-4" />
+              </Link>
+            </>
+          )}
+        </WalletSection>
+
         {/* Coupon */}
-        <WalletSection icon={<Ticket className="h-5 w-5 text-[var(--gold)]" />} title={t('couponTitle')}>
+        <WalletSection id="wallet-coupon" icon={<Ticket className="h-5 w-5 text-[var(--gold)]" />} title={t('couponTitle')}>
           {couponsList.length === 0 ? (
             <p className="text-sm text-[var(--muted)]">{t('couponEmpty')}</p>
           ) : (
@@ -298,23 +364,6 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
 
           <WalletVoucherSection initialPoints={profile.network_points || 0} initialVouchers={myVouchers} />
         </WalletSection>
-
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {/* Rewards */}
-          <WalletSection icon={<Gift className="h-5 w-5 text-[var(--gold)]" />} title={t('rewardsTitle')} comingSoonLabel={t('comingSoon')}>
-            <p className="text-sm text-[var(--muted)]">{t('rewardsEmpty')}</p>
-          </WalletSection>
-
-          {/* Pass */}
-          <WalletSection icon={<TicketCheck className="h-5 w-5 text-[var(--gold)]" />} title={t('passTitle')} comingSoonLabel={t('comingSoon')}>
-            <p className="text-sm text-[var(--muted)]">{t('passEmpty')}</p>
-          </WalletSection>
-
-          {/* Gift / Benefit */}
-          <WalletSection icon={<BadgePercent className="h-5 w-5 text-[var(--gold)]" />} title={t('giftTitle')} comingSoonLabel={t('comingSoon')}>
-            <p className="text-sm text-[var(--muted)]">{t('giftEmpty')}</p>
-          </WalletSection>
-        </div>
       </main>
     </div>
   )
