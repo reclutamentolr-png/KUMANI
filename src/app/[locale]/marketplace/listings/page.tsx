@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from '@/components/LocalizedLink'
 import { getTranslations } from 'next-intl/server'
-import { getActiveListings, getFeaturedListings, getUserListings } from '@/lib/listings-server'
+import { getActiveListings, getFeaturedListings, getUserListings, getActiveListingCategoryCounts, getActiveListingById, cleanListingSearch } from '@/lib/listings-server'
 import { CATEGORY_ICONS, CATEGORY_I18N_KEYS, ALL_LISTING_CATEGORIES, type ListingCategory } from '@/lib/listings'
 import { deleteListingAction, republishListingAction } from '@/app/actions/listings'
 import { ArrowLeft, Plus, Tag, Trash2, Eye, Calendar, RefreshCw, Sparkles, Coins, Info, ChevronDown } from 'lucide-react'
@@ -14,6 +14,7 @@ import ListingDetailModalWrapper from '@/components/ListingDetailModalWrapper'
 import EditListingButton from '@/components/EditListingButton'
 import EditListingModalWrapper from '@/components/EditListingModalWrapper'
 import ListingCard, { CATEGORY_STYLE } from '@/components/listings/ListingCard'
+import ListingsFilters from '@/components/listings/ListingsFilters'
 import { SuspendedBanner } from '@/components/ServiceSuspended'
 import { isToolOnline } from '@/lib/toolOnline'
 
@@ -25,16 +26,29 @@ export default async function ListingsPage({
   searchParams
 }: {
   params: Promise<{ locale: string }>
-  searchParams: Promise<{ category?: string; showForm?: string }>
+  searchParams: Promise<{ category?: string; showForm?: string; q?: string; listing?: string }>
 }) {
   const { locale } = await params
-  const { category, showForm } = await searchParams
+  const { category: rawCategory, showForm, q: rawQuery, listing: sharedListingId } = await searchParams
   const t = await getTranslations('marketplace')
   const commonT = await getTranslations('common')
 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  if (!user) {
+    // Link condiviso di un annuncio: dopo l'accesso si torna all'annuncio
+    const next = sharedListingId ? `?next=${encodeURIComponent(`/marketplace/listings?listing=${sharedListingId}`)}` : ''
+    redirect(`/${locale}/login${next}`)
+  }
+
+  const category = ALL_LISTING_CATEGORIES.includes(rawCategory as ListingCategory) ? (rawCategory as ListingCategory) : undefined
+  const query = cleanListingSearch(rawQuery)
+  const getCategoryLabel = (cat: ListingCategory) => t(CATEGORY_I18N_KEYS[cat] || 'catServizi')
+  // La ricerca trova anche le categorie per nome (es. "animali")
+  const queryCategories = query
+    ? ALL_LISTING_CATEGORIES.filter((cat) => getCategoryLabel(cat).toLowerCase().includes(query.toLowerCase()))
+    : []
+  const search = { q: query || undefined, qCategories: queryCategories }
 
   const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<{ daily_points: number | null; network_points: number | null; first_name: string | null; last_name: string | null }>()
 
@@ -60,21 +74,18 @@ export default async function ListingsPage({
       }
     : null
 
-  const allListings = await getActiveListings({
-    category: (category as ListingCategory) || undefined,
-    excludeFeatured: true
-  })
-
-  const featuredListings = await getFeaturedListings({
-    category: (category as ListingCategory) || undefined
-  })
+  const [allListings, featuredListings, categoryCounts, sharedListing] = await Promise.all([
+    getActiveListings({ category, excludeFeatured: true, ...search }),
+    getFeaturedListings({ category, ...search }),
+    getActiveListingCategoryCounts(search),
+    sharedListingId ? getActiveListingById(sharedListingId) : Promise.resolve(null),
+  ])
 
   const myListings = await getUserListings(user.id)
   const now = new Date().getTime()
 
-  const getCategoryLabel = (cat: ListingCategory) => t(CATEGORY_I18N_KEYS[cat] || 'catServizi')
   const totalActiveListings = allListings.length + featuredListings.length
-  const cardLabels = { showcase: t('showcaseBadge'), mine: t('myListing') }
+  const cardLabels = { showcase: t('showcaseBadge'), mine: t('myListing'), view: t('viewListing') }
   const euro = (value: number | string) =>
     new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2 }).format(Number(value))
 
@@ -162,36 +173,24 @@ export default async function ListingsPage({
           />
         )}
 
-        {/* Filtri Categoria: scorrevoli su telefono, a capo su schermi grandi */}
-        <div className="-mx-4 mb-8 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0">
-          <div className="flex w-max gap-2 sm:w-auto sm:flex-wrap">
-            <Link
-              href="/marketplace/listings"
-              className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold transition-all ${
-                !category ? 'bg-[var(--ink)] text-white shadow-md' : 'border border-gray-200 bg-white text-gray-700 hover:border-[var(--gold)]/60'
-              }`}
-            >
-              {t('allListings', { count: totalActiveListings })}
-            </Link>
-            {ALL_LISTING_CATEGORIES.map((cat) => {
-              const count = allListings.filter((l) => l.category === cat).length + featuredListings.filter((l) => l.category === cat).length
-              const active = category === cat
-              return (
-                <Link
-                  key={cat}
-                  href={`/marketplace/listings?category=${cat}`}
-                  className={`flex items-center gap-1.5 whitespace-nowrap rounded-full border px-4 py-2 text-sm font-semibold transition-all ${
-                    active ? 'border-[var(--ink)] bg-[var(--ink)] text-white shadow-md' : `${CATEGORY_STYLE[cat].chip} hover:shadow-sm`
-                  }`}
-                >
-                  <span>{CATEGORY_ICONS[cat]}</span>
-                  {getCategoryLabel(cat)}
-                  <span className={`rounded-full px-1.5 text-[11px] ${active ? 'bg-white/20' : 'bg-white/80'}`}>{count}</span>
-                </Link>
-              )
-            })}
-          </div>
-        </div>
+        {/* Filtri: categoria (menu a tendina) e ricerca libera */}
+        <ListingsFilters
+          categories={ALL_LISTING_CATEGORIES.map((cat) => ({
+            value: cat,
+            label: getCategoryLabel(cat),
+            icon: CATEGORY_ICONS[cat],
+            count: categoryCounts[cat] ?? 0,
+          }))}
+          allLabel={t('allCategories', { count: Object.values(categoryCounts).reduce((sum, n) => sum + n, 0) })}
+          category={category ?? ''}
+          query={query}
+          labels={{
+            category: t('filterCategory'),
+            search: t('searchListings'),
+            searchPlaceholder: t('searchListingsPlaceholder'),
+            clear: t('clearFilters'),
+          }}
+        />
 
         {/* I Miei Annunci */}
         {myListings.length > 0 && (
@@ -228,16 +227,24 @@ export default async function ListingsPage({
                           <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-emerald-700">{t('listingActive')}</span>
                         )}
                       </div>
-                      <ListingDetailButton listing={listing} isOwn={true} className="w-full text-left">
-                        <h3 className="mb-1 font-bold text-[var(--ink)] transition-colors hover:text-[var(--gold)]">{listing.title}</h3>
-                      </ListingDetailButton>
+                      <h3 className="mb-1 font-bold text-[var(--ink)]">{listing.title}</h3>
                       <p className="mb-3 line-clamp-2 text-sm text-gray-600">{listing.description}</p>
-                      {listing.price && <p className="mb-2 text-lg font-bold text-emerald-700">{euro(listing.price)}</p>}
+                      {listing.price && (
+                        <p className="mb-2 w-fit rounded-lg bg-[var(--ink)] px-3 py-1 text-base font-bold text-[var(--gold-bright)] shadow-sm">{euro(listing.price)}</p>
+                      )}
                       {isFeatured && (
                         <p className="mb-2 text-xs font-semibold text-[var(--gold)]">
                           {t('showcaseUntil', { date: new Date(listing.featured_until).toLocaleDateString(locale) })}
                         </p>
                       )}
+                      <ListingDetailButton
+                        listing={listing}
+                        isOwn={true}
+                        authorName={profile?.first_name ?? ''}
+                        className="mb-3 flex w-full items-center justify-center gap-1.5 rounded-lg bg-[var(--ink)] py-2 text-sm font-semibold text-[var(--gold-bright)] transition-colors hover:bg-[var(--ink-soft)]"
+                      >
+                        <Eye className="h-4 w-4" /> {t('viewListing')}
+                      </ListingDetailButton>
                       <div className="mt-auto flex items-center justify-between border-t border-gray-100 pt-3">
                         <span className="text-xs text-gray-500">
                           {isExpired ? t('expiredOn') : t('expires')}: {new Date(listing.expires_at).toLocaleDateString(locale)}
@@ -302,7 +309,15 @@ export default async function ListingsPage({
         <section>
           <h2 className="mb-4 text-lg font-bold text-[var(--ink)]">{t('allListings', { count: totalActiveListings })}</h2>
 
-          {allListings.length === 0 && featuredListings.length === 0 ? (
+          {allListings.length === 0 && featuredListings.length === 0 && (category || query) ? (
+            <div className="rounded-3xl border-2 border-dashed border-[var(--gold)]/40 bg-white/70 p-10 text-center">
+              <h3 className="mb-2 text-lg font-bold text-[var(--ink)]">{t('noListingsFound')}</h3>
+              <p className="mb-5 text-gray-500">{t('noListingsFoundHint')}</p>
+              <Link href="/marketplace/listings" className="inline-flex items-center gap-2 rounded-xl bg-[var(--ink)] px-5 py-3 font-bold text-[var(--gold-bright)]">
+                {t('clearFilters')}
+              </Link>
+            </div>
+          ) : allListings.length === 0 && featuredListings.length === 0 ? (
             <div className="rounded-3xl border-2 border-dashed border-[var(--gold)]/40 bg-white/70 p-12 text-center">
               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--ink)]">
                 <Tag className="h-8 w-8 text-[var(--gold-bright)]" />
@@ -334,7 +349,13 @@ export default async function ListingsPage({
       </main>
 
       <ChatModalWrapper userId={user.id} />
-      <ListingDetailModalWrapper />
+      <ListingDetailModalWrapper
+        initial={
+          sharedListing
+            ? { listing: sharedListing, authorName: sharedListing.profiles?.first_name ?? '', isOwn: sharedListing.user_id === user.id }
+            : undefined
+        }
+      />
       <EditListingModalWrapper />
     </div>
   )

@@ -1,4 +1,4 @@
-import { Sparkles, Tag } from 'lucide-react'
+import { Eye, Sparkles, Tag } from 'lucide-react'
 import ContactListingButton from '@/components/ContactListingButton'
 import ListingDetailButton from '@/components/ListingDetailButton'
 import ListingImageThumbnail from '@/components/ListingImageThumbnail'
@@ -46,7 +46,7 @@ export default function ListingCard({
   currentUserId: string
   categoryLabel: string
   featured?: boolean
-  labels: { showcase: string; mine: string }
+  labels: { showcase: string; mine: string; view: string }
   locale: string
 }) {
   const style = CATEGORY_STYLE[listing.category] ?? CATEGORY_STYLE.servizi
@@ -77,20 +77,21 @@ export default function ListingCard({
             <Sparkles className="h-3 w-3" /> {labels.showcase}
           </span>
         )}
-        {listing.price !== null && listing.price !== '' && (
-          <span className="absolute bottom-3 right-3 rounded-full bg-white/95 px-3 py-1 text-sm font-bold text-emerald-700 shadow">
-            {new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2 }).format(Number(listing.price))}
-          </span>
-        )}
       </div>
 
       <div className="flex flex-1 flex-col p-4">
-        <span className={`mb-2 inline-flex w-fit items-center gap-1 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${style.chip}`}>
-          {CATEGORY_ICONS[listing.category]} {categoryLabel}
-        </span>
-        <ListingDetailButton listing={listing} isOwn={isOwn} authorName={author} className="text-left">
-          <h3 className="mb-1 line-clamp-2 font-bold leading-snug text-[var(--ink)] transition-colors hover:text-[var(--gold)]">{listing.title}</h3>
-        </ListingDetailButton>
+        {/* Categoria e prezzo (riquadro nero con scritta oro) */}
+        <div className="mb-2 flex items-center justify-between gap-2">
+          <span className={`inline-flex min-w-0 items-center gap-1 truncate rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${style.chip}`}>
+            {CATEGORY_ICONS[listing.category]} {categoryLabel}
+          </span>
+          {listing.price !== null && listing.price !== '' && (
+            <span className="shrink-0 rounded-lg bg-[var(--ink)] px-3 py-1 text-base font-bold text-[var(--gold-bright)] shadow-sm">
+              {new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2 }).format(Number(listing.price))}
+            </span>
+          )}
+        </div>
+        <h3 className="mb-1 line-clamp-2 font-bold leading-snug text-[var(--ink)]">{listing.title}</h3>
         <p className="mb-4 line-clamp-3 flex-1 text-sm leading-6 text-gray-600">{listing.description}</p>
 
         <div className="mb-3 flex items-center gap-2 text-xs text-gray-500">
@@ -102,6 +103,14 @@ export default function ListingCard({
           <span>{new Date(listing.created_at).toLocaleDateString(locale, { day: 'numeric', month: 'short' })}</span>
         </div>
 
+        <ListingDetailButton
+          listing={listing}
+          isOwn={isOwn}
+          authorName={author}
+          className="mb-2 flex w-full items-center justify-center gap-1.5 rounded-lg bg-[var(--ink)] py-2 text-sm font-semibold text-[var(--gold-bright)] transition-colors hover:bg-[var(--ink-soft)]"
+        >
+          <Eye className="h-4 w-4" /> {labels.view}
+        </ListingDetailButton>
         {isOwn ? (
           <div className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 py-2 text-sm font-semibold text-emerald-700">
             <Tag className="h-4 w-4" /> {labels.mine}

@@ -2,12 +2,27 @@
 import { createClient } from '@/lib/supabase/server'
 import type { ListingCategory } from '@/lib/listings'
 
+// Ricerca libera nella Bacheca: testo (titolo o descrizione) oppure nome di
+// una categoria. Si tolgono i caratteri che hanno un significato nei filtri
+// del database, così la ricerca non può alterare la query.
+export function cleanListingSearch(raw?: string | null) {
+  return (raw ?? '').replace(/[,()*%\\:"'`]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 80)
+}
+
+function searchFilter(q: string, qCategories: ListingCategory[]) {
+  const parts = [`title.ilike.%${q}%`, `description.ilike.%${q}%`]
+  if (qCategories.length > 0) parts.push(`category.in.(${qCategories.join(',')})`)
+  return parts.join(',')
+}
+
+type ListingSearch = { q?: string; qCategories?: ListingCategory[] }
+
 export async function getActiveListings(options?: {
   category?: ListingCategory
   limit?: number
   excludeUserId?: string
   excludeFeatured?: boolean
-}) {
+} & ListingSearch) {
   const supabase = await createClient()
   const nowIso = new Date().toISOString()
 
@@ -28,13 +43,14 @@ export async function getActiveListings(options?: {
   // excluded here so they don't also clutter the regular listing (they
   // still count for category filters/totals via the separate query).
   if (options?.excludeFeatured) query = query.or(`featured_until.is.null,featured_until.lt.${nowIso}`)
+  if (options?.q) query = query.or(searchFilter(options.q, options.qCategories ?? []))
 
   const { data, error } = await query
   return error ? [] : (data || [])
 }
 
 /** Currently-showcased ("In Vetrina") listings, most-recently-featured first. */
-export async function getFeaturedListings(options?: { category?: ListingCategory }) {
+export async function getFeaturedListings(options?: { category?: ListingCategory } & ListingSearch) {
   const supabase = await createClient()
   const nowIso = new Date().toISOString()
 
@@ -50,9 +66,42 @@ export async function getFeaturedListings(options?: { category?: ListingCategory
     .order('featured_until', { ascending: false })
 
   if (options?.category) query = query.eq('category', options.category)
+  if (options?.q) query = query.or(searchFilter(options.q, options.qCategories ?? []))
 
   const { data, error } = await query
   return error ? [] : (data || [])
+}
+
+/** Quanti annunci attivi per categoria (con la ricerca, senza il filtro di categoria). */
+export async function getActiveListingCategoryCounts(search?: ListingSearch) {
+  const supabase = await createClient()
+  let query = supabase
+    .from('listings')
+    .select('category')
+    .eq('is_active', true)
+    .gte('expires_at', new Date().toISOString())
+  if (search?.q) query = query.or(searchFilter(search.q, search.qCategories ?? []))
+  const { data } = await query
+  const counts: Record<string, number> = {}
+  for (const row of data ?? []) counts[row.category] = (counts[row.category] ?? 0) + 1
+  return counts
+}
+
+/** Un annuncio attivo (per aprirlo da un link condiviso), o null. */
+export async function getActiveListingById(id: string) {
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) return null
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('listings')
+    .select(`
+      *,
+      profiles:user_id (first_name)
+    `)
+    .eq('id', id)
+    .eq('is_active', true)
+    .gte('expires_at', new Date().toISOString())
+    .maybeSingle()
+  return data
 }
 
 export async function getUserListings(userId: string) {

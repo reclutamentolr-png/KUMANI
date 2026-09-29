@@ -5,6 +5,7 @@ import { X, Tag, User, Calendar, Sparkles } from 'lucide-react'
 import { CATEGORY_ICONS, CATEGORY_I18N_KEYS, type ListingCategory } from '@/lib/listings'
 import ContactListingButton from '@/components/ContactListingButton'
 import ReportListingButton from '@/components/ReportListingButton'
+import ListingShareButtons from '@/components/listings/ListingShareButtons'
 
 type Props = {
   isOpen: boolean
@@ -56,7 +57,9 @@ export default function ListingDetailModal({ isOpen, onClose, listing, authorNam
               {CATEGORY_ICONS[listing.category as ListingCategory]} {t(CATEGORY_I18N_KEYS[listing.category as ListingCategory] || 'catServizi')}
             </span>
             {listing.price != null && listing.price !== '' && (
-              <span className="text-lg font-bold text-green-600">{'€'}{listing.price}</span>
+              <span className="rounded-lg bg-[var(--ink)] px-3 py-1 text-lg font-bold text-[var(--gold-bright)] shadow-sm">
+                {new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2 }).format(Number(listing.price))}
+              </span>
             )}
           </div>
 
@@ -74,6 +77,8 @@ export default function ListingDetailModal({ isOpen, onClose, listing, authorNam
               </span>
             )}
           </div>
+
+          <ListingShareButtons listingId={listing.id} title={listing.title} />
 
           {isOwn ? (
             <div className="w-full py-2 bg-green-50 border border-green-200 text-green-700 text-sm font-semibold rounded-lg flex items-center justify-center gap-1.5">
