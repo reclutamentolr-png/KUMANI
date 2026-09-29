@@ -5006,6 +5006,7 @@
     "closingInvited": "{name} já faz parte da KUMANI e pensou em si. Junte-se também: o primeiro passo é grátis.",
     "closing": "Junte-se também à comunidade: o primeiro passo é grátis.",
     "stickyCta": "Inscreva-se grátis",
-    "rulesLocked": "A explicação de cada regra, com exemplos, está no manual completo."
+    "rulesLocked": "A explicação de cada regra, com exemplos, está no manual completo.",
+    "memberNote": "Está a ver a página como membro: quem recebe o seu link vê o botão «Inscreva-se grátis»."
   }
 }

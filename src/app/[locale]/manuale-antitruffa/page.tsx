@@ -75,13 +75,18 @@ export default async function ManualePreviewPage({ searchParams }: Props) {
   ]
 
   const cta = user ? (
-    <Link
-      href="/marketplace/antitruffa"
-      className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-4 text-base font-extrabold text-[var(--ink)] shadow-lg"
-    >
-      <BookOpenCheck className="h-5 w-5" />
-      {t('ctaOpen')}
-    </Link>
+    <div>
+      <Link
+        href="/marketplace/antitruffa"
+        className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-4 text-base font-extrabold text-[var(--ink)] shadow-lg"
+      >
+        <BookOpenCheck className="h-5 w-5" />
+        {t('ctaOpen')}
+      </Link>
+      {/* Chi è iscritto e controlla il proprio link non vede "Iscriviti":
+          glielo diciamo, così non pensa che manchi il pulsante */}
+      <p className="mt-3 text-center text-xs leading-5 text-white/60">{t('memberNote')}</p>
+    </div>
   ) : (
     <div>
       <Link
