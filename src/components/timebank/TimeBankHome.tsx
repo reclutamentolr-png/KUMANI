@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
+import ChatRetentionNote from '@/components/ChatRetentionNote'
 import { useRouter } from 'next/navigation'
 import {
   BadgeCheck,
@@ -559,6 +560,7 @@ function ExchangeSheet({
               ))
             )}
           </div>
+          {open && online && <ChatRetentionNote className="mt-2" />}
           {open && online && (
             <form
               onSubmit={async (e) => {

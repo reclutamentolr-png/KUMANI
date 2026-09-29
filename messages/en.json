@@ -5018,6 +5018,7 @@
     "memberNote": "You're seeing this page as a member: people who receive your link see the \"Join for free\" button."
   },
   "chat": {
+    "someone": "User",
     "title": "Conversation",
     "titleWith": "Conversation with {name}",
     "emptyTitle": "No messages in this conversation",

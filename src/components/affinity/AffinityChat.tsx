@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { LoaderCircle, Send, ShieldCheck, X } from 'lucide-react'
 import { loadAffinityChat, sendAffinityMessage, type ChatMessage } from '@/app/actions/affinityFriends'
 import { useAffinityRealtime } from '@/lib/useAffinityRealtime'
+import ChatRetentionNote from '@/components/ChatRetentionNote'
 
 // Chat tra due persone che si sono dette sì. Nessun numero o email: tutto
 // resta in piattaforma. I nuovi messaggi arrivano in tempo reale.
@@ -84,6 +85,7 @@ export default function AffinityChat({ introId, name, onClose }: { introId: stri
           <div ref={bottom} />
         </div>
         {error && <p className="px-4 pb-1 text-xs font-semibold text-amber-700">{error}</p>}
+        <ChatRetentionNote className="mx-3 mt-2" />
         <form onSubmit={send} className="flex items-end gap-2 border-t border-gray-100 p-3">
           <textarea
             value={text}

@@ -230,7 +230,8 @@ export async function getUserConversations(userId: string) {
     const otherUserId = isUserSender ? msg.receiver_id : msg.sender_id
     const otherUser = isUserSender ? msg.receiver : msg.sender
     // Degli altri Kumani si mostra solo il nome
-    const otherUserName = otherUser?.first_name?.trim() || 'Utente'
+    // Vuoto se manca: la pagina mostra "Utente" nella lingua giusta
+    const otherUserName = otherUser?.first_name?.trim() || ''
     
     const listingId = msg.listing_id || 'direct'
     const key = `${listingId}_${otherUserId}`
@@ -239,7 +240,7 @@ export async function getUserConversations(userId: string) {
       conversationsMap.set(key, {
         key,
         listingId: msg.listing_id,
-        listingTitle: msg.listing?.title || 'Messaggio diretto',
+        listingTitle: msg.listing?.title || '',
         otherUserId,
         otherUserName,
         lastMessage: msg.content,

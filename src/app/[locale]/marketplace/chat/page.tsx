@@ -66,9 +66,9 @@ export default async function ChatInboxPage({ params }: { params: Promise<{ loca
     key={conv.key}
     convKey={conv.key}
     listingId={conv.listingId}
-    listingTitle={conv.listingTitle}
+    listingTitle={conv.listingTitle || t('directMessage')}
     otherUserId={conv.otherUserId}
-    otherUserName={conv.otherUserName}
+    otherUserName={conv.otherUserName || t('someone')}
     lastMessage={conv.lastMessage}
     unreadCount={conv.unreadCount}
     currentUserId={user.id}

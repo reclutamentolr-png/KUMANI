@@ -5018,6 +5018,7 @@
     "memberNote": "Vous voyez cette page en tant que membre : les personnes qui reçoivent votre lien voient le bouton « S'inscrire gratuitement »."
   },
   "chat": {
+    "someone": "Utilisateur",
     "title": "Conversation",
     "titleWith": "Conversation avec {name}",
     "emptyTitle": "Aucun message dans cette conversation",

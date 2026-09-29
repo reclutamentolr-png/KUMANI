@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
+import ChatRetentionNote from '@/components/ChatRetentionNote'
 import type { RealtimeChannel } from '@supabase/supabase-js'
 import { BadgeCheck, Check, Clock, Flag, LoaderCircle, MapPin, MessageCircle, Minus, Package, Pencil, Phone, Plus, Send, Share2, Star, Truck, Users, X } from 'lucide-react'
 import {
@@ -575,6 +576,7 @@ export default function ConvivioDetailView({ initial, siteUrl, myReferral }: { i
                   ))
                 )}
               </div>
+              <ChatRetentionNote className="mx-3 mt-2" />
               <form
                 onSubmit={async (e) => {
                   e.preventDefault()
