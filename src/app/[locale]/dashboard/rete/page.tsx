@@ -11,7 +11,15 @@ import DirectAffiliatesList from '@/components/DirectAffiliatesList'
 import NotYetKumaniList from '@/components/NotYetKumaniList'
 import Leaderboard from '@/components/Leaderboard'
 import { getDashboardNetworkData } from '@/lib/dashboardNetworkData'
-import { ArrowLeft, TreePine, Star, Sparkles, Crown, Trophy, Wallet } from 'lucide-react'
+import { ArrowLeft, TreePine, Star, Sparkles, Crown, Trophy, Wallet, PartyPopper } from 'lucide-react'
+import { RANKS } from '@/lib/ranks'
+
+// Schede "Prossimi obiettivi": aspetto di ciascuna qualifica (soglie e testi da RANKS)
+const GOALS = [
+  { key: 'rising_star', Icon: Star, icon: 'text-yellow-500', levelKey: 'easy', card: 'from-green-50 to-emerald-50 border-green-200', chip: 'text-green-800 bg-green-200', track: 'bg-green-200', bar: 'from-green-500 to-emerald-500' },
+  { key: 'shining_star', Icon: Sparkles, icon: 'text-blue-500', levelKey: 'medium', card: 'from-blue-50 to-indigo-50 border-blue-200', chip: 'text-blue-800 bg-blue-200', track: 'bg-blue-200', bar: 'from-blue-500 to-indigo-500' },
+  { key: 'diamond_star', Icon: Crown, icon: 'text-purple-500', levelKey: 'hard', card: 'from-purple-50 to-fuchsia-50 border-purple-200', chip: 'text-purple-800 bg-purple-200', track: 'bg-purple-200', bar: 'from-purple-500 to-fuchsia-500' },
+] as const
 
 // The Tipo 2 dashboard's dedicated network area: everything Tipo 1 shows
 // inline (KUMI, referral share, matrix, KUMANI lists, qualifications) lives
@@ -48,6 +56,13 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
   } = network
 
   const shareUrl = `${SITE_URL}/${locale}/ref/${profile?.referral_code}`
+
+  // Qualifiche raggiunte, con i giorni dall'iscrizione (registrate alla
+  // prima visita dopo il raggiungimento, con la data ricostruita).
+  const { data: achievementRows } = await supabase.rpc('my_rank_achievements')
+  const achievements = new Map(
+    ((achievementRows ?? []) as { rank_key: string; achieved_at: string; days: number }[]).map((row) => [row.rank_key, row])
+  )
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -182,48 +197,43 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
             {t('nextGoals')}
           </h2>
           <div className="space-y-4">
-            <div className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-200">
-              <div className="flex items-center justify-between mb-2">
-                <Star className="w-8 h-8 text-yellow-500" />
-                <span className="text-xs font-semibold text-green-800 bg-green-200 px-2.5 py-1 rounded-full">{t('easy')}</span>
-              </div>
-              <p className="font-bold text-gray-900 mb-1">{t('risingStar')}</p>
-              <p className="text-sm text-gray-600 mb-2">{t('risingStarDesc')}</p>
-              <div className="w-full bg-green-200 rounded-full h-2.5">
-                <div className="bg-gradient-to-r from-green-500 to-emerald-500 h-2.5 rounded-full" style={{ width: `${Math.min((directSponsorCount / 6) * 100, 100)}%` }}></div>
-              </div>
-              <p className="text-xs text-gray-500 mt-2 font-medium">
-                {directSponsorCount}/6 {t('affiliates')}
-              </p>
-            </div>
-            <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
-              <div className="flex items-center justify-between mb-2">
-                <Sparkles className="w-8 h-8 text-blue-500" />
-                <span className="text-xs font-semibold text-blue-800 bg-blue-200 px-2.5 py-1 rounded-full">{t('medium')}</span>
-              </div>
-              <p className="font-bold text-gray-900 mb-1">{t('shiningStar')}</p>
-              <p className="text-sm text-gray-600 mb-2">{t('shiningStarDesc')}</p>
-              <div className="w-full bg-blue-200 rounded-full h-2.5">
-                <div className="bg-gradient-to-r from-blue-500 to-indigo-500 h-2.5 rounded-full" style={{ width: `${Math.min((directSponsorCount / 36) * 100, 100)}%` }}></div>
-              </div>
-              <p className="text-xs text-gray-500 mt-2 font-medium">
-                {directSponsorCount}/36 {t('affiliates')}
-              </p>
-            </div>
-            <div className="p-4 bg-gradient-to-r from-purple-50 to-fuchsia-50 rounded-lg border border-purple-200">
-              <div className="flex items-center justify-between mb-2">
-                <Crown className="w-8 h-8 text-purple-500" />
-                <span className="text-xs font-semibold text-purple-800 bg-purple-200 px-2.5 py-1 rounded-full">{t('hard')}</span>
-              </div>
-              <p className="font-bold text-gray-900 mb-1">{t('diamondStar')}</p>
-              <p className="text-sm text-gray-600 mb-2">{t('diamondStarDesc')}</p>
-              <div className="w-full bg-purple-200 rounded-full h-2.5">
-                <div className="bg-gradient-to-r from-purple-500 to-fuchsia-500 h-2.5 rounded-full" style={{ width: `${Math.min((directSponsorCount / 108) * 100, 100)}%` }}></div>
-              </div>
-              <p className="text-xs text-gray-500 mt-2 font-medium">
-                {directSponsorCount}/108 {t('affiliates')}
-              </p>
-            </div>
+            {GOALS.map((goal) => {
+              const rank = RANKS.find((r) => r.key === goal.key)!
+              const achievement = achievements.get(goal.key)
+              const Icon = goal.Icon
+              return (
+                <div key={goal.key}>
+                  {achievement && (
+                    <div className="mb-2 flex items-center gap-2 rounded-lg bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-3 py-2 text-sm font-bold text-[var(--ink)] shadow-sm">
+                      <PartyPopper className="h-5 w-5 shrink-0" />
+                      <span>
+                        {t('goalReachedIn', { days: achievement.days })}
+                        <span className="ml-1 font-medium opacity-75">
+                          · {new Date(achievement.achieved_at).toLocaleDateString(locale)}
+                        </span>
+                      </span>
+                    </div>
+                  )}
+                  <div className={`p-4 bg-gradient-to-r ${goal.card} rounded-lg border ${achievement ? 'ring-2 ring-[var(--gold)]/60' : ''}`}>
+                    <div className="flex items-center justify-between mb-2">
+                      <Icon className={`w-8 h-8 ${goal.icon}`} />
+                      <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${goal.chip}`}>{t(goal.levelKey)}</span>
+                    </div>
+                    <p className="font-bold text-gray-900 mb-1">{t(rank.labelKey)}</p>
+                    <p className="text-sm text-gray-600 mb-2">{t(rank.descriptionKey)}</p>
+                    <div className={`w-full rounded-full h-2.5 ${goal.track}`}>
+                      <div
+                        className={`bg-gradient-to-r ${goal.bar} h-2.5 rounded-full`}
+                        style={{ width: `${achievement ? 100 : Math.min((directSponsorCount / rank.threshold) * 100, 100)}%` }}
+                      ></div>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-2 font-medium">
+                      {directSponsorCount}/{rank.threshold} {t('affiliates')}
+                    </p>
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </div>
         </div>
