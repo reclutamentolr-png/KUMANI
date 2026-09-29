@@ -1463,7 +1463,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
           </h2>
           <p className="text-gray-600 mt-1">
             Annunci del marketplace segnalati dai Kumani perché non in linea con le regole. Puoi ignorare la
-            segnalazione o eliminare direttamente l'annuncio.
+            segnalazione o eliminare direttamente l’annuncio.
           </p>
         </div>
 
@@ -1563,7 +1563,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
           </h2>
           <p className="text-gray-600 mt-1">
             Solo le storie approvate entrano in rotazione (dashboard, vetrina pubblica e home). Ogni modifica del
-            testo la rimette in coda. In home compaiono solo con il consenso "home" e quando il pool raggiunge la
+            testo la rimette in coda. In home compaiono solo con il consenso “home” e quando il pool raggiunge la
             soglia minima ({SPOTLIGHT_HOME_MIN_POOL}).
           </p>
           <p className="text-sm text-gray-500 mt-2">
@@ -2401,7 +2401,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
           </h2>
           <p className="text-gray-600 mt-1">
             Stime basate su {f.subscriptionPrice}€/anno per abbonamento e 1 Punto Community ≈ 1€. Non sostituisce i dati
-            reali di Stripe, che restano l'unica fonte per la contabilità.
+            reali di Stripe, che restano l’unica fonte per la contabilità.
           </p>
         </div>
 
@@ -2550,7 +2550,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
                   </button>
                 ))}
               </div>
-              <p className="text-xs text-gray-400 mt-1.5">L'italiano è obbligatorio; le altre lingue sono facoltative (se lasciate vuote, quell'utente vedrà il testo in italiano).</p>
+              <p className="text-xs text-gray-400 mt-1.5">L’italiano è obbligatorio; le altre lingue sono facoltative (se lasciate vuote, quell’utente vedrà il testo in italiano).</p>
             </div>
           )}
 
@@ -2815,7 +2815,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
             Iscrizioni senza invito
           </label>
           <p className="text-xs text-gray-500 mb-3">
-            Chi si iscrive senza codice invito entra nella struttura dell'account KUMANI (mai in quella di un Kumano).
+            Chi si iscrive senza codice invito entra nella struttura dell’account KUMANI (mai in quella di un Kumano).
             Un Kumano attivo della stessa zona riceve un &quot;ringraziamento attività&quot; quando il nuovo iscritto
             paga il primo abbonamento. Il ringraziamento per chi invita è il &quot;Bonus Struttura&quot; qui sotto.
           </p>
@@ -2958,7 +2958,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
             Annunci in Vetrina
           </label>
           <p className="text-xs text-gray-500 mb-3">
-            Punti Community richiesti a un Kumano per mettere in evidenza un proprio annuncio nella sezione "In Vetrina"
+            Punti Community richiesti a un Kumano per mettere in evidenza un proprio annuncio nella sezione “In Vetrina”
             della bacheca, per 7 o 15 giorni.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md">
