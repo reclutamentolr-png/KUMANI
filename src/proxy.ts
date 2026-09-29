@@ -36,6 +36,9 @@ const PAID_TOOLS = [
   'verifoto',
   'checkmail',
   'magazzino',
+  'documento-sicuro',
+  'firma-email',
+  'calcolatrici',
 ];
 
 // Pagine sempre raggiungibili durante la manutenzione (accesso dello Staff).
