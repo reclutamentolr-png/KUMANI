@@ -86,7 +86,7 @@ const GENERAL_SETTINGS_KEYS = new Set([
   'activity_thanks_points', 'pro_invite_extra_points', 'pro_trial_days', 'affinity_intros_per_week',
   'listing_feature_cost_7d', 'listing_feature_cost_15d', 'menu_ai_daily_runs',
   'veritas_write_seconds', 'veritas_vote_seconds', 'veritas_reveal_seconds',
-  'verifoto_daily_user', 'verifoto_monthly_ops',
+  'verifoto_daily_user', 'verifoto_monthly_ops', 'checkmail_daily_user',
   'mosaic_pixels_day', 'mosaic_bonus_pixels', 'mosaic_min_login_days',
   'fabula_min_login_days', 'fabula_hide_after_reports',
 ])

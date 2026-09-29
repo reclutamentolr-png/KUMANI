@@ -108,6 +108,17 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       requiresSubscription: true,
     },
     {
+      toolName: 'checkmail',
+      href: '/marketplace/checkmail',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'MailSearch',
+      title: t('checkmail'),
+      description: t('checkmailDescription'),
+      color: 'gold',
+      category: 'security',
+      requiresSubscription: true,
+    },
+    {
       toolName: 'memolife',
       href: '/marketplace/memolife',
       gradient: 'bg-[var(--ink)]',

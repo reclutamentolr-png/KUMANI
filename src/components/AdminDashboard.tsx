@@ -280,6 +280,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
     veritas_vote_seconds: 45,
     veritas_reveal_seconds: 15,
     verifoto_daily_user: 1,
+    checkmail_daily_user: 10,
     verifoto_monthly_ops: 1800,
     mosaic_pixels_day: 3,
     mosaic_bonus_pixels: 1,
@@ -2643,6 +2644,18 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
               Il piano gratuito di Sightengine include 2.000 operazioni al mese: oltre si paga. Tieni il tetto sotto 2.000 per restare gratis
               (ogni analisi consuma le operazioni indicate da Sightengine, di solito alcune per foto).
             </p>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">CheckMail: analisi per utente al giorno</label>
+            <input
+              type="number"
+              min="0"
+              max="100"
+              value={systemSettings.checkmail_daily_user ?? 10}
+              onChange={(e) => setSystemSettings({ ...systemSettings, checkmail_daily_user: Math.max(0, parseInt(e.target.value, 10) || 0) })}
+              className="w-full max-w-xs p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+            />
+            <p className="text-xs text-gray-500 mt-1">Ogni analisi usa anche la chiave AI del progetto (lettura del testo), con un piccolo costo.</p>
           </div>
           <div>
             <p className="block text-sm font-medium text-gray-700 mb-2">Veritas: durata delle fasi (secondi)</p>

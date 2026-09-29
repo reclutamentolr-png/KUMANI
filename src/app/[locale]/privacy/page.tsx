@@ -283,7 +283,8 @@ export default function PrivacyPage() {
                 <li><strong className="text-gray-900">Stripe</strong> — pagamenti di abbonamenti e commissioni; tratta i dati della carta come titolare autonomo secondo la propria informativa.</li>
                 <li>
                   <strong className="text-gray-900">Anthropic</strong> — funzioni di intelligenza artificiale di KUMANI Menu
-                  (traduzioni) e OfferMaker: riceve solo i testi che invii a queste funzioni, non il tuo profilo.
+                  (traduzioni), OfferMaker e CheckMail (lettura del testo delle email che chiedi di analizzare): riceve solo i
+                  testi che invii a queste funzioni, non il tuo profilo, e non li usa per addestrare i suoi modelli.
                 </li>
                 <li>
                   <strong className="text-gray-900">Servizio di invio email</strong> — <Todo>indicare il fornitore SMTP usato per le email di autenticazione, se diverso da Supabase</Todo>

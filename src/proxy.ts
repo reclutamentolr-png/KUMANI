@@ -34,6 +34,7 @@ const PAID_TOOLS = [
   'kumani-cv',
   'spotlight',
   'verifoto',
+  'checkmail',
   'magazzino',
 ];
 
