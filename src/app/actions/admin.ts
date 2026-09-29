@@ -2674,3 +2674,40 @@ export async function adminRemoveFabulaWord(word: string) {
   const { error } = await getServiceClient().from('fabula_banned_words').delete().eq('word', word)
   return error ? { success: false, error: error.message } : { success: true }
 }
+
+// ── Elenco utenti e matrice per il pannello ──────────────────────────────
+// Cognome e codice unico degli altri non sono più leggibili dal browser
+// (vedi 20261114110000_profiles_privacy.sql): lo Staff li riceve da qui.
+
+async function listProfilesForStaff() {
+  const { data } = await getServiceClient()
+    .from('profiles')
+    .select('id, first_name, last_name, referral_code')
+    .order('first_name')
+    .limit(500)
+  return data || []
+}
+
+export async function adminListMatrixUsers() {
+  const admin = await verifyAdmin('matrix.read')
+  if (!admin) return { users: [] }
+  return { users: await listProfilesForStaff() }
+}
+
+export async function adminListCouponUsers() {
+  const admin = await verifyAdmin('coupons.read')
+  if (!admin) return { users: [] }
+  return { users: await listProfilesForStaff() }
+}
+
+export async function adminGetUserMatrix(userId: string) {
+  const admin = await verifyAdmin('matrix.read')
+  if (!admin || !EVENT_ID_RE.test(userId)) return null
+  const service = getServiceClient()
+  const [{ data: profile }, { data: userNode }, { data: downline }] = await Promise.all([
+    service.from('profiles').select('username, first_name, last_name, referral_code, country_code').eq('id', userId).maybeSingle(),
+    service.from('matrix_nodes').select('*').eq('user_id', userId).maybeSingle(),
+    service.rpc('get_user_downline', { p_user_id: userId, p_max_depth: 5 }),
+  ])
+  return { profile, userNode, downline: (downline ?? []) as Array<{ id: string; parent_id: string | null; depth: number; [key: string]: unknown }> }
+}

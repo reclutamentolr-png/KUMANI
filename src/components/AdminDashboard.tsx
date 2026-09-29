@@ -41,6 +41,9 @@ import {
   moderateSpotlightProfile,
   dismissListingReport,
   deleteReportedListing,
+  adminListMatrixUsers,
+  adminListCouponUsers,
+  adminGetUserMatrix,
 } from '@/app/actions/admin'
 import {
   createAdminMessage,
@@ -341,8 +344,8 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
   }
 
   const loadMatrixUsers = async () => {
-    const { data } = await supabase.from('profiles').select('id, first_name, last_name, referral_code').order('first_name').limit(500)
-    if (data) setMatrixUsers(data)
+    const { users } = await adminListMatrixUsers()
+    setMatrixUsers(users)
   }
 
   const loadMatrixForUser = async (targetUserId: string) => {
@@ -355,9 +358,10 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
     setLoadingMatrix(true)
     setSelectedMatrixUserId(targetUserId)
     try {
-      const { data: profile } = await supabase.from('profiles').select('username, first_name, last_name, referral_code, country_code').eq('id', targetUserId).single()
-      const { data: userNode } = await supabase.from('matrix_nodes').select('*').eq('user_id', targetUserId).single()
-      const { data: downlineData } = await supabase.rpc('get_user_downline', { p_user_id: targetUserId, p_max_depth: 5 })
+      const result = await adminGetUserMatrix(targetUserId)
+      const profile = result?.profile
+      const userNode = result?.userNode
+      const downlineData = result?.downline
 
       const correctRootId = userNode?.id || (downlineData && downlineData.length > 0 ? downlineData[0].parent_id : `root-${targetUserId}`)
 
@@ -422,12 +426,8 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
 
   const loadCouponsData = async () => {
     setLoadingCoupons(true)
-    const { data: usersData } = await supabase
-      .from('profiles')
-      .select('id, first_name, last_name, referral_code')
-      .order('first_name')
-      .limit(500)
-    setCouponUsers(usersData || [])
+    const { users: usersData } = await adminListCouponUsers()
+    setCouponUsers(usersData)
 
     const [result, batchResult] = await Promise.all([listCoupons(), listVoucherBatches()])
     setCoupons(result.coupons)

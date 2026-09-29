@@ -36,11 +36,7 @@ export default async function ListingsPage({
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('daily_points, network_points, first_name, last_name')
-    .eq('id', user.id)
-    .single()
+  const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<{ daily_points: number | null; network_points: number | null; first_name: string | null; last_name: string | null }>()
 
   const { data: showcaseSettings } = await supabase
     .from('system_settings')

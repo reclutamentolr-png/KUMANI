@@ -4,19 +4,21 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useTranslations } from 'next-intl'
 import { Trophy, Medal, Award, Crown, TrendingUp } from 'lucide-react'
-import { isActiveSubscription } from '@/lib/subscriptionGate'
 
 type LeaderboardProps = {
   currentUserId: string
 }
 
+// Riga della classifica così come arriva dal database
+// (get_network_leaderboard): solo nome e codice unico mascherato, mai
+// cognome, codice completo o id degli altri Kumani.
 type LeaderboardEntry = {
-  id: string
+  rank_position: number
   first_name: string
-  last_name: string
-  referral_code: string
+  masked_code: string | null
   direct_active_count: number
   network_active_count: number
+  is_me: boolean
 }
 
 
@@ -27,115 +29,35 @@ export default function Leaderboard({ currentUserId }: LeaderboardProps) {
   const [userRank, setUserRank] = useState<number | null>(null)
   const [viewMode, setViewMode] = useState<'top10' | 'top100'>('top10')
   const [error, setError] = useState<string | null>(null)
-  const supabase = createClient()
 
   useEffect(() => {
-    loadLeaderboard()
-  }, [currentUserId])
-
-  const loadLeaderboard = async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      // 1. Recupera tutti i profili
-      let { data: profiles, error: profilesError } = await supabase
-        .from('profiles')
-        .select('id, first_name, last_name, referral_code, sponsor_id, subscription_status, subscription_expires_at')
-
-      if (profilesError) {
-        // subscription_expires_at may not exist yet on this database (same
-        // defensive fallback used in marketplace/page.tsx).
-        const fallback = await supabase
-          .from('profiles')
-          .select('id, first_name, last_name, referral_code, sponsor_id, subscription_status')
-        profiles = fallback.data?.map(p => ({ ...p, subscription_expires_at: null })) ?? null
-        profilesError = fallback.error
-      }
-
-      // 2. Recupera tutti i nodi della matrice
-      const { data: allNodes, error: nodesError } = await supabase
-        .from('matrix_nodes')
-        .select('id, user_id, path')
-
-      if (profilesError) {
-        setError(`${t('matrixProfilesError')}: ${profilesError.message}`)
-        return
-      }
-
-      if (nodesError) {
-        setError(`${t('matrixNodesError')}: ${nodesError.message} (Code: ${nodesError.code})`)
-        return
-      }
-
-      if (!profiles || profiles.length === 0) {
-        setError(t('noProfiles'))
-        return
-      }
-
-      if (!allNodes || allNodes.length === 0) {
-        setError(t('noMatrixNodes'))
-        return
-      }
-
-      // Crea una mappa user_id -> path e una user_id -> profilo (per lo stato abbonamento)
-      const userPathMap = new Map<string, string>()
-      allNodes.forEach(node => {
-        if (node.user_id && node.path) {
-          userPathMap.set(node.user_id, node.path)
+    const supabase = createClient()
+    let cancelled = false
+    const loadLeaderboard = async () => {
+      setLoading(true)
+      setError(null)
+      try {
+        // La classifica è calcolata nel database (Top 100 + la propria riga).
+        const { data, error: rpcError } = await supabase.rpc('get_network_leaderboard', { p_limit: 100 })
+        if (cancelled) return
+        if (rpcError) {
+          setError(t('unexpectedError'))
+          return
         }
-      })
-      const profileById = new Map(profiles.map(p => [p.id, p]))
-
-      // Calcola, per ogni profilo: quanti sponsorizzati diretti sono attivi
-      // (paganti) e quanti utenti attivi ci sono nell'intera rete sotto di lui.
-      const entriesWithCount: LeaderboardEntry[] = profiles.map(profile => {
-        const directActiveCount = profiles.filter(
-          p => p.sponsor_id === profile.id && isActiveSubscription(p)
-        ).length
-
-        const userPath = userPathMap.get(profile.id)
-        let networkActiveCount = 0
-        if (userPath) {
-          const prefix = userPath + '.'
-          networkActiveCount = allNodes
-            .filter(node => node.path?.startsWith(prefix))
-            .filter(node => {
-              const p = node.user_id ? profileById.get(node.user_id) : null
-              return p ? isActiveSubscription(p) : false
-            }).length
-        }
-
-        return {
-          id: profile.id,
-          first_name: profile.first_name,
-          last_name: profile.last_name,
-          referral_code: profile.referral_code,
-          direct_active_count: directActiveCount,
-          network_active_count: networkActiveCount
-        }
-      })
-
-      // Ordina per rete attiva decrescente, a parità per diretti attivi
-      const sorted = entriesWithCount.sort((a, b) => {
-        if (b.network_active_count !== a.network_active_count) {
-          return b.network_active_count - a.network_active_count
-        }
-        if (b.direct_active_count !== a.direct_active_count) {
-          return b.direct_active_count - a.direct_active_count
-        }
-        return (a.first_name || '').localeCompare(b.first_name || '')
-      })
-
-      setAllEntries(sorted)
-
-      const rank = sorted.findIndex(e => e.id === currentUserId) + 1
-      setUserRank(rank > 0 ? rank : null)
-    } catch (error) {
-      setError(t('unexpectedError'))
-    } finally {
-      setLoading(false)
+        const rows = (data ?? []) as LeaderboardEntry[]
+        setAllEntries(rows.filter((row) => row.rank_position <= 100))
+        setUserRank(rows.find((row) => row.is_me)?.rank_position ?? null)
+      } catch {
+        if (!cancelled) setError(t('unexpectedError'))
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
     }
-  }
+    loadLeaderboard()
+    return () => {
+      cancelled = true
+    }
+  }, [currentUserId, t])
 
   const displayedEntries = viewMode === 'top10' ? allEntries.slice(0, 10) : allEntries.slice(0, 100)
 
@@ -205,12 +127,12 @@ export default function Leaderboard({ currentUserId }: LeaderboardProps) {
         <div className="text-center py-8 text-gray-500">{t('noData')}</div>
       ) : (
         <div className="space-y-2 max-h-[500px] overflow-y-auto pr-2">
-          {displayedEntries.map((entry, index) => {
-            const rank = index + 1
-            const isCurrentUser = entry.id === currentUserId
+          {displayedEntries.map((entry) => {
+            const rank = entry.rank_position
+            const isCurrentUser = entry.is_me
             return (
               <div
-                key={entry.id}
+                key={entry.rank_position}
                 className={`flex items-center gap-3 p-3 rounded-lg border transition-all ${
                   isCurrentUser 
                     ? 'bg-[var(--gold-pale)]/50 border-[var(--gold)] shadow-sm ring-2 ring-[var(--gold)]/40' 
@@ -223,7 +145,7 @@ export default function Leaderboard({ currentUserId }: LeaderboardProps) {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <span className={`font-semibold truncate ${isCurrentUser ? 'text-[var(--ink)]' : 'text-gray-900'}`}>
-                      {entry.first_name} {entry.last_name}
+                      {entry.first_name}
                     </span>
                     {isCurrentUser && (
                       <span className="text-[10px] bg-[var(--ink)] text-[var(--gold-bright)] px-1.5 py-0.5 rounded-full font-bold uppercase tracking-wider">
@@ -231,7 +153,7 @@ export default function Leaderboard({ currentUserId }: LeaderboardProps) {
                       </span>
                     )}
                   </div>
-                  <div className="text-xs text-gray-500 font-mono truncate">{entry.referral_code}</div>
+                  <div className="text-xs text-gray-500 font-mono truncate">{entry.masked_code}</div>
                 </div>
                 <div className="flex flex-shrink-0 items-center gap-4">
                   <div className="text-right">

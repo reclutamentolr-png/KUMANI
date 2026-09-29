@@ -12,7 +12,7 @@ export default async function MarketplaceLayout({ children }: { children: React.
 
   let referralCode: string | null = null
   if (user) {
-    const { data } = await supabase.from('profiles').select('referral_code').eq('id', user.id).maybeSingle()
+    const { data } = await supabase.rpc('get_my_profile').maybeSingle<{ referral_code: string | null }>()
     referralCode = data?.referral_code ?? null
   }
 

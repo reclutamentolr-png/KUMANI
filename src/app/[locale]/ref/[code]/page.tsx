@@ -42,7 +42,7 @@ export default async function ReferralPage({ params }: { params: Promise<{ code:
   }
 
   const registerUrl = `/register?sponsor=${encodeURIComponent(inviter.referral_code)}`
-  const inviterName = `${inviter.first_name} ${inviter.last_name}`.trim()
+  const inviterName = inviter.first_name.trim()
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-purple-50 p-4">

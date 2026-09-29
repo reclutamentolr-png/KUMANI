@@ -53,7 +53,7 @@ export default async function EventPage({ params, searchParams }: Props) {
 
   let myReferral: string | null = null
   if (user) {
-    const { data: me } = await supabase.from('profiles').select('referral_code').eq('id', user.id).maybeSingle()
+    const { data: me } = await supabase.rpc('get_my_profile').maybeSingle<{ referral_code: string | null }>()
     myReferral = me?.referral_code ?? null
   }
 

@@ -23,7 +23,7 @@ export default async function TripPage({ params }: { params: Promise<{ locale: s
 
   const [bundle, { data: me }, { data: lifeCalendar }] = await Promise.all([
     getTripBundle(id),
-    supabase.from('profiles').select('referral_code').eq('id', user.id).maybeSingle(),
+    supabase.rpc('get_my_profile').maybeSingle<{ referral_code: string | null }>(),
     supabase.rpc('can_use_tool', { p_tool: 'life-calendar' }).maybeSingle<{ allowed: boolean }>(),
   ])
   if (!bundle) notFound()

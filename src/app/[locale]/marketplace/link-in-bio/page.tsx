@@ -23,11 +23,7 @@ export default async function LinkInBioPage({ params }: { params: Promise<{ loca
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('id, referral_code, first_name, last_name')
-    .eq('id', user.id)
-    .single()
+  const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<{ id: string; referral_code: string; first_name: string; last_name: string }>()
 
   if (!profile) redirect('/dashboard')
 

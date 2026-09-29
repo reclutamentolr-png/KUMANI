@@ -53,11 +53,7 @@ export default async function AdminPage({
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect(`/${locale}/login`)
   
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('is_admin, first_name, last_name')
-    .eq('id', user.id)
-    .single()
+  const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<{ is_admin: boolean | null; first_name: string | null; last_name: string | null }>()
   
   // ✅ Join semplice (senza !inner, più sicuro)
   const { data: adminRecord } = await supabase

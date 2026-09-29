@@ -15,7 +15,7 @@ export async function getActiveListings(options?: {
     .from('listings')
     .select(`
       *,
-      profiles:user_id (first_name, last_name, referral_code, username)
+      profiles:user_id (first_name)
     `)
     .eq('is_active', true)
     .gte('expires_at', nowIso)
@@ -42,7 +42,7 @@ export async function getFeaturedListings(options?: { category?: ListingCategory
     .from('listings')
     .select(`
       *,
-      profiles:user_id (first_name, last_name, referral_code, username)
+      profiles:user_id (first_name)
     `)
     .eq('is_active', true)
     .gte('expires_at', nowIso)
@@ -82,8 +82,8 @@ export async function getUserConversations(userId: string) {
     .from('messages')
     .select(`
       id, sender_id, receiver_id, listing_id, content, created_at, is_read,
-      sender:sender_id (id, first_name, last_name),
-      receiver:receiver_id (id, first_name, last_name),
+      sender:sender_id (id, first_name),
+      receiver:receiver_id (id, first_name),
       listing:listing_id (id, title)
     `)
     .or(`sender_id.eq.${userId},receiver_id.eq.${userId}`)
@@ -95,9 +95,8 @@ export async function getUserConversations(userId: string) {
     const isUserSender = msg.sender_id === userId
     const otherUserId = isUserSender ? msg.receiver_id : msg.sender_id
     const otherUser = isUserSender ? msg.receiver : msg.sender
-    const otherUserName = otherUser 
-      ? `${otherUser.first_name || ''} ${otherUser.last_name || ''}`.trim() || 'Utente'
-      : 'Utente'
+    // Degli altri Kumani si mostra solo il nome
+    const otherUserName = otherUser?.first_name?.trim() || 'Utente'
     
     const listingId = msg.listing_id || 'direct'
     const key = `${listingId}_${otherUserId}`

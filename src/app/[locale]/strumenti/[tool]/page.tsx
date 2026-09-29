@@ -70,7 +70,7 @@ export default async function ToolSharePage({
 
           {inviter && (
             <p className="mt-6 rounded-xl bg-white/5 px-4 py-3 text-sm text-gray-200">
-              {t('invitedBy', { name: `${inviter.first_name} ${inviter.last_name}`.trim() })}
+              {t('invitedBy', { name: inviter.first_name.trim() })}
             </p>
           )}
 

@@ -25,59 +25,21 @@ export async function getDashboardNetworkData(
   // Recupera il nodo matrice dell'utente corrente
   const { data: userNode } = await supabase.from('matrix_nodes').select('*').eq('user_id', user.id).single()
 
-  // Recupera tutti i nodi della matrice
-  const { data: allMatrixNodes, error: matrixError } = await supabase
-    .from('matrix_nodes')
-    .select(
-      `
-      id,
-      user_id,
-      parent_id,
-      path,
-      level,
-      position,
-      depth,
-      created_at,
-      profiles:user_id (
-        first_name,
-        last_name,
-        referral_code,
-        country_code,
-        username,
-        subscription_status,
-        subscription_expires_at
-      )
-    `
-    )
-    .order('level', { ascending: true })
-
-  // Filtra i discendenti
-  const downlineData = allMatrixNodes
-    ?.filter((node: any) => {
-      if (node.id === userNode?.id) return false
-      const rootPath = userNode?.path
-      if (!rootPath) return false
-      return node.path.startsWith(rootPath + '.')
-    })
-    .map((node: any) => ({
-      id: node.id,
-      user_id: node.user_id,
-      parent_id: node.parent_id,
-      path: node.path,
-      level: node.level,
-      position: node.position,
-      depth: node.depth,
-      created_at: node.created_at,
-      first_name: node.profiles?.first_name,
-      last_name: node.profiles?.last_name,
-      referral_code: node.profiles?.referral_code,
-      country_code: node.profiles?.country_code,
-      username: node.profiles?.username,
-      is_active: isActiveSubscription({
-        subscription_status: node.profiles?.subscription_status,
-        subscription_expires_at: node.profiles?.subscription_expires_at,
-      }),
-    }))
+  // I propri discendenti nella matrice: solo nome e stato attivo, calcolati
+  // dal database (niente cognome o codice di chi è finito sotto di noi).
+  const { data: downlineRows, error: matrixError } = await supabase.rpc('get_my_downline')
+  const downlineData = ((downlineRows ?? []) as Array<{
+    id: string
+    user_id: string
+    parent_id: string | null
+    path: string
+    level: number
+    position: number
+    depth: number
+    created_at: string
+    first_name: string | null
+    is_active: boolean
+  }>).map((node) => ({ ...node, first_name: node.first_name ?? undefined }))
 
   const downlineError = matrixError
 
@@ -120,10 +82,8 @@ export async function getDashboardNetworkData(
 
   // RECUPERA LO SPONSOR (il KUMI)
   const { data: sponsorData } = await supabase
-    .from('profiles')
-    .select('first_name, last_name, referral_code')
-    .eq('id', profile?.sponsor_id)
-    .single()
+    .rpc('get_my_sponsor')
+    .maybeSingle<{ first_name: string | null; last_name: string | null; referral_code: string | null }>()
 
   // QUALIFICHE — basate su quanti utenti QUESTO utente ha sponsorizzato
   // personalmente (profiles.sponsor_id) E CHE SONO ATTIVI (abbonamento

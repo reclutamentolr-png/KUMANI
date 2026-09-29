@@ -19,7 +19,7 @@ export default async function ConvivioDetailPage({ params }: { params: Promise<{
   if (!user) redirect(`/${locale}/login`)
   if (!/^[0-9a-f-]{36}$/i.test(id)) notFound()
 
-  const [detail, { data: me }] = await Promise.all([getConvivio(id), supabase.from('profiles').select('referral_code').eq('id', user.id).maybeSingle()])
+  const [detail, { data: me }] = await Promise.all([getConvivio(id), supabase.rpc('get_my_profile').maybeSingle<{ referral_code: string | null }>()])
   if (!detail) notFound()
 
   const online = await isToolOnline('convivio')

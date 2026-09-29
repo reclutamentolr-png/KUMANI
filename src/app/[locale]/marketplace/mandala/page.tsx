@@ -14,7 +14,7 @@ export default async function MandalaPage({ params }: { params: Promise<{ locale
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect(`/${locale}/login`)
 
-  const { data: profile } = await supabase.from('profiles').select('referral_code').eq('id', user.id).single()
+  const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<{ referral_code: string | null }>()
   const baseUrl = SITE_URL
   const referralUrl = profile?.referral_code ? `${baseUrl}/${locale}/ref/${profile.referral_code}` : `${baseUrl}/${locale}`
 

@@ -35,11 +35,11 @@ function ImpersonationBannerContent() {
       const supabase = createClient()
       const { data } = await supabase
         .from('profiles')
-        .select('first_name, last_name')
+        .select('first_name')
         .eq('id', adminId)
         .single()
 
-      if (data) setAdminName(`${data.first_name} ${data.last_name}`)
+      if (data) setAdminName(data.first_name)
     } catch (e) {}
   }
 

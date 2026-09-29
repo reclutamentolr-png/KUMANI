@@ -143,7 +143,7 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
             </div>
             <div>
               <h3 className="font-bold text-[var(--ink)]">
-                Conversazione con {listing.profiles?.first_name} {listing.profiles?.last_name}
+                Conversazione con {listing.profiles?.first_name}
               </h3>
               <div className="flex items-center gap-1.5 text-xs text-[var(--muted)] mt-0.5">
                 <Tag className="w-3 h-3 text-[var(--gold)]" />

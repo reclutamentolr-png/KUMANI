@@ -24,11 +24,7 @@ export default async function WhatsAppPage({ params }: { params: Promise<{ local
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('referral_code, first_name, last_name')
-    .eq('id', user.id)
-    .single()
+  const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<{ referral_code: string | null; first_name: string | null; last_name: string | null }>()
 
   if (!profile) redirect('/dashboard')
 

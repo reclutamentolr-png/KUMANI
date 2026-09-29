@@ -25,11 +25,7 @@ export default async function QRGeneratorPage({ params }: { params: Promise<{ lo
   
   if (!user) redirect('/login')
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('referral_code, first_name, last_name')
-    .eq('id', user.id)
-    .single()
+  const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<{ referral_code: string; first_name: string; last_name: string }>()
 
   if (!profile) redirect('/dashboard')
 
