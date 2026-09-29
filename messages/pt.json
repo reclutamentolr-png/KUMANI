@@ -4965,5 +4965,23 @@
     "stop": "Terminar",
     "skipIntro": "Saltar a introdução",
     "disclaimer": "O OXYGEN é um exercício de relaxamento e não um dispositivo médico: não substitui o conselho de um médico nem qualquer tratamento. Interrompa o exercício se se sentir mal."
+  },
+  "antitruffa": {
+    "shareTitle": "Partilhe o manual e proteja quem ama",
+    "shareSubtitle": "Envie-o aos pais, avós e amigos: dois minutos podem evitar uma burla. Quem se inscrever pelo seu link entra na sua rede.",
+    "shareMessage": "Encontrei um manual que explica como se proteger das burlas online, com exemplos reais e o que fazer de imediato. Dê uma vista de olhos, pode salvar as suas poupanças 👇",
+    "shareNative": "Partilhar…",
+    "copyLink": "Copiar link",
+    "linkCopied": "Link copiado!",
+    "shareHint": "Instagram e TikTok: copie o link e cole-o na bio ou numa story.",
+    "invitedBy": "{name} oferece-lhe este manual",
+    "previewBadge": "Pré-visualização gratuita",
+    "lockedTitle": "No manual completo",
+    "lockedText": "Cada burla é explicada com um exemplo real, os sinais de alerta e o que fazer de imediato. E ainda: o que fazer se já foi burlado, os contactos oficiais e a versão para imprimir.",
+    "lockedScams": "{count} burlas",
+    "ctaRegister": "Inscreva-se grátis e leia tudo",
+    "ctaLogin": "Já é Kumano? Entre",
+    "ctaOpen": "Abrir o manual completo",
+    "metaDescription": "As burlas online mais comuns de hoje, com exemplos reais, sinais de alerta e o que fazer de imediato. Um manual gratuito da comunidade KUMANI."
   }
 }

@@ -20,6 +20,9 @@ import ToolBackLink from '@/components/ToolBackLink'
 import Link from '@/components/LocalizedLink'
 import Vignette from '@/components/antitruffa/Vignette'
 import PrintGuideButton from '@/components/antitruffa/PrintGuideButton'
+import GuideShareButtons from '@/components/antitruffa/GuideShareButtons'
+import { guideShareUrl } from '@/lib/antitruffa/shareUrl'
+import { createClient } from '@/lib/supabase/server'
 import { getGuideContent } from '@/lib/antitruffa/content'
 import type { GuideContent, Scam } from '@/lib/antitruffa/types'
 
@@ -33,6 +36,16 @@ export default async function AntitruffaPage() {
   const g = await getGuideContent(locale)
   const tm = await getTranslations('marketplace')
   const tc = await getTranslations('common')
+
+  // Il link da condividere porta il codice invito di chi legge
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  const { data: me } = user
+    ? await supabase.from('profiles').select('referral_code').eq('id', user.id).maybeSingle()
+    : { data: null }
+  const shareUrl = guideShareUrl(locale, me?.referral_code)
 
   return (
     <div className="min-h-screen bg-[var(--background)] print:bg-white">
@@ -77,6 +90,10 @@ export default async function AntitruffaPage() {
             <PrintGuideButton label={g.ui.print} />
           </div>
         </section>
+
+        <div className="mb-8">
+          <GuideShareButtons url={shareUrl} title={g.title} />
+        </div>
 
         {/* Numeri */}
         <section className="mb-8">
@@ -244,6 +261,10 @@ export default async function AntitruffaPage() {
             ))}
           </ul>
         </section>
+
+        <div className="mb-8">
+          <GuideShareButtons url={shareUrl} title={g.title} />
+        </div>
 
         <blockquote className="mb-6 text-center text-lg font-semibold italic text-[var(--ink)]">“{g.motto}”</blockquote>
 

@@ -4965,5 +4965,23 @@
     "stop": "Beenden",
     "skipIntro": "Einführung überspringen",
     "disclaimer": "OXYGEN ist eine Entspannungsübung und kein Medizinprodukt: Es ersetzt weder ärztlichen Rat noch eine Behandlung. Brich die Übung ab, wenn du dich unwohl fühlst."
+  },
+  "antitruffa": {
+    "shareTitle": "Teile das Handbuch und schütze die Menschen, die du liebst",
+    "shareSubtitle": "Schick es Eltern, Großeltern und Freunden: zwei Minuten können einen Betrug verhindern. Wer sich über deinen Link anmeldet, kommt in dein Netzwerk.",
+    "shareMessage": "Ich habe ein Handbuch gefunden, das erklärt, wie man sich vor Online-Betrug schützt, mit echten Beispielen und was sofort zu tun ist. Schau mal rein, es kann deine Ersparnisse retten 👇",
+    "shareNative": "Teilen…",
+    "copyLink": "Link kopieren",
+    "linkCopied": "Link kopiert!",
+    "shareHint": "Instagram und TikTok: Kopiere den Link und füge ihn in deine Bio oder eine Story ein.",
+    "invitedBy": "{name} schenkt dir dieses Handbuch",
+    "previewBadge": "Kostenlose Vorschau",
+    "lockedTitle": "Im vollständigen Handbuch",
+    "lockedText": "Jede Betrugsmasche wird mit einem echten Beispiel, den Warnsignalen und den sofortigen Schritten erklärt. Außerdem: was zu tun ist, wenn du schon betrogen wurdest, offizielle Kontakte und eine Druckversion.",
+    "lockedScams": "{count} Maschen",
+    "ctaRegister": "Kostenlos anmelden und alles lesen",
+    "ctaLogin": "Schon Kumano? Anmelden",
+    "ctaOpen": "Vollständiges Handbuch öffnen",
+    "metaDescription": "Die häufigsten Online-Betrugsmaschen von heute, mit echten Beispielen, Warnsignalen und was sofort zu tun ist. Ein kostenloses Handbuch der KUMANI-Community."
   }
 }

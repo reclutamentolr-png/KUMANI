@@ -4965,5 +4965,23 @@
     "stop": "Termina",
     "skipIntro": "Salta l'introduzione",
     "disclaimer": "OXYGEN è un esercizio di rilassamento e non è un dispositivo medico: non sostituisce il parere di un medico né una terapia. Interrompi l'esercizio in caso di malessere."
+  },
+  "antitruffa": {
+    "shareTitle": "Condividi il manuale e proteggi chi ami",
+    "shareSubtitle": "Mandalo a genitori, nonni e amici: bastano due minuti per evitare una truffa. Chi si iscrive dal tuo link entra nella tua rete.",
+    "shareMessage": "Ho trovato un manuale che spiega come difendersi dalle truffe online, con esempi veri e cosa fare subito. Dagli un'occhiata, può salvarti i risparmi 👇",
+    "shareNative": "Condividi…",
+    "copyLink": "Copia link",
+    "linkCopied": "Link copiato!",
+    "shareHint": "Instagram e TikTok: copia il link e incollalo nella bio o in una storia.",
+    "invitedBy": "{name} ti regala questo manuale",
+    "previewBadge": "Anteprima gratuita",
+    "lockedTitle": "Nel manuale completo",
+    "lockedText": "Ogni truffa è spiegata con un esempio reale, i segnali d'allarme e cosa fare subito. In più: cosa fare se sei già stato truffato, i contatti ufficiali e la versione da stampare.",
+    "lockedScams": "{count} truffe",
+    "ctaRegister": "Iscriviti gratis e leggilo tutto",
+    "ctaLogin": "Sei già un Kumano? Accedi",
+    "ctaOpen": "Apri il manuale completo",
+    "metaDescription": "Le truffe online più diffuse di oggi, con esempi reali, segnali d'allarme e cosa fare subito. Un manuale gratuito della community KUMANI."
   }
 }

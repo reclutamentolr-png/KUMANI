@@ -4965,5 +4965,23 @@
     "stop": "Terminer",
     "skipIntro": "Passer l'introduction",
     "disclaimer": "OXYGEN est un exercice de relaxation et non un dispositif médical : il ne remplace ni l'avis d'un médecin ni un traitement. Arrêtez l'exercice en cas de malaise."
+  },
+  "antitruffa": {
+    "shareTitle": "Partagez le manuel et protégez ceux que vous aimez",
+    "shareSubtitle": "Envoyez-le à vos parents, grands-parents et amis : deux minutes peuvent éviter une arnaque. Ceux qui s'inscrivent via votre lien rejoignent votre réseau.",
+    "shareMessage": "J'ai trouvé un manuel qui explique comment se protéger des arnaques en ligne, avec de vrais exemples et quoi faire tout de suite. Jetez-y un œil, il peut sauver vos économies 👇",
+    "shareNative": "Partager…",
+    "copyLink": "Copier le lien",
+    "linkCopied": "Lien copié !",
+    "shareHint": "Instagram et TikTok : copiez le lien et collez-le dans votre bio ou une story.",
+    "invitedBy": "{name} vous offre ce manuel",
+    "previewBadge": "Aperçu gratuit",
+    "lockedTitle": "Dans le manuel complet",
+    "lockedText": "Chaque arnaque est expliquée avec un exemple réel, les signaux d'alerte et quoi faire tout de suite. En plus : que faire si vous avez déjà été arnaqué, les contacts officiels et la version à imprimer.",
+    "lockedScams": "{count} arnaques",
+    "ctaRegister": "Inscrivez-vous gratuitement et lisez tout",
+    "ctaLogin": "Déjà Kumano ? Connectez-vous",
+    "ctaOpen": "Ouvrir le manuel complet",
+    "metaDescription": "Les arnaques en ligne les plus répandues aujourd'hui, avec des exemples réels, les signaux d'alerte et quoi faire tout de suite. Un manuel gratuit de la communauté KUMANI."
   }
 }

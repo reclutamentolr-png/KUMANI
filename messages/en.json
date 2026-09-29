@@ -4965,5 +4965,23 @@
     "stop": "Finish",
     "skipIntro": "Skip the introduction",
     "disclaimer": "OXYGEN is a relaxation exercise, not a medical device: it does not replace a doctor's advice or any treatment. Stop the exercise if you feel unwell."
+  },
+  "antitruffa": {
+    "shareTitle": "Share the manual and protect the people you love",
+    "shareSubtitle": "Send it to parents, grandparents and friends: two minutes can stop a scam. Anyone who joins from your link enters your network.",
+    "shareMessage": "I found a manual that explains how to protect yourself from online scams, with real examples and what to do straight away. Have a look, it could save your savings 👇",
+    "shareNative": "Share…",
+    "copyLink": "Copy link",
+    "linkCopied": "Link copied!",
+    "shareHint": "Instagram and TikTok: copy the link and paste it in your bio or a story.",
+    "invitedBy": "{name} is giving you this manual",
+    "previewBadge": "Free preview",
+    "lockedTitle": "In the full manual",
+    "lockedText": "Every scam is explained with a real example, the warning signs and what to do straight away. Plus: what to do if you've already been scammed, official contacts and a printable version.",
+    "lockedScams": "{count} scams",
+    "ctaRegister": "Join for free and read it all",
+    "ctaLogin": "Already a Kumano? Log in",
+    "ctaOpen": "Open the full manual",
+    "metaDescription": "Today's most common online scams, with real examples, warning signs and what to do straight away. A free manual from the KUMANI community."
   }
 }

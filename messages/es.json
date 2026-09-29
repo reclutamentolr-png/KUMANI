@@ -4965,5 +4965,23 @@
     "stop": "Terminar",
     "skipIntro": "Saltar la introducción",
     "disclaimer": "OXYGEN es un ejercicio de relajación y no un dispositivo médico: no sustituye el consejo de un médico ni ningún tratamiento. Interrumpe el ejercicio si te encuentras mal."
+  },
+  "antitruffa": {
+    "shareTitle": "Comparte el manual y protege a quien quieres",
+    "shareSubtitle": "Envíalo a tus padres, abuelos y amigos: dos minutos pueden evitar una estafa. Quien se registre desde tu enlace entra en tu red.",
+    "shareMessage": "He encontrado un manual que explica cómo protegerse de las estafas online, con ejemplos reales y qué hacer enseguida. Échale un vistazo, puede salvar tus ahorros 👇",
+    "shareNative": "Compartir…",
+    "copyLink": "Copiar enlace",
+    "linkCopied": "¡Enlace copiado!",
+    "shareHint": "Instagram y TikTok: copia el enlace y pégalo en tu bio o en una historia.",
+    "invitedBy": "{name} te regala este manual",
+    "previewBadge": "Vista previa gratuita",
+    "lockedTitle": "En el manual completo",
+    "lockedText": "Cada estafa se explica con un ejemplo real, las señales de alarma y qué hacer enseguida. Además: qué hacer si ya te han estafado, los contactos oficiales y la versión para imprimir.",
+    "lockedScams": "{count} estafas",
+    "ctaRegister": "Regístrate gratis y léelo entero",
+    "ctaLogin": "¿Ya eres Kumano? Inicia sesión",
+    "ctaOpen": "Abrir el manual completo",
+    "metaDescription": "Las estafas online más comunes de hoy, con ejemplos reales, señales de alarma y qué hacer enseguida. Un manual gratuito de la comunidad KUMANI."
   }
 }
