@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { hasPermission, Permission } from '@/lib/admin-permissions'
 import MatrixTree from '@/components/MatrixTree'
+import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import AdminUserPicker from '@/components/admin/AdminUserPicker'
 import {
   adminUpdateProfile,
@@ -109,6 +110,26 @@ import {
   ChevronDown,
   BellRing,
 } from 'lucide-react'
+
+// Strumenti e interruttori raggruppati come nel Marketplace. Le sezioni della
+// piattaforma che non sono strumenti vanno in Community; il resto in "Altro".
+const TOOL_GROUPS = [
+  { id: 'marketing', label: 'Marketing' },
+  { id: 'security', label: 'Sicurezza e Verifica' },
+  { id: 'personal', label: 'Organizzazione Personale' },
+  { id: 'wellness', label: 'Benessere' },
+  { id: 'lavoro', label: 'Lavoro' },
+  { id: 'svago', label: 'Svago' },
+  { id: 'community', label: 'Community' },
+  { id: 'other', label: 'Altro' },
+] as const
+const PLATFORM_SWITCHES_COMMUNITY = new Set(['listings', 'chat', 'spotlight', 'convivio', 'events', 'timebank'])
+const TOOL_CATEGORY: Map<string, string> = new Map(getMarketplaceTools((key) => key).map((tool) => [tool.toolName, tool.category]))
+function toolCategoryOf(toolName: string): string {
+  if (TOOL_CATEGORY.has(toolName)) return TOOL_CATEGORY.get(toolName)!
+  if (PLATFORM_SWITCHES_COMMUNITY.has(toolName)) return 'community'
+  return 'other'
+}
 
 // Gruppi del menu a sinistra, nell'ordine in cui compaiono
 const MENU_GROUPS = [
@@ -1296,13 +1317,19 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
 
   const renderMarketplace = () => {
     const filteredTools = marketplaceUsage.filter((tool: any) => tool.tool_name !== 'nfc-smart-hub')
+    // Raggruppati per categoria, come nel Marketplace; le sezioni della
+    // piattaforma (Bacheca, chat, Kordata...) vanno in Community
+    const toolGroups = TOOL_GROUPS.map((group) => ({
+      ...group,
+      tools: filteredTools.filter((tool: { tool_name: string }) => toolCategoryOf(tool.tool_name) === group.id),
+    })).filter((group) => group.tools.length > 0)
 
     return (
       <div className="space-y-6">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
             <ShoppingBag className="w-7 h-7" />
-            Gestione Marketplace
+            Strumenti e interruttori
           </h2>
           <p className="text-gray-600 mt-1">
             Abilita o disabilita gli strumenti e scegli per ognuno il piano richiesto: <strong>Gratis</strong> (tutti gli
@@ -1311,66 +1338,76 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {filteredTools.map((tool: any) => (
-            <div key={tool.tool_name} className={`bg-white p-6 rounded-xl border shadow-sm ${!tool.is_enabled ? 'opacity-60 bg-gray-50' : ''}`}>
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900 capitalize">{tool.tool_name.replace(/-/g, ' ')}</h3>
-                  <p className="text-sm text-gray-500 mt-1">{tool.description || 'Strumento del marketplace'}</p>
-                </div>
-                <button
-                  onClick={() => toggleToolEnabled(tool.tool_name, tool.is_enabled)}
-                  disabled={savingTool === tool.tool_name}
-                  className="focus:outline-none"
-                >
-                  {tool.is_enabled ? (
-                    <ToggleRight className="w-14 h-8 text-green-500" />
-                  ) : (
-                    <ToggleLeft className="w-14 h-8 text-gray-400" />
+        {toolGroups.map((group) => (
+          <section key={group.id}>
+            <h3 className="mb-3 flex items-center justify-between gap-3 border-b border-gray-200 pb-2">
+              <span className="text-lg font-bold text-gray-900">{group.label}</span>
+              <span className="text-xs font-semibold text-gray-500">
+                {group.tools.filter((tool: { is_enabled: boolean }) => tool.is_enabled).length}/{group.tools.length} attivi
+              </span>
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {group.tools.map((tool: any) => (
+                <div key={tool.tool_name} className={`bg-white p-6 rounded-xl border shadow-sm ${!tool.is_enabled ? 'opacity-60 bg-gray-50' : ''}`}>
+                  <div className="flex items-start justify-between mb-4">
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-900 capitalize">{tool.tool_name.replace(/-/g, ' ')}</h3>
+                      <p className="text-sm text-gray-500 mt-1">{tool.description || 'Strumento del marketplace'}</p>
+                    </div>
+                    <button
+                      onClick={() => toggleToolEnabled(tool.tool_name, tool.is_enabled)}
+                      disabled={savingTool === tool.tool_name}
+                      className="focus:outline-none"
+                    >
+                      {tool.is_enabled ? (
+                        <ToggleRight className="w-14 h-8 text-green-500" />
+                      ) : (
+                        <ToggleLeft className="w-14 h-8 text-gray-400" />
+                      )}
+                    </button>
+                  </div>
+                  <div className="mb-4 flex items-center gap-2">
+                    <span className="text-xs text-gray-500 uppercase">Piano richiesto</span>
+                    <div className="flex rounded-lg border border-gray-200 overflow-hidden">
+                      {(['free', 'base', 'pro'] as const).map((plan) => {
+                        const active = (tool.required_plan ?? 'base') === plan
+                        return (
+                          <button
+                            key={plan}
+                            type="button"
+                            onClick={() => !active && changeToolPlan(tool.tool_name, plan)}
+                            disabled={savingTool === tool.tool_name}
+                            className={`px-3 py-1 text-xs font-semibold ${
+                              active
+                                ? plan === 'pro'
+                                  ? 'bg-[var(--ink)] text-[var(--gold-bright)]'
+                                  : 'bg-gray-800 text-white'
+                                : 'bg-white text-gray-600 hover:bg-gray-100'
+                            }`}
+                          >
+                            {plan === 'free' ? 'Gratis' : plan === 'base' ? 'Base' : 'Pro'}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                    <div>
+                      <div className="text-xs text-gray-500 uppercase">Utilizzi Totali</div>
+                      <div className="text-2xl font-bold text-[var(--gold)]">{tool.usage_count}</div>
+                    </div>
+                    <div className={`px-3 py-1 rounded-full text-xs font-semibold ${tool.is_enabled ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                      {tool.is_enabled ? 'ATTIVO' : 'DISATTIVO'}
+                    </div>
+                  </div>
+                  {savingTool === tool.tool_name && (
+                    <div className="mt-3 text-xs text-[var(--gold)]">💾 Salvataggio...</div>
                   )}
-                </button>
-              </div>
-              <div className="mb-4 flex items-center gap-2">
-                <span className="text-xs text-gray-500 uppercase">Piano richiesto</span>
-                <div className="flex rounded-lg border border-gray-200 overflow-hidden">
-                  {(['free', 'base', 'pro'] as const).map((plan) => {
-                    const active = (tool.required_plan ?? 'base') === plan
-                    return (
-                      <button
-                        key={plan}
-                        type="button"
-                        onClick={() => !active && changeToolPlan(tool.tool_name, plan)}
-                        disabled={savingTool === tool.tool_name}
-                        className={`px-3 py-1 text-xs font-semibold ${
-                          active
-                            ? plan === 'pro'
-                              ? 'bg-[var(--ink)] text-[var(--gold-bright)]'
-                              : 'bg-gray-800 text-white'
-                            : 'bg-white text-gray-600 hover:bg-gray-100'
-                        }`}
-                      >
-                        {plan === 'free' ? 'Gratis' : plan === 'base' ? 'Base' : 'Pro'}
-                      </button>
-                    )
-                  })}
                 </div>
-              </div>
-              <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                <div>
-                  <div className="text-xs text-gray-500 uppercase">Utilizzi Totali</div>
-                  <div className="text-2xl font-bold text-[var(--gold)]">{tool.usage_count}</div>
-                </div>
-                <div className={`px-3 py-1 rounded-full text-xs font-semibold ${tool.is_enabled ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                  {tool.is_enabled ? 'ATTIVO' : 'DISATTIVO'}
-                </div>
-              </div>
-              {savingTool === tool.tool_name && (
-                <div className="mt-3 text-xs text-[var(--gold)]">💾 Salvataggio...</div>
-              )}
+              ))}
             </div>
-          ))}
-        </div>
+          </section>
+        ))}
       </div>
     )
   }
