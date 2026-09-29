@@ -69,8 +69,8 @@ export default async function AdminPage({
   }
   
   // ✅ ROBUSTO: admin_roles può essere un OGGETTO o un ARRAY
-  const roles: any = (adminRecord as any)?.admin_roles
-  const rawPermissions: any[] = Array.isArray(roles)
+  const roles = adminRecord?.admin_roles as { permissions?: string[] | null } | { permissions?: string[] | null }[] | null | undefined
+  const rawPermissions: string[] = Array.isArray(roles)
     ? (roles?.[0]?.permissions || [])
     : (roles?.permissions || [])
 

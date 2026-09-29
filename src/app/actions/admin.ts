@@ -11,6 +11,7 @@ import { updateTag } from 'next/cache'
 import { SPOTLIGHT_HOME_CACHE_TAG, type SpotlightModerationStatus } from '@/lib/spotlight'
 import { getPlanPrices } from '@/lib/planPrices'
 import { invalidateListingsCache } from '@/lib/listings-server'
+import type { AdminCouponRow, AdminRewardRedemption, ListingReport, ListingReportRow } from '@/lib/adminTypes'
 
 const getServiceClient = () =>
   createServiceClient(
@@ -303,7 +304,8 @@ export async function listCoupons() {
     .limit(200)
 
   if (error) return { coupons: [], error: error.message }
-  return { coupons: data || [], error: null }
+  // profiles è un oggetto (un solo utente), non un array come deduce supabase-js
+  return { coupons: (data || []) as unknown as AdminCouponRow[], error: null }
 }
 
 export async function revokeCoupon(couponId: string) {
@@ -566,7 +568,8 @@ export async function listRewardRedemptions() {
     .limit(200)
 
   if (error) return { redemptions: [], error: error.message }
-  const rows = data || []
+  // reward_catalog è un oggetto (un solo premio), non un array come deduce supabase-js
+  const rows = (data || []) as unknown as Omit<AdminRewardRedemption, 'redeemer'>[]
 
   const userIds = Array.from(new Set(rows.map((r) => r.user_id).filter(Boolean)))
   const profiles = userIds.length
@@ -743,20 +746,21 @@ export async function listListingReports() {
     .limit(200)
 
   if (error) return { reports: [], error: error.message }
-  const rows = data || []
+  // listings è un oggetto (FK verso un solo annuncio), non un array come deduce supabase-js
+  const rows = (data || []) as unknown as ListingReportRow[]
 
   // Reporter (auth.users FK, needs a separate lookup) and listing owner (full
   // name only shown here in the admin queue — public listing/user-facing
   // views only ever get first_name, see ListingDetailModal/page.tsx/
   // CommunityPreview.tsx) share one batched profiles query.
-  const ownerIds = rows.map((r: any) => r.listings?.user_id).filter(Boolean)
+  const ownerIds = rows.map((r) => r.listings?.user_id).filter(Boolean)
   const profileIds = Array.from(new Set([...rows.map((r) => r.reporter_id), ...ownerIds].filter(Boolean)))
   const profiles = profileIds.length
     ? (await supabaseAdmin.from('profiles').select('id, first_name, last_name, email').in('id', profileIds)).data
     : []
   const byId = Object.fromEntries((profiles || []).map((p) => [p.id, p]))
 
-  const reports = rows.map((r: any) => ({
+  const reports: ListingReport[] = rows.map((r) => ({
     ...r,
     reporter: byId[r.reporter_id] || null,
     owner: r.listings?.user_id ? byId[r.listings.user_id] || null : null,

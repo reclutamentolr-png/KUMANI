@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, type ComponentProps } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { hasPermission, Permission } from '@/lib/admin-permissions'
 import MatrixTree from '@/components/MatrixTree'
@@ -54,7 +54,24 @@ import {
   deleteAdminMessage,
   listMessageableUsers,
 } from '@/app/actions/adminMessages'
-import type { LocalizedText, MessageType } from '@/lib/adminMessages'
+import type { LocalizedText, MessageType, AdminMessageRow } from '@/lib/adminMessages'
+import type {
+  AdminUserRow,
+  AdminProfileDetail,
+  AdminProfileForm,
+  MarketplaceToolRow,
+  MarketplaceToolUsage,
+  AdminCouponRow,
+  AdminVoucherRow,
+  AdminVoucherUser,
+  AdminVoucherBatch,
+  AdminRewardRow,
+  AdminRewardRedemption,
+  ListingReport,
+  AdminSpotlightProfile,
+  AdminHouseAccount,
+  AdminSystemSettings,
+} from '@/lib/adminTypes'
 import { SPOTLIGHT_HOME_MIN_POOL } from '@/lib/spotlight'
 import KuManagementPanel from '@/components/admin/KuManagementPanel'
 import AffinityReportsPanel from '@/components/admin/AffinityReportsPanel'
@@ -143,6 +160,9 @@ const MENU_GROUPS = [
   { id: 'games', label: 'Giochi' },
 ] as const
 
+// Nodo della matrice come lo vuole MatrixTree
+type MatrixNode = ComponentProps<typeof MatrixTree>['rootNode']
+
 type AdminDashboardProps = {
   userId: string
   permissions: Permission[]
@@ -221,41 +241,41 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
 
   const [stats, setStats] = useState({ totalUsers: 0, activeUsers: 0, totalNodes: 0, blockedUsers: 0 })
   const [onlineUsers, setOnlineUsers] = useState(0)
-  const [users, setUsers] = useState<any[]>([])
+  const [users, setUsers] = useState<AdminUserRow[]>([])
   const [searchTerm, setSearchTerm] = useState('')
   const [loadingUsers, setLoadingUsers] = useState(false)
 
-  const [selectedUser, setSelectedUser] = useState<any>(null)
+  const [selectedUser, setSelectedUser] = useState<AdminUserRow | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [availableRoles, setAvailableRoles] = useState<any[]>([])
+  const [availableRoles, setAvailableRoles] = useState<{ id: string; name: string }[]>([])
   const [userCurrentRoleId, setUserCurrentRoleId] = useState<string>('none')
   const [isSaving, setIsSaving] = useState(false)
 
   const [matrixPickedUser, setMatrixPickedUser] = useState<StaffUserHit | null>(null)
-  const [matrixData, setMatrixData] = useState<any>(null)
-  const [matrixDescendants, setMatrixDescendants] = useState<any[]>([])
+  const [matrixData, setMatrixData] = useState<MatrixNode | null>(null)
+  const [matrixDescendants, setMatrixDescendants] = useState<MatrixNode[]>([])
   const [matrixStats, setMatrixStats] = useState({ total: 0, level1: 0, level2: 0, level3: 0, level4: 0, level5: 0 })
   const [loadingMatrix, setLoadingMatrix] = useState(false)
 
-  const [marketplaceTools, setMarketplaceTools] = useState<any[]>([])
-  const [marketplaceUsage, setMarketplaceUsage] = useState<any[]>([])
+  const [marketplaceTools, setMarketplaceTools] = useState<MarketplaceToolRow[]>([])
+  const [marketplaceUsage, setMarketplaceUsage] = useState<MarketplaceToolUsage[]>([])
   const [savingTool, setSavingTool] = useState<string | null>(null)
 
-  const [profileEditUser, setProfileEditUser] = useState<any>(null)
-  const [profileForm, setProfileForm] = useState<any>({})
+  const [profileEditUser, setProfileEditUser] = useState<AdminProfileDetail | null>(null)
+  const [profileForm, setProfileForm] = useState<AdminProfileForm>({})
   const [savingProfile, setSavingProfile] = useState(false)
   const [impersonatingId, setImpersonatingId] = useState<string | null>(null)
 
   const [couponPickedUser, setCouponPickedUser] = useState<StaffUserHit | null>(null)
-  const [coupons, setCoupons] = useState<any[]>([])
+  const [coupons, setCoupons] = useState<AdminCouponRow[]>([])
   const [loadingCoupons, setLoadingCoupons] = useState(false)
   const [couponForm, setCouponForm] = useState({ userId: '', title: '', description: '', expiresAt: '' })
   const [savingCoupon, setSavingCoupon] = useState(false)
   const [couponError, setCouponError] = useState<string | null>(null)
 
-  const [vouchers, setVouchers] = useState<any[]>([])
+  const [vouchers, setVouchers] = useState<AdminVoucherRow[]>([])
   const [loadingVouchers, setLoadingVouchers] = useState(false)
-  const [voucherUsers, setVoucherUsers] = useState<any[]>([])
+  const [voucherUsers, setVoucherUsers] = useState<AdminVoucherUser[]>([])
   const [generatingAdminVoucher, setGeneratingAdminVoucher] = useState(false)
   const [lastAdminVoucherCode, setLastAdminVoucherCode] = useState<string | null>(null)
   const [creditForm, setCreditForm] = useState({ userId: '', amount: '' })
@@ -264,31 +284,31 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
   const [creditError, setCreditError] = useState<string | null>(null)
   const [creditSuccess, setCreditSuccess] = useState<string | null>(null)
 
-  const [financialSummary, setFinancialSummary] = useState<any>(null)
+  const [financialSummary, setFinancialSummary] = useState<Awaited<ReturnType<typeof getAdminFinancialSummary>> | null>(null)
   const [loadingFinancialSummary, setLoadingFinancialSummary] = useState(false)
 
-  const [listingReports, setListingReports] = useState<any[]>([])
+  const [listingReports, setListingReports] = useState<ListingReport[]>([])
   const [loadingListingReports, setLoadingListingReports] = useState(false)
 
-  const [spotlightProfiles, setSpotlightProfiles] = useState<any[]>([])
+  const [spotlightProfiles, setSpotlightProfiles] = useState<AdminSpotlightProfile[]>([])
   const [loadingSpotlight, setLoadingSpotlight] = useState(false)
 
-  const [rewards, setRewards] = useState<any[]>([])
-  const [rewardRedemptions, setRewardRedemptions] = useState<any[]>([])
+  const [rewards, setRewards] = useState<AdminRewardRow[]>([])
+  const [rewardRedemptions, setRewardRedemptions] = useState<AdminRewardRedemption[]>([])
   const [loadingRewards, setLoadingRewards] = useState(false)
   const [rewardForm, setRewardForm] = useState({ title: '', description: '', imageUrl: '', pointsCost: '', isVisible: true })
   const [editingRewardId, setEditingRewardId] = useState<string | null>(null)
   const [savingReward, setSavingReward] = useState(false)
   const [rewardError, setRewardError] = useState<string | null>(null)
   const [uploadingRewardImage, setUploadingRewardImage] = useState(false)
-  const [voucherBatches, setVoucherBatches] = useState<any[]>([])
+  const [voucherBatches, setVoucherBatches] = useState<AdminVoucherBatch[]>([])
   const [batchForm, setBatchForm] = useState<{ businessName: string; quantity: string; priceEur: string; invoiceRef: string; notes: string; plan: 'base' | 'pro' }>({ businessName: '', quantity: '10', priceEur: '400', invoiceRef: '', notes: '', plan: 'base' })
   const [creatingBatch, setCreatingBatch] = useState(false)
   const [couponArea, setCouponArea] = useState<'merchant' | 'community'>('merchant')
   const [fulfillCodeInputs, setFulfillCodeInputs] = useState<Record<string, string>>({})
   const [fulfillingId, setFulfillingId] = useState<string | null>(null)
 
-  const [systemSettings, setSystemSettings] = useState<Record<string, any>>({
+  const [systemSettings, setSystemSettings] = useState<AdminSystemSettings>({
     maintenance_mode: false,
     maintenance_message: 'Sito in manutenzione. Torna presto!',
     matrix_slot_bonus_points: 5,
@@ -313,16 +333,16 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
     fabula_hide_after_reports: 3
   })
   // Valori letti all'apertura: si salvano solo i campi cambiati
-  const [savedSettings, setSavedSettings] = useState<Record<string, any>>({})
+  const [savedSettings, setSavedSettings] = useState<Record<string, unknown>>({})
   const [planPrices, setPlanPrices] = useState<{ base: number; pro: number; source: 'stripe' | 'settings' } | null>(null)
   const [savingSettings, setSavingSettings] = useState(false)
-  const [houseAccount, setHouseAccount] = useState<any>(null)
+  const [houseAccount, setHouseAccount] = useState<AdminHouseAccount | null>(null)
   const [houseEmail, setHouseEmail] = useState('')
   const [creatingHouse, setCreatingHouse] = useState(false)
 
-  const [messages, setMessages] = useState<any[]>([])
+  const [messages, setMessages] = useState<AdminMessageRow[]>([])
   const [loadingMessages, setLoadingMessages] = useState(false)
-  const [messageableUsers, setMessageableUsers] = useState<any[]>([])
+  const [messageableUsers, setMessageableUsers] = useState<Awaited<ReturnType<typeof listMessageableUsers>>['users']>([])
   const [messageType, setMessageType] = useState<MessageType>('broadcast')
   const [messageTitle, setMessageTitle] = useState<LocalizedText>({})
   const [messageBody, setMessageBody] = useState<LocalizedText>({})
@@ -409,14 +429,15 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
       }
 
       setMatrixData(rootNode)
-      setMatrixDescendants(downlineData || [])
+      // get_user_downline restituisce righe complete di matrix_nodes
+      setMatrixDescendants((downlineData || []) as MatrixNode[])
       setMatrixStats({
         total: downlineData?.length || 0,
-        level1: downlineData?.filter((d: any) => d.depth === 1).length || 0,
-        level2: downlineData?.filter((d: any) => d.depth === 2).length || 0,
-        level3: downlineData?.filter((d: any) => d.depth === 3).length || 0,
-        level4: downlineData?.filter((d: any) => d.depth === 4).length || 0,
-        level5: downlineData?.filter((d: any) => d.depth === 5).length || 0,
+        level1: downlineData?.filter((d) => d.depth === 1).length || 0,
+        level2: downlineData?.filter((d) => d.depth === 2).length || 0,
+        level3: downlineData?.filter((d) => d.depth === 3).length || 0,
+        level4: downlineData?.filter((d) => d.depth === 4).length || 0,
+        level5: downlineData?.filter((d) => d.depth === 5).length || 0,
       })
     } catch (error) {
       console.error('Errore caricamento matrice:', error)
@@ -425,7 +446,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
     }
   }
 
-  const viewUserMatrix = (user: any) => {
+  const viewUserMatrix = (user: AdminUserRow) => {
     setActiveSection('matrix')
     setMatrixPickedUser({ id: user.id, first_name: user.first_name ?? null, last_name: user.last_name ?? null, referral_code: user.referral_code ?? null, email: user.email ?? null })
     setTimeout(() => {
@@ -440,7 +461,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
 
     const { data: usageRaw } = await supabase.from('marketplace_usage').select('tool_name')
     const usageCount: Record<string, number> = {}
-    usageRaw?.forEach((u: any) => {
+    usageRaw?.forEach((u: { tool_name: string }) => {
       usageCount[u.tool_name] = (usageCount[u.tool_name] || 0) + 1
     })
     setMarketplaceUsage(
@@ -524,7 +545,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
   }
 
   // CSV dei codici di un lotto (codice, stato, data di utilizzo).
-  const downloadBatchCsv = async (batch: any) => {
+  const downloadBatchCsv = async (batch: AdminVoucherBatch) => {
     const { codes } = await getVoucherBatchCodes(batch.id)
     const rows = [['codice', 'stato', 'usato_il'], ...codes.map((c) => [c.code, c.status === 'redeemed' ? 'usato' : c.status === 'revoked' ? 'revocato' : 'disponibile', c.redeemed_at ? new Date(c.redeemed_at).toLocaleDateString('it-IT') : ''])]
     const csv = rows.map((r) => r.join(';')).join('\n')
@@ -633,7 +654,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
       .slice(0, 8)
   })()
 
-  const selectCreditUser = (u: any) => {
+  const selectCreditUser = (u: AdminVoucherUser) => {
     setCreditForm({ ...creditForm, userId: u.id })
     setCreditUserSearch(`${u.first_name || ''} ${u.last_name || ''} — ${u.referral_code}`)
   }
@@ -666,7 +687,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
     setEditingRewardId(null)
   }
 
-  const handleEditReward = (reward: any) => {
+  const handleEditReward = (reward: AdminRewardRow) => {
     setEditingRewardId(reward.id)
     setRewardForm({
       title: reward.title,
@@ -778,8 +799,8 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
       const result = await uploadRewardImage(formData)
       if (result.success) setRewardForm((prev) => ({ ...prev, imageUrl: result.url }))
       else setRewardError(result.error)
-    } catch (err: any) {
-      setRewardError(err?.message || 'Caricamento della foto non riuscito.')
+    } catch (err) {
+      setRewardError((err instanceof Error && err.message) || 'Caricamento della foto non riuscito.')
     } finally {
       setUploadingRewardImage(false)
     }
@@ -808,8 +829,8 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
     adminGetPlanPrices().then(setPlanPrices)
     const { data } = await supabase.from('system_settings').select('key, value')
     if (data) {
-      const settingsObj: Record<string, any> = { ...systemSettings }
-      data.forEach((s: any) => {
+      const settingsObj: AdminSystemSettings = { ...systemSettings }
+      data.forEach((s: { key: string; value: string }) => {
         try {
           settingsObj[s.key] = JSON.parse(s.value)
         } catch {
@@ -864,7 +885,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
       .slice(0, 8)
   })()
 
-  const selectMessageUser = (u: any) => {
+  const selectMessageUser = (u: Awaited<ReturnType<typeof listMessageableUsers>>['users'][number]) => {
     setMessageTargetUserId(u.id)
     setMessageUserSearch(`${u.first_name || ''} ${u.last_name || ''} — ${u.email || ''}`)
   }
@@ -922,7 +943,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
     u.referral_code?.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
-  const openManageModal = async (user: any) => {
+  const openManageModal = async (user: AdminUserRow) => {
     setSelectedUser(user)
     setIsModalOpen(true)
     const { roles, roleId } = await adminGetUserRole(user.id)
@@ -950,7 +971,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
     }
   }
 
-  const handleToggleBlock = async (user: any) => {
+  const handleToggleBlock = async (user: AdminUserRow) => {
     if (!confirm(`Sei sicuro di voler ${user.is_blocked ? 'SBLOCCARE' : 'BLOCCARE'} l'utente ${user.email}?`)) return
     const newBlockedStatus = !user.is_blocked
     // Lato server: is_blocked non è più scrivibile dal browser.
@@ -963,7 +984,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
     }
   }
 
-  const openProfileEdit = async (user: any) => {
+  const openProfileEdit = async (user: AdminUserRow) => {
     const { profile: data } = await adminGetProfile(user.id)
     if (data) {
       setProfileEditUser(data)
@@ -1024,7 +1045,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
   }
 
     // ✅ IMPERSONIFICAZIONE: stessa scheda + link di ripristino admin
-  const handleImpersonate = async (user: any) => {
+  const handleImpersonate = async (user: AdminUserRow) => {
     if (!confirm(`Vuoi impersonare ${user.first_name} ${user.last_name}?\n\nVerrai loggato come questo utente.\nPotrai tornare al tuo account admin in qualsiasi momento con il pulsante "Torna Admin" del banner giallo.`)) return
 
     setImpersonatingId(user.id)
@@ -1042,8 +1063,8 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
         alert('Errore: ' + (result.error || 'Impossibile impersonificare'))
         setImpersonatingId(null)
       }
-    } catch (err: any) {
-      alert('Errore: ' + (err.message || 'Errore sconosciuto'))
+    } catch (err) {
+      alert('Errore: ' + ((err instanceof Error && err.message) || 'Errore sconosciuto'))
       setImpersonatingId(null)
     }
   }
@@ -1315,7 +1336,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
   )
 
   const renderMarketplace = () => {
-    const filteredTools = marketplaceUsage.filter((tool: any) => tool.tool_name !== 'nfc-smart-hub')
+    const filteredTools = marketplaceUsage.filter((tool) => tool.tool_name !== 'nfc-smart-hub')
     // Raggruppati per categoria, come nel Marketplace; le sezioni della
     // piattaforma (Bacheca, chat, Kordata...) vanno in Community
     const toolGroups = TOOL_GROUPS.map((group) => ({
@@ -1365,7 +1386,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
             </button>
             {isOpen && (
             <div className="grid grid-cols-1 gap-4 border-t border-gray-100 bg-gray-50/60 p-4 md:grid-cols-2">
-              {group.tools.map((tool: any) => (
+              {group.tools.map((tool) => (
                 <div key={tool.tool_name} className={`bg-white p-6 rounded-xl border shadow-sm ${!tool.is_enabled ? 'opacity-60 bg-gray-50' : ''}`}>
                   <div className="flex items-start justify-between mb-4">
                     <div>
@@ -1796,7 +1817,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
 
   const renderCommunityCoupons = () => {
     const now = new Date()
-    const statusOf = (c: any) => {
+    const statusOf = (c: AdminCouponRow) => {
       if (c.redeemed_at) return { label: 'Utilizzato', className: 'bg-gray-100 text-gray-600' }
       if (c.expires_at && new Date(c.expires_at) < now) return { label: 'Scaduto', className: 'bg-red-100 text-red-700' }
       return { label: 'Disponibile', className: 'bg-green-100 text-green-700' }
@@ -1920,7 +1941,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
   }
 
   const renderVouchers = () => {
-    const statusOf = (v: any) => {
+    const statusOf = (v: AdminVoucherRow) => {
       if (v.status === 'redeemed') return { label: 'Riscattato', className: 'bg-gray-100 text-gray-600' }
       if (v.status === 'revoked') return { label: 'Revocato', className: 'bg-red-100 text-red-700' }
       return { label: 'Disponibile', className: 'bg-green-100 text-green-700' }
