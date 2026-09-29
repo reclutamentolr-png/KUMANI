@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { hasPermission, Permission } from '@/lib/admin-permissions'
 import MatrixTree from '@/components/MatrixTree'
+import AdminUserPicker from '@/components/admin/AdminUserPicker'
 import {
   adminUpdateProfile,
   adminSaveSystemSettings,
@@ -41,8 +42,7 @@ import {
   moderateSpotlightProfile,
   dismissListingReport,
   deleteReportedListing,
-  adminListMatrixUsers,
-  adminListCouponUsers,
+  type StaffUserHit,
   adminGetUserMatrix,
 } from '@/app/actions/admin'
 import {
@@ -193,7 +193,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
   const [userCurrentRoleId, setUserCurrentRoleId] = useState<string>('none')
   const [isSaving, setIsSaving] = useState(false)
 
-  const [matrixUsers, setMatrixUsers] = useState<any[]>([])
+  const [matrixPickedUser, setMatrixPickedUser] = useState<StaffUserHit | null>(null)
   const [selectedMatrixUserId, setSelectedMatrixUserId] = useState<string>('')
   const [matrixData, setMatrixData] = useState<any>(null)
   const [matrixDescendants, setMatrixDescendants] = useState<any[]>([])
@@ -209,7 +209,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
   const [savingProfile, setSavingProfile] = useState(false)
   const [impersonatingId, setImpersonatingId] = useState<string | null>(null)
 
-  const [couponUsers, setCouponUsers] = useState<any[]>([])
+  const [couponPickedUser, setCouponPickedUser] = useState<StaffUserHit | null>(null)
   const [coupons, setCoupons] = useState<any[]>([])
   const [loadingCoupons, setLoadingCoupons] = useState(false)
   const [couponForm, setCouponForm] = useState({ userId: '', title: '', description: '', expiresAt: '' })
@@ -304,7 +304,6 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
       return () => clearInterval(interval)
     }
     else if (activeSection === 'users') loadUsers()
-    else if (activeSection === 'matrix') loadMatrixUsers()
     else if (activeSection === 'marketplace') loadMarketplaceData()
     else if (activeSection === 'coupons') loadCouponsData()
     else if (activeSection === 'vouchers') loadVouchersData()
@@ -341,11 +340,6 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
     const { users: data } = await adminListUsers()
     setUsers(data)
     setLoadingUsers(false)
-  }
-
-  const loadMatrixUsers = async () => {
-    const { users } = await adminListMatrixUsers()
-    setMatrixUsers(users)
   }
 
   const loadMatrixForUser = async (targetUserId: string) => {
@@ -400,6 +394,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
 
   const viewUserMatrix = (user: any) => {
     setActiveSection('matrix')
+    setMatrixPickedUser({ id: user.id, first_name: user.first_name ?? null, last_name: user.last_name ?? null, referral_code: user.referral_code ?? null, email: user.email ?? null })
     setTimeout(() => {
       setSelectedMatrixUserId(user.id)
       loadMatrixForUser(user.id)
@@ -426,9 +421,6 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
 
   const loadCouponsData = async () => {
     setLoadingCoupons(true)
-    const { users: usersData } = await adminListCouponUsers()
-    setCouponUsers(usersData)
-
     const [result, batchResult] = await Promise.all([listCoupons(), listVoucherBatches()])
     setCoupons(result.coupons)
     setVoucherBatches(batchResult.batches)
@@ -454,6 +446,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
       return
     }
     setCouponForm({ userId: '', title: '', description: '', expiresAt: '' })
+    setCouponPickedUser(null)
     await loadCouponsData()
   }
 
@@ -1192,13 +1185,15 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
         Visualizzatore Matrice
       </h2>
       <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-        <label className="block text-sm font-medium text-gray-700 mb-2">Seleziona un utente:</label>
-        <select value={selectedMatrixUserId} onChange={(e) => loadMatrixForUser(e.target.value)} className="w-full p-3 border border-gray-300 rounded-lg">
-          <option value="">-- Seleziona --</option>
-          {matrixUsers.map(u => (
-            <option key={u.id} value={u.id}>{u.first_name} {u.last_name} ({u.referral_code})</option>
-          ))}
-        </select>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Cerca un utente:</label>
+        <AdminUserPicker
+          scope="matrix"
+          selected={matrixPickedUser}
+          onSelect={(user) => {
+            setMatrixPickedUser(user)
+            loadMatrixForUser(user?.id ?? '')
+          }}
+        />
       </div>
 
       {loadingMatrix ? (
@@ -1706,18 +1701,14 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Utente</label>
-              <select
-                value={couponForm.userId}
-                onChange={(e) => setCouponForm({ ...couponForm, userId: e.target.value })}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
-              >
-                <option value="">Seleziona un utente...</option>
-                {couponUsers.map((u) => (
-                  <option key={u.id} value={u.id}>
-                    {u.first_name} {u.last_name} — {u.referral_code}
-                  </option>
-                ))}
-              </select>
+              <AdminUserPicker
+                scope="coupons"
+                selected={couponPickedUser}
+                onSelect={(user) => {
+                  setCouponPickedUser(user)
+                  setCouponForm({ ...couponForm, userId: user?.id ?? '' })
+                }}
+              />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Scadenza (opzionale)</label>

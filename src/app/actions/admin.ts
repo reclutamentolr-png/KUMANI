@@ -2679,25 +2679,33 @@ export async function adminRemoveFabulaWord(word: string) {
 // Cognome e codice unico degli altri non sono più leggibili dal browser
 // (vedi 20261114110000_profiles_privacy.sql): lo Staff li riceve da qui.
 
-async function listProfilesForStaff() {
-  const { data } = await getServiceClient()
+// Ricerca utenti per lo Staff (Matrice, Coupon): nome, cognome, codice o
+// email. Ogni parola deve comparire in uno di questi campi, così "mario
+// rossi" trova Mario Rossi. Al massimo 20 risultati.
+export type StaffUserHit = { id: string; first_name: string | null; last_name: string | null; referral_code: string | null; email: string | null }
+
+export async function adminSearchUsers(query: string, scope: 'matrix' | 'coupons'): Promise<{ users: StaffUserHit[] }> {
+  const admin = await verifyAdmin(scope === 'matrix' ? 'matrix.read' : 'coupons.read')
+  if (!admin) return { users: [] }
+  const words = query
+    .replace(/[,()*%\\:"'`]/g, ' ')
+    .trim()
+    .split(/\s+/)
+    .filter((word) => word.length > 0)
+    .slice(0, 4)
+  if (words.length === 0) return { users: [] }
+
+  let request = getServiceClient()
     .from('profiles')
-    .select('id, first_name, last_name, referral_code')
+    .select('id, first_name, last_name, referral_code, email')
+    .is('deleted_at', null)
     .order('first_name')
-    .limit(500)
-  return data || []
-}
-
-export async function adminListMatrixUsers() {
-  const admin = await verifyAdmin('matrix.read')
-  if (!admin) return { users: [] }
-  return { users: await listProfilesForStaff() }
-}
-
-export async function adminListCouponUsers() {
-  const admin = await verifyAdmin('coupons.read')
-  if (!admin) return { users: [] }
-  return { users: await listProfilesForStaff() }
+    .limit(20)
+  for (const word of words) {
+    request = request.or(`first_name.ilike.%${word}%,last_name.ilike.%${word}%,referral_code.ilike.%${word}%,email.ilike.%${word}%`)
+  }
+  const { data } = await request
+  return { users: (data ?? []) as StaffUserHit[] }
 }
 
 export async function adminGetUserMatrix(userId: string) {
