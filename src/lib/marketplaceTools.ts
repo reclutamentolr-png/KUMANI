@@ -119,6 +119,16 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       requiresSubscription: true,
     },
     {
+      toolName: 'antitruffa',
+      href: '/marketplace/antitruffa',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'BookOpenCheck',
+      title: t('antitruffa'),
+      description: t('antitruffaDescription'),
+      color: 'gold',
+      category: 'security',
+    },
+    {
       toolName: 'memolife',
       href: '/marketplace/memolife',
       gradient: 'bg-[var(--ink)]',
