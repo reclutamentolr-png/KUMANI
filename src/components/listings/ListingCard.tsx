@@ -4,7 +4,7 @@ import ContactListingButton from '@/components/ContactListingButton'
 import ListingDetailButton from '@/components/ListingDetailButton'
 import ListingImageThumbnail from '@/components/ListingImageThumbnail'
 import ReportListingButton from '@/components/ReportListingButton'
-import { CATEGORY_ICONS, type ListingCategory } from '@/lib/listings'
+import { CATEGORY_ICONS, type Listing, type ListingCategory } from '@/lib/listings'
 
 // Colore di ogni categoria (fascia della scheda senza foto e filtri).
 export const CATEGORY_STYLE: Record<ListingCategory, { band: string; chip: string }> = {
@@ -21,20 +21,6 @@ export const CATEGORY_STYLE: Record<ListingCategory, { band: string; chip: strin
   servizi: { band: 'from-[#c79a3b] to-[#a67c26]', chip: 'bg-[var(--gold-pale)] text-[var(--ink)] border-[var(--gold)]/40' },
 }
 
-type Listing = {
-  id: string
-  user_id: string
-  category: ListingCategory
-  title: string
-  description: string
-  price: number | string | null
-  image_url: string | null
-  created_at: string
-  country_code?: string | null
-  city?: string | null
-  is_remote?: boolean | null
-  profiles?: { first_name?: string | null } | null
-}
 
 // Scheda di un annuncio della Bacheca: foto (o fascia colorata con l'icona
 // della categoria), prezzo, titolo, autore e contatto.

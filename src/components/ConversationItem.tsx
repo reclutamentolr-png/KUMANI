@@ -61,7 +61,7 @@ export default function ConversationItem({
   }
 
   // ✅ CANCELLAZIONE CORRETTA: chiama la server action e ricarica la pagina
-  const handleDelete = async (e: React.MouseEvent) => {
+  const handleDelete = async (e: React.SyntheticEvent) => {
     e.stopPropagation()
     if (!confirm(t('confirmDelete'))) return
 
@@ -110,7 +110,7 @@ export default function ConversationItem({
                 role="button"
                 tabIndex={0}
                 onClick={handleDelete}
-                onKeyDown={(e) => { if (e.key === 'Enter') handleDelete(e as any) }}
+                onKeyDown={(e) => { if (e.key === 'Enter') handleDelete(e) }}
                 className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors flex-shrink-0 ml-2"
                 title={t('deleteTitle')}
               >

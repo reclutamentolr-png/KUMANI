@@ -13,10 +13,12 @@ import {
 } from 'lucide-react'
 import ProfileModal, { type ProfileChangeState } from './ProfileModal'
 import { getMyChangeRequest } from '@/app/actions/profileChanges'
+import type { User as AuthUser } from '@supabase/supabase-js'
+import type { MyProfile } from '@/lib/myProfile'
 
 type DashboardHeaderActionsProps = {
-  user: any
-  profile: any
+  user: AuthUser
+  profile: MyProfile | null
   isAdmin: boolean
 }
 

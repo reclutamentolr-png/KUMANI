@@ -2,8 +2,9 @@
 
 import { Pencil } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import type { Listing } from '@/lib/listings'
 
-export default function EditListingButton({ listing }: { listing: any }) {
+export default function EditListingButton({ listing }: { listing: Listing }) {
   const t = useTranslations('marketplace')
 
   const handleClick = () => {

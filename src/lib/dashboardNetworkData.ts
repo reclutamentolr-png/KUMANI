@@ -1,4 +1,5 @@
 import { SITE_URL } from '@/lib/siteUrl'
+import type { MyProfile } from '@/lib/myProfile'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { isActiveSubscription } from './subscriptionGate'
 import { fetchDirectSponsored } from './directAffiliates'
@@ -14,12 +15,7 @@ import { getCurrentRank, getNewlyAchievedRank, getUnclaimedRankBonuses } from '.
 export async function getDashboardNetworkData(
   supabase: SupabaseClient,
   user: { id: string },
-  profile: {
-    sponsor_id?: string | null
-    referral_code?: string | null
-    qualifications_seen?: string[] | null
-    rank_bonuses_claimed?: string[] | null
-  } | null,
+  profile: MyProfile | null,
   locale: string
 ) {
   // Bonus da riscuotere (vedi claimNetworkBonuses): partono subito, uno
@@ -70,11 +66,11 @@ export async function getDashboardNetworkData(
     position: userNode?.position || 1,
     depth: userNode?.depth || 0,
     created_at: userNode?.created_at || new Date().toISOString(),
-    username: (profile as any)?.username,
-    first_name: (profile as any)?.first_name,
-    last_name: (profile as any)?.last_name,
+    username: profile?.username ?? undefined,
+    first_name: profile?.first_name ?? undefined,
+    last_name: profile?.last_name ?? undefined,
     referral_code: profile?.referral_code ?? undefined,
-    country_code: (profile as any)?.country_code,
+    country_code: profile?.country_code ?? undefined,
   }
 
   // Statistiche rapide

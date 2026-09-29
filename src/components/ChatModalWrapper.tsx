@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from 'react'
 import ChatModal from '@/components/ChatModal'
+import type { ChatListing } from '@/lib/listings'
 
 export default function ChatModalWrapper({ userId }: { userId: string }) {
   const [chatOpen, setChatOpen] = useState(false)
-  const [selectedListing, setSelectedListing] = useState<any>(null)
+  const [selectedListing, setSelectedListing] = useState<ChatListing | null>(null)
   const [receiverId, setReceiverId] = useState<string>('')
   const [otherName, setOtherName] = useState<string>('')
 

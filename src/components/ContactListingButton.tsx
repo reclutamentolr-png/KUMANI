@@ -17,7 +17,7 @@ export default function ContactListingButton({
   listingId: string
   listingTitle: string
   listingCategory: string
-  listingPrice?: number
+  listingPrice?: number | string | null
   listingDescription: string
   receiverId: string
   authorName: string

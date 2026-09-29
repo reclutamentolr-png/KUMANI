@@ -70,7 +70,7 @@ export default function ListingForm({ userId, currentPoints, onCloseUrl, network
     if (result.success) {
       setSuccess(true)
       if ('featured' in result) {
-        setFeaturedUntil(result.featured ? (result as any).listing.featured_until : null)
+        setFeaturedUntil(result.featured && 'listing' in result ? ((result.listing as { featured_until?: string | null }).featured_until ?? null) : null)
         setFeatureError(!result.featured)
       }
     } else {

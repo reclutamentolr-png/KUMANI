@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from '@/components/LocalizedLink'
 import { getTranslations } from 'next-intl/server'
 import { LISTINGS_PAGE_SIZE, getUnreadMessagesCount, getActiveListings, getFeaturedListings, getUserListings, getActiveListingCategoryCounts, getActiveListingById, getListingCitiesByCountry, cleanListingSearch } from '@/lib/listings-server'
-import { CATEGORY_ICONS, CATEGORY_I18N_KEYS, ALL_LISTING_CATEGORIES, LISTING_COUNTRIES, isListingCountry, cleanListingCity, type ListingCategory } from '@/lib/listings'
+import { CATEGORY_ICONS, CATEGORY_I18N_KEYS, ALL_LISTING_CATEGORIES, LISTING_COUNTRIES, isListingCountry, cleanListingCity, type Listing, type ListingCategory } from '@/lib/listings'
 import { countryName } from '@/lib/events'
 import { deleteListingAction, republishListingAction } from '@/app/actions/listings'
 import { ArrowLeft, MessageCircle, Plus, Tag, Trash2, Eye, Calendar, RefreshCw, Sparkles, Coins, Info, ChevronDown } from 'lucide-react'
@@ -278,9 +278,10 @@ export default async function ListingsPage({
               {t('myListings', { count: myListings.length })}
             </h2>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {myListings.map((listing: any) => {
+              {myListings.map((listing: Listing) => {
                 const isExpired = new Date(listing.expires_at).getTime() < now
-                const isFeatured = listing.featured_until && new Date(listing.featured_until).getTime() > now
+                const featuredUntil = listing.featured_until ? new Date(listing.featured_until) : null
+                const isFeatured = featuredUntil !== null && featuredUntil.getTime() > now
                 const style = CATEGORY_STYLE[listing.category as ListingCategory] ?? CATEGORY_STYLE.servizi
                 return (
                   <div
@@ -312,7 +313,7 @@ export default async function ListingsPage({
                       )}
                       {isFeatured && (
                         <p className="mb-2 text-xs font-semibold text-[var(--gold)]">
-                          {t('showcaseUntil', { date: new Date(listing.featured_until).toLocaleDateString(locale) })}
+                          {t('showcaseUntil', { date: featuredUntil!.toLocaleDateString(locale) })}
                         </p>
                       )}
                       <ListingDetailButton
@@ -368,7 +369,7 @@ export default async function ListingsPage({
               {t('showcaseSection', { count: featuredListings.length })}
             </h2>
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-              {featuredListings.map((listing: any) => (
+              {featuredListings.map((listing: Listing) => (
                 <ListingCard
                   key={listing.id}
                   listing={listing}
@@ -411,7 +412,7 @@ export default async function ListingsPage({
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-              {allListings.map((listing: any) => (
+              {allListings.map((listing: Listing) => (
                 <ListingCard
                   key={listing.id}
                   listing={listing}

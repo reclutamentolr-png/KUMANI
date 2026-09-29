@@ -5,13 +5,13 @@ import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { X, AlertCircle, CheckCircle2 } from 'lucide-react'
 import { updateListingAction } from '@/app/actions/listings'
-import { type ListingCategory, CATEGORY_ICONS, CATEGORY_I18N_KEYS, ALL_LISTING_CATEGORIES, isListingCountry } from '@/lib/listings'
+import { type Listing, type ListingCategory, CATEGORY_ICONS, CATEGORY_I18N_KEYS, ALL_LISTING_CATEGORIES, isListingCountry } from '@/lib/listings'
 import ListingLocationFields, { type ListingLocationValue } from '@/components/listings/ListingLocationFields'
 
 type Props = {
   isOpen: boolean
   onClose: () => void
-  listing: any
+  listing: Listing
   citiesByCountry: Record<string, string[]>
 }
 

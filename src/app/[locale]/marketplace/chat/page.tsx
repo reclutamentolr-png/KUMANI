@@ -61,7 +61,7 @@ export default async function ChatInboxPage({ params }: { params: Promise<{ loca
           </div>
         ) : (
           <div className="space-y-4">
-            {conversations.map((conv: any) => (
+            {conversations.map((conv) => (
   <ConversationItem 
     key={conv.key}
     convKey={conv.key}

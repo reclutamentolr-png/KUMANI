@@ -13,6 +13,7 @@ import CopyButton from '@/components/CopyButton'
 import VoucherActivationButton from '@/components/VoucherActivationButton'
 import KuBadge from '@/components/ku/KuBadge'
 import AffinityBadge from './AffinityBadge'
+import type { MyProfile } from '@/lib/myProfile'
 
 // Tipo 2: the Marketplace-first layout. Tools are the main focus; the
 // network (KUMI, matrix, KUMANI lists, qualifications) is reduced to one
@@ -32,7 +33,7 @@ export default async function DashboardTipo2({
   agenda = null,
   network,
 }: {
-  profile: any
+  profile: MyProfile | null
   shareUrl: string
   unreadMessagesCount: number
   visibleTools: MarketplaceTool[]

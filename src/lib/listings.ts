@@ -115,3 +115,52 @@ export const ALL_LISTING_CATEGORIES: ListingCategory[] = [
   'impresa',
   'servizi'
 ]
+
+// Un annuncio della Bacheca, come arriva dal database (con il nome
+// dell'autore quando la lettura lo include).
+export type Listing = {
+  id: string
+  user_id: string
+  category: ListingCategory
+  title: string
+  description: string
+  price: number | string | null
+  image_url: string | null
+  created_at: string
+  expires_at: string
+  featured_until?: string | null
+  is_active?: boolean
+  country_code?: string | null
+  city?: string | null
+  is_remote?: boolean | null
+  profiles?: { first_name?: string | null; last_name?: string | null } | null
+}
+
+// L'annuncio a cui si riferisce una chat: basta sapere quale è e di chi
+// (per un messaggio diretto l'id è 'direct').
+export type ChatListing = Pick<Listing, 'id' | 'title'> & Partial<Omit<Listing, 'id' | 'title'>>
+
+// Un messaggio della chat della Bacheca
+export type ListingMessage = {
+  id: string
+  sender_id: string
+  receiver_id: string
+  listing_id: string | null
+  content: string
+  created_at: string
+  is_read: boolean
+}
+
+// Una conversazione nella pagina "I miei messaggi"
+export type Conversation = {
+  key: string
+  listingId: string | null
+  listingTitle: string
+  otherUserId: string
+  otherUserName: string
+  lastMessage: string
+  createdAt: string
+  initiatedBy: string
+  unreadCount: number
+  lastMessageAt: string
+}

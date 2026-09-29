@@ -4,11 +4,12 @@ import { useState, useEffect, useRef } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
 import { X, Send, MessageCircle, Tag, Clock } from 'lucide-react'
+import type { ChatListing, ListingMessage } from '@/lib/listings'
 
 type ChatModalProps = {
   isOpen: boolean
   onClose: () => void
-  listing: any
+  listing: ChatListing
   currentUserId: string
   receiverId: string
   // Nome della persona con cui si parla (non sempre è chi ha pubblicato l'annuncio)
@@ -21,7 +22,7 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
   // Il nome dell'altra persona: quello passato da chi apre la chat, oppure
   // l'autore dell'annuncio se è lui che riceve (mai "undefined")
   const name = (otherName || (listing?.user_id === receiverId ? listing?.profiles?.first_name : '') || '').trim()
-  const [messages, setMessages] = useState<any[]>([])
+  const [messages, setMessages] = useState<ListingMessage[]>([])
   const [newMessage, setNewMessage] = useState('')
   const [loading, setLoading] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -115,8 +116,9 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
             filter: `receiver_id=eq.${currentUserId}`
           },
           (payload) => {
-            if (payload.new.listing_id !== listing.id || payload.new.sender_id !== receiverId) return
-            setMessages((prev) => (prev.some((m) => m.id === payload.new.id) ? prev : [...prev, payload.new]))
+            const incoming = payload.new as ListingMessage
+            if (incoming.listing_id !== listing.id || incoming.sender_id !== receiverId) return
+            setMessages((prev) => (prev.some((m) => m.id === incoming.id) ? prev : [...prev, incoming]))
             
             // Segna il nuovo messaggio come letto immediatamente (le query
             // supabase-js partono solo con then/await)

@@ -1,5 +1,6 @@
 import { SITE_URL } from '@/lib/siteUrl'
 import { createClient } from '@/lib/supabase/server'
+import type { MyProfile } from '@/lib/myProfile'
 import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
@@ -36,7 +37,7 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
 
   // Profilo completo (dati personali inclusi) solo tramite get_my_profile():
   // dal browser/sessione utente le colonne personali non sono più leggibili.
-  const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<Record<string, any>>()
+  const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<MyProfile>()
 
   const network = await getDashboardNetworkData(supabase, user, profile, locale)
   const {

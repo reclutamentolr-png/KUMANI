@@ -3,7 +3,7 @@
 import { useTranslations, useLocale } from 'next-intl'
 import { X, Tag, User, Calendar, Sparkles, MapPin, Globe2 } from 'lucide-react'
 import { countryName } from '@/lib/events'
-import { CATEGORY_ICONS, CATEGORY_I18N_KEYS, type ListingCategory } from '@/lib/listings'
+import { CATEGORY_ICONS, CATEGORY_I18N_KEYS, type Listing, type ListingCategory } from '@/lib/listings'
 import ContactListingButton from '@/components/ContactListingButton'
 import ReportListingButton from '@/components/ReportListingButton'
 import ListingShareButtons from '@/components/listings/ListingShareButtons'
@@ -11,7 +11,7 @@ import ListingShareButtons from '@/components/listings/ListingShareButtons'
 type Props = {
   isOpen: boolean
   onClose: () => void
-  listing: any
+  listing: Listing
   authorName?: string
   isOwn: boolean
 }

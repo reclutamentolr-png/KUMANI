@@ -2,7 +2,7 @@
 import { revalidateTag, unstable_cache } from 'next/cache'
 import { createClient as createServiceClient, type SupabaseClient } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
-import type { ListingCategory } from '@/lib/listings'
+import type { Conversation, ListingCategory, ListingMessage } from '@/lib/listings'
 
 // Ricerca libera nella Bacheca: testo (titolo o descrizione) oppure nome di
 // una categoria. Si tolgono i caratteri che hanno un significato nei filtri
@@ -221,11 +221,17 @@ export async function getUserConversations(userId: string) {
     // lo ricontrolla sul server (deleteConversationAction).
     .order('created_at', { ascending: false })
     .limit(500)
-  data?.reverse()
+  // Messaggio con i nomi di mittente e destinatario e il titolo dell'annuncio
+  type ConversationRow = ListingMessage & {
+    sender: { id: string; first_name: string | null } | null
+    receiver: { id: string; first_name: string | null } | null
+    listing: { id: string; title: string } | null
+  }
+  const rows = ((data ?? []) as unknown as ConversationRow[]).reverse()
   
-  const conversationsMap = new Map()
+  const conversationsMap = new Map<string, Conversation>()
   
-  data?.forEach((msg: any) => {
+  rows.forEach((msg) => {
     const isUserSender = msg.sender_id === userId
     const otherUserId = isUserSender ? msg.receiver_id : msg.sender_id
     const otherUser = isUserSender ? msg.receiver : msg.sender
@@ -251,7 +257,7 @@ export async function getUserConversations(userId: string) {
         lastMessageAt: msg.created_at
       })
     } else {
-      const conv = conversationsMap.get(key)
+      const conv = conversationsMap.get(key)!
       // Aggiorna l'ultimo messaggio e la data
       conv.lastMessage = msg.content
       conv.lastMessageAt = msg.created_at
@@ -259,14 +265,14 @@ export async function getUserConversations(userId: string) {
   })
   
   // Secondo passaggio: calcoliamo i non letti (ora che abbiamo tutte le conversazioni)
-  data?.forEach((msg: any) => {
+  rows.forEach((msg) => {
     const isUserSender = msg.sender_id === userId
     const otherUserId = isUserSender ? msg.receiver_id : msg.sender_id
     const listingId = msg.listing_id || 'direct'
     const key = `${listingId}_${otherUserId}`
     
     if (conversationsMap.has(key)) {
-      const conv = conversationsMap.get(key)
+      const conv = conversationsMap.get(key)!
       if (!isUserSender && !msg.is_read) {
         conv.unreadCount += 1
       }
@@ -274,7 +280,7 @@ export async function getUserConversations(userId: string) {
   })
   
   // Ordina per data dell'ultimo messaggio (più recenti in cima)
-  return Array.from(conversationsMap.values()).sort((a: any, b: any) => 
+  return Array.from(conversationsMap.values()).sort((a, b) => 
     new Date(b.lastMessageAt).getTime() - new Date(a.lastMessageAt).getTime()
   )
 }

@@ -1,5 +1,7 @@
 'use client'
 
+import type { Listing } from '@/lib/listings'
+
 export default function ListingDetailButton({
   listing,
   authorName,
@@ -7,7 +9,7 @@ export default function ListingDetailButton({
   className,
   children,
 }: {
-  listing: any
+  listing: Listing
   authorName?: string
   isOwn: boolean
   className?: string

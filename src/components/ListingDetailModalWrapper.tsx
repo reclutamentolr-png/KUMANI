@@ -2,15 +2,16 @@
 
 import { useState, useEffect } from 'react'
 import ListingDetailModal from '@/components/ListingDetailModal'
+import type { Listing } from '@/lib/listings'
 
 // `initial`: annuncio da aprire subito (link condiviso ?listing=...)
 export default function ListingDetailModalWrapper({
   initial,
 }: {
-  initial?: { listing: unknown; authorName?: string; isOwn: boolean }
+  initial?: { listing: Listing; authorName?: string; isOwn: boolean }
 }) {
   const [open, setOpen] = useState(Boolean(initial))
-  const [listing, setListing] = useState<any>(initial?.listing ?? null)
+  const [listing, setListing] = useState<Listing | null>(initial?.listing ?? null)
   const [authorName, setAuthorName] = useState<string | undefined>(initial?.authorName)
   const [isOwn, setIsOwn] = useState(initial?.isOwn ?? false)
 

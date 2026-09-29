@@ -29,6 +29,7 @@ import { addDays, todayKey } from '@/lib/agenda'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { getPlanPrices } from '@/lib/planPrices'
 import { freeFirst } from '@/lib/freeFirst'
+import type { MyProfile } from '@/lib/myProfile'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -53,7 +54,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   // direttamente), messaggi non letti, piano e strumenti, preferiti.
   const [userIsAdmin, { data: profile }, unreadMessagesCount, access, favoriteToolNames] = await Promise.all([
     isAdmin(),
-    supabase.rpc('get_my_profile').maybeSingle<Record<string, any>>(),
+    supabase.rpc('get_my_profile').maybeSingle<MyProfile>(),
     getUnreadMessagesCount(user.id),
     getMarketplaceAccessState(supabase, user.id),
     getFavoriteToolNames(supabase, user.id),
