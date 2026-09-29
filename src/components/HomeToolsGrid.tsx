@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
+import { freeFirst } from '@/lib/freeFirst'
 import {
   Smartphone,
   Link2,
@@ -48,6 +49,8 @@ import {
 type Category = 'marketing' | 'security' | 'personal' | 'wellness' | 'lavoro' | 'svago' | 'community'
 
 type Tool = {
+  // Nome interno (vedi src/lib/homeToolNames.ts)
+  name: string
   icon: LucideIcon
   title: string
   desc: string
@@ -72,7 +75,9 @@ const CATEGORY_ICON: Record<Category, LucideIcon> = {
 // compatte. Il bottone "i" cerchiato su ogni tessera apre un popup con la
 // descrizione completa dello strumento, che prima stava scritta per intero
 // sulla card (ora tolta per lasciare più spazio a icona e titolo).
-export default function HomeToolsGrid() {
+// freeToolNames: servizi gratuiti (letti dal server), mostrati per primi
+// in ogni categoria.
+export default function HomeToolsGrid({ freeToolNames = [] }: { freeToolNames?: string[] }) {
   const t = useTranslations('landingHome')
   const tc = useTranslations('marketplace')
   const [activeTool, setActiveTool] = useState<Tool | null>(null)
@@ -94,39 +99,39 @@ export default function HomeToolsGrid() {
   }
 
   const tools: Tool[] = [
-    { icon: Smartphone, title: t('toolQrTitle'), desc: t('toolQrDescription'), category: 'marketing' },
-    { icon: Link2, title: t('toolLinkBioTitle'), desc: t('toolLinkBioDescription'), category: 'marketing' },
-    { icon: MessageCircle, title: t('toolWhatsappTitle'), desc: t('toolWhatsappDescription'), category: 'marketing' },
-    { icon: QrCode, title: t('toolQrProTitle'), desc: t('toolQrProDescription'), category: 'marketing' },
-    { icon: Stamp, title: tc('fidelity'), desc: tc('fidelityDescription'), category: 'marketing' },
-    { icon: Wand2, title: t('toolOffermakerTitle'), desc: t('toolOffermakerDescription'), category: 'marketing' },
-    { icon: UtensilsCrossed, title: tc('menu'), desc: tc('menuDescription'), category: 'marketing' },
-    { icon: ShieldCheck, title: t('toolSvatTitle'), desc: t('toolSvatDescription'), category: 'security' },
-    { icon: ScanEye, title: tc('verifoto'), desc: tc('verifotoDescription'), category: 'security' },
-    { icon: MailSearch, title: tc('checkmail'), desc: tc('checkmailDescription'), category: 'security' },
-    { icon: BookOpenCheck, title: tc('antitruffa'), desc: tc('antitruffaDescription'), category: 'security' },
-    { icon: Brain, title: t('toolMemolifeTitle'), desc: t('toolMemolifeDescription'), category: 'personal' },
-    { icon: CalendarClock, title: t('toolLifeCalendarTitle'), desc: t('toolLifeCalendarDescription'), category: 'personal' },
-    { icon: PackageSearch, title: t('toolFindoTitle'), desc: t('toolFindoDescription'), category: 'personal' },
-    { icon: FileCheck2, title: t('toolDigitalReceiptTitle'), desc: t('toolDigitalReceiptDescription'), category: 'lavoro' },
-    { icon: PiggyBank, title: tc('spendly'), desc: tc('spendlyDescription'), category: 'personal' },
-    { icon: Plane, title: tc('travel'), desc: tc('travelDescription'), category: 'personal' },
-    { icon: Flower2, title: tc('mandala'), desc: tc('mandalaDescription'), category: 'wellness' },
-    { icon: Wind, title: tc('oxygen'), desc: tc('oxygenDescription'), category: 'wellness' },
-    { icon: Waves, title: t('toolNeurobalanceTitle'), desc: t('toolNeurobalanceDescription'), category: 'wellness' },
-    { icon: Stethoscope, title: tc('aureya'), desc: tc('aureyaDescription'), category: 'wellness' },
-    { icon: FileSpreadsheet, title: tc('preventivi'), desc: tc('preventiviDescription'), category: 'lavoro' },
-    { icon: Warehouse, title: tc('magazzino'), desc: tc('magazzinoDescription'), category: 'lavoro' },
-    { icon: FileUser, title: tc('kumaniCv'), desc: tc('kumaniCvDescription'), category: 'personal' },
-    { icon: HeartHandshake, title: tc('affinity'), desc: tc('affinityDescription'), category: 'svago' },
-    { icon: VenetianMask, title: tc('veritas'), desc: tc('veritasDescription'), category: 'svago' },
-    { icon: Grid3x3, title: tc('mosaic'), desc: tc('mosaicDescription'), category: 'svago' },
-    { icon: Dices, title: tc('fabula'), desc: tc('fabulaDescription'), category: 'svago' },
-    { icon: Tag, title: t('toolListingsTitle'), desc: t('toolListingsDescription'), category: 'community' },
-    { icon: Star, title: tc('kumanoDelGiorno'), desc: tc('kumanoDelGiornoDescription'), category: 'community' },
-    { icon: HandPlatter, title: tc('convivio'), desc: tc('convivioDescription'), category: 'community' },
-    { icon: PartyPopper, title: tc('events'), desc: tc('eventsDescription'), category: 'community' },
-    { icon: Hourglass, title: tc('timebank'), desc: tc('timebankDescription'), category: 'community' },
+    { name: 'qr-generator', icon: Smartphone, title: t('toolQrTitle'), desc: t('toolQrDescription'), category: 'marketing' },
+    { name: 'link-in-bio', icon: Link2, title: t('toolLinkBioTitle'), desc: t('toolLinkBioDescription'), category: 'marketing' },
+    { name: 'whatsapp-messages', icon: MessageCircle, title: t('toolWhatsappTitle'), desc: t('toolWhatsappDescription'), category: 'marketing' },
+    { name: 'qr-code-pro', icon: QrCode, title: t('toolQrProTitle'), desc: t('toolQrProDescription'), category: 'marketing' },
+    { name: 'fidelity', icon: Stamp, title: tc('fidelity'), desc: tc('fidelityDescription'), category: 'marketing' },
+    { name: 'offermaker', icon: Wand2, title: t('toolOffermakerTitle'), desc: t('toolOffermakerDescription'), category: 'marketing' },
+    { name: 'menu', icon: UtensilsCrossed, title: tc('menu'), desc: tc('menuDescription'), category: 'marketing' },
+    { name: 'svat', icon: ShieldCheck, title: t('toolSvatTitle'), desc: t('toolSvatDescription'), category: 'security' },
+    { name: 'verifoto', icon: ScanEye, title: tc('verifoto'), desc: tc('verifotoDescription'), category: 'security' },
+    { name: 'checkmail', icon: MailSearch, title: tc('checkmail'), desc: tc('checkmailDescription'), category: 'security' },
+    { name: 'antitruffa', icon: BookOpenCheck, title: tc('antitruffa'), desc: tc('antitruffaDescription'), category: 'security' },
+    { name: 'memolife', icon: Brain, title: t('toolMemolifeTitle'), desc: t('toolMemolifeDescription'), category: 'personal' },
+    { name: 'life-calendar', icon: CalendarClock, title: t('toolLifeCalendarTitle'), desc: t('toolLifeCalendarDescription'), category: 'personal' },
+    { name: 'findo', icon: PackageSearch, title: t('toolFindoTitle'), desc: t('toolFindoDescription'), category: 'personal' },
+    { name: 'digital-receipt', icon: FileCheck2, title: t('toolDigitalReceiptTitle'), desc: t('toolDigitalReceiptDescription'), category: 'lavoro' },
+    { name: 'spendly', icon: PiggyBank, title: tc('spendly'), desc: tc('spendlyDescription'), category: 'personal' },
+    { name: 'travel', icon: Plane, title: tc('travel'), desc: tc('travelDescription'), category: 'personal' },
+    { name: 'mandala', icon: Flower2, title: tc('mandala'), desc: tc('mandalaDescription'), category: 'wellness' },
+    { name: 'oxygen', icon: Wind, title: tc('oxygen'), desc: tc('oxygenDescription'), category: 'wellness' },
+    { name: 'neurobalance', icon: Waves, title: t('toolNeurobalanceTitle'), desc: t('toolNeurobalanceDescription'), category: 'wellness' },
+    { name: 'aureya', icon: Stethoscope, title: tc('aureya'), desc: tc('aureyaDescription'), category: 'wellness' },
+    { name: 'preventivi', icon: FileSpreadsheet, title: tc('preventivi'), desc: tc('preventiviDescription'), category: 'lavoro' },
+    { name: 'magazzino', icon: Warehouse, title: tc('magazzino'), desc: tc('magazzinoDescription'), category: 'lavoro' },
+    { name: 'kumani-cv', icon: FileUser, title: tc('kumaniCv'), desc: tc('kumaniCvDescription'), category: 'personal' },
+    { name: 'affinity', icon: HeartHandshake, title: tc('affinity'), desc: tc('affinityDescription'), category: 'svago' },
+    { name: 'veritas', icon: VenetianMask, title: tc('veritas'), desc: tc('veritasDescription'), category: 'svago' },
+    { name: 'mosaic', icon: Grid3x3, title: tc('mosaic'), desc: tc('mosaicDescription'), category: 'svago' },
+    { name: 'fabula', icon: Dices, title: tc('fabula'), desc: tc('fabulaDescription'), category: 'svago' },
+    { name: 'listings', icon: Tag, title: t('toolListingsTitle'), desc: t('toolListingsDescription'), category: 'community' },
+    { name: 'spotlight', icon: Star, title: tc('kumanoDelGiorno'), desc: tc('kumanoDelGiornoDescription'), category: 'community' },
+    { name: 'convivio', icon: HandPlatter, title: tc('convivio'), desc: tc('convivioDescription'), category: 'community' },
+    { name: 'events', icon: PartyPopper, title: tc('events'), desc: tc('eventsDescription'), category: 'community' },
+    { name: 'timebank', icon: Hourglass, title: tc('timebank'), desc: tc('timebankDescription'), category: 'community' },
   ]
 
   const CATEGORY_LABEL: Record<Category, string> = {
@@ -143,7 +148,10 @@ export default function HomeToolsGrid() {
     <>
       <div className="space-y-8">
         {CATEGORY_ORDER.map((category) => {
-          const categoryTools = tools.filter((tool) => tool.category === category)
+          const categoryTools = freeFirst(
+            tools.filter((tool) => tool.category === category),
+            (tool) => freeToolNames.includes(tool.name)
+          )
           if (categoryTools.length === 0) return null
           const CategoryIcon = CATEGORY_ICON[category]
           const isOpen = openCategories.has(category)

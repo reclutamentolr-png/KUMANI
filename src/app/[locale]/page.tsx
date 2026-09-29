@@ -26,7 +26,7 @@ import {
 } from 'lucide-react'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import Logo from '@/components/Logo'
-import HomeToolsGrid from '@/components/HomeToolsGrid'
+import HomeToolsGridServer from '@/components/HomeToolsGridServer'
 import HomeKumanoDelGiorno from '@/components/spotlight/HomeKumanoDelGiorno'
 import HomeUpcomingEvents from '@/components/events/HomeUpcomingEvents'
 
@@ -215,7 +215,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <HomeToolsGrid />
+          <HomeToolsGridServer />
 
           {/* Per professionisti e imprenditori: gli strumenti del piano Pro */}
           <div className="mt-10 overflow-hidden rounded-3xl border-2 border-[var(--gold)] bg-gradient-to-br from-[var(--gold)]/20 via-white/[0.04] to-transparent p-6 shadow-[0_18px_50px_rgba(199,154,59,0.2)] sm:p-8">

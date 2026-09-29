@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { BadgeCheck, BookOpenCheck, Briefcase, CalendarClock, Gift, HeartPulse, Lock, ShieldCheck, Sparkles, Timer, Users } from 'lucide-react'
-import HomeToolsGrid from '@/components/HomeToolsGrid'
+import HomeToolsGridServer from '@/components/HomeToolsGridServer'
 import { getPlanPrices } from '@/lib/planPrices'
 import Link from '@/components/LocalizedLink'
 import Logo from '@/components/Logo'
@@ -250,7 +250,7 @@ export default async function ManualePreviewPage({ searchParams }: Props) {
           <div className="border-t border-white/10 px-6 py-6 sm:px-8">
             <h3 className="mb-1 text-lg font-bold">{t('ecoAllTitle')}</h3>
             <p className="mb-4 text-sm text-white/60">{t('ecoAllText')}</p>
-            <HomeToolsGrid />
+            <HomeToolsGridServer />
           </div>
 
           <div className="border-t border-white/10 bg-gradient-to-br from-[var(--gold)]/15 to-transparent px-6 py-6 sm:px-8">

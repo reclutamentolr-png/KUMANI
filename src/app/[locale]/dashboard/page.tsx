@@ -27,6 +27,7 @@ import { loadAgenda } from '@/lib/agenda-server'
 import { addDays, todayKey } from '@/lib/agenda'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { getPlanPrices } from '@/lib/planPrices'
+import { freeFirst } from '@/lib/freeFirst'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -107,7 +108,11 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
 
   // Chi è Pro trova gli strumenti Pro nell'Area Professionisti: non si
   // ripetono nelle categorie sotto.
-  const visibleTools = isPro ? enabledTools.filter((tool) => requiredPlan(tool.toolName) !== 'pro') : enabledTools
+  // I servizi gratuiti vengono per primi in ogni categoria.
+  const visibleTools = freeFirst(
+    isPro ? enabledTools.filter((tool) => requiredPlan(tool.toolName) !== 'pro') : enabledTools,
+    (tool) => requiredPlan(tool.toolName) === 'free'
+  )
   // Admin-enabled but not usable by THIS user (no active subscription) —
   // shown locked instead of silently hidden, same distinction the
   // marketplace category grid already makes via MarketplaceCard.
