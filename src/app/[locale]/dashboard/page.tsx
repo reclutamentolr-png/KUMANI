@@ -182,7 +182,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
         <ActivityTracker userId={user.id} />
 
         {isPro && proTools.length > 0 ? (
-          <ProArea tools={proTools} stats={proAreaStats} trial={proTrial} renewsOn={proRenewsOn} />
+          <ProArea tools={proTools} stats={proAreaStats} trial={proTrial} renewsOn={proRenewsOn} favoriteToolNames={favoriteToolNames} />
         ) : (
           !isPro && proTools.length > 0 && <ProTeaser trialExpired={proTrialExpired} />
         )}

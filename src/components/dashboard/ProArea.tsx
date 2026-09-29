@@ -4,6 +4,7 @@ import Link from '@/components/LocalizedLink'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 import type { MarketplaceTool } from '@/lib/marketplaceTools'
 import type { ProAreaStats } from '@/lib/proAreaStats'
+import FavoriteStarButton from '@/components/FavoriteStarButton'
 
 // Area Professionisti: in cima alla dashboard per chi ha il piano Pro (anche
 // in prova). Gli strumenti Pro (decisi dall'admin) con un dato della propria
@@ -13,8 +14,11 @@ export default async function ProArea({
   stats,
   trial,
   renewsOn,
+  favoriteToolNames = [],
 }: {
   tools: MarketplaceTool[]
+  // Strumenti già tra i Preferiti (stella piena)
+  favoriteToolNames?: string[]
   stats: ProAreaStats
   trial: { daysLeft: number; totalDays: number; endsOn: string; price: number } | null
   renewsOn: string | null
@@ -103,12 +107,14 @@ export default async function ProArea({
             <Link
               key={tool.toolName}
               href={`${tool.href}?from=dashboard`}
-              className="group flex items-start gap-3 rounded-xl border border-white/10 bg-white/[0.04] p-4 transition-colors hover:border-[var(--gold)]/60 hover:bg-white/[0.07]"
+              className="group relative flex items-start gap-3 rounded-xl border border-white/10 bg-white/[0.04] p-4 transition-colors hover:border-[var(--gold)]/60 hover:bg-white/[0.07]"
             >
+              <FavoriteStarButton toolName={tool.toolName} initialIsFavorite={favoriteToolNames.includes(tool.toolName)} />
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)]">
                 <Icon className="h-4.5 w-4.5" strokeWidth={1.8} />
               </div>
-              <div className="min-w-0 flex-1">
+              {/* pr-8: spazio per la stella dei Preferiti in alto a destra */}
+              <div className="min-w-0 flex-1 pr-8">
                 <p className="flex items-center justify-between gap-2 text-sm font-bold">
                   <span className="truncate">{tool.title}</span>
                   <ArrowRight className="h-3.5 w-3.5 shrink-0 text-[var(--gold-bright)] transition-transform group-hover:translate-x-0.5" />
