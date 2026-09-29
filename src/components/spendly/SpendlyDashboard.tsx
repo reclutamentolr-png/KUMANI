@@ -62,13 +62,15 @@ export default function SpendlyDashboard({
   // (come un vero saldo di conto), non il risultato netto del singolo mese:
   // l'ultimo punto del grafico deve coincidere con il Saldo netto annuale
   // mostrato nella KPI card qui sopra.
-  const cumulativeBalance = useMemo(() => {
-    let running = 0
-    return monthly.map((m) => {
-      running += m.balance
-      return { month: m.month, balance: running }
-    })
-  }, [monthly])
+  const cumulativeBalance = useMemo(
+    () =>
+      // Ogni mese: saldo del mese precedente + risultato del mese
+      monthly.reduce<{ month: number; balance: number }[]>(
+        (acc, m) => [...acc, { month: m.month, balance: (acc.length > 0 ? acc[acc.length - 1].balance : 0) + m.balance }],
+        []
+      ),
+    [monthly]
+  )
 
   const selected = monthly[selectedMonth - 1]
 

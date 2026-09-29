@@ -18,7 +18,6 @@ type ConversationItemProps = {
 }
 
 export default function ConversationItem({
-  convKey,
   listingId,
   listingTitle,
   otherUserId,

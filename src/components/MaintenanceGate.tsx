@@ -22,10 +22,8 @@ export default function MaintenanceGate({ children }: MaintenanceGateProps) {
     /^(\/[a-z]{2})?\/(login|forgot-password|reset-password)(\/|$)/.test(pathname ?? '')
 
   useEffect(() => {
-    if (isExempt) {
-      setStatus({ enabled: false, message: '' })
-      return
-    }
+    // Pagine sempre accessibili: nessun controllo (si mostrano subito, sotto)
+    if (isExempt) return
 
     getMaintenanceGate()
       .then((s) => {
@@ -37,8 +35,9 @@ export default function MaintenanceGate({ children }: MaintenanceGateProps) {
       })
   }, [isExempt, pathname])
 
-  // Durante il caricamento, mostra il contenuto normale (evita flash)
-  if (status === null) {
+  // Pagine sempre accessibili, o controllo in corso: contenuto normale
+  // (evita flash)
+  if (isExempt || status === null) {
     return <>{children}</>
   }
 

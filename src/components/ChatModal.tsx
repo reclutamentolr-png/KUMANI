@@ -97,6 +97,9 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
 
   useEffect(() => {
     if (isOpen && listing && currentUserId && receiverId) {
+      // Caricamento dei messaggi all'apertura della chat: è il compito di
+      // questo effetto
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       loadMessages()
       markAsRead()
 
@@ -133,7 +136,7 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
               const audio = new Audio('/notification.mp3')
               audio.volume = 0.4
               audio.play().catch(() => {})
-            } catch (e) {}
+            } catch {}
           }
         )
         .subscribe()
@@ -142,6 +145,9 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
         supabase.removeChannel(channel)
       }
     }
+    // Solo quando si apre un'altra chat: le funzioni qui dentro cambiano a
+    // ogni disegno e rimetterle qui riaprirebbe la chat di continuo
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, listing, currentUserId, receiverId])
 
   if (!isOpen || !listing) return null

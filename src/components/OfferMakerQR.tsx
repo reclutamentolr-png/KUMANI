@@ -63,6 +63,8 @@ export default function OfferMakerQR({
         </div>
       ) : (
         <div className="p-3 bg-white rounded-xl border border-[var(--gold)]/25 shadow-sm">
+          {/* QR generato al momento (data URL): <img> semplice */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={qrDataUrl} alt="QR Code" className="w-40 h-40" />
         </div>
       )}

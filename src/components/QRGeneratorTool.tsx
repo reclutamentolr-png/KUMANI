@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import QRCode from 'qrcode'
-import { Download, MousePointerClick } from 'lucide-react'
+import { Download } from 'lucide-react'
 
 type Props = {
   referralCode: string
@@ -131,6 +131,8 @@ export default function QRGeneratorTool({ referralCode, referralUrl, userName }:
               </div>
             ) : (
               <div className="p-4 bg-white rounded-xl shadow-sm border border-[var(--gold)]/25">
+                {/* QR generato al momento (data URL): <img> semplice */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={qrDataUrl} alt="QR Code" className="w-64 h-64" />
               </div>
             )}

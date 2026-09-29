@@ -74,6 +74,8 @@ export default function RewardsGrid({ rewards, initialBalance }: { rewards: Rewa
             >
               <div className="flex h-40 items-center justify-center bg-gray-100">
                 {reward.image_url ? (
+                  // Foto del premio caricata dallo Staff: <img> semplice
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img src={reward.image_url} alt={reward.title} className="h-full w-full object-cover" />
                 ) : (
                   <Gift className="h-12 w-12 text-gray-300" />

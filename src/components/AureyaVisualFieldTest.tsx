@@ -26,6 +26,11 @@ type Trial = { kind: 'stimulus'; x: number; y: number } | { kind: 'catch' }
 
 type Phase = 'instructions' | 'eye-ready' | 'testing' | 'saving' | 'results'
 
+// Istante attuale e pausa casuale tra una prova e l'altra (usati solo nei
+// timer e nei gestori dei tasti, mai mentre si disegna la pagina)
+const nowMs = () => performance.now()
+const randomGapMs = () => MIN_GAP_MS + Math.random() * (MAX_GAP_MS - MIN_GAP_MS)
+
 function buildTrials(): Trial[] {
   const stimuli: Trial[] = Array.from({ length: POINTS_PER_EYE }, () => {
     const angle = Math.random() * Math.PI * 2
@@ -108,7 +113,7 @@ export default function AureyaVisualFieldTest({
   }
 
   const scheduleNext = () => {
-    const gap = MIN_GAP_MS + Math.random() * (MAX_GAP_MS - MIN_GAP_MS)
+    const gap = randomGapMs()
     timeoutRef.current = setTimeout(() => {
       const next = cursorRef.current + 1
       if (next >= queueRef.current.length) {
@@ -124,7 +129,7 @@ export default function AureyaVisualFieldTest({
     const trial = queueRef.current[index]
     setActiveTrial(trial)
     setRampVisible(false)
-    trialStartRef.current = performance.now()
+    trialStartRef.current = nowMs()
     awaitingRef.current = true
 
     if (trial.kind === 'stimulus') {
@@ -155,7 +160,7 @@ export default function AureyaVisualFieldTest({
 
     const trial = queueRef.current[cursorRef.current]
     if (trial.kind === 'stimulus') {
-      const elapsed = performance.now() - trialStartRef.current
+      const elapsed = nowMs() - trialStartRef.current
       const frac = Math.min(1, elapsed / STIMULUS_RAMP_MS)
       const threshold = START_OPACITY + (MAX_OPACITY - START_OPACITY) * frac
       pointsRef.current = [

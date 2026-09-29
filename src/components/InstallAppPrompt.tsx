@@ -16,7 +16,9 @@ export default function InstallAppPrompt() {
   const t = useTranslations('dashboard')
   const [visible, setVisible] = useState(false)
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
-  const [isIOS, setIsIOS] = useState(false)
+  // iPhone/iPad: calcolato subito (il banner parte comunque nascosto, quindi
+  // server e browser disegnano la stessa cosa)
+  const [isIOS] = useState(() => typeof navigator !== 'undefined' && /iphone|ipad|ipod/i.test(navigator.userAgent))
 
   useEffect(() => {
     // ✅ Non mostrare se: già rifiutato in passato o app già installata
@@ -27,8 +29,7 @@ export default function InstallAppPrompt() {
 
     if (dismissed || isStandalone) return
 
-    const iOS = /iphone|ipad|ipod/i.test(navigator.userAgent)
-    setIsIOS(iOS)
+    const iOS = isIOS
 
     // ✅ Android/Chrome/Desktop: intercetta il prompt nativo e mostra il nostro
     const onBeforeInstallPrompt = (e: Event) => {
@@ -56,7 +57,7 @@ export default function InstallAppPrompt() {
       window.removeEventListener('beforeinstallprompt', onBeforeInstallPrompt)
       window.removeEventListener('appinstalled', onAppInstalled)
     }
-  }, [])
+  }, [isIOS])
 
   const handleInstall = async () => {
     if (!deferredPrompt) return

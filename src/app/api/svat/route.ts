@@ -16,21 +16,6 @@ interface SVATCheck {
   detailsInterp?: Record<string, string>
 }
 
-interface SVATResult {
-  input: string
-  domain?: string
-  score: number
-  badge: 'green' | 'yellow' | 'red'
-  checks: SVATCheck[]
-  summary: {
-    totalChecks: number
-    okCount: number
-    warningCount: number
-    riskCount: number
-    checkCount: number
-  }
-}
-
 export async function POST(request: NextRequest) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -87,9 +72,9 @@ export async function POST(request: NextRequest) {
       checkDMARC(domain),
       checkMX(domain),
       checkPTR(domain),
-      checkHTTPHeaders(input, domain),
+      checkHTTPHeaders(input),
       checkSSL(input, domain),
-      checkAbuseIPDB(domain, input),
+      checkAbuseIPDB(domain),
       checkContentScraping(pagePromise),
       checkLegalPages(pagePromise),
       checkReviews(pagePromise),
@@ -380,7 +365,7 @@ async function checkMX(domain: string): Promise<SVATCheck | null> {
 }
 
 // 6. Header HTTP/SSL — risposta del server, tipo di hosting
-async function checkHTTPHeaders(url: string, domain: string): Promise<SVATCheck | null> {
+async function checkHTTPHeaders(url: string): Promise<SVATCheck | null> {
   try {
     const res = await fetch(url, {
       method: 'HEAD',
@@ -624,7 +609,7 @@ async function checkSSL(url: string, domain: string): Promise<SVATCheck | null> 
           sourceUrl: `https://www.ssllabs.com/ssltest/analyze.html?d=${domain}`,
         }
       }
-    } catch (sslInfoError) {
+    } catch {
       // SSL checker API failed, fall back to minimal check
     }
 
@@ -752,8 +737,8 @@ async function checkLegalPages(pagePromise: Promise<FetchedPage | null>): Promis
     social: html.includes('facebook') || html.includes('instagram') || html.includes('linkedin') || html.includes('twitter'),
   }
 
-  const found = Object.entries(checks).filter(([_, v]) => v).map(([k]) => k)
-  const missing = Object.entries(checks).filter(([_, v]) => !v).map(([k]) => k)
+  const found = Object.entries(checks).filter(([, v]) => v).map(([k]) => k)
+  const missing = Object.entries(checks).filter(([, v]) => !v).map(([k]) => k)
 
   if (missing.length >= 4) {
     return {
@@ -972,7 +957,7 @@ async function checkPTR(domain: string): Promise<SVATCheck | null> {
 }
 
 // 5c. AbuseIPDB — ricerca segnalazioni di abusi per l'IP del dominio
-async function checkAbuseIPDB(domain: string, url: string): Promise<SVATCheck | null> {
+async function checkAbuseIPDB(domain: string): Promise<SVATCheck | null> {
   try {
     const apiKey = process.env.ABUSEIPDB_API_KEY
     if (!apiKey) return null

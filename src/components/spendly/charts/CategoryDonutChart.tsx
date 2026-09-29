@@ -15,19 +15,25 @@ export default function CategoryDonutChart({ data }: { data: Slice[] }) {
 
   if (total <= 0) return null
 
-  let offset = 0
-  const segments = data.map((d, i) => {
-    const fraction = d.value / total
-    const dash = fraction * circumference
-    const segment = {
-      ...d,
-      color: PALETTE[i % PALETTE.length],
-      dasharray: `${dash} ${circumference - dash}`,
-      dashoffset: -offset,
-    }
-    offset += dash
-    return segment
-  })
+  // Ogni fetta parte dove finisce la precedente (end = inizio + lunghezza)
+  const segments = data.reduce<Array<(typeof data)[number] & { color: string; dasharray: string; dashoffset: number; end: number }>>(
+    (acc, d, i) => {
+      const fraction = d.value / total
+      const dash = fraction * circumference
+      const offset = acc.length > 0 ? acc[acc.length - 1].end : 0
+      return [
+        ...acc,
+        {
+          ...d,
+          color: PALETTE[i % PALETTE.length],
+          dasharray: `${dash} ${circumference - dash}`,
+          dashoffset: -offset,
+          end: offset + dash,
+        },
+      ]
+    },
+    []
+  )
 
   return (
     <div className="flex flex-col sm:flex-row items-center gap-6">

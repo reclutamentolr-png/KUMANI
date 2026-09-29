@@ -13,7 +13,23 @@ function ImpersonationBannerContent() {
   const [isVisible, setIsVisible] = useState(false)
   const [adminName, setAdminName] = useState<string>('')
 
+  const fetchAdminName = async (adminId: string) => {
+    try {
+      const supabase = createClient()
+      const { data } = await supabase
+        .from('profiles')
+        .select('first_name')
+        .eq('id', adminId)
+        .single()
+
+      if (data) setAdminName(data.first_name)
+    } catch {}
+  }
+
+  // Si legge l'indirizzo e la memoria del browser solo dopo l'apertura della
+  // pagina (sul server non esistono): è il compito di questo effetto
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true)
 
     const imp = searchParams.get('impersonating')
@@ -29,19 +45,6 @@ function ImpersonationBannerContent() {
       }
     }
   }, [searchParams])
-
-  const fetchAdminName = async (adminId: string) => {
-    try {
-      const supabase = createClient()
-      const { data } = await supabase
-        .from('profiles')
-        .select('first_name')
-        .eq('id', adminId)
-        .single()
-
-      if (data) setAdminName(data.first_name)
-    } catch (e) {}
-  }
 
   const handleExit = async () => {
     if (!confirm(t('exitImpersonation'))) return

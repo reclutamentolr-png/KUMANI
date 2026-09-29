@@ -11,11 +11,12 @@ type MatrixNode = {
   position: number
   depth: number
   created_at: string
-  username?: string
-  first_name?: string
-  last_name?: string
-  referral_code?: string
-  country_code?: string
+  // Dal database possono arrivare vuoti (null)
+  username?: string | null
+  first_name?: string | null
+  last_name?: string | null
+  referral_code?: string | null
+  country_code?: string | null
 }
 
 type MatrixTreeProps = {

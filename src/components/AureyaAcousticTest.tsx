@@ -19,6 +19,10 @@ const MAX_GAIN = 0.3
 
 type Phase = 'device-check' | 'instructions' | 'testing' | 'saving' | 'results'
 
+// Istante attuale in millisecondi (usato solo nei gestori dei pulsanti e
+// dei timer, mai mentre si disegna la pagina)
+const nowMs = () => performance.now()
+
 function detectMobile(): boolean {
   if (typeof navigator === 'undefined') return false
   const uaData = (navigator as unknown as { userAgentData?: { mobile?: boolean } }).userAgentData
@@ -56,7 +60,10 @@ export default function AureyaAcousticTest({
   const stepStartRef = useRef<number>(0)
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
+  // Telefono o computer: si sa solo nel browser, dopo l'apertura (il testo
+  // mostrato cambia, quindi non si può calcolare prima sul server)
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMobile(detectMobile())
   }, [])
 
@@ -103,7 +110,7 @@ export default function AureyaAcousticTest({
 
     oscillatorRef.current = oscillator
     gainRef.current = gain
-    stepStartRef.current = performance.now()
+    stepStartRef.current = nowMs()
 
     timeoutRef.current = setTimeout(() => {
       recordStep(index, null)
@@ -126,7 +133,7 @@ export default function AureyaAcousticTest({
   }
 
   const handleHeard = () => {
-    const elapsed = performance.now() - stepStartRef.current
+    const elapsed = nowMs() - stepStartRef.current
     const frac = Math.min(1, elapsed / RAMP_DURATION_MS)
     const level = START_GAIN + (MAX_GAIN - START_GAIN) * frac
     recordStep(stepIndex, level)

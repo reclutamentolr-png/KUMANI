@@ -59,7 +59,6 @@ import type {
   AdminUserRow,
   AdminProfileDetail,
   AdminProfileForm,
-  MarketplaceToolRow,
   MarketplaceToolUsage,
   AdminCouponRow,
   AdminVoucherRow,
@@ -94,7 +93,6 @@ import {
   GitBranch,
   ShoppingBag,
   Settings,
-  TrendingUp,
   UserCheck,
   Activity,
   Lock,
@@ -257,7 +255,6 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
   const [matrixStats, setMatrixStats] = useState({ total: 0, level1: 0, level2: 0, level3: 0, level4: 0, level5: 0 })
   const [loadingMatrix, setLoadingMatrix] = useState(false)
 
-  const [marketplaceTools, setMarketplaceTools] = useState<MarketplaceToolRow[]>([])
   const [marketplaceUsage, setMarketplaceUsage] = useState<MarketplaceToolUsage[]>([])
   const [savingTool, setSavingTool] = useState<string | null>(null)
 
@@ -354,25 +351,6 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
 
   const MESSAGE_LANGUAGES = ['it', 'en', 'de', 'es', 'fr', 'pt', 'ru']
 
-  useEffect(() => {
-    if (activeSection === 'overview') {
-      loadStats()
-      loadOnlineUsers()
-      const interval = setInterval(loadOnlineUsers, 30000)
-      return () => clearInterval(interval)
-    }
-    else if (activeSection === 'users') loadUsers()
-    else if (activeSection === 'marketplace') loadMarketplaceData()
-    else if (activeSection === 'coupons') loadCouponsData()
-    else if (activeSection === 'vouchers') loadVouchersData()
-    else if (activeSection === 'rewards') loadRewardsData()
-    else if (activeSection === 'financials') loadFinancialSummary()
-    else if (activeSection === 'listingReports') loadListingReportsData()
-    else if (activeSection === 'spotlight') loadSpotlightData()
-    else if (activeSection === 'settings') loadSystemSettings()
-    else if (activeSection === 'messages') loadMessagesData()
-  }, [activeSection])
-
   const loadStats = async () => {
     // Dal server: la matrice non è leggibile dal browser
     const counts = await adminOverviewCounts()
@@ -457,7 +435,6 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
   const loadMarketplaceData = async () => {
     const { data: tools } = await supabase.from('marketplace_settings').select('*').order('tool_name')
     const toolsList = tools || []
-    setMarketplaceTools(toolsList)
 
     const { data: usageRaw } = await supabase.from('marketplace_usage').select('tool_name')
     const usageCount: Record<string, number> = {}
@@ -831,11 +808,18 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
     if (data) {
       const settingsObj: AdminSystemSettings = { ...systemSettings }
       data.forEach((s: { key: string; value: string }) => {
+        let value: unknown
         try {
-          settingsObj[s.key] = JSON.parse(s.value)
+          value = JSON.parse(s.value)
         } catch {
-          settingsObj[s.key] = s.value
+          value = s.value
         }
+        // Impostazione numerica salvata come testo (es. "20"): torna numero,
+        // solo se è davvero un numero valido
+        if (typeof settingsObj[s.key] === 'number' && typeof value === 'string' && value.trim() !== '' && Number.isFinite(Number(value))) {
+          value = Number(value)
+        }
+        settingsObj[s.key] = value
       })
       setSystemSettings(settingsObj)
       setSavedSettings(settingsObj)
@@ -854,7 +838,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
         alert(Object.keys(changed).length ? '✅ Impostazioni salvate con successo!' : 'Nessuna modifica da salvare.')
       }
       else alert('❌ Errore durante il salvataggio: ' + (result.error || ''))
-    } catch (error) {
+    } catch {
       alert('❌ Errore durante il salvataggio')
     }
     setSavingSettings(false)
@@ -867,6 +851,32 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
     setMessageableUsers(usersResult.users)
     setLoadingMessages(false)
   }
+
+  // Dati della sezione aperta (dopo le funzioni che li caricano)
+  useEffect(() => {
+    if (activeSection === 'overview') {
+      // Caricamento dei dati della sezione (con il segnale "caricamento"):
+      // è proprio il compito di questo effetto
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      loadStats()
+      loadOnlineUsers()
+      const interval = setInterval(loadOnlineUsers, 30000)
+      return () => clearInterval(interval)
+    }
+    else if (activeSection === 'users') loadUsers()
+    else if (activeSection === 'marketplace') loadMarketplaceData()
+    else if (activeSection === 'coupons') loadCouponsData()
+    else if (activeSection === 'vouchers') loadVouchersData()
+    else if (activeSection === 'rewards') loadRewardsData()
+    else if (activeSection === 'financials') loadFinancialSummary()
+    else if (activeSection === 'listingReports') loadListingReportsData()
+    else if (activeSection === 'spotlight') loadSpotlightData()
+    else if (activeSection === 'settings') loadSystemSettings()
+    else if (activeSection === 'messages') loadMessagesData()
+    // Solo al cambio di sezione: le funzioni di caricamento cambiano a ogni
+    // disegno e rimetterle qui ricaricherebbe i dati di continuo
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeSection])
 
   const resetMessageForm = () => {
     setMessageTitle({})
@@ -964,7 +974,7 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
       setIsModalOpen(false)
       setSelectedUser(null)
       alert('✅ Utente aggiornato con successo!')
-    } catch (error) {
+    } catch {
       alert('❌ Errore durante il salvataggio.')
     } finally {
       setIsSaving(false)
@@ -1141,11 +1151,12 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
   }
 
   // ?section= inesistente o non consentito dal ruolo: prima voce disponibile.
-  useEffect(() => {
-    if (!availableMenuItems.some((item) => item.id === activeSection)) {
-      setActiveSection(availableMenuItems[0]?.id ?? 'overview')
-    }
-  }, [activeSection, availableMenuItems])
+  // Si corregge subito, mentre si disegna la pagina (non dopo con un
+  // effetto); solo se il valore cambia davvero, così non si ripete.
+  const fallbackSection = availableMenuItems[0]?.id ?? 'overview'
+  if (activeSection !== fallbackSection && !availableMenuItems.some((item) => item.id === activeSection)) {
+    setActiveSection(fallbackSection)
+  }
 
   const renderOverview = () => (
     <div className="space-y-6">

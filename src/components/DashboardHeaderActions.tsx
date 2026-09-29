@@ -5,10 +5,8 @@ import { useTranslations } from 'next-intl'
 import Link from '@/components/LocalizedLink' // ✅ CAMBIATO: usa LocalizedLink invece di next/link
 import { logout } from '@/app/actions/logout'
 import {
-  Hand,
   Settings,
   LogOut,
-  User,
   Wallet
 } from 'lucide-react'
 import ProfileModal, { type ProfileChangeState } from './ProfileModal'

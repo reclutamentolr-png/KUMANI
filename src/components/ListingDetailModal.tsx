@@ -46,6 +46,8 @@ export default function ListingDetailModal({ isOpen, onClose, listing, authorNam
 
         <div className="p-6 space-y-4">
           {listing.image_url && (
+            // Foto indicata da chi pubblica (indirizzo esterno qualsiasi): <img> semplice
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={listing.image_url}
               alt={listing.title}
