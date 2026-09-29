@@ -118,6 +118,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   // marketplace category grid already makes via MarketplaceCard.
   const lockedToolNames = visibleTools.filter((tool) => !isToolEnabled(tool.toolName)).map((tool) => tool.toolName)
   const proToolNames = visibleTools.filter((tool) => requiredPlan(tool.toolName) === 'pro').map((tool) => tool.toolName)
+  const freeToolNames = visibleTools.filter((tool) => requiredPlan(tool.toolName) === 'free').map((tool) => tool.toolName)
 
   // "I prossimi giorni": appuntamenti, promemoria, bollette e scadenze dei
   // prossimi 7 giorni (più quelle scadute negli ultimi 60), dagli strumenti
@@ -206,6 +207,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
           visibleTools={visibleTools}
           lockedToolNames={lockedToolNames}
           proToolNames={proToolNames}
+          freeToolNames={freeToolNames}
           favoriteToolNames={favoriteToolNames}
           proTrialDaysLeft={proTrial?.daysLeft ?? null}
           agenda={hasAgenda ? <UpcomingAgenda events={agendaEvents} today={agendaToday} sources={agendaSources} /> : null}

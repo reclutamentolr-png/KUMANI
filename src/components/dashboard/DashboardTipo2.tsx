@@ -26,6 +26,7 @@ export default async function DashboardTipo2({
   visibleTools,
   lockedToolNames,
   proToolNames,
+  freeToolNames,
   favoriteToolNames,
   proTrialDaysLeft = null,
   agenda = null,
@@ -37,6 +38,8 @@ export default async function DashboardTipo2({
   visibleTools: MarketplaceTool[]
   lockedToolNames: string[]
   proToolNames: string[]
+  // Servizi gratuiti (etichetta GRATIS, mostrati per primi)
+  freeToolNames: string[]
   favoriteToolNames: string[]
   // Prova Pro in corso: il riquadro dell'abbonamento propone Pro come
   // scelta principale e il Base come alternativa.
@@ -191,6 +194,7 @@ export default async function DashboardTipo2({
               tools={tools}
               lockedToolNames={lockedToolNames}
               proToolNames={proToolNames}
+              freeToolNames={freeToolNames}
               favoriteToolNames={favoriteToolNames}
             />
           ))}

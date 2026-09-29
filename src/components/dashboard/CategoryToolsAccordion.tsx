@@ -28,6 +28,7 @@ export default function CategoryToolsAccordion({
   tools,
   lockedToolNames,
   proToolNames = [],
+  freeToolNames = [],
   favoriteToolNames,
 }: {
   category: MarketplaceCategory
@@ -37,6 +38,8 @@ export default function CategoryToolsAccordion({
   lockedToolNames: string[]
   // Strumenti del piano Pro (badge PRO; se bloccati portano a "Passa a Pro").
   proToolNames?: string[]
+  // Servizi gratuiti per tutti gli iscritti (etichetta GRATIS)
+  freeToolNames?: string[]
   favoriteToolNames: string[]
 }) {
   const t = useTranslations('marketplace')
@@ -109,6 +112,11 @@ export default function CategoryToolsAccordion({
                 {isPro && (
                   <span className="absolute left-14 top-[22px] rounded-full bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-1.5 py-0.5 text-[9px] font-extrabold tracking-wider text-[var(--ink)]">
                     PRO
+                  </span>
+                )}
+                {freeToolNames.includes(tool.toolName) && (
+                  <span className="absolute left-14 top-[22px] rounded-full bg-emerald-600 px-1.5 py-0.5 text-[9px] font-extrabold tracking-wider text-white">
+                    {t('free')}
                   </span>
                 )}
                 <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--ink)] text-[var(--gold-bright)]">

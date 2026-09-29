@@ -184,7 +184,7 @@ export default function HomeToolsGrid({ freeToolNames = [] }: { freeToolNames?: 
                   {categoryTools.map((tool, index) => (
                     <div
                       key={index}
-                      className="relative flex flex-col items-center justify-center text-center gap-1.5 py-4 px-2 rounded-xl bg-white/[0.03] border border-[var(--gold)]/15 hover:border-[var(--gold)]/50 hover:bg-white/[0.06] transition-all"
+                      className="relative flex flex-col items-center justify-center text-center gap-1.5 pt-7 pb-4 px-2 rounded-xl bg-white/[0.03] border border-[var(--gold)]/15 hover:border-[var(--gold)]/50 hover:bg-white/[0.06] transition-all"
                     >
                       <button
                         type="button"
@@ -194,6 +194,11 @@ export default function HomeToolsGrid({ freeToolNames = [] }: { freeToolNames?: 
                       >
                         <Info className="w-4.5 h-4.5" />
                       </button>
+                      {freeToolNames.includes(tool.name) && (
+                        <span className="absolute left-1.5 top-1.5 rounded-full bg-emerald-600 px-1.5 py-0.5 text-[9px] font-extrabold tracking-wider text-white">
+                          {tc('free')}
+                        </span>
+                      )}
                       <tool.icon className="w-7 h-7 sm:w-8 sm:h-8 text-[var(--gold-bright)]" strokeWidth={1.6} />
                       <span className="text-xs sm:text-sm font-bold text-white leading-tight">{tool.title}</span>
                     </div>
