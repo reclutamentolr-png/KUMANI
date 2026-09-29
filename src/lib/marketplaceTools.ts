@@ -197,6 +197,16 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       category: 'wellness',
     },
     {
+      toolName: 'oxygen',
+      href: '/marketplace/oxygen',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'Wind',
+      title: t('oxygen'),
+      description: t('oxygenDescription'),
+      color: 'gold',
+      category: 'wellness',
+    },
+    {
       toolName: 'neurobalance',
       href: '/marketplace/neurobalance',
       gradient: 'bg-[var(--ink)]',
