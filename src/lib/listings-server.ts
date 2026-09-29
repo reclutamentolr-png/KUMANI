@@ -9,13 +9,31 @@ export function cleanListingSearch(raw?: string | null) {
   return (raw ?? '').replace(/[,()*%\\:"'`]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 80)
 }
 
-function searchFilter(q: string, qCategories: ListingCategory[]) {
-  const parts = [`title.ilike.%${q}%`, `description.ilike.%${q}%`]
-  if (qCategories.length > 0) parts.push(`category.in.(${qCategories.join(',')})`)
+// Ogni parola cercata deve comparire nel titolo, nella descrizione o nel nome
+// della categoria (in qualsiasi ordine): "consulenza informatica" trova anche
+// "Consulenza in ambito informatico".
+export type ListingSearchTerm = { word: string; categories: ListingCategory[] }
+
+function termFilter(term: ListingSearchTerm) {
+  const parts = [`title.ilike.%${term.word}%`, `description.ilike.%${term.word}%`]
+  if (term.categories.length > 0) parts.push(`category.in.(${term.categories.join(',')})`)
   return parts.join(',')
 }
 
-type ListingSearch = { q?: string; qCategories?: ListingCategory[] }
+// Ricerca: parole, nazione (codice ISO) e città. Con una città si vedono
+// anche gli annunci "anche online / a distanza" della stessa nazione.
+export type ListingSearch = { terms?: ListingSearchTerm[]; country?: string; city?: string }
+
+// Filtri "oppure" separati si sommano come condizioni "e" (una per parola)
+function applySearch<Q extends { or: (filters: string) => Q; eq: (column: string, value: string) => Q }>(
+  query: Q,
+  search?: ListingSearch
+) {
+  for (const term of search?.terms ?? []) query = query.or(termFilter(term))
+  if (search?.country) query = query.eq('country_code', search.country)
+  if (search?.city) query = query.or(`city.ilike."${search.city}",is_remote.eq.true`)
+  return query
+}
 
 export async function getActiveListings(options?: {
   category?: ListingCategory
@@ -43,7 +61,7 @@ export async function getActiveListings(options?: {
   // excluded here so they don't also clutter the regular listing (they
   // still count for category filters/totals via the separate query).
   if (options?.excludeFeatured) query = query.or(`featured_until.is.null,featured_until.lt.${nowIso}`)
-  if (options?.q) query = query.or(searchFilter(options.q, options.qCategories ?? []))
+  query = applySearch(query, options)
 
   const { data, error } = await query
   return error ? [] : (data || [])
@@ -66,7 +84,7 @@ export async function getFeaturedListings(options?: { category?: ListingCategory
     .order('featured_until', { ascending: false })
 
   if (options?.category) query = query.eq('category', options.category)
-  if (options?.q) query = query.or(searchFilter(options.q, options.qCategories ?? []))
+  query = applySearch(query, options)
 
   const { data, error } = await query
   return error ? [] : (data || [])
@@ -80,7 +98,7 @@ export async function getActiveListingCategoryCounts(search?: ListingSearch) {
     .select('category')
     .eq('is_active', true)
     .gte('expires_at', new Date().toISOString())
-  if (search?.q) query = query.or(searchFilter(search.q, search.qCategories ?? []))
+  query = applySearch(query, search)
   const { data } = await query
   const counts: Record<string, number> = {}
   for (const row of data ?? []) counts[row.category] = (counts[row.category] ?? 0) + 1
@@ -102,6 +120,28 @@ export async function getActiveListingById(id: string) {
     .gte('expires_at', new Date().toISOString())
     .maybeSingle()
   return data
+}
+
+/** Città già usate negli annunci attivi, per nazione (suggerimenti di ricerca e pubblicazione). */
+export async function getListingCitiesByCountry() {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('listings')
+    .select('country_code, city')
+    .eq('is_active', true)
+    .gte('expires_at', new Date().toISOString())
+    .not('city', 'is', null)
+    .not('country_code', 'is', null)
+  const byCountry: Record<string, string[]> = {}
+  const seen = new Set<string>()
+  for (const row of data ?? []) {
+    const key = `${row.country_code}|${String(row.city).toLowerCase()}`
+    if (seen.has(key)) continue
+    seen.add(key)
+    ;(byCountry[row.country_code] ??= []).push(row.city)
+  }
+  for (const list of Object.values(byCountry)) list.sort((a, b) => a.localeCompare(b))
+  return byCountry
 }
 
 export async function getUserListings(userId: string) {

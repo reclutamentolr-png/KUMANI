@@ -1,4 +1,5 @@
-import { Eye, Sparkles, Tag } from 'lucide-react'
+import { Eye, Globe2, MapPin, Sparkles, Tag } from 'lucide-react'
+import { countryName } from '@/lib/events'
 import ContactListingButton from '@/components/ContactListingButton'
 import ListingDetailButton from '@/components/ListingDetailButton'
 import ListingImageThumbnail from '@/components/ListingImageThumbnail'
@@ -29,6 +30,9 @@ type Listing = {
   price: number | string | null
   image_url: string | null
   created_at: string
+  country_code?: string | null
+  city?: string | null
+  is_remote?: boolean | null
   profiles?: { first_name?: string | null } | null
 }
 
@@ -46,7 +50,7 @@ export default function ListingCard({
   currentUserId: string
   categoryLabel: string
   featured?: boolean
-  labels: { showcase: string; mine: string; view: string }
+  labels: { showcase: string; mine: string; view: string; remote: string }
   locale: string
 }) {
   const style = CATEGORY_STYLE[listing.category] ?? CATEGORY_STYLE.servizi
@@ -93,6 +97,23 @@ export default function ListingCard({
         </div>
         <h3 className="mb-1 line-clamp-2 font-bold leading-snug text-[var(--ink)]">{listing.title}</h3>
         <p className="mb-4 line-clamp-3 flex-1 text-sm leading-6 text-gray-600">{listing.description}</p>
+
+        {/* Località: città e nazione, e "anche online" */}
+        {(listing.city || listing.country_code || listing.is_remote) && (
+          <div className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-medium text-gray-600">
+            {(listing.city || listing.country_code) && (
+              <span className="flex items-center gap-1">
+                <MapPin className="h-3.5 w-3.5 text-[var(--gold)]" />
+                {[listing.city, countryName(listing.country_code ?? null, locale)].filter(Boolean).join(', ')}
+              </span>
+            )}
+            {listing.is_remote && (
+              <span className="flex items-center gap-1">
+                <Globe2 className="h-3.5 w-3.5 text-[var(--gold)]" /> {labels.remote}
+              </span>
+            )}
+          </div>
+        )}
 
         <div className="mb-3 flex items-center gap-2 text-xs text-gray-500">
           <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--ink)] text-[10px] font-bold text-[var(--gold-bright)]">

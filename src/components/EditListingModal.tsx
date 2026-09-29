@@ -6,14 +6,16 @@ import { useRouter } from 'next/navigation'
 import { X, AlertCircle, CheckCircle2 } from 'lucide-react'
 import { updateListingAction } from '@/app/actions/listings'
 import { type ListingCategory, CATEGORY_ICONS, CATEGORY_I18N_KEYS, ALL_LISTING_CATEGORIES } from '@/lib/listings'
+import ListingLocationFields, { type ListingLocationValue } from '@/components/listings/ListingLocationFields'
 
 type Props = {
   isOpen: boolean
   onClose: () => void
   listing: any
+  citiesByCountry: Record<string, string[]>
 }
 
-export default function EditListingModal({ isOpen, onClose, listing }: Props) {
+export default function EditListingModal({ isOpen, onClose, listing, citiesByCountry }: Props) {
   const t = useTranslations('marketplace')
   const commonT = useTranslations('common')
   const router = useRouter()
@@ -24,8 +26,11 @@ export default function EditListingModal({ isOpen, onClose, listing }: Props) {
     category: (listing?.category || 'servizi') as ListingCategory,
     price: listing?.price != null ? String(listing.price) : '',
     imageUrl: listing?.image_url || '',
-    contactEmail: listing?.contact_email || '',
-    contactPhone: listing?.contact_phone || '',
+  })
+  const [location, setLocation] = useState<ListingLocationValue>({
+    countryCode: listing?.country_code || '',
+    city: listing?.city || '',
+    isRemote: Boolean(listing?.is_remote),
   })
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -44,8 +49,9 @@ export default function EditListingModal({ isOpen, onClose, listing }: Props) {
       category: formData.category,
       price: formData.price ? parseFloat(formData.price) : undefined,
       imageUrl: formData.imageUrl || undefined,
-      contactEmail: formData.contactEmail || undefined,
-      contactPhone: formData.contactPhone || undefined,
+      countryCode: location.countryCode,
+      city: location.city || undefined,
+      isRemote: location.isRemote,
     })
 
     setSaving(false)
@@ -148,26 +154,7 @@ export default function EditListingModal({ isOpen, onClose, listing }: Props) {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('contactEmail')}</label>
-                <input
-                  type="email"
-                  value={formData.contactEmail}
-                  onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)]"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('contactPhone')}</label>
-                <input
-                  type="tel"
-                  value={formData.contactPhone}
-                  onChange={(e) => setFormData({ ...formData, contactPhone: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)]"
-                />
-              </div>
-            </div>
+            <ListingLocationFields value={location} onChange={setLocation} citiesByCountry={citiesByCountry} />
 
             <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
               <button type="button" onClick={onClose} className="text-sm text-gray-500 hover:text-gray-700 px-3 py-2">

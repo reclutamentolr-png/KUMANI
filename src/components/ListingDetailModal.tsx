@@ -1,7 +1,8 @@
 'use client'
 
 import { useTranslations, useLocale } from 'next-intl'
-import { X, Tag, User, Calendar, Sparkles } from 'lucide-react'
+import { X, Tag, User, Calendar, Sparkles, MapPin, Globe2 } from 'lucide-react'
+import { countryName } from '@/lib/events'
 import { CATEGORY_ICONS, CATEGORY_I18N_KEYS, type ListingCategory } from '@/lib/listings'
 import ContactListingButton from '@/components/ContactListingButton'
 import ReportListingButton from '@/components/ReportListingButton'
@@ -64,6 +65,22 @@ export default function ListingDetailModal({ isOpen, onClose, listing, authorNam
           </div>
 
           <p className="text-sm text-gray-700 whitespace-pre-wrap">{listing.description}</p>
+
+          {(listing.city || listing.country_code || listing.is_remote) && (
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm font-medium text-gray-700">
+              {(listing.city || listing.country_code) && (
+                <span className="flex items-center gap-1.5">
+                  <MapPin className="h-4 w-4 text-[var(--gold)]" />
+                  {[listing.city, countryName(listing.country_code ?? null, locale)].filter(Boolean).join(', ')}
+                </span>
+              )}
+              {listing.is_remote && (
+                <span className="flex items-center gap-1.5">
+                  <Globe2 className="h-4 w-4 text-[var(--gold)]" /> {t('listingRemoteShort')}
+                </span>
+              )}
+            </div>
+          )}
 
           <div className="flex items-center gap-4 text-xs text-gray-500 pt-2 border-t border-gray-100">
             {authorName && (

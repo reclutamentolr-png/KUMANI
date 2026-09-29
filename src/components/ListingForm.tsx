@@ -6,6 +6,7 @@ import { createListingAction } from '@/app/actions/listings'
 import { LISTING_COST, type ListingCategory, CATEGORY_ICONS, CATEGORY_I18N_KEYS, ALL_LISTING_CATEGORIES } from '@/lib/listings'
 import { X, AlertCircle, CheckCircle2, Sparkles } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
+import ListingLocationFields, { type ListingLocationValue } from '@/components/listings/ListingLocationFields'
 
 type Props = {
   userId: string
@@ -14,9 +15,12 @@ type Props = {
   networkPoints: number
   featureCost7d: number
   featureCost15d: number
+  // Nazione proposta (quella del profilo) e città già usate, per i suggerimenti
+  defaultCountry: string
+  citiesByCountry: Record<string, string[]>
 }
 
-export default function ListingForm({ userId, currentPoints, onCloseUrl, networkPoints, featureCost7d, featureCost15d }: Props) {
+export default function ListingForm({ userId, currentPoints, onCloseUrl, networkPoints, featureCost7d, featureCost15d, defaultCountry, citiesByCountry }: Props) {
   const t = useTranslations('marketplace')
   const commonT = useTranslations('common')
   const locale = useLocale()
@@ -31,9 +35,8 @@ export default function ListingForm({ userId, currentPoints, onCloseUrl, network
     category: 'servizi' as ListingCategory,
     price: '',
     imageUrl: '',
-    contactEmail: '',
-    contactPhone: ''
   })
+  const [location, setLocation] = useState<ListingLocationValue>({ countryCode: defaultCountry, city: '', isRemote: false })
   const [showcaseDuration, setShowcaseDuration] = useState<7 | 15 | null>(null)
 
   const canPublish = currentPoints >= LISTING_COST
@@ -58,8 +61,9 @@ export default function ListingForm({ userId, currentPoints, onCloseUrl, network
       category: formData.category,
       price: formData.price ? parseFloat(formData.price) : undefined,
       imageUrl: formData.imageUrl || undefined,
-      contactEmail: formData.contactEmail || undefined,
-      contactPhone: formData.contactPhone || undefined,
+      countryCode: location.countryCode,
+      city: location.city || undefined,
+      isRemote: location.isRemote,
       featureDurationDays: showcaseDuration || undefined
     })
 
@@ -153,18 +157,7 @@ export default function ListingForm({ userId, currentPoints, onCloseUrl, network
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">{t('contactEmail')}</label>
-            <input type="email" value={formData.contactEmail} onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)]" placeholder={t('contactEmailPlaceholder')} />
-            <p className="text-xs text-gray-500 mt-1">{t('notVisiblePublicly')}</p>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">{t('contactPhone')}</label>
-            <input type="tel" value={formData.contactPhone} onChange={(e) => setFormData({ ...formData, contactPhone: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)]" placeholder={t('contactPhonePlaceholder')} />
-            <p className="text-xs text-gray-500 mt-1">{t('notVisiblePublicly')}</p>
-          </div>
-        </div>
+        <ListingLocationFields value={location} onChange={setLocation} citiesByCountry={citiesByCountry} />
 
         <div className="rounded-lg border border-amber-200 bg-amber-50 p-3">
           <p className="text-xs font-semibold text-amber-900 mb-1 flex items-center gap-1">

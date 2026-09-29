@@ -1,5 +1,22 @@
 // src/lib/listings.ts
+import { EVENT_COUNTRIES } from '@/lib/events'
+
 export const LISTING_COST = 10
+
+// Nazioni proposte per la località degli annunci (le stesse degli Eventi;
+// i nomi si mostrano nella lingua di chi guarda con countryName()).
+export const LISTING_COUNTRIES: readonly string[] = EVENT_COUNTRIES
+
+export function isListingCountry(code: string | null | undefined): code is string {
+  return !!code && LISTING_COUNTRIES.includes(code)
+}
+
+// Città scritta dall'utente: spazi in ordine, massimo 80 caratteri, prima
+// lettera maiuscola ("milano" -> "Milano"). Il confronto è senza maiuscole.
+export function cleanListingCity(raw: string | null | undefined): string | null {
+  const city = (raw ?? '').replace(/[,()*%\\:"'`]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 80)
+  return city ? city.charAt(0).toUpperCase() + city.slice(1) : null
+}
 
 // Mirrors subito.it's top-level category taxonomy (12 categories), replacing
 // the earlier ad-hoc 4-category set.
@@ -23,8 +40,9 @@ export interface CreateListingData {
   category: ListingCategory
   price?: number
   imageUrl?: string
-  contactEmail?: string
-  contactPhone?: string
+  countryCode?: string
+  city?: string
+  isRemote?: boolean
   featureDurationDays?: 7 | 15
 }
 
@@ -34,8 +52,9 @@ export interface UpdateListingData {
   category: ListingCategory
   price?: number
   imageUrl?: string
-  contactEmail?: string
-  contactPhone?: string
+  countryCode?: string
+  city?: string
+  isRemote?: boolean
 }
 
 export const CATEGORY_LABELS: Record<ListingCategory, string> = {

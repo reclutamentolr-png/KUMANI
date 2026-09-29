@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import EditListingModal from '@/components/EditListingModal'
 
-export default function EditListingModalWrapper() {
+export default function EditListingModalWrapper({ citiesByCountry }: { citiesByCountry: Record<string, string[]> }) {
   const [open, setOpen] = useState(false)
   const [listing, setListing] = useState<any>(null)
 
@@ -18,5 +18,5 @@ export default function EditListingModalWrapper() {
 
   if (!open || !listing) return null
 
-  return <EditListingModal isOpen={open} onClose={() => setOpen(false)} listing={listing} />
+  return <EditListingModal isOpen={open} onClose={() => setOpen(false)} listing={listing} citiesByCountry={citiesByCountry} />
 }

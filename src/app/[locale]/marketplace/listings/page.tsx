@@ -2,8 +2,9 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from '@/components/LocalizedLink'
 import { getTranslations } from 'next-intl/server'
-import { getActiveListings, getFeaturedListings, getUserListings, getActiveListingCategoryCounts, getActiveListingById, cleanListingSearch } from '@/lib/listings-server'
-import { CATEGORY_ICONS, CATEGORY_I18N_KEYS, ALL_LISTING_CATEGORIES, type ListingCategory } from '@/lib/listings'
+import { getActiveListings, getFeaturedListings, getUserListings, getActiveListingCategoryCounts, getActiveListingById, getListingCitiesByCountry, cleanListingSearch } from '@/lib/listings-server'
+import { CATEGORY_ICONS, CATEGORY_I18N_KEYS, ALL_LISTING_CATEGORIES, LISTING_COUNTRIES, isListingCountry, cleanListingCity, type ListingCategory } from '@/lib/listings'
+import { countryName } from '@/lib/events'
 import { deleteListingAction, republishListingAction } from '@/app/actions/listings'
 import { ArrowLeft, Plus, Tag, Trash2, Eye, Calendar, RefreshCw, Sparkles, Coins, Info, ChevronDown } from 'lucide-react'
 import ListingForm from '@/components/ListingForm'
@@ -26,10 +27,10 @@ export default async function ListingsPage({
   searchParams
 }: {
   params: Promise<{ locale: string }>
-  searchParams: Promise<{ category?: string; showForm?: string; q?: string; listing?: string }>
+  searchParams: Promise<{ category?: string; showForm?: string; q?: string; listing?: string; country?: string; city?: string }>
 }) {
   const { locale } = await params
-  const { category: rawCategory, showForm, q: rawQuery, listing: sharedListingId } = await searchParams
+  const { category: rawCategory, showForm, q: rawQuery, listing: sharedListingId, country: rawCountry, city: rawCity } = await searchParams
   const t = await getTranslations('marketplace')
   const commonT = await getTranslations('common')
 
@@ -44,13 +45,33 @@ export default async function ListingsPage({
   const category = ALL_LISTING_CATEGORIES.includes(rawCategory as ListingCategory) ? (rawCategory as ListingCategory) : undefined
   const query = cleanListingSearch(rawQuery)
   const getCategoryLabel = (cat: ListingCategory) => t(CATEGORY_I18N_KEYS[cat] || 'catServizi')
-  // La ricerca trova anche le categorie per nome (es. "animali")
-  const queryCategories = query
-    ? ALL_LISTING_CATEGORIES.filter((cat) => getCategoryLabel(cat).toLowerCase().includes(query.toLowerCase()))
-    : []
-  const search = { q: query || undefined, qCategories: queryCategories }
 
-  const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<{ daily_points: number | null; network_points: number | null; first_name: string | null; last_name: string | null }>()
+  const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<{ daily_points: number | null; network_points: number | null; first_name: string | null; last_name: string | null; country_code: string | null }>()
+
+  // Dove: di partenza la nazione del profilo; ?country=all per tutti i paesi
+  const profileCountry = (profile?.country_code ?? '').trim().toUpperCase()
+  const defaultCountry = isListingCountry(profileCountry) ? profileCountry : ''
+  const requestedCountry = (rawCountry ?? '').toUpperCase()
+  const country = requestedCountry === 'ALL' ? '' : isListingCountry(requestedCountry) ? requestedCountry : rawCountry ? '' : defaultCountry
+  const city = cleanListingCity(cleanListingSearch(rawCity)) ?? ''
+
+  // Una condizione per parola (max 5); ogni parola trova anche le categorie
+  // per nome (es. "animali")
+  const search = {
+    terms: query
+      .split(' ')
+      .filter((word) => word.length > 1)
+      .slice(0, 5)
+      // Parole di 5+ lettere senza la vocale finale: "informatica" trova anche
+      // "informatico", "bicicletta" anche "biciclette"
+      .map((word) => (word.length >= 5 ? word.replace(/[aeiouàèéìòù]$/i, '') : word))
+      .map((word) => ({
+        word,
+        categories: ALL_LISTING_CATEGORIES.filter((cat) => getCategoryLabel(cat).toLowerCase().includes(word.toLowerCase())),
+      })),
+    country: country || undefined,
+    city: city || undefined,
+  }
 
   const { data: showcaseSettings } = await supabase
     .from('system_settings')
@@ -74,18 +95,22 @@ export default async function ListingsPage({
       }
     : null
 
-  const [allListings, featuredListings, categoryCounts, sharedListing] = await Promise.all([
+  const [allListings, featuredListings, categoryCounts, sharedListing, citiesByCountry] = await Promise.all([
     getActiveListings({ category, excludeFeatured: true, ...search }),
     getFeaturedListings({ category, ...search }),
     getActiveListingCategoryCounts(search),
     sharedListingId ? getActiveListingById(sharedListingId) : Promise.resolve(null),
+    getListingCitiesByCountry(),
   ])
+  const countryOptions = [...LISTING_COUNTRIES]
+    .map((code) => ({ value: code, label: countryName(code, locale) }))
+    .sort((a, b) => a.label.localeCompare(b.label, locale))
 
   const myListings = await getUserListings(user.id)
   const now = new Date().getTime()
 
   const totalActiveListings = allListings.length + featuredListings.length
-  const cardLabels = { showcase: t('showcaseBadge'), mine: t('myListing'), view: t('viewListing') }
+  const cardLabels = { showcase: t('showcaseBadge'), mine: t('myListing'), view: t('viewListing'), remote: t('listingRemoteShort') }
   const euro = (value: number | string) =>
     new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2 }).format(Number(value))
 
@@ -170,10 +195,12 @@ export default async function ListingsPage({
             networkPoints={profile?.network_points || 0}
             featureCost7d={featureCost7d}
             featureCost15d={featureCost15d}
+            defaultCountry={defaultCountry}
+            citiesByCountry={citiesByCountry}
           />
         )}
 
-        {/* Filtri: categoria (menu a tendina) e ricerca libera */}
+        {/* Ricerca: cosa, categoria e dove (nazione + città) */}
         <ListingsFilters
           categories={ALL_LISTING_CATEGORIES.map((cat) => ({
             value: cat,
@@ -181,13 +208,22 @@ export default async function ListingsPage({
             icon: CATEGORY_ICONS[cat],
             count: categoryCounts[cat] ?? 0,
           }))}
-          allLabel={t('allCategories', { count: Object.values(categoryCounts).reduce((sum, n) => sum + n, 0) })}
+          countries={countryOptions}
+          citiesByCountry={citiesByCountry}
+          allCategoriesLabel={t('allCategories', { count: Object.values(categoryCounts).reduce((sum, n) => sum + n, 0) })}
+          allCountriesLabel={t('allCountries')}
           category={category ?? ''}
           query={query}
+          country={country || 'all'}
+          city={city}
+          hasFilters={Boolean(category || query || city)}
           labels={{
-            category: t('filterCategory'),
-            search: t('searchListings'),
+            what: t('searchWhat'),
             searchPlaceholder: t('searchListingsPlaceholder'),
+            category: t('filterCategory'),
+            where: t('filterWhere'),
+            cityPlaceholder: t('filterCityPlaceholder'),
+            search: t('searchListings'),
             clear: t('clearFilters'),
           }}
         />
@@ -309,7 +345,7 @@ export default async function ListingsPage({
         <section>
           <h2 className="mb-4 text-lg font-bold text-[var(--ink)]">{t('allListings', { count: totalActiveListings })}</h2>
 
-          {allListings.length === 0 && featuredListings.length === 0 && (category || query) ? (
+          {allListings.length === 0 && featuredListings.length === 0 && (category || query || country || city) ? (
             <div className="rounded-3xl border-2 border-dashed border-[var(--gold)]/40 bg-white/70 p-10 text-center">
               <h3 className="mb-2 text-lg font-bold text-[var(--ink)]">{t('noListingsFound')}</h3>
               <p className="mb-5 text-gray-500">{t('noListingsFoundHint')}</p>
@@ -356,7 +392,7 @@ export default async function ListingsPage({
             : undefined
         }
       />
-      <EditListingModalWrapper />
+      <EditListingModalWrapper citiesByCountry={citiesByCountry} />
     </div>
   )
 }

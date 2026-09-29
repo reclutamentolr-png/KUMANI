@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import { isToolOnline } from '@/lib/toolOnline'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { revalidatePath } from 'next/cache'
-import { LISTING_COST, type CreateListingData, type UpdateListingData } from '@/lib/listings'
+import { LISTING_COST, cleanListingCity, isListingCountry, type CreateListingData, type UpdateListingData } from '@/lib/listings'
 
 // ✅ Service client per bypassare RLS
 const getServiceClient = () =>
@@ -15,8 +15,18 @@ const getServiceClient = () =>
     { auth: { autoRefreshToken: false, persistSession: false } }
   )
 
+// Località dell'annuncio: nazione obbligatoria (dall'elenco), città facoltativa.
+// I contatti (email/telefono) non si salvano più: si contatta dalla chat.
+function listingLocation(data: { countryCode?: string; city?: string; isRemote?: boolean }) {
+  const countryCode = (data.countryCode ?? '').toUpperCase()
+  if (!isListingCountry(countryCode)) return null
+  return { country_code: countryCode, city: cleanListingCity(data.city), is_remote: Boolean(data.isRemote) }
+}
+
 export async function createListingAction(data: CreateListingData) {
   if (!(await isToolOnline('listings'))) return { success: false, message: 'La Bacheca è momentaneamente sospesa: puoi consultare gli annunci ma non pubblicare o modificare.' }
+  const location = listingLocation(data)
+  if (!location) return { success: false, message: 'Scegli la nazione dell\'annuncio' }
   const supabase = await createClient()
 
   // The acting user is always the authenticated session, never data.userId
@@ -55,8 +65,7 @@ export async function createListingAction(data: CreateListingData) {
       category: data.category,
       price: data.price,
       image_url: data.imageUrl,
-      contact_email: data.contactEmail,
-      contact_phone: data.contactPhone,
+      ...location,
       expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
     })
     .select()
@@ -105,6 +114,8 @@ export async function createListingAction(data: CreateListingData) {
 // layer. Doesn't touch points/cost — editing is free, only creation costs.
 export async function updateListingAction(listingId: string, data: UpdateListingData) {
   if (!(await isToolOnline('listings'))) return { success: false, message: 'La Bacheca è momentaneamente sospesa: puoi consultare gli annunci ma non pubblicare o modificare.' }
+  const location = listingLocation(data)
+  if (!location) return { success: false, message: 'Scegli la nazione dell\'annuncio' }
   const supabase = await createClient()
   const {
     data: { user },
@@ -119,8 +130,7 @@ export async function updateListingAction(listingId: string, data: UpdateListing
       category: data.category,
       price: data.price,
       image_url: data.imageUrl,
-      contact_email: data.contactEmail,
-      contact_phone: data.contactPhone,
+      ...location,
     })
     .eq('id', listingId)
     .eq('user_id', user.id)
