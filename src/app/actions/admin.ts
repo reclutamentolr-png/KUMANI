@@ -10,6 +10,7 @@ import { getStripe } from '@/lib/stripe'
 import { updateTag } from 'next/cache'
 import { SPOTLIGHT_HOME_CACHE_TAG, type SpotlightModerationStatus } from '@/lib/spotlight'
 import { getPlanPrices } from '@/lib/planPrices'
+import { invalidateListingsCache } from '@/lib/listings-server'
 
 const getServiceClient = () =>
   createServiceClient(
@@ -785,6 +786,7 @@ export async function deleteReportedListing(listingId: string) {
   const supabaseAdmin = getServiceClient()
   const { error } = await supabaseAdmin.from('listings').delete().eq('id', listingId)
   if (error) return { success: false, error: error.message }
+  invalidateListingsCache()
   return { success: true }
 }
 

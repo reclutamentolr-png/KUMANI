@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import { isToolOnline } from '@/lib/toolOnline'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { revalidatePath } from 'next/cache'
+import { invalidateListingsCache } from '@/lib/listings-server'
 import { LISTING_COST, cleanListingCity, isListingCountry, type CreateListingData, type UpdateListingData } from '@/lib/listings'
 
 // ✅ Service client per bypassare RLS
@@ -77,6 +78,7 @@ export async function createListingAction(data: CreateListingData) {
     await getServiceClient().rpc('add_daily_points_for', { p_user_id: user.id, p_amount: LISTING_COST })
     return { success: false, message: 'Errore nella creazione dell\'annuncio' }
   }
+  invalidateListingsCache()
 
   // Vetrina opzionale scelta in fase di creazione: riusa lo stesso RPC
   // atomico (feature_listing) di FeatureListingButton, chiamato subito dopo
@@ -138,6 +140,7 @@ export async function updateListingAction(listingId: string, data: UpdateListing
     .single()
 
   if (error || !listing) return { success: false, message: 'Errore nella modifica dell\'annuncio' }
+  invalidateListingsCache()
   return { success: true, listing }
 }
 
@@ -168,6 +171,7 @@ export async function deleteListingAction(listingId: string, userId: string) {
   const { error } = await supabase.from('listings').delete().eq('id', listingId).eq('user_id', userId)
 
   if (error) return { success: false, message: 'Errore nell\'eliminazione' }
+  invalidateListingsCache()
   return { success: true }
 }
 
@@ -192,6 +196,7 @@ export async function republishListingAction(listingId: string) {
     .eq('user_id', user.id)
 
   if (error) return { success: false, message: 'Errore durante la ripubblicazione' }
+  invalidateListingsCache()
   return { success: true }
 }
 

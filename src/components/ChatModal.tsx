@@ -36,14 +36,16 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
       .eq('listing_id', listing.id)
       // ✅ Filtro rigoroso: solo messaggi tra currentUserId e receiverId in entrambe le direzioni
       .or(`and(sender_id.eq.${currentUserId},receiver_id.eq.${receiverId}),and(sender_id.eq.${receiverId},receiver_id.eq.${currentUserId})`)
-      .order('created_at', { ascending: true })
+      // Solo gli ultimi 100 (i più recenti, poi rimessi in ordine)
+      .order('created_at', { ascending: false })
+      .limit(100)
     
     if (error) {
       console.error('Errore caricamento messaggi:', error)
       return
     }
     
-    setMessages(data || [])
+    setMessages((data || []).reverse())
   }
 
   // ✅ Segna i messaggi ricevuti come letti
@@ -61,16 +63,22 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
     if (!newMessage.trim() || loading) return
     
     setLoading(true)
-    const { error } = await supabase.from('messages').insert({
-      sender_id: currentUserId,
-      receiver_id: receiverId,
-      listing_id: listing.id,
-      content: newMessage.trim()
-    })
+    const { data: sent, error } = await supabase
+      .from('messages')
+      .insert({
+        sender_id: currentUserId,
+        receiver_id: receiverId,
+        listing_id: listing.id,
+        content: newMessage.trim()
+      })
+      .select()
+      .single()
     
     if (!error) {
       setNewMessage('')
-      await loadMessages()
+      // Si aggiunge il messaggio inviato, senza ricaricare tutta la chat
+      if (sent) setMessages((prev) => [...prev, sent])
+      else await loadMessages()
     } else {
       console.error('Errore invio messaggio:', error)
       alert('Errore nell\'invio del messaggio')
@@ -80,12 +88,6 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
 
   useEffect(() => {
     if (isOpen && listing && currentUserId && receiverId) {
-      console.log('💬 Apertura chat:', { 
-        listing: listing.id, 
-        tra: currentUserId, 
-        e: receiverId 
-      })
-      
       loadMessages()
       markAsRead()
 
@@ -99,11 +101,14 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
             event: 'INSERT',
             schema: 'public',
             table: 'messages',
-            filter: `and(listing_id=eq.${listing.id},sender_id=eq.${receiverId},receiver_id=eq.${currentUserId})`
+            // Il filtro in tempo reale accetta una sola condizione: i
+            // messaggi per me; annuncio e mittente si controllano qui sotto
+            // (prima c'era un filtro and(...) che il servizio non accetta).
+            filter: `receiver_id=eq.${currentUserId}`
           },
           (payload) => {
-            console.log('📨 Nuovo messaggio ricevuto in tempo reale:', payload.new)
-            setMessages((prev) => [...prev, payload.new])
+            if (payload.new.listing_id !== listing.id || payload.new.sender_id !== receiverId) return
+            setMessages((prev) => (prev.some((m) => m.id === payload.new.id) ? prev : [...prev, payload.new]))
             
             // Segna il nuovo messaggio come letto immediatamente (le query
             // supabase-js partono solo con then/await)

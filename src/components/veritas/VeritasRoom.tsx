@@ -85,9 +85,11 @@ export default function VeritasRoom({
       if (document.visibilityState === 'visible') refresh()
     }
     document.addEventListener('visibilitychange', onVisible)
+    // Riserva se un messaggio in tempo reale si perde: ogni 30 secondi
+    // (prima 10), il gioco avanza già con i messaggi e il conto alla rovescia
     const fallback = setInterval(() => {
       if (document.visibilityState === 'visible') refresh()
-    }, 10000)
+    }, 30000)
     return () => {
       document.removeEventListener('visibilitychange', onVisible)
       clearInterval(fallback)

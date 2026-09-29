@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from '@/components/LocalizedLink'
 import { getTranslations } from 'next-intl/server'
-import { getActiveListings, getFeaturedListings, getUserListings, getActiveListingCategoryCounts, getActiveListingById, getListingCitiesByCountry, cleanListingSearch } from '@/lib/listings-server'
+import { LISTINGS_PAGE_SIZE, getActiveListings, getFeaturedListings, getUserListings, getActiveListingCategoryCounts, getActiveListingById, getListingCitiesByCountry, cleanListingSearch } from '@/lib/listings-server'
 import { CATEGORY_ICONS, CATEGORY_I18N_KEYS, ALL_LISTING_CATEGORIES, LISTING_COUNTRIES, isListingCountry, cleanListingCity, type ListingCategory } from '@/lib/listings'
 import { countryName } from '@/lib/events'
 import { deleteListingAction, republishListingAction } from '@/app/actions/listings'
@@ -33,10 +33,12 @@ export default async function ListingsPage({
   searchParams
 }: {
   params: Promise<{ locale: string }>
-  searchParams: Promise<{ category?: string; showForm?: string; q?: string; listing?: string; country?: string; city?: string }>
+  searchParams: Promise<{ category?: string; showForm?: string; q?: string; listing?: string; country?: string; city?: string; page?: string }>
 }) {
   const { locale } = await params
-  const { category: rawCategory, showForm, q: rawQuery, listing: sharedListingId, country: rawCountry, city: rawCity } = await searchParams
+  const { category: rawCategory, showForm, q: rawQuery, listing: sharedListingId, country: rawCountry, city: rawCity, page: rawPage } = await searchParams
+  // Pagina degli annunci (30 per volta invece di tutti insieme)
+  const page = Math.min(Math.max(parseInt(rawPage ?? '1', 10) || 1, 1), 1000)
   const t = await getTranslations('marketplace')
   const commonT = await getTranslations('common')
 
@@ -101,8 +103,8 @@ export default async function ListingsPage({
       }
     : null
 
-  const [allListings, featuredListings, categoryCounts, sharedListing, citiesByCountry] = await Promise.all([
-    getActiveListings({ category, excludeFeatured: true, ...search }),
+  const [pageListings, featuredListings, categoryCounts, sharedListing, citiesByCountry] = await Promise.all([
+    getActiveListings({ category, excludeFeatured: true, page, ...search }),
     getFeaturedListings({ category, ...search }),
     getActiveListingCategoryCounts(search),
     sharedListingId ? getActiveListingById(sharedListingId) : Promise.resolve(null),
@@ -115,7 +117,25 @@ export default async function ListingsPage({
   const myListings = await getUserListings(user.id)
   const now = new Date().getTime()
 
-  const totalActiveListings = allListings.length + featuredListings.length
+  // Si chiede un annuncio in più del necessario solo per sapere se c'è
+  // una pagina successiva.
+  const hasNextPage = pageListings.length > LISTINGS_PAGE_SIZE
+  const allListings = pageListings.slice(0, LISTINGS_PAGE_SIZE)
+  // Totale dai conteggi per categoria (vetrina inclusa), senza rileggere
+  // tutti gli annunci.
+  const totalActiveListings = category
+    ? (categoryCounts[category] ?? 0)
+    : Object.values(categoryCounts).reduce((sum, n) => sum + n, 0)
+  const pageHref = (target: number) => {
+    const params = new URLSearchParams()
+    if (category) params.set('category', category)
+    if (query) params.set('q', query)
+    if (rawCountry) params.set('country', rawCountry)
+    if (city) params.set('city', city)
+    if (target > 1) params.set('page', String(target))
+    const qs = params.toString()
+    return `/marketplace/listings${qs ? `?${qs}` : ''}`
+  }
   const cardLabels = { showcase: t('showcaseBadge'), mine: t('myListing'), view: t('viewListing'), remote: t('listingRemoteShort') }
   const euro = (value: number | string) =>
     new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2 }).format(Number(value))
@@ -386,6 +406,26 @@ export default async function ListingsPage({
                 />
               ))}
             </div>
+          )}
+
+          {(page > 1 || hasNextPage) && (
+            <nav className="mt-8 flex items-center justify-between gap-3">
+              {page > 1 ? (
+                <Link href={pageHref(page - 1)} className="rounded-xl border border-[var(--gold)]/40 bg-white px-4 py-2.5 text-sm font-semibold text-[var(--ink)] transition hover:bg-[var(--gold-pale)]">
+                  {t('listingsPrevPage')}
+                </Link>
+              ) : (
+                <span />
+              )}
+              <span className="text-sm text-[var(--muted)]">{t('listingsPageN', { page })}</span>
+              {hasNextPage ? (
+                <Link href={pageHref(page + 1)} className="rounded-xl bg-[var(--ink)] px-4 py-2.5 text-sm font-semibold text-[var(--gold-bright)] transition hover:bg-[var(--ink-soft)]">
+                  {t('listingsNextPage')}
+                </Link>
+              ) : (
+                <span />
+              )}
+            </nav>
           )}
         </section>
       </main>

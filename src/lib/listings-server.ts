@@ -1,4 +1,6 @@
 // src/lib/listings-server.ts
+import { revalidateTag, unstable_cache } from 'next/cache'
+import { createClient as createServiceClient, type SupabaseClient } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
 import type { ListingCategory } from '@/lib/listings'
 
@@ -35,9 +37,15 @@ function applySearch<Q extends { or: (filters: string) => Q; eq: (column: string
   return query
 }
 
+// Annunci per pagina nella Bacheca
+export const LISTINGS_PAGE_SIZE = 30
+
 export async function getActiveListings(options?: {
   category?: ListingCategory
   limit?: number
+  // Pagina (da 1): restituisce fino a LISTINGS_PAGE_SIZE + 1 annunci, quello
+  // in più serve solo a sapere se esiste la pagina successiva.
+  page?: number
   excludeUserId?: string
   excludeFeatured?: boolean
 } & ListingSearch) {
@@ -56,6 +64,10 @@ export async function getActiveListings(options?: {
 
   if (options?.category) query = query.eq('category', options.category)
   if (options?.limit) query = query.limit(options.limit)
+  if (options?.page) {
+    const from = (options.page - 1) * LISTINGS_PAGE_SIZE
+    query = query.range(from, from + LISTINGS_PAGE_SIZE)
+  }
   if (options?.excludeUserId) query = query.neq('user_id', options.excludeUserId)
   // Currently-showcased listings get their own section above the grid —
   // excluded here so they don't also clutter the regular listing (they
@@ -90,9 +102,22 @@ export async function getFeaturedListings(options?: { category?: ListingCategory
   return error ? [] : (data || [])
 }
 
-/** Quanti annunci attivi per categoria (con la ricerca, senza il filtro di categoria). */
-export async function getActiveListingCategoryCounts(search?: ListingSearch) {
-  const supabase = await createClient()
+// Letture uguali per tutti (conteggi e città): chiave di servizio e
+// memoria di 5 minuti, invece di rileggere tutti gli annunci a ogni visita.
+function serviceClient() {
+  return createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  })
+}
+
+// Svuota la memoria di conteggi e città: da chiamare quando un annuncio
+// viene pubblicato, modificato, ripubblicato o cancellato.
+const LISTINGS_CACHE_TAG = 'listings'
+export function invalidateListingsCache() {
+  revalidateTag(LISTINGS_CACHE_TAG, { expire: 0 })
+}
+
+async function countByCategory(supabase: SupabaseClient, search?: ListingSearch) {
   let query = supabase
     .from('listings')
     .select('category')
@@ -103,6 +128,20 @@ export async function getActiveListingCategoryCounts(search?: ListingSearch) {
   const counts: Record<string, number> = {}
   for (const row of data ?? []) counts[row.category] = (counts[row.category] ?? 0) + 1
   return counts
+}
+
+const cachedCategoryCounts = unstable_cache(
+  async (country: string, city: string) => countByCategory(serviceClient(), { country: country || undefined, city: city || undefined }),
+  ['listing-category-counts'],
+  { revalidate: 300, tags: [LISTINGS_CACHE_TAG] }
+)
+
+/** Quanti annunci attivi per categoria (con la ricerca, senza il filtro di categoria). */
+export async function getActiveListingCategoryCounts(search?: ListingSearch) {
+  // Senza parole cercate (il caso più comune) il conteggio è uguale per
+  // tutti: dalla memoria. Con le parole si calcola al momento.
+  if (!search?.terms?.length) return cachedCategoryCounts(search?.country ?? '', search?.city ?? '')
+  return countByCategory(await createClient(), search)
 }
 
 /** Un annuncio attivo (per aprirlo da un link condiviso), o null. */
@@ -123,9 +162,8 @@ export async function getActiveListingById(id: string) {
 }
 
 /** Città già usate negli annunci attivi, per nazione (suggerimenti di ricerca e pubblicazione). */
-export async function getListingCitiesByCountry() {
-  const supabase = await createClient()
-  const { data } = await supabase
+export const getListingCitiesByCountry = unstable_cache(async () => {
+  const { data } = await serviceClient()
     .from('listings')
     .select('country_code, city')
     .eq('is_active', true)
@@ -142,7 +180,7 @@ export async function getListingCitiesByCountry() {
   }
   for (const list of Object.values(byCountry)) list.sort((a, b) => a.localeCompare(b))
   return byCountry
-}
+}, ['listing-cities'], { revalidate: 300, tags: [LISTINGS_CACHE_TAG] })
 
 export async function getUserListings(userId: string) {
   const supabase = await createClient()
@@ -176,7 +214,14 @@ export async function getUserConversations(userId: string) {
       listing:listing_id (id, title)
     `)
     .or(`sender_id.eq.${userId},receiver_id.eq.${userId}`)
-    .order('created_at', { ascending: true }) // ✅ Ascending per calcolare il primo messaggio
+    // Gli ultimi 500 messaggi, dai più recenti: prima si leggevano tutti dal
+    // più vecchio e, oltre il limite del database (circa 1000 righe), si
+    // perdevano proprio i più nuovi. Poi si rimettono in ordine cronologico.
+    // "Chi ha iniziato" per chat lunghissime è indicativo: la cancellazione
+    // lo ricontrolla sul server (deleteConversationAction).
+    .order('created_at', { ascending: false })
+    .limit(500)
+  data?.reverse()
   
   const conversationsMap = new Map()
   
