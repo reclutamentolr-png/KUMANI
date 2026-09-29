@@ -5,10 +5,17 @@ import { useTranslations } from 'next-intl'
 import { X, Download, Share, PlusSquare } from 'lucide-react'
 import Logo from '@/components/Logo'
 
+// Evento del browser per installare l'app (Chrome, Edge, Android): non è
+// ancora nei tipi standard di TypeScript
+type BeforeInstallPromptEvent = Event & {
+  prompt: () => Promise<void>
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>
+}
+
 export default function InstallAppPrompt() {
   const t = useTranslations('dashboard')
   const [visible, setVisible] = useState(false)
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null)
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
   const [isIOS, setIsIOS] = useState(false)
 
   useEffect(() => {
@@ -16,7 +23,7 @@ export default function InstallAppPrompt() {
     const dismissed = localStorage.getItem('install_prompt_dismissed')
     const isStandalone =
       window.matchMedia('(display-mode: standalone)').matches ||
-      (navigator as any).standalone === true
+      (navigator as Navigator & { standalone?: boolean }).standalone === true
 
     if (dismissed || isStandalone) return
 
@@ -26,7 +33,7 @@ export default function InstallAppPrompt() {
     // ✅ Android/Chrome/Desktop: intercetta il prompt nativo e mostra il nostro
     const onBeforeInstallPrompt = (e: Event) => {
       e.preventDefault()
-      setDeferredPrompt(e)
+      setDeferredPrompt(e as BeforeInstallPromptEvent)
       setTimeout(() => setVisible(true), 1500)
     }
 
@@ -39,7 +46,7 @@ export default function InstallAppPrompt() {
     window.addEventListener('appinstalled', onAppInstalled)
 
     // ✅ iOS: non esiste beforeinstallprompt → mostra il tutorial
-    let timer: any
+    let timer: ReturnType<typeof setTimeout> | undefined
     if (iOS) {
       timer = setTimeout(() => setVisible(true), 1500)
     }

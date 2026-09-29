@@ -19,9 +19,10 @@ export async function getMaintenanceGate() {
     let enabled = false
     let message = 'Sito in manutenzione. Torna presto!'
 
-    data?.forEach((s: any) => {
+    // Il valore può essere testo JSON oppure già vero/falso
+    data?.forEach((s: { key: string; value: string | boolean }) => {
       try {
-        const parsed = JSON.parse(s.value)
+        const parsed = JSON.parse(String(s.value))
         if (s.key === 'maintenance_mode') {
           enabled = parsed === true
         }
@@ -33,7 +34,7 @@ export async function getMaintenanceGate() {
           enabled = s.value === 'true' || s.value === true
         }
         if (s.key === 'maintenance_message' && s.value) {
-          message = s.value
+          message = String(s.value)
         }
       }
     })

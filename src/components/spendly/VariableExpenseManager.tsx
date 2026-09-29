@@ -106,7 +106,7 @@ export default function VariableExpenseManager({ items, year }: { items: Spendly
 
     setSaving(false)
     if (!result.success) {
-      setError(t(result.message as any))
+      setError(t(result.message as Parameters<typeof t>[0]))
       return
     }
 

@@ -12,7 +12,8 @@ import {
   Phone,
   MessageCircle,
   MapPin,
-  ExternalLink
+  ExternalLink,
+  type LucideIcon,
 } from 'lucide-react'
 
 import ShareButton from '@/components/ShareButton'
@@ -85,7 +86,7 @@ export default async function LinkInBioPublicPage({ params }: { params: Promise<
 
   // Mappa sicura delle icone (usando solo icone garantite in lucide-react)
   const getIcon = (iconName: string) => {
-    const icons: Record<string, any> = {
+    const icons: Record<string, LucideIcon> = {
       instagram: Camera,
       facebook: Globe,
       twitter: AtSign,

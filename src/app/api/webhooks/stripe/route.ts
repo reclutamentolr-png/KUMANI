@@ -24,9 +24,10 @@ export async function POST(req: NextRequest) {
 
   try {
     event = getStripe().webhooks.constructEvent(body, sig!, process.env.STRIPE_WEBHOOK_SECRET!)
-  } catch (err: any) {
-    console.error('❌ Errore verifica webhook (firma sbagliata?):', err.message)
-    return NextResponse.json({ error: err.message }, { status: 400 })
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err)
+    console.error('❌ Errore verifica webhook (firma sbagliata?):', message)
+    return NextResponse.json({ error: message }, { status: 400 })
   }
 
   // Commissioni KUMANI (Events: 'event_fee', Kordata: 'convivio_fee').
@@ -86,7 +87,7 @@ export async function POST(req: NextRequest) {
 
   // Handle subscription deletion/cancellation
   if (event.type === 'customer.subscription.deleted' || event.type === 'customer.subscription.updated') {
-    const subscription = event.data.object as any
+    const subscription = event.data.object as Stripe.Subscription
     const userId = subscription.metadata?.userId
     if (userId) {
       // Attivo anche in prova e durante i nuovi tentativi di addebito
@@ -108,7 +109,12 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ received: true })
       }
 
-      const updateData: Record<string, any> = {
+      const updateData: {
+        subscription_status: string
+        subscription_source: string | null
+        subscription_plan?: 'pro' | 'base'
+        subscription_expires_at?: string
+      } = {
         subscription_status: newStatus,
         subscription_source: newStatus === 'active' ? 'stripe' : null,
       }

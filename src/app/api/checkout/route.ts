@@ -77,7 +77,7 @@ export async function POST(request: Request) {
     
     return NextResponse.redirect(session.url, 303)
     
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('❌ Errore Stripe Checkout:', error)
     return NextResponse.redirect(new URL('/billing?error=true', SITE_URL), 303)
   }

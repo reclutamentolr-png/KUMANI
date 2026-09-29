@@ -242,6 +242,10 @@ async function checkDomainAge(domain: string, whoisTextPromise: Promise<string |
 }
 
 // 3. DNS – record SPF — verifica autorizzazione server email
+// Una risposta DNS di dns.google (i nomi dei campi cambiano maiuscole a
+// seconda del tipo di record)
+type DnsAnswer = { name?: string; type?: number; Type?: number; TTL?: number; data?: string; Data?: string }
+
 async function checkSPF(domain: string): Promise<SVATCheck | null> {
   try {
     const res = await fetch(`https://dns.google/resolve?name=${domain}&type=TXT`, {
@@ -250,7 +254,7 @@ async function checkSPF(domain: string): Promise<SVATCheck | null> {
     if (!res.ok) return null
 
     const data = await res.json()
-    const txtRecords: string[] = (data.Answer || []).map((a: any) => a.data || a.Data || '')
+    const txtRecords: string[] = (data.Answer || []).map((a: DnsAnswer) => a.data || a.Data || '')
 
     const spfRecord = txtRecords.find((r) => r.toLowerCase().includes('v=spf1'))
     const hasSPF = !!spfRecord
@@ -293,7 +297,7 @@ async function checkDMARC(domain: string): Promise<SVATCheck | null> {
     if (!res.ok) return null
 
     const data = await res.json()
-    const txtRecords: string[] = (data.Answer || []).map((a: any) => a.data || a.Data || '')
+    const txtRecords: string[] = (data.Answer || []).map((a: DnsAnswer) => a.data || a.Data || '')
 
     const dmarcRecord = txtRecords.find((r) => r.toLowerCase().includes('dmarc'))
     const hasDMARC = !!dmarcRecord
@@ -343,7 +347,7 @@ async function checkMX(domain: string): Promise<SVATCheck | null> {
     if (!res.ok) return null
 
     const data = await res.json()
-    const mxRecords: any[] = data.Answer || []
+    const mxRecords: DnsAnswer[] = data.Answer || []
 
     if (mxRecords.length === 0) {
       return {
@@ -511,7 +515,7 @@ async function checkSSL(url: string, domain: string): Promise<SVATCheck | null> 
         const issues = endpoint.issues || []
 
         // Check for expiring certificate (within 30 days)
-        const certIssues = issues as Array<any>
+        const certIssues = issues as Array<{ message?: string }>
         const hasExpiringCert = certIssues.some(
           (i) => i.message && (i.message.includes('expiring') || i.message.includes('EXPiring'))
         )
@@ -889,7 +893,7 @@ async function checkPTR(domain: string): Promise<SVATCheck | null> {
 
     const data = await res.json()
     const answers = data.Answer || []
-    const ipRecords = answers.filter((a: any) => a.Type === 1 || a.type === 1)
+    const ipRecords = answers.filter((a: DnsAnswer) => a.Type === 1 || a.type === 1)
 
     if (ipRecords.length === 0) {
       return {

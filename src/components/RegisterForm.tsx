@@ -186,8 +186,8 @@ export default function RegisterForm() {
       setStep('verify')
       setResendCooldown(RESEND_COOLDOWN_SECONDS)
       setLoading(false)
-    } catch (err: any) {
-      setError(err.message || t('errorCreatingUser'))
+    } catch (err: unknown) {
+      setError((err instanceof Error && err.message) || t('errorCreatingUser'))
       setLoading(false)
     }
   }
@@ -261,8 +261,8 @@ export default function RegisterForm() {
       setTimeout(() => {
         router.push(`/${locale}/dashboard`)
       }, delay)
-    } catch (err: any) {
-      setError(err.message || t('errorCreatingUser'))
+    } catch (err: unknown) {
+      setError((err instanceof Error && err.message) || t('errorCreatingUser'))
     } finally {
       setLoading(false)
     }

@@ -30,6 +30,7 @@ import KuRewardsSection from '@/components/ku/KuRewardsSection'
 import { loadKuWalletData } from '@/lib/ku-server'
 import { getMyAttendedCount, listMyPasses } from '@/app/actions/events'
 import { EVENT_TYPE_EMOJI, formatEventDate } from '@/lib/events'
+import type { MyProfile } from '@/lib/myProfile'
 
 function WalletSection({
   id,
@@ -67,7 +68,7 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
 
   // Profilo completo (dati personali inclusi) solo tramite get_my_profile():
   // dal browser/sessione utente le colonne personali non sono più leggibili.
-  const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<Record<string, any>>()
+  const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<MyProfile>()
   if (!profile) redirect(`/${locale}/dashboard`)
 
   const directSponsored = await fetchDirectSponsored(supabase)
