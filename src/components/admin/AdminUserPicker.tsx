@@ -27,18 +27,27 @@ export default function AdminUserPicker({
   // Ricerca con una piccola attesa mentre si scrive
   useEffect(() => {
     const text = query.trim()
+    const id = ++requestId.current
     if (text.length < 2) {
-      queueMicrotask(() => setResults([]))
+      // Una ricerca ancora in corso non conta più: via risultati e rotellina
+      queueMicrotask(() => {
+        setResults([])
+        setLoading(false)
+      })
       return
     }
-    const id = ++requestId.current
     const timer = window.setTimeout(async () => {
       setLoading(true)
-      const { users } = await adminSearchUsers(text, scope)
-      if (id === requestId.current) {
-        setResults(users)
-        setLoading(false)
-        setOpen(true)
+      try {
+        const { users } = await adminSearchUsers(text, scope)
+        if (id === requestId.current) {
+          setResults(users)
+          setOpen(true)
+        }
+      } catch {
+        if (id === requestId.current) setResults([])
+      } finally {
+        if (id === requestId.current) setLoading(false)
       }
     }, 250)
     return () => window.clearTimeout(timer)

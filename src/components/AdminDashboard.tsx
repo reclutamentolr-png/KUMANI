@@ -45,6 +45,7 @@ import {
   deleteReportedListing,
   type StaffUserHit,
   adminGetUserMatrix,
+  adminOverviewCounts,
 } from '@/app/actions/admin'
 import {
   createAdminMessage,
@@ -153,6 +154,8 @@ type AdminDashboardProps = {
 export default function AdminDashboard({ userId, permissions, userName, locale, initialSection }: AdminDashboardProps) {
   const [activeSection, setActiveSection] = useState(initialSection || 'overview')
   const [openGroups, setOpenGroups] = useState<Set<string>>(new Set())
+  // Strumenti e interruttori: gruppi chiusi finché non si aprono
+  const [openToolGroups, setOpenToolGroups] = useState<Set<string>>(new Set())
 
   // Riflette la sezione attiva nell'URL (senza navigazione né reload), così
   // aggiornando la pagina si resta nella stessa voce del menu.
@@ -351,13 +354,9 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
   }, [activeSection])
 
   const loadStats = async () => {
-    // select('id'): con '*' la richiesta includerebbe colonne personali non
-    // più leggibili dal browser e fallirebbe.
-    const { count: totalUsers } = await supabase.from('profiles').select('id', { count: 'exact', head: true })
-    const { count: activeUsers } = await supabase.from('profiles').select('id', { count: 'exact', head: true }).eq('subscription_status', 'active').eq('is_blocked', false)
-    const { count: totalNodes } = await supabase.from('matrix_nodes').select('id', { count: 'exact', head: true })
-    const { count: blockedUsers } = await supabase.from('profiles').select('id', { count: 'exact', head: true }).eq('is_blocked', true)
-    setStats({ totalUsers: totalUsers || 0, activeUsers: activeUsers || 0, totalNodes: totalNodes || 0, blockedUsers: blockedUsers || 0 })
+    // Dal server: la matrice non è leggibile dal browser
+    const counts = await adminOverviewCounts()
+    if (counts) setStats(counts)
   }
 
   const loadOnlineUsers = async () => {
@@ -1338,15 +1337,34 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
           </p>
         </div>
 
-        {toolGroups.map((group) => (
-          <section key={group.id}>
-            <h3 className="mb-3 flex items-center justify-between gap-3 border-b border-gray-200 pb-2">
+        {toolGroups.map((group) => {
+          const isOpen = openToolGroups.has(group.id)
+          const activeCount = group.tools.filter((tool: { is_enabled: boolean }) => tool.is_enabled).length
+          return (
+          <section key={group.id} className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+            <button
+              type="button"
+              aria-expanded={isOpen}
+              onClick={() =>
+                setOpenToolGroups((prev) => {
+                  const next = new Set(prev)
+                  if (next.has(group.id)) next.delete(group.id)
+                  else next.add(group.id)
+                  return next
+                })
+              }
+              className="flex w-full items-center justify-between gap-3 px-5 py-4 text-left hover:bg-gray-50"
+            >
               <span className="text-lg font-bold text-gray-900">{group.label}</span>
-              <span className="text-xs font-semibold text-gray-500">
-                {group.tools.filter((tool: { is_enabled: boolean }) => tool.is_enabled).length}/{group.tools.length} attivi
+              <span className="flex items-center gap-3">
+                <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${activeCount === group.tools.length ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-800'}`}>
+                  {activeCount}/{group.tools.length} attivi
+                </span>
+                <ChevronDown className={`h-5 w-5 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
               </span>
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            </button>
+            {isOpen && (
+            <div className="grid grid-cols-1 gap-4 border-t border-gray-100 bg-gray-50/60 p-4 md:grid-cols-2">
               {group.tools.map((tool: any) => (
                 <div key={tool.tool_name} className={`bg-white p-6 rounded-xl border shadow-sm ${!tool.is_enabled ? 'opacity-60 bg-gray-50' : ''}`}>
                   <div className="flex items-start justify-between mb-4">
@@ -1406,8 +1424,10 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
                 </div>
               ))}
             </div>
+            )}
           </section>
-        ))}
+          )
+        })}
       </div>
     )
   }

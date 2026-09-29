@@ -2719,3 +2719,19 @@ export async function adminGetUserMatrix(userId: string) {
   ])
   return { profile, userNode, downline: (downline ?? []) as Array<{ id: string; parent_id: string | null; depth: number; [key: string]: unknown }> }
 }
+
+// Conteggi della Panoramica: dal server, perché la matrice non è più
+// leggibile dal browser (ognuno vede solo il proprio nodo).
+export async function adminOverviewCounts() {
+  const admin = await verifyAdmin('stats.read')
+  if (!admin) return null
+  const service = getServiceClient()
+  const count = async (query: PromiseLike<{ count: number | null }>) => (await query).count ?? 0
+  const [totalUsers, activeUsers, totalNodes, blockedUsers] = await Promise.all([
+    count(service.from('profiles').select('id', { count: 'exact', head: true })),
+    count(service.from('profiles').select('id', { count: 'exact', head: true }).eq('subscription_status', 'active').eq('is_blocked', false)),
+    count(service.from('matrix_nodes').select('id', { count: 'exact', head: true })),
+    count(service.from('profiles').select('id', { count: 'exact', head: true }).eq('is_blocked', true)),
+  ])
+  return { totalUsers, activeUsers, totalNodes, blockedUsers }
+}
