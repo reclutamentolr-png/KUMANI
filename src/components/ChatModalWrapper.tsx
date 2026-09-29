@@ -7,11 +7,13 @@ export default function ChatModalWrapper({ userId }: { userId: string }) {
   const [chatOpen, setChatOpen] = useState(false)
   const [selectedListing, setSelectedListing] = useState<any>(null)
   const [receiverId, setReceiverId] = useState<string>('')
+  const [otherName, setOtherName] = useState<string>('')
 
   useEffect(() => {
     const handleOpenChat = (event: CustomEvent) => {
       setSelectedListing(event.detail.listing)
       setReceiverId(event.detail.receiverId)
+      setOtherName(event.detail.otherName ?? '')
       setChatOpen(true)
     }
 
@@ -28,6 +30,7 @@ export default function ChatModalWrapper({ userId }: { userId: string }) {
       listing={selectedListing}
       currentUserId={userId}
       receiverId={receiverId}
+      otherName={otherName}
     />
   )
 }

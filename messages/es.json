@@ -5016,5 +5016,27 @@
     "stickyCta": "Regístrate gratis",
     "rulesLocked": "La explicación de cada regla, con ejemplos, está en el manual completo.",
     "memberNote": "Estás viendo la página como miembro: quien recibe tu enlace ve el botón «Regístrate gratis»."
+  },
+  "chat": {
+    "title": "Conversación",
+    "titleWith": "Conversación con {name}",
+    "emptyTitle": "No hay mensajes en esta conversación",
+    "emptyText": "¡Empieza tú la conversación!",
+    "placeholderWith": "Escribe a {name}…",
+    "placeholder": "Escribe un mensaje…",
+    "send": "Enviar",
+    "sendError": "No se pudo enviar el mensaje. Inténtalo de nuevo.",
+    "retention": "Por tu privacidad, los mensajes se borran automáticamente a los 30 días.",
+    "backToBoard": "Volver a los Anuncios",
+    "pageTitle": "Mis mensajes",
+    "inboxEmptyTitle": "Ningún mensaje",
+    "inboxEmptyText": "Todavía no has recibido ni enviado mensajes.",
+    "goToBoard": "Ir a los Anuncios de la comunidad",
+    "newOne": "1 nuevo",
+    "newMany": "{count} nuevos",
+    "deleteTitle": "Eliminar conversación",
+    "confirmDelete": "¿Eliminar esta conversación? No se puede deshacer y borra los mensajes para las dos personas.",
+    "deleteError": "No se pudo eliminar la conversación.",
+    "directMessage": "Mensaje directo"
   }
 }

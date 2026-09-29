@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { useLocale, useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
-import { X, Send, MessageCircle, Tag } from 'lucide-react'
+import { X, Send, MessageCircle, Tag, Clock } from 'lucide-react'
 
 type ChatModalProps = {
   isOpen: boolean
@@ -10,9 +11,16 @@ type ChatModalProps = {
   listing: any
   currentUserId: string
   receiverId: string
+  // Nome della persona con cui si parla (non sempre è chi ha pubblicato l'annuncio)
+  otherName?: string
 }
 
-export default function ChatModal({ isOpen, onClose, listing, currentUserId, receiverId }: ChatModalProps) {
+export default function ChatModal({ isOpen, onClose, listing, currentUserId, receiverId, otherName }: ChatModalProps) {
+  const t = useTranslations('chat')
+  const locale = useLocale()
+  // Il nome dell'altra persona: quello passato da chi apre la chat, oppure
+  // l'autore dell'annuncio se è lui che riceve (mai "undefined")
+  const name = (otherName || (listing?.user_id === receiverId ? listing?.profiles?.first_name : '') || '').trim()
   const [messages, setMessages] = useState<any[]>([])
   const [newMessage, setNewMessage] = useState('')
   const [loading, setLoading] = useState(false)
@@ -81,7 +89,7 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
       else await loadMessages()
     } else {
       console.error('Errore invio messaggio:', error)
-      alert('Errore nell\'invio del messaggio')
+      alert(t('sendError'))
     }
     setLoading(false)
   }
@@ -148,7 +156,7 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
             </div>
             <div>
               <h3 className="font-bold text-[var(--ink)]">
-                Conversazione con {listing.profiles?.first_name}
+                {name ? t('titleWith', { name }) : t('title')}
               </h3>
               <div className="flex items-center gap-1.5 text-xs text-[var(--muted)] mt-0.5">
                 <Tag className="w-3 h-3 text-[var(--gold)]" />
@@ -166,8 +174,8 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
           {messages.length === 0 ? (
             <div className="text-center text-gray-500 py-12">
               <MessageCircle className="w-16 h-16 mx-auto mb-3 text-[var(--gold)] opacity-40" />
-              <p className="font-medium">Nessun messaggio in questa conversazione</p>
-              <p className="text-sm mt-1">Inizia tu la conversazione!</p>
+              <p className="font-medium">{t('emptyTitle')}</p>
+              <p className="text-sm mt-1">{t('emptyText')}</p>
             </div>
           ) : (
             <>
@@ -187,7 +195,7 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
                     >
                       <p className="text-sm whitespace-pre-wrap break-words">{msg.content}</p>
                       <p className={`text-xs mt-1 ${isMe ? 'text-[var(--gold-pale)]/80' : 'text-[var(--muted)]'}`}>
-                        {new Date(msg.created_at).toLocaleString('it-IT', { 
+                        {new Date(msg.created_at).toLocaleString(locale, { 
                           day: '2-digit', 
                           month: '2-digit', 
                           hour: '2-digit', 
@@ -205,6 +213,11 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
 
         {/* Input messaggio */}
         <div className="p-4 border-t border-[var(--gold)]/25 bg-white">
+          {/* Cancellazione automatica dopo 30 giorni: ben visibile */}
+          <p className="mb-3 flex items-center gap-2 rounded-lg bg-[var(--gold-pale)] px-3 py-2 text-xs font-semibold text-[var(--ink)]">
+            <Clock className="h-4 w-4 shrink-0 text-[var(--gold)]" />
+            {t('retention')}
+          </p>
           <div className="flex gap-2">
             <input
               type="text"
@@ -216,7 +229,7 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
                   sendMessage()
                 }
               }}
-              placeholder={`Scrivi a ${listing.profiles?.first_name}...`}
+              placeholder={name ? t('placeholderWith', { name }) : t('placeholder')}
               className="flex-1 px-4 py-2.5 border border-[var(--gold)]/30 rounded-full focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 outline-none"
             />
             <button
@@ -225,7 +238,7 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
               className="px-5 py-2.5 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed text-[var(--ink)] rounded-full flex items-center gap-2 font-bold shadow-md transition-all"
             >
               <Send className="w-4 h-4" />
-              Invia
+              {t('send')}
             </button>
           </div>
         </div>

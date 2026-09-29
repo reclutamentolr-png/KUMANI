@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { markMessagesAsRead, deleteConversationAction } from '@/app/actions/listings'
 import { User, FileText, Trash2 } from 'lucide-react'
 
@@ -27,6 +28,7 @@ export default function ConversationItem({
   currentUserId,
   initiatedBy
 }: ConversationItemProps) {
+  const t = useTranslations('chat')
   const [unread, setUnread] = useState(unreadCount)
   const [isDeleting, setIsDeleting] = useState(false)
   const [deleted, setDeleted] = useState(false)
@@ -51,8 +53,9 @@ export default function ConversationItem({
 
     window.dispatchEvent(new CustomEvent('openChat', {
       detail: {
-        listing: listing || { id: 'direct', title: 'Messaggio diretto', user_id: otherUserId },
-        receiverId: otherUserId
+        listing: listing || { id: 'direct', title: t('directMessage'), user_id: otherUserId },
+        receiverId: otherUserId,
+        otherName: otherUserName
       }
     }))
   }
@@ -60,7 +63,7 @@ export default function ConversationItem({
   // ✅ CANCELLAZIONE CORRETTA: chiama la server action e ricarica la pagina
   const handleDelete = async (e: React.MouseEvent) => {
     e.stopPropagation()
-    if (!confirm('Sei sicuro di voler eliminare questa conversazione? L\'operazione è irreversibile e cancellerà i messaggi per entrambi gli utenti.')) return
+    if (!confirm(t('confirmDelete'))) return
 
     setIsDeleting(true)
     const result = await deleteConversationAction(currentUserId, otherUserId, listingId || undefined)
@@ -70,7 +73,7 @@ export default function ConversationItem({
       // ✅ Forza il ricaricamento completo della pagina: i dati vengono riletti dal DB
       window.location.reload()
     } else {
-      alert('Errore: ' + (result.error || 'Impossibile cancellare la conversazione'))
+      alert(t('deleteError'))
     }
     setIsDeleting(false)
   }
@@ -96,7 +99,7 @@ export default function ConversationItem({
               </h3>
               {unread > 0 && (
                 <span className="bg-[var(--gold)] text-[var(--ink)] text-xs font-bold px-2 py-0.5 rounded-full flex-shrink-0">
-                  {unread === 1 ? '1 nuovo' : `${unread} nuovi`}
+                  {unread === 1 ? t('newOne') : t('newMany', { count: unread })}
                 </span>
               )}
             </div>
@@ -109,7 +112,7 @@ export default function ConversationItem({
                 onClick={handleDelete}
                 onKeyDown={(e) => { if (e.key === 'Enter') handleDelete(e as any) }}
                 className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors flex-shrink-0 ml-2"
-                title="Elimina conversazione"
+                title={t('deleteTitle')}
               >
                 <Trash2 className={`w-4 h-4 ${isDeleting ? 'animate-pulse' : ''}`} />
               </span>

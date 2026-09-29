@@ -42,7 +42,7 @@ export default function ContactListingButton({
     }
     
     window.dispatchEvent(new CustomEvent('openChat', { 
-      detail: { listing, receiverId } 
+      detail: { listing, receiverId, otherName: authorName.split(' ')[0] } 
     }))
   }
 

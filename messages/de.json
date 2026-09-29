@@ -5016,5 +5016,27 @@
     "stickyCta": "Kostenlos anmelden",
     "rulesLocked": "Die Erklärung jeder Regel, mit Beispielen, findest du im vollständigen Handbuch.",
     "memberNote": "Du siehst die Seite als Mitglied: Wer deinen Link erhält, sieht den Button „Kostenlos anmelden“."
+  },
+  "chat": {
+    "title": "Unterhaltung",
+    "titleWith": "Unterhaltung mit {name}",
+    "emptyTitle": "Noch keine Nachrichten in dieser Unterhaltung",
+    "emptyText": "Beginne die Unterhaltung!",
+    "placeholderWith": "Schreib {name}…",
+    "placeholder": "Schreib eine Nachricht…",
+    "send": "Senden",
+    "sendError": "Die Nachricht konnte nicht gesendet werden. Versuch es noch einmal.",
+    "retention": "Zum Schutz deiner Privatsphäre werden Nachrichten nach 30 Tagen automatisch gelöscht.",
+    "backToBoard": "Zurück zu den Anzeigen",
+    "pageTitle": "Meine Nachrichten",
+    "inboxEmptyTitle": "Keine Nachrichten",
+    "inboxEmptyText": "Du hast noch keine Nachrichten erhalten oder gesendet.",
+    "goToBoard": "Zu den Community-Anzeigen",
+    "newOne": "1 neu",
+    "newMany": "{count} neu",
+    "deleteTitle": "Unterhaltung löschen",
+    "confirmDelete": "Diese Unterhaltung löschen? Das kann nicht rückgängig gemacht werden und löscht die Nachrichten für beide Personen.",
+    "deleteError": "Die Unterhaltung konnte nicht gelöscht werden.",
+    "directMessage": "Direktnachricht"
   }
 }

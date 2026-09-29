@@ -5016,5 +5016,27 @@
     "stickyCta": "Inscreva-se grátis",
     "rulesLocked": "A explicação de cada regra, com exemplos, está no manual completo.",
     "memberNote": "Está a ver a página como membro: quem recebe o seu link vê o botão «Inscreva-se grátis»."
+  },
+  "chat": {
+    "title": "Conversa",
+    "titleWith": "Conversa com {name}",
+    "emptyTitle": "Não há mensagens nesta conversa",
+    "emptyText": "Comece a conversa!",
+    "placeholderWith": "Escreva a {name}…",
+    "placeholder": "Escreva uma mensagem…",
+    "send": "Enviar",
+    "sendError": "Não foi possível enviar a mensagem. Tente novamente.",
+    "retention": "Para a sua privacidade, as mensagens são apagadas automaticamente ao fim de 30 dias.",
+    "backToBoard": "Voltar aos Anúncios",
+    "pageTitle": "As minhas mensagens",
+    "inboxEmptyTitle": "Nenhuma mensagem",
+    "inboxEmptyText": "Ainda não recebeu nem enviou mensagens.",
+    "goToBoard": "Ir para os Anúncios da comunidade",
+    "newOne": "1 nova",
+    "newMany": "{count} novas",
+    "deleteTitle": "Eliminar conversa",
+    "confirmDelete": "Eliminar esta conversa? A operação é irreversível e apaga as mensagens para as duas pessoas.",
+    "deleteError": "Não foi possível eliminar a conversa.",
+    "directMessage": "Mensagem direta"
   }
 }

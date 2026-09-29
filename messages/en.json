@@ -5016,5 +5016,27 @@
     "stickyCta": "Join for free",
     "rulesLocked": "The explanation of every rule, with examples, is in the full manual.",
     "memberNote": "You're seeing this page as a member: people who receive your link see the \"Join for free\" button."
+  },
+  "chat": {
+    "title": "Conversation",
+    "titleWith": "Conversation with {name}",
+    "emptyTitle": "No messages in this conversation",
+    "emptyText": "Start the conversation!",
+    "placeholderWith": "Write to {name}…",
+    "placeholder": "Write a message…",
+    "send": "Send",
+    "sendError": "The message couldn't be sent. Please try again.",
+    "retention": "For your privacy, messages are deleted automatically after 30 days.",
+    "backToBoard": "Back to Community Listings",
+    "pageTitle": "My messages",
+    "inboxEmptyTitle": "No messages",
+    "inboxEmptyText": "You haven't received or sent any messages yet.",
+    "goToBoard": "Go to Community Listings",
+    "newOne": "1 new",
+    "newMany": "{count} new",
+    "deleteTitle": "Delete conversation",
+    "confirmDelete": "Delete this conversation? This can't be undone and deletes the messages for both people.",
+    "deleteError": "The conversation couldn't be deleted.",
+    "directMessage": "Direct message"
   }
 }

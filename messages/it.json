@@ -5016,5 +5016,27 @@
     "stickyCta": "Iscriviti gratis",
     "rulesLocked": "La spiegazione di ogni regola, con esempi, è nel manuale completo.",
     "memberNote": "Stai vedendo la pagina da iscritto: chi riceve il tuo link vede il pulsante «Iscriviti gratis»."
+  },
+  "chat": {
+    "title": "Conversazione",
+    "titleWith": "Conversazione con {name}",
+    "emptyTitle": "Nessun messaggio in questa conversazione",
+    "emptyText": "Inizia tu la conversazione!",
+    "placeholderWith": "Scrivi a {name}…",
+    "placeholder": "Scrivi un messaggio…",
+    "send": "Invia",
+    "sendError": "Errore nell'invio del messaggio. Riprova.",
+    "retention": "Per la tua privacy, i messaggi vengono cancellati automaticamente dopo 30 giorni.",
+    "backToBoard": "Torna alla Bacheca",
+    "pageTitle": "I miei messaggi",
+    "inboxEmptyTitle": "Nessun messaggio",
+    "inboxEmptyText": "Non hai ancora ricevuto o inviato messaggi.",
+    "goToBoard": "Vai alla Bacheca Annunci",
+    "newOne": "1 nuovo",
+    "newMany": "{count} nuovi",
+    "deleteTitle": "Elimina conversazione",
+    "confirmDelete": "Vuoi eliminare questa conversazione? L'operazione è irreversibile e cancella i messaggi per entrambe le persone.",
+    "deleteError": "Impossibile eliminare la conversazione.",
+    "directMessage": "Messaggio diretto"
   }
 }

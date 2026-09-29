@@ -5016,5 +5016,27 @@
     "stickyCta": "S'inscrire gratuitement",
     "rulesLocked": "L'explication de chaque règle, avec des exemples, se trouve dans le manuel complet.",
     "memberNote": "Vous voyez cette page en tant que membre : les personnes qui reçoivent votre lien voient le bouton « S'inscrire gratuitement »."
+  },
+  "chat": {
+    "title": "Conversation",
+    "titleWith": "Conversation avec {name}",
+    "emptyTitle": "Aucun message dans cette conversation",
+    "emptyText": "Lancez la conversation !",
+    "placeholderWith": "Écrire à {name}…",
+    "placeholder": "Écrire un message…",
+    "send": "Envoyer",
+    "sendError": "Le message n'a pas pu être envoyé. Réessayez.",
+    "retention": "Pour votre confidentialité, les messages sont supprimés automatiquement après 30 jours.",
+    "backToBoard": "Retour aux Annonces",
+    "pageTitle": "Mes messages",
+    "inboxEmptyTitle": "Aucun message",
+    "inboxEmptyText": "Vous n'avez encore reçu ni envoyé de messages.",
+    "goToBoard": "Aller aux Annonces de la communauté",
+    "newOne": "1 nouveau",
+    "newMany": "{count} nouveaux",
+    "deleteTitle": "Supprimer la conversation",
+    "confirmDelete": "Supprimer cette conversation ? L'opération est irréversible et supprime les messages pour les deux personnes.",
+    "deleteError": "Impossible de supprimer la conversation.",
+    "directMessage": "Message direct"
   }
 }
