@@ -1,4 +1,4 @@
-export const MARKETPLACE_CATEGORIES = ['marketing', 'security', 'personal', 'wellness', 'lavoro', 'affinity', 'svago', 'community'] as const
+export const MARKETPLACE_CATEGORIES = ['marketing', 'security', 'personal', 'wellness', 'lavoro', 'svago', 'community'] as const
 export type MarketplaceCategory = (typeof MARKETPLACE_CATEGORIES)[number]
 
 export interface MarketplaceTool {
@@ -148,7 +148,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       title: t('digitalReceipt'),
       description: t('digitalReceiptDescription'),
       color: 'gold',
-      category: 'personal',
+      category: 'lavoro',
       requiresSubscription: true,
     },
     {
@@ -237,7 +237,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       title: t('kumaniCv'),
       description: t('kumaniCvDescription'),
       color: 'gold',
-      category: 'lavoro',
+      category: 'personal',
       requiresSubscription: true,
     },
     {
@@ -259,7 +259,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       title: t('affinity'),
       description: t('affinityDescription'),
       color: 'gold',
-      category: 'affinity',
+      category: 'svago',
     },
     {
       toolName: 'veritas',

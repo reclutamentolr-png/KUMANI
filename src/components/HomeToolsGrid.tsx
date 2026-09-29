@@ -42,7 +42,7 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 
-type Category = 'marketing' | 'security' | 'personal' | 'wellness' | 'lavoro' | 'affinity' | 'svago' | 'community'
+type Category = 'marketing' | 'security' | 'personal' | 'wellness' | 'lavoro' | 'svago' | 'community'
 
 type Tool = {
   icon: LucideIcon
@@ -51,7 +51,7 @@ type Tool = {
   category: Category
 }
 
-const CATEGORY_ORDER: Category[] = ['marketing', 'security', 'personal', 'wellness', 'lavoro', 'affinity', 'svago', 'community']
+const CATEGORY_ORDER: Category[] = ['marketing', 'security', 'personal', 'wellness', 'lavoro', 'svago', 'community']
 
 const CATEGORY_ICON: Record<Category, LucideIcon> = {
   marketing: Megaphone,
@@ -59,7 +59,6 @@ const CATEGORY_ICON: Record<Category, LucideIcon> = {
   personal: CalendarClock,
   wellness: Waves,
   lavoro: Briefcase,
-  affinity: HeartHandshake,
   svago: VenetianMask,
   community: Tag,
 }
@@ -104,7 +103,7 @@ export default function HomeToolsGrid() {
     { icon: Brain, title: t('toolMemolifeTitle'), desc: t('toolMemolifeDescription'), category: 'personal' },
     { icon: CalendarClock, title: t('toolLifeCalendarTitle'), desc: t('toolLifeCalendarDescription'), category: 'personal' },
     { icon: PackageSearch, title: t('toolFindoTitle'), desc: t('toolFindoDescription'), category: 'personal' },
-    { icon: FileCheck2, title: t('toolDigitalReceiptTitle'), desc: t('toolDigitalReceiptDescription'), category: 'personal' },
+    { icon: FileCheck2, title: t('toolDigitalReceiptTitle'), desc: t('toolDigitalReceiptDescription'), category: 'lavoro' },
     { icon: PiggyBank, title: tc('spendly'), desc: tc('spendlyDescription'), category: 'personal' },
     { icon: Plane, title: tc('travel'), desc: tc('travelDescription'), category: 'personal' },
     { icon: Flower2, title: tc('mandala'), desc: tc('mandalaDescription'), category: 'wellness' },
@@ -112,8 +111,8 @@ export default function HomeToolsGrid() {
     { icon: Stethoscope, title: tc('aureya'), desc: tc('aureyaDescription'), category: 'wellness' },
     { icon: FileSpreadsheet, title: tc('preventivi'), desc: tc('preventiviDescription'), category: 'lavoro' },
     { icon: Warehouse, title: tc('magazzino'), desc: tc('magazzinoDescription'), category: 'lavoro' },
-    { icon: FileUser, title: tc('kumaniCv'), desc: tc('kumaniCvDescription'), category: 'lavoro' },
-    { icon: HeartHandshake, title: tc('affinity'), desc: tc('affinityDescription'), category: 'affinity' },
+    { icon: FileUser, title: tc('kumaniCv'), desc: tc('kumaniCvDescription'), category: 'personal' },
+    { icon: HeartHandshake, title: tc('affinity'), desc: tc('affinityDescription'), category: 'svago' },
     { icon: VenetianMask, title: tc('veritas'), desc: tc('veritasDescription'), category: 'svago' },
     { icon: Grid3x3, title: tc('mosaic'), desc: tc('mosaicDescription'), category: 'svago' },
     { icon: Dices, title: tc('fabula'), desc: tc('fabulaDescription'), category: 'svago' },
@@ -130,7 +129,6 @@ export default function HomeToolsGrid() {
     personal: tc('categoryPersonal'),
     wellness: tc('categoryWellness'),
     lavoro: tc('categoryLavoro'),
-    affinity: tc('categoryAffinity'),
     svago: tc('categorySvago'),
     community: tc('categoryCommunity'),
   }
