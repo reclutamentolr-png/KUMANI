@@ -106,7 +106,20 @@ import {
   Hourglass,
   Grid3x3,
   Dices,
+  ChevronDown,
+  BellRing,
 } from 'lucide-react'
+
+// Gruppi del menu a sinistra, nell'ordine in cui compaiono
+const MENU_GROUPS = [
+  { id: 'general', label: 'Generale' },
+  { id: 'users', label: 'Utenti' },
+  { id: 'comms', label: 'Comunicazioni' },
+  { id: 'rewards', label: 'Punti e premi' },
+  { id: 'community', label: 'Community' },
+  { id: 'kordata', label: 'Kordata' },
+  { id: 'games', label: 'Giochi' },
+] as const
 
 type AdminDashboardProps = {
   userId: string
@@ -118,6 +131,7 @@ type AdminDashboardProps = {
 
 export default function AdminDashboard({ userId, permissions, userName, locale, initialSection }: AdminDashboardProps) {
   const [activeSection, setActiveSection] = useState(initialSection || 'overview')
+  const [openGroups, setOpenGroups] = useState<Set<string>>(new Set())
 
   // Riflette la sezione attiva nell'URL (senza navigazione né reload), così
   // aggiornando la pagina si resta nella stessa voce del menu.
@@ -194,7 +208,6 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
   const [isSaving, setIsSaving] = useState(false)
 
   const [matrixPickedUser, setMatrixPickedUser] = useState<StaffUserHit | null>(null)
-  const [selectedMatrixUserId, setSelectedMatrixUserId] = useState<string>('')
   const [matrixData, setMatrixData] = useState<any>(null)
   const [matrixDescendants, setMatrixDescendants] = useState<any[]>([])
   const [matrixStats, setMatrixStats] = useState({ total: 0, level1: 0, level2: 0, level3: 0, level4: 0, level5: 0 })
@@ -350,7 +363,6 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
       return
     }
     setLoadingMatrix(true)
-    setSelectedMatrixUserId(targetUserId)
     try {
       const result = await adminGetUserMatrix(targetUserId)
       const profile = result?.profile
@@ -396,7 +408,6 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
     setActiveSection('matrix')
     setMatrixPickedUser({ id: user.id, first_name: user.first_name ?? null, last_name: user.last_name ?? null, referral_code: user.referral_code ?? null, email: user.email ?? null })
     setTimeout(() => {
-      setSelectedMatrixUserId(user.id)
       loadMatrixForUser(user.id)
     }, 100)
   }
@@ -1016,34 +1027,76 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
     }
   }
 
+  // Menu a gruppi: ogni voce appartiene a un gruppo (vedi MENU_GROUPS)
   const menuItems = [
-  { id: 'overview', label: 'Panoramica', Icon: LayoutDashboard, permission: 'stats.read' as Permission },
-  { id: 'users', label: 'Utenti', Icon: Users, permission: 'users.read' as Permission },
-  { id: 'profileRequests', label: 'Richieste dati anagrafici', Icon: UserPen, permission: 'users.read' as Permission },
-  { id: 'accountDeletions', label: 'Cancellazione account', Icon: UserX, permission: 'users.read' as Permission },
-  { id: 'matrix', label: 'Matrice', Icon: GitBranch, permission: 'matrix.read' as Permission },
-  { id: 'marketplace', label: 'Ecosistema (strumenti)', Icon: ShoppingBag, permission: 'marketplace.read' as Permission },
-  { id: 'listingReports', label: 'Bacheca', Icon: Flag, permission: 'listings.read' as Permission },
-  { id: 'spotlight', label: 'Kumano del Giorno', Icon: Star, permission: 'listings.read' as Permission },
-  { id: 'affinity', label: 'Affinity', Icon: Flag, permission: 'listings.read' as Permission },
-  { id: 'convivio', label: 'Kordata', Icon: Flag, permission: 'listings.read' as Permission },
-  { id: 'events', label: 'Eventi', Icon: CalendarDays, permission: 'listings.read' as Permission },
-  { id: 'identity', label: 'Verifica identità', Icon: ScanFace, permission: 'users.read' as Permission },
-  { id: 'convivioFees', label: 'Commissioni Kordata', Icon: HandCoins, permission: 'listings.read' as Permission },
-  { id: 'timebank', label: 'Time Bank', Icon: Hourglass, permission: 'listings.read' as Permission },
-  { id: 'mosaic', label: 'Mosaic', Icon: Grid3x3, permission: 'listings.read' as Permission },
-  { id: 'fabula', label: 'Fabula', Icon: Dices, permission: 'listings.read' as Permission },
-  { id: 'coupons', label: 'Coupon', Icon: Ticket, permission: 'coupons.read' as Permission },
-  { id: 'vouchers', label: 'Voucher', Icon: BadgeCheck, permission: 'vouchers.read' as Permission },
-  { id: 'rewards', label: 'Premi', Icon: Gift, permission: 'rewards.read' as Permission },
-  { id: 'kuManagement', label: 'Gestione KU', Icon: Coins, permission: 'settings.read' as Permission },
-  { id: 'messages', label: 'Messaggi', Icon: MessageSquare, permission: 'messages.read' as Permission },
-  { id: 'contactMessages', label: 'Messaggi dal sito', Icon: Inbox, permission: 'support.read' as Permission },
-  { id: 'financials', label: 'Amministrazione', Icon: PiggyBank, permission: 'stats.read' as Permission },
-  { id: 'settings', label: 'Impostazioni', Icon: Settings, permission: 'settings.read' as Permission },
+  { id: 'overview', label: 'Panoramica', Icon: LayoutDashboard, permission: 'stats.read' as Permission, group: 'general' },
+  { id: 'financials', label: 'Amministrazione', Icon: PiggyBank, permission: 'stats.read' as Permission, group: 'general' },
+  { id: 'marketplace', label: 'Strumenti e interruttori', Icon: ShoppingBag, permission: 'marketplace.read' as Permission, group: 'general' },
+  { id: 'settings', label: 'Impostazioni', Icon: Settings, permission: 'settings.read' as Permission, group: 'general' },
+  { id: 'users', label: 'Utenti', Icon: Users, permission: 'users.read' as Permission, group: 'users' },
+  { id: 'matrix', label: 'Matrice', Icon: GitBranch, permission: 'matrix.read' as Permission, group: 'users' },
+  { id: 'identity', label: 'Verifica identità', Icon: ScanFace, permission: 'users.read' as Permission, group: 'users' },
+  { id: 'profileRequests', label: 'Richieste dati', Icon: UserPen, permission: 'users.read' as Permission, group: 'users' },
+  { id: 'accountDeletions', label: 'Cancellazione account', Icon: UserX, permission: 'users.read' as Permission, group: 'users' },
+  { id: 'messages', label: 'Messaggi agli utenti', Icon: MessageSquare, permission: 'messages.read' as Permission, group: 'comms' },
+  { id: 'contactMessages', label: 'Messaggi dal sito', Icon: Inbox, permission: 'support.read' as Permission, group: 'comms' },
+  { id: 'kuManagement', label: 'Gestione KU', Icon: Coins, permission: 'settings.read' as Permission, group: 'rewards' },
+  { id: 'rewards', label: 'Premi', Icon: Gift, permission: 'rewards.read' as Permission, group: 'rewards' },
+  { id: 'vouchers', label: 'Voucher', Icon: BadgeCheck, permission: 'vouchers.read' as Permission, group: 'rewards' },
+  { id: 'coupons', label: 'Coupon', Icon: Ticket, permission: 'coupons.read' as Permission, group: 'rewards' },
+  { id: 'listingReports', label: 'Bacheca', Icon: Flag, permission: 'listings.read' as Permission, group: 'community' },
+  { id: 'spotlight', label: 'Kumano del Giorno', Icon: Star, permission: 'listings.read' as Permission, group: 'community' },
+  { id: 'events', label: 'Eventi', Icon: CalendarDays, permission: 'listings.read' as Permission, group: 'community' },
+  { id: 'timebank', label: 'Time Bank', Icon: Hourglass, permission: 'listings.read' as Permission, group: 'community' },
+  { id: 'affinity', label: 'Affinity', Icon: Flag, permission: 'listings.read' as Permission, group: 'community' },
+  { id: 'convivio', label: 'Segnalazioni', Icon: Flag, permission: 'listings.read' as Permission, group: 'kordata' },
+  { id: 'convivioFees', label: 'Commissioni', Icon: HandCoins, permission: 'listings.read' as Permission, group: 'kordata' },
+  { id: 'mosaic', label: 'Mosaic', Icon: Grid3x3, permission: 'listings.read' as Permission, group: 'games' },
+  { id: 'fabula', label: 'Fabula', Icon: Dices, permission: 'listings.read' as Permission, group: 'games' },
 ]
 
   const availableMenuItems = menuItems.filter(item => hasPermission(permissions, item.permission))
+
+  // Gruppi con almeno una voce consentita dal ruolo; il gruppo della sezione
+  // aperta è sempre espanso, gli altri si aprono e chiudono a mano.
+  const menuGroups = MENU_GROUPS.map((group) => ({
+    ...group,
+    items: availableMenuItems.filter((item) => item.group === group.id),
+  })).filter((group) => group.items.length > 0)
+  const activeGroup = availableMenuItems.find((item) => item.id === activeSection)?.group
+  const pendingItems = availableMenuItems.filter((item) => (badges[item.id] ?? 0) > 0)
+  const toggleGroup = (groupId: string) => {
+    setOpenGroups((prev) => {
+      const next = new Set(prev)
+      if (groupId === activeGroup) return next
+      if (next.has(groupId)) next.delete(groupId)
+      else next.add(groupId)
+      return next
+    })
+  }
+
+  const renderMenuButton = (item: (typeof availableMenuItems)[number]) => {
+    const count = badges[item.id] ?? 0
+    return (
+      <button
+        key={item.id}
+        onClick={() => setActiveSection(item.id)}
+        title={count > 0 ? `${item.label}: ${count} ${count === 1 ? 'elemento' : 'elementi'} da vedere o gestire` : undefined}
+        className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
+          activeSection === item.id ? 'bg-[var(--ink)] text-white shadow-md' : 'text-gray-700 hover:bg-gray-100'
+        }`}
+      >
+        <item.Icon className="h-4 w-4 shrink-0" />
+        <span className="min-w-0 flex-1 truncate font-medium">{item.label}</span>
+        {count > 0 && (
+          <span className="shrink-0 rounded-full bg-[var(--gold)] px-1.5 py-0.5 text-[10px] font-bold leading-none text-white">
+            <span className="sr-only">Da gestire: </span>
+            {badgeLabel(count)}
+          </span>
+        )}
+      </button>
+    )
+  }
 
   // ?section= inesistente o non consentito dal ruolo: prima voce disponibile.
   useEffect(() => {
@@ -3021,32 +3074,62 @@ export default function AdminDashboard({ userId, permissions, userName, locale, 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
       <div className="lg:col-span-1">
-        <nav className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 space-y-2 sticky top-4">
-          {availableMenuItems.map(item => {
-            const count = badges[item.id] ?? 0
+        {/* Telefono: il menu è una tendina, divisa per gruppi */}
+        <label className="block lg:hidden">
+          <span className="sr-only">Sezione</span>
+          <select
+            value={activeSection}
+            onChange={(e) => setActiveSection(e.target.value)}
+            className="w-full rounded-xl border border-gray-200 bg-white p-3 text-sm font-semibold text-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-[var(--gold)]"
+          >
+            {menuGroups.map((group) => (
+              <optgroup key={group.id} label={group.label}>
+                {group.items.map((item) => {
+                  const count = badges[item.id] ?? 0
+                  return (
+                    <option key={item.id} value={item.id}>
+                      {item.label}
+                      {count > 0 ? ` (${badgeLabel(count)} da gestire)` : ''}
+                    </option>
+                  )
+                })}
+              </optgroup>
+            ))}
+          </select>
+        </label>
+
+        <nav className="sticky top-4 hidden max-h-[calc(100vh-2rem)] space-y-3 overflow-y-auto rounded-xl border border-gray-200 bg-white p-3 shadow-sm lg:block">
+          {/* Da gestire: solo le sezioni con qualcosa in attesa */}
+          {pendingItems.length > 0 && (
+            <div className="rounded-lg border border-[var(--gold)]/40 bg-[var(--gold-pale)] p-2">
+              <p className="mb-1 flex items-center gap-1.5 px-2 pt-1 text-[11px] font-bold uppercase tracking-wide text-[var(--ink)]">
+                <BellRing className="h-3.5 w-3.5 text-[var(--gold)]" /> Da gestire
+              </p>
+              {pendingItems.map((item) => renderMenuButton(item))}
+            </div>
+          )}
+
+          {menuGroups.map((group) => {
+            const isOpen = openGroups.has(group.id) || group.id === activeGroup
+            const groupCount = group.items.reduce((sum, item) => sum + (badges[item.id] ?? 0), 0)
             return (
-              <button
-                key={item.id}
-                onClick={() => setActiveSection(item.id)}
-                title={count > 0 ? `${item.label}: ${count} ${count === 1 ? 'elemento' : 'elementi'} da vedere o gestire` : undefined}
-                className={`w-full text-left px-4 py-3 rounded-lg transition-colors flex items-center gap-3 ${
-                  activeSection === item.id ? 'bg-[var(--ink)] text-white shadow-md' : 'hover:bg-gray-100 text-gray-700'
-                }`}
-              >
-                <span className="relative shrink-0">
-                  <item.Icon className="w-5 h-5" />
-                  {count > 0 && (
-                    <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-[var(--gold)] ring-2 ring-white" aria-hidden="true" />
-                  )}
-                </span>
-                <span className="font-medium flex-1 min-w-0">{item.label}</span>
-                {count > 0 && (
-                  <span className="shrink-0 rounded-full bg-[var(--gold)] px-1.5 py-0.5 text-[10px] font-bold leading-none text-white">
-                    <span className="sr-only">Da gestire: </span>
-                    {badgeLabel(count)}
+              <div key={group.id}>
+                <button
+                  type="button"
+                  onClick={() => toggleGroup(group.id)}
+                  aria-expanded={isOpen}
+                  className="flex w-full items-center justify-between gap-2 rounded-lg px-2 py-1.5 text-left text-[11px] font-bold uppercase tracking-wide text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                >
+                  <span>{group.label}</span>
+                  <span className="flex items-center gap-1.5">
+                    {!isOpen && groupCount > 0 && (
+                      <span className="rounded-full bg-[var(--gold)] px-1.5 py-0.5 text-[10px] font-bold leading-none text-white">{badgeLabel(groupCount)}</span>
+                    )}
+                    <ChevronDown className={`h-3.5 w-3.5 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
                   </span>
-                )}
-              </button>
+                </button>
+                {isOpen && <div className="mt-1 space-y-0.5">{group.items.map((item) => renderMenuButton(item))}</div>}
+              </div>
             )
           })}
         </nav>
