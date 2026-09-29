@@ -1449,6 +1449,7 @@
     "error_no_change": "Die gezählte Menge entspricht dem Bestand: Keine Korrektur erforderlich."
   },
   "timebank": {
+    "error_tooManyMessages": "Du hast das Limit von 100 Nachrichten pro Tag erreicht. Morgen kannst du wieder schreiben.",
     "error_report_own": "Sie können Ihre eigene Anzeige nicht melden.",
     "error_report_already": "Sie haben diesen Inhalt bereits gemeldet: Das Staff prüft ihn.",
     "error_report_limit": "Sie haben das Limit von 5 Meldungen pro Tag erreicht. Versuchen Sie es morgen erneut.",

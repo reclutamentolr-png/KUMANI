@@ -1449,6 +1449,7 @@
     "error_no_change": "La cantidad contada coincide con las existencias: no es necesario ningún ajuste."
   },
   "timebank": {
+    "error_tooManyMessages": "Has alcanzado el límite de 100 mensajes al día. Podrás escribir más mañana.",
     "error_report_own": "No puede denunciar su propio anuncio.",
     "error_report_already": "Ya ha denunciado este contenido: el Staff lo está revisando.",
     "error_report_limit": "Ha alcanzado el límite de 5 denuncias al día. Inténtelo mañana.",

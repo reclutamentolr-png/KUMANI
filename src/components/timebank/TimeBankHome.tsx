@@ -568,6 +568,9 @@ function ExchangeSheet({
                 if (result === 'ok') {
                   setBody('')
                   load()
+                } else {
+                  // Es. limite di 100 messaggi al giorno: prima l'errore non si vedeva
+                  alert(t.has(`error_${result}`) ? t(`error_${result}`) : t('error_saveError'))
                 }
               }}
               className="mt-2 flex gap-2"

@@ -1348,6 +1348,7 @@
     "error_no_change": "La quantità contata è uguale alla giacenza: nessuna rettifica necessaria."
   },
   "timebank": {
+    "error_tooManyMessages": "Hai raggiunto il limite di 100 messaggi al giorno. Potrai scriverne altri domani.",
     "error_report_own": "Non puoi segnalare un tuo annuncio.",
     "error_report_already": "Hai già segnalato questo contenuto: lo Staff lo sta controllando.",
     "error_report_limit": "Hai raggiunto il limite di 5 segnalazioni al giorno. Riprova domani.",

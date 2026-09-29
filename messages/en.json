@@ -1449,6 +1449,7 @@
     "error_no_change": "The counted quantity matches the stock: no adjustment needed."
   },
   "timebank": {
+    "error_tooManyMessages": "You've reached the limit of 100 messages a day. You can write more tomorrow.",
     "error_report_own": "You cannot report your own listing.",
     "error_report_already": "You have already reported this: the Staff is reviewing it.",
     "error_report_limit": "You have reached the limit of 5 reports per day. Try again tomorrow.",

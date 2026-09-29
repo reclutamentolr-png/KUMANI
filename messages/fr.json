@@ -1449,6 +1449,7 @@
     "error_no_change": "La quantité comptée est égale au stock : aucun ajustement nécessaire."
   },
   "timebank": {
+    "error_tooManyMessages": "Vous avez atteint la limite de 100 messages par jour. Vous pourrez en écrire d'autres demain.",
     "error_report_own": "Vous ne pouvez pas signaler votre propre annonce.",
     "error_report_already": "Vous avez déjà signalé ce contenu : le Staff est en train de l'examiner.",
     "error_report_limit": "Vous avez atteint la limite de 5 signalements par jour. Réessayez demain.",
