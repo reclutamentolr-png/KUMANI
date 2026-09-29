@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { getLocale, getTranslations } from 'next-intl/server'
-import { BookOpenCheck, Gift, Lock, ShieldCheck, Timer } from 'lucide-react'
+import { BadgeCheck, BookOpenCheck, Briefcase, CalendarClock, Gift, HeartPulse, Lock, ShieldCheck, Sparkles, Timer, Users } from 'lucide-react'
+import HomeToolsGrid from '@/components/HomeToolsGrid'
+import { getPlanPrices } from '@/lib/planPrices'
 import Link from '@/components/LocalizedLink'
 import Logo from '@/components/Logo'
 import Vignette from '@/components/antitruffa/Vignette'
@@ -58,6 +60,20 @@ export default async function ManualePreviewPage({ searchParams }: Props) {
   const registerHref = inviter ? `/register?sponsor=${encodeURIComponent(inviter.referral_code)}` : '/register'
   const scamCount = g.chapters.reduce((n, c) => n + c.scams.length, 0)
 
+  // Prezzi veri dei piani (da Stripe, con copia di riserva), nel formato
+  // della lingua: 49 € in italiano, €49 in inglese...
+  const prices = await getPlanPrices()
+  const euro = (value: number) =>
+    new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: Number.isInteger(value) ? 0 : 2 }).format(value)
+  const pillars = [
+    { icon: ShieldCheck, title: t('p1Title'), text: t('p1Text') },
+    { icon: CalendarClock, title: t('p2Title'), text: t('p2Text') },
+    { icon: HeartPulse, title: t('p3Title'), text: t('p3Text') },
+    { icon: Briefcase, title: t('p4Title'), text: t('p4Text') },
+    { icon: Users, title: t('p5Title'), text: t('p5Text') },
+    { icon: Gift, title: t('p6Title'), text: t('p6Text') },
+  ]
+
   const cta = user ? (
     <Link
       href="/marketplace/antitruffa"
@@ -110,7 +126,7 @@ export default async function ManualePreviewPage({ searchParams }: Props) {
         </div>
       </div>
 
-      <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-12">
+      <main className={`mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-12 ${user ? '' : 'pb-28'}`}>
         <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
           {g.stats.map(s => (
             <div key={s.label} className="rounded-2xl border border-[var(--gold)]/25 bg-[var(--paper)] p-4 text-center">
@@ -145,13 +161,20 @@ export default async function ManualePreviewPage({ searchParams }: Props) {
             {g.rules.title}
           </h2>
           <div className="grid gap-3 sm:grid-cols-2">
-            {g.rules.items.map(r => (
-              <div key={r.title} className="rounded-2xl border border-black/5 bg-[var(--paper)] p-4 shadow-sm">
-                <h3 className="mb-1 font-semibold text-[var(--ink)]">{r.title}</h3>
-                <p className="text-sm leading-6 text-[var(--muted)]">{r.text}</p>
+            {g.rules.items.map((r, i) => (
+              <div key={r.title} className="flex items-center gap-3 rounded-2xl border border-black/5 bg-[var(--paper)] p-4 shadow-sm">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--gold-pale)] text-xs font-bold text-[var(--ink)]">
+                  {i + 1}
+                </span>
+                <h3 className="flex-1 font-semibold text-[var(--ink)]">{r.title}</h3>
+                <Lock className="h-4 w-4 shrink-0 text-[var(--muted)]/60" />
               </div>
             ))}
           </div>
+          <p className="mt-3 flex items-center gap-2 text-sm text-[var(--muted)]">
+            <Lock className="h-4 w-4 shrink-0" />
+            {t('rulesLocked')}
+          </p>
         </section>
 
         {/* Cosa c'è nel manuale completo (solo i titoli) */}
@@ -191,6 +214,56 @@ export default async function ManualePreviewPage({ searchParams }: Props) {
           <div className="max-w-md">{cta}</div>
         </section>
 
+        {/* KUMANI è molto di più: la community e gli altri servizi */}
+        <section className="mb-8 overflow-hidden rounded-3xl bg-[var(--ink)] text-white">
+          <div className="relative p-6 sm:p-8">
+            <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full border border-[var(--gold)]/25 bg-[var(--gold)]/10" />
+            <div className="relative">
+              <p className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[var(--gold-bright)]">
+                <Sparkles className="h-4 w-4" />
+                {t('ecoEyebrow')}
+              </p>
+              <h2 className="mb-3 text-2xl font-bold leading-tight sm:text-3xl">{t('ecoTitle')}</h2>
+              <p className="text-base leading-7 text-white/75">{t('ecoText')}</p>
+            </div>
+          </div>
+
+          <div className="grid gap-3 px-6 pb-6 sm:grid-cols-2 sm:px-8">
+            {pillars.map(p => (
+              <div key={p.title} className="rounded-2xl border border-[var(--gold)]/20 bg-white/[0.04] p-4">
+                <div className="mb-2 flex items-center gap-3">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)]">
+                    <p.icon className="h-5 w-5 text-[var(--ink)]" strokeWidth={1.8} />
+                  </span>
+                  <h3 className="font-bold text-[var(--gold-bright)]">{p.title}</h3>
+                </div>
+                <p className="text-sm leading-6 text-white/75">{p.text}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="border-t border-white/10 px-6 py-6 sm:px-8">
+            <h3 className="mb-1 text-lg font-bold">{t('ecoAllTitle')}</h3>
+            <p className="mb-4 text-sm text-white/60">{t('ecoAllText')}</p>
+            <HomeToolsGrid />
+          </div>
+
+          <div className="border-t border-white/10 bg-gradient-to-br from-[var(--gold)]/15 to-transparent px-6 py-6 sm:px-8">
+            <ul className="mb-5 space-y-2">
+              {[t('pricingFree'), t('pricingBase', { price: euro(prices.base) }), t('pricingPro', { price: euro(prices.pro) })].map(line => (
+                <li key={line} className="flex gap-2 text-sm leading-6 text-white/85">
+                  <BadgeCheck className="mt-0.5 h-5 w-5 shrink-0 text-[var(--gold-bright)]" />
+                  {line}
+                </li>
+              ))}
+            </ul>
+            <p className="mb-4 text-base font-semibold leading-7 text-white">
+              {inviter ? t('closingInvited', { name: inviter.first_name || 'KUMANI' }) : t('closing')}
+            </p>
+            <div className="max-w-md">{cta}</div>
+          </div>
+        </section>
+
         <div className="mb-8">
           <GuideShareButtons url={shareUrl} title={g.title} />
         </div>
@@ -201,6 +274,22 @@ export default async function ManualePreviewPage({ searchParams }: Props) {
           <p>{g.ui.copyright}</p>
         </footer>
       </main>
+
+      {/* Invito all'iscrizione sempre a portata di dito (solo per chi non è iscritto) */}
+      {!user ? (
+        <div className="fixed inset-x-0 bottom-0 z-30 border-t border-[var(--gold)]/30 bg-[var(--ink)]/95 px-4 py-3 backdrop-blur">
+          <div className="mx-auto flex max-w-3xl items-center gap-3">
+            <p className="hidden flex-1 text-sm text-white/80 sm:block">{t('pricingFree')}</p>
+            <Link
+              href={registerHref}
+              className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-5 py-3 text-sm font-extrabold text-[var(--ink)] sm:flex-none"
+            >
+              <Gift className="h-4 w-4" />
+              {t('stickyCta')}
+            </Link>
+          </div>
+        </div>
+      ) : null}
     </div>
   )
 }
