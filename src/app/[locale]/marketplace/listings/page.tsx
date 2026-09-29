@@ -2,11 +2,11 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from '@/components/LocalizedLink'
 import { getTranslations } from 'next-intl/server'
-import { LISTINGS_PAGE_SIZE, getActiveListings, getFeaturedListings, getUserListings, getActiveListingCategoryCounts, getActiveListingById, getListingCitiesByCountry, cleanListingSearch } from '@/lib/listings-server'
+import { LISTINGS_PAGE_SIZE, getUnreadMessagesCount, getActiveListings, getFeaturedListings, getUserListings, getActiveListingCategoryCounts, getActiveListingById, getListingCitiesByCountry, cleanListingSearch } from '@/lib/listings-server'
 import { CATEGORY_ICONS, CATEGORY_I18N_KEYS, ALL_LISTING_CATEGORIES, LISTING_COUNTRIES, isListingCountry, cleanListingCity, type ListingCategory } from '@/lib/listings'
 import { countryName } from '@/lib/events'
 import { deleteListingAction, republishListingAction } from '@/app/actions/listings'
-import { ArrowLeft, Plus, Tag, Trash2, Eye, Calendar, RefreshCw, Sparkles, Coins, Info, ChevronDown } from 'lucide-react'
+import { ArrowLeft, MessageCircle, Plus, Tag, Trash2, Eye, Calendar, RefreshCw, Sparkles, Coins, Info, ChevronDown } from 'lucide-react'
 import ListingForm from '@/components/ListingForm'
 import ChatModalWrapper from '@/components/ChatModalWrapper'
 import FeatureListingButton from '@/components/FeatureListingButton'
@@ -103,12 +103,13 @@ export default async function ListingsPage({
       }
     : null
 
-  const [pageListings, featuredListings, categoryCounts, sharedListing, citiesByCountry] = await Promise.all([
+  const [pageListings, featuredListings, categoryCounts, sharedListing, citiesByCountry, unreadCount] = await Promise.all([
     getActiveListings({ category, excludeFeatured: true, page, ...search }),
     getFeaturedListings({ category, ...search }),
     getActiveListingCategoryCounts(search),
     sharedListingId ? getActiveListingById(sharedListingId) : Promise.resolve(null),
     getListingCitiesByCountry(),
+    getUnreadMessagesCount(user.id),
   ])
   const countryOptions = [...LISTING_COUNTRIES]
     .map((code) => ({ value: code, label: countryName(code, locale) }))
@@ -184,13 +185,28 @@ export default async function ListingsPage({
                 </div>
               </div>
             </div>
-            <Link
-              href="/marketplace/listings?showForm=true"
-              className="inline-flex items-center justify-center gap-2 self-start rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3.5 font-bold text-[var(--ink)] shadow-lg transition-all hover:brightness-110 lg:self-center"
-            >
-              <Plus className="h-5 w-5" />
-              {t('newListing')}
-            </Link>
+            <div className="flex flex-wrap gap-3 self-start lg:self-center">
+              <Link
+                href="/marketplace/listings?showForm=true"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3.5 font-bold text-[var(--ink)] shadow-lg transition-all hover:brightness-110"
+              >
+                <Plus className="h-5 w-5" />
+                {t('newListing')}
+              </Link>
+              {/* Messaggi ricevuti e inviati per gli annunci */}
+              <Link
+                href="/marketplace/chat"
+                className="relative inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 px-6 py-3.5 font-bold text-white transition-all hover:bg-white/10"
+              >
+                <MessageCircle className="h-5 w-5 text-[var(--gold-bright)]" />
+                {t('listingsMyMessages')}
+                {unreadCount > 0 && (
+                  <span className="absolute -right-2 -top-2 flex h-6 min-w-6 items-center justify-center rounded-full bg-red-600 px-1.5 text-xs font-bold text-white ring-2 ring-[var(--ink)]">
+                    {unreadCount > 99 ? '99+' : unreadCount}
+                  </span>
+                )}
+              </Link>
+            </div>
           </div>
           <details className="group relative mt-6 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white/75">
             <summary className="flex cursor-pointer list-none items-center gap-2 font-semibold text-white">

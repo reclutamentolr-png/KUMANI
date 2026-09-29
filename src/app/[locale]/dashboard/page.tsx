@@ -19,6 +19,7 @@ import { getMarketplaceAccessState } from '@/lib/marketplaceAccess'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { getFavoriteToolNames } from '@/lib/favorites'
 import DashboardTipo2 from '@/components/dashboard/DashboardTipo2'
+import BachecaMessagesAlert from '@/components/dashboard/BachecaMessagesAlert'
 import ProArea from '@/components/dashboard/ProArea'
 import ProTeaser from '@/components/dashboard/ProTeaser'
 import { getProAreaStats } from '@/lib/proAreaStats'
@@ -193,6 +194,9 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         <ActivityTracker userId={user.id} />
+
+        {/* Messaggi non letti dalla Bacheca: in cima, prima di tutto */}
+        {unreadMessagesCount > 0 && <BachecaMessagesAlert initialCount={unreadMessagesCount} />}
 
         {isPro && proTools.length > 0 ? (
           <ProArea tools={proTools} stats={proAreaStats} trial={proTrial} renewsOn={proRenewsOn} favoriteToolNames={favoriteToolNames} />

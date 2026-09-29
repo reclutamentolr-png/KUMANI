@@ -330,6 +330,9 @@
     "countryOutsideItalyNote": "KUMANI nasce in Italia: nel tuo paese alcune funzionalità potrebbero essere ridotte o non disponibili, perché vigono leggi diverse (es. verifiche d'identità, programmi a premi, documenti fiscali). Puoi comunque usare la piattaforma."
   },
   "dashboard": {
+    "bachecaAlertText": "Hai ricevuto un messaggio dalla Bacheca Annunci. Rispondi presto: una risposta veloce fa la differenza.",
+    "bachecaAlertRead": "Leggi i messaggi",
+    "bachecaAlertBoard": "Vai alla Bacheca",
     "profileLater": "Più tardi",
     "completeProfileShort": "Completa profilo",
     "title": "Dashboard",
@@ -680,6 +683,7 @@
     "checkmailDescription": "Hai un'email sospetta? Caricala e scopri in pochi secondi se è una truffa: mittente, link, allegati e testo sotto la lente.",
     "antitruffa": "Manuale Anti-Truffa",
     "antitruffaDescription": "Come difendersi dalle truffe online: i raggiri più diffusi di oggi, con esempi reali, segnali d'allarme e cosa fare subito. Gratis per tutti i Kumani.",
+    "listingsMyMessages": "I miei messaggi",
     "listingsPrevPage": "« Annunci precedenti",
     "listingsNextPage": "Annunci successivi »",
     "listingsPageN": "Pagina {page}",

@@ -310,6 +310,9 @@
     "countryOutsideItalyNote": "KUMANI stammt aus Italien: In deinem Land können einige Funktionen eingeschränkt oder nicht verfügbar sein, weil dort andere Gesetze gelten (z. B. Identitätsprüfungen, Prämienprogramme, Steuerdokumente). Du kannst die Plattform trotzdem nutzen."
   },
   "dashboard": {
+    "bachecaAlertText": "Du hast eine Nachricht zu einer Community-Anzeige erhalten. Antworte bald: Eine schnelle Antwort macht den Unterschied.",
+    "bachecaAlertRead": "Nachrichten lesen",
+    "bachecaAlertBoard": "Zu den Community-Anzeigen",
     "profileLater": "Später",
     "completeProfileShort": "Profil vervollständigen",
     "growthTool": "Dein Wachstumswerkzeug",
@@ -660,6 +663,7 @@
     "checkmailDescription": "Eine verdächtige E-Mail? Lade sie hoch und erfahre in Sekunden, ob sie Betrug ist: Absender, Links, Anhänge und Text unter der Lupe.",
     "antitruffa": "Anti-Betrugs-Handbuch",
     "antitruffaDescription": "So schützt du dich vor Online-Betrug: die häufigsten Maschen von heute, mit echten Beispielen, Warnsignalen und was sofort zu tun ist. Kostenlos für alle Kumani.",
+    "listingsMyMessages": "Meine Nachrichten",
     "listingsPrevPage": "« Vorherige Anzeigen",
     "listingsNextPage": "Weitere Anzeigen »",
     "listingsPageN": "Seite {page}",

@@ -330,6 +330,9 @@
     "countryOutsideItalyNote": "KUMANI was born in Italy: in your country some features may be reduced or unavailable because different laws apply (e.g. identity checks, reward programmes, tax documents). You can still use the platform."
   },
   "dashboard": {
+    "bachecaAlertText": "You've received a message about a Community Listing. Reply soon: a quick answer makes all the difference.",
+    "bachecaAlertRead": "Read messages",
+    "bachecaAlertBoard": "Go to Community Listings",
     "profileLater": "Later",
     "completeProfileShort": "Complete profile",
     "title": "Dashboard",
@@ -680,6 +683,7 @@
     "checkmailDescription": "Got a suspicious email? Upload it and find out in seconds whether it is a scam: sender, links, attachments and text under the lens.",
     "antitruffa": "Anti-Scam Manual",
     "antitruffaDescription": "How to protect yourself from online scams: today's most common frauds, with real examples, warning signs and what to do straight away. Free for all Kumani.",
+    "listingsMyMessages": "My messages",
     "listingsPrevPage": "« Previous listings",
     "listingsNextPage": "Next listings »",
     "listingsPageN": "Page {page}",
