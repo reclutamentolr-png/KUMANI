@@ -3750,6 +3750,8 @@
     "planPro": "Pro",
     "discoverPro": "Bist du Profi? Entdecke den Pro-Tarif →",
     "backToDashboard": "← Zurück zum Dashboard",
+    "startNow": "Jetzt loslegen: zum Dashboard",
+    "startNowHint": "Alle Dienste deines Tarifs warten im Dashboard auf dich.",
     "errorNotice": "Bei der Zahlung ist ein Fehler aufgetreten. Bitte versuche es gleich noch einmal.",
     "canceledNotice": "Zahlung abgebrochen: Es wurde nichts abgebucht.",
     "manageTitle": "Verwalte dein Abo",

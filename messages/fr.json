@@ -3750,6 +3750,8 @@
     "planPro": "Pro",
     "discoverPro": "Vous êtes professionnel ? Découvrez l’offre Pro →",
     "backToDashboard": "← Retour au tableau de bord",
+    "startNow": "Commencez tout de suite : allez au Tableau de bord",
+    "startNowHint": "Tous les services de votre offre vous attendent dans le Tableau de bord.",
     "errorNotice": "Une erreur est survenue lors du paiement. Réessayez dans un instant.",
     "canceledNotice": "Paiement annulé : aucun montant n’a été débité.",
     "manageTitle": "Gérez votre abonnement",

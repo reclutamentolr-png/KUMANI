@@ -3750,6 +3750,8 @@
     "planPro": "Pro",
     "discoverPro": "¿Eres profesional? Descubre el plan Pro →",
     "backToDashboard": "← Volver al panel",
+    "startNow": "Empieza ya: ve al Panel",
+    "startNowHint": "Todos los servicios de tu plan te esperan en el Panel.",
     "errorNotice": "Se produjo un error durante el pago. Inténtalo de nuevo en un momento.",
     "canceledNotice": "Pago cancelado: no se ha realizado ningún cargo.",
     "manageTitle": "Gestiona tu suscripción",

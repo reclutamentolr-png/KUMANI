@@ -278,8 +278,38 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
           </div>
         )}
 
+        {isActive && (
+          <div className="mt-6">
+            <Link
+              href="/dashboard"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-6 py-4 text-lg font-bold text-white shadow-md transition-all hover:bg-indigo-700 hover:shadow-lg"
+            >
+              {t('startNow')} <span aria-hidden>→</span>
+            </Link>
+            <p className="mt-2 text-sm text-gray-500">{t('startNowHint')}</p>
+          </div>
+        )}
+
+        {isPrepaid && (
+          <div className="mt-6 rounded-xl border border-gray-200 bg-gray-50 p-4 text-left text-sm text-gray-700">
+            {expiresOn ? t('prepaidNote', { date: expiresOn }) : t('prepaidNoteNoDate')}
+          </div>
+        )}
+
+        {trialEndsOn && (
+          <div className="mt-6 rounded-xl border border-indigo-200 bg-indigo-50 p-4 text-left text-sm text-indigo-800">
+            {t('trialNote', { date: trialEndsOn })}
+          </div>
+        )}
+
+        {!(isActive && profile?.subscription_plan === 'pro') && (
+          <Link href="/pro" className="mt-6 block text-sm font-semibold text-indigo-600 hover:underline">
+            {t('discoverPro')}
+          </Link>
+        )}
+
         {isStripeSubscriber && (
-          <div className="mt-6 rounded-xl border border-gray-200 p-5 text-left">
+          <div className="mt-10 rounded-xl border border-gray-200 p-5 text-left">
             <h2 className="text-base font-bold text-gray-900">{t('manageTitle')}</h2>
             <p className="mt-1 text-sm text-gray-600">{t('manageText')}</p>
 
@@ -330,28 +360,11 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
             )}
           </div>
         )}
-
-        {isPrepaid && (
-          <div className="mt-6 rounded-xl border border-gray-200 bg-gray-50 p-4 text-left text-sm text-gray-700">
-            {expiresOn ? t('prepaidNote', { date: expiresOn }) : t('prepaidNoteNoDate')}
-          </div>
-        )}
-
-        {trialEndsOn && (
-          <div className="mt-6 rounded-xl border border-indigo-200 bg-indigo-50 p-4 text-left text-sm text-indigo-800">
-            {t('trialNote', { date: trialEndsOn })}
-          </div>
-        )}
-
-        {!(isActive && profile?.subscription_plan === 'pro') && (
-          <Link href="/pro" className="mt-6 block text-sm font-semibold text-indigo-600 hover:underline">
-            {t('discoverPro')}
+        {!isActive && (
+          <Link href="/dashboard" className="mt-6 inline-block text-sm text-indigo-600 hover:underline font-medium">
+            {t('backToDashboard')}
           </Link>
         )}
-
-        <Link href="/dashboard" className="mt-6 inline-block text-sm text-indigo-600 hover:underline font-medium">
-          {t('backToDashboard')}
-        </Link>
       </div>
     </div>
   )

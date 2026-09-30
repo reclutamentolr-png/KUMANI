@@ -3750,6 +3750,8 @@
     "planPro": "Pro",
     "discoverPro": "Sei un professionista? Scopri il piano Pro →",
     "backToDashboard": "← Torna alla Dashboard",
+    "startNow": "Inizia subito: vai alla Dashboard",
+    "startNowHint": "Tutti i servizi del tuo piano ti aspettano nella Dashboard.",
     "errorNotice": "Si è verificato un errore durante il pagamento. Riprova tra qualche istante.",
     "canceledNotice": "Pagamento annullato: nessun addebito è stato effettuato.",
     "manageTitle": "Gestisci il tuo abbonamento",

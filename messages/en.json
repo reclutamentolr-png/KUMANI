@@ -3750,6 +3750,8 @@
     "planPro": "Pro",
     "discoverPro": "Are you a professional? Discover the Pro plan →",
     "backToDashboard": "← Back to Dashboard",
+    "startNow": "Get started: go to the Dashboard",
+    "startNowHint": "All the services in your plan are waiting for you in the Dashboard.",
     "errorNotice": "Something went wrong with the payment. Please try again in a moment.",
     "canceledNotice": "Payment canceled: you have not been charged.",
     "manageTitle": "Manage your subscription",
