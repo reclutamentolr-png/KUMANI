@@ -76,7 +76,11 @@ export async function recordAgentCommission(invoice: InvoiceLike): Promise<void>
       ? Math.round(invoice.total_excluding_tax * (gross / Math.max(invoice.total ?? gross, 1)))
       : Math.round(gross / (1 + (await vatRate()) / 100))
   const pct = Number(kind === 'first' ? agent.commission_first_pct : agent.commission_renewal_pct)
-  const priceId = invoice.lines?.data?.[0]?.pricing?.price_details?.price ?? (invoice.lines?.data?.[0] as { price?: { id?: string } } | undefined)?.price?.id
+  // Piano venduto: la riga con l'importo più alto. Nel passaggio Base → Pro
+  // la prima riga è lo storno (negativo) del Base, la vendita è quella Pro.
+  const lines = invoice.lines?.data ?? []
+  const mainLine = lines.reduce<(typeof lines)[number] | undefined>((best, line) => (!best || line.amount > best.amount ? line : best), undefined)
+  const priceId = mainLine?.pricing?.price_details?.price ?? (mainLine as { price?: { id?: string } } | undefined)?.price?.id
   const plan = typeof priceId === 'string' && priceId === process.env.STRIPE_PRICE_ID_PRO ? 'pro' : 'base'
 
   const { error } = await client.from('agent_commissions').insert({

@@ -2,31 +2,55 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { Crown, LoaderCircle } from 'lucide-react'
-import { upgradeToPro } from '@/app/actions/plans'
+import { previewUpgradeToPro, upgradeToPro } from '@/app/actions/plans'
 
-// "Passa a Pro" per chi ha già un abbonamento Base con carta.
+// "Passa a Pro" per chi ha già un abbonamento Base con carta: prima mostra
+// l'importo esatto che Stripe addebiterà (la differenza), poi chiede conferma.
 export default function UpgradeToProButton({ label, note }: { label: string; note: string }) {
   const t = useTranslations('plans')
+  const locale = useLocale()
   const router = useRouter()
   const [busy, setBusy] = useState(false)
   const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null)
+  const [preview, setPreview] = useState<{ amount: string; prorationDate: number } | null>(null)
 
-  const upgrade = async () => {
-    if (!confirm(note)) return
+  const showError = (reason?: string) => setMessage({ ok: false, text: t(`upgradeError_${reason ?? 'stripe_error'}`) })
+
+  const askPreview = async () => {
     setBusy(true)
     setMessage(null)
     try {
-      const result = await upgradeToPro()
+      const result = await previewUpgradeToPro()
       if (result.success) {
+        const amount = new Intl.NumberFormat(locale, { style: 'currency', currency: result.currency.toUpperCase() }).format(result.amountCents / 100)
+        setPreview({ amount, prorationDate: result.prorationDate })
+      } else {
+        showError(result.reason)
+      }
+    } catch {
+      showError()
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  const confirmUpgrade = async () => {
+    if (!preview) return
+    setBusy(true)
+    setMessage(null)
+    try {
+      const result = await upgradeToPro(preview.prorationDate)
+      if (result.success) {
+        setPreview(null)
         setMessage({ ok: true, text: t('upgradeDone') })
         router.refresh()
       } else {
-        setMessage({ ok: false, text: t(`upgradeError_${result.reason ?? 'stripe_error'}`) })
+        showError(result.reason)
       }
     } catch {
-      setMessage({ ok: false, text: t('upgradeError_stripe_error') })
+      showError()
     } finally {
       setBusy(false)
     }
@@ -34,15 +58,43 @@ export default function UpgradeToProButton({ label, note }: { label: string; not
 
   return (
     <div>
-      <button
-        type="button"
-        onClick={upgrade}
-        disabled={busy}
-        className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3.5 font-bold text-[var(--ink)] disabled:opacity-50"
-      >
-        {busy ? <LoaderCircle className="h-5 w-5 animate-spin" /> : <Crown className="h-5 w-5" />} {label}
-      </button>
-      <p className="mt-2 text-xs text-gray-400">{note}</p>
+      {preview ? (
+        <div className="rounded-xl border border-[var(--gold)]/40 bg-[var(--gold)]/10 p-4">
+          <p className="text-sm text-gray-300">{t('upgradeAmountLabel')}</p>
+          <p className="mt-1 text-3xl font-extrabold text-[var(--gold-bright)]">{preview.amount}</p>
+          <p className="mt-2 text-xs text-gray-400">{t('upgradeAmountHint')}</p>
+          <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+            <button
+              type="button"
+              onClick={confirmUpgrade}
+              disabled={busy}
+              className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3 font-bold text-[var(--ink)] disabled:opacity-50"
+            >
+              {busy ? <LoaderCircle className="h-5 w-5 animate-spin" /> : <Crown className="h-5 w-5" />} {t('upgradeConfirmPay', { amount: preview.amount })}
+            </button>
+            <button
+              type="button"
+              onClick={() => setPreview(null)}
+              disabled={busy}
+              className="rounded-xl border border-white/15 px-6 py-3 font-semibold text-gray-300 disabled:opacity-50"
+            >
+              {t('upgradeCancel')}
+            </button>
+          </div>
+        </div>
+      ) : (
+        <>
+          <button
+            type="button"
+            onClick={askPreview}
+            disabled={busy}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3.5 font-bold text-[var(--ink)] disabled:opacity-50"
+          >
+            {busy ? <LoaderCircle className="h-5 w-5 animate-spin" /> : <Crown className="h-5 w-5" />} {label}
+          </button>
+          <p className="mt-2 text-xs text-gray-400">{note}</p>
+        </>
+      )}
       {message && (
         <p
           role="status"
