@@ -4,6 +4,7 @@ import { getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
 import { ArrowLeft, Gift } from 'lucide-react'
 import RewardsGrid from '@/components/RewardsGrid'
+import { isRewardsCatalogEnabled } from '@/lib/rewardsCatalog'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -15,6 +16,8 @@ export default async function RewardsPage() {
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) redirect('/login')
+  // Catalogo Premi spento dall'Admin: si torna al Portafoglio
+  if (!(await isRewardsCatalogEnabled(supabase))) redirect('/wallet')
 
   const { data: profile } = await supabase.from('profiles').select('network_points').eq('id', user.id).single()
 

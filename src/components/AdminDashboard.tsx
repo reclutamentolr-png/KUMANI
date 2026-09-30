@@ -302,6 +302,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
   const [loadingSpotlight, setLoadingSpotlight] = useState(false)
 
   const [rewards, setRewards] = useState<AdminRewardRow[]>([])
+  const [rewardsCatalogOn, setRewardsCatalogOn] = useState(false)
   const [rewardRedemptions, setRewardRedemptions] = useState<AdminRewardRedemption[]>([])
   const [loadingRewards, setLoadingRewards] = useState(false)
   const [rewardForm, setRewardForm] = useState({ title: '', description: '', imageUrl: '', pointsCost: '', isVisible: true })
@@ -665,10 +666,30 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
 
   const loadRewardsData = async () => {
     setLoadingRewards(true)
-    const [rewardsResult, redemptionsResult] = await Promise.all([listRewards(), listRewardRedemptions()])
+    const [rewardsResult, redemptionsResult, switchResult] = await Promise.all([
+      listRewards(),
+      listRewardRedemptions(),
+      supabase.from('system_settings').select('value').eq('key', 'rewards_catalog_enabled').maybeSingle(),
+    ])
     setRewards(rewardsResult.rewards)
     setRewardRedemptions(redemptionsResult.redemptions)
+    setRewardsCatalogOn(switchResult.data?.value === 'true')
     setLoadingRewards(false)
+  }
+
+  // Interruttore del Catalogo Premi: spento, gli utenti non vedono né
+  // possono riscattare premi; catalogo e riscatti restano salvati.
+  const toggleRewardsCatalog = async () => {
+    const next = !rewardsCatalogOn
+    const ok = confirm(
+      next
+        ? 'Attivare il Catalogo Premi? Gli utenti vedranno la pagina Premi e potranno riscattare i premi visibili con i Punti Community.'
+        : 'Disattivare il Catalogo Premi? La pagina Premi sparisce e nessuno può più riscattare premi. Catalogo e riscatti già fatti restano salvati.'
+    )
+    if (!ok) return
+    const result = await adminSaveSystemSettings({ rewards_catalog_enabled: next })
+    if (result.success) setRewardsCatalogOn(next)
+    else alert(result.error || 'Errore durante il salvataggio.')
   }
 
   const resetRewardForm = () => {
@@ -2169,6 +2190,31 @@ L'accesso viene registrato.`)) return
             Premi riscattabili dai Kumani con i Punti Community. Un premio già riscattato non può più essere eliminato,
             solo nascosto (disattiva &quot;Visibile&quot;).
           </p>
+        </div>
+
+        <div
+          className={`flex flex-col gap-3 rounded-xl border p-4 sm:flex-row sm:items-center sm:justify-between ${
+            rewardsCatalogOn ? 'border-green-200 bg-green-50' : 'border-amber-200 bg-amber-50'
+          }`}
+        >
+          <div>
+            <p className="font-bold text-gray-900">Catalogo Premi {rewardsCatalogOn ? 'attivo' : 'disattivato'}</p>
+            <p className="text-sm text-gray-600">
+              {rewardsCatalogOn
+                ? 'Gli utenti vedono la pagina Premi e possono riscattare i premi visibili.'
+                : 'Gli utenti non vedono la pagina Premi e non possono riscattare. Puoi comunque preparare il catalogo ed evadere i riscatti già fatti.'}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={toggleRewardsCatalog}
+            disabled={loadingRewards}
+            className={`shrink-0 rounded-lg px-4 py-2 text-sm font-semibold disabled:opacity-50 ${
+              rewardsCatalogOn ? 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50' : 'bg-green-600 text-white hover:bg-green-700'
+            }`}
+          >
+            {rewardsCatalogOn ? 'Disattiva catalogo' : 'Attiva catalogo'}
+          </button>
         </div>
 
         <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">

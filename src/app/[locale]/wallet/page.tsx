@@ -23,6 +23,7 @@ import { isActiveSubscription } from '@/lib/subscriptionGate'
 import { getCurrentRank, RANKS } from '@/lib/ranks'
 import { listMyVouchers } from '@/app/actions/vouchers'
 import { listMyRedemptions } from '@/app/actions/rewards'
+import { isRewardsCatalogEnabled } from '@/lib/rewardsCatalog'
 import WalletMembershipCard from '@/components/WalletMembershipCard'
 import WalletCouponsList from '@/components/WalletCouponsList'
 import WalletVoucherSection from '@/components/WalletVoucherSection'
@@ -95,6 +96,9 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
 
   const couponsList = coupons || []
   const myVouchers = await listMyVouchers()
+  // Catalogo Premi: se spento dall'Admin niente collegamenti; i premi già
+  // riscattati restano visibili finché ce ne sono
+  const rewardsEnabled = await isRewardsCatalogEnabled(supabase)
   // Premi riscattati dal Catalogo Premi: in preparazione finché lo Staff non
   // li evade (il codice arriva poi tra i Coupon)
   const myRedemptions = (await listMyRedemptions()) as unknown as {
@@ -218,12 +222,14 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
           <WalletSection icon={<Network className="h-5 w-5 text-[var(--gold)]" />} title={t('networkPointsTitle')}>
             <p className="text-4xl font-bold text-[var(--ink)]">{profile.network_points || 0}</p>
             <p className="mt-1 text-xs text-[var(--muted)]">{t('networkPointsDisclaimer')}</p>
-            <Link
-              href="/rewards"
-              className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]"
-            >
-              {t('networkPointsCta')} <ArrowRight className="h-4 w-4" />
-            </Link>
+            {rewardsEnabled && (
+              <Link
+                href="/rewards"
+                className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]"
+              >
+                {t('networkPointsCta')} <ArrowRight className="h-4 w-4" />
+              </Link>
+            )}
           </WalletSection>
 
           {/* Badge */}
@@ -288,6 +294,7 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
         </WalletSection>
 
         {/* I miei premi: riscatti dal Catalogo Premi e il loro stato */}
+        {(rewardsEnabled || myRedemptions.length > 0) && (
         <WalletSection icon={<Gift className="h-5 w-5 text-[var(--gold)]" />} title={t('rewardsTitle')}>
           {myRedemptions.length === 0 ? (
             <div className="flex flex-wrap items-center justify-between gap-3">
@@ -343,12 +350,15 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
                   )
                 })}
               </ul>
-              <Link href="/rewards" className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
-                {t('networkPointsCta')} <ArrowRight className="h-4 w-4" />
-              </Link>
+              {rewardsEnabled && (
+                <Link href="/rewards" className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
+                  {t('networkPointsCta')} <ArrowRight className="h-4 w-4" />
+                </Link>
+              )}
             </>
           )}
         </WalletSection>
+        )}
 
         {/* Coupon */}
         <WalletSection id="wallet-coupon" icon={<Ticket className="h-5 w-5 text-[var(--gold)]" />} title={t('couponTitle')}>

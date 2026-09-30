@@ -91,6 +91,7 @@ const GENERAL_SETTINGS_KEYS = new Set([
   'verifoto_daily_user', 'verifoto_monthly_ops', 'checkmail_daily_user',
   'mosaic_pixels_day', 'mosaic_bonus_pixels', 'mosaic_min_login_days',
   'fabula_min_login_days', 'fabula_hide_after_reports',
+  'rewards_catalog_enabled',
 ])
 
 // Salva solo le impostazioni cambiate (il modulo manda le differenze), così
