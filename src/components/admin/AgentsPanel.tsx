@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState, type FormEvent, type ReactNode } from 'react'
+import ShareCredentials from '@/components/admin/ShareCredentials'
 import {
   Ban,
   BriefcaseBusiness,
@@ -491,7 +492,7 @@ function AgentForm({
 
 // ── Credenziali del nuovo agente ────────────────────────────────────────
 
-type Credentials = { url: string; email: string; password: string; name: string; code: string; link: string }
+type Credentials = { url: string; email: string; password: string; name: string; code: string; link: string; phone?: string }
 
 function CredentialsBox({ credentials, onClose }: { credentials: Credentials; onClose: () => void }) {
   const rows: [string, string][] = [
@@ -502,6 +503,19 @@ function CredentialsBox({ credentials, onClose }: { credentials: Credentials; on
     ['Link agente', credentials.link],
   ]
   const all = rows.map(([k, v]) => `${k}: ${v}`).join('\n')
+  const firstName = credentials.name.split(' ')[0]
+  const message = [
+    `Ciao ${firstName}, benvenuto in KUMANI come Agente venditore!`,
+    '',
+    `Accedi da: ${credentials.url}`,
+    `Email: ${credentials.email}`,
+    `Password: ${credentials.password}`,
+    '',
+    `Il tuo codice agente: ${credentials.code}`,
+    `Il tuo link per i clienti: ${credentials.link}`,
+    '',
+    'Conserva la password in un posto sicuro e non condividerla con nessuno.',
+  ].join('\n')
   return (
     <div className="rounded-xl border border-[var(--gold)] bg-[var(--gold-pale)] p-4 shadow-sm">
       <div className="flex items-start justify-between gap-2">
@@ -521,6 +535,7 @@ function CredentialsBox({ credentials, onClose }: { credentials: Credentials; on
       <div className="mt-3 flex flex-wrap items-center gap-3">
         <CopyButton text={all} label="Copia tutto" />
         <CopyButton text={credentials.link} label="Copia link" />
+        <ShareCredentials message={message} subject="KUMANI: il tuo accesso da Agente" email={credentials.email} phone={credentials.phone} />
         <p className="text-xs font-semibold text-amber-800">La password non verrà più mostrata: copiala ora e inviala all&apos;agente.</p>
       </div>
     </div>
@@ -1097,6 +1112,7 @@ export default function AgentsPanel() {
                     name: `${input.firstName} ${input.lastName}`,
                     code: result.code,
                     link: `${origin}/register?agente=${result.code}`,
+                    phone: input.phone,
                   })
                   setFormOpen(false)
                   load()

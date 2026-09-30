@@ -33,6 +33,7 @@ import {
   type TranslationChange,
 } from '@/app/actions/translations'
 import { LOCALE_LABELS, SECTION_LABELS, TRANSLATOR_LOCALES, isTranslatorLocale } from '@/lib/translationKeys'
+import ShareCredentials from '@/components/admin/ShareCredentials'
 
 type Tab = 'translators' | 'changes'
 
@@ -252,6 +253,15 @@ function CreateTranslatorForm({ onCreated }: { onCreated: (c: Credentials) => vo
 
 function CredentialsBox({ credentials, onClose }: { credentials: Credentials; onClose: () => void }) {
   const all = `Indirizzo: ${credentials.url}\nEmail: ${credentials.email}\nPassword: ${credentials.password}`
+  const message = [
+    `Ciao ${credentials.name.split(' ')[0]}, ecco il tuo accesso all'Area Traduttori di KUMANI.`,
+    '',
+    `Accedi da: ${credentials.url}`,
+    `Email: ${credentials.email}`,
+    `Password: ${credentials.password}`,
+    '',
+    'Conserva la password in un posto sicuro e non condividerla con nessuno.',
+  ].join('\n')
   return (
     <div className="rounded-xl border border-[var(--gold)] bg-[var(--gold-pale)] p-4 shadow-sm">
       <div className="flex items-start justify-between gap-2">
@@ -276,6 +286,7 @@ function CredentialsBox({ credentials, onClose }: { credentials: Credentials; on
       </dl>
       <div className="mt-3 flex flex-wrap items-center gap-3">
         <CopyButton text={all} label="Copia tutto" />
+        <ShareCredentials message={message} subject="KUMANI: il tuo accesso all'Area Traduttori" email={credentials.email} />
         <p className="text-xs font-semibold text-amber-800">La password non verrà più mostrata: copiala ora e inviala al traduttore.</p>
       </div>
     </div>
