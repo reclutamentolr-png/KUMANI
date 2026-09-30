@@ -14,7 +14,7 @@ export default function UpgradeToProButton({ label, note }: { label: string; not
   const router = useRouter()
   const [busy, setBusy] = useState(false)
   const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null)
-  const [preview, setPreview] = useState<{ amount: string; prorationDate: number } | null>(null)
+  const [preview, setPreview] = useState<{ amount: string; prorationDate: number; business: boolean } | null>(null)
   // Consenso all'avvio immediato, obbligatorio come nel checkout
   const [agreed, setAgreed] = useState(false)
   const tw = useTranslations('withdrawal')
@@ -28,7 +28,7 @@ export default function UpgradeToProButton({ label, note }: { label: string; not
       const result = await previewUpgradeToPro()
       if (result.success) {
         const amount = new Intl.NumberFormat(locale, { style: 'currency', currency: result.currency.toUpperCase() }).format(result.amountCents / 100)
-        setPreview({ amount, prorationDate: result.prorationDate })
+        setPreview({ amount, prorationDate: result.prorationDate, business: result.business })
       } else {
         showError(result.reason)
       }
@@ -68,7 +68,7 @@ export default function UpgradeToProButton({ label, note }: { label: string; not
           <p className="mt-2 text-xs text-gray-400">{t('upgradeAmountHint')}</p>
           <label className="mt-4 flex items-start gap-2 text-left text-xs leading-relaxed text-gray-300">
             <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--gold)]" />
-            <span>{tw('consentLabel')}</span>
+            <span>{tw(preview.business ? 'businessDeclaration' : 'consentLabel')}</span>
           </label>
           <div className="mt-4 flex flex-col gap-2 sm:flex-row">
             <button

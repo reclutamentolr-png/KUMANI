@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 import { getStripe } from '@/lib/stripe'
 import { verifyAdmin } from '@/lib/verifyAdmin'
 import { findStripeSubscriptionForUser } from '@/lib/stripeCustomer'
-import { proportionalRefund, withdrawableInvoices } from '@/lib/withdrawal'
+import { isBusinessPurchase, proportionalRefund, withdrawableInvoices } from '@/lib/withdrawal'
 
 const db = () =>
   createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
@@ -17,7 +17,7 @@ const db = () =>
 // Cliente: richiesta di recesso da /billing
 // ---------------------------------------------------------------------------
 
-export async function requestWithdrawal(reason: string): Promise<{ success: boolean; reason?: 'not_logged' | 'not_stripe' | 'expired' | 'already' | 'error' }> {
+export async function requestWithdrawal(reason: string): Promise<{ success: boolean; reason?: 'not_logged' | 'not_stripe' | 'business' | 'expired' | 'already' | 'error' }> {
   const supabase = await createClient()
   const {
     data: { user },
@@ -32,6 +32,7 @@ export async function requestWithdrawal(reason: string): Promise<{ success: bool
     const found = await findStripeSubscriptionForUser(user.id, user.email)
     const subscription = found?.subscription
     if (!subscription) return { success: false, reason: 'not_stripe' }
+    if (isBusinessPurchase(subscription)) return { success: false, reason: 'business' }
     const invoices = await withdrawableInvoices(subscription.id)
     if (invoices.length === 0) return { success: false, reason: 'expired' }
 

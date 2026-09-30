@@ -5474,6 +5474,36 @@
     "error_error": "Die Anfrage konnte nicht gesendet werden. Versuche es gleich noch einmal oder schreib uns über die Kontaktseite.",
     "error_expired": "Die 14-tägige Widerrufsfrist ist abgelaufen.",
     "error_already": "Du hast bereits einen laufenden Widerruf.",
-    "error_not_stripe": "Wir haben kein mit Karte bezahltes Abo gefunden."
+    "error_not_stripe": "Wir haben kein mit Karte bezahltes Abo gefunden.",
+    "asConsumer": "Kauf als Privatperson",
+    "asBusiness": "Kauf als Unternehmen oder Freiberufler",
+    "businessName": "Firmenname oder Name der Kanzlei",
+    "vatNumber": "USt-IdNr.",
+    "vatHint": "Italienische USt-IdNr. (11 Ziffern) oder aus einem anderen EU-Land mit Länderkürzel (z. B. DE123456789). Sie erscheint auf der Rechnung.",
+    "businessDeclaration": "Ich erkläre, dass ich für meine gewerbliche oder berufliche Tätigkeit kaufe: Mir ist bewusst, dass für diesen Kauf das Widerrufsrecht für Verbraucher nicht gilt.",
+    "businessRequired": "Um als Unternehmen oder Freiberufler zu kaufen, gib den Firmennamen ein und setze das Häkchen bei der Erklärung.",
+    "vatInvalid": "Die USt-IdNr. ist ungültig: Bitte prüfe sie (für EU-Länder außer Italien ist das Länderkürzel nötig, z. B. DE).",
+    "businessNoWithdrawal": "Abo für deine Tätigkeit mit USt-IdNr. gekauft: Das Widerrufsrecht für Verbraucher gilt nicht."
+  },
+  "purchaseEmail": {
+    "subject_create": "KUMANI: Bestätigung deines {plan}-Abos",
+    "subject_update": "KUMANI: Bestätigung des Wechsels zu {plan}",
+    "subject_cycle": "KUMANI: Bestätigung der Verlängerung von {plan}",
+    "greeting": "Hallo,",
+    "intro_create": "danke für dein KUMANI-Abo. Hier ist die Übersicht deines Kaufs.",
+    "intro_update": "dein Abo wurde auf {plan} umgestellt. Hier ist die Übersicht der Zahlung.",
+    "intro_cycle": "dein KUMANI-Abo wurde verlängert. Hier ist die Übersicht der Zahlung.",
+    "labelPlan": "Tarif",
+    "labelAmount": "Gezahlter Betrag",
+    "labelDate": "Zahlungsdatum",
+    "labelValidUntil": "Gültig bis",
+    "labelBuyer": "Rechnungsempfänger",
+    "consumerConsent": "Wie von dir am {date} verlangt, wurde das Abo sofort aktiviert, noch vor Ablauf der 14-tägigen Widerrufsfrist.",
+    "consumerWithdrawal": "Widerrufsrecht: Du kannst bis zum {deadline} ({days} Tage nach der Zahlung) auf der Seite Abo widerrufen. Wir erstatten dir den noch nicht genutzten Teil des Abos innerhalb von 14 Tagen nach deiner Anfrage.",
+    "businessNote": "Kauf für deine Tätigkeit ({name}, USt-IdNr. {vat}): Wie bei der Zahlung erklärt, gilt das Widerrufsrecht für Verbraucher nicht.",
+    "manage": "Auf der Seite Abo kannst du die Karte ändern, Rechnungen herunterladen oder die Verlängerung kündigen:",
+    "terms": "Nutzungsbedingungen:",
+    "footer": "Bewahre diese E-Mail auf: Sie ist die Bestätigung deines Vertrags.",
+    "signature": "Dein KUMANI-Team"
   }
 }

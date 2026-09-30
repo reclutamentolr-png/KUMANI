@@ -5474,6 +5474,36 @@
     "error_error": "No se ha podido enviar la solicitud. Inténtalo de nuevo en un momento o escríbenos desde la página Contacto.",
     "error_expired": "El plazo de 14 días para desistir ha vencido.",
     "error_already": "Ya tienes una solicitud de desistimiento en curso.",
-    "error_not_stripe": "No hemos encontrado ninguna suscripción pagada con tarjeta."
+    "error_not_stripe": "No hemos encontrado ninguna suscripción pagada con tarjeta.",
+    "asConsumer": "Compra como particular",
+    "asBusiness": "Compra como empresa o profesional",
+    "businessName": "Razón social o nombre del despacho",
+    "vatNumber": "Número de IVA",
+    "vatHint": "Número de IVA italiano (11 cifras) o de otro país de la UE con su prefijo (p. ej. ESX1234567X). Aparecerá en la factura.",
+    "businessDeclaration": "Declaro que compro para mi actividad empresarial o profesional: sé que a esta compra no se aplica el derecho de desistimiento de los consumidores.",
+    "businessRequired": "Para comprar como empresa o profesional, introduce la razón social y marca la declaración.",
+    "vatInvalid": "El número de IVA no es válido: compruébalo (para países de la UE distintos de Italia se necesita el prefijo, p. ej. ES).",
+    "businessNoWithdrawal": "Suscripción comprada para tu actividad con número de IVA: no se aplica el derecho de desistimiento de los consumidores."
+  },
+  "purchaseEmail": {
+    "subject_create": "KUMANI: confirmación de tu suscripción {plan}",
+    "subject_update": "KUMANI: confirmación del cambio a {plan}",
+    "subject_cycle": "KUMANI: confirmación de la renovación de {plan}",
+    "greeting": "Hola:",
+    "intro_create": "gracias por suscribirte a KUMANI. Este es el resumen de tu compra.",
+    "intro_update": "tu suscripción ha pasado al plan {plan}. Este es el resumen del pago.",
+    "intro_cycle": "tu suscripción a KUMANI se ha renovado. Este es el resumen del pago.",
+    "labelPlan": "Plan",
+    "labelAmount": "Importe pagado",
+    "labelDate": "Fecha del pago",
+    "labelValidUntil": "Válido hasta el",
+    "labelBuyer": "Titular",
+    "consumerConsent": "Como solicitaste el {date}, la suscripción se activó de inmediato, antes de que terminaran los 14 días del derecho de desistimiento.",
+    "consumerWithdrawal": "Derecho de desistimiento: puedes desistir hasta el {deadline} ({days} días desde el pago) desde la página Suscripción. Te reembolsaremos la parte de la suscripción que aún no hayas usado, en los 14 días siguientes a tu solicitud.",
+    "businessNote": "Compra realizada para tu actividad ({name}, IVA {vat}): como declaraste al pagar, no se aplica el derecho de desistimiento de los consumidores.",
+    "manage": "Puedes cambiar de tarjeta, descargar las facturas o cancelar la renovación desde la página Suscripción:",
+    "terms": "Condiciones del servicio:",
+    "footer": "Guarda este correo: es la confirmación de tu contrato.",
+    "signature": "El equipo de KUMANI"
   }
 }

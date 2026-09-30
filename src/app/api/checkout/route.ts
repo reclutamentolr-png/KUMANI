@@ -6,6 +6,7 @@ import { isActiveSubscription } from '@/lib/subscriptionGate'
 import { cookies } from 'next/headers'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { recordConsent } from '@/lib/withdrawal'
+import { parseVatInput } from '@/lib/vat'
 import { locales, defaultLocale } from '../../../../i18n'
 
 export async function POST(request: Request) {
@@ -25,11 +26,23 @@ export async function POST(request: Request) {
       return NextResponse.redirect(new URL(plan === 'pro' ? '/pro?error=unavailable' : '/billing?error=true', base), 303)
     }
 
-    // Consenso all'avvio immediato (casella obbligatoria nel modulo): senza,
+    // Privato: consenso all'avvio immediato obbligatorio. Azienda o
+    // professionista: ragione sociale, P.IVA valida e dichiarazione B2B (per
+    // questi acquisti non c'è il recesso del consumatore). Se manca qualcosa
     // si torna alla pagina di partenza con l'avviso.
     const form = await request.formData().catch(() => null)
-    if (form?.get('immediate_start') !== '1') {
-      return NextResponse.redirect(new URL(plan === 'pro' ? '/pro?error=consent' : '/billing?error=consent', base), 303)
+    const backWith = (error: string) =>
+      NextResponse.redirect(new URL(plan === 'pro' ? `/pro?error=${error}` : `/billing?error=${error}`, base), 303)
+    const isBusiness = form?.get('buyer_type') === 'business'
+    let business: { name: string; vat: string } | null = null
+    if (isBusiness) {
+      const name = String(form?.get('business_name') ?? '').trim().slice(0, 200)
+      const vat = parseVatInput(String(form?.get('vat_number') ?? ''))
+      if (!name || form?.get('business_declaration') !== '1') return backWith('business')
+      if (!vat?.ok) return backWith('vat')
+      business = { name, vat: vat.normalized }
+    } else if (form?.get('immediate_start') !== '1') {
+      return backWith('consent')
     }
     const cookieLocale = (await cookies()).get('NEXT_LOCALE')?.value
     const locale = cookieLocale && locales.includes(cookieLocale) ? cookieLocale : defaultLocale
@@ -52,6 +65,24 @@ export async function POST(request: Request) {
       return NextResponse.redirect(new URL(plan === 'pro' ? '/pro' : '/billing', base), 303)
     }
 
+    // Dati dell'acquisto anche su Stripe (checkout e abbonamento): servono a
+    // webhook, email di conferma e recesso.
+    const now = new Date().toISOString()
+    const purchaseMeta: Record<string, string> = business
+      ? { buyer_type: 'business', business_name: business.name, vat_number: business.vat, business_declaration: now, locale }
+      : { buyer_type: 'consumer', immediate_start_consent: now, locale }
+
+    // Azienda: cliente Stripe con ragione sociale e P.IVA, così compaiono
+    // in fattura. Se Stripe rifiuta il formato della P.IVA si crea senza.
+    let customerId: string | null = null
+    if (business) {
+      const stripe = getStripe()
+      const customer = await stripe.customers
+        .create({ email: user.email, name: business.name, tax_id_data: [{ type: 'eu_vat', value: business.vat }], metadata: { userId: user.id } })
+        .catch(() => stripe.customers.create({ email: user.email, name: business.name, metadata: { userId: user.id, vat_number: business.vat } }))
+      customerId = customer.id
+    }
+
     const session = await getStripe().checkout.sessions.create({
       mode: 'subscription',
       payment_method_types: ['card'],
@@ -64,7 +95,7 @@ export async function POST(request: Request) {
       metadata: {
         userId: user.id,
         plan,
-        immediate_start_consent: new Date().toISOString(),
+        ...purchaseMeta,
       },
       // Propaga lo stesso userId anche sull'oggetto Subscription (non solo
       // sulla Checkout Session): senza questo, gli eventi successivi
@@ -74,7 +105,7 @@ export async function POST(request: Request) {
         metadata: {
           userId: user.id,
           plan,
-          immediate_start_consent: new Date().toISOString(),
+          ...purchaseMeta,
         },
       },
       // session_id nell'URL permette a /billing di verificare e attivare
@@ -82,7 +113,7 @@ export async function POST(request: Request) {
       // `stripe listen` in ascolto).
       success_url: `${SITE_URL}/billing?success=true&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${SITE_URL}/billing?canceled=true`,
-      customer_email: user.email,
+      ...(customerId ? { customer: customerId } : { customer_email: user.email }),
     })
 
     // Controllo esplicito per evitare l'errore "string | null" di TypeScript
@@ -93,7 +124,7 @@ export async function POST(request: Request) {
     const service = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
       auth: { autoRefreshToken: false, persistSession: false },
     })
-    await recordConsent(service, { userId: user.id, kind: 'checkout', plan, stripeRef: session.id, locale })
+    await recordConsent(service, { userId: user.id, kind: 'checkout', plan, stripeRef: session.id, locale, business })
     
     return NextResponse.redirect(session.url, 303)
     

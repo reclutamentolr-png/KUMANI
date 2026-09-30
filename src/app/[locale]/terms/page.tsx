@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     'Termini di servizio della piattaforma Kumani e regolamento trasparente del Programma Vantaggi: punti, bonus, coupon e iniziative esclusive.'
 }
 
-const LAST_UPDATE = '30 settembre 2026'
+const LAST_UPDATE = '1 ottobre 2026'
 
 export default function TermsPage() {
   return (
@@ -387,6 +387,17 @@ export default function TermsPage() {
                 recesso. In tal caso, se recede, riceve il rimborso della sola parte dell&apos;abbonamento non ancora utilizzata, calcolata in
                 proporzione ai giorni trascorsi fino alla richiesta di recesso (art. 57, comma 3, Codice del Consumo). La richiesta di avvio
                 immediato viene registrata con data, ora e testo accettato.
+              </p>
+              <p>
+                <strong>Acquisti di aziende e professionisti.</strong> Chi acquista l&apos;abbonamento per la propria attività
+                d&apos;impresa o professionale, indicando ragione sociale e partita IVA e dichiarandolo al pagamento, non è un consumatore:
+                per questi acquisti il diritto di recesso di 14 giorni non si applica e l&apos;importo pagato non è rimborsabile, salvo i casi
+                previsti dalla legge.
+              </p>
+              <p>
+                Dopo ogni pagamento (primo acquisto, passaggio a Pro, rinnovo) l&apos;utente riceve via email la conferma del contratto, con
+                il riepilogo dell&apos;acquisto e, per i consumatori, la conferma della richiesta di avvio immediato e le istruzioni per il
+                recesso.
               </p>
               <p>
                 La disdetta (dalla pagina Abbonamento → &ldquo;Gestisci abbonamento&rdquo;) interrompe invece i rinnovi successivi: il periodo già

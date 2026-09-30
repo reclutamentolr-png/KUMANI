@@ -4,6 +4,7 @@ import { createClient } from '@supabase/supabase-js'
 import { getStripe } from '@/lib/stripe'
 import { isPlatformFeeType, markPlatformFeesPaid } from '@/lib/eventFees'
 import { recordAgentCommission, reverseAgentCommission } from '@/lib/agentCommissions'
+import { sendPurchaseConfirmation } from '@/lib/purchaseEmail'
 
 // Creato alla richiesta e non al caricamento del modulo: così `next build`
 // non fallisce se le variabili d'ambiente non sono disponibili in build.
@@ -35,8 +36,14 @@ export async function POST(req: NextRequest) {
   // cliente arrivato dal link di un agente; rimborso = provvigione annullata)
   if (event.type === 'invoice.paid' || event.type === 'charge.refunded') {
     try {
-      if (event.type === 'invoice.paid') await recordAgentCommission(event.data.object as Stripe.Invoice)
-      else await reverseAgentCommission(event.data.object as Stripe.Charge)
+      if (event.type === 'invoice.paid') {
+        // Email di conferma dell'acquisto (supporto durevole): un errore
+        // qui non blocca le provvigioni né fa ripetere l'evento.
+        await sendPurchaseConfirmation(event.data.object as Stripe.Invoice).catch((err) =>
+          console.error('❌ Email di conferma acquisto:', err instanceof Error ? err.message : err)
+        )
+        await recordAgentCommission(event.data.object as Stripe.Invoice)
+      } else await reverseAgentCommission(event.data.object as Stripe.Charge)
       return NextResponse.json({ received: true })
     } catch (err) {
       console.error(`❌ Provvigione agente (${event.type}) non registrata:`, err instanceof Error ? err.message : err)

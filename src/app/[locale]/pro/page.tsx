@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, CheckCircle2, Crown } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import Logo from '@/components/Logo'
 import UpgradeToProButton from '@/components/UpgradeToProButton'
+import CheckoutForm from '@/components/billing/CheckoutForm'
 import StartProTrialButton from '@/components/StartProTrialButton'
 import { createClient } from '@/lib/supabase/server'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
@@ -124,7 +125,11 @@ export default async function ProPage({
               {price} € <span className="text-base font-medium text-gray-400">{t('perYear')}</span>
             </p>
             {error === 'unavailable' && <p className="mt-3 text-sm text-amber-300">{t('proUnavailable')}</p>}
-            {error === 'consent' && <p className="mt-3 text-sm text-amber-300">{tw('consentRequired')}</p>}
+            {(error === 'consent' || error === 'business' || error === 'vat') && (
+              <p className="mt-3 text-sm text-amber-300">
+                {error === 'consent' ? tw('consentRequired') : error === 'vat' ? tw('vatInvalid') : tw('businessRequired')}
+              </p>
+            )}
 
             <div className="mt-6">
               {!user ? (
@@ -159,18 +164,26 @@ export default async function ProPage({
                   ) : hasStripeSubscription ? (
                     <UpgradeToProButton label={t('ctaUpgrade')} note={t('upgradeNote')} />
                   ) : (
-                    <form action="/api/checkout?plan=pro" method="POST" className="space-y-3">
-                      <label className="flex items-start gap-2 text-left text-xs leading-relaxed text-gray-300">
-                        <input type="checkbox" name="immediate_start" value="1" required className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--gold)]" />
-                        <span>{tw('consentLabel')}</span>
-                      </label>
+                    <CheckoutForm
+                      action="/api/checkout?plan=pro"
+                      dark
+                      texts={{
+                        asConsumer: tw('asConsumer'),
+                        asBusiness: tw('asBusiness'),
+                        consentLabel: tw('consentLabel'),
+                        businessName: tw('businessName'),
+                        vatNumber: tw('vatNumber'),
+                        vatHint: tw('vatHint'),
+                        businessDeclaration: tw('businessDeclaration'),
+                      }}
+                    >
                       <button
                         type="submit"
                         className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3.5 font-bold text-[var(--ink)]"
                       >
                         <Crown className="h-5 w-5" /> {t('ctaSubscribePro', { price })}
                       </button>
-                    </form>
+                    </CheckoutForm>
                   )}
                   {!trialUsed && plan !== 'pro' && <StartProTrialButton label={t('ctaStartTrial', { days: trialDays })} />}
                 </div>

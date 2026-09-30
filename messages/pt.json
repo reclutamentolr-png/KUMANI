@@ -5474,6 +5474,36 @@
     "error_error": "Não foi possível enviar o pedido. Tente novamente dentro de momentos ou escreva-nos a partir da página Contactos.",
     "error_expired": "O prazo de 14 dias para a livre resolução terminou.",
     "error_already": "Já tem um pedido de livre resolução em curso.",
-    "error_not_stripe": "Não encontrámos nenhuma subscrição paga com cartão."
+    "error_not_stripe": "Não encontrámos nenhuma subscrição paga com cartão.",
+    "asConsumer": "Compra como particular",
+    "asBusiness": "Compra como empresa ou profissional",
+    "businessName": "Denominação social ou nome do escritório",
+    "vatNumber": "Número de IVA",
+    "vatHint": "Número de IVA italiano (11 dígitos) ou de outro país da UE com o prefixo (ex. PT123456789). Aparecerá na fatura.",
+    "businessDeclaration": "Declaro que compro para a minha atividade empresarial ou profissional: sei que a esta compra não se aplica o direito de livre resolução dos consumidores.",
+    "businessRequired": "Para comprar como empresa ou profissional, indique a denominação social e assinale a declaração.",
+    "vatInvalid": "O número de IVA não é válido: verifique-o (para países da UE que não a Itália é necessário o prefixo, ex. PT).",
+    "businessNoWithdrawal": "Subscrição comprada para a sua atividade com número de IVA: não se aplica o direito de livre resolução dos consumidores."
+  },
+  "purchaseEmail": {
+    "subject_create": "KUMANI: confirmação da sua subscrição {plan}",
+    "subject_update": "KUMANI: confirmação da passagem para {plan}",
+    "subject_cycle": "KUMANI: confirmação da renovação de {plan}",
+    "greeting": "Olá,",
+    "intro_create": "obrigado por subscrever o KUMANI. Aqui está o resumo da sua compra.",
+    "intro_update": "a sua subscrição passou para o plano {plan}. Aqui está o resumo do pagamento.",
+    "intro_cycle": "a sua subscrição KUMANI foi renovada. Aqui está o resumo do pagamento.",
+    "labelPlan": "Plano",
+    "labelAmount": "Valor pago",
+    "labelDate": "Data do pagamento",
+    "labelValidUntil": "Válido até",
+    "labelBuyer": "Titular",
+    "consumerConsent": "Como pediu em {date}, a subscrição foi ativada de imediato, antes do fim dos 14 dias do direito de livre resolução.",
+    "consumerWithdrawal": "Direito de livre resolução: pode resolver o contrato até {deadline} ({days} dias após o pagamento) a partir da página Subscrição. Reembolsaremos a parte da subscrição ainda não utilizada, no prazo de 14 dias a contar do pedido.",
+    "businessNote": "Compra efetuada para a sua atividade ({name}, IVA {vat}): como declarado no pagamento, não se aplica o direito de livre resolução dos consumidores.",
+    "manage": "Pode mudar de cartão, descarregar as faturas ou cancelar a renovação a partir da página Subscrição:",
+    "terms": "Condições do serviço:",
+    "footer": "Guarde este email: é a confirmação do seu contrato.",
+    "signature": "A equipa KUMANI"
   }
 }

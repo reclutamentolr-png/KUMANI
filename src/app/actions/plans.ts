@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 import type Stripe from 'stripe'
 import { getLocale } from 'next-intl/server'
 import { getStripe } from '@/lib/stripe'
-import { recordConsent } from '@/lib/withdrawal'
+import { isBusinessPurchase, recordConsent } from '@/lib/withdrawal'
 
 const getServiceClient = () =>
   createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
@@ -64,7 +64,9 @@ async function findUpgradableSubscription(): Promise<
 // prorationDate va ripassata a upgradeToPro perché l'importo addebitato sia
 // esattamente quello mostrato.
 export async function previewUpgradeToPro(): Promise<
-  { success: true; amountCents: number; currency: string; prorationDate: number } | { success: false; reason: UpgradeReason }
+  // business: abbonamento acquistato con P.IVA (dichiarazione B2B al posto del consenso da privato)
+  | { success: true; amountCents: number; currency: string; prorationDate: number; business: boolean }
+  | { success: false; reason: UpgradeReason }
 > {
   try {
     const found = await findUpgradableSubscription()
@@ -79,7 +81,13 @@ export async function previewUpgradeToPro(): Promise<
         proration_date: prorationDate,
       },
     })
-    return { success: true, amountCents: Math.max(preview.amount_due, 0), currency: preview.currency, prorationDate }
+    return {
+      success: true,
+      amountCents: Math.max(preview.amount_due, 0),
+      currency: preview.currency,
+      prorationDate,
+      business: isBusinessPurchase(found.subscription),
+    }
   } catch (err) {
     console.error('Errore anteprima passaggio a Pro:', err)
     return { success: false, reason: 'stripe_error' }
@@ -110,7 +118,12 @@ export async function upgradeToPro(prorationDate?: number, immediateStart = fals
       proration_behavior: 'always_invoice',
       ...(useDate ? { proration_date: useDate } : {}),
       payment_behavior: 'error_if_incomplete',
-      metadata: { ...subscription.metadata, userId, plan: 'pro', immediate_start_consent: new Date().toISOString() },
+      metadata: {
+        ...subscription.metadata,
+        userId,
+        plan: 'pro',
+        [isBusinessPurchase(subscription) ? 'business_declaration' : 'immediate_start_consent']: new Date().toISOString(),
+      },
       expand: ['latest_invoice'],
     })
 
@@ -128,7 +141,15 @@ export async function upgradeToPro(prorationDate?: number, immediateStart = fals
       .update({ subscription_plan: 'pro', subscription_status: 'active', subscription_source: 'stripe' })
       .eq('id', userId)
     if (updateError) console.error('Errore salvataggio piano Pro (arriverà col webhook):', updateError.message)
-    await recordConsent(getServiceClient(), { userId, kind: 'upgrade', plan: 'pro', stripeRef: subscription.id, locale: await getLocale() })
+    const meta = subscription.metadata ?? {}
+    await recordConsent(getServiceClient(), {
+      userId,
+      kind: 'upgrade',
+      plan: 'pro',
+      stripeRef: subscription.id,
+      locale: await getLocale(),
+      business: isBusinessPurchase(subscription) ? { name: meta.business_name ?? '', vat: meta.vat_number ?? '' } : null,
+    })
 
     revalidatePath('/dashboard')
     revalidatePath('/pro')

@@ -8,7 +8,8 @@ import type Stripe from 'stripe'
 import { getStripe } from '@/lib/stripe'
 import { isActiveSubscription } from '@/lib/subscriptionGate'
 import { findStripeSubscriptionForUser, subscriptionPeriodEnd } from '@/lib/stripeCustomer'
-import { withdrawableInvoices, withdrawalDeadline } from '@/lib/withdrawal'
+import { isBusinessPurchase, withdrawableInvoices, withdrawalDeadline } from '@/lib/withdrawal'
+import CheckoutForm from '@/components/billing/CheckoutForm'
 import WithdrawalRequest from '@/components/billing/WithdrawalRequest'
 import { locales, defaultLocale } from '../../../i18n'
 
@@ -134,12 +135,15 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
   // nei 14 giorni (null se non si può più recedere)
   let withdrawalUntil: string | null = null
   let withdrawalEarliestPaid: number | null = null
+  let isBusiness = false
   if (isStripeSubscriber) {
     try {
       const found = await findStripeSubscriptionForUser(user.id, user.email)
       const sub = found?.subscription
       if (sub) {
-        const invoices = await withdrawableInvoices(sub.id)
+        // Acquisto come azienda/professionista: niente recesso del consumatore
+        isBusiness = isBusinessPurchase(sub)
+        const invoices = isBusiness ? [] : await withdrawableInvoices(sub.id)
         const deadline = withdrawalDeadline(invoices)
         if (deadline) {
           withdrawalUntil = dateFormat.format(deadline)
@@ -181,6 +185,15 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
   }
   const tw = await getTranslations({ locale, namespace: 'withdrawal' })
   const money = (cents: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(cents / 100)
+  const checkoutTexts = {
+    asConsumer: tw('asConsumer'),
+    asBusiness: tw('asBusiness'),
+    consentLabel: tw('consentLabel'),
+    businessName: tw('businessName'),
+    vatNumber: tw('vatNumber'),
+    vatHint: tw('vatHint'),
+    businessDeclaration: tw('businessDeclaration'),
+  }
   const canRequestWithdrawal = !!withdrawalUntil && withdrawal?.status !== 'pending'
 
   const portalNotice =
@@ -198,8 +211,10 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
             {checkoutError === 'true' ? t('errorNotice') : t('canceledNotice')}
           </div>
         )}
-        {!isActive && checkoutError === 'consent' && (
-          <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">{tw('consentRequired')}</div>
+        {!isActive && (checkoutError === 'consent' || checkoutError === 'business' || checkoutError === 'vat') && (
+          <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+            {checkoutError === 'consent' ? tw('consentRequired') : checkoutError === 'vat' ? tw('vatInvalid') : tw('businessRequired')}
+          </div>
         )}
 
         {withdrawal && (
@@ -244,18 +259,14 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
         </p>
 
         {!isActive && (
-          <form action="/api/checkout" method="POST" className="space-y-3">
-            <label className="flex items-start gap-2 text-left text-xs leading-relaxed text-gray-600">
-              <input type="checkbox" name="immediate_start" value="1" required className="mt-0.5 h-4 w-4 shrink-0 accent-indigo-600" />
-              <span>{tw('consentLabel')}</span>
-            </label>
+          <CheckoutForm action="/api/checkout" texts={checkoutTexts}>
             <button
               type="submit"
               className="w-full bg-indigo-600 text-white font-bold py-3 px-6 rounded-xl hover:bg-indigo-700 transition-all shadow-md hover:shadow-lg"
             >
               {t('subscribeCta')}
             </button>
-          </form>
+          </CheckoutForm>
         )}
 
         {isActive && (
@@ -289,6 +300,7 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
               </button>
             </form>
             <p className="mt-2 text-xs text-gray-500">{t('manageStripeNote')}</p>
+            {isBusiness && <p className="mt-3 text-xs text-gray-500">{tw('businessNoWithdrawal')}</p>}
 
             {canRequestWithdrawal && withdrawalUntil && (
               <div className="mt-5 border-t border-gray-200 pt-4">
@@ -308,6 +320,7 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
                       expired: tw('error_expired'),
                       already: tw('error_already'),
                       not_stripe: tw('error_not_stripe'),
+                      business: tw('businessNoWithdrawal'),
                       not_logged: tw('error_error'),
                     },
                   }}

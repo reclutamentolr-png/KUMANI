@@ -5474,6 +5474,36 @@
     "error_error": "Impossible d'envoyer la demande. Réessayez dans un instant ou écrivez-nous depuis la page Contact.",
     "error_expired": "Le délai de rétractation de 14 jours est expiré.",
     "error_already": "Vous avez déjà une demande de rétractation en cours.",
-    "error_not_stripe": "Nous n'avons trouvé aucun abonnement payé par carte."
+    "error_not_stripe": "Nous n'avons trouvé aucun abonnement payé par carte.",
+    "asConsumer": "Achat en tant que particulier",
+    "asBusiness": "Achat en tant qu'entreprise ou professionnel",
+    "businessName": "Raison sociale ou nom du cabinet",
+    "vatNumber": "Numéro de TVA",
+    "vatHint": "Numéro de TVA italien (11 chiffres) ou d'un autre pays de l'UE avec son préfixe (ex. FR12345678901). Il figurera sur la facture.",
+    "businessDeclaration": "Je déclare acheter pour mon activité d'entreprise ou professionnelle : je sais que le droit de rétractation des consommateurs ne s'applique pas à cet achat.",
+    "businessRequired": "Pour acheter en tant qu'entreprise ou professionnel, saisissez la raison sociale et cochez la déclaration.",
+    "vatInvalid": "Le numéro de TVA saisi n'est pas valide : vérifiez-le (pour les pays de l'UE autres que l'Italie, le préfixe est requis, ex. FR).",
+    "businessNoWithdrawal": "Abonnement acheté pour votre activité avec un numéro de TVA : le droit de rétractation des consommateurs ne s'applique pas."
+  },
+  "purchaseEmail": {
+    "subject_create": "KUMANI : confirmation de votre abonnement {plan}",
+    "subject_update": "KUMANI : confirmation du passage à {plan}",
+    "subject_cycle": "KUMANI : confirmation du renouvellement de {plan}",
+    "greeting": "Bonjour,",
+    "intro_create": "merci de vous être abonné à KUMANI. Voici le récapitulatif de votre achat.",
+    "intro_update": "votre abonnement est passé à l'offre {plan}. Voici le récapitulatif du paiement.",
+    "intro_cycle": "votre abonnement KUMANI a été renouvelé. Voici le récapitulatif du paiement.",
+    "labelPlan": "Offre",
+    "labelAmount": "Montant payé",
+    "labelDate": "Date du paiement",
+    "labelValidUntil": "Valable jusqu'au",
+    "labelBuyer": "Titulaire",
+    "consumerConsent": "Comme vous l'avez demandé le {date}, l'abonnement a été activé immédiatement, avant la fin du délai de rétractation de 14 jours.",
+    "consumerWithdrawal": "Droit de rétractation : vous pouvez vous rétracter jusqu'au {deadline} ({days} jours après le paiement) depuis la page Abonnement. Nous vous rembourserons la partie de l'abonnement non encore utilisée, dans les 14 jours suivant votre demande.",
+    "businessNote": "Achat effectué pour votre activité ({name}, TVA {vat}) : comme déclaré lors du paiement, le droit de rétractation des consommateurs ne s'applique pas.",
+    "manage": "Vous pouvez changer de carte, télécharger vos factures ou annuler le renouvellement depuis la page Abonnement :",
+    "terms": "Conditions d'utilisation :",
+    "footer": "Conservez cet e-mail : c'est la confirmation de votre contrat.",
+    "signature": "L'équipe KUMANI"
   }
 }

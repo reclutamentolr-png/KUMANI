@@ -28,6 +28,11 @@ export type WithdrawableInvoice = {
   paymentIntent: string | null
 }
 
+// Abbonamento acquistato come azienda/professionista (P.IVA): niente recesso
+export function isBusinessPurchase(subscription: Pick<Stripe.Subscription, 'metadata'>): boolean {
+  return subscription.metadata?.buyer_type === 'business'
+}
+
 // Fatture dell'abbonamento pagate negli ultimi 14 giorni (quelle per cui si
 // può ancora recedere), dalla più recente.
 export async function withdrawableInvoices(subscriptionId: string, now = Math.floor(Date.now() / 1000)): Promise<WithdrawableInvoice[]> {
@@ -70,11 +75,19 @@ export function proportionalRefund(inv: Pick<WithdrawableInvoice, 'amountCents' 
   return Math.round(inv.amountCents * unused)
 }
 
-// Registra il consenso all'avvio immediato con il testo esatto mostrato
-// all'utente nella sua lingua (prova in caso di contestazione).
+// Registra il consenso all'avvio immediato (privato) o la dichiarazione di
+// acquisto per l'attività (azienda/professionista, con P.IVA) con il testo
+// esatto mostrato all'utente nella sua lingua (prova in caso di contestazione).
 export async function recordConsent(
   service: SupabaseClient,
-  input: { userId: string; kind: 'checkout' | 'upgrade'; plan: 'base' | 'pro'; stripeRef: string | null; locale: string }
+  input: {
+    userId: string
+    kind: 'checkout' | 'upgrade'
+    plan: 'base' | 'pro'
+    stripeRef: string | null
+    locale: string
+    business?: { name: string; vat: string } | null
+  }
 ): Promise<void> {
   const t = await getTranslations({ locale: input.locale, namespace: 'withdrawal' })
   const { error } = await service.from('subscription_consents').insert({
@@ -84,7 +97,10 @@ export async function recordConsent(
     stripe_ref: input.stripeRef,
     locale: input.locale,
     text_version: CONSENT_VERSION,
-    consent_text: t('consentLabel'),
+    consent_text: input.business ? t('businessDeclaration') : t('consentLabel'),
+    buyer_type: input.business ? 'business' : 'consumer',
+    business_name: input.business?.name ?? null,
+    vat_number: input.business?.vat ?? null,
   })
   if (error) console.error('❌ Consenso avvio immediato non salvato:', error.message)
 }

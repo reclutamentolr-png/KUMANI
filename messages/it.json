@@ -5474,6 +5474,36 @@
     "error_error": "Non è stato possibile inviare la richiesta. Riprova tra poco o scrivici dalla pagina Contatti.",
     "error_expired": "Il periodo di 14 giorni per recedere è scaduto.",
     "error_already": "Hai già una richiesta di recesso in corso.",
-    "error_not_stripe": "Non abbiamo trovato un abbonamento pagato con carta."
+    "error_not_stripe": "Non abbiamo trovato un abbonamento pagato con carta.",
+    "asConsumer": "Acquisto come privato",
+    "asBusiness": "Acquisto come azienda o professionista",
+    "businessName": "Ragione sociale o nome dello studio",
+    "vatNumber": "Partita IVA",
+    "vatHint": "Partita IVA italiana (11 cifre) o di un altro Paese UE con il prefisso (es. DE123456789). Comparirà in fattura.",
+    "businessDeclaration": "Dichiaro di acquistare per la mia attività d'impresa o professionale: so che per questo acquisto non si applica il diritto di recesso previsto per i consumatori.",
+    "businessRequired": "Per acquistare come azienda o professionista inserisci la ragione sociale e spunta la dichiarazione.",
+    "vatInvalid": "La partita IVA inserita non è valida: controlla il numero (per i Paesi UE diversi dall'Italia serve il prefisso, es. DE).",
+    "businessNoWithdrawal": "Abbonamento acquistato per la tua attività con partita IVA: non si applica il diritto di recesso dei consumatori."
+  },
+  "purchaseEmail": {
+    "subject_create": "KUMANI: conferma del tuo abbonamento {plan}",
+    "subject_update": "KUMANI: conferma del passaggio a {plan}",
+    "subject_cycle": "KUMANI: conferma del rinnovo di {plan}",
+    "greeting": "Ciao,",
+    "intro_create": "grazie per esserti abbonato a KUMANI. Ecco il riepilogo del tuo acquisto.",
+    "intro_update": "il tuo abbonamento è passato al piano {plan}. Ecco il riepilogo del pagamento.",
+    "intro_cycle": "il tuo abbonamento KUMANI è stato rinnovato. Ecco il riepilogo del pagamento.",
+    "labelPlan": "Piano",
+    "labelAmount": "Importo pagato",
+    "labelDate": "Data del pagamento",
+    "labelValidUntil": "Valido fino al",
+    "labelBuyer": "Intestatario",
+    "consumerConsent": "Come da te richiesto il {date}, l'abbonamento è stato attivato subito, prima della fine dei 14 giorni per il recesso.",
+    "consumerWithdrawal": "Diritto di recesso: puoi recedere entro il {deadline} ({days} giorni dal pagamento) dalla pagina Abbonamento. Ti rimborseremo la parte dell'abbonamento non ancora usata, entro 14 giorni dalla richiesta.",
+    "businessNote": "Acquisto effettuato per la tua attività ({name}, P.IVA {vat}): come dichiarato al pagamento, non si applica il diritto di recesso previsto per i consumatori.",
+    "manage": "Puoi cambiare carta, scaricare le fatture o disdire il rinnovo dalla pagina Abbonamento:",
+    "terms": "Condizioni del servizio:",
+    "footer": "Conserva questa email: è la conferma del tuo contratto.",
+    "signature": "Il team KUMANI"
   }
 }

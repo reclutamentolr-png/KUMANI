@@ -5474,6 +5474,36 @@
     "error_error": "We could not send your request. Please try again shortly or write to us from the Contact page.",
     "error_expired": "The 14-day withdrawal period has expired.",
     "error_already": "You already have a withdrawal request in progress.",
-    "error_not_stripe": "We could not find a subscription paid by card."
+    "error_not_stripe": "We could not find a subscription paid by card.",
+    "asConsumer": "Buying as a private individual",
+    "asBusiness": "Buying as a business or professional",
+    "businessName": "Company or practice name",
+    "vatNumber": "VAT number",
+    "vatHint": "Italian VAT number (11 digits) or from another EU country with its prefix (e.g. DE123456789). It will appear on the invoice.",
+    "businessDeclaration": "I declare that I am buying for my business or professional activity: I understand that the consumer right of withdrawal does not apply to this purchase.",
+    "businessRequired": "To buy as a business or professional, enter the company name and tick the declaration.",
+    "vatInvalid": "The VAT number is not valid: please check it (for EU countries other than Italy, the prefix is required, e.g. DE).",
+    "businessNoWithdrawal": "Subscription bought for your business with a VAT number: the consumer right of withdrawal does not apply."
+  },
+  "purchaseEmail": {
+    "subject_create": "KUMANI: your {plan} subscription is confirmed",
+    "subject_update": "KUMANI: your switch to {plan} is confirmed",
+    "subject_cycle": "KUMANI: your {plan} renewal is confirmed",
+    "greeting": "Hello,",
+    "intro_create": "thank you for subscribing to KUMANI. Here is a summary of your purchase.",
+    "intro_update": "your subscription has been switched to {plan}. Here is a summary of the payment.",
+    "intro_cycle": "your KUMANI subscription has been renewed. Here is a summary of the payment.",
+    "labelPlan": "Plan",
+    "labelAmount": "Amount paid",
+    "labelDate": "Payment date",
+    "labelValidUntil": "Valid until",
+    "labelBuyer": "Billed to",
+    "consumerConsent": "As you requested on {date}, your subscription started immediately, before the end of the 14-day withdrawal period.",
+    "consumerWithdrawal": "Right of withdrawal: you can withdraw until {deadline} ({days} days from payment) from the Subscription page. We will refund the part of the subscription you have not yet used, within 14 days of your request.",
+    "businessNote": "Purchase made for your business ({name}, VAT {vat}): as declared at payment, the consumer right of withdrawal does not apply.",
+    "manage": "You can change your card, download invoices or cancel the renewal from the Subscription page:",
+    "terms": "Terms of service:",
+    "footer": "Keep this email: it is the confirmation of your contract.",
+    "signature": "The KUMANI team"
   }
 }
