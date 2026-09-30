@@ -152,7 +152,7 @@ export default function LandingPage() {
               <div className="text-xs sm:text-sm text-gray-400">{t('statWeeklyLabel')}</div>
             </div>
             <div>
-              <div className="text-2xl sm:text-3xl font-bold text-white">25+</div>
+              <div className="text-2xl sm:text-3xl font-bold text-white">30+</div>
               <div className="text-xs sm:text-sm text-gray-400">{t('statServicesLabel')}</div>
             </div>
           </div>
