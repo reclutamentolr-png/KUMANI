@@ -77,11 +77,20 @@ export async function updateItem(
     update.photo_path = photoPath
   }
 
+  // Foto precedente, da cancellare se viene sostituita o tolta
+  const { data: before } = photoPath !== undefined
+    ? await supabase.from('findo_items').select('photo_path').eq('id', id).eq('user_id', gate.userId).maybeSingle()
+    : { data: null }
+
   const { error } = await supabase.from('findo_items').update(update).eq('id', id).eq('user_id', gate.userId)
 
   if (error) {
     console.error('[Findo] updateItem failed:', error)
     return { success: false, message: 'saveError' }
+  }
+
+  if (before?.photo_path && before.photo_path !== photoPath) {
+    await supabase.storage.from('findo-photos').remove([before.photo_path])
   }
 
   return { success: true, data: null }

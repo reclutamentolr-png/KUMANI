@@ -21,6 +21,7 @@ import {
 import { createClient } from '@/lib/supabase/client'
 import { createReceipt } from '@/app/actions/digitalReceipt'
 import { todayKey } from '@/lib/agenda'
+import { resizeImageFile } from '@/lib/resizeImage'
 import {
   RECEIPT_TEMPLATES,
   validatePhotoFile,
@@ -74,7 +75,9 @@ export default function DigitalReceiptForm() {
 
   const isValid = form.objectName.trim().length > 0 && form.recipientName.trim().length > 0 && form.deliveryDate.length > 0
 
-  const handlePhotoSelect = async (file: File) => {
+  const handlePhotoSelect = async (picked: File) => {
+    // Scontrino ridotto a 2000 px con qualità alta: il testo resta leggibile
+    const file = (await resizeImageFile(picked, 2000, 0.86)) ?? picked
     const validationError = validatePhotoFile(file)
     if (validationError) {
       setError(validationError)
@@ -94,6 +97,11 @@ export default function DigitalReceiptForm() {
     const path = `${user.id}/${receiptId}.${photoExtension(file)}`
     const { error: uploadError } = await supabase.storage.from('receipt-photos-v2').upload(path, file, { upsert: true })
     setUploadingPhoto(false)
+
+    // Foto scelta prima e sostituita (altro formato): non resta nello spazio file
+    if (!uploadError && photoPath && photoPath !== path) {
+      await supabase.storage.from('receipt-photos-v2').remove([photoPath])
+    }
 
     if (uploadError) {
       console.error('[DigitalReceipt] photo upload failed:', uploadError)

@@ -7,6 +7,7 @@ import { CheckCircle, LoaderCircle, XCircle, ImagePlus } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { saveIssuerProfile } from '@/app/actions/quotes'
 import { validateLogoFile, logoExtension, type IssuerProfileFormData } from '@/lib/quotes'
+import { resizeImageFile } from '@/lib/resizeImage'
 
 type Props = {
   initialProfile: IssuerProfileFormData
@@ -30,7 +31,9 @@ export default function QuoteBusinessProfileForm({ initialProfile, initialLogoUr
 
   const isValid = form.companyName.trim().length > 0
 
-  const handleLogoSelect = async (file: File) => {
+  const handleLogoSelect = async (picked: File) => {
+    // Logo ridotto a 800 px, trasparenza mantenuta; gli SVG restano come sono
+    const file = picked.type === 'image/svg+xml' ? picked : ((await resizeImageFile(picked, 800, 0.9, { keepTransparency: true })) ?? picked)
     const validationError = validateLogoFile(file)
     if (validationError) {
       setError(validationError)
@@ -61,6 +64,11 @@ export default function QuoteBusinessProfileForm({ initialProfile, initialLogoUr
       setErrorDetail(uploadError.message || null)
       return
     }
+
+    // Logo precedente con un altro formato (logo.png → logo.jpg): si cancella
+    const { data: existing } = await supabase.storage.from('quote-logos-v2').list(user.id)
+    const stale = (existing ?? []).map((f) => `${user.id}/${f.name}`).filter((p) => p !== path && /\/logo\.[a-z0-9]+$/i.test(p))
+    if (stale.length) await supabase.storage.from('quote-logos-v2').remove(stale)
 
     setLogoPath(path)
     setLogoUrl(URL.createObjectURL(file))

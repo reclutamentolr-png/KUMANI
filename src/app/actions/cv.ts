@@ -94,11 +94,20 @@ export async function updateCv(id: string, form: CvFormData, rawPhotoPath: strin
   // every time the CV is edited without touching the photo field.
   if (photoPath) payload.photo_path = photoPath
 
+  // Foto precedente: con una nuova non deve restare nello spazio file
+  const { data: before } = photoPath
+    ? await supabase.from('cvs').select('photo_path').eq('id', id).eq('user_id', gate.userId).maybeSingle()
+    : { data: null }
+
   const { error } = await supabase.from('cvs').update(payload).eq('id', id).eq('user_id', gate.userId)
 
   if (error) {
     console.error('[Cv] updateCv failed:', error)
     return { success: false, message: 'saveError' }
+  }
+
+  if (before?.photo_path && before.photo_path !== photoPath) {
+    await supabase.storage.from('cv-photos').remove([before.photo_path])
   }
 
   return { success: true, data: null }

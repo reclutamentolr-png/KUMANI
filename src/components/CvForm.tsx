@@ -24,6 +24,7 @@ import {
 import CvTemplatePicker from '@/components/cv/CvTemplatePicker'
 import CvTemplateRenderer from '@/components/cv/CvTemplateRenderer'
 import MonthYearPicker from '@/components/cv/MonthYearPicker'
+import { resizeImageFile } from '@/lib/resizeImage'
 
 const LOCALE_NAMES: Record<string, string> = {
   it: 'Italiano',
@@ -83,7 +84,9 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
 
   const isValid = form.title.trim().length > 0 && form.fullName.trim().length > 0
 
-  const handlePhotoSelect = async (file: File) => {
+  const handlePhotoSelect = async (picked: File) => {
+    // Foto del CV ridotta a 1000 px: nitida anche stampata
+    const file = (await resizeImageFile(picked, 1000, 0.85)) ?? picked
     const validationError = validateCvPhotoFile(file)
     if (validationError) {
       setError(validationError)
@@ -106,6 +109,8 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
       setError('photoUploadError')
       return
     }
+    // Un'altra foto scelta prima di salvare: quella non resta nello spazio file
+    if (photoPath && photoPath !== path) await supabase.storage.from('cv-photos').remove([photoPath])
     setPhotoPath(path)
     setPhotoUrl(URL.createObjectURL(file))
   }

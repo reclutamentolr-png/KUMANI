@@ -8,6 +8,7 @@ import { CheckCircle, LoaderCircle, XCircle, Camera, PlusCircle, MapPin } from '
 import { createClient } from '@/lib/supabase/client'
 import { createItem, updateItem, createLocation } from '@/app/actions/findo'
 import { buildBreadcrumb, validatePhotoFile, photoExtension, type FindoLocation, type FindoItemFormData } from '@/lib/findo'
+import { resizeImageFile } from '@/lib/resizeImage'
 
 type Props =
   | { mode: 'create'; locations: FindoLocation[] }
@@ -47,7 +48,9 @@ export default function FindoItemForm(props: Props) {
 
   const isValid = form.name.trim().length > 0
 
-  const handlePhotoSelect = async (file: File) => {
+  const handlePhotoSelect = async (picked: File) => {
+    // Foto ridotta a 1600 px (buona qualità, circa 10 volte più leggera)
+    const file = (await resizeImageFile(picked, 1600, 0.82)) ?? picked
     const validationError = validatePhotoFile(file)
     if (validationError) {
       setError(validationError)
