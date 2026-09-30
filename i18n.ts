@@ -1,4 +1,5 @@
 import { getRequestConfig } from 'next-intl/server';
+import { applyOverrides, getTranslationOverrides } from './src/lib/translationOverrides';
 
 export const locales = ['it', 'fr', 'en', 'es', 'pt', 'de', 'ru'];
 export const defaultLocale = 'it';
@@ -32,8 +33,12 @@ export default getRequestConfig(async ({ requestLocale }) => {
     ? messages
     : (await import(`./messages/${defaultLocale}.json`)).default
 
+  // 4. Correzioni dei traduttori (Area Traduttori), sopra ai file; mai
+  //    sull'italiano, che è la base
+  const overrides = locale === defaultLocale ? {} : await getTranslationOverrides(locale)
+
   return {
     locale,
-    messages: mergeMessages(fallbackMessages, messages)
+    messages: applyOverrides(mergeMessages(fallbackMessages, messages), overrides)
   };
 });

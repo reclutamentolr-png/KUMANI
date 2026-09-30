@@ -41,6 +41,9 @@ const PAID_TOOLS = [
   'calcolatrici',
 ];
 
+// Pagine consentite ai traduttori (tutto il resto riporta all'Area Traduttori)
+const TRANSLATOR_ALLOWED = /^\/(traduzioni|login|auth|forgot-password|reset-password|maintenance)(\/|$)/;
+
 // Pagine sempre raggiungibili durante la manutenzione (accesso dello Staff).
 const MAINTENANCE_EXEMPT = /^\/(admin|auth|login|forgot-password|reset-password|maintenance)(\/|$)/;
 
@@ -81,6 +84,19 @@ export async function proxy(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  // Traduttori (account creati dall'Admin, ruolo scritto dal server
+  // nell'account): vedono solo l'Area Traduttori, niente dashboard né
+  // servizi. Nessuna lettura in più: il ruolo arriva con l'utente.
+  if (user && (user.app_metadata as { role?: string } | undefined)?.role === 'translator') {
+    const segments = request.nextUrl.pathname.split('/').filter(Boolean);
+    const hasLocale = !!segments[0] && locales.includes(segments[0]);
+    const localePrefix = hasLocale ? `/${segments[0]}` : '';
+    const barePath = '/' + (hasLocale ? segments.slice(1) : segments).join('/');
+    if (!TRANSLATOR_ALLOWED.test(barePath)) {
+      return NextResponse.redirect(new URL(`${localePrefix}/traduzioni`, request.url));
+    }
+  }
 
   // Controllo del piano per gli strumenti (vedi sotto): parte subito, in
   // parallelo al controllo della manutenzione, invece che dopo.

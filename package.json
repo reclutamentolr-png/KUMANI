@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.127.0",
+    "@formatjs/icu-messageformat-parser": "^3.5.17",
     "@kenjiuno/msgreader": "^1.28.0",
     "@stripe/stripe-js": "^9.14.0",
     "@supabase/ssr": "^0.12.5",

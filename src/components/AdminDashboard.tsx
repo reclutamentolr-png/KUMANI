@@ -84,6 +84,7 @@ import ConvivioFeesPanel from '@/components/admin/ConvivioFeesPanel'
 import ContactMessagesPanel from '@/components/admin/ContactMessagesPanel'
 import ProfileRequestsPanel from '@/components/admin/ProfileRequestsPanel'
 import AccountDeletionsPanel from '@/components/admin/AccountDeletionsPanel'
+import TranslatorsPanel from '@/components/admin/TranslatorsPanel'
 import { startImpersonation } from '@/lib/impersonation'
 import {
   LayoutDashboard,
@@ -126,6 +127,7 @@ import {
   Dices,
   ChevronDown,
   BellRing,
+  Languages,
 } from 'lucide-react'
 
 // Strumenti e interruttori raggruppati come nel Marketplace. Le sezioni della
@@ -1095,6 +1097,7 @@ L'accesso viene registrato.`)) return
   { id: 'identity', label: 'Verifica identità', Icon: ScanFace, permission: 'users.read' as Permission, group: 'users' },
   { id: 'profileRequests', label: 'Richieste dati', Icon: UserPen, permission: 'users.read' as Permission, group: 'users' },
   { id: 'accountDeletions', label: 'Cancellazione account', Icon: UserX, permission: 'users.read' as Permission, group: 'users' },
+  { id: 'translators', label: 'Traduttori', Icon: Languages, permission: 'users.write' as Permission, group: 'users' },
   { id: 'messages', label: 'Messaggi agli utenti', Icon: MessageSquare, permission: 'messages.read' as Permission, group: 'comms' },
   { id: 'contactMessages', label: 'Messaggi dal sito', Icon: Inbox, permission: 'support.read' as Permission, group: 'comms' },
   { id: 'kuManagement', label: 'Gestione KU', Icon: Coins, permission: 'settings.read' as Permission, group: 'rewards' },
@@ -3247,6 +3250,7 @@ L'accesso viene registrato.`)) return
         {activeSection === 'users' && renderUsers()}
         {activeSection === 'profileRequests' && <ProfileRequestsPanel onChanged={loadBadges} />}
         {activeSection === 'accountDeletions' && <AccountDeletionsPanel onChanged={loadBadges} canDelete={hasPermission(permissions, 'users.delete')} />}
+        {activeSection === 'translators' && <TranslatorsPanel />}
         {activeSection === 'matrix' && renderMatrix()}
         {activeSection === 'marketplace' && renderMarketplace()}
         {activeSection === 'coupons' && renderCoupons()}

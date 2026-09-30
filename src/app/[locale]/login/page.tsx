@@ -44,6 +44,14 @@ export default function LoginPage() {
       return
     }
 
+    // Traduttore: nessun profilo KUMANI da controllare, va nella sua area
+    if ((authData.user?.app_metadata as { role?: string } | undefined)?.role === 'translator') {
+      endImpersonation()
+      router.push(`/${locale}/traduzioni`)
+      router.refresh()
+      return
+    }
+
     if (authData.user) {
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
