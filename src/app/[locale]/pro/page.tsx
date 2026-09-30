@@ -26,6 +26,7 @@ export default async function ProPage({
   const { tool: highlightTool, error } = await searchParams
   const t = await getTranslations('plans')
   const tm = await getTranslations('marketplace')
+  const tw = await getTranslations('withdrawal')
 
   const service = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
     auth: { autoRefreshToken: false, persistSession: false },
@@ -123,6 +124,7 @@ export default async function ProPage({
               {price} € <span className="text-base font-medium text-gray-400">{t('perYear')}</span>
             </p>
             {error === 'unavailable' && <p className="mt-3 text-sm text-amber-300">{t('proUnavailable')}</p>}
+            {error === 'consent' && <p className="mt-3 text-sm text-amber-300">{tw('consentRequired')}</p>}
 
             <div className="mt-6">
               {!user ? (
@@ -157,7 +159,11 @@ export default async function ProPage({
                   ) : hasStripeSubscription ? (
                     <UpgradeToProButton label={t('ctaUpgrade')} note={t('upgradeNote')} />
                   ) : (
-                    <form action="/api/checkout?plan=pro" method="POST">
+                    <form action="/api/checkout?plan=pro" method="POST" className="space-y-3">
+                      <label className="flex items-start gap-2 text-left text-xs leading-relaxed text-gray-300">
+                        <input type="checkbox" name="immediate_start" value="1" required className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--gold)]" />
+                        <span>{tw('consentLabel')}</span>
+                      </label>
                       <button
                         type="submit"
                         className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3.5 font-bold text-[var(--ink)]"

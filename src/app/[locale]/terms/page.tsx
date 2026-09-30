@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     'Termini di servizio della piattaforma Kumani e regolamento trasparente del Programma Vantaggi: punti, bonus, coupon e iniziative esclusive.'
 }
 
-const LAST_UPDATE = '27 settembre 2026'
+const LAST_UPDATE = '30 settembre 2026'
 
 export default function TermsPage() {
   return (
@@ -376,7 +376,24 @@ export default function TermsPage() {
             <h2 className="text-xl font-bold text-gray-900 mb-3">12. Recesso, sospensione e chiusura</h2>
             <div className="text-gray-600 space-y-3 text-sm sm:text-base leading-relaxed">
               <p>
-                L&apos;utente può recedere in qualsiasi momento cancellando il proprio account: punti, bonus e coupon non utilizzati
+                <strong>Diritto di recesso dall&apos;abbonamento.</strong> L&apos;utente consumatore può recedere dall&apos;abbonamento a
+                pagamento (Base o Pro, compreso il passaggio da Base a Pro) entro 14 giorni da ciascun pagamento, senza indicarne il motivo,
+                dalla pagina <em>Abbonamento</em> dell&apos;area personale (&ldquo;Esercita il diritto di recesso&rdquo;) oppure con
+                qualsiasi dichiarazione esplicita inviata tramite la pagina Contatti. Il rimborso avviene entro 14 giorni dalla richiesta, con
+                lo stesso mezzo di pagamento utilizzato, e l&apos;abbonamento viene chiuso al momento del rimborso.
+              </p>
+              <p>
+                Prima del pagamento l&apos;utente può chiedere espressamente che l&apos;abbonamento inizi subito, durante il periodo di
+                recesso. In tal caso, se recede, riceve il rimborso della sola parte dell&apos;abbonamento non ancora utilizzata, calcolata in
+                proporzione ai giorni trascorsi fino alla richiesta di recesso (art. 57, comma 3, Codice del Consumo). La richiesta di avvio
+                immediato viene registrata con data, ora e testo accettato.
+              </p>
+              <p>
+                La disdetta (dalla pagina Abbonamento → &ldquo;Gestisci abbonamento&rdquo;) interrompe invece i rinnovi successivi: il periodo già
+                pagato resta attivo fino alla scadenza e non dà diritto a rimborsi.
+              </p>
+              <p>
+                L&apos;utente può inoltre recedere in qualsiasi momento cancellando il proprio account: punti, bonus e coupon non utilizzati
                 decadono al momento della cancellazione, senza diritto a indennizzi.
               </p>
               <p>

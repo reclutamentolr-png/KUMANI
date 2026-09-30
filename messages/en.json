@@ -2901,7 +2901,8 @@
     "upgradeError_not_stripe": "We could not find a card subscription to upgrade: use the activation button.",
     "upgradeError_unavailable": "The Pro plan is not available yet.",
     "upgradeError_already_pro": "You already have the Pro plan.",
-    "upgradeError_stripe_error": "Payment failed. Please try again shortly."
+    "upgradeError_stripe_error": "Payment failed. Please try again shortly.",
+    "upgradeError_consent": "Tick the box to request immediate activation of the Pro plan."
   },
   "proArea": {
     "convivioTitle": "Kordata · Group offers",
@@ -5453,5 +5454,26 @@
     "customers": {"title": "Your customers", "summary": "{total, plural, =0 {No customers} one {# customer} other {# customers}}, {active, plural, one {# active} other {# active}}", "empty": "You have no customers yet. Share your link to get started.", "joined": "Joined on {date}", "noPlan": "Not subscribed yet", "active": "Active", "inactive": "Inactive"},
     "commissions": {"title": "Commissions", "csv": "Download statement (CSV)", "filterLabel": "Filter by status", "filter": {"all": "All", "pending": "Pending", "matured": "Earned", "paid": "Paid", "cancelled": "Cancelled"}, "empty": "No commissions to show.", "col": {"date": "Date", "customer": "Customer", "kind": "Type", "plan": "Plan", "net": "Taxable amount", "pct": "%", "commission": "Commission", "state": "Status", "maturesAt": "Final on", "note": "Note"}, "kind": {"first": "First sale", "renewal": "Renewal", "adjustment": "Adjustment"}, "state": {"pendingUntil": "Pending until {date}", "pending": "Pending", "matured": "Earned", "paid": "Paid", "cancelled": "Cancelled"}},
     "payouts": {"title": "Payments received", "empty": "You have not received any payments yet.", "reference": "Reference", "noReference": "not provided"}
+  },
+  "withdrawal": {
+    "consentLabel": "I ask for my subscription to start immediately, before the 14-day withdrawal period ends. I understand that if I withdraw, I will only be refunded for the part of the subscription I have not yet used.",
+    "consentRequired": "To continue, tick the box to request immediate activation of your subscription.",
+    "title": "Right of withdrawal",
+    "text": "You can withdraw from your subscription within 14 days of payment, that is until {date}. Your subscription will be closed and you will receive your refund within 14 days.",
+    "refundProportional": "At payment you asked for immediate activation: we will refund the part of the subscription you have not yet used.",
+    "refundFull": "We will refund the full amount you paid.",
+    "reasonLabel": "Reason (optional)",
+    "cta": "Exercise the right of withdrawal",
+    "confirm": "Do you confirm your withdrawal? With the refund your subscription will be closed and you will lose access to paid services.",
+    "confirmCta": "I confirm my withdrawal",
+    "cancel": "Cancel",
+    "sent": "Withdrawal request sent. We will refund you within 14 days: until then your subscription stays active.",
+    "pending": "You sent a withdrawal request on {date}: we are handling it. The refund will arrive within 14 days of the request.",
+    "refunded": "Withdrawal accepted on {date}: refund of {amount} to the card used for payment. It usually arrives within 5-10 business days.",
+    "rejected": "Your withdrawal request of {date} was not accepted.",
+    "error_error": "We could not send your request. Please try again shortly or write to us from the Contact page.",
+    "error_expired": "The 14-day withdrawal period has expired.",
+    "error_already": "You already have a withdrawal request in progress.",
+    "error_not_stripe": "We could not find a subscription paid by card."
   }
 }

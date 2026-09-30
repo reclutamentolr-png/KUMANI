@@ -2901,7 +2901,8 @@
     "upgradeError_not_stripe": "Non abbiamo trovato un abbonamento con carta da aggiornare: usa il pulsante di attivazione.",
     "upgradeError_unavailable": "Il piano Pro non è ancora disponibile.",
     "upgradeError_already_pro": "Hai già il piano Pro.",
-    "upgradeError_stripe_error": "Pagamento non riuscito. Riprova tra poco."
+    "upgradeError_stripe_error": "Pagamento non riuscito. Riprova tra poco.",
+    "upgradeError_consent": "Spunta la casella per chiedere l'attivazione immediata del piano Pro."
   },
   "proArea": {
     "convivioTitle": "Kordata · Offerte di gruppo",
@@ -5453,5 +5454,26 @@
     "customers": {"title": "I tuoi clienti", "summary": "{total, plural, =0 {Nessun cliente} one {# cliente} other {# clienti}}, {active, plural, one {# attivo} other {# attivi}}", "empty": "Non hai ancora clienti. Condividi il tuo link per iniziare.", "joined": "Iscritto il {date}", "noPlan": "Non ancora abbonato", "active": "Attivo", "inactive": "Non attivo"},
     "commissions": {"title": "Provvigioni", "csv": "Scarica estratto conto (CSV)", "filterLabel": "Filtra per stato", "filter": {"all": "Tutte", "pending": "In maturazione", "matured": "Maturate", "paid": "Pagate", "cancelled": "Annullate"}, "empty": "Nessuna provvigione da mostrare.", "col": {"date": "Data", "customer": "Cliente", "kind": "Tipo", "plan": "Piano", "net": "Imponibile", "pct": "%", "commission": "Provvigione", "state": "Stato", "maturesAt": "Maturazione", "note": "Nota"}, "kind": {"first": "Prima vendita", "renewal": "Rinnovo", "adjustment": "Rettifica"}, "state": {"pendingUntil": "In maturazione fino al {date}", "pending": "In maturazione", "matured": "Maturata", "paid": "Pagata", "cancelled": "Annullata"}},
     "payouts": {"title": "Pagamenti ricevuti", "empty": "Non hai ancora ricevuto pagamenti.", "reference": "Riferimento", "noReference": "non indicato"}
+  },
+  "withdrawal": {
+    "consentLabel": "Chiedo che l'abbonamento parta subito, prima della fine dei 14 giorni per il recesso. Ho capito che, se recedo, mi verrà rimborsata solo la parte dell'abbonamento non ancora usata.",
+    "consentRequired": "Per procedere spunta la casella con cui chiedi l'attivazione immediata dell'abbonamento.",
+    "title": "Diritto di recesso",
+    "text": "Puoi recedere dall'abbonamento entro 14 giorni dal pagamento, cioè fino al {date}. L'abbonamento verrà chiuso e riceverai il rimborso entro 14 giorni.",
+    "refundProportional": "Al pagamento hai chiesto l'attivazione immediata: ti rimborseremo la parte dell'abbonamento non ancora usata.",
+    "refundFull": "Ti rimborseremo l'intero importo pagato.",
+    "reasonLabel": "Motivo (facoltativo)",
+    "cta": "Esercita il diritto di recesso",
+    "confirm": "Confermi il recesso? Con il rimborso l'abbonamento verrà chiuso e perderai l'accesso ai servizi a pagamento.",
+    "confirmCta": "Confermo il recesso",
+    "cancel": "Annulla",
+    "sent": "Richiesta di recesso inviata. Ti rimborseremo entro 14 giorni: fino ad allora l'abbonamento resta attivo.",
+    "pending": "Hai inviato una richiesta di recesso il {date}: la stiamo gestendo. Il rimborso arriverà entro 14 giorni dalla richiesta.",
+    "refunded": "Recesso accettato il {date}: rimborso di {amount} sulla carta usata per il pagamento. Di solito arriva in 5-10 giorni lavorativi.",
+    "rejected": "La richiesta di recesso del {date} non è stata accolta.",
+    "error_error": "Non è stato possibile inviare la richiesta. Riprova tra poco o scrivici dalla pagina Contatti.",
+    "error_expired": "Il periodo di 14 giorni per recedere è scaduto.",
+    "error_already": "Hai già una richiesta di recesso in corso.",
+    "error_not_stripe": "Non abbiamo trovato un abbonamento pagato con carta."
   }
 }

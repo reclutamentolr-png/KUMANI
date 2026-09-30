@@ -2901,7 +2901,8 @@
     "upgradeError_not_stripe": "Não encontrámos uma subscrição com cartão para atualizar: use o botão de ativação.",
     "upgradeError_unavailable": "O plano Pro ainda não está disponível.",
     "upgradeError_already_pro": "Já tem o plano Pro.",
-    "upgradeError_stripe_error": "O pagamento falhou. Tente novamente daqui a pouco."
+    "upgradeError_stripe_error": "O pagamento falhou. Tente novamente daqui a pouco.",
+    "upgradeError_consent": "Assinale a caixa para pedir a ativação imediata do plano Pro."
   },
   "proArea": {
     "convivioTitle": "Kordata · Ofertas de grupo",
@@ -5453,5 +5454,26 @@
     "customers": {"title": "Os seus clientes", "summary": "{total, plural, =0 {Nenhum cliente} one {# cliente} other {# clientes}}, {active, plural, one {# ativo} other {# ativos}}", "empty": "Ainda não tem clientes. Partilhe o seu link para começar.", "joined": "Inscrito em {date}", "noPlan": "Ainda sem subscrição", "active": "Ativo", "inactive": "Inativo"},
     "commissions": {"title": "Comissões", "csv": "Transferir extrato (CSV)", "filterLabel": "Filtrar por estado", "filter": {"all": "Todas", "pending": "Em maturação", "matured": "Adquiridas", "paid": "Pagas", "cancelled": "Anuladas"}, "empty": "Não há comissões para mostrar.", "col": {"date": "Data", "customer": "Cliente", "kind": "Tipo", "plan": "Plano", "net": "Valor tributável", "pct": "%", "commission": "Comissão", "state": "Estado", "maturesAt": "Maturação", "note": "Nota"}, "kind": {"first": "Primeira venda", "renewal": "Renovação", "adjustment": "Retificação"}, "state": {"pendingUntil": "Em maturação até {date}", "pending": "Em maturação", "matured": "Adquirida", "paid": "Paga", "cancelled": "Anulada"}},
     "payouts": {"title": "Pagamentos recebidos", "empty": "Ainda não recebeu pagamentos.", "reference": "Referência", "noReference": "não indicada"}
+  },
+  "withdrawal": {
+    "consentLabel": "Peço que a minha subscrição comece de imediato, antes do fim dos 14 dias do direito de livre resolução. Compreendo que, se resolver o contrato, só me será reembolsada a parte da subscrição ainda não utilizada.",
+    "consentRequired": "Para continuar, assinale a caixa com que pede a ativação imediata da subscrição.",
+    "title": "Direito de livre resolução",
+    "text": "Pode resolver a sua subscrição nos 14 dias seguintes ao pagamento, ou seja, até {date}. A subscrição será encerrada e receberá o reembolso no prazo de 14 dias.",
+    "refundProportional": "No pagamento pediu a ativação imediata: reembolsaremos a parte da subscrição ainda não utilizada.",
+    "refundFull": "Reembolsaremos o valor total pago.",
+    "reasonLabel": "Motivo (opcional)",
+    "cta": "Exercer o direito de livre resolução",
+    "confirm": "Confirma a resolução? Com o reembolso a subscrição será encerrada e perderá o acesso aos serviços pagos.",
+    "confirmCta": "Confirmo a resolução",
+    "cancel": "Cancelar",
+    "sent": "Pedido de livre resolução enviado. Reembolsaremos no prazo de 14 dias: até lá a subscrição continua ativa.",
+    "pending": "Enviou um pedido de livre resolução em {date}: estamos a tratá-lo. O reembolso chegará no prazo de 14 dias a contar do pedido.",
+    "refunded": "Resolução aceite em {date}: reembolso de {amount} no cartão usado para o pagamento. Normalmente chega em 5-10 dias úteis.",
+    "rejected": "O seu pedido de livre resolução de {date} não foi aceite.",
+    "error_error": "Não foi possível enviar o pedido. Tente novamente dentro de momentos ou escreva-nos a partir da página Contactos.",
+    "error_expired": "O prazo de 14 dias para a livre resolução terminou.",
+    "error_already": "Já tem um pedido de livre resolução em curso.",
+    "error_not_stripe": "Não encontrámos nenhuma subscrição paga com cartão."
   }
 }

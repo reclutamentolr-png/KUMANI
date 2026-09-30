@@ -87,6 +87,7 @@ import AccountDeletionsPanel from '@/components/admin/AccountDeletionsPanel'
 import TranslatorsPanel from '@/components/admin/TranslatorsPanel'
 import LanguagesPanel from '@/components/admin/LanguagesPanel'
 import AgentsPanel from '@/components/admin/AgentsPanel'
+import WithdrawalsPanel from '@/components/admin/WithdrawalsPanel'
 import { startImpersonation } from '@/lib/impersonation'
 import {
   LayoutDashboard,
@@ -124,6 +125,7 @@ import {
   Inbox,
   UserPen,
   UserX,
+  Undo2,
   Hourglass,
   Grid3x3,
   Dices,
@@ -1102,6 +1104,7 @@ L'accesso viene registrato.`)) return
   { id: 'identity', label: 'Verifica identità', Icon: ScanFace, permission: 'users.read' as Permission, group: 'users' },
   { id: 'profileRequests', label: 'Richieste dati', Icon: UserPen, permission: 'users.read' as Permission, group: 'users' },
   { id: 'accountDeletions', label: 'Cancellazione account', Icon: UserX, permission: 'users.read' as Permission, group: 'users' },
+  { id: 'withdrawals', label: 'Recessi', Icon: Undo2, permission: 'users.write' as Permission, group: 'users' },
   { id: 'translators', label: 'Traduttori', Icon: Languages, permission: 'users.write' as Permission, group: 'users' },
   { id: 'agents', label: 'Agenti', Icon: BriefcaseBusiness, permission: 'users.write' as Permission, group: 'users' },
   { id: 'messages', label: 'Messaggi agli utenti', Icon: MessageSquare, permission: 'messages.read' as Permission, group: 'comms' },
@@ -3258,6 +3261,7 @@ L'accesso viene registrato.`)) return
         {activeSection === 'accountDeletions' && <AccountDeletionsPanel onChanged={loadBadges} canDelete={hasPermission(permissions, 'users.delete')} />}
         {activeSection === 'translators' && <TranslatorsPanel />}
         {activeSection === 'agents' && <AgentsPanel />}
+        {activeSection === 'withdrawals' && <WithdrawalsPanel onChanged={loadBadges} />}
         {activeSection === 'languages' && <LanguagesPanel canWrite={hasPermission(permissions, 'settings.write')} />}
         {activeSection === 'matrix' && renderMatrix()}
         {activeSection === 'marketplace' && renderMarketplace()}

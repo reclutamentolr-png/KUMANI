@@ -2901,7 +2901,8 @@
     "upgradeError_not_stripe": "No encontramos una suscripción con tarjeta para actualizar: usa el botón de activación.",
     "upgradeError_unavailable": "El plan Pro aún no está disponible.",
     "upgradeError_already_pro": "Ya tienes el plan Pro.",
-    "upgradeError_stripe_error": "El pago no se realizó. Inténtalo de nuevo en un momento."
+    "upgradeError_stripe_error": "El pago no se realizó. Inténtalo de nuevo en un momento.",
+    "upgradeError_consent": "Marca la casilla para solicitar la activación inmediata del plan Pro."
   },
   "proArea": {
     "convivioTitle": "Kordata · Ofertas de grupo",
@@ -5453,5 +5454,26 @@
     "customers": {"title": "Tus clientes", "summary": "{total, plural, =0 {Ningún cliente} one {# cliente} other {# clientes}}, {active, plural, one {# activo} other {# activos}}", "empty": "Todavía no tienes clientes. Comparte tu enlace para empezar.", "joined": "Registrado el {date}", "noPlan": "Aún sin suscripción", "active": "Activo", "inactive": "Inactivo"},
     "commissions": {"title": "Comisiones", "csv": "Descargar extracto (CSV)", "filterLabel": "Filtrar por estado", "filter": {"all": "Todas", "pending": "En maduración", "matured": "Devengadas", "paid": "Pagadas", "cancelled": "Anuladas"}, "empty": "No hay comisiones que mostrar.", "col": {"date": "Fecha", "customer": "Cliente", "kind": "Tipo", "plan": "Plan", "net": "Base imponible", "pct": "%", "commission": "Comisión", "state": "Estado", "maturesAt": "Devengo", "note": "Nota"}, "kind": {"first": "Primera venta", "renewal": "Renovación", "adjustment": "Ajuste"}, "state": {"pendingUntil": "En maduración hasta el {date}", "pending": "En maduración", "matured": "Devengada", "paid": "Pagada", "cancelled": "Anulada"}},
     "payouts": {"title": "Pagos recibidos", "empty": "Todavía no has recibido pagos.", "reference": "Referencia", "noReference": "no indicada"}
+  },
+  "withdrawal": {
+    "consentLabel": "Solicito que mi suscripción empiece de inmediato, antes de que terminen los 14 días del derecho de desistimiento. Entiendo que, si desisto, solo se me reembolsará la parte de la suscripción que aún no haya usado.",
+    "consentRequired": "Para continuar, marca la casilla con la que solicitas la activación inmediata de tu suscripción.",
+    "title": "Derecho de desistimiento",
+    "text": "Puedes desistir de tu suscripción en los 14 días siguientes al pago, es decir, hasta el {date}. La suscripción se cerrará y recibirás el reembolso en un plazo de 14 días.",
+    "refundProportional": "Al pagar solicitaste la activación inmediata: te reembolsaremos la parte de la suscripción que aún no has usado.",
+    "refundFull": "Te reembolsaremos el importe íntegro que pagaste.",
+    "reasonLabel": "Motivo (opcional)",
+    "cta": "Ejercer el derecho de desistimiento",
+    "confirm": "¿Confirmas el desistimiento? Con el reembolso la suscripción se cerrará y perderás el acceso a los servicios de pago.",
+    "confirmCta": "Confirmo el desistimiento",
+    "cancel": "Cancelar",
+    "sent": "Solicitud de desistimiento enviada. Te reembolsaremos en un plazo de 14 días: hasta entonces la suscripción sigue activa.",
+    "pending": "Enviaste una solicitud de desistimiento el {date}: la estamos gestionando. El reembolso llegará en los 14 días siguientes a la solicitud.",
+    "refunded": "Desistimiento aceptado el {date}: reembolso de {amount} en la tarjeta usada para el pago. Suele llegar en 5-10 días hábiles.",
+    "rejected": "Tu solicitud de desistimiento del {date} no ha sido aceptada.",
+    "error_error": "No se ha podido enviar la solicitud. Inténtalo de nuevo en un momento o escríbenos desde la página Contacto.",
+    "error_expired": "El plazo de 14 días para desistir ha vencido.",
+    "error_already": "Ya tienes una solicitud de desistimiento en curso.",
+    "error_not_stripe": "No hemos encontrado ninguna suscripción pagada con tarjeta."
   }
 }

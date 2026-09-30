@@ -2901,7 +2901,8 @@
     "upgradeError_not_stripe": "Aucun abonnement par carte à mettre à jour : utilisez le bouton d'activation.",
     "upgradeError_unavailable": "L'offre Pro n'est pas encore disponible.",
     "upgradeError_already_pro": "Vous avez déjà l'offre Pro.",
-    "upgradeError_stripe_error": "Le paiement a échoué. Réessayez dans un instant."
+    "upgradeError_stripe_error": "Le paiement a échoué. Réessayez dans un instant.",
+    "upgradeError_consent": "Cochez la case pour demander l'activation immédiate de l'offre Pro."
   },
   "proArea": {
     "convivioTitle": "Kordata · Offres groupées",
@@ -5453,5 +5454,26 @@
     "customers": {"title": "Vos clients", "summary": "{total, plural, =0 {Aucun client} one {# client} other {# clients}}, {active, plural, one {# actif} other {# actifs}}", "empty": "Vous n'avez pas encore de clients. Partagez votre lien pour commencer.", "joined": "Inscrit le {date}", "noPlan": "Pas encore abonné", "active": "Actif", "inactive": "Inactif"},
     "commissions": {"title": "Commissions", "csv": "Télécharger le relevé (CSV)", "filterLabel": "Filtrer par statut", "filter": {"all": "Toutes", "pending": "En cours d'acquisition", "matured": "Acquises", "paid": "Payées", "cancelled": "Annulées"}, "empty": "Aucune commission à afficher.", "col": {"date": "Date", "customer": "Client", "kind": "Type", "plan": "Formule", "net": "Montant HT", "pct": "%", "commission": "Commission", "state": "Statut", "maturesAt": "Acquisition", "note": "Note"}, "kind": {"first": "Première vente", "renewal": "Renouvellement", "adjustment": "Régularisation"}, "state": {"pendingUntil": "En cours d'acquisition jusqu'au {date}", "pending": "En cours d'acquisition", "matured": "Acquise", "paid": "Payée", "cancelled": "Annulée"}},
     "payouts": {"title": "Paiements reçus", "empty": "Vous n'avez encore reçu aucun paiement.", "reference": "Référence", "noReference": "non indiquée"}
+  },
+  "withdrawal": {
+    "consentLabel": "Je demande que mon abonnement commence immédiatement, avant la fin du délai de rétractation de 14 jours. Je comprends que, si je me rétracte, seule la partie de l'abonnement non encore utilisée me sera remboursée.",
+    "consentRequired": "Pour continuer, cochez la case demandant l'activation immédiate de votre abonnement.",
+    "title": "Droit de rétractation",
+    "text": "Vous pouvez vous rétracter de votre abonnement dans les 14 jours suivant le paiement, soit jusqu'au {date}. L'abonnement sera fermé et vous serez remboursé dans les 14 jours.",
+    "refundProportional": "Lors du paiement, vous avez demandé l'activation immédiate : nous vous rembourserons la partie de l'abonnement non encore utilisée.",
+    "refundFull": "Nous vous rembourserons la totalité du montant payé.",
+    "reasonLabel": "Motif (facultatif)",
+    "cta": "Exercer le droit de rétractation",
+    "confirm": "Confirmez-vous votre rétractation ? Avec le remboursement, l'abonnement sera fermé et vous perdrez l'accès aux services payants.",
+    "confirmCta": "Je confirme ma rétractation",
+    "cancel": "Annuler",
+    "sent": "Demande de rétractation envoyée. Nous vous rembourserons dans les 14 jours : d'ici là, votre abonnement reste actif.",
+    "pending": "Vous avez envoyé une demande de rétractation le {date} : nous la traitons. Le remboursement arrivera dans les 14 jours suivant la demande.",
+    "refunded": "Rétractation acceptée le {date} : remboursement de {amount} sur la carte utilisée pour le paiement. Il arrive généralement sous 5 à 10 jours ouvrés.",
+    "rejected": "Votre demande de rétractation du {date} n'a pas été acceptée.",
+    "error_error": "Impossible d'envoyer la demande. Réessayez dans un instant ou écrivez-nous depuis la page Contact.",
+    "error_expired": "Le délai de rétractation de 14 jours est expiré.",
+    "error_already": "Vous avez déjà une demande de rétractation en cours.",
+    "error_not_stripe": "Nous n'avons trouvé aucun abonnement payé par carte."
   }
 }

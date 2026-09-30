@@ -4,14 +4,16 @@ import { revalidatePath } from 'next/cache'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
 import type Stripe from 'stripe'
+import { getLocale } from 'next-intl/server'
 import { getStripe } from '@/lib/stripe'
+import { recordConsent } from '@/lib/withdrawal'
 
 const getServiceClient = () =>
   createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
     auth: { autoRefreshToken: false, persistSession: false },
   })
 
-type UpgradeReason = 'not_logged' | 'not_stripe' | 'unavailable' | 'already_pro' | 'stripe_error'
+type UpgradeReason = 'not_logged' | 'not_stripe' | 'unavailable' | 'already_pro' | 'stripe_error' | 'consent'
 
 // Abbonamento Stripe attivo (Base con carta) da portare a Pro, con i controlli
 // comuni ad anteprima e passaggio.
@@ -88,7 +90,9 @@ export async function previewUpgradeToPro(): Promise<
 // dell'abbonamento Stripe esistente e Stripe addebita subito solo la
 // differenza per il periodo che resta (niente secondo abbonamento).
 // Chi non ha un abbonamento con carta passa dal checkout (?plan=pro).
-export async function upgradeToPro(prorationDate?: number): Promise<{ success: boolean; reason?: UpgradeReason }> {
+// immediateStart: consenso all'avvio immediato (casella obbligatoria).
+export async function upgradeToPro(prorationDate?: number, immediateStart = false): Promise<{ success: boolean; reason?: UpgradeReason }> {
+  if (!immediateStart) return { success: false, reason: 'consent' }
   try {
     const found = await findUpgradableSubscription()
     if (!found.ok) return { success: false, reason: found.reason }
@@ -106,7 +110,7 @@ export async function upgradeToPro(prorationDate?: number): Promise<{ success: b
       proration_behavior: 'always_invoice',
       ...(useDate ? { proration_date: useDate } : {}),
       payment_behavior: 'error_if_incomplete',
-      metadata: { ...subscription.metadata, userId, plan: 'pro' },
+      metadata: { ...subscription.metadata, userId, plan: 'pro', immediate_start_consent: new Date().toISOString() },
       expand: ['latest_invoice'],
     })
 
@@ -124,6 +128,7 @@ export async function upgradeToPro(prorationDate?: number): Promise<{ success: b
       .update({ subscription_plan: 'pro', subscription_status: 'active', subscription_source: 'stripe' })
       .eq('id', userId)
     if (updateError) console.error('Errore salvataggio piano Pro (arriverà col webhook):', updateError.message)
+    await recordConsent(getServiceClient(), { userId, kind: 'upgrade', plan: 'pro', stripeRef: subscription.id, locale: await getLocale() })
 
     revalidatePath('/dashboard')
     revalidatePath('/pro')

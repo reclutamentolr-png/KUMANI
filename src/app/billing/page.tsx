@@ -8,6 +8,8 @@ import type Stripe from 'stripe'
 import { getStripe } from '@/lib/stripe'
 import { isActiveSubscription } from '@/lib/subscriptionGate'
 import { findStripeSubscriptionForUser, subscriptionPeriodEnd } from '@/lib/stripeCustomer'
+import { withdrawableInvoices, withdrawalDeadline } from '@/lib/withdrawal'
+import WithdrawalRequest from '@/components/billing/WithdrawalRequest'
 import { locales, defaultLocale } from '../../../i18n'
 
 type BillingPageProps = {
@@ -26,6 +28,7 @@ type BillingProfile = {
 const MAX_SESSION_AGE_MS = 24 * 60 * 60 * 1000
 const isRecentSession = (createdSeconds: number) => Date.now() - createdSeconds * 1000 < MAX_SESSION_AGE_MS
 const isInFuture = (ms: number) => ms > Date.now()
+const daysAgoIso = (days: number) => new Date(Date.now() - days * 86_400_000).toISOString()
 
 export default async function BillingPage({ searchParams }: BillingPageProps) {
   const supabase = await createClient()
@@ -127,11 +130,21 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
   // Stato reale dell'abbonamento su Stripe (disdetta programmata / rinnovo):
   // best effort, se Stripe non risponde la pagina resta utilizzabile.
   let stripeState: { cancelOn: string | null; renewsOn: string | null } | null = null
+  // Diritto di recesso: ultimo giorno utile e pagamento più vecchio ancora
+  // nei 14 giorni (null se non si può più recedere)
+  let withdrawalUntil: string | null = null
+  let withdrawalEarliestPaid: number | null = null
   if (isStripeSubscriber) {
     try {
       const found = await findStripeSubscriptionForUser(user.id, user.email)
       const sub = found?.subscription
       if (sub) {
+        const invoices = await withdrawableInvoices(sub.id)
+        const deadline = withdrawalDeadline(invoices)
+        if (deadline) {
+          withdrawalUntil = dateFormat.format(deadline)
+          withdrawalEarliestPaid = Math.min(...invoices.map((inv) => inv.paidAt))
+        }
         const periodEnd = subscriptionPeriodEnd(sub)
         const scheduledEnd = sub.cancel_at ?? (sub.cancel_at_period_end ? periodEnd : undefined)
         stripeState = {
@@ -143,6 +156,32 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
       console.error('❌ Lettura stato abbonamento Stripe su /billing:', err instanceof Error ? err.message : err)
     }
   }
+
+  // Ultima richiesta di recesso (degli ultimi 60 giorni) e consenso
+  // all'avvio immediato: letti lato server, le tabelle non sono esposte.
+  const service = createAdminClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  })
+  const { data: withdrawal } = await service
+    .from('withdrawal_requests')
+    .select('status, requested_at, handled_at, refunded_cents, admin_note')
+    .eq('user_id', user.id)
+    .gte('requested_at', daysAgoIso(60))
+    .order('requested_at', { ascending: false })
+    .limit(1)
+    .maybeSingle<{ status: 'pending' | 'refunded' | 'rejected'; requested_at: string; handled_at: string | null; refunded_cents: number | null; admin_note: string | null }>()
+  let consentGiven = false
+  if (withdrawalEarliestPaid) {
+    const { count } = await service
+      .from('subscription_consents')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', user.id)
+      .gte('created_at', new Date((withdrawalEarliestPaid - 86_400) * 1000).toISOString())
+    consentGiven = (count ?? 0) > 0
+  }
+  const tw = await getTranslations({ locale, namespace: 'withdrawal' })
+  const money = (cents: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(cents / 100)
+  const canRequestWithdrawal = !!withdrawalUntil && withdrawal?.status !== 'pending'
 
   const portalNotice =
     portal === 'error' ? t('portalError')
@@ -157,6 +196,27 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
         {!isActive && (checkoutError === 'true' || canceled === 'true') && (
           <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
             {checkoutError === 'true' ? t('errorNotice') : t('canceledNotice')}
+          </div>
+        )}
+        {!isActive && checkoutError === 'consent' && (
+          <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">{tw('consentRequired')}</div>
+        )}
+
+        {withdrawal && (
+          <div
+            className={`mb-6 rounded-lg border p-3 text-left text-sm ${
+              withdrawal.status === 'refunded'
+                ? 'border-green-200 bg-green-50 text-green-800'
+                : withdrawal.status === 'rejected'
+                  ? 'border-amber-200 bg-amber-50 text-amber-800'
+                  : 'border-indigo-200 bg-indigo-50 text-indigo-800'
+            }`}
+          >
+            {withdrawal.status === 'pending' && tw('pending', { date: dateFormat.format(new Date(withdrawal.requested_at)) })}
+            {withdrawal.status === 'refunded' &&
+              tw('refunded', { date: dateFormat.format(new Date(withdrawal.handled_at ?? withdrawal.requested_at)), amount: money(withdrawal.refunded_cents ?? 0) })}
+            {withdrawal.status === 'rejected' && tw('rejected', { date: dateFormat.format(new Date(withdrawal.requested_at)) })}
+            {withdrawal.status !== 'pending' && withdrawal.admin_note && <p className="mt-1 text-xs">{withdrawal.admin_note}</p>}
           </div>
         )}
 
@@ -184,7 +244,11 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
         </p>
 
         {!isActive && (
-          <form action="/api/checkout" method="POST">
+          <form action="/api/checkout" method="POST" className="space-y-3">
+            <label className="flex items-start gap-2 text-left text-xs leading-relaxed text-gray-600">
+              <input type="checkbox" name="immediate_start" value="1" required className="mt-0.5 h-4 w-4 shrink-0 accent-indigo-600" />
+              <span>{tw('consentLabel')}</span>
+            </label>
             <button
               type="submit"
               className="w-full bg-indigo-600 text-white font-bold py-3 px-6 rounded-xl hover:bg-indigo-700 transition-all shadow-md hover:shadow-lg"
@@ -225,6 +289,31 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
               </button>
             </form>
             <p className="mt-2 text-xs text-gray-500">{t('manageStripeNote')}</p>
+
+            {canRequestWithdrawal && withdrawalUntil && (
+              <div className="mt-5 border-t border-gray-200 pt-4">
+                <h3 className="text-sm font-bold text-gray-900">{tw('title')}</h3>
+                <p className="mt-1 text-sm text-gray-600">{tw('text', { date: withdrawalUntil })}</p>
+                <p className="mt-1 text-xs text-gray-500">{consentGiven ? tw('refundProportional') : tw('refundFull')}</p>
+                <WithdrawalRequest
+                  texts={{
+                    reasonLabel: tw('reasonLabel'),
+                    cta: tw('cta'),
+                    confirm: tw('confirm'),
+                    confirmCta: tw('confirmCta'),
+                    cancel: tw('cancel'),
+                    sent: tw('sent'),
+                    errors: {
+                      error: tw('error_error'),
+                      expired: tw('error_expired'),
+                      already: tw('error_already'),
+                      not_stripe: tw('error_not_stripe'),
+                      not_logged: tw('error_error'),
+                    },
+                  }}
+                />
+              </div>
+            )}
           </div>
         )}
 

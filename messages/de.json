@@ -2901,7 +2901,8 @@
     "upgradeError_not_stripe": "Kein Kartenabo zum Aktualisieren gefunden: Nutze den Aktivierungsbutton.",
     "upgradeError_unavailable": "Der Pro-Tarif ist noch nicht verfügbar.",
     "upgradeError_already_pro": "Du hast bereits den Pro-Tarif.",
-    "upgradeError_stripe_error": "Zahlung fehlgeschlagen. Bitte versuche es gleich noch einmal."
+    "upgradeError_stripe_error": "Zahlung fehlgeschlagen. Bitte versuche es gleich noch einmal.",
+    "upgradeError_consent": "Setze das Häkchen, um die sofortige Aktivierung des Pro-Tarifs zu verlangen."
   },
   "proArea": {
     "convivioTitle": "Kordata · Gruppenangebote",
@@ -5453,5 +5454,26 @@
     "customers": {"title": "Ihre Kunden", "summary": "{total, plural, =0 {Keine Kunden} one {# Kunde} other {# Kunden}}, {active, plural, one {# aktiv} other {# aktiv}}", "empty": "Sie haben noch keine Kunden. Teilen Sie Ihren Link, um zu starten.", "joined": "Registriert am {date}", "noPlan": "Noch kein Abonnement", "active": "Aktiv", "inactive": "Nicht aktiv"},
     "commissions": {"title": "Provisionen", "csv": "Kontoauszug herunterladen (CSV)", "filterLabel": "Nach Status filtern", "filter": {"all": "Alle", "pending": "In Wartezeit", "matured": "Verdient", "paid": "Ausgezahlt", "cancelled": "Storniert"}, "empty": "Keine Provisionen vorhanden.", "col": {"date": "Datum", "customer": "Kunde", "kind": "Art", "plan": "Tarif", "net": "Nettobetrag", "pct": "%", "commission": "Provision", "state": "Status", "maturesAt": "Endgültig am", "note": "Hinweis"}, "kind": {"first": "Erstverkauf", "renewal": "Verlängerung", "adjustment": "Korrektur"}, "state": {"pendingUntil": "In Wartezeit bis {date}", "pending": "In Wartezeit", "matured": "Verdient", "paid": "Ausgezahlt", "cancelled": "Storniert"}},
     "payouts": {"title": "Erhaltene Zahlungen", "empty": "Sie haben noch keine Zahlungen erhalten.", "reference": "Verwendungszweck", "noReference": "nicht angegeben"}
+  },
+  "withdrawal": {
+    "consentLabel": "Ich verlange, dass mein Abo sofort beginnt, noch vor Ablauf der 14-tägigen Widerrufsfrist. Mir ist bewusst, dass mir bei einem Widerruf nur der noch nicht genutzte Teil des Abos erstattet wird.",
+    "consentRequired": "Um fortzufahren, setze das Häkchen, mit dem du die sofortige Aktivierung deines Abos verlangst.",
+    "title": "Widerrufsrecht",
+    "text": "Du kannst dein Abo innerhalb von 14 Tagen nach der Zahlung widerrufen, also bis zum {date}. Das Abo wird beendet und du erhältst die Erstattung innerhalb von 14 Tagen.",
+    "refundProportional": "Bei der Zahlung hast du die sofortige Aktivierung verlangt: Wir erstatten dir den noch nicht genutzten Teil des Abos.",
+    "refundFull": "Wir erstatten dir den vollen gezahlten Betrag.",
+    "reasonLabel": "Grund (optional)",
+    "cta": "Widerrufsrecht ausüben",
+    "confirm": "Bestätigst du den Widerruf? Mit der Erstattung wird das Abo beendet und du verlierst den Zugang zu den kostenpflichtigen Diensten.",
+    "confirmCta": "Ich bestätige den Widerruf",
+    "cancel": "Abbrechen",
+    "sent": "Widerruf gesendet. Wir erstatten dir den Betrag innerhalb von 14 Tagen: Bis dahin bleibt dein Abo aktiv.",
+    "pending": "Du hast am {date} einen Widerruf gesendet: Wir bearbeiten ihn. Die Erstattung erfolgt innerhalb von 14 Tagen ab der Anfrage.",
+    "refunded": "Widerruf am {date} angenommen: Erstattung von {amount} auf die für die Zahlung verwendete Karte. Sie kommt meist innerhalb von 5-10 Werktagen an.",
+    "rejected": "Dein Widerruf vom {date} wurde nicht angenommen.",
+    "error_error": "Die Anfrage konnte nicht gesendet werden. Versuche es gleich noch einmal oder schreib uns über die Kontaktseite.",
+    "error_expired": "Die 14-tägige Widerrufsfrist ist abgelaufen.",
+    "error_already": "Du hast bereits einen laufenden Widerruf.",
+    "error_not_stripe": "Wir haben kein mit Karte bezahltes Abo gefunden."
   }
 }
