@@ -312,6 +312,8 @@
     "enterResetCode": "Gib den Code und dein neues Passwort ein",
     "resetCodeDescription": "Wir haben eine E-Mail an {email} mit Anweisungen gesendet: Klicke auf den enthaltenen Link, oder – falls ein Code enthalten ist – gib ihn zusammen mit deinem neuen Passwort unten ein.",
     "cityOptional": "Stadt (optional)",
+    "cityRequired": "Stadt",
+    "cityMissing": "Gib die Stadt ein, in der du wohnst.",
     "directSignupUnavailable": "Derzeit ist die Registrierung nur mit Einladungscode möglich. Frag die Person, die dir von KUMANI erzählt hat.",
     "voucherCodeLabel": "Aktivierungs-Gutscheincode (optional)",
     "voucherCodeHint": "Du hast einen KUMANI-Gutschein von einem Geschäft bekommen? Gib ihn hier ein: Dein Abo wird sofort für ein Jahr aktiviert.",

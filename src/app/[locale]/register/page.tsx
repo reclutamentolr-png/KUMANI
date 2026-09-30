@@ -1,5 +1,6 @@
 import Link from '@/components/LocalizedLink'
 import { getTranslations } from 'next-intl/server'
+import { headers } from 'next/headers'
 import RegisterForm from '@/components/RegisterForm'
 import MaintenanceGate from '@/components/MaintenanceGate'
 import Logo from '@/components/Logo'
@@ -8,6 +9,9 @@ export const dynamic = 'force-dynamic'
 
 export default async function RegisterPage() {
   const t = await getTranslations('authRegister')
+  // Nazione da cui ci si collega (Vercel la ricava dall'indirizzo IP): serve
+  // solo a preselezionare il campo Nazione, che resta modificabile.
+  const detectedCountry = ((await headers()).get('x-vercel-ip-country') ?? '').toUpperCase()
   return (
     <MaintenanceGate>
       <div className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-[var(--background)] py-12 sm:px-6 lg:px-8">
@@ -28,7 +32,7 @@ export default async function RegisterPage() {
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="relative border border-[var(--gold)]/35 bg-[var(--paper)] px-4 py-8 shadow-[0_20px_55px_rgba(23,23,23,0.14)] sm:rounded-lg sm:px-10">
-            <RegisterForm />
+            <RegisterForm detectedCountry={detectedCountry} />
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
                 {t('alreadyHaveAccount')}{' '}

@@ -332,6 +332,8 @@
     "enterResetCode": "Enter the code and your new password",
     "resetCodeDescription": "We've sent an email to {email} with instructions: click the link inside, or — if it contains a code — enter it below along with your new password.",
     "cityOptional": "City (optional)",
+    "cityRequired": "City",
+    "cityMissing": "Enter the city where you live.",
     "directSignupUnavailable": "Right now you can only sign up with an invite code. Ask whoever told you about KUMANI.",
     "voucherCodeLabel": "Activation coupon code (optional)",
     "voucherCodeHint": "Did you get a KUMANI coupon from a shop? Enter it here: your subscription is activated right away for one year.",

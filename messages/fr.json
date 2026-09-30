@@ -312,6 +312,8 @@
     "enterResetCode": "Saisissez le code et votre nouveau mot de passe",
     "resetCodeDescription": "Nous avons envoyé un email à {email} avec les instructions : cliquez sur le lien qu'il contient, ou — s'il contient un code — saisissez-le ci-dessous avec votre nouveau mot de passe.",
     "cityOptional": "Ville (facultatif)",
+    "cityRequired": "Ville",
+    "cityMissing": "Indiquez la ville où vous habitez.",
     "directSignupUnavailable": "Pour le moment, l'inscription n'est possible qu'avec un code d'invitation. Demandez-le à la personne qui vous a parlé de KUMANI.",
     "voucherCodeLabel": "Code coupon d'activation (facultatif)",
     "voucherCodeHint": "Vous avez reçu un coupon KUMANI d'un commerce ? Saisissez-le ici : votre abonnement est activé tout de suite pour un an.",

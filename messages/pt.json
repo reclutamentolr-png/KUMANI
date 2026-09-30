@@ -312,6 +312,8 @@
     "enterResetCode": "Insira o código e a nova palavra-passe",
     "resetCodeDescription": "Enviámos um email para {email} com as instruções: clique no link que contém, ou — se contiver um código — insira-o abaixo junto com a nova palavra-passe.",
     "cityOptional": "Cidade (opcional)",
+    "cityRequired": "Cidade",
+    "cityMissing": "Indique a cidade onde vive.",
     "directSignupUnavailable": "De momento, o registo só é possível com um código de convite. Peça-o a quem lhe falou do KUMANI.",
     "voucherCodeLabel": "Código de cupão de ativação (opcional)",
     "voucherCodeHint": "Recebeu um cupão KUMANI de uma loja? Introduza-o aqui: a sua subscrição é ativada de imediato por um ano.",

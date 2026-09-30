@@ -14,7 +14,7 @@ const RESEND_COOLDOWN_SECONDS = 30
 
 type Step = 'form' | 'verify' | 'done'
 
-export default function RegisterForm() {
+export default function RegisterForm({ detectedCountry = '' }: { detectedCountry?: string }) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const locale = useLocale() // ✅ Ottiene 'it', 'en', ecc.
@@ -40,7 +40,8 @@ export default function RegisterForm() {
     last_name: '',
     email: resumeEmail,
     password: '',
-    country_code: '',
+    // Nazione preselezionata da quella da cui ci si collega, se è in elenco
+    country_code: europeanCountries.some((c) => c.code === detectedCountry) ? detectedCountry : '',
     city: '',
     referral_code: initialReferralCode,
     voucher_code: initialVoucherCode,
@@ -96,8 +97,13 @@ export default function RegisterForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
     setError(null)
+    // Città obbligatoria (non bastano spazi): finisce già compilata nel profilo
+    if (formData.city.trim().length < 2) {
+      setError(t('cityMissing'))
+      return
+    }
+    setLoading(true)
 
     const cleanReferralCode = formData.referral_code.trim().toUpperCase()
 
@@ -382,10 +388,10 @@ export default function RegisterForm() {
           </div>
 
           <div>
-            <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">{t('cityOptional')}</label>
+            <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">{t('cityRequired')}</label>
             <div className="relative">
               <MapPin className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
-              <input id="city" type="text" maxLength={80} value={formData.city} onChange={(e) => setFormData({ ...formData, city: e.target.value })} className="w-full pl-10 pr-4 py-2.5 border border-stone-300 rounded-lg focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 focus:outline-none" />
+              <input id="city" type="text" required minLength={2} maxLength={80} autoComplete="address-level2" value={formData.city} onChange={(e) => setFormData({ ...formData, city: e.target.value })} className="w-full pl-10 pr-4 py-2.5 border border-stone-300 rounded-lg focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 focus:outline-none" />
             </div>
           </div>
 
