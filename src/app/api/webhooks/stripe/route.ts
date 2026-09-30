@@ -5,6 +5,7 @@ import { getStripe } from '@/lib/stripe'
 import { isPlatformFeeType, markPlatformFeesPaid } from '@/lib/eventFees'
 import { recordAgentCommission, reverseAgentCommission } from '@/lib/agentCommissions'
 import { sendPurchaseConfirmation } from '@/lib/purchaseEmail'
+import { awardActivationPoints, reverseActivationPoints } from '@/lib/networkPoints'
 
 // Creato alla richiesta e non al caricamento del modulo: così `next build`
 // non fallisce se le variabili d'ambiente non sono disponibili in build.
@@ -32,8 +33,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: message }, { status: 400 })
   }
 
-  // Provvigioni degli Agenti venditori (fattura di abbonamento pagata da un
-  // cliente arrivato dal link di un agente; rimborso = provvigione annullata)
+  // Fattura di abbonamento pagata: email di conferma, provvigione dell'agente
+  // (cliente arrivato dal suo link) e Punti Rete allo sponsor diretto.
+  // Rimborso: provvigione annullata e punti tolti.
   if (event.type === 'invoice.paid' || event.type === 'charge.refunded') {
     try {
       if (event.type === 'invoice.paid') {
@@ -43,10 +45,15 @@ export async function POST(req: NextRequest) {
           console.error('❌ Email di conferma acquisto:', err instanceof Error ? err.message : err)
         )
         await recordAgentCommission(event.data.object as Stripe.Invoice)
-      } else await reverseAgentCommission(event.data.object as Stripe.Charge)
+        // Punti Rete allo sponsor diretto (idempotente per fattura)
+        await awardActivationPoints(event.data.object as Stripe.Invoice)
+      } else {
+        await reverseAgentCommission(event.data.object as Stripe.Charge)
+        await reverseActivationPoints(event.data.object as Stripe.Charge)
+      }
       return NextResponse.json({ received: true })
     } catch (err) {
-      console.error(`❌ Provvigione agente (${event.type}) non registrata:`, err instanceof Error ? err.message : err)
+      console.error(`❌ Provvigione agente o Punti Rete (${event.type}) non registrati:`, err instanceof Error ? err.message : err)
       // 500 → Stripe ritenta l'invio dell'evento più tardi.
       return NextResponse.json({ error: 'db_update_failed' }, { status: 500 })
     }

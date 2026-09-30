@@ -40,8 +40,8 @@ export async function createListingAction(data: CreateListingData) {
   if (!user) return { success: false, message: 'Devi effettuare l\'accesso' }
 
   // 1+2. Spende atomicamente da daily_points (mai network_points, che è
-  // riservato a voucher/premi) — stesso guard "nella WHERE dell'UPDATE"
-  // usato da create_subscription_voucher, evita la race condition del
+  // riservato a voucher e vetrina) — stesso guard "nella WHERE dell'UPDATE"
+  // usato da spend_network_points, evita la race condition del
   // vecchio pattern read-then-write.
   const { data: spendResult, error: spendError } = await supabase
     .rpc('spend_daily_points', { p_amount: LISTING_COST })

@@ -13,10 +13,11 @@ type Props = {
   labelKey: string
   descriptionKey: string
   icon: 'Star' | 'Sparkles' | 'Crown'
-  bonusPoints: number
+  // Punti Community guadagnati richiesti dal badge (solo per il testo)
+  threshold: number
 }
 
-export default function RankAchievementModal({ rankKey, labelKey, descriptionKey, icon, bonusPoints }: Props) {
+export default function RankAchievementModal({ rankKey, labelKey, descriptionKey, icon, threshold }: Props) {
   const t = useTranslations('dashboard')
   const [visible, setVisible] = useState(true)
   const Icon = RANK_ICONS[icon]
@@ -65,11 +66,7 @@ export default function RankAchievementModal({ rankKey, labelKey, descriptionKey
         </p>
         <h2 className="mb-3 text-2xl font-bold text-white">{t(labelKey)}</h2>
         <p className="text-sm leading-6 text-stone-300">{t('qualificationAchievedMessage', { rank: t(labelKey) })}</p>
-        <p className="mt-1 text-xs text-stone-400">{t(descriptionKey)}</p>
-
-        <p className="mt-4 inline-block rounded-full border border-[var(--gold)]/45 bg-[var(--gold)]/10 px-4 py-1.5 text-sm font-bold text-[var(--gold-bright)]">
-          {t('qualificationBonusPoints', { points: bonusPoints })}
-        </p>
+        <p className="mt-1 text-xs text-stone-400">{t(descriptionKey, { points: threshold })}</p>
 
         <button
           onClick={handleClose}

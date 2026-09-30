@@ -6,7 +6,6 @@ import InfoPopover from '@/components/InfoPopover'
 import type { MarketplaceTool } from '@/lib/marketplaceTools'
 import { MARKETPLACE_CATEGORIES, type MarketplaceCategory } from '@/lib/marketplaceTools'
 import type { DashboardNetworkData } from '@/lib/dashboardNetworkData'
-import { RANKS } from '@/lib/ranks'
 import { Users, ArrowRight, Star, CheckCircle2, Crown, Hourglass } from 'lucide-react'
 import CopyButton from '@/components/CopyButton'
 import VoucherActivationButton from '@/components/VoucherActivationButton'
@@ -54,9 +53,10 @@ export default async function DashboardTipo2({
   const pt = await getTranslations('proArea')
   const locale = await getLocale()
 
-  const { activeKumani, pendingKumani, currentRank, directSponsorCount } = network
-  const nextRank = RANKS.find((rank) => directSponsorCount < rank.threshold) || null
-  const rankProgress = nextRank ? Math.min((directSponsorCount / nextRank.threshold) * 100, 100) : 100
+  // Qualifiche (solo badge) sui Punti Community guadagnati in totale
+  const { activeKumani, pendingKumani, currentRank, ranks, networkPointsEarned } = network
+  const nextRank = ranks.find((rank) => networkPointsEarned < rank.threshold) || null
+  const rankProgress = nextRank ? Math.min((networkPointsEarned / nextRank.threshold) * 100, 100) : 100
 
   const categoryLabels: Record<MarketplaceCategory, string> = {
     marketing: marketplaceT('categoryMarketing'),
@@ -252,10 +252,10 @@ export default async function DashboardTipo2({
               {nextRank && (
                 <>
                   <p className="text-xs text-[var(--muted)] mt-1.5">
-                    {directSponsorCount}/{nextRank.threshold} {t('affiliates')}
+                    {networkPointsEarned}/{nextRank.threshold} {t('communityPointsUnit')}
                   </p>
                   <p className="text-xs font-semibold text-[var(--gold)] mt-1">
-                    {t('missingForNextRank', { count: nextRank.threshold - directSponsorCount, rank: t(nextRank.labelKey) })}
+                    {t('missingForNextRank', { count: nextRank.threshold - networkPointsEarned, rank: t(nextRank.labelKey) })}
                   </p>
                 </>
               )}

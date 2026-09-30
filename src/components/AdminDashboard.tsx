@@ -322,8 +322,18 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     maintenance_message: 'Sito in manutenzione. Torna presto!',
     matrix_slot_bonus_points: 5,
     matrix_spillover_bonus_points: 5,
-    activity_thanks_points: 3,
-    pro_invite_extra_points: 20,
+    activity_thanks_points: 0,
+    pro_invite_extra_points: 0,
+    network_points_activation_base: 49,
+    network_points_activation_pro: 122,
+    network_points_upgrade_pro: 60,
+    voucher_packs: [
+      { points: 294, credit_eur: 49 },
+      { points: 1800, credit_eur: 294 },
+      { points: 5500, credit_eur: 980 },
+    ],
+    voucher_value_base_eur: 49,
+    voucher_value_pro_eur: 149,
     pro_trial_days: 15,
     affinity_intros_per_week: 3,
     listing_feature_cost_7d: 20,
@@ -1054,7 +1064,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     setSavingProfile(true)
 
     // subscription_source traccia CHI ha attivato l'abbonamento (stripe /
-    // voucher / admin): claim_rank_bonus conta solo i downline attivati via
+    // voucher / admin): il Bonus Struttura conta solo i downline attivati via
     // Stripe per i Punti Community, quindi un'attivazione manuale da qui non deve
     // mai valere come pagamento reale. Lo tocchiamo solo quando lo stato
     // sta effettivamente cambiando — se era già "active" (es. pagamento
@@ -2923,16 +2933,119 @@ L'accesso viene registrato.`)) return
               </div>
             </div>
           )}
-          <label className="block max-w-xs">
-            <span className="mb-1 block text-xs font-medium text-gray-600">Punti Community / ringraziamento attività</span>
-            <input
-              type="number"
-              min="0"
-              value={systemSettings.activity_thanks_points ?? 3}
-              onChange={(e) => setSystemSettings({ ...systemSettings, activity_thanks_points: parseInt(e.target.value, 10) || 0 })}
-              className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
-            />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+            <GitBranch className="w-4 h-4" />
+            Punti Community (Punti Rete)
           </label>
+          <p className="text-xs text-gray-500 mb-3">
+            Punti assegnati <strong>solo allo sponsor diretto</strong> quando un suo invitato paga con carta: primo
+            abbonamento Base o Pro, oppure passaggio da Base a Pro. Voucher e rinnovi non danno punti; un rimborso li
+            toglie. Chi si iscrive senza invito non dà punti.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl">
+            <label className="block max-w-xs">
+              <span className="mb-1 block text-xs font-medium text-gray-600">Attivazione Base</span>
+              <input
+                type="number"
+                min="0"
+                value={systemSettings.network_points_activation_base ?? 49}
+                onChange={(e) => setSystemSettings({ ...systemSettings, network_points_activation_base: parseInt(e.target.value, 10) || 0 })}
+                className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+              />
+            </label>
+            <label className="block max-w-xs">
+              <span className="mb-1 block text-xs font-medium text-gray-600">Attivazione Pro</span>
+              <input
+                type="number"
+                min="0"
+                value={systemSettings.network_points_activation_pro ?? 122}
+                onChange={(e) => setSystemSettings({ ...systemSettings, network_points_activation_pro: parseInt(e.target.value, 10) || 0 })}
+                className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+              />
+            </label>
+            <label className="block max-w-xs">
+              <span className="mb-1 block text-xs font-medium text-gray-600">Passaggio a Pro</span>
+              <input
+                type="number"
+                min="0"
+                value={systemSettings.network_points_upgrade_pro ?? 60}
+                onChange={(e) => setSystemSettings({ ...systemSettings, network_points_upgrade_pro: parseInt(e.target.value, 10) || 0 })}
+                className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+              />
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+            <GitBranch className="w-4 h-4" />
+            Pacchetti voucher e qualifiche
+          </label>
+          <p className="text-xs text-gray-500 mb-3">
+            Il Kumano spende i punti del pacchetto e riceve un credito in euro, con cui crea voucher Base o Pro (da
+            regalare o vendere). I pacchetti si possono riscattare più volte. Le stesse soglie, sui punti guadagnati in
+            totale, danno i badge Kuman Green, Star e Black (nessun premio collegato).
+          </p>
+          <div className="space-y-2 max-w-xl">
+            {(Array.isArray(systemSettings.voucher_packs) ? systemSettings.voucher_packs : []).map((pack, index) => (
+              <div key={index} className="grid grid-cols-[auto_1fr_1fr] items-end gap-3">
+                <span className="pb-3 text-xs font-bold text-gray-500">{['Kuman Green', 'Kuman Star', 'Kuman Black'][index] ?? `#${index + 1}`}</span>
+                <label className="block">
+                  <span className="mb-1 block text-xs font-medium text-gray-600">Punti</span>
+                  <input
+                    type="number"
+                    min="1"
+                    value={pack.points}
+                    onChange={(e) => {
+                      const packs = [...systemSettings.voucher_packs]
+                      packs[index] = { ...pack, points: parseInt(e.target.value, 10) || 0 }
+                      setSystemSettings({ ...systemSettings, voucher_packs: packs })
+                    }}
+                    className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                  />
+                </label>
+                <label className="block">
+                  <span className="mb-1 block text-xs font-medium text-gray-600">Credito voucher (€)</span>
+                  <input
+                    type="number"
+                    min="1"
+                    value={pack.credit_eur}
+                    onChange={(e) => {
+                      const packs = [...systemSettings.voucher_packs]
+                      packs[index] = { ...pack, credit_eur: parseInt(e.target.value, 10) || 0 }
+                      setSystemSettings({ ...systemSettings, voucher_packs: packs })
+                    }}
+                    className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                  />
+                </label>
+              </div>
+            ))}
+          </div>
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl">
+            <label className="block max-w-xs">
+              <span className="mb-1 block text-xs font-medium text-gray-600">Valore voucher Base (€)</span>
+              <input
+                type="number"
+                min="0"
+                value={systemSettings.voucher_value_base_eur ?? 49}
+                onChange={(e) => setSystemSettings({ ...systemSettings, voucher_value_base_eur: parseInt(e.target.value, 10) || 0 })}
+                className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+              />
+            </label>
+            <label className="block max-w-xs">
+              <span className="mb-1 block text-xs font-medium text-gray-600">Valore voucher Pro (€)</span>
+              <input
+                type="number"
+                min="0"
+                value={systemSettings.voucher_value_pro_eur ?? 149}
+                onChange={(e) => setSystemSettings({ ...systemSettings, voucher_value_pro_eur: parseInt(e.target.value, 10) || 0 })}
+                className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+              />
+            </label>
+          </div>
         </div>
 
         <div>
@@ -2972,25 +3085,13 @@ L'accesso viene registrato.`)) return
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
             <GitBranch className="w-4 h-4" />
-            Piano Pro: extra inviti e prova gratuita
+            Piano Pro: prova gratuita
           </label>
           <p className="text-xs text-gray-500 mb-3">
-            <strong>Extra Pro:</strong> Punti Community in più, una sola volta per invitato, a chi invita direttamente una
-            persona che paga il piano Pro con carta. Si sommano al Bonus Struttura qui sopra (es. 10 + 20 = 30 punti, in
-            proporzione al prezzo Pro). <strong>Prova Pro:</strong> giorni di Pro gratis per chi si registra come
-            professionista o la attiva dalla pagina Pro (una sola volta per account, senza carta).
+            Giorni di Pro gratis per chi si registra come professionista o la attiva dalla pagina Pro (una sola volta per
+            account, senza carta).
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl">
-            <label className="block max-w-xs">
-              <span className="mb-1 block text-xs font-medium text-gray-600">Punti extra / invito Pro</span>
-              <input
-                type="number"
-                min="0"
-                value={systemSettings.pro_invite_extra_points ?? 20}
-                onChange={(e) => setSystemSettings({ ...systemSettings, pro_invite_extra_points: parseInt(e.target.value, 10) || 0 })}
-                className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
-              />
-            </label>
             <label className="block max-w-xs">
               <span className="mb-1 block text-xs font-medium text-gray-600">Giorni di prova</span>
               <input

@@ -36,7 +36,9 @@ async function vatRate(): Promise<number> {
   return Number.isFinite(rate) && rate >= 0 && rate < 100 ? rate : 22
 }
 
-async function userIdOf(invoice: InvoiceLike): Promise<string | null> {
+// Utente KUMANI della fattura (metadati dell'abbonamento)
+export async function userIdOf(raw: Stripe.Invoice): Promise<string | null> {
+  const invoice = raw as InvoiceLike
   const fromDetails = invoice.subscription_details?.metadata?.userId
   if (fromDetails) return fromDetails
   const subscriptionId = idOf(invoice.subscription)

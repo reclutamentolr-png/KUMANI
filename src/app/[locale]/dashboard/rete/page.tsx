@@ -13,9 +13,8 @@ import NotYetKumaniList from '@/components/NotYetKumaniList'
 import Leaderboard from '@/components/Leaderboard'
 import { getDashboardNetworkData } from '@/lib/dashboardNetworkData'
 import { ArrowLeft, TreePine, Star, Sparkles, Crown, Trophy, Wallet, PartyPopper } from 'lucide-react'
-import { RANKS } from '@/lib/ranks'
 
-// Schede "Prossimi obiettivi": aspetto di ciascuna qualifica (soglie e testi da RANKS)
+// Schede "Prossimi obiettivi": aspetto di ciascuna qualifica (soglie e testi dalle qualifiche della rete)
 const GOALS = [
   { key: 'rising_star', Icon: Star, icon: 'text-yellow-500', levelKey: 'easy', card: 'from-green-50 to-emerald-50 border-green-200', chip: 'text-green-800 bg-green-200', track: 'bg-green-200', bar: 'from-green-500 to-emerald-500' },
   { key: 'shining_star', Icon: Sparkles, icon: 'text-blue-500', levelKey: 'medium', card: 'from-blue-50 to-indigo-50 border-blue-200', chip: 'text-blue-800 bg-blue-200', track: 'bg-blue-200', bar: 'from-blue-500 to-indigo-500' },
@@ -53,13 +52,15 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
     pendingKumani,
     directSponsorInSpilloverCount,
     currentRank,
+    ranks,
+    networkPointsEarned,
     loginUrl,
   } = network
 
   const shareUrl = `${SITE_URL}/${locale}/ref/${profile?.referral_code}`
 
-  // Qualifiche raggiunte, con i giorni dall'iscrizione (registrate alla
-  // prima visita dopo il raggiungimento, con la data ricostruita).
+  // Qualifiche (badge) raggiunte, con i giorni dall'iscrizione: la data la
+  // registra il database quando i Punti Community guadagnati superano la soglia.
   const { data: achievementRows } = await supabase.rpc('my_rank_achievements')
   const achievements = new Map(
     ((achievementRows ?? []) as { rank_key: string; achieved_at: string; days: number }[]).map((row) => [row.rank_key, row])
@@ -199,7 +200,7 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
           </h2>
           <div className="space-y-4">
             {GOALS.map((goal) => {
-              const rank = RANKS.find((r) => r.key === goal.key)!
+              const rank = ranks.find((r) => r.key === goal.key)!
               const achievement = achievements.get(goal.key)
               const Icon = goal.Icon
               return (
@@ -221,15 +222,15 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
                       <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${goal.chip}`}>{t(goal.levelKey)}</span>
                     </div>
                     <p className="font-bold text-gray-900 mb-1">{t(rank.labelKey)}</p>
-                    <p className="text-sm text-gray-600 mb-2">{t(rank.descriptionKey)}</p>
+                    <p className="text-sm text-gray-600 mb-2">{t(rank.descriptionKey, { points: rank.threshold })}</p>
                     <div className={`w-full rounded-full h-2.5 ${goal.track}`}>
                       <div
                         className={`bg-gradient-to-r ${goal.bar} h-2.5 rounded-full`}
-                        style={{ width: `${achievement ? 100 : Math.min((directSponsorCount / rank.threshold) * 100, 100)}%` }}
+                        style={{ width: `${achievement ? 100 : Math.min((networkPointsEarned / rank.threshold) * 100, 100)}%` }}
                       ></div>
                     </div>
                     <p className="text-xs text-gray-500 mt-2 font-medium">
-                      {directSponsorCount}/{rank.threshold} {t('affiliates')}
+                      {Math.min(networkPointsEarned, rank.threshold)}/{rank.threshold} {t('communityPointsUnit')}
                     </p>
                   </div>
                 </div>

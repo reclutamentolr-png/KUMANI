@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     'Termini di servizio della piattaforma Kumani e regolamento trasparente del Programma Vantaggi: punti, bonus, coupon e iniziative esclusive.'
 }
 
-const LAST_UPDATE = '1 ottobre 2026'
+const LAST_UPDATE = '30 settembre 2026'
 
 export default function TermsPage() {
   return (
@@ -60,9 +60,9 @@ export default function TermsPage() {
             <li><a href="#sez-3" className="hover:underline">3. Abbonamento e corrispettivi</a></li>
             <li><a href="#sez-4" className="hover:underline">4. Servizi dell&apos;Ecosistema KUMANI</a></li>
             <li><a href="#sez-5" className="hover:underline">5. Bacheca annunci e contenuti degli utenti</a></li>
-            <li><a href="#sez-6" className="hover:underline">6. Punti e classifica di attività</a></li>
+            <li><a href="#sez-6" className="hover:underline">6. KU Points e Punti Community</a></li>
             <li><a href="#sez-7" className="hover:underline">7. Regolamento Programma Vantaggi</a></li>
-            <li><a href="#sez-8" className="hover:underline">8. Esclusione di compensi da reclutamento</a></li>
+            <li><a href="#sez-8" className="hover:underline">8. Nessun compenso in denaro da KUMANI</a></li>
             <li><a href="#sez-9" className="hover:underline">9. Privacy e dati personali</a></li>
             <li><a href="#sez-10" className="hover:underline">10. Limitazioni di responsabilità</a></li>
             <li><a href="#sez-11" className="hover:underline">11. Modifiche, manutenzione e continuità</a></li>
@@ -244,19 +244,31 @@ export default function TermsPage() {
 
           {/* 6 */}
           <section id="sez-6" className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 scroll-mt-24">
-            <h2 className="text-xl font-bold text-gray-900 mb-3">6. Punti e classifica di attività</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-3">6. KU Points e Punti Community</h2>
             <div className="text-gray-600 space-y-3 text-sm sm:text-base leading-relaxed">
               <p>
-                L&apos;utilizzo dei servizi (accessi giornalieri, strumenti utilizzati, annunci pubblicati) fa maturare punti attività.
-                La classifica pubblica rappresenta il livello di attività sulla Piattaforma e non costituisce in alcun modo
-                promessa di guadagno o diritto a corrispettivi in denaro.
+                <strong className="text-gray-900">KU Points.</strong> L&apos;utilizzo dei servizi (accesso giornaliero, uso degli strumenti,
+                altre attività indicate nella Piattaforma) fa maturare KU Points, nelle quantità stabilite dalla Piattaforma e
+                modificabili nel tempo. La classifica pubblica rappresenta il livello di attività e non costituisce promessa di guadagno.
+              </p>
+              <p>
+                <strong className="text-gray-900">Punti Community.</strong> L&apos;utente riceve Punti Community quando una persona che ha
+                invitato direttamente attiva un abbonamento pagato con carta (Base o Pro) o passa dal piano Base al piano Pro, e con il
+                Bonus Struttura legato ai posti della propria matrice. Le quantità sono stabilite dalla Piattaforma e indicate
+                nell&apos;area personale. Le attivazioni tramite voucher e i rinnovi non danno Punti Community; in caso di rimborso del
+                pagamento i punti collegati vengono tolti.
+              </p>
+              <p>
+                I Punti Community si usano per mettere in vetrina gli annunci e per riscattare i pacchetti voucher (sezione 7.8).
+                Le qualifiche Kuman Green, Kuman Star e Kuman Black sono badge di riconoscimento, raggiunti con i Punti Community
+                guadagnati in totale, e non danno diritto a premi.
               </p>
             </div>
             <div className="mt-4 bg-green-50 border border-green-200 rounded-xl p-4 flex gap-3">
               <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
               <p className="text-green-800 text-sm leading-relaxed">
-                <strong>Trasparenza:</strong> i punti si maturano esclusivamente utilizzando i servizi della Piattaforma.
-                Nessun punto, bonus o vantaggio è riconosciuto per il semplice reclutamento o la semplice registrazione di altri utenti.
+                <strong>Trasparenza:</strong> KU Points e Punti Community non sono denaro: KUMANI non li paga, non li rimborsa e non li
+                converte in contanti. La semplice registrazione di altri utenti, senza un abbonamento pagato, non dà punti.
               </p>
             </div>
           </section>
@@ -291,9 +303,9 @@ export default function TermsPage() {
                 La partecipazione è sempre volontaria e gratuita.
               </p>
               <p>
-                <strong className="text-gray-900">7.4 Caratteristiche dei vantaggi.</strong> Bonus e coupon sono personali,
-                non cedibili, non commerciabili e non convertibili in denaro. Non costituiscono moneta elettronica né valore
-                accumulabile riscattabile in contanti.
+                <strong className="text-gray-900">7.4 Caratteristiche dei vantaggi.</strong> Bonus, coupon e punti sono personali,
+                non cedibili e non convertibili in denaro presso KUMANI. Non costituiscono moneta elettronica né valore
+                accumulabile riscattabile in contanti. Fanno eccezione i voucher, disciplinati dalla sezione 7.8.
               </p>
               <p>
                 <strong className="text-gray-900">7.5 Scadenze.</strong> Ciascun bonus o coupon può riportare una data di scadenza,
@@ -308,30 +320,45 @@ export default function TermsPage() {
                 <strong className="text-gray-900">7.7 Modifiche al programma.</strong> La Piattaforma potrà modificare il Programma Vantaggi
                 dandone comunicazione in questa pagina. I vantaggi già attribuiti restano validi alle condizioni comunicate al momento dell&apos;attribuzione.
               </p>
+              <p>
+                <strong className="text-gray-900">7.8 Voucher.</strong> Con i Punti Community l&apos;utente può riscattare pacchetti che
+                danno un credito voucher in euro (i pacchetti e i relativi valori sono indicati nell&apos;area personale e possono essere
+                riscattati più volte). Con il credito l&apos;utente crea voucher che attivano un abbonamento KUMANI Base o Pro per un anno;
+                un voucher non ancora utilizzato può essere annullato e il credito torna disponibile. Il credito voucher non è
+                rimborsabile né convertibile in denaro presso KUMANI.
+              </p>
+              <p>
+                KUMANI concede i Voucher come incentivo promozionale sotto forma di sconto del 100% sui propri servizi.
+                L&apos;eventuale cessione, monetizzazione o rivendita dei Voucher a terzi da parte dell&apos;utente (Promotore) avviene in
+                totale autonomia e sotto la sua esclusiva responsabilità: KUMANI non è parte della cessione e la ricevuta che la
+                Piattaforma permette di preparare è un documento dell&apos;utente. È cura del Promotore adempiere agli obblighi fiscali e
+                dichiarativi previsti dalla normativa del proprio Paese di residenza in merito agli incassi derivanti da tali attività.
+              </p>
             </div>
 
             <div className="mt-5 bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3">
               <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
               <p className="text-amber-800 text-sm leading-relaxed">
-                Nessun vantaggio del programma è condizionato al reclutamento di altri utenti né ai pagamenti effettuati da terzi:
-                l&apos;unico criterio di maturazione è l&apos;utilizzo personale dei servizi.
+                I Punti Community dipendono dagli abbonamenti pagati dalle persone invitate (sezione 6). Non sono garantiti né
+                promessi guadagni: il valore dei voucher è uno sconto sui servizi KUMANI, e ciò che l&apos;utente ne ricava cedendoli a
+                terzi dipende solo da lui e ricade sotto la sua responsabilità (sezione 7.8).
               </p>
             </div>
           </section>
 
           {/* 8 */}
           <section id="sez-8" className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 scroll-mt-24">
-            <h2 className="text-xl font-bold text-gray-900 mb-3">8. Esclusione di compensi da reclutamento</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-3">8. Nessun compenso in denaro da KUMANI</h2>
             <div className="text-gray-600 space-y-3 text-sm sm:text-base leading-relaxed">
               <p>
-                La Piattaforma non riconosce commissioni, percentuali o compensi di alcun genere legati al reclutamento di nuovi membri
-                o ai corrispettivi da questi versati. Le funzionalità di referral e organizzazione della community (codici invito, matrici,
-                reti di contatti) hanno finalità esclusivamente organizzative e di condivisione dei contenuti, e non generano proventi
-                derivanti dalla struttura della rete.
+                KUMANI non paga agli utenti commissioni, percentuali o altri compensi in denaro per gli inviti o per gli abbonamenti
+                acquistati dalle persone invitate. Gli unici vantaggi collegati agli inviti sono i Punti Community e i voucher
+                descritti nelle sezioni 6 e 7, che non sono denaro e non sono convertibili in contanti presso KUMANI.
               </p>
               <p>
-                Tale assetto esclude la configurabilità di schemi piramidali o vendite multilivello compensate sul reclutamento,
-                ai sensi della normativa applicabile (incluso l&apos;art. 5 della L. 173/2005).
+                Le funzionalità di referral e di organizzazione della community (codici invito, matrice, rete di contatti) servono a
+                organizzare la community e a condividere i contenuti. Gli Agenti venditori incaricati da KUMANI operano con un
+                contratto separato, con partita IVA e provvigioni regolate da quel contratto.
               </p>
             </div>
           </section>

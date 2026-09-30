@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { Coins, Sparkles, Unlock, Award, Ticket, HeartHandshake, Repeat, Save, LoaderCircle, Info } from 'lucide-react'
 import { getKuManagement, updateKuFeature, updateKuUnlock } from '@/app/actions/admin'
 import type { KuFeatureKey, KuFeatureRow, KuUnlockRow } from '@/lib/ku'
+import KuActivityPointsTable from '@/components/admin/KuActivityPointsTable'
 
 type Stats = {
   byKind: Record<string, { count: number; ku: number; points: number; discountEur: number }>
@@ -190,6 +191,8 @@ export default function KuManagementPanel() {
           funziona&quot; su ogni scheda per la descrizione completa. Statistiche del mese: {monthLabel}.
         </p>
       </div>
+
+      <KuActivityPointsTable />
 
       {features.map((feature) => {
         const info = DESCRIPTIONS[feature.key]

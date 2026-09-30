@@ -203,6 +203,13 @@ export type AdminSystemSettings = {
   matrix_spillover_bonus_points: number
   activity_thanks_points: number
   pro_invite_extra_points: number
+  // Nuovo sistema Punti Community (20261203100000_network_points_v2.sql)
+  network_points_activation_base: number
+  network_points_activation_pro: number
+  network_points_upgrade_pro: number
+  voucher_packs: { points: number; credit_eur: number }[]
+  voucher_value_base_eur: number
+  voucher_value_pro_eur: number
   pro_trial_days: number
   affinity_intros_per_week: number
   listing_feature_cost_7d: number

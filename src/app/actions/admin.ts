@@ -92,6 +92,8 @@ const GENERAL_SETTINGS_KEYS = new Set([
   'mosaic_pixels_day', 'mosaic_bonus_pixels', 'mosaic_min_login_days',
   'fabula_min_login_days', 'fabula_hide_after_reports',
   'rewards_catalog_enabled',
+  'network_points_activation_base', 'network_points_activation_pro', 'network_points_upgrade_pro',
+  'voucher_packs', 'voucher_value_base_eur', 'voucher_value_pro_eur',
 ])
 
 // Salva solo le impostazioni cambiate (il modulo manda le differenze), così
@@ -101,6 +103,20 @@ export async function adminSaveSystemSettings(settings: Record<string, unknown>)
   if (!admin) return { success: false, error: 'Non autorizzato' }
   const unknown = Object.keys(settings).find((key) => !GENERAL_SETTINGS_KEYS.has(key))
   if (unknown) return { success: false, error: `Impostazione non modificabile da qui: ${unknown}` }
+  // Pacchetti voucher: 1-5 pacchetti con punti e credito interi positivi, punti crescenti
+  if ('voucher_packs' in settings) {
+    const packs = settings.voucher_packs
+    const valid =
+      Array.isArray(packs) &&
+      packs.length >= 1 &&
+      packs.length <= 5 &&
+      packs.every((p, i) => {
+        const pack = p as { points?: unknown; credit_eur?: unknown }
+        const prev = i > 0 ? (packs[i - 1] as { points: number }).points : 0
+        return Number.isInteger(pack.points) && Number.isInteger(pack.credit_eur) && (pack.points as number) > prev && (pack.credit_eur as number) > 0
+      })
+    if (!valid) return { success: false, error: 'Pacchetti voucher non validi: punti e credito devono essere numeri interi positivi, con punti crescenti.' }
+  }
   if (Object.keys(settings).length === 0) return { success: true }
   const rows = Object.entries(settings).map(([key, value]) => ({ key, value: JSON.stringify(value) }))
   const { error } = await getServiceClient().from('system_settings').upsert(rows, { onConflict: 'key' })
@@ -2759,4 +2775,35 @@ export async function adminOverviewCounts() {
     count(service.from('profiles').select('id', { count: 'exact', head: true }).eq('is_blocked', true)),
   ])
   return { totalUsers, activeUsers, totalNodes, blockedUsers }
+}
+
+// KU Points per attività (accesso giornaliero e uso di ogni strumento, una
+// volta al giorno): quantità modificabili, lette dalle funzioni che
+// assegnano i KU (ku_points_for in 20261203100000_network_points_v2.sql).
+export type KuActivityPointsRow = { key: string; label: string; points: number }
+
+export async function adminListKuActivityPoints(): Promise<{ rows: KuActivityPointsRow[]; error: string | null }> {
+  const admin = await verifyAdmin('settings.read')
+  if (!admin) return { rows: [], error: 'Non autorizzato' }
+  const { data, error } = await getServiceClient()
+    .from('ku_activity_points')
+    .select('key, label, points')
+    .order('sort_order')
+    .order('label')
+  if (error) return { rows: [], error: error.message }
+  return { rows: (data as KuActivityPointsRow[]) ?? [], error: null }
+}
+
+export async function adminSaveKuActivityPoints(rows: { key: string; points: number }[]) {
+  const admin = await verifyAdmin('settings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (rows.some((row) => !Number.isInteger(row.points) || row.points < 0 || row.points > 100)) {
+    return { success: false, error: 'I KU per attività devono essere numeri interi da 0 a 100.' }
+  }
+  const service = getServiceClient()
+  for (const row of rows) {
+    const { error } = await service.from('ku_activity_points').update({ points: row.points, updated_at: new Date().toISOString() }).eq('key', row.key)
+    if (error) return { success: false, error: error.message }
+  }
+  return { success: true }
 }

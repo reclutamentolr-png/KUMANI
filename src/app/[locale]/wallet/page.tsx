@@ -18,9 +18,8 @@ import {
   PartyPopper,
   Hourglass,
 } from 'lucide-react'
-import { fetchDirectSponsored } from '@/lib/directAffiliates'
-import { isActiveSubscription } from '@/lib/subscriptionGate'
-import { getCurrentRank, RANKS } from '@/lib/ranks'
+import { getCurrentRank } from '@/lib/ranks'
+import { getMyNetworkWallet } from '@/lib/networkWallet'
 import { listMyVouchers } from '@/app/actions/vouchers'
 import { listMyRedemptions } from '@/app/actions/rewards'
 import { isRewardsCatalogEnabled } from '@/lib/rewardsCatalog'
@@ -72,10 +71,11 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
   const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<MyProfile>()
   if (!profile) redirect(`/${locale}/dashboard`)
 
-  const directSponsored = await fetchDirectSponsored(supabase)
   const kuWalletData = await loadKuWalletData(supabase, profile)
-  const directActiveCount = directSponsored.filter(isActiveSubscription).length
-  const currentRank = getCurrentRank(directActiveCount)
+  // Punti Community, credito voucher e qualifiche (badge sui punti guadagnati)
+  const networkWallet = await getMyNetworkWallet(supabase)
+  const { ranks } = networkWallet
+  const currentRank = getCurrentRank(networkWallet.earnedTotal, ranks)
 
   const { data: receipts } = await supabase
     .from('digital_receipts')
@@ -220,7 +220,7 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
               quotidiano della piattaforma. Spendibili comunque insieme ai
               punti giornalieri (vedi WalletVoucherSection). */}
           <WalletSection icon={<Network className="h-5 w-5 text-[var(--gold)]" />} title={t('networkPointsTitle')}>
-            <p className="text-4xl font-bold text-[var(--ink)]">{profile.network_points || 0}</p>
+            <p className="text-4xl font-bold text-[var(--ink)]">{networkWallet.networkPoints}</p>
             <p className="mt-1 text-xs text-[var(--muted)]">{t('networkPointsDisclaimer')}</p>
             {rewardsEnabled && (
               <Link
@@ -235,8 +235,8 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
           {/* Badge */}
           <WalletSection icon={<Award className="h-5 w-5 text-[var(--gold)]" />} title={t('badgeTitle')}>
             <div className="grid grid-cols-3 gap-3">
-              {RANKS.map((rank) => {
-                const earned = directActiveCount >= rank.threshold
+              {ranks.map((rank) => {
+                const earned = networkWallet.earnedTotal >= rank.threshold
                 return (
                   <div
                     key={rank.key}
@@ -256,7 +256,7 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
             </div>
             {/* Invito a condividere: incoraggia a raggiungere la qualifica successiva. */}
             <p className="mt-3 text-xs leading-5 text-[var(--muted)]">
-              {directActiveCount >= RANKS[RANKS.length - 1].threshold
+              {networkWallet.earnedTotal >= ranks[ranks.length - 1].threshold
                 ? t('badgeEncourageTop')
                 : currentRank
                   ? t('badgeEncourageNext')
@@ -373,7 +373,14 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
         <WalletSection icon={<BadgeCheck className="h-5 w-5 text-[var(--gold)]" />} title={t('voucherTitle')}>
           <KuRewardsSection data={kuWalletData} />
 
-          <WalletVoucherSection initialPoints={profile.network_points || 0} initialVouchers={myVouchers} />
+          <WalletVoucherSection
+            initialPoints={networkWallet.networkPoints}
+            initialCreditCents={networkWallet.voucherCreditCents}
+            packs={networkWallet.packs}
+            valueBaseEur={networkWallet.voucherValueBaseEur}
+            valueProEur={networkWallet.voucherValueProEur}
+            initialVouchers={myVouchers}
+          />
         </WalletSection>
       </main>
     </div>

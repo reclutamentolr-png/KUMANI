@@ -4,7 +4,8 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import { after } from 'next/server'
 import { isActiveSubscription } from './subscriptionGate'
 import { fetchDirectSponsored } from './directAffiliates'
-import { getCurrentRank, getNewlyAchievedRank, getUnclaimedRankBonuses } from './ranks'
+import { getCurrentRank, getNewlyAchievedRank } from './ranks'
+import { getMyNetworkWallet } from './networkWallet'
 
 /**
  * Everything the "rete" (network) section needs: matrix tree, KUMI
@@ -33,13 +34,14 @@ export async function getDashboardNetworkData(
   // discendenti (solo nome e stato attivo, calcolati dal database: niente
   // cognome o codice di chi è finito sotto di noi), lo sponsor (il KUMI) e
   // gli invitati diretti.
-  const [{ data: userNode }, { data: downlineRows, error: matrixError }, { data: sponsorData }, directSponsored] = await Promise.all([
+  const [{ data: userNode }, { data: downlineRows, error: matrixError }, { data: sponsorData }, directSponsored, wallet] = await Promise.all([
     tree ? supabase.from('matrix_nodes').select('*').eq('user_id', user.id).single() : Promise.resolve({ data: null, error: null }),
     tree ? supabase.rpc('get_my_downline') : Promise.resolve({ data: null, error: null }),
     supabase
       .rpc('get_my_sponsor')
       .maybeSingle<{ first_name: string | null; last_name: string | null; referral_code: string | null }>(),
     fetchDirectSponsored(supabase),
+    getMyNetworkWallet(supabase),
   ])
   const downlineData = ((downlineRows ?? []) as Array<{
     id: string
@@ -93,12 +95,8 @@ export async function getDashboardNetworkData(
   )
   const userNodeId = userNode?.id
 
-  // QUALIFICHE — basate su quanti utenti QUESTO utente ha sponsorizzato
-  // personalmente (profiles.sponsor_id) E CHE SONO ATTIVI (abbonamento
-  // pagante), non sui figli diretti nella matrice (matrix_nodes.parent_id,
-  // level1Count, che è bloccato a 5 dallo spillover) e non su sponsorizzati
-  // non paganti: Rising Star/Diamond misurano un team di persone attive,
-  // non solo registrate.
+  // Invitati diretti (profiles.sponsor_id) con abbonamento attivo, non i
+  // figli nella matrice (matrix_nodes.parent_id, bloccati a 5 dallo spillover)
   const directActiveSponsored = directSponsored.filter(isActiveSubscription)
   const directSponsorCount = directActiveSponsored.length
   const directSponsoredWithStatus = directSponsored.map((p) => ({ ...p, is_active: isActiveSubscription(p) }))
@@ -121,20 +119,11 @@ export async function getDashboardNetworkData(
     return node ? node.parent_id !== userNodeId : false
   }).length
 
-  const currentRank = getCurrentRank(directSponsorCount)
-  const newlyAchievedRank = getNewlyAchievedRank(directSponsorCount, profile?.qualifications_seen || [])
-
-  // Silently credits network_points for any rank tier reached but not yet
-  // claimed — independent of qualifications_seen (the popup dismissal
-  // flag), so someone who reached a rank before this feature existed still
-  // gets the bonus the next time their dashboard loads, without a popup.
-  // claim_rank_bonus() recomputes the active-affiliate count itself and is
-  // guarded against double-award, so calling it here on every dashboard
-  // load (from either Tipo 1 or the /dashboard/rete page) is safe.
-  const unclaimedBonuses = getUnclaimedRankBonuses(directSponsorCount, profile?.rank_bonuses_claimed || [])
-  for (const rank of unclaimedBonuses) {
-    await supabase.rpc('claim_rank_bonus', { p_rank_key: rank.key })
-  }
+  // Qualifiche (solo badge): Punti Community guadagnati in totale, soglie
+  // dei pacchetti voucher
+  const { ranks, earnedTotal: networkPointsEarned } = wallet
+  const currentRank = getCurrentRank(networkPointsEarned, ranks)
+  const newlyAchievedRank = getNewlyAchievedRank(networkPointsEarned, profile?.qualifications_seen || [], ranks)
   await claims
 
   const loginUrl = `${SITE_URL}/${locale}/login`
@@ -155,38 +144,23 @@ export async function getDashboardNetworkData(
     directSponsorInSpilloverCount,
     currentRank,
     newlyAchievedRank,
+    ranks,
+    networkPointsEarned,
     loginUrl,
   }
 }
 
 export type DashboardNetworkData = Awaited<ReturnType<typeof getDashboardNetworkData>>
 
-// Bonus della rete riscossi a ogni apertura della dashboard (tutti
-// idempotenti e verificati dal database), uno dopo l'altro.
+// Bonus della rete riscossi a ogni apertura della dashboard (idempotente e
+// verificato dal database). I Punti Community delle attivazioni arrivano
+// invece dal webhook di Stripe (award_activation_points); i vecchi bonus
+// (qualifiche, 6° diretto, ringraziamento, extra Pro) non esistono più.
 async function claimNetworkBonuses(supabase: SupabaseClient) {
   // "Bonus Struttura": pays out for matrix slots filled since the last
   // check, whether by personal sponsorship or by someone else's spillover
-  // landing in one of this Kumano's 5 direct positions — see
-  // claim_matrix_slot_bonus() for why spillover recipients otherwise get
-  // nothing from the compensation plan. Idempotent and self-verifying, same
-  // pattern as claim_rank_bonus above, safe to call on every dashboard load.
+  // landing in one of this Kumano's 5 direct positions.
   await supabase.rpc('claim_matrix_slot_bonus')
-
-  // Pays for direct sponsees beyond this Kumano's own 5 matrix slots (see
-  // directSponsorInSpilloverCount above): claim_matrix_slot_bonus only
-  // covers the 5 slots physically under this Kumano's node, so a 6th+
-  // personal referral who spills over elsewhere in the tree otherwise earns
-  // nothing here. Same idempotent, self-verifying pattern.
-  await supabase.rpc('claim_sponsor_overflow_bonus')
-
-  // "Ringraziamento attività": per chi si è iscritto senza invito ed è stato
-  // abbinato a questo Kumano attivo, quando paga davvero il primo
-  // abbonamento. Idempotente come i claim sopra.
-  await supabase.rpc('claim_activity_thanks')
-
-  // Extra Pro: invitato diretto che paga il piano Pro con carta (si somma
-  // al Bonus Struttura). Idempotente: una volta per invitato.
-  await supabase.rpc('claim_pro_invite_bonus')
 }
 
 // Riscuote i bonus della rete DOPO aver risposto (non cambiano nulla di
