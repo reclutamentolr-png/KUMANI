@@ -320,7 +320,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
   const [systemSettings, setSystemSettings] = useState<AdminSystemSettings>({
     maintenance_mode: false,
     maintenance_message: 'Sito in manutenzione. Torna presto!',
-    matrix_slot_bonus_points: 5,
+    matrix_slot_bonus_points: 0,
     matrix_spillover_bonus_points: 5,
     activity_thanks_points: 0,
     pro_invite_extra_points: 0,
@@ -2737,33 +2737,284 @@ L'accesso viene registrato.`)) return
           <Settings className="w-7 h-7" />
           Impostazioni Sistema
         </h2>
-        <p className="text-gray-600 mt-1">Configura i parametri globali della piattaforma</p>
+        <p className="text-gray-600 mt-1">Configura i parametri globali della piattaforma, divisi per argomento. Un solo pulsante in fondo salva tutto.</p>
       </div>
 
-      <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-            <BadgeCheck className="w-4 h-4" />
-            Prezzi degli abbonamenti
-          </label>
-          <p className="text-xs text-gray-500 mb-3">
-            Letti direttamente da Stripe (i prezzi usati dal checkout): sono quelli mostrati sul sito e usati per il
-            riepilogo finanziario. Per cambiarli si modifica il prezzo su Stripe; il sito si aggiorna entro un&apos;ora.
-          </p>
-          {planPrices ? (
-            <div className="flex flex-wrap gap-3 text-sm">
-              <span className="rounded-lg bg-gray-100 px-3 py-2 font-semibold text-gray-800">Base: {planPrices.base} € / anno</span>
-              <span className="rounded-lg bg-gray-100 px-3 py-2 font-semibold text-gray-800">Pro: {planPrices.pro} € / anno</span>
-              {planPrices.source !== 'stripe' && (
-                <span className="rounded-lg bg-amber-50 px-3 py-2 text-amber-800">Stripe non raggiungibile: valori di riserva salvati</span>
-              )}
-            </div>
-          ) : (
-            <p className="text-sm text-gray-400">Caricamento…</p>
-          )}
+      <section className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-[var(--gold)]/30 bg-[var(--gold-pale)] px-5 py-3">
+          <BadgeCheck className="h-5 w-5 text-[var(--ink)]" />
+          <h3 className="text-base font-bold text-[var(--ink)]">Abbonamenti</h3>
+          <span className="text-xs text-gray-600">prezzi e prova Pro</span>
         </div>
+        <div className="space-y-6 p-5">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+              <BadgeCheck className="w-4 h-4" />
+              Prezzi degli abbonamenti
+            </label>
+            <p className="text-xs text-gray-500 mb-3">
+              Letti direttamente da Stripe (i prezzi usati dal checkout): sono quelli mostrati sul sito e usati per il
+              riepilogo finanziario. Per cambiarli si modifica il prezzo su Stripe; il sito si aggiorna entro un&apos;ora.
+            </p>
+            {planPrices ? (
+              <div className="flex flex-wrap gap-3 text-sm">
+                <span className="rounded-lg bg-gray-100 px-3 py-2 font-semibold text-gray-800">Base: {planPrices.base} € / anno</span>
+                <span className="rounded-lg bg-gray-100 px-3 py-2 font-semibold text-gray-800">Pro: {planPrices.pro} € / anno</span>
+                {planPrices.source !== 'stripe' && (
+                  <span className="rounded-lg bg-amber-50 px-3 py-2 text-amber-800">Stripe non raggiungibile: valori di riserva salvati</span>
+                )}
+              </div>
+            ) : (
+              <p className="text-sm text-gray-400">Caricamento…</p>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+              <GitBranch className="w-4 h-4" />
+              Piano Pro: prova gratuita
+            </label>
+            <p className="text-xs text-gray-500 mb-3">
+              Giorni di Pro gratis per chi si registra come professionista o la attiva dalla pagina Pro (una sola volta per
+              account, senza carta).
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl">
+              <label className="block max-w-xs">
+                <span className="mb-1 block text-xs font-medium text-gray-600">Giorni di prova</span>
+                <input
+                  type="number"
+                  min="1"
+                  value={systemSettings.pro_trial_days ?? 15}
+                  onChange={(e) => setSystemSettings({ ...systemSettings, pro_trial_days: parseInt(e.target.value, 10) || 1 })}
+                  className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                />
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <div className="rounded-xl border border-gray-200 p-4 space-y-4">
+      <section className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-[var(--gold)]/30 bg-[var(--gold-pale)] px-5 py-3">
+          <Users className="h-5 w-5 text-[var(--ink)]" />
+          <h3 className="text-base font-bold text-[var(--ink)]">Iscrizioni</h3>
+          <span className="text-xs text-gray-600">registrazione senza invito</span>
+        </div>
+        <div className="space-y-6 p-5">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+              <Users className="w-4 h-4" />
+              Iscrizioni senza invito
+            </label>
+            <p className="text-xs text-gray-500 mb-3">
+              Chi si iscrive senza codice invito entra nella struttura dell’account KUMANI (mai in quella di un Kumano) e non
+              dà Punti Community a nessuno.
+            </p>
+            {houseAccount ? (
+              <p className="text-sm text-gray-700 mb-3">
+                ✅ Attiva — account <strong>{houseAccount.first_name} {houseAccount.last_name}</strong>{' '}
+                <span className="font-mono">({houseAccount.referral_code})</span> · {houseAccount.email} ·{' '}
+                {houseAccount.directMembers} iscritti senza invito
+              </p>
+            ) : (
+              <div className="mb-3 space-y-2">
+                <p className="text-sm text-amber-700">
+                  ⚠️ Non attiva: finché l&apos;account KUMANI non esiste, la registrazione richiede ancora un codice invito.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-2 max-w-lg">
+                  <input
+                    type="email"
+                    value={houseEmail}
+                    onChange={(e) => setHouseEmail(e.target.value)}
+                    placeholder="email dell'account KUMANI (es. community@...)"
+                    className="flex-1 p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleCreateHouseAccount}
+                    disabled={creatingHouse || !houseEmail}
+                    className="px-4 py-2.5 rounded-lg bg-[var(--ink)] text-white text-sm font-semibold disabled:opacity-50"
+                  >
+                    {creatingHouse ? 'Creazione...' : 'Crea account KUMANI'}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <section className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-[var(--gold)]/30 bg-[var(--gold-pale)] px-5 py-3">
+          <Coins className="h-5 w-5 text-[var(--ink)]" />
+          <h3 className="text-base font-bold text-[var(--ink)]">Punti Community e voucher</h3>
+          <span className="text-xs text-gray-600">punti, pacchetti, badge e vetrina</span>
+        </div>
+        <div className="space-y-6 p-5">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+              <GitBranch className="w-4 h-4" />
+              Punti Community (Punti Rete)
+            </label>
+            <p className="text-xs text-gray-500 mb-3">
+              Punti assegnati <strong>solo allo sponsor diretto</strong> quando un suo invitato paga con carta: primo
+              abbonamento Base o Pro, oppure passaggio da Base a Pro. Voucher e rinnovi non danno punti; un rimborso li
+              toglie. <strong>Bonus Struttura (spillover):</strong> punti una tantum quando uno dei 5 posti diretti della
+              matrice di un Kumano viene occupato da una persona invitata da un altro Kumano che paga con carta. I posti
+              occupati dai propri invitati non danno bonus: c&apos;è già il punteggio dell&apos;attivazione.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-3xl">
+              <label className="block max-w-xs">
+                <span className="mb-1 block text-xs font-medium text-gray-600">Attivazione Base</span>
+                <input
+                  type="number"
+                  min="0"
+                  value={systemSettings.network_points_activation_base ?? 49}
+                  onChange={(e) => setSystemSettings({ ...systemSettings, network_points_activation_base: parseInt(e.target.value, 10) || 0 })}
+                  className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                />
+              </label>
+              <label className="block max-w-xs">
+                <span className="mb-1 block text-xs font-medium text-gray-600">Attivazione Pro</span>
+                <input
+                  type="number"
+                  min="0"
+                  value={systemSettings.network_points_activation_pro ?? 122}
+                  onChange={(e) => setSystemSettings({ ...systemSettings, network_points_activation_pro: parseInt(e.target.value, 10) || 0 })}
+                  className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                />
+              </label>
+              <label className="block max-w-xs">
+                <span className="mb-1 block text-xs font-medium text-gray-600">Passaggio a Pro</span>
+                <input
+                  type="number"
+                  min="0"
+                  value={systemSettings.network_points_upgrade_pro ?? 60}
+                  onChange={(e) => setSystemSettings({ ...systemSettings, network_points_upgrade_pro: parseInt(e.target.value, 10) || 0 })}
+                  className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                />
+              </label>
+              <label className="block max-w-xs">
+                <span className="mb-1 block text-xs font-medium text-gray-600">Bonus Struttura (spillover)</span>
+                <input
+                  type="number"
+                  min="0"
+                  value={systemSettings.matrix_spillover_bonus_points ?? 5}
+                  onChange={(e) => setSystemSettings({ ...systemSettings, matrix_spillover_bonus_points: parseInt(e.target.value, 10) || 0 })}
+                  className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                />
+              </label>
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+              <GitBranch className="w-4 h-4" />
+              Pacchetti voucher e qualifiche
+            </label>
+            <p className="text-xs text-gray-500 mb-3">
+              Il Kumano spende i punti del pacchetto e riceve un credito in euro, con cui crea voucher Base o Pro (da
+              regalare o vendere). I pacchetti si possono riscattare più volte. Le stesse soglie, sui punti guadagnati in
+              totale, danno i badge Kuman Green, Star e Black (nessun premio collegato).
+            </p>
+            <div className="space-y-2 max-w-xl">
+              {(Array.isArray(systemSettings.voucher_packs) ? systemSettings.voucher_packs : []).map((pack, index) => (
+                <div key={index} className="grid grid-cols-[auto_1fr_1fr] items-end gap-3">
+                  <span className="pb-3 text-xs font-bold text-gray-500">{['Kuman Green', 'Kuman Star', 'Kuman Black'][index] ?? `#${index + 1}`}</span>
+                  <label className="block">
+                    <span className="mb-1 block text-xs font-medium text-gray-600">Punti</span>
+                    <input
+                      type="number"
+                      min="1"
+                      value={pack.points}
+                      onChange={(e) => {
+                        const packs = [...systemSettings.voucher_packs]
+                        packs[index] = { ...pack, points: parseInt(e.target.value, 10) || 0 }
+                        setSystemSettings({ ...systemSettings, voucher_packs: packs })
+                      }}
+                      className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                    />
+                  </label>
+                  <label className="block">
+                    <span className="mb-1 block text-xs font-medium text-gray-600">Credito voucher (€)</span>
+                    <input
+                      type="number"
+                      min="1"
+                      value={pack.credit_eur}
+                      onChange={(e) => {
+                        const packs = [...systemSettings.voucher_packs]
+                        packs[index] = { ...pack, credit_eur: parseInt(e.target.value, 10) || 0 }
+                        setSystemSettings({ ...systemSettings, voucher_packs: packs })
+                      }}
+                      className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                    />
+                  </label>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl">
+              <label className="block max-w-xs">
+                <span className="mb-1 block text-xs font-medium text-gray-600">Valore voucher Base (€)</span>
+                <input
+                  type="number"
+                  min="0"
+                  value={systemSettings.voucher_value_base_eur ?? 49}
+                  onChange={(e) => setSystemSettings({ ...systemSettings, voucher_value_base_eur: parseInt(e.target.value, 10) || 0 })}
+                  className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                />
+              </label>
+              <label className="block max-w-xs">
+                <span className="mb-1 block text-xs font-medium text-gray-600">Valore voucher Pro (€)</span>
+                <input
+                  type="number"
+                  min="0"
+                  value={systemSettings.voucher_value_pro_eur ?? 149}
+                  onChange={(e) => setSystemSettings({ ...systemSettings, voucher_value_pro_eur: parseInt(e.target.value, 10) || 0 })}
+                  className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                />
+              </label>
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+              <Sparkles className="w-4 h-4" />
+              Annunci in Vetrina
+            </label>
+            <p className="text-xs text-gray-500 mb-3">
+              Punti Community richiesti a un Kumano per mettere in evidenza un proprio annuncio nella sezione “In Vetrina”
+              della bacheca, per 7 o 15 giorni.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md">
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  min="0"
+                  value={systemSettings.listing_feature_cost_7d ?? 20}
+                  onChange={(e) => setSystemSettings({ ...systemSettings, listing_feature_cost_7d: parseInt(e.target.value, 10) || 0 })}
+                  className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                />
+                <span className="text-sm text-gray-500 whitespace-nowrap">/ 7gg</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  min="0"
+                  value={systemSettings.listing_feature_cost_15d ?? 35}
+                  onChange={(e) => setSystemSettings({ ...systemSettings, listing_feature_cost_15d: parseInt(e.target.value, 10) || 0 })}
+                  className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                />
+                <span className="text-sm text-gray-500 whitespace-nowrap">/ 15gg</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-[var(--gold)]/30 bg-[var(--gold-pale)] px-5 py-3">
+          <Sparkles className="h-5 w-5 text-[var(--ink)]" />
+          <h3 className="text-base font-bold text-[var(--ink)]">Servizi</h3>
+          <span className="text-xs text-gray-600">limiti e parametri degli strumenti</span>
+        </div>
+        <div className="space-y-6 p-5">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Traduzioni AI del Menù al giorno (per ristorante)</label>
             <input
@@ -2891,314 +3142,77 @@ L'accesso viene registrato.`)) return
               Chi ha meno giorni di accesso, o scrive una parola filtrata, pubblica in attesa del controllo in Admin → Fabula.
             </p>
           </div>
-        </div>
-
-        <div className="rounded-xl border border-gray-200 p-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-            <Users className="w-4 h-4" />
-            Iscrizioni senza invito
-          </label>
-          <p className="text-xs text-gray-500 mb-3">
-            Chi si iscrive senza codice invito entra nella struttura dell’account KUMANI (mai in quella di un Kumano).
-            Un Kumano attivo della stessa zona riceve un &quot;ringraziamento attività&quot; quando il nuovo iscritto
-            paga il primo abbonamento. Il ringraziamento per chi invita è il &quot;Bonus Struttura&quot; qui sotto.
-          </p>
-          {houseAccount ? (
-            <p className="text-sm text-gray-700 mb-3">
-              ✅ Attiva — account <strong>{houseAccount.first_name} {houseAccount.last_name}</strong>{' '}
-              <span className="font-mono">({houseAccount.referral_code})</span> · {houseAccount.email} ·{' '}
-              {houseAccount.directMembers} iscritti senza invito
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+              <Users className="w-4 h-4" />
+              Affinity Amicizie
+            </label>
+            <p className="text-xs text-gray-500 mb-3">
+              Quante persone Kumi presenta ogni settimana a chi partecipa ad Affinity Amicizie (solo abbonati, 18+). Con pochi
+              iscritti conviene tenerlo basso; si può alzare man mano che la community cresce. 0 = presentazioni sospese.
             </p>
-          ) : (
-            <div className="mb-3 space-y-2">
-              <p className="text-sm text-amber-700">
-                ⚠️ Non attiva: finché l&apos;account KUMANI non esiste, la registrazione richiede ancora un codice invito.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-2 max-w-lg">
-                <input
-                  type="email"
-                  value={houseEmail}
-                  onChange={(e) => setHouseEmail(e.target.value)}
-                  placeholder="email dell'account KUMANI (es. community@...)"
-                  className="flex-1 p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
-                />
-                <button
-                  type="button"
-                  onClick={handleCreateHouseAccount}
-                  disabled={creatingHouse || !houseEmail}
-                  className="px-4 py-2.5 rounded-lg bg-[var(--ink)] text-white text-sm font-semibold disabled:opacity-50"
-                >
-                  {creatingHouse ? 'Creazione...' : 'Crea account KUMANI'}
-                </button>
-              </div>
+            <label className="block max-w-xs">
+              <span className="mb-1 block text-xs font-medium text-gray-600">Presentazioni a settimana</span>
+              <input
+                type="number"
+                min="0"
+                max="20"
+                value={systemSettings.affinity_intros_per_week ?? 3}
+                onChange={(e) => setSystemSettings({ ...systemSettings, affinity_intros_per_week: Math.min(20, parseInt(e.target.value, 10) || 0) })}
+                className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+              />
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-[var(--gold)]/30 bg-[var(--gold-pale)] px-5 py-3">
+          <Settings className="h-5 w-5 text-[var(--ink)]" />
+          <h3 className="text-base font-bold text-[var(--ink)]">Sistema</h3>
+          <span className="text-xs text-gray-600">manutenzione del sito</span>
+        </div>
+        <div className="space-y-6 p-5">
+          <div className="flex items-center justify-between p-4 bg-red-50 rounded-lg border border-red-200">
+            <div>
+              <div className="font-medium text-red-900">Modalità Manutenzione</div>
+              <div className="text-sm text-red-600">Se attiva, gli utenti vedranno un messaggio di manutenzione</div>
+            </div>
+            <button
+              onClick={() => setSystemSettings({...systemSettings, maintenance_mode: !systemSettings.maintenance_mode})}
+              className="focus:outline-none"
+            >
+              {systemSettings.maintenance_mode ? (
+                <ToggleRight className="w-14 h-8 text-red-500" />
+              ) : (
+                <ToggleLeft className="w-14 h-8 text-gray-400" />
+              )}
+            </button>
+          </div>
+
+          {systemSettings.maintenance_mode && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Messaggio di Manutenzione</label>
+              <textarea
+                value={systemSettings.maintenance_message || ''}
+                onChange={(e) => setSystemSettings({...systemSettings, maintenance_message: e.target.value})}
+                rows={3}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none"
+              />
             </div>
           )}
         </div>
+      </section>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-            <GitBranch className="w-4 h-4" />
-            Punti Community (Punti Rete)
-          </label>
-          <p className="text-xs text-gray-500 mb-3">
-            Punti assegnati <strong>solo allo sponsor diretto</strong> quando un suo invitato paga con carta: primo
-            abbonamento Base o Pro, oppure passaggio da Base a Pro. Voucher e rinnovi non danno punti; un rimborso li
-            toglie. Chi si iscrive senza invito non dà punti.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl">
-            <label className="block max-w-xs">
-              <span className="mb-1 block text-xs font-medium text-gray-600">Attivazione Base</span>
-              <input
-                type="number"
-                min="0"
-                value={systemSettings.network_points_activation_base ?? 49}
-                onChange={(e) => setSystemSettings({ ...systemSettings, network_points_activation_base: parseInt(e.target.value, 10) || 0 })}
-                className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
-              />
-            </label>
-            <label className="block max-w-xs">
-              <span className="mb-1 block text-xs font-medium text-gray-600">Attivazione Pro</span>
-              <input
-                type="number"
-                min="0"
-                value={systemSettings.network_points_activation_pro ?? 122}
-                onChange={(e) => setSystemSettings({ ...systemSettings, network_points_activation_pro: parseInt(e.target.value, 10) || 0 })}
-                className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
-              />
-            </label>
-            <label className="block max-w-xs">
-              <span className="mb-1 block text-xs font-medium text-gray-600">Passaggio a Pro</span>
-              <input
-                type="number"
-                min="0"
-                value={systemSettings.network_points_upgrade_pro ?? 60}
-                onChange={(e) => setSystemSettings({ ...systemSettings, network_points_upgrade_pro: parseInt(e.target.value, 10) || 0 })}
-                className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
-              />
-            </label>
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-            <GitBranch className="w-4 h-4" />
-            Pacchetti voucher e qualifiche
-          </label>
-          <p className="text-xs text-gray-500 mb-3">
-            Il Kumano spende i punti del pacchetto e riceve un credito in euro, con cui crea voucher Base o Pro (da
-            regalare o vendere). I pacchetti si possono riscattare più volte. Le stesse soglie, sui punti guadagnati in
-            totale, danno i badge Kuman Green, Star e Black (nessun premio collegato).
-          </p>
-          <div className="space-y-2 max-w-xl">
-            {(Array.isArray(systemSettings.voucher_packs) ? systemSettings.voucher_packs : []).map((pack, index) => (
-              <div key={index} className="grid grid-cols-[auto_1fr_1fr] items-end gap-3">
-                <span className="pb-3 text-xs font-bold text-gray-500">{['Kuman Green', 'Kuman Star', 'Kuman Black'][index] ?? `#${index + 1}`}</span>
-                <label className="block">
-                  <span className="mb-1 block text-xs font-medium text-gray-600">Punti</span>
-                  <input
-                    type="number"
-                    min="1"
-                    value={pack.points}
-                    onChange={(e) => {
-                      const packs = [...systemSettings.voucher_packs]
-                      packs[index] = { ...pack, points: parseInt(e.target.value, 10) || 0 }
-                      setSystemSettings({ ...systemSettings, voucher_packs: packs })
-                    }}
-                    className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
-                  />
-                </label>
-                <label className="block">
-                  <span className="mb-1 block text-xs font-medium text-gray-600">Credito voucher (€)</span>
-                  <input
-                    type="number"
-                    min="1"
-                    value={pack.credit_eur}
-                    onChange={(e) => {
-                      const packs = [...systemSettings.voucher_packs]
-                      packs[index] = { ...pack, credit_eur: parseInt(e.target.value, 10) || 0 }
-                      setSystemSettings({ ...systemSettings, voucher_packs: packs })
-                    }}
-                    className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
-                  />
-                </label>
-              </div>
-            ))}
-          </div>
-          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl">
-            <label className="block max-w-xs">
-              <span className="mb-1 block text-xs font-medium text-gray-600">Valore voucher Base (€)</span>
-              <input
-                type="number"
-                min="0"
-                value={systemSettings.voucher_value_base_eur ?? 49}
-                onChange={(e) => setSystemSettings({ ...systemSettings, voucher_value_base_eur: parseInt(e.target.value, 10) || 0 })}
-                className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
-              />
-            </label>
-            <label className="block max-w-xs">
-              <span className="mb-1 block text-xs font-medium text-gray-600">Valore voucher Pro (€)</span>
-              <input
-                type="number"
-                min="0"
-                value={systemSettings.voucher_value_pro_eur ?? 149}
-                onChange={(e) => setSystemSettings({ ...systemSettings, voucher_value_pro_eur: parseInt(e.target.value, 10) || 0 })}
-                className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
-              />
-            </label>
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-            <GitBranch className="w-4 h-4" />
-            Bonus Struttura Matrice
-          </label>
-          <p className="text-xs text-gray-500 mb-3">
-            Punti Community assegnati una tantum ogni volta che uno dei 5 posti diretti in matrice di un Kumano si riempie
-            con un abbonato realmente attivo (pagante Stripe). Il tasso applicato dipende da come quel posto si è
-            riempito: sponsorizzazione diretta o spillover di qualcun altro. Fino a 5 posti per persona.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl">
-            <label className="block max-w-xs">
-              <span className="mb-1 block text-xs font-medium text-gray-600">Punti Community / posto</span>
-              <input
-                type="number"
-                min="0"
-                value={systemSettings.matrix_slot_bonus_points ?? 5}
-                onChange={(e) => setSystemSettings({ ...systemSettings, matrix_slot_bonus_points: parseInt(e.target.value, 10) || 0 })}
-                className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
-              />
-            </label>
-            <label className="block max-w-xs">
-              <span className="mb-1 block text-xs font-medium text-gray-600">Punti Community / Spillover</span>
-              <input
-                type="number"
-                min="0"
-                value={systemSettings.matrix_spillover_bonus_points ?? 5}
-                onChange={(e) => setSystemSettings({ ...systemSettings, matrix_spillover_bonus_points: parseInt(e.target.value, 10) || 0 })}
-                className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
-              />
-            </label>
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-            <GitBranch className="w-4 h-4" />
-            Piano Pro: prova gratuita
-          </label>
-          <p className="text-xs text-gray-500 mb-3">
-            Giorni di Pro gratis per chi si registra come professionista o la attiva dalla pagina Pro (una sola volta per
-            account, senza carta).
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl">
-            <label className="block max-w-xs">
-              <span className="mb-1 block text-xs font-medium text-gray-600">Giorni di prova</span>
-              <input
-                type="number"
-                min="1"
-                value={systemSettings.pro_trial_days ?? 15}
-                onChange={(e) => setSystemSettings({ ...systemSettings, pro_trial_days: parseInt(e.target.value, 10) || 1 })}
-                className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
-              />
-            </label>
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-            <Users className="w-4 h-4" />
-            Affinity Amicizie
-          </label>
-          <p className="text-xs text-gray-500 mb-3">
-            Quante persone Kumi presenta ogni settimana a chi partecipa ad Affinity Amicizie (solo abbonati, 18+). Con pochi
-            iscritti conviene tenerlo basso; si può alzare man mano che la community cresce. 0 = presentazioni sospese.
-          </p>
-          <label className="block max-w-xs">
-            <span className="mb-1 block text-xs font-medium text-gray-600">Presentazioni a settimana</span>
-            <input
-              type="number"
-              min="0"
-              max="20"
-              value={systemSettings.affinity_intros_per_week ?? 3}
-              onChange={(e) => setSystemSettings({ ...systemSettings, affinity_intros_per_week: Math.min(20, parseInt(e.target.value, 10) || 0) })}
-              className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
-            />
-          </label>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-            <Sparkles className="w-4 h-4" />
-            Annunci in Vetrina
-          </label>
-          <p className="text-xs text-gray-500 mb-3">
-            Punti Community richiesti a un Kumano per mettere in evidenza un proprio annuncio nella sezione “In Vetrina”
-            della bacheca, per 7 o 15 giorni.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md">
-            <div className="flex items-center gap-2">
-              <input
-                type="number"
-                min="0"
-                value={systemSettings.listing_feature_cost_7d ?? 20}
-                onChange={(e) => setSystemSettings({ ...systemSettings, listing_feature_cost_7d: parseInt(e.target.value, 10) || 0 })}
-                className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
-              />
-              <span className="text-sm text-gray-500 whitespace-nowrap">/ 7gg</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <input
-                type="number"
-                min="0"
-                value={systemSettings.listing_feature_cost_15d ?? 35}
-                onChange={(e) => setSystemSettings({ ...systemSettings, listing_feature_cost_15d: parseInt(e.target.value, 10) || 0 })}
-                className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
-              />
-              <span className="text-sm text-gray-500 whitespace-nowrap">/ 15gg</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between p-4 bg-red-50 rounded-lg border border-red-200">
-          <div>
-            <div className="font-medium text-red-900">Modalità Manutenzione</div>
-            <div className="text-sm text-red-600">Se attiva, gli utenti vedranno un messaggio di manutenzione</div>
-          </div>
-          <button
-            onClick={() => setSystemSettings({...systemSettings, maintenance_mode: !systemSettings.maintenance_mode})}
-            className="focus:outline-none"
-          >
-            {systemSettings.maintenance_mode ? (
-              <ToggleRight className="w-14 h-8 text-red-500" />
-            ) : (
-              <ToggleLeft className="w-14 h-8 text-gray-400" />
-            )}
-          </button>
-        </div>
-
-        {systemSettings.maintenance_mode && (
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Messaggio di Manutenzione</label>
-            <textarea
-              value={systemSettings.maintenance_message || ''}
-              onChange={(e) => setSystemSettings({...systemSettings, maintenance_message: e.target.value})}
-              rows={3}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none"
-            />
-          </div>
-        )}
-
-        <div className="flex justify-end pt-4 border-t border-gray-200">
-          <button
-            onClick={saveSystemSettings}
-            disabled={savingSettings}
-            className="px-6 py-3 bg-[var(--ink)] text-white rounded-lg hover:bg-[var(--ink-soft)] font-medium disabled:bg-gray-400 flex items-center gap-2"
-          >
-            <Save className="w-4 h-4" />
-            {savingSettings ? 'Salvataggio...' : 'Salva Impostazioni'}
-          </button>
-        </div>
+      <div className="sticky bottom-0 z-10 -mx-1 flex justify-end rounded-xl border border-gray-200 bg-white/95 p-3 shadow-lg backdrop-blur">
+        <button
+          onClick={saveSystemSettings}
+          disabled={savingSettings}
+          className="px-6 py-3 bg-[var(--ink)] text-white rounded-lg hover:bg-[var(--ink-soft)] font-medium disabled:bg-gray-400 flex items-center gap-2"
+        >
+          <Save className="w-4 h-4" />
+          {savingSettings ? 'Salvataggio...' : 'Salva Impostazioni'}
+        </button>
       </div>
     </div>
   )

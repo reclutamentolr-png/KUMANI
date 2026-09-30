@@ -8,7 +8,6 @@ import {
   CheckCircle2,
   Target,
   Sparkles,
-  Warehouse,
   Ticket,
   BadgePercent,
   Wallet,
@@ -27,6 +26,7 @@ import {
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import Logo from '@/components/Logo'
 import HomeToolsGridServer from '@/components/HomeToolsGridServer'
+import ProToolsShowcase from '@/components/ProToolsShowcase'
 import HomeKumanoDelGiorno from '@/components/spotlight/HomeKumanoDelGiorno'
 import HomeUpcomingEvents from '@/components/events/HomeUpcomingEvents'
 
@@ -241,20 +241,7 @@ export default function LandingPage() {
                   </Link>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-2.5">
-                {[
-                  { icon: Ticket, label: 'Fidelity' },
-                  { icon: UtensilsCrossed, label: 'KUMANI Menu' },
-                  { icon: Briefcase, label: t('proToolQuotes') },
-                  { icon: Check, label: t('proToolReceipts') },
-                  { icon: Warehouse, label: 'Magazzino PRO' },
-                  { icon: HandPlatter, label: 'Kordata Pro' },
-                ].map((item) => (
-                  <div key={item.label} className="flex items-center gap-2 rounded-xl border border-[var(--gold)]/20 bg-white/[0.05] px-3 py-2.5 text-sm font-semibold text-white">
-                    <item.icon className="h-4 w-4 shrink-0 text-[var(--gold-bright)]" /> {item.label}
-                  </div>
-                ))}
-              </div>
+              <ProToolsShowcase />
             </div>
           </div>
 

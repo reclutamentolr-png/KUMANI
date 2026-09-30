@@ -254,7 +254,8 @@ export default function TermsPage() {
               <p>
                 <strong className="text-gray-900">Punti Community.</strong> L&apos;utente riceve Punti Community quando una persona che ha
                 invitato direttamente attiva un abbonamento pagato con carta (Base o Pro) o passa dal piano Base al piano Pro, e con il
-                Bonus Struttura legato ai posti della propria matrice. Le quantità sono stabilite dalla Piattaforma e indicate
+                Bonus Struttura, riconosciuto quando uno dei posti diretti della propria matrice viene occupato da una persona
+                invitata da un altro utente (spillover) che paga l&apos;abbonamento con carta. Le quantità sono stabilite dalla Piattaforma e indicate
                 nell&apos;area personale. Le attivazioni tramite voucher e i rinnovi non danno Punti Community; in caso di rimborso del
                 pagamento i punti collegati vengono tolti.
               </p>
