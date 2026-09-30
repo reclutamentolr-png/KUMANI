@@ -1,7 +1,9 @@
 import createMiddleware from 'next-intl/middleware';
 import { createServerClient } from '@supabase/ssr';
+import type { User } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextRequest } from 'next/server';
+import { readEnabledLocales } from './lib/enabledLocalesCore';
 import { locales, defaultLocale } from '../i18n';
 
 const intlMiddleware = createMiddleware({
@@ -60,8 +62,58 @@ function extractToolName(pathname: string): string | null {
   return null;
 }
 
+// Lingue attive (Admin → Lingue del sito): in memoria 60 secondi in questo
+// processo, così non si legge il database a ogni richiesta
+let enabledCache: { at: number; list: string[] } | null = null;
+async function enabledLocalesForProxy(): Promise<string[]> {
+  if (enabledCache && Date.now() - enabledCache.at < 60_000) return enabledCache.list;
+  try {
+    const list = await readEnabledLocales();
+    enabledCache = { at: Date.now(), list };
+    return list;
+  } catch {
+    return enabledCache?.list ?? [...locales];
+  }
+}
+
+const LOCALE_COOKIE = { path: '/', maxAge: 60 * 60 * 24 * 365, sameSite: 'lax' as const };
+
+// Anteprima delle lingue spente: traduttori (ruolo nell'account) e Staff.
+// Si controlla solo quando si apre una lingua spenta (caso raro).
+async function canPreviewHiddenLocales(
+  supabase: ReturnType<typeof createServerClient>,
+  user: User | null
+): Promise<boolean> {
+  if (!user) return false;
+  if ((user.app_metadata as { role?: string } | undefined)?.role === 'translator') return true;
+  const [{ data: profile }, { data: staff }] = await Promise.all([
+    supabase.from('profiles').select('is_admin').eq('id', user.id).maybeSingle(),
+    supabase.from('admin_users').select('user_id').eq('user_id', user.id).maybeSingle(),
+  ]);
+  return profile?.is_admin === true || !!staff;
+}
+
 export async function proxy(request: NextRequest) {
-  const response = intlMiddleware(request);
+  const enabledLocales = await enabledLocalesForProxy();
+  const urlSegments = request.nextUrl.pathname.split('/').filter(Boolean);
+  const urlLocale = urlSegments[0] && locales.includes(urlSegments[0]) ? urlSegments[0] : null;
+
+  let response = intlMiddleware(request);
+
+  // Lingua scelta in automatico (lingua del telefono o cookie di una visita
+  // precedente) ma spenta dall'Admin: si resta in italiano
+  const location = response.headers.get('location');
+  if (!urlLocale && location) {
+    const target = new URL(location, request.url).pathname.split('/').filter(Boolean)[0];
+    if (target && locales.includes(target) && !enabledLocales.includes(target)) {
+      const headers = new Headers(request.headers);
+      headers.set('accept-language', defaultLocale);
+      const otherCookies = request.cookies.getAll().filter((c) => c.name !== 'NEXT_LOCALE').map((c) => `${c.name}=${c.value}`);
+      headers.set('cookie', [...otherCookies, `NEXT_LOCALE=${defaultLocale}`].join('; '));
+      response = intlMiddleware(new NextRequest(request.url, { headers }));
+      response.cookies.set('NEXT_LOCALE', defaultLocale, LOCALE_COOKIE);
+    }
+  }
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -84,6 +136,16 @@ export async function proxy(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  // Lingua spenta dall'Admin nell'indirizzo (/de/...): stessa pagina in
+  // italiano. Lo Staff e i traduttori la vedono lo stesso (anteprima).
+  if (urlLocale && !enabledLocales.includes(urlLocale) && !(await canPreviewHiddenLocales(supabase, user))) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/' + urlSegments.slice(1).join('/');
+    const redirect = NextResponse.redirect(url);
+    redirect.cookies.set('NEXT_LOCALE', defaultLocale, LOCALE_COOKIE);
+    return redirect;
+  }
 
   // Traduttori (account creati dall'Admin, ruolo scritto dal server
   // nell'account): vedono solo l'Area Traduttori, niente dashboard né

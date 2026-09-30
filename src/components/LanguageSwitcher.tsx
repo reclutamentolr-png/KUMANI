@@ -3,21 +3,26 @@
 import { Languages } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import { defaultLocale } from '../../i18n'
+import { useEnabledLocales } from '@/components/EnabledLocalesProvider'
 
 const locales = [
   { code: 'it', label: 'Italiano' },
   { code: 'en', label: 'English' },
-  { code: 'fr', label: 'Francais' },
-  { code: 'es', label: 'Espanol' },
-  { code: 'pt', label: 'Portugues' },
+  { code: 'fr', label: 'Français' },
+  { code: 'es', label: 'Español' },
+  { code: 'pt', label: 'Português' },
   { code: 'de', label: 'Deutsch' },
-  { code: 'ru', label: 'Russkij' },
+  { code: 'ru', label: 'Русский' },
 ]
 
 export default function LanguageSwitcher({ dark = false }: { dark?: boolean }) {
   const pathname = usePathname()
   const router = useRouter()
   const locale = pathname.match(/^\/(it|en|fr|es|pt|de|ru)(?=\/|$)/)?.[1] ?? defaultLocale
+  // Solo le lingue attive (Admin → Lingue del sito); quella aperta resta
+  // visibile anche se spenta (anteprima dello Staff), con la dicitura
+  const enabled = useEnabledLocales()
+  const options = locales.filter((item) => !enabled || enabled.includes(item.code) || item.code === locale)
 
   const changeLocale = (nextLocale: string) => {
     const pathWithoutLocale = pathname.replace(/^\/(it|en|fr|es|pt|de|ru)(?=\/|$)/, '') || '/'
@@ -41,7 +46,12 @@ export default function LanguageSwitcher({ dark = false }: { dark?: boolean }) {
       <Languages className="h-4 w-4" aria-hidden="true" />
       <span className="sr-only">Cambia lingua</span>
       <select key={locale} value={locale} onChange={(event) => changeLocale(event.target.value)} className="bg-transparent text-inherit outline-none" aria-label="Cambia lingua">
-        {locales.map((item) => <option key={item.code} value={item.code} className="text-gray-900">{item.label}</option>)}
+        {options.map((item) => (
+          <option key={item.code} value={item.code} className="text-gray-900">
+            {item.label}
+            {enabled && !enabled.includes(item.code) ? ' (nascosta)' : ''}
+          </option>
+        ))}
       </select>
     </label>
   )

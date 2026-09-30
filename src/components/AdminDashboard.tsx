@@ -85,6 +85,7 @@ import ContactMessagesPanel from '@/components/admin/ContactMessagesPanel'
 import ProfileRequestsPanel from '@/components/admin/ProfileRequestsPanel'
 import AccountDeletionsPanel from '@/components/admin/AccountDeletionsPanel'
 import TranslatorsPanel from '@/components/admin/TranslatorsPanel'
+import LanguagesPanel from '@/components/admin/LanguagesPanel'
 import { startImpersonation } from '@/lib/impersonation'
 import {
   LayoutDashboard,
@@ -128,6 +129,7 @@ import {
   ChevronDown,
   BellRing,
   Languages,
+  Globe2,
 } from 'lucide-react'
 
 // Strumenti e interruttori raggruppati come nel Marketplace. Le sezioni della
@@ -1092,6 +1094,7 @@ L'accesso viene registrato.`)) return
   { id: 'financials', label: 'Amministrazione', Icon: PiggyBank, permission: 'stats.read' as Permission, group: 'general' },
   { id: 'marketplace', label: 'Strumenti e interruttori', Icon: ShoppingBag, permission: 'marketplace.read' as Permission, group: 'general' },
   { id: 'settings', label: 'Impostazioni', Icon: Settings, permission: 'settings.read' as Permission, group: 'general' },
+  { id: 'languages', label: 'Lingue del sito', Icon: Globe2, permission: 'settings.read' as Permission, group: 'general' },
   { id: 'users', label: 'Utenti', Icon: Users, permission: 'users.read' as Permission, group: 'users' },
   { id: 'matrix', label: 'Matrice', Icon: GitBranch, permission: 'matrix.read' as Permission, group: 'users' },
   { id: 'identity', label: 'Verifica identità', Icon: ScanFace, permission: 'users.read' as Permission, group: 'users' },
@@ -3251,6 +3254,7 @@ L'accesso viene registrato.`)) return
         {activeSection === 'profileRequests' && <ProfileRequestsPanel onChanged={loadBadges} />}
         {activeSection === 'accountDeletions' && <AccountDeletionsPanel onChanged={loadBadges} canDelete={hasPermission(permissions, 'users.delete')} />}
         {activeSection === 'translators' && <TranslatorsPanel />}
+        {activeSection === 'languages' && <LanguagesPanel canWrite={hasPermission(permissions, 'settings.write')} />}
         {activeSection === 'matrix' && renderMatrix()}
         {activeSection === 'marketplace' && renderMarketplace()}
         {activeSection === 'coupons' && renderCoupons()}

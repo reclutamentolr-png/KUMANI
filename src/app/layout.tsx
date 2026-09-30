@@ -3,6 +3,8 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
+import { getEnabledLocales } from '@/lib/enabledLocales';
+import { EnabledLocalesProvider } from '@/components/EnabledLocalesProvider';
 import { NeurobalanceAudioProvider } from '@/components/NeurobalanceAudioProvider';
 import FloatingAudioPlayer from '@/components/FloatingAudioPlayer';
 import "./globals.css";
@@ -117,15 +119,18 @@ type RootLayoutProps = {
 export default async function RootLayout({ children }: RootLayoutProps) {
   const locale = await getLocale();
   const messages = await getMessages();
+  const enabledLocales = await getEnabledLocales();
 
   return (
     <html lang={locale} suppressHydrationWarning>
       <body className={`min-h-full flex flex-col bg-gray-50 ${geistSans.variable} ${geistMono.variable} antialiased`}>
         <NextIntlClientProvider messages={messages}>
-          <NeurobalanceAudioProvider>
-            {children}
-            <FloatingAudioPlayer />
-          </NeurobalanceAudioProvider>
+          <EnabledLocalesProvider locales={enabledLocales}>
+            <NeurobalanceAudioProvider>
+              {children}
+              <FloatingAudioPlayer />
+            </NeurobalanceAudioProvider>
+          </EnabledLocalesProvider>
         </NextIntlClientProvider>
       </body>
     </html>
