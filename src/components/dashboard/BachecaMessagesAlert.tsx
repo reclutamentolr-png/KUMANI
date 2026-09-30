@@ -7,7 +7,8 @@ import Link from '@/components/LocalizedLink'
 
 // Avviso in cima alla dashboard: messaggi non letti dalla Bacheca Annunci,
 // con accesso diretto ai messaggi o alla Bacheca. Sparisce quando i
-// messaggi vengono letti (stesso evento di UnreadMessagesBadge).
+// messaggi vengono letti (evento refreshUnreadCount). Il numero rosso
+// lampeggia (non con "riduci movimento" attivo).
 export default function BachecaMessagesAlert({ initialCount }: { initialCount: number }) {
   const t = useTranslations('dashboard')
   const [count, setCount] = useState(initialCount)
@@ -25,8 +26,11 @@ export default function BachecaMessagesAlert({ initialCount }: { initialCount: n
       <div className="flex items-start gap-4">
         <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)]">
           <MessageCircle className="h-6 w-6 text-[var(--ink)]" />
-          <span className="absolute -right-1.5 -top-1.5 flex h-6 min-w-6 items-center justify-center rounded-full bg-red-600 px-1.5 text-xs font-bold text-white ring-2 ring-[var(--ink)]">
-            {count > 99 ? '99+' : count}
+          <span className="absolute -right-1.5 -top-1.5 flex h-6 min-w-6">
+            <span className="absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75 motion-safe:animate-ping" />
+            <span className="relative flex h-6 min-w-6 items-center justify-center rounded-full bg-red-600 px-1.5 text-xs font-bold text-white ring-2 ring-[var(--ink)] motion-safe:animate-pulse">
+              {count > 99 ? '99+' : count}
+            </span>
           </span>
         </div>
         <div className="min-w-0 flex-1">

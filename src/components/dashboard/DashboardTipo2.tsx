@@ -1,6 +1,5 @@
 import { getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
-import UnreadMessagesBadge from '@/components/UnreadMessagesBadge'
 import KumanoDelGiornoPreview from './KumanoDelGiornoPreview'
 import CategoryToolsAccordion from './CategoryToolsAccordion'
 import InfoPopover from '@/components/InfoPopover'
@@ -23,7 +22,6 @@ import type { MyProfile } from '@/lib/myProfile'
 export default async function DashboardTipo2({
   profile,
   shareUrl,
-  unreadMessagesCount,
   visibleTools,
   lockedToolNames,
   proToolNames,
@@ -35,7 +33,6 @@ export default async function DashboardTipo2({
 }: {
   profile: MyProfile | null
   shareUrl: string
-  unreadMessagesCount: number
   visibleTools: MarketplaceTool[]
   lockedToolNames: string[]
   proToolNames: string[]
@@ -248,12 +245,6 @@ export default async function DashboardTipo2({
                   </p>
                 </>
               )}
-            </div>
-          )}
-
-          {unreadMessagesCount > 0 && (
-            <div className="mt-4">
-              <UnreadMessagesBadge initialCount={unreadMessagesCount} />
             </div>
           )}
         </div>

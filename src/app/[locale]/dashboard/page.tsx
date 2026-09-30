@@ -209,7 +209,6 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
         <DashboardTipo2
           profile={profile}
           shareUrl={shareUrl}
-          unreadMessagesCount={unreadMessagesCount || 0}
           visibleTools={visibleTools}
           lockedToolNames={lockedToolNames}
           proToolNames={proToolNames}
