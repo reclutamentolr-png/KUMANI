@@ -45,7 +45,7 @@ export async function createVoucher(input: { plan: 'base' | 'pro'; purpose: 'gif
     .rpc('create_subscription_voucher', { p_plan: input.plan, p_purpose: input.purpose, p_price_cents: price })
     .single<{ success: boolean; reason: string | null; code: string | null; new_credit_cents: number }>()
   if (error || !data) return { success: false as const, message: 'error' as const }
-  if (!data.success) return { success: false as const, message: (data.reason ?? 'error') as 'insufficient_credit' | 'invalid' | 'error' }
+  if (!data.success) return { success: false as const, message: (data.reason ?? 'error') as 'insufficient_credit' | 'price_too_high' | 'invalid' | 'error' }
   revalidatePath('/wallet')
   return { success: true as const, code: data.code as string, creditCents: data.new_credit_cents }
 }
@@ -71,8 +71,15 @@ export async function updateVoucherSale(voucherId: string, input: { buyerName: s
   const buyer = input.buyerName.trim().slice(0, 200)
   const price = input.priceCents !== null && Number.isFinite(input.priceCents) ? Math.max(0, Math.round(input.priceCents)) : null
   const service = db()
-  const { data: voucher } = await service.from('subscription_vouchers').select('id, sold_at').eq('id', voucherId).eq('created_by', user.id).maybeSingle()
+  const { data: voucher } = await service
+    .from('subscription_vouchers')
+    .select('id, sold_at, cost_cents')
+    .eq('id', voucherId)
+    .eq('created_by', user.id)
+    .maybeSingle()
   if (!voucher) return { success: false as const }
+  // Mai oltre il valore del voucher (vale anche il vincolo nel database)
+  if (price !== null && voucher.cost_cents !== null && price > voucher.cost_cents) return { success: false as const }
   const { error } = await service
     .from('subscription_vouchers')
     .update({ purpose: 'sale', buyer_name: buyer || null, sale_price_cents: price, sold_at: voucher.sold_at ?? new Date().toISOString() })

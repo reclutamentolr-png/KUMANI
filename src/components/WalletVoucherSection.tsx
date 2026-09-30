@@ -78,15 +78,23 @@ export default function WalletVoucherSection({
     setMessage(null)
     setLastCode(null)
     const priceCents = purpose === 'sale' && price.trim() ? Math.round(Number(price.replace(',', '.')) * 100) : null
-    if (priceCents !== null && (!Number.isFinite(priceCents) || priceCents < 0)) {
+    if (priceCents !== null && (!Number.isFinite(priceCents) || priceCents < 0 || priceCents > costCents)) {
       setBusy(null)
-      setMessage({ ok: false, text: t('priceInvalid') })
+      setMessage({ ok: false, text: t('priceTooHigh', { max: euro(costCents) }) })
       return
     }
     const result = await createVoucher({ plan, purpose, priceCents })
     setBusy(null)
     if (!result.success) {
-      setMessage({ ok: false, text: result.message === 'insufficient_credit' ? t('creditNotEnough') : t('genericError') })
+      setMessage({
+        ok: false,
+        text:
+          result.message === 'insufficient_credit'
+            ? t('creditNotEnough')
+            : result.message === 'price_too_high'
+              ? t('priceTooHigh', { max: euro(costCents) })
+              : t('genericError'),
+      })
       return
     }
     setCredit(result.creditCents)
@@ -218,7 +226,7 @@ export default function WalletVoucherSection({
                 inputMode="decimal"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
-                placeholder={t('pricePlaceholder')}
+                placeholder={t('pricePlaceholder', { max: euro(costCents) })}
                 className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-[var(--gold)] focus:outline-none sm:w-48"
               />
               <p className="mt-1 text-xs text-[var(--muted)]">{t('saleNote')}</p>

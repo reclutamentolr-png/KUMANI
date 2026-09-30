@@ -14,7 +14,8 @@ export default function VoucherReceipt({
   voucher,
   seller,
 }: {
-  voucher: { id: string; code: string; plan: 'base' | 'pro'; priceCents: number | null; buyerName: string | null; soldAt: string }
+  // maxCents: valore del voucher, tetto del prezzo di vendita (null: voucher senza costo registrato)
+  voucher: { id: string; code: string; plan: 'base' | 'pro'; priceCents: number | null; buyerName: string | null; soldAt: string; maxCents: number | null }
   seller: { name: string; taxCode: string | null; address: string | null }
 }) {
   const t = useTranslations('voucherReceipt')
@@ -26,7 +27,7 @@ export default function VoucherReceipt({
   const [saved, setSaved] = useState<boolean | null>(null)
 
   const priceCents = price.trim() ? Math.round(Number(price.replace(',', '.')) * 100) : null
-  const priceValid = priceCents === null || (Number.isFinite(priceCents) && priceCents >= 0)
+  const priceValid = priceCents === null || (Number.isFinite(priceCents) && priceCents >= 0 && (voucher.maxCents === null || priceCents <= voucher.maxCents))
   const euro = (cents: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(cents / 100)
   const date = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(voucher.soldAt))
   const planName = voucher.plan === 'pro' ? 'KUMANI Pro' : 'KUMANI Base'
@@ -67,7 +68,11 @@ export default function VoucherReceipt({
               className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm sm:w-48"
             />
           </label>
-          {!priceValid && <p className="text-sm text-red-600">{t('priceInvalid')}</p>}
+          {!priceValid && (
+            <p className="text-sm text-red-600">
+              {voucher.maxCents !== null ? t('priceTooHigh', { max: euro(voucher.maxCents) }) : t('priceInvalid')}
+            </p>
+          )}
           <div className="flex flex-col gap-2 sm:flex-row">
             <button
               type="button"

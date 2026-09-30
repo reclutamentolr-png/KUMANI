@@ -31,7 +31,7 @@ export default async function VoucherReceiptPage({ params }: { params: Promise<{
   })
   const { data: voucher } = await service
     .from('subscription_vouchers')
-    .select('id, code, status, plan, purpose, sale_price_cents, buyer_name, sold_at, created_at')
+    .select('id, code, status, plan, purpose, sale_price_cents, buyer_name, sold_at, created_at, cost_cents')
     .eq('id', id)
     .eq('created_by', user.id)
     .maybeSingle()
@@ -51,6 +51,7 @@ export default async function VoucherReceiptPage({ params }: { params: Promise<{
         priceCents: voucher.sale_price_cents,
         buyerName: voucher.buyer_name,
         soldAt: voucher.sold_at ?? voucher.created_at,
+        maxCents: voucher.cost_cents,
       }}
       seller={{
         name: `${seller?.first_name ?? ''} ${seller?.last_name ?? ''}`.trim(),
