@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
 import KumanoDelGiornoPreview from './KumanoDelGiornoPreview'
 import CategoryToolsAccordion from './CategoryToolsAccordion'
@@ -52,6 +52,7 @@ export default async function DashboardTipo2({
   const t = await getTranslations('dashboard')
   const marketplaceT = await getTranslations('marketplace')
   const pt = await getTranslations('proArea')
+  const locale = await getLocale()
 
   const { activeKumani, pendingKumani, currentRank, directSponsorCount } = network
   const nextRank = RANKS.find((rank) => directSponsorCount < rank.threshold) || null
@@ -119,6 +120,7 @@ export default async function DashboardTipo2({
         <div className="rounded-xl border border-[var(--gold)]/25 bg-[var(--paper)] px-5 py-4 shadow-sm">
           <p className="text-xs text-[var(--muted)] font-medium mb-1.5">{t('subscriptionStatus')}</p>
           {profile?.subscription_status === 'active' ? (
+            <>
             <div className="flex items-center gap-2.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2">
               <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-500">
                 <CheckCircle2 className="h-4 w-4 text-white" />
@@ -127,11 +129,19 @@ export default async function DashboardTipo2({
                 <p className="text-sm font-bold text-emerald-700">{t('subscriptionActive')}</p>
                 {profile?.subscription_expires_at && (
                   <p className="text-xs text-emerald-600">
-                    {t('expiresAt')}: {new Date(profile.subscription_expires_at).toLocaleDateString('it-IT')}
+                    {t('expiresAt')}: {new Date(profile.subscription_expires_at).toLocaleDateString(locale)}
                   </p>
                 )}
               </div>
             </div>
+            {/* Pagina Abbonamento: carta, fatture, disdetta e recesso */}
+            <Link
+              href={{ pathname: '/billing' }}
+              className="mt-2 block text-center text-xs font-semibold text-[var(--muted)] underline-offset-2 hover:text-[var(--ink)] hover:underline"
+            >
+              {pt('manageSubscription')}
+            </Link>
+            </>
           ) : proTrialDaysLeft !== null ? (
             <>
               <div className="flex items-center gap-2.5 rounded-lg border border-[var(--gold)]/50 bg-[var(--gold-pale)] px-3 py-2">
