@@ -5468,7 +5468,8 @@
     "payouts": {"title": "Paiements reçus", "empty": "Vous n'avez encore reçu aucun paiement.", "reference": "Référence", "noReference": "non indiquée"}
   },
   "withdrawal": {
-    "consentLabel": "Je demande que mon abonnement commence immédiatement, avant la fin du délai de rétractation de 14 jours. Je comprends que, si je me rétracte, seule la partie de l'abonnement non encore utilisée me sera remboursée.",
+    "consentLabel": "Je veux utiliser KUMANI tout de suite.",
+    "consentHint": "Mon droit de rétractation de 14 jours reste valable : dans ce cas, je suis remboursé des jours non utilisés.",
     "consentRequired": "Pour continuer, cochez la case demandant l'activation immédiate de votre abonnement.",
     "title": "Droit de rétractation",
     "text": "Vous pouvez vous rétracter de votre abonnement dans les 14 jours suivant le paiement, soit jusqu'au {date}. L'abonnement sera fermé et vous serez remboursé dans les 14 jours.",

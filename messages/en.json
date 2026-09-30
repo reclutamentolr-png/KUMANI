@@ -5468,7 +5468,8 @@
     "payouts": {"title": "Payments received", "empty": "You have not received any payments yet.", "reference": "Reference", "noReference": "not provided"}
   },
   "withdrawal": {
-    "consentLabel": "I ask for my subscription to start immediately, before the 14-day withdrawal period ends. I understand that if I withdraw, I will only be refunded for the part of the subscription I have not yet used.",
+    "consentLabel": "I want to use KUMANI right away.",
+    "consentHint": "My 14-day right of withdrawal remains: in that case I get a refund for the days not used.",
     "consentRequired": "To continue, tick the box to request immediate activation of your subscription.",
     "title": "Right of withdrawal",
     "text": "You can withdraw from your subscription within 14 days of payment, that is until {date}. Your subscription will be closed and you will receive your refund within 14 days.",

@@ -5468,7 +5468,8 @@
     "payouts": {"title": "Pagos recibidos", "empty": "Todavía no has recibido pagos.", "reference": "Referencia", "noReference": "no indicada"}
   },
   "withdrawal": {
-    "consentLabel": "Solicito que mi suscripción empiece de inmediato, antes de que terminen los 14 días del derecho de desistimiento. Entiendo que, si desisto, solo se me reembolsará la parte de la suscripción que aún no haya usado.",
+    "consentLabel": "Quiero usar KUMANI desde ya.",
+    "consentHint": "Mantengo mi derecho de desistimiento de 14 días: en ese caso me reembolsan los días no usados.",
     "consentRequired": "Para continuar, marca la casilla con la que solicitas la activación inmediata de tu suscripción.",
     "title": "Derecho de desistimiento",
     "text": "Puedes desistir de tu suscripción en los 14 días siguientes al pago, es decir, hasta el {date}. La suscripción se cerrará y recibirás el reembolso en un plazo de 14 días.",

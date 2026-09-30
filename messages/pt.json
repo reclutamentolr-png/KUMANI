@@ -5468,7 +5468,8 @@
     "payouts": {"title": "Pagamentos recebidos", "empty": "Ainda não recebeu pagamentos.", "reference": "Referência", "noReference": "não indicada"}
   },
   "withdrawal": {
-    "consentLabel": "Peço que a minha subscrição comece de imediato, antes do fim dos 14 dias do direito de livre resolução. Compreendo que, se resolver o contrato, só me será reembolsada a parte da subscrição ainda não utilizada.",
+    "consentLabel": "Quero usar o KUMANI desde já.",
+    "consentHint": "Mantenho o meu direito de livre resolução de 14 dias: nesse caso recebo o reembolso dos dias não usados.",
     "consentRequired": "Para continuar, assinale a caixa com que pede a ativação imediata da subscrição.",
     "title": "Direito de livre resolução",
     "text": "Pode resolver a sua subscrição nos 14 dias seguintes ao pagamento, ou seja, até {date}. A subscrição será encerrada e receberá o reembolso no prazo de 14 dias.",

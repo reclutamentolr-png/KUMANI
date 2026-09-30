@@ -12,9 +12,9 @@ export const WITHDRAWAL_DAYS = 14
 const WINDOW_SECONDS = WITHDRAWAL_DAYS * 24 * 60 * 60
 
 // Versione del testo del consenso: va cambiata quando cambia il testo in
-// messages/*.json (withdrawal.consentLabel), così resta chiaro cosa ha
+// messages/*.json (withdrawal.consentLabel e consentHint), così resta chiaro cosa ha
 // accettato ogni utente.
-export const CONSENT_VERSION = '2026-09-30'
+export const CONSENT_VERSION = '2026-09-30-v2'
 
 // Campi della fattura nella versione API usata (2024-06-20), non più nei tipi
 type InvoiceLike = Stripe.Invoice & { payment_intent?: string | { id: string } | null }
@@ -97,7 +97,7 @@ export async function recordConsent(
     stripe_ref: input.stripeRef,
     locale: input.locale,
     text_version: CONSENT_VERSION,
-    consent_text: input.business ? t('businessDeclaration') : t('consentLabel'),
+    consent_text: input.business ? t('businessDeclaration') : `${t('consentLabel')} ${t('consentHint')}`,
     buyer_type: input.business ? 'business' : 'consumer',
     business_name: input.business?.name ?? null,
     vat_number: input.business?.vat ?? null,

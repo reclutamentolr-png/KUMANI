@@ -5468,7 +5468,8 @@
     "payouts": {"title": "Pagamenti ricevuti", "empty": "Non hai ancora ricevuto pagamenti.", "reference": "Riferimento", "noReference": "non indicato"}
   },
   "withdrawal": {
-    "consentLabel": "Chiedo che l'abbonamento parta subito, prima della fine dei 14 giorni per il recesso. Ho capito che, se recedo, mi verrà rimborsata solo la parte dell'abbonamento non ancora usata.",
+    "consentLabel": "Voglio usare KUMANI da subito.",
+    "consentHint": "Resta il mio diritto di recesso di 14 giorni: in quel caso ricevo il rimborso dei giorni non usati.",
     "consentRequired": "Per procedere spunta la casella con cui chiedi l'attivazione immediata dell'abbonamento.",
     "title": "Diritto di recesso",
     "text": "Puoi recedere dall'abbonamento entro 14 giorni dal pagamento, cioè fino al {date}. L'abbonamento verrà chiuso e riceverai il rimborso entro 14 giorni.",

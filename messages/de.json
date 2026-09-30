@@ -5468,7 +5468,8 @@
     "payouts": {"title": "Erhaltene Zahlungen", "empty": "Sie haben noch keine Zahlungen erhalten.", "reference": "Verwendungszweck", "noReference": "nicht angegeben"}
   },
   "withdrawal": {
-    "consentLabel": "Ich verlange, dass mein Abo sofort beginnt, noch vor Ablauf der 14-tägigen Widerrufsfrist. Mir ist bewusst, dass mir bei einem Widerruf nur der noch nicht genutzte Teil des Abos erstattet wird.",
+    "consentLabel": "Ich möchte KUMANI sofort nutzen.",
+    "consentHint": "Mein 14-tägiges Widerrufsrecht bleibt bestehen: In diesem Fall erhalte ich die nicht genutzten Tage erstattet.",
     "consentRequired": "Um fortzufahren, setze das Häkchen, mit dem du die sofortige Aktivierung deines Abos verlangst.",
     "title": "Widerrufsrecht",
     "text": "Du kannst dein Abo innerhalb von 14 Tagen nach der Zahlung widerrufen, also bis zum {date}. Das Abo wird beendet und du erhältst die Erstattung innerhalb von 14 Tagen.",

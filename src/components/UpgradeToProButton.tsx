@@ -68,7 +68,14 @@ export default function UpgradeToProButton({ label, note }: { label: string; not
           <p className="mt-2 text-xs text-gray-400">{t('upgradeAmountHint')}</p>
           <label className="mt-4 flex items-start gap-2 text-left text-xs leading-relaxed text-gray-300">
             <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--gold)]" />
-            <span>{tw(preview.business ? 'businessDeclaration' : 'consentLabel')}</span>
+            {preview.business ? (
+              <span>{tw('businessDeclaration')}</span>
+            ) : (
+              <span>
+                <span className="block text-sm font-semibold text-white">{tw('consentLabel')}</span>
+                <span className="mt-0.5 block">{tw('consentHint')}</span>
+              </span>
+            )}
           </label>
           <div className="mt-4 flex flex-col gap-2 sm:flex-row">
             <button

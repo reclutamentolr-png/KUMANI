@@ -6,6 +6,7 @@ export type CheckoutFormTexts = {
   asConsumer: string
   asBusiness: string
   consentLabel: string
+  consentHint: string
   businessName: string
   vatNumber: string
   vatHint: string
@@ -68,7 +69,10 @@ export default function CheckoutForm({
       ) : (
         <label className={`flex items-start gap-2 text-xs leading-relaxed ${text}`}>
           <input type="checkbox" name="immediate_start" value="1" required className={`mt-0.5 h-4 w-4 shrink-0 ${accent}`} />
-          <span>{texts.consentLabel}</span>
+          <span>
+            <span className="block text-sm font-semibold">{texts.consentLabel}</span>
+            <span className="mt-0.5 block">{texts.consentHint}</span>
+          </span>
         </label>
       )}
 

@@ -189,6 +189,7 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
     asConsumer: tw('asConsumer'),
     asBusiness: tw('asBusiness'),
     consentLabel: tw('consentLabel'),
+    consentHint: tw('consentHint'),
     businessName: tw('businessName'),
     vatNumber: tw('vatNumber'),
     vatHint: tw('vatHint'),

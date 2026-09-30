@@ -171,6 +171,7 @@ export default async function ProPage({
                         asConsumer: tw('asConsumer'),
                         asBusiness: tw('asBusiness'),
                         consentLabel: tw('consentLabel'),
+                        consentHint: tw('consentHint'),
                         businessName: tw('businessName'),
                         vatNumber: tw('vatNumber'),
                         vatHint: tw('vatHint'),
