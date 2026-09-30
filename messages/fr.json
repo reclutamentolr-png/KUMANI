@@ -351,7 +351,7 @@
     "spilloverLabel": "donnés à la Communauté",
     "downlineDepth": "Jusqu'au {depth}e niveau",
     "downlineDepthNone": "Aucun niveau pour l'instant",
-    "yourMatrix": "Votre structure (5 positions)",
+    "yourMatrix": "Votre étoile KUMANI (5 positions)",
     "displayedDepth": "Profondeur affichée : 5 niveaux (cliquer pour développer)",
     "nextGoals": "Prochains Objectifs",
     "goalReachedIn": "{days, plural, =0 {🎉 Objectif atteint dès le premier jour !} one {🎉 Objectif atteint en # jour !} other {🎉 Objectif atteint en # jours !}}",

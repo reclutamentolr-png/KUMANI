@@ -351,7 +351,7 @@
     "spilloverLabel": "an die Community",
     "downlineDepth": "Bis zur {depth}. Ebene",
     "downlineDepthNone": "Noch keine Ebene",
-    "yourMatrix": "Deine Struktur (5 Positionen)",
+    "yourMatrix": "Dein KUMANI-Stern (5 Positionen)",
     "displayedDepth": "Angezeigte Tiefe: 5 Ebenen (zum Erweitern klicken)",
     "nextGoals": "Nächste Ziele",
     "goalReachedIn": "{days, plural, =0 {🎉 Ziel schon am ersten Tag erreicht!} one {🎉 Ziel in # Tag erreicht!} other {🎉 Ziel in # Tagen erreicht!}}",
