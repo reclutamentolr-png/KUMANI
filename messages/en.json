@@ -5434,5 +5434,20 @@
     "tip3": "If something else comes to mind, jot it down on paper and get back to work.",
     "tip4": "On breaks, stand up and breathe: skip social media and rest your eyes.",
     "tip5": "After 4 sessions take the long break: it's part of the method."
+  },
+  "agentArea": {
+    "title": "Agent Area",
+    "logout": "Log out",
+    "services": "KUMANI services",
+    "showMore": "{count, plural, one {Show one more} other {Show # more}}",
+    "suspended": {"title": "Agent account suspended", "text": "Your agent account is not active at the moment. Please contact the KUMANI Staff for more information."},
+    "regime": {"partita_iva": "VAT-registered professional", "occasionale": "Occasional self-employment", "agenzia": "Agency agreement"},
+    "plan": {"base": "Base", "pro": "Pro"},
+    "link": {"title": "Your link", "code": "Agent code", "fullLink": "Sign-up link", "copy": "Copy", "copied": "Copied", "share": "Share", "shareTitle": "Join KUMANI", "shareText": "I invite you to discover KUMANI: sign up from this link.", "shareMessage": "Hi! I invite you to discover KUMANI, many useful services in one place. Sign up here: {link}", "whatsapp": "Send on WhatsApp", "note": "Only people who sign up from this link count. People already registered on KUMANI cannot be linked to you.", "qrAlt": "QR code of your sign-up link", "qrLoading": "Generating QR code...", "downloadQr": "Download PNG"},
+    "periods": {"title": "Your sales", "today": "Today", "week": "Week", "month": "Month", "year": "Year", "sales": "{count, plural, =0 {No sales} one {# sale} other {# sales}}", "revenue": "Revenue", "commission": "Commission"},
+    "wallet": {"title": "Your wallet", "pending": "Pending", "pendingHint": "Within the customer's 14-day withdrawal period", "matured": "Earned (to be paid)", "maturedHint": "Final, awaiting bank transfer", "paid": "Paid", "paidHint": "Already transferred by KUMANI", "rateFirst": "First sale {pct}", "rateRenewal": "Renewals {pct}", "explanation": "Commissions become final 14 days after the customer's payment. If the customer is refunded, the related commission is cancelled. Payments are made by KUMANI via bank transfer."},
+    "customers": {"title": "Your customers", "summary": "{total, plural, =0 {No customers} one {# customer} other {# customers}}, {active, plural, one {# active} other {# active}}", "empty": "You have no customers yet. Share your link to get started.", "joined": "Joined on {date}", "noPlan": "Not subscribed yet", "active": "Active", "inactive": "Inactive"},
+    "commissions": {"title": "Commissions", "csv": "Download statement (CSV)", "filterLabel": "Filter by status", "filter": {"all": "All", "pending": "Pending", "matured": "Earned", "paid": "Paid", "cancelled": "Cancelled"}, "empty": "No commissions to show.", "col": {"date": "Date", "customer": "Customer", "kind": "Type", "plan": "Plan", "net": "Taxable amount", "pct": "%", "commission": "Commission", "state": "Status", "maturesAt": "Final on", "note": "Note"}, "kind": {"first": "First sale", "renewal": "Renewal", "adjustment": "Adjustment"}, "state": {"pendingUntil": "Pending until {date}", "pending": "Pending", "matured": "Earned", "paid": "Paid", "cancelled": "Cancelled"}},
+    "payouts": {"title": "Payments received", "empty": "You have not received any payments yet.", "reference": "Reference", "noReference": "not provided"}
   }
 }

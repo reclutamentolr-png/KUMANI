@@ -43,6 +43,10 @@ const PAID_TOOLS = [
   'calcolatrici',
 ];
 
+// Pagine consentite agli agenti venditori e servizi della community esclusi
+const AGENT_ALLOWED = /^\/(agente|marketplace|login|auth|forgot-password|reset-password|maintenance)(\/|$)/;
+const AGENT_BLOCKED_TOOLS = /^\/marketplace\/(listings|chat|convivio|timebank|affinity|spotlight|mosaic|fabula|veritas)(\/|$)/;
+
 // Pagine consentite ai traduttori (tutto il resto riporta all'Area Traduttori)
 const TRANSLATOR_ALLOWED = /^\/(traduzioni|login|auth|forgot-password|reset-password|maintenance)(\/|$)/;
 
@@ -157,6 +161,18 @@ export async function proxy(request: NextRequest) {
     const barePath = '/' + (hasLocale ? segments.slice(1) : segments).join('/');
     if (!TRANSLATOR_ALLOWED.test(barePath)) {
       return NextResponse.redirect(new URL(`${localePrefix}/traduzioni`, request.url));
+    }
+  }
+
+  // Agenti venditori: la loro area e i servizi (piano Pro incluso), niente
+  // dashboard, rete o servizi della community (nessun contatto con i Kumani)
+  if (user && (user.app_metadata as { role?: string } | undefined)?.role === 'agent') {
+    const segments = request.nextUrl.pathname.split('/').filter(Boolean);
+    const hasLocale = !!segments[0] && locales.includes(segments[0]);
+    const localePrefix = hasLocale ? `/${segments[0]}` : '';
+    const barePath = '/' + (hasLocale ? segments.slice(1) : segments).join('/');
+    if (!AGENT_ALLOWED.test(barePath) || AGENT_BLOCKED_TOOLS.test(barePath)) {
+      return NextResponse.redirect(new URL(`${localePrefix}/agente`, request.url));
     }
   }
 

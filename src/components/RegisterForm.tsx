@@ -29,6 +29,9 @@ export default function RegisterForm() {
   // accedere viene rimandato qui con ?verify=<email> (vedi login/page.tsx)
   // per riprendere direttamente dall'inserimento del codice.
   const resumeEmail = searchParams.get('verify') || ''
+  // Link di un Agente venditore (?agente=AG-XXXXXX): il cliente resta suo
+  // (conta solo all'iscrizione; il codice lo verifica il server)
+  const agentCode = (searchParams.get('agente') || '').trim().toUpperCase().slice(0, 12)
   // "Registrati e scegli Pro" dalla pagina /pro arriva con ?plan=pro.
   const initialProfessional = searchParams.get('plan') === 'pro'
 
@@ -145,6 +148,7 @@ export default function RegisterForm() {
             referral_code: cleanReferralCode,
             voucher_code: cleanVoucherCode,
             professional: formData.professional,
+            agent_code: agentCode,
           }
         }
       })
@@ -207,6 +211,7 @@ export default function RegisterForm() {
       referral_code?: string
       voucher_code?: string
       professional?: boolean
+      agent_code?: string
     }
 
     try {
@@ -216,6 +221,7 @@ export default function RegisterForm() {
         p_country: meta.country_code || formData.country_code,
         p_city: meta.city ?? formData.city.trim(),
         p_referral_code: meta.referral_code ?? formData.referral_code.trim().toUpperCase(),
+        p_agent_code: meta.agent_code ?? agentCode,
       })
 
       if (registrationError || status !== 'ok') {

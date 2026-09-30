@@ -5434,5 +5434,20 @@
     "tip3": "Wenn dir etwas anderes einfällt, schreib es auf einen Zettel und mach weiter.",
     "tip4": "In der Pause aufstehen und durchatmen: kein Social Media, gönn deinen Augen Ruhe.",
     "tip5": "Nach 4 Einheiten nimm dir die lange Pause: Sie gehört zur Methode."
+  },
+  "agentArea": {
+    "title": "Agentenbereich",
+    "logout": "Abmelden",
+    "services": "Die KUMANI-Dienste",
+    "showMore": "{count, plural, one {Einen weiteren anzeigen} other {# weitere anzeigen}}",
+    "suspended": {"title": "Agentenkonto gesperrt", "text": "Ihr Agentenkonto ist derzeit nicht aktiv. Bitte wenden Sie sich für weitere Informationen an das KUMANI-Staff."},
+    "regime": {"partita_iva": "Umsatzsteuerpflichtige Selbstständigkeit", "occasionale": "Gelegentliche Tätigkeit", "agenzia": "Handelsvertretervertrag"},
+    "plan": {"base": "Base", "pro": "Pro"},
+    "link": {"title": "Ihr Link", "code": "Agentencode", "fullLink": "Registrierungslink", "copy": "Kopieren", "copied": "Kopiert", "share": "Teilen", "shareTitle": "Bei KUMANI registrieren", "shareText": "Ich lade Sie ein, KUMANI zu entdecken: Registrieren Sie sich über diesen Link.", "shareMessage": "Hallo! Ich lade dich ein, KUMANI zu entdecken, viele nützliche Dienste an einem Ort. Hier registrieren: {link}", "whatsapp": "Per WhatsApp senden", "note": "Es zählen nur Personen, die sich über diesen Link registrieren. Bereits bei KUMANI registrierte Personen können Ihnen nicht zugeordnet werden.", "qrAlt": "QR-Code Ihres Registrierungslinks", "qrLoading": "QR-Code wird erstellt...", "downloadQr": "PNG herunterladen"},
+    "periods": {"title": "Ihre Verkäufe", "today": "Heute", "week": "Woche", "month": "Monat", "year": "Jahr", "sales": "{count, plural, =0 {Keine Verkäufe} one {# Verkauf} other {# Verkäufe}}", "revenue": "Umsatz", "commission": "Provision"},
+    "wallet": {"title": "Ihr Guthaben", "pending": "In Wartezeit", "pendingHint": "Innerhalb der 14-tägigen Widerrufsfrist des Kunden", "matured": "Verdient (auszuzahlen)", "maturedHint": "Endgültig, Überweisung ausstehend", "paid": "Ausgezahlt", "paidHint": "Bereits von KUMANI überwiesen", "rateFirst": "Erstverkauf {pct}", "rateRenewal": "Verlängerungen {pct}", "explanation": "Provisionen werden 14 Tage nach der Zahlung des Kunden endgültig. Erhält der Kunde eine Erstattung, wird die zugehörige Provision storniert. Die Auszahlungen erfolgen durch KUMANI per Banküberweisung."},
+    "customers": {"title": "Ihre Kunden", "summary": "{total, plural, =0 {Keine Kunden} one {# Kunde} other {# Kunden}}, {active, plural, one {# aktiv} other {# aktiv}}", "empty": "Sie haben noch keine Kunden. Teilen Sie Ihren Link, um zu starten.", "joined": "Registriert am {date}", "noPlan": "Noch kein Abonnement", "active": "Aktiv", "inactive": "Nicht aktiv"},
+    "commissions": {"title": "Provisionen", "csv": "Kontoauszug herunterladen (CSV)", "filterLabel": "Nach Status filtern", "filter": {"all": "Alle", "pending": "In Wartezeit", "matured": "Verdient", "paid": "Ausgezahlt", "cancelled": "Storniert"}, "empty": "Keine Provisionen vorhanden.", "col": {"date": "Datum", "customer": "Kunde", "kind": "Art", "plan": "Tarif", "net": "Nettobetrag", "pct": "%", "commission": "Provision", "state": "Status", "maturesAt": "Endgültig am", "note": "Hinweis"}, "kind": {"first": "Erstverkauf", "renewal": "Verlängerung", "adjustment": "Korrektur"}, "state": {"pendingUntil": "In Wartezeit bis {date}", "pending": "In Wartezeit", "matured": "Verdient", "paid": "Ausgezahlt", "cancelled": "Storniert"}},
+    "payouts": {"title": "Erhaltene Zahlungen", "empty": "Sie haben noch keine Zahlungen erhalten.", "reference": "Verwendungszweck", "noReference": "nicht angegeben"}
   }
 }

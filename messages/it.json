@@ -5434,5 +5434,20 @@
     "tip3": "Se ti viene in mente altro, annotalo su un foglio e torna al lavoro.",
     "tip4": "In pausa alzati e respira: niente social, lascia riposare gli occhi.",
     "tip5": "Dopo 4 sessioni prenditi la pausa lunga: fa parte del metodo."
+  },
+  "agentArea": {
+    "title": "Area Agente",
+    "logout": "Esci",
+    "services": "I servizi KUMANI",
+    "showMore": "{count, plural, one {Mostra un altro} other {Mostra altri (#)}}",
+    "suspended": {"title": "Account agente sospeso", "text": "Il tuo account agente non è attivo in questo momento. Contatta lo Staff KUMANI per maggiori informazioni."},
+    "regime": {"partita_iva": "Partita IVA", "occasionale": "Prestazione occasionale", "agenzia": "Contratto di agenzia"},
+    "plan": {"base": "Base", "pro": "Pro"},
+    "link": {"title": "Il tuo link", "code": "Codice agente", "fullLink": "Link di iscrizione", "copy": "Copia", "copied": "Copiato", "share": "Condividi", "shareTitle": "Iscriviti a KUMANI", "shareText": "Ti invito a scoprire KUMANI: iscriviti da questo link.", "shareMessage": "Ciao! Ti invito a scoprire KUMANI, tanti servizi utili in un unico posto. Iscriviti da qui: {link}", "whatsapp": "Invia su WhatsApp", "note": "Contano solo le persone che si iscrivono da questo link. Chi è già registrato a KUMANI non può essere collegato a te.", "qrAlt": "Codice QR del tuo link di iscrizione", "qrLoading": "Generazione del QR...", "downloadQr": "Scarica PNG"},
+    "periods": {"title": "Le tue vendite", "today": "Oggi", "week": "Settimana", "month": "Mese", "year": "Anno", "sales": "{count, plural, =0 {Nessuna vendita} one {# vendita} other {# vendite}}", "revenue": "Fatturato", "commission": "Provvigione"},
+    "wallet": {"title": "Il tuo portafoglio", "pending": "In maturazione", "pendingHint": "Nei 14 giorni del diritto di recesso del cliente", "matured": "Maturato (da ricevere)", "maturedHint": "Definitivo, in attesa del bonifico", "paid": "Pagato", "paidHint": "Già bonificato da KUMANI", "rateFirst": "Prima vendita {pct}", "rateRenewal": "Rinnovi {pct}", "explanation": "Le provvigioni diventano definitive 14 giorni dopo il pagamento del cliente. Se il cliente viene rimborsato, la provvigione collegata viene annullata. I pagamenti vengono effettuati da KUMANI tramite bonifico bancario."},
+    "customers": {"title": "I tuoi clienti", "summary": "{total, plural, =0 {Nessun cliente} one {# cliente} other {# clienti}}, {active, plural, one {# attivo} other {# attivi}}", "empty": "Non hai ancora clienti. Condividi il tuo link per iniziare.", "joined": "Iscritto il {date}", "noPlan": "Non ancora abbonato", "active": "Attivo", "inactive": "Non attivo"},
+    "commissions": {"title": "Provvigioni", "csv": "Scarica estratto conto (CSV)", "filterLabel": "Filtra per stato", "filter": {"all": "Tutte", "pending": "In maturazione", "matured": "Maturate", "paid": "Pagate", "cancelled": "Annullate"}, "empty": "Nessuna provvigione da mostrare.", "col": {"date": "Data", "customer": "Cliente", "kind": "Tipo", "plan": "Piano", "net": "Imponibile", "pct": "%", "commission": "Provvigione", "state": "Stato", "maturesAt": "Maturazione", "note": "Nota"}, "kind": {"first": "Prima vendita", "renewal": "Rinnovo", "adjustment": "Rettifica"}, "state": {"pendingUntil": "In maturazione fino al {date}", "pending": "In maturazione", "matured": "Maturata", "paid": "Pagata", "cancelled": "Annullata"}},
+    "payouts": {"title": "Pagamenti ricevuti", "empty": "Non hai ancora ricevuto pagamenti.", "reference": "Riferimento", "noReference": "non indicato"}
   }
 }

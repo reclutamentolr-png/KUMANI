@@ -44,10 +44,11 @@ export default function LoginPage() {
       return
     }
 
-    // Traduttore: nessun profilo KUMANI da controllare, va nella sua area
-    if ((authData.user?.app_metadata as { role?: string } | undefined)?.role === 'translator') {
+    // Traduttore o Agente venditore: vanno nella loro area
+    const role = (authData.user?.app_metadata as { role?: string } | undefined)?.role
+    if (role === 'translator' || role === 'agent') {
       endImpersonation()
-      router.push(`/${locale}/traduzioni`)
+      router.push(`/${locale}/${role === 'translator' ? 'traduzioni' : 'agente'}`)
       router.refresh()
       return
     }
@@ -76,6 +77,7 @@ export default function LoginPage() {
           referral_code?: string
           voucher_code?: string
           professional?: boolean
+          agent_code?: string
         }
         const { data: status, error: registrationError } = meta.first_name && meta.last_name && meta.country_code
           ? await supabase.rpc('complete_registration', {
@@ -84,6 +86,7 @@ export default function LoginPage() {
               p_country: meta.country_code,
               p_city: meta.city ?? '',
               p_referral_code: meta.referral_code ?? '',
+              p_agent_code: meta.agent_code ?? '',
             })
           : { data: null, error: null }
 

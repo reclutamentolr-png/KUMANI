@@ -5434,5 +5434,20 @@
     "tip3": "Si autre chose te vient à l'esprit, note-le sur une feuille et reviens au travail.",
     "tip4": "Pendant la pause, lève-toi et respire : pas de réseaux sociaux, repose tes yeux.",
     "tip5": "Après 4 sessions, prends la pause longue : elle fait partie de la méthode."
+  },
+  "agentArea": {
+    "title": "Espace Agent",
+    "logout": "Se déconnecter",
+    "services": "Les services KUMANI",
+    "showMore": "{count, plural, one {Afficher # de plus} other {Afficher # de plus}}",
+    "suspended": {"title": "Compte agent suspendu", "text": "Votre compte agent n'est pas actif pour le moment. Contactez le Staff KUMANI pour plus d'informations."},
+    "regime": {"partita_iva": "Professionnel assujetti à la TVA", "occasionale": "Prestation occasionnelle", "agenzia": "Contrat d'agent commercial"},
+    "plan": {"base": "Base", "pro": "Pro"},
+    "link": {"title": "Votre lien", "code": "Code agent", "fullLink": "Lien d'inscription", "copy": "Copier", "copied": "Copié", "share": "Partager", "shareTitle": "Inscrivez-vous sur KUMANI", "shareText": "Je vous invite à découvrir KUMANI : inscrivez-vous depuis ce lien.", "shareMessage": "Bonjour ! Je vous invite à découvrir KUMANI, de nombreux services utiles réunis en un seul endroit. Inscrivez-vous ici : {link}", "whatsapp": "Envoyer sur WhatsApp", "note": "Seules les personnes qui s'inscrivent depuis ce lien sont comptabilisées. Les personnes déjà inscrites sur KUMANI ne peuvent pas vous être rattachées.", "qrAlt": "QR code de votre lien d'inscription", "qrLoading": "Génération du QR code...", "downloadQr": "Télécharger PNG"},
+    "periods": {"title": "Vos ventes", "today": "Aujourd'hui", "week": "Semaine", "month": "Mois", "year": "Année", "sales": "{count, plural, =0 {Aucune vente} one {# vente} other {# ventes}}", "revenue": "Chiffre d'affaires", "commission": "Commission"},
+    "wallet": {"title": "Votre portefeuille", "pending": "En cours d'acquisition", "pendingHint": "Pendant le délai de rétractation de 14 jours du client", "matured": "Acquis (à recevoir)", "maturedHint": "Définitif, en attente de virement", "paid": "Payé", "paidHint": "Déjà viré par KUMANI", "rateFirst": "Première vente {pct}", "rateRenewal": "Renouvellements {pct}", "explanation": "Les commissions deviennent définitives 14 jours après le paiement du client. Si le client est remboursé, la commission correspondante est annulée. Les paiements sont effectués par KUMANI par virement bancaire."},
+    "customers": {"title": "Vos clients", "summary": "{total, plural, =0 {Aucun client} one {# client} other {# clients}}, {active, plural, one {# actif} other {# actifs}}", "empty": "Vous n'avez pas encore de clients. Partagez votre lien pour commencer.", "joined": "Inscrit le {date}", "noPlan": "Pas encore abonné", "active": "Actif", "inactive": "Inactif"},
+    "commissions": {"title": "Commissions", "csv": "Télécharger le relevé (CSV)", "filterLabel": "Filtrer par statut", "filter": {"all": "Toutes", "pending": "En cours d'acquisition", "matured": "Acquises", "paid": "Payées", "cancelled": "Annulées"}, "empty": "Aucune commission à afficher.", "col": {"date": "Date", "customer": "Client", "kind": "Type", "plan": "Formule", "net": "Montant HT", "pct": "%", "commission": "Commission", "state": "Statut", "maturesAt": "Acquisition", "note": "Note"}, "kind": {"first": "Première vente", "renewal": "Renouvellement", "adjustment": "Régularisation"}, "state": {"pendingUntil": "En cours d'acquisition jusqu'au {date}", "pending": "En cours d'acquisition", "matured": "Acquise", "paid": "Payée", "cancelled": "Annulée"}},
+    "payouts": {"title": "Paiements reçus", "empty": "Vous n'avez encore reçu aucun paiement.", "reference": "Référence", "noReference": "non indiquée"}
   }
 }
