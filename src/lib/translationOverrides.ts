@@ -16,11 +16,12 @@ export function serviceClient() {
 const fetchOverrides = unstable_cache(
   async (locale: string): Promise<Record<string, string>> => {
     const { data, error } = await serviceClient().from('translation_overrides').select('key, value').eq('locale', locale)
-    // Tabella non ancora creata o database non raggiungibile: si usano i file
-    if (error || !data) return {}
+    // Errore (tabella mancante, database non raggiungibile): si lancia, così
+    // il "vuoto" non resta in memoria; sotto si usano i file delle lingue
+    if (error || !data) throw new Error(error?.message ?? 'translation_overrides non disponibile')
     return Object.fromEntries(data.map((row) => [row.key as string, row.value as string]))
   },
-  ['translation-overrides'],
+  ['translation-overrides-v2'],
   { revalidate: 600, tags: [TRANSLATIONS_CACHE_TAG] }
 )
 
