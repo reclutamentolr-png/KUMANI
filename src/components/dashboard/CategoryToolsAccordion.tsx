@@ -29,6 +29,7 @@ export default function CategoryToolsAccordion({
   lockedToolNames,
   proToolNames = [],
   freeToolNames = [],
+  basePrice,
   favoriteToolNames,
 }: {
   category: MarketplaceCategory
@@ -40,6 +41,8 @@ export default function CategoryToolsAccordion({
   proToolNames?: string[]
   // Servizi gratuiti per tutti gli iscritti (etichetta GRATIS)
   freeToolNames?: string[]
+  // Prezzo del piano Base già formattato, per "Abbonati ora"
+  basePrice: string
   favoriteToolNames: string[]
 }) {
   const t = useTranslations('marketplace')
@@ -94,7 +97,7 @@ export default function CategoryToolsAccordion({
                   <p className="font-bold text-[var(--ink)] text-sm mb-1 pr-6">{tool.title}</p>
                   <p className="text-xs text-[var(--muted)] leading-5 line-clamp-2 mb-2">{tool.description}</p>
                   <span className="inline-flex items-center gap-1 text-xs font-bold text-[var(--gold)] group-hover:text-[var(--ink)]">
-                    <Zap className="h-3 w-3" /> {td('subscribeNow')}
+                    <Zap className="h-3 w-3" /> {td('subscribeNow', { price: basePrice })}
                   </span>
                 </Link>
               )

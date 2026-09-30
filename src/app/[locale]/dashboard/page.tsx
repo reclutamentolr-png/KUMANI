@@ -75,6 +75,12 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   // 6. URL di condivisione
   const shareUrl = `${SITE_URL}/${locale}/ref/${profile?.referral_code}`
 
+  // Prezzo del piano Base come lo addebita Stripe (lo stesso del pagamento),
+  // per il pulsante "Abbonati ora"
+  const basePrice = new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2, minimumFractionDigits: 0 }).format(
+    (await getPlanPrices()).base
+  )
+
   // Strumenti attivi e piano dell'utente (Area Professionisti e categorie)
   const enabledTools = getMarketplaceTools(marketplaceT).filter((tool) => isSettingEnabled(tool.toolName))
   const proTools = enabledTools.filter((tool) => requiredPlan(tool.toolName) === 'pro')
@@ -213,6 +219,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
           lockedToolNames={lockedToolNames}
           proToolNames={proToolNames}
           freeToolNames={freeToolNames}
+          basePrice={basePrice}
           favoriteToolNames={favoriteToolNames}
           proTrialDaysLeft={proTrial?.daysLeft ?? null}
           agenda={hasAgenda ? <UpcomingAgenda events={agendaEvents} today={agendaToday} sources={agendaSources} /> : null}

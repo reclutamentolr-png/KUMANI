@@ -359,7 +359,7 @@
     "downlineDepthNone": "No levels yet",
     "subscriptionStatus": "Subscription Status",
     "currentPlan": "Current plan",
-    "subscribeNow": "Subscribe now €49/year",
+    "subscribeNow": "Subscribe now {price}/year",
     "yourReferralCode": "Your Unique Invite Code",
     "shareLink": "Sharing Link",
     "growthTool": "Your Growth Tool",

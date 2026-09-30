@@ -327,7 +327,7 @@
     "manageListings": "Управление объявлениями и сообщениями",
     "subscriptionStatus": "Статус подписки",
     "currentPlan": "Текущий план",
-    "subscribeNow": "Подписаться - 1 €/месяц",
+    "subscribeNow": "Подписаться - {price}/год",
     "marketplace": "Экосистема",
     "digitalTools": "Цифровые инструменты для роста сети",
     "discoverServices": "Открыть сервисы",

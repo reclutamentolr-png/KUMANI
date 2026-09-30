@@ -327,7 +327,7 @@
     "manageListings": "Gérer les annonces et messages",
     "subscriptionStatus": "Statut de l'abonnement",
     "currentPlan": "Forfait actuel",
-    "subscribeNow": "S'abonner maintenant - 1 €/mois",
+    "subscribeNow": "S'abonner maintenant - {price}/an",
     "marketplace": "Écosystème",
     "digitalTools": "Outils numériques pour développer votre réseau",
     "discoverServices": "Découvrir les services",

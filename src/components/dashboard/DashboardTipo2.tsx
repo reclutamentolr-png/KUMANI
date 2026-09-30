@@ -26,6 +26,7 @@ export default async function DashboardTipo2({
   lockedToolNames,
   proToolNames,
   freeToolNames,
+  basePrice,
   favoriteToolNames,
   proTrialDaysLeft = null,
   agenda = null,
@@ -38,6 +39,8 @@ export default async function DashboardTipo2({
   proToolNames: string[]
   // Servizi gratuiti (etichetta GRATIS, mostrati per primi)
   freeToolNames: string[]
+  // Prezzo del piano Base già formattato (es. "49 €")
+  basePrice: string
   favoriteToolNames: string[]
   // Prova Pro in corso: il riquadro dell'abbonamento propone Pro come
   // scelta principale e il Base come alternativa.
@@ -162,7 +165,7 @@ export default async function DashboardTipo2({
                   href={{ pathname: '/billing' }}
                   className="block text-center rounded-lg bg-[var(--ink)] px-3 py-2 text-sm font-semibold text-white hover:bg-[var(--ink-soft)]"
                 >
-                  {t('subscribeNow')}
+                  {t('subscribeNow', { price: basePrice })}
                 </Link>
                 <VoucherActivationButton />
               </div>
@@ -193,6 +196,7 @@ export default async function DashboardTipo2({
               lockedToolNames={lockedToolNames}
               proToolNames={proToolNames}
               freeToolNames={freeToolNames}
+              basePrice={basePrice}
               favoriteToolNames={favoriteToolNames}
             />
           ))}

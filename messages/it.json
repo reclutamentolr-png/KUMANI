@@ -359,7 +359,7 @@
     "downlineDepthNone": "Nessun livello ancora",
     "subscriptionStatus": "Stato Abbonamento",
     "currentPlan": "Piano attuale",
-    "subscribeNow": "Abbonati ora 49€/anno",
+    "subscribeNow": "Abbonati ora {price}/anno",
     "yourReferralCode": "Il tuo Codice d’invito Unico",
     "shareLink": "Link di Condivisione",
     "growthTool": "Il tuo Strumento di Crescita",

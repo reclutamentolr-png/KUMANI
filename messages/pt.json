@@ -327,7 +327,7 @@
     "manageListings": "Gerir anúncios e mensagens",
     "subscriptionStatus": "Estado da subscrição",
     "currentPlan": "Plano atual",
-    "subscribeNow": "Subscreva agora - €1/mês",
+    "subscribeNow": "Subscreva agora - {price}/ano",
     "marketplace": "Ecossistema",
     "digitalTools": "Ferramentas digitais para fazer crescer a sua rede",
     "discoverServices": "Descobrir serviços",

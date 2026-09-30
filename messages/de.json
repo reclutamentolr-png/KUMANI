@@ -327,7 +327,7 @@
     "manageListings": "Anzeigen und Nachrichten verwalten",
     "subscriptionStatus": "Abonnementstatus",
     "currentPlan": "Aktueller Plan",
-    "subscribeNow": "Jetzt abonnieren - 1 €/Monat",
+    "subscribeNow": "Jetzt abonnieren - {price}/Jahr",
     "marketplace": "Ökosystem",
     "digitalTools": "Digitale Werkzeuge für dein Netzwerk",
     "discoverServices": "Services entdecken",
