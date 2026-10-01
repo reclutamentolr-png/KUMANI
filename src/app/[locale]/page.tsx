@@ -138,8 +138,9 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
           <div className={`flex mb-5 sm:mb-7 ${L.hero.kind === 'split' ? 'justify-center lg:justify-start' : 'justify-center'}`}>
             {L.hero.video ? <HeroLogoVideo label="KUMANI" /> : <Logo size={96} priority className="sm:h-28 sm:w-28 h-24 w-24" />}
           </div>
-          <div className="inline-flex items-center gap-2 bg-[var(--gold)]/10 backdrop-blur px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium text-white mb-5 sm:mb-7 border border-[var(--gold)]/30">
-            <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-[var(--gold-bright)]" />
+          {/* Il manifesto in una frase: ben visibile, non un'etichetta */}
+          <div className="mx-auto mb-6 inline-flex max-w-3xl items-center gap-3 rounded-2xl border border-[var(--gold)]/60 bg-[var(--gold)]/15 px-5 py-3 text-base font-semibold leading-snug text-white shadow-[0_10px_30px_rgba(199,154,59,0.18)] backdrop-blur sm:mb-8 sm:px-7 sm:py-4 sm:text-xl">
+            <Sparkles className="h-5 w-5 shrink-0 text-[var(--gold-bright)] sm:h-6 sm:w-6" />
             {t('heroBadge')}
           </div>
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white mb-5 sm:mb-7 leading-tight break-words">
