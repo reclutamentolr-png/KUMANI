@@ -214,34 +214,42 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
           )}
         </WalletSection>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {/* Points / XP */}
-          <WalletSection icon={<Sparkles className="h-5 w-5 text-[var(--gold)]" />} title={t('pointsTitle')}>
-            <p className="text-4xl font-bold text-[var(--ink)]">{profile.daily_points || 0}</p>
-            <p className="mt-1 text-xs text-[var(--muted)]">{t('pointsDisclaimer')}</p>
-            <Link
-              href="/marketplace/listings"
-              className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]"
-            >
-              {t('pointsCta')} <ArrowRight className="h-4 w-4" />
-            </Link>
-          </WalletSection>
-
-          {/* Network points — distinti dai punti giornalieri: si ottengono
-              raggiungendo le qualifiche di sponsorizzazione, non dall'uso
-              quotidiano della piattaforma. Spendibili comunque insieme ai
-              punti giornalieri (vedi WalletVoucherSection). */}
-          <WalletSection icon={<Network className="h-5 w-5 text-[var(--gold)]" />} title={t('networkPointsTitle')}>
-            <p className="text-4xl font-bold text-[var(--ink)]">{networkWallet.networkPoints}</p>
-            <p className="mt-1 text-xs text-[var(--muted)]">{t('networkPointsDisclaimer')}</p>
-            {rewardsEnabled && (
-              <Link
-                href="/rewards"
-                className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]"
-              >
-                {t('networkPointsCta')} <ArrowRight className="h-4 w-4" />
-              </Link>
-            )}
+        <div className="space-y-6">
+          {/* Punti: KU Points (uso quotidiano) e Punti Community (inviti),
+              due saldi separati nella stessa scheda */}
+          <WalletSection icon={<Sparkles className="h-5 w-5 text-[var(--gold)]" />} title={t('pointsCardTitle')}>
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-[1fr_auto_1fr]">
+              <div>
+                <p className="flex items-center gap-1.5 text-sm font-bold uppercase tracking-wide text-[var(--muted)]">
+                  <Sparkles className="h-4 w-4 text-[var(--gold)]" /> {t('pointsTitle')}
+                </p>
+                <p className="mt-1 text-4xl font-bold text-[var(--ink)]">{profile.daily_points || 0}</p>
+                <p className="mt-1 text-xs leading-5 text-[var(--muted)]">{t('pointsDisclaimer')}</p>
+                <Link
+                  href="/marketplace/listings"
+                  className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]"
+                >
+                  {t('pointsCta')} <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+              {/* Separatore: orizzontale su telefono, verticale da tablet in su */}
+              <div aria-hidden className="h-px bg-gradient-to-r from-transparent via-[var(--gold)] to-transparent md:h-auto md:w-px md:bg-gradient-to-b" />
+              <div>
+                <p className="flex items-center gap-1.5 text-sm font-bold uppercase tracking-wide text-[var(--muted)]">
+                  <Network className="h-4 w-4 text-[var(--gold)]" /> {t('networkPointsTitle')}
+                </p>
+                <p className="mt-1 text-4xl font-bold text-[var(--ink)]">{networkWallet.networkPoints}</p>
+                <p className="mt-1 text-xs leading-5 text-[var(--muted)]">{t('networkPointsDisclaimer')}</p>
+                {rewardsEnabled && (
+                  <Link
+                    href="/rewards"
+                    className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]"
+                  >
+                    {t('networkPointsCta')} <ArrowRight className="h-4 w-4" />
+                  </Link>
+                )}
+              </div>
+            </div>
           </WalletSection>
 
           {/* Badge: qualifiche Kuman Green / Star / Black sui Punti Community
@@ -329,6 +337,14 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
 
         {/* Receipts */}
         <WalletSection icon={<Receipt className="h-5 w-5 text-[var(--gold)]" />} title={t('receiptsTitle')}>
+          {plan !== 'pro' && (
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[var(--gold)]/40 bg-[var(--gold-pale)] px-3 py-2.5 text-sm text-[var(--ink)]">
+              <span>{t('receiptsProOnly')}</span>
+              <Link href="/pro" className="shrink-0 rounded-lg bg-[var(--ink)] px-3 py-1.5 text-xs font-semibold text-white">
+                {t('receiptsProCta')}
+              </Link>
+            </div>
+          )}
           {receiptsList.length === 0 ? (
             <p className="text-sm text-[var(--muted)]">{t('receiptsEmpty')}</p>
           ) : (
