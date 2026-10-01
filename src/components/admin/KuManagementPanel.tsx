@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Coins, Sparkles, Unlock, Award, Ticket, HeartHandshake, Repeat, Save, LoaderCircle, Info } from 'lucide-react'
+import { Coins, Sparkles, Unlock, Award, Ticket, Repeat, Save, LoaderCircle, Info } from 'lucide-react'
 import { getKuManagement, updateKuFeature, updateKuUnlock } from '@/app/actions/admin'
 import type { KuFeatureKey, KuFeatureRow, KuUnlockRow } from '@/lib/ku'
 import KuActivityPointsTable from '@/components/admin/KuActivityPointsTable'
@@ -65,24 +65,13 @@ const DESCRIPTIONS: Record<KuFeatureKey, { title: string; icon: typeof Coins; pa
       "QUANDO USARLO — Come leva per trattenere gli utenti vicino alla scadenza. Lo sconto applicato si vede anche nel pannello Stripe (coupon \"KUMANI - sconto rinnovo KU\").",
     ],
   },
-  donation: {
-    title: '5. Donazione solidale',
-    icon: HeartHandshake,
-    paragraphs: [
-      "COSA FA — Gli utenti donano i propri KU a una causa scelta da KUMANI. Ogni mese KUMANI trasforma i KU donati dalla community in una donazione in euro all'associazione indicata.",
-      "COME FUNZIONA — Tasso: \"KU per 1 €\" (es. 100 KU = 1 €). Il totale del mese è limitato dal budget mensile: se la community dona più del budget, KUMANI dona comunque il budget massimo. La donazione in euro la effettuate voi (fuori dal sito) sulla base del totale mostrato qui nelle statistiche. Donazione minima per utente: il valore \"KU minimi\".",
-      "DOVE LO VEDE L'UTENTE — Portafoglio → \"Usa i tuoi KU Points\" → Donazione solidale, con nome e descrizione dell'associazione.",
-      'COSTO PER KUMANI — Al massimo il budget mensile impostato.',
-      "IMPORTANTE — Prima di attivarla compilate nome e descrizione dell'associazione (obbligatori). Comunicate poi alla community la donazione effettuata: è la parte che rende credibile l'iniziativa.",
-    ],
-  },
   conversion: {
-    title: '6. Conversione KU → Punti Community',
+    title: '5. Conversione KU → Punti Community',
     icon: Repeat,
     paragraphs: [
-      'COSA FA — I KU si convertono in Punti Community, che servono per voucher abbonamento, premi del catalogo e vetrina annunci.',
+      'COSA FA — I KU si convertono in Punti Community, che servono per i pacchetti voucher e per la vetrina annunci.',
       "COME FUNZIONA — Tasso: \"KU per 1 Punto Community\" (es. 20 KU = 1 PR). Tetto: massimo \"Punti Community al mese\" per utente (mese solare, ora italiana). Oltre il tetto la conversione viene rifiutata fino al mese successivo.",
-      "ATTENZIONE — 49 Punti Community valgono 1 anno di abbonamento. Con 20 KU = 1 PR e tetto 5 PR/mese, un utente molto attivo ottiene al massimo 60 PR l'anno, cioè poco più di un abbonamento gratis. Tenere il tetto basso. Anche i KU accreditati a mano dall'admin diventano convertibili.",
+      "ATTENZIONE — Con il pacchetto base 294 Punti Community danno 49 € di credito voucher. Con 20 KU = 1 PR e tetto 5 PR/mese, un utente molto attivo ottiene al massimo 60 PR l'anno. Tenere il tetto basso. I punti convertiti non contano per i badge Kuman Green/Star/Black. Anche i KU accreditati a mano dall'admin diventano convertibili.",
       "DOVE LO VEDE L'UTENTE — Portafoglio → \"Usa i tuoi KU Points\" → Converti in Punti Community, con il tetto residuo del mese.",
       'COSTO PER KUMANI — Indiretto: abbonamenti o premi riscattati con i Punti Community ottenuti.',
     ],
@@ -168,13 +157,6 @@ export default function KuManagementPanel() {
         return 'Nessun costo: i badge si calcolano dai KU guadagnati in totale.'
       case 'renewal_discount':
         return `${s?.renewal_discount?.count ?? 0} sconti applicati · ${s?.renewal_discount?.discountEur ?? 0} € di sconto totale`
-      case 'donation': {
-        const ku = s?.donation?.ku ?? 0
-        const perEuro = Number(feature.config.ku_per_euro || 1)
-        const budget = Number(feature.config.monthly_budget_eur || 0)
-        const euro = Math.min(Math.floor(ku / perEuro), budget)
-        return `${s?.donation?.count ?? 0} donazioni · ${ku} KU donati → KUMANI dona ${euro} € (budget ${budget} €)`
-      }
       case 'conversion':
         return `${s?.conversion?.count ?? 0} conversioni · ${s?.conversion?.ku ?? 0} KU → ${s?.conversion?.points ?? 0} Punti Community`
     }
@@ -249,13 +231,6 @@ export default function KuManagementPanel() {
                   {numberField(feature, 'max_per_year', 'Massimo per utente', 'all\'anno')}
                 </>
               )}
-              {feature.key === 'donation' && (
-                <>
-                  {numberField(feature, 'ku_per_euro', 'KU per 1 €', 'KU')}
-                  {numberField(feature, 'monthly_budget_eur', 'Budget mensile KUMANI', '€')}
-                  {numberField(feature, 'min_ku', 'Donazione minima', 'KU')}
-                </>
-              )}
               {feature.key === 'conversion' && (
                 <>
                   {numberField(feature, 'ku_per_point', 'KU per 1 Punto Community', 'KU')}
@@ -263,28 +238,6 @@ export default function KuManagementPanel() {
                 </>
               )}
             </div>
-
-            {feature.key === 'donation' && (
-              <div className="grid grid-cols-1 gap-3">
-                <label className="block">
-                  <span className="text-xs font-medium text-gray-600">Associazione (nome)</span>
-                  <input
-                    value={String(feature.config.association ?? '')}
-                    onChange={(e) => setConfig(feature.key, { association: e.target.value })}
-                    className={inputClass}
-                  />
-                </label>
-                <label className="block">
-                  <span className="text-xs font-medium text-gray-600">Descrizione della causa (la vedono gli utenti)</span>
-                  <textarea
-                    rows={2}
-                    value={String(feature.config.description ?? '')}
-                    onChange={(e) => setConfig(feature.key, { description: e.target.value })}
-                    className={inputClass}
-                  />
-                </label>
-              </div>
-            )}
 
             {feature.key === 'badges' && (
               <div className="space-y-2">

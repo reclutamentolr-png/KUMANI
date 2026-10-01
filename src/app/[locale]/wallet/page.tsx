@@ -20,6 +20,7 @@ import {
   Star,
   Crown,
   Lock,
+  HeartHandshake,
 } from 'lucide-react'
 import { getCurrentRank } from '@/lib/ranks'
 import { getMyNetworkWallet } from '@/lib/networkWallet'
@@ -27,6 +28,9 @@ import { listMyVouchers } from '@/app/actions/vouchers'
 import { listMyRedemptions } from '@/app/actions/rewards'
 import { isRewardsCatalogEnabled } from '@/lib/rewardsCatalog'
 import WalletMembershipCard from '@/components/WalletMembershipCard'
+import WalletDonations from '@/components/donations/WalletDonations'
+import { getPublicDonationSummary } from '@/lib/donationsPublic'
+import { getMyDonations } from '@/app/actions/donations'
 import QuickNav from '@/components/QuickNav'
 import WalletCouponsList from '@/components/WalletCouponsList'
 import WalletVoucherSection from '@/components/WalletVoucherSection'
@@ -83,6 +87,8 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
   const { ranks } = networkWallet
   const currentRank = getCurrentRank(networkWallet.earnedTotal, ranks)
   const nextRank = ranks.find((rank) => networkWallet.earnedTotal < rank.threshold) ?? null
+  // Donazioni (sezione visibile solo con un'associazione attiva)
+  const [donationSummary, myDonations, tdon] = await Promise.all([getPublicDonationSummary(), getMyDonations(), getTranslations('donations')])
   // Data in cui ogni badge è stato raggiunto (registrata dal database)
   const { data: achievementRows } = await supabase.rpc('my_rank_achievements')
   const achievements = new Map(
@@ -252,6 +258,13 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
               </div>
             </div>
           </WalletSection>
+
+          {/* Donazioni: dona i tuoi Punti Community e vedi quanto dona KUMANI */}
+          {donationSummary?.active && (
+            <WalletSection icon={<HeartHandshake className="h-5 w-5 text-[var(--gold)]" />} title={tdon('sectionTitle')}>
+              <WalletDonations summary={donationSummary} mine={myDonations} networkPoints={networkWallet.networkPoints} />
+            </WalletSection>
+          )}
 
           {/* Badge: qualifiche Kuman Green / Star / Black sui Punti Community
               guadagnati in totale, con avanzamento e data di raggiungimento */}

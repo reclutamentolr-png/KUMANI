@@ -50,18 +50,7 @@ export async function buyKuUnlock(unlockKey: string): Promise<KuResult> {
   return { success: data.success, reason: data.reason }
 }
 
-// 5. Donazione solidale
-export async function donateKu(amount: number): Promise<KuResult> {
-  const supabase = await createClient()
-  const { data, error } = await supabase
-    .rpc('donate_ku', { p_amount: Math.round(amount) })
-    .maybeSingle<{ success: boolean; reason: string | null }>()
-  if (error || !data) return { success: false, reason: 'error' }
-  if (data.success) refreshKuPages()
-  return { success: data.success, reason: data.reason }
-}
-
-// 6. Conversione in Punti Community
+// 5. Conversione in Punti Community
 export async function convertKuToNetworkPoints(points: number): Promise<KuResult> {
   const supabase = await createClient()
   const { data, error } = await supabase
@@ -107,7 +96,9 @@ export async function redeemRenewalDiscount(): Promise<KuResult & { discountEur:
       name: `KUMANI - sconto rinnovo KU (${reservation.discount_eur}€)`,
       max_redemptions: 1,
     })
-    await stripe.subscriptions.update(subscription.id, { discounts: [{ coupon: coupon.id }] })
+    // Lo sconto si aggiunge a quelli già presenti sull'abbonamento (non li sostituisce)
+    const existing = (subscription.discounts ?? []).map((d) => ({ discount: typeof d === 'string' ? d : d.id }))
+    await stripe.subscriptions.update(subscription.id, { discounts: [...existing, { coupon: coupon.id }] })
 
     await service
       .from('ku_transactions')

@@ -9,6 +9,7 @@ import type { DashboardNetworkData } from '@/lib/dashboardNetworkData'
 import { Users, ArrowRight, Star, CheckCircle2, Crown, Hourglass, Sparkles, BadgeCheck, Gift } from 'lucide-react'
 import CopyButton from '@/components/CopyButton'
 import VoucherActivationButton from '@/components/VoucherActivationButton'
+import DashboardDonations from '@/components/donations/DashboardDonations'
 import KuBadge from '@/components/ku/KuBadge'
 import AffinityBadge from './AffinityBadge'
 import type { MyProfile } from '@/lib/myProfile'
@@ -211,6 +212,9 @@ export default async function DashboardTipo2({
           <p className="mt-2 text-xs leading-5 text-[var(--muted)]">{t('inviteTileHint')}</p>
         </div>
       </div>
+
+      {/* Donazioni della community (solo con un'associazione attiva) */}
+      <DashboardDonations />
 
       {/* I tuoi strumenti: categorie chiuse a scheda, come le liste KUMANI */}
       <div>

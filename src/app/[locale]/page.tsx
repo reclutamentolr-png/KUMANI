@@ -29,6 +29,7 @@ import HomeToolsGridServer from '@/components/HomeToolsGridServer'
 import ProToolsShowcase from '@/components/ProToolsShowcase'
 import HomeKumanoDelGiorno from '@/components/spotlight/HomeKumanoDelGiorno'
 import HomeUpcomingEvents from '@/components/events/HomeUpcomingEvents'
+import HomeDonations from '@/components/donations/HomeDonations'
 
 export default function LandingPage() {
   const t = useTranslations('landingHome')
@@ -158,6 +159,9 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* ❤️ DONAZIONI: in evidenza subito dopo l'apertura */}
+      <HomeDonations />
 
       {/* 🤝 SEZIONE: CONDIVIDI KUMANI — volutamente minimale, niente
           linguaggio da "rete"/struttura in evidenza. */}

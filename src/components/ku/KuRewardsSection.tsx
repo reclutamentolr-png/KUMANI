@@ -3,16 +3,15 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { Award, Coins, HeartHandshake, LoaderCircle, Lock, Repeat, Sparkles, Ticket, Unlock } from 'lucide-react'
+import { Award, Coins, LoaderCircle, Lock, Repeat, Sparkles, Ticket, Unlock } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
-import { buyKuUnlock, convertKuToNetworkPoints, donateKu, redeemRenewalDiscount } from '@/app/actions/ku'
+import { buyKuUnlock, convertKuToNetworkPoints, redeemRenewalDiscount } from '@/app/actions/ku'
 import {
   currentKuBadge,
   featureConfig,
   nextKuBadge,
   type KuBadgesConfig,
   type KuConversionConfig,
-  type KuDonationConfig,
   type KuFeatureRow,
   type KuRenewalConfig,
   type KuShowcaseConfig,
@@ -42,16 +41,14 @@ export default function KuRewardsSection({ data }: { data: KuWalletData }) {
   const [busy, setBusy] = useState<string | null>(null)
   const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null)
   const [points, setPoints] = useState(1)
-  const [donation, setDonation] = useState(0)
 
   const showcase = featureConfig<KuShowcaseConfig>(data.features, 'showcase')
   const unlocksOn = featureConfig<Record<string, never>>(data.features, 'unlocks')
   const badges = featureConfig<KuBadgesConfig>(data.features, 'badges')
   const renewal = featureConfig<KuRenewalConfig>(data.features, 'renewal_discount')
-  const donationCfg = featureConfig<KuDonationConfig>(data.features, 'donation')
   const conversion = featureConfig<KuConversionConfig>(data.features, 'conversion')
 
-  const anyActive = [showcase, unlocksOn, badges, renewal, donationCfg, conversion].some((f) => f?.enabled)
+  const anyActive = [showcase, unlocksOn, badges, renewal, conversion].some((f) => f?.enabled)
   if (!anyActive) return null
 
   const run = async (key: string, action: () => Promise<{ success: boolean; reason: string | null }>, okText: string) => {
@@ -159,37 +156,6 @@ export default function KuRewardsSection({ data }: { data: KuWalletData }) {
                 {t('renewalButton', { cost: renewal.cost_ku, discount: renewal.discount_eur })}
               </button>
             )}
-          </div>
-        )}
-
-        {donationCfg?.enabled && (
-          <div className={card}>
-            <p className="flex items-center gap-2 font-semibold text-[var(--ink)]">
-              <HeartHandshake className="h-4 w-4 text-[var(--gold)]" /> {t('donationTitle', { association: donationCfg.association })}
-            </p>
-            {donationCfg.description && <p className="mt-1 text-sm text-[var(--muted)]">{donationCfg.description}</p>}
-            <p className="mt-1 text-xs text-[var(--muted)]">{t('donationRate', { rate: donationCfg.ku_per_euro })}</p>
-            <div className="mt-3 flex items-center gap-2">
-              <input
-                type="number"
-                min={donationCfg.min_ku}
-                value={donation || donationCfg.min_ku}
-                onChange={(e) => setDonation(parseInt(e.target.value, 10) || 0)}
-                className="w-24 rounded-lg border border-[var(--gold)]/30 p-2 text-center"
-              />
-              <button
-                type="button"
-                disabled={busy !== null}
-                onClick={() => {
-                  const amount = donation || donationCfg.min_ku
-                  run('donation', () => donateKu(amount), t('donationDone', { amount }))
-                }}
-                className={goldButton}
-              >
-                {busy === 'donation' && <LoaderCircle className="h-4 w-4 animate-spin" />}
-                {t('donationButton')}
-              </button>
-            </div>
           </div>
         )}
 

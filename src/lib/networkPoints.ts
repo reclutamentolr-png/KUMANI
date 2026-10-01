@@ -13,7 +13,7 @@ const db = () =>
   })
 
 // Piano della riga principale (nel passaggio a Pro la prima è lo storno del Base)
-function isProInvoice(invoice: Stripe.Invoice): boolean {
+export function isProInvoice(invoice: Stripe.Invoice): boolean {
   const main = invoice.lines?.data?.reduce<(typeof invoice.lines.data)[number] | undefined>(
     (best, line) => (!best || line.amount > best.amount ? line : best),
     undefined

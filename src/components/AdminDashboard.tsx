@@ -88,6 +88,7 @@ import TranslatorsPanel from '@/components/admin/TranslatorsPanel'
 import LanguagesPanel from '@/components/admin/LanguagesPanel'
 import AgentsPanel from '@/components/admin/AgentsPanel'
 import WithdrawalsPanel from '@/components/admin/WithdrawalsPanel'
+import DonationsPanel from '@/components/admin/DonationsPanel'
 import { startImpersonation } from '@/lib/impersonation'
 import {
   LayoutDashboard,
@@ -125,6 +126,7 @@ import {
   Inbox,
   UserPen,
   UserX,
+  HeartHandshake,
   Undo2,
   Hourglass,
   Grid3x3,
@@ -1130,6 +1132,7 @@ L'accesso viene registrato.`)) return
   { id: 'marketplace', label: 'Strumenti e interruttori', Icon: ShoppingBag, permission: 'marketplace.read' as Permission, group: 'general' },
   { id: 'settings', label: 'Impostazioni', Icon: Settings, permission: 'settings.read' as Permission, group: 'general' },
   { id: 'languages', label: 'Lingue del sito', Icon: Globe2, permission: 'settings.read' as Permission, group: 'general' },
+  { id: 'donations', label: 'Donazioni', Icon: HeartHandshake, permission: 'settings.read' as Permission, group: 'general' },
   { id: 'users', label: 'Utenti', Icon: Users, permission: 'users.read' as Permission, group: 'users' },
   { id: 'matrix', label: 'Matrice', Icon: GitBranch, permission: 'matrix.read' as Permission, group: 'users' },
   { id: 'identity', label: 'Verifica identità', Icon: ScanFace, permission: 'users.read' as Permission, group: 'users' },
@@ -2583,6 +2586,13 @@ L'accesso viene registrato.`)) return
             <Row label="Servizi già dati (usati)" value={eur(f.giftedServicesCents)} strong />
           </Card>
 
+          <Card title="Donazioni" subtitle="Impegno di KUMANI verso l'associazione (uscita di cassa quando versato)">
+            <Row label="Maturate dagli abbonamenti" value={eur(f.donations.subscriptionCents)} />
+            <Row label="Maturate dai Punti Community donati" value={eur(f.donations.pointsCents)} />
+            <Row label="Già versate" value={eur(f.donations.paidCents)} />
+            <Row label="Da versare" value={eur(Math.max(f.donations.subscriptionCents + f.donations.pointsCents - f.donations.paidCents, 0))} strong />
+          </Card>
+
           <Card title="Punti Community" subtitle="Assegnati dal nuovo sistema e ancora da spendere">
             <Row label="Attivazioni Base" value={`${f.pointsAwarded.activation_base} punti`} />
             <Row label="Attivazioni Pro" value={`${f.pointsAwarded.activation_pro} punti`} />
@@ -3496,6 +3506,7 @@ L'accesso viene registrato.`)) return
         {activeSection === 'translators' && <TranslatorsPanel />}
         {activeSection === 'agents' && <AgentsPanel />}
         {activeSection === 'withdrawals' && <WithdrawalsPanel onChanged={loadBadges} />}
+        {activeSection === 'donations' && <DonationsPanel />}
         {activeSection === 'languages' && <LanguagesPanel canWrite={hasPermission(permissions, 'settings.write')} />}
         {activeSection === 'matrix' && renderMatrix()}
         {activeSection === 'marketplace' && renderMarketplace()}

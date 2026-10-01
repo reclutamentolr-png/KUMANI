@@ -10,6 +10,7 @@ import { getStripe } from '@/lib/stripe'
 import { updateTag } from 'next/cache'
 import { SPOTLIGHT_HOME_CACHE_TAG, type SpotlightModerationStatus } from '@/lib/spotlight'
 import { getPlanPrices } from '@/lib/planPrices'
+import { KU_FEATURE_KEYS, type KuFeatureKey } from '@/lib/ku'
 import { invalidateListingsCache } from '@/lib/listings-server'
 import type { AdminCouponRow, AdminRewardRedemption, ListingReport, ListingReportRow } from '@/lib/adminTypes'
 
@@ -825,7 +826,21 @@ export async function getAdminFinancialSummary() {
     else pointsAwarded[a.kind as keyof typeof pointsAwarded] += a.points
   }
 
-  // 9. Premi del catalogo (spento, solo storico)
+  // 9. Donazioni: maturate (abbonamenti e punti donati, al netto dei
+  // rimborsi) e già versate alle associazioni
+  const [{ data: donationRows }, { data: donationPayouts }] = await Promise.all([
+    db.from('donation_entries').select('source, amount_cents, reversed_at'),
+    db.from('donation_payouts').select('amount_cents'),
+  ])
+  const donations = { subscriptionCents: 0, pointsCents: 0, paidCents: 0 }
+  for (const row of donationRows ?? []) {
+    if (row.reversed_at) continue
+    if (row.source === 'points') donations.pointsCents += row.amount_cents
+    else donations.subscriptionCents += row.amount_cents
+  }
+  for (const row of donationPayouts ?? []) donations.paidCents += row.amount_cents
+
+  // 10. Premi del catalogo (spento, solo storico)
   const { count: rewardsRedeemedCount } = await db.from('reward_redemptions').select('*', { count: 'exact', head: true })
 
   // Totali
@@ -857,6 +872,7 @@ export async function getAdminFinancialSummary() {
     networkPointsMaxCents,
     pointsAwarded,
     rewardsRedeemedCount: rewardsRedeemedCount ?? 0,
+    donations,
     cashIn,
     taxable,
     giftedServicesCents,
@@ -1099,7 +1115,7 @@ export async function getKuManagement() {
   const service = getServiceClient()
   const monthStart = romeMonthStartIso()
   const [{ data: features, error }, { data: unlocks }, { data: monthTx }, { data: purchases }] = await Promise.all([
-    service.from('ku_features').select('key, enabled, config, updated_at').order('key'),
+    service.from('ku_features').select('key, enabled, config, updated_at').in('key', [...KU_FEATURE_KEYS]),
     service.from('ku_unlocks').select('key, tool, cost_ku, enabled').order('key'),
     service.from('ku_transactions').select('kind, ku_amount, details').gte('created_at', monthStart).limit(20000),
     service.from('ku_unlock_purchases').select('unlock_key'),
@@ -1119,7 +1135,9 @@ export async function getKuManagement() {
   const unlockOwners: Record<string, number> = {}
   for (const row of purchases || []) unlockOwners[row.unlock_key] = (unlockOwners[row.unlock_key] || 0) + 1
 
-  return { features: features || [], unlocks: unlocks || [], stats: { byKind, unlockOwners, monthStart }, error: null }
+  // Ordine fisso 1-5 (il database li darebbe in ordine alfabetico)
+  const ordered = [...(features || [])].sort((a, b) => KU_FEATURE_KEYS.indexOf(a.key as KuFeatureKey) - KU_FEATURE_KEYS.indexOf(b.key as KuFeatureKey))
+  return { features: ordered, unlocks: unlocks || [], stats: { byKind, unlockOwners, monthStart }, error: null }
 }
 
 type KuConfigInput = Record<string, unknown>
@@ -1155,19 +1173,6 @@ function normalizeKuConfig(key: string, config: KuConfigInput): Record<string, u
       const perYear = int(config.max_per_year, 1, 12)
       return cost && discount && perYear ? { cost_ku: cost, discount_eur: discount, max_per_year: perYear } : null
     }
-    case 'donation': {
-      const perEuro = int(config.ku_per_euro, 1, 100000)
-      const budget = int(config.monthly_budget_eur, 0, 1000000)
-      const min = int(config.min_ku, 1, 100000)
-      if (!perEuro || budget === null || !min) return null
-      return {
-        association: String(config.association || '').trim().slice(0, 120),
-        description: String(config.description || '').trim().slice(0, 500),
-        ku_per_euro: perEuro,
-        monthly_budget_eur: budget,
-        min_ku: min,
-      }
-    }
     case 'conversion': {
       const perPoint = int(config.ku_per_point, 1, 100000)
       const max = int(config.max_points_per_month, 1, 1000)
@@ -1184,9 +1189,6 @@ export async function updateKuFeature(key: string, enabled: boolean, config: KuC
 
   const clean = normalizeKuConfig(key, config)
   if (!clean) return { success: false, error: 'Impostazioni non valide: controlla i valori.' }
-  if (key === 'donation' && enabled && !String(clean.association || '')) {
-    return { success: false, error: "Indica l'associazione prima di attivare la donazione." }
-  }
 
   const { error } = await getServiceClient()
     .from('ku_features')

@@ -6,6 +6,7 @@ import { isPlatformFeeType, markPlatformFeesPaid } from '@/lib/eventFees'
 import { recordAgentCommission, reverseAgentCommission } from '@/lib/agentCommissions'
 import { sendPurchaseConfirmation } from '@/lib/purchaseEmail'
 import { awardActivationPoints, reverseActivationPoints } from '@/lib/networkPoints'
+import { accrueSubscriptionDonation, reverseSubscriptionDonation } from '@/lib/donations'
 
 // Creato alla richiesta e non al caricamento del modulo: così `next build`
 // non fallisce se le variabili d'ambiente non sono disponibili in build.
@@ -34,8 +35,8 @@ export async function POST(req: NextRequest) {
   }
 
   // Fattura di abbonamento pagata: email di conferma, provvigione dell'agente
-  // (cliente arrivato dal suo link) e Punti Rete allo sponsor diretto.
-  // Rimborso: provvigione annullata e punti tolti.
+  // (cliente arrivato dal suo link), Punti Rete allo sponsor diretto e
+  // donazione KUMANI. Rimborso: provvigione, punti e donazione annullati.
   if (event.type === 'invoice.paid' || event.type === 'charge.refunded') {
     try {
       if (event.type === 'invoice.paid') {
@@ -47,9 +48,12 @@ export async function POST(req: NextRequest) {
         await recordAgentCommission(event.data.object as Stripe.Invoice)
         // Punti Rete allo sponsor diretto (idempotente per fattura)
         await awardActivationPoints(event.data.object as Stripe.Invoice)
+        // Donazione KUMANI all'associazione attiva (idempotente per fattura)
+        await accrueSubscriptionDonation(event.data.object as Stripe.Invoice)
       } else {
         await reverseAgentCommission(event.data.object as Stripe.Charge)
         await reverseActivationPoints(event.data.object as Stripe.Charge)
+        await reverseSubscriptionDonation(event.data.object as Stripe.Charge)
       }
       return NextResponse.json({ received: true })
     } catch (err) {
