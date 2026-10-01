@@ -5571,6 +5571,8 @@
     "packDone": "Feito! Recebeu {credit} de crédito de vouchers.",
     "packNotEnough": "Pontos Community insuficientes.",
     "createTitle": "2. Crie um voucher",
+    "createLocked": "Para criar um voucher precisa de crédito: resgate primeiro um pacote aqui em cima.",
+    "proNeedsCredit": "precisa de {amount} de crédito",
     "planBase": "Base · 1 ano ({price})",
     "planPro": "Pro · 1 ano ({price})",
     "purposeGift": "Para oferecer",

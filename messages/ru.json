@@ -5571,6 +5571,8 @@
     "packDone": "Готово! Вы получили {credit} на баланс ваучеров.",
     "packNotEnough": "Недостаточно баллов Community.",
     "createTitle": "2. Создайте ваучер",
+    "createLocked": "Чтобы создать ваучер, нужен баланс: сначала обменяй пакет выше.",
+    "proNeedsCredit": "нужно {amount} на балансе",
     "planBase": "Base · 1 год ({price})",
     "planPro": "Pro · 1 год ({price})",
     "purposeGift": "В подарок",

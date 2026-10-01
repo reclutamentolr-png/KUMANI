@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useId, useState } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { LoaderCircle, Ticket, Copy, Check, Share2, Package, Receipt, Undo2 } from 'lucide-react'
@@ -41,6 +41,8 @@ export default function WalletVoucherSection({
   const tw = useTranslations('wallet')
   const locale = useLocale()
   const router = useRouter()
+  // Nomi unici dei gruppi di scelta (più moduli nella stessa pagina non si mescolano)
+  const formId = useId()
   const euro = (cents: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(cents / 100)
 
   const [points, setPoints] = useState(initialPoints)
@@ -61,7 +63,13 @@ export default function WalletVoucherSection({
   const [redeemCode, setRedeemCode] = useState('')
   const [redeemMessage, setRedeemMessage] = useState<{ ok: boolean; text: string } | null>(null)
 
-  const costCents = (plan === 'pro' ? valueProEur : valueBaseEur) * 100
+  // Creazione possibile solo con credito: senza credito per il Base il modulo
+  // è bloccato; il Pro si sblocca quando il credito copre il suo valore.
+  const canAffordBase = credit >= valueBaseEur * 100
+  const canAffordPro = credit >= valueProEur * 100
+  const formLocked = !canAffordBase
+  const activePlan: 'base' | 'pro' = plan === 'pro' && !canAffordPro ? 'base' : plan
+  const costCents = (activePlan === 'pro' ? valueProEur : valueBaseEur) * 100
   const canCreate = credit >= costCents
 
   const handlePack = async (index: number) => {
@@ -93,7 +101,7 @@ export default function WalletVoucherSection({
       setMessage({ ok: false, text: t('priceTooHigh', { max: euro(costCents) }) })
       return
     }
-    const result = await createVoucher({ plan, purpose, priceCents })
+    const result = await createVoucher({ plan: activePlan, purpose, priceCents })
     setBusy(null)
     if (!result.success) {
       setMessage({
@@ -109,7 +117,7 @@ export default function WalletVoucherSection({
     }
     setCredit(result.creditCents)
     setLastCode(result.code)
-    setLastVoucher({ purpose, plan })
+    setLastVoucher({ purpose, plan: activePlan })
     setPrice('')
     router.refresh()
   }
@@ -224,19 +232,33 @@ export default function WalletVoucherSection({
       {/* 2. Crea un voucher */}
       <div className="border-t border-gray-100 pt-4">
         <p className="mb-3 text-sm font-semibold text-[var(--ink)]">{t('createTitle')}</p>
-        <div className="space-y-3">
+        {formLocked && (
+          <p className="mb-3 rounded-lg border border-[var(--gold)]/40 bg-[var(--gold-pale)] px-3 py-2 text-xs text-[var(--ink)]">{t('createLocked')}</p>
+        )}
+        <fieldset disabled={formLocked} className={`space-y-3 ${formLocked ? 'cursor-not-allowed opacity-45' : ''}`}>
           <div className="flex flex-col gap-1.5 text-sm text-[var(--ink)] sm:flex-row sm:gap-4">
-            {(['base', 'pro'] as const).map((value) => (
-              <label key={value} className="flex items-center gap-2">
-                <input type="radio" name="voucher_plan" checked={plan === value} onChange={() => setPlan(value)} className="h-4 w-4 accent-[var(--gold)]" />
-                {value === 'pro' ? t('planPro', { price: euro(valueProEur * 100) }) : t('planBase', { price: euro(valueBaseEur * 100) })}
-              </label>
-            ))}
+            {(['base', 'pro'] as const).map((value) => {
+              const locked = value === 'pro' && !canAffordPro
+              return (
+                <label key={value} className={`flex items-center gap-2 ${locked ? 'cursor-not-allowed text-gray-400' : ''}`}>
+                  <input
+                    type="radio"
+                    name={`voucher_plan_${formId}`}
+                    checked={activePlan === value}
+                    disabled={locked}
+                    onChange={() => setPlan(value)}
+                    className="h-4 w-4 accent-[var(--gold)]"
+                  />
+                  {value === 'pro' ? t('planPro', { price: euro(valueProEur * 100) }) : t('planBase', { price: euro(valueBaseEur * 100) })}
+                  {locked && !formLocked && <span className="text-xs">({t('proNeedsCredit', { amount: euro(valueProEur * 100) })})</span>}
+                </label>
+              )
+            })}
           </div>
           <div className="flex flex-col gap-1.5 text-sm text-[var(--ink)] sm:flex-row sm:gap-4">
             {(['gift', 'sale'] as const).map((value) => (
               <label key={value} className="flex items-center gap-2">
-                <input type="radio" name="voucher_purpose" checked={purpose === value} onChange={() => setPurpose(value)} className="h-4 w-4 accent-[var(--gold)]" />
+                <input type="radio" name={`voucher_purpose_${formId}`} checked={purpose === value} onChange={() => setPurpose(value)} className="h-4 w-4 accent-[var(--gold)]" />
                 {value === 'gift' ? t('purposeGift') : t('purposeSale')}
               </label>
             ))}
@@ -266,7 +288,7 @@ export default function WalletVoucherSection({
             </button>
             {!canCreate && <p className="text-xs text-gray-400">{t('creditMissing', { amount: euro(costCents - credit) })}</p>}
           </div>
-        </div>
+        </fieldset>
       </div>
 
       {message && <p className={`text-sm ${message.ok ? 'text-emerald-600' : 'text-red-600'}`}>{message.text}</p>}

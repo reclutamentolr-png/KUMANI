@@ -5571,6 +5571,8 @@
     "packDone": "Erledigt! Du hast {credit} Voucher-Guthaben erhalten.",
     "packNotEnough": "Nicht genug Community-Punkte.",
     "createTitle": "2. Voucher erstellen",
+    "createLocked": "Für einen Voucher brauchst du Guthaben: Löse zuerst oben ein Paket ein.",
+    "proNeedsCredit": "braucht {amount} Guthaben",
     "planBase": "Basis · 1 Jahr ({price})",
     "planPro": "Pro · 1 Jahr ({price})",
     "purposeGift": "Zum Verschenken",
