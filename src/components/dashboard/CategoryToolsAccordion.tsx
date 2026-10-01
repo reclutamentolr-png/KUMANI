@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import Link from '@/components/LocalizedLink'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 import type { MarketplaceTool, MarketplaceCategory } from '@/lib/marketplaceTools'
 import FavoriteStarButton from '@/components/FavoriteStarButton'
+import { readDashboardReturn, saveDashboardReturn } from '@/lib/dashboardReturn'
 import { Megaphone, ShieldCheck, CalendarClock, Waves, Briefcase, ChevronDown, ChevronUp, Smartphone, Lock, Zap, PartyPopper, Users } from 'lucide-react'
 
 const CATEGORY_ICONS: Record<MarketplaceCategory, typeof Megaphone> = {
@@ -50,6 +51,14 @@ export default function CategoryToolsAccordion({
   const [open, setOpen] = useState(false)
   const CategoryIcon = CATEGORY_ICONS[category]
 
+  // Ritorno da un servizio aperto da questa categoria: si riapre da sola
+  // (lo scorrimento lo fa DashboardReturnScroll)
+  useEffect(() => {
+    // Lettura di sessionStorage solo nel browser, dopo il primo disegno
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (readDashboardReturn()?.category === category) setOpen(true)
+  }, [category])
+
   return (
     <div className="rounded-xl border border-[var(--gold)]/25 bg-[var(--paper)] shadow-sm overflow-hidden">
       <button
@@ -85,6 +94,7 @@ export default function CategoryToolsAccordion({
                 <Link
                   key={tool.toolName}
                   href={isPro ? `/pro?tool=${tool.toolName}` : { pathname: '/billing' }}
+                  onClick={() => saveDashboardReturn(category)}
                   className="group relative rounded-xl border border-[var(--gold)]/25 bg-[var(--background)] p-4 opacity-50 transition-opacity hover:opacity-80"
                   title={isPro ? t('proRequired') : t('subscriptionRequired')}
                 >
@@ -107,6 +117,7 @@ export default function CategoryToolsAccordion({
               <Link
                 key={tool.toolName}
                 href={`${tool.href}?from=dashboard`}
+                onClick={() => saveDashboardReturn(category)}
                 className="group relative rounded-xl border border-[var(--gold)]/25 bg-[var(--background)] p-4 transition-all hover:-translate-y-0.5 hover:border-[var(--gold)]/60 hover:shadow-md"
               >
                 {(tool.category as string) !== 'community' && (
