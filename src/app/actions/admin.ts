@@ -13,6 +13,8 @@ import { getPlanPrices } from '@/lib/planPrices'
 import { KU_FEATURE_KEYS, type KuFeatureKey } from '@/lib/ku'
 import { invalidateListingsCache } from '@/lib/listings-server'
 import { generatePassCode } from '@/lib/toolPasses'
+import { DEFAULT_HOME_LAYOUT, isHomeLayout } from '@/lib/homeLayouts'
+import { HOME_LAYOUT_CACHE_TAG } from '@/lib/homeLayoutServer'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { getTranslations } from 'next-intl/server'
 import type { AdminCouponRow, AdminRewardRedemption, ListingReport, ListingReportRow } from '@/lib/adminTypes'
@@ -3024,4 +3026,32 @@ export async function adminListPassCodes() {
     })),
     error: null,
   }
+}
+
+// ============================================================
+// Aspetto della homepage: layout scelto dall'Admin
+// ============================================================
+
+export async function adminGetHomeLayout() {
+  const admin = await verifyAdmin('settings.read')
+  if (!admin) return { layout: null as string | null }
+  const { data } = await getServiceClient().from('system_settings').select('value').eq('key', 'home_layout').maybeSingle()
+  let value: unknown = data?.value
+  try {
+    value = typeof value === 'string' ? JSON.parse(value) : value
+  } catch {
+    // testo semplice
+  }
+  return { layout: isHomeLayout(value) ? value : DEFAULT_HOME_LAYOUT }
+}
+
+export async function adminSetHomeLayout(layout: string) {
+  const admin = await verifyAdmin('settings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!isHomeLayout(layout)) return { success: false, error: 'Layout non valido' }
+  const { error } = await getServiceClient().from('system_settings').upsert({ key: 'home_layout', value: JSON.stringify(layout) }, { onConflict: 'key' })
+  if (error) return { success: false, error: error.message }
+  // La homepage mostra subito il nuovo aspetto
+  updateTag(HOME_LAYOUT_CACHE_TAG)
+  return { success: true }
 }

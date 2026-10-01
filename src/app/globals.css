@@ -44,3 +44,52 @@ body {
 .animate-fadeIn {
   animation: fadeIn 0.5s ease-in-out;
 }
+/* ------------------------------------------------------------------
+   Homepage: layout scelti dall'Admin (src/lib/homeLayouts.ts).
+   Le sezioni chiare (.home-light) adattano i colori pensati per il
+   fondo scuro; gli stili fuori dai layer di Tailwind hanno la precedenza.
+   ------------------------------------------------------------------ */
+.home-light { color: var(--ink); }
+.home-light .text-white { color: var(--ink); }
+.home-light .text-gray-200,
+.home-light .text-gray-300 { color: #4b463c; }
+.home-light .text-gray-400,
+.home-light .text-gray-500 { color: var(--muted); }
+.home-light .text-white\/80 { color: rgba(23, 23, 23, 0.8); }
+.home-light .text-white\/60 { color: rgba(23, 23, 23, 0.6); }
+.home-light .text-\[var\(--gold-bright\)\] { color: var(--gold); }
+.home-light .bg-white\/\[0\.03\],
+.home-light .bg-white\/\[0\.04\],
+.home-light .bg-white\/5 {
+  background-color: #fff;
+  box-shadow: 0 8px 24px rgba(23, 23, 23, 0.06);
+}
+.home-light .border-white\/15,
+.home-light .border-white\/25,
+.home-light .border-white\/40 { border-color: rgba(23, 23, 23, 0.25); }
+.home-light .hover\:bg-white\/10:hover { background-color: var(--gold-pale); }
+
+.home-tex-dots {
+  background-image: radial-gradient(rgba(199, 154, 59, 0.16) 1px, transparent 1.5px);
+  background-size: 22px 22px;
+}
+.home-tex-lines {
+  background-image: repeating-linear-gradient(135deg, rgba(199, 154, 59, 0.07) 0 1px, transparent 1px 22px);
+}
+.home-glow::before {
+  content: "";
+  position: absolute;
+  width: 560px;
+  height: 560px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(199, 154, 59, 0.25), transparent 65%);
+  top: -180px;
+  right: -140px;
+  pointer-events: none;
+}
+
+/* Logo animato: fermo per chi ha chiesto meno movimento */
+@media (prefers-reduced-motion: reduce) {
+  .home-logo-video { display: none; }
+  .home-logo-still { display: block; }
+}

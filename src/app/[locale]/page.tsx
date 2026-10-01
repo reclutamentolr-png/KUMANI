@@ -1,5 +1,6 @@
 import Link from '@/components/LocalizedLink'
-import { useTranslations } from 'next-intl'
+import Image from 'next/image'
+import { getTranslations } from 'next-intl/server'
 import {
   Gift,
   Shield,
@@ -27,9 +28,24 @@ import HomeKumanoDelGiorno from '@/components/spotlight/HomeKumanoDelGiorno'
 import HomeUpcomingEvents from '@/components/events/HomeUpcomingEvents'
 import HomeDonations from '@/components/donations/HomeDonations'
 import HomePlans from '@/components/HomePlans'
+import HomeSection from '@/components/home/HomeSection'
+import HomeBand from '@/components/home/HomeBand'
+import HeroLogoVideo from '@/components/home/HeroLogoVideo'
+import type { Metadata } from 'next'
+import { HOME_LAYOUT_CONFIG, isHomeLayout } from '@/lib/homeLayouts'
+import { getHomeLayout } from '@/lib/homeLayoutServer'
 
-export default function LandingPage() {
-  const t = useTranslations('landingHome')
+// Anteprima di un layout (?layout=… dall'Admin): mai indicizzata
+export async function generateMetadata({ searchParams }: { searchParams: Promise<{ layout?: string }> }): Promise<Metadata> {
+  const { layout } = await searchParams
+  return layout ? { robots: { index: false, follow: false } } : {}
+}
+
+export default async function LandingPage({ searchParams }: { searchParams: Promise<{ layout?: string }> }) {
+  const t = await getTranslations('landingHome')
+  // Aspetto scelto dall'Admin: cambiano solo sfondi e immagini, mai i contenuti
+  const { layout: preview } = await searchParams
+  const L = HOME_LAYOUT_CONFIG[isHomeLayout(preview) ? preview : await getHomeLayout()]
 
   // Codice referral, riconoscimento pubblico e Kordata (acquisti di gruppo).
   // Niente "struttura a matrice" in evidenza — non deve sembrare un network.
@@ -101,12 +117,26 @@ export default function LandingPage() {
       {/* Hero Section — a piena larghezza, senza il carosello degli ultimi
           iscritti: tutto lo spazio è per il messaggio "non ti serve una
           promessa, ti serve una mano". */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-[var(--gold)]/10 via-transparent to-transparent"></div>
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10 lg:pt-12 pb-16 sm:pb-24 lg:pb-28 text-center">
+      <section
+        className={`relative overflow-hidden ${L.hero.kind === 'split' ? 'home-light bg-[var(--background)]' : L.hero.variant === 'radial' ? 'bg-[radial-gradient(ellipse_at_70%_0%,#3a2e17_0%,var(--ink)_60%)]' : ''}`}
+      >
+        {L.hero.kind === 'photo' && L.hero.image ? (
+          <>
+            <Image src={L.hero.image} alt="" fill priority sizes="100vw" className="object-cover" />
+            <div aria-hidden className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(15,13,10,0.62)_0%,rgba(15,13,10,0.84)_75%)]" />
+          </>
+        ) : (
+          L.hero.kind === 'classic' && <div className="absolute inset-0 bg-gradient-to-b from-[var(--gold)]/10 via-transparent to-transparent"></div>
+        )}
+        <div
+          className={`relative mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10 lg:pt-12 pb-16 sm:pb-24 lg:pb-28 ${
+            L.hero.kind === 'split' ? 'grid max-w-7xl items-center gap-10 text-center lg:grid-cols-[1.1fr_0.9fr] lg:text-left' : 'max-w-4xl text-center'
+          }`}
+        >
+          <div>
           <p className="text-2xl sm:text-3xl font-bold tracking-[0.3em] text-[var(--gold-bright)] mb-3 sm:mb-4">KUMANI</p>
-          <div className="flex justify-center mb-5 sm:mb-7">
-            <Logo size={96} priority className="sm:h-28 sm:w-28 h-24 w-24" />
+          <div className={`flex mb-5 sm:mb-7 ${L.hero.kind === 'split' ? 'justify-center lg:justify-start' : 'justify-center'}`}>
+            {L.hero.video ? <HeroLogoVideo label="KUMANI" /> : <Logo size={96} priority className="sm:h-28 sm:w-28 h-24 w-24" />}
           </div>
           <div className="inline-flex items-center gap-2 bg-[var(--gold)]/10 backdrop-blur px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium text-white mb-5 sm:mb-7 border border-[var(--gold)]/30">
             <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-[var(--gold-bright)]" />
@@ -116,11 +146,11 @@ export default function LandingPage() {
             {t('heroTitle')}
             <span className="block bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] bg-clip-text text-transparent">{t('heroAccent')}</span>
           </h1>
-          <p className="text-base sm:text-xl text-gray-300 mb-8 sm:mb-10 leading-relaxed max-w-2xl mx-auto">
+          <p className={`text-base sm:text-xl text-gray-300 mb-8 sm:mb-10 leading-relaxed max-w-2xl mx-auto ${L.hero.kind === 'split' ? 'lg:mx-0' : ''}`}>
             {t('heroDescription')}{' '}
             <strong className="text-white">{t('heroDescriptionStrong')}</strong>: {t('heroDescriptionEnd')}
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-10 sm:mb-14 justify-center">
+          <div className={`flex flex-col sm:flex-row gap-3 sm:gap-4 mb-10 sm:mb-14 justify-center ${L.hero.kind === 'split' ? 'lg:justify-start' : ''}`}>
             <Link
               href="/register"
               className="bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] hover:brightness-110 text-[var(--ink)] px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-bold text-base sm:text-lg transition-all shadow-xl hover:shadow-2xl hover:scale-105 flex items-center justify-center gap-2"
@@ -136,7 +166,7 @@ export default function LandingPage() {
             </Link>
           </div>
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-3 sm:gap-6 max-w-xl mx-auto">
+          <div className={`grid grid-cols-3 gap-3 sm:gap-6 max-w-xl mx-auto ${L.hero.kind === 'split' ? 'lg:mx-0' : ''}`}>
             <div>
               <div className="text-2xl sm:text-3xl font-bold text-white">7</div>
               <div className="text-xs sm:text-sm text-gray-400">{t('statLanguagesLabel')}</div>
@@ -150,6 +180,12 @@ export default function LandingPage() {
               <div className="text-xs sm:text-sm text-gray-400">{t('statServicesLabel')}</div>
             </div>
           </div>
+          </div>
+          {L.hero.kind === 'split' && L.hero.image && (
+            <div className="relative hidden aspect-[4/3] overflow-hidden rounded-[28px] border-[6px] border-white shadow-[0_24px_60px_rgba(23,23,23,0.28)] lg:block">
+              <Image src={L.hero.image} alt="" fill priority sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" />
+            </div>
+          )}
         </div>
       </section>
 
@@ -158,7 +194,7 @@ export default function LandingPage() {
 
       {/* 🤝 SEZIONE: CONDIVIDI KUMANI — volutamente minimale, niente
           linguaggio da "rete"/struttura in evidenza. */}
-      <section className="py-12 sm:py-20 bg-black/20">
+      <HomeSection bg={L.share} className="py-12 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-14">
             <div className="inline-flex items-center gap-2 bg-[var(--gold)]/10 border border-[var(--gold)]/30 px-4 py-1.5 rounded-full text-sm font-medium text-[var(--gold-bright)] mb-4">
@@ -193,11 +229,11 @@ export default function LandingPage() {
             </p>
           </div>
         </div>
-      </section>
+      </HomeSection>
 
       {/* 🛠️ SEZIONE: IL MARKETPLACE — i servizi nei tre livelli Gratis, Base
           e Pro, con "Dettagli" per l'elenco completo e trasparente. */}
-      <section className="py-12 sm:py-20">
+      <HomeSection bg={L.marketplace} className="py-12 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-14">
             <div className="inline-flex items-center gap-2 bg-[var(--gold)]/10 border border-[var(--gold)]/30 px-4 py-1.5 rounded-full text-sm font-medium text-[var(--gold-bright)] mb-4">
@@ -239,7 +275,9 @@ export default function LandingPage() {
             </div>
           </div>
         </div>
-      </section>
+      </HomeSection>
+
+      {L.bandAfterMarketplace && <HomeBand band={L.bandAfterMarketplace} />}
 
       {/* ☀️ OGGI IN COMMUNITY — Kumano del Giorno: fascia compatta dopo gli
           strumenti e prima dei vantaggi. Solo storie approvate e con
@@ -250,7 +288,7 @@ export default function LandingPage() {
       <HomeUpcomingEvents />
 
       {/* 🎟️ SEZIONE: PROGRAMMA BONUS & COUPON */}
-      <section className="py-12 sm:py-20 bg-black/20">
+      <HomeSection bg={L.bonus} className="py-12 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-14">
             <div className="inline-flex items-center gap-2 bg-[var(--gold)]/10 border border-[var(--gold)]/30 px-4 py-1.5 rounded-full text-sm font-medium text-[var(--gold-bright)] mb-4">
@@ -322,10 +360,12 @@ export default function LandingPage() {
             </Link>
           </div>
         </div>
-      </section>
+      </HomeSection>
+
+      {L.bandAfterBonus && <HomeBand band={L.bandAfterBonus} />}
 
       {/* Benefits Section */}
-      <section className="py-12 sm:py-20">
+      <HomeSection bg={L.benefits} className="py-12 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div>
@@ -386,10 +426,10 @@ export default function LandingPage() {
             </div>
           </div>
         </div>
-      </section>
+      </HomeSection>
 
       {/* CTA Section */}
-      <section className="py-12 sm:py-20 bg-gradient-to-r from-[var(--ink)] via-[var(--ink-soft)] to-[var(--ink)] border-y border-[var(--gold)]/25">
+      <HomeSection bg={L.cta} className="py-12 sm:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Ticket className="w-12 h-12 sm:w-16 sm:h-16 text-[var(--gold-bright)] mx-auto mb-4 sm:mb-6" />
           <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 break-words">
@@ -409,7 +449,7 @@ export default function LandingPage() {
             {t('ctaNote')}
           </p>
         </div>
-      </section>
+      </HomeSection>
 
       {/* Footer */}
       <footer className="bg-black/50 border-t border-[var(--gold)]/15 py-8 sm:py-12">

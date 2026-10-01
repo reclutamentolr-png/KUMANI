@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useTranslations } from 'next-intl'
 import { ListChecks, Smartphone, Ticket, X } from 'lucide-react'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
@@ -57,7 +58,9 @@ export default function PlanDetails({
         <ListChecks className="h-4 w-4" /> {t('planDetailsButton')}
       </button>
 
-      {open && (
+      {/* Disegnata nel body: non eredita i colori delle sezioni chiare della homepage */}
+      {open &&
+        createPortal(
         <div className="fixed inset-0 z-[200] flex items-end justify-center bg-black/70 p-0 sm:items-center sm:p-6" onClick={() => setOpen(false)}>
           <div
             role="dialog"
@@ -111,8 +114,9 @@ export default function PlanDetails({
               </button>
             </div>
           </div>
-        </div>
-      )}
+        </div>,
+          document.body
+        )}
     </>
   )
 }

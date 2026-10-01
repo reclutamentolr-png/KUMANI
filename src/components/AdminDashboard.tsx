@@ -91,6 +91,7 @@ import LanguagesPanel from '@/components/admin/LanguagesPanel'
 import AgentsPanel from '@/components/admin/AgentsPanel'
 import WithdrawalsPanel from '@/components/admin/WithdrawalsPanel'
 import DonationsPanel from '@/components/admin/DonationsPanel'
+import HomeLayoutPanel from '@/components/admin/HomeLayoutPanel'
 import PassCodesPanel from '@/components/admin/PassCodesPanel'
 import ToolPassSetting from '@/components/admin/ToolPassSetting'
 import { startImpersonation } from '@/lib/impersonation'
@@ -103,6 +104,7 @@ import {
   GitBranch,
   ShoppingBag,
   Settings,
+  Palette,
   UserCheck,
   Activity,
   Lock,
@@ -1136,6 +1138,7 @@ L'accesso viene registrato.`)) return
   { id: 'marketplace', label: 'Strumenti e interruttori', Icon: ShoppingBag, permission: 'marketplace.read' as Permission, group: 'general' },
   { id: 'settings', label: 'Impostazioni', Icon: Settings, permission: 'settings.read' as Permission, group: 'general' },
   { id: 'languages', label: 'Lingue del sito', Icon: Globe2, permission: 'settings.read' as Permission, group: 'general' },
+  { id: 'homeLayout', label: 'Aspetto homepage', Icon: Palette, permission: 'settings.read' as Permission, group: 'general' },
   { id: 'donations', label: 'Donazioni', Icon: HeartHandshake, permission: 'settings.read' as Permission, group: 'general' },
   { id: 'users', label: 'Utenti', Icon: Users, permission: 'users.read' as Permission, group: 'users' },
   { id: 'matrix', label: 'Matrice', Icon: GitBranch, permission: 'matrix.read' as Permission, group: 'users' },
@@ -3530,6 +3533,7 @@ L'accesso viene registrato.`)) return
         {activeSection === 'agents' && <AgentsPanel />}
         {activeSection === 'withdrawals' && <WithdrawalsPanel onChanged={loadBadges} />}
         {activeSection === 'donations' && <DonationsPanel />}
+        {activeSection === 'homeLayout' && <HomeLayoutPanel />}
         {activeSection === 'languages' && <LanguagesPanel canWrite={hasPermission(permissions, 'settings.write')} />}
         {activeSection === 'matrix' && renderMatrix()}
         {activeSection === 'marketplace' && renderMarketplace()}
