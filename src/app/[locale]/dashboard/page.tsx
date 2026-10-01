@@ -81,9 +81,11 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
 
   // Prezzo del piano Base come lo addebita Stripe (lo stesso del pagamento),
   // per il pulsante "Abbonati ora"
-  const basePrice = new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2, minimumFractionDigits: 0 }).format(
-    (await getPlanPrices()).base
-  )
+  const planPrices = await getPlanPrices()
+  const formatEur = (value: number) =>
+    new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2, minimumFractionDigits: 0 }).format(value)
+  const basePrice = formatEur(planPrices.base)
+  const proPrice = formatEur(planPrices.pro)
 
   // Strumenti attivi e piano dell'utente (Area Professionisti e categorie)
   const enabledTools = getMarketplaceTools(marketplaceT).filter((tool) => isSettingEnabled(tool.toolName))
@@ -138,6 +140,8 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   }
   const proToolNames = visibleTools.filter((tool) => requiredPlan(tool.toolName) === 'pro').map((tool) => tool.toolName)
   const freeToolNames = visibleTools.filter((tool) => requiredPlan(tool.toolName) === 'free').map((tool) => tool.toolName)
+  // Fascia di ogni servizio (Gratis / Base / Pro) per la dashboard a livelli
+  const toolPlans = Object.fromEntries(visibleTools.map((tool) => [tool.toolName, requiredPlan(tool.toolName)]))
 
   // "I prossimi giorni": appuntamenti, promemoria, bollette e scadenze dei
   // prossimi 7 giorni (più quelle scadute negli ultimi 60), dagli strumenti
@@ -244,6 +248,8 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
           proToolNames={proToolNames}
           freeToolNames={freeToolNames}
           basePrice={basePrice}
+          proPrice={proPrice}
+          toolPlans={toolPlans}
           favoriteToolNames={favoriteToolNames}
           proTrialDaysLeft={proTrial?.daysLeft ?? null}
           agenda={hasAgenda ? <UpcomingAgenda events={agendaEvents} today={agendaToday} sources={agendaSources} /> : null}

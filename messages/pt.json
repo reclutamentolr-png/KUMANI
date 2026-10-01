@@ -5754,5 +5754,28 @@
     "walletActivate": "Ativar o serviço",
     "walletCouponTitle": "Passe {service} – 1 ano",
     "walletCouponHint": "Ative-o você ou ofereça o código:"
+  },
+  "toolTiers": {
+    "intro": "Três níveis: comece pelos serviços gratuitos, desbloqueie o resto com uma subscrição ou ative um só serviço com um Passe.",
+    "legendFree": "Grátis · {count} serviços",
+    "legendBase": "Base {price}/ano · +{count} serviços",
+    "legendPro": "Pro {price}/ano · +{count} serviços para profissionais",
+    "legendPass": "Ou só um serviço com o Passe",
+    "tierFreeTitle": "Grátis",
+    "tierFreeSub": "Já são seus: incluídos para todos os membros, sem limite de tempo.",
+    "tierBaseTitle": "Base",
+    "tierBaseSub": "+{count} serviços para o dia a dia: segurança, organização, bem-estar.",
+    "tierProTitle": "Pro",
+    "tierProSub": "Tudo do Base + {count} serviços para profissionais e negócios: clientes, orçamentos, recibos.",
+    "active": "ATIVOS",
+    "perYear": "{price}/ANO",
+    "ctaBase": "Ativar Base – {price}/ano",
+    "ctaPro": "Passar a Pro – {price}/ano",
+    "includedBase": "Incluído no Base",
+    "includedPro": "Incluído no Pro",
+    "open": "Abrir",
+    "showAll": "Ver os {count} serviços",
+    "showLess": "Mostrar menos",
+    "passChip": "Só este {price}"
   }
 }

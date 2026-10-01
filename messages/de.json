@@ -5754,5 +5754,28 @@
     "walletActivate": "Dienst aktivieren",
     "walletCouponTitle": "{service}-Pass – 1 Jahr",
     "walletCouponHint": "Aktiviere ihn selbst oder verschenke den Code:"
+  },
+  "toolTiers": {
+    "intro": "Drei Stufen: Starte mit den kostenlosen Diensten, schalte den Rest mit einem Abo frei oder aktiviere einen einzelnen Dienst mit einem Pass.",
+    "legendFree": "Kostenlos · {count} Dienste",
+    "legendBase": "Base {price}/Jahr · +{count} Dienste",
+    "legendPro": "Pro {price}/Jahr · +{count} Dienste für Profis",
+    "legendPass": "Oder nur ein Dienst mit dem Pass",
+    "tierFreeTitle": "Kostenlos",
+    "tierFreeSub": "Schon deins: für alle Mitglieder inklusive, ohne Zeitlimit.",
+    "tierBaseTitle": "Base",
+    "tierBaseSub": "+{count} Dienste für den Alltag: Sicherheit, Organisation, Wohlbefinden.",
+    "tierProTitle": "Pro",
+    "tierProSub": "Alles aus Base + {count} Dienste für Profis und Unternehmen: Kunden, Angebote, Quittungen.",
+    "active": "AKTIV",
+    "perYear": "{price}/JAHR",
+    "ctaBase": "Base aktivieren – {price}/Jahr",
+    "ctaPro": "Zu Pro wechseln – {price}/Jahr",
+    "includedBase": "In Base enthalten",
+    "includedPro": "In Pro enthalten",
+    "open": "Öffnen",
+    "showAll": "Alle {count} Dienste anzeigen",
+    "showLess": "Weniger anzeigen",
+    "passChip": "Nur dieser {price}"
   }
 }

@@ -2,9 +2,10 @@ import { getLocale, getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
 import KumanoDelGiornoPreview from './KumanoDelGiornoPreview'
 import CategoryToolsAccordion from './CategoryToolsAccordion'
+import ToolTiers from './ToolTiers'
 import InfoPopover from '@/components/InfoPopover'
 import type { MarketplaceTool } from '@/lib/marketplaceTools'
-import { MARKETPLACE_CATEGORIES, type MarketplaceCategory } from '@/lib/marketplaceTools'
+import type { MarketplaceCategory } from '@/lib/marketplaceTools'
 import type { DashboardNetworkData } from '@/lib/dashboardNetworkData'
 import { Users, ArrowRight, Star, CheckCircle2, Crown, Hourglass, Sparkles, BadgeCheck, Gift } from 'lucide-react'
 import CopyButton from '@/components/CopyButton'
@@ -28,6 +29,8 @@ export default async function DashboardTipo2({
   proToolNames,
   freeToolNames,
   basePrice,
+  proPrice,
+  toolPlans,
   favoriteToolNames,
   proTrialDaysLeft = null,
   agenda = null,
@@ -44,6 +47,10 @@ export default async function DashboardTipo2({
   freeToolNames: string[]
   // Prezzo del piano Base già formattato (es. "49 €")
   basePrice: string
+  // Prezzo del piano Pro già formattato (es. "149 €")
+  proPrice: string
+  // Fascia di ogni servizio: Gratis, Base o Pro
+  toolPlans: Record<string, 'free' | 'base' | 'pro'>
   favoriteToolNames: string[]
   // Prova Pro in corso: il riquadro dell'abbonamento propone Pro come
   // scelta principale e il Base come alternativa.
@@ -81,10 +88,6 @@ export default async function DashboardTipo2({
     { toolName: 'community-timebank', href: '/marketplace/timebank', iconName: 'Hourglass', title: marketplaceT('timebank'), description: marketplaceT('timebankDescription') },
   ].map((item) => ({ ...item, gradient: 'bg-[var(--ink)]', color: 'gold', category: 'community' })) as unknown as MarketplaceTool[]
 
-  const toolsByCategory = MARKETPLACE_CATEGORIES.map((category) => ({
-    category,
-    tools: category === 'community' ? communityItems : visibleTools.filter((tool) => tool.category === category),
-  })).filter((group) => group.tools.length > 0)
 
   return (
     <>
@@ -219,26 +222,31 @@ export default async function DashboardTipo2({
       {/* Donazioni della community (solo con un'associazione attiva) */}
       <DashboardDonations />
 
-      {/* I tuoi strumenti: categorie chiuse a scheda, come le liste KUMANI */}
+      {/* I tuoi servizi in tre fasce (Gratis / Base / Pro), poi la Community */}
       <div>
-        <h2 className="text-xl font-bold text-[var(--ink)] mb-5">{t('yourTools')}</h2>
-
-        <div className="space-y-3">
-          {toolsByCategory.map(({ category, tools }) => (
-            <CategoryToolsAccordion
-              key={category}
-              category={category}
-              label={categoryLabels[category]}
-              toolsLabel={marketplaceT('categoryToolCount', { count: tools.length })}
-              tools={tools}
-              lockedToolNames={lockedToolNames}
-              passPrices={passPrices}
-              proToolNames={proToolNames}
-              freeToolNames={freeToolNames}
-              basePrice={basePrice}
-              favoriteToolNames={favoriteToolNames}
-            />
-          ))}
+        <h2 className="mb-1 text-xl font-bold text-[var(--ink)]">{t('yourTools')}</h2>
+        <ToolTiers
+          tools={visibleTools}
+          toolPlans={toolPlans}
+          lockedToolNames={lockedToolNames}
+          passPrices={passPrices}
+          favoriteToolNames={favoriteToolNames}
+          categoryLabels={categoryLabels}
+          basePrice={basePrice}
+          proPrice={proPrice}
+        />
+        <div className="mt-5">
+          <CategoryToolsAccordion
+            category="community"
+            label={categoryLabels.community}
+            toolsLabel={marketplaceT('categoryToolCount', { count: communityItems.length })}
+            tools={communityItems}
+            lockedToolNames={lockedToolNames}
+            proToolNames={proToolNames}
+            freeToolNames={freeToolNames}
+            basePrice={basePrice}
+            favoriteToolNames={favoriteToolNames}
+          />
         </div>
       </div>
 

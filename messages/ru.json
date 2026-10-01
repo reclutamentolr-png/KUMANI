@@ -5754,5 +5754,28 @@
     "walletActivate": "Подключить сервис",
     "walletCouponTitle": "Пропуск {service} – 1 год",
     "walletCouponHint": "Подключи его сам или подари код:"
+  },
+  "toolTiers": {
+    "intro": "Три уровня: начни с бесплатных сервисов, открой остальные подпиской или подключи отдельный сервис с Пропуском.",
+    "legendFree": "Бесплатно · {count} сервисов",
+    "legendBase": "Base {price}/год · +{count} сервисов",
+    "legendPro": "Pro {price}/год · +{count} сервисов для профессионалов",
+    "legendPass": "Или только один сервис с Пропуском",
+    "tierFreeTitle": "Бесплатно",
+    "tierFreeSub": "Уже твои: доступны всем участникам без ограничения по времени.",
+    "tierBaseTitle": "Base",
+    "tierBaseSub": "+{count} сервисов на каждый день: безопасность, организация, здоровье.",
+    "tierProTitle": "Pro",
+    "tierProSub": "Всё из Base + {count} сервисов для профессионалов и бизнеса: клиенты, сметы, квитанции.",
+    "active": "АКТИВНЫ",
+    "perYear": "{price}/ГОД",
+    "ctaBase": "Подключить Base – {price}/год",
+    "ctaPro": "Перейти на Pro – {price}/год",
+    "includedBase": "Входит в Base",
+    "includedPro": "Входит в Pro",
+    "open": "Открыть",
+    "showAll": "Показать все {count} сервисов",
+    "showLess": "Свернуть",
+    "passChip": "Только этот {price}"
   }
 }
