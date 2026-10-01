@@ -17,6 +17,9 @@ import {
   Network,
   PartyPopper,
   Hourglass,
+  Star,
+  Crown,
+  Lock,
 } from 'lucide-react'
 import { getCurrentRank } from '@/lib/ranks'
 import { getMyNetworkWallet } from '@/lib/networkWallet'
@@ -31,6 +34,8 @@ import { loadKuWalletData } from '@/lib/ku-server'
 import { getMyAttendedCount, listMyPasses } from '@/app/actions/events'
 import { EVENT_TYPE_EMOJI, formatEventDate } from '@/lib/events'
 import type { MyProfile } from '@/lib/myProfile'
+
+const RANK_ICONS = { Star, Sparkles, Crown }
 
 function WalletSection({
   id,
@@ -76,6 +81,12 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
   const networkWallet = await getMyNetworkWallet(supabase)
   const { ranks } = networkWallet
   const currentRank = getCurrentRank(networkWallet.earnedTotal, ranks)
+  const nextRank = ranks.find((rank) => networkWallet.earnedTotal < rank.threshold) ?? null
+  // Data in cui ogni badge è stato raggiunto (registrata dal database)
+  const { data: achievementRows } = await supabase.rpc('my_rank_achievements')
+  const achievements = new Map(
+    ((achievementRows ?? []) as { rank_key: string; achieved_at: string }[]).map((row) => [row.rank_key, row])
+  )
 
   const { data: receipts } = await supabase
     .from('digital_receipts')
@@ -232,36 +243,86 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
             )}
           </WalletSection>
 
-          {/* Badge */}
+          {/* Badge: qualifiche Kuman Green / Star / Black sui Punti Community
+              guadagnati in totale, con avanzamento e data di raggiungimento */}
           <WalletSection icon={<Award className="h-5 w-5 text-[var(--gold)]" />} title={t('badgeTitle')}>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="flex flex-wrap items-end justify-between gap-3">
+              <div>
+                <p className="text-xs text-[var(--muted)]">{t('badgeEarnedTotal')}</p>
+                <p className="text-3xl font-bold text-[var(--ink)]">{networkWallet.earnedTotal}</p>
+              </div>
+              <span className="rounded-full bg-[var(--ink)] px-3 py-1 text-xs font-bold text-[var(--gold-bright)]">
+                {currentRank ? td(currentRank.labelKey) : t('badgeNone')}
+              </span>
+            </div>
+
+            {nextRank ? (
+              <div className="mt-3">
+                <div className="h-2 overflow-hidden rounded-full bg-gray-100">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)]"
+                    style={{ width: `${Math.min((networkWallet.earnedTotal / nextRank.threshold) * 100, 100)}%` }}
+                  />
+                </div>
+                <p className="mt-1.5 text-xs font-semibold text-[var(--ink)]">
+                  {t('badgeNextProgress', { count: nextRank.threshold - networkWallet.earnedTotal, rank: td(nextRank.labelKey) })}
+                </p>
+              </div>
+            ) : (
+              <p className="mt-3 text-xs font-semibold text-[var(--gold)]">{t('badgeEncourageTop')}</p>
+            )}
+
+            <div className="mt-4 grid grid-cols-3 gap-2 sm:gap-3">
               {ranks.map((rank) => {
                 const earned = networkWallet.earnedTotal >= rank.threshold
+                const Icon = RANK_ICONS[rank.icon]
+                const achieved = achievements.get(rank.key)
                 return (
                   <div
                     key={rank.key}
-                    className={`rounded-lg border p-3 text-center ${
-                      earned ? 'border-[var(--gold)]/55 bg-[var(--gold-pale)]' : 'border-gray-200 bg-gray-50 opacity-60'
+                    className={`flex flex-col items-center rounded-xl border p-3 text-center ${
+                      earned ? 'border-[var(--gold)]/55 bg-[var(--gold-pale)]' : 'border-gray-200 bg-gray-50'
                     }`}
                   >
-                    <p className={`text-sm font-bold ${earned ? 'text-[var(--ink)]' : 'text-gray-400'}`}>
-                      {td(rank.labelKey)}
-                    </p>
-                    <p className="mt-1 text-[10px] text-gray-500">
-                      {earned ? t('badgeEarned') : t('badgeLocked', { threshold: rank.threshold })}
+                    <div
+                      className={`relative flex h-12 w-12 items-center justify-center rounded-full ${
+                        earned ? 'bg-[var(--ink)] text-[var(--gold-bright)] shadow-md' : 'bg-gray-200 text-gray-400'
+                      }`}
+                    >
+                      <Icon className="h-6 w-6" />
+                      {!earned && (
+                        <span className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-white shadow">
+                          <Lock className="h-3 w-3 text-gray-500" />
+                        </span>
+                      )}
+                    </div>
+                    <p className={`mt-2 text-xs font-bold sm:text-sm ${earned ? 'text-[var(--ink)]' : 'text-gray-500'}`}>{td(rank.labelKey)}</p>
+                    <p className="text-[10px] text-gray-500 sm:text-xs">{t('badgeThreshold', { points: rank.threshold })}</p>
+                    <p className={`mt-1 text-[10px] font-semibold ${earned ? 'text-emerald-700' : 'text-gray-400'}`}>
+                      {earned
+                        ? achieved
+                          ? t('badgeReachedOn', { date: new Date(achieved.achieved_at).toLocaleDateString(locale) })
+                          : t('badgeEarned')
+                        : t('badgeToReach')}
                     </p>
                   </div>
                 )
               })}
             </div>
-            {/* Invito a condividere: incoraggia a raggiungere la qualifica successiva. */}
+
             <p className="mt-3 text-xs leading-5 text-[var(--muted)]">
               {networkWallet.earnedTotal >= ranks[ranks.length - 1].threshold
-                ? t('badgeEncourageTop')
+                ? t('badgeOnlyRecognition')
                 : currentRank
                   ? t('badgeEncourageNext')
                   : t('badgeEncourageFirst')}
             </p>
+            <Link
+              href="/dashboard/rete"
+              className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]"
+            >
+              {t('badgeSeeNetwork')} <ArrowRight className="h-4 w-4" />
+            </Link>
           </WalletSection>
         </div>
 
