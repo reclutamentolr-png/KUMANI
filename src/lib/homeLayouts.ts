@@ -39,7 +39,7 @@ const IMG = {
 }
 
 const classic: HomeLayoutConfig = {
-  hero: { kind: 'classic' },
+  hero: { kind: 'classic', video: true },
   marketplace: { tone: 'dark', variant: 'plain' },
   community: { tone: 'dark', variant: 'shade' },
   share: { tone: 'dark', variant: 'plain' },
@@ -52,7 +52,7 @@ export const HOME_LAYOUT_CONFIG: Record<HomeLayoutKey, HomeLayoutConfig> = {
   classic,
   classic_video: { ...classic, hero: { kind: 'classic', video: true } },
   hands: {
-    hero: { kind: 'photo', image: IMG.circle },
+    hero: { kind: 'photo', image: IMG.circle, video: true },
     marketplace: { tone: 'dark', variant: 'dots' },
     community: { tone: 'light', variant: 'cream' },
     share: { tone: 'dark', variant: 'lines' },
@@ -61,7 +61,7 @@ export const HOME_LAYOUT_CONFIG: Record<HomeLayoutKey, HomeLayoutConfig> = {
     cta: { tone: 'dark', image: IMG.circle },
   },
   night: {
-    hero: { kind: 'classic', variant: 'radial' },
+    hero: { kind: 'classic', variant: 'radial', video: true },
     marketplace: { tone: 'dark', variant: 'dots' },
     community: { tone: 'dark', variant: 'lines' },
     share: { tone: 'dark', variant: 'dots' },
@@ -71,7 +71,7 @@ export const HOME_LAYOUT_CONFIG: Record<HomeLayoutKey, HomeLayoutConfig> = {
     cta: { tone: 'dark', variant: 'glow' },
   },
   cream_bands: {
-    hero: { kind: 'photo', image: IMG.volunteer },
+    hero: { kind: 'photo', image: IMG.volunteer, video: true },
     marketplace: { tone: 'light', variant: 'paper' },
     community: { tone: 'dark', variant: 'dots' },
     share: { tone: 'light', variant: 'cream' },
@@ -81,7 +81,7 @@ export const HOME_LAYOUT_CONFIG: Record<HomeLayoutKey, HomeLayoutConfig> = {
     cta: { tone: 'dark', image: IMG.heart },
   },
   workshops: {
-    hero: { kind: 'photo', image: IMG.artisan },
+    hero: { kind: 'photo', image: IMG.artisan, video: true },
     marketplace: { tone: 'light', variant: 'cream' },
     community: { tone: 'dark', variant: 'dots' },
     share: { tone: 'light', variant: 'paper' },
@@ -91,7 +91,7 @@ export const HOME_LAYOUT_CONFIG: Record<HomeLayoutKey, HomeLayoutConfig> = {
     cta: { tone: 'dark', image: IMG.cafe },
   },
   night_bands: {
-    hero: { kind: 'photo', image: IMG.phone },
+    hero: { kind: 'photo', image: IMG.phone, video: true },
     marketplace: { tone: 'dark', variant: 'dots' },
     community: { tone: 'dark', variant: 'lines' },
     share: { tone: 'dark', variant: 'dots' },
