@@ -2,7 +2,7 @@
 // Cambiano solo sfondi, foto, trame e alternanza chiaro/scuro: testi,
 // titoli, link e struttura restano identici (nessun effetto sulla SEO).
 
-export const HOME_LAYOUTS = ['classic', 'classic_video', 'hands', 'night', 'cream_bands', 'workshops', 'cream_side', 'night_bands'] as const
+export const HOME_LAYOUTS = ['classic', 'classic_video', 'hands', 'night', 'cream_bands', 'workshops', 'night_bands'] as const
 export type HomeLayoutKey = (typeof HOME_LAYOUTS)[number]
 export const DEFAULT_HOME_LAYOUT: HomeLayoutKey = 'classic'
 
@@ -84,15 +84,6 @@ export const HOME_LAYOUT_CONFIG: Record<HomeLayoutKey, HomeLayoutConfig> = {
     benefits: { tone: 'light', variant: 'paper' },
     cta: { tone: 'dark', image: IMG.cafe },
   },
-  cream_side: {
-    hero: { kind: 'split', image: IMG.cafe },
-    share: { tone: 'light', variant: 'paper' },
-    marketplace: { tone: 'dark', variant: 'glow' },
-    bandAfterMarketplace: { image: IMG.circle, kind: 'quote', quote: 'bandTogether' },
-    bonus: { tone: 'light', variant: 'paper' },
-    benefits: { tone: 'light', variant: 'cream' },
-    cta: { tone: 'dark', variant: 'glow' },
-  },
   night_bands: {
     hero: { kind: 'photo', image: IMG.phone },
     share: { tone: 'dark', variant: 'dots' },
@@ -113,7 +104,6 @@ export const HOME_LAYOUT_INFO: Record<HomeLayoutKey, { name: string; description
   night: { name: 'Notte dorata', description: 'Tutta scura con trame dorate e una fascia foto per la community.' },
   cream_bands: { name: 'Crema con fasce foto', description: 'Pagina chiara, foto di volontariato nell’apertura e fasce fotografiche.' },
   workshops: { name: 'Botteghe e mestieri', description: 'L’artigiano nell’apertura, sezioni alternate e chiusura sul bar.' },
-  cream_side: { name: 'Crema con foto ai lati', description: 'Apertura chiara con la foto del bar a lato, alternanza crema e scuro.' },
   night_bands: { name: 'Scura con fasce foto', description: 'Scura e dorata con fasce fotografiche tra le sezioni.' },
 }
 
