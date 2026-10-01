@@ -34,6 +34,9 @@ import { getMyDonations } from '@/app/actions/donations'
 import QuickNav from '@/components/QuickNav'
 import WalletCouponsList from '@/components/WalletCouponsList'
 import WalletVoucherSection from '@/components/WalletVoucherSection'
+import WalletRenewalDiscount from '@/components/ku/WalletRenewalDiscount'
+import { loadKuWalletData } from '@/lib/ku-server'
+import { featureConfig, type KuRenewalConfig } from '@/lib/ku'
 import { getMyAttendedCount, listMyPasses } from '@/app/actions/events'
 import { EVENT_TYPE_EMOJI, formatEventDate } from '@/lib/events'
 import type { MyProfile } from '@/lib/myProfile'
@@ -81,6 +84,10 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
   const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<MyProfile>()
   if (!profile) redirect(`/${locale}/dashboard`)
 
+  // Sconto sul rinnovo pagato in KU Karma (Gestione KU → 4), solo se attivo
+  const kuWalletData = await loadKuWalletData(supabase, profile)
+  const renewal = featureConfig<KuRenewalConfig>(kuWalletData.features, 'renewal_discount')
+  const tku = await getTranslations('kuRewards')
   // KU Points, credito voucher e qualifiche (badge sui punti guadagnati)
   const networkWallet = await getMyNetworkWallet(supabase)
   const { ranks } = networkWallet
@@ -459,6 +466,18 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
             <WalletCouponsList coupons={couponsList} />
           )}
         </WalletSection>
+
+        {/* Sconto sul rinnovo con i KU Karma */}
+        {renewal?.enabled && (
+          <WalletSection icon={<Ticket className="h-5 w-5 text-[var(--gold)]" />} title={tku('renewalTitle')}>
+            <WalletRenewalDiscount
+              config={renewal}
+              balance={kuWalletData.balance}
+              usedThisYear={kuWalletData.renewalUsedThisYear}
+              hasStripeSubscription={kuWalletData.hasStripeSubscription}
+            />
+          </WalletSection>
+        )}
 
         {/* Voucher abbonamento */}
         <WalletSection icon={<BadgeCheck className="h-5 w-5 text-[var(--gold)]" />} title={t('voucherTitle')}>

@@ -2914,6 +2914,8 @@
     "renewalText": "{cost} KU Karma = €{discount} off your next subscription renewal (up to {max} per year).",
     "renewalNoStripe": "Available for subscriptions renewed automatically by card.",
     "renewalButton": "Use {cost} KU Karma for €{discount} off",
+    "renewalMissing": "You need {missing} more KU Karma to get €{discount} off your next renewal.",
+    "renewalProgress": "You have {balance} of the {cost} KU Karma needed.",
     "renewalDone": "Done: €{discount} discount applied to your next renewal.",
     "showcaseTitle": "Showcase on the Board",
     "showcaseText": "Feature your listings paying in KU Karma: {cost7} KU Karma for 7 days, {cost15} KU Karma for 15 days.",

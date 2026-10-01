@@ -2914,6 +2914,8 @@
     "renewalText": "{cost} KU Karma = {discount} € de réduction sur le prochain renouvellement de votre abonnement (maximum {max} par an).",
     "renewalNoStripe": "Disponible pour les abonnements renouvelés automatiquement par carte.",
     "renewalButton": "Utiliser {cost} KU Karma pour {discount} € de réduction",
+    "renewalMissing": "Pour obtenir {discount} € de réduction sur votre prochain renouvellement, il vous manque {missing} KU Karma.",
+    "renewalProgress": "Vous avez {balance} KU Karma sur les {cost} nécessaires.",
     "renewalDone": "C'est fait : {discount} € de réduction appliqués à votre prochain renouvellement.",
     "showcaseTitle": "Vitrine du Tableau",
     "showcaseText": "Mettez vos annonces en vitrine en payant en KU Karma : {cost7} KU Karma pour 7 jours, {cost15} KU Karma pour 15 jours.",

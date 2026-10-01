@@ -2914,6 +2914,8 @@
     "renewalText": "{cost} KU Karma = {discount} € de desconto na próxima renovação da subscrição (no máximo {max} por ano).",
     "renewalNoStripe": "Disponível para subscrições com renovação automática no cartão.",
     "renewalButton": "Usar {cost} KU Karma para {discount} € de desconto",
+    "renewalMissing": "Para obter {discount} € de desconto na sua próxima renovação faltam-lhe {missing} KU Karma.",
+    "renewalProgress": "Tem {balance} KU Karma dos {cost} necessários.",
     "renewalDone": "Feito: {discount} € de desconto aplicados à sua próxima renovação.",
     "showcaseTitle": "Montra no Mural",
     "showcaseText": "Destaque os seus anúncios pagando em KU Karma: {cost7} KU Karma por 7 dias, {cost15} KU Karma por 15 dias.",

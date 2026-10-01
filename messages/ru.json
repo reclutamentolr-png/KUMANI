@@ -2914,6 +2914,8 @@
     "renewalText": "{cost} KU Karma = скидка {discount} € на следующее продление подписки (не более {max} в год).",
     "renewalNoStripe": "Доступно для подписок с автоматическим продлением по карте.",
     "renewalButton": "Потратить {cost} KU Karma на скидку {discount} €",
+    "renewalMissing": "Чтобы получить скидку {discount} € на следующее продление, тебе не хватает {missing} KU Karma.",
+    "renewalProgress": "У тебя {balance} из {cost} необходимых KU Karma.",
     "renewalDone": "Готово: скидка {discount} € применена к следующему продлению.",
     "showcaseTitle": "Витрина на доске",
     "showcaseText": "Размещай объявления на витрине за KU Karma: {cost7} KU Karma на 7 дней, {cost15} KU Karma на 15 дней.",

@@ -2914,6 +2914,8 @@
     "renewalText": "{cost} KU Karma = {discount} € di sconto sul prossimo rinnovo dell'abbonamento (massimo {max} all'anno).",
     "renewalNoStripe": "Disponibile per chi ha un abbonamento con rinnovo automatico con carta.",
     "renewalButton": "Usa {cost} KU Karma per {discount} € di sconto",
+    "renewalMissing": "Per ottenere {discount} € di sconto sul tuo prossimo rinnovo ti mancano {missing} KU Karma.",
+    "renewalProgress": "Hai {balance} KU Karma su {cost} necessari.",
     "renewalDone": "Fatto: {discount} € di sconto applicati al tuo prossimo rinnovo.",
     "showcaseTitle": "Vetrina in Bacheca",
     "showcaseText": "Metti in vetrina i tuoi annunci pagando in KU Karma: {cost7} KU Karma per 7 giorni, {cost15} KU Karma per 15 giorni.",

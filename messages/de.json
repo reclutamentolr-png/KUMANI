@@ -2914,6 +2914,8 @@
     "renewalText": "{cost} KU Karma = {discount} € Rabatt auf die nächste Abo-Verlängerung (höchstens {max} pro Jahr).",
     "renewalNoStripe": "Verfügbar für Abos mit automatischer Verlängerung per Karte.",
     "renewalButton": "{cost} KU Karma für {discount} € Rabatt einlösen",
+    "renewalMissing": "Für {discount} € Rabatt auf deine nächste Verlängerung fehlen dir noch {missing} KU Karma.",
+    "renewalProgress": "Du hast {balance} von {cost} benötigten KU Karma.",
     "renewalDone": "Erledigt: {discount} € Rabatt auf deine nächste Verlängerung angewendet.",
     "showcaseTitle": "Schaufenster am Brett",
     "showcaseText": "Stelle deine Anzeigen ins Schaufenster und zahle in KU Karma: {cost7} KU Karma für 7 Tage, {cost15} KU Karma für 15 Tage.",
