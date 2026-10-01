@@ -34,8 +34,6 @@ import { getMyDonations } from '@/app/actions/donations'
 import QuickNav from '@/components/QuickNav'
 import WalletCouponsList from '@/components/WalletCouponsList'
 import WalletVoucherSection from '@/components/WalletVoucherSection'
-import KuRewardsSection from '@/components/ku/KuRewardsSection'
-import { loadKuWalletData } from '@/lib/ku-server'
 import { getMyAttendedCount, listMyPasses } from '@/app/actions/events'
 import { EVENT_TYPE_EMOJI, formatEventDate } from '@/lib/events'
 import type { MyProfile } from '@/lib/myProfile'
@@ -54,7 +52,9 @@ function WalletSection({
   children: React.ReactNode
 }) {
   return (
-    <div id={id} className="scroll-mt-6 rounded-xl border border-[var(--gold)]/25 bg-[var(--paper)] p-6 shadow-sm">
+    <div id={id} className="relative scroll-mt-6 overflow-hidden rounded-xl border border-[var(--gold)]/40 bg-[var(--paper)] p-6 pt-7 shadow-sm">
+      {/* Banda dorata d'inizio sezione */}
+      <div aria-hidden className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-[var(--gold)] via-[var(--gold-bright)] to-[var(--gold)]" />
       <div className="mb-4 flex items-center justify-between">
         <h3 className="flex items-center gap-2 text-lg font-bold text-[var(--ink)]">
           {icon}
@@ -81,7 +81,6 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
   const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<MyProfile>()
   if (!profile) redirect(`/${locale}/dashboard`)
 
-  const kuWalletData = await loadKuWalletData(supabase, profile)
   // KU Points, credito voucher e qualifiche (badge sui punti guadagnati)
   const networkWallet = await getMyNetworkWallet(supabase)
   const { ranks } = networkWallet
@@ -463,8 +462,6 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
 
         {/* Voucher abbonamento */}
         <WalletSection icon={<BadgeCheck className="h-5 w-5 text-[var(--gold)]" />} title={t('voucherTitle')}>
-          <KuRewardsSection data={kuWalletData} />
-
           <WalletVoucherSection
             initialPoints={networkWallet.networkPoints}
             initialCreditCents={networkWallet.voucherCreditCents}
