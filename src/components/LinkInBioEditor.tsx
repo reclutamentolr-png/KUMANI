@@ -9,6 +9,7 @@ import { BIO_THEMES, ALL_BIO_THEME_KEYS, DEFAULT_BIO_THEME, PREMIUM_BIO_THEME_KE
 import { KU_UNLOCK_LINKINBIO_THEMES, linkInBioThemeUnlockKey } from '@/lib/ku'
 import { buyKuUnlock } from '@/app/actions/ku'
 import Link from '@/components/LocalizedLink'
+import BioThemeScene from '@/components/BioThemeScene'
 import { Plus, Trash2, Save, Link as LinkIcon, Check, ExternalLink, Globe, Mail, Phone, MessageCircle, Lock, Loader2, Eye, Sparkles, X } from 'lucide-react'
 
 type LinkItem = {
@@ -145,6 +146,7 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
   const specialThemes = PREMIUM_BIO_THEME_KEYS.filter(
     (key) => ownedThemes.includes(key) || themeCosts[key] !== undefined || theme === key
   )
+  const themeName = (key: BioThemeKey) => (BIO_THEMES[key].scene ? t(`themeName_${BIO_THEMES[key].scene}`) : BIO_THEMES[key].label)
   const tryTheme = (key: BioThemeKey) => {
     setPreviewTheme(key)
     // Su telefono l'anteprima sta sotto l'editor: portala in vista
@@ -225,8 +227,9 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
                       }}
                       className={`group relative overflow-hidden rounded-xl text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg ${inUse || trying ? 'ring-2 ring-[var(--gold)] ring-offset-2' : 'ring-1 ring-black/10'}`}
                     >
-                      <div className={`flex h-24 items-center justify-center p-2 ${style.pageBg}`}>
-                        <div className={`w-16 rounded-lg p-1.5 ${style.cardBg}`}>
+                      <div className={`relative flex h-28 items-center justify-center overflow-hidden p-2 ${style.pageBg}`}>
+                        {style.scene && <BioThemeScene scene={style.scene} crop className="absolute inset-0 h-full w-full transition-transform duration-500 group-hover:scale-105" />}
+                        <div className={`relative w-14 rounded-lg p-1.5 ${style.cardBg}`}>
                           <div className={`mx-auto h-4 w-4 rounded-full ${style.avatarBg}`} />
                           <div className={`mx-auto mt-1 h-1 w-8 rounded-full ${style.linkIconBg}`} />
                           <div className={`mt-1.5 h-2 rounded ${style.linkBg}`} />
@@ -239,7 +242,7 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
                         </span>
                       )}
                       <div className="flex flex-col gap-1 bg-white px-2 py-1.5">
-                        <span className="truncate text-xs font-bold text-[var(--ink)]">{style.label}</span>
+                        <span className="truncate text-xs font-bold text-[var(--ink)]">{themeName(key)}</span>
                         {owned ? (
                           <span className="inline-flex w-fit items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
                             <Check className="h-3 w-3" /> {inUse ? t('themeInUse') : t('themeOwned')}
@@ -348,19 +351,20 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
         {previewTheme && (
           <div className="mb-3 flex items-center gap-2 rounded-xl bg-[var(--ink)] px-3 py-2.5 text-sm text-white">
             <Eye className="h-4 w-4 shrink-0 text-[var(--gold-bright)]" />
-            <span className="flex-1">{t('themePreviewText', { name: BIO_THEMES[previewTheme].label })}</span>
+            <span className="flex-1">{t('themePreviewText', { name: themeName(previewTheme) })}</span>
             <button type="button" onClick={() => setPreviewTheme(null)} title={t('themePreviewClose')} className="rounded-full p-1 text-white/70 hover:bg-white/10 hover:text-white">
               <X className="h-4 w-4" />
             </button>
           </div>
         )}
-        <div className={`relative rounded-2xl p-6 text-center ${previewStyle.pageBg}`}>
+        <div className={`relative overflow-hidden rounded-2xl p-6 text-center ${previewStyle.pageBg}`}>
+          {previewStyle.scene && <BioThemeScene scene={previewStyle.scene} className="absolute inset-0 h-full w-full" />}
           {previewTheme && (
-            <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-black/45 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur">
+            <span className="absolute left-3 top-3 z-10 inline-flex items-center gap-1 rounded-full bg-black/45 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur">
               <Sparkles className="h-3 w-3" /> {t('themePreviewBadge')}
             </span>
           )}
-          <div className={`rounded-3xl p-6 ${previewStyle.cardBg}`}>
+          <div className={`relative rounded-3xl p-6 ${previewStyle.cardBg}`}>
             <div className={`w-20 h-20 rounded-full ${previewStyle.avatarBg} ${previewStyle.avatarText} flex items-center justify-center mx-auto mb-3 text-3xl font-bold shadow-lg`}>
               {(firstName || 'U').charAt(0).toUpperCase()}
             </div>
@@ -434,8 +438,10 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
       {unlockTheme && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4" onClick={() => !unlocking && setUnlockTheme(null)}>
           <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            <div className={`mx-auto h-16 w-16 rounded-full ${BIO_THEMES[unlockTheme].swatchClass} ring-4 ring-[var(--gold)]/40`} />
-            <h3 className="mt-4 text-center text-lg font-bold text-[var(--ink)]">{t('themeUnlockTitle', { name: BIO_THEMES[unlockTheme].label })}</h3>
+            <div className={`relative mx-auto h-36 overflow-hidden rounded-xl ${BIO_THEMES[unlockTheme].pageBg}`}>
+              {BIO_THEMES[unlockTheme].scene && <BioThemeScene scene={BIO_THEMES[unlockTheme].scene!} crop className="absolute inset-0 h-full w-full" />}
+            </div>
+            <h3 className="mt-4 text-center text-lg font-bold text-[var(--ink)]">{t('themeUnlockTitle', { name: themeName(unlockTheme) })}</h3>
             <p className="mt-1 text-center text-sm text-[var(--muted)]">{t('themeUnlockText')}</p>
             {themeCosts[unlockTheme] === undefined ? (
               <p className="mt-4 rounded-lg bg-gray-50 p-3 text-center text-sm text-[var(--muted)]">{t('themeUnlockUnavailable')}</p>

@@ -16,15 +16,19 @@ export type BioThemeKey =
   | 'blu'
   | 'viola'
   | 'grigio'
-  // Temi speciali: sbloccabili con i KU (Gestione KU → sblocco
-  // "linkinbio_premium_themes").
+  // Temi speciali con sfondo illustrato: ognuno si sblocca a parte con i
+  // KU (Gestione KU → linkinbio_theme_<chiave>).
   | 'aurora'
   | 'notte'
   | 'tramonto'
 
+export type BioSceneKey = 'aurora' | 'notte' | 'tramonto'
+
 export interface BioThemeStyle {
   key: BioThemeKey
   label: string
+  // Sfondo illustrato (components/BioThemeScene) sopra a pageBg
+  scene?: BioSceneKey
   swatchClass: string
   pageBg: string
   cardBg: string
@@ -42,10 +46,11 @@ export interface BioThemeStyle {
 export const BIO_THEMES: Record<BioThemeKey, BioThemeStyle> = {
   aurora: {
     key: 'aurora',
-    label: 'Aurora',
+    label: 'Aurora boreale',
+    scene: 'aurora',
     swatchClass: 'bg-gradient-to-br from-emerald-400 via-cyan-500 to-violet-600',
-    pageBg: 'bg-gradient-to-br from-emerald-400 via-cyan-600 to-violet-700',
-    cardBg: 'bg-white/10 backdrop-blur-xl border border-white/25',
+    pageBg: 'bg-gradient-to-b from-slate-950 via-sky-950 to-cyan-900',
+    cardBg: 'bg-slate-950/35 backdrop-blur-md border border-white/20',
     avatarBg: 'bg-white',
     avatarText: 'text-cyan-700',
     nameText: 'text-white',
@@ -58,10 +63,11 @@ export const BIO_THEMES: Record<BioThemeKey, BioThemeStyle> = {
   },
   notte: {
     key: 'notte',
-    label: 'Notte dorata',
+    label: 'Luna sul lago',
+    scene: 'notte',
     swatchClass: 'bg-gradient-to-br from-slate-950 via-slate-800 to-amber-500',
-    pageBg: 'bg-gradient-to-b from-slate-950 via-slate-900 to-slate-800',
-    cardBg: 'bg-slate-900/70 backdrop-blur-xl border border-amber-400/40',
+    pageBg: 'bg-gradient-to-b from-slate-950 via-slate-900 to-indigo-950',
+    cardBg: 'bg-slate-950/55 backdrop-blur-md border border-amber-300/40',
     avatarBg: 'bg-gradient-to-br from-amber-300 to-amber-600',
     avatarText: 'text-slate-950',
     nameText: 'text-amber-200',
@@ -74,10 +80,11 @@ export const BIO_THEMES: Record<BioThemeKey, BioThemeStyle> = {
   },
   tramonto: {
     key: 'tramonto',
-    label: 'Tramonto',
+    label: 'Savana al tramonto',
+    scene: 'tramonto',
     swatchClass: 'bg-gradient-to-br from-amber-400 via-rose-500 to-indigo-700',
-    pageBg: 'bg-gradient-to-b from-amber-400 via-rose-500 to-indigo-800',
-    cardBg: 'bg-white/10 backdrop-blur-xl border border-white/25',
+    pageBg: 'bg-gradient-to-b from-violet-950 via-pink-700 to-orange-500',
+    cardBg: 'bg-black/30 backdrop-blur-md border border-white/25',
     avatarBg: 'bg-white',
     avatarText: 'text-rose-600',
     nameText: 'text-white',
@@ -288,7 +295,7 @@ export const ALL_BIO_THEME_KEYS: BioThemeKey[] = [
   'aurora', 'notte', 'tramonto',
 ]
 
-// Richiedono lo sblocco KU "linkinbio_premium_themes" per essere scelti.
+// Richiedono lo sblocco KU del singolo tema (o il vecchio pacchetto).
 export const PREMIUM_BIO_THEME_KEYS: BioThemeKey[] = ['aurora', 'notte', 'tramonto']
 
 // 'gradient-1' is the DB column's old, unused default from before this

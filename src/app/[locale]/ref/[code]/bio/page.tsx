@@ -18,6 +18,7 @@ import {
 
 import ShareButton from '@/components/ShareButton'
 import { resolveBioTheme } from '@/lib/linkInBioThemes'
+import BioThemeScene from '@/components/BioThemeScene'
 import { normalizeLinkUrl } from '@/lib/linkUtils'
 import PublicPageOffline from '@/components/PublicPageOffline'
 
@@ -104,8 +105,9 @@ export default async function LinkInBioPublicPage({ params }: { params: Promise<
   }
 
   return (
-    <div className={`min-h-screen ${theme.pageBg} py-12 px-4`}>
-      <div className="max-w-md mx-auto">
+    <div className={`relative min-h-screen ${theme.pageBg} py-12 px-4`}>
+      {theme.scene && <BioThemeScene scene={theme.scene} className="pointer-events-none fixed inset-0 h-full w-full" />}
+      <div className="relative max-w-md mx-auto">
         {/* Card Principale */}
         <div className={`${theme.cardBg} rounded-3xl p-8 shadow-2xl`}>
 
