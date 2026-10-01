@@ -2903,6 +2903,7 @@
     "badgeCurrent": "O seu selo: {name}",
     "badgeNone": "Ainda sem selo: continue a usar o KUMANI todos os dias.",
     "badgeNext": "Próximo selo \"{name}\": {current}/{target} KU ganhos no total",
+    "dashboardBadgeProgress": "Distintivo \"{name}\": {current}/{target} KU ganhos",
     "badge_costante": "Kumano Constante",
     "badge_pilastro": "Pilar KUMANI",
     "conversionTitle": "Converter em Pontos Comunidade",

@@ -2903,6 +2903,7 @@
     "badgeCurrent": "Твой значок: {name}",
     "badgeNone": "Значка пока нет: продолжай пользоваться KUMANI каждый день.",
     "badgeNext": "Следующий значок «{name}»: {current}/{target} KU заработано всего",
+    "dashboardBadgeProgress": "Значок «{name}»: {current}/{target} KU заработано",
     "badge_costante": "Постоянный Кумано",
     "badge_pilastro": "Опора KUMANI",
     "conversionTitle": "Обменять на Баллы сообщества",

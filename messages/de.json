@@ -2903,6 +2903,7 @@
     "badgeCurrent": "Dein Abzeichen: {name}",
     "badgeNone": "Noch kein Abzeichen: Nutze KUMANI weiter jeden Tag.",
     "badgeNext": "Nächstes Abzeichen „{name}“: {current}/{target} KU insgesamt verdient",
+    "dashboardBadgeProgress": "Abzeichen „{name}“: {current}/{target} KU verdient",
     "badge_costante": "Beständiger Kumano",
     "badge_pilastro": "KUMANI-Säule",
     "conversionTitle": "In Community-Punkte umwandeln",

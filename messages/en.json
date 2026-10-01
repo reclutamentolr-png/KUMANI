@@ -2903,6 +2903,7 @@
     "badgeCurrent": "Your badge: {name}",
     "badgeNone": "No badge yet: keep using KUMANI every day.",
     "badgeNext": "Next badge \"{name}\": {current}/{target} KU earned in total",
+    "dashboardBadgeProgress": "\"{name}\" badge: {current}/{target} KU earned",
     "badge_costante": "Consistent Kumano",
     "badge_pilastro": "KUMANI Pillar",
     "conversionTitle": "Convert into Community Points",

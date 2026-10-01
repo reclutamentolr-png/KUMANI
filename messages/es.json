@@ -2903,6 +2903,7 @@
     "badgeCurrent": "Tu insignia: {name}",
     "badgeNone": "Aún no tienes insignia: sigue usando KUMANI cada día.",
     "badgeNext": "Próxima insignia \"{name}\": {current}/{target} KU ganados en total",
+    "dashboardBadgeProgress": "Insignia «{name}»: {current}/{target} KU ganados",
     "badge_costante": "Kumano Constante",
     "badge_pilastro": "Pilar KUMANI",
     "conversionTitle": "Convertir en Puntos Comunidad",
