@@ -8,11 +8,11 @@ import { getPlanPrices } from '@/lib/planPrices'
 import PlanDetails, { type PlanDetailsTool } from '@/components/PlanDetails'
 import type { MarketplaceCategory } from '@/lib/marketplaceTools'
 
-type ToolRow = { tool_name: string; is_enabled: boolean; required_plan: string | null; pass_enabled?: boolean | null; pass_price_cents?: number | null }
+export type ToolRow = { tool_name: string; is_enabled: boolean; required_plan: string | null; pass_enabled?: boolean | null; pass_price_cents?: number | null }
 
 // Impostazioni pubbliche dei servizi (piano richiesto e pass), lette con la
 // chiave di servizio e tenute in memoria 5 minuti.
-const fetchToolRows = unstable_cache(
+export const fetchToolRows = unstable_cache(
   async (): Promise<ToolRow[]> => {
     const service = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
       auth: { autoRefreshToken: false, persistSession: false },

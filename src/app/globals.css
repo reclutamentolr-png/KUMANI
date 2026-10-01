@@ -68,6 +68,7 @@ body {
 .home-light .border-white\/25,
 .home-light .border-white\/40 { border-color: rgba(23, 23, 23, 0.25); }
 .home-light .hover\:bg-white\/10:hover { background-color: var(--gold-pale); }
+.home-light .text-emerald-400 { color: #047857; }
 
 .home-tex-dots {
   background-image: radial-gradient(rgba(199, 154, 59, 0.16) 1px, transparent 1.5px);

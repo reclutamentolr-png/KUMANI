@@ -30,6 +30,7 @@ import HomeDonations from '@/components/donations/HomeDonations'
 import HomePlans from '@/components/HomePlans'
 import HomeSection from '@/components/home/HomeSection'
 import HomeBand from '@/components/home/HomeBand'
+import HomeCommunity from '@/components/home/HomeCommunity'
 import HeroLogoVideo from '@/components/home/HeroLogoVideo'
 import type { Metadata } from 'next'
 import { HOME_LAYOUT_CONFIG, isHomeLayout } from '@/lib/homeLayouts'
@@ -51,8 +52,7 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
   // Niente "struttura a matrice" in evidenza — non deve sembrare un network.
   const communityCards = [
     { icon: Share2, title: t('communityCard1Title'), desc: t('communityCard1Description') },
-    { icon: Trophy, title: t('communityCard3Title'), desc: t('communityCard3Description') },
-    { icon: HandPlatter, title: t('communityKordataTitle'), desc: t('communityKordataDescription') }
+    { icon: Trophy, title: t('communityCard3Title'), desc: t('communityCard3Description') }
   ]
 
   // L'Ecosistema: come gli strumenti si alimentano a vicenda (solo
@@ -237,6 +237,12 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
 
       {L.bandAfterMarketplace && <HomeBand band={L.bandAfterMarketplace} />}
 
+      {/* 👥 SEZIONE: LA COMMUNITY — Bacheca, Kordata, Banca del Tempo, Eventi
+          e Kumano del Giorno, con chi può usare ogni spazio */}
+      <HomeSection bg={L.community} className="py-12 sm:py-20">
+        <HomeCommunity />
+      </HomeSection>
+
       {/* 🤝 SEZIONE: CONDIVIDI KUMANI — volutamente minimale, niente
           linguaggio da "rete"/struttura in evidenza. */}
       <HomeSection bg={L.share} className="py-12 sm:py-20">
@@ -254,7 +260,7 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-8 max-w-4xl mx-auto">
             {communityCards.map((card, index) => (
               <div key={index} className="rounded-2xl p-6 border border-[var(--gold)]/15 bg-white/[0.03] hover:border-[var(--gold)]/40 transition-colors">
                 <div className="w-11 h-11 rounded-lg bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] flex items-center justify-center mb-4">
@@ -267,7 +273,7 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
           </div>
 
           {/* Box trasparenza: i badge di community non sono compensi */}
-          <div className="bg-white/[0.03] border border-[var(--gold)]/30 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 max-w-5xl mx-auto">
+          <div className="bg-white/[0.03] border border-[var(--gold)]/30 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 max-w-4xl mx-auto">
             <Shield className="w-8 h-8 text-[var(--gold-bright)] flex-shrink-0" />
             <p className="text-gray-200 text-sm sm:text-base leading-relaxed">
               <strong className="text-[var(--gold-bright)]">{t('communityTransparencyLead')}</strong> {t('communityTransparencyRest')}

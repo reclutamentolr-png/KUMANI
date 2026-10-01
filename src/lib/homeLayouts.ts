@@ -18,8 +18,9 @@ export type HomeBand = { image: string; kind: 'quote' | 'community'; quote?: 'ba
 
 export interface HomeLayoutConfig {
   hero: { kind: 'classic' | 'photo' | 'split'; image?: string; video?: boolean; variant?: SectionBg['variant'] }
-  share: SectionBg
   marketplace: SectionBg
+  community: SectionBg
+  share: SectionBg
   bonus: SectionBg
   benefits: SectionBg
   cta: SectionBg
@@ -39,8 +40,9 @@ const IMG = {
 
 const classic: HomeLayoutConfig = {
   hero: { kind: 'classic' },
-  share: { tone: 'dark', variant: 'shade' },
   marketplace: { tone: 'dark', variant: 'plain' },
+  community: { tone: 'dark', variant: 'shade' },
+  share: { tone: 'dark', variant: 'plain' },
   bonus: { tone: 'dark', variant: 'shade' },
   benefits: { tone: 'dark', variant: 'plain' },
   cta: { tone: 'dark', variant: 'cta' },
@@ -51,16 +53,18 @@ export const HOME_LAYOUT_CONFIG: Record<HomeLayoutKey, HomeLayoutConfig> = {
   classic_video: { ...classic, hero: { kind: 'classic', video: true } },
   hands: {
     hero: { kind: 'photo', image: IMG.circle },
-    share: { tone: 'light', variant: 'cream' },
     marketplace: { tone: 'dark', variant: 'dots' },
+    community: { tone: 'light', variant: 'cream' },
+    share: { tone: 'dark', variant: 'lines' },
     bonus: { tone: 'light', variant: 'paper' },
     benefits: { tone: 'dark', variant: 'lines' },
     cta: { tone: 'dark', image: IMG.circle },
   },
   night: {
     hero: { kind: 'classic', variant: 'radial' },
-    share: { tone: 'dark', variant: 'dots' },
     marketplace: { tone: 'dark', variant: 'dots' },
+    community: { tone: 'dark', variant: 'lines' },
+    share: { tone: 'dark', variant: 'dots' },
     bandAfterMarketplace: { image: IMG.heart, kind: 'community' },
     bonus: { tone: 'dark', variant: 'lines' },
     benefits: { tone: 'dark', variant: 'plain' },
@@ -68,8 +72,9 @@ export const HOME_LAYOUT_CONFIG: Record<HomeLayoutKey, HomeLayoutConfig> = {
   },
   cream_bands: {
     hero: { kind: 'photo', image: IMG.volunteer },
-    share: { tone: 'light', variant: 'cream' },
     marketplace: { tone: 'light', variant: 'paper' },
+    community: { tone: 'dark', variant: 'dots' },
+    share: { tone: 'light', variant: 'cream' },
     bandAfterMarketplace: { image: IMG.circle, kind: 'quote', quote: 'bandTogether' },
     bonus: { tone: 'light', variant: 'cream' },
     benefits: { tone: 'light', variant: 'paper' },
@@ -77,8 +82,9 @@ export const HOME_LAYOUT_CONFIG: Record<HomeLayoutKey, HomeLayoutConfig> = {
   },
   workshops: {
     hero: { kind: 'photo', image: IMG.artisan },
-    share: { tone: 'dark', variant: 'dots' },
     marketplace: { tone: 'light', variant: 'cream' },
+    community: { tone: 'dark', variant: 'dots' },
+    share: { tone: 'light', variant: 'paper' },
     bandAfterMarketplace: { image: IMG.circle, kind: 'quote', quote: 'bandHelp' },
     bonus: { tone: 'dark', variant: 'dots' },
     benefits: { tone: 'light', variant: 'paper' },
@@ -86,8 +92,9 @@ export const HOME_LAYOUT_CONFIG: Record<HomeLayoutKey, HomeLayoutConfig> = {
   },
   night_bands: {
     hero: { kind: 'photo', image: IMG.phone },
-    share: { tone: 'dark', variant: 'dots' },
     marketplace: { tone: 'dark', variant: 'dots' },
+    community: { tone: 'dark', variant: 'lines' },
+    share: { tone: 'dark', variant: 'dots' },
     bandAfterMarketplace: { image: IMG.artisan, kind: 'quote', quote: 'bandWork', position: 'center 30%' },
     bonus: { tone: 'dark', variant: 'lines' },
     bandAfterBonus: { image: IMG.circle, kind: 'community' },
