@@ -365,6 +365,17 @@
     "communityCardSubtitle": "Dein Stern, deine KUMANI und die Rangliste",
     "openCommunityCta": "Deine Community öffnen",
     "inviteTileHint": "Teile deinen Link: Wer sich anmeldet, kommt in deinen KUMANI-Stern.",
+    "sponsorHint": "Die Person, die dich zu KUMANI eingeladen hat.",
+    "noSponsorHint": "Du stehst am Anfang deines Sterns: Niemand hat dich eingeladen.",
+    "inviteShareMessage": "Hallo! Ich lade dich zu KUMANI ein: über 35 digitale Dienste in einer App und eine Community, die sich gegenseitig hilft. Melde dich über meinen Link an: {link}",
+    "inviteShareWhatsapp": "Per WhatsApp einladen",
+    "peopleTitle": "Deine KUMANI",
+    "peopleTabActive": "Aktiv",
+    "peopleTabPending": "Noch nicht aktiv",
+    "peopleEmptyActive": "Noch keine aktiven KUMANI: Teile deinen Einladungslink.",
+    "peopleEmptyPending": "Alle Eingeladenen haben ihr Abo bereits aktiviert.",
+    "peopleSince": "Dabei seit {date}",
+    "peopleRegisteredOn": "Angemeldet am {date}",
     "communityPointsUnit": "Community-Punkte",
     "missingForNextRank": "Dir fehlen {count} Community-Punkte für die Qualifikation {rank}",
     "affiliateActive": "Aktiv",
@@ -5624,5 +5635,16 @@
     "disclaimer": "Der Verkäufer hat den Voucher als Werbeanreiz von KUMANI erhalten und tritt ihn in alleiniger Verantwortung ab. KUMANI ist nicht Partei dieser Abtretung. Etwaige steuerliche und Meldepflichten liegen beim Verkäufer.",
     "sellerSignature": "Unterschrift des Verkäufers",
     "buyerSignature": "Unterschrift des Käufers"
+  },
+  "quickNav": {
+    "title": "Weiter zu",
+    "dashboard": "Dashboard",
+    "dashboardHint": "Dienste, Kalender und Status",
+    "community": "Deine Community",
+    "communityHint": "Stern, KUMANI und Rangliste",
+    "wallet": "Meine Brieftasche",
+    "walletHint": "Karte, Punkte und Voucher",
+    "listings": "Pinnwand",
+    "listingsHint": "Anzeigen der Community"
   }
 }

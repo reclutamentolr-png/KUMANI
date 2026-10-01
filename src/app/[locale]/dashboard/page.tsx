@@ -18,6 +18,7 @@ import { getMarketplaceAccessState } from '@/lib/marketplaceAccess'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { getFavoriteToolNames } from '@/lib/favorites'
 import DashboardTipo2 from '@/components/dashboard/DashboardTipo2'
+import QuickNav from '@/components/QuickNav'
 import BachecaMessagesAlert from '@/components/dashboard/BachecaMessagesAlert'
 import ProArea from '@/components/dashboard/ProArea'
 import ProTeaser from '@/components/dashboard/ProTeaser'
@@ -225,6 +226,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
           agenda={hasAgenda ? <UpcomingAgenda events={agendaEvents} today={agendaToday} sources={agendaSources} /> : null}
           network={network}
         />
+        <QuickNav current="dashboard" />
       </main>
 
       <ChatModalWrapper userId={user.id} />

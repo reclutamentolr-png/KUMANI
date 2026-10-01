@@ -365,6 +365,17 @@
     "communityCardSubtitle": "Твоя звезда, твои KUMANI и рейтинг",
     "openCommunityCta": "Открыть своё сообщество",
     "inviteTileHint": "Поделись своей ссылкой: кто зарегистрируется, попадёт в твою звезду KUMANI.",
+    "sponsorHint": "Человек, который пригласил тебя в KUMANI.",
+    "noSponsorHint": "Ты в начале своей звезды: тебя никто не приглашал.",
+    "inviteShareMessage": "Привет! Приглашаю тебя в KUMANI: более 35 цифровых сервисов в одном приложении и сообщество, где помогают друг другу. Регистрируйся по моей ссылке: {link}",
+    "inviteShareWhatsapp": "Пригласить в WhatsApp",
+    "peopleTitle": "Твои KUMANI",
+    "peopleTabActive": "Активные",
+    "peopleTabPending": "Ещё не активные",
+    "peopleEmptyActive": "Пока нет активных KUMANI: поделись своей ссылкой-приглашением.",
+    "peopleEmptyPending": "Все приглашённые уже активировали подписку.",
+    "peopleSince": "С тобой с {date}",
+    "peopleRegisteredOn": "Зарегистрирован {date}",
     "communityPointsUnit": "баллов Community",
     "missingForNextRank": "Вам не хватает {count} баллов Community до квалификации {rank}",
     "affiliateActive": "Активен",
@@ -5624,5 +5635,16 @@
     "disclaimer": "Продавец получил ваучер как рекламный стимул KUMANI и передаёт его под свою исключительную ответственность. KUMANI не является стороной этой передачи. Возможные налоговые и отчётные обязательства лежат на продавце.",
     "sellerSignature": "Подпись продавца",
     "buyerSignature": "Подпись покупателя"
+  },
+  "quickNav": {
+    "title": "Перейти также в",
+    "dashboard": "Панель",
+    "dashboardHint": "Сервисы, календарь и статус",
+    "community": "Твоё сообщество",
+    "communityHint": "Звезда, KUMANI и рейтинг",
+    "wallet": "Мой кошелёк",
+    "walletHint": "Карта, баллы и ваучеры",
+    "listings": "Доска объявлений",
+    "listingsHint": "Объявления сообщества"
   }
 }

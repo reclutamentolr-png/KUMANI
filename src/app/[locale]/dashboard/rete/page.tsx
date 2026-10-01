@@ -8,11 +8,11 @@ import CopyButton from '@/components/CopyButton'
 import MatrixTree from '@/components/MatrixTree'
 import SpilloverExplainer from '@/components/SpilloverExplainer'
 import RankBadge from '@/components/RankBadge'
-import DirectAffiliatesList from '@/components/DirectAffiliatesList'
-import NotYetKumaniList from '@/components/NotYetKumaniList'
+import KumaniPeople from '@/components/KumaniPeople'
+import QuickNav from '@/components/QuickNav'
 import Leaderboard from '@/components/Leaderboard'
 import { getDashboardNetworkData } from '@/lib/dashboardNetworkData'
-import { ArrowLeft, TreePine, Star, Sparkles, Crown, Trophy, Wallet, PartyPopper } from 'lucide-react'
+import { ArrowLeft, TreePine, Star, Sparkles, Crown, Trophy, Wallet, PartyPopper, UserPlus, CheckCircle2, Shuffle, Network, MessageCircle } from 'lucide-react'
 
 // Schede "Prossimi obiettivi": aspetto di ciascuna qualifica (soglie e testi dalle qualifiche della rete)
 const GOALS = [
@@ -85,88 +85,116 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {/* KUMI + referral */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="rounded-xl border border-[var(--gold)]/25 bg-[var(--paper)] p-6 shadow-sm">
-            <p className="mb-3 text-xs font-bold uppercase tracking-wide text-[var(--muted)]">{t('yourSponsor')}</p>
+        {/* KUMI e codice invito */}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_1.5fr]">
+          <div className="relative overflow-hidden rounded-2xl border border-[var(--gold)]/30 bg-white px-5 pb-5 pt-6 shadow-[0_10px_30px_rgba(23,23,23,0.08)]">
+            <div aria-hidden className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)]" />
+            <p className="mb-4 text-xs font-bold uppercase tracking-wide text-[var(--muted)]">{t('yourSponsor')}</p>
             {sponsorData ? (
-              <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-[var(--gold)] shadow-lg">
-                  <span className="text-white font-bold text-lg">
-                    {sponsorData.first_name?.[0]}
-                    {sponsorData.last_name?.[0] || ''}
-                  </span>
+              <div className="flex items-center gap-4">
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] text-xl font-bold text-[var(--ink)] shadow-lg">
+                  {sponsorData.first_name?.[0]}
+                  {sponsorData.last_name?.[0] || ''}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-bold text-[var(--ink)] truncate">
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-xl font-bold text-[var(--ink)]">
                     {sponsorData.first_name} {sponsorData.last_name}
                   </p>
-                  {sponsorData.referral_code && <p className="font-mono text-xs text-[var(--gold)]">{sponsorData.referral_code}</p>}
+                  {sponsorData.referral_code && <p className="font-mono text-sm text-[var(--gold)]">{sponsorData.referral_code}</p>}
+                  <p className="mt-1 text-xs text-[var(--muted)]">{t('sponsorHint')}</p>
                 </div>
               </div>
             ) : (
-              <div className="flex items-center gap-3 text-[var(--muted)]">
-                <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
-                  <span className="text-lg">-</span>
+              <div className="flex items-center gap-4">
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[var(--ink)] text-[var(--gold-bright)] shadow-lg">
+                  <Crown className="h-7 w-7" />
                 </div>
-                <p className="text-sm">{t('nobody')}</p>
+                <div>
+                  <p className="text-lg font-bold text-[var(--ink)]">{t('nobody')}</p>
+                  <p className="text-xs text-[var(--muted)]">{t('noSponsorHint')}</p>
+                </div>
               </div>
             )}
           </div>
 
-          <div className="rounded-xl border border-[var(--gold)]/45 bg-[var(--ink)] p-6 shadow-sm text-white">
-            <p className="mb-3 text-xs font-bold uppercase tracking-wide text-stone-300">{t('yourReferralCode')}</p>
-            <div className="flex items-center justify-between gap-3">
-              <p className="text-2xl sm:text-3xl font-mono font-bold tracking-wider">{profile?.referral_code}</p>
+          <div className="relative overflow-hidden rounded-2xl border border-[var(--gold)]/45 bg-gradient-to-br from-[#26221c] to-[var(--ink)] p-6 text-white shadow-[0_18px_40px_rgba(23,23,23,0.25)]">
+            <div aria-hidden className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-[var(--gold)]/15 blur-2xl" />
+            <div className="relative flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wide text-[var(--gold-bright)]">{t('yourReferralCode')}</p>
+                <p className="mt-2 break-all font-mono text-3xl font-extrabold tracking-wider sm:text-4xl">{profile?.referral_code}</p>
+              </div>
               {currentRank && <RankBadge rank={currentRank} />}
             </div>
-            <div className="mt-4 flex gap-2">
+            <div className="relative mt-5 flex gap-2">
               <input
                 readOnly
                 value={shareUrl}
-                className="flex-1 rounded-lg border border-[var(--gold)]/35 bg-white/10 px-3 py-2 text-sm text-white placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/60"
+                aria-label={t('yourReferralCode')}
+                className="min-w-0 flex-1 rounded-lg border border-[var(--gold)]/35 bg-white/10 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/60"
               />
               <CopyButton text={shareUrl} />
             </div>
+            <a
+              href={`https://wa.me/?text=${encodeURIComponent(t('inviteShareMessage', { link: shareUrl }))}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="relative mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-4 py-2.5 text-sm font-bold text-[var(--ink)] hover:brightness-110"
+            >
+              <MessageCircle className="h-4 w-4" /> {t('inviteShareWhatsapp')}
+            </a>
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="rounded-xl border border-[var(--gold)]/25 bg-[var(--paper)] p-5 shadow-sm">
-            <div className="grid grid-cols-3 gap-3">
-              <div>
-                <p className="text-2xl font-bold text-[var(--ink)]">{directSponsored.length}</p>
-                <p className="text-[10px] uppercase tracking-wide text-gray-400">{t('sponsoredLabel')}</p>
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-emerald-600">{directSponsorCount}</p>
-                <p className="text-[10px] uppercase tracking-wide text-gray-400">{t('activeLabel')}</p>
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-amber-600">{directSponsorInSpilloverCount}</p>
-                <p className="text-[10px] uppercase tracking-wide text-gray-400">{t('spilloverLabel')}</p>
-              </div>
+        {/* Numeri della rete */}
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <div className="relative overflow-hidden rounded-2xl border border-[var(--gold)]/30 bg-white px-5 pb-5 pt-6 shadow-[0_10px_30px_rgba(23,23,23,0.08)]">
+            <div aria-hidden className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)]" />
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--ink)] text-[var(--gold-bright)]">
+                <UserPlus className="h-4.5 w-4.5" />
+              </span>
+              <p className="text-xs font-bold uppercase tracking-wide text-[var(--muted)]">{t('sponsoredLabel')}</p>
             </div>
+            <p className="mt-3 text-4xl font-extrabold leading-none text-[var(--ink)]">{directSponsored.length}</p>
           </div>
-          <div className="rounded-xl border border-[var(--gold)]/25 bg-[var(--paper)] p-5 shadow-sm">
-            <p className="mb-1 text-sm text-[var(--muted)]">{t('totalDownline')}</p>
-            <p className="text-2xl font-bold text-[var(--ink)]">{totalDownline}</p>
-            <p className="text-xs text-gray-400 mt-1">
+          <div className="relative overflow-hidden rounded-2xl border border-[var(--gold)]/30 bg-white px-5 pb-5 pt-6 shadow-[0_10px_30px_rgba(23,23,23,0.08)]">
+            <div aria-hidden className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)]" />
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--ink)] text-[var(--gold-bright)]">
+                <CheckCircle2 className="h-4.5 w-4.5" />
+              </span>
+              <p className="text-xs font-bold uppercase tracking-wide text-[var(--muted)]">{t('activeLabel')}</p>
+            </div>
+            <p className="mt-3 text-4xl font-extrabold leading-none text-emerald-600">{directSponsorCount}</p>
+          </div>
+          <div className="relative overflow-hidden rounded-2xl border border-[var(--gold)]/30 bg-white px-5 pb-5 pt-6 shadow-[0_10px_30px_rgba(23,23,23,0.08)]">
+            <div aria-hidden className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)]" />
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--ink)] text-[var(--gold-bright)]">
+                <Shuffle className="h-4.5 w-4.5" />
+              </span>
+              <p className="text-xs font-bold uppercase tracking-wide text-[var(--muted)]">{t('spilloverLabel')}</p>
+            </div>
+            <p className="mt-3 text-4xl font-extrabold leading-none text-amber-600">{directSponsorInSpilloverCount}</p>
+          </div>
+          <div className="relative overflow-hidden rounded-2xl border border-[var(--gold)]/30 bg-white px-5 pb-5 pt-6 shadow-[0_10px_30px_rgba(23,23,23,0.08)]">
+            <div aria-hidden className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)]" />
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--ink)] text-[var(--gold-bright)]">
+                <Network className="h-4.5 w-4.5" />
+              </span>
+              <p className="text-xs font-bold uppercase tracking-wide text-[var(--muted)]">{t('totalDownline')}</p>
+            </div>
+            <p className="mt-3 text-4xl font-extrabold leading-none text-[var(--ink)]">{totalDownline}</p>
+            <p className="mt-1.5 text-xs text-[var(--muted)]">
               {maxDownlineDepth > 0 ? t('downlineDepth', { depth: maxDownlineDepth }) : t('downlineDepthNone')}
             </p>
           </div>
-          <div className="rounded-xl border border-[var(--gold)]/25 bg-[var(--gold-pale)] p-5 shadow-sm">
-            <p className="mb-1 text-sm text-[var(--ink-soft)] font-medium">{t('directAffiliates')}</p>
-            <p className="text-2xl font-bold text-[var(--ink)]">{directSponsorCount}</p>
-          </div>
         </div>
 
-        {/* KUMANI lists */}
-        <div className="rounded-xl border border-[var(--gold)]/25 bg-[var(--paper)] p-6 shadow-sm">
-          <DirectAffiliatesList people={activeKumani} variant="light" />
-          <NotYetKumaniList people={pendingKumani} senderName={profile?.first_name || ''} loginUrl={loginUrl} variant="light" />
-        </div>
+        {/* I tuoi KUMANI: attivi e non ancora attivi */}
+        <KumaniPeople active={activeKumani} pending={pendingKumani} senderName={profile?.first_name || ''} loginUrl={loginUrl} />
 
         {/* Matrice */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
@@ -239,6 +267,8 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
           </div>
         </div>
         </div>
+
+        <QuickNav current="community" />
       </main>
     </div>
   )

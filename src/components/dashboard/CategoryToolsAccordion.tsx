@@ -19,7 +19,7 @@ const CATEGORY_ICONS: Record<MarketplaceCategory, typeof Megaphone> = {
 }
 
 // Each category is its own closed card, same collapsed-until-clicked
-// pattern as DirectAffiliatesList / NotYetKumaniList, instead of dumping
+// pattern as the KUMANI lists on the network page, instead of dumping
 // every tool from every category on screen at once.
 export default function CategoryToolsAccordion({
   category,

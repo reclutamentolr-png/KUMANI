@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import QuickNav from '@/components/QuickNav'
 import { redirect } from 'next/navigation'
 import Link from '@/components/LocalizedLink'
 import { getTranslations } from 'next-intl/server'
@@ -445,6 +446,7 @@ export default async function ListingsPage({
             </nav>
           )}
         </section>
+        <QuickNav current="listings" />
       </main>
 
       <ChatModalWrapper userId={user.id} />

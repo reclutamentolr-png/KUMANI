@@ -393,6 +393,17 @@
     "communityCardSubtitle": "La tua stella, i tuoi KUMANI e la classifica",
     "openCommunityCta": "Apri la tua Community",
     "inviteTileHint": "Condividi il tuo link: chi si iscrive entra nella tua stella KUMANI.",
+    "sponsorHint": "La persona che ti ha invitato in KUMANI.",
+    "noSponsorHint": "Sei all’inizio della tua stella: nessuno ti ha invitato.",
+    "inviteShareMessage": "Ciao! Ti invito in KUMANI, oltre 35 servizi digitali in un’unica app e una community che si aiuta. Iscriviti dal mio link: {link}",
+    "inviteShareWhatsapp": "Invita su WhatsApp",
+    "peopleTitle": "I tuoi KUMANI",
+    "peopleTabActive": "Attivi",
+    "peopleTabPending": "Non ancora attivi",
+    "peopleEmptyActive": "Nessun KUMANI attivo per ora: condividi il tuo link di invito.",
+    "peopleEmptyPending": "Tutti i tuoi invitati hanno già attivato l’abbonamento.",
+    "peopleSince": "Con te dal {date}",
+    "peopleRegisteredOn": "Iscritto il {date}",
     "communityPointsUnit": "Punti Community",
     "missingForNextRank": "Ti mancano {count} Punti Community per la qualifica {rank}",
     "affiliateActive": "Attivo",
@@ -5624,5 +5635,16 @@
     "disclaimer": "Il voucher è stato ottenuto dal venditore come incentivo promozionale di KUMANI e viene ceduto sotto la sua esclusiva responsabilità. KUMANI non è parte di questa cessione. Gli eventuali obblighi fiscali e dichiarativi sono a carico del venditore.",
     "sellerSignature": "Firma del venditore",
     "buyerSignature": "Firma dell'acquirente"
+  },
+  "quickNav": {
+    "title": "Vai anche a",
+    "dashboard": "Dashboard",
+    "dashboardHint": "Servizi, calendario e stato",
+    "community": "La tua Community",
+    "communityHint": "Stella, KUMANI e classifica",
+    "wallet": "Il mio Wallet",
+    "walletHint": "Tessera, punti e voucher",
+    "listings": "Bacheca",
+    "listingsHint": "Annunci della community"
   }
 }

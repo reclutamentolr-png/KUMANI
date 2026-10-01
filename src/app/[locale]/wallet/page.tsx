@@ -27,6 +27,7 @@ import { listMyVouchers } from '@/app/actions/vouchers'
 import { listMyRedemptions } from '@/app/actions/rewards'
 import { isRewardsCatalogEnabled } from '@/lib/rewardsCatalog'
 import WalletMembershipCard from '@/components/WalletMembershipCard'
+import QuickNav from '@/components/QuickNav'
 import WalletCouponsList from '@/components/WalletCouponsList'
 import WalletVoucherSection from '@/components/WalletVoucherSection'
 import KuRewardsSection from '@/components/ku/KuRewardsSection'
@@ -462,6 +463,7 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
             initialVouchers={myVouchers}
           />
         </WalletSection>
+        <QuickNav current="wallet" />
       </main>
     </div>
   )

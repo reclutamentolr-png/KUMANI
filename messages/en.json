@@ -393,6 +393,17 @@
     "communityCardSubtitle": "Your star, your KUMANI and the leaderboard",
     "openCommunityCta": "Open your Community",
     "inviteTileHint": "Share your link: whoever signs up joins your KUMANI star.",
+    "sponsorHint": "The person who invited you to KUMANI.",
+    "noSponsorHint": "You are at the start of your star: nobody invited you.",
+    "inviteShareMessage": "Hi! I invite you to KUMANI: more than 35 digital services in one app and a community that helps each other. Sign up with my link: {link}",
+    "inviteShareWhatsapp": "Invite on WhatsApp",
+    "peopleTitle": "Your KUMANI",
+    "peopleTabActive": "Active",
+    "peopleTabPending": "Not active yet",
+    "peopleEmptyActive": "No active KUMANI yet: share your invite link.",
+    "peopleEmptyPending": "Everyone you invited has already activated their subscription.",
+    "peopleSince": "With you since {date}",
+    "peopleRegisteredOn": "Signed up on {date}",
     "communityPointsUnit": "Community Points",
     "missingForNextRank": "You need {count} more Community Points for the {rank} qualification",
     "affiliateActive": "Active",
@@ -5624,5 +5635,16 @@
     "disclaimer": "The seller obtained the voucher as a KUMANI promotional incentive and transfers it under their sole responsibility. KUMANI is not a party to this transfer. Any tax and reporting obligations are the responsibility of the seller.",
     "sellerSignature": "Seller's signature",
     "buyerSignature": "Buyer's signature"
+  },
+  "quickNav": {
+    "title": "Go to",
+    "dashboard": "Dashboard",
+    "dashboardHint": "Services, calendar and status",
+    "community": "Your Community",
+    "communityHint": "Star, KUMANI and leaderboard",
+    "wallet": "My Wallet",
+    "walletHint": "Card, points and vouchers",
+    "listings": "Noticeboard",
+    "listingsHint": "Community listings"
   }
 }
