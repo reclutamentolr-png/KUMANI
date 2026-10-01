@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { ArrowRight, HandCoins, HeartHandshake, Landmark } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
@@ -5,7 +6,8 @@ import { getPublicDonationSummary } from '@/lib/donationsPublic'
 import { euroFormat } from '@/lib/donationTypes'
 
 // Homepage: le donazioni di KUMANI in grande (contatore, associazione,
-// impegno per abbonamento). Nascosta finché non c'è un'associazione attiva.
+// impegno per abbonamento), con la foto del cuore al sole a lato (in alto
+// sul telefono). Nascosta finché non c'è un'associazione attiva.
 export default async function HomeDonations() {
   const summary = await getPublicDonationSummary()
   const active = summary?.active
@@ -17,9 +19,13 @@ export default async function HomeDonations() {
   return (
     <section className="py-12 sm:py-16">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="relative overflow-hidden rounded-3xl border-2 border-[var(--gold)] bg-gradient-to-br from-[#2a2418] via-[var(--ink)] to-[var(--ink)] p-6 shadow-[0_24px_60px_rgba(199,154,59,0.25)] sm:p-10">
+        <div className="relative grid grid-cols-1 overflow-hidden rounded-3xl border-2 border-[var(--gold)] bg-gradient-to-br from-[#2a2418] via-[var(--ink)] to-[var(--ink)] shadow-[0_24px_60px_rgba(199,154,59,0.25)] lg:grid-cols-[minmax(240px,300px)_1fr]">
           <div aria-hidden className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-[var(--gold)]/20 blur-3xl" />
-          <div className="relative grid gap-8 lg:grid-cols-[1.3fr_1fr] lg:items-center">
+          {/* Foto: mani che tengono un cuore al sole */}
+          <div className="relative h-52 sm:h-64 lg:h-auto">
+            <Image src="/home/donation-heart.webp" alt="" fill sizes="(min-width: 1024px) 300px, 100vw" className="object-cover object-[center_35%]" />
+          </div>
+          <div className="relative grid min-w-0 grid-cols-1 gap-8 p-6 sm:p-10 lg:grid-cols-[1.3fr_1fr] lg:items-center">
             <div>
               <p className="inline-flex items-center gap-2 rounded-full bg-[var(--gold)] px-3 py-1 text-xs font-bold uppercase tracking-wide text-[var(--ink)]">
                 <HeartHandshake className="h-3.5 w-3.5" /> {t('homeEyebrow')}
