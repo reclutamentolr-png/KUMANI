@@ -46,7 +46,7 @@ export default function HomeLayoutPanel() {
         <p className="text-sm text-gray-500">Caricamento…</p>
       ) : (
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
-          {HOME_LAYOUTS.map((key) => {
+          {HOME_LAYOUTS.map((key, index) => {
             const active = current === key
             return (
               <div
@@ -63,7 +63,10 @@ export default function HomeLayoutPanel() {
                   )}
                 </div>
                 <div className="flex flex-1 flex-col p-4">
-                  <p className="font-bold text-gray-900">{HOME_LAYOUT_INFO[key].name}</p>
+                  <p className="font-bold text-gray-900">
+                    <span className="mr-1.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-[var(--ink)] text-xs text-[var(--gold-bright)]">{index + 1}</span>
+                    {HOME_LAYOUT_INFO[key].name}
+                  </p>
                   <p className="mt-1 flex-1 text-sm text-gray-600">{HOME_LAYOUT_INFO[key].description}</p>
                   <div className="mt-4 flex gap-2">
                     <a
