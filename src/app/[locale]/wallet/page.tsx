@@ -164,6 +164,7 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
             planLabel={planName ? td('subscriptionActive') : td('freePlan')}
             planName={planName}
             rankLabel={currentRank ? td(currentRank.labelKey) : null}
+            validUntil={planName && profile.subscription_expires_at ? new Date(profile.subscription_expires_at).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' }) : null}
             qrUrl={referralUrl}
           />
         </WalletSection>
