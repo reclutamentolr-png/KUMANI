@@ -5557,7 +5557,7 @@
     "ruleBase": "Une personne que vous avez invitée active l'offre Base par carte : +{points} points",
     "rulePro": "Une personne que vous avez invitée active l'offre Pro par carte : +{points} points",
     "ruleUpgrade": "Une personne que vous avez invitée passe de Base à Pro : +{points} points",
-    "ruleSpillover": "Bonus Structure, une place de votre étoile prise par une personne invitée par un autre membre : +{points} points",
+    "ruleSpillover": "Une personne invitée par un autre Kumano est placée dans votre étoile et active un abonnement : +{points} points (Bonus Structure)",
     "cycleNote": "Chaque pack peut être échangé une fois par cycle : quand vous les avez tous échangés, le cycle recommence.",
     "cycleProgress": "Packs échangés dans ce cycle : {done} sur {total}. Quand vous les aurez tous échangés, le cycle recommencera.",
     "shareGiftMessage": "Je vous offre un voucher KUMANI : utilisez le code {code} pour activer gratuitement votre abonnement {plan} d'un an !",

@@ -5557,7 +5557,7 @@
     "ruleBase": "Uma pessoa que convidou ativa o plano Base com cartão: +{points} pontos",
     "rulePro": "Uma pessoa que convidou ativa o plano Pro com cartão: +{points} pontos",
     "ruleUpgrade": "Uma pessoa que convidou passa de Base a Pro: +{points} pontos",
-    "ruleSpillover": "Bónus Estrutura, um lugar da sua estrela ocupado por alguém convidado por outro membro: +{points} pontos",
+    "ruleSpillover": "Uma pessoa convidada por outro Kumano é colocada na sua estrela e ativa a subscrição: +{points} pontos (Bónus Estrutura)",
     "cycleNote": "Cada pacote resgata-se uma vez por ciclo: quando os tiver resgatado todos, o ciclo recomeça.",
     "cycleProgress": "Pacotes resgatados neste ciclo: {done} de {total}. Quando os resgatar todos, o ciclo recomeça.",
     "shareGiftMessage": "Ofereço-lhe um voucher KUMANI: use o código {code} para ativar gratuitamente a sua subscrição {plan} de um ano!",
