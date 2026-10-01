@@ -5552,7 +5552,16 @@
     "soldFor": "Venduto a {price}",
     "receiptLink": "Ricevuta",
     "cancelVoucher": "Annulla",
-    "cancelConfirm": "Annullare il voucher {code}? Non potrà più essere usato e il credito torna disponibile."
+    "cancelConfirm": "Annullare il voucher {code}? Non potrà più essere usato e il credito torna disponibile.",
+    "rulesTitle": "Come guadagni i Punti Community",
+    "ruleBase": "Un tuo invitato attiva il piano Base con carta: +{points} punti",
+    "rulePro": "Un tuo invitato attiva il piano Pro con carta: +{points} punti",
+    "ruleUpgrade": "Un tuo invitato passa da Base a Pro: +{points} punti",
+    "ruleSpillover": "Bonus Struttura, un posto della tua stella occupato da chi è invitato da un altro: +{points} punti",
+    "cycleNote": "Ogni pacchetto si riscatta una volta per ciclo: quando li hai riscattati tutti, il ciclo ricomincia.",
+    "cycleProgress": "Pacchetti riscattati in questo ciclo: {done} di {total}. Quando li riscatti tutti, il ciclo ricomincia.",
+    "shareGiftMessage": "Ti regalo un voucher KUMANI: usa il codice {code} per attivare gratis il tuo abbonamento {plan} di un anno!",
+    "shareSaleMessage": "Ecco il tuo voucher KUMANI: usa il codice {code} per attivare il tuo abbonamento {plan} di un anno."
   },
   "voucherReceipt": {
     "back": "Torna al Portafoglio",

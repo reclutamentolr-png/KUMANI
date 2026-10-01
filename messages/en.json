@@ -5552,7 +5552,16 @@
     "soldFor": "Sold for {price}",
     "receiptLink": "Receipt",
     "cancelVoucher": "Cancel",
-    "cancelConfirm": "Cancel voucher {code}? It can no longer be used and the credit becomes available again."
+    "cancelConfirm": "Cancel voucher {code}? It can no longer be used and the credit becomes available again.",
+    "rulesTitle": "How you earn Community Points",
+    "ruleBase": "Someone you invited activates the Base plan by card: +{points} points",
+    "rulePro": "Someone you invited activates the Pro plan by card: +{points} points",
+    "ruleUpgrade": "Someone you invited upgrades from Base to Pro: +{points} points",
+    "ruleSpillover": "Structure Bonus, a spot in your star taken by someone invited by another member: +{points} points",
+    "cycleNote": "Each pack can be redeemed once per cycle: once you have redeemed them all, the cycle starts again.",
+    "cycleProgress": "Packs redeemed in this cycle: {done} of {total}. Once you redeem them all, the cycle starts again.",
+    "shareGiftMessage": "Here's a KUMANI voucher as a gift: use the code {code} to activate your one-year {plan} subscription for free!",
+    "shareSaleMessage": "Here is your KUMANI voucher: use the code {code} to activate your one-year {plan} subscription."
   },
   "voucherReceipt": {
     "back": "Back to Wallet",

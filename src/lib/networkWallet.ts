@@ -10,6 +10,10 @@ export type NetworkWallet = {
   packs: VoucherPack[]
   voucherValueBaseEur: number
   voucherValueProEur: number
+  // Pacchetti già riscattati nel ciclo in corso (indici)
+  packsRedeemed: number[]
+  // Punti assegnati: attivazione Base/Pro, passaggio a Pro, Bonus Struttura
+  pointsRules: { base: number; pro: number; upgrade: number; spillover: number }
   ranks: RankDefinition[]
 }
 
@@ -22,6 +26,11 @@ export async function getMyNetworkWallet(supabase: SupabaseClient): Promise<Netw
     packs: VoucherPack[]
     voucher_value_base_eur: number
     voucher_value_pro_eur: number
+    packs_redeemed: number[] | null
+    points_activation_base: number
+    points_activation_pro: number
+    points_upgrade_pro: number
+    points_spillover: number
   }>()
   const packs = Array.isArray(data?.packs) ? data.packs : []
   return {
@@ -31,6 +40,13 @@ export async function getMyNetworkWallet(supabase: SupabaseClient): Promise<Netw
     packs,
     voucherValueBaseEur: data?.voucher_value_base_eur ?? 49,
     voucherValueProEur: data?.voucher_value_pro_eur ?? 149,
+    packsRedeemed: data?.packs_redeemed ?? [],
+    pointsRules: {
+      base: data?.points_activation_base ?? 49,
+      pro: data?.points_activation_pro ?? 122,
+      upgrade: data?.points_upgrade_pro ?? 60,
+      spillover: data?.points_spillover ?? 5,
+    },
     ranks: buildRanks(thresholdsFromPacks(packs)),
   }
 }

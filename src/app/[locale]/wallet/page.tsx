@@ -379,6 +379,8 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
             packs={networkWallet.packs}
             valueBaseEur={networkWallet.voucherValueBaseEur}
             valueProEur={networkWallet.voucherValueProEur}
+            initialPacksRedeemed={networkWallet.packsRedeemed}
+            pointsRules={networkWallet.pointsRules}
             initialVouchers={myVouchers}
           />
         </WalletSection>

@@ -23,6 +23,8 @@ export default function WalletVoucherSection({
   packs,
   valueBaseEur,
   valueProEur,
+  initialPacksRedeemed,
+  pointsRules,
   initialVouchers,
 }: {
   initialPoints: number
@@ -30,6 +32,9 @@ export default function WalletVoucherSection({
   packs: VoucherPack[]
   valueBaseEur: number
   valueProEur: number
+  // Pacchetti già presi nel ciclo in corso: nascosti finché il ciclo non ricomincia
+  initialPacksRedeemed: number[]
+  pointsRules: { base: number; pro: number; upgrade: number; spillover: number }
   initialVouchers: MyVoucher[]
 }) {
   const t = useTranslations('voucherWallet')
@@ -48,6 +53,9 @@ export default function WalletVoucherSection({
   const [purpose, setPurpose] = useState<'gift' | 'sale'>('gift')
   const [price, setPrice] = useState('')
   const [lastCode, setLastCode] = useState<string | null>(null)
+  // Uso e piano dell'ultimo voucher creato: decidono il messaggio da condividere
+  const [lastVoucher, setLastVoucher] = useState<{ purpose: 'gift' | 'sale'; plan: 'base' | 'pro' } | null>(null)
+  const [packsRedeemed, setPacksRedeemed] = useState<number[]>(initialPacksRedeemed)
   const [copied, setCopied] = useState<string | null>(null)
 
   const [redeemCode, setRedeemCode] = useState('')
@@ -67,6 +75,8 @@ export default function WalletVoucherSection({
       setMessage({ ok: false, text: result.message === 'insufficient_points' ? t('packNotEnough') : t('genericError') })
       return
     }
+    // Pacchetto preso: sparisce; presi tutti, il ciclo ricomincia
+    setPacksRedeemed((prev) => (prev.length + 1 >= packs.length ? [] : [...prev, index]))
     setPoints(result.points)
     setCredit(result.creditCents)
     setMessage({ ok: true, text: t('packDone', { credit: euro(pack.credit_eur * 100) }) })
@@ -99,6 +109,7 @@ export default function WalletVoucherSection({
     }
     setCredit(result.creditCents)
     setLastCode(result.code)
+    setLastVoucher({ purpose, plan })
     setPrice('')
     router.refresh()
   }
@@ -173,8 +184,18 @@ export default function WalletVoucherSection({
       <div>
         <p className="mb-1 text-sm font-semibold text-[var(--ink)]">{t('packsTitle')}</p>
         <p className="mb-3 text-xs text-[var(--muted)]">{t('packsIntro')}</p>
+        <div className="mb-3 rounded-lg bg-[var(--gold-pale)] px-3 py-2 text-xs text-[var(--ink)]">
+          <p className="font-semibold">{t('rulesTitle')}</p>
+          <ul className="mt-1 space-y-0.5">
+            <li>{t('ruleBase', { points: pointsRules.base })}</li>
+            <li>{t('rulePro', { points: pointsRules.pro })}</li>
+            <li>{t('ruleUpgrade', { points: pointsRules.upgrade })}</li>
+            <li>{t('ruleSpillover', { points: pointsRules.spillover })}</li>
+          </ul>
+        </div>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
           {packs.map((pack, index) => {
+            if (packsRedeemed.includes(index)) return null
             const enough = points >= pack.points
             return (
               <div key={index} className="flex flex-col rounded-xl border border-gray-200 bg-white p-3">
@@ -197,6 +218,7 @@ export default function WalletVoucherSection({
             )
           })}
         </div>
+        <p className="mt-2 text-xs text-[var(--muted)]">{packsRedeemed.length > 0 ? t('cycleProgress', { done: packsRedeemed.length, total: packs.length }) : t('cycleNote')}</p>
       </div>
 
       {/* 2. Crea un voucher */}
@@ -262,7 +284,11 @@ export default function WalletVoucherSection({
               {copied === lastCode ? tw('voucherCopied') : tw('voucherCopy')}
             </button>
             <a
-              href={buildWhatsAppHref(tw('voucherShareMessage', { code: lastCode }))}
+              href={buildWhatsAppHref(
+                lastVoucher?.purpose === 'sale'
+                  ? t('shareSaleMessage', { code: lastCode, plan: lastVoucher.plan === 'pro' ? 'Pro' : 'Base' })
+                  : t('shareGiftMessage', { code: lastCode, plan: lastVoucher?.plan === 'pro' ? 'Pro' : 'Base' })
+              )}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700 hover:bg-emerald-100"

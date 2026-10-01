@@ -666,102 +666,202 @@ export async function fulfillRewardRedemption(redemptionId: string, code: string
   return { success: true }
 }
 
-// ── Financial summary ───────────────────────────────────────────────────
-// Read-only reporting for the "Amministrazione" admin section: real Stripe
-// revenue vs. everything given back to the network (vouchers, rewards,
-// rank/structure bonuses). Every euro figure here is an estimate derived
-// from subscription_price_eur (1 point ≈ 1 euro, the symbolism this whole
-// points system was built on — see the voucher cost / subscription price
-// match) — it is not pulled from Stripe's own ledger, only from what the
-// app itself tracks.
-//
-// Kumano-issued vs admin-issued vouchers are told apart by code prefix
-// ("KV-" vs "KVA-", see createAdminVoucher above) — a code starting with
-// "KVA-" never matches the LIKE 'KV-%' pattern because its 3rd character
-// is 'A', not '-', so the two counts never overlap (verified live before
-// relying on it here).
+// ── Riepilogo economico (Admin → Amministrazione) ──────────────────────
+// Tutto in centesimi, calcolato dai dati veri:
+// - incassi, rimborsi e commissioni: registro dei movimenti di Stripe
+//   (balance transactions), quindi anche le commissioni Eventi/Kordata;
+// - abbonamenti per piano: fatture Stripe pagate (riga principale);
+// - lotti di voucher venduti ai negozi: fatturati fuori da Stripe;
+// - provvigioni agenti, voucher, credito e Punti Community: database.
+// I voucher e i punti non sono uscite di cassa: sono servizi dati senza
+// incasso, valutati al prezzo di listino.
 export async function getAdminFinancialSummary() {
   const admin = await verifyAdmin('stats.read')
   if (!admin) return { success: false as const, error: 'Non autorizzato' }
 
-  const supabaseAdmin = getServiceClient()
+  const db = getServiceClient()
+  const stripe = getStripe()
+  const prices = await getPlanPrices()
+  const { data: vatRow } = await db.from('system_settings').select('value').eq('key', 'agent_commission_vat_rate').maybeSingle()
+  const vatRate = Number(String(vatRow?.value ?? '22').replace(/"/g, '')) || 22
+  const since30 = Math.floor(Date.now() / 1000) - 30 * 86_400
 
-  const readNumberSetting = async (key: string, fallback: number) => {
-    const { data } = await supabaseAdmin.from('system_settings').select('value').eq('key', key).maybeSingle()
-    if (!data) return fallback
-    const parsed = parseInt(JSON.parse(data.value), 10)
-    return Number.isFinite(parsed) ? parsed : fallback
+  // 1. Stripe: tutti i movimenti (paginati)
+  const stripeTotals = { gross: 0, refunds: 0, fees: 0, net: 0, gross30: 0, net30: 0, charges: 0 }
+  let startingAfter: string | undefined
+  for (let page = 0; page < 50; page++) {
+    const list = await stripe.balanceTransactions.list({ limit: 100, ...(startingAfter ? { starting_after: startingAfter } : {}) })
+    for (const tx of list.data) {
+      const isCharge = tx.type === 'charge' || tx.type === 'payment'
+      const isRefund = tx.type === 'refund' || tx.type === 'payment_refund'
+      if (isCharge) {
+        stripeTotals.gross += tx.amount
+        stripeTotals.charges += 1
+        if (tx.created >= since30) stripeTotals.gross30 += tx.amount
+      }
+      if (isRefund) stripeTotals.refunds += -tx.amount
+      stripeTotals.fees += tx.fee
+      stripeTotals.net += tx.net
+      if (tx.created >= since30) stripeTotals.net30 += tx.net
+    }
+    if (!list.has_more || list.data.length === 0) break
+    startingAfter = list.data[list.data.length - 1].id
   }
 
-  // Prezzo Base vero, letto da Stripe (riserva: impostazioni salvate)
-  const subscriptionPrice = (await getPlanPrices()).base
-  const matrixBonusPerSlot = await readNumberSetting('matrix_slot_bonus_points', 5)
-  const matrixSpilloverBonusPerSlot = await readNumberSetting('matrix_spillover_bonus_points', 5)
+  // 2. Abbonamenti incassati per tipo (fatture pagate, riga principale)
+  const subs = {
+    base: { count: 0, cents: 0 },
+    pro: { count: 0, cents: 0 },
+    upgrade: { count: 0, cents: 0 },
+    renewal: { count: 0, cents: 0 },
+  }
+  startingAfter = undefined
+  for (let page = 0; page < 50; page++) {
+    const list = await stripe.invoices.list({ status: 'paid', limit: 100, ...(startingAfter ? { starting_after: startingAfter } : {}) })
+    for (const invoice of list.data) {
+      if (!invoice.amount_paid) continue
+      const main = invoice.lines.data.reduce<(typeof invoice.lines.data)[number] | undefined>(
+        (best, line) => (!best || line.amount > best.amount ? line : best),
+        undefined
+      )
+      const priceId = main?.pricing?.price_details?.price ?? (main as { price?: { id?: string } } | undefined)?.price?.id
+      const pro = typeof priceId === 'string' && priceId === process.env.STRIPE_PRICE_ID_PRO
+      const bucket =
+        invoice.billing_reason === 'subscription_cycle'
+          ? subs.renewal
+          : invoice.billing_reason === 'subscription_update'
+            ? subs.upgrade
+            : invoice.billing_reason === 'subscription_create'
+              ? pro
+                ? subs.pro
+                : subs.base
+              : null
+      if (!bucket) continue
+      bucket.count += 1
+      bucket.cents += invoice.amount_paid
+    }
+    if (!list.has_more || list.data.length === 0) break
+    startingAfter = list.data[list.data.length - 1].id
+  }
 
-  const { count: activeStripeCount } = await supabaseAdmin
+  // 3. Abbonati attivi oggi, per origine e piano
+  const { data: activeRows } = await db
     .from('profiles')
-    .select('*', { count: 'exact', head: true })
+    .select('subscription_source, subscription_plan, subscription_expires_at')
     .eq('subscription_status', 'active')
-    .eq('subscription_source', 'stripe')
+  const now = Date.now()
+  const active = { stripeBase: 0, stripePro: 0, voucher: 0, admin: 0 }
+  for (const p of activeRows ?? []) {
+    if (p.subscription_expires_at && new Date(p.subscription_expires_at).getTime() < now) continue
+    if (p.subscription_source === 'stripe') {
+      if (p.subscription_plan === 'pro') active.stripePro += 1
+      else active.stripeBase += 1
+    } else if (p.subscription_source === 'voucher') active.voucher += 1
+    else active.admin += 1
+  }
 
-  const { count: kumanoVouchersRedeemed } = await supabaseAdmin
-    .from('subscription_vouchers')
-    .select('*', { count: 'exact', head: true })
-    .eq('status', 'redeemed')
-    .like('code', 'KV-%')
+  // 4. Lotti di voucher venduti ai negozi (fattura a parte)
+  const { data: batches } = await db.from('voucher_batches').select('quantity, price_eur')
+  const shopBatches = {
+    count: batches?.length ?? 0,
+    vouchers: (batches ?? []).reduce((sum, b) => sum + (b.quantity ?? 0), 0),
+    cents: Math.round((batches ?? []).reduce((sum, b) => sum + Number(b.price_eur ?? 0), 0) * 100),
+  }
 
-  const { count: adminVouchersRedeemed } = await supabaseAdmin
-    .from('subscription_vouchers')
-    .select('*', { count: 'exact', head: true })
-    .eq('status', 'redeemed')
-    .like('code', 'KVA-%')
+  // 5. Provvigioni agenti (le rettifiche negative sono comprese)
+  const { data: commissions } = await db.from('agent_commissions').select('status, commission_cents, matures_at')
+  const agentCommissions = { pending: 0, matured: 0, paid: 0, cancelled: 0 }
+  for (const c of commissions ?? []) {
+    const cents = c.commission_cents ?? 0
+    if (c.status === 'cancelled') agentCommissions.cancelled += cents
+    else if (c.status === 'paid') agentCommissions.paid += cents
+    else if (c.matures_at && new Date(c.matures_at).getTime() <= now) agentCommissions.matured += cents
+    else agentCommissions.pending += cents
+  }
 
-  const { data: rewardRows, count: rewardsRedeemedCount } = await supabaseAdmin
-    .from('reward_redemptions')
-    .select('points_spent', { count: 'exact' })
-  const rewardsValue = (rewardRows || []).reduce((sum, r) => sum + (r.points_spent || 0), 0)
-
-  const RANK_BONUS_VALUES: Record<string, number> = { rising_star: 49, shining_star: 294, diamond_star: 900 }
-  const { data: profilesWithRanks } = await supabaseAdmin.from('profiles').select('rank_bonuses_claimed')
-  let rankBonusValue = 0
-  for (const p of profilesWithRanks || []) {
-    for (const key of p.rank_bonuses_claimed || []) {
-      rankBonusValue += RANK_BONUS_VALUES[key] || 0
+  // 6. Voucher: creati dai Kumani col credito (valore = costo registrato),
+  // omaggio dello Staff (KVA-, senza lotto) e dei lotti negozi
+  const { data: vouchers } = await db.from('subscription_vouchers').select('code, status, plan, cost_cents, batch_id')
+  const listPrice = (plan: string | null) => Math.round((plan === 'pro' ? prices.pro : prices.base) * 100)
+  const kumano = { activeCount: 0, activeCents: 0, redeemedCount: 0, redeemedCents: 0 }
+  const staffGifts = { redeemedCount: 0, redeemedCents: 0 }
+  const shopRedeemed = { count: 0 }
+  for (const v of vouchers ?? []) {
+    if (v.status === 'revoked') continue
+    if (v.batch_id) {
+      if (v.status === 'redeemed') shopRedeemed.count += 1
+    } else if (v.code?.startsWith('KVA-')) {
+      if (v.status === 'redeemed') {
+        staffGifts.redeemedCount += 1
+        staffGifts.redeemedCents += listPrice(v.plan)
+      }
+    } else {
+      const value = v.cost_cents ?? listPrice(v.plan)
+      if (v.status === 'redeemed') {
+        kumano.redeemedCount += 1
+        kumano.redeemedCents += value
+      } else {
+        kumano.activeCount += 1
+        kumano.activeCents += value
+      }
     }
   }
 
-  const { data: profilesWithSlots } = await supabaseAdmin
-    .from('profiles')
-    .select('matrix_bonus_direct_slots_paid, matrix_bonus_spillover_slots_paid')
-  const matrixBonusValue = (profilesWithSlots || []).reduce(
-    (sum, p) =>
-      sum +
-      (p.matrix_bonus_direct_slots_paid || 0) * matrixBonusPerSlot +
-      (p.matrix_bonus_spillover_slots_paid || 0) * matrixSpilloverBonusPerSlot,
-    0
-  )
+  // 7. Credito voucher e Punti Community ancora da usare
+  const { data: balances } = await db.from('profiles').select('voucher_credit_cents, network_points')
+  const voucherCreditCents = (balances ?? []).reduce((sum, p) => sum + (p.voucher_credit_cents ?? 0), 0)
+  const networkPointsOutstanding = (balances ?? []).reduce((sum, p) => sum + (p.network_points ?? 0), 0)
+  // Valore massimo dei punti: il pacchetto che rende di più per punto
+  const { data: packsRow } = await db.rpc('voucher_packs')
+  const packs = (Array.isArray(packsRow) ? packsRow : []) as { points: number; credit_eur: number }[]
+  const bestCentsPerPoint = packs.reduce((best, p) => Math.max(best, (p.credit_eur * 100) / p.points), 0)
+  const networkPointsMaxCents = Math.round(networkPointsOutstanding * bestCentsPerPoint)
 
-  const realRevenue = (activeStripeCount || 0) * subscriptionPrice
-  const kumanoVouchersValue = (kumanoVouchersRedeemed || 0) * subscriptionPrice
-  const adminVouchersValue = (adminVouchersRedeemed || 0) * subscriptionPrice
-  const totalReturnedToNetwork = kumanoVouchersValue + adminVouchersValue + rewardsValue + rankBonusValue + matrixBonusValue
-  const returnedPercent = realRevenue > 0 ? (totalReturnedToNetwork / realRevenue) * 100 : 0
+  // 8. Punti assegnati (registro)
+  const { data: awards } = await db.from('network_point_awards').select('kind, points, reversed_at')
+  const pointsAwarded = { activation_base: 0, activation_pro: 0, upgrade_pro: 0, matrix: 0, reversed: 0 }
+  for (const a of awards ?? []) {
+    if (a.reversed_at) pointsAwarded.reversed += a.points
+    else pointsAwarded[a.kind as keyof typeof pointsAwarded] += a.points
+  }
+
+  // 9. Premi del catalogo (spento, solo storico)
+  const { count: rewardsRedeemedCount } = await db.from('reward_redemptions').select('*', { count: 'exact', head: true })
+
+  // Totali
+  const cashIn = stripeTotals.net + shopBatches.cents
+  const taxable = Math.round(cashIn / (1 + vatRate / 100))
+  const agentDue = agentCommissions.pending + agentCommissions.matured
+  const giftedServicesCents = kumano.redeemedCents + staffGifts.redeemedCents
+  const outstandingCents = kumano.activeCents + voucherCreditCents
+  const subscriptionsCents = subs.base.cents + subs.pro.cents + subs.upgrade.cents + subs.renewal.cents
+  const networkSharePercent = subscriptionsCents > 0 ? ((kumano.redeemedCents + outstandingCents) / subscriptionsCents) * 100 : 0
 
   return {
     success: true as const,
-    subscriptionPrice,
-    activeStripeCount: activeStripeCount || 0,
-    realRevenue,
-    kumanoVouchersRedeemed: kumanoVouchersRedeemed || 0,
-    kumanoVouchersValue,
-    adminVouchersRedeemed: adminVouchersRedeemed || 0,
-    adminVouchersValue,
-    rewardsRedeemedCount: rewardsRedeemedCount || 0,
-    rewardsValue,
-    rankBonusValue,
-    matrixBonusValue,
-    totalReturnedToNetwork,
-    returnedPercent,
+    testMode: (process.env.STRIPE_SECRET_KEY ?? '').startsWith('sk_test_'),
+    prices,
+    vatRate,
+    stripe: stripeTotals,
+    subscriptions: subs,
+    subscriptionsCents,
+    active,
+    shopBatches,
+    shopRedeemed,
+    agentCommissions,
+    agentDue,
+    kumanoVouchers: kumano,
+    staffGifts,
+    voucherCreditCents,
+    networkPointsOutstanding,
+    networkPointsMaxCents,
+    pointsAwarded,
+    rewardsRedeemedCount: rewardsRedeemedCount ?? 0,
+    cashIn,
+    taxable,
+    giftedServicesCents,
+    outstandingCents,
+    networkSharePercent,
   }
 }
 

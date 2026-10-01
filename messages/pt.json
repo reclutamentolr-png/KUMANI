@@ -5552,7 +5552,16 @@
     "soldFor": "Vendido por {price}",
     "receiptLink": "Recibo",
     "cancelVoucher": "Anular",
-    "cancelConfirm": "Anular o voucher {code}? Deixa de poder ser usado e o crédito volta a ficar disponível."
+    "cancelConfirm": "Anular o voucher {code}? Deixa de poder ser usado e o crédito volta a ficar disponível.",
+    "rulesTitle": "Como ganha Pontos Community",
+    "ruleBase": "Uma pessoa que convidou ativa o plano Base com cartão: +{points} pontos",
+    "rulePro": "Uma pessoa que convidou ativa o plano Pro com cartão: +{points} pontos",
+    "ruleUpgrade": "Uma pessoa que convidou passa de Base a Pro: +{points} pontos",
+    "ruleSpillover": "Bónus Estrutura, um lugar da sua estrela ocupado por alguém convidado por outro membro: +{points} pontos",
+    "cycleNote": "Cada pacote resgata-se uma vez por ciclo: quando os tiver resgatado todos, o ciclo recomeça.",
+    "cycleProgress": "Pacotes resgatados neste ciclo: {done} de {total}. Quando os resgatar todos, o ciclo recomeça.",
+    "shareGiftMessage": "Ofereço-lhe um voucher KUMANI: use o código {code} para ativar gratuitamente a sua subscrição {plan} de um ano!",
+    "shareSaleMessage": "Aqui está o seu voucher KUMANI: use o código {code} para ativar a sua subscrição {plan} de um ano."
   },
   "voucherReceipt": {
     "back": "Voltar à Carteira",

@@ -2474,7 +2474,26 @@ L'accesso viene registrato.`)) return
       )
     }
 
-    const fmtEur = (n: number) => `€${n.toLocaleString('it-IT')}`
+    const eur = (cents: number) => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(cents / 100)
+    const Row = ({ label, value, hint, strong }: { label: string; value: string; hint?: string; strong?: boolean }) => (
+      <div className="flex items-start justify-between gap-4 border-b border-gray-100 py-2 last:border-0">
+        <div>
+          <p className={`text-sm ${strong ? 'font-bold text-gray-900' : 'text-gray-700'}`}>{label}</p>
+          {hint && <p className="text-xs text-gray-400">{hint}</p>}
+        </div>
+        <p className={`shrink-0 text-right text-sm tabular-nums ${strong ? 'font-bold text-gray-900' : 'text-gray-800'}`}>{value}</p>
+      </div>
+    )
+    const Card = ({ title, subtitle, children }: { title: string; subtitle: string; children: React.ReactNode }) => (
+      <section className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+        <div className="border-b border-[var(--gold)]/30 bg-[var(--gold-pale)] px-5 py-3">
+          <h3 className="text-base font-bold text-[var(--ink)]">{title}</h3>
+          <p className="text-xs text-gray-600">{subtitle}</p>
+        </div>
+        <div className="px-5 py-2">{children}</div>
+      </section>
+    )
+    const subs = f.subscriptions
 
     return (
       <div className="space-y-6">
@@ -2484,57 +2503,104 @@ L'accesso viene registrato.`)) return
             Amministrazione
           </h2>
           <p className="text-gray-600 mt-1">
-            Stime basate su {f.subscriptionPrice}€/anno per abbonamento e 1 Punto Community ≈ 1€. Non sostituisce i dati
-            reali di Stripe, che restano l’unica fonte per la contabilità.
+            Dati veri: incassi, rimborsi e commissioni dal registro di Stripe, il resto dal database. Voucher e punti non
+            sono uscite di cassa ma servizi dati senza incasso, valutati a prezzo di listino (Base {f.prices.base} €, Pro{' '}
+            {f.prices.pro} €). Importi IVA inclusa salvo dove indicato.
           </p>
+          {f.testMode && (
+            <p className="mt-2 inline-block rounded-lg bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-800">
+              Stripe in modalità test: sono pagamenti di prova.
+            </p>
+          )}
         </div>
 
-        <div className="bg-gradient-to-br from-green-50 to-white p-6 rounded-xl border-2 border-green-200 shadow-sm">
-          <p className="text-sm font-medium text-green-800 mb-1">Ricavi reali da abbonamenti Stripe attivi</p>
-          <p className="text-3xl font-bold text-green-700">{fmtEur(f.realRevenue)}</p>
-          <p className="text-xs text-green-600 mt-1">{f.activeStripeCount} abbonati attivi realmente paganti</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Voucher Kumani attivati</p>
-            <p className="text-2xl font-bold text-gray-900">{fmtEur(f.kumanoVouchersValue)}</p>
-            <p className="text-xs text-gray-400 mt-1">{f.kumanoVouchersRedeemed} voucher riscattati</p>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div className="rounded-xl border-2 border-green-200 bg-gradient-to-br from-green-50 to-white p-5 shadow-sm">
+            <p className="text-sm font-medium text-green-800">Incasso netto</p>
+            <p className="text-3xl font-bold text-green-700">{eur(f.cashIn)}</p>
+            <p className="mt-1 text-xs text-green-700">Stripe dopo rimborsi e commissioni, più i lotti venduti ai negozi</p>
           </div>
-          <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Voucher Admin regalati</p>
-            <p className="text-2xl font-bold text-gray-900">{fmtEur(f.adminVouchersValue)}</p>
-            <p className="text-xs text-gray-400 mt-1">{f.adminVouchersRedeemed} voucher riscattati</p>
+          <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+            <p className="text-sm font-medium text-gray-600">Imponibile (senza IVA {f.vatRate}%)</p>
+            <p className="text-3xl font-bold text-gray-900">{eur(f.taxable)}</p>
+            <p className="mt-1 text-xs text-gray-500">IVA compresa nell&apos;incasso: {eur(f.cashIn - f.taxable)}</p>
           </div>
-          <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Premi riscattati</p>
-            <p className="text-2xl font-bold text-gray-900">{fmtEur(f.rewardsValue)}</p>
-            <p className="text-xs text-gray-400 mt-1">{f.rewardsRedeemedCount} premi riscattati</p>
-          </div>
-          <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Bonus Qualifiche assegnati</p>
-            <p className="text-2xl font-bold text-gray-900">{fmtEur(f.rankBonusValue)}</p>
-            <p className="text-xs text-gray-400 mt-1">Kuman Green/Star/Black</p>
-          </div>
-          <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Bonus Struttura assegnati</p>
-            <p className="text-2xl font-bold text-gray-900">{fmtEur(f.matrixBonusValue)}</p>
-            <p className="text-xs text-gray-400 mt-1">Posti matrice riempiti</p>
-          </div>
-          <div className="bg-amber-50 p-5 rounded-xl border border-amber-200 shadow-sm">
-            <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide mb-1">Totale restituito alla rete</p>
-            <p className="text-2xl font-bold text-amber-800">{fmtEur(f.totalReturnedToNetwork)}</p>
+          <div className="rounded-xl border border-amber-200 bg-amber-50 p-5 shadow-sm">
+            <p className="text-sm font-medium text-amber-800">Provvigioni agenti da pagare</p>
+            <p className="text-3xl font-bold text-amber-800">{eur(f.agentDue)}</p>
+            <p className="mt-1 text-xs text-amber-700">In maturazione {eur(f.agentCommissions.pending)} · maturate {eur(f.agentCommissions.matured)}</p>
           </div>
         </div>
 
-        <div className="bg-[var(--gold-pale)] p-6 rounded-xl border-2 border-[var(--gold)]/40 shadow-sm">
-          <p className="text-sm font-medium text-[var(--ink)] mb-1">% restituita alla rete sui ricavi reali</p>
-          <p className="text-4xl font-bold text-[var(--gold)]">
-            {f.realRevenue > 0 ? f.returnedPercent.toFixed(1) : '—'}%
-          </p>
-          <p className="text-xs text-[var(--gold)] mt-1">
-            {fmtEur(f.totalReturnedToNetwork)} restituiti su {fmtEur(f.realRevenue)} di ricavi reali
-          </p>
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <Card title="Incassi Stripe" subtitle="Dal registro dei movimenti: abbonamenti e commissioni Eventi/Kordata">
+            <Row label="Incassato (lordo)" value={eur(f.stripe.gross)} hint={`${f.stripe.charges} pagamenti`} />
+            <Row label="Rimborsi" value={`− ${eur(f.stripe.refunds)}`} />
+            <Row label="Commissioni Stripe" value={`− ${eur(f.stripe.fees)}`} />
+            <Row label="Netto Stripe" value={eur(f.stripe.net)} strong />
+            <Row label="Ultimi 30 giorni" value={`${eur(f.stripe.gross30)} lordo · ${eur(f.stripe.net30)} netto`} />
+          </Card>
+
+          <Card title="Abbonamenti pagati con carta" subtitle="Fatture Stripe pagate, per tipo (IVA inclusa)">
+            <Row label="Nuovi Base" value={eur(subs.base.cents)} hint={`${subs.base.count} pagamenti`} />
+            <Row label="Nuovi Pro" value={eur(subs.pro.cents)} hint={`${subs.pro.count} pagamenti`} />
+            <Row label="Passaggi da Base a Pro" value={eur(subs.upgrade.cents)} hint={`${subs.upgrade.count} pagamenti (solo la differenza)`} />
+            <Row label="Rinnovi" value={eur(subs.renewal.cents)} hint={`${subs.renewal.count} pagamenti`} />
+            <Row label="Totale abbonamenti" value={eur(f.subscriptionsCents)} strong />
+          </Card>
+
+          <Card title="Abbonati attivi oggi" subtitle="Per origine dell'abbonamento">
+            <Row label="Base pagati con carta" value={String(f.active.stripeBase)} />
+            <Row label="Pro pagati con carta" value={String(f.active.stripePro)} />
+            <Row label="Attivati con voucher" value={String(f.active.voucher)} />
+            <Row label="Attivati dallo Staff" value={String(f.active.admin)} />
+          </Card>
+
+          <Card title="Lotti di voucher per i negozi" subtitle="Venduti con fattura a parte, fuori da Stripe">
+            <Row label="Lotti" value={String(f.shopBatches.count)} hint={`${f.shopBatches.vouchers} voucher, ${f.shopRedeemed.count} già usati`} />
+            <Row label="Incassato dai lotti" value={eur(f.shopBatches.cents)} strong />
+          </Card>
+
+          <Card title="Agenti venditori" subtitle="Provvigioni registrate (rettifiche comprese)">
+            <Row label="In maturazione (14 giorni)" value={eur(f.agentCommissions.pending)} />
+            <Row label="Maturate, da pagare" value={eur(f.agentCommissions.matured)} />
+            <Row label="Già pagate" value={eur(f.agentCommissions.paid)} />
+            <Row label="Annullate (rimborsi)" value={eur(f.agentCommissions.cancelled)} />
+          </Card>
+
+          <Card title="Voucher della community" subtitle="Servizi dati senza incasso, a prezzo di listino">
+            <Row label="Voucher Kumani usati" value={eur(f.kumanoVouchers.redeemedCents)} hint={`${f.kumanoVouchers.redeemedCount} voucher`} />
+            <Row label="Voucher Kumani non ancora usati" value={eur(f.kumanoVouchers.activeCents)} hint={`${f.kumanoVouchers.activeCount} voucher in circolazione`} />
+            <Row label="Credito voucher non ancora speso" value={eur(f.voucherCreditCents)} />
+            <Row label="Voucher omaggio dello Staff usati" value={eur(f.staffGifts.redeemedCents)} hint={`${f.staffGifts.redeemedCount} voucher`} />
+            <Row label="Servizi già dati (usati)" value={eur(f.giftedServicesCents)} strong />
+          </Card>
+
+          <Card title="Punti Community" subtitle="Assegnati dal nuovo sistema e ancora da spendere">
+            <Row label="Attivazioni Base" value={`${f.pointsAwarded.activation_base} punti`} />
+            <Row label="Attivazioni Pro" value={`${f.pointsAwarded.activation_pro} punti`} />
+            <Row label="Passaggi a Pro" value={`${f.pointsAwarded.upgrade_pro} punti`} />
+            <Row label="Bonus Struttura (spillover)" value={`${f.pointsAwarded.matrix} punti`} />
+            <Row label="Tolti per rimborsi" value={`${f.pointsAwarded.reversed} punti`} />
+            <Row
+              label="Punti ancora da spendere"
+              value={`${f.networkPointsOutstanding} punti`}
+              hint={`Valgono al massimo ${eur(f.networkPointsMaxCents)} di voucher, col pacchetto più conveniente`}
+              strong
+            />
+          </Card>
+
+          <div className="rounded-xl border-2 border-[var(--gold)]/40 bg-[var(--gold-pale)] p-6 shadow-sm">
+            <p className="text-sm font-medium text-[var(--ink)]">Voucher della community sugli abbonamenti incassati</p>
+            <p className="text-4xl font-bold text-[var(--gold)]">{f.subscriptionsCents > 0 ? `${f.networkSharePercent.toFixed(1)}%` : '—'}</p>
+            <p className="mt-1 text-xs text-[var(--ink)]">
+              Voucher Kumani usati, in circolazione e credito non speso ({eur(f.kumanoVouchers.redeemedCents + f.outstandingCents)}) su{' '}
+              {eur(f.subscriptionsCents)} di abbonamenti pagati. I punti non ancora convertiti sono esclusi.
+            </p>
+            {f.rewardsRedeemedCount > 0 && (
+              <p className="mt-2 text-xs text-gray-600">Storico Catalogo Premi (spento): {f.rewardsRedeemedCount} riscatti.</p>
+            )}
+          </div>
         </div>
       </div>
     )
