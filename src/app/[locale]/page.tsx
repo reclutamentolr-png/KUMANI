@@ -16,7 +16,6 @@ import {
   Trophy,
   HandPlatter,
   Briefcase,
-  Check,
   CalendarDays,
   Plane,
   UtensilsCrossed,
@@ -30,6 +29,7 @@ import ProToolsShowcase from '@/components/ProToolsShowcase'
 import HomeKumanoDelGiorno from '@/components/spotlight/HomeKumanoDelGiorno'
 import HomeUpcomingEvents from '@/components/events/HomeUpcomingEvents'
 import HomeDonations from '@/components/donations/HomeDonations'
+import HomePlans from '@/components/HomePlans'
 
 export default function LandingPage() {
   const t = useTranslations('landingHome')
@@ -52,10 +52,6 @@ export default function LandingPage() {
     { icon: Coins, title: t('synergy5Title'), desc: t('synergy5Text'), soon: false },
     { icon: PartyPopper, title: t('synergy6Title'), desc: t('synergy6Text'), soon: false },
   ]
-
-  // Piani: Base per tutti, Pro per chi lavora con i clienti (prova gratuita).
-  const baseFeatures = [1, 2, 3, 4].map((n) => t(`planBaseFeature${n}`))
-  const proFeatures = [1, 2, 3, 4].map((n) => t(`planProFeature${n}`))
 
   const steps = [
     { step: '1', icon: Zap, title: t('step1Title'), desc: t('step1Description') },
@@ -274,9 +270,9 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 💳 SEZIONE: I PIANI — Base per tutti, Pro per i professionisti */}
+      {/* 💳 SEZIONE: I PIANI — Gratis, Base e Pro (ognuno include il precedente) e il Pass */}
       <section className="py-12 sm:py-20 bg-black/20">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-14">
             <div className="inline-flex items-center gap-2 bg-[var(--gold)]/10 border border-[var(--gold)]/30 px-4 py-1.5 rounded-full text-sm font-medium text-[var(--gold-bright)] mb-4">
               <Wallet className="w-4 h-4" />
@@ -285,62 +281,10 @@ export default function LandingPage() {
             <h2 className="text-3xl sm:text-5xl font-bold text-white mb-4 break-words">
               {t('plansTitle')} <span className="bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] bg-clip-text text-transparent">{t('plansAccent')}</span>
             </h2>
-            <p className="text-base sm:text-xl text-gray-300 max-w-3xl mx-auto">{t('plansDescription')}</p>
+            <p className="text-base sm:text-xl text-gray-300 max-w-3xl mx-auto">{t('plansTiersDescription')}</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
-            <div className="flex flex-col rounded-3xl border border-[var(--gold)]/20 bg-white/[0.03] p-6 sm:p-8">
-              <h3 className="text-xl font-bold text-white">{t('planBaseName')}</h3>
-              <p className="mt-1 text-sm text-gray-400">{t('planBaseDescription')}</p>
-              <p className="mt-5 flex items-baseline gap-1.5">
-                <span className="text-4xl font-bold text-white">49 €</span>
-                <span className="text-gray-400">{t('planPerYear')}</span>
-              </p>
-              <ul className="mt-6 flex-1 space-y-3">
-                {baseFeatures.map((feature, index) => (
-                  <li key={index} className="flex items-start gap-2.5 text-sm text-gray-300">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--gold-bright)]" /> {feature}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                href="/register"
-                className="mt-8 inline-flex items-center justify-center gap-2 rounded-lg border border-[var(--gold)]/40 bg-white/5 px-6 py-3 font-bold text-white transition-all hover:bg-white/10"
-              >
-                {t('planBaseCta')}
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-
-            <div className="relative flex flex-col rounded-3xl border-2 border-[var(--gold)] bg-gradient-to-br from-[var(--gold)]/15 via-white/[0.04] to-transparent p-6 shadow-[0_18px_50px_rgba(199,154,59,0.2)] sm:p-8">
-              <span className="absolute -top-3 right-6 rounded-full bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-3 py-1 text-xs font-bold uppercase tracking-wide text-[var(--ink)] shadow">
-                {t('planProBadge')}
-              </span>
-              <h3 className="flex items-center gap-2 text-xl font-bold text-white">
-                <Briefcase className="h-5 w-5 text-[var(--gold-bright)]" /> {t('planProName')}
-              </h3>
-              <p className="mt-1 text-sm text-gray-300">{t('planProDescription')}</p>
-              <p className="mt-5 flex items-baseline gap-1.5">
-                <span className="text-4xl font-bold text-[var(--gold-bright)]">149 €</span>
-                <span className="text-gray-400">{t('planPerYear')}</span>
-              </p>
-              <ul className="mt-6 flex-1 space-y-3">
-                {proFeatures.map((feature, index) => (
-                  <li key={index} className="flex items-start gap-2.5 text-sm text-gray-200">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--gold-bright)]" /> {feature}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                href="/register?plan=pro"
-                className="mt-8 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3 font-bold text-[var(--ink)] shadow-xl transition-all hover:brightness-110"
-              >
-                {t('planProCta')}
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <p className="mt-3 text-center text-xs text-gray-400">{t('planProTrialNote')}</p>
-            </div>
-          </div>
+          <HomePlans />
         </div>
       </section>
 
