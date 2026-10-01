@@ -315,11 +315,11 @@
     "cityRequired": "Cidade",
     "cityMissing": "Indique a cidade onde vive.",
     "directSignupUnavailable": "De momento, o registo só é possível com um código de convite. Peça-o a quem lhe falou do KUMANI.",
-    "voucherCodeLabel": "Código de cupão de ativação (opcional)",
-    "voucherCodeHint": "Recebeu um cupão KUMANI de uma loja? Introduza-o aqui: a sua subscrição é ativada de imediato por um ano.",
-    "invalidVoucher": "Código de cupão inválido ou já usado. Verifique-o ou deixe o campo vazio.",
-    "voucherActivated": "Cupão ativado: a sua subscrição está ativa até {date}.",
-    "voucherNotActivated": "Conta criada, mas o cupão não foi ativado. Pode tentar de novo a partir do painel com \"Ativar com voucher\".",
+    "voucherCodeLabel": "Código de voucher de ativação (opcional)",
+    "voucherCodeHint": "Recebeu um voucher KUMANI de uma loja? Introduza-o aqui: a sua subscrição é ativada de imediato por um ano.",
+    "invalidVoucher": "Código de voucher inválido ou já usado. Verifique-o ou deixe o campo vazio.",
+    "voucherActivated": "Voucher ativado: a sua subscrição está ativa até {date}.",
+    "voucherNotActivated": "Conta criada, mas o voucher não foi ativado. Pode tentar de novo a partir do painel com \"Ativar com voucher\".",
     "countryOutsideItalyNote": "O KUMANI nasceu em Itália: no seu país, algumas funcionalidades poderão estar reduzidas ou indisponíveis, porque vigoram leis diferentes (p. ex. verificações de identidade, programas de prémios, documentos fiscais). Pode, ainda assim, utilizar a plataforma."
   },
   "dashboard": {
@@ -2945,8 +2945,8 @@
     "codeLabel": "Código de ativação",
     "howTo": "Leia o QR ou aceda a {site}/register e introduza o código. Válido uma única vez.",
     "print": "Imprimir",
-    "adminSummary": "{available} cupões disponíveis para imprimir de {total}",
-    "noneAvailable": "Nenhum cupão disponível: já foram todos usados."
+    "adminSummary": "{available} vouchers disponíveis para imprimir de {total}",
+    "noneAvailable": "Nenhum voucher disponível: já foram todos usados."
   },
   "plans": {
     "trialNote": "{days} dias de teste grátis, sem cartão.",

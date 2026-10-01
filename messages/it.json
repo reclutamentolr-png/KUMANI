@@ -335,11 +335,11 @@
     "cityRequired": "Città",
     "cityMissing": "Inserisci la città in cui vivi.",
     "directSignupUnavailable": "Al momento la registrazione è possibile solo con un codice invito. Chiedilo a chi ti ha parlato di KUMANI.",
-    "voucherCodeLabel": "Codice coupon di attivazione (facoltativo)",
-    "voucherCodeHint": "Hai ricevuto un coupon KUMANI da un negozio? Inseriscilo qui: il tuo abbonamento si attiva subito per un anno.",
-    "invalidVoucher": "Codice coupon non valido o già utilizzato. Controllalo, oppure lascia il campo vuoto.",
-    "voucherActivated": "Coupon attivato: il tuo abbonamento è attivo fino al {date}.",
-    "voucherNotActivated": "Account creato, ma il coupon non è stato attivato. Puoi riprovare dalla dashboard con \"Attiva tramite Voucher\".",
+    "voucherCodeLabel": "Codice voucher di attivazione (facoltativo)",
+    "voucherCodeHint": "Hai ricevuto un voucher KUMANI da un negozio? Inseriscilo qui: il tuo abbonamento si attiva subito per un anno.",
+    "invalidVoucher": "Codice voucher non valido o già utilizzato. Controllalo, oppure lascia il campo vuoto.",
+    "voucherActivated": "Voucher attivato: il tuo abbonamento è attivo fino al {date}.",
+    "voucherNotActivated": "Account creato, ma il voucher non è stato attivato. Puoi riprovare dalla dashboard con \"Attiva tramite Voucher\".",
     "countryOutsideItalyNote": "KUMANI nasce in Italia: nel tuo paese alcune funzionalità potrebbero essere ridotte o non disponibili, perché vigono leggi diverse (es. verifiche d'identità, programmi a premi, documenti fiscali). Puoi comunque usare la piattaforma."
   },
   "dashboard": {
@@ -2945,8 +2945,8 @@
     "codeLabel": "Codice di attivazione",
     "howTo": "Inquadra il QR oppure vai su {site}/register e inserisci il codice. Valido una sola volta.",
     "print": "Stampa",
-    "adminSummary": "{available} coupon disponibili da stampare su {total}",
-    "noneAvailable": "Nessun coupon disponibile: sono già stati tutti utilizzati."
+    "adminSummary": "{available} voucher disponibili da stampare su {total}",
+    "noneAvailable": "Nessun voucher disponibile: sono già stati tutti utilizzati."
   },
   "plans": {
     "trialNote": "{days} giorni di prova gratuita, senza carta.",

@@ -315,11 +315,11 @@
     "cityRequired": "Stadt",
     "cityMissing": "Gib die Stadt ein, in der du wohnst.",
     "directSignupUnavailable": "Derzeit ist die Registrierung nur mit Einladungscode möglich. Frag die Person, die dir von KUMANI erzählt hat.",
-    "voucherCodeLabel": "Aktivierungs-Gutscheincode (optional)",
-    "voucherCodeHint": "Du hast einen KUMANI-Gutschein von einem Geschäft bekommen? Gib ihn hier ein: Dein Abo wird sofort für ein Jahr aktiviert.",
-    "invalidVoucher": "Ungültiger oder bereits verwendeter Gutscheincode. Prüfe ihn oder lass das Feld leer.",
-    "voucherActivated": "Gutschein aktiviert: Dein Abo ist bis zum {date} aktiv.",
-    "voucherNotActivated": "Konto erstellt, aber der Gutschein wurde nicht aktiviert. Du kannst es im Dashboard mit „Mit Gutschein aktivieren“ erneut versuchen.",
+    "voucherCodeLabel": "Aktivierungs-Vouchercode (optional)",
+    "voucherCodeHint": "Du hast einen KUMANI-Voucher von einem Geschäft bekommen? Gib ihn hier ein: Dein Abo wird sofort für ein Jahr aktiviert.",
+    "invalidVoucher": "Ungültiger oder bereits verwendeter Vouchercode. Prüfe ihn oder lass das Feld leer.",
+    "voucherActivated": "Voucher aktiviert: Dein Abo ist bis zum {date} aktiv.",
+    "voucherNotActivated": "Konto erstellt, aber der Voucher wurde nicht aktiviert. Du kannst es im Dashboard mit „Mit Gutschein aktivieren“ erneut versuchen.",
     "countryOutsideItalyNote": "KUMANI stammt aus Italien: In deinem Land können einige Funktionen eingeschränkt oder nicht verfügbar sein, weil dort andere Gesetze gelten (z. B. Identitätsprüfungen, Prämienprogramme, Steuerdokumente). Du kannst die Plattform trotzdem nutzen."
   },
   "dashboard": {
@@ -2945,8 +2945,8 @@
     "codeLabel": "Aktivierungscode",
     "howTo": "Scanne den QR-Code oder gehe auf {site}/register und gib den Code ein. Nur einmal gültig.",
     "print": "Drucken",
-    "adminSummary": "{available} von {total} Gutscheinen zum Drucken verfügbar",
-    "noneAvailable": "Keine Gutscheine verfügbar: Alle wurden bereits verwendet."
+    "adminSummary": "{available} von {total} Vouchern zum Drucken verfügbar",
+    "noneAvailable": "Keine Voucher verfügbar: Alle wurden bereits verwendet."
   },
   "plans": {
     "trialNote": "{days} Tage kostenlos testen, ohne Karte.",

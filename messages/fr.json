@@ -315,11 +315,11 @@
     "cityRequired": "Ville",
     "cityMissing": "Indiquez la ville où vous habitez.",
     "directSignupUnavailable": "Pour le moment, l'inscription n'est possible qu'avec un code d'invitation. Demandez-le à la personne qui vous a parlé de KUMANI.",
-    "voucherCodeLabel": "Code coupon d'activation (facultatif)",
-    "voucherCodeHint": "Vous avez reçu un coupon KUMANI d'un commerce ? Saisissez-le ici : votre abonnement est activé tout de suite pour un an.",
-    "invalidVoucher": "Code coupon non valide ou déjà utilisé. Vérifiez-le, ou laissez le champ vide.",
-    "voucherActivated": "Coupon activé : votre abonnement est actif jusqu'au {date}.",
-    "voucherNotActivated": "Compte créé, mais le coupon n'a pas été activé. Vous pouvez réessayer depuis le tableau de bord avec « Activer avec un bon ».",
+    "voucherCodeLabel": "Code voucher d'activation (facultatif)",
+    "voucherCodeHint": "Vous avez reçu un voucher KUMANI d'un commerce ? Saisissez-le ici : votre abonnement est activé tout de suite pour un an.",
+    "invalidVoucher": "Code voucher non valide ou déjà utilisé. Vérifiez-le, ou laissez le champ vide.",
+    "voucherActivated": "Voucher activé : votre abonnement est actif jusqu'au {date}.",
+    "voucherNotActivated": "Compte créé, mais le voucher n'a pas été activé. Vous pouvez réessayer depuis le tableau de bord avec « Activer avec un bon ».",
     "countryOutsideItalyNote": "KUMANI est né en Italie : dans votre pays, certaines fonctionnalités pourraient être réduites ou indisponibles, car d'autres lois s'y appliquent (ex. vérifications d'identité, programmes de récompenses, documents fiscaux). Vous pouvez tout de même utiliser la plateforme."
   },
   "dashboard": {
@@ -2945,8 +2945,8 @@
     "codeLabel": "Code d'activation",
     "howTo": "Scannez le QR ou allez sur {site}/register et saisissez le code. Valable une seule fois.",
     "print": "Imprimer",
-    "adminSummary": "{available} coupons disponibles à imprimer sur {total}",
-    "noneAvailable": "Aucun coupon disponible : ils ont tous été utilisés."
+    "adminSummary": "{available} vouchers disponibles à imprimer sur {total}",
+    "noneAvailable": "Aucun voucher disponible : ils ont tous été utilisés."
   },
   "plans": {
     "trialNote": "{days} jours d'essai gratuit, sans carte.",

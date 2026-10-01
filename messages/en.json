@@ -335,11 +335,11 @@
     "cityRequired": "City",
     "cityMissing": "Enter the city where you live.",
     "directSignupUnavailable": "Right now you can only sign up with an invite code. Ask whoever told you about KUMANI.",
-    "voucherCodeLabel": "Activation coupon code (optional)",
-    "voucherCodeHint": "Did you get a KUMANI coupon from a shop? Enter it here: your subscription is activated right away for one year.",
-    "invalidVoucher": "Invalid or already used coupon code. Check it, or leave the field empty.",
-    "voucherActivated": "Coupon activated: your subscription is active until {date}.",
-    "voucherNotActivated": "Account created, but the coupon wasn't activated. You can try again from the dashboard with \"Activate with Voucher\".",
+    "voucherCodeLabel": "Activation voucher code (optional)",
+    "voucherCodeHint": "Did you get a KUMANI voucher from a shop? Enter it here: your subscription is activated right away for one year.",
+    "invalidVoucher": "Invalid or already used voucher code. Check it, or leave the field empty.",
+    "voucherActivated": "Voucher activated: your subscription is active until {date}.",
+    "voucherNotActivated": "Account created, but the voucher wasn't activated. You can try again from the dashboard with \"Activate with Voucher\".",
     "countryOutsideItalyNote": "KUMANI was born in Italy: in your country some features may be reduced or unavailable because different laws apply (e.g. identity checks, reward programmes, tax documents). You can still use the platform."
   },
   "dashboard": {
@@ -2945,8 +2945,8 @@
     "codeLabel": "Activation code",
     "howTo": "Scan the QR or go to {site}/register and enter the code. Valid once only.",
     "print": "Print",
-    "adminSummary": "{available} coupons available to print out of {total}",
-    "noneAvailable": "No coupons available: they have all been used."
+    "adminSummary": "{available} vouchers available to print out of {total}",
+    "noneAvailable": "No vouchers available: they have all been used."
   },
   "plans": {
     "trialNote": "{days}-day free trial, no card required.",

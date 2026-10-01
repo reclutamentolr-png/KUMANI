@@ -1148,7 +1148,7 @@ L'accesso viene registrato.`)) return
   { id: 'kuManagement', label: 'Gestione KU', Icon: Coins, permission: 'settings.read' as Permission, group: 'rewards' },
   { id: 'rewards', label: 'Premi', Icon: Gift, permission: 'rewards.read' as Permission, group: 'rewards' },
   { id: 'vouchers', label: 'Voucher', Icon: BadgeCheck, permission: 'vouchers.read' as Permission, group: 'rewards' },
-  { id: 'coupons', label: 'Coupon', Icon: Ticket, permission: 'coupons.read' as Permission, group: 'rewards' },
+  { id: 'coupons', label: 'Voucher e coupon', Icon: Ticket, permission: 'coupons.read' as Permission, group: 'rewards' },
   { id: 'listingReports', label: 'Bacheca', Icon: Flag, permission: 'listings.read' as Permission, group: 'community' },
   { id: 'spotlight', label: 'Kumano del Giorno', Icon: Star, permission: 'listings.read' as Permission, group: 'community' },
   { id: 'events', label: 'Eventi', Icon: CalendarDays, permission: 'listings.read' as Permission, group: 'community' },
@@ -1712,18 +1712,18 @@ L'accesso viene registrato.`)) return
     )
   }
 
-  // Area "Coupon per negozianti": lotti di codici di attivazione venduti a
-  // un'attività (vedi createVoucherBatch). Sta nella voce Coupon, separata
-  // dai coupon assegnati ai singoli utenti della community.
+  // Area "Voucher per negozianti": lotti di codici di attivazione venduti a
+  // un'attività (vedi createVoucherBatch). Sta nella voce "Voucher e coupon",
+  // separata dai coupon (buoni generici) assegnati agli utenti.
   const renderMerchantCoupons = () => (
     <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
       <div>
-        <h3 className="font-bold text-gray-900">Coupon per negozianti</h3>
+        <h3 className="font-bold text-gray-900">Voucher per negozianti</h3>
         <p className="text-sm text-gray-600 mt-1">
-          Genera un lotto di codici di attivazione da vendere a un&apos;attività (es. 10 coupon a 400 €), che li regala ai
+          Genera un lotto di codici di attivazione da vendere a un&apos;attività (es. 10 voucher a 400 €), che li regala ai
           propri clienti. Ogni codice attiva 1 anno di abbonamento, vale una sola volta e si può inserire già in
           registrazione: il QR stampato sul cartoncino apre la registrazione con il codice compilato. Gli abbonamenti
-          attivati con coupon non si rinnovano da soli e non generano KU Points a chi invita.
+          attivati con voucher non si rinnovano da soli e non generano KU Points a chi invita.
           Scegli il piano del lotto: <strong>Base</strong> oppure <strong>Pro</strong> (per negozi e professionisti:
           attiva 1 anno di Pro, che include anche il Base).
         </p>
@@ -1854,13 +1854,13 @@ L'accesso viene registrato.`)) return
       <div>
         <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
           <Ticket className="w-7 h-7" />
-          Coupon
+          Voucher e coupon
         </h2>
-        <p className="text-gray-600 mt-1">Due aree distinte: i coupon venduti ai negozianti e quelli assegnati agli utenti della community.</p>
+        <p className="text-gray-600 mt-1">Due aree distinte. Voucher = codice che attiva un abbonamento (qui: i lotti venduti ai negozianti). Coupon = buono generico (premio, sconto di un partner) assegnato a un utente, che non attiva abbonamenti.</p>
       </div>
       <div className="flex flex-wrap gap-2 border-b border-gray-200">
         {([
-          ['merchant', '🏪 Coupon per negozianti'],
+          ['merchant', '🏪 Voucher per negozianti'],
           ['community', '👥 Coupon per la community'],
         ] as const).map(([key, label]) => (
           <button

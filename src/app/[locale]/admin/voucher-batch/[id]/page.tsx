@@ -6,7 +6,7 @@ import Logo from '@/components/Logo'
 import PrintButton from '@/components/admin/PrintButton'
 import { getVoucherBatchCodes } from '@/app/actions/admin'
 
-// Cartoncini stampabili di un lotto di coupon per negozianti: un
+// Cartoncini stampabili di un lotto di voucher per negozianti: un
 // cartoncino per ogni codice ancora disponibile, con QR che apre la
 // registrazione con il codice già inserito (/register?voucher=CODICE).
 // Accesso solo admin (getVoucherBatchCodes verifica i permessi).

@@ -1234,7 +1234,7 @@ export async function uploadRewardImage(formData: FormData): Promise<{ success: 
 }
 
 // ============================================================
-// Coupon per negozianti: lotti di voucher abbonamento
+// Voucher per negozianti: lotti di voucher abbonamento
 // ============================================================
 
 export async function createVoucherBatch(input: {
