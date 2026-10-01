@@ -79,7 +79,7 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
     { icon: Gem, title: t('perk4Title'), desc: t('perk4Description') }
   ]
 
-  const benefits = [1, 2, 3, 4, 5, 6, 7].map((n) => t(`benefit${n}`))
+  const benefits = [1, 2, 3, 4, 5, 6, 7, 8].map((n) => t(`benefit${n}`))
 
   return (
     <div className="min-h-screen bg-[var(--ink)] overflow-x-hidden">
@@ -189,48 +189,6 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
         </div>
       </section>
 
-      {/* ❤️ DONAZIONI: in evidenza subito dopo l'apertura */}
-      <HomeDonations />
-
-      {/* 🤝 SEZIONE: CONDIVIDI KUMANI — volutamente minimale, niente
-          linguaggio da "rete"/struttura in evidenza. */}
-      <HomeSection bg={L.share} className="py-12 sm:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10 sm:mb-14">
-            <div className="inline-flex items-center gap-2 bg-[var(--gold)]/10 border border-[var(--gold)]/30 px-4 py-1.5 rounded-full text-sm font-medium text-[var(--gold-bright)] mb-4">
-              <Share2 className="w-4 h-4" />
-              {t('communityEyebrow')}
-            </div>
-            <h2 className="text-3xl sm:text-5xl font-bold text-white mb-4 break-words">
-              {t('communityTitle')} <span className="bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] bg-clip-text text-transparent">{t('communityAccent')}</span>
-            </h2>
-            <p className="text-base sm:text-xl text-gray-300 max-w-2xl mx-auto">
-              {t('communityDescription')}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8 max-w-5xl mx-auto">
-            {communityCards.map((card, index) => (
-              <div key={index} className="rounded-2xl p-6 border border-[var(--gold)]/15 bg-white/[0.03] hover:border-[var(--gold)]/40 transition-colors">
-                <div className="w-11 h-11 rounded-lg bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] flex items-center justify-center mb-4">
-                  <card.icon className="w-5 h-5 text-[var(--ink)]" />
-                </div>
-                <h3 className="text-lg font-bold text-white mb-2">{card.title}</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">{card.desc}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Box trasparenza: i badge di community non sono compensi */}
-          <div className="bg-white/[0.03] border border-[var(--gold)]/30 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 max-w-5xl mx-auto">
-            <Shield className="w-8 h-8 text-[var(--gold-bright)] flex-shrink-0" />
-            <p className="text-gray-200 text-sm sm:text-base leading-relaxed">
-              <strong className="text-[var(--gold-bright)]">{t('communityTransparencyLead')}</strong> {t('communityTransparencyRest')}
-            </p>
-          </div>
-        </div>
-      </HomeSection>
-
       {/* 🛠️ SEZIONE: IL MARKETPLACE — i servizi nei tre livelli Gratis, Base
           e Pro, con "Dettagli" per l'elenco completo e trasparente. */}
       <HomeSection bg={L.marketplace} className="py-12 sm:py-20">
@@ -278,6 +236,45 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
       </HomeSection>
 
       {L.bandAfterMarketplace && <HomeBand band={L.bandAfterMarketplace} />}
+
+      {/* 🤝 SEZIONE: CONDIVIDI KUMANI — volutamente minimale, niente
+          linguaggio da "rete"/struttura in evidenza. */}
+      <HomeSection bg={L.share} className="py-12 sm:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10 sm:mb-14">
+            <div className="inline-flex items-center gap-2 bg-[var(--gold)]/10 border border-[var(--gold)]/30 px-4 py-1.5 rounded-full text-sm font-medium text-[var(--gold-bright)] mb-4">
+              <Share2 className="w-4 h-4" />
+              {t('communityEyebrow')}
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-bold text-white mb-4 break-words">
+              {t('communityTitle')} <span className="bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] bg-clip-text text-transparent">{t('communityAccent')}</span>
+            </h2>
+            <p className="text-base sm:text-xl text-gray-300 max-w-2xl mx-auto">
+              {t('communityDescription')}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8 max-w-5xl mx-auto">
+            {communityCards.map((card, index) => (
+              <div key={index} className="rounded-2xl p-6 border border-[var(--gold)]/15 bg-white/[0.03] hover:border-[var(--gold)]/40 transition-colors">
+                <div className="w-11 h-11 rounded-lg bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] flex items-center justify-center mb-4">
+                  <card.icon className="w-5 h-5 text-[var(--ink)]" />
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">{card.title}</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">{card.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Box trasparenza: i badge di community non sono compensi */}
+          <div className="bg-white/[0.03] border border-[var(--gold)]/30 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 max-w-5xl mx-auto">
+            <Shield className="w-8 h-8 text-[var(--gold-bright)] flex-shrink-0" />
+            <p className="text-gray-200 text-sm sm:text-base leading-relaxed">
+              <strong className="text-[var(--gold-bright)]">{t('communityTransparencyLead')}</strong> {t('communityTransparencyRest')}
+            </p>
+          </div>
+        </div>
+      </HomeSection>
 
       {/* ☀️ OGGI IN COMMUNITY — Kumano del Giorno: fascia compatta dopo gli
           strumenti e prima dei vantaggi. Solo storie approvate e con
@@ -427,6 +424,9 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
           </div>
         </div>
       </HomeSection>
+
+      {/* ❤️ DONAZIONI: prima della chiamata finale */}
+      <HomeDonations />
 
       {/* CTA Section */}
       <HomeSection bg={L.cta} className="py-12 sm:py-20">
