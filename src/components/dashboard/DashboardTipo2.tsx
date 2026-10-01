@@ -6,7 +6,7 @@ import InfoPopover from '@/components/InfoPopover'
 import type { MarketplaceTool } from '@/lib/marketplaceTools'
 import { MARKETPLACE_CATEGORIES, type MarketplaceCategory } from '@/lib/marketplaceTools'
 import type { DashboardNetworkData } from '@/lib/dashboardNetworkData'
-import { Users, ArrowRight, Star, CheckCircle2, Crown, Hourglass } from 'lucide-react'
+import { Users, ArrowRight, Star, CheckCircle2, Crown, Hourglass, Sparkles, BadgeCheck, Gift } from 'lucide-react'
 import CopyButton from '@/components/CopyButton'
 import VoucherActivationButton from '@/components/VoucherActivationButton'
 import KuBadge from '@/components/ku/KuBadge'
@@ -104,12 +104,18 @@ export default async function DashboardTipo2({
       {agenda}
 
       {/* Striscia di stato compatta */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="rounded-xl border border-[var(--gold)]/25 bg-[var(--paper)] px-5 py-4 shadow-sm">
-          <p className="text-xs text-[var(--muted)] font-medium mb-1.5">{t('pointsCardLabel')}</p>
-          <span className="text-2xl font-bold text-[var(--ink)]">{profile?.daily_points || 0}</span>
-          <span className="ml-1.5 text-sm font-semibold text-[var(--gold)]">{t('kuPointsLabel')}</span>
-          <div className="mt-1.5">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="relative overflow-hidden rounded-2xl border border-[var(--gold)]/30 bg-white px-5 pb-5 pt-6 shadow-[0_10px_30px_rgba(23,23,23,0.08)]">
+          <div aria-hidden className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)]" />
+          <div className="mb-3 flex items-center gap-2.5">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--ink)] text-[var(--gold-bright)]">
+              <Sparkles className="h-4.5 w-4.5" />
+            </span>
+            <p className="text-xs font-bold uppercase tracking-wide text-[var(--muted)]">{t('pointsCardLabel').replace(/:\s*$/, '')}</p>
+          </div>
+          <span className="text-4xl font-extrabold leading-none text-[var(--ink)]">{profile?.daily_points || 0}</span>
+          <span className="ml-2 text-sm font-bold text-[var(--gold)]">{t('kuPointsLabel')}</span>
+          <div className="mt-2.5">
             <KuBadge earnedTotal={profile?.ku_earned_total || 0} />
           </div>
           <div className="mt-1.5">
@@ -117,16 +123,23 @@ export default async function DashboardTipo2({
           </div>
         </div>
 
-        <div className="rounded-xl border border-[var(--gold)]/25 bg-[var(--paper)] px-5 py-4 shadow-sm">
-          <p className="text-xs text-[var(--muted)] font-medium mb-1.5">{t('subscriptionStatus')}</p>
+        <div className="relative overflow-hidden rounded-2xl border border-[var(--gold)]/30 bg-white px-5 pb-5 pt-6 shadow-[0_10px_30px_rgba(23,23,23,0.08)]">
+          <div aria-hidden className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)]" />
+          <div className="mb-3 flex items-center gap-2.5">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--ink)] text-[var(--gold-bright)]">
+              <BadgeCheck className="h-4.5 w-4.5" />
+            </span>
+            <p className="text-xs font-bold uppercase tracking-wide text-[var(--muted)]">{t('subscriptionStatus')}</p>
+          </div>
+
           {profile?.subscription_status === 'active' ? (
             <>
-            <div className="flex items-center gap-2.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2">
-              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-500">
-                <CheckCircle2 className="h-4 w-4 text-white" />
+            <div className="flex items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2.5">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-500 shadow">
+                <CheckCircle2 className="h-5 w-5 text-white" />
               </div>
               <div>
-                <p className="text-sm font-bold text-emerald-700">{t('subscriptionActive')}</p>
+                <p className="text-base font-extrabold text-emerald-700">{t('subscriptionActive')}</p>
                 {profile?.subscription_expires_at && (
                   <p className="text-xs text-emerald-600">
                     {t('expiresAt')}: {new Date(profile.subscription_expires_at).toLocaleDateString(locale)}
@@ -137,9 +150,9 @@ export default async function DashboardTipo2({
             {/* Pagina Abbonamento: carta, fatture, disdetta e recesso */}
             <Link
               href={{ pathname: '/billing' }}
-              className="mt-2 block text-center text-xs font-semibold text-[var(--muted)] underline-offset-2 hover:text-[var(--ink)] hover:underline"
+              className="mt-3 flex items-center justify-center gap-1 rounded-lg border border-[var(--gold)]/50 px-3 py-1.5 text-xs font-bold text-[var(--ink)] transition-colors hover:bg-[var(--gold-pale)]"
             >
-              {pt('manageSubscription')}
+              {pt('manageSubscription')} <ArrowRight className="h-3.5 w-3.5" />
             </Link>
             </>
           ) : proTrialDaysLeft !== null ? (
@@ -183,11 +196,19 @@ export default async function DashboardTipo2({
           )}
         </div>
 
-        <div className="flex items-center justify-between gap-3 rounded-xl border border-[var(--gold)]/25 bg-[var(--paper)] px-5 py-4 shadow-sm">
-          <span className="text-sm text-[var(--muted)] font-medium truncate">
-            {t('yourReferralCode')} <span className="ml-1.5 font-mono font-bold text-[var(--ink)]">{profile?.referral_code}</span>
-          </span>
-          <CopyButton text={shareUrl} variant="light" />
+        <div className="relative overflow-hidden rounded-2xl border border-[var(--gold)]/30 bg-white px-5 pb-5 pt-6 shadow-[0_10px_30px_rgba(23,23,23,0.08)]">
+          <div aria-hidden className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)]" />
+          <div className="mb-3 flex items-center gap-2.5">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--ink)] text-[var(--gold-bright)]">
+              <Gift className="h-4.5 w-4.5" />
+            </span>
+            <p className="text-xs font-bold uppercase tracking-wide text-[var(--muted)]">{t('yourReferralCode')}</p>
+          </div>
+          <div className="flex items-center justify-between gap-3">
+            <span className="break-all font-mono text-2xl font-extrabold tracking-wide text-[var(--ink)]">{profile?.referral_code}</span>
+            <CopyButton text={shareUrl} variant="light" />
+          </div>
+          <p className="mt-2 text-xs leading-5 text-[var(--muted)]">{t('inviteTileHint')}</p>
         </div>
       </div>
 
@@ -215,54 +236,57 @@ export default async function DashboardTipo2({
 
       <KumanoDelGiornoPreview />
 
-      {/* Riepilogo della rete (gli annunci sono nella categoria Community) */}
-      <div>
-        <div className="rounded-xl border border-[var(--gold)]/25 bg-[var(--paper)] p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-lg font-bold text-[var(--ink)] flex items-center gap-2">
-              <Users className="h-5 w-5 text-[var(--gold)]" />
-              {t('yourNetwork')}
-            </h2>
-            <Link href="/dashboard/rete" className="text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)] flex items-center gap-1">
-              {t('viewFullNetwork')}
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
+      {/* Riepilogo della rete: tutta la scheda porta alla pagina Rete */}
+      <Link
+        href="/dashboard/rete"
+        className="group block overflow-hidden rounded-2xl border border-[var(--gold)]/45 bg-gradient-to-br from-[#26221c] to-[var(--ink)] p-5 text-white shadow-[0_18px_40px_rgba(23,23,23,0.25)] transition-all hover:-translate-y-0.5 hover:border-[var(--gold)] hover:shadow-[0_22px_50px_rgba(199,154,59,0.25)] sm:p-6"
+      >
+        <div className="flex items-center gap-3">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] shadow">
+            <Users className="h-5 w-5" />
+          </span>
+          <div className="min-w-0">
+            <h2 className="text-lg font-bold text-white sm:text-xl">{t('yourNetwork')}</h2>
+            <p className="text-xs text-white/60">{t('communityCardSubtitle')}</p>
           </div>
+        </div>
 
-          <div className="flex items-center gap-6 mb-5">
-            <div>
-              <p className="text-2xl font-bold text-[var(--ink)] leading-none">{activeKumani.length}</p>
-              <p className="text-xs text-[var(--muted)] font-medium mt-1">{t('activeKumaniLabel')}</p>
-            </div>
-            <div className="h-8 w-px bg-gray-200" />
-            <div>
-              <p className="text-2xl font-bold text-[var(--ink)] leading-none">{pendingKumani.length}</p>
-              <p className="text-xs text-[var(--muted)] font-medium mt-1">{t('pendingKumaniLabel')}</p>
-            </div>
+        <div className="mt-5 grid grid-cols-2 gap-3">
+          <div className="rounded-xl border border-white/10 bg-white/[0.06] px-4 py-3">
+            <p className="text-4xl font-extrabold leading-none text-[var(--gold-bright)]">{activeKumani.length}</p>
+            <p className="mt-1.5 text-xs font-medium text-white/70">{t('activeKumaniLabel')}</p>
           </div>
+          <div className="rounded-xl border border-white/10 bg-white/[0.06] px-4 py-3">
+            <p className="text-4xl font-extrabold leading-none text-white">{pendingKumani.length}</p>
+            <p className="mt-1.5 text-xs font-medium text-white/70">{t('pendingKumaniLabel')}</p>
+          </div>
+        </div>
 
-          {(currentRank || nextRank) && (
-            <div>
-              <p className="text-sm font-semibold text-[var(--ink)] mb-1.5">
-                {nextRank ? t(nextRank.labelKey) : currentRank ? t(currentRank.labelKey) : ''}
-              </p>
-              <div className="h-1.5 rounded-full bg-gray-100 overflow-hidden">
-                <div className="h-full bg-[var(--gold)]" style={{ width: `${rankProgress}%` }} />
-              </div>
+        {(currentRank || nextRank) && (
+          <div className="mt-5">
+            <div className="mb-1.5 flex items-center justify-between gap-2 text-sm">
+              <span className="font-semibold text-white">{nextRank ? t(nextRank.labelKey) : currentRank ? t(currentRank.labelKey) : ''}</span>
               {nextRank && (
-                <>
-                  <p className="text-xs text-[var(--muted)] mt-1.5">
-                    {networkPointsEarned}/{nextRank.threshold} {t('communityPointsUnit')}
-                  </p>
-                  <p className="text-xs font-semibold text-[var(--gold)] mt-1">
-                    {t('missingForNextRank', { count: nextRank.threshold - networkPointsEarned, rank: t(nextRank.labelKey) })}
-                  </p>
-                </>
+                <span className="text-xs text-white/60">
+                  {networkPointsEarned}/{nextRank.threshold} {t('communityPointsUnit')}
+                </span>
               )}
             </div>
-          )}
-        </div>
-      </div>
+            <div className="h-2.5 overflow-hidden rounded-full bg-white/10">
+              <div className="h-full rounded-full bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)]" style={{ width: `${rankProgress}%` }} />
+            </div>
+            {nextRank && (
+              <p className="mt-2 text-xs font-semibold text-[var(--gold-bright)]">
+                {t('missingForNextRank', { count: nextRank.threshold - networkPointsEarned, rank: t(nextRank.labelKey) })}
+              </p>
+            )}
+          </div>
+        )}
+
+        <span className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-5 py-3 font-bold text-[var(--ink)] shadow transition group-hover:brightness-110">
+          {t('openCommunityCta')} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+        </span>
+      </Link>
     </>
   )
 }
