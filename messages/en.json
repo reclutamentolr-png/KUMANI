@@ -5796,6 +5796,9 @@
     "open": "Open",
     "showAll": "See all {count} services",
     "showLess": "Show less",
-    "passChip": "Just this one {price}"
+    "passChip": "Just this one {price}",
+    "communityTitle": "Community",
+    "communityBadge": "TOGETHER",
+    "communitySub": "Noticeboard, Kumano of the Day, Kordata, Events and Time Bank: the community that lends a hand."
   }
 }

@@ -5796,6 +5796,9 @@
     "open": "Abrir",
     "showAll": "Ver los {count} servicios",
     "showLess": "Mostrar menos",
-    "passChip": "Solo este {price}"
+    "passChip": "Solo este {price}",
+    "communityTitle": "Comunidad",
+    "communityBadge": "JUNTOS",
+    "communitySub": "Tablón, Kumano del Día, Kordata, Eventos y Banco del Tiempo: la comunidad que echa una mano."
   }
 }

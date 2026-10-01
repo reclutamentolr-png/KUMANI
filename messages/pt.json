@@ -5796,6 +5796,9 @@
     "open": "Abrir",
     "showAll": "Ver os {count} serviços",
     "showLess": "Mostrar menos",
-    "passChip": "Só este {price}"
+    "passChip": "Só este {price}",
+    "communityTitle": "Comunidade",
+    "communityBadge": "JUNTOS",
+    "communitySub": "Mural, Kumano do Dia, Kordata, Eventos e Banco do Tempo: a comunidade que dá uma mão."
   }
 }

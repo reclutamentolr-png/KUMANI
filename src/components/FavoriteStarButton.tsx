@@ -14,7 +14,7 @@ export default function FavoriteStarButton({
   toolName: string
   initialIsFavorite: boolean
   // 'dark' sits over a dark/image card header (MarketplaceCard); 'light'
-  // sits directly on a paper-colored card (CategoryToolsAccordion).
+  // sits directly on a paper-colored card (ToolTiers).
   variant?: 'dark' | 'light'
   onToggle?: (toolName: string, isFavorite: boolean) => void
 }) {

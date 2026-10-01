@@ -5796,6 +5796,9 @@
     "open": "Apri",
     "showAll": "Vedi tutti i {count} servizi",
     "showLess": "Mostra meno",
-    "passChip": "Solo questo {price}"
+    "passChip": "Solo questo {price}",
+    "communityTitle": "Community",
+    "communityBadge": "INSIEME",
+    "communitySub": "Bacheca, Kumano del Giorno, Kordata, Eventi e Banca del Tempo: la community che si dà una mano."
   }
 }

@@ -138,8 +138,14 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     if (cents !== null)
       passPrices[name] = new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2, minimumFractionDigits: 0 }).format(cents / 100)
   }
-  const proToolNames = visibleTools.filter((tool) => requiredPlan(tool.toolName) === 'pro').map((tool) => tool.toolName)
-  const freeToolNames = visibleTools.filter((tool) => requiredPlan(tool.toolName) === 'free').map((tool) => tool.toolName)
+  // Sezioni della Community: accese/spente e bloccate dal piano. Gli Eventi
+  // si consultano sempre (il piano serve solo per organizzarli).
+  const communityAccess = Object.fromEntries(
+    ['listings', 'spotlight', 'convivio', 'events', 'timebank'].map((name) => [
+      name,
+      { visible: isSettingEnabled(name), locked: name !== 'events' && !isToolEnabled(name) },
+    ])
+  )
   // Fascia di ogni servizio (Gratis / Base / Pro) per la dashboard a livelli
   const toolPlans = Object.fromEntries(visibleTools.map((tool) => [tool.toolName, requiredPlan(tool.toolName)]))
 
@@ -245,11 +251,10 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
           visibleTools={visibleTools}
           lockedToolNames={lockedToolNames}
           passPrices={passPrices}
-          proToolNames={proToolNames}
-          freeToolNames={freeToolNames}
           basePrice={basePrice}
           proPrice={proPrice}
           toolPlans={toolPlans}
+          communityAccess={communityAccess}
           favoriteToolNames={favoriteToolNames}
           proTrialDaysLeft={proTrial?.daysLeft ?? null}
           agenda={hasAgenda ? <UpcomingAgenda events={agendaEvents} today={agendaToday} sources={agendaSources} /> : null}

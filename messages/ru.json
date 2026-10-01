@@ -5796,6 +5796,9 @@
     "open": "Открыть",
     "showAll": "Показать все {count} сервисов",
     "showLess": "Свернуть",
-    "passChip": "Только этот {price}"
+    "passChip": "Только этот {price}",
+    "communityTitle": "Сообщество",
+    "communityBadge": "ВМЕСТЕ",
+    "communitySub": "Доска объявлений, Кумано дня, Kordata, События и Банк времени: сообщество, которое помогает."
   }
 }

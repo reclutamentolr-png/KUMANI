@@ -87,7 +87,7 @@ export default function HomeToolsGrid({ freeToolNames = [] }: { freeToolNames?: 
   const tc = useTranslations('marketplace')
   const [activeTool, setActiveTool] = useState<Tool | null>(null)
   // Ogni categoria è chiusa finché non ci si clicca sopra, come l'accordion
-  // della dashboard (CategoryToolsAccordion) — evita di mostrare tutti gli
+  // della dashboard (ToolTiers) — evita di mostrare tutti gli
   // strumenti aperti insieme.
   const [openCategories, setOpenCategories] = useState<Set<Category>>(new Set())
 

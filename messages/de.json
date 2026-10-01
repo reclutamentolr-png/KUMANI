@@ -5796,6 +5796,9 @@
     "open": "Öffnen",
     "showAll": "Alle {count} Dienste anzeigen",
     "showLess": "Weniger anzeigen",
-    "passChip": "Nur dieser {price}"
+    "passChip": "Nur dieser {price}",
+    "communityTitle": "Community",
+    "communityBadge": "GEMEINSAM",
+    "communitySub": "Pinnwand, Kumano des Tages, Kordata, Events und Zeitbank: die Community, die mit anpackt."
   }
 }

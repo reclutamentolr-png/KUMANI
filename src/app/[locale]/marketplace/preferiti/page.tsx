@@ -37,7 +37,7 @@ export default async function MarketplaceFavoritesPage({
       toolName: tool.toolName,
       isEnabled: isToolEnabled(tool.toolName),
       // Preserve the "came from the dashboard" origin into each tool, same
-      // as CategoryToolsAccordion does — otherwise a tool opened from here
+      // as ToolTiers does — otherwise a tool opened from here
       // (itself reached via the dashboard's "Preferiti" shortcut) loses
       // track of it and its own back-link falls back to "Marketplace".
       href: fromDashboard ? `${tool.href}?from=dashboard` : tool.href,

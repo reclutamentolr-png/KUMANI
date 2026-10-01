@@ -1,7 +1,6 @@
 import { getLocale, getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
 import KumanoDelGiornoPreview from './KumanoDelGiornoPreview'
-import CategoryToolsAccordion from './CategoryToolsAccordion'
 import ToolTiers from './ToolTiers'
 import InfoPopover from '@/components/InfoPopover'
 import type { MarketplaceTool } from '@/lib/marketplaceTools'
@@ -26,11 +25,10 @@ export default async function DashboardTipo2({
   visibleTools,
   lockedToolNames,
   passPrices = {},
-  proToolNames,
-  freeToolNames,
   basePrice,
   proPrice,
   toolPlans,
+  communityAccess = {},
   favoriteToolNames,
   proTrialDaysLeft = null,
   agenda = null,
@@ -42,15 +40,14 @@ export default async function DashboardTipo2({
   lockedToolNames: string[]
   // Servizi bloccati acquistabili da soli: prezzo del pass
   passPrices?: Record<string, string>
-  proToolNames: string[]
-  // Servizi gratuiti (etichetta GRATIS, mostrati per primi)
-  freeToolNames: string[]
   // Prezzo del piano Base già formattato (es. "49 €")
   basePrice: string
   // Prezzo del piano Pro già formattato (es. "149 €")
   proPrice: string
   // Fascia di ogni servizio: Gratis, Base o Pro
   toolPlans: Record<string, 'free' | 'base' | 'pro'>
+  // Sezioni della Community: visibile (accesa) e bloccata dal piano
+  communityAccess?: Record<string, { visible: boolean; locked: boolean }>
   favoriteToolNames: string[]
   // Prova Pro in corso: il riquadro dell'abbonamento propone Pro come
   // scelta principale e il Base come alternativa.
@@ -81,12 +78,14 @@ export default async function DashboardTipo2({
   // Community: Bacheca, Kumano del Giorno e Kordata (sezioni della
   // piattaforma, non strumenti del Marketplace: niente stella preferiti).
   const communityItems = [
-    { toolName: 'community-listings', href: '/marketplace/listings', iconName: 'Tag', title: marketplaceT('listings'), description: marketplaceT('listingsDescription') },
-    { toolName: 'community-spotlight', href: '/marketplace/spotlight', iconName: 'Star', title: marketplaceT('kumanoDelGiorno'), description: marketplaceT('kumanoDelGiornoDescription') },
-    { toolName: 'community-convivio', href: '/marketplace/convivio', iconName: 'HandPlatter', title: marketplaceT('convivio'), description: marketplaceT('convivioDescription') },
-    { toolName: 'community-events', href: '/events', iconName: 'PartyPopper', title: marketplaceT('events'), description: marketplaceT('eventsDescription') },
-    { toolName: 'community-timebank', href: '/marketplace/timebank', iconName: 'Hourglass', title: marketplaceT('timebank'), description: marketplaceT('timebankDescription') },
-  ].map((item) => ({ ...item, gradient: 'bg-[var(--ink)]', color: 'gold', category: 'community' })) as unknown as MarketplaceTool[]
+    { toolName: 'community-listings', setting: 'listings', href: '/marketplace/listings', iconName: 'Tag', title: marketplaceT('listings'), description: marketplaceT('listingsDescription') },
+    { toolName: 'community-spotlight', setting: 'spotlight', href: '/marketplace/spotlight', iconName: 'Star', title: marketplaceT('kumanoDelGiorno'), description: marketplaceT('kumanoDelGiornoDescription') },
+    { toolName: 'community-convivio', setting: 'convivio', href: '/marketplace/convivio', iconName: 'HandPlatter', title: marketplaceT('convivio'), description: marketplaceT('convivioDescription') },
+    { toolName: 'community-events', setting: 'events', href: '/events', iconName: 'PartyPopper', title: marketplaceT('events'), description: marketplaceT('eventsDescription') },
+    { toolName: 'community-timebank', setting: 'timebank', href: '/marketplace/timebank', iconName: 'Hourglass', title: marketplaceT('timebank'), description: marketplaceT('timebankDescription') },
+  ]
+    .filter((item) => communityAccess[item.setting]?.visible !== false)
+    .map((item) => ({ ...item, locked: communityAccess[item.setting]?.locked === true }))
 
 
   return (
@@ -234,20 +233,8 @@ export default async function DashboardTipo2({
           categoryLabels={categoryLabels}
           basePrice={basePrice}
           proPrice={proPrice}
+          community={communityItems}
         />
-        <div className="mt-5">
-          <CategoryToolsAccordion
-            category="community"
-            label={categoryLabels.community}
-            toolsLabel={marketplaceT('categoryToolCount', { count: communityItems.length })}
-            tools={communityItems}
-            lockedToolNames={lockedToolNames}
-            proToolNames={proToolNames}
-            freeToolNames={freeToolNames}
-            basePrice={basePrice}
-            favoriteToolNames={favoriteToolNames}
-          />
-        </div>
       </div>
 
       <KumanoDelGiornoPreview />
