@@ -7,6 +7,7 @@ import { recordAgentCommission, reverseAgentCommission } from '@/lib/agentCommis
 import { sendPurchaseConfirmation } from '@/lib/purchaseEmail'
 import { awardActivationPoints, reverseActivationPoints } from '@/lib/networkPoints'
 import { accrueSubscriptionDonation, reverseSubscriptionDonation } from '@/lib/donations'
+import { grantToolPassFromSession, revokeToolPassForCharge, TOOL_PASS_TYPE } from '@/lib/toolPasses'
 
 // Creato alla richiesta e non al caricamento del modulo: così `next build`
 // non fallisce se le variabili d'ambiente non sono disponibili in build.
@@ -54,11 +55,28 @@ export async function POST(req: NextRequest) {
         await reverseAgentCommission(event.data.object as Stripe.Charge)
         await reverseActivationPoints(event.data.object as Stripe.Charge)
         await reverseSubscriptionDonation(event.data.object as Stripe.Charge)
+        // Pass servizio rimborsato: revocato
+        await revokeToolPassForCharge(event.data.object as Stripe.Charge)
       }
       return NextResponse.json({ received: true })
     } catch (err) {
       console.error(`❌ Provvigione agente o Punti Rete (${event.type}) non registrati:`, err instanceof Error ? err.message : err)
       // 500 → Stripe ritenta l'invio dell'evento più tardi.
+      return NextResponse.json({ error: 'db_update_failed' }, { status: 500 })
+    }
+  }
+
+  // Pass di un singolo servizio (pagamento una tantum): si assegna il pass e
+  // ci si ferma qui, mai come abbonamento.
+  if (
+    (event.type === 'checkout.session.completed' || event.type === 'checkout.session.async_payment_succeeded') &&
+    (event.data.object as Stripe.Checkout.Session).metadata?.type === TOOL_PASS_TYPE
+  ) {
+    try {
+      await grantToolPassFromSession(event.data.object as Stripe.Checkout.Session)
+      return NextResponse.json({ received: true })
+    } catch (err) {
+      console.error('❌ Pass servizio non assegnato:', err instanceof Error ? err.message : err)
       return NextResponse.json({ error: 'db_update_failed' }, { status: 500 })
     }
   }

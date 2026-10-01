@@ -106,6 +106,7 @@ export const SECTION_LABELS: Record<string, string> = {
   rewards: 'Premi',
   kuRewards: 'KU Karma',
   voucherCard: 'Voucher',
+  toolPass: 'Pass dei singoli servizi',
   referralLanding: 'Pagina di invito',
   toolShare: 'Condivisione dei servizi',
   adminMessage: 'Messaggi dello Staff',

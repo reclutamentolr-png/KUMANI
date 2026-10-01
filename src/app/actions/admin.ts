@@ -12,6 +12,9 @@ import { SPOTLIGHT_HOME_CACHE_TAG, type SpotlightModerationStatus } from '@/lib/
 import { getPlanPrices } from '@/lib/planPrices'
 import { KU_FEATURE_KEYS, type KuFeatureKey } from '@/lib/ku'
 import { invalidateListingsCache } from '@/lib/listings-server'
+import { generatePassCode } from '@/lib/toolPasses'
+import { getMarketplaceTools } from '@/lib/marketplaceTools'
+import { getTranslations } from 'next-intl/server'
 import type { AdminCouponRow, AdminRewardRedemption, ListingReport, ListingReportRow } from '@/lib/adminTypes'
 
 const getServiceClient = () =>
@@ -840,7 +843,19 @@ export async function getAdminFinancialSummary() {
   }
   for (const row of donationPayouts ?? []) donations.paidCents += row.amount_cents
 
-  // 10. Premi del catalogo (spento, solo storico)
+  // 10. Pass dei singoli servizi (pagati con carta o attivati con codice)
+  const { data: passRows } = await db.from('tool_passes').select('source, amount_cents, expires_at, revoked_at')
+  const toolPasses = { soldCount: 0, soldCents: 0, codeCount: 0, activeCount: 0 }
+  for (const row of passRows ?? []) {
+    if (row.revoked_at) continue
+    if (row.source === 'stripe') {
+      toolPasses.soldCount += 1
+      toolPasses.soldCents += row.amount_cents ?? 0
+    } else if (row.source === 'code') toolPasses.codeCount += 1
+    if (row.expires_at && new Date(row.expires_at).getTime() > now) toolPasses.activeCount += 1
+  }
+
+  // 11. Premi del catalogo (spento, solo storico)
   const { count: rewardsRedeemedCount } = await db.from('reward_redemptions').select('*', { count: 'exact', head: true })
 
   // Totali
@@ -863,6 +878,7 @@ export async function getAdminFinancialSummary() {
     active,
     shopBatches,
     shopRedeemed,
+    toolPasses,
     agentCommissions,
     agentDue,
     kumanoVouchers: kumano,
@@ -2908,4 +2924,104 @@ export async function adminSaveKuActivityPoints(rows: { key: string; points: num
     if (error) return { success: false, error: error.message }
   }
   return { success: true }
+}
+
+// ============================================================
+// Pass servizio: un singolo servizio per un anno, senza abbonamento
+// ============================================================
+
+// Vendibile da solo (sì/no) e prezzo del pass, per servizio
+export async function adminUpdateToolPass(toolName: string, enabled: boolean, priceEur: number) {
+  const admin = await verifyAdmin('marketplace.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  const cents = Math.round(Number(priceEur) * 100)
+  if (!Number.isFinite(cents) || cents < 100 || cents > 100000) return { success: false, error: 'Prezzo non valido: da 1 € a 1.000 €.' }
+  const { error } = await getServiceClient()
+    .from('marketplace_settings')
+    .update({ pass_enabled: enabled, pass_price_cents: cents, updated_at: new Date().toISOString() })
+    .eq('tool_name', toolName)
+  if (error) return { success: false, error: error.message }
+  return { success: true }
+}
+
+// Nome del servizio (in italiano, per l'area Admin e i coupon)
+async function toolTitle(tool: string) {
+  const t = await getTranslations({ locale: 'it', namespace: 'marketplace' })
+  return getMarketplaceTools((key) => t(key)).find((item) => item.toolName === tool)?.title ?? tool
+}
+
+// Codici pass: un lotto (es. da vendere a un negozio) oppure uno solo
+// assegnato a un utente, che lo trova tra i Coupon del Wallet.
+export async function adminCreatePassCodes(input: { tool: string; quantity: number; label: string; userId?: string | null }) {
+  const admin = await verifyAdmin('coupons.write')
+  if (!admin) return { success: false, error: 'Non autorizzato', codes: [] as string[] }
+  const db = getServiceClient()
+  const { data: setting } = await db.from('marketplace_settings').select('tool_name').eq('tool_name', input.tool).maybeSingle()
+  if (!setting) return { success: false, error: 'Servizio non valido.', codes: [] as string[] }
+  const quantity = input.userId ? 1 : Math.floor(Number(input.quantity))
+  if (!Number.isInteger(quantity) || quantity < 1 || quantity > 500) return { success: false, error: 'Quantità da 1 a 500.', codes: [] as string[] }
+  const label = input.label.trim().slice(0, 200) || null
+
+  const codes: string[] = []
+  for (let attempt = 0; attempt < 20 && codes.length < quantity; attempt++) {
+    const batch = Array.from({ length: quantity - codes.length }, () => generatePassCode())
+    const { data, error } = await db
+      .from('tool_pass_codes')
+      .upsert(
+        batch.map((code) => ({ code, tool: input.tool, days: 365, label, assigned_to: input.userId ?? null, created_by: admin.id })),
+        { onConflict: 'code', ignoreDuplicates: true }
+      )
+      .select('code')
+    if (error) return { success: false, error: error.message, codes }
+    codes.push(...(data ?? []).map((row: { code: string }) => row.code))
+  }
+
+  if (input.userId && codes[0]) {
+    const title = await toolTitle(input.tool)
+    const { error } = await db.from('wallet_coupons').insert({
+      user_id: input.userId,
+      code: codes[0],
+      title: `Pass ${title} – 1 anno`,
+      description: 'Attiva il servizio per un anno, oppure regala il codice: chi lo inserisce nella pagina del servizio lo attiva per sé.',
+      pass_tool: input.tool,
+      issued_by: admin.id,
+    })
+    if (error) return { success: false, error: error.message, codes }
+  }
+  return { success: true, codes }
+}
+
+export type AdminPassCodeRow = {
+  code: string
+  tool: string
+  toolTitle: string
+  label: string | null
+  created_at: string
+  redeemed_at: string | null
+  assigned: boolean
+}
+
+export async function adminListPassCodes() {
+  const admin = await verifyAdmin('coupons.read')
+  if (!admin) return { codes: [] as AdminPassCodeRow[], error: 'Non autorizzato' }
+  const { data, error } = await getServiceClient()
+    .from('tool_pass_codes')
+    .select('code, tool, label, created_at, redeemed_at, assigned_to')
+    .order('created_at', { ascending: false })
+    .limit(300)
+  if (error) return { codes: [] as AdminPassCodeRow[], error: error.message }
+  const t = await getTranslations({ locale: 'it', namespace: 'marketplace' })
+  const titles = new Map(getMarketplaceTools((key) => t(key)).map((item) => [item.toolName, item.title]))
+  return {
+    codes: (data ?? []).map((row) => ({
+      code: row.code,
+      tool: row.tool,
+      toolTitle: titles.get(row.tool) ?? row.tool,
+      label: row.label,
+      created_at: row.created_at,
+      redeemed_at: row.redeemed_at,
+      assigned: !!row.assigned_to,
+    })),
+    error: null,
+  }
 }

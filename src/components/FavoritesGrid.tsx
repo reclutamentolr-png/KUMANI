@@ -13,6 +13,7 @@ type FavoriteTool = {
   description: string
   color: string
   disabledReason?: 'offline' | 'subscription' | 'pro'
+  hasPass?: boolean
   isPro?: boolean
 }
 

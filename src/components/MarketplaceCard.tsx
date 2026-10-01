@@ -18,6 +18,8 @@ type MarketplaceCardProps = {
   disabledReason?: 'offline' | 'subscription' | 'pro'
   // Strumento del piano Pro: badge "PRO" sulla scheda.
   isPro?: boolean
+  // Acquistabile anche da solo (pass): la scheda bloccata porta alla sua pagina
+  hasPass?: boolean
   isFavorite?: boolean
   onFavoriteToggle?: (toolName: string, isFavorite: boolean) => void
 }
@@ -31,6 +33,7 @@ export default function MarketplaceCard({
    description,
    disabledReason,
    isPro = false,
+   hasPass = false,
    isFavorite = false,
    onFavoriteToggle,
 }: MarketplaceCardProps) {
@@ -38,7 +41,8 @@ export default function MarketplaceCard({
   const Icon = marketplaceIconMap[iconName] || Smartphone
   
   // Strumento Pro senza piano Pro: la scheda porta a "Passa a Pro".
-  const upgradeHref = disabledReason === 'pro' ? `/pro?tool=${toolName}` : null
+  const upgradeHref =
+    disabledReason && disabledReason !== 'offline' && hasPass ? `/pass/${toolName}` : disabledReason === 'pro' ? `/pro?tool=${toolName}` : null
 
   const handleClick = (e: React.MouseEvent) => {
     if (!isEnabled && !upgradeHref) {

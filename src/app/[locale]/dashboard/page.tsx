@@ -62,7 +62,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     getMarketplaceAccessState(supabase, user.id),
     getFavoriteToolNames(supabase, user.id),
   ])
-  const { userPlan, isSettingEnabled, isToolEnabled, requiredPlan } = access
+  const { userPlan, isSettingEnabled, isToolEnabled, requiredPlan, passPriceCents } = access
   const userIsAdmin = adminRole || profile?.is_admin === true
 
   // Promemoria di rinnovo: mostrato ogni volta che entra in dashboard negli
@@ -129,6 +129,13 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   // shown locked instead of silently hidden, same distinction the
   // marketplace category grid already makes via MarketplaceCard.
   const lockedToolNames = visibleTools.filter((tool) => !isToolEnabled(tool.toolName)).map((tool) => tool.toolName)
+  // Servizi bloccati acquistabili anche da soli (pass di un anno): prezzo formattato
+  const passPrices: Record<string, string> = {}
+  for (const name of lockedToolNames) {
+    const cents = passPriceCents(name)
+    if (cents !== null)
+      passPrices[name] = new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2, minimumFractionDigits: 0 }).format(cents / 100)
+  }
   const proToolNames = visibleTools.filter((tool) => requiredPlan(tool.toolName) === 'pro').map((tool) => tool.toolName)
   const freeToolNames = visibleTools.filter((tool) => requiredPlan(tool.toolName) === 'free').map((tool) => tool.toolName)
 
@@ -233,6 +240,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
           shareUrl={shareUrl}
           visibleTools={visibleTools}
           lockedToolNames={lockedToolNames}
+          passPrices={passPrices}
           proToolNames={proToolNames}
           freeToolNames={freeToolNames}
           basePrice={basePrice}

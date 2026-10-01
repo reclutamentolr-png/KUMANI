@@ -26,7 +26,7 @@ export default async function MarketplaceFavoritesPage({
   } = await supabase.auth.getUser()
   if (!user) redirect(`/${locale}/login`)
 
-  const { isSettingEnabled, isToolEnabled, disabledReason, requiredPlan } = await getMarketplaceAccessState(supabase, user.id)
+  const { isSettingEnabled, isToolEnabled, disabledReason, requiredPlan, passPriceCents } = await getMarketplaceAccessState(supabase, user.id)
   const favoriteToolNames = await getFavoriteToolNames(supabase, user.id)
 
   const favoriteTools = getMarketplaceTools(t)
@@ -48,6 +48,7 @@ export default async function MarketplaceFavoritesPage({
       color: tool.color,
       isPro: requiredPlan(tool.toolName) === 'pro',
       disabledReason: disabledReason(tool.toolName),
+      hasPass: passPriceCents(tool.toolName) !== null,
     }))
 
   return (

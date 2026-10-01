@@ -24,6 +24,7 @@ export default async function DashboardTipo2({
   shareUrl,
   visibleTools,
   lockedToolNames,
+  passPrices = {},
   proToolNames,
   freeToolNames,
   basePrice,
@@ -36,6 +37,8 @@ export default async function DashboardTipo2({
   shareUrl: string
   visibleTools: MarketplaceTool[]
   lockedToolNames: string[]
+  // Servizi bloccati acquistabili da soli: prezzo del pass
+  passPrices?: Record<string, string>
   proToolNames: string[]
   // Servizi gratuiti (etichetta GRATIS, mostrati per primi)
   freeToolNames: string[]
@@ -229,6 +232,7 @@ export default async function DashboardTipo2({
               toolsLabel={marketplaceT('categoryToolCount', { count: tools.length })}
               tools={tools}
               lockedToolNames={lockedToolNames}
+              passPrices={passPrices}
               proToolNames={proToolNames}
               freeToolNames={freeToolNames}
               basePrice={basePrice}

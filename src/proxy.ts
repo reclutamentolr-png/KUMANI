@@ -248,6 +248,18 @@ export async function proxy(request: NextRequest) {
           const { data: online } = await supabase.rpc('tool_online', { p_tool: toolName });
           if (online === false) return response;
         }
+        // Servizio acquistabile anche da solo (pass): pagina del pass, che
+        // propone pass, codice o abbonamento.
+        if (access.required_plan !== 'free') {
+          const { data: passSetting } = await supabase
+            .from('marketplace_settings')
+            .select('pass_enabled')
+            .eq('tool_name', toolName)
+            .maybeSingle<{ pass_enabled: boolean | null }>();
+          if (passSetting?.pass_enabled) {
+            return NextResponse.redirect(new URL(`${localePrefix}/pass/${toolName}`, request.url));
+          }
+        }
         const target = access.required_plan === 'pro' ? `${localePrefix}/pro?tool=${toolName}` : `${localePrefix}/dashboard`;
         return NextResponse.redirect(new URL(target, request.url));
       }

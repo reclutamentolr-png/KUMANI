@@ -335,6 +335,13 @@ export default function TermsPage() {
                 Piattaforma permette di preparare è un documento dell&apos;utente. È cura del Promotore adempiere agli obblighi fiscali e
                 dichiarativi previsti dalla normativa del proprio Paese di residenza in merito agli incassi derivanti da tali attività.
               </p>
+              <p>
+                <strong className="text-gray-900">7.9 Pass servizio.</strong> Alcuni servizi, indicati sulla loro scheda, possono essere
+                attivati singolarmente per un anno, senza abbonamento, con un pagamento unico o con un codice pass. Il pass non si
+                rinnova automaticamente, non dà KU Points a chi ha invitato l&apos;utente e non modifica il prezzo degli abbonamenti Base
+                e Pro, che restano dovuti per intero se l&apos;utente decide di abbonarsi. Per l&apos;acquisto del pass valgono le stesse
+                regole di recesso e di rimborso degli abbonamenti; in caso di rimborso il pass viene disattivato.
+              </p>
             </div>
 
             <div className="mt-5 bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3">

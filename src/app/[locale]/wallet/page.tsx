@@ -35,6 +35,8 @@ import QuickNav from '@/components/QuickNav'
 import WalletCouponsList from '@/components/WalletCouponsList'
 import WalletVoucherSection from '@/components/WalletVoucherSection'
 import WalletRenewalDiscount from '@/components/ku/WalletRenewalDiscount'
+import { getMyToolPasses } from '@/lib/toolPasses'
+import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { loadKuWalletData } from '@/lib/ku-server'
 import { featureConfig, type KuRenewalConfig } from '@/lib/ku'
 import { getMyAttendedCount, listMyPasses } from '@/app/actions/events'
@@ -112,13 +114,26 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
   const receiptsConfirmed = receiptsList.filter((r) => r.confirmed_at && !r.returned_at).length
   const receiptsReturned = receiptsList.filter((r) => r.returned_at).length
 
-  const { data: coupons } = await supabase
-    .from('wallet_coupons')
-    .select('id, code, title, description, expires_at, redeemed_at, created_at')
-    .eq('user_id', user.id)
-    .order('created_at', { ascending: false })
+  const couponQuery = (columns: string) =>
+    supabase.from('wallet_coupons').select(columns).eq('user_id', user.id).order('created_at', { ascending: false })
+  // Senza la colonna dei pass (migrazione non ancora applicata) si legge come prima
+  const withPass = await couponQuery('id, code, title, description, expires_at, redeemed_at, created_at, pass_tool')
+  const coupons = withPass.error ? (await couponQuery('id, code, title, description, expires_at, redeemed_at, created_at')).data : withPass.data
 
-  const couponsList = coupons || []
+  const couponsList = (coupons ?? []) as unknown as {
+    id: string
+    code: string
+    title: string
+    description: string | null
+    expires_at: string | null
+    redeemed_at: string | null
+    created_at: string
+    pass_tool?: string | null
+  }[]
+  // Pass dei singoli servizi attivi (servizio → scadenza) e nomi tradotti
+  const [myPasses, marketplaceT, tp] = await Promise.all([getMyToolPasses(supabase), getTranslations('marketplace'), getTranslations('toolPass')])
+  const toolsByName = new Map(getMarketplaceTools((key) => marketplaceT(key)).map((tool) => [tool.toolName, tool]))
+  const passTitles = Object.fromEntries([...toolsByName].map(([name, tool]) => [name, tool.title]))
   const myVouchers = await listMyVouchers()
   // Catalogo Premi: se spento dall'Admin niente collegamenti; i premi già
   // riscattati restano visibili finché ce ne sono
@@ -181,6 +196,37 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
             qrUrl={referralUrl}
           />
         </WalletSection>
+
+        {/* Pass dei singoli servizi (acquistati o attivati con codice) */}
+        {myPasses.size > 0 && (
+          <WalletSection icon={<Ticket className="h-5 w-5 text-[var(--gold)]" />} title={tp('walletPassTitle')}>
+            <ul className="space-y-2">
+              {[...myPasses].map(([tool, expiresAt]) => {
+                const info = toolsByName.get(tool)
+                return (
+                  <li key={tool} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[var(--gold)]/25 bg-white px-4 py-3">
+                    <span className="min-w-0">
+                      <span className="block font-semibold text-[var(--ink)]">{info?.title ?? tool}</span>
+                      <span className="block text-xs text-[var(--muted)]">
+                        {tp('walletPassUntil', { date: new Date(expiresAt).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' }) })}
+                      </span>
+                    </span>
+                    <span className="flex shrink-0 gap-2">
+                      <Link href={`/pass/${tool}`} className="rounded-lg border border-[var(--gold)]/50 px-3 py-1.5 text-xs font-semibold text-[var(--ink)]">
+                        {tp('walletPassRenew')}
+                      </Link>
+                      {info && (
+                        <Link href={info.href} className="rounded-lg bg-[var(--ink)] px-3 py-1.5 text-xs font-semibold text-[var(--gold-bright)]">
+                          {tp('openService')}
+                        </Link>
+                      )}
+                    </span>
+                  </li>
+                )
+              })}
+            </ul>
+          </WalletSection>
+        )}
 
         {/* Pass degli eventi a cui sono iscritto (il QR si apre nella pagina dell'evento) */}
         <WalletSection icon={<PartyPopper className="h-5 w-5 text-[var(--gold)]" />} title={t('eventPassesTitle')}>
@@ -463,7 +509,7 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
           {couponsList.length === 0 ? (
             <p className="text-sm text-[var(--muted)]">{t('couponEmpty')}</p>
           ) : (
-            <WalletCouponsList coupons={couponsList} />
+            <WalletCouponsList coupons={couponsList} passTitles={passTitles} />
           )}
         </WalletSection>
 

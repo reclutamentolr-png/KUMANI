@@ -91,6 +91,8 @@ import LanguagesPanel from '@/components/admin/LanguagesPanel'
 import AgentsPanel from '@/components/admin/AgentsPanel'
 import WithdrawalsPanel from '@/components/admin/WithdrawalsPanel'
 import DonationsPanel from '@/components/admin/DonationsPanel'
+import PassCodesPanel from '@/components/admin/PassCodesPanel'
+import ToolPassSetting from '@/components/admin/ToolPassSetting'
 import { startImpersonation } from '@/lib/impersonation'
 import {
   LayoutDashboard,
@@ -317,7 +319,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
   const [voucherBatches, setVoucherBatches] = useState<AdminVoucherBatch[]>([])
   const [batchForm, setBatchForm] = useState<{ businessName: string; quantity: string; priceEur: string; invoiceRef: string; notes: string; plan: 'base' | 'pro' }>({ businessName: '', quantity: '10', priceEur: '400', invoiceRef: '', notes: '', plan: 'base' })
   const [creatingBatch, setCreatingBatch] = useState(false)
-  const [couponArea, setCouponArea] = useState<'merchant' | 'community'>('merchant')
+  const [couponArea, setCouponArea] = useState<'merchant' | 'community' | 'pass'>('merchant')
   const [fulfillCodeInputs, setFulfillCodeInputs] = useState<Record<string, string>>({})
   const [fulfillingId, setFulfillingId] = useState<string | null>(null)
 
@@ -1494,6 +1496,14 @@ L'accesso viene registrato.`)) return
                       })}
                     </div>
                   </div>
+                  {(tool.required_plan ?? 'base') !== 'free' && (
+                    <ToolPassSetting
+                      toolName={tool.tool_name}
+                      enabled={!!tool.pass_enabled}
+                      priceCents={tool.pass_price_cents ?? 1000}
+                      onSaved={loadMarketplaceData}
+                    />
+                  )}
                   <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                     <div>
                       <div className="text-xs text-gray-500 uppercase">Utilizzi Totali</div>
@@ -1862,6 +1872,7 @@ L'accesso viene registrato.`)) return
         {([
           ['merchant', '🏪 Voucher per negozianti'],
           ['community', '👥 Coupon per la community'],
+          ['pass', '🎟️ Pass servizio'],
         ] as const).map(([key, label]) => (
           <button
             key={key}
@@ -1875,7 +1886,7 @@ L'accesso viene registrato.`)) return
           </button>
         ))}
       </div>
-      {couponArea === 'merchant' ? renderMerchantCoupons() : renderCommunityCoupons()}
+      {couponArea === 'merchant' ? renderMerchantCoupons() : couponArea === 'pass' ? <PassCodesPanel /> : renderCommunityCoupons()}
     </div>
   )
 
@@ -2567,6 +2578,15 @@ L'accesso viene registrato.`)) return
             <Row label="Attivati con voucher" value={String(f.active.voucher)} />
             <Row label="Attivati dallo Staff" value={String(f.active.admin)} />
           </Card>
+
+          {f.toolPasses && (
+            <Card title="Pass dei singoli servizi" subtitle="Un servizio per un anno, senza abbonamento (nessun KU Point a chi invita)">
+              <Row label="Pass pagati con carta" value={String(f.toolPasses.soldCount)} />
+              <Row label="Incassato dai pass" value={eur(f.toolPasses.soldCents)} strong />
+              <Row label="Attivati con codice" value={String(f.toolPasses.codeCount)} />
+              <Row label="Pass attivi oggi" value={String(f.toolPasses.activeCount)} />
+            </Card>
+          )}
 
           <Card title="Lotti di voucher per i negozi" subtitle="Venduti con fattura a parte, fuori da Stripe">
             <Row label="Lotti" value={String(f.shopBatches.count)} hint={`${f.shopBatches.vouchers} voucher, ${f.shopRedeemed.count} già usati`} />

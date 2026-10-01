@@ -11,6 +11,10 @@ export interface MarketplaceAccessState {
   isToolEnabled: (toolName: string) => boolean
   requiredPlan: (toolName: string) => RequiredPlan
   disabledReason: (toolName: string) => ToolDisabledReason | undefined
+  // Pass del singolo servizio: prezzo in centesimi se è acquistabile da solo
+  passPriceCents: (toolName: string) => number | null
+  // Scadenza del pass attivo dell'utente per quel servizio
+  passExpiresAt: (toolName: string) => string | null
 }
 
 // Strumenti che si aprono per tutti i registrati anche senza il piano: il
@@ -19,7 +23,7 @@ export interface MarketplaceAccessState {
 // piano, vedi trip_create).
 export const OPEN_TO_ALL_MEMBERS = ['travel']
 
-type SettingRow = { tool_name: string; is_enabled: boolean; required_plan?: RequiredPlan }
+type SettingRow = { tool_name: string; is_enabled: boolean; required_plan?: RequiredPlan; pass_enabled?: boolean; pass_price_cents?: number }
 
 /**
  * Stato d'accesso per le schede del Marketplace e della dashboard: piano
@@ -29,12 +33,16 @@ type SettingRow = { tool_name: string; is_enabled: boolean; required_plan?: Requ
  */
 export async function getMarketplaceAccessState(supabase: SupabaseClient, userId: string): Promise<MarketplaceAccessState> {
   // Impostazioni, piano e prova Pro: tre letture indipendenti, insieme
-  const [withPlan, planResult, trialResult] = await Promise.all([
-    supabase.from('marketplace_settings').select('tool_name, is_enabled, required_plan'),
+  // (più i pass dei singoli servizi già attivati)
+  const [withPass, planResult, trialResult, passResult] = await Promise.all([
+    supabase.from('marketplace_settings').select('tool_name, is_enabled, required_plan, pass_enabled, pass_price_cents'),
     supabase.rpc('my_plan'),
     supabase.rpc('my_trial_only'),
+    supabase.rpc('my_tool_passes'),
   ])
   let settings: SettingRow[] = []
+  // Migrazione dei pass non ancora applicata: si legge senza le loro colonne
+  const withPlan = withPass.error ? await supabase.from('marketplace_settings').select('tool_name, is_enabled, required_plan') : withPass
   if (!withPlan.error) {
     settings = (withPlan.data ?? []) as SettingRow[]
   } else {
@@ -62,18 +70,32 @@ export async function getMarketplaceAccessState(supabase: SupabaseClient, userId
   let trialOnly = false
   if (!trialResult.error) trialOnly = trialResult.data === true
 
+  const passes = new Map(
+    !passResult.error && Array.isArray(passResult.data)
+      ? (passResult.data as { tool: string; expires_at: string }[]).map((row) => [row.tool, row.expires_at] as const)
+      : []
+  )
+
   const isSettingEnabled = (toolName: string) => byTool.get(toolName)?.is_enabled !== false
   const requiredPlan = (toolName: string): RequiredPlan =>
     byTool.get(toolName)?.required_plan ?? (LEGACY_PAID_TOOLS.includes(toolName) ? 'base' : 'free')
   const isToolEnabled = (toolName: string) =>
     isSettingEnabled(toolName) &&
     (OPEN_TO_ALL_MEMBERS.includes(toolName) ||
-      (planCovers(userPlan, requiredPlan(toolName)) && !(trialOnly && requiredPlan(toolName) === 'base')))
+      (planCovers(userPlan, requiredPlan(toolName)) && !(trialOnly && requiredPlan(toolName) === 'base')) ||
+      passes.has(toolName))
   const disabledReason = (toolName: string): ToolDisabledReason | undefined => {
     if (!isSettingEnabled(toolName)) return 'offline'
     if (isToolEnabled(toolName)) return undefined
     return requiredPlan(toolName) === 'pro' ? 'pro' : 'subscription'
   }
 
-  return { userPlan, trialOnly, isSettingEnabled, isToolEnabled, requiredPlan, disabledReason }
+  const passPriceCents = (toolName: string) => {
+    const row = byTool.get(toolName)
+    if (!row?.pass_enabled || row.is_enabled === false || requiredPlan(toolName) === 'free') return null
+    return row.pass_price_cents ?? 1000
+  }
+  const passExpiresAt = (toolName: string) => passes.get(toolName) ?? null
+
+  return { userPlan, trialOnly, isSettingEnabled, isToolEnabled, requiredPlan, disabledReason, passPriceCents, passExpiresAt }
 }

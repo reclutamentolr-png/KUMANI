@@ -7,7 +7,7 @@ import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 import type { MarketplaceTool, MarketplaceCategory } from '@/lib/marketplaceTools'
 import FavoriteStarButton from '@/components/FavoriteStarButton'
 import { readDashboardReturn, saveDashboardReturn } from '@/lib/dashboardReturn'
-import { Megaphone, ShieldCheck, CalendarClock, Waves, Briefcase, ChevronDown, ChevronUp, Smartphone, Lock, Zap, PartyPopper, Users } from 'lucide-react'
+import { Megaphone, ShieldCheck, CalendarClock, Waves, Briefcase, ChevronDown, ChevronUp, Smartphone, Lock, Zap, PartyPopper, Users, Ticket } from 'lucide-react'
 
 const CATEGORY_ICONS: Record<MarketplaceCategory, typeof Megaphone> = {
   marketing: Megaphone,
@@ -28,6 +28,7 @@ export default function CategoryToolsAccordion({
   toolsLabel,
   tools,
   lockedToolNames,
+  passPrices = {},
   proToolNames = [],
   freeToolNames = [],
   basePrice,
@@ -38,6 +39,8 @@ export default function CategoryToolsAccordion({
   toolsLabel: string
   tools: MarketplaceTool[]
   lockedToolNames: string[]
+  // Servizi bloccati acquistabili da soli (pass di un anno): prezzo
+  passPrices?: Record<string, string>
   // Strumenti del piano Pro (badge PRO; se bloccati portano a "Passa a Pro").
   proToolNames?: string[]
   // Servizi gratuiti per tutti gli iscritti (etichetta GRATIS)
@@ -48,6 +51,7 @@ export default function CategoryToolsAccordion({
 }) {
   const t = useTranslations('marketplace')
   const td = useTranslations('dashboard')
+  const tp = useTranslations('toolPass')
   const [open, setOpen] = useState(false)
   const CategoryIcon = CATEGORY_ICONS[category]
 
@@ -90,10 +94,11 @@ export default function CategoryToolsAccordion({
             const isPro = proToolNames.includes(tool.toolName)
 
             if (locked) {
+              const passPrice = passPrices[tool.toolName]
               return (
                 <Link
                   key={tool.toolName}
-                  href={isPro ? `/pro?tool=${tool.toolName}` : { pathname: '/billing' }}
+                  href={passPrice ? `/pass/${tool.toolName}` : isPro ? `/pro?tool=${tool.toolName}` : { pathname: '/billing' }}
                   onClick={() => saveDashboardReturn(category)}
                   className="group relative rounded-xl border border-[var(--gold)]/25 bg-[var(--background)] p-4 opacity-50 transition-opacity hover:opacity-80"
                   title={isPro ? t('proRequired') : t('subscriptionRequired')}
@@ -106,9 +111,15 @@ export default function CategoryToolsAccordion({
                   </div>
                   <p className="font-bold text-[var(--ink)] text-sm mb-1 pr-6">{tool.title}</p>
                   <p className="text-xs text-[var(--muted)] leading-5 line-clamp-2 mb-2">{tool.description}</p>
-                  <span className="inline-flex items-center gap-1 text-xs font-bold text-[var(--gold)] group-hover:text-[var(--ink)]">
-                    <Zap className="h-3 w-3" /> {td('subscribeNow', { price: basePrice })}
-                  </span>
+                  {passPrice ? (
+                    <span className="inline-flex items-center gap-1 rounded-full border border-[var(--gold)]/60 bg-[var(--gold-pale)] px-2 py-0.5 text-[11px] font-bold text-[var(--ink)]">
+                      <Ticket className="h-3 w-3 text-[var(--gold)]" /> {tp('badgeLabel', { price: passPrice })}
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 text-xs font-bold text-[var(--gold)] group-hover:text-[var(--ink)]">
+                      <Zap className="h-3 w-3" /> {td('subscribeNow', { price: basePrice })}
+                    </span>
+                  )}
                 </Link>
               )
             }
