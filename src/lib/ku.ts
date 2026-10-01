@@ -28,7 +28,10 @@ export interface KuUnlockRow {
 
 // Sblocchi implementati nel codice. Per aggiungerne uno nuovo: voce in
 // ku_unlocks (migrazione) + controllo nello strumento + testi "unlock_<key>".
+// Vecchio pacchetto con tutti e tre i temi (disattivato: chi l'ha comprato
+// li conserva tutti); oggi ogni tema speciale si sblocca a parte.
 export const KU_UNLOCK_LINKINBIO_THEMES = 'linkinbio_premium_themes'
+export const linkInBioThemeUnlockKey = (theme: string) => `linkinbio_theme_${theme}`
 
 // Badge raggiunto più alto (livelli ordinati per soglia), null se nessuno.
 export function currentKuBadge(levels: KuBadgeLevel[] | undefined, earnedTotal: number): KuBadgeLevel | null {

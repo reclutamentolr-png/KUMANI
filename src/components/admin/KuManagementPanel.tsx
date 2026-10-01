@@ -14,7 +14,10 @@ type Stats = {
 
 // Nome leggibile degli sblocchi del catalogo (chiavi implementate nel codice).
 const UNLOCK_LABELS: Record<string, string> = {
-  linkinbio_premium_themes: 'Link in Bio — temi speciali (Aurora, Notte dorata, Tramonto)',
+  linkinbio_premium_themes: 'Link in Bio — pacchetto dei 3 temi (vecchio, disattivato: chi l’ha comprato li conserva)',
+  linkinbio_theme_aurora: 'Link in Bio — tema Aurora',
+  linkinbio_theme_notte: 'Link in Bio — tema Notte dorata',
+  linkinbio_theme_tramonto: 'Link in Bio — tema Tramonto',
 }
 
 // Descrizioni dettagliate: servono a capire, anche a distanza di tempo,

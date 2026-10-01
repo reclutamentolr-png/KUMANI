@@ -3,9 +3,9 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { Award, Coins, LoaderCircle, Lock, Repeat, Sparkles, Ticket, Unlock } from 'lucide-react'
+import { Award, Coins, LoaderCircle, Repeat, Sparkles, Ticket } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
-import { buyKuUnlock, convertKuToNetworkPoints, redeemRenewalDiscount } from '@/app/actions/ku'
+import { convertKuToNetworkPoints, redeemRenewalDiscount } from '@/app/actions/ku'
 import {
   currentKuBadge,
   featureConfig,
@@ -43,12 +43,11 @@ export default function KuRewardsSection({ data }: { data: KuWalletData }) {
   const [points, setPoints] = useState(1)
 
   const showcase = featureConfig<KuShowcaseConfig>(data.features, 'showcase')
-  const unlocksOn = featureConfig<Record<string, never>>(data.features, 'unlocks')
   const badges = featureConfig<KuBadgesConfig>(data.features, 'badges')
   const renewal = featureConfig<KuRenewalConfig>(data.features, 'renewal_discount')
   const conversion = featureConfig<KuConversionConfig>(data.features, 'conversion')
 
-  const anyActive = [showcase, unlocksOn, badges, renewal, conversion].some((f) => f?.enabled)
+  const anyActive = [showcase, badges, renewal, conversion].some((f) => f?.enabled)
   if (!anyActive) return null
 
   const run = async (key: string, action: () => Promise<{ success: boolean; reason: string | null }>, okText: string) => {
@@ -64,7 +63,6 @@ export default function KuRewardsSection({ data }: { data: KuWalletData }) {
   const badge = badges ? currentKuBadge(badges.levels, data.earnedTotal) : null
   const nextBadge = badges ? nextKuBadge(badges.levels, data.earnedTotal) : null
   const badgeName = (key: string) => (t.has(`badge_${key}`) ? t(`badge_${key}`) : key)
-  const availableUnlocks = data.unlocks.filter((u) => u.enabled || data.ownedUnlocks.includes(u.key))
 
   return (
     <section className="rounded-2xl border border-[var(--gold)]/20 bg-[var(--paper)] p-6 shadow-sm">
@@ -173,39 +171,6 @@ export default function KuRewardsSection({ data }: { data: KuWalletData }) {
           </div>
         )}
 
-        {unlocksOn?.enabled && availableUnlocks.length > 0 && (
-          <div className={`${card} md:col-span-2`}>
-            <p className="flex items-center gap-2 font-semibold text-[var(--ink)]">
-              <Unlock className="h-4 w-4 text-[var(--gold)]" /> {t('unlocksTitle')}
-            </p>
-            <div className="mt-3 space-y-3">
-              {availableUnlocks.map((unlock) => {
-                const owned = data.ownedUnlocks.includes(unlock.key)
-                return (
-                  <div key={unlock.key} className="flex flex-wrap items-center justify-between gap-3 rounded-lg bg-[var(--paper)] p-3">
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-semibold text-[var(--ink)]">{t(`unlock_${unlock.key}_title`)}</p>
-                      <p className="text-xs text-[var(--muted)]">{t(`unlock_${unlock.key}_text`)}</p>
-                    </div>
-                    {owned ? (
-                      <span className="rounded-full bg-green-50 px-3 py-1 text-xs font-semibold text-green-700">{t('unlockOwned')}</span>
-                    ) : (
-                      <button
-                        type="button"
-                        disabled={busy !== null}
-                        onClick={() => run(`unlock-${unlock.key}`, () => buyKuUnlock(unlock.key), t('unlockDone'))}
-                        className={goldButton}
-                      >
-                        {busy === `unlock-${unlock.key}` ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Lock className="h-4 w-4" />}
-                        {t('unlockButton', { cost: unlock.cost_ku })}
-                      </button>
-                    )}
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        )}
       </div>
     </section>
   )

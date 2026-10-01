@@ -6,9 +6,10 @@ import { createClient } from '@/lib/supabase/client'
 import { saveLinkInBio } from '@/app/actions/linkInBio'
 import { normalizeLinkUrl, displayLinkValue } from '@/lib/linkUtils'
 import { BIO_THEMES, ALL_BIO_THEME_KEYS, DEFAULT_BIO_THEME, PREMIUM_BIO_THEME_KEYS, resolveBioTheme, type BioThemeKey } from '@/lib/linkInBioThemes'
-import { KU_UNLOCK_LINKINBIO_THEMES } from '@/lib/ku'
+import { KU_UNLOCK_LINKINBIO_THEMES, linkInBioThemeUnlockKey } from '@/lib/ku'
+import { buyKuUnlock } from '@/app/actions/ku'
 import Link from '@/components/LocalizedLink'
-import { Plus, Trash2, Save, Link as LinkIcon, Check, ExternalLink, Globe, Mail, Phone, MessageCircle, Lock } from 'lucide-react'
+import { Plus, Trash2, Save, Link as LinkIcon, Check, ExternalLink, Globe, Mail, Phone, MessageCircle, Lock, Loader2 } from 'lucide-react'
 
 type LinkItem = {
   id: string
@@ -41,10 +42,15 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [justSaved, setJustSaved] = useState(false)
-  // Temi speciali (sblocco KU): 'owned' = già sbloccati, 'available' =
-  // acquistabili nel Portafoglio, 'hidden' = sblocco non attivo.
-  const [premiumState, setPremiumState] = useState<'owned' | 'available' | 'hidden'>('hidden')
-  const [premiumHint, setPremiumHint] = useState(false)
+  // Temi speciali: ognuno si sblocca a parte con i KU Points (popup qui
+  // nello strumento). owned = temi già sbloccati; costs = costo dei temi
+  // acquistabili (assente = sblocco non attivo); kuBalance = KU disponibili.
+  const [ownedThemes, setOwnedThemes] = useState<string[]>([])
+  const [themeCosts, setThemeCosts] = useState<Record<string, number>>({})
+  const [kuBalance, setKuBalance] = useState(0)
+  const [unlockTheme, setUnlockTheme] = useState<BioThemeKey | null>(null)
+  const [unlocking, setUnlocking] = useState(false)
+  const [unlockError, setUnlockError] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,12 +60,24 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
         .eq('user_id', userId)
         .single()
 
-      const [{ data: purchase }, { data: feature }, { data: unlock }] = await Promise.all([
-        supabase.from('ku_unlock_purchases').select('unlock_key').eq('unlock_key', KU_UNLOCK_LINKINBIO_THEMES).maybeSingle(),
+      const themeKeys = PREMIUM_BIO_THEME_KEYS.map(linkInBioThemeUnlockKey)
+      const [{ data: purchases }, { data: feature }, { data: unlocks }, { data: me }] = await Promise.all([
+        supabase.from('ku_unlock_purchases').select('unlock_key').in('unlock_key', [...themeKeys, KU_UNLOCK_LINKINBIO_THEMES]),
         supabase.from('ku_features').select('enabled').eq('key', 'unlocks').maybeSingle(),
-        supabase.from('ku_unlocks').select('enabled').eq('key', KU_UNLOCK_LINKINBIO_THEMES).maybeSingle(),
+        supabase.from('ku_unlocks').select('key, cost_ku, enabled').in('key', themeKeys),
+        supabase.from('profiles').select('daily_points').eq('id', userId).maybeSingle(),
       ])
-      setPremiumState(purchase ? 'owned' : feature?.enabled && unlock?.enabled ? 'available' : 'hidden')
+      const bought = (purchases ?? []).map((row) => row.unlock_key as string)
+      // Il vecchio pacchetto apre tutti e tre i temi
+      setOwnedThemes(
+        PREMIUM_BIO_THEME_KEYS.filter((key) => bought.includes(KU_UNLOCK_LINKINBIO_THEMES) || bought.includes(linkInBioThemeUnlockKey(key)))
+      )
+      setThemeCosts(
+        feature?.enabled
+          ? Object.fromEntries((unlocks ?? []).filter((u) => u.enabled).map((u) => [String(u.key).replace('linkinbio_theme_', ''), u.cost_ku as number]))
+          : {}
+      )
+      setKuBalance(me?.daily_points ?? 0)
 
       if (data) {
         setBioText(data.bio_text || '')
@@ -146,13 +164,22 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
               const style = BIO_THEMES[key]
               const selected = theme === key
               const premium = PREMIUM_BIO_THEME_KEYS.includes(key)
-              if (premium && premiumState === 'hidden' && !selected) return null
-              const locked = premium && premiumState !== 'owned'
+              const owned = ownedThemes.includes(key)
+              // Tema speciale non sbloccabile ora (sblocchi spenti): nascosto
+              if (premium && !owned && themeCosts[key] === undefined && !selected) return null
+              const locked = premium && !owned
               return (
                 <button
                   key={key}
                   type="button"
-                  onClick={() => (locked ? setPremiumHint(true) : setTheme(key))}
+                  onClick={() => {
+                    if (locked) {
+                      setUnlockError(null)
+                      setUnlockTheme(key)
+                    } else {
+                      setTheme(key)
+                    }
+                  }}
                   title={style.label}
                   className={`relative w-9 h-9 rounded-full ${style.swatchClass} transition-transform hover:scale-110 ${selected ? 'ring-2 ring-offset-2 ring-[var(--gold)]' : ''} ${locked ? 'opacity-60' : ''}`}
                 >
@@ -164,14 +191,6 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
               )
             })}
           </div>
-          {premiumHint && (
-            <p className="mt-2 text-xs text-[var(--muted)]">
-              {t('premiumThemesHint')}{' '}
-              <Link href="/wallet" className="font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
-                {t('premiumThemesCta')}
-              </Link>
-            </p>
-          )}
         </div>
 
         {/* Links Manager */}
@@ -306,6 +325,70 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
           </div>
         </div>
       </div>
+
+      {/* Popup di sblocco di un tema speciale */}
+      {unlockTheme && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4" onClick={() => !unlocking && setUnlockTheme(null)}>
+          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <div className={`mx-auto h-16 w-16 rounded-full ${BIO_THEMES[unlockTheme].swatchClass} ring-4 ring-[var(--gold)]/40`} />
+            <h3 className="mt-4 text-center text-lg font-bold text-[var(--ink)]">{t('themeUnlockTitle', { name: BIO_THEMES[unlockTheme].label })}</h3>
+            <p className="mt-1 text-center text-sm text-[var(--muted)]">{t('themeUnlockText')}</p>
+            {themeCosts[unlockTheme] === undefined ? (
+              <p className="mt-4 rounded-lg bg-gray-50 p-3 text-center text-sm text-[var(--muted)]">{t('themeUnlockUnavailable')}</p>
+            ) : (
+              <>
+                <div className="mt-4 grid grid-cols-2 gap-2 text-center">
+                  <div className="rounded-lg bg-[var(--gold-pale)] p-2">
+                    <p className="text-xs text-[var(--muted)]">{t('themeUnlockCostLabel')}</p>
+                    <p className="text-lg font-bold text-[var(--ink)]">{themeCosts[unlockTheme]} KU</p>
+                  </div>
+                  <div className="rounded-lg bg-gray-50 p-2">
+                    <p className="text-xs text-[var(--muted)]">{t('themeUnlockBalanceLabel')}</p>
+                    <p className="text-lg font-bold text-[var(--ink)]">{kuBalance} KU</p>
+                  </div>
+                </div>
+                {kuBalance < themeCosts[unlockTheme] && (
+                  <p className="mt-3 text-center text-sm font-semibold text-red-600">{t('themeUnlockMissing', { missing: themeCosts[unlockTheme] - kuBalance })}</p>
+                )}
+              </>
+            )}
+            {unlockError && <p className="mt-3 text-center text-sm text-red-600">{unlockError}</p>}
+            <div className="mt-5 flex flex-col gap-2">
+              {themeCosts[unlockTheme] !== undefined && kuBalance >= themeCosts[unlockTheme] && (
+                <button
+                  type="button"
+                  disabled={unlocking}
+                  onClick={async () => {
+                    const key = unlockTheme
+                    setUnlocking(true)
+                    setUnlockError(null)
+                    const result = await buyKuUnlock(linkInBioThemeUnlockKey(key))
+                    setUnlocking(false)
+                    if (!result.success && result.reason !== 'already_owned') {
+                      setUnlockError(t('themeUnlockError'))
+                      return
+                    }
+                    setOwnedThemes((prev) => [...prev, key])
+                    if (result.success) setKuBalance((prev) => prev - (themeCosts[key] ?? 0))
+                    setTheme(key)
+                    setUnlockTheme(null)
+                  }}
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-4 py-3 font-bold text-[var(--ink)] disabled:opacity-50"
+                >
+                  {unlocking ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lock className="h-4 w-4" />}
+                  {t('themeUnlockButton', { cost: themeCosts[unlockTheme] })}
+                </button>
+              )}
+              <Link href="/wallet" className="text-center text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
+                {t('themeUnlockWallet')}
+              </Link>
+              <button type="button" disabled={unlocking} onClick={() => setUnlockTheme(null)} className="text-sm text-[var(--muted)] hover:text-[var(--ink)]">
+                {t('themeUnlockCancel')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
