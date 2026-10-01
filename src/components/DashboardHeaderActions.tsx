@@ -48,11 +48,11 @@ export default function DashboardHeaderActions({ user, profile, isAdmin }: Dashb
 
   return (
     <>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-1.5 sm:gap-4">
         {/* Icona Profilo e Nome */}
         <button
           onClick={() => setIsProfileModalOpen(true)}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-white/10 transition-colors group"
+          className="flex items-center gap-2 px-1.5 py-1.5 sm:px-3 rounded-lg hover:bg-white/10 transition-colors group"
           title={profileIncomplete ? t('completeProfileShort') : unseenOutcome ? lockT('outcomeDot') : 'Modifica profilo'}
         >
           <div className="relative w-8 h-8 rounded-full bg-[var(--gold)] flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:shadow-md transition-shadow">
@@ -81,20 +81,20 @@ export default function DashboardHeaderActions({ user, profile, isAdmin }: Dashb
         {/* Pulsante My Wallet */}
         <Link
           href="/wallet"
-          className="text-sm text-[var(--ink)] bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] hover:brightness-110 font-bold transition-all flex items-center gap-1 px-3 py-1.5 rounded-md shadow-sm"
+          className="text-sm text-[var(--ink)] bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] hover:brightness-110 font-bold transition-all flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-md shadow-sm"
         >
           <Wallet className="w-4 h-4" />
-          <span className="hidden sm:inline">Il mio Wallet</span>
+          <span className="hidden sm:inline">{t('myWallet')}</span>
         </Link>
 
         {/* Pulsante Pannello Admin (Visibile solo agli admin) */}
         {isAdmin && (
           <Link
             href="/admin"
-            className="text-sm text-white bg-red-600 hover:bg-red-700 font-medium transition-colors flex items-center gap-1 px-3 py-1.5 rounded-md shadow-sm"
+            className="text-sm text-white bg-red-600 hover:bg-red-700 font-medium transition-colors flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-md shadow-sm"
           >
             <Settings className="w-4 h-4" />
-            <span className="hidden sm:inline">Pannello Admin</span>
+            <span className="hidden sm:inline">{t('adminPanel')}</span>
           </Link>
         )}
 
@@ -102,11 +102,11 @@ export default function DashboardHeaderActions({ user, profile, isAdmin }: Dashb
         <form action={logout} className="inline">
           <button
             type="submit"
-            className="text-sm text-red-600 hover:text-red-800 font-medium transition-colors flex items-center gap-1 hover:bg-red-50 px-3 py-1.5 rounded-md"
+            className="text-sm text-red-600 hover:text-red-800 font-medium transition-colors flex items-center gap-1 hover:bg-red-50 px-2 sm:px-3 py-1.5 rounded-md"
             title="Esci"
           >
             <LogOut className="w-4 h-4" />
-            <span className="hidden sm:inline">Esci</span>
+            <span className="hidden sm:inline">{t('logoutLabel')}</span>
           </button>
         </form>
       </div>

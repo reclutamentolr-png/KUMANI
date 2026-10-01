@@ -2227,6 +2227,9 @@ L'accesso viene registrato.`)) return
           </button>
         </div>
 
+        {/* A catalogo spento si vede solo l'interruttore (e i riscatti ancora da evadere) */}
+        {rewardsCatalogOn && (
+        <>
         <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
           <h3 className="font-bold text-gray-900">{editingRewardId ? 'Modifica premio' : 'Nuovo premio'}</h3>
           {rewardError && (
@@ -2377,7 +2380,10 @@ L'accesso viene registrato.`)) return
             </tbody>
           </table>
         </div>
+        </>
+        )}
 
+        {(rewardsCatalogOn || rewardRedemptions.some((r) => !r.fulfilled_at)) && (
         <div>
           <h3 className="font-bold text-gray-900 mb-3">Riscatti da evadere</h3>
           <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
@@ -2443,6 +2449,7 @@ L'accesso viene registrato.`)) return
             </table>
           </div>
         </div>
+        )}
       </div>
     )
   }

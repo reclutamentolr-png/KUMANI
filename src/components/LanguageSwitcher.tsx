@@ -15,7 +15,9 @@ const locales = [
   { code: 'ru', label: 'Русский' },
 ]
 
-export default function LanguageSwitcher({ dark = false }: { dark?: boolean }) {
+// compact: solo icona e sigla della lingua (es. IT), per le barre strette;
+// il menu a tendina resta quello nativo, sovrapposto e invisibile.
+export default function LanguageSwitcher({ dark = false, compact = false }: { dark?: boolean; compact?: boolean }) {
   const pathname = usePathname()
   const router = useRouter()
   const locale = pathname.match(/^\/(it|en|fr|es|pt|de|ru)(?=\/|$)/)?.[1] ?? defaultLocale
@@ -39,6 +41,32 @@ export default function LanguageSwitcher({ dark = false }: { dark?: boolean }) {
     document.cookie = `NEXT_LOCALE=${nextLocale}; path=/; max-age=31536000; SameSite=Lax`
     router.push(target)
     router.refresh()
+  }
+
+  if (compact) {
+    return (
+      <label
+        className={`relative inline-flex items-center gap-1 rounded-lg border px-2 py-1.5 text-xs font-bold uppercase ${dark ? 'border-white/20 bg-white/10 text-white' : 'border-gray-200 bg-white text-gray-700'}`}
+        title="Lingua / Language"
+      >
+        <Languages className="h-4 w-4" aria-hidden="true" />
+        <span aria-hidden="true">{locale}</span>
+        <select
+          key={locale}
+          value={locale}
+          onChange={(event) => changeLocale(event.target.value)}
+          className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+          aria-label="Cambia lingua"
+        >
+          {options.map((item) => (
+            <option key={item.code} value={item.code} className="text-gray-900">
+              {item.label}
+              {enabled && !enabled.includes(item.code) ? ' (nascosta)' : ''}
+            </option>
+          ))}
+        </select>
+      </label>
+    )
   }
 
   return (

@@ -9,6 +9,8 @@ import ListingDetailModalWrapper from '@/components/ListingDetailModalWrapper'
 import { getUnreadMessagesCount } from '@/lib/listings-server'
 import InstallAppPrompt from '@/components/InstallAppPrompt'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
+import Link from '@/components/LocalizedLink'
+import { Star } from 'lucide-react'
 import RankAchievementModal from '@/components/RankAchievementModal'
 import RenewalReminderModal from '@/components/RenewalReminderModal'
 import AdminMessagePopup from '@/components/AdminMessagePopup'
@@ -192,11 +194,22 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
       {/* Header */}
       <header className="border-b border-[var(--gold)]/25 bg-[var(--ink)] shadow-[0_8px_30px_rgba(23,23,23,0.18)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <h1 className="hidden text-2xl font-bold tracking-tight text-white sm:block">{t('programTitle')}</h1>
-          <h1 className="text-xl font-bold tracking-tight text-white sm:hidden">Kumani</h1>
+          <div className="flex min-w-0 items-center gap-2.5">
+            <h1 className="hidden text-2xl font-bold tracking-tight text-white sm:block">{t('programTitle')}</h1>
+            <h1 className="text-xl font-bold tracking-tight text-white sm:hidden">Kumani</h1>
+            {/* Stella oro: i servizi preferiti */}
+            <Link
+              href="/marketplace/preferiti?from=dashboard"
+              aria-label={t('goToFavorites')}
+              title={t('goToFavorites')}
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[var(--gold-bright)] transition-transform hover:scale-110"
+            >
+              <Star className="h-7 w-7 drop-shadow-[0_0_8px_rgba(231,197,106,0.75)]" fill="currentColor" strokeWidth={1.5} />
+            </Link>
+          </div>
 
-          <div className="flex items-center gap-3">
-            <LanguageSwitcher dark />
+          <div className="flex items-center gap-2 sm:gap-3">
+            <LanguageSwitcher dark compact />
             <DashboardHeaderActions user={user} profile={profile} isAdmin={userIsAdmin} />
           </div>
         </div>
