@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
 import { saveLinkInBio } from '@/app/actions/linkInBio'
@@ -9,7 +9,7 @@ import { BIO_THEMES, ALL_BIO_THEME_KEYS, DEFAULT_BIO_THEME, PREMIUM_BIO_THEME_KE
 import { KU_UNLOCK_LINKINBIO_THEMES, linkInBioThemeUnlockKey } from '@/lib/ku'
 import { buyKuUnlock } from '@/app/actions/ku'
 import Link from '@/components/LocalizedLink'
-import { Plus, Trash2, Save, Link as LinkIcon, Check, ExternalLink, Globe, Mail, Phone, MessageCircle, Lock, Loader2 } from 'lucide-react'
+import { Plus, Trash2, Save, Link as LinkIcon, Check, ExternalLink, Globe, Mail, Phone, MessageCircle, Lock, Loader2, Eye, Sparkles, X } from 'lucide-react'
 
 type LinkItem = {
   id: string
@@ -51,6 +51,10 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
   const [unlockTheme, setUnlockTheme] = useState<BioThemeKey | null>(null)
   const [unlocking, setUnlocking] = useState(false)
   const [unlockError, setUnlockError] = useState<string | null>(null)
+  // Tema speciale in prova: l'anteprima lo mostra senza toccare il tema
+  // salvato, così l'utente lo vede prima di spendere i KU.
+  const [previewTheme, setPreviewTheme] = useState<BioThemeKey | null>(null)
+  const previewRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -134,7 +138,18 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
 
   if (loading) return <div className="text-center py-8 text-[var(--muted)]">{t('loadingEditor')}</div>
 
-  const previewStyle = resolveBioTheme(theme)
+  const previewStyle = resolveBioTheme(previewTheme ?? theme)
+  const baseThemes = ALL_BIO_THEME_KEYS.filter((key) => !PREMIUM_BIO_THEME_KEYS.includes(key))
+  // Un tema speciale si mostra se è già tuo, se si può sbloccare o se è
+  // quello in uso (sblocchi spenti dopo averlo scelto).
+  const specialThemes = PREMIUM_BIO_THEME_KEYS.filter(
+    (key) => ownedThemes.includes(key) || themeCosts[key] !== undefined || theme === key
+  )
+  const tryTheme = (key: BioThemeKey) => {
+    setPreviewTheme(key)
+    // Su telefono l'anteprima sta sotto l'editor: portala in vista
+    if (window.innerWidth < 1024) previewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
   const displayName = [firstName, lastName].filter(Boolean).join(' ')
 
   return (
@@ -160,37 +175,87 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
         <div className="mb-6">
           <label className="block text-sm font-semibold text-[var(--ink)] mb-2">{t('bioThemeLabel')}</label>
           <div className="flex flex-wrap gap-2">
-            {ALL_BIO_THEME_KEYS.map((key) => {
+            {baseThemes.map((key) => {
               const style = BIO_THEMES[key]
-              const selected = theme === key
-              const premium = PREMIUM_BIO_THEME_KEYS.includes(key)
-              const owned = ownedThemes.includes(key)
-              // Tema speciale non sbloccabile ora (sblocchi spenti): nascosto
-              if (premium && !owned && themeCosts[key] === undefined && !selected) return null
-              const locked = premium && !owned
+              const selected = theme === key && !previewTheme
               return (
                 <button
                   key={key}
                   type="button"
                   onClick={() => {
-                    if (locked) {
-                      setUnlockError(null)
-                      setUnlockTheme(key)
-                    } else {
-                      setTheme(key)
-                    }
+                    setTheme(key)
+                    setPreviewTheme(null)
                   }}
                   title={style.label}
-                  className={`relative w-9 h-9 rounded-full ${style.swatchClass} transition-transform hover:scale-110 ${selected ? 'ring-2 ring-offset-2 ring-[var(--gold)]' : ''} ${locked ? 'opacity-60' : ''}`}
+                  className={`relative w-9 h-9 rounded-full ${style.swatchClass} transition-transform hover:scale-110 ${selected ? 'ring-2 ring-offset-2 ring-[var(--gold)]' : ''}`}
                 >
                   {selected && (
                     <Check className={`w-4 h-4 absolute inset-0 m-auto ${key === 'bianco' || key === 'giallo' ? 'text-gray-900' : 'text-white'}`} />
                   )}
-                  {locked && <Lock className="w-3.5 h-3.5 absolute inset-0 m-auto text-white" />}
                 </button>
               )
             })}
           </div>
+
+          {/* Temi speciali: schede con mini-anteprima, da provare prima di sbloccarli */}
+          {specialThemes.length > 0 && (
+            <div className="mt-5">
+              <div className="mb-2 flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-[var(--gold)]" />
+                <span className="text-sm font-semibold text-[var(--ink)]">{t('specialThemesTitle')}</span>
+              </div>
+              <p className="mb-3 text-xs text-[var(--muted)]">{t('specialThemesHint')}</p>
+              <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                {specialThemes.map((key) => {
+                  const style = BIO_THEMES[key]
+                  const owned = ownedThemes.includes(key)
+                  const inUse = theme === key && !previewTheme
+                  const trying = previewTheme === key
+                  return (
+                    <button
+                      key={key}
+                      type="button"
+                      onClick={() => {
+                        if (owned) {
+                          setTheme(key)
+                          setPreviewTheme(null)
+                        } else {
+                          tryTheme(key)
+                        }
+                      }}
+                      className={`group relative overflow-hidden rounded-xl text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg ${inUse || trying ? 'ring-2 ring-[var(--gold)] ring-offset-2' : 'ring-1 ring-black/10'}`}
+                    >
+                      <div className={`flex h-24 items-center justify-center p-2 ${style.pageBg}`}>
+                        <div className={`w-16 rounded-lg p-1.5 ${style.cardBg}`}>
+                          <div className={`mx-auto h-4 w-4 rounded-full ${style.avatarBg}`} />
+                          <div className={`mx-auto mt-1 h-1 w-8 rounded-full ${style.linkIconBg}`} />
+                          <div className={`mt-1.5 h-2 rounded ${style.linkBg}`} />
+                          <div className={`mt-1 h-2 rounded ${style.linkBg}`} />
+                        </div>
+                      </div>
+                      {!owned && (
+                        <span className="absolute right-1.5 top-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur">
+                          {trying ? <Eye className="h-3.5 w-3.5" /> : <Lock className="h-3 w-3" />}
+                        </span>
+                      )}
+                      <div className="flex flex-col gap-1 bg-white px-2 py-1.5">
+                        <span className="truncate text-xs font-bold text-[var(--ink)]">{style.label}</span>
+                        {owned ? (
+                          <span className="inline-flex w-fit items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
+                            <Check className="h-3 w-3" /> {inUse ? t('themeInUse') : t('themeOwned')}
+                          </span>
+                        ) : (
+                          <span className="inline-flex w-fit items-center gap-1 rounded-full bg-[var(--ink)] px-2 py-0.5 text-[10px] font-bold text-[var(--gold-bright)]">
+                            {themeCosts[key] !== undefined ? `${themeCosts[key]} KU` : t('themeLocked')}
+                          </span>
+                        )}
+                      </div>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Links Manager */}
@@ -276,11 +341,25 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
       {/* Live Preview — driven by this component's own state, so it reflects
           every keystroke and every save immediately, unlike the old static
           mockup that never read the real bio/links at all. */}
-      <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-5 sm:p-6 lg:sticky lg:top-24">
+      <div ref={previewRef} className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-5 sm:p-6 lg:sticky lg:top-24 scroll-mt-24">
         <h3 className="text-lg font-bold text-[var(--ink)] mb-4 flex items-center gap-2">
           {t('previewOf')}
         </h3>
-        <div className={`rounded-2xl p-6 text-center ${previewStyle.pageBg}`}>
+        {previewTheme && (
+          <div className="mb-3 flex items-center gap-2 rounded-xl bg-[var(--ink)] px-3 py-2.5 text-sm text-white">
+            <Eye className="h-4 w-4 shrink-0 text-[var(--gold-bright)]" />
+            <span className="flex-1">{t('themePreviewText', { name: BIO_THEMES[previewTheme].label })}</span>
+            <button type="button" onClick={() => setPreviewTheme(null)} title={t('themePreviewClose')} className="rounded-full p-1 text-white/70 hover:bg-white/10 hover:text-white">
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        )}
+        <div className={`relative rounded-2xl p-6 text-center ${previewStyle.pageBg}`}>
+          {previewTheme && (
+            <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-black/45 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur">
+              <Sparkles className="h-3 w-3" /> {t('themePreviewBadge')}
+            </span>
+          )}
           <div className={`rounded-3xl p-6 ${previewStyle.cardBg}`}>
             <div className={`w-20 h-20 rounded-full ${previewStyle.avatarBg} ${previewStyle.avatarText} flex items-center justify-center mx-auto mb-3 text-3xl font-bold shadow-lg`}>
               {(firstName || 'U').charAt(0).toUpperCase()}
@@ -324,6 +403,31 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
             </p>
           </div>
         </div>
+        {previewTheme && (
+          <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+            {themeCosts[previewTheme] !== undefined ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setUnlockError(null)
+                  setUnlockTheme(previewTheme)
+                }}
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-4 py-3 font-bold text-[var(--ink)] shadow-sm hover:brightness-105"
+              >
+                <Lock className="h-4 w-4" /> {t('themeUnlockButton', { cost: themeCosts[previewTheme] })}
+              </button>
+            ) : (
+              <p className="flex-1 rounded-xl bg-gray-50 p-3 text-center text-sm text-[var(--muted)]">{t('themeUnlockUnavailable')}</p>
+            )}
+            <button
+              type="button"
+              onClick={() => setPreviewTheme(null)}
+              className="rounded-xl border border-[var(--gold)]/40 px-4 py-3 text-sm font-semibold text-[var(--ink)] hover:bg-[var(--gold)]/10"
+            >
+              {t('themePreviewClose')}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Popup di sblocco di un tema speciale */}
@@ -371,6 +475,7 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
                     setOwnedThemes((prev) => [...prev, key])
                     if (result.success) setKuBalance((prev) => prev - (themeCosts[key] ?? 0))
                     setTheme(key)
+                    setPreviewTheme(null)
                     setUnlockTheme(null)
                   }}
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-4 py-3 font-bold text-[var(--ink)] disabled:opacity-50"
