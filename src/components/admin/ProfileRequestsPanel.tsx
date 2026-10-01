@@ -1,5 +1,6 @@
 'use client'
 
+import { notify } from '@/lib/adminNotify'
 import { useCallback, useEffect, useState } from 'react'
 import { AlertTriangle, Ban, Check, LoaderCircle, RefreshCw, UserPen, X } from 'lucide-react'
 import {
@@ -82,7 +83,7 @@ export default function ProfileRequestsPanel({ onChanged }: { onChanged?: () => 
   const afterAction = async (result: { success: boolean; error: string | null }) => {
     setWorking(null)
     if (!result.success) {
-      alert('Errore: ' + (result.error ?? ''))
+      notify('Errore: ' + (result.error ?? ''))
       return
     }
     await load(tab)
@@ -93,11 +94,11 @@ export default function ProfileRequestsPanel({ onChanged }: { onChanged?: () => 
     const edited = values[item.id] ?? {}
     for (const [field, raw] of Object.entries(edited)) {
       if (!raw.trim()) {
-        alert(`Il campo "${FIELD_LABEL[field] ?? field}" non può essere vuoto.`)
+        notify(`Il campo "${FIELD_LABEL[field] ?? field}" non può essere vuoto.`)
         return
       }
       if (field === 'date_of_birth' && !isValidDate(raw.trim())) {
-        alert('Data di nascita non valida: usa il formato AAAA-MM-GG.')
+        notify('Data di nascita non valida: usa il formato AAAA-MM-GG.')
         return
       }
     }
@@ -109,7 +110,7 @@ export default function ProfileRequestsPanel({ onChanged }: { onChanged?: () => 
   const reject = async (item: AdminProfileRequest) => {
     const note = (notes[item.id] ?? '').trim()
     if (!note) {
-      alert("Scrivi il motivo del rifiuto (lo vede l'utente).")
+      notify("Scrivi il motivo del rifiuto (lo vede l'utente).")
       return
     }
     if (!confirm(`Rifiutare la richiesta di ${fullName(item.user)}?`)) return

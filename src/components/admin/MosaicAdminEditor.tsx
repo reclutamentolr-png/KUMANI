@@ -1,5 +1,6 @@
 'use client'
 
+import { notify } from '@/lib/adminNotify'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Brush, Eraser, ImageUp, LoaderCircle, Lock, Minus, SquareDashedMousePointer, Plus, Save, Trash2, Undo2, Users, X } from 'lucide-react'
 import {
@@ -147,7 +148,7 @@ export default function MosaicAdminEditor({
     } finally {
       setWorking(false)
     }
-    if (!result.success) return alert('Errore: ' + (result.error ?? ''))
+    if (!result.success) return notify('Errore: ' + (result.error ?? ''))
     await after?.()
   }
 

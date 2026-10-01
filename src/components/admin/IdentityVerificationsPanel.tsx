@@ -1,5 +1,6 @@
 'use client'
 
+import { notify } from '@/lib/adminNotify'
 import { useCallback, useEffect, useState } from 'react'
 import { Check, ExternalLink, FileText, LoaderCircle, RefreshCw, ScanFace, X } from 'lucide-react'
 import { adminListIdentityVerifications, adminReviewIdentity, type AdminIdentityVerification } from '@/app/actions/admin'
@@ -48,15 +49,15 @@ export default function IdentityVerificationsPanel() {
   const decide = async (item: AdminIdentityVerification, approve: boolean) => {
     const note = (notes[item.id] ?? '').trim()
     if (!approve && !note) {
-      alert('Scrivi il motivo del rifiuto (lo vede l\'utente).')
+      notify('Scrivi il motivo del rifiuto (lo vede l\'utente).')
       return
     }
     if (approve && !confirm(`Approvare il documento di ${fullName(item.user)}? Il file verrà cancellato.`)) return
     setWorking(item.id)
     const result = await adminReviewIdentity(item.id, approve, note)
     setWorking(null)
-    if (!result.success) alert('Errore: ' + (result.error ?? ''))
-    else if (result.warning) alert(result.warning)
+    if (!result.success) notify('Errore: ' + (result.error ?? ''))
+    else if (result.warning) notify(result.warning)
     setRejecting(null)
     await load(tab)
   }

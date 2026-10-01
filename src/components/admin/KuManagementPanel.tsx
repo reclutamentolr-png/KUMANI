@@ -1,5 +1,6 @@
 'use client'
 
+import { notify } from '@/lib/adminNotify'
 import { useEffect, useState } from 'react'
 import { Coins, Sparkles, Unlock, Award, Ticket, Repeat, Save, LoaderCircle, Info } from 'lucide-react'
 import { getKuManagement, updateKuFeature, updateKuUnlock } from '@/app/actions/admin'
@@ -91,8 +92,9 @@ export default function KuManagementPanel() {
   const [savingKey, setSavingKey] = useState<string | null>(null)
   const [openInfo, setOpenInfo] = useState<Record<string, boolean>>({})
 
+  // Il primo caricamento mostra lo spinner (loading parte da true); dopo un
+  // salvataggio i dati si aggiornano senza togliere la pagina.
   const load = async () => {
-    setLoading(true)
     const result = await getKuManagement()
     setFeatures(result.features as KuFeatureRow[])
     setUnlocks(result.unlocks as KuUnlockRow[])
@@ -116,9 +118,9 @@ export default function KuManagementPanel() {
     setSavingKey(null)
     if (result.success) {
       await load()
-      alert('✅ Salvato.')
+      notify('Le modifiche sono state salvate.', 'success')
     } else {
-      alert('❌ ' + (result.error || 'Errore'))
+      notify('❌ ' + (result.error || 'Errore'))
     }
   }
 
@@ -126,7 +128,7 @@ export default function KuManagementPanel() {
     setSavingKey(unlock.key)
     const result = await updateKuUnlock(unlock.key, unlock.cost_ku, unlock.enabled)
     setSavingKey(null)
-    if (!result.success) alert('❌ ' + (result.error || 'Errore'))
+    if (!result.success) notify('❌ ' + (result.error || 'Errore'))
     else await load()
   }
 

@@ -1,5 +1,6 @@
 'use client'
 
+import { notify } from '@/lib/adminNotify'
 import { useCallback, useEffect, useState } from 'react'
 import { Check, Flag, LoaderCircle, Trash2, X } from 'lucide-react'
 import { adminCloseTimebankReport, adminListTimebank, adminRemoveTimebankPost, adminResolveTimebankDispute } from '@/app/actions/admin'
@@ -49,7 +50,7 @@ export default function TimebankAdminPanel() {
     setWorking(id)
     const result = await action()
     setWorking(null)
-    if (!result.success) alert('Errore: ' + (result.error ?? ''))
+    if (!result.success) notify('Errore: ' + (result.error ?? ''))
     await load(tab)
   }
 

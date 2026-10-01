@@ -1,5 +1,6 @@
 'use client'
 
+import { notify } from '@/lib/adminNotify'
 import { useCallback, useEffect, useState } from 'react'
 import { LoaderCircle, RefreshCw, Undo2 } from 'lucide-react'
 import { adminListWithdrawals, adminRefundWithdrawal, adminRejectWithdrawal, type AdminWithdrawal } from '@/app/actions/withdrawals'
@@ -56,9 +57,9 @@ export default function WithdrawalsPanel({ onChanged }: { onChanged?: () => void
     setWorking(item.id)
     try {
       const result = await adminRefundWithdrawal(item.id, mode, notes[item.id] ?? '')
-      if (!result.success) alert('Errore: ' + (result.error ?? ''))
+      if (!result.success) notify('Errore: ' + (result.error ?? ''))
     } catch (err) {
-      alert('Errore: ' + (err instanceof Error ? err.message : String(err)))
+      notify('Errore: ' + (err instanceof Error ? err.message : String(err)))
     } finally {
       setWorking(null)
     }
@@ -69,14 +70,14 @@ export default function WithdrawalsPanel({ onChanged }: { onChanged?: () => void
   const reject = async (item: AdminWithdrawal) => {
     const note = (notes[item.id] ?? '').trim()
     if (!note) {
-      alert('Scrivi nella nota il motivo del rifiuto: il cliente lo vedrà nella pagina Abbonamento.')
+      notify('Scrivi nella nota il motivo del rifiuto: il cliente lo vedrà nella pagina Abbonamento.')
       return
     }
     if (!confirm(`Rifiutare la richiesta di recesso di ${fullName(item.user)}? L'abbonamento resterà attivo.`)) return
     setWorking(item.id)
     try {
       const result = await adminRejectWithdrawal(item.id, note)
-      if (!result.success) alert('Errore: ' + (result.error ?? ''))
+      if (!result.success) notify('Errore: ' + (result.error ?? ''))
     } finally {
       setWorking(null)
     }

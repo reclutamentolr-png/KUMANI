@@ -1,5 +1,6 @@
 'use client'
 
+import { notify } from '@/lib/adminNotify'
 import { useCallback, useEffect, useState } from 'react'
 import { ExternalLink, Flag, LoaderCircle } from 'lucide-react'
 import { listConvivioReports, resolveConvivioReport } from '@/app/actions/admin'
@@ -38,7 +39,7 @@ export default function ConvivioReportsPanel({ locale }: { locale: string }) {
     setWorking(report.id)
     const result = await resolveConvivioReport(report.id, cancel)
     setWorking(null)
-    if (!result.success) alert('Errore: ' + result.error)
+    if (!result.success) notify('Errore: ' + result.error)
     await load()
   }
 

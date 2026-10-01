@@ -1,5 +1,6 @@
 'use client'
 
+import { notify } from '@/lib/adminNotify'
 import { useCallback, useEffect, useState } from 'react'
 import { Ban, Check, ExternalLink, Flag, LoaderCircle, Percent, RotateCcw, Star, Trash2, X } from 'lucide-react'
 import {
@@ -97,8 +98,8 @@ export default function EventsAdminPanel({
     setWorking(id)
     const result = await action()
     setWorking(null)
-    if (!result.success) alert('Errore: ' + (result.error ?? ''))
-    else if (result.warning) alert(result.warning)
+    if (!result.success) notify('Errore: ' + (result.error ?? ''))
+    else if (result.warning) notify(result.warning)
     await load(tab)
   }
 

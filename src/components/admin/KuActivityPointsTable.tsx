@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { ListOrdered, LoaderCircle, Save } from 'lucide-react'
+import { notify } from '@/lib/adminNotify'
 import { adminListKuActivityPoints, adminSaveKuActivityPoints, type KuActivityPointsRow } from '@/app/actions/admin'
 
 // Specchietto dei KU Karma assegnati per ogni attività (accesso giornaliero
@@ -32,6 +33,7 @@ export default function KuActivityPointsTable() {
       return
     }
     setSaved(Object.fromEntries((rows ?? []).map((row) => [row.key, row.points])))
+    notify('KU Karma per attività salvati.', 'success')
   }
 
   return (

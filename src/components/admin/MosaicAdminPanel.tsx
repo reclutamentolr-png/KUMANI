@@ -1,5 +1,6 @@
 'use client'
 
+import { notify } from '@/lib/adminNotify'
 import { useCallback, useEffect, useState } from 'react'
 import { Check, Eraser, Flag, Grid3x3, LoaderCircle, Pencil, Plus, Trash2, Users } from 'lucide-react'
 import {
@@ -54,7 +55,7 @@ export default function MosaicAdminPanel() {
 
   const closeReport = async (id: string) => {
     const result = await adminCloseMosaicReport(id)
-    if (!result.success) return alert('Errore: ' + (result.error ?? ''))
+    if (!result.success) return notify('Errore: ' + (result.error ?? ''))
     await load()
   }
 
@@ -74,7 +75,7 @@ export default function MosaicAdminPanel() {
       endsAt: new Date(form.endsAt).toISOString(),
     })
     setSaving(false)
-    if (!result.success) return alert('Errore: ' + (result.error ?? ''))
+    if (!result.success) return notify('Errore: ' + (result.error ?? ''))
     setEditing(null)
     await load()
   }
@@ -88,14 +89,14 @@ export default function MosaicAdminPanel() {
   const clearUser = async (seasonId: string, userId: string, label: string) => {
     if (!confirm(`Togliere tutte le tessere di ${label} da questa stagione? Le caselle tornano libere.`)) return
     const result = await adminClearMosaicUser(seasonId, userId)
-    if (!result.success) return alert('Errore: ' + (result.error ?? ''))
+    if (!result.success) return notify('Errore: ' + (result.error ?? ''))
     await Promise.all([showPeople(seasonId), load()])
   }
 
   const remove = async (season: MosaicAdminSeason) => {
     if (!confirm(`Eliminare la stagione "${season.title}"${season.filled ? ` e le sue ${season.filled} tessere` : ''}? Non si può annullare.`)) return
     const result = await adminDeleteMosaicSeason(season.id)
-    if (!result.success) return alert('Errore: ' + (result.error ?? ''))
+    if (!result.success) return notify('Errore: ' + (result.error ?? ''))
     await load()
   }
 

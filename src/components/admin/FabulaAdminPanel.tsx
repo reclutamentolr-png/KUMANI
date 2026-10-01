@@ -1,5 +1,6 @@
 'use client'
 
+import { notify } from '@/lib/adminNotify'
 import { useCallback, useEffect, useState } from 'react'
 import { Check, EyeOff, Plus, Trash2, X } from 'lucide-react'
 import { adminAddFabulaWord, adminListFabula, adminRemoveFabulaWord, adminSetFabulaStatus } from '@/app/actions/admin'
@@ -40,7 +41,7 @@ export default function FabulaAdminPanel() {
   const act = async (action: () => Promise<{ success: boolean; error?: string | null }>) => {
     const result = await action()
     if (!result.success) {
-      alert('Errore: ' + (result.error ?? ''))
+      notify('Errore: ' + (result.error ?? ''))
       return false
     }
     await load(tab)

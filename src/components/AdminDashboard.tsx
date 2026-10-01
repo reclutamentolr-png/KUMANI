@@ -1,5 +1,7 @@
 'use client'
 
+import { notify } from '@/lib/adminNotify'
+import AdminToaster from '@/components/admin/AdminToaster'
 import { useState, useEffect, type ComponentProps } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { hasPermission, Permission } from '@/lib/admin-permissions'
@@ -391,8 +393,8 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     }
   }
 
-  const loadUsers = async () => {
-    setLoadingUsers(true)
+  const loadUsers = async (silent = false) => {
+    if (!silent) setLoadingUsers(true)
     const { users: data } = await adminListUsers()
     setUsers(data)
     setLoadingUsers(false)
@@ -474,8 +476,8 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     )
   }
 
-  const loadCouponsData = async () => {
-    setLoadingCoupons(true)
+  const loadCouponsData = async (silent = false) => {
+    if (!silent) setLoadingCoupons(true)
     const [result, batchResult] = await Promise.all([listCoupons(), listVoucherBatches()])
     setCoupons(result.coupons)
     setVoucherBatches(batchResult.batches)
@@ -502,7 +504,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     }
     setCouponForm({ userId: '', title: '', description: '', expiresAt: '' })
     setCouponPickedUser(null)
-    await loadCouponsData()
+    await loadCouponsData(true)
   }
 
   const handleRevokeCoupon = async (couponId: string) => {
@@ -511,12 +513,12 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     if (result.success) {
       setCoupons((prev) => prev.filter((c) => c.id !== couponId))
     } else {
-      alert(result.error || 'Errore durante la revoca del coupon.')
+      notify(result.error || 'Errore durante la revoca del coupon.')
     }
   }
 
-  const loadVouchersData = async () => {
-    setLoadingVouchers(true)
+  const loadVouchersData = async (silent = false) => {
+    if (!silent) setLoadingVouchers(true)
     const [voucherResult, usersResult] = await Promise.all([listVouchers(), listVoucherUsers()])
     setVouchers(voucherResult.vouchers)
     setVoucherUsers(usersResult.users)
@@ -537,7 +539,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     })
     setCreatingBatch(false)
     if (!result.success) {
-      alert('❌ ' + result.error)
+      notify('❌ ' + result.error)
       return
     }
     setBatchForm({ businessName: '', quantity: '10', priceEur: '400', invoiceRef: '', notes: '', plan: 'base' })
@@ -565,11 +567,11 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     const result = await createAdminVoucher()
     setGeneratingAdminVoucher(false)
     if (!result.success) {
-      alert(result.error || 'Errore durante la generazione del codice.')
+      notify(result.error || 'Errore durante la generazione del codice.')
       return
     }
     setLastAdminVoucherCode(result.code)
-    await loadVouchersData()
+    await loadVouchersData(true)
   }
 
   const handleCreditPoints = async () => {
@@ -590,7 +592,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     setCreditSuccess(`+${amount} KU Karma accreditati.`)
     setCreditForm({ userId: '', amount: '' })
     setCreditUserSearch('')
-    await loadVouchersData()
+    await loadVouchersData(true)
   }
 
   const loadFinancialSummary = async () => {
@@ -620,7 +622,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
       setSpotlightProfiles((prev) => prev.map((p) => (p.id === profileId ? { ...p, moderation_status: status } : p)))
       loadBadges()
     } else {
-      alert(result.error || 'Errore durante la moderazione.')
+      notify(result.error || 'Errore durante la moderazione.')
     }
   }
 
@@ -630,7 +632,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
       setListingReports((prev) => prev.filter((r) => r.id !== reportId))
       loadBadges()
     } else {
-      alert(result.error || 'Errore durante la rimozione della segnalazione.')
+      notify(result.error || 'Errore durante la rimozione della segnalazione.')
     }
   }
 
@@ -641,7 +643,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
       setListingReports((prev) => prev.filter((r) => r.listing_id !== listingId))
       loadBadges()
     } else {
-      alert(result.error || 'Errore durante l\'eliminazione dell\'annuncio.')
+      notify(result.error || 'Errore durante l\'eliminazione dell\'annuncio.')
     }
   }
 
@@ -672,12 +674,12 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     if (result.success) {
       setVouchers((prev) => prev.map((v) => (v.id === voucherId ? { ...v, status: 'revoked' } : v)))
     } else {
-      alert(result.error || 'Errore durante la revoca del voucher.')
+      notify(result.error || 'Errore durante la revoca del voucher.')
     }
   }
 
-  const loadRewardsData = async () => {
-    setLoadingRewards(true)
+  const loadRewardsData = async (silent = false) => {
+    if (!silent) setLoadingRewards(true)
     const [rewardsResult, redemptionsResult, switchResult] = await Promise.all([
       listRewards(),
       listRewardRedemptions(),
@@ -701,7 +703,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     if (!ok) return
     const result = await adminSaveSystemSettings({ rewards_catalog_enabled: next })
     if (result.success) setRewardsCatalogOn(next)
-    else alert(result.error || 'Errore durante il salvataggio.')
+    else notify(result.error || 'Errore durante il salvataggio.')
   }
 
   const resetRewardForm = () => {
@@ -742,7 +744,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
       return
     }
     resetRewardForm()
-    await loadRewardsData()
+    await loadRewardsData(true)
   }
 
   const handleDeleteReward = async (rewardId: string) => {
@@ -751,14 +753,14 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     if (result.success) {
       setRewards((prev) => prev.filter((r) => r.id !== rewardId))
     } else {
-      alert(result.error || 'Errore durante l\'eliminazione del premio.')
+      notify(result.error || 'Errore durante l\'eliminazione del premio.')
     }
   }
 
   const handleFulfillRedemption = async (redemptionId: string) => {
     const code = (fulfillCodeInputs[redemptionId] || '').trim()
     if (!code) {
-      alert('Inserisci il codice da inviare al Kumano.')
+      notify('Inserisci il codice da inviare al Kumano.')
       return
     }
     setFulfillingId(redemptionId)
@@ -777,7 +779,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
         return next
       })
     } else {
-      alert(result.error || 'Errore durante l\'evasione del riscatto.')
+      notify(result.error || 'Errore durante l\'evasione del riscatto.')
     }
   }
 
@@ -785,7 +787,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     setSavingTool(toolName)
     const result = await updateToolPlan(toolName, plan)
     if (result.success) await loadMarketplaceData()
-    else alert('Errore: ' + (result.error || 'aggiornamento non riuscito'))
+    else notify('Errore: ' + (result.error || 'aggiornamento non riuscito'))
     setSavingTool(null)
   }
 
@@ -795,7 +797,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     if (result.success) {
       await loadMarketplaceData()
     } else {
-      alert('Errore durante l\'aggiornamento: ' + (result.error || ''))
+      notify('Errore durante l\'aggiornamento: ' + (result.error || ''))
     }
     setSavingTool(null)
   }
@@ -840,9 +842,9 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     setCreatingHouse(false)
     if (result.success) {
       await loadHouseAccount()
-      alert('✅ Account KUMANI creato: la registrazione senza invito è attiva.')
+      notify('✅ Account KUMANI creato: la registrazione senza invito è attiva.')
     } else {
-      alert('❌ ' + (result.error || 'Errore'))
+      notify('❌ ' + (result.error || 'Errore'))
     }
   }
 
@@ -880,17 +882,17 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
       const result = await adminSaveSystemSettings(changed)
       if (result.success) {
         setSavedSettings({ ...savedSettings, ...changed })
-        alert(Object.keys(changed).length ? '✅ Impostazioni salvate con successo!' : 'Nessuna modifica da salvare.')
+        notify(Object.keys(changed).length ? '✅ Impostazioni salvate con successo!' : 'Nessuna modifica da salvare.')
       }
-      else alert('❌ Errore durante il salvataggio: ' + (result.error || ''))
+      else notify('❌ Errore durante il salvataggio: ' + (result.error || ''))
     } catch {
-      alert('❌ Errore durante il salvataggio')
+      notify('❌ Errore durante il salvataggio')
     }
     setSavingSettings(false)
   }
 
-  const loadMessagesData = async () => {
-    setLoadingMessages(true)
+  const loadMessagesData = async (silent = false) => {
+    if (!silent) setLoadingMessages(true)
     const [messagesResult, usersResult] = await Promise.all([listAdminMessages(), listMessageableUsers()])
     setMessages(messagesResult.messages)
     setMessageableUsers(usersResult.users)
@@ -969,7 +971,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
       return
     }
     resetMessageForm()
-    await loadMessagesData()
+    await loadMessagesData(true)
   }
 
   const handleToggleMessageActive = async (id: string, currentActive: boolean) => {
@@ -977,7 +979,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     if (result.success) {
       setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, is_active: !currentActive } : m)))
     } else {
-      alert(result.error)
+      notify(result.error)
     }
   }
 
@@ -987,7 +989,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     if (result.success) {
       setMessages((prev) => prev.filter((m) => m.id !== id))
     } else {
-      alert(result.error)
+      notify(result.error)
     }
   }
 
@@ -1012,15 +1014,15 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     try {
       const result = await adminSetUserRole(selectedUser.id, userCurrentRoleId === 'none' ? null : userCurrentRoleId)
       if (!result.success) {
-        alert('❌ ' + (result.error || 'Errore durante il salvataggio.'))
+        notify('❌ ' + (result.error || 'Errore durante il salvataggio.'))
         return
       }
-      await loadUsers()
+      await loadUsers(true)
       setIsModalOpen(false)
       setSelectedUser(null)
-      alert('✅ Utente aggiornato con successo!')
+      notify('✅ Utente aggiornato con successo!')
     } catch {
-      alert('❌ Errore durante il salvataggio.')
+      notify('❌ Errore durante il salvataggio.')
     } finally {
       setIsSaving(false)
     }
@@ -1032,10 +1034,10 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     // Lato server: is_blocked non è più scrivibile dal browser.
     const result = await adminUpdateProfile(user.id, { is_blocked: newBlockedStatus })
     if (result.success) {
-      await loadUsers()
-      alert(`✅ Utente ${newBlockedStatus ? 'bloccato' : 'sbloccato'} con successo.`)
+      await loadUsers(true)
+      notify(`✅ Utente ${newBlockedStatus ? 'bloccato' : 'sbloccato'} con successo.`)
     } else {
-      alert('❌ Errore durante l\'aggiornamento.')
+      notify('❌ Errore durante l\'aggiornamento.')
     }
   }
 
@@ -1090,11 +1092,11 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
         : null
     })
     if (result.success) {
-      alert('✅ Profilo aggiornato con successo!')
+      notify('✅ Profilo aggiornato con successo!')
       setProfileEditUser(null)
-      await loadUsers()
+      await loadUsers(true)
     } else {
-      alert('❌ Errore: ' + (result.error || 'Impossibile aggiornare'))
+      notify('❌ Errore: ' + (result.error || 'Impossibile aggiornare'))
     }
     setSavingProfile(false)
   }
@@ -1116,11 +1118,11 @@ L'accesso viene registrato.`)) return
         // ✅ Naviga al magic link dell'utente target (stessa scheda)
         window.location.href = result.targetUrl
       } else {
-        alert('Errore: ' + (result.error || 'Impossibile impersonificare'))
+        notify('Errore: ' + (result.error || 'Impossibile impersonificare'))
         setImpersonatingId(null)
       }
     } catch (err) {
-      alert('Errore: ' + ((err instanceof Error && err.message) || 'Errore sconosciuto'))
+      notify('Errore: ' + ((err instanceof Error && err.message) || 'Errore sconosciuto'))
       setImpersonatingId(null)
     }
   }
@@ -3436,6 +3438,7 @@ L'accesso viene registrato.`)) return
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <AdminToaster />
       <div className="lg:col-span-1">
         {/* Telefono: il menu è una tendina, divisa per gruppi */}
         <label className="block lg:hidden">

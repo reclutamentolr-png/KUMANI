@@ -1,5 +1,6 @@
 'use client'
 
+import { notify } from '@/lib/adminNotify'
 import { useCallback, useEffect, useState } from 'react'
 import { Check, Inbox, LoaderCircle, Mail, RefreshCw, RotateCcw } from 'lucide-react'
 import { adminListContactMessages, adminSetContactMessageStatus, type AdminContactMessage } from '@/app/actions/admin'
@@ -51,7 +52,7 @@ export default function ContactMessagesPanel() {
     const result = await adminSetContactMessageStatus(item.id, status)
     setWorking(null)
     if (!result.success) {
-      alert('Errore: ' + (result.error ?? ''))
+      notify('Errore: ' + (result.error ?? ''))
       return
     }
     setItems((prev) =>

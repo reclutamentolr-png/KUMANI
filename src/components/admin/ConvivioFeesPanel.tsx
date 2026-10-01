@@ -1,5 +1,6 @@
 'use client'
 
+import { notify } from '@/lib/adminNotify'
 import { useCallback, useEffect, useState } from 'react'
 import { ExternalLink, LoaderCircle, Percent } from 'lucide-react'
 import { prettyVat, registryLookupUrl } from '@/lib/vat'
@@ -45,7 +46,7 @@ export default function ConvivioFeesPanel({ locale, canReadSettings = true }: { 
     setWorking(fee.id)
     const result = await adminWaiveConvivioFee(fee.id)
     setWorking(null)
-    if (!result.success) alert('Errore: ' + (result.error ?? ''))
+    if (!result.success) notify('Errore: ' + (result.error ?? ''))
     await load()
   }
 

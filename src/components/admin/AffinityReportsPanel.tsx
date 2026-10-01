@@ -1,5 +1,6 @@
 'use client'
 
+import { notify } from '@/lib/adminNotify'
 import { useCallback, useEffect, useState } from 'react'
 import { Flag, LoaderCircle } from 'lucide-react'
 import { listAffinityReports, resolveAffinityReport } from '@/app/actions/admin'
@@ -33,7 +34,7 @@ export default function AffinityReportsPanel() {
     setWorking(report.id)
     const result = await resolveAffinityReport(report.id, block)
     setWorking(null)
-    if (!result.success) alert('Errore: ' + result.error)
+    if (!result.success) notify('Errore: ' + result.error)
     await load()
   }
 

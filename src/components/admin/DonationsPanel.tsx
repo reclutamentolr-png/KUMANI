@@ -1,5 +1,6 @@
 'use client'
 
+import { notify } from '@/lib/adminNotify'
 import { useCallback, useEffect, useState } from 'react'
 import { HeartHandshake, LoaderCircle, Plus, Save, Trash2 } from 'lucide-react'
 import {
@@ -30,8 +31,8 @@ export default function DonationsPanel() {
   const [payout, setPayout] = useState({ association_id: '', amount_eur: '', paid_on: new Date().toISOString().slice(0, 10), reference: '', receipt_url: '', notes: '' })
   const [busy, setBusy] = useState<string | null>(null)
 
+  // Spinner solo al primo caricamento (loading parte da true)
   const load = useCallback(async () => {
-    setLoading(true)
     const result = await adminGetDonations()
     if (result.error) {
       setError(result.error)
@@ -62,11 +63,12 @@ export default function DonationsPanel() {
     const result = await action()
     setBusy(null)
     if (!result.success) {
-      alert('Errore: ' + (result.error ?? ''))
+      notify('Errore: ' + (result.error ?? ''))
       return
     }
     done?.()
     await load()
+    notify('Operazione completata.', 'success')
   }
 
   const toCents = (value: string) => Math.round(Number(value.replace(',', '.')) * 100)

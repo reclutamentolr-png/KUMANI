@@ -1,5 +1,6 @@
 'use client'
 
+import { notify } from '@/lib/adminNotify'
 import { useCallback, useEffect, useState } from 'react'
 import { AlertTriangle, Ban, LoaderCircle, RefreshCw, Trash2, UserX } from 'lucide-react'
 import {
@@ -74,17 +75,17 @@ export default function AccountDeletionsPanel({ onChanged, canDelete = true }: {
     if (!ok) return
     const typed = prompt('Per confermare scrivi ELIMINA')
     if ((typed ?? '').trim().toUpperCase() !== 'ELIMINA') {
-      alert('Conferma non corretta: nessuna operazione eseguita.')
+      notify('Conferma non corretta: nessuna operazione eseguita.')
       return
     }
     setWorking(item.id)
     try {
       const result = await adminExecuteDeletion(item.id, notes[item.id] ?? '')
       const warnings = result.warnings?.length ? `\n\nNote:\n• ${result.warnings.join('\n• ')}` : ''
-      if (!result.success) alert(`Errore: ${result.error ?? ''}${warnings}`)
-      else alert(`Account cancellato.${warnings}`)
+      if (!result.success) notify(`Errore: ${result.error ?? ''}${warnings}`)
+      else notify(`Account cancellato.${warnings}`)
     } catch (err) {
-      alert('Errore: ' + (err instanceof Error ? err.message : String(err)))
+      notify('Errore: ' + (err instanceof Error ? err.message : String(err)))
     } finally {
       setWorking(null)
     }
@@ -95,14 +96,14 @@ export default function AccountDeletionsPanel({ onChanged, canDelete = true }: {
   const cancel = async (item: AdminDeletionRequest) => {
     const note = (notes[item.id] ?? '').trim()
     if (!note) {
-      alert('Scrivi una nota con il motivo dell’annullamento (es. richiesta ritirata dall’utente).')
+      notify('Scrivi una nota con il motivo dell’annullamento (es. richiesta ritirata dall’utente).')
       return
     }
     if (!confirm(`Annullare la richiesta di cancellazione di ${fullName(item.user)}? L'account resterà attivo.`)) return
     setWorking(item.id)
     try {
       const result = await adminCancelDeletion(item.id, note)
-      if (!result.success) alert('Errore: ' + (result.error ?? ''))
+      if (!result.success) notify('Errore: ' + (result.error ?? ''))
     } finally {
       setWorking(null)
     }
