@@ -587,7 +587,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
       setCreditError(result.error || 'Errore durante la ricarica punti.')
       return
     }
-    setCreditSuccess(`+${amount} KU Points accreditati.`)
+    setCreditSuccess(`+${amount} KU Karma accreditati.`)
     setCreditForm({ userId: '', amount: '' })
     setCreditUserSearch('')
     await loadVouchersData()
@@ -695,7 +695,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     const next = !rewardsCatalogOn
     const ok = confirm(
       next
-        ? 'Attivare il Catalogo Premi? Gli utenti vedranno la pagina Premi e potranno riscattare i premi visibili con i Punti Community.'
+        ? 'Attivare il Catalogo Premi? Gli utenti vedranno la pagina Premi e potranno riscattare i premi visibili con i KU Points.'
         : 'Disattivare il Catalogo Premi? La pagina Premi sparisce e nessuno può più riscattare premi. Catalogo e riscatti già fatti restano salvati.'
     )
     if (!ok) return
@@ -724,7 +724,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     setRewardError(null)
     const pointsCost = parseInt(rewardForm.pointsCost, 10)
     if (!rewardForm.title.trim() || !pointsCost || pointsCost <= 0) {
-      setRewardError('Titolo e Punti Community (> 0) sono obbligatori.')
+      setRewardError('Titolo e KU Points (> 0) sono obbligatori.')
       return
     }
     setSavingReward(true)
@@ -1067,7 +1067,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
 
     // subscription_source traccia CHI ha attivato l'abbonamento (stripe /
     // voucher / admin): il Bonus Struttura conta solo i downline attivati via
-    // Stripe per i Punti Community, quindi un'attivazione manuale da qui non deve
+    // Stripe per i KU Points, quindi un'attivazione manuale da qui non deve
     // mai valere come pagamento reale. Lo tocchiamo solo quando lo stato
     // sta effettivamente cambiando — se era già "active" (es. pagamento
     // Stripe reale) e l'admin salva il form per un altro motivo, non
@@ -1721,7 +1721,7 @@ L'accesso viene registrato.`)) return
           Genera un lotto di codici di attivazione da vendere a un&apos;attività (es. 10 coupon a 400 €), che li regala ai
           propri clienti. Ogni codice attiva 1 anno di abbonamento, vale una sola volta e si può inserire già in
           registrazione: il QR stampato sul cartoncino apre la registrazione con il codice compilato. Gli abbonamenti
-          attivati con coupon non si rinnovano da soli e non generano Punti Community a chi invita.
+          attivati con coupon non si rinnovano da soli e non generano KU Points a chi invita.
           Scegli il piano del lotto: <strong>Base</strong> oppure <strong>Pro</strong> (per negozi e professionisti:
           attiva 1 anno di Pro, che include anche il Base).
         </p>
@@ -2017,8 +2017,8 @@ L'accesso viene registrato.`)) return
             Voucher Abbonamento
           </h2>
           <p className="text-gray-600 mt-1">
-            I Kumani creano questi voucher spendendo 49 Punti Community; qui puoi anche generarne direttamente in qualità di
-            amministratore (gratis, nessun punto scalato) o caricare KU Points a un utente.
+            I Kumani creano questi voucher spendendo 49 KU Points; qui puoi anche generarne direttamente in qualità di
+            amministratore (gratis, nessun punto scalato) o caricare KU Karma a un utente.
           </p>
         </div>
 
@@ -2047,10 +2047,10 @@ L'accesso viene registrato.`)) return
           </div>
 
           <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
-            <h3 className="font-bold text-gray-900">Carica KU Points</h3>
+            <h3 className="font-bold text-gray-900">Carica KU Karma</h3>
             <p className="text-sm text-gray-600">
               Accredita punti giornalieri direttamente a un utente. Questi punti abilitano solo la pubblicazione di
-              annunci in bacheca — non i voucher né il Catalogo Premi, che restano legati solo ai Punti Community guadagnati
+              annunci in bacheca — non i voucher né il Catalogo Premi, che restano legati solo ai KU Points guadagnati
               realmente.
             </p>
             {creditError && (
@@ -2093,7 +2093,7 @@ L'accesso viene registrato.`)) return
                         className="w-full text-left px-3 py-2 text-sm hover:bg-[var(--gold-pale)] border-b last:border-0 border-gray-100"
                       >
                         <div className="font-medium text-gray-900">{u.first_name} {u.last_name}</div>
-                        <div className="text-xs text-gray-500">{u.referral_code} · {u.daily_points || 0} KU Points</div>
+                        <div className="text-xs text-gray-500">{u.referral_code} · {u.daily_points || 0} KU Karma</div>
                       </button>
                     ))}
                   </div>
@@ -2200,7 +2200,7 @@ L'accesso viene registrato.`)) return
             Catalogo Premi
           </h2>
           <p className="text-gray-600 mt-1">
-            Premi riscattabili dai Kumani con i Punti Community. Un premio già riscattato non può più essere eliminato,
+            Premi riscattabili dai Kumani con i KU Points. Un premio già riscattato non può più essere eliminato,
             solo nascosto (disattiva &quot;Visibile&quot;).
           </p>
         </div>
@@ -2250,7 +2250,7 @@ L'accesso viene registrato.`)) return
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Punti Community necessari</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">KU Points necessari</label>
               <input
                 type="number"
                 min="1"
@@ -2342,7 +2342,7 @@ L'accesso viene registrato.`)) return
             <thead className="bg-gray-50 border-b">
               <tr>
                 <th className="text-left px-4 py-3 font-semibold text-gray-600">Premio</th>
-                <th className="text-left px-4 py-3 font-semibold text-gray-600">Punti Community</th>
+                <th className="text-left px-4 py-3 font-semibold text-gray-600">KU Points</th>
                 <th className="text-left px-4 py-3 font-semibold text-gray-600">Visibile</th>
                 <th className="text-right px-4 py-3 font-semibold text-gray-600">Azioni</th>
               </tr>
@@ -2588,12 +2588,12 @@ L'accesso viene registrato.`)) return
 
           <Card title="Donazioni" subtitle="Impegno di KUMANI verso l'associazione (uscita di cassa quando versato)">
             <Row label="Maturate dagli abbonamenti" value={eur(f.donations.subscriptionCents)} />
-            <Row label="Maturate dai Punti Community donati" value={eur(f.donations.pointsCents)} />
+            <Row label="Maturate dai KU Points donati" value={eur(f.donations.pointsCents)} />
             <Row label="Già versate" value={eur(f.donations.paidCents)} />
             <Row label="Da versare" value={eur(Math.max(f.donations.subscriptionCents + f.donations.pointsCents - f.donations.paidCents, 0))} strong />
           </Card>
 
-          <Card title="Punti Community" subtitle="Assegnati dal nuovo sistema e ancora da spendere">
+          <Card title="KU Points" subtitle="Assegnati dal nuovo sistema e ancora da spendere">
             <Row label="Attivazioni Base" value={`${f.pointsAwarded.activation_base} punti`} />
             <Row label="Attivazioni Pro" value={`${f.pointsAwarded.activation_pro} punti`} />
             <Row label="Passaggi a Pro" value={`${f.pointsAwarded.upgrade_pro} punti`} />
@@ -2890,7 +2890,7 @@ L'accesso viene registrato.`)) return
             </label>
             <p className="text-xs text-gray-500 mb-3">
               Chi si iscrive senza codice invito entra nella struttura dell’account KUMANI (mai in quella di un Kumano) e non
-              dà Punti Community a nessuno.
+              dà KU Points a nessuno.
             </p>
             {houseAccount ? (
               <p className="text-sm text-gray-700 mb-3">
@@ -2929,14 +2929,14 @@ L'accesso viene registrato.`)) return
       <section className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-[var(--gold)]/30 bg-[var(--gold-pale)] px-5 py-3">
           <Coins className="h-5 w-5 text-[var(--ink)]" />
-          <h3 className="text-base font-bold text-[var(--ink)]">Punti Community e voucher</h3>
+          <h3 className="text-base font-bold text-[var(--ink)]">KU Points e voucher</h3>
           <span className="text-xs text-gray-600">punti, pacchetti, badge e vetrina</span>
         </div>
         <div className="space-y-6 p-5">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
               <GitBranch className="w-4 h-4" />
-              Punti Community (Punti Rete)
+              KU Points
             </label>
             <p className="text-xs text-gray-500 mb-3">
               Punti assegnati <strong>solo allo sponsor diretto</strong> quando un suo invitato paga con carta: primo
@@ -3062,7 +3062,7 @@ L'accesso viene registrato.`)) return
               Annunci in Vetrina
             </label>
             <p className="text-xs text-gray-500 mb-3">
-              Punti Community richiesti a un Kumano per mettere in evidenza un proprio annuncio nella sezione “In Vetrina”
+              KU Points richiesti a un Kumano per mettere in evidenza un proprio annuncio nella sezione “In Vetrina”
               della bacheca, per 7 o 15 giorni.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md">
@@ -3197,7 +3197,7 @@ L'accesso viene registrato.`)) return
               ))}
             </div>
             <p className="text-xs text-gray-500 mt-1">
-              Il bonus arriva a chi oggi ha usato un altro servizio KUMANI. Un giorno di accesso = il KU di accesso giornaliero.
+              Il bonus arriva a chi oggi ha usato un altro servizio KUMANI. Un giorno di accesso = il KU Karma di accesso giornaliero.
               Dimensione e date delle stagioni si gestiscono in Admin → Mosaic.
             </p>
           </div>

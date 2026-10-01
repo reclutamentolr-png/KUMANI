@@ -85,7 +85,7 @@ export default function DonationsPanel() {
         <p className="mt-1 text-gray-600">
           Per ogni pagamento con carta di un abbonamento (primo pagamento e rinnovi) KUMANI dona una cifra fissa
           all&apos;associazione attiva; il passaggio da Base a Pro aggiunge la differenza; un rimborso annulla la donazione. I
-          Kumani possono donare i propri Punti Community: KUMANI versa il controvalore in euro. Tutto è visibile in
+          Kumani possono donare i propri KU Points: KUMANI versa il controvalore in euro. Tutto è visibile in
           Homepage, nella pagina Donazioni e nel Portafoglio.
         </p>
         {error && <p className="mt-2 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
@@ -102,7 +102,7 @@ export default function DonationsPanel() {
         {[
           ['Maturato in totale', euro(accrued)],
           ['Da abbonamenti', euro(totals.subscriptionCents)],
-          ['Da Punti Community', euro(totals.pointsCents)],
+          ['Da KU Points', euro(totals.pointsCents)],
           ['Già versato', euro(paid)],
         ].map(([label, value]) => (
           <div key={label} className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
@@ -126,7 +126,7 @@ export default function DonationsPanel() {
             <input value={settings.pro} onChange={(e) => setSettings({ ...settings, pro: e.target.value })} inputMode="decimal" className={input} />
           </label>
           <label className="text-xs font-medium text-gray-600">
-            Valore di 1 Punto Community donato (€)
+            Valore di 1 KU Point donato (€)
             <input value={settings.point} onChange={(e) => setSettings({ ...settings, point: e.target.value })} inputMode="decimal" className={input} />
           </label>
         </div>

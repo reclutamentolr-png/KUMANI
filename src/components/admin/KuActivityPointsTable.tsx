@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react'
 import { ListOrdered, LoaderCircle, Save } from 'lucide-react'
 import { adminListKuActivityPoints, adminSaveKuActivityPoints, type KuActivityPointsRow } from '@/app/actions/admin'
 
-// Specchietto dei KU Points assegnati per ogni attività (accesso giornaliero
-// e uso di ciascuno strumento, una volta al giorno). 0 = nessun KU.
+// Specchietto dei KU Karma assegnati per ogni attività (accesso giornaliero
+// e uso di ciascuno strumento, una volta al giorno). 0 = nessun KU Karma.
 export default function KuActivityPointsTable() {
   const [rows, setRows] = useState<KuActivityPointsRow[] | null>(null)
   const [saved, setSaved] = useState<Record<string, number>>({})
@@ -38,11 +38,11 @@ export default function KuActivityPointsTable() {
     <div className="bg-white rounded-xl border shadow-sm p-5 space-y-4">
       <div>
         <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-          <ListOrdered className="w-5 h-5" /> KU Points per attività
+          <ListOrdered className="w-5 h-5" /> KU Karma per attività
         </h3>
         <p className="text-sm text-gray-600 mt-1">
-          Quanti KU riceve un Kumano per ogni attività: l&apos;accesso giornaliero e il primo uso del giorno di ciascuno
-          strumento. 0 = l&apos;attività non dà KU. Le modifiche valgono dal momento del salvataggio.
+          Quanti KU Karma riceve un Kumano per ogni attività: l&apos;accesso giornaliero e il primo uso del giorno di ciascuno
+          strumento. 0 = l&apos;attività non dà KU Karma. Le modifiche valgono dal momento del salvataggio.
         </p>
       </div>
       {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}

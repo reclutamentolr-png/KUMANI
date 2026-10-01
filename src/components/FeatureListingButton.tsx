@@ -16,7 +16,7 @@ export default function FeatureListingButton({
   listingId: string
   cost7d: number
   cost15d: number
-  // Vetrina pagabile anche in KU (Gestione KU → 1): null se non attiva.
+  // Vetrina pagabile anche in KU Karma (Gestione KU → 1): null se non attiva.
   kuCosts?: { cost7d: number; cost15d: number } | null
 }) {
   const t = useTranslations('marketplace')
@@ -109,7 +109,7 @@ export default function FeatureListingButton({
               className="flex items-center gap-1 rounded-lg bg-yellow-400 hover:bg-yellow-500 text-[var(--ink)] text-xs font-bold px-3 py-1.5 disabled:opacity-50"
             >
               {loadingDuration === 'ku7' && <LoaderCircle className="w-3 h-3 animate-spin" />}
-              {t('showcaseDays', { days: 7 })} · {kuCosts.cost7d} KU
+              {t('showcaseDays', { days: 7 })} · {kuCosts.cost7d} KU Karma
             </button>
             <button
               type="button"
@@ -118,7 +118,7 @@ export default function FeatureListingButton({
               className="flex items-center gap-1 rounded-lg bg-yellow-400 hover:bg-yellow-500 text-[var(--ink)] text-xs font-bold px-3 py-1.5 disabled:opacity-50"
             >
               {loadingDuration === 'ku15' && <LoaderCircle className="w-3 h-3 animate-spin" />}
-              {t('showcaseDays', { days: 15 })} · {kuCosts.cost15d} KU
+              {t('showcaseDays', { days: 15 })} · {kuCosts.cost15d} KU Karma
             </button>
           </>
         )}

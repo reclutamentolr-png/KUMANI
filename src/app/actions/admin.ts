@@ -453,7 +453,7 @@ export async function createAdminVoucher(): Promise<{ success: true; code: strin
   return { success: false, error: 'Impossibile generare un codice univoco. Riprova.' }
 }
 
-// Credits daily_points (KU Points) directly to a user — separate from
+// Credits daily_points (KU Karma) directly to a user — separate from
 // network_points on purpose, per product decision: an admin top-up should
 // only unlock listings, never let someone mint vouchers/rewards for free.
 export async function creditDailyPoints(userId: string, amount: number) {
@@ -473,7 +473,7 @@ export async function creditDailyPoints(userId: string, amount: number) {
 
   if (fetchError || !profile) return { success: false, error: 'Utente non trovato.' }
 
-  // Conta anche per i badge di costanza (KU guadagnati in totale).
+  // Conta anche per i badge di costanza (KU Karma guadagnati in totale).
   const { error } = await supabaseAdmin
     .from('profiles')
     .update({
@@ -520,7 +520,7 @@ export async function createReward(input: {
   if (!admin) return { success: false, error: 'Non autorizzato' }
 
   if (!input.title.trim() || !input.pointsCost || input.pointsCost <= 0) {
-    return { success: false, error: 'Titolo e Punti Community (> 0) sono obbligatori' }
+    return { success: false, error: 'Titolo e KU Points (> 0) sono obbligatori' }
   }
 
   const supabaseAdmin = getServiceClient()
@@ -544,7 +544,7 @@ export async function updateReward(
   if (!admin) return { success: false, error: 'Non autorizzato' }
 
   if (!input.title.trim() || !input.pointsCost || input.pointsCost <= 0) {
-    return { success: false, error: 'Titolo e Punti Community (> 0) sono obbligatori' }
+    return { success: false, error: 'Titolo e KU Points (> 0) sono obbligatori' }
   }
 
   const supabaseAdmin = getServiceClient()
@@ -673,7 +673,7 @@ export async function fulfillRewardRedemption(redemptionId: string, code: string
 //   (balance transactions), quindi anche le commissioni Eventi/Kordata;
 // - abbonamenti per piano: fatture Stripe pagate (riga principale);
 // - lotti di voucher venduti ai negozi: fatturati fuori da Stripe;
-// - provvigioni agenti, voucher, credito e Punti Community: database.
+// - provvigioni agenti, voucher, credito e KU Points: database.
 // I voucher e i punti non sono uscite di cassa: sono servizi dati senza
 // incasso, valutati al prezzo di listino.
 export async function getAdminFinancialSummary() {
@@ -808,7 +808,7 @@ export async function getAdminFinancialSummary() {
     }
   }
 
-  // 7. Credito voucher e Punti Community ancora da usare
+  // 7. Credito voucher e KU Points ancora da usare
   const { data: balances } = await db.from('profiles').select('voucher_credit_cents, network_points')
   const voucherCreditCents = (balances ?? []).reduce((sum, p) => sum + (p.voucher_credit_cents ?? 0), 0)
   const networkPointsOutstanding = (balances ?? []).reduce((sum, p) => sum + (p.network_points ?? 0), 0)
@@ -2879,9 +2879,9 @@ export async function adminOverviewCounts() {
   return { totalUsers, activeUsers, totalNodes, blockedUsers }
 }
 
-// KU Points per attività (accesso giornaliero e uso di ogni strumento, una
+// KU Karma per attività (accesso giornaliero e uso di ogni strumento, una
 // volta al giorno): quantità modificabili, lette dalle funzioni che
-// assegnano i KU (ku_points_for in 20261203100000_network_points_v2.sql).
+// assegnano i KU Karma (ku_points_for in 20261203100000_network_points_v2.sql).
 export type KuActivityPointsRow = { key: string; label: string; points: number }
 
 export async function adminListKuActivityPoints(): Promise<{ rows: KuActivityPointsRow[]; error: string | null }> {
@@ -2900,7 +2900,7 @@ export async function adminSaveKuActivityPoints(rows: { key: string; points: num
   const admin = await verifyAdmin('settings.write')
   if (!admin) return { success: false, error: 'Non autorizzato' }
   if (rows.some((row) => !Number.isInteger(row.points) || row.points < 0 || row.points > 100)) {
-    return { success: false, error: 'I KU per attività devono essere numeri interi da 0 a 100.' }
+    return { success: false, error: 'I KU Karma per attività devono essere numeri interi da 0 a 100.' }
   }
   const service = getServiceClient()
   for (const row of rows) {

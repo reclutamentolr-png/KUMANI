@@ -60,7 +60,7 @@ export default function TermsPage() {
             <li><a href="#sez-3" className="hover:underline">3. Abbonamento e corrispettivi</a></li>
             <li><a href="#sez-4" className="hover:underline">4. Servizi dell&apos;Ecosistema KUMANI</a></li>
             <li><a href="#sez-5" className="hover:underline">5. Bacheca annunci e contenuti degli utenti</a></li>
-            <li><a href="#sez-6" className="hover:underline">6. KU Points e Punti Community</a></li>
+            <li><a href="#sez-6" className="hover:underline">6. KU Karma e KU Points</a></li>
             <li><a href="#sez-7" className="hover:underline">7. Regolamento Programma Vantaggi</a></li>
             <li><a href="#sez-8" className="hover:underline">8. Nessun compenso in denaro da KUMANI</a></li>
             <li><a href="#sez-9" className="hover:underline">9. Privacy e dati personali</a></li>
@@ -244,31 +244,31 @@ export default function TermsPage() {
 
           {/* 6 */}
           <section id="sez-6" className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 scroll-mt-24">
-            <h2 className="text-xl font-bold text-gray-900 mb-3">6. KU Points e Punti Community</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-3">6. KU Karma e KU Points</h2>
             <div className="text-gray-600 space-y-3 text-sm sm:text-base leading-relaxed">
               <p>
-                <strong className="text-gray-900">KU Points.</strong> L&apos;utilizzo dei servizi (accesso giornaliero, uso degli strumenti,
-                altre attività indicate nella Piattaforma) fa maturare KU Points, nelle quantità stabilite dalla Piattaforma e
+                <strong className="text-gray-900">KU Karma.</strong> L&apos;utilizzo dei servizi (accesso giornaliero, uso degli strumenti,
+                altre attività indicate nella Piattaforma) fa maturare KU Karma, nelle quantità stabilite dalla Piattaforma e
                 modificabili nel tempo. La classifica pubblica rappresenta il livello di attività e non costituisce promessa di guadagno.
               </p>
               <p>
-                <strong className="text-gray-900">Punti Community.</strong> L&apos;utente riceve Punti Community quando una persona che ha
+                <strong className="text-gray-900">KU Points.</strong> L&apos;utente riceve KU Points quando una persona che ha
                 invitato direttamente attiva un abbonamento pagato con carta (Base o Pro) o passa dal piano Base al piano Pro, e con il
                 Bonus Struttura, riconosciuto quando uno dei posti diretti della propria matrice viene occupato da una persona
                 invitata da un altro utente (spillover) che paga l&apos;abbonamento con carta. Le quantità sono stabilite dalla Piattaforma e indicate
-                nell&apos;area personale. Le attivazioni tramite voucher e i rinnovi non danno Punti Community; in caso di rimborso del
+                nell&apos;area personale. Le attivazioni tramite voucher e i rinnovi non danno KU Points; in caso di rimborso del
                 pagamento i punti collegati vengono tolti.
               </p>
               <p>
-                I Punti Community si usano per mettere in vetrina gli annunci e per riscattare i pacchetti voucher (sezione 7.8).
-                Le qualifiche Kuman Green, Kuman Star e Kuman Black sono badge di riconoscimento, raggiunti con i Punti Community
+                I KU Points si usano per mettere in vetrina gli annunci e per riscattare i pacchetti voucher (sezione 7.8).
+                Le qualifiche Kuman Green, Kuman Star e Kuman Black sono badge di riconoscimento, raggiunti con i KU Points
                 guadagnati in totale, e non danno diritto a premi.
               </p>
             </div>
             <div className="mt-4 bg-green-50 border border-green-200 rounded-xl p-4 flex gap-3">
               <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
               <p className="text-green-800 text-sm leading-relaxed">
-                <strong>Trasparenza:</strong> KU Points e Punti Community non sono denaro: KUMANI non li paga, non li rimborsa e non li
+                <strong>Trasparenza:</strong> KU Karma e KU Points non sono denaro: KUMANI non li paga, non li rimborsa e non li
                 converte in contanti. La semplice registrazione di altri utenti, senza un abbonamento pagato, non dà punti.
               </p>
             </div>
@@ -322,7 +322,7 @@ export default function TermsPage() {
                 dandone comunicazione in questa pagina. I vantaggi già attribuiti restano validi alle condizioni comunicate al momento dell&apos;attribuzione.
               </p>
               <p>
-                <strong className="text-gray-900">7.8 Voucher.</strong> Con i Punti Community l&apos;utente può riscattare pacchetti che
+                <strong className="text-gray-900">7.8 Voucher.</strong> Con i KU Points l&apos;utente può riscattare pacchetti che
                 danno un credito voucher in euro (i pacchetti e i relativi valori sono indicati nell&apos;area personale e possono essere
                 riscattati più volte). Con il credito l&apos;utente crea voucher che attivano un abbonamento KUMANI Base o Pro per un anno;
                 un voucher non ancora utilizzato può essere annullato e il credito torna disponibile. Il credito voucher non è
@@ -340,7 +340,7 @@ export default function TermsPage() {
             <div className="mt-5 bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3">
               <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
               <p className="text-amber-800 text-sm leading-relaxed">
-                I Punti Community dipendono dagli abbonamenti pagati dalle persone invitate (sezione 6). Non sono garantiti né
+                I KU Points dipendono dagli abbonamenti pagati dalle persone invitate (sezione 6). Non sono garantiti né
                 promessi guadagni: il valore dei voucher è uno sconto sui servizi KUMANI, e ciò che l&apos;utente ne ricava cedendoli a
                 terzi dipende solo da lui e ricade sotto la sua responsabilità (sezione 7.8).
               </p>
@@ -353,7 +353,7 @@ export default function TermsPage() {
             <div className="text-gray-600 space-y-3 text-sm sm:text-base leading-relaxed">
               <p>
                 KUMANI non paga agli utenti commissioni, percentuali o altri compensi in denaro per gli inviti o per gli abbonamenti
-                acquistati dalle persone invitate. Gli unici vantaggi collegati agli inviti sono i Punti Community e i voucher
+                acquistati dalle persone invitate. Gli unici vantaggi collegati agli inviti sono i KU Points e i voucher
                 descritti nelle sezioni 6 e 7, che non sono denaro e non sono convertibili in contanti presso KUMANI.
               </p>
               <p>

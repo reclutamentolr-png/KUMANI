@@ -43,9 +43,9 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [justSaved, setJustSaved] = useState(false)
-  // Temi speciali: ognuno si sblocca a parte con i KU Points (popup qui
+  // Temi speciali: ognuno si sblocca a parte con i KU Karma (popup qui
   // nello strumento). owned = temi già sbloccati; costs = costo dei temi
-  // acquistabili (assente = sblocco non attivo); kuBalance = KU disponibili.
+  // acquistabili (assente = sblocco non attivo); kuBalance = KU Karma disponibili.
   const [ownedThemes, setOwnedThemes] = useState<string[]>([])
   const [themeCosts, setThemeCosts] = useState<Record<string, number>>({})
   const [kuBalance, setKuBalance] = useState(0)
@@ -53,7 +53,7 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
   const [unlocking, setUnlocking] = useState(false)
   const [unlockError, setUnlockError] = useState<string | null>(null)
   // Tema speciale in prova: l'anteprima lo mostra senza toccare il tema
-  // salvato, così l'utente lo vede prima di spendere i KU.
+  // salvato, così l'utente lo vede prima di spendere i KU Karma.
   const [previewTheme, setPreviewTheme] = useState<BioThemeKey | null>(null)
   const previewRef = useRef<HTMLDivElement>(null)
 
@@ -249,7 +249,7 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
                           </span>
                         ) : (
                           <span className="inline-flex w-fit items-center gap-1 rounded-full bg-[var(--ink)] px-2 py-0.5 text-[10px] font-bold text-[var(--gold-bright)]">
-                            {themeCosts[key] !== undefined ? `${themeCosts[key]} KU` : t('themeLocked')}
+                            {themeCosts[key] !== undefined ? `${themeCosts[key]} KU Karma` : t('themeLocked')}
                           </span>
                         )}
                       </div>
@@ -450,11 +450,11 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
                 <div className="mt-4 grid grid-cols-2 gap-2 text-center">
                   <div className="rounded-lg bg-[var(--gold-pale)] p-2">
                     <p className="text-xs text-[var(--muted)]">{t('themeUnlockCostLabel')}</p>
-                    <p className="text-lg font-bold text-[var(--ink)]">{themeCosts[unlockTheme]} KU</p>
+                    <p className="text-lg font-bold text-[var(--ink)]">{themeCosts[unlockTheme]} KU Karma</p>
                   </div>
                   <div className="rounded-lg bg-gray-50 p-2">
                     <p className="text-xs text-[var(--muted)]">{t('themeUnlockBalanceLabel')}</p>
-                    <p className="text-lg font-bold text-[var(--ink)]">{kuBalance} KU</p>
+                    <p className="text-lg font-bold text-[var(--ink)]">{kuBalance} KU Karma</p>
                   </div>
                 </div>
                 {kuBalance < themeCosts[unlockTheme] && (

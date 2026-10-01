@@ -82,7 +82,7 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
   if (!profile) redirect(`/${locale}/dashboard`)
 
   const kuWalletData = await loadKuWalletData(supabase, profile)
-  // Punti Community, credito voucher e qualifiche (badge sui punti guadagnati)
+  // KU Points, credito voucher e qualifiche (badge sui punti guadagnati)
   const networkWallet = await getMyNetworkWallet(supabase)
   const { ranks } = networkWallet
   const currentRank = getCurrentRank(networkWallet.earnedTotal, ranks)
@@ -222,7 +222,7 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
         </WalletSection>
 
         <div className="space-y-6">
-          {/* Punti: KU Points (uso quotidiano) e Punti Community (inviti),
+          {/* Punti: KU Karma (uso quotidiano) e KU Points (inviti),
               due saldi separati nella stessa scheda */}
           <WalletSection icon={<Sparkles className="h-5 w-5 text-[var(--gold)]" />} title={t('pointsCardTitle')}>
             <div className="grid grid-cols-1 gap-5 md:grid-cols-[1fr_auto_1fr]">
@@ -259,14 +259,14 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
             </div>
           </WalletSection>
 
-          {/* Donazioni: dona i tuoi Punti Community e vedi quanto dona KUMANI */}
+          {/* Donazioni: dona i tuoi KU Points e vedi quanto dona KUMANI */}
           {donationSummary?.active && (
             <WalletSection icon={<HeartHandshake className="h-5 w-5 text-[var(--gold)]" />} title={tdon('sectionTitle')}>
               <WalletDonations summary={donationSummary} mine={myDonations} networkPoints={networkWallet.networkPoints} />
             </WalletSection>
           )}
 
-          {/* Badge: qualifiche Kuman Green / Star / Black sui Punti Community
+          {/* Badge: qualifiche Kuman Green / Star / Black sui KU Points
               guadagnati in totale, con avanzamento e data di raggiungimento */}
           <WalletSection icon={<Award className="h-5 w-5 text-[var(--gold)]" />} title={t('badgeTitle')}>
             <div className="flex flex-wrap items-end justify-between gap-3">

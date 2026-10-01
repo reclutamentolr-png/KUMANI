@@ -24,23 +24,23 @@ const UNLOCK_LABELS: Record<string, string> = {
 // come funziona ogni metodo prima di attivarlo o cambiarne i valori.
 const DESCRIPTIONS: Record<KuFeatureKey, { title: string; icon: typeof Coins; paragraphs: string[] }> = {
   showcase: {
-    title: '1. Vetrina annunci pagabile in KU',
+    title: '1. Vetrina annunci pagabile in KU Karma',
     icon: Sparkles,
     paragraphs: [
-      "COSA FA — In Bacheca, sul proprio annuncio, il pulsante \"Metti in vetrina\" offre oltre al pagamento in Punti Community anche quello in KU Points. L'annuncio in vetrina compare in evidenza per 7 o 15 giorni.",
-      'COME FUNZIONA — I costi in KU sono quelli impostati qui sotto (uno per 7 giorni, uno per 15). Se l\'annuncio è già in vetrina, i giorni acquistati si sommano a quelli che restano. I KU vengono scalati in modo atomico: se non bastano, la vetrina non parte e non si perde nulla.',
-      "DOVE LO VEDE L'UTENTE — Bacheca → I miei annunci → \"Metti in vetrina\": compaiono i pulsanti \"7 giorni · X KU\" e \"15 giorni · X KU\" accanto a quelli in Punti Community.",
-      'COSTO PER KUMANI — Zero: la vetrina è uno spazio già esistente. Il prezzo in Punti Community (impostazioni generali) resta disponibile in parallelo.',
-      'QUANDO USARLO — Per dare subito un secondo uso concreto ai KU di chi pubblica annunci. Consigliato come primo metodo da attivare.',
+      "COSA FA — In Bacheca, sul proprio annuncio, il pulsante \"Metti in vetrina\" offre oltre al pagamento in KU Points anche quello in KU Karma. L'annuncio in vetrina compare in evidenza per 7 o 15 giorni.",
+      'COME FUNZIONA — I costi in KU Karma sono quelli impostati qui sotto (uno per 7 giorni, uno per 15). Se l\'annuncio è già in vetrina, i giorni acquistati si sommano a quelli che restano. I KU Karma vengono scalati in modo atomico: se non bastano, la vetrina non parte e non si perde nulla.',
+      "DOVE LO VEDE L'UTENTE — Bacheca → I miei annunci → \"Metti in vetrina\": compaiono i pulsanti \"7 giorni · X KU Karma\" e \"15 giorni · X KU Karma\" accanto a quelli in KU Points.",
+      'COSTO PER KUMANI — Zero: la vetrina è uno spazio già esistente. Il prezzo in KU Points (impostazioni generali) resta disponibile in parallelo.',
+      'QUANDO USARLO — Per dare subito un secondo uso concreto ai KU Karma di chi pubblica annunci. Consigliato come primo metodo da attivare.',
     ],
   },
   unlocks: {
     title: '2. Sblocchi extra negli strumenti',
     icon: Unlock,
     paragraphs: [
-      "COSA FA — Catalogo di contenuti extra acquistabili una sola volta con i KU (lo sblocco resta per sempre a chi lo compra). Ogni voce del catalogo corrisponde a un contenuto già realizzato nel codice dello strumento.",
+      "COSA FA — Catalogo di contenuti extra acquistabili una sola volta con i KU Karma (lo sblocco resta per sempre a chi lo compra). Ogni voce del catalogo corrisponde a un contenuto già realizzato nel codice dello strumento.",
       'COME FUNZIONA — Qui sotto per ogni sblocco si decide costo e disponibilità. Se l\'intero metodo è spento o la singola voce è disattivata, nessuno può più acquistarla; chi l\'ha già acquistata la conserva comunque.',
-      "DOVE LO VEDE L'UTENTE — Portafoglio → \"Usa i tuoi KU Points\" → Sblocchi; e dentro lo strumento (es. in Link in Bio i temi speciali compaiono con il lucchetto finché non vengono sbloccati).",
+      "DOVE LO VEDE L'UTENTE — Portafoglio → \"Usa i tuoi KU Karma\" → Sblocchi; e dentro lo strumento (es. in Link in Bio i temi speciali compaiono con il lucchetto finché non vengono sbloccati).",
       'SBLOCCHI DISPONIBILI OGGI — Link in Bio: 3 temi speciali (Aurora, Notte dorata, Tramonto). Nuovi sblocchi (es. disegni extra del Mandala, suoni di Neurobalance, modelli di preventivo) richiedono di realizzare il contenuto nello strumento: una volta fatto, la voce comparirà in questo elenco.',
       'COSTO PER KUMANI — Zero: sono contenuti digitali.',
     ],
@@ -49,9 +49,9 @@ const DESCRIPTIONS: Record<KuFeatureKey, { title: string; icon: typeof Coins; pa
     title: '3. Badge di costanza',
     icon: Award,
     paragraphs: [
-      "COSA FA — Riconoscimento pubblico per chi usa KUMANI con costanza: al raggiungimento delle soglie di KU guadagnati IN TOTALE (non il saldo, quindi spendere i KU non fa perdere il badge) si ottiene un badge.",
-      "COME FUNZIONA — I livelli e le soglie si impostano qui sotto (es. \"costante\" a 500 KU, \"pilastro\" a 2.000). Il totale cresce a ogni punto guadagnato: accesso giornaliero, uso degli strumenti, accrediti manuali dell'admin. Per chi era già iscritto il totale iniziale è stimato come saldo attuale + KU spesi in annunci.",
-      "DOVE LO VEDE L'UTENTE — In dashboard accanto ai KU Points e nel Portafoglio, con la barra di avanzamento verso il livello successivo.",
+      "COSA FA — Riconoscimento pubblico per chi usa KUMANI con costanza: al raggiungimento delle soglie di KU Karma guadagnati IN TOTALE (non il saldo, quindi spendere i KU Karma non fa perdere il badge) si ottiene un badge.",
+      "COME FUNZIONA — I livelli e le soglie si impostano qui sotto (es. \"costante\" a 500 KU Karma, \"pilastro\" a 2.000). Il totale cresce a ogni punto guadagnato: accesso giornaliero, uso degli strumenti, accrediti manuali dell'admin. Per chi era già iscritto il totale iniziale è stimato come saldo attuale + KU Karma spesi in annunci.",
+      "DOVE LO VEDE L'UTENTE — In dashboard accanto ai KU Karma e nel Portafoglio, con la barra di avanzamento verso il livello successivo.",
       'COSTO PER KUMANI — Zero.',
       "NOTA — Il nome visualizzato dei livelli \"costante\" e \"pilastro\" è tradotto nelle 7 lingue. Un livello con una chiave nuova viene mostrato con la chiave stessa finché non si aggiunge la traduzione.",
     ],
@@ -60,23 +60,23 @@ const DESCRIPTIONS: Record<KuFeatureKey, { title: string; icon: typeof Coins; pa
     title: '4. Sconto sul rinnovo dell\'abbonamento',
     icon: Ticket,
     paragraphs: [
-      "COSA FA — L'utente converte KU in uno sconto in euro sul prossimo rinnovo annuale del suo abbonamento.",
-      "COME FUNZIONA — Al click, i KU vengono scalati e KUMANI applica automaticamente all'abbonamento Stripe dell'utente un coupon \"una tantum\" pari allo sconto impostato: vale sul prossimo addebito. Se Stripe non risponde o l'abbonamento non si trova, i KU vengono restituiti. Limite: il numero massimo di sconti per utente in 365 giorni impostato qui sotto.",
+      "COSA FA — L'utente converte KU Karma in uno sconto in euro sul prossimo rinnovo annuale del suo abbonamento.",
+      "COME FUNZIONA — Al click, i KU Karma vengono scalati e KUMANI applica automaticamente all'abbonamento Stripe dell'utente un coupon \"una tantum\" pari allo sconto impostato: vale sul prossimo addebito. Se Stripe non risponde o l'abbonamento non si trova, i KU Karma vengono restituiti. Limite: il numero massimo di sconti per utente in 365 giorni impostato qui sotto.",
       "CHI PUÒ USARLO — Solo chi ha un abbonamento Stripe attivo con rinnovo automatico (non chi è attivo tramite voucher o attivazione admin, perché non c'è un addebito futuro da scontare).",
-      "DOVE LO VEDE L'UTENTE — Portafoglio → \"Usa i tuoi KU Points\" → Sconto sul rinnovo.",
+      "DOVE LO VEDE L'UTENTE — Portafoglio → \"Usa i tuoi KU Karma\" → Sconto sul rinnovo.",
       'COSTO PER KUMANI — Lo sconto in euro, al massimo (sconto × limite annuale) per utente all\'anno. Esempio: 5 € una volta l\'anno.',
-      "QUANDO USARLO — Come leva per trattenere gli utenti vicino alla scadenza. Lo sconto applicato si vede anche nel pannello Stripe (coupon \"KUMANI - sconto rinnovo KU\").",
+      "QUANDO USARLO — Come leva per trattenere gli utenti vicino alla scadenza. Lo sconto applicato si vede anche nel pannello Stripe (coupon \"KUMANI - sconto rinnovo KU Karma\").",
     ],
   },
   conversion: {
-    title: '5. Conversione KU → Punti Community',
+    title: '5. Conversione KU Karma → KU Points',
     icon: Repeat,
     paragraphs: [
-      'COSA FA — I KU si convertono in Punti Community, che servono per i pacchetti voucher e per la vetrina annunci.',
-      "COME FUNZIONA — Tasso: \"KU per 1 Punto Community\" (es. 20 KU = 1 PR). Tetto: massimo \"Punti Community al mese\" per utente (mese solare, ora italiana). Oltre il tetto la conversione viene rifiutata fino al mese successivo.",
-      "ATTENZIONE — Con il pacchetto base 294 Punti Community danno 49 € di credito voucher. Con 20 KU = 1 PR e tetto 5 PR/mese, un utente molto attivo ottiene al massimo 60 PR l'anno. Tenere il tetto basso. I punti convertiti non contano per i badge Kuman Green/Star/Black. Anche i KU accreditati a mano dall'admin diventano convertibili.",
-      "DOVE LO VEDE L'UTENTE — Portafoglio → \"Usa i tuoi KU Points\" → Converti in Punti Community, con il tetto residuo del mese.",
-      'COSTO PER KUMANI — Indiretto: abbonamenti o premi riscattati con i Punti Community ottenuti.',
+      'COSA FA — I KU Karma si convertono in KU Points, che servono per i pacchetti voucher e per la vetrina annunci.',
+      "COME FUNZIONA — Tasso: \"KU Karma per 1 KU Point\" (es. 20 KU Karma = 1 KU Point). Tetto: massimo \"KU Points al mese\" per utente (mese solare, ora italiana). Oltre il tetto la conversione viene rifiutata fino al mese successivo.",
+      "ATTENZIONE — Con il pacchetto base 294 KU Points danno 49 € di credito voucher. Con 20 KU Karma = 1 KU Point e tetto 5 KU Points/mese, un utente molto attivo ottiene al massimo 60 KU Points l'anno. Tenere il tetto basso. I punti convertiti non contano per i badge Kuman Green/Star/Black. Anche i KU Karma accreditati a mano dall'admin diventano convertibili.",
+      "DOVE LO VEDE L'UTENTE — Portafoglio → \"Usa i tuoi KU Karma\" → Converti in KU Points, con il tetto residuo del mese.",
+      'COSTO PER KUMANI — Indiretto: abbonamenti o premi riscattati con i KU Points ottenuti.',
     ],
   },
 }
@@ -153,15 +153,15 @@ export default function KuManagementPanel() {
     const s = stats?.byKind
     switch (feature.key) {
       case 'showcase':
-        return `${s?.showcase?.count ?? 0} vetrine pagate in KU · ${s?.showcase?.ku ?? 0} KU spesi`
+        return `${s?.showcase?.count ?? 0} vetrine pagate in KU Karma · ${s?.showcase?.ku ?? 0} KU Karma spesi`
       case 'unlocks':
-        return `${s?.unlock?.count ?? 0} sblocchi acquistati questo mese · ${s?.unlock?.ku ?? 0} KU spesi`
+        return `${s?.unlock?.count ?? 0} sblocchi acquistati questo mese · ${s?.unlock?.ku ?? 0} KU Karma spesi`
       case 'badges':
-        return 'Nessun costo: i badge si calcolano dai KU guadagnati in totale.'
+        return 'Nessun costo: i badge si calcolano dai KU Karma guadagnati in totale.'
       case 'renewal_discount':
         return `${s?.renewal_discount?.count ?? 0} sconti applicati · ${s?.renewal_discount?.discountEur ?? 0} € di sconto totale`
       case 'conversion':
-        return `${s?.conversion?.count ?? 0} conversioni · ${s?.conversion?.ku ?? 0} KU → ${s?.conversion?.points ?? 0} Punti Community`
+        return `${s?.conversion?.count ?? 0} conversioni · ${s?.conversion?.ku ?? 0} KU Karma → ${s?.conversion?.points ?? 0} KU Points`
     }
   }
 
@@ -172,7 +172,7 @@ export default function KuManagementPanel() {
           <Coins className="w-7 h-7" /> Gestione KU
         </h2>
         <p className="text-gray-600 mt-1">
-          Nuovi usi dei KU Points, attivabili uno alla volta come incentivo. Tutti partono spenti. Apri &quot;Come
+          Nuovi usi dei KU Karma, attivabili uno alla volta come incentivo. Tutti partono spenti. Apri &quot;Come
           funziona&quot; su ogni scheda per la descrizione completa. Statistiche del mese: {monthLabel}.
         </p>
       </div>
@@ -223,21 +223,21 @@ export default function KuManagementPanel() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {feature.key === 'showcase' && (
                 <>
-                  {numberField(feature, 'cost_7d', 'Costo 7 giorni', 'KU')}
-                  {numberField(feature, 'cost_15d', 'Costo 15 giorni', 'KU')}
+                  {numberField(feature, 'cost_7d', 'Costo 7 giorni', 'KU Karma')}
+                  {numberField(feature, 'cost_15d', 'Costo 15 giorni', 'KU Karma')}
                 </>
               )}
               {feature.key === 'renewal_discount' && (
                 <>
-                  {numberField(feature, 'cost_ku', 'Costo', 'KU')}
+                  {numberField(feature, 'cost_ku', 'Costo', 'KU Karma')}
                   {numberField(feature, 'discount_eur', 'Sconto', '€')}
                   {numberField(feature, 'max_per_year', 'Massimo per utente', 'all\'anno')}
                 </>
               )}
               {feature.key === 'conversion' && (
                 <>
-                  {numberField(feature, 'ku_per_point', 'KU per 1 Punto Community', 'KU')}
-                  {numberField(feature, 'max_points_per_month', 'Tetto per utente', 'PR / mese')}
+                  {numberField(feature, 'ku_per_point', 'KU Karma per 1 KU Point', 'KU Karma')}
+                  {numberField(feature, 'max_points_per_month', 'Tetto per utente', 'KU Points / mese')}
                 </>
               )}
             </div>
@@ -258,7 +258,7 @@ export default function KuManagementPanel() {
                       />
                     </label>
                     <label className="w-40">
-                      <span className="text-xs font-medium text-gray-600">Soglia (KU totali)</span>
+                      <span className="text-xs font-medium text-gray-600">Soglia (KU Karma totali)</span>
                       <input
                         type="number"
                         min={1}
@@ -295,7 +295,7 @@ export default function KuManagementPanel() {
                   <thead>
                     <tr className="border-b text-left text-gray-500">
                       <th className="py-2 pr-3 font-medium">Sblocco</th>
-                      <th className="py-2 pr-3 font-medium">Costo (KU)</th>
+                      <th className="py-2 pr-3 font-medium">Costo (KU Karma)</th>
                       <th className="py-2 pr-3 font-medium">Disponibile</th>
                       <th className="py-2 pr-3 font-medium">Utenti che lo hanno</th>
                       <th className="py-2" />

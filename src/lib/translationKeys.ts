@@ -104,7 +104,7 @@ export const SECTION_LABELS: Record<string, string> = {
   proArea: 'Area Professionisti',
   wallet: 'Wallet',
   rewards: 'Premi',
-  kuRewards: 'Punti KU',
+  kuRewards: 'KU Karma',
   voucherCard: 'Voucher',
   referralLanding: 'Pagina di invito',
   toolShare: 'Condivisione dei servizi',

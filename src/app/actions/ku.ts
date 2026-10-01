@@ -5,7 +5,7 @@ import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
 import { getStripe } from '@/lib/stripe'
 
-// Usi dei KU Points (Gestione KU). Tutta la logica sensibile (funzione
+// Usi dei KU Karma (Gestione KU). Tutta la logica sensibile (funzione
 // attiva?, saldo, tetti, scalare i punti) vive nelle funzioni SQL
 // SECURITY DEFINER: qui si chiamano con la sessione dell'utente.
 
@@ -22,7 +22,7 @@ const refreshKuPages = () => {
   revalidatePath('/marketplace/listings')
 }
 
-// 1. Vetrina annunci pagata in KU
+// 1. Vetrina annunci pagata in KU Karma
 export async function featureListingWithKu(
   listingId: string,
   durationDays: 7 | 15
@@ -50,7 +50,7 @@ export async function buyKuUnlock(unlockKey: string): Promise<KuResult> {
   return { success: data.success, reason: data.reason }
 }
 
-// 5. Conversione in Punti Community
+// 5. Conversione in KU Points
 export async function convertKuToNetworkPoints(points: number): Promise<KuResult> {
   const supabase = await createClient()
   const { data, error } = await supabase
@@ -61,9 +61,9 @@ export async function convertKuToNetworkPoints(points: number): Promise<KuResult
   return { success: data.success, reason: data.reason }
 }
 
-// 4. Sconto sul rinnovo: i KU si scalano nel database (prenotazione), poi
+// 4. Sconto sul rinnovo: i KU Karma si scalano nel database (prenotazione), poi
 // si applica un coupon Stripe "una tantum" all'abbonamento dell'utente, che
-// vale sul prossimo addebito. Se Stripe fallisce, i KU vengono restituiti.
+// vale sul prossimo addebito. Se Stripe fallisce, i KU Karma vengono restituiti.
 export async function redeemRenewalDiscount(): Promise<KuResult & { discountEur: number }> {
   const supabase = await createClient()
   const {
@@ -93,7 +93,7 @@ export async function redeemRenewalDiscount(): Promise<KuResult & { discountEur:
       amount_off: reservation.discount_eur * 100,
       currency: 'eur',
       duration: 'once',
-      name: `KUMANI - sconto rinnovo KU (${reservation.discount_eur}€)`,
+      name: `KUMANI - sconto rinnovo KU Karma (${reservation.discount_eur}€)`,
       max_redemptions: 1,
     })
     // Lo sconto si aggiunge a quelli già presenti sull'abbonamento (non li sostituisce)
@@ -109,7 +109,7 @@ export async function redeemRenewalDiscount(): Promise<KuResult & { discountEur:
     refreshKuPages()
     return { success: true, reason: null, discountEur: reservation.discount_eur }
   } catch (err) {
-    // Rimborso dei KU e registrazione dell'esito: la prenotazione non conta
+    // Rimborso dei KU Karma e registrazione dell'esito: la prenotazione non conta
     // più per il limite annuale (status failed).
     const { data: tx } = await service.from('ku_transactions').select('ku_amount').eq('id', reservation.transaction_id).single()
     if (tx) await service.rpc('add_daily_points_for', { p_user_id: user.id, p_amount: tx.ku_amount })
