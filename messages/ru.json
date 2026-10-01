@@ -5672,7 +5672,7 @@
     "learnMore": "Подробнее о пожертвованиях",
     "visitWebsite": "Сайт организации",
     "donateTitle": "Пожертвуй свои KU Points",
-    "donateHint": "Каждый балл стоит {value}: KUMANI перечисляет сумму организации.",
+    "donateHint": "Каждые 10 пожертвованных баллов = {value}: баллы списываются с твоего баланса, а KUMANI перечисляет сумму организации.",
     "donatePlaceholder": "Сколько баллов пожертвовать",
     "donateButton": "Пожертвовать {amount}",
     "donateConfirm": "Пожертвовать {points} KU Points ({amount}) организации {association}?",

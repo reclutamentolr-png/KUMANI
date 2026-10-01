@@ -5672,7 +5672,7 @@
     "learnMore": "Discover our donations",
     "visitWebsite": "Association's website",
     "donateTitle": "Donate your KU Points",
-    "donateHint": "Each point is worth {value}: KUMANI pays the amount to the association.",
+    "donateHint": "Every 10 points donated = {value}: the points leave your balance and KUMANI pays the amount to the association.",
     "donatePlaceholder": "Points to donate",
     "donateButton": "Donate {amount}",
     "donateConfirm": "Donate {points} KU Points ({amount}) to {association}?",

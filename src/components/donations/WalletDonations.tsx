@@ -72,7 +72,7 @@ export default function WalletDonations({
       {value > 0 && (
         <div>
           <p className="text-sm font-semibold text-[var(--ink)]">{t('donateTitle')}</p>
-          <p className="mb-2 text-xs text-[var(--muted)]">{t('donateHint', { value: eur(value) })}</p>
+          <p className="mb-2 text-xs text-[var(--muted)]">{t('donateHint', { value: eur(value * 10) })}</p>
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
             <input
               type="number"
