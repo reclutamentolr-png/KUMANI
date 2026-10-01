@@ -3,7 +3,7 @@ import { createServerClient } from '@supabase/ssr';
 import type { User } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
-import { readEnabledLocales } from './lib/enabledLocalesCore';
+import { readProxySettings } from './lib/enabledLocalesCore';
 import { locales, defaultLocale } from '../i18n';
 
 const intlMiddleware = createMiddleware({
@@ -66,17 +66,20 @@ function extractToolName(pathname: string): string | null {
   return null;
 }
 
-// Lingue attive (Admin → Lingue del sito): in memoria 60 secondi in questo
-// processo, così non si legge il database a ogni richiesta
-let enabledCache: { at: number; list: string[] } | null = null;
-async function enabledLocalesForProxy(): Promise<string[]> {
-  if (enabledCache && Date.now() - enabledCache.at < 60_000) return enabledCache.list;
+// Lingue attive (Admin → Lingue del sito) e manutenzione accesa/spenta: in
+// memoria 30 secondi in questo processo, così non si legge il database a
+// ogni pagina. Una modifica dall'Admin vale entro 30 secondi.
+type ProxySettings = { locales: string[]; maintenanceOn: boolean };
+let settingsCache: { at: number; value: ProxySettings } | null = null;
+async function proxySettings(): Promise<ProxySettings> {
+  if (settingsCache && Date.now() - settingsCache.at < 30_000) return settingsCache.value;
   try {
-    const list = await readEnabledLocales();
-    enabledCache = { at: Date.now(), list };
-    return list;
+    const value = await readProxySettings();
+    settingsCache = { at: Date.now(), value };
+    return value;
   } catch {
-    return enabledCache?.list ?? [...locales];
+    // Database non raggiungibile: si controlla la manutenzione come prima
+    return settingsCache?.value ?? { locales: [...locales], maintenanceOn: true };
   }
 }
 
@@ -98,7 +101,7 @@ async function canPreviewHiddenLocales(
 }
 
 export async function proxy(request: NextRequest) {
-  const enabledLocales = await enabledLocalesForProxy();
+  const { locales: enabledLocales, maintenanceOn } = await proxySettings();
   const urlSegments = request.nextUrl.pathname.split('/').filter(Boolean);
   const urlLocale = urlSegments[0] && locales.includes(urlSegments[0]) ? urlSegments[0] : null;
 
@@ -206,7 +209,8 @@ export async function proxy(request: NextRequest) {
     const hasLocale = !!segments[0] && locales.includes(segments[0]);
     const localePrefix = hasLocale ? `/${segments[0]}` : '';
     const barePath = '/' + (hasLocale ? segments.slice(1) : segments).join('/');
-    if (!MAINTENANCE_EXEMPT.test(barePath)) {
+    // Solo a manutenzione accesa si chiede al database se l'utente è Staff
+    if (maintenanceOn && !MAINTENANCE_EXEMPT.test(barePath)) {
       const { data: maintenance, error: maintenanceError } = await supabase.rpc('maintenance_status');
       const state = maintenance as { enabled?: boolean; staff?: boolean } | null;
       if (!maintenanceError && state?.enabled && !state.staff) {

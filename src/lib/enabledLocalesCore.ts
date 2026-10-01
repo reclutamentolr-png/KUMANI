@@ -24,6 +24,26 @@ export function parseEnabledLocales(raw: unknown): string[] {
   return valid.includes('it') ? valid : ['it', ...valid]
 }
 
+// Impostazioni lette dal proxy a ogni pagina, in un'unica richiesta: lingue
+// attive e manutenzione accesa/spenta (il proxy le tiene in memoria qualche
+// secondo, vedi src/proxy.ts).
+export async function readProxySettings(): Promise<{ locales: string[]; maintenanceOn: boolean }> {
+  const { data, error } = await createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  })
+    .from('system_settings')
+    .select('key, value')
+    .in('key', [ENABLED_LOCALES_KEY, 'maintenance_mode'])
+  if (error) throw new Error(error.message)
+  const rows = new Map((data ?? []).map((row) => [row.key, row.value]))
+  const localesRaw = rows.get(ENABLED_LOCALES_KEY)
+  const maintenanceRaw = String(rows.get('maintenance_mode') ?? 'false').replace(/"/g, '')
+  return {
+    locales: localesRaw !== undefined ? parseEnabledLocales(localesRaw) : [...ALL_SITE_LOCALES],
+    maintenanceOn: maintenanceRaw === 'true',
+  }
+}
+
 export async function readEnabledLocales(): Promise<string[]> {
   const { data, error } = await createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
     auth: { autoRefreshToken: false, persistSession: false },
