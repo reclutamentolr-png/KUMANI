@@ -5,6 +5,8 @@ import { ArrowRight, Briefcase, Check, Ticket } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { getPlanPrices } from '@/lib/planPrices'
+import PlanDetails, { type PlanDetailsTool } from '@/components/PlanDetails'
+import type { MarketplaceCategory } from '@/lib/marketplaceTools'
 
 type ToolRow = { tool_name: string; is_enabled: boolean; required_plan: string | null; pass_enabled?: boolean | null; pass_price_cents?: number | null }
 
@@ -40,15 +42,40 @@ export default async function HomePlans() {
   const byName = new Map(rows.map((row) => [row.tool_name, row]))
   const tools = getMarketplaceTools((key) => marketplaceT(key)).filter((tool) => byName.get(tool.toolName)?.is_enabled !== false)
   const planOf = (name: string) => byName.get(name)?.required_plan ?? 'base'
-  const titles = (plan: string) => tools.filter((tool) => planOf(tool.toolName) === plan).map((tool) => tool.title)
-  const free = titles('free')
-  const base = titles('base')
-  const pro = titles('pro')
+  const eur = (value: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2, minimumFractionDigits: 0 }).format(value)
+  const categoryLabel: Record<Exclude<MarketplaceCategory, 'community'>, string> = {
+    marketing: marketplaceT('categoryMarketing'),
+    security: marketplaceT('categorySecurity'),
+    personal: marketplaceT('categoryPersonal'),
+    wellness: marketplaceT('categoryWellness'),
+    lavoro: marketplaceT('categoryLavoro'),
+    svago: marketplaceT('categorySvago'),
+  }
+  // Servizi di un piano, con descrizione e argomento (per "Dettagli")
+  const detailsOf = (plan: string): PlanDetailsTool[] =>
+    tools
+      .filter((tool) => planOf(tool.toolName) === plan)
+      .map((tool) => {
+        const row = byName.get(tool.toolName)
+        return {
+          toolName: tool.toolName,
+          title: tool.title,
+          description: tool.description,
+          iconName: tool.iconName,
+          categoryLabel: categoryLabel[tool.category],
+          ...(row?.pass_enabled && plan !== 'free' ? { passPrice: eur((row.pass_price_cents ?? 1000) / 100) } : {}),
+        }
+      })
+  const freeTools = detailsOf('free')
+  const baseTools = detailsOf('base')
+  const proTools = detailsOf('pro')
+  const free = freeTools.map((tool) => tool.title)
+  const base = baseTools.map((tool) => tool.title)
+  const pro = proTools.map((tool) => tool.title)
   const passPrices = tools
     .map((tool) => byName.get(tool.toolName))
     .filter((row): row is ToolRow => !!row?.pass_enabled && row.required_plan !== 'free')
     .map((row) => row.pass_price_cents ?? 1000)
-  const eur = (value: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2, minimumFractionDigits: 0 }).format(value)
 
   const list = (items: string[], dark = false) => (
     <ul className="mt-3 flex-1 space-y-2">
@@ -74,9 +101,10 @@ export default async function HomePlans() {
           <p className="mt-2 min-h-[40px] text-sm text-gray-400">{t('planFreeDescription')}</p>
           <p className="mt-4 text-xs font-extrabold uppercase tracking-wide text-[var(--gold-bright)]">{t('planFreeIncluded', { count: free.length })}</p>
           {list(free)}
+          <PlanDetails planName={t('planFreeName')} price={`${eur(0)} · ${t('planForever')}`} intro={t('planDetailsIntroFree')} tools={freeTools} />
           <Link
             href="/register"
-            className="mt-7 inline-flex items-center justify-center gap-2 rounded-lg border border-white/40 px-6 py-3 font-bold text-white transition-all hover:bg-white/10"
+            className="mt-3 inline-flex items-center justify-center gap-2 rounded-lg border border-white/40 px-6 py-3 font-bold text-white transition-all hover:bg-white/10"
           >
             {t('planFreeCta')} <ArrowRight className="h-4 w-4" />
           </Link>
@@ -95,9 +123,15 @@ export default async function HomePlans() {
           <p className="mt-2 min-h-[40px] text-sm text-gray-300">{t('planBaseDescription')}</p>
           <p className="mt-4 text-xs font-extrabold uppercase tracking-wide text-[var(--gold-bright)]">{t('planBaseIncluded', { count: base.length })}</p>
           {list(base)}
+          <PlanDetails
+            planName={t('planBaseName')}
+            price={`${eur(prices.base)} ${t('planPerYear')}`}
+            intro={t('planDetailsIntroBase', { free: free.length, count: base.length })}
+            tools={baseTools}
+          />
           <Link
             href="/register"
-            className="mt-7 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3 font-bold text-[var(--ink)] shadow-xl transition-all hover:brightness-110"
+            className="mt-3 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3 font-bold text-[var(--ink)] shadow-xl transition-all hover:brightness-110"
           >
             {t('planBaseCta')} <ArrowRight className="h-4 w-4" />
           </Link>
@@ -118,9 +152,16 @@ export default async function HomePlans() {
           <p className="mt-2 min-h-[40px] text-sm text-gray-300">{t('planProDescription')}</p>
           <p className="mt-4 text-xs font-extrabold uppercase tracking-wide text-[var(--gold-bright)]">{t('planProIncluded', { count: pro.length })}</p>
           {list(pro, true)}
+          <PlanDetails
+            planName={t('planProName')}
+            price={`${eur(prices.pro)} ${t('planPerYear')}`}
+            intro={t('planDetailsIntroPro', { base: free.length + base.length, count: pro.length })}
+            tools={proTools}
+            dark
+          />
           <Link
             href="/register?plan=pro"
-            className="mt-7 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3 font-bold text-[var(--ink)] shadow-xl transition-all hover:brightness-110"
+            className="mt-3 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3 font-bold text-[var(--ink)] shadow-xl transition-all hover:brightness-110"
           >
             {t('planProCta')} <ArrowRight className="h-4 w-4" />
           </Link>

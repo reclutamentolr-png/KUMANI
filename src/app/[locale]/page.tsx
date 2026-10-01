@@ -15,7 +15,6 @@ import {
   Share2,
   Trophy,
   HandPlatter,
-  Briefcase,
   CalendarDays,
   Plane,
   UtensilsCrossed,
@@ -24,8 +23,6 @@ import {
 } from 'lucide-react'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import Logo from '@/components/Logo'
-import HomeToolsGridServer from '@/components/HomeToolsGridServer'
-import ProToolsShowcase from '@/components/ProToolsShowcase'
 import HomeKumanoDelGiorno from '@/components/spotlight/HomeKumanoDelGiorno'
 import HomeUpcomingEvents from '@/components/events/HomeUpcomingEvents'
 import HomeDonations from '@/components/donations/HomeDonations'
@@ -198,8 +195,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 🛠️ SEZIONE: IL MARKETPLACE — raggruppato per categoria, come in
-          dashboard, con tessere quadrate invece di schede lunghe. */}
+      {/* 🛠️ SEZIONE: IL MARKETPLACE — i servizi nei tre livelli Gratis, Base
+          e Pro, con "Dettagli" per l'elenco completo e trasparente. */}
       <section className="py-12 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-14">
@@ -215,35 +212,9 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <HomeToolsGridServer />
-
-          {/* Per professionisti e imprenditori: gli strumenti del piano Pro */}
-          <div className="mt-10 overflow-hidden rounded-3xl border-2 border-[var(--gold)] bg-gradient-to-br from-[var(--gold)]/20 via-white/[0.04] to-transparent p-6 shadow-[0_18px_50px_rgba(199,154,59,0.2)] sm:p-8">
-            <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr] lg:items-center">
-              <div>
-                <p className="inline-flex items-center gap-2 rounded-full bg-[var(--gold)] px-3 py-1 text-xs font-bold uppercase tracking-wide text-[var(--ink)]">
-                  <Briefcase className="h-3.5 w-3.5" /> {t('proBannerEyebrow')}
-                </p>
-                <h3 className="mt-4 text-2xl font-bold text-white sm:text-3xl">{t('proBannerTitle')}</h3>
-                <p className="mt-3 leading-relaxed text-gray-300">{t('proBannerText')}</p>
-                <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                  <Link
-                    href="/pro"
-                    className="inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3 font-bold text-[var(--ink)] shadow-xl hover:brightness-110"
-                  >
-                    {t('proBannerCta')} <ArrowRight className="h-4 w-4" />
-                  </Link>
-                  <Link
-                    href="/register?plan=pro"
-                    className="inline-flex items-center justify-center rounded-lg border border-[var(--gold)]/50 px-6 py-3 font-semibold text-white hover:bg-white/10"
-                  >
-                    {t('proBannerTrial')}
-                  </Link>
-                </div>
-              </div>
-              <ProToolsShowcase />
-            </div>
-          </div>
+          {/* Tre livelli (Gratis, Base, Pro) con l'elenco completo dei servizi */}
+          <p className="-mt-4 mb-10 text-center text-sm text-gray-400 sm:-mt-8 sm:text-base">{t('plansTiersDescription')}</p>
+          <HomePlans />
 
           {/* Come si parlano gli strumenti */}
           <div className="mt-10 rounded-3xl border border-[var(--gold)]/25 bg-gradient-to-br from-[var(--gold)]/10 via-white/[0.03] to-transparent p-6 sm:p-8">
@@ -267,24 +238,6 @@ export default function LandingPage() {
               ))}
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* 💳 SEZIONE: I PIANI — Gratis, Base e Pro (ognuno include il precedente) e il Pass */}
-      <section className="py-12 sm:py-20 bg-black/20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10 sm:mb-14">
-            <div className="inline-flex items-center gap-2 bg-[var(--gold)]/10 border border-[var(--gold)]/30 px-4 py-1.5 rounded-full text-sm font-medium text-[var(--gold-bright)] mb-4">
-              <Wallet className="w-4 h-4" />
-              {t('plansEyebrow')}
-            </div>
-            <h2 className="text-3xl sm:text-5xl font-bold text-white mb-4 break-words">
-              {t('plansTitle')} <span className="bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] bg-clip-text text-transparent">{t('plansAccent')}</span>
-            </h2>
-            <p className="text-base sm:text-xl text-gray-300 max-w-3xl mx-auto">{t('plansTiersDescription')}</p>
-          </div>
-
-          <HomePlans />
         </div>
       </section>
 
