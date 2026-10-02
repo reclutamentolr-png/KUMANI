@@ -93,6 +93,7 @@ import WithdrawalsPanel from '@/components/admin/WithdrawalsPanel'
 import DonationsPanel from '@/components/admin/DonationsPanel'
 import HomeLayoutPanel from '@/components/admin/HomeLayoutPanel'
 import PlatformsPanel from '@/components/admin/PlatformsPanel'
+import EmailSetupPanel from '@/components/admin/EmailSetupPanel'
 import ReportsPanel, { type ReportTab } from '@/components/admin/ReportsPanel'
 import PassCodesPanel from '@/components/admin/PassCodesPanel'
 import ToolPassSetting from '@/components/admin/ToolPassSetting'
@@ -1163,6 +1164,7 @@ L'accesso viene registrato.`)) return
   { id: 'agents', label: 'Agenti', Icon: BriefcaseBusiness, permission: 'users.write' as Permission, group: 'users' },
   { id: 'messages', label: 'Messaggi agli utenti', Icon: MessageSquare, permission: 'messages.read' as Permission, group: 'comms' },
   { id: 'contactMessages', label: 'Messaggi dal sito', Icon: Inbox, permission: 'support.read' as Permission, group: 'comms' },
+  { id: 'emailSetup', label: 'Gestione Email', Icon: Mail, permission: 'settings.read' as Permission, group: 'comms' },
   { id: 'kuManagement', label: 'Gestione KU', Icon: Coins, permission: 'settings.read' as Permission, group: 'rewards' },
   { id: 'rewards', label: 'Premi', Icon: Gift, permission: 'rewards.read' as Permission, group: 'rewards' },
   { id: 'vouchers', label: 'Voucher', Icon: BadgeCheck, permission: 'vouchers.read' as Permission, group: 'rewards' },
@@ -3582,6 +3584,7 @@ L'accesso viene registrato.`)) return
         {activeSection === 'mosaic' && <MosaicAdminPanel />}
         {activeSection === 'fabula' && <FabulaAdminPanel />}
         {activeSection === 'contactMessages' && <ContactMessagesPanel />}
+        {activeSection === 'emailSetup' && <EmailSetupPanel />}
         {activeSection === 'settings' && renderSettings()}
       </div>
 

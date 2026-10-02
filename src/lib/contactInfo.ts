@@ -2,8 +2,9 @@
 // Da completare prima del lancio: i campi a null vengono mostrati come
 // "in arrivo" (Contatti) o come segnaposto da compilare (Privacy).
 export const CONTACT_INFO = {
-  supportEmail: null as string | null, // es. 'supporto@kumani.io'
-  privacyEmail: null as string | null, // es. 'privacy@kumani.io'
+  supportEmail: 'support@kumani.io' as string | null,
+  privacyEmail: 'privacy@kumani.io' as string | null,
+  infoEmail: 'info@kumani.io' as string | null,
   whatsapp: null as string | null, // numero in formato internazionale, es. '+393331234567'
   responseTime: '24–48h',
   company: {
@@ -13,3 +14,11 @@ export const CONTACT_INFO = {
     pec: null as string | null,
   },
 }
+
+// Indirizzi @kumani.io gestiti in Admin → Gestione Email: Cloudflare Email
+// Routing li inoltra alla casella Gmail di KUMANI.
+export const KUMANI_MAILBOXES = [
+  { address: 'support@kumani.io', label: 'Assistenza agli utenti' },
+  { address: 'privacy@kumani.io', label: 'Privacy e richieste GDPR' },
+  { address: 'info@kumani.io', label: 'Informazioni generali' },
+] as const
