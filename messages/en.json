@@ -378,7 +378,11 @@
     "voucherNotActivated": "Account created, but the voucher wasn't activated. You can try again from the dashboard with \"Activate with Voucher\".",
     "countryOutsideItalyNote": "KUMANI was born in Italy: in your country some features may be reduced or unavailable because different laws apply (e.g. identity checks, reward programmes, tax documents). You can still use the platform.",
     "samePasswordError": "The new password must be different from your current one.",
-    "weakPasswordError": "Password too weak: use at least 8 characters with letters and numbers."
+    "weakPasswordError": "Password too weak: use at least 8 characters with letters and numbers.",
+    "tooManyEmailsError": "You requested too many emails in a short time: wait a few minutes and try again.",
+    "tooManyRequestsError": "Too many attempts in a short time: wait a few minutes and try again.",
+    "invalidEmailError": "Invalid email address: check that you typed it correctly.",
+    "genericAuthError": "Something went wrong. Please try again shortly."
   },
   "dashboard": {
     "receivedLabel": "From the Community",

@@ -358,7 +358,11 @@
     "voucherNotActivated": "Conta criada, mas o voucher não foi ativado. Pode tentar de novo a partir do painel com \"Ativar com voucher\".",
     "countryOutsideItalyNote": "O KUMANI nasceu em Itália: no seu país, algumas funcionalidades poderão estar reduzidas ou indisponíveis, porque vigoram leis diferentes (p. ex. verificações de identidade, programas de prémios, documentos fiscais). Pode, ainda assim, utilizar a plataforma.",
     "samePasswordError": "A nova palavra-passe tem de ser diferente da atual.",
-    "weakPasswordError": "Palavra-passe demasiado fraca: use pelo menos 8 caracteres com letras e números."
+    "weakPasswordError": "Palavra-passe demasiado fraca: use pelo menos 8 caracteres com letras e números.",
+    "tooManyEmailsError": "Pediu demasiados e-mails em pouco tempo: aguarde alguns minutos e tente novamente.",
+    "tooManyRequestsError": "Demasiadas tentativas em pouco tempo: aguarde alguns minutos e tente novamente.",
+    "invalidEmailError": "Endereço de e-mail inválido: verifique se está bem escrito.",
+    "genericAuthError": "Algo correu mal. Tente novamente daqui a pouco."
   },
   "dashboard": {
     "receivedLabel": "Da Comunidade",

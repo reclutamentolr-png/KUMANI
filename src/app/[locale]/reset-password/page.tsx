@@ -9,6 +9,7 @@ import Link from '@/components/LocalizedLink'
 import { Lock, AlertCircle, Loader2, Home, CheckCircle } from 'lucide-react'
 import MaintenanceGate from '@/components/MaintenanceGate'
 import Logo from '@/components/Logo'
+import { authErrorText } from '@/lib/authErrors'
 
 // Fallback per chi arriva cliccando il link nell'email di reset (il client
 // Supabase imposta la sessione automaticamente leggendo il token dall'URL).
@@ -61,7 +62,7 @@ export default function ResetPasswordPage() {
     const { error: updateError } = await supabase.auth.updateUser({ password })
 
     if (updateError) {
-      setError(updateError.message)
+      setError(authErrorText(t, updateError, t('genericAuthError')))
       setLoading(false)
       return
     }

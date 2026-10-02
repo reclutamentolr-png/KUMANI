@@ -9,6 +9,7 @@ import Link from '@/components/LocalizedLink'
 import { Mail, Lock, AlertCircle, Loader2, Home, CheckCircle, ShieldCheck } from 'lucide-react'
 import MaintenanceGate from '@/components/MaintenanceGate'
 import Logo from '@/components/Logo'
+import { authErrorText } from '@/lib/authErrors'
 
 const RESEND_COOLDOWN_SECONDS = 30
 
@@ -53,7 +54,7 @@ export default function ForgotPasswordPage() {
     })
 
     if (resetError) {
-      setError(resetError.message)
+      setError(authErrorText(t, resetError, t('genericAuthError')))
       setLoading(false)
       return
     }
@@ -94,15 +95,7 @@ export default function ForgotPasswordPage() {
     const { error: updateError } = await supabase.auth.updateUser({ password })
 
     if (updateError) {
-      // Errori più comuni spiegati nella lingua dell'utente
-      const errorCode = (updateError as { code?: string }).code
-      setError(
-        errorCode === 'same_password'
-          ? t('samePasswordError')
-          : errorCode === 'weak_password'
-            ? t('weakPasswordError')
-            : updateError.message
-      )
+      setError(authErrorText(t, updateError, t('genericAuthError')))
       setLoading(false)
       return
     }
@@ -120,7 +113,7 @@ export default function ForgotPasswordPage() {
       redirectTo: `${window.location.origin}/${locale}/reset-password`,
     })
     if (resendError) {
-      setError(resendError.message)
+      setError(authErrorText(t, resendError, t('genericAuthError')))
       return
     }
     setCodeVerified(false)

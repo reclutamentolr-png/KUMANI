@@ -358,7 +358,11 @@
     "voucherNotActivated": "Cuenta creada, pero el voucher no se ha activado. Puedes volver a intentarlo desde el panel con \"Activar con vale\".",
     "countryOutsideItalyNote": "KUMANI nace en Italia: en tu país algunas funcionalidades podrían estar reducidas o no estar disponibles, porque rigen leyes distintas (p. ej. verificaciones de identidad, programas de premios, documentos fiscales). Aun así, puedes usar la plataforma.",
     "samePasswordError": "La nueva contraseña debe ser distinta de la actual.",
-    "weakPasswordError": "Contraseña demasiado débil: usa al menos 8 caracteres con letras y números."
+    "weakPasswordError": "Contraseña demasiado débil: usa al menos 8 caracteres con letras y números.",
+    "tooManyEmailsError": "Has pedido demasiados correos en poco tiempo: espera unos minutos y vuelve a intentarlo.",
+    "tooManyRequestsError": "Demasiados intentos en poco tiempo: espera unos minutos y vuelve a intentarlo.",
+    "invalidEmailError": "Dirección de correo no válida: comprueba que esté bien escrita.",
+    "genericAuthError": "Algo no ha funcionado. Inténtalo de nuevo en un momento."
   },
   "dashboard": {
     "receivedLabel": "De la Comunidad",

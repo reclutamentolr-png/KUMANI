@@ -378,7 +378,11 @@
     "voucherNotActivated": "Account creato, ma il voucher non è stato attivato. Puoi riprovare dalla dashboard con \"Attiva tramite Voucher\".",
     "countryOutsideItalyNote": "KUMANI nasce in Italia: nel tuo paese alcune funzionalità potrebbero essere ridotte o non disponibili, perché vigono leggi diverse (es. verifiche d'identità, programmi a premi, documenti fiscali). Puoi comunque usare la piattaforma.",
     "samePasswordError": "La nuova password deve essere diversa da quella attuale.",
-    "weakPasswordError": "Password troppo debole: usa almeno 8 caratteri con lettere e numeri."
+    "weakPasswordError": "Password troppo debole: usa almeno 8 caratteri con lettere e numeri.",
+    "tooManyEmailsError": "Hai chiesto troppe email in poco tempo: aspetta qualche minuto e riprova.",
+    "tooManyRequestsError": "Troppi tentativi in poco tempo: aspetta qualche minuto e riprova.",
+    "invalidEmailError": "Indirizzo email non valido: controlla di averlo scritto bene.",
+    "genericAuthError": "Qualcosa non ha funzionato. Riprova tra poco."
   },
   "dashboard": {
     "receivedLabel": "Dalla Community",

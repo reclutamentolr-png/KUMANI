@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { europeanCountries } from '@/lib/european-countries'
 import { User, Mail, Lock, MapPin, AlertCircle, Loader2, Home, ShieldCheck, CheckCircle, Briefcase, Info } from 'lucide-react'
 import Logo from '@/components/Logo'
+import { authErrorText } from '@/lib/authErrors'
 
 const RESEND_COOLDOWN_SECONDS = 30
 
@@ -199,7 +200,7 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
       setResendCooldown(RESEND_COOLDOWN_SECONDS)
       setLoading(false)
     } catch (err: unknown) {
-      setError((err instanceof Error && err.message) || t('errorCreatingUser'))
+      setError(authErrorText(t, err, t('errorCreatingUser')))
       setLoading(false)
     }
   }
@@ -276,7 +277,7 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
         router.push(`/${locale}/dashboard`)
       }, delay)
     } catch (err: unknown) {
-      setError((err instanceof Error && err.message) || t('errorCreatingUser'))
+      setError(authErrorText(t, err, t('errorCreatingUser')))
     } finally {
       setLoading(false)
     }
@@ -309,7 +310,7 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
     setResendMessage(null)
     const { error: resendError } = await supabase.auth.resend({ type: 'signup', email: formData.email })
     if (resendError) {
-      setError(resendError.message)
+      setError(authErrorText(t, resendError, t('genericAuthError')))
       return
     }
     setResendMessage(t('codeResent'))
