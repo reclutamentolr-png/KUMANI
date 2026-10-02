@@ -3,10 +3,13 @@
 import { createClient } from '@/lib/supabase/server'
 import { hasActiveAureyaAccess } from '@/lib/aureya-server'
 import {
+  ACUITY_LEVELS,
+  AMSLER_SIZE,
   computeAcousticScore,
-  computeVisualScore,
+  computeAcuityScore,
   type AcousticTestResult,
-  type VisualTestResult,
+  type AcuityTestResult,
+  type AmslerTestResult,
 } from '@/lib/aureya'
 
 type ActionResult<T> = { success: true; data: T } | { success: false; message: string }
@@ -56,27 +59,59 @@ export async function saveAcousticTestResult(result: AcousticTestResult): Promis
   return { success: true, data: { id: data.id } }
 }
 
-export async function saveVisualTestResult(result: VisualTestResult): Promise<ActionResult<{ id: string }>> {
+export async function saveAcuityTestResult(result: AcuityTestResult): Promise<ActionResult<{ id: string }>> {
   const gate = await requireActiveAureyaAccess()
   if (!gate.ok) return { success: false, message: gate.message }
+
+  // Solo valori ammessi: due occhi, livelli della tabella
+  const levels: readonly number[] = ACUITY_LEVELS
+  const eyes = (result.eyes ?? [])
+    .filter((e) => (e.eye === 'left' || e.eye === 'right') && (e.bestLogMar === null || levels.includes(e.bestLogMar)))
+    .slice(0, 2)
+  if (eyes.length === 0) return { success: false, message: 'saveError' }
+  const clean: AcuityTestResult = {
+    distanceCm: Number(result.distanceCm) || 0,
+    pxPerMm: Number(result.pxPerMm) || 0,
+    eyes,
+  }
 
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('aureya_test_results')
-    .insert({
-      user_id: gate.userId,
-      test_type: 'visual',
-      result,
-      score: computeVisualScore(result.eyes),
-    })
+    .insert({ user_id: gate.userId, test_type: 'acuity', result: clean, score: computeAcuityScore(eyes) })
     .select('id')
     .single()
 
   if (error || !data) {
-    console.error('[Aureya] saveVisualTestResult failed:', error)
+    console.error('[Aureya] saveAcuityTestResult failed:', error)
     return { success: false, message: 'saveError' }
   }
+  return { success: true, data: { id: data.id } }
+}
 
+// La griglia di Amsler non dà un punteggio: si salvano le zone segnate
+export async function saveAmslerTestResult(result: AmslerTestResult): Promise<ActionResult<{ id: string }>> {
+  const gate = await requireActiveAureyaAccess()
+  if (!gate.ok) return { success: false, message: gate.message }
+
+  const max = AMSLER_SIZE * AMSLER_SIZE
+  const eyes = (result.eyes ?? [])
+    .filter((e) => e.eye === 'left' || e.eye === 'right')
+    .slice(0, 2)
+    .map((e) => ({ eye: e.eye, marked: [...new Set((e.marked ?? []).filter((n) => Number.isInteger(n) && n >= 0 && n < max))] }))
+  if (eyes.length === 0) return { success: false, message: 'saveError' }
+
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('aureya_test_results')
+    .insert({ user_id: gate.userId, test_type: 'amsler', result: { eyes }, score: null })
+    .select('id')
+    .single()
+
+  if (error || !data) {
+    console.error('[Aureya] saveAmslerTestResult failed:', error)
+    return { success: false, message: 'saveError' }
+  }
   return { success: true, data: { id: data.id } }
 }
 

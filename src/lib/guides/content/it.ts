@@ -937,21 +937,26 @@ const content: GuidesContent = {
       slug: "aureya",
       category: "wellness",
       title: "Aureya",
-      summary: "Due test rapidi di autovalutazione, udito e campo visivo, da ripetere e confrontare nel tempo.",
-      minutes: 2,
+      summary: "Tre test rapidi di autovalutazione, udito, acuità visiva e griglia di Amsler, da ripetere e confrontare nel tempo.",
+      minutes: 3,
       steps: [
         {
           title: "Prima di tutto",
-          text: "Aureya è uno strumento di autovalutazione, non un dispositivo medico, e non sostituisce una visita. I risultati dipendono da cuffie, volume, luminosità e distanza dallo schermo: sono indicativi."
+          text: "Aureya è uno strumento di autovalutazione, non un dispositivo medico, e non sostituisce una visita. I risultati dipendono da cuffie, volume, schermo, luce e distanza: sono indicativi."
         },
         {
-          title: "Scegli un test",
-          text: "Nel test acustico ascolti una serie di toni a diverse frequenze, un orecchio alla volta. Nel test del campo visivo fissi il centro dello schermo e segnali i punti che vedi, anche con la coda dell’occhio."
+          title: "Il test acustico",
+          text: "Ascolti una serie di toni a diverse frequenze, un orecchio alla volta, e tocchi «Lo sento» appena li percepisci. Tra un suono e l’altro c’è una pausa di silenzio di durata diversa: tocca solo quando senti davvero il suono."
+        },
+        {
+          title: "Acuità visiva e griglia di Amsler",
+          text: "Nell’acuità visiva indichi dove è girata la lettera «E», sempre più piccola, senza limiti di tempo. Nella griglia di Amsler guardi il punto al centro e segni le zone dove le linee sembrano storte, sfocate o mancanti. Entrambi si fanno un occhio alla volta.",
+          tip: "La prima volta misuri lo schermo appoggiando una carta di credito: serve a mostrare la lettera e la griglia della grandezza giusta."
         },
         {
           title: "Confronta nel tempo",
-          text: "Ogni test salva data e risultato (da 0 a 100, più alto è meglio) nella «Cronologia test», così puoi confrontarli nel tempo.",
-          tip: "In caso di dubbi o cali percepiti, consulta un medico o uno specialista."
+          text: "Ogni test salva data e risultato nella «Cronologia test», così puoi confrontarli nel tempo.",
+          tip: "Se noti peggioramenti, linee storte o zone mancanti, soprattutto per la prima volta, consulta un medico o un oculista."
         }
       ],
       cta: {

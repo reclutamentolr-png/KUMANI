@@ -937,21 +937,26 @@ const content: GuidesContent = {
       slug: "aureya",
       category: "wellness",
       title: "Aureya",
-      summary: "Two quick self-check tests, hearing and visual field, to repeat and compare over time.",
-      minutes: 2,
+      summary: "Three quick self-check tests, hearing, visual acuity and the Amsler grid, to repeat and compare over time.",
+      minutes: 3,
       steps: [
         {
           title: "First of all",
-          text: "Aureya is a self-check tool, not a medical device, and doesn’t replace a check-up. Results depend on headphones, volume, brightness and distance from the screen: they’re indicative."
+          text: "Aureya is a self-check tool, not a medical device, and doesn’t replace a check-up. Results depend on headphones, volume, screen, light and distance: they’re indicative."
         },
         {
-          title: "Choose a test",
-          text: "In the acoustic test you hear a series of tones at different frequencies, one ear at a time. In the visual field test you stare at the centre of the screen and mark the dots you see, even out of the corner of your eye."
+          title: "The acoustic test",
+          text: "You hear a series of tones at different frequencies, one ear at a time, and tap “I hear it” as soon as you perceive them. Between sounds there’s a pause of silence of varying length: tap only when you really hear the sound."
+        },
+        {
+          title: "Visual acuity and the Amsler grid",
+          text: "In the visual acuity test you say which way the letter “E” is facing as it gets smaller, with no time limit. In the Amsler grid you look at the dot in the centre and mark the areas where the lines look wavy, blurred or missing. Both are done one eye at a time.",
+          tip: "The first time you measure the screen by placing a credit card on it: this shows the letter and grid at the right size."
         },
         {
           title: "Compare over time",
-          text: "Each test saves the date and result (0 to 100, higher is better) in the “Test history”, so you can compare them over time.",
-          tip: "If you have doubts or notice a decline, see a doctor or a specialist."
+          text: "Each test saves the date and result in the “Test history”, so you can compare them over time.",
+          tip: "If you notice a decline, wavy lines or missing areas, especially for the first time, see a doctor or an eye specialist."
         }
       ],
       cta: {

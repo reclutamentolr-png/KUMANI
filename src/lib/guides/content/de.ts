@@ -937,21 +937,26 @@ const content: GuidesContent = {
       slug: "aureya",
       category: "wellness",
       title: "Aureya",
-      summary: "Zwei schnelle Selbsttests, Hören und Gesichtsfeld, zum Wiederholen und Vergleichen im Lauf der Zeit.",
-      minutes: 2,
+      summary: "Drei schnelle Selbsttests, Hören, Sehschärfe und Amsler-Gitter, zum Wiederholen und Vergleichen im Lauf der Zeit.",
+      minutes: 3,
       steps: [
         {
           title: "Vorab",
-          text: "Aureya ist ein Werkzeug zur Selbsteinschätzung, kein Medizinprodukt, und ersetzt keine Untersuchung. Die Ergebnisse hängen von Kopfhörern, Lautstärke, Helligkeit und Abstand zum Bildschirm ab: Sie sind nur Richtwerte."
+          text: "Aureya ist ein Werkzeug zur Selbsteinschätzung, kein Medizinprodukt, und ersetzt keine Untersuchung. Die Ergebnisse hängen von Kopfhörern, Lautstärke, Bildschirm, Licht und Abstand ab: Sie sind nur Richtwerte."
         },
         {
-          title: "Test wählen",
-          text: "Beim Akustiktest hörst du eine Reihe von Tönen in verschiedenen Frequenzen, ein Ohr nach dem anderen. Beim Gesichtsfeldtest schaust du auf die Bildschirmmitte und markierst die Punkte, die du siehst, auch aus dem Augenwinkel."
+          title: "Der Akustiktest",
+          text: "Du hörst eine Reihe von Tönen in verschiedenen Frequenzen, ein Ohr nach dem anderen, und tippst auf „Ich höre es“, sobald du sie wahrnimmst. Zwischen den Tönen gibt es eine Pause unterschiedlicher Länge: Tippe nur, wenn du den Ton wirklich hörst."
+        },
+        {
+          title: "Sehschärfe und Amsler-Gitter",
+          text: "Beim Sehschärfetest gibst du an, in welche Richtung das immer kleinere „E“ zeigt, ohne Zeitlimit. Beim Amsler-Gitter schaust du auf den Punkt in der Mitte und markierst die Bereiche, in denen die Linien verzerrt, verschwommen oder lückenhaft wirken. Beides machst du mit einem Auge nach dem anderen.",
+          tip: "Beim ersten Mal misst du den Bildschirm, indem du eine Kreditkarte auflegst: So erscheinen Buchstabe und Gitter in der richtigen Größe."
         },
         {
           title: "Im Lauf der Zeit vergleichen",
-          text: "Jeder Test speichert Datum und Ergebnis (0 bis 100, höher ist besser) im „Testverlauf“, damit du sie vergleichen kannst.",
-          tip: "Bei Zweifeln oder wahrgenommener Verschlechterung wende dich an einen Arzt oder Facharzt."
+          text: "Jeder Test speichert Datum und Ergebnis im „Testverlauf“, damit du sie vergleichen kannst.",
+          tip: "Wenn du eine Verschlechterung, verzerrte Linien oder fehlende Bereiche bemerkst, besonders zum ersten Mal, wende dich an einen Arzt oder Augenarzt."
         }
       ],
       cta: {

@@ -937,21 +937,26 @@ const content: GuidesContent = {
       slug: "aureya",
       category: "wellness",
       title: "Aureya",
-      summary: "Deux tests rapides d’auto-évaluation, audition et champ visuel, à refaire et comparer dans le temps.",
-      minutes: 2,
+      summary: "Trois tests rapides d’auto-évaluation, audition, acuité visuelle et grille d’Amsler, à refaire et comparer dans le temps.",
+      minutes: 3,
       steps: [
         {
           title: "Avant tout",
-          text: "Aureya est un outil d’auto-évaluation, pas un dispositif médical, et ne remplace pas une consultation. Les résultats dépendent des écouteurs, du volume, de la luminosité et de la distance à l’écran : ils sont indicatifs."
+          text: "Aureya est un outil d’auto-évaluation, pas un dispositif médical, et ne remplace pas une consultation. Les résultats dépendent des écouteurs, du volume, de l’écran, de la lumière et de la distance : ils sont indicatifs."
         },
         {
-          title: "Choisissez un test",
-          text: "Dans le test auditif, vous écoutez une série de sons à différentes fréquences, une oreille à la fois. Dans le test de champ visuel, vous fixez le centre de l’écran et signalez les points que vous voyez, même du coin de l’œil."
+          title: "Le test auditif",
+          text: "Vous écoutez une série de sons à différentes fréquences, une oreille à la fois, et touchez « Je l’entends » dès que vous les percevez. Entre deux sons, il y a un silence de durée variable : touchez seulement quand vous entendez vraiment le son."
+        },
+        {
+          title: "Acuité visuelle et grille d’Amsler",
+          text: "Dans le test d’acuité, vous indiquez dans quel sens est tournée la lettre « E », de plus en plus petite, sans limite de temps. Dans la grille d’Amsler, vous regardez le point au centre et marquez les zones où les lignes semblent ondulées, floues ou absentes. Les deux se font un œil à la fois.",
+          tip: "La première fois, vous mesurez l’écran en posant une carte bancaire : cela affiche la lettre et la grille à la bonne taille."
         },
         {
           title: "Comparez dans le temps",
-          text: "Chaque test enregistre la date et le résultat (de 0 à 100, plus c’est haut mieux c’est) dans l’« Historique des tests », pour les comparer dans le temps.",
-          tip: "En cas de doute ou de baisse ressentie, consultez un médecin ou un spécialiste."
+          text: "Chaque test enregistre la date et le résultat dans l’« Historique des tests », pour les comparer dans le temps.",
+          tip: "Si vous remarquez une baisse, des lignes ondulées ou des zones manquantes, surtout pour la première fois, consultez un médecin ou un ophtalmologiste."
         }
       ],
       cta: {

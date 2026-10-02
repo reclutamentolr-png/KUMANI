@@ -937,21 +937,26 @@ const content: GuidesContent = {
       slug: "aureya",
       category: "wellness",
       title: "Aureya",
-      summary: "Dois testes rápidos de autoavaliação, audição e campo visual, para repetir e comparar ao longo do tempo.",
-      minutes: 2,
+      summary: "Três testes rápidos de autoavaliação, audição, acuidade visual e grelha de Amsler, para repetir e comparar ao longo do tempo.",
+      minutes: 3,
       steps: [
         {
           title: "Antes de mais",
-          text: "O Aureya é uma ferramenta de autoavaliação, não um dispositivo médico, e não substitui uma consulta. Os resultados dependem dos auscultadores, volume, brilho e distância ao ecrã: são indicativos."
+          text: "O Aureya é uma ferramenta de autoavaliação, não um dispositivo médico, e não substitui uma consulta. Os resultados dependem dos auscultadores, volume, ecrã, luz e distância: são indicativos."
         },
         {
-          title: "Escolha um teste",
-          text: "No teste auditivo ouve uma série de tons a diferentes frequências, um ouvido de cada vez. No teste de campo visual fixa o centro do ecrã e assinala os pontos que vê, mesmo pelo canto do olho."
+          title: "O teste auditivo",
+          text: "Ouve uma série de tons a diferentes frequências, um ouvido de cada vez, e toca em «Estou a ouvir» assim que os percebe. Entre um som e outro há uma pausa de silêncio de duração variável: toque só quando ouvir mesmo o som."
+        },
+        {
+          title: "Acuidade visual e grelha de Amsler",
+          text: "Na acuidade visual indica para onde está virada a letra «E», cada vez mais pequena, sem limite de tempo. Na grelha de Amsler olha para o ponto no centro e marca as zonas onde as linhas parecem tortas, desfocadas ou em falta. Ambos se fazem um olho de cada vez.",
+          tip: "Da primeira vez mede o ecrã encostando um cartão de crédito: serve para mostrar a letra e a grelha no tamanho certo."
         },
         {
           title: "Compare ao longo do tempo",
-          text: "Cada teste guarda a data e o resultado (de 0 a 100, quanto mais alto melhor) no «Histórico de testes», para os comparar ao longo do tempo.",
-          tip: "Em caso de dúvida ou de diminuição percebida, consulte um médico ou um especialista."
+          text: "Cada teste guarda a data e o resultado no «Histórico de testes», para os comparar ao longo do tempo.",
+          tip: "Se notar uma diminuição, linhas tortas ou zonas em falta, sobretudo pela primeira vez, consulte um médico ou um oftalmologista."
         }
       ],
       cta: {

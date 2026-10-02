@@ -937,21 +937,26 @@ const content: GuidesContent = {
       slug: "aureya",
       category: "wellness",
       title: "Aureya",
-      summary: "Dos tests rápidos de autoevaluación, oído y campo visual, para repetir y comparar con el tiempo.",
-      minutes: 2,
+      summary: "Tres tests rápidos de autoevaluación, oído, agudeza visual y rejilla de Amsler, para repetir y comparar con el tiempo.",
+      minutes: 3,
       steps: [
         {
           title: "Antes de nada",
-          text: "Aureya es una herramienta de autoevaluación, no un dispositivo médico, y no sustituye una revisión. Los resultados dependen de auriculares, volumen, brillo y distancia de la pantalla: son orientativos."
+          text: "Aureya es una herramienta de autoevaluación, no un dispositivo médico, y no sustituye una revisión. Los resultados dependen de auriculares, volumen, pantalla, luz y distancia: son orientativos."
         },
         {
-          title: "Elige un test",
-          text: "En el test auditivo escuchas una serie de tonos a distintas frecuencias, un oído cada vez. En el test de campo visual miras fijamente el centro de la pantalla y marcas los puntos que ves, incluso con el rabillo del ojo."
+          title: "El test auditivo",
+          text: "Escuchas una serie de tonos a distintas frecuencias, un oído cada vez, y tocas «Lo oigo» en cuanto los percibes. Entre un sonido y otro hay una pausa de silencio de duración variable: toca solo cuando oigas de verdad el sonido."
+        },
+        {
+          title: "Agudeza visual y rejilla de Amsler",
+          text: "En la agudeza visual indicas hacia dónde mira la letra «E», cada vez más pequeña, sin límite de tiempo. En la rejilla de Amsler miras el punto del centro y marcas las zonas donde las líneas parecen torcidas, borrosas o ausentes. Ambos se hacen con un ojo cada vez.",
+          tip: "La primera vez mides la pantalla apoyando una tarjeta de crédito: sirve para mostrar la letra y la rejilla del tamaño correcto."
         },
         {
           title: "Compara con el tiempo",
-          text: "Cada test guarda la fecha y el resultado (de 0 a 100, cuanto más alto mejor) en el «Historial de tests», para compararlos con el tiempo.",
-          tip: "Si tienes dudas o notas un empeoramiento, consulta a un médico o a un especialista."
+          text: "Cada test guarda la fecha y el resultado en el «Historial de tests», para compararlos con el tiempo.",
+          tip: "Si notas un empeoramiento, líneas torcidas o zonas que faltan, sobre todo por primera vez, consulta a un médico o a un oftalmólogo."
         }
       ],
       cta: {
