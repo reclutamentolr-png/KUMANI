@@ -8,7 +8,10 @@ import { createClient } from '@/lib/supabase/server'
 import { getGuidesContent, guideShot, PUBLIC_GUIDES } from '@/lib/guides/content'
 import type { GuideSlug } from '@/lib/guides/types'
 
-type Props = { params: Promise<{ slug: string }> }
+type Props = { params: Promise<{ slug: string }>; searchParams: Promise<{ from?: string }> }
+
+// Solo percorsi interni (mai altri siti): /marketplace/…, /events, /viaggi…
+const safeFrom = (from?: string) => (from && /^\/(?!\/)[A-Za-z0-9/_\-]*$/.test(from) ? from : null)
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
@@ -26,8 +29,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 // Una guida: passi numerati, ognuno con la sua schermata del telefono
 // (l'elemento spiegato è evidenziato in oro), poi il pulsante per provare.
-export default async function GuidePage({ params }: Props) {
+export default async function GuidePage({ params, searchParams }: Props) {
   const { slug } = await params
+  const from = safeFrom((await searchParams).from)
   const locale = await getLocale()
   const t = await getTranslations('guides')
   const supabase = await createClient()
@@ -50,8 +54,10 @@ export default async function GuidePage({ params }: Props) {
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
-          <Link href="/guida" className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]">
-            <ArrowLeft className="h-5 w-5" /> {t('backToGuides')}
+          {/* Aperta da "Come si usa": si torna al servizio, non all'elenco */}
+          <Link href={from ?? '/guida'} className="flex min-w-0 items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]">
+            <ArrowLeft className="h-5 w-5 shrink-0" />
+            <span className="truncate">{from ? t('backToService', { name: guide.title }) : t('backToGuides')}</span>
           </Link>
           <span className="flex items-center gap-2 font-semibold tracking-wide">
             <BookOpen className="h-5 w-5 text-[var(--gold-bright)]" /> {t('linkLabel')}

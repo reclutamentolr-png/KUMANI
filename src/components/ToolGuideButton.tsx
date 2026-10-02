@@ -27,7 +27,8 @@ export default function ToolGuideButton() {
 
   return (
     <Link
-      href={`/guida/${slug}`}
+      // La guida sa da dove arrivi: in alto mostra "Torna a …" verso il servizio
+      href={`/guida/${slug}?from=${encodeURIComponent(barePath)}`}
       className={`fixed left-4 z-40 flex items-center gap-2 rounded-full border border-[var(--gold)]/60 bg-[var(--gold-pale)] px-4 py-3 text-sm font-semibold text-[var(--ink)] shadow-[0_12px_35px_rgba(23,23,23,0.25)] transition-all hover:-translate-y-0.5 hover:border-[var(--gold)] print:hidden ${
         aboveShare ? 'bottom-[4.5rem]' : 'bottom-4'
       }`}
