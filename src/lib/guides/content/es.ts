@@ -7,6 +7,7 @@ const content: GuidesContent = {
     wallet: { title: 'El monedero', text: 'Tarjeta, puntos, donaciones, insignias y recibos en un solo lugar.' },
     promoteTools: { title: "Herramientas para promocionar", text: "Las guías de los servicios que te ayudan a dar a conocer KUMANI." },
     security: { title: "Seguridad", text: "Las guías de los servicios que te ayudan a reconocer y frenar las estafas." },
+    community: { title: "Comunidad", text: "Las guías de los servicios para conocerse, ayudarse y jugar juntos." },
   },
   guides: [
     {
@@ -461,6 +462,156 @@ const content: GuidesContent = {
       cta: {
         label: "Abrir Documento Seguro",
         href: "/marketplace/documento-sicuro"
+      }
+    },
+    {
+      slug: "listings",
+      category: "community",
+      title: "Anuncios de la Comunidad",
+      summary: "Publica servicios y productos, busca lo que necesitas y escribe a quien ha publicado.",
+      minutes: 3,
+      steps: [
+        {
+          title: "Busca un anuncio",
+          text: "Escribe lo que buscas, elige categoría, país y ciudad y toca «Buscar». Los anuncios destacados aparecen primero."
+        },
+        {
+          title: "Publica tu anuncio",
+          text: "Toca «Nuevo anuncio»: publicarlo cuesta algunos KU Karma, los ves en el botón. Escribe título, categoría y descripción; precio e imagen son opcionales.",
+          tip: "Si no tienes suficientes KU Karma, accede cada día para acumularlos. Los anuncios duran 30 días y luego puedes volver a publicarlos con un clic."
+        },
+        {
+          title: "Dónde está",
+          text: "Elige país y ciudad. Para servicios y consultorías marca «Disponible también online / a distancia»: el anuncio aparece en todas las ciudades del país."
+        },
+        {
+          title: "Escaparate (opcional)",
+          text: "Puedes destacar el anuncio enseguida en la sección En el escaparate con KU Points, eligiendo cuántos días. Luego toca «Publicar Anuncio»."
+        },
+        {
+          title: "Tus mensajes",
+          text: "En «Mis mensajes» encuentras las conversaciones con quien te ha escrito por un anuncio o a quien has escrito tú. Por tu privacidad, los mensajes se borran solos a los 30 días."
+        }
+      ],
+      cta: {
+        label: "Abrir los Anuncios",
+        href: "/marketplace/listings"
+      }
+    },
+    {
+      slug: "timebank",
+      category: "community",
+      title: "KUMANI Time Bank",
+      summary: "Ayuda a alguien durante una hora y gana una hora, para usarla cuando necesites una mano.",
+      minutes: 3,
+      steps: [
+        {
+          title: "1 hora = 1 hora",
+          text: "Ayudas a alguien durante una hora y ganas una hora, que usas cuando necesitas ayuda. Las horas no valen dinero y no se convierten en puntos ni descuentos."
+        },
+        {
+          title: "Verifica y participa",
+          text: "Toca «Verificar y participar»: hace falta estar registrado desde hace al menos 30 días, tener el perfil completo, ser mayor de edad, tener la identidad verificada (código fiscal o documento) y aceptar las reglas. Después creas tu perfil y recibes las horas de bienvenida.",
+          tip: "Puedes verificar tu identidad y aceptar las reglas ya, aunque todavía falte algún requisito."
+        },
+        {
+          title: "Pide u ofrece ayuda",
+          text: "En el tablón filtra peticiones y ofertas por categoría, presencial u online y ciudad. Publica con «Pedir ayuda» u «Ofrecer ayuda», o responde con «Me ofrezco»: las horas pasan de un saldo a otro cuando confirmáis los dos."
+        },
+        {
+          title: "Intercambios seguros",
+          text: "La primera vez quedad en un lugar público u online. Nadie debe pedirte dinero, regalos ni datos bancarios; nada de consultorías profesionales ni trabajos peligrosos. Si algo va mal, denúncialo: el Staff interviene."
+        }
+      ],
+      cta: {
+        label: "Abrir la Time Bank",
+        href: "/marketplace/timebank"
+      }
+    },
+    {
+      slug: "convivio",
+      category: "community",
+      title: "Kordata",
+      summary: "Compras en grupo entre Kumani: juntos se compra mejor, directamente al productor o a la tienda.",
+      minutes: 3,
+      steps: [
+        {
+          title: "Juntos se compra mejor",
+          text: "Un Kumano propone una compra en grupo a un productor o una tienda y los demás se unen: alcanzado el mínimo, el pedido sale y cada uno paga directamente al proveedor."
+        },
+        {
+          title: "Únete a una Kordata",
+          text: "En «Abiertos» encuentras las Kordate activas, por categoría (comida y vino, tecnología, viajes y eventos, casa y energía…). Abre la que te interese y toca «Me uno»: te avisamos cuando se alcance el mínimo. En «Los míos» encuentras aquellas en las que participas.",
+          tip: "Después de unirte ves quién participa y puedes escribir en el chat del grupo."
+        },
+        {
+          title: "Propón una Kordata",
+          text: "Toca «Proponer una Kordata». Para proteger a quien se une hay que hacerse organizador: suscripción activa desde hace al menos 30 días, perfil completo, identidad verificada y normas del organizador aceptadas."
+        },
+        {
+          title: "Cómo se paga",
+          text: "KUMANI no gestiona los pagos: alcanzado el mínimo, cada uno paga directamente al proveedor siguiendo las instrucciones del organizador, que responde de lo que propone."
+        }
+      ],
+      cta: {
+        label: "Abrir Kordata",
+        href: "/marketplace/convivio"
+      }
+    },
+    {
+      slug: "affinity",
+      category: "community",
+      title: "KUMANI Affinity",
+      summary: "Un juego de 20 preguntas para descubrir tu arquetipo, retar a un amigo y conocer a personas afines.",
+      minutes: 3,
+      steps: [
+        {
+          title: "Responde a 20 preguntas",
+          text: "Toca «Empezar el juego» y responde a 20 preguntas rápidas: no hay respuestas correctas ni incorrectas.",
+          tip: "Solo guardamos tu mapa (5 valores) y tu arquetipo, nunca tus respuestas. Puedes borrarlo cuando quieras."
+        },
+        {
+          title: "Tu arquetipo y tu mapa",
+          text: "Al final descubres tu arquetipo KUMANI y tu Mapa de Afinidad en 5 valores: aventura, valores, ritmo, curiosidad y calidez. Puedes compartirlo o volver a jugar."
+        },
+        {
+          title: "Juega en Dúo",
+          text: "Toca «Enviar el enlace Dúo» y mándalo a un amigo o a tu pareja: juega, incluso sin registrarse, y descubrís al momento vuestra compatibilidad."
+        },
+        {
+          title: "Affinity Amistades",
+          text: "Cada semana Kumi te presenta a algunas personas afines. Elige los idiomas que hablas, añade una frase sobre ti, da tu consentimiento y toca «Activar las presentaciones». El chat solo se abre si los dos decís que sí.",
+          tip: "Solo participan personas suscritas y mayores de edad que lo han elegido. Puedes bloquear, denunciar o pausar cuando quieras."
+        }
+      ],
+      cta: {
+        label: "Abrir Affinity",
+        href: "/marketplace/affinity"
+      }
+    },
+    {
+      slug: "veritas",
+      category: "community",
+      title: "Veritas",
+      summary: "El juego «¿Quién miente?» de 3 a 8 jugadores: los amigos pueden jugar incluso sin registrarse.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Crea una sala",
+          text: "Escribe tu apodo, elige el idioma de las preguntas y el número de rondas y toca «Crear la sala». Invita a tus amigos con el enlace o el código: de 3 a 8 jugadores, incluso sin registrarse."
+        },
+        {
+          title: "Entra con un código",
+          text: "Si un amigo ya ha creado una sala, escribe su código y toca «Entrar en la sala»."
+        },
+        {
+          title: "Cómo se juega",
+          text: "En cada ronda llega una pregunta: todos escriben la verdad, salvo uno que en secreto se la inventa. Leed las respuestas anónimas y votad quién miente. Quien descubre al mentiroso gana 1 punto; el mentiroso gana 1 punto por cada persona engañada."
+        }
+      ],
+      cta: {
+        label: "Abrir Veritas",
+        href: "/marketplace/veritas"
       }
     },
   ],

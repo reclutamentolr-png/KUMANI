@@ -7,6 +7,7 @@ const content: GuidesContent = {
     wallet: { title: 'The Wallet', text: 'Card, points, donations, badges and receipts in one place.' },
     promoteTools: { title: "Tools for promoting", text: "Guides to the services that help you spread the word about KUMANI." },
     security: { title: "Security", text: "Guides to the services that help you spot and stop scams." },
+    community: { title: "Community", text: "Guides to the services for meeting, helping each other and playing together." },
   },
   guides: [
     {
@@ -461,6 +462,156 @@ const content: GuidesContent = {
       cta: {
         label: "Open Safe Document",
         href: "/marketplace/documento-sicuro"
+      }
+    },
+    {
+      slug: "listings",
+      category: "community",
+      title: "Community Listings",
+      summary: "Post services and products, find what you need and message whoever posted.",
+      minutes: 3,
+      steps: [
+        {
+          title: "Search for a listing",
+          text: "Type what you’re looking for, choose category, country and city and tap “Search”. Featured listings appear first."
+        },
+        {
+          title: "Post your listing",
+          text: "Tap “New Listing”: posting costs some KU Karma, shown on the button. Write a title, category and description; price and image are optional.",
+          tip: "If you don’t have enough KU Karma, log in every day to collect them. Listings last 30 days, then you can repost them with one click."
+        },
+        {
+          title: "Where it is",
+          text: "Choose country and city. For services and consulting, tick “Also available online / remotely”: the listing appears in every city of the country."
+        },
+        {
+          title: "Featured (optional)",
+          text: "You can feature the listing right away in the Featured section with KU Points, choosing for how many days. Then tap “Publish Listing”."
+        },
+        {
+          title: "Your messages",
+          text: "In “My messages” you’ll find conversations with people who wrote to you about a listing or whom you wrote to. For your privacy, messages are deleted automatically after 30 days."
+        }
+      ],
+      cta: {
+        label: "Open Community Listings",
+        href: "/marketplace/listings"
+      }
+    },
+    {
+      slug: "timebank",
+      category: "community",
+      title: "KUMANI Time Bank",
+      summary: "Help someone for an hour and earn an hour, to spend when you need a hand.",
+      minutes: 3,
+      steps: [
+        {
+          title: "1 hour = 1 hour",
+          text: "You help someone for an hour and earn an hour, which you spend when you need a hand. Hours aren’t worth money and can’t be turned into points or discounts."
+        },
+        {
+          title: "Verify and join",
+          text: "Tap “Verify and join”: you need to have been a member for at least 30 days, a complete profile, be of age, a verified identity (tax code or ID) and accepted rules. Then you create your profile and get your welcome hours.",
+          tip: "You can verify your identity and accept the rules right away, even if some requirement is still missing."
+        },
+        {
+          title: "Ask for or offer help",
+          text: "On the board, filter requests and offers by category, in person or online, and city. Post with “Ask for help” or “Offer help”, or reply with “I can help”: hours move from one balance to the other when you both confirm."
+        },
+        {
+          title: "Safe exchanges",
+          text: "The first time, meet in a public place or online. Nobody should ask you for money, gifts or bank details; no professional advice or dangerous jobs. If something’s wrong, report it: the Staff steps in."
+        }
+      ],
+      cta: {
+        label: "Open the Time Bank",
+        href: "/marketplace/timebank"
+      }
+    },
+    {
+      slug: "convivio",
+      category: "community",
+      title: "Kordata",
+      summary: "Group buying among Kumani: together you buy better, straight from the producer or the shop.",
+      minutes: 3,
+      steps: [
+        {
+          title: "Together you buy better",
+          text: "A Kumano proposes a group purchase from a producer or shop and the others join: once the minimum is reached the order goes ahead and everyone pays the supplier directly."
+        },
+        {
+          title: "Join a Kordata",
+          text: "Under “Open” you’ll find active Kordate, by category (food and wine, tech, travel and events, home and energy…). Open the one you like and tap “I’m in”: we’ll let you know when the minimum is reached. Under “Mine” you’ll find the ones you’re part of.",
+          tip: "Once you join you can see who’s taking part and write in the group chat."
+        },
+        {
+          title: "Propose a Kordata",
+          text: "Tap “Propose a Kordata”. To protect those who join you need to become an organiser: an active subscription for at least 30 days, a complete profile, a verified identity and the organiser’s rules accepted."
+        },
+        {
+          title: "How payment works",
+          text: "KUMANI doesn’t handle payments: once the minimum is reached, everyone pays the supplier directly following the organiser’s instructions, and the organiser is responsible for what they propose."
+        }
+      ],
+      cta: {
+        label: "Open Kordata",
+        href: "/marketplace/convivio"
+      }
+    },
+    {
+      slug: "affinity",
+      category: "community",
+      title: "KUMANI Affinity",
+      summary: "A 20-question game to discover your archetype, challenge a friend and meet people on your wavelength.",
+      minutes: 3,
+      steps: [
+        {
+          title: "Answer 20 questions",
+          text: "Tap “Start the game” and answer 20 quick questions: there are no right or wrong answers.",
+          tip: "We only save your map (5 values) and your archetype, never your individual answers. You can delete it whenever you like."
+        },
+        {
+          title: "Your archetype and your map",
+          text: "At the end you discover your KUMANI archetype and your Affinity Map on 5 values: adventure, values, rhythm, curiosity and warmth. You can share it or play again."
+        },
+        {
+          title: "Play in Duo",
+          text: "Tap “Send the Duo link” and send it to a friend or partner: they play, even without signing up, and you instantly find out how compatible you are."
+        },
+        {
+          title: "Affinity Friends",
+          text: "Every week Kumi introduces you to a few people on your wavelength. Choose the languages you speak, add a sentence about yourself, give your consent and tap “Turn on introductions”. The chat only opens if you both say yes.",
+          tip: "Only subscribed adults who chose to take part are included. You can block, report or pause whenever you like."
+        }
+      ],
+      cta: {
+        label: "Open Affinity",
+        href: "/marketplace/affinity"
+      }
+    },
+    {
+      slug: "veritas",
+      category: "community",
+      title: "Veritas",
+      summary: "The “Who’s lying?” game for 3 to 8 players: friends can play even without signing up.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Create a room",
+          text: "Enter your nickname, choose the question language and number of rounds and tap “Create the room”. Invite friends with the link or code: 3 to 8 players, even without signing up."
+        },
+        {
+          title: "Join with a code",
+          text: "If a friend has already created a room, enter their code and tap “Join the room”."
+        },
+        {
+          title: "How to play",
+          text: "Each round brings a question: everyone writes the truth, except one person who secretly makes something up. Read the anonymous answers and vote for the liar. Whoever spots the liar gets 1 point; the liar gets 1 point for each person fooled."
+        }
+      ],
+      cta: {
+        label: "Open Veritas",
+        href: "/marketplace/veritas"
       }
     },
   ],

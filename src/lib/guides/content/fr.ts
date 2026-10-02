@@ -7,6 +7,7 @@ const content: GuidesContent = {
     wallet: { title: 'Le portefeuille', text: 'Carte, points, dons, badges et reçus au même endroit.' },
     promoteTools: { title: "Outils pour promouvoir", text: "Les guides des services qui vous aident à faire connaître KUMANI." },
     security: { title: "Sécurité", text: "Les guides des services qui vous aident à reconnaître et à stopper les arnaques." },
+    community: { title: "Communauté", text: "Les guides des services pour se rencontrer, s’entraider et jouer ensemble." },
   },
   guides: [
     {
@@ -461,6 +462,156 @@ const content: GuidesContent = {
       cta: {
         label: "Ouvrir Document Sûr",
         href: "/marketplace/documento-sicuro"
+      }
+    },
+    {
+      slug: "listings",
+      category: "community",
+      title: "Petites Annonces",
+      summary: "Publiez des services et des produits, trouvez ce qu’il vous faut et écrivez à l’auteur de l’annonce.",
+      minutes: 3,
+      steps: [
+        {
+          title: "Cherchez une annonce",
+          text: "Écrivez ce que vous cherchez, choisissez catégorie, pays et ville et touchez « Rechercher ». Les annonces en vitrine apparaissent en premier."
+        },
+        {
+          title: "Publiez votre annonce",
+          text: "Touchez « Nouvelle annonce » : la publier coûte quelques KU Karma, indiqués sur le bouton. Écrivez titre, catégorie et description ; prix et image sont facultatifs.",
+          tip: "Si vous n’avez pas assez de KU Karma, connectez-vous chaque jour pour en accumuler. Les annonces durent 30 jours, puis vous pouvez les republier en un clic."
+        },
+        {
+          title: "Où ça se trouve",
+          text: "Choisissez pays et ville. Pour les services et conseils, cochez « Disponible aussi en ligne / à distance » : l’annonce apparaît dans toutes les villes du pays."
+        },
+        {
+          title: "Vitrine (facultative)",
+          text: "Vous pouvez mettre tout de suite l’annonce en avant dans la section En vitrine avec des KU Points, en choisissant le nombre de jours. Touchez ensuite « Publier une Annonce »."
+        },
+        {
+          title: "Vos messages",
+          text: "Dans « Mes messages », vous trouvez les conversations avec ceux qui vous ont écrit pour une annonce ou à qui vous avez écrit. Pour votre vie privée, les messages s’effacent automatiquement après 30 jours."
+        }
+      ],
+      cta: {
+        label: "Ouvrir les Petites Annonces",
+        href: "/marketplace/listings"
+      }
+    },
+    {
+      slug: "timebank",
+      category: "community",
+      title: "KUMANI Time Bank",
+      summary: "Aidez quelqu’un pendant une heure et gagnez une heure, à utiliser quand vous avez besoin d’un coup de main.",
+      minutes: 3,
+      steps: [
+        {
+          title: "1 heure = 1 heure",
+          text: "Vous aidez quelqu’un pendant une heure et gagnez une heure, que vous utilisez quand vous avez besoin d’aide. Les heures ne valent pas d’argent et ne se convertissent ni en points ni en réductions."
+        },
+        {
+          title: "Vérifiez et participez",
+          text: "Touchez « Vérifier et participer » : il faut être inscrit depuis au moins 30 jours, avoir un profil complet, être majeur, avoir une identité vérifiée (code fiscal ou pièce d’identité) et accepter les règles. Ensuite vous créez votre profil et recevez les heures de bienvenue.",
+          tip: "Vous pouvez vérifier votre identité et accepter les règles tout de suite, même s’il manque encore une condition."
+        },
+        {
+          title: "Demandez ou proposez de l’aide",
+          text: "Sur le tableau, filtrez demandes et offres par catégorie, en présentiel ou en ligne, et par ville. Publiez avec « Demander de l’aide » ou « Proposer de l’aide », ou répondez avec « Je me propose » : les heures passent d’un solde à l’autre quand vous confirmez tous les deux."
+        },
+        {
+          title: "Échanges sûrs",
+          text: "La première fois, rencontrez-vous dans un lieu public ou en ligne. Personne ne doit vous demander d’argent, de cadeaux ou de coordonnées bancaires ; pas de conseils professionnels ni de travaux dangereux. Un problème ? Signalez-le : le Staff intervient."
+        }
+      ],
+      cta: {
+        label: "Ouvrir la Time Bank",
+        href: "/marketplace/timebank"
+      }
+    },
+    {
+      slug: "convivio",
+      category: "community",
+      title: "Kordata",
+      summary: "Des achats groupés entre Kumani : ensemble on achète mieux, directement chez le producteur ou le commerçant.",
+      minutes: 3,
+      steps: [
+        {
+          title: "Ensemble on achète mieux",
+          text: "Un Kumano propose un achat groupé chez un producteur ou un commerçant et les autres participent : une fois le minimum atteint, la commande part et chacun paie directement le fournisseur."
+        },
+        {
+          title: "Participez à une Kordata",
+          text: "Dans « Ouverts », vous trouvez les Kordate actives, par catégorie (gastronomie et vin, technologie, voyages et événements, maison et énergie…). Ouvrez celle qui vous intéresse et touchez « Je participe » : nous vous prévenons quand le minimum est atteint. Dans « Les miens », vous retrouvez celles auxquelles vous participez.",
+          tip: "Après votre participation, vous voyez qui participe et pouvez écrire dans la discussion du groupe."
+        },
+        {
+          title: "Proposez une Kordata",
+          text: "Touchez « Proposer une Kordata ». Pour protéger les participants, il faut devenir organisateur : abonnement actif depuis au moins 30 jours, profil complet, identité vérifiée et règles de l’organisateur acceptées."
+        },
+        {
+          title: "Comment on paie",
+          text: "KUMANI ne gère pas les paiements : une fois le minimum atteint, chacun paie directement le fournisseur selon les instructions de l’organisateur, qui répond de ce qu’il propose."
+        }
+      ],
+      cta: {
+        label: "Ouvrir Kordata",
+        href: "/marketplace/convivio"
+      }
+    },
+    {
+      slug: "affinity",
+      category: "community",
+      title: "KUMANI Affinity",
+      summary: "Un jeu de 20 questions pour découvrir votre archétype, défier un ami et rencontrer des personnes sur la même longueur d’onde.",
+      minutes: 3,
+      steps: [
+        {
+          title: "Répondez à 20 questions",
+          text: "Touchez « Commencer le jeu » et répondez à 20 questions rapides : il n’y a pas de bonnes ou de mauvaises réponses.",
+          tip: "Nous enregistrons seulement votre carte (5 valeurs) et votre archétype, jamais vos réponses. Vous pouvez la supprimer quand vous voulez."
+        },
+        {
+          title: "Votre archétype et votre carte",
+          text: "À la fin, vous découvrez votre archétype KUMANI et votre Carte d’Affinité sur 5 valeurs : aventure, valeurs, rythme, curiosité et chaleur. Vous pouvez la partager ou rejouer."
+        },
+        {
+          title: "Jouez en Duo",
+          text: "Touchez « Envoyer le lien Duo » et envoyez-le à un ami ou à votre partenaire : il joue, même sans s’inscrire, et vous découvrez tout de suite votre compatibilité."
+        },
+        {
+          title: "Affinity Amitiés",
+          text: "Chaque semaine, Kumi vous présente quelques personnes sur la même longueur d’onde. Choisissez les langues que vous parlez, ajoutez une phrase sur vous, donnez votre accord et touchez « Activer les présentations ». La discussion s’ouvre seulement si vous dites oui tous les deux.",
+          tip: "Seules des personnes abonnées et majeures qui ont choisi de participer sont incluses. Vous pouvez bloquer, signaler ou mettre en pause quand vous voulez."
+        }
+      ],
+      cta: {
+        label: "Ouvrir Affinity",
+        href: "/marketplace/affinity"
+      }
+    },
+    {
+      slug: "veritas",
+      category: "community",
+      title: "Veritas",
+      summary: "Le jeu « Qui ment ? » de 3 à 8 joueurs : les amis peuvent jouer même sans s’inscrire.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Créez une salle",
+          text: "Écrivez votre pseudo, choisissez la langue des questions et le nombre de tours et touchez « Créer la salle ». Invitez vos amis avec le lien ou le code : de 3 à 8 joueurs, même sans inscription."
+        },
+        {
+          title: "Entrez avec un code",
+          text: "Si un ami a déjà créé une salle, écrivez son code et touchez « Rejoindre la salle »."
+        },
+        {
+          title: "Comment jouer",
+          text: "À chaque tour arrive une question : tout le monde écrit la vérité, sauf une personne qui invente en secret. Lisez les réponses anonymes et votez pour le menteur. Qui démasque le menteur gagne 1 point ; le menteur gagne 1 point par personne trompée."
+        }
+      ],
+      cta: {
+        label: "Ouvrir Veritas",
+        href: "/marketplace/veritas"
       }
     },
   ],

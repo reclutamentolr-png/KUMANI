@@ -14,6 +14,13 @@ export const TOOL_GUIDES: { path: string; slug: GuideSlug }[] = [
   { path: '/marketplace/checkmail', slug: 'checkmail' },
   { path: '/marketplace/verifoto', slug: 'verifoto' },
   { path: '/marketplace/documento-sicuro', slug: 'documento-sicuro' },
+  { path: '/marketplace/listings', slug: 'listings' },
+  // I messaggi sono quelli della Bacheca: stessa guida
+  { path: '/marketplace/chat', slug: 'listings' },
+  { path: '/marketplace/timebank', slug: 'timebank' },
+  { path: '/marketplace/convivio', slug: 'convivio' },
+  { path: '/marketplace/affinity', slug: 'affinity' },
+  { path: '/marketplace/veritas', slug: 'veritas' },
 ]
 
 export function toolGuideFor(barePath: string): GuideSlug | null {

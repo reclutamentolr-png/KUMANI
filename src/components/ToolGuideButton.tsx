@@ -20,8 +20,10 @@ export default function ToolGuideButton() {
   const slug = toolGuideFor(barePath)
   if (!slug) return null
 
-  // Il Kumano del Giorno non ha il pulsante "Condividi"
-  const aboveShare = barePath.startsWith('/marketplace/') && slug !== 'spotlight'
+  // "Condividi" c'è solo negli strumenti del marketplace, non in Kumano del
+  // Giorno, Bacheca, messaggi, Time Bank e Kordata
+  const NO_SHARE = ['spotlight', 'listings', 'timebank', 'convivio']
+  const aboveShare = barePath.startsWith('/marketplace/') && !NO_SHARE.includes(slug)
 
   return (
     <Link
