@@ -111,6 +111,7 @@ export const SECTION_LABELS: Record<string, string> = {
   share: 'Pulsante Condividi… (menu del telefono)',
   guides: 'Centro guide (/guida): testi delle pagine',
   tour: 'Tour della dashboard al primo accesso',
+  jobs: 'Trova Lavoro (ricerca offerte di lavoro)',
   referralLanding: 'Pagina di invito',
   toolShare: 'Condivisione dei servizi',
   adminMessage: 'Messaggi dello Staff',

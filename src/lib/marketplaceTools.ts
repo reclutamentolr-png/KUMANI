@@ -314,6 +314,17 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       requiresSubscription: true,
     },
     {
+      toolName: 'trova-lavoro',
+      href: '/marketplace/trova-lavoro',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'BriefcaseBusiness',
+      title: t('trovaLavoro'),
+      description: t('trovaLavoroDescription'),
+      color: 'gold',
+      category: 'lavoro',
+      requiresSubscription: true,
+    },
+    {
       toolName: 'kumani-cv',
       href: '/marketplace/kumani-cv',
       gradient: 'bg-[var(--ink)]',
