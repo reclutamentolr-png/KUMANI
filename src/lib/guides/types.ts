@@ -2,9 +2,21 @@
 // dell'app (public/guides/<lingua>/<guida>-<n>.webp, una per passo, fatte
 // con scripts/guide-screenshots.mjs).
 
-export type GuideCategory = 'start' | 'promote' | 'wallet'
+export type GuideCategory = 'start' | 'promote' | 'wallet' | 'promoteTools'
 
-export type GuideSlug = 'registrazione' | 'accesso' | 'dashboard' | 'invito' | 'voucher' | 'wallet'
+export type GuideSlug =
+  | 'registrazione'
+  | 'accesso'
+  | 'dashboard'
+  | 'invito'
+  | 'voucher'
+  | 'wallet'
+  // Guide dei servizi (lo slug è il nome del servizio)
+  | 'qr-generator'
+  | 'whatsapp-messages'
+  | 'link-in-bio'
+  | 'spotlight'
+  | 'events'
 
 export type GuideStep = {
   title: string

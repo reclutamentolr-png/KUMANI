@@ -66,7 +66,7 @@ for (const shot of shots) {
   const needle = shot.key ? textOf(shot.key) : null
   const result = await evaluate(`(() => {
     const style = document.createElement('style')
-    style.textContent = 'nextjs-portal{display:none!important}'
+    style.textContent = 'nextjs-portal,a.fixed[href*="/guida/"]{display:none!important}'
     document.head.appendChild(style)
     if (${link !== '-'} && location.pathname.replace(/[/]$/, '').endsWith('/login')) return 'login'
     // Nei link mostrati (codice invito, QR…) il dominio vero, non localhost
@@ -99,7 +99,11 @@ for (const shot of shots) {
     console.log(`${locale} ${shot.name}: ${result === 'login' ? 'NON COLLEGATO' : 'elemento non trovato (' + result + ')'}`)
     continue
   }
-  const png = await send('Page.captureScreenshot', { format: 'png' })
+  // full: tutta la pagina (per studiare un servizio), non solo lo schermo
+  const fullHeight = shot.full ? await evaluate('Math.min(document.documentElement.scrollHeight, 9000)') : 0
+  const png = await send('Page.captureScreenshot', fullHeight
+    ? { format: 'png', captureBeyondViewport: true, clip: { x: 0, y: 0, width: Number(process.env.SHOT_WIDTH || 390), height: fullHeight, scale: 1 } }
+    : { format: 'png' })
   writeFileSync(`${outDir}/${shot.name}.png`, Buffer.from(png.data, 'base64'))
   console.log(`${locale} ${shot.name}: ok`)
 }

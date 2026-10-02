@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { getLocale, getTranslations } from 'next-intl/server'
-import { ArrowLeft, ArrowRight, BookOpen, Clock, Footprints, Megaphone, Sparkles, Wallet } from 'lucide-react'
+import { ArrowLeft, ArrowRight, BookOpen, Clock, Footprints, Megaphone, Sparkles, Wallet, Wrench } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { getGuidesContent } from '@/lib/guides/content'
 import type { GuideCategory } from '@/lib/guides/types'
@@ -14,6 +14,7 @@ const CATEGORY_ICONS: Record<GuideCategory, typeof Wallet> = {
   start: Footprints,
   promote: Megaphone,
   wallet: Wallet,
+  promoteTools: Wrench,
 }
 
 // Centro guide: elenco delle guide passo passo, divise per argomento.

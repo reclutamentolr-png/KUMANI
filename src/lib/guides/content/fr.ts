@@ -5,6 +5,7 @@ const content: GuidesContent = {
     start: { title: 'Premiers pas', text: 'Créez votre compte, connectez-vous et découvrez votre tableau de bord.' },
     promote: { title: 'Promouvoir KUMANI', text: 'Invitez vos proches avec votre lien et utilisez les vouchers.' },
     wallet: { title: 'Le portefeuille', text: 'Carte, points, dons, badges et reçus au même endroit.' },
+    promoteTools: { title: "Outils pour promouvoir", text: "Les guides des services qui vous aident à faire connaître KUMANI." },
   },
   guides: [
     {
@@ -166,6 +167,148 @@ const content: GuidesContent = {
         },
       ],
       cta: { label: 'Ouvrir le portefeuille', href: '/wallet' },
+    },
+    {
+      slug: "qr-generator",
+      category: "promoteTools",
+      title: "QR Code dynamique",
+      summary: "Créez le QR code de votre lien d’invitation, choisissez les couleurs et téléchargez-le pour l’imprimer ou le partager.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Votre lien est déjà dedans",
+          text: "Le QR mène à votre lien d’invitation personnel. Le « Lien de destination » est verrouillé : qui le scanne rejoint toujours votre étoile KUMANI."
+        },
+        {
+          title: "Choisissez les couleurs",
+          text: "Changez la « Couleur du QR Code » et la « Couleur de fond », ou touchez l’un des « Thèmes rapides ».",
+          tip: "Gardez un bon contraste entre le QR et le fond : un QR trop clair se lit mal."
+        },
+        {
+          title: "Téléchargez le QR",
+          text: "Vérifiez l’aperçu et touchez « Télécharger le PNG » : l’image est en haute résolution, adaptée aussi à l’impression."
+        },
+        {
+          title: "Où l’utiliser",
+          text: "Imprimez-le sur des cartes de visite et des flyers, partagez-le sur les réseaux sociaux ou ajoutez-le à votre signature e-mail."
+        }
+      ],
+      cta: {
+        label: "Ouvrir le QR Code dynamique",
+        href: "/marketplace/qr-generator"
+      }
+    },
+    {
+      slug: "whatsapp-messages",
+      category: "promoteTools",
+      title: "Messages WhatsApp",
+      summary: "Des messages prêts avec votre lien d’invitation : choisissez le bon ton et envoyez-le en quelques secondes.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Choisissez le message",
+          text: "Il y a 4 messages pour des situations différentes : informel, formel, émotionnel et après une rencontre. Votre lien d’invitation est déjà dans le texte."
+        },
+        {
+          title: "Copiez ou envoyez",
+          text: "Touchez « Envoyer sur WhatsApp » pour ouvrir WhatsApp avec le message prêt et choisissez le destinataire. Ou touchez « Copier le message » et collez-le où vous voulez, même dans une autre appli.",
+          tip: "Dans WhatsApp, vous pouvez modifier le texte avant de l’envoyer : ajoutez le prénom de la personne."
+        },
+        {
+          title: "Conseils pour des messages efficaces",
+          text: "Personnalisez toujours le message, ne l’envoyez pas à trop de personnes à la fois et faites suivre un appel ou un message vocal."
+        }
+      ],
+      cta: {
+        label: "Ouvrir Messages WhatsApp",
+        href: "/marketplace/whatsapp-messages"
+      }
+    },
+    {
+      slug: "link-in-bio",
+      category: "promoteTools",
+      title: "Link in Bio",
+      summary: "Créez votre page personnelle avec vos liens, à mettre dans la bio d’Instagram, TikTok et des autres réseaux.",
+      minutes: 3,
+      steps: [
+        {
+          title: "Écrivez votre bio",
+          text: "Dans le champ « Texte bio », écrivez une phrase sur vous : elle apparaît sous votre nom."
+        },
+        {
+          title: "Couleur et thèmes spéciaux",
+          text: "Choisissez la couleur de la page. Les thèmes spéciaux (Aurore boréale, Lune sur le lac, Savane au coucher du soleil) s’affichent en aperçu quand vous les touchez : les KU Karma ne sont utilisés que si vous décidez de les débloquer."
+        },
+        {
+          title: "Ajoutez vos liens et enregistrez",
+          text: "Touchez « Ajouter un lien » pour ajouter vos liens (site, réseaux, boutique…) : votre lien d’invitation KUMANI est toujours présent. Touchez ensuite « Enregistrer la page ».",
+          tip: "Plus bas, vous voyez l’aperçu de la page."
+        },
+        {
+          title: "Partagez votre page",
+          text: "Copiez le lien de la page et mettez-le dans la bio de vos réseaux, ou touchez « Visitez votre page Link in Bio » pour la voir. Pensez à enregistrer avant de partager."
+        }
+      ],
+      cta: {
+        label: "Ouvrir Link in Bio",
+        href: "/marketplace/link-in-bio"
+      }
+    },
+    {
+      slug: "spotlight",
+      category: "promoteTools",
+      title: "Kumano du Jour",
+      summary: "Racontez votre histoire et entrez dans la vitrine de la communauté : chaque jour, un Kumano est mis en avant. Réservé aux abonnés actifs.",
+      minutes: 3,
+      steps: [
+        {
+          title: "Racontez votre histoire",
+          text: "Indiquez votre prénom ou surnom (jamais le nom de famille), ville, pays, métier ou passion et une courte histoire, lisible en 20 secondes."
+        },
+        {
+          title: "Choisissez vos outils préférés",
+          text: "Touchez les outils KUMANI que vous utilisez le plus : ils apparaissent avec votre histoire."
+        },
+        {
+          title: "Consentements et envoi",
+          text: "Cochez le consentement pour être montré à la communauté (celui pour la page d’accueil est facultatif) et touchez « Enregistrer et entrer en vitrine ». Le Staff KUMANI approuve l’histoire, puis elle entre dans la rotation du Kumano du Jour.",
+          tip: "Vous pouvez retirer votre histoire de la vitrine ou de la page d’accueil à tout moment, depuis cette même page."
+        }
+      ],
+      cta: {
+        label: "Racontez votre histoire",
+        href: "/marketplace/spotlight"
+      }
+    },
+    {
+      slug: "events",
+      category: "promoteTools",
+      title: "KUMANI Events",
+      summary: "Trouvez les rencontres, ateliers et soirées de la communauté, inscrivez-vous en un geste et entrez avec votre pass.",
+      minutes: 3,
+      steps: [
+        {
+          title: "Trouvez un événement",
+          text: "Cherchez par ville, pays, langue et date, ou touchez « En ligne uniquement » pour les événements en ligne."
+        },
+        {
+          title: "Inscrivez-vous et recevez le pass",
+          text: "Ouvrez l’événement et touchez « Participer » : vous recevez tout de suite le pass avec QR, que vous retrouvez dans « Mes pass ». Montrez-le à l’entrée : l’organisateur le scanne et vous êtes dedans.",
+          tip: "Si l’événement est complet, vous pouvez vous inscrire en liste d’attente : si une place se libère, vous entrez automatiquement."
+        },
+        {
+          title: "Organisez un événement",
+          text: "Vous voulez organiser une rencontre dans votre ville ou en ligne ? Touchez « Organiser un événement »."
+        },
+        {
+          title: "Devenez organisateur vérifié",
+          text: "Pour organiser des événements, il faut être un Kumano Vérifié : touchez « Devenir organisateur vérifié » et suivez les étapes. Ensuite, depuis « Mes événements », vous gérez inscrits et check-in."
+        }
+      ],
+      cta: {
+        label: "Ouvrir KUMANI Events",
+        href: "/events"
+      }
     },
   ],
 }
