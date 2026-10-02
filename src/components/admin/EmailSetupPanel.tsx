@@ -286,6 +286,23 @@ export default function EmailSetupPanel() {
                   </div>
                   <p className="text-xs font-semibold text-amber-700">Copiala ora e usala nel passo b): chiusa questa pagina non sarà più visibile.</p>
                 </div>
+              ) : state.resend.error || !state.resend.configured ? (
+                // La chiave del sito può solo inviare (scelta più sicura): la password si crea a mano
+                <ol className="list-decimal space-y-1 pl-5">
+                  <li>
+                    Apri{' '}
+                    <a className="font-semibold underline" href="https://resend.com/api-keys" target="_blank" rel="noopener noreferrer">
+                      Resend → API Keys <ExternalLink className="inline h-3 w-3" />
+                    </a>{' '}
+                    → <b>Create API Key</b>.
+                  </li>
+                  <li>
+                    Name <b>Gmail SMTP</b> · Permission <b>Sending access</b> · Domain <b>kumani.io</b> → <b>Add</b>.
+                  </li>
+                  <li>
+                    Copia subito la chiave (inizia con <code>re_</code>): è la password SMTP del passo b). Non va messa in Vercel né in .env.local.
+                  </li>
+                </ol>
               ) : (
                 <button
                   type="button"
