@@ -2701,7 +2701,8 @@
     "rewardSpent": "{points} KU Points · {date}",
     "rewardFallbackTitle": "Приз",
     "eventAttendedBadge": "{count, plural, one {Вы были на # событии} few {Вы были на # событиях} many {Вы были на # событиях} other {Вы были на # события}}",
-    "eventPassWaitlist": "В листе ожидания"
+    "eventPassWaitlist": "В листе ожидания",
+    "welcomeBonusReceived": "Получено с Бонусом гостеприимства: {points}"
   },
   "rewards": {
     "title": "Каталог призов",

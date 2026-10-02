@@ -2755,7 +2755,8 @@
     "rewardSpent": "{points} KU Points · {date}",
     "rewardFallbackTitle": "Premio",
     "eventAttendedBadge": "{count, plural, one {C'ero a # evento} other {C'ero a # eventi}}",
-    "eventPassWaitlist": "In lista d'attesa"
+    "eventPassWaitlist": "In lista d'attesa",
+    "welcomeBonusReceived": "Ricevuti con il Bonus Accoglienza: {points}"
   },
   "rewards": {
     "title": "Catalogo Premi",
