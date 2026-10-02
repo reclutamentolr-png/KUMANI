@@ -47,7 +47,7 @@ const send = (method, params = {}) =>
 const evaluate = async (expression) => (await send('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true }))?.result?.value
 
 await send('Page.enable')
-await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 2, mobile: true })
+await send('Emulation.setDeviceMetricsOverride', { width: Number(process.env.SHOT_WIDTH || 390), height: 844, deviceScaleFactor: process.env.SHOT_WIDTH ? 1 : 2, mobile: !process.env.SHOT_WIDTH })
 await send('Emulation.setUserAgentOverride', {
   userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
 })
