@@ -1,19 +1,19 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { LoaderCircle, Pause, Play, Volume2 } from 'lucide-react'
+import { CloudLightning, CloudRain, Droplets, Flame, LoaderCircle, Moon, Pause, Play, Trees, Volume2, Waves, Wind, type LucideIcon } from 'lucide-react'
 import { useNeurobalanceAudio } from '@/components/NeurobalanceAudioProvider'
 import type { NaturePreset } from '@/lib/natureSounds'
 
-const PRESETS: { id: NaturePreset; emoji: string }[] = [
-  { id: 'rain', emoji: '🌧️' },
-  { id: 'ocean', emoji: '🌊' },
-  { id: 'stream', emoji: '💧' },
-  { id: 'forest', emoji: '🌲' },
-  { id: 'wind', emoji: '🍃' },
-  { id: 'fire', emoji: '🔥' },
-  { id: 'night', emoji: '🌙' },
-  { id: 'storm', emoji: '⛈️' },
+const PRESETS: { id: NaturePreset; Icon: LucideIcon }[] = [
+  { id: 'rain', Icon: CloudRain },
+  { id: 'ocean', Icon: Waves },
+  { id: 'stream', Icon: Droplets },
+  { id: 'forest', Icon: Trees },
+  { id: 'wind', Icon: Wind },
+  { id: 'fire', Icon: Flame },
+  { id: 'night', Icon: Moon },
+  { id: 'storm', Icon: CloudLightning },
 ]
 
 // Il motore dei suoni natura vive in NeurobalanceAudioProvider (vedi
@@ -52,7 +52,13 @@ export default function NatureMixer() {
                   className="flex w-full items-start justify-between gap-2 text-left disabled:opacity-40"
                 >
                   <div>
-                    <div className="text-xl">{preset.emoji}</div>
+                    <span
+                      className={`flex h-9 w-9 items-center justify-center rounded-full border transition-colors ${
+                        isActive ? 'border-[var(--gold)] bg-[var(--gold)] text-[var(--ink)]' : 'border-[var(--gold)]/40 bg-[var(--gold)]/10 text-[var(--gold-bright)]'
+                      }`}
+                    >
+                      <preset.Icon className="h-4.5 w-4.5" strokeWidth={1.75} />
+                    </span>
                     <div className="mt-1 text-sm font-semibold text-white">{t(`naturePresets.${preset.id}.label`)}</div>
                     <div className="text-[11px] leading-tight text-white/50">{t(`naturePresets.${preset.id}.hint`)}</div>
                   </div>

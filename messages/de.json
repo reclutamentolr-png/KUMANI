@@ -1004,6 +1004,11 @@
     "reportErrorGeneric": "Die Meldung konnte nicht gesendet werden. Bitte versuche es erneut."
   },
   "neurobalance": {
+    "tracksLabel": "Entspannungsaudios",
+    "tracksDescription": "Aufgenommene Tracks, die du auch ohne Stereokopfhörer hören kannst: Mach es dir bequem und lass dich tragen.",
+    "trackMeta": "{duration} Min.",
+    "trackInfo": "Aufgenommenes Audio · auch ohne Kopfhörer",
+    "tracks": {"tibetan-bowls": {"name": "Tiefe Entspannung · Chakra Balance", "description": "Tibetische Klangschalen, auf 432 Hz gestimmt, für einen langen Moment der Ruhe."}, "meditation-relax": {"name": "Entspannung und Meditation", "description": "Ein sanfter Track zum Meditieren oder Abschalten für ein paar Minuten."}},
     "backToMarketplace": "Zurück zum Ökosystem",
     "eyebrow": "Bewusste Neuroakustik",
     "subtitle": "Binaurale Frequenzen für Regeneration und tiefes Gleichgewicht.",

@@ -1004,6 +1004,11 @@
     "reportErrorGeneric": "Impossible d'envoyer le signalement. Réessayez."
   },
   "neurobalance": {
+    "tracksLabel": "Audios de relaxation",
+    "tracksDescription": "Des pistes enregistrées à écouter même sans écouteurs stéréo : installez-vous confortablement et laissez-vous porter.",
+    "trackMeta": "{duration} min",
+    "trackInfo": "Audio enregistré · s’écoute aussi sans écouteurs",
+    "tracks": {"tibetan-bowls": {"name": "Relaxation profonde · Chakra Balance", "description": "Des bols tibétains accordés à 432 Hz pour un long moment de calme."}, "meditation-relax": {"name": "Détente et Méditation", "description": "Une piste douce pour méditer ou décrocher quelques minutes."}},
     "backToMarketplace": "Retour à l’Écosystème",
     "eyebrow": "Neuroacoustique consciente",
     "subtitle": "Fréquences binaurales pour la régénération et l'équilibre profond.",

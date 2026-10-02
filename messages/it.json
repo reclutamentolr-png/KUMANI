@@ -1024,6 +1024,11 @@
     "whatsapp": "WhatsApp"
   },
   "neurobalance": {
+    "tracksLabel": "Audio di rilassamento",
+    "tracksDescription": "Tracce registrate da ascoltare anche senza cuffie stereo: mettiti comodo e lasciati accompagnare.",
+    "trackMeta": "{duration} min",
+    "trackInfo": "Audio registrato · si ascolta anche senza cuffie",
+    "tracks": {"tibetan-bowls": {"name": "Rilassamento profondo · Chakra Balance", "description": "Campane tibetane accordate a 432 Hz per un lungo momento di calma."}, "meditation-relax": {"name": "Relax e Meditazione", "description": "Una traccia morbida per meditare o staccare per qualche minuto."}},
     "backToMarketplace": "Torna all’Ecosistema",
     "eyebrow": "Neuroacustica consapevole",
     "subtitle": "Frequenze binaurali per la rigenerazione e l'equilibrio profondo.",

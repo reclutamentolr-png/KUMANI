@@ -13,14 +13,16 @@ import { useNeurobalanceAudio } from '@/components/NeurobalanceAudioProvider'
 // suonando e fermarlo da qualunque schermata.
 export default function FloatingAudioPlayer() {
   const t = useTranslations('neurobalance')
-  const { isPlaying, remaining, selectedId, selectedSpecialSound, activeNature, stopEverything } = useNeurobalanceAudio()
+  const { isPlaying, remaining, selectedId, selectedSpecialSound, selectedTrack, activeNature, stopEverything } = useNeurobalanceAudio()
 
   if (!isPlaying && !activeNature) return null
 
   const minutes = Math.floor(remaining / 60).toString().padStart(2, '0')
   const seconds = (remaining % 60).toString().padStart(2, '0')
 
-  const label = selectedSpecialSound
+  const label = selectedTrack
+    ? t(`tracks.${selectedTrack.id}.name`)
+    : selectedSpecialSound
     ? t(`specialSounds.${selectedSpecialSound.id}.name`)
     : isPlaying
       ? t(`presets.${selectedId}.name`)

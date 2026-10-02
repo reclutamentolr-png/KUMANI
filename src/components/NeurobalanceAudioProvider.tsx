@@ -3,11 +3,13 @@
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
 import { awardNeurobalancePoint } from '@/app/actions/neurobalance'
 import { NatureSoundsEngine, type NaturePreset } from '@/lib/natureSounds'
-import { presets, specialSounds, MIN_LISTEN_SECONDS_FOR_POINT, type Preset, type SpecialSound } from '@/lib/neurobalancePresets'
+import { presets, specialSounds, tracks, MIN_LISTEN_SECONDS_FOR_POINT, type Preset, type SpecialSound, type Track } from '@/lib/neurobalancePresets'
 
 interface NeurobalanceAudioValue {
   presets: Preset[]
   specialSounds: SpecialSound[]
+  tracks: Track[]
+  selectedTrack: Track | null
   selectedId: string
   isPlaying: boolean
   remaining: number
@@ -18,6 +20,7 @@ interface NeurobalanceAudioValue {
   natureVolume: number
   handlePresetCardClick: (preset: Preset) => Promise<void>
   handleSpecialSoundCardClick: (sound: SpecialSound) => Promise<void>
+  handleTrackCardClick: (track: Track) => Promise<void>
   togglePlayback: () => Promise<void>
   resetSession: () => void
   setVolume: (volume: number) => void
@@ -46,6 +49,9 @@ export function NeurobalanceAudioProvider({ children }: { children: ReactNode })
   const [remaining, setRemaining] = useState(presets[0].duration * 60)
   const [volume, setVolumeState] = useState(0.18)
   const [selectedSpecialSound, setSelectedSpecialSound] = useState<SpecialSound | null>(null)
+  // Audio registrato in riproduzione (campane tibetane, meditazione)
+  const [selectedTrack, setSelectedTrack] = useState<Track | null>(null)
+  const trackRef = useRef<HTMLAudioElement | null>(null)
 
   const [activeNature, setActiveNature] = useState<NaturePreset | null>(null)
   const [natureLoading, setNatureLoading] = useState<NaturePreset | null>(null)
@@ -67,7 +73,7 @@ export function NeurobalanceAudioProvider({ children }: { children: ReactNode })
   }, [])
 
   useEffect(() => {
-    if (!isPlaying) return
+    if (!isPlaying || selectedTrack) return
     timerRef.current = setInterval(() => {
       setRemaining((current) => {
         if (current <= 1) {
@@ -82,10 +88,12 @@ export function NeurobalanceAudioProvider({ children }: { children: ReactNode })
     return () => {
       if (timerRef.current) clearInterval(timerRef.current)
     }
-  }, [isPlaying])
+  }, [isPlaying, selectedTrack])
 
   useEffect(() => {
     if (gainRef.current) gainRef.current.gain.value = volume
+    // Il cursore va da 0 a 0,4 (toni generati): per i file si porta su 0–1
+    if (trackRef.current) trackRef.current.volume = Math.min(1, volume / 0.4)
   }, [volume])
 
   useEffect(() => {
@@ -104,6 +112,43 @@ export function NeurobalanceAudioProvider({ children }: { children: ReactNode })
     oscillatorsRef.current.forEach((oscillator) => oscillator.stop())
     oscillatorsRef.current = []
     setIsPlaying(false)
+  }
+
+  // Ferma e scarica l'audio registrato (passando a un tono o a un'altra traccia)
+  const stopTrack = () => {
+    const audio = trackRef.current
+    if (audio) {
+      audio.pause()
+      audio.removeAttribute('src')
+      audio.load()
+    }
+    trackRef.current = null
+    setSelectedTrack(null)
+  }
+
+  const playTrack = async (track: Track) => {
+    const audio = new Audio()
+    const opus = audio.canPlayType('audio/webm; codecs="opus"') !== ''
+    audio.src = `${track.src}.${opus ? 'webm' : 'm4a'}`
+    audio.preload = 'auto'
+    audio.volume = Math.min(1, volume / 0.4)
+    audio.addEventListener('timeupdate', () => {
+      setRemaining(Math.max(0, Math.ceil((Number.isFinite(audio.duration) ? audio.duration : track.duration) - audio.currentTime)))
+    })
+    audio.addEventListener('ended', () => {
+      setIsPlaying(false)
+      setRemaining(track.duration)
+    })
+    trackRef.current = audio
+    setSelectedTrack(track)
+    setRemaining(track.duration)
+    try {
+      await audio.play()
+      setIsPlaying(true)
+    } catch (err) {
+      console.error('[NeurobalanceAudio] failed to play track:', track.id, err)
+      setIsPlaying(false)
+    }
   }
 
   const playWith = async (carrier: number, beat: number, durationSeconds: number) => {
@@ -132,6 +177,17 @@ export function NeurobalanceAudioProvider({ children }: { children: ReactNode })
   }
 
   const togglePlayback = async () => {
+    // Audio registrato: pausa e ripresa dallo stesso punto
+    if (selectedTrack && trackRef.current) {
+      if (isPlaying) {
+        trackRef.current.pause()
+        setIsPlaying(false)
+      } else {
+        await trackRef.current.play().catch(() => {})
+        setIsPlaying(true)
+      }
+      return
+    }
     if (isPlaying) {
       stopAudio()
       return
@@ -143,8 +199,9 @@ export function NeurobalanceAudioProvider({ children }: { children: ReactNode })
   }
 
   const handlePresetCardClick = async (preset: Preset) => {
-    const isThisPlaying = isPlaying && !selectedSpecialSound && selectedId === preset.id
+    const isThisPlaying = isPlaying && !selectedTrack && !selectedSpecialSound && selectedId === preset.id
     stopAudio()
+    stopTrack()
     if (isThisPlaying) return
     setSelectedSpecialSound(null)
     setSelectedId(preset.id)
@@ -154,12 +211,32 @@ export function NeurobalanceAudioProvider({ children }: { children: ReactNode })
   const handleSpecialSoundCardClick = async (sound: SpecialSound) => {
     const isThisPlaying = isPlaying && selectedSpecialSound?.id === sound.id
     stopAudio()
+    stopTrack()
     if (isThisPlaying) return
     setSelectedSpecialSound(sound)
     await playWith(sound.frequency, 4, 15 * 60)
   }
 
+  const handleTrackCardClick = async (track: Track) => {
+    // La stessa traccia: pausa o ripresa; un'altra: si riparte da capo
+    if (selectedTrack?.id === track.id && trackRef.current) {
+      await togglePlayback()
+      return
+    }
+    stopAudio()
+    stopTrack()
+    setSelectedSpecialSound(null)
+    await playTrack(track)
+  }
+
   const resetSession = () => {
+    if (selectedTrack && trackRef.current) {
+      trackRef.current.pause()
+      trackRef.current.currentTime = 0
+      setIsPlaying(false)
+      setRemaining(selectedTrack.duration)
+      return
+    }
     const selected = presets.find((preset) => preset.id === selectedId) ?? presets[0]
     stopAudio()
     setRemaining(selectedSpecialSound ? 15 * 60 : selected.duration * 60)
@@ -191,6 +268,7 @@ export function NeurobalanceAudioProvider({ children }: { children: ReactNode })
 
   const stopEverything = () => {
     stopAudio()
+    stopTrack()
     natureEngineRef.current?.fadeStop()
     setActiveNature(null)
   }
@@ -200,6 +278,8 @@ export function NeurobalanceAudioProvider({ children }: { children: ReactNode })
       value={{
         presets,
         specialSounds,
+        tracks,
+        selectedTrack,
         selectedId,
         isPlaying,
         remaining,
@@ -210,6 +290,7 @@ export function NeurobalanceAudioProvider({ children }: { children: ReactNode })
         natureVolume,
         handlePresetCardClick,
         handleSpecialSoundCardClick,
+        handleTrackCardClick,
         togglePlayback,
         resetSession,
         setVolume: setVolumeState,

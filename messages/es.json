@@ -1004,6 +1004,11 @@
     "reportErrorGeneric": "No se pudo enviar la denuncia. Inténtalo de nuevo."
   },
   "neurobalance": {
+    "tracksLabel": "Audios de relajación",
+    "tracksDescription": "Pistas grabadas para escuchar incluso sin auriculares estéreo: ponte cómodo y déjate llevar.",
+    "trackMeta": "{duration} min",
+    "trackInfo": "Audio grabado · se escucha también sin auriculares",
+    "tracks": {"tibetan-bowls": {"name": "Relajación profunda · Chakra Balance", "description": "Cuencos tibetanos afinados a 432 Hz para un largo momento de calma."}, "meditation-relax": {"name": "Relax y Meditación", "description": "Una pista suave para meditar o desconectar unos minutos."}},
     "backToMarketplace": "Volver al Ecosistema",
     "eyebrow": "Neuroacústica consciente",
     "subtitle": "Frecuencias binaurales para la regeneración y el equilibrio profundo.",

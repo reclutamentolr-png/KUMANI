@@ -1004,6 +1004,11 @@
     "reportErrorGeneric": "Não foi possível enviar a denúncia. Tente novamente."
   },
   "neurobalance": {
+    "tracksLabel": "Áudios de relaxamento",
+    "tracksDescription": "Faixas gravadas para ouvir mesmo sem auscultadores estéreo: ponha-se confortável e deixe-se levar.",
+    "trackMeta": "{duration} min",
+    "trackInfo": "Áudio gravado · ouve-se também sem auscultadores",
+    "tracks": {"tibetan-bowls": {"name": "Relaxamento profundo · Chakra Balance", "description": "Taças tibetanas afinadas a 432 Hz para um longo momento de calma."}, "meditation-relax": {"name": "Relax e Meditação", "description": "Uma faixa suave para meditar ou desligar durante alguns minutos."}},
     "backToMarketplace": "Voltar ao Ecossistema",
     "eyebrow": "Neuroacústica consciente",
     "subtitle": "Frequências binaurais para regeneração e equilíbrio profundo.",

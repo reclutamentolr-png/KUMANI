@@ -28,4 +28,19 @@ export const specialSounds: SpecialSound[] = [
   { id: 'innalzare-vibrazioni', frequency: 963 },
 ]
 
+// Audio registrati (public/audio): ognuno in due formati, Opus (.webm,
+// più leggero) e AAC (.m4a) per i browser che non leggono l'Opus. La durata
+// è quella reale del file, in secondi.
+export type Track = {
+  id: string
+  src: string
+  duration: number
+  frequency?: number
+}
+
+export const tracks: Track[] = [
+  { id: 'tibetan-bowls', src: '/audio/campane-tibetane-432hz', duration: 2499, frequency: 432 },
+  { id: 'meditation-relax', src: '/audio/meditazione-relax', duration: 618 },
+]
+
 export const MIN_LISTEN_SECONDS_FOR_POINT = 10 * 60

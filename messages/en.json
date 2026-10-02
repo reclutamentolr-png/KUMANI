@@ -1024,6 +1024,11 @@
     "saving": "Saving..."
   },
   "neurobalance": {
+    "tracksLabel": "Relaxation audio",
+    "tracksDescription": "Recorded tracks you can enjoy even without stereo headphones: get comfortable and let them guide you.",
+    "trackMeta": "{duration} min",
+    "trackInfo": "Recorded audio · no headphones needed",
+    "tracks": {"tibetan-bowls": {"name": "Deep relaxation · Chakra Balance", "description": "Tibetan singing bowls tuned to 432 Hz for a long moment of calm."}, "meditation-relax": {"name": "Relax and Meditation", "description": "A gentle track to meditate or switch off for a few minutes."}},
     "backToMarketplace": "Back to the Ecosystem",
     "eyebrow": "Mindful neuroacoustics",
     "subtitle": "Binaural frequencies for regeneration and deep balance.",
