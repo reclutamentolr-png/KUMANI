@@ -62,6 +62,22 @@ export default async function GuidesPage() {
           </div>
         </section>
 
+        {user && (
+          <Link
+            href="/dashboard?tour=1"
+            className="mb-10 flex items-center gap-3 rounded-2xl border border-[var(--gold)]/40 bg-white px-5 py-4 shadow-sm transition hover:border-[var(--gold)]"
+          >
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--ink)] text-[var(--gold-bright)]">
+              <Sparkles className="h-5 w-5" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block font-bold text-[var(--ink)]">{t('tourTitle')}</span>
+              <span className="block text-sm text-[var(--muted)]">{t('tourText')}</span>
+            </span>
+            <ArrowRight className="h-4 w-4 shrink-0 text-[var(--gold)]" />
+          </Link>
+        )}
+
         <div className="space-y-10">
           {order.map((category) => {
             const Icon = CATEGORY_ICONS[category]

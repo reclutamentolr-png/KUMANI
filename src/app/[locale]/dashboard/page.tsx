@@ -22,6 +22,7 @@ import { getFavoriteToolNames } from '@/lib/favorites'
 import DashboardTipo2 from '@/components/dashboard/DashboardTipo2'
 import DashboardReturnScroll from '@/components/dashboard/DashboardReturnScroll'
 import QuickNav from '@/components/QuickNav'
+import DashboardTour from '@/components/dashboard/DashboardTour'
 import BachecaMessagesAlert from '@/components/dashboard/BachecaMessagesAlert'
 import ProArea from '@/components/dashboard/ProArea'
 import ProTeaser from '@/components/dashboard/ProTeaser'
@@ -261,6 +262,8 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
           network={network}
         />
         <QuickNav current="dashboard" />
+        {/* Tour al primo accesso (una volta sola; si rivede dal Centro guide) */}
+        <DashboardTour seen={(user.user_metadata as { tour_seen?: boolean } | undefined)?.tour_seen === true} />
       </main>
 
       <ChatModalWrapper userId={user.id} />

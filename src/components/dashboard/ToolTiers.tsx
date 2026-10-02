@@ -209,7 +209,7 @@ function TierBlock({
   const price = tier === 'base' ? basePrice : proPrice
 
   return (
-    <section className={`overflow-hidden rounded-2xl shadow-[0_12px_30px_rgba(23,23,23,0.08)] ${style.box}`}>
+    <section data-tour={tier === 'free' ? 'free' : undefined} className={`overflow-hidden rounded-2xl shadow-[0_12px_30px_rgba(23,23,23,0.08)] ${style.box}`}>
       <div className={`flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between ${style.head}`}>
         <div>
           <h3 className={`flex flex-wrap items-center gap-2 text-lg font-extrabold ${style.title}`}>

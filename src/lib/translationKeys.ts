@@ -110,6 +110,7 @@ export const SECTION_LABELS: Record<string, string> = {
   toolTiers: 'Dashboard: servizi in fasce Gratis / Base / Pro',
   share: 'Pulsante Condividi… (menu del telefono)',
   guides: 'Centro guide (/guida): testi delle pagine',
+  tour: 'Tour della dashboard al primo accesso',
   referralLanding: 'Pagina di invito',
   toolShare: 'Condivisione dei servizi',
   adminMessage: 'Messaggi dello Staff',

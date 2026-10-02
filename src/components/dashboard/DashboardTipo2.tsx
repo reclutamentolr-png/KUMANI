@@ -93,7 +93,7 @@ export default async function DashboardTipo2({
   return (
     <>
       {/* Scorciatoie: servizi preferiti e Centro guide, affiancati */}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <div data-tour="shortcuts" className="grid grid-cols-1 gap-3 sm:grid-cols-2">
       <Link
         href="/marketplace/preferiti?from=dashboard"
         className="group flex items-center justify-between gap-3 rounded-xl border border-[var(--gold)]/35 bg-[var(--gold-pale)] px-5 py-4 shadow-sm transition-colors hover:border-[var(--gold)]"
@@ -124,7 +124,7 @@ export default async function DashboardTipo2({
 
       {/* Striscia di stato compatta */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <div className="relative overflow-hidden rounded-2xl border border-[var(--gold)]/30 bg-white px-5 pb-5 pt-6 shadow-[0_10px_30px_rgba(23,23,23,0.08)]">
+        <div data-tour="points" className="relative overflow-hidden rounded-2xl border border-[var(--gold)]/30 bg-white px-5 pb-5 pt-6 shadow-[0_10px_30px_rgba(23,23,23,0.08)]">
           <div aria-hidden className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)]" />
           <div className="mb-3 flex items-center gap-2.5">
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--ink)] text-[var(--gold-bright)]">
@@ -215,7 +215,7 @@ export default async function DashboardTipo2({
           )}
         </div>
 
-        <div className="relative overflow-hidden rounded-2xl border border-[var(--gold)]/30 bg-white px-5 pb-5 pt-6 shadow-[0_10px_30px_rgba(23,23,23,0.08)]">
+        <div data-tour="invite" className="relative overflow-hidden rounded-2xl border border-[var(--gold)]/30 bg-white px-5 pb-5 pt-6 shadow-[0_10px_30px_rgba(23,23,23,0.08)]">
           <div aria-hidden className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)]" />
           <div className="mb-3 flex items-center gap-2.5">
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--ink)] text-[var(--gold-bright)]">
