@@ -57,7 +57,7 @@ export default async function GuidePage({ params, searchParams }: Props) {
           {/* Aperta da "Come si usa": si torna al servizio, non all'elenco */}
           <Link href={from ?? '/guida'} className="flex min-w-0 items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]">
             <ArrowLeft className="h-5 w-5 shrink-0" />
-            <span className="truncate">{from ? t('backToService', { name: guide.title }) : t('backToGuides')}</span>
+            <span className="truncate">{from === '/dashboard' ? t('backToDashboard') : from ? t('backToService', { name: guide.title }) : t('backToGuides')}</span>
           </Link>
           <span className="flex items-center gap-2 font-semibold tracking-wide">
             <BookOpen className="h-5 w-5 text-[var(--gold-bright)]" /> {t('linkLabel')}

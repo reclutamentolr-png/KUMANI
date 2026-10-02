@@ -6055,7 +6055,10 @@
     "membersTitle": "Le altre guide sono per chi è già dentro",
     "membersText": "Dopo l’accesso trovi le guide su dashboard, inviti, voucher, Wallet e su ogni servizio, con il pulsante «Come si usa».",
     "membersRegister": "Registrati gratis",
-    "membersLogin": "Accedi"
+    "membersLogin": "Accedi",
+    "howItWorks": "Come funziona",
+    "howItWorksService": "Come funziona {service}",
+    "backToDashboard": "Torna alla dashboard"
   },
   "tour": {
     "stepOf": "Passo {n} di {total}",

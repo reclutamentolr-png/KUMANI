@@ -6055,7 +6055,10 @@
     "membersTitle": "Les autres guides sont réservés aux membres",
     "membersText": "Une fois connecté, vous trouvez les guides du tableau de bord, des invitations, des vouchers, du portefeuille et de chaque service, avec le bouton « Mode d’emploi ».",
     "membersRegister": "Inscrivez-vous gratuitement",
-    "membersLogin": "Se connecter"
+    "membersLogin": "Se connecter",
+    "howItWorks": "Comment ça marche",
+    "howItWorksService": "Comment fonctionne {service}",
+    "backToDashboard": "Retour au tableau de bord"
   },
   "tour": {
     "stepOf": "Étape {n} sur {total}",

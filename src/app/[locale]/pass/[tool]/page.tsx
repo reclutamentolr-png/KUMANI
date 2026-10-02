@@ -1,6 +1,7 @@
 import { notFound, redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
-import { ArrowLeft, CheckCircle2, Crown, Sparkles, Ticket } from 'lucide-react'
+import { ArrowLeft, BookOpen, CheckCircle2, Crown, Sparkles, Ticket } from 'lucide-react'
+import { toolGuideFor } from '@/lib/guides/toolGuides'
 import Link from '@/components/LocalizedLink'
 import CheckoutForm from '@/components/billing/CheckoutForm'
 import PassCodeForm from '@/components/pass/PassCodeForm'
@@ -30,6 +31,7 @@ export default async function ToolPassPage({
   if (!user) redirect(`/${locale}/login?next=${encodeURIComponent(`/pass/${tool}`)}`)
 
   const marketplaceT = await getTranslations('marketplace')
+  const tg = await getTranslations('guides')
   const info = getMarketplaceTools((key) => marketplaceT(key)).find((item) => item.toolName === tool)
   if (!info) notFound()
   const t = await getTranslations('toolPass')
@@ -73,6 +75,14 @@ export default async function ToolPassPage({
           <div>
             <h1 className="text-2xl font-extrabold text-[var(--ink)] sm:text-3xl">{t('pageTitle', { service: info.title })}</h1>
             <p className="mt-1 text-sm leading-6 text-[var(--muted)]">{info.description}</p>
+            {toolGuideFor(info.href) && (
+              <Link
+                href={`/guida/${toolGuideFor(info.href)}?from=${encodeURIComponent(`/pass/${tool}`)}`}
+                className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-[var(--gold)]/50 bg-[var(--gold-pale)] px-3.5 py-1.5 text-sm font-bold text-[var(--ink)] transition hover:border-[var(--gold)]"
+              >
+                <BookOpen className="h-4 w-4 text-[var(--gold)]" /> {tg('howItWorksService', { service: info.title })}
+              </Link>
+            )}
           </div>
         </div>
 

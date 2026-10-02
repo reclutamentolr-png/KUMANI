@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { ArrowRight, ChevronDown, ChevronUp, Lock, Smartphone, Ticket, Users } from 'lucide-react'
+import { ArrowRight, BookOpen, ChevronDown, ChevronUp, Lock, Smartphone, Ticket, Users } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import FavoriteStarButton from '@/components/FavoriteStarButton'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 import type { MarketplaceCategory, MarketplaceTool } from '@/lib/marketplaceTools'
 import { readDashboardReturn, saveDashboardReturn } from '@/lib/dashboardReturn'
+import { toolGuideFor } from '@/lib/guides/toolGuides'
 
 type Tier = 'free' | 'base' | 'pro'
 const PREVIEW = 8
@@ -277,7 +278,10 @@ function ToolCard({
   returnKey: string
 }) {
   const t = useTranslations('toolTiers')
+  const tg = useTranslations('guides')
   const Icon = marketplaceIconMap[tool.iconName] || Smartphone
+  // Servizio non ancora attivo: la sua guida, per capire com'è prima di acquistarlo
+  const guide = locked ? toolGuideFor(tool.href) : null
   const href = !locked
     ? `${tool.href}?from=dashboard`
     : passPrice
@@ -287,10 +291,11 @@ function ToolCard({
         : { pathname: '/billing' }
 
   return (
+    <div className="relative">
     <Link
       href={href}
       onClick={() => saveDashboardReturn(returnKey)}
-      className="group relative flex min-h-[150px] flex-col rounded-xl border border-[var(--gold)]/30 bg-white p-4 transition-all hover:-translate-y-0.5 hover:border-[var(--gold)]/70 hover:shadow-md"
+      className={`group relative flex min-h-[150px] flex-col rounded-xl border border-[var(--gold)]/30 bg-white p-4 transition-all hover:-translate-y-0.5 hover:border-[var(--gold)]/70 hover:shadow-md ${guide ? 'pb-12' : ''}`}
     >
       <FavoriteStarButton toolName={tool.toolName} initialIsFavorite={isFavorite} variant="light" />
       <div className="relative mb-2 flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--ink)] text-[var(--gold-bright)]">
@@ -327,5 +332,15 @@ function ToolCard({
         )}
       </div>
     </Link>
+    {guide && (
+      <Link
+        href={`/guida/${guide}?from=${encodeURIComponent('/dashboard')}`}
+        onClick={() => saveDashboardReturn(returnKey)}
+        className="absolute bottom-3 left-4 inline-flex items-center gap-1 rounded-full border border-[var(--gold)]/50 bg-[var(--gold-pale)] px-2.5 py-1 text-[11px] font-bold text-[var(--ink)] transition hover:border-[var(--gold)]"
+      >
+        <BookOpen className="h-3 w-3 text-[var(--gold)]" /> {tg('howItWorks')}
+      </Link>
+    )}
+    </div>
   )
 }

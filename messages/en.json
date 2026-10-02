@@ -6055,7 +6055,10 @@
     "membersTitle": "The other guides are for members",
     "membersText": "Once you’re logged in you’ll find guides to the dashboard, invites, vouchers, the Wallet and every service, with the “How to use” button.",
     "membersRegister": "Sign up for free",
-    "membersLogin": "Log in"
+    "membersLogin": "Log in",
+    "howItWorks": "How it works",
+    "howItWorksService": "How {service} works",
+    "backToDashboard": "Back to dashboard"
   },
   "tour": {
     "stepOf": "Step {n} of {total}",

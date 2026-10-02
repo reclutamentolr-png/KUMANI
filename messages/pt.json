@@ -6055,7 +6055,10 @@
     "membersTitle": "Os outros guias são para quem já está dentro",
     "membersText": "Depois de entrar encontra os guias do painel, dos convites, dos vouchers, da carteira e de cada serviço, com o botão «Como se usa».",
     "membersRegister": "Registe-se grátis",
-    "membersLogin": "Entrar"
+    "membersLogin": "Entrar",
+    "howItWorks": "Como funciona",
+    "howItWorksService": "Como funciona {service}",
+    "backToDashboard": "Voltar ao painel"
   },
   "tour": {
     "stepOf": "Passo {n} de {total}",

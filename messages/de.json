@@ -6055,7 +6055,10 @@
     "membersTitle": "Die anderen Anleitungen sind für Mitglieder",
     "membersText": "Nach der Anmeldung findest du Anleitungen zu Dashboard, Einladungen, Vouchern, Brieftasche und jedem Dienst, mit dem Button „So geht’s“.",
     "membersRegister": "Kostenlos registrieren",
-    "membersLogin": "Anmelden"
+    "membersLogin": "Anmelden",
+    "howItWorks": "So funktioniert’s",
+    "howItWorksService": "So funktioniert {service}",
+    "backToDashboard": "Zurück zum Dashboard"
   },
   "tour": {
     "stepOf": "Schritt {n} von {total}",

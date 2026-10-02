@@ -6055,7 +6055,10 @@
     "membersTitle": "Las demás guías son para quien ya está dentro",
     "membersText": "Después de acceder encuentras las guías del panel, las invitaciones, los vouchers, el monedero y cada servicio, con el botón «Cómo se usa».",
     "membersRegister": "Regístrate gratis",
-    "membersLogin": "Acceder"
+    "membersLogin": "Acceder",
+    "howItWorks": "Cómo funciona",
+    "howItWorksService": "Cómo funciona {service}",
+    "backToDashboard": "Volver al panel"
   },
   "tour": {
     "stepOf": "Paso {n} de {total}",
