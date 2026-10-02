@@ -9,6 +9,7 @@ export const dynamic = 'force-dynamic'
 
 export default async function RegisterPage() {
   const t = await getTranslations('authRegister')
+  const tg = await getTranslations('guides')
   // Nazione da cui ci si collega (Vercel la ricava dall'indirizzo IP): serve
   // solo a preselezionare il campo Nazione, che resta modificabile.
   const detectedCountry = ((await headers()).get('x-vercel-ip-country') ?? '').toUpperCase()
@@ -40,6 +41,9 @@ export default async function RegisterPage() {
                   {t('loginHere')}
                 </Link>
               </p>
+              <Link href="/guida/registrazione" className="mt-2 inline-block text-xs font-medium text-[var(--muted)] hover:text-[var(--ink)] hover:underline">
+                {tg('authHelp')}
+              </Link>
             </div>
           </div>
         </div>

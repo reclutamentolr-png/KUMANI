@@ -10,7 +10,7 @@ import { getUnreadMessagesCount } from '@/lib/listings-server'
 import InstallAppPrompt from '@/components/InstallAppPrompt'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import Link from '@/components/LocalizedLink'
-import { Star } from 'lucide-react'
+import { ArrowRight, BookOpen, Star } from 'lucide-react'
 import RankAchievementModal from '@/components/RankAchievementModal'
 import RenewalReminderModal from '@/components/RenewalReminderModal'
 import AdminMessagePopup from '@/components/AdminMessagePopup'
@@ -41,6 +41,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   const { locale } = await params
   const t = await getTranslations('dashboard')
   const marketplaceT = await getTranslations('marketplace')
+  const guidesT = await getTranslations('guides')
   const supabase = await createClient()
 
   // 1. Verifica autenticazione
@@ -260,6 +261,20 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
           agenda={hasAgenda ? <UpcomingAgenda events={agendaEvents} today={agendaToday} sources={agendaSources} /> : null}
           network={network}
         />
+        {/* Centro guide: guide passo passo con le schermate */}
+        <Link
+          href="/guida"
+          className="group mt-8 flex items-center gap-3 rounded-2xl border border-[var(--gold)]/40 bg-[var(--gold-pale)] px-4 py-3.5 transition hover:border-[var(--gold)]"
+        >
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--ink)] text-[var(--gold-bright)]">
+            <BookOpen className="h-5 w-5" />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block font-bold text-[var(--ink)]">{guidesT('dashboardTitle')}</span>
+            <span className="block text-xs text-[var(--muted)]">{guidesT('dashboardHint')}</span>
+          </span>
+          <ArrowRight className="h-4 w-4 shrink-0 text-[var(--gold)] transition-transform group-hover:translate-x-1" />
+        </Link>
         <QuickNav current="dashboard" />
       </main>
 

@@ -4,7 +4,7 @@ import { getEnabledLocales } from '@/lib/enabledLocales'
 
 // Pagine pubbliche nelle lingue attive (italiano senza prefisso): le lingue
 // spente dall'Admin non compaiono per Google.
-const PAGES = ['', '/chi-siamo', '/pro', '/events', '/spotlight', '/register', '/login', '/terms', '/privacy', '/contact', '/donazioni']
+const PAGES = ['', '/chi-siamo', '/pro', '/events', '/spotlight', '/register', '/login', '/terms', '/privacy', '/contact', '/donazioni', '/guida', '/guida/registrazione', '/guida/accesso', '/guida/dashboard', '/guida/invito', '/guida/voucher', '/guida/wallet']
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const LOCALES = await getEnabledLocales()

@@ -5818,5 +5818,6 @@
     "communityBadge": "TOGETHER",
     "communitySub": "Noticeboard, Kumano of the Day, Kordata, Events and Time Bank: the community that lends a hand."
   },
-  "share": {"native": "Share…", "nativeHint": "Instagram, WhatsApp, Telegram and other apps", "copy": "Copy link", "copied": "Link copied"}
+  "share": {"native": "Share…", "nativeHint": "Instagram, WhatsApp, Telegram and other apps", "copy": "Copy link", "copied": "Link copied"},
+  "guides": {"metaTitle": "KUMANI guides: how it works", "metaDescription": "Step-by-step guides with screenshots of the KUMANI app: sign-up, login, dashboard, invites, vouchers and Wallet.", "eyebrow": "Help center", "title": "How to use KUMANI", "subtitle": "Step-by-step guides with real screenshots of the app: from sign-up to the Wallet.", "backToHome": "Back to home", "backToGuides": "All guides", "steps": "{count} steps", "minutes": "{count} min", "stepOf": "Step {n} of {total}", "tip": "Tip", "next": "Next guide", "prev": "Previous guide", "comingSoon": "Coming soon: a guide for every service and the Pro plan guide.", "help": "Can’t find what you’re looking for?", "contact": "Write to us", "shotAlt": "Screenshot: {title}", "linkLabel": "Guides", "dashboardTitle": "How do you use KUMANI?", "dashboardHint": "Step-by-step guides with app screenshots", "authHelp": "Need help? Read the guide"}
 }

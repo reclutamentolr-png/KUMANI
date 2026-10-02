@@ -19,6 +19,7 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const t = useTranslations('auth')
+  const tg = useTranslations('guides')
   
   const router = useRouter()
   const locale = useLocale()
@@ -203,6 +204,9 @@ export default function LoginPage() {
               </Link>
               <Link href="/register" className="block text-sm font-medium text-[var(--gold)] hover:text-[var(--ink)] hover:underline">
                 {t('noAccount')}
+              </Link>
+              <Link href="/guida/accesso" className="block text-xs font-medium text-[var(--muted)] hover:text-[var(--ink)] hover:underline">
+                {tg('authHelp')}
               </Link>
             </div>
           </div>
