@@ -181,7 +181,7 @@ export default function PrivacyPage() {
               </p>
               <p>
                 <strong className="text-gray-900">Messaggi al supporto.</strong> Nome, email, argomento e testo dei messaggi che
-                ci invii dal modulo di contatto.
+                ci invii dal modulo di contatto o scrivendo a support@, privacy@ o info@kumani.io, e le nostre risposte.
               </p>
               <p>
                 <strong className="text-gray-900">Dati di terzi inseriti dagli utenti.</strong> Alcuni strumenti permettono di
@@ -287,7 +287,21 @@ export default function PrivacyPage() {
                   testi che invii a queste funzioni, non il tuo profilo, e non li usa per addestrare i suoi modelli.
                 </li>
                 <li>
-                  <strong className="text-gray-900">Servizio di invio email</strong> — <Todo>indicare il fornitore SMTP usato per le email di autenticazione, se diverso da Supabase</Todo>
+                  <strong className="text-gray-900">Resend</strong> — invio delle email di KUMANI: codici di verifica e di recupero
+                  password, conferme di pagamento, avvisi e le email che lo staff ti scrive da support@, privacy@ o info@kumani.io.
+                </li>
+                <li>
+                  <strong className="text-gray-900">Cloudflare</strong> — gestione del dominio kumani.io e ricezione delle email
+                  inviate ai nostri indirizzi @kumani.io, che inoltra alla casella di posta dello staff.
+                </li>
+                <li>
+                  <strong className="text-gray-900">Google (Gmail)</strong> — casella di posta in cui lo staff legge le email che
+                  invii ai nostri indirizzi @kumani.io e da cui ti risponde.
+                </li>
+                <li>
+                  <strong className="text-gray-900">Careerjet</strong> — ricerca di offerte di lavoro in Trova Lavoro: riceve le
+                  parole e il luogo che cerchi, insieme all&apos;indirizzo IP e al tipo di browser, come richiesto dal servizio; non
+                  riceve il tuo nome né la tua email.
                 </li>
               </ul>
               <p>
