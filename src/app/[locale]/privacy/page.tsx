@@ -274,41 +274,53 @@ export default function PrivacyPage() {
             <h2 className="text-xl font-bold text-gray-900 mb-3">5. Fornitori e trasferimenti fuori dall&apos;UE</h2>
             <div className="text-gray-600 space-y-3 text-sm sm:text-base leading-relaxed">
               <p>
-                I dati sono trattati dal personale autorizzato di Kumani e dai seguenti fornitori, nominati responsabili del
-                trattamento (art. 28 GDPR), che li usano solo per erogare i loro servizi:
+                I dati sono trattati dal personale autorizzato di Kumani e da fornitori esterni, nominati responsabili del
+                trattamento (art. 28 GDPR), che li usano solo per erogare i loro servizi. Rientrano in queste categorie:
               </p>
               <ul className="list-disc pl-5 space-y-2">
-                <li><strong className="text-gray-900">Supabase</strong> — database, archivio file e autenticazione (incluse le email di verifica e di recupero password).</li>
-                <li><strong className="text-gray-900">Vercel</strong> — hosting ed esecuzione dell&apos;applicazione.</li>
-                <li><strong className="text-gray-900">Stripe</strong> — pagamenti di abbonamenti e commissioni; tratta i dati della carta come titolare autonomo secondo la propria informativa.</li>
                 <li>
-                  <strong className="text-gray-900">Anthropic</strong> — funzioni di intelligenza artificiale di KUMANI Menu
-                  (traduzioni), OfferMaker e CheckMail (lettura del testo delle email che chiedi di analizzare): riceve solo i
-                  testi che invii a queste funzioni, non il tuo profilo, e non li usa per addestrare i suoi modelli.
+                  <strong className="text-gray-900">Infrastruttura e hosting</strong> — esecuzione del sito, database, archivio
+                  file e autenticazione.
                 </li>
                 <li>
-                  <strong className="text-gray-900">Resend</strong> — invio delle email di KUMANI: codici di verifica e di recupero
-                  password, conferme di pagamento, avvisi e le email che lo staff ti scrive da support@, privacy@ o info@kumani.io.
+                  <strong className="text-gray-900">Dominio e ricezione delle email</strong> — gestione del dominio kumani.io e
+                  inoltro delle email inviate ai nostri indirizzi @kumani.io.
                 </li>
                 <li>
-                  <strong className="text-gray-900">Cloudflare</strong> — gestione del dominio kumani.io e ricezione delle email
-                  inviate ai nostri indirizzi @kumani.io, che inoltra alla casella di posta dello staff.
+                  <strong className="text-gray-900">Invio delle email</strong> — codici di verifica e di recupero password,
+                  conferme di pagamento, avvisi e le email che lo staff ti scrive da support@, privacy@ o info@kumani.io.
                 </li>
                 <li>
-                  <strong className="text-gray-900">Google (Gmail)</strong> — casella di posta in cui lo staff legge le email che
-                  invii ai nostri indirizzi @kumani.io e da cui ti risponde.
+                  <strong className="text-gray-900">Posta dello staff</strong> — casella in cui lo staff legge le email che invii
+                  ai nostri indirizzi e da cui ti risponde.
                 </li>
                 <li>
-                  <strong className="text-gray-900">Careerjet</strong> — ricerca di offerte di lavoro in Trova Lavoro: riceve le
-                  parole e il luogo che cerchi, insieme all&apos;indirizzo IP e al tipo di browser, come richiesto dal servizio; non
-                  riceve il tuo nome né la tua email.
+                  <strong className="text-gray-900">Intelligenza artificiale</strong> — funzioni di KUMANI Menu (traduzioni),
+                  OfferMaker e CheckMail: il fornitore riceve solo i testi che invii a queste funzioni, non il tuo profilo, e non li
+                  usa per addestrare i suoi modelli.
+                </li>
+                <li>
+                  <strong className="text-gray-900">Analisi delle immagini</strong> — solo in VeriFoto e solo se lo scegli: una copia
+                  ridotta della foto, senza metadati, che il fornitore non conserva.
+                </li>
+                <li>
+                  <strong className="text-gray-900">Ricerca di offerte di lavoro</strong> — in Trova Lavoro il fornitore riceve le
+                  parole e il luogo che cerchi, insieme all&apos;indirizzo IP e al tipo di browser; non riceve il tuo nome né la tua
+                  email.
                 </li>
               </ul>
               <p>
-                Alcuni di questi fornitori hanno sede negli Stati Uniti o possono trattare dati fuori dallo Spazio Economico Europeo.
-                In questi casi il trasferimento avviene sulla base della decisione di adeguatezza UE-USA (EU-U.S. Data Privacy
+                I pagamenti sono gestiti da <strong className="text-gray-900">Stripe</strong>, che tratta i dati della carta come
+                titolare autonomo secondo la propria informativa.
+              </p>
+              <p>
+                L&apos;elenco aggiornato dei fornitori è disponibile su richiesta scrivendo a <PrivacyEmail />.
+              </p>
+              <p>
+                Alcuni fornitori hanno sede negli Stati Uniti o possono trattare dati fuori dallo Spazio Economico Europeo. In
+                questi casi il trasferimento avviene sulla base della decisione di adeguatezza UE-USA (EU-U.S. Data Privacy
                 Framework) per i fornitori certificati o delle Clausole Contrattuali Standard approvate dalla Commissione europea.{' '}
-                <Todo>verificare la regione dei server Supabase e Vercel e le garanzie di ciascun fornitore</Todo>
+                <Todo>verificare la regione dei server e le garanzie di ciascun fornitore</Todo>
               </p>
               <p>
                 I dati possono inoltre essere comunicati alle autorità quando richiesto dalla legge. Kumani non vende i tuoi dati

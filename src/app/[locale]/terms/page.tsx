@@ -172,9 +172,9 @@ export default function TermsPage() {
                 <strong className="text-gray-900">Strumenti di verifica (SVAT, VeriFoto, CheckMail).</strong> I risultati sono indizi automatici e non
                 costituiscono una perizia né una garanzia sull&apos;affidabilità di siti, aziende, immagini o email: nessun controllo
                 automatico riconosce il 100% delle truffe. In CheckMail l&apos;email è analizzata al momento e non viene conservata
-                dalla Piattaforma; il testo può essere letto anche da un fornitore di intelligenza artificiale (Anthropic). In VeriFoto i controlli di base
+                dalla Piattaforma; il testo può essere letto anche da un fornitore di intelligenza artificiale. In VeriFoto i controlli di base
                 avvengono sul dispositivo dell&apos;utente senza caricare la foto; solo se l&apos;utente lo sceglie, una copia ridotta e priva di
-                metadati viene inviata a un fornitore esterno di rilevamento (Sightengine) per l&apos;analisi e non viene conservata dalla
+                metadati viene inviata a un fornitore esterno di rilevamento per l&apos;analisi e non viene conservata dalla
                 Piattaforma. L&apos;utente deve caricare solo immagini che ha il diritto di usare.
               </p>
               <p>
