@@ -63,7 +63,34 @@ await evaluate("localStorage.setItem('install_prompt_dismissed', 'true')")
 for (const shot of shots) {
   await send('Page.navigate', { url: base + shot.path })
   await sleep(shot.wait ?? 9000)
-  const needle = shot.key ? textOf(shot.key) : null
+  // Azioni prima della foto: scrivere in un campo, toccare un pulsante,
+  // caricare un file. I testi possono essere per lingua ({ it, en }).
+  const local = (v) => (v && typeof v === 'object' ? v[locale] ?? v.en : v)
+  for (const step of shot.do ?? []) {
+    if (step.fill) {
+      await evaluate(`(() => {
+        const el = document.querySelector(${JSON.stringify(step.fill)})
+        if (!el) return
+        const proto = el.tagName === 'TEXTAREA' ? HTMLTextAreaElement.prototype : el.tagName === 'SELECT' ? HTMLSelectElement.prototype : HTMLInputElement.prototype
+        Object.getOwnPropertyDescriptor(proto, 'value').set.call(el, ${JSON.stringify(local(step.value))})
+        el.dispatchEvent(new Event(el.tagName === 'SELECT' ? 'change' : 'input', { bubbles: true }))
+      })()`)
+    } else if (step.click) {
+      await evaluate(`document.querySelector(${JSON.stringify(step.click)})?.click()`)
+    } else if (step.clickText) {
+      await evaluate(`(() => {
+        const needle = ${JSON.stringify(local(step.clickText))}.toLowerCase()
+        const all = [...document.querySelectorAll('button, a, label, [role=tab], [role=button]')].filter((n) => (n.textContent || '').toLowerCase().includes(needle))
+        all.sort((x, y) => x.textContent.length - y.textContent.length)[0]?.click()
+      })()`)
+    } else if (step.file) {
+      const { root } = await send('DOM.getDocument', { depth: -1 })
+      const { nodeId } = await send('DOM.querySelector', { nodeId: root.nodeId, selector: step.file })
+      if (nodeId) await send('DOM.setFileInputFiles', { nodeId, files: [step.path] })
+    }
+    await sleep(step.wait ?? 1500)
+  }
+  const needle = shot.key ? textOf(shot.key) : shot.text ? local(shot.text) : null
   const result = await evaluate(`(() => {
     const style = document.createElement('style')
     style.textContent = 'nextjs-portal,a.fixed[href*="/guida/"]{display:none!important}'

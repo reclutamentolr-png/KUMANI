@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
 import { getLocale, getTranslations } from 'next-intl/server'
-import { ArrowLeft, ArrowRight, BookOpen, Clock, Footprints, Megaphone, Sparkles, Wallet, Wrench } from 'lucide-react'
+import { ArrowLeft, ArrowRight, BookOpen, Clock, Footprints, Megaphone, ShieldCheck, Sparkles, Wallet, Wrench } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
-import { getGuidesContent } from '@/lib/guides/content'
+import { createClient } from '@/lib/supabase/server'
+import { getGuidesContent, PUBLIC_GUIDES } from '@/lib/guides/content'
 import type { GuideCategory } from '@/lib/guides/types'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -15,14 +16,22 @@ const CATEGORY_ICONS: Record<GuideCategory, typeof Wallet> = {
   promote: Megaphone,
   wallet: Wallet,
   promoteTools: Wrench,
+  security: ShieldCheck,
 }
 
 // Centro guide: elenco delle guide passo passo, divise per argomento.
-// Pagina pubblica: serve anche a chi non si è ancora registrato.
+// Senza accesso mostra solo le guide pubbliche (registrazione e accesso):
+// le altre sono per chi è già dentro.
 export default async function GuidesPage() {
   const locale = await getLocale()
   const t = await getTranslations('guides')
-  const { categories, guides } = await getGuidesContent(locale)
+  const content = await getGuidesContent(locale)
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  const { categories } = content
+  const guides = user ? content.guides : content.guides.filter((guide) => PUBLIC_GUIDES.includes(guide.slug))
   const order = Object.keys(categories) as GuideCategory[]
 
   return (
@@ -92,9 +101,30 @@ export default async function GuidesPage() {
           })}
         </div>
 
-        <p className="mt-10 rounded-2xl border border-dashed border-[var(--gold)]/50 bg-[var(--gold-pale)] px-5 py-4 text-sm text-[var(--ink)]">
-          {t('comingSoon')}
-        </p>
+        {user ? (
+          <p className="mt-10 rounded-2xl border border-dashed border-[var(--gold)]/50 bg-[var(--gold-pale)] px-5 py-4 text-sm text-[var(--ink)]">
+            {t('comingSoon')}
+          </p>
+        ) : (
+          <div className="mt-10 rounded-2xl border border-[var(--gold)]/40 bg-[var(--gold-pale)] px-5 py-5 text-[var(--ink)]">
+            <p className="font-bold">{t('membersTitle')}</p>
+            <p className="mt-1 text-sm text-[var(--ink)]/75">{t('membersText')}</p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <Link
+                href="/register"
+                className="rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-5 py-2.5 text-sm font-bold text-[var(--ink)] shadow-sm transition hover:brightness-105"
+              >
+                {t('membersRegister')}
+              </Link>
+              <Link
+                href="/login?next=%2Fguida"
+                className="rounded-xl border border-[var(--ink)]/20 bg-white px-5 py-2.5 text-sm font-bold text-[var(--ink)] transition hover:border-[var(--gold)]"
+              >
+                {t('membersLogin')}
+              </Link>
+            </div>
+          </div>
+        )}
         <p className="mt-6 text-center text-sm text-[var(--muted)]">
           {t('help')}{' '}
           <Link href="/contact" className="font-semibold text-[var(--gold)] hover:underline">

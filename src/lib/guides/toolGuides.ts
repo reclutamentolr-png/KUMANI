@@ -9,6 +9,11 @@ export const TOOL_GUIDES: { path: string; slug: GuideSlug }[] = [
   { path: '/marketplace/link-in-bio', slug: 'link-in-bio' },
   { path: '/marketplace/spotlight', slug: 'spotlight' },
   { path: '/events', slug: 'events' },
+  { path: '/marketplace/antitruffa', slug: 'antitruffa' },
+  { path: '/marketplace/verifica-iban', slug: 'verifica-iban' },
+  { path: '/marketplace/checkmail', slug: 'checkmail' },
+  { path: '/marketplace/verifoto', slug: 'verifoto' },
+  { path: '/marketplace/documento-sicuro', slug: 'documento-sicuro' },
 ]
 
 export function toolGuideFor(barePath: string): GuideSlug | null {

@@ -379,6 +379,15 @@
     "countryOutsideItalyNote": "KUMANI was born in Italy: in your country some features may be reduced or unavailable because different laws apply (e.g. identity checks, reward programmes, tax documents). You can still use the platform."
   },
   "dashboard": {
+    "receivedLabel": "From the Community",
+    "receivedKumaniLabel": "received from Kumani",
+    "peopleTabReceived": "Received from Kumani",
+    "peopleReceivedHint": "People invited by other Kumani and placed in your star. They aren’t your direct invites, but they’re part of your star and give you the Structure Bonus.",
+    "peopleEmptyReceived": "Nobody yet: when someone invited by another Kumano is placed in your star and activates a subscription, you’ll find them here.",
+    "peopleReceivedSince": "In your star since {date}",
+    "legendInvited": "Invited by you",
+    "legendReceived": "Received from the community",
+    "legendReceivedHint": "In blue, people invited by other Kumani and placed in your star (Structure Bonus).",
     "bachecaAlertText": "You've received a message about a Community Listing. Reply soon: a quick answer makes all the difference.",
     "bachecaAlertRead": "Read messages",
     "bachecaAlertBoard": "Go to Community Listings",
@@ -5819,5 +5828,5 @@
     "communitySub": "Noticeboard, Kumano of the Day, Kordata, Events and Time Bank: the community that lends a hand."
   },
   "share": {"native": "Share…", "nativeHint": "Instagram, WhatsApp, Telegram and other apps", "copy": "Copy link", "copied": "Link copied"},
-  "guides": {"metaTitle": "KUMANI guides: how it works", "metaDescription": "Step-by-step guides with screenshots of the KUMANI app: sign-up, login, dashboard, invites, vouchers and Wallet.", "eyebrow": "Help center", "title": "How to use KUMANI", "subtitle": "Step-by-step guides with real screenshots of the app: from sign-up to the Wallet.", "backToHome": "Back to home", "backToGuides": "All guides", "steps": "{count} steps", "minutes": "{count} min", "stepOf": "Step {n} of {total}", "tip": "Tip", "next": "Next guide", "prev": "Previous guide", "comingSoon": "Coming soon: a guide for every service and the Pro plan guide.", "help": "Can’t find what you’re looking for?", "contact": "Write to us", "shotAlt": "Screenshot: {title}", "linkLabel": "Guides", "dashboardTitle": "How do you use KUMANI?", "dashboardHint": "Step-by-step guides with app screenshots", "authHelp": "Need help? Read the guide", "howToUse": "How to use"}
+  "guides": {"metaTitle": "KUMANI guides: how it works", "metaDescription": "Step-by-step guides with screenshots of the KUMANI app: sign-up, login, dashboard, invites, vouchers and Wallet.", "eyebrow": "Help center", "title": "How to use KUMANI", "subtitle": "Step-by-step guides with real screenshots of the app: from sign-up to the Wallet.", "backToHome": "Back to home", "backToGuides": "All guides", "steps": "{count} steps", "minutes": "{count} min", "stepOf": "Step {n} of {total}", "tip": "Tip", "next": "Next guide", "prev": "Previous guide", "comingSoon": "Coming soon: a guide for every service and the Pro plan guide.", "help": "Can’t find what you’re looking for?", "contact": "Write to us", "shotAlt": "Screenshot: {title}", "linkLabel": "Guides", "dashboardTitle": "How do you use KUMANI?", "dashboardHint": "Step-by-step guides with app screenshots", "authHelp": "Need help? Read the guide", "howToUse": "How to use", "membersTitle": "The other guides are for members", "membersText": "Once you’re logged in you’ll find guides to the dashboard, invites, vouchers, the Wallet and every service, with the “How to use” button.", "membersRegister": "Sign up for free", "membersLogin": "Log in"}
 }

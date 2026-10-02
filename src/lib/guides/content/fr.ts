@@ -6,6 +6,7 @@ const content: GuidesContent = {
     promote: { title: 'Promouvoir KUMANI', text: 'Invitez vos proches avec votre lien et utilisez les vouchers.' },
     wallet: { title: 'Le portefeuille', text: 'Carte, points, dons, badges et reçus au même endroit.' },
     promoteTools: { title: "Outils pour promouvoir", text: "Les guides des services qui vous aident à faire connaître KUMANI." },
+    security: { title: "Sécurité", text: "Les guides des services qui vous aident à reconnaître et à stopper les arnaques." },
   },
   guides: [
     {
@@ -308,6 +309,158 @@ const content: GuidesContent = {
       cta: {
         label: "Ouvrir KUMANI Events",
         href: "/events"
+      }
+    },
+    {
+      slug: "antitruffa",
+      category: "security",
+      title: "Manuel anti-arnaques",
+      summary: "Les arnaques les plus répandues, avec des exemples réels et quoi faire tout de suite : lisez-le, enregistrez-le et partagez-le avec vos proches.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Téléchargez-le ou imprimez-le",
+          text: "En haut, touchez « Télécharger ou imprimer le manuel » : la fenêtre d’impression du téléphone ou de l’ordinateur s’ouvre, où vous pouvez aussi l’enregistrer en PDF."
+        },
+        {
+          title: "Partagez-le avec vos proches",
+          text: "Envoyez-le à vos parents, grands-parents et amis par WhatsApp, Facebook, Telegram, X, LinkedIn ou e-mail, ou copiez le lien. Qui s’inscrit depuis votre lien rejoint votre réseau."
+        },
+        {
+          title: "Le test des 10 secondes",
+          text: "Avant de cliquer, de répondre ou de payer, posez-vous les 6 questions du test : si une seule réponse est « oui », c’est presque certainement une arnaque.",
+          tip: "Juste en dessous se trouvent les 6 règles d’or : elles suffisent à éviter la plupart des arnaques."
+        },
+        {
+          title: "Choisissez un chapitre",
+          text: "Depuis le sommaire, allez au chapitre qui vous intéresse : e-mails et SMS, appels, à votre porte, messageries, achats, investissements… Touchez une arnaque pour l’ouvrir et lire des exemples et quoi faire. À la fin, vous trouvez quoi faire tout de suite si vous avez été arnaqué."
+        }
+      ],
+      cta: {
+        label: "Ouvrir le manuel anti-arnaques",
+        href: "/marketplace/antitruffa"
+      }
+    },
+    {
+      slug: "verifica-iban",
+      category: "security",
+      title: "Vérification IBAN",
+      summary: "Vérifiez l’IBAN avant un virement : s’il est bien écrit, de quel pays il est et quels signaux surveiller.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Collez l’IBAN",
+          text: "Collez l’IBAN qu’on vous a donné, avec ou sans espaces, et touchez « Vérifier l’IBAN ». Tout se passe sur votre téléphone : l’IBAN n’est ni envoyé ni enregistré."
+        },
+        {
+          title: "Lisez le résultat",
+          text: "Vous voyez si l’IBAN est bien écrit et de quel pays il est. Pour les IBAN italiens, vous voyez aussi ses parties : CIN, ABI (la banque), CAB (l’agence) et numéro de compte.",
+          tip: "S’il y a une erreur, nous vous disons où : par exemple un caractère manquant ou deux chiffres inversés."
+        },
+        {
+          title: "Pour quoi payez-vous ?",
+          text: "Choisissez la réponse la plus proche (un particulier, une location de vacances, une boutique en ligne, un investissement…) et votre pays : nous vous montrons les signaux à surveiller."
+        },
+        {
+          title: "Avant de faire le virement",
+          text: "Rappelez-vous : un IBAN valide ne garantit pas que le destinataire est honnête. Lisez les conseils avant de payer : un virement instantané ne peut pas être annulé."
+        }
+      ],
+      cta: {
+        label: "Ouvrir Vérification IBAN",
+        href: "/marketplace/verifica-iban"
+      }
+    },
+    {
+      slug: "checkmail",
+      category: "security",
+      title: "CheckMail",
+      summary: "Vous avez reçu un e-mail suspect ? Importez-le ou copiez-le : nous vérifions l’expéditeur, les liens, les pièces jointes et le texte et nous vous disons s’il est risqué.",
+      minutes: 3,
+      steps: [
+        {
+          title: "Choisissez comment charger l’e-mail",
+          text: "Il y a trois façons : « Importer le fichier » (l’e-mail enregistré en .eml ou .msg, la plus complète), « Coller la source » ou « Depuis le téléphone ». Chacune a ses instructions pour Gmail, Outlook et les autres logiciels."
+        },
+        {
+          title: "Saisissez l’e-mail et analysez-le",
+          text: "Depuis le téléphone, il suffit de copier l’expéditeur, l’objet et le texte avec les liens, puis de toucher « Analyser l’e-mail ».",
+          tip: "Sous le bouton, vous voyez combien d’analyses il vous reste aujourd’hui."
+        },
+        {
+          title: "Le niveau de risque",
+          text: "Le résultat vous dit si le risque est faible, moyen ou élevé et liste ce que nous avons trouvé : faux expéditeur, liens raccourcis, urgence, demandes de données…"
+        },
+        {
+          title: "Que faire",
+          text: "Suivez les conseils : par exemple ne cliquez pas, n’ouvrez pas les pièces jointes et ne répondez pas. Avec « Analyser un autre e-mail », vous recommencez.",
+          tip: "CheckMail donne des indices, pas des certitudes : en cas de doute, contactez l’entreprise par ses canaux officiels."
+        }
+      ],
+      cta: {
+        label: "Ouvrir CheckMail",
+        href: "/marketplace/checkmail"
+      }
+    },
+    {
+      slug: "verifoto",
+      category: "security",
+      title: "VeriFoto",
+      summary: "Vérifiez si une photo est vraie ou si elle a été créée ou retouchée avec l’intelligence artificielle, avant de lui faire confiance.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Choisissez la photo",
+          text: "Touchez « Choisir une photo » et prenez l’image à vérifier (JPG, PNG ou WebP jusqu’à 15 Mo). Les contrôles de base se font sur votre téléphone."
+        },
+        {
+          title: "Le risque qu’elle soit IA ou retouchée",
+          text: "Vous voyez un verdict et un pourcentage de risque : 0–30 % faible, 31–69 % incertain, 70–100 % élevé. En dessous, les indices trouvés, comme les certificats numériques et les données de l’appareil photo."
+        },
+        {
+          title: "La carte des retouches",
+          text: "Touchez « Carte des retouches » : les zones beaucoup plus claires que le reste peuvent indiquer des parties collées ou retouchées. C’est une aide visuelle, pas une preuve."
+        },
+        {
+          title: "Deuxième avis et photo originale",
+          text: "Pour un contrôle de plus, utilisez le détecteur d’IA : acceptez l’envoi d’une copie réduite de la photo et touchez « Analyser avec le détecteur d’IA ». Avec Google Lens ou TinEye, cherchez si la même photo existe déjà en ligne.",
+          tip: "VeriFoto donne des indices, pas des certitudes : en cas de doute, méfiez-vous."
+        }
+      ],
+      cta: {
+        label: "Ouvrir VeriFoto",
+        href: "/marketplace/verifoto"
+      }
+    },
+    {
+      slug: "documento-sicuro",
+      category: "security",
+      title: "Document Sûr",
+      summary: "Avant d’envoyer la photo d’une pièce d’identité, ajoutez une mention avec l’objet et la date et cachez les données inutiles.",
+      minutes: 3,
+      steps: [
+        {
+          title: "Choisissez la photo du document",
+          text: "Touchez « Choisir une photo » pour la prendre dans la galerie, ou « Prendre une photo ». La photo reste sur votre téléphone : elle n’est ni envoyée ni enregistrée."
+        },
+        {
+          title: "Cachez les données inutiles",
+          text: "Touchez « Cacher une zone » et faites glisser le doigt sur la photo pour poser un rectangle noir sur le numéro du document, la signature ou la photo, s’ils ne vous ont pas été demandés.",
+          tip: "Nous vous indiquons aussi si la photo contient des données cachées, comme la position GPS : elles disparaissent de la copie téléchargée."
+        },
+        {
+          title: "Ajoutez la mention de protection",
+          text: "Choisissez pourquoi vous l’envoyez (location, banque, travail, achat en ligne…) et à qui : la mention avec l’objet et la date se répète en diagonale sur toute la photo. Vous pouvez modifier le texte, la visibilité, la taille et la couleur.",
+          tip: "Utilisez une mention différente pour chaque personne : si la copie circule, vous saurez d’où elle vient."
+        },
+        {
+          title: "Téléchargez ou envoyez la copie",
+          text: "Touchez « Télécharger la copie protégée » ou « Partager » : vous obtenez une nouvelle copie avec la mention et les zones cachées, sans données cachées. L’original n’est pas modifié."
+        }
+      ],
+      cta: {
+        label: "Ouvrir Document Sûr",
+        href: "/marketplace/documento-sicuro"
       }
     },
   ],

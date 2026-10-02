@@ -34,7 +34,7 @@ export async function getDashboardNetworkData(
   // discendenti (solo nome e stato attivo, calcolati dal database: niente
   // cognome o codice di chi è finito sotto di noi), lo sponsor (il KUMI) e
   // gli invitati diretti.
-  const [{ data: userNode }, { data: downlineRows, error: matrixError }, { data: sponsorData }, directSponsored, wallet] = await Promise.all([
+  const [{ data: userNode }, { data: downlineRows, error: matrixError }, { data: sponsorData }, directSponsored, wallet, receivedRows] = await Promise.all([
     tree ? supabase.from('matrix_nodes').select('*').eq('user_id', user.id).single() : Promise.resolve({ data: null, error: null }),
     tree ? supabase.rpc('get_my_downline') : Promise.resolve({ data: null, error: null }),
     supabase
@@ -42,6 +42,13 @@ export async function getDashboardNetworkData(
       .maybeSingle<{ first_name: string | null; last_name: string | null; referral_code: string | null }>(),
     fetchDirectSponsored(supabase),
     getMyNetworkWallet(supabase),
+    // Ricevuti dalla community (nei propri 5 posti, invitati da altri): con
+    // l'albero si ricavano da lì, altrimenti li conta il database
+    tree
+      ? Promise.resolve(null)
+      : supabase
+          .rpc('my_received_kumani')
+          .then(({ data, error }) => (error ? [] : ((data ?? []) as { first_name: string | null; joined_at: string }[]))),
   ])
   const downlineData = ((downlineRows ?? []) as Array<{
     id: string
@@ -119,6 +126,14 @@ export async function getDashboardNetworkData(
     return node ? node.parent_id !== userNodeId : false
   }).length
 
+  // Nella stella: chi occupa uno dei 5 posti diretti senza essere un
+  // proprio invitato è arrivato dalla community (colore diverso)
+  const directIds = new Set(directSponsored.map((p) => p.id))
+  const receivedNodes = activeDownlineForTree.filter((node) => node.parent_id === userNodeId && !directIds.has(node.user_id))
+  const receivedIds = receivedNodes.map((node) => node.user_id)
+  const receivedKumani =
+    receivedRows ?? receivedNodes.map((node) => ({ first_name: node.first_name ?? null, joined_at: node.created_at }))
+
   // Qualifiche (solo badge): Punti Community guadagnati in totale, soglie
   // dei pacchetti voucher
   const { ranks, earnedTotal: networkPointsEarned } = wallet
@@ -142,6 +157,8 @@ export async function getDashboardNetworkData(
     activeKumani,
     pendingKumani,
     directSponsorInSpilloverCount,
+    receivedKumani,
+    receivedIds,
     currentRank,
     newlyAchievedRank,
     ranks,

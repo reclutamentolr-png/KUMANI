@@ -12,7 +12,7 @@ import KumaniPeople from '@/components/KumaniPeople'
 import QuickNav from '@/components/QuickNav'
 import Leaderboard from '@/components/Leaderboard'
 import { getDashboardNetworkData } from '@/lib/dashboardNetworkData'
-import { ArrowLeft, TreePine, Star, Sparkles, Crown, Trophy, Wallet, PartyPopper, UserPlus, CheckCircle2, Shuffle, Network, MessageCircle } from 'lucide-react'
+import { ArrowLeft, TreePine, Star, Sparkles, Crown, Trophy, Wallet, PartyPopper, UserPlus, CheckCircle2, Shuffle, Network, MessageCircle, Gift } from 'lucide-react'
 import NativeShareButton from '@/components/NativeShareButton'
 
 // Schede "Prossimi obiettivi": aspetto di ciascuna qualifica (soglie e testi dalle qualifiche della rete)
@@ -52,6 +52,8 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
     activeKumani,
     pendingKumani,
     directSponsorInSpilloverCount,
+    receivedKumani,
+    receivedIds,
     currentRank,
     ranks,
     networkPointsEarned,
@@ -156,7 +158,7 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
         </div>
 
         {/* Numeri della rete */}
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-5">
           <div className="relative overflow-hidden rounded-2xl border border-[var(--gold)]/30 bg-white px-5 pb-5 pt-6 shadow-[0_10px_30px_rgba(23,23,23,0.08)]">
             <div aria-hidden className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)]" />
             <div className="flex items-center gap-2.5">
@@ -187,6 +189,17 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
             </div>
             <p className="mt-3 text-4xl font-extrabold leading-none text-amber-600">{directSponsorInSpilloverCount}</p>
           </div>
+          {/* Dalla community: invitati da altri Kumani, arrivati nella stella */}
+          <div className="relative overflow-hidden rounded-2xl border border-sky-300/60 bg-white px-5 pb-5 pt-6 shadow-[0_10px_30px_rgba(23,23,23,0.08)]">
+            <div aria-hidden className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-sky-400 to-sky-300" />
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sky-950 text-sky-200">
+                <Gift className="h-4.5 w-4.5" />
+              </span>
+              <p className="text-xs font-bold uppercase tracking-wide text-[var(--muted)]">{t('receivedLabel')}</p>
+            </div>
+            <p className="mt-3 text-4xl font-extrabold leading-none text-sky-600">{receivedKumani.length}</p>
+          </div>
           <div className="relative overflow-hidden rounded-2xl border border-[var(--gold)]/30 bg-white px-5 pb-5 pt-6 shadow-[0_10px_30px_rgba(23,23,23,0.08)]">
             <div aria-hidden className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)]" />
             <div className="flex items-center gap-2.5">
@@ -203,7 +216,7 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
         </div>
 
         {/* I tuoi KUMANI: attivi e non ancora attivi */}
-        <KumaniPeople active={activeKumani} pending={pendingKumani} senderName={profile?.first_name || ''} loginUrl={loginUrl} />
+        <KumaniPeople active={activeKumani} pending={pendingKumani} received={receivedKumani} senderName={profile?.first_name || ''} loginUrl={loginUrl} />
 
         {/* Matrice */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
@@ -221,7 +234,7 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
               {t('matrixError')}: {downlineError.message}
             </p>
           ) : (
-            <MatrixTree rootNode={rootNode} descendants={activeDownlineForTree} />
+            <MatrixTree rootNode={rootNode} descendants={activeDownlineForTree} receivedIds={receivedIds} />
           )}
         </div>
 

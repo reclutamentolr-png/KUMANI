@@ -6,6 +6,7 @@ const content: GuidesContent = {
     promote: { title: 'Promover a KUMANI', text: 'Convide quem conhece com o seu link e use os vouchers.' },
     wallet: { title: 'A carteira', text: 'Cartão, pontos, donativos, badges e recibos num só lugar.' },
     promoteTools: { title: "Ferramentas para promover", text: "Os guias dos serviços que o ajudam a dar a conhecer a KUMANI." },
+    security: { title: "Segurança", text: "Os guias dos serviços que o ajudam a reconhecer e travar as burlas." },
   },
   guides: [
     {
@@ -308,6 +309,158 @@ const content: GuidesContent = {
       cta: {
         label: "Abrir KUMANI Events",
         href: "/events"
+      }
+    },
+    {
+      slug: "antitruffa",
+      category: "security",
+      title: "Manual Antiburla",
+      summary: "As burlas mais comuns, com exemplos reais e o que fazer de imediato: leia-o, guarde-o e partilhe-o com quem ama.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Descarregue-o ou imprima-o",
+          text: "No topo, toque em «Descarregar ou imprimir o manual»: abre-se a impressão do telemóvel ou do computador, onde também o pode guardar em PDF."
+        },
+        {
+          title: "Partilhe-o com quem ama",
+          text: "Envie-o a pais, avós e amigos por WhatsApp, Facebook, Telegram, X, LinkedIn ou email, ou copie o link. Quem se regista a partir do seu link entra na sua rede."
+        },
+        {
+          title: "O teste dos 10 segundos",
+          text: "Antes de clicar, responder ou pagar, faça a si próprio as 6 perguntas do teste: se uma só resposta for «sim», é quase de certeza uma burla.",
+          tip: "Logo abaixo estão as 6 regras de ouro: bastam para evitar a maioria das burlas."
+        },
+        {
+          title: "Escolha um capítulo",
+          text: "A partir do índice vá ao capítulo de que precisa: emails e SMS, chamadas, à porta de casa, chats, compras, investimentos… Toque numa burla para a abrir e ler exemplos e o que fazer. No fim encontra o que fazer de imediato se foi burlado."
+        }
+      ],
+      cta: {
+        label: "Abrir o Manual Antiburla",
+        href: "/marketplace/antitruffa"
+      }
+    },
+    {
+      slug: "verifica-iban",
+      category: "security",
+      title: "Verificar IBAN",
+      summary: "Verifique o IBAN antes de uma transferência: se está bem escrito, de que país é e que sinais vigiar.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Cole o IBAN",
+          text: "Cole o IBAN que lhe deram, com ou sem espaços, e toque em «Verificar o IBAN». Tudo acontece no seu telemóvel: o IBAN não é enviado nem guardado."
+        },
+        {
+          title: "Leia o resultado",
+          text: "Vê se o IBAN está bem escrito e de que país é. Nos IBAN italianos vê também as suas partes: CIN, ABI (o banco), CAB (a agência) e número de conta.",
+          tip: "Se houver um erro, dizemos-lhe onde: por exemplo um carácter em falta ou dois números trocados."
+        },
+        {
+          title: "Para que está a pagar?",
+          text: "Escolha a resposta mais próxima (um particular, uma casa de férias, uma loja online, um investimento…) e o seu país: mostramos-lhe os sinais a que deve estar atento."
+        },
+        {
+          title: "Antes de fazer a transferência",
+          text: "Lembre-se: um IBAN válido não garante que o destinatário seja honesto. Leia os conselhos antes de pagar: uma transferência imediata não pode ser anulada."
+        }
+      ],
+      cta: {
+        label: "Abrir Verificar IBAN",
+        href: "/marketplace/verifica-iban"
+      }
+    },
+    {
+      slug: "checkmail",
+      category: "security",
+      title: "CheckMail",
+      summary: "Recebeu um e-mail suspeito? Carregue-o ou copie-o: verificamos remetente, links, anexos e texto e dizemos-lhe qual o risco.",
+      minutes: 3,
+      steps: [
+        {
+          title: "Escolha como carregar o e-mail",
+          text: "Há três formas: «Carregar o ficheiro» (o e-mail guardado como .eml ou .msg, a mais completa), «Colar o código-fonte» ou «No telemóvel». Cada uma tem instruções para Gmail, Outlook e outros programas."
+        },
+        {
+          title: "Introduza o e-mail e analise-o",
+          text: "No telemóvel basta copiar remetente, assunto e texto com os links e depois tocar em «Analisar o e-mail».",
+          tip: "Por baixo do botão vê quantas análises lhe restam hoje."
+        },
+        {
+          title: "O nível de risco",
+          text: "O resultado diz-lhe se o risco é baixo, médio ou alto e enumera o que encontrámos: remetente falso, links encurtados, pressa, pedidos de dados…"
+        },
+        {
+          title: "O que fazer",
+          text: "Siga os conselhos: por exemplo não clique, não abra anexos e não responda. Com «Analisar outro e-mail» recomeça.",
+          tip: "O CheckMail dá indícios, não certezas: na dúvida, contacte a empresa pelos seus canais oficiais."
+        }
+      ],
+      cta: {
+        label: "Abrir CheckMail",
+        href: "/marketplace/checkmail"
+      }
+    },
+    {
+      slug: "verifoto",
+      category: "security",
+      title: "VeriFoto",
+      summary: "Verifique se uma foto é verdadeira ou se foi criada ou retocada com inteligência artificial, antes de confiar.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Escolha a foto",
+          text: "Toque em «Escolher uma foto» e escolha a imagem a verificar (JPG, PNG ou WebP até 15 MB). Os controlos básicos são feitos no seu telemóvel."
+        },
+        {
+          title: "O risco de ser IA ou retocada",
+          text: "Vê um veredito e uma percentagem de risco: 0–30% baixo, 31–69% incerto, 70–100% alto. Por baixo estão os indícios encontrados, como certificados digitais e dados da câmara."
+        },
+        {
+          title: "O mapa de retoques",
+          text: "Toque em «Mapa de retoques»: as zonas muito mais claras do que o resto podem indicar partes coladas ou retocadas. É uma ajuda visual, não uma prova."
+        },
+        {
+          title: "Segunda opinião e foto original",
+          text: "Para um controlo extra use o detetor de IA: aceite o envio de uma cópia reduzida da foto e toque em «Analisar com o detetor de IA». Com o Google Lens ou o TinEye procura se a mesma foto já existe online.",
+          tip: "O VeriFoto dá indícios, não certezas: na dúvida, não confie."
+        }
+      ],
+      cta: {
+        label: "Abrir VeriFoto",
+        href: "/marketplace/verifoto"
+      }
+    },
+    {
+      slug: "documento-sicuro",
+      category: "security",
+      title: "Documento Seguro",
+      summary: "Antes de enviar a foto de um documento, acrescente um texto com o motivo e a data e tape os dados que não são precisos.",
+      minutes: 3,
+      steps: [
+        {
+          title: "Escolha a foto do documento",
+          text: "Toque em «Escolher uma foto» para a tirar da galeria ou em «Tirar uma foto». A foto fica no seu telemóvel: não é carregada nem guardada."
+        },
+        {
+          title: "Tape os dados que não são precisos",
+          text: "Toque em «Tapar uma zona» e arraste o dedo sobre a foto para pôr um retângulo preto sobre o número do documento, a assinatura ou a foto, se não lhos pediram.",
+          tip: "Também lhe dizemos se a foto tem dados escondidos, como a localização GPS: na cópia descarregada já não estão."
+        },
+        {
+          title: "Acrescente o texto de proteção",
+          text: "Escolha para que a envia (arrendamento, banco, trabalho, compra online…) e a quem: o texto com motivo e data repete-se na diagonal por toda a foto. Pode mudar o texto, a visibilidade, o tamanho e a cor.",
+          tip: "Use um texto diferente para cada pessoa: se a cópia circular, saberá de onde saiu."
+        },
+        {
+          title: "Descarregue ou envie a cópia",
+          text: "Toque em «Descarregar a cópia protegida» ou «Partilhar»: obtém uma cópia nova com o texto e as zonas tapadas, sem dados escondidos. O original não é alterado."
+        }
+      ],
+      cta: {
+        label: "Abrir Documento Seguro",
+        href: "/marketplace/documento-sicuro"
       }
     },
   ],

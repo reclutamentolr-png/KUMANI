@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { ArrowLeft, ArrowRight, BookOpen, Clock, Lightbulb } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
-import { getGuidesContent, guideShot } from '@/lib/guides/content'
+import { createClient } from '@/lib/supabase/server'
+import { getGuidesContent, guideShot, PUBLIC_GUIDES } from '@/lib/guides/content'
+import type { GuideSlug } from '@/lib/guides/types'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -14,7 +16,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const t = await getTranslations('guides')
   const guide = (await getGuidesContent(locale)).guides.find((g) => g.slug === slug)
   if (!guide) return { title: t('metaTitle') }
-  return { title: `${guide.title} · ${t('linkLabel')} KUMANI`, description: guide.summary }
+  return {
+    title: `${guide.title} · ${t('linkLabel')} KUMANI`,
+    description: guide.summary,
+    // Solo le guide pubbliche vanno su Google
+    ...(PUBLIC_GUIDES.includes(guide.slug) ? {} : { robots: { index: false, follow: false } }),
+  }
 }
 
 // Una guida: passi numerati, ognuno con la sua schermata del telefono
@@ -23,7 +30,15 @@ export default async function GuidePage({ params }: Props) {
   const { slug } = await params
   const locale = await getLocale()
   const t = await getTranslations('guides')
-  const { guides } = await getGuidesContent(locale)
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  const isPublic = PUBLIC_GUIDES.includes(slug as GuideSlug)
+  if (!user && !isPublic) redirect(`/${locale}/login?next=${encodeURIComponent(`/guida/${slug}`)}`)
+  // Senza accesso si scorre solo tra le guide pubbliche
+  const all = (await getGuidesContent(locale)).guides
+  const guides = user ? all : all.filter((g) => PUBLIC_GUIDES.includes(g.slug))
   const index = guides.findIndex((g) => g.slug === slug)
   if (index < 0) notFound()
   const guide = guides[index]

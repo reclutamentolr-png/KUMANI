@@ -359,6 +359,15 @@
     "countryOutsideItalyNote": "O KUMANI nasceu em Itália: no seu país, algumas funcionalidades poderão estar reduzidas ou indisponíveis, porque vigoram leis diferentes (p. ex. verificações de identidade, programas de prémios, documentos fiscais). Pode, ainda assim, utilizar a plataforma."
   },
   "dashboard": {
+    "receivedLabel": "Da Comunidade",
+    "receivedKumaniLabel": "recebidos dos Kumani",
+    "peopleTabReceived": "Recebidos dos Kumani",
+    "peopleReceivedHint": "Pessoas convidadas por outros Kumani e colocadas na sua estrela. Não são convidados diretos seus, mas fazem parte da sua estrela e dão-lhe o Bónus Estrutura.",
+    "peopleEmptyReceived": "Ninguém por agora: quando uma pessoa convidada por outro Kumano for colocada na sua estrela e ativar a subscrição, encontra-a aqui.",
+    "peopleReceivedSince": "Na sua estrela desde {date}",
+    "legendInvited": "Convidados por si",
+    "legendReceived": "Recebidos da comunidade",
+    "legendReceivedHint": "A azul, as pessoas convidadas por outros Kumani e colocadas na sua estrela (Bónus Estrutura).",
     "bachecaAlertText": "Recebeu uma mensagem sobre um Anúncio da comunidade. Responda depressa: uma resposta rápida faz a diferença.",
     "bachecaAlertRead": "Ler mensagens",
     "bachecaAlertBoard": "Ir para os Anúncios",
@@ -5819,5 +5828,5 @@
     "communitySub": "Mural, Kumano do Dia, Kordata, Eventos e Banco do Tempo: a comunidade que dá uma mão."
   },
   "share": {"native": "Partilhar…", "nativeHint": "Instagram, WhatsApp, Telegram e outras apps", "copy": "Copiar link", "copied": "Link copiado"},
-  "guides": {"metaTitle": "Guias KUMANI: como se usa", "metaDescription": "Guias passo a passo com capturas da app KUMANI: registo, entrada, painel, convites, vouchers e carteira.", "eyebrow": "Centro de ajuda", "title": "Como se usa a KUMANI", "subtitle": "Guias passo a passo com capturas reais da app: do registo à carteira.", "backToHome": "Voltar ao início", "backToGuides": "Todos os guias", "steps": "{count} passos", "minutes": "{count} min", "stepOf": "Passo {n} de {total}", "tip": "Dica", "next": "Guia seguinte", "prev": "Guia anterior", "comingSoon": "Em breve: um guia para cada serviço e o guia do plano Pro.", "help": "Não encontra o que procura?", "contact": "Escreva-nos", "shotAlt": "Captura: {title}", "linkLabel": "Guias", "dashboardTitle": "Como se usa a KUMANI?", "dashboardHint": "Guias passo a passo com capturas da app", "authHelp": "Precisa de ajuda? Veja o guia", "howToUse": "Como se usa"}
+  "guides": {"metaTitle": "Guias KUMANI: como se usa", "metaDescription": "Guias passo a passo com capturas da app KUMANI: registo, entrada, painel, convites, vouchers e carteira.", "eyebrow": "Centro de ajuda", "title": "Como se usa a KUMANI", "subtitle": "Guias passo a passo com capturas reais da app: do registo à carteira.", "backToHome": "Voltar ao início", "backToGuides": "Todos os guias", "steps": "{count} passos", "minutes": "{count} min", "stepOf": "Passo {n} de {total}", "tip": "Dica", "next": "Guia seguinte", "prev": "Guia anterior", "comingSoon": "Em breve: um guia para cada serviço e o guia do plano Pro.", "help": "Não encontra o que procura?", "contact": "Escreva-nos", "shotAlt": "Captura: {title}", "linkLabel": "Guias", "dashboardTitle": "Como se usa a KUMANI?", "dashboardHint": "Guias passo a passo com capturas da app", "authHelp": "Precisa de ajuda? Veja o guia", "howToUse": "Como se usa", "membersTitle": "Os outros guias são para quem já está dentro", "membersText": "Depois de entrar encontra os guias do painel, dos convites, dos vouchers, da carteira e de cada serviço, com o botão «Como se usa».", "membersRegister": "Registe-se grátis", "membersLogin": "Entrar"}
 }

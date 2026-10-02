@@ -22,9 +22,11 @@ type MatrixNode = {
 type MatrixTreeProps = {
   rootNode: MatrixNode
   descendants: MatrixNode[]
+  // Posti occupati da persone invitate da altri Kumani (dalla community)
+  receivedIds?: string[]
 }
 
-export default function MatrixTree({ rootNode, descendants }: MatrixTreeProps) {
+export default function MatrixTree({ rootNode, descendants, receivedIds = [] }: MatrixTreeProps) {
   const t = useTranslations('dashboard')
   const directMembers = descendants
     .filter((node) => node.parent_id === rootNode.id)
@@ -40,6 +42,7 @@ export default function MatrixTree({ rootNode, descendants }: MatrixTreeProps) {
 
   const renderMember = (member: MatrixNode | null, slotIndex: number) => {
     const isOccupied = Boolean(member)
+    const isReceived = Boolean(member && receivedIds.includes(member.user_id))
     const downlineCount = member ? getDownlineCount(member) : 0
     const point = STAR_POINTS[slotIndex]
 
@@ -50,13 +53,19 @@ export default function MatrixTree({ rootNode, descendants }: MatrixTreeProps) {
         style={{ left: `${point.left}%`, top: `${point.top}%` }}
       >
         <div className={`relative flex h-12 w-12 items-center justify-center rounded-full border-[3px] shadow-lg transition-transform sm:h-20 sm:w-20 sm:border-4 ${
-          isOccupied
-            ? 'border-[var(--gold)] bg-[var(--ink)] text-[var(--gold-bright)] hover:-translate-y-1'
-            : 'border-dashed border-stone-300 bg-stone-100 text-stone-400'
+          isReceived
+            ? 'border-sky-400 bg-sky-950 text-sky-200 hover:-translate-y-1'
+            : isOccupied
+              ? 'border-[var(--gold)] bg-[var(--ink)] text-[var(--gold-bright)] hover:-translate-y-1'
+              : 'border-dashed border-stone-300 bg-stone-100 text-stone-400'
         }`}>
           {isOccupied ? <UserRound className="h-6 w-6 sm:h-8 sm:w-8" strokeWidth={1.6} /> : <span className="text-xl sm:text-2xl">+</span>}
           <span className={`absolute -bottom-2 rounded-full border px-1.5 py-0.5 text-[9px] font-bold sm:px-2 sm:text-[10px] ${
-            isOccupied ? 'border-[var(--gold)]/50 bg-[var(--gold-pale)] text-[var(--ink)]' : 'border-stone-300 bg-white text-stone-400'
+            isReceived
+              ? 'border-sky-300 bg-sky-50 text-sky-900'
+              : isOccupied
+                ? 'border-[var(--gold)]/50 bg-[var(--gold-pale)] text-[var(--ink)]'
+                : 'border-stone-300 bg-white text-stone-400'
           }`}>
             {slotIndex + 1}
           </span>
@@ -101,6 +110,17 @@ export default function MatrixTree({ rootNode, descendants }: MatrixTreeProps) {
           {directSlots.map(renderMember)}
         </div>
       </div>
+
+      {/* Legenda dei colori */}
+      <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-semibold text-[var(--ink)]">
+        <span className="flex items-center gap-1.5">
+          <span className="h-3.5 w-3.5 rounded-full border-2 border-[var(--gold)] bg-[var(--ink)]" /> {t('legendInvited')}
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="h-3.5 w-3.5 rounded-full border-2 border-sky-400 bg-sky-950" /> {t('legendReceived')}
+        </span>
+      </div>
+      <p className="-mt-5 text-center text-xs text-[var(--muted)]">{t('legendReceivedHint')}</p>
 
       <div className="flex items-center justify-center gap-2 text-xs text-[var(--muted)]">
         <Users className="h-4 w-4 text-[var(--gold)]" />

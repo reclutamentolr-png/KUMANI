@@ -1,5 +1,9 @@
 import type { GuideSlug, GuidesContent } from '@/lib/guides/types'
 
+// Guide aperte a tutti (homepage, accesso, registrazione, Google): le altre
+// mostrano l'app dall'interno e sono per chi ha già fatto l'accesso.
+export const PUBLIC_GUIDES: GuideSlug[] = ['registrazione', 'accesso']
+
 // Un file per lingua, caricato solo quando serve. Una lingua sconosciuta
 // ricade sull'italiano (versione di riferimento).
 const LOADERS: Record<string, () => Promise<{ default: GuidesContent }>> = {

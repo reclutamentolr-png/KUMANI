@@ -359,6 +359,15 @@
     "countryOutsideItalyNote": "KUMANI stammt aus Italien: In deinem Land können einige Funktionen eingeschränkt oder nicht verfügbar sein, weil dort andere Gesetze gelten (z. B. Identitätsprüfungen, Prämienprogramme, Steuerdokumente). Du kannst die Plattform trotzdem nutzen."
   },
   "dashboard": {
+    "receivedLabel": "Aus der Community",
+    "receivedKumaniLabel": "von Kumani erhalten",
+    "peopleTabReceived": "Von Kumani erhalten",
+    "peopleReceivedHint": "Personen, die von anderen Kumani eingeladen und in deinen Stern gesetzt wurden. Sie sind nicht deine direkten Einladungen, gehören aber zu deinem Stern und bringen dir den Struktur-Bonus.",
+    "peopleEmptyReceived": "Noch niemand: Wenn eine von einem anderen Kumano eingeladene Person in deinen Stern gesetzt wird und ein Abo aktiviert, findest du sie hier.",
+    "peopleReceivedSince": "In deinem Stern seit {date}",
+    "legendInvited": "Von dir eingeladen",
+    "legendReceived": "Aus der Community erhalten",
+    "legendReceivedHint": "In Blau: Personen, die von anderen Kumani eingeladen und in deinen Stern gesetzt wurden (Struktur-Bonus).",
     "bachecaAlertText": "Du hast eine Nachricht zu einer Community-Anzeige erhalten. Antworte bald: Eine schnelle Antwort macht den Unterschied.",
     "bachecaAlertRead": "Nachrichten lesen",
     "bachecaAlertBoard": "Zu den Community-Anzeigen",
@@ -5819,5 +5828,5 @@
     "communitySub": "Pinnwand, Kumano des Tages, Kordata, Events und Zeitbank: die Community, die mit anpackt."
   },
   "share": {"native": "Teilen…", "nativeHint": "Instagram, WhatsApp, Telegram und andere Apps", "copy": "Link kopieren", "copied": "Link kopiert"},
-  "guides": {"metaTitle": "KUMANI-Anleitungen: so funktioniert’s", "metaDescription": "Schritt-für-Schritt-Anleitungen mit Screenshots der KUMANI-App: Registrierung, Anmeldung, Dashboard, Einladungen, Voucher und Brieftasche.", "eyebrow": "Hilfe-Center", "title": "So nutzt du KUMANI", "subtitle": "Schritt-für-Schritt-Anleitungen mit echten Screenshots der App: von der Registrierung bis zur Brieftasche.", "backToHome": "Zur Startseite", "backToGuides": "Alle Anleitungen", "steps": "{count} Schritte", "minutes": "{count} Min.", "stepOf": "Schritt {n} von {total}", "tip": "Tipp", "next": "Nächste Anleitung", "prev": "Vorherige Anleitung", "comingSoon": "Demnächst: eine Anleitung für jeden Dienst und die Anleitung zum Pro-Plan.", "help": "Nicht gefunden, was du suchst?", "contact": "Schreib uns", "shotAlt": "Screenshot: {title}", "linkLabel": "Anleitungen", "dashboardTitle": "Wie nutzt man KUMANI?", "dashboardHint": "Schritt-für-Schritt-Anleitungen mit Screenshots der App", "authHelp": "Hilfe nötig? Lies die Anleitung", "howToUse": "So geht’s"}
+  "guides": {"metaTitle": "KUMANI-Anleitungen: so funktioniert’s", "metaDescription": "Schritt-für-Schritt-Anleitungen mit Screenshots der KUMANI-App: Registrierung, Anmeldung, Dashboard, Einladungen, Voucher und Brieftasche.", "eyebrow": "Hilfe-Center", "title": "So nutzt du KUMANI", "subtitle": "Schritt-für-Schritt-Anleitungen mit echten Screenshots der App: von der Registrierung bis zur Brieftasche.", "backToHome": "Zur Startseite", "backToGuides": "Alle Anleitungen", "steps": "{count} Schritte", "minutes": "{count} Min.", "stepOf": "Schritt {n} von {total}", "tip": "Tipp", "next": "Nächste Anleitung", "prev": "Vorherige Anleitung", "comingSoon": "Demnächst: eine Anleitung für jeden Dienst und die Anleitung zum Pro-Plan.", "help": "Nicht gefunden, was du suchst?", "contact": "Schreib uns", "shotAlt": "Screenshot: {title}", "linkLabel": "Anleitungen", "dashboardTitle": "Wie nutzt man KUMANI?", "dashboardHint": "Schritt-für-Schritt-Anleitungen mit Screenshots der App", "authHelp": "Hilfe nötig? Lies die Anleitung", "howToUse": "So geht’s", "membersTitle": "Die anderen Anleitungen sind für Mitglieder", "membersText": "Nach der Anmeldung findest du Anleitungen zu Dashboard, Einladungen, Vouchern, Brieftasche und jedem Dienst, mit dem Button „So geht’s“.", "membersRegister": "Kostenlos registrieren", "membersLogin": "Anmelden"}
 }

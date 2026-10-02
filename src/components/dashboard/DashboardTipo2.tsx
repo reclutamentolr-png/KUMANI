@@ -64,7 +64,7 @@ export default async function DashboardTipo2({
   const locale = await getLocale()
 
   // Qualifiche (solo badge) sui Punti Community guadagnati in totale
-  const { activeKumani, pendingKumani, currentRank, ranks, networkPointsEarned } = network
+  const { activeKumani, pendingKumani, receivedKumani, currentRank, ranks, networkPointsEarned } = network
   const nextRank = ranks.find((rank) => networkPointsEarned < rank.threshold) || null
   const rankProgress = nextRank ? Math.min((networkPointsEarned / nextRank.threshold) * 100, 100) : 100
 
@@ -268,7 +268,7 @@ export default async function DashboardTipo2({
           </div>
         </div>
 
-        <div className="mt-5 grid grid-cols-2 gap-3">
+        <div className="mt-5 grid grid-cols-3 gap-2 sm:gap-3">
           <div className="rounded-xl border border-white/10 bg-white/[0.06] px-4 py-3">
             <p className="text-4xl font-extrabold leading-none text-[var(--gold-bright)]">{activeKumani.length}</p>
             <p className="mt-1.5 text-xs font-medium text-white/70">{t('activeKumaniLabel')}</p>
@@ -276,6 +276,10 @@ export default async function DashboardTipo2({
           <div className="rounded-xl border border-white/10 bg-white/[0.06] px-4 py-3">
             <p className="text-4xl font-extrabold leading-none text-white">{pendingKumani.length}</p>
             <p className="mt-1.5 text-xs font-medium text-white/70">{t('pendingKumaniLabel')}</p>
+          </div>
+          <div className="rounded-xl border border-sky-300/25 bg-sky-400/[0.08] px-4 py-3">
+            <p className="text-4xl font-extrabold leading-none text-sky-300">{receivedKumani.length}</p>
+            <p className="mt-1.5 text-xs font-medium text-white/70">{t('receivedKumaniLabel')}</p>
           </div>
         </div>
 

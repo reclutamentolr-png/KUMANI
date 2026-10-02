@@ -6,6 +6,7 @@ const content: GuidesContent = {
     promote: { title: 'Promoting KUMANI', text: 'Invite the people you know with your link and use vouchers.' },
     wallet: { title: 'The Wallet', text: 'Card, points, donations, badges and receipts in one place.' },
     promoteTools: { title: "Tools for promoting", text: "Guides to the services that help you spread the word about KUMANI." },
+    security: { title: "Security", text: "Guides to the services that help you spot and stop scams." },
   },
   guides: [
     {
@@ -308,6 +309,158 @@ const content: GuidesContent = {
       cta: {
         label: "Open KUMANI Events",
         href: "/events"
+      }
+    },
+    {
+      slug: "antitruffa",
+      category: "security",
+      title: "Anti-Scam Manual",
+      summary: "The most common scams, with real examples and what to do right away: read it, save it and share it with the people you love.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Download or print it",
+          text: "At the top, tap “Download or print the manual”: your phone’s or computer’s print window opens, where you can also save it as a PDF."
+        },
+        {
+          title: "Share it with the people you love",
+          text: "Send it to parents, grandparents and friends via WhatsApp, Facebook, Telegram, X, LinkedIn or email, or copy the link. Anyone who signs up from your link joins your network."
+        },
+        {
+          title: "The 10-second test",
+          text: "Before clicking, replying or paying, ask yourself the 6 questions of the test: if even one answer is “yes”, it’s almost certainly a scam.",
+          tip: "Right below are the 6 golden rules: they alone are enough to avoid most scams."
+        },
+        {
+          title: "Choose a chapter",
+          text: "From the contents, go to the chapter you need: email and texts, phone calls, at your front door, chats, shopping, investments… Tap a scam to open it and read examples and what to do. At the end you’ll find what to do right away if you’ve been scammed."
+        }
+      ],
+      cta: {
+        label: "Open the Anti-Scam Manual",
+        href: "/marketplace/antitruffa"
+      }
+    },
+    {
+      slug: "verifica-iban",
+      category: "security",
+      title: "IBAN Check",
+      summary: "Check the IBAN before a bank transfer: whether it’s written correctly, which country it’s from and which warning signs to watch for.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Paste the IBAN",
+          text: "Paste the IBAN you were given, with or without spaces, and tap “Check the IBAN”. The check happens entirely on your phone: the IBAN is never sent or saved."
+        },
+        {
+          title: "Read the result",
+          text: "You see whether the IBAN is written correctly and which country it’s from. For Italian IBANs you also see its parts: CIN, ABI (the bank), CAB (the branch) and account number.",
+          tip: "If there’s a mistake, we tell you where: for example a missing character or two swapped digits."
+        },
+        {
+          title: "What are you paying for?",
+          text: "Choose the closest answer (a private seller, a holiday home, an online shop, an investment…) and your country: we show you the warning signs to watch for."
+        },
+        {
+          title: "Before making the transfer",
+          text: "Remember: a valid IBAN doesn’t guarantee the recipient is honest. Read the tips before paying: an instant transfer can’t be cancelled."
+        }
+      ],
+      cta: {
+        label: "Open IBAN Check",
+        href: "/marketplace/verifica-iban"
+      }
+    },
+    {
+      slug: "checkmail",
+      category: "security",
+      title: "CheckMail",
+      summary: "Got a suspicious email? Upload or copy it: we check the sender, links, attachments and text and tell you how risky it is.",
+      minutes: 3,
+      steps: [
+        {
+          title: "Choose how to load the email",
+          text: "There are three ways: “Upload the file” (the email saved as .eml or .msg, the most complete), “Paste the source” or “From your phone”. Each one comes with instructions for Gmail, Outlook and other programs."
+        },
+        {
+          title: "Enter the email and analyse it",
+          text: "From your phone, just copy the sender, subject and text with any links, then tap “Analyze the email”.",
+          tip: "Below the button you can see how many checks you have left today."
+        },
+        {
+          title: "The risk level",
+          text: "The result tells you whether the risk is low, medium or high and lists what we found: fake sender, shortened links, pressure, requests for your details…"
+        },
+        {
+          title: "What to do",
+          text: "Follow the advice: for example don’t click, don’t open attachments and don’t reply. With “Check another email” you start again.",
+          tip: "CheckMail gives clues, not certainties: if in doubt, contact the company through its official channels."
+        }
+      ],
+      cta: {
+        label: "Open CheckMail",
+        href: "/marketplace/checkmail"
+      }
+    },
+    {
+      slug: "verifoto",
+      category: "security",
+      title: "VeriFoto",
+      summary: "Check whether a photo is real or was created or retouched with artificial intelligence, before you trust it.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Choose the photo",
+          text: "Tap “Choose a photo” and pick the image to check (JPG, PNG or WebP up to 15 MB). The basic checks happen on your phone."
+        },
+        {
+          title: "The risk that it’s AI or retouched",
+          text: "You see a verdict and a risk percentage: 0–30% low, 31–69% uncertain, 70–100% high. Below are the clues found, such as digital certificates and camera data."
+        },
+        {
+          title: "The retouch map",
+          text: "Tap “Retouch map”: areas much brighter than the rest can point to pasted or retouched parts. It’s a visual aid, not proof."
+        },
+        {
+          title: "Second opinion and the original photo",
+          text: "For an extra check use the AI detector: agree to send a reduced copy of the photo and tap “Analyse with the AI detector”. With Google Lens or TinEye you can search whether the same photo already exists online.",
+          tip: "VeriFoto gives clues, not certainties: if in doubt, don’t trust it."
+        }
+      ],
+      cta: {
+        label: "Open VeriFoto",
+        href: "/marketplace/verifoto"
+      }
+    },
+    {
+      slug: "documento-sicuro",
+      category: "security",
+      title: "Safe Document",
+      summary: "Before sending a photo of an ID, add a caption with purpose and date and cover the details that aren’t needed.",
+      minutes: 3,
+      steps: [
+        {
+          title: "Choose the photo of the document",
+          text: "Tap “Choose a photo” to pick it from your gallery or “Take a photo”. The photo stays on your phone: it’s never uploaded or saved."
+        },
+        {
+          title: "Cover the details that aren’t needed",
+          text: "Tap “Cover an area” and drag your finger over the photo to put a black rectangle over the document number, signature or photo, if they weren’t asked for.",
+          tip: "We also tell you if the photo contains hidden data, such as GPS location: it’s gone from the downloaded copy."
+        },
+        {
+          title: "Add the protection caption",
+          text: "Choose what you’re sending it for (renting, bank, job, online purchase…) and to whom: the caption with purpose and date repeats diagonally across the whole photo. You can change its text, visibility, size and colour.",
+          tip: "Use a different caption for each person: if the copy gets passed around, you’ll know where it came from."
+        },
+        {
+          title: "Download or send the copy",
+          text: "Tap “Download the protected copy” or “Share”: you get a new copy with the caption and covered areas, without hidden data. The original isn’t touched."
+        }
+      ],
+      cta: {
+        label: "Open Safe Document",
+        href: "/marketplace/documento-sicuro"
       }
     },
   ],

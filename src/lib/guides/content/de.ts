@@ -6,6 +6,7 @@ const content: GuidesContent = {
     promote: { title: 'KUMANI empfehlen', text: 'Lade Bekannte mit deinem Link ein und nutze die Voucher.' },
     wallet: { title: 'Die Brieftasche', text: 'Karte, Punkte, Spenden, Abzeichen und Belege an einem Ort.' },
     promoteTools: { title: "Tools zum Empfehlen", text: "Die Anleitungen zu den Diensten, mit denen du KUMANI bekannt machst." },
+    security: { title: "Sicherheit", text: "Die Anleitungen zu den Diensten, mit denen du Betrug erkennst und stoppst." },
   },
   guides: [
     {
@@ -308,6 +309,158 @@ const content: GuidesContent = {
       cta: {
         label: "KUMANI Events öffnen",
         href: "/events"
+      }
+    },
+    {
+      slug: "antitruffa",
+      category: "security",
+      title: "Anti-Betrugs-Handbuch",
+      summary: "Die häufigsten Betrugsmaschen mit echten Beispielen und was sofort zu tun ist: lies es, speichere es und teile es mit den Menschen, die du liebst.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Herunterladen oder drucken",
+          text: "Tippe oben auf „Handbuch herunterladen oder drucken“: Das Druckfenster von Handy oder Computer öffnet sich, dort kannst du es auch als PDF speichern."
+        },
+        {
+          title: "Teile es mit den Menschen, die du liebst",
+          text: "Schick es an Eltern, Großeltern und Freunde per WhatsApp, Facebook, Telegram, X, LinkedIn oder E-Mail, oder kopiere den Link. Wer sich über deinen Link registriert, kommt in dein Netzwerk."
+        },
+        {
+          title: "Der 10-Sekunden-Test",
+          text: "Bevor du klickst, antwortest oder bezahlst, stell dir die 6 Fragen des Tests: Ist auch nur eine Antwort „ja“, ist es fast sicher Betrug.",
+          tip: "Direkt darunter stehen die 6 goldenen Regeln: Sie reichen schon, um die meisten Betrugsmaschen zu vermeiden."
+        },
+        {
+          title: "Wähle ein Kapitel",
+          text: "Geh über das Inhaltsverzeichnis zum Kapitel, das du brauchst: E-Mails und SMS, Anrufe, an der Haustür, Chats, Einkäufe, Geldanlagen… Tippe auf eine Masche, um sie zu öffnen und Beispiele und Tipps zu lesen. Am Ende steht, was du sofort tun solltest, wenn du betrogen wurdest."
+        }
+      ],
+      cta: {
+        label: "Anti-Betrugs-Handbuch öffnen",
+        href: "/marketplace/antitruffa"
+      }
+    },
+    {
+      slug: "verifica-iban",
+      category: "security",
+      title: "IBAN-Prüfung",
+      summary: "Prüfe die IBAN vor einer Überweisung: ob sie richtig geschrieben ist, aus welchem Land sie stammt und auf welche Warnzeichen du achten solltest.",
+      minutes: 2,
+      steps: [
+        {
+          title: "IBAN einfügen",
+          text: "Füge die IBAN ein, die du bekommen hast, mit oder ohne Leerzeichen, und tippe auf „IBAN prüfen“. Alles passiert auf deinem Handy: Die IBAN wird weder gesendet noch gespeichert."
+        },
+        {
+          title: "Ergebnis lesen",
+          text: "Du siehst, ob die IBAN richtig geschrieben ist und aus welchem Land sie stammt. Bei italienischen IBANs siehst du auch ihre Teile: CIN, ABI (die Bank), CAB (die Filiale) und Kontonummer.",
+          tip: "Gibt es einen Fehler, sagen wir dir, wo: zum Beispiel ein fehlendes Zeichen oder zwei vertauschte Ziffern."
+        },
+        {
+          title: "Wofür bezahlst du?",
+          text: "Wähle die passendste Antwort (ein Privatverkäufer, eine Ferienwohnung, ein Onlineshop, eine Geldanlage…) und dein Land: Wir zeigen dir die Warnzeichen, auf die du achten solltest."
+        },
+        {
+          title: "Vor der Überweisung",
+          text: "Denk daran: Eine gültige IBAN garantiert nicht, dass der Empfänger ehrlich ist. Lies die Tipps vor dem Bezahlen: Eine Echtzeitüberweisung lässt sich nicht zurückholen."
+        }
+      ],
+      cta: {
+        label: "IBAN-Prüfung öffnen",
+        href: "/marketplace/verifica-iban"
+      }
+    },
+    {
+      slug: "checkmail",
+      category: "security",
+      title: "CheckMail",
+      summary: "Eine verdächtige E-Mail bekommen? Lade sie hoch oder kopiere sie: Wir prüfen Absender, Links, Anhänge und Text und sagen dir, wie riskant sie ist.",
+      minutes: 3,
+      steps: [
+        {
+          title: "Wähle, wie du die E-Mail lädst",
+          text: "Es gibt drei Wege: „Datei hochladen“ (die als .eml oder .msg gespeicherte E-Mail, am vollständigsten), „Quelltext einfügen“ oder „Vom Handy“. Zu jedem gibt es eine Anleitung für Gmail, Outlook und andere Programme."
+        },
+        {
+          title: "E-Mail eingeben und prüfen",
+          text: "Vom Handy aus reicht es, Absender, Betreff und Text mit den Links zu kopieren und dann auf „E-Mail prüfen“ zu tippen.",
+          tip: "Unter dem Button siehst du, wie viele Prüfungen dir heute noch bleiben."
+        },
+        {
+          title: "Die Risikostufe",
+          text: "Das Ergebnis sagt dir, ob das Risiko niedrig, mittel oder hoch ist, und listet auf, was wir gefunden haben: falscher Absender, gekürzte Links, Zeitdruck, Abfrage von Daten…"
+        },
+        {
+          title: "Was tun",
+          text: "Folge den Tipps: zum Beispiel nicht klicken, keine Anhänge öffnen und nicht antworten. Mit „Eine andere E-Mail prüfen“ fängst du neu an.",
+          tip: "CheckMail liefert Hinweise, keine Gewissheiten: Im Zweifel kontaktiere das Unternehmen über seine offiziellen Kanäle."
+        }
+      ],
+      cta: {
+        label: "CheckMail öffnen",
+        href: "/marketplace/checkmail"
+      }
+    },
+    {
+      slug: "verifoto",
+      category: "security",
+      title: "VeriFoto",
+      summary: "Prüfe, ob ein Foto echt ist oder mit künstlicher Intelligenz erstellt oder bearbeitet wurde, bevor du ihm vertraust.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Foto auswählen",
+          text: "Tippe auf „Foto auswählen“ und wähle das Bild, das du prüfen willst (JPG, PNG oder WebP bis 15 MB). Die Grundprüfungen laufen auf deinem Handy."
+        },
+        {
+          title: "Das Risiko, dass es KI oder bearbeitet ist",
+          text: "Du siehst eine Einschätzung und einen Risikowert: 0–30 % niedrig, 31–69 % unsicher, 70–100 % hoch. Darunter stehen die gefundenen Hinweise, etwa digitale Zertifikate und Kameradaten."
+        },
+        {
+          title: "Die Retusche-Karte",
+          text: "Tippe auf „Retusche-Karte“: Bereiche, die viel heller sind als der Rest, können auf eingefügte oder bearbeitete Teile hinweisen. Das ist eine Sehhilfe, kein Beweis."
+        },
+        {
+          title: "Zweite Meinung und Originalfoto",
+          text: "Für eine zusätzliche Prüfung nutze den KI-Detektor: Stimme dem Senden einer verkleinerten Kopie zu und tippe auf „Mit dem KI-Detektor analysieren“. Mit Google Lens oder TinEye suchst du, ob es dasselbe Foto schon online gibt.",
+          tip: "VeriFoto liefert Hinweise, keine Gewissheiten: Im Zweifel lieber nicht vertrauen."
+        }
+      ],
+      cta: {
+        label: "VeriFoto öffnen",
+        href: "/marketplace/verifoto"
+      }
+    },
+    {
+      slug: "documento-sicuro",
+      category: "security",
+      title: "Sicheres Dokument",
+      summary: "Bevor du das Foto eines Ausweises verschickst, füge einen Vermerk mit Zweck und Datum hinzu und decke die Daten ab, die nicht nötig sind.",
+      minutes: 3,
+      steps: [
+        {
+          title: "Foto des Dokuments wählen",
+          text: "Tippe auf „Foto auswählen“, um es aus der Galerie zu nehmen, oder auf „Foto aufnehmen“. Das Foto bleibt auf deinem Handy: Es wird weder hochgeladen noch gespeichert."
+        },
+        {
+          title: "Nicht benötigte Daten abdecken",
+          text: "Tippe auf „Bereich abdecken“ und zieh den Finger über das Foto, um ein schwarzes Rechteck über Ausweisnummer, Unterschrift oder Foto zu legen, wenn sie nicht verlangt wurden.",
+          tip: "Wir sagen dir auch, ob das Foto versteckte Daten wie den GPS-Standort enthält: In der heruntergeladenen Kopie sind sie weg."
+        },
+        {
+          title: "Schutzvermerk hinzufügen",
+          text: "Wähle, wofür du es schickst (Miete, Bank, Arbeit, Onlinekauf…) und an wen: Der Vermerk mit Zweck und Datum wiederholt sich diagonal über das ganze Foto. Du kannst Text, Sichtbarkeit, Größe und Farbe ändern.",
+          tip: "Nutze für jede Person einen anderen Vermerk: Wenn die Kopie weitergegeben wird, weißt du, woher sie stammt."
+        },
+        {
+          title: "Kopie herunterladen oder senden",
+          text: "Tippe auf „Geschützte Kopie herunterladen“ oder „Teilen“: Du bekommst eine neue Kopie mit Vermerk und abgedeckten Bereichen, ohne versteckte Daten. Das Original bleibt unverändert."
+        }
+      ],
+      cta: {
+        label: "Sicheres Dokument öffnen",
+        href: "/marketplace/documento-sicuro"
       }
     },
   ],

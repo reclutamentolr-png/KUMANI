@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { CheckCircle2, Clock, MessageCircle, UserPlus, Users } from 'lucide-react'
+import { CheckCircle2, Clock, Gift, MessageCircle, UserPlus, Users } from 'lucide-react'
 
 type ActivePerson = {
   id: string
@@ -30,29 +30,37 @@ function whatsAppHref(phone: string | null, message: string): string {
   return `https://wa.me/?text=${encodeURIComponent(message)}`
 }
 
+type ReceivedPerson = { first_name: string | null; joined_at: string }
+
 const initials = (first: string | null, last: string | null) => `${first?.[0] ?? ''}${last?.[0] ?? ''}`.toUpperCase() || '?'
 
 // I tuoi KUMANI nella pagina Rete: invitati diretti attivi e quelli che non
-// hanno ancora attivato l'abbonamento (con il promemoria WhatsApp).
+// hanno ancora attivato l'abbonamento (con il promemoria WhatsApp), più chi
+// è arrivato nella stella dalla community (invitato da altri Kumani).
 export default function KumaniPeople({
   active,
   pending,
+  received = [],
   senderName,
   loginUrl,
 }: {
   active: ActivePerson[]
   pending: PendingPerson[]
+  received?: ReceivedPerson[]
   senderName: string
   loginUrl: string
 }) {
   const t = useTranslations('dashboard')
   const locale = useLocale()
-  const [tab, setTab] = useState<'active' | 'pending'>(active.length === 0 && pending.length > 0 ? 'pending' : 'active')
+  const [tab, setTab] = useState<'active' | 'pending' | 'received'>(
+    active.length > 0 ? 'active' : pending.length > 0 ? 'pending' : received.length > 0 ? 'received' : 'active'
+  )
   const date = (iso: string) => new Date(iso).toLocaleDateString(locale)
 
   const tabs = [
     { key: 'active' as const, label: t('peopleTabActive'), count: active.length, Icon: CheckCircle2 },
     { key: 'pending' as const, label: t('peopleTabPending'), count: pending.length, Icon: Clock },
+    { key: 'received' as const, label: t('peopleTabReceived'), count: received.length, Icon: Gift },
   ]
 
   return (
@@ -64,7 +72,7 @@ export default function KumaniPeople({
           </span>
           {t('peopleTitle')}
         </h2>
-        <div className="flex rounded-xl bg-[var(--ink)]/[0.05] p-1">
+        <div className="flex flex-wrap rounded-xl bg-[var(--ink)]/[0.05] p-1">
           {tabs.map(({ key, label, count, Icon }) => (
             <button
               key={key}
@@ -82,7 +90,33 @@ export default function KumaniPeople({
       </div>
 
       <div className="p-5">
-        {tab === 'active' ? (
+        {tab === 'received' ? (
+          <>
+            <p className="mb-3 text-sm text-[var(--muted)]">{t('peopleReceivedHint')}</p>
+            {received.length === 0 ? (
+              <p className="rounded-xl border border-dashed border-sky-300 bg-sky-50/60 px-4 py-6 text-center text-sm text-[var(--ink)]">
+                {t('peopleEmptyReceived')}
+              </p>
+            ) : (
+              <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {received.map((person, index) => (
+                  <li key={`${person.first_name}-${index}`} className="flex items-center gap-3 rounded-xl border border-sky-200 bg-white p-3">
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-2 border-sky-400 bg-sky-950 text-sm font-bold text-sky-200">
+                      {initials(person.first_name, null)}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate font-semibold text-[var(--ink)]">{person.first_name || '—'}</p>
+                      <p className="text-xs text-[var(--muted)]">{t('peopleReceivedSince', { date: date(person.joined_at) })}</p>
+                    </div>
+                    <span className="shrink-0 rounded-full bg-sky-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-sky-700">
+                      {t('affiliateActive')}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </>
+        ) : tab === 'active' ? (
           active.length === 0 ? (
             <p className="rounded-xl border border-dashed border-[var(--gold)]/50 bg-[var(--gold-pale)]/50 px-4 py-6 text-center text-sm text-[var(--ink)]">
               {t('peopleEmptyActive')}
