@@ -36,7 +36,14 @@ export default function HomeSection({
       {bg.image && (
         <>
           <Image src={bg.image} alt="" fill priority={priority} sizes="100vw" className="object-cover" />
-          <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-[rgba(15,13,10,0.86)] via-[rgba(15,13,10,0.8)] to-[rgba(15,13,10,0.92)]" />
+          <div
+            aria-hidden
+            className={`absolute inset-0 bg-gradient-to-b ${
+              bg.overlay === 'soft'
+                ? 'from-[rgba(15,13,10,0.55)] via-[rgba(15,13,10,0.45)] to-[rgba(15,13,10,0.8)]'
+                : 'from-[rgba(15,13,10,0.86)] via-[rgba(15,13,10,0.8)] to-[rgba(15,13,10,0.92)]'
+            }`}
+          />
         </>
       )}
       <div className="relative">{children}</div>

@@ -2,7 +2,7 @@
 // Cambiano solo sfondi, foto, trame e alternanza chiaro/scuro: testi,
 // titoli, link e struttura restano identici (nessun effetto sulla SEO).
 
-export const HOME_LAYOUTS = ['classic', 'classic_video', 'hands', 'night', 'cream_bands', 'workshops', 'night_bands'] as const
+export const HOME_LAYOUTS = ['classic', 'hands_walk', 'hands', 'night', 'cream_bands', 'workshops', 'night_bands'] as const
 export type HomeLayoutKey = (typeof HOME_LAYOUTS)[number]
 export const DEFAULT_HOME_LAYOUT: HomeLayoutKey = 'classic'
 
@@ -12,6 +12,8 @@ export type SectionBg = {
   // shade = nero leggermente più scuro (come oggi), cream/paper = chiari
   variant?: 'plain' | 'shade' | 'dots' | 'lines' | 'glow' | 'radial' | 'cream' | 'paper' | 'cta'
   image?: string
+  // Velatura sopra la foto: soft lascia vedere di più l'immagine
+  overlay?: 'strong' | 'soft'
 }
 
 export type HomeBand = { image: string; kind: 'quote' | 'community'; quote?: 'bandHelp' | 'bandTogether' | 'bandWork'; position?: string }
@@ -36,6 +38,7 @@ const IMG = {
   cafe: '/home/cafe.webp',
   toast: '/home/toast.webp',
   phone: '/home/phone.webp',
+  walk: '/home/walk-together.webp',
 }
 
 const classic: HomeLayoutConfig = {
@@ -50,7 +53,15 @@ const classic: HomeLayoutConfig = {
 
 export const HOME_LAYOUT_CONFIG: Record<HomeLayoutKey, HomeLayoutConfig> = {
   classic,
-  classic_video: { ...classic, hero: { kind: 'classic', video: true } },
+  hands_walk: {
+    hero: { kind: 'photo', image: IMG.circle, video: true },
+    marketplace: { tone: 'dark', variant: 'dots' },
+    community: { tone: 'light', variant: 'cream' },
+    share: { tone: 'dark', variant: 'lines' },
+    bonus: { tone: 'light', variant: 'paper' },
+    benefits: { tone: 'dark', variant: 'lines' },
+    cta: { tone: 'dark', image: IMG.walk, overlay: 'soft' },
+  },
   hands: {
     hero: { kind: 'photo', image: IMG.circle, video: true },
     marketplace: { tone: 'dark', variant: 'dots' },
@@ -106,7 +117,7 @@ export const HOME_LAYOUT_CONFIG: Record<HomeLayoutKey, HomeLayoutConfig> = {
 // Nomi e descrizioni per l'Admin (area solo in italiano)
 export const HOME_LAYOUT_INFO: Record<HomeLayoutKey, { name: string; description: string }> = {
   classic: { name: 'Attuale', description: 'La homepage di sempre: tutta scura con dettagli oro.' },
-  classic_video: { name: 'Attuale con video', description: 'Come l’attuale, con il logo animato (K → stella → K) nell’apertura.' },
+  hands_walk: { name: 'Cerchio di mani + cammino insieme', description: 'Come “Cerchio di mani”, con la chiusura su due persone che camminano insieme al tramonto (“Il primo passo è tuo”).' },
   hands: { name: 'Cerchio di mani', description: 'Foto del cerchio di mani nell’apertura e nella chiusura, sezioni alternate crema e scure.' },
   night: { name: 'Notte dorata', description: 'Tutta scura con trame dorate e una fascia foto per la community.' },
   cream_bands: { name: 'Crema con fasce foto', description: 'Pagina chiara, foto di volontariato nell’apertura e fasce fotografiche.' },
