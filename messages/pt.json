@@ -5932,7 +5932,15 @@
     "dashboardTitle": "Juntos doámos {amount}",
     "dashboardText": "a {association}. Também pode doar os seus KU Points.",
     "donateCta": "Doe os seus KU Points",
-    "taxCode": "NIF {code}"
+    "taxCode": "NIF {code}",
+    "pledgeChipBase": "{amount} por cada Base",
+    "pledgeChipPro": "{amount} por cada Pro",
+    "accruedHint": "da comunidade KUMANI",
+    "paidHint": "à associação",
+    "yourImpactLabel": "O seu contributo",
+    "yourImpactHint": "com a sua subscrição e os pontos doados",
+    "donateAll": "Todos ({points})",
+    "noPointsYet": "Ainda não tem KU Points para doar: recebe-os quando uma pessoa que convidou ativa a subscrição."
   },
   "toolPass": {
     "productName": "Passe {service} – 1 ano",

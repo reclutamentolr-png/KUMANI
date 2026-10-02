@@ -5932,7 +5932,15 @@
     "dashboardTitle": "Вместе мы пожертвовали {amount}",
     "dashboardText": "организации {association}. Ты тоже можешь пожертвовать свои KU Points.",
     "donateCta": "Пожертвуй свои KU Points",
-    "taxCode": "ИНН {code}"
+    "taxCode": "ИНН {code}",
+    "pledgeChipBase": "{amount} за каждую Base",
+    "pledgeChipPro": "{amount} за каждую Pro",
+    "accruedHint": "от сообщества KUMANI",
+    "paidHint": "ассоциации",
+    "yourImpactLabel": "Твой вклад",
+    "yourImpactHint": "с твоей подпиской и пожертвованными баллами",
+    "donateAll": "Все ({points})",
+    "noPointsYet": "У тебя пока нет KU Points для пожертвования: ты получаешь их, когда приглашённый тобой человек активирует подписку."
   },
   "toolPass": {
     "productName": "Пропуск {service} – 1 год",

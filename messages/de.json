@@ -5932,7 +5932,15 @@
     "dashboardTitle": "Gemeinsam haben wir {amount} gespendet",
     "dashboardText": "an {association}. Auch du kannst deine KU Points spenden.",
     "donateCta": "Spende deine KU Points",
-    "taxCode": "Steuernummer {code}"
+    "taxCode": "Steuernummer {code}",
+    "pledgeChipBase": "{amount} pro Base",
+    "pledgeChipPro": "{amount} pro Pro",
+    "accruedHint": "von der KUMANI-Community",
+    "paidHint": "an den Verein",
+    "yourImpactLabel": "Dein Beitrag",
+    "yourImpactHint": "mit deinem Abo und gespendeten Punkten",
+    "donateAll": "Alle ({points})",
+    "noPointsYet": "Du hast noch keine KU Points zum Spenden: Du bekommst sie, wenn eine eingeladene Person ein Abo aktiviert."
   },
   "toolPass": {
     "productName": "{service}-Pass – 1 Jahr",
