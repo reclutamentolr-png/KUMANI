@@ -155,6 +155,8 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
             voucher_code: cleanVoucherCode,
             professional: formData.professional,
             agent_code: agentCode,
+            // Lingua dell'email con il codice (modello "Confirm signup" di Supabase)
+            locale,
           }
         }
       })
