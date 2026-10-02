@@ -1,4 +1,5 @@
 import { SITE_URL } from '@/lib/siteUrl'
+import { ProxyAgent, fetch as undiciFetch } from 'undici'
 import {
   JOB_COUNTRIES,
   type JobFilters,
@@ -38,6 +39,18 @@ class SourceError extends Error {
 // la fonte restituisce soprattutto quegli annunci (poi li filtriamo comunque)
 const REMOTE_WORD: Record<string, string> = { it: 'remoto', en: 'remote', fr: 'télétravail', es: 'remoto', pt: 'remoto', de: 'homeoffice', ru: 'удаленно' }
 
+// Careerjet accetta solo IP autorizzati e Vercel non ha un IP fisso: se c'è
+// FIXIE_URL (proxy con IP statici, es. http://utente:password@host:porta) le
+// richieste a Careerjet escono da lì. Senza la variabile si va diretti (locale).
+const PROXY_URL = process.env.FIXIE_URL || process.env.CAREERJET_PROXY_URL
+let proxyAgent: ProxyAgent | null = null
+
+async function careerjetFetch(url: string, init: { headers: Record<string, string>; signal: AbortSignal }) {
+  if (!PROXY_URL) return fetch(url, { ...init, cache: 'no-store' })
+  proxyAgent ??= new ProxyAgent(PROXY_URL)
+  return undiciFetch(url, { ...init, dispatcher: proxyAgent })
+}
+
 async function fetchPage(filters: JobFilters, keywords: string, page: number, caller: Caller): Promise<CareerjetJob[]> {
   const key = process.env.CAREERJET_API_KEY
   if (!key) throw new SourceError('unavailable')
@@ -55,13 +68,12 @@ async function fetchPage(filters: JobFilters, keywords: string, page: number, ca
   if (contract) params.set('contract_type', contract)
   if (filters.hours !== 'any') params.set('work_hours', filters.hours === 'full' ? 'f' : 'p')
 
-  const res = await fetch(`${ENDPOINT}?${params}`, {
+  const res = await careerjetFetch(`${ENDPOINT}?${params}`, {
     headers: {
       Authorization: `Basic ${Buffer.from(`${key}:`).toString('base64')}`,
       Referer: `${SITE_URL}/`,
     },
     signal: AbortSignal.timeout(20_000),
-    cache: 'no-store',
   })
   // 403: la fonte non accetta il server (IP non autorizzato o sito non dichiarato)
   if (res.status === 401 || res.status === 403) throw new SourceError('unavailable')
