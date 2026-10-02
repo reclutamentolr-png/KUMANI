@@ -21,6 +21,20 @@ export const TOOL_GUIDES: { path: string; slug: GuideSlug }[] = [
   { path: '/marketplace/convivio', slug: 'convivio' },
   { path: '/marketplace/affinity', slug: 'affinity' },
   { path: '/marketplace/veritas', slug: 'veritas' },
+  { path: '/marketplace/kumani-cv', slug: 'kumani-cv' },
+  { path: '/marketplace/findo', slug: 'findo' },
+  { path: '/marketplace/life-calendar', slug: 'life-calendar' },
+  { path: '/marketplace/memolife', slug: 'memolife' },
+  { path: '/marketplace/spendly', slug: 'spendly' },
+  { path: '/marketplace/svat', slug: 'svat' },
+  { path: '/marketplace/focus', slug: 'focus' },
+  { path: '/marketplace/mandala', slug: 'mandala' },
+  { path: '/marketplace/mosaic', slug: 'mosaic' },
+  { path: '/marketplace/oxygen', slug: 'oxygen' },
+  { path: '/marketplace/fabula', slug: 'fabula' },
+  { path: '/marketplace/neurobalance', slug: 'neurobalance' },
+  { path: '/marketplace/aureya', slug: 'aureya' },
+  { path: '/viaggi', slug: 'travel' },
 ]
 
 export function toolGuideFor(barePath: string): GuideSlug | null {

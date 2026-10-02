@@ -8,6 +8,8 @@ const content: GuidesContent = {
     promoteTools: { title: "Strumenti per promuovere", text: "Le guide ai servizi che ti aiutano a far conoscere KUMANI." },
     security: { title: "Sicurezza", text: "Le guide ai servizi che ti aiutano a riconoscere e fermare le truffe." },
     community: { title: "Community", text: "Le guide ai servizi per incontrarsi, aiutarsi e giocare insieme." },
+    organize: { title: "Lavoro e organizzazione", text: "Le guide ai servizi per il lavoro, i conti, le scadenze e l’agenda." },
+    wellness: { title: "Benessere e svago", text: "Le guide ai servizi per concentrarsi, rilassarsi, creare e viaggiare." },
   },
   guides: [
     {
@@ -612,6 +614,371 @@ const content: GuidesContent = {
       cta: {
         label: "Apri Veritas",
         href: "/marketplace/veritas"
+      }
+    },
+    {
+      slug: "kumani-cv",
+      category: "organize",
+      title: "KUMANI CV",
+      summary: "Crea il tuo CV in stile europeo: ogni PDF ha un QR verso la tua pagina pubblica, sempre aggiornata.",
+      minutes: 4,
+      steps: [
+        {
+          title: "Crea un nuovo CV",
+          text: "Tocca «Nuovo CV». Il CV è in stile europeo e ogni PDF ha un QR che porta alla tua pagina pubblica: chi lo inquadra vede sempre l’ultima versione."
+        },
+        {
+          title: "Nome, lingua e template",
+          text: "Dai un nome al CV (per esempio «CV italiano»), scegli la lingua del contenuto e uno dei tre template: Minimal, Classic o Sidebar. Poi aggiungi foto e dati personali.",
+          tip: "Puoi creare più CV, per esempio uno in italiano e uno in inglese."
+        },
+        {
+          title: "Esperienze, formazione e competenze",
+          text: "Compila le sezioni con «Aggiungi esperienza», «Aggiungi formazione», competenze, lingue, certificazioni e link. Con «Anteprima» vedi subito come viene."
+        },
+        {
+          title: "Crea, scarica e condividi",
+          text: "Tocca «Crea CV». Poi puoi scaricare il PDF, copiare il link pubblico o condividerlo su WhatsApp ed email. Se aggiorni il CV, link e QR mostrano sempre la versione nuova."
+        }
+      ],
+      cta: {
+        label: "Apri KUMANI CV",
+        href: "/marketplace/kumani-cv"
+      }
+    },
+    {
+      slug: "findo",
+      category: "organize",
+      title: "Findo",
+      summary: "Il tuo inventario personale: registra dove tieni le cose e ritrovale in un attimo.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Il tuo inventario personale",
+          text: "Registra dove tieni le cose (documenti, attrezzi, oggetti di valore) e ritrovale in un attimo. Per iniziare tocca «Aggiungi oggetto»."
+        },
+        {
+          title: "Registra un oggetto",
+          text: "Aggiungi una foto, scrivi cosa registri, scegli dove si trova (o crea una nuova posizione), poi categoria e tag. Tocca «Salva oggetto».",
+          tip: "Le posizioni si riusano: «Armadio camera», «Cantina», «Ufficio»… Se sposti un oggetto, Findo tiene la cronologia degli spostamenti."
+        },
+        {
+          title: "Ritrova le cose",
+          text: "Cerca per nome, tag o posizione, mostra solo i preferiti oppure apri «Gestisci posizioni» per vedere cosa c’è in ogni posto."
+        }
+      ],
+      cta: {
+        label: "Apri Findo",
+        href: "/marketplace/findo"
+      }
+    },
+    {
+      slug: "life-calendar",
+      category: "organize",
+      title: "Life Calendar",
+      summary: "Documenti, auto, casa, contratti e abbonamenti: tutte le scadenze in un posto, con rinnovo e promemoria.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Tutte le scadenze in un posto",
+          text: "In alto vedi quante scadenze sono regolari, prossime alla scadenza, urgenti o scadute. Tocca «Nuova scadenza» per aggiungerne una."
+        },
+        {
+          title: "Aggiungi una scadenza",
+          text: "Scrivi cosa vuoi ricordare (carta d’identità, assicurazione auto, revisione…), scegli la categoria e, se vuoi, un profilo: una persona, un’auto, una casa. Poi inserisci la data di scadenza."
+        },
+        {
+          title: "Rinnovo e promemoria",
+          text: "Scegli se si ripete (ogni mese, ogni anno, ogni 2 anni…) e quando avvisarti, da 180 giorni a 1 giorno prima. Ti avvisiamo nella dashboard e nel calendario di MemoLife."
+        }
+      ],
+      cta: {
+        label: "Apri Life Calendar",
+        href: "/marketplace/life-calendar"
+      }
+    },
+    {
+      slug: "memolife",
+      category: "organize",
+      title: "MemoLife",
+      summary: "La tua agenda: appuntamenti, promemoria, note e rubrica, insieme alle bollette e alle scadenze.",
+      minutes: 2,
+      steps: [
+        {
+          title: "La tua agenda",
+          text: "MemoLife riunisce appuntamenti, promemoria, note e rubrica nelle schede Oggi, Calendario, Promemoria, Note e Rubrica. Nel calendario trovi anche le bollette di Spendly e le scadenze di Life Calendar."
+        },
+        {
+          title: "Aggiungi qualcosa",
+          text: "Tocca il pulsante «+» in basso e scegli appuntamento, promemoria, nota o contatto. Da qui puoi aggiungere anche una bolletta (Spendly) o la scadenza di un documento (Life Calendar)."
+        }
+      ],
+      cta: {
+        label: "Apri MemoLife",
+        href: "/marketplace/memolife"
+      }
+    },
+    {
+      slug: "spendly",
+      category: "organize",
+      title: "Spendly",
+      summary: "Il tuo bilancio personale mese per mese: entrate, bollette e spese sotto controllo.",
+      minutes: 3,
+      steps: [
+        {
+          title: "Il tuo bilancio annuale",
+          text: "Nella «Dashboard Annuale» vedi entrate, spese fisse, spese variabili e saldo netto dell’anno, con l’andamento del saldo mese per mese."
+        },
+        {
+          title: "Le schede",
+          text: "In alto passi da una scheda all’altra: Dashboard, Entrate, Bollette, Spese Fisse e Spese Variabili. In ognuna tocca «Nuova» per aggiungere una voce."
+        },
+        {
+          title: "Il monitoraggio mensile",
+          text: "Scegli un mese per vederne il dettaglio: entrate, spese, saldo e spese variabili per categoria. I colori ti dicono se il mese è positivo, in guardia o critico."
+        },
+        {
+          title: "Le bollette",
+          text: "Nella scheda «Bollette» aggiungi luce, gas, acqua, telefono… con «Nuova bolletta»: si ripetono in automatico e segni quanto hai pagato davvero. Se chiudi un contratto, disattivala."
+        }
+      ],
+      cta: {
+        label: "Apri Spendly",
+        href: "/marketplace/spendly"
+      }
+    },
+    {
+      slug: "svat",
+      category: "organize",
+      title: "SVAT – Verifica Anti-Truffa",
+      summary: "Controlla in pochi secondi se un sito, una partita IVA o un codice QR sono affidabili.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Scegli cosa verificare",
+          text: "Puoi controllare un sito («Verifica Sito»), una partita IVA («Verifica Partita IVA») o un codice QR («Controllo QR»)."
+        },
+        {
+          title: "Il punteggio di affidabilità",
+          text: "Inserisci l’indirizzo del sito e tocca «Esegui Verifica»: in pochi secondi ottieni un punteggio da 0 a 100 e un giudizio."
+        },
+        {
+          title: "I controlli nel dettaglio",
+          text: "Sotto vedi quanti controlli sono OK, da tenere d’occhio o a rischio: dominio e DNS, sicurezza, contenuti, pagine legali, recensioni e modello di business."
+        },
+        {
+          title: "Verifica una partita IVA",
+          text: "Nella scheda «Verifica Partita IVA» inserisci una partita IVA italiana o europea per sapere se è attiva e a chi è intestata.",
+          tip: "Un buon punteggio è un indizio, non una garanzia: prima di pagare leggi anche il Manuale Anti-Truffa."
+        }
+      ],
+      cta: {
+        label: "Apri SVAT",
+        href: "/marketplace/svat"
+      }
+    },
+    {
+      slug: "focus",
+      category: "wellness",
+      title: "KUMANI Focus",
+      summary: "Lavora a intervalli: concentrazione e pause brevi, con una pausa lunga ogni 4 sessioni.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Avvia una sessione",
+          text: "Scrivi su cosa ti concentri e tocca «Inizia»: parte il conto alla rovescia. Puoi saltare una fase o ricominciare; un suono leggero ti avvisa a ogni cambio."
+        },
+        {
+          title: "Scegli il tuo ritmo",
+          text: "Classico 25/5, Lungo 50/10, Breve 15/3 o Personalizzato. Puoi attivare suono, vibrazione, schermo sempre acceso e una notifica a ogni cambio."
+        },
+        {
+          title: "Le tue sessioni di oggi",
+          text: "Vedi quante sessioni hai completato e quanti minuti di concentrazione hai fatto oggi. Si azzera ogni giorno e resta solo sul tuo dispositivo.",
+          tip: "Apri «Consigli per concentrarti meglio» per qualche suggerimento."
+        }
+      ],
+      cta: {
+        label: "Apri Focus",
+        href: "/marketplace/focus"
+      }
+    },
+    {
+      slug: "mandala",
+      category: "wellness",
+      title: "Mandala KUMANI",
+      summary: "Disegna con un dito: il tuo tratto diventa un mandala simmetrico. Nessuna abilità richiesta.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Disegna con un dito",
+          text: "Traccia una linea sulla tela: viene ripetuta in modo simmetrico e diventa un mandala in pochi secondi."
+        },
+        {
+          title: "Scegli simmetria e colori",
+          text: "Scegli la simmetria (6, 8, 12 o 16 spicchi), lo sfondo scuro o avorio, il pennello o la gomma, lo spessore e il colore. Con «Annulla» torni indietro, con «Pulisci» ricominci."
+        },
+        {
+          title: "Scarica il tuo mandala",
+          text: "Tocca «Scarica PNG» per salvare il disegno e condividerlo, per esempio su WhatsApp.",
+          tip: "Per rilassarti ancora di più puoi ascoltare le onde di Neurobalance mentre disegni."
+        }
+      ],
+      cta: {
+        label: "Apri Mandala",
+        href: "/marketplace/mandala"
+      }
+    },
+    {
+      slug: "mosaic",
+      category: "wellness",
+      title: "KUMANI Mosaic",
+      summary: "Ogni Kumano lascia qualche tessera al giorno su una tela comune: un’opera creata da tutta la community.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Un’opera di tutta la community",
+          text: "Ogni Kumano lascia il suo segno sulla tela condivisa: nessuno la possiede, tutti l’hanno creata. Puoi ingrandire la tela, rivedere com’è cresciuta, condividerla e scaricarla."
+        },
+        {
+          title: "Come funziona",
+          text: "Ogni giorno hai alcune tessere: tocca una casella libera, scegli un colore e conferma. Una tessera piazzata resta per sempre. Le tessere si rinnovano a mezzanotte e ogni stagione ha un tema e una data di chiusura.",
+          tip: "Puoi piazzare tessere dopo 7 giorni di accesso a KUMANI. Se usi anche un altro servizio KUMANI nello stesso giorno, ricevi una tessera bonus."
+        },
+        {
+          title: "I tuoi riconoscimenti",
+          text: "Sblocca i riconoscimenti della stagione: Co-fondatore dell’opera, Ultima tessera e Mosaicista. Se vedi una scritta offensiva o una pubblicità, tocca una tessera e segnala l’area."
+        }
+      ],
+      cta: {
+        label: "Apri Mosaic",
+        href: "/marketplace/mosaic"
+      }
+    },
+    {
+      slug: "oxygen",
+      category: "wellness",
+      title: "OXYGEN",
+      summary: "Tre minuti per tornare a respirare, con la respirazione 4-7-8: inspiri per 4 secondi, trattieni per 7, espiri per 8.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Scegli come respirare",
+          text: "Scegli la sessione guidata (circa 3 minuti, con qualche parola lungo il percorso) oppure solo respiro, e quanti cicli fare: 4 sono consigliati. Puoi attivare suono e vibrazione per respirare a occhi chiusi."
+        },
+        {
+          title: "Prima di iniziare",
+          text: "Siediti o sdraiati in un posto tranquillo, mai mentre guidi. La prima volta fai al massimo 4 cicli e, se ti gira la testa, fermati e respira normalmente.",
+          tip: "OXYGEN è un esercizio di rilassamento, non un dispositivo medico: non sostituisce il parere di un medico."
+        },
+        {
+          title: "Inizia a respirare",
+          text: "Tocca «Inizia a respirare»: il cerchio si allarga e si stringe con te e ti accompagna passo dopo passo."
+        }
+      ],
+      cta: {
+        label: "Apri OXYGEN",
+        href: "/marketplace/oxygen"
+      }
+    },
+    {
+      slug: "fabula",
+      category: "wellness",
+      title: "Kumani Fabula",
+      summary: "Sei dadi, una storia: scrivi una micro-storia con i dadi del giorno e leggi quelle della community.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Il lancio del giorno",
+          text: "Nel «Lancio del giorno» i dadi sono uguali per tutta la community e cambiano a mezzanotte. Con «Lancio libero» puoi tirarli quando vuoi."
+        },
+        {
+          title: "Lancia e scrivi",
+          text: "Tocca «Lancia i dadi»: escono personaggio, luogo, oggetto, emozione, azione e atmosfera. Scrivi una micro-storia (fino a 900 caratteri) che li usi tutti; se vuoi, prova la sfida dei 60 secondi."
+        },
+        {
+          title: "Galleria e storie",
+          text: "Pubblica la storia nella «Galleria» o tienila per te in «Le mie storie». Leggi come gli altri hanno raccontato gli stessi dadi, in sette lingue: nessuna classifica, solo applausi.",
+          tip: "Scrivi ogni giorno per ottenere il riconoscimento «Penna costante»."
+        }
+      ],
+      cta: {
+        label: "Apri Fabula",
+        href: "/marketplace/fabula"
+      }
+    },
+    {
+      slug: "neurobalance",
+      category: "wellness",
+      title: "Neurobalance",
+      summary: "Sessioni audio con frequenze binaurali e suoni della natura, per una pausa di relax.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Scegli una sessione",
+          text: "Indossa cuffie stereo, scegli una sessione (per esempio «Riposo profondo», «Focus fluido» o «Reset consapevole»), regola il volume e tocca «Inizia sessione»."
+        },
+        {
+          title: "Special Sound",
+          text: "Frequenze portanti da ascoltare con cuffie stereo, a volume basso e confortevole. Tocca il pulsante play accanto a quella che vuoi ascoltare."
+        },
+        {
+          title: "Suoni della natura",
+          text: "Pioggia, oceano, ruscello, foresta, vento, fuoco, notte e temporale: attivane uno e mescolalo alla tua sessione.",
+          tip: "Neurobalance è pensato per il relax, non è una terapia."
+        }
+      ],
+      cta: {
+        label: "Apri Neurobalance",
+        href: "/marketplace/neurobalance"
+      }
+    },
+    {
+      slug: "aureya",
+      category: "wellness",
+      title: "Aureya",
+      summary: "Due test rapidi di autovalutazione, udito e campo visivo, da ripetere e confrontare nel tempo.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Prima di tutto",
+          text: "Aureya è uno strumento di autovalutazione, non un dispositivo medico, e non sostituisce una visita. I risultati dipendono da cuffie, volume, luminosità e distanza dallo schermo: sono indicativi."
+        },
+        {
+          title: "Scegli un test",
+          text: "Nel test acustico ascolti una serie di toni a diverse frequenze, un orecchio alla volta. Nel test del campo visivo fissi il centro dello schermo e segnali i punti che vedi, anche con la coda dell’occhio."
+        },
+        {
+          title: "Confronta nel tempo",
+          text: "Ogni test salva data e risultato (da 0 a 100, più alto è meglio) nella «Cronologia test», così puoi confrontarli nel tempo.",
+          tip: "In caso di dubbi o cali percepiti, consulta un medico o uno specialista."
+        }
+      ],
+      cta: {
+        label: "Apri Aureya",
+        href: "/marketplace/aureya"
+      }
+    },
+    {
+      slug: "travel",
+      category: "wellness",
+      title: "KUMANI Travel",
+      summary: "Il viaggio che si organizza da solo: itinerario giorno per giorno e checklist condivisi con chi parte con te.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Crea un viaggio",
+          text: "Tocca «Nuovo viaggio», aggiungi le date e le attività: l’itinerario si costruisce giorno per giorno. Nella checklist segni le cose da non dimenticare e chi se ne occupa.",
+          tip: "Per creare un viaggio serve l’abbonamento; per entrare in un viaggio a cui ti hanno invitato no."
+        },
+        {
+          title: "Invita o entra con un codice",
+          text: "Dal viaggio tocca «Invita al viaggio» e manda il link o il codice a chi parte con te. Se hai ricevuto un codice, scrivilo in «Hai un codice invito?» e tocca «Entra»."
+        }
+      ],
+      cta: {
+        label: "Apri KUMANI Travel",
+        href: "/viaggi"
       }
     },
   ],

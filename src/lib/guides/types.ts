@@ -2,7 +2,7 @@
 // dell'app (public/guides/<lingua>/<guida>-<n>.webp, una per passo, fatte
 // con scripts/guide-screenshots.mjs).
 
-export type GuideCategory = 'start' | 'promote' | 'wallet' | 'promoteTools' | 'security' | 'community'
+export type GuideCategory = 'start' | 'promote' | 'wallet' | 'promoteTools' | 'security' | 'community' | 'organize' | 'wellness'
 
 export type GuideSlug =
   | 'registrazione'
@@ -27,6 +27,20 @@ export type GuideSlug =
   | 'convivio'
   | 'affinity'
   | 'veritas'
+  | 'kumani-cv'
+  | 'findo'
+  | 'life-calendar'
+  | 'memolife'
+  | 'spendly'
+  | 'svat'
+  | 'focus'
+  | 'mandala'
+  | 'mosaic'
+  | 'oxygen'
+  | 'fabula'
+  | 'neurobalance'
+  | 'aureya'
+  | 'travel'
 
 export type GuideStep = {
   title: string

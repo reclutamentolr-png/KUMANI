@@ -8,6 +8,8 @@ const content: GuidesContent = {
     promoteTools: { title: "Tools zum Empfehlen", text: "Die Anleitungen zu den Diensten, mit denen du KUMANI bekannt machst." },
     security: { title: "Sicherheit", text: "Die Anleitungen zu den Diensten, mit denen du Betrug erkennst und stoppst." },
     community: { title: "Community", text: "Die Anleitungen zu den Diensten, um sich zu treffen, sich zu helfen und zusammen zu spielen." },
+    organize: { title: "Arbeit und Organisation", text: "Die Anleitungen zu den Diensten für Arbeit, Finanzen, Fristen und Kalender." },
+    wellness: { title: "Wohlbefinden und Freizeit", text: "Die Anleitungen zu den Diensten zum Konzentrieren, Entspannen, Gestalten und Reisen." },
   },
   guides: [
     {
@@ -612,6 +614,371 @@ const content: GuidesContent = {
       cta: {
         label: "Veritas öffnen",
         href: "/marketplace/veritas"
+      }
+    },
+    {
+      slug: "kumani-cv",
+      category: "organize",
+      title: "KUMANI CV",
+      summary: "Erstelle deinen Lebenslauf im europäischen Format: Jedes PDF hat einen QR-Code zu deiner immer aktuellen öffentlichen Seite.",
+      minutes: 4,
+      steps: [
+        {
+          title: "Neuen Lebenslauf erstellen",
+          text: "Tippe auf „Neuer Lebenslauf“. Der Lebenslauf ist im europäischen Format und jedes PDF hat einen QR-Code zu deiner öffentlichen Seite: Wer ihn scannt, sieht immer die neueste Version."
+        },
+        {
+          title: "Name, Sprache und Vorlage",
+          text: "Gib dem Lebenslauf einen Namen (zum Beispiel „Lebenslauf Deutsch“), wähle die Sprache des Inhalts und eine der drei Vorlagen: Minimal, Classic oder Sidebar. Füge dann Foto und persönliche Daten hinzu.",
+          tip: "Du kannst mehrere Lebensläufe anlegen, zum Beispiel einen auf Deutsch und einen auf Englisch."
+        },
+        {
+          title: "Erfahrung, Ausbildung und Kenntnisse",
+          text: "Fülle die Abschnitte mit „Erfahrung hinzufügen“, „Ausbildung hinzufügen“, Kenntnissen, Sprachen, Zertifikaten und Links. Mit „Vorschau“ siehst du sofort, wie er aussieht."
+        },
+        {
+          title: "Erstellen, herunterladen und teilen",
+          text: "Tippe auf „Lebenslauf erstellen“. Danach kannst du das PDF herunterladen, den öffentlichen Link kopieren oder ihn per WhatsApp und E-Mail teilen. Wenn du den Lebenslauf aktualisierst, zeigen Link und QR-Code immer die neue Version."
+        }
+      ],
+      cta: {
+        label: "KUMANI CV öffnen",
+        href: "/marketplace/kumani-cv"
+      }
+    },
+    {
+      slug: "findo",
+      category: "organize",
+      title: "Findo",
+      summary: "Dein persönliches Inventar: Notiere, wo du Dinge aufbewahrst, und finde sie im Nu wieder.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Dein persönliches Inventar",
+          text: "Notiere, wo du Dinge aufbewahrst (Dokumente, Werkzeug, Wertsachen), und finde sie im Nu wieder. Tippe zum Start auf „Objekt hinzufügen“."
+        },
+        {
+          title: "Objekt erfassen",
+          text: "Füge ein Foto hinzu, schreib, was du erfasst, wähle, wo es ist (oder lege einen neuen Ort an), dann Kategorie und Tags. Tippe auf „Objekt speichern“.",
+          tip: "Orte lassen sich wiederverwenden: „Schlafzimmerschrank“, „Keller“, „Büro“… Wenn du ein Objekt umräumst, speichert Findo den Verlauf."
+        },
+        {
+          title: "Dinge wiederfinden",
+          text: "Suche nach Name, Tag oder Ort, zeig nur Favoriten an oder öffne „Standorte verwalten“, um zu sehen, was an jedem Ort liegt."
+        }
+      ],
+      cta: {
+        label: "Findo öffnen",
+        href: "/marketplace/findo"
+      }
+    },
+    {
+      slug: "life-calendar",
+      category: "organize",
+      title: "Life Calendar",
+      summary: "Ausweise, Auto, Haus, Verträge und Abos: alle Fristen an einem Ort, mit Verlängerung und Erinnerungen.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Alle Fristen an einem Ort",
+          text: "Oben siehst du, wie viele Fristen in Ordnung, bald fällig, dringend oder abgelaufen sind. Tippe auf „Neue Frist“, um eine hinzuzufügen."
+        },
+        {
+          title: "Frist hinzufügen",
+          text: "Schreib, woran du denken willst (Personalausweis, Kfz-Versicherung, TÜV…), wähle die Kategorie und, wenn du willst, ein Profil: eine Person, ein Auto, ein Haus. Gib dann das Fälligkeitsdatum ein."
+        },
+        {
+          title: "Verlängerung und Erinnerungen",
+          text: "Wähle, ob sie sich wiederholt (jeden Monat, jedes Jahr, alle 2 Jahre…) und wann wir dich erinnern sollen, von 180 Tagen bis 1 Tag vorher. Wir erinnern dich im Dashboard und im MemoLife-Kalender."
+        }
+      ],
+      cta: {
+        label: "Life Calendar öffnen",
+        href: "/marketplace/life-calendar"
+      }
+    },
+    {
+      slug: "memolife",
+      category: "organize",
+      title: "MemoLife",
+      summary: "Dein Kalender: Termine, Erinnerungen, Notizen und Kontakte, zusammen mit Rechnungen und Fristen.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Dein Kalender",
+          text: "MemoLife bündelt Termine, Erinnerungen, Notizen und Kontakte in den Tabs Heute, Kalender, Erinnerungen, Notizen und Kontakte. Im Kalender siehst du auch die Rechnungen aus Spendly und die Fristen aus Life Calendar."
+        },
+        {
+          title: "Etwas hinzufügen",
+          text: "Tippe unten auf den „+“-Button und wähle Termin, Erinnerung, Notiz oder Kontakt. Von hier aus kannst du auch eine Rechnung (Spendly) oder eine Dokumentfrist (Life Calendar) hinzufügen."
+        }
+      ],
+      cta: {
+        label: "MemoLife öffnen",
+        href: "/marketplace/memolife"
+      }
+    },
+    {
+      slug: "spendly",
+      category: "organize",
+      title: "Spendly",
+      summary: "Dein persönliches Budget Monat für Monat: Einnahmen, Rechnungen und Ausgaben im Griff.",
+      minutes: 3,
+      steps: [
+        {
+          title: "Dein Jahresbudget",
+          text: "In der „Jahresübersicht“ siehst du Einnahmen, feste Ausgaben, variable Ausgaben und den Nettosaldo des Jahres, mit dem Verlauf Monat für Monat."
+        },
+        {
+          title: "Die Tabs",
+          text: "Oben wechselst du zwischen den Tabs: Übersicht, Einnahmen, Rechnungen, Feste Ausgaben und Variable Ausgaben. Tippe in jedem auf „Neu“, um einen Eintrag hinzuzufügen."
+        },
+        {
+          title: "Monatliche Übersicht",
+          text: "Wähle einen Monat, um die Details zu sehen: Einnahmen, Ausgaben, Saldo und variable Ausgaben nach Kategorie. Die Farben zeigen, ob der Monat positiv, kritisch oder zu beobachten ist."
+        },
+        {
+          title: "Rechnungen",
+          text: "Im Tab „Rechnungen“ fügst du Strom, Gas, Wasser, Telefon… mit „Neue Rechnung“ hinzu: Sie wiederholen sich automatisch und du trägst ein, was du wirklich bezahlt hast. Kündigst du einen Vertrag, deaktiviere sie."
+        }
+      ],
+      cta: {
+        label: "Spendly öffnen",
+        href: "/marketplace/spendly"
+      }
+    },
+    {
+      slug: "svat",
+      category: "organize",
+      title: "SVAT – Betrugsprävention",
+      summary: "Prüfe in Sekunden, ob eine Website, eine USt-IdNr. oder ein QR-Code vertrauenswürdig sind.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Wähle, was du prüfst",
+          text: "Du kannst eine Website („Website-Prüfung“), eine USt-IdNr. („USt-IdNr.-Prüfung“) oder einen QR-Code („QR-Prüfung“) prüfen."
+        },
+        {
+          title: "Die Vertrauensbewertung",
+          text: "Gib die Adresse der Website ein und tippe auf „Verifizierung starten“: In wenigen Sekunden bekommst du eine Bewertung von 0 bis 100 und ein Urteil."
+        },
+        {
+          title: "Die Prüfungen im Detail",
+          text: "Darunter siehst du, wie viele Prüfungen in Ordnung, zu beobachten oder riskant sind: Domain und DNS, Sicherheit, Inhalt, rechtliche Seiten, Bewertungen und Geschäftsmodell."
+        },
+        {
+          title: "USt-IdNr. prüfen",
+          text: "Gib im Tab „USt-IdNr.-Prüfung“ eine italienische oder europäische USt-IdNr. ein, um zu erfahren, ob sie aktiv ist und wem sie gehört.",
+          tip: "Eine gute Bewertung ist ein Hinweis, keine Garantie: Lies vor dem Bezahlen auch das Anti-Betrugs-Handbuch."
+        }
+      ],
+      cta: {
+        label: "SVAT öffnen",
+        href: "/marketplace/svat"
+      }
+    },
+    {
+      slug: "focus",
+      category: "wellness",
+      title: "KUMANI Focus",
+      summary: "Arbeite in Intervallen: Konzentration und kurze Pausen, mit einer langen Pause alle 4 Einheiten.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Einheit starten",
+          text: "Schreib, worauf du dich konzentrierst, und tippe auf „Starten“: Der Countdown beginnt. Du kannst eine Phase überspringen oder neu beginnen; ein leiser Ton meldet jeden Wechsel."
+        },
+        {
+          title: "Wähle deinen Rhythmus",
+          text: "Klassisch 25/5, Lang 50/10, Kurz 15/3 oder Eigener. Du kannst Ton, Vibration, dauerhaft eingeschalteten Bildschirm und eine Benachrichtigung bei jedem Wechsel aktivieren."
+        },
+        {
+          title: "Deine Einheiten heute",
+          text: "Du siehst, wie viele Einheiten du heute abgeschlossen und wie viele Minuten du dich konzentriert hast. Das setzt sich jeden Tag zurück und bleibt nur auf deinem Gerät.",
+          tip: "Öffne „Tipps für mehr Konzentration“ für ein paar Anregungen."
+        }
+      ],
+      cta: {
+        label: "Focus öffnen",
+        href: "/marketplace/focus"
+      }
+    },
+    {
+      slug: "mandala",
+      category: "wellness",
+      title: "Mandala KUMANI",
+      summary: "Zeichne mit einem Finger: Dein Strich wird zu einem symmetrischen Mandala. Kein Talent nötig.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Mit einem Finger zeichnen",
+          text: "Zieh eine Linie auf der Leinwand: Sie wird symmetrisch wiederholt und wird in Sekunden zum Mandala."
+        },
+        {
+          title: "Symmetrie und Farben wählen",
+          text: "Wähle die Symmetrie (6, 8, 12 oder 16 Segmente), dunklen oder elfenbeinfarbenen Hintergrund, Pinsel oder Radierer, Strichstärke und Farbe. „Rückgängig“ geht einen Schritt zurück, „Löschen“ fängt neu an."
+        },
+        {
+          title: "Mandala herunterladen",
+          text: "Tippe auf „PNG herunterladen“, um die Zeichnung zu speichern und zu teilen, zum Beispiel auf WhatsApp.",
+          tip: "Noch entspannter wird es, wenn du beim Zeichnen die Klänge von Neurobalance hörst."
+        }
+      ],
+      cta: {
+        label: "Mandala öffnen",
+        href: "/marketplace/mandala"
+      }
+    },
+    {
+      slug: "mosaic",
+      category: "wellness",
+      title: "KUMANI Mosaic",
+      summary: "Jeder Kumano setzt täglich ein paar Steine auf eine gemeinsame Leinwand: ein Werk der ganzen Community.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Ein Werk der ganzen Community",
+          text: "Jeder Kumano hinterlässt seine Spur auf der gemeinsamen Leinwand: Niemand besitzt sie, alle haben sie geschaffen. Du kannst sie vergrößern, ihr Wachsen nachverfolgen, sie teilen und herunterladen."
+        },
+        {
+          title: "So funktioniert es",
+          text: "Jeden Tag hast du ein paar Steine: Tippe auf ein freies Feld, wähle eine Farbe und bestätige. Ein gesetzter Stein bleibt für immer. Die Steine erneuern sich um Mitternacht und jede Saison hat ein Thema und ein Enddatum.",
+          tip: "Du kannst Steine setzen, nachdem du dich an 7 Tagen bei KUMANI angemeldet hast. Nutzt du am selben Tag noch einen anderen KUMANI-Dienst, bekommst du einen Bonusstein."
+        },
+        {
+          title: "Deine Auszeichnungen",
+          text: "Schalte die Auszeichnungen der Saison frei: Mitgründer des Werks, Letztes Steinchen und Mosaikkünstler. Siehst du eine beleidigende Schrift oder Werbung, tippe auf einen ihrer Steine und melde den Bereich."
+        }
+      ],
+      cta: {
+        label: "Mosaic öffnen",
+        href: "/marketplace/mosaic"
+      }
+    },
+    {
+      slug: "oxygen",
+      category: "wellness",
+      title: "OXYGEN",
+      summary: "Drei Minuten, um wieder durchzuatmen, mit der 4-7-8-Atmung: 4 Sekunden einatmen, 7 halten, 8 ausatmen.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Wähle, wie du atmest",
+          text: "Wähle die geführte Sitzung (etwa 3 Minuten, mit ein paar Worten unterwegs) oder nur atmen, und wie viele Zyklen: 4 werden empfohlen. Mit Ton und Vibration kannst du mit geschlossenen Augen atmen."
+        },
+        {
+          title: "Bevor du anfängst",
+          text: "Setz oder leg dich an einen ruhigen Ort, nie beim Autofahren. Mach beim ersten Mal höchstens 4 Zyklen und hör auf, wenn dir schwindelig wird, und atme normal weiter.",
+          tip: "OXYGEN ist eine Entspannungsübung, kein Medizinprodukt: Es ersetzt keinen ärztlichen Rat."
+        },
+        {
+          title: "Mit dem Atmen beginnen",
+          text: "Tippe auf „Mit dem Atmen beginnen“: Der Kreis weitet sich und zieht sich mit dir zusammen und begleitet dich Schritt für Schritt."
+        }
+      ],
+      cta: {
+        label: "OXYGEN öffnen",
+        href: "/marketplace/oxygen"
+      }
+    },
+    {
+      slug: "fabula",
+      category: "wellness",
+      title: "Kumani Fabula",
+      summary: "Sechs Würfel, eine Geschichte: Schreib eine Mikrogeschichte mit den Würfeln des Tages und lies die der Community.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Der Wurf des Tages",
+          text: "Beim „Wurf des Tages“ sind die Würfel für die ganze Community gleich und wechseln um Mitternacht. Mit dem „Freien Wurf“ würfelst du, wann du willst."
+        },
+        {
+          title: "Würfeln und schreiben",
+          text: "Tippe auf „Würfeln“: Es kommen Figur, Ort, Gegenstand, Gefühl, Handlung und Stimmung. Schreib eine Mikrogeschichte (bis zu 900 Zeichen), die alle verwendet; wenn du magst, probier die 60-Sekunden-Challenge."
+        },
+        {
+          title: "Galerie und Geschichten",
+          text: "Veröffentliche die Geschichte in der „Galerie“ oder behalte sie in „Meine Geschichten“. Lies, wie andere dieselben Würfel erzählt haben, in sieben Sprachen: keine Rangliste, nur Applaus.",
+          tip: "Schreib jeden Tag, um die Auszeichnung „Beständige Feder“ zu bekommen."
+        }
+      ],
+      cta: {
+        label: "Fabula öffnen",
+        href: "/marketplace/fabula"
+      }
+    },
+    {
+      slug: "neurobalance",
+      category: "wellness",
+      title: "Neurobalance",
+      summary: "Audiositzungen mit binauralen Frequenzen und Naturklängen für eine entspannte Pause.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Sitzung wählen",
+          text: "Setz Stereokopfhörer auf, wähle eine Sitzung (zum Beispiel „Tiefe Ruhe“, „Fließender Fokus“ oder „Bewusster Neustart“), stell die Lautstärke ein und tippe auf „Session starten“."
+        },
+        {
+          title: "Special Sound",
+          text: "Trägerfrequenzen zum Hören mit Stereokopfhörern, bei niedriger, angenehmer Lautstärke. Tippe auf den Play-Button neben der gewünschten."
+        },
+        {
+          title: "Naturklänge",
+          text: "Regen, Ozean, Bach, Wald, Wind, Feuer, Nacht und Gewitter: Schalte einen ein und misch ihn in deine Sitzung.",
+          tip: "Neurobalance ist zum Entspannen gedacht, es ist keine Therapie."
+        }
+      ],
+      cta: {
+        label: "Neurobalance öffnen",
+        href: "/marketplace/neurobalance"
+      }
+    },
+    {
+      slug: "aureya",
+      category: "wellness",
+      title: "Aureya",
+      summary: "Zwei schnelle Selbsttests, Hören und Gesichtsfeld, zum Wiederholen und Vergleichen im Lauf der Zeit.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Vorab",
+          text: "Aureya ist ein Werkzeug zur Selbsteinschätzung, kein Medizinprodukt, und ersetzt keine Untersuchung. Die Ergebnisse hängen von Kopfhörern, Lautstärke, Helligkeit und Abstand zum Bildschirm ab: Sie sind nur Richtwerte."
+        },
+        {
+          title: "Test wählen",
+          text: "Beim Akustiktest hörst du eine Reihe von Tönen in verschiedenen Frequenzen, ein Ohr nach dem anderen. Beim Gesichtsfeldtest schaust du auf die Bildschirmmitte und markierst die Punkte, die du siehst, auch aus dem Augenwinkel."
+        },
+        {
+          title: "Im Lauf der Zeit vergleichen",
+          text: "Jeder Test speichert Datum und Ergebnis (0 bis 100, höher ist besser) im „Testverlauf“, damit du sie vergleichen kannst.",
+          tip: "Bei Zweifeln oder wahrgenommener Verschlechterung wende dich an einen Arzt oder Facharzt."
+        }
+      ],
+      cta: {
+        label: "Aureya öffnen",
+        href: "/marketplace/aureya"
+      }
+    },
+    {
+      slug: "travel",
+      category: "wellness",
+      title: "KUMANI Travel",
+      summary: "Die Reise, die sich selbst organisiert: Reiseplan Tag für Tag und Checkliste, geteilt mit deinen Mitreisenden.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Reise erstellen",
+          text: "Tippe auf „Neue Reise“, füge Daten und Aktivitäten hinzu: Der Reiseplan entsteht Tag für Tag. In der Checkliste notierst du, was nicht vergessen werden darf und wer sich darum kümmert.",
+          tip: "Zum Erstellen einer Reise brauchst du ein Abo; um einer Reise beizutreten, zu der du eingeladen wurdest, nicht."
+        },
+        {
+          title: "Einladen oder mit Code beitreten",
+          text: "Tippe in der Reise auf „Zur Reise einladen“ und schick Link oder Code an deine Mitreisenden. Hast du einen Code bekommen, gib ihn bei „Einladungscode?“ ein und tippe auf „Beitreten“."
+        }
+      ],
+      cta: {
+        label: "KUMANI Travel öffnen",
+        href: "/viaggi"
       }
     },
   ],

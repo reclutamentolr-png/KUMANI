@@ -8,6 +8,8 @@ const content: GuidesContent = {
     promoteTools: { title: "Tools for promoting", text: "Guides to the services that help you spread the word about KUMANI." },
     security: { title: "Security", text: "Guides to the services that help you spot and stop scams." },
     community: { title: "Community", text: "Guides to the services for meeting, helping each other and playing together." },
+    organize: { title: "Work and organisation", text: "Guides to the services for work, money, deadlines and your diary." },
+    wellness: { title: "Wellbeing and leisure", text: "Guides to the services for focusing, relaxing, creating and travelling." },
   },
   guides: [
     {
@@ -612,6 +614,371 @@ const content: GuidesContent = {
       cta: {
         label: "Open Veritas",
         href: "/marketplace/veritas"
+      }
+    },
+    {
+      slug: "kumani-cv",
+      category: "organize",
+      title: "KUMANI CV",
+      summary: "Create your European-style CV: every PDF has a QR code leading to your always up-to-date public page.",
+      minutes: 4,
+      steps: [
+        {
+          title: "Create a new CV",
+          text: "Tap “New CV”. The CV is European-style and every PDF has a QR code leading to your public page: whoever scans it always sees the latest version."
+        },
+        {
+          title: "Name, language and template",
+          text: "Give the CV a name (for example “Italian CV”), choose the content language and one of the three templates: Minimal, Classic or Sidebar. Then add a photo and your details.",
+          tip: "You can create several CVs, for example one in Italian and one in English."
+        },
+        {
+          title: "Experience, education and skills",
+          text: "Fill in the sections with “Add experience”, “Add education”, skills, languages, certifications and links. With “Preview” you see right away how it looks."
+        },
+        {
+          title: "Create, download and share",
+          text: "Tap “Create CV”. Then you can download the PDF, copy the public link or share it via WhatsApp and email. If you update the CV, the link and QR always show the new version."
+        }
+      ],
+      cta: {
+        label: "Open KUMANI CV",
+        href: "/marketplace/kumani-cv"
+      }
+    },
+    {
+      slug: "findo",
+      category: "organize",
+      title: "Findo",
+      summary: "Your personal inventory: record where you keep things and find them in a moment.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Your personal inventory",
+          text: "Record where you keep things (documents, tools, valuables) and find them in a moment. To start, tap “Add item”."
+        },
+        {
+          title: "Record an item",
+          text: "Add a photo, write what you’re recording, choose where it is (or create a new location), then category and tags. Tap “Save item”.",
+          tip: "Locations are reusable: “Bedroom wardrobe”, “Cellar”, “Office”… If you move an item, Findo keeps the history of where it’s been."
+        },
+        {
+          title: "Find things again",
+          text: "Search by name, tag or location, show favourites only, or open “Manage locations” to see what’s in each place."
+        }
+      ],
+      cta: {
+        label: "Open Findo",
+        href: "/marketplace/findo"
+      }
+    },
+    {
+      slug: "life-calendar",
+      category: "organize",
+      title: "Life Calendar",
+      summary: "Documents, car, home, contracts and subscriptions: all your deadlines in one place, with renewals and reminders.",
+      minutes: 2,
+      steps: [
+        {
+          title: "All your deadlines in one place",
+          text: "At the top you see how many deadlines are on track, coming up, urgent or expired. Tap “New deadline” to add one."
+        },
+        {
+          title: "Add a deadline",
+          text: "Write what you want to remember (ID card, car insurance, MOT…), choose the category and, if you like, a profile: a person, a car, a home. Then enter the due date."
+        },
+        {
+          title: "Renewal and reminders",
+          text: "Choose whether it repeats (every month, every year, every 2 years…) and when to remind you, from 180 days to 1 day before. We remind you on the dashboard and in the MemoLife calendar."
+        }
+      ],
+      cta: {
+        label: "Open Life Calendar",
+        href: "/marketplace/life-calendar"
+      }
+    },
+    {
+      slug: "memolife",
+      category: "organize",
+      title: "MemoLife",
+      summary: "Your diary: appointments, reminders, notes and contacts, together with bills and deadlines.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Your diary",
+          text: "MemoLife brings together appointments, reminders, notes and contacts in the Today, Calendar, Reminders, Notes and Contacts tabs. The calendar also shows your Spendly bills and Life Calendar deadlines."
+        },
+        {
+          title: "Add something",
+          text: "Tap the “+” button at the bottom and choose appointment, reminder, note or contact. From here you can also add a bill (Spendly) or a document deadline (Life Calendar)."
+        }
+      ],
+      cta: {
+        label: "Open MemoLife",
+        href: "/marketplace/memolife"
+      }
+    },
+    {
+      slug: "spendly",
+      category: "organize",
+      title: "Spendly",
+      summary: "Your personal budget month by month: income, bills and expenses under control.",
+      minutes: 3,
+      steps: [
+        {
+          title: "Your annual budget",
+          text: "In the “Annual Dashboard” you see the year’s income, fixed expenses, variable expenses and net balance, with the balance trend month by month."
+        },
+        {
+          title: "The tabs",
+          text: "At the top you switch between tabs: Dashboard, Income, Bills, Fixed Expenses and Variable Expenses. In each one, tap “New” to add an entry."
+        },
+        {
+          title: "Monthly monitoring",
+          text: "Choose a month to see its details: income, expenses, balance and variable expenses by category. The colours tell you whether the month is positive, on watch or critical."
+        },
+        {
+          title: "Bills",
+          text: "In the “Bills” tab add electricity, gas, water, phone… with “New bill”: they repeat automatically and you record what you actually paid. If you close a contract, deactivate it."
+        }
+      ],
+      cta: {
+        label: "Open Spendly",
+        href: "/marketplace/spendly"
+      }
+    },
+    {
+      slug: "svat",
+      category: "organize",
+      title: "SVAT – Anti-Fraud Check",
+      summary: "Check in seconds whether a website, a VAT number or a QR code can be trusted.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Choose what to check",
+          text: "You can check a website (“Website Check”), a VAT number (“VAT Number Check”) or a QR code (“QR Check”)."
+        },
+        {
+          title: "The trust score",
+          text: "Enter the website address and tap “Run Verification”: in a few seconds you get a score from 0 to 100 and a verdict."
+        },
+        {
+          title: "The checks in detail",
+          text: "Below you see how many checks are OK, worth watching or risky: domain and DNS, security, content, legal pages, reviews and business model."
+        },
+        {
+          title: "Check a VAT number",
+          text: "In the “VAT Number Check” tab enter an Italian or European VAT number to find out whether it’s active and who it belongs to.",
+          tip: "A good score is a clue, not a guarantee: before paying, also read the Anti-Scam Manual."
+        }
+      ],
+      cta: {
+        label: "Open SVAT",
+        href: "/marketplace/svat"
+      }
+    },
+    {
+      slug: "focus",
+      category: "wellness",
+      title: "KUMANI Focus",
+      summary: "Work in intervals: focus and short breaks, with a long break every 4 sessions.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Start a session",
+          text: "Write what you’re focusing on and tap “Start”: the countdown begins. You can skip a phase or start over; a soft sound tells you at every change."
+        },
+        {
+          title: "Choose your rhythm",
+          text: "Classic 25/5, Long 50/10, Short 15/3 or Custom. You can turn on sound, vibration, keep the screen on and get a notification at every change."
+        },
+        {
+          title: "Your sessions today",
+          text: "See how many sessions you completed and how many minutes you focused today. It resets every day and stays only on your device.",
+          tip: "Open “Tips for better focus” for a few suggestions."
+        }
+      ],
+      cta: {
+        label: "Open Focus",
+        href: "/marketplace/focus"
+      }
+    },
+    {
+      slug: "mandala",
+      category: "wellness",
+      title: "KUMANI Mandala",
+      summary: "Draw with one finger: your stroke becomes a symmetrical mandala. No skill required.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Draw with one finger",
+          text: "Draw a line on the canvas: it’s repeated symmetrically and becomes a mandala in seconds."
+        },
+        {
+          title: "Choose symmetry and colours",
+          text: "Choose the symmetry (6, 8, 12 or 16 segments), a dark or ivory background, brush or eraser, thickness and colour. “Undo” takes a step back, “Clear” starts over."
+        },
+        {
+          title: "Download your mandala",
+          text: "Tap “Download PNG” to save the drawing and share it, for example on WhatsApp.",
+          tip: "To relax even more, you can listen to Neurobalance waves while you draw."
+        }
+      ],
+      cta: {
+        label: "Open Mandala",
+        href: "/marketplace/mandala"
+      }
+    },
+    {
+      slug: "mosaic",
+      category: "wellness",
+      title: "KUMANI Mosaic",
+      summary: "Every Kumano places a few tiles a day on a shared canvas: a work created by the whole community.",
+      minutes: 2,
+      steps: [
+        {
+          title: "A work of the whole community",
+          text: "Every Kumano leaves their mark on the shared canvas: nobody owns it, everyone created it. You can zoom in, replay how it grew, share it and download it."
+        },
+        {
+          title: "How it works",
+          text: "Every day you get a few tiles: tap a free square, choose a colour and confirm. A placed tile stays forever. Tiles renew at midnight and each season has a theme and an end date.",
+          tip: "You can place tiles after 7 days of logging in to KUMANI. If you also use another KUMANI service the same day, you get a bonus tile."
+        },
+        {
+          title: "Your achievements",
+          text: "Unlock the season’s achievements: Co-founder of the artwork, Final tile and Mosaicist. If you see offensive writing or an ad, tap one of its tiles and report the area."
+        }
+      ],
+      cta: {
+        label: "Open Mosaic",
+        href: "/marketplace/mosaic"
+      }
+    },
+    {
+      slug: "oxygen",
+      category: "wellness",
+      title: "OXYGEN",
+      summary: "Three minutes to breathe again, with 4-7-8 breathing: breathe in for 4 seconds, hold for 7, breathe out for 8.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Choose how to breathe",
+          text: "Choose the guided session (about 3 minutes, with a few words along the way) or just breathe, and how many cycles: 4 are recommended. You can turn on sound and vibration to breathe with your eyes closed."
+        },
+        {
+          title: "Before you start",
+          text: "Sit or lie down somewhere quiet, never while driving. The first time do at most 4 cycles and, if you feel dizzy, stop and breathe normally.",
+          tip: "OXYGEN is a relaxation exercise, not a medical device: it doesn’t replace a doctor’s advice."
+        },
+        {
+          title: "Start breathing",
+          text: "Tap “Start breathing”: the circle grows and shrinks with you and guides you step by step."
+        }
+      ],
+      cta: {
+        label: "Open OXYGEN",
+        href: "/marketplace/oxygen"
+      }
+    },
+    {
+      slug: "fabula",
+      category: "wellness",
+      title: "Kumani Fabula",
+      summary: "Six dice, one story: write a micro-story with today’s dice and read the community’s.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Today’s roll",
+          text: "In “Today’s roll” the dice are the same for the whole community and change at midnight. With “Free roll” you can roll whenever you like."
+        },
+        {
+          title: "Roll and write",
+          text: "Tap “Roll the dice”: you get a character, place, object, emotion, action and atmosphere. Write a micro-story (up to 900 characters) that uses them all; if you like, try the 60-second challenge."
+        },
+        {
+          title: "Gallery and stories",
+          text: "Publish the story in the “Gallery” or keep it in “My stories”. Read how others told the same dice, in seven languages: no rankings, just applause.",
+          tip: "Write every day to earn the “Steady pen” achievement."
+        }
+      ],
+      cta: {
+        label: "Open Fabula",
+        href: "/marketplace/fabula"
+      }
+    },
+    {
+      slug: "neurobalance",
+      category: "wellness",
+      title: "Neurobalance",
+      summary: "Audio sessions with binaural frequencies and nature sounds, for a relaxing break.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Choose a session",
+          text: "Put on stereo headphones, choose a session (for example “Deep rest”, “Fluid focus” or “Mindful reset”), adjust the volume and tap “Start session”."
+        },
+        {
+          title: "Special Sound",
+          text: "Carrier frequencies to listen to with stereo headphones, at a low, comfortable volume. Tap the play button next to the one you want."
+        },
+        {
+          title: "Nature sounds",
+          text: "Rain, ocean, stream, forest, wind, fire, night and thunderstorm: turn one on and mix it into your session.",
+          tip: "Neurobalance is meant for relaxation, it isn’t a therapy."
+        }
+      ],
+      cta: {
+        label: "Open Neurobalance",
+        href: "/marketplace/neurobalance"
+      }
+    },
+    {
+      slug: "aureya",
+      category: "wellness",
+      title: "Aureya",
+      summary: "Two quick self-check tests, hearing and visual field, to repeat and compare over time.",
+      minutes: 2,
+      steps: [
+        {
+          title: "First of all",
+          text: "Aureya is a self-check tool, not a medical device, and doesn’t replace a check-up. Results depend on headphones, volume, brightness and distance from the screen: they’re indicative."
+        },
+        {
+          title: "Choose a test",
+          text: "In the acoustic test you hear a series of tones at different frequencies, one ear at a time. In the visual field test you stare at the centre of the screen and mark the dots you see, even out of the corner of your eye."
+        },
+        {
+          title: "Compare over time",
+          text: "Each test saves the date and result (0 to 100, higher is better) in the “Test history”, so you can compare them over time.",
+          tip: "If you have doubts or notice a decline, see a doctor or a specialist."
+        }
+      ],
+      cta: {
+        label: "Open Aureya",
+        href: "/marketplace/aureya"
+      }
+    },
+    {
+      slug: "travel",
+      category: "wellness",
+      title: "KUMANI Travel",
+      summary: "The trip that organises itself: a day-by-day itinerary and checklist shared with your travel companions.",
+      minutes: 2,
+      steps: [
+        {
+          title: "Create a trip",
+          text: "Tap “New trip”, add dates and activities: the itinerary builds day by day. In the checklist, note what not to forget and who’s taking care of it.",
+          tip: "Creating a trip requires a subscription; joining a trip you were invited to doesn’t."
+        },
+        {
+          title: "Invite or join with a code",
+          text: "From the trip, tap “Invite to the trip” and send the link or code to your companions. If you received a code, enter it under “Got an invite code?” and tap “Join”."
+        }
+      ],
+      cta: {
+        label: "Open KUMANI Travel",
+        href: "/viaggi"
       }
     },
   ],
