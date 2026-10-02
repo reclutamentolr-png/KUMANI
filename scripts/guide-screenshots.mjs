@@ -58,7 +58,7 @@ if (link !== '-') {
 // Niente invito "Installa Kumani" sulle schermate delle guide
 await send('Page.navigate', { url: base + '/privacy' })
 await sleep(4000)
-await evaluate("localStorage.setItem('install_prompt_dismissed', 'true')")
+await evaluate("localStorage.setItem('install_prompt_dismissed', 'true'); localStorage.setItem('kumani_tour_seen', '1')")
 
 for (const shot of shots) {
   await send('Page.navigate', { url: base + shot.path })
@@ -96,13 +96,13 @@ for (const shot of shots) {
     style.textContent = 'nextjs-portal,a.fixed[href*="/guida/"]{display:none!important}'
     document.head.appendChild(style)
     if (${link !== '-'} && location.pathname.replace(/[/]$/, '').endsWith('/login')) return 'login'
-    // Nei link mostrati (codice invito, QR…) il dominio vero, non localhost
+    // Nei link mostrati (codice invito, QR…) il dominio vero (kumani.io), non localhost
     const local = /https?:[/][/]localhost:3000/g
-    document.querySelectorAll('input').forEach((i) => { if (i.value.includes('localhost:3000')) i.value = i.value.replace(local, 'https://kumani.it') })
+    document.querySelectorAll('input').forEach((i) => { if (i.value.includes('localhost:3000')) i.value = i.value.replace(local, 'https://kumani.io') })
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT)
     while (walker.nextNode()) {
       const n = walker.currentNode
-      if (n.nodeValue.includes('localhost:3000')) n.nodeValue = n.nodeValue.replace(local, 'https://kumani.it')
+      if (n.nodeValue.includes('localhost:3000')) n.nodeValue = n.nodeValue.replace(local, 'https://kumani.io')
     }
     let el = null
     ${shot.sel ? `el = document.querySelector(${JSON.stringify(shot.sel)})` : ''}

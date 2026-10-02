@@ -2,7 +2,7 @@
 // Variabili d'ambiente:
 // - RESEND_API_KEY: chiave API di Resend
 // - EMAIL_FROM: mittente su un dominio verificato in Resend,
-//   es. "KUMANI <noreply@kumani.it>"
+//   es. "KUMANI <noreply@kumani.io>"
 // Se mancano, l'email non parte (log) e il resto continua a funzionare.
 
 export type SendEmailInput = {
