@@ -112,7 +112,7 @@ const content: GuidesContent = {
         },
         {
           title: 'Comment gagner des KU Points',
-          text: 'Les règles sont dans le portefeuille : vous recevez des KU Points quand une personne invitée active un abonnement en payant par carte ou passe à Pro, ainsi qu’avec le Bonus Structure.',
+          text: 'Les règles sont dans le portefeuille : vous recevez des KU Points quand une personne invitée active un abonnement en payant par carte ou passe à Pro, ainsi qu’avec le Bonus Accueil.',
         },
       ],
       cta: { label: 'Ouvrir votre Communauté', href: '/dashboard/rete' },

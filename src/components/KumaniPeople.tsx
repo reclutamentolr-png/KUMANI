@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { CheckCircle2, Clock, Gift, MessageCircle, UserPlus, Users } from 'lucide-react'
+import Link from '@/components/LocalizedLink'
+import { ArrowRight, CheckCircle2, Clock, Gift, MessageCircle, UserPlus, Users } from 'lucide-react'
 
 type ActivePerson = {
   id: string
@@ -92,7 +93,15 @@ export default function KumaniPeople({
       <div className="p-5">
         {tab === 'received' ? (
           <>
-            <p className="mb-3 text-sm text-[var(--muted)]">{t('peopleReceivedHint')}</p>
+            <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm text-[var(--muted)]">{t('peopleReceivedHint')}</p>
+              <Link
+                href="/wallet#wallet-points"
+                className="inline-flex shrink-0 items-center gap-1 self-start rounded-full border border-sky-300 bg-sky-50 px-3 py-1.5 text-xs font-bold text-sky-800 transition hover:border-sky-400 sm:self-auto"
+              >
+                {t('legendWalletCta')} <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
             {received.length === 0 ? (
               <p className="rounded-xl border border-dashed border-sky-300 bg-sky-50/60 px-4 py-6 text-center text-sm text-[var(--ink)]">
                 {t('peopleEmptyReceived')}

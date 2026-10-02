@@ -112,7 +112,7 @@ const content: GuidesContent = {
         },
         {
           title: 'Come guadagni i KU Points',
-          text: 'Nel Wallet trovi le regole: ricevi KU Points quando una persona che hai invitato attiva l’abbonamento pagando con carta o passa a Pro, e con il Bonus Struttura.',
+          text: 'Nel Wallet trovi le regole: ricevi KU Points quando una persona che hai invitato attiva l’abbonamento pagando con carta o passa a Pro, e con il Bonus Accoglienza.',
         },
       ],
       cta: { label: 'Apri la tua Community', href: '/dashboard/rete' },

@@ -1081,7 +1081,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     setSavingProfile(true)
 
     // subscription_source traccia CHI ha attivato l'abbonamento (stripe /
-    // voucher / admin): il Bonus Struttura conta solo i downline attivati via
+    // voucher / admin): il Bonus Accoglienza conta solo i downline attivati via
     // Stripe per i KU Points, quindi un'attivazione manuale da qui non deve
     // mai valere come pagamento reale. Lo tocchiamo solo quando lo stato
     // sta effettivamente cambiando — se era già "active" (es. pagamento
@@ -2639,7 +2639,7 @@ L'accesso viene registrato.`)) return
             <Row label="Attivazioni Base" value={`${f.pointsAwarded.activation_base} punti`} />
             <Row label="Attivazioni Pro" value={`${f.pointsAwarded.activation_pro} punti`} />
             <Row label="Passaggi a Pro" value={`${f.pointsAwarded.upgrade_pro} punti`} />
-            <Row label="Bonus Struttura (spillover)" value={`${f.pointsAwarded.matrix} punti`} />
+            <Row label="Bonus Accoglienza (spillover)" value={`${f.pointsAwarded.matrix} punti`} />
             <Row label="Tolti per rimborsi" value={`${f.pointsAwarded.reversed} punti`} />
             <Row
               label="Punti ancora da spendere"
@@ -2983,7 +2983,7 @@ L'accesso viene registrato.`)) return
             <p className="text-xs text-gray-500 mb-3">
               Punti assegnati <strong>solo allo sponsor diretto</strong> quando un suo invitato paga con carta: primo
               abbonamento Base o Pro, oppure passaggio da Base a Pro. Voucher e rinnovi non danno punti; un rimborso li
-              toglie. <strong>Bonus Struttura (spillover):</strong> punti una tantum quando uno dei 5 posti diretti della
+              toglie. <strong>Bonus Accoglienza (spillover):</strong> punti una tantum quando uno dei 5 posti diretti della
               matrice di un Kumano viene occupato da una persona invitata da un altro Kumano che paga con carta. I posti
               occupati dai propri invitati non danno bonus: c&apos;è già il punteggio dell&apos;attivazione.
             </p>
@@ -3019,7 +3019,7 @@ L'accesso viene registrato.`)) return
                 />
               </label>
               <label className="block max-w-xs">
-                <span className="mb-1 block text-xs font-medium text-gray-600">Bonus Struttura (spillover)</span>
+                <span className="mb-1 block text-xs font-medium text-gray-600">Bonus Accoglienza (spillover)</span>
                 <input
                   type="number"
                   min="0"

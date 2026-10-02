@@ -276,7 +276,7 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
         <div className="space-y-6">
           {/* Punti: KU Karma (uso quotidiano) e KU Points (inviti),
               due saldi separati nella stessa scheda */}
-          <WalletSection icon={<Sparkles className="h-5 w-5 text-[var(--gold)]" />} title={t('pointsCardTitle')}>
+          <WalletSection id="wallet-points" icon={<Sparkles className="h-5 w-5 text-[var(--gold)]" />} title={t('pointsCardTitle')}>
             <div className="grid grid-cols-1 gap-5 md:grid-cols-[1fr_auto_1fr]">
               <div>
                 <p className="flex items-center gap-1.5 text-sm font-bold uppercase tracking-wide text-[var(--muted)]">

@@ -112,7 +112,7 @@ const content: GuidesContent = {
         },
         {
           title: 'How you earn KU Points',
-          text: 'The rules are in the Wallet: you receive KU Points when someone you invited activates a subscription by paying with a card or upgrades to Pro, and with the Structure Bonus.',
+          text: 'The rules are in the Wallet: you receive KU Points when someone you invited activates a subscription by paying with a card or upgrades to Pro, and with the Welcome Bonus.',
         },
       ],
       cta: { label: 'Open your Community', href: '/dashboard/rete' },

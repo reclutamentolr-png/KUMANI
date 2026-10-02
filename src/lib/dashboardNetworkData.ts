@@ -174,7 +174,7 @@ export type DashboardNetworkData = Awaited<ReturnType<typeof getDashboardNetwork
 // invece dal webhook di Stripe (award_activation_points); i vecchi bonus
 // (qualifiche, 6° diretto, ringraziamento, extra Pro) non esistono più.
 async function claimNetworkBonuses(supabase: SupabaseClient) {
-  // "Bonus Struttura": pays out for matrix slots filled since the last
+  // "Bonus Accoglienza": pays out for matrix slots filled since the last
   // check, whether by personal sponsorship or by someone else's spillover
   // landing in one of this Kumano's 5 direct positions.
   await supabase.rpc('claim_matrix_slot_bonus')

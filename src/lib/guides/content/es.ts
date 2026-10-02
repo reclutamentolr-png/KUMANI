@@ -112,7 +112,7 @@ const content: GuidesContent = {
         },
         {
           title: 'Cómo ganas KU Points',
-          text: 'Las reglas están en el monedero: recibes KU Points cuando una persona que invitaste activa la suscripción pagando con tarjeta o pasa a Pro, y con el Bonus Estructura.',
+          text: 'Las reglas están en el monedero: recibes KU Points cuando una persona que invitaste activa la suscripción pagando con tarjeta o pasa a Pro, y con el Bonus Acogida.',
         },
       ],
       cta: { label: 'Abrir tu Comunidad', href: '/dashboard/rete' },

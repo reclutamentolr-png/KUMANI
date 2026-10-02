@@ -112,7 +112,7 @@ const content: GuidesContent = {
         },
         {
           title: 'So verdienst du KU Points',
-          text: 'Die Regeln stehen in der Brieftasche: Du erhältst KU Points, wenn eine von dir eingeladene Person ein Abo mit Karte bezahlt oder zu Pro wechselt, und mit dem Struktur-Bonus.',
+          text: 'Die Regeln stehen in der Brieftasche: Du erhältst KU Points, wenn eine von dir eingeladene Person ein Abo mit Karte bezahlt oder zu Pro wechselt, und mit dem Willkommensbonus.',
         },
       ],
       cta: { label: 'Deine Community öffnen', href: '/dashboard/rete' },

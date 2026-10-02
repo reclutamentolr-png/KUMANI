@@ -12,7 +12,7 @@ export type NetworkWallet = {
   voucherValueProEur: number
   // Pacchetti già riscattati nel ciclo in corso (indici)
   packsRedeemed: number[]
-  // Punti assegnati: attivazione Base/Pro, passaggio a Pro, Bonus Struttura
+  // Punti assegnati: attivazione Base/Pro, passaggio a Pro, Bonus Accoglienza
   pointsRules: { base: number; pro: number; upgrade: number; spillover: number }
   ranks: RankDefinition[]
 }

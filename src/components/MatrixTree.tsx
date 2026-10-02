@@ -1,4 +1,5 @@
-import { Crown, Users, UserRound } from 'lucide-react'
+import { ArrowRight, Crown, Users, UserRound } from 'lucide-react'
+import Link from '@/components/LocalizedLink'
 import { useTranslations } from 'next-intl'
 import StarLines, { STAR_CENTER, STAR_POINTS } from '@/components/StarLines'
 
@@ -120,7 +121,15 @@ export default function MatrixTree({ rootNode, descendants, receivedIds = [] }: 
           <span className="h-3.5 w-3.5 rounded-full border-2 border-sky-400 bg-sky-950" /> {t('legendReceived')}
         </span>
       </div>
-      <p className="-mt-5 text-center text-xs text-[var(--muted)]">{t('legendReceivedHint')}</p>
+      <div className="-mt-5 flex flex-col items-center gap-2 text-center sm:flex-row sm:justify-center sm:text-left">
+        <p className="max-w-md text-xs text-[var(--muted)]">{t('legendReceivedHint')}</p>
+        <Link
+          href="/wallet#wallet-points"
+          className="inline-flex shrink-0 items-center gap-1 rounded-full border border-sky-300 bg-sky-50 px-3 py-1.5 text-xs font-bold text-sky-800 transition hover:border-sky-400"
+        >
+          {t('legendWalletCta')} <ArrowRight className="h-3.5 w-3.5" />
+        </Link>
+      </div>
 
       <div className="flex items-center justify-center gap-2 text-xs text-[var(--muted)]">
         <Users className="h-4 w-4 text-[var(--gold)]" />

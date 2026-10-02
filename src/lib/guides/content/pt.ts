@@ -112,7 +112,7 @@ const content: GuidesContent = {
         },
         {
           title: 'Como ganha KU Points',
-          text: 'As regras estão na carteira: recebe KU Points quando uma pessoa que convidou ativa a subscrição pagando com cartão ou passa a Pro, e com o Bónus Estrutura.',
+          text: 'As regras estão na carteira: recebe KU Points quando uma pessoa que convidou ativa a subscrição pagando com cartão ou passa a Pro, e com o Bónus Acolhimento.',
         },
       ],
       cta: { label: 'Abrir a sua Comunidade', href: '/dashboard/rete' },

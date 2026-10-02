@@ -254,7 +254,7 @@ export default function TermsPage() {
               <p>
                 <strong className="text-gray-900">KU Points.</strong> L&apos;utente riceve KU Points quando una persona che ha
                 invitato direttamente attiva un abbonamento pagato con carta (Base o Pro) o passa dal piano Base al piano Pro, e con il
-                Bonus Struttura, riconosciuto quando uno dei posti diretti della propria matrice viene occupato da una persona
+                Bonus Accoglienza, riconosciuto quando uno dei posti diretti della propria matrice viene occupato da una persona
                 invitata da un altro utente (spillover) che paga l&apos;abbonamento con carta. Le quantità sono stabilite dalla Piattaforma e indicate
                 nell&apos;area personale. Le attivazioni tramite voucher e i rinnovi non danno KU Points; in caso di rimborso del
                 pagamento i punti collegati vengono tolti.
