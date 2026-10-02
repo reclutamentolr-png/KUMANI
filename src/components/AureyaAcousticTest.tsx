@@ -16,6 +16,13 @@ const RAMP_DURATION_MS = 4000
 const HOLD_AT_MAX_MS = 1500
 const START_GAIN = 0.015
 const MAX_GAIN = 0.3
+// Silenzio tra un suono e l'altro, ogni volta di durata diversa: così non si
+// impara il ritmo e si preme solo quando il suono c'è davvero
+const GAP_MIN_MS = 2000
+const GAP_MAX_MS = 5000
+// Oltre questo numero di tocchi senza suono il risultato è poco attendibile
+const EARLY_PRESS_LIMIT = 2
+const randomGap = () => GAP_MIN_MS + Math.random() * (GAP_MAX_MS - GAP_MIN_MS)
 
 type Phase = 'device-check' | 'instructions' | 'testing' | 'saving' | 'results'
 
@@ -48,6 +55,11 @@ export default function AureyaAcousticTest({
   const [stepIndex, setStepIndex] = useState(0)
   const [error, setError] = useState<string | null>(null)
   const [score, setScore] = useState<number | null>(null)
+  // Pausa di silenzio prima del prossimo suono
+  const [waiting, setWaiting] = useState(false)
+  // Avviso breve quando si tocca "Lo sento" durante il silenzio
+  const [earlyNotice, setEarlyNotice] = useState(false)
+  const [earlyPresses, setEarlyPresses] = useState(0)
 
   // Source of truth for the in-progress test: playStep/recordStep chain
   // themselves via setTimeout, so they must not rely on React state from
@@ -59,6 +71,9 @@ export default function AureyaAcousticTest({
   const gainRef = useRef<GainNode | null>(null)
   const stepStartRef = useRef<number>(0)
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const gapRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const toneOnRef = useRef(false)
+  const earlyPressesRef = useRef(0)
 
   // Telefono o computer: si sa solo nel browser, dopo l'apertura (il testo
   // mostrato cambia, quindi non si può calcolare prima sul server)
@@ -68,6 +83,7 @@ export default function AureyaAcousticTest({
   }, [])
 
   const stopTone = () => {
+    toneOnRef.current = false
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current)
       timeoutRef.current = null
@@ -82,6 +98,7 @@ export default function AureyaAcousticTest({
       stopTone()
       void audioContextRef.current?.close()
       if (timeoutRef.current) clearTimeout(timeoutRef.current)
+      if (gapRef.current) clearTimeout(gapRef.current)
     }
   }, [])
 
@@ -111,6 +128,8 @@ export default function AureyaAcousticTest({
     oscillatorRef.current = oscillator
     gainRef.current = gain
     stepStartRef.current = nowMs()
+    toneOnRef.current = true
+    setWaiting(false)
 
     timeoutRef.current = setTimeout(() => {
       recordStep(index, null)
@@ -126,25 +145,57 @@ export default function AureyaAcousticTest({
     const next = index + 1
     if (next < STEPS.length) {
       setStepIndex(next)
-      void playStep(next)
+      waitThenPlay(next)
     } else {
       void finishTest(thresholdsRef.current)
     }
   }
 
+  // Silenzio di durata casuale, poi il suono
+  const waitThenPlay = (index: number) => {
+    setWaiting(true)
+    if (gapRef.current) clearTimeout(gapRef.current)
+    gapRef.current = setTimeout(() => {
+      gapRef.current = null
+      void playStep(index)
+    }, randomGap())
+  }
+
+  const cancelGap = () => {
+    if (gapRef.current) {
+      clearTimeout(gapRef.current)
+      gapRef.current = null
+    }
+    setWaiting(false)
+  }
+
   const handleHeard = () => {
+    // Tocco durante il silenzio: non è una risposta, si conta soltanto
+    if (!toneOnRef.current) {
+      earlyPressesRef.current += 1
+      setEarlyPresses(earlyPressesRef.current)
+      setEarlyNotice(true)
+      window.setTimeout(() => setEarlyNotice(false), 1800)
+      return
+    }
     const elapsed = nowMs() - stepStartRef.current
     const frac = Math.min(1, elapsed / RAMP_DURATION_MS)
     const level = START_GAIN + (MAX_GAIN - START_GAIN) * frac
     recordStep(stepIndex, level)
   }
 
-  const startTest = () => {
+  const startTest = async () => {
     thresholdsRef.current = []
+    earlyPressesRef.current = 0
+    setEarlyPresses(0)
     setStepIndex(0)
     setError(null)
     setPhase('testing')
-    void playStep(0)
+    // L'audio va sbloccato subito, dentro il tocco su "Inizia" (telefoni)
+    const audioContext = audioContextRef.current ?? new AudioContext()
+    audioContextRef.current = audioContext
+    await audioContext.resume()
+    waitThenPlay(0)
   }
 
   const finishTest = async (finalThresholds: AcousticThreshold[]) => {
@@ -159,6 +210,7 @@ export default function AureyaAcousticTest({
   }
 
   const restart = () => {
+    cancelGap()
     thresholdsRef.current = []
     setStepIndex(0)
     setScore(null)
@@ -245,6 +297,10 @@ export default function AureyaAcousticTest({
               {currentStep.ear === 'left' ? t('earLeft') : t('earRight')}
             </p>
             <p className="text-sm text-[var(--muted)]">{t('frequencyLabel', { frequency: currentStep.frequency })}</p>
+            {/* Stessa altezza con e senza scritta, così il tasto non si sposta */}
+            <p className={`min-h-[1.25rem] text-sm font-semibold ${earlyNotice ? 'text-amber-600' : 'text-[var(--gold)]'}`} aria-live="polite">
+              {earlyNotice ? t('earlyPress') : waiting ? t('waitingLabel') : ''}
+            </p>
           </div>
           <button
             type="button"
@@ -283,6 +339,13 @@ export default function AureyaAcousticTest({
                 previousScore,
                 date: new Date(previousTestedAt).toLocaleDateString(),
               })}
+            </p>
+          )}
+
+          {earlyPresses > EARLY_PRESS_LIMIT && (
+            <p className="mb-6 flex gap-2 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-800">
+              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
+              {t('earlyPressWarning', { count: earlyPresses })}
             </p>
           )}
 
