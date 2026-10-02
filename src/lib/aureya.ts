@@ -56,6 +56,9 @@ export interface AcuityEyeResult {
   eye: Eye
   // Livello più piccolo superato (logMAR); null = nemmeno il primo
   bestLogMar: number | null
+  // Lo schermo non poteva disegnare lettere più piccole: il valore vero
+  // potrebbe essere più alto
+  limitedByScreen?: boolean
 }
 
 export interface AcuityTestResult {

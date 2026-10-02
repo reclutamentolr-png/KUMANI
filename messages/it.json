@@ -1328,7 +1328,9 @@
       "saveSuccess": "Risultato salvato nella tua cronologia.",
       "restart": "Rifai il test",
       "coverLeft": "l’occhio sinistro",
-      "coverRight": "l’occhio destro"
+      "coverRight": "l’occhio destro",
+      "how5": "Dal computer puoi rispondere anche con le frecce della tastiera: comodo quando sei lontano dallo schermo.",
+      "limitedNote": "Il tuo schermo non permette di mostrare lettere ancora più piccole a questa distanza: il tuo risultato reale potrebbe essere più alto. Per misurare oltre, rifai il test da uno smartphone."
     },
     "amsler": {
       "title": "Griglia di Amsler",

@@ -1254,7 +1254,9 @@
       "saveSuccess": "Résultat enregistré dans votre historique.",
       "restart": "Refaire le test",
       "coverLeft": "votre œil gauche",
-      "coverRight": "votre œil droit"
+      "coverRight": "votre œil droit",
+      "how5": "Sur ordinateur, vous pouvez aussi répondre avec les flèches du clavier : pratique quand vous êtes loin de l’écran.",
+      "limitedNote": "Votre écran ne permet pas d’afficher des lettres encore plus petites à cette distance : votre résultat réel pourrait être plus élevé. Pour mesurer au-delà, refaites le test sur un smartphone."
     },
     "amsler": {
       "title": "Grille d’Amsler",

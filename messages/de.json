@@ -1254,7 +1254,9 @@
       "saveSuccess": "Ergebnis in deinem Verlauf gespeichert.",
       "restart": "Test wiederholen",
       "coverLeft": "das linke Auge",
-      "coverRight": "das rechte Auge"
+      "coverRight": "das rechte Auge",
+      "how5": "Am Computer kannst du auch mit den Pfeiltasten antworten: praktisch, wenn du weit vom Bildschirm entfernt bist.",
+      "limitedNote": "Dein Bildschirm kann bei diesem Abstand keine noch kleineren Buchstaben darstellen: Dein tatsächliches Ergebnis könnte höher sein. Um weiter zu messen, wiederhole den Test auf einem Smartphone."
     },
     "amsler": {
       "title": "Amsler-Gitter",

@@ -1274,7 +1274,9 @@
       "saveSuccess": "Result saved in your history.",
       "restart": "Take the test again",
       "coverLeft": "your left eye",
-      "coverRight": "your right eye"
+      "coverRight": "your right eye",
+      "how5": "On a computer you can also answer with the arrow keys: handy when you’re far from the screen.",
+      "limitedNote": "Your screen can’t show even smaller letters at this distance: your real result may be higher. To measure further, take the test again on a smartphone."
     },
     "amsler": {
       "title": "Amsler grid",

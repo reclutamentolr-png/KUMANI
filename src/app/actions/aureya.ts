@@ -68,6 +68,7 @@ export async function saveAcuityTestResult(result: AcuityTestResult): Promise<Ac
   const eyes = (result.eyes ?? [])
     .filter((e) => (e.eye === 'left' || e.eye === 'right') && (e.bestLogMar === null || levels.includes(e.bestLogMar)))
     .slice(0, 2)
+    .map((e) => ({ eye: e.eye, bestLogMar: e.bestLogMar, ...(e.limitedByScreen === true ? { limitedByScreen: true } : {}) }))
   if (eyes.length === 0) return { success: false, message: 'saveError' }
   const clean: AcuityTestResult = {
     distanceCm: Number(result.distanceCm) || 0,

@@ -26,6 +26,18 @@ type Phase = 'intro' | 'calibration' | 'eye' | 'testing' | 'saving' | 'results'
 const DIRECTIONS: Direction[] = ['up', 'right', 'down', 'left']
 const ROTATION: Record<Direction, number> = { right: 0, down: 90, left: 180, up: 270 }
 const EYES: Eye[] = ['right', 'left']
+// La E ha 5 righe (barre e spazi): serve almeno 1 pixel vero dello schermo
+// per riga, quindi la E da 10/10 deve essere alta almeno 5 pixel veri.
+const MIN_DEVICE_PX_10_10 = 5
+const TAN_5_ARCMIN = Math.tan((5 / 60) * (Math.PI / 180))
+
+// Distanza: telefono 40 cm; computer quanto basta perché anche la E da 10/10
+// sia nitida (schermi con pixel più grandi = più lontano), da 60 cm a 2,5 m
+function chooseDistanceCm(pxPerMm: number, dpr: number, phone: boolean) {
+  if (phone) return 40
+  const neededMm = MIN_DEVICE_PX_10_10 / (pxPerMm * dpr) / TAN_5_ARCMIN
+  return Math.min(250, Math.max(60, Math.ceil(neededMm / 100) * 10))
+}
 
 const randomDirection = (previous: Direction | null) => {
   const options = DIRECTIONS.filter((d) => d !== previous)
@@ -45,7 +57,8 @@ export default function AureyaAcuityTest({ previousScore, previousTestedAt }: { 
   const t = useTranslations('aureya.acuity')
   const [phase, setPhase] = useState<Phase>('intro')
   const [pxPerMm, setPxPerMm] = useState<number | null>(null)
-  const [distanceCm, setDistanceCm] = useState(40)
+  const [isPhone, setIsPhone] = useState(true)
+  const [dpr, setDpr] = useState(1)
   const [eyeIndex, setEyeIndex] = useState(0)
   const [levelIndex, setLevelIndex] = useState(0)
   const [tries, setTries] = useState(0)
@@ -55,16 +68,28 @@ export default function AureyaAcuityTest({ previousScore, previousTestedAt }: { 
   const [score, setScore] = useState<number | null>(null)
   const [error, setError] = useState<string | null>(null)
 
-  // Telefono a 40 cm, computer a 60 cm (si sa solo nel browser)
+  // Telefono o computer e densità dei pixel: si sanno solo nel browser
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setDistanceCm(window.matchMedia('(pointer: coarse)').matches ? 40 : 60)
+    setIsPhone(window.matchMedia('(pointer: coarse)').matches)
+    setDpr(window.devicePixelRatio || 1)
     setPxPerMm(savedPxPerMm())
   }, [])
 
+  const distanceCm = chooseDistanceCm(pxPerMm ?? 3.8, dpr, isPhone)
+
+  // Grandezza della E in pixel veri dello schermo, arrotondata a righe intere
+  // (così resta nitida); 0 = troppo piccola per questo schermo
+  const letterPx = (logMar: number) => {
+    if (!pxPerMm) return 0
+    const device = optotypeMm(logMar, distanceCm) * pxPerMm * dpr
+    if (device / 5 < 0.75) return 0
+    return (Math.max(1, Math.round(device / 5)) * 5) / dpr
+  }
+
   const eye = EYES[eyeIndex]
   const level = ACUITY_LEVELS[levelIndex]
-  const sizePx = pxPerMm ? optotypeMm(level, distanceCm) * pxPerMm : 0
+  const sizePx = letterPx(level)
 
   const startEye = () => {
     setLevelIndex(0)
@@ -74,8 +99,8 @@ export default function AureyaAcuityTest({ previousScore, previousTestedAt }: { 
     setPhase('testing')
   }
 
-  const finishEye = async (bestLogMar: number | null) => {
-    const all = [...results, { eye, bestLogMar }]
+  const finishEye = async (bestLogMar: number | null, limitedByScreen = false) => {
+    const all = [...results, { eye, bestLogMar, ...(limitedByScreen ? { limitedByScreen } : {}) }]
     setResults(all)
     if (eyeIndex + 1 < EYES.length) {
       setEyeIndex(eyeIndex + 1)
@@ -94,7 +119,10 @@ export default function AureyaAcuityTest({ previousScore, previousTestedAt }: { 
     const nextCorrect = correct + (chosen === direction ? 1 : 0)
     // Livello superato appena le risposte giuste bastano
     if (nextCorrect >= ACUITY_PASS) {
-      if (levelIndex + 1 < ACUITY_LEVELS.length) {
+      // Lo schermo non può disegnare la E del livello dopo: ci si ferma qui
+      if (levelIndex + 1 < ACUITY_LEVELS.length && letterPx(ACUITY_LEVELS[levelIndex + 1]) === 0) {
+        void finishEye(level, true)
+      } else if (levelIndex + 1 < ACUITY_LEVELS.length) {
         setLevelIndex(levelIndex + 1)
         setTries(0)
         setCorrect(0)
@@ -113,6 +141,20 @@ export default function AureyaAcuityTest({ previousScore, previousTestedAt }: { 
     setCorrect(nextCorrect)
     setDirection(randomDirection(direction))
   }
+
+  // Dal computer si risponde anche con le frecce della tastiera
+  useEffect(() => {
+    if (phase !== 'testing') return
+    const keys: Record<string, Direction> = { ArrowUp: 'up', ArrowRight: 'right', ArrowDown: 'down', ArrowLeft: 'left' }
+    const onKey = (event: KeyboardEvent) => {
+      const chosen = keys[event.key]
+      if (!chosen) return
+      event.preventDefault()
+      answer(chosen)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  })
 
   const restart = () => {
     setEyeIndex(0)
@@ -147,6 +189,7 @@ export default function AureyaAcuityTest({ previousScore, previousTestedAt }: { 
             <li>• {t('how2')}</li>
             <li>• {t('how3')}</li>
             <li>• {t('how4')}</li>
+            {!isPhone && <li>• {t('how5')}</li>}
           </ul>
           <div className="flex flex-wrap items-center gap-3">
             <button
@@ -235,6 +278,11 @@ export default function AureyaAcuityTest({ previousScore, previousTestedAt }: { 
           {previousScore !== null && previousTestedAt && (
             <p className="mb-4 rounded-2xl border border-[var(--gold)]/25 bg-[var(--gold-pale)] p-4 text-sm text-[var(--ink)]">
               {t('resultsComparison', { score, previousScore, date: new Date(previousTestedAt).toLocaleDateString() })}
+            </p>
+          )}
+          {results.some((r) => r.limitedByScreen) && (
+            <p className="mb-4 rounded-2xl border border-[var(--gold)]/25 bg-[var(--gold-pale)] p-4 text-sm leading-6 text-[var(--ink)]">
+              {t('limitedNote')}
             </p>
           )}
           <p className="mb-5 flex gap-2 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-800">

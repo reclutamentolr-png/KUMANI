@@ -1254,7 +1254,9 @@
       "saveSuccess": "Resultado guardado en tu historial.",
       "restart": "Repetir el test",
       "coverLeft": "el ojo izquierdo",
-      "coverRight": "el ojo derecho"
+      "coverRight": "el ojo derecho",
+      "how5": "Desde el ordenador también puedes responder con las flechas del teclado: cómodo cuando estás lejos de la pantalla.",
+      "limitedNote": "Tu pantalla no puede mostrar letras aún más pequeñas a esta distancia: tu resultado real podría ser más alto. Para medir más allá, repite el test desde un smartphone."
     },
     "amsler": {
       "title": "Rejilla de Amsler",

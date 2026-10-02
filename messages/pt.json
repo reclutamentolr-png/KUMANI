@@ -1254,7 +1254,9 @@
       "saveSuccess": "Resultado guardado no seu histórico.",
       "restart": "Repetir o teste",
       "coverLeft": "o olho esquerdo",
-      "coverRight": "o olho direito"
+      "coverRight": "o olho direito",
+      "how5": "No computador também pode responder com as setas do teclado: prático quando está longe do ecrã.",
+      "limitedNote": "O seu ecrã não consegue mostrar letras ainda mais pequenas a esta distância: o seu resultado real pode ser mais alto. Para medir além disso, repita o teste num smartphone."
     },
     "amsler": {
       "title": "Grelha de Amsler",
