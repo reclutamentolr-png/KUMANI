@@ -5817,5 +5817,6 @@
     "communityTitle": "Comunidad",
     "communityBadge": "JUNTOS",
     "communitySub": "Tablón, Kumano del Día, Kordata, Eventos y Banco del Tiempo: la comunidad que echa una mano."
-  }
+  },
+  "share": {"native": "Compartir…", "nativeHint": "Instagram, WhatsApp, Telegram y otras apps", "copy": "Copiar enlace", "copied": "Enlace copiado"}
 }

@@ -5817,5 +5817,6 @@
     "communityTitle": "Community",
     "communityBadge": "INSIEME",
     "communitySub": "Bacheca, Kumano del Giorno, Kordata, Eventi e Banca del Tempo: la community che si dà una mano."
-  }
+  },
+  "share": {"native": "Condividi…", "nativeHint": "Instagram, WhatsApp, Telegram e altre app", "copy": "Copia link", "copied": "Link copiato"}
 }

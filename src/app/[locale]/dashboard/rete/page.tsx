@@ -13,6 +13,7 @@ import QuickNav from '@/components/QuickNav'
 import Leaderboard from '@/components/Leaderboard'
 import { getDashboardNetworkData } from '@/lib/dashboardNetworkData'
 import { ArrowLeft, TreePine, Star, Sparkles, Crown, Trophy, Wallet, PartyPopper, UserPlus, CheckCircle2, Shuffle, Network, MessageCircle } from 'lucide-react'
+import NativeShareButton from '@/components/NativeShareButton'
 
 // Schede "Prossimi obiettivi": aspetto di ciascuna qualifica (soglie e testi dalle qualifiche della rete)
 const GOALS = [
@@ -143,6 +144,14 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
             >
               <MessageCircle className="h-4 w-4" /> {t('inviteShareWhatsapp')}
             </a>
+            <NativeShareButton
+              url={shareUrl}
+              title="KUMANI"
+              text={t('inviteShareMessage', { link: '' }).trim()}
+              variant="glass"
+              copyFallback={false}
+              className="relative mt-2 w-full"
+            />
           </div>
         </div>
 

@@ -5817,5 +5817,6 @@
     "communityTitle": "Сообщество",
     "communityBadge": "ВМЕСТЕ",
     "communitySub": "Доска объявлений, Кумано дня, Kordata, События и Банк времени: сообщество, которое помогает."
-  }
+  },
+  "share": {"native": "Поделиться…", "nativeHint": "Instagram, WhatsApp, Telegram и другие приложения", "copy": "Скопировать ссылку", "copied": "Ссылка скопирована"}
 }

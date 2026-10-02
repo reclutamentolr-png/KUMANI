@@ -5817,5 +5817,6 @@
     "communityTitle": "Community",
     "communityBadge": "GEMEINSAM",
     "communitySub": "Pinnwand, Kumano des Tages, Kordata, Events und Zeitbank: die Community, die mit anpackt."
-  }
+  },
+  "share": {"native": "Teilen…", "nativeHint": "Instagram, WhatsApp, Telegram und andere Apps", "copy": "Link kopieren", "copied": "Link kopiert"}
 }

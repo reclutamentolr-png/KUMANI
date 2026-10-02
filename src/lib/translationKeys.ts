@@ -108,6 +108,7 @@ export const SECTION_LABELS: Record<string, string> = {
   voucherCard: 'Voucher',
   toolPass: 'Pass dei singoli servizi',
   toolTiers: 'Dashboard: servizi in fasce Gratis / Base / Pro',
+  share: 'Pulsante Condividi… (menu del telefono)',
   referralLanding: 'Pagina di invito',
   toolShare: 'Condivisione dei servizi',
   adminMessage: 'Messaggi dello Staff',

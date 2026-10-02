@@ -5817,5 +5817,6 @@
     "communityTitle": "Comunidade",
     "communityBadge": "JUNTOS",
     "communitySub": "Mural, Kumano do Dia, Kordata, Eventos e Banco do Tempo: a comunidade que dá uma mão."
-  }
+  },
+  "share": {"native": "Partilhar…", "nativeHint": "Instagram, WhatsApp, Telegram e outras apps", "copy": "Copiar link", "copied": "Link copiado"}
 }

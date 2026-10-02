@@ -13,6 +13,7 @@ import DashboardDonations from '@/components/donations/DashboardDonations'
 import KuBadge from '@/components/ku/KuBadge'
 import AffinityBadge from './AffinityBadge'
 import type { MyProfile } from '@/lib/myProfile'
+import NativeShareButton from '@/components/NativeShareButton'
 
 // Tipo 2: the Marketplace-first layout. Tools are the main focus; the
 // network (KUMI, matrix, KUMANI lists, qualifications) is reduced to one
@@ -215,6 +216,7 @@ export default async function DashboardTipo2({
             <CopyButton text={shareUrl} variant="light" />
           </div>
           <p className="mt-2 text-xs leading-5 text-[var(--muted)]">{t('inviteTileHint')}</p>
+          <NativeShareButton url={shareUrl} title="KUMANI" variant="light" copyFallback={false} className="mt-3 w-full" />
         </div>
       </div>
 

@@ -5817,5 +5817,6 @@
     "communityTitle": "Communauté",
     "communityBadge": "ENSEMBLE",
     "communitySub": "Tableau d'annonces, Kumano du Jour, Kordata, Événements et Banque du Temps : la communauté qui donne un coup de main."
-  }
+  },
+  "share": {"native": "Partager…", "nativeHint": "Instagram, WhatsApp, Telegram et autres applis", "copy": "Copier le lien", "copied": "Lien copié"}
 }

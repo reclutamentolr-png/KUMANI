@@ -9,6 +9,7 @@ import OfferMakerQR from '@/components/OfferMakerQR'
 import { Sheet } from '@/components/memolife/MemoLifeForms'
 import { registerToEvent, reportEvent, reviewEvent, unregisterFromEvent } from '@/app/actions/events'
 import { eventPassUrl, formatEventDate, type EventDetail } from '@/lib/events'
+import NativeShareButton from '@/components/NativeShareButton'
 
 const REGISTER_ERRORS = ['full', 'age', 'started', 'organizer', 'not_available', 'not_logged', 'not_allowed', 'invalid', 'suspended']
 
@@ -329,6 +330,8 @@ export default function EventActions({
               {copied ? <Check className="h-5 w-5 text-emerald-600" /> : <Copy className="h-5 w-5" />} {copied ? t('copied') : t('copyLink')}
             </button>
           </div>
+          {/* Menu del telefono: Instagram, Telegram e le altre app */}
+          <NativeShareButton url={shareUrl} title={event.title} text={shareText.replace(shareUrl, '').trim()} variant="dark" copyFallback={false} className="mt-2 w-full py-3" />
         </section>
       )}
       {!event.is_organizer && (
