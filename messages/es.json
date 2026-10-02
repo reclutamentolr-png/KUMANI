@@ -1180,7 +1180,7 @@
       "continueButton": "Continuar",
       "instructionsTitle": "Cómo funciona",
       "instructionsBody": "El test dura entre 2 y 3 minutos y cubre ambos oídos en 6 frecuencias distintas, de graves a agudos. Para cada sonido, pulsa \"Lo oigo\" en cuanto puedas percibirlo, aunque sea débilmente. Si no pulsas nada, el test pasa automáticamente al siguiente sonido tras unos segundos. Entre un sonido y otro siempre hay una pausa de silencio de duración variable: pulsa solo cuando oigas de verdad el sonido.",
-      "waitingLabel": "Escucha… el próximo sonido llegará enseguida",
+      "waitingLabel": "Escucha con atención: pulsa «Lo oigo» solo cuando oigas el sonido.",
       "earlyPress": "Ahora no hay sonido: espera a oírlo",
       "earlyPressWarning": "Has pulsado «Lo oigo» {count} veces sin sonido: para un resultado fiable, repite el test con calma y pulsa solo cuando oigas de verdad el tono.",
       "startButton": "Iniciar el test",

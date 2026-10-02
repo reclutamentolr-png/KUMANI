@@ -1200,7 +1200,7 @@
       "continueButton": "Continue",
       "instructionsTitle": "How it works",
       "instructionsBody": "The test takes about 2-3 minutes and covers both ears across 6 different frequencies, from low to high. For each sound, press \"I hear it\" as soon as you can perceive it, even faintly. If you press nothing, the test automatically moves to the next sound after a few seconds. Between sounds there is always a pause of silence of varying length: tap only when you really hear the sound.",
-      "waitingLabel": "Listen… the next sound is coming soon",
+      "waitingLabel": "Listen carefully: tap “I hear it” only when you hear the sound.",
       "earlyPress": "No sound right now: wait until you hear it",
       "earlyPressWarning": "You tapped “I hear it” {count} times with no sound: for a reliable result, take the test again calmly and tap only when you really hear the tone.",
       "startButton": "Start the test",

@@ -55,8 +55,6 @@ export default function AureyaAcousticTest({
   const [stepIndex, setStepIndex] = useState(0)
   const [error, setError] = useState<string | null>(null)
   const [score, setScore] = useState<number | null>(null)
-  // Pausa di silenzio prima del prossimo suono
-  const [waiting, setWaiting] = useState(false)
   // Avviso breve quando si tocca "Lo sento" durante il silenzio
   const [earlyNotice, setEarlyNotice] = useState(false)
   const [earlyPresses, setEarlyPresses] = useState(0)
@@ -129,7 +127,6 @@ export default function AureyaAcousticTest({
     gainRef.current = gain
     stepStartRef.current = nowMs()
     toneOnRef.current = true
-    setWaiting(false)
 
     timeoutRef.current = setTimeout(() => {
       recordStep(index, null)
@@ -153,7 +150,6 @@ export default function AureyaAcousticTest({
 
   // Silenzio di durata casuale, poi il suono
   const waitThenPlay = (index: number) => {
-    setWaiting(true)
     if (gapRef.current) clearTimeout(gapRef.current)
     gapRef.current = setTimeout(() => {
       gapRef.current = null
@@ -166,7 +162,6 @@ export default function AureyaAcousticTest({
       clearTimeout(gapRef.current)
       gapRef.current = null
     }
-    setWaiting(false)
   }
 
   const handleHeard = () => {
@@ -297,9 +292,10 @@ export default function AureyaAcousticTest({
               {currentStep.ear === 'left' ? t('earLeft') : t('earRight')}
             </p>
             <p className="text-sm text-[var(--muted)]">{t('frequencyLabel', { frequency: currentStep.frequency })}</p>
-            {/* Stessa altezza con e senza scritta, così il tasto non si sposta */}
+            {/* Scritta fissa, uguale nel silenzio e durante il suono: lo schermo
+                non deve mai far capire quando parte il tono */}
             <p className={`min-h-[1.25rem] text-sm font-semibold ${earlyNotice ? 'text-amber-600' : 'text-[var(--gold)]'}`} aria-live="polite">
-              {earlyNotice ? t('earlyPress') : waiting ? t('waitingLabel') : ''}
+              {earlyNotice ? t('earlyPress') : t('waitingLabel')}
             </p>
           </div>
           <button

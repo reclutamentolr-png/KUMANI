@@ -1180,7 +1180,7 @@
       "continueButton": "Weiter",
       "instructionsTitle": "So funktioniert's",
       "instructionsBody": "Der Test dauert etwa 2-3 Minuten und deckt beide Ohren bei 6 verschiedenen Frequenzen ab, von tief bis hoch. Drücke bei jedem Ton \"Ich höre es\", sobald du ihn wahrnimmst, auch schwach. Wenn du nichts drückst, wechselt der Test nach einigen Sekunden automatisch zum nächsten Ton. Zwischen den Tönen gibt es immer eine Pause unterschiedlicher Länge: Drücke nur, wenn du den Ton wirklich hörst.",
-      "waitingLabel": "Hör zu… der nächste Ton kommt gleich",
+      "waitingLabel": "Hör genau hin: Drücke „Ich höre es“ nur, wenn du den Ton hörst.",
       "earlyPress": "Gerade ist kein Ton zu hören: warte, bis du ihn hörst",
       "earlyPressWarning": "Du hast {count}-mal „Ich höre es“ gedrückt, ohne dass ein Ton lief: Für ein verlässliches Ergebnis wiederhole den Test in Ruhe und drücke nur, wenn du den Ton wirklich hörst.",
       "startButton": "Test starten",

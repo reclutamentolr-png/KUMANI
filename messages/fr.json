@@ -1180,7 +1180,7 @@
       "continueButton": "Continuer",
       "instructionsTitle": "Comment ça marche",
       "instructionsBody": "Le test dure environ 2 à 3 minutes et couvre les deux oreilles sur 6 fréquences différentes, des graves aux aigus. Pour chaque son, appuyez sur « Je l'entends » dès que vous pouvez le percevoir, même faiblement. Si vous n'appuyez sur rien, le test passe automatiquement au son suivant après quelques secondes. Entre deux sons, il y a toujours un silence de durée variable : appuyez seulement quand vous entendez vraiment le son.",
-      "waitingLabel": "Écoutez… le prochain son arrive bientôt",
+      "waitingLabel": "Écoutez attentivement : touchez « Je l’entends » seulement quand vous entendez le son.",
       "earlyPress": "Aucun son pour l’instant : attendez de l’entendre",
       "earlyPressWarning": "Vous avez appuyé {count} fois sur « Je l’entends » sans son : pour un résultat fiable, refaites le test calmement en appuyant seulement quand vous entendez vraiment le son.",
       "startButton": "Démarrer le test",
