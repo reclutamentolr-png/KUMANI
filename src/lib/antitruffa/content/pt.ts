@@ -5,7 +5,7 @@ import type { GuideContent } from '@/lib/antitruffa/types'
 // portugueses, sem estatísticas nem números inventados. Setembro de 2026.
 const pt: GuideContent = {
   eyebrow: `Manual KUMANI · Segurança e Verificação`,
-  title: `Como se defender das burlas online`,
+  title: `Como se defender das burlas online e em casa`,
   motto: `Nem tudo o que é grátis vale pouco. Este pode valer as suas poupanças.`,
   lead: `As burlas de hoje já não têm erros de ortografia: usam inteligência artificial, números de telefone falsificados e sites iguais aos verdadeiros. Este manual mostra-lhe, com exemplos reais, como as reconhecer em poucos segundos e o que fazer se alguma coisa já correu mal.`,
   giftNote: `Uma oferta reservada aos Kumani. Leia, guarde e partilhe com quem ama: pais e avós são os alvos preferidos.`,
@@ -154,6 +154,67 @@ const pt: GuideContent = {
           todo: [`Ligue já para a sua operadora e para o banco a partir de outro telefone`, `Ative o PIN do cartão SIM`, `Prefira as notificações na app do banco aos SMS`],
         },
       ],
+    },
+    {
+      id: `domicilio`,
+      title: `À porta de casa`,
+      intro: `Nem todas as burlas chegam por telefone ou pela internet. A PSP, com o programa «Apoio 65 – Idosos em Segurança», e a GNR alertam regularmente para burlas a idosos em casa: falsos funcionários da água, da luz ou do gás e falsos agentes que aparecem sem aviso para entrar, cobrar ou roubar.`,
+      pattern: {
+        title: `O esquema é sempre o mesmo`,
+        text: `Água, gás, luz, câmara municipal, polícia: muda a farda, não o truque. Alguém que não esperava, um cartão mostrado à pressa, um motivo urgente (uma fuga, uma avaria, uma inspeção, um reembolso) e um pedido: entrar em casa ou receber dinheiro e ouro. Muitas vezes um cúmplice entra ou procura enquanto está distraído.`,
+      },
+      scams: [
+        {
+          id: `finto-letturista`,
+          title: `O falso leitor de contadores`,
+          how: `Toca à campainha a dizer que tem de ler o contador da água, do gás ou da luz, ou verificar as torneiras por um problema na zona. Depois de entrar, pede-lhe que abra a água na casa de banho ou na cozinha e, enquanto está ocupado, ele ou um cúmplice procura dinheiro e ouro. Outras vezes pede logo dinheiro para um «acerto» ou um «reembolso».`,
+          example: {
+            kind: `notice`,
+            from: `Aviso da junta de freguesia, a pedido da GNR`,
+            text: `Pede-se à população a máxima atenção a pessoas que se apresentem nas habitações fazendo-se passar por funcionários encarregados da leitura dos contadores da água. Não deixe entrar ninguém sem o identificar e, em caso de dúvida, contacte as autoridades.`,
+          },
+          flags: [`A visita não foi anunciada com antecedência no prédio ou na fatura`, `Insiste em entrar ou em que abra as torneiras`, `Pede dinheiro para acertos, reembolsos ou cauções`, `Mostra o cartão à pressa ou não tem nada que o identifique`],
+          todo: [`Não abra a quem não espera: fale através da porta fechada ou do intercomunicador`, `Ligue para o número da sua fatura, não para o que a pessoa lhe dá, e pergunte se há mesmo uma visita`, `As leituras reais são anunciadas com antecedência e muitos contadores são lidos à distância`, `Em caso de dúvida ligue 112 e avise vizinhos e familiares idosos`],
+          vignette: `door`,
+        },
+        {
+          id: `finta-fuga-gas`,
+          title: `A falsa fuga de gás e a falsa inspeção da caldeira`,
+          how: `Apresentam-se como técnicos do gás, da água ou da câmara: «Há uma fuga na zona, temos de verificar já». Assustam-no e pedem-lhe que junte dinheiro e ouro «para os proteger», ou fazem-no sair de casa. Outras vezes exigem o pagamento de uma «inspeção obrigatória» que não existe.`,
+          example: {
+            kind: `door`,
+            from: `À porta`,
+            text: `Bom dia, somos do gás. Há uma fuga no prédio, é perigoso, temos de entrar já. Ponha o dinheiro e o ouro num saco para não se estragarem.`,
+          },
+          flags: [`Alarme súbito e medo: «é perigoso, depressa»`, `Pedem-lhe para mudar ou juntar dinheiro e ouro`, `Falam de inspeções obrigatórias a pagar já, em dinheiro`],
+          todo: [`Nenhum técnico verdadeiro lhe pede para mexer no seu dinheiro ou no seu ouro`, `Se cheirar mesmo a gás, saia, não mexa em interruptores e ligue para o número de emergência da sua fatura`, `Feche a porta e ligue 112`],
+        },
+        {
+          id: `finto-carabiniere-ritiro`,
+          title: `O falso polícia ou advogado que vem buscar dinheiro e ouro`,
+          how: `Primeiro chega uma chamada: um filho ou um neto teve um acidente ou está em apuros e é preciso pagar já uma caução. Pouco depois, um «enviado» que diz ser polícia, advogado ou estafeta toca à porta para levar dinheiro ou ouro. Mantêm-no ao telefone para que não possa ligar a ninguém.`,
+          example: {
+            kind: `call`,
+            from: `Número desconhecido`,
+            text: `Minha senhora, fala a polícia. O seu neto causou um acidente e precisa de uma caução hoje para não ficar detido. Um colega passa por sua casa daqui a meia hora para a levantar.`,
+          },
+          flags: [`A polícia e os advogados nunca vão buscar dinheiro ou ouro a casa`, `Pedem-lhe que não desligue e que não conte a ninguém`, `Pressa e medo por um familiar`],
+          todo: [`Desligue, ligue o senhor mesmo ao familiar e depois para o 112`, `Não entregue nada a ninguém, mesmo a quem mostra um cartão`, `Use a palavra-passe da família`],
+          vignette: `call`,
+        },
+        {
+          id: `finto-funzionario`,
+          title: `O falso funcionário da câmara, da Segurança Social, dos CTT ou do banco`,
+          how: `Apresenta-se como funcionário da câmara, da Segurança Social, dos CTT ou do banco: tem de verificar a pensão, trocar notas «falsas», confirmar documentos ou entregar-lhe um reembolso. O objetivo é entrar, ver onde guarda o dinheiro ou receber dinheiro, cartões e PIN.`,
+          flags: [`Câmaras e bancos não enviam funcionários a casa sem marcação`, `Pede para ver dinheiro, cartões, PIN ou cadernetas`, `Fala de notas falsas ou de reembolsos a receber já`],
+          todo: [`Pergunte o nome e o serviço e ligue o senhor mesmo para o número oficial`, `Nunca mostre onde guarda dinheiro e ouro`, `Se for preciso, marque o senhor mesmo uma visita ao balcão, com um familiar`],
+        },
+      ],
+      poster: {
+        title: `Para imprimir e colar junto à porta`,
+        lines: [`Não abro a quem não espero.`, `Peço o cartão e ligo eu para o número da fatura ou da entidade.`, `Ninguém vem buscar dinheiro ou ouro a casa: nem polícias, nem advogados, nem técnicos.`, `Em caso de dúvida, ligo 112.`],
+        note: `Imprima-a e cole-a do lado de dentro da porta dos seus pais e avós. E falem sobre isso: quem está avisado defende-se melhor.`,
+      },
     },
     {
       id: `chat`,

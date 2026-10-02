@@ -6,7 +6,7 @@ import type { GuideContent } from '@/lib/antitruffa/types'
 // Contactos verificados en septiembre de 2026.
 const es: GuideContent = {
   eyebrow: `Manual KUMANI · Seguridad y Verificación`,
-  title: `Cómo protegerte de las estafas online`,
+  title: `Cómo protegerte de las estafas online y a domicilio`,
   motto: `No todo lo gratis vale poco. Esto puede valer tus ahorros.`,
   lead: `Las estafas de hoy ya no tienen faltas de ortografía: usan inteligencia artificial, números de teléfono falsificados y webs idénticas a las de verdad. Este manual te enseña, con ejemplos reales, a reconocerlas en pocos segundos y qué hacer si algo ya ha salido mal.`,
   giftNote: `Un regalo solo para los Kumani. Léelo, guárdalo y compártelo con quien quieres: padres y abuelos son el blanco favorito.`,
@@ -154,6 +154,67 @@ const es: GuideContent = {
           todo: [`Llama enseguida a tu operadora y a tu banco desde otro teléfono`, `Activa el PIN de la SIM`, `Mejor las notificaciones en la app del banco que los SMS`],
         },
       ],
+    },
+    {
+      id: `domicilio`,
+      title: `En la puerta de casa`,
+      intro: `No todas las estafas llegan por teléfono o por internet. El Ministerio del Interior y la Policía Nacional alertan con la campaña «Detente antes de abrir»: falsos revisores del gas y del agua se presentan sin aviso, sobre todo en casas de personas mayores, para cobrar revisiones que no existen o para robar.`,
+      pattern: {
+        title: `El esquema siempre es el mismo`,
+        text: `Agua, gas, luz, ayuntamiento, policía: cambia el uniforme, no el truco. Alguien a quien no esperabas, una acreditación enseñada deprisa, un motivo urgente (una fuga, una avería, una revisión, un reembolso) y una petición: entrar en casa o que le des dinero y joyas. A menudo un cómplice entra o rebusca mientras estás distraído.`,
+      },
+      scams: [
+        {
+          id: `finto-letturista`,
+          title: `El falso lector de contadores`,
+          how: `Llama a la puerta diciendo que tiene que leer el contador del agua, del gas o de la luz, o revisar los grifos por un problema en la zona. Una vez dentro te hace abrir el agua en el baño o la cocina y, mientras estás ocupado, él o un cómplice busca dinero y joyas. Otras veces pide directamente dinero en efectivo por una «regularización» o un «reembolso».`,
+          example: {
+            kind: `notice`,
+            from: `Aviso del ayuntamiento, a petición de la Guardia Civil`,
+            text: `Se ruega a los vecinos la máxima atención ante personas que se presenten en los domicilios haciéndose pasar por encargados de la lectura de los contadores del agua. No dejen entrar a nadie sin identificarlo y, ante cualquier duda, llamen al 112.`,
+          },
+          flags: [`La visita no se ha avisado con antelación en el portal o en la factura`, `Insiste en entrar o en que abras los grifos`, `Pide efectivo por regularizaciones, reembolsos o fianzas`, `Enseña la acreditación deprisa o no lleva nada que lo identifique`],
+          todo: [`No abras a quien no esperas: habla desde la puerta cerrada o el telefonillo`, `Llama al número de tu factura, no al que te da la persona, y pregunta si de verdad hay una visita`, `Las revisiones reales se avisan con antelación y nunca se pagan en efectivo en la puerta`, `Ante la duda llama al 112, al 091 (Policía Nacional) o al 062 (Guardia Civil) y avisa a vecinos y familiares mayores`],
+          vignette: `door`,
+        },
+        {
+          id: `finta-fuga-gas`,
+          title: `La falsa fuga de gas y el falso revisor de la caldera`,
+          how: `Se presentan como técnicos del gas, del agua o del ayuntamiento: «Hay una fuga en la zona, tenemos que revisar ahora mismo». Te asustan y te piden que juntes dinero y joyas «para protegerlos», o te hacen salir de casa. Otras veces exigen pagar una «revisión obligatoria» que no existe o te hacen firmar un contrato.`,
+          example: {
+            kind: `door`,
+            from: `En la puerta`,
+            text: `Buenos días, venimos del gas. Hay una fuga en el edificio, es peligroso, tenemos que entrar ya. Guarde el dinero y las joyas en una bolsa para que no se estropeen.`,
+          },
+          flags: [`Alarma repentina y miedo: «es peligroso, deprisa»`, `Te piden mover o juntar dinero y joyas`, `Hablan de revisiones obligatorias que hay que pagar ya, en efectivo`],
+          todo: [`Ningún técnico de verdad te pide tocar tu dinero o tus joyas`, `Si de verdad huele a gas, sal, no toques interruptores y llama al teléfono de urgencias de tu distribuidora`, `Cierra la puerta y llama al 112`],
+        },
+        {
+          id: `finto-carabiniere-ritiro`,
+          title: `El falso policía o abogado que pasa a recoger dinero y joyas`,
+          how: `Primero llega una llamada: un hijo o un nieto ha tenido un accidente o está en apuros y hace falta una fianza ya. Poco después, un «enviado» que se presenta como policía, abogado o mensajero llama a la puerta para recoger dinero o joyas. Te mantienen al teléfono para que no puedas llamar a nadie.`,
+          example: {
+            kind: `call`,
+            from: `Número desconocido`,
+            text: `Señora, le llamo de la Policía. Su nieto ha provocado un accidente y necesita una fianza hoy mismo para no ir a prisión. Un compañero pasará a recogerla por su casa en media hora.`,
+          },
+          flags: [`La policía y los abogados nunca recogen dinero ni joyas en casa`, `Te piden que no cuelgues y que no se lo cuentes a nadie`, `Prisa y miedo por un familiar`],
+          todo: [`Cuelga, llama tú a tu familiar y después al 091 o al 062`, `No entregues nada a nadie, aunque enseñe una placa`, `Usa la palabra clave de la familia`],
+          vignette: `call`,
+        },
+        {
+          id: `finto-funzionario`,
+          title: `El falso empleado del ayuntamiento, de la Seguridad Social, de Correos o del banco`,
+          how: `Se presenta como empleado del ayuntamiento, de la Seguridad Social, de Correos o del banco: tiene que revisar tu pensión, cambiar billetes «falsos», comprobar documentos o entregarte un reembolso. El objetivo es entrar, ver dónde guardas el dinero o que le des efectivo, tarjetas y PIN.`,
+          flags: [`Ayuntamientos y bancos no envían empleados a casa sin cita`, `Pide ver efectivo, tarjetas, PIN o libretas`, `Habla de billetes falsos o de reembolsos que cobrar ya`],
+          todo: [`Pide nombre y departamento y llama tú al número oficial`, `No enseñes nunca dónde guardas dinero y joyas`, `Si hace falta, pide tú cita en la oficina, con un familiar`],
+        },
+      ],
+      poster: {
+        title: `Para imprimir y pegar junto a la puerta`,
+        lines: [`No abro a quien no espero.`, `Pido la acreditación y llamo yo al número de la factura o del organismo.`, `Nadie recoge dinero ni joyas en casa: ni policías, ni abogados, ni técnicos.`, `Ante la duda, llamo al 112.`],
+        note: `Imprímela y pégala por dentro de la puerta de tus padres y abuelos. Y habladlo juntos: quien está avisado se defiende mejor.`,
+      },
     },
     {
       id: `chat`,

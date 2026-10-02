@@ -51,6 +51,28 @@ function Alert({ x, y }: { x: number; y: number }) {
 }
 
 const SCENES: Record<VignetteId, ReactNode> = {
+  // Porta di casa con spioncino; fuori il finto addetto con tesserino e
+  // contatore, l'amo d'oro che punta alla maniglia
+  door: (
+    <>
+      <rect x="40" y="18" width="78" height="118" rx="4" fill={SOFT} stroke={LINE} strokeWidth="3" />
+      <rect x="50" y="30" width="58" height="40" rx="3" fill="none" stroke={LINE} strokeWidth="2" />
+      <rect x="50" y="80" width="58" height="44" rx="3" fill="none" stroke={LINE} strokeWidth="2" />
+      <circle cx="79" cy="44" r="4" fill={GOLD} />
+      <circle cx="104" cy="88" r="4.5" fill={BRIGHT} />
+      <Mask x={170} y={52} s={1.1} />
+      <path d="M150 70 h40 a8 8 0 0 1 8 8 v50 h-56 v-50 a8 8 0 0 1 8 -8 Z" fill={SOFT} />
+      <rect x="156" y="84" width="22" height="15" rx="2" fill={GOLD} />
+      <rect x="159" y="89" width="9" height="2.5" rx="1" fill="var(--ink)" />
+      <rect x="159" y="93" width="14" height="2" rx="1" fill="var(--ink)" />
+      <g transform="translate(206 104)">
+        <circle r="12" fill="none" stroke={LINE} strokeWidth="2.5" />
+        <path d="M0 0 L6 -6" stroke={BRIGHT} strokeWidth="2.5" strokeLinecap="round" />
+        <circle r="2" fill={BRIGHT} />
+      </g>
+      <Hook x={128} y={74} />
+    </>
+  ),
   // Telefono con SMS e link che nasconde un amo
   sms: (
     <>

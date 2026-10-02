@@ -5,7 +5,7 @@ import type { GuideContent } from '@/lib/antitruffa/types'
 // remplacées par leurs équivalents français. Mis à jour en septembre 2026.
 const fr: GuideContent = {
   eyebrow: `Manuel KUMANI · Sécurité et Vérification`,
-  title: `Comment se protéger des arnaques en ligne`,
+  title: `Comment se protéger des arnaques en ligne et à domicile`,
   motto: `Tout ce qui est gratuit ne vaut pas rien. Celui-ci peut valoir vos économies.`,
   lead: `Les arnaques d'aujourd'hui n'ont plus de fautes d'orthographe : elles utilisent l'intelligence artificielle, des numéros de téléphone falsifiés et des sites identiques aux vrais. Ce manuel vous montre, avec des exemples réels, comment les reconnaître en quelques secondes et quoi faire si quelque chose a déjà mal tourné.`,
   giftNote: `Un cadeau réservé aux Kumani. Lisez-le, gardez-le et partagez-le avec ceux que vous aimez : les parents et les grands-parents sont les cibles préférées.`,
@@ -154,6 +154,67 @@ const fr: GuideContent = {
           todo: [`Appelez tout de suite votre opérateur et votre banque depuis un autre téléphone`, `Activez le code PIN de la carte SIM`, `Préférez les validations dans l'application de la banque plutôt que par SMS`],
         },
       ],
+    },
+    {
+      id: `domicilio`,
+      title: `À votre porte`,
+      intro: `Toutes les arnaques n’arrivent pas par téléphone ou par internet. La Gendarmerie nationale et la Préfecture de police mettent régulièrement en garde contre les vols « à la fausse qualité » : de faux agents des eaux, d’EDF ou de faux policiers se présentent au domicile, surtout chez des personnes âgées, pour voler argent et bijoux.`,
+      pattern: {
+        title: `Le scénario est toujours le même`,
+        text: `Eau, gaz, électricité, mairie, police : l’uniforme change, pas la ruse. Quelqu’un que vous n’attendiez pas, une carte montrée à la hâte, un motif urgent (une fuite, une panne, un contrôle, un remboursement) et une demande : entrer chez vous, ou se faire remettre de l’argent et des bijoux. Souvent un complice entre ou fouille pendant que vous êtes distrait.`,
+      },
+      scams: [
+        {
+          id: `finto-letturista`,
+          title: `Le faux releveur de compteur`,
+          how: `Il sonne en disant devoir relever le compteur d’eau, de gaz ou d’électricité, ou vérifier vos robinets à cause d’un problème dans le quartier. Une fois entré, il vous fait ouvrir l’eau dans la salle de bain ou la cuisine et, pendant que vous êtes occupé, lui ou un complice cherche argent et bijoux. Parfois il réclame directement de l’argent pour une « régularisation » ou un « remboursement ».`,
+          example: {
+            kind: `notice`,
+            from: `Avis de la mairie, sur signalement de la gendarmerie`,
+            text: `La population est invitée à la plus grande vigilance envers des personnes se présentant au domicile en se faisant passer pour des agents chargés du relevé des compteurs d’eau. Ne laissez entrer personne sans l’avoir identifié et, en cas de doute, appelez le 17.`,
+          },
+          flags: [`La visite n’a pas été annoncée par un avis dans l’immeuble ou sur votre facture`, `Il insiste pour entrer ou pour vous faire ouvrir les robinets`, `Il demande de l’argent liquide pour une régularisation ou un remboursement`, `Il montre sa carte trop vite ou n’a rien pour s’identifier`],
+          todo: [`N’ouvrez pas à quelqu’un que vous n’attendez pas : parlez à travers la porte fermée ou l’interphone`, `Appelez le numéro écrit sur votre facture, pas celui qu’il vous donne, et demandez si une intervention est prévue`, `Les vrais relevés sont annoncés à l’avance et beaucoup de compteurs se relèvent à distance`, `En cas de doute, appelez le 17 ou le 112 et prévenez vos voisins et proches âgés`],
+          vignette: `door`,
+        },
+        {
+          id: `finta-fuga-gas`,
+          title: `La fausse fuite de gaz et le faux contrôle de chaudière`,
+          how: `Ils se présentent comme agents du gaz, des eaux ou de la mairie : « Il y a une fuite dans le quartier, nous devons vérifier tout de suite. » Ils vous font peur et vous demandent de rassembler argent et bijoux « pour les protéger », ou vous font sortir. D’autres fois ils exigent le paiement d’un « contrôle obligatoire » qui n’existe pas.`,
+          example: {
+            kind: `door`,
+            from: `À la porte`,
+            text: `Bonjour, service du gaz. Il y a une fuite dans l’immeuble, c’est dangereux, nous devons entrer tout de suite. Mettez votre argent et vos bijoux dans un sac pour qu’ils ne s’abîment pas.`,
+          },
+          flags: [`Alarme soudaine et peur : « c’est dangereux, vite »`, `On vous demande de déplacer ou de rassembler argent et bijoux`, `On parle de contrôles obligatoires à payer tout de suite, en liquide`],
+          todo: [`Aucun vrai technicien ne vous demande de toucher à votre argent ou à vos bijoux`, `Si vous sentez vraiment le gaz, sortez, ne touchez pas aux interrupteurs et appelez le numéro d’urgence indiqué sur votre facture`, `Fermez la porte et appelez le 17`],
+        },
+        {
+          id: `finto-carabiniere-ritiro`,
+          title: `Le faux policier ou avocat qui vient récupérer argent et bijoux`,
+          how: `D’abord un appel : un enfant ou un petit-enfant a eu un accident ou a des ennuis, il faut payer une caution tout de suite. Peu après, un « envoyé » qui se dit policier, avocat ou coursier sonne pour récupérer de l’argent ou des bijoux. On vous garde au téléphone pour que vous ne puissiez appeler personne.`,
+          example: {
+            kind: `call`,
+            from: `Numéro inconnu`,
+            text: `Madame, ici la police. Votre petit-fils a provoqué un accident, il faut une caution tout de suite pour éviter la garde à vue. Un collègue passe la récupérer chez vous dans une demi-heure.`,
+          },
+          flags: [`La police et les avocats ne viennent jamais chercher argent ou bijoux à domicile`, `On vous demande de rester en ligne et de n’en parler à personne`, `Urgence et peur pour un proche`],
+          todo: [`Raccrochez, appelez vous-même votre proche puis le 17`, `Ne remettez rien à personne, même à quelqu’un qui montre une carte`, `Utilisez le mot de passe de la famille`],
+          vignette: `call`,
+        },
+        {
+          id: `finto-funzionario`,
+          title: `Le faux employé de la mairie, de la caisse de retraite, de La Poste ou de la banque`,
+          how: `Il se présente comme employé de la mairie, de la caisse de retraite, de La Poste ou de la banque : il doit vérifier votre pension, remplacer de « faux » billets, contrôler vos papiers ou vous remettre un remboursement. Le but est d’entrer, de voir où vous rangez votre argent ou de se faire remettre liquide, cartes et codes.`,
+          flags: [`Mairies et banques n’envoient pas d’employés chez vous sans rendez-vous`, `Il demande à voir argent liquide, cartes, codes ou livrets`, `Il parle de faux billets ou de remboursements à toucher tout de suite`],
+          todo: [`Demandez son nom et son service et appelez vous-même le numéro officiel`, `Ne montrez jamais où vous rangez argent et bijoux`, `Si besoin, prenez vous-même rendez-vous au guichet, avec un proche`],
+        },
+      ],
+      poster: {
+        title: `À imprimer et à coller près de la porte`,
+        lines: [`Je n’ouvre pas à quelqu’un que je n’attends pas.`, `Je demande la carte et j’appelle moi-même le numéro de la facture ou de l’organisme.`, `Personne ne vient chercher argent ou bijoux à domicile : ni la police, ni les avocats, ni les techniciens.`, `En cas de doute, j’appelle le 17.`],
+        note: `Imprimez-la et collez-la à l’intérieur de la porte de vos parents et grands-parents. Et parlez-en ensemble : qui est prévenu se défend mieux.`,
+      },
     },
     {
       id: `chat`,

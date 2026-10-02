@@ -4,7 +4,7 @@ import type { GuideContent } from '@/lib/antitruffa/types'
 // Angepasst an die italienische Referenzversion (it.ts). Stand: September 2026.
 const de: GuideContent = {
   eyebrow: `KUMANI Handbuch · Sicherheit und Prüfung`,
-  title: `So schützt du dich vor Online-Betrug`,
+  title: `So schützt du dich vor Betrug online und an der Haustür`,
   motto: `Nicht alles, was kostenlos ist, ist wenig wert. Dieses Handbuch kann deine Ersparnisse wert sein.`,
   lead: `Betrugsnachrichten von heute haben keine Rechtschreibfehler mehr: Die Täter nutzen künstliche Intelligenz, gefälschte Telefonnummern und Webseiten, die genauso aussehen wie die echten. Dieses Handbuch zeigt dir mit echten Beispielen, wie du Betrug in wenigen Sekunden erkennst und was du tun kannst, wenn schon etwas schiefgelaufen ist.`,
   giftNote: `Ein Geschenk nur für Kumani. Lies es, speichere es und teile es mit den Menschen, die dir wichtig sind: Eltern und Großeltern sind die Lieblingsziele der Betrüger.`,
@@ -153,6 +153,67 @@ const de: GuideContent = {
           todo: [`Ruf sofort deinen Mobilfunkanbieter und die Bank von einem anderen Telefon an`, `Schalte die SIM-PIN ein`, `Nutze lieber die Freigabe in der Banking-App als SMS-Codes`],
         },
       ],
+    },
+    {
+      id: `domicilio`,
+      title: `An der Haustür`,
+      intro: `Nicht jeder Betrug kommt per Telefon oder Internet. Mit Enkeltrick und Schockanrufen erbeuteten Betrüger 2025 laut Bundeskriminalamt rund 49 Millionen Euro, und oft holt ein „Abholer“ Geld und Schmuck direkt an der Haustür ab. Viele Maschen beginnen mit einem Klingeln.`,
+      pattern: {
+        title: `Die Masche ist immer dieselbe`,
+        text: `Wasser, Gas, Strom, Stadtverwaltung, Polizei: Die Uniform wechselt, der Trick nicht. Jemand, den du nicht erwartet hast, ein schnell gezeigter Ausweis, ein dringender Grund (ein Leck, eine Störung, eine Kontrolle, eine Erstattung) und eine Bitte: in die Wohnung zu kommen oder Geld und Schmuck zu bekommen. Oft schleicht sich ein Komplize hinein, während du abgelenkt bist.`,
+      },
+      scams: [
+        {
+          id: `finto-letturista`,
+          title: `Der falsche Zählerableser`,
+          how: `Er klingelt und sagt, er müsse den Wasser-, Gas- oder Stromzähler ablesen oder wegen eines Problems in der Gegend die Wasserhähne prüfen. Drinnen lässt er dich im Bad oder in der Küche das Wasser laufen, und während du beschäftigt bist, sucht er oder ein Komplize nach Geld und Schmuck. Manchmal verlangt er gleich Bargeld für eine „Nachzahlung“ oder eine „Rückerstattung“.`,
+          example: {
+            kind: `notice`,
+            from: `Hinweis der Gemeinde nach einer Warnung der Polizei`,
+            text: `Die Bevölkerung wird gebeten, besonders vorsichtig zu sein bei Personen, die sich als Ableser der Wasserzähler ausgeben und an der Haustür klingeln. Lassen Sie niemanden herein, dessen Identität Sie nicht geprüft haben, und rufen Sie im Zweifel die 110.`,
+          },
+          flags: [`Der Besuch wurde nicht vorher angekündigt, weder im Haus noch auf der Rechnung`, `Er drängt darauf hereinzukommen oder die Wasserhähne aufzudrehen`, `Er verlangt Bargeld für Nachzahlungen, Erstattungen oder Kautionen`, `Er zeigt den Ausweis nur kurz oder hat gar keinen`],
+          todo: [`Öffne niemandem, den du nicht erwartest: Sprich durch die geschlossene Tür oder die Sprechanlage`, `Ruf die Nummer auf deiner Rechnung an, nicht die, die dir die Person gibt, und frag, ob wirklich ein Termin ansteht`, `Echte Ablesungen werden von den Stadtwerken vorher angekündigt, und viele Zähler werden heute aus der Ferne gelesen`, `Im Zweifel ruf die 110 an und warne ältere Nachbarn und Angehörige`],
+          vignette: `door`,
+        },
+        {
+          id: `finta-fuga-gas`,
+          title: `Das falsche Gasleck und die falsche Heizungsprüfung`,
+          how: `Sie geben sich als Techniker der Stadtwerke, des Gasversorgers oder der Gemeinde aus: „Es gibt ein Leck in der Gegend, wir müssen sofort prüfen.“ Sie machen dir Angst und bitten dich, Geld und Schmuck „zum Schutz“ zusammenzupacken, oder schicken dich hinaus. Andere verlangen Geld für eine „Pflichtprüfung“, die es nicht gibt.`,
+          example: {
+            kind: `door`,
+            from: `An der Tür`,
+            text: `Guten Tag, wir sind vom Gasversorger. Im Haus gibt es ein Leck, das ist gefährlich, wir müssen sofort rein. Packen Sie Geld und Schmuck in eine Tasche, damit nichts kaputtgeht.`,
+          },
+          flags: [`Plötzlicher Alarm und Angst: „Das ist gefährlich, schnell“`, `Du sollst Geld und Schmuck umräumen oder einpacken`, `Es ist von Pflichtprüfungen die Rede, die sofort bar zu zahlen sind`],
+          todo: [`Kein echter Techniker bittet dich, Geld oder Schmuck anzufassen`, `Riechst du wirklich Gas: raus aus der Wohnung, keine Schalter betätigen und den Notdienst deines Versorgers anrufen`, `Schließ die Tür und ruf die 110 an`],
+        },
+        {
+          id: `finto-carabiniere-ritiro`,
+          title: `Falsche Polizisten und der „Abholer“ an der Haustür`,
+          how: `Zuerst kommt ein Anruf: ein angeblicher Polizist warnt vor Einbrechern, oder ein Kind oder Enkel hatte einen Unfall und braucht sofort eine Kaution. Kurz danach klingelt ein „Abholer“, angeblich Polizist, Anwalt oder Bote, um Bargeld oder Schmuck mitzunehmen. Man hält dich am Telefon, damit du niemanden anrufen kannst.`,
+          example: {
+            kind: `call`,
+            from: `Unbekannte Nummer`,
+            text: `Hier spricht die Kriminalpolizei. Ihr Enkel hat einen Unfall verursacht und braucht heute eine Kaution, sonst kommt er in Haft. Ein Kollege holt das Geld in einer halben Stunde bei Ihnen ab.`,
+          },
+          flags: [`Polizei und Anwälte holen niemals Geld oder Schmuck zu Hause ab`, `Du sollst am Telefon bleiben und mit niemandem sprechen`, `Zeitdruck und Angst um einen Angehörigen`],
+          todo: [`Leg auf, ruf selbst deinen Angehörigen an und danach die 110`, `Gib niemandem etwas, auch nicht jemandem mit Dienstausweis`, `Nutzt ein Familien-Codewort`],
+          vignette: `call`,
+        },
+        {
+          id: `finto-funzionario`,
+          title: `Falsche Mitarbeiter von Amt, Rentenversicherung, Post oder Bank`,
+          how: `Er gibt sich als Mitarbeiter der Stadt, der Rentenversicherung, der Post oder der Bank aus: Er müsse deine Rente prüfen, „falsche“ Geldscheine austauschen, Unterlagen kontrollieren oder dir eine Erstattung bringen. Ziel ist es, hereinzukommen, zu sehen, wo du dein Geld aufbewahrst, oder Bargeld, Karten und PIN zu bekommen.`,
+          flags: [`Ämter und Banken schicken niemanden ohne Termin zu dir nach Hause`, `Er will Bargeld, Karten, PIN oder Sparbücher sehen`, `Er spricht von Falschgeld oder von Erstattungen, die sofort abzuholen sind`],
+          todo: [`Frag nach Name und Abteilung und ruf selbst die offizielle Nummer an`, `Zeig nie, wo du Geld und Schmuck aufbewahrst`, `Mach bei Bedarf selbst einen Termin im Büro aus, zusammen mit einem Angehörigen`],
+        },
+      ],
+      poster: {
+        title: `Zum Ausdrucken und neben die Tür hängen`,
+        lines: [`Ich öffne niemandem, den ich nicht erwarte.`, `Ich frage nach dem Ausweis und rufe selbst die Nummer auf der Rechnung oder der Behörde an.`, `Niemand holt Geld oder Schmuck zu Hause ab: keine Polizei, keine Anwälte, keine Techniker.`, `Im Zweifel rufe ich die 110 an.`],
+        note: `Druck sie aus und häng sie innen an die Haustür deiner Eltern und Großeltern. Und sprecht darüber: Wer gewarnt ist, schützt sich besser.`,
+      },
     },
     {
       id: `chat`,

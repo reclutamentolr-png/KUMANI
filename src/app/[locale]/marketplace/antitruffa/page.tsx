@@ -1,5 +1,6 @@
 import { getLocale, getTranslations } from 'next-intl/server'
 import {
+  DoorClosed,
   AlertTriangle,
   ArrowLeft,
   ArrowRight,
@@ -178,11 +179,35 @@ export default async function AntitruffaPage() {
               <h2 className="text-2xl font-bold text-[var(--ink)]">{c.title}</h2>
               <p className="mt-1 text-sm leading-6 text-[var(--muted)]">{c.intro}</p>
             </div>
+            {/* Lo schema che si ripete in tutto il capitolo */}
+            {c.pattern ? (
+              <div className="mb-4 break-inside-avoid rounded-2xl border-l-4 border-[var(--gold)] bg-[var(--gold-pale)]/70 p-4 [print-color-adjust:exact]">
+                <p className="flex items-center gap-2 font-bold text-[var(--ink)]">
+                  <Sparkles className="h-4 w-4 text-[var(--gold)]" />
+                  {c.pattern.title}
+                </p>
+                <p className="mt-1 text-sm leading-6 text-[var(--ink)]">{c.pattern.text}</p>
+              </div>
+            ) : null}
             <div className="space-y-3">
               {c.scams.map(s => (
                 <ScamCard key={s.id} scam={s} ui={g.ui} />
               ))}
             </div>
+            {/* Scheda da stampare e attaccare vicino alla porta */}
+            {c.poster ? (
+              <div className="mt-4 break-inside-avoid rounded-3xl border-2 border-dashed border-[var(--gold)] bg-white p-6 text-center [print-color-adjust:exact]">
+                <p className="text-xs font-bold uppercase tracking-widest text-[var(--gold)]">{c.poster.title}</p>
+                <ul className="mx-auto mt-4 max-w-md space-y-3">
+                  {c.poster.lines.map(line => (
+                    <li key={line} className="text-lg font-bold leading-snug text-[var(--ink)] sm:text-xl">
+                      {line}
+                    </li>
+                  ))}
+                </ul>
+                <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-[var(--muted)] print:hidden">{c.poster.note}</p>
+              </div>
+            ) : null}
             {i === 0 ? <CheckMailCta ui={g.ui} /> : null}
           </section>
         ))}
@@ -367,6 +392,21 @@ function Example({ example, label }: { example: NonNullable<Scam['example']>; la
             {from}
           </div>
           <p className="px-3 py-3 font-semibold leading-6 text-red-700">{text}</p>
+        </div>
+      ) : kind === 'notice' ? (
+        // Avviso affisso (Comune, Carabinieri)
+        <div className="rounded-xl border border-black/15 bg-[#fffdf5] p-4 text-sm shadow-sm [print-color-adjust:exact]">
+          <div className="mb-2 border-b border-black/10 pb-2 text-xs font-bold uppercase tracking-wide text-gray-700">{from}</div>
+          <p className="leading-6 text-gray-800">{text}</p>
+        </div>
+      ) : kind === 'door' ? (
+        // Conversazione alla porta
+        <div className="flex gap-3 rounded-xl bg-[var(--ink)] p-4 text-sm text-white [print-color-adjust:exact]">
+          <DoorClosed className="mt-0.5 h-5 w-5 shrink-0 text-[var(--gold-bright)]" />
+          <div>
+            <div className="mb-1 text-xs text-[var(--gold-bright)]">{from}</div>
+            <p className="italic leading-6 text-white/85">“{text}”</p>
+          </div>
         </div>
       ) : kind === 'ad' ? (
         <div className="rounded-xl border border-black/10 bg-white p-3 text-sm">

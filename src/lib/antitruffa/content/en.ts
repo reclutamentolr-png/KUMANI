@@ -6,7 +6,7 @@ import type { GuideContent } from '@/lib/antitruffa/types'
 // Stop Scams UK. Updated September 2026.
 const en: GuideContent = {
   eyebrow: `KUMANI Manual · Safety and Verification`,
-  title: `How to protect yourself from online scams`,
+  title: `How to protect yourself from online and doorstep scams`,
   motto: `Not everything free is worth little. This one could be worth your savings.`,
   lead: `Today's scams no longer have spelling mistakes: they use artificial intelligence, faked phone numbers and websites that look exactly like the real ones. This manual shows you, with real examples, how to spot them in a few seconds and what to do if something has already gone wrong.`,
   giftNote: `A gift for Kumani members only. Read it, save it and share it with the people you love: parents and grandparents are the scammers' favourite targets.`,
@@ -154,6 +154,67 @@ const en: GuideContent = {
           todo: [`Call your mobile network and your bank straight away from another phone`, `Set a SIM PIN`, `Choose notifications in your banking app rather than text messages`],
         },
       ],
+    },
+    {
+      id: `domicilio`,
+      title: `At your front door`,
+      intro: `Not every scam arrives by phone or online. In the UK alone, Trading Standards recorded 5,228 reported cases of doorstep selling and rogue traders in 2021, with £25.8 million lost (National Trading Standards, Friends Against Scams). Many scams start with a knock at the door.`,
+      pattern: {
+        title: `The trick is always the same`,
+        text: `Water, gas, electricity, the council, the police: the uniform changes, the trick does not. Someone you were not expecting, an ID card flashed in a hurry, an urgent reason (a leak, a fault, an inspection, a refund) and one request: to come inside, or to be handed money and jewellery. Often an accomplice slips in while you are distracted.`,
+      },
+      scams: [
+        {
+          id: `finto-letturista`,
+          title: `The fake meter reader`,
+          how: `They knock saying they need to read your water, gas or electricity meter, or check your taps because of a problem in the area. Once inside they ask you to run the water in the bathroom or kitchen and, while you are busy, they or an accomplice look for cash and jewellery. Sometimes they simply ask for cash for an “adjustment” or a “refund”.`,
+          example: {
+            kind: `notice`,
+            from: `Council notice, following a police warning`,
+            text: `Residents are asked to be extremely careful with people calling at homes claiming to read water meters. Do not let anyone in unless you have confirmed who they are and, if in doubt, contact the police.`,
+          },
+          flags: [`The visit was not announced by letter or on your bill`, `They insist on coming in or on you running the taps`, `They ask for cash for adjustments, refunds or deposits`, `They flash their ID quickly or have nothing to identify them`],
+          todo: [`Do not open the door to anyone you are not expecting: talk through the closed door or the intercom`, `Call the number on your bill, not one they give you, and ask whether a visit is really planned`, `Many energy and water companies let you set a password their staff will say at the door: ask yours`, `If in doubt call 999 (UK), 911 (US) or 112 (EU) and warn older neighbours and relatives`],
+          vignette: `door`,
+        },
+        {
+          id: `finta-fuga-gas`,
+          title: `The fake gas leak and the bogus boiler check`,
+          how: `They claim to be from the gas board, the water company or the council: “There is a leak in the area, we must check now.” They frighten you and ask you to gather cash and jewellery “to keep them safe”, or they get you out of the house. Other times they demand payment for a “compulsory inspection” that does not exist.`,
+          example: {
+            kind: `door`,
+            from: `At the door`,
+            text: `Hello, we are from the gas company. There is a leak in the building, it is dangerous, we need to come in now. Put your cash and jewellery in a bag so they do not get damaged.`,
+          },
+          flags: [`Sudden alarm and fear: “it is dangerous, quick”`, `They ask you to move or gather money and jewellery`, `They talk about compulsory checks to be paid now, in cash`],
+          todo: [`No real engineer asks you to touch your money or jewellery`, `If you really smell gas, get out, do not use switches and call the emergency number on your bill`, `Close the door and call the police`],
+        },
+        {
+          id: `finto-carabiniere-ritiro`,
+          title: `Courier fraud: the fake officer who comes to collect`,
+          how: `First comes a call from a “police officer” or “bank investigator”, or about a relative in trouble who needs bail. Shortly afterwards a “courier” knocks at the door to collect cash, cards or jewellery. They keep you on the phone so you cannot call anyone.`,
+          example: {
+            kind: `call`,
+            from: `Unknown number`,
+            text: `This is the police. Your grandson has caused an accident and needs bail today. We will send a courier to collect it from you in half an hour.`,
+          },
+          flags: [`Police and banks never send anyone to collect money, cards or jewellery`, `They ask you to stay on the line and tell no one`, `Rush and fear for a relative`],
+          todo: [`Hang up, call your relative yourself, then the police from a different phone`, `Never hand anything over, not even to someone with an ID card`, `Use your family password`],
+          vignette: `call`,
+        },
+        {
+          id: `finto-funzionario`,
+          title: `The fake council, pension or bank official`,
+          how: `They claim to be from the council, the pension service, the post office or the bank: they need to check your pension, replace “counterfeit” banknotes, verify documents or hand you a refund. The goal is to get in, see where you keep your money or get cash, cards and PIN numbers.`,
+          flags: [`Councils and banks do not send staff to your home without an appointment`, `They ask to see cash, cards, PIN numbers or bank books`, `They talk about counterfeit notes or refunds to collect today`],
+          todo: [`Ask for their name and department and call the official number yourself`, `Never show where you keep money or jewellery`, `If needed, book an appointment at the office yourself, with a relative`],
+        },
+      ],
+      poster: {
+        title: `Print it and stick it next to your door`,
+        lines: [`I do not open the door to people I am not expecting.`, `I ask for ID and call the number on my bill or the official number myself.`, `Nobody collects money or jewellery at home: not the police, not the bank, not engineers.`, `If in doubt, I call the police.`],
+        note: `Print it and stick it inside the front door of your parents and grandparents. And talk about it together: people who know are harder to fool.`,
+      },
     },
     {
       id: `chat`,

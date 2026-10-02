@@ -3,9 +3,14 @@ import type { GuideContent } from '@/lib/antitruffa/types'
 // Manuale anti-truffa KUMANI — italiano (versione di riferimento).
 // Fonti principali: Polizia Postale (report 2025 e avvisi 2026), CERT-AgID,
 // Consob, AGCOM, AgID, INPS, Agenzia delle Entrate. Aggiornato a settembre 2026.
+// Capitolo "Alla porta di casa": Direzione Centrale della Polizia Criminale
+// (truffe agli over 65, dati 2024, nel Rapporto Eurispes 2025) e avvisi di
+// Comuni e Carabinieri. Nelle altre lingue: BKA 2025 (DE), National Trading
+// Standards / Friends Against Scams 2021 (UK), campagne di Ministerio del
+// Interior (ES), Gendarmerie e Préfecture de police (FR), PSP e GNR (PT).
 const it: GuideContent = {
   eyebrow: `Manuale KUMANI · Sicurezza e Verifica`,
-  title: `Come difendersi dalle truffe online`,
+  title: `Come difendersi dalle truffe online e a domicilio`,
   motto: `Non tutto ciò che è gratis vale poco. Questo può valere i tuoi risparmi.`,
   lead: `Le truffe di oggi non hanno più errori di grammatica: usano l'intelligenza artificiale, numeri di telefono falsificati e siti identici a quelli veri. Questo manuale ti mostra, con esempi reali, come riconoscerle in pochi secondi e cosa fare se qualcosa è già andato storto.`,
   giftNote: `Un regalo riservato ai Kumani. Leggilo, salvalo e condividilo con chi ami: genitori e nonni sono i bersagli preferiti.`,
@@ -154,6 +159,67 @@ const it: GuideContent = {
           todo: [`Chiama subito il tuo operatore e la banca da un altro telefono`, `Attiva il PIN della SIM`, `Preferisci le notifiche nell'app della banca agli SMS`],
         },
       ],
+    },
+    {
+      id: `domicilio`,
+      title: `Alla porta di casa`,
+      intro: `Non tutte le truffe arrivano dal telefono o da internet. Nel 2024 in Italia le truffe a danno di persone con più di 65 anni sono state 42.890, il 15,6% in più dell’anno prima (dati della Direzione Centrale della Polizia Criminale, riportati nel Rapporto Eurispes 2025). Molte cominciano con un campanello.`,
+      pattern: {
+        title: `Lo schema è sempre lo stesso`,
+        text: `Acqua, gas, luce, telefono, Comune, Carabinieri: cambia la divisa, non il trucco. Una persona che non aspettavi, un tesserino mostrato di fretta, un motivo urgente (una perdita, un guasto, un controllo, un rimborso) e una richiesta: entrare in casa oppure farsi dare soldi e gioielli. Spesso c’è un complice che entra o fruga mentre tu sei distratto.`,
+      },
+      scams: [
+        {
+          id: `finto-letturista`,
+          title: `Il finto addetto alla lettura dei contatori`,
+          how: `Suona alla porta dicendo di dover leggere il contatore dell’acqua, del gas o della luce, o di controllare i rubinetti per un problema nella zona. Una volta dentro ti fa aprire l’acqua in bagno o in cucina e, mentre sei occupato, lui o un complice cerca soldi e gioielli. Altre volte chiede subito contanti per un “conguaglio” o un “rimborso”.`,
+          example: {
+            kind: `notice`,
+            from: `Avviso del Comune, su segnalazione dei Carabinieri`,
+            text: `Si invita la cittadinanza a prestare la massima attenzione a persone che si presentino presso le abitazioni fingendosi incaricati della lettura dei contatori dell’acqua. Non consentite l’accesso a persone non identificate e, in caso di dubbi, contattate le Forze dell’Ordine.`,
+          },
+          flags: [`La visita non è stata annunciata da un avviso nel palazzo o in bolletta`, `Insiste per entrare o per farti aprire i rubinetti`, `Chiede contanti per conguagli, rimborsi o cauzioni`, `Mostra il tesserino di fretta o non ha nulla che lo identifichi`],
+          todo: [`Non aprire a chi non aspetti: parla dalla porta chiusa o dal citofono`, `Chiama il numero scritto sulla tua bolletta, non quello che ti dà la persona, e chiedi se c’è davvero un intervento`, `Ricorda che le letture vere sono annunciate prima e spesso il contatore è fuori casa`, `Nel dubbio chiama subito il 112 e avvisa vicini e familiari anziani`, `Leggi e condividi gli avvisi del Comune e dei Carabinieri: segnalano le truffe in corso nella tua zona`],
+          vignette: `door`,
+        },
+        {
+          id: `finta-fuga-gas`,
+          title: `La finta fuga di gas e il finto controllo della caldaia`,
+          how: `Si presentano come tecnici del gas, dell’acquedotto o del Comune: “C’è una fuga nella zona, dobbiamo controllare subito”. Ti spaventano e ti chiedono di raccogliere soldi e gioielli “per proteggerli”, per esempio in una borsa o nel frigorifero, oppure ti fanno uscire di casa. Altre volte pretendono il pagamento di un “controllo obbligatorio” che non esiste.`,
+          example: {
+            kind: `door`,
+            from: `Alla porta`,
+            text: `Buongiorno, siamo del servizio gas. C’è una fuga nel palazzo: è pericoloso, dobbiamo entrare subito. Metta soldi e gioielli in una borsa, così non si rovinano.`,
+          },
+          flags: [`Allarme improvviso e paura: “è pericoloso, presto”`, `Ti chiedono di spostare o raccogliere soldi e gioielli`, `Parlano di controlli obbligatori da pagare subito, in contanti`],
+          todo: [`Nessun tecnico vero ti chiede di toccare soldi o gioielli`, `Se senti davvero odore di gas esci, non usare interruttori e chiama il pronto intervento indicato in bolletta`, `Chiudi la porta e chiama il 112`],
+        },
+        {
+          id: `finto-carabiniere-ritiro`,
+          title: `Il finto carabiniere o avvocato che passa a ritirare soldi e gioielli`,
+          how: `Prima arriva una telefonata: un figlio o un nipote ha avuto un incidente o è nei guai e serve subito una cauzione. Poco dopo un “incaricato”, che si presenta come carabiniere, avvocato o corriere, suona alla porta per ritirare contanti o gioielli. Ti tengono al telefono così non puoi chiamare nessuno.`,
+          example: {
+            kind: `call`,
+            from: `Numero sconosciuto`,
+            text: `Signora, sono il maresciallo dei Carabinieri. Suo nipote ha causato un incidente: per evitare il carcere serve subito una cauzione. Tra poco passa un nostro incaricato a ritirarla.`,
+          },
+          flags: [`Forze dell’ordine e avvocati non ritirano mai soldi o gioielli a casa`, `Ti chiedono di restare al telefono e di non parlarne con nessuno`, `Fretta e paura per un familiare`],
+          todo: [`Riattacca, chiama tu il familiare e poi il 112`, `Non consegnare niente a nessuno, nemmeno a chi mostra un tesserino`, `Usa la parola d’ordine di famiglia`],
+          vignette: `call`,
+        },
+        {
+          id: `finto-funzionario`,
+          title: `Il finto impiegato del Comune, dell’INPS, delle Poste o della banca`,
+          how: `Si presenta come impiegato del Comune, dell’INPS, delle Poste o della banca: deve controllare la pensione, sostituire banconote “false”, verificare i documenti o consegnare un rimborso. Lo scopo è entrare, vedere dove tieni i soldi o farsi dare contanti, carte e PIN.`,
+          flags: [`Enti e banche non mandano impiegati a casa senza appuntamento`, `Chiede di vedere contanti, carte, PIN o libretti`, `Parla di banconote false o di rimborsi da riscuotere subito`],
+          todo: [`Chiedi nome e ufficio e chiama tu il numero ufficiale dell’ente`, `Non mostrare mai dove tieni soldi e gioielli`, `Se serve, fissa tu un appuntamento in ufficio, insieme a un familiare`],
+        },
+      ],
+      poster: {
+        title: `Da stampare e attaccare vicino alla porta`,
+        lines: [`Non apro a chi non aspetto.`, `Chiedo il tesserino e chiamo io il numero della bolletta o dell’ente.`, `Nessuno ritira soldi o gioielli a casa: né Carabinieri, né avvocati, né tecnici.`, `Nel dubbio chiamo il 112.`],
+        note: `Stampala e attaccala dentro la porta di casa dei tuoi genitori e dei tuoi nonni. E parlatene insieme: chi è avvisato si difende meglio.`,
+      },
     },
     {
       id: `chat`,

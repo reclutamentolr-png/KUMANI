@@ -3,10 +3,11 @@
 // i testi stanno in src/lib/antitruffa/content/<lingua>.ts.
 
 // Vignette disegnate (src/components/antitruffa/Vignette.tsx)
-export type VignetteId = 'sms' | 'email' | 'whatsapp' | 'call' | 'qr' | 'shop' | 'invest' | 'romance' | 'job' | 'blackmail' | 'identity' | 'invoice'
+export type VignetteId = 'sms' | 'email' | 'whatsapp' | 'call' | 'qr' | 'shop' | 'invest' | 'romance' | 'job' | 'blackmail' | 'identity' | 'invoice' | 'door'
 
 // Tipo di messaggio d'esempio (cambia la grafica: fumetto SMS, email, chat...)
-export type ExampleKind = 'sms' | 'email' | 'chat' | 'call' | 'ad' | 'popup'
+// door = conversazione alla porta; notice = avviso affisso (Comune, Carabinieri)
+export type ExampleKind = 'sms' | 'email' | 'chat' | 'call' | 'ad' | 'popup' | 'door' | 'notice'
 
 export type Scam = {
   id: string
@@ -22,7 +23,16 @@ export type Scam = {
   vignette?: VignetteId
 }
 
-export type Chapter = { id: string; title: string; intro: string; scams: Scam[] }
+export type Chapter = {
+  id: string
+  title: string
+  intro: string
+  // Facoltativo: lo schema che si ripete in tutte le truffe del capitolo
+  pattern?: { title: string; text: string }
+  scams: Scam[]
+  // Facoltativo: scheda da stampare (es. da attaccare vicino alla porta)
+  poster?: { title: string; lines: string[]; note: string }
+}
 
 export type Contact = { name: string; detail: string; url?: string; phone?: string }
 
