@@ -6174,6 +6174,9 @@
     "per_month": "mese",
     "per_week": "settimana",
     "per_day": "giorno",
-    "per_hour": "ora"
+    "per_hour": "ora",
+    "quotaLeft": "Ricerche disponibili questa settimana: {left} di {limit}",
+    "quotaNone": "Ricerche della settimana finite: la prossima da {date}",
+    "error_quota": "Hai usato le {limit} ricerche disponibili in questi 7 giorni (fase di prova). La prossima sarà disponibile {date}."
   }
 }

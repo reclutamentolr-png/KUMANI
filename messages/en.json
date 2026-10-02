@@ -6174,6 +6174,9 @@
     "per_month": "month",
     "per_week": "week",
     "per_day": "day",
-    "per_hour": "hour"
+    "per_hour": "hour",
+    "quotaLeft": "Searches left this week: {left} of {limit}",
+    "quotaNone": "No searches left this week: next one from {date}",
+    "error_quota": "You have used the {limit} searches available in these 7 days (trial phase). The next one will be available {date}."
   }
 }

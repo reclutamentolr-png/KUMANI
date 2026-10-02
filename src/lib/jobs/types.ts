@@ -91,8 +91,13 @@ export interface JobStats {
 }
 
 // Messaggi inviati alla pagina mentre la ricerca procede (una riga JSON ciascuno)
+// Ricerche usate negli ultimi 7 giorni; limit null = nessun limite (Staff)
+export type JobQuota = { used: number; limit: number | null; nextAt: string | null }
+
 export type JobSearchEvent =
+  | { type: 'quota'; quota: JobQuota }
   | { type: 'progress'; step: 'search'; done: number; total: number; found: number }
   | { type: 'progress'; step: 'dedupe' | 'filter' | 'check' | 'rank'; count: number }
   | { type: 'result'; jobs: JobResult[]; stats: JobStats }
   | { type: 'error'; code: 'unavailable' | 'invalid' | 'forbidden' | 'failed' }
+  | { type: 'error'; code: 'quota'; quota: JobQuota }

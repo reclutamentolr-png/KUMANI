@@ -29,6 +29,7 @@ import {
   JOB_COUNTRIES,
   type JobCountry,
   type JobFilters,
+  type JobQuota,
   type JobResult,
   type JobSearchEvent,
   type JobStats,
@@ -54,10 +55,12 @@ export default function JobSearch({
   defaultCountry,
   initialFavorites,
   initialSearches,
+  initialQuota,
 }: {
   defaultCountry: JobCountry
   initialFavorites: JobResult[]
   initialSearches: SavedSearch[]
+  initialQuota: JobQuota | null
 }) {
   const t = useTranslations('jobs')
   const locale = useLocale()
@@ -71,6 +74,10 @@ export default function JobSearch({
   const [error, setError] = useState<string | null>(null)
   const [favorites, setFavorites] = useState<JobResult[]>(initialFavorites)
   const [searches, setSearches] = useState<SavedSearch[]>(initialSearches)
+  const [quota, setQuota] = useState<JobQuota | null>(initialQuota)
+  const quotaLeft = quota && quota.limit !== null ? Math.max(0, quota.limit - quota.used) : null
+  const quotaDate = (iso: string | null) =>
+    iso ? new Date(iso).toLocaleString(locale, { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }) : ''
   const [notice, setNotice] = useState<string | null>(null)
   const [visibleCount, setVisibleCount] = useState(30)
   const resultsRef = useRef<HTMLDivElement>(null)
@@ -105,6 +112,10 @@ export default function JobSearch({
       setError(t('errorKeywords'))
       return
     }
+    if (quotaLeft === 0) {
+      setError(t('error_quota', { limit: quota?.limit ?? 0, date: quotaDate(quota?.nextAt ?? null) }))
+      return
+    }
     setTab('search')
     setRunning(true)
     setError(null)
@@ -122,24 +133,41 @@ export default function JobSearch({
       const reader = res.body.getReader()
       const decoder = new TextDecoder()
       let buffer = ''
+      let counted = false
+      const handle = (line: string) => {
+        if (!line.trim()) return
+        const event = JSON.parse(line) as JobSearchEvent
+        if (event.type === 'quota') {
+          setQuota(event.quota)
+          counted = true
+        }
+        if (event.type === 'progress') setProgress(event)
+        if (event.type === 'result') {
+          setResults(event.jobs)
+          setStats(event.stats)
+          window.setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
+        }
+        if (event.type === 'error') {
+          if (event.code === 'quota') {
+            setQuota(event.quota)
+            setError(t('error_quota', { limit: event.quota.limit ?? 0, date: quotaDate(event.quota.nextAt) }))
+          } else {
+            setError(t(`error_${event.code}`))
+            // Ricerca non riuscita: il server non la conta
+            if (counted) setQuota((q) => (q ? { ...q, used: Math.max(0, q.used - 1) } : q))
+          }
+        }
+      }
       for (;;) {
         const { value, done } = await reader.read()
         if (done) break
         buffer += decoder.decode(value, { stream: true })
         const lines = buffer.split('\n')
         buffer = lines.pop() ?? ''
-        for (const line of lines) {
-          if (!line.trim()) continue
-          const event = JSON.parse(line) as JobSearchEvent
-          if (event.type === 'progress') setProgress(event)
-          if (event.type === 'result') {
-            setResults(event.jobs)
-            setStats(event.stats)
-            window.setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
-          }
-          if (event.type === 'error') setError(t(`error_${event.code}`))
-        }
+        lines.forEach(handle)
       }
+      // Le risposte di errore arrivano come una sola riga senza a capo
+      handle(buffer)
     } catch {
       setError(t('error_failed'))
     } finally {
@@ -412,6 +440,13 @@ export default function JobSearch({
                 {running ? <LoaderCircle className="h-5 w-5 animate-spin" /> : <Search className="h-5 w-5" />}
                 {running ? t('searching') : t('searchButton')}
               </button>
+              {quotaLeft !== null && (
+                <span className={`text-sm font-semibold ${quotaLeft === 0 ? 'text-red-700' : 'text-[var(--muted)]'}`}>
+                  {quotaLeft === 0
+                    ? t('quotaNone', { date: quotaDate(quota?.nextAt ?? null) })
+                    : t('quotaLeft', { left: quotaLeft, limit: quota?.limit ?? 0 })}
+                </span>
+              )}
               {!running && filters.keywords.trim().length >= 2 && (
                 <button type="button" onClick={() => void saveSearch()} className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--muted)] hover:text-[var(--ink)]">
                   <Bookmark className="h-4 w-4" /> {t('saveSearch')}

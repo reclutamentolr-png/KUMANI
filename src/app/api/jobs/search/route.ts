@@ -60,16 +60,35 @@ export async function POST(request: NextRequest) {
     userAgent: request.headers.get('user-agent') || 'Mozilla/5.0',
   }
 
+  // Limite di ricerche a settimana: la ricerca si registra prima di partire
+  const { data: claim, error: claimError } = await supabase.rpc('claim_job_search')
+  const claimed = claim as { ok: boolean; run_id?: string; limit: number | null; used?: number; next_at: string | null } | null
+  if (claimError || !claimed) {
+    console.error('[trova-lavoro] limite non verificabile:', claimError?.message)
+    return NextResponse.json({ type: 'error', code: 'failed' } satisfies JobSearchEvent, { status: 500 })
+  }
+  if (!claimed.ok) {
+    const quota = { used: claimed.limit ?? 0, limit: claimed.limit, nextAt: claimed.next_at }
+    return NextResponse.json({ type: 'error', code: 'quota', quota } satisfies JobSearchEvent, { status: 429 })
+  }
+
   const encoder = new TextEncoder()
   const stream = new ReadableStream({
     async start(controller) {
       const send = (event: JobSearchEvent) => controller.enqueue(encoder.encode(JSON.stringify(event) + '\n'))
+      let gotResult = false
+      send({ type: 'quota', quota: { used: claimed.used ?? 1, limit: claimed.limit, nextAt: claimed.next_at } })
       try {
-        for await (const event of searchJobs(filters, caller)) send(event)
+        for await (const event of searchJobs(filters, caller)) {
+          if (event.type === 'result') gotResult = true
+          send(event)
+        }
       } catch (error) {
         console.error('[trova-lavoro] ricerca non riuscita:', error)
         send({ type: 'error', code: 'failed' })
       } finally {
+        // Nessun risultato per un problema della fonte: la ricerca non conta
+        if (!gotResult && claimed.run_id) await supabase.rpc('refund_job_search', { p_run_id: claimed.run_id })
         controller.close()
       }
     },

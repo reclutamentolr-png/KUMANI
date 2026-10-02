@@ -6,7 +6,7 @@ import { ArrowLeft, BriefcaseBusiness, Sparkles } from 'lucide-react'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import JobSearch from '@/components/jobs/JobSearch'
 import { listJobFavorites, listJobSearches } from '@/app/actions/jobs'
-import { isJobCountry, type JobCountry } from '@/lib/jobs/types'
+import { isJobCountry, type JobCountry, type JobQuota } from '@/lib/jobs/types'
 
 // Trova Lavoro: offerte di lavoro da fonti esterne con filtri accurati.
 // KUMANI non ospita annunci e non raccoglie CV: ci si candida sul sito
@@ -28,11 +28,14 @@ export default async function TrovaLavoroPage() {
   if (!user) redirect(`/${locale}/login`)
   if (!(await hasActiveToolAccess(supabase, user.id, 'trova-lavoro'))) redirect(`/${locale}/dashboard`)
 
-  const [{ data: profile }, favorites, searches] = await Promise.all([
+  const [{ data: profile }, favorites, searches, { data: quotaRow }] = await Promise.all([
     supabase.rpc('get_my_profile').maybeSingle<{ country_code: string | null }>(),
     listJobFavorites(),
     listJobSearches(),
+    supabase.rpc('job_search_quota'),
   ])
+  const q = quotaRow as { used: number; limit: number | null; next_at: string | null } | null
+  const quota: JobQuota | null = q ? { used: q.used, limit: q.limit, nextAt: q.next_at } : null
   const country = profile?.country_code?.toUpperCase()
   const defaultCountry: JobCountry = isJobCountry(country) ? country : (BY_LOCALE[locale] ?? 'IT')
 
@@ -68,7 +71,7 @@ export default async function TrovaLavoroPage() {
           </div>
         </section>
 
-        <JobSearch defaultCountry={defaultCountry} initialFavorites={favorites} initialSearches={searches} />
+        <JobSearch defaultCountry={defaultCountry} initialFavorites={favorites} initialSearches={searches} initialQuota={quota} />
       </main>
     </div>
   )

@@ -6174,6 +6174,9 @@
     "per_month": "Monat",
     "per_week": "Woche",
     "per_day": "Tag",
-    "per_hour": "Stunde"
+    "per_hour": "Stunde",
+    "quotaLeft": "Verfügbare Suchen diese Woche: {left} von {limit}",
+    "quotaNone": "Keine Suchen mehr diese Woche: die nächste ab {date}",
+    "error_quota": "Du hast die {limit} verfügbaren Suchen dieser 7 Tage genutzt (Testphase). Die nächste ist verfügbar ab {date}."
   }
 }
