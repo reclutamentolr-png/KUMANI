@@ -356,7 +356,9 @@
     "invalidVoucher": "Código de voucher no válido o ya utilizado. Revísalo o deja el campo vacío.",
     "voucherActivated": "Voucher activado: tu suscripción está activa hasta el {date}.",
     "voucherNotActivated": "Cuenta creada, pero el voucher no se ha activado. Puedes volver a intentarlo desde el panel con \"Activar con vale\".",
-    "countryOutsideItalyNote": "KUMANI nace en Italia: en tu país algunas funcionalidades podrían estar reducidas o no estar disponibles, porque rigen leyes distintas (p. ej. verificaciones de identidad, programas de premios, documentos fiscales). Aun así, puedes usar la plataforma."
+    "countryOutsideItalyNote": "KUMANI nace en Italia: en tu país algunas funcionalidades podrían estar reducidas o no estar disponibles, porque rigen leyes distintas (p. ej. verificaciones de identidad, programas de premios, documentos fiscales). Aun así, puedes usar la plataforma.",
+    "samePasswordError": "La nueva contraseña debe ser distinta de la actual.",
+    "weakPasswordError": "Contraseña demasiado débil: usa al menos 8 caracteres con letras y números."
   },
   "dashboard": {
     "receivedLabel": "De la Comunidad",

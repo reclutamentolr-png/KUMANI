@@ -28,6 +28,9 @@ export default function ForgotPasswordPage() {
   const locale = useLocale()
   const router = useRouter()
   const supabase = createClient()
+  // Il codice si usa una volta sola: se è già stato verificato e il
+  // salvataggio della password fallisce, al nuovo tentativo non va riverificato
+  const [codeVerified, setCodeVerified] = useState(false)
 
   useEffect(() => {
     if (resendCooldown <= 0) return
@@ -74,22 +77,32 @@ export default function ForgotPasswordPage() {
     setLoading(true)
     setError(null)
 
-    const { error: verifyError } = await supabase.auth.verifyOtp({
-      email,
-      token: code.trim(),
-      type: 'recovery',
-    })
-
-    if (verifyError) {
-      setError(t('invalidVerificationCode'))
-      setLoading(false)
-      return
+    if (!codeVerified) {
+      const { error: verifyError } = await supabase.auth.verifyOtp({
+        email: email.trim(),
+        token: code.trim(),
+        type: 'recovery',
+      })
+      if (verifyError) {
+        setError(t('invalidVerificationCode'))
+        setLoading(false)
+        return
+      }
+      setCodeVerified(true)
     }
 
     const { error: updateError } = await supabase.auth.updateUser({ password })
 
     if (updateError) {
-      setError(updateError.message)
+      // Errori più comuni spiegati nella lingua dell'utente
+      const errorCode = (updateError as { code?: string }).code
+      setError(
+        errorCode === 'same_password'
+          ? t('samePasswordError')
+          : errorCode === 'weak_password'
+            ? t('weakPasswordError')
+            : updateError.message
+      )
       setLoading(false)
       return
     }
@@ -110,6 +123,7 @@ export default function ForgotPasswordPage() {
       setError(resendError.message)
       return
     }
+    setCodeVerified(false)
     setResendMessage(t('codeResent'))
     setResendCooldown(RESEND_COOLDOWN_SECONDS)
   }

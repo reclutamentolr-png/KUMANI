@@ -356,7 +356,9 @@
     "invalidVoucher": "Código de voucher inválido ou já usado. Verifique-o ou deixe o campo vazio.",
     "voucherActivated": "Voucher ativado: a sua subscrição está ativa até {date}.",
     "voucherNotActivated": "Conta criada, mas o voucher não foi ativado. Pode tentar de novo a partir do painel com \"Ativar com voucher\".",
-    "countryOutsideItalyNote": "O KUMANI nasceu em Itália: no seu país, algumas funcionalidades poderão estar reduzidas ou indisponíveis, porque vigoram leis diferentes (p. ex. verificações de identidade, programas de prémios, documentos fiscais). Pode, ainda assim, utilizar a plataforma."
+    "countryOutsideItalyNote": "O KUMANI nasceu em Itália: no seu país, algumas funcionalidades poderão estar reduzidas ou indisponíveis, porque vigoram leis diferentes (p. ex. verificações de identidade, programas de prémios, documentos fiscais). Pode, ainda assim, utilizar a plataforma.",
+    "samePasswordError": "A nova palavra-passe tem de ser diferente da atual.",
+    "weakPasswordError": "Palavra-passe demasiado fraca: use pelo menos 8 caracteres com letras e números."
   },
   "dashboard": {
     "receivedLabel": "Da Comunidade",

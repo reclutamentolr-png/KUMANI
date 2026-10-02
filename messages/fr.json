@@ -356,7 +356,9 @@
     "invalidVoucher": "Code voucher non valide ou déjà utilisé. Vérifiez-le, ou laissez le champ vide.",
     "voucherActivated": "Voucher activé : votre abonnement est actif jusqu'au {date}.",
     "voucherNotActivated": "Compte créé, mais le voucher n'a pas été activé. Vous pouvez réessayer depuis le tableau de bord avec « Activer avec un bon ».",
-    "countryOutsideItalyNote": "KUMANI est né en Italie : dans votre pays, certaines fonctionnalités pourraient être réduites ou indisponibles, car d'autres lois s'y appliquent (ex. vérifications d'identité, programmes de récompenses, documents fiscaux). Vous pouvez tout de même utiliser la plateforme."
+    "countryOutsideItalyNote": "KUMANI est né en Italie : dans votre pays, certaines fonctionnalités pourraient être réduites ou indisponibles, car d'autres lois s'y appliquent (ex. vérifications d'identité, programmes de récompenses, documents fiscaux). Vous pouvez tout de même utiliser la plateforme.",
+    "samePasswordError": "Le nouveau mot de passe doit être différent de l’actuel.",
+    "weakPasswordError": "Mot de passe trop faible : utilisez au moins 8 caractères avec lettres et chiffres."
   },
   "dashboard": {
     "receivedLabel": "De la Communauté",

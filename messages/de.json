@@ -356,7 +356,9 @@
     "invalidVoucher": "Ungültiger oder bereits verwendeter Vouchercode. Prüfe ihn oder lass das Feld leer.",
     "voucherActivated": "Voucher aktiviert: Dein Abo ist bis zum {date} aktiv.",
     "voucherNotActivated": "Konto erstellt, aber der Voucher wurde nicht aktiviert. Du kannst es im Dashboard mit „Mit Gutschein aktivieren“ erneut versuchen.",
-    "countryOutsideItalyNote": "KUMANI stammt aus Italien: In deinem Land können einige Funktionen eingeschränkt oder nicht verfügbar sein, weil dort andere Gesetze gelten (z. B. Identitätsprüfungen, Prämienprogramme, Steuerdokumente). Du kannst die Plattform trotzdem nutzen."
+    "countryOutsideItalyNote": "KUMANI stammt aus Italien: In deinem Land können einige Funktionen eingeschränkt oder nicht verfügbar sein, weil dort andere Gesetze gelten (z. B. Identitätsprüfungen, Prämienprogramme, Steuerdokumente). Du kannst die Plattform trotzdem nutzen.",
+    "samePasswordError": "Das neue Passwort muss sich vom aktuellen unterscheiden.",
+    "weakPasswordError": "Passwort zu schwach: Verwende mindestens 8 Zeichen mit Buchstaben und Zahlen."
   },
   "dashboard": {
     "receivedLabel": "Aus der Community",

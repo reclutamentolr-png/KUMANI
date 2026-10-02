@@ -376,7 +376,9 @@
     "invalidVoucher": "Codice voucher non valido o già utilizzato. Controllalo, oppure lascia il campo vuoto.",
     "voucherActivated": "Voucher attivato: il tuo abbonamento è attivo fino al {date}.",
     "voucherNotActivated": "Account creato, ma il voucher non è stato attivato. Puoi riprovare dalla dashboard con \"Attiva tramite Voucher\".",
-    "countryOutsideItalyNote": "KUMANI nasce in Italia: nel tuo paese alcune funzionalità potrebbero essere ridotte o non disponibili, perché vigono leggi diverse (es. verifiche d'identità, programmi a premi, documenti fiscali). Puoi comunque usare la piattaforma."
+    "countryOutsideItalyNote": "KUMANI nasce in Italia: nel tuo paese alcune funzionalità potrebbero essere ridotte o non disponibili, perché vigono leggi diverse (es. verifiche d'identità, programmi a premi, documenti fiscali). Puoi comunque usare la piattaforma.",
+    "samePasswordError": "La nuova password deve essere diversa da quella attuale.",
+    "weakPasswordError": "Password troppo debole: usa almeno 8 caratteri con lettere e numeri."
   },
   "dashboard": {
     "receivedLabel": "Dalla Community",
