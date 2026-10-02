@@ -18,7 +18,7 @@ export const CONTACT_INFO = {
 // Indirizzi @kumani.io gestiti in Admin → Gestione Email: Cloudflare Email
 // Routing li inoltra alla casella Gmail di KUMANI.
 export const KUMANI_MAILBOXES = [
-  { address: 'support@kumani.io', label: 'Assistenza agli utenti' },
-  { address: 'privacy@kumani.io', label: 'Privacy e richieste GDPR' },
-  { address: 'info@kumani.io', label: 'Informazioni generali' },
+  { address: 'support@kumani.io', name: 'KUMANI Supporto', label: 'Assistenza agli utenti' },
+  { address: 'privacy@kumani.io', name: 'KUMANI Privacy', label: 'Privacy e richieste GDPR' },
+  { address: 'info@kumani.io', name: 'KUMANI Info', label: 'Informazioni generali' },
 ] as const

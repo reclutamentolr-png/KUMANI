@@ -12,11 +12,14 @@ export type SendEmailInput = {
   text: string
   // Stessa chiave = stessa email: Resend non la rimanda (es. eventi Stripe ripetuti)
   idempotencyKey?: string
+  // Mittente diverso da EMAIL_FROM (es. "KUMANI Supporto <support@kumani.io>") e indirizzo per le risposte
+  from?: string
+  replyTo?: string
 }
 
-export async function sendEmail(input: SendEmailInput): Promise<{ sent: boolean; error?: string }> {
+export async function sendEmail(input: SendEmailInput): Promise<{ sent: boolean; error?: string; id?: string }> {
   const apiKey = process.env.RESEND_API_KEY
-  const from = process.env.EMAIL_FROM
+  const from = input.from ?? process.env.EMAIL_FROM
   if (!apiKey || !from) {
     console.warn(`✉️ Email non inviata a ${input.to} (RESEND_API_KEY o EMAIL_FROM mancanti): ${input.subject}`)
     return { sent: false, error: 'not_configured' }
@@ -29,7 +32,14 @@ export async function sendEmail(input: SendEmailInput): Promise<{ sent: boolean;
         'Content-Type': 'application/json',
         ...(input.idempotencyKey ? { 'Idempotency-Key': input.idempotencyKey } : {}),
       },
-      body: JSON.stringify({ from, to: [input.to], subject: input.subject, html: input.html, text: input.text }),
+      body: JSON.stringify({
+        from,
+        to: [input.to],
+        subject: input.subject,
+        html: input.html,
+        text: input.text,
+        ...(input.replyTo ? { reply_to: input.replyTo } : {}),
+      }),
       signal: AbortSignal.timeout(10_000),
     })
     if (!res.ok) {
@@ -37,7 +47,8 @@ export async function sendEmail(input: SendEmailInput): Promise<{ sent: boolean;
       console.error(`❌ Resend ${res.status} per ${input.to}:`, body.slice(0, 300))
       return { sent: false, error: `resend_${res.status}` }
     }
-    return { sent: true }
+    const data = (await res.json().catch(() => null)) as { id?: string } | null
+    return { sent: true, id: data?.id }
   } catch (err) {
     console.error('❌ Errore invio email con Resend:', err instanceof Error ? err.message : err)
     return { sent: false, error: 'network' }
