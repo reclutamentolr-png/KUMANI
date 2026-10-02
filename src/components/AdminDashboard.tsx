@@ -92,6 +92,7 @@ import AgentsPanel from '@/components/admin/AgentsPanel'
 import WithdrawalsPanel from '@/components/admin/WithdrawalsPanel'
 import DonationsPanel from '@/components/admin/DonationsPanel'
 import HomeLayoutPanel from '@/components/admin/HomeLayoutPanel'
+import ReportsPanel, { type ReportTab } from '@/components/admin/ReportsPanel'
 import PassCodesPanel from '@/components/admin/PassCodesPanel'
 import ToolPassSetting from '@/components/admin/ToolPassSetting'
 import { startImpersonation } from '@/lib/impersonation'
@@ -105,6 +106,7 @@ import {
   ShoppingBag,
   Settings,
   Palette,
+  BarChart3,
   UserCheck,
   Activity,
   Lock,
@@ -188,6 +190,13 @@ type AdminDashboardProps = {
 
 export default function AdminDashboard({ permissions, userName, locale, initialSection }: AdminDashboardProps) {
   const [activeSection, setActiveSection] = useState(initialSection || 'overview')
+  // Scheda aperta in Statistiche e classifiche (dai pulsanti "Dettaglio")
+  const [reportTab, setReportTab] = useState<ReportTab>('passes')
+  const openReport = (tab: ReportTab) => {
+    setReportTab(tab)
+    setActiveSection('reports')
+    window.scrollTo({ top: 0 })
+  }
   // Menu a sinistra "a fisarmonica": un solo gruppo aperto alla volta.
   // undefined = segue la sezione aperta; null = tutti chiusi.
   const [openGroup, setOpenGroup] = useState<string | null | undefined>(undefined)
@@ -1135,6 +1144,7 @@ L'accesso viene registrato.`)) return
   const menuItems = [
   { id: 'overview', label: 'Panoramica', Icon: LayoutDashboard, permission: 'stats.read' as Permission, group: 'general' },
   { id: 'financials', label: 'Amministrazione', Icon: PiggyBank, permission: 'stats.read' as Permission, group: 'general' },
+  { id: 'reports', label: 'Statistiche e classifiche', Icon: BarChart3, permission: 'stats.read' as Permission, group: 'general' },
   { id: 'marketplace', label: 'Strumenti e interruttori', Icon: ShoppingBag, permission: 'marketplace.read' as Permission, group: 'general' },
   { id: 'settings', label: 'Impostazioni', Icon: Settings, permission: 'settings.read' as Permission, group: 'general' },
   { id: 'languages', label: 'Lingue del sito', Icon: Globe2, permission: 'settings.read' as Permission, group: 'general' },
@@ -2510,13 +2520,20 @@ L'accesso viene registrato.`)) return
         <p className={`shrink-0 text-right text-sm tabular-nums ${strong ? 'font-bold text-gray-900' : 'text-gray-800'}`}>{value}</p>
       </div>
     )
-    const Card = ({ title, subtitle, children }: { title: string; subtitle: string; children: React.ReactNode }) => (
+    const Card = ({ title, subtitle, detail, children }: { title: string; subtitle: string; detail?: ReportTab; children: React.ReactNode }) => (
       <section className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
         <div className="border-b border-[var(--gold)]/30 bg-[var(--gold-pale)] px-5 py-3">
           <h3 className="text-base font-bold text-[var(--ink)]">{title}</h3>
           <p className="text-xs text-gray-600">{subtitle}</p>
         </div>
         <div className="px-5 py-2">{children}</div>
+        {detail && (
+          <div className="border-t border-gray-100 px-5 py-2.5 text-right">
+            <button type="button" onClick={() => openReport(detail)} className="text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
+              Dettaglio e classifica →
+            </button>
+          </div>
+        )}
       </section>
     )
     const subs = f.subscriptions
@@ -2583,7 +2600,7 @@ L'accesso viene registrato.`)) return
           </Card>
 
           {f.toolPasses && (
-            <Card title="Pass dei singoli servizi" subtitle="Un servizio per un anno, senza abbonamento (nessun KU Point a chi invita)">
+            <Card detail="passes" title="Pass dei singoli servizi" subtitle="Un servizio per un anno, senza abbonamento (nessun KU Point a chi invita)">
               <Row label="Pass pagati con carta" value={String(f.toolPasses.soldCount)} />
               <Row label="Incassato dai pass" value={eur(f.toolPasses.soldCents)} strong />
               <Row label="Attivati con codice" value={String(f.toolPasses.codeCount)} />
@@ -2591,19 +2608,19 @@ L'accesso viene registrato.`)) return
             </Card>
           )}
 
-          <Card title="Lotti di voucher per i negozi" subtitle="Venduti con fattura a parte, fuori da Stripe">
+          <Card detail="shops" title="Lotti di voucher per i negozi" subtitle="Venduti con fattura a parte, fuori da Stripe">
             <Row label="Lotti" value={String(f.shopBatches.count)} hint={`${f.shopBatches.vouchers} voucher, ${f.shopRedeemed.count} già usati`} />
             <Row label="Incassato dai lotti" value={eur(f.shopBatches.cents)} strong />
           </Card>
 
-          <Card title="Agenti venditori" subtitle="Provvigioni registrate (rettifiche comprese)">
+          <Card detail="agents" title="Agenti venditori" subtitle="Provvigioni registrate (rettifiche comprese)">
             <Row label="In maturazione (14 giorni)" value={eur(f.agentCommissions.pending)} />
             <Row label="Maturate, da pagare" value={eur(f.agentCommissions.matured)} />
             <Row label="Già pagate" value={eur(f.agentCommissions.paid)} />
             <Row label="Annullate (rimborsi)" value={eur(f.agentCommissions.cancelled)} />
           </Card>
 
-          <Card title="Voucher della community" subtitle="Servizi dati senza incasso, a prezzo di listino">
+          <Card detail="vouchers" title="Voucher della community" subtitle="Servizi dati senza incasso, a prezzo di listino">
             <Row label="Voucher Kumani usati" value={eur(f.kumanoVouchers.redeemedCents)} hint={`${f.kumanoVouchers.redeemedCount} voucher`} />
             <Row label="Voucher Kumani non ancora usati" value={eur(f.kumanoVouchers.activeCents)} hint={`${f.kumanoVouchers.activeCount} voucher in circolazione`} />
             <Row label="Credito voucher non ancora speso" value={eur(f.voucherCreditCents)} />
@@ -2611,14 +2628,14 @@ L'accesso viene registrato.`)) return
             <Row label="Servizi già dati (usati)" value={eur(f.giftedServicesCents)} strong />
           </Card>
 
-          <Card title="Donazioni" subtitle="Impegno di KUMANI verso l'associazione (uscita di cassa quando versato)">
+          <Card detail="donors" title="Donazioni" subtitle="Impegno di KUMANI verso l'associazione (uscita di cassa quando versato)">
             <Row label="Maturate dagli abbonamenti" value={eur(f.donations.subscriptionCents)} />
             <Row label="Maturate dai KU Points donati" value={eur(f.donations.pointsCents)} />
             <Row label="Già versate" value={eur(f.donations.paidCents)} />
             <Row label="Da versare" value={eur(Math.max(f.donations.subscriptionCents + f.donations.pointsCents - f.donations.paidCents, 0))} strong />
           </Card>
 
-          <Card title="KU Points" subtitle="Assegnati dal nuovo sistema e ancora da spendere">
+          <Card detail="points" title="KU Points" subtitle="Assegnati dal nuovo sistema e ancora da spendere">
             <Row label="Attivazioni Base" value={`${f.pointsAwarded.activation_base} punti`} />
             <Row label="Attivazioni Pro" value={`${f.pointsAwarded.activation_pro} punti`} />
             <Row label="Passaggi a Pro" value={`${f.pointsAwarded.upgrade_pro} punti`} />
@@ -3534,6 +3551,7 @@ L'accesso viene registrato.`)) return
         {activeSection === 'withdrawals' && <WithdrawalsPanel onChanged={loadBadges} />}
         {activeSection === 'donations' && <DonationsPanel />}
         {activeSection === 'homeLayout' && <HomeLayoutPanel />}
+        {activeSection === 'reports' && <ReportsPanel initialTab={reportTab} />}
         {activeSection === 'languages' && <LanguagesPanel canWrite={hasPermission(permissions, 'settings.write')} />}
         {activeSection === 'matrix' && renderMatrix()}
         {activeSection === 'marketplace' && renderMarketplace()}

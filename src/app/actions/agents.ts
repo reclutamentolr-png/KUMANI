@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { verifyAdmin } from '@/lib/verifyAdmin'
 import { SITE_URL } from '@/lib/siteUrl'
+import { agentRankingPosition } from '@/lib/agentRanking'
 import {
   TAX_REGIMES,
   commissionState,
@@ -115,6 +116,8 @@ export type AgentOverview = {
     note: string | null
   }[]
   payouts: { paidOn: string; amountCents: number; reference: string | null }[]
+  // Attivazioni e posizione tra gli agenti attivi (senza i nomi degli altri)
+  ranking: { position: number | null; total: number; activations: number; renewals: number; customers: number; activeCustomers: number }
 }
 
 type CommissionRow = {
@@ -181,6 +184,7 @@ export async function getAgentOverview(locale: string): Promise<AgentOverview | 
   const sumState = (state: CommissionState) => commissions.filter((c) => c.state === state).reduce((n, c) => n + c.commissionCents, 0)
 
   const now = Date.now()
+  const rank = await agentRankingPosition(agentId)
   return {
     agent: {
       name: `${profile?.first_name ?? ''} ${profile?.last_name ?? ''}`.trim(),
@@ -205,6 +209,16 @@ export async function getAgentOverview(locale: string): Promise<AgentOverview | 
     }),
     commissions,
     payouts: (payouts ?? []).map((p) => ({ paidOn: p.paid_on as string, amountCents: p.amount_cents as number, reference: (p.reference as string | null) ?? null })),
+    ranking: {
+      position: rank?.position ?? null,
+      total: rank?.total ?? 0,
+      activations: commissions.filter((c) => c.kind === 'first' && c.state !== 'cancelled').length,
+      renewals: commissions.filter((c) => c.kind === 'renewal' && c.state !== 'cancelled').length,
+      customers: (customers ?? []).length,
+      activeCustomers: (customers ?? []).filter(
+        (c) => c.subscription_status === 'active' && (!c.subscription_expires_at || new Date(c.subscription_expires_at as string).getTime() > now)
+      ).length,
+    },
   }
 }
 

@@ -15,6 +15,7 @@ import {
   Share2,
   Store,
   TrendingUp,
+  Trophy,
   Users,
   Wallet,
 } from 'lucide-react'
@@ -253,6 +254,35 @@ function LinkCard({ agent }: { agent: AgentOverview['agent'] }) {
 }
 
 // ── Periodi ─────────────────────────────────────────────────────────────
+
+// Le proprie attivazioni e la posizione tra gli agenti attivi
+function Ranking({ ranking }: { ranking: AgentOverview['ranking'] }) {
+  const t = useTranslations('agentArea')
+  const stats = [
+    { key: 'activations', value: ranking.activations },
+    { key: 'renewals', value: ranking.renewals },
+    { key: 'customers', value: ranking.customers },
+    { key: 'activeCustomers', value: ranking.activeCustomers },
+  ] as const
+  return (
+    <Section icon={<Trophy className="h-5 w-5" />} title={t('ranking.title')}>
+      {ranking.position !== null && ranking.total > 0 && (
+        <p className="mb-4 rounded-xl border border-[var(--gold)]/40 bg-[var(--gold-pale)]/60 px-4 py-3 text-base font-bold text-[var(--ink)]">
+          {t('ranking.position', { position: ranking.position, total: ranking.total })}
+        </p>
+      )}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {stats.map(({ key, value }) => (
+          <div key={key} className="rounded-xl border border-[var(--gold)]/25 bg-white p-4 text-center">
+            <p className="text-2xl font-bold text-[var(--ink)]">{value}</p>
+            <p className="mt-1 text-xs text-[var(--muted)]">{t(`ranking.${key}`)}</p>
+          </div>
+        ))}
+      </div>
+      <p className="mt-3 text-sm text-[var(--muted)]">{t('ranking.hint')}</p>
+    </Section>
+  )
+}
 
 function Periods({ periods }: { periods: AgentOverview['periods'] }) {
   const t = useTranslations('agentArea')
@@ -592,6 +622,7 @@ export default function AgentArea({ overview }: { overview: AgentOverview }) {
       <main className="mx-auto max-w-6xl space-y-6 px-4 py-6">
         <LinkCard agent={agent} />
         <Periods periods={overview.periods} />
+        <Ranking ranking={overview.ranking} />
         <WalletCard wallet={overview.wallet} agent={agent} />
         <Commissions commissions={overview.commissions} code={agent.code} />
         <Customers customers={overview.customers} />
