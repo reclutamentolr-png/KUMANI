@@ -145,7 +145,7 @@ export default function EmailSetupPanel() {
                 </>
               )}
               <p className="mt-2 text-xs">
-                Token Cloudflare (My Profile → API Tokens → Create Custom Token), permessi: <b>Zone · Zone · Read</b>, <b>Zone · DNS · Edit</b>,{' '}
+                Token Cloudflare (My Profile → API Tokens → Create Custom Token), permessi: <b>Zone · Zone · Read</b>, <b>Zone · Zone Settings · Edit</b>, <b>Zone · DNS · Edit</b>,{' '}
                 <b>Zone · Email Routing Rules · Edit</b>, <b>Account · Email Routing Addresses · Edit</b>; risorse: la zona {state.zone ?? 'kumani.io'} e il tuo account.
               </p>
             </div>

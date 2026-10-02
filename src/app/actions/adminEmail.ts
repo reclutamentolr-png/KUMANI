@@ -9,7 +9,7 @@ import { sendEmail } from '@/lib/email'
 // KUMANI; per rispondere con lo stesso indirizzo Gmail invia tramite l'SMTP
 // di Resend. Qui si legge lo stato e si fanno i passaggi dalle due API.
 //
-// Permessi del token CLOUDFLARE_API_TOKEN: Zone → Zone: Read, DNS: Edit,
+// Permessi del token CLOUDFLARE_API_TOKEN: Zone → Zone: Read, Zone Settings: Edit, DNS: Edit,
 // Email Routing Rules: Edit; Account → Email Routing Addresses: Edit.
 
 const CF = 'https://api.cloudflare.com/client/v4'
