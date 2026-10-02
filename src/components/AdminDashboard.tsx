@@ -92,12 +92,14 @@ import AgentsPanel from '@/components/admin/AgentsPanel'
 import WithdrawalsPanel from '@/components/admin/WithdrawalsPanel'
 import DonationsPanel from '@/components/admin/DonationsPanel'
 import HomeLayoutPanel from '@/components/admin/HomeLayoutPanel'
+import PlatformsPanel from '@/components/admin/PlatformsPanel'
 import ReportsPanel, { type ReportTab } from '@/components/admin/ReportsPanel'
 import PassCodesPanel from '@/components/admin/PassCodesPanel'
 import ToolPassSetting from '@/components/admin/ToolPassSetting'
 import { startImpersonation } from '@/lib/impersonation'
 import {
   LayoutDashboard,
+  PlugZap,
   CalendarDays,
   Star,
   Coins,
@@ -1142,6 +1144,7 @@ L'accesso viene registrato.`)) return
 
   // Menu a gruppi: ogni voce appartiene a un gruppo (vedi MENU_GROUPS)
   const menuItems = [
+  { id: 'platforms', label: 'Piattaforme collegate', Icon: PlugZap, permission: 'stats.read' as Permission, group: 'general' },
   { id: 'overview', label: 'Panoramica', Icon: LayoutDashboard, permission: 'stats.read' as Permission, group: 'general' },
   { id: 'financials', label: 'Amministrazione', Icon: PiggyBank, permission: 'stats.read' as Permission, group: 'general' },
   { id: 'reports', label: 'Statistiche e classifiche', Icon: BarChart3, permission: 'stats.read' as Permission, group: 'general' },
@@ -3542,6 +3545,7 @@ L'accesso viene registrato.`)) return
       </div>
 
       <div className="lg:col-span-3 space-y-6">
+        {activeSection === 'platforms' && <PlatformsPanel />}
         {activeSection === 'overview' && renderOverview()}
         {activeSection === 'users' && renderUsers()}
         {activeSection === 'profileRequests' && <ProfileRequestsPanel onChanged={loadBadges} />}
