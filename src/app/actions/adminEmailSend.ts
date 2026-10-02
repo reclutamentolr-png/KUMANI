@@ -4,7 +4,7 @@ import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { verifyAdmin } from '@/lib/verifyAdmin'
 import { KUMANI_MAILBOXES } from '@/lib/contactInfo'
 import { escapeHtml, sendEmail } from '@/lib/email'
-import { SITE_URL } from '@/lib/siteUrl'
+import { PUBLIC_SITE_URL as SITE_URL } from '@/lib/siteUrl'
 
 // Admin → Invio Email: lo Staff scrive un'email da support@, privacy@ o
 // info@kumani.io. Parte con Resend, una per destinatario (nessuno vede gli

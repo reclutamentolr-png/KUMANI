@@ -15,3 +15,7 @@ export const SITE_URL = (
     process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : '',
   ].find((url) => url && !(onVercel && isLocalhost(url))) || 'http://localhost:3000'
 ).replace(/\/+$/, '')
+
+// Indirizzo da mostrare fuori dal sito (email scritte dallo Staff): anche
+// quando si lavora in locale deve comparire il dominio vero, mai localhost.
+export const PUBLIC_SITE_URL = isLocalhost(SITE_URL) ? 'https://kumani.io' : SITE_URL
