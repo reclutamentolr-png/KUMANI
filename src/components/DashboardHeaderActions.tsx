@@ -7,7 +7,8 @@ import { logout } from '@/app/actions/logout'
 import {
   Settings,
   LogOut,
-  Wallet
+  Wallet,
+  FolderOpen
 } from 'lucide-react'
 import ProfileModal, { type ProfileChangeState } from './ProfileModal'
 import { getMyChangeRequest } from '@/app/actions/profileChanges'
@@ -24,6 +25,7 @@ export default function DashboardHeaderActions({ user, profile, isAdmin }: Dashb
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
   const t = useTranslations('dashboard')
   const lockT = useTranslations('profileLock')
+  const docsT = useTranslations('documents')
   // Profilo ancora da completare (il database imposta profile_completed_at
   // quando tutti i dati obbligatori sono presenti): pallino arancione.
   const profileIncomplete = !profile?.profile_completed_at
@@ -77,6 +79,16 @@ export default function DashboardHeaderActions({ user, profile, isAdmin }: Dashb
             )}
           </span>
         </button>
+
+        {/* Pulsante Documenti */}
+        <Link
+          href="/documenti"
+          className="text-sm text-[var(--ink)] border border-[var(--gold)]/60 bg-white hover:bg-[var(--gold-pale)] font-bold transition-all flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-md shadow-sm"
+          aria-label={docsT('title')}
+        >
+          <FolderOpen className="w-4 h-4" />
+          <span className="hidden sm:inline">{docsT('title')}</span>
+        </Link>
 
         {/* Pulsante My Wallet */}
         <Link

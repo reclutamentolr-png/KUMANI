@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { getLocale, getTranslations } from 'next-intl/server'
-import { ArrowLeft, ArrowRight, BookOpen, Briefcase, Clock, Footprints, Megaphone, Leaf, ShieldCheck, Sparkles, Users, Wallet, Wrench } from 'lucide-react'
+import { ArrowLeft, ArrowRight, BookOpen, Briefcase, Clock, Footprints, FolderOpen, Megaphone, Leaf, ShieldCheck, Sparkles, Users, Wallet, Wrench } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { createClient } from '@/lib/supabase/server'
 import { getGuidesContent, PUBLIC_GUIDES } from '@/lib/guides/content'
@@ -28,6 +28,7 @@ const CATEGORY_ICONS: Record<GuideCategory, typeof Wallet> = {
 export default async function GuidesPage() {
   const locale = await getLocale()
   const t = await getTranslations('guides')
+  const docsT = await getTranslations('documents')
   const content = await getGuidesContent(locale)
   const supabase = await createClient()
   const {
@@ -121,9 +122,26 @@ export default async function GuidesPage() {
         </div>
 
         {user ? (
-          <p className="mt-10 rounded-2xl border border-dashed border-[var(--gold)]/50 bg-[var(--gold-pale)] px-5 py-4 text-sm text-[var(--ink)]">
-            {t('comingSoon')}
-          </p>
+          <>
+            <Link
+              href="/documenti"
+              className="group mt-10 flex items-center justify-between gap-4 rounded-2xl border border-[var(--gold)]/40 bg-white px-5 py-4 shadow-sm transition hover:border-[var(--gold)]"
+            >
+              <span className="flex items-center gap-3">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--ink)] text-[var(--gold-bright)]">
+                  <FolderOpen className="h-5 w-5" />
+                </span>
+                <span>
+                  <span className="block font-bold text-[var(--ink)]">{docsT('guideLinkTitle')}</span>
+                  <span className="block text-sm text-[var(--muted)]">{docsT('guideLinkText')}</span>
+                </span>
+              </span>
+              <ArrowRight className="h-5 w-5 shrink-0 text-[var(--gold)] transition-transform group-hover:translate-x-1" />
+            </Link>
+            <p className="mt-4 rounded-2xl border border-dashed border-[var(--gold)]/50 bg-[var(--gold-pale)] px-5 py-4 text-sm text-[var(--ink)]">
+              {t('comingSoon')}
+            </p>
+          </>
         ) : (
           <div className="mt-10 rounded-2xl border border-[var(--gold)]/40 bg-[var(--gold-pale)] px-5 py-5 text-[var(--ink)]">
             <p className="font-bold">{t('membersTitle')}</p>

@@ -1,0 +1,224 @@
+import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
+import { getLocale, getTranslations } from 'next-intl/server'
+import {
+  ArrowLeft,
+  ArrowRight,
+  BadgeCheck,
+  CalendarCheck,
+  Download,
+  FileText,
+  FolderOpen,
+  IdCard,
+  Info,
+  Presentation,
+  Receipt,
+  ScrollText,
+  Ticket,
+  TicketPercent,
+  type LucideIcon,
+} from 'lucide-react'
+import Link from '@/components/LocalizedLink'
+import { createClient } from '@/lib/supabase/server'
+import { listKumaniDocuments, listPersonalDocuments } from '@/lib/documentsData'
+import { DOC_LOCALES, pickLocalized, type DocLocale, type KumaniDocFile, type PersonalDocKind } from '@/lib/documents'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('documents')
+  return { title: t('metaTitle') }
+}
+
+const KIND_ICONS: Record<PersonalDocKind, LucideIcon> = {
+  quote: FileText,
+  receipt: Receipt,
+  cv: IdCard,
+  coupon: TicketPercent,
+  event: CalendarCheck,
+  voucher: Ticket,
+}
+const KIND_ORDER: PersonalDocKind[] = ['quote', 'receipt', 'cv', 'coupon', 'event', 'voucher']
+
+const mb = (n: number) => `${(n / 1024 / 1024).toFixed(1)} MB`
+
+// Documenti: "Doc KUMANI" (materiale ufficiale da scaricare, prima nella
+// lingua dell'utente) e "Doc Personali" (i documenti creati con i servizi).
+export default async function DocumentsPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
+  const locale = await getLocale()
+  const t = await getTranslations('documents')
+  const commonT = await getTranslations('common')
+  const { tab } = await searchParams
+  const personal = tab === 'personali'
+
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) redirect(`/${locale}/login`)
+
+  const languageName = (code: string) => {
+    try {
+      const name = new Intl.DisplayNames([locale], { type: 'language' }).of(code) ?? code
+      return name.charAt(0).toUpperCase() + name.slice(1)
+    } catch {
+      return code
+    }
+  }
+  const dateFmt = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', year: 'numeric' })
+
+  const tabClass = (active: boolean) =>
+    `flex-1 rounded-xl px-4 py-2.5 text-center text-sm font-bold transition ${active ? 'bg-[var(--ink)] text-white shadow' : 'text-[var(--muted)] hover:text-[var(--ink)]'}`
+
+  const fileButton = (f: KumaniDocFile, main: boolean) => {
+    const Icon = f.format === 'pdf' ? FileText : Presentation
+    return (
+      <a
+        key={f.id}
+        href={`/api/documenti/${f.id}`}
+        className={
+          main
+            ? 'inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-4 py-2.5 text-sm font-extrabold text-[var(--ink)] shadow-sm transition hover:brightness-105'
+            : 'inline-flex items-center gap-1 rounded-lg border border-[var(--gold)]/40 bg-white px-2.5 py-1 text-xs font-semibold text-[var(--ink)] transition hover:border-[var(--gold)]'
+        }
+      >
+        {main ? <Download className="h-4 w-4" /> : <Icon className="h-3.5 w-3.5 text-[var(--gold)]" />}
+        {t(f.format)}
+        {main && <span className="font-medium opacity-70">· {mb(f.size_bytes)}</span>}
+      </a>
+    )
+  }
+
+  const body = personal ? await personalTab() : await kumaniTab()
+
+  return (
+    <div className="min-h-screen bg-[var(--background)]">
+      <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
+        <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
+          <Link href="/dashboard" className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]">
+            <ArrowLeft className="h-5 w-5" /> {commonT('backToDashboard')}
+          </Link>
+          <span className="flex items-center gap-2 font-semibold tracking-wide">
+            <FolderOpen className="h-5 w-5 text-[var(--gold-bright)]" /> {t('title')}
+          </span>
+        </div>
+      </header>
+
+      <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+        <h1 className="text-3xl font-bold text-[var(--ink)] sm:text-4xl">{t('title')}</h1>
+        <p className="mt-2 text-[var(--muted)]">{t('subtitle')}</p>
+
+        <nav className="mt-6 flex gap-1 rounded-2xl border border-[var(--gold)]/30 bg-white p-1 shadow-sm">
+          <Link href="/documenti" className={tabClass(!personal)}>
+            {t('tabKumani')}
+          </Link>
+          <Link href="/documenti?tab=personali" className={tabClass(personal)}>
+            {t('tabPersonal')}
+          </Link>
+        </nav>
+
+        {body}
+      </main>
+    </div>
+  )
+
+  async function kumaniTab() {
+    const docs = await listKumaniDocuments(supabase)
+    return (
+      <section className="mt-6 space-y-4">
+        <p className="text-sm text-[var(--muted)]">{t('kumaniIntro')}</p>
+        {docs.length === 0 && <p className="rounded-2xl border border-dashed border-[var(--gold)]/40 bg-white p-6 text-center text-[var(--muted)]">{t('kumaniEmpty')}</p>}
+        {docs.map((d) => {
+          const mine = d.files.filter((f) => f.locale === locale).sort((a, b) => (a.format === 'pdf' ? -1 : 1) - (b.format === 'pdf' ? -1 : 1))
+          const others = DOC_LOCALES.filter((l) => l !== locale)
+            .map((l) => ({ l, files: d.files.filter((f) => f.locale === l) }))
+            .filter((x) => x.files.length > 0)
+          const CatIcon = d.category === 'presentation' ? Presentation : d.category === 'rules' ? ScrollText : FileText
+          const description = pickLocalized(d.description, locale)
+          return (
+            <article key={d.id} className="rounded-2xl border border-[var(--gold)]/30 bg-white p-5 shadow-sm sm:p-6">
+              <div className="flex items-start gap-4">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--ink)] text-[var(--gold-bright)]">
+                  <CatIcon className="h-6 w-6" />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-bold uppercase tracking-wider text-[var(--gold)]">{t(`category_${d.category}`)}</p>
+                  <h2 className="text-xl font-bold text-[var(--ink)]">{pickLocalized(d.title, locale)}</h2>
+                  {description && <p className="mt-1 text-sm text-[var(--muted)]">{description}</p>}
+                </div>
+              </div>
+
+              <div className="mt-5">
+                <p className="mb-2 text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
+                  {t('yourLanguage')} · {languageName(locale)}
+                </p>
+                {mine.length ? <div className="flex flex-wrap gap-2">{mine.map((f) => fileButton(f, true))}</div> : <p className="text-sm text-[var(--muted)]">{t('notInYourLanguage')}</p>}
+              </div>
+
+              {others.length > 0 && (
+                <details className="mt-4 group" open={mine.length === 0}>
+                  <summary className="cursor-pointer text-sm font-semibold text-[var(--ink)] hover:text-[var(--gold)]">{t('otherLanguages')}</summary>
+                  <ul className="mt-3 space-y-2">
+                    {others.map(({ l, files }) => (
+                      <li key={l} className="flex flex-wrap items-center gap-2">
+                        <span className="w-28 text-sm text-[var(--ink)]">{languageName(l as DocLocale)}</span>
+                        {files.map((f) => fileButton(f, false))}
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              )}
+
+              {d.category === 'presentation' && (
+                <p className="mt-4 flex items-start gap-2 rounded-xl bg-[var(--gold-pale)] px-3 py-2 text-xs text-[var(--ink)]">
+                  <BadgeCheck className="mt-0.5 h-4 w-4 shrink-0 text-[var(--gold)]" /> {t('officialNote')}
+                </p>
+              )}
+            </article>
+          )
+        })}
+      </section>
+    )
+  }
+
+  async function personalTab() {
+    const docs = await listPersonalDocuments(supabase, user!.id)
+    const groups = KIND_ORDER.map((kind) => ({ kind, items: docs.filter((d) => d.kind === kind) })).filter((g) => g.items.length > 0)
+    return (
+      <section className="mt-6 space-y-5">
+        <p className="text-sm text-[var(--muted)]">{t('personalIntro')}</p>
+        {groups.length === 0 && (
+          <p className="flex items-start gap-3 rounded-2xl border border-dashed border-[var(--gold)]/40 bg-white p-6 text-[var(--muted)]">
+            <Info className="mt-0.5 h-5 w-5 shrink-0 text-[var(--gold)]" /> {t('personalEmpty')}
+          </p>
+        )}
+        {groups.map(({ kind, items }) => {
+          const Icon = KIND_ICONS[kind]
+          return (
+            <div key={kind} className="rounded-2xl border border-[var(--gold)]/30 bg-white shadow-sm">
+              <h2 className="flex items-center gap-2 border-b border-[var(--gold)]/20 px-5 py-3 font-bold text-[var(--ink)]">
+                <Icon className="h-5 w-5 text-[var(--gold)]" /> {t(`kind_${kind}`)} <span className="text-sm font-normal text-[var(--muted)]">({items.length})</span>
+              </h2>
+              <ul className="divide-y divide-[var(--gold)]/10">
+                {items.map((d) => (
+                  <li key={d.id}>
+                    <Link href={d.href} className="group flex items-center justify-between gap-3 px-5 py-3 transition hover:bg-[var(--gold-pale)]/50">
+                      <div className="min-w-0">
+                        <p className="truncate font-semibold text-[var(--ink)]">{d.title || t('untitled')}</p>
+                        <p className="truncate text-xs text-[var(--muted)]">
+                          {dateFmt.format(new Date(d.date))}
+                          {d.subtitle ? ` · ${d.subtitle}` : ''}
+                        </p>
+                      </div>
+                      <span className="flex shrink-0 items-center gap-1 text-sm font-semibold text-[var(--gold)]">
+                        {t('open')} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        })}
+      </section>
+    )
+  }
+}

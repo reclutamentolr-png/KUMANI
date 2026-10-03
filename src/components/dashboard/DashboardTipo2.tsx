@@ -6,7 +6,7 @@ import InfoPopover from '@/components/InfoPopover'
 import type { MarketplaceTool } from '@/lib/marketplaceTools'
 import type { MarketplaceCategory } from '@/lib/marketplaceTools'
 import type { DashboardNetworkData } from '@/lib/dashboardNetworkData'
-import { Users, ArrowRight, Star, CheckCircle2, Crown, Hourglass, Sparkles, BadgeCheck, Gift, BookOpen } from 'lucide-react'
+import { Users, ArrowRight, Star, CheckCircle2, Crown, Hourglass, Sparkles, BadgeCheck, Gift, BookOpen, FolderOpen } from 'lucide-react'
 import CopyButton from '@/components/CopyButton'
 import VoucherActivationButton from '@/components/VoucherActivationButton'
 import DashboardDonations from '@/components/donations/DashboardDonations'
@@ -61,6 +61,7 @@ export default async function DashboardTipo2({
   const marketplaceT = await getTranslations('marketplace')
   const pt = await getTranslations('proArea')
   const guidesT = await getTranslations('guides')
+  const docsT = await getTranslations('documents')
   const locale = await getLocale()
 
   // Qualifiche (solo badge) sui Punti Community guadagnati in totale
@@ -93,7 +94,7 @@ export default async function DashboardTipo2({
   return (
     <>
       {/* Scorciatoie: servizi preferiti e Centro guide, affiancati */}
-      <div data-tour="shortcuts" className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <div data-tour="shortcuts" className="grid grid-cols-1 gap-3 sm:grid-cols-3">
       <Link
         href="/marketplace/preferiti?from=dashboard"
         className="group flex items-center justify-between gap-3 rounded-xl border border-[var(--gold)]/35 bg-[var(--gold-pale)] px-5 py-4 shadow-sm transition-colors hover:border-[var(--gold)]"
@@ -112,6 +113,15 @@ export default async function DashboardTipo2({
             <BookOpen className="h-4.5 w-4.5" />
           </div>
           <span className="font-semibold text-[var(--ink)]">{guidesT('dashboardTitle')}</span>
+        </div>
+        <ArrowRight className="h-4 w-4 text-[var(--ink)] transition-transform group-hover:translate-x-1" />
+      </Link>
+      <Link href="/documenti" className="group flex items-center justify-between gap-3 rounded-xl border border-[var(--gold)]/35 bg-[var(--gold-pale)] px-5 py-4 shadow-sm transition-colors hover:border-[var(--gold)]">
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--gold)] text-white">
+            <FolderOpen className="h-4.5 w-4.5" />
+          </div>
+          <span className="font-semibold text-[var(--ink)]">{docsT('title')}</span>
         </div>
         <ArrowRight className="h-4 w-4 text-[var(--ink)] transition-transform group-hover:translate-x-1" />
       </Link>
