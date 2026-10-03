@@ -31,7 +31,7 @@ export default function FloatingAudioPlayer() {
         : ''
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex items-center gap-3 rounded-2xl border border-[var(--gold)]/30 bg-[var(--ink)] px-4 py-3 text-white shadow-[0_12px_35px_rgba(23,23,23,0.35)]">
+    <div data-fab className="fixed bottom-4 right-4 z-50 flex items-center gap-3 rounded-2xl border border-[var(--gold)]/30 bg-[var(--ink)] px-4 py-3 text-white shadow-[0_12px_35px_rgba(23,23,23,0.35)]">
       <Link href="/marketplace/neurobalance" className="flex min-w-0 items-center gap-2">
         <Waves className="h-5 w-5 shrink-0 animate-pulse text-[var(--gold-bright)]" />
         <div className="min-w-0">

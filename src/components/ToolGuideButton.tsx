@@ -7,9 +7,10 @@ import Link from '@/components/LocalizedLink'
 import { toolGuideFor } from '@/lib/guides/toolGuides'
 import { locales } from '../../i18n'
 
-// Pulsante "Come si usa" fisso in basso a sinistra nei servizi che hanno una
-// guida (src/lib/guides/toolGuides.ts). Negli strumenti del marketplace sta
-// sopra il pulsante "Condividi", altrove al suo posto.
+// Pulsante "Come si usa" fisso in basso a destra nei servizi che hanno una
+// guida (src/lib/guides/toolGuides.ts); "Condividi" sta in basso a sinistra.
+// Sul telefono solo l'icona. Se la pagina ha già un pulsante in basso a
+// destra (data-fab, es. "Nuovo"), sale sopra di lui (globals.css).
 export default function ToolGuideButton() {
   const pathname = usePathname()
   const t = useTranslations('guides')
@@ -20,21 +21,16 @@ export default function ToolGuideButton() {
   const slug = toolGuideFor(barePath)
   if (!slug) return null
 
-  // "Condividi" c'è solo negli strumenti del marketplace, non in Kumano del
-  // Giorno, Bacheca, messaggi, Time Bank e Kordata
-  const NO_SHARE = ['spotlight', 'listings', 'timebank', 'convivio']
-  const aboveShare = barePath.startsWith('/marketplace/') && !NO_SHARE.includes(slug)
-
   return (
     <Link
       // La guida sa da dove arrivi: in alto mostra "Torna a …" verso il servizio
       href={`/guida/${slug}?from=${encodeURIComponent(barePath)}`}
-      className={`fixed left-4 z-40 flex items-center gap-2 rounded-full border border-[var(--gold)]/60 bg-[var(--gold-pale)] px-4 py-3 text-sm font-semibold text-[var(--ink)] shadow-[0_12px_35px_rgba(23,23,23,0.25)] transition-all hover:-translate-y-0.5 hover:border-[var(--gold)] print:hidden ${
-        aboveShare ? 'bottom-[4.5rem]' : 'bottom-4'
-      }`}
+      aria-label={t('howToUse')}
+      title={t('howToUse')}
+      className="tool-guide-fab fixed bottom-4 right-4 z-40 flex h-12 w-12 items-center justify-center gap-2 rounded-full border border-[var(--gold)]/60 bg-[var(--gold-pale)] text-sm font-semibold text-[var(--ink)] shadow-[0_12px_35px_rgba(23,23,23,0.25)] transition-all hover:-translate-y-0.5 hover:border-[var(--gold)] print:hidden sm:h-auto sm:w-auto sm:px-4 sm:py-3"
     >
-      <BookOpen className="h-4 w-4 text-[var(--gold)]" />
-      {t('howToUse')}
+      <BookOpen className="h-5 w-5 text-[var(--gold)] sm:h-4 sm:w-4" />
+      <span className="hidden sm:inline">{t('howToUse')}</span>
     </Link>
   )
 }

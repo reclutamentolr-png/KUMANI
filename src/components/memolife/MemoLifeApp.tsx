@@ -417,7 +417,7 @@ export default function MemoLifeApp({
       <button
         type="button"
         onClick={() => setEditor({ kind: 'menu' })}
-        className="fixed bottom-6 right-6 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] shadow-xl transition-transform hover:scale-105"
+        data-fab className="fixed bottom-6 right-6 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] shadow-xl transition-transform hover:scale-105"
         aria-label={t('add')}
       >
         <Plus className="h-7 w-7" />

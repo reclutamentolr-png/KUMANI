@@ -140,7 +140,7 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
             {L.hero.video ? <HeroLogoVideo label="KUMANI" /> : <Logo size={96} priority className="sm:h-28 sm:w-28 h-24 w-24" />}
           </div>
           {/* Il manifesto in una frase: ben visibile, non un'etichetta */}
-          <div className="mx-auto mb-6 inline-flex max-w-3xl items-center gap-3 rounded-2xl border border-[var(--gold)]/60 bg-[var(--gold)]/15 px-5 py-3 text-base font-semibold leading-snug text-white shadow-[0_10px_30px_rgba(199,154,59,0.18)] backdrop-blur sm:mb-8 sm:px-7 sm:py-4 sm:text-xl">
+          <div className="mx-auto mb-6 inline-flex max-w-3xl items-center gap-3 rounded-2xl border border-[var(--gold)]/60 bg-[var(--gold)]/15 px-5 py-3 text-lg font-semibold leading-snug text-white shadow-[0_10px_30px_rgba(199,154,59,0.18)] backdrop-blur sm:mb-8 sm:px-7 sm:py-4 sm:text-xl">
             <Sparkles className="h-5 w-5 shrink-0 text-[var(--gold-bright)] sm:h-6 sm:w-6" />
             {t('heroBadge')}
           </div>
@@ -148,7 +148,7 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
             {t('heroTitle')}
             <span className="block bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] bg-clip-text text-transparent">{t('heroAccent')}</span>
           </h1>
-          <p className={`text-base sm:text-xl text-gray-300 mb-8 sm:mb-10 leading-relaxed max-w-2xl mx-auto ${L.hero.kind === 'split' ? 'lg:mx-0' : ''}`}>
+          <p className={`text-lg sm:text-xl text-gray-300 mb-8 sm:mb-10 leading-relaxed max-w-2xl mx-auto ${L.hero.kind === 'split' ? 'lg:mx-0' : ''}`}>
             {t('heroDescription')}{' '}
             <strong className="text-white">{t('heroDescriptionStrong')}</strong>: {t('heroDescriptionEnd')}
           </p>

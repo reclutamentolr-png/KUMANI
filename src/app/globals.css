@@ -19,6 +19,26 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Telefono: testi un po' più grandi, più facili da leggere anche senza
+   occhiali. Cambiano solo le dimensioni dei caratteri (non gli spazi), così
+   l'impaginazione resta quella pensata per lo schermo piccolo. */
+@media (max-width: 639px) {
+  :root {
+    --text-xs: 0.8125rem; /* 13px invece di 12 */
+    --text-sm: 0.9375rem; /* 15px invece di 14 */
+    --text-base: 1.0625rem; /* 17px invece di 16 */
+  }
+  .text-\[9px\] { font-size: 10.5px; }
+  .text-\[10px\] { font-size: 11.5px; }
+  .text-\[11px\] { font-size: 12.5px; }
+}
+
+/* "Come si usa" in basso a destra: se la pagina ha già un pulsante lì
+   (data-fab, es. "Nuovo" o il lettore audio), sale sopra di lui */
+body:has([data-fab]) .tool-guide-fab {
+  bottom: 6.5rem;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
