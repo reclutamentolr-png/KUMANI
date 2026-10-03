@@ -42,8 +42,9 @@ export default async function GuidesPage() {
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]">
-            <ArrowLeft className="h-5 w-5" /> {t('backToHome')}
+          {/* Chi ha fatto l'accesso torna alla dashboard, gli altri alla home */}
+          <Link href={user ? '/dashboard' : '/'} className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]">
+            <ArrowLeft className="h-5 w-5" /> {user ? t('backToDashboard') : t('backToHome')}
           </Link>
           <span className="flex items-center gap-2 font-semibold tracking-wide">
             <BookOpen className="h-5 w-5 text-[var(--gold-bright)]" /> {t('linkLabel')}
