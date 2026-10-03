@@ -1,6 +1,6 @@
 import { getTranslations } from 'next-intl/server'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
-import { ArrowLeft, ArrowRight, CheckCircle2, Crown } from 'lucide-react'
+import { ArrowLeft, ArrowRight, BookOpen, CheckCircle2, Crown } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import Logo from '@/components/Logo'
 import UpgradeToProButton from '@/components/UpgradeToProButton'
@@ -11,6 +11,7 @@ import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 import type { UserPlan } from '@/lib/plans'
 import { getPlanPrices } from '@/lib/planPrices'
+import { toolGuideFor } from '@/lib/guides/toolGuides'
 
 // Pagina "KUMANI Pro": strumenti del piano Pro (decisi dall'admin in
 // Admin → Marketplace), prezzo e pulsante adatto alla situazione:
@@ -28,6 +29,12 @@ export default async function ProPage({
   const t = await getTranslations('plans')
   const tm = await getTranslations('marketplace')
   const tw = await getTranslations('withdrawal')
+  const tg = await getTranslations('guides')
+  // Guida del servizio (Centro guide), per capire com'è prima di acquistare
+  const guideHref = (href: string) => {
+    const slug = toolGuideFor(href)
+    return slug ? `/guida/${slug}?from=${encodeURIComponent(highlightTool ? `/pro?tool=${highlightTool}` : '/pro')}` : null
+  }
 
   const service = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
     auth: { autoRefreshToken: false, persistSession: false },
@@ -92,9 +99,17 @@ export default async function ProPage({
           <h1 className="text-3xl font-bold sm:text-4xl">{t('proTitle')}</h1>
           <p className="mx-auto mt-3 max-w-xl text-gray-300">{t('proSubtitle')}</p>
           {highlighted && (
-            <p className="mx-auto mt-5 max-w-xl rounded-xl border border-[var(--gold)]/40 bg-[var(--gold)]/10 px-4 py-3 text-sm text-[var(--gold-bright)]">
-              {t('toolIsPro', { tool: highlighted.title })}
-            </p>
+            <div className="mx-auto mt-5 max-w-xl rounded-xl border border-[var(--gold)]/40 bg-[var(--gold)]/10 px-4 py-3 text-sm text-[var(--gold-bright)]">
+              <p>{t('toolIsPro', { tool: highlighted.title })}</p>
+              {guideHref(highlighted.href) && (
+                <Link
+                  href={guideHref(highlighted.href)!}
+                  className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-4 py-1.5 text-sm font-bold text-[var(--ink)] transition hover:opacity-90"
+                >
+                  <BookOpen className="h-4 w-4" /> {tg('howItWorksService', { service: highlighted.title })}
+                </Link>
+              )}
+            </div>
           )}
         </div>
 
@@ -111,6 +126,11 @@ export default async function ProPage({
                   <span>
                     <span className="block font-semibold">{tool.title}</span>
                     <span className="block text-sm text-gray-400">{tool.description}</span>
+                    {guideHref(tool.href) && (
+                      <Link href={guideHref(tool.href)!} className="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-[var(--gold-bright)] underline-offset-2 hover:underline">
+                        <BookOpen className="h-3.5 w-3.5" /> {tg('howItWorks')}
+                      </Link>
+                    )}
                   </span>
                 </li>
               )

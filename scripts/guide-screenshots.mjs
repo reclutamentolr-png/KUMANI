@@ -75,6 +75,19 @@ for (const shot of shots) {
         Object.getOwnPropertyDescriptor(proto, 'value').set.call(el, ${JSON.stringify(local(step.value))})
         el.dispatchEvent(new Event(el.tagName === 'SELECT' ? 'change' : 'input', { bubbles: true }))
       })()`)
+    } else if (step.fillLabel) {
+      // Campo trovato dal testo della sua etichetta (moduli senza id)
+      await evaluate(`(() => {
+        const wanted = ${JSON.stringify(local(step.fillLabel))}.toLowerCase()
+        const label = [...document.querySelectorAll('label')].find((l) => (l.querySelector('span')?.textContent || l.textContent || '').trim().toLowerCase() === wanted)
+        const el = label?.querySelector('input, textarea, select') || (label?.htmlFor && document.getElementById(label.htmlFor))
+        if (!el) return
+        const proto = el.tagName === 'TEXTAREA' ? HTMLTextAreaElement.prototype : el.tagName === 'SELECT' ? HTMLSelectElement.prototype : HTMLInputElement.prototype
+        Object.getOwnPropertyDescriptor(proto, 'value').set.call(el, ${JSON.stringify(local(step.value))})
+        el.dispatchEvent(new Event(el.tagName === 'SELECT' ? 'change' : 'input', { bubbles: true }))
+      })()`)
+    } else if (step.js) {
+      await evaluate(step.js)
     } else if (step.click) {
       await evaluate(`document.querySelector(${JSON.stringify(step.click)})?.click()`)
     } else if (step.clickText) {

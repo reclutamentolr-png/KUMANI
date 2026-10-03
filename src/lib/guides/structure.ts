@@ -6,7 +6,7 @@ import type { GuideCategory, GuideSlug } from '@/lib/guides/types'
 
 export type GuideStructure = { slug: GuideSlug; category: GuideCategory; minutes: number; steps: number; href: string }
 
-export const GUIDE_CATEGORIES: GuideCategory[] = ['start', 'promote', 'wallet', 'promoteTools', 'security', 'community', 'organize', 'wellness']
+export const GUIDE_CATEGORIES: GuideCategory[] = ['start', 'promote', 'wallet', 'promoteTools', 'security', 'community', 'organize', 'pro', 'wellness']
 
 export const GUIDE_STRUCTURE: GuideStructure[] = [
   { slug: 'registrazione', category: 'start', minutes: 3, steps: 4, href: '/register' },
@@ -37,6 +37,14 @@ export const GUIDE_STRUCTURE: GuideStructure[] = [
   { slug: 'spendly', category: 'organize', minutes: 3, steps: 4, href: '/marketplace/spendly' },
   { slug: 'fincheck', category: 'organize', minutes: 3, steps: 5, href: '/marketplace/fincheck' },
   { slug: 'svat', category: 'organize', minutes: 2, steps: 4, href: '/marketplace/svat' },
+  { slug: 'menu', category: 'pro', minutes: 3, steps: 4, href: '/marketplace/menu' },
+  { slug: 'fidelity', category: 'pro', minutes: 3, steps: 5, href: '/marketplace/fidelity' },
+  { slug: 'preventivi', category: 'pro', minutes: 3, steps: 5, href: '/marketplace/preventivi' },
+  { slug: 'digital-receipt', category: 'pro', minutes: 3, steps: 4, href: '/marketplace/digital-receipt' },
+  { slug: 'magazzino', category: 'pro', minutes: 3, steps: 4, href: '/marketplace/magazzino' },
+  { slug: 'qr-code-pro', category: 'pro', minutes: 2, steps: 3, href: '/marketplace/qr-code-pro' },
+  { slug: 'firma-email', category: 'pro', minutes: 3, steps: 5, href: '/marketplace/firma-email' },
+  { slug: 'calcolatrici', category: 'pro', minutes: 2, steps: 4, href: '/marketplace/calcolatrici' },
   { slug: 'focus', category: 'wellness', minutes: 2, steps: 3, href: '/marketplace/focus' },
   { slug: 'mandala', category: 'wellness', minutes: 2, steps: 3, href: '/marketplace/mandala' },
   { slug: 'mosaic', category: 'wellness', minutes: 2, steps: 3, href: '/marketplace/mosaic' },

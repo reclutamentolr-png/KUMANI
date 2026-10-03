@@ -2391,7 +2391,7 @@
     "searchPlaceholder": "Nach Gegenstand oder Empfänger suchen...",
     "noReceiptsYet": "Du hast noch keine Quittung erstellt.",
     "noResults": "Keine Quittung entspricht der Suche.",
-    "statusPending": "Deine Geschichte wird vom KUMANI-Staff geprüft: Sie erscheint im Schaufenster, sobald sie freigegeben ist.",
+    "statusPending": "Ausstehend",
     "statusConfirmed": "Bestätigt",
     "statusReturned": "Zurückgegeben",
     "to": "an",
@@ -6691,6 +6691,10 @@
       "wellness": {
         "title": "Wohlbefinden und Freizeit",
         "text": "Die Anleitungen zu den Diensten zum Konzentrieren, Entspannen, Gestalten und Reisen."
+      },
+      "pro": {
+        "title": "Pro-Dienste",
+        "text": "Die Werkzeuge für alle, die mit Kunden arbeiten: Speisekarte, Treuekarte, Angebote, Quittungen und mehr."
       }
     },
     "registrazione": {
@@ -7170,6 +7174,123 @@
       "step5Title": "Der Aktionsplan",
       "step5Text": "FinCheck schlägt dir bis zu 3 konkrete Ziele vor, mit Beträgen, die auf deinem Budget beruhen: Hake sie ab, wenn du sie erreicht hast. Nach 3 Monaten machst du den Test erneut und siehst deine Fortschritte.",
       "step5Tip": "Beim ersten Mal und danach alle 3 Monate bekommst du KU Karma für den Test."
+    },
+    "menu": {
+      "title": "KUMANI Menu",
+      "summary": "Die Speisekarte deines Lokals online, mit QR-Code am Tisch und in mehreren Sprachen.",
+      "cta": "KUMANI Menu öffnen",
+      "step1Title": "Deine Online-Speisekarte",
+      "step1Text": "Erstelle die Speisekarte mit dem Namen deines Lokals, dem Stil und den Sprachen. Im Tab „Deine Online-Speisekarte“ findest du den Link, den QR-Code zum Herunterladen, die Speisekarte als PDF und den Tischaufsteller.",
+      "step1Tip": "Unter „Einstellungen“ änderst du Stil, Sprachen und den Link für Bewertungen.",
+      "step2Title": "Kategorien und Gerichte",
+      "step2Text": "Tippe auf „Kategorie hinzufügen“ (zum Beispiel Vorspeisen) und dann in jeder Kategorie auf „Gericht hinzufügen“. Mit den Pfeilen änderst du die Reihenfolge, mit „Verfügbar“ markierst du ein Gericht als ausverkauft.",
+      "step3Title": "Die Gerichtskarte",
+      "step3Text": "Gib Name, Preis, Foto und Beschreibung in jeder Sprache ein und wähle dann die Merkmale (vegan, glutenfrei…) und die Allergene. Du kannst es auch als „Tagesgericht“ markieren.",
+      "step3Tip": "„Mit KI übersetzen“ ergänzt fehlende Übersetzungen mit einem Klick.",
+      "step4Title": "Die Speisekarte aus Gästesicht",
+      "step4Text": "Der Gast scannt den QR-Code und sieht die Speisekarte in seiner Sprache, mit dem hervorgehobenen Tagesgericht und den Allergenen jedes Gerichts."
+    },
+    "fidelity": {
+      "title": "Kumi Card",
+      "summary": "Die digitale Treuekarte: Stempel auf dem Handy des Kunden, Prämie und Statistiken.",
+      "cta": "Kumi Card öffnen",
+      "step1Title": "Deine Kumi Card",
+      "step1Text": "Erstelle die Karte mit dem Namen deines Geschäfts, der Prämie und der Anzahl der Stempel und tippe dann auf dem Handy oder Tablet an der Kasse auf „Kassenmodus öffnen“.",
+      "step1Tip": "Auf anderen Geräten wird die Kasse mit der PIN entsperrt, die du festlegst.",
+      "step2Title": "Stempel vergeben",
+      "step2Text": "Wähle im Kassenmodus, wie viele Stempel du vergibst, und tippe auf „Stempel geben“: Es erscheint ein QR-Code, den der Kunde mit seinem Handy scannt. Hier übergibst du auch die Prämie.",
+      "step3Title": "Die Karte des Kunden",
+      "step3Text": "Der Kunde sieht die gesammelten Stempel, die Prämie und wie viele Stempel ihm noch fehlen, ohne eine App herunterzuladen. An der Kasse kann er auch seinen Code zeigen.",
+      "step4Title": "Die Entwicklung",
+      "step4Text": "Auf deiner Seite siehst du die Stempel pro Woche und die stärksten Tage und Uhrzeiten, dazu Kunden, ausgegebene Prämien und die durchschnittliche Wiederkehrrate.",
+      "step5Title": "Deine Kunden",
+      "step5Text": "Unter „Deine Kunden“ findest du, wer kurz vor der Prämie steht, und kontaktierst ihn – wenn er zugestimmt hat – mit „Auf WhatsApp schreiben“, damit er wiederkommt."
+    },
+    "preventivi": {
+      "title": "Angebote",
+      "summary": "Professionelle Angebote mit deinem Briefkopf, als PDF, zum Versenden per WhatsApp oder E-Mail.",
+      "cta": "Angebote öffnen",
+      "step1Title": "Das Firmenprofil",
+      "step1Text": "Fülle beim ersten Mal das Firmenprofil mit Logo, Firmenname, USt-IdNr. und Kontaktdaten aus: Sie erscheinen oben auf jedem Angebot.",
+      "step2Title": "Die Kundendaten",
+      "step2Text": "Tippe auf „Neues Angebot“ und gib die Kundendaten ein oder wähle einen bereits gespeicherten Kunden.",
+      "step3Title": "Die Angebotspositionen",
+      "step3Text": "Trage unter „Angebotspositionen“ Beschreibung, Menge und Preis ein; mit „Position hinzufügen“ fügst du weitere hinzu. Die Summe wird automatisch berechnet.",
+      "step3Tip": "Füge auch Zahlungsart und Notizen hinzu: Sie erscheinen im PDF.",
+      "step4Title": "Die Übersicht",
+      "step4Text": "Nach „Angebot erstellen“ siehst du die Übersicht mit Kunde, Positionen, Gesamtsumme und Gültigkeitsdaten.",
+      "step5Title": "Herunterladen und senden",
+      "step5Text": "Tippe auf „PDF herunterladen“ und schick es dem Kunden per WhatsApp oder E-Mail. Mit „Bearbeiten“ kannst du es jederzeit ändern."
+    },
+    "digital_receipt": {
+      "title": "Digitale Belege",
+      "summary": "Ein digitaler Beleg für jede Übergabe oder Leihe, vom Empfänger bestätigt.",
+      "cta": "Digitale Belege öffnen",
+      "step1Title": "Deine Belege",
+      "step1Text": "Hier findest du alle Belege mit ihrem Status: Ausstehend, Bestätigt oder Zurückgegeben. Tippe auf „Neue Quittung“, um einen neuen zu erstellen.",
+      "step2Title": "Art wählen und ausfüllen",
+      "step2Text": "Wähle die Art (Übergabe, Leihe, Schlüssel, Dokumente…), füge bei Bedarf ein Foto hinzu und gib Gegenstand, Empfänger und Datum ein. Tippe dann auf „Quittung erstellen“.",
+      "step2Tip": "Bei einer Leihe kannst du das Rückgabedatum angeben und eine Erinnerung erhalten.",
+      "step3Title": "Link teilen",
+      "step3Text": "Kopiere den Link oder lass den Empfänger den QR-Code scannen. Du kannst auch das PDF herunterladen; am Ende der Leihe tippst du auf „Rückgabe bestätigen“.",
+      "step4Title": "Der Empfänger bestätigt",
+      "step4Text": "Der Empfänger öffnet den Link, ganz ohne Konto, und tippt auf „Ich bestätige, das oben Genannte erhalten zu haben“. Der Beleg wechselt auf „Bestätigt“."
+    },
+    "magazzino": {
+      "title": "Magazzino PRO",
+      "summary": "Artikel, Bestände, Zu- und Abgänge und Nachbestellhinweise an einem Ort.",
+      "cta": "Magazzino PRO öffnen",
+      "step1Title": "Das Lager auf einen Blick",
+      "step1Text": "Oben siehst du den Lagerwert, die Artikel unter Mindestbestand, die Bewegungen des Monats und die durchschnittliche Marge.",
+      "step2Title": "Artikel hinzufügen",
+      "step2Text": "Tippe auf „Neuer Artikel“ und gib Name, Kategorie, Maßeinheit, Einkaufspreis, Verkaufspreis, Mindestbestand und Anfangsbestand ein.",
+      "step2Tip": "Mit „Code scannen“ findest du einen Artikel über seinen Barcode.",
+      "step3Title": "Zu- und Abgänge",
+      "step3Text": "Nutze bei jedem Artikel die Schaltflächen für Zugang, Abgang oder Inventur: Wähle Grund und Menge und speichere. Der Bestand aktualisiert sich automatisch.",
+      "step4Title": "Übersicht und Nachbestellung",
+      "step4Text": "In der „Übersicht“ findest du den Lagerwert, die nachzubestellenden Artikel und die meistbewegten. Unter „Artikel“ und „Bewegungen“ exportierst du alles als CSV für deinen Steuerberater."
+    },
+    "qr_code_pro": {
+      "title": "QR Code PRO",
+      "summary": "Dynamische QR-Codes: Du änderst das Ziel, wann du willst, und zählst die Scans.",
+      "cta": "QR Code PRO öffnen",
+      "step1Title": "Deine QR-Codes",
+      "step1Text": "Hier findest du alle deine QR-Codes mit der Anzahl der Scans. Tippe auf „Neuer QR-Code“, um einen zu erstellen.",
+      "step2Title": "QR-Code erstellen",
+      "step2Text": "Gib dem QR-Code einen Namen und wähle, was er tun soll: eine Website öffnen, auf WhatsApp schreiben, anrufen, eine SMS oder E-Mail senden, sich mit dem WLAN verbinden oder einen Kontakt speichern. Wähle dann die Farben und tippe auf „QR-Code erstellen“.",
+      "step3Title": "Herunterladen und jederzeit ändern",
+      "step3Text": "In der Detailansicht siehst du die Scans, kopierst den dynamischen Link und lädst den QR-Code herunter. Wenn du das Ziel änderst, funktioniert der bereits gedruckte QR-Code weiter.",
+      "step3Tip": "Druck den QR-Code auf Flyer und Visitenkarten: Du musst sie nie wieder neu drucken."
+    },
+    "firma_email": {
+      "title": "E-Mail-Signatur",
+      "summary": "Eine professionelle E-Mail-Signatur mit deinen Daten, deinen Social-Media-Profilen und dem Link zu deinem Link in Bio.",
+      "cta": "E-Mail-Signatur öffnen",
+      "step1Title": "Stil wählen",
+      "step1Text": "Wähle zwischen Klassisch, Kompakt und Modern.",
+      "step2Title": "Deine Daten",
+      "step2Text": "Gib Name, Position und Unternehmen ein, dann die Kontaktdaten: Telefon, Handy, E-Mail, Website und Adresse.",
+      "step2Tip": "Der Entwurf bleibt auf diesem Gerät gespeichert.",
+      "step3Title": "Farbe und Social Media",
+      "step3Text": "Wähle deine Markenfarbe und füge die Links zu deinen Social-Media-Profilen ein. Du kannst auch den Link zu deinem Link in Bio hinzufügen.",
+      "step4Title": "Vorschau und kopieren",
+      "step4Text": "Prüfe die Vorschau und tippe auf „Signatur kopieren“. Du kannst auch den HTML-Code kopieren oder die Datei herunterladen.",
+      "step5Title": "In dein E-Mail-Programm einfügen",
+      "step5Text": "Unter „So fügst du die Signatur ein“ findest du die Schritte für Gmail, Outlook, Apple Mail und iPhone."
+    },
+    "calcolatrici": {
+      "title": "PRO-Rechner",
+      "summary": "MwSt., Rabatte, Aufschlag und Marge, Quellensteuer: die Rechnungen des Alltags im Handumdrehen.",
+      "cta": "PRO-Rechner öffnen",
+      "step1Title": "MwSt. berechnen",
+      "step1Text": "Wähle im Tab „MwSt.“, ob du die MwSt. aufschlagen oder herausrechnen willst, und gib Betrag und Steuersatz ein: Du siehst sofort Nettobetrag, MwSt. und Gesamtbetrag.",
+      "step2Title": "Rabatte",
+      "step2Text": "Gib im Tab „Rabatt“ den Preis und den Rabatt in Prozent, in Euro oder gestaffelt ein: Du siehst den Endpreis und die Ersparnis.",
+      "step3Title": "Aufschlag und Marge",
+      "step3Text": "Gib Einkaufs- und Verkaufspreis ein, um Aufschlag, Marge und Gewinn zu sehen, oder berechne den Preis ausgehend von der gewünschten Marge oder dem gewünschten Aufschlag.",
+      "step4Title": "Die Quellensteuer",
+      "step4Text": "Aus dem Honorar berechnest du den auszuzahlenden Nettobetrag und den Rechnungsbetrag mit Rentenbeitrag und MwSt. – oder du gehst vom Nettobetrag aus, den du erhalten willst.",
+      "step4Tip": "Kopiere das Ergebnis mit „Ergebnis kopieren“. Die Berechnung ist ein Richtwert: Prüfe sie immer mit deinem Steuerberater."
     }
   },
   "deckTexts": {

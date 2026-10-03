@@ -2,7 +2,7 @@
 // dell'app (public/guides/<lingua>/<guida>-<n>.webp, una per passo, fatte
 // con scripts/guide-screenshots.mjs).
 
-export type GuideCategory = 'start' | 'promote' | 'wallet' | 'promoteTools' | 'security' | 'community' | 'organize' | 'wellness'
+export type GuideCategory = 'start' | 'promote' | 'wallet' | 'promoteTools' | 'security' | 'community' | 'organize' | 'pro' | 'wellness'
 
 export type GuideSlug =
   | 'registrazione'
@@ -33,6 +33,15 @@ export type GuideSlug =
   | 'memolife'
   | 'spendly'
   | 'fincheck'
+  // Servizi Pro
+  | 'menu'
+  | 'fidelity'
+  | 'preventivi'
+  | 'digital-receipt'
+  | 'magazzino'
+  | 'qr-code-pro'
+  | 'firma-email'
+  | 'calcolatrici'
   | 'svat'
   | 'focus'
   | 'mandala'

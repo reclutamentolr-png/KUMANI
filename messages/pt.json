@@ -6691,6 +6691,10 @@
       "wellness": {
         "title": "Bem-estar e lazer",
         "text": "Os guias dos serviços para se concentrar, relaxar, criar e viajar."
+      },
+      "pro": {
+        "title": "Serviços Pro",
+        "text": "As ferramentas para quem trabalha com clientes: menu, cartão de fidelização, orçamentos, recibos e muito mais."
       }
     },
     "registrazione": {
@@ -7170,6 +7174,123 @@
       "step5Title": "O plano de ação",
       "step5Text": "O FinCheck propõe-lhe até 3 objetivos concretos, com valores calculados sobre o seu orçamento: assinale-os quando os cumprir. Após 3 meses refaça o teste para ver os progressos.",
       "step5Tip": "Na primeira vez e depois a cada 3 meses recebe KU Karma pelo teste."
+    },
+    "menu": {
+      "title": "KUMANI Menu",
+      "summary": "O menu do seu estabelecimento online, com o QR na mesa e em várias línguas.",
+      "cta": "Abrir KUMANI Menu",
+      "step1Title": "O seu menu online",
+      "step1Text": "Crie o menu com o nome do estabelecimento, o estilo e as línguas. No separador «O seu menu online» encontra o link, o QR para descarregar, o menu em PDF e o cartão para pôr na mesa.",
+      "step1Tip": "Em «Definições» muda o estilo, as línguas e o link para as avaliações.",
+      "step2Title": "Categorias e pratos",
+      "step2Text": "Toque em «Adicionar categoria» (por exemplo Entradas) e depois em «Adicionar prato» em cada categoria. Com as setas muda a ordem; com «Disponível» marca um prato como esgotado.",
+      "step3Title": "A ficha do prato",
+      "step3Text": "Introduza o nome, o preço, a foto e a descrição em cada língua e depois escolha as características (vegano, sem glúten…) e os alergénios. Também o pode marcar como «Prato do dia».",
+      "step3Tip": "«Traduzir com IA» completa num clique as traduções em falta.",
+      "step4Title": "O menu visto pelo cliente",
+      "step4Text": "O cliente lê o QR e vê o menu na sua língua, com o prato do dia em destaque e os alergénios de cada prato."
+    },
+    "fidelity": {
+      "title": "Kumi Card",
+      "summary": "O cartão de fidelização digital: os carimbos no telemóvel do cliente, o prémio e as estatísticas.",
+      "cta": "Abrir Kumi Card",
+      "step1Title": "O seu Kumi Card",
+      "step1Text": "Crie o cartão com o nome do negócio, o prémio e o número de carimbos e depois toque em «Abrir modo caixa» no telemóvel ou tablet que tem na caixa.",
+      "step1Tip": "Nos outros dispositivos, a caixa desbloqueia-se com o PIN que escolher.",
+      "step2Title": "Dê o carimbo",
+      "step2Text": "No modo caixa escolha quantos carimbos dar e toque em «Dar carimbo»: aparece um QR que o cliente lê com o telemóvel. É também aqui que entrega o prémio.",
+      "step3Title": "O cartão do cliente",
+      "step3Text": "O cliente vê os carimbos acumulados, o prémio e quantos carimbos lhe faltam, sem descarregar nenhuma app. Na caixa pode também mostrar o seu código.",
+      "step4Title": "A evolução",
+      "step4Text": "Na sua página vê os carimbos por semana e os dias e horas de maior movimento, além dos clientes, dos prémios entregues e da taxa média de regresso.",
+      "step5Title": "Os seus clientes",
+      "step5Text": "Em «Os seus clientes» encontra quem está perto do prémio e, se tiver dado consentimento, contacta-o com «Escrever no WhatsApp» para o fazer voltar."
+    },
+    "preventivi": {
+      "title": "Orçamentos",
+      "summary": "Orçamentos profissionais com o seu cabeçalho, em PDF, para enviar por WhatsApp ou por email.",
+      "cta": "Abrir Orçamentos",
+      "step1Title": "O Perfil da Empresa",
+      "step1Text": "Da primeira vez, preencha o Perfil da Empresa com o logótipo, a denominação social, o NIF e os contactos: vão aparecer no topo de cada orçamento.",
+      "step2Title": "Os dados do cliente",
+      "step2Text": "Toque em «Novo orçamento» e introduza os dados do cliente, ou escolha um cliente já guardado.",
+      "step3Title": "Os itens do orçamento",
+      "step3Text": "Em «Itens do orçamento» escreva a descrição, a quantidade e o preço; com «Adicionar item» acrescenta mais. O total é calculado automaticamente.",
+      "step3Tip": "Adicione também a forma de pagamento e as notas: aparecem no PDF.",
+      "step4Title": "O resumo",
+      "step4Text": "Depois de «Criar orçamento» vê o resumo com o cliente, os itens, o total e as datas de validade.",
+      "step5Title": "Descarregue e envie",
+      "step5Text": "Toque em «Descarregar PDF» e envie-o ao cliente por WhatsApp ou por email. Com «Editar» pode alterá-lo quando quiser."
+    },
+    "digital_receipt": {
+      "title": "Recibos Digitais",
+      "summary": "Um recibo digital para cada entrega ou empréstimo, confirmado pelo destinatário.",
+      "cta": "Abrir Recibos Digitais",
+      "step1Title": "Os seus recibos",
+      "step1Text": "Aqui encontra todos os recibos com o respetivo estado: Pendente, Confirmado ou Devolvido. Toque em «Novo recibo» para criar um.",
+      "step2Title": "Escolha o tipo e preencha",
+      "step2Text": "Escolha o tipo (entrega, empréstimo, chaves, documentos…), adicione uma foto se quiser e escreva o objeto, o destinatário e a data. Depois toque em «Criar recibo».",
+      "step2Tip": "Para um empréstimo pode indicar a data de devolução e receber um lembrete.",
+      "step3Title": "Partilhe o link",
+      "step3Text": "Copie o link ou peça ao destinatário para ler o QR. Também pode descarregar o PDF; no fim do empréstimo, toque em «Confirmar devolução».",
+      "step4Title": "O destinatário confirma",
+      "step4Text": "O destinatário abre o link, sem precisar de conta, e toca em «Confirmo que recebi o indicado acima». O recibo passa a «Confirmado»."
+    },
+    "magazzino": {
+      "title": "Magazzino PRO",
+      "summary": "Produtos, stocks, entradas e saídas e alertas de reposição num só lugar.",
+      "cta": "Abrir Magazzino PRO",
+      "step1Title": "O armazém num relance",
+      "step1Text": "No topo vê o valor do armazém, os produtos abaixo do stock mínimo, os movimentos do mês e a margem média.",
+      "step2Title": "Adicione um produto",
+      "step2Text": "Toque em «Novo produto» e introduza o nome, a categoria, a unidade de medida, o custo, o preço de venda, o stock mínimo e o stock inicial.",
+      "step2Tip": "Com «Digitalizar código» encontra um produto lendo o código de barras.",
+      "step3Title": "Entradas e saídas",
+      "step3Text": "Em cada produto use os botões de entrada, saída ou inventário: escolha o motivo e a quantidade e registe. O stock atualiza-se sozinho.",
+      "step4Title": "Painel e reposição",
+      "step4Text": "No «Painel» encontra o valor do armazém, os produtos a repor e os que têm mais movimento. Em «Produtos» e «Movimentos» exporta tudo em CSV para o seu contabilista."
+    },
+    "qr_code_pro": {
+      "title": "QR Code PRO",
+      "summary": "QR codes dinâmicos: muda o destino quando quiser e conta as leituras.",
+      "cta": "Abrir QR Code PRO",
+      "step1Title": "Os seus QR Codes",
+      "step1Text": "Aqui encontra todos os seus QR com o número de leituras. Toque em «Novo QR Code» para criar um.",
+      "step2Title": "Crie o QR",
+      "step2Text": "Dê um nome ao QR e escolha o que deve fazer: abrir um site, escrever no WhatsApp, ligar, enviar um SMS ou um email, ligar-se ao WiFi ou guardar um contacto. Depois escolha as cores e toque em «Criar QR Code».",
+      "step3Title": "Descarregue e altere quando quiser",
+      "step3Text": "No detalhe vê as leituras, copia o link dinâmico e descarrega o QR. Se mudar o destino, o QR já impresso continua a funcionar.",
+      "step3Tip": "Imprima o QR em folhetos e cartões de visita: nunca mais terá de os reimprimir."
+    },
+    "firma_email": {
+      "title": "Assinatura de email",
+      "summary": "Uma assinatura de email profissional com os seus dados, as suas redes sociais e o link para o seu Link in Bio.",
+      "cta": "Abrir Assinatura de email",
+      "step1Title": "Escolha o estilo",
+      "step1Text": "Escolha entre Clássica, Compacta e Moderna.",
+      "step2Title": "Os seus dados",
+      "step2Text": "Escreva o nome, o cargo e a empresa e depois os contactos: telefone, telemóvel, email, site e morada.",
+      "step2Tip": "O rascunho fica guardado neste dispositivo.",
+      "step3Title": "Cor e redes sociais",
+      "step3Text": "Escolha a cor da sua marca e cole os links dos seus perfis nas redes sociais. Também pode adicionar o link para o seu Link in Bio.",
+      "step4Title": "Pré-visualização e cópia",
+      "step4Text": "Verifique a pré-visualização e toque em «Copiar assinatura». Também pode copiar o código HTML ou descarregar o ficheiro.",
+      "step5Title": "Adicione-a ao seu email",
+      "step5Text": "Em «Como adicionar a assinatura» encontra os passos para Gmail, Outlook, Apple Mail e iPhone."
+    },
+    "calcolatrici": {
+      "title": "Calculadoras PRO",
+      "summary": "IVA, descontos, markup e margem, retenção na fonte: as contas do dia a dia num instante.",
+      "cta": "Abrir Calculadoras PRO",
+      "step1Title": "O cálculo do IVA",
+      "step1Text": "No separador «IVA» escolha se quer acrescentar ou retirar o IVA, escreva o valor e a taxa: vê logo a base tributável, o IVA e o total.",
+      "step2Title": "Os descontos",
+      "step2Text": "No separador «Desconto» escreva o preço e o desconto em percentagem, em euros ou em cascata: vê o preço final e a poupança.",
+      "step3Title": "Markup e margem",
+      "step3Text": "Escreva o custo e o preço de venda para ver o markup, a margem e o lucro, ou calcule o preço a partir da margem ou do markup que pretende.",
+      "step4Title": "A retenção na fonte",
+      "step4Text": "A partir dos honorários calcula o líquido a pagar e o total da fatura, com contribuição para a segurança social e IVA, ou parte do líquido que quer receber.",
+      "step4Tip": "O resultado copia-se com «Copiar resultado». O cálculo é indicativo: confirme sempre com o seu contabilista."
     }
   },
   "deckTexts": {

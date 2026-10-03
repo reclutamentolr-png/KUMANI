@@ -6691,6 +6691,10 @@
       "wellness": {
         "title": "Benessere e svago",
         "text": "Le guide ai servizi per concentrarsi, rilassarsi, creare e viaggiare."
+      },
+      "pro": {
+        "title": "Servizi Pro",
+        "text": "Gli strumenti per chi lavora con i clienti: menù, tessera fedeltà, preventivi, ricevute e altro."
       }
     },
     "registrazione": {
@@ -7170,6 +7174,123 @@
       "step5Title": "Il piano d’azione",
       "step5Text": "FinCheck ti propone fino a 3 obiettivi concreti, con gli importi calcolati sul tuo bilancio: spuntali quando li hai fatti. Dopo 3 mesi rifai il test per vedere i progressi.",
       "step5Tip": "La prima volta e poi ogni 3 mesi ricevi i KU Karma per il test."
+    },
+    "menu": {
+      "title": "KUMANI Menu",
+      "summary": "Il menù del tuo locale online, con il QR al tavolo e in più lingue.",
+      "cta": "Apri KUMANI Menu",
+      "step1Title": "Il tuo menù online",
+      "step1Text": "Crea il menù con il nome del locale, lo stile e le lingue. Nella scheda «Il tuo menù online» trovi il link, il QR da scaricare, il menù in PDF e il cartoncino da mettere sul tavolo.",
+      "step1Tip": "Con «Impostazioni» cambi stile, lingue e link per le recensioni.",
+      "step2Title": "Categorie e piatti",
+      "step2Text": "Tocca «Aggiungi categoria» (per esempio Antipasti) e poi «Aggiungi piatto» in ogni categoria. Con le frecce cambi l'ordine, con «Disponibile» segni un piatto come esaurito.",
+      "step3Title": "La scheda del piatto",
+      "step3Text": "Inserisci nome, prezzo, foto e descrizione in ogni lingua, poi scegli le caratteristiche (vegano, senza glutine…) e gli allergeni. Puoi anche segnarlo come «Piatto del giorno».",
+      "step3Tip": "«Traduci con l'AI» completa in un clic le traduzioni mancanti.",
+      "step4Title": "Il menù visto dal cliente",
+      "step4Text": "Il cliente inquadra il QR e vede il menù nella sua lingua, con il piatto del giorno in evidenza e gli allergeni di ogni piatto."
+    },
+    "fidelity": {
+      "title": "Kumi Card",
+      "summary": "La tessera fedeltà digitale: i timbri sul telefono del cliente, il premio e le statistiche.",
+      "cta": "Apri Kumi Card",
+      "step1Title": "La tua Kumi Card",
+      "step1Text": "Crea la tessera con il nome dell'attività, il premio e il numero di timbri, poi tocca «Apri modalità cassa» sul telefono o sul tablet che tieni alla cassa.",
+      "step1Tip": "Sugli altri dispositivi la cassa si sblocca con il PIN che scegli.",
+      "step2Title": "Dai il timbro",
+      "step2Text": "In modalità cassa scegli quanti timbri dare e tocca «Dai timbro»: compare un QR che il cliente inquadra con il suo telefono. Da qui consegni anche il premio.",
+      "step3Title": "La tessera del cliente",
+      "step3Text": "Il cliente vede i timbri raccolti, il premio e quanti timbri gli mancano, senza scaricare app. Alla cassa può anche mostrare il suo codice.",
+      "step4Title": "L'andamento",
+      "step4Text": "Nella tua pagina vedi i timbri per settimana e i giorni e gli orari di punta, oltre ai clienti, ai premi consegnati e al ritorno medio.",
+      "step5Title": "I tuoi clienti",
+      "step5Text": "In «I tuoi clienti» trovi chi è vicino al premio e, se ha dato il consenso, lo contatti con «Scrivi su WhatsApp» per farlo tornare."
+    },
+    "preventivi": {
+      "title": "Preventivi",
+      "summary": "Preventivi professionali con la tua intestazione, in PDF, da inviare su WhatsApp o per email.",
+      "cta": "Apri Preventivi",
+      "step1Title": "Il Profilo Azienda",
+      "step1Text": "La prima volta compila il Profilo Azienda con logo, ragione sociale, P.IVA e contatti: compariranno in alto in ogni preventivo.",
+      "step2Title": "I dati del cliente",
+      "step2Text": "Tocca «Nuovo preventivo» e inserisci i dati del cliente, oppure richiama un cliente già salvato.",
+      "step3Title": "Le voci del preventivo",
+      "step3Text": "In «Voci di preventivo» scrivi descrizione, quantità e prezzo; con «Aggiungi voce» ne aggiungi altre. Il totale si calcola da solo.",
+      "step3Tip": "Aggiungi anche la modalità di pagamento e le note: compaiono nel PDF.",
+      "step4Title": "Il riepilogo",
+      "step4Text": "Dopo «Crea preventivo» vedi il riepilogo con il cliente, le voci, il totale e le date di validità.",
+      "step5Title": "Scarica e invia",
+      "step5Text": "Tocca «Scarica PDF» e invialo al cliente con WhatsApp o per email. Con «Modifica» puoi cambiarlo quando vuoi."
+    },
+    "digital_receipt": {
+      "title": "Ricevute Digitali",
+      "summary": "Una ricevuta digitale per ogni consegna o prestito, confermata dal destinatario.",
+      "cta": "Apri Ricevute Digitali",
+      "step1Title": "Le tue ricevute",
+      "step1Text": "Qui trovi tutte le ricevute con il loro stato: In attesa, Confermata o Restituita. Tocca «Nuova ricevuta» per crearne una.",
+      "step2Title": "Scegli il tipo e compila",
+      "step2Text": "Scegli il tipo (consegna, prestito, chiavi, documenti…), aggiungi una foto se vuoi e scrivi oggetto, destinatario e data. Poi tocca «Crea ricevuta».",
+      "step2Tip": "Per un prestito puoi indicare la data di restituzione e ricevere un promemoria.",
+      "step3Title": "Condividi il link",
+      "step3Text": "Copia il link o fai inquadrare il QR al destinatario. Puoi anche scaricare il PDF; a fine prestito tocca «Conferma restituzione».",
+      "step4Title": "Il destinatario conferma",
+      "step4Text": "Il destinatario apre il link, senza bisogno di un account, e tocca «Confermo di aver ricevuto quanto indicato». La ricevuta diventa «Confermata»."
+    },
+    "magazzino": {
+      "title": "Magazzino PRO",
+      "summary": "Prodotti, giacenze, carichi e scarichi e avvisi di riordino in un solo posto.",
+      "cta": "Apri Magazzino PRO",
+      "step1Title": "Il magazzino a colpo d'occhio",
+      "step1Text": "In alto vedi il valore del magazzino, i prodotti sotto scorta, i movimenti del mese e il margine medio.",
+      "step2Title": "Aggiungi un prodotto",
+      "step2Text": "Tocca «Nuovo prodotto» e inserisci nome, categoria, unità di misura, costo, prezzo di vendita, scorta minima e giacenza iniziale.",
+      "step2Tip": "Con «Scansiona codice» trovi un prodotto inquadrando il codice a barre.",
+      "step3Title": "Carichi e scarichi",
+      "step3Text": "Su ogni prodotto usa i pulsanti di carico, scarico o inventario: scegli la causale e la quantità e registra. La giacenza si aggiorna da sola.",
+      "step4Title": "Cruscotto e riordino",
+      "step4Text": "Nel «Cruscotto» trovi il valore del magazzino, i prodotti da riordinare e i più movimentati. Da «Prodotti» e «Movimenti» esporti tutto in CSV per il commercialista."
+    },
+    "qr_code_pro": {
+      "title": "QR Code PRO",
+      "summary": "QR code dinamici: cambi la destinazione quando vuoi e conti le scansioni.",
+      "cta": "Apri QR Code PRO",
+      "step1Title": "I tuoi QR Code",
+      "step1Text": "Qui trovi tutti i tuoi QR con il numero di scansioni. Tocca «Nuovo QR Code» per crearne uno.",
+      "step2Title": "Crea il QR",
+      "step2Text": "Dai un nome al QR e scegli cosa deve fare: aprire un sito, scrivere su WhatsApp, chiamare, mandare un SMS o un'email, collegarsi al WiFi o salvare un contatto. Poi scegli i colori e tocca «Crea QR Code».",
+      "step3Title": "Scarica e cambia quando vuoi",
+      "step3Text": "Nel dettaglio vedi le scansioni, copi il link dinamico e scarichi il QR. Se cambi la destinazione, il QR già stampato continua a funzionare.",
+      "step3Tip": "Stampa il QR su volantini e biglietti da visita: non dovrai più ristamparli."
+    },
+    "firma_email": {
+      "title": "Firma Email",
+      "summary": "Una firma email professionale con i tuoi dati, i social e il link al tuo Link in Bio.",
+      "cta": "Apri Firma Email",
+      "step1Title": "Scegli lo stile",
+      "step1Text": "Scegli tra Classica, Compatta e Moderna.",
+      "step2Title": "I tuoi dati",
+      "step2Text": "Scrivi nome, ruolo e azienda, poi i contatti: telefono, cellulare, email, sito e indirizzo.",
+      "step2Tip": "La bozza resta salvata su questo dispositivo.",
+      "step3Title": "Colore e social",
+      "step3Text": "Scegli il colore del tuo brand e incolla i link dei tuoi profili social. Puoi aggiungere anche il link al tuo Link in Bio.",
+      "step4Title": "Anteprima e copia",
+      "step4Text": "Controlla l'anteprima e tocca «Copia firma». Puoi anche copiare il codice HTML o scaricare il file.",
+      "step5Title": "Inseriscila nella posta",
+      "step5Text": "In «Come inserire la firma» trovi i passaggi per Gmail, Outlook, Apple Mail e iPhone."
+    },
+    "calcolatrici": {
+      "title": "Calcolatrici PRO",
+      "summary": "IVA, sconti, ricarico e margine, ritenuta d'acconto: i conti di tutti i giorni in un attimo.",
+      "cta": "Apri Calcolatrici PRO",
+      "step1Title": "Il calcolo dell'IVA",
+      "step1Text": "Nella scheda «IVA» scegli se aggiungere o scorporare l'IVA, scrivi l'importo e l'aliquota: vedi subito imponibile, IVA e totale.",
+      "step2Title": "Gli sconti",
+      "step2Text": "Nella scheda «Sconto» scrivi il prezzo e lo sconto in percentuale, in euro o in cascata: vedi il prezzo finale e il risparmio.",
+      "step3Title": "Ricarico e margine",
+      "step3Text": "Scrivi costo e prezzo di vendita per vedere ricarico, margine e utile, oppure calcola il prezzo partendo dal margine o dal ricarico che vuoi.",
+      "step4Title": "La ritenuta d'acconto",
+      "step4Text": "Dal compenso calcoli il netto a pagare e il totale della fattura, con contributo previdenziale e IVA, oppure parti dal netto che vuoi incassare.",
+      "step4Tip": "Il risultato si copia con «Copia risultato». Il calcolo è indicativo: verifica sempre con il tuo commercialista."
     }
   },
   "deckTexts": {

@@ -2391,7 +2391,7 @@
     "searchPlaceholder": "Search by object or recipient...",
     "noReceiptsYet": "You haven't created any receipt yet.",
     "noResults": "No receipt matches your search.",
-    "statusPending": "Your story is being reviewed by the KUMANI Staff: it will be featured as soon as it's approved.",
+    "statusPending": "Pending",
     "statusConfirmed": "Confirmed",
     "statusReturned": "Returned",
     "to": "to",
@@ -6691,6 +6691,10 @@
       "wellness": {
         "title": "Wellbeing and leisure",
         "text": "Guides to the services for focusing, relaxing, creating and travelling."
+      },
+      "pro": {
+        "title": "Pro services",
+        "text": "Tools for people who work with customers: menu, loyalty card, quotes, receipts and more."
       }
     },
     "registrazione": {
@@ -7170,6 +7174,123 @@
       "step5Title": "Your action plan",
       "step5Text": "FinCheck suggests up to 3 concrete goals, with amounts based on your budget: tick them off when done. After 3 months, retake the quiz to see your progress.",
       "step5Tip": "You get KU Karma for the quiz the first time and then every 3 months."
+    },
+    "menu": {
+      "title": "KUMANI Menu",
+      "summary": "Your venue’s menu online, with a QR on the table and in several languages.",
+      "cta": "Open KUMANI Menu",
+      "step1Title": "Your online menu",
+      "step1Text": "Create the menu with your venue’s name, style and languages. In the “Your online menu” tab you’ll find the link, the QR to download, the menu as a PDF and the card to put on the table.",
+      "step1Tip": "With “Settings” you change the style, languages and review link.",
+      "step2Title": "Categories and dishes",
+      "step2Text": "Tap “Add category” (for example Starters), then “Add dish” in each category. Use the arrows to change the order and “Available” to mark a dish as sold out.",
+      "step3Title": "The dish card",
+      "step3Text": "Enter the name, price, photo and description in each language, then choose the features (vegan, gluten-free…) and the allergens. You can also mark it as “Dish of the day”.",
+      "step3Tip": "“Translate with AI” fills in the missing translations in one click.",
+      "step4Title": "The menu as the customer sees it",
+      "step4Text": "The customer scans the QR and sees the menu in their language, with the dish of the day highlighted and the allergens for each dish."
+    },
+    "fidelity": {
+      "title": "Kumi Card",
+      "summary": "The digital loyalty card: stamps on the customer’s phone, the reward and the stats.",
+      "cta": "Open Kumi Card",
+      "step1Title": "Your Kumi Card",
+      "step1Text": "Create the card with your business name, the reward and the number of stamps, then tap “Open till mode” on the phone or tablet you keep at the till.",
+      "step1Tip": "On other devices the till unlocks with the PIN you choose.",
+      "step2Title": "Give a stamp",
+      "step2Text": "In till mode choose how many stamps to give and tap “Give stamp”: a QR appears for the customer to scan with their phone. This is also where you hand over the reward.",
+      "step3Title": "The customer’s card",
+      "step3Text": "The customer sees the stamps collected, the reward and how many stamps are left, without downloading any app. At the till they can also show their code.",
+      "step4Title": "How it’s going",
+      "step4Text": "On your page you see stamps per week and the busiest days and times, plus customers, rewards given and the average return rate.",
+      "step5Title": "Your customers",
+      "step5Text": "In “Your customers” you find who is close to the reward and, if they gave consent, you contact them with “Write on WhatsApp” to bring them back."
+    },
+    "preventivi": {
+      "title": "Quotes",
+      "summary": "Professional quotes with your letterhead, as a PDF, to send on WhatsApp or by email.",
+      "cta": "Open Quotes",
+      "step1Title": "The Company Profile",
+      "step1Text": "The first time, fill in the Company Profile with your logo, company name, VAT number and contacts: they appear at the top of every quote.",
+      "step2Title": "The customer’s details",
+      "step2Text": "Tap “New quote” and enter the customer’s details, or pick a customer you’ve already saved.",
+      "step3Title": "The quote items",
+      "step3Text": "In “Quote items” write the description, quantity and price; with “Add item” you add more. The total is calculated automatically.",
+      "step3Tip": "Also add the payment method and notes: they appear in the PDF.",
+      "step4Title": "The summary",
+      "step4Text": "After “Create quote” you see the summary with the customer, the items, the total and the validity dates.",
+      "step5Title": "Download and send",
+      "step5Text": "Tap “Download PDF” and send it to the customer on WhatsApp or by email. With “Edit” you can change it whenever you like."
+    },
+    "digital_receipt": {
+      "title": "Digital Receipts",
+      "summary": "A digital receipt for every delivery or loan, confirmed by the recipient.",
+      "cta": "Open Digital Receipts",
+      "step1Title": "Your receipts",
+      "step1Text": "Here you find all your receipts with their status: Pending, Confirmed or Returned. Tap “New receipt” to create one.",
+      "step2Title": "Choose the type and fill in",
+      "step2Text": "Choose the type (delivery, loan, keys, documents…), add a photo if you like and write the item, recipient and date. Then tap “Create receipt”.",
+      "step2Tip": "For a loan you can set the return date and get a reminder.",
+      "step3Title": "Share the link",
+      "step3Text": "Copy the link or let the recipient scan the QR. You can also download the PDF; when the loan ends, tap “Confirm return”.",
+      "step4Title": "The recipient confirms",
+      "step4Text": "The recipient opens the link, with no account needed, and taps “I confirm I received the above”. The receipt becomes “Confirmed”."
+    },
+    "magazzino": {
+      "title": "Magazzino PRO",
+      "summary": "Products, stock levels, stock in and out and reorder alerts in one place.",
+      "cta": "Open Magazzino PRO",
+      "step1Title": "Your stock at a glance",
+      "step1Text": "At the top you see the stock value, products below minimum stock, this month’s movements and the average margin.",
+      "step2Title": "Add a product",
+      "step2Text": "Tap “New product” and enter the name, category, unit of measure, cost, selling price, minimum stock and opening stock.",
+      "step2Tip": "With “Scan code” you find a product by scanning its barcode.",
+      "step3Title": "Stock in and out",
+      "step3Text": "On each product use the stock in, stock out or stocktake buttons: choose the reason and quantity and save. The stock level updates automatically.",
+      "step4Title": "Dashboard and reordering",
+      "step4Text": "In the “Dashboard” you find the stock value, the products to reorder and the most moved ones. From “Products” and “Movements” you export everything as CSV for your accountant."
+    },
+    "qr_code_pro": {
+      "title": "QR Code PRO",
+      "summary": "Dynamic QR codes: change the destination whenever you like and count the scans.",
+      "cta": "Open QR Code PRO",
+      "step1Title": "Your QR Codes",
+      "step1Text": "Here you find all your QR codes with the number of scans. Tap “New QR Code” to create one.",
+      "step2Title": "Create the QR",
+      "step2Text": "Give the QR a name and choose what it should do: open a website, write on WhatsApp, call, send an SMS or an email, connect to WiFi or save a contact. Then choose the colours and tap “Create QR Code”.",
+      "step3Title": "Download and change whenever you like",
+      "step3Text": "In the details you see the scans, copy the dynamic link and download the QR. If you change the destination, the QR you’ve already printed keeps working.",
+      "step3Tip": "Print the QR on flyers and business cards: you’ll never need to reprint them."
+    },
+    "firma_email": {
+      "title": "Email Signature",
+      "summary": "A professional email signature with your details, your socials and the link to your Link in Bio.",
+      "cta": "Open Email Signature",
+      "step1Title": "Choose the style",
+      "step1Text": "Choose between Classic, Compact and Modern.",
+      "step2Title": "Your details",
+      "step2Text": "Write your name, role and company, then your contacts: phone, mobile, email, website and address.",
+      "step2Tip": "The draft stays saved on this device.",
+      "step3Title": "Colour and socials",
+      "step3Text": "Choose your brand colour and paste the links to your social profiles. You can also add the link to your Link in Bio.",
+      "step4Title": "Preview and copy",
+      "step4Text": "Check the preview and tap “Copy signature”. You can also copy the HTML code or download the file.",
+      "step5Title": "Add it to your email",
+      "step5Text": "In “How to add the signature” you find the steps for Gmail, Outlook, Apple Mail and iPhone."
+    },
+    "calcolatrici": {
+      "title": "PRO Calculators",
+      "summary": "VAT, discounts, markup and margin, withholding tax: everyday sums in a moment.",
+      "cta": "Open PRO Calculators",
+      "step1Title": "Calculating VAT",
+      "step1Text": "In the “VAT” tab choose whether to add or remove VAT, enter the amount and the rate: you immediately see the net amount, the VAT and the total.",
+      "step2Title": "Discounts",
+      "step2Text": "In the “Discount” tab enter the price and the discount as a percentage, in euros or stacked: you see the final price and the saving.",
+      "step3Title": "Markup and margin",
+      "step3Text": "Enter the cost and selling price to see markup, margin and profit, or work out the price starting from the margin or markup you want.",
+      "step4Title": "Withholding tax",
+      "step4Text": "From the fee you work out the net amount to pay and the invoice total, with pension contribution and VAT, or start from the net amount you want to receive.",
+      "step4Tip": "Copy the result with “Copy result”. The calculation is indicative: always check with your accountant."
     }
   },
   "deckTexts": {

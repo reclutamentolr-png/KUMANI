@@ -2391,7 +2391,7 @@
     "searchPlaceholder": "Rechercher par objet ou destinataire...",
     "noReceiptsYet": "Vous n'avez encore créé aucun reçu.",
     "noResults": "Aucun reçu ne correspond à votre recherche.",
-    "statusPending": "Votre histoire est en cours d'approbation par le Staff KUMANI : elle sera mise en vitrine dès qu'elle sera approuvée.",
+    "statusPending": "En attente",
     "statusConfirmed": "Confirmé",
     "statusReturned": "Restitué",
     "to": "à",
@@ -6691,6 +6691,10 @@
       "wellness": {
         "title": "Bien-être et loisirs",
         "text": "Les guides des services pour se concentrer, se détendre, créer et voyager."
+      },
+      "pro": {
+        "title": "Services Pro",
+        "text": "Les outils pour ceux qui travaillent avec des clients : menu, carte de fidélité, devis, reçus et plus encore."
       }
     },
     "registrazione": {
@@ -7170,6 +7174,123 @@
       "step5Title": "Le plan d’action",
       "step5Text": "FinCheck vous propose jusqu’à 3 objectifs concrets, avec des montants calculés sur votre budget : cochez-les une fois atteints. Après 3 mois, refaites le test pour voir vos progrès.",
       "step5Tip": "Vous recevez des KU Karma pour le test la première fois, puis tous les 3 mois."
+    },
+    "menu": {
+      "title": "KUMANI Menu",
+      "summary": "Le menu de votre établissement en ligne, avec le QR sur la table et en plusieurs langues.",
+      "cta": "Ouvrir KUMANI Menu",
+      "step1Title": "Votre menu en ligne",
+      "step1Text": "Créez le menu avec le nom de l’établissement, le style et les langues. Dans l’onglet « Votre menu en ligne », vous trouvez le lien, le QR à télécharger, le menu en PDF et le chevalet à poser sur la table.",
+      "step1Tip": "Avec « Réglages », vous changez le style, les langues et le lien pour les avis.",
+      "step2Title": "Catégories et plats",
+      "step2Text": "Touchez « Ajouter une catégorie » (par exemple Entrées), puis « Ajouter un plat » dans chaque catégorie. Les flèches changent l’ordre, et « Disponible » permet de marquer un plat comme épuisé.",
+      "step3Title": "La fiche du plat",
+      "step3Text": "Saisissez le nom, le prix, la photo et la description dans chaque langue, puis choisissez les caractéristiques (vegan, sans gluten…) et les allergènes. Vous pouvez aussi le marquer comme « Plat du jour ».",
+      "step3Tip": "« Traduire avec l'IA » complète en un clic les traductions manquantes.",
+      "step4Title": "Le menu vu par le client",
+      "step4Text": "Le client scanne le QR et voit le menu dans sa langue, avec le plat du jour mis en avant et les allergènes de chaque plat."
+    },
+    "fidelity": {
+      "title": "Kumi Card",
+      "summary": "La carte de fidélité numérique : les tampons sur le téléphone du client, la récompense et les statistiques.",
+      "cta": "Ouvrir Kumi Card",
+      "step1Title": "Votre Kumi Card",
+      "step1Text": "Créez la carte avec le nom de l’activité, la récompense et le nombre de tampons, puis touchez « Ouvrir le mode caisse » sur le téléphone ou la tablette que vous gardez à la caisse.",
+      "step1Tip": "Sur les autres appareils, la caisse se déverrouille avec le code PIN que vous choisissez.",
+      "step2Title": "Donnez le tampon",
+      "step2Text": "En mode caisse, choisissez combien de tampons donner et touchez « Donner un tampon » : un QR s’affiche, que le client scanne avec son téléphone. C’est aussi ici que vous remettez la récompense.",
+      "step3Title": "La carte du client",
+      "step3Text": "Le client voit les tampons cumulés, la récompense et combien de tampons il lui manque, sans télécharger d’application. À la caisse, il peut aussi montrer son code.",
+      "step4Title": "L’évolution",
+      "step4Text": "Sur votre page, vous voyez les tampons par semaine et les jours et heures de pointe, ainsi que les clients, les récompenses remises et le taux de retour moyen.",
+      "step5Title": "Vos clients",
+      "step5Text": "Dans « Vos clients », vous trouvez ceux qui sont proches de la récompense et, s’ils ont donné leur accord, vous les contactez avec « Écrire sur WhatsApp » pour les faire revenir."
+    },
+    "preventivi": {
+      "title": "Devis",
+      "summary": "Des devis professionnels à votre en-tête, en PDF, à envoyer sur WhatsApp ou par e-mail.",
+      "cta": "Ouvrir Devis",
+      "step1Title": "Le Profil Entreprise",
+      "step1Text": "La première fois, remplissez le Profil Entreprise avec le logo, la raison sociale, le numéro de TVA et les coordonnées : ils apparaîtront en haut de chaque devis.",
+      "step2Title": "Les données du client",
+      "step2Text": "Touchez « Nouveau devis » et saisissez les données du client, ou rappelez un client déjà enregistré.",
+      "step3Title": "Les lignes du devis",
+      "step3Text": "Dans « Lignes de devis », écrivez la description, la quantité et le prix ; avec « Ajouter une ligne », vous en ajoutez d’autres. Le total se calcule tout seul.",
+      "step3Tip": "Ajoutez aussi le mode de paiement et les notes : ils apparaissent dans le PDF.",
+      "step4Title": "Le récapitulatif",
+      "step4Text": "Après « Créer le devis », vous voyez le récapitulatif avec le client, les lignes, le total et les dates de validité.",
+      "step5Title": "Téléchargez et envoyez",
+      "step5Text": "Touchez « Télécharger le PDF » et envoyez-le au client par WhatsApp ou par e-mail. Avec « Modifier », vous pouvez le changer quand vous voulez."
+    },
+    "digital_receipt": {
+      "title": "Reçus numériques",
+      "summary": "Un reçu numérique pour chaque livraison ou prêt, confirmé par le destinataire.",
+      "cta": "Ouvrir Reçus numériques",
+      "step1Title": "Vos reçus",
+      "step1Text": "Ici, vous trouvez tous vos reçus avec leur statut : En attente, Confirmé ou Restitué. Touchez « Nouveau reçu » pour en créer un.",
+      "step2Title": "Choisissez le type et remplissez",
+      "step2Text": "Choisissez le type (livraison, prêt, clés, documents…), ajoutez une photo si vous le souhaitez et indiquez l’objet, le destinataire et la date. Touchez ensuite « Créer le reçu ».",
+      "step2Tip": "Pour un prêt, vous pouvez indiquer la date de restitution et recevoir un rappel.",
+      "step3Title": "Partagez le lien",
+      "step3Text": "Copiez le lien ou faites scanner le QR au destinataire. Vous pouvez aussi télécharger le PDF ; à la fin du prêt, touchez « Confirmer la restitution ».",
+      "step4Title": "Le destinataire confirme",
+      "step4Text": "Le destinataire ouvre le lien, sans avoir besoin de compte, et touche « Je confirme avoir reçu ce qui est indiqué ». Le reçu passe à « Confirmé »."
+    },
+    "magazzino": {
+      "title": "Magazzino PRO",
+      "summary": "Produits, stocks, entrées et sorties et alertes de réapprovisionnement au même endroit.",
+      "cta": "Ouvrir Magazzino PRO",
+      "step1Title": "Le stock en un coup d’œil",
+      "step1Text": "En haut, vous voyez la valeur du stock, les produits sous le seuil minimum, les mouvements du mois et la marge moyenne.",
+      "step2Title": "Ajoutez un produit",
+      "step2Text": "Touchez « Nouveau produit » et saisissez le nom, la catégorie, l’unité de mesure, le coût, le prix de vente, le stock minimum et le stock initial.",
+      "step2Tip": "Avec « Scanner un code », vous trouvez un produit en scannant son code-barres.",
+      "step3Title": "Entrées et sorties",
+      "step3Text": "Sur chaque produit, utilisez les boutons d’entrée, de sortie ou d’inventaire : choisissez le motif et la quantité, puis enregistrez. Le stock se met à jour tout seul.",
+      "step4Title": "Tableau de bord et réapprovisionnement",
+      "step4Text": "Dans le « Tableau de bord », vous trouvez la valeur du stock, les produits à réapprovisionner et ceux qui bougent le plus. Depuis « Produits » et « Mouvements », vous exportez tout en CSV pour votre comptable."
+    },
+    "qr_code_pro": {
+      "title": "QR Code PRO",
+      "summary": "Des QR codes dynamiques : vous changez la destination quand vous voulez et vous comptez les scans.",
+      "cta": "Ouvrir QR Code PRO",
+      "step1Title": "Vos QR Codes",
+      "step1Text": "Ici, vous trouvez tous vos QR avec le nombre de scans. Touchez « Nouveau QR Code » pour en créer un.",
+      "step2Title": "Créez le QR",
+      "step2Text": "Donnez un nom au QR et choisissez ce qu’il doit faire : ouvrir un site, écrire sur WhatsApp, appeler, envoyer un SMS ou un e-mail, se connecter au WiFi ou enregistrer un contact. Choisissez ensuite les couleurs et touchez « Créer le QR Code ».",
+      "step3Title": "Téléchargez et modifiez quand vous voulez",
+      "step3Text": "Dans le détail, vous voyez les scans, copiez le lien dynamique et téléchargez le QR. Si vous changez la destination, le QR déjà imprimé continue de fonctionner.",
+      "step3Tip": "Imprimez le QR sur vos flyers et cartes de visite : vous n’aurez plus à les réimprimer."
+    },
+    "firma_email": {
+      "title": "Signature e-mail",
+      "summary": "Une signature e-mail professionnelle avec vos coordonnées, vos réseaux sociaux et le lien vers votre Link in Bio.",
+      "cta": "Ouvrir Signature e-mail",
+      "step1Title": "Choisissez le style",
+      "step1Text": "Choisissez entre Classique, Compacte et Moderne.",
+      "step2Title": "Vos coordonnées",
+      "step2Text": "Écrivez votre nom, votre fonction et votre entreprise, puis vos contacts : téléphone, mobile, e-mail, site et adresse.",
+      "step2Tip": "Le brouillon reste enregistré sur cet appareil.",
+      "step3Title": "Couleur et réseaux sociaux",
+      "step3Text": "Choisissez la couleur de votre marque et collez les liens de vos profils sociaux. Vous pouvez aussi ajouter le lien vers votre Link in Bio.",
+      "step4Title": "Aperçu et copie",
+      "step4Text": "Vérifiez l’aperçu et touchez « Copier la signature ». Vous pouvez aussi copier le code HTML ou télécharger le fichier.",
+      "step5Title": "Ajoutez-la à votre messagerie",
+      "step5Text": "Dans « Comment ajouter la signature », vous trouvez les étapes pour Gmail, Outlook, Apple Mail et iPhone."
+    },
+    "calcolatrici": {
+      "title": "Calculatrices PRO",
+      "summary": "TVA, remises, coefficient et marge, retenue à la source : les calculs de tous les jours en un instant.",
+      "cta": "Ouvrir Calculatrices PRO",
+      "step1Title": "Le calcul de la TVA",
+      "step1Text": "Dans l’onglet « TVA », choisissez d’ajouter ou de retirer la TVA, saisissez le montant et le taux : vous voyez tout de suite le montant HT, la TVA et le total.",
+      "step2Title": "Les remises",
+      "step2Text": "Dans l’onglet « Remise », saisissez le prix et la remise en pourcentage, en euros ou en cascade : vous voyez le prix final et l’économie réalisée.",
+      "step3Title": "Coefficient et marge",
+      "step3Text": "Saisissez le coût et le prix de vente pour voir le coefficient, la marge et le bénéfice, ou calculez le prix à partir de la marge ou du coefficient souhaité.",
+      "step4Title": "La retenue à la source",
+      "step4Text": "À partir des honoraires, vous calculez le net à payer et le total de la facture, avec cotisation de retraite et TVA, ou vous partez du net que vous voulez encaisser.",
+      "step4Tip": "Le résultat se copie avec « Copier le résultat ». Le calcul est indicatif : vérifiez toujours avec votre comptable."
     }
   },
   "deckTexts": {
