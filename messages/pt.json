@@ -6645,6 +6645,16 @@
         "p2d": "Margem e acréscimo sem erros.",
         "p3": "Sem folhas de cálculo",
         "p3d": "Tudo no telemóvel."
+      },
+      "fincheck": {
+        "sub": "Educação financeira",
+        "tagline": "Descubra como está com o seu dinheiro e equilibre melhor as contas.",
+        "p1": "Teste gratuito",
+        "p1d": "15 perguntas, o seu perfil e conselhos por área.",
+        "p2": "Check-up do orçamento",
+        "p2d": "Regra 50/30/20 e semáforos com os dados do Spendly.",
+        "p3": "Plano de ação",
+        "p3d": "Até 3 objetivos concretos para assinalar."
       }
     }
   },
@@ -7142,6 +7152,24 @@
       "step1Tip": "Para criar uma viagem é preciso subscrição; para entrar numa viagem para a qual foi convidado, não.",
       "step2Title": "Convide ou entre com um código",
       "step2Text": "Na viagem, toque em «Convidar para a viagem» e envie o link ou o código a quem viaja consigo. Se recebeu um código, escreva-o em «Tem um código de convite?» e toque em «Entrar»."
+    },
+    "fincheck": {
+      "title": "FinCheck",
+      "summary": "O teste de educação financeira e o check-up do seu orçamento: descubra para onde vai o seu dinheiro e como equilibrar as contas.",
+      "cta": "Abrir o FinCheck",
+      "step1Title": "Comece o teste",
+      "step1Text": "Abra o FinCheck e toque em «Começar o teste»: 15 perguntas simples sobre os seus hábitos com o dinheiro, cerca de 3 minutos. O teste é gratuito.",
+      "step2Title": "Responda com sinceridade",
+      "step2Text": "Uma pergunta de cada vez sobre consciência, poupança, dívidas, despesas e futuro. Escolha a resposta mais próxima do que faz na realidade; com «Voltar» pode alterá-la.",
+      "step3Title": "O seu perfil",
+      "step3Text": "No fim vê o seu perfil, a pontuação em 45 e um semáforo para cada uma das 5 áreas, com um conselho para as que deve melhorar.",
+      "step3Tip": "Os resultados são privados: só você os vê.",
+      "step4Title": "O check-up do orçamento",
+      "step4Text": "Se usa o Spendly, o FinCheck calcula a média dos últimos 3 meses: receitas, despesas, quanto lhe sobra, a regra 50/30/20 e um semáforo para a casa, as prestações, as subscrições e outros indicadores.",
+      "step4Tip": "O check-up está incluído a partir do plano Base e funciona melhor com 3 meses de receitas e despesas registadas no Spendly.",
+      "step5Title": "O plano de ação",
+      "step5Text": "O FinCheck propõe-lhe até 3 objetivos concretos, com valores calculados sobre o seu orçamento: assinale-os quando os cumprir. Após 3 meses refaça o teste para ver os progressos.",
+      "step5Tip": "Na primeira vez e depois a cada 3 meses recebe KU Karma pelo teste."
     }
   },
   "deckTexts": {

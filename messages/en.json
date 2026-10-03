@@ -6645,6 +6645,16 @@
         "p2d": "Mark-up and margin without mistakes.",
         "p3": "No spreadsheets",
         "p3d": "Everything from your phone."
+      },
+      "fincheck": {
+        "sub": "Financial education",
+        "tagline": "Find out how you’re doing with your money and make ends meet more easily.",
+        "p1": "Free quiz",
+        "p1d": "15 questions, your profile and tips for each area.",
+        "p2": "Budget check-up",
+        "p2d": "50/30/20 rule and traffic lights from your Spendly data.",
+        "p3": "Action plan",
+        "p3d": "Up to 3 concrete goals to tick off."
       }
     }
   },
@@ -7142,6 +7152,24 @@
       "step1Tip": "Creating a trip requires a subscription; joining a trip you were invited to doesn’t.",
       "step2Title": "Invite or join with a code",
       "step2Text": "From the trip, tap “Invite to the trip” and send the link or code to your companions. If you received a code, enter it under “Got an invite code?” and tap “Join”."
+    },
+    "fincheck": {
+      "title": "FinCheck",
+      "summary": "The financial-education quiz and your budget check-up: find out where your money goes and how to make ends meet.",
+      "cta": "Open FinCheck",
+      "step1Title": "Start the quiz",
+      "step1Text": "Open FinCheck and tap “Start the quiz”: 15 simple questions about your money habits, about 3 minutes. The quiz is free.",
+      "step2Title": "Answer honestly",
+      "step2Text": "One question at a time on awareness, saving, debt, spending and the future. Pick the answer closest to what you really do; tap “Back” to change it.",
+      "step3Title": "Your profile",
+      "step3Text": "At the end you see your profile, your score out of 45 and a traffic light for each of the 5 areas, with a tip for the ones to improve.",
+      "step3Tip": "Your results are private: only you can see them.",
+      "step4Title": "The budget check-up",
+      "step4Text": "If you use Spendly, FinCheck works out the average of the last 3 months: income, expenses, what you have left, the 50/30/20 rule and a traffic light for housing, loans, subscriptions and other indicators.",
+      "step4Tip": "The check-up is included from the Base plan and works best with 3 months of income and expenses recorded in Spendly.",
+      "step5Title": "Your action plan",
+      "step5Text": "FinCheck suggests up to 3 concrete goals, with amounts based on your budget: tick them off when done. After 3 months, retake the quiz to see your progress.",
+      "step5Tip": "You get KU Karma for the quiz the first time and then every 3 months."
     }
   },
   "deckTexts": {

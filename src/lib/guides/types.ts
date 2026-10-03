@@ -32,6 +32,7 @@ export type GuideSlug =
   | 'life-calendar'
   | 'memolife'
   | 'spendly'
+  | 'fincheck'
   | 'svat'
   | 'focus'
   | 'mandala'

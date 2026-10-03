@@ -38,6 +38,7 @@ export const FLYERS: FlyerConfig[] = [
   { tool: 'qr-generator', style: 'phone', category: 'marketing', icon: 'QrCode', points: ['Zap', 'Palette', 'Store'], shot: 'qr-generator-3' },
   { tool: 'link-in-bio', style: 'phone', category: 'marketing', icon: 'Link', points: ['Clock', 'Palette', 'Share2'], shot: 'link-in-bio-4' },
   { tool: 'spendly', style: 'phone', category: 'personal', icon: 'PiggyBank', points: ['ChartLine', 'Wallet', 'CalendarDays'], shot: 'spendly-2' },
+  { tool: 'fincheck', style: 'phone', category: 'personal', icon: 'Gauge', points: ['ClipboardList', 'ChartColumn', 'ListChecks'], shot: 'fincheck-3' },
   { tool: 'findo', style: 'phone', category: 'personal', icon: 'MapPin', points: ['Camera', 'Search', 'House'], shot: 'findo-1' },
   { tool: 'travel', style: 'photo', category: 'personal', icon: 'Plane', points: ['CalendarDays', 'ListChecks', 'Users'], photo: '/flyers/photos/group-travel.webp' },
   { tool: 'kumani-cv', style: 'phone', category: 'personal', icon: 'IdCard', points: ['FileText', 'RefreshCw', 'Globe'], shot: 'kumani-cv-1' },

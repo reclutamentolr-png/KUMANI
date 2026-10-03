@@ -6645,6 +6645,16 @@
         "p2d": "Majoration et marge sans erreurs.",
         "p3": "Fini les tableurs",
         "p3d": "Tout depuis le téléphone."
+      },
+      "fincheck": {
+        "sub": "Éducation financière",
+        "tagline": "Découvrez où vous en êtes avec votre argent et bouclez mieux vos fins de mois.",
+        "p1": "Test gratuit",
+        "p1d": "15 questions, votre profil et des conseils par domaine.",
+        "p2": "Bilan du budget",
+        "p2d": "Règle 50/30/20 et feux tricolores avec les données de Spendly.",
+        "p3": "Plan d’action",
+        "p3d": "Jusqu’à 3 objectifs concrets à cocher."
       }
     }
   },
@@ -7142,6 +7152,24 @@
       "step1Tip": "Pour créer un voyage, il faut un abonnement ; pour rejoindre un voyage auquel on vous a invité, non.",
       "step2Title": "Invitez ou rejoignez avec un code",
       "step2Text": "Depuis le voyage, touchez « Inviter au voyage » et envoyez le lien ou le code à vos compagnons. Si vous avez reçu un code, saisissez-le dans « Vous avez un code d’invitation ? » et touchez « Rejoindre »."
+    },
+    "fincheck": {
+      "title": "FinCheck",
+      "summary": "Le test d’éducation financière et le bilan de votre budget : découvrez où va votre argent et comment boucler vos fins de mois.",
+      "cta": "Ouvrir FinCheck",
+      "step1Title": "Commencez le test",
+      "step1Text": "Ouvrez FinCheck et touchez « Commencer le test » : 15 questions simples sur vos habitudes avec l’argent, environ 3 minutes. Le test est gratuit.",
+      "step2Title": "Répondez avec sincérité",
+      "step2Text": "Une question à la fois sur la conscience, l’épargne, les dettes, les dépenses et l’avenir. Choisissez la réponse la plus proche de ce que vous faites vraiment ; avec « Retour » vous pouvez la changer.",
+      "step3Title": "Votre profil",
+      "step3Text": "À la fin, vous voyez votre profil, votre score sur 45 et un feu tricolore pour chacun des 5 domaines, avec un conseil pour ceux à améliorer.",
+      "step3Tip": "Vos résultats sont privés : vous seul les voyez.",
+      "step4Title": "Le bilan du budget",
+      "step4Text": "Si vous utilisez Spendly, FinCheck calcule la moyenne des 3 derniers mois : revenus, dépenses, ce qu’il vous reste, la règle 50/30/20 et un feu tricolore pour le logement, les crédits, les abonnements et d’autres indicateurs.",
+      "step4Tip": "Le bilan est inclus dès le plan Base et fonctionne mieux avec 3 mois de revenus et de dépenses enregistrés dans Spendly.",
+      "step5Title": "Le plan d’action",
+      "step5Text": "FinCheck vous propose jusqu’à 3 objectifs concrets, avec des montants calculés sur votre budget : cochez-les une fois atteints. Après 3 mois, refaites le test pour voir vos progrès.",
+      "step5Tip": "Vous recevez des KU Karma pour le test la première fois, puis tous les 3 mois."
     }
   },
   "deckTexts": {
