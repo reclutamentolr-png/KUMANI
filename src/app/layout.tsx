@@ -84,7 +84,8 @@ type RootLayoutProps = {
 
 export default async function RootLayout({ children }: RootLayoutProps) {
   const locale = await getLocale();
-  const messages = await getMessages();
+  // I testi per Google delle pagine dei servizi servono solo sul server
+  const messages = Object.fromEntries(Object.entries(await getMessages()).filter(([key]) => key !== 'toolSeo'));
   const enabledLocales = await getEnabledLocales();
 
   return (

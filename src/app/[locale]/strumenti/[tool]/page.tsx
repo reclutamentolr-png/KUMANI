@@ -1,4 +1,6 @@
 import { getLocale } from 'next-intl/server'
+import { getToolSeo } from '@/lib/toolSeo'
+import { getGuidesContent } from '@/lib/guides/content'
 import { getPlanPrices } from '@/lib/planPrices'
 import { CANONICAL_ORIGIN, localizedUrl } from '@/lib/seo'
 import JsonLd from '@/components/seo/JsonLd'
@@ -6,7 +8,7 @@ import type { Metadata } from 'next'
 import { pageMetadata } from '@/lib/seo'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
-import { ArrowRight, Sparkles } from 'lucide-react'
+import { ArrowRight, CheckCircle2, ChevronDown, Sparkles } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import Logo from '@/components/Logo'
 import { createClient } from '@/lib/supabase/server'
@@ -24,8 +26,14 @@ export async function generateMetadata({ params }: { params: Promise<{ tool: str
   const tm = await getTranslations('marketplace')
   const tool = getMarketplaceTools(tm).find((item) => item.toolName === toolName)
   if (!tool) return {}
+  // Titolo e descrizione pensati per le ricerche, se ci sono in questa lingua
+  const seo = await getToolSeo(await getLocale(), tool.toolName)
   // Indirizzo canonico senza ?ref: tutte le condivisioni contano come una pagina
-  return pageMetadata(`/strumenti/${tool.toolName}`, { title: tool.title, description: tool.description }, { ownImage: true })
+  return pageMetadata(
+    `/strumenti/${tool.toolName}`,
+    { title: seo ? { absolute: seo.title } : tool.title, description: seo?.description ?? tool.description },
+    { ownImage: true }
+  )
 }
 
 export default async function ToolSharePage({
@@ -64,14 +72,21 @@ export default async function ToolSharePage({
   }
   const registerHref = inviter ? `/register?sponsor=${encodeURIComponent(inviter.referral_code)}` : '/register'
 
-  const prices = await getPlanPrices()
+  const locale = await getLocale()
+  const [prices, seo, guides, ts] = await Promise.all([
+    getPlanPrices(),
+    getToolSeo(locale, tool.toolName),
+    getGuidesContent(locale),
+    getTranslations('toolSeo.common'),
+  ])
+  const steps = guides.guides.find((g) => g.slug === tool.toolName)?.steps ?? []
   const APP_CATEGORY: Record<string, string> = { security: 'SecurityApplication', svago: 'GameApplication', personal: 'LifestyleApplication', wellness: 'HealthApplication' }
   const ld = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
     name: tool.title,
     description: tool.description,
-    url: localizedUrl(await getLocale(), `/strumenti/${tool.toolName}`),
+    url: localizedUrl(locale, `/strumenti/${tool.toolName}`),
     applicationCategory: APP_CATEGORY[tool.category] ?? 'BusinessApplication',
     operatingSystem: 'Web, Android, iOS',
     publisher: { '@type': 'Organization', name: 'KUMANI', url: CANONICAL_ORIGIN },
@@ -85,7 +100,13 @@ export default async function ToolSharePage({
 
   return (
     <div className="min-h-screen bg-[var(--ink)] px-4 py-10 text-white">
-      <JsonLd data={ld} />
+      <JsonLd
+        data={
+          seo
+            ? [ld, { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: seo.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }]
+            : ld
+        }
+      />
       <div className="mx-auto max-w-lg">
         <Link href="/" className="mb-8 flex items-center justify-center gap-2">
           <Logo size={44} className="h-11 w-11" />
@@ -119,6 +140,71 @@ export default async function ToolSharePage({
             {t('ctaDiscover')}
           </Link>
         </div>
+
+        {/* Approfondimento per chi arriva da Google: a cosa serve, come si usa, domande */}
+        {seo && (
+          <div className="mt-10 space-y-8">
+            <section>
+              <h2 className="text-2xl font-bold">{seo.heading}</h2>
+              <p className="mt-3 leading-relaxed text-gray-300">{seo.intro}</p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-bold text-[var(--gold-bright)]">{ts('pointsTitle')}</h2>
+              <ul className="mt-3 space-y-2.5">
+                {seo.points.map((point) => (
+                  <li key={point} className="flex gap-2.5 leading-relaxed text-gray-200">
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-[var(--gold-bright)]" />
+                    {point}
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            {steps.length > 0 && (
+              <section>
+                <h2 className="text-lg font-bold text-[var(--gold-bright)]">{ts('stepsTitle')}</h2>
+                <ol className="mt-3 space-y-4">
+                  {steps.map((step, i) => (
+                    <li key={step.title} className="flex gap-3">
+                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--gold)]/20 text-sm font-bold text-[var(--gold-bright)]">{i + 1}</span>
+                      <div>
+                        <h3 className="font-semibold">{step.title}</h3>
+                        <p className="mt-1 leading-relaxed text-gray-300">{step.text}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            )}
+
+            <section>
+              <h2 className="text-lg font-bold text-[var(--gold-bright)]">{ts('faqTitle')}</h2>
+              <div className="mt-3 space-y-2">
+                {seo.faq.map((f) => (
+                  <details key={f.q} className="group rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
+                    <summary className="flex cursor-pointer list-none items-center justify-between gap-3 font-semibold">
+                      <h3>{f.q}</h3>
+                      <ChevronDown className="h-5 w-5 shrink-0 text-gray-400 transition-transform group-open:rotate-180" />
+                    </summary>
+                    <p className="mt-2 leading-relaxed text-gray-300">{f.a}</p>
+                  </details>
+                ))}
+              </div>
+            </section>
+
+            <section className="rounded-3xl border border-[var(--gold)]/25 bg-white/[0.04] p-6 text-center">
+              <h2 className="text-xl font-bold">{ts('ctaTitle')}</h2>
+              <p className="mt-2 leading-relaxed text-gray-300">{ts('ctaText')}</p>
+              <Link
+                href={registerHref}
+                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3.5 font-bold text-[var(--ink)] shadow-lg transition-all hover:brightness-110"
+              >
+                {t('ctaRegister')} <ArrowRight className="h-5 w-5" />
+              </Link>
+            </section>
+          </div>
+        )}
       </div>
     </div>
   )

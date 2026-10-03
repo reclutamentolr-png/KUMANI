@@ -8113,5 +8113,560 @@
     "loginDescription": "Accedi al tuo account KUMANI.",
     "termsTitle": "Termini di servizio",
     "termsDescription": "Termini di servizio di KUMANI e regolamento del programma vantaggi: punti, bonus, coupon e iniziative."
+  },
+  "toolSeo": {
+    "common": {
+      "pointsTitle": "Cosa puoi fare",
+      "stepsTitle": "Come funziona",
+      "faqTitle": "Domande frequenti",
+      "ctaTitle": "Provalo con KUMANI",
+      "ctaText": "Ti iscrivi in pochi minuti e trovi questo e tutti gli altri servizi in un solo posto, dal telefono o dal computer."
+    },
+    "svat": {
+      "title": "Verificare se un sito è affidabile o una truffa · SVAT",
+      "description": "Controlla se un sito, una partita IVA o un codice QR sono affidabili: punteggio da 0 a 100 con dominio, sicurezza, pagine legali e recensioni.",
+      "heading": "Come capire se un sito è affidabile prima di comprare",
+      "intro": "Un negozio online con prezzi troppo bassi, un sito appena creato, un QR attaccato su un parcheggio: prima di pagare vale la pena controllare. SVAT analizza l’indirizzo in pochi secondi e ti dà un punteggio di affidabilità da 0 a 100, con il dettaglio di cosa va bene e cosa no.",
+      "points": [
+        "Verifica un sito: età del dominio, DNS, sicurezza, contenuti, pagine legali e recensioni",
+        "Verifica una partita IVA italiana o europea: se è attiva e a chi è intestata",
+        "Controlla un codice QR prima di aprirlo, per evitare link trappola",
+        "Leggi quali controlli sono OK, da tenere d’occhio o a rischio"
+      ],
+      "faq": [
+        {
+          "q": "Come faccio a sapere se un sito è una truffa?",
+          "a": "Nessun controllo dà la certezza assoluta, ma alcuni segnali aiutano molto: un dominio registrato da pochi giorni, l’assenza di partita IVA e pagine legali, recensioni assenti o sospette, prezzi molto più bassi del normale. SVAT controlla questi e altri segnali e li riassume in un punteggio."
+        },
+        {
+          "q": "Un punteggio alto significa che il sito è sicuro al 100%?",
+          "a": "No. Il punteggio è un indizio, non una garanzia: anche un sito con un buon punteggio può nascondere problemi. Prima di pagare usa metodi di pagamento con tutela, come la carta di credito, e diffida da chi chiede bonifici istantanei o ricariche."
+        },
+        {
+          "q": "Posso verificare una partita IVA straniera?",
+          "a": "Sì, SVAT controlla le partite IVA italiane ed europee e ti dice se risultano attive e a chi sono intestate."
+        }
+      ]
+    },
+    "verifica_iban": {
+      "title": "Verifica IBAN online: controlla l’IBAN prima del bonifico",
+      "description": "Controlla se un IBAN è scritto correttamente, di che paese e banca è, e quali segnali di truffa guardare prima di fare un bonifico.",
+      "heading": "Come verificare un IBAN prima di fare un bonifico",
+      "intro": "Un bonifico istantaneo non si può annullare: per questo conviene controllare l’IBAN prima di pagare. Verifica IBAN ti dice se è scritto correttamente e di che paese è, e per gli IBAN italiani ti mostra banca e filiale. Il controllo avviene tutto sul tuo telefono: l’IBAN non viene inviato né salvato.",
+      "points": [
+        "Controlla se l’IBAN è scritto correttamente e dove c’è l’errore",
+        "Scopri il paese e, per l’Italia, ABI (la banca), CAB (la filiale) e numero di conto",
+        "Ricevi i segnali di truffa da guardare in base a cosa stai pagando",
+        "Nessun dato inviato: il controllo resta sul tuo dispositivo"
+      ],
+      "faq": [
+        {
+          "q": "Un IBAN valido significa che il destinatario è onesto?",
+          "a": "No. Un IBAN corretto dice solo che il codice è scritto bene, non chi c’è dietro. Molte truffe usano IBAN validissimi: guarda anche gli altri segnali, come la fretta o un prezzo troppo basso."
+        },
+        {
+          "q": "Come capisco di che banca è un IBAN italiano?",
+          "a": "Nell’IBAN italiano ci sono il codice ABI, che identifica la banca, e il CAB, che identifica la filiale. Verifica IBAN li separa e te li mostra."
+        },
+        {
+          "q": "Cosa faccio se ho già fatto un bonifico a un truffatore?",
+          "a": "Contatta subito la tua banca per chiedere il richiamo del bonifico e sporgi denuncia alla Polizia Postale. Più in fretta agisci, più possibilità ci sono di recuperare i soldi."
+        }
+      ]
+    },
+    "checkmail": {
+      "title": "Email sospetta? Verifica se è phishing · CheckMail",
+      "description": "Hai ricevuto un’email sospetta? CheckMail controlla mittente, link, allegati e testo e ti dice se il rischio di phishing è basso, medio o alto.",
+      "heading": "Come riconoscere un’email di phishing",
+      "intro": "Pacchi bloccati, conti sospesi, rimborsi da riscuotere: le email truffa imitano banche, corrieri e servizi che usi ogni giorno. Con CheckMail carichi o copi l’email sospetta e in pochi secondi sai cosa non torna: mittente, link, allegati e parole usate per metterti fretta.",
+      "points": [
+        "Analizza il mittente vero, anche quando il nome visualizzato è falso",
+        "Controlla i link nascosti e accorciati",
+        "Segnala allegati pericolosi e richieste di dati personali",
+        "Ti dice cosa fare: non cliccare, non rispondere, contattare l’azienda dai canali ufficiali"
+      ],
+      "faq": [
+        {
+          "q": "Come capisco se un’email è phishing?",
+          "a": "I segnali più comuni sono un mittente che non corrisponde all’azienda, link che portano a indirizzi diversi da quelli ufficiali, toni urgenti («entro 24 ore») e richieste di password, codici o dati della carta. CheckMail li cerca per te."
+        },
+        {
+          "q": "Posso controllare un’email dal telefono?",
+          "a": "Sì: basta copiare mittente, oggetto e testo con i link. Dal computer puoi anche caricare il file dell’email (.eml o .msg) per un controllo più completo."
+        },
+        {
+          "q": "Ho cliccato su un link sospetto: cosa faccio?",
+          "a": "Non inserire dati. Se li hai già inseriti, cambia subito la password di quel servizio, avvisa la tua banca se riguarda carte o conti e attiva la verifica in due passaggi."
+        }
+      ]
+    },
+    "verifoto": {
+      "title": "Foto vera o fatta con l’AI? Controlla con VeriFoto",
+      "description": "Scopri se una foto è stata creata o ritoccata con l’intelligenza artificiale: rischio in percentuale, dati della fotocamera e mappa dei ritocchi.",
+      "heading": "Come capire se una foto è stata fatta o ritoccata con l’AI",
+      "intro": "Profili falsi, annunci con foto prese da internet, immagini generate dall’intelligenza artificiale: prima di fidarti di una foto puoi controllarla. VeriFoto cerca gli indizi lasciati dalla fotocamera o dai programmi di modifica e ti mostra un livello di rischio.",
+      "points": [
+        "Rischio in percentuale che la foto sia AI o ritoccata",
+        "Indizi come certificati digitali e dati della fotocamera",
+        "Mappa dei ritocchi per vedere le zone sospette",
+        "Secondo parere con un rilevatore AI e ricerca della foto online"
+      ],
+      "faq": [
+        {
+          "q": "VeriFoto può dire con certezza se una foto è falsa?",
+          "a": "No, nessuno strumento può farlo con certezza. VeriFoto raccoglie indizi e li riassume in un livello di rischio: nel dubbio, non fidarti."
+        },
+        {
+          "q": "Come scopro se una foto è stata rubata da internet?",
+          "a": "Cerca la stessa immagine con Google Lens o TinEye: se compare su altri siti con altri nomi, è un forte segnale di profilo o annuncio falso. VeriFoto ti porta direttamente a queste ricerche."
+        },
+        {
+          "q": "Le mie foto vengono salvate?",
+          "a": "I controlli di base avvengono sul tuo dispositivo. Solo se scegli il secondo parere del rilevatore AI viene inviata una copia ridotta della foto, e solo dopo che lo hai accettato."
+        }
+      ]
+    },
+    "antitruffa": {
+      "title": "Manuale Anti-Truffa: le truffe più diffuse e come difendersi",
+      "description": "Truffe via SMS, email, telefono, chat, acquisti online e investimenti: esempi reali, il test dei 10 secondi e cosa fare subito se sei stato truffato.",
+      "heading": "Le truffe più diffuse e come riconoscerle",
+      "intro": "Il finto corriere, il falso operatore della banca, il figlio che scrive da un numero nuovo, l’investimento che rende troppo: le truffe cambiano forma ma si somigliano. Il Manuale Anti-Truffa le raccoglie in capitoli, con esempi reali e cosa fare subito. Puoi scaricarlo, stamparlo e condividerlo con chi ami.",
+      "points": [
+        "Il test dei 10 secondi: 6 domande da farsi prima di cliccare, rispondere o pagare",
+        "Le 6 regole d’oro che evitano la maggior parte delle truffe",
+        "Capitoli per email e SMS, telefonate, porta di casa, chat, acquisti e investimenti",
+        "Cosa fare subito se sei stato truffato"
+      ],
+      "faq": [
+        {
+          "q": "Quali sono le truffe più diffuse oggi?",
+          "a": "Tra le più diffuse ci sono gli SMS e le email del finto corriere o della finta banca, le telefonate di falsi operatori, i messaggi di parenti che chiedono soldi da un numero nuovo, gli annunci falsi online e gli investimenti con guadagni promessi."
+        },
+        {
+          "q": "Posso dare il manuale ai miei genitori?",
+          "a": "Sì, è pensato proprio per questo: puoi stamparlo, salvarlo in PDF o mandare il link su WhatsApp, Facebook, Telegram o per email."
+        },
+        {
+          "q": "Cosa faccio se sono stato truffato?",
+          "a": "Blocca subito carte e conti chiamando la banca, cambia le password, conserva messaggi e ricevute e sporgi denuncia alla Polizia Postale. Il manuale ha un capitolo con tutti i passi."
+        }
+      ]
+    },
+    "documento_sicuro": {
+      "title": "Inviare la foto di un documento in sicurezza · Documento Sicuro",
+      "description": "Prima di mandare la carta d’identità, aggiungi una filigrana con scopo e data e copri i dati che non servono. La foto resta sul tuo telefono.",
+      "heading": "Come mandare la foto della carta d’identità senza rischi",
+      "intro": "Affitto, lavoro, acquisti online: spesso ci chiedono la foto di un documento. Ma una copia che gira può essere usata per furti d’identità. Con Documento Sicuro aggiungi una scritta con scopo e data, copri i dati che non servono e togli i dati nascosti, come la posizione GPS.",
+      "points": [
+        "Filigrana con scopo, destinatario e data ripetuta su tutta la foto",
+        "Copri numero del documento, firma o foto se non servono",
+        "Rimuove i dati nascosti, come la posizione GPS",
+        "La foto non viene caricata né salvata: tutto avviene sul tuo telefono"
+      ],
+      "faq": [
+        {
+          "q": "Perché aggiungere una filigrana al documento?",
+          "a": "Una scritta come «Solo per contratto di affitto – 3 ottobre» rende la copia molto più difficile da usare per altri scopi, come aprire conti o fare acquisti a tuo nome."
+        },
+        {
+          "q": "Chi riceve la copia può ancora leggere i dati?",
+          "a": "Sì, la filigrana lascia leggibili i dati. Se a chi la riceve serve un dato che hai coperto, puoi creare una nuova copia senza coprirlo."
+        },
+        {
+          "q": "La foto del mio documento viene caricata su internet?",
+          "a": "No. La foto resta sul tuo telefono e l’originale non viene toccato: scarichi o condividi solo la copia protetta."
+        }
+      ]
+    },
+    "fincheck": {
+      "title": "Test di educazione finanziaria e check-up del bilancio · FinCheck",
+      "description": "15 domande in 3 minuti per scoprire il tuo profilo con il denaro: risparmio, debiti, spese e futuro, con consigli pratici e un piano d’azione.",
+      "heading": "Quanto sei bravo a gestire i tuoi soldi?",
+      "intro": "Arrivare a fine mese, risparmiare qualcosa, non farsi schiacciare dalle rate: tutto parte dal sapere dove vanno i soldi. FinCheck è un test di educazione finanziaria di 15 domande che ti mostra i punti forti e quelli da migliorare in cinque aree, con un consiglio per ognuna.",
+      "points": [
+        "Test di 15 domande, circa 3 minuti, su consapevolezza, risparmio, debiti, spese e futuro",
+        "Punteggio e semaforo per ogni area, con consigli pratici",
+        "Check-up del bilancio con la regola 50/30/20 se usi Spendly",
+        "Piano d’azione con fino a 3 obiettivi concreti"
+      ],
+      "faq": [
+        {
+          "q": "Cos’è la regola 50/30/20?",
+          "a": "È un modo semplice per dividere le entrate: circa il 50% per le spese necessarie (casa, bollette, spesa), il 30% per i desideri e il 20% per risparmi e debiti. FinCheck la calcola sul tuo bilancio reale se usi Spendly."
+        },
+        {
+          "q": "FinCheck mi dà consigli di investimento?",
+          "a": "No. FinCheck è educazione finanziaria: ti aiuta a capire le tue abitudini e a far quadrare il bilancio. Non consiglia prodotti finanziari né investimenti."
+        },
+        {
+          "q": "Chi vede i miei risultati?",
+          "a": "Solo tu: i risultati del test e del check-up sono privati."
+        }
+      ]
+    },
+    "spendly": {
+      "title": "App per il bilancio familiare: entrate, spese e bollette · Spendly",
+      "description": "Tieni il bilancio personale mese per mese: entrate, bollette, spese fisse e variabili, saldo e andamento dell’anno. Semplice, dal telefono.",
+      "heading": "Come tenere il bilancio familiare senza fogli Excel",
+      "intro": "Sapere quanto entra e quanto esce è il primo passo per risparmiare. Spendly è il tuo bilancio personale: registri entrate, bollette, spese fisse e variabili e vedi mese per mese se sei in positivo, in guardia o in difficoltà.",
+      "points": [
+        "Dashboard annuale con entrate, spese e saldo netto",
+        "Bollette che si ripetono da sole, con quanto hai pagato davvero",
+        "Spese variabili divise per categoria",
+        "Colori che ti dicono subito se il mese è positivo o critico"
+      ],
+      "faq": [
+        {
+          "q": "Come si fa un bilancio familiare?",
+          "a": "Si parte dalle entrate del mese, poi si sottraggono le spese fisse (affitto, rate, abbonamenti), le bollette e le spese variabili (spesa, benzina, svago). Spendly fa i conti per te e ti mostra il saldo."
+        },
+        {
+          "q": "Devo collegare il mio conto in banca?",
+          "a": "No. In Spendly inserisci tu le voci: non serve collegare conti né carte."
+        },
+        {
+          "q": "Posso usare Spendly con FinCheck?",
+          "a": "Sì: con qualche mese di entrate e spese registrate, FinCheck usa i dati di Spendly per il check-up del bilancio."
+        }
+      ]
+    },
+    "trova_lavoro": {
+      "title": "Offerte di lavoro con filtri e controllo anti-truffa · Trova Lavoro",
+      "description": "Cerca offerte di lavoro da più fonti, senza doppioni, con filtri su contratto, orario, stipendio e lavoro da remoto e il controllo degli annunci sospetti.",
+      "heading": "Come cercare lavoro evitando gli annunci truffa",
+      "intro": "Gli annunci di lavoro sono tanti, spesso ripetuti, e alcuni nascondono truffe: corsi a pagamento, guadagni facili, richieste di soldi o documenti. Trova Lavoro cerca le offerte da più fonti, toglie i doppioni, applica i tuoi filtri e segnala gli annunci sospetti. Ti candidi direttamente sul sito dell’annuncio.",
+      "points": [
+        "Offerte da più fonti in una sola ricerca, senza doppioni",
+        "Filtri per contratto, orario, stipendio minimo, data e lavoro da remoto",
+        "Segnalazione degli annunci con segnali di truffa",
+        "Preferiti e ricerche salvate da rivedere con calma"
+      ],
+      "faq": [
+        {
+          "q": "Come riconosco un annuncio di lavoro truffa?",
+          "a": "Diffida di chi chiede soldi per corsi, kit o iscrizioni, promette guadagni alti senza esperienza, chiede documenti o dati bancari prima del colloquio o ti contatta solo via chat. Trova Lavoro segnala questi segnali."
+        },
+        {
+          "q": "KUMANI pubblica gli annunci?",
+          "a": "No. KUMANI non ospita annunci e non raccoglie CV: cerca le offerte pubblicate su altri siti e ti porta all’annuncio originale per candidarti."
+        },
+        {
+          "q": "Posso cercare solo lavori da remoto?",
+          "a": "Sì, con il filtro «Solo da remoto o ibrido»."
+        }
+      ]
+    },
+    "kumani_cv": {
+      "title": "Curriculum europeo online con QR code · KUMANI CV",
+      "description": "Crea il tuo curriculum in formato europeo, scarica il PDF e condividi il link: il QR nel CV porta sempre alla versione aggiornata.",
+      "heading": "Come fare un curriculum europeo che resta sempre aggiornato",
+      "intro": "Un CV mandato oggi può essere già vecchio domani. Con KUMANI CV crei il curriculum in stile europeo, scegli tra tre modelli e scarichi il PDF. Ogni PDF ha un QR verso la tua pagina pubblica: chi lo inquadra vede sempre l’ultima versione.",
+      "points": [
+        "Curriculum in stile europeo con tre modelli: Minimal, Classic e Sidebar",
+        "Esperienze, formazione, competenze, lingue, certificazioni e link",
+        "PDF da scaricare e link pubblico da condividere su WhatsApp ed email",
+        "Più CV, per esempio uno in italiano e uno in inglese"
+      ],
+      "faq": [
+        {
+          "q": "Cos’è il curriculum europeo?",
+          "a": "È un formato di CV ordinato e facile da leggere, con dati personali, esperienze, formazione, lingue e competenze in sezioni chiare. È molto usato in Italia e in Europa."
+        },
+        {
+          "q": "A cosa serve il QR code nel curriculum?",
+          "a": "Chi ha in mano il tuo CV stampato o in PDF può inquadrare il QR e vedere la versione più recente, anche se nel frattempo l’hai aggiornato."
+        },
+        {
+          "q": "Posso fare il CV in inglese?",
+          "a": "Sì, scegli la lingua del contenuto quando crei il CV. Puoi averne più di uno, in lingue diverse."
+        }
+      ]
+    },
+    "menu": {
+      "title": "Menù digitale con QR code per ristoranti e bar · KUMANI Menu",
+      "description": "Crea il menù online del tuo locale con QR al tavolo, foto, allergeni e più lingue. Aggiorni prezzi e piatti esauriti in un attimo.",
+      "heading": "Come creare un menù digitale con QR code per il tuo locale",
+      "intro": "Ristampare il menù per ogni prezzo cambiato costa tempo e soldi. Con KUMANI Menu crei il menù online del tuo ristorante, bar o pizzeria: il cliente inquadra il QR al tavolo e lo legge nella sua lingua, con foto, allergeni e piatto del giorno.",
+      "points": [
+        "QR da stampare e cartoncino da tavolo pronti",
+        "Menù in più lingue, con traduzione automatica dei piatti",
+        "Allergeni e caratteristiche come vegano o senza glutine",
+        "Piatti esauriti e piatto del giorno aggiornabili in un clic"
+      ],
+      "faq": [
+        {
+          "q": "Come funziona un menù con QR code?",
+          "a": "Metti il QR sul tavolo: il cliente lo inquadra con la fotocamera del telefono e apre il menù, senza scaricare app."
+        },
+        {
+          "q": "Posso indicare gli allergeni?",
+          "a": "Sì, per ogni piatto scegli gli allergeni e le caratteristiche, che il cliente vede accanto al piatto."
+        },
+        {
+          "q": "Il menù può essere in inglese per i turisti?",
+          "a": "Sì, scegli le lingue del menù: il cliente lo vede nella sua lingua. Le traduzioni mancanti si completano con l’AI."
+        }
+      ]
+    },
+    "fidelity": {
+      "title": "Tessera fedeltà digitale con timbri sul telefono · Kumi Card",
+      "description": "La raccolta punti per il tuo negozio senza cartoncini: timbri via QR sul telefono del cliente, premi, statistiche e clienti da far tornare.",
+      "heading": "Come creare una tessera fedeltà digitale per il tuo negozio",
+      "intro": "I cartoncini a timbri si perdono e non dicono nulla sui tuoi clienti. Kumi Card è la tessera fedeltà digitale: dai il timbro con un QR, il cliente lo raccoglie sul telefono senza scaricare app e tu vedi chi torna, quando e chi è vicino al premio.",
+      "points": [
+        "Timbri dati con un QR dalla cassa, anche più di uno alla volta",
+        "Il cliente vede timbri e premio sul telefono, senza app",
+        "Statistiche: timbri per settimana, giorni e orari di punta, ritorno medio",
+        "Clienti vicini al premio da contattare su WhatsApp, se hanno dato il consenso"
+      ],
+      "faq": [
+        {
+          "q": "Il cliente deve scaricare un’app?",
+          "a": "No, inquadra il QR con la fotocamera del telefono e la tessera si apre nel browser."
+        },
+        {
+          "q": "Posso usare la cassa da un tablet?",
+          "a": "Sì, apri la modalità cassa sul telefono o sul tablet del negozio; sugli altri dispositivi si sblocca con il PIN che scegli."
+        },
+        {
+          "q": "Per quali attività va bene?",
+          "a": "Per bar, parrucchieri, centri estetici, negozi, pizzerie e ogni attività con clienti che tornano."
+        }
+      ]
+    },
+    "preventivi": {
+      "title": "Fare preventivi in PDF dal telefono · Preventivi KUMANI",
+      "description": "Crea preventivi professionali con logo, P.IVA e voci calcolate in automatico, scarica il PDF e invialo al cliente su WhatsApp o per email.",
+      "heading": "Come fare un preventivo professionale in pochi minuti",
+      "intro": "Un preventivo chiaro e ordinato fa la differenza con il cliente. Con Preventivi crei documenti con la tua intestazione, le voci e il totale calcolato da solo, e li mandi in PDF su WhatsApp o per email, anche dal telefono.",
+      "points": [
+        "Intestazione con logo, ragione sociale, P.IVA e contatti",
+        "Voci con quantità e prezzo, totale calcolato in automatico",
+        "Clienti salvati da richiamare al preventivo successivo",
+        "PDF da scaricare e inviare, sempre modificabile"
+      ],
+      "faq": [
+        {
+          "q": "Cosa deve contenere un preventivo?",
+          "a": "I dati di chi lo fa e del cliente, la descrizione dei lavori o prodotti con quantità e prezzi, il totale, le condizioni di pagamento e la data di validità."
+        },
+        {
+          "q": "Posso inviare il preventivo su WhatsApp?",
+          "a": "Sì, scarichi il PDF e lo condividi su WhatsApp o per email."
+        },
+        {
+          "q": "Il preventivo sostituisce la fattura?",
+          "a": "No, il preventivo è una proposta al cliente. La fattura va emessa con i sistemi previsti dalla legge."
+        }
+      ]
+    },
+    "digital_receipt": {
+      "title": "Ricevuta di consegna o prestito confermata online · Ricevute Digitali",
+      "description": "Crea una ricevuta per una consegna, un prestito, delle chiavi o dei documenti: il destinatario la conferma dal link, senza account.",
+      "heading": "Come avere una prova di consegna di oggetti, chiavi o documenti",
+      "intro": "Hai prestato un oggetto, consegnato delle chiavi o dei documenti? Con Ricevute Digitali crei una ricevuta con foto e data, la mandi con un link o un QR e il destinatario conferma di aver ricevuto. Così resta traccia di cosa è stato consegnato e quando.",
+      "points": [
+        "Ricevute per consegne, prestiti, chiavi, documenti e altro",
+        "Conferma del destinatario dal link, senza account",
+        "Promemoria per la data di restituzione dei prestiti",
+        "PDF da scaricare e stato sempre visibile: in attesa, confermata o restituita"
+      ],
+      "faq": [
+        {
+          "q": "Il destinatario deve iscriversi?",
+          "a": "No, apre il link o inquadra il QR e conferma con un tocco."
+        },
+        {
+          "q": "Posso usarla per il prestito di un oggetto?",
+          "a": "Sì, indica la data di restituzione: ricevi un promemoria e quando l’oggetto torna tocchi «Conferma restituzione»."
+        },
+        {
+          "q": "Ha valore legale?",
+          "a": "È una traccia scritta, con data, di cosa è stato consegnato e confermato dal destinatario. Per contratti o casi importanti chiedi consiglio a un professionista."
+        }
+      ]
+    },
+    "magazzino": {
+      "title": "Gestione magazzino semplice per piccole attività · Magazzino PRO",
+      "description": "Prodotti, giacenze, carichi e scarichi, scorte minime e avvisi di riordino, con lettura del codice a barre ed esportazione in CSV.",
+      "heading": "Come gestire il magazzino di un piccolo negozio",
+      "intro": "Sapere cosa hai in magazzino, cosa sta finendo e quanto vale la merce evita ordini sbagliati e scaffali vuoti. Magazzino PRO tiene in ordine prodotti, giacenze e movimenti e ti mostra quando è il momento di riordinare.",
+      "points": [
+        "Prodotti con costo, prezzo di vendita, scorta minima e giacenza",
+        "Carichi, scarichi e inventario con la giacenza che si aggiorna da sola",
+        "Cerca i prodotti inquadrando il codice a barre",
+        "Valore del magazzino, prodotti da riordinare ed esportazione in CSV"
+      ],
+      "faq": [
+        {
+          "q": "Posso usarlo dal telefono?",
+          "a": "Sì, funziona dal telefono, dal tablet e dal computer, e con la fotocamera leggi i codici a barre."
+        },
+        {
+          "q": "Come so quando riordinare?",
+          "a": "Per ogni prodotto imposti la scorta minima: quando la giacenza scende sotto, il prodotto compare tra quelli da riordinare."
+        },
+        {
+          "q": "Posso dare i dati al commercialista?",
+          "a": "Sì, esporti prodotti e movimenti in CSV, apribile con Excel."
+        }
+      ]
+    },
+    "neurobalance": {
+      "title": "Suoni binaurali e suoni della natura per rilassarsi · Neurobalance",
+      "description": "Sessioni audio con frequenze binaurali e suoni della natura (pioggia, oceano, foresta) per una pausa di relax. Da ascoltare con le cuffie.",
+      "heading": "Suoni per rilassarsi e staccare la mente",
+      "intro": "Una pausa di pochi minuti con un suono rilassante può aiutarti a staccare. Neurobalance unisce sessioni con frequenze binaurali, da ascoltare con le cuffie, e suoni della natura come pioggia, oceano e foresta, da mescolare come preferisci.",
+      "points": [
+        "Sessioni come «Riposo profondo», «Focus fluido» e «Reset consapevole»",
+        "Suoni della natura: pioggia, oceano, ruscello, foresta, vento, fuoco, notte e temporale",
+        "Volume regolabile e suoni da mescolare",
+        "Pensato per il relax, da ascoltare con cuffie stereo"
+      ],
+      "faq": [
+        {
+          "q": "Cosa sono i suoni binaurali?",
+          "a": "Sono due toni leggermente diversi, uno per orecchio, che vengono percepiti come un unico battito. Per questo servono le cuffie stereo."
+        },
+        {
+          "q": "Neurobalance è una terapia?",
+          "a": "No, è pensato per il relax, non è una terapia e non sostituisce il parere di un medico."
+        },
+        {
+          "q": "Posso usarlo mentre studio o lavoro?",
+          "a": "Puoi usarlo come sottofondo per una pausa o mentre ti concentri, a volume basso e confortevole. Non usarlo mentre guidi."
+        }
+      ]
+    },
+    "oxygen": {
+      "title": "Respirazione 4-7-8 guidata per rilassarsi · OXYGEN",
+      "description": "Tre minuti di respirazione 4-7-8 guidata: inspiri per 4 secondi, trattieni per 7, espiri per 8. Con cerchio, suono e vibrazione.",
+      "heading": "Come fare la respirazione 4-7-8",
+      "intro": "Quando sei teso, rallentare il respiro aiuta a ritrovare la calma. OXYGEN ti guida nella respirazione 4-7-8: un cerchio si allarga e si stringe con te, e con suono e vibrazione puoi farla anche a occhi chiusi.",
+      "points": [
+        "Sessione guidata di circa 3 minuti oppure solo respiro",
+        "Scegli quanti cicli fare: 4 sono consigliati",
+        "Suono e vibrazione per respirare a occhi chiusi",
+        "Consigli per farla in sicurezza"
+      ],
+      "faq": [
+        {
+          "q": "Cos’è la respirazione 4-7-8?",
+          "a": "È un esercizio di respirazione: inspiri per 4 secondi, trattieni il respiro per 7 ed espiri lentamente per 8."
+        },
+        {
+          "q": "Quanti cicli devo fare?",
+          "a": "La prima volta fai al massimo 4 cicli. Se ti gira la testa, fermati e respira normalmente."
+        },
+        {
+          "q": "Posso farla mentre guido?",
+          "a": "No. Falla seduto o sdraiato in un posto tranquillo. OXYGEN è un esercizio di rilassamento, non un dispositivo medico."
+        }
+      ]
+    },
+    "focus": {
+      "title": "Timer Pomodoro online per studiare e lavorare · KUMANI Focus",
+      "description": "Lavora a intervalli con il metodo Pomodoro: 25 minuti di concentrazione e 5 di pausa, o il ritmo che preferisci, con suono e vibrazione.",
+      "heading": "Come concentrarsi con il metodo Pomodoro",
+      "intro": "Restare concentrati per ore è difficile; a intervalli brevi è molto più facile. KUMANI Focus è un timer che alterna concentrazione e pause, con una pausa lunga ogni 4 sessioni, e ti avvisa con un suono leggero a ogni cambio.",
+      "points": [
+        "Ritmi pronti: Classico 25/5, Lungo 50/10, Breve 15/3, oppure personalizzato",
+        "Suono, vibrazione e notifica a ogni cambio",
+        "Schermo sempre acceso durante la sessione",
+        "Sessioni e minuti di concentrazione di oggi"
+      ],
+      "faq": [
+        {
+          "q": "Cos’è il metodo Pomodoro?",
+          "a": "È un metodo per organizzare il tempo: lavori concentrato per 25 minuti, fai 5 minuti di pausa e, ogni 4 sessioni, una pausa più lunga."
+        },
+        {
+          "q": "Posso cambiare la durata delle sessioni?",
+          "a": "Sì, scegli uno dei ritmi pronti o imposta durate personalizzate."
+        },
+        {
+          "q": "Le mie sessioni vengono salvate?",
+          "a": "Il conteggio di oggi resta solo sul tuo dispositivo e si azzera ogni giorno."
+        }
+      ]
+    },
+    "fabula": {
+      "title": "Dadi delle storie online: scrivi una micro-storia · Kumani Fabula",
+      "description": "Lancia sei dadi delle storie (personaggio, luogo, oggetto, emozione, azione e atmosfera) e scrivi una micro-storia. I dadi del giorno sono uguali per tutti.",
+      "heading": "Sei dadi, una storia: un gioco di scrittura creativa",
+      "intro": "Un gioco di scrittura creativa per allenare la fantasia in pochi minuti. Lanci sei dadi delle storie e scrivi una micro-storia che usi tutti gli elementi. Ogni giorno i dadi sono uguali per tutta la community: puoi leggere come gli altri hanno raccontato gli stessi dadi.",
+      "points": [
+        "Sei dadi: personaggio, luogo, oggetto, emozione, azione e atmosfera",
+        "Lancio del giorno uguale per tutti, oppure lancio libero",
+        "Sfida dei 60 secondi per chi vuole mettersi alla prova",
+        "Galleria delle storie della community, senza classifiche"
+      ],
+      "faq": [
+        {
+          "q": "Come si gioca con i dadi delle storie?",
+          "a": "Lanci i dadi, guardi gli elementi usciti e scrivi una breve storia che li contenga tutti. Non ci sono regole su genere o stile."
+        },
+        {
+          "q": "Quanto deve essere lunga la storia?",
+          "a": "Fino a 900 caratteri: una micro-storia di poche righe."
+        },
+        {
+          "q": "Devo pubblicare le mie storie?",
+          "a": "No, puoi pubblicarle nella galleria o tenerle per te in «Le mie storie»."
+        }
+      ]
+    },
+    "mandala": {
+      "title": "Disegnare mandala online con un dito · Mandala KUMANI",
+      "description": "Disegna con il dito e il tuo tratto diventa un mandala simmetrico: 6, 8, 12 o 16 spicchi, colori a scelta e PNG da scaricare. Nessuna abilità richiesta.",
+      "heading": "Disegnare un mandala per rilassarsi",
+      "intro": "Disegnare un mandala aiuta a staccare la mente, anche se non sai disegnare. In Mandala KUMANI tracci una linea con il dito e viene ripetuta in modo simmetrico: in pochi secondi nasce un mandala tutto tuo.",
+      "points": [
+        "Simmetria a 6, 8, 12 o 16 spicchi",
+        "Sfondo scuro o avorio, pennello, gomma, spessore e colori",
+        "Annulla e ricomincia quando vuoi",
+        "Scarica il disegno in PNG e condividilo"
+      ],
+      "faq": [
+        {
+          "q": "Serve saper disegnare?",
+          "a": "No: la simmetria fa quasi tutto il lavoro, anche un tratto semplice diventa un mandala."
+        },
+        {
+          "q": "Posso salvare il mio mandala?",
+          "a": "Sì, con «Scarica PNG» lo salvi e lo puoi condividere, per esempio su WhatsApp."
+        },
+        {
+          "q": "Funziona sul telefono?",
+          "a": "Sì, è pensato per disegnare con il dito sul telefono o sul tablet, ma funziona anche con il mouse."
+        }
+      ]
+    },
+    "memolife": {
+      "title": "Agenda online con promemoria, note e rubrica · MemoLife",
+      "description": "Appuntamenti, promemoria, note e rubrica in una sola agenda, insieme alle bollette e alle scadenze dei documenti.",
+      "heading": "Un’agenda per non dimenticare più nulla",
+      "intro": "Appuntamenti sul calendario, promemoria sul telefono, note sparse e numeri in rubrica: MemoLife li riunisce in un solo posto. Nel calendario trovi anche le bollette e le scadenze dei documenti, così hai tutto sotto controllo.",
+      "points": [
+        "Schede Oggi, Calendario, Promemoria, Note e Rubrica",
+        "Bollette di Spendly e scadenze di Life Calendar nel calendario",
+        "Aggiungi tutto da un solo pulsante «+»",
+        "Dal telefono o dal computer"
+      ],
+      "faq": [
+        {
+          "q": "Posso vedere le bollette nel calendario?",
+          "a": "Sì, le bollette registrate in Spendly compaiono nel calendario di MemoLife."
+        },
+        {
+          "q": "Posso segnare la scadenza della carta d’identità?",
+          "a": "Sì, aggiungi la scadenza di un documento con Life Calendar e la ritrovi nel calendario."
+        },
+        {
+          "q": "Serve installare un’app?",
+          "a": "No, MemoLife funziona dal browser del telefono o del computer, e puoi aggiungere KUMANI alla schermata Home."
+        }
+      ]
+    }
   }
 }
