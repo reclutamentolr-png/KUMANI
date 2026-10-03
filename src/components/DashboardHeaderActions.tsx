@@ -55,7 +55,7 @@ export default function DashboardHeaderActions({ user, profile, isAdmin }: Dashb
         <button
           onClick={() => setIsProfileModalOpen(true)}
           className="flex items-center gap-2 px-1.5 py-1.5 sm:px-3 rounded-lg hover:bg-white/10 transition-colors group"
-          title={profileIncomplete ? t('completeProfileShort') : unseenOutcome ? lockT('outcomeDot') : 'Modifica profilo'}
+          title={profileIncomplete ? t('completeProfileShort') : unseenOutcome ? lockT('outcomeDot') : t('editProfileTitle')}
         >
           <div className="relative w-8 h-8 rounded-full bg-[var(--gold)] flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:shadow-md transition-shadow">
             {userInitial.toUpperCase()}
@@ -69,7 +69,7 @@ export default function DashboardHeaderActions({ user, profile, isAdmin }: Dashb
             )}
           </div>
           <span className="hidden sm:block text-left leading-tight">
-            <span className="block text-sm text-[var(--gold-bright)] font-medium">{profile?.first_name || 'Il mio profilo'}</span>
+            <span className="block text-xs font-bold uppercase tracking-[0.12em] text-[var(--gold-bright)]">{t('profileButton')}</span>
             {profileIncomplete && <span className="block text-[10px] font-semibold text-amber-400">{t('completeProfileShort')}</span>}
             {!profileIncomplete && unseenOutcome === 'approved' && (
               <span className="block text-[10px] font-semibold text-emerald-400">{lockT('approvedShort')}</span>

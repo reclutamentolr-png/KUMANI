@@ -587,7 +587,8 @@
     "starLevel": "Nivel {level}",
     "starTapHint": "Toca un Kumano para ver su estrella, hasta el 5.º nivel por debajo de ti.",
     "starLastLevel": "Debajo de esta estrella está el 5.º nivel: el último que puedes ver.",
-    "legendInvitedBy": "Invitados por {name}"
+    "legendInvitedBy": "Invitados por {name}",
+    "profileButton": "Perfil"
   },
   "memolife": {
     "greeting": "Ciao, {name}!",
