@@ -96,6 +96,7 @@ import PlatformsPanel from '@/components/admin/PlatformsPanel'
 import EmailSetupPanel from '@/components/admin/EmailSetupPanel'
 import EmailComposePanel from '@/components/admin/EmailComposePanel'
 import PushPanel from '@/components/admin/PushPanel'
+import CostsPanel from '@/components/admin/CostsPanel'
 import DocumentsAdminPanel from '@/components/admin/DocumentsAdminPanel'
 import AdminLateSponsor from '@/components/admin/AdminLateSponsor'
 import AdminPasswordReset from '@/components/admin/AdminPasswordReset'
@@ -132,6 +133,7 @@ import {
   Gift,
   Sparkles,
   PiggyBank,
+  Calculator,
   Flag,
   MessageSquare,
   Megaphone,
@@ -1151,6 +1153,7 @@ L'accesso viene registrato.`)) return
   { id: 'platforms', label: 'Piattaforme collegate', Icon: PlugZap, permission: 'stats.read' as Permission, group: 'general' },
   { id: 'overview', label: 'Panoramica', Icon: LayoutDashboard, permission: 'stats.read' as Permission, group: 'general' },
   { id: 'financials', label: 'Amministrazione', Icon: PiggyBank, permission: 'stats.read' as Permission, group: 'general' },
+  { id: 'costs', label: 'Costi e margini', Icon: Calculator, permission: 'stats.read' as Permission, group: 'general' },
   { id: 'reports', label: 'Statistiche e classifiche', Icon: BarChart3, permission: 'stats.read' as Permission, group: 'general' },
   { id: 'marketplace', label: 'Strumenti e interruttori', Icon: ShoppingBag, permission: 'marketplace.read' as Permission, group: 'general' },
   { id: 'settings', label: 'Impostazioni', Icon: Settings, permission: 'settings.read' as Permission, group: 'general' },
@@ -3574,6 +3577,7 @@ L'accesso viene registrato.`)) return
         {activeSection === 'rewards' && renderRewards()}
         {activeSection === 'messages' && renderMessages()}
         {activeSection === 'financials' && renderFinancials()}
+        {activeSection === 'costs' && <CostsPanel />}
         {activeSection === 'listingReports' && renderListingReports()}
         {activeSection === 'spotlight' && renderSpotlight()}
         {activeSection === 'kuManagement' && <KuManagementPanel />}
