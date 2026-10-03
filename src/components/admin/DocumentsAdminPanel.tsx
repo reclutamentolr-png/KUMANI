@@ -13,6 +13,7 @@ import {
 } from '@/app/actions/adminDocuments'
 import { DOC_BUCKET, DOC_CATEGORIES, DOC_FORMATS, DOC_LOCALES, DOC_MIME, type DocCategory, type DocFormat, type DocLocale, type KumaniDoc, type Localized } from '@/lib/documents'
 import { notify } from '@/lib/adminNotify'
+import FlyersAdminSection from '@/components/admin/FlyersAdminSection'
 
 // Admin → Documenti KUMANI: il materiale ufficiale che gli iscritti trovano in
 // Documenti → Doc KUMANI. Ogni documento ha titolo e descrizione nelle 7
@@ -265,6 +266,7 @@ export default function DocumentsAdminPanel() {
           </div>
         </section>
       ))}
+      <FlyersAdminSection />
     </div>
   )
 }

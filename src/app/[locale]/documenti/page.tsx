@@ -11,6 +11,7 @@ import {
   FolderOpen,
   IdCard,
   Info,
+  Megaphone,
   Presentation,
   Receipt,
   ScrollText,
@@ -21,6 +22,8 @@ import {
 import Link from '@/components/LocalizedLink'
 import { createClient } from '@/lib/supabase/server'
 import { listKumaniDocuments, listPersonalDocuments } from '@/lib/documentsData'
+import { getFlyerTitles, listPublishedFlyers } from '@/lib/flyersData'
+import { FLYERS } from '@/lib/flyers'
 import { DOC_LOCALES, pickLocalized, type DocLocale, type KumaniDocFile, type PersonalDocKind } from '@/lib/documents'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -121,11 +124,13 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
   )
 
   async function kumaniTab() {
-    const docs = await listKumaniDocuments(supabase)
+    const [docs, published, flyerTitles] = await Promise.all([listKumaniDocuments(supabase), listPublishedFlyers(supabase), getFlyerTitles()])
+    const flyers = FLYERS.filter((f) => published.has(f.tool))
+    const flyersT = await getTranslations('flyers')
     return (
       <section className="mt-6 space-y-4">
         <p className="text-sm text-[var(--muted)]">{t('kumaniIntro')}</p>
-        {docs.length === 0 && <p className="rounded-2xl border border-dashed border-[var(--gold)]/40 bg-white p-6 text-center text-[var(--muted)]">{t('kumaniEmpty')}</p>}
+        {docs.length === 0 && flyers.length === 0 && <p className="rounded-2xl border border-dashed border-[var(--gold)]/40 bg-white p-6 text-center text-[var(--muted)]">{t('kumaniEmpty')}</p>}
         {docs.map((d) => {
           const mine = d.files.filter((f) => f.locale === locale).sort((a, b) => (a.format === 'pdf' ? -1 : 1) - (b.format === 'pdf' ? -1 : 1))
           const others = DOC_LOCALES.filter((l) => l !== locale)
@@ -175,6 +180,31 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
             </article>
           )
         })}
+        {flyers.length > 0 && (
+          <div className="pt-4">
+            <h2 className="flex items-center gap-2 text-xl font-bold text-[var(--ink)]">
+              <Megaphone className="h-5 w-5 text-[var(--gold)]" /> {flyersT('sectionTitle')}
+            </h2>
+            <p className="mt-1 text-sm text-[var(--muted)]">{flyersT('sectionIntro')}</p>
+            <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {flyers.map((f) => (
+                <Link
+                  key={f.tool}
+                  href={`/documenti/volantino/${f.tool}`}
+                  className="group flex items-center justify-between gap-3 rounded-2xl border border-[var(--gold)]/30 bg-white px-4 py-3 shadow-sm transition hover:border-[var(--gold)]"
+                >
+                  <span className="min-w-0">
+                    <span className="block truncate font-bold text-[var(--ink)]">{flyerTitles[f.tool] ?? f.tool}</span>
+                    <span className="block truncate text-xs text-[var(--muted)]">{flyersT(`cat_${f.category}`)}</span>
+                  </span>
+                  <span className="flex shrink-0 items-center gap-1 text-sm font-semibold text-[var(--gold)]">
+                    {flyersT('preview')} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </section>
     )
   }

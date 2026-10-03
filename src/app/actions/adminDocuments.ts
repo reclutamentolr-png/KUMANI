@@ -3,6 +3,8 @@
 import { randomBytes } from 'crypto'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { verifyAdmin } from '@/lib/verifyAdmin'
+import { FLYERS } from '@/lib/flyers'
+import { getFlyerTitles } from '@/lib/flyersData'
 import { DOC_BUCKET, DOC_CATEGORIES, DOC_FORMATS, DOC_LOCALES, DOC_MAX_BYTES, type DocCategory, type DocFormat, type DocLocale, type KumaniDoc, type Localized } from '@/lib/documents'
 
 // Admin → Documenti KUMANI: schede dei documenti (titolo e descrizione nelle
@@ -114,6 +116,26 @@ export async function adminDeleteDocFile(fileId: string): Promise<Result> {
   if (!file) return { success: false, error: 'File non trovato' }
   await db().storage.from(DOC_BUCKET).remove([file.storage_path])
   const { error } = await db().from('kumani_document_files').delete().eq('id', fileId)
+  if (error) return { success: false, error: error.message }
+  return { success: true }
+}
+
+// ---------- Volantini dei servizi ----------
+
+export async function adminListFlyers(): Promise<Result<{ flyers: { tool: string; title: string; style: string; published: boolean }[] }>> {
+  if (!(await verifyAdmin('settings.read'))) return { success: false, error: 'Non autorizzato' }
+  const [{ data, error }, titles] = await Promise.all([db().from('flyer_settings').select('tool_name, is_published'), getFlyerTitles()])
+  if (error) return { success: false, error: error.code === '42P01' ? 'Esegui la migrazione 20261219100000_flyers.sql.' : error.message }
+  const on = new Set((data ?? []).filter((r) => r.is_published).map((r) => r.tool_name as string))
+  return { success: true, flyers: FLYERS.map((f) => ({ tool: f.tool, title: titles[f.tool] ?? f.tool, style: f.style, published: on.has(f.tool) })) }
+}
+
+export async function adminSetFlyers(tools: string[], published: boolean): Promise<Result> {
+  if (!(await verifyAdmin('settings.write'))) return { success: false, error: 'Non autorizzato' }
+  const known = new Set(FLYERS.map((f) => f.tool))
+  const rows = tools.filter((t) => known.has(t)).map((tool_name) => ({ tool_name, is_published: published, updated_at: new Date().toISOString() }))
+  if (!rows.length) return { success: false, error: 'Nessun volantino' }
+  const { error } = await db().from('flyer_settings').upsert(rows, { onConflict: 'tool_name' })
   if (error) return { success: false, error: error.message }
   return { success: true }
 }
