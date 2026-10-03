@@ -6239,6 +6239,11 @@
     "previewIntro": "El QR de abajo lleva a tu enlace de invitación: quien se registra desde aquí queda invitado por ti.",
     "noCode": "Tu enlace de invitación aún no está listo: el QR lleva a kumani.io.",
     "error": "No se ha podido crear el folleto. Inténtalo de nuevo.",
+    "searchPlaceholder": "Busca un servicio, p. ej. Menu o Spendly",
+    "noResults": "No se ha encontrado ningún folleto: prueba con otro nombre.",
+    "share": "Compartir",
+    "shareText": "{name} en KUMANI. Regístrate gratis con mi invitación:",
+    "linkCopied": "Texto y enlace copiados: pégalos donde quieras.",
     "tools": {
       "qr_generator": {
         "sub": "Tu invitación en un QR",

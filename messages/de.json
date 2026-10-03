@@ -6239,6 +6239,11 @@
     "previewIntro": "Der QR-Code unten führt zu deinem Einladungslink: Wer sich darüber registriert, gilt als von dir eingeladen.",
     "noCode": "Dein Einladungslink ist noch nicht bereit: Der QR-Code führt zu kumani.io.",
     "error": "Der Flyer konnte nicht erstellt werden. Bitte versuche es erneut.",
+    "searchPlaceholder": "Dienst suchen, z. B. Menu oder Spendly",
+    "noResults": "Kein Flyer gefunden: Versuche einen anderen Namen.",
+    "share": "Teilen",
+    "shareText": "{name} auf KUMANI. Registriere dich kostenlos mit meiner Einladung:",
+    "linkCopied": "Text und Link kopiert: Füge sie ein, wo du willst.",
     "tools": {
       "qr_generator": {
         "sub": "Deine Einladung als QR-Code",

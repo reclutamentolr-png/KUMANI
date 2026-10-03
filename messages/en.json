@@ -6239,6 +6239,11 @@
     "previewIntro": "The QR code at the bottom leads to your invite link: anyone who signs up from it is invited by you.",
     "noCode": "Your invite link is not ready yet: the QR code leads to kumani.io.",
     "error": "The flyer could not be created. Please try again.",
+    "searchPlaceholder": "Search a service, e.g. Menu or Spendly",
+    "noResults": "No flyer found: try another name.",
+    "share": "Share",
+    "shareText": "{name} on KUMANI. Sign up for free with my invite:",
+    "linkCopied": "Text and link copied: paste them wherever you like.",
     "tools": {
       "qr_generator": {
         "sub": "Your invite in a QR code",

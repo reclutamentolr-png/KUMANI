@@ -6239,6 +6239,11 @@
     "previewIntro": "Le QR en bas mène à votre lien d’invitation : les personnes qui s’inscrivent ainsi sont invitées par vous.",
     "noCode": "Votre lien d’invitation n’est pas encore prêt : le QR mène à kumani.io.",
     "error": "Impossible de créer le flyer. Réessayez.",
+    "searchPlaceholder": "Cherchez un service, ex. Menu ou Spendly",
+    "noResults": "Aucun flyer trouvé : essayez un autre nom.",
+    "share": "Partager",
+    "shareText": "{name} sur KUMANI. Inscrivez-vous gratuitement avec mon invitation :",
+    "linkCopied": "Texte et lien copiés : collez-les où vous voulez.",
     "tools": {
       "qr_generator": {
         "sub": "Votre invitation en QR",

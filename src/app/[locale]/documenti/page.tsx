@@ -21,6 +21,7 @@ import {
 } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import DeckDownloadButton from '@/components/documents/DeckDownloadButton'
+import FlyerGrid from '@/components/flyers/FlyerGrid'
 import { createClient } from '@/lib/supabase/server'
 import { listKumaniDocuments, listPersonalDocuments } from '@/lib/documentsData'
 import { getFlyerTitles, listPublishedFlyers } from '@/lib/flyersData'
@@ -201,23 +202,7 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
               <Megaphone className="h-5 w-5 text-[var(--gold)]" /> {flyersT('sectionTitle')}
             </h2>
             <p className="mt-1 text-sm text-[var(--muted)]">{flyersT('sectionIntro')}</p>
-            <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-              {flyers.map((f) => (
-                <Link
-                  key={f.tool}
-                  href={`/documenti/volantino/${f.tool}`}
-                  className="group flex items-center justify-between gap-3 rounded-2xl border border-[var(--gold)]/30 bg-white px-4 py-3 shadow-sm transition hover:border-[var(--gold)]"
-                >
-                  <span className="min-w-0">
-                    <span className="block truncate font-bold text-[var(--ink)]">{flyerTitles[f.tool] ?? f.tool}</span>
-                    <span className="block truncate text-xs text-[var(--muted)]">{flyersT(`cat_${f.category}`)}</span>
-                  </span>
-                  <span className="flex shrink-0 items-center gap-1 text-sm font-semibold text-[var(--gold)]">
-                    {flyersT('preview')} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                  </span>
-                </Link>
-              ))}
-            </div>
+            <FlyerGrid items={flyers.map((f) => ({ tool: f.tool, title: flyerTitles[f.tool] ?? f.tool, category: flyersT(`cat_${f.category}`) }))} />
           </div>
         )}
       </section>

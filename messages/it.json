@@ -6239,6 +6239,11 @@
     "previewIntro": "Il QR in basso porta al tuo link di invito: chi si registra da qui risulta invitato da te.",
     "noCode": "Il tuo link di invito non è ancora pronto: il QR porta a kumani.io.",
     "error": "Non è stato possibile creare il volantino. Riprova.",
+    "searchPlaceholder": "Cerca un servizio, es. Menu o Spendly",
+    "noResults": "Nessun volantino trovato: prova con un altro nome.",
+    "share": "Condividi",
+    "shareText": "{name} su KUMANI. Registrati gratis con il mio invito:",
+    "linkCopied": "Testo e link copiati: incollali dove vuoi.",
     "tools": {
       "qr_generator": {
         "sub": "Il tuo invito in un QR",

@@ -6239,6 +6239,11 @@
     "previewIntro": "O QR em baixo leva ao seu link de convite: quem se regista a partir daqui fica convidado por si.",
     "noCode": "O seu link de convite ainda não está pronto: o QR leva a kumani.io.",
     "error": "Não foi possível criar o folheto. Tente novamente.",
+    "searchPlaceholder": "Procure um serviço, ex. Menu ou Spendly",
+    "noResults": "Nenhum folheto encontrado: tente outro nome.",
+    "share": "Partilhar",
+    "shareText": "{name} na KUMANI. Registe-se grátis com o meu convite:",
+    "linkCopied": "Texto e link copiados: cole-os onde quiser.",
     "tools": {
       "qr_generator": {
         "sub": "O seu convite num QR",

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { Download, FileText, LoaderCircle } from 'lucide-react'
+import { Download, FileText, LoaderCircle, Share2 } from 'lucide-react'
 import QRCode from 'qrcode'
 import FlyerCanvas, { type FlyerTexts } from './FlyerCanvas'
 import { flyerKey, type FlyerConfig, type FlyerPlan } from '@/lib/flyers'
@@ -19,7 +19,8 @@ export default function FlyerView({ config, plan, title, inviteUrl, screenshotLa
   const box = useRef<HTMLDivElement>(null)
   const [qrSvg, setQrSvg] = useState('')
   const [scale, setScale] = useState(0.3)
-  const [busy, setBusy] = useState<'png' | 'pdf' | null>(null)
+  const [busy, setBusy] = useState<'png' | 'pdf' | 'share' | null>(null)
+  const [copied, setCopied] = useState(false)
   const [error, setError] = useState(false)
 
   const target = inviteUrl ?? 'https://kumani.io'
@@ -57,14 +58,45 @@ export default function FlyerView({ config, plan, title, inviteUrl, screenshotLa
   const imageUrl = config.style === 'photo' ? (config.photo ?? null) : config.style === 'phone' && config.shot ? `/guides/${screenshotLang}/${config.shot}.webp` : null
   const fileBase = `KUMANI_${config.tool}_${locale}`
 
+  const renderPng = async () => {
+    const { toPng } = await import('html-to-image')
+    await document.fonts.ready
+    return toPng(node.current!, { width: 1080, height: 1350, pixelRatio: 1, cacheBust: true, style: { transform: 'none' } })
+  }
+
+  // Condividi: immagine allegata dove il telefono lo permette, altrimenti il link
+  const share = async () => {
+    if (!node.current) return
+    setBusy('share')
+    setError(false)
+    const text = `${t('shareText', { name: title })} ${target}`
+    try {
+      const png = await renderPng()
+      const file = new File([await (await fetch(png)).blob()], `${fileBase}.png`, { type: 'image/png' })
+      if (navigator.canShare?.({ files: [file] })) await navigator.share({ files: [file], title, text })
+      else if (navigator.share) await navigator.share({ title, text, url: target })
+      else {
+        await navigator.clipboard.writeText(text)
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2500)
+      }
+    } catch (e) {
+      // Condivisione annullata dall'utente: nessun errore da mostrare
+      if (!(e instanceof DOMException && e.name === 'AbortError')) {
+        console.error('[volantino]', e)
+        setError(true)
+      }
+    } finally {
+      setBusy(null)
+    }
+  }
+
   const exportAs = async (kind: 'png' | 'pdf') => {
     if (!node.current) return
     setBusy(kind)
     setError(false)
     try {
-      const { toPng } = await import('html-to-image')
-      await document.fonts.ready
-      const png = await toPng(node.current, { width: 1080, height: 1350, pixelRatio: 1, cacheBust: true, style: { transform: 'none' } })
+      const png = await renderPng()
       const a = document.createElement('a')
       if (kind === 'png') {
         a.href = png
@@ -97,6 +129,14 @@ export default function FlyerView({ config, plan, title, inviteUrl, screenshotLa
       <div className="flex flex-wrap gap-3">
         <button
           type="button"
+          onClick={share}
+          disabled={busy !== null || !qrSvg}
+          className="inline-flex items-center gap-2 rounded-xl bg-[var(--ink)] px-5 py-3 font-extrabold text-white shadow-sm transition hover:brightness-125 disabled:opacity-60"
+        >
+          {busy === 'share' ? <LoaderCircle className="h-5 w-5 animate-spin" /> : <Share2 className="h-5 w-5 text-[var(--gold-bright)]" />} {busy === 'share' ? t('generating') : t('share')}
+        </button>
+        <button
+          type="button"
           onClick={() => exportAs('png')}
           disabled={busy !== null || !qrSvg}
           className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-5 py-3 font-extrabold text-[var(--ink)] shadow-sm transition hover:brightness-105 disabled:opacity-60"
@@ -112,6 +152,7 @@ export default function FlyerView({ config, plan, title, inviteUrl, screenshotLa
           {busy === 'pdf' ? <LoaderCircle className="h-5 w-5 animate-spin" /> : <FileText className="h-5 w-5 text-[var(--gold)]" />} {busy === 'pdf' ? t('generating') : t('pdf')}
         </button>
       </div>
+      {copied && <p className="rounded-xl bg-emerald-50 px-3 py-2 text-sm text-emerald-700">{t('linkCopied')}</p>}
       {error && <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">{t('error')}</p>}
       <p className="text-sm text-[var(--muted)]">{inviteUrl ? t('previewIntro') : t('noCode')}</p>
     </div>
