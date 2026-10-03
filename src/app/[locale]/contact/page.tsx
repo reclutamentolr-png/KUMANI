@@ -1,3 +1,4 @@
+import JsonLd from '@/components/seo/JsonLd'
 import type { Metadata } from 'next'
 import { pageMetadata } from '@/lib/seo'
 import type { ReactNode } from 'react'
@@ -114,8 +115,15 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
   ]
   const hasCompanyData = companyRows.some((row) => !!row.value)
 
+  const ld = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  }
+
   return (
     <div className="min-h-screen bg-[var(--background)]">
+      <JsonLd data={ld} />
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <Link href={user ? '/dashboard' : '/'} className="flex items-center gap-2 text-sm font-medium hover:text-[var(--gold-bright)]">

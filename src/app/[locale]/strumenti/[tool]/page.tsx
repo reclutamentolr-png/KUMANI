@@ -1,3 +1,7 @@
+import { getLocale } from 'next-intl/server'
+import { getPlanPrices } from '@/lib/planPrices'
+import { CANONICAL_ORIGIN, localizedUrl } from '@/lib/seo'
+import JsonLd from '@/components/seo/JsonLd'
 import type { Metadata } from 'next'
 import { pageMetadata } from '@/lib/seo'
 import { notFound } from 'next/navigation'
@@ -21,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ tool: str
   const tool = getMarketplaceTools(tm).find((item) => item.toolName === toolName)
   if (!tool) return {}
   // Indirizzo canonico senza ?ref: tutte le condivisioni contano come una pagina
-  return pageMetadata(`/strumenti/${tool.toolName}`, { title: tool.title, description: tool.description })
+  return pageMetadata(`/strumenti/${tool.toolName}`, { title: tool.title, description: tool.description }, { ownImage: true })
 }
 
 export default async function ToolSharePage({
@@ -60,8 +64,28 @@ export default async function ToolSharePage({
   }
   const registerHref = inviter ? `/register?sponsor=${encodeURIComponent(inviter.referral_code)}` : '/register'
 
+  const prices = await getPlanPrices()
+  const APP_CATEGORY: Record<string, string> = { security: 'SecurityApplication', svago: 'GameApplication', personal: 'LifestyleApplication', wellness: 'HealthApplication' }
+  const ld = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: tool.title,
+    description: tool.description,
+    url: localizedUrl(await getLocale(), `/strumenti/${tool.toolName}`),
+    applicationCategory: APP_CATEGORY[tool.category] ?? 'BusinessApplication',
+    operatingSystem: 'Web, Android, iOS',
+    publisher: { '@type': 'Organization', name: 'KUMANI', url: CANONICAL_ORIGIN },
+    offers: {
+      '@type': 'Offer',
+      price: requiredPlan === 'free' ? 0 : requiredPlan === 'pro' ? prices.pro : prices.base,
+      priceCurrency: 'EUR',
+      ...(requiredPlan === 'free' ? {} : { description: requiredPlan === 'pro' ? 'KUMANI Pro' : 'KUMANI Base' }),
+    },
+  }
+
   return (
     <div className="min-h-screen bg-[var(--ink)] px-4 py-10 text-white">
+      <JsonLd data={ld} />
       <div className="mx-auto max-w-lg">
         <Link href="/" className="mb-8 flex items-center justify-center gap-2">
           <Logo size={44} className="h-11 w-11" />

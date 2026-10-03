@@ -36,8 +36,10 @@ export const localizedUrl = (locale: string, path: string) => {
 /**
  * Metadati di una pagina pubblica. `path` senza lingua (es. '/chi-siamo',
  * '' per la homepage). Titolo e descrizione restano quelli della pagina.
+ * `ownImage`: la pagina ha la sua anteprima (opengraph-image.tsx), quindi
+ * niente immagine generica che la coprirebbe.
  */
-export async function pageMetadata(path: string, meta: Metadata = {}): Promise<Metadata> {
+export async function pageMetadata(path: string, meta: Metadata = {}, { ownImage = false } = {}): Promise<Metadata> {
   const [locale, enabled, t] = await Promise.all([getLocale(), getEnabledLocales(), getTranslations('seo')])
   const canonical = localizedUrl(locale, path)
   const languages: Record<string, string> = Object.fromEntries(enabled.map((l) => [l, localizedUrl(l, path)]))
@@ -56,9 +58,9 @@ export async function pageMetadata(path: string, meta: Metadata = {}): Promise<M
       url: canonical,
       title,
       description,
-      images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'KUMANI' }],
+      ...(ownImage ? {} : { images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'KUMANI' }] }),
       ...(meta.openGraph ?? {}),
     },
-    twitter: { card: 'summary_large_image', title, description, images: ['/og-image.jpg'], ...(meta.twitter ?? {}) },
+    twitter: { card: 'summary_large_image', title, description, ...(ownImage ? {} : { images: ['/og-image.jpg'] }), ...(meta.twitter ?? {}) },
   }
 }

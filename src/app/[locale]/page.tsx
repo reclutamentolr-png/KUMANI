@@ -1,3 +1,5 @@
+import { CANONICAL_ORIGIN } from '@/lib/seo'
+import JsonLd from '@/components/seo/JsonLd'
 import Link from '@/components/LocalizedLink'
 import { pageMetadata } from '@/lib/seo'
 import Image from 'next/image'
@@ -86,8 +88,15 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
 
   const benefits = [1, 2, 3, 4, 5, 6, 7, 8].map((n) => t(`benefit${n}`))
 
+  // Dati strutturati: chi è KUMANI e il sito
+  const ld = [
+    { '@context': 'https://schema.org', '@type': 'Organization', name: 'KUMANI', url: CANONICAL_ORIGIN, logo: `${CANONICAL_ORIGIN}/icon-512.png`, slogan: t('heroTitle') + ' ' + t('heroAccent'), email: 'support@kumani.io' },
+    { '@context': 'https://schema.org', '@type': 'WebSite', name: 'KUMANI', url: CANONICAL_ORIGIN },
+  ]
+
   return (
     <div className="min-h-screen bg-[var(--ink)] overflow-x-hidden">
+      <JsonLd data={ld} />
       {/* Header */}
       <header className="bg-black/40 backdrop-blur-lg border-b border-[var(--gold)]/15 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex justify-between items-center">

@@ -1,3 +1,5 @@
+import { CANONICAL_ORIGIN, localizedUrl } from '@/lib/seo'
+import JsonLd from '@/components/seo/JsonLd'
 import { cache } from 'react'
 import { pageMetadata } from '@/lib/seo'
 import type { Metadata } from 'next'
@@ -32,7 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params
   const event = await loadEvent(id)
   if (!event) return { title: 'KUMANI Events' }
-  return pageMetadata(`/events/${id}`, { title: { absolute: `${event.title} · KUMANI Events` }, description: event.description.slice(0, 160) })
+  return pageMetadata(`/events/${id}`, { title: { absolute: `${event.title} · KUMANI Events` }, description: event.description.slice(0, 160) }, { ownImage: true })
 }
 
 // Scheda di un evento: pubblica. Indirizzo esatto e link online arrivano
@@ -83,8 +85,28 @@ export default async function EventPage({ params, searchParams }: Props) {
   const seriesDates = event.series ?? []
   const unlocked = !!event.address || !!event.map_link || !!event.online_link || event.is_organizer || !!event.my_pass
 
+  const eventUrl = localizedUrl(locale, `/events/${event.id}`)
+  const physical = { '@type': 'Place', name: event.city ?? 'KUMANI', address: { '@type': 'PostalAddress', addressLocality: event.city ?? undefined, addressCountry: event.country_code ?? undefined } }
+  const virtual = { '@type': 'VirtualLocation', url: eventUrl }
+  const ld = {
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    name: event.title,
+    description: event.description.slice(0, 500),
+    startDate: event.starts_at,
+    ...(event.ends_at ? { endDate: event.ends_at } : {}),
+    eventStatus: event.status === 'cancelled' ? 'https://schema.org/EventCancelled' : 'https://schema.org/EventScheduled',
+    eventAttendanceMode:
+      event.mode === 'online' ? 'https://schema.org/OnlineEventAttendanceMode' : event.mode === 'hybrid' ? 'https://schema.org/MixedEventAttendanceMode' : 'https://schema.org/OfflineEventAttendanceMode',
+    location: event.mode === 'online' ? virtual : event.mode === 'hybrid' ? [physical, virtual] : physical,
+    organizer: { '@type': 'Organization', name: 'KUMANI', url: CANONICAL_ORIGIN },
+    offers: { '@type': 'Offer', price: event.price ?? 0, priceCurrency: event.currency ?? 'EUR', url: eventUrl, availability: full ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock' },
+    url: eventUrl,
+  }
+
   return (
     <div className="min-h-screen bg-[var(--background)]">
+      {event.status === 'published' && <JsonLd data={ld} />}
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-4">
           <Link href="/events" className="flex items-center gap-2 text-sm font-medium hover:text-[var(--gold-bright)]">

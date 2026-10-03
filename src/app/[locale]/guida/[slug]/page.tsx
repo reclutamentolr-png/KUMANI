@@ -1,3 +1,5 @@
+import { CANONICAL_ORIGIN } from '@/lib/seo'
+import JsonLd from '@/components/seo/JsonLd'
 import type { Metadata } from 'next'
 import { pageMetadata } from '@/lib/seo'
 import Image from 'next/image'
@@ -25,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: guide.summary,
     // Solo le guide pubbliche vanno su Google
     ...(PUBLIC_GUIDES.includes(guide.slug) ? {} : { robots: { index: false, follow: false } }),
-  })
+  }, { ownImage: true })
 }
 
 // Una guida: passi numerati, ognuno con la sua schermata del telefono
@@ -50,9 +52,24 @@ export default async function GuidePage({ params, searchParams }: Props) {
   const prev = guides[index - 1]
   const next = guides[index + 1]
   const total = guide.steps.length
+  const ld = {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: guide.title,
+    description: guide.summary,
+    totalTime: `PT${guide.minutes}M`,
+    step: guide.steps.map((step, i) => ({
+      '@type': 'HowToStep',
+      position: i + 1,
+      name: step.title,
+      text: step.text,
+      image: `${CANONICAL_ORIGIN}${guideShot(locale, guide.slug, i + 1)}`,
+    })),
+  }
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
+      {isPublic && <JsonLd data={ld} />}
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
           {/* Aperta da "Come si usa": si torna al servizio, non all'elenco */}
