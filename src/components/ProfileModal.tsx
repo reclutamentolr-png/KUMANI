@@ -60,7 +60,12 @@ export default function ProfileModal({ isOpen, onClose, initialData, userId, onC
       .then((state) => {
         if (cancelled) return
         setChanges(state)
-        onChangeRequestUpdate?.(state)
+        // Esito mostrato qui: conta come visto, la scritta in alto sparisce
+        // (il riquadro resta finché non si tocca "Ho capito")
+        if (state.outcome) {
+          markProfileChangeSeen(state.outcome.id).catch(() => {})
+          onChangeRequestUpdate?.({ ...state, outcome: null })
+        } else onChangeRequestUpdate?.(state)
       })
       .catch(() => {})
     return () => {
@@ -78,10 +83,7 @@ export default function ProfileModal({ isOpen, onClose, initialData, userId, onC
   const dismissOutcome = () => {
     const outcome = changes.outcome
     if (!outcome) return
-    const next = { ...changes, outcome: null }
-    setChanges(next)
-    onChangeRequestUpdate?.(next)
-    markProfileChangeSeen(outcome.id).catch(() => {})
+    setChanges({ ...changes, outcome: null })
   }
 
   const cancelRequest = async () => {
@@ -128,8 +130,8 @@ export default function ProfileModal({ isOpen, onClose, initialData, userId, onC
                 <p className="mt-0.5 text-green-700">{lockT('approvedText')}</p>
                 {outcome.staff_note && <p className="mt-1 text-green-700">{lockT('staffNote')}: {outcome.staff_note}</p>}
               </div>
-              <button onClick={dismissOutcome} className="text-green-600 hover:text-green-800" title={lockT('gotIt')}>
-                <X className="w-4 h-4" />
+              <button onClick={dismissOutcome} className="shrink-0 rounded-lg border border-green-300 bg-white px-3 py-1 text-xs font-bold text-green-800 hover:bg-green-100">
+                {lockT('gotIt')}
               </button>
             </div>
           )}
@@ -144,8 +146,8 @@ export default function ProfileModal({ isOpen, onClose, initialData, userId, onC
                   </p>
                 )}
               </div>
-              <button onClick={dismissOutcome} className="text-red-600 hover:text-red-800" title={lockT('gotIt')}>
-                <X className="w-4 h-4" />
+              <button onClick={dismissOutcome} className="shrink-0 rounded-lg border border-red-300 bg-white px-3 py-1 text-xs font-bold text-red-800 hover:bg-red-100">
+                {lockT('gotIt')}
               </button>
             </div>
           )}
