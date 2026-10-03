@@ -115,7 +115,7 @@ const FlyerCanvas = forwardRef<HTMLDivElement, Props>(function FlyerCanvas({ con
             </div>
           </div>
         </div>
-        <div style={{ position: 'absolute', left: 64, right: 64, top: 770, bottom: 250, display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20 }}>
+        <div style={{ position: 'absolute', left: 64, right: 64, top: 770, bottom: 290, display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20 }}>
           {texts.points.map(([t, d], i) => (
             <div key={i} style={{ background: '#fff', borderRadius: 26, padding: '30px 24px', boxShadow: '0 8px 24px rgba(0,0,0,.06)' }}>
               <div style={{ width: 58, height: 58, borderRadius: 16, background: PALE, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -126,6 +126,7 @@ const FlyerCanvas = forwardRef<HTMLDivElement, Props>(function FlyerCanvas({ con
             </div>
           ))}
         </div>
+        {texts.note && <div style={{ position: 'absolute', left: 64, right: 64, top: 1072, fontSize: 19, color: MUTED, fontStyle: 'italic' }}>{texts.note}</div>}
         {footer(true)}
       </div>
     )
