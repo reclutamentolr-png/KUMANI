@@ -1351,7 +1351,7 @@ L'accesso viene registrato.`)) return
                       <button onClick={() => handleToggleBlock(user)} className={`text-sm font-medium inline-flex items-center gap-1 ${user.is_blocked ? 'text-green-600' : 'text-red-600'}`}>
                         {user.is_blocked ? <><Lock className="w-4 h-4" /> Sblocca</> : <><Lock className="w-4 h-4" /> Blocca</>}
                       </button>
-                      <button onClick={() => openManageModal(user)} className="text-[var(--gold)] hover:text-[var(--ink)] text-sm font-medium">Ruolo</button>
+                      <button onClick={() => openManageModal(user)} className="text-[var(--gold)] hover:text-[var(--ink)] text-sm font-medium">Gestisci</button>
                     </td>
                   </tr>
                 ))}
