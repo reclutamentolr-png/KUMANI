@@ -453,16 +453,13 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
       }
 
       setMatrixData(rootNode)
-      // get_user_downline restituisce righe complete di matrix_nodes
+      // Nodi completi (con path) preparati da adminGetUserMatrix
       setMatrixDescendants((downlineData || []) as MatrixNode[])
-      setMatrixStats({
-        total: downlineData?.length || 0,
-        level1: downlineData?.filter((d) => d.depth === 1).length || 0,
-        level2: downlineData?.filter((d) => d.depth === 2).length || 0,
-        level3: downlineData?.filter((d) => d.depth === 3).length || 0,
-        level4: downlineData?.filter((d) => d.depth === 4).length || 0,
-        level5: downlineData?.filter((d) => d.depth === 5).length || 0,
-      })
+      // "depth" è assoluta nella matrice: il livello 1 è il più alto sotto il titolare
+      const rows = downlineData ?? []
+      const top = rows.length ? Math.min(...rows.map((d) => d.depth)) : 0
+      const atLevel = (n: number) => rows.filter((d) => d.depth - top + 1 === n).length
+      setMatrixStats({ total: rows.length, level1: atLevel(1), level2: atLevel(2), level3: atLevel(3), level4: atLevel(4), level5: atLevel(5) })
     } catch (error) {
       console.error('Errore caricamento matrice:', error)
     } finally {

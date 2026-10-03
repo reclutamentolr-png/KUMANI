@@ -2878,7 +2878,17 @@ export async function adminGetUserMatrix(userId: string) {
     service.from('matrix_nodes').select('*').eq('user_id', userId).maybeSingle(),
     service.rpc('get_user_downline', { p_user_id: userId, p_max_depth: 5 }),
   ])
-  return { profile, userNode, downline: (downline ?? []) as Array<{ id: string; parent_id: string | null; depth: number; [key: string]: unknown }> }
+  // get_user_downline dà node_id e profile_user_id ma non il percorso (path),
+  // che serve alla stella per contare le persone di ogni ramo: si completa
+  // con i nodi della matrice.
+  const rows = (downline ?? []) as Array<{ node_id: string; profile_user_id: string; parent_id: string | null; depth: number; [key: string]: unknown }>
+  const ids = rows.map((r) => r.node_id)
+  const { data: nodes } = ids.length ? await service.from('matrix_nodes').select('id, path, created_at').in('id', ids) : { data: [] }
+  const byId = new Map((nodes ?? []).map((n) => [n.id as string, n]))
+  const full = rows
+    .map(({ node_id, profile_user_id, ...rest }) => ({ ...rest, id: node_id, user_id: profile_user_id, path: String(byId.get(node_id)?.path ?? ''), created_at: byId.get(node_id)?.created_at ?? rest.joined_at }))
+    .filter((n) => n.path)
+  return { profile, userNode, downline: full as Array<{ id: string; parent_id: string | null; depth: number; [key: string]: unknown }> }
 }
 
 // Conteggi della Panoramica: dal server, perché la matrice non è più
