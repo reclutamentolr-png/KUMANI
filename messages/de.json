@@ -8113,5 +8113,560 @@
     "loginDescription": "Melde dich bei deinem KUMANI-Konto an.",
     "termsTitle": "Nutzungsbedingungen",
     "termsDescription": "Nutzungsbedingungen von KUMANI und Regeln des Vorteilsprogramms: Punkte, Boni, Gutscheine und Aktionen."
+  },
+  "toolSeo": {
+    "common": {
+      "pointsTitle": "Was du damit machen kannst",
+      "stepsTitle": "So funktioniert es",
+      "faqTitle": "Häufige Fragen",
+      "ctaTitle": "Probier es mit KUMANI aus",
+      "ctaText": "Du meldest dich in wenigen Minuten an und findest dieses und alle anderen Tools an einem Ort, auf dem Handy oder am Computer."
+    },
+    "svat": {
+      "title": "Website auf Seriosität prüfen & Fake-Shop erkennen · SVAT",
+      "description": "Prüfe, ob eine Website, eine USt-IdNr. oder ein QR-Code seriös ist: Score von 0 bis 100 mit Domain, Sicherheit, Impressum & Co. und Bewertungen.",
+      "heading": "Wie erkenne ich, ob ein Online-Shop seriös ist, bevor ich kaufe?",
+      "intro": "Ein Online-Shop mit viel zu niedrigen Preisen, eine gerade erst erstellte Website, ein QR-Code auf einem Parkautomaten: Vor dem Bezahlen lohnt sich ein Check. SVAT analysiert die Adresse in wenigen Sekunden und gibt dir einen Vertrauens-Score von 0 bis 100 – mit Details dazu, was in Ordnung ist und was nicht.",
+      "points": [
+        "Website prüfen: Alter der Domain, DNS, Sicherheit, Inhalte, rechtliche Seiten und Bewertungen",
+        "Italienische oder europäische USt-IdNr. prüfen: ob sie aktiv ist und auf wen sie lautet",
+        "QR-Code vor dem Öffnen prüfen, um Fallen-Links zu vermeiden",
+        "Sehen, welche Prüfungen OK sind, Achtung brauchen oder ein Risiko darstellen"
+      ],
+      "faq": [
+        {
+          "q": "Wie erkenne ich, ob eine Website Betrug ist?",
+          "a": "Keine Prüfung gibt absolute Gewissheit, aber einige Warnsignale helfen sehr: eine erst vor wenigen Tagen registrierte Domain, fehlende USt-IdNr. und rechtliche Seiten, fehlende oder verdächtige Bewertungen, Preise weit unter dem Üblichen. SVAT prüft diese und weitere Signale und fasst sie in einem Score zusammen."
+        },
+        {
+          "q": "Bedeutet ein hoher Score, dass die Website zu 100 % sicher ist?",
+          "a": "Nein. Der Score ist ein Hinweis, keine Garantie: Auch hinter einer Website mit gutem Score können Probleme stecken. Nutze zum Bezahlen Zahlungsmethoden mit Käuferschutz, zum Beispiel die Kreditkarte, und sei misstrauisch, wenn jemand Echtzeitüberweisungen oder Guthabenkarten verlangt."
+        },
+        {
+          "q": "Kann ich eine ausländische USt-IdNr. prüfen?",
+          "a": "Ja, SVAT prüft italienische und europäische USt-IdNr. und zeigt dir, ob sie aktiv sind und auf wen sie lauten."
+        }
+      ]
+    },
+    "verifica_iban": {
+      "title": "IBAN prüfen online: IBAN vor der Überweisung checken",
+      "description": "Prüfe, ob eine IBAN korrekt geschrieben ist, aus welchem Land und von welcher Bank sie stammt – und welche Betrugsanzeichen du vor der Überweisung beachten solltest.",
+      "heading": "Wie prüfe ich eine IBAN vor einer Überweisung?",
+      "intro": "Eine Echtzeitüberweisung lässt sich nicht rückgängig machen: Deshalb lohnt es sich, die IBAN vor dem Bezahlen zu prüfen. Die IBAN-Prüfung zeigt dir, ob sie korrekt geschrieben ist und aus welchem Land sie stammt; bei italienischen IBANs siehst du auch Bank und Filiale. Die Prüfung läuft komplett auf deinem Handy: Die IBAN wird weder gesendet noch gespeichert.",
+      "points": [
+        "Prüfen, ob die IBAN korrekt geschrieben ist und wo der Fehler liegt",
+        "Land erkennen und bei italienischen IBANs ABI (Bank), CAB (Filiale) und Kontonummer sehen",
+        "Betrugsanzeichen passend zu dem, was du gerade bezahlst",
+        "Keine Daten werden gesendet: Die Prüfung bleibt auf deinem Gerät"
+      ],
+      "faq": [
+        {
+          "q": "Heißt eine gültige IBAN, dass der Empfänger ehrlich ist?",
+          "a": "Nein. Eine korrekte IBAN sagt nur, dass der Code richtig geschrieben ist, nicht, wer dahintersteckt. Viele Betrugsmaschen nutzen absolut gültige IBANs: Achte auch auf andere Warnsignale wie Zeitdruck oder einen viel zu niedrigen Preis."
+        },
+        {
+          "q": "Wie erkenne ich, zu welcher Bank eine italienische IBAN gehört?",
+          "a": "Eine italienische IBAN enthält den ABI-Code, der die Bank identifiziert, und den CAB-Code, der die Filiale identifiziert. Die IBAN-Prüfung trennt sie und zeigt sie dir an."
+        },
+        {
+          "q": "Was tun, wenn ich schon Geld an einen Betrüger überwiesen habe?",
+          "a": "Wende dich sofort an deine Bank und bitte um einen Rückruf der Überweisung. Erstatte außerdem Anzeige bei der Polizei (auch online über die Onlinewache). Je schneller du handelst, desto größer die Chance, das Geld zurückzubekommen."
+        }
+      ]
+    },
+    "checkmail": {
+      "title": "Verdächtige E-Mail? Phishing-Mail erkennen · CheckMail",
+      "description": "Eine verdächtige E-Mail bekommen? CheckMail prüft Absender, Links, Anhänge und Text und zeigt dir, ob das Phishing-Risiko niedrig, mittel oder hoch ist.",
+      "heading": "Wie erkenne ich eine Phishing-Mail?",
+      "intro": "Hängende Pakete, gesperrte Konten, Erstattungen zum Abholen: Betrugs-Mails imitieren Banken, Paketdienste und Dienste, die du täglich nutzt. Mit CheckMail lädst du die verdächtige E-Mail hoch oder kopierst sie hinein und weißt in wenigen Sekunden, was nicht stimmt: Absender, Links, Anhänge und Formulierungen, die dich unter Druck setzen sollen.",
+      "points": [
+        "Prüft den echten Absender, auch wenn der angezeigte Name gefälscht ist",
+        "Prüft versteckte und gekürzte Links",
+        "Warnt vor gefährlichen Anhängen und Anfragen nach persönlichen Daten",
+        "Sagt dir, was zu tun ist: nicht klicken, nicht antworten, das Unternehmen über offizielle Kanäle kontaktieren"
+      ],
+      "faq": [
+        {
+          "q": "Wie erkenne ich, ob eine E-Mail Phishing ist?",
+          "a": "Die häufigsten Anzeichen sind ein Absender, der nicht zum Unternehmen passt, Links zu anderen als den offiziellen Adressen, ein dringlicher Ton („innerhalb von 24 Stunden“) und Anfragen nach Passwörtern, Codes oder Kartendaten. CheckMail sucht danach für dich."
+        },
+        {
+          "q": "Kann ich eine E-Mail auf dem Handy prüfen?",
+          "a": "Ja: Kopiere einfach Absender, Betreff und Text mit den Links. Am Computer kannst du auch die E-Mail-Datei (.eml oder .msg) hochladen, für eine noch gründlichere Prüfung."
+        },
+        {
+          "q": "Ich habe auf einen verdächtigen Link geklickt: Was nun?",
+          "a": "Gib keine Daten ein. Falls du schon Daten eingegeben hast, ändere sofort das Passwort für diesen Dienst, informiere deine Bank, wenn Karten oder Konten betroffen sind, und aktiviere die Zwei-Faktor-Authentifizierung."
+        }
+      ]
+    },
+    "verifoto": {
+      "title": "Echtes Foto oder KI-Bild? KI-Bilder erkennen mit VeriFoto",
+      "description": "Finde heraus, ob ein Foto mit künstlicher Intelligenz erzeugt oder bearbeitet wurde: Risiko in Prozent, Kameradaten und eine Karte der Retuschen.",
+      "heading": "Wie erkenne ich, ob ein Foto mit KI erstellt oder bearbeitet wurde?",
+      "intro": "Fake-Profile, Anzeigen mit Fotos aus dem Internet, von künstlicher Intelligenz erzeugte Bilder: Bevor du einem Foto vertraust, kannst du es prüfen. VeriFoto sucht nach Spuren, die die Kamera oder Bearbeitungsprogramme hinterlassen haben, und zeigt dir eine Risikostufe an.",
+      "points": [
+        "Risiko in Prozent, dass das Foto KI-generiert oder bearbeitet ist",
+        "Hinweise wie digitale Zertifikate und Kameradaten",
+        "Karte der Retuschen, um verdächtige Bereiche zu sehen",
+        "Zweitmeinung durch einen KI-Detektor und Rückwärtssuche des Fotos im Internet"
+      ],
+      "faq": [
+        {
+          "q": "Kann VeriFoto sicher sagen, ob ein Foto gefälscht ist?",
+          "a": "Nein, kein Tool kann das mit Gewissheit. VeriFoto sammelt Hinweise und fasst sie in einer Risikostufe zusammen: Im Zweifel lieber nicht vertrauen."
+        },
+        {
+          "q": "Wie finde ich heraus, ob ein Foto aus dem Internet gestohlen wurde?",
+          "a": "Suche dasselbe Bild mit Google Lens oder TinEye: Taucht es auf anderen Websites unter anderen Namen auf, ist das ein starkes Zeichen für ein Fake-Profil oder eine Fake-Anzeige. VeriFoto führt dich direkt zu diesen Suchen."
+        },
+        {
+          "q": "Werden meine Fotos gespeichert?",
+          "a": "Die Basisprüfungen laufen auf deinem Gerät. Nur wenn du die Zweitmeinung des KI-Detektors wählst, wird eine verkleinerte Kopie des Fotos gesendet, und zwar erst, nachdem du zugestimmt hast."
+        }
+      ]
+    },
+    "antitruffa": {
+      "title": "Anti-Betrugs-Handbuch: häufige Betrugsmaschen & Schutz",
+      "description": "Betrug per SMS, E-Mail, Telefon, Chat, beim Online-Shopping und bei Geldanlagen: echte Beispiele, der 10-Sekunden-Test und was sofort zu tun ist.",
+      "heading": "Die häufigsten Betrugsmaschen und wie du sie erkennst",
+      "intro": "Der falsche Paketbote, der angebliche Bankmitarbeiter, das Kind, das von einer neuen Nummer schreibt, die Geldanlage mit zu hoher Rendite: Betrugsmaschen ändern ihre Form, ähneln sich aber. Das Anti-Betrugs-Handbuch sammelt sie in Kapiteln, mit echten Beispielen und dem, was sofort zu tun ist. Du kannst es herunterladen, ausdrucken und mit deinen Liebsten teilen.",
+      "points": [
+        "Der 10-Sekunden-Test: 6 Fragen, die du dir stellen solltest, bevor du klickst, antwortest oder bezahlst",
+        "Die 6 goldenen Regeln, die die meisten Betrugsversuche verhindern",
+        "Kapitel zu E-Mail und SMS, Anrufen, Haustür, Chats, Einkäufen und Geldanlagen",
+        "Was sofort zu tun ist, wenn du betrogen wurdest"
+      ],
+      "faq": [
+        {
+          "q": "Welche Betrugsmaschen sind heute am häufigsten?",
+          "a": "Zu den häufigsten gehören SMS und E-Mails vom falschen Paketdienst oder der falschen Bank, Anrufe angeblicher Mitarbeiter, Nachrichten von Angehörigen, die von einer neuen Nummer um Geld bitten, gefälschte Online-Anzeigen und Geldanlagen mit versprochenen Gewinnen."
+        },
+        {
+          "q": "Kann ich das Handbuch meinen Eltern geben?",
+          "a": "Ja, genau dafür ist es gedacht: Du kannst es ausdrucken, als PDF speichern oder den Link per WhatsApp, Facebook, Telegram oder E-Mail verschicken."
+        },
+        {
+          "q": "Was tun, wenn ich betrogen wurde?",
+          "a": "Lass sofort Karten und Konten über deine Bank sperren, ändere deine Passwörter, bewahre Nachrichten und Belege auf und erstatte Anzeige bei der Polizei (auch online über die Onlinewache). Das Handbuch hat ein Kapitel mit allen Schritten."
+        }
+      ]
+    },
+    "documento_sicuro": {
+      "title": "Ausweisfoto sicher verschicken · Sicheres Dokument",
+      "description": "Bevor du deinen Personalausweis verschickst: Wasserzeichen mit Zweck und Datum hinzufügen und unnötige Daten schwärzen. Das Foto bleibt auf deinem Handy.",
+      "heading": "Wie verschicke ich ein Foto vom Personalausweis ohne Risiko?",
+      "intro": "Wohnungssuche, Job, Online-Käufe: Oft wird ein Foto eines Ausweisdokuments verlangt. Doch eine Kopie, die im Umlauf ist, kann für Identitätsdiebstahl genutzt werden. Mit Sicheres Dokument fügst du einen Schriftzug mit Zweck und Datum hinzu, schwärzt unnötige Daten und entfernst versteckte Daten wie den GPS-Standort.",
+      "points": [
+        "Wasserzeichen mit Zweck, Empfänger und Datum, über das ganze Foto wiederholt",
+        "Dokumentnummer, Unterschrift oder Foto schwärzen, wenn sie nicht gebraucht werden",
+        "Entfernt versteckte Daten wie den GPS-Standort",
+        "Das Foto wird weder hochgeladen noch gespeichert: Alles passiert auf deinem Handy"
+      ],
+      "faq": [
+        {
+          "q": "Warum ein Wasserzeichen auf den Ausweis setzen?",
+          "a": "Ein Schriftzug wie „Nur für Mietvertrag – 3. Oktober“ macht es viel schwieriger, die Kopie für andere Zwecke zu nutzen, etwa um in deinem Namen Konten zu eröffnen oder einzukaufen."
+        },
+        {
+          "q": "Kann der Empfänger die Daten noch lesen?",
+          "a": "Ja, das Wasserzeichen lässt die Daten lesbar. Braucht der Empfänger eine Angabe, die du geschwärzt hast, kannst du eine neue Kopie ohne Schwärzung erstellen."
+        },
+        {
+          "q": "Wird das Foto meines Ausweises ins Internet hochgeladen?",
+          "a": "Nein. Das Foto bleibt auf deinem Handy und das Original wird nicht verändert: Du lädst nur die geschützte Kopie herunter oder teilst sie."
+        }
+      ]
+    },
+    "fincheck": {
+      "title": "Finanzwissen-Test & Finanz-Check deines Budgets · FinCheck",
+      "description": "15 Fragen in 3 Minuten zu deinem Umgang mit Geld: Sparen, Schulden, Ausgaben und Zukunft, mit praktischen Tipps und einem Aktionsplan.",
+      "heading": "Wie gut kannst du mit Geld umgehen?",
+      "intro": "Bis zum Monatsende hinkommen, etwas sparen, sich nicht von Raten erdrücken lassen: Alles beginnt damit, zu wissen, wohin das Geld fließt. FinCheck ist ein Test zur finanziellen Bildung mit 15 Fragen, der dir deine Stärken und Verbesserungsfelder in fünf Bereichen zeigt, mit einem Tipp für jeden Bereich.",
+      "points": [
+        "Test mit 15 Fragen, etwa 3 Minuten, zu Bewusstsein, Sparen, Schulden, Ausgaben und Zukunft",
+        "Punktzahl und Ampel für jeden Bereich, mit praktischen Tipps",
+        "Budget-Check mit der 50/30/20-Regel, wenn du Spendly nutzt",
+        "Aktionsplan mit bis zu 3 konkreten Zielen"
+      ],
+      "faq": [
+        {
+          "q": "Was ist die 50/30/20-Regel?",
+          "a": "Eine einfache Methode, das Einkommen aufzuteilen: etwa 50 % für notwendige Ausgaben (Wohnen, Nebenkosten, Lebensmittel), 30 % für Wünsche und 20 % für Ersparnisse und Schulden. FinCheck berechnet sie auf Basis deines echten Budgets, wenn du Spendly nutzt."
+        },
+        {
+          "q": "Gibt mir FinCheck Anlagetipps?",
+          "a": "Nein. FinCheck ist finanzielle Bildung: Es hilft dir, deine Gewohnheiten zu verstehen und dein Budget ins Gleichgewicht zu bringen. Es ist keine Anlageberatung und empfiehlt weder Finanzprodukte noch Geldanlagen."
+        },
+        {
+          "q": "Wer sieht meine Ergebnisse?",
+          "a": "Nur du: Die Ergebnisse des Tests und des Budget-Checks sind privat."
+        }
+      ]
+    },
+    "spendly": {
+      "title": "Haushaltsbuch-App: Einnahmen, Ausgaben & Rechnungen · Spendly",
+      "description": "Führe dein persönliches Haushaltsbuch Monat für Monat: Einnahmen, Rechnungen, Fixkosten und variable Ausgaben, Saldo und Jahresverlauf. Einfach, auf dem Handy.",
+      "heading": "Wie führe ich ein Haushaltsbuch ohne Excel-Tabellen?",
+      "intro": "Zu wissen, wie viel reinkommt und wie viel rausgeht, ist der erste Schritt zum Sparen. Spendly ist dein persönliches Haushaltsbuch: Du erfasst Einnahmen, Rechnungen, Fixkosten und variable Ausgaben und siehst Monat für Monat, ob du im Plus bist, aufpassen musst oder in Schwierigkeiten steckst.",
+      "points": [
+        "Jahres-Dashboard mit Einnahmen, Ausgaben und Nettosaldo",
+        "Rechnungen, die sich automatisch wiederholen, mit dem tatsächlich gezahlten Betrag",
+        "Variable Ausgaben nach Kategorien",
+        "Farben, die dir sofort zeigen, ob der Monat positiv oder kritisch ist"
+      ],
+      "faq": [
+        {
+          "q": "Wie führt man ein Haushaltsbuch?",
+          "a": "Du startest mit den Einnahmen des Monats und ziehst dann die Fixkosten (Miete, Raten, Abos), die Rechnungen und die variablen Ausgaben (Einkauf, Tanken, Freizeit) ab. Spendly rechnet für dich und zeigt dir den Saldo."
+        },
+        {
+          "q": "Muss ich mein Bankkonto verbinden?",
+          "a": "Nein. In Spendly trägst du die Posten selbst ein: Du musst weder Konten noch Karten verbinden."
+        },
+        {
+          "q": "Kann ich Spendly zusammen mit FinCheck nutzen?",
+          "a": "Ja: Wenn du ein paar Monate Einnahmen und Ausgaben erfasst hast, nutzt FinCheck die Daten aus Spendly für den Budget-Check."
+        }
+      ]
+    },
+    "trova_lavoro": {
+      "title": "Jobs suchen mit Filtern und Betrugs-Check · Jobsuche",
+      "description": "Finde Stellenangebote aus mehreren Quellen ohne Duplikate, mit Filtern für Vertrag, Arbeitszeit, Gehalt und Homeoffice und Prüfung verdächtiger Anzeigen.",
+      "heading": "Wie suche ich einen Job und vermeide Fake-Stellenanzeigen?",
+      "intro": "Es gibt viele Stellenanzeigen, oft doppelt, und manche verbergen Betrug: kostenpflichtige Kurse, leicht verdientes Geld, Forderungen nach Geld oder Dokumenten. Die Jobsuche findet Angebote aus mehreren Quellen, entfernt Duplikate, wendet deine Filter an und markiert verdächtige Anzeigen. Du bewirbst dich direkt auf der Website der Anzeige.",
+      "points": [
+        "Angebote aus mehreren Quellen in einer einzigen Suche, ohne Duplikate",
+        "Filter für Vertrag, Arbeitszeit, Mindestgehalt, Datum und Remote-Arbeit",
+        "Markierung von Anzeigen mit Betrugsanzeichen",
+        "Favoriten und gespeicherte Suchen zum späteren Ansehen in Ruhe"
+      ],
+      "faq": [
+        {
+          "q": "Wie erkenne ich eine betrügerische Stellenanzeige?",
+          "a": "Sei misstrauisch, wenn jemand Geld für Kurse, Starter-Kits oder Anmeldungen verlangt, hohe Verdienste ohne Erfahrung verspricht, vor dem Vorstellungsgespräch Dokumente oder Bankdaten verlangt oder dich nur per Chat kontaktiert. Die Jobsuche markiert diese Anzeichen."
+        },
+        {
+          "q": "Veröffentlicht KUMANI Stellenanzeigen?",
+          "a": "Nein. KUMANI hostet keine Anzeigen und sammelt keine Lebensläufe: Es sucht Angebote, die auf anderen Websites veröffentlicht sind, und führt dich zur Originalanzeige, damit du dich bewerben kannst."
+        },
+        {
+          "q": "Kann ich nur nach Remote-Jobs suchen?",
+          "a": "Ja, mit dem Filter „Nur remote oder hybrid“."
+        }
+      ]
+    },
+    "kumani_cv": {
+      "title": "Lebenslauf im europäischen Format online mit QR-Code · KUMANI CV",
+      "description": "Erstelle deinen Lebenslauf im europäischen Format, lade das PDF herunter und teile den Link: Der QR-Code im CV führt immer zur aktuellen Version.",
+      "heading": "Wie erstelle ich einen europäischen Lebenslauf, der immer aktuell bleibt?",
+      "intro": "Ein heute verschickter Lebenslauf kann morgen schon veraltet sein. Mit KUMANI CV erstellst du deinen Lebenslauf im europäischen Stil, wählst zwischen drei Vorlagen und lädst das PDF herunter. Jedes PDF hat einen QR-Code zu deiner öffentlichen Seite: Wer ihn scannt, sieht immer die neueste Version.",
+      "points": [
+        "Lebenslauf im europäischen Stil mit drei Vorlagen: Minimal, Classic und Sidebar",
+        "Berufserfahrung, Ausbildung, Kompetenzen, Sprachen, Zertifikate und Links",
+        "PDF zum Herunterladen und öffentlicher Link zum Teilen per WhatsApp und E-Mail",
+        "Mehrere Lebensläufe, zum Beispiel einer auf Deutsch und einer auf Englisch"
+      ],
+      "faq": [
+        {
+          "q": "Was ist der europäische Lebenslauf?",
+          "a": "Ein übersichtliches, leicht lesbares CV-Format mit persönlichen Daten, Berufserfahrung, Ausbildung, Sprachen und Kompetenzen in klaren Abschnitten. Es ist in ganz Europa weit verbreitet."
+        },
+        {
+          "q": "Wozu dient der QR-Code im Lebenslauf?",
+          "a": "Wer deinen Lebenslauf ausgedruckt oder als PDF in der Hand hat, kann den QR-Code scannen und die neueste Version sehen, auch wenn du ihn inzwischen aktualisiert hast."
+        },
+        {
+          "q": "Kann ich den Lebenslauf auf Englisch erstellen?",
+          "a": "Ja, du wählst die Sprache des Inhalts, wenn du den Lebenslauf erstellst. Du kannst mehrere haben, in verschiedenen Sprachen."
+        }
+      ]
+    },
+    "menu": {
+      "title": "Digitale Speisekarte mit QR-Code für Restaurants · KUMANI Menu",
+      "description": "Erstelle die Online-Speisekarte für dein Lokal mit QR-Code am Tisch, Fotos, Allergenen und mehreren Sprachen. Preise und ausverkaufte Gerichte im Nu ändern.",
+      "heading": "Wie erstelle ich eine digitale Speisekarte mit QR-Code für mein Lokal?",
+      "intro": "Die Speisekarte bei jeder Preisänderung neu zu drucken kostet Zeit und Geld. Mit KUMANI Menu erstellst du die Online-Speisekarte für dein Restaurant, deine Bar oder Pizzeria: Der Gast scannt den QR-Code am Tisch und liest sie in seiner Sprache, mit Fotos, Allergenen und Tagesgericht.",
+      "points": [
+        "QR-Code zum Ausdrucken und fertiger Tischaufsteller",
+        "Speisekarte in mehreren Sprachen, mit automatischer Übersetzung der Gerichte",
+        "Allergene und Merkmale wie vegan oder glutenfrei",
+        "Ausverkaufte Gerichte und Tagesgericht mit einem Klick aktualisieren"
+      ],
+      "faq": [
+        {
+          "q": "Wie funktioniert eine Speisekarte mit QR-Code?",
+          "a": "Stell den QR-Code auf den Tisch: Der Gast scannt ihn mit der Handykamera und öffnet die Speisekarte, ohne eine App herunterzuladen."
+        },
+        {
+          "q": "Kann ich Allergene angeben?",
+          "a": "Ja, für jedes Gericht wählst du die Allergene und Merkmale aus, die der Gast neben dem Gericht sieht."
+        },
+        {
+          "q": "Kann die Speisekarte für Touristen auf Englisch sein?",
+          "a": "Ja, du wählst die Sprachen der Speisekarte: Der Gast sieht sie in seiner Sprache. Fehlende Übersetzungen werden mit KI ergänzt."
+        }
+      ]
+    },
+    "fidelity": {
+      "title": "Digitale Stempelkarte & Treuekarte auf dem Handy · Kumi Card",
+      "description": "Das Bonusprogramm für dein Geschäft ohne Papierkarten: Stempel per QR-Code aufs Handy des Kunden, Prämien, Statistiken und Kunden, die wiederkommen.",
+      "heading": "Wie erstelle ich eine digitale Treuekarte für mein Geschäft?",
+      "intro": "Papier-Stempelkarten gehen verloren und verraten dir nichts über deine Kunden. Die Kumi Card ist die digitale Treuekarte: Du vergibst den Stempel per QR-Code, der Kunde sammelt ihn auf dem Handy, ohne eine App herunterzuladen, und du siehst, wer wann wiederkommt und wer kurz vor der Prämie steht.",
+      "points": [
+        "Stempel per QR-Code an der Kasse vergeben, auch mehrere auf einmal",
+        "Der Kunde sieht Stempel und Prämie auf dem Handy, ohne App",
+        "Statistiken: Stempel pro Woche, Stoßzeiten nach Tagen und Uhrzeiten, durchschnittliche Wiederkehr",
+        "Kunden kurz vor der Prämie per WhatsApp kontaktieren, wenn sie zugestimmt haben"
+      ],
+      "faq": [
+        {
+          "q": "Muss der Kunde eine App herunterladen?",
+          "a": "Nein, er scannt den QR-Code mit der Handykamera und die Karte öffnet sich im Browser."
+        },
+        {
+          "q": "Kann ich die Kasse auf einem Tablet nutzen?",
+          "a": "Ja, öffne den Kassenmodus auf dem Handy oder Tablet des Geschäfts; auf anderen Geräten wird er mit der PIN entsperrt, die du festlegst."
+        },
+        {
+          "q": "Für welche Geschäfte eignet sie sich?",
+          "a": "Für Cafés und Bars, Friseure, Kosmetikstudios, Läden, Pizzerien und jedes Geschäft mit Stammkunden."
+        }
+      ]
+    },
+    "preventivi": {
+      "title": "Angebot schreiben als PDF auf dem Handy · Angebote KUMANI",
+      "description": "Erstelle professionelle Angebote mit Logo, USt-IdNr. und automatisch berechneten Positionen, lade das PDF herunter und schick es per WhatsApp oder E-Mail.",
+      "heading": "Wie schreibe ich in wenigen Minuten ein professionelles Angebot?",
+      "intro": "Ein klares, übersichtliches Angebot macht beim Kunden den Unterschied. Mit Angebote erstellst du Dokumente mit deinem Briefkopf, den Positionen und der automatisch berechneten Gesamtsumme und schickst sie als PDF per WhatsApp oder E-Mail, auch vom Handy aus.",
+      "points": [
+        "Briefkopf mit Logo, Firmenname, USt-IdNr. und Kontaktdaten",
+        "Positionen mit Menge und Preis, Gesamtsumme automatisch berechnet",
+        "Gespeicherte Kunden für das nächste Angebot",
+        "PDF zum Herunterladen und Versenden, jederzeit bearbeitbar"
+      ],
+      "faq": [
+        {
+          "q": "Was muss ein Angebot enthalten?",
+          "a": "Die Daten des Anbieters und des Kunden, die Beschreibung der Arbeiten oder Produkte mit Mengen und Preisen, die Gesamtsumme, die Zahlungsbedingungen und die Gültigkeitsdauer."
+        },
+        {
+          "q": "Kann ich das Angebot per WhatsApp schicken?",
+          "a": "Ja, du lädst das PDF herunter und teilst es per WhatsApp oder E-Mail."
+        },
+        {
+          "q": "Ersetzt das Angebot die Rechnung?",
+          "a": "Nein, das Angebot ist ein Vorschlag an den Kunden. Die Rechnung muss so ausgestellt werden, wie es das Gesetz vorschreibt."
+        }
+      ]
+    },
+    "digital_receipt": {
+      "title": "Übergabeprotokoll & Leihschein online bestätigen · Digitale Belege",
+      "description": "Erstelle einen Beleg für eine Übergabe, eine Ausleihe, Schlüssel oder Dokumente: Der Empfänger bestätigt ihn per Link, ohne Konto.",
+      "heading": "Wie bekomme ich einen Nachweis für die Übergabe von Gegenständen, Schlüsseln oder Dokumenten?",
+      "intro": "Du hast etwas verliehen oder Schlüssel oder Dokumente übergeben? Mit Digitale Belege erstellst du einen Beleg mit Foto und Datum, schickst ihn per Link oder QR-Code, und der Empfänger bestätigt den Erhalt. So bleibt festgehalten, was wann übergeben wurde.",
+      "points": [
+        "Belege für Übergaben, Ausleihen, Schlüssel, Dokumente und mehr",
+        "Bestätigung durch den Empfänger per Link, ohne Konto",
+        "Erinnerung an das Rückgabedatum bei Ausleihen",
+        "PDF zum Herunterladen und Status immer sichtbar: ausstehend, bestätigt oder zurückgegeben"
+      ],
+      "faq": [
+        {
+          "q": "Muss sich der Empfänger registrieren?",
+          "a": "Nein, er öffnet den Link oder scannt den QR-Code und bestätigt mit einem Tippen."
+        },
+        {
+          "q": "Kann ich ihn für das Verleihen eines Gegenstands nutzen?",
+          "a": "Ja, gib das Rückgabedatum an: Du bekommst eine Erinnerung, und wenn der Gegenstand zurück ist, tippst du auf „Rückgabe bestätigen“."
+        },
+        {
+          "q": "Ist der Beleg rechtlich gültig?",
+          "a": "Er ist ein schriftlicher, datierter Nachweis darüber, was übergeben und vom Empfänger bestätigt wurde. Bei Verträgen oder wichtigen Fällen lass dich von einer Fachperson beraten."
+        }
+      ]
+    },
+    "magazzino": {
+      "title": "Einfache Lagerverwaltung für kleine Betriebe · Magazzino PRO",
+      "description": "Artikel, Lagerbestand, Wareneingang und -ausgang, Mindestbestand und Nachbestellwarnungen, mit Barcode-Scanner und CSV-Export.",
+      "heading": "Wie verwalte ich das Lager eines kleinen Geschäfts?",
+      "intro": "Zu wissen, was du auf Lager hast, was knapp wird und wie viel die Ware wert ist, verhindert falsche Bestellungen und leere Regale. Magazzino PRO hält Artikel, Bestände und Bewegungen in Ordnung und zeigt dir, wann es Zeit zum Nachbestellen ist.",
+      "points": [
+        "Artikel mit Einkaufspreis, Verkaufspreis, Mindestbestand und Lagerbestand",
+        "Wareneingang, Warenausgang und Inventur mit automatisch aktualisiertem Bestand",
+        "Artikel per Barcode-Scan suchen",
+        "Lagerwert, nachzubestellende Artikel und CSV-Export"
+      ],
+      "faq": [
+        {
+          "q": "Kann ich es auf dem Handy nutzen?",
+          "a": "Ja, es funktioniert auf Handy, Tablet und Computer, und mit der Kamera scannst du Barcodes."
+        },
+        {
+          "q": "Woher weiß ich, wann ich nachbestellen muss?",
+          "a": "Für jeden Artikel legst du einen Mindestbestand fest: Fällt der Bestand darunter, erscheint der Artikel in der Liste zum Nachbestellen."
+        },
+        {
+          "q": "Kann ich die Daten an meinen Steuerberater geben?",
+          "a": "Ja, du exportierst Artikel und Bewegungen als CSV, die sich mit Excel öffnen lässt."
+        }
+      ]
+    },
+    "neurobalance": {
+      "title": "Binaurale Beats & Naturgeräusche zum Entspannen · Neurobalance",
+      "description": "Audio-Sessions mit binauralen Frequenzen und Naturgeräuschen (Regen, Ozean, Wald) für eine entspannende Pause. Zum Hören mit Kopfhörern.",
+      "heading": "Entspannungsklänge, um abzuschalten",
+      "intro": "Eine Pause von wenigen Minuten mit einem entspannenden Klang kann dir helfen abzuschalten. Neurobalance verbindet Sessions mit binauralen Frequenzen, die du mit Kopfhörern hörst, und Naturgeräusche wie Regen, Ozean und Wald, die du nach Belieben mischen kannst.",
+      "points": [
+        "Sessions wie „Tiefe Ruhe“, „Fließender Fokus“ und „Bewusster Neustart“",
+        "Naturgeräusche: Regen, Ozean, Bach, Wald, Wind, Feuer, Nacht und Gewitter",
+        "Einstellbare Lautstärke und mischbare Klänge",
+        "Für die Entspannung gedacht, zum Hören mit Stereo-Kopfhörern"
+      ],
+      "faq": [
+        {
+          "q": "Was sind binaurale Beats?",
+          "a": "Zwei leicht unterschiedliche Töne, einer pro Ohr, die als ein einziger Schlag wahrgenommen werden. Deshalb brauchst du Stereo-Kopfhörer."
+        },
+        {
+          "q": "Ist Neurobalance eine Therapie?",
+          "a": "Nein, es ist zur Entspannung gedacht, keine Therapie und ersetzt nicht den Rat einer Ärztin oder eines Arztes."
+        },
+        {
+          "q": "Kann ich es beim Lernen oder Arbeiten nutzen?",
+          "a": "Du kannst es als Hintergrund für eine Pause oder beim Konzentrieren nutzen, mit niedriger, angenehmer Lautstärke. Nicht beim Autofahren verwenden."
+        }
+      ]
+    },
+    "oxygen": {
+      "title": "4-7-8-Atmung geführt: Atemübung zum Entspannen · OXYGEN",
+      "description": "Drei Minuten geführte 4-7-8-Atmung: 4 Sekunden einatmen, 7 Sekunden halten, 8 Sekunden ausatmen. Mit Kreis, Ton und Vibration.",
+      "heading": "Wie funktioniert die 4-7-8-Atemtechnik?",
+      "intro": "Wenn du angespannt bist, hilft ein langsamerer Atem, wieder zur Ruhe zu kommen. OXYGEN führt dich durch die 4-7-8-Atmung: Ein Kreis wird mit dir größer und kleiner, und mit Ton und Vibration kannst du sie auch mit geschlossenen Augen machen.",
+      "points": [
+        "Geführte Session von etwa 3 Minuten oder nur Atmen",
+        "Wähle, wie viele Zyklen du machst: 4 werden empfohlen",
+        "Ton und Vibration, um mit geschlossenen Augen zu atmen",
+        "Hinweise für eine sichere Durchführung"
+      ],
+      "faq": [
+        {
+          "q": "Was ist die 4-7-8-Atmung?",
+          "a": "Eine Atemübung: Du atmest 4 Sekunden ein, hältst den Atem 7 Sekunden an und atmest 8 Sekunden langsam aus."
+        },
+        {
+          "q": "Wie viele Zyklen soll ich machen?",
+          "a": "Mach beim ersten Mal höchstens 4 Zyklen. Wenn dir schwindelig wird, hör auf und atme normal weiter."
+        },
+        {
+          "q": "Kann ich sie beim Autofahren machen?",
+          "a": "Nein. Mach sie im Sitzen oder Liegen an einem ruhigen Ort. OXYGEN ist eine Entspannungsübung, kein Medizinprodukt."
+        }
+      ]
+    },
+    "focus": {
+      "title": "Pomodoro-Timer online zum Lernen und Arbeiten · KUMANI Focus",
+      "description": "Arbeite in Intervallen mit der Pomodoro-Technik: 25 Minuten Konzentration und 5 Minuten Pause oder dein eigener Rhythmus, mit Ton und Vibration.",
+      "heading": "Wie konzentriere ich mich mit der Pomodoro-Technik?",
+      "intro": "Stundenlang konzentriert zu bleiben ist schwer; in kurzen Intervallen geht es viel leichter. KUMANI Focus ist ein Timer, der Konzentration und Pausen abwechselt, mit einer langen Pause alle 4 Einheiten, und dich bei jedem Wechsel mit einem sanften Ton benachrichtigt.",
+      "points": [
+        "Fertige Rhythmen: Klassisch 25/5, Lang 50/10, Kurz 15/3 oder ein eigener",
+        "Ton, Vibration und Benachrichtigung bei jedem Wechsel",
+        "Bildschirm bleibt während der Session an",
+        "Einheiten und Konzentrationsminuten von heute"
+      ],
+      "faq": [
+        {
+          "q": "Was ist die Pomodoro-Technik?",
+          "a": "Eine Methode zur Zeiteinteilung: Du arbeitest 25 Minuten konzentriert, machst 5 Minuten Pause und nach 4 Einheiten eine längere Pause."
+        },
+        {
+          "q": "Kann ich die Dauer der Einheiten ändern?",
+          "a": "Ja, wähle einen der fertigen Rhythmen oder stell eigene Zeiten ein."
+        },
+        {
+          "q": "Werden meine Sessions gespeichert?",
+          "a": "Der Tageszähler bleibt nur auf deinem Gerät und wird jeden Tag zurückgesetzt."
+        }
+      ]
+    },
+    "fabula": {
+      "title": "Story-Würfel online: schreib eine Mikrogeschichte · Kumani Fabula",
+      "description": "Wirf sechs Story-Würfel (Figur, Ort, Gegenstand, Gefühl, Handlung und Stimmung) und schreib eine Mikrogeschichte. Die Würfel des Tages sind für alle gleich.",
+      "heading": "Sechs Würfel, eine Geschichte: ein Spiel für kreatives Schreiben",
+      "intro": "Ein Spiel für kreatives Schreiben, das deine Fantasie in wenigen Minuten trainiert. Du wirfst sechs Story-Würfel und schreibst eine Mikrogeschichte, die alle Elemente verwendet. Jeden Tag sind die Würfel für die ganze Community gleich: Du kannst lesen, wie andere aus denselben Würfeln ihre Geschichte gemacht haben.",
+      "points": [
+        "Sechs Würfel: Figur, Ort, Gegenstand, Gefühl, Handlung und Stimmung",
+        "Wurf des Tages für alle gleich oder freier Wurf",
+        "60-Sekunden-Challenge für alle, die sich herausfordern wollen",
+        "Galerie mit den Geschichten der Community, ohne Ranglisten"
+      ],
+      "faq": [
+        {
+          "q": "Wie spielt man mit Story-Würfeln?",
+          "a": "Du wirfst die Würfel, schaust dir die Elemente an und schreibst eine kurze Geschichte, die alle enthält. Es gibt keine Regeln zu Genre oder Stil."
+        },
+        {
+          "q": "Wie lang muss die Geschichte sein?",
+          "a": "Bis zu 900 Zeichen: eine Mikrogeschichte von wenigen Zeilen."
+        },
+        {
+          "q": "Muss ich meine Geschichten veröffentlichen?",
+          "a": "Nein, du kannst sie in der Galerie veröffentlichen oder für dich behalten unter „Meine Geschichten“."
+        }
+      ]
+    },
+    "mandala": {
+      "title": "Mandala online zeichnen mit dem Finger · Mandala KUMANI",
+      "description": "Zeichne mit dem Finger und dein Strich wird zum symmetrischen Mandala: 6, 8, 12 oder 16 Segmente, Farben nach Wahl und PNG-Download. Kein Talent nötig.",
+      "heading": "Ein Mandala zeichnen, um zu entspannen",
+      "intro": "Ein Mandala zu zeichnen hilft beim Abschalten, auch wenn du nicht zeichnen kannst. In Mandala KUMANI ziehst du mit dem Finger eine Linie, die symmetrisch wiederholt wird: In wenigen Sekunden entsteht dein ganz eigenes Mandala.",
+      "points": [
+        "Symmetrie mit 6, 8, 12 oder 16 Segmenten",
+        "Dunkler oder elfenbeinfarbener Hintergrund, Pinsel, Radierer, Strichstärke und Farben",
+        "Rückgängig machen und neu beginnen, wann du willst",
+        "Zeichnung als PNG herunterladen und teilen"
+      ],
+      "faq": [
+        {
+          "q": "Muss ich zeichnen können?",
+          "a": "Nein: Die Symmetrie erledigt fast die ganze Arbeit, auch ein einfacher Strich wird zum Mandala."
+        },
+        {
+          "q": "Kann ich mein Mandala speichern?",
+          "a": "Ja, mit „PNG herunterladen“ speicherst du es und kannst es teilen, zum Beispiel per WhatsApp."
+        },
+        {
+          "q": "Funktioniert es auf dem Handy?",
+          "a": "Ja, es ist zum Zeichnen mit dem Finger auf Handy oder Tablet gedacht, funktioniert aber auch mit der Maus."
+        }
+      ]
+    },
+    "memolife": {
+      "title": "Online-Kalender mit Erinnerungen, Notizen & Kontakten · MemoLife",
+      "description": "Termine, Erinnerungen, Notizen und Kontakte in einem einzigen Planer, zusammen mit Rechnungen und Ablaufdaten deiner Dokumente.",
+      "heading": "Ein Planer, damit du nichts mehr vergisst",
+      "intro": "Termine im Kalender, Erinnerungen auf dem Handy, verstreute Notizen und Nummern im Adressbuch: MemoLife bringt alles an einem Ort zusammen. Im Kalender findest du auch Rechnungen und Ablaufdaten deiner Dokumente, so hast du alles im Griff.",
+      "points": [
+        "Bereiche Heute, Kalender, Erinnerungen, Notizen und Kontakte",
+        "Rechnungen aus Spendly und Fristen aus Life Calendar im Kalender",
+        "Alles über eine einzige „+“-Taste hinzufügen",
+        "Auf dem Handy oder am Computer"
+      ],
+      "faq": [
+        {
+          "q": "Kann ich Rechnungen im Kalender sehen?",
+          "a": "Ja, die in Spendly erfassten Rechnungen erscheinen im Kalender von MemoLife."
+        },
+        {
+          "q": "Kann ich das Ablaufdatum meines Personalausweises eintragen?",
+          "a": "Ja, füge das Ablaufdatum eines Dokuments mit Life Calendar hinzu und du findest es im Kalender wieder."
+        },
+        {
+          "q": "Muss ich eine App installieren?",
+          "a": "Nein, MemoLife funktioniert im Browser auf Handy oder Computer, und du kannst KUMANI zum Startbildschirm hinzufügen."
+        }
+      ]
+    }
   }
 }

@@ -8113,5 +8113,560 @@
     "loginDescription": "Log in to your KUMANI account.",
     "termsTitle": "Terms of service",
     "termsDescription": "KUMANI terms of service and benefits programme rules: points, bonuses, coupons and initiatives."
+  },
+  "toolSeo": {
+    "common": {
+      "pointsTitle": "What you can do",
+      "stepsTitle": "How it works",
+      "faqTitle": "Frequently asked questions",
+      "ctaTitle": "Try it with KUMANI",
+      "ctaText": "Sign up in a few minutes and find this and every other service in one place, on your phone or computer."
+    },
+    "svat": {
+      "title": "Website checker: is this site legit or a scam? · SVAT",
+      "description": "Check whether a website, VAT number or QR code can be trusted before you pay: a 0–100 trust score based on domain, security, legal pages and reviews.",
+      "heading": "How to tell if a website is legit before you buy",
+      "intro": "An online shop with prices that look too good to be true, a site created last week, a QR code stuck on a parking meter: before you pay, it pays to check. SVAT analyses the address in seconds and gives you a trust score from 0 to 100, showing what looks fine and what doesn’t.",
+      "points": [
+        "Check a website: domain age, DNS, security, content, legal pages and reviews",
+        "Check an Italian or EU VAT number: whether it’s active and who it’s registered to",
+        "Check a QR code before opening it, to avoid trap links",
+        "See which checks are OK, worth watching or risky"
+      ],
+      "faq": [
+        {
+          "q": "How can I tell if a website is a scam?",
+          "a": "No check gives absolute certainty, but some signs help a lot: a domain registered only a few days ago, no VAT number or legal pages, missing or suspicious reviews, prices far below normal. SVAT checks these and other signs and sums them up in a score."
+        },
+        {
+          "q": "Does a high score mean the website is 100% safe?",
+          "a": "No. The score is a hint, not a guarantee: even a site with a good score can hide problems. Before paying, use payment methods with buyer protection, such as a credit card, and be wary of anyone asking for instant bank transfers or top-ups."
+        },
+        {
+          "q": "Can I check a foreign VAT number?",
+          "a": "Yes, SVAT checks Italian and EU VAT numbers and tells you whether they are active and who they are registered to."
+        }
+      ]
+    },
+    "verifica_iban": {
+      "title": "IBAN checker: validate an IBAN before a bank transfer",
+      "description": "Check that an IBAN is correctly written, which country and bank it belongs to, and which scam warning signs to look for before you send money.",
+      "heading": "How to check an IBAN before making a bank transfer",
+      "intro": "An instant bank transfer can’t be cancelled, so it’s worth checking the IBAN before you pay. IBAN Check tells you whether it’s correctly written and which country it’s from, and for Italian IBANs it shows the bank and branch. The check happens entirely on your phone: the IBAN is never sent or stored.",
+      "points": [
+        "Check whether the IBAN is correctly written and where the mistake is",
+        "See the country and, for Italian IBANs, the ABI (bank), CAB (branch) and account number",
+        "Get the scam warning signs to look for based on what you’re paying for",
+        "No data sent: the check stays on your device"
+      ],
+      "faq": [
+        {
+          "q": "Does a valid IBAN mean the recipient is honest?",
+          "a": "No. A valid IBAN only means the code is correctly written, not who is behind it. Many scams use perfectly valid IBANs: look at the other signs too, such as pressure to hurry or a price that’s too low."
+        },
+        {
+          "q": "How do I find out which bank an Italian IBAN belongs to?",
+          "a": "An Italian IBAN contains the ABI code, which identifies the bank, and the CAB code, which identifies the branch. IBAN Check splits them out and shows them to you."
+        },
+        {
+          "q": "What should I do if I’ve already sent money to a scammer?",
+          "a": "Contact your bank straight away to ask for the transfer to be recalled, and report it to the police and your national cybercrime or fraud reporting service. The faster you act, the better the chance of getting your money back."
+        }
+      ]
+    },
+    "checkmail": {
+      "title": "Suspicious email? Check if it’s phishing · CheckMail",
+      "description": "Received a suspicious email? CheckMail checks the sender, links, attachments and wording and tells you if the phishing risk is low, medium or high.",
+      "heading": "How to spot a phishing email",
+      "intro": "Held parcels, suspended accounts, refunds waiting to be claimed: scam emails imitate the banks, couriers and services you use every day. With CheckMail you upload or paste the suspicious email and in seconds you see what doesn’t add up: sender, links, attachments and words meant to rush you.",
+      "points": [
+        "Analyses the real sender, even when the display name is fake",
+        "Checks hidden and shortened links",
+        "Flags dangerous attachments and requests for personal data",
+        "Tells you what to do: don’t click, don’t reply, contact the company through its official channels"
+      ],
+      "faq": [
+        {
+          "q": "How can I tell if an email is phishing?",
+          "a": "The most common signs are a sender that doesn’t match the company, links leading to addresses other than the official ones, urgent wording (“within 24 hours”) and requests for passwords, codes or card details. CheckMail looks for them for you."
+        },
+        {
+          "q": "Can I check an email on my phone?",
+          "a": "Yes: just copy the sender, subject and text with the links. On a computer you can also upload the email file (.eml or .msg) for a more thorough check."
+        },
+        {
+          "q": "I clicked a suspicious link: what should I do?",
+          "a": "Don’t enter any details. If you already have, change that service’s password straight away, tell your bank if cards or accounts are involved, and turn on two-step verification."
+        }
+      ]
+    },
+    "verifoto": {
+      "title": "Real photo or AI-generated? Check it with VeriFoto",
+      "description": "Find out if a photo was created or edited with artificial intelligence: a risk percentage, camera data and a map of the areas that may have been edited.",
+      "heading": "How to tell if a photo is AI-generated or edited",
+      "intro": "Fake profiles, listings with photos taken from the internet, images generated by artificial intelligence: before you trust a photo, you can check it. VeriFoto looks for the traces left by the camera or by editing software and shows you a risk level.",
+      "points": [
+        "Risk percentage that the photo is AI-generated or edited",
+        "Clues such as digital credentials and camera data",
+        "Edit map to see the suspicious areas",
+        "Second opinion from an AI detector and reverse image search"
+      ],
+      "faq": [
+        {
+          "q": "Can VeriFoto say for certain whether a photo is fake?",
+          "a": "No, no tool can do that with certainty. VeriFoto gathers clues and sums them up in a risk level: if in doubt, don’t trust it."
+        },
+        {
+          "q": "How can I find out if a photo was stolen from the internet?",
+          "a": "Search for the same image with Google Lens or TinEye: if it appears on other sites under other names, that’s a strong sign of a fake profile or listing. VeriFoto takes you straight to these searches."
+        },
+        {
+          "q": "Are my photos saved?",
+          "a": "The basic checks happen on your device. Only if you choose the AI detector’s second opinion is a reduced copy of the photo sent, and only after you’ve agreed to it."
+        }
+      ]
+    },
+    "antitruffa": {
+      "title": "Anti-Scam Manual: the most common scams and how to avoid them",
+      "description": "Text, email, phone, chat, online shopping and investment scams: real examples, the 10-second test and what to do right away if you’ve been scammed.",
+      "heading": "The most common scams and how to spot them",
+      "intro": "The fake courier, the fake bank adviser, the son or daughter texting from a new number, the investment with returns too good to be true: scams change shape but look alike. The Anti-Scam Manual gathers them into chapters, with real examples and what to do right away. You can download it, print it and share it with the people you love.",
+      "points": [
+        "The 10-second test: 6 questions to ask yourself before you click, reply or pay",
+        "The 6 golden rules that prevent most scams",
+        "Chapters on emails and texts, phone calls, the doorstep, chats, shopping and investments",
+        "What to do right away if you’ve been scammed"
+      ],
+      "faq": [
+        {
+          "q": "What are the most common scams today?",
+          "a": "Among the most common are texts and emails from a fake courier or fake bank, calls from fake advisers, messages from relatives asking for money from a new number, fake online listings and investments with promised returns."
+        },
+        {
+          "q": "Can I give the manual to my parents?",
+          "a": "Yes, that’s exactly what it’s designed for: you can print it, save it as a PDF or send the link via WhatsApp, Facebook, Telegram or email."
+        },
+        {
+          "q": "What should I do if I’ve been scammed?",
+          "a": "Block your cards and accounts straight away by calling your bank, change your passwords, keep messages and receipts, and report it to the police and your national cybercrime or fraud reporting service. The manual has a chapter with all the steps."
+        }
+      ]
+    },
+    "documento_sicuro": {
+      "title": "Send a photo of your ID safely with a watermark · Safe Document",
+      "description": "Before sending your ID card, add a watermark with the purpose and date and cover the details that aren’t needed. The photo stays on your phone.",
+      "heading": "How to send a photo of your ID card safely",
+      "intro": "Renting, a new job, online purchases: we’re often asked for a photo of an ID document. But a copy in circulation can be used for identity theft. With Safe Document you add text stating the purpose and date, cover the details that aren’t needed and remove hidden data, such as GPS location.",
+      "points": [
+        "Watermark with purpose, recipient and date repeated across the whole photo",
+        "Cover the document number, signature or photo if they aren’t needed",
+        "Removes hidden data, such as GPS location",
+        "The photo is never uploaded or stored: everything happens on your phone"
+      ],
+      "faq": [
+        {
+          "q": "Why add a watermark to an ID document?",
+          "a": "Text such as “For rental agreement only – 3 October” makes the copy much harder to use for other purposes, such as opening accounts or making purchases in your name."
+        },
+        {
+          "q": "Can the recipient still read the details?",
+          "a": "Yes, the watermark keeps the details readable. If the recipient needs something you’ve covered, you can create a new copy without covering it."
+        },
+        {
+          "q": "Is the photo of my document uploaded to the internet?",
+          "a": "No. The photo stays on your phone and the original isn’t touched: you only download or share the protected copy."
+        }
+      ]
+    },
+    "fincheck": {
+      "title": "Financial literacy quiz and budget check-up · FinCheck",
+      "description": "15 questions in 3 minutes to discover your money profile: saving, debt, spending and the future, with practical tips and an action plan.",
+      "heading": "How good are you at managing your money?",
+      "intro": "Making it to the end of the month, putting something aside, not getting crushed by repayments: it all starts with knowing where your money goes. FinCheck is a 15-question financial literacy quiz that shows your strengths and the areas to improve across five areas, with a tip for each one.",
+      "points": [
+        "15-question quiz, about 3 minutes, on awareness, saving, debt, spending and the future",
+        "Score and traffic light for each area, with practical tips",
+        "Budget check-up with the 50/30/20 rule if you use Spendly",
+        "Action plan with up to 3 concrete goals"
+      ],
+      "faq": [
+        {
+          "q": "What is the 50/30/20 rule?",
+          "a": "It’s a simple way to split your income: about 50% for needs (housing, bills, groceries), 30% for wants and 20% for savings and debt. FinCheck works it out on your real budget if you use Spendly."
+        },
+        {
+          "q": "Does FinCheck give investment advice?",
+          "a": "No. FinCheck is financial education: it helps you understand your habits and balance your budget. It doesn’t recommend financial products or investments."
+        },
+        {
+          "q": "Who can see my results?",
+          "a": "Only you: your quiz and check-up results are private."
+        }
+      ]
+    },
+    "spendly": {
+      "title": "Household budget app: income, expenses and bills · Spendly",
+      "description": "Track your personal budget month by month: income, bills, fixed and variable expenses, balance and the year’s trend. Simple, from your phone.",
+      "heading": "How to keep a household budget without spreadsheets",
+      "intro": "Knowing how much comes in and how much goes out is the first step to saving. Spendly is your personal budget: you record income, bills, fixed and variable expenses and see month by month whether you’re in the black, need to be careful or are struggling.",
+      "points": [
+        "Yearly dashboard with income, expenses and net balance",
+        "Recurring bills that repeat automatically, with what you actually paid",
+        "Variable expenses split by category",
+        "Colours that tell you at a glance whether the month is positive or critical"
+      ],
+      "faq": [
+        {
+          "q": "How do you make a household budget?",
+          "a": "Start with the month’s income, then subtract fixed costs (rent, repayments, subscriptions), bills and variable expenses (groceries, fuel, leisure). Spendly does the maths for you and shows you the balance."
+        },
+        {
+          "q": "Do I have to link my bank account?",
+          "a": "No. In Spendly you enter the items yourself: there’s no need to link accounts or cards."
+        },
+        {
+          "q": "Can I use Spendly with FinCheck?",
+          "a": "Yes: once you’ve recorded a few months of income and expenses, FinCheck uses your Spendly data for the budget check-up."
+        }
+      ]
+    },
+    "trova_lavoro": {
+      "title": "Job search with filters and scam job alerts · Find a Job",
+      "description": "Search job offers from multiple sources with no duplicates, filter by contract, hours, salary and remote work, and get suspicious listings flagged.",
+      "heading": "How to search for jobs and avoid job scams",
+      "intro": "There are lots of job ads, often repeated, and some hide scams: paid courses, easy money, requests for cash or documents. Find a Job searches offers from multiple sources, removes duplicates, applies your filters and flags suspicious listings. You apply directly on the listing’s website.",
+      "points": [
+        "Offers from multiple sources in a single search, with no duplicates",
+        "Filters for contract, hours, minimum salary, date and remote work",
+        "Listings showing scam warning signs are flagged",
+        "Favourites and saved searches to review at your own pace"
+      ],
+      "faq": [
+        {
+          "q": "How can I spot a fake job ad?",
+          "a": "Be wary of anyone who asks for money for courses, kits or registration, promises high earnings with no experience, asks for documents or bank details before the interview, or only contacts you via chat. Find a Job flags these signs."
+        },
+        {
+          "q": "Does KUMANI publish job ads?",
+          "a": "No. KUMANI doesn’t host job ads or collect CVs: it searches offers published on other websites and takes you to the original listing to apply."
+        },
+        {
+          "q": "Can I search for remote jobs only?",
+          "a": "Yes, with the “Remote or hybrid only” filter."
+        }
+      ]
+    },
+    "kumani_cv": {
+      "title": "European-style CV maker online with QR code · KUMANI CV",
+      "description": "Create your CV in European format, download the PDF and share the link: the QR code on your CV always leads to the latest version.",
+      "heading": "How to make a European CV that’s always up to date",
+      "intro": "A CV sent today may already be out of date tomorrow. With KUMANI CV you create a European-style CV, choose from three templates and download the PDF. Every PDF has a QR code linking to your public page: anyone who scans it always sees the latest version.",
+      "points": [
+        "European-style CV with three templates: Minimal, Classic and Sidebar",
+        "Experience, education, skills, languages, certifications and links",
+        "PDF to download and a public link to share on WhatsApp and by email",
+        "Multiple CVs, for example one in English and one in another language"
+      ],
+      "faq": [
+        {
+          "q": "What is a European CV?",
+          "a": "It’s a tidy, easy-to-read CV format, with personal details, experience, education, languages and skills in clear sections. It’s widely used in Italy and across Europe."
+        },
+        {
+          "q": "What is a QR code on a CV for?",
+          "a": "Anyone holding your printed or PDF CV can scan the QR code and see the latest version, even if you’ve updated it in the meantime."
+        },
+        {
+          "q": "Can I make my CV in another language?",
+          "a": "Yes, choose the content language when you create the CV. You can have more than one, in different languages."
+        }
+      ]
+    },
+    "menu": {
+      "title": "QR code menu for restaurants, cafés and bars · KUMANI Menu",
+      "description": "Create a digital menu for your venue with table QR codes, photos, allergens and multiple languages. Update prices and sold-out dishes in seconds.",
+      "heading": "How to create a QR code menu for your restaurant",
+      "intro": "Reprinting the menu every time a price changes costs time and money. With KUMANI Menu you create an online menu for your restaurant, bar or pizzeria: customers scan the QR code at the table and read it in their own language, with photos, allergens and the dish of the day.",
+      "points": [
+        "Printable QR code and table card ready to go",
+        "Menu in multiple languages, with automatic translation of dishes",
+        "Allergens and attributes such as vegan or gluten-free",
+        "Sold-out dishes and dish of the day updated in one click"
+      ],
+      "faq": [
+        {
+          "q": "How does a QR code menu work?",
+          "a": "Place the QR code on the table: customers scan it with their phone camera and the menu opens, with no app to download."
+        },
+        {
+          "q": "Can I show allergens?",
+          "a": "Yes, for each dish you choose the allergens and attributes, which customers see next to the dish."
+        },
+        {
+          "q": "Can the menu be in other languages for tourists?",
+          "a": "Yes, choose the menu languages: customers see it in their own language. Missing translations can be completed with AI."
+        }
+      ]
+    },
+    "fidelity": {
+      "title": "Digital loyalty card app with stamps on the phone · Kumi Card",
+      "description": "A stamp card for your shop without paper cards: stamps via QR on the customer’s phone, rewards, stats and customers you can bring back.",
+      "heading": "How to create a digital loyalty card for your business",
+      "intro": "Paper stamp cards get lost and tell you nothing about your customers. Kumi Card is a digital loyalty card: you give the stamp with a QR code, customers collect it on their phone without downloading an app, and you see who comes back, when, and who is close to a reward.",
+      "points": [
+        "Stamps given via QR code from the till, even several at once",
+        "Customers see their stamps and reward on their phone, no app needed",
+        "Stats: stamps per week, peak days and hours, average return",
+        "Customers close to a reward you can contact on WhatsApp, if they’ve given consent"
+      ],
+      "faq": [
+        {
+          "q": "Do customers have to download an app?",
+          "a": "No, they scan the QR code with their phone camera and the card opens in the browser."
+        },
+        {
+          "q": "Can I run the till from a tablet?",
+          "a": "Yes, open till mode on the shop’s phone or tablet; on other devices it’s unlocked with the PIN you choose."
+        },
+        {
+          "q": "What kinds of businesses is it for?",
+          "a": "Cafés, hairdressers, beauty salons, shops, pizzerias and any business with returning customers."
+        }
+      ]
+    },
+    "preventivi": {
+      "title": "Create PDF quotes and estimates on your phone · KUMANI Quotes",
+      "description": "Create professional quotes with your logo, VAT number and automatically calculated items, download the PDF and send it via WhatsApp or email.",
+      "heading": "How to write a professional quote in minutes",
+      "intro": "A clear, tidy quote makes a difference with customers. With Quotes you create documents with your letterhead, line items and an automatically calculated total, and send them as a PDF on WhatsApp or by email, even from your phone.",
+      "points": [
+        "Header with logo, company name, VAT number and contact details",
+        "Items with quantity and price, total calculated automatically",
+        "Saved customers to reuse on your next quote",
+        "PDF to download and send, editable at any time"
+      ],
+      "faq": [
+        {
+          "q": "What should a quote include?",
+          "a": "The details of whoever issues it and of the customer, a description of the work or products with quantities and prices, the total, the payment terms and the validity date."
+        },
+        {
+          "q": "Can I send the quote on WhatsApp?",
+          "a": "Yes, you download the PDF and share it on WhatsApp or by email."
+        },
+        {
+          "q": "Does a quote replace an invoice?",
+          "a": "No, a quote is a proposal to the customer. Invoices must be issued as required by law."
+        }
+      ]
+    },
+    "digital_receipt": {
+      "title": "Proof of delivery or loan receipt online · Digital Receipts",
+      "description": "Create a receipt for a delivery, a loan, keys or documents: the recipient confirms it from a link or QR code, with no account needed.",
+      "heading": "How to get proof of handing over items, keys or documents",
+      "intro": "Lent something, handed over keys or documents? With Digital Receipts you create a receipt with a photo and date, send it with a link or QR code and the recipient confirms they received it. That way there’s a record of what was handed over and when.",
+      "points": [
+        "Receipts for deliveries, loans, keys, documents and more",
+        "Recipient confirmation from the link, no account needed",
+        "Reminder for the return date of loans",
+        "PDF to download and status always visible: pending, confirmed or returned"
+      ],
+      "faq": [
+        {
+          "q": "Does the recipient have to sign up?",
+          "a": "No, they open the link or scan the QR code and confirm with a tap."
+        },
+        {
+          "q": "Can I use it when lending an item?",
+          "a": "Yes, set the return date: you get a reminder and when the item comes back you tap “Confirm return”."
+        },
+        {
+          "q": "Is it legally binding?",
+          "a": "It’s a dated written record of what was handed over and confirmed by the recipient. For contracts or important matters, ask a professional for advice."
+        }
+      ]
+    },
+    "magazzino": {
+      "title": "Simple inventory management for small businesses · Magazzino PRO",
+      "description": "Track products, stock levels, goods in and out, minimum stock and reorder alerts, with barcode scanning and CSV export. From phone, tablet or computer.",
+      "heading": "How to manage stock for a small shop",
+      "intro": "Knowing what you have in stock, what’s running low and what your goods are worth prevents wrong orders and empty shelves. Magazzino PRO keeps your products, stock levels and movements in order and shows you when it’s time to reorder.",
+      "points": [
+        "Products with cost, selling price, minimum stock and stock level",
+        "Goods in, goods out and stocktakes, with stock levels that update automatically",
+        "Find products by scanning the barcode",
+        "Stock value, products to reorder and CSV export"
+      ],
+      "faq": [
+        {
+          "q": "Can I use it on my phone?",
+          "a": "Yes, it works on phone, tablet and computer, and you can scan barcodes with the camera."
+        },
+        {
+          "q": "How do I know when to reorder?",
+          "a": "For each product you set the minimum stock: when the stock level drops below it, the product appears in the list to reorder."
+        },
+        {
+          "q": "Can I give the data to my accountant?",
+          "a": "Yes, you can export products and movements as CSV, which opens in Excel."
+        }
+      ]
+    },
+    "neurobalance": {
+      "title": "Binaural beats and nature sounds for relaxation · Neurobalance",
+      "description": "Audio sessions with binaural beats and nature sounds (rain, ocean, forest) for a relaxing break. Best listened to with headphones.",
+      "heading": "Relaxing sounds to unwind and switch off",
+      "intro": "A break of just a few minutes with a relaxing sound can help you switch off. Neurobalance combines binaural beat sessions, to listen to with headphones, and nature sounds such as rain, ocean and forest that you can mix as you like.",
+      "points": [
+        "Sessions such as “Deep rest”, “Fluid focus” and “Mindful reset”",
+        "Nature sounds: rain, ocean, stream, forest, wind, fire, night and thunderstorm",
+        "Adjustable volume and sounds you can mix",
+        "Designed for relaxation, to listen to with stereo headphones"
+      ],
+      "faq": [
+        {
+          "q": "What are binaural beats?",
+          "a": "They are two slightly different tones, one in each ear, that are perceived as a single beat. That’s why you need stereo headphones."
+        },
+        {
+          "q": "Is Neurobalance a therapy?",
+          "a": "No, it’s designed for relaxation; it isn’t a therapy and doesn’t replace a doctor’s advice."
+        },
+        {
+          "q": "Can I use it while studying or working?",
+          "a": "You can use it as background sound during a break or while you concentrate, at a low, comfortable volume. Don’t use it while driving."
+        }
+      ]
+    },
+    "oxygen": {
+      "title": "Guided 4-7-8 breathing exercise to relax · OXYGEN",
+      "description": "Three minutes of guided 4-7-8 breathing: breathe in for 4 seconds, hold for 7, breathe out for 8. With a visual circle, sound and vibration.",
+      "heading": "How to do 4-7-8 breathing",
+      "intro": "When you’re tense, slowing down your breathing helps you calm down. OXYGEN guides you through 4-7-8 breathing: a circle expands and contracts with you, and with sound and vibration you can even do it with your eyes closed.",
+      "points": [
+        "Guided session of about 3 minutes, or breathing only",
+        "Choose how many cycles to do: 4 are recommended",
+        "Sound and vibration so you can breathe with your eyes closed",
+        "Tips for doing it safely"
+      ],
+      "faq": [
+        {
+          "q": "What is 4-7-8 breathing?",
+          "a": "It’s a breathing exercise: you breathe in for 4 seconds, hold your breath for 7 and breathe out slowly for 8."
+        },
+        {
+          "q": "How many cycles should I do?",
+          "a": "The first time, do no more than 4 cycles. If you feel dizzy, stop and breathe normally."
+        },
+        {
+          "q": "Can I do it while driving?",
+          "a": "No. Do it sitting or lying down somewhere quiet. OXYGEN is a relaxation exercise, not a medical device."
+        }
+      ]
+    },
+    "focus": {
+      "title": "Online Pomodoro timer for studying and work · KUMANI Focus",
+      "description": "Work in intervals with the Pomodoro technique: 25 minutes of focus and a 5-minute break, or the rhythm you prefer, with sound and vibration.",
+      "heading": "How to stay focused with the Pomodoro technique",
+      "intro": "Staying focused for hours is hard; in short intervals it’s much easier. KUMANI Focus is a timer that alternates focus and breaks, with a long break every 4 sessions, and alerts you with a gentle sound at every switch.",
+      "points": [
+        "Ready-made rhythms: Classic 25/5, Long 50/10, Short 15/3, or Custom",
+        "Sound, vibration and notification at every switch",
+        "Screen stays on during the session",
+        "Today’s sessions and minutes of focus"
+      ],
+      "faq": [
+        {
+          "q": "What is the Pomodoro technique?",
+          "a": "It’s a time-management method: you work with full focus for 25 minutes, take a 5-minute break and, every 4 sessions, a longer break."
+        },
+        {
+          "q": "Can I change the length of the sessions?",
+          "a": "Yes, choose one of the ready-made rhythms or set custom durations."
+        },
+        {
+          "q": "Are my sessions saved?",
+          "a": "Today’s count stays only on your device and resets every day."
+        }
+      ]
+    },
+    "fabula": {
+      "title": "Online story dice: write a micro story · Kumani Fabula",
+      "description": "Roll six story dice (character, place, object, emotion, action and mood) and write a micro story. The daily dice are the same for everyone.",
+      "heading": "Six dice, one story: a creative writing game",
+      "intro": "A creative writing game to train your imagination in a few minutes. You roll six story dice and write a micro story that uses every element. Each day the dice are the same for the whole community: you can read how others told a story with the same dice.",
+      "points": [
+        "Six dice: character, place, object, emotion, action and mood",
+        "Daily roll that’s the same for everyone, or a free roll",
+        "60-second challenge if you want to test yourself",
+        "Community story gallery, with no leaderboards"
+      ],
+      "faq": [
+        {
+          "q": "How do you play with story dice?",
+          "a": "Roll the dice, look at the elements that come up and write a short story that includes all of them. There are no rules on genre or style."
+        },
+        {
+          "q": "How long should the story be?",
+          "a": "Up to 900 characters: a micro story of a few lines."
+        },
+        {
+          "q": "Do I have to publish my stories?",
+          "a": "No, you can publish them in the gallery or keep them to yourself in “My stories”."
+        }
+      ]
+    },
+    "mandala": {
+      "title": "Draw mandalas online with your finger · Mandala KUMANI",
+      "description": "Draw with your finger and your stroke becomes a symmetrical mandala: 6, 8, 12 or 16 segments, colours of your choice and PNG download. No skills needed.",
+      "heading": "Drawing a mandala to relax",
+      "intro": "Drawing a mandala helps you switch off, even if you can’t draw. In Mandala KUMANI you trace a line with your finger and it’s repeated symmetrically: in seconds, a mandala all of your own takes shape.",
+      "points": [
+        "Symmetry with 6, 8, 12 or 16 segments",
+        "Dark or ivory background, brush, eraser, stroke width and colours",
+        "Undo and start again whenever you like",
+        "Download your drawing as a PNG and share it"
+      ],
+      "faq": [
+        {
+          "q": "Do I need to know how to draw?",
+          "a": "No: the symmetry does almost all the work, and even a simple stroke becomes a mandala."
+        },
+        {
+          "q": "Can I save my mandala?",
+          "a": "Yes, with “Download PNG” you save it and can share it, for example on WhatsApp."
+        },
+        {
+          "q": "Does it work on a phone?",
+          "a": "Yes, it’s designed for drawing with your finger on a phone or tablet, but it also works with a mouse."
+        }
+      ]
+    },
+    "memolife": {
+      "title": "Online planner with reminders, notes and contacts · MemoLife",
+      "description": "Appointments, reminders, notes and contacts in one online planner, together with your bills and document expiry dates. On your phone or computer.",
+      "heading": "A planner so you never forget anything again",
+      "intro": "Appointments on the calendar, reminders on your phone, scattered notes and numbers in your contacts: MemoLife brings them together in one place. The calendar also shows your bills and document expiry dates, so you have everything under control.",
+      "points": [
+        "Today, Calendar, Reminders, Notes and Contacts tabs",
+        "Spendly bills and Life Calendar deadlines in the calendar",
+        "Add everything from a single “+” button",
+        "On your phone or computer"
+      ],
+      "faq": [
+        {
+          "q": "Can I see my bills in the calendar?",
+          "a": "Yes, the bills recorded in Spendly appear in the MemoLife calendar."
+        },
+        {
+          "q": "Can I note when my ID card expires?",
+          "a": "Yes, add a document’s expiry date with Life Calendar and you’ll find it in the calendar."
+        },
+        {
+          "q": "Do I need to install an app?",
+          "a": "No, MemoLife works in your phone’s or computer’s browser, and you can add KUMANI to your Home screen."
+        }
+      ]
+    }
   }
 }
