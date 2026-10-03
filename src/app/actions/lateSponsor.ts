@@ -7,7 +7,7 @@ import { verifyAdmin } from '@/lib/verifyAdmin'
 import { getStripe } from '@/lib/stripe'
 import { awardActivationPoints } from '@/lib/networkPoints'
 
-// Invito indicato dopo la registrazione (entro 30 giorni; lo Staff anche
+// Invito indicato dopo la registrazione (entro 15 giorni; lo Staff anche
 // dopo). La persona passa nella stella di chi l'ha invitata e, se aveva già
 // pagato l'abbonamento, il Kumano riceve i KU Points di quell'attivazione.
 
@@ -59,7 +59,7 @@ export async function claimLateSponsor(code: string): Promise<LateSponsorResult>
   return result
 }
 
-// Lo Staff, su richiesta del Kumano (anche dopo i 30 giorni)
+// Lo Staff, su richiesta del Kumano (anche dopo i 15 giorni)
 export async function adminAssignLateSponsor(userId: string, code: string): Promise<LateSponsorResult> {
   if (!(await verifyAdmin('users.write'))) return { success: false, code: 'forbidden' }
   return assign(userId, code, true)

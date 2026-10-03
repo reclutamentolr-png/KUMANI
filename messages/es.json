@@ -7596,7 +7596,7 @@
   },
   "lateSponsor": {
     "title": "¿Te ha invitado alguien?",
-    "text": "Si un Kumano te recomendó KUMANI y al registrarte no pusiste su código, puedes hacerlo ahora: entrarás en su estrella. Tienes hasta el {date}, una sola vez.",
+    "text": "Si un Kumano te recomendó KUMANI y al registrarte no pusiste su código, puedes hacerlo ahora. Tienes hasta el {date}, una sola vez.",
     "placeholder": "Código de invitación, p. ej. IT-1234567-A",
     "button": "Confirmar",
     "confirm": "¿Confirmas el código {code}? No se podrá cambiar.",

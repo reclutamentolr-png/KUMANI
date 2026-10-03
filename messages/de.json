@@ -7596,7 +7596,7 @@
   },
   "lateSponsor": {
     "title": "Hat dich jemand eingeladen?",
-    "text": "Wenn dir ein Kumano KUMANI empfohlen hat und du bei der Anmeldung seinen Code nicht eingegeben hast, kannst du das jetzt tun: Du kommst in seinen Stern. Möglich bis {date}, nur einmal.",
+    "text": "Wenn dir ein Kumano KUMANI empfohlen hat und du bei der Anmeldung seinen Code nicht eingegeben hast, kannst du das jetzt tun. Möglich bis {date}, nur einmal.",
     "placeholder": "Einladungscode, z. B. IT-1234567-A",
     "button": "Bestätigen",
     "confirm": "Code {code} bestätigen? Er kann danach nicht geändert werden.",

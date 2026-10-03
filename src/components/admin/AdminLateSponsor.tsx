@@ -6,7 +6,7 @@ import { adminAssignLateSponsor } from '@/app/actions/lateSponsor'
 import { notify } from '@/lib/adminNotify'
 
 // Admin → Gestisci Utente: assegna chi ha invitato una persona iscritta
-// senza codice (anche dopo i 30 giorni), su richiesta del Kumano.
+// senza codice (anche dopo i 15 giorni), su richiesta del Kumano.
 const ERRORS: Record<string, string> = {
   not_direct: 'Questa persona ha già un invitante: si può assegnare solo a chi si è iscritto senza codice.',
   already: 'L’invitante è già stato assegnato una volta.',
@@ -36,7 +36,7 @@ export default function AdminLateSponsor({ userId }: { userId: string }) {
   return (
     <div>
       <label className="mb-1 block text-sm font-medium text-gray-700">Assegna chi l’ha invitato</label>
-      <p className="mb-2 text-xs text-gray-500">Solo per chi si è iscritto senza codice e non ha ancora persone sotto di sé. Anche dopo i 30 giorni.</p>
+      <p className="mb-2 text-xs text-gray-500">Solo per chi si è iscritto senza codice e non ha ancora persone sotto di sé. Anche dopo i 15 giorni.</p>
       <div className="flex gap-2">
         <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="Codice invito del Kumano" className="flex-1 rounded-lg border border-gray-300 p-2 text-sm uppercase" />
         <button type="button" onClick={run} disabled={busy || !code.trim()} className="inline-flex items-center gap-1.5 rounded-lg bg-gray-900 px-3 py-2 text-sm font-semibold text-white disabled:opacity-50">

@@ -7596,7 +7596,7 @@
   },
   "lateSponsor": {
     "title": "Quelqu’un vous a invité ?",
-    "text": "Si un Kumano vous a recommandé KUMANI et que vous n’avez pas saisi son code à l’inscription, vous pouvez le faire maintenant : vous rejoindrez son étoile. Vous avez jusqu’au {date}, une seule fois.",
+    "text": "Si un Kumano vous a recommandé KUMANI et que vous n’avez pas saisi son code à l’inscription, vous pouvez le faire maintenant. Vous avez jusqu’au {date}, une seule fois.",
     "placeholder": "Code d’invitation, ex. IT-1234567-A",
     "button": "Confirmer",
     "confirm": "Confirmer le code {code} ? Il ne pourra plus être modifié.",

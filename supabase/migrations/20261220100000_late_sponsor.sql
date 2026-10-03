@@ -1,7 +1,7 @@
 -- Invito indicato dopo la registrazione. Chi si è iscritto senza codice
--- (signup_source 'direct', sotto l'account KUMANI) può indicare entro 30
+-- (signup_source 'direct', sotto l'account KUMANI) può indicare entro 15
 -- giorni il codice di chi lo ha invitato: passa nella stella di quel Kumano.
--- Lo Staff può farlo anche dopo i 30 giorni (su richiesta del Kumano).
+-- Lo Staff può farlo anche dopo i 15 giorni (su richiesta del Kumano).
 -- Regole: una sola volta; solo se sotto di lui non c'è ancora nessuno;
 -- non se stesso, non l'account KUMANI, non un account bloccato o disattivo.
 -- I KU Points di un'attivazione già pagata li assegna poi il server
@@ -10,7 +10,7 @@
 alter table public.profiles add column if not exists late_sponsor_at timestamptz;
 
 insert into public.system_settings (key, value)
-values ('late_sponsor_days', '30')
+values ('late_sponsor_days', '15')
 on conflict (key) do nothing;
 
 -- Stato per la persona: può ancora indicare l'invitante? Entro quando?
@@ -23,7 +23,7 @@ set search_path = public
 as $$
 declare
   v_house text := public.setting_text('house_account_id');
-  v_days int := public.setting_int('late_sponsor_days', 30);
+  v_days int := public.setting_int('late_sponsor_days', 15);
   v_profile record;
   v_node uuid;
 begin
@@ -51,7 +51,7 @@ set search_path = public
 as $$
 declare
   v_house text := public.setting_text('house_account_id');
-  v_days int := public.setting_int('late_sponsor_days', 30);
+  v_days int := public.setting_int('late_sponsor_days', 15);
   v_code text := upper(trim(coalesce(p_code, '')));
   v_profile record;
   v_sponsor uuid;
