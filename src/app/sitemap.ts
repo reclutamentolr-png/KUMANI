@@ -27,9 +27,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
     auth: { autoRefreshToken: false, persistSession: false },
   })
-  const [{ data: settings }, { data: events }] = await Promise.all([
+  const [{ data: settings }, { data: events }, { data: landings }] = await Promise.all([
     db.from('marketplace_settings').select('tool_name, is_enabled'),
     db.from('events').select('id, updated_at').eq('status', 'published').gte('starts_at', new Date().toISOString()).limit(500),
+    // Landing Page pubblicate dagli utenti Pro (una lingua sola, niente alternative)
+    db.rpc('list_public_landings'),
   ])
   const off = new Set((settings ?? []).filter((s) => s.is_enabled === false).map((s) => s.tool_name as string))
   const tools = getMarketplaceTools((key) => key).filter((tool) => !off.has(tool.toolName))
@@ -39,5 +41,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...tools.map((tool) => entry(`/strumenti/${tool.toolName}`, 0.7)),
     ...PUBLIC_GUIDES.map((slug) => entry(`/guida/${slug}`, 0.5)),
     ...(events ?? []).map((e) => entry(`/events/${e.id}`, 0.5, 'weekly', e.updated_at as string | undefined)),
+    ...((landings as { slug: string; updated_at: string }[] | null) ?? []).map((l) => ({
+      url: `${SITE_URL}/p/${l.slug}`,
+      lastModified: l.updated_at,
+      changeFrequency: 'weekly' as const,
+      priority: 0.4,
+    })),
   ]
 }

@@ -32,6 +32,7 @@ const PAID_TOOLS = [
   'spendly',
   'fidelity',
   'menu',
+  'landing-page',
   'preventivi',
   'kumani-cv',
   'spotlight',

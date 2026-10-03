@@ -3091,3 +3091,51 @@ export async function adminSetHomeLayout(layout: string) {
   updateTag(HOME_LAYOUT_CACHE_TAG)
   return { success: true }
 }
+
+// ---------------------------------------------------------------------------
+// Landing Page: segnalazioni dei visitatori e sospensione delle pagine
+// ---------------------------------------------------------------------------
+
+export async function listLandingPagesAdmin(search: string) {
+  const admin = await verifyAdmin('listings.read')
+  if (!admin) return { pages: [], reports: [], error: 'Non autorizzato' }
+  const service = getServiceClient()
+  const q = search.trim().toLowerCase().replace(/[^a-z0-9-]/g, '')
+  let pagesQuery = service
+    .from('landing_pages')
+    .select('owner_id, slug, is_published, suspended, suspended_reason, updated_at, owner:profiles!landing_pages_owner_id_fkey(first_name, last_name, email)')
+    .order('updated_at', { ascending: false })
+    .limit(100)
+  if (q) pagesQuery = pagesQuery.ilike('slug', `%${q}%`)
+  const [{ data: pages, error }, { data: reports, error: reportsError }] = await Promise.all([
+    pagesQuery,
+    service
+      .from('landing_reports')
+      .select('id, reason, details, status, created_at, page:landing_pages!landing_reports_owner_id_fkey(owner_id, slug, suspended)')
+      .eq('status', 'open')
+      .order('created_at', { ascending: false })
+      .limit(200),
+  ])
+  if (error || reportsError) return { pages: [], reports: [], error: (error ?? reportsError)!.message }
+  return { pages: pages ?? [], reports: reports ?? [], error: null }
+}
+
+export async function setLandingSuspended(ownerId: string, suspended: boolean, reason: string) {
+  const admin = await verifyAdmin('listings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  const { error } = await getServiceClient()
+    .from('landing_pages')
+    .update({ suspended, suspended_reason: suspended ? reason.trim().slice(0, 300) || null : null })
+    .eq('owner_id', ownerId)
+  if (error) return { success: false, error: error.message }
+  // Sospesa: si chiudono anche le sue segnalazioni aperte
+  if (suspended) await getServiceClient().from('landing_reports').update({ status: 'closed' }).eq('owner_id', ownerId).eq('status', 'open')
+  return { success: true, error: null }
+}
+
+export async function closeLandingReport(reportId: string) {
+  const admin = await verifyAdmin('listings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  const { error } = await getServiceClient().from('landing_reports').update({ status: 'closed' }).eq('id', reportId)
+  return { success: !error, error: error?.message ?? null }
+}

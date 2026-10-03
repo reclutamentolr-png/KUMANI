@@ -76,6 +76,7 @@ import type {
 import { SPOTLIGHT_HOME_MIN_POOL } from '@/lib/spotlight'
 import KuManagementPanel from '@/components/admin/KuManagementPanel'
 import AffinityReportsPanel from '@/components/admin/AffinityReportsPanel'
+import LandingPagesPanel from '@/components/admin/LandingPagesPanel'
 import ConvivioReportsPanel from '@/components/admin/ConvivioReportsPanel'
 import EventsAdminPanel from '@/components/admin/EventsAdminPanel'
 import TimebankAdminPanel from '@/components/admin/TimebankAdminPanel'
@@ -110,6 +111,7 @@ import {
   FileText,
   CalendarDays,
   Star,
+  PanelsTopLeft,
   Coins,
   Users,
   GitBranch,
@@ -1180,6 +1182,7 @@ L'accesso viene registrato.`)) return
   { id: 'coupons', label: 'Voucher e coupon', Icon: Ticket, permission: 'coupons.read' as Permission, group: 'rewards' },
   { id: 'listingReports', label: 'Bacheca', Icon: Flag, permission: 'listings.read' as Permission, group: 'community' },
   { id: 'spotlight', label: 'Kumano del Giorno', Icon: Star, permission: 'listings.read' as Permission, group: 'community' },
+  { id: 'landingPages', label: 'Landing Page', Icon: PanelsTopLeft, permission: 'listings.read' as Permission, group: 'community' },
   { id: 'events', label: 'Eventi', Icon: CalendarDays, permission: 'listings.read' as Permission, group: 'community' },
   { id: 'timebank', label: 'Time Bank', Icon: Hourglass, permission: 'listings.read' as Permission, group: 'community' },
   { id: 'affinity', label: 'Affinity', Icon: Flag, permission: 'listings.read' as Permission, group: 'community' },
@@ -3582,6 +3585,7 @@ L'accesso viene registrato.`)) return
         {activeSection === 'spotlight' && renderSpotlight()}
         {activeSection === 'kuManagement' && <KuManagementPanel />}
         {activeSection === 'affinity' && <AffinityReportsPanel />}
+        {activeSection === 'landingPages' && <LandingPagesPanel />}
         {activeSection === 'convivio' && <ConvivioReportsPanel locale={locale} />}
         {activeSection === 'events' && (
           <EventsAdminPanel

@@ -154,6 +154,8 @@ export const SECTION_LABELS: Record<string, string> = {
   affinity: 'Affinity',
   menuBuilder: 'KUMANI Menu (gestione)',
   menuPublic: 'KUMANI Menu (pagina pubblica)',
+  landingEditor: 'Landing Page (gestione)',
+  landingPublic: 'Landing Page (pagina pubblica)',
   veritas: 'Veritas',
   convivio: 'Kordata',
   travel: 'KUMANI Travel',

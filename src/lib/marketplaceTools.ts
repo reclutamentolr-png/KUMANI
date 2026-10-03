@@ -347,6 +347,17 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       requiresSubscription: true,
     },
     {
+      toolName: 'landing-page',
+      href: '/marketplace/landing-page',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'PanelsTopLeft',
+      title: t('landingPage'),
+      description: t('landingPageDescription'),
+      color: 'gold',
+      category: 'marketing',
+      requiresSubscription: true,
+    },
+    {
       toolName: 'menu',
       href: '/marketplace/menu',
       gradient: 'bg-[var(--ink)]',
