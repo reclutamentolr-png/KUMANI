@@ -597,7 +597,17 @@
     "noMatrixNodes": "Nessuna posizione nella struttura.",
     "unexpectedError": "Errore imprevisto nel caricamento della classifica",
     "error": "Errore",
-    "myPosition": "La mia posizione"
+    "myPosition": "La mia posizione",
+    "starOpen": "Apri la stella di {name}",
+    "starYou": "Tu",
+    "starPath": "Percorso nella stella",
+    "starUp": "Risali di un livello",
+    "starBackToMine": "Torna alla tua stella",
+    "starBackToStart": "Torna alla stella iniziale",
+    "starLevel": "{level}° livello",
+    "starTapHint": "Tocca un Kumano per vedere la sua stella, fino al 5° livello sotto di te.",
+    "starLastLevel": "Sotto questa stella c’è il 5° livello: è l’ultimo che puoi vedere.",
+    "legendInvitedBy": "Invitati da {name}"
   },
   "memolife": {
     "memolife": "MemoLife",

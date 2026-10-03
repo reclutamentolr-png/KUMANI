@@ -597,7 +597,17 @@
     "noProfiles": "No profiles found in database",
     "noMatrixNodes": "No positions in the structure.",
     "unexpectedError": "Unexpected error loading leaderboard",
-    "error": "Error"
+    "error": "Error",
+    "starOpen": "Open {name}’s star",
+    "starYou": "You",
+    "starPath": "Path in the star",
+    "starUp": "Up one level",
+    "starBackToMine": "Back to your star",
+    "starBackToStart": "Back to the first star",
+    "starLevel": "Level {level}",
+    "starTapHint": "Tap a Kumano to see their star, down to the 5th level below you.",
+    "starLastLevel": "Below this star is the 5th level: the last one you can see.",
+    "legendInvitedBy": "Invited by {name}"
   },
   "memolife": {
     "greeting": "Hello, {name}!",

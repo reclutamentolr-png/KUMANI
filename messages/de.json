@@ -577,7 +577,17 @@
     "pointsCardLabel": "Deine Punkte für tägliche Zugriffe:",
     "kuPointsLabel": "KU Karma",
     "howPointsWorkLabel": "Wie verdient man Punkte?",
-    "howPointsWorkBody": "Du erhältst 1 Punkt für jeden Tag, an dem du dich anmeldest, plus 1 Punkt für jedes Tool des Ökosystems, das du nutzt (einmal pro Tag und Tool). Mit den Punkten veröffentlichst du Anzeigen in der Community und nutzt die weiteren Vorteile aus deinem Wallet."
+    "howPointsWorkBody": "Du erhältst 1 Punkt für jeden Tag, an dem du dich anmeldest, plus 1 Punkt für jedes Tool des Ökosystems, das du nutzt (einmal pro Tag und Tool). Mit den Punkten veröffentlichst du Anzeigen in der Community und nutzt die weiteren Vorteile aus deinem Wallet.",
+    "starOpen": "Stern von {name} öffnen",
+    "starYou": "Du",
+    "starPath": "Pfad im Stern",
+    "starUp": "Eine Ebene höher",
+    "starBackToMine": "Zurück zu deinem Stern",
+    "starBackToStart": "Zurück zum ersten Stern",
+    "starLevel": "Ebene {level}",
+    "starTapHint": "Tippe auf einen Kumano, um seinen Stern zu sehen – bis zur 5. Ebene unter dir.",
+    "starLastLevel": "Unter diesem Stern liegt die 5. Ebene: die letzte, die du sehen kannst.",
+    "legendInvitedBy": "Eingeladen von {name}"
   },
   "memolife": {
     "greeting": "Ciao, {name}!",

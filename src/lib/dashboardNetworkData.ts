@@ -21,7 +21,8 @@ export async function getDashboardNetworkData(
   locale: string,
   // tree: albero completo della rete (solo la pagina "La mia rete"; la
   // dashboard mostra un riepilogo e non lo carica, altrimenti chi sta in
-  // cima leggerebbe tutta la matrice). claims: 'inline' riscuote i bonus
+  // cima leggerebbe tutta la matrice; nella stella si possono aprire le
+  // stelle dei propri Kumani fino al 5° livello). claims: 'inline' riscuote i bonus
   // prima di rispondere, 'skip' li lascia a deferNetworkClaims().
   options: { tree?: boolean; claims?: 'inline' | 'skip' } = {}
 ) {
@@ -31,8 +32,8 @@ export async function getDashboardNetworkData(
   const claims = claimsMode === 'inline' ? claimNetworkBonuses(supabase) : Promise.resolve()
 
   // Letture indipendenti tutte insieme: nodo matrice dell'utente, i propri
-  // discendenti (solo nome e stato attivo, calcolati dal database: niente
-  // cognome o codice di chi è finito sotto di noi), lo sponsor (il KUMI) e
+  // discendenti (nome e stato attivo; cognome e codice solo dei propri
+  // invitati diretti, per gli altri il codice mascherato), lo sponsor (il KUMI) e
   // gli invitati diretti.
   const [{ data: userNode }, { data: downlineRows, error: matrixError }, { data: sponsorData }, directSponsored, wallet, receivedRows] = await Promise.all([
     tree ? supabase.from('matrix_nodes').select('*').eq('user_id', user.id).single() : Promise.resolve({ data: null, error: null }),
@@ -61,6 +62,12 @@ export async function getDashboardNetworkData(
     created_at: string
     first_name: string | null
     is_active: boolean
+    // Solo dei propri invitati diretti (vedi 20261221100000_downline_star_navigation.sql)
+    last_name?: string | null
+    referral_code?: string | null
+    masked_code?: string | null
+    is_my_direct?: boolean
+    sponsored_by_parent?: boolean
   }>).map((node) => ({ ...node, first_name: node.first_name ?? undefined }))
 
   const downlineError = matrixError

@@ -577,7 +577,17 @@
     "pointsCardLabel": "Vos points accumulés grâce aux connexions :",
     "kuPointsLabel": "KU Karma",
     "howPointsWorkLabel": "Comment gagne-t-on des points ?",
-    "howPointsWorkBody": "Vous gagnez 1 point chaque jour où vous vous connectez, plus 1 point pour chaque outil de l’Écosystème que vous utilisez (une fois par jour et par outil). Les points servent à publier des annonces dans la Communauté et pour les autres avantages indiqués dans votre Portefeuille."
+    "howPointsWorkBody": "Vous gagnez 1 point chaque jour où vous vous connectez, plus 1 point pour chaque outil de l’Écosystème que vous utilisez (une fois par jour et par outil). Les points servent à publier des annonces dans la Communauté et pour les autres avantages indiqués dans votre Portefeuille.",
+    "starOpen": "Ouvrir l’étoile de {name}",
+    "starYou": "Vous",
+    "starPath": "Parcours dans l’étoile",
+    "starUp": "Remonter d’un niveau",
+    "starBackToMine": "Revenir à votre étoile",
+    "starBackToStart": "Revenir à l’étoile de départ",
+    "starLevel": "Niveau {level}",
+    "starTapHint": "Touchez un Kumano pour voir son étoile, jusqu’au 5e niveau sous vous.",
+    "starLastLevel": "Sous cette étoile se trouve le 5e niveau : le dernier que vous pouvez voir.",
+    "legendInvitedBy": "Invités par {name}"
   },
   "memolife": {
     "greeting": "Ciao, {name}!",

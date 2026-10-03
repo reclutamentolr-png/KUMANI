@@ -44,6 +44,27 @@ body {
 .animate-fadeIn {
   animation: fadeIn 0.5s ease-in-out;
 }
+
+/* Stella della matrice: effetto zoom quando si apre la stella di un Kumano */
+@keyframes starZoom {
+  from {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-starZoom {
+  animation: starZoom 0.35s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-starZoom {
+    animation: none;
+  }
+}
 /* ------------------------------------------------------------------
    Homepage: layout scelti dall'Admin (src/lib/homeLayouts.ts).
    Le sezioni chiare (.home-light) adattano i colori pensati per il

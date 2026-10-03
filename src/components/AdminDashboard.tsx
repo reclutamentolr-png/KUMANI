@@ -1414,7 +1414,7 @@ L'accesso viene registrato.`)) return
                 <p>Questa matrice è vuota</p>
               </div>
             ) : (
-              <MatrixTree rootNode={matrixData} descendants={matrixDescendants} />
+              <MatrixTree key={matrixData.id} rootNode={matrixData} descendants={matrixDescendants} mode="admin" />
             )}
           </div>
         </>

@@ -577,7 +577,17 @@
     "pointsCardLabel": "Os seus pontos acumulados pelos acessos:",
     "kuPointsLabel": "KU Karma",
     "howPointsWorkLabel": "Como se ganham pontos?",
-    "howPointsWorkBody": "Ganha 1 ponto por cada dia em que acede à plataforma, mais 1 ponto por cada ferramenta do Ecossistema que usa (uma vez por dia por ferramenta). Os pontos servem para publicar anúncios na Comunidade e para as outras vantagens indicadas na sua Carteira."
+    "howPointsWorkBody": "Ganha 1 ponto por cada dia em que acede à plataforma, mais 1 ponto por cada ferramenta do Ecossistema que usa (uma vez por dia por ferramenta). Os pontos servem para publicar anúncios na Comunidade e para as outras vantagens indicadas na sua Carteira.",
+    "starOpen": "Abrir a estrela de {name}",
+    "starYou": "Você",
+    "starPath": "Percurso na estrela",
+    "starUp": "Subir um nível",
+    "starBackToMine": "Voltar à sua estrela",
+    "starBackToStart": "Voltar à estrela inicial",
+    "starLevel": "Nível {level}",
+    "starTapHint": "Toque num Kumano para ver a estrela dele, até ao 5.º nível abaixo de si.",
+    "starLastLevel": "Abaixo desta estrela está o 5.º nível: o último que pode ver.",
+    "legendInvitedBy": "Convidados por {name}"
   },
   "memolife": {
     "greeting": "Olá, {name}!",
