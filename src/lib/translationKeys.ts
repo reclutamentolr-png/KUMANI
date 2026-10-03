@@ -119,6 +119,8 @@ export const SECTION_LABELS: Record<string, string> = {
   accountDeletion: 'Cancellazione account',
   passwordChange: 'Profilo: cambio password',
   passwordEmail: 'Email: avviso di password cambiata',
+  pushSettings: 'Profilo: notifiche push',
+  pushNotifications: 'Testi delle notifiche push',
   lateSponsor: 'Invito indicato dopo la registrazione',
   verification: 'Verifica identità',
   agenda: 'Agenda (prossimi giorni)',

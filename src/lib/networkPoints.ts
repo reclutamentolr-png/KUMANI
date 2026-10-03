@@ -1,6 +1,7 @@
 import type Stripe from 'stripe'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { userIdOf } from '@/lib/agentCommissions'
+import { localizedPath, notifyUser } from '@/lib/push'
 
 // Punti Rete per le attivazioni pagate con carta (webhook invoice.paid):
 // allo sponsor diretto del cliente, una volta per fattura, con i valori
@@ -37,8 +38,22 @@ export async function awardActivationPoints(invoice: Stripe.Invoice): Promise<vo
 
   const customer = await userIdOf(invoice)
   if (!customer) return
-  const { error } = await db().rpc('award_activation_points', { p_invoice_id: invoice.id, p_customer: customer, p_kind: kind })
+  const { data, error } = await db().rpc('award_activation_points', { p_invoice_id: invoice.id, p_customer: customer, p_kind: kind })
   if (error) throw new Error(`Punti Rete non assegnati: ${error.message}`)
+
+  // Notifica push a chi ha invitato (solo quando i punti sono stati assegnati ora)
+  const row = (Array.isArray(data) ? data[0] : data) as { awarded?: boolean; sponsor_id?: string | null; points?: number } | null
+  if (row?.awarded && row.sponsor_id) {
+    const { data: person } = await db().from('profiles').select('first_name').eq('id', customer).maybeSingle()
+    const name = person?.first_name || 'Kumano'
+    const points = row.points ?? 0
+    await notifyUser(row.sponsor_id, 'network', (t, locale) => ({
+      title: t(kind === 'upgrade_pro' ? 'upgradeTitle' : 'activationTitle'),
+      body: t(kind === 'upgrade_pro' ? 'upgradeBody' : 'activationBody', { name, points }),
+      url: localizedPath(locale, '/dashboard/rete'),
+      tag: `activation-${invoice.id}`,
+    }))
+  }
 }
 
 export async function reverseActivationPoints(charge: Stripe.Charge): Promise<void> {

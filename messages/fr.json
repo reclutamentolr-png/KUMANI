@@ -7647,5 +7647,39 @@
     "body": "le mot de passe de votre compte KUMANI a été modifié le {date} depuis votre profil.",
     "notYou": "Si ce n’était pas vous, réinitialisez immédiatement votre mot de passe avec le lien ci-dessous et écrivez-nous à {email}.",
     "signature": "L’équipe KUMANI"
+  },
+  "pushSettings": {
+    "title": "Notifications",
+    "offHint": "Recevez les alertes importantes même quand KUMANI est fermé.",
+    "onHint": "Activées sur cet appareil. Choisissez lesquelles recevoir :",
+    "enable": "Activer",
+    "disable": "Désactiver",
+    "denied": "Les notifications sont bloquées pour KUMANI : réactivez-les dans les réglages du navigateur ou du téléphone.",
+    "iosInstall": "Sur iPhone, les notifications fonctionnent avec KUMANI ajouté à l’écran d’accueil : touchez Partager puis « Sur l’écran d’accueil », puis ouvrez KUMANI depuis là.",
+    "unsupported": "Ce navigateur ne prend pas en charge les notifications.",
+    "cat_network": "Votre réseau",
+    "cat_network_hint": "Quand un Kumano que vous avez invité active KUMANI et que vous recevez des KU Points.",
+    "cat_expiry": "Échéances",
+    "cat_expiry_hint": "Quelques jours avant l’expiration d’un abonnement sans renouvellement automatique.",
+    "cat_events": "Événements",
+    "cat_events_hint": "La veille d’un événement auquel vous êtes inscrit.",
+    "cat_staff": "Annonces de KUMANI",
+    "cat_staff_hint": "Nouveautés et communications importantes du Staff.",
+    "deviceNote": "Valable pour cet appareil : activez-les depuis le profil sur vos autres appareils.",
+    "test": "Envoyer un test",
+    "testSent": "Test envoyé : il devrait arriver dans quelques secondes.",
+    "error": "Une erreur s’est produite. Réessayez dans un instant."
+  },
+  "pushNotifications": {
+    "testTitle": "Notifications activées",
+    "testBody": "Parfait : vous recevrez désormais ici les alertes de KUMANI.",
+    "activationTitle": "Un nouveau Kumano grâce à vous",
+    "activationBody": "{name} a activé KUMANI : vous avez reçu {points} KU Points.",
+    "upgradeTitle": "Passage à Pro",
+    "upgradeBody": "{name} est passé à KUMANI Pro : vous avez reçu {points} KU Points.",
+    "expiryTitle": "Votre abonnement va bientôt expirer",
+    "expiryBody": "Il expire le {date}. Renouvelez-le pour continuer à utiliser les services KUMANI.",
+    "eventTitle": "Rappel d’événement",
+    "eventBody": "{title} · {date}"
   }
 }

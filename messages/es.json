@@ -7647,5 +7647,39 @@
     "body": "la contraseña de tu cuenta de KUMANI se cambió el {date} desde tu perfil.",
     "notYou": "Si no has sido tú, restablece ya la contraseña con el enlace de abajo y escríbenos a {email}.",
     "signature": "El equipo de KUMANI"
+  },
+  "pushSettings": {
+    "title": "Notificaciones",
+    "offHint": "Recibe los avisos importantes aunque KUMANI esté cerrada.",
+    "onHint": "Activadas en este dispositivo. Elige cuáles recibir:",
+    "enable": "Activar",
+    "disable": "Desactivar",
+    "denied": "Las notificaciones están bloqueadas para KUMANI: vuelve a activarlas en los ajustes del navegador o del teléfono.",
+    "iosInstall": "En iPhone, las notificaciones funcionan con KUMANI añadida a la pantalla de inicio: toca Compartir y luego «Añadir a pantalla de inicio», y abre KUMANI desde ahí.",
+    "unsupported": "Este navegador no admite notificaciones.",
+    "cat_network": "Tu red",
+    "cat_network_hint": "Cuando un Kumano que invitaste activa KUMANI y recibes KU Points.",
+    "cat_expiry": "Vencimientos",
+    "cat_expiry_hint": "Unos días antes de que venza una suscripción sin renovación automática.",
+    "cat_events": "Eventos",
+    "cat_events_hint": "El día antes de un evento al que te inscribiste.",
+    "cat_staff": "Avisos de KUMANI",
+    "cat_staff_hint": "Novedades y comunicaciones importantes del Staff.",
+    "deviceNote": "Vale para este dispositivo: actívalas desde el perfil en tus otros dispositivos.",
+    "test": "Enviar una prueba",
+    "testSent": "Prueba enviada: debería llegar en unos segundos.",
+    "error": "Algo no ha funcionado. Inténtalo de nuevo en breve."
+  },
+  "pushNotifications": {
+    "testTitle": "Notificaciones activadas",
+    "testBody": "Perfecto: a partir de ahora recibirás aquí los avisos de KUMANI.",
+    "activationTitle": "Un nuevo Kumano gracias a ti",
+    "activationBody": "{name} ha activado KUMANI: has recibido {points} KU Points.",
+    "upgradeTitle": "Cambio a Pro",
+    "upgradeBody": "{name} se ha pasado a KUMANI Pro: has recibido {points} KU Points.",
+    "expiryTitle": "Tu suscripción está a punto de vencer",
+    "expiryBody": "Vence el {date}. Renuévala para seguir usando los servicios de KUMANI.",
+    "eventTitle": "Recordatorio de evento",
+    "eventBody": "{title} · {date}"
   }
 }

@@ -7647,5 +7647,39 @@
     "body": "das Passwort deines KUMANI-Kontos wurde am {date} in deinem Profil geändert.",
     "notYou": "Wenn du das nicht warst, setze dein Passwort sofort über den Link unten zurück und schreib uns an {email}.",
     "signature": "Dein KUMANI-Team"
+  },
+  "pushSettings": {
+    "title": "Benachrichtigungen",
+    "offHint": "Erhalte wichtige Hinweise auch, wenn KUMANI geschlossen ist.",
+    "onHint": "Auf diesem Gerät aktiv. Wähle aus, welche du erhalten möchtest:",
+    "enable": "Aktivieren",
+    "disable": "Deaktivieren",
+    "denied": "Benachrichtigungen sind für KUMANI blockiert: aktiviere sie wieder in den Browser- oder Telefoneinstellungen.",
+    "iosInstall": "Auf dem iPhone funktionieren Benachrichtigungen, wenn KUMANI zum Home-Bildschirm hinzugefügt ist: Tippe auf Teilen, dann „Zum Home-Bildschirm“, und öffne KUMANI von dort.",
+    "unsupported": "Dieser Browser unterstützt keine Benachrichtigungen.",
+    "cat_network": "Dein Netzwerk",
+    "cat_network_hint": "Wenn ein von dir eingeladener Kumano KUMANI aktiviert und du KU Points erhältst.",
+    "cat_expiry": "Fristen",
+    "cat_expiry_hint": "Einige Tage bevor ein Abo ohne automatische Verlängerung abläuft.",
+    "cat_events": "Events",
+    "cat_events_hint": "Am Tag vor einem Event, für das du angemeldet bist.",
+    "cat_staff": "Mitteilungen von KUMANI",
+    "cat_staff_hint": "Neuigkeiten und wichtige Mitteilungen vom Staff.",
+    "deviceNote": "Gilt für dieses Gerät: Auf anderen Geräten im Profil aktivieren.",
+    "test": "Test senden",
+    "testSent": "Test gesendet: Er sollte in wenigen Sekunden ankommen.",
+    "error": "Etwas hat nicht funktioniert. Versuche es gleich noch einmal."
+  },
+  "pushNotifications": {
+    "testTitle": "Benachrichtigungen aktiv",
+    "testBody": "Perfekt: Ab jetzt erhältst du hier die Hinweise von KUMANI.",
+    "activationTitle": "Ein neuer Kumano dank dir",
+    "activationBody": "{name} hat KUMANI aktiviert: Du hast {points} KU Points erhalten.",
+    "upgradeTitle": "Wechsel zu Pro",
+    "upgradeBody": "{name} ist zu KUMANI Pro gewechselt: Du hast {points} KU Points erhalten.",
+    "expiryTitle": "Dein Abo läuft bald ab",
+    "expiryBody": "Es läuft am {date} ab. Verlängere es, um die KUMANI-Dienste weiter zu nutzen.",
+    "eventTitle": "Event-Erinnerung",
+    "eventBody": "{title} · {date}"
   }
 }

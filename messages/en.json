@@ -7647,5 +7647,39 @@
     "body": "the password of your KUMANI account was changed on {date} from your profile.",
     "notYou": "If it wasn’t you, reset your password right away using the link below and write to us at {email}.",
     "signature": "The KUMANI team"
+  },
+  "pushSettings": {
+    "title": "Notifications",
+    "offHint": "Get important alerts even when KUMANI is closed.",
+    "onHint": "On for this device. Choose which ones to get:",
+    "enable": "Turn on",
+    "disable": "Turn off",
+    "denied": "Notifications are blocked for KUMANI: turn them back on in your browser or phone settings.",
+    "iosInstall": "On iPhone, notifications work once KUMANI is added to the Home Screen: tap Share, then “Add to Home Screen”, and open KUMANI from there.",
+    "unsupported": "This browser doesn’t support notifications.",
+    "cat_network": "Your network",
+    "cat_network_hint": "When a Kumano you invited activates KUMANI and you get KU Points.",
+    "cat_expiry": "Expiry dates",
+    "cat_expiry_hint": "A few days before a subscription without automatic renewal expires.",
+    "cat_events": "Events",
+    "cat_events_hint": "The day before an event you signed up for.",
+    "cat_staff": "KUMANI announcements",
+    "cat_staff_hint": "News and important messages from the Staff.",
+    "deviceNote": "This applies to this device: turn them on from the profile on your other devices.",
+    "test": "Send a test",
+    "testSent": "Test sent: it should arrive in a few seconds.",
+    "error": "Something went wrong. Please try again shortly."
+  },
+  "pushNotifications": {
+    "testTitle": "Notifications on",
+    "testBody": "All set: from now on you’ll get KUMANI alerts here.",
+    "activationTitle": "A new Kumano thanks to you",
+    "activationBody": "{name} activated KUMANI: you received {points} KU Points.",
+    "upgradeTitle": "Upgrade to Pro",
+    "upgradeBody": "{name} upgraded to KUMANI Pro: you received {points} KU Points.",
+    "expiryTitle": "Your subscription is about to expire",
+    "expiryBody": "It expires on {date}. Renew it to keep using KUMANI services.",
+    "eventTitle": "Event reminder",
+    "eventBody": "{title} · {date}"
   }
 }

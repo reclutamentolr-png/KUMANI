@@ -7,6 +7,7 @@ import ProfileFieldsGrid, { ConfirmLockBox, MissingFieldsBox, useProfileFieldLab
 import ProfileChangeRequestDialog from '@/components/profile/ProfileChangeRequestDialog'
 import AccountDeletionSection from '@/components/profile/AccountDeletionSection'
 import PasswordChangeSection from '@/components/profile/PasswordChangeSection'
+import PushSettingsSection from '@/components/profile/PushSettingsSection'
 import { useProfileCompletion } from '@/components/profile/useProfileCompletion'
 import {
   cancelProfileChange,
@@ -261,6 +262,7 @@ export default function ProfileModal({ isOpen, onClose, initialData, userId, onC
             </form>
           )}
 
+          {isOpen && <PushSettingsSection />}
           <PasswordChangeSection />
           <AccountDeletionSection isOpen={isOpen} />
         </div>

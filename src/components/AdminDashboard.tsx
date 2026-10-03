@@ -95,6 +95,7 @@ import HomeLayoutPanel from '@/components/admin/HomeLayoutPanel'
 import PlatformsPanel from '@/components/admin/PlatformsPanel'
 import EmailSetupPanel from '@/components/admin/EmailSetupPanel'
 import EmailComposePanel from '@/components/admin/EmailComposePanel'
+import PushPanel from '@/components/admin/PushPanel'
 import DocumentsAdminPanel from '@/components/admin/DocumentsAdminPanel'
 import AdminLateSponsor from '@/components/admin/AdminLateSponsor'
 import AdminPasswordReset from '@/components/admin/AdminPasswordReset'
@@ -1168,6 +1169,7 @@ L'accesso viene registrato.`)) return
   { id: 'contactMessages', label: 'Messaggi dal sito', Icon: Inbox, permission: 'support.read' as Permission, group: 'comms' },
   { id: 'emailSetup', label: 'Gestione Email', Icon: Mail, permission: 'settings.read' as Permission, group: 'comms' },
   { id: 'emailSend', label: 'Invio Email', Icon: Send, permission: 'support.write' as Permission, group: 'comms' },
+  { id: 'push', label: 'Notifiche push', Icon: BellRing, permission: 'messages.read' as Permission, group: 'comms' },
   { id: 'documents', label: 'Documenti KUMANI', Icon: FileText, permission: 'settings.read' as Permission, group: 'comms' },
   { id: 'kuManagement', label: 'Gestione KU', Icon: Coins, permission: 'settings.read' as Permission, group: 'rewards' },
   { id: 'rewards', label: 'Premi', Icon: Gift, permission: 'rewards.read' as Permission, group: 'rewards' },
@@ -3592,6 +3594,7 @@ L'accesso viene registrato.`)) return
         {activeSection === 'contactMessages' && <ContactMessagesPanel />}
         {activeSection === 'emailSetup' && <EmailSetupPanel />}
         {activeSection === 'emailSend' && <EmailComposePanel />}
+        {activeSection === 'push' && <PushPanel />}
         {activeSection === 'documents' && <DocumentsAdminPanel />}
         {activeSection === 'settings' && renderSettings()}
       </div>

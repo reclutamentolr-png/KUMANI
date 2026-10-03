@@ -7647,5 +7647,39 @@
     "body": "a palavra-passe da sua conta KUMANI foi alterada em {date} a partir do seu perfil.",
     "notYou": "Se não foi você, redefina já a palavra-passe com o link abaixo e escreva-nos para {email}.",
     "signature": "A equipa KUMANI"
+  },
+  "pushSettings": {
+    "title": "Notificações",
+    "offHint": "Receba os avisos importantes mesmo com a KUMANI fechada.",
+    "onHint": "Ativas neste dispositivo. Escolha quais receber:",
+    "enable": "Ativar",
+    "disable": "Desativar",
+    "denied": "As notificações estão bloqueadas para a KUMANI: volte a ativá-las nas definições do navegador ou do telemóvel.",
+    "iosInstall": "No iPhone, as notificações funcionam com a KUMANI adicionada ao ecrã principal: toque em Partilhar e depois em «Adicionar ao ecrã principal», e abra a KUMANI a partir daí.",
+    "unsupported": "Este navegador não suporta notificações.",
+    "cat_network": "A sua rede",
+    "cat_network_hint": "Quando um Kumano que convidou ativa a KUMANI e recebe KU Points.",
+    "cat_expiry": "Prazos",
+    "cat_expiry_hint": "Alguns dias antes de expirar uma subscrição sem renovação automática.",
+    "cat_events": "Eventos",
+    "cat_events_hint": "Na véspera de um evento em que se inscreveu.",
+    "cat_staff": "Avisos da KUMANI",
+    "cat_staff_hint": "Novidades e comunicações importantes do Staff.",
+    "deviceNote": "Vale para este dispositivo: ative-as a partir do perfil nos outros dispositivos.",
+    "test": "Enviar um teste",
+    "testSent": "Teste enviado: deve chegar dentro de segundos.",
+    "error": "Algo correu mal. Tente novamente daqui a pouco."
+  },
+  "pushNotifications": {
+    "testTitle": "Notificações ativas",
+    "testBody": "Perfeito: a partir de agora recebe aqui os avisos da KUMANI.",
+    "activationTitle": "Um novo Kumano graças a si",
+    "activationBody": "{name} ativou a KUMANI: recebeu {points} KU Points.",
+    "upgradeTitle": "Passagem a Pro",
+    "upgradeBody": "{name} passou para a KUMANI Pro: recebeu {points} KU Points.",
+    "expiryTitle": "A sua subscrição está prestes a expirar",
+    "expiryBody": "Expira a {date}. Renove-a para continuar a usar os serviços KUMANI.",
+    "eventTitle": "Lembrete de evento",
+    "eventBody": "{title} · {date}"
   }
 }

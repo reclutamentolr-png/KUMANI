@@ -7647,5 +7647,39 @@
     "body": "la password del tuo account KUMANI è stata cambiata il {date} dal tuo profilo.",
     "notYou": "Se non sei stato tu, reimposta subito la password dal link qui sotto e scrivici a {email}.",
     "signature": "Il team KUMANI"
+  },
+  "pushSettings": {
+    "title": "Notifiche",
+    "offHint": "Ricevi gli avvisi importanti anche con KUMANI chiusa.",
+    "onHint": "Attive su questo dispositivo. Scegli quali ricevere:",
+    "enable": "Attiva",
+    "disable": "Disattiva",
+    "denied": "Le notifiche sono bloccate per KUMANI: riattivale dalle impostazioni del browser o del telefono.",
+    "iosInstall": "Su iPhone le notifiche funzionano con KUMANI aggiunta alla schermata Home: tocca Condividi e poi «Aggiungi alla schermata Home», poi apri KUMANI da lì.",
+    "unsupported": "Questo browser non supporta le notifiche.",
+    "cat_network": "La tua rete",
+    "cat_network_hint": "Quando un Kumano che hai invitato attiva KUMANI e ricevi i KU Points.",
+    "cat_expiry": "Scadenze",
+    "cat_expiry_hint": "Qualche giorno prima che scada un abbonamento senza rinnovo automatico.",
+    "cat_events": "Eventi",
+    "cat_events_hint": "Il giorno prima di un evento a cui sei iscritto.",
+    "cat_staff": "Avvisi di KUMANI",
+    "cat_staff_hint": "Novità e comunicazioni importanti dello Staff.",
+    "deviceNote": "Vale per questo dispositivo: sugli altri attivale dal loro profilo.",
+    "test": "Invia una prova",
+    "testSent": "Prova inviata: dovrebbe arrivare tra pochi secondi.",
+    "error": "Qualcosa non ha funzionato. Riprova tra poco."
+  },
+  "pushNotifications": {
+    "testTitle": "Notifiche attive",
+    "testBody": "Perfetto: da ora ricevi qui gli avvisi di KUMANI.",
+    "activationTitle": "Un nuovo Kumano grazie a te",
+    "activationBody": "{name} ha attivato KUMANI: hai ricevuto {points} KU Points.",
+    "upgradeTitle": "Passaggio a Pro",
+    "upgradeBody": "{name} è passato a KUMANI Pro: hai ricevuto {points} KU Points.",
+    "expiryTitle": "Il tuo abbonamento sta per scadere",
+    "expiryBody": "Scade il {date}. Rinnovalo per continuare a usare i servizi KUMANI.",
+    "eventTitle": "Promemoria evento",
+    "eventBody": "{title} · {date}"
   }
 }
