@@ -7681,5 +7681,14 @@
     "expiryBody": "Es läuft am {date} ab. Verlängere es, um die KUMANI-Dienste weiter zu nutzen.",
     "eventTitle": "Event-Erinnerung",
     "eventBody": "{title} · {date}"
+  },
+  "pushInvite": {
+    "title": "Benachrichtigungen aktivieren",
+    "text": "Wir benachrichtigen dich, wenn jemand, den du eingeladen hast, KUMANI aktiviert, sowie vor Fristen und Events. Auswahl im Profil.",
+    "enable": "Aktivieren",
+    "close": "Schließen",
+    "done": "Benachrichtigungen auf diesem Gerät aktiv. Im Profil kannst du auswählen, welche du erhältst.",
+    "denied": "Benachrichtigungen sind blockiert: Du kannst sie in den Browser- oder Telefoneinstellungen wieder aktivieren.",
+    "error": "Etwas hat nicht funktioniert. Versuche es gleich noch einmal."
   }
 }

@@ -121,6 +121,7 @@ export const SECTION_LABELS: Record<string, string> = {
   passwordEmail: 'Email: avviso di password cambiata',
   pushSettings: 'Profilo: notifiche push',
   pushNotifications: 'Testi delle notifiche push',
+  pushInvite: 'Dashboard: invito ad attivare le notifiche',
   lateSponsor: 'Invito indicato dopo la registrazione',
   verification: 'Verifica identità',
   agenda: 'Agenda (prossimi giorni)',

@@ -7681,5 +7681,14 @@
     "expiryBody": "Scade il {date}. Rinnovalo per continuare a usare i servizi KUMANI.",
     "eventTitle": "Promemoria evento",
     "eventBody": "{title} · {date}"
+  },
+  "pushInvite": {
+    "title": "Attiva le notifiche",
+    "text": "Ti avvisiamo quando un tuo invitato attiva KUMANI, prima delle scadenze e degli eventi. Puoi scegliere quali ricevere dal Profilo.",
+    "enable": "Attiva",
+    "close": "Chiudi",
+    "done": "Notifiche attive su questo dispositivo. Puoi scegliere quali ricevere dal Profilo.",
+    "denied": "Le notifiche sono bloccate: puoi riattivarle dalle impostazioni del browser o del telefono.",
+    "error": "Qualcosa non ha funzionato. Riprova tra poco."
   }
 }

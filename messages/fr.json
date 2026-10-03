@@ -7681,5 +7681,14 @@
     "expiryBody": "Il expire le {date}. Renouvelez-le pour continuer à utiliser les services KUMANI.",
     "eventTitle": "Rappel d’événement",
     "eventBody": "{title} · {date}"
+  },
+  "pushInvite": {
+    "title": "Activez les notifications",
+    "text": "Nous vous prévenons quand une personne invitée active KUMANI, avant les échéances et les événements. Choisissez lesquelles depuis le Profil.",
+    "enable": "Activer",
+    "close": "Fermer",
+    "done": "Notifications activées sur cet appareil. Vous pouvez choisir lesquelles recevoir depuis le Profil.",
+    "denied": "Les notifications sont bloquées : vous pouvez les réactiver dans les réglages du navigateur ou du téléphone.",
+    "error": "Une erreur s’est produite. Réessayez dans un instant."
   }
 }

@@ -21,6 +21,7 @@ import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { getFavoriteToolNames } from '@/lib/favorites'
 import DashboardTipo2 from '@/components/dashboard/DashboardTipo2'
 import LateSponsorCard from '@/components/dashboard/LateSponsorCard'
+import PushInviteCard from '@/components/dashboard/PushInviteCard'
 import { getLateSponsorStatus } from '@/lib/lateSponsor'
 import DashboardReturnScroll from '@/components/dashboard/DashboardReturnScroll'
 import QuickNav from '@/components/QuickNav'
@@ -242,6 +243,9 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
 
         {/* Iscritto senza codice: può ancora indicare chi l'ha invitato */}
         {lateSponsor.eligible && lateSponsor.until && <LateSponsorCard until={lateSponsor.until} />}
+
+        {/* Invito ad attivare le notifiche push su questo dispositivo */}
+        <PushInviteCard />
 
         {/* Messaggi non letti dalla Bacheca: in cima, prima di tutto */}
         {unreadMessagesCount > 0 && <BachecaMessagesAlert initialCount={unreadMessagesCount} />}

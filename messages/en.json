@@ -7681,5 +7681,14 @@
     "expiryBody": "It expires on {date}. Renew it to keep using KUMANI services.",
     "eventTitle": "Event reminder",
     "eventBody": "{title} · {date}"
+  },
+  "pushInvite": {
+    "title": "Turn on notifications",
+    "text": "We’ll let you know when someone you invited activates KUMANI, and before expiry dates and events. Choose which ones from your Profile.",
+    "enable": "Turn on",
+    "close": "Close",
+    "done": "Notifications are on for this device. You can choose which ones to get from your Profile.",
+    "denied": "Notifications are blocked: you can turn them back on in your browser or phone settings.",
+    "error": "Something went wrong. Please try again shortly."
   }
 }

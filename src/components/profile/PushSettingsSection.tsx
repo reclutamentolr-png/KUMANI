@@ -11,6 +11,7 @@ import {
   setPushPreference,
   type PushPreferences,
 } from '@/app/actions/push'
+import { enablePush, getPushDeviceStatus } from '@/lib/pushClient'
 
 // Nel profilo: attiva le notifiche push su questo dispositivo e scegli quali
 // ricevere. Su iPhone funzionano solo con KUMANI aggiunta alla schermata Home.
@@ -18,15 +19,6 @@ import {
 const CATEGORIES = ['network', 'expiry', 'events', 'staff'] as const
 
 type Status = 'loading' | 'unsupported' | 'ios-install' | 'denied' | 'off' | 'on'
-
-function urlBase64ToUint8Array(base64String: string) {
-  const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
-  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/')
-  const raw = window.atob(base64)
-  const output = new Uint8Array(raw.length)
-  for (let i = 0; i < raw.length; ++i) output[i] = raw.charCodeAt(i)
-  return output
-}
 
 export default function PushSettingsSection() {
   const t = useTranslations('pushSettings')
@@ -40,32 +32,14 @@ export default function PushSettingsSection() {
   useEffect(() => {
     let cancelled = false
     const check = async () => {
-      const ios = /iPad|iPhone|iPod/.test(navigator.userAgent)
-      const standalone = window.matchMedia('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone === true
-      const supported = 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window
-      if (!supported || !process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY) {
-        if (!cancelled) setStatus(ios && !standalone ? 'ios-install' : 'unsupported')
-        return
+      const { status: deviceStatus, subscription } = await getPushDeviceStatus()
+      if (subscription) {
+        // Riallinea il dispositivo (lingua, chiavi) a ogni apertura
+        await savePushSubscription(JSON.parse(JSON.stringify(subscription)), locale, navigator.userAgent)
+        const p = await getPushPreferences()
+        if (!cancelled) setPrefs(p)
       }
-      if (Notification.permission === 'denied') {
-        if (!cancelled) setStatus('denied')
-        return
-      }
-      try {
-        const registration = await navigator.serviceWorker.register('/sw.js', { scope: '/', updateViaCache: 'none' })
-        const sub = await registration.pushManager.getSubscription()
-        if (sub) {
-          // Riallinea il dispositivo (lingua, chiavi) a ogni apertura
-          await savePushSubscription(JSON.parse(JSON.stringify(sub)), locale, navigator.userAgent)
-          const p = await getPushPreferences()
-          if (!cancelled) {
-            setPrefs(p)
-            setStatus('on')
-          }
-        } else if (!cancelled) setStatus('off')
-      } catch {
-        if (!cancelled) setStatus('unsupported')
-      }
+      if (!cancelled) setStatus(deviceStatus)
     }
     check()
     return () => {
@@ -76,30 +50,13 @@ export default function PushSettingsSection() {
   const enable = async () => {
     setBusy(true)
     setError(null)
-    try {
-      const permission = await Notification.requestPermission()
-      if (permission !== 'granted') {
-        setStatus(permission === 'denied' ? 'denied' : 'off')
-        return
-      }
-      const registration = await navigator.serviceWorker.ready
-      const sub = await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!),
-      })
-      const res = await savePushSubscription(JSON.parse(JSON.stringify(sub)), locale, navigator.userAgent)
-      if (!res.success) {
-        await sub.unsubscribe().catch(() => {})
-        setError(t('error'))
-        return
-      }
+    const result = await enablePush(locale)
+    if (result === 'on') {
       setPrefs(await getPushPreferences())
       setStatus('on')
-    } catch {
-      setError(t('error'))
-    } finally {
-      setBusy(false)
-    }
+    } else if (result === 'error') setError(t('error'))
+    else setStatus(result)
+    setBusy(false)
   }
 
   const disable = async () => {
