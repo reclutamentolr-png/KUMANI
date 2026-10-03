@@ -1,4 +1,5 @@
 import Link from '@/components/LocalizedLink'
+import { pageMetadata } from '@/lib/seo'
 import Image from 'next/image'
 import { getTranslations } from 'next-intl/server'
 import {
@@ -39,7 +40,10 @@ import { getHomeLayout } from '@/lib/homeLayoutServer'
 // Anteprima di un layout (?layout=… dall'Admin): mai indicizzata
 export async function generateMetadata({ searchParams }: { searchParams: Promise<{ layout?: string }> }): Promise<Metadata> {
   const { layout } = await searchParams
-  return layout ? { robots: { index: false, follow: false } } : {}
+  // Anteprima di un aspetto della homepage (Admin): mai su Google
+  if (layout) return { robots: { index: false, follow: false } }
+  const t = await getTranslations('seo')
+  return pageMetadata('', { title: { absolute: t('homeTitle') }, description: t('homeDescription') })
 }
 
 export default async function LandingPage({ searchParams }: { searchParams: Promise<{ layout?: string }> }) {

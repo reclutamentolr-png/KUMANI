@@ -1,3 +1,5 @@
+import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/seo'
 import Link from '@/components/LocalizedLink'
 import { getTranslations } from 'next-intl/server'
 import { headers } from 'next/headers'
@@ -6,6 +8,11 @@ import MaintenanceGate from '@/components/MaintenanceGate'
 import Logo from '@/components/Logo'
 
 export const dynamic = 'force-dynamic'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('seo')
+  return pageMetadata('/register', { title: t('registerTitle'), description: t('registerDescription') })
+}
 
 export default async function RegisterPage() {
   const t = await getTranslations('authRegister')

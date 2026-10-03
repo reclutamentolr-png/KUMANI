@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/seo'
 import { getTranslations } from 'next-intl/server'
 import { ArrowLeft, CalendarHeart, CalendarPlus, Ticket } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
@@ -10,7 +11,7 @@ import { isToolOnline } from '@/lib/toolOnline'
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('events')
-  return { title: `KUMANI Events · ${t('tagline')}`, description: t('heroText') }
+  return pageMetadata('/events', { title: { absolute: `KUMANI Events · ${t('tagline')}` }, description: t('heroText') })
 }
 
 // KUMANI Events: calendario pubblico degli eventi della community. Si vede

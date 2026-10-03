@@ -1,3 +1,5 @@
+import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/seo'
 import { getTranslations } from 'next-intl/server'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { ArrowLeft, ArrowRight, BookOpen, CheckCircle2, Crown } from 'lucide-react'
@@ -17,6 +19,11 @@ import { toolGuideFor } from '@/lib/guides/toolGuides'
 // Admin → Marketplace), prezzo e pulsante adatto alla situazione:
 // non iscritto → registrazione; Base con carta → passaggio a Pro (Stripe
 // calcola la differenza); altrimenti → checkout Pro.
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('plans')
+  return pageMetadata('/pro', { title: t('proTitle'), description: t('proSubtitle') })
+}
+
 export default async function ProPage({
   params,
   searchParams,

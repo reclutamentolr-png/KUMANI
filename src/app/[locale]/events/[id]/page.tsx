@@ -1,4 +1,5 @@
 import { cache } from 'react'
+import { pageMetadata } from '@/lib/seo'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getLocale, getTranslations } from 'next-intl/server'
@@ -31,7 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params
   const event = await loadEvent(id)
   if (!event) return { title: 'KUMANI Events' }
-  return { title: `${event.title} · KUMANI Events`, description: event.description.slice(0, 160) }
+  return pageMetadata(`/events/${id}`, { title: { absolute: `${event.title} · KUMANI Events` }, description: event.description.slice(0, 160) })
 }
 
 // Scheda di un evento: pubblica. Indirizzo esatto e link online arrivano

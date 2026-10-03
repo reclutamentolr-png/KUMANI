@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/seo'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { ArrowLeft, Info, Lock } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
@@ -14,7 +15,7 @@ const LIST_SECTIONS = new Set([2, 3, 6])
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('privacyPage')
-  return { title: t('metaTitle'), description: t('metaDescription') }
+  return pageMetadata('/privacy', { title: t('metaTitle'), description: t('metaDescription') })
 }
 
 export default async function PrivacyPage() {

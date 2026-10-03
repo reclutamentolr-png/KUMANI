@@ -1,3 +1,5 @@
+import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/seo'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { ArrowRight, Sparkles } from 'lucide-react'
@@ -13,6 +15,15 @@ type Inviter = { first_name: string; last_name: string; referral_code: string }
 // Pagina pubblica di uno strumento, quella che i Kumani condividono dal
 // pulsante "Condividi" dentro ogni strumento (?ref=CODICE). Chi arriva qui
 // si iscrive con il codice invito di chi ha condiviso già inserito.
+export async function generateMetadata({ params }: { params: Promise<{ tool: string }> }): Promise<Metadata> {
+  const { tool: toolName } = await params
+  const tm = await getTranslations('marketplace')
+  const tool = getMarketplaceTools(tm).find((item) => item.toolName === toolName)
+  if (!tool) return {}
+  // Indirizzo canonico senza ?ref: tutte le condivisioni contano come una pagina
+  return pageMetadata(`/strumenti/${tool.toolName}`, { title: tool.title, description: tool.description })
+}
+
 export default async function ToolSharePage({
   params,
   searchParams,

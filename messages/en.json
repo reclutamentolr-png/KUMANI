@@ -8101,5 +8101,17 @@
     "joinTitle": "Join KUMANI too",
     "joinText": "Useful services every day and a community that helps each other. Sign up for free with {name}’s invitation.",
     "joinButton": "Sign up for free"
+  },
+  "seo": {
+    "siteTitle": "KUMANI – Hands that lend you a hand",
+    "siteDescription": "KUMANI is an ecosystem of everyday digital tools for freelancers, individuals and families: dynamic QR codes, link in bio, scam checks, expense tracking and more. Fair price, public rules.",
+    "homeTitle": "KUMANI – Digital tools and a community that helps each other",
+    "homeDescription": "You bring the ideas, KUMANI lends a hand: over 35 digital services in one app, Free, Base and Pro plans, and a community that truly helps each other.",
+    "registerTitle": "Sign up for free",
+    "registerDescription": "Create your free KUMANI account in seconds and try the free services right away.",
+    "loginTitle": "Log in",
+    "loginDescription": "Log in to your KUMANI account.",
+    "termsTitle": "Terms of service",
+    "termsDescription": "KUMANI terms of service and benefits programme rules: points, bonuses, coupons and initiatives."
   }
 }

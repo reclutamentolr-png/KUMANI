@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/seo'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { ArrowLeft, CheckCircle2, ExternalLink, FileText, HandCoins, HeartHandshake, Landmark, Users } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
@@ -7,7 +8,7 @@ import { euroFormat } from '@/lib/donationTypes'
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('donations')
-  return { title: t('pageTitle'), description: t('pageIntro') }
+  return pageMetadata('/donazioni', { title: t('pageTitle'), description: t('pageIntro') })
 }
 
 // Pagina pubblica delle donazioni: quanto è stato raccolto e versato, a chi,

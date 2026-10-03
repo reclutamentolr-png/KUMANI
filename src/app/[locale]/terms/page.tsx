@@ -1,5 +1,7 @@
 import Link from '@/components/LocalizedLink'
 import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
+import { pageMetadata } from '@/lib/seo'
 import {
   ArrowLeft,
   Shield,
@@ -10,10 +12,9 @@ import {
   FileText
 } from 'lucide-react'
 
-export const metadata: Metadata = {
-  title: 'Termini di Servizio e Regolamento Programma Vantaggi',
-  description:
-    'Termini di servizio della piattaforma Kumani e regolamento trasparente del Programma Vantaggi: punti, bonus, coupon e iniziative esclusive.'
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('seo')
+  return pageMetadata('/terms', { title: t('termsTitle'), description: t('termsDescription') })
 }
 
 const LAST_UPDATE = '30 settembre 2026'

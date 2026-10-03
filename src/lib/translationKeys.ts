@@ -124,6 +124,7 @@ export const SECTION_LABELS: Record<string, string> = {
   pushInvite: 'Dashboard: invito ad attivare le notifiche',
   fincheck: 'FinCheck (test di educazione finanziaria e check-up del bilancio)',
   businessCard: 'Biglietto da visita (Documenti e pagina del QR)',
+  seo: 'Google: titoli e descrizioni del sito',
   lateSponsor: 'Invito indicato dopo la registrazione',
   verification: 'Verifica identità',
   agenda: 'Agenda (prossimi giorni)',

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/seo'
 import type { ReactNode } from 'react'
 import { getTranslations } from 'next-intl/server'
 import {
@@ -22,7 +23,7 @@ import { createClient } from '@/lib/supabase/server'
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('contactPage')
-  return { title: t('metaTitle'), description: t('metaDescription') }
+  return pageMetadata('/contact', { title: t('metaTitle'), description: t('metaDescription') })
 }
 
 const TOPICS: ContactTopic[] = ['support', 'billing', 'pro', 'partnership', 'privacy', 'other']

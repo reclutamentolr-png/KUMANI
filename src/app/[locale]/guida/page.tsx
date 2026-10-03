@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/seo'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { ArrowLeft, ArrowRight, BookOpen, Briefcase, Clock, Crown, Footprints, FolderOpen, Megaphone, Leaf, ShieldCheck, Sparkles, Users, Wallet, Wrench } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
@@ -8,7 +9,7 @@ import type { GuideCategory } from '@/lib/guides/types'
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('guides')
-  return { title: t('metaTitle'), description: t('metaDescription') }
+  return pageMetadata('/guida', { title: t('metaTitle'), description: t('metaDescription') })
 }
 
 const CATEGORY_ICONS: Record<GuideCategory, typeof Wallet> = {

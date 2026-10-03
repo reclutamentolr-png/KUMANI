@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/seo'
 import Image from 'next/image'
 import { notFound, redirect } from 'next/navigation'
 import { getLocale, getTranslations } from 'next-intl/server'
@@ -19,12 +20,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const t = await getTranslations('guides')
   const guide = (await getGuidesContent(locale)).guides.find((g) => g.slug === slug)
   if (!guide) return { title: t('metaTitle') }
-  return {
-    title: `${guide.title} · ${t('linkLabel')} KUMANI`,
+  return pageMetadata(`/guida/${guide.slug}`, {
+    title: { absolute: `${guide.title} · ${t('linkLabel')} KUMANI` },
     description: guide.summary,
     // Solo le guide pubbliche vanno su Google
     ...(PUBLIC_GUIDES.includes(guide.slug) ? {} : { robots: { index: false, follow: false } }),
-  }
+  })
 }
 
 // Una guida: passi numerati, ognuno con la sua schermata del telefono

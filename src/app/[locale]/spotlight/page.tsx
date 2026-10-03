@@ -1,3 +1,5 @@
+import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/seo'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
@@ -22,6 +24,11 @@ interface ArchiveRow {
 // Pagina pubblica (nessun controllo di autenticazione, come /ref/[code]):
 // è la "vetrina" pensata per essere condivisa e vista anche da chi non è
 // ancora iscritto a KUMANI.
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('spotlight')
+  return pageMetadata('/spotlight', { title: t('title'), description: t('subtitle') })
+}
+
 export default async function SpotlightPage() {
   if (!(await isToolOnline('spotlight'))) return <ServiceStopped />
   const t = await getTranslations('spotlight')

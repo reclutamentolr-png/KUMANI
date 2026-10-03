@@ -8101,5 +8101,17 @@
     "joinTitle": "Adira também à KUMANI",
     "joinText": "Serviços úteis todos os dias e uma comunidade que se ajuda. Registe-se grátis com o convite de {name}.",
     "joinButton": "Registe-se grátis"
+  },
+  "seo": {
+    "siteTitle": "KUMANI – Mãos que lhe dão uma mão",
+    "siteDescription": "A KUMANI é um ecossistema de ferramentas digitais úteis todos os dias para trabalhadores independentes, particulares e famílias: códigos QR dinâmicos, link na bio, verificação antiburla, gestão de despesas e mais. Preço justo, regras públicas.",
+    "homeTitle": "KUMANI – Ferramentas digitais e uma comunidade que se ajuda",
+    "homeDescription": "Você traz as ideias, a KUMANI dá uma mão: mais de 35 serviços digitais numa só app, planos Grátis, Base e Pro, e uma comunidade que se ajuda de verdade.",
+    "registerTitle": "Registe-se grátis",
+    "registerDescription": "Crie a sua conta KUMANI grátis em segundos e experimente já os serviços gratuitos.",
+    "loginTitle": "Entrar",
+    "loginDescription": "Entre na sua conta KUMANI.",
+    "termsTitle": "Termos de serviço",
+    "termsDescription": "Termos de serviço da KUMANI e regulamento do programa de vantagens: pontos, bónus, cupões e iniciativas."
   }
 }
