@@ -7338,8 +7338,8 @@
         }
       },
       "passBold": "Need just one service? ",
-      "passText": "Activate it with a €10 yearly Pass: one-off payment, no subscription.",
-      "notes": "You sign up for free and get fifteen services straight away. The Base plan, 49 euros a year, is for individuals and families. The Pro plan, 149 euros a year, is for those who work with clients and can be tried free for fifteen days. Anyone who needs just one service can buy a 10-euro yearly Pass."
+      "passText": "Activate it with a yearly Pass from {price}: one-off payment, no subscription.",
+      "notes": "You sign up for free and get fifteen services straight away. The Base plan, 49 euros a year, is for individuals and families. The Pro plan, 149 euros a year, is for those who work with clients and can be tried free for fifteen days. Anyone who needs just one service can buy a yearly Pass, from {price}."
     },
     "s9": {
       "title": "The tools for your business",

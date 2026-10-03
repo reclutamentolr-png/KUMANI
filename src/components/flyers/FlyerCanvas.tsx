@@ -80,7 +80,7 @@ const FlyerCanvas = forwardRef<HTMLDivElement, Props>(function FlyerCanvas({ con
       <div style={{ minWidth: 0 }}>
         <div style={{ fontSize: 21, fontWeight: 700, color: GOLD, textTransform: 'uppercase', letterSpacing: 1.5 }}>{texts.planLabel}</div>
         <div style={{ fontSize: 38, fontWeight: 800, marginTop: 2 }}>{texts.priceLabel}</div>
-        {texts.passLabel && <div style={{ fontSize: 20, color: dark ? '#cfc6b0' : MUTED, marginTop: 4 }}>{texts.passLabel}</div>}
+        {texts.passLabel && <div style={{ fontSize: 20, lineHeight: 1.35, whiteSpace: 'pre-line', color: dark ? '#cfc6b0' : MUTED, marginTop: 4 }}>{texts.passLabel}</div>}
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 18, flex: 'none' }}>
         <div style={{ textAlign: 'right', fontSize: 21, color: dark ? '#cfc6b0' : MUTED }}>

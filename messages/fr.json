@@ -7338,8 +7338,8 @@
         }
       },
       "passBold": "Besoin d’un seul service ? ",
-      "passText": "Activez-le avec un Pass annuel à 10 € : paiement unique, sans abonnement.",
-      "notes": "On s’inscrit gratuitement et on dispose tout de suite de quinze services. L’offre Base, 49 euros par an, est pour les particuliers et les familles. L’offre Pro, 149 euros par an, est pour ceux qui travaillent avec des clients et s’essaie gratuitement pendant quinze jours. Pour un seul service, il existe un Pass annuel à 10 euros."
+      "passText": "Activez-le avec un Pass annuel à partir de {price} : paiement unique, sans abonnement.",
+      "notes": "On s’inscrit gratuitement et on dispose tout de suite de quinze services. L’offre Base, 49 euros par an, est pour les particuliers et les familles. L’offre Pro, 149 euros par an, est pour ceux qui travaillent avec des clients et s’essaie gratuitement pendant quinze jours. Pour un seul service, il existe un Pass annuel à partir de {price}."
     },
     "s9": {
       "title": "Les outils pour votre activité",

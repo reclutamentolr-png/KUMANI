@@ -7338,8 +7338,8 @@
         }
       },
       "passBold": "Ti serve un solo servizio? ",
-      "passText": "Attivalo con un Pass annuale da 10 €: pagamento unico, senza abbonamento.",
-      "notes": "Ci si registra gratis e si hanno subito quindici servizi. Il piano Base, 49 euro l’anno, è per privati e famiglie. Il piano Pro, 149 euro l’anno, è per chi lavora con i clienti e si prova gratis per quindici giorni. Chi vuole un solo servizio può attivare un Pass annuale da 10 euro."
+      "passText": "Attivalo con un Pass annuale, a partire da {price}: pagamento unico, senza abbonamento.",
+      "notes": "Ci si registra gratis e si hanno subito quindici servizi. Il piano Base, 49 euro l’anno, è per privati e famiglie. Il piano Pro, 149 euro l’anno, è per chi lavora con i clienti e si prova gratis per quindici giorni. Chi vuole un solo servizio può attivare un Pass annuale, a partire da {price}."
     },
     "s9": {
       "title": "Gli strumenti per la tua attività",

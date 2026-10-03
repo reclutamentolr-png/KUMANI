@@ -7338,8 +7338,8 @@
         }
       },
       "passBold": "Precisa de um só serviço? ",
-      "passText": "Ative-o com um Passe anual de 10 €: pagamento único, sem subscrição.",
-      "notes": "Regista-se grátis e tem logo quinze serviços. O plano Base, 49 euros por ano, é para particulares e famílias. O plano Pro, 149 euros por ano, é para quem trabalha com clientes e experimenta-se grátis durante quinze dias. Quem quer um só serviço pode ativar um Passe anual de 10 euros."
+      "passText": "Ative-o com um Passe anual a partir de {price}: pagamento único, sem subscrição.",
+      "notes": "Regista-se grátis e tem logo quinze serviços. O plano Base, 49 euros por ano, é para particulares e famílias. O plano Pro, 149 euros por ano, é para quem trabalha com clientes e experimenta-se grátis durante quinze dias. Quem quer um só serviço pode ativar um Passe anual a partir de {price}."
     },
     "s9": {
       "title": "As ferramentas para o seu negócio",

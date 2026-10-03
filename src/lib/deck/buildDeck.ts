@@ -52,8 +52,12 @@ async function icon(name: string, hex: string, px = 256): Promise<string> {
   return data
 }
 
-export async function buildDeck(rawTexts: unknown, locale: string): Promise<Blob> {
+export async function buildDeck(rawTexts: unknown, locale: string, minPassEur: number): Promise<Blob> {
   const S: T = arrays(rawTexts)
+  // {price} = Pass più economico, con il formato di prezzo della lingua
+  const price = new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', minimumFractionDigits: minPassEur % 1 ? 2 : 0 }).format(minPassEur)
+  S.s8.passText = String(S.s8.passText).replace('{price}', price)
+  S.s8.notes = String(S.s8.notes).replace('{price}', price)
   const k = SCALE[locale] ?? 1
   const fs = (n: number) => Math.round(n * k * 2) / 2
   const lg = LANG[locale] ?? 'it-IT'

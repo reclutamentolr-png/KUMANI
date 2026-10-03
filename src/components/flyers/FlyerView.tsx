@@ -50,7 +50,11 @@ export default function FlyerView({ config, plan, title, inviteUrl, screenshotLa
     category: t(`cat_${config.category}`),
     planLabel: plan.plan === 'free' ? t('includedFree') : plan.plan === 'pro' ? t('includedPro') : t('includedBase'),
     priceLabel: plan.plan === 'free' ? t('priceFree') : t('pricePerYear', { price: money(plan.planPrice) }),
-    passLabel: plan.plan === 'free' ? t('freeNote') : plan.plan === 'pro' ? t('proTrial') : plan.passPrice ? t('passAlso', { price: money(plan.passPrice) }) : null,
+    passLabel:
+      plan.plan === 'free'
+        ? t('freeNote')
+        : [plan.passPrice ? t('passAlso', { price: money(plan.passPrice) }) : null, plan.plan === 'pro' ? t('proTrial') : null].filter(Boolean).join('
+') || null,
     cta: t('cta'),
     url: 'kumani.io',
     tagLine: t('tagLine'),

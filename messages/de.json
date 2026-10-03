@@ -7338,8 +7338,8 @@
         }
       },
       "passBold": "Nur ein Dienst nötig? ",
-      "passText": "Aktiviere ihn mit einem Jahrespass für 10 €: einmalige Zahlung, kein Abo.",
-      "notes": "Man meldet sich kostenlos an und hat sofort fünfzehn Dienste. Der Base-Tarif, 49 Euro im Jahr, ist für Privatpersonen und Familien. Der Pro-Tarif, 149 Euro im Jahr, ist für alle, die mit Kunden arbeiten, und lässt sich fünfzehn Tage kostenlos testen. Wer nur einen Dienst braucht, kann einen Jahrespass für 10 Euro aktivieren."
+      "passText": "Aktiviere ihn mit einem Jahrespass ab {price}: einmalige Zahlung, kein Abo.",
+      "notes": "Man meldet sich kostenlos an und hat sofort fünfzehn Dienste. Der Base-Tarif, 49 Euro im Jahr, ist für Privatpersonen und Familien. Der Pro-Tarif, 149 Euro im Jahr, ist für alle, die mit Kunden arbeiten, und lässt sich fünfzehn Tage kostenlos testen. Wer nur einen Dienst braucht, kann einen Jahrespass ab {price} aktivieren."
     },
     "s9": {
       "title": "Die Werkzeuge für dein Geschäft",
