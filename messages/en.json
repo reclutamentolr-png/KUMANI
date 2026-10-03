@@ -7593,5 +7593,19 @@
     "s7": "KUMANI uses only technical cookies, needed to keep you logged in and make the site work. We do not use profiling or advertising cookies.",
     "s8t": "Contact",
     "s8": "To exercise your rights or for any privacy question, write to {email}."
+  },
+  "lateSponsor": {
+    "title": "Did someone invite you?",
+    "text": "If a Kumano recommended KUMANI and you didn’t enter their code when signing up, you can do it now: you’ll join their star. You have until {date}, only once.",
+    "placeholder": "Invite code, e.g. IT-1234567-A",
+    "button": "Confirm",
+    "confirm": "Confirm the code {code}? It can’t be changed later.",
+    "done": "Done! You are now in {name}’s star.",
+    "error_invalid_code": "Invalid code: check that you typed it correctly.",
+    "error_self": "You can’t enter your own code.",
+    "error_expired": "The time to name who invited you has expired: write to support.",
+    "error_has_team": "There are already people below you: write to support for help.",
+    "error_already": "You have already named who invited you.",
+    "error_generic": "Something went wrong. Please try again shortly."
   }
 }

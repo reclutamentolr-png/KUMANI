@@ -96,6 +96,7 @@ import PlatformsPanel from '@/components/admin/PlatformsPanel'
 import EmailSetupPanel from '@/components/admin/EmailSetupPanel'
 import EmailComposePanel from '@/components/admin/EmailComposePanel'
 import DocumentsAdminPanel from '@/components/admin/DocumentsAdminPanel'
+import AdminLateSponsor from '@/components/admin/AdminLateSponsor'
 import ReportsPanel, { type ReportTab } from '@/components/admin/ReportsPanel'
 import PassCodesPanel from '@/components/admin/PassCodesPanel'
 import ToolPassSetting from '@/components/admin/ToolPassSetting'
@@ -3376,6 +3377,7 @@ L'accesso viene registrato.`)) return
                 ))}
               </select>
             </div>
+            {hasPermission(permissions, 'users.write') && <AdminLateSponsor userId={selectedUser.id} />}
           </div>
           <div className="flex gap-3 justify-end">
             <button onClick={() => setIsModalOpen(false)} className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 font-medium" disabled={isSaving}>Annulla</button>

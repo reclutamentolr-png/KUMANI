@@ -7593,5 +7593,19 @@
     "s7": "KUMANI usa solo cookie tecnici, necessari per farti restare collegato e far funzionare il sito. Non usiamo cookie di profilazione né pubblicitari.",
     "s8t": "Contatti",
     "s8": "Per esercitare i tuoi diritti o per qualsiasi domanda sulla privacy scrivi a {email}."
+  },
+  "lateSponsor": {
+    "title": "Ti ha invitato qualcuno?",
+    "text": "Se un Kumano ti ha consigliato KUMANI e alla registrazione non hai inserito il suo codice, puoi farlo ora: entri nella sua stella. Hai tempo fino al {date}, una sola volta.",
+    "placeholder": "Codice invito, es. IT-1234567-A",
+    "button": "Conferma",
+    "confirm": "Confermi il codice {code}? Non si potrà cambiare.",
+    "done": "Fatto! Ora sei nella stella di {name}.",
+    "error_invalid_code": "Codice non valido: controlla di averlo scritto bene.",
+    "error_self": "Non puoi inserire il tuo stesso codice.",
+    "error_expired": "Il tempo per indicare chi ti ha invitato è scaduto: scrivi al supporto.",
+    "error_has_team": "Ci sono già persone sotto di te: scrivi al supporto per farti aiutare.",
+    "error_already": "Hai già indicato chi ti ha invitato.",
+    "error_generic": "Qualcosa è andato storto. Riprova tra poco."
   }
 }

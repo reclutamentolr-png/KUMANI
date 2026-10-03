@@ -7593,5 +7593,19 @@
     "s7": "KUMANI verwendet nur technische Cookies, die nötig sind, damit du angemeldet bleibst und die Website funktioniert. Wir verwenden keine Profiling- oder Werbe-Cookies.",
     "s8t": "Kontakt",
     "s8": "Um deine Rechte auszuüben oder für Fragen zum Datenschutz schreib an {email}."
+  },
+  "lateSponsor": {
+    "title": "Hat dich jemand eingeladen?",
+    "text": "Wenn dir ein Kumano KUMANI empfohlen hat und du bei der Anmeldung seinen Code nicht eingegeben hast, kannst du das jetzt tun: Du kommst in seinen Stern. Möglich bis {date}, nur einmal.",
+    "placeholder": "Einladungscode, z. B. IT-1234567-A",
+    "button": "Bestätigen",
+    "confirm": "Code {code} bestätigen? Er kann danach nicht geändert werden.",
+    "done": "Erledigt! Du bist jetzt im Stern von {name}.",
+    "error_invalid_code": "Ungültiger Code: Prüfe die Schreibweise.",
+    "error_self": "Du kannst nicht deinen eigenen Code eingeben.",
+    "error_expired": "Die Frist ist abgelaufen: Schreib an den Support.",
+    "error_has_team": "Unter dir sind bereits Personen: Schreib an den Support.",
+    "error_already": "Du hast bereits angegeben, wer dich eingeladen hat.",
+    "error_generic": "Etwas ist schiefgelaufen. Bitte versuche es gleich noch einmal."
   }
 }

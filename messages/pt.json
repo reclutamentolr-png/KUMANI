@@ -7593,5 +7593,19 @@
     "s7": "A KUMANI usa apenas cookies técnicos, necessários para manter a sessão e fazer o site funcionar. Não usamos cookies de perfil nem publicitários.",
     "s8t": "Contactos",
     "s8": "Para exercer os seus direitos ou para qualquer pergunta sobre privacidade escreva para {email}."
+  },
+  "lateSponsor": {
+    "title": "Alguém o convidou?",
+    "text": "Se um Kumano lhe recomendou a KUMANI e no registo não pôs o código dele, pode fazê-lo agora: entra na estrela dele. Tem até {date}, uma só vez.",
+    "placeholder": "Código de convite, ex. IT-1234567-A",
+    "button": "Confirmar",
+    "confirm": "Confirma o código {code}? Não poderá ser alterado.",
+    "done": "Feito! Agora está na estrela de {name}.",
+    "error_invalid_code": "Código inválido: verifique se o escreveu bem.",
+    "error_self": "Não pode inserir o seu próprio código.",
+    "error_expired": "O prazo para indicar quem o convidou terminou: escreva ao apoio.",
+    "error_has_team": "Já há pessoas abaixo de si: escreva ao apoio para obter ajuda.",
+    "error_already": "Já indicou quem o convidou.",
+    "error_generic": "Algo correu mal. Tente novamente daqui a pouco."
   }
 }

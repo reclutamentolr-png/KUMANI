@@ -20,6 +20,8 @@ import { getMarketplaceAccessState } from '@/lib/marketplaceAccess'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { getFavoriteToolNames } from '@/lib/favorites'
 import DashboardTipo2 from '@/components/dashboard/DashboardTipo2'
+import LateSponsorCard from '@/components/dashboard/LateSponsorCard'
+import { getLateSponsorStatus } from '@/lib/lateSponsor'
 import DashboardReturnScroll from '@/components/dashboard/DashboardReturnScroll'
 import QuickNav from '@/components/QuickNav'
 import DashboardTour from '@/components/dashboard/DashboardTour'
@@ -79,6 +81,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
 
   // 6. URL di condivisione
   const shareUrl = `${SITE_URL}/${locale}/ref/${profile?.referral_code}`
+  const lateSponsor = await getLateSponsorStatus(user.id)
 
   // Prezzo del piano Base come lo addebita Stripe (lo stesso del pagamento),
   // per il pulsante "Abbonati ora"
@@ -236,6 +239,9 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         <ActivityTracker userId={user.id} />
         <DashboardReturnScroll />
+
+        {/* Iscritto senza codice: può ancora indicare chi l'ha invitato */}
+        {lateSponsor.eligible && lateSponsor.until && <LateSponsorCard until={lateSponsor.until} />}
 
         {/* Messaggi non letti dalla Bacheca: in cima, prima di tutto */}
         {unreadMessagesCount > 0 && <BachecaMessagesAlert initialCount={unreadMessagesCount} />}

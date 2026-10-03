@@ -7593,5 +7593,19 @@
     "s7": "KUMANI utilise uniquement des cookies techniques, nécessaires pour rester connecté et faire fonctionner le site. Nous n’utilisons pas de cookies de profilage ni publicitaires.",
     "s8t": "Contact",
     "s8": "Pour exercer vos droits ou pour toute question sur la confidentialité, écrivez à {email}."
+  },
+  "lateSponsor": {
+    "title": "Quelqu’un vous a invité ?",
+    "text": "Si un Kumano vous a recommandé KUMANI et que vous n’avez pas saisi son code à l’inscription, vous pouvez le faire maintenant : vous rejoindrez son étoile. Vous avez jusqu’au {date}, une seule fois.",
+    "placeholder": "Code d’invitation, ex. IT-1234567-A",
+    "button": "Confirmer",
+    "confirm": "Confirmer le code {code} ? Il ne pourra plus être modifié.",
+    "done": "C’est fait ! Vous êtes maintenant dans l’étoile de {name}.",
+    "error_invalid_code": "Code non valide : vérifiez qu’il est bien saisi.",
+    "error_self": "Vous ne pouvez pas saisir votre propre code.",
+    "error_expired": "Le délai pour indiquer qui vous a invité est dépassé : écrivez au support.",
+    "error_has_team": "Des personnes sont déjà inscrites sous vous : écrivez au support pour obtenir de l’aide.",
+    "error_already": "Vous avez déjà indiqué qui vous a invité.",
+    "error_generic": "Un problème est survenu. Réessayez dans un instant."
   }
 }
