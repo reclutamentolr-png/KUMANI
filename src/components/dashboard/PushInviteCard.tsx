@@ -24,13 +24,13 @@ export default function PushInviteCard() {
     } catch {
       // senza memoria del browser l'invito resta visibile
     }
-    getPushDeviceStatus().then(({ status }) => {
+    getPushDeviceStatus(locale).then(({ status }) => {
       if (!cancelled && status === 'off') setVisible(true)
     })
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [locale])
 
   const dismiss = () => {
     try {

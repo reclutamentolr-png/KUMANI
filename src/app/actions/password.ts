@@ -80,6 +80,10 @@ export async function changeMyPassword(current: string, next: string, locale: st
     return { success: false, code: 'error' }
   }
 
+  // Fuori tutti gli altri dispositivi (anche un eventuale intruso), resta
+  // collegato solo quello da cui si è cambiata la password
+  await supabase.auth.signOut({ scope: 'others' }).catch(() => {})
+
   const { data: profile } = await serviceClient().from('profiles').select('first_name').eq('id', user.id).maybeSingle()
   const lang = locales.includes(locale) ? locale : defaultLocale
   await sendPasswordChangedEmail(user.email, profile?.first_name ?? null, lang).catch((err) =>

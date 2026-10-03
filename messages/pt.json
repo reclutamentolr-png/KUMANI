@@ -362,7 +362,9 @@
     "tooManyEmailsError": "Pediu demasiados e-mails em pouco tempo: aguarde alguns minutos e tente novamente.",
     "tooManyRequestsError": "Demasiadas tentativas em pouco tempo: aguarde alguns minutos e tente novamente.",
     "invalidEmailError": "Endereço de e-mail inválido: verifique se está bem escrito.",
-    "genericAuthError": "Algo correu mal. Tente novamente daqui a pouco."
+    "genericAuthError": "Algo correu mal. Tente novamente daqui a pouco.",
+    "haveCode": "Já recebi um código",
+    "haveCodeNeedEmail": "Escreva primeiro o seu email e depois toque em «Já recebi um código»."
   },
   "dashboard": {
     "receivedLabel": "Da Comunidade",

@@ -16,7 +16,7 @@ function urlBase64ToUint8Array(base64String: string) {
 }
 
 // Stato di questo dispositivo (registra il service worker se serve)
-export async function getPushDeviceStatus(): Promise<{ status: PushDeviceStatus; subscription: PushSubscription | null }> {
+export async function getPushDeviceStatus(locale?: string): Promise<{ status: PushDeviceStatus; subscription: PushSubscription | null }> {
   const ios = /iPad|iPhone|iPod/.test(navigator.userAgent)
   const standalone =
     window.matchMedia('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone === true
@@ -28,6 +28,9 @@ export async function getPushDeviceStatus(): Promise<{ status: PushDeviceStatus;
   try {
     const registration = await navigator.serviceWorker.register('/sw.js', { scope: '/', updateViaCache: 'none' })
     const subscription = await registration.pushManager.getSubscription()
+    // Il dispositivo appartiene a chi è collegato adesso (anche se prima era
+    // di un altro account uscito senza "Esci")
+    if (subscription && locale) await savePushSubscription(JSON.parse(JSON.stringify(subscription)), locale, navigator.userAgent).catch(() => {})
     return { status: subscription ? 'on' : 'off', subscription }
   } catch {
     return { status: 'unsupported', subscription: null }

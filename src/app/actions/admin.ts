@@ -190,6 +190,15 @@ export async function adminUpdateProfile(userId: string, profileData: Record<str
     const { data: current } = await supabaseAdmin.from('profiles').select('deleted_at').eq('id', userId).maybeSingle()
     if (current?.deleted_at) return { success: false, error: 'Account cancellato: non si può sbloccare' }
   }
+  // Blocco, abbonamento e punti di un amministratore completo o di sé
+  // stessi: solo un amministratore completo
+  const sensitive = Object.keys(profileData).some((key) => key !== 'is_admin')
+  if (sensitive && !(await isFullAdmin(admin.id))) {
+    const { data: target } = await supabaseAdmin.from('profiles').select('is_admin').eq('id', userId).maybeSingle()
+    if (target?.is_admin || userId === admin.id) {
+      return { success: false, error: 'Solo un amministratore completo può modificare un amministratore o il proprio account' }
+    }
+  }
   if ('is_admin' in profileData) {
     const { data: current } = await supabaseAdmin.from('profiles').select('is_admin').eq('id', userId).maybeSingle()
     if (Boolean(current?.is_admin) !== Boolean(profileData.is_admin) && !(await isFullAdmin(admin.id))) {

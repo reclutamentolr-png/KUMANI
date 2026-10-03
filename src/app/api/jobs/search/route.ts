@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { searchJobs } from '@/lib/jobs/search'
 import { DEFAULT_FILTERS, isJobCountry, type JobFilters, type JobSearchEvent } from '@/lib/jobs/types'
@@ -88,7 +89,13 @@ export async function POST(request: NextRequest) {
         send({ type: 'error', code: 'failed' })
       } finally {
         // Nessun risultato per un problema della fonte: la ricerca non conta
-        if (!gotResult && claimed.run_id) await supabase.rpc('refund_job_search', { p_run_id: claimed.run_id })
+        if (!gotResult && claimed.run_id) {
+          // Rimborso solo dal server (l'utente non può azzerarsi il limite)
+          const service = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+            auth: { autoRefreshToken: false, persistSession: false },
+          })
+          await service.rpc('refund_job_search_for', { p_run_id: claimed.run_id, p_user: user.id })
+        }
         controller.close()
       }
     },

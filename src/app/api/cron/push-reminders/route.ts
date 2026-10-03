@@ -38,7 +38,7 @@ export async function GET(request: Request) {
       .select('id, subscription_expires_at, subscription_source')
       .in('id', chunk)
       .eq('subscription_status', 'active')
-      .neq('subscription_source', 'stripe')
+      .or('subscription_source.is.null,subscription_source.neq.stripe')
       .gt('subscription_expires_at', new Date(now).toISOString())
       .lte('subscription_expires_at', new Date(now + 3 * DAY).toISOString())
     for (const p of expiring ?? []) {

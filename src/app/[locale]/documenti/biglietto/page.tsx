@@ -29,6 +29,9 @@ export default async function BusinessCardPage() {
     supabase.from('business_cards').select('design, show_phone, show_whatsapp, show_email').eq('user_id', user.id).maybeSingle<BusinessCardSettings>(),
   ])
   const code = profile?.referral_code
+  // La pagina del QR esiste solo per chi ha il biglietto: alla prima apertura
+  // si crea con le impostazioni di partenza (contatti nascosti)
+  if (code && !card) await supabase.from('business_cards').insert({ user_id: user.id }).then(() => {})
   // Il QR porta sempre al dominio pubblico (mai a localhost)
   const site = /localhost|127\.0\.0\.1/.test(SITE_URL) ? 'https://kumani.io' : SITE_URL
   const prefix = locale === defaultLocale ? '' : `/${locale}`

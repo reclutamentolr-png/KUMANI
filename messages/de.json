@@ -362,7 +362,9 @@
     "tooManyEmailsError": "Du hast in kurzer Zeit zu viele E-Mails angefordert: Warte ein paar Minuten und versuch es erneut.",
     "tooManyRequestsError": "Zu viele Versuche in kurzer Zeit: Warte ein paar Minuten und versuch es erneut.",
     "invalidEmailError": "Ungültige E-Mail-Adresse: Prüfe, ob du sie richtig geschrieben hast.",
-    "genericAuthError": "Etwas hat nicht geklappt. Versuch es gleich noch einmal."
+    "genericAuthError": "Etwas hat nicht geklappt. Versuch es gleich noch einmal.",
+    "haveCode": "Ich habe bereits einen Code",
+    "haveCodeNeedEmail": "Gib zuerst deine E-Mail ein und tippe dann auf „Ich habe bereits einen Code“."
   },
   "dashboard": {
     "receivedLabel": "Aus der Community",

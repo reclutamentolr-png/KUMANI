@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { safeFetch } from '@/lib/safeFetch'
 import { createClient } from '@/lib/supabase/server'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
@@ -372,7 +373,7 @@ async function analyzeURL(url: string): Promise<QRAnalysis['analysis']> {
 
     // Attempt to resolve redirect chain
     try {
-      const res = await fetch(url, {
+      const res = await safeFetch(url, {
         method: 'HEAD',
         redirect: 'manual',
         headers: { 'User-Agent': 'SVAT-QR-Scanner/1.0' },
@@ -388,7 +389,7 @@ async function analyzeURL(url: string): Promise<QRAnalysis['analysis']> {
         for (let i = 0; i < 5; i++) {
           redirectChain.push({ url: current, final: false })
           try {
-            const redirectRes = await fetch(current, {
+            const redirectRes = await safeFetch(current, {
               method: 'HEAD',
               redirect: 'manual',
               headers: { 'User-Agent': 'SVAT-QR-Scanner/1.0' },
@@ -412,7 +413,7 @@ async function analyzeURL(url: string): Promise<QRAnalysis['analysis']> {
   } else {
     // For direct URLs, follow redirects once to check
     try {
-      const res = await fetch(url, {
+      const res = await safeFetch(url, {
         method: 'HEAD',
         redirect: 'follow',
         headers: { 'User-Agent': 'SVAT-QR-Scanner/1.0' },

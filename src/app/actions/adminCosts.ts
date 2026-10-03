@@ -127,7 +127,9 @@ export async function adminCostsSummary() {
   const active = list.costs.filter((c) => isActiveOn(c, day))
   const monthlyRun = active.reduce((sum, c) => sum + (c.frequency === 'monthly' ? c.amount_cents : c.frequency === 'yearly' ? Math.round(c.amount_cents / 12) : 0), 0)
   const yearlyRun = active.reduce((sum, c) => sum + (c.frequency === 'monthly' ? c.amount_cents * 12 : c.frequency === 'yearly' ? c.amount_cents : 0), 0)
-  const variableTotal = list.expenses.reduce((sum, e) => sum + e.amount_cents, 0)
+  // Tutte le spese (l'elenco mostrato è limitato alle più recenti)
+  const { data: allExpenses } = await db().from('platform_expenses').select('amount_cents')
+  const variableTotal = (allExpenses ?? []).reduce((sum, e) => sum + (e.amount_cents as number), 0)
   const variableThisMonth = list.expenses.filter((e) => e.spent_on.startsWith(thisMonth)).reduce((sum, e) => sum + e.amount_cents, 0)
   const toComplete = list.costs.filter((c) => c.amount_cents === 0).length
 

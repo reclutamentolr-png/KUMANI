@@ -15,7 +15,6 @@ Downloaded at 2000 px width on 2026-10-03.
 | calcolatrici.webp | Calculator, laptop, notebook and coffee mug on a desk (mirrored horizontally so the calculator keys read correctly) | Mikhail Nilov | https://www.pexels.com/photo/a-person-sitting-a-wooden-table-with-a-notepad-and-laptop-using-a-calculator-6963847/ | Pexels License |
 | friends-dinner.webp | Friends sharing a pasta dinner outdoors | Askar Abayev | https://www.pexels.com/photo/unrecognizable-woman-serving-delicious-pasta-with-meatballs-to-man-during-dinner-5638705/ | Pexels License |
 | group-travel.webp | Friends with backpacks walking in a forest | Ivan S | https://www.pexels.com/photo/people-carrying-backpack-walking-in-the-forest-9629915/ | Pexels License |
-| relax-headphones.webp | Woman relaxing with headphones in warm sunlight | Tirachard Kumtanom | https://www.pexels.com/photo/woman-wearing-black-sleeveless-dress-holding-white-headphone-at-daytime-1001850/ | Pexels License |
 | planner-agenda.webp | Hand writing in a weekly planner | Karola G (kaboompics.com) | https://www.pexels.com/photo/person-writing-on-a-planner-4968703/ | Pexels License |
 | job-search.webp | Young man smiling at a laptop with a coffee | Mikhail Nilov | https://www.pexels.com/photo/man-in-white-crew-neck-t-shirt-using-a-silver-laptop-6969626/ | Pexels License |
 | community-help.webp | Two neighbours gardening together | Centre for Ageing Better | https://www.pexels.com/photo/women-planting-plants-on-the-garden-7849457/ | Pexels License |

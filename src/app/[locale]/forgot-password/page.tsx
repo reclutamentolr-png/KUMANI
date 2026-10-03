@@ -278,6 +278,21 @@ export default function ForgotPasswordPage() {
 
             {step === 'request' && (
               <div className="mt-6 text-center">
+                {/* Codice già ricevuto (es. inviato dallo Staff): si passa subito a inserirlo */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!email.trim()) {
+                      setError(t('haveCodeNeedEmail'))
+                      return
+                    }
+                    setError(null)
+                    setStep('verify')
+                  }}
+                  className="mb-3 block w-full text-sm font-semibold text-[var(--ink)] underline-offset-2 hover:underline"
+                >
+                  {t('haveCode')}
+                </button>
                 <Link href="/login" className="text-sm font-medium text-[var(--gold)] hover:text-[var(--ink)] hover:underline">
                   {t('backToLogin')}
                 </Link>

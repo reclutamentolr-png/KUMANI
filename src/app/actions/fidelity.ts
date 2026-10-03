@@ -134,30 +134,17 @@ export async function unlockFidelityCassa(
   pin: string
 ): Promise<{ success: true } | Fail<'wrongPin' | 'locked' | 'notFound'>> {
   const service = getFidelityServiceClient()
-  const { data: card } = await service
-    .from('fidelity_cards')
-    .select('id, pin_hash, pin_failed_attempts, pin_locked_until')
-    .eq('id', cardId)
-    .maybeSingle()
+  if (typeof cardId !== 'string' || !/^[0-9a-f-]{36}$/i.test(cardId)) return { success: false, message: 'notFound' }
+  // Ogni tentativo si conta PRIMA di provare il PIN, in modo atomico: anche
+  // con tante richieste insieme il blocco scatta dopo 5 tentativi.
+  const { data: attempt } = await service.rpc('fidelity_pin_attempt', { p_card: cardId, p_max: PIN_MAX_ATTEMPTS, p_lock_minutes: PIN_LOCK_MINUTES })
+  if (attempt === 'notfound') return { success: false, message: 'notFound' }
+  if (attempt !== 'try') return { success: false, message: 'locked' }
+  const { data: card } = await service.from('fidelity_cards').select('pin_hash').eq('id', cardId).maybeSingle()
   if (!card) return { success: false, message: 'notFound' }
 
-  if (card.pin_locked_until && new Date(card.pin_locked_until).getTime() > Date.now()) {
-    return { success: false, message: 'locked' }
-  }
-
-  if (!FIDELITY_PIN_PATTERN.test(pin.trim()) || !verifyPin(pin.trim(), card.pin_hash)) {
-    // Blocco temporaneo dopo troppi tentativi: un PIN di 4-6 cifre non
-    // deve essere indovinabile per forza bruta.
-    const attempts = (card.pin_failed_attempts ?? 0) + 1
-    const locked = attempts >= PIN_MAX_ATTEMPTS
-    await service
-      .from('fidelity_cards')
-      .update({
-        pin_failed_attempts: locked ? 0 : attempts,
-        pin_locked_until: locked ? new Date(Date.now() + PIN_LOCK_MINUTES * 60 * 1000).toISOString() : null,
-      })
-      .eq('id', cardId)
-    return { success: false, message: locked ? 'locked' : 'wrongPin' }
+  if (!FIDELITY_PIN_PATTERN.test(String(pin ?? '').trim()) || !verifyPin(String(pin).trim(), card.pin_hash)) {
+    return { success: false, message: 'wrongPin' }
   }
 
   await service.from('fidelity_cards').update({ pin_failed_attempts: 0, pin_locked_until: null }).eq('id', cardId)

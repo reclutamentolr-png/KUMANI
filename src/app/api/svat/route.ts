@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { safeFetch } from '@/lib/safeFetch'
 import { createClient } from '@/lib/supabase/server'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { fetchWhoisText, parseWhois } from '@/lib/whois'
@@ -233,7 +234,7 @@ type DnsAnswer = { name?: string; type?: number; Type?: number; TTL?: number; da
 
 async function checkSPF(domain: string): Promise<SVATCheck | null> {
   try {
-    const res = await fetch(`https://dns.google/resolve?name=${domain}&type=TXT`, {
+    const res = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=TXT`, {
       next: { revalidate: 3600 },
     })
     if (!res.ok) return null
@@ -253,7 +254,7 @@ async function checkSPF(domain: string): Promise<SVATCheck | null> {
         details: 'SPF record not found — email spoofing risk',
         detailsKey: 'dnsRecordsMissing',
         source: 'Google DNS',
-        sourceUrl: `https://dns.google/resolve?name=${domain}&type=TXT`,
+        sourceUrl: `https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=TXT`,
       }
     }
 
@@ -266,7 +267,7 @@ async function checkSPF(domain: string): Promise<SVATCheck | null> {
       detailsKey: 'dnsRecordsFound',
       detailsInterp: { records: 'SPF' },
       source: 'Google DNS',
-      sourceUrl: `https://dns.google/resolve?name=${domain}&type=TXT`,
+      sourceUrl: `https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=TXT`,
     }
   } catch {
     return null
@@ -276,7 +277,7 @@ async function checkSPF(domain: string): Promise<SVATCheck | null> {
 // 4. DNS – record DMARC
 async function checkDMARC(domain: string): Promise<SVATCheck | null> {
   try {
-    const res = await fetch(`https://dns.google/resolve?name=_dmarc.${domain}&type=TXT`, {
+    const res = await fetch(`https://dns.google/resolve?name=_dmarc.${encodeURIComponent(domain)}&type=TXT`, {
       next: { revalidate: 3600 },
     })
     if (!res.ok) return null
@@ -296,7 +297,7 @@ async function checkDMARC(domain: string): Promise<SVATCheck | null> {
         details: 'DMARC record not found — phishing protection missing',
         detailsKey: 'dnsRecordsMissing',
         source: 'Google DNS',
-        sourceUrl: `https://dns.google/resolve?name=_dmarc.${domain}&type=TXT`,
+        sourceUrl: `https://dns.google/resolve?name=_dmarc.${encodeURIComponent(domain)}&type=TXT`,
       }
     }
 
@@ -316,7 +317,7 @@ async function checkDMARC(domain: string): Promise<SVATCheck | null> {
       detailsKey: 'dnsRecordsFound',
       detailsInterp: { records: `DMARC (${policy})` },
       source: 'Google DNS',
-      sourceUrl: `https://dns.google/resolve?name=_dmarc.${domain}&type=TXT`,
+      sourceUrl: `https://dns.google/resolve?name=_dmarc.${encodeURIComponent(domain)}&type=TXT`,
     }
   } catch {
     return null
@@ -326,7 +327,7 @@ async function checkDMARC(domain: string): Promise<SVATCheck | null> {
 // 5. DNS – record MX
 async function checkMX(domain: string): Promise<SVATCheck | null> {
   try {
-    const res = await fetch(`https://dns.google/resolve?name=${domain}&type=MX`, {
+    const res = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=MX`, {
       next: { revalidate: 3600 },
     })
     if (!res.ok) return null
@@ -343,7 +344,7 @@ async function checkMX(domain: string): Promise<SVATCheck | null> {
         details: 'No MX records found — email not properly routed',
         detailsKey: 'noMX',
         source: 'Google DNS',
-        sourceUrl: `https://dns.google/resolve?name=${domain}&type=MX`,
+        sourceUrl: `https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=MX`,
       }
     }
 
@@ -357,7 +358,7 @@ async function checkMX(domain: string): Promise<SVATCheck | null> {
       details: `MX records: ${mxHosts}`,
       detailsKey: 'mxFound',
       source: 'Google DNS',
-      sourceUrl: `https://dns.google/resolve?name=${domain}&type=MX`,
+      sourceUrl: `https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=MX`,
     }
   } catch {
     return null
@@ -367,7 +368,7 @@ async function checkMX(domain: string): Promise<SVATCheck | null> {
 // 6. Header HTTP/SSL — risposta del server, tipo di hosting
 async function checkHTTPHeaders(url: string): Promise<SVATCheck | null> {
   try {
-    const res = await fetch(url, {
+    const res = await safeFetch(url, {
       method: 'HEAD',
       headers: {
         'User-Agent': 'SVAT-Checker/1.0 (anti-fraud verification)',
@@ -450,7 +451,7 @@ async function checkHTTPHeaders(url: string): Promise<SVATCheck | null> {
 // SSL certificate check (via HTTP)
 async function checkSSL(url: string, domain: string): Promise<SVATCheck | null> {
   try {
-    const res = await fetch(url, {
+    const res = await safeFetch(url, {
       method: 'GET',
       headers: {
         'User-Agent': 'SVAT-SSL-Checker/1.0',
@@ -488,7 +489,7 @@ async function checkSSL(url: string, domain: string): Promise<SVATCheck | null> 
     }
 
     // Try to get certificate info from SSL Labs
-    const certRes = await fetch(`https://api.ssllabs.com/api/v3/analyze?host=${domain}&publish=off&all=done`, {
+    const certRes = await fetch(`https://api.ssllabs.com/api/v3/analyze?host=${encodeURIComponent(domain)}&publish=off&all=done`, {
       next: { revalidate: 3600 },
     })
 
@@ -568,7 +569,7 @@ async function checkSSL(url: string, domain: string): Promise<SVATCheck | null> 
 
     // Fallback: use another SSL API to get certificate details
     try {
-      const sslInfoRes = await fetch(`https://ssl-checker-api.vercel.app/api/check?domain=${domain}`, {
+      const sslInfoRes = await fetch(`https://ssl-checker-api.vercel.app/api/check?domain=${encodeURIComponent(domain)}`, {
         next: { revalidate: 3600 },
       })
       if (sslInfoRes.ok) {
@@ -642,7 +643,7 @@ interface FetchedPage {
 
 async function fetchPageHtml(url: string): Promise<FetchedPage | null> {
   try {
-    const res = await fetch(url, {
+    const res = await safeFetch(url, {
       headers: {
         'User-Agent':
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 SVAT-Checker/1.0',
@@ -871,7 +872,7 @@ async function checkBusinessModel(pagePromise: Promise<FetchedPage | null>): Pro
 async function checkPTR(domain: string): Promise<SVATCheck | null> {
   try {
     // Get A record first
-    const res = await fetch(`https://dns.google/resolve?name=${domain}&type=A`, {
+    const res = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=A`, {
       next: { revalidate: 3600 },
     })
     if (!res.ok) return null
@@ -963,7 +964,7 @@ async function checkAbuseIPDB(domain: string): Promise<SVATCheck | null> {
     if (!apiKey) return null
 
     // Get A record first
-    const dnsRes = await fetch(`https://dns.google/resolve?name=${domain}&type=A`, {
+    const dnsRes = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=A`, {
       next: { revalidate: 3600 },
     })
     if (!dnsRes.ok) return null
@@ -972,7 +973,7 @@ async function checkAbuseIPDB(domain: string): Promise<SVATCheck | null> {
     const ip = dnsData?.Answer?.[0]?.data || dnsData?.Answer?.[0]?.Data
     if (!ip) return null
 
-    const res = await fetch(`https://api.abuseipdb.com/api/v2/check?ipAddress=${ip}&maxAgeInDays=90`, {
+    const res = await fetch(`https://api.abuseipdb.com/api/v2/check?ipAddress=${encodeURIComponent(ip)}&maxAgeInDays=90`, {
       headers: {
         'Key': apiKey,
         'Accept': 'application/json',

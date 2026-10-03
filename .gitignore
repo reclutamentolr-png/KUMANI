@@ -14,10 +14,22 @@ supabase/.temp/
 
 # Environment variables (IMPORTANTE: non caricare mai le chiavi API!)
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
+!.env.example
+
+# Chiavi, certificati ed esportazioni di dati (mai su GitHub)
+*.pem
+*.key
+*.p12
+*.pfx
+*.dump
+*.backup
+/*.sql
+/*.csv
+/*.xlsx
+
+# Vercel
+.vercel/
 
 # Debug
 npm-debug.log*

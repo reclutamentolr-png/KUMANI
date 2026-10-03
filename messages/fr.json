@@ -362,7 +362,9 @@
     "tooManyEmailsError": "Vous avez demandé trop d’e-mails en peu de temps : attendez quelques minutes et réessayez.",
     "tooManyRequestsError": "Trop de tentatives en peu de temps : attendez quelques minutes et réessayez.",
     "invalidEmailError": "Adresse e-mail non valide : vérifiez qu’elle est bien écrite.",
-    "genericAuthError": "Un problème est survenu. Réessayez dans un instant."
+    "genericAuthError": "Un problème est survenu. Réessayez dans un instant.",
+    "haveCode": "J’ai déjà reçu un code",
+    "haveCodeNeedEmail": "Saisissez d’abord votre e-mail, puis touchez « J’ai déjà reçu un code »."
   },
   "dashboard": {
     "receivedLabel": "De la Communauté",

@@ -387,14 +387,11 @@ export async function translateMenuMissing(): Promise<
 
   // Limite giornaliero (contato prima della chiamata, anche se poi fallisce).
   const service = getServiceClient()
-  const today = new Date().toISOString().slice(0, 10)
   const { data: limitRow } = await service.from('system_settings').select('value').eq('key', 'menu_ai_daily_runs').maybeSingle()
   const limit = Number(String(limitRow?.value ?? '5').replace(/"/g, '')) || 5
-  const { data: usage } = await service.from('menu_ai_usage').select('runs').eq('owner_id', g.userId).eq('used_on', today).maybeSingle()
-  if ((usage?.runs ?? 0) >= limit) return { success: false, message: 'aiLimitReached' }
-  await service
-    .from('menu_ai_usage')
-    .upsert({ owner_id: g.userId, used_on: today, runs: (usage?.runs ?? 0) + 1 }, { onConflict: 'owner_id,used_on' })
+  // Contatore atomico: richieste in parallelo non superano il limite
+  const { data: taken } = await service.rpc('ai_quota_take', { p_kind: 'menu', p_user: g.userId, p_limit: limit })
+  if (taken === null || taken === undefined) return { success: false, message: 'aiLimitReached' }
 
   const results = new Map<string, LocalizedText>()
   try {

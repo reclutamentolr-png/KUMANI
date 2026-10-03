@@ -382,7 +382,9 @@
     "tooManyEmailsError": "You requested too many emails in a short time: wait a few minutes and try again.",
     "tooManyRequestsError": "Too many attempts in a short time: wait a few minutes and try again.",
     "invalidEmailError": "Invalid email address: check that you typed it correctly.",
-    "genericAuthError": "Something went wrong. Please try again shortly."
+    "genericAuthError": "Something went wrong. Please try again shortly.",
+    "haveCode": "I already have a code",
+    "haveCodeNeedEmail": "Enter your email first, then tap “I already have a code”."
   },
   "dashboard": {
     "receivedLabel": "From the Community",

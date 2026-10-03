@@ -25,6 +25,24 @@ async function currentUserId() {
   return user?.id ?? null
 }
 
+// Solo i servizi di notifica dei browser (il server invierà richieste lì)
+function isPushServiceEndpoint(endpoint: string) {
+  try {
+    const url = new URL(endpoint)
+    if (url.protocol !== 'https:') return false
+    const host = url.hostname
+    return (
+      host === 'fcm.googleapis.com' ||
+      host === 'updates.push.services.mozilla.com' ||
+      host === 'web.push.apple.com' ||
+      host.endsWith('.push.apple.com') ||
+      host.endsWith('.notify.windows.com')
+    )
+  } catch {
+    return false
+  }
+}
+
 type BrowserSubscription = { endpoint?: unknown; keys?: { p256dh?: unknown; auth?: unknown } }
 
 export async function savePushSubscription(sub: BrowserSubscription, locale: string, userAgent: string) {
@@ -33,7 +51,7 @@ export async function savePushSubscription(sub: BrowserSubscription, locale: str
   const endpoint = typeof sub?.endpoint === 'string' ? sub.endpoint : ''
   const p256dh = typeof sub?.keys?.p256dh === 'string' ? sub.keys.p256dh : ''
   const auth = typeof sub?.keys?.auth === 'string' ? sub.keys.auth : ''
-  if (!/^https:\/\//.test(endpoint) || endpoint.length > 1000 || !p256dh || !auth || p256dh.length > 200 || auth.length > 100) {
+  if (!isPushServiceEndpoint(endpoint) || endpoint.length > 1000 || !p256dh || !auth || p256dh.length > 200 || auth.length > 100) {
     return { success: false }
   }
   const { error } = await pushDb()

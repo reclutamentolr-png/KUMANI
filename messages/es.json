@@ -362,7 +362,9 @@
     "tooManyEmailsError": "Has pedido demasiados correos en poco tiempo: espera unos minutos y vuelve a intentarlo.",
     "tooManyRequestsError": "Demasiados intentos en poco tiempo: espera unos minutos y vuelve a intentarlo.",
     "invalidEmailError": "Dirección de correo no válida: comprueba que esté bien escrita.",
-    "genericAuthError": "Algo no ha funcionado. Inténtalo de nuevo en un momento."
+    "genericAuthError": "Algo no ha funcionado. Inténtalo de nuevo en un momento.",
+    "haveCode": "Ya he recibido un código",
+    "haveCodeNeedEmail": "Escribe primero tu email y luego toca «Ya he recibido un código»."
   },
   "dashboard": {
     "receivedLabel": "De la Comunidad",

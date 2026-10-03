@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { getAnthropicClient, MissingApiKeyError } from '@/lib/anthropic'
 import { hasActiveOfferMakerAccess } from '@/lib/offermaker-server'
 import { awardToolPoint } from '@/lib/toolPoints'
@@ -113,24 +114,17 @@ export async function generateOfferDraft(
 
   // Limite giornaliero: contato solo dopo aver verificato che la chiave API
   // esista (una chiave mancante non deve consumare la quota), prima della chiamata.
-  const supabase = await createClient()
-  const today = new Date().toISOString().slice(0, 10)
-  const { data: usage } = await supabase
-    .from('offermaker_ai_usage')
-    .select('runs')
-    .eq('owner_id', gate.userId)
-    .eq('used_on', today)
-    .maybeSingle()
-  if ((usage?.runs ?? 0) >= OFFERMAKER_AI_DAILY_RUNS) {
-    return { success: false, message: 'aiLimitReached' }
-  }
-  const { error: usageError } = await supabase
-    .from('offermaker_ai_usage')
-    .upsert({ owner_id: gate.userId, used_on: today, runs: (usage?.runs ?? 0) + 1 }, { onConflict: 'owner_id,used_on' })
+  // Contatore atomico nel database (l'utente non può azzerarlo né superarlo
+  // con richieste in parallelo)
+  const service = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  })
+  const { data: taken, error: usageError } = await service.rpc('ai_quota_take', { p_kind: 'offermaker', p_user: gate.userId, p_limit: OFFERMAKER_AI_DAILY_RUNS })
   if (usageError) {
     console.error('[OfferMaker] usage update failed:', usageError)
     return { success: false, message: 'generateError' }
   }
+  if (taken === null) return { success: false, message: 'aiLimitReached' }
 
   try {
     const message = await client.messages.create({
