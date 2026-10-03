@@ -210,11 +210,25 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
   }
 
   async function personalTab() {
-    const docs = await listPersonalDocuments(supabase, user!.id)
+    const [docs, bcT] = await Promise.all([listPersonalDocuments(supabase, user!.id), getTranslations('businessCard')])
     const groups = KIND_ORDER.map((kind) => ({ kind, items: docs.filter((d) => d.kind === kind) })).filter((g) => g.items.length > 0)
     return (
       <section className="mt-6 space-y-5">
         <p className="text-sm text-[var(--muted)]">{t('personalIntro')}</p>
+        {/* Biglietto da visita: sempre disponibile, creato al momento */}
+        <Link
+          href="/documenti/biglietto"
+          className="group flex items-center gap-4 rounded-2xl border border-[var(--gold)]/40 bg-[var(--ink)] p-5 text-white shadow-sm transition hover:border-[var(--gold)]"
+        >
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)]">
+            <IdCard className="h-6 w-6" />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block font-bold">{bcT('title')}</span>
+            <span className="block text-sm text-white/70">{bcT('docsHint')}</span>
+          </span>
+          <ArrowRight className="h-5 w-5 text-[var(--gold-bright)] transition-transform group-hover:translate-x-0.5" />
+        </Link>
         {groups.length === 0 && (
           <p className="flex items-start gap-3 rounded-2xl border border-dashed border-[var(--gold)]/40 bg-white p-6 text-[var(--muted)]">
             <Info className="mt-0.5 h-5 w-5 shrink-0 text-[var(--gold)]" /> {t('personalEmpty')}
