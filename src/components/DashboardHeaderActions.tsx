@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import Link from '@/components/LocalizedLink' // ✅ CAMBIATO: usa LocalizedLink invece di next/link
 import { logout } from '@/app/actions/logout'
+import { forgetPushDevice } from '@/lib/pushClient'
 import {
   Settings,
   LogOut,
@@ -111,7 +112,7 @@ export default function DashboardHeaderActions({ user, profile, isAdmin }: Dashb
         )}
 
         {/* Pulsante di Logout */}
-        <form action={logout} className="inline">
+        <form action={async () => { await forgetPushDevice(); await logout() }} className="inline">
           <button
             type="submit"
             className="text-sm text-red-600 hover:text-red-800 font-medium transition-colors flex items-center gap-1 hover:bg-red-50 px-2 sm:px-3 py-1.5 rounded-md"

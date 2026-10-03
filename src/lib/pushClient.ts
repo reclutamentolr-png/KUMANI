@@ -1,6 +1,6 @@
 'use client'
 
-import { savePushSubscription } from '@/app/actions/push'
+import { removePushSubscription, savePushSubscription } from '@/app/actions/push'
 
 // Lato browser delle notifiche push: usato dal profilo e dall'invito in dashboard.
 
@@ -52,5 +52,20 @@ export async function enablePush(locale: string): Promise<'on' | 'off' | 'denied
     return 'on'
   } catch {
     return 'error'
+  }
+}
+
+// All'uscita dall'account: questo dispositivo smette di ricevere le notifiche
+// di quell'account (es. telefono o computer condiviso). Non blocca mai l'uscita.
+export async function forgetPushDevice() {
+  try {
+    if (!('serviceWorker' in navigator)) return
+    const registration = await navigator.serviceWorker.getRegistration('/')
+    const subscription = await registration?.pushManager.getSubscription()
+    if (!subscription) return
+    await Promise.race([removePushSubscription(subscription.endpoint), new Promise((resolve) => setTimeout(resolve, 3000))])
+    await subscription.unsubscribe()
+  } catch {
+    // l'uscita continua comunque
   }
 }

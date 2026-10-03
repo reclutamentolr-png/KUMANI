@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Save, AlertCircle, X, LogOut, Lock } from 'lucide-react'
 import { logout } from '@/app/actions/logout'
+import { forgetPushDevice } from '@/lib/pushClient'
 import ProfileFieldsGrid, { ConfirmLockBox, MissingFieldsBox } from '@/components/profile/ProfileFieldsGrid'
 import { useProfileCompletion } from '@/components/profile/useProfileCompletion'
 
@@ -78,7 +79,7 @@ export default function ProfileCompleter({ initialData, onDismiss, onSaved, bloc
       </form>
 
       {blocking && (
-        <form action={logout} className="mt-4 border-t border-amber-200 pt-3 text-center">
+        <form action={async () => { await forgetPushDevice(); await logout() }} className="mt-4 border-t border-amber-200 pt-3 text-center">
           <button type="submit" className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-600 hover:text-red-700">
             <LogOut className="w-4 h-4" /> {lockT('logout')}
           </button>
