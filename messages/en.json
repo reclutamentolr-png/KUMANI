@@ -7617,5 +7617,34 @@
     "error_has_team": "There are already people below you: write to support for help.",
     "error_already": "You have already named who invited you.",
     "error_generic": "Something went wrong. Please try again shortly."
+  },
+  "passwordChange": {
+    "title": "Password",
+    "hint": "You can change it anytime; you need your current one.",
+    "open": "Change password",
+    "current": "Current password",
+    "new": "New password",
+    "confirm": "Repeat the new password",
+    "show": "Show",
+    "hide": "Hide",
+    "emailNotice": "We’ll send you an email confirming the change.",
+    "cancel": "Cancel",
+    "save": "Save password",
+    "saving": "Saving…",
+    "success": "Password changed.",
+    "errorTooShort": "The new password must be at least 6 characters.",
+    "errorTooLong": "The new password can have at most 72 characters.",
+    "errorMismatch": "The two new passwords don’t match.",
+    "errorSame": "The new password is the same as the current one.",
+    "errorWrongCurrent": "The current password is incorrect.",
+    "errorRateLimit": "Too many attempts: try again in a few minutes.",
+    "errorGeneric": "Something went wrong. Please try again shortly."
+  },
+  "passwordEmail": {
+    "subject": "Your KUMANI password has been changed",
+    "greeting": "Hi {name},",
+    "body": "the password of your KUMANI account was changed on {date} from your profile.",
+    "notYou": "If it wasn’t you, reset your password right away using the link below and write to us at {email}.",
+    "signature": "The KUMANI team"
   }
 }

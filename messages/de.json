@@ -7617,5 +7617,34 @@
     "error_has_team": "Unter dir sind bereits Personen: Schreib an den Support.",
     "error_already": "Du hast bereits angegeben, wer dich eingeladen hat.",
     "error_generic": "Etwas ist schiefgelaufen. Bitte versuche es gleich noch einmal."
+  },
+  "passwordChange": {
+    "title": "Passwort",
+    "hint": "Du kannst es jederzeit ändern; dazu brauchst du das aktuelle.",
+    "open": "Passwort ändern",
+    "current": "Aktuelles Passwort",
+    "new": "Neues Passwort",
+    "confirm": "Neues Passwort wiederholen",
+    "show": "Anzeigen",
+    "hide": "Verbergen",
+    "emailNotice": "Wir senden dir eine E-Mail zur Bestätigung.",
+    "cancel": "Abbrechen",
+    "save": "Passwort speichern",
+    "saving": "Wird gespeichert…",
+    "success": "Passwort geändert.",
+    "errorTooShort": "Das neue Passwort muss mindestens 6 Zeichen haben.",
+    "errorTooLong": "Das neue Passwort darf höchstens 72 Zeichen haben.",
+    "errorMismatch": "Die beiden neuen Passwörter stimmen nicht überein.",
+    "errorSame": "Das neue Passwort ist identisch mit dem aktuellen.",
+    "errorWrongCurrent": "Das aktuelle Passwort ist falsch.",
+    "errorRateLimit": "Zu viele Versuche: versuche es in ein paar Minuten erneut.",
+    "errorGeneric": "Etwas hat nicht funktioniert. Versuche es gleich noch einmal."
+  },
+  "passwordEmail": {
+    "subject": "Dein KUMANI-Passwort wurde geändert",
+    "greeting": "Hallo {name},",
+    "body": "das Passwort deines KUMANI-Kontos wurde am {date} in deinem Profil geändert.",
+    "notYou": "Wenn du das nicht warst, setze dein Passwort sofort über den Link unten zurück und schreib uns an {email}.",
+    "signature": "Dein KUMANI-Team"
   }
 }

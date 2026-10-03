@@ -7617,5 +7617,34 @@
     "error_has_team": "Já há pessoas abaixo de si: escreva ao apoio para obter ajuda.",
     "error_already": "Já indicou quem o convidou.",
     "error_generic": "Algo correu mal. Tente novamente daqui a pouco."
+  },
+  "passwordChange": {
+    "title": "Palavra-passe",
+    "hint": "Pode alterá-la quando quiser; precisa da atual.",
+    "open": "Alterar palavra-passe",
+    "current": "Palavra-passe atual",
+    "new": "Nova palavra-passe",
+    "confirm": "Repita a nova palavra-passe",
+    "show": "Mostrar",
+    "hide": "Ocultar",
+    "emailNotice": "Vamos enviar-lhe um e-mail a confirmar a alteração.",
+    "cancel": "Cancelar",
+    "save": "Guardar palavra-passe",
+    "saving": "A guardar…",
+    "success": "Palavra-passe alterada.",
+    "errorTooShort": "A nova palavra-passe deve ter pelo menos 6 caracteres.",
+    "errorTooLong": "A nova palavra-passe pode ter no máximo 72 caracteres.",
+    "errorMismatch": "As duas novas palavras-passe não coincidem.",
+    "errorSame": "A nova palavra-passe é igual à atual.",
+    "errorWrongCurrent": "A palavra-passe atual não está correta.",
+    "errorRateLimit": "Demasiadas tentativas: tente novamente dentro de alguns minutos.",
+    "errorGeneric": "Algo correu mal. Tente novamente daqui a pouco."
+  },
+  "passwordEmail": {
+    "subject": "A sua palavra-passe KUMANI foi alterada",
+    "greeting": "Olá {name},",
+    "body": "a palavra-passe da sua conta KUMANI foi alterada em {date} a partir do seu perfil.",
+    "notYou": "Se não foi você, redefina já a palavra-passe com o link abaixo e escreva-nos para {email}.",
+    "signature": "A equipa KUMANI"
   }
 }

@@ -7617,5 +7617,34 @@
     "error_has_team": "Des personnes sont déjà inscrites sous vous : écrivez au support pour obtenir de l’aide.",
     "error_already": "Vous avez déjà indiqué qui vous a invité.",
     "error_generic": "Un problème est survenu. Réessayez dans un instant."
+  },
+  "passwordChange": {
+    "title": "Mot de passe",
+    "hint": "Vous pouvez le changer quand vous voulez ; il faut l’actuel.",
+    "open": "Changer le mot de passe",
+    "current": "Mot de passe actuel",
+    "new": "Nouveau mot de passe",
+    "confirm": "Répétez le nouveau mot de passe",
+    "show": "Afficher",
+    "hide": "Masquer",
+    "emailNotice": "Nous vous enverrons un e-mail de confirmation.",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "success": "Mot de passe modifié.",
+    "errorTooShort": "Le nouveau mot de passe doit contenir au moins 6 caractères.",
+    "errorTooLong": "Le nouveau mot de passe peut contenir au maximum 72 caractères.",
+    "errorMismatch": "Les deux nouveaux mots de passe ne correspondent pas.",
+    "errorSame": "Le nouveau mot de passe est identique à l’actuel.",
+    "errorWrongCurrent": "Le mot de passe actuel est incorrect.",
+    "errorRateLimit": "Trop de tentatives : réessayez dans quelques minutes.",
+    "errorGeneric": "Une erreur s’est produite. Réessayez dans un instant."
+  },
+  "passwordEmail": {
+    "subject": "Votre mot de passe KUMANI a été modifié",
+    "greeting": "Bonjour {name},",
+    "body": "le mot de passe de votre compte KUMANI a été modifié le {date} depuis votre profil.",
+    "notYou": "Si ce n’était pas vous, réinitialisez immédiatement votre mot de passe avec le lien ci-dessous et écrivez-nous à {email}.",
+    "signature": "L’équipe KUMANI"
   }
 }
