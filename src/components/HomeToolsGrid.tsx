@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { freeFirst } from '@/lib/freeFirst'
 import {
+  Gauge,
   Smartphone,
   Link2,
   MessageCircle,
@@ -124,6 +125,7 @@ export default function HomeToolsGrid({ freeToolNames = [] }: { freeToolNames?: 
     { name: 'findo', icon: PackageSearch, title: t('toolFindoTitle'), desc: t('toolFindoDescription'), category: 'personal' },
     { name: 'digital-receipt', icon: FileCheck2, title: t('toolDigitalReceiptTitle'), desc: t('toolDigitalReceiptDescription'), category: 'lavoro' },
     { name: 'spendly', icon: PiggyBank, title: tc('spendly'), desc: tc('spendlyDescription'), category: 'personal' },
+    { name: 'fincheck', icon: Gauge, title: tc('fincheck'), desc: tc('fincheckDescription'), category: 'personal' },
     { name: 'travel', icon: Plane, title: tc('travel'), desc: tc('travelDescription'), category: 'personal' },
     { name: 'mandala', icon: Flower2, title: tc('mandala'), desc: tc('mandalaDescription'), category: 'wellness' },
     { name: 'oxygen', icon: Wind, title: tc('oxygen'), desc: tc('oxygenDescription'), category: 'wellness' },

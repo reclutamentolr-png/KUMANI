@@ -3,7 +3,8 @@ import { localizedPath, notifyUser, pushConfigured, pushDb } from '@/lib/push'
 
 // Promemoria giornalieri con le notifiche push (Vercel Cron, vedi vercel.json):
 // - abbonamento senza rinnovo automatico (voucher, Staff) che scade entro 3 giorni;
-// - eventi a cui si è iscritti che iniziano entro 36 ore.
+// - eventi a cui si è iscritti che iniziano entro 36 ore;
+// - FinCheck: invito a rifare il test 3 mesi dopo l'ultimo.
 // Ogni promemoria parte una volta sola (push_log). Solo per chi ha attivato
 // le notifiche su almeno un dispositivo.
 
@@ -87,5 +88,28 @@ export async function GET(request: Request) {
     }
   }
 
-  return NextResponse.json({ expiry, events })
+  // FinCheck: 3 mesi dopo l'ultimo test, invito a rifarlo (una volta per test)
+  let fincheck = 0
+  for (let i = 0; i < userIds.length; i += 200) {
+    const chunk = userIds.slice(i, i + 200)
+    const { data: tests } = await db
+      .from('fincheck_results')
+      .select('id, user_id, created_at')
+      .in('user_id', chunk)
+      .order('created_at', { ascending: false })
+    const latest = new Map<string, { id: string; created_at: string }>()
+    for (const row of tests ?? []) if (!latest.has(row.user_id as string)) latest.set(row.user_id as string, row as { id: string; created_at: string })
+    for (const [userId, row] of latest) {
+      if (now - new Date(row.created_at).getTime() < 90 * DAY) continue
+      await notifyUser(
+        userId,
+        'expiry',
+        (t, locale) => ({ title: t('fincheckTitle'), body: t('fincheckBody'), url: localizedPath(locale, '/marketplace/fincheck'), tag: 'fincheck' }),
+        { kind: 'fincheck', ref: row.id }
+      )
+      fincheck++
+    }
+  }
+
+  return NextResponse.json({ expiry, events, fincheck })
 }

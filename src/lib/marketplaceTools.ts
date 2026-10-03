@@ -216,6 +216,17 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       requiresSubscription: true,
     },
     {
+      // Test gratuito; il check-up del bilancio usa i dati di Spendly (Base)
+      toolName: 'fincheck',
+      href: '/marketplace/fincheck',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'Gauge',
+      title: t('fincheck'),
+      description: t('fincheckDescription'),
+      color: 'gold',
+      category: 'personal',
+    },
+    {
       // Pagine sotto /viaggi (non /marketplace): gli invitati entrano anche
       // senza abbonamento, il piano serve solo per creare un viaggio.
       toolName: 'travel',

@@ -38,6 +38,7 @@ import {
   Grid3x3,
   Dices,
   BriefcaseBusiness,
+  Gauge,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -46,6 +47,7 @@ import {
 // tool's icon never silently falls back to the default in one place but
 // not another.
 export const marketplaceIconMap: Record<string, LucideIcon> = {
+  Gauge,
   Smartphone,
   Link2,
   MessageCircle,
