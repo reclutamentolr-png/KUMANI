@@ -7125,5 +7125,443 @@
       "step2Title": "Einladen oder mit Code beitreten",
       "step2Text": "Tippe in der Reise auf „Zur Reise einladen“ und schick Link oder Code an deine Mitreisenden. Hast du einen Code bekommen, gib ihn bei „Einladungscode?“ ein und tippe auf „Beitreten“."
     }
+  },
+  "deckTexts": {
+    "docTitle": "KUMANI — Projektpräsentation",
+    "sec": {
+      "1": "Auftakt",
+      "2": "Über uns",
+      "3": "Das Ökosystem",
+      "4": "Tarife und Dienste",
+      "5": "Community und Punkte",
+      "6": "Spenden",
+      "7": "Vertrauen und Start"
+    },
+    "s1": {
+      "title": "Hände, die dir eine Hand reichen.",
+      "sub": "Du bringst die Ideen. KUMANI packt mit an.",
+      "foot": "Projektpräsentation · kumani.io",
+      "notes": "Willkommen. KUMANI ist ein Ökosystem digitaler Werkzeuge für jeden Tag, für Selbstständige ebenso wie für Privatpersonen und Familien. In dieser Präsentation sehen wir, was es ist, was es bietet, was es kostet und wie Punkte und Spenden funktionieren."
+    },
+    "s2": {
+      "title": "Die Bedeutung des Namens",
+      "sub": "Zwei Worte, ein Versprechen: Hände zusammen.",
+      "cards": {
+        "1": {
+          "1": "組 KU",
+          "2": "aus dem Japanischen „kumi“",
+          "3": "Gruppe, Menschen, die Seite an Seite arbeiten."
+        },
+        "2": {
+          "1": "MANI",
+          "2": "das älteste italienische Wort für Arbeit",
+          "3": "Die Hände, die bauen, helfen, erschaffen."
+        },
+        "3": {
+          "1": "KUMANI",
+          "2": "Hände zusammen",
+          "3": "Und darin steckt auch „umani“, Menschen: Sie stehen im Mittelpunkt."
+        }
+      },
+      "notes": "KU kommt aus dem Japanischen kumi: eine Gruppe, Menschen, die Seite an Seite arbeiten. MANI ist das älteste italienische Wort für Arbeit: die Hände. KUMANI bedeutet Hände zusammen. Und wer darin das italienische Wort umani, Menschen, hört, liegt nicht falsch."
+    },
+    "s3": {
+      "title": "Warum KUMANI entstand",
+      "rows": {
+        "1": {
+          "1": "Leere Hände",
+          "2": "Außergewöhnliche Menschen, mit großem Herzen und leerem Werkzeugkasten."
+        },
+        "2": {
+          "1": "Die Erkenntnis",
+          "2": "Es brauchte mehr Hände: eine für den QR-Code, eine für den Kalender, eine für das Angebot, eine zum Atmen."
+        },
+        "3": {
+          "1": "Das Versprechen",
+          "2": "Ein Ort, alle Werkzeuge, ein ehrlicher Preis. Keine Träume: Werkzeuge."
+        }
+      },
+      "notes": "KUMANI entstand aus der Beobachtung von Selbstständigen: Verkäufer, Berater, Handwerker. Sie hatten Ideen und Tatendrang, aber nicht die Werkzeuge. So entstand das Versprechen: ein Ort, alle Werkzeuge, ein ehrlicher Preis."
+    },
+    "s4": {
+      "title": "Das KUMANI-Manifest",
+      "sub": "Sechs Sätze, die jede Entscheidung leiten.",
+      "items": {
+        "1": {
+          "1": "Wir verkaufen keine Träume:",
+          "2": "wir leihen Hände."
+        },
+        "2": {
+          "1": "Wir versprechen keine Gewinne:",
+          "2": "wir stellen Werkzeuge bereit."
+        },
+        "3": {
+          "1": "Wir bauen keine Pyramiden:",
+          "2": "wir bauen Werkbänke."
+        },
+        "4": {
+          "1": "Ein ehrlicher Preis, für immer:",
+          "2": "49 € im Jahr Base, 149 € im Jahr Pro."
+        },
+        "5": {
+          "1": "Erst Menschen, dann Profis:",
+          "2": "deshalb bringen wir dir auch das Atmen bei."
+        },
+        "6": {
+          "1": "Transparenz als Unterschrift:",
+          "2": "öffentliche Regeln, echte Vorteile, keine Tricks."
+        }
+      },
+      "notes": "Das Manifest ist unser Ausweis. Wir versprechen keine Gewinne: Wir stellen Werkzeuge bereit. Der Preis ist öffentlich und für alle gleich."
+    },
+    "s5": {
+      "title": "Das KUMANI-Ökosystem in vier Zahlen",
+      "sub": "Ein Konto, Werkzeuge, die miteinander sprechen.",
+      "stats": {
+        "1": {
+          "1": "39",
+          "2": "Dienste",
+          "3": "15 kostenlos · 16 mit Base · 8 mit Pro"
+        },
+        "2": {
+          "1": "7",
+          "2": "Sprachen",
+          "3": "Italienisch, Englisch, Französisch, Spanisch, Portugiesisch, Deutsch, Russisch"
+        },
+        "3": {
+          "1": "49 €",
+          "2": "im Jahr mit Base",
+          "3": "weniger als 1 € pro Woche"
+        },
+        "4": {
+          "1": "15",
+          "2": "Tage Pro-Test",
+          "3": "kostenlos, ohne Kreditkarte"
+        }
+      },
+      "notes": "Neununddreißig Dienste: fünfzehn kostenlos für alle Registrierten, sechzehn mehr mit dem Base-Tarif, acht mehr mit dem Pro-Tarif. Alles in sieben Sprachen. Der Base-Tarif kostet 49 Euro im Jahr, weniger als einen Euro pro Woche. Pro kann man fünfzehn Tage kostenlos testen."
+    },
+    "s6": {
+      "title": "Sechs Bereiche, ein Konto",
+      "sub": "Einige Beispiele der enthaltenen Dienste.",
+      "areas": {
+        "1": {
+          "1": "Sichtbar werden",
+          "2": "QR-Code, Link in Bio, WhatsApp-Nachrichten, E-Mail-Signatur, KUMANI Menu, Kumi Card"
+        },
+        "2": {
+          "1": "Schutz vor Betrug",
+          "2": "SVAT, VeriFoto, CheckMail, IBAN-Prüfung, Sicheres Dokument, Anti-Betrugs-Handbuch"
+        },
+        "3": {
+          "1": "Organisation",
+          "2": "MemoLife, Life Calendar, Spendly, Findo, KUMANI Travel, KUMANI CV"
+        },
+        "4": {
+          "1": "Wohlbefinden",
+          "2": "Neurobalance, Aureya, Oxygen, Mandala, KUMANI Focus"
+        },
+        "5": {
+          "1": "Arbeit",
+          "2": "Jobsuche, Angebote, Digitale Belege, Magazzino PRO, PRO-Rechner"
+        },
+        "6": {
+          "1": "Community und Freizeit",
+          "2": "Anzeigen, Kordata, Time Bank, Events, Affinity, Veritas, Mosaic, Fabula"
+        }
+      },
+      "notes": "Die Dienste sind in sechs Bereiche gegliedert: sichtbar werden, Schutz vor Betrug, persönliche Organisation, Wohlbefinden, Arbeit, Community und Freizeit. Ein einziges Konto genügt."
+    },
+    "s7": {
+      "title": "Werkzeuge, die miteinander sprechen",
+      "sub": "Keine getrennten Werkzeuge: Jedes stärkt die anderen.",
+      "nodes": {
+        "1": {
+          "1": "Ein Kalender für alles",
+          "2": "Termine, Rechnungen und Fristen zusammen"
+        },
+        "2": {
+          "1": "Travel und Life Calendar",
+          "2": "Abreise und Passablauf im Kalender"
+        },
+        "3": {
+          "1": "Menü und Kumi Card",
+          "2": "der Tisch-QR führt zu deinen Kontakten"
+        },
+        "4": {
+          "1": "Kordata und Profis",
+          "2": "Gruppenkäufe finden Pro-Anbieter"
+        },
+        "5": {
+          "1": "Punkte in einem Wallet",
+          "2": "jedes genutzte Tool mehrt deine KU Karma"
+        },
+        "6": {
+          "1": "KUMANI Events",
+          "2": "QR-Pass im Wallet, Event im Kalender"
+        }
+      },
+      "notes": "Die Stärke von KUMANI: Die Werkzeuge sprechen miteinander. Der Kalender sammelt Termine, Rechnungen und Fristen. Reisen landen im Kalender. Das Restaurantmenü führt zur Kumi Card. Und jedes genutzte Werkzeug lässt die Punkte im Wallet wachsen."
+    },
+    "s8": {
+      "title": "Drei Tarife, ein ehrlicher Preis",
+      "sub": "Die Anmeldung ist kostenlos. Jeder Tarif enthält den vorherigen.",
+      "plans": {
+        "1": {
+          "1": "Kostenlos",
+          "2": "0 €",
+          "3": "für immer",
+          "4": "Zum Start, ohne Kreditkarte",
+          "5": "15 Dienste inklusive",
+          "6": "QR-Code, WhatsApp-Nachrichten, IBAN-Prüfung, Anzeigen, Kordata, Time Bank, Spiele und Wohlbefinden"
+        },
+        "2": {
+          "1": "Base",
+          "2": "49 €",
+          "3": "im Jahr",
+          "4": "Für Privatpersonen und Familien",
+          "5": "Alles aus Kostenlos + 16 Dienste",
+          "6": "MemoLife, Spendly, Life Calendar, Link in Bio, SVAT, CheckMail, Neurobalance, Travel, Jobsuche"
+        },
+        "3": {
+          "1": "Pro",
+          "2": "149 €",
+          "3": "im Jahr",
+          "4": "Für alle, die mit Kunden arbeiten",
+          "5": "Alles aus Base + 8 Pro-Dienste",
+          "6": "KUMANI Menu, Kumi Card, Angebote, Digitale Belege, Magazzino, QR Code PRO. 15 Tage kostenlos."
+        }
+      },
+      "passBold": "Nur ein Dienst nötig? ",
+      "passText": "Aktiviere ihn mit einem Jahrespass für 10 €: einmalige Zahlung, kein Abo.",
+      "notes": "Man meldet sich kostenlos an und hat sofort fünfzehn Dienste. Der Base-Tarif, 49 Euro im Jahr, ist für Privatpersonen und Familien. Der Pro-Tarif, 149 Euro im Jahr, ist für alle, die mit Kunden arbeiten, und lässt sich fünfzehn Tage kostenlos testen. Wer nur einen Dienst braucht, kann einen Jahrespass für 10 Euro aktivieren."
+    },
+    "s9": {
+      "title": "Die Werkzeuge für dein Geschäft",
+      "sub": "Pro-Tarif: Geschäfte, Lokale, Handwerker und Freiberufler.",
+      "rows": {
+        "1": {
+          "1": "KUMANI Menu",
+          "2": "Menü mit Tisch-QR, mehrsprachig, immer aktuell"
+        },
+        "2": {
+          "1": "Kumi Card",
+          "2": "Die Treuekarte auf dem Handy des Kunden"
+        },
+        "3": {
+          "1": "Angebote",
+          "2": "Mit deinem Logo, als PDF, per E-Mail oder WhatsApp"
+        },
+        "4": {
+          "1": "Digitale Belege",
+          "2": "Lieferungen und Anzahlungen vom Kunden bestätigt"
+        },
+        "5": {
+          "1": "Magazzino PRO",
+          "2": "Bestand und Barcodes per Handy"
+        },
+        "6": {
+          "1": "QR Code PRO",
+          "2": "Ziel ändern und Scans zählen"
+        }
+      },
+      "notes": "Für Profis bietet der Pro-Tarif konkrete Werkzeuge: das Menü mit Tisch-QR, die digitale Treuekarte, Angebote und Belege mit wenigen Klicks, die Lagerverwaltung und verfolgbare QR-Codes. Dazu der Profi-Bereich und die Möglichkeit, Kordata-Anbieter zu werden."
+    },
+    "s10": {
+      "title": "Sicherer gegen Online-Betrug",
+      "sub": "Prüfungen in Sekunden, bevor du vertraust, zahlst oder ein Dokument sendest.",
+      "items": {
+        "1": {
+          "1": "SVAT",
+          "2": "Risikobewertung einer Website oder Firma"
+        },
+        "2": {
+          "1": "VeriFoto",
+          "2": "Erkennt, ob ein Foto mit KI erzeugt oder bearbeitet wurde"
+        },
+        "3": {
+          "1": "CheckMail",
+          "2": "Prüft eine verdächtige E-Mail: Absender, Links, Anhänge"
+        },
+        "4": {
+          "1": "IBAN-Prüfung",
+          "2": "Prüft die IBAN vor einer Überweisung · kostenlos"
+        },
+        "5": {
+          "1": "Sicheres Dokument",
+          "2": "Wasserzeichen und verdeckte Daten vor dem Senden"
+        },
+        "6": {
+          "1": "Anti-Betrugs-Handbuch",
+          "2": "Die häufigsten Maschen und was zu tun ist · kostenlos"
+        }
+      },
+      "notes": "Online-Betrug ist ein Problem für alle, die im Netz arbeiten. KUMANI bietet sechs Werkzeuge: Prüfung von Websites und Firmen, falsche Fotos, verdächtige E-Mails, IBAN, Schutz von Dokumenten und ein aktuelles Handbuch. IBAN-Prüfung und Handbuch sind für alle kostenlos. Die Ergebnisse sind automatische Hinweise, keine Garantie."
+    },
+    "s11": {
+      "title": "Eine Community, die mit anpackt",
+      "sub": "Was du gibst, bekommst du zurück.",
+      "rows": {
+        "1": {
+          "1": "Anzeigen",
+          "2": "Dienste und Produkte unter Kumani"
+        },
+        "2": {
+          "1": "Kordata",
+          "2": "Gemeinsam kaufen, alle sparen"
+        },
+        "3": {
+          "1": "Time Bank",
+          "2": "Eine Stunde deiner Hilfe ist eine Stunde Hilfe wert"
+        },
+        "4": {
+          "1": "KUMANI Events",
+          "2": "Treffen vor Ort, mit QR-Pass"
+        },
+        "5": {
+          "1": "Affinity",
+          "2": "Dein Archetyp und die Nähe zu Freunden"
+        },
+        "6": {
+          "1": "Spiele",
+          "2": "Veritas, Mosaic und Fabula gemeinsam spielen"
+        }
+      },
+      "notes": "KUMANI ist nicht nur Werkzeug: Es ist eine Community. Anzeigen, Gruppenkäufe mit der Kordata, die Time Bank zum Austausch von Hilfe, Events vor Ort und Spiele mit Freunden."
+    },
+    "s12": {
+      "title": "Zwei Arten von Punkten, öffentliche Regeln",
+      "sub": "Konkrete Vorteile in KUMANI, keine Gewinnversprechen.",
+      "karma": {
+        "1": "KU Karma",
+        "2": "Gibt es für die tägliche Nutzung der Dienste.",
+        "3": {
+          "1": "Rabatt auf die Verlängerung",
+          "2": "Schaufenster für deine Anzeigen",
+          "3": "Umwandlung in KU Points",
+          "4": "Aktivitäts-Abzeichen"
+        }
+      },
+      "points": {
+        "1": "KU Points",
+        "2": "Kommen, wenn eine eingeladene Person ein Abo abschließt, und mit dem Willkommensbonus.",
+        "3": {
+          "1": "Gutschein für das Abo eines anderen Kumano",
+          "2": "Gutschein-Pakete",
+          "3": "Schaufenster für deine Anzeigen",
+          "4": "Spenden an den Verein"
+        }
+      },
+      "note": "Punkte gibt es nur für die Nutzung der Plattform, und sie lassen sich nur darin einsetzen, nach dem öffentlichen Reglement. Sie sind kein Geld.",
+      "notes": "Es gibt zwei Arten von Punkten. KU Karma gibt es für die tägliche Nutzung der Dienste, zum Beispiel für einen Rabatt auf die Verlängerung. KU Points kommen, wenn eine eingeladene Person ein Abo abschließt, und mit dem Willkommensbonus: für Gutscheine, das Anzeigen-Schaufenster und Spenden. Wichtig: Sie sind kein Geld und lassen sich nicht auszahlen."
+    },
+    "s13": {
+      "title": "Teile KUMANI, ganz ohne Druck",
+      "sub": "Ein Tipp von Mensch zu Mensch: keine Verkaufsziele.",
+      "you": "Du",
+      "legendMine": "von dir eingeladen",
+      "legendReceived": "von Kumani erhalten",
+      "rows": {
+        "1": {
+          "1": "Deine persönliche Einladung",
+          "2": "Ein einzigartiger Link zum Teilen, mit wem du willst, wann du willst. Keine Pflicht, keine Frist."
+        },
+        "2": {
+          "1": "Willkommensbonus",
+          "2": "Von anderen Kumani eingeladene Personen können in deinen Stern kommen: Ihre Punkte zählen zu deinen KU Points."
+        },
+        "3": {
+          "1": "Anerkennung, kein Einkommen",
+          "2": "Die Abzeichen Kuman Green, Kuman Star und Kuman Black zeigen, wie aktiv deine Community ist."
+        }
+      },
+      "notes": "Wer möchte, kann KUMANI mit einem persönlichen Link teilen. Das Netzwerk erscheint als Stern mit fünf Plätzen: in Gold die von dir Eingeladenen, in Blau die von anderen Kumani mit dem Willkommensbonus erhaltenen. Abzeichen sind Anerkennung, kein Einkommen."
+    },
+    "s14": {
+      "eyebrow": "KUMANI HILFT",
+      "title": "Jedes Abo hilft jemandem.",
+      "text": "Ein Teil jedes Abos geht an einen Verein. Was gesammelt wird und jede Überweisung sind öffentlich.",
+      "notes": "Ein wichtiger Teil des Projekts: die Spenden. Jedes Abo hilft jemandem, und alles ist öffentlich."
+    },
+    "s15": {
+      "title": "So funktionieren die Spenden",
+      "sub": "Drei Quellen, ein Ziel, alles veröffentlicht.",
+      "src": {
+        "1": {
+          "1": "3 €",
+          "2": "für jedes Base-Abo",
+          "3": "abgeschlossen oder verlängert"
+        },
+        "2": {
+          "1": "6 €",
+          "2": "für jedes Pro-Abo",
+          "3": "abgeschlossen oder verlängert"
+        },
+        "3": {
+          "1": "1 €",
+          "2": "je 10 gespendete KU Points",
+          "3": "aus deinem Wallet, wann du willst"
+        }
+      },
+      "assoc": "Unterstützter Verein",
+      "publicT": "Alles öffentlich",
+      "publicD": "Auf der Website: wie viel gespendet und schon überwiesen wurde, jede Überweisung mit Datum, Referenz und Beleg.",
+      "notes": "Für jedes abgeschlossene oder verlängerte Base-Abo spendet KUMANI 3 Euro, für jedes Pro-Abo 6 Euro. Außerdem kann jeder Kumano seine KU Points spenden: Je 10 Punkte überweist KUMANI 1 Euro. Website und Wallet zeigen, wie viel gespendet und überwiesen wurde, mit jedem Beleg."
+    },
+    "s16": {
+      "title": "Vertrauen zuerst",
+      "sub": "Wie wir Menschen und ihre Daten schützen.",
+      "items": {
+        "1": {
+          "1": "Öffentliche Regeln",
+          "2": "AGB und Reglement für alle lesbar, schon vor der Anmeldung."
+        },
+        "2": {
+          "1": "Daten in Europa",
+          "2": "Die Datenbank von KUMANI liegt in Europa, in Frankfurt."
+        },
+        "3": {
+          "1": "Sichere Zahlungen",
+          "2": "Zahlungen laufen über Stripe: KUMANI sieht keine Kartendaten."
+        },
+        "4": {
+          "1": "Sieben Sprachen",
+          "2": "Website, E-Mails und Anleitungen in der Sprache jedes Menschen."
+        },
+        "5": {
+          "1": "Schritt-für-Schritt-Anleitungen",
+          "2": "Jeder Dienst hat seine Anleitung, schon vor dem Kauf."
+        },
+        "6": {
+          "1": "Echter Support",
+          "2": "support@kumani.io für Hilfe, privacy@kumani.io für persönliche Daten."
+        }
+      },
+      "notes": "Vertrauen ist die Grundlage. Die Regeln sind öffentlich, die Datenbank liegt in Europa, Zahlungen laufen über Stripe. Alles ist in sieben Sprachen, mit Anleitungen für jeden Dienst und einem Support per E-Mail."
+    },
+    "s17": {
+      "title": "Start in drei Schritten",
+      "sub": "In wenigen Minuten startklar, ohne Kreditkarte.",
+      "steps": {
+        "1": {
+          "1": "Kostenlos anmelden",
+          "2": "Name, E-Mail und ein 6-stelliger Code: sofort 15 Dienste."
+        },
+        "2": {
+          "1": "Lass dich führen",
+          "2": "Die Dashboard-Tour und die Anleitungen zeigen jedes Werkzeug."
+        },
+        "3": {
+          "1": "Wähle, wann du willst",
+          "2": "Base, Pro oder ein Pass für einen Dienst, wenn du ihn brauchst."
+        }
+      },
+      "notes": "Der Start ist einfach: kostenlos anmelden mit einem Bestätigungscode per E-Mail, die Tour führt durchs Dashboard und jeder Dienst hat seine Anleitung. Einen Tarif wählt man erst, wenn man ihn braucht."
+    },
+    "s18": {
+      "title": "Der erste Schritt gehört dir.\nDen Rest schaffen wir zusammen.",
+      "contacts": "kumani.io  ·  support@kumani.io",
+      "notes": "Danke. Der erste Schritt gehört euch: Die Anmeldung auf kumani.io ist kostenlos. Für alle Fragen: support@kumani.io."
+    }
   }
 }

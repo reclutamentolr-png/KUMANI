@@ -20,6 +20,7 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
+import DeckDownloadButton from '@/components/documents/DeckDownloadButton'
 import { createClient } from '@/lib/supabase/server'
 import { listKumaniDocuments, listPersonalDocuments } from '@/lib/documentsData'
 import { getFlyerTitles, listPublishedFlyers } from '@/lib/flyersData'
@@ -132,10 +133,16 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
         <p className="text-sm text-[var(--muted)]">{t('kumaniIntro')}</p>
         {docs.length === 0 && flyers.length === 0 && <p className="rounded-2xl border border-dashed border-[var(--gold)]/40 bg-white p-6 text-center text-[var(--muted)]">{t('kumaniEmpty')}</p>}
         {docs.map((d) => {
-          const mine = d.files.filter((f) => f.locale === locale).sort((a, b) => (a.format === 'pdf' ? -1 : 1) - (b.format === 'pdf' ? -1 : 1))
+          // Presentazione: il PowerPoint si crea al momento (testi aggiornati), in ogni lingua
+          const live = d.category === 'presentation'
+          const files = live ? d.files.filter((f) => f.format !== 'pptx') : d.files
+          const mine = files.filter((f) => f.locale === locale).sort((a, b) => (a.format === 'pdf' ? -1 : 1) - (b.format === 'pdf' ? -1 : 1))
           const others = DOC_LOCALES.filter((l) => l !== locale)
-            .map((l) => ({ l, files: d.files.filter((f) => f.locale === l) }))
-            .filter((x) => x.files.length > 0)
+            .map((l) => ({ l, files: files.filter((f) => f.locale === l) }))
+            .filter((x) => live || x.files.length > 0)
+          const deckButton = (l: string, main: boolean) => (
+            <DeckDownloadButton key={`deck-${l}`} locale={l} main={main} label={t('pptx')} busyLabel={flyersT('generating')} errorLabel={flyersT('error')} />
+          )
           const CatIcon = d.category === 'presentation' ? Presentation : d.category === 'rules' ? ScrollText : FileText
           const description = pickLocalized(d.description, locale)
           return (
@@ -155,17 +162,25 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
                 <p className="mb-2 text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
                   {t('yourLanguage')} · {languageName(locale)}
                 </p>
-                {mine.length ? <div className="flex flex-wrap gap-2">{mine.map((f) => fileButton(f, true))}</div> : <p className="text-sm text-[var(--muted)]">{t('notInYourLanguage')}</p>}
+                {mine.length || live ? (
+                  <div className="flex flex-wrap items-center gap-2">
+                    {mine.map((f) => fileButton(f, true))}
+                    {live && deckButton(locale, true)}
+                  </div>
+                ) : (
+                  <p className="text-sm text-[var(--muted)]">{t('notInYourLanguage')}</p>
+                )}
               </div>
 
               {others.length > 0 && (
-                <details className="mt-4 group" open={mine.length === 0}>
+                <details className="mt-4 group" open={mine.length === 0 && !live}>
                   <summary className="cursor-pointer text-sm font-semibold text-[var(--ink)] hover:text-[var(--gold)]">{t('otherLanguages')}</summary>
                   <ul className="mt-3 space-y-2">
                     {others.map(({ l, files }) => (
                       <li key={l} className="flex flex-wrap items-center gap-2">
                         <span className="w-28 text-sm text-[var(--ink)]">{languageName(l as DocLocale)}</span>
                         {files.map((f) => fileButton(f, false))}
+                        {live && deckButton(l, false)}
                       </li>
                     ))}
                   </ul>
