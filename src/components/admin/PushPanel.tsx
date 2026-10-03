@@ -2,8 +2,10 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { BellRing, LoaderCircle, RefreshCw, Send, Smartphone } from 'lucide-react'
-import { adminPushOverview, adminSendPushCampaign, type PushAudience } from '@/app/actions/push'
+import { adminPushOverview, adminPushUserStatus, adminSendPushCampaign, type PushAudience } from '@/app/actions/push'
 import { notify } from '@/lib/adminNotify'
+import AdminUserPicker from '@/components/admin/AdminUserPicker'
+import type { StaffUserHit } from '@/app/actions/admin'
 
 // Admin → Notifiche push: avvisi dello Staff sui telefoni e computer dei
 // Kumani che hanno attivato le notifiche (e non hanno spento "Avvisi dello
@@ -13,6 +15,7 @@ const AUDIENCES: { value: PushAudience; label: string }[] = [
   { value: 'all', label: 'Tutti' },
   { value: 'active', label: 'Solo con abbonamento attivo' },
   { value: 'inactive', label: 'Solo senza abbonamento attivo' },
+  { value: 'user', label: 'Una persona' },
 ]
 
 const LANGUAGES = [
@@ -39,6 +42,16 @@ export default function PushPanel() {
   const [audience, setAudience] = useState<PushAudience>('all')
   const [locale, setLocale] = useState('all')
   const [sending, setSending] = useState(false)
+  const [person, setPerson] = useState<StaffUserHit | null>(null)
+  const [personStatus, setPersonStatus] = useState<{ devices: number; staffOff: boolean } | null>(null)
+
+  const pickPerson = async (user: StaffUserHit | null) => {
+    setPerson(user)
+    setPersonStatus(null)
+    if (user) setPersonStatus(await adminPushUserStatus(user.id))
+  }
+  const personName = person ? `${person.first_name ?? ''} ${person.last_name ?? ''}`.trim() || person.email || person.referral_code || '' : ''
+  const personReachable = Boolean(personStatus && personStatus.devices > 0 && !personStatus.staffOff)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -55,16 +68,18 @@ export default function PushPanel() {
 
   const send = async () => {
     if (!title.trim() || !body.trim()) return
+    if (audience === 'user' && !person) return
     const langLabel = LANGUAGES.find(([code]) => code === locale)?.[1]
-    if (!window.confirm(`Inviare la notifica a: ${AUDIENCE_LABEL[audience]} · ${langLabel}?`)) return
+    const target = audience === 'user' ? personName : `${AUDIENCE_LABEL[audience]} · ${langLabel}`
+    if (!window.confirm(`Inviare la notifica a: ${target}?`)) return
     setSending(true)
-    const r = await adminSendPushCampaign({ title, body, url, audience, locale })
+    const r = await adminSendPushCampaign({ title, body, url, audience, locale, userId: person?.id })
     setSending(false)
     if (!r.success) {
       notify(r.error ?? 'Invio non riuscito.')
       return
     }
-    notify(`Inviata a ${r.recipients} persone (${r.sent} dispositivi${r.failed ? `, ${r.failed} non raggiunti` : ''}).`, 'success')
+    notify(audience === 'user' ? `Inviata a ${personName} (${r.sent} dispositivi${r.failed ? `, ${r.failed} non raggiunti` : ''}).` : `Inviata a ${r.recipients} persone (${r.sent} dispositivi${r.failed ? `, ${r.failed} non raggiunti` : ''}).`, 'success')
     setTitle('')
     setBody('')
     load()
@@ -117,13 +132,30 @@ export default function PushPanel() {
               {AUDIENCES.map((a) => <option key={a.value} value={a.value}>{a.label}</option>)}
             </select>
           </div>
-          <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">Lingua del dispositivo</label>
-            <select value={locale} onChange={(e) => setLocale(e.target.value)} className="w-full rounded-lg border border-gray-300 p-2 text-sm">
-              {LANGUAGES.map(([code, name]) => <option key={code} value={code}>{name}</option>)}
-            </select>
-          </div>
+          {audience !== 'user' && (
+            <div>
+              <label className="mb-1 block text-sm font-medium text-gray-700">Lingua del dispositivo</label>
+              <select value={locale} onChange={(e) => setLocale(e.target.value)} className="w-full rounded-lg border border-gray-300 p-2 text-sm">
+                {LANGUAGES.map(([code, name]) => <option key={code} value={code}>{name}</option>)}
+              </select>
+            </div>
+          )}
         </div>
+        {audience === 'user' && (
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">Persona</label>
+            <AdminUserPicker scope="matrix" selected={person} onSelect={pickPerson} />
+            {person && personStatus && (
+              <p className={`mt-1 text-xs ${personReachable ? 'text-emerald-700' : 'text-amber-700'}`}>
+                {personStatus.devices === 0
+                  ? 'Non ha attivato le notifiche su nessun dispositivo: non riceverà nulla.'
+                  : personStatus.staffOff
+                    ? 'Ha disattivato gli avvisi di KUMANI: non riceverà nulla.'
+                    : `Notifiche attive su ${personStatus.devices} ${personStatus.devices === 1 ? 'dispositivo' : 'dispositivi'}.`}
+              </p>
+            )}
+          </div>
+        )}
         <p className="text-xs text-gray-500">Il testo parte così come lo scrivi: per un avviso in più lingue, invialo una volta per ogni lingua.</p>
         <div>
           <label className="mb-1 block text-sm font-medium text-gray-700">Titolo <span className="text-gray-400">({title.length}/80)</span></label>
@@ -146,7 +178,7 @@ export default function PushPanel() {
           </div>
         )}
         <div className="flex justify-end">
-          <button type="button" onClick={send} disabled={sending || !title.trim() || !body.trim() || !data.configured} className="inline-flex items-center gap-1.5 rounded-lg bg-gray-900 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50">
+          <button type="button" onClick={send} disabled={sending || !title.trim() || !body.trim() || !data.configured || (audience === 'user' && !personReachable)} className="inline-flex items-center gap-1.5 rounded-lg bg-gray-900 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50">
             {sending ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />} Invia notifica
           </button>
         </div>
@@ -166,7 +198,7 @@ export default function PushPanel() {
                 </div>
                 <p className="text-sm text-gray-700">{c.body}</p>
                 <p className="mt-1 text-xs text-gray-500">
-                  {AUDIENCE_LABEL[c.audience]} · {c.locale ? c.locale.toUpperCase() : 'tutte le lingue'} · {c.recipients} persone · {c.sent} dispositivi raggiunti{c.failed ? ` · ${c.failed} non raggiunti` : ''} · {c.url}
+                  {c.audience === 'user' ? `A: ${c.target_name ?? 'persona'}` : `${AUDIENCE_LABEL[c.audience]} · ${c.locale ? c.locale.toUpperCase() : 'tutte le lingue'} · ${c.recipients} persone`} · {c.sent} dispositivi raggiunti{c.failed ? ` · ${c.failed} non raggiunti` : ''} · {c.url}
                 </p>
               </li>
             ))}
