@@ -7568,5 +7568,30 @@
       "contacts": "kumani.io  ·  support@kumani.io",
       "notes": "Thank you. The first step is yours: signing up is free at kumani.io. For any question: support@kumani.io."
     }
+  },
+  "privacyPage": {
+    "metaTitle": "Privacy Policy",
+    "metaDescription": "How KUMANI processes users’ personal data, in short.",
+    "title": "Privacy Policy",
+    "subtitle": "How we process your personal data, in short.",
+    "notice": "This is a short version. The full policy is being prepared and will be published on this page.",
+    "updated": "Last updated: {date}",
+    "back": "Go back",
+    "s1t": "Who processes the data",
+    "s1": "The data controller will be shown on this page with full details. For any question about your data you can already write to {email}.",
+    "s2t": "What data we process",
+    "s2": "Account data: email and password (encrypted, nobody can read it).|Profile data: first name, last name, country, city and whatever you choose to add.|The content you create in the tools, such as agenda, expenses, deadlines, quotes or listings.|Payments: handled by Stripe; KUMANI never sees or stores card details.|Technical data, such as IP address and browser type, for the security of the service.",
+    "s3t": "Why we process it",
+    "s3": "To provide the service you chose (performance of the contract).|To comply with legal obligations, such as tax rules.|For security and to prevent abuse and scams (legitimate interest).|To show your story on the homepage only if you consent, which you can withdraw at any time.|We do not send advertising emails without your consent.",
+    "s4t": "Who receives the data",
+    "s4": "Only the technical providers needed to run KUMANI (hosting, database in Europe, email delivery, payments with Stripe), who use the data only for that purpose. We do not sell your data to anyone.",
+    "s5t": "How long we keep it",
+    "s5": "As long as your account is active. You can delete your account from your profile: the related data is deleted or anonymised, except what the law requires us to keep (for example tax records of payments).",
+    "s6t": "Your rights",
+    "s6": "Access your data and get a copy.|Correct it or ask for it to be deleted.|Restrict or object to processing.|Withdraw consent at any time.|Lodge a complaint with the data protection authority of your country.",
+    "s7t": "Cookies",
+    "s7": "KUMANI uses only technical cookies, needed to keep you logged in and make the site work. We do not use profiling or advertising cookies.",
+    "s8t": "Contact",
+    "s8": "To exercise your rights or for any privacy question, write to {email}."
   }
 }

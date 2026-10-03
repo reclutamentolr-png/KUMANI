@@ -7568,5 +7568,30 @@
       "contacts": "kumani.io  ·  support@kumani.io",
       "notes": "Gracias. El primer paso es vuestro: registrarse es gratis en kumani.io. Para cualquier pregunta: support@kumani.io."
     }
+  },
+  "privacyPage": {
+    "metaTitle": "Política de privacidad",
+    "metaDescription": "Cómo trata KUMANI los datos personales de los usuarios, en resumen.",
+    "title": "Política de privacidad",
+    "subtitle": "Cómo tratamos tus datos personales, en breve.",
+    "notice": "Esta es una versión esencial. La política completa está en preparación y se publicará en esta página.",
+    "updated": "Última actualización: {date}",
+    "back": "Volver",
+    "s1t": "Quién trata los datos",
+    "s1": "El responsable del tratamiento se indicará en esta página con sus datos completos. Para cualquier pregunta sobre tus datos ya puedes escribir a {email}.",
+    "s2t": "Qué datos tratamos",
+    "s2": "Datos de la cuenta: email y contraseña (cifrada, nadie puede leerla).|Datos del perfil: nombre, apellidos, país, ciudad y lo que decidas añadir.|Los contenidos que creas en las herramientas, por ejemplo agenda, gastos, vencimientos, presupuestos o anuncios.|Pagos: se realizan con Stripe; KUMANI no ve ni guarda los datos de la tarjeta.|Datos técnicos, como la dirección IP y el tipo de navegador, para la seguridad del servicio.",
+    "s3t": "Por qué los tratamos",
+    "s3": "Para prestarte el servicio que has elegido (ejecución del contrato).|Para cumplir obligaciones legales, por ejemplo fiscales.|Para la seguridad y para prevenir abusos y estafas (interés legítimo).|Para mostrar tu historia en la portada solo si das tu consentimiento, que puedes retirar cuando quieras.|No enviamos publicidad por email sin tu consentimiento.",
+    "s4t": "Quién recibe los datos",
+    "s4": "Solo los proveedores técnicos necesarios para que KUMANI funcione (alojamiento, base de datos en Europa, envío de emails, pagos con Stripe), que usan los datos solo para ese fin. No vendemos tus datos a nadie.",
+    "s5t": "Durante cuánto tiempo",
+    "s5": "Mientras tu cuenta esté activa. Puedes eliminar la cuenta desde tu perfil: los datos vinculados se eliminan o se anonimizan, salvo los que la ley nos obliga a conservar (por ejemplo los datos fiscales de los pagos).",
+    "s6t": "Tus derechos",
+    "s6": "Acceder a tus datos y obtener una copia.|Rectificarlos o pedir que se eliminen.|Limitar un tratamiento u oponerte.|Retirar un consentimiento en cualquier momento.|Presentar una reclamación ante la autoridad de protección de datos de tu país.",
+    "s7t": "Cookies",
+    "s7": "KUMANI usa solo cookies técnicas, necesarias para mantener la sesión y que el sitio funcione. No usamos cookies de perfilado ni publicitarias.",
+    "s8t": "Contacto",
+    "s8": "Para ejercer tus derechos o para cualquier pregunta sobre privacidad escribe a {email}."
   }
 }
