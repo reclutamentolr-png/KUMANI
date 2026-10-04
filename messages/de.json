@@ -5899,7 +5899,9 @@
     "cycleProgress": "In diesem Zyklus eingelöste Pakete: {done} von {total}. Wenn du alle eingelöst hast, beginnt der Zyklus von vorn.",
     "shareGiftMessage": "Ich schenke dir einen KUMANI-Voucher: Mit dem Code {code} aktivierst du kostenlos dein {plan}-Abo für ein Jahr!",
     "shareSaleMessage": "Hier ist dein KUMANI-Voucher: Mit dem Code {code} aktivierst du dein {plan}-Abo für ein Jahr.",
-    "rulePass": "Eine von dir eingeladene Person kauft einen einzelnen Service (Pass): die für diesen Service festgelegten KU Points"
+    "rulePass": "Eine von dir eingeladene Person kauft einen einzelnen Service (Pass): die für diesen Service festgelegten KU Points",
+    "ruleWelcomeGive": "Ab deiner {from}. aktivierten eingeladenen Person gehen {base} Punkte eines Basis-Abos und {pro} eines Pro-Abos als Willkommensbonus an die Person, die sie in ihren Stern aufnimmt",
+    "ruleWelcomeGet": "Eine von einem anderen Kumano eingeladene Person kommt in deinen Stern und aktiviert ein Abo: +{base} Punkte mit Basis, +{pro} mit Pro (Willkommensbonus)"
   },
   "voucherReceipt": {
     "back": "Zurück zur Brieftasche",
@@ -7897,7 +7899,9 @@
     "landingMessageTitle": "Neue Nachricht von deiner Landing Page",
     "landingMessageBody": "{name} hat dir geschrieben: Tippe zum Lesen.",
     "passTitle": "Neue KU Points aus deinem Netzwerk",
-    "passBody": "{name} hat {service} gekauft: Du hast {points} KU Points erhalten."
+    "passBody": "{name} hat {service} gekauft: Du hast {points} KU Points erhalten.",
+    "welcomeTitle": "Willkommensbonus",
+    "welcomeBody": "{name} ist in deinen Stern gekommen und hat KUMANI aktiviert: Du hast {points} KU Points erhalten."
   },
   "pushInvite": {
     "title": "Benachrichtigungen aktivieren",

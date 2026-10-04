@@ -5899,7 +5899,9 @@
     "cycleProgress": "Pacchetti riscattati in questo ciclo: {done} di {total}. Quando li riscatti tutti, il ciclo ricomincia.",
     "shareGiftMessage": "Ti regalo un voucher KUMANI: usa il codice {code} per attivare gratis il tuo abbonamento {plan} di un anno!",
     "shareSaleMessage": "Ecco il tuo voucher KUMANI: usa il codice {code} per attivare il tuo abbonamento {plan} di un anno.",
-    "rulePass": "Un tuo invitato acquista un singolo servizio (Pass): i KU Points indicati per quel servizio"
+    "rulePass": "Un tuo invitato acquista un singolo servizio (Pass): i KU Points indicati per quel servizio",
+    "ruleWelcomeGive": "Dal {from}° tuo invitato attivato in poi, {base} punti del Base e {pro} del Pro vanno come Bonus Accoglienza a chi accoglie la persona nella sua stella",
+    "ruleWelcomeGet": "Una persona invitata da un altro Kumano entra nella tua stella e attiva l’abbonamento: +{base} punti con il Base, +{pro} con il Pro (Bonus Accoglienza)"
   },
   "voucherReceipt": {
     "back": "Torna al Portafoglio",
@@ -7897,7 +7899,9 @@
     "landingMessageTitle": "Nuovo messaggio dalla tua Landing Page",
     "landingMessageBody": "{name} ti ha scritto: tocca per leggere.",
     "passTitle": "Nuovi KU Points dalla tua rete",
-    "passBody": "{name} ha acquistato {service}: hai ricevuto {points} KU Points."
+    "passBody": "{name} ha acquistato {service}: hai ricevuto {points} KU Points.",
+    "welcomeTitle": "Bonus Accoglienza",
+    "welcomeBody": "{name} è entrato nella tua stella e ha attivato KUMANI: hai ricevuto {points} KU Points."
   },
   "pushInvite": {
     "title": "Attiva le notifiche",

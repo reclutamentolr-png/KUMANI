@@ -91,6 +91,7 @@ const ADMIN_EDITABLE_PROFILE_FIELDS = new Set([
 // il resto hanno i loro pannelli, e non vanno mai riscritte da qui.
 const GENERAL_SETTINGS_KEYS = new Set([
   'maintenance_mode', 'maintenance_message', 'matrix_slot_bonus_points', 'matrix_spillover_bonus_points',
+  'welcome_bonus_base', 'welcome_bonus_pro', 'welcome_bonus_from_direct',
   'activity_thanks_points', 'pro_invite_extra_points', 'pro_trial_days', 'affinity_intros_per_week',
   'listing_feature_cost_7d', 'listing_feature_cost_15d', 'menu_ai_daily_runs',
   'veritas_write_seconds', 'veritas_vote_seconds', 'veritas_reveal_seconds',

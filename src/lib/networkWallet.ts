@@ -13,7 +13,7 @@ export type NetworkWallet = {
   // Pacchetti già riscattati nel ciclo in corso (indici)
   packsRedeemed: number[]
   // Punti assegnati: attivazione Base/Pro, passaggio a Pro, Bonus Accoglienza
-  pointsRules: { base: number; pro: number; upgrade: number; spillover: number }
+  pointsRules: { base: number; pro: number; upgrade: number; spillover: number; welcomeBase: number; welcomePro: number; welcomeFrom: number }
   ranks: RankDefinition[]
 }
 
@@ -32,6 +32,8 @@ export async function getMyNetworkWallet(supabase: SupabaseClient): Promise<Netw
     points_upgrade_pro: number
     points_spillover: number
   }>()
+  // Bonus Accoglienza ceduto dallo sponsor (dal N° invitato in poi)
+  const { data: welcome } = await supabase.rpc('network_welcome_rules').maybeSingle<{ base: number; pro: number; from_direct: number }>()
   const packs = Array.isArray(data?.packs) ? data.packs : []
   return {
     networkPoints: data?.network_points ?? 0,
@@ -45,7 +47,10 @@ export async function getMyNetworkWallet(supabase: SupabaseClient): Promise<Netw
       base: data?.points_activation_base ?? 49,
       pro: data?.points_activation_pro ?? 122,
       upgrade: data?.points_upgrade_pro ?? 60,
-      spillover: data?.points_spillover ?? 5,
+      spillover: data?.points_spillover ?? 0,
+      welcomeBase: welcome?.base ?? 5,
+      welcomePro: welcome?.pro ?? 10,
+      welcomeFrom: welcome?.from_direct ?? 6,
     },
     ranks: buildRanks(thresholdsFromPacks(packs)),
   }

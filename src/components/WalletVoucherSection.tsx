@@ -34,7 +34,7 @@ export default function WalletVoucherSection({
   valueProEur: number
   // Pacchetti già presi nel ciclo in corso: nascosti finché il ciclo non ricomincia
   initialPacksRedeemed: number[]
-  pointsRules: { base: number; pro: number; upgrade: number; spillover: number }
+  pointsRules: { base: number; pro: number; upgrade: number; spillover: number; welcomeBase: number; welcomePro: number; welcomeFrom: number }
   initialVouchers: MyVoucher[]
 }) {
   const t = useTranslations('voucherWallet')
@@ -198,7 +198,8 @@ export default function WalletVoucherSection({
             <li>{t('ruleBase', { points: pointsRules.base })}</li>
             <li>{t('rulePro', { points: pointsRules.pro })}</li>
             <li>{t('ruleUpgrade', { points: pointsRules.upgrade })}</li>
-            <li>{t('ruleSpillover', { points: pointsRules.spillover })}</li>
+            <li>{t('ruleWelcomeGive', { from: pointsRules.welcomeFrom, base: pointsRules.welcomeBase, pro: pointsRules.welcomePro })}</li>
+            <li>{t('ruleWelcomeGet', { base: pointsRules.welcomeBase, pro: pointsRules.welcomePro })}</li>
             <li>{t('rulePass')}</li>
           </ul>
         </div>

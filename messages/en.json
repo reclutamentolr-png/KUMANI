@@ -5899,7 +5899,9 @@
     "cycleProgress": "Packs redeemed in this cycle: {done} of {total}. Once you redeem them all, the cycle starts again.",
     "shareGiftMessage": "Here's a KUMANI voucher as a gift: use the code {code} to activate your one-year {plan} subscription for free!",
     "shareSaleMessage": "Here is your KUMANI voucher: use the code {code} to activate your one-year {plan} subscription.",
-    "rulePass": "Someone you invited buys a single service (Pass): the KU Points set for that service"
+    "rulePass": "Someone you invited buys a single service (Pass): the KU Points set for that service",
+    "ruleWelcomeGive": "From your {from}th activated invitee onwards, {base} points of a Base and {pro} of a Pro go as a Welcome Bonus to whoever welcomes that person into their star",
+    "ruleWelcomeGet": "Someone invited by another Kumano joins your star and activates a subscription: +{base} points with Base, +{pro} with Pro (Welcome Bonus)"
   },
   "voucherReceipt": {
     "back": "Back to Wallet",
@@ -7897,7 +7899,9 @@
     "landingMessageTitle": "New message from your Landing Page",
     "landingMessageBody": "{name} wrote to you: tap to read.",
     "passTitle": "New KU Points from your network",
-    "passBody": "{name} bought {service}: you received {points} KU Points."
+    "passBody": "{name} bought {service}: you received {points} KU Points.",
+    "welcomeTitle": "Welcome Bonus",
+    "welcomeBody": "{name} joined your star and activated KUMANI: you received {points} KU Points."
   },
   "pushInvite": {
     "title": "Turn on notifications",

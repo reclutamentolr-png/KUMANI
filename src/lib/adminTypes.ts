@@ -205,6 +205,10 @@ export type AdminSystemSettings = {
   maintenance_message: string
   matrix_slot_bonus_points: number
   matrix_spillover_bonus_points: number
+  // Bonus Accoglienza ceduto dallo sponsor (20270104100000_welcome_bonus_split.sql)
+  welcome_bonus_base: number
+  welcome_bonus_pro: number
+  welcome_bonus_from_direct: number
   activity_thanks_points: number
   pro_invite_extra_points: number
   // Nuovo sistema Punti Community (20261203100000_network_points_v2.sql)

@@ -351,7 +351,10 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     maintenance_mode: false,
     maintenance_message: 'Sito in manutenzione. Torna presto!',
     matrix_slot_bonus_points: 0,
-    matrix_spillover_bonus_points: 5,
+    matrix_spillover_bonus_points: 0,
+    welcome_bonus_base: 5,
+    welcome_bonus_pro: 10,
+    welcome_bonus_from_direct: 6,
     activity_thanks_points: 0,
     pro_invite_extra_points: 0,
     network_points_activation_base: 49,
@@ -2658,7 +2661,7 @@ L'accesso viene registrato.`)) return
             <Row label="Attivazioni Pro" value={`${f.pointsAwarded.activation_pro} punti`} />
             <Row label="Passaggi a Pro" value={`${f.pointsAwarded.upgrade_pro} punti`} />
             <Row label="Pass dei singoli servizi" value={`${f.pointsAwarded.tool_pass} punti`} />
-            <Row label="Bonus Accoglienza (spillover)" value={`${f.pointsAwarded.matrix} punti`} />
+            <Row label="Bonus Accoglienza" value={`${f.pointsAwarded.matrix} punti`} />
             <Row label="Tolti per rimborsi" value={`${f.pointsAwarded.reversed} punti`} />
             <Row
               label="Punti ancora da spendere"
@@ -3002,9 +3005,10 @@ L'accesso viene registrato.`)) return
             <p className="text-xs text-gray-500 mb-3">
               Punti assegnati <strong>solo allo sponsor diretto</strong> quando un suo invitato paga con carta: primo
               abbonamento Base o Pro, oppure passaggio da Base a Pro. Voucher e rinnovi non danno punti; un rimborso li
-              toglie. <strong>Bonus Accoglienza (spillover):</strong> punti una tantum quando uno dei 5 posti diretti della
-              matrice di un Kumano viene occupato da una persona invitata da un altro Kumano che paga con carta. I posti
-              occupati dai propri invitati non danno bonus: c&apos;è già il punteggio dell&apos;attivazione.
+              toglie. <strong>Bonus Accoglienza:</strong> dal N° invitato attivato in poi, una parte dei punti dello sponsor
+              passa a chi accoglie la persona nella propria stella (un altro Kumano). Non è un costo in più per KUMANI: lo
+              cede lo sponsor (es. Base 49 → 44 allo sponsor + 5 di Bonus Accoglienza; Pro 122 → 112 + 10). Le prime
+              attivazioni di ogni Kumano restano piene.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-3xl">
               <label className="block max-w-xs">
@@ -3037,17 +3041,46 @@ L'accesso viene registrato.`)) return
                   className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
                 />
               </label>
+            </div>
+            <p className="mt-5 mb-2 text-sm font-semibold text-gray-800">Bonus Accoglienza (ceduto dallo sponsor)</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl">
               <label className="block max-w-xs">
-                <span className="mb-1 block text-xs font-medium text-gray-600">Bonus Accoglienza (spillover)</span>
+                <span className="mb-1 block text-xs font-medium text-gray-600">Dal N° invitato attivato</span>
+                <input
+                  type="number"
+                  min="1"
+                  value={systemSettings.welcome_bonus_from_direct ?? 6}
+                  onChange={(e) => setSystemSettings({ ...systemSettings, welcome_bonus_from_direct: parseInt(e.target.value, 10) || 1 })}
+                  className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                />
+              </label>
+              <label className="block max-w-xs">
+                <span className="mb-1 block text-xs font-medium text-gray-600">Punti ceduti per un Base</span>
                 <input
                   type="number"
                   min="0"
-                  value={systemSettings.matrix_spillover_bonus_points ?? 5}
-                  onChange={(e) => setSystemSettings({ ...systemSettings, matrix_spillover_bonus_points: parseInt(e.target.value, 10) || 0 })}
+                  value={systemSettings.welcome_bonus_base ?? 5}
+                  onChange={(e) => setSystemSettings({ ...systemSettings, welcome_bonus_base: parseInt(e.target.value, 10) || 0 })}
+                  className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                />
+              </label>
+              <label className="block max-w-xs">
+                <span className="mb-1 block text-xs font-medium text-gray-600">Punti ceduti per un Pro</span>
+                <input
+                  type="number"
+                  min="0"
+                  value={systemSettings.welcome_bonus_pro ?? 10}
+                  onChange={(e) => setSystemSettings({ ...systemSettings, welcome_bonus_pro: parseInt(e.target.value, 10) || 0 })}
                   className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
                 />
               </label>
             </div>
+            <p className="mt-2 text-xs text-gray-500">
+              Esempio con i valori attuali: dal {systemSettings.welcome_bonus_from_direct ?? 6}° invitato lo sponsor riceve{' '}
+              {(systemSettings.network_points_activation_base ?? 49) - (systemSettings.welcome_bonus_base ?? 5)} punti per un Base e{' '}
+              {(systemSettings.network_points_activation_pro ?? 122) - (systemSettings.welcome_bonus_pro ?? 10)} per un Pro; chi accoglie riceve{' '}
+              {systemSettings.welcome_bonus_base ?? 5} e {systemSettings.welcome_bonus_pro ?? 10}.
+            </p>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">

@@ -49,7 +49,25 @@ export async function awardActivationPoints(invoice: Stripe.Invoice): Promise<vo
   if (error) throw new Error(`Punti Rete non assegnati: ${error.message}`)
 
   // Notifica push a chi ha invitato (solo quando i punti sono stati assegnati ora)
-  const row = (Array.isArray(data) ? data[0] : data) as { awarded?: boolean; sponsor_id?: string | null; points?: number } | null
+  const row = (Array.isArray(data) ? data[0] : data) as {
+    awarded?: boolean
+    sponsor_id?: string | null
+    points?: number
+    welcome_user?: string | null
+    welcome_points?: number
+  } | null
+  // Bonus Accoglienza a chi ha accolto la persona nella propria stella
+  if (row?.awarded && row.welcome_user && (row.welcome_points ?? 0) > 0) {
+    const { data: person } = await db().from('profiles').select('first_name').eq('id', customer).maybeSingle()
+    const name = person?.first_name || 'Kumano'
+    const points = row.welcome_points ?? 0
+    await notifyUser(row.welcome_user, 'network', (t, locale) => ({
+      title: t('welcomeTitle'),
+      body: t('welcomeBody', { name, points }),
+      url: localizedPath(locale, '/dashboard/rete'),
+      tag: `welcome-${invoice.id}`,
+    }))
+  }
   if (row?.awarded && row.sponsor_id) {
     const { data: person } = await db().from('profiles').select('first_name').eq('id', customer).maybeSingle()
     const name = person?.first_name || 'Kumano'
@@ -77,6 +95,9 @@ export async function reverseActivationPoints(charge: Stripe.Charge): Promise<vo
   if (!invoiceId) return
   const { error } = await db().rpc('reverse_activation_points', { p_invoice_id: invoiceId })
   if (error) throw new Error(`Punti Rete non tolti: ${error.message}`)
+  // Bonus Accoglienza nato dalla stessa attivazione
+  const { error: welcomeError } = await db().rpc('reverse_activation_points', { p_invoice_id: `welcome:${invoiceId}` })
+  if (welcomeError) throw new Error(`Bonus Accoglienza non tolto: ${welcomeError.message}`)
 }
 
 // KU Points per il Pass di un singolo servizio (punti decisi dall'Admin per

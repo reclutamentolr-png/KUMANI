@@ -259,10 +259,12 @@ export default function TermsPage() {
               </p>
               <p>
                 <strong className="text-gray-900">KU Points.</strong> L&apos;utente riceve KU Points quando una persona che ha
-                invitato direttamente attiva un abbonamento pagato con carta (Base o Pro) o passa dal piano Base al piano Pro, e con il
-                Bonus Accoglienza, riconosciuto quando uno dei posti diretti della propria matrice viene occupato da una persona
-                invitata da un altro utente (spillover) che paga l&apos;abbonamento con carta. Le quantità sono stabilite dalla Piattaforma e indicate
-                nell&apos;area personale. Le attivazioni tramite voucher e i rinnovi non danno KU Points; in caso di rimborso del
+                invitato direttamente attiva un abbonamento pagato con carta (Base o Pro), passa dal piano Base al piano Pro o acquista
+                un pass, e con il Bonus Accoglienza. Il Bonus Accoglienza è riconosciuto quando uno dei posti diretti della propria
+                matrice viene occupato da una persona invitata da un altro utente (spillover) che attiva l&apos;abbonamento con carta: a
+                partire dall&apos;attivazione indicata dalla Piattaforma (attualmente la sesta persona invitata da quell&apos;utente), una
+                parte dei KU Points dell&apos;attivazione non va a chi ha invitato ma a chi accoglie la persona nella propria matrice. Le
+                quantità sono stabilite dalla Piattaforma e indicate nell&apos;area personale. Le attivazioni tramite voucher e i rinnovi non danno KU Points; in caso di rimborso del
                 pagamento i punti collegati vengono tolti.
               </p>
               <p>

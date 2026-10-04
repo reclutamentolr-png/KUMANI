@@ -5899,7 +5899,9 @@
     "cycleProgress": "Packs échangés dans ce cycle : {done} sur {total}. Quand vous les aurez tous échangés, le cycle recommencera.",
     "shareGiftMessage": "Je vous offre un voucher KUMANI : utilisez le code {code} pour activer gratuitement votre abonnement {plan} d'un an !",
     "shareSaleMessage": "Voici votre voucher KUMANI : utilisez le code {code} pour activer votre abonnement {plan} d'un an.",
-    "rulePass": "Une personne que vous avez invitée achète un service à l'unité (Pass) : les KU Points prévus pour ce service"
+    "rulePass": "Une personne que vous avez invitée achète un service à l'unité (Pass) : les KU Points prévus pour ce service",
+    "ruleWelcomeGive": "À partir de votre {from}e invité activé, {base} points d’un Base et {pro} d’un Pro vont en Bonus Accueil à la personne qui l’accueille dans son étoile",
+    "ruleWelcomeGet": "Une personne invitée par un autre Kumano entre dans votre étoile et active un abonnement : +{base} points avec Base, +{pro} avec Pro (Bonus Accueil)"
   },
   "voucherReceipt": {
     "back": "Retour au Portefeuille",
@@ -7897,7 +7899,9 @@
     "landingMessageTitle": "Nouveau message de votre Landing Page",
     "landingMessageBody": "{name} vous a écrit : touchez pour lire.",
     "passTitle": "Nouveaux KU Points de votre réseau",
-    "passBody": "{name} a acheté {service} : vous avez reçu {points} KU Points."
+    "passBody": "{name} a acheté {service} : vous avez reçu {points} KU Points.",
+    "welcomeTitle": "Bonus Accueil",
+    "welcomeBody": "{name} est entré(e) dans votre étoile et a activé KUMANI : vous avez reçu {points} KU Points."
   },
   "pushInvite": {
     "title": "Activez les notifications",
