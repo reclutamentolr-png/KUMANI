@@ -5,6 +5,7 @@ import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
 import type Stripe from 'stripe'
 import { getLocale } from 'next-intl/server'
+import { getPlanPrices } from '@/lib/planPrices'
 import { getStripe } from '@/lib/stripe'
 import { isBusinessPurchase, recordConsent } from '@/lib/withdrawal'
 
@@ -65,7 +66,7 @@ async function findUpgradableSubscription(): Promise<
 // esattamente quello mostrato.
 export async function previewUpgradeToPro(): Promise<
   // business: abbonamento acquistato con P.IVA (dichiarazione B2B al posto del consenso da privato)
-  | { success: true; amountCents: number; currency: string; prorationDate: number; business: boolean }
+  | { success: true; amountCents: number; currency: string; prorationDate: number; business: boolean; renewsAt: number | null; renewalPriceEuro: number }
   | { success: false; reason: UpgradeReason }
 > {
   try {
@@ -87,6 +88,9 @@ export async function previewUpgradeToPro(): Promise<
       currency: preview.currency,
       prorationDate,
       business: isBusinessPurchase(found.subscription),
+      // Prossimo rinnovo automatico (fine del periodo attuale) e prezzo Pro
+      renewsAt: (found.subscription as unknown as { current_period_end?: number }).current_period_end ?? null,
+      renewalPriceEuro: (await getPlanPrices()).pro,
     }
   } catch (err) {
     console.error('Errore anteprima passaggio a Pro:', err)

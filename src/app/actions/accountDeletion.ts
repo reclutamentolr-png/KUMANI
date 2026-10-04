@@ -1,6 +1,8 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { getStripe } from '@/lib/stripe'
+import { findStripeSubscriptionForUser } from '@/lib/stripeCustomer'
 
 // Richiesta di cancellazione dell'account (GDPR, art. 17): l'utente la invia
 // e può annullarla finché è in attesa; lo Staff la esegue entro 30 giorni.
@@ -41,7 +43,20 @@ export async function requestAccountDeletion(reason: string): Promise<AccountDel
   const clean = (typeof reason === 'string' ? reason : '').trim().slice(0, 1000)
   const { data, error } = await supabase.rpc('account_request_deletion', { p_reason: clean })
   if (error) return { success: false, error: 'generic' }
-  if (data === 'ok') return { success: true }
+  if (data === 'ok') {
+    // Niente rinnovo mentre la richiesta aspetta lo Staff: l'abbonamento
+    // con carta smette subito di rinnovarsi (errori ignorati: lo Staff lo
+    // chiude comunque quando esegue la cancellazione)
+    try {
+      const found = await findStripeSubscriptionForUser(user.id, user.email)
+      if (found?.subscription && !found.subscription.cancel_at_period_end) {
+        await getStripe().subscriptions.update(found.subscription.id, { cancel_at_period_end: true })
+      }
+    } catch (err) {
+      console.error('⚠️ Rinnovo non fermato alla richiesta di cancellazione:', err instanceof Error ? err.message : err)
+    }
+    return { success: true }
+  }
   if (data === 'pending') return { success: false, error: 'pending' }
   if (data === 'not_allowed') return { success: false, error: 'not_allowed' }
   return { success: false, error: 'generic' }

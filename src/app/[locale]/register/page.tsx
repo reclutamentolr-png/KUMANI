@@ -55,14 +55,6 @@ export default async function RegisterPage() {
           </div>
         </div>
 
-        <div className="mt-8 text-center text-xs text-gray-500">
-          <p className="text-[var(--muted)]">
-            {t('byCreatingAccount')}{' '}
-            <Link href="/terms" className="text-[var(--gold)] hover:underline">{t('termsOfService')}</Link>
-            {' '}{t('and')}{' '}
-            <Link href="/privacy" className="text-[var(--gold)] hover:underline">{t('privacyPolicy')}</Link>
-          </p>
-        </div>
       </div>
     </MaintenanceGate>
   )

@@ -1,5 +1,6 @@
 'use client'
 
+import { TERMS_VERSION } from '@/lib/legal'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 // ✅ Usa next/navigation per entrambi. Il middleware di next-intl gestirà la lingua automaticamente!
@@ -47,6 +48,9 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
     referral_code: initialReferralCode,
     voucher_code: initialVoucherCode,
     professional: initialProfessional,
+    // Termini e Privacy (obbligatorio) e consenso marketing (facoltativo)
+    accept_terms: false,
+    marketing: false,
   })
   // Esito dell'attivazione del coupon, mostrato nella schermata finale.
   const [voucherOutcome, setVoucherOutcome] = useState<{ ok: boolean; text: string } | null>(null)
@@ -90,6 +94,9 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
         referral_code: referralCode,
         voucher_code: voucherCode,
         professional: formData.professional,
+        terms_accepted_at: new Date().toISOString(),
+        terms_version: TERMS_VERSION,
+        marketing_consent: formData.marketing,
       },
     })
     await activateAccount(updated.user ?? signIn.user)
@@ -158,6 +165,10 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
             agent_code: agentCode,
             // Lingua dell'email con il codice (modello "Confirm signup" di Supabase)
             locale,
+            // Consensi dati nel modulo: si copiano nello storico dopo la verifica
+            terms_accepted_at: new Date().toISOString(),
+            terms_version: TERMS_VERSION,
+            marketing_consent: formData.marketing,
           }
         }
       })
@@ -242,6 +253,9 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
               : t('errorCreatingUser')
         )
       }
+
+      // Consensi dell'iscrizione (Termini, Privacy, marketing) nello storico
+      await supabase.rpc('record_registration_consents')
 
       // Coupon: attivazione usa e getta (garantita da redeem_subscription_voucher).
       // Se non va a buon fine l'account resta creato: il codice si può
@@ -448,6 +462,42 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
             />
             <p className="text-xs text-gray-500 mt-1">{t('voucherCodeHint')}</p>
           </div>
+
+          <label htmlFor="accept_terms" className="flex cursor-pointer items-start gap-3 text-sm text-gray-700">
+            <input
+              id="accept_terms"
+              type="checkbox"
+              required
+              checked={formData.accept_terms}
+              onChange={(e) => setFormData({ ...formData, accept_terms: e.target.checked })}
+              className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--gold)]"
+            />
+            <span>
+              {t.rich('termsAccept', {
+                terms: (chunks) => (
+                  <Link href={`${locale === 'it' ? '' : `/${locale}`}/terms`} target="_blank" className="font-semibold text-[var(--gold)] hover:underline">
+                    {chunks}
+                  </Link>
+                ),
+                privacy: (chunks) => (
+                  <Link href={`${locale === 'it' ? '' : `/${locale}`}/privacy`} target="_blank" className="font-semibold text-[var(--gold)] hover:underline">
+                    {chunks}
+                  </Link>
+                ),
+              })}
+            </span>
+          </label>
+
+          <label htmlFor="marketing" className="flex cursor-pointer items-start gap-3 text-sm text-gray-700">
+            <input
+              id="marketing"
+              type="checkbox"
+              checked={formData.marketing}
+              onChange={(e) => setFormData({ ...formData, marketing: e.target.checked })}
+              className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--gold)]"
+            />
+            <span>{t('marketingConsent')}</span>
+          </label>
 
           <button
             type="submit"

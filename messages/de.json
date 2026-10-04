@@ -364,7 +364,9 @@
     "invalidEmailError": "Ungültige E-Mail-Adresse: Prüfe, ob du sie richtig geschrieben hast.",
     "genericAuthError": "Etwas hat nicht geklappt. Versuch es gleich noch einmal.",
     "haveCode": "Ich habe bereits einen Code",
-    "haveCodeNeedEmail": "Gib zuerst deine E-Mail ein und tippe dann auf „Ich habe bereits einen Code“."
+    "haveCodeNeedEmail": "Gib zuerst deine E-Mail ein und tippe dann auf „Ich habe bereits einen Code“.",
+    "termsAccept": "Ich habe die <terms>Nutzungsbedingungen</terms> und die <privacy>Datenschutzerklärung</privacy> gelesen und akzeptiere sie.",
+    "marketingConsent": "Ich möchte Neuigkeiten und Angebote von KUMANI per E-Mail erhalten (freiwillig: Du kannst es dir jederzeit in deinem Profil anders überlegen)."
   },
   "dashboard": {
     "receivedLabel": "Aus der Community",
@@ -3950,8 +3952,8 @@
     "titleActive": "Abo aktiv",
     "titleInactive": "Schließe dein Abo ab",
     "activeText": "Danke! Dein Tarif {plan} ist aktiv: Du hast Zugriff auf die Tools des KUMANI-Ökosystems, die in deinem Tarif enthalten sind.",
-    "inactiveText": "Aktiviere deinen Tarif für nur 49 €/Jahr und schalte die Tools des KUMANI-Ökosystems frei.",
-    "subscribeCta": "Jetzt für 49 €/Jahr abonnieren",
+    "inactiveText": "Aktiviere deinen Tarif für nur {price} €/Jahr und schalte die Tools des KUMANI-Ökosystems frei.",
+    "subscribeCta": "Jetzt für {price} €/Jahr abonnieren",
     "statusLabel": "Status:",
     "statusActive": "Aktiv ({plan})",
     "validUntil": "Gültig bis {date}",
@@ -3976,7 +3978,13 @@
     "portalError": "Die Abo-Verwaltung konnte nicht geöffnet werden. Versuche es gleich noch einmal.",
     "portalNone": "Wir haben kein Kartenabo gefunden, das mit deinem Konto verknüpft ist: Auf Stripe gibt es nichts zu verwalten.",
     "portalNotConfigured": "Die Abo-Verwaltung ist noch nicht verfügbar. Versuche es später erneut oder kontaktiere den Support.",
-    "portalReturn": "Willkommen zurück! Änderungen an deinem Abo können einen Moment dauern, bis sie hier erscheinen."
+    "portalReturn": "Willkommen zurück! Änderungen an deinem Abo können einen Moment dauern, bis sie hier erscheinen.",
+    "renewalOffCta": "Automatische Verlängerung deaktivieren",
+    "renewalOnCta": "Automatische Verlängerung wieder aktivieren",
+    "renewalOffHint": "Dein Tarif bleibt bis zum {date} aktiv, danach verlängert er sich nicht und wir buchen nichts ab.",
+    "renewalOffDone": "Automatische Verlängerung deaktiviert: Dein Tarif bleibt bis zum Ablauf aktiv und verlängert sich danach nicht.",
+    "renewalOnDone": "Automatische Verlängerung wieder aktiviert.",
+    "renewalError": "Die automatische Verlängerung konnte nicht geändert werden. Versuche es noch einmal oder nutze „Abo verwalten oder kündigen“."
   },
   "travel": {
     "error_suspended": "Dienst vorübergehend ausgesetzt. Bitte versuchen Sie es später erneut.",
@@ -5811,7 +5819,10 @@
     "businessDeclaration": "Ich erkläre, dass ich für meine gewerbliche oder berufliche Tätigkeit kaufe: Mir ist bewusst, dass für diesen Kauf das Widerrufsrecht für Verbraucher nicht gilt.",
     "businessRequired": "Um als Unternehmen oder Freiberufler zu kaufen, gib den Firmennamen ein und setze das Häkchen bei der Erklärung.",
     "vatInvalid": "Die USt-IdNr. ist ungültig: Bitte prüfe sie (für EU-Länder außer Italien ist das Länderkürzel nötig, z. B. DE).",
-    "businessNoWithdrawal": "Abo für deine Tätigkeit mit USt-IdNr. gekauft: Das Widerrufsrecht für Verbraucher gilt nicht."
+    "businessNoWithdrawal": "Abo für deine Tätigkeit mit USt-IdNr. gekauft: Das Widerrufsrecht für Verbraucher gilt nicht.",
+    "termsAccept": "Ich habe die <terms>Nutzungsbedingungen</terms> und die <privacy>Datenschutzerklärung</privacy> gelesen und akzeptiere sie.",
+    "termsRequired": "Um fortzufahren, akzeptiere die Nutzungsbedingungen und die Datenschutzerklärung.",
+    "renewalNote": "Das Abo verlängert sich am {date} automatisch zum Preis von {price} € pro Jahr, sofern du nicht kündigst. Du kannst die Verlängerung jederzeit mit einem Klick auf der Seite Abo deaktivieren: Wir benachrichtigen dich ohnehin vor jeder Verlängerung per E-Mail."
   },
   "purchaseEmail": {
     "subject_create": "KUMANI: Bestätigung deines {plan}-Abos",
@@ -5832,7 +5843,15 @@
     "manage": "Auf der Seite Abo kannst du die Karte ändern, Rechnungen herunterladen oder die Verlängerung kündigen:",
     "terms": "Nutzungsbedingungen:",
     "footer": "Bewahre diese E-Mail auf: Sie ist die Bestätigung deines Vertrags.",
-    "signature": "Dein KUMANI-Team"
+    "signature": "Dein KUMANI-Team",
+    "renewal": "Automatische Verlängerung: Am {date} verlängert sich das Abo zum Preis von {price} € pro Jahr, sofern du nicht kündigst. Wir benachrichtigen dich vor der Verlängerung per E-Mail; du kannst sie mit einem Klick auf der Seite Abo deaktivieren:",
+    "termsAccepted": "Am {date} hast du die Nutzungsbedingungen und die Datenschutzerklärung akzeptiert.",
+    "labelService": "Dienst",
+    "subject_pass": "KUMANI: Bestätigung deines {service}-Passes",
+    "intro_pass": "danke für den Kauf des {service}-Passes. Hier ist die Übersicht deines Kaufs.",
+    "passOneOff": "Einmalzahlung: Der Pass gilt ein Jahr und verlängert sich nicht automatisch.",
+    "passConsent": "Wie von dir am {date} verlangt, wurde der Pass sofort aktiviert, noch vor Ablauf der 14-tägigen Widerrufsfrist.",
+    "passWithdrawal": "Widerrufsrecht: Du kannst bis zum {deadline} ({days} Tage nach der Zahlung) widerrufen, indem du uns über die Kontaktseite schreibst. Wir erstatten dir den noch nicht genutzten Teil des Passes innerhalb von 14 Tagen nach deiner Anfrage."
   },
   "voucherWallet": {
     "pointsBalance": "KU Points",
@@ -6009,7 +6028,8 @@
     "walletPassRenew": "Verlängern",
     "walletActivate": "Dienst aktivieren",
     "walletCouponTitle": "{service}-Pass – 1 Jahr",
-    "walletCouponHint": "Aktiviere ihn selbst oder verschenke den Code:"
+    "walletCouponHint": "Aktiviere ihn selbst oder verschenke den Code:",
+    "error_terms": "Um fortzufahren, akzeptiere die Nutzungsbedingungen und die Datenschutzerklärung."
   },
   "toolTiers": {
     "intro": "Drei Stufen: Starte mit den kostenlosen Diensten, schalte den Rest mit einem Abo frei oder aktiviere einen einzelnen Dienst mit einem Pass.",
@@ -8899,5 +8919,19 @@
     "reportCancel": "Abbrechen",
     "reportThanks": "Danke, wir haben deine Meldung erhalten.",
     "reportError": "Senden nicht möglich. Versuch es noch einmal."
+  },
+  "renewalEmail": {
+    "subject": "KUMANI: Dein Abo verlängert sich am {date}",
+    "greeting": "Hallo,",
+    "intro": "wir erinnern dich daran, dass sich dein {plan}-Abo am {date} automatisch verlängert: An diesem Tag buchen wir {amount} von der hinterlegten Karte ab.",
+    "keep": "Wenn du weitermachen möchtest, musst du nichts tun.",
+    "stop": "Wenn du nicht verlängern möchtest, deaktiviere die automatische Verlängerung mit einem Klick auf der Seite Abo: Dein Tarif bleibt bis zum Ablauf aktiv.",
+    "cta": "Verlängerung verwalten",
+    "signature": "Dein KUMANI-Team"
+  },
+  "marketingConsent": {
+    "title": "Neuigkeiten und Angebote per E-Mail",
+    "onText": "Aktiv: Du erhältst Neuigkeiten und Angebote von KUMANI. Du kannst das jederzeit deaktivieren.",
+    "offText": "Deaktiviert: Du erhältst nur Service-E-Mails (Sicherheit, Zahlungen, Konto)."
   }
 }

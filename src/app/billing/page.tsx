@@ -10,11 +10,13 @@ import { isActiveSubscription } from '@/lib/subscriptionGate'
 import { findStripeSubscriptionForUser, subscriptionPeriodEnd } from '@/lib/stripeCustomer'
 import { isBusinessPurchase, withdrawableInvoices, withdrawalDeadline } from '@/lib/withdrawal'
 import CheckoutForm from '@/components/billing/CheckoutForm'
+import { getCheckoutTexts } from '@/lib/checkoutTexts'
+import { getPlanPrices } from '@/lib/planPrices'
 import WithdrawalRequest from '@/components/billing/WithdrawalRequest'
 import { locales, defaultLocale } from '../../../i18n'
 
 type BillingPageProps = {
-  searchParams: Promise<{ success?: string; session_id?: string; canceled?: string; error?: string; portal?: string }>
+  searchParams: Promise<{ success?: string; session_id?: string; canceled?: string; error?: string; portal?: string; renewal?: string }>
 }
 
 type BillingProfile = {
@@ -42,7 +44,7 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
   const locale = cookieLocale && locales.includes(cookieLocale) ? cookieLocale : defaultLocale
   const t = await getTranslations({ locale, namespace: 'billingPage' })
 
-  const { success, session_id, canceled, error: checkoutError, portal } = await searchParams
+  const { success, session_id, canceled, error: checkoutError, portal, renewal } = await searchParams
 
   // get_my_profile: l'email non è più leggibile con una select diretta.
   let { data: profile } = await supabase
@@ -180,21 +182,14 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
       .from('subscription_consents')
       .select('id', { count: 'exact', head: true })
       .eq('user_id', user.id)
+      .in('kind', ['checkout', 'upgrade'])
       .gte('created_at', new Date((withdrawalEarliestPaid - 86_400) * 1000).toISOString())
     consentGiven = (count ?? 0) > 0
   }
   const tw = await getTranslations({ locale, namespace: 'withdrawal' })
   const money = (cents: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(cents / 100)
-  const checkoutTexts = {
-    asConsumer: tw('asConsumer'),
-    asBusiness: tw('asBusiness'),
-    consentLabel: tw('consentLabel'),
-    consentHint: tw('consentHint'),
-    businessName: tw('businessName'),
-    vatNumber: tw('vatNumber'),
-    vatHint: tw('vatHint'),
-    businessDeclaration: tw('businessDeclaration'),
-  }
+  const basePrice = (await getPlanPrices()).base
+  const checkoutTexts = await getCheckoutTexts(locale, { priceEuro: basePrice })
   const canRequestWithdrawal = !!withdrawalUntil && withdrawal?.status !== 'pending'
 
   const portalNotice =
@@ -212,9 +207,9 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
             {checkoutError === 'true' ? t('errorNotice') : t('canceledNotice')}
           </div>
         )}
-        {!isActive && (checkoutError === 'consent' || checkoutError === 'business' || checkoutError === 'vat') && (
+        {!isActive && (checkoutError === 'consent' || checkoutError === 'terms' || checkoutError === 'business' || checkoutError === 'vat') && (
           <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
-            {checkoutError === 'consent' ? tw('consentRequired') : checkoutError === 'vat' ? tw('vatInvalid') : tw('businessRequired')}
+            {checkoutError === 'consent' ? tw('consentRequired') : checkoutError === 'terms' ? tw('termsRequired') : checkoutError === 'vat' ? tw('vatInvalid') : tw('businessRequired')}
           </div>
         )}
 
@@ -256,7 +251,7 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
         </h1>
 
         <p className="text-gray-600 mb-8">
-          {isActive ? t('activeText', { plan: planName }) : t('inactiveText')}
+          {isActive ? t('activeText', { plan: planName }) : t('inactiveText', { price: basePrice })}
         </p>
 
         {!isActive && (
@@ -265,7 +260,7 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
               type="submit"
               className="w-full bg-indigo-600 text-white font-bold py-3 px-6 rounded-xl hover:bg-indigo-700 transition-all shadow-md hover:shadow-lg"
             >
-              {t('subscribeCta')}
+              {t('subscribeCta', { price: basePrice })}
             </button>
           </CheckoutForm>
         )}
@@ -313,6 +308,11 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
             <h2 className="text-base font-bold text-gray-900">{t('manageTitle')}</h2>
             <p className="mt-1 text-sm text-gray-600">{t('manageText')}</p>
 
+            {renewal && ['on', 'off', 'error'].includes(renewal) && (
+              <p className={`mt-3 rounded-lg p-3 text-sm ${renewal === 'error' ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-800'}`} role="status">
+                {t(renewal === 'on' ? 'renewalOnDone' : renewal === 'off' ? 'renewalOffDone' : 'renewalError')}
+              </p>
+            )}
             {stripeState?.cancelOn && (
               <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
                 {t('cancelScheduled', { date: stripeState.cancelOn })}
@@ -320,6 +320,22 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
             )}
             {stripeState?.renewsOn && (
               <p className="mt-3 text-sm text-gray-700">{t('renewsOn', { date: stripeState.renewsOn })}</p>
+            )}
+
+            {/* Rinnovo automatico: si spegne (o si riaccende) con un clic */}
+            {(stripeState?.renewsOn || stripeState?.cancelOn) && (
+              <form action="/api/billing/renewal" method="POST" className="mt-4">
+                <input type="hidden" name="renew" value={stripeState?.renewsOn ? '0' : '1'} />
+                <button
+                  type="submit"
+                  className={`w-full rounded-xl px-6 py-3 font-bold transition-all ${
+                    stripeState?.renewsOn ? 'bg-gray-900 text-white hover:bg-gray-800' : 'bg-indigo-600 text-white hover:bg-indigo-700'
+                  }`}
+                >
+                  {stripeState?.renewsOn ? t('renewalOffCta') : t('renewalOnCta')}
+                </button>
+                {stripeState?.renewsOn && <p className="mt-2 text-xs text-gray-500">{t('renewalOffHint', { date: stripeState.renewsOn })}</p>}
+              </form>
             )}
 
             <form action="/api/billing/portal" method="POST" className="mt-4">

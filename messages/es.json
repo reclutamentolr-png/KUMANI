@@ -364,7 +364,9 @@
     "invalidEmailError": "Dirección de correo no válida: comprueba que esté bien escrita.",
     "genericAuthError": "Algo no ha funcionado. Inténtalo de nuevo en un momento.",
     "haveCode": "Ya he recibido un código",
-    "haveCodeNeedEmail": "Escribe primero tu email y luego toca «Ya he recibido un código»."
+    "haveCodeNeedEmail": "Escribe primero tu email y luego toca «Ya he recibido un código».",
+    "termsAccept": "He leído y acepto los <terms>Términos de servicio</terms> y la <privacy>Política de privacidad</privacy>.",
+    "marketingConsent": "Quiero recibir por correo electrónico novedades y ofertas de KUMANI (opcional: puedes cambiar de opinión cuando quieras desde tu perfil)."
   },
   "dashboard": {
     "receivedLabel": "De la Comunidad",
@@ -3950,8 +3952,8 @@
     "titleActive": "Suscripción activa",
     "titleInactive": "Completa tu suscripción",
     "activeText": "¡Gracias! Tu plan {plan} está activo: tienes acceso a las herramientas del Ecosistema KUMANI incluidas en tu plan.",
-    "inactiveText": "Activa tu plan por solo 49 €/año y desbloquea las herramientas del Ecosistema KUMANI.",
-    "subscribeCta": "Suscríbete por 49 €/año",
+    "inactiveText": "Activa tu plan por solo {price} €/año y desbloquea las herramientas del Ecosistema KUMANI.",
+    "subscribeCta": "Suscríbete por {price} €/año",
     "statusLabel": "Estado:",
     "statusActive": "Activo ({plan})",
     "validUntil": "Válido hasta el {date}",
@@ -3976,7 +3978,13 @@
     "portalError": "No se ha podido abrir la gestión de la suscripción. Inténtalo de nuevo en unos instantes.",
     "portalNone": "No hemos encontrado ninguna suscripción con tarjeta vinculada a tu cuenta: no hay nada que gestionar en Stripe.",
     "portalNotConfigured": "La gestión de la suscripción todavía no está disponible. Inténtalo más tarde o contacta con el soporte.",
-    "portalReturn": "¡Bienvenido de nuevo! Los cambios en tu suscripción pueden tardar unos instantes en aparecer aquí."
+    "portalReturn": "¡Bienvenido de nuevo! Los cambios en tu suscripción pueden tardar unos instantes en aparecer aquí.",
+    "renewalOffCta": "Desactivar la renovación automática",
+    "renewalOnCta": "Reactivar la renovación automática",
+    "renewalOffHint": "El plan sigue activo hasta el {date}; después no se renueva y no te cobraremos nada.",
+    "renewalOffDone": "Renovación automática desactivada: el plan sigue activo hasta su vencimiento y después no se renueva.",
+    "renewalOnDone": "Renovación automática reactivada.",
+    "renewalError": "No se ha podido cambiar la renovación automática. Inténtalo de nuevo o usa «Gestionar o cancelar la suscripción»."
   },
   "travel": {
     "error_suspended": "Servicio suspendido temporalmente. Inténtelo más tarde.",
@@ -5811,7 +5819,10 @@
     "businessDeclaration": "Declaro que compro para mi actividad empresarial o profesional: sé que a esta compra no se aplica el derecho de desistimiento de los consumidores.",
     "businessRequired": "Para comprar como empresa o profesional, introduce la razón social y marca la declaración.",
     "vatInvalid": "El número de IVA no es válido: compruébalo (para países de la UE distintos de Italia se necesita el prefijo, p. ej. ES).",
-    "businessNoWithdrawal": "Suscripción comprada para tu actividad con número de IVA: no se aplica el derecho de desistimiento de los consumidores."
+    "businessNoWithdrawal": "Suscripción comprada para tu actividad con número de IVA: no se aplica el derecho de desistimiento de los consumidores.",
+    "termsAccept": "He leído y acepto los <terms>Términos de servicio</terms> y la <privacy>Política de privacidad</privacy>.",
+    "termsRequired": "Para continuar, acepta los Términos de servicio y la Política de privacidad.",
+    "renewalNote": "La suscripción se renueva automáticamente el {date} por {price} € al año, salvo que la canceles. Puedes desactivar la renovación cuando quieras, con un clic, desde la página Suscripción: de todos modos, te avisaremos por correo electrónico antes de cada renovación."
   },
   "purchaseEmail": {
     "subject_create": "KUMANI: confirmación de tu suscripción {plan}",
@@ -5832,7 +5843,15 @@
     "manage": "Puedes cambiar de tarjeta, descargar las facturas o cancelar la renovación desde la página Suscripción:",
     "terms": "Condiciones del servicio:",
     "footer": "Guarda este correo: es la confirmación de tu contrato.",
-    "signature": "El equipo de KUMANI"
+    "signature": "El equipo de KUMANI",
+    "renewal": "Renovación automática: el {date} la suscripción se renueva por {price} € al año, salvo que la canceles. Te avisaremos por correo electrónico antes de la renovación; puedes desactivarla con un clic desde la página Suscripción:",
+    "termsAccepted": "El {date} aceptaste los Términos de servicio y la Política de privacidad.",
+    "labelService": "Servicio",
+    "subject_pass": "KUMANI: confirmación del Pase {service}",
+    "intro_pass": "gracias por comprar el Pase {service}. Este es el resumen de tu compra.",
+    "passOneOff": "Pago único: el Pase dura un año y no se renueva automáticamente.",
+    "passConsent": "Como solicitaste el {date}, el Pase se activó de inmediato, antes de que terminaran los 14 días del derecho de desistimiento.",
+    "passWithdrawal": "Derecho de desistimiento: puedes desistir hasta el {deadline} ({days} días desde el pago) escribiéndonos desde la página Contacto. Te reembolsaremos la parte del Pase que aún no hayas usado, en los 14 días siguientes a tu solicitud."
   },
   "voucherWallet": {
     "pointsBalance": "KU Points",
@@ -6009,7 +6028,8 @@
     "walletPassRenew": "Renovar",
     "walletActivate": "Activar el servicio",
     "walletCouponTitle": "Pase {service} – 1 año",
-    "walletCouponHint": "Actívalo tú o regala el código:"
+    "walletCouponHint": "Actívalo tú o regala el código:",
+    "error_terms": "Para continuar, acepta los Términos de servicio y la Política de privacidad."
   },
   "toolTiers": {
     "intro": "Tres niveles: empieza por los servicios gratuitos, desbloquea el resto con una suscripción o activa un solo servicio con un Pase.",
@@ -8899,5 +8919,19 @@
     "reportCancel": "Cancelar",
     "reportThanks": "Gracias, hemos recibido tu denuncia.",
     "reportError": "No se ha podido enviar. Inténtalo de nuevo."
+  },
+  "renewalEmail": {
+    "subject": "KUMANI: tu suscripción se renueva el {date}",
+    "greeting": "Hola:",
+    "intro": "te recordamos que tu suscripción {plan} se renovará automáticamente el {date}: en esa fecha cargaremos {amount} en la tarjeta vinculada.",
+    "keep": "Si quieres continuar, no tienes que hacer nada.",
+    "stop": "Si no quieres renovar, desactiva la renovación automática con un clic desde la página Suscripción: el plan sigue activo hasta su vencimiento.",
+    "cta": "Gestionar la renovación",
+    "signature": "El equipo de KUMANI"
+  },
+  "marketingConsent": {
+    "title": "Novedades y ofertas por correo electrónico",
+    "onText": "Activado: recibes las novedades y ofertas de KUMANI. Puedes desactivarlo cuando quieras.",
+    "offText": "Desactivado: solo recibes los correos del servicio (seguridad, pagos, cuenta)."
   }
 }

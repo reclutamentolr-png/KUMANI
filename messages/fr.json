@@ -364,7 +364,9 @@
     "invalidEmailError": "Adresse e-mail non valide : vérifiez qu’elle est bien écrite.",
     "genericAuthError": "Un problème est survenu. Réessayez dans un instant.",
     "haveCode": "J’ai déjà reçu un code",
-    "haveCodeNeedEmail": "Saisissez d’abord votre e-mail, puis touchez « J’ai déjà reçu un code »."
+    "haveCodeNeedEmail": "Saisissez d’abord votre e-mail, puis touchez « J’ai déjà reçu un code ».",
+    "termsAccept": "J’ai lu et j’accepte les <terms>Conditions d’utilisation</terms> et la <privacy>Politique de confidentialité</privacy>.",
+    "marketingConsent": "Je souhaite recevoir par e-mail les nouveautés et les offres de KUMANI (facultatif : vous pouvez changer d’avis à tout moment depuis votre profil)."
   },
   "dashboard": {
     "receivedLabel": "De la Communauté",
@@ -3950,8 +3952,8 @@
     "titleActive": "Abonnement actif",
     "titleInactive": "Finalisez votre abonnement",
     "activeText": "Merci ! Votre offre {plan} est active : vous avez accès aux outils de l’Écosystème KUMANI inclus dans votre offre.",
-    "inactiveText": "Activez votre offre pour seulement 49 €/an et débloquez les outils de l’Écosystème KUMANI.",
-    "subscribeCta": "S’abonner pour 49 €/an",
+    "inactiveText": "Activez votre offre pour seulement {price} €/an et débloquez les outils de l’Écosystème KUMANI.",
+    "subscribeCta": "S’abonner pour {price} €/an",
     "statusLabel": "Statut :",
     "statusActive": "Actif ({plan})",
     "validUntil": "Valable jusqu’au {date}",
@@ -3976,7 +3978,13 @@
     "portalError": "Impossible d'ouvrir la gestion de l'abonnement. Réessayez dans quelques instants.",
     "portalNone": "Nous n'avons trouvé aucun abonnement par carte associé à votre compte : il n'y a rien à gérer sur Stripe.",
     "portalNotConfigured": "La gestion de l'abonnement n'est pas encore disponible. Réessayez plus tard ou contactez l'assistance.",
-    "portalReturn": "Bon retour ! Les éventuelles modifications de votre abonnement peuvent mettre quelques instants à apparaître ici."
+    "portalReturn": "Bon retour ! Les éventuelles modifications de votre abonnement peuvent mettre quelques instants à apparaître ici.",
+    "renewalOffCta": "Désactiver le renouvellement automatique",
+    "renewalOnCta": "Réactiver le renouvellement automatique",
+    "renewalOffHint": "L’offre reste active jusqu’au {date}, puis elle n’est pas renouvelée et nous ne vous prélevons rien.",
+    "renewalOffDone": "Renouvellement automatique désactivé : l’offre reste active jusqu’à son échéance, puis elle n’est pas renouvelée.",
+    "renewalOnDone": "Renouvellement automatique réactivé.",
+    "renewalError": "Impossible de modifier le renouvellement automatique. Réessayez ou utilisez « Gérer ou résilier l'abonnement »."
   },
   "travel": {
     "error_suspended": "Service momentanément suspendu. Veuillez réessayer plus tard.",
@@ -5811,7 +5819,10 @@
     "businessDeclaration": "Je déclare acheter pour mon activité d'entreprise ou professionnelle : je sais que le droit de rétractation des consommateurs ne s'applique pas à cet achat.",
     "businessRequired": "Pour acheter en tant qu'entreprise ou professionnel, saisissez la raison sociale et cochez la déclaration.",
     "vatInvalid": "Le numéro de TVA saisi n'est pas valide : vérifiez-le (pour les pays de l'UE autres que l'Italie, le préfixe est requis, ex. FR).",
-    "businessNoWithdrawal": "Abonnement acheté pour votre activité avec un numéro de TVA : le droit de rétractation des consommateurs ne s'applique pas."
+    "businessNoWithdrawal": "Abonnement acheté pour votre activité avec un numéro de TVA : le droit de rétractation des consommateurs ne s'applique pas.",
+    "termsAccept": "J’ai lu et j’accepte les <terms>Conditions d’utilisation</terms> et la <privacy>Politique de confidentialité</privacy>.",
+    "termsRequired": "Pour continuer, acceptez les Conditions d’utilisation et la Politique de confidentialité.",
+    "renewalNote": "L’abonnement se renouvelle automatiquement le {date} au prix de {price} € par an, sauf résiliation. Vous pouvez désactiver le renouvellement à tout moment, en un clic, depuis la page Abonnement : nous vous prévenons de toute façon par e-mail avant chaque renouvellement."
   },
   "purchaseEmail": {
     "subject_create": "KUMANI : confirmation de votre abonnement {plan}",
@@ -5832,7 +5843,15 @@
     "manage": "Vous pouvez changer de carte, télécharger vos factures ou annuler le renouvellement depuis la page Abonnement :",
     "terms": "Conditions d'utilisation :",
     "footer": "Conservez cet e-mail : c'est la confirmation de votre contrat.",
-    "signature": "L'équipe KUMANI"
+    "signature": "L'équipe KUMANI",
+    "renewal": "Renouvellement automatique : le {date}, l’abonnement se renouvelle au prix de {price} € par an, sauf résiliation. Nous vous prévenons par e-mail avant le renouvellement ; vous pouvez le désactiver en un clic depuis la page Abonnement :",
+    "termsAccepted": "Le {date}, vous avez accepté les Conditions d’utilisation et la Politique de confidentialité.",
+    "labelService": "Service",
+    "subject_pass": "KUMANI : confirmation du Pass {service}",
+    "intro_pass": "merci d’avoir acheté le Pass {service}. Voici le récapitulatif de votre achat.",
+    "passOneOff": "Paiement unique : le Pass dure un an et ne se renouvelle pas automatiquement.",
+    "passConsent": "Comme vous l’avez demandé le {date}, le Pass a été activé immédiatement, avant la fin du délai de rétractation de 14 jours.",
+    "passWithdrawal": "Droit de rétractation : vous pouvez vous rétracter jusqu’au {deadline} ({days} jours après le paiement) en nous écrivant depuis la page Contact. Nous vous rembourserons la partie du Pass non encore utilisée, dans les 14 jours suivant votre demande."
   },
   "voucherWallet": {
     "pointsBalance": "KU Points",
@@ -6009,7 +6028,8 @@
     "walletPassRenew": "Renouveler",
     "walletActivate": "Activer le service",
     "walletCouponTitle": "Pass {service} – 1 an",
-    "walletCouponHint": "Activez-le vous-même ou offrez le code :"
+    "walletCouponHint": "Activez-le vous-même ou offrez le code :",
+    "error_terms": "Pour continuer, acceptez les Conditions d’utilisation et la Politique de confidentialité."
   },
   "toolTiers": {
     "intro": "Trois niveaux : commencez par les services gratuits, débloquez le reste avec un abonnement ou activez un seul service avec un Pass.",
@@ -8899,5 +8919,19 @@
     "reportCancel": "Annuler",
     "reportThanks": "Merci, nous avons bien reçu votre signalement.",
     "reportError": "Envoi impossible. Réessayez."
+  },
+  "renewalEmail": {
+    "subject": "KUMANI : votre abonnement se renouvelle le {date}",
+    "greeting": "Bonjour,",
+    "intro": "nous vous rappelons que votre abonnement {plan} se renouvellera automatiquement le {date} : à cette date, nous prélèverons {amount} sur la carte associée.",
+    "keep": "Si vous souhaitez continuer, vous n’avez rien à faire.",
+    "stop": "Si vous ne souhaitez pas renouveler, désactivez le renouvellement automatique en un clic depuis la page Abonnement : l’offre reste active jusqu’à son échéance.",
+    "cta": "Gérer le renouvellement",
+    "signature": "L’équipe KUMANI"
+  },
+  "marketingConsent": {
+    "title": "Nouveautés et offres par e-mail",
+    "onText": "Activé : vous recevez les nouveautés et les offres de KUMANI. Vous pouvez le désactiver à tout moment.",
+    "offText": "Désactivé : vous ne recevez que les e-mails de service (sécurité, paiements, compte)."
   }
 }

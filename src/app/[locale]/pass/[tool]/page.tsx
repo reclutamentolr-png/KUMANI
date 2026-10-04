@@ -4,6 +4,7 @@ import { ArrowLeft, BookOpen, CheckCircle2, Crown, Sparkles, Ticket } from 'luci
 import { toolGuideFor } from '@/lib/guides/toolGuides'
 import Link from '@/components/LocalizedLink'
 import CheckoutForm from '@/components/billing/CheckoutForm'
+import { getCheckoutTexts } from '@/lib/checkoutTexts'
 import PassCodeForm from '@/components/pass/PassCodeForm'
 import { createClient } from '@/lib/supabase/server'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
@@ -11,7 +12,7 @@ import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 import { getPlanPrices } from '@/lib/planPrices'
 import { confirmToolPassSession, getMyToolPasses, getToolPassOffer } from '@/lib/toolPasses'
 
-const ERRORS = ['unavailable', 'already', 'business', 'vat', 'consent', 'payment'] as const
+const ERRORS = ['unavailable', 'already', 'business', 'vat', 'consent', 'terms', 'payment'] as const
 
 // Pass di un singolo servizio: acquisto con carta (1 anno, pagamento unico),
 // attivazione con codice, oppure abbonamento Base/Pro per avere tutto.
@@ -131,16 +132,7 @@ export default async function ToolPassPage({
               <div className="mt-5">
                 <CheckoutForm
                   action={`/api/checkout/pass?tool=${encodeURIComponent(tool)}`}
-                  texts={{
-                    asConsumer: tw('asConsumer'),
-                    asBusiness: tw('asBusiness'),
-                    consentLabel: tw('consentLabel'),
-                    consentHint: tw('consentHint'),
-                    businessName: tw('businessName'),
-                    vatNumber: tw('vatNumber'),
-                    vatHint: tw('vatHint'),
-                    businessDeclaration: tw('businessDeclaration'),
-                  }}
+                  texts={await getCheckoutTexts(locale)}
                 >
                   <button
                     type="submit"

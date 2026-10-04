@@ -7,6 +7,7 @@ import Link from '@/components/LocalizedLink'
 import Logo from '@/components/Logo'
 import UpgradeToProButton from '@/components/UpgradeToProButton'
 import CheckoutForm from '@/components/billing/CheckoutForm'
+import { getCheckoutTexts } from '@/lib/checkoutTexts'
 import StartProTrialButton from '@/components/StartProTrialButton'
 import { createClient } from '@/lib/supabase/server'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
@@ -152,9 +153,9 @@ export default async function ProPage({
               {price} € <span className="text-base font-medium text-gray-400">{t('perYear')}</span>
             </p>
             {error === 'unavailable' && <p className="mt-3 text-sm text-amber-300">{t('proUnavailable')}</p>}
-            {(error === 'consent' || error === 'business' || error === 'vat') && (
+            {(error === 'consent' || error === 'terms' || error === 'business' || error === 'vat') && (
               <p className="mt-3 text-sm text-amber-300">
-                {error === 'consent' ? tw('consentRequired') : error === 'vat' ? tw('vatInvalid') : tw('businessRequired')}
+                {error === 'consent' ? tw('consentRequired') : error === 'terms' ? tw('termsRequired') : error === 'vat' ? tw('vatInvalid') : tw('businessRequired')}
               </p>
             )}
 
@@ -194,16 +195,7 @@ export default async function ProPage({
                     <CheckoutForm
                       action="/api/checkout?plan=pro"
                       dark
-                      texts={{
-                        asConsumer: tw('asConsumer'),
-                        asBusiness: tw('asBusiness'),
-                        consentLabel: tw('consentLabel'),
-                        consentHint: tw('consentHint'),
-                        businessName: tw('businessName'),
-                        vatNumber: tw('vatNumber'),
-                        vatHint: tw('vatHint'),
-                        businessDeclaration: tw('businessDeclaration'),
-                      }}
+                      texts={await getCheckoutTexts(locale, { priceEuro: price })}
                     >
                       <button
                         type="submit"

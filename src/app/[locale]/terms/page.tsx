@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata('/terms', { title: t('termsTitle'), description: t('termsDescription') })
 }
 
-const LAST_UPDATE = '30 settembre 2026'
+const LAST_UPDATE = '4 ottobre 2026'
 
 export default function TermsPage() {
   return (
@@ -119,8 +119,13 @@ export default function TermsPage() {
                 Pro e gratuiti e non si rinnova in automatico. Non sono previsti costi nascosti né corrispettivi ulteriori per le funzionalità incluse.
               </p>
               <p>
-                I pagamenti sono gestiti da provider terzi autorizzati. L&apos;abbonamento si rinnova automaticamente salvo disdetta:
-                l&apos;utente può annullare in qualsiasi momento e continuerà a usufruire dei servizi fino al termine del periodo già pagato.
+                I pagamenti sono gestiti da provider terzi autorizzati. Prima del pagamento l&apos;utente accetta espressamente i presenti
+                Termini e l&apos;Informativa privacy; accanto al pulsante di pagamento sono indicati la data e il prezzo del rinnovo.
+                L&apos;abbonamento annuale si rinnova automaticamente salvo disdetta: l&apos;utente può disattivare il rinnovo automatico in
+                qualsiasi momento, anche subito dopo l&apos;acquisto, con il pulsante &ldquo;Disattiva rinnovo automatico&rdquo; della pagina
+                <em> Abbonamento</em>, e continuerà a usufruire dei servizi fino al termine del periodo già pagato. Tra 30 e 15 giorni prima
+                di ogni rinnovo l&apos;utente riceve un&apos;email con la data dell&apos;addebito, l&apos;importo e il collegamento per
+                disattivare il rinnovo.
               </p>
               <p>
                 Alla scadenza del piano i contenuti restano salvati e consultabili dal titolare, ma non si possono creare o modificare
@@ -419,8 +424,8 @@ export default function TermsPage() {
                 lo stesso mezzo di pagamento utilizzato, e l&apos;abbonamento viene chiuso al momento del rimborso.
               </p>
               <p>
-                Prima del pagamento l&apos;utente può chiedere espressamente che l&apos;abbonamento inizi subito, durante il periodo di
-                recesso. In tal caso, se recede, riceve il rimborso della sola parte dell&apos;abbonamento non ancora utilizzata, calcolata in
+                Al pagamento l&apos;utente consumatore chiede espressamente che l&apos;abbonamento (o il Pass) inizi subito, durante il
+                periodo di recesso: la richiesta non fa perdere il diritto di recesso. In tal caso, se recede, riceve il rimborso della sola parte dell&apos;abbonamento non ancora utilizzata, calcolata in
                 proporzione ai giorni trascorsi fino alla richiesta di recesso (art. 57, comma 3, Codice del Consumo). La richiesta di avvio
                 immediato viene registrata con data, ora e testo accettato.
               </p>
@@ -431,13 +436,16 @@ export default function TermsPage() {
                 previsti dalla legge.
               </p>
               <p>
-                Dopo ogni pagamento (primo acquisto, passaggio a Pro, rinnovo) l&apos;utente riceve via email la conferma del contratto, con
-                il riepilogo dell&apos;acquisto e, per i consumatori, la conferma della richiesta di avvio immediato e le istruzioni per il
+                Dopo ogni pagamento (primo acquisto, passaggio a Pro, rinnovo, acquisto di un Pass) l&apos;utente riceve via email la
+                conferma del contratto, con il riepilogo dell&apos;acquisto, la data e il prezzo del rinnovo automatico (per gli abbonamenti),
+                l&apos;accettazione dei Termini e, per i consumatori, la conferma della richiesta di avvio immediato e le istruzioni per il
                 recesso.
               </p>
               <p>
-                La disdetta (dalla pagina Abbonamento → &ldquo;Gestisci abbonamento&rdquo;) interrompe invece i rinnovi successivi: il periodo già
-                pagato resta attivo fino alla scadenza e non dà diritto a rimborsi.
+                La disdetta (dalla pagina Abbonamento → &ldquo;Disattiva rinnovo automatico&rdquo; oppure &ldquo;Gestisci o disdici
+                l&apos;abbonamento&rdquo;) interrompe invece i rinnovi successivi: il periodo già pagato resta attivo fino alla scadenza e non dà
+                diritto a rimborsi, salvo il diritto di recesso entro 14 giorni dal pagamento. La richiesta di cancellazione dell&apos;account
+                disattiva subito il rinnovo automatico.
               </p>
               <p>
                 L&apos;utente può inoltre recedere in qualsiasi momento cancellando il proprio account: punti, bonus e coupon non utilizzati

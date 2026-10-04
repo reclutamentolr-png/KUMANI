@@ -5,6 +5,8 @@ import { SITE_URL } from '@/lib/siteUrl'
 import { escapeHtml, sendEmail } from '@/lib/email'
 import { prettyVat } from '@/lib/vat'
 import { WITHDRAWAL_DAYS } from '@/lib/withdrawal'
+import { getPlanPrices } from '@/lib/planPrices'
+import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { locales, defaultLocale } from '../../i18n'
 
 // Conferma dell'acquisto su supporto durevole (Codice del Consumo, art. 51):
@@ -74,6 +76,16 @@ export async function sendPurchaseConfirmation(raw: Stripe.Invoice): Promise<voi
       link: billingUrl,
     })
   }
+  // Rinnovo automatico: data e prezzo, e come disattivarlo con un clic
+  if (validUntil) {
+    const prices = await getPlanPrices()
+    const renewalPrice = plan === 'KUMANI Pro' ? prices.pro : prices.base
+    paragraphs.push({
+      text: t('renewal', { date: date.format(validUntil), price: new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(renewalPrice) }),
+      link: billingUrl,
+    })
+  }
+  if (meta.terms_accepted) paragraphs.push({ text: t('termsAccepted', { date: date.format(new Date(meta.terms_accepted)) }) })
   paragraphs.push({ text: t('manage'), link: billingUrl }, { text: t('terms'), link: termsUrl })
 
   const subject = t(`subject_${reason}`, { plan })
@@ -110,4 +122,74 @@ ${paragraphs
 
   // Gli errori sono già nei log di sendEmail: il webhook non va ripetuto per un'email
   await sendEmail({ to, subject, html, text, idempotencyKey: `purchase-${invoice.id}` })
+}
+
+// Conferma dell'acquisto di un Pass (pagamento unico, 1 anno, nessun
+// rinnovo): stesso supporto durevole degli abbonamenti, con consenso,
+// recesso (privati) o dati fiscali (aziende) e Termini accettati.
+export async function sendPassConfirmation(session: Stripe.Checkout.Session, expiresAt: string): Promise<void> {
+  const meta = session.metadata ?? {}
+  const to = session.customer_details?.email ?? session.customer_email
+  if (!to || (session.amount_total ?? 0) <= 0) return
+
+  const locale = meta.locale && locales.includes(meta.locale) ? meta.locale : defaultLocale
+  const t = await getTranslations({ locale, namespace: 'purchaseEmail' })
+  const marketplaceT = await getTranslations({ locale, namespace: 'marketplace' })
+  const service = getMarketplaceTools((key) => marketplaceT(key)).find((tool) => tool.toolName === meta.tool)?.title ?? meta.tool ?? ''
+  const date = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Rome' })
+  const money = new Intl.NumberFormat(locale, { style: 'currency', currency: (session.currency ?? 'eur').toUpperCase() })
+  const paidAt = session.created * 1000
+  const prefix = locale === defaultLocale ? '' : `/${locale}`
+  const contactUrl = `${SITE_URL}${prefix}/contact`
+  const termsUrl = `${SITE_URL}${prefix}/terms#sez-12`
+  const isBusiness = meta.buyer_type === 'business'
+
+  const rows: [string, string][] = [
+    [t('labelService'), service],
+    [t('labelAmount'), money.format((session.amount_total ?? 0) / 100)],
+    [t('labelDate'), date.format(paidAt)],
+    [t('labelValidUntil'), date.format(new Date(expiresAt))],
+    ...(isBusiness ? ([[t('labelBuyer'), `${meta.business_name ?? ''} · ${prettyVat(meta.vat_number)}`]] as [string, string][]) : []),
+  ]
+  const paragraphs: { text: string; link?: string }[] = [{ text: t('passOneOff') }]
+  if (isBusiness) {
+    paragraphs.push({ text: t('businessNote', { name: meta.business_name ?? '', vat: prettyVat(meta.vat_number) }) })
+  } else {
+    if (meta.immediate_start_consent) paragraphs.push({ text: t('passConsent', { date: date.format(new Date(meta.immediate_start_consent)) }) })
+    paragraphs.push({ text: t('passWithdrawal', { deadline: date.format(paidAt + WITHDRAWAL_DAYS * 86_400_000), days: WITHDRAWAL_DAYS }), link: contactUrl })
+  }
+  if (meta.terms_accepted) paragraphs.push({ text: t('termsAccepted', { date: date.format(new Date(meta.terms_accepted)) }) })
+  paragraphs.push({ text: t('terms'), link: termsUrl })
+
+  const subject = t('subject_pass', { service })
+  const intro = t('intro_pass', { service })
+  const text = [
+    t('greeting'),
+    '',
+    intro,
+    '',
+    ...rows.map(([k, v]) => `${k}: ${v}`),
+    '',
+    ...paragraphs.flatMap((p) => [p.link ? `${p.text} ${p.link}` : p.text, '']),
+    t('footer'),
+    '',
+    t('signature'),
+  ].join('\n')
+  const html = `<!doctype html><html><body style="margin:0;background:#f5f3ee;font-family:Arial,Helvetica,sans-serif;color:#1a1a1a">
+<div style="max-width:560px;margin:0 auto;padding:24px 16px">
+<div style="background:#111;color:#e8c872;font-weight:bold;font-size:20px;padding:16px 20px;border-radius:12px 12px 0 0">KUMANI</div>
+<div style="background:#fff;padding:20px;border-radius:0 0 12px 12px;line-height:1.5;font-size:15px">
+<p>${escapeHtml(t('greeting'))}</p>
+<p>${escapeHtml(intro)}</p>
+<table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:14px">
+${rows.map(([k, v]) => `<tr><td style="padding:6px 0;color:#666">${escapeHtml(k)}</td><td style="padding:6px 0;text-align:right;font-weight:bold">${escapeHtml(v)}</td></tr>`).join('\n')}
+</table>
+${paragraphs
+  .map((p) => `<p>${escapeHtml(p.text)}${p.link ? ` <a href="${escapeHtml(p.link)}" style="color:#8a6d1f">${escapeHtml(p.link)}</a>` : ''}</p>`)
+  .join('\n')}
+<p style="font-size:13px;color:#666">${escapeHtml(t('footer'))}</p>
+<p>${escapeHtml(t('signature'))}</p>
+</div></div></body></html>`
+
+  await sendEmail({ to, subject, html, text, idempotencyKey: `pass-${session.id}` })
 }

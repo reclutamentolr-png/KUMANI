@@ -11,11 +11,17 @@ export type CheckoutFormTexts = {
   vatNumber: string
   vatHint: string
   businessDeclaration: string
+  // Accettazione di Termini e Privacy (con i link), obbligatoria per tutti
+  termsLabel: ReactNode
+  // Abbonamenti: data e prezzo del rinnovo automatico, accanto al pulsante
+  renewalNote?: string
 }
 
 // Modulo di pagamento (POST a /api/checkout): acquisto come privato, con il
 // consenso all'avvio immediato, oppure come azienda/professionista con
 // ragione sociale, P.IVA e dichiarazione B2B (niente recesso del consumatore).
+// Per tutti: accettazione di Termini e Privacy; per gli abbonamenti, data e
+// prezzo del rinnovo automatico scritti sopra il pulsante.
 // Il pulsante arriva dal server come children. I testi arrivano tradotti dal
 // server (/billing sceglie la lingua dal cookie).
 export default function CheckoutForm({
@@ -75,6 +81,13 @@ export default function CheckoutForm({
           </span>
         </label>
       )}
+
+      <label className={`flex items-start gap-2 text-xs leading-relaxed ${text}`}>
+        <input type="checkbox" name="accept_terms" value="1" required className={`mt-0.5 h-4 w-4 shrink-0 ${accent}`} />
+        <span>{texts.termsLabel}</span>
+      </label>
+
+      {texts.renewalNote && <p className={`rounded-lg px-3 py-2 text-xs leading-relaxed ${dark ? 'bg-white/5 text-gray-300' : 'bg-gray-50 text-gray-700'}`}>{texts.renewalNote}</p>}
 
       {children}
     </form>

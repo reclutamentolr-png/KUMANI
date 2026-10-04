@@ -6,6 +6,8 @@ import { isActiveSubscription } from '@/lib/subscriptionGate'
 import { cookies } from 'next/headers'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { recordConsent } from '@/lib/withdrawal'
+import { getCheckoutTexts } from '@/lib/checkoutTexts'
+import { getPlanPrices } from '@/lib/planPrices'
 import { parseVatInput } from '@/lib/vat'
 import { locales, defaultLocale } from '../../../../i18n'
 
@@ -44,6 +46,8 @@ export async function POST(request: Request) {
     } else if (form?.get('immediate_start') !== '1') {
       return backWith('consent')
     }
+    // Termini di servizio e Privacy accettati (per privati e aziende)
+    if (form?.get('accept_terms') !== '1') return backWith('terms')
     const cookieLocale = (await cookies()).get('NEXT_LOCALE')?.value
     const locale = cookieLocale && locales.includes(cookieLocale) ? cookieLocale : defaultLocale
 
@@ -69,8 +73,8 @@ export async function POST(request: Request) {
     // webhook, email di conferma e recesso.
     const now = new Date().toISOString()
     const purchaseMeta: Record<string, string> = business
-      ? { buyer_type: 'business', business_name: business.name, vat_number: business.vat, business_declaration: now, locale }
-      : { buyer_type: 'consumer', immediate_start_consent: now, locale }
+      ? { buyer_type: 'business', business_name: business.name, vat_number: business.vat, business_declaration: now, terms_accepted: now, locale }
+      : { buyer_type: 'consumer', immediate_start_consent: now, terms_accepted: now, locale }
 
     // Azienda: cliente Stripe con ragione sociale e P.IVA, così compaiono
     // in fattura. Se Stripe rifiuta il formato della P.IVA si crea senza.
@@ -124,7 +128,10 @@ export async function POST(request: Request) {
     const service = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
       auth: { autoRefreshToken: false, persistSession: false },
     })
-    await recordConsent(service, { userId: user.id, kind: 'checkout', plan, stripeRef: session.id, locale, business })
+    // Stesso testo del rinnovo mostrato accanto al pulsante
+    const prices = await getPlanPrices()
+    const { renewalNote } = await getCheckoutTexts(locale, { priceEuro: plan === 'pro' ? prices.pro : prices.base })
+    await recordConsent(service, { userId: user.id, kind: 'checkout', plan, stripeRef: session.id, locale, business, renewalNote, termsAccepted: true })
     
     return NextResponse.redirect(session.url, 303)
     

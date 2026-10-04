@@ -384,7 +384,9 @@
     "invalidEmailError": "Indirizzo email non valido: controlla di averlo scritto bene.",
     "genericAuthError": "Qualcosa non ha funzionato. Riprova tra poco.",
     "haveCode": "Ho già ricevuto un codice",
-    "haveCodeNeedEmail": "Scrivi prima la tua email, poi tocca «Ho già ricevuto un codice»."
+    "haveCodeNeedEmail": "Scrivi prima la tua email, poi tocca «Ho già ricevuto un codice».",
+    "termsAccept": "Ho letto e accetto i <terms>Termini di servizio</terms> e l’<privacy>Informativa privacy</privacy>.",
+    "marketingConsent": "Voglio ricevere via email novità e offerte di KUMANI (facoltativo: puoi cambiare idea quando vuoi dal profilo)."
   },
   "dashboard": {
     "receivedLabel": "Dalla Community",
@@ -3950,8 +3952,8 @@
     "titleActive": "Abbonamento Attivo",
     "titleInactive": "Completa il tuo Abbonamento",
     "activeText": "Grazie! Il tuo piano {plan} è attivo: hai accesso agli strumenti dell’Ecosistema KUMANI inclusi nel tuo piano.",
-    "inactiveText": "Attiva il tuo piano a soli 49€/anno per sbloccare gli strumenti dell’Ecosistema KUMANI.",
-    "subscribeCta": "Abbonati ora per 49€/anno",
+    "inactiveText": "Attiva il tuo piano a soli {price}€/anno per sbloccare gli strumenti dell’Ecosistema KUMANI.",
+    "subscribeCta": "Abbonati ora per {price}€/anno",
     "statusLabel": "Stato:",
     "statusActive": "Attivo ({plan})",
     "validUntil": "Valido fino al {date}",
@@ -3976,7 +3978,13 @@
     "portalError": "Non è stato possibile aprire la gestione dell'abbonamento. Riprova tra qualche istante.",
     "portalNone": "Non abbiamo trovato un abbonamento con carta collegato al tuo account: non c'è nulla da gestire su Stripe.",
     "portalNotConfigured": "La gestione dell'abbonamento non è ancora disponibile. Riprova più tardi o contatta l'assistenza.",
-    "portalReturn": "Bentornato! Eventuali modifiche al tuo abbonamento possono richiedere qualche istante per comparire qui."
+    "portalReturn": "Bentornato! Eventuali modifiche al tuo abbonamento possono richiedere qualche istante per comparire qui.",
+    "renewalOffCta": "Disattiva rinnovo automatico",
+    "renewalOnCta": "Riattiva il rinnovo automatico",
+    "renewalOffHint": "Il piano resta attivo fino al {date}, poi non si rinnova e non ti addebitiamo nulla.",
+    "renewalOffDone": "Rinnovo automatico disattivato: il piano resta attivo fino alla scadenza, poi non si rinnova.",
+    "renewalOnDone": "Rinnovo automatico riattivato.",
+    "renewalError": "Non è stato possibile cambiare il rinnovo automatico. Riprova o usa «Gestisci o disdici l’abbonamento»."
   },
   "travel": {
     "error_suspended": "Servizio momentaneamente sospeso. Riprova più tardi.",
@@ -5811,7 +5819,10 @@
     "businessDeclaration": "Dichiaro di acquistare per la mia attività d'impresa o professionale: so che per questo acquisto non si applica il diritto di recesso previsto per i consumatori.",
     "businessRequired": "Per acquistare come azienda o professionista inserisci la ragione sociale e spunta la dichiarazione.",
     "vatInvalid": "La partita IVA inserita non è valida: controlla il numero (per i Paesi UE diversi dall'Italia serve il prefisso, es. DE).",
-    "businessNoWithdrawal": "Abbonamento acquistato per la tua attività con partita IVA: non si applica il diritto di recesso dei consumatori."
+    "businessNoWithdrawal": "Abbonamento acquistato per la tua attività con partita IVA: non si applica il diritto di recesso dei consumatori.",
+    "termsAccept": "Ho letto e accetto i <terms>Termini di servizio</terms> e l’<privacy>Informativa privacy</privacy>.",
+    "termsRequired": "Per procedere accetta i Termini di servizio e l’Informativa privacy.",
+    "renewalNote": "L’abbonamento si rinnova automaticamente il {date} al prezzo di {price} € all’anno, salvo disdetta. Puoi disattivare il rinnovo quando vuoi, con un clic, dalla pagina Abbonamento: ti avvisiamo comunque via email prima di ogni rinnovo."
   },
   "purchaseEmail": {
     "subject_create": "KUMANI: conferma del tuo abbonamento {plan}",
@@ -5832,7 +5843,15 @@
     "manage": "Puoi cambiare carta, scaricare le fatture o disdire il rinnovo dalla pagina Abbonamento:",
     "terms": "Condizioni del servizio:",
     "footer": "Conserva questa email: è la conferma del tuo contratto.",
-    "signature": "Il team KUMANI"
+    "signature": "Il team KUMANI",
+    "renewal": "Rinnovo automatico: il {date} l’abbonamento si rinnova al prezzo di {price} € all’anno, salvo disdetta. Ti avvisiamo via email prima del rinnovo; puoi disattivarlo con un clic dalla pagina Abbonamento:",
+    "termsAccepted": "Il {date} hai accettato i Termini di servizio e l’Informativa privacy.",
+    "labelService": "Servizio",
+    "subject_pass": "KUMANI: conferma del Pass {service}",
+    "intro_pass": "grazie per aver acquistato il Pass {service}. Ecco il riepilogo del tuo acquisto.",
+    "passOneOff": "Pagamento unico: il Pass dura un anno e non si rinnova in automatico.",
+    "passConsent": "Come da te richiesto il {date}, il Pass è stato attivato subito, prima della fine dei 14 giorni per il recesso.",
+    "passWithdrawal": "Diritto di recesso: puoi recedere entro il {deadline} ({days} giorni dal pagamento) scrivendoci dalla pagina Contatti. Ti rimborseremo la parte del Pass non ancora usata, entro 14 giorni dalla richiesta."
   },
   "voucherWallet": {
     "pointsBalance": "KU Points",
@@ -6009,7 +6028,8 @@
     "walletPassRenew": "Rinnova",
     "walletActivate": "Attiva il servizio",
     "walletCouponTitle": "Pass {service} – 1 anno",
-    "walletCouponHint": "Attivalo tu oppure regala il codice:"
+    "walletCouponHint": "Attivalo tu oppure regala il codice:",
+    "error_terms": "Per procedere accetta i Termini di servizio e l’Informativa privacy."
   },
   "toolTiers": {
     "intro": "Tre livelli: parti dai servizi gratuiti, sblocca il resto con un abbonamento o attiva un singolo servizio con un Pass.",
@@ -8899,5 +8919,19 @@
     "reportCancel": "Annulla",
     "reportThanks": "Grazie, abbiamo ricevuto la segnalazione.",
     "reportError": "Non è stato possibile inviare. Riprova."
+  },
+  "renewalEmail": {
+    "subject": "KUMANI: il tuo abbonamento si rinnova il {date}",
+    "greeting": "Ciao,",
+    "intro": "ti ricordiamo che il tuo abbonamento {plan} si rinnoverà automaticamente il {date}: in quella data addebiteremo {amount} sulla carta collegata.",
+    "keep": "Se vuoi continuare, non devi fare nulla.",
+    "stop": "Se non vuoi rinnovare, disattiva il rinnovo automatico con un clic dalla pagina Abbonamento: il piano resta attivo fino alla scadenza.",
+    "cta": "Gestisci il rinnovo",
+    "signature": "Il team KUMANI"
+  },
+  "marketingConsent": {
+    "title": "Novità e offerte via email",
+    "onText": "Attivo: ricevi le novità e le offerte di KUMANI. Puoi disattivarlo quando vuoi.",
+    "offText": "Disattivato: ricevi solo le email di servizio (sicurezza, pagamenti, account)."
   }
 }

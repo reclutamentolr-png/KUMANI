@@ -8,6 +8,7 @@ import ProfileChangeRequestDialog from '@/components/profile/ProfileChangeReques
 import AccountDeletionSection from '@/components/profile/AccountDeletionSection'
 import PasswordChangeSection from '@/components/profile/PasswordChangeSection'
 import PushSettingsSection from '@/components/profile/PushSettingsSection'
+import MarketingConsentSection from '@/components/profile/MarketingConsentSection'
 import { useProfileCompletion } from '@/components/profile/useProfileCompletion'
 import {
   cancelProfileChange,
@@ -266,6 +267,7 @@ export default function ProfileModal({ isOpen, onClose, initialData, userId, onC
 
           {isOpen && <PushSettingsSection />}
           <PasswordChangeSection />
+          <MarketingConsentSection isOpen={isOpen} />
           <AccountDeletionSection isOpen={isOpen} />
         </div>
       </div>

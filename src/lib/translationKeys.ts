@@ -126,6 +126,8 @@ export const SECTION_LABELS: Record<string, string> = {
   businessCard: 'Biglietto da visita (Documenti e pagina del QR)',
   seo: 'Google: titoli e descrizioni del sito',
   toolSeo: 'Google: testi delle pagine dei servizi',
+  renewalEmail: 'Email: promemoria del rinnovo',
+  marketingConsent: 'Profilo: consenso a novità e offerte',
   lateSponsor: 'Invito indicato dopo la registrazione',
   verification: 'Verifica identità',
   agenda: 'Agenda (prossimi giorni)',

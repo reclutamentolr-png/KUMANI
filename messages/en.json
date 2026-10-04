@@ -384,7 +384,9 @@
     "invalidEmailError": "Invalid email address: check that you typed it correctly.",
     "genericAuthError": "Something went wrong. Please try again shortly.",
     "haveCode": "I already have a code",
-    "haveCodeNeedEmail": "Enter your email first, then tap “I already have a code”."
+    "haveCodeNeedEmail": "Enter your email first, then tap “I already have a code”.",
+    "termsAccept": "I have read and accept the <terms>Terms of Service</terms> and the <privacy>Privacy Policy</privacy>.",
+    "marketingConsent": "I want to receive KUMANI news and offers by email (optional: you can change your mind at any time from your profile)."
   },
   "dashboard": {
     "receivedLabel": "From the Community",
@@ -3950,8 +3952,8 @@
     "titleActive": "Subscription active",
     "titleInactive": "Complete your subscription",
     "activeText": "Thank you! Your {plan} plan is active: you have access to the KUMANI Ecosystem tools included in your plan.",
-    "inactiveText": "Activate your plan for just €49/year to unlock the KUMANI Ecosystem tools.",
-    "subscribeCta": "Subscribe now for €49/year",
+    "inactiveText": "Activate your plan for just €{price}/year to unlock the KUMANI Ecosystem tools.",
+    "subscribeCta": "Subscribe now for €{price}/year",
     "statusLabel": "Status:",
     "statusActive": "Active ({plan})",
     "validUntil": "Valid until {date}",
@@ -3976,7 +3978,13 @@
     "portalError": "We couldn't open subscription management. Please try again in a moment.",
     "portalNone": "We couldn't find a card subscription linked to your account: there's nothing to manage on Stripe.",
     "portalNotConfigured": "Subscription management isn't available yet. Please try again later or contact support.",
-    "portalReturn": "Welcome back! Any changes to your subscription may take a moment to show up here."
+    "portalReturn": "Welcome back! Any changes to your subscription may take a moment to show up here.",
+    "renewalOffCta": "Turn off automatic renewal",
+    "renewalOnCta": "Turn automatic renewal back on",
+    "renewalOffHint": "Your plan stays active until {date}, then it does not renew and we will not charge you anything.",
+    "renewalOffDone": "Automatic renewal turned off: your plan stays active until it expires, then it does not renew.",
+    "renewalOnDone": "Automatic renewal turned back on.",
+    "renewalError": "We could not change automatic renewal. Please try again or use ‘Manage or cancel subscription’."
   },
   "travel": {
     "error_suspended": "Service temporarily suspended. Please try again later.",
@@ -5811,7 +5819,10 @@
     "businessDeclaration": "I declare that I am buying for my business or professional activity: I understand that the consumer right of withdrawal does not apply to this purchase.",
     "businessRequired": "To buy as a business or professional, enter the company name and tick the declaration.",
     "vatInvalid": "The VAT number is not valid: please check it (for EU countries other than Italy, the prefix is required, e.g. DE).",
-    "businessNoWithdrawal": "Subscription bought for your business with a VAT number: the consumer right of withdrawal does not apply."
+    "businessNoWithdrawal": "Subscription bought for your business with a VAT number: the consumer right of withdrawal does not apply.",
+    "termsAccept": "I have read and accept the <terms>Terms of Service</terms> and the <privacy>Privacy Policy</privacy>.",
+    "termsRequired": "To continue, please accept the Terms of Service and the Privacy Policy.",
+    "renewalNote": "Your subscription renews automatically on {date} at €{price} per year, unless you cancel. You can turn off renewal at any time, with one click, from the Subscription page: we will email you before every renewal anyway."
   },
   "purchaseEmail": {
     "subject_create": "KUMANI: your {plan} subscription is confirmed",
@@ -5832,7 +5843,15 @@
     "manage": "You can change your card, download invoices or cancel the renewal from the Subscription page:",
     "terms": "Terms of service:",
     "footer": "Keep this email: it is the confirmation of your contract.",
-    "signature": "The KUMANI team"
+    "signature": "The KUMANI team",
+    "renewal": "Automatic renewal: on {date} your subscription renews at €{price} per year, unless you cancel. We will email you before the renewal; you can turn it off with one click from the Subscription page:",
+    "termsAccepted": "On {date} you accepted the Terms of Service and the Privacy Policy.",
+    "labelService": "Service",
+    "subject_pass": "KUMANI: your {service} pass is confirmed",
+    "intro_pass": "thank you for buying the {service} pass. Here is a summary of your purchase.",
+    "passOneOff": "One-off payment: the pass lasts one year and does not renew automatically.",
+    "passConsent": "As you requested on {date}, your pass was activated immediately, before the end of the 14-day withdrawal period.",
+    "passWithdrawal": "Right of withdrawal: you can withdraw until {deadline} ({days} days from payment) by writing to us from the Contact page. We will refund the part of the pass you have not yet used, within 14 days of your request."
   },
   "voucherWallet": {
     "pointsBalance": "KU Points",
@@ -6009,7 +6028,8 @@
     "walletPassRenew": "Renew",
     "walletActivate": "Activate the service",
     "walletCouponTitle": "{service} pass – 1 year",
-    "walletCouponHint": "Activate it yourself or give away the code:"
+    "walletCouponHint": "Activate it yourself or give away the code:",
+    "error_terms": "To continue, please accept the Terms of Service and the Privacy Policy."
   },
   "toolTiers": {
     "intro": "Three levels: start with the free services, unlock the rest with a subscription or activate a single service with a Pass.",
@@ -8899,5 +8919,19 @@
     "reportCancel": "Cancel",
     "reportThanks": "Thank you, we’ve received your report.",
     "reportError": "Couldn’t send. Please try again."
+  },
+  "renewalEmail": {
+    "subject": "KUMANI: your subscription renews on {date}",
+    "greeting": "Hello,",
+    "intro": "this is a reminder that your {plan} subscription will renew automatically on {date}: on that date we will charge {amount} to the linked card.",
+    "keep": "If you want to continue, you do not need to do anything.",
+    "stop": "If you do not want to renew, turn off automatic renewal with one click from the Subscription page: your plan stays active until it expires.",
+    "cta": "Manage renewal",
+    "signature": "The KUMANI team"
+  },
+  "marketingConsent": {
+    "title": "News and offers by email",
+    "onText": "On: you receive KUMANI news and offers. You can turn this off at any time.",
+    "offText": "Off: you only receive service emails (security, payments, account)."
   }
 }

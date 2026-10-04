@@ -1,3 +1,5 @@
+import { createClient as createServiceClient } from '@supabase/supabase-js'
+import { recordConsent } from '@/lib/withdrawal'
 import { SITE_URL } from '@/lib/siteUrl'
 import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
@@ -48,6 +50,8 @@ export async function POST(request: Request) {
     } else if (form?.get('immediate_start') !== '1') {
       return back('consent')
     }
+    // Termini di servizio e Privacy accettati (per privati e aziende)
+    if (form?.get('accept_terms') !== '1') return back('terms')
 
     const marketplaceT = await getTranslations({ locale, namespace: 'marketplace' })
     const toolInfo = getMarketplaceTools((key) => marketplaceT(key)).find((item) => item.toolName === tool)
@@ -61,8 +65,8 @@ export async function POST(request: Request) {
       tool,
       locale,
       ...(business
-        ? { buyer_type: 'business', business_name: business.name, vat_number: business.vat, business_declaration: now }
-        : { buyer_type: 'consumer', immediate_start_consent: now }),
+        ? { buyer_type: 'business', business_name: business.name, vat_number: business.vat, business_declaration: now, terms_accepted: now }
+        : { buyer_type: 'consumer', immediate_start_consent: now, terms_accepted: now }),
     }
 
     const stripe = getStripe()
@@ -93,6 +97,11 @@ export async function POST(request: Request) {
       ...(customerId ? { customer: customerId } : { customer_email: user.email, customer_creation: 'always' as const }),
     })
     if (!session.url) throw new Error('URL di pagamento mancante')
+    // Prova del consenso (avvio immediato o dichiarazione aziendale + Termini)
+    const service = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+      auth: { autoRefreshToken: false, persistSession: false },
+    })
+    await recordConsent(service, { userId: user.id, kind: 'pass', plan: null, tool, stripeRef: session.id, locale, business, termsAccepted: true })
     return NextResponse.redirect(session.url, 303)
   } catch (error) {
     console.error('❌ Checkout pass servizio:', error instanceof Error ? error.message : error)
