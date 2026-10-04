@@ -9,6 +9,7 @@ import NetworkSummaryCard from '@/components/dashboard/NetworkSummaryCard'
 import { CommunityBlock } from '@/components/dashboard/CommunityBlock'
 import KumanoDelGiornoPreview from '@/components/dashboard/KumanoDelGiornoPreview'
 import DashboardDonations from '@/components/donations/DashboardDonations'
+import { getSessionUser, preloadSession } from '@/lib/session'
 
 export const dynamic = 'force-dynamic'
 
@@ -23,9 +24,9 @@ export default async function CommunityPage({ params }: { params: Promise<{ loca
   const { locale } = await params
   const t = await getTranslations('hub')
   const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  // Utente letto una volta sola per la pagina e la sua intestazione
+  preloadSession()
+  const user = await getSessionUser()
   if (!user) redirect(`/${locale}/login`)
 
   const [{ data: profile }, communityItems] = await Promise.all([

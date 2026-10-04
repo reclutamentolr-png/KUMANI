@@ -27,6 +27,7 @@ import { getFlyerTitles, listPublishedFlyers } from '@/lib/flyersData'
 import { FLYERS } from '@/lib/flyers'
 import { DOC_LOCALES, pickLocalized, type DocLocale, type KumaniDocFile, type PersonalDocKind } from '@/lib/documents'
 import AppHeader from '@/components/nav/AppHeader'
+import { getSessionUser, preloadSession } from '@/lib/session'
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('documents')
@@ -54,9 +55,9 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
   const personal = tab === 'personali'
 
   const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  // Utente letto una volta sola per la pagina e la sua intestazione
+  preloadSession()
+  const user = await getSessionUser()
   if (!user) redirect(`/${locale}/login`)
 
   const languageName = (code: string) => {

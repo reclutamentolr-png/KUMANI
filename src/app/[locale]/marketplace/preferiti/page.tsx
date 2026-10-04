@@ -8,6 +8,7 @@ import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { getFavoriteToolNames } from '@/lib/favorites'
 import FavoritesGrid from '@/components/FavoritesGrid'
 import AppHeader from '@/components/nav/AppHeader'
+import { getSessionUser, preloadSession } from '@/lib/session'
 
 export default async function MarketplaceFavoritesPage({
   params,
@@ -21,9 +22,9 @@ export default async function MarketplaceFavoritesPage({
   const fromDashboard = from === 'dashboard'
   const t = await getTranslations('marketplace')
   const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  // Utente letto una volta sola per la pagina e la sua intestazione
+  preloadSession()
+  const user = await getSessionUser()
   if (!user) redirect(`/${locale}/login`)
 
   const { isSettingEnabled, isToolEnabled, disabledReason, requiredPlan, passPriceCents } = await getMarketplaceAccessState(supabase, user.id)

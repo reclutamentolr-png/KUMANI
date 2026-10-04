@@ -39,8 +39,8 @@ import { loadKuWalletData } from '@/lib/ku-server'
 import { featureConfig, type KuRenewalConfig } from '@/lib/ku'
 import { getMyAttendedCount, listMyPasses } from '@/app/actions/events'
 import { EVENT_TYPE_EMOJI, formatEventDate } from '@/lib/events'
-import type { MyProfile } from '@/lib/myProfile'
 import AppHeader from '@/components/nav/AppHeader'
+import { getSessionProfile, getSessionUser, preloadSession } from '@/lib/session'
 
 const RANK_ICONS = { Star, Sparkles, Crown }
 
@@ -72,61 +72,85 @@ function WalletSection({
 
 export default async function WalletPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
-  const t = await getTranslations('wallet')
-  const td = await getTranslations('dashboard')
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const [t, td, supabase] = await Promise.all([getTranslations('wallet'), getTranslations('dashboard'), createClient()])
+  // Utente letto una volta sola per la pagina e la sua intestazione
+  preloadSession()
+  const user = await getSessionUser()
   if (!user) redirect(`/${locale}/login`)
 
   // Profilo completo (dati personali inclusi) solo tramite get_my_profile():
   // dal browser/sessione utente le colonne personali non sono più leggibili.
-  const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<MyProfile>()
+  const profile = await getSessionProfile()
   if (!profile) redirect(`/${locale}/dashboard`)
 
-  // Sconto sul rinnovo pagato in KU Karma (Gestione KU → 4), solo se attivo
-  const kuWalletData = await loadKuWalletData(supabase, profile)
+  const couponQuery = (columns: string) =>
+    supabase.from('wallet_coupons').select(columns).eq('user_id', user.id).order('created_at', { ascending: false })
+
+  // Tutte le letture del Wallet insieme (una alla volta la pagina impiegava
+  // quasi due secondi): ognuna è indipendente dalle altre.
+  const [
+    kuWalletData,
+    tku,
+    networkWallet,
+    { data: welcomeAwards },
+    [donationSummary, myDonations, tdon],
+    { data: achievementRows },
+    { data: receipts },
+    coupons,
+    [myPasses, marketplaceT, tp],
+    myVouchers,
+    rewardsEnabled,
+    redemptions,
+    [eventPasses, attendedCount],
+    { data: plan },
+  ] = await Promise.all([
+    // Sconto sul rinnovo pagato in KU Karma (Gestione KU → 4), solo se attivo
+    loadKuWalletData(supabase, profile),
+    getTranslations('kuRewards'),
+    // KU Points, credito voucher e qualifiche (badge sui punti guadagnati)
+    getMyNetworkWallet(supabase),
+    // KU Points ricevuti con il Bonus Accoglienza (registro dei punti, tipo
+    // 'matrix'; esclusi quelli annullati)
+    supabase.from('network_point_awards').select('points').eq('user_id', user.id).eq('kind', 'matrix').is('reversed_at', null),
+    // Donazioni (sezione visibile solo con un'associazione attiva)
+    Promise.all([getPublicDonationSummary(), getMyDonations(), getTranslations('donations')]),
+    // Data in cui ogni badge è stato raggiunto (registrata dal database)
+    supabase.rpc('my_rank_achievements'),
+    supabase
+      .from('digital_receipts')
+      .select('id, object_name, template, confirmed_at, returned_at, created_at')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false }),
+    // Senza la colonna dei pass (migrazione non ancora applicata) si legge come prima
+    couponQuery('id, code, title, description, expires_at, redeemed_at, created_at, pass_tool').then(async (withPass) =>
+      withPass.error ? (await couponQuery('id, code, title, description, expires_at, redeemed_at, created_at')).data : withPass.data
+    ),
+    // Pass dei singoli servizi attivi (servizio → scadenza) e nomi tradotti
+    Promise.all([getMyToolPasses(supabase), getTranslations('marketplace'), getTranslations('toolPass')]),
+    listMyVouchers(),
+    // Catalogo Premi: se spento dall'Admin niente collegamenti; i premi già
+    // riscattati restano visibili finché ce ne sono
+    isRewardsCatalogEnabled(supabase),
+    // Premi riscattati dal Catalogo Premi: in preparazione finché lo Staff non
+    // li evade (il codice arriva poi tra i Coupon)
+    listMyRedemptions(),
+    Promise.all([listMyPasses(), getMyAttendedCount()]),
+    supabase.rpc('my_plan'),
+  ])
+
   const renewal = featureConfig<KuRenewalConfig>(kuWalletData.features, 'renewal_discount')
-  const tku = await getTranslations('kuRewards')
-  // KU Points, credito voucher e qualifiche (badge sui punti guadagnati)
-  const networkWallet = await getMyNetworkWallet(supabase)
   const { ranks } = networkWallet
   const currentRank = getCurrentRank(networkWallet.earnedTotal, ranks)
   const nextRank = ranks.find((rank) => networkWallet.earnedTotal < rank.threshold) ?? null
-  // KU Points ricevuti con il Bonus Accoglienza (registro dei punti, tipo
-  // 'matrix'; esclusi quelli annullati)
-  const { data: welcomeAwards } = await supabase
-    .from('network_point_awards')
-    .select('points')
-    .eq('user_id', user.id)
-    .eq('kind', 'matrix')
-    .is('reversed_at', null)
   const welcomeBonusPoints = (welcomeAwards ?? []).reduce((sum, row) => sum + (row.points ?? 0), 0)
-  // Donazioni (sezione visibile solo con un'associazione attiva)
-  const [donationSummary, myDonations, tdon] = await Promise.all([getPublicDonationSummary(), getMyDonations(), getTranslations('donations')])
-  // Data in cui ogni badge è stato raggiunto (registrata dal database)
-  const { data: achievementRows } = await supabase.rpc('my_rank_achievements')
   const achievements = new Map(
     ((achievementRows ?? []) as { rank_key: string; achieved_at: string }[]).map((row) => [row.rank_key, row])
   )
-
-  const { data: receipts } = await supabase
-    .from('digital_receipts')
-    .select('id, object_name, template, confirmed_at, returned_at, created_at')
-    .eq('user_id', user.id)
-    .order('created_at', { ascending: false })
 
   const receiptsList = receipts || []
   const receiptsPending = receiptsList.filter((r) => !r.confirmed_at).length
   const receiptsConfirmed = receiptsList.filter((r) => r.confirmed_at && !r.returned_at).length
   const receiptsReturned = receiptsList.filter((r) => r.returned_at).length
-
-  const couponQuery = (columns: string) =>
-    supabase.from('wallet_coupons').select(columns).eq('user_id', user.id).order('created_at', { ascending: false })
-  // Senza la colonna dei pass (migrazione non ancora applicata) si legge come prima
-  const withPass = await couponQuery('id, code, title, description, expires_at, redeemed_at, created_at, pass_tool')
-  const coupons = withPass.error ? (await couponQuery('id, code, title, description, expires_at, redeemed_at, created_at')).data : withPass.data
 
   const couponsList = (coupons ?? []) as unknown as {
     id: string
@@ -138,27 +162,17 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
     created_at: string
     pass_tool?: string | null
   }[]
-  // Pass dei singoli servizi attivi (servizio → scadenza) e nomi tradotti
-  const [myPasses, marketplaceT, tp] = await Promise.all([getMyToolPasses(supabase), getTranslations('marketplace'), getTranslations('toolPass')])
   const toolsByName = new Map(getMarketplaceTools((key) => marketplaceT(key)).map((tool) => [tool.toolName, tool]))
   const passTitles = Object.fromEntries([...toolsByName].map(([name, tool]) => [name, tool.title]))
-  const myVouchers = await listMyVouchers()
-  // Catalogo Premi: se spento dall'Admin niente collegamenti; i premi già
-  // riscattati restano visibili finché ce ne sono
-  const rewardsEnabled = await isRewardsCatalogEnabled(supabase)
-  // Premi riscattati dal Catalogo Premi: in preparazione finché lo Staff non
-  // li evade (il codice arriva poi tra i Coupon)
-  const myRedemptions = (await listMyRedemptions()) as unknown as {
+  const myRedemptions = redemptions as unknown as {
     id: string
     points_spent: number
     redeemed_at: string
     fulfilled_at: string | null
     reward_catalog: { title: string | null; image_url: string | null } | { title: string | null; image_url: string | null }[] | null
   }[]
-  const [eventPasses, attendedCount] = await Promise.all([listMyPasses(), getMyAttendedCount()])
 
   // Piano effettivo (la prova Pro conta come Pro): stesso calcolo degli strumenti.
-  const { data: plan } = await supabase.rpc('my_plan')
   const onProTrial =
     plan === 'pro' && profile.pro_trial_ends_at && new Date(profile.pro_trial_ends_at).getTime() > new Date().getTime() && profile.subscription_plan !== 'pro'
   const planName = plan === 'pro' ? (onProTrial ? t('planProTrial') : t('planPro')) : plan === 'base' ? t('planBase') : null

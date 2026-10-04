@@ -43,8 +43,7 @@ export const revalidate = 0
 
 export default async function DashboardPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
-  const marketplaceT = await getTranslations('marketplace')
-  const supabase = await createClient()
+  const [marketplaceT, supabase] = await Promise.all([getTranslations('marketplace'), createClient()])
 
   // 1. Verifica autenticazione
   const {
@@ -58,7 +57,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   // dashboard impiegava secondi): ruolo admin, profilo completo (solo
   // tramite get_my_profile(): le colonne personali non sono leggibili
   // direttamente), messaggi non letti, piano e strumenti, preferiti.
-  const [adminRole, { data: profile }, unreadMessagesCount, access, favoriteToolNames, { count: landingUnread }, reviewOptions] = await Promise.all([
+  const [adminRole, { data: profile }, unreadMessagesCount, access, favoriteToolNames, { count: landingUnread }, reviewOptions, lateSponsor, planPrices] = await Promise.all([
     hasAdminRole(supabase, user.id),
     supabase.rpc('get_my_profile').maybeSingle<MyProfile>(),
     getUnreadMessagesCount(user.id),
@@ -68,6 +67,10 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     supabase.from('landing_messages').select('id', { count: 'exact', head: true }).eq('owner_id', user.id).is('read_at', null),
     // Recensioni: cosa può recensire (acquisti da almeno 7 giorni)
     getMyReviewOptions(),
+    // Iscritto senza codice: può ancora indicare chi l'ha invitato
+    getLateSponsorStatus(user.id),
+    // Prezzi dei piani come li addebita Stripe (in cache per un'ora)
+    getPlanPrices(),
   ])
   const canReview = reviewOptions.some((option) => option.purchaseLabel && !option.review)
   const { userPlan, isSettingEnabled, isToolEnabled, requiredPlan } = access
@@ -86,11 +89,9 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
 
   // 6. URL di condivisione
   const shareUrl = `${SITE_URL}/${locale}/ref/${profile?.referral_code}`
-  const lateSponsor = await getLateSponsorStatus(user.id)
 
   // Prezzo del piano Base come lo addebita Stripe (lo stesso del pagamento),
   // per il pulsante "Abbonati ora"
-  const planPrices = await getPlanPrices()
   const formatEur = (value: number) =>
     new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2, minimumFractionDigits: 0 }).format(value)
   const basePrice = formatEur(planPrices.base)

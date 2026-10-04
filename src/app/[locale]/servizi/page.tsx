@@ -7,6 +7,7 @@ import { getServicesCatalog } from '@/lib/servicesCatalog'
 import { getPlanPrices } from '@/lib/planPrices'
 import AppHeader from '@/components/nav/AppHeader'
 import ServicesBrowser from '@/components/services/ServicesBrowser'
+import { getSessionUser, preloadSession } from '@/lib/session'
 
 export const dynamic = 'force-dynamic'
 
@@ -23,9 +24,9 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
   const t = await getTranslations('hub')
   const tiersT = await getTranslations('toolTiers')
   const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  // Utente letto una volta sola per la pagina e la sua intestazione
+  preloadSession()
+  const user = await getSessionUser()
   if (!user) redirect(`/${locale}/login`)
 
   const [{ items, favorites, userPlan }, planPrices] = await Promise.all([getServicesCatalog(supabase, user.id, locale), getPlanPrices()])

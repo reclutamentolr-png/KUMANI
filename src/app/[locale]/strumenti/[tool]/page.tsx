@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { getLocale } from 'next-intl/server'
 import { getToolSeo } from '@/lib/toolSeo'
 import { getGuidesContent } from '@/lib/guides/content'
@@ -19,8 +20,9 @@ import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 
 type Inviter = { first_name: string; last_name: string; referral_code: string }
 
-// Impostazioni del servizio decise dall'Admin (piano e acceso/spento)
-async function toolSetting(toolName: string) {
+// Impostazioni del servizio decise dall'Admin (piano e acceso/spento): una
+// sola lettura per richiesta (servono sia ai metadati sia alla pagina)
+const toolSetting = cache(async (toolName: string) => {
   const { data } = await createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
     auth: { autoRefreshToken: false, persistSession: false },
   })
@@ -29,7 +31,7 @@ async function toolSetting(toolName: string) {
     .eq('tool_name', toolName)
     .maybeSingle()
   return data as { required_plan: string | null; is_enabled: boolean | null } | null
-}
+})
 
 // Pagina pubblica di uno strumento, quella che i Kumani condividono dal
 // pulsante "Condividi" dentro ogni strumento (?ref=CODICE). Chi arriva qui

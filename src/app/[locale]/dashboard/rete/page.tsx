@@ -1,6 +1,5 @@
 import { SITE_URL } from '@/lib/siteUrl'
 import { createClient } from '@/lib/supabase/server'
-import type { MyProfile } from '@/lib/myProfile'
 import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import CopyButton from '@/components/CopyButton'
@@ -13,6 +12,7 @@ import { getDashboardNetworkData } from '@/lib/dashboardNetworkData'
 import { TreePine, Star, Sparkles, Crown, Trophy, PartyPopper, UserPlus, CheckCircle2, Shuffle, Network, MessageCircle, Gift, Users } from 'lucide-react'
 import NativeShareButton from '@/components/NativeShareButton'
 import AppHeader from '@/components/nav/AppHeader'
+import { getSessionProfile, getSessionUser, preloadSession } from '@/lib/session'
 
 // Schede "Prossimi obiettivi": aspetto di ciascuna qualifica (soglie e testi dalle qualifiche della rete)
 const GOALS = [
@@ -29,14 +29,14 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
   const t = await getTranslations('dashboard')
   const supabase = await createClient()
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  // Utente letto una volta sola per la pagina e la sua intestazione
+  preloadSession()
+  const user = await getSessionUser()
   if (!user) redirect(`/${locale}/login`)
 
   // Profilo completo (dati personali inclusi) solo tramite get_my_profile():
   // dal browser/sessione utente le colonne personali non sono più leggibili.
-  const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<MyProfile>()
+  const profile = await getSessionProfile()
 
   const network = await getDashboardNetworkData(supabase, user, profile, locale)
   const {

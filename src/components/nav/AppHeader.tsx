@@ -5,8 +5,7 @@ import { Star } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import DashboardHeaderActions from '@/components/DashboardHeaderActions'
-import { createClient } from '@/lib/supabase/server'
-import { hasAdminRole } from '@/lib/admin-auth'
+import { getSessionIsAdmin, getSessionProfile, getSessionUser } from '@/lib/session'
 import type { MyProfile } from '@/lib/myProfile'
 
 // Intestazione delle pagine principali (Home, Servizi, Community, Wallet,
@@ -29,16 +28,11 @@ export default async function AppHeader({
   const t = await getTranslations('dashboard')
   let session = loaded
   if (!session) {
-    const supabase = await createClient()
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
+    // Letture condivise con la pagina (una sola volta per richiesta)
+    const user = await getSessionUser()
     if (!user) return null
-    const [adminRole, { data: profile }] = await Promise.all([
-      hasAdminRole(supabase, user.id),
-      supabase.rpc('get_my_profile').maybeSingle<MyProfile>(),
-    ])
-    session = { user, profile, isAdmin: adminRole || profile?.is_admin === true }
+    const [profile, isAdmin] = await Promise.all([getSessionProfile(), getSessionIsAdmin(user.id)])
+    session = { user, profile, isAdmin }
   }
 
   return (

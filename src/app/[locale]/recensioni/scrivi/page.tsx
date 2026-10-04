@@ -2,10 +2,10 @@ import { redirect } from 'next/navigation'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { PenLine } from 'lucide-react'
 import AppHeader from '@/components/nav/AppHeader'
-import { createClient } from '@/lib/supabase/server'
 import { getMyReviewOptions } from '@/app/actions/reviews'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import ReviewWriter from '@/components/reviews/ReviewWriter'
+import { getSessionUser, preloadSession } from '@/lib/session'
 
 export const dynamic = 'force-dynamic'
 
@@ -21,10 +21,9 @@ export default async function WriteReviewPage({ searchParams }: { searchParams: 
   const locale = await getLocale()
   const t = await getTranslations('reviews')
   const tm = await getTranslations('marketplace')
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  // Utente letto una volta sola per la pagina e la sua intestazione
+  preloadSession()
+  const user = await getSessionUser()
   if (!user) redirect(`/${locale}/login?next=${encodeURIComponent('/recensioni/scrivi')}`)
 
   const names = Object.fromEntries(getMarketplaceTools(tm).map((tool) => [tool.toolName, tool.title]))

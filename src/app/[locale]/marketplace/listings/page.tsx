@@ -55,7 +55,15 @@ export default async function ListingsPage({
   const query = cleanListingSearch(rawQuery)
   const getCategoryLabel = (cat: ListingCategory) => t(CATEGORY_I18N_KEYS[cat] || 'catServizi')
 
-  const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<{ daily_points: number | null; network_points: number | null; first_name: string | null; last_name: string | null; country_code: string | null }>()
+  // Letture indipendenti tutte insieme: profilo, costi della vetrina (anche
+  // in KU), annunci dell'utente e stato della Bacheca
+  const [{ data: profile }, { data: showcaseSettings }, { data: kuShowcase }, myListings, online] = await Promise.all([
+    supabase.rpc('get_my_profile').maybeSingle<{ daily_points: number | null; network_points: number | null; first_name: string | null; last_name: string | null; country_code: string | null }>(),
+    supabase.from('system_settings').select('key, value').in('key', ['listing_feature_cost_7d', 'listing_feature_cost_15d']),
+    supabase.from('ku_features').select('enabled, config').eq('key', 'showcase').maybeSingle(),
+    getUserListings(user.id),
+    isToolOnline('listings'),
+  ])
 
   // Dove: di partenza la nazione del profilo; ?country=all per tutti i paesi
   const profileCountry = (profile?.country_code ?? '').trim().toUpperCase()
@@ -82,10 +90,6 @@ export default async function ListingsPage({
     city: city || undefined,
   }
 
-  const { data: showcaseSettings } = await supabase
-    .from('system_settings')
-    .select('key, value')
-    .in('key', ['listing_feature_cost_7d', 'listing_feature_cost_15d'])
   const parseSetting = (key: string, fallback: number) => {
     const raw = showcaseSettings?.find((s) => s.key === key)?.value
     if (!raw) return fallback
@@ -96,7 +100,6 @@ export default async function ListingsPage({
   const featureCost15d = parseSetting('listing_feature_cost_15d', 35)
 
   // Vetrina pagabile anche in KU, se attivata in Gestione KU.
-  const { data: kuShowcase } = await supabase.from('ku_features').select('enabled, config').eq('key', 'showcase').maybeSingle()
   const kuCosts = kuShowcase?.enabled
     ? {
         cost7d: Number((kuShowcase.config as { cost_7d?: number }).cost_7d ?? 0),
@@ -116,7 +119,6 @@ export default async function ListingsPage({
     .map((code) => ({ value: code, label: countryName(code, locale) }))
     .sort((a, b) => a.label.localeCompare(b.label, locale))
 
-  const myListings = await getUserListings(user.id)
   const now = new Date().getTime()
 
   // Si chiede un annuncio in più del necessario solo per sapere se c'è
@@ -142,7 +144,6 @@ export default async function ListingsPage({
   const euro = (value: number | string) =>
     new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2 }).format(Number(value))
 
-  const online = await isToolOnline('listings')
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
