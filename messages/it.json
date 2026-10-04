@@ -9431,5 +9431,45 @@
     "error_notEligible": "Puoi recensire solo ciò che hai acquistato da almeno 7 giorni.",
     "error_notLoggedIn": "Accedi di nuovo per continuare.",
     "error_saveError": "Invio non riuscito, riprova."
+  },
+  "catalog": {
+    "pageTitle": "Catalogo dei servizi",
+    "eyebrow": "{count} servizi in un’unica app",
+    "intro": "Tutti i servizi KUMANI divisi per categoria: a cosa servono, cosa puoi fare e come si usano, in poche righe. Come un manuale da sfogliare.",
+    "plansLine": "Gratis per chi si iscrive · Base {base}/anno · Pro {pro}/anno",
+    "searchPlaceholder": "Cerca un servizio o una parola…",
+    "clearSearch": "Cancella la ricerca",
+    "indexTitle": "Indice",
+    "noResults": "Nessun servizio trovato. Prova con un’altra parola.",
+    "purposeLabel": "A cosa serve:",
+    "pointsLabel": "Cosa puoi fare",
+    "stepsLabel": "Come si usa",
+    "planFree": "Gratis",
+    "planBase": "Incluso in Base",
+    "planPro": "Incluso in Pro",
+    "passFrom": "oppure Pass da {price}/anno",
+    "openService": "Scopri il servizio",
+    "fullGuide": "Guida con le schermate",
+    "downloadPdf": "Scarica il catalogo in PDF",
+    "generating": "Preparo il PDF…",
+    "pdfError": "PDF non riuscito, riprova.",
+    "pdfTitle": "Catalogo dei servizi KUMANI",
+    "pdfSubtitle": "{count} servizi digitali in un’unica app",
+    "pdfUpdated": "Aggiornato a {date}",
+    "pdfFileName": "catalogo-servizi",
+    "footerLink": "Catalogo servizi",
+    "servicesLink": "Come funziona ogni servizio? Leggi il catalogo (anche in PDF)",
+    "openPage": "Apri il catalogo",
+    "groupCommunity": "Community",
+    "extraSteps": {
+      "trova_lavoro": {
+        "step1Title": "Imposta la ricerca",
+        "step1Text": "Scrivi il lavoro che cerchi e scegli il paese e la zona.",
+        "step2Title": "Filtra le offerte",
+        "step2Text": "Restringi per contratto, orario e stipendio: gli annunci sospetti vengono segnalati.",
+        "step3Title": "Salva e candidati",
+        "step3Text": "Salva le offerte e le ricerche che ti interessano e candidati sul sito dell’annuncio."
+      }
+    }
   }
 }

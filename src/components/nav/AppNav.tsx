@@ -22,6 +22,7 @@ const MEMBER_AREAS = [
   '/marketplace',
   '/donazioni',
   '/recensioni',
+  '/catalogo',
   '/guida',
   '/events',
   '/viaggi',

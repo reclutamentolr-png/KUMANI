@@ -53,6 +53,7 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
   const t = await getTranslations('landingHome')
   const tg = await getTranslations('guides')
   const tr = await getTranslations('reviews')
+  const tcat = await getTranslations('catalog')
   // Aspetto scelto dall'Admin: cambiano solo sfondi e immagini, mai i contenuti
   const { layout: preview } = await searchParams
   const L = HOME_LAYOUT_CONFIG[isHomeLayout(preview) ? preview : await getHomeLayout()]
@@ -491,6 +492,7 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
               <Link href="/chi-siamo" className="hover:text-[var(--gold-bright)] transition-colors">{t('aboutLink')}</Link>
               <Link href="/guida" className="hover:text-[var(--gold-bright)] transition-colors">{tg('linkLabel')}</Link>
               <Link href="/recensioni" className="hover:text-[var(--gold-bright)] transition-colors">{tr('footerLink')}</Link>
+              <Link href="/catalogo" className="hover:text-[var(--gold-bright)] transition-colors">{tcat('footerLink')}</Link>
               <Link href="/privacy" className="hover:text-[var(--gold-bright)] transition-colors">Privacy</Link>
               <Link href="/terms" className="hover:text-[var(--gold-bright)] transition-colors">{t('terms')}</Link>
               <Link href="/contact" className="hover:text-[var(--gold-bright)] transition-colors">{t('contact')}</Link>

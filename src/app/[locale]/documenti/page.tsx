@@ -17,6 +17,7 @@ import {
   Ticket,
   TicketPercent,
   type LucideIcon,
+  BookMarked,
 } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import DeckDownloadButton from '@/components/documents/DeckDownloadButton'
@@ -28,6 +29,8 @@ import { FLYERS } from '@/lib/flyers'
 import { DOC_LOCALES, pickLocalized, type DocLocale, type KumaniDocFile, type PersonalDocKind } from '@/lib/documents'
 import AppHeader from '@/components/nav/AppHeader'
 import { getSessionUser, preloadSession } from '@/lib/session'
+import { getCatalog } from '@/lib/catalog-server'
+import CatalogPdfButton from '@/components/catalog/CatalogPdfButton'
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('documents')
@@ -117,7 +120,13 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
   )
 
   async function kumaniTab() {
-    const [docs, published, flyerTitles] = await Promise.all([listKumaniDocuments(supabase), listPublishedFlyers(supabase), getFlyerTitles()])
+    const [docs, published, flyerTitles, catalog, catalogT] = await Promise.all([
+      listKumaniDocuments(supabase),
+      listPublishedFlyers(supabase),
+      getFlyerTitles(),
+      getCatalog(locale),
+      getTranslations('catalog'),
+    ])
     const flyers = FLYERS.filter((f) => published.has(f.tool))
     const flyersT = await getTranslations('flyers')
     return (
@@ -187,6 +196,26 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
             </article>
           )
         })}
+        {/* Catalogo dei servizi: il PDF si crea al momento, nella lingua della pagina */}
+        <article className="rounded-2xl border border-[var(--gold)]/30 bg-white p-5 shadow-sm sm:p-6">
+          <div className="flex items-start gap-4">
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--ink)] text-[var(--gold-bright)]">
+              <BookMarked className="h-6 w-6" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-bold uppercase tracking-wider text-[var(--gold)]">{catalogT('eyebrow', { count: catalog.total })}</p>
+              <h2 className="text-xl font-bold text-[var(--ink)]">{catalogT('pageTitle')}</h2>
+              <p className="mt-1 text-sm text-[var(--muted)]">{catalogT('intro')}</p>
+            </div>
+          </div>
+          <div className="mt-5 flex flex-wrap items-center gap-2">
+            <CatalogPdfButton catalog={catalog} variant="light" />
+            <Link href="/catalogo" className="inline-flex items-center gap-1.5 rounded-xl px-4 py-3 text-sm font-bold text-[var(--ink)] hover:bg-[var(--gold-pale)]">
+              {catalogT('openPage')}
+            </Link>
+          </div>
+        </article>
+
         {flyers.length > 0 && (
           <div className="pt-4">
             <h2 className="flex items-center gap-2 text-xl font-bold text-[var(--ink)]">

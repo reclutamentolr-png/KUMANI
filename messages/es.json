@@ -9431,5 +9431,45 @@
     "error_notEligible": "Solo puedes opinar sobre lo que compraste hace al menos 7 días.",
     "error_notLoggedIn": "Vuelve a iniciar sesión para continuar.",
     "error_saveError": "No se ha podido enviar, inténtalo de nuevo."
+  },
+  "catalog": {
+    "pageTitle": "Catálogo de servicios",
+    "eyebrow": "{count} servicios en una sola app",
+    "intro": "Todos los servicios KUMANI por categoría: para qué sirven, qué puedes hacer y cómo se usan, en pocas líneas. Como un manual para hojear.",
+    "plansLine": "Gratis al registrarte · Base {base}/año · Pro {pro}/año",
+    "searchPlaceholder": "Busca un servicio o una palabra…",
+    "clearSearch": "Borrar la búsqueda",
+    "indexTitle": "Índice",
+    "noResults": "No se ha encontrado ningún servicio. Prueba con otra palabra.",
+    "purposeLabel": "Para qué sirve:",
+    "pointsLabel": "Qué puedes hacer",
+    "stepsLabel": "Cómo se usa",
+    "planFree": "Gratis",
+    "planBase": "Incluido en Base",
+    "planPro": "Incluido en Pro",
+    "passFrom": "o Pass desde {price}/año",
+    "openService": "Descubre el servicio",
+    "fullGuide": "Guía con capturas",
+    "downloadPdf": "Descargar el catálogo en PDF",
+    "generating": "Preparando el PDF…",
+    "pdfError": "No se ha podido crear el PDF, inténtalo de nuevo.",
+    "pdfTitle": "Catálogo de servicios KUMANI",
+    "pdfSubtitle": "{count} servicios digitales en una sola app",
+    "pdfUpdated": "Actualizado: {date}",
+    "pdfFileName": "catalogo-servicios",
+    "footerLink": "Catálogo de servicios",
+    "servicesLink": "¿Cómo funciona cada servicio? Lee el catálogo (también en PDF)",
+    "openPage": "Abrir el catálogo",
+    "groupCommunity": "Comunidad",
+    "extraSteps": {
+      "trova_lavoro": {
+        "step1Title": "Configura la búsqueda",
+        "step1Text": "Escribe el trabajo que buscas y elige el país y la zona.",
+        "step2Title": "Filtra las ofertas",
+        "step2Text": "Afina por contrato, horario y sueldo: los anuncios sospechosos se señalan.",
+        "step3Title": "Guarda y postúlate",
+        "step3Text": "Guarda las ofertas y búsquedas que te interesan y postúlate en la web del anuncio."
+      }
+    }
   }
 }

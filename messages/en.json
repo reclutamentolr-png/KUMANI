@@ -9431,5 +9431,45 @@
     "error_notEligible": "You can only review what you bought at least 7 days ago.",
     "error_notLoggedIn": "Please sign in again to continue.",
     "error_saveError": "Could not send, please try again."
+  },
+  "catalog": {
+    "pageTitle": "Service catalogue",
+    "eyebrow": "{count} services in one app",
+    "intro": "All KUMANI services by category: what they are for, what you can do and how to use them, in a few lines. Like a manual to browse.",
+    "plansLine": "Free when you sign up · Base {base}/year · Pro {pro}/year",
+    "searchPlaceholder": "Search for a service or a word…",
+    "clearSearch": "Clear search",
+    "indexTitle": "Contents",
+    "noResults": "No services found. Try another word.",
+    "purposeLabel": "What it is for:",
+    "pointsLabel": "What you can do",
+    "stepsLabel": "How to use it",
+    "planFree": "Free",
+    "planBase": "Included in Base",
+    "planPro": "Included in Pro",
+    "passFrom": "or Pass from {price}/year",
+    "openService": "Discover the service",
+    "fullGuide": "Guide with screenshots",
+    "downloadPdf": "Download the catalogue as PDF",
+    "generating": "Preparing the PDF…",
+    "pdfError": "PDF failed, please try again.",
+    "pdfTitle": "KUMANI service catalogue",
+    "pdfSubtitle": "{count} digital services in one app",
+    "pdfUpdated": "Updated {date}",
+    "pdfFileName": "service-catalogue",
+    "footerLink": "Service catalogue",
+    "servicesLink": "How does each service work? Read the catalogue (also as PDF)",
+    "openPage": "Open the catalogue",
+    "groupCommunity": "Community",
+    "extraSteps": {
+      "trova_lavoro": {
+        "step1Title": "Set up your search",
+        "step1Text": "Type the job you are looking for and choose the country and area.",
+        "step2Title": "Filter the offers",
+        "step2Text": "Narrow down by contract, hours and salary: suspicious ads are flagged.",
+        "step3Title": "Save and apply",
+        "step3Text": "Save the offers and searches you like and apply on the ad’s website."
+      }
+    }
   }
 }

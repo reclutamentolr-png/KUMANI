@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
-import { Crown } from 'lucide-react'
+import { ArrowRight, BookMarked, Crown } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { createClient } from '@/lib/supabase/server'
 import { getServicesCatalog } from '@/lib/servicesCatalog'
@@ -23,6 +23,7 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
   const { locale } = await params
   const t = await getTranslations('hub')
   const tiersT = await getTranslations('toolTiers')
+  const tc = await getTranslations('catalog')
   const supabase = await createClient()
   // Utente letto una volta sola per la pagina e la sua intestazione
   preloadSession()
@@ -38,6 +39,16 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
     <div className="min-h-screen bg-[var(--background)]">
       <AppHeader title={t('servicesTitle')} subtitle={t('servicesSubtitle', { count: items.length })} />
       <main className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
+        {/* Il catalogo: come funziona ogni servizio, per categorie (anche in PDF) */}
+        <Link
+          href="/catalogo"
+          className="flex items-center justify-between gap-3 rounded-2xl border border-[var(--gold)]/35 bg-[var(--gold-pale)] px-4 py-3 text-sm font-semibold text-[var(--ink)] transition-colors hover:border-[var(--gold)]"
+        >
+          <span className="flex items-center gap-2">
+            <BookMarked className="h-5 w-5 shrink-0 text-[var(--gold)]" /> {tc('servicesLink')}
+          </span>
+          <ArrowRight className="h-4 w-4 shrink-0" />
+        </Link>
         <ServicesBrowser items={items} favorites={favorites} />
 
         {/* Sblocca tutto: solo a chi ha ancora servizi chiusi */}

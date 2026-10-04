@@ -9431,5 +9431,45 @@
     "error_notEligible": "Só pode avaliar o que comprou há pelo menos 7 dias.",
     "error_notLoggedIn": "Inicie sessão novamente para continuar.",
     "error_saveError": "Não foi possível enviar, tente novamente."
+  },
+  "catalog": {
+    "pageTitle": "Catálogo de serviços",
+    "eyebrow": "{count} serviços numa só app",
+    "intro": "Todos os serviços KUMANI por categoria: para que servem, o que pode fazer e como se usam, em poucas linhas. Como um manual para folhear.",
+    "plansLine": "Grátis ao registar-se · Base {base}/ano · Pro {pro}/ano",
+    "searchPlaceholder": "Procure um serviço ou uma palavra…",
+    "clearSearch": "Limpar a pesquisa",
+    "indexTitle": "Índice",
+    "noResults": "Nenhum serviço encontrado. Tente outra palavra.",
+    "purposeLabel": "Para que serve:",
+    "pointsLabel": "O que pode fazer",
+    "stepsLabel": "Como se usa",
+    "planFree": "Grátis",
+    "planBase": "Incluído no Base",
+    "planPro": "Incluído no Pro",
+    "passFrom": "ou Pass a partir de {price}/ano",
+    "openService": "Descobrir o serviço",
+    "fullGuide": "Guia com capturas de ecrã",
+    "downloadPdf": "Descarregar o catálogo em PDF",
+    "generating": "A preparar o PDF…",
+    "pdfError": "Não foi possível criar o PDF, tente novamente.",
+    "pdfTitle": "Catálogo de serviços KUMANI",
+    "pdfSubtitle": "{count} serviços digitais numa só app",
+    "pdfUpdated": "Atualizado: {date}",
+    "pdfFileName": "catalogo-servicos",
+    "footerLink": "Catálogo de serviços",
+    "servicesLink": "Como funciona cada serviço? Leia o catálogo (também em PDF)",
+    "openPage": "Abrir o catálogo",
+    "groupCommunity": "Comunidade",
+    "extraSteps": {
+      "trova_lavoro": {
+        "step1Title": "Configure a pesquisa",
+        "step1Text": "Escreva o trabalho que procura e escolha o país e a zona.",
+        "step2Title": "Filtre as ofertas",
+        "step2Text": "Refine por contrato, horário e salário: os anúncios suspeitos são assinalados.",
+        "step3Title": "Guarde e candidate-se",
+        "step3Text": "Guarde as ofertas e pesquisas que lhe interessam e candidate-se no site do anúncio."
+      }
+    }
   }
 }

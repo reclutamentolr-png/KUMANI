@@ -9431,5 +9431,45 @@
     "error_notEligible": "Du kannst nur bewerten, was du vor mindestens 7 Tagen gekauft hast.",
     "error_notLoggedIn": "Bitte melde dich erneut an.",
     "error_saveError": "Senden fehlgeschlagen, bitte erneut versuchen."
+  },
+  "catalog": {
+    "pageTitle": "Dienstekatalog",
+    "eyebrow": "{count} Dienste in einer App",
+    "intro": "Alle KUMANI-Dienste nach Kategorie: wofür sie da sind, was du tun kannst und wie sie funktionieren, in wenigen Zeilen. Wie ein Handbuch zum Durchblättern.",
+    "plansLine": "Kostenlos bei der Anmeldung · Base {base}/Jahr · Pro {pro}/Jahr",
+    "searchPlaceholder": "Dienst oder Wort suchen…",
+    "clearSearch": "Suche löschen",
+    "indexTitle": "Inhalt",
+    "noResults": "Kein Dienst gefunden. Versuche ein anderes Wort.",
+    "purposeLabel": "Wofür:",
+    "pointsLabel": "Was du tun kannst",
+    "stepsLabel": "So funktioniert es",
+    "planFree": "Kostenlos",
+    "planBase": "In Base enthalten",
+    "planPro": "In Pro enthalten",
+    "passFrom": "oder Pass ab {price}/Jahr",
+    "openService": "Dienst entdecken",
+    "fullGuide": "Anleitung mit Screenshots",
+    "downloadPdf": "Katalog als PDF herunterladen",
+    "generating": "PDF wird erstellt…",
+    "pdfError": "PDF fehlgeschlagen, bitte erneut versuchen.",
+    "pdfTitle": "KUMANI Dienstekatalog",
+    "pdfSubtitle": "{count} digitale Dienste in einer App",
+    "pdfUpdated": "Stand: {date}",
+    "pdfFileName": "dienstekatalog",
+    "footerLink": "Dienstekatalog",
+    "servicesLink": "Wie funktioniert jeder Dienst? Lies den Katalog (auch als PDF)",
+    "openPage": "Katalog öffnen",
+    "groupCommunity": "Community",
+    "extraSteps": {
+      "trova_lavoro": {
+        "step1Title": "Suche einrichten",
+        "step1Text": "Gib den gesuchten Job ein und wähle Land und Region.",
+        "step2Title": "Angebote filtern",
+        "step2Text": "Grenze nach Vertrag, Arbeitszeit und Gehalt ein: verdächtige Anzeigen werden markiert.",
+        "step3Title": "Speichern und bewerben",
+        "step3Text": "Speichere passende Angebote und Suchen und bewirb dich auf der Website der Anzeige."
+      }
+    }
   }
 }

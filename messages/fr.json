@@ -9431,5 +9431,45 @@
     "error_notEligible": "Vous ne pouvez évaluer que ce que vous avez acheté il y a au moins 7 jours.",
     "error_notLoggedIn": "Reconnectez-vous pour continuer.",
     "error_saveError": "Envoi impossible, réessayez."
+  },
+  "catalog": {
+    "pageTitle": "Catalogue des services",
+    "eyebrow": "{count} services dans une seule app",
+    "intro": "Tous les services KUMANI par catégorie : à quoi ils servent, ce que vous pouvez faire et comment les utiliser, en quelques lignes. Comme un manuel à feuilleter.",
+    "plansLine": "Gratuit à l’inscription · Base {base}/an · Pro {pro}/an",
+    "searchPlaceholder": "Rechercher un service ou un mot…",
+    "clearSearch": "Effacer la recherche",
+    "indexTitle": "Sommaire",
+    "noResults": "Aucun service trouvé. Essayez un autre mot.",
+    "purposeLabel": "À quoi ça sert :",
+    "pointsLabel": "Ce que vous pouvez faire",
+    "stepsLabel": "Comment l’utiliser",
+    "planFree": "Gratuit",
+    "planBase": "Inclus dans Base",
+    "planPro": "Inclus dans Pro",
+    "passFrom": "ou Pass à partir de {price}/an",
+    "openService": "Découvrir le service",
+    "fullGuide": "Guide avec captures d’écran",
+    "downloadPdf": "Télécharger le catalogue en PDF",
+    "generating": "Préparation du PDF…",
+    "pdfError": "Échec du PDF, réessayez.",
+    "pdfTitle": "Catalogue des services KUMANI",
+    "pdfSubtitle": "{count} services numériques dans une seule app",
+    "pdfUpdated": "Mis à jour : {date}",
+    "pdfFileName": "catalogue-services",
+    "footerLink": "Catalogue des services",
+    "servicesLink": "Comment fonctionne chaque service ? Lisez le catalogue (aussi en PDF)",
+    "openPage": "Ouvrir le catalogue",
+    "groupCommunity": "Communauté",
+    "extraSteps": {
+      "trova_lavoro": {
+        "step1Title": "Lancez la recherche",
+        "step1Text": "Indiquez le travail que vous cherchez et choisissez le pays et la zone.",
+        "step2Title": "Filtrez les offres",
+        "step2Text": "Affinez par contrat, horaires et salaire : les annonces suspectes sont signalées.",
+        "step3Title": "Enregistrez et postulez",
+        "step3Text": "Enregistrez les offres et recherches qui vous intéressent et postulez sur le site de l’annonce."
+      }
+    }
   }
 }

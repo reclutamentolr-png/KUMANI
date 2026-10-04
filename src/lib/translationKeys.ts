@@ -150,6 +150,7 @@ export const SECTION_LABELS: Record<string, string> = {
   lifeCalendar: 'Life Calendar',
   garage: 'Kumani Garage',
   reviews: 'Recensioni',
+  catalog: 'Catalogo servizi',
   findo: 'Findo',
   digitalReceipt: 'Ricevute digitali',
   spendly: 'Spendly',
