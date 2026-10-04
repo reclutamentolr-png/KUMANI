@@ -30,6 +30,7 @@ import Logo from '@/components/Logo'
 import HomeKumanoDelGiorno from '@/components/spotlight/HomeKumanoDelGiorno'
 import HomeUpcomingEvents from '@/components/events/HomeUpcomingEvents'
 import HomeDonations from '@/components/donations/HomeDonations'
+import HomeReviews from '@/components/reviews/HomeReviews'
 import HomePlans from '@/components/HomePlans'
 import HomeSection from '@/components/home/HomeSection'
 import HomeBand from '@/components/home/HomeBand'
@@ -51,6 +52,7 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
 export default async function LandingPage({ searchParams }: { searchParams: Promise<{ layout?: string }> }) {
   const t = await getTranslations('landingHome')
   const tg = await getTranslations('guides')
+  const tr = await getTranslations('reviews')
   // Aspetto scelto dall'Admin: cambiano solo sfondi e immagini, mai i contenuti
   const { layout: preview } = await searchParams
   const L = HOME_LAYOUT_CONFIG[isHomeLayout(preview) ? preview : await getHomeLayout()]
@@ -305,6 +307,9 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
       {/* 📅 PROSSIMI EVENTI — KUMANI Events, una data per serie */}
       <HomeUpcomingEvents />
 
+      {/* Recensioni verificate di chi ha acquistato */}
+      <HomeReviews />
+
       {/* 🎟️ SEZIONE: PROGRAMMA BONUS & COUPON */}
       <HomeSection bg={L.bonus} className="py-12 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -485,6 +490,7 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
             <div className="flex flex-wrap justify-center gap-4 sm:gap-8 text-gray-400 text-sm">
               <Link href="/chi-siamo" className="hover:text-[var(--gold-bright)] transition-colors">{t('aboutLink')}</Link>
               <Link href="/guida" className="hover:text-[var(--gold-bright)] transition-colors">{tg('linkLabel')}</Link>
+              <Link href="/recensioni" className="hover:text-[var(--gold-bright)] transition-colors">{tr('footerLink')}</Link>
               <Link href="/privacy" className="hover:text-[var(--gold-bright)] transition-colors">Privacy</Link>
               <Link href="/terms" className="hover:text-[var(--gold-bright)] transition-colors">{t('terms')}</Link>
               <Link href="/contact" className="hover:text-[var(--gold-bright)] transition-colors">{t('contact')}</Link>

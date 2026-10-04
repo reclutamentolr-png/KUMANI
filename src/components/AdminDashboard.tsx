@@ -78,6 +78,7 @@ import { SPOTLIGHT_HOME_MIN_POOL } from '@/lib/spotlight'
 import KuManagementPanel from '@/components/admin/KuManagementPanel'
 import AffinityReportsPanel from '@/components/admin/AffinityReportsPanel'
 import LandingPagesPanel from '@/components/admin/LandingPagesPanel'
+import ReviewsPanel from '@/components/admin/ReviewsPanel'
 import ConvivioReportsPanel from '@/components/admin/ConvivioReportsPanel'
 import EventsAdminPanel from '@/components/admin/EventsAdminPanel'
 import TimebankAdminPanel from '@/components/admin/TimebankAdminPanel'
@@ -158,6 +159,7 @@ import {
   Languages,
   Globe2,
   BriefcaseBusiness,
+  MessageSquareQuote,
 } from 'lucide-react'
 
 // Strumenti e interruttori raggruppati come nel Marketplace. Le sezioni della
@@ -1187,6 +1189,7 @@ L'accesso viene registrato.`)) return
   { id: 'listingReports', label: 'Bacheca', Icon: Flag, permission: 'listings.read' as Permission, group: 'community' },
   { id: 'spotlight', label: 'Kumano del Giorno', Icon: Star, permission: 'listings.read' as Permission, group: 'community' },
   { id: 'landingPages', label: 'Landing Page', Icon: PanelsTopLeft, permission: 'listings.read' as Permission, group: 'community' },
+  { id: 'reviews', label: 'Recensioni', Icon: MessageSquareQuote, permission: 'listings.read' as Permission, group: 'community' },
   { id: 'events', label: 'Eventi', Icon: CalendarDays, permission: 'listings.read' as Permission, group: 'community' },
   { id: 'timebank', label: 'Time Bank', Icon: Hourglass, permission: 'listings.read' as Permission, group: 'community' },
   { id: 'affinity', label: 'Affinity', Icon: Flag, permission: 'listings.read' as Permission, group: 'community' },
@@ -3655,6 +3658,7 @@ L'accesso viene registrato.`)) return
         {activeSection === 'kuManagement' && <KuManagementPanel />}
         {activeSection === 'affinity' && <AffinityReportsPanel />}
         {activeSection === 'landingPages' && <LandingPagesPanel />}
+        {activeSection === 'reviews' && <ReviewsPanel />}
         {activeSection === 'convivio' && <ConvivioReportsPanel locale={locale} />}
         {activeSection === 'events' && (
           <EventsAdminPanel

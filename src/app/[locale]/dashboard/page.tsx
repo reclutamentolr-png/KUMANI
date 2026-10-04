@@ -26,6 +26,8 @@ import InterestsOnboarding from '@/components/dashboard/InterestsOnboarding'
 import LandingMessagesAlert from '@/components/dashboard/LandingMessagesAlert'
 import BachecaMessagesAlert from '@/components/dashboard/BachecaMessagesAlert'
 import ProArea from '@/components/dashboard/ProArea'
+import ReviewInviteCard from '@/components/reviews/ReviewInviteCard'
+import { getMyReviewOptions } from '@/app/actions/reviews'
 import ProTeaser from '@/components/dashboard/ProTeaser'
 import { getProAreaStats } from '@/lib/proAreaStats'
 import UpcomingAgenda from '@/components/agenda/UpcomingAgenda'
@@ -56,7 +58,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   // dashboard impiegava secondi): ruolo admin, profilo completo (solo
   // tramite get_my_profile(): le colonne personali non sono leggibili
   // direttamente), messaggi non letti, piano e strumenti, preferiti.
-  const [adminRole, { data: profile }, unreadMessagesCount, access, favoriteToolNames, { count: landingUnread }] = await Promise.all([
+  const [adminRole, { data: profile }, unreadMessagesCount, access, favoriteToolNames, { count: landingUnread }, reviewOptions] = await Promise.all([
     hasAdminRole(supabase, user.id),
     supabase.rpc('get_my_profile').maybeSingle<MyProfile>(),
     getUnreadMessagesCount(user.id),
@@ -64,7 +66,10 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     getFavoriteToolNames(supabase, user.id),
     // Messaggi non letti dal modulo "Scrivimi" della propria Landing Page
     supabase.from('landing_messages').select('id', { count: 'exact', head: true }).eq('owner_id', user.id).is('read_at', null),
+    // Recensioni: cosa può recensire (acquisti da almeno 7 giorni)
+    getMyReviewOptions(),
   ])
+  const canReview = reviewOptions.some((option) => option.purchaseLabel && !option.review)
   const { userPlan, isSettingEnabled, isToolEnabled, requiredPlan } = access
   const userIsAdmin = adminRole || profile?.is_admin === true
 
@@ -204,6 +209,9 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
         {/* Messaggi non letti dalla Bacheca: in cima, prima di tutto */}
         {unreadMessagesCount > 0 && <BachecaMessagesAlert initialCount={unreadMessagesCount} />}
         {(landingUnread ?? 0) > 0 && <LandingMessagesAlert count={landingUnread ?? 0} />}
+
+        {/* Invito a recensire chi ha acquistato e non l'ha ancora fatto */}
+        {canReview && <ReviewInviteCard />}
 
         {isPro && proTools.length > 0 ? (
           <ProArea tools={proTools} stats={proAreaStats} trial={proTrial} renewsOn={proRenewsOn} favoriteToolNames={favoriteToolNames} />

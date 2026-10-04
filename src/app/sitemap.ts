@@ -8,7 +8,7 @@ import { PUBLIC_GUIDES } from '@/lib/guides/content'
 // Pagine pubbliche nelle lingue attive (italiano senza prefisso): le lingue
 // spente dall'Admin non compaiono per Google. Oltre alle pagine fisse: le
 // pagine pubbliche dei servizi, le guide pubbliche e gli eventi in arrivo.
-const PAGES = ['', '/chi-siamo', '/pro', '/events', '/spotlight', '/register', '/login', '/terms', '/privacy', '/contact', '/donazioni', '/guida', '/manuale-antitruffa']
+const PAGES = ['', '/chi-siamo', '/pro', '/events', '/spotlight', '/register', '/login', '/terms', '/privacy', '/contact', '/donazioni', '/recensioni', '/guida', '/manuale-antitruffa']
 
 export const revalidate = 3600
 

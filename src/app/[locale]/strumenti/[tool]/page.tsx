@@ -10,6 +10,7 @@ import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { ArrowRight, CheckCircle2, ChevronDown, Sparkles } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
+import ToolReviews from '@/components/reviews/ToolReviews'
 import Logo from '@/components/Logo'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
@@ -225,6 +226,9 @@ export default async function ToolSharePage({
             </section>
           </div>
         )}
+
+        {/* Recensioni verificate di chi ha acquistato il servizio */}
+        {!off && <ToolReviews subject={tool.toolName} />}
       </div>
     </div>
   )

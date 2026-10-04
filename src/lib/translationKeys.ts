@@ -149,6 +149,7 @@ export const SECTION_LABELS: Record<string, string> = {
   offermaker: 'OfferMaker',
   lifeCalendar: 'Life Calendar',
   garage: 'Kumani Garage',
+  reviews: 'Recensioni',
   findo: 'Findo',
   digitalReceipt: 'Ricevute digitali',
   spendly: 'Spendly',
