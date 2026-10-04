@@ -700,13 +700,19 @@ export async function getAdminFinancialSummary() {
   const prices = await getPlanPrices()
   const { data: vatRow } = await db.from('system_settings').select('value').eq('key', 'agent_commission_vat_rate').maybeSingle()
   const vatRate = Number(String(vatRow?.value ?? '22').replace(/"/g, '')) || 22
-  const since30 = Math.floor(Date.now() / 1000) - 30 * 86_400
+  // Data di partenza delle statistiche (Admin → Amministrazione, "Riparti da
+  // oggi"): i movimenti Stripe precedenti (es. pagamenti di prova) non contano
+  const { data: sinceRow } = await db.from('system_settings').select('value').eq('key', 'finance_stats_since').maybeSingle()
+  const sinceIso = String(sinceRow?.value ?? '').replace(/"/g, '')
+  const statsSince = sinceIso && !Number.isNaN(Date.parse(sinceIso)) ? Math.floor(Date.parse(sinceIso) / 1000) : 0
+  const createdFilter = statsSince ? { created: { gte: statsSince } } : {}
+  const since30 = Math.max(Math.floor(Date.now() / 1000) - 30 * 86_400, statsSince)
 
   // 1. Stripe: tutti i movimenti (paginati)
   const stripeTotals = { gross: 0, refunds: 0, fees: 0, net: 0, gross30: 0, net30: 0, charges: 0 }
   let startingAfter: string | undefined
   for (let page = 0; page < 50; page++) {
-    const list = await stripe.balanceTransactions.list({ limit: 100, ...(startingAfter ? { starting_after: startingAfter } : {}) })
+    const list = await stripe.balanceTransactions.list({ limit: 100, ...createdFilter, ...(startingAfter ? { starting_after: startingAfter } : {}) })
     for (const tx of list.data) {
       const isCharge = tx.type === 'charge' || tx.type === 'payment'
       const isRefund = tx.type === 'refund' || tx.type === 'payment_refund'
@@ -733,7 +739,7 @@ export async function getAdminFinancialSummary() {
   }
   startingAfter = undefined
   for (let page = 0; page < 50; page++) {
-    const list = await stripe.invoices.list({ status: 'paid', limit: 100, ...(startingAfter ? { starting_after: startingAfter } : {}) })
+    const list = await stripe.invoices.list({ status: 'paid', limit: 100, ...createdFilter, ...(startingAfter ? { starting_after: startingAfter } : {}) })
     for (const invoice of list.data) {
       if (!invoice.amount_paid) continue
       const main = invoice.lines.data.reduce<(typeof invoice.lines.data)[number] | undefined>(
@@ -882,6 +888,7 @@ export async function getAdminFinancialSummary() {
   return {
     success: true as const,
     testMode: (process.env.STRIPE_SECRET_KEY ?? '').startsWith('sk_test_'),
+    statsSince: statsSince ? new Date(statsSince * 1000).toISOString() : null,
     prices,
     vatRate,
     stripe: stripeTotals,
@@ -3141,5 +3148,16 @@ export async function closeLandingReport(reportId: string) {
   const admin = await verifyAdmin('listings.write')
   if (!admin) return { success: false, error: 'Non autorizzato' }
   const { error } = await getServiceClient().from('landing_reports').update({ status: 'closed' }).eq('id', reportId)
+  return { success: !error, error: error?.message ?? null }
+}
+
+// Data di partenza delle statistiche economiche: "Riparti da oggi" (es. dopo
+// i pagamenti di prova, o al lancio) oppure di nuovo tutto lo storico
+export async function adminSetFinanceStatsSince(fromNow: boolean) {
+  const admin = await verifyAdmin('settings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  const { error } = await getServiceClient()
+    .from('system_settings')
+    .upsert({ key: 'finance_stats_since', value: fromNow ? new Date().toISOString() : '' }, { onConflict: 'key' })
   return { success: !error, error: error?.message ?? null }
 }

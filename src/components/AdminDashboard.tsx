@@ -31,6 +31,7 @@ import {
   creditDailyPoints,
   listVoucherUsers,
   getAdminFinancialSummary,
+  adminSetFinanceStatsSince,
   listListingReports,
   adminListUsers,
   updateToolPlan,
@@ -2576,6 +2577,39 @@ L'accesso viene registrato.`)) return
               Stripe in modalità test: sono pagamenti di prova.
             </p>
           )}
+          {/* Data di partenza dei conteggi: i movimenti precedenti non contano */}
+          <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
+            <span className="text-gray-600">
+              {f.statsSince
+                ? `Conteggi dal ${new Date(f.statsSince).toLocaleString('it-IT', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}`
+                : 'Conteggi su tutto lo storico di Stripe'}
+            </span>
+            <button
+              type="button"
+              onClick={async () => {
+                if (!confirm('Ripartire da zero da adesso? I movimenti di Stripe precedenti non verranno più contati (restano su Stripe).')) return
+                const r = await adminSetFinanceStatsSince(true)
+                if (!r.success) notify('Errore: ' + r.error)
+                await loadFinancialSummary()
+              }}
+              className="rounded-lg bg-gray-900 px-3 py-1.5 text-xs font-semibold text-white"
+            >
+              Riparti da oggi
+            </button>
+            {f.statsSince && (
+              <button
+                type="button"
+                onClick={async () => {
+                  const r = await adminSetFinanceStatsSince(false)
+                  if (!r.success) notify('Errore: ' + r.error)
+                  await loadFinancialSummary()
+                }}
+                className="rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-semibold text-gray-700"
+              >
+                Mostra tutto lo storico
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -2621,7 +2655,7 @@ L'accesso viene registrato.`)) return
           </Card>
 
           {f.toolPasses && (
-            <Card detail="passes" title="Pass dei singoli servizi" subtitle="Un servizio per un anno, senza abbonamento (nessun KU Point a chi invita)">
+            <Card detail="passes" title="Pass dei singoli servizi" subtitle="Un servizio per un anno, senza abbonamento (KU Points a chi invita se impostati sul Pass)">
               <Row label="Pass pagati con carta" value={String(f.toolPasses.soldCount)} />
               <Row label="Incassato dai pass" value={eur(f.toolPasses.soldCents)} strong />
               <Row label="Attivati con codice" value={String(f.toolPasses.codeCount)} />
