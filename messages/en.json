@@ -3155,7 +3155,9 @@
     "statOffers": "{count, plural, one {# click on your offers} other {# clicks on your offers}}",
     "teaserTitle": "Are you a professional? Discover KUMANI Pro",
     "teaserBody": "Customer loyalty, quotes, receipts and promotions for your business.",
-    "teaserCta": "Discover Pro"
+    "teaserCta": "Discover Pro",
+    "statLandingOn": "Published · {count, plural, =0 {no new messages} one {# new message} other {# new messages}}",
+    "statLandingOff": "Not published yet"
   },
   "affinity": {
     "badgeMessages": "{count, plural, one {# new message} other {# new messages}}",
@@ -7342,7 +7344,7 @@
       "step4Text": "Tick “Publish the page” and tap “Save”. At the top you’ll find your address with “Copy”, “Open” and “Download QR”, ready for business cards, your shop window and social media.",
       "step4Tip": "In “Business details” enter your company name and VAT number, if you have one.",
       "step5Title": "The page as customers see it",
-      "step5Text": "Anyone who opens the link sees your page on their phone or computer and can contact you with one tap. Google can find it using the title and description you chose."
+      "step5Text": "Anyone who opens the link sees your page on their phone or computer and can contact you with one tap, including through the “Message me” form: messages arrive in the “Messages” tab, on your dashboard and as a notification on your phone."
     }
   },
   "deckTexts": {
@@ -7871,7 +7873,9 @@
     "deviceNote": "This applies to this device: turn them on from the profile on your other devices.",
     "test": "Send a test",
     "testSent": "Test sent: it should arrive in a few seconds.",
-    "error": "Something went wrong. Please try again shortly."
+    "error": "Something went wrong. Please try again shortly.",
+    "cat_messages": "Messages",
+    "cat_messages_hint": "When someone writes to you from your Landing Page."
   },
   "pushNotifications": {
     "testTitle": "Notifications on",
@@ -7885,7 +7889,9 @@
     "eventTitle": "Event reminder",
     "eventBody": "{title} · {date}",
     "fincheckTitle": "Time for your FinCheck",
-    "fincheckBody": "It's been 3 months since your last quiz: retake it and see your progress."
+    "fincheckBody": "It's been 3 months since your last quiz: retake it and see your progress.",
+    "landingMessageTitle": "New message from your Landing Page",
+    "landingMessageBody": "{name} wrote to you: tap to read."
   },
   "pushInvite": {
     "title": "Turn on notifications",
@@ -8727,7 +8733,7 @@
         "Introduction, services and method copy written with AI, always editable",
         "Three templates and the main colour you prefer",
         "Ready-made blocks: services, about me, testimonials, gallery, opening hours and contact details",
-        "WhatsApp, call or email button, plus a QR code and link to share"
+        "WhatsApp button, “Message me” form with messages in your area, plus a QR code and link to share"
       ],
       "faq": [
         {
@@ -8886,7 +8892,21 @@
     "err_aiUnavailable": "The AI isn’t available right now.",
     "err_aiLimitReached": "You’ve used all of today’s AI drafts: try again tomorrow.",
     "err_aiError": "The AI didn’t respond. Try again shortly.",
-    "err_aiMissingAnswers": "At least say what you do and what services you offer."
+    "err_aiMissingAnswers": "At least say what you do and what services you offer.",
+    "contactsForm": "Show the “Message me” form",
+    "contactsFormHint": "Visitors write to you from the page: you’ll find their messages in the “Messages” tab, on your dashboard and as a notification on your phone.",
+    "tabPage": "My page",
+    "tabMessages": "Messages",
+    "inboxEmpty": "No messages yet",
+    "inboxEmptyHint": "When someone writes to you using the “Message me” form on your page, the message arrives here.",
+    "inboxReplyEmail": "Reply by email",
+    "inboxCall": "Call",
+    "inboxDeleteConfirm": "Delete this message?",
+    "share": "Share",
+    "shareText": "Here’s {name}’s page:",
+    "alertTitle": "{count, plural, one {You have a new message from your Landing Page} other {You have # new messages from your Landing Page}}",
+    "alertText": "Someone wrote to you using the “Message me” form: read it and reply with one tap.",
+    "alertCta": "Read messages"
   },
   "landingPublic": {
     "services": "Services",
@@ -8918,7 +8938,18 @@
     "reportSend": "Send report",
     "reportCancel": "Cancel",
     "reportThanks": "Thank you, we’ve received your report.",
-    "reportError": "Couldn’t send. Please try again."
+    "reportError": "Couldn’t send. Please try again.",
+    "formTitle": "Message me",
+    "formName": "Name",
+    "formContact": "Email or phone",
+    "formContactHint": "So I can reply to you.",
+    "formMessage": "Message",
+    "formConsent": "I agree that my details and message will be sent to {name} so that they can get back to me.",
+    "formPrivacy": "Privacy notice",
+    "formSend": "Send message",
+    "formSent": "Message sent! You’ll get a reply as soon as possible.",
+    "formError": "The message couldn’t be sent. Check the fields and try again.",
+    "formTooMany": "You’ve already sent several messages: please try again later."
   },
   "renewalEmail": {
     "subject": "KUMANI: your subscription renews on {date}",

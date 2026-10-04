@@ -17,12 +17,14 @@ import {
   LoaderCircle,
   Plus,
   Save,
+  Share2,
   Sparkles,
   Trash2,
   TriangleAlert,
   X,
 } from 'lucide-react'
 import LandingView, { type LandingLabels } from '@/components/landing/LandingView'
+import LandingContactForm, { type LandingFormLabels } from '@/components/landing/LandingContactForm'
 import { checkLandingSlug, generateLandingDraft, saveLanding, uploadLandingPhoto, type LandingAiAnswers } from '@/app/actions/landing'
 import { resizeImageFile } from '@/lib/resizeImage'
 import {
@@ -57,6 +59,7 @@ type Props = {
   initial: LandingEditorInitial
   siteUrl: string
   labelsByLocale: Record<LandingLocale, LandingLabels>
+  formLabelsByLocale: Record<LandingLocale, LandingFormLabels>
   menuUrl: string | null
 }
 
@@ -89,7 +92,7 @@ function Card({ title, children, defaultOpen = true, right }: { title: string; c
   )
 }
 
-export default function LandingEditor({ initial, siteUrl, labelsByLocale, menuUrl }: Props) {
+export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLabelsByLocale, menuUrl }: Props) {
   const t = useTranslations('landingEditor')
   const [slug, setSlug] = useState(initial.slug)
   const [savedSlug, setSavedSlug] = useState(initial.exists ? initial.slug : '')
@@ -167,6 +170,21 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, menuUr
     }
   }
 
+  // Condividi la propria pagina: menu di condivisione del telefono, altrimenti WhatsApp
+  const sharePage = async () => {
+    const text = t('shareText', { name: c.hero.name || savedSlug })
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: c.hero.name, text, url: publicUrl })
+        return
+      } catch {
+        /* condivisione annullata */
+        return
+      }
+    }
+    window.open(`https://wa.me/?text=${encodeURIComponent(`${text} ${publicUrl}`)}`, '_blank', 'noopener')
+  }
+
   const downloadQr = async () => {
     const data = await QRCode.toDataURL(publicUrl, { width: 1024, margin: 2 })
     const a = document.createElement('a')
@@ -213,8 +231,20 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, menuUr
   const status = initial.suspended ? 'suspended' : isPublished && savedSlug ? 'published' : 'draft'
 
   const preview = useMemo(
-    () => <LandingView content={c} template={template} accent={accent} labels={labels} lang={contentLocale} menuUrl={menuUrl} createHref="#" preview />,
-    [c, template, accent, labels, contentLocale, menuUrl]
+    () => (
+      <LandingView
+        content={c}
+        template={template}
+        accent={accent}
+        labels={labels}
+        lang={contentLocale}
+        menuUrl={menuUrl}
+        createHref="#"
+        preview
+        contactFormSlot={<LandingContactForm slug="" labels={formLabelsByLocale[contentLocale]} ownerName={c.hero.name} privacyHref="" preview />}
+      />
+    ),
+    [c, template, accent, labels, contentLocale, menuUrl, formLabelsByLocale]
   )
 
   const blockEditors: Record<SectionKey, ReactNode> = {
@@ -358,6 +388,13 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, menuUr
         <Field title={t('contactsAddress')}>
           <input className={input} maxLength={160} value={c.contacts.address} onChange={(e) => update((x) => ((x.contacts.address = e.target.value), x))} />
         </Field>
+        <label className="flex items-start gap-2 text-sm text-gray-800">
+          <input type="checkbox" className="mt-0.5 h-5 w-5 accent-[var(--gold)]" checked={c.contacts.form} onChange={(e) => update((x) => ((x.contacts.form = e.target.checked), x))} />
+          <span>
+            {t('contactsForm')}
+            <span className="block text-xs text-gray-500">{t('contactsFormHint')}</span>
+          </span>
+        </label>
       </>
     ),
   }
@@ -403,6 +440,9 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, menuUr
                 </a>
                 <button type="button" onClick={downloadQr} className="inline-flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-2 text-sm font-semibold hover:bg-white/20">
                   <Download className="h-4 w-4" /> {t('downloadQr')}
+                </button>
+                <button type="button" onClick={sharePage} className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--gold)] px-3 py-2 text-sm font-semibold text-[var(--ink)] hover:brightness-110">
+                  <Share2 className="h-4 w-4" /> {t('share')}
                 </button>
               </div>
             </div>

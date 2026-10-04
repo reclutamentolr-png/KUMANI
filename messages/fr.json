@@ -3155,7 +3155,9 @@
     "statOffers": "{count, plural, one {# clic sur vos offres} other {# clics sur vos offres}}",
     "teaserTitle": "Vous êtes professionnel ? Découvrez KUMANI Pro",
     "teaserBody": "Fidélité client, devis, reçus et promotions pour votre activité.",
-    "teaserCta": "Découvrir Pro"
+    "teaserCta": "Découvrir Pro",
+    "statLandingOn": "Publiée · {count, plural, =0 {aucun nouveau message} one {# nouveau message} other {# nouveaux messages}}",
+    "statLandingOff": "Pas encore publiée"
   },
   "affinity": {
     "badgeMessages": "{count, plural, one {# nouveau message} other {# nouveaux messages}}",
@@ -7342,7 +7344,7 @@
       "step4Text": "Cochez « Publier la page » et touchez « Enregistrer ». En haut, vous trouvez votre adresse avec « Copier », « Ouvrir » et « Télécharger le QR », à mettre sur vos cartes de visite, votre vitrine et vos réseaux sociaux.",
       "step4Tip": "Dans « Informations sur l’activité », indiquez votre raison sociale et votre numéro de TVA, si vous en avez un.",
       "step5Title": "La page vue par les clients",
-      "step5Text": "Quiconque ouvre le lien voit votre page sur son téléphone ou son ordinateur et vous contacte en un geste. Google peut la trouver grâce au titre et à la description que vous avez choisis."
+      "step5Text": "Quiconque ouvre le lien voit votre page sur son téléphone ou son ordinateur et vous contacte en un geste, y compris avec le formulaire « Écrivez-moi » : les messages arrivent dans l’onglet « Messages », dans le tableau de bord et par une notification sur votre téléphone."
     }
   },
   "deckTexts": {
@@ -7871,7 +7873,9 @@
     "deviceNote": "Valable pour cet appareil : activez-les depuis le profil sur vos autres appareils.",
     "test": "Envoyer un test",
     "testSent": "Test envoyé : il devrait arriver dans quelques secondes.",
-    "error": "Une erreur s’est produite. Réessayez dans un instant."
+    "error": "Une erreur s’est produite. Réessayez dans un instant.",
+    "cat_messages": "Messages",
+    "cat_messages_hint": "Quand quelqu’un vous écrit depuis votre Landing Page."
   },
   "pushNotifications": {
     "testTitle": "Notifications activées",
@@ -7885,7 +7889,9 @@
     "eventTitle": "Rappel d’événement",
     "eventBody": "{title} · {date}",
     "fincheckTitle": "C'est l'heure de votre FinCheck",
-    "fincheckBody": "3 mois se sont écoulés depuis votre dernier test : refaites-le et découvrez vos progrès."
+    "fincheckBody": "3 mois se sont écoulés depuis votre dernier test : refaites-le et découvrez vos progrès.",
+    "landingMessageTitle": "Nouveau message de votre Landing Page",
+    "landingMessageBody": "{name} vous a écrit : touchez pour lire."
   },
   "pushInvite": {
     "title": "Activez les notifications",
@@ -8727,7 +8733,7 @@
         "Textes de présentation, services et méthode rédigés avec l’IA, toujours modifiables",
         "Trois modèles et la couleur principale que vous préférez",
         "Blocs prêts à l’emploi : services, à propos, témoignages, galerie, horaires et coordonnées",
-        "Bouton WhatsApp, appel ou e-mail, QR et lien à partager"
+        "Bouton WhatsApp, formulaire « Écrivez-moi » avec les messages dans votre espace, QR et lien à partager"
       ],
       "faq": [
         {
@@ -8886,7 +8892,21 @@
     "err_aiUnavailable": "L’IA n’est pas disponible pour le moment.",
     "err_aiLimitReached": "Vous avez utilisé tous les brouillons IA du jour : réessayez demain.",
     "err_aiError": "L’IA n’a pas répondu. Réessayez dans un instant.",
-    "err_aiMissingAnswers": "Indiquez au moins ce que vous faites et quels services vous proposez."
+    "err_aiMissingAnswers": "Indiquez au moins ce que vous faites et quels services vous proposez.",
+    "contactsForm": "Afficher le formulaire « Écrivez-moi »",
+    "contactsFormHint": "Les visiteurs vous écrivent depuis la page : vous trouvez les messages dans l’onglet « Messages », dans le tableau de bord et par une notification sur le téléphone.",
+    "tabPage": "Ma page",
+    "tabMessages": "Messages",
+    "inboxEmpty": "Aucun message pour l’instant",
+    "inboxEmptyHint": "Quand quelqu’un vous écrit via le formulaire « Écrivez-moi » de votre page, le message arrive ici.",
+    "inboxReplyEmail": "Répondre par e-mail",
+    "inboxCall": "Appeler",
+    "inboxDeleteConfirm": "Supprimer ce message ?",
+    "share": "Partager",
+    "shareText": "Voici la page de {name} :",
+    "alertTitle": "{count, plural, one {Vous avez un nouveau message de votre Landing Page} other {Vous avez # nouveaux messages de votre Landing Page}}",
+    "alertText": "Quelqu’un vous a écrit via le formulaire « Écrivez-moi » : lisez-le et répondez en un geste.",
+    "alertCta": "Lire les messages"
   },
   "landingPublic": {
     "services": "Services",
@@ -8918,7 +8938,18 @@
     "reportSend": "Envoyer le signalement",
     "reportCancel": "Annuler",
     "reportThanks": "Merci, nous avons bien reçu votre signalement.",
-    "reportError": "Envoi impossible. Réessayez."
+    "reportError": "Envoi impossible. Réessayez.",
+    "formTitle": "Écrivez-moi",
+    "formName": "Nom",
+    "formContact": "E-mail ou téléphone",
+    "formContactHint": "Pour pouvoir vous répondre.",
+    "formMessage": "Message",
+    "formConsent": "J’accepte que mes données et mon message soient transmis à {name} afin d’être recontacté(e).",
+    "formPrivacy": "Politique de confidentialité",
+    "formSend": "Envoyer le message",
+    "formSent": "Message envoyé ! Vous recevrez une réponse au plus vite.",
+    "formError": "Impossible d’envoyer le message. Vérifiez les champs et réessayez.",
+    "formTooMany": "Vous avez déjà envoyé plusieurs messages : réessayez plus tard."
   },
   "renewalEmail": {
     "subject": "KUMANI : votre abonnement se renouvelle le {date}",

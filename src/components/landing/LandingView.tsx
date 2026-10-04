@@ -35,6 +35,8 @@ type Props = {
   createHref?: string
   // Pulsante "Segnala" (solo sulla pagina pubblica)
   reportSlot?: ReactNode
+  // Modulo "Scrivimi" (pagina pubblica; disattivato nell'anteprima)
+  contactFormSlot?: ReactNode
   // Nell'anteprima i link non portano fuori dall'editor
   preview?: boolean
 }
@@ -48,7 +50,7 @@ const SOCIAL_LABELS: Record<keyof LandingContent['social'], string> = {
   website: 'Web',
 }
 
-export default function LandingView({ content: c, template, accent, labels, lang, menuUrl, createHref, reportSlot, preview }: Props) {
+export default function LandingView({ content: c, template, accent, labels, lang, menuUrl, createHref, reportSlot, contactFormSlot, preview }: Props) {
   const th = landingTheme(template, accent)
   const vars = {
     '--lp-bg': th.bg,
@@ -185,7 +187,7 @@ export default function LandingView({ content: c, template, accent, labels, lang
         </section>
       ) : null,
     contacts:
-      c.contacts.on && (c.contacts.phone || c.contacts.whatsapp || c.contacts.email || mapUrl) ? (
+      c.contacts.on && (c.contacts.phone || c.contacts.whatsapp || c.contacts.email || mapUrl || (c.contacts.form && contactFormSlot)) ? (
         <section key="contacts" className="px-5 py-12 @xl:px-8">
           {heading(c.contacts.title, labels.contacts)}
           <div className="grid gap-3 @xl:grid-cols-2">
@@ -219,6 +221,7 @@ export default function LandingView({ content: c, template, accent, labels, lang
               </a>
             )}
           </div>
+          {c.contacts.form && contactFormSlot && <div className="mt-6">{contactFormSlot}</div>}
         </section>
       ) : null,
   }

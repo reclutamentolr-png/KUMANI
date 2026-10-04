@@ -76,8 +76,8 @@ export type PushPreferences = Record<PushCategory, boolean>
 export async function getPushPreferences(): Promise<PushPreferences | null> {
   const userId = await currentUserId()
   if (!userId) return null
-  const { data } = await pushDb().from('push_preferences').select('network, expiry, events, staff').eq('user_id', userId).maybeSingle()
-  return { network: data?.network ?? true, expiry: data?.expiry ?? true, events: data?.events ?? true, staff: data?.staff ?? true }
+  const { data } = await pushDb().from('push_preferences').select('network, expiry, events, staff, messages').eq('user_id', userId).maybeSingle()
+  return { network: data?.network ?? true, expiry: data?.expiry ?? true, events: data?.events ?? true, staff: data?.staff ?? true, messages: data?.messages ?? true }
 }
 
 export async function setPushPreference(category: PushCategory, enabled: boolean) {

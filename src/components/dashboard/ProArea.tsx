@@ -37,6 +37,8 @@ export default async function ProArea({
         return stats['qr-code-pro'] ? t('statQr', { count: stats['qr-code-pro'].scans }) : null
       case 'offermaker':
         return stats.offermaker ? t('statOffers', { count: stats.offermaker.clicks }) : null
+      case 'landing-page':
+        return stats['landing-page'] ? t(stats['landing-page'].published ? 'statLandingOn' : 'statLandingOff', { count: stats['landing-page'].unread }) : null
       case 'menu':
         return stats.menu ? t('statMenu', { count: stats.menu.items, soldOut: stats.menu.soldOut }) : null
       default:

@@ -2,10 +2,11 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import LandingView from '@/components/landing/LandingView'
 import ReportLandingButton from '@/components/landing/ReportLandingButton'
+import LandingContactForm from '@/components/landing/LandingContactForm'
 import JsonLd from '@/components/seo/JsonLd'
 import { CANONICAL_ORIGIN } from '@/lib/seo'
 import { landingPhotoUrl } from '@/lib/landing'
-import { getLandingLabels } from '@/lib/landing-server'
+import { getLandingFormLabels, getLandingLabels } from '@/lib/landing-server'
 import { loadPublicLanding } from '@/lib/landing-public'
 
 type Props = { params: Promise<{ slug: string }> }
@@ -37,7 +38,7 @@ export default async function PublicLandingPage({ params }: Props) {
   const page = await loadPublicLanding(slug)
   if (!page) notFound()
   const c = page.content
-  const labels = await getLandingLabels(page.content_locale)
+  const [labels, formLabels] = await Promise.all([getLandingLabels(page.content_locale), getLandingFormLabels(page.content_locale)])
   const url = `${CANONICAL_ORIGIN}/p/${page.slug}`
 
   // Dati per Google: attività locale con contatti e social (niente stelle:
@@ -78,6 +79,14 @@ export default async function PublicLandingPage({ params }: Props) {
         menuUrl={page.menu_token ? `/m/${page.menu_token}` : null}
         createHref={page.referral_code ? `/register?sponsor=${encodeURIComponent(page.referral_code)}` : '/register'}
         reportSlot={<ReportLandingButton slug={page.slug} locale={page.content_locale} />}
+        contactFormSlot={
+          <LandingContactForm
+            slug={page.slug}
+            labels={formLabels}
+            ownerName={c.hero.name || c.footer.businessName}
+            privacyHref={page.content_locale === 'it' ? '/privacy' : `/${page.content_locale}/privacy`}
+          />
+        }
       />
     </>
   )

@@ -3155,7 +3155,9 @@
     "statOffers": "{count, plural, one {# Klick auf deine Angebote} other {# Klicks auf deine Angebote}}",
     "teaserTitle": "Bist du Profi? Entdecke KUMANI Pro",
     "teaserBody": "Kundenbindung, Angebote, Belege und Aktionen für dein Geschäft.",
-    "teaserCta": "Pro entdecken"
+    "teaserCta": "Pro entdecken",
+    "statLandingOn": "Veröffentlicht · {count, plural, =0 {keine neuen Nachrichten} one {# neue Nachricht} other {# neue Nachrichten}}",
+    "statLandingOff": "Noch nicht veröffentlicht"
   },
   "affinity": {
     "badgeMessages": "{count, plural, one {# neue Nachricht} other {# neue Nachrichten}}",
@@ -7342,7 +7344,7 @@
       "step4Text": "Hake „Seite veröffentlichen“ an und tippe auf „Speichern“. Oben findest du deine Adresse mit „Kopieren“, „Öffnen“ und „QR herunterladen“ – für Visitenkarten, Schaufenster und Social Media.",
       "step4Tip": "Unter „Angaben zum Unternehmen“ trägst du Firmenname und USt-IdNr. ein, falls vorhanden.",
       "step5Title": "Die Seite aus Kundensicht",
-      "step5Text": "Wer den Link öffnet, sieht deine Seite auf dem Handy oder am Computer und kontaktiert dich mit einem Tipp. Google kann sie über den Titel und die Beschreibung finden, die du gewählt hast."
+      "step5Text": "Wer den Link öffnet, sieht deine Seite auf dem Handy oder am Computer und kontaktiert dich mit einem Tipp, auch über das Formular „Schreib mir“: Die Nachrichten landen im Tab „Nachrichten“, im Dashboard und als Benachrichtigung auf deinem Handy."
     }
   },
   "deckTexts": {
@@ -7871,7 +7873,9 @@
     "deviceNote": "Gilt für dieses Gerät: Auf anderen Geräten im Profil aktivieren.",
     "test": "Test senden",
     "testSent": "Test gesendet: Er sollte in wenigen Sekunden ankommen.",
-    "error": "Etwas hat nicht funktioniert. Versuche es gleich noch einmal."
+    "error": "Etwas hat nicht funktioniert. Versuche es gleich noch einmal.",
+    "cat_messages": "Nachrichten",
+    "cat_messages_hint": "Wenn dir jemand über deine Landing Page schreibt."
   },
   "pushNotifications": {
     "testTitle": "Benachrichtigungen aktiv",
@@ -7885,7 +7889,9 @@
     "eventTitle": "Event-Erinnerung",
     "eventBody": "{title} · {date}",
     "fincheckTitle": "Zeit für deinen FinCheck",
-    "fincheckBody": "Seit deinem letzten Test sind 3 Monate vergangen: Mach ihn erneut und sieh dir deine Fortschritte an."
+    "fincheckBody": "Seit deinem letzten Test sind 3 Monate vergangen: Mach ihn erneut und sieh dir deine Fortschritte an.",
+    "landingMessageTitle": "Neue Nachricht von deiner Landing Page",
+    "landingMessageBody": "{name} hat dir geschrieben: Tippe zum Lesen."
   },
   "pushInvite": {
     "title": "Benachrichtigungen aktivieren",
@@ -8727,7 +8733,7 @@
         "Texte für Vorstellung, Leistungen und Arbeitsweise mit KI geschrieben, jederzeit änderbar",
         "Drei Vorlagen und die Hauptfarbe deiner Wahl",
         "Fertige Blöcke: Leistungen, Über mich, Kundenstimmen, Galerie, Öffnungszeiten und Kontakt",
-        "Button für WhatsApp, Anruf oder E-Mail, dazu QR-Code und Link zum Teilen"
+        "WhatsApp-Button, Formular „Schreib mir“ mit den Nachrichten in deinem Bereich, QR-Code und Link zum Teilen"
       ],
       "faq": [
         {
@@ -8886,7 +8892,21 @@
     "err_aiUnavailable": "Die KI ist gerade nicht verfügbar.",
     "err_aiLimitReached": "Du hast alle KI-Entwürfe für heute genutzt: Versuch es morgen wieder.",
     "err_aiError": "Die KI hat nicht geantwortet. Versuch es gleich noch einmal.",
-    "err_aiMissingAnswers": "Schreib mindestens, was du machst und welche Leistungen du anbietest."
+    "err_aiMissingAnswers": "Schreib mindestens, was du machst und welche Leistungen du anbietest.",
+    "contactsForm": "Formular „Schreib mir“ anzeigen",
+    "contactsFormHint": "Besucher schreiben dir über die Seite: Du findest die Nachrichten im Tab „Nachrichten“, im Dashboard und als Benachrichtigung auf dem Handy.",
+    "tabPage": "Meine Seite",
+    "tabMessages": "Nachrichten",
+    "inboxEmpty": "Noch keine Nachrichten",
+    "inboxEmptyHint": "Wenn dir jemand über das Formular „Schreib mir“ auf deiner Seite schreibt, kommt die Nachricht hier an.",
+    "inboxReplyEmail": "Per E-Mail antworten",
+    "inboxCall": "Anrufen",
+    "inboxDeleteConfirm": "Diese Nachricht löschen?",
+    "share": "Teilen",
+    "shareText": "Hier ist die Seite von {name}:",
+    "alertTitle": "{count, plural, one {Du hast eine neue Nachricht von deiner Landing Page} other {Du hast # neue Nachrichten von deiner Landing Page}}",
+    "alertText": "Jemand hat dir über das Formular „Schreib mir“ geschrieben: Lies die Nachricht und antworte mit einem Tipp.",
+    "alertCta": "Nachrichten lesen"
   },
   "landingPublic": {
     "services": "Leistungen",
@@ -8918,7 +8938,18 @@
     "reportSend": "Meldung senden",
     "reportCancel": "Abbrechen",
     "reportThanks": "Danke, wir haben deine Meldung erhalten.",
-    "reportError": "Senden nicht möglich. Versuch es noch einmal."
+    "reportError": "Senden nicht möglich. Versuch es noch einmal.",
+    "formTitle": "Schreib mir",
+    "formName": "Name",
+    "formContact": "E-Mail oder Telefon",
+    "formContactHint": "Damit ich dir antworten kann.",
+    "formMessage": "Nachricht",
+    "formConsent": "Ich bin einverstanden, dass meine Daten und meine Nachricht an {name} übermittelt werden, damit ich kontaktiert werden kann.",
+    "formPrivacy": "Datenschutzhinweise",
+    "formSend": "Nachricht senden",
+    "formSent": "Nachricht gesendet! Du bekommst so bald wie möglich eine Antwort.",
+    "formError": "Die Nachricht konnte nicht gesendet werden. Prüfe die Felder und versuche es erneut.",
+    "formTooMany": "Du hast bereits mehrere Nachrichten gesendet: Versuche es später erneut."
   },
   "renewalEmail": {
     "subject": "KUMANI: Dein Abo verlängert sich am {date}",

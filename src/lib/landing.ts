@@ -42,7 +42,7 @@ export type LandingContent = {
   testimonials: { on: boolean; title: string; items: Testimonial[]; googleUrl: string }
   gallery: { on: boolean; title: string; photos: string[] }
   hours: { on: boolean; title: string; rows: HoursRow[]; note: string }
-  contacts: { on: boolean; title: string; phone: string; whatsapp: string; email: string; address: string; city: string }
+  contacts: { on: boolean; title: string; phone: string; whatsapp: string; email: string; address: string; city: string; form: boolean }
   social: { instagram: string; facebook: string; linkedin: string; tiktok: string; youtube: string; website: string }
   links: { menu: boolean }
   footer: { businessName: string; vat: string }
@@ -67,7 +67,7 @@ export function emptyLandingContent(name = ''): LandingContent {
     testimonials: { on: false, title: '', items: [], googleUrl: '' },
     gallery: { on: false, title: '', photos: [] },
     hours: { on: false, title: '', rows: [], note: '' },
-    contacts: { on: true, title: '', phone: '', whatsapp: '', email: '', address: '', city: '' },
+    contacts: { on: true, title: '', phone: '', whatsapp: '', email: '', address: '', city: '', form: true },
     social: { instagram: '', facebook: '', linkedin: '', tiktok: '', youtube: '', website: '' },
     links: { menu: false },
     footer: { businessName: '', vat: '' },
@@ -180,6 +180,8 @@ export function cleanLandingContent(raw: unknown, ownerId?: string): LandingCont
       email: cleanEmail(s('contacts').email),
       address: str(s('contacts').address, 160),
       city: str(s('contacts').city, 80),
+      // Modulo "Scrivimi": il messaggio arriva nella casella del titolare
+      form: bool(s('contacts').form, true),
     },
     social: {
       instagram: cleanUrl(s('social').instagram),

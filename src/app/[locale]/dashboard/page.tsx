@@ -26,6 +26,7 @@ import { getLateSponsorStatus } from '@/lib/lateSponsor'
 import DashboardReturnScroll from '@/components/dashboard/DashboardReturnScroll'
 import QuickNav from '@/components/QuickNav'
 import DashboardTour from '@/components/dashboard/DashboardTour'
+import LandingMessagesAlert from '@/components/dashboard/LandingMessagesAlert'
 import BachecaMessagesAlert from '@/components/dashboard/BachecaMessagesAlert'
 import ProArea from '@/components/dashboard/ProArea'
 import ProTeaser from '@/components/dashboard/ProTeaser'
@@ -59,12 +60,14 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   // dashboard impiegava secondi): ruolo admin, profilo completo (solo
   // tramite get_my_profile(): le colonne personali non sono leggibili
   // direttamente), messaggi non letti, piano e strumenti, preferiti.
-  const [adminRole, { data: profile }, unreadMessagesCount, access, favoriteToolNames] = await Promise.all([
+  const [adminRole, { data: profile }, unreadMessagesCount, access, favoriteToolNames, { count: landingUnread }] = await Promise.all([
     hasAdminRole(supabase, user.id),
     supabase.rpc('get_my_profile').maybeSingle<MyProfile>(),
     getUnreadMessagesCount(user.id),
     getMarketplaceAccessState(supabase, user.id),
     getFavoriteToolNames(supabase, user.id),
+    // Messaggi non letti dal modulo "Scrivimi" della propria Landing Page
+    supabase.from('landing_messages').select('id', { count: 'exact', head: true }).eq('owner_id', user.id).is('read_at', null),
   ])
   const { userPlan, isSettingEnabled, isToolEnabled, requiredPlan, passPriceCents } = access
   const userIsAdmin = adminRole || profile?.is_admin === true
@@ -249,6 +252,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
 
         {/* Messaggi non letti dalla Bacheca: in cima, prima di tutto */}
         {unreadMessagesCount > 0 && <BachecaMessagesAlert initialCount={unreadMessagesCount} />}
+        {(landingUnread ?? 0) > 0 && <LandingMessagesAlert count={landingUnread ?? 0} />}
 
         {isPro && proTools.length > 0 ? (
           <ProArea tools={proTools} stats={proAreaStats} trial={proTrial} renewsOn={proRenewsOn} favoriteToolNames={favoriteToolNames} />

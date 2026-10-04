@@ -16,7 +16,7 @@ import { enablePush, getPushDeviceStatus } from '@/lib/pushClient'
 // Nel profilo: attiva le notifiche push su questo dispositivo e scegli quali
 // ricevere. Su iPhone funzionano solo con KUMANI aggiunta alla schermata Home.
 
-const CATEGORIES = ['network', 'expiry', 'events', 'staff'] as const
+const CATEGORIES = ['network', 'expiry', 'events', 'messages', 'staff'] as const
 
 type Status = 'loading' | 'unsupported' | 'ios-install' | 'denied' | 'off' | 'on'
 

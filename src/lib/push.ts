@@ -7,8 +7,8 @@ import { locales, defaultLocale } from '../../i18n'
 // Variabili d'ambiente: NEXT_PUBLIC_VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY.
 // Se mancano, le notifiche non partono (log) e il resto funziona.
 
-export type PushCategory = 'network' | 'expiry' | 'events' | 'staff'
-export const PUSH_CATEGORIES: PushCategory[] = ['network', 'expiry', 'events', 'staff']
+export type PushCategory = 'network' | 'expiry' | 'events' | 'staff' | 'messages'
+export const PUSH_CATEGORIES: PushCategory[] = ['network', 'expiry', 'events', 'staff', 'messages']
 
 export type PushPayload = { title: string; body: string; url?: string; tag?: string }
 

@@ -3155,7 +3155,9 @@
     "statOffers": "{count, plural, one {# clique nas suas ofertas} other {# cliques nas suas ofertas}}",
     "teaserTitle": "É profissional? Descubra o KUMANI Pro",
     "teaserBody": "Fidelização de clientes, orçamentos, recibos e promoções para a sua atividade.",
-    "teaserCta": "Descobrir Pro"
+    "teaserCta": "Descobrir Pro",
+    "statLandingOn": "Publicada · {count, plural, =0 {nenhuma mensagem nova} one {# mensagem nova} other {# mensagens novas}}",
+    "statLandingOff": "Ainda não publicada"
   },
   "affinity": {
     "badgeMessages": "{count, plural, one {# nova mensagem} other {# novas mensagens}}",
@@ -7342,7 +7344,7 @@
       "step4Text": "Marque «Publicar a página» e toque em «Guardar». No topo encontra o seu endereço com «Copiar», «Abrir» e «Descarregar QR», para pôr em cartões de visita, na montra e nas redes sociais.",
       "step4Tip": "Em «Dados do negócio» introduza a denominação social e o NIF, se os tiver.",
       "step5Title": "A página vista pelos clientes",
-      "step5Text": "Quem abre o link vê a sua página no telemóvel ou no computador e contacta-o com um toque. O Google pode encontrá-la através do título e da descrição que escolheu."
+      "step5Text": "Quem abre o link vê a sua página no telemóvel ou no computador e contacta-o com um toque, também através do formulário «Escreva-me»: as mensagens chegam ao separador «Mensagens», ao painel e com uma notificação no telemóvel."
     }
   },
   "deckTexts": {
@@ -7871,7 +7873,9 @@
     "deviceNote": "Vale para este dispositivo: ative-as a partir do perfil nos outros dispositivos.",
     "test": "Enviar um teste",
     "testSent": "Teste enviado: deve chegar dentro de segundos.",
-    "error": "Algo correu mal. Tente novamente daqui a pouco."
+    "error": "Algo correu mal. Tente novamente daqui a pouco.",
+    "cat_messages": "Mensagens",
+    "cat_messages_hint": "Quando alguém lhe escreve a partir da sua Landing Page."
   },
   "pushNotifications": {
     "testTitle": "Notificações ativas",
@@ -7885,7 +7889,9 @@
     "eventTitle": "Lembrete de evento",
     "eventBody": "{title} · {date}",
     "fincheckTitle": "Está na hora do seu FinCheck",
-    "fincheckBody": "Passaram 3 meses desde o último teste: repita-o e descubra os seus progressos."
+    "fincheckBody": "Passaram 3 meses desde o último teste: repita-o e descubra os seus progressos.",
+    "landingMessageTitle": "Nova mensagem da sua Landing Page",
+    "landingMessageBody": "{name} escreveu-lhe: toque para ler."
   },
   "pushInvite": {
     "title": "Ative as notificações",
@@ -8727,7 +8733,7 @@
         "Textos de apresentação, serviços e método escritos com IA, sempre editáveis",
         "Três modelos e a cor principal que preferir",
         "Blocos prontos: serviços, sobre mim, testemunhos, galeria, horários e contactos",
-        "Botão de WhatsApp, chamada ou email, QR e link para partilhar"
+        "Botão de WhatsApp, formulário «Escreva-me» com as mensagens na sua área, QR e link para partilhar"
       ],
       "faq": [
         {
@@ -8886,7 +8892,21 @@
     "err_aiUnavailable": "A IA não está disponível neste momento.",
     "err_aiLimitReached": "Já usou todos os rascunhos com IA de hoje: tente novamente amanhã.",
     "err_aiError": "A IA não respondeu. Tente novamente daqui a pouco.",
-    "err_aiMissingAnswers": "Escreva pelo menos o que faz e que serviços oferece."
+    "err_aiMissingAnswers": "Escreva pelo menos o que faz e que serviços oferece.",
+    "contactsForm": "Mostrar o formulário «Escreva-me»",
+    "contactsFormHint": "Os visitantes escrevem-lhe a partir da página: encontra as mensagens no separador «Mensagens», no painel e com uma notificação no telemóvel.",
+    "tabPage": "A minha página",
+    "tabMessages": "Mensagens",
+    "inboxEmpty": "Ainda não há mensagens",
+    "inboxEmptyHint": "Quando alguém lhe escrever através do formulário «Escreva-me» da sua página, a mensagem chega aqui.",
+    "inboxReplyEmail": "Responder por email",
+    "inboxCall": "Ligar",
+    "inboxDeleteConfirm": "Eliminar esta mensagem?",
+    "share": "Partilhar",
+    "shareText": "Esta é a página de {name}:",
+    "alertTitle": "{count, plural, one {Tem uma nova mensagem da sua Landing Page} other {Tem # novas mensagens da sua Landing Page}}",
+    "alertText": "Alguém lhe escreveu através do formulário «Escreva-me»: leia e responda com um toque.",
+    "alertCta": "Ler as mensagens"
   },
   "landingPublic": {
     "services": "Serviços",
@@ -8918,7 +8938,18 @@
     "reportSend": "Enviar denúncia",
     "reportCancel": "Cancelar",
     "reportThanks": "Obrigado, recebemos a sua denúncia.",
-    "reportError": "Não foi possível enviar. Tente novamente."
+    "reportError": "Não foi possível enviar. Tente novamente.",
+    "formTitle": "Escreva-me",
+    "formName": "Nome",
+    "formContact": "Email ou telefone",
+    "formContactHint": "Para lhe poder responder.",
+    "formMessage": "Mensagem",
+    "formConsent": "Aceito que os meus dados e a mensagem sejam enviados a {name} para ser contactado(a).",
+    "formPrivacy": "Política de privacidade",
+    "formSend": "Enviar mensagem",
+    "formSent": "Mensagem enviada! Vai receber uma resposta o mais rapidamente possível.",
+    "formError": "Não foi possível enviar a mensagem. Verifique os campos e tente novamente.",
+    "formTooMany": "Já enviou várias mensagens: tente novamente mais tarde."
   },
   "renewalEmail": {
     "subject": "KUMANI: a sua subscrição renova-se em {date}",

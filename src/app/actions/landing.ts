@@ -8,6 +8,7 @@ import { getAnthropicClient, MissingApiKeyError } from '@/lib/anthropic'
 import { ANTHROPIC_MODEL } from '@/lib/offermaker'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { awardToolPoint } from '@/lib/toolPoints'
+import { localizedPath, notifyUser } from '@/lib/push'
 import {
   cleanLandingContent,
   isLandingLocale,
@@ -278,5 +279,88 @@ export async function reportLanding(slug: string, reason: ReportReason, details:
     details: String(details ?? '').trim().slice(0, 1000) || null,
     reporter_hash: reporterHash,
   })
+  return { success: !error }
+}
+
+// ---------------------------------------------------------------------------
+// Messaggi dei visitatori (modulo "Scrivimi" della pagina pubblica)
+// ---------------------------------------------------------------------------
+
+export async function sendLandingMessage(input: {
+  slug: string
+  name: string
+  contact: string
+  message: string
+  consent: boolean
+  website: string
+}): Promise<{ success: true } | { success: false; reason: 'invalid' | 'tooMany' | 'error' }> {
+  // Campo trappola compilato: è un robot (si risponde "inviato" senza salvare)
+  if (input.website) return { success: true }
+  const name = String(input.name ?? '').trim().slice(0, 80)
+  const contact = String(input.contact ?? '').trim().slice(0, 120)
+  const message = String(input.message ?? '').replace(/\r\n/g, '\n').trim().slice(0, 2000)
+  if (!input.consent || !name || contact.length < 3 || !message) return { success: false, reason: 'invalid' }
+
+  // Solo pagine pubblicate e visibili (stesse regole della pagina pubblica)
+  const supabase = await createClient()
+  const { data: page } = await supabase.rpc('get_public_landing', { p_slug: String(input.slug).toLowerCase() })
+  if (!page) return { success: false, reason: 'invalid' }
+  const service = getServiceClient()
+  const { data: row } = await service.from('landing_pages').select('owner_id, content').eq('slug', String(input.slug).toLowerCase()).maybeSingle()
+  if (!row) return { success: false, reason: 'invalid' }
+  if (cleanLandingContent(row.content).contacts.form === false) return { success: false, reason: 'invalid' }
+
+  // Limiti contro lo spam: 3 messaggi l'ora dalla stessa persona, 50 al giorno per pagina
+  const h = await headers()
+  const ip = (h.get('x-forwarded-for') ?? '').split(',')[0].trim() || h.get('x-real-ip') || 'unknown'
+  const senderHash = createHash('sha256').update(`${ip}|${row.owner_id}`).digest('hex').slice(0, 32)
+  const [{ count: mine }, { count: today }] = await Promise.all([
+    service.from('landing_messages').select('id', { count: 'exact', head: true }).eq('owner_id', row.owner_id).eq('sender_hash', senderHash).gte('created_at', new Date(Date.now() - 60 * 60 * 1000).toISOString()),
+    service.from('landing_messages').select('id', { count: 'exact', head: true }).eq('owner_id', row.owner_id).gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()),
+  ])
+  if ((mine ?? 0) >= 3 || (today ?? 0) >= 50) return { success: false, reason: 'tooMany' }
+
+  const { error } = await service.from('landing_messages').insert({ owner_id: row.owner_id, sender_name: name, sender_contact: contact, message, sender_hash: senderHash })
+  if (error) {
+    console.error('[Landing] messaggio non salvato:', error.message)
+    return { success: false, reason: 'error' }
+  }
+
+  // Notifica sul telefono del titolare (se le ha attivate)
+  await notifyUser(row.owner_id as string, 'messages', (t, locale) => ({
+    title: t('landingMessageTitle'),
+    body: t('landingMessageBody', { name }),
+    url: localizedPath(locale, '/marketplace/landing-page?tab=messages'),
+    tag: 'landing-message',
+  }))
+  return { success: true }
+}
+
+export type LandingMessage = { id: string; sender_name: string; sender_contact: string; message: string; read_at: string | null; created_at: string }
+
+export async function getLandingMessages(): Promise<LandingMessage[]> {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return []
+  const { data } = await supabase
+    .from('landing_messages')
+    .select('id, sender_name, sender_contact, message, read_at, created_at')
+    .eq('owner_id', user.id)
+    .order('created_at', { ascending: false })
+    .limit(200)
+  return (data as LandingMessage[] | null) ?? []
+}
+
+export async function markLandingMessageRead(id: string, read = true): Promise<{ success: boolean }> {
+  const supabase = await createClient()
+  const { error } = await supabase.from('landing_messages').update({ read_at: read ? new Date().toISOString() : null }).eq('id', id)
+  return { success: !error }
+}
+
+export async function deleteLandingMessage(id: string): Promise<{ success: boolean }> {
+  const supabase = await createClient()
+  const { error } = await supabase.from('landing_messages').delete().eq('id', id)
   return { success: !error }
 }
