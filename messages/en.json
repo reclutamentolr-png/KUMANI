@@ -6659,6 +6659,16 @@
         "p2d": "50/30/20 rule and traffic lights from your Spendly data.",
         "p3": "Action plan",
         "p3d": "Up to 3 concrete goals to tick off."
+      },
+      "landing_page": {
+        "sub": "Your business website in minutes",
+        "tagline": "Introduction, services and contact details on a link of your own, in the colours you choose.",
+        "p1": "Copy written with AI",
+        "p1d": "Answer a few questions: your draft is ready.",
+        "p2": "Your style",
+        "p2d": "Three templates and any colour you like.",
+        "p3": "Findable on Google",
+        "p3d": "With title, description and a QR code to share."
       }
     }
   },
@@ -7295,6 +7305,24 @@
       "step4Title": "Withholding tax",
       "step4Text": "From the fee you work out the net amount to pay and the invoice total, with pension contribution and VAT, or start from the net amount you want to receive.",
       "step4Tip": "Copy the result with “Copy result”. The calculation is indicative: always check with your accountant."
+    },
+    "landing_page": {
+      "title": "Landing Page",
+      "summary": "Your business website on kumani.io: copy written with AI, colours of your choice, contact details and a QR code to share.",
+      "cta": "Open Landing Page",
+      "step1Title": "Write the copy with AI",
+      "step1Text": "Open “Write the copy with AI” and answer the questions: what you do, where, for whom and which services you offer. Tap “Write the draft”: the AI prepares the introduction, services, about me, method and the description for Google.",
+      "step1Tip": "The AI only uses what you write: always reread the draft before publishing.",
+      "step2Title": "Address, style and colours",
+      "step2Text": "In “Address and language” choose the page address (kumani.io/p/…) and the language you write in. In “Style” choose between Elegant dark, Light and Colourful, and pick the main colour.",
+      "step3Title": "Introduction and blocks",
+      "step3Text": "In “Introduction” add your name, headline, photo, logo and the main button (WhatsApp, call, email or link). In “Page blocks” make the ones you need visible, fill them in and change their order with the arrows.",
+      "step3Tip": "In Testimonials only publish genuine quotes from real customers, with their consent.",
+      "step4Title": "Publish and share",
+      "step4Text": "Tick “Publish the page” and tap “Save”. At the top you’ll find your address with “Copy”, “Open” and “Download QR”, ready for business cards, your shop window and social media.",
+      "step4Tip": "In “Business details” enter your company name and VAT number, if you have one.",
+      "step5Title": "The page as customers see it",
+      "step5Text": "Anyone who opens the link sees your page on their phone or computer and can contact you with one tap. Google can find it using the title and description you chose."
     }
   },
   "deckTexts": {
@@ -8667,6 +8695,32 @@
         {
           "q": "Do I need to install an app?",
           "a": "No, MemoLife works in your phone’s or computer’s browser, and you can add KUMANI to your Home screen."
+        }
+      ]
+    },
+    "landing_page": {
+      "title": "Create a website for your small business in minutes · Landing Page",
+      "description": "One-page website builder for your business: introduction, services, contact details and WhatsApp, copy written with AI, your colours and a QR code to share.",
+      "heading": "How to create a business website without coding",
+      "intro": "A freelancer or a small shop needs a clear page to show customers: who you are, what you do and how to get in touch. With Landing Page you create it from your phone in minutes, at an address of your own (kumani.io/p/…), in the colours you choose, with copy prepared by AI from your answers.",
+      "points": [
+        "Introduction, services and method copy written with AI, always editable",
+        "Three templates and the main colour you prefer",
+        "Ready-made blocks: services, about me, testimonials, gallery, opening hours and contact details",
+        "WhatsApp, call or email button, plus a QR code and link to share"
+      ],
+      "faq": [
+        {
+          "q": "Do I need to know how to code or own a domain?",
+          "a": "No. You fill in the blocks from your phone or computer and the page is published at kumani.io/p/ followed by the address you choose."
+        },
+        {
+          "q": "Can people find the page on Google?",
+          "a": "Once published, the page has a title, description and business details for Google. How long it takes to appear in the results is up to Google."
+        },
+        {
+          "q": "Can I change the text later?",
+          "a": "Yes, you can edit the text, photos, colours and blocks whenever you like: changes go live as soon as you save."
         }
       ]
     }

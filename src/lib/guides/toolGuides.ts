@@ -28,6 +28,7 @@ export const TOOL_GUIDES: { path: string; slug: GuideSlug }[] = [
   { path: '/marketplace/spendly', slug: 'spendly' },
   { path: '/marketplace/fincheck', slug: 'fincheck' },
   { path: '/marketplace/menu', slug: 'menu' },
+  { path: '/marketplace/landing-page', slug: 'landing-page' },
   { path: '/marketplace/fidelity', slug: 'fidelity' },
   { path: '/marketplace/preventivi', slug: 'preventivi' },
   { path: '/marketplace/digital-receipt', slug: 'digital-receipt' },

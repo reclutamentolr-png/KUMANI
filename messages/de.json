@@ -6659,6 +6659,16 @@
         "p2d": "50/30/20-Regel und Ampeln aus deinen Spendly-Daten.",
         "p3": "Aktionsplan",
         "p3d": "Bis zu 3 konkrete Ziele zum Abhaken."
+      },
+      "landing_page": {
+        "sub": "Deine Website in wenigen Minuten",
+        "tagline": "Vorstellung, Leistungen und Kontakte unter deinem eigenen Link, in deinen Farben.",
+        "p1": "Texte mit KI",
+        "p1d": "Ein paar Fragen beantworten: Der Entwurf steht.",
+        "p2": "Dein Stil",
+        "p2d": "Drei Vorlagen und deine Wunschfarbe.",
+        "p3": "Auffindbar bei Google",
+        "p3d": "Mit Titel, Beschreibung und QR-Code zum Teilen."
       }
     }
   },
@@ -7295,6 +7305,24 @@
       "step4Title": "Die Quellensteuer",
       "step4Text": "Aus dem Honorar berechnest du den auszuzahlenden Nettobetrag und den Rechnungsbetrag mit Rentenbeitrag und MwSt. – oder du gehst vom Nettobetrag aus, den du erhalten willst.",
       "step4Tip": "Kopiere das Ergebnis mit „Ergebnis kopieren“. Die Berechnung ist ein Richtwert: Prüfe sie immer mit deinem Steuerberater."
+    },
+    "landing_page": {
+      "title": "Landing Page",
+      "summary": "Deine Website auf kumani.io: Texte mit KI geschrieben, Farben nach Wahl, Kontakte und QR-Code zum Teilen.",
+      "cta": "Landing Page öffnen",
+      "step1Title": "Texte mit KI schreiben",
+      "step1Text": "Öffne „Texte mit KI schreiben“ und beantworte die Fragen: was du machst, wo, für wen und welche Leistungen du anbietest. Tippe auf „Entwurf schreiben“: Die KI erstellt Vorstellung, Leistungen, Über mich, Arbeitsweise und die Beschreibung für Google.",
+      "step1Tip": "Die KI nutzt nur, was du schreibst: Lies den Entwurf vor dem Veröffentlichen immer noch einmal durch.",
+      "step2Title": "Adresse, Stil und Farben",
+      "step2Text": "Unter „Adresse und Sprache“ wählst du die Adresse der Seite (kumani.io/p/…) und die Sprache, in der du schreibst. Unter „Stil“ wählst du zwischen Elegant dunkel, Hell und Farbig sowie die Hauptfarbe.",
+      "step3Title": "Vorstellung und Blöcke",
+      "step3Text": "Unter „Vorstellung“ trägst du Name, Titel, Foto, Logo und den Hauptbutton ein (WhatsApp, Anruf, E-Mail oder Link). Unter „Blöcke der Seite“ blendest du die Blöcke ein, die du brauchst, füllst sie aus und änderst die Reihenfolge mit den Pfeilen.",
+      "step3Tip": "Veröffentliche bei den Kundenstimmen nur echte Aussagen echter Kunden, mit deren Einverständnis.",
+      "step4Title": "Veröffentlichen und teilen",
+      "step4Text": "Hake „Seite veröffentlichen“ an und tippe auf „Speichern“. Oben findest du deine Adresse mit „Kopieren“, „Öffnen“ und „QR herunterladen“ – für Visitenkarten, Schaufenster und Social Media.",
+      "step4Tip": "Unter „Angaben zum Unternehmen“ trägst du Firmenname und USt-IdNr. ein, falls vorhanden.",
+      "step5Title": "Die Seite aus Kundensicht",
+      "step5Text": "Wer den Link öffnet, sieht deine Seite auf dem Handy oder am Computer und kontaktiert dich mit einem Tipp. Google kann sie über den Titel und die Beschreibung finden, die du gewählt hast."
     }
   },
   "deckTexts": {
@@ -8667,6 +8695,32 @@
         {
           "q": "Muss ich eine App installieren?",
           "a": "Nein, MemoLife funktioniert im Browser auf Handy oder Computer, und du kannst KUMANI zum Startbildschirm hinzufügen."
+        }
+      ]
+    },
+    "landing_page": {
+      "title": "Website für Selbstständige erstellen – in wenigen Minuten · Landing Page",
+      "description": "Erstelle eine Website für dein Unternehmen: Vorstellung, Leistungen, Kontakt und WhatsApp, Texte mit KI, Farben nach Wahl und QR-Code zum Teilen.",
+      "heading": "Wie erstelle ich eine eigene Website ohne Programmierkenntnisse?",
+      "intro": "Selbstständige und kleine Läden brauchen eine klare Seite für ihre Kunden: wer du bist, was du machst, wie man dich erreicht. Mit Landing Page erstellst du sie in wenigen Minuten am Handy, unter deiner eigenen Adresse (kumani.io/p/…), in deinen Farben und mit Texten, die die KI aus deinen Antworten vorbereitet.",
+      "points": [
+        "Texte für Vorstellung, Leistungen und Arbeitsweise mit KI geschrieben, jederzeit änderbar",
+        "Drei Vorlagen und die Hauptfarbe deiner Wahl",
+        "Fertige Blöcke: Leistungen, Über mich, Kundenstimmen, Galerie, Öffnungszeiten und Kontakt",
+        "Button für WhatsApp, Anruf oder E-Mail, dazu QR-Code und Link zum Teilen"
+      ],
+      "faq": [
+        {
+          "q": "Muss ich programmieren können oder eine eigene Domain haben?",
+          "a": "Nein. Du füllst die Blöcke am Handy oder Computer aus und die Seite wird unter kumani.io/p/ und der von dir gewählten Adresse veröffentlicht."
+        },
+        {
+          "q": "Ist die Seite bei Google zu finden?",
+          "a": "Sobald du sie veröffentlichst, hat die Seite Titel, Beschreibung und Unternehmensangaben für Google. Wann sie in den Suchergebnissen erscheint, entscheidet Google."
+        },
+        {
+          "q": "Kann ich die Texte später ändern?",
+          "a": "Ja, du kannst Texte, Fotos, Farben und Blöcke jederzeit ändern: Die Änderungen sind online, sobald du speicherst."
         }
       ]
     }

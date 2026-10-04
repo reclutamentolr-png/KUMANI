@@ -6659,6 +6659,16 @@
         "p2d": "Regra 50/30/20 e semáforos com os dados do Spendly.",
         "p3": "Plano de ação",
         "p3d": "Até 3 objetivos concretos para assinalar."
+      },
+      "landing_page": {
+        "sub": "O seu site em poucos minutos",
+        "tagline": "Apresentação, serviços e contactos num link só seu, com as cores que escolher.",
+        "p1": "Textos com IA",
+        "p1d": "Responda a algumas perguntas: o rascunho está pronto.",
+        "p2": "O seu estilo",
+        "p2d": "Três modelos e a cor que quiser.",
+        "p3": "Visível no Google",
+        "p3d": "Com título, descrição e QR para partilhar."
       }
     }
   },
@@ -7295,6 +7305,24 @@
       "step4Title": "A retenção na fonte",
       "step4Text": "A partir dos honorários calcula o líquido a pagar e o total da fatura, com contribuição para a segurança social e IVA, ou parte do líquido que quer receber.",
       "step4Tip": "O resultado copia-se com «Copiar resultado». O cálculo é indicativo: confirme sempre com o seu contabilista."
+    },
+    "landing_page": {
+      "title": "Landing Page",
+      "summary": "O site de apresentação do seu negócio em kumani.io: textos escritos com IA, cores à escolha, contactos e QR para partilhar.",
+      "cta": "Abrir Landing Page",
+      "step1Title": "Escreva os textos com IA",
+      "step1Text": "Abra «Escreva os textos com IA» e responda às perguntas: o que faz, onde, para quem e que serviços oferece. Toque em «Escrever o rascunho»: a IA prepara a apresentação, os serviços, a secção sobre mim, o método e a descrição para o Google.",
+      "step1Tip": "A IA usa apenas o que escreve: releia sempre o rascunho antes de publicar.",
+      "step2Title": "Endereço, estilo e cores",
+      "step2Text": "Em «Endereço e língua» escolha o endereço da página (kumani.io/p/…) e a língua em que escreve. Em «Estilo» escolha entre Escuro elegante, Claro e Colorido, e a cor principal.",
+      "step3Title": "Apresentação e blocos",
+      "step3Text": "Em «Apresentação» indique o nome, o título, a foto, o logótipo e o botão principal (WhatsApp, chamada, email ou link). Em «Blocos da página» torne visíveis os que precisa, preencha-os e mude a ordem com as setas.",
+      "step3Tip": "Nos Testemunhos publique apenas frases verdadeiras de clientes reais, com o consentimento deles.",
+      "step4Title": "Publique e partilhe",
+      "step4Text": "Marque «Publicar a página» e toque em «Guardar». No topo encontra o seu endereço com «Copiar», «Abrir» e «Descarregar QR», para pôr em cartões de visita, na montra e nas redes sociais.",
+      "step4Tip": "Em «Dados do negócio» introduza a denominação social e o NIF, se os tiver.",
+      "step5Title": "A página vista pelos clientes",
+      "step5Text": "Quem abre o link vê a sua página no telemóvel ou no computador e contacta-o com um toque. O Google pode encontrá-la através do título e da descrição que escolheu."
     }
   },
   "deckTexts": {
@@ -8667,6 +8695,32 @@
         {
           "q": "É preciso instalar uma aplicação?",
           "a": "Não, o MemoLife funciona no navegador do telemóvel ou do computador, e pode adicionar o KUMANI ao ecrã principal."
+        }
+      ]
+    },
+    "landing_page": {
+      "title": "Criar um site para o seu negócio em poucos minutos · Landing Page",
+      "description": "Crie o site do seu negócio: apresentação, serviços, contactos e WhatsApp, textos escritos com IA, cores à escolha e um QR para partilhar.",
+      "heading": "Como criar um site para o seu negócio sem saber programar",
+      "intro": "Um profissional ou uma pequena loja precisa de uma página clara para mostrar aos clientes: quem é, o que faz, como contactá-lo. Com a Landing Page cria-a no telemóvel em poucos minutos, num endereço só seu (kumani.io/p/…), com as cores que escolher e os textos preparados pela IA a partir das suas respostas.",
+      "points": [
+        "Textos de apresentação, serviços e método escritos com IA, sempre editáveis",
+        "Três modelos e a cor principal que preferir",
+        "Blocos prontos: serviços, sobre mim, testemunhos, galeria, horários e contactos",
+        "Botão de WhatsApp, chamada ou email, QR e link para partilhar"
+      ],
+      "faq": [
+        {
+          "q": "É preciso saber programar ou ter um domínio?",
+          "a": "Não. Preenche os blocos no telemóvel ou no computador e a página é publicada em kumani.io/p/ seguido do endereço que escolher."
+        },
+        {
+          "q": "A página aparece no Google?",
+          "a": "Quando a publica, a página tem título, descrição e dados do negócio para o Google. O tempo que demora a aparecer nos resultados é decidido pelo Google."
+        },
+        {
+          "q": "Posso alterar os textos depois?",
+          "a": "Sim, pode alterar textos, fotos, cores e blocos sempre que quiser: as alterações ficam online assim que guarda."
         }
       ]
     }

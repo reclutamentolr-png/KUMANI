@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/server'
 import { getAnthropicClient, MissingApiKeyError } from '@/lib/anthropic'
 import { ANTHROPIC_MODEL } from '@/lib/offermaker'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
+import { awardToolPoint } from '@/lib/toolPoints'
 import {
   cleanLandingContent,
   isLandingLocale,
@@ -86,6 +87,7 @@ export async function saveLanding(input: LandingSaveInput): Promise<{ success: t
   const toRemove = unused.filter((p) => !recent.has(p))
   if (toRemove.length) await service.storage.from('landing-photos').remove(toRemove)
 
+  await awardToolPoint('landing-page')
   return { success: true, content }
 }
 

@@ -6659,6 +6659,16 @@
         "p2d": "Regola 50/30/20 e semafori dai dati di Spendly.",
         "p3": "Piano d’azione",
         "p3d": "Fino a 3 obiettivi concreti da spuntare."
+      },
+      "landing_page": {
+        "sub": "Il tuo sito vetrina in pochi minuti",
+        "tagline": "Presentazione, servizi e contatti su un link tutto tuo, con i colori che scegli.",
+        "p1": "Testi con l’AI",
+        "p1d": "Rispondi a qualche domanda: la bozza è pronta.",
+        "p2": "Il tuo stile",
+        "p2d": "Tre modelli e il colore che vuoi.",
+        "p3": "Trovabile su Google",
+        "p3d": "Con titolo, descrizione e QR da condividere."
       }
     }
   },
@@ -7295,6 +7305,24 @@
       "step4Title": "La ritenuta d'acconto",
       "step4Text": "Dal compenso calcoli il netto a pagare e il totale della fattura, con contributo previdenziale e IVA, oppure parti dal netto che vuoi incassare.",
       "step4Tip": "Il risultato si copia con «Copia risultato». Il calcolo è indicativo: verifica sempre con il tuo commercialista."
+    },
+    "landing_page": {
+      "title": "Landing Page",
+      "summary": "Il tuo sito vetrina su kumani.io: testi scritti con l’AI, colori a scelta, contatti e QR da condividere.",
+      "cta": "Apri Landing Page",
+      "step1Title": "Scrivi i testi con l’AI",
+      "step1Text": "Apri «Scrivi i testi con l’AI» e rispondi alle domande: cosa fai, dove, per chi e quali servizi offri. Tocca «Scrivi la bozza»: l’AI prepara presentazione, servizi, chi sono, metodo e descrizione per Google.",
+      "step1Tip": "L’AI usa solo quello che scrivi: rileggi sempre la bozza prima di pubblicare.",
+      "step2Title": "Indirizzo, stile e colori",
+      "step2Text": "In «Indirizzo e lingua» scegli l’indirizzo della pagina (kumani.io/p/…) e la lingua in cui scrivi. In «Stile» scegli tra Elegante scuro, Chiaro e Colorato, e il colore principale.",
+      "step3Title": "Presentazione e blocchi",
+      "step3Text": "In «Presentazione» metti nome, titolo, foto, logo e il pulsante principale (WhatsApp, chiamata, email o link). In «Blocchi della pagina» rendi visibili quelli che ti servono, compilali e cambia l’ordine con le frecce.",
+      "step3Tip": "Nelle Testimonianze pubblica solo frasi vere di clienti reali, con il loro consenso.",
+      "step4Title": "Pubblica e condividi",
+      "step4Text": "Spunta «Pubblica la pagina» e tocca «Salva». In alto trovi il tuo indirizzo con «Copia», «Apri» e «Scarica QR», da mettere su biglietti da visita, vetrina e social.",
+      "step4Tip": "In «Dati dell’attività» inserisci ragione sociale e partita IVA, se ce l’hai.",
+      "step5Title": "La pagina vista dai clienti",
+      "step5Text": "Chi apre il link vede la tua pagina sul telefono o sul computer e ti contatta con un tocco. Google la può trovare con il titolo e la descrizione che hai scelto."
     }
   },
   "deckTexts": {
@@ -8667,6 +8695,32 @@
         {
           "q": "Serve installare un’app?",
           "a": "No, MemoLife funziona dal browser del telefono o del computer, e puoi aggiungere KUMANI alla schermata Home."
+        }
+      ]
+    },
+    "landing_page": {
+      "title": "Creare un sito vetrina per la tua attività in pochi minuti · Landing Page",
+      "description": "Crea la landing page della tua attività: presentazione, servizi, contatti e WhatsApp, testi scritti con l’AI, colori a scelta e QR da condividere.",
+      "heading": "Come creare un sito vetrina senza saper programmare",
+      "intro": "Un professionista o un piccolo negozio ha bisogno di una pagina chiara da mostrare ai clienti: chi sei, cosa fai, come contattarti. Con Landing Page la crei dal telefono in pochi minuti, su un indirizzo tutto tuo (kumani.io/p/…), con i colori che scegli e i testi preparati dall’AI a partire dalle tue risposte.",
+      "points": [
+        "Testi di presentazione, servizi e metodo scritti con l’AI, sempre modificabili",
+        "Tre modelli e il colore principale che preferisci",
+        "Blocchi pronti: servizi, chi sono, testimonianze, galleria, orari e contatti",
+        "Pulsante WhatsApp, chiamata o email, QR e link da condividere"
+      ],
+      "faq": [
+        {
+          "q": "Serve saper programmare o avere un dominio?",
+          "a": "No. Compili i blocchi dal telefono o dal computer e la pagina è pubblicata su kumani.io/p/ seguito dall’indirizzo che scegli."
+        },
+        {
+          "q": "La pagina si trova su Google?",
+          "a": "Quando la pubblichi, la pagina ha titolo, descrizione e dati dell’attività per Google. I tempi per comparire nei risultati li decide Google."
+        },
+        {
+          "q": "Posso cambiare i testi dopo?",
+          "a": "Sì, puoi modificare testi, foto, colori e blocchi quando vuoi: le modifiche sono online appena salvi."
         }
       ]
     }

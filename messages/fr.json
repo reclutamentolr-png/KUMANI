@@ -6659,6 +6659,16 @@
         "p2d": "Règle 50/30/20 et feux tricolores avec les données de Spendly.",
         "p3": "Plan d’action",
         "p3d": "Jusqu’à 3 objectifs concrets à cocher."
+      },
+      "landing_page": {
+        "sub": "Votre site vitrine en quelques minutes",
+        "tagline": "Présentation, services et coordonnées sur un lien bien à vous, aux couleurs de votre choix.",
+        "p1": "Textes avec l’IA",
+        "p1d": "Répondez à quelques questions : le brouillon est prêt.",
+        "p2": "Votre style",
+        "p2d": "Trois modèles et la couleur de votre choix.",
+        "p3": "Visible sur Google",
+        "p3d": "Avec titre, description et QR à partager."
       }
     }
   },
@@ -7295,6 +7305,24 @@
       "step4Title": "La retenue à la source",
       "step4Text": "À partir des honoraires, vous calculez le net à payer et le total de la facture, avec cotisation de retraite et TVA, ou vous partez du net que vous voulez encaisser.",
       "step4Tip": "Le résultat se copie avec « Copier le résultat ». Le calcul est indicatif : vérifiez toujours avec votre comptable."
+    },
+    "landing_page": {
+      "title": "Landing Page",
+      "summary": "Votre site vitrine sur kumani.io : textes rédigés avec l’IA, couleurs au choix, coordonnées et QR à partager.",
+      "cta": "Ouvrir Landing Page",
+      "step1Title": "Rédigez les textes avec l’IA",
+      "step1Text": "Ouvrez « Rédiger les textes avec l’IA » et répondez aux questions : ce que vous faites, où, pour qui et quels services vous proposez. Touchez « Rédiger le brouillon » : l’IA prépare la présentation, les services, la partie à propos, la méthode et la description pour Google.",
+      "step1Tip": "L’IA utilise uniquement ce que vous écrivez : relisez toujours le brouillon avant de publier.",
+      "step2Title": "Adresse, style et couleurs",
+      "step2Text": "Dans « Adresse et langue », choisissez l’adresse de la page (kumani.io/p/…) et la langue dans laquelle vous écrivez. Dans « Style », choisissez entre Sombre élégant, Clair et Coloré, ainsi que la couleur principale.",
+      "step3Title": "Présentation et blocs",
+      "step3Text": "Dans « Présentation », indiquez le nom, le titre, la photo, le logo et le bouton principal (WhatsApp, appel, e-mail ou lien). Dans « Blocs de la page », affichez ceux dont vous avez besoin, remplissez-les et changez leur ordre avec les flèches.",
+      "step3Tip": "Dans les Témoignages, publiez uniquement des phrases authentiques de vrais clients, avec leur accord.",
+      "step4Title": "Publiez et partagez",
+      "step4Text": "Cochez « Publier la page » et touchez « Enregistrer ». En haut, vous trouvez votre adresse avec « Copier », « Ouvrir » et « Télécharger le QR », à mettre sur vos cartes de visite, votre vitrine et vos réseaux sociaux.",
+      "step4Tip": "Dans « Informations sur l’activité », indiquez votre raison sociale et votre numéro de TVA, si vous en avez un.",
+      "step5Title": "La page vue par les clients",
+      "step5Text": "Quiconque ouvre le lien voit votre page sur son téléphone ou son ordinateur et vous contacte en un geste. Google peut la trouver grâce au titre et à la description que vous avez choisis."
     }
   },
   "deckTexts": {
@@ -8667,6 +8695,32 @@
         {
           "q": "Faut-il installer une application ?",
           "a": "Non, MemoLife fonctionne dans le navigateur du téléphone ou de l’ordinateur, et vous pouvez ajouter KUMANI à l’écran d’accueil."
+        }
+      ]
+    },
+    "landing_page": {
+      "title": "Créer un site vitrine pour votre activité en quelques minutes · Landing Page",
+      "description": "Créez le site vitrine de votre activité : présentation, services, coordonnées et WhatsApp, textes rédigés avec l’IA, couleurs au choix et QR à partager.",
+      "heading": "Comment créer un site vitrine sans savoir coder",
+      "intro": "Un indépendant ou un petit commerce a besoin d’une page claire à montrer à ses clients : qui vous êtes, ce que vous faites, comment vous contacter. Avec Landing Page, vous la créez depuis votre téléphone en quelques minutes, sur une adresse bien à vous (kumani.io/p/…), aux couleurs de votre choix et avec des textes préparés par l’IA à partir de vos réponses.",
+      "points": [
+        "Textes de présentation, services et méthode rédigés avec l’IA, toujours modifiables",
+        "Trois modèles et la couleur principale que vous préférez",
+        "Blocs prêts à l’emploi : services, à propos, témoignages, galerie, horaires et coordonnées",
+        "Bouton WhatsApp, appel ou e-mail, QR et lien à partager"
+      ],
+      "faq": [
+        {
+          "q": "Faut-il savoir coder ou avoir un nom de domaine ?",
+          "a": "Non. Vous remplissez les blocs depuis votre téléphone ou votre ordinateur et la page est publiée sur kumani.io/p/ suivi de l’adresse que vous choisissez."
+        },
+        {
+          "q": "La page apparaît-elle sur Google ?",
+          "a": "Une fois publiée, la page dispose d’un titre, d’une description et des informations sur l’activité pour Google. C’est Google qui décide du délai d’apparition dans les résultats."
+        },
+        {
+          "q": "Puis-je modifier les textes ensuite ?",
+          "a": "Oui, vous pouvez modifier les textes, les photos, les couleurs et les blocs quand vous le souhaitez : les modifications sont en ligne dès que vous enregistrez."
         }
       ]
     }
