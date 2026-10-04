@@ -39,7 +39,7 @@ export default function InterestsOnboarding({ items }: { items: ServiceItem[] })
 
   return (
     <div className="fixed inset-0 z-[90] overflow-y-auto bg-[var(--ink)] text-white" role="dialog" aria-modal="true" aria-labelledby="interests-title">
-      <div className="mx-auto flex min-h-full max-w-lg flex-col gap-6 px-6 pb-8 pt-10">
+      <div className="mx-auto flex min-h-full max-w-lg flex-col gap-6 px-6 pb-[max(2rem,env(safe-area-inset-bottom))] pt-[calc(2.5rem+env(safe-area-inset-top))]">
         <div className="space-y-2.5">
           <p className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--gold-bright)]">{t('interestsEyebrow')}</p>
           <h2 id="interests-title" className="font-serif text-3xl font-bold leading-tight">

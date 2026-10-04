@@ -61,7 +61,10 @@ export default async function AppHeader({
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          <LanguageSwitcher dark compact />
+          {/* Sul telefono la lingua è nel menu ☰ */}
+          <span className="hidden sm:block">
+            <LanguageSwitcher dark compact />
+          </span>
           <DashboardHeaderActions user={session.user} profile={session.profile} isAdmin={session.isAdmin} />
         </div>
       </div>

@@ -9099,6 +9099,10 @@
     "stripFree": "Gratis",
     "stripActivate": "Activar",
     "stripInvite": "Tu invitación",
-    "stripWallet": "Ir al Wallet"
+    "stripWallet": "Ir al Wallet",
+    "menuTitle": "Menú",
+    "menuOpen": "Abrir el menú",
+    "menuClose": "Cerrar el menú",
+    "menuLanguage": "Idioma"
   }
 }
