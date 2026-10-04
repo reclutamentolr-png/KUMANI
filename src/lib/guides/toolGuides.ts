@@ -24,6 +24,7 @@ export const TOOL_GUIDES: { path: string; slug: GuideSlug }[] = [
   { path: '/marketplace/kumani-cv', slug: 'kumani-cv' },
   { path: '/marketplace/findo', slug: 'findo' },
   { path: '/marketplace/life-calendar', slug: 'life-calendar' },
+  { path: '/marketplace/garage', slug: 'garage' },
   { path: '/marketplace/memolife', slug: 'memolife' },
   { path: '/marketplace/spendly', slug: 'spendly' },
   { path: '/marketplace/fincheck', slug: 'fincheck' },

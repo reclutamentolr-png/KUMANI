@@ -26,6 +26,8 @@ export type AgendaEvent = {
   tripEdge?: 'start' | 'end'
   // KUMANI Events: l'utente è l'organizzatore (refId = id dell'evento)
   organizing?: boolean
+  // Kumani Garage: scadenza dell'auto (si gestisce nella pagina dell'auto)
+  garageVehicleId?: string
 }
 
 // Giorno di calendario a Roma di un istante ('2026-10-16').

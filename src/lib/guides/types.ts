@@ -30,6 +30,7 @@ export type GuideSlug =
   | 'kumani-cv'
   | 'findo'
   | 'life-calendar'
+  | 'garage'
   | 'memolife'
   | 'spendly'
   | 'fincheck'

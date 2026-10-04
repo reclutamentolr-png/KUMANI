@@ -133,7 +133,8 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     lifeCalendar: isToolEnabled('life-calendar'),
   }
   const agendaToday = todayKey()
-  const hasAgenda = agendaSources.memolife || agendaSources.spendly || agendaSources.lifeCalendar
+  // Anche solo Kumani Garage (es. con il Pass): le scadenze dell'auto
+  const hasAgenda = agendaSources.memolife || agendaSources.spendly || agendaSources.lifeCalendar || isToolEnabled('garage')
 
   // 4. Rete (serve il profilo), agenda, prova Pro e dati dell'Area
   //    Professionisti: anche queste insieme.

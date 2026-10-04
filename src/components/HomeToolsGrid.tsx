@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { freeFirst } from '@/lib/freeFirst'
 import {
+  CarFront,
   PanelsTopLeft,
   Gauge,
   Smartphone,
@@ -124,6 +125,7 @@ export default function HomeToolsGrid({ freeToolNames = [] }: { freeToolNames?: 
     { name: 'documento-sicuro', icon: FileLock2, title: tc('documentoSicuro'), desc: tc('documentoSicuroDescription'), category: 'security' },
     { name: 'memolife', icon: Brain, title: t('toolMemolifeTitle'), desc: t('toolMemolifeDescription'), category: 'personal' },
     { name: 'life-calendar', icon: CalendarClock, title: t('toolLifeCalendarTitle'), desc: t('toolLifeCalendarDescription'), category: 'personal' },
+    { name: 'garage', icon: CarFront, title: tc('garage'), desc: tc('garageDescription'), category: 'personal' },
     { name: 'findo', icon: PackageSearch, title: t('toolFindoTitle'), desc: t('toolFindoDescription'), category: 'personal' },
     { name: 'digital-receipt', icon: FileCheck2, title: t('toolDigitalReceiptTitle'), desc: t('toolDigitalReceiptDescription'), category: 'lavoro' },
     { name: 'spendly', icon: PiggyBank, title: tc('spendly'), desc: tc('spendlyDescription'), category: 'personal' },

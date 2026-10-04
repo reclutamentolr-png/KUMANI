@@ -125,6 +125,13 @@ export default function AgendaEventRow({
         >
           {event.done ? <Undo2 className="h-4 w-4" /> : <span className="flex items-center gap-1"><Check className="h-3.5 w-3.5" /> {t('markDone')}</span>}
         </button>
+      ) : event.kind === 'deadline' && event.garageVehicleId ? (
+        <Link
+          href={`/marketplace/garage/${event.garageVehicleId}`}
+          className="flex shrink-0 items-center gap-1 rounded-lg bg-rose-600 px-2.5 py-1.5 text-xs font-bold text-white hover:bg-rose-700"
+        >
+          {t('openGarage')}
+        </Link>
       ) : event.kind === 'deadline' ? (
         <button
           type="button"

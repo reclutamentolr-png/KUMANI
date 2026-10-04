@@ -183,6 +183,17 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       requiresSubscription: true,
     },
     {
+      toolName: 'garage',
+      href: '/marketplace/garage',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'CarFront',
+      title: t('garage'),
+      description: t('garageDescription'),
+      color: 'gold',
+      category: 'personal',
+      requiresSubscription: true,
+    },
+    {
       toolName: 'findo',
       href: '/marketplace/findo',
       gradient: 'bg-[var(--ink)]',

@@ -18,6 +18,7 @@ const GROUP_OF: Record<string, ServiceGroup> = {
   fincheck: 'money',
   memolife: 'money',
   'life-calendar': 'money',
+  garage: 'money',
   findo: 'money',
   travel: 'money',
   // Lavoro

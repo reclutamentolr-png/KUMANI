@@ -111,5 +111,76 @@ export async function GET(request: Request) {
     }
   }
 
-  return NextResponse.json({ expiry, events, fincheck })
+  // Kumani Garage: scadenze dell'auto a 30, 7 e 1 giorno e il giorno stesso;
+  // noleggio senza km aggiornati da più di 30 giorni (una volta al mese)
+  let garage = 0
+  const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Rome' }).format(new Date(now))
+  const dayKey = (offset: number) => new Date(new Date(`${today}T12:00:00Z`).getTime() + offset * DAY).toISOString().slice(0, 10)
+  const remindDays = [0, 1, 7, 30]
+  for (let i = 0; i < userIds.length; i += 200) {
+    const chunk = userIds.slice(i, i + 200)
+    const { data: due } = await db
+      .from('garage_deadlines')
+      .select('id, user_id, vehicle_id, kind, title, due_date, garage_vehicles(name)')
+      .in('user_id', chunk)
+      .in('due_date', remindDays.map(dayKey))
+    for (const row of due ?? []) {
+      const days = remindDays.find((d) => dayKey(d) === row.due_date) ?? 0
+      const vehicle = (Array.isArray(row.garage_vehicles) ? row.garage_vehicles[0] : row.garage_vehicles) as { name: string } | null
+      await notifyUser(
+        row.user_id as string,
+        'expiry',
+        (t, locale) => ({
+          title: t('garageDeadlineTitle', { car: vehicle?.name ?? '' }),
+          body: t(days === 0 ? 'garageDeadlineToday' : 'garageDeadlineBody', {
+            what: (row.title as string | null) || t(`garageKind_${row.kind}`),
+            days,
+            date: new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', timeZone: 'UTC' }).format(new Date(`${row.due_date}T12:00:00Z`)),
+          }),
+          url: localizedPath(locale, `/marketplace/garage/${row.vehicle_id}`),
+          tag: `garage-${row.id}`,
+        }),
+        { kind: 'garage_deadline', ref: `${row.id}:${row.due_date}:${days}` }
+      )
+      garage++
+    }
+
+    const { data: rentals } = await db
+      .from('garage_vehicles')
+      .select('id, user_id, name, rental_start, rental_months, created_at')
+      .in('user_id', chunk)
+      .eq('kind', 'rental')
+      .lte('rental_start', dayKey(-30))
+    if (!rentals?.length) continue
+    const { data: lastReadings } = await db
+      .from('garage_readings')
+      .select('vehicle_id, read_on')
+      .in('vehicle_id', rentals.map((r) => r.id as string))
+      .order('read_on', { ascending: false })
+    const lastRead = new Map<string, string>()
+    for (const r of lastReadings ?? []) if (!lastRead.has(r.vehicle_id as string)) lastRead.set(r.vehicle_id as string, r.read_on as string)
+    for (const rental of rentals) {
+      // Contratto ancora in corso e ultima rilevazione (o ritiro) oltre 30 giorni fa
+      const start = rental.rental_start as string
+      const endDate = new Date(`${start}T12:00:00Z`)
+      endDate.setUTCMonth(endDate.getUTCMonth() + (rental.rental_months as number))
+      if (endDate.toISOString().slice(0, 10) < today) continue
+      const last = lastRead.get(rental.id as string) ?? start
+      if (last > dayKey(-30)) continue
+      await notifyUser(
+        rental.user_id as string,
+        'expiry',
+        (t, locale) => ({
+          title: t('garageKmTitle', { car: rental.name as string }),
+          body: t('garageKmBody'),
+          url: localizedPath(locale, `/marketplace/garage/${rental.id}`),
+          tag: `garage-km-${rental.id}`,
+        }),
+        { kind: 'garage_km', ref: `${rental.id}:${today.slice(0, 7)}` }
+      )
+      garage++
+    }
+  }
+
+  return NextResponse.json({ expiry, events, fincheck, garage })
 }

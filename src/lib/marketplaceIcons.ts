@@ -1,4 +1,5 @@
 import {
+  CarFront,
   Smartphone,
   Link2,
   MessageCircle,
@@ -48,6 +49,7 @@ import {
 // tool's icon never silently falls back to the default in one place but
 // not another.
 export const marketplaceIconMap: Record<string, LucideIcon> = {
+  CarFront,
   Gauge,
   Smartphone,
   Link2,

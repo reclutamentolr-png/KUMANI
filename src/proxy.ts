@@ -26,6 +26,7 @@ const PAID_TOOLS = [
   'offermaker',
   'qr-code-pro',
   'life-calendar',
+  'garage',
   'findo',
   'digital-receipt',
   'aureya',

@@ -1,4 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
+import { getTranslations } from 'next-intl/server'
 import { addDays, dateKeyOf, daysBetween, sortAgenda, timeOf, todayKey, type AgendaEvent } from '@/lib/agenda'
 import { fixedExpenseDueDate, paymentKey, periodOf, type SpendlyFixedExpense, type SpendlyFixedPayment } from '@/lib/spendly'
 
@@ -145,6 +146,43 @@ export async function loadAgenda(supabase: SupabaseClient, userId: string, optio
       })()
     )
   }
+
+  // Kumani Garage: bollo, assicurazione, revisione… delle proprie auto (le
+  // RLS mostrano solo le proprie; nessuna riga per chi non usa Garage).
+  // Compaiono da 30 giorni prima, come un promemoria.
+  jobs.push(
+    (async () => {
+      const { data } = await supabase
+        .from('garage_deadlines')
+        .select('id, vehicle_id, kind, title, due_date, amount, recurrence, garage_vehicles(name)')
+        .eq('user_id', userId)
+        .gte('due_date', overdueSince)
+        .lte('due_date', addDays(to, 30))
+      if (!data?.length) return
+      const t = await getTranslations('garage')
+      for (const item of data) {
+        const date = item.due_date as string
+        const inRange = date >= from && date <= to
+        const overdue = date < from
+        const remindNow = options.useReminders && date > to && daysBetween(today, date) <= 30
+        if (!inRange && !overdue && !remindNow) continue
+        const vehicle = (Array.isArray(item.garage_vehicles) ? item.garage_vehicles[0] : item.garage_vehicles) as { name: string } | null
+        const label = (item.title as string | null) || t(`deadline_${item.kind}`)
+        events.push({
+          key: `garage:${item.id}`,
+          kind: 'deadline',
+          date,
+          time: null,
+          title: vehicle ? `${label} · ${vehicle.name}` : label,
+          amount: item.amount !== null ? Number(item.amount) : null,
+          done: false,
+          refId: item.id as string,
+          recurring: item.recurrence !== 'none',
+          garageVehicleId: item.vehicle_id as string,
+        })
+      }
+    })()
+  )
 
   // KUMANI Travel: partenza e rientro dei viaggi di cui si fa parte (anche
   // senza abbonamento: le RLS mostrano solo i viaggi dei membri).
