@@ -7,6 +7,22 @@ import { generateCatalogPdf } from '@/lib/catalogPdf'
 import { loadInterFontBase64 } from '@/lib/cvPdf'
 import type { Catalog } from '@/lib/catalog-server'
 
+// Immagine del sito come data URL per il PDF (null se non si carica: la
+// copertina resta solo testo)
+async function toDataUrl(path: string): Promise<string | null> {
+  try {
+    const blob = await (await fetch(path)).blob()
+    return await new Promise((resolve) => {
+      const reader = new FileReader()
+      reader.onload = () => resolve(typeof reader.result === 'string' ? reader.result : null)
+      reader.onerror = () => resolve(null)
+      reader.readAsDataURL(blob)
+    })
+  } catch {
+    return null
+  }
+}
+
 // Scarica il catalogo dei servizi in PDF, nella lingua della pagina
 export default function CatalogPdfButton({ catalog, variant = 'gold' }: { catalog: Catalog; variant?: 'gold' | 'light' }) {
   const t = useTranslations('catalog')
@@ -18,7 +34,7 @@ export default function CatalogPdfButton({ catalog, variant = 'gold' }: { catalo
     setBusy(true)
     setError(false)
     try {
-      const font = await loadInterFontBase64()
+      const [font, cover, logo] = await Promise.all([loadInterFontBase64(), toDataUrl('/catalog/cover.jpg'), toDataUrl('/deck/logo.png')])
       const date = new Date().toLocaleDateString(locale, { month: 'long', year: 'numeric' })
       const blob = generateCatalogPdf(
         catalog,
@@ -39,7 +55,8 @@ export default function CatalogPdfButton({ catalog, variant = 'gold' }: { catalo
           footer: t('pdfTitle'),
           site: 'kumani.io',
         },
-        font
+        font,
+        { cover, logo }
       )
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')

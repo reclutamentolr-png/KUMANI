@@ -28,7 +28,10 @@ const GOLD: [number, number, number] = [199, 154, 59]
 const MUTED: [number, number, number] = [105, 100, 92]
 const LINE: [number, number, number] = [228, 220, 200]
 
-export function generateCatalogPdf(catalog: Catalog, labels: CatalogPdfLabels, fontBase64: string): Blob {
+// Immagini della copertina come data URL (null = copertina solo testo)
+export type CatalogPdfImages = { cover: string | null; logo: string | null }
+
+export function generateCatalogPdf(catalog: Catalog, labels: CatalogPdfLabels, fontBase64: string, images: CatalogPdfImages = { cover: null, logo: null }): Blob {
   const doc = new jsPDF({ unit: 'pt', format: 'a4' })
   doc.addFileToVFS('Inter-Regular.ttf', fontBase64)
   doc.addFont('Inter-Regular.ttf', 'Inter', 'normal')
@@ -62,25 +65,33 @@ export function generateCatalogPdf(catalog: Catalog, labels: CatalogPdfLabels, f
     y = M
   }
 
-  // Copertina
+  // Copertina: mosaico di foto KUMANI in alto (sfuma nel nero), testi in
+  // basso su fondo scuro pieno, così restano sempre leggibili
   doc.setFillColor(...INK)
   doc.rect(0, 0, W, H, 'F')
-  doc.setDrawColor(...GOLD)
-  doc.setLineWidth(1)
-  doc.circle(W - 60, 90, 120, 'S')
-  y = H * 0.36
+  const photoH = images.cover ? W * (1000 / 1240) : 0
+  if (images.cover) doc.addImage(images.cover, 'JPEG', 0, 0, W, photoH)
+  y = Math.max(photoH + 6, H * 0.36)
+  if (images.logo) {
+    doc.addImage(images.logo, 'PNG', M, y - 6, 54, 54)
+    color(GOLD)
+    doc.setFontSize(13)
+    doc.text('K U M A N I', M + 66, y + 26)
+    y += 78
+  } else {
+    color(GOLD)
+    doc.setFontSize(14)
+    doc.text('K U M A N I', M, y)
+    y += 40
+  }
+  write(labels.title, 30, [255, 255, 255], { gap: 4 })
+  write(labels.subtitle, 14, GOLD, { gap: 12 })
+  write(labels.intro, 10.5, [225, 220, 210], { width: CW * 0.9, gap: 12 })
+  write(labels.plansLine, 10.5, [255, 255, 255], { gap: 4 })
+  write(labels.updated, 9, [170, 165, 155])
   color(GOLD)
-  doc.setFontSize(14)
-  doc.text('K U M A N I', M, y)
-  y += 46
-  write(labels.title, 34, [255, 255, 255], { gap: 6 })
-  write(labels.subtitle, 15, GOLD, { gap: 18 })
-  write(labels.intro, 11.5, [225, 220, 210], { width: CW * 0.85, gap: 22 })
-  write(labels.plansLine, 11, [255, 255, 255], { gap: 6 })
-  write(labels.updated, 9.5, [170, 165, 155])
-  color(GOLD)
-  doc.setFontSize(12)
-  doc.text(labels.site, M, H - 60)
+  doc.setFontSize(11)
+  doc.text(labels.site, W - M, H - 36, { align: 'right' })
 
   // Indice
   newPage()
