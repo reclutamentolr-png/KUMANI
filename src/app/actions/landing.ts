@@ -79,7 +79,7 @@ export async function saveLanding(input: LandingSaveInput): Promise<{ success: t
   }
 
   // Foto non più usate: si tolgono dal bucket (errori ignorati)
-  const used = new Set([content.hero.photo, content.hero.logo, content.about.photo, ...content.gallery.photos].filter(Boolean))
+  const used = new Set([content.hero.photo, content.hero.logo, content.about.photo, content.style.bgPhoto, ...content.gallery.photos].filter(Boolean))
   const service = getServiceClient()
   const { data: files } = await service.storage.from('landing-photos').list(g.userId, { limit: 100 })
   const unused = (files ?? []).map((f) => `${g.userId}/${f.name}`).filter((p) => !used.has(p))

@@ -25,6 +25,7 @@ import {
 } from 'lucide-react'
 import LandingView, { type LandingLabels } from '@/components/landing/LandingView'
 import LandingContactForm, { type LandingFormLabels } from '@/components/landing/LandingContactForm'
+import { landingSerif } from '@/components/landing/landingFonts'
 import { checkLandingSlug, generateLandingDraft, saveLanding, uploadLandingPhoto, type LandingAiAnswers } from '@/app/actions/landing'
 import { resizeImageFile } from '@/lib/resizeImage'
 import {
@@ -33,6 +34,10 @@ import {
   LANDING_LOCALE_NAMES,
   LANDING_LOCALES,
   LANDING_TEMPLATES,
+  LANDING_PRESETS,
+  LANDING_BG_KEYS,
+  LANDING_FONTS,
+  heroBackground,
   LIMITS,
   landingPhotoUrl,
   landingTheme,
@@ -518,6 +523,35 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
         </Card>
 
         <Card title={t('sectionStyle')}>
+          {/* Stili pronti per tipo di attività: modello, colore, sfondo e carattere in un tocco */}
+          <div>
+            <span className={label}>{t('presetsTitle')}</span>
+            <p className="mb-2 text-xs text-gray-500">{t('presetsHint')}</p>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+              {LANDING_PRESETS.map((p) => {
+                const active = template === p.template && accent === p.accent && c.style.bg === p.bg && c.style.font === p.font
+                return (
+                  <button
+                    key={p.key}
+                    type="button"
+                    onClick={() => {
+                      setTemplate(p.template)
+                      setAccent(p.accent)
+                      update((x) => ((x.style = { ...x.style, bg: p.bg, font: p.font }), x))
+                    }}
+                    className={`group relative h-20 overflow-hidden rounded-xl border-2 text-left ${active ? 'border-[var(--gold)] ring-2 ring-[var(--gold)]/30' : 'border-transparent'}`}
+                    style={{ backgroundImage: heroBackground({ bg: p.bg, bgPhoto: '', font: p.font }) ?? undefined, backgroundSize: 'cover', backgroundPosition: 'center' }}
+                    aria-pressed={active}
+                  >
+                    <span className="absolute inset-x-0 bottom-0 flex items-center gap-1.5 bg-black/55 px-2 py-1.5 text-xs font-semibold text-white">
+                      <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: p.accent }} />
+                      {t(`preset_${p.key}`)}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
           <div className="grid grid-cols-3 gap-2">
             {LANDING_TEMPLATES.map((tpl) => {
               const th = landingTheme(tpl, accent)
@@ -573,6 +607,52 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
                 />
                 {t('customColor')}
               </label>
+            </div>
+          </div>
+          {/* Sfondo della presentazione: nessuno, foto a tema, sfumatura o una tua foto */}
+          <div>
+            <span className={label}>{t('bgTitle')}</span>
+            <div className="grid grid-cols-4 gap-2 sm:grid-cols-6">
+              {['', ...LANDING_BG_KEYS].map((k) => (
+                <button
+                  key={k || 'none'}
+                  type="button"
+                  onClick={() => update((x) => ((x.style.bg = k), x))}
+                  title={k ? t(`bg_${k}`) : t('bgNone')}
+                  aria-label={k ? t(`bg_${k}`) : t('bgNone')}
+                  aria-pressed={c.style.bg === k}
+                  className={`flex aspect-square items-center justify-center rounded-lg border-2 text-[10px] font-semibold text-gray-600 ${c.style.bg === k ? 'border-[var(--gold)] ring-2 ring-[var(--gold)]/30' : 'border-gray-200'}`}
+                  style={k ? { backgroundImage: heroBackground({ bg: k, bgPhoto: '', font: 'modern' }) ?? undefined, backgroundSize: 'cover', backgroundPosition: 'center' } : { background: landingTheme(template, accent).heroBg }}
+                >
+                  {!k && <span className="rounded bg-white/80 px-1">{t('bgNone')}</span>}
+                </button>
+              ))}
+            </div>
+            <div className="mt-3">
+              <PhotoField
+                title=""
+                value={c.style.bgPhoto}
+                addLabel={c.style.bgPhoto ? undefined : t('bgCustom')}
+                onChange={(p) => update((x) => ((x.style = { ...x.style, bgPhoto: p, bg: p ? 'custom' : x.style.bg === 'custom' ? '' : x.style.bg }), x))}
+                onError={(m) => setMessage({ ok: false, text: err(m) })}
+              />
+            </div>
+          </div>
+          {/* Carattere dei titoli */}
+          <div>
+            <span className={label}>{t('fontTitle')}</span>
+            <div className="flex gap-2">
+              {LANDING_FONTS.map((f) => (
+                <button
+                  key={f}
+                  type="button"
+                  onClick={() => update((x) => ((x.style.font = f), x))}
+                  aria-pressed={c.style.font === f}
+                  className={`rounded-xl border-2 px-4 py-2 text-lg ${c.style.font === f ? 'border-[var(--gold)] bg-[var(--gold)]/10' : 'border-gray-200'} ${f === 'elegant' ? landingSerif.className : ''}`}
+                >
+                  {t(`font_${f}`)}
+                </button>
+              ))}
             </div>
           </div>
         </Card>

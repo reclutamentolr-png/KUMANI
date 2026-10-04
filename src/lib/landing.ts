@@ -20,6 +20,46 @@ export const isLandingTemplate = (v: unknown): v is LandingTemplate => typeof v 
 
 export const LANDING_ACCENTS = ['#c79a3b', '#2563eb', '#0f766e', '#16a34a', '#dc2626', '#db2777', '#7c3aed', '#ea580c']
 
+// Sfondi della presentazione: foto a tema (Pexels, vedi CREDITS.md) o
+// sfumature. 'custom' = una foto caricata dal titolare.
+export const LANDING_BACKGROUNDS: Record<string, { photo?: string; gradient?: string }> = {
+  restaurant: { photo: '/flyers/photos/menu.webp' },
+  cafe: { photo: '/flyers/photos/fidelity.webp' },
+  shop: { photo: '/flyers/photos/qr-code-pro.webp' },
+  artisan: { photo: '/flyers/photos/preventivi.webp' },
+  office: { photo: '/flyers/photos/firma-email.webp' },
+  beauty: { photo: '/landing/bg/beauty.webp' },
+  health: { photo: '/landing/bg/health.webp' },
+  fitness: { photo: '/landing/bg/fitness.webp' },
+  vineyard: { photo: '/landing/bg/vineyard.webp' },
+  travel: { photo: '/flyers/photos/group-travel.webp' },
+  garden: { photo: '/flyers/photos/community-help.webp' },
+  night: { gradient: 'linear-gradient(135deg, #0b1023 0%, #1e3a8a 100%)' },
+  sunset: { gradient: 'linear-gradient(135deg, #4c0519 0%, #c2410c 100%)' },
+  emerald: { gradient: 'linear-gradient(135deg, #022c22 0%, #0f766e 100%)' },
+  lavender: { gradient: 'linear-gradient(135deg, #1e1b4b 0%, #7c3aed 100%)' },
+  gold: { gradient: 'radial-gradient(circle at 80% 20%, rgba(199,154,59,0.45), transparent 55%), linear-gradient(135deg, #111 0%, #2a2214 100%)' },
+}
+export const LANDING_BG_KEYS = Object.keys(LANDING_BACKGROUNDS)
+export const LANDING_FONTS = ['modern', 'elegant'] as const
+export type LandingFont = (typeof LANDING_FONTS)[number]
+
+// Stili pronti per tipo di attività: modello, colore, sfondo e carattere
+export const LANDING_PRESETS: { key: string; template: LandingTemplate; accent: string; bg: string; font: LandingFont }[] = [
+  { key: 'restaurant', template: 'scuro', accent: '#c79a3b', bg: 'restaurant', font: 'elegant' },
+  { key: 'cafe', template: 'chiaro', accent: '#b45309', bg: 'cafe', font: 'elegant' },
+  { key: 'shop', template: 'chiaro', accent: '#db2777', bg: 'shop', font: 'modern' },
+  { key: 'artisan', template: 'scuro', accent: '#ea580c', bg: 'artisan', font: 'modern' },
+  { key: 'office', template: 'chiaro', accent: '#2563eb', bg: 'office', font: 'modern' },
+  { key: 'beauty', template: 'chiaro', accent: '#be185d', bg: 'beauty', font: 'elegant' },
+  { key: 'health', template: 'chiaro', accent: '#0f766e', bg: 'health', font: 'modern' },
+  { key: 'fitness', template: 'scuro', accent: '#16a34a', bg: 'fitness', font: 'modern' },
+  { key: 'vineyard', template: 'scuro', accent: '#9f1239', bg: 'vineyard', font: 'elegant' },
+  { key: 'travel', template: 'chiaro', accent: '#0284c7', bg: 'travel', font: 'modern' },
+  { key: 'garden', template: 'chiaro', accent: '#16a34a', bg: 'garden', font: 'modern' },
+  { key: 'creative', template: 'scuro', accent: '#a855f7', bg: 'lavender', font: 'modern' },
+]
+
 export const SECTION_KEYS = ['services', 'about', 'method', 'testimonials', 'gallery', 'hours', 'contacts'] as const
 export type SectionKey = (typeof SECTION_KEYS)[number]
 
@@ -47,6 +87,8 @@ export type LandingContent = {
   links: { menu: boolean }
   footer: { businessName: string; vat: string }
   seo: { description: string }
+  // Sfondo della presentazione ('' = quello del modello) e carattere dei titoli
+  style: { bg: string; bgPhoto: string; font: LandingFont }
 }
 
 export const LIMITS = {
@@ -72,6 +114,7 @@ export function emptyLandingContent(name = ''): LandingContent {
     links: { menu: false },
     footer: { businessName: '', vat: '' },
     seo: { description: '' },
+    style: { bg: '', bgPhoto: '', font: 'modern' },
   }
 }
 
@@ -194,7 +237,23 @@ export function cleanLandingContent(raw: unknown, ownerId?: string): LandingCont
     links: { menu: bool(s('links').menu, false) },
     footer: { businessName: str(s('footer').businessName, 120), vat: str(s('footer').vat, 30) },
     seo: { description: str(s('seo').description, 170) },
+    style: {
+      bg: ((k) => (k === 'custom' || LANDING_BG_KEYS.includes(k) ? k : ''))(str(s('style').bg, 20)),
+      bgPhoto: cleanPhoto(s('style').bgPhoto, ownerId),
+      font: (LANDING_FONTS as readonly string[]).includes(s('style').font as string) ? (s('style').font as LandingFont) : 'modern',
+    },
   }
+}
+
+// Sfondo della presentazione come stile CSS (foto scurita perché il testo
+// resti leggibile, oppure sfumatura). null = sfondo del modello.
+export function heroBackground(style: LandingContent['style']): string | null {
+  if (style.bg === 'custom') {
+    return style.bgPhoto ? `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.72)), url("${landingPhotoUrl(style.bgPhoto)}")` : null
+  }
+  const bg = LANDING_BACKGROUNDS[style.bg]
+  if (!bg) return null
+  return bg.photo ? `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.72)), url("${bg.photo}")` : bg.gradient ?? null
 }
 
 // ---------------------------------------------------------------------------

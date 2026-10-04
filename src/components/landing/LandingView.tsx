@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react'
 import { Clock, Mail, MapPin, MessageCircle, Phone, Star, UtensilsCrossed } from 'lucide-react'
-import { ctaHref, landingPhotoUrl, landingTheme, type LandingContent, type LandingTemplate, type SectionKey } from '@/lib/landing'
+import { ctaHref, heroBackground, landingPhotoUrl, landingTheme, type LandingContent, type LandingTemplate, type SectionKey } from '@/lib/landing'
+import { landingSerif } from '@/components/landing/landingFonts'
 
 // Aspetto della Landing Page: lo stesso componente disegna la pagina
 // pubblica e l'anteprima nell'editor (niente stato, niente hook).
@@ -51,7 +52,11 @@ const SOCIAL_LABELS: Record<keyof LandingContent['social'], string> = {
 }
 
 export default function LandingView({ content: c, template, accent, labels, lang, menuUrl, createHref, reportSlot, contactFormSlot, preview }: Props) {
-  const th = landingTheme(template, accent)
+  const base = landingTheme(template, accent)
+  // Sfondo a tema (foto o sfumatura): la presentazione diventa scura con testo chiaro
+  const heroBg = heroBackground(c.style)
+  const th = heroBg ? { ...base, heroText: '#ffffff', heroMuted: 'rgba(255,255,255,0.85)' } : base
+  const serif = c.style.font === 'elegant'
   const vars = {
     '--lp-bg': th.bg,
     '--lp-surface': th.surface,
@@ -227,10 +232,17 @@ export default function LandingView({ content: c, template, accent, labels, lang
   }
 
   return (
-    <div lang={lang} style={{ ...vars, background: 'var(--lp-bg)', color: 'var(--lp-text)' }} className="@container min-h-full">
+    <div
+      lang={lang}
+      style={{ ...vars, background: 'var(--lp-bg)', color: 'var(--lp-text)' }}
+      className={`@container min-h-full ${landingSerif.variable}`}
+      data-lp-serif={serif ? '' : undefined}
+    >
       {/* Presentazione */}
-      <header style={{ background: th.heroBg, color: th.heroText }}>
-        <div className="mx-auto max-w-5xl px-5 pb-12 pt-8 @xl:px-8">
+      <header
+        style={heroBg ? { backgroundImage: heroBg, backgroundSize: 'cover', backgroundPosition: 'center', color: th.heroText } : { background: th.heroBg, color: th.heroText }}
+      >
+        <div className={`mx-auto max-w-5xl px-5 pt-8 @xl:px-8 ${heroBg ? 'pb-20 @2xl:pb-28' : 'pb-12'}`}>
           <div className="mb-10 flex items-center gap-3">
             {c.hero.logo && (
               // eslint-disable-next-line @next/next/no-img-element
@@ -241,7 +253,7 @@ export default function LandingView({ content: c, template, accent, labels, lang
           <div className={`grid items-center gap-8 ${c.hero.photo ? 'md:grid-cols-[1.2fr_1fr]' : ''}`}>
             <div>
               {c.hero.title && <h1 className="text-4xl font-bold leading-tight @xl:text-5xl">{c.hero.title}</h1>}
-              {c.hero.subtitle && <p className="mt-4 text-xl font-medium" style={{ color: template === 'colore' ? th.heroText : 'var(--lp-accent)' }}>{c.hero.subtitle}</p>}
+              {c.hero.subtitle && <p className="mt-4 text-xl font-medium" style={{ color: template === 'colore' && !heroBg ? th.heroText : heroBg ? '#ffffff' : 'var(--lp-accent)', opacity: heroBg ? 0.95 : 1 }}>{c.hero.subtitle}</p>}
               {c.hero.text && <p className="mt-4 whitespace-pre-line text-lg leading-relaxed" style={{ color: th.heroMuted }}>{c.hero.text}</p>}
               <div className="mt-7 flex flex-wrap gap-3">
                 {cta && c.hero.ctaLabel && (
@@ -249,7 +261,7 @@ export default function LandingView({ content: c, template, accent, labels, lang
                     href={preview ? undefined : cta}
                     {...(c.hero.ctaKind === 'link' || c.hero.ctaKind === 'whatsapp' ? linkProps : {})}
                     className="inline-flex items-center justify-center rounded-xl px-6 py-3.5 font-bold shadow-lg transition hover:brightness-110"
-                    style={template === 'colore' ? { background: th.onAccent, color: th.accent } : { background: 'var(--lp-accent)', color: 'var(--lp-on-accent)' }}
+                    style={template === 'colore' && !heroBg ? { background: th.onAccent, color: th.accent } : { background: 'var(--lp-accent)', color: 'var(--lp-on-accent)' }}
                   >
                     {c.hero.ctaLabel}
                   </a>
@@ -259,7 +271,7 @@ export default function LandingView({ content: c, template, accent, labels, lang
                     href={preview ? undefined : menuUrl}
                     {...linkProps}
                     className="inline-flex items-center gap-2 rounded-xl border px-5 py-3.5 font-semibold"
-                    style={{ borderColor: template === 'colore' ? th.heroText : 'var(--lp-accent)', color: template === 'colore' ? th.heroText : 'var(--lp-accent)' }}
+                    style={{ borderColor: template === 'colore' || heroBg ? th.heroText : 'var(--lp-accent)', color: template === 'colore' || heroBg ? th.heroText : 'var(--lp-accent)' }}
                   >
                     <UtensilsCrossed className="h-5 w-5" /> {labels.seeMenu}
                   </a>

@@ -135,3 +135,9 @@ body {
   .home-logo-video { display: none; }
   .home-logo-still { display: block; }
 }
+
+/* Landing Page: carattere "Elegante" dei titoli */
+[data-lp-serif] :is(h1, h2, h3) {
+  font-family: var(--lp-serif), Georgia, 'Times New Roman', serif;
+  letter-spacing: -0.01em;
+}
