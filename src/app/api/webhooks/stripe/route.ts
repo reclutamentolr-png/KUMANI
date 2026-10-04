@@ -5,7 +5,7 @@ import { getStripe } from '@/lib/stripe'
 import { isPlatformFeeType, markPlatformFeesPaid } from '@/lib/eventFees'
 import { recordAgentCommission, reverseAgentCommission } from '@/lib/agentCommissions'
 import { sendPassConfirmation, sendPurchaseConfirmation } from '@/lib/purchaseEmail'
-import { awardActivationPoints, reverseActivationPoints } from '@/lib/networkPoints'
+import { awardActivationPoints, awardPassPoints, reverseActivationPoints } from '@/lib/networkPoints'
 import { accrueSubscriptionDonation, reverseSubscriptionDonation } from '@/lib/donations'
 import { grantToolPassFromSession, revokeToolPassForCharge, TOOL_PASS_TYPE } from '@/lib/toolPasses'
 
@@ -75,6 +75,8 @@ export async function POST(req: NextRequest) {
     try {
       const session = event.data.object as Stripe.Checkout.Session
       const expiresAt = await grantToolPassFromSession(session)
+      // KU Points a chi ha invitato l'acquirente (se decisi per quel servizio)
+      if (expiresAt) await awardPassPoints(session)
       // Conferma su supporto durevole (un'email per pagamento)
       if (expiresAt) {
         await sendPassConfirmation(session, expiresAt).catch((err) =>

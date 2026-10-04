@@ -69,6 +69,7 @@ export type MarketplaceToolRow = {
   // Pass del singolo servizio (20261210100000_tool_passes.sql)
   pass_enabled?: boolean | null
   pass_price_cents?: number | null
+  pass_ku_points?: number | null
 }
 
 export type MarketplaceToolUsage = MarketplaceToolRow & { usage_count: number }

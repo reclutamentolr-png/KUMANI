@@ -2661,7 +2661,7 @@
     "pointsDisclaimer": "Earned every day by logging in to KUMANI and by using the Ecosystem tools, which give one point a day to those who use them. They can also be used for other purposes within the platform. Not convertible to euros, not transferable.",
     "pointsCta": "Go to Listings",
     "networkPointsTitle": "KU Points",
-    "networkPointsDisclaimer": "You receive them when someone you invited activates a subscription paying by card (Base or Pro) or upgrades to Pro, and through the Welcome Bonus. They are used for voucher packs and for the listing showcase.",
+    "networkPointsDisclaimer": "You receive them when someone you invited activates a subscription paying by card (Base or Pro), upgrades to Pro or buys a single service (Pass), and through the Welcome Bonus. They are used for voucher packs and for the listing showcase.",
     "networkPointsCta": "Go to Reward Catalog",
     "badgeTitle": "Badges",
     "badgeEncourageFirst": "Share the KUMANI platform and it will be easier to reach your first qualification.",
@@ -5895,7 +5895,8 @@
     "cycleNote": "Each pack can be redeemed once per cycle: once you have redeemed them all, the cycle starts again.",
     "cycleProgress": "Packs redeemed in this cycle: {done} of {total}. Once you redeem them all, the cycle starts again.",
     "shareGiftMessage": "Here's a KUMANI voucher as a gift: use the code {code} to activate your one-year {plan} subscription for free!",
-    "shareSaleMessage": "Here is your KUMANI voucher: use the code {code} to activate your one-year {plan} subscription."
+    "shareSaleMessage": "Here is your KUMANI voucher: use the code {code} to activate your one-year {plan} subscription.",
+    "rulePass": "Someone you invited buys a single service (Pass): the KU Points set for that service"
   },
   "voucherReceipt": {
     "back": "Back to Wallet",
@@ -7891,7 +7892,9 @@
     "fincheckTitle": "Time for your FinCheck",
     "fincheckBody": "It's been 3 months since your last quiz: retake it and see your progress.",
     "landingMessageTitle": "New message from your Landing Page",
-    "landingMessageBody": "{name} wrote to you: tap to read."
+    "landingMessageBody": "{name} wrote to you: tap to read.",
+    "passTitle": "New KU Points from your network",
+    "passBody": "{name} bought {service}: you received {points} KU Points."
   },
   "pushInvite": {
     "title": "Turn on notifications",

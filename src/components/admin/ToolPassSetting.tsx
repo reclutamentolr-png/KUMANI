@@ -11,27 +11,35 @@ export default function ToolPassSetting({
   toolName,
   enabled,
   priceCents,
+  kuPoints,
   onSaved,
 }: {
   toolName: string
   enabled: boolean
   priceCents: number
+  kuPoints: number
   onSaved: () => void
 }) {
   const [on, setOn] = useState(enabled)
   const [price, setPrice] = useState(String((priceCents || 1000) / 100))
+  const [points, setPoints] = useState(String(kuPoints || 0))
   const [busy, setBusy] = useState(false)
-  const dirty = on !== enabled || Number(price.replace(',', '.')) * 100 !== priceCents
+  const dirty = on !== enabled || Number(price.replace(',', '.')) * 100 !== priceCents || Number(points) !== kuPoints
 
   const save = async () => {
     setBusy(true)
-    const result = await adminUpdateToolPass(toolName, on, Number(price.replace(',', '.')))
+    const result = await adminUpdateToolPass(toolName, on, Number(price.replace(',', '.')), Number(points) || 0)
     setBusy(false)
     if (!result.success) {
       notify('Errore: ' + (result.error ?? ''))
       return
     }
-    notify(on ? `Pass attivo: il servizio si può acquistare da solo a ${price} € per un anno.` : 'Pass disattivato per questo servizio.', 'success')
+    notify(
+      on
+        ? `Pass attivo: il servizio si può acquistare da solo a ${price} € per un anno${Number(points) > 0 ? `; chi ha invitato l'acquirente riceve ${points} KU Points` : ''}.`
+        : 'Pass disattivato per questo servizio.',
+      'success'
+    )
     onSaved()
   }
 
@@ -51,6 +59,16 @@ export default function ToolPassSetting({
             className="w-20 rounded-md border border-gray-300 px-2 py-1 text-right text-sm disabled:bg-gray-100"
           />
           €
+        </label>
+        <label className="flex items-center gap-1 text-sm" title="KU Points a chi ha invitato l'acquirente, al primo acquisto del Pass (0 = nessuno)">
+          <input
+            value={points}
+            onChange={(e) => setPoints(e.target.value.replace(/[^\d]/g, ''))}
+            inputMode="numeric"
+            disabled={!on}
+            className="w-16 rounded-md border border-gray-300 px-2 py-1 text-right text-sm disabled:bg-gray-100"
+          />
+          KU Points
         </label>
         <button
           type="button"

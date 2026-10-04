@@ -1531,6 +1531,7 @@ L'accesso viene registrato.`)) return
                       toolName={tool.tool_name}
                       enabled={!!tool.pass_enabled}
                       priceCents={tool.pass_price_cents ?? 1000}
+                      kuPoints={tool.pass_ku_points ?? 0}
                       onSaved={loadMarketplaceData}
                     />
                   )}
@@ -2656,6 +2657,7 @@ L'accesso viene registrato.`)) return
             <Row label="Attivazioni Base" value={`${f.pointsAwarded.activation_base} punti`} />
             <Row label="Attivazioni Pro" value={`${f.pointsAwarded.activation_pro} punti`} />
             <Row label="Passaggi a Pro" value={`${f.pointsAwarded.upgrade_pro} punti`} />
+            <Row label="Pass dei singoli servizi" value={`${f.pointsAwarded.tool_pass} punti`} />
             <Row label="Bonus Accoglienza (spillover)" value={`${f.pointsAwarded.matrix} punti`} />
             <Row label="Tolti per rimborsi" value={`${f.pointsAwarded.reversed} punti`} />
             <Row

@@ -834,7 +834,7 @@ export async function getAdminFinancialSummary() {
 
   // 8. Punti assegnati (registro)
   const { data: awards } = await db.from('network_point_awards').select('kind, points, reversed_at')
-  const pointsAwarded = { activation_base: 0, activation_pro: 0, upgrade_pro: 0, matrix: 0, reversed: 0 }
+  const pointsAwarded = { activation_base: 0, activation_pro: 0, upgrade_pro: 0, matrix: 0, tool_pass: 0, reversed: 0 }
   for (const a of awards ?? []) {
     if (a.reversed_at) pointsAwarded.reversed += a.points
     else pointsAwarded[a.kind as keyof typeof pointsAwarded] += a.points
@@ -2969,14 +2969,17 @@ export async function adminSaveKuActivityPoints(rows: { key: string; points: num
 // ============================================================
 
 // Vendibile da solo (sì/no) e prezzo del pass, per servizio
-export async function adminUpdateToolPass(toolName: string, enabled: boolean, priceEur: number) {
+export async function adminUpdateToolPass(toolName: string, enabled: boolean, priceEur: number, kuPoints = 0) {
   const admin = await verifyAdmin('marketplace.write')
   if (!admin) return { success: false, error: 'Non autorizzato' }
   const cents = Math.round(Number(priceEur) * 100)
   if (!Number.isFinite(cents) || cents < 100 || cents > 100000) return { success: false, error: 'Prezzo non valido: da 1 € a 1.000 €.' }
+  // KU Points a chi ha invitato l'acquirente (0 = nessuno)
+  const points = Math.round(Number(kuPoints))
+  if (!Number.isFinite(points) || points < 0 || points > 10000) return { success: false, error: 'KU Points non validi: da 0 a 10.000.' }
   const { error } = await getServiceClient()
     .from('marketplace_settings')
-    .update({ pass_enabled: enabled, pass_price_cents: cents, updated_at: new Date().toISOString() })
+    .update({ pass_enabled: enabled, pass_price_cents: cents, pass_ku_points: points, updated_at: new Date().toISOString() })
     .eq('tool_name', toolName)
   if (error) return { success: false, error: error.message }
   return { success: true }

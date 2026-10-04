@@ -199,6 +199,7 @@ export default function WalletVoucherSection({
             <li>{t('rulePro', { points: pointsRules.pro })}</li>
             <li>{t('ruleUpgrade', { points: pointsRules.upgrade })}</li>
             <li>{t('ruleSpillover', { points: pointsRules.spillover })}</li>
+            <li>{t('rulePass')}</li>
           </ul>
         </div>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">

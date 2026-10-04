@@ -2661,7 +2661,7 @@
     "pointsDisclaimer": "Man sammelt sie jeden Tag durch die Anmeldung bei KUMANI und durch die Nutzung der Tools des Ökosystems, die pro Tag einen Punkt vergeben. Sie können auch für andere Zwecke innerhalb der Plattform verwendet werden. Nicht in Euro umwandelbar, nicht übertragbar.",
     "pointsCta": "Zur Anzeigen-Pinnwand",
     "networkPointsTitle": "KU Points",
-    "networkPointsDisclaimer": "Du erhältst sie, wenn eine von dir eingeladene Person ein Abo per Karte bezahlt (Basis oder Pro) oder zu Pro wechselt, sowie über den Willkommensbonus. Sie dienen für Voucher-Pakete und für hervorgehobene Anzeigen.",
+    "networkPointsDisclaimer": "Du erhältst sie, wenn eine von dir eingeladene Person ein Abo per Karte bezahlt (Basis oder Pro), zu Pro wechselt oder einen einzelnen Service (Pass) kauft, sowie über den Willkommensbonus. Sie dienen für Voucher-Pakete und für hervorgehobene Anzeigen.",
     "networkPointsCta": "Zum Prämienkatalog",
     "badgeTitle": "Abzeichen",
     "badgeEncourageFirst": "Teile die KUMANI-Plattform und du erreichst deine erste Qualifikation leichter.",
@@ -5895,7 +5895,8 @@
     "cycleNote": "Jedes Paket kann einmal pro Zyklus eingelöst werden: Wenn du alle eingelöst hast, beginnt der Zyklus von vorn.",
     "cycleProgress": "In diesem Zyklus eingelöste Pakete: {done} von {total}. Wenn du alle eingelöst hast, beginnt der Zyklus von vorn.",
     "shareGiftMessage": "Ich schenke dir einen KUMANI-Voucher: Mit dem Code {code} aktivierst du kostenlos dein {plan}-Abo für ein Jahr!",
-    "shareSaleMessage": "Hier ist dein KUMANI-Voucher: Mit dem Code {code} aktivierst du dein {plan}-Abo für ein Jahr."
+    "shareSaleMessage": "Hier ist dein KUMANI-Voucher: Mit dem Code {code} aktivierst du dein {plan}-Abo für ein Jahr.",
+    "rulePass": "Eine von dir eingeladene Person kauft einen einzelnen Service (Pass): die für diesen Service festgelegten KU Points"
   },
   "voucherReceipt": {
     "back": "Zurück zur Brieftasche",
@@ -7891,7 +7892,9 @@
     "fincheckTitle": "Zeit für deinen FinCheck",
     "fincheckBody": "Seit deinem letzten Test sind 3 Monate vergangen: Mach ihn erneut und sieh dir deine Fortschritte an.",
     "landingMessageTitle": "Neue Nachricht von deiner Landing Page",
-    "landingMessageBody": "{name} hat dir geschrieben: Tippe zum Lesen."
+    "landingMessageBody": "{name} hat dir geschrieben: Tippe zum Lesen.",
+    "passTitle": "Neue KU Points aus deinem Netzwerk",
+    "passBody": "{name} hat {service} gekauft: Du hast {points} KU Points erhalten."
   },
   "pushInvite": {
     "title": "Benachrichtigungen aktivieren",

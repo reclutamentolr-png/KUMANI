@@ -2661,7 +2661,7 @@
     "pointsDisclaimer": "Ils se gagnent chaque jour en se connectant à KUMANI et en utilisant les outils de l’Écosystème, qui offrent un point par jour à ceux qui les utilisent. Ils pourront aussi servir à d’autres usages sur la plateforme. Non convertibles en euros, non transférables.",
     "pointsCta": "Aller au tableau d'affichage",
     "networkPointsTitle": "KU Points",
-    "networkPointsDisclaimer": "Vous les recevez quand une personne que vous avez invitée active un abonnement en payant par carte (Base ou Pro) ou passe à Pro, ainsi qu'avec le Bonus Accueil. Ils servent aux packs de vouchers et à la mise en vitrine des annonces.",
+    "networkPointsDisclaimer": "Vous les recevez quand une personne que vous avez invitée active un abonnement en payant par carte (Base ou Pro), passe à Pro ou achète un service à l'unité (Pass), ainsi qu'avec le Bonus Accueil. Ils servent aux packs de vouchers et à la mise en vitrine des annonces.",
     "networkPointsCta": "Aller au Catalogue de Récompenses",
     "badgeTitle": "Badges",
     "badgeEncourageFirst": "Partagez la plateforme KUMANI et il sera plus facile d'obtenir votre première qualification.",
@@ -5895,7 +5895,8 @@
     "cycleNote": "Chaque pack peut être échangé une fois par cycle : quand vous les avez tous échangés, le cycle recommence.",
     "cycleProgress": "Packs échangés dans ce cycle : {done} sur {total}. Quand vous les aurez tous échangés, le cycle recommencera.",
     "shareGiftMessage": "Je vous offre un voucher KUMANI : utilisez le code {code} pour activer gratuitement votre abonnement {plan} d'un an !",
-    "shareSaleMessage": "Voici votre voucher KUMANI : utilisez le code {code} pour activer votre abonnement {plan} d'un an."
+    "shareSaleMessage": "Voici votre voucher KUMANI : utilisez le code {code} pour activer votre abonnement {plan} d'un an.",
+    "rulePass": "Une personne que vous avez invitée achète un service à l'unité (Pass) : les KU Points prévus pour ce service"
   },
   "voucherReceipt": {
     "back": "Retour au Portefeuille",
@@ -7891,7 +7892,9 @@
     "fincheckTitle": "C'est l'heure de votre FinCheck",
     "fincheckBody": "3 mois se sont écoulés depuis votre dernier test : refaites-le et découvrez vos progrès.",
     "landingMessageTitle": "Nouveau message de votre Landing Page",
-    "landingMessageBody": "{name} vous a écrit : touchez pour lire."
+    "landingMessageBody": "{name} vous a écrit : touchez pour lire.",
+    "passTitle": "Nouveaux KU Points de votre réseau",
+    "passBody": "{name} a acheté {service} : vous avez reçu {points} KU Points."
   },
   "pushInvite": {
     "title": "Activez les notifications",

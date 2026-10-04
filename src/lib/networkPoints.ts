@@ -2,6 +2,9 @@ import type Stripe from 'stripe'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { userIdOf } from '@/lib/agentCommissions'
 import { localizedPath, notifyUser } from '@/lib/push'
+import { getTranslations } from 'next-intl/server'
+import { getMarketplaceTools } from '@/lib/marketplaceTools'
+import { locales } from '../../i18n'
 
 // Punti Rete per le attivazioni pagate con carta (webhook invoice.paid):
 // allo sponsor diretto del cliente, una volta per fattura, con i valori
@@ -60,7 +63,43 @@ export async function reverseActivationPoints(charge: Stripe.Charge): Promise<vo
   // Campo della versione API usata (2024-06-20), non più nei tipi
   const raw = (charge as Stripe.Charge & { invoice?: string | { id: string } | null }).invoice
   const invoiceId = typeof raw === 'string' ? raw : raw?.id
-  if (!invoiceId || !charge.amount_refunded) return
+  if (!charge.amount_refunded) return
+  // Pass di un servizio: punti registrati con il riferimento del pagamento
+  const pi = typeof charge.payment_intent === 'string' ? charge.payment_intent : charge.payment_intent?.id
+  if (pi) {
+    const { error: passError } = await db().rpc('reverse_activation_points', { p_invoice_id: `pass:${pi}` })
+    if (passError) throw new Error(`KU Points del pass non tolti: ${passError.message}`)
+  }
+  if (!invoiceId) return
   const { error } = await db().rpc('reverse_activation_points', { p_invoice_id: invoiceId })
   if (error) throw new Error(`Punti Rete non tolti: ${error.message}`)
+}
+
+// KU Points per il Pass di un singolo servizio (punti decisi dall'Admin per
+// quel servizio): allo sponsor diretto, solo al primo Pass di quel servizio.
+export async function awardPassPoints(session: Stripe.Checkout.Session): Promise<void> {
+  const meta = session.metadata ?? {}
+  const pi = typeof session.payment_intent === 'string' ? session.payment_intent : session.payment_intent?.id
+  if (!meta.userId || !meta.tool || !pi || (session.amount_total ?? 0) <= 0) return
+  const { data, error } = await db().rpc('award_pass_points', { p_ref: `pass:${pi}`, p_customer: meta.userId, p_tool: meta.tool })
+  if (error) throw new Error(`KU Points del pass non assegnati: ${error.message}`)
+
+  const row = (Array.isArray(data) ? data[0] : data) as { awarded?: boolean; sponsor_id?: string | null; points?: number } | null
+  if (row?.awarded && row.sponsor_id) {
+    const { data: person } = await db().from('profiles').select('first_name').eq('id', meta.userId).maybeSingle()
+    const name = person?.first_name || 'Kumano'
+    const points = row.points ?? 0
+    // Nome del servizio in ogni lingua (la notifica parte nella lingua del dispositivo)
+    const names = new Map<string, string>()
+    for (const locale of locales) {
+      const tm = await getTranslations({ locale, namespace: 'marketplace' })
+      names.set(locale, getMarketplaceTools((key) => tm(key)).find((tool) => tool.toolName === meta.tool)?.title ?? meta.tool)
+    }
+    await notifyUser(row.sponsor_id, 'network', (t, locale) => ({
+      title: t('passTitle'),
+      body: t('passBody', { name, service: names.get(locale) ?? meta.tool, points }),
+      url: localizedPath(locale, '/dashboard/rete'),
+      tag: `pass-${pi}`,
+    }))
+  }
 }

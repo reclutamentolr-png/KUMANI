@@ -2661,7 +2661,7 @@
     "pointsDisclaimer": "Se ganan cada día al acceder a KUMANI y al usar las herramientas del Ecosistema, que dan un punto al día a quien las usa. También se podrán usar para otros fines dentro de la plataforma. No convertibles en euros, no transferibles.",
     "pointsCta": "Ir a los anuncios",
     "networkPointsTitle": "KU Points",
-    "networkPointsDisclaimer": "Los recibes cuando una persona que has invitado activa la suscripción pagando con tarjeta (Base o Pro) o pasa a Pro, y con el Bonus Acogida. Se usan para los paquetes de vouchers y para destacar anuncios.",
+    "networkPointsDisclaimer": "Los recibes cuando una persona que has invitado activa la suscripción pagando con tarjeta (Base o Pro), pasa a Pro o compra un servicio suelto (Pase), y con el Bonus Acogida. Se usan para los paquetes de vouchers y para destacar anuncios.",
     "networkPointsCta": "Ir al Catálogo de Premios",
     "badgeTitle": "Insignias",
     "badgeEncourageFirst": "Comparte la plataforma KUMANI y te será más fácil conseguir tu primera calificación.",
@@ -5895,7 +5895,8 @@
     "cycleNote": "Cada paquete se canjea una vez por ciclo: cuando los hayas canjeado todos, el ciclo vuelve a empezar.",
     "cycleProgress": "Paquetes canjeados en este ciclo: {done} de {total}. Cuando los canjees todos, el ciclo vuelve a empezar.",
     "shareGiftMessage": "¡Te regalo un voucher KUMANI: usa el código {code} para activar gratis tu suscripción {plan} de un año!",
-    "shareSaleMessage": "Aquí tienes tu voucher KUMANI: usa el código {code} para activar tu suscripción {plan} de un año."
+    "shareSaleMessage": "Aquí tienes tu voucher KUMANI: usa el código {code} para activar tu suscripción {plan} de un año.",
+    "rulePass": "Una persona que invitaste compra un servicio suelto (Pase): los KU Points indicados para ese servicio"
   },
   "voucherReceipt": {
     "back": "Volver al Monedero",
@@ -7891,7 +7892,9 @@
     "fincheckTitle": "Es hora de tu FinCheck",
     "fincheckBody": "Han pasado 3 meses desde tu último test: repítelo y descubre tu progreso.",
     "landingMessageTitle": "Nuevo mensaje de tu Landing Page",
-    "landingMessageBody": "{name} te ha escrito: toca para leer."
+    "landingMessageBody": "{name} te ha escrito: toca para leer.",
+    "passTitle": "Nuevos KU Points de tu red",
+    "passBody": "{name} ha comprado {service}: has recibido {points} KU Points."
   },
   "pushInvite": {
     "title": "Activa las notificaciones",
