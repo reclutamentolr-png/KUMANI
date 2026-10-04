@@ -6693,10 +6693,10 @@
         "tagline": "Presentación, servicios y contactos en un enlace solo tuyo, con los colores que elijas.",
         "p1": "Textos con IA",
         "p1d": "Responde a unas preguntas: el borrador está listo.",
-        "p2": "Tu estilo",
-        "p2d": "Tres plantillas y el color que quieras.",
-        "p3": "Visible en Google",
-        "p3d": "Con título, descripción y QR para compartir."
+        "p2": "Tu estilo, listo para Google",
+        "p2d": "Tres plantillas, tu color y una ficha para Google.",
+        "p3": "Los clientes te escriben",
+        "p3d": "Mensajes en el panel y aviso en el móvil."
       }
     }
   },
@@ -7446,9 +7446,9 @@
       "sub": "Una sola cuenta, herramientas que se comunican.",
       "stats": {
         "1": {
-          "1": "39",
+          "1": "41",
           "2": "servicios",
-          "3": "15 gratuitos · 16 con Base · 8 con Pro"
+          "3": "16 gratuitos · 16 con Base · 9 con Pro"
         },
         "2": {
           "1": "7",
@@ -7466,7 +7466,7 @@
           "3": "gratis, sin tarjeta de crédito"
         }
       },
-      "notes": "Treinta y nueve servicios: quince gratuitos para quien se registra, dieciséis más con el plan Base, ocho más con el plan Pro. Todo en siete idiomas. El plan Base cuesta 49 euros al año, menos de un euro a la semana. El Pro se prueba gratis durante quince días."
+      "notes": "Cuarenta y un servicios: dieciséis gratuitos para quien se registra, dieciséis más con el plan Base, nueve más con el plan Pro. Todo en siete idiomas. El plan Base cuesta 49 euros al año, menos de un euro a la semana. El Pro se prueba gratis durante quince días."
     },
     "s6": {
       "title": "Seis áreas, una sola cuenta",
@@ -7539,7 +7539,7 @@
           "2": "0 €",
           "3": "para siempre",
           "4": "Para empezar, sin tarjeta de crédito",
-          "5": "15 servicios incluidos",
+          "5": "16 servicios incluidos",
           "6": "Código QR, Mensajes de WhatsApp, Verificar IBAN, Anuncios, Kordata, Time Bank, juegos y bienestar"
         },
         "2": {
@@ -7555,13 +7555,13 @@
           "2": "149 €",
           "3": "al año",
           "4": "Para quien trabaja con clientes",
-          "5": "Todo el Base + 8 servicios Pro",
-          "6": "KUMANI Menu, Kumi Card, Presupuestos, Recibos Digitales, Magazzino, QR Code PRO. 15 días gratis."
+          "5": "Todo el Base + 9 servicios Pro",
+          "6": "KUMANI Menu, Kumi Card, Presupuestos, Recibos Digitales, Magazzino, QR Code PRO, Landing Page. 15 días gratis."
         }
       },
       "passBold": "¿Necesitas un solo servicio? ",
       "passText": "Actívalo con un Pase anual desde {price}: pago único, sin suscripción.",
-      "notes": "Uno se registra gratis y tiene enseguida quince servicios. El plan Base, 49 euros al año, es para particulares y familias. El plan Pro, 149 euros al año, es para quien trabaja con clientes y se prueba gratis durante quince días. Quien quiere un solo servicio puede activar un Pase anual desde {price}."
+      "notes": "Uno se registra gratis y tiene enseguida dieciséis servicios. El plan Base, 49 euros al año, es para particulares y familias. El plan Pro, 149 euros al año, es para quien trabaja con clientes y se prueba gratis durante quince días. Quien quiere un solo servicio puede activar un Pase anual desde {price}."
     },
     "s9": {
       "title": "Las herramientas para tu negocio",
@@ -7671,7 +7671,7 @@
       },
       "points": {
         "1": "KU Points",
-        "2": "Llegan cuando una persona que invitaste activa la suscripción, y con el Bonus Acogida.",
+        "2": "Llegan cuando una persona que invitaste activa la suscripción o un servicio suelto, y con el Bonus Acogida.",
         "3": {
           "1": "Voucher para la suscripción de otro Kumano",
           "2": "Paquetes de vouchers",
@@ -7680,7 +7680,7 @@
         }
       },
       "note": "Los puntos se obtienen solo usando la plataforma y se gastan solo dentro de ella, según el Reglamento público. No son dinero.",
-      "notes": "Hay dos tipos de puntos. Los KU Karma se obtienen usando los servicios cada día y dan, por ejemplo, un descuento en la renovación. Los KU Points llegan cuando una persona invitada activa la suscripción y con el Bonus Acogida: se usan para vouchers, el escaparate de anuncios y donaciones. Importante: no son dinero y no se convierten en efectivo."
+      "notes": "Hay dos tipos de puntos. Los KU Karma se obtienen usando los servicios cada día y dan, por ejemplo, un descuento en la renovación. Los KU Points llegan cuando una persona invitada activa la suscripción o un servicio suelto, y con el Bonus Acogida: se usan para vouchers, el escaparate de anuncios y donaciones. Importante: no son dinero y no se convierten en efectivo."
     },
     "s13": {
       "title": "Comparte KUMANI, sin presiones",
@@ -7695,14 +7695,14 @@
         },
         "2": {
           "1": "Bonus Acogida",
-          "2": "Personas invitadas por otros Kumani pueden entrar en tu estrella: los puntos se suman a tus KU Points."
+          "2": "Personas invitadas por otros Kumani pueden entrar en tu estrella: recibes el Bonus Acogida, una parte de los puntos de quien las invitó."
         },
         "3": {
           "1": "Reconocimiento, no ingresos",
           "2": "Las insignias Kuman Green, Kuman Star y Kuman Black muestran lo activa que es tu Comunidad."
         }
       },
-      "notes": "Quien quiera puede compartir KUMANI con un enlace personal. La red se ve como una estrella de cinco posiciones: en oro las personas que invitaste, en azul las recibidas de otros Kumani con el Bonus Acogida. Las insignias son un reconocimiento, no un ingreso."
+      "notes": "Quien quiera puede compartir KUMANI con un enlace personal. La red se ve como una estrella de cinco posiciones: en oro las personas que invitaste, en azul las acogidas de otros Kumani. A partir del sexto invitado, quien invita cede una pequeña parte de sus puntos como Bonus Acogida a quien acoge a la persona en su estrella. Las insignias son un reconocimiento, no un ingreso."
     },
     "s14": {
       "eyebrow": "KUMANI SOLIDARIO",
@@ -7772,7 +7772,7 @@
       "steps": {
         "1": {
           "1": "Regístrate gratis",
-          "2": "Nombre, email y un código de 6 cifras: 15 servicios al momento."
+          "2": "Nombre, email y un código de 6 cifras: 16 servicios al momento."
         },
         "2": {
           "1": "Déjate guiar",
@@ -7789,6 +7789,31 @@
       "title": "El primer paso es tuyo.\nEl resto lo hacemos juntos.",
       "contacts": "kumani.io  ·  support@kumani.io",
       "notes": "Gracias. El primer paso es vuestro: registrarse es gratis en kumani.io. Para cualquier pregunta: support@kumani.io."
+    },
+    "landing": {
+      "title": "Tu Landing Page",
+      "sub": "La web de tu actividad, lista en pocos minutos.",
+      "rows": {
+        "1": {
+          "1": "Textos escritos con IA",
+          "2": "Responde a cinco preguntas: presentación, servicios y descripción para Google están listos."
+        },
+        "2": {
+          "1": "Tu estilo",
+          "2": "Tres plantillas, el color que quieras, fotos y logo: se ve bien en el móvil y en el ordenador."
+        },
+        "3": {
+          "1": "Los clientes te escriben",
+          "2": "Formulario «Escríbeme»: el mensaje llega al panel y con una notificación en el móvil."
+        },
+        "4": {
+          "1": "Fácil de encontrar y compartir",
+          "2": "Dirección kumani.io/p/…, ficha lista para Google, QR y botón Compartir."
+        }
+      },
+      "badgePro": "Incluida en el plan Pro",
+      "badgePass": "Incluida en el plan Pro · o sola por {price} al año",
+      "notes": "Muchos profesionales no tienen web o no quieren pagar por una. Con la Landing Page la crean desde el móvil en pocos minutos: responden a cinco preguntas y la IA escribe la presentación, luego eligen plantilla, color, fotos y bloques. La página tiene una dirección en kumani.io, está lista para Google y los clientes escriben desde el formulario «Escríbeme»: el mensaje llega al panel y con una notificación en el móvil. Está incluida en el Pro y también se puede comprar sola."
     }
   },
   "privacyPage": {

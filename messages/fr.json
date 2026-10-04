@@ -6693,10 +6693,10 @@
         "tagline": "Présentation, services et coordonnées sur un lien bien à vous, aux couleurs de votre choix.",
         "p1": "Textes avec l’IA",
         "p1d": "Répondez à quelques questions : le brouillon est prêt.",
-        "p2": "Votre style",
-        "p2d": "Trois modèles et la couleur de votre choix.",
-        "p3": "Visible sur Google",
-        "p3d": "Avec titre, description et QR à partager."
+        "p2": "Votre style, prêt pour Google",
+        "p2d": "Trois modèles, votre couleur et une fiche Google.",
+        "p3": "Vos clients vous écrivent",
+        "p3d": "Messages au tableau de bord et notification mobile."
       }
     }
   },
@@ -7446,9 +7446,9 @@
       "sub": "Un seul compte, des outils qui se parlent.",
       "stats": {
         "1": {
-          "1": "39",
+          "1": "41",
           "2": "services",
-          "3": "15 gratuits · 16 avec Base · 8 avec Pro"
+          "3": "16 gratuits · 16 avec Base · 9 avec Pro"
         },
         "2": {
           "1": "7",
@@ -7466,7 +7466,7 @@
           "3": "gratuits, sans carte bancaire"
         }
       },
-      "notes": "Trente-neuf services : quinze gratuits pour toute personne inscrite, seize de plus avec l’offre Base, huit de plus avec l’offre Pro. Le tout en sept langues. L’offre Base coûte 49 euros par an, moins d’un euro par semaine. L’offre Pro s’essaie gratuitement pendant quinze jours."
+      "notes": "Quarante et un services : seize gratuits pour toute personne inscrite, seize de plus avec l’offre Base, neuf de plus avec l’offre Pro. Le tout en sept langues. L’offre Base coûte 49 euros par an, moins d’un euro par semaine. L’offre Pro s’essaie gratuitement pendant quinze jours."
     },
     "s6": {
       "title": "Six domaines, un seul compte",
@@ -7539,7 +7539,7 @@
           "2": "0 €",
           "3": "pour toujours",
           "4": "Pour commencer, sans carte bancaire",
-          "5": "15 services inclus",
+          "5": "16 services inclus",
           "6": "QR Code, Messages WhatsApp, Vérification IBAN, Annonces, Kordata, Time Bank, jeux et bien-être"
         },
         "2": {
@@ -7555,13 +7555,13 @@
           "2": "149 €",
           "3": "par an",
           "4": "Pour ceux qui travaillent avec des clients",
-          "5": "Tout le Base + 8 services Pro",
-          "6": "KUMANI Menu, Kumi Card, Devis, Reçus numériques, Magazzino, QR Code PRO. 15 jours gratuits."
+          "5": "Tout le Base + 9 services Pro",
+          "6": "KUMANI Menu, Kumi Card, Devis, Reçus numériques, Magazzino, QR Code PRO, Landing Page. 15 jours gratuits."
         }
       },
       "passBold": "Besoin d’un seul service ? ",
       "passText": "Activez-le avec un Pass annuel à partir de {price} : paiement unique, sans abonnement.",
-      "notes": "On s’inscrit gratuitement et on dispose tout de suite de quinze services. L’offre Base, 49 euros par an, est pour les particuliers et les familles. L’offre Pro, 149 euros par an, est pour ceux qui travaillent avec des clients et s’essaie gratuitement pendant quinze jours. Pour un seul service, il existe un Pass annuel à partir de {price}."
+      "notes": "On s’inscrit gratuitement et on dispose tout de suite de seize services. L’offre Base, 49 euros par an, est pour les particuliers et les familles. L’offre Pro, 149 euros par an, est pour ceux qui travaillent avec des clients et s’essaie gratuitement pendant quinze jours. Pour un seul service, il existe un Pass annuel à partir de {price}."
     },
     "s9": {
       "title": "Les outils pour votre activité",
@@ -7671,7 +7671,7 @@
       },
       "points": {
         "1": "KU Points",
-        "2": "Ils arrivent quand une personne que vous avez invitée active un abonnement, et avec le Bonus Accueil.",
+        "2": "Ils arrivent quand une personne que vous avez invitée active un abonnement ou un service à l’unité, et avec le Bonus Accueil.",
         "3": {
           "1": "Voucher pour l’abonnement d’un autre Kumano",
           "2": "Packs de vouchers",
@@ -7680,7 +7680,7 @@
         }
       },
       "note": "Les points s’obtiennent uniquement en utilisant la plateforme et se dépensent uniquement à l’intérieur, selon le Règlement public. Ce n’est pas de l’argent.",
-      "notes": "Il existe deux types de points. Les KU Karma s’obtiennent en utilisant les services chaque jour et donnent, par exemple, une remise sur le renouvellement. Les KU Points arrivent quand une personne invitée active un abonnement et avec le Bonus Accueil : ils servent aux vouchers, à la vitrine des annonces et aux dons. Important : ce n’est pas de l’argent et ils ne se convertissent pas en euros."
+      "notes": "Il existe deux types de points. Les KU Karma s’obtiennent en utilisant les services chaque jour et donnent, par exemple, une remise sur le renouvellement. Les KU Points arrivent quand une personne invitée active un abonnement ou un service à l’unité, et avec le Bonus Accueil : ils servent aux vouchers, à la vitrine des annonces et aux dons. Important : ce n’est pas de l’argent et ils ne se convertissent pas en euros."
     },
     "s13": {
       "title": "Partagez KUMANI, sans pression",
@@ -7695,14 +7695,14 @@
         },
         "2": {
           "1": "Bonus Accueil",
-          "2": "Des personnes invitées par d’autres Kumani peuvent rejoindre votre étoile : les points s’ajoutent à vos KU Points."
+          "2": "Des personnes invitées par d’autres Kumani peuvent rejoindre votre étoile : vous recevez le Bonus Accueil, une partie des points de la personne qui les a invitées."
         },
         "3": {
           "1": "Une reconnaissance, pas un revenu",
           "2": "Les badges Kuman Green, Kuman Star et Kuman Black montrent à quel point votre Communauté est active."
         }
       },
-      "notes": "Qui le souhaite peut partager KUMANI avec un lien personnel. Le réseau apparaît comme une étoile à cinq positions : en or les personnes que vous avez invitées, en bleu celles reçues des autres Kumani avec le Bonus Accueil. Les badges sont une reconnaissance, pas un revenu."
+      "notes": "Qui le souhaite peut partager KUMANI avec un lien personnel. Le réseau apparaît comme une étoile à cinq positions : en or les personnes que vous avez invitées, en bleu celles accueillies d’autres Kumani. À partir du sixième invité, la personne qui invite cède une petite partie de ses points comme Bonus Accueil à celle qui accueille la personne dans son étoile. Les badges sont une reconnaissance, pas un revenu."
     },
     "s14": {
       "eyebrow": "KUMANI SOLIDAIRE",
@@ -7772,7 +7772,7 @@
       "steps": {
         "1": {
           "1": "Inscrivez-vous",
-          "2": "Nom, e-mail et un code à 6 chiffres : 15 services tout de suite."
+          "2": "Nom, e-mail et un code à 6 chiffres : 16 services tout de suite."
         },
         "2": {
           "1": "Laissez-vous guider",
@@ -7789,6 +7789,31 @@
       "title": "Le premier pas vous appartient.\nLe reste, nous le ferons ensemble.",
       "contacts": "kumani.io  ·  support@kumani.io",
       "notes": "Merci. Le premier pas vous appartient : l’inscription est gratuite sur kumani.io. Pour toute question : support@kumani.io."
+    },
+    "landing": {
+      "title": "Votre Landing Page",
+      "sub": "Le site vitrine de votre activité, prêt en quelques minutes.",
+      "rows": {
+        "1": {
+          "1": "Textes rédigés avec l’IA",
+          "2": "Répondez à cinq questions : présentation, services et description pour Google sont prêts."
+        },
+        "2": {
+          "1": "Votre style",
+          "2": "Trois modèles, la couleur de votre choix, photos et logo : parfait sur téléphone et ordinateur."
+        },
+        "3": {
+          "1": "Vos clients vous écrivent",
+          "2": "Formulaire « Écrivez-moi » : le message arrive dans le tableau de bord et en notification sur le téléphone."
+        },
+        "4": {
+          "1": "Visible et facile à partager",
+          "2": "Adresse kumani.io/p/…, fiche prête pour Google, QR et bouton Partager."
+        }
+      },
+      "badgePro": "Incluse dans l’offre Pro",
+      "badgePass": "Incluse dans l’offre Pro · ou seule à {price} par an",
+      "notes": "Beaucoup de professionnels n’ont pas de site ou ne veulent pas en payer un. Avec la Landing Page, ils le créent depuis leur téléphone en quelques minutes : ils répondent à cinq questions et l’IA rédige la présentation, puis ils choisissent modèle, couleur, photos et blocs. La page a une adresse sur kumani.io, elle est prête pour Google et les clients écrivent via le formulaire « Écrivez-moi » : le message arrive dans le tableau de bord et en notification sur le téléphone. Elle est incluse dans l’offre Pro et peut aussi s’acheter seule."
     }
   },
   "privacyPage": {

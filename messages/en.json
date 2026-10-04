@@ -6693,10 +6693,10 @@
         "tagline": "Introduction, services and contact details on a link of your own, in the colours you choose.",
         "p1": "Copy written with AI",
         "p1d": "Answer a few questions: your draft is ready.",
-        "p2": "Your style",
-        "p2d": "Three templates and any colour you like.",
-        "p3": "Findable on Google",
-        "p3d": "With title, description and a QR code to share."
+        "p2": "Your style, ready for Google",
+        "p2d": "Three templates, your colour and a Google listing.",
+        "p3": "Customers message you",
+        "p3d": "Messages in the dashboard and a phone notification."
       }
     }
   },
@@ -7446,9 +7446,9 @@
       "sub": "One account, tools that talk to each other.",
       "stats": {
         "1": {
-          "1": "39",
+          "1": "41",
           "2": "services",
-          "3": "15 free · 16 with Base · 8 with Pro"
+          "3": "16 free · 16 with Base · 9 with Pro"
         },
         "2": {
           "1": "7",
@@ -7466,7 +7466,7 @@
           "3": "free, no credit card"
         }
       },
-      "notes": "Thirty-nine services: fifteen free for anyone who signs up, sixteen more with the Base plan, eight more with the Pro plan. Everything in seven languages. The Base plan costs 49 euros a year, less than one euro a week. Pro can be tried free for fifteen days."
+      "notes": "Forty-one services: sixteen free for anyone who signs up, sixteen more with the Base plan, nine more with the Pro plan. Everything in seven languages. The Base plan costs 49 euros a year, less than one euro a week. Pro can be tried free for fifteen days."
     },
     "s6": {
       "title": "Six areas, one account",
@@ -7539,7 +7539,7 @@
           "2": "€0",
           "3": "forever",
           "4": "To get started, no credit card",
-          "5": "15 services included",
+          "5": "16 services included",
           "6": "QR Code, WhatsApp Messages, IBAN Check, Listings, Kordata, Time Bank, games and wellbeing"
         },
         "2": {
@@ -7555,13 +7555,13 @@
           "2": "€149",
           "3": "a year",
           "4": "For those who work with clients",
-          "5": "Everything in Base + 8 Pro services",
-          "6": "KUMANI Menu, Kumi Card, Quotes, Digital Receipts, Magazzino, QR Code PRO. 15 days free."
+          "5": "Everything in Base + 9 Pro services",
+          "6": "KUMANI Menu, Kumi Card, Quotes, Digital Receipts, Magazzino, QR Code PRO, Landing Page. 15 days free."
         }
       },
       "passBold": "Need just one service? ",
       "passText": "Activate it with a yearly Pass from {price}: one-off payment, no subscription.",
-      "notes": "You sign up for free and get fifteen services straight away. The Base plan, 49 euros a year, is for individuals and families. The Pro plan, 149 euros a year, is for those who work with clients and can be tried free for fifteen days. Anyone who needs just one service can buy a yearly Pass, from {price}."
+      "notes": "You sign up for free and get sixteen services straight away. The Base plan, 49 euros a year, is for individuals and families. The Pro plan, 149 euros a year, is for those who work with clients and can be tried free for fifteen days. Anyone who needs just one service can buy a yearly Pass, from {price}."
     },
     "s9": {
       "title": "The tools for your business",
@@ -7671,7 +7671,7 @@
       },
       "points": {
         "1": "KU Points",
-        "2": "Received when someone you invited activates a subscription, and with the Welcome Bonus.",
+        "2": "Received when someone you invited activates a subscription or a single service, and with the Welcome Bonus.",
         "3": {
           "1": "Voucher for another Kumano’s subscription",
           "2": "Voucher packs",
@@ -7680,7 +7680,7 @@
         }
       },
       "note": "Points are earned only by using the platform and can be spent only inside it, under the public Rules. They are not money.",
-      "notes": "There are two kinds of points. KU Karma are earned by using the services every day and give, for example, a discount on renewal. KU Points arrive when an invited person activates a subscription and with the Welcome Bonus: they are used for vouchers, the listings showcase and donations. Important: they are not money and cannot be turned into cash."
+      "notes": "There are two kinds of points. KU Karma are earned by using the services every day and give, for example, a discount on renewal. KU Points arrive when an invited person activates a subscription or a single service, and with the Welcome Bonus: they are used for vouchers, the listings showcase and donations. Important: they are not money and cannot be turned into cash."
     },
     "s13": {
       "title": "Share KUMANI, no pressure",
@@ -7695,14 +7695,14 @@
         },
         "2": {
           "1": "Welcome Bonus",
-          "2": "People invited by other Kumani can join your star: their points add up to your KU Points."
+          "2": "People invited by other Kumani can join your star: you receive the Welcome Bonus, a part of the points of whoever invited them."
         },
         "3": {
           "1": "Recognition, not income",
           "2": "Kuman Green, Kuman Star and Kuman Black badges show how active your Community is."
         }
       },
-      "notes": "Anyone who wants to can share KUMANI with a personal link. The network appears as a five-position star: in gold the people you invited, in blue those received from other Kumani with the Welcome Bonus. Badges are recognition, not income."
+      "notes": "Anyone who wants to can share KUMANI with a personal link. The network appears as a five-position star: in gold the people you invited, in blue those welcomed from other Kumani. From the sixth invitee on, the inviter gives a small part of their points as a Welcome Bonus to whoever welcomes the person into their star. Badges are recognition, not income."
     },
     "s14": {
       "eyebrow": "KUMANI FOR GOOD CAUSES",
@@ -7772,7 +7772,7 @@
       "steps": {
         "1": {
           "1": "Sign up for free",
-          "2": "Name, email and a 6-digit code: 15 services straight away."
+          "2": "Name, email and a 6-digit code: 16 services straight away."
         },
         "2": {
           "1": "Let us guide you",
@@ -7789,6 +7789,31 @@
       "title": "The first step is yours.\nWe’ll take the rest together.",
       "contacts": "kumani.io  ·  support@kumani.io",
       "notes": "Thank you. The first step is yours: signing up is free at kumani.io. For any question: support@kumani.io."
+    },
+    "landing": {
+      "title": "Your Landing Page",
+      "sub": "Your business website, ready in a few minutes.",
+      "rows": {
+        "1": {
+          "1": "Copy written with AI",
+          "2": "Answer five questions: introduction, services and Google description are ready."
+        },
+        "2": {
+          "1": "Your style",
+          "2": "Three templates, any colour, photos and logo: it looks good on phone and computer."
+        },
+        "3": {
+          "1": "Customers message you",
+          "2": "“Message me” form: messages arrive in the dashboard and as a phone notification."
+        },
+        "4": {
+          "1": "Findable and shareable",
+          "2": "A kumani.io/p/… address, Google-ready listing, QR code and Share button."
+        }
+      },
+      "badgePro": "Included in the Pro plan",
+      "badgePass": "Included in the Pro plan · or on its own for {price} a year",
+      "notes": "Many professionals have no website or do not want to pay for one. With the Landing Page they create it from their phone in a few minutes: they answer five questions and AI writes the introduction, then they choose template, colour, photos and blocks. The page has an address on kumani.io, is ready for Google and customers write through the “Message me” form: the message arrives in the dashboard and as a notification on the phone. It is included in Pro and can also be bought on its own."
     }
   },
   "privacyPage": {

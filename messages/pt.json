@@ -6693,10 +6693,10 @@
         "tagline": "Apresentação, serviços e contactos num link só seu, com as cores que escolher.",
         "p1": "Textos com IA",
         "p1d": "Responda a algumas perguntas: o rascunho está pronto.",
-        "p2": "O seu estilo",
-        "p2d": "Três modelos e a cor que quiser.",
-        "p3": "Visível no Google",
-        "p3d": "Com título, descrição e QR para partilhar."
+        "p2": "O seu estilo, pronto para o Google",
+        "p2d": "Três modelos, a sua cor e uma ficha para o Google.",
+        "p3": "Os clientes escrevem-lhe",
+        "p3d": "Mensagens no painel e notificação no telemóvel."
       }
     }
   },
@@ -7446,9 +7446,9 @@
       "sub": "Uma só conta, ferramentas que comunicam entre si.",
       "stats": {
         "1": {
-          "1": "39",
+          "1": "41",
           "2": "serviços",
-          "3": "15 grátis · 16 com Base · 8 com Pro"
+          "3": "16 grátis · 16 com Base · 9 com Pro"
         },
         "2": {
           "1": "7",
@@ -7466,7 +7466,7 @@
           "3": "grátis, sem cartão de crédito"
         }
       },
-      "notes": "Trinta e nove serviços: quinze grátis para quem se regista, dezasseis a mais com o plano Base, oito a mais com o plano Pro. Tudo em sete línguas. O plano Base custa 49 euros por ano, menos de um euro por semana. O Pro experimenta-se grátis durante quinze dias."
+      "notes": "Quarenta e um serviços: dezasseis grátis para quem se regista, dezasseis a mais com o plano Base, nove a mais com o plano Pro. Tudo em sete línguas. O plano Base custa 49 euros por ano, menos de um euro por semana. O Pro experimenta-se grátis durante quinze dias."
     },
     "s6": {
       "title": "Seis áreas, uma só conta",
@@ -7539,7 +7539,7 @@
           "2": "0 €",
           "3": "para sempre",
           "4": "Para começar, sem cartão de crédito",
-          "5": "15 serviços incluídos",
+          "5": "16 serviços incluídos",
           "6": "QR Code, Mensagens WhatsApp, Verificar IBAN, Anúncios, Kordata, Time Bank, jogos e bem-estar"
         },
         "2": {
@@ -7555,13 +7555,13 @@
           "2": "149 €",
           "3": "por ano",
           "4": "Para quem trabalha com clientes",
-          "5": "Todo o Base + 8 serviços Pro",
-          "6": "KUMANI Menu, Kumi Card, Orçamentos, Recibos Digitais, Magazzino, QR Code PRO. 15 dias grátis."
+          "5": "Todo o Base + 9 serviços Pro",
+          "6": "KUMANI Menu, Kumi Card, Orçamentos, Recibos Digitais, Magazzino, QR Code PRO, Landing Page. 15 dias grátis."
         }
       },
       "passBold": "Precisa de um só serviço? ",
       "passText": "Ative-o com um Passe anual a partir de {price}: pagamento único, sem subscrição.",
-      "notes": "Regista-se grátis e tem logo quinze serviços. O plano Base, 49 euros por ano, é para particulares e famílias. O plano Pro, 149 euros por ano, é para quem trabalha com clientes e experimenta-se grátis durante quinze dias. Quem quer um só serviço pode ativar um Passe anual a partir de {price}."
+      "notes": "Regista-se grátis e tem logo dezasseis serviços. O plano Base, 49 euros por ano, é para particulares e famílias. O plano Pro, 149 euros por ano, é para quem trabalha com clientes e experimenta-se grátis durante quinze dias. Quem quer um só serviço pode ativar um Passe anual a partir de {price}."
     },
     "s9": {
       "title": "As ferramentas para o seu negócio",
@@ -7671,7 +7671,7 @@
       },
       "points": {
         "1": "KU Points",
-        "2": "Chegam quando uma pessoa que convidou ativa a subscrição, e com o Bónus Acolhimento.",
+        "2": "Chegam quando uma pessoa que convidou ativa a subscrição ou um serviço avulso, e com o Bónus Acolhimento.",
         "3": {
           "1": "Voucher para a subscrição de outro Kumano",
           "2": "Pacotes de vouchers",
@@ -7680,7 +7680,7 @@
         }
       },
       "note": "Os pontos ganham-se só usando a plataforma e gastam-se só dentro dela, segundo o Regulamento público. Não são dinheiro.",
-      "notes": "Há dois tipos de pontos. Os KU Karma ganham-se usando os serviços todos os dias e dão, por exemplo, um desconto na renovação. Os KU Points chegam quando uma pessoa convidada ativa a subscrição e com o Bónus Acolhimento: usam-se para vouchers, a montra de anúncios e doações. Importante: não são dinheiro e não se convertem em euros."
+      "notes": "Há dois tipos de pontos. Os KU Karma ganham-se usando os serviços todos os dias e dão, por exemplo, um desconto na renovação. Os KU Points chegam quando uma pessoa convidada ativa a subscrição ou um serviço avulso, e com o Bónus Acolhimento: usam-se para vouchers, a montra de anúncios e doações. Importante: não são dinheiro e não se convertem em euros."
     },
     "s13": {
       "title": "Partilhe a KUMANI, sem pressões",
@@ -7695,14 +7695,14 @@
         },
         "2": {
           "1": "Bónus Acolhimento",
-          "2": "Pessoas convidadas por outros Kumani podem entrar na sua estrela: os pontos somam-se aos seus KU Points."
+          "2": "Pessoas convidadas por outros Kumani podem entrar na sua estrela: recebe o Bónus Acolhimento, uma parte dos pontos de quem as convidou."
         },
         "3": {
           "1": "Reconhecimento, não rendimento",
           "2": "Os distintivos Kuman Green, Kuman Star e Kuman Black mostram quão ativa é a sua Comunidade."
         }
       },
-      "notes": "Quem quiser pode partilhar a KUMANI com um link pessoal. A rede aparece como uma estrela de cinco posições: a dourado as pessoas que convidou, a azul as recebidas de outros Kumani com o Bónus Acolhimento. Os distintivos são um reconhecimento, não um rendimento."
+      "notes": "Quem quiser pode partilhar a KUMANI com um link pessoal. A rede aparece como uma estrela de cinco posições: a dourado as pessoas que convidou, a azul as acolhidas de outros Kumani. A partir do sexto convidado, quem convida cede uma pequena parte dos seus pontos como Bónus Acolhimento a quem acolhe a pessoa na sua estrela. Os distintivos são um reconhecimento, não um rendimento."
     },
     "s14": {
       "eyebrow": "KUMANI SOLIDÁRIA",
@@ -7772,7 +7772,7 @@
       "steps": {
         "1": {
           "1": "Registe-se grátis",
-          "2": "Nome, email e um código de 6 dígitos: logo 15 serviços."
+          "2": "Nome, email e um código de 6 dígitos: logo 16 serviços."
         },
         "2": {
           "1": "Deixe-se guiar",
@@ -7789,6 +7789,31 @@
       "title": "O primeiro passo é seu.\nO resto fazemos juntos.",
       "contacts": "kumani.io  ·  support@kumani.io",
       "notes": "Obrigado. O primeiro passo é vosso: o registo é grátis em kumani.io. Para qualquer pergunta: support@kumani.io."
+    },
+    "landing": {
+      "title": "A sua Landing Page",
+      "sub": "O site da sua atividade, pronto em poucos minutos.",
+      "rows": {
+        "1": {
+          "1": "Textos escritos com IA",
+          "2": "Responda a cinco perguntas: apresentação, serviços e descrição para o Google ficam prontos."
+        },
+        "2": {
+          "1": "O seu estilo",
+          "2": "Três modelos, a cor que quiser, fotos e logótipo: fica bem no telemóvel e no computador."
+        },
+        "3": {
+          "1": "Os clientes escrevem-lhe",
+          "2": "Formulário «Escreva-me»: a mensagem chega ao painel e com uma notificação no telemóvel."
+        },
+        "4": {
+          "1": "Fácil de encontrar e partilhar",
+          "2": "Endereço kumani.io/p/…, ficha pronta para o Google, QR e botão Partilhar."
+        }
+      },
+      "badgePro": "Incluída no plano Pro",
+      "badgePass": "Incluída no plano Pro · ou sozinha por {price} por ano",
+      "notes": "Muitos profissionais não têm site ou não querem pagar por um. Com a Landing Page criam-no a partir do telemóvel em poucos minutos: respondem a cinco perguntas e a IA escreve a apresentação, depois escolhem modelo, cor, fotos e blocos. A página tem um endereço em kumani.io, está pronta para o Google e os clientes escrevem pelo formulário «Escreva-me»: a mensagem chega ao painel e com uma notificação no telemóvel. Está incluída no Pro e também pode ser comprada sozinha."
     }
   },
   "privacyPage": {

@@ -20,7 +20,7 @@ export type FlyerConfig = {
 
 export const FLYERS: FlyerConfig[] = [
   // Pro: foto
-  { tool: 'landing-page', style: 'phone', category: 'pro', icon: 'Store', points: ['Sparkles', 'Palette', 'Search'], shot: 'landing-page-5' },
+  { tool: 'landing-page', style: 'phone', category: 'pro', icon: 'Store', points: ['Sparkles', 'Palette', 'MessageCircle'], shot: 'landing-page-5' },
   { tool: 'menu', style: 'photo', category: 'pro', icon: 'Utensils', points: ['QrCode', 'Languages', 'Wheat'], photo: '/flyers/photos/menu.webp' },
   { tool: 'fidelity', style: 'photo', category: 'pro', icon: 'Stamp', points: ['Smartphone', 'Gift', 'Repeat'], photo: '/flyers/photos/fidelity.webp' },
   { tool: 'preventivi', style: 'photo', category: 'pro', icon: 'FileText', points: ['Smartphone', 'FileDown', 'Send'], photo: '/flyers/photos/preventivi.webp' },

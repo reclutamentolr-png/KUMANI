@@ -6693,10 +6693,10 @@
         "tagline": "Vorstellung, Leistungen und Kontakte unter deinem eigenen Link, in deinen Farben.",
         "p1": "Texte mit KI",
         "p1d": "Ein paar Fragen beantworten: Der Entwurf steht.",
-        "p2": "Dein Stil",
-        "p2d": "Drei Vorlagen und deine Wunschfarbe.",
-        "p3": "Auffindbar bei Google",
-        "p3d": "Mit Titel, Beschreibung und QR-Code zum Teilen."
+        "p2": "Dein Stil, bereit für Google",
+        "p2d": "Drei Vorlagen, deine Farbe und ein Google-Eintrag.",
+        "p3": "Kunden schreiben dir",
+        "p3d": "Nachrichten im Dashboard und aufs Handy."
       }
     }
   },
@@ -7446,9 +7446,9 @@
       "sub": "Ein Konto, Werkzeuge, die miteinander sprechen.",
       "stats": {
         "1": {
-          "1": "39",
+          "1": "41",
           "2": "Dienste",
-          "3": "15 kostenlos · 16 mit Base · 8 mit Pro"
+          "3": "16 kostenlos · 16 mit Base · 9 mit Pro"
         },
         "2": {
           "1": "7",
@@ -7466,7 +7466,7 @@
           "3": "kostenlos, ohne Kreditkarte"
         }
       },
-      "notes": "Neununddreißig Dienste: fünfzehn kostenlos für alle Registrierten, sechzehn mehr mit dem Base-Tarif, acht mehr mit dem Pro-Tarif. Alles in sieben Sprachen. Der Base-Tarif kostet 49 Euro im Jahr, weniger als einen Euro pro Woche. Pro kann man fünfzehn Tage kostenlos testen."
+      "notes": "Einundvierzig Dienste: sechzehn kostenlos für alle Registrierten, sechzehn mehr mit dem Base-Tarif, neun mehr mit dem Pro-Tarif. Alles in sieben Sprachen. Der Base-Tarif kostet 49 Euro im Jahr, weniger als einen Euro pro Woche. Pro kann man fünfzehn Tage kostenlos testen."
     },
     "s6": {
       "title": "Sechs Bereiche, ein Konto",
@@ -7539,7 +7539,7 @@
           "2": "0 €",
           "3": "für immer",
           "4": "Zum Start, ohne Kreditkarte",
-          "5": "15 Dienste inklusive",
+          "5": "16 Dienste inklusive",
           "6": "QR-Code, WhatsApp-Nachrichten, IBAN-Prüfung, Anzeigen, Kordata, Time Bank, Spiele und Wohlbefinden"
         },
         "2": {
@@ -7555,13 +7555,13 @@
           "2": "149 €",
           "3": "im Jahr",
           "4": "Für alle, die mit Kunden arbeiten",
-          "5": "Alles aus Base + 8 Pro-Dienste",
-          "6": "KUMANI Menu, Kumi Card, Angebote, Digitale Belege, Magazzino, QR Code PRO. 15 Tage kostenlos."
+          "5": "Alles aus Base + 9 Pro-Dienste",
+          "6": "KUMANI Menu, Kumi Card, Angebote, Digitale Belege, Magazzino, QR Code PRO, Landing Page. 15 Tage kostenlos."
         }
       },
       "passBold": "Nur ein Dienst nötig? ",
       "passText": "Aktiviere ihn mit einem Jahrespass ab {price}: einmalige Zahlung, kein Abo.",
-      "notes": "Man meldet sich kostenlos an und hat sofort fünfzehn Dienste. Der Base-Tarif, 49 Euro im Jahr, ist für Privatpersonen und Familien. Der Pro-Tarif, 149 Euro im Jahr, ist für alle, die mit Kunden arbeiten, und lässt sich fünfzehn Tage kostenlos testen. Wer nur einen Dienst braucht, kann einen Jahrespass ab {price} aktivieren."
+      "notes": "Man meldet sich kostenlos an und hat sofort sechzehn Dienste. Der Base-Tarif, 49 Euro im Jahr, ist für Privatpersonen und Familien. Der Pro-Tarif, 149 Euro im Jahr, ist für alle, die mit Kunden arbeiten, und lässt sich fünfzehn Tage kostenlos testen. Wer nur einen Dienst braucht, kann einen Jahrespass ab {price} aktivieren."
     },
     "s9": {
       "title": "Die Werkzeuge für dein Geschäft",
@@ -7671,7 +7671,7 @@
       },
       "points": {
         "1": "KU Points",
-        "2": "Kommen, wenn eine eingeladene Person ein Abo abschließt, und mit dem Willkommensbonus.",
+        "2": "Kommen, wenn eine eingeladene Person ein Abo oder einen einzelnen Dienst aktiviert, und mit dem Willkommensbonus.",
         "3": {
           "1": "Gutschein für das Abo eines anderen Kumano",
           "2": "Gutschein-Pakete",
@@ -7680,7 +7680,7 @@
         }
       },
       "note": "Punkte gibt es nur für die Nutzung der Plattform, und sie lassen sich nur darin einsetzen, nach dem öffentlichen Reglement. Sie sind kein Geld.",
-      "notes": "Es gibt zwei Arten von Punkten. KU Karma gibt es für die tägliche Nutzung der Dienste, zum Beispiel für einen Rabatt auf die Verlängerung. KU Points kommen, wenn eine eingeladene Person ein Abo abschließt, und mit dem Willkommensbonus: für Gutscheine, das Anzeigen-Schaufenster und Spenden. Wichtig: Sie sind kein Geld und lassen sich nicht auszahlen."
+      "notes": "Es gibt zwei Arten von Punkten. KU Karma gibt es für die tägliche Nutzung der Dienste, zum Beispiel für einen Rabatt auf die Verlängerung. KU Points kommen, wenn eine eingeladene Person ein Abo oder einen einzelnen Dienst aktiviert, und mit dem Willkommensbonus: für Gutscheine, das Anzeigen-Schaufenster und Spenden. Wichtig: Sie sind kein Geld und lassen sich nicht auszahlen."
     },
     "s13": {
       "title": "Teile KUMANI, ganz ohne Druck",
@@ -7695,14 +7695,14 @@
         },
         "2": {
           "1": "Willkommensbonus",
-          "2": "Von anderen Kumani eingeladene Personen können in deinen Stern kommen: Ihre Punkte zählen zu deinen KU Points."
+          "2": "Von anderen Kumani eingeladene Personen können in deinen Stern kommen: Du erhältst den Willkommensbonus, einen Teil der Punkte der Person, die sie eingeladen hat."
         },
         "3": {
           "1": "Anerkennung, kein Einkommen",
           "2": "Die Abzeichen Kuman Green, Kuman Star und Kuman Black zeigen, wie aktiv deine Community ist."
         }
       },
-      "notes": "Wer möchte, kann KUMANI mit einem persönlichen Link teilen. Das Netzwerk erscheint als Stern mit fünf Plätzen: in Gold die von dir Eingeladenen, in Blau die von anderen Kumani mit dem Willkommensbonus erhaltenen. Abzeichen sind Anerkennung, kein Einkommen."
+      "notes": "Wer möchte, kann KUMANI mit einem persönlichen Link teilen. Das Netzwerk erscheint als Stern mit fünf Plätzen: in Gold die von dir Eingeladenen, in Blau die von anderen Kumani aufgenommenen. Ab der sechsten eingeladenen Person gibt die einladende Person einen kleinen Teil ihrer Punkte als Willkommensbonus an die Person ab, die den Neuen in ihren Stern aufnimmt. Abzeichen sind Anerkennung, kein Einkommen."
     },
     "s14": {
       "eyebrow": "KUMANI HILFT",
@@ -7772,7 +7772,7 @@
       "steps": {
         "1": {
           "1": "Kostenlos anmelden",
-          "2": "Name, E-Mail und ein 6-stelliger Code: sofort 15 Dienste."
+          "2": "Name, E-Mail und ein 6-stelliger Code: sofort 16 Dienste."
         },
         "2": {
           "1": "Lass dich führen",
@@ -7789,6 +7789,31 @@
       "title": "Der erste Schritt gehört dir.\nDen Rest schaffen wir zusammen.",
       "contacts": "kumani.io  ·  support@kumani.io",
       "notes": "Danke. Der erste Schritt gehört euch: Die Anmeldung auf kumani.io ist kostenlos. Für alle Fragen: support@kumani.io."
+    },
+    "landing": {
+      "title": "Deine Landing Page",
+      "sub": "Die Website für dein Business, in wenigen Minuten fertig.",
+      "rows": {
+        "1": {
+          "1": "Texte mit KI geschrieben",
+          "2": "Fünf Fragen beantworten: Vorstellung, Leistungen und Google-Beschreibung sind fertig."
+        },
+        "2": {
+          "1": "Dein Stil",
+          "2": "Drei Vorlagen, deine Wunschfarbe, Fotos und Logo: sieht auf Handy und Computer gut aus."
+        },
+        "3": {
+          "1": "Kunden schreiben dir",
+          "2": "Formular „Schreib mir“: Die Nachricht kommt ins Dashboard und als Benachrichtigung aufs Handy."
+        },
+        "4": {
+          "1": "Auffindbar und teilbar",
+          "2": "Adresse kumani.io/p/…, Google-fertiger Eintrag, QR-Code und Teilen-Button."
+        }
+      },
+      "badgePro": "Im Pro-Tarif enthalten",
+      "badgePass": "Im Pro-Tarif enthalten · oder einzeln für {price} im Jahr",
+      "notes": "Viele Selbstständige haben keine Website oder wollen nicht dafür zahlen. Mit der Landing Page erstellen sie sie in wenigen Minuten am Handy: Sie beantworten fünf Fragen, die KI schreibt die Vorstellung, dann wählen sie Vorlage, Farbe, Fotos und Blöcke. Die Seite hat eine Adresse auf kumani.io, ist bereit für Google, und Kunden schreiben über das Formular „Schreib mir“: Die Nachricht kommt ins Dashboard und als Benachrichtigung aufs Handy. Sie ist in Pro enthalten und kann auch einzeln gekauft werden."
     }
   },
   "privacyPage": {

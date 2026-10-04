@@ -8,7 +8,7 @@ import * as Lucide from 'lucide-react'
 
 // Presentazione KUMANI creata nel browser al momento del download: testi
 // ufficiali (namespace "deckTexts", correggibili dall'Area Traduttori),
-// 18 slide con transizioni, animazioni d'entrata e note per chi presenta.
+// 19 slide con transizioni, animazioni d'entrata e note per chi presenta.
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type T = any // testi della presentazione, struttura in messages/<lingua>.json → deckTexts
@@ -52,12 +52,18 @@ async function icon(name: string, hex: string, px = 256): Promise<string> {
   return data
 }
 
-export async function buildDeck(rawTexts: unknown, locale: string, minPassEur: number): Promise<Blob> {
+export async function buildDeck(rawTexts: unknown, locale: string, minPassEur: number, landingPassEur: number | null = null): Promise<Blob> {
   const S: T = arrays(rawTexts)
   // {price} = Pass più economico, con il formato di prezzo della lingua
   const price = new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', minimumFractionDigits: minPassEur % 1 ? 2 : 0 }).format(minPassEur)
   S.s8.passText = String(S.s8.passText).replace('{price}', price)
   S.s8.notes = String(S.s8.notes).replace('{price}', price)
+  // Landing Page: inclusa nel Pro, oppure da sola (Pass) se l'Admin la vende così
+  const landingPrice =
+    landingPassEur != null
+      ? new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', minimumFractionDigits: landingPassEur % 1 ? 2 : 0 }).format(landingPassEur)
+      : null
+  S.landing.badge = landingPrice ? String(S.landing.badgePass).replace('{price}', landingPrice) : S.landing.badgePro
   const k = SCALE[locale] ?? 1
   const fs = (n: number) => Math.round(n * k * 2) / 2
   const lg = LANG[locale] ?? 'it-IT'
@@ -262,6 +268,27 @@ export async function buildDeck(rawTexts: unknown, locale: string, minPassEur: n
       Tx(s, S.s9.rows[i][1], { x: x + 0.85, y: y + 0.38, w: 2.65, h: 0.95, fontSize: fs(14), color: C.accent4, valign: 'top', objectName: `a${i + 2}-d${i}` })
     }
     s.addNotes(S.s9.notes)
+  }
+
+  // 9b. Landing Page: il sito vetrina del professionista
+  {
+    const s = pres.addSlide({ masterName: 'KUMANI scuro', sectionTitle: sec[3] })
+    titled(s, S.landing.title, S.landing.sub)
+    const ics = ['Sparkles', 'Palette', 'MessageCircle', 'Search']
+    for (let i = 0; i < 4; i++) {
+      const y = 1.95 + i * 1.08
+      await circleIcon(s, ics[i], 0.6, y, 0.72, C.accent1, HEX.ink, `a${i + 2}-ic${i}`)
+      Tx(s, [
+        { text: S.landing.rows[i][0], options: { bold: true, color: C.background1, fontSize: fs(18), breakLine: true } },
+        { text: S.landing.rows[i][1], options: { color: C.accent3, fontSize: fs(14) } },
+      ], { x: 1.55, y: y - 0.08, w: 6.6, h: 1.0, valign: 'top', objectName: `a${i + 2}-tx${i}` })
+    }
+    card(s, 0.6, 6.25, 7.55, 0.55, 'a6-badge', C.accent1)
+    Tx(s, S.landing.badge, { x: 0.8, y: 6.27, w: 7.2, h: 0.5, fontSize: fs(15), bold: true, color: C.text1, valign: 'middle', objectName: 'a6-badgetx' })
+    // Telefono con una Landing Page di esempio
+    s.addShape(pres.ShapeType.roundRect, { x: 9.05, y: 1.45, w: 3.15, h: 5.2, rectRadius: 0.3, fill: { color: '000000' }, line: { color: HEX.gold, width: 1.5 }, shadow: SH(), objectName: 'a1-tel' } as any)
+    s.addImage({ path: `${IMG}/landing.png`, x: 9.3, y: 1.6, w: 2.65, h: 4.9, objectName: 'a1-pagina' } as any)
+    s.addNotes(S.landing.notes)
   }
 
   // 10. Sicurezza
