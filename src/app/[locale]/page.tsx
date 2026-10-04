@@ -36,6 +36,7 @@ import HomeSection from '@/components/home/HomeSection'
 import HomeBand from '@/components/home/HomeBand'
 import HomeCommunity from '@/components/home/HomeCommunity'
 import HeroLogoVideo from '@/components/home/HeroLogoVideo'
+import HeroSideImage from '@/components/home/HeroSideImage'
 import type { Metadata } from 'next'
 import { HOME_LAYOUT_CONFIG, isHomeLayout } from '@/lib/homeLayouts'
 import { getHomeLayout } from '@/lib/homeLayoutServer'
@@ -57,6 +58,8 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
   // Aspetto scelto dall'Admin: cambiano solo sfondi e immagini, mai i contenuti
   const { layout: preview } = await searchParams
   const L = HOME_LAYOUT_CONFIG[isHomeLayout(preview) ? preview : await getHomeLayout()]
+  // Apertura con testo a sinistra sul computer (foto a lato)
+  const leftHero = L.hero.kind === 'split' || L.hero.kind === 'side'
 
   // Codice referral, riconoscimento pubblico e Kordata (acquisti di gruppo).
   // Niente "struttura a matrice" in evidenza — non deve sembrare un network.
@@ -135,7 +138,7 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
           iscritti: tutto lo spazio è per il messaggio "non ti serve una
           promessa, ti serve una mano". */}
       <section
-        className={`relative overflow-hidden ${L.hero.kind === 'split' ? 'home-light bg-[var(--background)]' : L.hero.variant === 'radial' ? 'bg-[radial-gradient(ellipse_at_70%_0%,#3a2e17_0%,var(--ink)_60%)]' : ''}`}
+        className={`relative overflow-hidden ${L.hero.kind === 'side' ? 'bg-[#0c0d0c]' : L.hero.kind === 'split' ? 'home-light bg-[var(--background)]' : L.hero.variant === 'radial' ? 'bg-[radial-gradient(ellipse_at_70%_0%,#3a2e17_0%,var(--ink)_60%)]' : ''}`}
       >
         {L.hero.kind === 'photo' && L.hero.image ? (
           <>
@@ -147,12 +150,16 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
         )}
         <div
           className={`relative mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10 lg:pt-12 pb-16 sm:pb-24 lg:pb-28 ${
-            L.hero.kind === 'split' ? 'grid max-w-7xl items-center gap-10 text-center lg:grid-cols-[1.1fr_0.9fr] lg:text-left' : 'max-w-4xl text-center'
+            L.hero.kind === 'split'
+              ? 'grid max-w-7xl items-center gap-10 text-center lg:grid-cols-[1.1fr_0.9fr] lg:text-left'
+              : L.hero.kind === 'side'
+                ? 'z-10 max-w-7xl text-center lg:py-28 lg:text-left'
+                : 'max-w-4xl text-center'
           }`}
         >
-          <div>
+          <div className={L.hero.kind === 'side' ? 'lg:max-w-[46%]' : undefined}>
           <p className="text-2xl sm:text-3xl font-bold tracking-[0.3em] text-[var(--gold-bright)] mb-3 sm:mb-4">KUMANI</p>
-          <div className={`flex mb-5 sm:mb-7 ${L.hero.kind === 'split' ? 'justify-center lg:justify-start' : 'justify-center'}`}>
+          <div className={`flex mb-5 sm:mb-7 ${leftHero ? 'justify-center lg:justify-start' : 'justify-center'}`}>
             {L.hero.video ? <HeroLogoVideo label="KUMANI" /> : <Logo size={96} priority className="sm:h-28 sm:w-28 h-24 w-24" />}
           </div>
           {/* Il manifesto in una frase: ben visibile, non un'etichetta */}
@@ -164,11 +171,11 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
             {t('heroTitle')}
             <span className="block bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] bg-clip-text text-transparent">{t('heroAccent')}</span>
           </h1>
-          <p className={`text-lg sm:text-xl text-gray-300 mb-8 sm:mb-10 leading-relaxed max-w-2xl mx-auto ${L.hero.kind === 'split' ? 'lg:mx-0' : ''}`}>
+          <p className={`text-lg sm:text-xl text-gray-300 mb-8 sm:mb-10 leading-relaxed max-w-2xl mx-auto ${leftHero ? 'lg:mx-0' : ''}`}>
             {t('heroDescription')}{' '}
             <strong className="text-white">{t('heroDescriptionStrong')}</strong>: {t('heroDescriptionEnd')}
           </p>
-          <div className={`flex flex-col sm:flex-row gap-3 sm:gap-4 mb-10 sm:mb-14 justify-center ${L.hero.kind === 'split' ? 'lg:justify-start' : ''}`}>
+          <div className={`flex flex-col sm:flex-row gap-3 sm:gap-4 mb-10 sm:mb-14 justify-center ${leftHero ? 'lg:justify-start' : ''}`}>
             <Link
               href="/register"
               className="bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] hover:brightness-110 text-[var(--ink)] px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-bold text-base sm:text-lg transition-all shadow-xl hover:shadow-2xl hover:scale-105 flex items-center justify-center gap-2"
@@ -184,7 +191,7 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
             </Link>
           </div>
           {/* Stats */}
-          <div className={`grid grid-cols-3 gap-3 sm:gap-6 max-w-xl mx-auto ${L.hero.kind === 'split' ? 'lg:mx-0' : ''}`}>
+          <div className={`grid grid-cols-3 gap-3 sm:gap-6 max-w-xl mx-auto ${leftHero ? 'lg:mx-0' : ''}`}>
             <div>
               <div className="text-2xl sm:text-3xl font-bold text-white">7</div>
               <div className="text-xs sm:text-sm text-gray-400">{t('statLanguagesLabel')}</div>
@@ -205,6 +212,9 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
             </div>
           )}
         </div>
+        {L.hero.kind === 'side' && L.hero.image && L.hero.mobileImage && (
+          <HeroSideImage image={L.hero.image} mobileImage={L.hero.mobileImage} position={L.hero.position} />
+        )}
       </section>
 
       {/* 🛠️ SEZIONE: IL MARKETPLACE — i servizi nei tre livelli Gratis, Base
