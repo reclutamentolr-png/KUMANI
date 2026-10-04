@@ -28,17 +28,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     auth: { autoRefreshToken: false, persistSession: false },
   })
   const [{ data: settings }, { data: events }, { data: landings }] = await Promise.all([
-    db.from('marketplace_settings').select('tool_name, is_enabled'),
+    db.from('marketplace_settings').select('tool_name, is_enabled, updated_at'),
     db.from('events').select('id, updated_at').eq('status', 'published').gte('starts_at', new Date().toISOString()).limit(500),
     // Landing Page pubblicate dagli utenti Pro (una lingua sola, niente alternative)
     db.rpc('list_public_landings'),
   ])
   const off = new Set((settings ?? []).filter((s) => s.is_enabled === false).map((s) => s.tool_name as string))
+  const updated = new Map((settings ?? []).filter((s) => s.updated_at).map((s) => [s.tool_name as string, new Date(s.updated_at as string).toISOString()]))
   const tools = getMarketplaceTools((key) => key).filter((tool) => !off.has(tool.toolName))
 
   return [
     ...PAGES.map((page) => entry(page, page === '' ? 1 : 0.6, page === '' ? 'weekly' : 'monthly')),
-    ...tools.map((tool) => entry(`/strumenti/${tool.toolName}`, 0.7)),
+    // Data dell'ultima modifica dall'Admin (es. servizio riacceso): Google rilegge la pagina
+    ...tools.map((tool) => entry(`/strumenti/${tool.toolName}`, 0.7, 'monthly', updated.get(tool.toolName))),
     ...PUBLIC_GUIDES.map((slug) => entry(`/guida/${slug}`, 0.5)),
     ...(events ?? []).map((e) => entry(`/events/${e.id}`, 0.5, 'weekly', e.updated_at as string | undefined)),
     ...((landings as { slug: string; updated_at: string }[] | null) ?? []).map((l) => ({

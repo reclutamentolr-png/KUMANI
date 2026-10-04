@@ -3041,7 +3041,8 @@
     "ctaDiscover": "Alle KUMANI-Tools entdecken",
     "includedPaid": "Im KUMANI-Abo enthalten, zusammen mit allen anderen Tools.",
     "includedFree": "Kostenlos für alle, die bei KUMANI registriert sind.",
-    "includedPro": "Im KUMANI Pro-Tarif enthalten (149 €/Jahr, mit 15 Tagen Testphase)."
+    "includedPro": "Im KUMANI Pro-Tarif enthalten (149 €/Jahr, mit 15 Tagen Testphase).",
+    "unavailable": "Dieser Dienst ist vorübergehend nicht verfügbar und bald wieder da. In der Zwischenzeit kannst du alle anderen KUMANI-Dienste entdecken."
   },
   "kuRewards": {
     "title": "Nutze deine KU Karma",

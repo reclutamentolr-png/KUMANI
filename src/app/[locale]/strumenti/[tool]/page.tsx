@@ -18,6 +18,18 @@ import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 
 type Inviter = { first_name: string; last_name: string; referral_code: string }
 
+// Impostazioni del servizio decise dall'Admin (piano e acceso/spento)
+async function toolSetting(toolName: string) {
+  const { data } = await createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  })
+    .from('marketplace_settings')
+    .select('required_plan, is_enabled')
+    .eq('tool_name', toolName)
+    .maybeSingle()
+  return data as { required_plan: string | null; is_enabled: boolean | null } | null
+}
+
 // Pagina pubblica di uno strumento, quella che i Kumani condividono dal
 // pulsante "Condividi" dentro ogni strumento (?ref=CODICE). Chi arriva qui
 // si iscrive con il codice invito di chi ha condiviso già inserito.
@@ -27,11 +39,18 @@ export async function generateMetadata({ params }: { params: Promise<{ tool: str
   const tool = getMarketplaceTools(tm).find((item) => item.toolName === toolName)
   if (!tool) return {}
   // Titolo e descrizione pensati per le ricerche, se ci sono in questa lingua
-  const seo = await getToolSeo(await getLocale(), tool.toolName)
+  const [seo, setting] = await Promise.all([getToolSeo(await getLocale(), tool.toolName), toolSetting(tool.toolName)])
+  // Servizio spento dall'Admin: la pagina resta ma Google non la mostra
+  // finché non viene riacceso (poi torna nella sitemap e viene riletta)
+  const off = setting?.is_enabled === false
   // Indirizzo canonico senza ?ref: tutte le condivisioni contano come una pagina
   return pageMetadata(
     `/strumenti/${tool.toolName}`,
-    { title: seo ? { absolute: seo.title } : tool.title, description: seo?.description ?? tool.description },
+    {
+      title: seo ? { absolute: seo.title } : tool.title,
+      description: seo?.description ?? tool.description,
+      ...(off ? { robots: { index: false, follow: true } } : {}),
+    },
     { ownImage: true }
   )
 }
@@ -52,13 +71,8 @@ export default async function ToolSharePage({
   if (!tool) notFound()
 
   // Piano richiesto dallo strumento (deciso dall'admin): Gratis / Base / Pro.
-  const { data: setting } = await createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
-    auth: { autoRefreshToken: false, persistSession: false },
-  })
-    .from('marketplace_settings')
-    .select('required_plan')
-    .eq('tool_name', tool.toolName)
-    .maybeSingle()
+  const setting = await toolSetting(tool.toolName)
+  const off = setting?.is_enabled === false
   const requiredPlan = (setting?.required_plan as string | undefined) ?? (tool.requiresSubscription ? 'base' : 'free')
   const Icon = marketplaceIconMap[tool.iconName]
 
@@ -122,7 +136,13 @@ export default async function ToolSharePage({
           </div>
           <h1 className="text-3xl font-bold">{tool.title}</h1>
           <p className="mt-3 leading-relaxed text-gray-300">{tool.description}</p>
-          <p className="mt-4 text-sm text-gray-400">{requiredPlan === 'pro' ? t('includedPro') : requiredPlan === 'base' ? t('includedPaid') : t('includedFree')}</p>
+          {off ? (
+            <p className="mt-4 rounded-xl border border-amber-400/40 bg-amber-400/10 px-4 py-3 text-sm text-amber-200" role="status">
+              {t('unavailable')}
+            </p>
+          ) : (
+            <p className="mt-4 text-sm text-gray-400">{requiredPlan === 'pro' ? t('includedPro') : requiredPlan === 'base' ? t('includedPaid') : t('includedFree')}</p>
+          )}
 
           {inviter && (
             <p className="mt-6 rounded-xl bg-white/5 px-4 py-3 text-sm text-gray-200">

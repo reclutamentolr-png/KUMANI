@@ -3041,7 +3041,8 @@
     "ctaDiscover": "Descubre todas las herramientas KUMANI",
     "includedPaid": "Incluida en la suscripción KUMANI, junto con todas las demás herramientas.",
     "includedFree": "Gratis para todos los registrados en KUMANI.",
-    "includedPro": "Incluido en el plan KUMANI Pro (149 €/año, con 15 días de prueba)."
+    "includedPro": "Incluido en el plan KUMANI Pro (149 €/año, con 15 días de prueba).",
+    "unavailable": "Este servicio no está disponible temporalmente y volverá pronto. Mientras tanto, puedes descubrir todos los demás servicios de KUMANI."
   },
   "kuRewards": {
     "title": "Usa tus KU Karma",
