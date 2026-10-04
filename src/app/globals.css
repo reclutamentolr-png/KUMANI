@@ -38,9 +38,26 @@
 body:has([data-fab]) .tool-guide-fab {
   bottom: 6.5rem;
 }
-/* Menu fisso in basso (pagine principali): i pulsanti fissi salgono sopra */
-body:has([data-app-nav]) [data-fab] {
-  bottom: 5.5rem;
+/* Menu fisso in basso (area riservata): i pulsanti fissi salgono sopra */
+body:has([data-app-nav]) [data-fab],
+body:has([data-app-nav]) .tool-share-fab,
+body:has([data-app-nav]) .tool-guide-fab {
+  bottom: calc(5.25rem + env(safe-area-inset-bottom));
+}
+body:has([data-app-nav]):has([data-fab]) .tool-guide-fab {
+  bottom: calc(9.75rem + env(safe-area-inset-bottom));
+}
+/* iPhone: la barra in un proprio livello grafico, così Safari non la sposta
+   mentre la pagina scorre o la barra degli indirizzi si allunga/accorcia; e
+   niente "rimbalzo" della pagina che la trascinava con sé */
+.app-nav {
+  transform: translate3d(0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+html:has(.app-nav),
+html:has(.app-nav) body {
+  overscroll-behavior-y: none;
 }
 
 body {

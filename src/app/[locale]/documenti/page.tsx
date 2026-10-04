@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { getLocale, getTranslations } from 'next-intl/server'
 import {
-  ArrowLeft,
   ArrowRight,
   BadgeCheck,
   CalendarCheck,
@@ -27,6 +26,7 @@ import { listKumaniDocuments, listPersonalDocuments } from '@/lib/documentsData'
 import { getFlyerTitles, listPublishedFlyers } from '@/lib/flyersData'
 import { FLYERS } from '@/lib/flyers'
 import { DOC_LOCALES, pickLocalized, type DocLocale, type KumaniDocFile, type PersonalDocKind } from '@/lib/documents'
+import AppHeader from '@/components/nav/AppHeader'
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('documents')
@@ -50,7 +50,6 @@ const mb = (n: number) => `${(n / 1024 / 1024).toFixed(1)} MB`
 export default async function DocumentsPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
   const locale = await getLocale()
   const t = await getTranslations('documents')
-  const commonT = await getTranslations('common')
   const { tab } = await searchParams
   const personal = tab === 'personali'
 
@@ -96,16 +95,7 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
-        <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
-          <Link href="/dashboard" className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]">
-            <ArrowLeft className="h-5 w-5" /> {commonT('backToDashboard')}
-          </Link>
-          <span className="flex items-center gap-2 font-semibold tracking-wide">
-            <FolderOpen className="h-5 w-5 text-[var(--gold-bright)]" /> {t('title')}
-          </span>
-        </div>
-      </header>
+      <AppHeader title={t('title')} icon={<FolderOpen className="h-5 w-5" />} />
 
       <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
         <h1 className="text-3xl font-bold text-[var(--ink)] sm:text-4xl">{t('title')}</h1>

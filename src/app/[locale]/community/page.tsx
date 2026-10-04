@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { getDashboardNetworkData } from '@/lib/dashboardNetworkData'
 import { getCommunityItems } from '@/lib/servicesCatalog'
 import type { MyProfile } from '@/lib/myProfile'
-import HubHeader from '@/components/nav/HubHeader'
+import AppHeader from '@/components/nav/AppHeader'
 import NetworkSummaryCard from '@/components/dashboard/NetworkSummaryCard'
 import { CommunityBlock } from '@/components/dashboard/CommunityBlock'
 import KumanoDelGiornoPreview from '@/components/dashboard/KumanoDelGiornoPreview'
@@ -36,7 +36,7 @@ export default async function CommunityPage({ params }: { params: Promise<{ loca
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      <HubHeader title={t('communityTitle')} subtitle={t('communitySubtitle')} />
+      <AppHeader title={t('communityTitle')} subtitle={t('communitySubtitle')} />
       <main className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
         <NetworkSummaryCard network={network} />
         {communityItems.length > 0 && <CommunityBlock items={communityItems} />}

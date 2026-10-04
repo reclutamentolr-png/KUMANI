@@ -69,6 +69,7 @@ export default function DashboardHeaderActions({ user, profile, isAdmin }: Dashb
       <div className="flex items-center gap-1.5 sm:gap-4">
         {/* Icona Profilo e Nome */}
         <button
+          data-profile-button
           onClick={() => setIsProfileModalOpen(true)}
           className="flex items-center gap-2 px-1.5 py-1.5 sm:px-3 rounded-lg hover:bg-white/10 transition-colors group"
           title={profileIncomplete ? t('completeProfileShort') : unseenOutcome ? lockT('outcomeDot') : t('editProfileTitle')}

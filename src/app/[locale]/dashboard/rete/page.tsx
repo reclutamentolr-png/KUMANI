@@ -3,7 +3,6 @@ import { createClient } from '@/lib/supabase/server'
 import type { MyProfile } from '@/lib/myProfile'
 import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
-import Link from '@/components/LocalizedLink'
 import CopyButton from '@/components/CopyButton'
 import MatrixTree from '@/components/MatrixTree'
 import SpilloverExplainer from '@/components/SpilloverExplainer'
@@ -11,8 +10,9 @@ import RankBadge from '@/components/RankBadge'
 import KumaniPeople from '@/components/KumaniPeople'
 import Leaderboard from '@/components/Leaderboard'
 import { getDashboardNetworkData } from '@/lib/dashboardNetworkData'
-import { ArrowLeft, TreePine, Star, Sparkles, Crown, Trophy, Wallet, PartyPopper, UserPlus, CheckCircle2, Shuffle, Network, MessageCircle, Gift } from 'lucide-react'
+import { TreePine, Star, Sparkles, Crown, Trophy, PartyPopper, UserPlus, CheckCircle2, Shuffle, Network, MessageCircle, Gift, Users } from 'lucide-react'
 import NativeShareButton from '@/components/NativeShareButton'
+import AppHeader from '@/components/nav/AppHeader'
 
 // Schede "Prossimi obiettivi": aspetto di ciascuna qualifica (soglie e testi dalle qualifiche della rete)
 const GOALS = [
@@ -70,21 +70,7 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      <header className="border-b border-[var(--gold)]/25 bg-[var(--ink)] shadow-[0_8px_30px_rgba(23,23,23,0.18)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          <Link href="/dashboard" className="flex items-center gap-2 text-sm font-semibold text-[var(--gold-bright)] transition-colors hover:text-white">
-            <ArrowLeft className="h-4 w-4" /> {t('backToDashboard')}
-          </Link>
-          <h1 className="text-lg font-semibold tracking-tight text-white">{t('yourNetwork')}</h1>
-          <Link
-            href="/wallet"
-            className="flex items-center gap-1.5 rounded-lg border border-[var(--gold)]/45 bg-black px-3 py-1.5 text-sm font-semibold text-[var(--gold-bright)] shadow-sm transition-colors hover:bg-[var(--gold)]/10"
-          >
-            <Wallet className="h-4 w-4" />
-            <span className="hidden sm:inline">{t('myWallet')}</span>
-          </Link>
-        </div>
-      </header>
+      <AppHeader title={t('yourNetwork')} icon={<Users className="h-5 w-5" />} />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* KUMI e codice invito */}

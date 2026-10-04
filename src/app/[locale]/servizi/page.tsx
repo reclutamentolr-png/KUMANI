@@ -5,7 +5,7 @@ import Link from '@/components/LocalizedLink'
 import { createClient } from '@/lib/supabase/server'
 import { getServicesCatalog } from '@/lib/servicesCatalog'
 import { getPlanPrices } from '@/lib/planPrices'
-import HubHeader from '@/components/nav/HubHeader'
+import AppHeader from '@/components/nav/AppHeader'
 import ServicesBrowser from '@/components/services/ServicesBrowser'
 
 export const dynamic = 'force-dynamic'
@@ -35,7 +35,7 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      <HubHeader title={t('servicesTitle')} subtitle={t('servicesSubtitle', { count: items.length })} />
+      <AppHeader title={t('servicesTitle')} subtitle={t('servicesSubtitle', { count: items.length })} />
       <main className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
         <ServicesBrowser items={items} favorites={favorites} />
 

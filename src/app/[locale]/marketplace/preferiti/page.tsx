@@ -2,11 +2,12 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
-import { ArrowLeft, Star } from 'lucide-react'
+import { Star } from 'lucide-react'
 import { getMarketplaceAccessState } from '@/lib/marketplaceAccess'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { getFavoriteToolNames } from '@/lib/favorites'
 import FavoritesGrid from '@/components/FavoritesGrid'
+import AppHeader from '@/components/nav/AppHeader'
 
 export default async function MarketplaceFavoritesPage({
   params,
@@ -19,7 +20,6 @@ export default async function MarketplaceFavoritesPage({
   const { from } = await searchParams
   const fromDashboard = from === 'dashboard'
   const t = await getTranslations('marketplace')
-  const commonT = await getTranslations('common')
   const supabase = await createClient()
   const {
     data: { user },
@@ -53,19 +53,7 @@ export default async function MarketplaceFavoritesPage({
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      <header className="border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-[0_8px_30px_rgba(23,23,23,0.18)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <Link
-            href="/dashboard"
-            className="flex items-center gap-2 text-sm font-semibold text-[var(--gold-bright)] transition-colors hover:text-white"
-          >
-            <ArrowLeft className="h-4 w-4" /> {commonT('backToDashboard')}
-          </Link>
-          <h1 className="flex items-center gap-2 text-lg font-semibold tracking-tight text-white">
-            <Star className="h-5 w-5 text-[var(--gold-bright)]" fill="currentColor" /> {t('favoritesTitle')}
-          </h1>
-        </div>
-      </header>
+      <AppHeader title={t('favoritesTitle')} icon={<Star className="h-5 w-5" fill="currentColor" />} />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8 max-w-2xl">

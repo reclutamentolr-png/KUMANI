@@ -4,7 +4,6 @@ import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
 import {
-  ArrowLeft,
   Wallet,
   Ticket,
   Gift,
@@ -41,6 +40,7 @@ import { featureConfig, type KuRenewalConfig } from '@/lib/ku'
 import { getMyAttendedCount, listMyPasses } from '@/app/actions/events'
 import { EVENT_TYPE_EMOJI, formatEventDate } from '@/lib/events'
 import type { MyProfile } from '@/lib/myProfile'
+import AppHeader from '@/components/nav/AppHeader'
 
 const RANK_ICONS = { Star, Sparkles, Crown }
 
@@ -173,16 +173,7 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      <header className="border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-[0_8px_30px_rgba(23,23,23,0.18)]">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          <Link href="/dashboard" className="flex items-center gap-2 text-sm font-semibold text-[var(--gold-bright)] transition-colors hover:text-white">
-            <ArrowLeft className="h-4 w-4" /> {t('backToDashboard')}
-          </Link>
-          <h1 className="flex items-center gap-2 text-lg font-semibold tracking-tight text-white">
-            <Wallet className="h-5 w-5 text-[var(--gold-bright)]" /> {t('title')}
-          </h1>
-        </div>
-      </header>
+      <AppHeader title={t('title')} icon={<Wallet className="h-5 w-5" />} />
 
       <main className="mx-auto max-w-5xl space-y-6 px-4 py-10 sm:px-6 lg:px-8">
         <div className="mb-4 max-w-2xl">

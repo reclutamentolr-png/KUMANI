@@ -71,6 +71,9 @@ const OG_LOCALES: Record<string, string> = { it: "it_IT", en: "en_GB", fr: "fr_F
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  // iPhone: la pagina usa tutto lo schermo e i margini sicuri (env(safe-area-*))
+  // tengono il menu in basso sopra la barretta di sistema
+  viewportFit: "cover",
   // Zoom libero: chi vede poco può ingrandire (accessibilità)
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#171717" },

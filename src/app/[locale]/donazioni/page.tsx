@@ -3,6 +3,7 @@ import { pageMetadata } from '@/lib/seo'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { ArrowLeft, CheckCircle2, ExternalLink, FileText, HandCoins, HeartHandshake, Landmark, Users } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
+import AppHeader from '@/components/nav/AppHeader'
 import { getPublicDonationSummary } from '@/lib/donationsPublic'
 import { euroFormat } from '@/lib/donationTypes'
 
@@ -19,9 +20,13 @@ export default async function DonationsPage() {
   const summary = await getPublicDonationSummary()
   const eur = (cents: number) => euroFormat(locale, cents)
   const active = summary?.active ?? null
+  // Chi ha fatto l'accesso vede l'intestazione dell'app (torna alla Home,
+  // non alla homepage pubblica); gli altri quella pubblica
+  const appHeader = await AppHeader({ title: t('sectionTitle'), icon: <HeartHandshake className="h-5 w-5" /> })
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
+      {appHeader ?? (
       <header className="border-b border-[var(--gold)]/25 bg-[var(--ink)]">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
           <Link href="/" className="flex items-center gap-2 text-sm font-semibold text-[var(--gold-bright)] hover:text-white">
@@ -32,6 +37,7 @@ export default async function DonationsPage() {
           </span>
         </div>
       </header>
+      )}
 
       <main className="mx-auto max-w-5xl space-y-8 px-4 py-10 sm:px-6">
         <div className="text-center">
