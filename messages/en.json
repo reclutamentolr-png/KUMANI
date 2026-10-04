@@ -3126,7 +3126,9 @@
     "upgradeError_unavailable": "The Pro plan is not available yet.",
     "upgradeError_already_pro": "You already have the Pro plan.",
     "upgradeError_stripe_error": "Payment failed. Please try again shortly.",
-    "upgradeError_consent": "Tick the box to request immediate activation of the Pro plan."
+    "upgradeError_consent": "Tick the box to request immediate activation of the Pro plan.",
+    "passCreditNote": "You have {amount} of credit from your active passes: we deduct it from your first payment. The passes included in the plan end when the plan starts.",
+    "passCreditApplied": "Credit from your passes already deducted: {amount}. The passes included in Pro end."
   },
   "proArea": {
     "convivioTitle": "Kordata · Group offers",
@@ -5853,7 +5855,8 @@
     "intro_pass": "thank you for buying the {service} pass. Here is a summary of your purchase.",
     "passOneOff": "One-off payment: the pass lasts one year and does not renew automatically.",
     "passConsent": "As you requested on {date}, your pass was activated immediately, before the end of the 14-day withdrawal period.",
-    "passWithdrawal": "Right of withdrawal: you can withdraw until {deadline} ({days} days from payment) by writing to us from the Contact page. We will refund the part of the pass you have not yet used, within 14 days of your request."
+    "passWithdrawal": "Right of withdrawal: you can withdraw until {deadline} ({days} days from payment) by writing to us from the Contact page. We will refund the part of the pass you have not yet used, within 14 days of your request.",
+    "passCredit": "The credit from your passes ({amount}) was deducted from your first payment: the passes included in the plan have ended."
   },
   "voucherWallet": {
     "pointsBalance": "KU Points",

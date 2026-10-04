@@ -3126,7 +3126,9 @@
     "upgradeError_unavailable": "O plano Pro ainda não está disponível.",
     "upgradeError_already_pro": "Já tem o plano Pro.",
     "upgradeError_stripe_error": "O pagamento falhou. Tente novamente daqui a pouco.",
-    "upgradeError_consent": "Assinale a caixa para pedir a ativação imediata do plano Pro."
+    "upgradeError_consent": "Assinale a caixa para pedir a ativação imediata do plano Pro.",
+    "passCreditNote": "Tem {amount} de crédito dos seus passes ainda ativos: descontamo-lo do primeiro pagamento. Os passes incluídos no plano terminam quando o plano é ativado.",
+    "passCreditApplied": "Crédito dos seus passes já descontado: {amount}. Os passes incluídos no Pro terminam."
   },
   "proArea": {
     "convivioTitle": "Kordata · Ofertas de grupo",
@@ -5853,7 +5855,8 @@
     "intro_pass": "obrigado por ter comprado o Passe {service}. Aqui está o resumo da sua compra.",
     "passOneOff": "Pagamento único: o Passe dura um ano e não se renova automaticamente.",
     "passConsent": "Como pediu em {date}, o Passe foi ativado de imediato, antes do fim dos 14 dias do direito de livre resolução.",
-    "passWithdrawal": "Direito de livre resolução: pode resolver o contrato até {deadline} ({days} dias após o pagamento), escrevendo-nos a partir da página Contactos. Reembolsaremos a parte do Passe ainda não utilizada, no prazo de 14 dias a contar do pedido."
+    "passWithdrawal": "Direito de livre resolução: pode resolver o contrato até {deadline} ({days} dias após o pagamento), escrevendo-nos a partir da página Contactos. Reembolsaremos a parte do Passe ainda não utilizada, no prazo de 14 dias a contar do pedido.",
+    "passCredit": "Do primeiro pagamento foi descontado o crédito dos seus passes ({amount}): os passes incluídos no plano terminaram."
   },
   "voucherWallet": {
     "pointsBalance": "KU Points",

@@ -8,6 +8,7 @@ import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { recordConsent } from '@/lib/withdrawal'
 import { getCheckoutTexts } from '@/lib/checkoutTexts'
 import { getPlanPrices } from '@/lib/planPrices'
+import { computePassCredit } from '@/lib/passCredit'
 import { parseVatInput } from '@/lib/vat'
 import { locales, defaultLocale } from '../../../../i18n'
 
@@ -78,6 +79,17 @@ export async function POST(request: Request) {
 
     // Azienda: cliente Stripe con ragione sociale e P.IVA, così compaiono
     // in fattura. Se Stripe rifiuta il formato della P.IVA si crea senza.
+    // Pass già pagati per servizi inclusi nel piano: la parte non usata si
+    // scala dal primo pagamento (i Pass terminano quando il piano si attiva)
+    const planPrices = await getPlanPrices()
+    const fullCents = Math.round((plan === 'pro' ? planPrices.pro : planPrices.base) * 100)
+    const credit = await computePassCredit(user.id, plan)
+    const creditCents = Math.min(credit.cents, Math.max(fullCents - 100, 0))
+    if (creditCents > 0) {
+      purchaseMeta.pass_credit_cents = String(creditCents)
+      purchaseMeta.pass_ids = credit.passIds.join(',').slice(0, 480)
+    }
+
     let customerId: string | null = null
     if (business) {
       const stripe = getStripe()
@@ -87,8 +99,21 @@ export async function POST(request: Request) {
       customerId = customer.id
     }
 
+    const coupon =
+      creditCents > 0
+        ? await getStripe().coupons.create({
+            amount_off: creditCents,
+            currency: 'eur',
+            duration: 'once',
+            max_redemptions: 1,
+            name: 'Credito Pass KUMANI',
+            metadata: { userId: user.id, pass_ids: purchaseMeta.pass_ids },
+          })
+        : null
+
     const session = await getStripe().checkout.sessions.create({
       mode: 'subscription',
+      ...(coupon ? { discounts: [{ coupon: coupon.id }] } : {}),
       payment_method_types: ['card'],
       line_items: [
         {
@@ -129,8 +154,7 @@ export async function POST(request: Request) {
       auth: { autoRefreshToken: false, persistSession: false },
     })
     // Stesso testo del rinnovo mostrato accanto al pulsante
-    const prices = await getPlanPrices()
-    const { renewalNote } = await getCheckoutTexts(locale, { priceEuro: plan === 'pro' ? prices.pro : prices.base })
+    const { renewalNote } = await getCheckoutTexts(locale, { priceEuro: plan === 'pro' ? planPrices.pro : planPrices.base })
     await recordConsent(service, { userId: user.id, kind: 'checkout', plan, stripeRef: session.id, locale, business, renewalNote, termsAccepted: true })
     
     return NextResponse.redirect(session.url, 303)

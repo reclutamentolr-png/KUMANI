@@ -6,6 +6,7 @@ import { isPlatformFeeType, markPlatformFeesPaid } from '@/lib/eventFees'
 import { recordAgentCommission, reverseAgentCommission } from '@/lib/agentCommissions'
 import { sendPassConfirmation, sendPurchaseConfirmation } from '@/lib/purchaseEmail'
 import { awardActivationPoints, awardPassPoints, reverseActivationPoints } from '@/lib/networkPoints'
+import { convertPassesFromInvoice } from '@/lib/passCredit'
 import { accrueSubscriptionDonation, reverseSubscriptionDonation } from '@/lib/donations'
 import { grantToolPassFromSession, revokeToolPassForCharge, TOOL_PASS_TYPE } from '@/lib/toolPasses'
 
@@ -49,6 +50,8 @@ export async function POST(req: NextRequest) {
         await recordAgentCommission(event.data.object as Stripe.Invoice)
         // Punti Rete allo sponsor diretto (idempotente per fattura)
         await awardActivationPoints(event.data.object as Stripe.Invoice)
+        // Pass scalati con il credito al primo pagamento del piano: terminano
+        await convertPassesFromInvoice(event.data.object as Stripe.Invoice & { subscription_details?: { metadata?: Record<string, string> | null } | null })
         // Donazione KUMANI all'associazione attiva (idempotente per fattura)
         await accrueSubscriptionDonation(event.data.object as Stripe.Invoice)
       } else {

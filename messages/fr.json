@@ -3126,7 +3126,9 @@
     "upgradeError_unavailable": "L'offre Pro n'est pas encore disponible.",
     "upgradeError_already_pro": "Vous avez déjà l'offre Pro.",
     "upgradeError_stripe_error": "Le paiement a échoué. Réessayez dans un instant.",
-    "upgradeError_consent": "Cochez la case pour demander l'activation immédiate de l'offre Pro."
+    "upgradeError_consent": "Cochez la case pour demander l'activation immédiate de l'offre Pro.",
+    "passCreditNote": "Vous avez {amount} de crédit grâce à vos pass encore actifs : nous le déduisons du premier paiement. Les pass inclus dans l’offre prennent fin quand l’offre est activée.",
+    "passCreditApplied": "Crédit de vos pass déjà déduit : {amount}. Les pass inclus dans Pro prennent fin."
   },
   "proArea": {
     "convivioTitle": "Kordata · Offres groupées",
@@ -5853,7 +5855,8 @@
     "intro_pass": "merci d’avoir acheté le Pass {service}. Voici le récapitulatif de votre achat.",
     "passOneOff": "Paiement unique : le Pass dure un an et ne se renouvelle pas automatiquement.",
     "passConsent": "Comme vous l’avez demandé le {date}, le Pass a été activé immédiatement, avant la fin du délai de rétractation de 14 jours.",
-    "passWithdrawal": "Droit de rétractation : vous pouvez vous rétracter jusqu’au {deadline} ({days} jours après le paiement) en nous écrivant depuis la page Contact. Nous vous rembourserons la partie du Pass non encore utilisée, dans les 14 jours suivant votre demande."
+    "passWithdrawal": "Droit de rétractation : vous pouvez vous rétracter jusqu’au {deadline} ({days} jours après le paiement) en nous écrivant depuis la page Contact. Nous vous rembourserons la partie du Pass non encore utilisée, dans les 14 jours suivant votre demande.",
+    "passCredit": "Le crédit de vos pass ({amount}) a été déduit du premier paiement : les pass inclus dans l’offre ont pris fin."
   },
   "voucherWallet": {
     "pointsBalance": "KU Points",

@@ -344,9 +344,13 @@ export default function TermsPage() {
               <p>
                 <strong className="text-gray-900">7.9 Pass servizio.</strong> Alcuni servizi, indicati sulla loro scheda, possono essere
                 attivati singolarmente per un anno, senza abbonamento, con un pagamento unico o con un codice pass. Il pass non si
-                rinnova automaticamente, non dà KU Points a chi ha invitato l&apos;utente e non modifica il prezzo degli abbonamenti Base
-                e Pro, che restano dovuti per intero se l&apos;utente decide di abbonarsi. Per l&apos;acquisto del pass valgono le stesse
-                regole di recesso e di rimborso degli abbonamenti; in caso di rimborso il pass viene disattivato.
+                rinnova automaticamente. Al primo acquisto del pass di un servizio, chi ha invitato l&apos;utente può ricevere i KU Points
+                indicati dalla Piattaforma per quel servizio; in caso di rimborso vengono tolti. Se l&apos;utente attiva in seguito un
+                abbonamento Base o Pro che include servizi per cui ha un pass pagato ancora attivo, la parte del pass non ancora
+                utilizzata (calcolata in proporzione ai giorni che restano) viene scalata dal primo pagamento dell&apos;abbonamento e quei
+                pass terminano, sostituiti dall&apos;abbonamento; i KU Points dell&apos;attivazione sono calcolati in proporzione
+                all&apos;importo effettivamente pagato. Per l&apos;acquisto del pass valgono le stesse regole di recesso e di rimborso degli
+                abbonamenti; in caso di rimborso il pass viene disattivato.
               </p>
             </div>
 

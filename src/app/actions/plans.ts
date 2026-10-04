@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 import type Stripe from 'stripe'
 import { getLocale } from 'next-intl/server'
 import { getPlanPrices } from '@/lib/planPrices'
+import { computePassCredit, convertCreditedPasses } from '@/lib/passCredit'
 import { getStripe } from '@/lib/stripe'
 import { isBusinessPurchase, recordConsent } from '@/lib/withdrawal'
 
@@ -66,7 +67,7 @@ async function findUpgradableSubscription(): Promise<
 // esattamente quello mostrato.
 export async function previewUpgradeToPro(): Promise<
   // business: abbonamento acquistato con P.IVA (dichiarazione B2B al posto del consenso da privato)
-  | { success: true; amountCents: number; currency: string; prorationDate: number; business: boolean; renewsAt: number | null; renewalPriceEuro: number }
+  | { success: true; amountCents: number; currency: string; prorationDate: number; business: boolean; renewsAt: number | null; renewalPriceEuro: number; creditCents: number }
   | { success: false; reason: UpgradeReason }
 > {
   try {
@@ -82,9 +83,13 @@ export async function previewUpgradeToPro(): Promise<
         proration_date: prorationDate,
       },
     })
+    // Credito dei Pass già pagati per servizi Pro: scalato dall'importo
+    const credit = await computePassCredit(found.userId, 'pro')
+    const due = Math.max(preview.amount_due, 0)
     return {
       success: true,
-      amountCents: Math.max(preview.amount_due, 0),
+      amountCents: Math.max(due - credit.cents, 0),
+      creditCents: Math.min(credit.cents, due),
       currency: preview.currency,
       prorationDate,
       business: isBusinessPurchase(found.subscription),
@@ -105,6 +110,8 @@ export async function previewUpgradeToPro(): Promise<
 // immediateStart: consenso all'avvio immediato (casella obbligatoria).
 export async function upgradeToPro(prorationDate?: number, immediateStart = false): Promise<{ success: boolean; reason?: UpgradeReason }> {
   if (!immediateStart) return { success: false, reason: 'consent' }
+  // Se il passaggio fallisce, il credito dei Pass messo sul saldo va tolto
+  let undoCreditOnError: (() => Promise<void>) | null = null
   try {
     const found = await findUpgradableSubscription()
     if (!found.ok) return { success: false, reason: found.reason }
@@ -114,6 +121,24 @@ export async function upgradeToPro(prorationDate?: number, immediateStart = fals
     // l'importo); altrimenti Stripe calcola sul momento attuale.
     const now = Math.floor(Date.now() / 1000)
     const useDate = prorationDate && prorationDate <= now && now - prorationDate < 30 * 60 ? prorationDate : undefined
+
+    // Credito dei Pass per servizi Pro: va sul saldo del cliente Stripe, che
+    // lo usa per la fattura del passaggio (l'eventuale resto per i rinnovi).
+    // Se il passaggio non va a buon fine il credito viene tolto.
+    const customerId = typeof subscription.customer === 'string' ? subscription.customer : subscription.customer.id
+    const credit = await computePassCredit(userId, 'pro')
+    if (credit.cents > 0) {
+      await getStripe().customers.createBalanceTransaction(customerId, { amount: -credit.cents, currency: 'eur', description: 'Credito Pass KUMANI' })
+    }
+    const undoCredit = async () => {
+      if (credit.cents > 0) {
+        await getStripe()
+          .customers.createBalanceTransaction(customerId, { amount: credit.cents, currency: 'eur', description: 'Credito Pass KUMANI annullato' })
+          .catch((err) => console.error('⚠️ Credito Pass non annullato:', err))
+      }
+    }
+
+    undoCreditOnError = undoCredit
 
     // error_if_incomplete: se l'addebito della differenza fallisce Stripe
     // annulla il cambio di prezzo e lancia un errore (niente Pro non pagato).
@@ -135,8 +160,12 @@ export async function upgradeToPro(prorationDate?: number, immediateStart = fals
     const invoicePaid = !invoice || (typeof invoice !== 'string' && invoice.status === 'paid')
     if (updated.status !== 'active' || !invoicePaid) {
       console.error('Passaggio a Pro non pagato:', updated.id, updated.status, typeof invoice === 'string' ? invoice : invoice?.status)
+      await undoCredit()
       return { success: false, reason: 'stripe_error' }
     }
+    // Passaggio pagato: il credito resta usato e i Pass scalati terminano
+    undoCreditOnError = null
+    await convertCreditedPasses(userId, credit.passIds)
 
     // Il webhook customer.subscription.updated fa lo stesso: qui si aggiorna
     // subito per non far aspettare l'utente.
@@ -160,6 +189,7 @@ export async function upgradeToPro(prorationDate?: number, immediateStart = fals
     return { success: true }
   } catch (err) {
     console.error('Errore passaggio a Pro:', err)
+    await undoCreditOnError?.()
     return { success: false, reason: 'stripe_error' }
   }
 }

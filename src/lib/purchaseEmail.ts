@@ -86,6 +86,10 @@ export async function sendPurchaseConfirmation(raw: Stripe.Invoice): Promise<voi
     })
   }
   if (meta.terms_accepted) paragraphs.push({ text: t('termsAccepted', { date: date.format(new Date(meta.terms_accepted)) }) })
+  // Primo pagamento con il credito dei Pass già pagati
+  if (reason === 'create' && Number(meta.pass_credit_cents) > 0) {
+    paragraphs.push({ text: t('passCredit', { amount: money.format(Number(meta.pass_credit_cents) / 100) }) })
+  }
   paragraphs.push({ text: t('manage'), link: billingUrl }, { text: t('terms'), link: termsUrl })
 
   const subject = t(`subject_${reason}`, { plan })

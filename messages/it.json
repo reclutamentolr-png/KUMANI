@@ -3126,7 +3126,9 @@
     "upgradeError_unavailable": "Il piano Pro non è ancora disponibile.",
     "upgradeError_already_pro": "Hai già il piano Pro.",
     "upgradeError_stripe_error": "Pagamento non riuscito. Riprova tra poco.",
-    "upgradeError_consent": "Spunta la casella per chiedere l'attivazione immediata del piano Pro."
+    "upgradeError_consent": "Spunta la casella per chiedere l'attivazione immediata del piano Pro.",
+    "passCreditNote": "Hai {amount} di credito dai tuoi Pass ancora attivi: lo scaliamo dal primo pagamento. I Pass inclusi nel piano terminano quando il piano si attiva.",
+    "passCreditApplied": "Credito dei tuoi Pass già scalato: {amount}. I Pass inclusi nel Pro terminano."
   },
   "proArea": {
     "convivioTitle": "Kordata · Offerte di gruppo",
@@ -5853,7 +5855,8 @@
     "intro_pass": "grazie per aver acquistato il Pass {service}. Ecco il riepilogo del tuo acquisto.",
     "passOneOff": "Pagamento unico: il Pass dura un anno e non si rinnova in automatico.",
     "passConsent": "Come da te richiesto il {date}, il Pass è stato attivato subito, prima della fine dei 14 giorni per il recesso.",
-    "passWithdrawal": "Diritto di recesso: puoi recedere entro il {deadline} ({days} giorni dal pagamento) scrivendoci dalla pagina Contatti. Ti rimborseremo la parte del Pass non ancora usata, entro 14 giorni dalla richiesta."
+    "passWithdrawal": "Diritto di recesso: puoi recedere entro il {deadline} ({days} giorni dal pagamento) scrivendoci dalla pagina Contatti. Ti rimborseremo la parte del Pass non ancora usata, entro 14 giorni dalla richiesta.",
+    "passCredit": "Dal primo pagamento è stato scalato il credito dei tuoi Pass ({amount}): i Pass inclusi nel piano sono terminati."
   },
   "voucherWallet": {
     "pointsBalance": "KU Points",

@@ -8,6 +8,7 @@ import Logo from '@/components/Logo'
 import UpgradeToProButton from '@/components/UpgradeToProButton'
 import CheckoutForm from '@/components/billing/CheckoutForm'
 import { getCheckoutTexts } from '@/lib/checkoutTexts'
+import { computePassCredit } from '@/lib/passCredit'
 import StartProTrialButton from '@/components/StartProTrialButton'
 import { createClient } from '@/lib/supabase/server'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
@@ -88,6 +89,9 @@ export default async function ProPage({
     }
   }
   const trialDays = Number(String(trialDaysRow?.value ?? '15').replace(/"/g, '')) || 15
+  // Credito dei Pass già pagati per servizi Pro (scalato dal primo pagamento)
+  const passCredit = user && !hasStripeSubscription ? await computePassCredit(user.id, 'pro') : null
+  const passCreditCents = passCredit ? Math.min(passCredit.cents, Math.max(Math.round(price * 100) - 100, 0)) : 0
   const proAvailable = !!process.env.STRIPE_PRICE_ID_PRO
 
   return (
@@ -192,6 +196,12 @@ export default async function ProPage({
                   ) : hasStripeSubscription ? (
                     <UpgradeToProButton label={t('ctaUpgrade')} note={t('upgradeNote')} />
                   ) : (
+                    <>
+                    {passCreditCents > 0 && (
+                      <p className="rounded-xl bg-emerald-500/10 px-4 py-3 text-sm font-semibold text-emerald-300">
+                        {t('passCreditNote', { amount: new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(passCreditCents / 100) })}
+                      </p>
+                    )}
                     <CheckoutForm
                       action="/api/checkout?plan=pro"
                       dark
@@ -204,6 +214,7 @@ export default async function ProPage({
                         <Crown className="h-5 w-5" /> {t('ctaSubscribePro', { price })}
                       </button>
                     </CheckoutForm>
+                    </>
                   )}
                   {!trialUsed && plan !== 'pro' && <StartProTrialButton label={t('ctaStartTrial', { days: trialDays })} />}
                 </div>

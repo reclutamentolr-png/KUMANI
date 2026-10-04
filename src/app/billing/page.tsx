@@ -11,6 +11,7 @@ import { findStripeSubscriptionForUser, subscriptionPeriodEnd } from '@/lib/stri
 import { isBusinessPurchase, withdrawableInvoices, withdrawalDeadline } from '@/lib/withdrawal'
 import CheckoutForm from '@/components/billing/CheckoutForm'
 import { getCheckoutTexts } from '@/lib/checkoutTexts'
+import { computePassCredit } from '@/lib/passCredit'
 import { getPlanPrices } from '@/lib/planPrices'
 import WithdrawalRequest from '@/components/billing/WithdrawalRequest'
 import { locales, defaultLocale } from '../../../i18n'
@@ -187,8 +188,12 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
     consentGiven = (count ?? 0) > 0
   }
   const tw = await getTranslations({ locale, namespace: 'withdrawal' })
+  const tp = await getTranslations({ locale, namespace: 'plans' })
   const money = (cents: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(cents / 100)
   const basePrice = (await getPlanPrices()).base
+  // Credito dei Pass già pagati per servizi del Base (scalato dal primo pagamento)
+  const basePassCredit = !isActive ? await computePassCredit(user.id, 'base') : null
+  const basePassCreditCents = basePassCredit ? Math.min(basePassCredit.cents, Math.max(Math.round(basePrice * 100) - 100, 0)) : 0
   const checkoutTexts = await getCheckoutTexts(locale, { priceEuro: basePrice })
   const canRequestWithdrawal = !!withdrawalUntil && withdrawal?.status !== 'pending'
 
@@ -254,6 +259,11 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
           {isActive ? t('activeText', { plan: planName }) : t('inactiveText', { price: basePrice })}
         </p>
 
+        {!isActive && basePassCreditCents > 0 && (
+          <p className="mb-4 rounded-xl bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800">
+            {tp('passCreditNote', { amount: money(basePassCreditCents) })}
+          </p>
+        )}
         {!isActive && (
           <CheckoutForm action="/api/checkout" texts={checkoutTexts}>
             <button

@@ -3126,7 +3126,9 @@
     "upgradeError_unavailable": "Der Pro-Tarif ist noch nicht verfügbar.",
     "upgradeError_already_pro": "Du hast bereits den Pro-Tarif.",
     "upgradeError_stripe_error": "Zahlung fehlgeschlagen. Bitte versuche es gleich noch einmal.",
-    "upgradeError_consent": "Setze das Häkchen, um die sofortige Aktivierung des Pro-Tarifs zu verlangen."
+    "upgradeError_consent": "Setze das Häkchen, um die sofortige Aktivierung des Pro-Tarifs zu verlangen.",
+    "passCreditNote": "Du hast {amount} Guthaben aus deinen noch aktiven Pässen: Wir ziehen es von der ersten Zahlung ab. Die im Tarif enthaltenen Pässe enden, sobald der Tarif aktiv ist.",
+    "passCreditApplied": "Guthaben aus deinen Pässen bereits abgezogen: {amount}. Die in Pro enthaltenen Pässe enden."
   },
   "proArea": {
     "convivioTitle": "Kordata · Gruppenangebote",
@@ -5853,7 +5855,8 @@
     "intro_pass": "danke für den Kauf des {service}-Passes. Hier ist die Übersicht deines Kaufs.",
     "passOneOff": "Einmalzahlung: Der Pass gilt ein Jahr und verlängert sich nicht automatisch.",
     "passConsent": "Wie von dir am {date} verlangt, wurde der Pass sofort aktiviert, noch vor Ablauf der 14-tägigen Widerrufsfrist.",
-    "passWithdrawal": "Widerrufsrecht: Du kannst bis zum {deadline} ({days} Tage nach der Zahlung) widerrufen, indem du uns über die Kontaktseite schreibst. Wir erstatten dir den noch nicht genutzten Teil des Passes innerhalb von 14 Tagen nach deiner Anfrage."
+    "passWithdrawal": "Widerrufsrecht: Du kannst bis zum {deadline} ({days} Tage nach der Zahlung) widerrufen, indem du uns über die Kontaktseite schreibst. Wir erstatten dir den noch nicht genutzten Teil des Passes innerhalb von 14 Tagen nach deiner Anfrage.",
+    "passCredit": "Das Guthaben aus deinen Pässen ({amount}) wurde von der ersten Zahlung abgezogen: Die im Tarif enthaltenen Pässe sind beendet."
   },
   "voucherWallet": {
     "pointsBalance": "KU Points",

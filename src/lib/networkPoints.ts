@@ -41,7 +41,11 @@ export async function awardActivationPoints(invoice: Stripe.Invoice): Promise<vo
 
   const customer = await userIdOf(invoice)
   if (!customer) return
-  const { data, error } = await db().rpc('award_activation_points', { p_invoice_id: invoice.id, p_customer: customer, p_kind: kind })
+  // Punti in proporzione a quanto è stato pagato davvero: con il credito dei
+  // Pass (o un altro sconto) il cliente paga meno del prezzo pieno
+  const full = invoice.subtotal ?? 0
+  const scale = full > 0 ? Math.min(Math.max(invoice.amount_paid / full, 0), 1) : 1
+  const { data, error } = await db().rpc('award_activation_points', { p_invoice_id: invoice.id, p_customer: customer, p_kind: kind, p_scale: scale })
   if (error) throw new Error(`Punti Rete non assegnati: ${error.message}`)
 
   // Notifica push a chi ha invitato (solo quando i punti sono stati assegnati ora)

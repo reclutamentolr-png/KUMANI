@@ -3126,7 +3126,9 @@
     "upgradeError_unavailable": "El plan Pro aún no está disponible.",
     "upgradeError_already_pro": "Ya tienes el plan Pro.",
     "upgradeError_stripe_error": "El pago no se realizó. Inténtalo de nuevo en un momento.",
-    "upgradeError_consent": "Marca la casilla para solicitar la activación inmediata del plan Pro."
+    "upgradeError_consent": "Marca la casilla para solicitar la activación inmediata del plan Pro.",
+    "passCreditNote": "Tienes {amount} de crédito de tus pases todavía activos: lo descontamos del primer pago. Los pases incluidos en el plan terminan cuando se activa el plan.",
+    "passCreditApplied": "Crédito de tus pases ya descontado: {amount}. Los pases incluidos en Pro terminan."
   },
   "proArea": {
     "convivioTitle": "Kordata · Ofertas de grupo",
@@ -5853,7 +5855,8 @@
     "intro_pass": "gracias por comprar el Pase {service}. Este es el resumen de tu compra.",
     "passOneOff": "Pago único: el Pase dura un año y no se renueva automáticamente.",
     "passConsent": "Como solicitaste el {date}, el Pase se activó de inmediato, antes de que terminaran los 14 días del derecho de desistimiento.",
-    "passWithdrawal": "Derecho de desistimiento: puedes desistir hasta el {deadline} ({days} días desde el pago) escribiéndonos desde la página Contacto. Te reembolsaremos la parte del Pase que aún no hayas usado, en los 14 días siguientes a tu solicitud."
+    "passWithdrawal": "Derecho de desistimiento: puedes desistir hasta el {deadline} ({days} días desde el pago) escribiéndonos desde la página Contacto. Te reembolsaremos la parte del Pase que aún no hayas usado, en los 14 días siguientes a tu solicitud.",
+    "passCredit": "Del primer pago se ha descontado el crédito de tus pases ({amount}): los pases incluidos en el plan han terminado."
   },
   "voucherWallet": {
     "pointsBalance": "KU Points",

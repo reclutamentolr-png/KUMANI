@@ -14,7 +14,7 @@ export default function UpgradeToProButton({ label, note }: { label: string; not
   const router = useRouter()
   const [busy, setBusy] = useState(false)
   const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null)
-  const [preview, setPreview] = useState<{ amount: string; prorationDate: number; business: boolean; renewal: string | null } | null>(null)
+  const [preview, setPreview] = useState<{ amount: string; prorationDate: number; business: boolean; renewal: string | null; credit: string | null } | null>(null)
   // Consenso all'avvio immediato, obbligatorio come nel checkout
   const [agreed, setAgreed] = useState(false)
   const tw = useTranslations('withdrawal')
@@ -35,7 +35,9 @@ export default function UpgradeToProButton({ label, note }: { label: string; not
               price: new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(result.renewalPriceEuro),
             })
           : null
-        setPreview({ amount, prorationDate: result.prorationDate, business: result.business, renewal })
+        const credit =
+          result.creditCents > 0 ? new Intl.NumberFormat(locale, { style: 'currency', currency: result.currency.toUpperCase() }).format(result.creditCents / 100) : null
+        setPreview({ amount, prorationDate: result.prorationDate, business: result.business, renewal, credit })
       } else {
         showError(result.reason)
       }
@@ -73,6 +75,7 @@ export default function UpgradeToProButton({ label, note }: { label: string; not
           <p className="text-sm text-gray-300">{t('upgradeAmountLabel')}</p>
           <p className="mt-1 text-3xl font-extrabold text-[var(--gold-bright)]">{preview.amount}</p>
           <p className="mt-2 text-xs text-gray-400">{t('upgradeAmountHint')}</p>
+          {preview.credit && <p className="mt-2 text-xs font-semibold text-emerald-300">{t('passCreditApplied', { amount: preview.credit })}</p>}
           {preview.renewal && <p className="mt-2 rounded-lg bg-white/5 px-3 py-2 text-xs leading-relaxed text-gray-300">{preview.renewal}</p>}
           <label className="mt-4 flex items-start gap-2 text-left text-xs leading-relaxed text-gray-300">
             <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--gold)]" />
