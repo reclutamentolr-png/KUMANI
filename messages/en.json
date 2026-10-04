@@ -6701,6 +6701,16 @@
         "p2d": "Three templates, your colour and a Google listing.",
         "p3": "Customers message you",
         "p3d": "Messages in the dashboard and a phone notification."
+      },
+      "garage": {
+        "sub": "Owned and leased cars",
+        "tagline": "Always know if you are within your lease mileage, and never forget road tax or insurance again.",
+        "p1": "Lease mileage check",
+        "p1d": "Day-by-day budget and extra-km cost.",
+        "p2": "Deadlines with reminders",
+        "p2d": "Road tax, insurance, inspection and service.",
+        "p3": "Expenses in Spendly",
+        "p3d": "Fuel and maintenance in your budget."
       }
     }
   },

@@ -6701,6 +6701,16 @@
         "p2d": "Três modelos, a sua cor e uma ficha para o Google.",
         "p3": "Os clientes escrevem-lhe",
         "p3d": "Mensagens no painel e notificação no telemóvel."
+      },
+      "garage": {
+        "sub": "Carros próprios e em renting",
+        "tagline": "Sabe sempre se está dentro dos km do renting e não se esquece mais do IUC nem do seguro.",
+        "p1": "Controlo de km",
+        "p1d": "Orçamento dia a dia e custo dos km a mais.",
+        "p2": "Prazos com lembretes",
+        "p2d": "IUC, seguro, inspeção e revisão.",
+        "p3": "Despesas no Spendly",
+        "p3d": "Combustível e manutenção no seu orçamento."
       }
     }
   },

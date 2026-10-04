@@ -6701,6 +6701,16 @@
         "p2d": "Trois modèles, votre couleur et une fiche Google.",
         "p3": "Vos clients vous écrivent",
         "p3d": "Messages au tableau de bord et notification mobile."
+      },
+      "garage": {
+        "sub": "Voitures personnelles et en location",
+        "tagline": "Vous savez toujours si vous respectez les km de la location et n’oubliez plus taxe ni assurance.",
+        "p1": "Suivi des km",
+        "p1d": "Budget jour après jour et coût des km en plus.",
+        "p2": "Échéances avec rappels",
+        "p2d": "Taxe, assurance, contrôle technique et révision.",
+        "p3": "Dépenses dans Spendly",
+        "p3d": "Carburant et entretien dans votre budget."
       }
     }
   },

@@ -6701,6 +6701,16 @@
         "p2d": "Tres plantillas, tu color y una ficha para Google.",
         "p3": "Los clientes te escriben",
         "p3d": "Mensajes en el panel y aviso en el móvil."
+      },
+      "garage": {
+        "sub": "Coches en propiedad y de renting",
+        "tagline": "Sabes siempre si estás dentro de los km del renting y no olvidas más impuesto ni seguro.",
+        "p1": "Control de km",
+        "p1d": "Presupuesto día a día y coste de los km de más.",
+        "p2": "Vencimientos con avisos",
+        "p2d": "Impuesto, seguro, ITV y revisión.",
+        "p3": "Gastos en Spendly",
+        "p3d": "Combustible y mantenimiento en tu presupuesto."
       }
     }
   },

@@ -6701,6 +6701,16 @@
         "p2d": "Tre modelli, il tuo colore e una scheda per Google.",
         "p3": "I clienti ti scrivono",
         "p3d": "Messaggi in dashboard e notifica sul telefono."
+      },
+      "garage": {
+        "sub": "Auto di proprietà e a noleggio",
+        "tagline": "Sai sempre se sei nei km del noleggio e non dimentichi più bollo e assicurazione.",
+        "p1": "Controllo km noleggio",
+        "p1d": "Budget giorno per giorno e costo dei km in più.",
+        "p2": "Scadenze con promemoria",
+        "p2d": "Bollo, assicurazione, revisione e tagliando.",
+        "p3": "Spese in Spendly",
+        "p3d": "Carburante e manutenzione nel tuo bilancio."
       }
     }
   },

@@ -6701,6 +6701,16 @@
         "p2d": "Drei Vorlagen, deine Farbe und ein Google-Eintrag.",
         "p3": "Kunden schreiben dir",
         "p3d": "Nachrichten im Dashboard und aufs Handy."
+      },
+      "garage": {
+        "sub": "Eigene Autos und Leasing",
+        "tagline": "Du weißt immer, ob du im Leasing-Kilometerrahmen bist, und vergisst nie mehr Steuer oder Versicherung.",
+        "p1": "Kilometerkontrolle",
+        "p1d": "Budget Tag für Tag und Kosten der Mehrkilometer.",
+        "p2": "Fristen mit Erinnerung",
+        "p2d": "Kfz-Steuer, Versicherung, HU und Inspektion.",
+        "p3": "Kosten in Spendly",
+        "p3d": "Tanken und Wartung in deinem Budget."
       }
     }
   },
