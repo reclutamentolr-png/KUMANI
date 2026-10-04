@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import ProfileModal, { type ProfileChangeState } from './ProfileModal'
 import { getMyChangeRequest } from '@/app/actions/profileChanges'
+import { OPEN_PROFILE_EVENT } from '@/components/nav/AppNav'
 import type { User as AuthUser } from '@supabase/supabase-js'
 import type { MyProfile } from '@/lib/myProfile'
 
@@ -33,6 +34,20 @@ export default function DashboardHeaderActions({ user, profile, isAdmin }: Dashb
   // Esito di una richiesta di cambio dati non ancora visto: pallino verde/rosso.
   const [changeState, setChangeState] = useState<ProfileChangeState>({ pending: null, outcome: null })
   const unseenOutcome = changeState.outcome?.status ?? null
+
+  // "Profilo" del menu fisso: evento se si è già in Home, ?profilo=1 se si
+  // arriva da un'altra pagina (tolto subito dall'indirizzo)
+  useEffect(() => {
+    const open = () => setIsProfileModalOpen(true)
+    window.addEventListener(OPEN_PROFILE_EVENT, open)
+    const url = new URL(window.location.href)
+    if (url.searchParams.get('profilo') === '1') {
+      url.searchParams.delete('profilo')
+      window.history.replaceState(null, '', url.toString())
+      open()
+    }
+    return () => window.removeEventListener(OPEN_PROFILE_EVENT, open)
+  }, [])
 
   useEffect(() => {
     if (profileIncomplete) return

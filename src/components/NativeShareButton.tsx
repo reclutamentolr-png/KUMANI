@@ -15,6 +15,7 @@ export default function NativeShareButton({
   text,
   variant = 'gold',
   copyFallback = true,
+  iconOnly = false,
   className = '',
 }: {
   url: string
@@ -22,6 +23,8 @@ export default function NativeShareButton({
   text?: string
   variant?: 'gold' | 'dark' | 'light' | 'glass'
   copyFallback?: boolean
+  // Solo l'icona (es. la riga di stato della Home)
+  iconOnly?: boolean
   className?: string
 }) {
   const t = useTranslations('share')
@@ -58,6 +61,19 @@ export default function NativeShareButton({
     light: 'border border-[var(--gold)]/50 bg-white text-[var(--ink)] hover:bg-[var(--gold-pale)]',
     glass: 'bg-white/20 text-white backdrop-blur hover:bg-white/30',
   }[variant]
+
+  if (iconOnly)
+    return (
+      <button
+        type="button"
+        onClick={share}
+        aria-label={copied ? t('copied') : canShare ? t('native') : t('copy')}
+        title={copied ? t('copied') : canShare ? t('native') : t('copy')}
+        className={`rounded-lg p-2 transition ${copied ? 'bg-green-500 text-white' : 'bg-[var(--gold-pale)] text-[var(--ink)] hover:bg-[var(--gold)]/25'} ${className}`}
+      >
+        {copied ? <Check className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
+      </button>
+    )
 
   return (
     <button

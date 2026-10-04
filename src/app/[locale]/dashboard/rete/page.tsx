@@ -9,7 +9,6 @@ import MatrixTree from '@/components/MatrixTree'
 import SpilloverExplainer from '@/components/SpilloverExplainer'
 import RankBadge from '@/components/RankBadge'
 import KumaniPeople from '@/components/KumaniPeople'
-import QuickNav from '@/components/QuickNav'
 import Leaderboard from '@/components/Leaderboard'
 import { getDashboardNetworkData } from '@/lib/dashboardNetworkData'
 import { ArrowLeft, TreePine, Star, Sparkles, Crown, Trophy, Wallet, PartyPopper, UserPlus, CheckCircle2, Shuffle, Network, MessageCircle, Gift } from 'lucide-react'
@@ -290,7 +289,6 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
         </div>
         </div>
 
-        <QuickNav current="community" />
       </main>
     </div>
   )

@@ -2,6 +2,8 @@ import MaintenanceGate from '@/components/MaintenanceGate'
 import ProfileReminder from '@/components/ProfileReminder'
 import ImpersonationBanner from '@/components/ImpersonationBanner'
 import ToolGuideButton from '@/components/ToolGuideButton'
+import AppNav from '@/components/nav/AppNav'
+import RecentToolTracker from '@/components/nav/RecentToolTracker'
 
 // Questo layout applica SOLO il MaintenanceGate ai children del locale
 // I tag <html> e <body> sono gestiti dal layout root (src/app/layout.tsx)
@@ -20,6 +22,9 @@ export default function LocaleLayout({
       <ToolGuideButton />
       {/* Popup "completa il profilo" dopo 15 minuti sulla piattaforma */}
       <ProfileReminder />
+      {/* Menu fisso delle pagine principali e servizi usati di recente */}
+      <AppNav />
+      <RecentToolTracker />
     </MaintenanceGate>
   )
 }

@@ -31,7 +31,6 @@ import WalletMembershipCard from '@/components/WalletMembershipCard'
 import WalletDonations from '@/components/donations/WalletDonations'
 import { getPublicDonationSummary } from '@/lib/donationsPublic'
 import { getMyDonations } from '@/app/actions/donations'
-import QuickNav from '@/components/QuickNav'
 import WalletCouponsList from '@/components/WalletCouponsList'
 import WalletVoucherSection from '@/components/WalletVoucherSection'
 import WalletRenewalDiscount from '@/components/ku/WalletRenewalDiscount'
@@ -551,7 +550,6 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
             initialVouchers={myVouchers}
           />
         </WalletSection>
-        <QuickNav current="wallet" />
       </main>
     </div>
   )

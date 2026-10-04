@@ -38,6 +38,10 @@
 body:has([data-fab]) .tool-guide-fab {
   bottom: 6.5rem;
 }
+/* Menu fisso in basso (pagine principali): i pulsanti fissi salgono sopra */
+body:has([data-app-nav]) [data-fab] {
+  bottom: 5.5rem;
+}
 
 body {
   background: var(--background);

@@ -24,8 +24,8 @@ import LateSponsorCard from '@/components/dashboard/LateSponsorCard'
 import PushInviteCard from '@/components/dashboard/PushInviteCard'
 import { getLateSponsorStatus } from '@/lib/lateSponsor'
 import DashboardReturnScroll from '@/components/dashboard/DashboardReturnScroll'
-import QuickNav from '@/components/QuickNav'
 import DashboardTour from '@/components/dashboard/DashboardTour'
+import InterestsOnboarding from '@/components/dashboard/InterestsOnboarding'
 import LandingMessagesAlert from '@/components/dashboard/LandingMessagesAlert'
 import BachecaMessagesAlert from '@/components/dashboard/BachecaMessagesAlert'
 import ProArea from '@/components/dashboard/ProArea'
@@ -36,7 +36,7 @@ import { loadAgenda } from '@/lib/agenda-server'
 import { addDays, todayKey } from '@/lib/agenda'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { getPlanPrices } from '@/lib/planPrices'
-import { freeFirst } from '@/lib/freeFirst'
+import { getServicesCatalog } from '@/lib/servicesCatalog'
 import type { MyProfile } from '@/lib/myProfile'
 
 export const dynamic = 'force-dynamic'
@@ -69,7 +69,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     // Messaggi non letti dal modulo "Scrivimi" della propria Landing Page
     supabase.from('landing_messages').select('id', { count: 'exact', head: true }).eq('owner_id', user.id).is('read_at', null),
   ])
-  const { userPlan, isSettingEnabled, isToolEnabled, requiredPlan, passPriceCents } = access
+  const { userPlan, isSettingEnabled, isToolEnabled, requiredPlan } = access
   const userIsAdmin = adminRole || profile?.is_admin === true
 
   // Promemoria di rinnovo: mostrato ogni volta che entra in dashboard negli
@@ -93,7 +93,6 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   const formatEur = (value: number) =>
     new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2, minimumFractionDigits: 0 }).format(value)
   const basePrice = formatEur(planPrices.base)
-  const proPrice = formatEur(planPrices.pro)
 
   // Strumenti attivi e piano dell'utente (Area Professionisti e categorie)
   const enabledTools = getMarketplaceTools(marketplaceT).filter((tool) => isSettingEnabled(tool.toolName))
@@ -128,34 +127,6 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     }
   }
 
-  // Chi è Pro trova gli strumenti Pro nell'Area Professionisti: non si
-  // ripetono nelle categorie sotto.
-  // I servizi gratuiti vengono per primi in ogni categoria.
-  const visibleTools = freeFirst(
-    isPro ? enabledTools.filter((tool) => requiredPlan(tool.toolName) !== 'pro') : enabledTools,
-    (tool) => requiredPlan(tool.toolName) === 'free'
-  )
-  // Admin-enabled but not usable by THIS user (no active subscription) —
-  // shown locked instead of silently hidden, same distinction the
-  // marketplace category grid already makes via MarketplaceCard.
-  const lockedToolNames = visibleTools.filter((tool) => !isToolEnabled(tool.toolName)).map((tool) => tool.toolName)
-  // Servizi bloccati acquistabili anche da soli (pass di un anno): prezzo formattato
-  const passPrices: Record<string, string> = {}
-  for (const name of lockedToolNames) {
-    const cents = passPriceCents(name)
-    if (cents !== null)
-      passPrices[name] = new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2, minimumFractionDigits: 0 }).format(cents / 100)
-  }
-  // Sezioni della Community: accese/spente e bloccate dal piano. Gli Eventi
-  // si consultano sempre (il piano serve solo per organizzarli).
-  const communityAccess = Object.fromEntries(
-    ['listings', 'spotlight', 'convivio', 'events', 'timebank'].map((name) => [
-      name,
-      { visible: isSettingEnabled(name), locked: name !== 'events' && !isToolEnabled(name) },
-    ])
-  )
-  // Fascia di ogni servizio (Gratis / Base / Pro) per la dashboard a livelli
-  const toolPlans = Object.fromEntries(visibleTools.map((tool) => [tool.toolName, requiredPlan(tool.toolName)]))
 
   // "I prossimi giorni": appuntamenti, promemoria, bollette e scadenze dei
   // prossimi 7 giorni (più quelle scadute negli ultimi 60), dagli strumenti
@@ -170,7 +141,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
 
   // 4. Rete (serve il profilo), agenda, prova Pro e dati dell'Area
   //    Professionisti: anche queste insieme.
-  const [network, agendaEvents, trial, stats] = await Promise.all([
+  const [network, agendaEvents, trial, stats, catalog] = await Promise.all([
     // La dashboard mostra solo un riepilogo della rete (il dettaglio è in
     // /dashboard/rete), ma servono anche per i popup qualifiche/rinnovo.
     getDashboardNetworkData(supabase, user, profile, locale, { tree: false, claims: 'skip' }),
@@ -185,6 +156,8 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
       : Promise.resolve([]),
     isPro && !paidPro && trialEnd > nowMs ? loadProTrial() : Promise.resolve(null),
     isPro && proTools.length > 0 ? getProAreaStats(supabase, user.id) : Promise.resolve(null),
+    // Tutti i servizi con lo stato per l'utente: preferiti, recenti e suggerimento
+    getServicesCatalog(supabase, user.id, locale, { access, favorites: favoriteToolNames }),
   ])
   const { newlyAchievedRank } = network
   // Bonus della rete: dopo aver mostrato la pagina
@@ -196,6 +169,9 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
       proRenewsOn = new Date(profile.subscription_expires_at).toLocaleDateString(locale)
     }
   }
+
+  const firstAccess = (user.user_metadata ?? {}) as { tour_seen?: boolean; interests_seen?: boolean }
+  const askInterests = !firstAccess.interests_seen && !firstAccess.tour_seen && favoriteToolNames.length === 0
 
   return (
     <div className="min-h-screen bg-[var(--background)]" suppressHydrationWarning>
@@ -263,21 +239,15 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
         <DashboardTipo2
           profile={profile}
           shareUrl={shareUrl}
-          visibleTools={visibleTools}
-          lockedToolNames={lockedToolNames}
-          passPrices={passPrices}
-          basePrice={basePrice}
-          proPrice={proPrice}
-          toolPlans={toolPlans}
-          communityAccess={communityAccess}
+          services={catalog.items}
           favoriteToolNames={favoriteToolNames}
+          basePrice={basePrice}
           proTrialDaysLeft={proTrial?.daysLeft ?? null}
           agenda={hasAgenda ? <UpcomingAgenda events={agendaEvents} today={agendaToday} sources={agendaSources} /> : null}
-          network={network}
         />
-        <QuickNav current="dashboard" />
-        {/* Tour al primo accesso (una volta sola; si rivede dal Centro guide) */}
-        <DashboardTour seen={(user.user_metadata as { tour_seen?: boolean } | undefined)?.tour_seen === true} />
+        {/* Primo accesso: prima "Cosa ti interessa?" (riempie i preferiti),
+            poi il tour (una volta sola; si rivede dal Centro guide) */}
+        {askInterests ? <InterestsOnboarding items={catalog.items} /> : <DashboardTour seen={firstAccess.tour_seen === true} />}
       </main>
 
       <ChatModalWrapper userId={user.id} />

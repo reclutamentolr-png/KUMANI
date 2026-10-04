@@ -12,8 +12,8 @@ import { createClient } from '@/lib/supabase/client'
 // torna su altri dispositivi. Con ?tour=1 si rivede (link nel Centro guide).
 const STEPS = [
   { key: 'welcome', target: null },
-  { key: 'free', target: 'free' },
-  { key: 'shortcuts', target: 'shortcuts' },
+  { key: 'myServices', target: 'my-services' },
+  { key: 'nav', target: 'app-nav' },
   { key: 'invite', target: 'invite' },
   { key: 'points', target: 'points' },
   { key: 'end', target: null },
