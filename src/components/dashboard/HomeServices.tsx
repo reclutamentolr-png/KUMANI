@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { ArrowRight, Clock, Lightbulb, Plus, Star } from 'lucide-react'
+import { ArrowRight, Clock, Plus, Star } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
-import { ServiceCard, serviceHref } from '@/components/services/ServicesBrowser'
+import { ServiceCard } from '@/components/services/ServicesBrowser'
+import SuggestionCarousel from './SuggestionCarousel'
 import { readRecentTools } from '@/lib/recentTools'
 import type { ServiceItem } from '@/lib/servicesCatalog'
 
@@ -34,10 +35,9 @@ export default function HomeServices({ items, favorites }: { items: ServiceItem[
     .filter((item): item is ServiceItem => !!item && item.open)
     .slice(0, MAX_RECENT)
 
-  // Suggerimento: un servizio già aperto all'utente, né preferito né usato di
-  // recente; cambia ogni giorno
+  // Suggerimenti a rotazione: servizi già aperti all'utente, né preferiti né
+  // usati di recente
   const candidates = recent === null ? [] : items.filter((item) => item.open && !favorites.includes(item.toolName) && !recent.includes(item.toolName))
-  const suggestion = browser && candidates.length > 0 ? candidates[browser.day % candidates.length] : null
 
   return (
     <div className="space-y-6">
@@ -82,24 +82,7 @@ export default function HomeServices({ items, favorites }: { items: ServiceItem[
         </section>
       )}
 
-      {suggestion && (
-        <Link
-          href={serviceHref(suggestion)}
-          className="group flex items-center gap-4 rounded-2xl border border-[var(--gold)]/40 bg-[var(--gold-pale)] p-4 transition-colors hover:border-[var(--gold)]"
-        >
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[var(--gold)] text-white">
-            <Lightbulb className="h-5 w-5" />
-          </span>
-          <span className="min-w-0 flex-1">
-            <span className="block text-xs font-bold uppercase tracking-wide text-[var(--muted)]">{t('suggestionTitle')}</span>
-            <span className="block font-bold text-[var(--ink)]">{suggestion.title}</span>
-            <span className="line-clamp-2 block text-sm text-[var(--ink)]/75">{suggestion.description}</span>
-          </span>
-          <span className="flex shrink-0 items-center gap-1 rounded-full bg-[var(--ink)] px-3 py-1.5 text-xs font-bold text-white">
-            {t('suggestionCta')} <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-          </span>
-        </Link>
-      )}
+      {browser && candidates.length > 0 && <SuggestionCarousel items={candidates} day={browser.day} />}
     </div>
   )
 }

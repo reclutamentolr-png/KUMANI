@@ -9103,6 +9103,9 @@
     "menuTitle": "Меню",
     "menuOpen": "Открыть меню",
     "menuClose": "Закрыть меню",
-    "menuLanguage": "Язык"
+    "menuLanguage": "Язык",
+    "carouselPrev": "Назад",
+    "carouselNext": "Далее",
+    "carouselGoTo": "Перейти к {name}"
   }
 }

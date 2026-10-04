@@ -9103,6 +9103,9 @@
     "menuTitle": "Menu",
     "menuOpen": "Open the menu",
     "menuClose": "Close the menu",
-    "menuLanguage": "Language"
+    "menuLanguage": "Language",
+    "carouselPrev": "Previous",
+    "carouselNext": "Next",
+    "carouselGoTo": "Go to {name}"
   }
 }
