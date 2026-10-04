@@ -13,5 +13,5 @@ export default async function MaintenancePage() {
     const locale = await getLocale()
     redirect(locale === 'it' ? '/' : `/${locale}`)
   }
-  return <MaintenanceScreen message={state?.message || 'Sito in manutenzione. Torna presto!'} />
+  return <MaintenanceScreen message={state?.message || ''} />
 }

@@ -9035,5 +9035,10 @@
     "title": "Nouveautés et offres par e-mail",
     "onText": "Activé : vous recevez les nouveautés et les offres de KUMANI. Vous pouvez le désactiver à tout moment.",
     "offText": "Désactivé : vous ne recevez que les e-mails de service (sécurité, paiements, compte)."
+  },
+  "maintenanceScreen": {
+    "title": "Nous revenons bientôt !",
+    "badge": "Maintenance programmée",
+    "defaultMessage": "Nous améliorons KUMANI. Revenez dans quelques instants."
   }
 }

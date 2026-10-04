@@ -9035,5 +9035,10 @@
     "title": "News and offers by email",
     "onText": "On: you receive KUMANI news and offers. You can turn this off at any time.",
     "offText": "Off: you only receive service emails (security, payments, account)."
+  },
+  "maintenanceScreen": {
+    "title": "We’ll be back soon!",
+    "badge": "Scheduled maintenance",
+    "defaultMessage": "We’re improving KUMANI. Please check back shortly."
   }
 }
