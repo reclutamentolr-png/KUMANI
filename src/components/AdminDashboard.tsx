@@ -3610,6 +3610,9 @@ L'accesso viene registrato.`)) return
 
           {menuGroups.map((group) => {
             const isOpen = currentOpenGroup === group.id
+            // Gruppo della sezione aperta: titolo in oro su una banda, e una
+            // linea oro accanto alle sue voci
+            const isCurrent = activeGroup === group.id
             const groupCount = group.items.reduce((sum, item) => sum + (badges[item.id] ?? 0), 0)
             return (
               <div key={group.id}>
@@ -3617,7 +3620,12 @@ L'accesso viene registrato.`)) return
                   type="button"
                   onClick={() => toggleGroup(group.id)}
                   aria-expanded={isOpen}
-                  className="flex w-full items-center justify-between gap-2 rounded-lg px-2 py-1.5 text-left text-[11px] font-bold uppercase tracking-wide text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                  aria-current={isCurrent ? 'true' : undefined}
+                  className={`flex w-full items-center justify-between gap-2 rounded-lg px-2 py-1.5 text-left text-[11px] font-bold uppercase tracking-wide ${
+                    isCurrent
+                      ? 'border-l-4 border-[var(--gold)] bg-[var(--gold-pale)]/50 text-[var(--gold)] hover:bg-[var(--gold-pale)]/80'
+                      : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'
+                  }`}
                 >
                   <span>{group.label}</span>
                   <span className="flex items-center gap-1.5">
@@ -3627,7 +3635,9 @@ L'accesso viene registrato.`)) return
                     <ChevronDown className={`h-3.5 w-3.5 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
                   </span>
                 </button>
-                {isOpen && <div className="mt-1 space-y-0.5">{group.items.map((item) => renderMenuButton(item))}</div>}
+                {isOpen && (
+                  <div className={`mt-1 space-y-0.5 ${isCurrent ? 'ml-1 border-l-2 border-[var(--gold)]/60 pl-1.5' : ''}`}>{group.items.map((item) => renderMenuButton(item))}</div>
+                )}
               </div>
             )
           })}
