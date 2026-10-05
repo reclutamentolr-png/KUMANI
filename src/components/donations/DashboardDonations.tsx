@@ -4,7 +4,7 @@ import Link from '@/components/LocalizedLink'
 import { getPublicDonationSummary } from '@/lib/donationsPublic'
 import { percentFormat } from '@/lib/donationTypes'
 
-// Dashboard: quanto ha donato finora la community e a chi, con l'invito a
+// Community: la percentuale di ogni abbonamento che va all'associazione, con l'invito a
 // donare i propri Punti Community. Nascosta senza associazione attiva.
 export default async function DashboardDonations() {
   const summary = await getPublicDonationSummary()

@@ -206,7 +206,7 @@
     "benefit5": "Iniziative esclusive periodiche con regolamento pubblico",
     "benefit6": "Classifica di attività trasparente e verificabile",
     "benefit7": "Flessibilità totale: lavora da dove vuoi, quando vuoi",
-    "benefit8": "Con il tuo abbonamento sostieni anche una buona causa: KUMANI dona una parte a un’associazione e pubblica quanto ha donato e versato",
+    "benefit8": "Con il tuo abbonamento sostieni anche una buona causa: una percentuale va a un’associazione e KUMANI pubblica ogni versamento con la ricevuta",
     "benefitsCta": "Entra ora nell’Ecosistema",
     "sideRow1Title": "Coupon & Bonus",
     "sideRow1Description": "Vantaggi legati alla tua attività reale",
@@ -7732,8 +7732,8 @@
     "s14": {
       "eyebrow": "KUMANI PER IL SOCIALE",
       "title": "Ogni abbonamento aiuta qualcuno.",
-      "text": "Una parte di ogni abbonamento va a un’associazione. Quanto raccolto e ogni versamento sono pubblici.",
-      "notes": "Una parte importante del progetto: le donazioni. Ogni abbonamento aiuta qualcuno, e tutto è pubblico."
+      "text": "Una parte di ogni abbonamento va a un’associazione. Ogni versamento è pubblico, con la sua ricevuta.",
+      "notes": "Una parte importante del progetto: le donazioni. Ogni abbonamento aiuta qualcuno, e ogni versamento è pubblico."
     },
     "s15": {
       "title": "Come funzionano le donazioni",

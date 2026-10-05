@@ -206,7 +206,7 @@
     "benefit5": "Periodic exclusive initiatives with public rules",
     "benefit6": "Transparent, verifiable activity ranking",
     "benefit7": "Total flexibility: work from wherever you want, whenever you want",
-    "benefit8": "Your subscription also supports a good cause: KUMANI donates part of it to an association and publishes how much it has donated and paid",
+    "benefit8": "With your subscription you also support a good cause: a percentage goes to a charity and KUMANI publishes every transfer with its receipt",
     "benefitsCta": "Join the Ecosystem now",
     "sideRow1Title": "Coupons & Bonuses",
     "sideRow1Description": "Rewards tied to your real activity",
@@ -7732,8 +7732,8 @@
     "s14": {
       "eyebrow": "KUMANI FOR GOOD CAUSES",
       "title": "Every subscription helps someone.",
-      "text": "Part of every subscription goes to an association. What is raised and every payment are public.",
-      "notes": "An important part of the project: donations. Every subscription helps someone, and everything is public."
+      "text": "Part of every subscription goes to a charity. Every transfer is public, with its receipt.",
+      "notes": "An important part of the project: donations. Every subscription helps someone, and every transfer is public."
     },
     "s15": {
       "title": "How donations work",

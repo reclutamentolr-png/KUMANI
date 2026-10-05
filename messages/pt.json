@@ -124,7 +124,7 @@
     "benefit5": "Iniciativas exclusivas periódicas com regulamento público",
     "benefit6": "Classificação de atividade transparente e verificável",
     "benefit7": "Flexibilidade total: trabalhe de onde quiser, quando quiser",
-    "benefit8": "Com a sua subscrição também apoia uma boa causa: a KUMANI doa uma parte a uma associação e publica quanto doou e entregou",
+    "benefit8": "Com a sua subscrição apoia também uma boa causa: uma percentagem vai para uma associação e a KUMANI publica cada transferência com o recibo",
     "benefitsCta": "Entre já no Ecossistema",
     "ctaTitle": "O primeiro passo é seu. O resto fazemos juntos.",
     "ctaDescription": "Entre no Ecossistema KUMANI, use as ferramentas todos os dias e deixe que cada gesto se transforme em bónus, cupões e acesso a iniciativas exclusivas.",
@@ -5945,7 +5945,7 @@
   },
   "donations": {
     "sectionTitle": "Donativos KUMANI",
-    "pledgeLine": "{percent} de cada assinatura KUMANI, nova ou renovada, vai para {association}.",
+    "pledgeLine": "{percent} de cada subscrição KUMANI, nova ou renovada, vai para {association}.",
     "paidLabel": "Já entregue à associação",
     "donorsLabel": "Kumani que doaram pontos",
     "associationLabel": "A associação que apoiamos",
@@ -5966,10 +5966,10 @@
     "myNone": "Ainda não doou pontos.",
     "mySubscription": "Com a sua subscrição a KUMANI já doou {amount}.",
     "pageTitle": "Os donativos da KUMANI",
-    "pageIntro": "Uma parte de cada assinatura vai para uma associação dedicada ao social, indicada aqui com nome e site. Transparência: para quem vai, quanto já transferimos e o recibo de cada transferência.",
+    "pageIntro": "Uma parte de cada subscrição vai para uma associação dedicada ao social, indicada aqui com nome e site. Transparência: para quem vai, quanto já transferimos e o recibo de cada transferência.",
     "comingSoon": "Os donativos vão começar em breve: aqui verá a associação que apoiamos e cada entrega.",
     "howTitle": "Como funciona",
-    "how1": "{percent} de cada assinatura paga, Base ou Pro, nova ou renovada, vai para a associação.",
+    "how1": "{percent} de cada subscrição paga, Base ou Pro, nova ou renovada, vai para a associação.",
     "how2": "A percentagem é calculada sobre o valor realmente cobrado, também na passagem de Base para Pro.",
     "how3": "Cada Kumano pode doar os seus KU Points a partir da Carteira: a KUMANI entrega o seu valor.",
     "how4": "Cada entrega à associação é publicada aqui, com data e referência.",
@@ -5983,7 +5983,7 @@
     "homeEyebrow": "KUMANI solidária",
     "homeTitle": "Cada subscrição ajuda alguém.",
     "homeCta": "Descobrir os donativos",
-    "dashboardTitle": "{percent} de cada assinatura vai para solidariedade",
+    "dashboardTitle": "{percent} de cada subscrição vai para solidariedade",
     "dashboardText": "a {association}. Também pode doar os seus KU Points.",
     "donateCta": "Doe os seus KU Points",
     "taxCode": "NIF {code}",
@@ -5992,8 +5992,8 @@
     "yourImpactHint": "com a sua subscrição e os pontos doados",
     "donateAll": "Todos ({points})",
     "noPointsYet": "Ainda não tem KU Points para doar: recebe-os quando uma pessoa que convidou ativa a subscrição.",
-    "pledgeShort": "De cada assinatura",
-    "pledgeChip": "{percent} de cada assinatura"
+    "pledgeShort": "De cada subscrição",
+    "pledgeChip": "{percent} de cada subscrição"
   },
   "toolPass": {
     "productName": "Passe {service} – 1 ano",
@@ -7732,8 +7732,8 @@
     "s14": {
       "eyebrow": "KUMANI SOLIDÁRIA",
       "title": "Cada subscrição ajuda alguém.",
-      "text": "Uma parte de cada subscrição vai para uma associação. O que se angaria e cada entrega são públicos.",
-      "notes": "Uma parte importante do projeto: as doações. Cada subscrição ajuda alguém, e tudo é público."
+      "text": "Uma parte de cada subscrição vai para uma associação. Cada transferência é pública, com o seu recibo.",
+      "notes": "Uma parte importante do projeto: as doações. Cada subscrição ajuda alguém, e cada transferência é pública."
     },
     "s15": {
       "title": "Como funcionam as doações",
@@ -7741,12 +7741,12 @@
       "src": {
         "1": {
           "1": "{percent}",
-          "2": "de cada assinatura Base",
+          "2": "de cada subscrição Base",
           "3": "nova ou renovada"
         },
         "2": {
           "1": "{percent}",
-          "2": "de cada assinatura Pro",
+          "2": "de cada subscrição Pro",
           "3": "nova, renovada ou passagem a Pro"
         },
         "3": {
@@ -7758,7 +7758,7 @@
       "assoc": "Associação apoiada",
       "publicT": "Tudo público",
       "publicD": "No site: quanto já foi transferido para a associação e cada transferência com data, referência e recibo.",
-      "notes": "{percent} de cada assinatura Base ou Pro, nova ou renovada, vai para a associação, calculado sobre o valor realmente cobrado. Além disso, cada membro pode doar os seus KU Points: por cada 10 pontos a KUMANI transfere 1 euro. No site e no Wallet vê-se a percentagem, quanto já foi transferido e cada transferência com o seu recibo."
+      "notes": "{percent} de cada subscrição Base ou Pro, nova ou renovada, vai para a associação, calculado sobre o valor realmente cobrado. Além disso, cada membro pode doar os seus KU Points: por cada 10 pontos a KUMANI transfere 1 euro. No site e no Wallet vê-se a percentagem, quanto já foi transferido e cada transferência com o seu recibo."
     },
     "s16": {
       "title": "A confiança em primeiro lugar",

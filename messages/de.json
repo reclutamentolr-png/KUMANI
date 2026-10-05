@@ -124,7 +124,7 @@
     "benefit5": "Regelmäßige exklusive Aktionen mit öffentlichen Teilnahmebedingungen",
     "benefit6": "Transparente und nachprüfbare Aktivitätsrangliste",
     "benefit7": "Volle Flexibilität: arbeite, wo und wann du willst",
-    "benefit8": "Mit deinem Abo unterstützt du auch einen guten Zweck: KUMANI spendet einen Teil an einen Verein und veröffentlicht, wie viel gespendet und überwiesen wurde",
+    "benefit8": "Mit deinem Abo unterstützt du auch einen guten Zweck: Ein Prozentsatz geht an eine gemeinnützige Organisation und KUMANI veröffentlicht jede Überweisung mit Beleg",
     "benefitsCta": "Jetzt dem Ökosystem beitreten",
     "ctaTitle": "Der erste Schritt gehört dir. Den Rest schaffen wir zusammen.",
     "ctaDescription": "Tritt dem KUMANI-Ökosystem bei, nutze die Tools jeden Tag und lass jede Aktion zu Boni, Coupons und Zugang zu exklusiven Aktionen werden.",
@@ -7732,8 +7732,8 @@
     "s14": {
       "eyebrow": "KUMANI HILFT",
       "title": "Jedes Abo hilft jemandem.",
-      "text": "Ein Teil jedes Abos geht an einen Verein. Was gesammelt wird und jede Überweisung sind öffentlich.",
-      "notes": "Ein wichtiger Teil des Projekts: die Spenden. Jedes Abo hilft jemandem, und alles ist öffentlich."
+      "text": "Ein Teil jedes Abos geht an eine gemeinnützige Organisation. Jede Überweisung ist öffentlich, mit Beleg.",
+      "notes": "Ein wichtiger Teil des Projekts: die Spenden. Jedes Abo hilft jemandem, und jede Überweisung ist öffentlich."
     },
     "s15": {
       "title": "So funktionieren die Spenden",

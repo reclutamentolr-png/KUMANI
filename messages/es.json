@@ -124,7 +124,7 @@
     "benefit5": "Iniciativas exclusivas periódicas con reglamento público",
     "benefit6": "Clasificación de actividad transparente y verificable",
     "benefit7": "Flexibilidad total: trabaja desde donde quieras, cuando quieras",
-    "benefit8": "Con tu suscripción también apoyas una buena causa: KUMANI dona una parte a una asociación y publica cuánto ha donado y entregado",
+    "benefit8": "Con tu suscripción también apoyas una buena causa: un porcentaje va a una asociación y KUMANI publica cada transferencia con su recibo",
     "benefitsCta": "Entra ahora en el Ecosistema",
     "ctaTitle": "El primer paso es tuyo. El resto lo hacemos juntos.",
     "ctaDescription": "Entra en el Ecosistema KUMANI, usa las herramientas cada día y deja que cada gesto se convierta en bonos, cupones y acceso a iniciativas exclusivas.",
@@ -7732,8 +7732,8 @@
     "s14": {
       "eyebrow": "KUMANI SOLIDARIO",
       "title": "Cada suscripción ayuda a alguien.",
-      "text": "Una parte de cada suscripción va a una asociación. Lo recaudado y cada entrega son públicos.",
-      "notes": "Una parte importante del proyecto: las donaciones. Cada suscripción ayuda a alguien, y todo es público."
+      "text": "Una parte de cada suscripción va a una asociación. Cada transferencia es pública, con su recibo.",
+      "notes": "Una parte importante del proyecto: las donaciones. Cada suscripción ayuda a alguien, y cada transferencia es pública."
     },
     "s15": {
       "title": "Cómo funcionan las donaciones",
