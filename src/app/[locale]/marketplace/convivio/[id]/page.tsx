@@ -5,6 +5,7 @@ import { ArrowLeft, HandPlatter } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import ConvivioDetailView from '@/components/convivio/ConvivioDetailView'
 import { getConvivio } from '@/app/actions/convivio'
+import { getShowcaseInfo } from '@/app/actions/kordataShowcase'
 import { createClient } from '@/lib/supabase/server'
 import { SuspendedBanner } from '@/components/ServiceSuspended'
 import { isToolOnline } from '@/lib/toolOnline'
@@ -19,7 +20,12 @@ export default async function ConvivioDetailPage({ params }: { params: Promise<{
   if (!user) redirect(`/${locale}/login`)
   if (!/^[0-9a-f-]{36}$/i.test(id)) notFound()
 
-  const [detail, { data: me }] = await Promise.all([getConvivio(id), supabase.rpc('get_my_profile').maybeSingle<{ referral_code: string | null }>()])
+  const [detail, { data: me }, { data: photo }, showcase] = await Promise.all([
+    getConvivio(id),
+    supabase.rpc('get_my_profile').maybeSingle<{ referral_code: string | null }>(),
+    supabase.rpc('convivio_photo', { p_group: id }),
+    getShowcaseInfo(id),
+  ])
   if (!detail) notFound()
 
   const online = await isToolOnline('convivio')
@@ -39,7 +45,7 @@ export default async function ConvivioDetailPage({ params }: { params: Promise<{
       </header>
       <main className="mx-auto max-w-6xl px-4 py-8">
         {!online && <SuspendedBanner className="mb-6" />}
-        <ConvivioDetailView initial={detail} siteUrl={SITE_URL} myReferral={me?.referral_code ?? null} />
+        <ConvivioDetailView initial={detail} siteUrl={SITE_URL} myReferral={me?.referral_code ?? null} photoPath={(photo as string | null) ?? null} showcase={showcase} />
       </main>
     </div>
   )

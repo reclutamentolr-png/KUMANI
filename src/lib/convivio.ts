@@ -96,3 +96,28 @@ export type MySupplierInfo = {
 }
 
 export type SupplierSearchResult = { id: string; business_name: string; city: string; category: ConvivioCategory; description: string; rating: Rating }
+
+// ---------- Vetrina in homepage ----------
+
+// Capocordata o fornitore chiedono di mostrare il lotto in homepage; lo Staff
+// approva. In homepage al massimo 3 lotti aperti e ancora sotto il minimo.
+export const SHOWCASE_CACHE_TAG = 'kordata-showcase'
+export const SHOWCASE_REJECT_REASONS = ['photo', 'description', 'price', 'other'] as const
+export type ShowcaseRejectReason = (typeof SHOWCASE_REJECT_REASONS)[number]
+export type ShowcaseStatus = 'none' | 'requested' | 'approved' | 'rejected' | 'removed'
+
+export type ShowcaseInfo = {
+  can_manage: boolean
+  eligible: boolean
+  status: ShowcaseStatus
+  reason: ShowcaseRejectReason | null
+  photo_path: string | null
+}
+
+export type ShowcaseCard = Omit<ConvivioCard, 'is_leader' | 'is_supplier' | 'my_quantity' | 'supplier_status' | 'supplier_is_leader'> & {
+  photo_path: string | null
+  vat_valid: boolean
+}
+
+export const convivioPhotoUrl = (path: string | null | undefined) =>
+  path ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/convivio-photos/${path}` : null

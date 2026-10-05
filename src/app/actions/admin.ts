@@ -2225,7 +2225,7 @@ const DELETION_ID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f
 // Bucket dove i file dell'utente stanno nella cartella `${userId}/`.
 // Cartelle "<userId>/…" da svuotare alla cancellazione dell'account
 // (reward-images contiene solo immagini caricate dallo Staff)
-const USER_FILE_BUCKETS = ['identity-docs', 'cv-photos', 'quote-logos-v2', 'menu-photos', 'findo-photos', 'receipt-photos-v2']
+const USER_FILE_BUCKETS = ['identity-docs', 'cv-photos', 'quote-logos-v2', 'menu-photos', 'findo-photos', 'receipt-photos-v2', 'convivio-photos']
 const DELETED_EMAIL_RE = /@deleted\.invalid$/i
 
 export async function adminListDeletionRequests(status: 'pending' | 'handled' = 'pending') {

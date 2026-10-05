@@ -29,6 +29,7 @@ import LanguageSwitcher from '@/components/LanguageSwitcher'
 import Logo from '@/components/Logo'
 import HomeKumanoDelGiorno from '@/components/spotlight/HomeKumanoDelGiorno'
 import HomeUpcomingEvents from '@/components/events/HomeUpcomingEvents'
+import HomeKordataShowcase from '@/components/convivio/HomeKordataShowcase'
 import HomeDonations from '@/components/donations/HomeDonations'
 import HomeReviews from '@/components/reviews/HomeReviews'
 import HomePlans from '@/components/HomePlans'
@@ -317,6 +318,9 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
 
       {/* 📅 PROSSIMI EVENTI — KUMANI Events, una data per serie */}
       <HomeUpcomingEvents />
+
+      {/* 🤝 KORDATA IN CORSO — acquisti di gruppo in vetrina (approvati dallo Staff) */}
+      <HomeKordataShowcase />
 
       {/* Recensioni verificate di chi ha acquistato */}
       <HomeReviews />

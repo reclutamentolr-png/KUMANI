@@ -86,6 +86,7 @@ import MosaicAdminPanel from '@/components/admin/MosaicAdminPanel'
 import FabulaAdminPanel from '@/components/admin/FabulaAdminPanel'
 import IdentityVerificationsPanel from '@/components/admin/IdentityVerificationsPanel'
 import ConvivioFeesPanel from '@/components/admin/ConvivioFeesPanel'
+import KordataShowcasePanel from '@/components/admin/KordataShowcasePanel'
 import ContactMessagesPanel from '@/components/admin/ContactMessagesPanel'
 import ProfileRequestsPanel from '@/components/admin/ProfileRequestsPanel'
 import AccountDeletionsPanel from '@/components/admin/AccountDeletionsPanel'
@@ -1195,6 +1196,7 @@ L'accesso viene registrato.`)) return
   { id: 'affinity', label: 'Affinity', Icon: Flag, permission: 'listings.read' as Permission, group: 'community' },
   { id: 'convivio', label: 'Segnalazioni', Icon: Flag, permission: 'listings.read' as Permission, group: 'kordata' },
   { id: 'convivioFees', label: 'Commissioni', Icon: HandCoins, permission: 'listings.read' as Permission, group: 'kordata' },
+  { id: 'convivioShowcase', label: 'Vetrina homepage', Icon: Megaphone, permission: 'listings.read' as Permission, group: 'kordata' },
   { id: 'mosaic', label: 'Mosaic', Icon: Grid3x3, permission: 'listings.read' as Permission, group: 'games' },
   { id: 'fabula', label: 'Fabula', Icon: Dices, permission: 'listings.read' as Permission, group: 'games' },
 ]
@@ -3668,6 +3670,7 @@ L'accesso viene registrato.`)) return
           />
         )}
         {activeSection === 'identity' && <IdentityVerificationsPanel />}
+        {activeSection === 'convivioShowcase' && <KordataShowcasePanel locale={locale} />}
         {activeSection === 'convivioFees' && <ConvivioFeesPanel locale={locale} canReadSettings={hasPermission(permissions, 'settings.read')} />}
         {activeSection === 'timebank' && <TimebankAdminPanel />}
         {activeSection === 'mosaic' && <MosaicAdminPanel />}

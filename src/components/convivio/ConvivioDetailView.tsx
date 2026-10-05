@@ -19,13 +19,26 @@ import {
   updateConvivioInfo,
 } from '@/app/actions/convivio'
 import { createClient } from '@/lib/supabase/client'
-import { formatEuro, savingPercent, type ConvivioDetail, type ConvivioMessage } from '@/lib/convivio'
+import { convivioPhotoUrl, formatEuro, savingPercent, type ConvivioDetail, type ConvivioMessage, type ShowcaseInfo } from '@/lib/convivio'
+import ConvivioShowcaseBox from './ConvivioShowcaseBox'
 import { ProgressBar, STATUS_STYLE } from './ConvivioCardItem'
 
 // Dettaglio di una cordata: adesione (con quantità), avanzamento in tempo
 // reale, istruzioni di pagamento/ritiro, chat del gruppo, azioni del
 // capocordata, condivisione e segnalazione.
-export default function ConvivioDetailView({ initial, siteUrl, myReferral }: { initial: ConvivioDetail; siteUrl: string; myReferral: string | null }) {
+export default function ConvivioDetailView({
+  initial,
+  siteUrl,
+  myReferral,
+  photoPath,
+  showcase,
+}: {
+  initial: ConvivioDetail
+  siteUrl: string
+  myReferral: string | null
+  photoPath: string | null
+  showcase: ShowcaseInfo | null
+}) {
   const t = useTranslations('convivio')
   const locale = useLocale()
   const [data, setData] = useState(initial)
@@ -41,6 +54,7 @@ export default function ConvivioDetailView({ initial, siteUrl, myReferral }: { i
   const [editing, setEditing] = useState(false)
   const [info, setInfo] = useState({ description: initial.description, pickup: initial.pickup_info })
   const [now, setNow] = useState(0)
+  const [photo, setPhoto] = useState(photoPath)
   const channelRef = useRef<RealtimeChannel | null>(null)
 
   const refresh = useCallback(async () => {
@@ -138,110 +152,117 @@ export default function ConvivioDetailView({ initial, siteUrl, myReferral }: { i
   return (
     <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr]">
       <div className="space-y-5">
-        <div className="rounded-2xl border border-[var(--gold)]/25 bg-white p-5 shadow-sm">
-          <div className="mb-2 flex flex-wrap items-center gap-2">
-            <span className="rounded-full bg-[var(--background)] px-2 py-0.5 text-[11px] font-semibold text-[var(--muted)]">{t(`category_${data.category}`)}</span>
-            <span className={`rounded-full px-2 py-0.5 text-[11px] font-bold ${STATUS_STYLE[data.status]}`}>{t(`status_${data.status}`)}</span>
-          </div>
-          <h1 className="text-2xl font-bold text-[var(--ink)]">{data.title}</h1>
-          <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[var(--muted)]">
-            <span className="flex items-center gap-1">
-              <Package className="h-4 w-4" /> {data.supplier_name}
-            </span>
-            {data.city && (
+        <div className="overflow-hidden rounded-2xl border border-[var(--gold)]/25 bg-white shadow-sm">
+          {photo && (
+            // Foto del lotto (caricata dal capocordata o dal fornitore)
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={convivioPhotoUrl(photo)!} alt="" className="aspect-[16/9] w-full object-cover" />
+          )}
+          <div className="p-5">
+            <div className="mb-2 flex flex-wrap items-center gap-2">
+              <span className="rounded-full bg-[var(--background)] px-2 py-0.5 text-[11px] font-semibold text-[var(--muted)]">{t(`category_${data.category}`)}</span>
+              <span className={`rounded-full px-2 py-0.5 text-[11px] font-bold ${STATUS_STYLE[data.status]}`}>{t(`status_${data.status}`)}</span>
+            </div>
+            <h1 className="text-2xl font-bold text-[var(--ink)]">{data.title}</h1>
+            <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[var(--muted)]">
               <span className="flex items-center gap-1">
-                <MapPin className="h-4 w-4" /> {data.city}
+                <Package className="h-4 w-4" /> {data.supplier_name}
               </span>
-            )}
-            {!data.supplier_is_leader && (
-              <span className="flex items-center gap-1">
-                <BadgeCheck className="h-4 w-4 text-[var(--gold)]" /> {t('leaderBy', { name: data.leader_name ?? '' })}
-                {data.leader_rating.count > 0 && <RatingStars rating={data.leader_rating} />}
-              </span>
-            )}
-            {data.supplier_kumani && (
-              <span className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold ${data.supplier_status === 'confirmed' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>
-                <BadgeCheck className="h-3.5 w-3.5" /> {data.supplier_status === 'confirmed' ? t('supplierConfirmed') : t('supplierPending')}
-                {data.supplier_rating && data.supplier_rating.count > 0 && <RatingStars rating={data.supplier_rating} />}
-              </span>
-            )}
-          </p>
-
-          <div className="mt-4 flex flex-wrap items-baseline gap-2">
-            <span className="text-3xl font-bold text-[var(--ink)]">{formatEuro(data.group_price, locale)}</span>
-            {data.unit_label && <span className="text-sm text-[var(--muted)]">/ {data.unit_label}</span>}
-            {data.retail_price && saving ? (
-              <>
-                <span className="text-sm text-gray-400 line-through">{formatEuro(data.retail_price, locale)}</span>
-                <span className="rounded bg-emerald-100 px-2 text-sm font-bold text-emerald-700">-{saving}%</span>
-              </>
-            ) : null}
-          </div>
-
-          <div className="mt-4">
-            <ProgressBar people={data.people} min={data.min_participants} max={data.max_participants} />
-            <div className="mt-1.5 flex flex-wrap items-center justify-between gap-2 text-sm text-[var(--muted)]">
-              <span className="flex items-center gap-1">
-                <Users className="h-4 w-4" /> {t('peopleOfMin', { people: data.people, min: data.min_participants })}
-                {data.max_participants ? ` · ${t('maxPeople', { max: data.max_participants })}` : ''}
-              </span>
-              {open && (
+              {data.city && (
                 <span className="flex items-center gap-1">
-                  <Clock className="h-4 w-4" /> {left}
+                  <MapPin className="h-4 w-4" /> {data.city}
                 </span>
               )}
-            </div>
-          </div>
-          <p className="mt-4 rounded-xl bg-[var(--gold-pale)]/60 px-4 py-3 text-sm font-medium text-[var(--ink)]">{statusBanner}</p>
+              {!data.supplier_is_leader && (
+                <span className="flex items-center gap-1">
+                  <BadgeCheck className="h-4 w-4 text-[var(--gold)]" /> {t('leaderBy', { name: data.leader_name ?? '' })}
+                  {data.leader_rating.count > 0 && <RatingStars rating={data.leader_rating} />}
+                </span>
+              )}
+              {data.supplier_kumani && (
+                <span className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold ${data.supplier_status === 'confirmed' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>
+                  <BadgeCheck className="h-3.5 w-3.5" /> {data.supplier_status === 'confirmed' ? t('supplierConfirmed') : t('supplierPending')}
+                  {data.supplier_rating && data.supplier_rating.count > 0 && <RatingStars rating={data.supplier_rating} />}
+                </span>
+              )}
+            </p>
 
-          {editing ? (
-            <div className="mt-4 space-y-3">
-              <textarea className="w-full rounded-xl border border-[var(--gold)]/30 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 p-3 text-sm" rows={4} maxLength={2000} value={info.description} onChange={(e) => setInfo({ ...info, description: e.target.value })} />
-              <textarea className="w-full rounded-xl border border-[var(--gold)]/30 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 p-3 text-sm" rows={3} maxLength={1000} value={info.pickup} onChange={(e) => setInfo({ ...info, pickup: e.target.value })} />
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  disabled={busy}
-                  onClick={async () => {
-                    await run(() => updateConvivioInfo(data.id, info.description, info.pickup), t('saved'))
-                    setEditing(false)
-                  }}
-                  className="rounded-lg bg-[var(--ink)] px-4 py-2 text-sm font-bold text-white"
-                >
-                  {t('save')}
-                </button>
-                <button type="button" onClick={() => setEditing(false)} className="rounded-lg px-4 py-2 text-sm font-semibold text-gray-600">
-                  {t('cancel')}
-                </button>
+            <div className="mt-4 flex flex-wrap items-baseline gap-2">
+              <span className="text-3xl font-bold text-[var(--ink)]">{formatEuro(data.group_price, locale)}</span>
+              {data.unit_label && <span className="text-sm text-[var(--muted)]">/ {data.unit_label}</span>}
+              {data.retail_price && saving ? (
+                <>
+                  <span className="text-sm text-gray-400 line-through">{formatEuro(data.retail_price, locale)}</span>
+                  <span className="rounded bg-emerald-100 px-2 text-sm font-bold text-emerald-700">-{saving}%</span>
+                </>
+              ) : null}
+            </div>
+
+            <div className="mt-4">
+              <ProgressBar people={data.people} min={data.min_participants} max={data.max_participants} />
+              <div className="mt-1.5 flex flex-wrap items-center justify-between gap-2 text-sm text-[var(--muted)]">
+                <span className="flex items-center gap-1">
+                  <Users className="h-4 w-4" /> {t('peopleOfMin', { people: data.people, min: data.min_participants })}
+                  {data.max_participants ? ` · ${t('maxPeople', { max: data.max_participants })}` : ''}
+                </span>
+                {open && (
+                  <span className="flex items-center gap-1">
+                    <Clock className="h-4 w-4" /> {left}
+                  </span>
+                )}
               </div>
             </div>
-          ) : (
-            <>
-              {data.description && <p className="mt-4 whitespace-pre-wrap text-sm leading-6 text-gray-700">{data.description}</p>}
-              <div className="mt-4 rounded-xl border border-[var(--gold)]/15 bg-[var(--background)] p-4">
-                <p className="mb-1 flex items-center gap-1.5 text-sm font-bold text-[var(--ink)]">
-                  <Truck className="h-4 w-4 text-[var(--gold)]" /> {t('pickupTitle')}
-                </p>
-                <p className="whitespace-pre-wrap text-sm text-gray-700">{data.pickup_info || '—'}</p>
-                <p className="mt-2 text-xs text-[var(--muted)]">{t('paymentsNotice')}</p>
-              </div>
-            </>
-          )}
+            <p className="mt-4 rounded-xl bg-[var(--gold-pale)]/60 px-4 py-3 text-sm font-medium text-[var(--ink)]">{statusBanner}</p>
 
-          <div className="mt-4 flex flex-wrap items-center gap-2">
-            <button type="button" onClick={share} className="flex items-center gap-1.5 rounded-lg border border-[var(--gold)]/40 px-3 py-2 text-sm font-semibold text-[var(--ink)] hover:bg-[var(--gold-pale)]">
-              <Share2 className="h-4 w-4" /> {t('share')}
-            </button>
-            {data.is_leader && !editing && ['open', 'ordered'].includes(data.status) && (
-              <button type="button" onClick={() => setEditing(true)} className="flex items-center gap-1.5 rounded-lg border border-[var(--gold)]/40 px-3 py-2 text-sm font-semibold text-[var(--ink)] hover:bg-[var(--gold-pale)]">
-                <Pencil className="h-4 w-4" /> {t('editInfo')}
-              </button>
+            {editing ? (
+              <div className="mt-4 space-y-3">
+                <textarea className="w-full rounded-xl border border-[var(--gold)]/30 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 p-3 text-sm" rows={4} maxLength={2000} value={info.description} onChange={(e) => setInfo({ ...info, description: e.target.value })} />
+                <textarea className="w-full rounded-xl border border-[var(--gold)]/30 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 p-3 text-sm" rows={3} maxLength={1000} value={info.pickup} onChange={(e) => setInfo({ ...info, pickup: e.target.value })} />
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    disabled={busy}
+                    onClick={async () => {
+                      await run(() => updateConvivioInfo(data.id, info.description, info.pickup), t('saved'))
+                      setEditing(false)
+                    }}
+                    className="rounded-lg bg-[var(--ink)] px-4 py-2 text-sm font-bold text-white"
+                  >
+                    {t('save')}
+                  </button>
+                  <button type="button" onClick={() => setEditing(false)} className="rounded-lg px-4 py-2 text-sm font-semibold text-gray-600">
+                    {t('cancel')}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                {data.description && <p className="mt-4 whitespace-pre-wrap text-sm leading-6 text-gray-700">{data.description}</p>}
+                <div className="mt-4 rounded-xl border border-[var(--gold)]/15 bg-[var(--background)] p-4">
+                  <p className="mb-1 flex items-center gap-1.5 text-sm font-bold text-[var(--ink)]">
+                    <Truck className="h-4 w-4 text-[var(--gold)]" /> {t('pickupTitle')}
+                  </p>
+                  <p className="whitespace-pre-wrap text-sm text-gray-700">{data.pickup_info || '—'}</p>
+                  <p className="mt-2 text-xs text-[var(--muted)]">{t('paymentsNotice')}</p>
+                </div>
+              </>
             )}
-            {!data.is_leader && (
-              <button type="button" onClick={report} className="ml-auto flex items-center gap-1 text-xs font-semibold text-gray-400 hover:text-red-600">
-                <Flag className="h-3.5 w-3.5" /> {t('report')}
+
+            <div className="mt-4 flex flex-wrap items-center gap-2">
+              <button type="button" onClick={share} className="flex items-center gap-1.5 rounded-lg border border-[var(--gold)]/40 px-3 py-2 text-sm font-semibold text-[var(--ink)] hover:bg-[var(--gold-pale)]">
+                <Share2 className="h-4 w-4" /> {t('share')}
               </button>
-            )}
+              {data.is_leader && !editing && ['open', 'ordered'].includes(data.status) && (
+                <button type="button" onClick={() => setEditing(true)} className="flex items-center gap-1.5 rounded-lg border border-[var(--gold)]/40 px-3 py-2 text-sm font-semibold text-[var(--ink)] hover:bg-[var(--gold-pale)]">
+                  <Pencil className="h-4 w-4" /> {t('editInfo')}
+                </button>
+              )}
+              {!data.is_leader && (
+                <button type="button" onClick={report} className="ml-auto flex items-center gap-1 text-xs font-semibold text-gray-400 hover:text-red-600">
+                  <Flag className="h-3.5 w-3.5" /> {t('report')}
+                </button>
+              )}
+            </div>
           </div>
         </div>
 
@@ -485,6 +506,9 @@ export default function ConvivioDetailView({ initial, siteUrl, myReferral }: { i
             )}
           </div>
         )}
+
+        {/* Foto e vetrina in homepage: capocordata e fornitore confermato */}
+        {showcase?.can_manage && <ConvivioShowcaseBox groupId={data.id} initial={showcase} onPhoto={setPhoto} />}
 
         {/* Azioni del capocordata */}
         {data.is_leader && (
