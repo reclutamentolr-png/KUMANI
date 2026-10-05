@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { Check, Copy, Mail, MessageCircle, Share2 } from 'lucide-react'
-import { giftPath, type GiftOrder, type GiftOrderCode } from '@/lib/gifts'
+import { giftInfoPath, giftPath, type GiftOrder, type GiftOrderCode } from '@/lib/gifts'
 
 // I regali comprati: ogni codice con il suo stato e i pulsanti per mandarlo.
 export default function GiftOrdersList({ orders, names, baseUrl }: { orders: GiftOrder[]; names: Record<string, string>; baseUrl: string }) {
@@ -15,6 +15,9 @@ export default function GiftOrdersList({ orders, names, baseUrl }: { orders: Gif
   const date = (iso: string) => new Date(iso).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' })
   const money = (cents: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2, minimumFractionDigits: 0 }).format(cents / 100)
   const link = (code: string) => `${baseUrl}${giftPath(code)}`
+  // Messaggio da mandare: il regalo con il suo link, poi dove leggere di cosa si tratta
+  const message = (order: GiftOrder, code: string) =>
+    `${t('shareText', { item: names[order.id] ?? '' })} ${link(code)}\n\n${t('shareLearnMore')} ${baseUrl}${giftInfoPath(order.kind, order.tool)}`
 
   const status = (c: GiftOrderCode) =>
     c.revoked
@@ -36,16 +39,15 @@ export default function GiftOrdersList({ orders, names, baseUrl }: { orders: Gif
   }
 
   const share = async (order: GiftOrder, code: string) => {
-    const text = t('shareText', { item: names[order.id] ?? '' })
     if (navigator.share) {
       try {
-        await navigator.share({ title: t('shareTitle'), text, url: link(code) })
+        await navigator.share({ title: t('shareTitle'), text: message(order, code) })
       } catch {
         // Annullato
       }
       return
     }
-    window.open(`https://wa.me/?text=${encodeURIComponent(`${text} ${link(code)}`)}`, '_blank')
+    window.open(`https://wa.me/?text=${encodeURIComponent(message(order, code))}`, '_blank')
   }
 
   if (orders.length === 0) return <p className="rounded-xl border border-gray-200 bg-white p-5 text-sm text-[var(--muted)]">{t('noOrders')}</p>
@@ -68,7 +70,6 @@ export default function GiftOrdersList({ orders, names, baseUrl }: { orders: Gif
             {order.codes.map((c) => {
               const s = status(c)
               const usable = !c.revoked && !c.redeemed_at && new Date(c.valid_until).getTime() >= now
-              const text = t('shareText', { item: names[order.id] ?? '' })
               return (
                 <li key={c.code} className="flex flex-wrap items-center gap-x-3 gap-y-2 py-2.5">
                   <span className="font-mono text-sm font-bold tracking-wider text-[var(--ink)]">{c.code}</span>
@@ -79,7 +80,7 @@ export default function GiftOrdersList({ orders, names, baseUrl }: { orders: Gif
                         <Share2 className="h-3.5 w-3.5" /> {t('send')}
                       </button>
                       <a
-                        href={`https://wa.me/?text=${encodeURIComponent(`${text} ${link(c.code)}`)}`}
+                        href={`https://wa.me/?text=${encodeURIComponent(message(order, c.code))}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="WhatsApp"
@@ -88,7 +89,7 @@ export default function GiftOrdersList({ orders, names, baseUrl }: { orders: Gif
                         <MessageCircle className="h-3.5 w-3.5" />
                       </a>
                       <a
-                        href={`mailto:?subject=${encodeURIComponent(t('shareTitle'))}&body=${encodeURIComponent(`${text}\n\n${link(c.code)}`)}`}
+                        href={`mailto:?subject=${encodeURIComponent(t('shareTitle'))}&body=${encodeURIComponent(message(order, c.code))}`}
                         aria-label="Email"
                         className="flex items-center rounded-lg border border-gray-200 px-2 py-1.5 text-gray-600 hover:bg-gray-50"
                       >

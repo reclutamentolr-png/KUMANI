@@ -5871,7 +5871,8 @@
     "giftWithdrawal": "For codes not yet activated you can withdraw within {days} days of purchase: write to us and we will refund you.",
     "giftManage": "See the status of your codes and send them from here:",
     "subject_gift": "KUMANI: your gift codes — {item}",
-    "intro_gift": "Thank you! Here {count, plural, one {is your gift code} other {are your # gift codes}} for “{item}”."
+    "intro_gift": "Thank you! Here {count, plural, one {is your gift code} other {are your # gift codes}} for “{item}”.",
+    "giftLearnMore": "To help the recipient understand what it is, you can also send this page (readable without an account):"
   },
   "voucherWallet": {
     "pointsBalance": "KU Points",
@@ -9639,6 +9640,9 @@
     "walletText": "Give a year of Base or Pro, or the Pass for a service, to one or more people.",
     "walletButton": "Give a gift",
     "billingLink": "Give KUMANI Base or Pro to someone",
-    "passLink": "Give the {service} Pass to someone"
+    "passLink": "Give the {service} Pass to someone",
+    "shareLearnMore": "Find out what it is and how it works:",
+    "learnMoreService": "Find out more about {service}",
+    "learnMorePlan": "Discover every service included"
   }
 }

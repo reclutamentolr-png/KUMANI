@@ -1,13 +1,13 @@
 import type { Metadata } from 'next'
 import { getLocale, getTranslations } from 'next-intl/server'
-import { CalendarClock, CheckCircle2, Gift, Sparkles } from 'lucide-react'
+import { ArrowUpRight, CalendarClock, CheckCircle2, Gift, Sparkles } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import Logo from '@/components/Logo'
 import GiftRedeemButton from '@/components/gifts/GiftRedeemButton'
 import { createClient } from '@/lib/supabase/server'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { giftItemName } from '@/lib/giftsServer'
-import { GIFT_CODE_RE, giftPath, normalizeGiftCode, type GiftCodeInfo } from '@/lib/gifts'
+import { GIFT_CODE_RE, giftInfoPath, giftPath, normalizeGiftCode, type GiftCodeInfo } from '@/lib/gifts'
 
 export const metadata: Metadata = { robots: { index: false, follow: false } }
 
@@ -77,6 +77,15 @@ export default async function GiftPage({ params }: { params: Promise<{ code: str
                   </li>
                 )}
               </ul>
+              <Link
+                href={giftInfoPath(info.kind, info.tool)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[var(--gold-bright)] underline underline-offset-4 hover:text-white"
+              >
+                {info.kind === 'pass' && tool ? t('learnMoreService', { service: tool.title }) : t('learnMorePlan')}
+                <ArrowUpRight className="h-4 w-4" />
+              </Link>
 
               {info.status === 'valid' ? (
                 info.mine ? (

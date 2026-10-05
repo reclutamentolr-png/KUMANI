@@ -5871,7 +5871,8 @@
     "giftWithdrawal": "Für noch nicht aktivierte Codes kannst du innerhalb von {days} Tagen nach dem Kauf widerrufen: Schreib uns, und wir erstatten den Betrag.",
     "giftManage": "Status der Codes ansehen und von hier verschicken:",
     "subject_gift": "KUMANI: deine Geschenkcodes — {item}",
-    "intro_gift": "Danke! Hier {count, plural, one {ist dein Geschenkcode} other {sind deine # Geschenkcodes}} für „{item}“."
+    "intro_gift": "Danke! Hier {count, plural, one {ist dein Geschenkcode} other {sind deine # Geschenkcodes}} für „{item}“.",
+    "giftLearnMore": "Damit die beschenkte Person versteht, worum es geht, kannst du auch diese Seite schicken (ohne Konto lesbar):"
   },
   "voucherWallet": {
     "pointsBalance": "KU Points",
@@ -9639,6 +9640,9 @@
     "walletText": "Verschenke ein Jahr Base oder Pro oder den Pass für einen Dienst an eine oder mehrere Personen.",
     "walletButton": "Etwas verschenken",
     "billingLink": "KUMANI Base oder Pro verschenken",
-    "passLink": "Den Pass {service} verschenken"
+    "passLink": "Den Pass {service} verschenken",
+    "shareLearnMore": "Hier erfährst du, was es ist und wie es funktioniert:",
+    "learnMoreService": "Mehr über {service} erfahren",
+    "learnMorePlan": "Alle enthaltenen Dienste entdecken"
   }
 }

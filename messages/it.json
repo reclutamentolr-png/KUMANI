@@ -5871,7 +5871,8 @@
     "giftWithdrawal": "Per i codici non ancora attivati puoi recedere entro {days} giorni dall’acquisto: scrivici e ti rimborsiamo.",
     "giftManage": "Vedi lo stato dei codici e mandali da qui:",
     "subject_gift": "KUMANI: i tuoi codici regalo — {item}",
-    "intro_gift": "Grazie! Ecco {count, plural, one {il tuo codice regalo} other {i tuoi # codici regalo}} per «{item}»."
+    "intro_gift": "Grazie! Ecco {count, plural, one {il tuo codice regalo} other {i tuoi # codici regalo}} per «{item}».",
+    "giftLearnMore": "Per far capire a chi lo riceve di cosa si tratta, puoi mandare anche questa pagina (si legge senza account):"
   },
   "voucherWallet": {
     "pointsBalance": "KU Points",
@@ -9639,6 +9640,9 @@
     "walletText": "Regala un anno di Base o Pro, o il Pass di un servizio, a una o più persone.",
     "walletButton": "Fai un regalo",
     "billingLink": "Regala KUMANI Base o Pro a qualcuno",
-    "passLink": "Regala il Pass {service} a qualcuno"
+    "passLink": "Regala il Pass {service} a qualcuno",
+    "shareLearnMore": "Scopri cos’è e come funziona:",
+    "learnMoreService": "Scopri di più su {service}",
+    "learnMorePlan": "Scopri tutti i servizi inclusi"
   }
 }

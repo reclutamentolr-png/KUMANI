@@ -5871,7 +5871,8 @@
     "giftWithdrawal": "Para os códigos ainda não ativados pode exercer a livre resolução nos {days} dias seguintes à compra: escreva-nos e reembolsamos.",
     "giftManage": "Veja o estado dos códigos e envie-os a partir daqui:",
     "subject_gift": "KUMANI: os seus códigos de oferta — {item}",
-    "intro_gift": "Obrigado! Aqui {count, plural, one {está o seu código de oferta} other {estão os seus # códigos de oferta}} para «{item}»."
+    "intro_gift": "Obrigado! Aqui {count, plural, one {está o seu código de oferta} other {estão os seus # códigos de oferta}} para «{item}».",
+    "giftLearnMore": "Para quem recebe perceber do que se trata, pode enviar também esta página (lê-se sem conta):"
   },
   "voucherWallet": {
     "pointsBalance": "KU Points",
@@ -9639,6 +9640,9 @@
     "walletText": "Ofereça um ano de Base ou Pro, ou o Pass de um serviço, a uma ou mais pessoas.",
     "walletButton": "Fazer uma oferta",
     "billingLink": "Ofereça KUMANI Base ou Pro a alguém",
-    "passLink": "Ofereça o Pass {service} a alguém"
+    "passLink": "Ofereça o Pass {service} a alguém",
+    "shareLearnMore": "Descobre o que é e como funciona:",
+    "learnMoreService": "Saiba mais sobre {service}",
+    "learnMorePlan": "Descubra todos os serviços incluídos"
   }
 }

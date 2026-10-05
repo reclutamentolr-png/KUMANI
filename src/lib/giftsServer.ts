@@ -7,7 +7,7 @@ import { escapeHtml, sendEmail } from '@/lib/email'
 import { prettyVat } from '@/lib/vat'
 import { WITHDRAWAL_DAYS } from '@/lib/withdrawal'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
-import { GIFT_TYPE, giftPath } from '@/lib/gifts'
+import { GIFT_TYPE, giftInfoPath, giftPath } from '@/lib/gifts'
 import { locales, defaultLocale } from '../../i18n'
 
 // Regali: ordine e codici dopo il pagamento (webhook, o ritorno da Stripe se
@@ -103,7 +103,10 @@ export async function sendGiftConfirmation(session: Stripe.Checkout.Session, ord
     [t('labelRedeemBy'), date.format(new Date(codes[0].valid_until))],
     ...(isBusiness ? ([[t('labelBuyer'), `${meta.business_name ?? ''} · ${prettyVat(meta.vat_number)}`]] as [string, string][]) : []),
   ]
-  const paragraphs: { text: string; link?: string }[] = [{ text: t('giftHowTo') }]
+  const paragraphs: { text: string; link?: string }[] = [
+    { text: t('giftHowTo') },
+    { text: t('giftLearnMore'), link: `${SITE_URL}${prefix}${giftInfoPath(meta.kind === 'pass' ? 'pass' : 'plan', meta.tool)}` },
+  ]
   if (isBusiness) paragraphs.push({ text: t('businessNote', { name: meta.business_name ?? '', vat: prettyVat(meta.vat_number) }) })
   else paragraphs.push({ text: t('giftWithdrawal', { days: WITHDRAWAL_DAYS }), link: `${SITE_URL}${prefix}/contact` })
   paragraphs.push({ text: t('giftManage'), link: `${SITE_URL}${prefix}/regali` })

@@ -54,3 +54,8 @@ export const normalizeGiftCode = (code: string) => code.trim().toUpperCase()
 
 // Percorso della pagina del regalo (senza prefisso lingua)
 export const giftPath = (code: string) => `/regalo/${encodeURIComponent(code)}`
+
+// Pagina pubblica che spiega cosa si regala (visibile senza account): la
+// presentazione del servizio per un Pass, il catalogo dei servizi per Base/Pro
+export const giftInfoPath = (kind: GiftKind | null | undefined, tool: string | null | undefined) =>
+  kind === 'pass' && tool ? `/strumenti/${encodeURIComponent(tool)}` : '/catalogo'
