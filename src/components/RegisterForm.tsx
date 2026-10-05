@@ -11,7 +11,7 @@ import { europeanCountries } from '@/lib/european-countries'
 import { User, Mail, Lock, MapPin, AlertCircle, Loader2, Home, ShieldCheck, CheckCircle, Briefcase, Info, Gift } from 'lucide-react'
 import Logo from '@/components/Logo'
 import { authErrorText } from '@/lib/authErrors'
-import { redeemGiftCode } from '@/app/actions/gifts'
+import { checkActivationCode, redeemActivationCode } from '@/app/actions/codes'
 import { GIFT_CODE_RE } from '@/lib/gifts'
 
 const RESEND_COOLDOWN_SECONDS = 30
@@ -32,6 +32,8 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
   // Regalo ricevuto (link /regalo/CODICE): si attiva a iscrizione completata
   const giftParam = (searchParams.get('gift') || '').trim().toUpperCase()
   const giftCode = GIFT_CODE_RE.test(giftParam) ? giftParam : ''
+  // Un solo campo per tutti i codici: voucher abbonamento, Pass o regalo
+  const initialCode = giftCode || initialVoucherCode
   const tg = useTranslations('gifts')
   // Un utente che ha lasciato la verifica a metà e poi ha provato ad
   // accedere viene rimandato qui con ?verify=<email> (vedi login/page.tsx)
@@ -52,7 +54,7 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
     country_code: europeanCountries.some((c) => c.code === detectedCountry) ? detectedCountry : '',
     city: '',
     referral_code: initialReferralCode,
-    voucher_code: initialVoucherCode,
+    voucher_code: initialCode,
     professional: initialProfessional,
     // Termini e Privacy (obbligatorio) e consenso marketing (facoltativo)
     accept_terms: false,
@@ -61,7 +63,6 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
   // Esito dell'attivazione del coupon, mostrato nella schermata finale.
   const [voucherOutcome, setVoucherOutcome] = useState<{ ok: boolean; text: string } | null>(null)
   const [proTrialOutcome, setProTrialOutcome] = useState<string | null>(null)
-  const [giftOutcome, setGiftOutcome] = useState<{ ok: boolean; text: string } | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [step, setStep] = useState<Step>(resumeEmail ? 'verify' : 'form')
@@ -100,7 +101,6 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
         city: formData.city.trim(),
         referral_code: referralCode,
         voucher_code: voucherCode,
-        gift_code: giftCode,
         professional: formData.professional,
         terms_accepted_at: new Date().toISOString(),
         terms_version: TERMS_VERSION,
@@ -146,8 +146,7 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
       // "valido/non valido"), attivato davvero a registrazione completata.
       const cleanVoucherCode = formData.voucher_code.trim().toUpperCase()
       if (cleanVoucherCode) {
-        const { data: voucherValid } = await supabase.rpc('voucher_code_is_valid', { p_code: cleanVoucherCode })
-        if (!voucherValid) throw new Error(t('invalidVoucher'))
+        if (!(await checkActivationCode(cleanVoucherCode))) throw new Error(t('invalidVoucher'))
       }
 
       // 2. Registra l'utente in Supabase Auth — non ancora confermato: Supabase
@@ -169,7 +168,6 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
             city: formData.city.trim(),
             referral_code: cleanReferralCode,
             voucher_code: cleanVoucherCode,
-            gift_code: giftCode,
             professional: formData.professional,
             agent_code: agentCode,
             // Lingua dell'email con il codice (modello "Confirm signup" di Supabase)
@@ -239,7 +237,6 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
       city?: string
       referral_code?: string
       voucher_code?: string
-      gift_code?: string
       professional?: boolean
       agent_code?: string
     }
@@ -267,28 +264,19 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
       // Consensi dell'iscrizione (Termini, Privacy, marketing) nello storico
       await supabase.rpc('record_registration_consents')
 
-      // Coupon: attivazione usa e getta (garantita da redeem_subscription_voucher).
-      // Se non va a buon fine l'account resta creato: il codice si può
-      // riprovare dalla dashboard con "Attiva tramite Voucher".
-      const voucherCode = (meta.voucher_code ?? formData.voucher_code).trim().toUpperCase()
+      // Codice (voucher, Pass o regalo): attivato ora. Se non va a buon fine
+      // l'account resta creato: il codice si riprova dalla dashboard con
+      // "Hai un codice?". Con un Pass o un regalo si apre la dashboard essenziale.
+      const activationCode = (meta.voucher_code ?? formData.voucher_code).trim().toUpperCase()
       let delay = 2000
-      if (voucherCode) {
-        const { data: redeem } = await supabase
-          .rpc('redeem_subscription_voucher', { p_code: voucherCode })
-          .maybeSingle<{ success: boolean; reason: string | null; new_expires_at: string | null }>()
+      if (activationCode) {
+        const outcome = await redeemActivationCode(activationCode, { welcome: true })
+        const until = outcome.expiresAt ? new Date(outcome.expiresAt).toLocaleDateString(locale) : ''
         setVoucherOutcome(
-          redeem?.success && redeem.new_expires_at
-            ? { ok: true, text: t('voucherActivated', { date: new Date(redeem.new_expires_at).toLocaleDateString(locale) }) }
-            : { ok: false, text: t('voucherNotActivated') }
+          outcome.success
+            ? { ok: true, text: outcome.kind === 'voucher' ? t('voucherActivated', { date: until }) : outcome.kind === 'pass' ? t('passActivated', { date: until }) : tg('registerGiftDone') }
+            : { ok: false, text: outcome.kind === 'gift' ? tg(`redeem_${outcome.reason ?? 'error'}`) : t('voucherNotActivated') }
         )
-        delay = 4500
-      }
-
-      // Regalo ricevuto: attivato ora (se non va, si riprova dal link del regalo)
-      const gift = (meta.gift_code ?? giftCode).trim().toUpperCase()
-      if (gift) {
-        const outcome = await redeemGiftCode(gift)
-        setGiftOutcome(outcome.success ? { ok: true, text: tg('registerGiftDone') } : { ok: false, text: tg(`redeem_${outcome.reason ?? 'error'}`) })
         delay = 4500
       }
 
@@ -481,7 +469,7 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
               value={formData.voucher_code}
               onChange={(e) => setFormData({ ...formData, voucher_code: e.target.value.toUpperCase() })}
               className="w-full px-4 py-2.5 border border-stone-300 rounded-lg focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 focus:outline-none font-mono tracking-wider"
-              placeholder="KVA-..."
+              placeholder="KVA-…  PASS-…  GIFT-…"
             />
             <p className="text-xs text-gray-500 mt-1">{t('voucherCodeHint')}</p>
           </div>
@@ -614,7 +602,6 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
           {voucherOutcome && (
             <p className={`mt-3 text-sm font-medium ${voucherOutcome.ok ? 'text-green-700' : 'text-amber-700'}`}>{voucherOutcome.text}</p>
           )}
-          {giftOutcome && <p className={`mt-3 text-sm font-medium ${giftOutcome.ok ? 'text-green-700' : 'text-amber-700'}`}>{giftOutcome.text}</p>}
           {proTrialOutcome && <p className="mt-3 text-sm font-medium text-amber-700">{proTrialOutcome}</p>}
         </div>
       )}

@@ -4,16 +4,13 @@ import { useState } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { Ticket, LoaderCircle, X } from 'lucide-react'
-import { redeemVoucher } from '@/app/actions/vouchers'
+import { redeemActivationCode } from '@/app/actions/codes'
 
-/**
- * Lets a Kumano activate their subscription straight from the dashboard
- * card, without going through My Wallet, by entering a voucher code
- * someone else created for them (see WalletVoucherSection for the
- * create-a-voucher side of this flow).
- */
+// "Hai un codice?" in dashboard: un solo campo per voucher abbonamento
+// (KV-/KVA-), codici Pass (PASS-) e regali (GIFT-), riconosciuti dal codice.
 export default function VoucherActivationButton() {
   const t = useTranslations('dashboard')
+  const tg = useTranslations('gifts')
   const locale = useLocale()
   const router = useRouter()
 
@@ -33,25 +30,30 @@ export default function VoucherActivationButton() {
     if (!code.trim()) return
     setLoading(true)
     setMessage(null)
-    const result = await redeemVoucher(code)
+    const result = await redeemActivationCode(code)
     setLoading(false)
 
     if (!result.success) {
+      if (result.kind === 'gift') {
+        setMessage({ type: 'error', text: tg(`redeem_${result.reason ?? 'error'}`) })
+        return
+      }
       const key =
-        result.message === 'already_used'
+        result.reason === 'already_used'
           ? 'activateVoucherErrorUsed'
-          : result.message === 'self_redemption'
+          : result.reason === 'self_redemption'
             ? 'activateVoucherErrorSelf'
-            : result.message === 'not_found'
+            : result.reason === 'not_found'
               ? 'activateVoucherErrorNotFound'
               : 'activateVoucherErrorGeneric'
       setMessage({ type: 'error', text: t(key) })
       return
     }
 
+    const date = result.expiresAt ? new Date(result.expiresAt).toLocaleDateString(locale) : ''
     setMessage({
       type: 'success',
-      text: t('activateVoucherSuccess', { date: new Date(result.expiresAt).toLocaleDateString(locale) }),
+      text: result.kind === 'voucher' ? t('activateVoucherSuccess', { date }) : t('activateCodeSuccessService', { date }),
     })
     setTimeout(() => {
       setOpen(false)
