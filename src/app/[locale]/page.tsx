@@ -169,7 +169,14 @@ export default async function LandingPage({ searchParams }: { searchParams: Prom
             {t('heroBadge')}
           </div>
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white mb-5 sm:mb-7 leading-tight break-words">
-            {t('heroTitle')}
+            {/* Una riga per pezzo: "Le tue idee," / "le nostre mani." / "Insieme." */}
+            {t('heroTitle')
+              .split(/(?<=,)\s+/)
+              .map((part) => (
+                <span key={part} className="block">
+                  {part}
+                </span>
+              ))}
             <span className="block bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] bg-clip-text text-transparent">{t('heroAccent')}</span>
           </h1>
           <p className={`text-lg sm:text-xl text-gray-300 mb-8 sm:mb-10 leading-relaxed max-w-2xl mx-auto ${leftHero ? 'lg:mx-0' : ''}`}>
