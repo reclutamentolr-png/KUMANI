@@ -102,9 +102,14 @@ export async function getDashboardNetworkData(
   // relative to the viewed user — anyone placed via spillover has a
   // nonzero depth themselves, so it must be subtracted to get "how many
   // levels below ME" rather than "how many levels below the company root".
-  const rootDepth = userNode?.depth ?? 0
+  // I livelli si contano dal percorso in matrice (sempre esatto): i nodi
+  // radice (account KUMANI e chi è in cima a una propria struttura) hanno
+  // depth 0 salvato, mentre i loro figli partono da 2, e il conto veniva
+  // un livello in più (es. "fino al 5° livello" con 4 livelli).
+  const levelOf = (node: { depth: number; path?: string | null }) => (node.path ? String(node.path).split('.').length - 1 : node.depth)
+  const rootDepth = userNode ? levelOf(userNode) : 0
   const maxDownlineDepth = (downlineData || []).reduce(
-    (max: number, node: { depth: number }) => Math.max(max, node.depth - rootDepth),
+    (max: number, node: { depth: number; path?: string | null }) => Math.max(max, levelOf(node) - rootDepth),
     0
   )
   const userNodeId = userNode?.id
