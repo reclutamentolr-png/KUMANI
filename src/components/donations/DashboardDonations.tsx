@@ -2,7 +2,7 @@ import { getLocale, getTranslations } from 'next-intl/server'
 import { ArrowRight, HeartHandshake } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { getPublicDonationSummary } from '@/lib/donationsPublic'
-import { euroFormat } from '@/lib/donationTypes'
+import { percentFormat } from '@/lib/donationTypes'
 
 // Dashboard: quanto ha donato finora la community e a chi, con l'invito a
 // donare i propri Punti Community. Nascosta senza associazione attiva.
@@ -22,7 +22,7 @@ export default async function DashboardDonations() {
         <HeartHandshake className="h-6 w-6" />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block text-lg font-extrabold text-[var(--ink)]">{t('dashboardTitle', { amount: euroFormat(locale, summary.accrued_cents) })}</span>
+        <span className="block text-lg font-extrabold text-[var(--ink)]">{t('dashboardTitle', { percent: percentFormat(locale, summary.percent_bp) })}</span>
         <span className="block text-sm text-[var(--muted)]">{t('dashboardText', { association: active.name })}</span>
       </span>
       <span className="inline-flex shrink-0 items-center gap-1 rounded-lg bg-[var(--ink)] px-4 py-2 text-sm font-bold text-[var(--gold-bright)]">

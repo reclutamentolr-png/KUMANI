@@ -4,10 +4,10 @@ import { userIdOf } from '@/lib/agentCommissions'
 import { isProInvoice } from '@/lib/networkPoints'
 import { refreshDonationSummary } from '@/lib/donationsPublic'
 
-// Donazioni KUMANI per i pagamenti con carta (webhook invoice.paid): Base
-// 3 €, Pro 6 € a ogni primo pagamento e rinnovo, la differenza nel passaggio
-// a Pro; all'associazione attiva. Un rimborso annulla la donazione
-// (charge.refunded). Importi nelle impostazioni (Admin → Donazioni).
+// Donazioni KUMANI per i pagamenti con carta (webhook invoice.paid): una
+// percentuale di quanto incassato a ogni primo pagamento, rinnovo e
+// passaggio a Pro, all'associazione attiva. Un rimborso annulla la donazione
+// (charge.refunded). Percentuale nelle impostazioni (Admin → Donazioni).
 
 const db = () =>
   createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
@@ -27,7 +27,12 @@ export async function accrueSubscriptionDonation(invoice: Stripe.Invoice): Promi
           : null
   if (!kind) return
   const userId = await userIdOf(invoice)
-  const { error } = await db().rpc('accrue_subscription_donation', { p_invoice_id: invoice.id, p_user: userId, p_kind: kind })
+  const { error } = await db().rpc('accrue_subscription_donation', {
+    p_invoice_id: invoice.id,
+    p_user: userId,
+    p_kind: kind,
+    p_amount_paid_cents: invoice.amount_paid ?? 0,
+  })
   if (error) throw new Error(`Donazione non registrata: ${error.message}`)
   refreshDonationSummary()
 }

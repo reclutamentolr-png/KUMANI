@@ -26,7 +26,7 @@ export default function DonationsPanel() {
   const [associations, setAssociations] = useState<AdminAssociation[]>([])
   const [payouts, setPayouts] = useState<AdminPayout[]>([])
   const [totals, setTotals] = useState({ subscriptionCents: 0, pointsCents: 0 })
-  const [settings, setSettings] = useState({ base: '3', pro: '6', point: '0.10' })
+  const [settings, setSettings] = useState({ percent: '5', point: '0.10' })
   const [form, setForm] = useState<typeof emptyAssociation & { id?: string }>(emptyAssociation)
   const [payout, setPayout] = useState({ association_id: '', amount_eur: '', paid_on: new Date().toISOString().slice(0, 10), reference: '', receipt_url: '', notes: '' })
   const [busy, setBusy] = useState<string | null>(null)
@@ -43,8 +43,7 @@ export default function DonationsPanel() {
     setPayouts(result.payouts)
     setTotals(result.totals)
     setSettings({
-      base: String(result.settings.baseCents / 100),
-      pro: String(result.settings.proCents / 100),
+      percent: String(result.settings.percentBp / 100),
       point: String(result.settings.pointValueCents / 100),
     })
     setPayout((prev) => ({ ...prev, association_id: prev.association_id || result.associations.find((a) => a.is_active)?.id || result.associations[0]?.id || '' }))
@@ -85,10 +84,11 @@ export default function DonationsPanel() {
           <HeartHandshake className="h-7 w-7" /> Donazioni
         </h2>
         <p className="mt-1 text-gray-600">
-          Per ogni pagamento con carta di un abbonamento (primo pagamento e rinnovi) KUMANI dona una cifra fissa
-          all&apos;associazione attiva; il passaggio da Base a Pro aggiunge la differenza; un rimborso annulla la donazione. I
+          Per ogni pagamento con carta di un abbonamento (primo pagamento, rinnovi e passaggio a Pro) KUMANI dona una
+          percentuale di quanto incassato all&apos;associazione attiva; un rimborso annulla la donazione. I
           Kumani possono donare i propri KU Points: KUMANI versa il controvalore in euro. Tutto è visibile in
-          Homepage, nella pagina Donazioni e nel Portafoglio.
+          Homepage, nella pagina Donazioni e nel Portafoglio: in pubblico si vedono la percentuale e quanto è già stato
+          versato (con le ricevute), non il totale maturato, così non si risale al numero di abbonati.
         </p>
         {error && <p className="mt-2 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
         {!active && (
@@ -118,14 +118,10 @@ export default function DonationsPanel() {
       {/* Impostazioni */}
       <section className="space-y-3 rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
         <h3 className="font-bold text-gray-900">Importi</h3>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <label className="text-xs font-medium text-gray-600">
-            Donazione per abbonamento Base (€)
-            <input value={settings.base} onChange={(e) => setSettings({ ...settings, base: e.target.value })} inputMode="decimal" className={input} />
-          </label>
-          <label className="text-xs font-medium text-gray-600">
-            Donazione per abbonamento Pro (€)
-            <input value={settings.pro} onChange={(e) => setSettings({ ...settings, pro: e.target.value })} inputMode="decimal" className={input} />
+            Percentuale donata di ogni abbonamento (%)
+            <input value={settings.percent} onChange={(e) => setSettings({ ...settings, percent: e.target.value })} inputMode="decimal" className={input} />
           </label>
           <label className="text-xs font-medium text-gray-600">
             Valore di 1 KU Point donato (€)
@@ -133,13 +129,15 @@ export default function DonationsPanel() {
           </label>
         </div>
         <p className="text-xs text-gray-500">
-          Riferimento: con il pacchetto base 294 punti valgono 49 € di voucher (circa 0,17 € a punto). 0 al valore del punto
-          = donazione di punti spenta.
+          Esempio: con il 5% un Base da 49 € dona 2,45 € e un Pro da 149 € dona 7,45 € (si calcola su quanto incassato davvero,
+          sconti compresi). La nuova percentuale vale per i pagamenti da quel momento. Riferimento per i punti: con il
+          pacchetto base 294 punti valgono 49 € di voucher (circa 0,17 € a punto). 0 al valore del punto = donazione di punti
+          spenta.
         </p>
         <button
           type="button"
           disabled={busy !== null}
-          onClick={() => run('settings', () => adminSaveDonationSettings({ baseCents: toCents(settings.base), proCents: toCents(settings.pro), pointValueCents: toCents(settings.point) }))}
+          onClick={() => run('settings', () => adminSaveDonationSettings({ percentBp: Math.round(Number(settings.percent.replace(',', '.')) * 100), pointValueCents: toCents(settings.point) }))}
           className="inline-flex items-center gap-2 rounded-lg bg-[var(--ink)] px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
         >
           <Save className="h-4 w-4" /> Salva importi

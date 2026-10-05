@@ -5945,8 +5945,7 @@
   },
   "donations": {
     "sectionTitle": "KUMANI-Spenden",
-    "pledgeLine": "Für jedes aktivierte oder verlängerte Abo spendet KUMANI {base} (Basis) und {pro} (Pro) an {association}.",
-    "accruedLabel": "Bisher gespendet",
+    "pledgeLine": "{percent} jedes KUMANI-Abos, neu oder verlängert, gehen an {association}.",
     "paidLabel": "Bereits an den Verein überwiesen",
     "donorsLabel": "Kumani, die Punkte gespendet haben",
     "associationLabel": "Der Verein, den wir unterstützen",
@@ -5967,11 +5966,11 @@
     "myNone": "Du hast noch keine Punkte gespendet.",
     "mySubscription": "Mit deinem Abo hat KUMANI bereits {amount} gespendet.",
     "pageTitle": "Die Spenden von KUMANI",
-    "pageIntro": "Ein Teil jedes Abos geht an einen gemeinnützigen Verein, der hier mit Namen und Website angegeben ist. Volle Transparenz: So viel haben wir gesammelt, für wen und wie viel wir bereits überwiesen haben.",
+    "pageIntro": "Ein Teil jedes Abos geht an eine gemeinnützige Organisation, hier mit Name und Website. Transparenz: an wen es geht, wie viel wir bereits überwiesen haben und der Beleg jeder Überweisung.",
     "comingSoon": "Die Spenden starten bald: Hier siehst du den Verein, den wir unterstützen, und jede Überweisung.",
     "howTitle": "So funktioniert es",
-    "how1": "Für jedes bezahlte oder verlängerte Basis-Abo spendet KUMANI {base}.",
-    "how2": "Für jedes bezahlte oder verlängerte Pro-Abo spendet KUMANI {pro}.",
+    "how1": "{percent} jedes bezahlten Abos, Base oder Pro, neu oder verlängert, gehen an die Organisation.",
+    "how2": "Der Prozentsatz wird auf den tatsächlich gezahlten Betrag berechnet, auch beim Wechsel von Base zu Pro.",
     "how3": "Jeder Kumano kann seine KU Points in der Brieftasche spenden: KUMANI überweist ihren Gegenwert.",
     "how4": "Jede Überweisung an den Verein wird hier veröffentlicht, mit Datum und Referenz.",
     "payoutsTitle": "Getätigte Überweisungen",
@@ -5980,23 +5979,21 @@
     "receipt": "Beleg",
     "historyTitle": "Unterstützte Vereine",
     "paidShort": "{amount} überwiesen",
-    "fromSubscriptions": "Aus Abos",
     "fromPoints": "Aus KU Points",
     "homeEyebrow": "KUMANI hilft",
     "homeTitle": "Jedes Abo hilft jemandem.",
     "homeCta": "Unsere Spenden ansehen",
-    "dashboardTitle": "Gemeinsam haben wir {amount} gespendet",
+    "dashboardTitle": "{percent} jedes Abos gehen an einen guten Zweck",
     "dashboardText": "an {association}. Auch du kannst deine KU Points spenden.",
     "donateCta": "Spende deine KU Points",
     "taxCode": "Steuernummer {code}",
-    "pledgeChipBase": "{amount} pro Base",
-    "pledgeChipPro": "{amount} pro Pro",
-    "accruedHint": "von der KUMANI-Community",
     "paidHint": "an den Verein",
     "yourImpactLabel": "Dein Beitrag",
     "yourImpactHint": "mit deinem Abo und gespendeten Punkten",
     "donateAll": "Alle ({points})",
-    "noPointsYet": "Du hast noch keine KU Points zum Spenden: Du bekommst sie, wenn eine eingeladene Person ein Abo aktiviert."
+    "noPointsYet": "Du hast noch keine KU Points zum Spenden: Du bekommst sie, wenn eine eingeladene Person ein Abo aktiviert.",
+    "pledgeShort": "Von jedem Abo",
+    "pledgeChip": "{percent} jedes Abos"
   },
   "toolPass": {
     "productName": "{service}-Pass – 1 Jahr",
@@ -7743,14 +7740,14 @@
       "sub": "Drei Quellen, ein Ziel, alles veröffentlicht.",
       "src": {
         "1": {
-          "1": "3 €",
-          "2": "für jedes Base-Abo",
-          "3": "abgeschlossen oder verlängert"
+          "1": "{percent}",
+          "2": "jedes Base-Abos",
+          "3": "neu oder verlängert"
         },
         "2": {
-          "1": "6 €",
-          "2": "für jedes Pro-Abo",
-          "3": "abgeschlossen oder verlängert"
+          "1": "{percent}",
+          "2": "jedes Pro-Abos",
+          "3": "neu, verlängert oder Wechsel zu Pro"
         },
         "3": {
           "1": "1 €",
@@ -7760,8 +7757,8 @@
       },
       "assoc": "Unterstützter Verein",
       "publicT": "Alles öffentlich",
-      "publicD": "Auf der Website: wie viel gespendet und schon überwiesen wurde, jede Überweisung mit Datum, Referenz und Beleg.",
-      "notes": "Für jedes abgeschlossene oder verlängerte Base-Abo spendet KUMANI 3 Euro, für jedes Pro-Abo 6 Euro. Außerdem kann jeder Kumano seine KU Points spenden: Je 10 Punkte überweist KUMANI 1 Euro. Website und Wallet zeigen, wie viel gespendet und überwiesen wurde, mit jedem Beleg."
+      "publicD": "Auf der Website: wie viel bereits an die Organisation überwiesen wurde und jede Überweisung mit Datum, Referenz und Beleg.",
+      "notes": "{percent} jedes Base- oder Pro-Abos, neu oder verlängert, gehen an die Organisation, berechnet auf den tatsächlich gezahlten Betrag. Zusätzlich kann jedes Mitglied seine KU Points spenden: für je 10 Punkte überweist KUMANI 1 Euro. Website und Wallet zeigen den Prozentsatz, die bereits überwiesene Summe und jede Überweisung mit Beleg."
     },
     "s16": {
       "title": "Vertrauen zuerst",

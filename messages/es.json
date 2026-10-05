@@ -5945,8 +5945,7 @@
   },
   "donations": {
     "sectionTitle": "Donaciones KUMANI",
-    "pledgeLine": "Por cada suscripción activada o renovada, KUMANI dona {base} (Base) y {pro} (Pro) a {association}.",
-    "accruedLabel": "Donado hasta ahora",
+    "pledgeLine": "El {percent} de cada suscripción KUMANI, nueva o renovada, va a {association}.",
     "paidLabel": "Ya entregado a la asociación",
     "donorsLabel": "Kumani que han donado puntos",
     "associationLabel": "La asociación que apoyamos",
@@ -5967,11 +5966,11 @@
     "myNone": "Aún no has donado puntos.",
     "mySubscription": "Con tu suscripción KUMANI ya ha donado {amount}.",
     "pageTitle": "Las donaciones de KUMANI",
-    "pageIntro": "Una parte de cada suscripción va a una asociación con fines sociales, indicada aquí con su nombre y su web. Transparencia total: esto es lo que hemos recaudado, para quién y cuánto hemos entregado ya.",
+    "pageIntro": "Una parte de cada suscripción va a una asociación comprometida con lo social, indicada aquí con su nombre y su web. Transparencia: a quién va, cuánto hemos transferido ya y el recibo de cada transferencia.",
     "comingSoon": "Las donaciones empezarán pronto: aquí verás la asociación que apoyamos y cada entrega.",
     "howTitle": "Cómo funciona",
-    "how1": "Por cada suscripción Base pagada o renovada, KUMANI dona {base}.",
-    "how2": "Por cada suscripción Pro pagada o renovada, KUMANI dona {pro}.",
+    "how1": "El {percent} de cada suscripción pagada, Base o Pro, nueva o renovada, va a la asociación.",
+    "how2": "El porcentaje se calcula sobre lo que realmente se cobra, también al pasar de Base a Pro.",
     "how3": "Cada Kumano puede donar sus KU Points desde el Monedero: KUMANI entrega su contravalor.",
     "how4": "Cada entrega a la asociación se publica aquí, con fecha y referencia.",
     "payoutsTitle": "Entregas realizadas",
@@ -5980,23 +5979,21 @@
     "receipt": "Recibo",
     "historyTitle": "Asociaciones apoyadas",
     "paidShort": "entregado {amount}",
-    "fromSubscriptions": "De las suscripciones",
     "fromPoints": "De los KU Points",
     "homeEyebrow": "KUMANI solidario",
     "homeTitle": "Cada suscripción ayuda a alguien.",
     "homeCta": "Descubre nuestras donaciones",
-    "dashboardTitle": "Juntos hemos donado {amount}",
+    "dashboardTitle": "El {percent} de cada suscripción va a fines benéficos",
     "dashboardText": "a {association}. Tú también puedes donar tus KU Points.",
     "donateCta": "Dona tus KU Points",
     "taxCode": "CIF {code}",
-    "pledgeChipBase": "{amount} por cada Base",
-    "pledgeChipPro": "{amount} por cada Pro",
-    "accruedHint": "de la comunidad KUMANI",
     "paidHint": "a la asociación",
     "yourImpactLabel": "Tu contribución",
     "yourImpactHint": "con tu suscripción y los puntos donados",
     "donateAll": "Todos ({points})",
-    "noPointsYet": "Todavía no tienes KU Points para donar: los recibes cuando una persona que invitaste activa la suscripción."
+    "noPointsYet": "Todavía no tienes KU Points para donar: los recibes cuando una persona que invitaste activa la suscripción.",
+    "pledgeShort": "De cada suscripción",
+    "pledgeChip": "{percent} de cada suscripción"
   },
   "toolPass": {
     "productName": "Pase {service} – 1 año",
@@ -7743,14 +7740,14 @@
       "sub": "Tres fuentes, un único destino, todo publicado.",
       "src": {
         "1": {
-          "1": "3 €",
-          "2": "por cada suscripción Base",
-          "3": "activada o renovada"
+          "1": "{percent}",
+          "2": "de cada suscripción Base",
+          "3": "nueva o renovada"
         },
         "2": {
-          "1": "6 €",
-          "2": "por cada suscripción Pro",
-          "3": "activada o renovada"
+          "1": "{percent}",
+          "2": "de cada suscripción Pro",
+          "3": "nueva, renovada o paso a Pro"
         },
         "3": {
           "1": "1 €",
@@ -7760,8 +7757,8 @@
       },
       "assoc": "Asociación apoyada",
       "publicT": "Todo público",
-      "publicD": "En la web: cuánto se ha donado, cuánto se ha entregado ya, cada entrega con fecha, referencia y recibo.",
-      "notes": "Por cada suscripción Base activada o renovada KUMANI dona 3 euros, por cada Pro 6 euros. Además, cada Kumano puede donar sus KU Points: por cada 10 puntos KUMANI entrega 1 euro. En la web y en el Wallet se ve cuánto se ha donado, cuánto se ha entregado y cada entrega con su recibo."
+      "publicD": "En la web: cuánto se ha transferido ya a la asociación y cada transferencia con fecha, referencia y recibo.",
+      "notes": "El {percent} de cada suscripción Base o Pro, nueva o renovada, va a la asociación, calculado sobre lo que realmente se cobra. Además, cada miembro puede donar sus KU Points: por cada 10 puntos KUMANI aporta 1 euro. En la web y en el Wallet se ven el porcentaje, lo ya transferido y cada transferencia con su recibo."
     },
     "s16": {
       "title": "La confianza ante todo",

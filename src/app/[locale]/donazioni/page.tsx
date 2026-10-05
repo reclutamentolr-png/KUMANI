@@ -5,7 +5,7 @@ import { ArrowLeft, CheckCircle2, ExternalLink, FileText, HandCoins, HeartHandsh
 import Link from '@/components/LocalizedLink'
 import AppHeader from '@/components/nav/AppHeader'
 import { getPublicDonationSummary } from '@/lib/donationsPublic'
-import { euroFormat } from '@/lib/donationTypes'
+import { euroFormat, percentFormat } from '@/lib/donationTypes'
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('donations')
@@ -52,8 +52,8 @@ export default async function DonationsPage() {
             {/* Contatore */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               <div className="rounded-2xl border-2 border-[var(--gold)] bg-gradient-to-br from-[#2a2418] to-[var(--ink)] p-6 text-center text-white shadow-lg sm:col-span-1">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--gold-bright)]">{t('accruedLabel')}</p>
-                <p className="mt-1 text-4xl font-extrabold">{eur(summary.accrued_cents)}</p>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--gold-bright)]">{t('pledgeShort')}</p>
+                <p className="mt-1 text-4xl font-extrabold">{percentFormat(locale, summary.percent_bp)}</p>
               </div>
               <div className="rounded-2xl border border-[var(--gold)]/30 bg-white p-6 text-center shadow-sm">
                 <Landmark className="mx-auto h-6 w-6 text-[var(--gold)]" />
@@ -66,11 +66,7 @@ export default async function DonationsPage() {
                 <p className="text-xs text-[var(--muted)]">{t('donorsLabel')}</p>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4 text-center text-sm">
-              <p className="rounded-xl bg-white p-3 shadow-sm">
-                <span className="block font-bold text-[var(--ink)]">{eur(summary.subscription_cents)}</span>
-                <span className="text-[var(--muted)]">{t('fromSubscriptions')}</span>
-              </p>
+            <div className="grid grid-cols-1 gap-4 text-center text-sm">
               <p className="rounded-xl bg-white p-3 shadow-sm">
                 <span className="block font-bold text-[var(--ink)]">{eur(summary.points_cents)}</span>
                 <span className="text-[var(--muted)]">{t('fromPoints')}</span>
@@ -108,8 +104,8 @@ export default async function DonationsPage() {
               <h2 className="text-lg font-bold text-[var(--ink)]">{t('howTitle')}</h2>
               <ul className="mt-3 space-y-2 text-sm text-gray-700">
                 {[
-                  t('how1', { base: eur(summary.base_cents) }),
-                  t('how2', { pro: eur(summary.pro_cents) }),
+                  t('how1', { percent: percentFormat(locale, summary.percent_bp) }),
+                  t('how2'),
                   t('how3'),
                   t('how4'),
                 ].map((line) => (
@@ -158,7 +154,7 @@ export default async function DonationsPage() {
                     <li key={a.name} className="flex flex-wrap justify-between gap-2 py-2">
                       <span className="font-semibold text-[var(--ink)]">{a.name}</span>
                       <span className="text-[var(--muted)]">
-                        {eur(a.accrued_cents)} · {t('paidShort', { amount: eur(a.paid_cents) })}
+                        {t('paidShort', { amount: eur(a.paid_cents) })}
                       </span>
                     </li>
                   ))}

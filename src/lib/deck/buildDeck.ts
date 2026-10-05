@@ -52,7 +52,7 @@ async function icon(name: string, hex: string, px = 256): Promise<string> {
   return data
 }
 
-export async function buildDeck(rawTexts: unknown, locale: string, minPassEur: number, landingPassEur: number | null = null): Promise<Blob> {
+export async function buildDeck(rawTexts: unknown, locale: string, minPassEur: number, landingPassEur: number | null = null, donationPercentBp: number | null = null): Promise<Blob> {
   const S: T = arrays(rawTexts)
   // {price} = Pass più economico, con il formato di prezzo della lingua
   const price = new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', minimumFractionDigits: minPassEur % 1 ? 2 : 0 }).format(minPassEur)
@@ -64,6 +64,10 @@ export async function buildDeck(rawTexts: unknown, locale: string, minPassEur: n
       ? new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', minimumFractionDigits: landingPassEur % 1 ? 2 : 0 }).format(landingPassEur)
       : null
   S.landing.badge = landingPrice ? String(S.landing.badgePass).replace('{price}', landingPrice) : S.landing.badgePro
+  // {percent} = percentuale di ogni abbonamento donata (Admin → Donazioni)
+  const percent = new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 2 }).format((donationPercentBp ?? 500) / 10000)
+  S.s15.src = S.s15.src.map((card: string[]) => card.map((text) => String(text).replace('{percent}', percent)))
+  S.s15.notes = String(S.s15.notes).replace('{percent}', percent)
   const k = SCALE[locale] ?? 1
   const fs = (n: number) => Math.round(n * k * 2) / 2
   const lg = LANG[locale] ?? 'it-IT'

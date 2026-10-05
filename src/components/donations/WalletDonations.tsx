@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { ArrowRight, Heart, HeartHandshake, LoaderCircle, Sparkles, User } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { donateNetworkPoints } from '@/app/actions/donations'
-import { euroFormat, type DonationSummary, type MyDonations } from '@/lib/donationTypes'
+import { euroFormat, percentFormat, type DonationSummary, type MyDonations } from '@/lib/donationTypes'
 
 // Portafoglio → Donazioni: l'associazione sostenuta (fascia con foto), le
 // cifre in evidenza (community, versato, il tuo contributo), la donazione dei
@@ -77,22 +77,14 @@ export default function WalletDonations({
             <p className="text-lg font-extrabold leading-tight">{active.name}</p>
             {active.mission && <p className="mt-1 text-sm text-white/80">{active.mission}</p>}
             <div className="mt-3 flex flex-wrap gap-2">
-              <span className="rounded-full bg-[var(--gold)]/25 px-3 py-1 text-xs font-bold text-[var(--gold-bright)]">{t('pledgeChipBase', { amount: eur(summary.base_cents) })}</span>
-              <span className="rounded-full bg-[var(--gold)]/25 px-3 py-1 text-xs font-bold text-[var(--gold-bright)]">{t('pledgeChipPro', { amount: eur(summary.pro_cents) })}</span>
+              <span className="rounded-full bg-[var(--gold)]/25 px-3 py-1 text-xs font-bold text-[var(--gold-bright)]">{t('pledgeChip', { percent: percentFormat(locale, summary.percent_bp) })}</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Le cifre, in evidenza */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        <div className="rounded-2xl border border-[var(--gold)]/40 bg-gradient-to-br from-[var(--gold-pale)] to-white p-4">
-          <p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-[var(--muted)]">
-            <Heart className="h-3.5 w-3.5 text-[var(--gold)]" fill="currentColor" /> {t('accruedLabel')}
-          </p>
-          <p className="mt-1 text-3xl font-extrabold text-[var(--gold)]">{eur(summary.accrued_cents)}</p>
-          <p className="text-xs text-[var(--muted)]">{t('accruedHint')}</p>
-        </div>
+      <div className="grid grid-cols-2 gap-3">
         <div className="rounded-2xl border border-[var(--gold)]/25 bg-white p-4">
           <p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-[var(--muted)]">
             <HeartHandshake className="h-3.5 w-3.5 text-[var(--gold)]" /> {t('paidLabel')}
@@ -100,7 +92,7 @@ export default function WalletDonations({
           <p className="mt-1 text-3xl font-extrabold text-[var(--ink)]">{eur(summary.paid_cents)}</p>
           <p className="text-xs text-[var(--muted)]">{t('paidHint')}</p>
         </div>
-        <div className="col-span-2 rounded-2xl bg-[var(--ink)] p-4 text-white sm:col-span-1">
+        <div className="rounded-2xl bg-[var(--ink)] p-4 text-white">
           <p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-white/60">
             <User className="h-3.5 w-3.5 text-[var(--gold-bright)]" /> {t('yourImpactLabel')}
           </p>

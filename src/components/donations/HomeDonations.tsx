@@ -3,11 +3,13 @@ import { getLocale, getTranslations } from 'next-intl/server'
 import { ArrowRight, HandCoins, HeartHandshake, Landmark } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { getPublicDonationSummary } from '@/lib/donationsPublic'
-import { euroFormat } from '@/lib/donationTypes'
+import { euroFormat, percentFormat } from '@/lib/donationTypes'
 
-// Homepage: le donazioni di KUMANI in grande (contatore, associazione,
-// impegno per abbonamento), con la foto del cuore al sole a lato (in alto
-// sul telefono). Nascosta finché non c'è un'associazione attiva.
+// Homepage: le donazioni di KUMANI in grande (percentuale di ogni
+// abbonamento, quanto è già stato versato all'associazione con le ricevute,
+// associazione), con la foto del cuore al sole a lato (in alto sul
+// telefono). Nessun totale maturato: non deve far capire quanti sono gli
+// abbonati. Nascosta finché non c'è un'associazione attiva.
 export default async function HomeDonations() {
   const summary = await getPublicDonationSummary()
   const active = summary?.active
@@ -32,7 +34,7 @@ export default async function HomeDonations() {
               </p>
               <h2 className="mt-4 text-3xl font-extrabold leading-tight text-white sm:text-4xl">{t('homeTitle')}</h2>
               <p className="mt-3 text-base leading-relaxed text-gray-300 sm:text-lg">
-                {t('pledgeLine', { base: eur(summary.base_cents), pro: eur(summary.pro_cents), association: active.name })}
+                {t('pledgeLine', { percent: percentFormat(locale, summary.percent_bp), association: active.name })}
               </p>
               {active.mission && <p className="mt-2 text-sm italic text-[var(--gold-bright)]">“{active.mission}”</p>}
               <Link
@@ -45,8 +47,8 @@ export default async function HomeDonations() {
 
             <div className="space-y-3">
               <div className="rounded-2xl border border-[var(--gold)]/40 bg-white/[0.06] p-5 text-center">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--gold-bright)]">{t('accruedLabel')}</p>
-                <p className="mt-1 text-5xl font-extrabold text-white sm:text-6xl">{eur(summary.accrued_cents)}</p>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--gold-bright)]">{t('pledgeShort')}</p>
+                <p className="mt-1 text-5xl font-extrabold text-white sm:text-6xl">{percentFormat(locale, summary.percent_bp)}</p>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div className="rounded-xl border border-white/10 bg-white/[0.04] p-3 text-center">

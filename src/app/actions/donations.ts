@@ -78,7 +78,7 @@ export async function adminGetDonations() {
     service.from('donation_associations').select('*').order('is_active', { ascending: false }).order('created_at', { ascending: false }),
     service.from('donation_entries').select('association_id, amount_cents, source, reversed_at'),
     service.from('donation_payouts').select('*').order('paid_on', { ascending: false }),
-    service.from('system_settings').select('key, value').in('key', ['donation_base_cents', 'donation_pro_cents', 'donation_point_value_cents']),
+    service.from('system_settings').select('key, value').in('key', ['donation_percent_bp', 'donation_point_value_cents']),
   ])
   const accrued = new Map<string, number>()
   let subscriptionCents = 0
@@ -99,8 +99,8 @@ export async function adminGetDonations() {
     associations: (associations ?? []).map((a) => ({ ...a, accrued_cents: accrued.get(a.id) ?? 0, paid_cents: paid.get(a.id) ?? 0 })) as AdminAssociation[],
     payouts: (payouts ?? []).map((p) => ({ ...p, association: names.get(p.association_id) ?? '—' })) as AdminPayout[],
     settings: {
-      baseCents: setting('donation_base_cents', 300),
-      proCents: setting('donation_pro_cents', 600),
+      // Percentuale di ogni abbonamento, in centesimi di punto (500 = 5%)
+      percentBp: setting('donation_percent_bp', 500),
       pointValueCents: setting('donation_point_value_cents', 10),
     },
     totals: { subscriptionCents, pointsCents },
@@ -189,16 +189,15 @@ export async function adminDeletePayout(id: string) {
   return { success: true }
 }
 
-export async function adminSaveDonationSettings(input: { baseCents: number; proCents: number; pointValueCents: number }) {
+export async function adminSaveDonationSettings(input: { percentBp: number; pointValueCents: number }) {
   if (!(await verifyAdmin('settings.write'))) return { success: false, error: 'Non autorizzato' }
-  const values = [input.baseCents, input.proCents, input.pointValueCents]
-  if (values.some((v) => !Number.isInteger(v) || v < 0 || v > 100000)) return { success: false, error: 'Valori non validi.' }
+  if (!Number.isInteger(input.percentBp) || input.percentBp < 0 || input.percentBp > 5000) return { success: false, error: 'Percentuale non valida (da 0 a 50%).' }
+  if (!Number.isInteger(input.pointValueCents) || input.pointValueCents < 0 || input.pointValueCents > 100000) return { success: false, error: 'Valore del punto non valido.' }
   const { error } = await db()
     .from('system_settings')
     .upsert(
       [
-        { key: 'donation_base_cents', value: String(input.baseCents) },
-        { key: 'donation_pro_cents', value: String(input.proCents) },
+        { key: 'donation_percent_bp', value: String(input.percentBp) },
         { key: 'donation_point_value_cents', value: String(input.pointValueCents) },
       ],
       { onConflict: 'key' }
