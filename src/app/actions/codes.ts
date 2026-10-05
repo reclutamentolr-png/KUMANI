@@ -22,6 +22,16 @@ const service = () =>
     auth: { autoRefreshToken: false, persistSession: false },
   })
 
+// Codice invito di chi ha comprato un regalo ancora valido (per chi si
+// iscrive con il codice regalo senza indicare chi l'ha invitato)
+export async function giftGiverReferral(raw: string): Promise<string> {
+  const code = clean(raw)
+  if (!GIFT_CODE_RE.test(code)) return ''
+  const { data } = await service().rpc('gift_code_info', { p_code: code })
+  const info = data as { status?: string; giver_referral?: string | null } | null
+  return info?.status === 'valid' ? (info.giver_referral ?? '') : ''
+}
+
 // Prima dell'iscrizione: solo "valido / non valido" (si attiva dopo)
 export async function checkActivationCode(raw: string): Promise<boolean> {
   const code = clean(raw)

@@ -11,7 +11,7 @@ import { europeanCountries } from '@/lib/european-countries'
 import { User, Mail, Lock, MapPin, AlertCircle, Loader2, Home, ShieldCheck, CheckCircle, Briefcase, Info, Gift } from 'lucide-react'
 import Logo from '@/components/Logo'
 import { authErrorText } from '@/lib/authErrors'
-import { checkActivationCode, redeemActivationCode } from '@/app/actions/codes'
+import { checkActivationCode, giftGiverReferral, redeemActivationCode } from '@/app/actions/codes'
 import { GIFT_CODE_RE } from '@/lib/gifts'
 
 const RESEND_COOLDOWN_SECONDS = 30
@@ -121,7 +121,10 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
     }
     setLoading(true)
 
-    const cleanReferralCode = formData.referral_code.trim().toUpperCase()
+    // Regalo senza codice invito: l'invito è di chi ha regalato
+    const typedCode = formData.voucher_code.trim().toUpperCase()
+    const cleanReferralCode =
+      formData.referral_code.trim().toUpperCase() || (GIFT_CODE_RE.test(typedCode) ? await giftGiverReferral(typedCode) : '')
 
     try {
       // 1. Codice invito FACOLTATIVO: se c'è lo si verifica subito (prima del

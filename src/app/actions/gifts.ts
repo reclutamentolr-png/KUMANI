@@ -30,8 +30,11 @@ export async function redeemGiftCode(code: string): Promise<GiftRedeemResult> {
     revalidatePath('/dashboard')
     revalidatePath('/wallet')
     if (data.buyer_id) {
-      const { data: me } = await supabase.rpc('get_my_profile').maybeSingle<{ first_name: string | null }>()
+      const { data: me } = await supabase.rpc('get_my_profile').maybeSingle<{ id: string; first_name: string | null }>()
       const name = me?.first_name || 'Kumano'
+      // Chi riceve il regalo e non ha ancora indicato chi l'ha invitato (entro
+      // i giorni previsti): entra nella stella di chi ha regalato
+      if (me?.id) await giverAsSponsor(me.id, data.buyer_id)
       await notifyUser(
         data.buyer_id,
         'network',
@@ -41,6 +44,22 @@ export async function redeemGiftCode(code: string): Promise<GiftRedeemResult> {
     }
   }
   return { success: data.success, reason: data.reason, kind: data.kind, tool: data.tool, plan: data.plan, expiresAt: data.expires_at }
+}
+
+async function giverAsSponsor(userId: string, buyerId: string) {
+  try {
+    const db = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+      auth: { autoRefreshToken: false, persistSession: false },
+    })
+    const { data: status } = await db.rpc('late_sponsor_status', { p_user: userId })
+    if ((status as { eligible?: boolean } | null)?.eligible !== true) return
+    const { data: buyer } = await db.from('profiles').select('referral_code').eq('id', buyerId).maybeSingle()
+    if (!buyer?.referral_code) return
+    const { data: result, error } = await db.rpc('assign_late_sponsor', { p_user: userId, p_code: buyer.referral_code, p_ignore_deadline: false })
+    if (error || result !== 'ok') console.error('[regalo] invito di chi regala non assegnato:', error?.message ?? result)
+  } catch (error) {
+    console.error('[regalo] invito di chi regala non assegnato:', error)
+  }
 }
 
 export async function getMyGiftOrders(): Promise<GiftOrder[]> {
