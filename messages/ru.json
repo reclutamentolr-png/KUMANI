@@ -594,7 +594,12 @@
     "starLastLevel": "Под этой звездой — 5-й уровень: последний, который вам виден.",
     "legendInvitedBy": "Приглашены: {name}",
     "profileButton": "Профиль",
-    "activateCodeSuccessService": "Сервис активирован до {date}!"
+    "activateCodeSuccessService": "Сервис активирован до {date}!",
+    "peoplePass": "Пользуется {service} по Pass",
+    "peoplePassGift": "Пользуется {service}: ваш подарок",
+    "peoplePassUntil": "Pass действует до {date}",
+    "sendWhatsAppMoreServices": "Показать другие сервисы",
+    "whatsappPassMessage": "Привет, {name}! 👋 Это {sponsorName}. Как тебе {service}? В KUMANI есть много других полезных сервисов для дома, денег и работы: загляни сюда {url}"
   },
   "memolife": {
     "greeting": "Ciao, {name}!",

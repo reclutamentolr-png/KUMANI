@@ -594,7 +594,12 @@
     "starLastLevel": "Unter diesem Stern liegt die 5. Ebene: die letzte, die du sehen kannst.",
     "legendInvitedBy": "Eingeladen von {name}",
     "profileButton": "Profil",
-    "activateCodeSuccessService": "Dienst aktiviert bis {date}!"
+    "activateCodeSuccessService": "Dienst aktiviert bis {date}!",
+    "peoplePass": "Nutzt {service} mit dem Pass",
+    "peoplePassGift": "Nutzt {service}: dein Geschenk",
+    "peoplePassUntil": "Pass aktiv bis {date}",
+    "sendWhatsAppMoreServices": "Die anderen Dienste zeigen",
+    "whatsappPassMessage": "Hallo {name}! 👋 Hier ist {sponsorName}. Wie kommst du mit {service} zurecht? Bei KUMANI gibt es viele weitere nützliche Dienste für Zuhause, Geld und Arbeit: Schau mal hier {url}"
   },
   "memolife": {
     "greeting": "Ciao, {name}!",

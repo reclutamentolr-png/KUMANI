@@ -9,6 +9,8 @@ import RankBadge from '@/components/RankBadge'
 import KumaniPeople from '@/components/KumaniPeople'
 import Leaderboard from '@/components/Leaderboard'
 import { getDashboardNetworkData } from '@/lib/dashboardNetworkData'
+import { getMemberPasses } from '@/lib/memberPasses'
+import { defaultLocale } from '../../../../../i18n'
 import { TreePine, Star, Sparkles, Crown, Trophy, PartyPopper, UserPlus, CheckCircle2, Shuffle, Network, MessageCircle, Gift, Users } from 'lucide-react'
 import NativeShareButton from '@/components/NativeShareButton'
 import AppHeader from '@/components/nav/AppHeader'
@@ -60,6 +62,11 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
   } = network
 
   const shareUrl = `${SITE_URL}/${locale}/ref/${profile?.referral_code}`
+  // Chi non ha ancora un piano ma usa un servizio con il Pass (anche regalato
+  // da te): si vede nell'elenco, con un messaggio per scoprire gli altri servizi
+  const passes = await getMemberPasses(pendingKumani.map((person) => person.id), user.id)
+  const pendingWithPasses = pendingKumani.map((person) => ({ ...person, passes: passes.get(person.id) ?? [] }))
+  const catalogUrl = `${SITE_URL}${locale === defaultLocale ? '' : `/${locale}`}/catalogo`
 
   // Qualifiche (badge) raggiunte, con i giorni dall'iscrizione: la data la
   // registra il database quando i Punti Community guadagnati superano la soglia.
@@ -201,7 +208,7 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
         </div>
 
         {/* I tuoi KUMANI: attivi e non ancora attivi */}
-        <KumaniPeople active={activeKumani} pending={pendingKumani} received={receivedKumani} senderName={profile?.first_name || ''} loginUrl={loginUrl} />
+        <KumaniPeople active={activeKumani} pending={pendingWithPasses} received={receivedKumani} senderName={profile?.first_name || ''} loginUrl={loginUrl} catalogUrl={catalogUrl} />
 
         {/* Matrice */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
