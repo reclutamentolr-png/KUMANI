@@ -291,7 +291,7 @@
   "auth": {
     "registrationIncomplete": "Tu registro no se completó. Vuelve a «Registrarse» con el mismo correo y contraseña: lo completaremos desde allí.",
     "professionalLabel": "Soy profesional",
-    "professionalHint": "Tienda, estudio o negocio: prueba gratis durante 15 días las herramientas Pro (tarjeta de fidelización, presupuestos, recibos, promociones). Sin tarjeta.",
+    "professionalHint": "Tienda, despacho o negocio: prueba gratis durante 15 días las herramientas Pro (tarjeta de fidelidad, presupuestos, recibos, promociones). Sin tarjeta: tras el registro te pedimos el NIF-IVA o el código fiscal.",
     "proTrialStarted": "Prueba Pro activa hasta el {date}: encontrarás las herramientas en el Área Profesionales.",
     "loginTitle": "Accede a tu cuenta",
     "loginDescription": "Para gestionar tu suscripción y tus herramientas",
@@ -367,7 +367,9 @@
     "haveCodeNeedEmail": "Escribe primero tu email y luego toca «Ya he recibido un código».",
     "termsAccept": "He leído y acepto los <terms>Términos de servicio</terms> y la <privacy>Política de privacidad</privacy>.",
     "marketingConsent": "Quiero recibir por correo electrónico novedades y ofertas de KUMANI (opcional: puedes cambiar de opinión cuando quieras desde tu perfil).",
-    "passActivated": "Código Pass activado: el servicio es tuyo hasta el {date}."
+    "passActivated": "Código Pass activado: el servicio es tuyo hasta el {date}.",
+    "proTrialNext": "Ahora activa la prueba Pro gratuita: te pedimos el NIF-IVA o el código fiscal.",
+    "disposableEmail": "No se aceptan correos temporales o desechables: usa una dirección que revises de verdad."
   },
   "dashboard": {
     "receivedLabel": "De la Comunidad",
@@ -9672,5 +9674,39 @@
     "back": "Volver a los servicios",
     "readyTitle": "Ya está incluido: empieza a usarlo",
     "decideTitle": "¿Te convence? Elige cómo activarlo"
+  },
+  "proTrial": {
+    "intro": "Para activar la prueba gratuita necesitamos un dato de tu actividad: tu NIF-IVA o, si trabajas sin él, tu código fiscal italiano. Sin tarjeta.",
+    "withVat": "Tengo NIF-IVA",
+    "withoutVat": "Trabajo sin NIF-IVA",
+    "country": "País",
+    "vatLabel": "NIF-IVA",
+    "vatPlaceholder": "NIF-IVA",
+    "taxCodeLabel": "Código fiscal",
+    "taxCodeHint": "Debe coincidir con el nombre, los apellidos y la fecha de nacimiento de tu perfil.",
+    "oneTrial": "Una sola prueba por NIF-IVA o código fiscal. El NIF-IVA se guarda en los datos de tu actividad.",
+    "submit": "Activar la prueba gratuita",
+    "openProfile": "Abrir el perfil",
+    "error_vat_format": "El NIF-IVA no tiene un formato válido para el país elegido.",
+    "error_vat_checksum": "El NIF-IVA no es válido: comprueba que esté bien escrito.",
+    "error_vat_country": "Elige el país del NIF-IVA.",
+    "error_vat_vies_invalid": "Este NIF-IVA no figura activo en el registro europeo (VIES).",
+    "error_birthdateMissing": "Primero añade tu fecha de nacimiento en el perfil.",
+    "error_taxCode_format": "El código fiscal no tiene un formato válido (16 caracteres).",
+    "error_taxCode_checksum": "El código fiscal no es válido: comprueba que esté bien escrito.",
+    "error_taxCode_surname": "El código fiscal no coincide con los apellidos del perfil.",
+    "error_taxCode_name": "El código fiscal no coincide con el nombre del perfil.",
+    "error_taxCode_birthdate": "El código fiscal no coincide con la fecha de nacimiento del perfil.",
+    "error_taxCode_used": "Este código fiscal ya está asociado a otra cuenta.",
+    "error_tax_code_invalid": "Código fiscal no válido.",
+    "error_id_used": "La prueba gratuita ya se ha usado con este NIF-IVA o código fiscal.",
+    "error_already_used": "Ya has usado la prueba Pro gratuita.",
+    "error_already_pro": "Ya tienes el plan Pro.",
+    "error_blocked": "Tu cuenta no puede activar la prueba. Escribe al soporte.",
+    "error_not_allowed": "Tu cuenta no puede activar la prueba. Escribe al soporte.",
+    "error_not_logged": "Inicia sesión para activar la prueba.",
+    "error_notLoggedIn": "Inicia sesión para activar la prueba.",
+    "error_saveError": "No se ha podido guardar. Inténtalo de nuevo.",
+    "error_error": "No se ha podido activar la prueba. Inténtalo de nuevo."
   }
 }

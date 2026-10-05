@@ -13,6 +13,7 @@ import Logo from '@/components/Logo'
 import { authErrorText } from '@/lib/authErrors'
 import { checkActivationCode, giftGiverReferral, redeemActivationCode } from '@/app/actions/codes'
 import { GIFT_CODE_RE } from '@/lib/gifts'
+import { isDisposableEmail } from '@/lib/disposableEmail'
 
 const RESEND_COOLDOWN_SECONDS = 30
 
@@ -117,6 +118,10 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
     // Città obbligatoria (non bastano spazi): finisce già compilata nel profilo
     if (formData.city.trim().length < 2) {
       setError(t('cityMissing'))
+      return
+    }
+    if (isDisposableEmail(formData.email)) {
+      setError(t('disposableEmail'))
       return
     }
     setLoading(true)
@@ -283,21 +288,17 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
         delay = 4500
       }
 
-      // "Sono un professionista": 15 giorni di Pro gratis, una sola volta per
-      // account (start_pro_trial non fa nulla se il coupon ha già dato il Pro).
-      if (meta.professional ?? formData.professional) {
-        const { data: trial } = await supabase
-          .rpc('start_pro_trial')
-          .maybeSingle<{ status: string; trial_ends_at: string | null }>()
-        if (trial?.status === 'ok' && trial.trial_ends_at) {
-          setProTrialOutcome(t('proTrialStarted', { date: new Date(trial.trial_ends_at).toLocaleDateString(locale) }))
-          delay = 4500
-        }
+      // "Sono un professionista": la prova Pro si attiva con Partita IVA o
+      // codice fiscale, sulla pagina Pro (si apre con il modulo pronto)
+      const professional = meta.professional ?? formData.professional
+      if (professional) {
+        setProTrialOutcome(t('proTrialNext'))
+        delay = 4500
       }
 
       setStep('done')
       setTimeout(() => {
-        router.push(`/${locale}/dashboard`)
+        router.push(professional ? `/${locale}/pro?prova=1` : `/${locale}/dashboard`)
       }, delay)
     } catch (err: unknown) {
       setError(authErrorText(t, err, t('errorCreatingUser')))

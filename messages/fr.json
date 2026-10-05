@@ -291,7 +291,7 @@
   "auth": {
     "registrationIncomplete": "Votre inscription n'a pas été finalisée. Retournez sur « S'inscrire » avec le même e-mail et mot de passe : nous la finaliserons.",
     "professionalLabel": "Je suis un professionnel",
-    "professionalHint": "Commerce, cabinet ou activité : essayez gratuitement les outils Pro pendant 15 jours (carte de fidélité, devis, reçus, promotions). Aucune carte demandée.",
+    "professionalHint": "Boutique, cabinet ou activité : essayez gratuitement les outils Pro pendant 15 jours (carte de fidélité, devis, reçus, promotions). Sans carte : après l’inscription, nous vous demandons votre numéro de TVA ou code fiscal.",
     "proTrialStarted": "Essai Pro actif jusqu'au {date} : vous trouverez les outils dans l'Espace Professionnels.",
     "loginTitle": "Connectez-vous à votre compte",
     "loginDescription": "Pour gérer votre abonnement et vos outils",
@@ -367,7 +367,9 @@
     "haveCodeNeedEmail": "Saisissez d’abord votre e-mail, puis touchez « J’ai déjà reçu un code ».",
     "termsAccept": "J’ai lu et j’accepte les <terms>Conditions d’utilisation</terms> et la <privacy>Politique de confidentialité</privacy>.",
     "marketingConsent": "Je souhaite recevoir par e-mail les nouveautés et les offres de KUMANI (facultatif : vous pouvez changer d’avis à tout moment depuis votre profil).",
-    "passActivated": "Code Pass activé : le service est à vous jusqu’au {date}."
+    "passActivated": "Code Pass activé : le service est à vous jusqu’au {date}.",
+    "proTrialNext": "Activez maintenant l’essai Pro gratuit : nous vous demandons votre numéro de TVA ou code fiscal.",
+    "disposableEmail": "Les adresses e-mail temporaires ou jetables ne sont pas acceptées : utilisez une adresse que vous consultez vraiment."
   },
   "dashboard": {
     "receivedLabel": "De la Communauté",
@@ -9672,5 +9674,39 @@
     "back": "Retour aux services",
     "readyTitle": "Déjà inclus : commencez à l’utiliser",
     "decideTitle": "Convaincu ? Choisissez comment l’activer"
+  },
+  "proTrial": {
+    "intro": "Pour activer l’essai gratuit, il nous faut une donnée de votre activité : votre numéro de TVA ou, si vous travaillez sans, votre code fiscal italien. Aucune carte requise.",
+    "withVat": "J’ai un numéro de TVA",
+    "withoutVat": "Je travaille sans numéro de TVA",
+    "country": "Pays",
+    "vatLabel": "Numéro de TVA",
+    "vatPlaceholder": "Numéro de TVA",
+    "taxCodeLabel": "Code fiscal",
+    "taxCodeHint": "Il doit correspondre au prénom, au nom et à la date de naissance de votre profil.",
+    "oneTrial": "Un seul essai par numéro de TVA ou code fiscal. Le numéro de TVA est enregistré dans les données de votre activité.",
+    "submit": "Activer l’essai gratuit",
+    "openProfile": "Ouvrir le profil",
+    "error_vat_format": "Le numéro de TVA n’a pas un format valide pour le pays choisi.",
+    "error_vat_checksum": "Le numéro de TVA n’est pas valide : vérifiez la saisie.",
+    "error_vat_country": "Choisissez le pays du numéro de TVA.",
+    "error_vat_vies_invalid": "Ce numéro de TVA n’est pas actif dans le registre européen (VIES).",
+    "error_birthdateMissing": "Ajoutez d’abord votre date de naissance dans le profil.",
+    "error_taxCode_format": "Le code fiscal n’a pas un format valide (16 caractères).",
+    "error_taxCode_checksum": "Le code fiscal n’est pas valide : vérifiez la saisie.",
+    "error_taxCode_surname": "Le code fiscal ne correspond pas au nom du profil.",
+    "error_taxCode_name": "Le code fiscal ne correspond pas au prénom du profil.",
+    "error_taxCode_birthdate": "Le code fiscal ne correspond pas à la date de naissance du profil.",
+    "error_taxCode_used": "Ce code fiscal est déjà associé à un autre compte.",
+    "error_tax_code_invalid": "Code fiscal non valide.",
+    "error_id_used": "L’essai gratuit a déjà été utilisé avec ce numéro de TVA ou ce code fiscal.",
+    "error_already_used": "Vous avez déjà utilisé l’essai Pro gratuit.",
+    "error_already_pro": "Vous avez déjà le forfait Pro.",
+    "error_blocked": "Votre compte ne peut pas activer l’essai. Contactez l’assistance.",
+    "error_not_allowed": "Votre compte ne peut pas activer l’essai. Contactez l’assistance.",
+    "error_not_logged": "Connectez-vous pour activer l’essai.",
+    "error_notLoggedIn": "Connectez-vous pour activer l’essai.",
+    "error_saveError": "Enregistrement impossible. Réessayez.",
+    "error_error": "Impossible d’activer l’essai. Réessayez."
   }
 }

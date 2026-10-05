@@ -311,7 +311,7 @@
   "auth": {
     "registrationIncomplete": "Your registration was not completed. Go back to \"Sign up\" and use the same email and password: we will complete it from there.",
     "professionalLabel": "I'm a professional",
-    "professionalHint": "Shop, studio or business: try the Pro tools free for 15 days (loyalty card, quotes, receipts, promotions). No card required.",
+    "professionalHint": "Shop, practice or business: try the Pro tools free for 15 days (loyalty card, quotes, receipts, promotions). No card: after signing up we’ll ask for your VAT number or tax code.",
     "proTrialStarted": "Pro trial active until {date}: you will find the tools in the Professionals Area.",
     "loginTitle": "Log in to your account",
     "loginDescription": "To manage your subscription and your tools",
@@ -387,7 +387,9 @@
     "haveCodeNeedEmail": "Enter your email first, then tap “I already have a code”.",
     "termsAccept": "I have read and accept the <terms>Terms of Service</terms> and the <privacy>Privacy Policy</privacy>.",
     "marketingConsent": "I want to receive KUMANI news and offers by email (optional: you can change your mind at any time from your profile).",
-    "passActivated": "Pass code activated: the service is yours until {date}."
+    "passActivated": "Pass code activated: the service is yours until {date}.",
+    "proTrialNext": "Now start your free Pro trial: we’ll ask for your VAT number or tax code.",
+    "disposableEmail": "Temporary or disposable email addresses are not accepted: use an address you actually check."
   },
   "dashboard": {
     "receivedLabel": "From the Community",
@@ -9672,5 +9674,39 @@
     "back": "Back to services",
     "readyTitle": "Already included: start using it",
     "decideTitle": "Convinced? Choose how to activate it"
+  },
+  "proTrial": {
+    "intro": "To start the free trial we need one detail about your business: your VAT number or, if you work without one, your Italian tax code. No card required.",
+    "withVat": "I have a VAT number",
+    "withoutVat": "I work without a VAT number",
+    "country": "Country",
+    "vatLabel": "VAT number",
+    "vatPlaceholder": "VAT number",
+    "taxCodeLabel": "Tax code",
+    "taxCodeHint": "It must match the first name, last name and date of birth in your profile.",
+    "oneTrial": "One trial per VAT number or tax code. Your VAT number is saved in your business details.",
+    "submit": "Start the free trial",
+    "openProfile": "Open your profile",
+    "error_vat_format": "The VAT number is not in a valid format for the selected country.",
+    "error_vat_checksum": "The VAT number is not valid: check you typed it correctly.",
+    "error_vat_country": "Choose the country of the VAT number.",
+    "error_vat_vies_invalid": "This VAT number is not active in the EU register (VIES).",
+    "error_birthdateMissing": "First add your date of birth to your profile.",
+    "error_taxCode_format": "The tax code is not in a valid format (16 characters).",
+    "error_taxCode_checksum": "The tax code is not valid: check you typed it correctly.",
+    "error_taxCode_surname": "The tax code does not match the last name in your profile.",
+    "error_taxCode_name": "The tax code does not match the first name in your profile.",
+    "error_taxCode_birthdate": "The tax code does not match the date of birth in your profile.",
+    "error_taxCode_used": "This tax code is already linked to another account.",
+    "error_tax_code_invalid": "Invalid tax code.",
+    "error_id_used": "The free trial has already been used with this VAT number or tax code.",
+    "error_already_used": "You have already used the free Pro trial.",
+    "error_already_pro": "You already have the Pro plan.",
+    "error_blocked": "Your account cannot start the trial. Please contact support.",
+    "error_not_allowed": "Your account cannot start the trial. Please contact support.",
+    "error_not_logged": "Log in to start the trial.",
+    "error_notLoggedIn": "Log in to start the trial.",
+    "error_saveError": "Could not save. Please try again.",
+    "error_error": "The trial could not be started. Please try again."
   }
 }

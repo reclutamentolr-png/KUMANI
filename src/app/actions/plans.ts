@@ -193,15 +193,3 @@ export async function upgradeToPro(prorationDate?: number, immediateStart = fals
     return { success: false, reason: 'stripe_error' }
   }
 }
-
-// Prova Pro gratuita (15 giorni) per chi è già iscritto: una sola volta per
-// account, regole in start_pro_trial().
-export async function startProTrial(): Promise<{ success: boolean; reason?: string }> {
-  const supabase = await createClient()
-  const { data, error } = await supabase.rpc('start_pro_trial').maybeSingle<{ status: string }>()
-  if (error || !data) return { success: false, reason: 'error' }
-  if (data.status !== 'ok') return { success: false, reason: data.status }
-  revalidatePath('/dashboard')
-  revalidatePath('/pro')
-  return { success: true }
-}

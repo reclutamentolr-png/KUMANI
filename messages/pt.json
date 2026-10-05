@@ -291,7 +291,7 @@
   "auth": {
     "registrationIncomplete": "O seu registo não foi concluído. Volte a «Registar» com o mesmo email e palavra-passe: concluímos a partir daí.",
     "professionalLabel": "Sou profissional",
-    "professionalHint": "Loja, escritório ou negócio: experimente grátis durante 15 dias as ferramentas Pro (cartão de fidelização, orçamentos, recibos, promoções). Sem cartão.",
+    "professionalHint": "Loja, escritório ou atividade: experimente grátis durante 15 dias as ferramentas Pro (cartão de fidelidade, orçamentos, recibos, promoções). Sem cartão: depois da inscrição pedimos o número de IVA ou o código fiscal.",
     "proTrialStarted": "Teste Pro ativo até {date}: encontra as ferramentas na Área Profissionais.",
     "loginTitle": "Entre na sua conta",
     "loginDescription": "Para gerir a sua subscrição e as suas ferramentas",
@@ -367,7 +367,9 @@
     "haveCodeNeedEmail": "Escreva primeiro o seu email e depois toque em «Já recebi um código».",
     "termsAccept": "Li e aceito os <terms>Termos de serviço</terms> e a <privacy>Política de privacidade</privacy>.",
     "marketingConsent": "Quero receber por email novidades e ofertas da KUMANI (opcional: pode mudar de ideias quando quiser a partir do seu perfil).",
-    "passActivated": "Código Pass ativado: o serviço é seu até {date}."
+    "passActivated": "Código Pass ativado: o serviço é seu até {date}.",
+    "proTrialNext": "Agora ative o teste Pro gratuito: pedimos o número de IVA ou o código fiscal.",
+    "disposableEmail": "Não são aceites emails temporários ou descartáveis: use um endereço que consulta de facto."
   },
   "dashboard": {
     "receivedLabel": "Da Comunidade",
@@ -9672,5 +9674,39 @@
     "back": "Voltar aos serviços",
     "readyTitle": "Já está incluído: comece a usar",
     "decideTitle": "Convence-o? Escolha como ativá-lo"
+  },
+  "proTrial": {
+    "intro": "Para ativar o teste gratuito precisamos de um dado da sua atividade: o NIF/número de IVA ou, se trabalha sem ele, o seu código fiscal italiano. Sem cartão.",
+    "withVat": "Tenho número de IVA",
+    "withoutVat": "Trabalho sem número de IVA",
+    "country": "País",
+    "vatLabel": "Número de IVA",
+    "vatPlaceholder": "Número de IVA",
+    "taxCodeLabel": "Código fiscal",
+    "taxCodeHint": "Tem de corresponder ao nome, apelido e data de nascimento do seu perfil.",
+    "oneTrial": "Um só teste por número de IVA ou código fiscal. O número de IVA fica guardado nos dados da sua atividade.",
+    "submit": "Ativar o teste gratuito",
+    "openProfile": "Abrir o perfil",
+    "error_vat_format": "O número de IVA não tem um formato válido para o país escolhido.",
+    "error_vat_checksum": "O número de IVA não é válido: verifique se está bem escrito.",
+    "error_vat_country": "Escolha o país do número de IVA.",
+    "error_vat_vies_invalid": "Este número de IVA não está ativo no registo europeu (VIES).",
+    "error_birthdateMissing": "Primeiro indique a sua data de nascimento no perfil.",
+    "error_taxCode_format": "O código fiscal não tem um formato válido (16 caracteres).",
+    "error_taxCode_checksum": "O código fiscal não é válido: verifique se está bem escrito.",
+    "error_taxCode_surname": "O código fiscal não corresponde ao apelido do perfil.",
+    "error_taxCode_name": "O código fiscal não corresponde ao nome do perfil.",
+    "error_taxCode_birthdate": "O código fiscal não corresponde à data de nascimento do perfil.",
+    "error_taxCode_used": "Este código fiscal já está associado a outra conta.",
+    "error_tax_code_invalid": "Código fiscal inválido.",
+    "error_id_used": "O teste gratuito já foi usado com este número de IVA ou código fiscal.",
+    "error_already_used": "Já usou o teste Pro gratuito.",
+    "error_already_pro": "Já tem o plano Pro.",
+    "error_blocked": "A sua conta não pode ativar o teste. Contacte o suporte.",
+    "error_not_allowed": "A sua conta não pode ativar o teste. Contacte o suporte.",
+    "error_not_logged": "Inicie sessão para ativar o teste.",
+    "error_notLoggedIn": "Inicie sessão para ativar o teste.",
+    "error_saveError": "Não foi possível guardar. Tente de novo.",
+    "error_error": "Não foi possível ativar o teste. Tente de novo."
   }
 }

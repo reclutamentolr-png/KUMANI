@@ -291,7 +291,7 @@
   "auth": {
     "registrationIncomplete": "Deine Registrierung wurde nicht abgeschlossen. Geh zurück zu „Registrieren\" und nutze dieselbe E-Mail und dasselbe Passwort: Wir schließen sie dort ab.",
     "professionalLabel": "Ich bin selbstständig / Profi",
-    "professionalHint": "Geschäft, Praxis oder Betrieb: Teste die Pro-Werkzeuge 15 Tage kostenlos (Treuekarte, Angebote, Belege, Aktionen). Keine Karte nötig.",
+    "professionalHint": "Geschäft, Praxis oder Betrieb: Teste die Pro-Tools 15 Tage kostenlos (Kundenkarte, Angebote, Quittungen, Aktionen). Ohne Karte: Nach der Registrierung fragen wir nach USt-IdNr. oder Steuercode.",
     "proTrialStarted": "Pro-Test aktiv bis {date}: Die Werkzeuge findest du im Bereich für Profis.",
     "loginTitle": "Bei deinem Konto anmelden",
     "loginDescription": "Um dein Abo und deine Tools zu verwalten",
@@ -367,7 +367,9 @@
     "haveCodeNeedEmail": "Gib zuerst deine E-Mail ein und tippe dann auf „Ich habe bereits einen Code“.",
     "termsAccept": "Ich habe die <terms>Nutzungsbedingungen</terms> und die <privacy>Datenschutzerklärung</privacy> gelesen und akzeptiere sie.",
     "marketingConsent": "Ich möchte Neuigkeiten und Angebote von KUMANI per E-Mail erhalten (freiwillig: Du kannst es dir jederzeit in deinem Profil anders überlegen).",
-    "passActivated": "Pass-Code aktiviert: Der Dienst gehört dir bis {date}."
+    "passActivated": "Pass-Code aktiviert: Der Dienst gehört dir bis {date}.",
+    "proTrialNext": "Starte jetzt den kostenlosen Pro-Test: Wir fragen nach USt-IdNr. oder Steuercode.",
+    "disposableEmail": "Temporäre oder Wegwerf-E-Mail-Adressen werden nicht akzeptiert: Nutze eine Adresse, die du wirklich liest."
   },
   "dashboard": {
     "receivedLabel": "Aus der Community",
@@ -9672,5 +9674,39 @@
     "back": "Zurück zu den Diensten",
     "readyTitle": "Schon enthalten: Leg los",
     "decideTitle": "Überzeugt? Wähle, wie du ihn aktivierst"
+  },
+  "proTrial": {
+    "intro": "Für den kostenlosen Test brauchen wir eine Angabe zu deiner Tätigkeit: deine USt-IdNr. oder, wenn du ohne arbeitest, deinen italienischen Steuercode. Keine Karte nötig.",
+    "withVat": "Ich habe eine USt-IdNr.",
+    "withoutVat": "Ich arbeite ohne USt-IdNr.",
+    "country": "Land",
+    "vatLabel": "USt-IdNr.",
+    "vatPlaceholder": "USt-IdNr.",
+    "taxCodeLabel": "Steuercode",
+    "taxCodeHint": "Er muss zu Vorname, Nachname und Geburtsdatum in deinem Profil passen.",
+    "oneTrial": "Ein Test pro USt-IdNr. oder Steuercode. Die USt-IdNr. wird in deinen Geschäftsdaten gespeichert.",
+    "submit": "Kostenlosen Test starten",
+    "openProfile": "Profil öffnen",
+    "error_vat_format": "Die USt-IdNr. hat für das gewählte Land kein gültiges Format.",
+    "error_vat_checksum": "Die USt-IdNr. ist ungültig: Prüfe die Eingabe.",
+    "error_vat_country": "Wähle das Land der USt-IdNr.",
+    "error_vat_vies_invalid": "Diese USt-IdNr. ist im EU-Register (VIES) nicht aktiv.",
+    "error_birthdateMissing": "Trage zuerst dein Geburtsdatum im Profil ein.",
+    "error_taxCode_format": "Der Steuercode hat kein gültiges Format (16 Zeichen).",
+    "error_taxCode_checksum": "Der Steuercode ist ungültig: Prüfe die Eingabe.",
+    "error_taxCode_surname": "Der Steuercode passt nicht zum Nachnamen im Profil.",
+    "error_taxCode_name": "Der Steuercode passt nicht zum Vornamen im Profil.",
+    "error_taxCode_birthdate": "Der Steuercode passt nicht zum Geburtsdatum im Profil.",
+    "error_taxCode_used": "Dieser Steuercode ist bereits mit einem anderen Konto verknüpft.",
+    "error_tax_code_invalid": "Ungültiger Steuercode.",
+    "error_id_used": "Der kostenlose Test wurde mit dieser USt-IdNr. oder diesem Steuercode bereits genutzt.",
+    "error_already_used": "Du hast den kostenlosen Pro-Test bereits genutzt.",
+    "error_already_pro": "Du hast bereits den Pro-Plan.",
+    "error_blocked": "Dein Konto kann den Test nicht starten. Bitte kontaktiere den Support.",
+    "error_not_allowed": "Dein Konto kann den Test nicht starten. Bitte kontaktiere den Support.",
+    "error_not_logged": "Melde dich an, um den Test zu starten.",
+    "error_notLoggedIn": "Melde dich an, um den Test zu starten.",
+    "error_saveError": "Speichern nicht möglich. Bitte erneut versuchen.",
+    "error_error": "Der Test konnte nicht gestartet werden. Bitte erneut versuchen."
   }
 }

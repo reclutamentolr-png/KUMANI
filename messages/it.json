@@ -311,7 +311,7 @@
   "auth": {
     "registrationIncomplete": "La registrazione non è stata completata. Torna su «Registrati» e usa la stessa email e password: la completiamo da lì.",
     "professionalLabel": "Sono un professionista",
-    "professionalHint": "Negozio, studio o attività: prova gratis per 15 giorni gli strumenti Pro (tessera fedeltà, preventivi, ricevute, promozioni). Nessuna carta richiesta.",
+    "professionalHint": "Negozio, studio o attività: prova gratis per 15 giorni gli strumenti Pro (tessera fedeltà, preventivi, ricevute, promozioni). Nessuna carta: dopo l’iscrizione ti chiediamo la Partita IVA o il codice fiscale.",
     "proTrialStarted": "Prova Pro attiva fino al {date}: trovi gli strumenti nell’Area Professionisti.",
     "loginTitle": "Accedi al tuo account",
     "loginDescription": "Per gestire il tuo abbonamento e i tuoi strumenti",
@@ -387,7 +387,9 @@
     "haveCodeNeedEmail": "Scrivi prima la tua email, poi tocca «Ho già ricevuto un codice».",
     "termsAccept": "Ho letto e accetto i <terms>Termini di servizio</terms> e l’<privacy>Informativa privacy</privacy>.",
     "marketingConsent": "Voglio ricevere via email novità e offerte di KUMANI (facoltativo: puoi cambiare idea quando vuoi dal profilo).",
-    "passActivated": "Codice Pass attivato: il servizio è tuo fino al {date}."
+    "passActivated": "Codice Pass attivato: il servizio è tuo fino al {date}.",
+    "proTrialNext": "Ora attiva la prova Pro gratuita: ti chiediamo la Partita IVA o il codice fiscale.",
+    "disposableEmail": "Email temporanee o usa e getta non sono accettate: usa un indirizzo che controlli davvero."
   },
   "dashboard": {
     "receivedLabel": "Dalla Community",
@@ -9672,5 +9674,39 @@
     "back": "Torna ai servizi",
     "readyTitle": "È già incluso: inizia a usarlo",
     "decideTitle": "Ti convince? Scegli come attivarlo"
+  },
+  "proTrial": {
+    "intro": "Per attivare la prova gratuita ci serve un dato della tua attività: la Partita IVA oppure, se lavori senza Partita IVA, il tuo codice fiscale. Nessuna carta richiesta.",
+    "withVat": "Ho la Partita IVA",
+    "withoutVat": "Lavoro senza Partita IVA",
+    "country": "Paese",
+    "vatLabel": "Partita IVA",
+    "vatPlaceholder": "Partita IVA",
+    "taxCodeLabel": "Codice fiscale",
+    "taxCodeHint": "Deve corrispondere a nome, cognome e data di nascita del tuo profilo.",
+    "oneTrial": "Una sola prova per Partita IVA o codice fiscale. La Partita IVA viene salvata nei dati della tua attività.",
+    "submit": "Attiva la prova gratuita",
+    "openProfile": "Apri il profilo",
+    "error_vat_format": "La Partita IVA non ha un formato valido per il paese scelto.",
+    "error_vat_checksum": "La Partita IVA non è valida: controlla di averla scritta bene.",
+    "error_vat_country": "Scegli il paese della Partita IVA.",
+    "error_vat_vies_invalid": "Questa Partita IVA non risulta attiva nel registro europeo (VIES).",
+    "error_birthdateMissing": "Prima inserisci la tua data di nascita nel profilo.",
+    "error_taxCode_format": "Il codice fiscale non ha un formato valido (16 caratteri).",
+    "error_taxCode_checksum": "Il codice fiscale non è valido: controlla di averlo scritto bene.",
+    "error_taxCode_surname": "Il codice fiscale non corrisponde al cognome del profilo.",
+    "error_taxCode_name": "Il codice fiscale non corrisponde al nome del profilo.",
+    "error_taxCode_birthdate": "Il codice fiscale non corrisponde alla data di nascita del profilo.",
+    "error_taxCode_used": "Questo codice fiscale è già associato a un altro account.",
+    "error_tax_code_invalid": "Codice fiscale non valido.",
+    "error_id_used": "La prova gratuita è già stata usata con questa Partita IVA o questo codice fiscale.",
+    "error_already_used": "Hai già usato la prova Pro gratuita.",
+    "error_already_pro": "Hai già il piano Pro.",
+    "error_blocked": "Il tuo account non può attivare la prova. Scrivi al supporto.",
+    "error_not_allowed": "Il tuo account non può attivare la prova. Scrivi al supporto.",
+    "error_not_logged": "Accedi per attivare la prova.",
+    "error_notLoggedIn": "Accedi per attivare la prova.",
+    "error_saveError": "Non è stato possibile salvare. Riprova.",
+    "error_error": "Non è stato possibile attivare la prova. Riprova."
   }
 }

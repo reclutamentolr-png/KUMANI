@@ -103,7 +103,6 @@ export default function LoginPage() {
         // se non vanno a buon fine (si riprovano dalla dashboard).
         const activationCode = (meta.voucher_code ?? '').trim().toUpperCase()
         if (activationCode) await redeemActivationCode(activationCode, { welcome: true })
-        if (meta.professional) await supabase.rpc('start_pro_trial')
       }
 
       if (profile?.is_blocked) {

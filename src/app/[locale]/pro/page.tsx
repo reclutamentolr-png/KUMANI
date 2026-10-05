@@ -31,10 +31,10 @@ export default async function ProPage({
   searchParams,
 }: {
   params: Promise<{ locale: string }>
-  searchParams: Promise<{ tool?: string; error?: string }>
+  searchParams: Promise<{ tool?: string; error?: string; prova?: string }>
 }) {
   const { locale } = await params
-  const { tool: highlightTool, error } = await searchParams
+  const { tool: highlightTool, error, prova } = await searchParams
   const t = await getTranslations('plans')
   const tm = await getTranslations('marketplace')
   const tw = await getTranslations('withdrawal')
@@ -216,7 +216,7 @@ export default async function ProPage({
                     </CheckoutForm>
                     </>
                   )}
-                  {!trialUsed && plan !== 'pro' && <StartProTrialButton label={t('ctaStartTrial', { days: trialDays })} />}
+                  {!trialUsed && plan !== 'pro' && <StartProTrialButton label={t('ctaStartTrial', { days: trialDays })} autoOpen={prova === '1'} />}
                 </div>
               )}
             </div>
