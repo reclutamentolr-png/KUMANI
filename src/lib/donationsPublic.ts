@@ -18,7 +18,8 @@ export const getPublicDonationSummary = unstable_cache(
     if (error || !data) return null
     return data as DonationSummary
   },
-  ['donation-summary'],
+  // v2: dati in percentuale (la vecchia memoria non aveva percent_bp)
+  ['donation-summary-v2'],
   { tags: [DONATIONS_CACHE_TAG], revalidate: 300 }
 )
 

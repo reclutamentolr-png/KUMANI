@@ -36,5 +36,5 @@ export const euroFormat = (locale: string, cents: number) =>
   new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', minimumFractionDigits: cents % 100 === 0 ? 0 : 2 }).format(cents / 100)
 
 // "5%" / "5,5%" nella lingua della pagina
-export const percentFormat = (locale: string, bp: number) =>
-  new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 2 }).format(bp / 10000)
+export const percentFormat = (locale: string, bp: number | null | undefined) =>
+  typeof bp === 'number' && Number.isFinite(bp) ? new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 2 }).format(bp / 10000) : '—'
