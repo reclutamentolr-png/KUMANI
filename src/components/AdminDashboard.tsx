@@ -3610,9 +3610,10 @@ L'accesso viene registrato.`)) return
 
           {menuGroups.map((group) => {
             const isOpen = currentOpenGroup === group.id
-            // Gruppo della sezione aperta: titolo in oro su una banda, e una
-            // linea oro accanto alle sue voci
-            const isCurrent = activeGroup === group.id
+            // Gruppo in cui ci si trova (quello aperto; se sono tutti chiusi,
+            // quello della sezione mostrata): titolo in oro su una banda, e
+            // una linea oro accanto alle sue voci
+            const isCurrent = (currentOpenGroup ?? activeGroup) === group.id
             const groupCount = group.items.reduce((sum, item) => sum + (badges[item.id] ?? 0), 0)
             return (
               <div key={group.id}>
