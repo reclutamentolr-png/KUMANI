@@ -9649,5 +9649,19 @@
     "shareLearnMore": "Find out what it is and how it works:",
     "learnMoreService": "Find out more about {service}",
     "learnMorePlan": "Discover every service included"
+  },
+  "relatedServices": {
+    "banner": "Finding {tool} useful? Discover the other services in",
+    "discover": "Discover",
+    "eyebrow": "More services",
+    "open": "Open",
+    "pass": "Pass {price}",
+    "inBase": "With Base",
+    "inPro": "With Pro",
+    "alsoFree": "Free, worth a try",
+    "allServices": "See all services",
+    "close": "Close",
+    "noneInGroup": "There are no other services in this group yet.",
+    "error": "The services could not be loaded. Please try again."
   }
 }

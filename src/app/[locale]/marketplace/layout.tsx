@@ -1,9 +1,11 @@
 import { createClient } from '@/lib/supabase/server'
 import ToolShareButton from '@/components/ToolShareButton'
+import RelatedServices from '@/components/RelatedServices'
 
 // Layout comune del marketplace: aggiunge il pulsante "Condividi" dentro
-// ogni strumento (il componente si mostra solo sulle pagine degli
-// strumenti, non su categorie, bacheca o chat).
+// ogni strumento e, in fondo alla pagina principale di ogni servizio, la
+// riga per scoprire gli altri servizi dello stesso gruppo (i componenti si
+// mostrano solo sulle pagine degli strumenti, non su categorie, bacheca o chat).
 export default async function MarketplaceLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
   const {
@@ -19,6 +21,7 @@ export default async function MarketplaceLayout({ children }: { children: React.
   return (
     <>
       {children}
+      {user && <RelatedServices />}
       {user && <ToolShareButton referralCode={referralCode} />}
     </>
   )

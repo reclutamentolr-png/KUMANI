@@ -9649,5 +9649,19 @@
     "shareLearnMore": "Hier erfährst du, was es ist und wie es funktioniert:",
     "learnMoreService": "Mehr über {service} erfahren",
     "learnMorePlan": "Alle enthaltenen Dienste entdecken"
+  },
+  "relatedServices": {
+    "banner": "Ist {tool} hilfreich? Entdecke die anderen Dienste der Gruppe",
+    "discover": "Entdecken",
+    "eyebrow": "Weitere Dienste",
+    "open": "Öffnen",
+    "pass": "Pass {price}",
+    "inBase": "Mit Base",
+    "inPro": "Mit Pro",
+    "alsoFree": "Kostenlos, zum Ausprobieren",
+    "allServices": "Alle Dienste ansehen",
+    "close": "Schließen",
+    "noneInGroup": "In dieser Gruppe gibt es noch keine weiteren Dienste.",
+    "error": "Die Dienste konnten nicht geladen werden. Bitte erneut versuchen."
   }
 }

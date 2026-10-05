@@ -9649,5 +9649,19 @@
     "shareLearnMore": "Descobre o que é e como funciona:",
     "learnMoreService": "Saiba mais sobre {service}",
     "learnMorePlan": "Descubra todos os serviços incluídos"
+  },
+  "relatedServices": {
+    "banner": "O {tool} é-lhe útil? Descubra os outros serviços do grupo",
+    "discover": "Descobrir",
+    "eyebrow": "Mais serviços",
+    "open": "Abrir",
+    "pass": "Pass {price}",
+    "inBase": "Com Base",
+    "inPro": "Com Pro",
+    "alsoFree": "Grátis, para experimentar",
+    "allServices": "Ver todos os serviços",
+    "close": "Fechar",
+    "noneInGroup": "Por agora não há outros serviços neste grupo.",
+    "error": "Não foi possível carregar os serviços. Tente de novo."
   }
 }

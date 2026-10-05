@@ -9649,5 +9649,19 @@
     "shareLearnMore": "Узнай, что это и как работает:",
     "learnMoreService": "Подробнее о {service}",
     "learnMorePlan": "Все включённые сервисы"
+  },
+  "relatedServices": {
+    "banner": "{tool} пригодился? Посмотрите другие сервисы группы",
+    "discover": "Смотреть",
+    "eyebrow": "Другие сервисы",
+    "open": "Открыть",
+    "pass": "Pass {price}",
+    "inBase": "С Base",
+    "inPro": "С Pro",
+    "alsoFree": "Бесплатно, стоит попробовать",
+    "allServices": "Все сервисы",
+    "close": "Закрыть",
+    "noneInGroup": "В этой группе пока нет других сервисов.",
+    "error": "Не удалось загрузить сервисы. Попробуйте ещё раз."
   }
 }
