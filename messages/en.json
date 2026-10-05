@@ -9608,7 +9608,7 @@
     "mineLink": "Your gifts",
     "registerToRedeem": "Sign up for free and activate the gift",
     "loginToRedeem": "Already have an account? Log in and activate it",
-    "alreadyMine": "You have already activated this gift.",
+    "alreadyMine": "Your gift is active: you’ll also find it on your dashboard.",
     "state_redeemed": "This gift has already been activated.",
     "state_expired": "This gift has expired: it had to be activated within a year of purchase.",
     "state_revoked": "This gift has been cancelled.",

@@ -9608,7 +9608,7 @@
     "mineLink": "Vos cadeaux",
     "registerToRedeem": "Inscrivez-vous gratuitement et activez le cadeau",
     "loginToRedeem": "Vous avez déjà un compte ? Connectez-vous et activez-le",
-    "alreadyMine": "Vous avez déjà activé ce cadeau.",
+    "alreadyMine": "Votre cadeau est actif : vous le retrouvez aussi sur votre tableau de bord.",
     "state_redeemed": "Ce cadeau a déjà été activé.",
     "state_expired": "Ce cadeau a expiré : il devait être activé dans l’année suivant l’achat.",
     "state_revoked": "Ce cadeau a été annulé.",

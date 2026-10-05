@@ -9608,7 +9608,7 @@
     "mineLink": "Deine Geschenke",
     "registerToRedeem": "Kostenlos registrieren und Geschenk aktivieren",
     "loginToRedeem": "Schon ein Konto? Anmelden und aktivieren",
-    "alreadyMine": "Du hast dieses Geschenk bereits aktiviert.",
+    "alreadyMine": "Dein Geschenk ist aktiv: Du findest es auch in deinem Dashboard.",
     "state_redeemed": "Dieses Geschenk wurde bereits aktiviert.",
     "state_expired": "Dieses Geschenk ist abgelaufen: Es musste innerhalb eines Jahres nach dem Kauf aktiviert werden.",
     "state_revoked": "Dieses Geschenk wurde storniert.",
