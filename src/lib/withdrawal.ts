@@ -82,7 +82,7 @@ export async function recordConsent(
   service: SupabaseClient,
   input: {
     userId: string
-    kind: 'checkout' | 'upgrade' | 'pass'
+    kind: 'checkout' | 'upgrade' | 'pass' | 'gift'
     plan: 'base' | 'pro' | null
     tool?: string | null
     stripeRef: string | null
@@ -95,7 +95,9 @@ export async function recordConsent(
   }
 ): Promise<void> {
   const t = await getTranslations({ locale: input.locale, namespace: 'withdrawal' })
-  const main = input.business ? t('businessDeclaration') : `${t('consentLabel')} ${t('consentHint')}`
+  // Regalo comprato da un privato: il servizio parte solo quando il codice
+  // viene attivato, quindi niente consenso all'avvio immediato
+  const main = input.business ? t('businessDeclaration') : input.kind === 'gift' ? '' : `${t('consentLabel')} ${t('consentHint')}`
   const terms = input.termsAccepted ? String(t.raw('termsAccept')).replace(/<\/?[a-z]+>/g, '') : ''
   const { error } = await service.from('subscription_consents').insert({
     user_id: input.userId,

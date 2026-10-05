@@ -18,6 +18,7 @@ const MEMBER_AREAS = [
   '/servizi',
   '/community',
   '/wallet',
+  '/regali',
   '/documenti',
   '/marketplace',
   '/donazioni',
@@ -46,7 +47,7 @@ const TABS = [
     Icon: Users,
     match: ['/community', '/dashboard/rete', '/donazioni', '/events', '/convivio', '/spotlight', '/marketplace/listings', '/marketplace/chat', '/marketplace/spotlight', '/marketplace/convivio', '/marketplace/timebank'],
   },
-  { key: 'wallet', href: '/wallet', Icon: Wallet, match: ['/wallet'] },
+  { key: 'wallet', href: '/wallet', Icon: Wallet, match: ['/wallet', '/regali'] },
 ] as const
 
 // Evento con cui "Profilo" apre la finestra del profilo quando la pagina ha

@@ -9,6 +9,8 @@ import { awardActivationPoints, awardPassPoints, reverseActivationPoints } from 
 import { convertPassesFromInvoice } from '@/lib/passCredit'
 import { accrueSubscriptionDonation, reverseSubscriptionDonation } from '@/lib/donations'
 import { grantToolPassFromSession, revokeToolPassForCharge, TOOL_PASS_TYPE } from '@/lib/toolPasses'
+import { GIFT_TYPE } from '@/lib/gifts'
+import { fulfillGiftSession, revokeGiftForCharge, sendGiftConfirmation } from '@/lib/giftsServer'
 
 // Creato alla richiesta e non al caricamento del modulo: così `next build`
 // non fallisce se le variabili d'ambiente non sono disponibili in build.
@@ -60,6 +62,8 @@ export async function POST(req: NextRequest) {
         await reverseSubscriptionDonation(event.data.object as Stripe.Charge)
         // Pass servizio rimborsato: revocato
         await revokeToolPassForCharge(event.data.object as Stripe.Charge)
+        // Regalo rimborsato: i codici non ancora attivati non valgono più
+        await revokeGiftForCharge(event.data.object as Stripe.Charge)
       }
       return NextResponse.json({ received: true })
     } catch (err) {
@@ -89,6 +93,27 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ received: true })
     } catch (err) {
       console.error('❌ Pass servizio non assegnato:', err instanceof Error ? err.message : err)
+      return NextResponse.json({ error: 'db_update_failed' }, { status: 500 })
+    }
+  }
+
+  // Regali (pagamento una tantum): ordine e codici, email con i codici a chi
+  // ha comprato; mai come abbonamento e senza KU Points.
+  if (
+    (event.type === 'checkout.session.completed' || event.type === 'checkout.session.async_payment_succeeded') &&
+    (event.data.object as Stripe.Checkout.Session).metadata?.type === GIFT_TYPE
+  ) {
+    try {
+      const session = event.data.object as Stripe.Checkout.Session
+      const orderId = await fulfillGiftSession(session)
+      if (orderId) {
+        await sendGiftConfirmation(session, orderId).catch((err) =>
+          console.error('⚠️ Email del regalo non inviata:', err instanceof Error ? err.message : err)
+        )
+      }
+      return NextResponse.json({ received: true })
+    } catch (err) {
+      console.error('❌ Regalo non creato:', err instanceof Error ? err.message : err)
       return NextResponse.json({ error: 'db_update_failed' }, { status: 500 })
     }
   }

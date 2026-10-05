@@ -87,6 +87,7 @@ import FabulaAdminPanel from '@/components/admin/FabulaAdminPanel'
 import IdentityVerificationsPanel from '@/components/admin/IdentityVerificationsPanel'
 import ConvivioFeesPanel from '@/components/admin/ConvivioFeesPanel'
 import KordataShowcasePanel from '@/components/admin/KordataShowcasePanel'
+import GiftOrdersPanel from '@/components/admin/GiftOrdersPanel'
 import ContactMessagesPanel from '@/components/admin/ContactMessagesPanel'
 import ProfileRequestsPanel from '@/components/admin/ProfileRequestsPanel'
 import AccountDeletionsPanel from '@/components/admin/AccountDeletionsPanel'
@@ -347,7 +348,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
   const [voucherBatches, setVoucherBatches] = useState<AdminVoucherBatch[]>([])
   const [batchForm, setBatchForm] = useState<{ businessName: string; quantity: string; priceEur: string; invoiceRef: string; notes: string; plan: 'base' | 'pro' }>({ businessName: '', quantity: '10', priceEur: '400', invoiceRef: '', notes: '', plan: 'base' })
   const [creatingBatch, setCreatingBatch] = useState(false)
-  const [couponArea, setCouponArea] = useState<'merchant' | 'community' | 'pass'>('merchant')
+  const [couponArea, setCouponArea] = useState<'merchant' | 'community' | 'pass' | 'gifts'>('merchant')
   const [fulfillCodeInputs, setFulfillCodeInputs] = useState<Record<string, string>>({})
   const [fulfillingId, setFulfillingId] = useState<string | null>(null)
 
@@ -1913,6 +1914,7 @@ L'accesso viene registrato.`)) return
           ['merchant', '🏪 Voucher per negozianti'],
           ['community', '👥 Coupon per la community'],
           ['pass', '🎟️ Pass servizio'],
+          ['gifts', '🎁 Regali'],
         ] as const).map(([key, label]) => (
           <button
             key={key}
@@ -1926,7 +1928,7 @@ L'accesso viene registrato.`)) return
           </button>
         ))}
       </div>
-      {couponArea === 'merchant' ? renderMerchantCoupons() : couponArea === 'pass' ? <PassCodesPanel /> : renderCommunityCoupons()}
+      {couponArea === 'merchant' ? renderMerchantCoupons() : couponArea === 'pass' ? <PassCodesPanel /> : couponArea === 'gifts' ? <GiftOrdersPanel /> : renderCommunityCoupons()}
     </div>
   )
 

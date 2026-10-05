@@ -8,9 +8,11 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl' // ✅ Aggiungilo qui
 import Link from 'next/link'
 import { europeanCountries } from '@/lib/european-countries'
-import { User, Mail, Lock, MapPin, AlertCircle, Loader2, Home, ShieldCheck, CheckCircle, Briefcase, Info } from 'lucide-react'
+import { User, Mail, Lock, MapPin, AlertCircle, Loader2, Home, ShieldCheck, CheckCircle, Briefcase, Info, Gift } from 'lucide-react'
 import Logo from '@/components/Logo'
 import { authErrorText } from '@/lib/authErrors'
+import { redeemGiftCode } from '@/app/actions/gifts'
+import { GIFT_CODE_RE } from '@/lib/gifts'
 
 const RESEND_COOLDOWN_SECONDS = 30
 
@@ -27,6 +29,10 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
   const initialReferralCode = searchParams.get('sponsor') || searchParams.get('ref') || ''
   // Coupon di attivazione (es. dal QR del cartoncino di un negozio).
   const initialVoucherCode = (searchParams.get('voucher') || '').toUpperCase()
+  // Regalo ricevuto (link /regalo/CODICE): si attiva a iscrizione completata
+  const giftParam = (searchParams.get('gift') || '').trim().toUpperCase()
+  const giftCode = GIFT_CODE_RE.test(giftParam) ? giftParam : ''
+  const tg = useTranslations('gifts')
   // Un utente che ha lasciato la verifica a metà e poi ha provato ad
   // accedere viene rimandato qui con ?verify=<email> (vedi login/page.tsx)
   // per riprendere direttamente dall'inserimento del codice.
@@ -55,6 +61,7 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
   // Esito dell'attivazione del coupon, mostrato nella schermata finale.
   const [voucherOutcome, setVoucherOutcome] = useState<{ ok: boolean; text: string } | null>(null)
   const [proTrialOutcome, setProTrialOutcome] = useState<string | null>(null)
+  const [giftOutcome, setGiftOutcome] = useState<{ ok: boolean; text: string } | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [step, setStep] = useState<Step>(resumeEmail ? 'verify' : 'form')
@@ -93,6 +100,7 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
         city: formData.city.trim(),
         referral_code: referralCode,
         voucher_code: voucherCode,
+        gift_code: giftCode,
         professional: formData.professional,
         terms_accepted_at: new Date().toISOString(),
         terms_version: TERMS_VERSION,
@@ -161,6 +169,7 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
             city: formData.city.trim(),
             referral_code: cleanReferralCode,
             voucher_code: cleanVoucherCode,
+            gift_code: giftCode,
             professional: formData.professional,
             agent_code: agentCode,
             // Lingua dell'email con il codice (modello "Confirm signup" di Supabase)
@@ -230,6 +239,7 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
       city?: string
       referral_code?: string
       voucher_code?: string
+      gift_code?: string
       professional?: boolean
       agent_code?: string
     }
@@ -271,6 +281,14 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
             ? { ok: true, text: t('voucherActivated', { date: new Date(redeem.new_expires_at).toLocaleDateString(locale) }) }
             : { ok: false, text: t('voucherNotActivated') }
         )
+        delay = 4500
+      }
+
+      // Regalo ricevuto: attivato ora (se non va, si riprova dal link del regalo)
+      const gift = (meta.gift_code ?? giftCode).trim().toUpperCase()
+      if (gift) {
+        const outcome = await redeemGiftCode(gift)
+        setGiftOutcome(outcome.success ? { ok: true, text: tg('registerGiftDone') } : { ok: false, text: tg(`redeem_${outcome.reason ?? 'error'}`) })
         delay = 4500
       }
 
@@ -352,6 +370,11 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
 
       {step === 'form' && (
         <form onSubmit={handleSubmit} className={`space-y-4 ${error ? 'mt-4' : 'mt-8'}`}>
+          {giftCode && (
+            <p className="flex items-start gap-2 rounded-xl border border-[var(--gold)]/40 bg-[var(--gold-pale)]/60 px-4 py-3 text-sm text-[var(--ink)]">
+              <Gift className="mt-0.5 h-4 w-4 shrink-0 text-[var(--gold)]" /> {tg('registerGiftBanner')}
+            </p>
+          )}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label htmlFor="first_name" className="block text-sm font-medium text-gray-700 mb-1">{t('firstName')}</label>
@@ -591,6 +614,7 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
           {voucherOutcome && (
             <p className={`mt-3 text-sm font-medium ${voucherOutcome.ok ? 'text-green-700' : 'text-amber-700'}`}>{voucherOutcome.text}</p>
           )}
+          {giftOutcome && <p className={`mt-3 text-sm font-medium ${giftOutcome.ok ? 'text-green-700' : 'text-amber-700'}`}>{giftOutcome.text}</p>}
           {proTrialOutcome && <p className="mt-3 text-sm font-medium text-amber-700">{proTrialOutcome}</p>}
         </div>
       )}

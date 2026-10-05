@@ -72,7 +72,7 @@ function WalletSection({
 
 export default async function WalletPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
-  const [t, td, supabase] = await Promise.all([getTranslations('wallet'), getTranslations('dashboard'), createClient()])
+  const [t, td, tg, supabase] = await Promise.all([getTranslations('wallet'), getTranslations('dashboard'), getTranslations('gifts'), createClient()])
   // Utente letto una volta sola per la pagina e la sua intestazione
   preloadSession()
   const user = await getSessionUser()
@@ -541,6 +541,16 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
             />
           </WalletSection>
         )}
+
+        {/* Regali: codici per Base/Pro o per il Pass di un servizio */}
+        <WalletSection icon={<Gift className="h-5 w-5 text-[var(--gold)]" />} title={tg('walletTitle')}>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm leading-6 text-[var(--muted)]">{tg('walletText')}</p>
+            <Link href="/regali" className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[var(--ink)] px-4 py-2.5 text-sm font-bold text-[var(--gold-bright)]">
+              <Gift className="h-4 w-4" /> {tg('walletButton')}
+            </Link>
+          </div>
+        </WalletSection>
 
         {/* Voucher abbonamento */}
         <WalletSection icon={<BadgeCheck className="h-5 w-5 text-[var(--gold)]" />} title={t('voucherTitle')}>

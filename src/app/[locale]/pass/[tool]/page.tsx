@@ -1,6 +1,6 @@
 import { notFound, redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
-import { ArrowLeft, BookOpen, CheckCircle2, Crown, Sparkles, Ticket } from 'lucide-react'
+import { ArrowLeft, BookOpen, CheckCircle2, Crown, Gift, Sparkles, Ticket } from 'lucide-react'
 import { toolGuideFor } from '@/lib/guides/toolGuides'
 import Link from '@/components/LocalizedLink'
 import CheckoutForm from '@/components/billing/CheckoutForm'
@@ -37,6 +37,7 @@ export default async function ToolPassPage({
   if (!info) notFound()
   const t = await getTranslations('toolPass')
   const tw = await getTranslations('withdrawal')
+  const tg2 = await getTranslations('gifts')
 
   // Ritorno dal pagamento: il pass si conferma anche senza webhook
   const confirmed = sp.success && sp.session_id ? await confirmToolPassSession(sp.session_id, user.id) : null
@@ -143,6 +144,9 @@ export default async function ToolPassPage({
                   </button>
                 </CheckoutForm>
               </div>
+              <Link href={`/regali?tool=${encodeURIComponent(tool)}`} className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--ink)] underline decoration-[var(--gold)] underline-offset-4 hover:text-[var(--gold)]">
+                <Gift className="h-4 w-4 text-[var(--gold)]" /> {tg2('passLink', { service: info.title })}
+              </Link>
             </section>
           ) : (
             !passExpiry && <p className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[var(--muted)]">{t('notForSale')}</p>

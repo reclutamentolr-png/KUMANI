@@ -189,6 +189,7 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
   }
   const tw = await getTranslations({ locale, namespace: 'withdrawal' })
   const tp = await getTranslations({ locale, namespace: 'plans' })
+  const tg = await getTranslations({ locale, namespace: 'gifts' })
   const money = (cents: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(cents / 100)
   const basePrice = (await getPlanPrices()).base
   // Credito dei Pass già pagati per servizi del Base (scalato dal primo pagamento)
@@ -312,6 +313,10 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
             {t('discoverPro')}
           </Link>
         )}
+
+        <Link href="/regali" className="mt-3 block text-sm font-semibold text-indigo-600 hover:underline">
+          🎁 {tg('billingLink')}
+        </Link>
 
         {isStripeSubscriber && (
           <div className="mt-10 rounded-xl border border-gray-200 p-5 text-left">

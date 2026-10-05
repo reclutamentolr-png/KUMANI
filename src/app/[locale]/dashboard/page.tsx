@@ -37,6 +37,7 @@ import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { getPlanPrices } from '@/lib/planPrices'
 import { getServicesCatalog } from '@/lib/servicesCatalog'
 import type { MyProfile } from '@/lib/myProfile'
+import GiftWelcomeDashboard from '@/components/gifts/GiftWelcomeDashboard'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -57,7 +58,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   // dashboard impiegava secondi): ruolo admin, profilo completo (solo
   // tramite get_my_profile(): le colonne personali non sono leggibili
   // direttamente), messaggi non letti, piano e strumenti, preferiti.
-  const [adminRole, { data: profile }, unreadMessagesCount, access, favoriteToolNames, { count: landingUnread }, reviewOptions, lateSponsor, planPrices] = await Promise.all([
+  const [adminRole, { data: profile }, unreadMessagesCount, access, favoriteToolNames, { count: landingUnread }, reviewOptions, lateSponsor, planPrices, { data: giftWelcome }] = await Promise.all([
     hasAdminRole(supabase, user.id),
     supabase.rpc('get_my_profile').maybeSingle<MyProfile>(),
     getUnreadMessagesCount(user.id),
@@ -71,6 +72,8 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     getLateSponsorStatus(user.id),
     // Prezzi dei piani come li addebita Stripe (in cache per un'ora)
     getPlanPrices(),
+    // Arrivato con il regalo di un Pass e senza piano: dashboard essenziale
+    supabase.rpc('my_gift_welcome'),
   ])
   const canReview = reviewOptions.some((option) => option.purchaseLabel && !option.review)
   const { userPlan, isSettingEnabled, isToolEnabled, requiredPlan } = access
@@ -214,24 +217,30 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
         {/* Invito a recensire chi ha acquistato e non l'ha ancora fatto */}
         {canReview && <ReviewInviteCard />}
 
-        {isPro && proTools.length > 0 ? (
-          <ProArea tools={proTools} stats={proAreaStats} trial={proTrial} renewsOn={proRenewsOn} favoriteToolNames={favoriteToolNames} />
+        {giftWelcome === true ? (
+          <GiftWelcomeDashboard firstName={profile?.first_name ?? null} services={catalog.items} passExpiry={access.passExpiresAt} />
         ) : (
-          !isPro && proTools.length > 0 && <ProTeaser trialExpired={proTrialExpired} />
-        )}
+          <>
+            {isPro && proTools.length > 0 ? (
+              <ProArea tools={proTools} stats={proAreaStats} trial={proTrial} renewsOn={proRenewsOn} favoriteToolNames={favoriteToolNames} />
+            ) : (
+              !isPro && proTools.length > 0 && <ProTeaser trialExpired={proTrialExpired} />
+            )}
 
-        <DashboardTipo2
-          profile={profile}
-          shareUrl={shareUrl}
-          services={catalog.items}
-          favoriteToolNames={favoriteToolNames}
-          basePrice={basePrice}
-          proTrialDaysLeft={proTrial?.daysLeft ?? null}
-          agenda={hasAgenda ? <UpcomingAgenda events={agendaEvents} today={agendaToday} sources={agendaSources} /> : null}
-        />
-        {/* Primo accesso: prima "Cosa ti interessa?" (riempie i preferiti),
-            poi il tour (una volta sola; si rivede dal Centro guide) */}
-        {askInterests ? <InterestsOnboarding items={catalog.items} /> : <DashboardTour seen={firstAccess.tour_seen === true} />}
+            <DashboardTipo2
+              profile={profile}
+              shareUrl={shareUrl}
+              services={catalog.items}
+              favoriteToolNames={favoriteToolNames}
+              basePrice={basePrice}
+              proTrialDaysLeft={proTrial?.daysLeft ?? null}
+              agenda={hasAgenda ? <UpcomingAgenda events={agendaEvents} today={agendaToday} sources={agendaSources} /> : null}
+            />
+            {/* Primo accesso: prima "Cosa ti interessa?" (riempie i preferiti),
+                poi il tour (una volta sola; si rivede dal Centro guide) */}
+            {askInterests ? <InterestsOnboarding items={catalog.items} /> : <DashboardTour seen={firstAccess.tour_seen === true} />}
+          </>
+        )}
       </main>
 
       <ChatModalWrapper userId={user.id} />

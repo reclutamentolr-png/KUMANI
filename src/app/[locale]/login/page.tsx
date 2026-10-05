@@ -8,6 +8,7 @@ import { useLocale } from 'next-intl'
 import Link from '@/components/LocalizedLink'
 import { Mail, Lock, Loader2 } from 'lucide-react'
 import { awardDailyPoint } from '@/app/actions/award-daily-point'
+import { redeemGiftCode } from '@/app/actions/gifts'
 import { endImpersonation } from '@/lib/impersonation'
 import { resetProfileReminder } from '@/components/ProfileReminder'
 import MaintenanceGate from '@/components/MaintenanceGate'
@@ -77,6 +78,7 @@ export default function LoginPage() {
           city?: string
           referral_code?: string
           voucher_code?: string
+          gift_code?: string
           professional?: boolean
           agent_code?: string
         }
@@ -102,6 +104,7 @@ export default function LoginPage() {
         // se non vanno a buon fine (si riprovano dalla dashboard).
         const voucherCode = (meta.voucher_code ?? '').trim().toUpperCase()
         if (voucherCode) await supabase.rpc('redeem_subscription_voucher', { p_code: voucherCode })
+        if (meta.gift_code) await redeemGiftCode(meta.gift_code)
         if (meta.professional) await supabase.rpc('start_pro_trial')
       }
 
