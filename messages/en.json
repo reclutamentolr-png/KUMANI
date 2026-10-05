@@ -9655,13 +9655,22 @@
     "discover": "Discover",
     "eyebrow": "More services",
     "open": "Open",
-    "pass": "Pass {price}",
-    "inBase": "With Base",
-    "inPro": "With Pro",
     "alsoFree": "Free, worth a try",
     "allServices": "See all services",
     "close": "Close",
     "noneInGroup": "There are no other services in this group yet.",
-    "error": "The services could not be loaded. Please try again."
+    "error": "The services could not be loaded. Please try again.",
+    "learnMore": "Learn more"
+  },
+  "toolMember": {
+    "open": "Open {tool}",
+    "choose": "How would you like to activate it?",
+    "passTitle": "Just this service",
+    "passText": "One-year Pass, single payment: {price}",
+    "planTitle": "Every service",
+    "planText": "{plan} plan: {price} a year, with every service included",
+    "back": "Back to services",
+    "readyTitle": "Already included: start using it",
+    "decideTitle": "Convinced? Choose how to activate it"
   }
 }

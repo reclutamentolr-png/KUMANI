@@ -9655,13 +9655,22 @@
     "discover": "Entdecken",
     "eyebrow": "Weitere Dienste",
     "open": "Öffnen",
-    "pass": "Pass {price}",
-    "inBase": "Mit Base",
-    "inPro": "Mit Pro",
     "alsoFree": "Kostenlos, zum Ausprobieren",
     "allServices": "Alle Dienste ansehen",
     "close": "Schließen",
     "noneInGroup": "In dieser Gruppe gibt es noch keine weiteren Dienste.",
-    "error": "Die Dienste konnten nicht geladen werden. Bitte erneut versuchen."
+    "error": "Die Dienste konnten nicht geladen werden. Bitte erneut versuchen.",
+    "learnMore": "Mehr erfahren"
+  },
+  "toolMember": {
+    "open": "{tool} öffnen",
+    "choose": "Wie möchtest du ihn aktivieren?",
+    "passTitle": "Nur dieser Dienst",
+    "passText": "Pass für ein Jahr, einmalige Zahlung: {price}",
+    "planTitle": "Alle Dienste",
+    "planText": "{plan}-Abo: {price} pro Jahr, alle Dienste inklusive",
+    "back": "Zurück zu den Diensten",
+    "readyTitle": "Schon enthalten: Leg los",
+    "decideTitle": "Überzeugt? Wähle, wie du ihn aktivierst"
   }
 }

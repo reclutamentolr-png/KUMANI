@@ -9655,13 +9655,22 @@
     "discover": "Découvrir",
     "eyebrow": "Autres services",
     "open": "Ouvrir",
-    "pass": "Pass {price}",
-    "inBase": "Avec Base",
-    "inPro": "Avec Pro",
     "alsoFree": "Gratuits, à essayer",
     "allServices": "Voir tous les services",
     "close": "Fermer",
     "noneInGroup": "Il n’y a pas encore d’autres services dans ce groupe.",
-    "error": "Impossible de charger les services. Réessayez."
+    "error": "Impossible de charger les services. Réessayez.",
+    "learnMore": "En savoir plus"
+  },
+  "toolMember": {
+    "open": "Ouvrir {tool}",
+    "choose": "Comment voulez-vous l’activer ?",
+    "passTitle": "Seulement ce service",
+    "passText": "Pass d’un an, paiement unique : {price}",
+    "planTitle": "Tous les services",
+    "planText": "Abonnement {plan} : {price} par an, tous les services inclus",
+    "back": "Retour aux services",
+    "readyTitle": "Déjà inclus : commencez à l’utiliser",
+    "decideTitle": "Convaincu ? Choisissez comment l’activer"
   }
 }

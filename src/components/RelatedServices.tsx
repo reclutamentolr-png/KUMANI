@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { ArrowRight, Compass, LoaderCircle, Lock, Ticket, X } from 'lucide-react'
+import { ArrowRight, BookOpen, Compass, LoaderCircle, X } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
@@ -41,7 +41,9 @@ export default function RelatedServices() {
 
   const row = (item: ServiceItem) => {
     const Icon = marketplaceIconMap[item.iconName] || Compass
-    const href = item.open ? item.href : item.unlock === 'pass' ? `/pass/${item.toolName}` : item.unlock === 'pro' ? '/pro' : '/billing'
+    // Servizio non ancora suo: prima la pagina che spiega come funziona, da lì
+    // sceglie se prendere il Pass del solo servizio o abbonarsi
+    const href = item.open ? item.href : `/strumenti/${item.toolName}`
     return (
       <li key={item.toolName}>
         <Link href={href} onClick={() => setOpen(false)} className="flex items-start gap-3 rounded-xl border border-gray-100 p-3 transition hover:border-[var(--gold)]/60 hover:bg-[var(--gold-pale)]/30">
@@ -59,13 +61,9 @@ export default function RelatedServices() {
               <>
                 {t('open')} <ArrowRight className="h-3 w-3" />
               </>
-            ) : item.unlock === 'pass' && item.passPrice ? (
-              <>
-                <Ticket className="h-3 w-3" /> {t('pass', { price: item.passPrice })}
-              </>
             ) : (
               <>
-                <Lock className="h-3 w-3" /> {item.unlock === 'pro' ? t('inPro') : t('inBase')}
+                <BookOpen className="h-3 w-3" /> {t('learnMore')}
               </>
             )}
           </span>

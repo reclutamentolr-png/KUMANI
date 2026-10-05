@@ -9655,13 +9655,22 @@
     "discover": "Scopri",
     "eyebrow": "Altri servizi",
     "open": "Apri",
-    "pass": "Pass {price}",
-    "inBase": "Con Base",
-    "inPro": "Con Pro",
     "alsoFree": "Gratis, da provare",
     "allServices": "Vedi tutti i servizi",
     "close": "Chiudi",
     "noneInGroup": "In questo gruppo per ora non ci sono altri servizi.",
-    "error": "Non è stato possibile caricare i servizi. Riprova."
+    "error": "Non è stato possibile caricare i servizi. Riprova.",
+    "learnMore": "Scopri di più"
+  },
+  "toolMember": {
+    "open": "Apri {tool}",
+    "choose": "Come vuoi attivarlo?",
+    "passTitle": "Solo questo servizio",
+    "passText": "Pass di un anno, pagamento unico: {price}",
+    "planTitle": "Tutti i servizi",
+    "planText": "Abbonamento {plan}: {price} all’anno, con tutti i servizi inclusi",
+    "back": "Torna ai servizi",
+    "readyTitle": "È già incluso: inizia a usarlo",
+    "decideTitle": "Ti convince? Scegli come attivarlo"
   }
 }
