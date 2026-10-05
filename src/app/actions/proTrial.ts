@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 import { checkVat, verifyVies } from '@/lib/vat'
 import { verifyTaxCode } from '@/app/actions/verification'
 
-// Prova Pro gratuita: solo con Partita IVA verificata oppure, per chi lavora
+// Prova Pro gratuita: solo con Partita IVA valida (formato e cifra di controllo) oppure, per chi lavora
 // senza Partita IVA, con il codice fiscale (coerente con nome, cognome e
 // data di nascita del profilo). Una prova per Partita IVA o codice fiscale,
 // per sempre (regole finali in grant_pro_trial()).
@@ -31,10 +31,12 @@ export async function startVerifiedProTrial(input: { type: 'vat' | 'tax_code'; c
     const check = checkVat(input.country || 'IT', input.value)
     if (!check.ok) return { success: false, reason: `vat_${check.reason}` }
     if (check.eu) {
-      // Il VIES dice se la Partita IVA esiste; se il servizio non risponde
-      // non si blocca chi è in regola (basta il controllo del formato)
+      // Il VIES elenca solo le Partite IVA abilitate alle operazioni con
+      // altri paesi UE: molte Partite IVA italiane attive (es. forfettari)
+      // non ci sono. Quindi non blocca: serve solo a leggere il nome
+      // dell'attività quando c'è. Il controllo vero è formato + cifra di
+      // controllo, più "una prova per Partita IVA".
       const vies = await verifyVies(check.normalized)
-      if (vies.status === 'invalid') return { success: false, reason: 'vat_vies_invalid' }
       viesName = vies.status === 'valid' ? (vies.name ?? null) : null
     }
     idValue = check.normalized
