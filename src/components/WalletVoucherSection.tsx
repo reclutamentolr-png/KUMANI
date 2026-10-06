@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { useRouter } from 'next/navigation'
-import { Award, Check, Copy, LoaderCircle, Receipt, Share2, Ticket } from 'lucide-react'
+import { Award, Check, ChevronDown, Copy, LoaderCircle, Receipt, Share2, Star, Ticket } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { redeemVoucher, type MyVoucher } from '@/app/actions/vouchers'
 import type { RankDefinition } from '@/lib/ranks'
@@ -50,6 +50,15 @@ export default function WalletVoucherSection({
   const [redeemMessage, setRedeemMessage] = useState<{ ok: boolean; text: string } | null>(null)
   const vouchers = initialVouchers
   const available = vouchers.filter((v) => v.status === 'active').length
+
+  // Voucher raggruppati per premio, in box da aprire: Kuman Green, Star,
+  // Black, poi i voucher Black continuo e infine gli altri
+  const STAR_CLASS = { green: 'fill-emerald-500 text-emerald-500', gold: 'fill-amber-400 text-amber-400', black: 'fill-gray-900 text-gray-900' } as const
+  const groups = [
+    ...ranks.map((r) => ({ key: r.key, title: t('groupPrize', { rank: td(r.labelKey) }), star: STAR_CLASS[r.color], items: vouchers.filter((v) => v.prize_key === r.key) })),
+    { key: 'black_plus', title: t('prizeBlackPlus'), star: STAR_CLASS.black, items: vouchers.filter((v) => v.prize_key?.startsWith('black_plus_')) },
+    { key: 'other', title: t('groupOther'), star: null, items: vouchers.filter((v) => !v.prize_key || (!v.prize_key.startsWith('black_plus_') && !ranks.some((r) => r.key === v.prize_key))) },
+  ].filter((g) => g.items.length > 0)
 
   const prizeName = (key: string | null) => {
     if (!key) return null
@@ -167,44 +176,64 @@ export default function WalletVoucherSection({
           <>
             <p className="mb-2 text-xs leading-5 text-[var(--muted)]">{t('vouchersHowTo')}</p>
             <div className="space-y-2">
-              {vouchers.map((v) => {
-                const plan = v.plan === 'pro' ? 'Pro' : 'Base'
+              {groups.map((g) => {
+                const ready = g.items.filter((v) => v.status === 'active').length
                 return (
-                  <div key={v.id} className="rounded-lg border border-gray-200 bg-white px-3 py-2">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex min-w-0 flex-wrap items-center gap-2">
-                        <code className="font-mono text-sm text-[var(--ink)]">{v.code}</code>
-                        <span className="rounded bg-[var(--gold-pale)] px-1.5 py-0.5 text-[10px] font-bold uppercase text-[var(--ink)]">{plan}</span>
-                        {prizeName(v.prize_key) && <span className="text-[11px] text-[var(--muted)]">{t('prizeFrom', { rank: prizeName(v.prize_key)! })}</span>}
-                      </div>
-                      <span className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide ${statusClass(v.status)}`}>{statusLabel(v.status)}</span>
+                  <details key={g.key} className="group rounded-xl border border-[var(--gold)]/40 bg-white/80 shadow-sm">
+                    <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-3 py-2.5 [&::-webkit-details-marker]:hidden">
+                      <span className="flex min-w-0 items-center gap-2 font-bold text-[var(--ink)]">
+                        {g.star ? <Star className={`h-5 w-5 shrink-0 ${g.star}`} /> : <Ticket className="h-5 w-5 shrink-0 text-[var(--gold)]" />}
+                        <span className="truncate">{g.title}</span>
+                      </span>
+                      <span className="flex shrink-0 items-center gap-2 text-xs text-[var(--muted)]">
+                        {t('groupCount', { count: g.items.length })}
+                        {ready > 0 && <span className="rounded-full bg-emerald-100 px-2 py-0.5 font-bold text-emerald-700">{t('vouchersReady', { count: ready })}</span>}
+                        <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />
+                      </span>
+                    </summary>
+                    <div className="space-y-2 border-t border-[var(--gold)]/20 px-3 py-3">
+                    {g.items.map((v) => {
+                      const plan = v.plan === 'pro' ? 'Pro' : 'Base'
+                      return (
+                        <div key={v.id} className="rounded-lg border border-gray-200 bg-white px-3 py-2">
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <div className="flex min-w-0 flex-wrap items-center gap-2">
+                              <code className="font-mono text-sm text-[var(--ink)]">{v.code}</code>
+                              <span className="rounded bg-[var(--gold-pale)] px-1.5 py-0.5 text-[10px] font-bold uppercase text-[var(--ink)]">{plan}</span>
+                              {v.prize_key?.startsWith('black_plus_') && prizeName(v.prize_key) && <span className="text-[11px] text-[var(--muted)]">{t('prizeFrom', { rank: prizeName(v.prize_key)! })}</span>}
+                            </div>
+                            <span className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide ${statusClass(v.status)}`}>{statusLabel(v.status)}</span>
+                          </div>
+                          {v.personal && v.status === 'active' && <p className="mt-1 text-xs font-semibold text-[var(--gold)]">{t('personalProHint')}</p>}
+                          <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[var(--muted)]">
+                            {v.purpose === 'sale' && <span>{v.sale_price_cents !== null ? t('soldFor', { price: euro(v.sale_price_cents) }) : t('purposeSale')}{v.buyer_name ? ` · ${v.buyer_name}` : ''}</span>}
+                            {v.status === 'active' && (
+                              <>
+                                <button type="button" onClick={() => handleCopy(v.code)} className="inline-flex items-center gap-1 font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
+                                  {copied === v.code ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+                                  {copied === v.code ? tw('voucherCopied') : tw('voucherCopy')}
+                                </button>
+                                <a
+                                  href={buildWhatsAppHref(t('shareGiftMessage', { code: v.code, plan, url: `${window.location.origin}/api/presentazione?lang=${locale}` }))}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 font-semibold text-emerald-700 hover:text-emerald-800"
+                                >
+                                  <Share2 className="h-3.5 w-3.5" /> {tw('voucherShareWhatsapp')}
+                                </a>
+                              </>
+                            )}
+                            {v.status !== 'revoked' && (
+                              <Link href={`/wallet/voucher/${v.id}`} className="inline-flex items-center gap-1 font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
+                                <Receipt className="h-3.5 w-3.5" /> {t('receiptLink')}
+                              </Link>
+                            )}
+                          </div>
+                        </div>
+                      )
+                    })}
                     </div>
-                    {v.personal && v.status === 'active' && <p className="mt-1 text-xs font-semibold text-[var(--gold)]">{t('personalProHint')}</p>}
-                    <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[var(--muted)]">
-                      {v.purpose === 'sale' && <span>{v.sale_price_cents !== null ? t('soldFor', { price: euro(v.sale_price_cents) }) : t('purposeSale')}{v.buyer_name ? ` · ${v.buyer_name}` : ''}</span>}
-                      {v.status === 'active' && (
-                        <>
-                          <button type="button" onClick={() => handleCopy(v.code)} className="inline-flex items-center gap-1 font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
-                            {copied === v.code ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
-                            {copied === v.code ? tw('voucherCopied') : tw('voucherCopy')}
-                          </button>
-                          <a
-                            href={buildWhatsAppHref(t('shareGiftMessage', { code: v.code, plan, url: `${window.location.origin}/api/presentazione?lang=${locale}` }))}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 font-semibold text-emerald-700 hover:text-emerald-800"
-                          >
-                            <Share2 className="h-3.5 w-3.5" /> {tw('voucherShareWhatsapp')}
-                          </a>
-                        </>
-                      )}
-                      {v.status !== 'revoked' && (
-                        <Link href={`/wallet/voucher/${v.id}`} className="inline-flex items-center gap-1 font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
-                          <Receipt className="h-3.5 w-3.5" /> {t('receiptLink')}
-                        </Link>
-                      )}
-                    </div>
-                  </div>
+                  </details>
                 )
               })}
             </div>

@@ -5955,7 +5955,10 @@
     "personalProHint": "Bon Pro personnel : vous pouvez l’activer pour vous ci-dessous, dans « Utiliser un bon ».",
     "pointsConfirmed": "dont confirmés : {count}",
     "pointsConfirmNote": "Les KU Points deviennent définitifs {days} jours après le paiement, le délai d’une éventuelle rétractation. Seuls les points confirmés comptent pour les qualifications et peuvent être utilisés (vitrine, dons). Les activations remboursées ne donnent pas de points.",
-    "vouchersReady": "{count, plural, one {# à utiliser} other {# à utiliser}}"
+    "vouchersReady": "{count, plural, one {# à utiliser} other {# à utiliser}}",
+    "groupPrize": "Prix {rank}",
+    "groupOther": "Autres bons",
+    "groupCount": "{count, plural, one {# bon} other {# bons}}"
   },
   "voucherReceipt": {
     "back": "Retour au Portefeuille",

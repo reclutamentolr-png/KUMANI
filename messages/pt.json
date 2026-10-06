@@ -5955,7 +5955,10 @@
     "personalProHint": "Voucher Pro pessoal: pode ativá-lo para si aqui em baixo, em «Resgatar um voucher».",
     "pointsConfirmed": "dos quais confirmados: {count}",
     "pointsConfirmNote": "Os KU Points tornam-se definitivos {days} dias após o pagamento, o prazo para uma eventual livre resolução. Só os confirmados contam para as qualificações e podem ser usados (montra, doações). As ativações reembolsadas não dão pontos.",
-    "vouchersReady": "{count} por usar"
+    "vouchersReady": "{count} por usar",
+    "groupPrize": "Prémio {rank}",
+    "groupOther": "Outros vouchers",
+    "groupCount": "{count, plural, one {# voucher} other {# vouchers}}"
   },
   "voucherReceipt": {
     "back": "Voltar à Carteira",

@@ -5955,7 +5955,10 @@
     "personalProHint": "Personal Pro voucher: you can activate it for yourself below, in “Redeem a voucher”.",
     "pointsConfirmed": "of which confirmed: {count}",
     "pointsConfirmNote": "KU Points become final {days} days after payment, the time allowed for any withdrawal. Only confirmed points count towards qualifications and can be used (showcase, donations). Refunded activations give no points.",
-    "vouchersReady": "{count} to use"
+    "vouchersReady": "{count} to use",
+    "groupPrize": "{rank} prize",
+    "groupOther": "Other vouchers",
+    "groupCount": "{count, plural, one {# voucher} other {# vouchers}}"
   },
   "voucherReceipt": {
     "back": "Back to Wallet",

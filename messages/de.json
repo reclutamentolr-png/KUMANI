@@ -5955,7 +5955,10 @@
     "personalProHint": "Persönlicher Pro-Gutschein: Du kannst ihn unten unter „Gutschein einlösen“ für dich aktivieren.",
     "pointsConfirmed": "davon bestätigt: {count}",
     "pointsConfirmNote": "KU Points werden {days} Tage nach der Zahlung endgültig, die Frist für einen möglichen Widerruf. Nur bestätigte Punkte zählen für die Qualifikationen und können genutzt werden (Vitrine, Spenden). Erstattete Aktivierungen geben keine Punkte.",
-    "vouchersReady": "{count} verfügbar"
+    "vouchersReady": "{count} verfügbar",
+    "groupPrize": "Prämie {rank}",
+    "groupOther": "Weitere Gutscheine",
+    "groupCount": "{count, plural, one {# Gutschein} other {# Gutscheine}}"
   },
   "voucherReceipt": {
     "back": "Zurück zur Brieftasche",
