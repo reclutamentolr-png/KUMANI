@@ -230,6 +230,9 @@ export type AdminSystemSettings = {
   veritas_reveal_seconds: number
   verifoto_daily_user: number
   checkmail_daily_user: number
+  // Scudo Dati (20270123100000_scudo_dati.sql)
+  scudo_dati_other_cost: number
+  scudo_dati_daily_cap: number
   verifoto_monthly_ops: number
   mosaic_pixels_day: number
   mosaic_bonus_pixels: number

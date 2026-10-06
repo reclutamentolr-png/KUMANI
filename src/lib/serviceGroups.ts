@@ -9,6 +9,7 @@ const GROUP_OF: Record<string, ServiceGroup> = {
   // Proteggerti dalle truffe
   svat: 'security',
   'verifica-iban': 'security',
+  'scudo-dati': 'security',
   checkmail: 'security',
   verifoto: 'security',
   'documento-sicuro': 'security',
@@ -56,7 +57,7 @@ export const serviceGroupOf = (toolName: string): ServiceGroup => GROUP_OF[toolN
 // Servizi proposti come preferiti per ogni interesse (primo accesso): i
 // primi della lista che l'utente può davvero usare
 export const STARTER_SERVICES: Record<ServiceGroup, string[]> = {
-  security: ['svat', 'verifica-iban', 'checkmail', 'antitruffa'],
+  security: ['svat', 'verifica-iban', 'scudo-dati', 'checkmail', 'antitruffa'],
   money: ['spendly', 'fincheck', 'memolife'],
   work: ['trova-lavoro', 'kumani-cv', 'preventivi'],
   business: ['landing-page', 'qr-generator', 'whatsapp-messages', 'link-in-bio'],

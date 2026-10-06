@@ -70,6 +70,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "relatedServices",
   "reviews",
   "rewards",
+  "scudoDati",
   "share",
   "spendly",
   "spotlight",

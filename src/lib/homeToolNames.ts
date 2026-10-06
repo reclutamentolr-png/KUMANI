@@ -3,7 +3,7 @@
 // gratuiti e mostrarli per primi.
 export const HOME_TOOL_NAMES = [
   'qr-generator', 'link-in-bio', 'whatsapp-messages', 'qr-code-pro', 'fidelity', 'offermaker', 'menu', 'landing-page',
-  'svat', 'verifoto', 'checkmail', 'antitruffa', 'verifica-iban', 'documento-sicuro', 'firma-email', 'calcolatrici', 'focus',
+  'svat', 'verifoto', 'checkmail', 'antitruffa', 'verifica-iban', 'scudo-dati', 'documento-sicuro', 'firma-email', 'calcolatrici', 'focus',
   'memolife', 'life-calendar', 'garage', 'findo', 'digital-receipt', 'spendly', 'fincheck', 'travel',
   'mandala', 'oxygen', 'neurobalance', 'aureya',
   'preventivi', 'magazzino', 'kumani-cv', 'trova-lavoro',

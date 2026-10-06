@@ -104,6 +104,7 @@ export const SECTION_LABELS: Record<string, string> = {
   antitruffa: 'Manuale Anti-Truffa (condivisione)',
   documentoSicuro: 'Documento Sicuro',
   verificaIban: 'Verifica IBAN',
+  scudoDati: 'Scudo Dati',
   firmaEmail: 'Firma Email',
   calcolatrici: 'Calcolatrici PRO',
   focus: 'KUMANI Focus',

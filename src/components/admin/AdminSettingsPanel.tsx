@@ -51,6 +51,8 @@ export default function AdminSettingsPanel() {
     veritas_reveal_seconds: 15,
     verifoto_daily_user: 1,
     checkmail_daily_user: 10,
+    scudo_dati_other_cost: 3,
+    scudo_dati_daily_cap: 90,
     verifoto_monthly_ops: 1800,
     mosaic_pixels_day: 3,
     mosaic_bonus_pixels: 1,
@@ -506,6 +508,37 @@ export default function AdminSettingsPanel() {
               className="w-full max-w-xs p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
             />
             <p className="text-xs text-gray-500 mt-1">Ogni analisi usa anche la chiave AI del progetto (lettura del testo), con un piccolo costo.</p>
+          </div>
+          <div>
+            <p className="block text-sm font-medium text-gray-700 mb-2">Scudo Dati</p>
+            <div className="grid grid-cols-2 gap-3 max-w-md">
+              <label className="text-xs text-gray-600">
+                KU Karma per controllare un&apos;altra email
+                <input
+                  type="number"
+                  min="0"
+                  max="100"
+                  value={systemSettings.scudo_dati_other_cost ?? 3}
+                  onChange={(e) => setSystemSettings({ ...systemSettings, scudo_dati_other_cost: Math.min(100, Math.max(0, parseInt(e.target.value, 10) || 0)) })}
+                  className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                />
+              </label>
+              <label className="text-xs text-gray-600">
+                Controlli esterni al giorno (tutto il sito)
+                <input
+                  type="number"
+                  min="0"
+                  max="10000"
+                  value={systemSettings.scudo_dati_daily_cap ?? 90}
+                  onChange={(e) => setSystemSettings({ ...systemSettings, scudo_dati_daily_cap: Math.min(10000, Math.max(0, parseInt(e.target.value, 10) || 0)) })}
+                  className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                />
+              </label>
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              Il controllo della propria email è gratis (5 nuovi al giorno a persona); le altre email costano KU Karma (10 al giorno a persona).
+              Il tetto giornaliero protegge il servizio gratuito XposedOrNot: gli esiti restano in memoria 24 ore e non contano.
+            </p>
           </div>
           <div>
             <p className="block text-sm font-medium text-gray-700 mb-2">Veritas: durata delle fasi (secondi)</p>

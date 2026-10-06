@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { freeFirst } from '@/lib/freeFirst'
 import {
   CarFront,
+  ShieldUser,
   PanelsTopLeft,
   Gauge,
   Smartphone,
@@ -122,6 +123,7 @@ export default function HomeToolsGrid({ freeToolNames = [] }: { freeToolNames?: 
     { name: 'checkmail', icon: MailSearch, title: tc('checkmail'), desc: tc('checkmailDescription'), category: 'security' },
     { name: 'antitruffa', icon: BookOpenCheck, title: tc('antitruffa'), desc: tc('antitruffaDescription'), category: 'security' },
     { name: 'verifica-iban', icon: Landmark, title: tc('verificaIban'), desc: tc('verificaIbanDescription'), category: 'security' },
+    { name: 'scudo-dati', icon: ShieldUser, title: tc('scudoDati'), desc: tc('scudoDatiDescription'), category: 'security' },
     { name: 'documento-sicuro', icon: FileLock2, title: tc('documentoSicuro'), desc: tc('documentoSicuroDescription'), category: 'security' },
     { name: 'memolife', icon: Brain, title: t('toolMemolifeTitle'), desc: t('toolMemolifeDescription'), category: 'personal' },
     { name: 'life-calendar', icon: CalendarClock, title: t('toolLifeCalendarTitle'), desc: t('toolLifeCalendarDescription'), category: 'personal' },

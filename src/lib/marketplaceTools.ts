@@ -150,6 +150,16 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       category: 'security',
     },
     {
+      toolName: 'scudo-dati',
+      href: '/marketplace/scudo-dati',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'ShieldUser',
+      title: t('scudoDati'),
+      description: t('scudoDatiDescription'),
+      color: 'gold',
+      category: 'security',
+    },
+    {
       toolName: 'documento-sicuro',
       href: '/marketplace/documento-sicuro',
       gradient: 'bg-[var(--ink)]',
