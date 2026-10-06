@@ -9433,7 +9433,8 @@
     "error_readingsLimit": "Du hast die maximale Anzahl an Ablesungen erreicht.",
     "error_deadlinesLimit": "Du hast die maximale Anzahl an Fristen erreicht.",
     "error_amountInvalid": "Gib einen gültigen Betrag ein.",
-    "error_expensesLimit": "Du hast die maximale Anzahl an Ausgaben erreicht."
+    "error_expensesLimit": "Du hast die maximale Anzahl an Ausgaben erreicht.",
+    "rentalDownDescription": "Anzahlung Leasing {name}"
   },
   "reviews": {
     "pageTitle": "Bewertungen der Kumani",
@@ -9817,7 +9818,15 @@
     "checkBoxText": "Füge eine IBAN, eine E-Mail, eine USt-IdNr. oder eine Website ein: Ich bringe dich zum richtigen Tool.",
     "checkBoxPlaceholder": "IBAN, E-Mail, USt-IdNr. oder Website…",
     "checkBoxButton": "Prüfen",
-    "checkBoxUnknown": "Ich erkenne die Eingabe nicht: Füge eine IBAN, eine E-Mail, eine USt-IdNr. oder eine Website-Adresse ein."
+    "checkBoxUnknown": "Ich erkenne die Eingabe nicht: Füge eine IBAN, eine E-Mail, eine USt-IdNr. oder eine Website-Adresse ein.",
+    "tripSpendlyTitle": "Dein Anteil in Spendly",
+    "tripSpendlyHint": "{count, plural, one {# geteilte Ausgabe} other {# geteilte Ausgaben}} mit dir, dein Anteil beträgt {total}: Füge ihn mit einem Tipp zu deinen Spendly-Ausgaben hinzu.",
+    "tripSpendlyButton": "Zu Spendly hinzufügen",
+    "tripSpendlyUpdate": "Spendly aktualisieren",
+    "tripSpendlyDone": "Erledigt: {count, plural, one {# Reiseausgabe} other {# Reiseausgaben}} in Spendly, insgesamt {total}. Wenn sich die Ausgaben ändern, tippe erneut zum Aktualisieren.",
+    "tripSpendlyNoAccess": "Mit dem Base-Plan fügst du deinen Anteil an den Reiseausgaben mit einem Tipp zu Spendly hinzu.",
+    "spendlyFincheckTitle": "Mach einen Check-up deiner Finanzen",
+    "spendlyFincheckText": "Fincheck nutzt deine echten Spendly-Daten der letzten 3 Monate: Sparen, Fixkosten, Schulden und ein Aktionsplan."
   },
   "businessProfile": {
     "title": "Firmenprofil",

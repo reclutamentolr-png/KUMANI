@@ -80,6 +80,21 @@ async function syncRentalFee(
   const fee = row.rental_monthly_fee
   const keep = wanted && row.kind === 'rental' && fee !== null && fee > 0 && row.rental_start && row.rental_months
   try {
+    // Anticipo del noleggio: una spesa variabile alla data di inizio contratto
+    const downSource = `garage_down:${vehicleId}`
+    const down = row.rental_down_payment
+    await supabase.from('spendly_variable_expenses').delete().eq('user_id', userId).eq('source', downSource)
+    if (keep && down !== null && down > 0 && (await hasActiveToolAccess(supabase, userId, 'spendly'))) {
+      const tg = await getTranslations('garage')
+      await supabase.from('spendly_variable_expenses').insert({
+        user_id: userId,
+        description: tg('rentalDownDescription', { name: row.name }).slice(0, 120),
+        amount: down,
+        expense_date: row.rental_start,
+        category: 'trasporti',
+        source: downSource,
+      })
+    }
     if (!keep) {
       if (currentFixedId) {
         await supabase.from('spendly_fixed_expenses').delete().eq('id', currentFixedId).eq('user_id', userId)
@@ -168,6 +183,7 @@ export async function deleteVehicle(id: string): Promise<ActionResult<null>> {
   if (!user) return { success: false, message: 'notLoggedIn' }
   const { data: vehicle } = await supabase.from('garage_vehicles').select('spendly_fixed_id').eq('id', id).eq('user_id', user.id).maybeSingle()
   if (vehicle?.spendly_fixed_id) await supabase.from('spendly_fixed_expenses').delete().eq('id', vehicle.spendly_fixed_id).eq('user_id', user.id)
+  if (vehicle) await supabase.from('spendly_variable_expenses').delete().eq('user_id', user.id).eq('source', `garage_down:${id}`)
   const { error } = await supabase.from('garage_vehicles').delete().eq('id', id).eq('user_id', user.id)
   if (error) {
     console.error('[Garage] deleteVehicle failed:', error)

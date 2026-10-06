@@ -2,6 +2,9 @@ import { createClient } from '@/lib/supabase/server'
 import { getLocale } from 'next-intl/server'
 import { redirect } from 'next/navigation'
 import SpendlyDashboard from '@/components/spendly/SpendlyDashboard'
+import { getTranslations } from 'next-intl/server'
+import { ArrowRight, HeartPulse } from 'lucide-react'
+import Link from '@/components/LocalizedLink'
 import type { SpendlyIncome, SpendlyFixedExpense, SpendlyFixedPayment, SpendlyVariableExpense } from '@/lib/spendly'
 import { currentYear } from '@/lib/spendly'
 
@@ -52,7 +55,9 @@ export default async function SpendlyDashboardPage({
       .returns<SpendlyFixedPayment[]>(),
   ])
 
+  const te = await getTranslations('ecosystem')
   return (
+    <>
     <SpendlyDashboard
       income={income || []}
       fixedExpenses={fixedExpenses || []}
@@ -60,5 +65,22 @@ export default async function SpendlyDashboardPage({
       payments={payments || []}
       year={year}
     />
+    {/* Ecosistema: il check-up dei conti di Fincheck usa i dati di Spendly */}
+    <div className="mx-auto max-w-7xl px-4 pb-10 sm:px-6 lg:px-8">
+      <Link
+        href="/marketplace/fincheck"
+        className="group flex items-center gap-4 rounded-2xl border border-[var(--gold)]/40 bg-white p-5 shadow-sm transition hover:border-[var(--gold)]"
+      >
+        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[var(--gold-pale)] text-[var(--gold)]">
+          <HeartPulse className="h-6 w-6" />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block font-bold text-[var(--ink)]">{te('spendlyFincheckTitle')}</span>
+          <span className="block text-sm text-[var(--muted)]">{te('spendlyFincheckText')}</span>
+        </span>
+        <ArrowRight className="h-5 w-5 shrink-0 text-[var(--gold)] transition-transform group-hover:translate-x-0.5" />
+      </Link>
+    </div>
+    </>
   )
 }

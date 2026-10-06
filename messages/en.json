@@ -9433,7 +9433,8 @@
     "error_readingsLimit": "You have reached the maximum number of readings.",
     "error_deadlinesLimit": "You have reached the maximum number of deadlines.",
     "error_amountInvalid": "Enter a valid amount.",
-    "error_expensesLimit": "You have reached the maximum number of expenses."
+    "error_expensesLimit": "You have reached the maximum number of expenses.",
+    "rentalDownDescription": "Rental down payment {name}"
   },
   "reviews": {
     "pageTitle": "Kumani reviews",
@@ -9817,7 +9818,15 @@
     "checkBoxText": "Paste an IBAN, an email, a VAT number or a website: I’ll take you to the right tool.",
     "checkBoxPlaceholder": "IBAN, email, VAT number or website…",
     "checkBoxButton": "Check",
-    "checkBoxUnknown": "I can’t recognise what you entered: paste an IBAN, an email, a VAT number or a website address."
+    "checkBoxUnknown": "I can’t recognise what you entered: paste an IBAN, an email, a VAT number or a website address.",
+    "tripSpendlyTitle": "Your share in Spendly",
+    "tripSpendlyHint": "{count, plural, one {# expense} other {# expenses}} shared with you, your share is {total}: add it to your Spendly expenses in one tap.",
+    "tripSpendlyButton": "Add to Spendly",
+    "tripSpendlyUpdate": "Update Spendly",
+    "tripSpendlyDone": "Done: {count, plural, one {# trip expense} other {# trip expenses}} in Spendly, for {total}. If the expenses change, tap again to update.",
+    "tripSpendlyNoAccess": "With the Base plan you add your share of the trip expenses to Spendly in one tap.",
+    "spendlyFincheckTitle": "Get a check-up of your finances",
+    "spendlyFincheckText": "Fincheck uses your real Spendly data from the last 3 months: savings, fixed costs, debts and an action plan."
   },
   "businessProfile": {
     "title": "Business profile",

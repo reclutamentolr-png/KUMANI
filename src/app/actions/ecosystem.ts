@@ -26,3 +26,21 @@ export async function addReceiptToSpendly(code: string): Promise<ReceiptSpendlyS
   }
   return (data as ReceiptSpendlyStatus | null) ?? 'no_value'
 }
+
+// Viaggi → Spendly: le mie quote delle spese del viaggio
+export type TripSpendlyStatus = { status: 'ok' | 'login' | 'not_member' | 'currency' | 'no_access'; shares?: number; imported?: number; total?: number }
+
+export async function tripSpendlyStatus(tripId: string): Promise<TripSpendlyStatus> {
+  if (!/^[0-9a-f-]{36}$/i.test(tripId)) return { status: 'not_member' }
+  const supabase = await createClient()
+  const { data } = await supabase.rpc('trip_spendly_status', { p_trip: tripId })
+  return (data as TripSpendlyStatus | null) ?? { status: 'not_member' }
+}
+
+export async function syncTripToSpendly(tripId: string): Promise<TripSpendlyStatus> {
+  if (!/^[0-9a-f-]{36}$/i.test(tripId)) return { status: 'not_member' }
+  const supabase = await createClient()
+  const { data, error } = await supabase.rpc('trip_to_spendly', { p_trip: tripId })
+  if (error) console.error('[ecosistema] viaggio → Spendly:', error.message)
+  return (data as TripSpendlyStatus | null) ?? { status: 'not_member' }
+}

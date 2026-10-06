@@ -9433,7 +9433,8 @@
     "error_readingsLimit": "Достигнуто максимальное число показаний.",
     "error_deadlinesLimit": "Достигнуто максимальное число сроков.",
     "error_amountInvalid": "Введите корректную сумму.",
-    "error_expensesLimit": "Достигнуто максимальное число расходов."
+    "error_expensesLimit": "Достигнуто максимальное число расходов.",
+    "rentalDownDescription": "Первый взнос по аренде {name}"
   },
   "reviews": {
     "pageTitle": "Отзывы Kumani",
@@ -9817,7 +9818,15 @@
     "checkBoxText": "Вставьте IBAN, email, номер НДС или сайт — я открою нужный инструмент.",
     "checkBoxPlaceholder": "IBAN, email, номер НДС или сайт…",
     "checkBoxButton": "Проверить",
-    "checkBoxUnknown": "Не удаётся распознать ввод: вставьте IBAN, email, номер НДС или адрес сайта."
+    "checkBoxUnknown": "Не удаётся распознать ввод: вставьте IBAN, email, номер НДС или адрес сайта.",
+    "tripSpendlyTitle": "Ваша доля в Spendly",
+    "tripSpendlyHint": "{count, plural, one {# общий расход} few {# общих расхода} many {# общих расходов} other {# общих расхода}} с вами, ваша доля — {total}: добавьте её в расходы Spendly одним касанием.",
+    "tripSpendlyButton": "Добавить в Spendly",
+    "tripSpendlyUpdate": "Обновить Spendly",
+    "tripSpendlyDone": "Готово: {count, plural, one {# расход} few {# расхода} many {# расходов} other {# расхода}} поездки в Spendly на {total}. Если расходы изменятся, нажмите ещё раз для обновления.",
+    "tripSpendlyNoAccess": "С тарифом Base вы добавляете свою долю расходов поездки в Spendly одним касанием.",
+    "spendlyFincheckTitle": "Проверьте свои финансы",
+    "spendlyFincheckText": "Fincheck использует реальные данные Spendly за последние 3 месяца: сбережения, постоянные расходы, долги и план действий."
   },
   "businessProfile": {
     "title": "Карточка бизнеса",

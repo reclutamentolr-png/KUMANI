@@ -9433,7 +9433,8 @@
     "error_readingsLimit": "Atingiu o número máximo de leituras.",
     "error_deadlinesLimit": "Atingiu o número máximo de prazos.",
     "error_amountInvalid": "Introduza um valor válido.",
-    "error_expensesLimit": "Atingiu o número máximo de despesas."
+    "error_expensesLimit": "Atingiu o número máximo de despesas.",
+    "rentalDownDescription": "Entrada do aluguer {name}"
   },
   "reviews": {
     "pageTitle": "Avaliações dos Kumani",
@@ -9817,7 +9818,15 @@
     "checkBoxText": "Cole um IBAN, um email, um número de IVA ou um site: levo-o à ferramenta certa.",
     "checkBoxPlaceholder": "IBAN, email, número de IVA ou site…",
     "checkBoxButton": "Verificar",
-    "checkBoxUnknown": "Não reconheço o que escreveu: cole um IBAN, um email, um número de IVA ou o endereço de um site."
+    "checkBoxUnknown": "Não reconheço o que escreveu: cole um IBAN, um email, um número de IVA ou o endereço de um site.",
+    "tripSpendlyTitle": "A sua parte no Spendly",
+    "tripSpendlyHint": "{count, plural, one {# despesa partilhada} other {# despesas partilhadas}} consigo, a sua parte é {total}: adicione-a às suas despesas do Spendly com um toque.",
+    "tripSpendlyButton": "Adicionar ao Spendly",
+    "tripSpendlyUpdate": "Atualizar o Spendly",
+    "tripSpendlyDone": "Feito: {count, plural, one {# despesa} other {# despesas}} da viagem no Spendly, por {total}. Se as despesas mudarem, toque novamente para atualizar.",
+    "tripSpendlyNoAccess": "Com o plano Base adiciona a sua parte das despesas da viagem ao Spendly com um toque.",
+    "spendlyFincheckTitle": "Faça um check-up às suas contas",
+    "spendlyFincheckText": "O Fincheck usa os seus dados reais do Spendly dos últimos 3 meses: poupança, despesas fixas, dívidas e um plano de ação."
   },
   "businessProfile": {
     "title": "Ficha da atividade",

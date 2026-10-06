@@ -7,6 +7,7 @@ import { Sheet } from '@/components/memolife/MemoLifeForms'
 import { addSettlement, deleteSettlement } from '@/app/actions/travel'
 import { EXPENSE_CATEGORIES, EXPENSE_EMOJI, memberBalances, settleUp, type TripDetail, type TripExpense, type TripSettlement } from '@/lib/travel'
 import TravelExpenseForm from './TravelExpenseForm'
+import TripSpendlyBox from '@/components/ecosystem/TripSpendlyBox'
 
 // Spese del viaggio: il mio saldo, "chi deve quanto a chi" con i
 // trasferimenti minimi, i rimborsi già fatti e l'elenco delle spese.
@@ -76,6 +77,8 @@ export default function TravelBudget({
 
   return (
     <div className="space-y-4">
+      {/* Ecosistema: la mia parte delle spese in Spendly */}
+      {expenses.length > 0 && <TripSpendlyBox tripId={detail.id} expensesKey={expenses.map((e) => `${e.id}:${e.amount}`).join(',')} />}
       {/* Riepilogo */}
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="rounded-2xl border border-gray-200 bg-white p-4">
