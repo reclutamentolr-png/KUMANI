@@ -9,56 +9,10 @@ const db = () =>
     auth: { autoRefreshToken: false, persistSession: false },
   })
 
-// Voucher del nuovo sistema dei Punti Community:
-// 1. si riscatta un pacchetto (294 / 1800 / 5500 punti) → credito in euro;
-// 2. con il credito si crea un voucher Base (49 €) o Pro (149 €), da regalare
-//    o da vendere; un voucher non usato si può annullare (credito restituito).
-// Controlli e addebiti avvengono in un'unica transazione nel database
-// (redeem_voucher_pack, create_subscription_voucher, cancel_my_voucher in
-// 20261203100000_network_points_v2.sql).
-
-export async function redeemVoucherPack(index: number) {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  if (!user) return { success: false as const, message: 'notLoggedIn' as const }
-
-  const { data, error } = await supabase
-    .rpc('redeem_voucher_pack', { p_index: index })
-    .single<{ success: boolean; reason: string | null; new_network_points: number; new_credit_cents: number }>()
-  if (error || !data) return { success: false as const, message: 'error' as const }
-  if (!data.success) return { success: false as const, message: (data.reason ?? 'error') as 'insufficient_points' | 'not_found' | 'error' }
-  revalidatePath('/wallet')
-  return { success: true as const, points: data.new_network_points, creditCents: data.new_credit_cents }
-}
-
-export async function createVoucher(input: { plan: 'base' | 'pro'; purpose: 'gift' | 'sale'; priceCents: number | null }) {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  if (!user) return { success: false as const, message: 'notLoggedIn' as const }
-
-  const price = input.purpose === 'sale' && input.priceCents !== null && Number.isFinite(input.priceCents) ? Math.max(0, Math.round(input.priceCents)) : null
-  const { data, error } = await supabase
-    .rpc('create_subscription_voucher', { p_plan: input.plan, p_purpose: input.purpose, p_price_cents: price })
-    .single<{ success: boolean; reason: string | null; code: string | null; new_credit_cents: number }>()
-  if (error || !data) return { success: false as const, message: 'error' as const }
-  if (!data.success) return { success: false as const, message: (data.reason ?? 'error') as 'insufficient_credit' | 'price_too_high' | 'invalid' | 'error' }
-  revalidatePath('/wallet')
-  return { success: true as const, code: data.code as string, creditCents: data.new_credit_cents }
-}
-
-export async function cancelMyVoucher(voucherId: string) {
-  const supabase = await createClient()
-  const { data, error } = await supabase
-    .rpc('cancel_my_voucher', { p_voucher_id: voucherId })
-    .single<{ success: boolean; new_credit_cents: number }>()
-  if (error || !data?.success) return { success: false as const }
-  revalidatePath('/wallet')
-  return { success: true as const, creditCents: data.new_credit_cents }
-}
+// Voucher abbonamento nel Wallet: i voucher premio delle qualifiche
+// (Kuman Green / Star / Black) arrivano da soli (evaluate_qualifications nel
+// database). Qui: dati di vendita per la ricevuta, riscatto di un codice
+// ricevuto, elenco dei propri voucher.
 
 // Dati di vendita per la ricevuta (acquirente e prezzo): solo sui propri
 // voucher. La vendita è del Kumano, KUMANI non ne è parte.
@@ -75,7 +29,7 @@ export async function updateVoucherSale(voucherId: string, input: { buyerName: s
     .from('subscription_vouchers')
     .select('id, sold_at, cost_cents')
     .eq('id', voucherId)
-    .eq('created_by', user.id)
+    .or(`created_by.eq.${user.id},holder_id.eq.${user.id}`)
     .maybeSingle()
   if (!voucher) return { success: false as const }
   // Mai oltre il valore del voucher (vale anche il vincolo nel database)
@@ -126,9 +80,13 @@ export type MyVoucher = {
   purpose: 'gift' | 'sale' | null
   sale_price_cents: number | null
   buyer_name: string | null
+  // Premio di qualifica (rising_star, shining_star, diamond_star, black_plus_N)
+  prize_key: string | null
+  // Voucher Pro personale di Kuman Black: si può attivare per sé
+  personal: boolean
 }
 
-/** Lists vouchers the caller created, for their own wallet history. */
+/** I voucher dell'utente: quelli creati e quelli ricevuti in premio. */
 export async function listMyVouchers(): Promise<MyVoucher[]> {
   const supabase = await createClient()
   const {
@@ -136,12 +94,12 @@ export async function listMyVouchers(): Promise<MyVoucher[]> {
   } = await supabase.auth.getUser()
   if (!user) return []
 
-  // Letti col servizio, sempre filtrati sui voucher creati dall'utente
+  // Letti col servizio, sempre filtrati sui voucher dell'utente
   const { data } = await db()
     .from('subscription_vouchers')
-    .select('id, code, status, created_at, redeemed_at, plan, purpose, sale_price_cents, buyer_name')
-    .eq('created_by', user.id)
+    .select('id, code, status, created_at, redeemed_at, plan, purpose, sale_price_cents, buyer_name, prize_key, created_by')
+    .or(`created_by.eq.${user.id},holder_id.eq.${user.id}`)
     .order('created_at', { ascending: false })
 
-  return (data as MyVoucher[] | null) || []
+  return ((data ?? []) as (Omit<MyVoucher, 'personal'> & { created_by: string })[]).map(({ created_by, ...v }) => ({ ...v, personal: created_by !== user.id }))
 }

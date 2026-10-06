@@ -2,15 +2,18 @@ import { getTranslations } from 'next-intl/server'
 import { ArrowRight, Users } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import type { DashboardNetworkData } from '@/lib/dashboardNetworkData'
+import { rankProgress } from '@/lib/ranks'
+import RankRequirements, { rankMissingText } from '@/components/RankRequirements'
 
 // Riepilogo della rete (pagina Community): tutta la scheda porta alla
 // pagina Rete con stella, KUMANI e qualifiche.
 export default async function NetworkSummaryCard({ network }: { network: DashboardNetworkData }) {
   const t = await getTranslations('dashboard')
-  // Qualifiche (solo badge) sui KU Points guadagnati in totale
-  const { activeKumani, pendingKumani, receivedKumani, currentRank, ranks, networkPointsEarned } = network
-  const nextRank = ranks.find((rank) => networkPointsEarned < rank.threshold) || null
-  const rankProgress = nextRank ? Math.min((networkPointsEarned / nextRank.threshold) * 100, 100) : 100
+  // Qualifiche: attivazioni pagate delle persone invitate + KU Points guadagnati
+  const { activeKumani, pendingKumani, receivedKumani, currentRank, ranks, networkPointsEarned, networkActivations, achievedKeys } = network
+  const nextRank = ranks.find((rank) => !achievedKeys.includes(rank.key)) || null
+  const progress = nextRank ? rankProgress(nextRank, networkActivations, networkPointsEarned) : 100
+  const missing = nextRank ? await rankMissingText(nextRank, networkActivations, networkPointsEarned) : null
 
   return (
     <Link
@@ -46,20 +49,12 @@ export default async function NetworkSummaryCard({ network }: { network: Dashboa
         <div className="mt-5">
           <div className="mb-1.5 flex items-center justify-between gap-2 text-sm">
             <span className="font-semibold text-white">{nextRank ? t(nextRank.labelKey) : currentRank ? t(currentRank.labelKey) : ''}</span>
-            {nextRank && (
-              <span className="text-xs text-white/60">
-                {networkPointsEarned}/{nextRank.threshold} {t('communityPointsUnit')}
-              </span>
-            )}
+            {nextRank && <RankRequirements rank={nextRank} activations={networkActivations} points={networkPointsEarned} className="text-xs text-white/60" />}
           </div>
           <div className="h-2.5 overflow-hidden rounded-full bg-white/10">
-            <div className="h-full rounded-full bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)]" style={{ width: `${rankProgress}%` }} />
+            <div className="h-full rounded-full bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)]" style={{ width: `${progress}%` }} />
           </div>
-          {nextRank && (
-            <p className="mt-2 text-xs font-semibold text-[var(--gold-bright)]">
-              {t('missingForNextRank', { count: nextRank.threshold - networkPointsEarned, rank: t(nextRank.labelKey) })}
-            </p>
-          )}
+          {missing && <p className="mt-2 text-xs font-semibold text-[var(--gold-bright)]">{missing}</p>}
         </div>
       )}
 

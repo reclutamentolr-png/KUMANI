@@ -33,7 +33,7 @@ export default async function VoucherReceiptPage({ params }: { params: Promise<{
     .from('subscription_vouchers')
     .select('id, code, status, plan, purpose, sale_price_cents, buyer_name, sold_at, created_at, cost_cents')
     .eq('id', id)
-    .eq('created_by', user.id)
+    .or(`created_by.eq.${user.id},holder_id.eq.${user.id}`)
     .maybeSingle()
   if (!voucher || voucher.status === 'revoked') notFound()
 

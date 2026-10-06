@@ -1,56 +1,67 @@
 export interface RankDefinition {
   key: string
-  threshold: number
   labelKey: string
   descriptionKey: string
   icon: 'Star' | 'Sparkles' | 'Crown'
+  // Colore della stella del festeggiamento
+  color: 'green' | 'gold' | 'black'
+  // Requisiti: attivazioni Base/Pro pagate delle persone invitate e KU
+  // Points guadagnati in totale (compresi quelli ricevuti dalla struttura)
+  activations: number
+  points: number
+  // Voucher Base di premio
+  vouchers: number
 }
 
-// Qualifiche Kuman Green / Star / Black: solo badge, senza premi. Si
-// raggiungono con i Punti Community guadagnati in totale
-// (profiles.network_points_earned_total), non con il saldo: spendere punti
-// per i pacchetti voucher non fa perdere il badge. Le soglie sono quelle dei
-// pacchetti voucher (system_settings.voucher_packs, di default 294 / 1800 /
-// 5500): la data di raggiungimento la registra il database
-// (record_network_badges in 20261203100000_network_points_v2.sql).
-export const DEFAULT_RANK_THRESHOLDS = [294, 1800, 5500]
+// Qualifiche Kuman Green / Star / Black: le decide il database
+// (evaluate_qualifications in 20270113100000_ku_points_qualifications_v3.sql),
+// che registra la data in rank_achievements e mette i voucher premio nel
+// Wallet. Qui solo regole (da system_settings.qualifications) e avanzamento.
+export type QualificationRule = { key: string; activations: number; points: number; vouchers: number }
 
-const RANK_SHAPES: Omit<RankDefinition, 'threshold'>[] = [
-  { key: 'rising_star', labelKey: 'risingStar', descriptionKey: 'risingStarDesc', icon: 'Star' },
-  { key: 'shining_star', labelKey: 'shiningStar', descriptionKey: 'shiningStarDesc', icon: 'Sparkles' },
-  { key: 'diamond_star', labelKey: 'diamondStar', descriptionKey: 'diamondStarDesc', icon: 'Crown' },
+export const DEFAULT_QUALIFICATIONS: QualificationRule[] = [
+  { key: 'rising_star', activations: 6, points: 60, vouchers: 1 },
+  { key: 'shining_star', activations: 36, points: 360, vouchers: 6 },
+  { key: 'diamond_star', activations: 108, points: 1080, vouchers: 18 },
 ]
 
-// Qualifiche con le soglie correnti (dai pacchetti voucher); ordinate in
-// modo crescente, getCurrentRank si basa su questo.
-export function buildRanks(thresholds: number[] = DEFAULT_RANK_THRESHOLDS): RankDefinition[] {
-  return RANK_SHAPES.map((shape, i) => ({ ...shape, threshold: thresholds[i] ?? DEFAULT_RANK_THRESHOLDS[i] }))
+const RANK_SHAPES: Omit<RankDefinition, 'activations' | 'points' | 'vouchers'>[] = [
+  { key: 'rising_star', labelKey: 'risingStar', descriptionKey: 'risingStarDesc', icon: 'Star', color: 'green' },
+  { key: 'shining_star', labelKey: 'shiningStar', descriptionKey: 'shiningStarDesc', icon: 'Sparkles', color: 'gold' },
+  { key: 'diamond_star', labelKey: 'diamondStar', descriptionKey: 'diamondStarDesc', icon: 'Crown', color: 'black' },
+]
+
+// Qualifiche con le regole correnti, in ordine crescente
+export function buildRanks(rules: unknown = DEFAULT_QUALIFICATIONS): RankDefinition[] {
+  const list = Array.isArray(rules) ? (rules as QualificationRule[]) : DEFAULT_QUALIFICATIONS
+  return RANK_SHAPES.map((shape, i) => {
+    const rule = list.find((r) => r?.key === shape.key) ?? DEFAULT_QUALIFICATIONS[i]
+    return { ...shape, activations: Number(rule.activations) || 0, points: Number(rule.points) || 0, vouchers: Number(rule.vouchers) || 0 }
+  })
 }
 
 export const RANKS: RankDefinition[] = buildRanks()
 
-// Soglie dai pacchetti voucher letti dal database ([{points, credit_eur}])
-export function thresholdsFromPacks(packs: unknown): number[] {
-  if (!Array.isArray(packs)) return DEFAULT_RANK_THRESHOLDS
-  const points = packs.map((p) => Number((p as { points?: unknown })?.points)).filter((n) => Number.isFinite(n) && n > 0)
-  return points.length >= 3 ? points.slice(0, 3) : DEFAULT_RANK_THRESHOLDS
-}
-
-/** Highest rank whose threshold has been reached, or null. */
-export function getCurrentRank(earnedPoints: number, ranks: RankDefinition[] = RANKS): RankDefinition | null {
+/** Qualifica più alta tra quelle raggiunte (registrate dal database), o null. */
+export function getCurrentRank(achievedKeys: string[], ranks: RankDefinition[] = RANKS): RankDefinition | null {
   let current: RankDefinition | null = null
-  for (const rank of ranks) {
-    if (earnedPoints >= rank.threshold) current = rank
-  }
+  for (const rank of ranks) if (achievedKeys.includes(rank.key)) current = rank
   return current
 }
 
 /**
- * The highest achieved rank that isn't in `seenKeys` yet — the one the
- * congrats popup should show. If someone jumps past an intermediate rank,
- * only the highest newly-achieved one is shown.
+ * La qualifica raggiunta più alta non ancora vista: quella del popup di
+ * festeggiamento. Se si salta una qualifica intermedia, si festeggia solo
+ * la più alta.
  */
-export function getNewlyAchievedRank(earnedPoints: number, seenKeys: string[], ranks: RankDefinition[] = RANKS): RankDefinition | null {
-  const achieved = ranks.filter((r) => earnedPoints >= r.threshold && !seenKeys.includes(r.key))
-  return achieved.length > 0 ? achieved[achieved.length - 1] : null
+export function getNewlyAchievedRank(achievedKeys: string[], seenKeys: string[], ranks: RankDefinition[] = RANKS): RankDefinition | null {
+  const fresh = ranks.filter((r) => achievedKeys.includes(r.key) && !seenKeys.includes(r.key))
+  return fresh.length > 0 ? fresh[fresh.length - 1] : null
+}
+
+/** Avanzamento verso una qualifica (0–100): conta il requisito più indietro. */
+export function rankProgress(rank: RankDefinition, activations: number, points: number): number {
+  const a = rank.activations > 0 ? activations / rank.activations : 1
+  const p = rank.points > 0 ? points / rank.points : 1
+  return Math.round(Math.min(a, p, 1) * 100)
 }

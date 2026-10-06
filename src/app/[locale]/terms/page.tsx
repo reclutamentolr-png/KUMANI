@@ -259,18 +259,19 @@ export default function TermsPage() {
               </p>
               <p>
                 <strong className="text-gray-900">KU Points.</strong> L&apos;utente riceve KU Points quando una persona che ha
-                invitato direttamente attiva un abbonamento pagato con carta (Base o Pro), passa dal piano Base al piano Pro o acquista
-                un pass, e con il Bonus Accoglienza. Il Bonus Accoglienza è riconosciuto quando uno dei posti diretti della propria
-                matrice viene occupato da una persona invitata da un altro utente (spillover) che attiva l&apos;abbonamento con carta: a
-                partire dall&apos;attivazione indicata dalla Piattaforma (attualmente la sesta persona invitata da quell&apos;utente), una
-                parte dei KU Points dell&apos;attivazione non va a chi ha invitato ma a chi accoglie la persona nella propria matrice. Le
-                quantità sono stabilite dalla Piattaforma e indicate nell&apos;area personale. Le attivazioni tramite voucher e i rinnovi non danno KU Points; in caso di rimborso del
+                invitato direttamente attiva un abbonamento pagato con carta (Base o Pro), passa dal piano Base al piano Pro (in
+                proporzione a quanto pagato) o acquista un pass, e con il Bonus Accoglienza. Il Bonus Accoglienza è riconosciuto quando
+                uno dei posti diretti della propria matrice viene occupato da una persona invitata da un altro utente (spillover) che
+                attiva l&apos;abbonamento con carta: a partire dall&apos;attivazione indicata dalla Piattaforma (attualmente la sesta
+                persona invitata da quell&apos;utente), una parte dei KU Points dell&apos;attivazione non va a chi ha invitato ma a chi
+                accoglie la persona nella propria matrice. Le quantità sono stabilite dalla Piattaforma e indicate nell&apos;area personale. Le attivazioni tramite voucher e i rinnovi non danno KU Points; in caso di rimborso del
                 pagamento i punti collegati vengono tolti.
               </p>
               <p>
-                I KU Points si usano per mettere in vetrina gli annunci e per riscattare i pacchetti voucher (sezione 7.8).
-                Le qualifiche Kuman Green, Kuman Star e Kuman Black sono badge di riconoscimento, raggiunti con i KU Points
-                guadagnati in totale, e non danno diritto a premi.
+                I KU Points si usano per mettere in vetrina gli annunci e per le donazioni all&apos;associazione sostenuta da KUMANI.
+                Le qualifiche Kuman Green, Kuman Star e Kuman Black si raggiungono con un numero minimo di attivazioni Base o Pro
+                pagate con carta dalle persone invitate direttamente e un numero minimo di KU Points guadagnati in totale (requisiti
+                indicati nell&apos;area personale); al raggiungimento danno i voucher premio descritti nella sezione 7.8.
               </p>
             </div>
             <div className="mt-4 bg-green-50 border border-green-200 rounded-xl p-4 flex gap-3">
@@ -330,11 +331,13 @@ export default function TermsPage() {
                 dandone comunicazione in questa pagina. I vantaggi già attribuiti restano validi alle condizioni comunicate al momento dell&apos;attribuzione.
               </p>
               <p>
-                <strong className="text-gray-900">7.8 Voucher.</strong> Con i KU Points l&apos;utente può riscattare pacchetti che
-                danno un credito voucher in euro (i pacchetti e i relativi valori sono indicati nell&apos;area personale e possono essere
-                riscattati più volte). Con il credito l&apos;utente crea voucher che attivano un abbonamento KUMANI Base o Pro per un anno;
-                un voucher non ancora utilizzato può essere annullato e il credito torna disponibile. Il credito voucher non è
-                rimborsabile né convertibile in denaro presso KUMANI.
+                <strong className="text-gray-900">7.8 Voucher.</strong> Al raggiungimento di una qualifica l&apos;utente riceve nell&apos;area
+                personale voucher che attivano un abbonamento KUMANI Base per un anno a una persona nuova (il numero di voucher per
+                ogni qualifica è indicato nell&apos;area personale); con Kuman Black riceve anche un voucher Pro di un anno utilizzabile per
+                sé e, dopo Kuman Black, un voucher ogni numero di nuove attivazioni indicato dalla Piattaforma. Chi ha generato un
+                voucher non può utilizzarlo per sé, salvo il voucher Pro personale. Le attivazioni fatte con un voucher non danno KU
+                Points e non contano per le qualifiche. Se un rimborso fa venir meno i requisiti di una qualifica, i voucher premio
+                non ancora utilizzati vengono annullati. I voucher non sono rimborsabili né convertibili in denaro presso KUMANI.
               </p>
               <p>
                 KUMANI concede i Voucher come incentivo promozionale sotto forma di sconto del 100% sui propri servizi.

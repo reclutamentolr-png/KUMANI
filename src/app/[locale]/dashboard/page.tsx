@@ -186,9 +186,9 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
         <RankAchievementModal
           rankKey={newlyAchievedRank.key}
           labelKey={newlyAchievedRank.labelKey}
-          descriptionKey={newlyAchievedRank.descriptionKey}
-          icon={newlyAchievedRank.icon}
-          threshold={newlyAchievedRank.threshold}
+          color={newlyAchievedRank.color}
+          vouchers={newlyAchievedRank.vouchers}
+          blackPlusEvery={network.blackPlusEvery}
         />
       ) : renewalDaysLeft !== null && profile?.subscription_expires_at ? (
         <RenewalReminderModal expiresAt={profile.subscription_expires_at} daysLeft={renewalDaysLeft} />

@@ -9,6 +9,8 @@ import RankBadge from '@/components/RankBadge'
 import KumaniPeople from '@/components/KumaniPeople'
 import Leaderboard from '@/components/Leaderboard'
 import { getDashboardNetworkData } from '@/lib/dashboardNetworkData'
+import { rankProgress } from '@/lib/ranks'
+import RankRequirements from '@/components/RankRequirements'
 import { getMemberPasses } from '@/lib/memberPasses'
 import { defaultLocale } from '../../../../../i18n'
 import { TreePine, Star, Sparkles, Crown, Trophy, PartyPopper, UserPlus, CheckCircle2, Shuffle, Network, MessageCircle, Gift, Users } from 'lucide-react'
@@ -58,6 +60,7 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
     currentRank,
     ranks,
     networkPointsEarned,
+    networkActivations,
     loginUrl,
   } = network
 
@@ -264,15 +267,15 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
                       <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${goal.chip}`}>{t(goal.levelKey)}</span>
                     </div>
                     <p className="font-bold text-gray-900 mb-1">{t(rank.labelKey)}</p>
-                    <p className="text-sm text-gray-600 mb-2">{t(rank.descriptionKey, { points: rank.threshold })}</p>
+                    <p className="text-sm text-gray-600 mb-2">{t(rank.descriptionKey, { acts: rank.activations, points: rank.points, vouchers: rank.vouchers })}</p>
                     <div className={`w-full rounded-full h-2.5 ${goal.track}`}>
                       <div
                         className={`bg-gradient-to-r ${goal.bar} h-2.5 rounded-full`}
-                        style={{ width: `${achievement ? 100 : Math.min((networkPointsEarned / rank.threshold) * 100, 100)}%` }}
+                        style={{ width: `${achievement ? 100 : rankProgress(rank, networkActivations, networkPointsEarned)}%` }}
                       ></div>
                     </div>
                     <p className="text-xs text-gray-500 mt-2 font-medium">
-                      {Math.min(networkPointsEarned, rank.threshold)}/{rank.threshold} {t('communityPointsUnit')}
+                      <RankRequirements rank={rank} activations={networkActivations} points={networkPointsEarned} />
                     </p>
                   </div>
                 </div>

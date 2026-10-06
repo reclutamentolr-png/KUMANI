@@ -21,7 +21,8 @@ import {
   Lock,
   HeartHandshake,
 } from 'lucide-react'
-import { getCurrentRank } from '@/lib/ranks'
+import { getCurrentRank, rankProgress } from '@/lib/ranks'
+import { rankMissingText } from '@/components/RankRequirements'
 import { getMyNetworkWallet } from '@/lib/networkWallet'
 import { listMyVouchers } from '@/app/actions/vouchers'
 import { listMyRedemptions } from '@/app/actions/rewards'
@@ -107,7 +108,7 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
     // Sconto sul rinnovo pagato in KU Karma (Gestione KU → 4), solo se attivo
     loadKuWalletData(supabase, profile),
     getTranslations('kuRewards'),
-    // KU Points, credito voucher e qualifiche (badge sui punti guadagnati)
+    // KU Points, attivazioni e regole delle qualifiche
     getMyNetworkWallet(supabase),
     // KU Points ricevuti con il Bonus Accoglienza (registro dei punti, tipo
     // 'matrix'; esclusi quelli annullati)
@@ -140,12 +141,15 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
 
   const renewal = featureConfig<KuRenewalConfig>(kuWalletData.features, 'renewal_discount')
   const { ranks } = networkWallet
-  const currentRank = getCurrentRank(networkWallet.earnedTotal, ranks)
-  const nextRank = ranks.find((rank) => networkWallet.earnedTotal < rank.threshold) ?? null
   const welcomeBonusPoints = (welcomeAwards ?? []).reduce((sum, row) => sum + (row.points ?? 0), 0)
   const achievements = new Map(
     ((achievementRows ?? []) as { rank_key: string; achieved_at: string }[]).map((row) => [row.rank_key, row])
   )
+  // Qualifiche registrate dal database (attivazioni pagate + KU Points)
+  const achievedKeys = [...achievements.keys()]
+  const currentRank = getCurrentRank(achievedKeys, ranks)
+  const nextRank = ranks.find((rank) => !achievements.has(rank.key)) ?? null
+  const nextMissing = nextRank ? await rankMissingText(nextRank, networkWallet.activations, networkWallet.earnedTotal) : null
 
   const receiptsList = receipts || []
   const receiptsPending = receiptsList.filter((r) => !r.confirmed_at).length
@@ -335,13 +339,19 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
             </WalletSection>
           )}
 
-          {/* Badge: qualifiche Kuman Green / Star / Black sui KU Points
-              guadagnati in totale, con avanzamento e data di raggiungimento */}
+          {/* Qualifiche Kuman Green / Star / Black: attivazioni pagate delle
+              persone invitate e KU Points guadagnati, con i voucher premio */}
           <WalletSection icon={<Award className="h-5 w-5 text-[var(--gold)]" />} title={t('badgeTitle')}>
             <div className="flex flex-wrap items-end justify-between gap-3">
-              <div>
-                <p className="text-xs text-[var(--muted)]">{t('badgeEarnedTotal')}</p>
-                <p className="text-3xl font-bold text-[var(--ink)]">{networkWallet.earnedTotal}</p>
+              <div className="flex gap-6">
+                <div>
+                  <p className="text-xs text-[var(--muted)]">{t('badgeActivations')}</p>
+                  <p className="text-3xl font-bold text-[var(--ink)]">{networkWallet.activations}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-[var(--muted)]">{t('badgeEarnedTotal')}</p>
+                  <p className="text-3xl font-bold text-[var(--ink)]">{networkWallet.earnedTotal}</p>
+                </div>
               </div>
               <span className="rounded-full bg-[var(--ink)] px-3 py-1 text-xs font-bold text-[var(--gold-bright)]">
                 {currentRank ? td(currentRank.labelKey) : t('badgeNone')}
@@ -353,12 +363,10 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
                 <div className="h-2 overflow-hidden rounded-full bg-gray-100">
                   <div
                     className="h-full rounded-full bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)]"
-                    style={{ width: `${Math.min((networkWallet.earnedTotal / nextRank.threshold) * 100, 100)}%` }}
+                    style={{ width: `${rankProgress(nextRank, networkWallet.activations, networkWallet.earnedTotal)}%` }}
                   />
                 </div>
-                <p className="mt-1.5 text-xs font-semibold text-[var(--ink)]">
-                  {t('badgeNextProgress', { count: nextRank.threshold - networkWallet.earnedTotal, rank: td(nextRank.labelKey) })}
-                </p>
+                {nextMissing && <p className="mt-1.5 text-xs font-semibold text-[var(--ink)]">{nextMissing}</p>}
               </div>
             ) : (
               <p className="mt-3 text-xs font-semibold text-[var(--gold)]">{t('badgeEncourageTop')}</p>
@@ -366,7 +374,7 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
 
             <div className="mt-4 grid grid-cols-3 gap-2 sm:gap-3">
               {ranks.map((rank) => {
-                const earned = networkWallet.earnedTotal >= rank.threshold
+                const earned = achievements.has(rank.key)
                 const Icon = RANK_ICONS[rank.icon]
                 const achieved = achievements.get(rank.key)
                 return (
@@ -389,7 +397,8 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
                       )}
                     </div>
                     <p className={`mt-2 text-xs font-bold sm:text-sm ${earned ? 'text-[var(--ink)]' : 'text-gray-500'}`}>{td(rank.labelKey)}</p>
-                    <p className="text-[10px] text-gray-500 sm:text-xs">{t('badgeThreshold', { points: rank.threshold })}</p>
+                    <p className="text-[10px] text-gray-500 sm:text-xs">{t('badgeRequirement', { acts: rank.activations, points: rank.points })}</p>
+                    <p className="text-[10px] font-semibold text-[var(--gold)] sm:text-xs">{t('badgePrize', { count: rank.vouchers })}</p>
                     <p className={`mt-1 text-[10px] font-semibold ${earned ? 'text-emerald-700' : 'text-gray-400'}`}>
                       {earned
                         ? achieved
@@ -403,8 +412,8 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
             </div>
 
             <p className="mt-3 text-xs leading-5 text-[var(--muted)]">
-              {networkWallet.earnedTotal >= ranks[ranks.length - 1].threshold
-                ? t('badgeOnlyRecognition')
+              {achievements.has(ranks[ranks.length - 1].key)
+                ? t('badgeBlackNote', { every: networkWallet.blackPlusEvery })
                 : currentRank
                   ? t('badgeEncourageNext')
                   : t('badgeEncourageFirst')}
@@ -552,16 +561,13 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
           </div>
         </WalletSection>
 
-        {/* Voucher abbonamento */}
-        <WalletSection icon={<BadgeCheck className="h-5 w-5 text-[var(--gold)]" />} title={t('voucherTitle')}>
+        {/* KU Points, qualifiche e voucher premio */}
+        <WalletSection id="voucher" icon={<BadgeCheck className="h-5 w-5 text-[var(--gold)]" />} title={t('voucherTitle')}>
           <WalletVoucherSection
-            initialPoints={networkWallet.networkPoints}
-            initialCreditCents={networkWallet.voucherCreditCents}
-            packs={networkWallet.packs}
-            valueBaseEur={networkWallet.voucherValueBaseEur}
-            valueProEur={networkWallet.voucherValueProEur}
-            initialPacksRedeemed={networkWallet.packsRedeemed}
-            pointsRules={networkWallet.pointsRules}
+            points={networkWallet.networkPoints}
+            rules={networkWallet.pointsRules}
+            ranks={networkWallet.ranks}
+            blackPlusEvery={networkWallet.blackPlusEvery}
             initialVouchers={myVouchers}
           />
         </WalletSection>

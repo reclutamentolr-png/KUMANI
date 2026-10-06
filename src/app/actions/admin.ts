@@ -100,7 +100,7 @@ const GENERAL_SETTINGS_KEYS = new Set([
   'fabula_min_login_days', 'fabula_hide_after_reports',
   'rewards_catalog_enabled',
   'network_points_activation_base', 'network_points_activation_pro', 'network_points_upgrade_pro',
-  'voucher_packs', 'voucher_value_base_eur', 'voucher_value_pro_eur',
+  'qualifications', 'black_plus_every', 'voucher_value_base_eur', 'voucher_value_pro_eur',
 ])
 
 // Salva solo le impostazioni cambiate (il modulo manda le differenze), così
@@ -110,19 +110,28 @@ export async function adminSaveSystemSettings(settings: Record<string, unknown>)
   if (!admin) return { success: false, error: 'Non autorizzato' }
   const unknown = Object.keys(settings).find((key) => !GENERAL_SETTINGS_KEYS.has(key))
   if (unknown) return { success: false, error: `Impostazione non modificabile da qui: ${unknown}` }
-  // Pacchetti voucher: 1-5 pacchetti con punti e credito interi positivi, punti crescenti
-  if ('voucher_packs' in settings) {
-    const packs = settings.voucher_packs
+  // Qualifiche: Kuman Green, Star e Black con attivazioni crescenti, punti e voucher interi
+  if ('qualifications' in settings) {
+    const rules = settings.qualifications
+    const keys = ['rising_star', 'shining_star', 'diamond_star']
     const valid =
-      Array.isArray(packs) &&
-      packs.length >= 1 &&
-      packs.length <= 5 &&
-      packs.every((p, i) => {
-        const pack = p as { points?: unknown; credit_eur?: unknown }
-        const prev = i > 0 ? (packs[i - 1] as { points: number }).points : 0
-        return Number.isInteger(pack.points) && Number.isInteger(pack.credit_eur) && (pack.points as number) > prev && (pack.credit_eur as number) > 0
+      Array.isArray(rules) &&
+      rules.length === 3 &&
+      rules.every((r, i) => {
+        const rule = r as { key?: unknown; activations?: unknown; points?: unknown; vouchers?: unknown }
+        const prev = i > 0 ? (rules[i - 1] as { activations: number }).activations : 0
+        return (
+          rule.key === keys[i] &&
+          Number.isInteger(rule.activations) && (rule.activations as number) > prev &&
+          Number.isInteger(rule.points) && (rule.points as number) >= 0 &&
+          Number.isInteger(rule.vouchers) && (rule.vouchers as number) >= 0 && (rule.vouchers as number) <= 100
+        )
       })
-    if (!valid) return { success: false, error: 'Pacchetti voucher non validi: punti e credito devono essere numeri interi positivi, con punti crescenti.' }
+    if (!valid) return { success: false, error: 'Qualifiche non valide: attivazioni crescenti, punti e voucher interi (massimo 100 voucher).' }
+  }
+  if ('black_plus_every' in settings) {
+    const every = settings.black_plus_every
+    if (!Number.isInteger(every) || (every as number) < 0 || (every as number) > 1000) return { success: false, error: 'Black continuo: numero di attivazioni non valido (0 = spento).' }
   }
   if (Object.keys(settings).length === 0) return { success: true }
   const rows = Object.entries(settings).map(([key, value]) => ({ key, value: JSON.stringify(value) }))
@@ -833,11 +842,11 @@ export async function getAdminFinancialSummary() {
   const { data: balances } = await db.from('profiles').select('voucher_credit_cents, network_points')
   const voucherCreditCents = (balances ?? []).reduce((sum, p) => sum + (p.voucher_credit_cents ?? 0), 0)
   const networkPointsOutstanding = (balances ?? []).reduce((sum, p) => sum + (p.network_points ?? 0), 0)
-  // Valore massimo dei punti: il pacchetto che rende di più per punto
-  const { data: packsRow } = await db.rpc('voucher_packs')
-  const packs = (Array.isArray(packsRow) ? packsRow : []) as { points: number; credit_eur: number }[]
-  const bestCentsPerPoint = packs.reduce((best, p) => Math.max(best, (p.credit_eur * 100) / p.points), 0)
-  const networkPointsMaxCents = Math.round(networkPointsOutstanding * bestCentsPerPoint)
+  // Valore massimo dei punti: oggi si possono solo donare all'associazione
+  // (i voucher arrivano con le qualifiche, non si comprano con i punti)
+  const { data: pointValueRow } = await db.from('system_settings').select('value').eq('key', 'donation_point_value_cents').maybeSingle()
+  const centsPerPoint = Number(String(pointValueRow?.value ?? '10').replace(/"/g, '')) || 10
+  const networkPointsMaxCents = Math.round(networkPointsOutstanding * centsPerPoint)
 
   // 8. Punti assegnati (registro)
   const { data: awards } = await db.from('network_point_awards').select('kind, points, reversed_at')

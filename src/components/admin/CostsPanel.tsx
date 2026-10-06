@@ -167,7 +167,7 @@ export default function CostsPanel() {
         <div className="rounded-xl border border-gray-200 bg-white p-5">
           <h3 className="font-bold text-gray-900">Impegni futuri</h3>
           <p className="mb-2 text-xs text-gray-500">Non sono ancora costi: lo diventano quando vengono usati o pagati.</p>
-          <Row label="KU Points ancora da convertire" value={eur(c.pointsMax)} hint={`${c.points} punti: valore massimo se tutti convertiti in voucher col pacchetto più conveniente`} />
+          <Row label="KU Points ancora da usare" value={eur(c.pointsMax)} hint={`${c.points} punti: valore massimo se tutti donati all'associazione`} />
           <Row label="Voucher creati e non ancora usati" value={eur(c.vouchersUnused)} />
           <Row label="Credito voucher non ancora speso" value={eur(c.voucherCredit)} />
           <Row label="Provvigioni agenti da pagare" value={eur(c.agentsDue)} />

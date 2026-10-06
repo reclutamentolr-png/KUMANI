@@ -35,7 +35,7 @@ export async function getDashboardNetworkData(
   // discendenti (nome e stato attivo; cognome e codice solo dei propri
   // invitati diretti, per gli altri il codice mascherato), lo sponsor (il KUMI) e
   // gli invitati diretti.
-  const [{ data: userNode }, { data: downlineRows, error: matrixError }, { data: sponsorData }, directSponsored, wallet, receivedRows] = await Promise.all([
+  const [{ data: userNode }, { data: downlineRows, error: matrixError }, { data: sponsorData }, directSponsored, wallet, receivedRows, { data: achievementRows }] = await Promise.all([
     tree ? supabase.from('matrix_nodes').select('*').eq('user_id', user.id).single() : Promise.resolve({ data: null, error: null }),
     tree ? supabase.rpc('get_my_downline') : Promise.resolve({ data: null, error: null }),
     supabase
@@ -50,6 +50,8 @@ export async function getDashboardNetworkData(
       : supabase
           .rpc('my_received_kumani')
           .then(({ data, error }) => (error ? [] : ((data ?? []) as { first_name: string | null; joined_at: string }[]))),
+    // Qualifiche raggiunte (il database le ricalcola e dà i voucher premio)
+    supabase.rpc('my_rank_achievements'),
   ])
   const downlineData = ((downlineRows ?? []) as Array<{
     id: string
@@ -146,11 +148,11 @@ export async function getDashboardNetworkData(
   const receivedKumani =
     receivedRows ?? receivedNodes.map((node) => ({ first_name: node.first_name ?? null, joined_at: node.created_at }))
 
-  // Qualifiche (solo badge): Punti Community guadagnati in totale, soglie
-  // dei pacchetti voucher
-  const { ranks, earnedTotal: networkPointsEarned } = wallet
-  const currentRank = getCurrentRank(networkPointsEarned, ranks)
-  const newlyAchievedRank = getNewlyAchievedRank(networkPointsEarned, profile?.qualifications_seen || [], ranks)
+  // Qualifiche: le registra il database (attivazioni pagate + KU Points)
+  const { ranks, earnedTotal: networkPointsEarned, activations: networkActivations } = wallet
+  const achievedKeys = ((achievementRows ?? []) as { rank_key: string }[]).map((row) => row.rank_key)
+  const currentRank = getCurrentRank(achievedKeys, ranks)
+  const newlyAchievedRank = getNewlyAchievedRank(achievedKeys, profile?.qualifications_seen || [], ranks)
   await claims
 
   const loginUrl = `${SITE_URL}/${locale}/login`
@@ -175,6 +177,9 @@ export async function getDashboardNetworkData(
     newlyAchievedRank,
     ranks,
     networkPointsEarned,
+    networkActivations,
+    achievedKeys,
+    blackPlusEvery: wallet.blackPlusEvery,
     loginUrl,
   }
 }

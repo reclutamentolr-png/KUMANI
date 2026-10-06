@@ -232,9 +232,9 @@
     "communityCard2Title": "Struttura Visuale a Matrice",
     "communityCard2Description": "La tua rete organizzata in una struttura chiara a 5 posizioni, con crescita automatica.",
     "communityCard3Title": "Classifica e Riconoscimenti",
-    "communityCard3Description": "Badge Kuman Green, Kuman Star e Kuman Black per chi costruisce una community sempre più attiva.",
+    "communityCard3Description": "Qualifiche Kuman Green, Kuman Star e Kuman Black, con voucher in premio, per chi costruisce una community sempre più attiva.",
     "communityTransparencyLead": "Riconoscimento, non reddito:",
-    "communityTransparencyRest": "la classifica e le qualifiche (Kuman Green, Kuman Star, Kuman Black) riflettono quanto è attiva la tua Community e restano badge di prestigio. I KU Points sono spendibili solo all’interno della piattaforma.",
+    "communityTransparencyRest": "la classifica e le qualifiche (Kuman Green, Kuman Star, Kuman Black) riflettono quanto è attiva la tua Community e danno voucher per attivare persone nuove, non denaro. I KU Points sono spendibili solo all’interno della piattaforma.",
     "aboutLink": "Chi siamo"
   },
   "authRegister": {
@@ -443,11 +443,11 @@
     "nextGoals": "Prossimi Obiettivi",
     "goalReachedIn": "{days, plural, =0 {🎉 Obiettivo raggiunto già il primo giorno!} one {🎉 Obiettivo raggiunto in # giorno!} other {🎉 Obiettivo raggiunto in # giorni!}}",
     "risingStar": "Kuman Green",
-    "risingStarDesc": "Raggiungi {points} KU Points guadagnati per il badge Kuman Green",
+    "risingStarDesc": "Servono {acts} attivazioni Base o Pro e {points} KU Points. Premio: {vouchers, plural, one {# voucher} other {# voucher}}.",
     "shiningStar": "Kuman Star",
-    "shiningStarDesc": "Raggiungi {points} KU Points guadagnati per il badge Kuman Star",
+    "shiningStarDesc": "Servono {acts} attivazioni Base o Pro e {points} KU Points. Premio: {vouchers, plural, one {# voucher} other {# voucher}}.",
     "diamondStar": "Kuman Black",
-    "diamondStarDesc": "Raggiungi {points} KU Points guadagnati per il badge Kuman Black",
+    "diamondStarDesc": "Servono {acts} attivazioni Base o Pro e {points} KU Points. Premio: {vouchers, plural, one {# voucher} other {# voucher}} e un anno di Pro per te.",
     "affiliates": "affiliati",
     "communityCardSubtitle": "La tua stella, i tuoi KUMANI e la classifica",
     "openCommunityCta": "Apri i dettagli della tua Community",
@@ -621,7 +621,16 @@
     "peoplePassGift": "Usa {service}: regalo tuo",
     "peoplePassUntil": "Pass attivo fino al {date}",
     "sendWhatsAppMoreServices": "Fagli scoprire gli altri servizi",
-    "whatsappPassMessage": "Ciao {name}! 👋 Sono {sponsorName}. Come ti trovi con {service}? Su KUMANI ci sono tanti altri servizi utili per la casa, i soldi e il lavoro: dai un’occhiata qui {url}"
+    "whatsappPassMessage": "Ciao {name}! 👋 Sono {sponsorName}. Come ti trovi con {service}? Su KUMANI ci sono tanti altri servizi utili per la casa, i soldi e il lavoro: dai un’occhiata qui {url}",
+    "missingBoth": "Per {rank} ti mancano {acts, plural, one {# attivazione} other {# attivazioni}} e {points} KU Points",
+    "missingActivations": "Per {rank} ti {acts, plural, one {manca # attivazione} other {mancano # attivazioni}}",
+    "missingPoints": "Per {rank} ti mancano {points} KU Points",
+    "rankRequirementLine": "{acts}/{actsTarget} attivazioni · {points}/{pointsTarget} KU Points",
+    "qualificationCongrats": "Complimenti, hai raggiunto la qualifica di {rank}!",
+    "qualificationVouchers": "Hai ricevuto {count, plural, one {# voucher per attivare un nuovo Kumano} other {# voucher per attivare nuovi Kumani}}",
+    "qualificationVouchersHint": "Li trovi nel tuo Wallet, nella sezione dei voucher, con le indicazioni per regalarli.",
+    "qualificationBlackExtra": "In più hai un voucher Pro di un anno tutto per te e da ora ricevi 1 voucher ogni {every} nuove attivazioni. Ti aspettano anche la vetrina nel Kumano del Giorno, l’invito all’evento annuale KUMANI e il Consiglio dei Black.",
+    "qualificationOpenWallet": "Vai ai tuoi voucher"
   },
   "memolife": {
     "memolife": "MemoLife",
@@ -970,7 +979,7 @@
     "backToListings": "Torna alla Bacheca",
     "myPoints": "I tuoi KU Karma:",
     "myNetworkPoints": "I tuoi KU Points:",
-    "networkPointsForShowcaseHint": "I KU Points servono per mettere gli annunci in vetrina e per i pacchetti voucher.",
+    "networkPointsForShowcaseHint": "I KU Points servono per mettere gli annunci in vetrina e contano per le qualifiche.",
     "listingCostDesc": "Ogni annuncio costa 10 punti (10 accessi giornalieri). Accedi ogni giorno per accumularli!",
     "newListing": "Nuovo Annuncio (10 punti)",
     "allListings": "Tutti ({count})",
@@ -2726,7 +2735,7 @@
     "pointsDisclaimer": "Si guadagnano ogni giorno con l’accesso alla piattaforma KUMANI e con l’uso degli strumenti dell’Ecosistema, che offrono un punto al giorno a chi li utilizza. Si potranno usare anche per altri scopi all’interno della piattaforma. Non convertibili in euro, non trasferibili.",
     "pointsCta": "Vai alla Bacheca Annunci",
     "networkPointsTitle": "KU Points",
-    "networkPointsDisclaimer": "Li ricevi quando una persona che hai invitato attiva l'abbonamento pagando con carta (Base o Pro), passa a Pro o acquista un singolo servizio (Pass), e con il Bonus Accoglienza. Si usano per i pacchetti voucher e per la vetrina degli annunci.",
+    "networkPointsDisclaimer": "Li ricevi quando una persona che hai invitato attiva l’abbonamento pagando con carta (Base o Pro), passa a Pro o acquista un singolo servizio (Pass), e con il Bonus Accoglienza. Contano per le qualifiche e si usano per la vetrina degli annunci e le donazioni.",
     "networkPointsCta": "Vai al Catalogo Premi",
     "badgeTitle": "Badge",
     "badgeEncourageFirst": "Condividi la piattaforma KUMANI e sarà più facile ottenere la tua prima qualifica.",
@@ -2761,7 +2770,7 @@
     "couponPdfBadge": "COUPON",
     "couponPdfFooter": "Codice fornito da Kumani. Verifica i termini d'uso presso il partner.",
     "couponRedeemError": "Non è stato possibile utilizzare il coupon. Riprova.",
-    "voucherTitle": "Punti Voucher Abbonamento",
+    "voucherTitle": "KU Points, qualifiche e voucher",
     "voucherIntro": "Quando raggiungi {points} KU Points puoi creare un voucher da inviare a un altro Kumano: una volta riscattato, attiva il suo abbonamento per un anno.",
     "voucherCreate": "Crea Voucher",
     "voucherNeedMore": "Ti mancano ancora {points} KU Points",
@@ -2794,7 +2803,11 @@
     "rewardFallbackTitle": "Premio",
     "eventAttendedBadge": "{count, plural, one {C'ero a # evento} other {C'ero a # eventi}}",
     "eventPassWaitlist": "In lista d'attesa",
-    "welcomeBonusReceived": "Ricevuti con il Bonus Accoglienza: {points}"
+    "welcomeBonusReceived": "Ricevuti con il Bonus Accoglienza: {points}",
+    "badgeActivations": "Attivazioni Base o Pro",
+    "badgeRequirement": "{acts} attivazioni · {points} punti",
+    "badgePrize": "Premio: {count, plural, one {# voucher} other {# voucher}}",
+    "badgeBlackNote": "Sei Kuman Black: ricevi 1 voucher ogni {every} nuove attivazioni. Grazie per far crescere la Community KUMANI!"
   },
   "rewards": {
     "title": "Catalogo Premi",
@@ -5901,7 +5914,7 @@
     "purposeGift": "Da regalare",
     "purposeSale": "Da vendere",
     "pricePlaceholder": "Prezzo di vendita in €, massimo {max} (facoltativo)",
-    "saleNote": "Dopo averlo creato, lo trovi qui sotto in «I tuoi voucher creati»: premi «Ricevuta» per prepararla. La vendita è tra te e l'acquirente e la gestisci tu, anche per gli eventuali obblighi fiscali.",
+    "saleNote": "Puoi anche vendere un voucher, a un prezzo non superiore al suo valore: premi «Ricevuta» per prepararla. La vendita è tra te e l’acquirente ed è sotto la tua responsabilità, anche per gli eventuali obblighi fiscali.",
     "createButton": "Crea voucher ({price})",
     "creditMissing": "Mancano {amount} di credito",
     "creditNotEnough": "Credito voucher insufficiente.",
@@ -5916,15 +5929,26 @@
     "rulesTitle": "Come guadagni i KU Points",
     "ruleBase": "Un tuo invitato attiva il piano Base con carta: +{points} punti",
     "rulePro": "Un tuo invitato attiva il piano Pro con carta: +{points} punti",
-    "ruleUpgrade": "Un tuo invitato passa da Base a Pro: +{points} punti",
+    "ruleUpgrade": "Un tuo invitato passa da Base a Pro: +{points} punti, in proporzione a quanto paga",
     "ruleSpillover": "Una persona invitata da un altro Kumano viene inserita nella tua stella e attiva l’abbonamento: +{points} punti (Bonus Accoglienza)",
     "cycleNote": "Ogni pacchetto si riscatta una volta per ciclo: quando li hai riscattati tutti, il ciclo ricomincia.",
     "cycleProgress": "Pacchetti riscattati in questo ciclo: {done} di {total}. Quando li riscatti tutti, il ciclo ricomincia.",
     "shareGiftMessage": "Ti regalo un voucher KUMANI: usa il codice {code} per attivare gratis il tuo abbonamento {plan} di un anno!",
     "shareSaleMessage": "Ecco il tuo voucher KUMANI: usa il codice {code} per attivare il tuo abbonamento {plan} di un anno.",
     "rulePass": "Un tuo invitato acquista un singolo servizio (Pass): i KU Points indicati per quel servizio",
-    "ruleWelcomeGive": "Dal {from}° tuo invitato attivato in poi, {base} punti del Base e {pro} del Pro vanno come Bonus Accoglienza a chi accoglie la persona nella sua stella",
-    "ruleWelcomeGet": "Una persona invitata da un altro Kumano entra nella tua stella e attiva l’abbonamento: +{base} punti con il Base, +{pro} con il Pro (Bonus Accoglienza)"
+    "ruleWelcomeGive": "Dal {from}° invitato attivato in poi, se la persona entra nella stella di un altro Kumano: con il Base {baseKeep} punti a te e {base} a chi la accoglie, con il Pro {proKeep} a te e {pro} a chi la accoglie",
+    "ruleWelcomeGet": "Una persona invitata da un altro Kumano entra nella tua stella e attiva l’abbonamento: +{base} punti con il Base, +{pro} con il Pro (Bonus Accoglienza)",
+    "vouchersAvailable": "Voucher da usare",
+    "qualificationsTitle": "Qualifiche e premi",
+    "qualificationRequirement": "{acts} attivazioni + {points} KU Points",
+    "qualificationPrize": "{count, plural, one {# voucher Base} other {# voucher Base}} per attivare nuovi Kumani",
+    "qualificationPrizeBlack": "+ 1 voucher Pro di un anno per te",
+    "qualificationsNote": "Contano le attivazioni Base o Pro pagate con carta dalle persone che hai invitato (non i Pass né le attivazioni con voucher) e tutti i KU Points guadagnati, anche quelli ricevuti dalla tua stella. Dopo Kuman Black: 1 voucher ogni {every} nuove attivazioni. I voucher arrivano da soli qui sotto.",
+    "noVouchers": "Ancora nessun voucher: arrivano da soli con la prima qualifica.",
+    "vouchersHowTo": "Regala un voucher a una persona nuova: lo inserisce nella registrazione, in «Hai un codice?», e ha un anno di KUMANI Base. Tu non puoi usarlo per te.",
+    "prizeFrom": "premio {rank}",
+    "prizeBlackPlus": "Black continuo",
+    "personalProHint": "Voucher Pro personale: puoi attivarlo per te qui sotto, in «Riscatta un voucher»."
   },
   "voucherReceipt": {
     "back": "Torna al Portafoglio",
@@ -6827,12 +6851,12 @@
     },
     "voucher": {
       "title": "Creare e usare i voucher",
-      "summary": "Trasforma i KU Points in voucher da regalare e attiva un voucher che hai ricevuto.",
+      "summary": "I voucher arrivano in premio con le qualifiche: regalali a persone nuove e attiva un voucher che hai ricevuto.",
       "cta": "Vai ai voucher",
-      "step1Title": "Riscatta un pacchetto di punti",
-      "step1Text": "Nel Wallet, nella sezione dei voucher, spendi i tuoi KU Points per riscattare un pacchetto: ricevi un credito in euro per creare voucher. Sotto ogni pacchetto vedi quanti punti ti mancano.",
-      "step2Title": "Crea un voucher",
-      "step2Text": "Con il credito scegli il piano (Base o Pro, un anno) e se il voucher è da regalare o da vendere, poi tocca «Crea voucher».",
+      "step1Title": "Raggiungi una qualifica",
+      "step1Text": "Con le attivazioni Base o Pro delle persone che hai invitato e i KU Points diventi Kuman Green, Star o Black: i voucher premio arrivano da soli nel Wallet, nella sezione dei voucher.",
+      "step2Title": "Regala un voucher",
+      "step2Text": "Copia il codice o mandalo su WhatsApp: chi lo riceve lo inserisce nella registrazione e ha un anno di KUMANI Base. Se lo vendi, prepara la ricevuta con «Ricevuta».",
       "step3Title": "Hai ricevuto un voucher?",
       "step3Text": "Scrivi il codice nel campo «Hai ricevuto un voucher?» e tocca «Riscatta»: il tuo abbonamento si attiva subito. Puoi anche inserirlo quando ti registri."
     },
@@ -6847,7 +6871,7 @@
       "step3Title": "Dona i tuoi KU Points",
       "step3Text": "Nella sezione Donazioni puoi donare i tuoi KU Points all’associazione sostenuta da KUMANI: ogni 10 punti donati = 1 €, che KUMANI versa all’associazione.",
       "step4Title": "I badge",
-      "step4Text": "I badge Kuman Green, Kuman Star e Kuman Black si sbloccano con i KU Points guadagnati in totale. La barra ti dice quanti punti mancano al prossimo.",
+      "step4Text": "Le qualifiche Kuman Green, Kuman Star e Kuman Black si raggiungono con le attivazioni delle persone che hai invitato e i KU Points, e danno voucher in premio. La barra ti dice quanto manca alla prossima.",
       "step5Title": "Ricevute, coupon e sconto sul rinnovo",
       "step5Text": "Più in basso trovi le Ricevute Digitali (piano Pro), i coupon ottenuti nell’Ecosistema e lo sconto sul rinnovo dell’abbonamento che puoi ottenere con i KU Karma."
     },
@@ -7718,13 +7742,13 @@
         "2": "Arrivano quando una persona che hai invitato attiva l’abbonamento o un singolo servizio, e con il Bonus Accoglienza.",
         "3": {
           "1": "Voucher per l’abbonamento di un altro Kumano",
-          "2": "Pacchetti voucher",
+          "2": "Voucher premio delle qualifiche",
           "3": "Vetrina per i tuoi annunci",
           "4": "Donazioni all’associazione"
         }
       },
       "note": "I punti si maturano solo usando la piattaforma e si spendono solo al suo interno, secondo il Regolamento pubblico. Non sono denaro.",
-      "notes": "Ci sono due tipi di punti. I KU Karma si maturano usando i servizi ogni giorno e danno, per esempio, uno sconto sul rinnovo. I KU Points arrivano quando una persona invitata attiva l’abbonamento o un singolo servizio, e con il Bonus Accoglienza: si usano per i voucher, la vetrina degli annunci e le donazioni. Importante: non sono denaro e non si convertono in soldi."
+      "notes": "Ci sono due tipi di punti. I KU Karma si maturano usando i servizi ogni giorno e danno, per esempio, uno sconto sul rinnovo. I KU Points arrivano quando una persona invitata attiva l’abbonamento o un singolo servizio, e con il Bonus Accoglienza: contano per le qualifiche, che danno voucher in premio, e si usano per la vetrina degli annunci e le donazioni. Importante: non sono denaro e non si convertono in soldi."
     },
     "s13": {
       "title": "Condividi KUMANI, senza pressioni",
@@ -7743,10 +7767,10 @@
         },
         "3": {
           "1": "Riconoscimento, non reddito",
-          "2": "Badge Kuman Green, Kuman Star e Kuman Black mostrano quanto è attiva la tua Community."
+          "2": "Le qualifiche Kuman Green, Kuman Star e Kuman Black premiano con voucher chi fa crescere la Community."
         }
       },
-      "notes": "Chi vuole può condividere KUMANI con un link personale. La rete si vede come una stella a cinque posizioni: in oro le persone che hai invitato tu, in azzurro quelle accolte dagli altri Kumani. Dal sesto invitato in poi, chi invita cede una piccola parte dei suoi punti come Bonus Accoglienza a chi accoglie la persona nella propria stella. I badge sono un riconoscimento, non un reddito."
+      "notes": "Chi vuole può condividere KUMANI con un link personale. La rete si vede come una stella a cinque posizioni: in oro le persone che hai invitato tu, in azzurro quelle accolte dagli altri Kumani. Dal sesto invitato in poi, chi invita cede una piccola parte dei suoi punti come Bonus Accoglienza a chi accoglie la persona nella propria stella. Le qualifiche danno voucher per attivare persone nuove, non denaro."
     },
     "s14": {
       "eyebrow": "KUMANI PER IL SOCIALE",

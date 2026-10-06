@@ -211,11 +211,13 @@ export type AdminSystemSettings = {
   welcome_bonus_from_direct: number
   activity_thanks_points: number
   pro_invite_extra_points: number
-  // Nuovo sistema Punti Community (20261203100000_network_points_v2.sql)
+  // KU Points per attivazione e passaggio a Pro
   network_points_activation_base: number
   network_points_activation_pro: number
   network_points_upgrade_pro: number
-  voucher_packs: { points: number; credit_eur: number }[]
+  // Qualifiche e voucher premio (20270113100000_ku_points_qualifications_v3.sql)
+  qualifications: { key: string; activations: number; points: number; vouchers: number }[]
+  black_plus_every: number
   voucher_value_base_eur: number
   voucher_value_pro_eur: number
   pro_trial_days: number

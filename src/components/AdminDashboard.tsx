@@ -357,19 +357,20 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     maintenance_message: 'Sito in manutenzione. Torna presto!',
     matrix_slot_bonus_points: 0,
     matrix_spillover_bonus_points: 0,
-    welcome_bonus_base: 5,
+    welcome_bonus_base: 1,
     welcome_bonus_pro: 10,
     welcome_bonus_from_direct: 6,
     activity_thanks_points: 0,
     pro_invite_extra_points: 0,
-    network_points_activation_base: 49,
-    network_points_activation_pro: 122,
-    network_points_upgrade_pro: 60,
-    voucher_packs: [
-      { points: 294, credit_eur: 49 },
-      { points: 1800, credit_eur: 294 },
-      { points: 5500, credit_eur: 980 },
+    network_points_activation_base: 10,
+    network_points_activation_pro: 120,
+    network_points_upgrade_pro: 110,
+    qualifications: [
+      { key: 'rising_star', activations: 6, points: 60, vouchers: 1 },
+      { key: 'shining_star', activations: 36, points: 360, vouchers: 6 },
+      { key: 'diamond_star', activations: 108, points: 1080, vouchers: 18 },
     ],
+    black_plus_every: 6,
     voucher_value_base_eur: 49,
     voucher_value_pro_eur: 149,
     pro_trial_days: 15,
@@ -2072,8 +2073,8 @@ L'accesso viene registrato.`)) return
             Voucher Abbonamento
           </h2>
           <p className="text-gray-600 mt-1">
-            I Kumani creano questi voucher spendendo 49 KU Points; qui puoi anche generarne direttamente in qualità di
-            amministratore (gratis, nessun punto scalato) o caricare KU Karma a un utente.
+            I Kumani ricevono questi voucher in premio con le qualifiche (Kuman Green, Star e Black); qui puoi anche
+            generarne direttamente in qualità di amministratore (gratis) o caricare KU Karma a un utente.
           </p>
         </div>
 
@@ -2685,7 +2686,6 @@ L'accesso viene registrato.`)) return
           <Card detail="vouchers" title="Voucher della community" subtitle="Servizi dati senza incasso, a prezzo di listino">
             <Row label="Voucher Kumani usati" value={eur(f.kumanoVouchers.redeemedCents)} hint={`${f.kumanoVouchers.redeemedCount} voucher`} />
             <Row label="Voucher Kumani non ancora usati" value={eur(f.kumanoVouchers.activeCents)} hint={`${f.kumanoVouchers.activeCount} voucher in circolazione`} />
-            <Row label="Credito voucher non ancora speso" value={eur(f.voucherCreditCents)} />
             <Row label="Voucher omaggio dello Staff usati" value={eur(f.staffGifts.redeemedCents)} hint={`${f.staffGifts.redeemedCount} voucher`} />
             <Row label="Servizi già dati (usati)" value={eur(f.giftedServicesCents)} strong />
           </Card>
@@ -2707,7 +2707,7 @@ L'accesso viene registrato.`)) return
             <Row
               label="Punti ancora da spendere"
               value={`${f.networkPointsOutstanding} punti`}
-              hint={`Valgono al massimo ${eur(f.networkPointsMaxCents)} di voucher, col pacchetto più conveniente`}
+              hint={`Si possono solo donare all'associazione: al massimo ${eur(f.networkPointsMaxCents)}`}
               strong
             />
           </Card>
@@ -3035,7 +3035,7 @@ L'accesso viene registrato.`)) return
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-[var(--gold)]/30 bg-[var(--gold-pale)] px-5 py-3">
           <Coins className="h-5 w-5 text-[var(--ink)]" />
           <h3 className="text-base font-bold text-[var(--ink)]">KU Points e voucher</h3>
-          <span className="text-xs text-gray-600">punti, pacchetti, badge e vetrina</span>
+          <span className="text-xs text-gray-600">punti, qualifiche, voucher premio e vetrina</span>
         </div>
         <div className="space-y-6 p-5">
           <div>
@@ -3045,11 +3045,11 @@ L'accesso viene registrato.`)) return
             </label>
             <p className="text-xs text-gray-500 mb-3">
               Punti assegnati <strong>solo allo sponsor diretto</strong> quando un suo invitato paga con carta: primo
-              abbonamento Base o Pro, oppure passaggio da Base a Pro. Voucher e rinnovi non danno punti; un rimborso li
-              toglie. <strong>Bonus Accoglienza:</strong> dal N° invitato attivato in poi, una parte dei punti dello sponsor
-              passa a chi accoglie la persona nella propria stella (un altro Kumano). Non è un costo in più per KUMANI: lo
-              cede lo sponsor (es. Base 49 → 44 allo sponsor + 5 di Bonus Accoglienza; Pro 122 → 112 + 10). Le prime
-              attivazioni di ogni Kumano restano piene.
+              abbonamento Base o Pro, oppure passaggio da Base a Pro (in proporzione a quanto pagato). Voucher e rinnovi
+              non danno punti; un rimborso li toglie. <strong>Bonus Accoglienza:</strong> dal N° invitato attivato in poi,
+              una parte dei punti dello sponsor passa a chi accoglie la persona nella propria stella (un altro Kumano):
+              Base 10 → 9 allo sponsor + 1; Pro 120 → 110 + 10. Nel passaggio a Pro di una persona accolta, la stessa
+              proporzione (101 + 9). Non è un costo in più per KUMANI: lo cede lo sponsor.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-3xl">
               <label className="block max-w-xs">
@@ -3057,7 +3057,7 @@ L'accesso viene registrato.`)) return
                 <input
                   type="number"
                   min="0"
-                  value={systemSettings.network_points_activation_base ?? 49}
+                  value={systemSettings.network_points_activation_base ?? 10}
                   onChange={(e) => setSystemSettings({ ...systemSettings, network_points_activation_base: parseInt(e.target.value, 10) || 0 })}
                   className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
                 />
@@ -3067,7 +3067,7 @@ L'accesso viene registrato.`)) return
                 <input
                   type="number"
                   min="0"
-                  value={systemSettings.network_points_activation_pro ?? 122}
+                  value={systemSettings.network_points_activation_pro ?? 120}
                   onChange={(e) => setSystemSettings({ ...systemSettings, network_points_activation_pro: parseInt(e.target.value, 10) || 0 })}
                   className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
                 />
@@ -3077,7 +3077,7 @@ L'accesso viene registrato.`)) return
                 <input
                   type="number"
                   min="0"
-                  value={systemSettings.network_points_upgrade_pro ?? 60}
+                  value={systemSettings.network_points_upgrade_pro ?? 110}
                   onChange={(e) => setSystemSettings({ ...systemSettings, network_points_upgrade_pro: parseInt(e.target.value, 10) || 0 })}
                   className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
                 />
@@ -3100,7 +3100,7 @@ L'accesso viene registrato.`)) return
                 <input
                   type="number"
                   min="0"
-                  value={systemSettings.welcome_bonus_base ?? 5}
+                  value={systemSettings.welcome_bonus_base ?? 1}
                   onChange={(e) => setSystemSettings({ ...systemSettings, welcome_bonus_base: parseInt(e.target.value, 10) || 0 })}
                   className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
                 />
@@ -3118,56 +3118,56 @@ L'accesso viene registrato.`)) return
             </div>
             <p className="mt-2 text-xs text-gray-500">
               Esempio con i valori attuali: dal {systemSettings.welcome_bonus_from_direct ?? 6}° invitato lo sponsor riceve{' '}
-              {(systemSettings.network_points_activation_base ?? 49) - (systemSettings.welcome_bonus_base ?? 5)} punti per un Base e{' '}
-              {(systemSettings.network_points_activation_pro ?? 122) - (systemSettings.welcome_bonus_pro ?? 10)} per un Pro; chi accoglie riceve{' '}
-              {systemSettings.welcome_bonus_base ?? 5} e {systemSettings.welcome_bonus_pro ?? 10}.
+              {(systemSettings.network_points_activation_base ?? 10) - (systemSettings.welcome_bonus_base ?? 1)} punti per un Base e{' '}
+              {(systemSettings.network_points_activation_pro ?? 120) - (systemSettings.welcome_bonus_pro ?? 10)} per un Pro; chi accoglie riceve{' '}
+              {systemSettings.welcome_bonus_base ?? 1} e {systemSettings.welcome_bonus_pro ?? 10}.
             </p>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
               <GitBranch className="w-4 h-4" />
-              Pacchetti voucher e qualifiche
+              Qualifiche e voucher premio
             </label>
             <p className="text-xs text-gray-500 mb-3">
-              Il Kumano spende i punti del pacchetto e riceve un credito in euro, con cui crea voucher Base o Pro (da
-              regalare o vendere). I pacchetti si possono riscattare più volte. Le stesse soglie, sui punti guadagnati in
-              totale, danno i badge Kuman Green, Star e Black (nessun premio collegato).
+              Una qualifica si raggiunge con <strong>entrambi</strong> i requisiti: attivazioni Base/Pro pagate con carta
+              delle persone invitate (i Pass e le attivazioni con voucher non contano) e KU Points guadagnati in totale
+              (compresi quelli ricevuti dalla struttura e dai Pass). Al raggiungimento arrivano da soli nel Wallet i voucher
+              Base di premio; con Kuman Black anche un voucher Pro di un anno per sé. Se un rimborso fa perdere i requisiti,
+              i voucher premio non ancora usati vengono annullati.
             </p>
-            <div className="space-y-2 max-w-xl">
-              {(Array.isArray(systemSettings.voucher_packs) ? systemSettings.voucher_packs : []).map((pack, index) => (
-                <div key={index} className="grid grid-cols-[auto_1fr_1fr] items-end gap-3">
-                  <span className="pb-3 text-xs font-bold text-gray-500">{['Kuman Green', 'Kuman Star', 'Kuman Black'][index] ?? `#${index + 1}`}</span>
-                  <label className="block">
-                    <span className="mb-1 block text-xs font-medium text-gray-600">Punti</span>
-                    <input
-                      type="number"
-                      min="1"
-                      value={pack.points}
-                      onChange={(e) => {
-                        const packs = [...systemSettings.voucher_packs]
-                        packs[index] = { ...pack, points: parseInt(e.target.value, 10) || 0 }
-                        setSystemSettings({ ...systemSettings, voucher_packs: packs })
-                      }}
-                      className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
-                    />
-                  </label>
-                  <label className="block">
-                    <span className="mb-1 block text-xs font-medium text-gray-600">Credito voucher (€)</span>
-                    <input
-                      type="number"
-                      min="1"
-                      value={pack.credit_eur}
-                      onChange={(e) => {
-                        const packs = [...systemSettings.voucher_packs]
-                        packs[index] = { ...pack, credit_eur: parseInt(e.target.value, 10) || 0 }
-                        setSystemSettings({ ...systemSettings, voucher_packs: packs })
-                      }}
-                      className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
-                    />
-                  </label>
+            <div className="space-y-2 max-w-2xl">
+              {(Array.isArray(systemSettings.qualifications) ? systemSettings.qualifications : []).map((rule, index) => (
+                <div key={rule.key} className="grid grid-cols-[7rem_1fr_1fr_1fr] items-end gap-3">
+                  <span className="pb-3 text-xs font-bold text-gray-500">{['Kuman Green', 'Kuman Star', 'Kuman Black'][index] ?? rule.key}</span>
+                  {(['activations', 'points', 'vouchers'] as const).map((field) => (
+                    <label key={field} className="block">
+                      <span className="mb-1 block text-xs font-medium text-gray-600">{field === 'activations' ? 'Attivazioni' : field === 'points' ? 'KU Points' : 'Voucher premio'}</span>
+                      <input
+                        type="number"
+                        min="0"
+                        value={rule[field]}
+                        onChange={(e) => {
+                          const rules = [...systemSettings.qualifications]
+                          rules[index] = { ...rule, [field]: parseInt(e.target.value, 10) || 0 }
+                          setSystemSettings({ ...systemSettings, qualifications: rules })
+                        }}
+                        className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                      />
+                    </label>
+                  ))}
                 </div>
               ))}
             </div>
+            <label className="mt-4 block max-w-xs">
+              <span className="mb-1 block text-xs font-medium text-gray-600">Black continuo: 1 voucher ogni N nuove attivazioni (0 = spento)</span>
+              <input
+                type="number"
+                min="0"
+                value={systemSettings.black_plus_every ?? 6}
+                onChange={(e) => setSystemSettings({ ...systemSettings, black_plus_every: parseInt(e.target.value, 10) || 0 })}
+                className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+              />
+            </label>
             <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl">
               <label className="block max-w-xs">
                 <span className="mb-1 block text-xs font-medium text-gray-600">Valore voucher Base (€)</span>
