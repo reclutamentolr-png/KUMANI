@@ -218,6 +218,9 @@ export async function deferNetworkClaims(supabase: SupabaseClient) {
     })
     try {
       await claimNetworkBonuses(client)
+      // Qualifiche e premi ricalcolati dopo aver mostrato la pagina
+      // (my_rank_achievements ora legge soltanto)
+      await client.rpc('refresh_my_qualifications')
     } catch (error) {
       console.error('[deferNetworkClaims]', error)
     }
