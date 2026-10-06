@@ -413,13 +413,17 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
               })}
             </div>
 
-            <p className="mt-3 text-xs leading-5 text-[var(--muted)]">
-              {achievements.has(ranks[ranks.length - 1].key)
-                ? t('badgeBlackNote', { every: networkWallet.blackPlusEvery })
-                : currentRank
-                  ? t('badgeEncourageNext')
-                  : t('badgeEncourageFirst')}
-            </p>
+            {achievements.has(ranks[ranks.length - 1].key) ? (
+              // Kuman Black: messaggio in evidenza, nero e oro
+              <div className="mt-4 flex items-center gap-3 rounded-2xl bg-gradient-to-r from-gray-950 via-gray-900 to-gray-800 px-4 py-3.5 shadow-[0_10px_30px_rgba(0,0,0,0.25)] ring-1 ring-[var(--gold)]/50">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[var(--gold)]/15 ring-1 ring-[var(--gold-bright)]/60">
+                  <Crown className="h-6 w-6 text-[var(--gold-bright)]" />
+                </span>
+                <p className="text-sm font-bold leading-6 text-[var(--gold-bright)] sm:text-base">{t('badgeBlackNote', { every: networkWallet.blackPlusEvery })}</p>
+              </div>
+            ) : (
+              <p className="mt-3 text-xs leading-5 text-[var(--muted)]">{currentRank ? t('badgeEncourageNext') : t('badgeEncourageFirst')}</p>
+            )}
             <Link
               href="/dashboard/rete"
               className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]"
