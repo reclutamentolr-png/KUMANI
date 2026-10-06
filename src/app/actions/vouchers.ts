@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
+import { getSessionUser } from '@/lib/session'
 
 const db = () =>
   createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
@@ -88,10 +89,9 @@ export type MyVoucher = {
 
 /** I voucher dell'utente: quelli creati e quelli ricevuti in premio. */
 export async function listMyVouchers(): Promise<MyVoucher[]> {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  // Utente verificato (getUser), letto una volta sola per richiesta: dal
+  // Wallet è lo stesso della pagina; chiamata dal browser lo rilegge.
+  const user = await getSessionUser()
   if (!user) return []
 
   // Letti col servizio, sempre filtrati sui voucher dell'utente
@@ -100,6 +100,7 @@ export async function listMyVouchers(): Promise<MyVoucher[]> {
     .select('id, code, status, created_at, redeemed_at, plan, purpose, sale_price_cents, buyer_name, prize_key, created_by')
     .or(`created_by.eq.${user.id},holder_id.eq.${user.id}`)
     .order('created_at', { ascending: false })
+    .limit(200)
 
   return ((data ?? []) as (Omit<MyVoucher, 'personal'> & { created_by: string })[]).map(({ created_by, ...v }) => ({ ...v, personal: created_by !== user.id }))
 }

@@ -1,6 +1,5 @@
 import createMiddleware from 'next-intl/middleware';
 import { createServerClient } from '@supabase/ssr';
-import type { User } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
 import { readProxySettings } from './lib/enabledLocalesCore';
@@ -85,16 +84,20 @@ async function proxySettings(): Promise<ProxySettings> {
   }
 }
 
+// Utente letto dal token della sessione (id e ruolo scritto dal server in
+// app_metadata, che è dentro il token firmato).
+type SessionUser = { id: string; app_metadata?: { role?: string } };
+
 const LOCALE_COOKIE = { path: '/', maxAge: 60 * 60 * 24 * 365, sameSite: 'lax' as const };
 
 // Anteprima delle lingue spente: traduttori (ruolo nell'account) e Staff.
 // Si controlla solo quando si apre una lingua spenta (caso raro).
 async function canPreviewHiddenLocales(
   supabase: ReturnType<typeof createServerClient>,
-  user: User | null
+  user: SessionUser | null
 ): Promise<boolean> {
   if (!user) return false;
-  if ((user.app_metadata as { role?: string } | undefined)?.role === 'translator') return true;
+  if (user.app_metadata?.role === 'translator') return true;
   const [{ data: profile }, { data: staff }] = await Promise.all([
     supabase.from('profiles').select('is_admin').eq('id', user.id).maybeSingle(),
     supabase.from('admin_users').select('user_id').eq('user_id', user.id).maybeSingle(),
@@ -142,9 +145,22 @@ export async function proxy(request: NextRequest) {
     }
   );
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // getClaims verifica il token in locale (chiavi di firma asimmetriche) e,
+  // come getUser, rinnova la sessione scaduta scrivendo i cookie; con chiavi
+  // simmetriche ricade da solo sulla chiamata a Supabase Auth. Senza alcun
+  // cookie di Supabase (sb-…) non c'è sessione: si salta del tutto.
+  let user: SessionUser | null = null;
+  if (request.cookies.getAll().some((c) => c.name.startsWith('sb-'))) {
+    try {
+      const { data } = await supabase.auth.getClaims();
+      const claims = data?.claims;
+      if (claims?.sub) {
+        user = { id: claims.sub, app_metadata: claims.app_metadata as SessionUser['app_metadata'] };
+      }
+    } catch {
+      user = null;
+    }
+  }
 
   // Lingua spenta dall'Admin nell'indirizzo (/de/...): stessa pagina in
   // italiano. Lo Staff e i traduttori la vedono lo stesso (anteprima).
@@ -159,7 +175,7 @@ export async function proxy(request: NextRequest) {
   // Traduttori (account creati dall'Admin, ruolo scritto dal server
   // nell'account): vedono solo l'Area Traduttori, niente dashboard né
   // servizi. Nessuna lettura in più: il ruolo arriva con l'utente.
-  if (user && (user.app_metadata as { role?: string } | undefined)?.role === 'translator') {
+  if (user && user.app_metadata?.role === 'translator') {
     const segments = request.nextUrl.pathname.split('/').filter(Boolean);
     const hasLocale = !!segments[0] && locales.includes(segments[0]);
     const localePrefix = hasLocale ? `/${segments[0]}` : '';
@@ -171,7 +187,7 @@ export async function proxy(request: NextRequest) {
 
   // Agenti venditori: la loro area e i servizi (piano Pro incluso), niente
   // dashboard, rete o servizi della community (nessun contatto con i Kumani)
-  if (user && (user.app_metadata as { role?: string } | undefined)?.role === 'agent') {
+  if (user && user.app_metadata?.role === 'agent') {
     const segments = request.nextUrl.pathname.split('/').filter(Boolean);
     const hasLocale = !!segments[0] && locales.includes(segments[0]);
     const localePrefix = hasLocale ? `/${segments[0]}` : '';
@@ -200,7 +216,12 @@ export async function proxy(request: NextRequest) {
   }
   const accessCheck =
     user && toolName
-      ? supabase.rpc('can_use_tool', { p_tool: toolName }).maybeSingle<{ allowed: boolean; required_plan: string; known: boolean }>()
+      ? supabase
+          .rpc('can_use_tool', { p_tool: toolName })
+          .maybeSingle<{ allowed: boolean; required_plan: string; known: boolean }>()
+          // .then fa partire davvero la richiesta adesso (le query di
+          // Supabase partono solo quando vengono attese)
+          .then((r) => r)
       : null;
 
   // Manutenzione (Admin → Impostazioni): vale davvero, non solo a schermo.
@@ -246,6 +267,8 @@ export async function proxy(request: NextRequest) {
         // Kordata, Bacheca e chat spente dallo Staff restano consultabili in
         // sola lettura (la pagina mostra il banner "sospeso", le scritture
         // sono bloccate dal database): si passa se il motivo è solo lo spegnimento.
+        // Le due letture qui sotto sono alternative (piano 'free' oppure
+        // no), quindi al più una: non c'è nulla da mettere in parallelo.
         if (READ_ONLY_WHEN_OFF.includes(toolName) && access.required_plan === 'free') {
           const { data: online } = await supabase.rpc('tool_online', { p_tool: toolName });
           if (online === false) return response;

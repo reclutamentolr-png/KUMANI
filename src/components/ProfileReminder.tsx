@@ -63,6 +63,17 @@ function markComplete() {
   }
 }
 
+// Nessun cookie di sessione di Supabase (sb-…, leggibili dal browser): chi
+// non ha fatto l'accesso non viene chiesto al server a ogni cambio pagina.
+// Appena entra il cookie c'è e il controllo riparte da solo.
+function mayBeSignedIn() {
+  try {
+    return document.cookie.split(';').some((c) => c.trim().startsWith('sb-'))
+  } catch {
+    return true
+  }
+}
+
 export function resetProfileReminder() {
   try {
     sessionStorage.removeItem(STORAGE_KEY)
@@ -84,8 +95,10 @@ export default function ProfileReminder() {
   const isExempt = isExemptPath(pathname)
   const blocking = !!profile && !isExempt && (dismissed || (dismissedOnPath !== null && dismissedOnPath !== pathname))
 
-  // Si chiede al server a ogni cambio pagina finché non si sa che il profilo
-  // è completo (così funziona anche subito dopo il login, senza ricaricare).
+  // Si chiede al server cambiando pagina finché non si sa se il profilo è
+  // completo (così funziona anche subito dopo il login, senza ricaricare):
+  // una volta saputo non si chiede più (completo: segnato nella sessione;
+  // incompleto: resta qui). Senza sessione nessuna richiesta.
   useEffect(() => {
     if (isExempt || profile) return
     try {
@@ -93,6 +106,7 @@ export default function ProfileReminder() {
     } catch {
       // Ignorato.
     }
+    if (!mayBeSignedIn()) return
     let cancelled = false
     getIncompleteProfile()
       .then((result) => {

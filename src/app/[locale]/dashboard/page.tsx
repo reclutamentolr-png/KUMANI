@@ -56,13 +56,29 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     redirect(`/${locale}/login`)
   }
 
+  // Profilo, rete e «Il tuo benessere di oggi» partono subito: la rete usa
+  // il profilo solo dopo le sue letture (gli passa la promessa).
+  const profilePromise = Promise.resolve(
+    supabase
+      .rpc('get_my_profile')
+      .maybeSingle<MyProfile>()
+      .then(({ data }) => data ?? null)
+  )
+  // La dashboard mostra solo un riepilogo della rete (il dettaglio è in
+  // /dashboard/rete), ma servono anche per i popup qualifiche/rinnovo.
+  const networkPromise = getDashboardNetworkData(supabase, user, profilePromise, locale, { tree: false, claims: 'skip' })
+  const wellnessPromise = Promise.resolve(supabase.rpc('wellness_path_today').then((r) => r))
+  // Se la pagina fallisce prima di attenderle, niente errori non gestiti
+  networkPromise.catch(() => {})
+  wellnessPromise.catch(() => {})
+
   // 2-3, 7-8. Richieste indipendenti tutte insieme (una alla volta la
   // dashboard impiegava secondi): ruolo admin, profilo completo (solo
   // tramite get_my_profile(): le colonne personali non sono leggibili
   // direttamente), messaggi non letti, piano e strumenti, preferiti.
-  const [adminRole, { data: profile }, unreadMessagesCount, access, favoriteToolNames, { count: landingUnread }, reviewOptions, lateSponsor, planPrices, { data: giftWelcome }] = await Promise.all([
+  const [adminRole, profile, unreadMessagesCount, access, favoriteToolNames, { count: landingUnread }, reviewOptions, lateSponsor, planPrices, { data: giftWelcome }] = await Promise.all([
     hasAdminRole(supabase, user.id),
-    supabase.rpc('get_my_profile').maybeSingle<MyProfile>(),
+    profilePromise,
     getUnreadMessagesCount(user.id),
     getMarketplaceAccessState(supabase, user.id),
     getFavoriteToolNames(supabase, user.id),
@@ -147,12 +163,10 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   // Anche solo Kumani Garage (es. con il Pass): le scadenze dell'auto
   const hasAgenda = agendaSources.memolife || agendaSources.spendly || agendaSources.lifeCalendar || isToolEnabled('garage')
 
-  // 4. Rete (serve il profilo), agenda, prova Pro e dati dell'Area
+  // 4. Rete (già partita), agenda, prova Pro e dati dell'Area
   //    Professionisti: anche queste insieme.
   const [network, agendaEvents, trial, stats, catalog, { data: wellnessToday }] = await Promise.all([
-    // La dashboard mostra solo un riepilogo della rete (il dettaglio è in
-    // /dashboard/rete), ma servono anche per i popup qualifiche/rinnovo.
-    getDashboardNetworkData(supabase, user, profile, locale, { tree: false, claims: 'skip' }),
+    networkPromise,
     hasAgenda
       ? loadAgenda(supabase, user.id, {
           from: agendaToday,
@@ -167,7 +181,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     // Tutti i servizi con lo stato per l'utente: preferiti, recenti e suggerimento
     getServicesCatalog(supabase, user.id, locale, { access, favorites: favoriteToolNames }),
     // «Il tuo benessere di oggi»: i tre passi e il bonus
-    supabase.rpc('wellness_path_today'),
+    wellnessPromise,
   ])
   const { newlyAchievedRank } = network
   // Bonus della rete: dopo aver mostrato la pagina

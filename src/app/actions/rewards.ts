@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { getSessionClient, getSessionUser } from '@/lib/session'
 
 /**
  * Redeems a catalog reward with network_points: the cost check, deduction
@@ -34,10 +35,8 @@ export async function redeemReward(rewardId: string) {
 
 /** The caller's own redemption history, for the "I miei premi" list. */
 export async function listMyRedemptions() {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  // Utente verificato (getUser), letto una volta sola per richiesta
+  const [supabase, user] = await Promise.all([getSessionClient(), getSessionUser()])
   if (!user) return []
 
   const { data } = await supabase
@@ -45,6 +44,7 @@ export async function listMyRedemptions() {
     .select('id, reward_id, points_spent, redeemed_at, fulfilled_at, reward_catalog(title, image_url)')
     .eq('user_id', user.id)
     .order('redeemed_at', { ascending: false })
+    .limit(100)
 
   return data || []
 }

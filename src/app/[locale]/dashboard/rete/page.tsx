@@ -30,19 +30,16 @@ const GOALS = [
 // here instead, reachable from the main dashboard's compact summary card.
 export default async function DashboardRetePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
-  const t = await getTranslations('dashboard')
-  const supabase = await createClient()
-
   // Utente letto una volta sola per la pagina e la sua intestazione
   preloadSession()
-  const user = await getSessionUser()
+  const [t, supabase, user] = await Promise.all([getTranslations('dashboard'), createClient(), getSessionUser()])
   if (!user) redirect(`/${locale}/login`)
 
   // Profilo completo (dati personali inclusi) solo tramite get_my_profile():
   // dal browser/sessione utente le colonne personali non sono più leggibili.
-  const profile = await getSessionProfile()
-
-  const network = await getDashboardNetworkData(supabase, user, profile, locale)
+  // La rete parte subito e usa il profilo solo dopo le sue letture.
+  const profilePromise = getSessionProfile()
+  const [network, profile] = await Promise.all([getDashboardNetworkData(supabase, user, profilePromise, locale), profilePromise])
   const {
     rootNode,
     activeDownlineForTree,
@@ -64,6 +61,7 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
     networkPendingActivations,
     networkPendingPoints,
     loginUrl,
+    achievements: achievementRows,
   } = network
 
   const shareUrl = `${SITE_URL}/${locale}/ref/${profile?.referral_code}`
@@ -75,10 +73,8 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
 
   // Qualifiche (badge) raggiunte, con i giorni dall'iscrizione: la data la
   // registra il database quando i Punti Community guadagnati superano la soglia.
-  const { data: achievementRows } = await supabase.rpc('my_rank_achievements')
-  const achievements = new Map(
-    ((achievementRows ?? []) as { rank_key: string; achieved_at: string; days: number }[]).map((row) => [row.rank_key, row])
-  )
+  // (Le stesse lette con la rete, non una seconda volta.)
+  const achievements = new Map(achievementRows.map((row) => [row.rank_key, row]))
 
   return (
     <div className="min-h-screen bg-[var(--background)]">

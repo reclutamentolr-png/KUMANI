@@ -21,13 +21,15 @@ export async function generateMetadata() {
 // chiari, con il lucchetto e dove si sbloccano.
 export default async function ServicesPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
-  const t = await getTranslations('hub')
-  const tiersT = await getTranslations('toolTiers')
-  const tc = await getTranslations('catalog')
-  const supabase = await createClient()
   // Utente letto una volta sola per la pagina e la sua intestazione
   preloadSession()
-  const user = await getSessionUser()
+  const [t, tiersT, tc, supabase, user] = await Promise.all([
+    getTranslations('hub'),
+    getTranslations('toolTiers'),
+    getTranslations('catalog'),
+    createClient(),
+    getSessionUser(),
+  ])
   if (!user) redirect(`/${locale}/login`)
 
   const [{ items, favorites, userPlan }, planPrices] = await Promise.all([getServicesCatalog(supabase, user.id, locale), getPlanPrices()])

@@ -17,7 +17,9 @@ import { getMyNetworkWallet } from './networkWallet'
 export async function getDashboardNetworkData(
   supabase: SupabaseClient,
   user: { id: string },
-  profile: MyProfile | null,
+  // Anche come promessa: il profilo serve solo dopo le letture, che così
+  // partono senza aspettarlo.
+  profileInput: MyProfile | null | Promise<MyProfile | null>,
   locale: string,
   // tree: albero completo della rete (solo la pagina "La mia rete"; la
   // dashboard mostra un riepilogo e non lo carica, altrimenti chi sta in
@@ -53,6 +55,7 @@ export async function getDashboardNetworkData(
     // Qualifiche raggiunte (il database le ricalcola e dà i voucher premio)
     supabase.rpc('my_rank_achievements'),
   ])
+  const profile = await profileInput
   const downlineData = ((downlineRows ?? []) as Array<{
     id: string
     user_id: string
@@ -151,7 +154,9 @@ export async function getDashboardNetworkData(
   // Qualifiche: le registra il database con attivazioni e KU Points
   // confermati (dopo i giorni del recesso); quelli in conferma si mostrano a parte
   const { ranks, confirmedPoints: networkPointsEarned, activations: networkActivations } = wallet
-  const achievedKeys = ((achievementRows ?? []) as { rank_key: string }[]).map((row) => row.rank_key)
+  // Con la data e i giorni dall'iscrizione (schede "Prossimi obiettivi")
+  const achievements = (achievementRows ?? []) as { rank_key: string; achieved_at: string; days: number }[]
+  const achievedKeys = achievements.map((row) => row.rank_key)
   const currentRank = getCurrentRank(achievedKeys, ranks)
   const newlyAchievedRank = getNewlyAchievedRank(achievedKeys, profile?.qualifications_seen || [], ranks)
   await claims
@@ -180,6 +185,7 @@ export async function getDashboardNetworkData(
     networkPointsEarned,
     networkActivations,
     achievedKeys,
+    achievements,
     blackPlusEvery: wallet.blackPlusEvery,
     networkPendingActivations: wallet.pendingActivations,
     networkPendingPoints: wallet.pendingPoints,

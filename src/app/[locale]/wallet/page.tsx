@@ -97,22 +97,25 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
 
   // Profilo completo (dati personali inclusi) solo tramite get_my_profile():
   // dal browser/sessione utente le colonne personali non sono più leggibili.
-  const profile = await getSessionProfile()
-  if (!profile) redirect(`/${locale}/dashboard`)
+  // Letto insieme alle altre letture (serve prima solo al KU Wallet).
+  const profilePromise = getSessionProfile()
 
   const couponQuery = (columns: string) =>
-    supabase.from('wallet_coupons').select(columns).eq('user_id', user.id).order('created_at', { ascending: false })
+    supabase.from('wallet_coupons').select(columns).eq('user_id', user.id).order('created_at', { ascending: false }).limit(100)
+  // Ricevute digitali: la pagina ne mostra solo i conteggi
+  const receiptCount = () => supabase.from('digital_receipts').select('id', { count: 'exact', head: true }).eq('user_id', user.id)
 
   // Tutte le letture del Wallet insieme (una alla volta la pagina impiegava
   // quasi due secondi): ognuna è indipendente dalle altre.
   const [
+    profile,
     kuWalletData,
     tku,
     networkWallet,
     { data: welcomeAwards },
     [donationSummary, myDonations, tdon],
     { data: achievementRows },
-    { data: receipts },
+    [{ count: receiptsPendingCount }, { count: receiptsConfirmedCount }, { count: receiptsReturnedCount }],
     coupons,
     [myPasses, marketplaceT, tp],
     myVouchers,
@@ -123,8 +126,9 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
     { data: fidelityCards },
     { data: receivedReceipts },
   ] = await Promise.all([
+    profilePromise,
     // Sconto sul rinnovo pagato in KU Karma (Gestione KU → 4), solo se attivo
-    loadKuWalletData(supabase, profile),
+    profilePromise.then((p) => (p ? loadKuWalletData(supabase, p) : null)),
     getTranslations('kuRewards'),
     // KU Points, attivazioni e regole delle qualifiche
     getMyNetworkWallet(supabase),
@@ -135,11 +139,12 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
     Promise.all([getPublicDonationSummary(), getMyDonations(), getTranslations('donations')]),
     // Data in cui ogni badge è stato raggiunto (registrata dal database)
     supabase.rpc('my_rank_achievements'),
-    supabase
-      .from('digital_receipts')
-      .select('id, object_name, template, confirmed_at, returned_at, created_at')
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false }),
+    // Ricevute in attesa, confermate (non restituite) e restituite
+    Promise.all([
+      receiptCount().is('confirmed_at', null),
+      receiptCount().not('confirmed_at', 'is', null).is('returned_at', null),
+      receiptCount().not('returned_at', 'is', null),
+    ]),
     // Senza la colonna dei pass (migrazione non ancora applicata) si legge come prima
     couponQuery('id, code, title, description, expires_at, redeemed_at, created_at, pass_tool').then(async (withPass) =>
       withPass.error ? (await couponQuery('id, code, title, description, expires_at, redeemed_at, created_at')).data : withPass.data
@@ -159,6 +164,7 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
     supabase.rpc('my_fidelity_cards'),
     supabase.rpc('my_received_receipts', { p_limit: 5 }),
   ])
+  if (!profile || !kuWalletData) redirect(`/${locale}/dashboard`)
 
   const fidelityList = (fidelityCards ?? []) as FidelityWalletCard[]
   const receivedList = (receivedReceipts ?? []) as ReceivedReceipt[]
@@ -174,10 +180,11 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
   const nextRank = ranks.find((rank) => !achievements.has(rank.key)) ?? null
   const nextMissing = nextRank ? await rankMissingText(nextRank, networkWallet.activations, networkWallet.confirmedPoints) : null
 
-  const receiptsList = receipts || []
-  const receiptsPending = receiptsList.filter((r) => !r.confirmed_at).length
-  const receiptsConfirmed = receiptsList.filter((r) => r.confirmed_at && !r.returned_at).length
-  const receiptsReturned = receiptsList.filter((r) => r.returned_at).length
+  const receiptsPending = receiptsPendingCount ?? 0
+  const receiptsConfirmed = receiptsConfirmedCount ?? 0
+  const receiptsReturned = receiptsReturnedCount ?? 0
+  // Ogni ricevuta rientra in almeno uno dei tre conteggi
+  const hasReceipts = receiptsPending + receiptsConfirmed + receiptsReturned > 0
 
   const couponsList = (coupons ?? []) as unknown as {
     id: string
@@ -502,7 +509,7 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
               </Link>
             </div>
           )}
-          {receiptsList.length === 0 ? (
+          {!hasReceipts ? (
             <p className="text-sm text-[var(--muted)]">{t('receiptsEmpty')}</p>
           ) : (
             <div className="mb-4 grid grid-cols-3 gap-3 text-center">

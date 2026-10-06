@@ -54,15 +54,16 @@ const mb = (n: number) => `${(n / 1024 / 1024).toFixed(1)} MB`
 // Documenti: "Doc KUMANI" (materiale ufficiale da scaricare, prima nella
 // lingua dell'utente) e "Doc Personali" (i documenti creati con i servizi).
 export default async function DocumentsPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
-  const locale = await getLocale()
-  const t = await getTranslations('documents')
-  const { tab } = await searchParams
-  const personal = tab === 'personali'
-
-  const supabase = await createClient()
   // Utente letto una volta sola per la pagina e la sua intestazione
   preloadSession()
-  const user = await getSessionUser()
+  const [locale, t, { tab }, supabase, user] = await Promise.all([
+    getLocale(),
+    getTranslations('documents'),
+    searchParams,
+    createClient(),
+    getSessionUser(),
+  ])
+  const personal = tab === 'personali'
   if (!user) redirect(`/${locale}/login`)
 
   const languageName = (code: string) => {
@@ -122,15 +123,15 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
   )
 
   async function kumaniTab() {
-    const [docs, published, flyerTitles, catalog, catalogT] = await Promise.all([
+    const [docs, published, flyerTitles, catalog, catalogT, flyersT] = await Promise.all([
       listKumaniDocuments(supabase),
       listPublishedFlyers(supabase),
       getFlyerTitles(),
       getCatalog(locale),
       getTranslations('catalog'),
+      getTranslations('flyers'),
     ])
     const flyers = FLYERS.filter((f) => published.has(f.tool))
-    const flyersT = await getTranslations('flyers')
     return (
       <section className="mt-6 space-y-4">
         <p className="text-sm text-[var(--muted)]">{t('kumaniIntro')}</p>
