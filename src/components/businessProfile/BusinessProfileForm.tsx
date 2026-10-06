@@ -9,6 +9,8 @@ import { saveBusinessProfile } from '@/app/actions/businessProfile'
 import { BUSINESS_SOCIALS, type BusinessProfile } from '@/lib/businessProfile'
 import { validateLogoFile, logoExtension } from '@/lib/quotes'
 import { resizeImageFile } from '@/lib/resizeImage'
+import VatCheck from '@/components/ecosystem/VatCheck'
+import IbanInlineCheck from '@/components/ecosystem/IbanInlineCheck'
 
 const INPUT =
   'w-full rounded-lg border-2 border-[var(--gold)]/20 px-3 py-2 text-sm focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30'
@@ -151,6 +153,7 @@ export default function BusinessProfileForm({ initial }: { initial: BusinessProf
         </Field>
         <Field label={t('vatNumber')}>
           <input className={INPUT} value={form.vatNumber} onChange={(e) => set('vatNumber', e.target.value)} />
+          <VatCheck value={form.vatNumber} onUseName={(name) => set('companyName', name)} />
         </Field>
         <Field label={t('pec')}>
           <input type="email" className={INPUT} value={form.pec} onChange={(e) => set('pec', e.target.value)} />
@@ -255,6 +258,7 @@ export default function BusinessProfileForm({ initial }: { initial: BusinessProf
 
       <Section icon={<Wallet className="h-5 w-5" />} title={t('paymentTitle')}>
         <textarea className={`${INPUT} min-h-20`} value={form.paymentInfo} maxLength={500} placeholder={t('paymentPlaceholder')} onChange={(e) => set('paymentInfo', e.target.value)} />
+        <IbanInlineCheck text={form.paymentInfo} />
       </Section>
 
       {error && (

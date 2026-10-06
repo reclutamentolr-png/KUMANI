@@ -3,8 +3,11 @@
 import { useState, useEffect, useRef } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
-import { X, Send, MessageCircle, Tag, Clock } from 'lucide-react'
+import { X, Send, MessageCircle, Tag, Clock, ShieldCheck, ShieldAlert, Mail, Link2 } from 'lucide-react'
+import LocalizedLink from '@/components/LocalizedLink'
 import type { ChatListing, ListingMessage } from '@/lib/listings'
+import { detectMessageSafety } from '@/lib/messageSafety'
+import { countryName } from '@/lib/iban'
 
 type ChatModalProps = {
   isOpen: boolean
@@ -18,6 +21,7 @@ type ChatModalProps = {
 
 export default function ChatModal({ isOpen, onClose, listing, currentUserId, receiverId, otherName }: ChatModalProps) {
   const t = useTranslations('chat')
+  const te = useTranslations('ecosystem')
   const locale = useLocale()
   // Il nome dell'altra persona: quello passato da chi apre la chat, oppure
   // l'autore dell'annuncio se è lui che riceve (mai "undefined")
@@ -189,10 +193,13 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
             <>
               {messages.map((msg) => {
                 const isMe = msg.sender_id === currentUserId
+                // Avvisi solo sui messaggi dell'altra persona: IBAN, email, link
+                const safety = isMe ? {} : detectMessageSafety(msg.content)
+                const hasSafety = !!(safety.iban || safety.email || safety.url)
                 return (
                   <div
                     key={msg.id}
-                    className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}
+                    className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}
                   >
                     <div
                       className={`max-w-[75%] p-3 rounded-2xl shadow-sm ${
@@ -211,6 +218,44 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
                         })}
                       </p>
                     </div>
+                    {hasSafety && (
+                      <div className="mt-1.5 max-w-[75%] space-y-1.5" title={te('chatSafetyHint')}>
+                        <div className="flex flex-wrap gap-1.5">
+                          {safety.iban && (
+                            <SafetyChip
+                              tone={safety.iban.valid ? 'ok' : 'bad'}
+                              icon={safety.iban.valid ? ShieldCheck : ShieldAlert}
+                              label={
+                                safety.iban.valid
+                                  ? te('chatSafetyIbanValid', { country: countryName(safety.iban.country ?? '', locale) })
+                                  : te('chatSafetyIbanInvalid')
+                              }
+                              href={`/marketplace/verifica-iban?iban=${encodeURIComponent(safety.iban.normalized)}`}
+                              action={te('chatSafetyCheck')}
+                            />
+                          )}
+                          {safety.email && (
+                            <SafetyChip
+                              tone="info"
+                              icon={Mail}
+                              label={te('chatSafetyEmail')}
+                              href={`/marketplace/checkmail?sender=${encodeURIComponent(safety.email)}`}
+                              action={te('chatSafetyCheck')}
+                            />
+                          )}
+                          {safety.url && (
+                            <SafetyChip
+                              tone="info"
+                              icon={Link2}
+                              label={te('chatSafetyLink')}
+                              href={`/marketplace/svat?url=${encodeURIComponent(safety.url)}`}
+                              action={te('chatSafetyCheck')}
+                            />
+                          )}
+                        </div>
+                        <p className="text-[11px] leading-4 text-[var(--muted)]">{te('chatSafetyHint')}</p>
+                      </div>
+                    )}
                   </div>
                 )
               })}
@@ -252,5 +297,37 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
         </div>
       </div>
     </div>
+  )
+}
+
+// Chip di sicurezza sotto un messaggio: esito breve + link «Controlla»
+// (in una nuova scheda, così la chat resta aperta)
+const CHIP_TONE = {
+  ok: 'border-emerald-200 bg-emerald-50 text-emerald-900',
+  bad: 'border-red-200 bg-red-50 text-red-900',
+  info: 'border-amber-200 bg-amber-50 text-amber-900',
+} as const
+
+function SafetyChip({
+  tone,
+  icon: Icon,
+  label,
+  href,
+  action,
+}: {
+  tone: keyof typeof CHIP_TONE
+  icon: typeof ShieldCheck
+  label: string
+  href: string
+  action: string
+}) {
+  return (
+    <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium ${CHIP_TONE[tone]}`}>
+      <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden />
+      {label}
+      <LocalizedLink href={href} target="_blank" rel="noopener" className="font-bold underline underline-offset-2 hover:no-underline">
+        {action}
+      </LocalizedLink>
+    </span>
   )
 }

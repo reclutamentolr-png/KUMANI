@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { ArrowRight, BookOpen, Lock, Search, Smartphone, X } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import FavoriteStarButton from '@/components/FavoriteStarButton'
+import QuickCheckBox from '@/components/ecosystem/QuickCheckBox'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 import { GROUP_STYLE, SERVICE_GROUPS } from '@/lib/serviceGroups'
 import type { ServiceItem } from '@/lib/servicesCatalog'
@@ -111,6 +112,8 @@ export default function ServicesBrowser({ items, favorites: initialFavorites }: 
                 {t(`group_${group}`)}
                 <span className="text-sm font-semibold text-[var(--muted)]">{items.length}</span>
               </h2>
+              {/* Sicurezza: un campo unico che porta allo strumento giusto */}
+              {group === 'security' && <QuickCheckBox />}
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {items.map((item) => (
                   <ServiceCard key={item.toolName} item={item} isFavorite={favorites.includes(item.toolName)} onToggle={onToggle} />

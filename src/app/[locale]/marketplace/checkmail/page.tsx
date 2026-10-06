@@ -6,7 +6,14 @@ import { createClient } from '@/lib/supabase/server'
 
 // KUMANI CheckMail (Sicurezza e Verifica, piano Base): la pagina è protetta
 // dal proxy come gli altri strumenti; qui solo le analisi rimaste oggi.
-export default async function CheckMailPage() {
+export default async function CheckMailPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  // ?sender= (es. dagli avvisi in chat): solo il mittente, l'analisi parte col click
+  const rawSender = (await searchParams).sender
+  const initialSender = (typeof rawSender === 'string' ? rawSender : '').replace(/[\x00-\x1f\x7f<>"`]/g, '').trim().slice(0, 200)
   const t = await getTranslations('checkmail')
   const tc = await getTranslations('common')
   const supabase = await createClient()
@@ -48,7 +55,7 @@ export default async function CheckMailPage() {
           </div>
         </div>
 
-        <CheckMailTool leftToday={status?.left_today ?? 0} dailyLimit={status?.daily_limit ?? 0} />
+        <CheckMailTool leftToday={status?.left_today ?? 0} dailyLimit={status?.daily_limit ?? 0} initialSender={initialSender} />
       </main>
     </div>
   )

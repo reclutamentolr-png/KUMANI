@@ -57,7 +57,7 @@ function LevelIcon({ level }: { level: SignalLevel }) {
   return <Info className="mt-0.5 h-5 w-5 shrink-0 text-sky-600" aria-hidden />
 }
 
-export default function IbanChecker() {
+export default function IbanChecker({ initialIban = '' }: { initialIban?: string }) {
   const t = useTranslations('verificaIban')
   const locale = useLocale()
   const inputId = useId()
@@ -66,8 +66,9 @@ export default function IbanChecker() {
   const inputRef = useRef<HTMLInputElement>(null)
   const awardedRef = useRef(false)
 
-  const [value, setValue] = useState('')
-  const [result, setResult] = useState<IbanResult | null>(null)
+  const [value, setValue] = useState(initialIban)
+  // IBAN arrivato dal link: esito mostrato subito (senza punto KU, serve il click)
+  const [result, setResult] = useState<IbanResult | null>(() => (initialIban ? validateIban(initialIban) : null))
   const [context, setContext] = useState<PaymentContext | null>(null)
   const [homeCountry, setHomeCountry] = useState('IT')
   const [copyState, setCopyState] = useState<'idle' | 'copied' | 'failed'>('idle')

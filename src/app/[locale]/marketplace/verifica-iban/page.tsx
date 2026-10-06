@@ -7,7 +7,15 @@ import IbanChecker from '@/components/verificaIban/IbanChecker'
 // incolla l'IBAN e si controlla che sia scritto correttamente, di che paese
 // è e se ci sono segnali sospetti. Tutto avviene nel browser: nessuna
 // chiamata di rete, nessun dato salvato.
-export default async function VerificaIbanPage() {
+export default async function VerificaIbanPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  // ?iban= (es. dagli avvisi in chat o dal box «Controlla»): solo lettere,
+  // cifre e spazi, al massimo 50 caratteri
+  const rawIban = (await searchParams).iban
+  const initialIban = (typeof rawIban === 'string' ? rawIban : '').replace(/[^A-Za-z0-9 ]/g, '').slice(0, 50).trim()
   const t = await getTranslations('verificaIban')
   const tm = await getTranslations('marketplace')
   const tc = await getTranslations('common')
@@ -47,7 +55,7 @@ export default async function VerificaIbanPage() {
           </div>
         </div>
 
-        <IbanChecker />
+        <IbanChecker initialIban={initialIban} />
 
         <p className="mt-6 text-center text-xs leading-5 text-[var(--muted)]">{t('privacy')}</p>
       </main>

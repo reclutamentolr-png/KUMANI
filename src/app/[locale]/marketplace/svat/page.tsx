@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { useState } from 'react'
+import { use, useState } from 'react'
 import ToolBackLink from '@/components/ToolBackLink'
 import {
   ArrowLeft,
@@ -81,11 +81,26 @@ function BadgeColor({ badge }: { badge: 'green' | 'yellow' | 'red' }) {
   }
 }
 
-export default function SVATPage() {
+// Precompilazione da link (?vat= o ?url=, es. dalla chat o dal box «Controlla»):
+// solo il campo, il controllo parte col click perché chiama servizi esterni
+function prefillFromParams(params: { [key: string]: string | string[] | undefined }): { tab: 'website' | 'vat'; value: string } {
+  const clean = (v: string | string[] | undefined) =>
+    (typeof v === 'string' ? v : '').replace(/[\x00-\x1f\x7f<>"`]/g, '').trim().slice(0, 200)
+  const vat = clean(params.vat)
+  if (vat) return { tab: 'vat', value: vat }
+  return { tab: 'website', value: clean(params.url) }
+}
+
+export default function SVATPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
   const t = useTranslations('svat')
   const commonT = useTranslations('common')
-  const [activeTab, setActiveTab] = useState<'website' | 'vat' | 'qr'>('website')
-  const [input, setInput] = useState('')
+  const prefill = prefillFromParams(use(searchParams))
+  const [activeTab, setActiveTab] = useState<'website' | 'vat' | 'qr'>(prefill.tab)
+  const [input, setInput] = useState(prefill.value)
   const [result, setResult] = useState<SVATResult | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)

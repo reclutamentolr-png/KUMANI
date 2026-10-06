@@ -15,6 +15,8 @@ import {
 } from '@/lib/quotes'
 import { useFromDashboardSuffix } from '@/lib/useFromDashboard'
 import QuoteClientQuickEditModal from '@/components/QuoteClientQuickEditModal'
+import VatCheck from '@/components/ecosystem/VatCheck'
+import IbanInlineCheck from '@/components/ecosystem/IbanInlineCheck'
 
 type IssuerSummary = {
   company_name: string | null
@@ -250,6 +252,7 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
                 onChange={(e) => setForm((prev) => ({ ...prev, clientVat: e.target.value }))}
                 className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
               />
+              <VatCheck value={form.clientVat} onUseName={(name) => setForm((prev) => ({ ...prev, clientName: name }))} />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">{t('clientPecField')}</label>
@@ -480,6 +483,7 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
             rows={3}
             className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
           />
+          <IbanInlineCheck text={form.paymentInfo} />
           {issuerPayment && form.paymentInfo.trim() !== issuerPayment && (
             <button
               type="button"

@@ -17,13 +17,22 @@ const LEVEL_STYLE = {
 // KUMANI CheckMail: l'utente carica il file dell'email, incolla il sorgente o
 // (dal telefono) scrive mittente e testo; il server risponde con punteggio di
 // rischio, segnali trovati e, se disponibile, il parere dell'IA.
-export default function CheckMailTool({ leftToday: initialLeft, dailyLimit }: { leftToday: number; dailyLimit: number }) {
+export default function CheckMailTool({
+  leftToday: initialLeft,
+  dailyLimit,
+  initialSender = '',
+}: {
+  leftToday: number
+  dailyLimit: number
+  initialSender?: string
+}) {
   const t = useTranslations('checkmail')
   const locale = useLocale()
-  const [mode, setMode] = useState<Mode>('file')
+  // Mittente arrivato dal link: si apre direttamente «Scrivi a mano»
+  const [mode, setMode] = useState<Mode>(initialSender ? 'quick' : 'file')
   const [file, setFile] = useState<File | null>(null)
   const [raw, setRaw] = useState('')
-  const [sender, setSender] = useState('')
+  const [sender, setSender] = useState(initialSender)
   const [subject, setSubject] = useState('')
   const [text, setText] = useState('')
   const [busy, setBusy] = useState(false)
