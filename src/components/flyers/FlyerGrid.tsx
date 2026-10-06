@@ -2,11 +2,14 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { ArrowRight, Search, X } from 'lucide-react'
+import { ArrowRight, ChevronDown, Search, X } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 
-// Elenco dei volantini con ricerca per nome del servizio (o area)
-type Item = { tool: string; title: string; category: string }
+// Elenco dei volantini raggruppati per area, in box da aprire, con ricerca
+// per nome del servizio (o area): cercando, i risultati si vedono tutti
+type Item = { tool: string; title: string; categoryKey: string; category: string }
+
+const CATEGORY_ORDER = ['pro', 'marketing', 'security', 'personal', 'lavoro', 'wellness', 'svago', 'community']
 
 const norm = (s: string) => s.toLocaleLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '')
 
@@ -15,6 +18,11 @@ export default function FlyerGrid({ items }: { items: Item[] }) {
   const [q, setQ] = useState('')
   const query = norm(q.trim())
   const shown = query ? items.filter((i) => norm(`${i.title} ${i.category} ${i.tool}`).includes(query)) : items
+  const keys = [...CATEGORY_ORDER, ...items.map((i) => i.categoryKey).filter((k) => !CATEGORY_ORDER.includes(k))]
+  const groups = [...new Set(keys)]
+    .map((key) => ({ key, items: items.filter((i) => i.categoryKey === key) }))
+    .filter((g) => g.items.length > 0)
+    .map((g) => ({ ...g, label: g.items[0].category }))
 
   return (
     <>
@@ -35,8 +43,9 @@ export default function FlyerGrid({ items }: { items: Item[] }) {
         )}
       </div>
       {shown.length === 0 && <p className="mt-4 text-sm text-[var(--muted)]">{t('noResults')}</p>}
-      <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-        {shown.map((f) => (
+      {query ? (
+        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          {shown.map((f) => (
           <Link
             key={f.tool}
             href={`/documenti/volantino/${f.tool}`}
@@ -50,8 +59,40 @@ export default function FlyerGrid({ items }: { items: Item[] }) {
               {t('preview')} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </span>
           </Link>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="mt-4 space-y-2">
+          {groups.map((g) => (
+            <details key={g.key} className="group/box rounded-2xl border border-[var(--gold)]/30 bg-white shadow-sm">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 [&::-webkit-details-marker]:hidden">
+                <span className="font-bold text-[var(--ink)]">{g.label}</span>
+                <span className="flex shrink-0 items-center gap-2 text-xs font-semibold text-[var(--muted)]">
+                  {g.items.length}
+                  <ChevronDown className="h-4 w-4 transition-transform group-open/box:rotate-180" />
+                </span>
+              </summary>
+              <div className="grid grid-cols-1 gap-3 border-t border-[var(--gold)]/20 p-3 sm:grid-cols-2">
+                {g.items.map((f) => (
+          <Link
+            key={f.tool}
+            href={`/documenti/volantino/${f.tool}`}
+            className="group flex items-center justify-between gap-3 rounded-2xl border border-[var(--gold)]/30 bg-white px-4 py-3 shadow-sm transition hover:border-[var(--gold)]"
+          >
+            <span className="min-w-0">
+              <span className="block truncate font-bold text-[var(--ink)]">{f.title}</span>
+              <span className="block truncate text-xs text-[var(--muted)]">{f.category}</span>
+            </span>
+            <span className="flex shrink-0 items-center gap-1 text-sm font-semibold text-[var(--gold)]">
+              {t('preview')} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </span>
+          </Link>
+                ))}
+              </div>
+            </details>
+          ))}
+        </div>
+      )}
     </>
   )
 }

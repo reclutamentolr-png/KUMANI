@@ -225,7 +225,7 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
               <Megaphone className="h-5 w-5 text-[var(--gold)]" /> {flyersT('sectionTitle')}
             </h2>
             <p className="mt-1 text-sm text-[var(--muted)]">{flyersT('sectionIntro')}</p>
-            <FlyerGrid items={flyers.map((f) => ({ tool: f.tool, title: flyerTitles[f.tool] ?? f.tool, category: flyersT(`cat_${f.category}`) }))} />
+            <FlyerGrid items={flyers.map((f) => ({ tool: f.tool, title: flyerTitles[f.tool] ?? f.tool, categoryKey: f.category, category: flyersT(`cat_${f.category}`) }))} />
           </div>
         )}
       </section>
