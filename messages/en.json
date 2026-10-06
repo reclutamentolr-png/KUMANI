@@ -5434,7 +5434,21 @@
     "googleCopied": "Copied!",
     "googleTips": "Repeat the check now and then, turn on two-step verification on your accounts and be wary of messages that use your details to look credible: you can check a suspicious email with",
     "googleNote": "Google’s procedure and button names may change slightly over time. The official instructions are here:",
-    "googleHelpLink": "Google Help"
+    "googleHelpLink": "Google Help",
+    "photosTitle": "Find out where your photos are used",
+    "photosIntro": "The photos you post can end up on fake profiles, romance scams or sites you don’t know. With two free tools you can search the web for your photos: upload one of your images and see where it appears.",
+    "photos_step1_title": "Choose your photos",
+    "photos_step1_text": "Start with your social media profile pictures, your most shared photos and those with your children. Only search for your own photos or those of people who asked you to.",
+    "photos_step2_title": "Search them with Google Lens",
+    "photos_step2_text": "Open Google Lens, upload the photo (or capture it from the screen) and scroll through “Exact matches” and similar images: you’ll see the sites where it appears.",
+    "photos_step3_title": "Double-check with TinEye",
+    "photos_step3_text": "TinEye finds the same image even when cropped or edited and shows where it appeared first. Using both finds more results.",
+    "photosFakeTitle": "If your photo is on a fake profile",
+    "photosFakeText": "Take screenshots of the profile and the page address, report it to the platform with the “Pretending to be me / impersonation” option and warn your contacts. If it’s used to scam or blackmail, report it to the police (cybercrime unit).",
+    "photosTipsBefore": "Before posting, remove hidden data such as location from your photos with",
+    "photosTipsMiddle": "; if you receive a photo and want to know whether it’s real or AI-generated, check it with",
+    "photosTipsAfter": ".",
+    "photosNote": "Google Lens and TinEye are free external services: you upload the photo to their site yourself. KUMANI does not receive or analyse your photos."
   },
   "firmaEmail": {
     "badge": "Marketing PRO",

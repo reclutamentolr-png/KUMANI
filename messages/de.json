@@ -5434,7 +5434,21 @@
     "googleCopied": "Kopiert!",
     "googleTips": "Wiederhole die Prüfung ab und zu, aktiviere die Bestätigung in zwei Schritten für deine Konten und sei misstrauisch bei Nachrichten, die deine Daten nutzen, um glaubwürdig zu wirken: Eine verdächtige E-Mail prüfst du mit",
     "googleNote": "Ablauf und Bezeichnungen der Google-Buttons können sich mit der Zeit leicht ändern. Die offizielle Anleitung findest du hier:",
-    "googleHelpLink": "Google-Hilfe"
+    "googleHelpLink": "Google-Hilfe",
+    "photosTitle": "Finde heraus, wo deine Fotos verwendet werden",
+    "photosIntro": "Deine veröffentlichten Fotos können auf Fake-Profilen, bei Liebesbetrug oder auf unbekannten Seiten landen. Mit zwei kostenlosen Tools kannst du das Web nach deinen Fotos durchsuchen: Du lädst ein eigenes Bild hoch und siehst, wo es auftaucht.",
+    "photos_step1_title": "Wähle deine Fotos",
+    "photos_step1_text": "Beginne mit deinen Profilbildern in sozialen Netzwerken, den am häufigsten geteilten Fotos und denen mit deinen Kindern. Suche nur nach eigenen Fotos oder nach denen von Personen, die dich darum gebeten haben.",
+    "photos_step2_title": "Suche sie mit Google Lens",
+    "photos_step2_text": "Öffne Google Lens, lade das Foto hoch (oder nimm es vom Bildschirm auf) und sieh dir die „Genauen Übereinstimmungen“ und ähnliche Bilder an: So siehst du die Seiten, auf denen es erscheint.",
+    "photos_step3_title": "Prüfe mit TinEye nach",
+    "photos_step3_text": "TinEye findet dasselbe Bild auch zugeschnitten oder bearbeitet und zeigt, wo es zuerst auftauchte. Mit beiden findest du mehr Ergebnisse.",
+    "photosFakeTitle": "Wenn dein Foto auf einem Fake-Profil ist",
+    "photosFakeText": "Mach Screenshots vom Profil und von der Seitenadresse, melde es dem Netzwerk mit der Option „Gibt sich als ich aus / Identitätsdiebstahl“ und warne deine Kontakte. Wird es für Betrug oder Erpressung genutzt, erstatte Anzeige bei der Polizei.",
+    "photosTipsBefore": "Entferne vor dem Posten versteckte Daten wie den Standort aus deinen Fotos mit",
+    "photosTipsMiddle": "; wenn du ein Foto bekommst und wissen willst, ob es echt oder mit KI erzeugt ist, prüfe es mit",
+    "photosTipsAfter": ".",
+    "photosNote": "Google Lens und TinEye sind kostenlose externe Dienste: Du lädst das Foto selbst auf deren Seite hoch. KUMANI empfängt und analysiert deine Fotos nicht."
   },
   "firmaEmail": {
     "badge": "Marketing PRO",

@@ -9,6 +9,7 @@ import { EMAIL_RE, maskEmail, type ScudoError, type ScudoResult } from '@/lib/sc
 import BreachResult from '@/components/scudoDati/BreachResult'
 import PasswordCheck from '@/components/scudoDati/PasswordCheck'
 import GoogleRemovalGuide from '@/components/scudoDati/GoogleRemovalGuide'
+import PhotoSearchGuide from '@/components/scudoDati/PhotoSearchGuide'
 
 // SCUDO DATI: la propria email (gratis), un'altra email (KU Karma) e la
 // password (solo nel browser).
@@ -138,6 +139,9 @@ export default function ScudoDatiTool({ maskedEmail, cost, initialBalance }: { m
 
       {/* Guida: togliere i propri dati dai risultati di Google */}
       <GoogleRemovalGuide />
+
+      {/* Guida: dove sono usate le proprie foto (ricerca inversa fatta dall'utente) */}
+      <PhotoSearchGuide />
     </div>
   )
 }

@@ -5434,7 +5434,21 @@
     "googleCopied": "Copiato!",
     "googleTips": "Ripeti il controllo ogni tanto, attiva la verifica in due passaggi sui tuoi account e diffida di messaggi che usano i tuoi dati per sembrare credibili: un’email sospetta la controlli con",
     "googleNote": "Procedura e nomi dei pulsanti di Google possono cambiare leggermente nel tempo. Le istruzioni ufficiali sono qui:",
-    "googleHelpLink": "assistenza di Google"
+    "googleHelpLink": "assistenza di Google",
+    "photosTitle": "Scopri dove sono usate le tue foto",
+    "photosIntro": "Le foto che pubblichi possono finire su profili falsi, truffe sentimentali o siti che non conosci. Con due strumenti gratuiti puoi cercare le tue foto sul web: carichi una tua immagine e vedi dove compare.",
+    "photos_step1_title": "Scegli le tue foto",
+    "photos_step1_text": "Parti dalle foto profilo dei social, da quelle più condivise e da quelle con i tuoi figli. Cerca solo foto tue o di chi te lo ha chiesto.",
+    "photos_step2_title": "Cercale con Google Lens",
+    "photos_step2_text": "Apri Google Lens, carica la foto (o scattala dallo schermo) e scorri le «Corrispondenze esatte» e le immagini simili: vedrai i siti in cui compare.",
+    "photos_step3_title": "Ricontrolla con TinEye",
+    "photos_step3_text": "TinEye cerca la stessa immagine anche ritagliata o modificata e mostra dove è apparsa per prima. Usarli tutti e due trova più risultati.",
+    "photosFakeTitle": "Se la tua foto è su un profilo falso",
+    "photosFakeText": "Fai gli screenshot del profilo e dell’indirizzo della pagina, segnalalo al social con l’opzione «Si spaccia per me / furto d’identità» e avvisa i tuoi contatti. Se viene usato per truffare o ricattare, denuncialo alla Polizia Postale (commissariatodips.it).",
+    "photosTipsBefore": "Prima di pubblicare, togli dalle foto i dati nascosti come la posizione con",
+    "photosTipsMiddle": "; se ricevi una foto e vuoi capire se è vera o creata con l’intelligenza artificiale, controllala con",
+    "photosTipsAfter": ".",
+    "photosNote": "Google Lens e TinEye sono servizi esterni gratuiti: la foto la carichi tu sul loro sito. KUMANI non riceve né analizza le tue foto."
   },
   "firmaEmail": {
     "badge": "Marketing PRO",

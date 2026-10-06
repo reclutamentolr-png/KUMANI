@@ -5434,7 +5434,21 @@
     "googleCopied": "Copié !",
     "googleTips": "Refaites la vérification de temps en temps, activez la validation en deux étapes sur vos comptes et méfiez-vous des messages qui utilisent vos données pour paraître crédibles : vous pouvez vérifier un e-mail suspect avec",
     "googleNote": "La procédure et les noms des boutons de Google peuvent changer légèrement avec le temps. Les instructions officielles sont ici :",
-    "googleHelpLink": "aide Google"
+    "googleHelpLink": "aide Google",
+    "photosTitle": "Découvrez où vos photos sont utilisées",
+    "photosIntro": "Les photos que vous publiez peuvent se retrouver sur de faux profils, des arnaques sentimentales ou des sites inconnus. Avec deux outils gratuits, vous pouvez chercher vos photos sur le web : vous téléversez une de vos images et voyez où elle apparaît.",
+    "photos_step1_title": "Choisissez vos photos",
+    "photos_step1_text": "Commencez par vos photos de profil sur les réseaux sociaux, les plus partagées et celles avec vos enfants. Ne cherchez que vos propres photos ou celles des personnes qui vous l’ont demandé.",
+    "photos_step2_title": "Cherchez-les avec Google Lens",
+    "photos_step2_text": "Ouvrez Google Lens, téléversez la photo (ou capturez-la à l’écran) et parcourez les « Correspondances exactes » et les images similaires : vous verrez les sites où elle apparaît.",
+    "photos_step3_title": "Vérifiez avec TinEye",
+    "photos_step3_text": "TinEye retrouve la même image même recadrée ou modifiée et montre où elle est apparue en premier. Utiliser les deux donne plus de résultats.",
+    "photosFakeTitle": "Si votre photo est sur un faux profil",
+    "photosFakeText": "Faites des captures d’écran du profil et de l’adresse de la page, signalez-le au réseau social avec l’option « Se fait passer pour moi / usurpation d’identité » et prévenez vos contacts. S’il sert à escroquer ou à faire du chantage, portez plainte auprès de la police ou de la gendarmerie.",
+    "photosTipsBefore": "Avant de publier, retirez de vos photos les données cachées comme la position avec",
+    "photosTipsMiddle": " ; si vous recevez une photo et voulez savoir si elle est vraie ou générée par l’IA, vérifiez-la avec",
+    "photosTipsAfter": ".",
+    "photosNote": "Google Lens et TinEye sont des services externes gratuits : c’est vous qui téléversez la photo sur leur site. KUMANI ne reçoit ni n’analyse vos photos."
   },
   "firmaEmail": {
     "badge": "Marketing PRO",

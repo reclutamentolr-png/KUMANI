@@ -5434,7 +5434,21 @@
     "googleCopied": "¡Copiado!",
     "googleTips": "Repite la comprobación de vez en cuando, activa la verificación en dos pasos en tus cuentas y desconfía de mensajes que usan tus datos para parecer creíbles: puedes comprobar un email sospechoso con",
     "googleNote": "El procedimiento y los nombres de los botones de Google pueden cambiar ligeramente con el tiempo. Las instrucciones oficiales están aquí:",
-    "googleHelpLink": "ayuda de Google"
+    "googleHelpLink": "ayuda de Google",
+    "photosTitle": "Descubre dónde se usan tus fotos",
+    "photosIntro": "Las fotos que publicas pueden acabar en perfiles falsos, estafas sentimentales o webs que no conoces. Con dos herramientas gratuitas puedes buscar tus fotos en la web: subes una imagen tuya y ves dónde aparece.",
+    "photos_step1_title": "Elige tus fotos",
+    "photos_step1_text": "Empieza por tus fotos de perfil en redes sociales, las más compartidas y las de tus hijos. Busca solo fotos tuyas o de quien te lo haya pedido.",
+    "photos_step2_title": "Búscalas con Google Lens",
+    "photos_step2_text": "Abre Google Lens, sube la foto (o captúrala de la pantalla) y revisa las «Coincidencias exactas» y las imágenes similares: verás las webs donde aparece.",
+    "photos_step3_title": "Compruébalo con TinEye",
+    "photos_step3_text": "TinEye encuentra la misma imagen aunque esté recortada o editada y muestra dónde apareció primero. Usar los dos encuentra más resultados.",
+    "photosFakeTitle": "Si tu foto está en un perfil falso",
+    "photosFakeText": "Haz capturas del perfil y de la dirección de la página, denúncialo a la red social con la opción «Se hace pasar por mí / suplantación de identidad» y avisa a tus contactos. Si se usa para estafar o chantajear, denúncialo a la policía.",
+    "photosTipsBefore": "Antes de publicar, quita de tus fotos los datos ocultos como la ubicación con",
+    "photosTipsMiddle": "; si recibes una foto y quieres saber si es real o creada con IA, compruébala con",
+    "photosTipsAfter": ".",
+    "photosNote": "Google Lens y TinEye son servicios externos gratuitos: eres tú quien sube la foto a su web. KUMANI no recibe ni analiza tus fotos."
   },
   "firmaEmail": {
     "badge": "Marketing PRO",
