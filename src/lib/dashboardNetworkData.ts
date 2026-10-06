@@ -148,8 +148,9 @@ export async function getDashboardNetworkData(
   const receivedKumani =
     receivedRows ?? receivedNodes.map((node) => ({ first_name: node.first_name ?? null, joined_at: node.created_at }))
 
-  // Qualifiche: le registra il database (attivazioni pagate + KU Points)
-  const { ranks, earnedTotal: networkPointsEarned, activations: networkActivations } = wallet
+  // Qualifiche: le registra il database con attivazioni e KU Points
+  // confermati (dopo i giorni del recesso); quelli in conferma si mostrano a parte
+  const { ranks, confirmedPoints: networkPointsEarned, activations: networkActivations } = wallet
   const achievedKeys = ((achievementRows ?? []) as { rank_key: string }[]).map((row) => row.rank_key)
   const currentRank = getCurrentRank(achievedKeys, ranks)
   const newlyAchievedRank = getNewlyAchievedRank(achievedKeys, profile?.qualifications_seen || [], ranks)
@@ -180,6 +181,9 @@ export async function getDashboardNetworkData(
     networkActivations,
     achievedKeys,
     blackPlusEvery: wallet.blackPlusEvery,
+    networkPendingActivations: wallet.pendingActivations,
+    networkPendingPoints: wallet.pendingPoints,
+    pointsConfirmDays: wallet.confirmDays,
     loginUrl,
   }
 }

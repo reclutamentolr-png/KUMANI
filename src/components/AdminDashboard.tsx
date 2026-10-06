@@ -88,6 +88,7 @@ import IdentityVerificationsPanel from '@/components/admin/IdentityVerifications
 import ConvivioFeesPanel from '@/components/admin/ConvivioFeesPanel'
 import KordataShowcasePanel from '@/components/admin/KordataShowcasePanel'
 import GiftOrdersPanel from '@/components/admin/GiftOrdersPanel'
+import QualifiedMembersPanel from '@/components/admin/QualifiedMembersPanel'
 import ContactMessagesPanel from '@/components/admin/ContactMessagesPanel'
 import ProfileRequestsPanel from '@/components/admin/ProfileRequestsPanel'
 import AccountDeletionsPanel from '@/components/admin/AccountDeletionsPanel'
@@ -143,6 +144,7 @@ import {
   Flag,
   MessageSquare,
   Megaphone,
+  Crown,
   Mail,
   Send,
   LoaderCircle,
@@ -1186,6 +1188,7 @@ L'accesso viene registrato.`)) return
   { id: 'push', label: 'Notifiche push', Icon: BellRing, permission: 'messages.read' as Permission, group: 'comms' },
   { id: 'documents', label: 'Documenti KUMANI', Icon: FileText, permission: 'settings.read' as Permission, group: 'comms' },
   { id: 'kuManagement', label: 'Gestione KU', Icon: Coins, permission: 'settings.read' as Permission, group: 'rewards' },
+  { id: 'qualified', label: 'Qualificati', Icon: Crown, permission: 'users.read' as Permission, group: 'rewards' },
   { id: 'rewards', label: 'Premi', Icon: Gift, permission: 'rewards.read' as Permission, group: 'rewards' },
   { id: 'vouchers', label: 'Voucher', Icon: BadgeCheck, permission: 'vouchers.read' as Permission, group: 'rewards' },
   { id: 'coupons', label: 'Voucher e coupon', Icon: Ticket, permission: 'coupons.read' as Permission, group: 'rewards' },
@@ -3674,6 +3677,7 @@ L'accesso viene registrato.`)) return
         {activeSection === 'affinity' && <AffinityReportsPanel />}
         {activeSection === 'landingPages' && <LandingPagesPanel />}
         {activeSection === 'reviews' && <ReviewsPanel />}
+        {activeSection === 'qualified' && <QualifiedMembersPanel />}
         {activeSection === 'convivio' && <ConvivioReportsPanel locale={locale} />}
         {activeSection === 'events' && (
           <EventsAdminPanel

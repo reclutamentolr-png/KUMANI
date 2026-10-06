@@ -610,7 +610,8 @@
     "qualificationVouchers": "Has recibido {count, plural, one {# voucher para activar un nuevo Kumano} other {# vouchers para activar nuevos Kumani}}",
     "qualificationVouchersHint": "Los encuentras en tu Wallet, en la sección de vouchers, con las indicaciones para regalarlos.",
     "qualificationBlackExtra": "Además tienes un voucher Pro de un año solo para ti y desde ahora recibes 1 voucher cada {every} nuevas activaciones. También te esperan el escaparate del Kumano del Día, la invitación al evento anual KUMANI y el Consejo de los Black.",
-    "qualificationOpenWallet": "Ir a tus vouchers"
+    "qualificationOpenWallet": "Ir a tus vouchers",
+    "rankPendingLine": "En confirmación: +{acts} activaciones, +{points} KU Points"
   },
   "memolife": {
     "greeting": "Ciao, {name}!",
@@ -2753,7 +2754,10 @@
     "badgeActivations": "Activaciones Base o Pro",
     "badgeRequirement": "{acts} activaciones · {points} puntos",
     "badgePrize": "Premio: {count, plural, one {# voucher} other {# vouchers}}",
-    "badgeBlackNote": "Eres Kuman Black: recibes 1 voucher cada {every} nuevas activaciones. ¡Gracias por hacer crecer la Comunidad KUMANI!"
+    "badgeBlackNote": "Eres Kuman Black: recibes 1 voucher cada {every} nuevas activaciones. ¡Gracias por hacer crecer la Comunidad KUMANI!",
+    "badgeConfirmedPoints": "KU Points confirmados",
+    "badgePending": "+{count} en confirmación",
+    "badgePendingPoints": "+{count} en confirmación"
   },
   "rewards": {
     "title": "Catálogo de Premios",
@@ -5943,12 +5947,14 @@
     "qualificationRequirement": "{acts} activaciones + {points} KU Points",
     "qualificationPrize": "{count, plural, one {# voucher Base} other {# vouchers Base}} para activar nuevos Kumani",
     "qualificationPrizeBlack": "+ 1 voucher Pro de un año para ti",
-    "qualificationsNote": "Cuentan las activaciones Base o Pro pagadas con tarjeta por las personas que invitaste (no los Pass ni las activaciones con voucher) y todos los KU Points ganados, también los recibidos de tu estrella. Después de Kuman Black: 1 voucher cada {every} nuevas activaciones. Los vouchers llegan aquí solos.",
+    "qualificationsNote": "Cuentan las activaciones Base o Pro pagadas con tarjeta por las personas que invitaste (no los Pass ni las activaciones con voucher) y todos los KU Points ganados, también los recibidos de tu estrella, una vez confirmados. Después de Kuman Black: 1 voucher cada {every} nuevas activaciones. Los vouchers llegan aquí solos.",
     "noVouchers": "Todavía no hay vouchers: llegan solos con la primera calificación.",
     "vouchersHowTo": "Regala un voucher a una persona nueva: lo introduce al registrarse, en «¿Tienes un código?», y obtiene un año de KUMANI Base. Tú no puedes usarlo.",
     "prizeFrom": "premio {rank}",
     "prizeBlackPlus": "Black continuo",
-    "personalProHint": "Voucher Pro personal: puedes activarlo para ti aquí abajo, en «Canjear un voucher»."
+    "personalProHint": "Voucher Pro personal: puedes activarlo para ti aquí abajo, en «Canjear un voucher».",
+    "pointsConfirmed": "de los cuales confirmados: {count}",
+    "pointsConfirmNote": "Los KU Points son definitivos {days} días después del pago, el plazo para un posible desistimiento. Solo los confirmados cuentan para las calificaciones y se pueden usar (escaparate, donaciones). Las activaciones reembolsadas no dan puntos."
   },
   "voucherReceipt": {
     "back": "Volver al Monedero",
@@ -8027,7 +8033,10 @@
     "showcaseReason_price": "precio de venta al público poco creíble",
     "showcaseReason_other": "no respeta las normas",
     "giftRedeemedTitle": "Tu regalo ha sido activado 🎁",
-    "giftRedeemedBody": "{name} ha activado tu regalo."
+    "giftRedeemedBody": "{name} ha activado tu regalo.",
+    "qualificationTitle": "¡Nueva calificación: {rank}! 🎉",
+    "qualificationBlackPlusTitle": "Nuevo voucher Black continuo 🎁",
+    "qualificationBody": "Has recibido {count, plural, one {# voucher} other {# vouchers}}: los encuentras en tu Wallet."
   },
   "pushInvite": {
     "title": "Activa las notificaciones",

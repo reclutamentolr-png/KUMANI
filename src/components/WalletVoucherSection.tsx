@@ -25,8 +25,13 @@ export default function WalletVoucherSection({
   ranks,
   blackPlusEvery,
   initialVouchers,
+  pendingPoints,
+  confirmDays,
 }: {
   points: number
+  // KU Points ancora in conferma (pagamenti di meno di confirmDays giorni)
+  pendingPoints: number
+  confirmDays: number
   rules: Rules
   ranks: RankDefinition[]
   blackPlusEvery: number
@@ -98,12 +103,15 @@ export default function WalletVoucherSection({
         <div className="rounded-xl border border-gray-200 bg-white p-4">
           <p className="text-xs text-[var(--muted)]">{t('pointsBalance')}</p>
           <p className="text-2xl font-bold text-[var(--ink)]">{points}</p>
+          <p className="text-xs font-semibold text-emerald-700">{t('pointsConfirmed', { count: Math.max(points - pendingPoints, 0) })}</p>
         </div>
         <div className="rounded-xl border border-gray-200 bg-white p-4">
           <p className="text-xs text-[var(--muted)]">{t('vouchersAvailable')}</p>
           <p className="text-2xl font-bold text-[var(--ink)]">{available}</p>
         </div>
       </div>
+
+      <p className="-mt-3 text-xs leading-5 text-[var(--muted)]">{t('pointsConfirmNote', { days: confirmDays })}</p>
 
       {/* 1. Come si guadagnano i KU Points */}
       <div className="rounded-xl border border-gray-200 bg-white p-4">

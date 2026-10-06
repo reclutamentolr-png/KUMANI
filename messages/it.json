@@ -630,7 +630,8 @@
     "qualificationVouchers": "Hai ricevuto {count, plural, one {# voucher per attivare un nuovo Kumano} other {# voucher per attivare nuovi Kumani}}",
     "qualificationVouchersHint": "Li trovi nel tuo Wallet, nella sezione dei voucher, con le indicazioni per regalarli.",
     "qualificationBlackExtra": "In più hai un voucher Pro di un anno tutto per te e da ora ricevi 1 voucher ogni {every} nuove attivazioni. Ti aspettano anche la vetrina nel Kumano del Giorno, l’invito all’evento annuale KUMANI e il Consiglio dei Black.",
-    "qualificationOpenWallet": "Vai ai tuoi voucher"
+    "qualificationOpenWallet": "Vai ai tuoi voucher",
+    "rankPendingLine": "In conferma: +{acts} attivazioni, +{points} KU Points"
   },
   "memolife": {
     "memolife": "MemoLife",
@@ -2807,7 +2808,10 @@
     "badgeActivations": "Attivazioni Base o Pro",
     "badgeRequirement": "{acts} attivazioni · {points} punti",
     "badgePrize": "Premio: {count, plural, one {# voucher} other {# voucher}}",
-    "badgeBlackNote": "Sei Kuman Black: ricevi 1 voucher ogni {every} nuove attivazioni. Grazie per far crescere la Community KUMANI!"
+    "badgeBlackNote": "Sei Kuman Black: ricevi 1 voucher ogni {every} nuove attivazioni. Grazie per far crescere la Community KUMANI!",
+    "badgeConfirmedPoints": "KU Points confermati",
+    "badgePending": "+{count} in conferma",
+    "badgePendingPoints": "+{count} in conferma"
   },
   "rewards": {
     "title": "Catalogo Premi",
@@ -5943,12 +5947,14 @@
     "qualificationRequirement": "{acts} attivazioni + {points} KU Points",
     "qualificationPrize": "{count, plural, one {# voucher Base} other {# voucher Base}} per attivare nuovi Kumani",
     "qualificationPrizeBlack": "+ 1 voucher Pro di un anno per te",
-    "qualificationsNote": "Contano le attivazioni Base o Pro pagate con carta dalle persone che hai invitato (non i Pass né le attivazioni con voucher) e tutti i KU Points guadagnati, anche quelli ricevuti dalla tua stella. Dopo Kuman Black: 1 voucher ogni {every} nuove attivazioni. I voucher arrivano da soli qui sotto.",
+    "qualificationsNote": "Contano le attivazioni Base o Pro pagate con carta dalle persone che hai invitato (non i Pass né le attivazioni con voucher) e tutti i KU Points guadagnati, anche quelli ricevuti dalla tua stella, una volta confermati. Dopo Kuman Black: 1 voucher ogni {every} nuove attivazioni. I voucher arrivano da soli qui sotto.",
     "noVouchers": "Ancora nessun voucher: arrivano da soli con la prima qualifica.",
     "vouchersHowTo": "Regala un voucher a una persona nuova: lo inserisce nella registrazione, in «Hai un codice?», e ha un anno di KUMANI Base. Tu non puoi usarlo per te.",
     "prizeFrom": "premio {rank}",
     "prizeBlackPlus": "Black continuo",
-    "personalProHint": "Voucher Pro personale: puoi attivarlo per te qui sotto, in «Riscatta un voucher»."
+    "personalProHint": "Voucher Pro personale: puoi attivarlo per te qui sotto, in «Riscatta un voucher».",
+    "pointsConfirmed": "di cui confermati: {count}",
+    "pointsConfirmNote": "I KU Points diventano definitivi {days} giorni dopo il pagamento, il tempo per un eventuale recesso. Solo quelli confermati contano per le qualifiche e si possono usare (vetrina, donazioni). Le attivazioni rimborsate non danno punti."
   },
   "voucherReceipt": {
     "back": "Torna al Portafoglio",
@@ -8027,7 +8033,10 @@
     "showcaseReason_price": "prezzo al pubblico non credibile",
     "showcaseReason_other": "non rispetta le regole",
     "giftRedeemedTitle": "Il tuo regalo è stato attivato 🎁",
-    "giftRedeemedBody": "{name} ha attivato il tuo regalo."
+    "giftRedeemedBody": "{name} ha attivato il tuo regalo.",
+    "qualificationTitle": "Nuova qualifica: {rank}! 🎉",
+    "qualificationBlackPlusTitle": "Nuovo voucher Black continuo 🎁",
+    "qualificationBody": "Hai ricevuto {count, plural, one {# voucher} other {# voucher}}: li trovi nel tuo Wallet."
   },
   "pushInvite": {
     "title": "Attiva le notifiche",

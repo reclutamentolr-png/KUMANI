@@ -630,7 +630,8 @@
     "qualificationVouchers": "You have received {count, plural, one {# voucher to activate a new Kumano} other {# vouchers to activate new Kumani}}",
     "qualificationVouchersHint": "You’ll find them in your Wallet, in the vouchers section, with instructions on how to give them.",
     "qualificationBlackExtra": "You also get a one-year Pro voucher just for you, and from now on 1 voucher every {every} new activations. The Kumano of the Day showcase, an invitation to the annual KUMANI event and the Black Council are waiting for you too.",
-    "qualificationOpenWallet": "Go to your vouchers"
+    "qualificationOpenWallet": "Go to your vouchers",
+    "rankPendingLine": "Being confirmed: +{acts} activations, +{points} KU Points"
   },
   "memolife": {
     "greeting": "Hello, {name}!",
@@ -2753,7 +2754,10 @@
     "badgeActivations": "Base or Pro activations",
     "badgeRequirement": "{acts} activations · {points} points",
     "badgePrize": "Reward: {count, plural, one {# voucher} other {# vouchers}}",
-    "badgeBlackNote": "You are Kuman Black: you get 1 voucher every {every} new activations. Thank you for growing the KUMANI Community!"
+    "badgeBlackNote": "You are Kuman Black: you get 1 voucher every {every} new activations. Thank you for growing the KUMANI Community!",
+    "badgeConfirmedPoints": "Confirmed KU Points",
+    "badgePending": "+{count} being confirmed",
+    "badgePendingPoints": "+{count} being confirmed"
   },
   "rewards": {
     "title": "Reward Catalog",
@@ -5943,12 +5947,14 @@
     "qualificationRequirement": "{acts} activations + {points} KU Points",
     "qualificationPrize": "{count, plural, one {# Base voucher} other {# Base vouchers}} to activate new Kumani",
     "qualificationPrizeBlack": "+ 1 one-year Pro voucher for you",
-    "qualificationsNote": "What counts: Base or Pro activations paid by card by the people you invited (not Passes or voucher activations) and all the KU Points you earn, including those from your star. After Kuman Black: 1 voucher every {every} new activations. Vouchers appear here automatically.",
+    "qualificationsNote": "What counts: Base or Pro activations paid by card by the people you invited (not Passes or voucher activations) and all the KU Points you earn, including those from your star, once confirmed. After Kuman Black: 1 voucher every {every} new activations. Vouchers appear here automatically.",
     "noVouchers": "No vouchers yet: they arrive automatically with your first qualification.",
     "vouchersHowTo": "Give a voucher to someone new: they enter it when signing up, in “Got a code?”, and get a year of KUMANI Base. You can’t use it yourself.",
     "prizeFrom": "{rank} reward",
     "prizeBlackPlus": "Black ongoing",
-    "personalProHint": "Personal Pro voucher: you can activate it for yourself below, in “Redeem a voucher”."
+    "personalProHint": "Personal Pro voucher: you can activate it for yourself below, in “Redeem a voucher”.",
+    "pointsConfirmed": "of which confirmed: {count}",
+    "pointsConfirmNote": "KU Points become final {days} days after payment, the time allowed for any withdrawal. Only confirmed points count towards qualifications and can be used (showcase, donations). Refunded activations give no points."
   },
   "voucherReceipt": {
     "back": "Back to Wallet",
@@ -8027,7 +8033,10 @@
     "showcaseReason_price": "retail price not credible",
     "showcaseReason_other": "does not follow the rules",
     "giftRedeemedTitle": "Your gift has been activated 🎁",
-    "giftRedeemedBody": "{name} has activated the gift you sent."
+    "giftRedeemedBody": "{name} has activated the gift you sent.",
+    "qualificationTitle": "New qualification: {rank}! 🎉",
+    "qualificationBlackPlusTitle": "New Black ongoing voucher 🎁",
+    "qualificationBody": "You have received {count, plural, one {# voucher} other {# vouchers}}: find them in your Wallet."
   },
   "pushInvite": {
     "title": "Turn on notifications",

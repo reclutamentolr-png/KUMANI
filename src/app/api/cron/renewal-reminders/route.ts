@@ -1,13 +1,15 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import { getTranslations } from 'next-intl/server'
 import { escapeHtml, sendEmail } from '@/lib/email'
 import { findStripeSubscriptionForUser } from '@/lib/stripeCustomer'
 import { getPlanPrices } from '@/lib/planPrices'
 import { SITE_URL } from '@/lib/siteUrl'
+import { localizedPath, notifyUser } from '@/lib/push'
 import { locales, defaultLocale } from '../../../../../i18n'
 
-// Promemoria del rinnovo automatico (Vercel Cron, vedi vercel.json): a chi
+// Ogni mattina (Vercel Cron, vedi vercel.json): qualifiche raggiunte con i
+// KU Points appena confermati (in fondo) e promemoria del rinnovo automatico: a chi
 // paga con carta, tra 30 e 15 giorni prima del rinnovo annuale, un'email con
 // data, importo e link per disattivare il rinnovo con un clic. Una sola
 // email per periodo (renewal_reminders). Chi ha già disdetto non la riceve.
@@ -75,5 +77,36 @@ ${lines.map((l) => `<p>${escapeHtml(l)}</p>`).join('\n')}
       console.error('⚠️ Promemoria rinnovo:', err instanceof Error ? err.message : err)
     }
   }
-  return NextResponse.json({ checked: due?.length ?? 0, sent })
+  const qualifications = await evaluateQualifications(db)
+  return NextResponse.json({ checked: due?.length ?? 0, sent, qualifications })
+}
+
+// Qualifiche: chi ha KU Points appena confermati (passati i giorni del
+// recesso) viene ricontrollato; a chi raggiunge una qualifica arriva una
+// notifica (il festeggiamento lo vede alla prossima apertura della dashboard)
+const RANK_NAMES: Record<string, string> = { rising_star: 'Kuman Green', shining_star: 'Kuman Star', diamond_star: 'Kuman Black' }
+
+async function evaluateQualifications(db: SupabaseClient): Promise<number> {
+  const { data, error } = await db.rpc('evaluate_due_qualifications')
+  if (error) {
+    console.error('⚠️ Qualifiche:', error.message)
+    return 0
+  }
+  const prizes = (data ?? []) as { user_id: string; prize_key: string; rank_key: string; vouchers: number }[]
+  for (const prize of prizes) {
+    const rank = RANK_NAMES[prize.rank_key] ?? 'Kuman'
+    const continuing = prize.prize_key.startsWith('black_plus_')
+    await notifyUser(
+      prize.user_id,
+      'network',
+      (t, locale) => ({
+        title: continuing ? t('qualificationBlackPlusTitle') : t('qualificationTitle', { rank }),
+        body: t('qualificationBody', { count: prize.vouchers }),
+        url: localizedPath(locale, continuing ? '/wallet#voucher' : '/dashboard'),
+        tag: `qualification-${prize.prize_key}`,
+      }),
+      { kind: 'qualification', ref: `${prize.user_id}:${prize.prize_key}` }
+    )
+  }
+  return prizes.length
 }

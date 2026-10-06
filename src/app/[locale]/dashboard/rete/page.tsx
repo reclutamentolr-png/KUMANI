@@ -61,6 +61,8 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
     ranks,
     networkPointsEarned,
     networkActivations,
+    networkPendingActivations,
+    networkPendingPoints,
     loginUrl,
   } = network
 
@@ -275,7 +277,13 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
                       ></div>
                     </div>
                     <p className="text-xs text-gray-500 mt-2 font-medium">
-                      <RankRequirements rank={rank} activations={networkActivations} points={networkPointsEarned} />
+                      <RankRequirements
+                        rank={rank}
+                        activations={networkActivations}
+                        points={networkPointsEarned}
+                        pendingActivations={achievement ? 0 : networkPendingActivations}
+                        pendingPoints={achievement ? 0 : networkPendingPoints}
+                      />
                     </p>
                   </div>
                 </div>

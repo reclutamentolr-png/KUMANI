@@ -264,7 +264,9 @@ export default function TermsPage() {
                 uno dei posti diretti della propria matrice viene occupato da una persona invitata da un altro utente (spillover) che
                 attiva l&apos;abbonamento con carta: a partire dall&apos;attivazione indicata dalla Piattaforma (attualmente la sesta
                 persona invitata da quell&apos;utente), una parte dei KU Points dell&apos;attivazione non va a chi ha invitato ma a chi
-                accoglie la persona nella propria matrice. Le quantità sono stabilite dalla Piattaforma e indicate nell&apos;area personale. Le attivazioni tramite voucher e i rinnovi non danno KU Points; in caso di rimborso del
+                accoglie la persona nella propria matrice. Le quantità sono stabilite dalla Piattaforma e indicate nell&apos;area personale. I KU
+                Points diventano definitivi 15 giorni dopo il pagamento che li ha generati (il tempo per l&apos;eventuale recesso): fino ad
+                allora sono visibili ma non contano per le qualifiche e non si possono utilizzare. Le attivazioni tramite voucher e i rinnovi non danno KU Points; in caso di rimborso del
                 pagamento i punti collegati vengono tolti.
               </p>
               <p>

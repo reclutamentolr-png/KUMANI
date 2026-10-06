@@ -610,7 +610,8 @@
     "qualificationVouchers": "Vous avez reçu {count, plural, one {# bon pour activer un nouveau Kumano} other {# bons pour activer de nouveaux Kumani}}",
     "qualificationVouchersHint": "Vous les trouvez dans votre Wallet, section bons, avec les indications pour les offrir.",
     "qualificationBlackExtra": "En plus, vous avez un bon Pro d’un an rien que pour vous et, désormais, 1 bon toutes les {every} nouvelles activations. La vitrine du Kumano du Jour, l’invitation à l’événement annuel KUMANI et le Conseil des Black vous attendent aussi.",
-    "qualificationOpenWallet": "Voir vos bons"
+    "qualificationOpenWallet": "Voir vos bons",
+    "rankPendingLine": "En confirmation : +{acts} activations, +{points} KU Points"
   },
   "memolife": {
     "greeting": "Ciao, {name}!",
@@ -2753,7 +2754,10 @@
     "badgeActivations": "Activations Base ou Pro",
     "badgeRequirement": "{acts} activations · {points} points",
     "badgePrize": "Récompense : {count, plural, one {# bon} other {# bons}}",
-    "badgeBlackNote": "Vous êtes Kuman Black : vous recevez 1 bon toutes les {every} nouvelles activations. Merci de faire grandir la Communauté KUMANI !"
+    "badgeBlackNote": "Vous êtes Kuman Black : vous recevez 1 bon toutes les {every} nouvelles activations. Merci de faire grandir la Communauté KUMANI !",
+    "badgeConfirmedPoints": "KU Points confirmés",
+    "badgePending": "+{count} en confirmation",
+    "badgePendingPoints": "+{count} en confirmation"
   },
   "rewards": {
     "title": "Catalogue de Récompenses",
@@ -5943,12 +5947,14 @@
     "qualificationRequirement": "{acts} activations + {points} KU Points",
     "qualificationPrize": "{count, plural, one {# bon Base} other {# bons Base}} pour activer de nouveaux Kumani",
     "qualificationPrizeBlack": "+ 1 bon Pro d’un an pour vous",
-    "qualificationsNote": "Comptent les activations Base ou Pro payées par carte par les personnes que vous avez invitées (pas les Pass ni les activations par bon) et tous les KU Points gagnés, y compris ceux reçus de votre étoile. Après Kuman Black : 1 bon toutes les {every} nouvelles activations. Les bons arrivent ici automatiquement.",
+    "qualificationsNote": "Comptent les activations Base ou Pro payées par carte par les personnes que vous avez invitées (pas les Pass ni les activations par bon) et tous les KU Points gagnés, y compris ceux reçus de votre étoile, une fois confirmés. Après Kuman Black : 1 bon toutes les {every} nouvelles activations. Les bons arrivent ici automatiquement.",
     "noVouchers": "Aucun bon pour l’instant : ils arrivent automatiquement avec la première qualification.",
     "vouchersHowTo": "Offrez un bon à une personne nouvelle : elle le saisit à l’inscription, dans « Vous avez un code ? », et obtient un an de KUMANI Base. Vous ne pouvez pas l’utiliser pour vous.",
     "prizeFrom": "récompense {rank}",
     "prizeBlackPlus": "Black continu",
-    "personalProHint": "Bon Pro personnel : vous pouvez l’activer pour vous ci-dessous, dans « Utiliser un bon »."
+    "personalProHint": "Bon Pro personnel : vous pouvez l’activer pour vous ci-dessous, dans « Utiliser un bon ».",
+    "pointsConfirmed": "dont confirmés : {count}",
+    "pointsConfirmNote": "Les KU Points deviennent définitifs {days} jours après le paiement, le délai d’une éventuelle rétractation. Seuls les points confirmés comptent pour les qualifications et peuvent être utilisés (vitrine, dons). Les activations remboursées ne donnent pas de points."
   },
   "voucherReceipt": {
     "back": "Retour au Portefeuille",
@@ -8027,7 +8033,10 @@
     "showcaseReason_price": "prix public peu crédible",
     "showcaseReason_other": "ne respecte pas les règles",
     "giftRedeemedTitle": "Votre cadeau a été activé 🎁",
-    "giftRedeemedBody": "{name} a activé votre cadeau."
+    "giftRedeemedBody": "{name} a activé votre cadeau.",
+    "qualificationTitle": "Nouvelle qualification : {rank} ! 🎉",
+    "qualificationBlackPlusTitle": "Nouveau bon Black continu 🎁",
+    "qualificationBody": "Vous avez reçu {count, plural, one {# bon} other {# bons}} : retrouvez-les dans votre Wallet."
   },
   "pushInvite": {
     "title": "Activez les notifications",

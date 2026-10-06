@@ -13,8 +13,23 @@ export async function rankMissingText(rank: RankDefinition, activations: number,
   return null
 }
 
-// Riga "3/6 attivazioni · 40/60 KU Points"
-export default async function RankRequirements({ rank, activations, points, className = '' }: { rank: RankDefinition; activations: number; points: number; className?: string }) {
+// Riga "3/6 attivazioni · 40/60 KU Points" (confermati) e, se ci sono,
+// quanti sono ancora in conferma
+export default async function RankRequirements({
+  rank,
+  activations,
+  points,
+  pendingActivations = 0,
+  pendingPoints = 0,
+  className = '',
+}: {
+  rank: RankDefinition
+  activations: number
+  points: number
+  pendingActivations?: number
+  pendingPoints?: number
+  className?: string
+}) {
   const t = await getTranslations('dashboard')
   return (
     <span className={className}>
@@ -24,6 +39,9 @@ export default async function RankRequirements({ rank, activations, points, clas
         points: Math.min(points, rank.points),
         pointsTarget: rank.points,
       })}
+      {(pendingActivations > 0 || pendingPoints > 0) && (
+        <span className="block opacity-80">{t('rankPendingLine', { acts: pendingActivations, points: pendingPoints })}</span>
+      )}
     </span>
   )
 }

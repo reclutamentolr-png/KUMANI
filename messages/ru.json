@@ -610,7 +610,8 @@
     "qualificationVouchers": "Вы получили {count, plural, one {# ваучер} few {# ваучера} many {# ваучеров} other {# ваучера}} для подключения новых Кумани",
     "qualificationVouchersHint": "Они в вашем Кошельке, в разделе ваучеров, с подсказками, как их подарить.",
     "qualificationBlackExtra": "Кроме того, у вас есть ваучер Pro на год лично для вас, а с этого момента — 1 ваучер за каждые {every} новых активаций. Вас также ждут витрина «Кумано дня», приглашение на ежегодное мероприятие KUMANI и Совет Black.",
-    "qualificationOpenWallet": "К вашим ваучерам"
+    "qualificationOpenWallet": "К вашим ваучерам",
+    "rankPendingLine": "На подтверждении: +{acts} активаций, +{points} KU Points"
   },
   "memolife": {
     "greeting": "Ciao, {name}!",
@@ -2753,7 +2754,10 @@
     "badgeActivations": "Активации Base или Pro",
     "badgeRequirement": "{acts} активаций · {points} баллов",
     "badgePrize": "Награда: {count, plural, one {# ваучер} few {# ваучера} many {# ваучеров} other {# ваучера}}",
-    "badgeBlackNote": "Вы Kuman Black: вы получаете 1 ваучер за каждые {every} новых активаций. Спасибо, что развиваете Сообщество KUMANI!"
+    "badgeBlackNote": "Вы Kuman Black: вы получаете 1 ваучер за каждые {every} новых активаций. Спасибо, что развиваете Сообщество KUMANI!",
+    "badgeConfirmedPoints": "Подтверждённые KU Points",
+    "badgePending": "+{count} на подтверждении",
+    "badgePendingPoints": "+{count} на подтверждении"
   },
   "rewards": {
     "title": "Каталог призов",
@@ -5943,12 +5947,14 @@
     "qualificationRequirement": "{acts} активаций + {points} KU Points",
     "qualificationPrize": "{count, plural, one {# ваучер Base} few {# ваучера Base} many {# ваучеров Base} other {# ваучера Base}} для подключения новых Кумани",
     "qualificationPrizeBlack": "+ 1 ваучер Pro на год для вас",
-    "qualificationsNote": "Учитываются активации Base или Pro, оплаченные картой приглашёнными вами людьми (не Pass и не активации по ваучеру), и все заработанные KU Points, включая полученные от вашей звезды. После Kuman Black: 1 ваучер за каждые {every} новых активаций. Ваучеры появляются здесь сами.",
+    "qualificationsNote": "Учитываются активации Base или Pro, оплаченные картой приглашёнными вами людьми (не Pass и не активации по ваучеру), и все заработанные KU Points, включая полученные от вашей звезды, после подтверждения. После Kuman Black: 1 ваучер за каждые {every} новых активаций. Ваучеры появляются здесь сами.",
     "noVouchers": "Пока нет ваучеров: они появятся сами с первой квалификацией.",
     "vouchersHowTo": "Подарите ваучер новому человеку: он вводит его при регистрации в поле «Есть код?» и получает год KUMANI Base. Сами вы использовать его не можете.",
     "prizeFrom": "награда {rank}",
     "prizeBlackPlus": "Black дальше",
-    "personalProHint": "Личный ваучер Pro: вы можете активировать его для себя ниже, в разделе «Активировать ваучер»."
+    "personalProHint": "Личный ваучер Pro: вы можете активировать его для себя ниже, в разделе «Активировать ваучер».",
+    "pointsConfirmed": "из них подтверждено: {count}",
+    "pointsConfirmNote": "KU Points становятся окончательными через {days} дней после оплаты — это срок для возможного отказа от покупки. Только подтверждённые баллы учитываются в квалификациях и могут использоваться (витрина, пожертвования). За возвращённые активации баллы не начисляются."
   },
   "voucherReceipt": {
     "back": "Назад в кошелёк",
@@ -8027,7 +8033,10 @@
     "showcaseReason_price": "неправдоподобная розничная цена",
     "showcaseReason_other": "нарушает правила",
     "giftRedeemedTitle": "Ваш подарок активирован 🎁",
-    "giftRedeemedBody": "{name} активировал(а) ваш подарок."
+    "giftRedeemedBody": "{name} активировал(а) ваш подарок.",
+    "qualificationTitle": "Новая квалификация: {rank}! 🎉",
+    "qualificationBlackPlusTitle": "Новый ваучер Black дальше 🎁",
+    "qualificationBody": "Вы получили {count, plural, one {# ваучер} few {# ваучера} many {# ваучеров} other {# ваучера}}: они в вашем Кошельке."
   },
   "pushInvite": {
     "title": "Включите уведомления",

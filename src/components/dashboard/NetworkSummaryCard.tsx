@@ -10,7 +10,7 @@ import RankRequirements, { rankMissingText } from '@/components/RankRequirements
 export default async function NetworkSummaryCard({ network }: { network: DashboardNetworkData }) {
   const t = await getTranslations('dashboard')
   // Qualifiche: attivazioni pagate delle persone invitate + KU Points guadagnati
-  const { activeKumani, pendingKumani, receivedKumani, currentRank, ranks, networkPointsEarned, networkActivations, achievedKeys } = network
+  const { activeKumani, pendingKumani, receivedKumani, currentRank, ranks, networkPointsEarned, networkActivations, achievedKeys, networkPendingActivations, networkPendingPoints } = network
   const nextRank = ranks.find((rank) => !achievedKeys.includes(rank.key)) || null
   const progress = nextRank ? rankProgress(nextRank, networkActivations, networkPointsEarned) : 100
   const missing = nextRank ? await rankMissingText(nextRank, networkActivations, networkPointsEarned) : null
@@ -49,7 +49,16 @@ export default async function NetworkSummaryCard({ network }: { network: Dashboa
         <div className="mt-5">
           <div className="mb-1.5 flex items-center justify-between gap-2 text-sm">
             <span className="font-semibold text-white">{nextRank ? t(nextRank.labelKey) : currentRank ? t(currentRank.labelKey) : ''}</span>
-            {nextRank && <RankRequirements rank={nextRank} activations={networkActivations} points={networkPointsEarned} className="text-xs text-white/60" />}
+            {nextRank && (
+              <RankRequirements
+                rank={nextRank}
+                activations={networkActivations}
+                points={networkPointsEarned}
+                pendingActivations={networkPendingActivations}
+                pendingPoints={networkPendingPoints}
+                className="text-right text-xs text-white/60"
+              />
+            )}
           </div>
           <div className="h-2.5 overflow-hidden rounded-full bg-white/10">
             <div className="h-full rounded-full bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)]" style={{ width: `${progress}%` }} />

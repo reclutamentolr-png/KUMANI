@@ -149,7 +149,7 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
   const achievedKeys = [...achievements.keys()]
   const currentRank = getCurrentRank(achievedKeys, ranks)
   const nextRank = ranks.find((rank) => !achievements.has(rank.key)) ?? null
-  const nextMissing = nextRank ? await rankMissingText(nextRank, networkWallet.activations, networkWallet.earnedTotal) : null
+  const nextMissing = nextRank ? await rankMissingText(nextRank, networkWallet.activations, networkWallet.confirmedPoints) : null
 
   const receiptsList = receipts || []
   const receiptsPending = receiptsList.filter((r) => !r.confirmed_at).length
@@ -347,10 +347,12 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
                 <div>
                   <p className="text-xs text-[var(--muted)]">{t('badgeActivations')}</p>
                   <p className="text-3xl font-bold text-[var(--ink)]">{networkWallet.activations}</p>
+                  {networkWallet.pendingActivations > 0 && <p className="text-xs text-amber-700">{t('badgePending', { count: networkWallet.pendingActivations })}</p>}
                 </div>
                 <div>
-                  <p className="text-xs text-[var(--muted)]">{t('badgeEarnedTotal')}</p>
-                  <p className="text-3xl font-bold text-[var(--ink)]">{networkWallet.earnedTotal}</p>
+                  <p className="text-xs text-[var(--muted)]">{t('badgeConfirmedPoints')}</p>
+                  <p className="text-3xl font-bold text-[var(--ink)]">{networkWallet.confirmedPoints}</p>
+                  {networkWallet.pendingPoints > 0 && <p className="text-xs text-amber-700">{t('badgePendingPoints', { count: networkWallet.pendingPoints })}</p>}
                 </div>
               </div>
               <span className="rounded-full bg-[var(--ink)] px-3 py-1 text-xs font-bold text-[var(--gold-bright)]">
@@ -363,7 +365,7 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
                 <div className="h-2 overflow-hidden rounded-full bg-gray-100">
                   <div
                     className="h-full rounded-full bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)]"
-                    style={{ width: `${rankProgress(nextRank, networkWallet.activations, networkWallet.earnedTotal)}%` }}
+                    style={{ width: `${rankProgress(nextRank, networkWallet.activations, networkWallet.confirmedPoints)}%` }}
                   />
                 </div>
                 {nextMissing && <p className="mt-1.5 text-xs font-semibold text-[var(--ink)]">{nextMissing}</p>}
@@ -569,6 +571,8 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
             ranks={networkWallet.ranks}
             blackPlusEvery={networkWallet.blackPlusEvery}
             initialVouchers={myVouchers}
+            pendingPoints={networkWallet.pendingPoints}
+            confirmDays={networkWallet.confirmDays}
           />
         </WalletSection>
       </main>

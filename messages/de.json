@@ -610,7 +610,8 @@
     "qualificationVouchers": "Du hast {count, plural, one {# Gutschein erhalten, um einen neuen Kumano zu aktivieren} other {# Gutscheine erhalten, um neue Kumani zu aktivieren}}",
     "qualificationVouchersHint": "Du findest sie in deinem Wallet im Bereich Gutscheine, mit Hinweisen zum Verschenken.",
     "qualificationBlackExtra": "Außerdem hast du einen Pro-Gutschein für ein Jahr nur für dich und bekommst ab jetzt 1 Gutschein alle {every} neuen Aktivierungen. Auf dich warten auch die Vitrine im Kumano des Tages, die Einladung zum jährlichen KUMANI-Event und der Rat der Black.",
-    "qualificationOpenWallet": "Zu deinen Gutscheinen"
+    "qualificationOpenWallet": "Zu deinen Gutscheinen",
+    "rankPendingLine": "In Bestätigung: +{acts} Aktivierungen, +{points} KU Points"
   },
   "memolife": {
     "greeting": "Ciao, {name}!",
@@ -2753,7 +2754,10 @@
     "badgeActivations": "Base- oder Pro-Aktivierungen",
     "badgeRequirement": "{acts} Aktivierungen · {points} Punkte",
     "badgePrize": "Prämie: {count, plural, one {# Gutschein} other {# Gutscheine}}",
-    "badgeBlackNote": "Du bist Kuman Black: Du bekommst 1 Gutschein alle {every} neuen Aktivierungen. Danke, dass du die KUMANI-Community wachsen lässt!"
+    "badgeBlackNote": "Du bist Kuman Black: Du bekommst 1 Gutschein alle {every} neuen Aktivierungen. Danke, dass du die KUMANI-Community wachsen lässt!",
+    "badgeConfirmedPoints": "Bestätigte KU Points",
+    "badgePending": "+{count} in Bestätigung",
+    "badgePendingPoints": "+{count} in Bestätigung"
   },
   "rewards": {
     "title": "Prämienkatalog",
@@ -5943,12 +5947,14 @@
     "qualificationRequirement": "{acts} Aktivierungen + {points} KU Points",
     "qualificationPrize": "{count, plural, one {# Base-Gutschein} other {# Base-Gutscheine}}, um neue Kumani zu aktivieren",
     "qualificationPrizeBlack": "+ 1 Pro-Gutschein für ein Jahr für dich",
-    "qualificationsNote": "Es zählen die per Karte bezahlten Base- oder Pro-Aktivierungen der von dir eingeladenen Personen (keine Pässe und keine Aktivierungen per Gutschein) und alle verdienten KU Points, auch die aus deinem Stern. Nach Kuman Black: 1 Gutschein alle {every} neuen Aktivierungen. Die Gutscheine erscheinen hier automatisch.",
+    "qualificationsNote": "Es zählen die per Karte bezahlten Base- oder Pro-Aktivierungen der von dir eingeladenen Personen (keine Pässe und keine Aktivierungen per Gutschein) und alle verdienten KU Points, auch die aus deinem Stern, sobald sie bestätigt sind. Nach Kuman Black: 1 Gutschein alle {every} neuen Aktivierungen. Die Gutscheine erscheinen hier automatisch.",
     "noVouchers": "Noch keine Gutscheine: Sie kommen automatisch mit der ersten Qualifikation.",
     "vouchersHowTo": "Schenke einen Gutschein einer neuen Person: Sie gibt ihn bei der Registrierung unter „Hast du einen Code?“ ein und bekommt ein Jahr KUMANI Base. Du selbst kannst ihn nicht nutzen.",
     "prizeFrom": "Prämie {rank}",
     "prizeBlackPlus": "Black fortlaufend",
-    "personalProHint": "Persönlicher Pro-Gutschein: Du kannst ihn unten unter „Gutschein einlösen“ für dich aktivieren."
+    "personalProHint": "Persönlicher Pro-Gutschein: Du kannst ihn unten unter „Gutschein einlösen“ für dich aktivieren.",
+    "pointsConfirmed": "davon bestätigt: {count}",
+    "pointsConfirmNote": "KU Points werden {days} Tage nach der Zahlung endgültig, die Frist für einen möglichen Widerruf. Nur bestätigte Punkte zählen für die Qualifikationen und können genutzt werden (Vitrine, Spenden). Erstattete Aktivierungen geben keine Punkte."
   },
   "voucherReceipt": {
     "back": "Zurück zur Brieftasche",
@@ -8027,7 +8033,10 @@
     "showcaseReason_price": "Ladenpreis nicht glaubwürdig",
     "showcaseReason_other": "verstößt gegen die Regeln",
     "giftRedeemedTitle": "Dein Geschenk wurde aktiviert 🎁",
-    "giftRedeemedBody": "{name} hat dein Geschenk aktiviert."
+    "giftRedeemedBody": "{name} hat dein Geschenk aktiviert.",
+    "qualificationTitle": "Neue Qualifikation: {rank}! 🎉",
+    "qualificationBlackPlusTitle": "Neuer Gutschein Black fortlaufend 🎁",
+    "qualificationBody": "Du hast {count, plural, one {# Gutschein} other {# Gutscheine}} erhalten: Du findest sie in deinem Wallet."
   },
   "pushInvite": {
     "title": "Benachrichtigungen aktivieren",
