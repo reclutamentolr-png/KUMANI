@@ -5,7 +5,7 @@ import { pageMetadata } from '@/lib/seo'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getLocale, getTranslations } from 'next-intl/server'
-import { ArrowLeft, Ban, CalendarDays, CalendarHeart, ChevronRight, Clock, Euro, Hourglass, Languages, Lock, MapPin, MessageSquareQuote, Repeat, ShieldCheck, Stamp, TriangleAlert, UserRound, Users, Video } from 'lucide-react'
+import { Plane, ArrowLeft, Ban, CalendarDays, CalendarHeart, ChevronRight, Clock, Euro, Hourglass, Languages, Lock, MapPin, MessageSquareQuote, Repeat, ShieldCheck, Stamp, TriangleAlert, UserRound, Users, Video } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import EventActions from '@/components/events/EventActions'
 import { EventFlags, LevelBadge, PriceBadge, RatingBadge, SpotsBadge, Stars, formatEventPrice, formatRating } from '@/components/events/EventBadges'
@@ -53,6 +53,7 @@ export default async function EventPage({ params, searchParams }: Props) {
   ] = await Promise.all([loadEvent(id), supabase.auth.getUser()])
   if (!event) notFound()
   const online = await isToolOnline('events')
+  const te = await getTranslations('ecosystem')
 
   let myReferral: string | null = null
   if (user) {
@@ -309,6 +310,20 @@ export default async function EventPage({ params, searchParams }: Props) {
           </div>
 
           <div className="space-y-5">
+            {/* Ecosistema: evento in presenza → viaggio già compilato */}
+            {user && event.mode !== 'online' && !started && (
+              <Link
+                href={`/viaggi?nuovo=1&titolo=${encodeURIComponent(event.title)}&meta=${encodeURIComponent(event.city ?? '')}&dal=${start.date}&al=${end?.date ?? start.date}`}
+                className="group flex items-center gap-3 rounded-2xl border border-sky-200 bg-sky-50/70 p-4 transition hover:border-sky-400"
+              >
+                <Plane className="h-6 w-6 shrink-0 text-sky-600" />
+                <span className="min-w-0 flex-1">
+                  <span className="block font-bold text-[var(--ink)]">{te('eventTripTitle')}</span>
+                  <span className="block text-sm text-[var(--muted)]">{te('eventTripText')}</span>
+                </span>
+                <ChevronRight className="h-5 w-5 shrink-0 text-sky-600 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            )}
             {(event.status === 'published' || event.is_organizer) && (
               <EventActions event={event} loggedIn={!!user} sponsor={sponsor} siteUrl={SITE_URL} myReferral={myReferral} started={started} />
             )}

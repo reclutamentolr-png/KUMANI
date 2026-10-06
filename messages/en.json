@@ -9826,7 +9826,19 @@
     "tripSpendlyDone": "Done: {count, plural, one {# trip expense} other {# trip expenses}} in Spendly, for {total}. If the expenses change, tap again to update.",
     "tripSpendlyNoAccess": "With the Base plan you add your share of the trip expenses to Spendly in one tap.",
     "spendlyFincheckTitle": "Get a check-up of your finances",
-    "spendlyFincheckText": "Fincheck uses your real Spendly data from the last 3 months: savings, fixed costs, debts and an action plan."
+    "spendlyFincheckText": "Fincheck uses your real Spendly data from the last 3 months: savings, fixed costs, debts and an action plan.",
+    "eventTripTitle": "Coming from out of town?",
+    "eventTripText": "Plan the trip: dates already set, checklist and expenses shared with whoever comes with you.",
+    "cvToBioButton": "Add to Link in bio",
+    "cvToBioDone": "CV link added to your Link in bio.",
+    "cvToBioExists": "Your CV is already in your Link in bio.",
+    "cvToBioOpen": "Open Link in bio",
+    "cvToBioNoAccess": "Link in bio is included in the Base and Pro plans.",
+    "cvToBioError": "It could not be added. Please try again.",
+    "cvToBioLinkTitle": "My CV",
+    "listingsTimebankTitle": "Need help, without money?",
+    "listingsTimebankText": "In the Time Bank, Kumani exchange hours of help: one hour given is worth one hour received.",
+    "listingsTimebankCta": "Go to the Time Bank"
   },
   "businessProfile": {
     "title": "Business profile",

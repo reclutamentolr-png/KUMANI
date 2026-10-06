@@ -9826,7 +9826,19 @@
     "tripSpendlyDone": "Erledigt: {count, plural, one {# Reiseausgabe} other {# Reiseausgaben}} in Spendly, insgesamt {total}. Wenn sich die Ausgaben ändern, tippe erneut zum Aktualisieren.",
     "tripSpendlyNoAccess": "Mit dem Base-Plan fügst du deinen Anteil an den Reiseausgaben mit einem Tipp zu Spendly hinzu.",
     "spendlyFincheckTitle": "Mach einen Check-up deiner Finanzen",
-    "spendlyFincheckText": "Fincheck nutzt deine echten Spendly-Daten der letzten 3 Monate: Sparen, Fixkosten, Schulden und ein Aktionsplan."
+    "spendlyFincheckText": "Fincheck nutzt deine echten Spendly-Daten der letzten 3 Monate: Sparen, Fixkosten, Schulden und ein Aktionsplan.",
+    "eventTripTitle": "Kommst du von außerhalb?",
+    "eventTripText": "Plane die Reise: Daten schon eingetragen, Checkliste und geteilte Ausgaben mit allen, die mitkommen.",
+    "cvToBioButton": "Zum Link in bio hinzufügen",
+    "cvToBioDone": "CV-Link zu deinem Link in bio hinzugefügt.",
+    "cvToBioExists": "Der CV ist schon in deinem Link in bio.",
+    "cvToBioOpen": "Link in bio öffnen",
+    "cvToBioNoAccess": "Link in bio ist in den Plänen Base und Pro enthalten.",
+    "cvToBioError": "Konnte nicht hinzugefügt werden. Bitte erneut versuchen.",
+    "cvToBioLinkTitle": "Mein Lebenslauf",
+    "listingsTimebankTitle": "Brauchst du Hilfe, ohne Geld?",
+    "listingsTimebankText": "In der Zeitbank tauschen Kumani Stunden Hilfe: Eine gegebene Stunde ist eine erhaltene Stunde wert.",
+    "listingsTimebankCta": "Zur Zeitbank"
   },
   "businessProfile": {
     "title": "Firmenprofil",

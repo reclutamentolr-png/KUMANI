@@ -12,8 +12,21 @@ import { isToolOnline } from '@/lib/toolOnline'
 // KUMANI Travel: i miei viaggi. Fuori da /marketplace di proposito: chi è
 // stato invitato entra anche senza abbonamento; solo creare un viaggio
 // richiede il piano (controllato da trip_create).
-export default async function TravelPage({ params }: { params: Promise<{ locale: string }> }) {
+export default async function TravelPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ locale: string }>
+  searchParams: Promise<{ nuovo?: string; titolo?: string; meta?: string; dal?: string; al?: string }>
+}) {
   const { locale } = await params
+  // Ecosistema: viaggio nuovo già compilato (es. da un evento)
+  const sp = await searchParams
+  const day = (v?: string) => (v && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : '')
+  const prefill =
+    sp.nuovo === '1'
+      ? { title: (sp.titolo ?? '').slice(0, 80), destination: (sp.meta ?? '').slice(0, 80), startsOn: day(sp.dal), endsOn: day(sp.al) || day(sp.dal) }
+      : null
   const t = await getTranslations('travel')
   const commonT = await getTranslations('common')
   const supabase = await createClient()
@@ -49,7 +62,7 @@ export default async function TravelPage({ params }: { params: Promise<{ locale:
           <p className="mt-2 text-[var(--muted)]">{t('intro')}</p>
         </div>
         {!online && <SuspendedBanner className="mb-6" />}
-        <TravelHome trips={trips} canCreate={online && !!access?.allowed} today={todayKey()} />
+        <TravelHome trips={trips} canCreate={online && !!access?.allowed} today={todayKey()} prefill={prefill} />
       </main>
     </div>
   )

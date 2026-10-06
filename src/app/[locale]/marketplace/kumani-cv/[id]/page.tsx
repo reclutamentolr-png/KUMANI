@@ -10,6 +10,7 @@ import OfferMakerQR from '@/components/OfferMakerQR'
 import CopyLinkButton from '@/components/CopyLinkButton'
 import CvPdfButton from '@/components/CvPdfButton'
 import CvShareButtons from '@/components/CvShareButtons'
+import CvToBioButton from '@/components/ecosystem/CvToBioButton'
 import CvActions from '@/components/CvActions'
 import CvTemplateRenderer from '@/components/cv/CvTemplateRenderer'
 
@@ -107,6 +108,7 @@ export default async function CvDetailPage({
         <div className="space-y-4">
           <div className="flex flex-wrap items-center gap-3">
             <CvPdfButton cv={cv} photoUrl={photoUrl} publicUrl={publicUrl} />
+            <CvToBioButton publicUrl={publicUrl} />
             <CvActions id={cv.id} />
           </div>
           <CvShareButtons cv={cv} photoUrl={photoUrl} publicUrl={publicUrl} />

@@ -7,7 +7,7 @@ import { LISTINGS_PAGE_SIZE, getUnreadMessagesCount, getActiveListings, getFeatu
 import { CATEGORY_ICONS, CATEGORY_I18N_KEYS, ALL_LISTING_CATEGORIES, LISTING_COUNTRIES, isListingCountry, cleanListingCity, type Listing, type ListingCategory } from '@/lib/listings'
 import { countryName } from '@/lib/events'
 import { deleteListingAction, republishListingAction } from '@/app/actions/listings'
-import { ArrowLeft, MessageCircle, Plus, Tag, Trash2, Eye, Calendar, RefreshCw, Sparkles, Coins, Info, ChevronDown } from 'lucide-react'
+import { ArrowLeft, MessageCircle, Plus, Tag, Trash2, Eye, Calendar, RefreshCw, Sparkles, Coins, Info, ChevronDown, Hourglass } from 'lucide-react'
 import ListingForm from '@/components/ListingForm'
 import ChatModalWrapper from '@/components/ChatModalWrapper'
 import FeatureListingButton from '@/components/FeatureListingButton'
@@ -41,6 +41,7 @@ export default async function ListingsPage({
   // Pagina degli annunci (30 per volta invece di tutti insieme)
   const page = Math.min(Math.max(parseInt(rawPage ?? '1', 10) || 1, 1), 1000)
   const t = await getTranslations('marketplace')
+  const te = await getTranslations('ecosystem')
   const commonT = await getTranslations('common')
 
   const supabase = await createClient()
@@ -271,6 +272,21 @@ export default async function ListingsPage({
             clear: t('clearFilters'),
           }}
         />
+
+        {/* Ecosistema: per i servizi e l'aiuto in casa c'è anche la Banca del tempo (ore, non soldi) */}
+        {(category === 'servizi' || category === 'colf_badanti') && (
+          <Link
+            href="/marketplace/timebank"
+            className="group mb-8 flex items-center gap-4 rounded-2xl border border-teal-200 bg-teal-50/70 p-4 transition hover:border-teal-400"
+          >
+            <Hourglass className="h-7 w-7 shrink-0 text-teal-600" />
+            <span className="min-w-0 flex-1">
+              <span className="block font-bold text-[var(--ink)]">{te('listingsTimebankTitle')}</span>
+              <span className="block text-sm text-[var(--muted)]">{te('listingsTimebankText')}</span>
+            </span>
+            <span className="shrink-0 text-sm font-bold text-teal-700 group-hover:underline">{te('listingsTimebankCta')}</span>
+          </Link>
+        )}
 
         {/* I Miei Annunci */}
         {myListings.length > 0 && (

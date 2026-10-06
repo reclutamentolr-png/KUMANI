@@ -12,11 +12,22 @@ import TravelTripForm from './TravelTripForm'
 
 // I miei viaggi: prossimi in alto, "Nuovo viaggio" (con il piano) ed
 // "Entra con un codice" (per tutti, anche senza abbonamento).
-export default function TravelHome({ trips, canCreate, today }: { trips: TripSummary[]; canCreate: boolean; today: string }) {
+export default function TravelHome({
+  trips,
+  canCreate,
+  today,
+  prefill = null,
+}: {
+  trips: TripSummary[]
+  canCreate: boolean
+  today: string
+  // Viaggio nuovo già compilato da un altro servizio (es. un evento)
+  prefill?: { title: string; destination: string; startsOn: string; endsOn: string } | null
+}) {
   const t = useTranslations('travel')
   const locale = useLocale()
   const router = useRouter()
-  const [creating, setCreating] = useState(false)
+  const [creating, setCreating] = useState(!!prefill && canCreate)
   const [code, setCode] = useState('')
   const [joining, setJoining] = useState(false)
   const [joinError, setJoinError] = useState<string | null>(null)
@@ -150,6 +161,7 @@ export default function TravelHome({ trips, canCreate, today }: { trips: TripSum
         <Sheet title={t('newTrip')} onClose={() => setCreating(false)}>
           <TravelTripForm
             mode="create"
+            initial={prefill ?? undefined}
             onSubmit={async (values, checklist) => {
               const result = await createTrip({ ...values, checklist })
               if (result.success && result.id) {

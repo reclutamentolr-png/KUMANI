@@ -9826,7 +9826,19 @@
     "tripSpendlyDone": "Feito: {count, plural, one {# despesa} other {# despesas}} da viagem no Spendly, por {total}. Se as despesas mudarem, toque novamente para atualizar.",
     "tripSpendlyNoAccess": "Com o plano Base adiciona a sua parte das despesas da viagem ao Spendly com um toque.",
     "spendlyFincheckTitle": "Faça um check-up às suas contas",
-    "spendlyFincheckText": "O Fincheck usa os seus dados reais do Spendly dos últimos 3 meses: poupança, despesas fixas, dívidas e um plano de ação."
+    "spendlyFincheckText": "O Fincheck usa os seus dados reais do Spendly dos últimos 3 meses: poupança, despesas fixas, dívidas e um plano de ação.",
+    "eventTripTitle": "Vem de fora?",
+    "eventTripText": "Organize a viagem: datas já prontas, checklist e despesas partilhadas com quem vem consigo.",
+    "cvToBioButton": "Adicionar ao Link in bio",
+    "cvToBioDone": "Link do CV adicionado ao seu Link in bio.",
+    "cvToBioExists": "O CV já está no seu Link in bio.",
+    "cvToBioOpen": "Abrir o Link in bio",
+    "cvToBioNoAccess": "O Link in bio está incluído nos planos Base e Pro.",
+    "cvToBioError": "Não foi possível adicionar. Tente novamente.",
+    "cvToBioLinkTitle": "O meu CV",
+    "listingsTimebankTitle": "Precisa de ajuda, sem dinheiro?",
+    "listingsTimebankText": "No Banco do tempo os Kumani trocam horas de ajuda: uma hora dada vale uma hora recebida.",
+    "listingsTimebankCta": "Ir ao Banco do tempo"
   },
   "businessProfile": {
     "title": "Ficha da atividade",

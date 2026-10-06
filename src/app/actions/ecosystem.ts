@@ -1,6 +1,8 @@
 'use server'
 
+import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
+import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 
 // Collegamenti tra i servizi dell'Ecosistema (Ricevuta digitale → Spendly,
 // Kumi Card Fidelity → Wallet). Le regole stanno nelle funzioni del database.
@@ -43,4 +45,29 @@ export async function syncTripToSpendly(tripId: string): Promise<TripSpendlyStat
   const { data, error } = await supabase.rpc('trip_to_spendly', { p_trip: tripId })
   if (error) console.error('[ecosistema] viaggio → Spendly:', error.message)
   return (data as TripSpendlyStatus | null) ?? { status: 'not_member' }
+}
+
+// CV → Link in bio: aggiunge il link pubblico del CV tra i link (una volta sola)
+export async function addCvToLinkInBio(publicUrl: string): Promise<'added' | 'exists' | 'no_access' | 'error'> {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user || !/^https?:\/\/[^\s]+\/cv\/[A-Za-z0-9_-]{4,64}$/.test(publicUrl)) return 'error'
+  if (!(await hasActiveToolAccess(supabase, user.id, 'link-in-bio'))) return 'no_access'
+  const { data: row } = await supabase.from('link_in_bio').select('links, theme, bio_text').eq('user_id', user.id).maybeSingle()
+  const raw = row?.links
+  const links: { id?: string; title: string; url: string; icon: string; enabled?: boolean }[] = Array.isArray(raw) ? raw : typeof raw === 'string' ? JSON.parse(raw || '[]') : []
+  const code = publicUrl.split('/cv/')[1]
+  if (links.some((l) => typeof l.url === 'string' && l.url.includes(`/cv/${code}`))) return 'exists'
+  const t = await getTranslations('ecosystem')
+  links.push({ id: crypto.randomUUID(), title: t('cvToBioLinkTitle'), url: publicUrl, icon: 'default', enabled: true })
+  const { error } = await supabase
+    .from('link_in_bio')
+    .upsert({ user_id: user.id, links: JSON.stringify(links), bio_text: row?.bio_text ?? '', theme: row?.theme ?? undefined, updated_at: new Date().toISOString() }, { onConflict: 'user_id' })
+  if (error) {
+    console.error('[ecosistema] CV → Link in bio:', error.message)
+    return 'error'
+  }
+  return 'added'
 }

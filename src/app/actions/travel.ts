@@ -63,6 +63,7 @@ export async function createTrip(input: {
   endsOn: string
   emoji: string
   checklist: string[]
+  baseCurrency?: string
 }): Promise<Result> {
   if (!(await isToolOnline('travel'))) return { success: false, error: 'suspended' }
   const title = clean(input.title, 80)
@@ -86,6 +87,10 @@ export async function createTrip(input: {
   }
   const result = data as { id?: string; error?: string }
   if (!result?.id) return { success: false, error: result?.error ?? 'saveError' }
+  // Valuta del viaggio scelta nel modulo (trip_create parte sempre dall'euro)
+  if (input.baseCurrency && input.baseCurrency !== 'EUR' && (CURRENCIES as readonly string[]).includes(input.baseCurrency)) {
+    await supabase.from('trips').update({ base_currency: input.baseCurrency }).eq('id', result.id)
+  }
   await awardToolPoint('travel')
   return { success: true, id: result.id }
 }

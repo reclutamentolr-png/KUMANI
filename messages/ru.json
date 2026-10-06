@@ -9826,7 +9826,19 @@
     "tripSpendlyDone": "Готово: {count, plural, one {# расход} few {# расхода} many {# расходов} other {# расхода}} поездки в Spendly на {total}. Если расходы изменятся, нажмите ещё раз для обновления.",
     "tripSpendlyNoAccess": "С тарифом Base вы добавляете свою долю расходов поездки в Spendly одним касанием.",
     "spendlyFincheckTitle": "Проверьте свои финансы",
-    "spendlyFincheckText": "Fincheck использует реальные данные Spendly за последние 3 месяца: сбережения, постоянные расходы, долги и план действий."
+    "spendlyFincheckText": "Fincheck использует реальные данные Spendly за последние 3 месяца: сбережения, постоянные расходы, долги и план действий.",
+    "eventTripTitle": "Приезжаете из другого города?",
+    "eventTripText": "Организуйте поездку: даты уже указаны, чек-лист и общие расходы с теми, кто едет с вами.",
+    "cvToBioButton": "Добавить в Link in bio",
+    "cvToBioDone": "Ссылка на резюме добавлена в ваш Link in bio.",
+    "cvToBioExists": "Резюме уже есть в вашем Link in bio.",
+    "cvToBioOpen": "Открыть Link in bio",
+    "cvToBioNoAccess": "Link in bio входит в тарифы Base и Pro.",
+    "cvToBioError": "Не удалось добавить. Попробуйте ещё раз.",
+    "cvToBioLinkTitle": "Моё резюме",
+    "listingsTimebankTitle": "Нужна помощь, без денег?",
+    "listingsTimebankText": "В Банке времени Kumani обмениваются часами помощи: отданный час равен полученному.",
+    "listingsTimebankCta": "Перейти в Банк времени"
   },
   "businessProfile": {
     "title": "Карточка бизнеса",
