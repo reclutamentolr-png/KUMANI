@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation'
+import NextStepNudge from '@/components/ecosystem/NextStepNudge'
 import { getTranslations } from 'next-intl/server'
 import { ArrowLeft, Building2 } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
@@ -51,6 +52,8 @@ export default async function BusinessProfilePage({
             </Link>
           </div>
         )}
+        {/* Ecosistema: il passo successivo, se il servizio non è ancora incluso */}
+        <NextStepNudge tool="preventivi" name="Pro" reason="nudgeProfileToPro" className="mt-8" />
       </main>
     </div>
   )

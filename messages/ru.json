@@ -9849,7 +9849,15 @@
     "wellnessClaim": "Получить +{bonus} KU Karma",
     "wellnessClaimed": "Бонус за сегодня получен",
     "wellnessAwarded": "Получено +{bonus} KU Karma!",
-    "wellnessStreak": "{count, plural, one {# день подряд} few {# дня подряд} many {# дней подряд} other {# дня подряд}}"
+    "wellnessStreak": "{count, plural, one {# день подряд} few {# дня подряд} many {# дней подряд} other {# дня подряд}}",
+    "nudgeCta": "Узнать о {name}",
+    "nudgePriceFrom": "от {price} в год",
+    "nudgeIbanToCheckmail": "IBAN пришёл вам по email? CheckMail проанализирует всё письмо и скажет, мошенничество ли это.",
+    "nudgeAntitruffaToCheckmail": "Подозрительное письмо или сообщение? CheckMail проверит его за несколько секунд.",
+    "nudgeWellnessToNeuro": "Хотите большего? NeuroBalance поможет расслабиться, уснуть или сосредоточиться с бинауральными звуками и звуками природы.",
+    "nudgeQrToPro": "С QR Code Pro можно менять адрес даже после печати QR и видеть, сколько раз его отсканировали.",
+    "nudgeBioToLanding": "Готовы к настоящей странице для бизнеса? Лендинг заполнится сам по вашей карточке бизнеса.",
+    "nudgeProfileToPro": "С тарифом Pro карточка бизнеса сама заполняет Сметы, Лендинг, Меню, Kumi Card Fidelity и Подпись email."
   },
   "businessProfile": {
     "title": "Карточка бизнеса",

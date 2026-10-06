@@ -1,4 +1,5 @@
 import { SITE_URL } from '@/lib/siteUrl'
+import NextStepNudge from '@/components/ecosystem/NextStepNudge'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from '@/components/LocalizedLink'
@@ -135,6 +136,8 @@ export default async function LinkInBioPage({ params }: { params: Promise<{ loca
           </a>
           <p className="text-sm text-[var(--muted)] mt-3">{t('savePrompt')}</p>
         </div>
+        {/* Ecosistema: il passo successivo, se il servizio non è ancora incluso */}
+        <NextStepNudge tool="landing-page" name="Landing page" reason="nudgeBioToLanding" className="mt-8" />
       </main>
     </div>
   )

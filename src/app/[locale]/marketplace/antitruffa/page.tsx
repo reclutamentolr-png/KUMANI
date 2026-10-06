@@ -1,4 +1,5 @@
 import { getLocale, getTranslations } from 'next-intl/server'
+import NextStepNudge from '@/components/ecosystem/NextStepNudge'
 import {
   DoorClosed,
   AlertTriangle,
@@ -298,6 +299,8 @@ export default async function AntitruffaPage() {
           <p>{g.ui.disclaimer}</p>
           <p>{g.ui.copyright}</p>
         </footer>
+        {/* Ecosistema: il passo successivo, se il servizio non è ancora incluso */}
+        <NextStepNudge tool="checkmail" name="CheckMail" reason="nudgeAntitruffaToCheckmail" className="mt-8" />
       </main>
     </div>
   )

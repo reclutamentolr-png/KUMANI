@@ -1,4 +1,5 @@
 import { getTranslations } from 'next-intl/server'
+import NextStepNudge from '@/components/ecosystem/NextStepNudge'
 import { ArrowLeft, Landmark } from 'lucide-react'
 import ToolBackLink from '@/components/ToolBackLink'
 import IbanChecker from '@/components/verificaIban/IbanChecker'
@@ -58,6 +59,8 @@ export default async function VerificaIbanPage({
         <IbanChecker initialIban={initialIban} />
 
         <p className="mt-6 text-center text-xs leading-5 text-[var(--muted)]">{t('privacy')}</p>
+        {/* Ecosistema: il passo successivo, se il servizio non è ancora incluso */}
+        <NextStepNudge tool="checkmail" name="CheckMail" reason="nudgeIbanToCheckmail" className="mt-8" />
       </main>
     </div>
   )

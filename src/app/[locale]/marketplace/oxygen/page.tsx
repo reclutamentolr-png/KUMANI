@@ -1,4 +1,5 @@
 import { getTranslations } from 'next-intl/server'
+import NextStepNudge from '@/components/ecosystem/NextStepNudge'
 import { ArrowLeft, Wind } from 'lucide-react'
 import ToolBackLink from '@/components/ToolBackLink'
 import OxygenSession from '@/components/oxygen/OxygenSession'
@@ -48,6 +49,8 @@ export default async function OxygenPage() {
         <OxygenSession />
 
         <p className="mt-6 text-center text-xs leading-5 text-[var(--muted)]">{t('disclaimer')}</p>
+        {/* Ecosistema: il passo successivo, se il servizio non è ancora incluso */}
+        <NextStepNudge tool="neurobalance" name="NeuroBalance" reason="nudgeWellnessToNeuro" className="mt-8" />
       </main>
     </div>
   )

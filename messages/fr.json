@@ -9849,7 +9849,15 @@
     "wellnessClaim": "Recevoir +{bonus} KU Karma",
     "wellnessClaimed": "Bonus du jour reçu",
     "wellnessAwarded": "+{bonus} KU Karma reçus !",
-    "wellnessStreak": "{count, plural, one {# jour d’affilée} other {# jours d’affilée}}"
+    "wellnessStreak": "{count, plural, one {# jour d’affilée} other {# jours d’affilée}}",
+    "nudgeCta": "Découvrir {name}",
+    "nudgePriceFrom": "à partir de {price} par an",
+    "nudgeIbanToCheckmail": "L’IBAN vous est arrivé par e-mail ? CheckMail analyse tout l’e-mail et vous dit s’il s’agit d’une arnaque.",
+    "nudgeAntitruffaToCheckmail": "Un e-mail ou un message suspect ? CheckMail le vérifie pour vous en quelques secondes.",
+    "nudgeWellnessToNeuro": "Envie d’aller plus loin ? NeuroBalance vous accompagne avec des sons binauraux et de la nature pour vous détendre, dormir ou vous concentrer.",
+    "nudgeQrToPro": "Avec QR Code Pro, vous changez la destination même après avoir imprimé le QR et vous voyez combien de fois il est scanné.",
+    "nudgeBioToLanding": "Prêt pour une vraie page pour votre activité ? La Landing page se remplit toute seule avec votre fiche entreprise.",
+    "nudgeProfileToPro": "Avec le Pro, votre fiche entreprise remplit toute seule Devis, Landing page, Menu, Kumi Card Fidelity et Signature e-mail."
   },
   "businessProfile": {
     "title": "Fiche entreprise",

@@ -1,4 +1,5 @@
 import { SITE_URL } from '@/lib/siteUrl'
+import NextStepNudge from '@/components/ecosystem/NextStepNudge'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslations } from 'next-intl/server'
 import { redirect } from 'next/navigation'
@@ -119,6 +120,8 @@ export default async function QRGeneratorPage({ params }: { params: Promise<{ lo
             </li>
           </ul>
         </div>
+        {/* Ecosistema: il passo successivo, se il servizio non è ancora incluso */}
+        <NextStepNudge tool="qr-code-pro" name="QR Code Pro" reason="nudgeQrToPro" className="mt-8" />
       </main>
     </div>
   )

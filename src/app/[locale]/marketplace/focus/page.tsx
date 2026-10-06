@@ -1,4 +1,5 @@
 import { getTranslations } from 'next-intl/server'
+import NextStepNudge from '@/components/ecosystem/NextStepNudge'
 import { ArrowLeft, Timer } from 'lucide-react'
 import ToolBackLink from '@/components/ToolBackLink'
 import FocusTimer from '@/components/focus/FocusTimer'
@@ -49,6 +50,8 @@ export default async function FocusPage() {
         <FocusTimer />
 
         <p className="mt-6 text-center text-xs leading-5 text-[var(--muted)]">{t('disclaimer')}</p>
+        {/* Ecosistema: il passo successivo, se il servizio non è ancora incluso */}
+        <NextStepNudge tool="neurobalance" name="NeuroBalance" reason="nudgeWellnessToNeuro" className="mt-8" />
       </main>
     </div>
   )
