@@ -1,6 +1,8 @@
 // Landing Page (servizio Pro): struttura dei contenuti, modelli di stile e
 // controlli dei dati. Usato dall'editor, dal server e dalla pagina pubblica.
 
+import { BUSINESS_SOCIALS, businessWebsiteUrl, type BusinessProfile } from '@/lib/businessProfile'
+
 export const LANDING_LOCALES = ['it', 'en', 'fr', 'es', 'pt', 'de', 'ru'] as const
 export type LandingLocale = (typeof LANDING_LOCALES)[number]
 export const LANDING_LOCALE_NAMES: Record<LandingLocale, string> = {
@@ -116,6 +118,33 @@ export function emptyLandingContent(name = ''): LandingContent {
     seo: { description: '' },
     style: { bg: '', bgPhoto: '', font: 'modern' },
   }
+}
+
+// Dati della Scheda attività nei contenuti della pagina: si scrive un campo
+// solo se la Scheda ce l'ha. Il logo no (qui solo foto del bucket
+// landing-photos). Restituisce anche il colore, se valido.
+export function landingFromBusinessProfile(content: LandingContent, p: BusinessProfile): { content: LandingContent; accent: string | null } {
+  const x = structuredClone(content)
+  const set = (v: string, apply: (v: string) => void) => {
+    if (v.trim()) apply(v.trim())
+  }
+  set(p.companyName, (v) => {
+    x.hero.name = v
+    x.footer.businessName = v
+  })
+  set(p.tagline, (v) => (x.hero.subtitle = v))
+  set(p.phone, (v) => (x.contacts.phone = v))
+  set(p.whatsapp, (v) => (x.contacts.whatsapp = v))
+  set(p.email, (v) => (x.contacts.email = v))
+  set(p.address, (v) => (x.contacts.address = v))
+  set(p.city, (v) => (x.contacts.city = v))
+  set(p.vatNumber, (v) => (x.footer.vat = v))
+  set(businessWebsiteUrl(p.website), (v) => (x.social.website = v))
+  for (const k of BUSINESS_SOCIALS) set(p.socials[k] ?? '', (v) => (x.social[k] = v))
+  const rows = p.openingHours.filter((r) => r.day.trim() || r.hours.trim()).slice(0, LIMITS.hours)
+  if (rows.length) x.hours = { ...x.hours, on: true, rows: rows.map((r) => ({ day: r.day.trim(), hours: r.hours.trim() })) }
+  const accent = /^#[0-9a-f]{6}$/i.test(p.accent) ? p.accent.toLowerCase() : null
+  return { content: x, accent }
 }
 
 // ---------------------------------------------------------------------------

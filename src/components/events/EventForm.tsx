@@ -19,6 +19,8 @@ import {
   type OrganizedEvent,
   type OrganizerStatus,
 } from '@/lib/events'
+import BusinessProfileImport from '@/components/businessProfile/BusinessProfileImport'
+import type { BusinessProfile } from '@/lib/businessProfile'
 
 const input = 'w-full rounded-xl border border-gray-300 px-3 py-2.5 text-[15px] focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30'
 const label = 'mb-1 block text-sm font-semibold text-gray-700'
@@ -108,6 +110,7 @@ export default function EventForm({
   maxCapacity,
   feePercent,
   fidelityCard,
+  businessProfile = null,
   onSaved,
 }: {
   event?: OrganizedEvent | null
@@ -117,6 +120,8 @@ export default function EventForm({
   feePercent: number
   // Kumi Card attiva dell'organizzatore: abilita il timbro a chi entra
   fidelityCard?: OrganizerStatus['fidelity_card']
+  // Scheda attività: per un nuovo evento il luogo si può riprendere da lì
+  businessProfile?: BusinessProfile | null
   onSaved: (result: { id: string; status: string; dates?: number }) => void
 }) {
   const t = useTranslations('eventsOrganizer')
@@ -130,6 +135,17 @@ export default function EventForm({
   const priceLocked = !!event && event.people > 0
   const needsPlace = form.mode !== 'online'
   const needsLink = form.mode !== 'in_person'
+
+  // «Usa i dati della Scheda attività» (solo a richiesta: il luogo può essere un altro)
+  const importBusinessProfile = (p: BusinessProfile) => {
+    const address = [p.address, p.postalCode].filter(Boolean).join(', ')
+    setForm((f) => ({
+      ...f,
+      venueName: p.companyName ? p.companyName.slice(0, 120) : f.venueName,
+      address: address ? address.slice(0, 200) : f.address,
+      city: p.city ? p.city.slice(0, 80) : f.city,
+    }))
+  }
 
   const toggleLanguage = (code: string) =>
     setForm((f) => ({ ...f, languages: f.languages.includes(code) ? f.languages.filter((l) => l !== code) : [...f.languages, code] }))
@@ -281,6 +297,7 @@ export default function EventForm({
 
       {needsPlace && (
         <div className="space-y-4 rounded-xl border border-gray-200 bg-gray-50/60 p-4">
+          {!event && <BusinessProfileImport profile={businessProfile} onImport={importBusinessProfile} />}
           <div>
             <label className={label}>{t('fieldVenue')}</label>
             <input className={input} value={form.venueName} maxLength={120} placeholder={t('fieldVenuePlaceholder')} onChange={(e) => set('venueName', e.target.value)} />

@@ -10,6 +10,8 @@ import { KU_UNLOCK_LINKINBIO_THEMES, linkInBioThemeUnlockKey } from '@/lib/ku'
 import { buyKuUnlock } from '@/app/actions/ku'
 import Link from '@/components/LocalizedLink'
 import BioThemeScene from '@/components/BioThemeScene'
+import BusinessProfileImport from '@/components/businessProfile/BusinessProfileImport'
+import { businessWebsiteUrl, type BusinessProfile } from '@/lib/businessProfile'
 import { Plus, Trash2, Save, Link as LinkIcon, Check, ExternalLink, Globe, Mail, Phone, MessageCircle, Lock, Loader2, Eye, Sparkles, X } from 'lucide-react'
 
 type LinkItem = {
@@ -34,7 +36,17 @@ const URL_PLACEHOLDER_MAP: Record<string, string> = {
   whatsapp: '+39 333 1234567',
 }
 
-export default function LinkInBioEditor({ userId, firstName, lastName }: { userId: string; firstName?: string; lastName?: string }) {
+export default function LinkInBioEditor({
+  userId,
+  firstName,
+  lastName,
+  businessProfile = null,
+}: {
+  userId: string
+  firstName?: string
+  lastName?: string
+  businessProfile?: BusinessProfile | null
+}) {
   const t = useTranslations('marketplace')
   const supabase = createClient()
   const [bioText, setBioText] = useState('')
@@ -121,6 +133,25 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
     setLinks(links.filter(l => l.id !== id))
   }
 
+  // «Usa i dati della Scheda attività»: frase dalla Scheda e link mancanti
+  // (sito, WhatsApp, email, telefono); quelli già presenti non si duplicano
+  const importProfile = (p: BusinessProfile) => {
+    if (p.tagline.trim()) setBioText(p.tagline.trim())
+    const candidates: { icon: string; url: string; title: string }[] = [
+      { icon: 'website', url: businessWebsiteUrl(p.website), title: t('website') },
+      { icon: 'whatsapp', url: p.whatsapp.trim(), title: t('whatsapp') },
+      { icon: 'email', url: p.email.trim(), title: t('email') },
+      { icon: 'phone', url: p.phone.trim(), title: t('phone') },
+    ]
+    setLinks((prev) => {
+      const existing = new Set(prev.map((l) => normalizeLinkUrl(l.icon, l.url)).filter(Boolean))
+      const added = candidates
+        .filter((c) => c.url && !existing.has(normalizeLinkUrl(c.icon, c.url)))
+        .map((c) => ({ id: crypto.randomUUID(), title: c.title, url: c.url, icon: c.icon, enabled: true }))
+      return [...prev, ...added]
+    })
+  }
+
   const handleSave = async () => {
     setSaving(true)
     setJustSaved(false)
@@ -161,6 +192,8 @@ export default function LinkInBioEditor({ userId, firstName, lastName }: { userI
           <LinkIcon className="w-5 h-5 text-[var(--gold)]" />
           {t('editPage')}
         </h3>
+
+        <BusinessProfileImport profile={businessProfile} onImport={importProfile} className="mb-6" />
 
         {/* Bio Text */}
         <div className="mb-6">

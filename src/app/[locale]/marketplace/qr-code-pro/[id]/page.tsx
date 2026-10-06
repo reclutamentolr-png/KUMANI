@@ -6,6 +6,7 @@ import Link from '@/components/LocalizedLink'
 import { ArrowLeft, MousePointerClick, QrCode } from 'lucide-react'
 import { hasActiveQrProAccess } from '@/lib/qrPro-server'
 import QrProForm from '@/components/QrProForm'
+import { getMyBusinessProfile } from '@/lib/businessProfile-server'
 import OfferMakerQR from '@/components/OfferMakerQR'
 import CopyLinkButton from '@/components/CopyLinkButton'
 import { buildWifiQrPayload, type QrContentType, type QrDestination, type WifiDestination } from '@/lib/qrPro'
@@ -37,6 +38,8 @@ export default async function QrCodeDetailPage({
     .single()
 
   if (!qrCode) notFound()
+
+  const business = await getMyBusinessProfile(supabase, user.id)
 
   const baseUrl = SITE_URL
   const shortLink = `${baseUrl}/q/${qrCode.code}`
@@ -107,6 +110,7 @@ export default async function QrCodeDetailPage({
         <QrProForm
           mode="edit"
           id={qrCode.id}
+          business={business}
           initial={{
             label: qrCode.label,
             contentType: qrCode.content_type as QrContentType,

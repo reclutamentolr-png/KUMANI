@@ -6,12 +6,21 @@ import { useTranslations } from 'next-intl'
 import { AlertTriangle, Pencil, Trash2 } from 'lucide-react'
 import { deleteFidelityCard } from '@/app/actions/fidelity'
 import FidelitySettingsForm from '@/components/fidelity/FidelitySettingsForm'
+import type { BusinessProfile } from '@/lib/businessProfile'
 import type { FidelityCard } from '@/lib/fidelity'
 
 // Riepilogo della tessera con matita (modifica) e cestino (eliminazione
 // definitiva, con popup di conferma) — stesso schema del box "La tua
 // storia" del Kumano del Giorno.
-export default function FidelitySettingsPanel({ card, customersCount }: { card: FidelityCard; customersCount: number }) {
+export default function FidelitySettingsPanel({
+  card,
+  customersCount,
+  businessProfile = null,
+}: {
+  card: FidelityCard
+  customersCount: number
+  businessProfile?: BusinessProfile | null
+}) {
   const t = useTranslations('fidelity')
   const router = useRouter()
   const [editing, setEditing] = useState(false)
@@ -30,7 +39,7 @@ export default function FidelitySettingsPanel({ card, customersCount }: { card: 
     } else setDeleteError(true)
   }
 
-  if (editing) return <FidelitySettingsForm card={card} onDone={() => setEditing(false)} />
+  if (editing) return <FidelitySettingsForm card={card} businessProfile={businessProfile} onDone={() => setEditing(false)} />
 
   return (
     <div className="flex items-start justify-between gap-3">

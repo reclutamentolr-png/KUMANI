@@ -6,6 +6,7 @@ import ToolBackLink from '@/components/ToolBackLink'
 import { getTranslations } from 'next-intl/server'
 import LinkInBioEditor from '@/components/LinkInBioEditor'
 import CopyLinkButton from '@/components/CopyLinkButton'
+import { getMyBusinessProfile } from '@/lib/businessProfile-server'
 import {
   Link2,
   ArrowLeft,
@@ -59,6 +60,7 @@ export default async function LinkInBioPage({ params }: { params: Promise<{ loca
     )
   }
 
+  const businessProfile = await getMyBusinessProfile(supabase, user.id)
   const baseUrl = SITE_URL
   
   const bioUrl = `${baseUrl}/${locale}/ref/${profile.referral_code}/bio`
@@ -102,7 +104,7 @@ export default async function LinkInBioPage({ params }: { params: Promise<{ loca
         {/* Editor reale + anteprima live (la stessa istanza di stato guida
             entrambi i pannelli, quindi resta sincronizzata mentre si scrive
             e dopo il salvataggio — niente più mockup statico scollegato). */}
-        <LinkInBioEditor userId={user.id} firstName={profile.first_name} lastName={profile.last_name} />
+        <LinkInBioEditor userId={user.id} firstName={profile.first_name} lastName={profile.last_name} businessProfile={businessProfile} />
 
         {/* URL della Bio con pulsante copia */}
         <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 mb-8">

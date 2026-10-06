@@ -5,6 +5,8 @@ import { useTranslations } from 'next-intl'
 import { LoaderCircle, Sparkles, XCircle } from 'lucide-react'
 import { generateOfferDraft } from '@/app/actions/offermaker'
 import OfferMakerReview from '@/components/OfferMakerReview'
+import BusinessProfileImport from '@/components/businessProfile/BusinessProfileImport'
+import { businessFullAddress, type BusinessProfile } from '@/lib/businessProfile'
 import {
   OBJECTIVES,
   TONES,
@@ -16,16 +18,23 @@ import {
 
 type Props = {
   initialWhatsapp: string
+  businessProfile?: BusinessProfile | null
 }
 
 const TOTAL_STEPS = 4
 
-function emptyAnswers(initialWhatsapp: string): OfferFormAnswers {
+// «Dove operi?»: città e provincia della Scheda (l'indirizzo completo solo se manca la città)
+function profileLocation(p: BusinessProfile): string {
+  const area = p.city ? (p.province ? `${p.city} (${p.province})` : p.city) : businessFullAddress(p)
+  return area.slice(0, 500)
+}
+
+function emptyAnswers(initialWhatsapp: string, businessProfile: BusinessProfile | null): OfferFormAnswers {
   return {
     whatOffer: '',
     targetAudience: '',
     priceInfo: '',
-    locationInfo: '',
+    locationInfo: businessProfile ? profileLocation(businessProfile) : '',
     strengthPoint: '',
     objective: 'whatsapp',
     tone: 'friendly',
@@ -33,16 +42,27 @@ function emptyAnswers(initialWhatsapp: string): OfferFormAnswers {
   }
 }
 
-export default function OfferMakerWizard({ initialWhatsapp }: Props) {
+export default function OfferMakerWizard({ initialWhatsapp, businessProfile = null }: Props) {
   const t = useTranslations('offermaker')
   const [step, setStep] = useState(1)
-  const [answers, setAnswers] = useState<OfferFormAnswers>(() => emptyAnswers(initialWhatsapp))
+  const [answers, setAnswers] = useState<OfferFormAnswers>(() => emptyAnswers(initialWhatsapp, businessProfile))
   const [generating, setGenerating] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [draft, setDraft] = useState<GeneratedCampaignDraft | null>(null)
 
   const setAnswer = <K extends keyof OfferFormAnswers>(key: K, value: OfferFormAnswers[K]) => {
     setAnswers((prev) => ({ ...prev, [key]: value }))
+  }
+
+  // «Usa i dati della Scheda attività»: solo i campi che la Scheda ha
+  const importBusinessProfile = (p: BusinessProfile) => {
+    const whatsapp = (p.whatsapp || p.phone).slice(0, 40)
+    const location = profileLocation(p)
+    setAnswers((prev) => ({
+      ...prev,
+      contactWhatsapp: whatsapp || prev.contactWhatsapp,
+      locationInfo: location || prev.locationInfo,
+    }))
   }
 
   const canAdvance = (() => {
@@ -89,6 +109,7 @@ export default function OfferMakerWizard({ initialWhatsapp }: Props) {
 
   return (
     <div className="bg-white rounded-2xl shadow-[0_14px_40px_rgba(23,23,23,0.08)] border border-[var(--gold)]/25 p-6 sm:p-8">
+      <BusinessProfileImport profile={businessProfile} onImport={importBusinessProfile} className="mb-6" />
       <div className="flex items-center gap-2 mb-6">
         {Array.from({ length: TOTAL_STEPS }, (_, i) => i + 1).map((s) => (
           <div

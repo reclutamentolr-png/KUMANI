@@ -16,6 +16,8 @@ type IssuerSummary = {
   address: string | null
   email: string | null
   phone: string | null
+  // Dalla Scheda attività: riempie il pagamento dei nuovi preventivi
+  payment_info?: string | null
 } | null
 
 type Props = {
@@ -26,7 +28,7 @@ type Props = {
   initialData?: QuoteFormData
 }
 
-function defaultForm(): QuoteFormData {
+function defaultForm(paymentInfo = ''): QuoteFormData {
   return {
     clientName: '',
     clientEmail: '',
@@ -39,17 +41,19 @@ function defaultForm(): QuoteFormData {
     issueDate: new Date().toISOString().slice(0, 10),
     validUntil: '',
     items: [emptyQuoteItem()],
-    paymentInfo: '',
+    paymentInfo,
     notes: '',
   }
 }
 
 export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData }: Props) {
   const t = useTranslations('preventivi')
+  const tb = useTranslations('businessProfile')
   const router = useRouter()
   const fromDashboardSuffix = useFromDashboardSuffix()
+  const issuerPayment = issuer?.payment_info?.trim() ?? ''
 
-  const [form, setForm] = useState<QuoteFormData>(initialData || defaultForm())
+  const [form, setForm] = useState<QuoteFormData>(initialData || defaultForm(issuerPayment))
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [savedClients, setSavedClients] = useState<SavedClientRow[]>([])
@@ -359,6 +363,15 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData 
             rows={3}
             className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
           />
+          {issuerPayment && form.paymentInfo.trim() !== issuerPayment && (
+            <button
+              type="button"
+              onClick={() => setForm((prev) => ({ ...prev, paymentInfo: issuerPayment }))}
+              className="mt-2 text-xs font-semibold text-[var(--gold)] hover:text-[var(--ink)]"
+            >
+              {tb('importButton')}
+            </button>
+          )}
         </div>
 
         <div className="border-t border-[var(--gold)]/15 pt-6">

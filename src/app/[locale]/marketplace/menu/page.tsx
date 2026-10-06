@@ -6,6 +6,7 @@ import Link from '@/components/LocalizedLink'
 import MenuBuilder from '@/components/menu/MenuBuilder'
 import { createClient } from '@/lib/supabase/server'
 import { loadMenuData } from '@/lib/menu-server'
+import { getMyBusinessProfile } from '@/lib/businessProfile-server'
 
 // KUMANI Menu — builder del ristoratore (strumento Pro: l'accesso lo
 // controlla il middleware con can_use_tool, e ogni azione lo ricontrolla).
@@ -19,7 +20,7 @@ export default async function MenuBuilderPage({ params }: { params: Promise<{ lo
   } = await supabase.auth.getUser()
   if (!user) redirect(`/${locale}/login`)
 
-  const data = await loadMenuData(supabase, user.id)
+  const [data, businessProfile] = await Promise.all([loadMenuData(supabase, user.id), getMyBusinessProfile(supabase, user.id)])
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -46,7 +47,7 @@ export default async function MenuBuilderPage({ params }: { params: Promise<{ lo
             <p className="mt-2 text-white/70">{t('subtitle')}</p>
           </div>
         </div>
-        <MenuBuilder initial={data} siteUrl={SITE_URL} locale={locale} />
+        <MenuBuilder initial={data} siteUrl={SITE_URL} locale={locale} businessProfile={businessProfile} />
       </main>
     </div>
   )

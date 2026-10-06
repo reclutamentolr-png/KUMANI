@@ -3,6 +3,7 @@
 import { useEffect, useSyncExternalStore } from 'react'
 import SignatureEditor, { type Prefill } from '@/components/firmaEmail/SignatureEditor'
 import { DRAFT_KEY } from '@/components/firmaEmail/draft'
+import type { BusinessProfile } from '@/lib/businessProfile'
 
 // La bozza si legge da localStorage una sola volta per visita della pagina:
 // sul server (e al primo render di idratazione) non c'è, poi l'editor
@@ -24,7 +25,15 @@ function readDraftOnce(): string | null {
 const subscribe = () => () => {}
 const serverSnapshot = () => null
 
-export default function SignatureBuilder({ prefill, cardUrl }: { prefill: Prefill; cardUrl: string | null }) {
+export default function SignatureBuilder({
+  prefill,
+  cardUrl,
+  business,
+}: {
+  prefill: Prefill
+  cardUrl: string | null
+  business: BusinessProfile | null
+}) {
   const rawDraft = useSyncExternalStore(subscribe, readDraftOnce, serverSnapshot)
 
   useEffect(
@@ -34,5 +43,5 @@ export default function SignatureBuilder({ prefill, cardUrl }: { prefill: Prefil
     [],
   )
 
-  return <SignatureEditor key={rawDraft ? 'draft' : 'fresh'} prefill={prefill} cardUrl={cardUrl} rawDraft={rawDraft} />
+  return <SignatureEditor key={rawDraft ? 'draft' : 'fresh'} prefill={prefill} cardUrl={cardUrl} rawDraft={rawDraft} business={business} />
 }

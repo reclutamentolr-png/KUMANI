@@ -52,6 +52,8 @@ import {
   type MenuItem,
   type MenuLocale,
 } from '@/lib/menu'
+import BusinessProfileImport from '@/components/businessProfile/BusinessProfileImport'
+import type { BusinessProfile } from '@/lib/businessProfile'
 
 type Result = { success: true; data: MenuData } | { success: false; message: string }
 
@@ -72,7 +74,17 @@ type ItemDraft = {
 
 const inputClass = 'w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30'
 
-export default function MenuBuilder({ initial, siteUrl, locale }: { initial: MenuData; siteUrl: string; locale: string }) {
+export default function MenuBuilder({
+  initial,
+  siteUrl,
+  locale,
+  businessProfile = null,
+}: {
+  initial: MenuData
+  siteUrl: string
+  locale: string
+  businessProfile?: BusinessProfile | null
+}) {
   const t = useTranslations('menuBuilder')
   const tp = useTranslations('menuPublic')
   const [data, setData] = useState<MenuData>(initial)
@@ -92,10 +104,12 @@ export default function MenuBuilder({ initial, siteUrl, locale }: { initial: Men
   const publicUrl = menu ? `${siteUrl}/m/${menu.token}` : ''
   const menuBasePath = `/${locale}/marketplace/menu`
 
+  // Primo avvio (menu non ancora creato): si parte dai dati della Scheda attività
+  const fromProfile = !initial.menu && businessProfile ? businessProfile : null
   const [settings, setSettings] = useState({
-    restaurantName: initial.menu?.restaurant_name ?? '',
-    tagline: initial.menu?.tagline ?? '',
-    reviewUrl: initial.menu?.review_url ?? '',
+    restaurantName: initial.menu?.restaurant_name ?? (fromProfile?.companyName ?? '').slice(0, 80),
+    tagline: initial.menu?.tagline ?? (fromProfile?.tagline ?? '').slice(0, 140),
+    reviewUrl: initial.menu?.review_url ?? (fromProfile?.reviewUrl ?? '').slice(0, 500),
     template: (initial.menu?.template ?? 'elegante') as MenuTemplate,
     defaultLocale: (initial.menu?.default_locale ?? 'it') as MenuLocale,
     languages: (initial.menu?.languages ?? ['it']) as MenuLocale[],
@@ -233,9 +247,19 @@ export default function MenuBuilder({ initial, siteUrl, locale }: { initial: Men
     )
   }
 
+  // «Usa i dati della Scheda attività»: solo i campi che la Scheda ha
+  const importBusinessProfile = (p: BusinessProfile) =>
+    setSettings((s) => ({
+      ...s,
+      restaurantName: p.companyName ? p.companyName.slice(0, 80) : s.restaurantName,
+      tagline: p.tagline ? p.tagline.slice(0, 140) : s.tagline,
+      reviewUrl: p.reviewUrl ? p.reviewUrl.slice(0, 500) : s.reviewUrl,
+    }))
+
   // Impostazioni (anche primo avvio)
   const settingsForm = (
     <div className="space-y-4">
+      <BusinessProfileImport profile={businessProfile} onImport={importBusinessProfile} />
       <div>
         <label className="mb-1 block text-sm font-semibold text-gray-700">{t('restaurantName')}</label>
         <input className={inputClass} value={settings.restaurantName} maxLength={80} onChange={(e) => setSettings({ ...settings, restaurantName: e.target.value })} />

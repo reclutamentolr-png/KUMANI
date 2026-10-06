@@ -5,6 +5,7 @@ import Link from '@/components/LocalizedLink'
 import { ArrowLeft, QrCode } from 'lucide-react'
 import { hasActiveQrProAccess } from '@/lib/qrPro-server'
 import QrProForm from '@/components/QrProForm'
+import { getMyBusinessProfile } from '@/lib/businessProfile-server'
 
 export default async function NewQrCodePage() {
   const t = await getTranslations('qrCodePro')
@@ -19,6 +20,8 @@ export default async function NewQrCodePage() {
   if (!hasAccess) {
     redirect('/dashboard')
   }
+
+  const business = await getMyBusinessProfile(supabase, user.id)
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -39,7 +42,7 @@ export default async function NewQrCodePage() {
       </header>
 
       <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <QrProForm mode="create" />
+        <QrProForm mode="create" business={business} />
       </main>
     </div>
   )

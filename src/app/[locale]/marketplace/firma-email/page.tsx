@@ -5,11 +5,13 @@ import SignatureBuilder from '@/components/firmaEmail/SignatureBuilder'
 import { createClient } from '@/lib/supabase/server'
 import { SITE_URL } from '@/lib/siteUrl'
 import type { MyProfile } from '@/lib/myProfile'
+import { getMyBusinessProfile } from '@/lib/businessProfile-server'
 
 // Firma Email (Marketing, PRO): generatore di firme email professionali.
 // Tutto avviene nel browser; il server legge solo il profilo (nome, email,
-// telefono e codice invito) per precompilare il modulo e costruire il link
-// alla pagina pubblica del Kumano (Link in Bio). Nessun dato viene salvato.
+// telefono e codice invito) e la Scheda attività per precompilare il modulo
+// e costruire il link alla pagina pubblica del Kumano (Link in Bio). Nessun
+// dato viene salvato.
 export default async function FirmaEmailPage() {
   const locale = await getLocale()
   const t = await getTranslations('firmaEmail')
@@ -20,7 +22,9 @@ export default async function FirmaEmailPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  const { data: me } = user ? await supabase.rpc('get_my_profile').maybeSingle<MyProfile>() : { data: null }
+  const [{ data: me }, business] = user
+    ? await Promise.all([supabase.rpc('get_my_profile').maybeSingle<MyProfile>(), getMyBusinessProfile(supabase, user.id)])
+    : [{ data: null }, null]
 
   const text = (value: unknown) => (typeof value === 'string' ? value.trim() : '')
   const prefill = {
@@ -67,7 +71,7 @@ export default async function FirmaEmailPage() {
           </div>
         </div>
 
-        <SignatureBuilder prefill={prefill} cardUrl={cardUrl} />
+        <SignatureBuilder prefill={prefill} cardUrl={cardUrl} business={business} />
 
         <p className="mt-6 text-center text-xs leading-5 text-[var(--muted)]">{t('privacyNote')}</p>
       </main>

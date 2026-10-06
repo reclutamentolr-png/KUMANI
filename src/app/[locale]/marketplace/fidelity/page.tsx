@@ -6,6 +6,7 @@ import { ArrowLeft, Gift, Stamp, Users, CheckCircle2, MonitorSmartphone, Repeat,
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import FidelitySettingsForm from '@/components/fidelity/FidelitySettingsForm'
 import FidelitySettingsPanel from '@/components/fidelity/FidelitySettingsPanel'
+import { getMyBusinessProfile } from '@/lib/businessProfile-server'
 import FidelityCustomers from '@/components/fidelity/FidelityCustomers'
 import FidelityBarChart from '@/components/fidelity/FidelityBarChart'
 import { FIDELITY_LOST_AFTER_DAYS, effectiveStamps, type FidelityCard, type FidelityMember } from '@/lib/fidelity'
@@ -29,7 +30,10 @@ export default async function FidelityManagePage() {
   if (!user) redirect('/login')
   if (!(await hasActiveToolAccess(supabase, user.id, 'fidelity'))) redirect('/dashboard')
 
-  const { data: card } = await supabase.from('fidelity_cards').select(CARD_COLUMNS).eq('owner_id', user.id).maybeSingle<FidelityCard>()
+  const [{ data: card }, businessProfile] = await Promise.all([
+    supabase.from('fidelity_cards').select(CARD_COLUMNS).eq('owner_id', user.id).maybeSingle<FidelityCard>(),
+    getMyBusinessProfile(supabase, user.id),
+  ])
 
   let members: FidelityMember[] = []
   let events: FidelityEventRow[] = []
@@ -106,7 +110,7 @@ export default async function FidelityManagePage() {
               </div>
             </div>
             <div className="mx-auto max-w-xl rounded-2xl border border-[var(--gold)]/25 bg-[var(--paper)] p-6 shadow-sm sm:p-8">
-              <FidelitySettingsForm card={null} />
+              <FidelitySettingsForm card={null} businessProfile={businessProfile} />
             </div>
           </>
         ) : (
@@ -179,7 +183,7 @@ export default async function FidelityManagePage() {
 
             <section className="rounded-2xl border border-[var(--gold)]/25 bg-[var(--paper)] p-6">
               <h2 className="mb-4 text-lg font-bold text-[var(--ink)]">{t('settingsTitle')}</h2>
-              <FidelitySettingsPanel card={card} customersCount={members.length} />
+              <FidelitySettingsPanel card={card} customersCount={members.length} businessProfile={businessProfile} />
             </section>
 
             <section className="rounded-2xl border border-[var(--gold)]/25 bg-[var(--paper)] p-6">

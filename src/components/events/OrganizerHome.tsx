@@ -10,6 +10,7 @@ import VerificationSetup from '@/components/verification/VerificationSetup'
 import { cancelEvent, getEvent, type EventFormInput } from '@/app/actions/events'
 import { EVENT_TYPE_EMOJI, MIN_FEE_PAYMENT, formatEventDate, type EventFee, type EventPassItem, type OrganizedEvent, type OrganizerStatus } from '@/lib/events'
 import EventForm from './EventForm'
+import type { BusinessProfile } from '@/lib/businessProfile'
 import EventAttendees from './EventAttendees'
 import OrganizerReputation from './OrganizerReputation'
 import { LevelBadge } from './EventBadges'
@@ -37,6 +38,7 @@ export default function OrganizerHome({
   fees,
   notice,
   openEventId,
+  businessProfile = null,
 }: {
   status: OrganizerStatus | null
   organized: OrganizedEvent[]
@@ -44,6 +46,7 @@ export default function OrganizerHome({
   fees: EventFee[]
   notice: Notice
   openEventId: string | null
+  businessProfile?: BusinessProfile | null
 }) {
   const t = useTranslations('eventsOrganizer')
   const locale = useLocale()
@@ -411,6 +414,7 @@ export default function OrganizerHome({
             maxCapacity={maxCapacity}
             feePercent={percent}
             fidelityCard={status?.fidelity_card ?? null}
+            businessProfile={businessProfile}
             onSaved={(result) => {
               setSheet({ kind: 'saved', id: result.id, status: result.status, edited: sheet.kind === 'edit', dates: result.dates })
               router.refresh()

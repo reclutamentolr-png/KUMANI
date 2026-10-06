@@ -28,6 +28,8 @@ import LandingContactForm, { type LandingFormLabels } from '@/components/landing
 import { landingSerif } from '@/components/landing/landingFonts'
 import { checkLandingSlug, generateLandingDraft, saveLanding, uploadLandingPhoto, type LandingAiAnswers } from '@/app/actions/landing'
 import { resizeImageFile } from '@/lib/resizeImage'
+import BusinessProfileImport from '@/components/businessProfile/BusinessProfileImport'
+import type { BusinessProfile } from '@/lib/businessProfile'
 import {
   CTA_KINDS,
   LANDING_ACCENTS,
@@ -39,6 +41,7 @@ import {
   LANDING_FONTS,
   heroBackground,
   LIMITS,
+  landingFromBusinessProfile,
   landingPhotoUrl,
   landingTheme,
   type LandingContent,
@@ -66,6 +69,7 @@ type Props = {
   labelsByLocale: Record<LandingLocale, LandingLabels>
   formLabelsByLocale: Record<LandingLocale, LandingFormLabels>
   menuUrl: string | null
+  businessProfile: BusinessProfile | null
 }
 
 const input = 'w-full rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-gray-900 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30'
@@ -97,7 +101,7 @@ function Card({ title, children, defaultOpen = true, right }: { title: string; c
   )
 }
 
-export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLabelsByLocale, menuUrl }: Props) {
+export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLabelsByLocale, menuUrl, businessProfile }: Props) {
   const t = useTranslations('landingEditor')
   const [slug, setSlug] = useState(initial.slug)
   const [savedSlug, setSavedSlug] = useState(initial.exists ? initial.slug : '')
@@ -221,6 +225,14 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
     })
     setAiOpen(false)
     setMessage({ ok: true, text: t('aiDone') })
+  }
+
+  // «Usa i dati della Scheda attività»: riempie solo i campi che la Scheda ha
+  const importProfile = (p: BusinessProfile) => {
+    const r = landingFromBusinessProfile(c, p)
+    setC(r.content)
+    if (r.accent) setAccent(r.accent)
+    setDirty(true)
   }
 
   const moveSection = (key: SectionKey, dir: -1 | 1) =>
@@ -407,6 +419,8 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_400px]">
       <div className="space-y-4">
+        <BusinessProfileImport profile={businessProfile} onImport={importProfile} />
+
         {/* Stato e indirizzo pubblico */}
         <section className="rounded-2xl bg-[var(--ink)] p-5 text-white shadow-lg">
           <div className="flex flex-wrap items-center justify-between gap-3">

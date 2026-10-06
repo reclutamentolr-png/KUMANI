@@ -6,6 +6,7 @@ import ToolBackLink from '@/components/ToolBackLink'
 import { Wand2, ArrowLeft, Sparkles, ListChecks } from 'lucide-react'
 import OfferMakerWizard from '@/components/OfferMakerWizard'
 import { hasActiveOfferMakerAccess } from '@/lib/offermaker-server'
+import { getMyBusinessProfile } from '@/lib/businessProfile-server'
 
 export default async function OfferMakerPage() {
   const t = await getTranslations('offermaker')
@@ -22,7 +23,12 @@ export default async function OfferMakerPage() {
     redirect('/dashboard')
   }
 
-  const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<{ phone: string | null }>()
+  const [{ data: profile }, businessProfile] = await Promise.all([
+    supabase.rpc('get_my_profile').maybeSingle<{ phone: string | null }>(),
+    getMyBusinessProfile(supabase, user.id),
+  ])
+  // WhatsApp: prima quello della Scheda attività, poi il telefono del profilo
+  const initialWhatsapp = (businessProfile.whatsapp || businessProfile.phone || profile?.phone || '').slice(0, 40)
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -65,7 +71,7 @@ export default async function OfferMakerPage() {
           </div>
         </div>
 
-        <OfferMakerWizard initialWhatsapp={profile?.phone || ''} />
+        <OfferMakerWizard initialWhatsapp={initialWhatsapp} businessProfile={businessProfile} />
       </main>
     </div>
   )

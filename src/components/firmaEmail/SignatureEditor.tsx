@@ -5,6 +5,8 @@ import { useTranslations } from 'next-intl'
 import { Check, ClipboardCopy, Code2, Download, Link2, Palette, RotateCcw, Share2, User, Image as ImageIcon, Phone } from 'lucide-react'
 import { completeFirmaEmail } from '@/app/actions/firmaEmail'
 import SignatureInstructions from '@/components/firmaEmail/SignatureInstructions'
+import BusinessProfileImport from '@/components/businessProfile/BusinessProfileImport'
+import { BUSINESS_SOCIALS, businessFullAddress, businessWebsiteUrl, type BusinessProfile } from '@/lib/businessProfile'
 import { clearDraft, parseDraft, saveDraft } from '@/components/firmaEmail/draft'
 import {
   DEFAULT_BRAND_COLOR,
@@ -34,8 +36,37 @@ export interface Prefill {
 type TextField = Exclude<keyof SignatureData, 'social' | 'includeCardLink' | 'color'>
 type Status = 'copied' | 'htmlCopied' | 'downloaded' | 'copyFailed' | null
 
-function fromPrefill(prefill: Prefill): SignatureData {
-  return { ...emptySignature(), ...prefill }
+const cut = (value: string) => value.trim().slice(0, 300)
+
+// Dati della Scheda attività dentro la firma: si sovrascrive solo dove la
+// Scheda ha un valore. Con `contacts` riprende anche telefono ed email.
+function withBusiness(base: SignatureData, p: BusinessProfile, contacts: boolean): SignatureData {
+  const next: SignatureData = { ...base, social: { ...base.social } }
+  const put = (field: 'company' | 'phone' | 'mobile' | 'email' | 'website' | 'address' | 'logoUrl', value: string) => {
+    if (value.trim()) next[field] = cut(value)
+  }
+  put('company', p.companyName)
+  put('website', businessWebsiteUrl(p.website))
+  put('address', businessFullAddress(p))
+  put('logoUrl', p.logoUrl ?? '')
+  if (/^#[0-9a-f]{6}$/i.test(p.accent.trim())) next.color = safeColor(p.accent)
+  for (const key of BUSINESS_SOCIALS) {
+    const value = p.socials[key]
+    if (value?.trim()) next.social[key] = cut(value)
+  }
+  if (contacts) {
+    put('phone', p.phone)
+    put('email', p.email)
+    if (p.whatsapp.trim() && p.whatsapp.trim() !== p.phone.trim()) put('mobile', p.whatsapp)
+  }
+  return next
+}
+
+// Senza bozza: dati personali + quelli della Scheda (nome, sito, indirizzo,
+// logo, colore, social); telefono ed email restano quelli personali.
+function fromPrefill(prefill: Prefill, business: BusinessProfile | null): SignatureData {
+  const base = { ...emptySignature(), ...prefill }
+  return business ? withBusiness(base, business, false) : base
 }
 
 // Copia come testo formattato; se il browser non lo permette, seleziona una
@@ -108,14 +139,16 @@ export default function SignatureEditor({
   prefill,
   cardUrl,
   rawDraft,
+  business,
 }: {
   prefill: Prefill
   cardUrl: string | null
   rawDraft: string | null
+  business: BusinessProfile | null
 }) {
   const t = useTranslations('firmaEmail')
-  const [initial] = useState(() => parseDraft(rawDraft, fromPrefill(prefill)))
-  const [data, setData] = useState<SignatureData>(() => initial?.data ?? fromPrefill(prefill))
+  const [initial] = useState(() => parseDraft(rawDraft, fromPrefill(prefill, business)))
+  const [data, setData] = useState<SignatureData>(() => initial?.data ?? fromPrefill(prefill, business))
   const [template, setTemplate] = useState<SignatureTemplate>(() => initial?.template ?? 'classic')
   const [status, setStatus] = useState<Status>(null)
   const [frameHeight, setFrameHeight] = useState(180)
@@ -196,7 +229,7 @@ export default function SignatureEditor({
 
   const handleReset = () => {
     clearDraft()
-    setData(fromPrefill(prefill))
+    setData(fromPrefill(prefill, business))
     setTemplate('classic')
   }
 
@@ -226,6 +259,8 @@ export default function SignatureEditor({
     <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
       {/* Modulo */}
       <div className="space-y-5">
+        <BusinessProfileImport profile={business} onImport={p => setData(prev => withBusiness(prev, p, true))} />
+
         <Section icon={<Palette className="h-5 w-5" />} title={t('sectionTemplate')}>
           <div className="grid grid-cols-3 gap-2">
             {SIGNATURE_TEMPLATES.map(id => {

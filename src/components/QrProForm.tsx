@@ -15,10 +15,16 @@ import {
   type WifiEncryption,
 } from '@/lib/qrPro'
 import { STANDARD_COLORS, ALL_STANDARD_COLOR_KEYS } from '@/lib/standardColorPalette'
+import BusinessProfileImport from '@/components/businessProfile/BusinessProfileImport'
+import { businessWebsiteUrl, type BusinessProfile } from '@/lib/businessProfile'
 
-type Props =
+type Props = (
   | { mode: 'create' }
   | { mode: 'edit'; id: string; initial: QrCodeFormData }
+) & { business?: BusinessProfile | null }
+
+// Tipi che si possono riempire con la Scheda attività
+const IMPORT_TYPES: QrContentType[] = ['vcard', 'whatsapp', 'phone', 'email', 'link']
 
 const TYPE_ICONS: Record<QrContentType, typeof Link2> = {
   link: Link2,
@@ -53,6 +59,40 @@ export default function QrProForm(props: Props) {
 
   const setType = (type: QrContentType) => {
     setForm((prev) => ({ ...prev, contentType: type, destination: emptyDestinationFor(type) }))
+  }
+
+  // «Usa i dati della Scheda attività»: riempie solo i campi che la Scheda ha
+  const importBusiness = (p: BusinessProfile) => {
+    setForm((prev) => {
+      const next: Record<string, string> = { ...(prev.destination as unknown as Record<string, string>) }
+      const put = (key: string, value: string) => {
+        if (value.trim()) next[key] = value.trim()
+      }
+      if (prev.contentType === 'vcard') {
+        put('company', p.companyName)
+        put('phone', p.phone)
+        put('mobile', p.whatsapp)
+        put('email', p.email)
+        put('website', businessWebsiteUrl(p.website))
+        put('address', p.address)
+        put('city', p.city)
+        put('postalCode', p.postalCode)
+      } else if (prev.contentType === 'whatsapp') {
+        put('phone', p.whatsapp || p.phone)
+      } else if (prev.contentType === 'phone') {
+        put('phone', p.phone)
+      } else if (prev.contentType === 'email') {
+        put('email', p.email)
+      } else if (prev.contentType === 'link') {
+        put('url', businessWebsiteUrl(p.website))
+      }
+      // Colore del marchio solo se abbastanza scuro: un QR chiaro su fondo
+      // bianco non si legge
+      const hex = /^#[0-9a-f]{6}$/i.test(p.accent.trim()) ? p.accent.trim().toLowerCase() : ''
+      const luminance = hex ? (0.299 * parseInt(hex.slice(1, 3), 16) + 0.587 * parseInt(hex.slice(3, 5), 16) + 0.114 * parseInt(hex.slice(5, 7), 16)) / 255 : 1
+      const accent = luminance < 0.6 ? hex : ''
+      return { ...prev, destination: next as unknown as QrDestination, fgColor: accent || prev.fgColor }
+    })
   }
 
   const isValid = (() => {
@@ -134,6 +174,10 @@ export default function QrProForm(props: Props) {
       </div>
 
       <div className="space-y-3">
+        {IMPORT_TYPES.includes(form.contentType) && (
+          <BusinessProfileImport key={form.contentType} profile={props.business ?? null} onImport={importBusiness} />
+        )}
+
         {form.contentType === 'link' && (
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">{t('urlLabel')}</label>

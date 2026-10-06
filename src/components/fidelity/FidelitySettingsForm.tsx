@@ -16,23 +16,41 @@ import {
   FIDELITY_MIN_STAMPS,
   type FidelityCard,
 } from '@/lib/fidelity'
+import BusinessProfileImport from '@/components/businessProfile/BusinessProfileImport'
+import { businessWebsiteUrl, type BusinessProfile } from '@/lib/businessProfile'
 
 const inputClass = 'w-full rounded-lg border border-[var(--gold)]/30 p-2.5 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]'
 
 // Creazione (card = null) o modifica della tessera del negozio.
-export default function FidelitySettingsForm({ card, onDone }: { card: FidelityCard | null; onDone?: () => void }) {
+export default function FidelitySettingsForm({
+  card,
+  onDone,
+  businessProfile = null,
+}: {
+  card: FidelityCard | null
+  onDone?: () => void
+  businessProfile?: BusinessProfile | null
+}) {
   const t = useTranslations('fidelity')
   const router = useRouter()
-  const [businessName, setBusinessName] = useState(card?.business_name ?? '')
+  // Nuova tessera: si parte dai dati della Scheda attività
+  const fromProfile = !card && businessProfile ? businessProfile : null
+  const [businessName, setBusinessName] = useState(card?.business_name ?? (fromProfile?.companyName ?? '').slice(0, 80))
   const [prize, setPrize] = useState(card?.prize ?? '')
   const [stampsNeeded, setStampsNeeded] = useState(card?.stamps_needed ?? FIDELITY_DEFAULT_STAMPS)
   const [minHours, setMinHours] = useState(card?.min_hours_between_stamps ?? FIDELITY_DEFAULT_MIN_HOURS)
   const [expireDays, setExpireDays] = useState<number | null>(card?.stamps_expire_days ?? null)
-  const [reviewUrl, setReviewUrl] = useState(card?.review_url ?? '')
+  const [reviewUrl, setReviewUrl] = useState(card?.review_url ?? businessWebsiteUrl(fromProfile?.reviewUrl ?? ''))
   const [closePercent, setClosePercent] = useState(card?.close_to_prize_percent ?? FIDELITY_DEFAULT_CLOSE_PERCENT)
   const [pin, setPin] = useState('')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  // «Usa i dati della Scheda attività»: solo i campi che la Scheda ha
+  const importBusinessProfile = (p: BusinessProfile) => {
+    if (p.companyName) setBusinessName(p.companyName.slice(0, 80))
+    if (p.reviewUrl) setReviewUrl(businessWebsiteUrl(p.reviewUrl))
+  }
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -60,6 +78,7 @@ export default function FidelitySettingsForm({ card, onDone }: { card: FidelityC
 
   return (
     <form onSubmit={submit} className="space-y-4">
+      <BusinessProfileImport profile={businessProfile} onImport={importBusinessProfile} />
       <div>
         <label className="mb-1 block text-sm font-medium text-[var(--ink)]">{t('businessNameField')}</label>
         <input value={businessName} onChange={(e) => setBusinessName(e.target.value)} maxLength={80} required className={inputClass} placeholder={t('businessNamePlaceholder')} />
