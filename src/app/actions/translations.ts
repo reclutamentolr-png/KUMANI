@@ -360,3 +360,146 @@ export async function adminRevertTranslationChange(historyId: string) {
   if (!result.success) return { success: false as const, error: result.error === 'invalid' ? 'Il testo precedente non è più valido' : 'Ripristino non riuscito' }
   return { success: true as const }
 }
+
+// ── Admin: controllo del lavoro reale dei traduttori ────────────────────
+// Distingue il lavoro vero (testi davvero cambiati) da quello apparente:
+// testi confermati senza modifiche, italiano incollato, inglese copiato in
+// un'altra lingua, traduzioni da ricontrollare perché l'italiano è cambiato,
+// e salvataggi a raffica (molti testi in un minuto).
+
+export type AuditFlag = 'italian' | 'english' | 'stale'
+export type AuditItem = { locale: string; key: string; italian: string; value: string; flag: AuditFlag }
+export type TranslatorAudit = {
+  id: string
+  name: string
+  locales: TranslatorLocale[]
+  saved: number
+  changed: number
+  confirmed: number
+  copiedItalian: number
+  copiedEnglish: number
+  stale: number
+  words: number
+  edits: number
+  activeDays: number
+  firstAt: string | null
+  lastAt: string | null
+  maxPerMinute: number
+  perLocale: { locale: TranslatorLocale; total: number; changed: number; confirmed: number }[]
+  samples: AuditItem[]
+}
+export type LocaleCoverage = { locale: TranslatorLocale; total: number; overridden: number; stillItalian: number }
+
+// Testi da cui un testo uguale all'italiano non è sospetto (marchi, sigle, numeri)
+const looksTranslatable = (italian: string) => italian.length >= 12 && /[a-zà-ù]{3,}\s+[a-zà-ù]{3,}/i.test(italian)
+const wordCount = (text: string) => (text.replace(/\{[^}]*\}/g, ' ').match(/[\p{L}\p{N}]+/gu) ?? []).length
+
+export async function adminTranslatorAudit(): Promise<{ translators: TranslatorAudit[]; coverage: LocaleCoverage[] } | { error: string }> {
+  if (!(await verifyAdmin('users.write'))) return { error: 'Non autorizzato' }
+  const db = serviceClient()
+  const locales = ['en', 'fr', 'es', 'pt', 'de', 'ru'] as TranslatorLocale[]
+
+  const [{ data: people }, { data: overrides }, { data: history }, itTree, ...trees] = await Promise.all([
+    db.from('translators').select('user_id, display_name, locales'),
+    db.from('translation_overrides').select('locale, key, value, source_hash, updated_by').limit(100000),
+    db.from('translation_history').select('changed_by, changed_at').order('changed_at', { ascending: true }).limit(100000),
+    loadBaseMessages('it'),
+    ...locales.map((l) => loadBaseMessages(l)),
+  ])
+  const it = flattenMessages(itTree)
+  const flat = Object.fromEntries(locales.map((l, i) => [l, flattenMessages(trees[i])])) as Record<TranslatorLocale, Record<string, string>>
+  const total = Object.keys(it).length
+  const italianHash = new Map<string, string>()
+  const hashOf = (key: string) => {
+    if (!italianHash.has(key)) italianHash.set(key, hashText(it[key] ?? ''))
+    return italianHash.get(key)!
+  }
+
+  // Copertura per lingua: quanti testi sono corretti e quanti restano in italiano
+  const byLocaleKey = new Map<string, string>()
+  for (const o of overrides ?? []) byLocaleKey.set(`${o.locale}:${o.key}`, o.value as string)
+  const coverage: LocaleCoverage[] = locales.map((locale) => {
+    let overridden = 0
+    let stillItalian = 0
+    for (const key of Object.keys(it)) {
+      const override = byLocaleKey.get(`${locale}:${key}`)
+      if (override !== undefined) overridden++
+      const finalValue = override ?? flat[locale][key] ?? it[key]
+      if (finalValue === it[key] && looksTranslatable(it[key])) stillItalian++
+    }
+    return { locale, total, overridden, stillItalian }
+  })
+
+  const translators: TranslatorAudit[] = (people ?? []).map((p) => {
+    const id = p.user_id as string
+    const mine = (overrides ?? []).filter((o) => o.updated_by === id)
+    const audit: TranslatorAudit = {
+      id,
+      name: p.display_name as string,
+      locales: ((p.locales as string[]) ?? []).filter(isTranslatorLocale),
+      saved: mine.length,
+      changed: 0,
+      confirmed: 0,
+      copiedItalian: 0,
+      copiedEnglish: 0,
+      stale: 0,
+      words: 0,
+      edits: 0,
+      activeDays: 0,
+      firstAt: null,
+      lastAt: null,
+      maxPerMinute: 0,
+      perLocale: [],
+      samples: [],
+    }
+    const perLocale = new Map<TranslatorLocale, { changed: number; confirmed: number }>()
+    for (const o of mine) {
+      const locale = o.locale as TranslatorLocale
+      const key = o.key as string
+      const value = o.value as string
+      const italian = it[key]
+      if (italian === undefined || !flat[locale]) continue
+      const base = flat[locale][key] ?? italian
+      const counts = perLocale.get(locale) ?? { changed: 0, confirmed: 0 }
+      if (value === base) {
+        audit.confirmed++
+        counts.confirmed++
+      } else {
+        audit.changed++
+        counts.changed++
+        audit.words += wordCount(value)
+      }
+      perLocale.set(locale, counts)
+      let flag: AuditFlag | null = null
+      if (value === italian && looksTranslatable(italian)) {
+        audit.copiedItalian++
+        flag = 'italian'
+      } else if (locale !== 'en' && value === flat.en[key] && flat.en[key] !== italian && looksTranslatable(italian)) {
+        audit.copiedEnglish++
+        flag = 'english'
+      } else if (o.source_hash !== hashOf(key)) {
+        audit.stale++
+        flag = 'stale'
+      }
+      if (flag && audit.samples.length < 60) audit.samples.push({ locale, key, italian, value, flag })
+    }
+    audit.perLocale = [...perLocale.entries()].map(([locale, c]) => ({ locale, total, ...c }))
+
+    // Storico: quante modifiche, in quanti giorni e la velocità massima
+    const times = (history ?? []).filter((h) => h.changed_by === id).map((h) => new Date(h.changed_at as string).getTime())
+    audit.edits = times.length
+    if (times.length) {
+      audit.firstAt = new Date(times[0]).toISOString()
+      audit.lastAt = new Date(times[times.length - 1]).toISOString()
+      audit.activeDays = new Set(times.map((t) => new Date(t).toISOString().slice(0, 10))).size
+      let start = 0
+      for (let end = 0; end < times.length; end++) {
+        while (times[end] - times[start] > 60_000) start++
+        audit.maxPerMinute = Math.max(audit.maxPerMinute, end - start + 1)
+      }
+    }
+    return audit
+  })
+
+  return { translators, coverage }
+}

@@ -1,5 +1,6 @@
 'use client'
 
+import TranslatorAuditTab from '@/components/admin/TranslatorAuditTab'
 import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react'
 import {
   Check,
@@ -20,6 +21,7 @@ import {
   UserPlus,
   Wand2,
   X,
+  Gauge,
 } from 'lucide-react'
 import {
   adminCreateTranslator,
@@ -35,7 +37,7 @@ import {
 import { LOCALE_LABELS, SECTION_LABELS, TRANSLATOR_LOCALES, isTranslatorLocale } from '@/lib/translationLocales'
 import ShareCredentials from '@/components/admin/ShareCredentials'
 
-type Tab = 'translators' | 'changes'
+type Tab = 'translators' | 'audit' | 'changes'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const MIN_PASSWORD = 10
@@ -736,6 +738,7 @@ export default function TranslatorsPanel() {
           <li>Possono modificare solo le lingue che assegni loro.</li>
           <li>Le correzioni vanno online nel sito entro pochi minuti.</li>
           <li>Ogni modifica si può ripristinare da &quot;Ultime modifiche&quot;.</li>
+          <li>In &quot;Controllo lavoro&quot; vedi quanto ha tradotto davvero ogni traduttore, separato dai testi solo confermati o copiati.</li>
         </ul>
       </div>
 
@@ -743,6 +746,7 @@ export default function TranslatorsPanel() {
         {(
           [
             { key: 'translators', label: 'Traduttori', Icon: Languages },
+            { key: 'audit', label: 'Controllo lavoro', Icon: Gauge },
             { key: 'changes', label: 'Ultime modifiche', Icon: History },
           ] as const
         ).map((t) => (
@@ -759,7 +763,7 @@ export default function TranslatorsPanel() {
         ))}
       </div>
 
-      {tab === 'translators' ? <TranslatorsTab /> : <ChangesTab />}
+      {tab === 'translators' ? <TranslatorsTab /> : tab === 'audit' ? <TranslatorAuditTab /> : <ChangesTab />}
     </div>
   )
 }
