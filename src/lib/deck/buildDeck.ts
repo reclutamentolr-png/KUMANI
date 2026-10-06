@@ -578,6 +578,10 @@ async function finishDeck(raw: ArrayBuffer): Promise<Blob> {
   // Dissolvenza tra le slide; gli oggetti "aN-…" entrano in ordine di N
   for (const name of Object.keys(zip.files).filter((n) => /^ppt\/slides\/slide\d+\.xml$/.test(n))) {
     let xml = await zip.file(name)!.async('string')
+    // Caselle del modello rimaste vuote (le slide con le foto scrivono i
+    // titoli da sole): in PowerPoint mostrerebbero «Fare clic per inserire il
+    // testo» sopra i titoli veri, quindi si tolgono
+    xml = xml.replace(/<p:sp>(?:(?!<\/p:sp>)[\s\S])*?<p:ph\b(?:(?!<\/p:sp>)[\s\S])*?<\/p:sp>/g, (sp) => (/<a:t>[^<]+<\/a:t>/.test(sp) ? sp : ''))
     const byStep = new Map<number, string[]>()
     const textIds: string[] = []
     for (const m of xml.matchAll(/<p:(sp|pic|cxnSp)>([\s\S]*?)<\/p:\1>/g)) {
