@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { useRouter } from 'next/navigation'
-import { Award, Check, Copy, LoaderCircle, Receipt, Share2 } from 'lucide-react'
+import { Award, Check, Copy, LoaderCircle, Receipt, Share2, Ticket } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { redeemVoucher, type MyVoucher } from '@/app/actions/vouchers'
 import type { RankDefinition } from '@/lib/ranks'
@@ -146,11 +146,23 @@ export default function WalletVoucherSection({
         <p className="mt-2 text-xs leading-5 text-[var(--muted)]">{t('qualificationsNote', { every: blackPlusEvery })}</p>
       </div>
 
-      {/* 3. Voucher ricevuti in premio */}
-      <div>
-        <p className="mb-2 text-xs font-bold uppercase tracking-wide text-gray-400">{tw('voucherMyVouchers')}</p>
+      {/* 3. Voucher ricevuti in premio: in evidenza */}
+      <div className="rounded-2xl border-2 border-[var(--gold)]/60 bg-gradient-to-br from-[var(--gold-pale)] to-white p-4 shadow-[0_10px_30px_rgba(199,154,59,0.18)] sm:p-5">
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <h3 className="flex items-center gap-2.5 text-lg font-extrabold text-[var(--ink)] sm:text-xl">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--ink)] text-[var(--gold-bright)] shadow">
+              <Ticket className="h-5 w-5" />
+            </span>
+            {tw('voucherMyVouchers')}
+          </h3>
+          {available > 0 && (
+            <span className="shrink-0 rounded-full bg-[var(--ink)] px-3 py-1 text-sm font-bold text-[var(--gold-bright)]">
+              {t('vouchersReady', { count: available })}
+            </span>
+          )}
+        </div>
         {vouchers.length === 0 ? (
-          <p className="rounded-lg border border-dashed border-gray-200 px-3 py-4 text-center text-sm text-[var(--muted)]">{t('noVouchers')}</p>
+          <p className="rounded-lg border border-dashed border-[var(--gold)]/50 bg-white/70 px-3 py-4 text-center text-sm text-[var(--muted)]">{t('noVouchers')}</p>
         ) : (
           <>
             <p className="mb-2 text-xs leading-5 text-[var(--muted)]">{t('vouchersHowTo')}</p>
@@ -158,7 +170,7 @@ export default function WalletVoucherSection({
               {vouchers.map((v) => {
                 const plan = v.plan === 'pro' ? 'Pro' : 'Base'
                 return (
-                  <div key={v.id} className="rounded-lg border border-gray-200 px-3 py-2">
+                  <div key={v.id} className="rounded-lg border border-gray-200 bg-white px-3 py-2">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <div className="flex min-w-0 flex-wrap items-center gap-2">
                         <code className="font-mono text-sm text-[var(--ink)]">{v.code}</code>

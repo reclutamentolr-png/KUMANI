@@ -5954,7 +5954,8 @@
     "prizeBlackPlus": "Black continuo",
     "personalProHint": "Voucher Pro personal: puedes activarlo para ti aquí abajo, en «Canjear un voucher».",
     "pointsConfirmed": "de los cuales confirmados: {count}",
-    "pointsConfirmNote": "Los KU Points son definitivos {days} días después del pago, el plazo para un posible desistimiento. Solo los confirmados cuentan para las calificaciones y se pueden usar (escaparate, donaciones). Las activaciones reembolsadas no dan puntos."
+    "pointsConfirmNote": "Los KU Points son definitivos {days} días después del pago, el plazo para un posible desistimiento. Solo los confirmados cuentan para las calificaciones y se pueden usar (escaparate, donaciones). Las activaciones reembolsadas no dan puntos.",
+    "vouchersReady": "{count} por usar"
   },
   "voucherReceipt": {
     "back": "Volver al Monedero",
