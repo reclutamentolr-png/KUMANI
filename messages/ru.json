@@ -9838,7 +9838,18 @@
     "cvToBioLinkTitle": "Моё резюме",
     "listingsTimebankTitle": "Нужна помощь, без денег?",
     "listingsTimebankText": "В Банке времени Kumani обмениваются часами помощи: отданный час равен полученному.",
-    "listingsTimebankCta": "Перейти в Банк времени"
+    "listingsTimebankCta": "Перейти в Банк времени",
+    "wellnessTitle": "Ваше благополучие сегодня",
+    "wellnessIntro": "Три маленьких шага, чтобы чувствовать себя лучше: выполните все три и получите +{bonus} KU Karma.",
+    "wellnessDoneToday": "Сегодня тоже выполнено: до завтра!",
+    "wellnessBreath": "Дышите с Oxygen",
+    "wellnessFocus": "Сосредоточьтесь с Focus",
+    "wellnessMind": "Расслабьтесь с Mandala или NeuroBalance",
+    "wellnessProgress": "Выполнено шагов сегодня: {done} из {total}",
+    "wellnessClaim": "Получить +{bonus} KU Karma",
+    "wellnessClaimed": "Бонус за сегодня получен",
+    "wellnessAwarded": "Получено +{bonus} KU Karma!",
+    "wellnessStreak": "{count, plural, one {# день подряд} few {# дня подряд} many {# дней подряд} other {# дня подряд}}"
   },
   "businessProfile": {
     "title": "Карточка бизнеса",

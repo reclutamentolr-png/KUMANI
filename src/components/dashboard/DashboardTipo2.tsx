@@ -25,6 +25,7 @@ export default async function DashboardTipo2({
   basePrice,
   proTrialDaysLeft = null,
   agenda = null,
+  wellness = null,
 }: {
   profile: MyProfile | null
   shareUrl: string
@@ -38,6 +39,8 @@ export default async function DashboardTipo2({
   proTrialDaysLeft?: number | null
   // Riquadro "I prossimi giorni" (agenda unica), già pronto dal server
   agenda?: React.ReactNode
+  // «Il tuo benessere di oggi», già pronto dal server
+  wellness?: React.ReactNode
 }) {
   const t = await getTranslations('dashboard')
   const guidesT = await getTranslations('guides')
@@ -114,6 +117,8 @@ export default async function DashboardTipo2({
       )}
 
       <HomeServices items={services} favorites={favoriteToolNames} />
+
+      {wellness}
 
       {/* Novità di Affinity Amicizie (solo per chi partecipa) */}
       <AffinityBadge />

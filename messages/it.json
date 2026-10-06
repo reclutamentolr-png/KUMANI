@@ -9838,7 +9838,18 @@
     "cvToBioLinkTitle": "Il mio CV",
     "listingsTimebankTitle": "Ti serve un aiuto, senza soldi?",
     "listingsTimebankText": "Nella Banca del tempo i Kumani si scambiano ore di aiuto: un’ora data vale un’ora ricevuta.",
-    "listingsTimebankCta": "Vai alla Banca del tempo"
+    "listingsTimebankCta": "Vai alla Banca del tempo",
+    "wellnessTitle": "Il tuo benessere di oggi",
+    "wellnessIntro": "Tre piccoli passi per stare meglio: fatti tutti e tre, ritiri +{bonus} KU Karma.",
+    "wellnessDoneToday": "Fatto anche oggi: ci vediamo domani per il prossimo passo.",
+    "wellnessBreath": "Respira con Oxygen",
+    "wellnessFocus": "Concentrati con Focus",
+    "wellnessMind": "Rilassati con Mandala o NeuroBalance",
+    "wellnessProgress": "{done} di {total} passi fatti oggi",
+    "wellnessClaim": "Ritira +{bonus} KU Karma",
+    "wellnessClaimed": "Bonus di oggi ritirato",
+    "wellnessAwarded": "+{bonus} KU Karma ritirati!",
+    "wellnessStreak": "{count, plural, one {# giorno di fila} other {# giorni di fila}}"
   },
   "businessProfile": {
     "title": "Scheda attività",

@@ -71,3 +71,21 @@ export async function addCvToLinkInBio(publicUrl: string): Promise<'added' | 'ex
   }
   return 'added'
 }
+
+// «Il tuo benessere di oggi»: stato dei tre passi e bonus di KU Karma
+export type WellnessToday = { breath: boolean; focus: boolean; mind: boolean; claimed: boolean; bonus: number; streak: number; awarded?: number }
+
+export async function claimWellnessBonus(): Promise<WellnessToday | null> {
+  const supabase = await createClient()
+  const { data, error } = await supabase.rpc('claim_wellness_path_bonus')
+  if (error) {
+    console.error('[ecosistema] bonus benessere:', error.message)
+    return null
+  }
+  const result = data as (WellnessToday & { error?: string }) | null
+  if (!result || result.error) {
+    const { data: state } = await supabase.rpc('wellness_path_today')
+    return (state as WellnessToday | null) ?? null
+  }
+  return result
+}

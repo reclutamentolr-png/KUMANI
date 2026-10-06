@@ -32,6 +32,8 @@ import ProTeaser from '@/components/dashboard/ProTeaser'
 import { getProAreaStats } from '@/lib/proAreaStats'
 import UpcomingAgenda from '@/components/agenda/UpcomingAgenda'
 import { loadAgenda } from '@/lib/agenda-server'
+import WellnessTodayCard from '@/components/ecosystem/WellnessTodayCard'
+import type { WellnessToday } from '@/app/actions/ecosystem'
 import { addDays, todayKey } from '@/lib/agenda'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { getPlanPrices } from '@/lib/planPrices'
@@ -147,7 +149,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
 
   // 4. Rete (serve il profilo), agenda, prova Pro e dati dell'Area
   //    Professionisti: anche queste insieme.
-  const [network, agendaEvents, trial, stats, catalog] = await Promise.all([
+  const [network, agendaEvents, trial, stats, catalog, { data: wellnessToday }] = await Promise.all([
     // La dashboard mostra solo un riepilogo della rete (il dettaglio è in
     // /dashboard/rete), ma servono anche per i popup qualifiche/rinnovo.
     getDashboardNetworkData(supabase, user, profile, locale, { tree: false, claims: 'skip' }),
@@ -164,6 +166,8 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     isPro && proTools.length > 0 ? getProAreaStats(supabase, user.id) : Promise.resolve(null),
     // Tutti i servizi con lo stato per l'utente: preferiti, recenti e suggerimento
     getServicesCatalog(supabase, user.id, locale, { access, favorites: favoriteToolNames }),
+    // «Il tuo benessere di oggi»: i tre passi e il bonus
+    supabase.rpc('wellness_path_today'),
   ])
   const { newlyAchievedRank } = network
   // Bonus della rete: dopo aver mostrato la pagina
@@ -234,6 +238,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
               favoriteToolNames={favoriteToolNames}
               basePrice={basePrice}
               proTrialDaysLeft={proTrial?.daysLeft ?? null}
+              wellness={wellnessToday ? <WellnessTodayCard initial={wellnessToday as WellnessToday} /> : null}
               agenda={hasAgenda ? <UpcomingAgenda events={agendaEvents} today={agendaToday} sources={agendaSources} /> : null}
             />
             {/* Primo accesso: prima "Cosa ti interessa?" (riempie i preferiti),

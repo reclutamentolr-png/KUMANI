@@ -9838,7 +9838,18 @@
     "cvToBioLinkTitle": "Mein Lebenslauf",
     "listingsTimebankTitle": "Brauchst du Hilfe, ohne Geld?",
     "listingsTimebankText": "In der Zeitbank tauschen Kumani Stunden Hilfe: Eine gegebene Stunde ist eine erhaltene Stunde wert.",
-    "listingsTimebankCta": "Zur Zeitbank"
+    "listingsTimebankCta": "Zur Zeitbank",
+    "wellnessTitle": "Dein Wohlbefinden heute",
+    "wellnessIntro": "Drei kleine Schritte, um dich besser zu fühlen: Mach alle drei und hol dir +{bonus} KU Karma.",
+    "wellnessDoneToday": "Auch heute geschafft: bis morgen zum nächsten Schritt.",
+    "wellnessBreath": "Atme mit Oxygen",
+    "wellnessFocus": "Konzentriere dich mit Focus",
+    "wellnessMind": "Entspann dich mit Mandala oder NeuroBalance",
+    "wellnessProgress": "{done} von {total} Schritten heute erledigt",
+    "wellnessClaim": "+{bonus} KU Karma abholen",
+    "wellnessClaimed": "Heutiger Bonus abgeholt",
+    "wellnessAwarded": "+{bonus} KU Karma abgeholt!",
+    "wellnessStreak": "{count, plural, one {# Tag in Folge} other {# Tage in Folge}}"
   },
   "businessProfile": {
     "title": "Firmenprofil",

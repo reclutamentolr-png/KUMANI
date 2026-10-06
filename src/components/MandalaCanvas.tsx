@@ -1,5 +1,6 @@
 'use client'
 
+import { completeMandala } from '@/app/actions/mandala'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Download, Eraser, Paintbrush, Share2, Trash2, Undo2 } from 'lucide-react'
@@ -187,6 +188,7 @@ export default function MandalaCanvas({ referralUrl }: { referralUrl: string }) 
     link.download = 'mandala-kumani.png'
     link.href = out.toDataURL('image/png')
     link.click()
+    completeMandala()
   }
 
   const handleShare = async () => {
@@ -199,6 +201,7 @@ export default function MandalaCanvas({ referralUrl }: { referralUrl: string }) 
       try {
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({ files: [file], text: `${t('shareText')}\n${referralUrl}` })
+          completeMandala()
         } else {
           setShareError(true)
         }
