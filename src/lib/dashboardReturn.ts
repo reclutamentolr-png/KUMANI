@@ -9,14 +9,6 @@ const MAX_AGE_MS = 30 * 60 * 1000
 
 export type DashboardReturn = { category: string; scrollY: number; at: number }
 
-export function saveDashboardReturn(category: string) {
-  try {
-    sessionStorage.setItem(KEY, JSON.stringify({ category, scrollY: window.scrollY, at: Date.now() }))
-  } catch {
-    // Archiviazione non disponibile (es. navigazione privata): nessun ritorno
-  }
-}
-
 export function readDashboardReturn(): DashboardReturn | null {
   try {
     const raw = sessionStorage.getItem(KEY)

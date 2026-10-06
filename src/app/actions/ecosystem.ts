@@ -11,13 +11,6 @@ export type ReceiptSpendlyStatus = 'expense' | 'income' | 'added' | 'no_value' |
 
 const CODE_PATTERN = /^[A-Za-z0-9_-]{4,64}$/
 
-export async function receiptSpendlyStatus(code: string): Promise<ReceiptSpendlyStatus> {
-  if (!CODE_PATTERN.test(code)) return 'no_value'
-  const supabase = await createClient()
-  const { data } = await supabase.rpc('receipt_spendly_status', { p_code: code })
-  return (data as ReceiptSpendlyStatus | null) ?? 'no_value'
-}
-
 export async function addReceiptToSpendly(code: string): Promise<ReceiptSpendlyStatus> {
   if (!CODE_PATTERN.test(code)) return 'no_value'
   const supabase = await createClient()

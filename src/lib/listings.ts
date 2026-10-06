@@ -58,20 +58,6 @@ export interface UpdateListingData {
   isRemote?: boolean
 }
 
-export const CATEGORY_LABELS: Record<ListingCategory, string> = {
-  veicoli: 'Veicoli',
-  immobili: 'Immobili',
-  elettronica: 'Elettronica',
-  moda: 'Moda e Accessori',
-  casa_persona: 'Casa e Persona',
-  tempo_libero: 'Tempo Libero, Sport e Hobby',
-  colf_badanti: 'Colf, Badanti e Baby Sitter',
-  agricoltura: 'Agricoltura e Giardinaggio',
-  animali: 'Animali',
-  impresa: 'Per la tua Impresa',
-  servizi: 'Servizi'
-}
-
 export const CATEGORY_ICONS: Record<ListingCategory, string> = {
   veicoli: '🚗',
   immobili: '🏠',

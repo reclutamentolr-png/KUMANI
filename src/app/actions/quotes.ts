@@ -7,7 +7,6 @@ import {
   computeQuoteTotal,
   type QuoteFormData,
   type QuoteItem,
-  type IssuerProfileRow,
   type SavedClientRow,
   type SavedClientFormData,
 } from '@/lib/quotes'
@@ -48,16 +47,6 @@ async function requireActivePreventiviAccess(): Promise<
   }
 
   return { ok: true, userId: user.id }
-}
-
-export async function getIssuerProfile(): Promise<ActionResult<IssuerProfileRow | null>> {
-  const gate = await requireActivePreventiviAccess()
-  if (!gate.ok) return { success: false, message: gate.message }
-
-  const supabase = await createClient()
-  const { data } = await supabase.from('quote_issuer_profiles').select('*').eq('user_id', gate.userId).maybeSingle()
-
-  return { success: true, data: data || null }
 }
 
 /**

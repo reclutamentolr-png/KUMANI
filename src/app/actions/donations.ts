@@ -4,8 +4,8 @@ import { revalidatePath } from 'next/cache'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
 import { verifyAdmin } from '@/lib/verifyAdmin'
-import type { DonationSummary, MyDonations } from '@/lib/donationTypes'
-import { getPublicDonationSummary, refreshDonationSummary } from '@/lib/donationsPublic'
+import type { MyDonations } from '@/lib/donationTypes'
+import { refreshDonationSummary } from '@/lib/donationsPublic'
 
 const db = () =>
   createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
@@ -20,10 +20,6 @@ const refresh = () => {
 // ---------------------------------------------------------------------------
 // Pubblico e Kumano
 // ---------------------------------------------------------------------------
-
-export async function getDonationSummary(): Promise<DonationSummary | null> {
-  return getPublicDonationSummary()
-}
 
 export async function getMyDonations(): Promise<MyDonations | null> {
   const supabase = await createClient()

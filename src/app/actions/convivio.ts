@@ -4,7 +4,6 @@ import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
 import { isToolOnline } from '@/lib/toolOnline'
 import { checkVat, verifyVies } from '@/lib/vat'
-import { acceptRules, verifyTaxCode } from '@/app/actions/verification'
 import type { ConvivioCard, ConvivioDetail, ConvivioLeaderStatus, ConvivioMessage, MySupplierInfo, SupplierSearchResult } from '@/lib/convivio'
 
 // Convivio: le regole (verifica, soglia, adesioni, chat) sono nelle funzioni
@@ -29,18 +28,6 @@ async function rpc<T>(name: string, args: Record<string, unknown> = {}): Promise
 
 export async function getLeaderStatus(): Promise<ConvivioLeaderStatus | null> {
   return rpc<ConvivioLeaderStatus>('convivio_my_leader_status')
-}
-
-// Diventare capocordata: codice fiscale verificato + accettazione regole.
-// (La verifica completa, anche con documento, è in actions/verification.)
-export async function becomeLeader(taxCode: string, acceptTerms: boolean): Promise<{ success: boolean; error?: string }> {
-  if (!(await isToolOnline('convivio'))) return { success: false, error: 'suspended' }
-  if (!acceptTerms) return { success: false, error: 'terms' }
-  const verified = await verifyTaxCode(taxCode)
-  if (!verified.success) return { success: false, error: verified.error === 'blocked' ? 'saveError' : verified.error }
-  const accepted = await acceptRules('kordata')
-  if (!accepted.success) return { success: false, error: accepted.error === 'blocked' ? 'saveError' : accepted.error }
-  return { success: true }
 }
 
 export async function listConvivi(filter: 'open' | 'mine' | 'supplier'): Promise<ConvivioCard[]> {

@@ -72,32 +72,6 @@ export async function getAdminPermissions(): Promise<Permission[]> {
   }
 }
 
-export function hasPermission(
-  userPermissions: Permission[],
-  requiredPermission: Permission
-): boolean {
-  if (userPermissions.includes('*')) return true
-  return userPermissions.includes(requiredPermission)
-}
-
-// Staff: un ruolo in admin_users oppure l'admin completo (profiles.is_admin),
-// come nel pannello Admin.
-export async function isAdmin(): Promise<boolean> {
-  const permissions = await getAdminPermissions()
-  if (permissions.length > 0) return true
-  try {
-    const supabase = await createClient()
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-    if (!user) return false
-    const { data } = await supabase.from('profiles').select('is_admin').eq('id', user.id).maybeSingle()
-    return data?.is_admin === true
-  } catch {
-    return false
-  }
-}
-
 // Versione veloce per la dashboard (solo per mostrare il pulsante Admin):
 // una sola lettura, ruolo con i suoi permessi. Chi ha profiles.is_admin lo
 // sa già dal profilo. La protezione vera resta nella pagina Admin.

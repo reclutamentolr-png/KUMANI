@@ -6,8 +6,6 @@
 export type UserPlan = 'none' | 'base' | 'pro'
 export type RequiredPlan = 'free' | 'base' | 'pro'
 
-export const REQUIRED_PLANS: RequiredPlan[] = ['free', 'base', 'pro']
-
 export function planCovers(plan: UserPlan, required: RequiredPlan): boolean {
   if (required === 'free') return true
   if (required === 'base') return plan === 'base' || plan === 'pro'

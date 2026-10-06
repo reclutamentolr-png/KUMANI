@@ -128,52 +128,6 @@ export async function createReceipt(
   return { success: false, message: 'saveError' }
 }
 
-export async function updateReceipt(id: string, form: DigitalReceiptFormData): Promise<ActionResult<null>> {
-  const gate = await requireActiveDigitalReceiptAccess()
-  if (!gate.ok) return { success: false, message: gate.message }
-
-  const supabase = await createClient()
-
-  const { data: existing } = await supabase
-    .from('digital_receipts')
-    .select('confirmed_at')
-    .eq('id', id)
-    .eq('user_id', gate.userId)
-    .single()
-
-  if (!existing) {
-    return { success: false, message: 'saveError' }
-  }
-  if (existing.confirmed_at) {
-    return { success: false, message: 'alreadyConfirmedError' }
-  }
-
-  const { error } = await supabase
-    .from('digital_receipts')
-    .update({
-      template: form.template,
-      object_name: form.objectName,
-      serial_number: form.serialNumber || null,
-      recipient_name: form.recipientName,
-      delivery_date: form.deliveryDate,
-      reason: form.reason || null,
-      notes: form.notes || null,
-      quantity: form.quantity,
-      declared_value: form.declaredValue,
-      expected_return_date: form.expectedReturnDate || null,
-      updated_at: new Date().toISOString(),
-    })
-    .eq('id', id)
-    .eq('user_id', gate.userId)
-
-  if (error) {
-    console.error('[DigitalReceipt] updateReceipt failed:', error)
-    return { success: false, message: 'saveError' }
-  }
-
-  return { success: true, data: null }
-}
-
 export async function deleteReceipt(id: string): Promise<ActionResult<null>> {
   const gate = await requireActiveDigitalReceiptAccess()
   if (!gate.ok) return { success: false, message: gate.message }
