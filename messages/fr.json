@@ -611,7 +611,8 @@
     "qualificationVouchersHint": "Vous les trouvez dans votre Wallet, section bons, avec les indications pour les offrir.",
     "qualificationBlackExtra": "En plus, vous avez un bon Pro d’un an rien que pour vous et, désormais, 1 bon toutes les {every} nouvelles activations. La vitrine du Kumano du Jour, l’invitation à l’événement annuel KUMANI et le Conseil des Black vous attendent aussi.",
     "qualificationOpenWallet": "Voir vos bons",
-    "rankPendingLine": "En confirmation : +{acts} activations, +{points} KU Points"
+    "rankPendingLine": "En confirmation : +{acts} activations, +{points} KU Points",
+    "receivedWelcomeNote": "Vous ne recevez le Bonus d’Accueil que pour les personnes placées dans vos 5 places directes : 5 personnes au maximum."
   },
   "marketplace": {
     "fabula": "Kumani Fabula",
@@ -5938,7 +5939,8 @@
     "vouchersReady": "{count, plural, one {# à utiliser} other {# à utiliser}}",
     "groupPrize": "Prix {rank}",
     "groupOther": "Autres bons",
-    "groupCount": "{count, plural, one {# bon} other {# bons}}"
+    "groupCount": "{count, plural, one {# bon} other {# bons}}",
+    "ruleWelcomeCap": "Le Bonus d’Accueil est un cadeau de bienvenue, pas un revenu : vous ne le recevez que pour les personnes accueillies dans vos 5 places directes, donc 5 fois au maximum (jusqu’à {maxBase} points avec le Base, {maxPro} avec le Pro). Les vraies récompenses viennent des personnes que vous invitez vous-même."
   },
   "voucherReceipt": {
     "back": "Retour au Portefeuille",

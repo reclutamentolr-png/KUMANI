@@ -631,7 +631,8 @@
     "qualificationVouchersHint": "You’ll find them in your Wallet, in the vouchers section, with instructions on how to give them.",
     "qualificationBlackExtra": "You also get a one-year Pro voucher just for you, and from now on 1 voucher every {every} new activations. The Kumano of the Day showcase, an invitation to the annual KUMANI event and the Black Council are waiting for you too.",
     "qualificationOpenWallet": "Go to your vouchers",
-    "rankPendingLine": "Being confirmed: +{acts} activations, +{points} KU Points"
+    "rankPendingLine": "Being confirmed: +{acts} activations, +{points} KU Points",
+    "receivedWelcomeNote": "You only get the Welcome Bonus for people who land in your 5 direct spots: at most 5 people."
   },
   "marketplace": {
     "fabula": "Kumani Fabula",
@@ -5938,7 +5939,8 @@
     "vouchersReady": "{count} to use",
     "groupPrize": "{rank} prize",
     "groupOther": "Other vouchers",
-    "groupCount": "{count, plural, one {# voucher} other {# vouchers}}"
+    "groupCount": "{count, plural, one {# voucher} other {# vouchers}}",
+    "ruleWelcomeCap": "The Welcome Bonus is a welcome, not an income: you only get it for people placed in your 5 direct spots, so at most 5 times (up to {maxBase} points with Base, {maxPro} with Pro). The real rewards come from the people you invite yourself."
   },
   "voucherReceipt": {
     "back": "Back to Wallet",

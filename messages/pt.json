@@ -611,7 +611,8 @@
     "qualificationVouchersHint": "Encontra-os no seu Wallet, na secção dos vouchers, com as indicações para os oferecer.",
     "qualificationBlackExtra": "Além disso, tem um voucher Pro de um ano só para si e a partir de agora recebe 1 voucher a cada {every} novas ativações. Esperam-no também a montra do Kumano do Dia, o convite para o evento anual KUMANI e o Conselho dos Black.",
     "qualificationOpenWallet": "Ver os seus vouchers",
-    "rankPendingLine": "Em confirmação: +{acts} ativações, +{points} KU Points"
+    "rankPendingLine": "Em confirmação: +{acts} ativações, +{points} KU Points",
+    "receivedWelcomeNote": "Só recebe o Bónus de Acolhimento por quem entra nos seus 5 lugares diretos: no máximo 5 pessoas."
   },
   "marketplace": {
     "fabula": "Kumani Fabula",
@@ -5938,7 +5939,8 @@
     "vouchersReady": "{count} por usar",
     "groupPrize": "Prémio {rank}",
     "groupOther": "Outros vouchers",
-    "groupCount": "{count, plural, one {# voucher} other {# vouchers}}"
+    "groupCount": "{count, plural, one {# voucher} other {# vouchers}}",
+    "ruleWelcomeCap": "O Bónus de Acolhimento é uma boas-vindas, não um rendimento: só o recebe pelas pessoas acolhidas nos seus 5 lugares diretos, portanto no máximo 5 vezes (até {maxBase} pontos com o Base, {maxPro} com o Pro). Os prémios a sério vêm das pessoas que convida."
   },
   "voucherReceipt": {
     "back": "Voltar à Carteira",

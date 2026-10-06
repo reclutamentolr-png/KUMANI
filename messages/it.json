@@ -631,7 +631,8 @@
     "qualificationVouchersHint": "Li trovi nel tuo Wallet, nella sezione dei voucher, con le indicazioni per regalarli.",
     "qualificationBlackExtra": "In più hai un voucher Pro di un anno tutto per te e da ora ricevi 1 voucher ogni {every} nuove attivazioni. Ti aspettano anche la vetrina nel Kumano del Giorno, l’invito all’evento annuale KUMANI e il Consiglio dei Black.",
     "qualificationOpenWallet": "Vai ai tuoi voucher",
-    "rankPendingLine": "In conferma: +{acts} attivazioni, +{points} KU Points"
+    "rankPendingLine": "In conferma: +{acts} attivazioni, +{points} KU Points",
+    "receivedWelcomeNote": "Ricevi il Bonus Accoglienza solo per chi entra nei tuoi 5 posti diretti: al massimo 5 persone."
   },
   "marketplace": {
     "fabula": "Kumani Fabula",
@@ -5938,7 +5939,8 @@
     "vouchersReady": "{count, plural, one {# da usare} other {# da usare}}",
     "groupPrize": "Premio {rank}",
     "groupOther": "Altri voucher",
-    "groupCount": "{count, plural, one {# voucher} other {# voucher}}"
+    "groupCount": "{count, plural, one {# voucher} other {# voucher}}",
+    "ruleWelcomeCap": "Il Bonus Accoglienza è un benvenuto, non un’entrata: lo ricevi solo per le persone accolte nei tuoi 5 posti diretti, quindi al massimo 5 volte (fino a {maxBase} punti con il Base, {maxPro} con il Pro). I premi veri arrivano dalle persone che inviti tu."
   },
   "voucherReceipt": {
     "back": "Torna al Portafoglio",

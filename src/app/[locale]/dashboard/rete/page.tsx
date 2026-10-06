@@ -192,6 +192,7 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
               <p className="text-xs font-bold uppercase tracking-wide text-[var(--muted)]">{t('receivedLabel')}</p>
             </div>
             <p className="mt-3 text-4xl font-extrabold leading-none text-sky-600">{receivedKumani.length}</p>
+            <p className="mt-2 text-xs leading-5 text-[var(--muted)]">{t('receivedWelcomeNote')}</p>
           </div>
           <div className="relative overflow-hidden rounded-2xl border border-[var(--gold)]/30 bg-white px-5 pb-5 pt-6 shadow-[0_10px_30px_rgba(23,23,23,0.08)]">
             <div aria-hidden className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)]" />

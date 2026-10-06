@@ -611,7 +611,8 @@
     "qualificationVouchersHint": "Du findest sie in deinem Wallet im Bereich Gutscheine, mit Hinweisen zum Verschenken.",
     "qualificationBlackExtra": "Außerdem hast du einen Pro-Gutschein für ein Jahr nur für dich und bekommst ab jetzt 1 Gutschein alle {every} neuen Aktivierungen. Auf dich warten auch die Vitrine im Kumano des Tages, die Einladung zum jährlichen KUMANI-Event und der Rat der Black.",
     "qualificationOpenWallet": "Zu deinen Gutscheinen",
-    "rankPendingLine": "In Bestätigung: +{acts} Aktivierungen, +{points} KU Points"
+    "rankPendingLine": "In Bestätigung: +{acts} Aktivierungen, +{points} KU Points",
+    "receivedWelcomeNote": "Den Willkommensbonus bekommst du nur für Personen auf deinen 5 direkten Plätzen: höchstens 5 Personen."
   },
   "marketplace": {
     "fabula": "Kumani Fabula",
@@ -5938,7 +5939,8 @@
     "vouchersReady": "{count} verfügbar",
     "groupPrize": "Prämie {rank}",
     "groupOther": "Weitere Gutscheine",
-    "groupCount": "{count, plural, one {# Gutschein} other {# Gutscheine}}"
+    "groupCount": "{count, plural, one {# Gutschein} other {# Gutscheine}}",
+    "ruleWelcomeCap": "Der Willkommensbonus ist ein Willkommen, kein Einkommen: Du bekommst ihn nur für Personen, die auf deinen 5 direkten Plätzen landen, also höchstens 5-mal (bis zu {maxBase} Punkte mit Base, {maxPro} mit Pro). Die echten Belohnungen kommen von den Personen, die du selbst einlädst."
   },
   "voucherReceipt": {
     "back": "Zurück zur Brieftasche",

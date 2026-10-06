@@ -611,7 +611,8 @@
     "qualificationVouchersHint": "Они в вашем Кошельке, в разделе ваучеров, с подсказками, как их подарить.",
     "qualificationBlackExtra": "Кроме того, у вас есть ваучер Pro на год лично для вас, а с этого момента — 1 ваучер за каждые {every} новых активаций. Вас также ждут витрина «Кумано дня», приглашение на ежегодное мероприятие KUMANI и Совет Black.",
     "qualificationOpenWallet": "К вашим ваучерам",
-    "rankPendingLine": "На подтверждении: +{acts} активаций, +{points} KU Points"
+    "rankPendingLine": "На подтверждении: +{acts} активаций, +{points} KU Points",
+    "receivedWelcomeNote": "Бонус приёма начисляется только за тех, кто попадает на ваши 5 прямых мест: не более 5 человек."
   },
   "marketplace": {
     "fabula": "Kumani Fabula",
@@ -5938,7 +5939,8 @@
     "vouchersReady": "{count} к использованию",
     "groupPrize": "Награда {rank}",
     "groupOther": "Другие ваучеры",
-    "groupCount": "{count, plural, one {# ваучер} few {# ваучера} many {# ваучеров} other {# ваучера}}"
+    "groupCount": "{count, plural, one {# ваучер} few {# ваучера} many {# ваучеров} other {# ваучера}}",
+    "ruleWelcomeCap": "Бонус приёма — это приветствие, а не доход: он начисляется только за людей, размещённых на ваших 5 прямых местах, то есть не более 5 раз (до {maxBase} баллов с Base, {maxPro} с Pro). Настоящие награды приносят люди, которых приглашаете вы сами."
   },
   "voucherReceipt": {
     "back": "Назад в кошелёк",

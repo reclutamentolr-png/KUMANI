@@ -131,6 +131,8 @@ export default function WalletVoucherSection({
           <li>{t('ruleUpgrade', { points: rules.upgrade })}</li>
           <li>{t('ruleWelcomeGive', { from: rules.welcomeFrom, base: rules.welcomeBase, pro: rules.welcomePro, baseKeep: rules.base - rules.welcomeBase, proKeep: rules.pro - rules.welcomePro })}</li>
           <li>{t('ruleWelcomeGet', { base: rules.welcomeBase, pro: rules.welcomePro })}</li>
+          {/* Tetto naturale: solo le persone accolte nei 5 posti diretti */}
+          <li className="font-semibold text-[var(--ink)]">{t('ruleWelcomeCap', { maxBase: rules.welcomeBase * 5, maxPro: rules.welcomePro * 5 })}</li>
           <li>{t('rulePass')}</li>
         </ul>
       </div>

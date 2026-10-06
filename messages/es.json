@@ -611,7 +611,8 @@
     "qualificationVouchersHint": "Los encuentras en tu Wallet, en la sección de vouchers, con las indicaciones para regalarlos.",
     "qualificationBlackExtra": "Además tienes un voucher Pro de un año solo para ti y desde ahora recibes 1 voucher cada {every} nuevas activaciones. También te esperan el escaparate del Kumano del Día, la invitación al evento anual KUMANI y el Consejo de los Black.",
     "qualificationOpenWallet": "Ir a tus vouchers",
-    "rankPendingLine": "En confirmación: +{acts} activaciones, +{points} KU Points"
+    "rankPendingLine": "En confirmación: +{acts} activaciones, +{points} KU Points",
+    "receivedWelcomeNote": "Solo recibes el Bono de Acogida por quien entra en tus 5 puestos directos: como máximo 5 personas."
   },
   "marketplace": {
     "fabula": "Kumani Fabula",
@@ -5938,7 +5939,8 @@
     "vouchersReady": "{count} por usar",
     "groupPrize": "Premio {rank}",
     "groupOther": "Otros vouchers",
-    "groupCount": "{count, plural, one {# voucher} other {# vouchers}}"
+    "groupCount": "{count, plural, one {# voucher} other {# vouchers}}",
+    "ruleWelcomeCap": "El Bono de Acogida es un regalo, no un ingreso: solo lo recibes por las personas acogidas en tus 5 puestos directos, así que como máximo 5 veces (hasta {maxBase} puntos con el Base, {maxPro} con el Pro). Los premios de verdad vienen de las personas que invitas tú."
   },
   "voucherReceipt": {
     "back": "Volver al Monedero",
