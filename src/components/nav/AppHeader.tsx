@@ -40,8 +40,8 @@ export default async function AppHeader({
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex min-w-0 items-center gap-2.5">
           <Link href="/dashboard" className="min-w-0">
-            <span className="hidden text-2xl font-bold tracking-tight text-white sm:block">{t('programTitle')}</span>
-            <span className="text-xl font-bold tracking-tight text-white sm:hidden">Kumani</span>
+            {/* «Home Kumani»: si torna alla Home da ogni pagina */}
+            <span className="block truncate text-xl font-bold tracking-tight text-white sm:text-2xl">{t('programTitle')}</span>
           </Link>
           {/* Stella oro: i servizi preferiti */}
           <Link
