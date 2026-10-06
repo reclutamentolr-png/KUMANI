@@ -2627,7 +2627,10 @@
     "present": "Heute",
     "editTab": "Bearbeiten",
     "previewTab": "Vorschau",
-    "publicFooterBadge": "Lebenslauf erstellt mit KUMANI"
+    "publicFooterBadge": "Lebenslauf erstellt mit KUMANI",
+    "editMyCv": "Deinen Lebenslauf bearbeiten",
+    "oneCvOnly": "Du kannst nur einen Lebenslauf haben: Bearbeite den vorhandenen.",
+    "prefilledFromProfile": "Name, Kontakte und Stadt stammen aus deinem Profil: Prüfe sie und ergänze den Rest."
   },
   "adminMessage": {
     "broadcastBadge": "Ankündigung",

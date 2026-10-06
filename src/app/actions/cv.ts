@@ -55,6 +55,10 @@ export async function createCv(form: CvFormData, rawPhotoPath: string | null): P
   const photoPath = ownPhotoPath(rawPhotoPath, gate.userId)
   const supabase = await createClient()
 
+  // Un solo CV per persona: chi ce l'ha già lo modifica
+  const { data: existing } = await supabase.from('cvs').select('id').eq('user_id', gate.userId).limit(1).maybeSingle()
+  if (existing) return { success: false, message: 'oneCvOnly' }
+
   for (let attempt = 0; attempt < 5; attempt++) {
     const code = generateShortCode()
     const { data, error } = await supabase

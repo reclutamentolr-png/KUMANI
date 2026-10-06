@@ -4,7 +4,7 @@ import { getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
 import { ArrowLeft, FileUser } from 'lucide-react'
 import { hasActiveCvAccess } from '@/lib/cv-server'
-import CvForm from '@/components/CvForm'
+import CvForm, { emptyCvForm } from '@/components/CvForm'
 
 export default async function NewCvPage({ searchParams }: { searchParams: Promise<{ from?: string }> }) {
   const t = await getTranslations('kumaniCv')
@@ -20,6 +20,25 @@ export default async function NewCvPage({ searchParams }: { searchParams: Promis
   const hasAccess = await hasActiveCvAccess(supabase, user.id)
   if (!hasAccess) {
     redirect('/dashboard')
+  }
+
+  // Un solo CV per persona: chi ce l'ha già va a modificarlo
+  const { data: existing } = await supabase.from('cvs').select('id').eq('user_id', user.id).limit(1).maybeSingle()
+  if (existing) redirect(`/marketplace/kumani-cv/${existing.id}/edit${backSuffix}`)
+
+  // CV nuovo già compilato con i dati del profilo
+  const { data: profile } = await supabase
+    .rpc('get_my_profile')
+    .maybeSingle<{ first_name: string | null; last_name: string | null; email: string | null; phone: string | null; city: string | null; province: string | null; occupation: string | null }>()
+  const fullName = [profile?.first_name, profile?.last_name].filter(Boolean).join(' ').trim()
+  const location = [profile?.city, profile?.province ? `(${profile.province})` : ''].filter(Boolean).join(' ').trim()
+  const initialData = {
+    ...emptyCvForm(),
+    fullName,
+    roleTitle: profile?.occupation ?? '',
+    email: profile?.email ?? user.email ?? '',
+    phone: profile?.phone ?? '',
+    location,
   }
 
   return (
@@ -41,7 +60,10 @@ export default async function NewCvPage({ searchParams }: { searchParams: Promis
       </header>
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <CvForm mode="create" />
+        {(fullName || initialData.email) && (
+          <p className="mb-6 rounded-xl border border-[var(--gold)]/40 bg-[var(--gold-pale)] px-4 py-3 text-sm text-[var(--ink)]">{t('prefilledFromProfile')}</p>
+        )}
+        <CvForm mode="create" initialData={initialData} />
       </main>
     </div>
   )

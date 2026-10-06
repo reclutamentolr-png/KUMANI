@@ -43,7 +43,7 @@ type Props = {
   initialPhotoUrl?: string | null
 }
 
-function defaultForm(): CvFormData {
+export function emptyCvForm(): CvFormData {
   return {
     title: '',
     template: 'minimal',
@@ -74,7 +74,7 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
   const fromDashboardSuffix = useFromDashboardSuffix()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const [form, setForm] = useState<CvFormData>(initialData || defaultForm())
+  const [form, setForm] = useState<CvFormData>(initialData || emptyCvForm())
   const [photoUrl, setPhotoUrl] = useState<string | null>(initialPhotoUrl || null)
   const [photoPath, setPhotoPath] = useState<string | null>(null)
   const [uploadingPhoto, setUploadingPhoto] = useState(false)

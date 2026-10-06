@@ -2627,7 +2627,10 @@
     "present": "По настоящее время",
     "editTab": "Изменить",
     "previewTab": "Предпросмотр",
-    "publicFooterBadge": "Резюме создано с KUMANI"
+    "publicFooterBadge": "Резюме создано с KUMANI",
+    "editMyCv": "Изменить резюме",
+    "oneCvOnly": "Можно иметь только одно резюме: измените уже созданное.",
+    "prefilledFromProfile": "Имя, контакты и город взяты из вашего профиля: проверьте их и заполните остальное."
   },
   "adminMessage": {
     "broadcastBadge": "Объявление",

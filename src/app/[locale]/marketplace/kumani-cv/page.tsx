@@ -61,11 +61,11 @@ export default async function KumaniCvPage({ searchParams }: { searchParams: Pro
               <p className="text-white/70 text-base sm:text-lg">{t('heroDescription')}</p>
             </div>
             <Link
-              href={`/marketplace/kumani-cv/new${backSuffix}`}
+              href={cvs && cvs.length > 0 ? `/marketplace/kumani-cv/${cvs[0].id}/edit${backSuffix}` : `/marketplace/kumani-cv/new${backSuffix}`}
               className="flex shrink-0 items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] rounded-xl font-bold shadow-md hover:brightness-105 transition-all"
             >
               <PlusCircle className="w-5 h-5" />
-              {t('newCv')}
+              {cvs && cvs.length > 0 ? t('editMyCv') : t('newCv')}
             </Link>
           </div>
         </div>

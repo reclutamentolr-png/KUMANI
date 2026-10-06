@@ -56,6 +56,8 @@ export default function CvsDashboard({ cvs }: { cvs: Cv[] }) {
         )}
       </div>
 
+      {/* Un solo CV per persona: il pulsante «Nuovo CV» solo finché non c'è */}
+      {cvs.length === 0 && (
       <Link
         href={`/marketplace/kumani-cv/new${fromDashboardSuffix}`}
         data-fab className="fixed bottom-6 right-6 z-10 flex items-center gap-2 px-6 py-4 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] rounded-full font-bold shadow-lg hover:brightness-105 hover:shadow-xl hover:-translate-y-0.5 transition-all"
@@ -63,6 +65,7 @@ export default function CvsDashboard({ cvs }: { cvs: Cv[] }) {
         <PlusCircle className="w-5 h-5" />
         {t('newCv')}
       </Link>
+      )}
     </div>
   )
 }

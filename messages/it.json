@@ -2681,7 +2681,10 @@
     "present": "Presente",
     "editTab": "Modifica",
     "previewTab": "Anteprima",
-    "publicFooterBadge": "CV realizzato con KUMANI"
+    "publicFooterBadge": "CV realizzato con KUMANI",
+    "editMyCv": "Modifica il tuo CV",
+    "oneCvOnly": "Puoi avere un solo CV: modifica quello che hai già.",
+    "prefilledFromProfile": "Nome, contatti e città li abbiamo presi dal tuo profilo: controlla e completa il resto."
   },
   "adminMessage": {
     "broadcastBadge": "Comunicazione a tutti",
