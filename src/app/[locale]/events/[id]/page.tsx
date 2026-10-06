@@ -17,6 +17,10 @@ import { createClient } from '@/lib/supabase/server'
 import { SuspendedBanner } from '@/components/ServiceSuspended'
 import { isToolOnline } from '@/lib/toolOnline'
 
+// Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
+// richiesta, mai preparata in anticipo né tenuta in memoria
+export const dynamic = 'force-dynamic'
+
 type Props = {
   params: Promise<{ id: string }>
   searchParams: Promise<{ ref?: string }>

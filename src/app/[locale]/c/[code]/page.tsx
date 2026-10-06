@@ -5,6 +5,10 @@ import { ArrowRight, Mail, MessageCircle, Phone, UserPlus } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { createClient } from '@/lib/supabase/server'
 
+// Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
+// richiesta, mai preparata in anticipo né tenuta in memoria
+export const dynamic = 'force-dynamic'
+
 // Pagina del biglietto da visita (si apre dal QR): nome e cognome del
 // Kumano, i contatti che ha scelto di mostrare e l'invito a iscriversi.
 

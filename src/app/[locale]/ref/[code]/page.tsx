@@ -2,6 +2,10 @@ import { createClient } from '@/lib/supabase/server'
 import { getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
 
+// Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
+// richiesta, mai preparata in anticipo né tenuta in memoria
+export const dynamic = 'force-dynamic'
+
 type InviterData = { referral_code: string; country_code: string; first_name: string; last_name: string }
 
 const FLAGS: Record<string, string> = { IT: '🇮🇹', US: '🇺🇸', DE: '🇩🇪', FR: '🇫🇷', ES: '🇪🇸', PT: '🇵🇹', BR: '🇧🇷', RU: '🇷🇺', GB: '🇬🇧' }

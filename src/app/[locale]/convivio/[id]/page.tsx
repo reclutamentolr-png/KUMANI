@@ -7,6 +7,10 @@ import { ProgressBar } from '@/components/convivio/ConvivioCardItem'
 import { createClient } from '@/lib/supabase/server'
 import { convivioPhotoUrl, formatEuro, savingPercent, type ConvivioPublic } from '@/lib/convivio'
 
+// Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
+// richiesta, mai preparata in anticipo né tenuta in memoria
+export const dynamic = 'force-dynamic'
+
 // Anteprima pubblica di una Kordata (link condiviso su WhatsApp): si vede
 // cosa si compra e a che punto è; per aderire serve l'account KUMANI (con il
 // codice invito del capocordata già inserito).

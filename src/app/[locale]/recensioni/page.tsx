@@ -8,6 +8,10 @@ import { getPublicReviews } from '@/lib/reviews-public'
 import { getReviewTexts } from '@/lib/reviews-labels'
 import ReviewCard, { ReviewStars } from '@/components/reviews/ReviewCard'
 
+// Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
+// richiesta, mai preparata in anticipo né tenuta in memoria
+export const dynamic = 'force-dynamic'
+
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('reviews')
   return pageMetadata('/recensioni', { title: t('pageTitle'), description: t('pageIntro') })

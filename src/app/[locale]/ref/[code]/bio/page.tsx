@@ -22,6 +22,10 @@ import BioThemeScene from '@/components/BioThemeScene'
 import { normalizeLinkUrl } from '@/lib/linkUtils'
 import PublicPageOffline from '@/components/PublicPageOffline'
 
+// Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
+// richiesta, mai preparata in anticipo né tenuta in memoria
+export const dynamic = 'force-dynamic'
+
 export default async function LinkInBioPublicPage({ params }: { params: Promise<{ code: string }> }) {
   const resolvedParams = await params
   const code = resolvedParams.code

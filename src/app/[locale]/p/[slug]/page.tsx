@@ -9,6 +9,10 @@ import { landingPhotoUrl } from '@/lib/landing'
 import { getLandingFormLabels, getLandingLabels } from '@/lib/landing-server'
 import { loadPublicLanding } from '@/lib/landing-public'
 
+// Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
+// richiesta, mai preparata in anticipo né tenuta in memoria
+export const dynamic = 'force-dynamic'
+
 type Props = { params: Promise<{ slug: string }> }
 
 const OG_LOCALE: Record<string, string> = { it: 'it_IT', en: 'en_GB', fr: 'fr_FR', es: 'es_ES', pt: 'pt_PT', de: 'de_DE', ru: 'ru_RU' }

@@ -10,6 +10,10 @@ import { isEmptySpotlightProfile, type SpotlightProfile } from '@/lib/spotlight'
 import { ServiceStopped } from '@/components/ServiceSuspended'
 import { isToolOnline } from '@/lib/toolOnline'
 
+// Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
+// richiesta, mai preparata in anticipo né tenuta in memoria
+export const dynamic = 'force-dynamic'
+
 interface ArchiveRow {
   day: string
   spotlight_profiles: {

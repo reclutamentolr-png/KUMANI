@@ -75,6 +75,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "spotlight",
   "svat",
   "timebank",
+  "toolMember",
   "toolPass",
   "toolShare",
   "toolTiers",

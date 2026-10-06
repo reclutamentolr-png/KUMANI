@@ -1,7 +1,7 @@
 import Link from '@/components/LocalizedLink'
 import { pageMetadata } from '@/lib/seo'
 import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import {
   ArrowLeft,
   Sparkles,
@@ -10,12 +10,20 @@ import {
   CheckCircle2
 } from 'lucide-react'
 
-export async function generateMetadata(): Promise<Metadata> {
+// Pagina uguale per tutti: preparata in anticipo per ogni lingua e rifatta
+// in background (al massimo ogni ora; prima se cambiano lingue o traduzioni)
+export const revalidate = 3600
+
+type LocaleProps = { params: Promise<{ locale: string }> }
+
+export async function generateMetadata({ params }: LocaleProps): Promise<Metadata> {
+  setRequestLocale((await params).locale)
   const t = await getTranslations('aboutPage')
   return pageMetadata('/chi-siamo', { title: t('metaTitle'), description: t('metaDescription') })
 }
 
-export default async function ChiSiamoPage() {
+export default async function ChiSiamoPage({ params }: LocaleProps) {
+  setRequestLocale((await params).locale)
   const t = await getTranslations('aboutPage')
 
   const manifestoItems = [1, 2, 3, 4, 5, 6].map((n) => ({

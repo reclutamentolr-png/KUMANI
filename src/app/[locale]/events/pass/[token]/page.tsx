@@ -7,6 +7,10 @@ import { stampKey } from '@/lib/events'
 import { SuspendedBanner } from '@/components/ServiceSuspended'
 import { createClient } from '@/lib/supabase/server'
 
+// Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
+// richiesta, mai preparata in anticipo né tenuta in memoria
+export const dynamic = 'force-dynamic'
+
 // Pagina aperta inquadrando il QR di un pass con la fotocamera del telefono.
 // All'organizzatore fa subito il check-in; al titolare mostra il suo evento.
 export default async function EventPassPage({ params }: { params: Promise<{ token: string }> }) {

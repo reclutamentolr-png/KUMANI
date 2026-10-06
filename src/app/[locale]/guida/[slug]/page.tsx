@@ -11,6 +11,10 @@ import { createClient } from '@/lib/supabase/server'
 import { getGuidesContent, guideShot, PUBLIC_GUIDES } from '@/lib/guides/content'
 import type { GuideSlug } from '@/lib/guides/types'
 
+// Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
+// richiesta, mai preparata in anticipo né tenuta in memoria
+export const dynamic = 'force-dynamic'
+
 type Props = { params: Promise<{ slug: string }>; searchParams: Promise<{ from?: string }> }
 
 // Solo percorsi interni (mai altri siti): /marketplace/…, /events, /viaggi…

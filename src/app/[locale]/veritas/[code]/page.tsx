@@ -8,6 +8,10 @@ import { isRoomCode } from '@/lib/veritas'
 import { ServiceStopped } from '@/components/ServiceSuspended'
 import { isToolOnline } from '@/lib/toolOnline'
 
+// Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
+// richiesta, mai preparata in anticipo né tenuta in memoria
+export const dynamic = 'force-dynamic'
+
 // Stanza di Veritas (/veritas/<codice>): pubblica, si gioca anche senza account.
 export default async function VeritasRoomPage({ params }: { params: Promise<{ code: string }> }) {
   const { code: rawCode } = await params

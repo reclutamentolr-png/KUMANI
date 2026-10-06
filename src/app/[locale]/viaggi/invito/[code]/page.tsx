@@ -9,6 +9,10 @@ import { formatTripDates, type TripPublic } from '@/lib/travel'
 import { SuspendedBanner } from '@/components/ServiceSuspended'
 import { isToolOnline } from '@/lib/toolOnline'
 
+// Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
+// richiesta, mai preparata in anticipo né tenuta in memoria
+export const dynamic = 'force-dynamic'
+
 // Pagina del link di invito (condiviso su WhatsApp): cosa è il viaggio e chi
 // lo organizza. Per entrare serve un account KUMANI, anche senza abbonamento;
 // chi si iscrive entra nella rete di chi ha condiviso il link (?ref=).

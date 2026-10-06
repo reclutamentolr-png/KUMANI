@@ -4,6 +4,10 @@ import { Stamp } from 'lucide-react'
 import FidelityCassa from '@/components/fidelity/FidelityCassa'
 import { getFidelityServiceClient, hasCassaAccess } from '@/lib/fidelity-server'
 
+// Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
+// richiesta, mai preparata in anticipo né tenuta in memoria
+export const dynamic = 'force-dynamic'
+
 // Modalità cassa della Kumi Card. Fuori da /marketplace di proposito: deve
 // funzionare anche sul tablet del negozio senza account, sbloccato con il
 // PIN. Il titolare loggato entra direttamente.

@@ -10,6 +10,10 @@ import { getFidelityServiceClient } from '@/lib/fidelity-server'
 import { createClient } from '@/lib/supabase/server'
 import { FIDELITY_MEMBER_QR_PREFIX, effectiveStamps, isFutureDate, stampsExpireAt } from '@/lib/fidelity'
 
+// Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
+// richiesta, mai preparata in anticipo né tenuta in memoria
+export const dynamic = 'force-dynamic'
+
 type MemberRow = {
   member_code: string
   stamps_count: number

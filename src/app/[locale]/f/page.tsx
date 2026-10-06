@@ -6,6 +6,10 @@ import { getFidelityServiceClient, readWalletTokens } from '@/lib/fidelity-serve
 import { createClient } from '@/lib/supabase/server'
 import { effectiveStamps } from '@/lib/fidelity'
 
+// Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
+// richiesta, mai preparata in anticipo né tenuta in memoria
+export const dynamic = 'force-dynamic'
+
 type WalletRow = {
   token: string
   stamps_count: number

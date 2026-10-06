@@ -6,6 +6,10 @@ import PublicPageOffline from '@/components/PublicPageOffline'
 import ReceiptSpendlyBox from '@/components/ecosystem/ReceiptSpendlyBox'
 import type { ReceiptSpendlyStatus } from '@/app/actions/ecosystem'
 
+// Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
+// richiesta, mai preparata in anticipo né tenuta in memoria
+export const dynamic = 'force-dynamic'
+
 interface PublicReceiptRow {
   code: string
   template: ReceiptTemplate

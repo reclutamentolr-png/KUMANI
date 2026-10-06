@@ -7,6 +7,10 @@ import { createClient } from '@/lib/supabase/server'
 import { isMenuTemplate, MENU_THEMES, menuThemeStyle } from '@/lib/menuThemes'
 import { detectMenuLocale, isMenuLocale, MENU_ALLERGENS, MENU_DIET_TAGS, MENU_LOCALE_NAMES, type MenuLocale } from '@/lib/menu'
 
+// Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
+// richiesta, mai preparata in anticipo né tenuta in memoria
+export const dynamic = 'force-dynamic'
+
 type PublicMenu = {
   restaurant_name: string
   tagline: string | null

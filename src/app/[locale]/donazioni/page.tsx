@@ -7,6 +7,10 @@ import AppHeader from '@/components/nav/AppHeader'
 import { getPublicDonationSummary } from '@/lib/donationsPublic'
 import { euroFormat, percentFormat } from '@/lib/donationTypes'
 
+// Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
+// richiesta, mai preparata in anticipo né tenuta in memoria
+export const dynamic = 'force-dynamic'
+
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('donations')
   return pageMetadata('/donazioni', { title: t('pageTitle'), description: t('pageIntro') })

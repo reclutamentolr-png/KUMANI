@@ -3,6 +3,10 @@ import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { MessageCircle, CheckCircle2, ShieldCheck } from 'lucide-react'
 
+// Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
+// richiesta, mai preparata in anticipo né tenuta in memoria
+export const dynamic = 'force-dynamic'
+
 interface PublicCampaign {
   code: string
   locale: string

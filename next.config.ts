@@ -30,6 +30,14 @@ const nextConfig: NextConfig = {
         ],
       },
       {
+        // Fuori dal dominio definitivo (anteprime e indirizzo *.vercel.app,
+        // localhost) niente Google. Vale per ogni richiesta, anche per le
+        // pagine pubbliche preparate in anticipo, che non leggono l'indirizzo.
+        source: '/:path*',
+        missing: [{ type: 'host', value: '(?:www\\.)?kumani\\.io' }],
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
+      },
+      {
         // Service worker delle notifiche push: sempre la versione più recente
         source: '/sw.js',
         headers: [

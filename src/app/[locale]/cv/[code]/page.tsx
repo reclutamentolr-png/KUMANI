@@ -7,6 +7,10 @@ import CvTemplateRenderer from '@/components/cv/CvTemplateRenderer'
 import type { CvTemplate, CvLink, CvExperience, CvEducation, CvSkill, CvLanguage, CvCertification } from '@/lib/cv'
 import PublicPageOffline from '@/components/PublicPageOffline'
 
+// Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
+// richiesta, mai preparata in anticipo né tenuta in memoria
+export const dynamic = 'force-dynamic'
+
 interface PublicCvRow {
   code: string
   title: string

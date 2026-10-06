@@ -17,6 +17,10 @@ import type { UserPlan } from '@/lib/plans'
 import { getPlanPrices } from '@/lib/planPrices'
 import { toolGuideFor } from '@/lib/guides/toolGuides'
 
+// Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
+// richiesta, mai preparata in anticipo né tenuta in memoria
+export const dynamic = 'force-dynamic'
+
 // Pagina "KUMANI Pro": strumenti del piano Pro (decisi dall'admin in
 // Admin → Marketplace), prezzo e pulsante adatto alla situazione:
 // non iscritto → registrazione; Base con carta → passaggio a Pro (Stripe

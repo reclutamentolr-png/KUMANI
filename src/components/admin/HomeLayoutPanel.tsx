@@ -70,7 +70,7 @@ export default function HomeLayoutPanel() {
                   <p className="mt-1 flex-1 text-sm text-gray-600">{HOME_LAYOUT_INFO[key].description}</p>
                   <div className="mt-4 flex gap-2">
                     <a
-                      href={`/?layout=${key}`}
+                      href={`/admin/anteprima-home/${key}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex flex-1 items-center justify-center gap-1 rounded-lg border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"

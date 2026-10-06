@@ -22,6 +22,10 @@ import type { ContactTopic } from '@/app/actions/contact'
 import { CONTACT_INFO } from '@/lib/contactInfo'
 import { createClient } from '@/lib/supabase/server'
 
+// Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
+// richiesta, mai preparata in anticipo né tenuta in memoria
+export const dynamic = 'force-dynamic'
+
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('contactPage')
   return pageMetadata('/contact', { title: t('metaTitle'), description: t('metaDescription') })

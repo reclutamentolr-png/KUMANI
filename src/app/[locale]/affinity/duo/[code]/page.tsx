@@ -7,6 +7,10 @@ import { isAffinityArchetype, isAffinityMap, type AffinityArchetype, type Affini
 import { ServiceStopped } from '@/components/ServiceSuspended'
 import { isToolOnline } from '@/lib/toolOnline'
 
+// Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
+// richiesta, mai preparata in anticipo né tenuta in memoria
+export const dynamic = 'force-dynamic'
+
 type DuoRow = { first_name: string | null; archetype: string; map: unknown; referral_code: string | null }
 
 // Pagina pubblica del link "Gioca in Duo" (/affinity/duo/<codice>): si gioca

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { pageMetadata } from '@/lib/seo'
-import { getLocale, getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations, setRequestLocale } from 'next-intl/server'
 import { ArrowLeft, Info, Lock } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { CONTACT_INFO } from '@/lib/contactInfo'
@@ -13,12 +13,20 @@ import { CONTACT_INFO } from '@/lib/contactInfo'
 const LAST_UPDATE = '2026-10-03'
 const LIST_SECTIONS = new Set([2, 3, 6])
 
-export async function generateMetadata(): Promise<Metadata> {
+// Pagina uguale per tutti: preparata in anticipo per ogni lingua e rifatta
+// in background (al massimo ogni ora; prima se cambiano lingue o traduzioni)
+export const revalidate = 3600
+
+type LocaleProps = { params: Promise<{ locale: string }> }
+
+export async function generateMetadata({ params }: LocaleProps): Promise<Metadata> {
+  setRequestLocale((await params).locale)
   const t = await getTranslations('privacyPage')
   return pageMetadata('/privacy', { title: t('metaTitle'), description: t('metaDescription') })
 }
 
-export default async function PrivacyPage() {
+export default async function PrivacyPage({ params }: LocaleProps) {
+  setRequestLocale((await params).locale)
   const locale = await getLocale()
   const t = await getTranslations('privacyPage')
   const email = CONTACT_INFO.privacyEmail ?? 'privacy@kumani.io'

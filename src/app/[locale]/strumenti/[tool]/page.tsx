@@ -1,5 +1,4 @@
 import { cache } from 'react'
-import { getLocale } from 'next-intl/server'
 import { getToolSeo } from '@/lib/toolSeo'
 import { getGuidesContent } from '@/lib/guides/content'
 import { getPlanPrices } from '@/lib/planPrices'
@@ -8,18 +7,15 @@ import JsonLd from '@/components/seo/JsonLd'
 import type { Metadata } from 'next'
 import { pageMetadata } from '@/lib/seo'
 import { notFound } from 'next/navigation'
-import { getTranslations } from 'next-intl/server'
-import { ArrowRight, CheckCircle2, ChevronDown, Crown, Sparkles, Ticket } from 'lucide-react'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
+import { CheckCircle2, ChevronDown, Sparkles } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import ToolReviews from '@/components/reviews/ToolReviews'
 import Logo from '@/components/Logo'
-import { createClient } from '@/lib/supabase/server'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
-import { getToolPassOffer } from '@/lib/toolPasses'
-
-type Inviter = { first_name: string; last_name: string; referral_code: string }
+import ToolShareActions from '@/components/strumenti/ToolShareActions'
 
 // Impostazioni del servizio decise dall'Admin (piano e acceso/spento): una
 // sola lettura per richiesta (servono sia ai metadati sia alla pagina)
@@ -37,13 +33,27 @@ const toolSetting = cache(async (toolName: string) => {
 // Pagina pubblica di uno strumento, quella che i Kumani condividono dal
 // pulsante "Condividi" dentro ogni strumento (?ref=CODICE). Chi arriva qui
 // si iscrive con il codice invito di chi ha condiviso già inserito.
-export async function generateMetadata({ params }: { params: Promise<{ tool: string }> }): Promise<Metadata> {
-  const { tool: toolName } = await params
+// Pagina uguale per tutti: preparata in anticipo per ogni lingua e servizio e
+// rifatta in background al massimo ogni 5 minuti (piano e acceso/spento
+// decisi dall'Admin compaiono entro 5 minuti, come nella Home). Le parti
+// personali (chi ha condiviso con ?ref, pulsanti per chi è già iscritto) le
+// completa il browser: components/strumenti/ToolShareActions.
+export const revalidate = 300
+
+export function generateStaticParams() {
+  return getMarketplaceTools((key) => key).map(({ toolName }) => ({ tool: toolName }))
+}
+
+type Props = { params: Promise<{ locale: string; tool: string }> }
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale, tool: toolName } = await params
+  setRequestLocale(locale)
   const tm = await getTranslations('marketplace')
   const tool = getMarketplaceTools(tm).find((item) => item.toolName === toolName)
   if (!tool) return {}
   // Titolo e descrizione pensati per le ricerche, se ci sono in questa lingua
-  const [seo, setting] = await Promise.all([getToolSeo(await getLocale(), tool.toolName), toolSetting(tool.toolName)])
+  const [seo, setting] = await Promise.all([getToolSeo(locale, tool.toolName), toolSetting(tool.toolName)])
   // Servizio spento dall'Admin: la pagina resta ma Google non la mostra
   // finché non viene riacceso (poi torna nella sitemap e viene riletta)
   const off = setting?.is_enabled === false
@@ -59,15 +69,9 @@ export async function generateMetadata({ params }: { params: Promise<{ tool: str
   )
 }
 
-export default async function ToolSharePage({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ tool: string }>
-  searchParams: Promise<{ ref?: string }>
-}) {
-  const { tool: toolName } = await params
-  const { ref } = await searchParams
+export default async function ToolSharePage({ params }: Props) {
+  const { locale, tool: toolName } = await params
+  setRequestLocale(locale)
   const tm = await getTranslations('marketplace')
   const t = await getTranslations('toolShare')
 
@@ -77,80 +81,19 @@ export default async function ToolSharePage({
   // Piano richiesto dallo strumento (deciso dall'admin): Gratis / Base / Pro.
   const setting = await toolSetting(tool.toolName)
   const off = setting?.is_enabled === false
-  const requiredPlan = (setting?.required_plan as string | undefined) ?? (tool.requiresSubscription ? 'base' : 'free')
+  const requiredPlan = ((setting?.required_plan as string | undefined) ?? (tool.requiresSubscription ? 'base' : 'free')) as 'free' | 'base' | 'pro'
   const Icon = marketplaceIconMap[tool.iconName]
 
-  // Chi ha condiviso: solo nome e codice, tramite la funzione pubblica.
-  let inviter: Inviter | null = null
-  const code = typeof ref === 'string' ? ref.trim().toUpperCase() : ''
-  if (/^[A-Z0-9-]{3,32}$/.test(code)) {
-    const { data } = await (await createClient()).rpc('get_public_profile_by_referral', { p_referral_code: code })
-    inviter = ((data as Inviter[] | null) ?? [])[0] ?? null
-  }
-  const registerHref = inviter ? `/register?sponsor=${encodeURIComponent(inviter.referral_code)}` : '/register'
-
-  // Chi è già iscritto (arriva da "Scopri gli altri servizi" o da un link):
-  // dopo aver letto come funziona sceglie se aprirlo, prendere il Pass del
-  // solo servizio o abbonarsi. Chi non è iscritto vede "Iscriviti e provalo".
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  const member = user
-    ? await Promise.all([
-        supabase.rpc('can_use_tool', { p_tool: tool.toolName }).maybeSingle<{ allowed: boolean }>(),
-        getToolPassOffer(supabase, tool.toolName),
-      ]).then(([{ data: access }, offer]) => ({ allowed: access?.allowed === true, offer }))
-    : null
-
-  const locale = await getLocale()
-  const [prices, seo, guides, ts, tmb] = await Promise.all([
+  const [prices, seo, guides, ts] = await Promise.all([
     getPlanPrices(),
     getToolSeo(locale, tool.toolName),
     getGuidesContent(locale),
     getTranslations('toolSeo.common'),
-    getTranslations('toolMember'),
   ])
-  const money = (eur: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2, minimumFractionDigits: 0 }).format(eur)
-
-  // Pulsanti per chi è già iscritto: Apri, oppure Pass del solo servizio o abbonamento
-  const memberActions = member && !off && (
-    <div className="mt-6 space-y-3 text-left">
-      {member.allowed ? (
-        <Link
-          href={tool.href}
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3.5 font-bold text-[var(--ink)] shadow-lg transition-all hover:brightness-110"
-        >
-          {tmb('open', { tool: tool.title })} <ArrowRight className="h-5 w-5" />
-        </Link>
-      ) : (
-        <>
-          <p className="text-center text-sm font-semibold text-gray-200">{tmb('choose')}</p>
-          {member.offer.enabled && (
-            <Link href={`/pass/${tool.toolName}`} className="flex items-center gap-3 rounded-2xl border border-[var(--gold)]/40 bg-white/[0.04] p-4 transition hover:border-[var(--gold)] hover:bg-white/[0.07]">
-              <Ticket className="h-6 w-6 shrink-0 text-[var(--gold-bright)]" />
-              <span className="min-w-0 flex-1">
-                <span className="block font-bold">{tmb('passTitle')}</span>
-                <span className="block text-sm text-gray-300">{tmb('passText', { price: money(member.offer.priceCents / 100) })}</span>
-              </span>
-              <ArrowRight className="h-5 w-5 shrink-0 text-[var(--gold-bright)]" />
-            </Link>
-          )}
-          <Link
-            href={requiredPlan === 'pro' ? `/pro?tool=${encodeURIComponent(tool.toolName)}` : '/billing'}
-            className="flex items-center gap-3 rounded-2xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] p-4 text-[var(--ink)] transition hover:brightness-110"
-          >
-            <Crown className="h-6 w-6 shrink-0" />
-            <span className="min-w-0 flex-1">
-              <span className="block font-bold">{tmb('planTitle')}</span>
-              <span className="block text-sm">{tmb('planText', { plan: requiredPlan === 'pro' ? 'Pro' : 'Base', price: money(requiredPlan === 'pro' ? prices.pro : prices.base) })}</span>
-            </span>
-            <ArrowRight className="h-5 w-5 shrink-0" />
-          </Link>
-        </>
-      )}
-    </div>
-  )
+  // Pulsanti: chi ha condiviso (?ref) e chi è già iscritto li vede dal
+  // browser (Apri, Pass del solo servizio o abbonamento); qui la versione
+  // per chi arriva da Google, uguale per tutti
+  const actions = { toolName: tool.toolName, toolTitle: tool.title, toolHref: tool.href, requiredPlan, off, prices: { base: prices.base, pro: prices.pro } }
   const steps = guides.guides.find((g) => g.slug === tool.toolName)?.steps ?? []
   const APP_CATEGORY: Record<string, string> = { security: 'SecurityApplication', svago: 'GameApplication', personal: 'LifestyleApplication', wellness: 'HealthApplication' }
   const ld = {
@@ -202,32 +145,7 @@ export default async function ToolSharePage({
             <p className="mt-4 text-sm text-gray-400">{requiredPlan === 'pro' ? t('includedPro') : requiredPlan === 'base' ? t('includedPaid') : t('includedFree')}</p>
           )}
 
-          {member ? (
-            <>
-              {memberActions}
-              <Link href="/servizi" className="mt-4 inline-block text-sm font-semibold text-[var(--gold-bright)] hover:text-white">
-                {tmb('back')}
-              </Link>
-            </>
-          ) : (
-            <>
-              {inviter && (
-                <p className="mt-6 rounded-xl bg-white/5 px-4 py-3 text-sm text-gray-200">
-                  {t('invitedBy', { name: inviter.first_name.trim() })}
-                </p>
-              )}
-
-              <Link
-                href={registerHref}
-                className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3.5 font-bold text-[var(--ink)] shadow-lg transition-all hover:brightness-110"
-              >
-                {t('ctaRegister')} <ArrowRight className="h-5 w-5" />
-              </Link>
-              <Link href="/" className="mt-4 inline-block text-sm font-semibold text-[var(--gold-bright)] hover:text-white">
-                {t('ctaDiscover')}
-              </Link>
-            </>
-          )}
+          <ToolShareActions variant="hero" {...actions} />
         </div>
 
         {/* Approfondimento per chi arriva da Google: a cosa serve, come si usa, domande */}
@@ -282,25 +200,7 @@ export default async function ToolSharePage({
               </div>
             </section>
 
-            {member ? (
-              memberActions && (
-                <section className="rounded-3xl border border-[var(--gold)]/25 bg-white/[0.04] p-6">
-                  <h2 className="text-center text-xl font-bold">{member.allowed ? tmb('readyTitle') : tmb('decideTitle')}</h2>
-                  {memberActions}
-                </section>
-              )
-            ) : (
-              <section className="rounded-3xl border border-[var(--gold)]/25 bg-white/[0.04] p-6 text-center">
-                <h2 className="text-xl font-bold">{ts('ctaTitle')}</h2>
-                <p className="mt-2 leading-relaxed text-gray-300">{ts('ctaText')}</p>
-                <Link
-                  href={registerHref}
-                  className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3.5 font-bold text-[var(--ink)] shadow-lg transition-all hover:brightness-110"
-                >
-                  {t('ctaRegister')} <ArrowRight className="h-5 w-5" />
-                </Link>
-              </section>
-            )}
+            <ToolShareActions variant="footer" {...actions} ctaTitle={ts('ctaTitle')} ctaText={ts('ctaText')} />
           </div>
         )}
 

@@ -9,6 +9,10 @@ import { createClient } from '@/lib/supabase/server'
 import { SuspendedBanner } from '@/components/ServiceSuspended'
 import { isToolOnline } from '@/lib/toolOnline'
 
+// Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
+// richiesta, mai preparata in anticipo né tenuta in memoria
+export const dynamic = 'force-dynamic'
+
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('events')
   return pageMetadata('/events', { title: { absolute: `KUMANI Events · ${t('tagline')}` }, description: t('heroText') })

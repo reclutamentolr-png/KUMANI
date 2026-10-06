@@ -9,6 +9,10 @@ import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { giftItemName } from '@/lib/giftsServer'
 import { GIFT_CODE_RE, giftInfoPath, giftPath, normalizeGiftCode, type GiftCodeInfo } from '@/lib/gifts'
 
+// Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
+// richiesta, mai preparata in anticipo né tenuta in memoria
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = { robots: { index: false, follow: false } }
 
 // Pagina del regalo (link mandato da chi ha comprato): cosa contiene, chi lo

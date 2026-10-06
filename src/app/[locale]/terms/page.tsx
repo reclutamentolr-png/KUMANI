@@ -1,6 +1,6 @@
 import Link from '@/components/LocalizedLink'
 import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { pageMetadata } from '@/lib/seo'
 import {
   ArrowLeft,
@@ -12,14 +12,22 @@ import {
   FileText
 } from 'lucide-react'
 
-export async function generateMetadata(): Promise<Metadata> {
+// Pagina uguale per tutti: preparata in anticipo per ogni lingua e rifatta
+// in background (al massimo ogni ora; prima se cambiano lingue o traduzioni)
+export const revalidate = 3600
+
+type LocaleProps = { params: Promise<{ locale: string }> }
+
+export async function generateMetadata({ params }: LocaleProps): Promise<Metadata> {
+  setRequestLocale((await params).locale)
   const t = await getTranslations('seo')
   return pageMetadata('/terms', { title: t('termsTitle'), description: t('termsDescription') })
 }
 
 const LAST_UPDATE = '4 ottobre 2026'
 
-export default function TermsPage() {
+export default async function TermsPage({ params }: LocaleProps) {
+  setRequestLocale((await params).locale)
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
