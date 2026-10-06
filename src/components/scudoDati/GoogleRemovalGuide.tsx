@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { Check, Copy, ExternalLink, Info, Lightbulb, Mail, SearchX } from 'lucide-react'
+import { Check, Copy, ExternalLink, Info, Lightbulb, Mail, MailCheck, SearchX } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 
 // Guida «Togli i tuoi dati da Google»: la procedura ufficiale «Risultati che
@@ -92,14 +92,18 @@ export default function GoogleRemovalGuide() {
         </button>
       </div>
 
-      <div className="mt-5 flex gap-3 text-sm text-[var(--muted)]">
-        <Lightbulb className="mt-0.5 h-5 w-5 shrink-0 text-[var(--gold)]" />
-        <p>
-          {t('googleTips')}{' '}
-          <Link href="/marketplace/checkmail" className="font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
-            CheckMail
-          </Link>
-        </p>
+      {/* Consigli finali in evidenza, con il passo verso CheckMail */}
+      <div className="mt-5 flex flex-col gap-4 rounded-2xl bg-gradient-to-br from-[var(--ink)] to-[#2a2721] p-5 text-white shadow-md sm:flex-row sm:items-center">
+        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--gold)]/20 ring-1 ring-[var(--gold-bright)]/60">
+          <Lightbulb className="h-6 w-6 text-[var(--gold-bright)]" />
+        </span>
+        <p className="min-w-0 flex-1 text-sm font-semibold leading-6 sm:text-base">{t('googleTips')}</p>
+        <Link
+          href="/marketplace/checkmail"
+          className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-4 py-2.5 text-sm font-extrabold text-[var(--ink)] shadow hover:brightness-105"
+        >
+          <MailCheck className="h-4 w-4" /> CheckMail
+        </Link>
       </div>
 
       <p className="mt-4 text-xs text-[var(--muted)]">
