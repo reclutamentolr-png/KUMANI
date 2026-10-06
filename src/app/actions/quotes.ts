@@ -6,7 +6,6 @@ import { hasActivePreventiviAccess } from '@/lib/quotes-server'
 import {
   computeQuoteTotal,
   type QuoteFormData,
-  type IssuerProfileFormData,
   type IssuerProfileRow,
   type SavedClientRow,
   type SavedClientFormData,
@@ -43,44 +42,6 @@ export async function getIssuerProfile(): Promise<ActionResult<IssuerProfileRow 
   const { data } = await supabase.from('quote_issuer_profiles').select('*').eq('user_id', gate.userId).maybeSingle()
 
   return { success: true, data: data || null }
-}
-
-export async function saveIssuerProfile(
-  form: IssuerProfileFormData,
-  logoPath: string | null
-): Promise<ActionResult<null>> {
-  const gate = await requireActivePreventiviAccess()
-  if (!gate.ok) return { success: false, message: gate.message }
-
-  const supabase = await createClient()
-
-  const payload: Partial<IssuerProfileRow> = {
-    user_id: gate.userId,
-    company_name: form.companyName || null,
-    vat_number: form.vatNumber || null,
-    address: form.address || null,
-    city: form.city || null,
-    postal_code: form.postalCode || null,
-    province: form.province || null,
-    pec: form.pec || null,
-    email: form.email || null,
-    phone: form.phone || null,
-    updated_at: new Date().toISOString(),
-  }
-  // Only overwrite logo_path when a new logo was actually uploaded in this
-  // save — passing null here would wipe a previously saved logo every time
-  // the profile is edited without touching the logo field.
-  // Solo percorsi nella cartella dell'utente (come saveMenuItem)
-  if (logoPath && logoPath.startsWith(`${gate.userId}/`) && !logoPath.includes('..')) payload.logo_path = logoPath
-
-  const { error } = await supabase.from('quote_issuer_profiles').upsert(payload, { onConflict: 'user_id' })
-
-  if (error) {
-    console.error('[Quotes] saveIssuerProfile failed:', error)
-    return { success: false, message: 'saveError' }
-  }
-
-  return { success: true, data: null }
 }
 
 /**

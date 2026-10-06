@@ -18,6 +18,7 @@ import {
   TicketPercent,
   type LucideIcon,
   BookMarked,
+  Building2,
 } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import DeckDownloadButton from '@/components/documents/DeckDownloadButton'
@@ -231,7 +232,7 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
   }
 
   async function personalTab() {
-    const [docs, bcT] = await Promise.all([listPersonalDocuments(supabase, user!.id), getTranslations('businessCard')])
+    const [docs, bcT, bpT] = await Promise.all([listPersonalDocuments(supabase, user!.id), getTranslations('businessCard'), getTranslations('businessProfile')])
     const groups = KIND_ORDER.map((kind) => ({ kind, items: docs.filter((d) => d.kind === kind) })).filter((g) => g.items.length > 0)
     return (
       <section className="mt-6 space-y-5">
@@ -249,6 +250,20 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
             <span className="block text-sm text-white/70">{bcT('docsHint')}</span>
           </span>
           <ArrowRight className="h-5 w-5 text-[var(--gold-bright)] transition-transform group-hover:translate-x-0.5" />
+        </Link>
+        {/* Scheda attività: i dati dell'attività per tutti i servizi */}
+        <Link
+          href="/scheda-attivita?from=/documenti"
+          className="group flex items-center gap-4 rounded-2xl border border-[var(--gold)]/40 bg-white p-5 shadow-sm transition hover:border-[var(--gold)]"
+        >
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[var(--gold-pale)] text-[var(--gold)]">
+            <Building2 className="h-6 w-6" />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block font-bold text-[var(--ink)]">{bpT('title')}</span>
+            <span className="block text-sm text-[var(--muted)]">{bpT('subtitle')}</span>
+          </span>
+          <ArrowRight className="h-5 w-5 text-[var(--gold)] transition-transform group-hover:translate-x-0.5" />
         </Link>
         {groups.length === 0 && (
           <p className="flex items-start gap-3 rounded-2xl border border-dashed border-[var(--gold)]/40 bg-white p-6 text-[var(--muted)]">

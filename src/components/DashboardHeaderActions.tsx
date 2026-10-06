@@ -10,6 +10,7 @@ import {
   LogOut,
   Wallet,
   FolderOpen,
+  Building2,
   Menu,
   X,
   ChevronRight
@@ -35,6 +36,7 @@ export default function DashboardHeaderActions({ user, profile, isAdmin }: Dashb
   const t = useTranslations('dashboard')
   const lockT = useTranslations('profileLock')
   const docsT = useTranslations('documents')
+  const bpT = useTranslations('businessProfile')
   // Profilo ancora da completare (il database imposta profile_completed_at
   // quando tutti i dati obbligatori sono presenti): pallino arancione.
   const profileIncomplete = !profile?.profile_completed_at
@@ -129,6 +131,10 @@ export default function DashboardHeaderActions({ user, profile, isAdmin }: Dashb
             </button>
             <Link href="/documenti" onClick={() => setMenuOpen(false)} className={menuItem}>
               <FolderOpen className="h-5 w-5 text-[var(--gold-bright)]" /> <span className="flex-1">{docsT('title')}</span>
+              <ChevronRight className="h-4 w-4 text-white/40" />
+            </Link>
+            <Link href="/scheda-attivita" onClick={() => setMenuOpen(false)} className={menuItem}>
+              <Building2 className="h-5 w-5 text-[var(--gold-bright)]" /> <span className="flex-1">{bpT('menuLink')}</span>
               <ChevronRight className="h-4 w-4 text-white/40" />
             </Link>
             <Link href="/wallet" onClick={() => setMenuOpen(false)} className={menuItem}>

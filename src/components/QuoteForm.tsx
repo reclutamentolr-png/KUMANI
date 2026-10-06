@@ -152,7 +152,7 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData 
           </div>
         </div>
         <Link
-          href={`/marketplace/preventivi/business-profile${fromDashboardSuffix}`}
+          href="/scheda-attivita?from=/marketplace/preventivi"
           className="flex items-center gap-1.5 text-sm font-medium text-[var(--gold)] hover:underline"
         >
           <Pencil className="w-3.5 h-3.5" />
