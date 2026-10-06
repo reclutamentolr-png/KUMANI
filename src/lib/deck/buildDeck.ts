@@ -5,10 +5,13 @@ import JSZip from 'jszip'
 import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import * as Lucide from 'lucide-react'
+import type { DeckCatalogGroup, DeckPlan, DeckVariant } from '@/lib/deck/types'
 
 // Presentazione KUMANI creata nel browser al momento del download: testi
 // ufficiali (namespace "deckTexts", correggibili dall'Area Traduttori),
 // 19 slide con transizioni, animazioni d'entrata e note per chi presenta.
+// Versione Full: in più, dopo la Sicurezza, tutti i servizi uno per uno
+// (una slide per gruppo, come la pagina Servizi) con il bollino del piano.
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type T = any // testi della presentazione, struttura in messages/<lingua>.json → deckTexts
@@ -20,6 +23,13 @@ const THEME_COLORS: Record<string, string> = {
 }
 const HEX = { ink: '171717', gold: 'C79A3B', goldBright: 'E7C56A', white: 'FFFFFF', red: 'B5452F', sky: '5BA4D6' }
 const SCALE: Record<string, number> = { it: 1, en: 1, fr: 0.94, es: 0.96, pt: 0.96, de: 0.92, ru: 0.92 }
+// Gruppi di servizi (stessi colori della pagina Servizi) e bollini dei piani
+const GROUP_HEX: Record<string, string> = { security: 'B5452F', money: '2F6B45', work: '2B4F9A', business: '8A6D1F', wellness: '0F766E', fun: '7C3AED', community: 'C79A3B' }
+const GROUP_TILE: Record<string, string> = { security: 'FDE7E3', money: 'E4F1E8', work: 'E6ECF8', business: 'F5E8BD', wellness: 'DFF3F1', fun: 'EFE7FD', community: 'F5E8BD' }
+const GROUP_ICON: Record<string, string> = { security: 'ShieldCheck', money: 'Wallet', work: 'BriefcaseBusiness', business: 'Store', wellness: 'Leaf', fun: 'Dices', community: 'Users' }
+const PLAN_BADGE: Record<DeckPlan, { fill: string; text: string }> = { free: { fill: '3E7C59', text: 'FFFFFF' }, base: { fill: 'C79A3B', text: '171717' }, pro: { fill: '171717', text: 'E7C56A' } }
+// Servizi per slide (griglia 2 × 4): oltre, il gruppo si divide in più slide
+const PER_SLIDE = 8
 const LANG: Record<string, string> = { it: 'it-IT', en: 'en-GB', fr: 'fr-FR', es: 'es-ES', pt: 'pt-PT', de: 'de-DE', ru: 'ru-RU' }
 
 // Oggetti con chiavi "1", "2"… (come nei file delle lingue) → array
@@ -52,8 +62,17 @@ async function icon(name: string, hex: string, px = 256): Promise<string> {
   return data
 }
 
-export async function buildDeck(rawTexts: unknown, locale: string, minPassEur: number, landingPassEur: number | null = null, donationPercentBp: number | null = null): Promise<Blob> {
+export async function buildDeck(
+  rawTexts: unknown,
+  locale: string,
+  minPassEur: number,
+  landingPassEur: number | null = null,
+  donationPercentBp: number | null = null,
+  variant: DeckVariant = 'lite',
+  catalog: DeckCatalogGroup[] = []
+): Promise<Blob> {
   const S: T = arrays(rawTexts)
+  const full = variant === 'full' && catalog.length > 0
   // {price} = Pass più economico, con il formato di prezzo della lingua
   const price = new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', minimumFractionDigits: minPassEur % 1 ? 2 : 0 }).format(minPassEur)
   S.s8.passText = String(S.s8.passText).replace('{price}', price)
@@ -76,7 +95,7 @@ export async function buildDeck(rawTexts: unknown, locale: string, minPassEur: n
 
   const pres = new PptxGenJS()
   pres.layout = 'LAYOUT_WIDE'
-  pres.title = S.docTitle
+  pres.title = full ? S.full.docTitle : S.docTitle
   pres.author = 'KUMANI'
   pres.company = 'KUMANI'
   pres.theme = { headFontFace: 'Cambria', bodyFontFace: 'Calibri' }
@@ -125,7 +144,7 @@ export async function buildDeck(rawTexts: unknown, locale: string, minPassEur: n
     s.addImage({ path: LOGO, x: 0.75, y: 0.8, w: 1.7, h: 1.7, objectName: 'a2-logo' } as any)
     Tx(s, S.s1.title, { x: 0.75, y: 2.85, w: 6.0, h: 1.65, fontFace: 'Cambria', fontSize: S.s1.title.length > 34 ? 36 : fs(44), bold: true, color: C.background1, valign: 'top', objectName: 'a3-titolo' })
     Tx(s, S.s1.sub, { x: 0.75, y: 4.6, w: 6.0, h: 0.9, fontSize: fs(22), italic: true, color: C.accent2, valign: 'top', objectName: 'a4-sotto' })
-    Tx(s, S.s1.foot, { x: 0.75, y: 6.55, w: 6.0, h: 0.4, fontSize: 14, color: C.accent4, objectName: 'a5-data' })
+    Tx(s, full ? S.full.foot : S.s1.foot, { x: 0.75, y: 6.55, w: 6.0, h: 0.4, fontSize: 14, color: C.accent4, objectName: 'a5-data' })
     s.addNotes(S.s1.notes)
   }
 
@@ -309,6 +328,62 @@ export async function buildDeck(rawTexts: unknown, locale: string, minPassEur: n
       Tx(s, S.s10.items[i][1], { x: x + 0.3, y: y + 1.43, w: w - 0.6, h: 0.72, fontSize: fs(14), color: C.accent4, valign: 'top', objectName: `a${i + 1}-d${i}` })
     }
     s.addNotes(S.s10.notes)
+  }
+
+  // Full: tutti i servizi, uno per uno (prima della Community)
+  if (full) {
+    pres.addSection({ title: S.full.section })
+    const planName: Record<DeckPlan, string> = { free: S.s8.plans[0][0], base: S.s8.plans[1][0], pro: S.s8.plans[2][0] }
+    const badge = (s: any, plan: DeckPlan, x: number, y: number, w: number, h: number, objectName: string) => {
+      s.addShape(pres.ShapeType.roundRect, { x, y, w, h, rectRadius: h / 2, fill: { color: PLAN_BADGE[plan].fill }, line: plan === 'pro' ? { color: HEX.gold, width: 0.75 } : { type: 'none' }, objectName: objectName + '-bg' } as any)
+      Tx(s, planName[plan], { x, y, w, h, fontSize: 10, bold: true, align: 'center', valign: 'middle', color: PLAN_BADGE[plan].text, objectName: objectName + '-tx' })
+    }
+
+    // Apertura: i gruppi con il numero dei servizi e la legenda dei bollini
+    {
+      const s = pres.addSlide({ masterName: 'KUMANI scuro', sectionTitle: S.full.section })
+      titled(s, S.full.title, S.full.sub)
+      const w = 2.8, h = 2.05, gx = 0.3, gy = 0.3
+      const slot = (i: number) => [0.6 + (i % 4) * (w + gx), 1.95 + Math.floor(i / 4) * (h + gy)]
+      const shown = catalog.slice(0, 7)
+      for (let i = 0; i < shown.length; i++) {
+        const g = shown[i], [x, y] = slot(i)
+        card(s, x, y, w, h, `a${i + 1}-card${i}`, C.text2)
+        await circleIcon(s, GROUP_ICON[g.key] ?? 'Sparkles', x + 0.25, y + 0.25, 0.75, GROUP_HEX[g.key] ?? HEX.gold, HEX.white, `a${i + 1}-ic${i}`)
+        Tx(s, g.label, { x: x + 0.25, y: y + 1.08, w: w - 0.5, h: 0.6, fontSize: fs(16), bold: true, color: C.background1, valign: 'top', objectName: `a${i + 1}-t${i}` })
+        Tx(s, g.count, { x: x + 0.25, y: y + 1.65, w: w - 0.5, h: 0.3, fontSize: fs(14), color: C.accent2, objectName: `a${i + 1}-n${i}` })
+      }
+      const [lx, ly] = slot(7), n = shown.length + 1
+      card(s, lx, ly, w, h, `a${n}-legenda`, C.text2)
+      Tx(s, S.full.legend, { x: lx + 0.25, y: ly + 0.18, w: w - 0.5, h: 0.78, fontSize: fs(12.5), italic: true, color: C.accent3, valign: 'top', objectName: `a${n}-legtx` })
+      ;(['free', 'base', 'pro'] as const).forEach((plan, j) => badge(s, plan, lx + 0.25, ly + 1.0 + j * 0.34, 1.45, 0.28, `a${n}-b${j}`))
+      s.addNotes(S.full.introNotes)
+    }
+
+    // Una slide per gruppo (divisa in più slide oltre PER_SLIDE servizi)
+    for (const g of catalog) {
+      const parts = Math.ceil(g.items.length / PER_SLIDE)
+      const size = Math.ceil(g.items.length / parts)
+      const hex = GROUP_HEX[g.key] ?? HEX.gold, tile = GROUP_TILE[g.key] ?? 'F5E8BD'
+      for (let p = 0; p < parts; p++) {
+        const items = g.items.slice(p * size, (p + 1) * size)
+        const s = pres.addSlide({ masterName: 'KUMANI chiaro', sectionTitle: S.full.section })
+        titled(s, parts > 1 ? `${g.label} (${p + 1}/${parts})` : g.label, g.sub)
+        await circleIcon(s, GROUP_ICON[g.key] ?? 'Sparkles', 11.95, 0.45, 0.75, hex, HEX.white, 'a1-gruppo')
+        s.addShape(pres.ShapeType.rect, { x: 0.6, y: 1.7, w: 0.9, h: 0.06, fill: { color: hex }, line: { type: 'none' }, objectName: 'a1-riga' } as any)
+        const w = 5.95, h = 1.1, gx = 0.2, gy = 0.12
+        for (let i = 0; i < items.length; i++) {
+          const it = items[i], x = 0.6 + (i % 2) * (w + gx), y = 1.9 + Math.floor(i / 2) * (h + gy), a = `a${i + 2}`
+          card(s, x, y, w, h, `${a}-card${i}`)
+          s.addShape(pres.ShapeType.ellipse, { x: x + 0.2, y: y + 0.2, w: 0.62, h: 0.62, fill: { color: tile }, line: { type: 'none' }, objectName: `${a}-icbg${i}` } as any)
+          s.addImage({ data: await icon(it.iconName, hex), x: x + 0.33, y: y + 0.33, w: 0.36, h: 0.36, objectName: `${a}-ic${i}` } as any)
+          Tx(s, it.name, { x: x + 0.98, y: y + 0.1, w: w - 2.4, h: 0.36, fontSize: it.name.length > 28 ? fs(14) : fs(16), bold: true, color: C.text1, valign: 'middle', objectName: `${a}-t${i}` })
+          badge(s, it.plan, x + w - 1.3, y + 0.16, 1.1, 0.28, `${a}-b${i}`)
+          Tx(s, it.description, { x: x + 0.98, y: y + 0.46, w: w - 1.18, h: 0.6, fontSize: fs(11), color: C.accent4, valign: 'top', objectName: `${a}-d${i}` })
+        }
+        s.addNotes(g.notes)
+      }
+    }
   }
 
   // 11. Community

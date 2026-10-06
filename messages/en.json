@@ -6277,7 +6277,10 @@
     "guideLinkTitle": "Documents to download",
     "guideLinkText": "Official presentation, rules and other KUMANI materials in your language.",
     "metaTitle": "Documents",
-    "kind_receipt_received": "Confirmed receipts"
+    "kind_receipt_received": "Confirmed receipts",
+    "pptxLite": "PowerPoint Lite",
+    "pptxFull": "PowerPoint Full",
+    "pptxVariants": "Lite: the short presentation. Full: also every service, one by one."
   },
   "flyers": {
     "cta": "Sign up for free at",
@@ -7494,9 +7497,9 @@
       "sub": "One account, tools that talk to each other.",
       "stats": {
         "1": {
-          "1": "42",
-          "2": "services",
-          "3": "16 free · 17 with Base · 9 with Pro"
+          "1": "{total}",
+          "2": "{total, plural, one {service} other {services}}",
+          "3": "{free} free · {base} with Base · {pro} with Pro"
         },
         "2": {
           "1": "7",
@@ -7514,7 +7517,7 @@
           "3": "free, no credit card"
         }
       },
-      "notes": "Forty-two services: sixteen free for anyone who signs up, seventeen more with the Base plan, nine more with the Pro plan. Everything in seven languages. The Base plan costs 49 euros a year, less than one euro a week. Pro can be tried free for fifteen days."
+      "notes": "{total, plural, one {# service} other {# services}}: {free} free for anyone who signs up, {base} more with the Base plan, {pro} more with the Pro plan. Everything in seven languages. The Base plan costs 49 euros a year, less than one euro a week. Pro can be tried free for fifteen days."
     },
     "s6": {
       "title": "Six areas, one account",
@@ -7526,7 +7529,7 @@
         },
         "2": {
           "1": "Anti-scam security",
-          "2": "SVAT, VeriFoto, CheckMail, IBAN Check, Safe Document, Anti-Scam Manual"
+          "2": "SVAT, VeriFoto, CheckMail, IBAN Check, Data Shield, Safe Document, Anti-Scam Manual"
         },
         "3": {
           "1": "Organisation",
@@ -7587,7 +7590,7 @@
           "2": "€0",
           "3": "forever",
           "4": "To get started, no credit card",
-          "5": "16 services included",
+          "5": "{free, plural, one {# service included} other {# services included}}",
           "6": "QR Code, WhatsApp Messages, IBAN Check, Listings, Kordata, Time Bank, games and wellbeing"
         },
         "2": {
@@ -7595,7 +7598,7 @@
           "2": "€49",
           "3": "a year",
           "4": "For individuals and families",
-          "5": "Everything in Free + 17 services",
+          "5": "Everything in Free + {base, plural, one {# service} other {# services}}",
           "6": "MemoLife, Spendly, Life Calendar, Link in Bio, SVAT, CheckMail, Neurobalance, Travel, Find a Job"
         },
         "3": {
@@ -7603,13 +7606,13 @@
           "2": "€149",
           "3": "a year",
           "4": "For those who work with clients",
-          "5": "Everything in Base + 9 Pro services",
+          "5": "Everything in Base + {pro, plural, one {# Pro service} other {# Pro services}}",
           "6": "KUMANI Menu, Kumi Card, Quotes, Digital Receipts, Magazzino, QR Code PRO, Landing Page. 15 days free."
         }
       },
       "passBold": "Need just one service? ",
       "passText": "Activate it with a yearly Pass from {price}: one-off payment, no subscription.",
-      "notes": "You sign up for free and get sixteen services straight away. The Base plan, 49 euros a year, is for individuals and families. The Pro plan, 149 euros a year, is for those who work with clients and can be tried free for fifteen days. Anyone who needs just one service can buy a yearly Pass, from {price}."
+      "notes": "You sign up for free and get {free, plural, one {# service} other {# services}} straight away. The Base plan, 49 euros a year, is for individuals and families. The Pro plan, 149 euros a year, is for those who work with clients and can be tried free for fifteen days. Anyone who needs just one service can buy a yearly Pass, from {price}."
     },
     "s9": {
       "title": "The tools for your business",
@@ -7820,7 +7823,7 @@
       "steps": {
         "1": {
           "1": "Sign up for free",
-          "2": "Name, email and a 6-digit code: 16 services straight away."
+          "2": "Name, email and a 6-digit code: {free, plural, one {# service} other {# services}} straight away."
         },
         "2": {
           "1": "Let us guide you",
@@ -7862,6 +7865,21 @@
       "badgePro": "Included in the Pro plan",
       "badgePass": "Included in the Pro plan · or on its own for {price} a year",
       "notes": "Many professionals have no website or do not want to pay for one. With the Landing Page they create it from their phone in a few minutes: they answer five questions and AI writes the introduction, then they choose template, colour, photos and blocks. The page has an address on kumani.io, is ready for Google and customers write through the “Message me” form: the message arrives in the dashboard and as a notification on the phone. It is included in Pro and can also be bought on its own."
+    },
+    "full": {
+      "section": "All services",
+      "title": "All KUMANI services",
+      "sub": "{total, plural, one {# service} other {# services}} grouped by need, one by one.",
+      "legend": "The coloured badge shows which plan includes the service.",
+      "count": "{count, plural, one {# service} other {# services}}",
+      "groupSub": "{count, plural, one {# service} other {# services}} · All KUMANI services",
+      "community": "Community",
+      "chatName": "Messages",
+      "chatDesc": "Write privately to other Kumani: messages are deleted automatically after 30 days.",
+      "introNotes": "Now let’s look at all KUMANI services, one by one, grouped by need: {total} in total. On each card a coloured badge shows the plan: green Free, gold Base, dark Pro.",
+      "notes": "{group}: {count, plural, one {# service} other {# services}}. {names}. For each one, just say what it is for and who it helps; the badge shows the plan that includes it.",
+      "foot": "Full presentation, with every service · kumani.io",
+      "docTitle": "KUMANI — Full presentation with all services"
     }
   },
   "privacyPage": {

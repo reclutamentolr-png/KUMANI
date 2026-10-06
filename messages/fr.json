@@ -6277,7 +6277,10 @@
     "guideLinkTitle": "Documents à télécharger",
     "guideLinkText": "Présentation officielle, règlements et autres documents KUMANI dans votre langue.",
     "metaTitle": "Documents",
-    "kind_receipt_received": "Reçus confirmés"
+    "kind_receipt_received": "Reçus confirmés",
+    "pptxLite": "PowerPoint Lite",
+    "pptxFull": "PowerPoint Full",
+    "pptxVariants": "Lite : la présentation courte. Full : en plus, tous les services un par un."
   },
   "flyers": {
     "cta": "Inscrivez-vous gratuitement sur",
@@ -7494,9 +7497,9 @@
       "sub": "Un seul compte, des outils qui se parlent.",
       "stats": {
         "1": {
-          "1": "42",
-          "2": "services",
-          "3": "16 gratuits · 17 avec Base · 9 avec Pro"
+          "1": "{total}",
+          "2": "{total, plural, one {service} other {services}}",
+          "3": "{free, plural, one {# gratuit} other {# gratuits}} · {base} avec Base · {pro} avec Pro"
         },
         "2": {
           "1": "7",
@@ -7514,7 +7517,7 @@
           "3": "gratuits, sans carte bancaire"
         }
       },
-      "notes": "Quarante-deux services : seize gratuits pour toute personne inscrite, dix-sept de plus avec l’offre Base, neuf de plus avec l’offre Pro. Le tout en sept langues. L’offre Base coûte 49 euros par an, moins d’un euro par semaine. L’offre Pro s’essaie gratuitement pendant quinze jours."
+      "notes": "{total, plural, one {# service} other {# services}} : {free, plural, one {# gratuit} other {# gratuits}} pour toute personne inscrite, {base} de plus avec l’offre Base, {pro} de plus avec l’offre Pro. Le tout en sept langues. L’offre Base coûte 49 euros par an, moins d’un euro par semaine. L’offre Pro s’essaie gratuitement pendant quinze jours."
     },
     "s6": {
       "title": "Six domaines, un seul compte",
@@ -7526,7 +7529,7 @@
         },
         "2": {
           "1": "Sécurité anti-arnaque",
-          "2": "SVAT, VeriFoto, CheckMail, Vérification IBAN, Document Sûr, Manuel anti-arnaques"
+          "2": "SVAT, VeriFoto, CheckMail, Vérification IBAN, Bouclier Données, Document Sûr, Manuel anti-arnaques"
         },
         "3": {
           "1": "Organisation",
@@ -7587,7 +7590,7 @@
           "2": "0 €",
           "3": "pour toujours",
           "4": "Pour commencer, sans carte bancaire",
-          "5": "16 services inclus",
+          "5": "{free, plural, one {# service inclus} other {# services inclus}}",
           "6": "QR Code, Messages WhatsApp, Vérification IBAN, Annonces, Kordata, Time Bank, jeux et bien-être"
         },
         "2": {
@@ -7595,7 +7598,7 @@
           "2": "49 €",
           "3": "par an",
           "4": "Pour les particuliers et les familles",
-          "5": "Tout le Gratuit + 17 services",
+          "5": "Tout le Gratuit + {base, plural, one {# service} other {# services}}",
           "6": "MemoLife, Spendly, Life Calendar, Link in Bio, SVAT, CheckMail, Neurobalance, Travel, Trouver un emploi"
         },
         "3": {
@@ -7603,13 +7606,13 @@
           "2": "149 €",
           "3": "par an",
           "4": "Pour ceux qui travaillent avec des clients",
-          "5": "Tout le Base + 9 services Pro",
+          "5": "Tout le Base + {pro, plural, one {# service Pro} other {# services Pro}}",
           "6": "KUMANI Menu, Kumi Card, Devis, Reçus numériques, Magazzino, QR Code PRO, Landing Page. 15 jours gratuits."
         }
       },
       "passBold": "Besoin d’un seul service ? ",
       "passText": "Activez-le avec un Pass annuel à partir de {price} : paiement unique, sans abonnement.",
-      "notes": "On s’inscrit gratuitement et on dispose tout de suite de seize services. L’offre Base, 49 euros par an, est pour les particuliers et les familles. L’offre Pro, 149 euros par an, est pour ceux qui travaillent avec des clients et s’essaie gratuitement pendant quinze jours. Pour un seul service, il existe un Pass annuel à partir de {price}."
+      "notes": "On s’inscrit gratuitement et on dispose tout de suite de {free, plural, one {# service} other {# services}}. L’offre Base, 49 euros par an, est pour les particuliers et les familles. L’offre Pro, 149 euros par an, est pour ceux qui travaillent avec des clients et s’essaie gratuitement pendant quinze jours. Pour un seul service, il existe un Pass annuel à partir de {price}."
     },
     "s9": {
       "title": "Les outils pour votre activité",
@@ -7820,7 +7823,7 @@
       "steps": {
         "1": {
           "1": "Inscrivez-vous",
-          "2": "Nom, e-mail et un code à 6 chiffres : 16 services tout de suite."
+          "2": "Nom, e-mail et un code à 6 chiffres : {free, plural, one {# service} other {# services}} tout de suite."
         },
         "2": {
           "1": "Laissez-vous guider",
@@ -7862,6 +7865,21 @@
       "badgePro": "Incluse dans l’offre Pro",
       "badgePass": "Incluse dans l’offre Pro · ou seule à {price} par an",
       "notes": "Beaucoup de professionnels n’ont pas de site ou ne veulent pas en payer un. Avec la Landing Page, ils le créent depuis leur téléphone en quelques minutes : ils répondent à cinq questions et l’IA rédige la présentation, puis ils choisissent modèle, couleur, photos et blocs. La page a une adresse sur kumani.io, elle est prête pour Google et les clients écrivent via le formulaire « Écrivez-moi » : le message arrive dans le tableau de bord et en notification sur le téléphone. Elle est incluse dans l’offre Pro et peut aussi s’acheter seule."
+    },
+    "full": {
+      "section": "Tous les services",
+      "title": "Tous les services KUMANI",
+      "sub": "{total, plural, one {# service} other {# services}} classés par besoin, un par un.",
+      "legend": "La pastille de couleur indique l’offre qui inclut le service.",
+      "count": "{count, plural, one {# service} other {# services}}",
+      "groupSub": "{count, plural, one {# service} other {# services}} · Tous les services KUMANI",
+      "community": "Communauté",
+      "chatName": "Messages",
+      "chatDesc": "Écrivez en privé aux autres Kumani : les messages s’effacent automatiquement après 30 jours.",
+      "introNotes": "Voyons maintenant tous les services KUMANI, un par un, classés par besoin : {total} au total. Sur chaque fiche, une pastille de couleur indique l’offre : vert Gratuit, or Base, foncé Pro.",
+      "notes": "{group} : {count, plural, one {# service} other {# services}}. {names}. Pour chacun, il suffit de dire à quoi il sert et pour qui ; la pastille indique l’offre qui l’inclut.",
+      "foot": "Présentation complète, avec tous les services · kumani.io",
+      "docTitle": "KUMANI — Présentation complète avec tous les services"
     }
   },
   "privacyPage": {

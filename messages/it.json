@@ -6277,7 +6277,10 @@
     "guideLinkTitle": "Documenti da scaricare",
     "guideLinkText": "Presentazione ufficiale, regolamenti e altro materiale KUMANI nella tua lingua.",
     "metaTitle": "Documenti",
-    "kind_receipt_received": "Ricevute confermate"
+    "kind_receipt_received": "Ricevute confermate",
+    "pptxLite": "PowerPoint Lite",
+    "pptxFull": "PowerPoint Full",
+    "pptxVariants": "Lite: la presentazione breve. Full: in più tutti i servizi, uno per uno."
   },
   "flyers": {
     "cta": "Registrati gratis su",
@@ -7494,9 +7497,9 @@
       "sub": "Un solo account, strumenti che si parlano tra loro.",
       "stats": {
         "1": {
-          "1": "42",
-          "2": "servizi",
-          "3": "16 gratuiti · 17 con Base · 9 con Pro"
+          "1": "{total}",
+          "2": "{total, plural, one {servizio} other {servizi}}",
+          "3": "{free, plural, one {# gratuito} other {# gratuiti}} · {base} con Base · {pro} con Pro"
         },
         "2": {
           "1": "7",
@@ -7514,7 +7517,7 @@
           "3": "gratis, senza carta di credito"
         }
       },
-      "notes": "Quarantadue servizi: sedici gratuiti per chi si registra, diciassette in più con il piano Base, nove in più con il piano Pro. Tutto in sette lingue. Il piano Base costa 49 euro l’anno, meno di un euro a settimana. Il Pro si prova gratis per quindici giorni."
+      "notes": "{total, plural, one {# servizio} other {# servizi}}: {free, plural, one {# gratuito} other {# gratuiti}} per chi si registra, {base} in più con il piano Base, {pro} in più con il piano Pro. Tutto in sette lingue. Il piano Base costa 49 euro l’anno, meno di un euro a settimana. Il Pro si prova gratis per quindici giorni."
     },
     "s6": {
       "title": "Sei aree, un solo account",
@@ -7526,7 +7529,7 @@
         },
         "2": {
           "1": "Sicurezza anti-truffa",
-          "2": "SVAT, VeriFoto, CheckMail, Verifica IBAN, Documento Sicuro, Manuale Anti-Truffa"
+          "2": "SVAT, VeriFoto, CheckMail, Verifica IBAN, Scudo Dati, Documento Sicuro, Manuale Anti-Truffa"
         },
         "3": {
           "1": "Organizzazione",
@@ -7587,7 +7590,7 @@
           "2": "0 €",
           "3": "per sempre",
           "4": "Per iniziare, senza carta di credito",
-          "5": "16 servizi inclusi",
+          "5": "{free, plural, one {# servizio incluso} other {# servizi inclusi}}",
           "6": "QR Code, Messaggi WhatsApp, Verifica IBAN, Bacheca, Kordata, Banca del Tempo, giochi e benessere"
         },
         "2": {
@@ -7595,7 +7598,7 @@
           "2": "49 €",
           "3": "all’anno",
           "4": "Per privati e famiglie",
-          "5": "Tutto il Gratis + 17 servizi",
+          "5": "Tutto il Gratis + {base, plural, one {# servizio} other {# servizi}}",
           "6": "MemoLife, Spendly, Life Calendar, Link in Bio, SVAT, CheckMail, Neurobalance, Travel, Trova Lavoro"
         },
         "3": {
@@ -7603,13 +7606,13 @@
           "2": "149 €",
           "3": "all’anno",
           "4": "Per chi lavora con i clienti",
-          "5": "Tutto il Base + 9 servizi Pro",
+          "5": "Tutto il Base + {pro, plural, one {# servizio Pro} other {# servizi Pro}}",
           "6": "KUMANI Menu, Kumi Card, Preventivi, Ricevute Digitali, Magazzino, QR Code PRO, Landing Page. 15 giorni gratis."
         }
       },
       "passBold": "Ti serve un solo servizio? ",
       "passText": "Attivalo con un Pass annuale, a partire da {price}: pagamento unico, senza abbonamento.",
-      "notes": "Ci si registra gratis e si hanno subito sedici servizi. Il piano Base, 49 euro l’anno, è per privati e famiglie. Il piano Pro, 149 euro l’anno, è per chi lavora con i clienti e si prova gratis per quindici giorni. Chi vuole un solo servizio può attivare un Pass annuale, a partire da {price}."
+      "notes": "Ci si registra gratis e si hanno subito {free, plural, one {# servizio} other {# servizi}}. Il piano Base, 49 euro l’anno, è per privati e famiglie. Il piano Pro, 149 euro l’anno, è per chi lavora con i clienti e si prova gratis per quindici giorni. Chi vuole un solo servizio può attivare un Pass annuale, a partire da {price}."
     },
     "s9": {
       "title": "Gli strumenti per la tua attività",
@@ -7820,7 +7823,7 @@
       "steps": {
         "1": {
           "1": "Registrati gratis",
-          "2": "Nome, email e un codice a 6 cifre: subito 16 servizi."
+          "2": "Nome, email e un codice a 6 cifre: subito {free, plural, one {# servizio} other {# servizi}}."
         },
         "2": {
           "1": "Fatti guidare",
@@ -7862,6 +7865,21 @@
       "badgePro": "Inclusa nel piano Pro",
       "badgePass": "Inclusa nel piano Pro · oppure da sola a {price} all’anno",
       "notes": "Molti professionisti non hanno un sito o non vogliono pagarne uno. Con la Landing Page lo creano dal telefono in pochi minuti: rispondono a cinque domande e l’AI scrive la presentazione, poi scelgono modello, colore, foto e blocchi. La pagina ha un indirizzo su kumani.io, è pronta per Google e i clienti scrivono dal modulo Scrivimi: il messaggio arriva in dashboard e con una notifica sul telefono. È inclusa nel Pro e si può anche acquistare da sola."
+    },
+    "full": {
+      "section": "Tutti i servizi",
+      "title": "Tutti i servizi KUMANI",
+      "sub": "{total, plural, one {# servizio} other {# servizi}} divisi per bisogno, uno per uno.",
+      "legend": "Il bollino colorato indica il piano che include il servizio.",
+      "count": "{count, plural, one {# servizio} other {# servizi}}",
+      "groupSub": "{count, plural, one {# servizio} other {# servizi}} · Tutti i servizi KUMANI",
+      "community": "Community",
+      "chatName": "Messaggi",
+      "chatDesc": "Scrivi in privato agli altri Kumani: i messaggi si cancellano da soli dopo 30 giorni.",
+      "introNotes": "Ora vediamo tutti i servizi KUMANI, uno per uno, divisi per bisogno: {total} in tutto. Su ogni scheda un bollino colorato indica il piano: verde Gratis, oro Base, scuro Pro.",
+      "notes": "{group}: {count, plural, one {# servizio} other {# servizi}}. {names}. Per ognuno basta dire a cosa serve e per chi; il bollino indica il piano che lo include.",
+      "foot": "Presentazione completa, con tutti i servizi · kumani.io",
+      "docTitle": "KUMANI — Presentazione completa con tutti i servizi"
     }
   },
   "privacyPage": {

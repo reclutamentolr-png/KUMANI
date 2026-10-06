@@ -6277,7 +6277,10 @@
     "guideLinkTitle": "Dokumente zum Herunterladen",
     "guideLinkText": "Offizielle Präsentation, Regeln und weitere KUMANI-Unterlagen in deiner Sprache.",
     "metaTitle": "Dokumente",
-    "kind_receipt_received": "Bestätigte Belege"
+    "kind_receipt_received": "Bestätigte Belege",
+    "pptxLite": "PowerPoint Lite",
+    "pptxFull": "PowerPoint Full",
+    "pptxVariants": "Lite: die kurze Präsentation. Full: zusätzlich alle Dienste, einer nach dem anderen."
   },
   "flyers": {
     "cta": "Kostenlos registrieren auf",
@@ -7494,9 +7497,9 @@
       "sub": "Ein Konto, Werkzeuge, die miteinander sprechen.",
       "stats": {
         "1": {
-          "1": "42",
-          "2": "Dienste",
-          "3": "16 kostenlos · 17 mit Base · 9 mit Pro"
+          "1": "{total}",
+          "2": "{total, plural, one {Dienst} other {Dienste}}",
+          "3": "{free} kostenlos · {base} mit Base · {pro} mit Pro"
         },
         "2": {
           "1": "7",
@@ -7514,7 +7517,7 @@
           "3": "kostenlos, ohne Kreditkarte"
         }
       },
-      "notes": "Zweiundvierzig Dienste: sechzehn kostenlos für alle Registrierten, siebzehn mehr mit dem Base-Tarif, neun mehr mit dem Pro-Tarif. Alles in sieben Sprachen. Der Base-Tarif kostet 49 Euro im Jahr, weniger als einen Euro pro Woche. Pro kann man fünfzehn Tage kostenlos testen."
+      "notes": "{total, plural, one {# Dienst} other {# Dienste}}: {free} kostenlos für alle Registrierten, {base} mehr mit dem Base-Tarif, {pro} mehr mit dem Pro-Tarif. Alles in sieben Sprachen. Der Base-Tarif kostet 49 Euro im Jahr, weniger als einen Euro pro Woche. Pro kann man fünfzehn Tage kostenlos testen."
     },
     "s6": {
       "title": "Sechs Bereiche, ein Konto",
@@ -7526,7 +7529,7 @@
         },
         "2": {
           "1": "Schutz vor Betrug",
-          "2": "SVAT, VeriFoto, CheckMail, IBAN-Prüfung, Sicheres Dokument, Anti-Betrugs-Handbuch"
+          "2": "SVAT, VeriFoto, CheckMail, IBAN-Prüfung, Datenschild, Sicheres Dokument, Anti-Betrugs-Handbuch"
         },
         "3": {
           "1": "Organisation",
@@ -7587,7 +7590,7 @@
           "2": "0 €",
           "3": "für immer",
           "4": "Zum Start, ohne Kreditkarte",
-          "5": "16 Dienste inklusive",
+          "5": "{free, plural, one {# Dienst} other {# Dienste}} inklusive",
           "6": "QR-Code, WhatsApp-Nachrichten, IBAN-Prüfung, Anzeigen, Kordata, Time Bank, Spiele und Wohlbefinden"
         },
         "2": {
@@ -7595,7 +7598,7 @@
           "2": "49 €",
           "3": "im Jahr",
           "4": "Für Privatpersonen und Familien",
-          "5": "Alles aus Kostenlos + 17 Dienste",
+          "5": "Alles aus Kostenlos + {base, plural, one {# Dienst} other {# Dienste}}",
           "6": "MemoLife, Spendly, Life Calendar, Link in Bio, SVAT, CheckMail, Neurobalance, Travel, Jobsuche"
         },
         "3": {
@@ -7603,13 +7606,13 @@
           "2": "149 €",
           "3": "im Jahr",
           "4": "Für alle, die mit Kunden arbeiten",
-          "5": "Alles aus Base + 9 Pro-Dienste",
+          "5": "Alles aus Base + {pro, plural, one {# Pro-Dienst} other {# Pro-Dienste}}",
           "6": "KUMANI Menu, Kumi Card, Angebote, Digitale Belege, Magazzino, QR Code PRO, Landing Page. 15 Tage kostenlos."
         }
       },
       "passBold": "Nur ein Dienst nötig? ",
       "passText": "Aktiviere ihn mit einem Jahrespass ab {price}: einmalige Zahlung, kein Abo.",
-      "notes": "Man meldet sich kostenlos an und hat sofort sechzehn Dienste. Der Base-Tarif, 49 Euro im Jahr, ist für Privatpersonen und Familien. Der Pro-Tarif, 149 Euro im Jahr, ist für alle, die mit Kunden arbeiten, und lässt sich fünfzehn Tage kostenlos testen. Wer nur einen Dienst braucht, kann einen Jahrespass ab {price} aktivieren."
+      "notes": "Man meldet sich kostenlos an und hat sofort {free, plural, one {# Dienst} other {# Dienste}}. Der Base-Tarif, 49 Euro im Jahr, ist für Privatpersonen und Familien. Der Pro-Tarif, 149 Euro im Jahr, ist für alle, die mit Kunden arbeiten, und lässt sich fünfzehn Tage kostenlos testen. Wer nur einen Dienst braucht, kann einen Jahrespass ab {price} aktivieren."
     },
     "s9": {
       "title": "Die Werkzeuge für dein Geschäft",
@@ -7820,7 +7823,7 @@
       "steps": {
         "1": {
           "1": "Kostenlos anmelden",
-          "2": "Name, E-Mail und ein 6-stelliger Code: sofort 16 Dienste."
+          "2": "Name, E-Mail und ein 6-stelliger Code: sofort {free, plural, one {# Dienst} other {# Dienste}}."
         },
         "2": {
           "1": "Lass dich führen",
@@ -7862,6 +7865,21 @@
       "badgePro": "Im Pro-Tarif enthalten",
       "badgePass": "Im Pro-Tarif enthalten · oder einzeln für {price} im Jahr",
       "notes": "Viele Selbstständige haben keine Website oder wollen nicht dafür zahlen. Mit der Landing Page erstellen sie sie in wenigen Minuten am Handy: Sie beantworten fünf Fragen, die KI schreibt die Vorstellung, dann wählen sie Vorlage, Farbe, Fotos und Blöcke. Die Seite hat eine Adresse auf kumani.io, ist bereit für Google, und Kunden schreiben über das Formular „Schreib mir“: Die Nachricht kommt ins Dashboard und als Benachrichtigung aufs Handy. Sie ist in Pro enthalten und kann auch einzeln gekauft werden."
+    },
+    "full": {
+      "section": "Alle Dienste",
+      "title": "Alle KUMANI-Dienste",
+      "sub": "{total, plural, one {# Dienst} other {# Dienste}}, nach Bedarf geordnet, einer nach dem anderen.",
+      "legend": "Das farbige Etikett zeigt, welcher Tarif den Dienst enthält.",
+      "count": "{count, plural, one {# Dienst} other {# Dienste}}",
+      "groupSub": "{count, plural, one {# Dienst} other {# Dienste}} · Alle KUMANI-Dienste",
+      "community": "Community",
+      "chatName": "Nachrichten",
+      "chatDesc": "Schreib anderen Kumani privat: Nachrichten werden nach 30 Tagen automatisch gelöscht.",
+      "introNotes": "Jetzt sehen wir uns alle KUMANI-Dienste einzeln an, nach Bedarf geordnet: insgesamt {total}. Auf jeder Karte zeigt ein farbiges Etikett den Tarif: grün Kostenlos, gold Base, dunkel Pro.",
+      "notes": "{group}: {count, plural, one {# Dienst} other {# Dienste}}. {names}. Zu jedem genügt ein Satz: wofür er ist und wem er hilft; das Etikett zeigt den Tarif, der ihn enthält.",
+      "foot": "Vollständige Präsentation mit allen Diensten · kumani.io",
+      "docTitle": "KUMANI — Vollständige Präsentation mit allen Diensten"
     }
   },
   "privacyPage": {

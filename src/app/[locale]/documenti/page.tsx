@@ -144,9 +144,19 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
           const others = DOC_LOCALES.filter((l) => l !== locale)
             .map((l) => ({ l, files: files.filter((f) => f.locale === l) }))
             .filter((x) => live || x.files.length > 0)
-          const deckButton = (l: string, main: boolean) => (
-            <DeckDownloadButton key={`deck-${l}`} locale={l} main={main} label={t('pptx')} busyLabel={flyersT('generating')} errorLabel={flyersT('error')} />
-          )
+          // Due PowerPoint per lingua: Lite (breve) e Full (con tutti i servizi)
+          const deckButton = (l: string, main: boolean) =>
+            (['lite', 'full'] as const).map((variant) => (
+              <DeckDownloadButton
+                key={`deck-${l}-${variant}`}
+                locale={l}
+                variant={variant}
+                main={main}
+                label={t(variant === 'full' ? 'pptxFull' : 'pptxLite')}
+                busyLabel={flyersT('generating')}
+                errorLabel={flyersT('error')}
+              />
+            ))
           const CatIcon = d.category === 'presentation' ? Presentation : d.category === 'rules' ? ScrollText : FileText
           const description = pickLocalized(d.description, locale)
           return (
@@ -174,6 +184,7 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
                 ) : (
                   <p className="text-sm text-[var(--muted)]">{t('notInYourLanguage')}</p>
                 )}
+                {live && <p className="mt-2 text-xs text-[var(--muted)]">{t('pptxVariants')}</p>}
               </div>
 
               {others.length > 0 && (
