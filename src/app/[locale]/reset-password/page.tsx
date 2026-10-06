@@ -12,13 +12,16 @@ import Logo from '@/components/Logo'
 import { authErrorText } from '@/lib/authErrors'
 
 // Fallback per chi arriva cliccando il link nell'email di reset (il client
-// Supabase imposta la sessione automaticamente leggendo il token dall'URL).
+// Supabase imposta la sessione automaticamente leggendo il token dall'URL;
+// i link dello Staff con ?token_hash= si verificano qui sotto con verifyOtp).
 // Il percorso "principale" è /forgot-password, che chiede un codice via
 // email da digitare — ma finché il template email non mostra {{ .Token }}
 // (serve piano Supabase Pro o un provider SMTP personalizzato, entrambi non
 // ancora configurati), il link resta l'unico modo con cui il codice arriva
 // davvero all'utente. Chi apre questa pagina senza sessione (link scaduto o
 // visita diretta) viene rimandato a /forgot-password per ricominciare.
+const verifications: Record<string, Promise<boolean>> = {}
+
 export default function ResetPasswordPage() {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -34,6 +37,25 @@ export default function ResetPasswordPage() {
 
   useEffect(() => {
     const checkSession = async () => {
+      // Link dell'email inviata dallo Staff (codice creato con l'API admin):
+      // ?token_hash=…&type=recovery. Si verifica qui e si toglie dall'indirizzo.
+      // I link chiesti da "Password dimenticata" arrivano invece con ?code=…
+      // e li gestisce da solo il client Supabase.
+      const params = new URLSearchParams(window.location.search)
+      const tokenHash = params.get('token_hash')
+      if (tokenHash && params.get('type') === 'recovery') {
+        // Una sola verifica anche se l'effetto parte due volte (React Strict Mode):
+        // il codice vale una volta sola
+        verifications[tokenHash] ??= supabase.auth
+          .verifyOtp({ token_hash: tokenHash, type: 'recovery' })
+          .then(({ error }) => !error)
+        const verified = await verifications[tokenHash]
+        window.history.replaceState(null, '', window.location.pathname)
+        if (!verified) {
+          router.replace(`/${locale}/forgot-password`)
+          return
+        }
+      }
       const { data: { session } } = await supabase.auth.getSession()
       if (session?.user) {
         setHasSession(true)

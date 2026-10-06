@@ -10,6 +10,7 @@ import { Mail, Lock, AlertCircle, Loader2, Home, CheckCircle, ShieldCheck } from
 import MaintenanceGate from '@/components/MaintenanceGate'
 import Logo from '@/components/Logo'
 import { authErrorText } from '@/lib/authErrors'
+import TurnstileWidget, { useTurnstile } from '@/components/auth/TurnstileWidget'
 
 const RESEND_COOLDOWN_SECONDS = 30
 
@@ -29,6 +30,8 @@ export default function ForgotPasswordPage() {
   const locale = useLocale()
   const router = useRouter()
   const supabase = createClient()
+  // Verifica anti-robot (Cloudflare Turnstile): serve per chiedere e rimandare il codice
+  const captcha = useTurnstile()
   // Il codice si usa una volta sola: se è già stato verificato e il
   // salvataggio della password fallisce, al nuovo tentativo non va riverificato
   const [codeVerified, setCodeVerified] = useState(false)
@@ -51,6 +54,7 @@ export default function ForgotPasswordPage() {
     // a reimpostare la password: lo teniamo attivo come fallback.
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/${locale}/reset-password`,
+      captchaToken: captcha.consume(),
     })
 
     if (resetError) {
@@ -111,6 +115,7 @@ export default function ForgotPasswordPage() {
     setResendMessage(null)
     const { error: resendError } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/${locale}/reset-password`,
+      captchaToken: captcha.consume(),
     })
     if (resendError) {
       setError(authErrorText(t, resendError, t('genericAuthError')))
@@ -230,6 +235,9 @@ export default function ForgotPasswordPage() {
                   </button>
                 </form>
 
+                {/* Nuovo invio del codice: anche questo passa dalla verifica anti-robot */}
+                <TurnstileWidget captcha={captcha} className="mt-4" />
+
                 <div className="mt-4 flex items-center justify-between text-sm">
                   <button
                     type="button"
@@ -241,7 +249,7 @@ export default function ForgotPasswordPage() {
                   <button
                     type="button"
                     onClick={handleResend}
-                    disabled={resendCooldown > 0}
+                    disabled={resendCooldown > 0 || captcha.pending}
                     className="font-medium text-[var(--gold)] hover:text-[var(--ink)] disabled:text-gray-400"
                   >
                     {resendCooldown > 0 ? t('resendCodeIn', { seconds: resendCooldown }) : t('resendCode')}
@@ -265,9 +273,11 @@ export default function ForgotPasswordPage() {
                   </div>
                 </div>
 
+                <TurnstileWidget captcha={captcha} />
+
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || captcha.pending}
                   className="flex w-full items-center justify-center gap-2 rounded-md border border-transparent bg-[var(--ink)] px-4 py-3 text-sm font-bold text-white shadow-sm transition-all hover:bg-[var(--ink-soft)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)] focus:ring-offset-2 disabled:opacity-50"
                 >
                   {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : null}

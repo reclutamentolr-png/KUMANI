@@ -13,6 +13,8 @@ import { endImpersonation } from '@/lib/impersonation'
 import { resetProfileReminder } from '@/components/ProfileReminder'
 import MaintenanceGate from '@/components/MaintenanceGate'
 import Logo from '@/components/Logo'
+import TurnstileWidget, { useTurnstile } from '@/components/auth/TurnstileWidget'
+import { authErrorKey } from '@/lib/authErrors'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -25,6 +27,7 @@ export default function LoginPage() {
   const router = useRouter()
   const locale = useLocale()
   const supabase = createClient()
+  const captcha = useTurnstile()
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -34,6 +37,7 @@ export default function LoginPage() {
     const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
       email,
       password,
+      options: { captchaToken: captcha.consume() },
     })
 
     if (authError) {
@@ -41,7 +45,9 @@ export default function LoginPage() {
         router.push(`/${locale}/register?verify=${encodeURIComponent(email)}`)
         return
       }
-      setError(t('invalidCredentials'))
+      // Verifica anti-robot o troppi tentativi: messaggio specifico, altrimenti credenziali errate
+      const key = authErrorKey(authError)
+      setError(t(key === 'captchaError' || key === 'tooManyRequestsError' ? key : 'invalidCredentials'))
       setLoading(false)
       return
     }
@@ -188,9 +194,11 @@ export default function LoginPage() {
                 </div>
               </div>
 
+              <TurnstileWidget captcha={captcha} />
+
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || captcha.pending}
                 className="flex w-full items-center justify-center gap-2 rounded-md border border-transparent bg-[var(--ink)] px-4 py-3 text-sm font-bold text-white shadow-sm transition-all hover:bg-[var(--ink-soft)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)] focus:ring-offset-2 disabled:opacity-50"
               >
                 {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : null}

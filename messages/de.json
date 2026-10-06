@@ -369,7 +369,8 @@
     "marketingConsent": "Ich möchte Neuigkeiten und Angebote von KUMANI per E-Mail erhalten (freiwillig: Du kannst es dir jederzeit in deinem Profil anders überlegen).",
     "passActivated": "Pass-Code aktiviert: Der Dienst gehört dir bis {date}.",
     "proTrialNext": "Starte jetzt den kostenlosen Pro-Test: Wir fragen nach USt-IdNr. oder Steuercode.",
-    "disposableEmail": "Temporäre oder Wegwerf-E-Mail-Adressen werden nicht akzeptiert: Nutze eine Adresse, die du wirklich liest."
+    "disposableEmail": "Temporäre oder Wegwerf-E-Mail-Adressen werden nicht akzeptiert: Nutze eine Adresse, die du wirklich liest.",
+    "captchaError": "Anti-Bot-Prüfung fehlgeschlagen: bitte erneut versuchen."
   },
   "dashboard": {
     "receivedLabel": "Aus der Community",
@@ -7943,7 +7944,8 @@
     "errorSame": "Das neue Passwort ist identisch mit dem aktuellen.",
     "errorWrongCurrent": "Das aktuelle Passwort ist falsch.",
     "errorRateLimit": "Zu viele Versuche: versuche es in ein paar Minuten erneut.",
-    "errorGeneric": "Etwas hat nicht funktioniert. Versuche es gleich noch einmal."
+    "errorGeneric": "Etwas hat nicht funktioniert. Versuche es gleich noch einmal.",
+    "errorCaptcha": "Anti-Bot-Prüfung fehlgeschlagen: bitte erneut versuchen."
   },
   "passwordEmail": {
     "subject": "Dein KUMANI-Passwort wurde geändert",
@@ -7951,6 +7953,21 @@
     "body": "das Passwort deines KUMANI-Kontos wurde am {date} in deinem Profil geändert.",
     "notYou": "Wenn du das nicht warst, setze dein Passwort sofort über den Link unten zurück und schreib uns an {email}.",
     "signature": "Dein KUMANI-Team"
+  },
+  "passwordResetEmail": {
+    "subject": "Dein Code für ein neues KUMANI-Passwort",
+    "greeting": "Hallo {name},",
+    "body": "das KUMANI-Staff hat dir einen Code geschickt, mit dem du ein neues Passwort für dein Konto wählen kannst.",
+    "codeIntro": "Gehe zu „Passwort vergessen?“, gib deine E-Mail ein, tippe auf „Ich habe bereits einen Code“ und gib diesen Code ein:",
+    "linkIntro": "Oder öffne direkt diesen Link:",
+    "button": "Neues Passwort wählen",
+    "expiry": "Code und Link gelten nur einmal und nur für kurze Zeit.",
+    "notYou": "Wenn du keine Passwortänderung angefordert hast, ignoriere diese E-Mail: Dein Passwort bleibt unverändert.",
+    "signature": "Dein KUMANI-Team"
+  },
+  "turnstile": {
+    "loadError": "Die Anti-Bot-Prüfung wurde nicht geladen.",
+    "retry": "Erneut versuchen"
   },
   "pushSettings": {
     "title": "Benachrichtigungen",

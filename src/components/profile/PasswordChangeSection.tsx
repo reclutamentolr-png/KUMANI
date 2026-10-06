@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { AlertCircle, CheckCircle2, Eye, EyeOff, KeyRound } from 'lucide-react'
 import { changeMyPassword } from '@/app/actions/password'
+import TurnstileWidget, { useTurnstile } from '@/components/auth/TurnstileWidget'
 
 // Nel profilo: cambio password con la password attuale (chi l'ha dimenticata
 // usa "Password dimenticata" dalla pagina di accesso).
@@ -18,6 +19,8 @@ export default function PasswordChangeSection() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [done, setDone] = useState(false)
+  // La password attuale si controlla con un accesso: serve la verifica anti-robot
+  const captcha = useTurnstile()
 
   const reset = () => {
     setCurrent('')
@@ -36,7 +39,7 @@ export default function PasswordChangeSection() {
     if (next === current) return setError(t('errorSame'))
     setSaving(true)
     try {
-      const res = await changeMyPassword(current, next, locale)
+      const res = await changeMyPassword(current, next, locale, captcha.consume())
       if (res.success) {
         reset()
         setOpen(false)
@@ -49,6 +52,7 @@ export default function PasswordChangeSection() {
         too_long: t('errorTooLong'),
         same: t('errorSame'),
         rate_limit: t('errorRateLimit'),
+        captcha: t('errorCaptcha'),
       }
       setError(messages[res.code ?? ''] ?? t('errorGeneric'))
     } catch {
@@ -114,6 +118,7 @@ export default function PasswordChangeSection() {
             </p>
           )}
           <p className="text-xs text-gray-500">{t('emailNotice')}</p>
+          <TurnstileWidget captcha={captcha} />
           <div className="flex justify-end gap-2">
             <button
               type="button"
@@ -125,7 +130,7 @@ export default function PasswordChangeSection() {
             >
               {t('cancel')}
             </button>
-            <button type="submit" disabled={saving} className="rounded-lg bg-[var(--ink)] px-4 py-2 text-sm font-bold text-[var(--gold-bright)] disabled:opacity-50">
+            <button type="submit" disabled={saving || captcha.pending} className="rounded-lg bg-[var(--ink)] px-4 py-2 text-sm font-bold text-[var(--gold-bright)] disabled:opacity-50">
               {saving ? t('saving') : t('save')}
             </button>
           </div>

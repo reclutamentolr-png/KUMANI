@@ -389,7 +389,8 @@
     "marketingConsent": "I want to receive KUMANI news and offers by email (optional: you can change your mind at any time from your profile).",
     "passActivated": "Pass code activated: the service is yours until {date}.",
     "proTrialNext": "Now start your free Pro trial: we’ll ask for your VAT number or tax code.",
-    "disposableEmail": "Temporary or disposable email addresses are not accepted: use an address you actually check."
+    "disposableEmail": "Temporary or disposable email addresses are not accepted: use an address you actually check.",
+    "captchaError": "Anti-bot check failed: please try again."
   },
   "dashboard": {
     "receivedLabel": "From the Community",
@@ -7943,7 +7944,8 @@
     "errorSame": "The new password is the same as the current one.",
     "errorWrongCurrent": "The current password is incorrect.",
     "errorRateLimit": "Too many attempts: try again in a few minutes.",
-    "errorGeneric": "Something went wrong. Please try again shortly."
+    "errorGeneric": "Something went wrong. Please try again shortly.",
+    "errorCaptcha": "Anti-bot check failed: please try again."
   },
   "passwordEmail": {
     "subject": "Your KUMANI password has been changed",
@@ -7951,6 +7953,21 @@
     "body": "the password of your KUMANI account was changed on {date} from your profile.",
     "notYou": "If it wasn’t you, reset your password right away using the link below and write to us at {email}.",
     "signature": "The KUMANI team"
+  },
+  "passwordResetEmail": {
+    "subject": "Your code for a new KUMANI password",
+    "greeting": "Hi {name},",
+    "body": "the KUMANI Staff sent you a code to choose a new password for your account.",
+    "codeIntro": "Go to “Forgot password?”, enter your email, tap “I already have a code” and enter this code:",
+    "linkIntro": "Or open this link directly:",
+    "button": "Choose a new password",
+    "expiry": "The code and the link can be used only once and for a short time.",
+    "notYou": "If you didn’t ask to change your password, ignore this email: your password stays the same.",
+    "signature": "The KUMANI team"
+  },
+  "turnstile": {
+    "loadError": "The anti-bot check did not load.",
+    "retry": "Try again"
   },
   "pushSettings": {
     "title": "Notifications",

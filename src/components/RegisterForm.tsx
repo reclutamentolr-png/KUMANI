@@ -14,6 +14,7 @@ import { authErrorText } from '@/lib/authErrors'
 import { checkActivationCode, giftGiverReferral, redeemActivationCode } from '@/app/actions/codes'
 import { GIFT_CODE_RE } from '@/lib/gifts'
 import { isDisposableEmail } from '@/lib/disposableEmail'
+import TurnstileWidget, { useTurnstile } from '@/components/auth/TurnstileWidget'
 
 const RESEND_COOLDOWN_SECONDS = 30
 
@@ -25,6 +26,8 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
   const locale = useLocale() // ✅ Ottiene 'it', 'en', ecc.
   const t = useTranslations('auth')
   const supabase = createClient()
+  // Verifica anti-robot (Cloudflare Turnstile) per le chiamate a Supabase Auth
+  const captcha = useTurnstile()
 
   // ✅ Legge sia 'sponsor' che 'ref' dall'URL
   const initialReferralCode = searchParams.get('sponsor') || searchParams.get('ref') || ''
@@ -82,9 +85,11 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
   // quelli del modulo e si completa la registrazione. Se il profilo esiste
   // già si esce: è un utente vero, deve accedere dal login.
   const resumeIncompleteRegistration = async (referralCode: string, voucherCode: string): Promise<boolean> => {
+    // Il token del signUp è già stato usato: serve quello nuovo del widget
     const { data: signIn, error: signInError } = await supabase.auth.signInWithPassword({
       email: formData.email,
       password: formData.password,
+      options: { captchaToken: await captcha.next() },
     })
     if (signInError || !signIn.user) return false
 
@@ -184,7 +189,8 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
             terms_accepted_at: new Date().toISOString(),
             terms_version: TERMS_VERSION,
             marketing_consent: formData.marketing,
-          }
+          },
+          captchaToken: captcha.consume(),
         }
       })
 
@@ -332,7 +338,11 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
     if (resendCooldown > 0) return
     setError(null)
     setResendMessage(null)
-    const { error: resendError } = await supabase.auth.resend({ type: 'signup', email: formData.email })
+    const { error: resendError } = await supabase.auth.resend({
+      type: 'signup',
+      email: formData.email,
+      options: { captchaToken: captcha.consume() },
+    })
     if (resendError) {
       setError(authErrorText(t, resendError, t('genericAuthError')))
       return
@@ -514,9 +524,11 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
             <span>{t('marketingConsent')}</span>
           </label>
 
+          <TurnstileWidget captcha={captcha} />
+
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || captcha.pending}
             className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed text-[var(--ink)] font-bold rounded-xl transition-all shadow-lg"
           >
             {loading ? (
@@ -577,6 +589,9 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
             </button>
           </form>
 
+          {/* Nuovo invio del codice: anche questo passa dalla verifica anti-robot */}
+          <TurnstileWidget captcha={captcha} />
+
           <div className="flex items-center justify-between text-sm">
             <button
               type="button"
@@ -588,7 +603,7 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
             <button
               type="button"
               onClick={handleResend}
-              disabled={resendCooldown > 0}
+              disabled={resendCooldown > 0 || captcha.pending}
               className="font-medium text-[var(--gold)] hover:text-[var(--ink)] disabled:text-gray-400"
             >
               {resendCooldown > 0 ? t('resendCodeIn', { seconds: resendCooldown }) : t('resendCode')}

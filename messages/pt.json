@@ -369,7 +369,8 @@
     "marketingConsent": "Quero receber por email novidades e ofertas da KUMANI (opcional: pode mudar de ideias quando quiser a partir do seu perfil).",
     "passActivated": "Código Pass ativado: o serviço é seu até {date}.",
     "proTrialNext": "Agora ative o teste Pro gratuito: pedimos o número de IVA ou o código fiscal.",
-    "disposableEmail": "Não são aceites emails temporários ou descartáveis: use um endereço que consulta de facto."
+    "disposableEmail": "Não são aceites emails temporários ou descartáveis: use um endereço que consulta de facto.",
+    "captchaError": "A verificação anti-robô falhou: tente novamente."
   },
   "dashboard": {
     "receivedLabel": "Da Comunidade",
@@ -7943,7 +7944,8 @@
     "errorSame": "A nova palavra-passe é igual à atual.",
     "errorWrongCurrent": "A palavra-passe atual não está correta.",
     "errorRateLimit": "Demasiadas tentativas: tente novamente dentro de alguns minutos.",
-    "errorGeneric": "Algo correu mal. Tente novamente daqui a pouco."
+    "errorGeneric": "Algo correu mal. Tente novamente daqui a pouco.",
+    "errorCaptcha": "A verificação anti-robô falhou: tente novamente."
   },
   "passwordEmail": {
     "subject": "A sua palavra-passe KUMANI foi alterada",
@@ -7951,6 +7953,21 @@
     "body": "a palavra-passe da sua conta KUMANI foi alterada em {date} a partir do seu perfil.",
     "notYou": "Se não foi você, redefina já a palavra-passe com o link abaixo e escreva-nos para {email}.",
     "signature": "A equipa KUMANI"
+  },
+  "passwordResetEmail": {
+    "subject": "O seu código para uma nova palavra-passe KUMANI",
+    "greeting": "Olá {name},",
+    "body": "o Staff KUMANI enviou-lhe um código para escolher uma nova palavra-passe para a sua conta.",
+    "codeIntro": "Vá a «Esqueceu-se da palavra-passe?», escreva o seu email, toque em «Já recebi um código» e introduza este código:",
+    "linkIntro": "Ou abra diretamente este link:",
+    "button": "Escolher uma nova palavra-passe",
+    "expiry": "O código e o link só valem uma vez e por pouco tempo.",
+    "notYou": "Se não pediu para mudar a palavra-passe, ignore este email: a sua palavra-passe continua a mesma.",
+    "signature": "A equipa KUMANI"
+  },
+  "turnstile": {
+    "loadError": "A verificação anti-robô não carregou.",
+    "retry": "Tentar novamente"
   },
   "pushSettings": {
     "title": "Notificações",

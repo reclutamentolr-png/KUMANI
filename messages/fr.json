@@ -369,7 +369,8 @@
     "marketingConsent": "Je souhaite recevoir par e-mail les nouveautés et les offres de KUMANI (facultatif : vous pouvez changer d’avis à tout moment depuis votre profil).",
     "passActivated": "Code Pass activé : le service est à vous jusqu’au {date}.",
     "proTrialNext": "Activez maintenant l’essai Pro gratuit : nous vous demandons votre numéro de TVA ou code fiscal.",
-    "disposableEmail": "Les adresses e-mail temporaires ou jetables ne sont pas acceptées : utilisez une adresse que vous consultez vraiment."
+    "disposableEmail": "Les adresses e-mail temporaires ou jetables ne sont pas acceptées : utilisez une adresse que vous consultez vraiment.",
+    "captchaError": "Vérification anti-robot échouée : réessayez."
   },
   "dashboard": {
     "receivedLabel": "De la Communauté",
@@ -7943,7 +7944,8 @@
     "errorSame": "Le nouveau mot de passe est identique à l’actuel.",
     "errorWrongCurrent": "Le mot de passe actuel est incorrect.",
     "errorRateLimit": "Trop de tentatives : réessayez dans quelques minutes.",
-    "errorGeneric": "Une erreur s’est produite. Réessayez dans un instant."
+    "errorGeneric": "Une erreur s’est produite. Réessayez dans un instant.",
+    "errorCaptcha": "Vérification anti-robot échouée : réessayez."
   },
   "passwordEmail": {
     "subject": "Votre mot de passe KUMANI a été modifié",
@@ -7951,6 +7953,21 @@
     "body": "le mot de passe de votre compte KUMANI a été modifié le {date} depuis votre profil.",
     "notYou": "Si ce n’était pas vous, réinitialisez immédiatement votre mot de passe avec le lien ci-dessous et écrivez-nous à {email}.",
     "signature": "L’équipe KUMANI"
+  },
+  "passwordResetEmail": {
+    "subject": "Votre code pour un nouveau mot de passe KUMANI",
+    "greeting": "Bonjour {name},",
+    "body": "le Staff KUMANI vous a envoyé un code pour choisir un nouveau mot de passe pour votre compte.",
+    "codeIntro": "Allez sur « Mot de passe oublié ? », saisissez votre e-mail, touchez « J’ai déjà reçu un code » et saisissez ce code :",
+    "linkIntro": "Ou ouvrez directement ce lien :",
+    "button": "Choisir un nouveau mot de passe",
+    "expiry": "Le code et le lien ne sont valables qu’une seule fois et pour peu de temps.",
+    "notYou": "Si vous n’avez pas demandé à changer votre mot de passe, ignorez cet e-mail : votre mot de passe reste le même.",
+    "signature": "L’équipe KUMANI"
+  },
+  "turnstile": {
+    "loadError": "La vérification anti-robot ne s’est pas chargée.",
+    "retry": "Réessayer"
   },
   "pushSettings": {
     "title": "Notifications",

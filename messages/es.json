@@ -369,7 +369,8 @@
     "marketingConsent": "Quiero recibir por correo electrónico novedades y ofertas de KUMANI (opcional: puedes cambiar de opinión cuando quieras desde tu perfil).",
     "passActivated": "Código Pass activado: el servicio es tuyo hasta el {date}.",
     "proTrialNext": "Ahora activa la prueba Pro gratuita: te pedimos el NIF-IVA o el código fiscal.",
-    "disposableEmail": "No se aceptan correos temporales o desechables: usa una dirección que revises de verdad."
+    "disposableEmail": "No se aceptan correos temporales o desechables: usa una dirección que revises de verdad.",
+    "captchaError": "La verificación anti-robot no se ha superado: inténtalo de nuevo."
   },
   "dashboard": {
     "receivedLabel": "De la Comunidad",
@@ -7943,7 +7944,8 @@
     "errorSame": "La nueva contraseña es igual a la actual.",
     "errorWrongCurrent": "La contraseña actual no es correcta.",
     "errorRateLimit": "Demasiados intentos: inténtalo de nuevo en unos minutos.",
-    "errorGeneric": "Algo no ha funcionado. Inténtalo de nuevo en breve."
+    "errorGeneric": "Algo no ha funcionado. Inténtalo de nuevo en breve.",
+    "errorCaptcha": "La verificación anti-robot no se ha superado: inténtalo de nuevo."
   },
   "passwordEmail": {
     "subject": "Tu contraseña de KUMANI ha sido cambiada",
@@ -7951,6 +7953,21 @@
     "body": "la contraseña de tu cuenta de KUMANI se cambió el {date} desde tu perfil.",
     "notYou": "Si no has sido tú, restablece ya la contraseña con el enlace de abajo y escríbenos a {email}.",
     "signature": "El equipo de KUMANI"
+  },
+  "passwordResetEmail": {
+    "subject": "Tu código para una nueva contraseña de KUMANI",
+    "greeting": "Hola {name}:",
+    "body": "el Staff de KUMANI te ha enviado un código para elegir una nueva contraseña para tu cuenta.",
+    "codeIntro": "Ve a «¿Olvidaste tu contraseña?», escribe tu email, toca «Ya he recibido un código» e introduce este código:",
+    "linkIntro": "O abre directamente este enlace:",
+    "button": "Elegir una nueva contraseña",
+    "expiry": "El código y el enlace solo valen una vez y durante poco tiempo.",
+    "notYou": "Si no has pedido cambiar la contraseña, ignora este email: tu contraseña sigue siendo la misma.",
+    "signature": "El equipo de KUMANI"
+  },
+  "turnstile": {
+    "loadError": "La verificación anti-robot no se ha cargado.",
+    "retry": "Reintentar"
   },
   "pushSettings": {
     "title": "Notificaciones",

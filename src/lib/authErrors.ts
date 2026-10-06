@@ -4,6 +4,8 @@
 // Restituisce la chiave nel namespace "auth" dei messaggi, oppure null se
 // l'errore non viene da Supabase (es. un messaggio già tradotto dal sito).
 const BY_CODE: Record<string, string> = {
+  // Verifica anti-robot (Cloudflare Turnstile) mancante, scaduta o già usata
+  captcha_failed: 'captchaError',
   same_password: 'samePasswordError',
   weak_password: 'weakPasswordError',
   over_email_send_rate_limit: 'tooManyEmailsError',
@@ -16,6 +18,7 @@ const BY_CODE: Record<string, string> = {
 }
 
 const BY_TEXT: [RegExp, string][] = [
+  [/captcha/i, 'captchaError'],
   [/different from the old password/i, 'samePasswordError'],
   [/password should (be at least|contain)|weak password/i, 'weakPasswordError'],
   [/email rate limit|security purposes, you can only request/i, 'tooManyEmailsError'],
