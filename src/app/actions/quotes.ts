@@ -6,11 +6,27 @@ import { hasActivePreventiviAccess } from '@/lib/quotes-server'
 import {
   computeQuoteTotal,
   type QuoteFormData,
+  type QuoteItem,
   type IssuerProfileRow,
   type SavedClientRow,
   type SavedClientFormData,
 } from '@/lib/quotes'
 import { awardToolPoint } from '@/lib/toolPoints'
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+// Righe ricostruite campo per campo: productId resta solo se è un uuid
+function cleanItems(items: QuoteItem[]): QuoteItem[] {
+  return (Array.isArray(items) ? items : []).map((item) => {
+    const row: QuoteItem = {
+      description: String(item?.description ?? ''),
+      quantity: Number(item?.quantity) || 0,
+      unitPrice: Number(item?.unitPrice) || 0,
+    }
+    if (typeof item?.productId === 'string' && UUID_RE.test(item.productId)) row.productId = item.productId
+    return row
+  })
+}
 
 type ActionResult<T> = { success: true; data: T } | { success: false; message: string }
 
@@ -140,7 +156,8 @@ export async function createQuote(
   if (!gate.ok) return { success: false, message: gate.message }
 
   const supabase = await createClient()
-  const total = computeQuoteTotal(form.items)
+  const items = cleanItems(form.items)
+  const total = computeQuoteTotal(items)
 
   for (let attempt = 0; attempt < 5; attempt++) {
     const { data: maxRow } = await supabase
@@ -168,7 +185,7 @@ export async function createQuote(
         client_vat: form.clientVat || null,
         issue_date: form.issueDate,
         valid_until: form.validUntil || null,
-        items: form.items,
+        items,
         payment_info: form.paymentInfo || null,
         notes: form.notes || null,
         total,
@@ -198,7 +215,8 @@ export async function updateQuote(id: string, form: QuoteFormData): Promise<Acti
   if (!gate.ok) return { success: false, message: gate.message }
 
   const supabase = await createClient()
-  const total = computeQuoteTotal(form.items)
+  const items = cleanItems(form.items)
+  const total = computeQuoteTotal(items)
 
   const { error } = await supabase
     .from('quotes')
@@ -213,7 +231,7 @@ export async function updateQuote(id: string, form: QuoteFormData): Promise<Acti
       client_vat: form.clientVat || null,
       issue_date: form.issueDate,
       valid_until: form.validUntil || null,
-      items: form.items,
+      items,
       payment_info: form.paymentInfo || null,
       notes: form.notes || null,
       total,
@@ -244,4 +262,29 @@ export async function deleteQuote(id: string): Promise<ActionResult<null>> {
   }
 
   return { success: true, data: null }
+}
+
+export type UnloadQuoteResult =
+  | { ok: true; count: number }
+  | { ok: false; error: 'not_allowed' | 'not_found' | 'already' | 'no_products' | 'insufficient' | 'failed'; name?: string; stock?: number }
+
+/** Preventivo venduto → toglie dal Magazzino i prodotti collegati alle righe (una volta sola, tutto o niente). */
+export async function unloadQuoteStock(quoteId: string): Promise<UnloadQuoteResult> {
+  if (!UUID_RE.test(quoteId)) return { ok: false, error: 'not_found' }
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return { ok: false, error: 'not_allowed' }
+
+  const { data, error } = await supabase.rpc('quote_unload_stock', { p_quote: quoteId })
+  if (error || !data) {
+    console.error('[Quotes] unloadQuoteStock failed:', error)
+    return { ok: false, error: 'failed' }
+  }
+  const res = data as { ok?: boolean; count?: number; error?: string; name?: string; stock?: number }
+  if (res.ok) return { ok: true, count: Number(res.count) || 0 }
+  const known = ['not_allowed', 'not_found', 'already', 'no_products', 'insufficient'] as const
+  const code = known.find((k) => k === res.error) ?? 'failed'
+  return { ok: false, error: code, name: res.name, stock: res.stock !== undefined ? Number(res.stock) : undefined }
 }

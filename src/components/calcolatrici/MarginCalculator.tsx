@@ -10,6 +10,7 @@ type Mode = 'fromPrice' | 'fromMargin' | 'fromMarkup'
 
 export default function MarginCalculator() {
   const t = useTranslations('calcolatrici')
+  const te = useTranslations('ecosystem')
   const { money, percent } = useFormatters()
   const [mode, setMode] = useState<Mode>('fromPrice')
   const [cost, setCost] = useState('')
@@ -72,7 +73,11 @@ export default function MarginCalculator() {
         <Note>{t('mgExplain')}</Note>
       </Card>
 
-      {result ? <ResultPanel title={t('mgTitle')} lines={lines} /> : <EmptyResult />}
+      {result ? (
+        <ResultPanel title={t('mgTitle')} lines={lines} quote={{ description: te('calcLineMargin'), price: result.price }} />
+      ) : (
+        <EmptyResult />
+      )}
     </div>
   )
 }

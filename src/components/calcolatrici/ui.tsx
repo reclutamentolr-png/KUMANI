@@ -2,7 +2,8 @@
 
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { Check, Copy } from 'lucide-react'
+import { Check, Copy, FileText } from 'lucide-react'
+import LocalizedLink from '@/components/LocalizedLink'
 import { parseDecimal } from '@/lib/calculators'
 
 // Elementi condivisi dalle quattro calcolatrici: campi numerici, pulsanti a
@@ -19,6 +20,10 @@ interface CalcUsage {
 const CalcUsageContext = createContext<CalcUsage>({ reportResult: () => {}, reportCopy: () => {} })
 export const CalcUsageProvider = CalcUsageContext.Provider
 export const useCalcUsage = () => useContext(CalcUsageContext)
+
+// Accesso ai Preventivi (Pro), controllato lato server dalla pagina
+const CalcQuoteContext = createContext(false)
+export const CalcQuoteProvider = CalcQuoteContext.Provider
 
 /** Segnala un risultato valido ogni volta che la sua "firma" cambia. */
 export function useReportResult(signature: string | null) {
@@ -172,8 +177,14 @@ export interface ResultLine {
   negative?: boolean
 }
 
+/** Riga da portare in un nuovo preventivo (prezzo netto, senza IVA). */
+export interface QuoteLine {
+  description: string
+  price: number
+}
+
 /** Pannello scuro con i risultati e il pulsante "Copia risultato". */
-export function ResultPanel({ title, lines, footer }: { title: string; lines: ResultLine[]; footer?: ReactNode }) {
+export function ResultPanel({ title, lines, footer, quote }: { title: string; lines: ResultLine[]; footer?: ReactNode; quote?: QuoteLine }) {
   const main = lines.filter((line) => line.highlight)
   const rest = lines.filter((line) => !line.highlight)
   const copyText = [title, ...lines.map((line) => `${line.label}: ${line.negative ? '- ' : ''}${line.value}`)].join('\n')
@@ -202,7 +213,26 @@ export function ResultPanel({ title, lines, footer }: { title: string; lines: Re
       )}
       {footer && <div className="mt-4 text-sm leading-6 text-white/80">{footer}</div>}
       <CopyButton text={copyText} />
+      {quote && <QuoteButton quote={quote} />}
     </div>
+  )
+}
+
+/** «Usa nel preventivo»: apre un nuovo preventivo con una riga precompilata. */
+function QuoteButton({ quote }: { quote: QuoteLine }) {
+  const t = useTranslations('ecosystem')
+  const canQuote = useContext(CalcQuoteContext)
+  // Solo con un importo valido e positivo, e solo per chi ha i Preventivi
+  if (!canQuote || !Number.isFinite(quote.price) || quote.price <= 0) return null
+  const params = new URLSearchParams({ line: quote.description, price: quote.price.toFixed(2) })
+  return (
+    <LocalizedLink
+      href={`/marketplace/preventivi/new?${params.toString()}`}
+      className="mt-2.5 flex w-full items-center justify-center gap-2 rounded-xl border border-white/20 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:border-[var(--gold-bright)] hover:text-[var(--gold-bright)]"
+    >
+      <FileText className="h-4 w-4" />
+      {t('calcUseInQuote')}
+    </LocalizedLink>
   )
 }
 

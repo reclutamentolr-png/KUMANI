@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { BadgePercent, Percent, Receipt, TrendingUp, type LucideIcon } from 'lucide-react'
 import { completeCalcolatrici } from '@/app/actions/calcolatrici'
-import { CalcUsageProvider } from './ui'
+import { CalcQuoteProvider, CalcUsageProvider } from './ui'
 import VatCalculator from './VatCalculator'
 import WithholdingCalculator from './WithholdingCalculator'
 import DiscountCalculator from './DiscountCalculator'
@@ -22,7 +22,7 @@ const TABS: { id: Tab; icon: LucideIcon; label: string }[] = [
 // Dopo quanto tempo un risultato "fermo" conta come uso dello strumento
 const RESULT_DEBOUNCE_MS = 2500
 
-export default function CalcolatriciApp() {
+export default function CalcolatriciApp({ canQuote = false }: { canQuote?: boolean }) {
   const t = useTranslations('calcolatrici')
   const [tab, setTab] = useState<Tab>('vat')
   const awarded = useRef(false)
@@ -51,6 +51,7 @@ export default function CalcolatriciApp() {
 
   return (
     <CalcUsageProvider value={usage}>
+      <CalcQuoteProvider value={canQuote}>
       <div role="tablist" aria-label={t('tabsLabel')} className="mb-6 grid grid-cols-2 gap-2 sm:grid-cols-4">
         {TABS.map(({ id, icon: Icon, label }) => {
           const active = tab === id
@@ -85,6 +86,7 @@ export default function CalcolatriciApp() {
           {id === 'margin' && <MarginCalculator />}
         </div>
       ))}
+      </CalcQuoteProvider>
     </CalcUsageProvider>
   )
 }

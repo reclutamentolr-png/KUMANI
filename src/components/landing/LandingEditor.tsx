@@ -26,7 +26,7 @@ import {
 import LandingView, { type LandingLabels } from '@/components/landing/LandingView'
 import LandingContactForm, { type LandingFormLabels } from '@/components/landing/LandingContactForm'
 import { landingSerif } from '@/components/landing/landingFonts'
-import { checkLandingSlug, generateLandingDraft, saveLanding, uploadLandingPhoto, type LandingAiAnswers } from '@/app/actions/landing'
+import { checkLandingSlug, generateLandingDraft, importBusinessLogoToLanding, saveLanding, uploadLandingPhoto, type LandingAiAnswers } from '@/app/actions/landing'
 import { resizeImageFile } from '@/lib/resizeImage'
 import BusinessProfileImport from '@/components/businessProfile/BusinessProfileImport'
 import type { BusinessProfile } from '@/lib/businessProfile'
@@ -233,6 +233,12 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
     setC(r.content)
     if (r.accent) setAccent(r.accent)
     setDirty(true)
+    // Anche il logo, se la Scheda ne ha uno (in caso di errore resta quello di prima)
+    importBusinessLogoToLanding()
+      .then((res) => {
+        if ('path' in res) update((x) => ((x.hero.logo = res.path), x))
+      })
+      .catch(() => {})
   }
 
   const moveSection = (key: SectionKey, dir: -1 | 1) =>

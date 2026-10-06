@@ -21,6 +21,7 @@ const LOCALE_DEFAULT_RATE: Record<string, string> = {
 
 export default function VatCalculator() {
   const t = useTranslations('calcolatrici')
+  const te = useTranslations('ecosystem')
   const { locale, money, percent } = useFormatters()
   const localeRate = LOCALE_DEFAULT_RATE[locale]
   const [mode, setMode] = useState<VatMode>('add')
@@ -83,6 +84,8 @@ export default function VatCalculator() {
             { label: `${t('vatAmount')} ${percent(result.rate)}`, value: money(result.vat) },
             { label: t('vatGross'), value: money(result.gross) },
           ]}
+          // Nel preventivo va l'imponibile (i preventivi non hanno IVA)
+          quote={{ description: te('calcLineVat'), price: result.net }}
         />
       ) : (
         <EmptyResult />

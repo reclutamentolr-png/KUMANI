@@ -18,6 +18,7 @@ const VAT_RATE = 22
 
 export default function WithholdingCalculator() {
   const t = useTranslations('calcolatrici')
+  const te = useTranslations('ecosystem')
   const { locale, money, percent } = useFormatters()
   const [mode, setMode] = useState<Mode>('forward')
   const [amount, setAmount] = useState('')
@@ -120,6 +121,8 @@ export default function WithholdingCalculator() {
           title={t('whTitle')}
           lines={lines}
           footer={mode === 'reverse' ? t('whReverseSummary', { net: money(result.netToPay), amount: money(result.compenso) }) : undefined}
+          // Nel preventivo va il compenso: rivalsa, cassa, IVA e ritenuta si calcolano in fattura
+          quote={{ description: te('calcLineWithholding'), price: result.compenso }}
         />
       ) : (
         <EmptyResult />

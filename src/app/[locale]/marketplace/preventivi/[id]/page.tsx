@@ -7,6 +7,8 @@ import { hasActivePreventiviAccess } from '@/lib/quotes-server'
 import QuotePdfButton from '@/components/QuotePdfButton'
 import QuoteShareButtons from '@/components/QuoteShareButtons'
 import QuoteActions from '@/components/QuoteActions'
+import QuoteWorkChain from '@/components/ecosystem/QuoteWorkChain'
+import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import type { QuoteItem } from '@/lib/quotes'
 
 export default async function QuoteDetailPage({
@@ -16,7 +18,7 @@ export default async function QuoteDetailPage({
   params: Promise<{ locale: string; id: string }>
   searchParams: Promise<{ from?: string }>
 }) {
-  const { id } = await params
+  const { locale, id } = await params
   const { from } = await searchParams
   const backSuffix = from === 'dashboard' ? '?from=dashboard' : ''
   const t = await getTranslations('preventivi')
@@ -43,6 +45,16 @@ export default async function QuoteDetailPage({
 
   const logoUrl = issuer?.logo_path
     ? supabase.storage.from('quote-logos-v2').getPublicUrl(issuer.logo_path).data.publicUrl
+    : null
+
+  // Catena di lavoro: scarico dal Magazzino (righe collegate) e ricevuta di pagamento
+  const hasLinkedProducts = ((quote.items || []) as QuoteItem[]).some((item) => typeof item.productId === 'string')
+  const [canMagazzino, canReceipt] = await Promise.all([
+    hasLinkedProducts ? hasActiveToolAccess(supabase, user.id, 'magazzino') : Promise.resolve(false),
+    hasActiveToolAccess(supabase, user.id, 'digital-receipt'),
+  ])
+  const unloadedOn = quote.stock_unloaded_at
+    ? new Date(quote.stock_unloaded_at).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Rome' })
     : null
 
   return (
@@ -139,6 +151,12 @@ export default async function QuoteDetailPage({
             <QuoteActions id={quote.id} />
           </div>
           <QuoteShareButtons quote={quote} issuer={issuer || null} logoUrl={logoUrl} />
+          <QuoteWorkChain
+            quoteId={quote.id}
+            showUnload={hasLinkedProducts && canMagazzino}
+            unloadedOn={unloadedOn}
+            showReceipt={canReceipt}
+          />
         </div>
       </main>
     </div>

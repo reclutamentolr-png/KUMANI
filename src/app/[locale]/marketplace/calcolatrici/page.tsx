@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server'
 import { ArrowLeft, Calculator } from 'lucide-react'
 import ToolBackLink from '@/components/ToolBackLink'
 import CalcolatriciApp from '@/components/calcolatrici/CalcolatriciApp'
+import { createClient } from '@/lib/supabase/server'
 
 // CALCOLATRICI PRO (Lavoro, piano PRO): IVA, ritenuta d'acconto, sconti,
 // ricarico e margine. La pagina è protetta dal proxy come gli altri
@@ -10,6 +11,10 @@ export default async function CalcolatriciPage() {
   const t = await getTranslations('calcolatrici')
   const tm = await getTranslations('marketplace')
   const tc = await getTranslations('common')
+  // «Usa nel preventivo» solo per chi può usare i Preventivi (Pro)
+  const supabase = await createClient()
+  const { data: quoteAccess } = await supabase.rpc('can_use_tool', { p_tool: 'preventivi' }).maybeSingle<{ allowed: boolean }>()
+  const canQuote = quoteAccess?.allowed === true
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -46,7 +51,7 @@ export default async function CalcolatriciPage() {
           </div>
         </div>
 
-        <CalcolatriciApp />
+        <CalcolatriciApp canQuote={canQuote} />
 
         <p className="mt-6 text-center text-xs leading-5 text-[var(--muted)]">{t('privacyNote')}</p>
       </main>

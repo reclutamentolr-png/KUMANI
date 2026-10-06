@@ -147,6 +147,7 @@ export async function saveMenuItem(input: {
   photoPath: string | null
   available: boolean
   isDailySpecial: boolean
+  inventoryProductId?: string | null
 }): Promise<MenuResult> {
   const g = await gate()
   if (!g.ok) return { success: false, message: g.message }
@@ -169,6 +170,11 @@ export async function saveMenuItem(input: {
     photo_path: photoPath,
     available: !!input.available,
     is_daily_special: !!input.isDailySpecial,
+    // Il trigger accetta solo prodotti dello stesso titolare del menu
+    inventory_product_id:
+      typeof input.inventoryProductId === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(input.inventoryProductId)
+        ? input.inventoryProductId
+        : null,
   }
 
   if (input.id) {

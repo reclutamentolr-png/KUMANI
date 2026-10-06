@@ -124,6 +124,35 @@ export async function uploadLandingPhoto(formData: FormData): Promise<{ success:
   return { success: true, path }
 }
 
+// Logo della Scheda attività copiato tra le foto della Landing (nuovo nome,
+// stesse regole del caricamento: jpeg/png/webp fino a 2 MB, max 40 file).
+// SVG o file troppo grandi non si importano.
+export async function importBusinessLogoToLanding(): Promise<{ path: string } | { error: string }> {
+  const g = await gate()
+  if (!g.ok) return { error: g.message }
+  const { data: profile } = await g.supabase.from('quote_issuer_profiles').select('logo_path').eq('user_id', g.userId).maybeSingle()
+  const logoPath = (profile?.logo_path as string | null | undefined) ?? null
+  if (!logoPath || !logoPath.startsWith(`${g.userId}/`)) return { error: 'noLogo' }
+
+  const service = getServiceClient()
+  const { data: blob, error: downloadError } = await service.storage.from('quote-logos-v2').download(logoPath)
+  if (downloadError || !blob) return { error: 'photoError' }
+  const allowed: Record<string, string> = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' }
+  // Tipo dal download, altrimenti dall'estensione del file
+  const byExt: Record<string, string> = { jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', webp: 'image/webp' }
+  const type = allowed[blob.type] ? blob.type : (byExt[logoPath.split('.').pop()?.toLowerCase() ?? ''] ?? '')
+  const ext = allowed[type]
+  if (!ext || blob.size > 2 * 1024 * 1024) return { error: 'photoError' }
+
+  const { data: files } = await service.storage.from('landing-photos').list(g.userId, { limit: 100 })
+  if ((files?.length ?? 0) >= 40) return { error: 'tooManyPhotos' }
+
+  const path = `${g.userId}/${randomBytes(10).toString('hex')}.${ext}`
+  const { error } = await service.storage.from('landing-photos').upload(path, Buffer.from(await blob.arrayBuffer()), { contentType: type, upsert: false })
+  if (error) return { error: 'photoError' }
+  return { path }
+}
+
 // ---------------------------------------------------------------------------
 // Testi con l'AI: dalle risposte a poche domande, una bozza di presentazione,
 // servizi, chi sono, metodo e descrizione per Google. Niente fatti inventati.

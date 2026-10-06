@@ -15,7 +15,7 @@ export async function loadMenuData(supabase: SupabaseClient, userId: string): Pr
     supabase.from('menu_categories').select('id, position, names').eq('menu_id', menu.id).order('position').order('created_at'),
     supabase
       .from('menu_items')
-      .select('id, category_id, position, name, names, descriptions, price, diet_tags, allergens, photo_path, available, is_daily_special')
+      .select('id, category_id, position, name, names, descriptions, price, diet_tags, allergens, photo_path, available, is_daily_special, inventory_product_id')
       .eq('menu_id', menu.id)
       .order('position')
       .order('created_at'),

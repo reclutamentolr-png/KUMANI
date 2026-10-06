@@ -59,14 +59,23 @@ function defaultForm(): DigitalReceiptFormData {
   }
 }
 
-export default function DigitalReceiptForm() {
+export default function DigitalReceiptForm({
+  initialData,
+  savedClients = [],
+}: {
+  // Campi già compilati (es. dal preventivo); gli altri restano quelli di default
+  initialData?: Partial<DigitalReceiptFormData>
+  // Nomi dei clienti salvati nei Preventivi, suggeriti nel campo destinatario
+  savedClients?: string[]
+} = {}) {
   const t = useTranslations('digitalReceipt')
+  const te = useTranslations('ecosystem')
   const router = useRouter()
   const supabase = createClient()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [receiptId] = useState(() => crypto.randomUUID())
-  const [form, setForm] = useState<DigitalReceiptFormData>(defaultForm)
+  const [form, setForm] = useState<DigitalReceiptFormData>(() => ({ ...defaultForm(), ...initialData }))
   const [photoUrl, setPhotoUrl] = useState<string | null>(null)
   const [photoPath, setPhotoPath] = useState<string | null>(null)
   const [uploadingPhoto, setUploadingPhoto] = useState(false)
@@ -214,8 +223,17 @@ export default function DigitalReceiptForm() {
             value={form.recipientName}
             onChange={(e) => setForm((prev) => ({ ...prev, recipientName: e.target.value }))}
             placeholder={t('recipientPlaceholder')}
+            list={savedClients.length > 0 ? 'receipt-saved-clients' : undefined}
+            title={savedClients.length > 0 ? te('receiptSavedClients') : undefined}
             className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
           />
+          {savedClients.length > 0 && (
+            <datalist id="receipt-saved-clients" aria-label={te('receiptSavedClients')}>
+              {savedClients.map((name) => (
+                <option key={name} value={name} />
+              ))}
+            </datalist>
+          )}
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">{t('dateField')}</label>

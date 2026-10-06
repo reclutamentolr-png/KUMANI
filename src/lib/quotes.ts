@@ -2,6 +2,18 @@ export interface QuoteItem {
   description: string
   quantity: number
   unitPrice: number
+  // Riga presa dal Magazzino (id di inventory_products): serve allo scarico
+  productId?: string
+}
+
+// Prodotto del Magazzino proposto nel preventivo (solo Pro)
+export interface QuoteInventoryProduct {
+  id: string
+  name: string
+  sku: string | null
+  unit: string
+  sale_price: number | null
+  stock: number
 }
 
 export interface QuoteFormData {

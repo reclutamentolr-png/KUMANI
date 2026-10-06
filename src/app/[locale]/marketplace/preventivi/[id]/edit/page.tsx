@@ -3,7 +3,7 @@ import { redirect, notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
 import { ArrowLeft, FileSpreadsheet } from 'lucide-react'
-import { hasActivePreventiviAccess } from '@/lib/quotes-server'
+import { hasActivePreventiviAccess, loadQuoteInventoryProducts } from '@/lib/quotes-server'
 import QuoteForm from '@/components/QuoteForm'
 import type { QuoteFormData } from '@/lib/quotes'
 
@@ -38,6 +38,8 @@ export default async function EditQuotePage({
     .select('*')
     .eq('user_id', user.id)
     .maybeSingle()
+
+  const inventoryProducts = await loadQuoteInventoryProducts(supabase, user.id)
 
   const logoUrl = profile?.logo_path
     ? supabase.storage.from('quote-logos-v2').getPublicUrl(profile.logo_path).data.publicUrl
@@ -78,7 +80,14 @@ export default async function EditQuotePage({
       </header>
 
       <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <QuoteForm issuer={profile || null} logoUrl={logoUrl} mode="edit" quoteId={quote.id} initialData={initialData} />
+        <QuoteForm
+          issuer={profile || null}
+          logoUrl={logoUrl}
+          mode="edit"
+          quoteId={quote.id}
+          initialData={initialData}
+          inventoryProducts={inventoryProducts ?? undefined}
+        />
       </main>
     </div>
   )

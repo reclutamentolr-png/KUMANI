@@ -20,7 +20,22 @@ export default async function MenuBuilderPage({ params }: { params: Promise<{ lo
   } = await supabase.auth.getUser()
   if (!user) redirect(`/${locale}/login`)
 
-  const [data, businessProfile] = await Promise.all([loadMenuData(supabase, user.id), getMyBusinessProfile(supabase, user.id)])
+  const [data, businessProfile, { data: inventoryAccess }] = await Promise.all([
+    loadMenuData(supabase, user.id),
+    getMyBusinessProfile(supabase, user.id),
+    supabase.rpc('can_use_tool', { p_tool: 'magazzino' }).maybeSingle<{ allowed: boolean }>(),
+  ])
+  // Prodotti del Magazzino da collegare ai piatti (solo se il Magazzino è nel piano)
+  const { data: inventoryRows } = inventoryAccess?.allowed
+    ? await supabase
+        .from('inventory_products')
+        .select('id, name, stock, unit')
+        .eq('owner_id', user.id)
+        .eq('is_active', true)
+        .order('name')
+        .limit(500)
+    : { data: null }
+  const inventoryProducts = (inventoryRows ?? []).map((p) => ({ id: p.id as string, name: p.name as string, stock: Number(p.stock), unit: (p.unit as string | null) ?? '' }))
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -47,7 +62,7 @@ export default async function MenuBuilderPage({ params }: { params: Promise<{ lo
             <p className="mt-2 text-white/70">{t('subtitle')}</p>
           </div>
         </div>
-        <MenuBuilder initial={data} siteUrl={SITE_URL} locale={locale} businessProfile={businessProfile} />
+        <MenuBuilder initial={data} siteUrl={SITE_URL} locale={locale} businessProfile={businessProfile} inventoryProducts={inventoryProducts} />
       </main>
     </div>
   )

@@ -2,14 +2,26 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
-import { ArrowLeft, FileSpreadsheet } from 'lucide-react'
-import { hasActivePreventiviAccess } from '@/lib/quotes-server'
+import { ArrowLeft, Calculator, FileSpreadsheet } from 'lucide-react'
+import { hasActivePreventiviAccess, loadQuoteInventoryProducts } from '@/lib/quotes-server'
 import QuoteForm from '@/components/QuoteForm'
 
-export default async function NewQuotePage({ searchParams }: { searchParams: Promise<{ from?: string }> }) {
+export default async function NewQuotePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ from?: string; line?: string; price?: string }>
+}) {
   const t = await getTranslations('preventivi')
-  const { from } = await searchParams
+  const te = await getTranslations('ecosystem')
+  const { from, line, price } = await searchParams
   const backSuffix = from === 'dashboard' ? '?from=dashboard' : ''
+
+  // Riga arrivata dalle Calcolatrici (?line=…&price=…)
+  const lineText = typeof line === 'string' ? line.trim().slice(0, 200) : ''
+  const linePrice = typeof price === 'string' ? Number(price.replace(',', '.')) : NaN
+  const initialLine = lineText
+    ? { description: lineText, unitPrice: Number.isFinite(linePrice) && linePrice >= 0 ? Math.round(linePrice * 100) / 100 : 0 }
+    : undefined
 
   const supabase = await createClient()
   const {
@@ -27,6 +39,8 @@ export default async function NewQuotePage({ searchParams }: { searchParams: Pro
     .select('*')
     .eq('user_id', user.id)
     .maybeSingle()
+
+  const inventoryProducts = await loadQuoteInventoryProducts(supabase, user.id)
 
   const logoUrl = profile?.logo_path
     ? supabase.storage.from('quote-logos-v2').getPublicUrl(profile.logo_path).data.publicUrl
@@ -51,7 +65,19 @@ export default async function NewQuotePage({ searchParams }: { searchParams: Pro
       </header>
 
       <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <QuoteForm issuer={profile || null} logoUrl={logoUrl} mode="create" />
+        {initialLine && (
+          <p className="mb-6 flex items-center gap-2 rounded-xl border border-[var(--gold)]/30 bg-[var(--gold-pale)] px-4 py-3 text-sm text-[var(--ink)]">
+            <Calculator className="h-4 w-4 shrink-0 text-[var(--gold)]" />
+            {te('quoteFromCalcBanner')}
+          </p>
+        )}
+        <QuoteForm
+          issuer={profile || null}
+          logoUrl={logoUrl}
+          mode="create"
+          inventoryProducts={inventoryProducts ?? undefined}
+          initialLine={initialLine}
+        />
       </main>
     </div>
   )

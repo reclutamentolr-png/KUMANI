@@ -63,6 +63,8 @@ export type MenuItem = {
   photo_path: string | null
   available: boolean
   is_daily_special: boolean
+  // Prodotto del Magazzino collegato (giacenza zero = esaurito)
+  inventory_product_id?: string | null
 }
 
 export type MenuCategory = {

@@ -1,12 +1,18 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import Link from '@/components/LocalizedLink'
-import { CheckCircle, LoaderCircle, XCircle, Plus, Trash2, Pencil, User } from 'lucide-react'
+import { CheckCircle, LoaderCircle, XCircle, Plus, Trash2, Pencil, User, Boxes, Search, X } from 'lucide-react'
 import { createQuote, updateQuote, listSavedClients } from '@/app/actions/quotes'
-import { emptyQuoteItem, computeQuoteTotal, type QuoteFormData, type SavedClientRow } from '@/lib/quotes'
+import {
+  emptyQuoteItem,
+  computeQuoteTotal,
+  type QuoteFormData,
+  type QuoteInventoryProduct,
+  type SavedClientRow,
+} from '@/lib/quotes'
 import { useFromDashboardSuffix } from '@/lib/useFromDashboard'
 import QuoteClientQuickEditModal from '@/components/QuoteClientQuickEditModal'
 
@@ -26,6 +32,10 @@ type Props = {
   mode: 'create' | 'edit'
   quoteId?: string
   initialData?: QuoteFormData
+  // Prodotti attivi del Magazzino: passati solo a chi ha il Pro
+  inventoryProducts?: QuoteInventoryProduct[]
+  // Prima riga già pronta (es. dalle Calcolatrici) su un modulo nuovo
+  initialLine?: { description: string; unitPrice: number }
 }
 
 function defaultForm(paymentInfo = ''): QuoteFormData {
@@ -46,14 +56,22 @@ function defaultForm(paymentInfo = ''): QuoteFormData {
   }
 }
 
-export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData }: Props) {
+export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData, inventoryProducts, initialLine }: Props) {
   const t = useTranslations('preventivi')
   const tb = useTranslations('businessProfile')
+  const te = useTranslations('ecosystem')
+  const tm = useTranslations('magazzino')
   const router = useRouter()
   const fromDashboardSuffix = useFromDashboardSuffix()
   const issuerPayment = issuer?.payment_info?.trim() ?? ''
 
-  const [form, setForm] = useState<QuoteFormData>(initialData || defaultForm(issuerPayment))
+  const [form, setForm] = useState<QuoteFormData>(() => {
+    if (initialData) return initialData
+    const base = defaultForm(issuerPayment)
+    return initialLine ? { ...base, items: [{ ...emptyQuoteItem(), ...initialLine }] } : base
+  })
+  const [pickerOpen, setPickerOpen] = useState(false)
+  const [pickerQuery, setPickerQuery] = useState('')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [savedClients, setSavedClients] = useState<SavedClientRow[]>([])
@@ -106,6 +124,24 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData 
       ...prev,
       items: prev.items.map((item, i) => (i === index ? { ...item, ...patch } : item)),
     }))
+  }
+
+  const pickerResults = useMemo(() => {
+    const q = pickerQuery.trim().toLowerCase()
+    const list = inventoryProducts ?? []
+    const found = q ? list.filter((p) => p.name.toLowerCase().includes(q) || (p.sku ?? '').toLowerCase().includes(q)) : list
+    return found.slice(0, 50)
+  }, [inventoryProducts, pickerQuery])
+
+  // Prodotto scelto: nuova riga collegata (o al posto dell'unica riga vuota)
+  const addProduct = (product: QuoteInventoryProduct) => {
+    const line = { description: product.name, quantity: 1, unitPrice: Number(product.sale_price) || 0, productId: product.id }
+    setForm((prev) => {
+      const onlyEmpty = prev.items.length === 1 && !prev.items[0].description.trim() && !prev.items[0].unitPrice
+      return { ...prev, items: onlyEmpty ? [line] : [...prev.items, line] }
+    })
+    setPickerOpen(false)
+    setPickerQuery('')
   }
 
   const addItem = () => setForm((prev) => ({ ...prev, items: [...prev.items, emptyQuoteItem()] }))
@@ -298,13 +334,21 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData 
           <div className="space-y-3">
             {form.items.map((item, index) => (
               <div key={index} className="grid grid-cols-12 gap-2 items-start">
-                <input
-                  type="text"
-                  value={item.description}
-                  onChange={(e) => updateItem(index, { description: e.target.value })}
-                  placeholder={t('itemDescriptionPlaceholder')}
-                  className="col-span-6 px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
-                />
+                <div className="col-span-6">
+                  <input
+                    type="text"
+                    value={item.description}
+                    onChange={(e) => updateItem(index, { description: e.target.value })}
+                    placeholder={t('itemDescriptionPlaceholder')}
+                    className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
+                  />
+                  {item.productId && (
+                    <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-[var(--gold-pale)] px-2 py-0.5 text-[11px] font-semibold text-[var(--ink)]">
+                      <Boxes className="w-3 h-3 text-[var(--gold)]" />
+                      {te('quoteFromInventoryBadge')}
+                    </span>
+                  )}
+                </div>
                 <input
                   type="number"
                   min={0}
@@ -334,14 +378,87 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData 
               </div>
             ))}
           </div>
-          <button
-            type="button"
-            onClick={addItem}
-            className="mt-3 flex items-center gap-1.5 text-sm font-medium text-[var(--gold)] hover:underline"
-          >
-            <Plus className="w-4 h-4" />
-            {t('addItemAction')}
-          </button>
+          <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2">
+            <button
+              type="button"
+              onClick={addItem}
+              className="flex items-center gap-1.5 text-sm font-medium text-[var(--gold)] hover:underline"
+            >
+              <Plus className="w-4 h-4" />
+              {t('addItemAction')}
+            </button>
+            {inventoryProducts && (
+              <button
+                type="button"
+                onClick={() => setPickerOpen((open) => !open)}
+                aria-expanded={pickerOpen}
+                className="flex items-center gap-1.5 text-sm font-medium text-[var(--gold)] hover:underline"
+              >
+                <Boxes className="w-4 h-4" />
+                {te('quoteFromInventory')}
+              </button>
+            )}
+          </div>
+
+          {inventoryProducts && pickerOpen && (
+            <div className="mt-3 rounded-xl border-2 border-[var(--gold)]/25 bg-[var(--background)] p-3">
+              <div className="flex items-center gap-2">
+                <div className="relative flex-1">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                  <input
+                    type="search"
+                    autoFocus
+                    value={pickerQuery}
+                    onChange={(e) => setPickerQuery(e.target.value)}
+                    placeholder={te('quoteInventorySearch')}
+                    aria-label={te('quoteInventorySearch')}
+                    className="w-full rounded-lg border-2 border-[var(--gold)]/20 bg-white py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setPickerOpen(false)}
+                  aria-label={t('cancelAction')}
+                  className="p-2 rounded-lg text-gray-400 hover:text-[var(--ink)] hover:bg-[var(--gold-pale)]"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+              {pickerResults.length === 0 ? (
+                <p className="mt-3 text-sm text-gray-500">{te('quoteInventoryEmpty')}</p>
+              ) : (
+                <ul className="mt-2 max-h-64 overflow-y-auto divide-y divide-[var(--gold)]/10">
+                  {pickerResults.map((product) => (
+                    <li key={product.id}>
+                      <button
+                        type="button"
+                        onClick={() => addProduct(product)}
+                        className="flex w-full items-center justify-between gap-3 rounded-lg px-2 py-2 text-left hover:bg-[var(--gold-pale)]"
+                      >
+                        <span className="min-w-0">
+                          <span className="block truncate text-sm font-medium text-[var(--ink)]">{product.name}</span>
+                          <span className="block text-xs text-gray-500">
+                            {[
+                              product.sku,
+                              te('quoteInventoryStock', {
+                                stock: Number(product.stock).toLocaleString(undefined, { maximumFractionDigits: 3 }),
+                                unit: tm.has(`unit_${product.unit}`) ? tm(`unit_${product.unit}`) : product.unit,
+                              }),
+                            ]
+                              .filter(Boolean)
+                              .join(' · ')}
+                          </span>
+                        </span>
+                        <span className="shrink-0 text-sm font-semibold text-[var(--ink)]">
+                          {(Number(product.sale_price) || 0).toLocaleString(undefined, { style: 'currency', currency: 'EUR' })}
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
 
           <div className="mt-6 flex justify-end">
             <div className="bg-[var(--gold-pale)] rounded-xl px-5 py-3 text-right">

@@ -55,6 +55,8 @@ import {
 import BusinessProfileImport from '@/components/businessProfile/BusinessProfileImport'
 import type { BusinessProfile } from '@/lib/businessProfile'
 
+export type MenuInventoryProduct = { id: string; name: string; stock: number; unit: string }
+
 type Result = { success: true; data: MenuData } | { success: false; message: string }
 
 type ItemDraft = {
@@ -70,6 +72,7 @@ type ItemDraft = {
   available: boolean
   isDailySpecial: boolean
   translateName: boolean
+  inventoryProductId: string | null
 }
 
 const inputClass = 'w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30'
@@ -79,13 +82,17 @@ export default function MenuBuilder({
   siteUrl,
   locale,
   businessProfile = null,
+  inventoryProducts = [],
 }: {
   initial: MenuData
   siteUrl: string
   locale: string
   businessProfile?: BusinessProfile | null
+  inventoryProducts?: MenuInventoryProduct[]
 }) {
   const t = useTranslations('menuBuilder')
+  const te = useTranslations('ecosystem')
+  const productName = (id: string | null | undefined) => (id ? inventoryProducts.find((p) => p.id === id)?.name ?? null : null)
   const tp = useTranslations('menuPublic')
   const [data, setData] = useState<MenuData>(initial)
   const [busy, setBusy] = useState(false)
@@ -170,6 +177,7 @@ export default function MenuBuilder({
             available: item.available,
             isDailySpecial: item.is_daily_special,
             translateName: Object.keys(item.names).length > 0,
+            inventoryProductId: item.inventory_product_id ?? null,
           }
         : {
             categoryId,
@@ -183,6 +191,7 @@ export default function MenuBuilder({
             available: true,
             isDailySpecial: false,
             translateName: false,
+            inventoryProductId: null,
           }
     )
 
@@ -242,6 +251,7 @@ export default function MenuBuilder({
           photoPath: itemDraft.photoPath,
           available: itemDraft.available,
           isDailySpecial: itemDraft.isDailySpecial,
+          inventoryProductId: itemDraft.inventoryProductId,
         }),
       () => setItemDraft(null)
     )
@@ -532,6 +542,13 @@ export default function MenuBuilder({
                         {tp('allergensLabel')}: {item.allergens.map((a) => tp(`allergen_${a}`)).join(', ')}
                       </p>
                     )}
+                    {productName(item.inventory_product_id) && (
+                      <p className="mt-1">
+                        <span className="rounded-full bg-sky-50 px-2 py-0.5 text-[10px] font-semibold text-sky-700">
+                          {te('menuInventoryLinked', { name: productName(item.inventory_product_id) ?? '' })}
+                        </span>
+                      </p>
+                    )}
                     {item.diet_tags.length > 0 && (
                       <p className="mt-1 flex flex-wrap gap-1">
                         {item.diet_tags.map((tag) => (
@@ -650,6 +667,26 @@ export default function MenuBuilder({
                 onChange={(e) => setItemDraft({ ...itemDraft, price: e.target.value })}
               />
             </div>
+            {/* Collegamento al Magazzino: giacenza zero = piatto esaurito */}
+            {inventoryProducts.length > 0 && (
+              <div>
+                <label className="mb-1 block text-xs font-semibold text-gray-600">{te('menuInventoryLabel')}</label>
+                <select
+                  className={inputClass}
+                  value={itemDraft.inventoryProductId ?? ''}
+                  onChange={(e) => setItemDraft({ ...itemDraft, inventoryProductId: e.target.value || null })}
+                >
+                  <option value="">{te('menuInventoryNone')}</option>
+                  {inventoryProducts.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.name} ({p.stock.toLocaleString(locale)}
+                      {p.unit ? ` ${p.unit}` : ''})
+                    </option>
+                  ))}
+                </select>
+                <p className="mt-1 text-xs text-gray-500">{te('menuInventoryHint')}</p>
+              </div>
+            )}
             <div>
               <p className="mb-1 text-xs font-semibold text-gray-600">{t('photo')}</p>
               <div className="flex items-center gap-3">

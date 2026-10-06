@@ -12,6 +12,7 @@ const MAX_STEPS = 5
 
 export default function DiscountCalculator() {
   const t = useTranslations('calcolatrici')
+  const te = useTranslations('ecosystem')
   const { money, percent } = useFormatters()
   const [mode, setMode] = useState<Mode>('percent')
   const [price, setPrice] = useState('')
@@ -106,7 +107,11 @@ export default function DiscountCalculator() {
         )}
       </Card>
 
-      {result ? <ResultPanel title={t('dsTitle')} lines={lines} /> : <EmptyResult />}
+      {result ? (
+        <ResultPanel title={t('dsTitle')} lines={lines} quote={{ description: te('calcLineDiscount'), price: result.finalPrice }} />
+      ) : (
+        <EmptyResult />
+      )}
     </div>
   )
 }
