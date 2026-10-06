@@ -5937,7 +5937,7 @@
     "ruleSpillover": "Una persona invitada por otro Kumano entra en tu estrella y activa la suscripción: +{points} puntos (Bonus Acogida)",
     "cycleNote": "Cada paquete se canjea una vez por ciclo: cuando los hayas canjeado todos, el ciclo vuelve a empezar.",
     "cycleProgress": "Paquetes canjeados en este ciclo: {done} de {total}. Cuando los canjees todos, el ciclo vuelve a empezar.",
-    "shareGiftMessage": "¡Te regalo un voucher KUMANI: usa el código {code} para activar gratis tu suscripción {plan} de un año!",
+    "shareGiftMessage": "¡Te regalo un voucher KUMANI: usa el código {code} para activar gratis tu suscripción {plan} de un año!\n\nPara ver bien qué es KUMANI, aquí tienes la presentación: {url}",
     "shareSaleMessage": "Aquí tienes tu voucher KUMANI: usa el código {code} para activar tu suscripción {plan} de un año.",
     "rulePass": "Una persona que invitaste compra un servicio suelto (Pase): los KU Points indicados para ese servicio",
     "ruleWelcomeGive": "A partir de tu {from}.º invitado activado, si la persona entra en la estrella de otro Kumano: con Base {baseKeep} puntos para ti y {base} para quien la acoge, con Pro {proKeep} para ti y {pro} para quien la acoge",

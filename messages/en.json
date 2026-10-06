@@ -5937,7 +5937,7 @@
     "ruleSpillover": "Someone invited by another Kumano is placed in your star and activates a subscription: +{points} points (Welcome Bonus)",
     "cycleNote": "Each pack can be redeemed once per cycle: once you have redeemed them all, the cycle starts again.",
     "cycleProgress": "Packs redeemed in this cycle: {done} of {total}. Once you redeem them all, the cycle starts again.",
-    "shareGiftMessage": "Here's a KUMANI voucher as a gift: use the code {code} to activate your one-year {plan} subscription for free!",
+    "shareGiftMessage": "Here's a KUMANI voucher as a gift: use the code {code} to activate your one-year {plan} subscription for free!\n\nTo see what KUMANI is all about, here is the presentation: {url}",
     "shareSaleMessage": "Here is your KUMANI voucher: use the code {code} to activate your one-year {plan} subscription.",
     "rulePass": "Someone you invited buys a single service (Pass): the KU Points set for that service",
     "ruleWelcomeGive": "From your {from}th activated invitee onwards, if the person joins another Kumano’s star: with Base {baseKeep} points to you and {base} to whoever welcomes them, with Pro {proKeep} to you and {pro} to whoever welcomes them",

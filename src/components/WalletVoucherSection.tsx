@@ -189,7 +189,7 @@ export default function WalletVoucherSection({
                             {copied === v.code ? tw('voucherCopied') : tw('voucherCopy')}
                           </button>
                           <a
-                            href={buildWhatsAppHref(t('shareGiftMessage', { code: v.code, plan }))}
+                            href={buildWhatsAppHref(t('shareGiftMessage', { code: v.code, plan, url: `${window.location.origin}/api/presentazione?lang=${locale}` }))}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-1 font-semibold text-emerald-700 hover:text-emerald-800"

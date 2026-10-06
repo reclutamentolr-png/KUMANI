@@ -5937,7 +5937,7 @@
     "ruleSpillover": "Eine von einem anderen Kumano eingeladene Person kommt in deinen Stern und aktiviert ein Abo: +{points} Punkte (Willkommensbonus)",
     "cycleNote": "Jedes Paket kann einmal pro Zyklus eingelöst werden: Wenn du alle eingelöst hast, beginnt der Zyklus von vorn.",
     "cycleProgress": "In diesem Zyklus eingelöste Pakete: {done} von {total}. Wenn du alle eingelöst hast, beginnt der Zyklus von vorn.",
-    "shareGiftMessage": "Ich schenke dir einen KUMANI-Voucher: Mit dem Code {code} aktivierst du kostenlos dein {plan}-Abo für ein Jahr!",
+    "shareGiftMessage": "Ich schenke dir einen KUMANI-Voucher: Mit dem Code {code} aktivierst du kostenlos dein {plan}-Abo für ein Jahr!\n\nDamit du siehst, was KUMANI ist, hier die Präsentation: {url}",
     "shareSaleMessage": "Hier ist dein KUMANI-Voucher: Mit dem Code {code} aktivierst du dein {plan}-Abo für ein Jahr.",
     "rulePass": "Eine von dir eingeladene Person kauft einen einzelnen Service (Pass): die für diesen Service festgelegten KU Points",
     "ruleWelcomeGive": "Ab der {from}. aktivierten eingeladenen Person, wenn sie in den Stern eines anderen Kumano kommt: bei Base {baseKeep} Punkte für dich und {base} für die aufnehmende Person, bei Pro {proKeep} für dich und {pro} für die aufnehmende Person",

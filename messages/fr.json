@@ -5937,7 +5937,7 @@
     "ruleSpillover": "Une personne invitée par un autre Kumano est placée dans votre étoile et active un abonnement : +{points} points (Bonus Accueil)",
     "cycleNote": "Chaque pack peut être échangé une fois par cycle : quand vous les avez tous échangés, le cycle recommence.",
     "cycleProgress": "Packs échangés dans ce cycle : {done} sur {total}. Quand vous les aurez tous échangés, le cycle recommencera.",
-    "shareGiftMessage": "Je vous offre un voucher KUMANI : utilisez le code {code} pour activer gratuitement votre abonnement {plan} d'un an !",
+    "shareGiftMessage": "Je vous offre un voucher KUMANI : utilisez le code {code} pour activer gratuitement votre abonnement {plan} d'un an !\n\nPour bien voir ce qu’est KUMANI, voici la présentation : {url}",
     "shareSaleMessage": "Voici votre voucher KUMANI : utilisez le code {code} pour activer votre abonnement {plan} d'un an.",
     "rulePass": "Une personne que vous avez invitée achète un service à l'unité (Pass) : les KU Points prévus pour ce service",
     "ruleWelcomeGive": "À partir de votre {from}e invité activé, si la personne entre dans l’étoile d’un autre Kumano : avec Base {baseKeep} points pour vous et {base} pour qui l’accueille, avec Pro {proKeep} pour vous et {pro} pour qui l’accueille",
