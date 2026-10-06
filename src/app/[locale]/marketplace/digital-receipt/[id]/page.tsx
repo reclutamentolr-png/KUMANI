@@ -10,6 +10,8 @@ import OfferMakerQR from '@/components/OfferMakerQR'
 import CopyLinkButton from '@/components/CopyLinkButton'
 import DigitalReceiptActions from '@/components/DigitalReceiptActions'
 import DigitalReceiptPdfButton from '@/components/DigitalReceiptPdfButton'
+import ReceiptSpendlyBox from '@/components/ecosystem/ReceiptSpendlyBox'
+import type { ReceiptSpendlyStatus } from '@/app/actions/ecosystem'
 
 export default async function DigitalReceiptDetailPage({
   params,
@@ -63,6 +65,8 @@ export default async function DigitalReceiptDetailPage({
     : receipt.confirmed_at
       ? 'bg-green-100 text-green-700'
       : 'bg-amber-100 text-amber-800'
+
+  const spendly = (((await supabase.rpc('receipt_spendly_status', { p_code: receipt.code })).data as ReceiptSpendlyStatus | null) ?? 'no_value')
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -126,6 +130,9 @@ export default async function DigitalReceiptDetailPage({
             showConfirmReturn={receipt.template === 'loan' && !!receipt.confirmed_at && !receipt.returned_at}
           />
         </div>
+
+        {/* Ricevuta con un importo pagato: l'entrata in Spendly con un tocco */}
+        {spendly !== 'no_value' && <ReceiptSpendlyBox code={receipt.code} initialStatus={spendly} />}
       </main>
     </div>
   )

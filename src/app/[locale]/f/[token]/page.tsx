@@ -7,6 +7,7 @@ import { Clock, Gift, PartyPopper, Star, Wallet } from 'lucide-react'
 import RememberFidelityCard from '@/components/fidelity/RememberFidelityCard'
 import FidelityContactForm from '@/components/fidelity/FidelityContactForm'
 import { getFidelityServiceClient } from '@/lib/fidelity-server'
+import { createClient } from '@/lib/supabase/server'
 import { FIDELITY_MEMBER_QR_PREFIX, effectiveStamps, isFutureDate, stampsExpireAt } from '@/lib/fidelity'
 
 type MemberRow = {
@@ -42,6 +43,10 @@ export default async function FidelityCardPage({
 
   const t = await getTranslations('fidelity')
   const locale = await getLocale()
+  // Kumano con l'accesso: la tessera si lega al suo account (RememberFidelityCard)
+  const {
+    data: { user },
+  } = await (await createClient()).auth.getUser()
   const { data: member } = await getFidelityServiceClient()
     .from('fidelity_members')
     .select(
@@ -144,9 +149,15 @@ export default async function FidelityCardPage({
           }}
         />
 
-        <Link href="/f" className="flex items-center justify-center gap-2 text-sm font-semibold text-[var(--gold-bright)]">
-          <Wallet className="h-4 w-4" /> {t('myCards')}
-        </Link>
+        {user ? (
+          <Link href="/wallet#fidelity" className="flex items-center justify-center gap-2 text-center text-sm font-semibold text-[var(--gold-bright)]">
+            <Wallet className="h-4 w-4 shrink-0" /> {t('savedInKumaniWallet')}
+          </Link>
+        ) : (
+          <Link href="/f" className="flex items-center justify-center gap-2 text-sm font-semibold text-[var(--gold-bright)]">
+            <Wallet className="h-4 w-4" /> {t('myCards')}
+          </Link>
+        )}
         <p className="text-center text-xs text-white/40">{t('poweredBy')}</p>
       </div>
     </div>

@@ -2757,7 +2757,12 @@
     "badgeBlackNote": "Vous êtes Kuman Black : vous recevez 1 bon toutes les {every} nouvelles activations. Merci de faire grandir la Communauté KUMANI !",
     "badgeConfirmedPoints": "KU Points confirmés",
     "badgePending": "+{count} en confirmation",
-    "badgePendingPoints": "+{count} en confirmation"
+    "badgePendingPoints": "+{count} en confirmation",
+    "fidelityTitle": "Vos cartes de fidélité",
+    "fidelityEmpty": "Quand un commerce vous donne une carte de fidélité Kumi Card, ouvrez-la après vous être connecté : vous la retrouverez ici, sur n’importe quel téléphone.",
+    "fidelityComplete": "Carte complète : retirez votre cadeau ({prize})",
+    "fidelityMissing": "{count, plural, one {Il manque # tampon} other {Il manque # tampons}} pour : {prize}",
+    "receiptsReceivedTitle": "Reçus que vous avez confirmés"
   },
   "rewards": {
     "title": "Catalogue de Récompenses",
@@ -3046,7 +3051,8 @@
     "deleteCardTitle": "Supprimer la Kumi Card de {business} ?",
     "deleteCardText": "{count, plural, =0 {La carte sera supprimée définitivement. Cette action est irréversible.} one {La carte, 1 client et tous ses tampons seront supprimés définitivement : le client ne verra plus sa carte. Cette action est irréversible.} other {La carte, # clients et tous leurs tampons seront supprimés définitivement : les clients ne verront plus leurs cartes. Cette action est irréversible.}}",
     "deleteCardConfirm": "Supprimer définitivement",
-    "deleting": "Suppression..."
+    "deleting": "Suppression...",
+    "savedInKumaniWallet": "Enregistrée aussi dans votre Wallet KUMANI"
   },
   "referralLanding": {
     "invalidTitle": "Code non valide",
@@ -6307,7 +6313,8 @@
     "untitled": "Sans titre",
     "guideLinkTitle": "Documents à télécharger",
     "guideLinkText": "Présentation officielle, règlements et autres documents KUMANI dans votre langue.",
-    "metaTitle": "Documents"
+    "metaTitle": "Documents",
+    "kind_receipt_received": "Reçus confirmés"
   },
   "flyers": {
     "cta": "Inscrivez-vous gratuitement sur",
@@ -9745,5 +9752,19 @@
     "error_notLoggedIn": "Connectez-vous pour activer l’essai.",
     "error_saveError": "Enregistrement impossible. Réessayez.",
     "error_error": "Impossible d’activer l’essai. Réessayez."
+  },
+  "ecosystem": {
+    "receiptSpendlyTitle": "Noter dans Spendly",
+    "receiptSpendlyHintExpense": "Ajoutez le montant de ce reçu à vos dépenses, sans le ressaisir.",
+    "receiptSpendlyHintIncome": "Ajoutez le montant de ce reçu à vos revenus, sans le ressaisir.",
+    "receiptSpendlyAddExpense": "Ajouter aux dépenses",
+    "receiptSpendlyAddIncome": "Ajouter aux revenus",
+    "receiptSpendlyAddedExpense": "C’est fait : vous le trouvez dans les dépenses variables de Spendly.",
+    "receiptSpendlyAddedIncome": "C’est fait : vous le trouvez dans les revenus de Spendly.",
+    "receiptSpendlyOpen": "Ouvrir Spendly",
+    "receiptSpendlyNoAccess": "Avec le plan Base, vous notez cette dépense dans Spendly en un geste.",
+    "receiptSpendlyDiscover": "Découvrir Spendly",
+    "receiptSpendlyLogin": "Vous avez un compte KUMANI ? Connectez-vous et notez cette dépense dans Spendly en un geste.",
+    "receiptSpendlyLoginCta": "Se connecter"
   }
 }

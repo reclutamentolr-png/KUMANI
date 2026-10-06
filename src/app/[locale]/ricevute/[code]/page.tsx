@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation'
 import type { ReceiptTemplate } from '@/lib/digitalReceipt'
 import DigitalReceiptPublicView from '@/components/DigitalReceiptPublicView'
 import PublicPageOffline from '@/components/PublicPageOffline'
+import ReceiptSpendlyBox from '@/components/ecosystem/ReceiptSpendlyBox'
+import type { ReceiptSpendlyStatus } from '@/app/actions/ecosystem'
 
 interface PublicReceiptRow {
   code: string
@@ -44,9 +46,24 @@ export default async function DigitalReceiptPublicPage({
     ? supabase.storage.from('receipt-photos-v2').getPublicUrl(data.photo_path).data.publicUrl
     : null
 
+  // Ricevuta con un importo pagato: chi ha l'accesso la segna in Spendly
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  const hasPayment = (data.declared_value ?? 0) > 0 && (data.template === 'private_sale' || data.template === 'declared_payment')
+  let spendly: ReceiptSpendlyStatus = 'no_value'
+  if (hasPayment) {
+    spendly = user ? (((await supabase.rpc('receipt_spendly_status', { p_code: code })).data as ReceiptSpendlyStatus | null) ?? 'no_value') : 'login'
+  }
+
   return (
     <div className="min-h-screen bg-[var(--background)]">
       <DigitalReceiptPublicView receipt={{ ...data, photo_url: photoUrl }} />
+      {spendly !== 'no_value' && (
+        <div className="mx-auto max-w-lg px-4 pb-12 sm:px-6">
+          <ReceiptSpendlyBox code={code} initialStatus={spendly} loginHref={`/login?next=/ricevute/${code}`} />
+        </div>
+      )}
     </div>
   )
 }

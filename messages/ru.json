@@ -2757,7 +2757,12 @@
     "badgeBlackNote": "Вы Kuman Black: вы получаете 1 ваучер за каждые {every} новых активаций. Спасибо, что развиваете Сообщество KUMANI!",
     "badgeConfirmedPoints": "Подтверждённые KU Points",
     "badgePending": "+{count} на подтверждении",
-    "badgePendingPoints": "+{count} на подтверждении"
+    "badgePendingPoints": "+{count} на подтверждении",
+    "fidelityTitle": "Ваши карты лояльности",
+    "fidelityEmpty": "Когда магазин даст вам карту лояльности Kumi Card, откройте её после входа в аккаунт: она будет здесь, на любом телефоне.",
+    "fidelityComplete": "Карта заполнена: получите подарок ({prize})",
+    "fidelityMissing": "{count, plural, one {Остался # штамп} few {Осталось # штампа} many {Осталось # штампов} other {Осталось # штампа}} до: {prize}",
+    "receiptsReceivedTitle": "Подтверждённые вами расписки"
   },
   "rewards": {
     "title": "Каталог призов",
@@ -3046,7 +3051,8 @@
     "deleteCardTitle": "Удалить Kumi Card заведения {business}?",
     "deleteCardText": "{count, plural, =0 {Карта будет удалена навсегда. Действие необратимо.} one {Навсегда удалятся карта, # клиент и все его штампы: клиент больше не увидит свою карту. Действие необратимо.} few {Навсегда удалятся карта, # клиента и все их штампы: клиенты больше не увидят свои карты. Действие необратимо.} many {Навсегда удалятся карта, # клиентов и все их штампы: клиенты больше не увидят свои карты. Действие необратимо.} other {Навсегда удалятся карта, # клиента и все их штампы: клиенты больше не увидят свои карты. Действие необратимо.}}",
     "deleteCardConfirm": "Удалить навсегда",
-    "deleting": "Удаление..."
+    "deleting": "Удаление...",
+    "savedInKumaniWallet": "Сохранена и в вашем Кошельке KUMANI"
   },
   "referralLanding": {
     "invalidTitle": "Неверный код",
@@ -6307,7 +6313,8 @@
     "untitled": "Без названия",
     "guideLinkTitle": "Документы для скачивания",
     "guideLinkText": "Официальная презентация, правила и другие материалы KUMANI на вашем языке.",
-    "metaTitle": "Документы"
+    "metaTitle": "Документы",
+    "kind_receipt_received": "Подтверждённые расписки"
   },
   "flyers": {
     "cta": "Бесплатная регистрация на",
@@ -9745,5 +9752,19 @@
     "error_notLoggedIn": "Войдите, чтобы включить пробный период.",
     "error_saveError": "Не удалось сохранить. Попробуйте ещё раз.",
     "error_error": "Не удалось включить пробный период. Попробуйте ещё раз."
+  },
+  "ecosystem": {
+    "receiptSpendlyTitle": "Записать в Spendly",
+    "receiptSpendlyHintExpense": "Добавьте сумму этой расписки в свои расходы, не вводя её заново.",
+    "receiptSpendlyHintIncome": "Добавьте сумму этой расписки в свои доходы, не вводя её заново.",
+    "receiptSpendlyAddExpense": "Добавить в расходы",
+    "receiptSpendlyAddIncome": "Добавить в доходы",
+    "receiptSpendlyAddedExpense": "Готово: запись — в переменных расходах Spendly.",
+    "receiptSpendlyAddedIncome": "Готово: запись — в доходах Spendly.",
+    "receiptSpendlyOpen": "Открыть Spendly",
+    "receiptSpendlyNoAccess": "С тарифом Base этот расход можно записать в Spendly одним касанием.",
+    "receiptSpendlyDiscover": "Узнать о Spendly",
+    "receiptSpendlyLogin": "Есть аккаунт KUMANI? Войдите и запишите этот расход в Spendly одним касанием.",
+    "receiptSpendlyLoginCta": "Войти"
   }
 }

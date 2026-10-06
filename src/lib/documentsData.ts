@@ -21,7 +21,7 @@ export async function listKumaniDocuments(supabase: SupabaseClient): Promise<Kum
 const LIMIT = 50
 
 export async function listPersonalDocuments(supabase: SupabaseClient, userId: string): Promise<PersonalDoc[]> {
-  const [quotes, receipts, cvs, coupons, events, vouchers] = await Promise.all([
+  const [quotes, receipts, cvs, coupons, events, vouchers, received] = await Promise.all([
     supabase.from('quotes').select('id, quote_number, client_name, created_at').eq('user_id', userId).order('created_at', { ascending: false }).limit(LIMIT),
     supabase.from('digital_receipts').select('id, object_name, recipient_name, created_at').eq('user_id', userId).order('created_at', { ascending: false }).limit(LIMIT),
     supabase.from('cvs').select('id, title, full_name, created_at').eq('user_id', userId).order('created_at', { ascending: false }).limit(LIMIT),
@@ -41,6 +41,8 @@ export async function listPersonalDocuments(supabase: SupabaseClient, userId: st
       .neq('status', 'revoked')
       .order('sold_at', { ascending: false })
       .limit(LIMIT),
+    // Ricevute fatte da altri e confermate con l'accesso
+    supabase.rpc('my_received_receipts', { p_limit: LIMIT }),
   ])
 
   const docs: PersonalDoc[] = []
@@ -60,6 +62,9 @@ export async function listPersonalDocuments(supabase: SupabaseClient, userId: st
   for (const v of vouchers.data ?? [])
     docs.push({ kind: 'voucher', id: v.id, title: v.code, subtitle: v.buyer_name || null, date: v.sold_at || v.created_at, href: `/wallet/voucher/${v.id}` })
 
-  for (const res of [quotes, receipts, cvs, coupons, events, vouchers]) if (res.error) console.error('[documenti] personali:', res.error.message)
+  for (const r of (received.data ?? []) as { code: string; object_name: string; delivery_date: string; confirmed_at: string | null }[])
+    docs.push({ kind: 'receipt_received', id: r.code, title: r.object_name || r.code, subtitle: null, date: r.confirmed_at || r.delivery_date, href: `/ricevute/${r.code}` })
+
+  for (const res of [quotes, receipts, cvs, coupons, events, vouchers, received]) if (res.error) console.error('[documenti] personali:', res.error.message)
   return docs
 }

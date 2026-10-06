@@ -2757,7 +2757,12 @@
     "badgeBlackNote": "You are Kuman Black: you get 1 voucher every {every} new activations. Thank you for growing the KUMANI Community!",
     "badgeConfirmedPoints": "Confirmed KU Points",
     "badgePending": "+{count} being confirmed",
-    "badgePendingPoints": "+{count} being confirmed"
+    "badgePendingPoints": "+{count} being confirmed",
+    "fidelityTitle": "Your loyalty cards",
+    "fidelityEmpty": "When a shop gives you a Kumi Card loyalty card, open it after logging in: you will find it here, on any phone.",
+    "fidelityComplete": "Card complete: collect your reward ({prize})",
+    "fidelityMissing": "{count, plural, one {# stamp} other {# stamps}} to go for: {prize}",
+    "receiptsReceivedTitle": "Receipts you confirmed"
   },
   "rewards": {
     "title": "Reward Catalog",
@@ -3046,7 +3051,8 @@
     "deleteCardTitle": "Delete the Kumi Card of {business}?",
     "deleteCardText": "{count, plural, =0 {The card will be permanently deleted. This can't be undone.} one {The card, 1 customer and all their stamps will be permanently deleted: the customer won't see their card anymore. This can't be undone.} other {The card, # customers and all their stamps will be permanently deleted: customers won't see their cards anymore. This can't be undone.}}",
     "deleteCardConfirm": "Delete permanently",
-    "deleting": "Deleting..."
+    "deleting": "Deleting...",
+    "savedInKumaniWallet": "Also saved in your KUMANI Wallet"
   },
   "referralLanding": {
     "invalidTitle": "Invalid code",
@@ -6307,7 +6313,8 @@
     "untitled": "Untitled",
     "guideLinkTitle": "Documents to download",
     "guideLinkText": "Official presentation, rules and other KUMANI materials in your language.",
-    "metaTitle": "Documents"
+    "metaTitle": "Documents",
+    "kind_receipt_received": "Confirmed receipts"
   },
   "flyers": {
     "cta": "Sign up for free at",
@@ -9745,5 +9752,19 @@
     "error_notLoggedIn": "Log in to start the trial.",
     "error_saveError": "Could not save. Please try again.",
     "error_error": "The trial could not be started. Please try again."
+  },
+  "ecosystem": {
+    "receiptSpendlyTitle": "Record it in Spendly",
+    "receiptSpendlyHintExpense": "Add the amount of this receipt to your expenses, without typing it again.",
+    "receiptSpendlyHintIncome": "Add the amount of this receipt to your income, without typing it again.",
+    "receiptSpendlyAddExpense": "Add to expenses",
+    "receiptSpendlyAddIncome": "Add to income",
+    "receiptSpendlyAddedExpense": "Done: you will find it among the variable expenses in Spendly.",
+    "receiptSpendlyAddedIncome": "Done: you will find it among the income in Spendly.",
+    "receiptSpendlyOpen": "Open Spendly",
+    "receiptSpendlyNoAccess": "With the Base plan you can record this expense in Spendly in one tap.",
+    "receiptSpendlyDiscover": "Discover Spendly",
+    "receiptSpendlyLogin": "Do you have a KUMANI account? Log in and record this expense in Spendly in one tap.",
+    "receiptSpendlyLoginCta": "Log in"
   }
 }

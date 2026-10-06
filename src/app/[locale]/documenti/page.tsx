@@ -40,12 +40,13 @@ export async function generateMetadata(): Promise<Metadata> {
 const KIND_ICONS: Record<PersonalDocKind, LucideIcon> = {
   quote: FileText,
   receipt: Receipt,
+  receipt_received: Receipt,
   cv: IdCard,
   coupon: TicketPercent,
   event: CalendarCheck,
   voucher: Ticket,
 }
-const KIND_ORDER: PersonalDocKind[] = ['quote', 'receipt', 'cv', 'coupon', 'event', 'voucher']
+const KIND_ORDER: PersonalDocKind[] = ['quote', 'receipt', 'receipt_received', 'cv', 'coupon', 'event', 'voucher']
 
 const mb = (n: number) => `${(n / 1024 / 1024).toFixed(1)} MB`
 

@@ -366,7 +366,15 @@ export async function claimFidelityCode(code: string, locale: string): Promise<C
 export async function rememberFidelityCard(token: string): Promise<void> {
   if (!/^[A-Za-z0-9_-]{16,64}$/.test(token)) return
   const { data } = await getFidelityServiceClient().from('fidelity_members').select('id').eq('token', token).maybeSingle()
-  if (data) await addWalletToken(token)
+  if (!data) return
+  await addWalletToken(token)
+  // Kumano con l'accesso: la tessera resta legata al suo account e la
+  // ritrova nel Wallet KUMANI su qualsiasi telefono
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (user) await supabase.rpc('link_fidelity_member', { p_token: token })
 }
 
 // ============================================================

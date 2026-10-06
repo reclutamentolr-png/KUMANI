@@ -20,6 +20,8 @@ import {
   Crown,
   Lock,
   HeartHandshake,
+  Stamp,
+  ChevronRight,
 } from 'lucide-react'
 import { getCurrentRank, rankProgress } from '@/lib/ranks'
 import { rankMissingText } from '@/components/RankRequirements'
@@ -41,9 +43,23 @@ import { featureConfig, type KuRenewalConfig } from '@/lib/ku'
 import { getMyAttendedCount, listMyPasses } from '@/app/actions/events'
 import { EVENT_TYPE_EMOJI, formatEventDate } from '@/lib/events'
 import AppHeader from '@/components/nav/AppHeader'
+import { effectiveStamps } from '@/lib/fidelity'
 import { getSessionProfile, getSessionUser, preloadSession } from '@/lib/session'
 
 const RANK_ICONS = { Star, Sparkles, Crown }
+
+type FidelityWalletCard = {
+  token: string
+  business_name: string
+  prize: string
+  stamps_needed: number
+  stamps_expire_days: number | null
+  stamps_count: number
+  last_stamp_at: string | null
+  rewards_redeemed: number
+  is_active: boolean
+}
+type ReceivedReceipt = { code: string; object_name: string; template: string; delivery_date: string; declared_value: number | null; confirmed_at: string | null }
 
 function WalletSection({
   id,
@@ -104,6 +120,8 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
     redemptions,
     [eventPasses, attendedCount],
     { data: plan },
+    { data: fidelityCards },
+    { data: receivedReceipts },
   ] = await Promise.all([
     // Sconto sul rinnovo pagato in KU Karma (Gestione KU → 4), solo se attivo
     loadKuWalletData(supabase, profile),
@@ -137,8 +155,13 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
     listMyRedemptions(),
     Promise.all([listMyPasses(), getMyAttendedCount()]),
     supabase.rpc('my_plan'),
+    // Ecosistema: le Kumi Card fedeltà dei negozi e le ricevute confermate
+    supabase.rpc('my_fidelity_cards'),
+    supabase.rpc('my_received_receipts', { p_limit: 5 }),
   ])
 
+  const fidelityList = (fidelityCards ?? []) as FidelityWalletCard[]
+  const receivedList = (receivedReceipts ?? []) as ReceivedReceipt[]
   const renewal = featureConfig<KuRenewalConfig>(kuWalletData.features, 'renewal_discount')
   const { ranks } = networkWallet
   const welcomeBonusPoints = (welcomeAwards ?? []).reduce((sum, row) => sum + (row.points ?? 0), 0)
@@ -244,6 +267,42 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
             </ul>
           </WalletSection>
         )}
+
+        {/* Kumi Card fedeltà dei negozi: legate all'account quando si aprono con l'accesso */}
+        <WalletSection id="fidelity" icon={<Stamp className="h-5 w-5 text-[var(--gold)]" />} title={t('fidelityTitle')}>
+          {fidelityList.length === 0 ? (
+            <p className="text-sm text-[var(--muted)]">{t('fidelityEmpty')}</p>
+          ) : (
+            <ul className="space-y-2">
+              {fidelityList.map((card) => {
+                const stamps = Math.min(effectiveStamps(card, card), card.stamps_needed)
+                const complete = stamps >= card.stamps_needed
+                return (
+                  <li key={card.token}>
+                    <Link
+                      href={`/f/${card.token}`}
+                      className="flex items-center gap-3 rounded-xl border border-[var(--gold)]/25 bg-white px-4 py-3 transition-colors hover:border-[var(--gold)]"
+                    >
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate font-semibold text-[var(--ink)]">{card.business_name}</span>
+                        <span className="block truncate text-xs text-[var(--muted)]">
+                          {complete ? t('fidelityComplete', { prize: card.prize }) : t('fidelityMissing', { count: card.stamps_needed - stamps, prize: card.prize })}
+                        </span>
+                        <span className="mt-1.5 block h-1.5 overflow-hidden rounded-full bg-gray-100">
+                          <span className="block h-full rounded-full bg-[var(--gold)]" style={{ width: `${(stamps / card.stamps_needed) * 100}%` }} />
+                        </span>
+                      </span>
+                      <span className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-bold ${complete ? 'bg-emerald-100 text-emerald-700' : 'bg-[var(--gold-pale)] text-[var(--ink)]'}`}>
+                        {stamps}/{card.stamps_needed}
+                      </span>
+                      <ChevronRight className="h-4 w-4 shrink-0 text-gray-400" />
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+        </WalletSection>
 
         {/* Pass degli eventi a cui sono iscritto (il QR si apre nella pagina dell'evento) */}
         <WalletSection icon={<PartyPopper className="h-5 w-5 text-[var(--gold)]" />} title={t('eventPassesTitle')}>
@@ -459,6 +518,25 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
                 <p className="text-2xl font-bold text-[var(--ink)]">{receiptsReturned}</p>
                 <p className="text-[10px] uppercase tracking-wide text-gray-400">{t('receiptsReturned')}</p>
               </div>
+            </div>
+          )}
+          {/* Ricevute fatte da altri che ho confermato con l'accesso */}
+          {receivedList.length > 0 && (
+            <div className="mb-4">
+              <p className="mb-2 text-xs font-bold uppercase tracking-wide text-gray-400">{t('receiptsReceivedTitle')}</p>
+              <ul className="space-y-1.5">
+                {receivedList.map((r) => (
+                  <li key={r.code}>
+                    <Link href={`/ricevute/${r.code}`} className="flex items-center justify-between gap-3 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm hover:border-[var(--gold)]">
+                      <span className="min-w-0 truncate font-medium text-[var(--ink)]">{r.object_name}</span>
+                      <span className="shrink-0 text-xs text-[var(--muted)]">
+                        {r.declared_value ? `€${r.declared_value} · ` : ''}
+                        {new Date(r.delivery_date).toLocaleDateString(locale)}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
           <Link

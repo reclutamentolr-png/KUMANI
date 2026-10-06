@@ -3,6 +3,7 @@ import Link from '@/components/LocalizedLink'
 import Logo from '@/components/Logo'
 import { ChevronRight, Wallet } from 'lucide-react'
 import { getFidelityServiceClient, readWalletTokens } from '@/lib/fidelity-server'
+import { createClient } from '@/lib/supabase/server'
 import { effectiveStamps } from '@/lib/fidelity'
 
 type WalletRow = {
@@ -15,7 +16,13 @@ type WalletRow = {
 // Portafoglio del cliente: tutte le Kumi Card ricordate da questo browser.
 export default async function FidelityWalletPage() {
   const t = await getTranslations('fidelity')
-  const tokens = await readWalletTokens()
+  // Tessere ricordate da questo browser + quelle legate all'account KUMANI
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  const linked = user ? (((await supabase.rpc('my_fidelity_cards')).data ?? []) as { token: string }[]).map((c) => c.token) : []
+  const tokens = [...new Set([...(await readWalletTokens()), ...linked])]
   const { data } = tokens.length
     ? await getFidelityServiceClient()
         .from('fidelity_members')

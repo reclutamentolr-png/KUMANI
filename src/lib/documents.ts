@@ -35,7 +35,7 @@ export function pickLocalized(value: Localized | null | undefined, locale: strin
   return value[locale as DocLocale] || value.it || Object.values(value).find(Boolean) || ''
 }
 
-export type PersonalDocKind = 'quote' | 'receipt' | 'cv' | 'coupon' | 'event' | 'voucher'
+export type PersonalDocKind = 'quote' | 'receipt' | 'receipt_received' | 'cv' | 'coupon' | 'event' | 'voucher'
 
 export type PersonalDoc = {
   kind: PersonalDocKind

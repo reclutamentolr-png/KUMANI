@@ -2757,7 +2757,12 @@
     "badgeBlackNote": "Du bist Kuman Black: Du bekommst 1 Gutschein alle {every} neuen Aktivierungen. Danke, dass du die KUMANI-Community wachsen lässt!",
     "badgeConfirmedPoints": "Bestätigte KU Points",
     "badgePending": "+{count} in Bestätigung",
-    "badgePendingPoints": "+{count} in Bestätigung"
+    "badgePendingPoints": "+{count} in Bestätigung",
+    "fidelityTitle": "Deine Treuekarten",
+    "fidelityEmpty": "Wenn dir ein Geschäft eine Kumi-Card-Treuekarte gibt, öffne sie nach der Anmeldung: Du findest sie dann hier, auf jedem Handy.",
+    "fidelityComplete": "Karte voll: Hol dir deine Prämie ({prize})",
+    "fidelityMissing": "{count, plural, one {Noch # Stempel} other {Noch # Stempel}} bis: {prize}",
+    "receiptsReceivedTitle": "Von dir bestätigte Belege"
   },
   "rewards": {
     "title": "Prämienkatalog",
@@ -3046,7 +3051,8 @@
     "deleteCardTitle": "Kumi Card von {business} löschen?",
     "deleteCardText": "{count, plural, =0 {Die Karte wird endgültig gelöscht. Das kann nicht rückgängig gemacht werden.} one {Die Karte, 1 Kunde und alle seine Stempel werden endgültig gelöscht: Der Kunde sieht seine Karte nicht mehr. Das kann nicht rückgängig gemacht werden.} other {Die Karte, # Kunden und alle ihre Stempel werden endgültig gelöscht: Die Kunden sehen ihre Karten nicht mehr. Das kann nicht rückgängig gemacht werden.}}",
     "deleteCardConfirm": "Endgültig löschen",
-    "deleting": "Wird gelöscht..."
+    "deleting": "Wird gelöscht...",
+    "savedInKumaniWallet": "Auch in deinem KUMANI-Wallet gespeichert"
   },
   "referralLanding": {
     "invalidTitle": "Ungültiger Code",
@@ -6307,7 +6313,8 @@
     "untitled": "Ohne Titel",
     "guideLinkTitle": "Dokumente zum Herunterladen",
     "guideLinkText": "Offizielle Präsentation, Regeln und weitere KUMANI-Unterlagen in deiner Sprache.",
-    "metaTitle": "Dokumente"
+    "metaTitle": "Dokumente",
+    "kind_receipt_received": "Bestätigte Belege"
   },
   "flyers": {
     "cta": "Kostenlos registrieren auf",
@@ -9745,5 +9752,19 @@
     "error_notLoggedIn": "Melde dich an, um den Test zu starten.",
     "error_saveError": "Speichern nicht möglich. Bitte erneut versuchen.",
     "error_error": "Der Test konnte nicht gestartet werden. Bitte erneut versuchen."
+  },
+  "ecosystem": {
+    "receiptSpendlyTitle": "In Spendly eintragen",
+    "receiptSpendlyHintExpense": "Füge den Betrag dieses Belegs zu deinen Ausgaben hinzu, ohne ihn neu einzutippen.",
+    "receiptSpendlyHintIncome": "Füge den Betrag dieses Belegs zu deinen Einnahmen hinzu, ohne ihn neu einzutippen.",
+    "receiptSpendlyAddExpense": "Zu den Ausgaben",
+    "receiptSpendlyAddIncome": "Zu den Einnahmen",
+    "receiptSpendlyAddedExpense": "Erledigt: Du findest ihn bei den variablen Ausgaben in Spendly.",
+    "receiptSpendlyAddedIncome": "Erledigt: Du findest ihn bei den Einnahmen in Spendly.",
+    "receiptSpendlyOpen": "Spendly öffnen",
+    "receiptSpendlyNoAccess": "Mit dem Base-Plan trägst du diese Ausgabe mit einem Tipp in Spendly ein.",
+    "receiptSpendlyDiscover": "Spendly entdecken",
+    "receiptSpendlyLogin": "Hast du ein KUMANI-Konto? Melde dich an und trage diese Ausgabe mit einem Tipp in Spendly ein.",
+    "receiptSpendlyLoginCta": "Anmelden"
   }
 }
