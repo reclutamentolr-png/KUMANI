@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import confetti from 'canvas-confetti'
 import { useTranslations } from 'next-intl'
 import { Gift, X } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
@@ -33,15 +32,20 @@ export default function RankAchievementModal({ rankKey, labelKey, color, voucher
   const star = STAR[color]
 
   useEffect(() => {
-    const end = Date.now() + 2500
-    const colors = [...star.confetti]
-    const frame = () => {
-      confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors })
-      confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors })
-      if (Date.now() < end) requestAnimationFrame(frame)
-    }
-    confetti({ particleCount: 90, spread: 100, origin: { y: 0.6 }, colors })
-    frame()
+    // canvas-confetti caricato solo quando si apre il modale
+    import('canvas-confetti')
+      .then(({ default: confetti }) => {
+        const end = Date.now() + 2500
+        const colors = [...star.confetti]
+        const frame = () => {
+          confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors })
+          confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors })
+          if (Date.now() < end) requestAnimationFrame(frame)
+        }
+        confetti({ particleCount: 90, spread: 100, origin: { y: 0.6 }, colors })
+        frame()
+      })
+      .catch(() => {})
   }, [star])
 
   const close = () => {

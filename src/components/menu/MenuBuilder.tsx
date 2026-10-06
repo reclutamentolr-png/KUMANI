@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import QRCode from 'qrcode'
 import {
   ArrowDown,
   ArrowUp,
@@ -125,7 +124,9 @@ export default function MenuBuilder({
 
   useEffect(() => {
     if (!publicUrl) return
-    QRCode.toDataURL(publicUrl, { width: 720, margin: 2 })
+    // qrcode caricato solo quando serve, fuori dal bundle iniziale
+    import('qrcode')
+      .then(({ default: QRCode }) => QRCode.toDataURL(publicUrl, { width: 720, margin: 2 }))
       .then(setQr)
       .catch(() => setQr(null))
   }, [publicUrl])

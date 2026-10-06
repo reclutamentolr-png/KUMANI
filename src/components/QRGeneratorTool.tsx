@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
-import QRCode from 'qrcode'
 import { Download } from 'lucide-react'
 
 type Props = {
@@ -21,6 +20,8 @@ export default function QRGeneratorTool({ referralCode, referralUrl, userName }:
   useEffect(() => {
     const generateQR = async () => {
       try {
+        // qrcode caricato solo quando serve, fuori dal bundle iniziale
+        const QRCode = (await import('qrcode')).default
         const url = await QRCode.toDataURL(referralUrl, {
           width: 400,
           margin: 2,

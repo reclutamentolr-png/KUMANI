@@ -1,5 +1,9 @@
 import { jsPDF } from 'jspdf'
 import type { QuoteItem } from '@/lib/quotes'
+import type { QuotePdfLabels } from '@/lib/pdfHelpers'
+
+// Helper senza jsPDF ri-esportati per chi li importava da qui
+export { buildQuotePdfLabels, loadImageAsDataUrl } from '@/lib/pdfHelpers'
 
 export type QuoteForPdf = {
   quote_number: number
@@ -31,22 +35,7 @@ export type IssuerForPdf = {
   phone: string | null
 } | null
 
-type PdfLabels = {
-  bigTitle: string
-  documentTitle: (n: number) => string
-  issueDateLabel: string
-  validUntilLabel: string
-  attentionLabel: string
-  vatLabel: string
-  descriptionHeader: string
-  quantityHeader: string
-  unitPriceHeader: string
-  totalHeader: string
-  totalLabel: string
-  paymentInfoLabel: string
-  notesLabel: string
-  pecLabel: string
-}
+type PdfLabels = QuotePdfLabels
 
 const INK: [number, number, number] = [23, 23, 23]
 const GOLD: [number, number, number] = [199, 161, 90]
@@ -289,40 +278,4 @@ export function generateQuotePdfBlob(params: {
   }
 
   return doc.output('blob')
-}
-
-/** Shared between the download button and the share/print flow so the two never drift apart. */
-export function buildQuotePdfLabels(t: (key: string, values?: Record<string, string | number>) => string): PdfLabels {
-  return {
-    bigTitle: t('pdfBigTitle'),
-    documentTitle: (n) => t('pdfDocumentTitle', { number: n }),
-    issueDateLabel: t('issueDateField'),
-    validUntilLabel: t('validUntilField'),
-    attentionLabel: t('pdfAttentionLabel'),
-    vatLabel: t('clientVatField'),
-    descriptionHeader: t('itemDescriptionHeader'),
-    quantityHeader: t('itemQuantityHeader'),
-    unitPriceHeader: t('itemPriceHeader'),
-    totalHeader: t('itemTotalHeader'),
-    totalLabel: t('totalLabel'),
-    paymentInfoLabel: t('paymentInfoField'),
-    notesLabel: t('notesField'),
-    pecLabel: t('pecField'),
-  }
-}
-
-export async function loadImageAsDataUrl(url: string): Promise<string | null> {
-  try {
-    const res = await fetch(url)
-    if (!res.ok) return null
-    const blob = await res.blob()
-    return await new Promise((resolve) => {
-      const reader = new FileReader()
-      reader.onloadend = () => resolve(reader.result as string)
-      reader.onerror = () => resolve(null)
-      reader.readAsDataURL(blob)
-    })
-  } catch {
-    return null
-  }
 }

@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { Download, FileText, LoaderCircle, Share2 } from 'lucide-react'
-import QRCode from 'qrcode'
 import FlyerCanvas, { type FlyerTexts } from './FlyerCanvas'
 import { flyerKey, type FlyerConfig, type FlyerPlan } from '@/lib/flyers'
 
@@ -25,7 +24,10 @@ export default function FlyerView({ config, plan, title, inviteUrl, screenshotLa
 
   const target = inviteUrl ?? 'https://kumani.io'
   useEffect(() => {
-    QRCode.toString(target, { type: 'svg', margin: 0, errorCorrectionLevel: 'M', color: { dark: '#171717', light: '#00000000' } }).then(setQrSvg)
+    // qrcode caricato solo quando serve, fuori dal bundle iniziale
+    import('qrcode')
+      .then(({ default: QRCode }) => QRCode.toString(target, { type: 'svg', margin: 0, errorCorrectionLevel: 'M', color: { dark: '#171717', light: '#00000000' } }))
+      .then(setQrSvg)
   }, [target])
 
   // L'anteprima si adatta alla larghezza della pagina

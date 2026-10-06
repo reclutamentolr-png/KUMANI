@@ -1,7 +1,6 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import jsQR from 'jsqr'
 import { useTranslations } from 'next-intl'
 import { X } from 'lucide-react'
 
@@ -20,6 +19,8 @@ export default function FidelityScanner({
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
   const rafRef = useRef<number | null>(null)
+  // jsqr caricato all'avvio della fotocamera, fuori dal bundle iniziale
+  const jsqrRef = useRef<typeof import('jsqr').default | null>(null)
   const [cameraError, setCameraError] = useState(false)
   const [manualCode, setManualCode] = useState('')
 
@@ -32,11 +33,17 @@ export default function FidelityScanner({
 
   useEffect(() => {
     let cancelled = false
+    import('jsqr')
+      .then((m) => {
+        jsqrRef.current = m.default
+      })
+      .catch(() => {})
 
     const tick = () => {
       const video = videoRef.current
       const canvas = canvasRef.current
-      if (!video || !canvas || video.readyState !== video.HAVE_ENOUGH_DATA) {
+      const jsQR = jsqrRef.current
+      if (!video || !canvas || !jsQR || video.readyState !== video.HAVE_ENOUGH_DATA) {
         rafRef.current = requestAnimationFrame(tick)
         return
       }

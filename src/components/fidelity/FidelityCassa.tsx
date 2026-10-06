@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import QRCode from 'qrcode'
 import { CheckCircle2, Gift, Lock, LogOut, Minus, Plus, ScanLine, Stamp, Star, AlertTriangle, RefreshCw } from 'lucide-react'
 import {
   applyFidelityToMember,
@@ -102,6 +101,8 @@ function CassaPanel({ card }: { card: CardInfo }) {
     // Nessun prefisso di lingua: il telefono del cliente apre la pagina
     // nella sua lingua (rilevamento automatico di next-intl).
     const url = `${window.location.origin}/f/c/${result.code}`
+    // qrcode caricato solo quando serve, fuori dal bundle iniziale
+    const QRCode = (await import('qrcode')).default
     const qr = await QRCode.toDataURL(url, { width: 520, margin: 1, errorCorrectionLevel: 'M' })
     setBusy(false)
     setView({ name: 'claim', kind, code: result.code, qr, expiresAt: new Date(result.expiresAt).getTime() })

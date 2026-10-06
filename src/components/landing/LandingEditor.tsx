@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
-import QRCode from 'qrcode'
 import {
   ArrowDown,
   ArrowUp,
@@ -195,6 +194,8 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
   }
 
   const downloadQr = async () => {
+    // qrcode caricato solo quando serve, fuori dal bundle iniziale
+    const QRCode = (await import('qrcode')).default
     const data = await QRCode.toDataURL(publicUrl, { width: 1024, margin: 2 })
     const a = document.createElement('a')
     a.href = data

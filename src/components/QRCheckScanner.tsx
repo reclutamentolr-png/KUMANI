@@ -1,7 +1,6 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import jsQR from 'jsqr'
 import { useTranslations } from 'next-intl'
 import {
   Camera,
@@ -104,6 +103,12 @@ export default function QRCheckScanner() {
   const streamRef = useRef<MediaStream | null>(null)
   const rafRef = useRef<number | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  // jsqr caricato alla prima scansione, fuori dal bundle iniziale
+  const jsqrRef = useRef<typeof import('jsqr').default | null>(null)
+  const loadJsQR = useCallback(async () => {
+    if (!jsqrRef.current) jsqrRef.current = (await import('jsqr')).default
+    return jsqrRef.current
+  }, [])
 
   const stopCamera = useCallback(() => {
     if (rafRef.current) cancelAnimationFrame(rafRef.current)
@@ -147,6 +152,7 @@ export default function QRCheckScanner() {
     setError(null)
     setResult(null)
     try {
+      loadJsQR().catch(() => {})
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: 'environment' },
       })
@@ -156,7 +162,8 @@ export default function QRCheckScanner() {
       function tick() {
         const video = videoRef.current
         const canvas = canvasRef.current
-        if (!video || !canvas || video.readyState !== video.HAVE_ENOUGH_DATA) {
+        const jsQR = jsqrRef.current
+        if (!video || !canvas || !jsQR || video.readyState !== video.HAVE_ENOUGH_DATA) {
           rafRef.current = requestAnimationFrame(tick)
           return
         }
@@ -188,7 +195,7 @@ export default function QRCheckScanner() {
     } catch {
       setError(t('allowCamera'))
     }
-  }, [t, analyze, stopCamera])
+  }, [t, analyze, stopCamera, loadJsQR])
 
   const handleFile = useCallback(
     (file: File) => {
@@ -196,10 +203,17 @@ export default function QRCheckScanner() {
       setResult(null)
       const img = new Image()
       const url = URL.createObjectURL(file)
-      img.onload = () => {
+      img.onload = async () => {
         const canvas = canvasRef.current
         URL.revokeObjectURL(url)
         if (!canvas) return
+        let jsQR: typeof import('jsqr').default
+        try {
+          jsQR = await loadJsQR()
+        } catch {
+          setError(t('noQRFound'))
+          return
+        }
         canvas.width = img.width
         canvas.height = img.height
         const ctx = canvas.getContext('2d')
@@ -219,7 +233,7 @@ export default function QRCheckScanner() {
       }
       img.src = url
     },
-    [analyze, t]
+    [analyze, t, loadJsQR]
   )
 
   const reset = () => {

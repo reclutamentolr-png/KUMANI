@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import QRCode from 'qrcode'
 import { Download } from 'lucide-react'
 
 type Props = {
@@ -28,12 +27,16 @@ export default function OfferMakerQR({
 
   useEffect(() => {
     let cancelled = false
-    QRCode.toDataURL(url, {
-      width: 320,
-      margin: 2,
-      color: { dark: fgColor, light: bgColor },
-      errorCorrectionLevel: 'H',
-    })
+    // qrcode caricato solo quando serve, fuori dal bundle iniziale
+    import('qrcode')
+      .then(({ default: QRCode }) =>
+        QRCode.toDataURL(url, {
+          width: 320,
+          margin: 2,
+          color: { dark: fgColor, light: bgColor },
+          errorCorrectionLevel: 'H',
+        })
+      )
       .then((dataUrl) => {
         if (!cancelled) {
           setQrDataUrl(dataUrl)

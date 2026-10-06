@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Check, Copy, Download, ExternalLink, FileText, LoaderCircle } from 'lucide-react'
-import QRCode from 'qrcode'
 import Link from '@/components/LocalizedLink'
 import BusinessCardCanvas, { BLEED, CARD_H, CARD_W, FULL_H, FULL_W, type CardDesign, type CardSide } from './BusinessCardCanvas'
 import { saveBusinessCard, type BusinessCardSettings } from '@/app/actions/businessCard'
@@ -36,7 +35,10 @@ export default function BusinessCardEditor({ cardUrl, cardPath, initial, hasPhon
   const back = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    QRCode.toString(cardUrl, { type: 'svg', margin: 1, errorCorrectionLevel: 'M', color: { dark: '#111111', light: '#00000000' } }).then(setQrSvg)
+    // qrcode caricato solo quando serve, fuori dal bundle iniziale
+    import('qrcode')
+      .then(({ default: QRCode }) => QRCode.toString(cardUrl, { type: 'svg', margin: 1, errorCorrectionLevel: 'M', color: { dark: '#111111', light: '#00000000' } }))
+      .then(setQrSvg)
   }, [cardUrl])
 
   useEffect(() => {

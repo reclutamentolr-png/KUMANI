@@ -4,21 +4,9 @@ import { parse, TYPE, type MessageFormatElement } from '@formatjs/icu-messagefor
 // con chiave a punti (es. "landingHome.heroTitle"), controllo dei
 // segnaposto e impronta del testo italiano.
 
-export const TRANSLATOR_LOCALES = ['en', 'fr', 'es', 'pt', 'de', 'ru'] as const
-export type TranslatorLocale = (typeof TRANSLATOR_LOCALES)[number]
-
-export const LOCALE_LABELS: Record<TranslatorLocale, string> = {
-  en: 'Inglese',
-  fr: 'Francese',
-  es: 'Spagnolo',
-  pt: 'Portoghese',
-  de: 'Tedesco',
-  ru: 'Russo',
-}
-
-export function isTranslatorLocale(value: string): value is TranslatorLocale {
-  return (TRANSLATOR_LOCALES as readonly string[]).includes(value)
-}
+// Costanti senza parser in translationLocales.ts (le usano anche i
+// componenti client); qui ri-esportate per chi le importava da questo file
+export { LOCALE_LABELS, SECTION_LABELS, TRANSLATOR_LOCALES, isTranslatorLocale, type TranslatorLocale } from '@/lib/translationLocales'
 
 type MessageTree = { [key: string]: string | MessageTree }
 
@@ -86,96 +74,4 @@ export function checkTranslation(italian: string, value: string): TranslationChe
   const extra = mine.filter((p) => !expected.includes(p))
   if (missing.length || extra.length) return { ok: false, reason: 'placeholders', missing, extra }
   return { ok: true }
-}
-
-// Nomi comprensibili delle sezioni del sito (gli altri si mostrano così come sono)
-export const SECTION_LABELS: Record<string, string> = {
-  common: 'Testi comuni (pulsanti, errori…)',
-  landingHome: 'Homepage',
-  authRegister: 'Registrazione',
-  auth: 'Accesso',
-  dashboard: 'Dashboard',
-  marketplace: 'Ecosistema: nomi e descrizioni dei servizi',
-  aboutPage: 'Chi siamo',
-  contactPage: 'Contatti',
-  errorPages: 'Pagine di errore',
-  billingPage: 'Abbonamento e pagamenti',
-  plans: 'Piani Base e Pro',
-  proArea: 'Area Professionisti',
-  wallet: 'Wallet',
-  rewards: 'Premi',
-  kuRewards: 'KU Karma',
-  voucherCard: 'Voucher',
-  toolPass: 'Pass dei singoli servizi',
-  toolTiers: 'Dashboard: servizi in fasce Gratis / Base / Pro',
-  share: 'Pulsante Condividi… (menu del telefono)',
-  guides: 'Centro guide (/guida): testi delle pagine',
-  tour: 'Tour della dashboard al primo accesso',
-  jobs: 'Trova Lavoro (ricerca offerte di lavoro)',
-  referralLanding: 'Pagina di invito',
-  toolShare: 'Condivisione dei servizi',
-  adminMessage: 'Messaggi dello Staff',
-  profileLock: 'Profilo e modifiche dei dati',
-  accountDeletion: 'Cancellazione account',
-  passwordChange: 'Profilo: cambio password',
-  passwordEmail: 'Email: avviso di password cambiata',
-  pushSettings: 'Profilo: notifiche push',
-  pushNotifications: 'Testi delle notifiche push',
-  pushInvite: 'Dashboard: invito ad attivare le notifiche',
-  fincheck: 'FinCheck (test di educazione finanziaria e check-up del bilancio)',
-  businessCard: 'Biglietto da visita (Documenti e pagina del QR)',
-  seo: 'Google: titoli e descrizioni del sito',
-  toolSeo: 'Google: testi delle pagine dei servizi',
-  maintenanceScreen: 'Schermata di manutenzione',
-  renewalEmail: 'Email: promemoria del rinnovo',
-  marketingConsent: 'Profilo: consenso a novità e offerte',
-  lateSponsor: 'Invito indicato dopo la registrazione',
-  verification: 'Verifica identità',
-  agenda: 'Agenda (prossimi giorni)',
-  chat: 'Messaggi della Bacheca',
-  qrGenerator: 'QR Code',
-  qrCodePro: 'QR Code PRO',
-  whatsappPage: 'Messaggi WhatsApp',
-  memolife: 'MemoLife',
-  neurobalance: 'NeuroBalance',
-  mandala: 'Mandala',
-  spotlight: 'Kumano del Giorno',
-  spotlightHome: 'Kumano del Giorno (homepage)',
-  aureya: 'Aureya',
-  magazzino: 'Magazzino PRO',
-  timebank: 'Banca del Tempo',
-  verifoto: 'VeriFoto',
-  svat: 'SVAT',
-  offermaker: 'OfferMaker',
-  lifeCalendar: 'Life Calendar',
-  garage: 'Kumani Garage',
-  reviews: 'Recensioni',
-  catalog: 'Catalogo servizi',
-  findo: 'Findo',
-  digitalReceipt: 'Ricevute digitali',
-  spendly: 'Spendly',
-  preventivi: 'Preventivi',
-  kumaniCv: 'KUMANI CV',
-  fidelity: 'Kumi Card (fidelity)',
-  affinity: 'Affinity',
-  menuBuilder: 'KUMANI Menu (gestione)',
-  menuPublic: 'KUMANI Menu (pagina pubblica)',
-  landingEditor: 'Landing Page (gestione)',
-  landingPublic: 'Landing Page (pagina pubblica)',
-  veritas: 'Veritas',
-  convivio: 'Kordata',
-  travel: 'KUMANI Travel',
-  events: 'KUMANI Events',
-  eventsHome: 'KUMANI Events (homepage)',
-  eventsOrganizer: 'KUMANI Events (organizzatori)',
-  mosaic: 'Mosaic',
-  fabula: 'Fabula',
-  checkmail: 'CheckMail',
-  oxygen: 'OXYGEN',
-  antitruffa: 'Manuale Anti-Truffa (condivisione)',
-  documentoSicuro: 'Documento Sicuro',
-  verificaIban: 'Verifica IBAN',
-  firmaEmail: 'Firma Email',
-  calcolatrici: 'Calcolatrici PRO',
-  focus: 'KUMANI Focus',
 }

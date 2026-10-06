@@ -109,17 +109,8 @@ export function getCvPdfLabels(locale: string) {
   return CV_PDF_LABELS[locale] || CV_PDF_LABELS.it
 }
 
-export async function loadInterFontBase64(): Promise<string> {
-  const res = await fetch('/fonts/inter/Inter-Regular.ttf')
-  const buffer = await res.arrayBuffer()
-  let binary = ''
-  const bytes = new Uint8Array(buffer)
-  const chunkSize = 0x8000
-  for (let i = 0; i < bytes.length; i += chunkSize) {
-    binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize))
-  }
-  return btoa(binary)
-}
+// Helper senza jsPDF ri-esportato per chi lo importava da qui
+export { loadInterFontBase64 } from '@/lib/pdfHelpers'
 
 const INK: [number, number, number] = [23, 23, 23]
 const GOLD: [number, number, number] = [199, 161, 90]

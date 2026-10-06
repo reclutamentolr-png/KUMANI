@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
-import { jsPDF } from 'jspdf'
 import { Download, LoaderCircle } from 'lucide-react'
 
 type Coupon = {
@@ -21,9 +20,11 @@ export default function CouponPdfButton({ coupon }: { coupon: Coupon }) {
   const locale = useLocale()
   const [generating, setGenerating] = useState(false)
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     setGenerating(true)
     try {
+      // jsPDF solo al clic, fuori dal bundle iniziale
+      const { jsPDF } = await import('jspdf')
       const width = 600
       const height = 300
       const margin = 40

@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { Download, LoaderCircle } from 'lucide-react'
-import { generateQuotePdfBlob, loadImageAsDataUrl, buildQuotePdfLabels, type QuoteForPdf, type IssuerForPdf } from '@/lib/quotePdf'
+import type { QuoteForPdf, IssuerForPdf } from '@/lib/quotePdf'
+import { loadImageAsDataUrl, buildQuotePdfLabels } from '@/lib/pdfHelpers'
 
 type Props = {
   quote: QuoteForPdf
@@ -33,6 +34,8 @@ export default function QuotePdfButton({ quote, issuer, logoUrl }: Props) {
   const handleDownload = async () => {
     setGenerating(true)
     try {
+      // jsPDF solo al clic, fuori dal bundle iniziale
+      const { generateQuotePdfBlob } = await import('@/lib/quotePdf')
       const logoDataUrl = logoUrl ? await loadImageAsDataUrl(logoUrl) : null
       const blob = generateQuotePdfBlob({
         quote,

@@ -32,7 +32,7 @@ import {
   type AdminTranslator,
   type TranslationChange,
 } from '@/app/actions/translations'
-import { LOCALE_LABELS, SECTION_LABELS, TRANSLATOR_LOCALES, isTranslatorLocale } from '@/lib/translationKeys'
+import { LOCALE_LABELS, SECTION_LABELS, TRANSLATOR_LOCALES, isTranslatorLocale } from '@/lib/translationLocales'
 import ShareCredentials from '@/components/admin/ShareCredentials'
 
 type Tab = 'translators' | 'changes'

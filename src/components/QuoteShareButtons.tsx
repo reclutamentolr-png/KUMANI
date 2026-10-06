@@ -3,13 +3,8 @@
 import { useState, useEffect } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { Share2, MessageCircle, Mail, Printer, LoaderCircle } from 'lucide-react'
-import {
-  generateQuotePdfBlob,
-  loadImageAsDataUrl,
-  buildQuotePdfLabels,
-  type QuoteForPdf,
-  type IssuerForPdf,
-} from '@/lib/quotePdf'
+import type { QuoteForPdf, IssuerForPdf } from '@/lib/quotePdf'
+import { loadImageAsDataUrl, buildQuotePdfLabels } from '@/lib/pdfHelpers'
 
 type Props = {
   quote: QuoteForPdf
@@ -26,6 +21,8 @@ export default function QuoteShareButtons({ quote, issuer, logoUrl }: Props) {
   const formatCurrency = (n: number) => n.toLocaleString(locale, { style: 'currency', currency: 'EUR' })
 
   const buildBlob = async (): Promise<Blob> => {
+    // jsPDF solo al clic, fuori dal bundle iniziale
+    const { generateQuotePdfBlob } = await import('@/lib/quotePdf')
     const logoDataUrl = logoUrl ? await loadImageAsDataUrl(logoUrl) : null
     return generateQuotePdfBlob({
       quote,

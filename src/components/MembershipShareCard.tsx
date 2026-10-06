@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import QRCode from 'qrcode'
 import { Check, Copy, Download, MessageCircle, RotateCcw, Share2, X } from 'lucide-react'
 
 type Props = {
@@ -127,7 +126,11 @@ export default function MembershipShareCard({ firstName, lastName, memberId, pla
       })
     Promise.all([
       load('/icon-512.png').catch(() => null),
-      QRCode.toDataURL(shareUrl, { width: 600, margin: 0, errorCorrectionLevel: 'M' }).then(load).catch(() => null),
+      // qrcode caricato solo quando serve, fuori dal bundle iniziale
+      import('qrcode')
+        .then(({ default: QRCode }) => QRCode.toDataURL(shareUrl, { width: 600, margin: 0, errorCorrectionLevel: 'M' }))
+        .then(load)
+        .catch(() => null),
     ]).then(([logo, qr]) => {
       if (cancelled) return
       assets.current = { logo, qr }

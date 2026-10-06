@@ -3,8 +3,7 @@
 import { useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { Download, LoaderCircle } from 'lucide-react'
-import { generateCatalogPdf } from '@/lib/catalogPdf'
-import { loadInterFontBase64 } from '@/lib/cvPdf'
+import { loadInterFontBase64 } from '@/lib/pdfHelpers'
 import type { Catalog } from '@/lib/catalog-server'
 
 // Immagine del sito come data URL per il PDF (null se non si carica: la
@@ -34,7 +33,13 @@ export default function CatalogPdfButton({ catalog, variant = 'gold' }: { catalo
     setBusy(true)
     setError(false)
     try {
-      const [font, cover, logo] = await Promise.all([loadInterFontBase64(), toDataUrl('/catalog/cover.jpg'), toDataUrl('/deck/logo.png')])
+      // jsPDF solo al clic, fuori dal bundle iniziale
+      const [{ generateCatalogPdf }, font, cover, logo] = await Promise.all([
+        import('@/lib/catalogPdf'),
+        loadInterFontBase64(),
+        toDataUrl('/catalog/cover.jpg'),
+        toDataUrl('/deck/logo.png'),
+      ])
       const date = new Date().toLocaleDateString(locale, { month: 'long', year: 'numeric' })
       const blob = generateCatalogPdf(
         catalog,

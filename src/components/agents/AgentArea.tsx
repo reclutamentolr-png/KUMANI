@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState, useSyncExternalStore } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import QRCode from 'qrcode'
 import {
   Check,
   Copy,
@@ -149,7 +148,9 @@ function LinkCard({ agent }: { agent: AgentOverview['agent'] }) {
 
   useEffect(() => {
     let alive = true
-    QRCode.toDataURL(agent.link, { width: 480, margin: 2, errorCorrectionLevel: 'M', color: { dark: '#171717', light: '#ffffff' } })
+    // qrcode caricato solo quando serve, fuori dal bundle iniziale
+    import('qrcode')
+      .then(({ default: QRCode }) => QRCode.toDataURL(agent.link, { width: 480, margin: 2, errorCorrectionLevel: 'M', color: { dark: '#171717', light: '#ffffff' } }))
       .then((url) => {
         if (alive) setQr(url)
       })

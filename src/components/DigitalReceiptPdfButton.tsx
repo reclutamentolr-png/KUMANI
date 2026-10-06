@@ -2,8 +2,6 @@
 
 import { useState } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
-import { jsPDF } from 'jspdf'
-import QRCode from 'qrcode'
 import { Download, LoaderCircle } from 'lucide-react'
 import type { ReceiptTemplate } from '@/lib/digitalReceipt'
 
@@ -63,6 +61,8 @@ export default function DigitalReceiptPdfButton({ receipt, receiptUrl, photoUrl,
   const handleDownload = async () => {
     setGenerating(true)
     try {
+      // jsPDF e qrcode solo al clic, fuori dal bundle iniziale
+      const [{ jsPDF }, QRCode] = await Promise.all([import('jspdf'), import('qrcode').then((m) => m.default)])
       const [qrDataUrl, photoDataUrl] = await Promise.all([
         QRCode.toDataURL(receiptUrl, { width: 240, margin: 1, errorCorrectionLevel: 'H' }),
         photoUrl ? loadImageAsDataUrl(photoUrl) : Promise.resolve(null),
