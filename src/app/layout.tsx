@@ -1,4 +1,5 @@
 import { SITE_URL } from '@/lib/siteUrl'
+import { CLIENT_NAMESPACES } from '@/i18n/clientNamespaces.generated';
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from 'next-intl';
@@ -87,8 +88,11 @@ type RootLayoutProps = {
 
 export default async function RootLayout({ children }: RootLayoutProps) {
   const locale = await getLocale();
-  // I testi per Google delle pagine dei servizi servono solo sul server
-  const messages = Object.fromEntries(Object.entries(await getMessages()).filter(([key]) => key !== 'toolSeo'));
+  // Al browser vanno solo i testi usati dai componenti con useTranslations
+  // (elenco generato da scripts/client-namespaces.mjs): gli altri servono
+  // solo sul server
+  const allMessages = await getMessages();
+  const messages = Object.fromEntries(CLIENT_NAMESPACES.filter((key) => key in allMessages).map((key) => [key, allMessages[key]]));
   const enabledLocales = await getEnabledLocales();
 
   return (
