@@ -3,7 +3,7 @@ import type { MyProfile } from '@/lib/myProfile'
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import { after } from 'next/server'
 import { isActiveSubscription } from './subscriptionGate'
-import { fetchDirectSponsored } from './directAffiliates'
+import { fetchDirectSponsored, type SponsoredProfile } from './directAffiliates'
 import { getCurrentRank, getNewlyAchievedRank } from './ranks'
 import { getMyNetworkWallet } from './networkWallet'
 
@@ -33,58 +33,37 @@ export async function getDashboardNetworkData(
   // dopo l'altro come prima, ma in parallelo alle letture invece che dopo.
   const claims = claimsMode === 'inline' ? claimNetworkBonuses(supabase) : Promise.resolve()
 
-  // Letture indipendenti tutte insieme: nodo matrice dell'utente, i propri
-  // discendenti (nome e stato attivo; cognome e codice solo dei propri
-  // invitati diretti, per gli altri il codice mascherato), lo sponsor (il KUMI) e
-  // gli invitati diretti.
-  const [{ data: userNode }, { data: downlineRows, error: matrixError }, { data: sponsorData }, directSponsored, wallet, receivedRows, { data: achievementRows }] = await Promise.all([
-    tree ? supabase.from('matrix_nodes').select('*').eq('user_id', user.id).single() : Promise.resolve({ data: null, error: null }),
-    tree ? supabase.rpc('get_my_downline') : Promise.resolve({ data: null, error: null }),
+  // Letture indipendenti tutte insieme: nodo matrice dell'utente, la stella
+  // (i Kumani attivi fino al 5° livello; cognome e codice solo dei propri
+  // invitati diretti, per gli altri il codice mascherato) con i numeri della
+  // rete contati dal database, lo sponsor (il KUMI) e gli invitati diretti.
+  // Senza albero (dashboard e Community) bastano i conteggi del riepilogo.
+  const [{ data: userNode }, treeData, { data: sponsorData }, directData, wallet, { data: achievementRows }] = await Promise.all([
+    tree
+      ? supabase.from('matrix_nodes').select('id, parent_id, path, level, position, depth, created_at').eq('user_id', user.id).maybeSingle<MatrixNodeRow>()
+      : Promise.resolve({ data: null, error: null }),
+    tree ? loadDownlineTree(supabase) : Promise.resolve(null),
     supabase
       .rpc('get_my_sponsor')
       .maybeSingle<{ first_name: string | null; last_name: string | null; referral_code: string | null }>(),
-    fetchDirectSponsored(supabase),
+    tree ? fetchDirectSponsored(supabase).then((list) => ({ list, summary: null })) : loadNetworkSummary(supabase),
     getMyNetworkWallet(supabase),
-    // Ricevuti dalla community (nei propri 5 posti, invitati da altri): con
-    // l'albero si ricavano da lì, altrimenti li conta il database
-    tree
-      ? Promise.resolve(null)
-      : supabase
-          .rpc('my_received_kumani')
-          .then(({ data, error }) => (error ? [] : ((data ?? []) as { first_name: string | null; joined_at: string }[]))),
     // Qualifiche raggiunte (il database le ricalcola e dà i voucher premio)
     supabase.rpc('my_rank_achievements'),
   ])
   const profile = await profileInput
-  const downlineData = ((downlineRows ?? []) as Array<{
-    id: string
-    user_id: string
-    parent_id: string | null
-    path: string
-    level: number
-    position: number
-    depth: number
-    created_at: string
-    first_name: string | null
-    is_active: boolean
-    // Solo dei propri invitati diretti (vedi 20261221100000_downline_star_navigation.sql)
-    last_name?: string | null
-    referral_code?: string | null
-    masked_code?: string | null
-    is_my_direct?: boolean
-    sponsored_by_parent?: boolean
-  }>).map((node) => ({ ...node, first_name: node.first_name ?? undefined }))
-
-  const downlineError = matrixError
+  const downlineData = (treeData?.rows ?? []).map((node) => ({ ...node, first_name: node.first_name ?? undefined }))
+  const downlineError = treeData?.error ?? null
+  const directSponsored = directData.list
 
   // Solo chi ha un abbonamento attivo appare visivamente nell'albero della
   // matrice: chi si registra ma non attiva l'abbonamento resta comunque
   // posizionato nella struttura reale (per lo spillover), ma non è mostrato
   // qui — appare invece nella lista "Non ancora KUMANI".
-  const activeDownlineForTree = (downlineData || []).filter((node) => node.is_active)
+  const activeDownlineForTree = downlineData.filter((node) => node.is_active)
 
   // Costruisci il rootNode
-  const correctRootId = userNode?.id || (downlineData && downlineData.length > 0 ? downlineData[0].parent_id : `root-${user.id}`)
+  const correctRootId = userNode?.id || downlineData[0]?.parent_id || `root-${user.id}`
   const rootNode = {
     id: correctRootId,
     user_id: user.id,
@@ -100,9 +79,11 @@ export async function getDashboardNetworkData(
     referral_code: profile?.referral_code ?? undefined,
     country_code: profile?.country_code ?? undefined,
   }
+  const userNodeId = userNode?.id
 
-  // Statistiche rapide
-  const totalDownline = downlineData?.length || 0
+  // Statistiche rapide (su tutta la discendenza, attivi e no): di norma le
+  // conta il database (get_my_network_totals); se la funzione manca si
+  // ricavano dall'elenco completo come prima.
   // matrix_nodes.depth is absolute (from the global matrix root), not
   // relative to the viewed user — anyone placed via spillover has a
   // nonzero depth themselves, so it must be subtracted to get "how many
@@ -113,16 +94,15 @@ export async function getDashboardNetworkData(
   // un livello in più (es. "fino al 5° livello" con 4 livelli).
   const levelOf = (node: { depth: number; path?: string | null }) => (node.path ? String(node.path).split('.').length - 1 : node.depth)
   const rootDepth = userNode ? levelOf(userNode) : 0
-  const maxDownlineDepth = (downlineData || []).reduce(
-    (max: number, node: { depth: number; path?: string | null }) => Math.max(max, levelOf(node) - rootDepth),
-    0
-  )
-  const userNodeId = userNode?.id
+  const totals = treeData?.totals
+  const totalDownline = totals ? totals.total_downline : downlineData.length
+  const maxDownlineDepth = totals
+    ? totals.max_depth
+    : downlineData.reduce((max: number, node) => Math.max(max, levelOf(node) - rootDepth), 0)
 
   // Invitati diretti (profiles.sponsor_id) con abbonamento attivo, non i
   // figli nella matrice (matrix_nodes.parent_id, bloccati a 5 dallo spillover)
   const directActiveSponsored = directSponsored.filter(isActiveSubscription)
-  const directSponsorCount = directActiveSponsored.length
   const directSponsoredWithStatus = directSponsored.map((p) => ({ ...p, is_active: isActiveSubscription(p) }))
   // "I tuoi KUMANI" mostra solo chi ha attivato l'abbonamento; chi si è
   // registrato ma non ha ancora attivato finisce in "Non ancora KUMANI",
@@ -135,21 +115,30 @@ export async function getDashboardNetworkData(
   // spostati più in profondità dallo spillover perché quei posti erano già
   // occupati — sono comunque "diretti" (sponsor_id), solo non posizionati
   // direttamente sotto di lui nell'albero.
-  const downlineNodeByUserId = new Map(
-    (downlineData || []).map((d: { user_id: string; parent_id: string | null }) => [d.user_id, d])
-  )
-  const directSponsorInSpilloverCount = directSponsored.filter((p) => {
-    const node = downlineNodeByUserId.get(p.id)
-    return node ? node.parent_id !== userNodeId : false
-  }).length
+  const directSponsorInSpilloverCount = totals
+    ? totals.direct_in_spillover
+    : (() => {
+        const downlineNodeByUserId = new Map(downlineData.map((d) => [d.user_id, d]))
+        return directSponsored.filter((p) => {
+          const node = downlineNodeByUserId.get(p.id)
+          return node ? node.parent_id !== userNodeId : false
+        }).length
+      })()
 
   // Nella stella: chi occupa uno dei 5 posti diretti senza essere un
   // proprio invitato è arrivato dalla community (colore diverso)
   const directIds = new Set(directSponsored.map((p) => p.id))
   const receivedNodes = activeDownlineForTree.filter((node) => node.parent_id === userNodeId && !directIds.has(node.user_id))
   const receivedIds = receivedNodes.map((node) => node.user_id)
-  const receivedKumani =
-    receivedRows ?? receivedNodes.map((node) => ({ first_name: node.first_name ?? null, joined_at: node.created_at }))
+  const receivedKumani = receivedNodes.map((node) => ({ first_name: node.first_name ?? null, joined_at: node.created_at }))
+
+  // Conteggi del riepilogo (dashboard e Community): senza albero li dà il
+  // database, altrimenti si contano gli elenchi appena letti
+  const summary = directData.summary
+  const activeKumaniCount = summary ? summary.active_direct : activeKumani.length
+  const pendingKumaniCount = summary ? summary.pending_direct : pendingKumani.length
+  const receivedKumaniCount = summary ? summary.received : receivedKumani.length
+  const directSponsorCount = activeKumaniCount
 
   // Qualifiche: le registra il database con attivazioni e KU Points
   // confermati (dopo i giorni del recesso); quelli in conferma si mostrano a parte
@@ -178,6 +167,10 @@ export async function getDashboardNetworkData(
     pendingKumani,
     directSponsorInSpilloverCount,
     receivedKumani,
+    // Per il riepilogo: senza albero gli elenchi qui sopra restano vuoti
+    activeKumaniCount,
+    pendingKumaniCount,
+    receivedKumaniCount,
     receivedIds,
     currentRank,
     newlyAchievedRank,
@@ -192,6 +185,76 @@ export async function getDashboardNetworkData(
     pointsConfirmDays: wallet.confirmDays,
     loginUrl,
   }
+}
+
+type MatrixNodeRow = {
+  id: string
+  parent_id: string | null
+  path: string
+  level: number
+  position: number
+  depth: number
+  created_at: string
+}
+
+type DownlineRow = MatrixNodeRow & {
+  user_id: string
+  first_name: string | null
+  is_active: boolean
+  // Solo dei propri invitati diretti (vedi 20261221100000_downline_star_navigation.sql)
+  last_name?: string | null
+  referral_code?: string | null
+  masked_code?: string | null
+  is_my_direct?: boolean
+  sponsored_by_parent?: boolean
+  // Kumani attivi sotto di lui, a qualunque profondità (get_my_downline_star)
+  active_downline_count?: number
+}
+
+type NetworkTotals = { total_downline: number; max_depth: number; direct_in_spillover: number }
+
+// Livelli della stella che si possono vedere (MatrixTree: fino al 5° sotto il titolare)
+const STAR_MAX_DEPTH = 5
+
+/**
+ * La stella: solo i Kumani attivi fino al 5° livello, con i numeri della
+ * rete contati dal database (20270122100000_network_scaling.sql), così chi
+ * sta in cima non legge tutta la matrice. Se le funzioni nuove non ci sono
+ * ancora, si torna all'elenco completo di get_my_downline().
+ */
+async function loadDownlineTree(
+  supabase: SupabaseClient
+): Promise<{ rows: DownlineRow[]; totals: NetworkTotals | null; error: { message: string } | null }> {
+  const [star, totals] = await Promise.all([
+    supabase.rpc('get_my_downline_star', { p_max_depth: STAR_MAX_DEPTH }),
+    supabase.rpc('get_my_network_totals').maybeSingle<NetworkTotals>(),
+  ])
+  if (!star.error && !totals.error) {
+    return {
+      rows: (star.data ?? []) as DownlineRow[],
+      totals: totals.data ?? { total_downline: 0, max_depth: 0, direct_in_spillover: 0 },
+      error: null,
+    }
+  }
+  const { data, error } = await supabase.rpc('get_my_downline')
+  return { rows: (data ?? []) as DownlineRow[], totals: null, error }
+}
+
+type NetworkSummary = { active_direct: number; pending_direct: number; received: number }
+
+/**
+ * Riepilogo senza albero: solo i conteggi (my_network_summary), non gli
+ * elenchi con i telefoni. Se la funzione manca, gli elenchi come prima.
+ */
+async function loadNetworkSummary(supabase: SupabaseClient): Promise<{ list: SponsoredProfile[]; summary: NetworkSummary | null }> {
+  const { data, error } = await supabase.rpc('my_network_summary').maybeSingle<NetworkSummary>()
+  if (!error) return { list: [], summary: data ?? { active_direct: 0, pending_direct: 0, received: 0 } }
+  const [list, received] = await Promise.all([
+    fetchDirectSponsored(supabase),
+    supabase.rpc('my_received_kumani').then(({ data: rows, error: receivedError }) => (receivedError ? [] : ((rows ?? []) as unknown[]))),
+  ])
+  const active = list.filter(isActiveSubscription).length
+  return { list, summary: { active_direct: active, pending_direct: list.length - active, received: received.length } }
 }
 
 export type DashboardNetworkData = Awaited<ReturnType<typeof getDashboardNetworkData>>

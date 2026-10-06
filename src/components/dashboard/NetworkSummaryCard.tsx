@@ -10,7 +10,7 @@ import RankRequirements, { rankMissingText } from '@/components/RankRequirements
 export default async function NetworkSummaryCard({ network }: { network: DashboardNetworkData }) {
   const t = await getTranslations('dashboard')
   // Qualifiche: attivazioni pagate delle persone invitate + KU Points guadagnati
-  const { activeKumani, pendingKumani, receivedKumani, currentRank, ranks, networkPointsEarned, networkActivations, achievedKeys, networkPendingActivations, networkPendingPoints } = network
+  const { activeKumaniCount, pendingKumaniCount, receivedKumaniCount, currentRank, ranks, networkPointsEarned, networkActivations, achievedKeys, networkPendingActivations, networkPendingPoints } = network
   const nextRank = ranks.find((rank) => !achievedKeys.includes(rank.key)) || null
   const progress = nextRank ? rankProgress(nextRank, networkActivations, networkPointsEarned) : 100
   const missing = nextRank ? await rankMissingText(nextRank, networkActivations, networkPointsEarned) : null
@@ -32,15 +32,15 @@ export default async function NetworkSummaryCard({ network }: { network: Dashboa
 
       <div className="mt-5 grid grid-cols-3 gap-2 sm:gap-3">
         <div className="rounded-xl border border-white/10 bg-white/[0.06] px-4 py-3">
-          <p className="text-4xl font-extrabold leading-none text-[var(--gold-bright)]">{activeKumani.length}</p>
+          <p className="text-4xl font-extrabold leading-none text-[var(--gold-bright)]">{activeKumaniCount}</p>
           <p className="mt-1.5 text-xs font-medium text-white/70">{t('activeKumaniLabel')}</p>
         </div>
         <div className="rounded-xl border border-white/10 bg-white/[0.06] px-4 py-3">
-          <p className="text-4xl font-extrabold leading-none text-white">{pendingKumani.length}</p>
+          <p className="text-4xl font-extrabold leading-none text-white">{pendingKumaniCount}</p>
           <p className="mt-1.5 text-xs font-medium text-white/70">{t('pendingKumaniLabel')}</p>
         </div>
         <div className="rounded-xl border border-sky-300/25 bg-sky-400/[0.08] px-4 py-3">
-          <p className="text-4xl font-extrabold leading-none text-sky-300">{receivedKumani.length}</p>
+          <p className="text-4xl font-extrabold leading-none text-sky-300">{receivedKumaniCount}</p>
           <p className="mt-1.5 text-xs font-medium text-white/70">{t('receivedKumaniLabel')}</p>
         </div>
       </div>

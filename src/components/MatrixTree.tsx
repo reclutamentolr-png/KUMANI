@@ -25,6 +25,9 @@ type MatrixNode = {
   country_code?: string | null
   // Invitato da chi gli sta sopra nella stella? Se no, è arrivato dalla community
   sponsored_by_parent?: boolean | null
+  // Kumani attivi sotto di lui, già contati dal database (get_my_downline_star:
+  // la stella riceve solo i primi 5 livelli, non tutta la discendenza)
+  active_downline_count?: number | null
 }
 
 type MatrixTreeProps = {
@@ -56,7 +59,9 @@ export default function MatrixTree({ rootNode, descendants, receivedIds = [], mo
   const directSlots = Array.from({ length: 5 }, (_, index) => directMembers[index] || null)
 
   const getDownlineCount = (directMember: MatrixNode) =>
-    descendants.filter((node) => node.path.startsWith(`${directMember.path}.`)).length
+    typeof directMember.active_downline_count === 'number'
+      ? directMember.active_downline_count
+      : descendants.filter((node) => node.path.startsWith(`${directMember.path}.`)).length
 
   const displayName = (node: MatrixNode) =>
     `${node.first_name || ''} ${node.last_name || ''}`.trim() || 'Kumano'
