@@ -1,7 +1,7 @@
 'use client'
 
 import { useLocale, useTranslations } from 'next-intl'
-import { ExternalLink, Image as ImageIcon, ShieldAlert } from 'lucide-react'
+import { ExternalLink, FileLock2, Image as ImageIcon, Lightbulb, ScanSearch, ShieldAlert } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 
 // Guida «Scopri dove sono usate le tue foto»: ricerca inversa delle PROPRIE
@@ -53,17 +53,33 @@ export default function PhotoSearchGuide() {
         </div>
       </div>
 
-      <p className="mt-4 text-sm text-[var(--muted)]">
-        {t('photosTipsBefore')}{' '}
-        <Link href="/marketplace/documento-sicuro" className="font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
-          Documento Sicuro
-        </Link>
-        {t('photosTipsMiddle')}{' '}
-        <Link href="/marketplace/verifoto" className="font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
-          VeriFoto
-        </Link>
-        {t('photosTipsAfter')}
-      </p>
+      {/* Consigli in evidenza, con i due servizi KUMANI collegati */}
+      <div className="mt-5 rounded-2xl bg-gradient-to-br from-[var(--ink)] to-[#2a2721] p-5 text-white shadow-md">
+        <div className="flex gap-4">
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--gold)]/20 ring-1 ring-[var(--gold-bright)]/60">
+            <Lightbulb className="h-6 w-6 text-[var(--gold-bright)]" />
+          </span>
+          <p className="min-w-0 flex-1 text-sm font-semibold leading-6 sm:text-base">
+            {t('photosTipsBefore')} <span className="text-[var(--gold-bright)]">Documento Sicuro</span>
+            {t('photosTipsMiddle')} <span className="text-[var(--gold-bright)]">VeriFoto</span>
+            {t('photosTipsAfter')}
+          </p>
+        </div>
+        <div className="mt-4 flex flex-wrap gap-2 sm:pl-16">
+          <Link
+            href="/marketplace/documento-sicuro"
+            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-4 py-2.5 text-sm font-extrabold text-[var(--ink)] shadow hover:brightness-105"
+          >
+            <FileLock2 className="h-4 w-4" /> Documento Sicuro
+          </Link>
+          <Link
+            href="/marketplace/verifoto"
+            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-4 py-2.5 text-sm font-extrabold text-[var(--ink)] shadow hover:brightness-105"
+          >
+            <ScanSearch className="h-4 w-4" /> VeriFoto
+          </Link>
+        </div>
+      </div>
       <p className="mt-3 text-xs text-[var(--muted)]">{t('photosNote')}</p>
     </section>
   )
