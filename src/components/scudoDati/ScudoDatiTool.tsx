@@ -8,6 +8,7 @@ import { checkMyEmail, checkOtherEmail } from '@/app/actions/scudoDati'
 import { EMAIL_RE, maskEmail, type ScudoError, type ScudoResult } from '@/lib/scudoDati'
 import BreachResult from '@/components/scudoDati/BreachResult'
 import PasswordCheck from '@/components/scudoDati/PasswordCheck'
+import GoogleRemovalGuide from '@/components/scudoDati/GoogleRemovalGuide'
 
 // SCUDO DATI: la propria email (gratis), un'altra email (KU Karma) e la
 // password (solo nel browser).
@@ -134,6 +135,9 @@ export default function ScudoDatiTool({ maskedEmail, cost, initialBalance }: { m
 
       {/* 3. La tua password */}
       <PasswordCheck />
+
+      {/* Guida: togliere i propri dati dai risultati di Google */}
+      <GoogleRemovalGuide />
     </div>
   )
 }
