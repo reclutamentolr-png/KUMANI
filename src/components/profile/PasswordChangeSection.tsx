@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { AlertCircle, CheckCircle2, Eye, EyeOff, KeyRound } from 'lucide-react'
 import { changeMyPassword } from '@/app/actions/password'
-import TurnstileWidget, { useTurnstile } from '@/components/auth/TurnstileWidget'
+import TurnstileWidget, { TURNSTILE_ENABLED, useTurnstile } from '@/components/auth/TurnstileWidget'
 
 // Nel profilo: cambio password con la password attuale (chi l'ha dimenticata
 // usa "Password dimenticata" dalla pagina di accesso).
@@ -19,8 +19,11 @@ export default function PasswordChangeSection() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [done, setDone] = useState(false)
-  // La password attuale si controlla con un accesso: serve la verifica anti-robot
+  // La password attuale si controlla con un accesso: serve la verifica anti-robot.
+  // Il riquadro compare solo quando si preme «Salva»: mentre si scrive non c'è,
+  // così non può togliere il cursore ai campi
   const captcha = useTurnstile()
+  const [verifying, setVerifying] = useState(false)
 
   const reset = () => {
     setCurrent('')
@@ -39,7 +42,12 @@ export default function PasswordChangeSection() {
     if (next === current) return setError(t('errorSame'))
     setSaving(true)
     try {
-      const res = await changeMyPassword(current, next, locale, captcha.consume())
+      let token: string | undefined
+      if (TURNSTILE_ENABLED) {
+        setVerifying(true)
+        token = await captcha.next()
+      }
+      const res = await changeMyPassword(current, next, locale, token)
       if (res.success) {
         reset()
         setOpen(false)
@@ -58,6 +66,8 @@ export default function PasswordChangeSection() {
     } catch {
       setError(t('errorGeneric'))
     } finally {
+      // Dopo ogni tentativo il riquadro sparisce: al prossimo «Salva» ne parte uno nuovo
+      setVerifying(false)
       setSaving(false)
     }
   }
@@ -118,19 +128,20 @@ export default function PasswordChangeSection() {
             </p>
           )}
           <p className="text-xs text-gray-500">{t('emailNotice')}</p>
-          <TurnstileWidget captcha={captcha} />
+          {verifying && <TurnstileWidget captcha={captcha} />}
           <div className="flex justify-end gap-2">
             <button
               type="button"
               onClick={() => {
                 reset()
+                setVerifying(false)
                 setOpen(false)
               }}
               className="rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100"
             >
               {t('cancel')}
             </button>
-            <button type="submit" disabled={saving || captcha.pending} className="rounded-lg bg-[var(--ink)] px-4 py-2 text-sm font-bold text-[var(--gold-bright)] disabled:opacity-50">
+            <button type="submit" disabled={saving} className="rounded-lg bg-[var(--ink)] px-4 py-2 text-sm font-bold text-[var(--gold-bright)] disabled:opacity-50">
               {saving ? t('saving') : t('save')}
             </button>
           </div>
