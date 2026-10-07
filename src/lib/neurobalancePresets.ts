@@ -1,3 +1,5 @@
+import { audioUrl } from './audioUrl'
+
 // Dati statici condivisi tra NeurobalancePlayer (pagina Neurobalance) e
 // NeurobalanceAudioProvider (motore audio globale, sopravvive alla
 // navigazione) — i nomi/descrizioni mostrati a schermo restano nelle
@@ -28,7 +30,7 @@ export const specialSounds: SpecialSound[] = [
   { id: 'innalzare-vibrazioni', frequency: 963 },
 ]
 
-// Audio registrati (public/audio): ognuno in due formati, Opus (.webm,
+// Audio registrati (bucket «audio» di Supabase Storage): ognuno in due formati, Opus (.webm,
 // più leggero) e AAC (.m4a) per i browser che non leggono l'Opus. La durata
 // è quella reale del file, in secondi.
 export type Track = {
@@ -39,8 +41,8 @@ export type Track = {
 }
 
 export const tracks: Track[] = [
-  { id: 'tibetan-bowls', src: '/audio/campane-tibetane-432hz', duration: 2499, frequency: 432 },
-  { id: 'meditation-relax', src: '/audio/meditazione-relax', duration: 618 },
+  { id: 'tibetan-bowls', src: audioUrl('campane-tibetane-432hz'), duration: 2499, frequency: 432 },
+  { id: 'meditation-relax', src: audioUrl('meditazione-relax'), duration: 618 },
 ]
 
 export const MIN_LISTEN_SECONDS_FOR_POINT = 10 * 60

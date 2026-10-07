@@ -1,19 +1,21 @@
 // Real-recording nature soundscapes (replaces the earlier procedural
 // synthesis — kept authentic instead of "zero file, zero cost" now that
-// licensed recordings are available under public/audio/).
+// licensed recordings are available in the Supabase «audio» bucket).
+import { audioUrl } from './audioUrl'
+
 export type NaturePreset =
   | 'rain' | 'ocean' | 'wind' | 'stream'
   | 'fire' | 'forest' | 'night' | 'storm'
 
 export const NATURE_SOUND_FILES: Record<NaturePreset, string> = {
-  rain: '/audio/rain.mp3',
-  ocean: '/audio/ocean.mp3',
-  wind: '/audio/wind.mp3',
-  stream: '/audio/river.mp3',
-  fire: '/audio/fire.mp3',
-  forest: '/audio/forest.mp3',
-  night: '/audio/night.mp3',
-  storm: '/audio/thunderstorm.mp3',
+  rain: audioUrl('rain.mp3'),
+  ocean: audioUrl('ocean.mp3'),
+  wind: audioUrl('wind.mp3'),
+  stream: audioUrl('river.mp3'),
+  fire: audioUrl('fire.mp3'),
+  forest: audioUrl('forest.mp3'),
+  night: audioUrl('night.mp3'),
+  storm: audioUrl('thunderstorm.mp3'),
 }
 
 const CROSSFADE_SECONDS = 1.2
