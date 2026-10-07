@@ -3,7 +3,8 @@ import { getTranslations } from 'next-intl/server'
 import { ArrowRight, BookMarked, Crown } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { createClient } from '@/lib/supabase/server'
-import { getServicesCatalog } from '@/lib/servicesCatalog'
+import { getCommunityItems, getServicesCatalog } from '@/lib/servicesCatalog'
+import { CommunityBlock } from '@/components/dashboard/CommunityBlock'
 import { getPlanPrices } from '@/lib/planPrices'
 import AppHeader from '@/components/nav/AppHeader'
 import ServicesBrowser from '@/components/services/ServicesBrowser'
@@ -32,7 +33,11 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
   ])
   if (!user) redirect(`/${locale}/login`)
 
-  const [{ items, favorites, userPlan }, planPrices] = await Promise.all([getServicesCatalog(supabase, user.id, locale), getPlanPrices()])
+  const [{ items, favorites, userPlan }, planPrices, communityItems] = await Promise.all([
+    getServicesCatalog(supabase, user.id, locale),
+    getPlanPrices(),
+    getCommunityItems(supabase, user.id),
+  ])
   const formatEur = (value: number) =>
     new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2, minimumFractionDigits: 0 }).format(value)
   const lockedCount = items.filter((item) => !item.open).length
@@ -52,6 +57,9 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
           <ArrowRight className="h-4 w-4 shrink-0" />
         </Link>
         <ServicesBrowser items={items} favorites={favorites} />
+
+        {/* In fondo: le sezioni della Community (Bacheca, Kordata, Eventi…) */}
+        {communityItems.length > 0 && <CommunityBlock items={communityItems} />}
 
         {/* Sblocca tutto: solo a chi ha ancora servizi chiusi */}
         {lockedCount > 0 && (

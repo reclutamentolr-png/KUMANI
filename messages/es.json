@@ -1368,7 +1368,8 @@
     "you": "Tú",
     "by": "de",
     "points": "Puntos",
-    "backToDashboard": "Volver al Dashboard"
+    "backToDashboard": "Volver al Dashboard",
+    "closeProfile": "Cerrar perfil"
   },
   "magazzino": {
     "deleteForever": "Eliminar definitivamente",

@@ -17,7 +17,8 @@
     "you": "You",
     "by": "by",
     "points": "Points",
-    "backToDashboard": "Back to Dashboard"
+    "backToDashboard": "Back to Dashboard",
+    "closeProfile": "Close profile"
   },
   "landingHome": {
     "statLanguagesLabel": "languages: KUMANI speaks yours",

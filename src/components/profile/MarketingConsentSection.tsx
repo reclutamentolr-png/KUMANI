@@ -35,7 +35,7 @@ export default function MarketingConsentSection({ isOpen }: { isOpen: boolean })
 
   if (granted === null) return null
   return (
-    <div className="mt-2 flex items-center justify-between gap-3 border-t border-gray-100 pt-4">
+    <div className="flex items-center justify-between gap-3">
       <div>
         <p className="flex items-center gap-1.5 text-sm font-semibold text-[var(--ink)]">
           <Mail className="h-4 w-4 text-[var(--gold)]" /> {t('title')}

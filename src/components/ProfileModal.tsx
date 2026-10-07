@@ -121,7 +121,7 @@ export default function ProfileModal({ isOpen, onClose, initialData, userId, onC
           </button>
         </div>
 
-        <div className="p-6 space-y-3">
+        <div className="p-6 space-y-4">
           {/* Esito dell'ultima richiesta, finché l'utente non lo chiude */}
           {outcome?.status === 'approved' && (
             <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg text-sm flex items-start gap-2">
@@ -153,6 +153,7 @@ export default function ProfileModal({ isOpen, onClose, initialData, userId, onC
             </div>
           )}
 
+          <ProfileCard>
           {locked ? (
             <>
               <ProfileFieldsGrid values={lockedValues} locked />
@@ -216,11 +217,6 @@ export default function ProfileModal({ isOpen, onClose, initialData, userId, onC
                 </div>
               )}
 
-              <div className="flex justify-end pt-4 border-t border-gray-100">
-                <button type="button" onClick={close} className="px-4 py-2 border border-[var(--gold)]/40 hover:border-[var(--gold)] hover:bg-[var(--paper)] text-[var(--ink)] rounded-lg font-medium transition-colors">
-                  {commonT('close')}
-                </button>
-              </div>
             </>
           ) : (
             <form onSubmit={completion.submit} noValidate className="space-y-3">
@@ -264,11 +260,31 @@ export default function ProfileModal({ isOpen, onClose, initialData, userId, onC
               )}
             </form>
           )}
+          </ProfileCard>
 
-          {isOpen && <PushSettingsSection />}
-          <PasswordChangeSection />
-          <MarketingConsentSection isOpen={isOpen} />
-          <AccountDeletionSection isOpen={isOpen} />
+          {isOpen && (
+            <ProfileCard>
+              <PushSettingsSection />
+            </ProfileCard>
+          )}
+          <ProfileCard>
+            <PasswordChangeSection />
+          </ProfileCard>
+          <ProfileCard>
+            <MarketingConsentSection isOpen={isOpen} />
+          </ProfileCard>
+          <ProfileCard tone="red">
+            <AccountDeletionSection isOpen={isOpen} />
+          </ProfileCard>
+
+          {/* Chiudi in fondo, ben visibile */}
+          <button
+            type="button"
+            onClick={close}
+            className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--ink)] px-4 py-3 text-base font-bold text-[var(--gold-bright)] shadow-md transition hover:opacity-90"
+          >
+            <X className="h-5 w-5" /> {commonT('closeProfile')}
+          </button>
         </div>
       </div>
 
@@ -285,6 +301,20 @@ export default function ProfileModal({ isOpen, onClose, initialData, userId, onC
           />
         </div>
       )}
+    </div>
+  )
+}
+
+// Sezione del profilo in una scheda con la banda colorata in alto (come nel
+// Wallet): oro per le impostazioni, rosso per la cancellazione dell'account
+function ProfileCard({ children, tone = 'gold' }: { children: React.ReactNode; tone?: 'gold' | 'red' }) {
+  return (
+    <div className={`relative overflow-hidden rounded-xl border bg-white px-4 pb-4 pt-5 shadow-sm ${tone === 'red' ? 'border-red-200' : 'border-[var(--gold)]/30'}`}>
+      <div
+        aria-hidden
+        className={`absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r ${tone === 'red' ? 'from-red-400 to-red-300' : 'from-[var(--gold)] via-[var(--gold-bright)] to-[var(--gold)]'}`}
+      />
+      {children}
     </div>
   )
 }

@@ -55,7 +55,7 @@ export default function AccountDeletionSection({ isOpen }: { isOpen: boolean }) 
   }
 
   return (
-    <div className="pt-4 mt-2 border-t border-gray-100">
+    <div className="pt-4">
       {pending ? (
         <div className="bg-red-50 border border-red-200 text-red-900 px-4 py-3 rounded-lg text-sm">
           <p className="font-semibold flex items-center gap-2">

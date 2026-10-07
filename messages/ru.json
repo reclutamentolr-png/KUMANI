@@ -1368,7 +1368,8 @@
     "you": "Вы",
     "by": "от",
     "points": "Баллы",
-    "backToDashboard": "Назад в панель управления"
+    "backToDashboard": "Назад в панель управления",
+    "closeProfile": "Закрыть профиль"
   },
   "magazzino": {
     "deleteForever": "Удалить навсегда",

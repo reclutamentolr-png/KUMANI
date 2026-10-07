@@ -76,7 +76,7 @@ export default function PasswordChangeSection() {
     'w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30'
 
   return (
-    <div className="mt-2 border-t border-gray-100 pt-4">
+    <div className="border-t border-gray-100">
       {!open ? (
         <div className="flex items-center justify-between gap-3">
           <div>
