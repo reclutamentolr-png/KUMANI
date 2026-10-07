@@ -3055,7 +3055,9 @@
     "teaserBody": "Kundenbindung, Angebote, Belege und Aktionen für dein Geschäft.",
     "teaserCta": "Pro entdecken",
     "statLandingOn": "Veröffentlicht · {count, plural, =0 {keine neuen Nachrichten} one {# neue Nachricht} other {# neue Nachrichten}}",
-    "statLandingOff": "Noch nicht veröffentlicht"
+    "statLandingOff": "Noch nicht veröffentlicht",
+    "expandTools": "Pro-Tools öffnen ({count})",
+    "collapseTools": "Pro-Tools schließen"
   },
   "affinity": {
     "badgeMessages": "{count, plural, one {# neue Nachricht} other {# neue Nachrichten}}",

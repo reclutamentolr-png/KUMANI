@@ -1,5 +1,5 @@
 import { getTranslations } from 'next-intl/server'
-import { ArrowRight, Briefcase, Crown, HandPlatter, Hourglass, Smartphone } from 'lucide-react'
+import { ArrowRight, Briefcase, ChevronDown, Crown, HandPlatter, Hourglass, Smartphone } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 import type { MarketplaceTool } from '@/lib/marketplaceTools'
@@ -101,7 +101,14 @@ export default async function ProArea({
         </div>
       )}
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {/* Strumenti Pro chiusi di base, per non riempire la Home: si aprono con un tocco */}
+      <details className="group/pro">
+        <summary className="flex cursor-pointer list-none items-center justify-center gap-2 rounded-xl border border-[var(--gold)]/50 bg-white/[0.06] px-4 py-3 text-sm font-bold text-[var(--gold-bright)] transition hover:border-[var(--gold)] hover:bg-white/[0.1] [&::-webkit-details-marker]:hidden">
+          <span className="group-open/pro:hidden">{t('expandTools', { count: tools.length + 1 })}</span>
+          <span className="hidden group-open/pro:inline">{t('collapseTools')}</span>
+          <ChevronDown className="h-4 w-4 transition-transform group-open/pro:rotate-180" />
+        </summary>
+      <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {tools.map((tool) => {
           const Icon = marketplaceIconMap[tool.iconName] || Smartphone
           const stat = statLine(tool.toolName)
@@ -147,6 +154,7 @@ export default async function ProArea({
           </div>
         </Link>
       </div>
+      </details>
     </section>
   )
 }

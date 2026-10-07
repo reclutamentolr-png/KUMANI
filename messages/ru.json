@@ -3055,7 +3055,9 @@
     "teaserBody": "Лояльность клиентов, сметы, чеки и акции для вашего бизнеса.",
     "teaserCta": "Узнать о Pro",
     "statLandingOn": "Опубликована · {count, plural, =0 {новых сообщений нет} one {# новое сообщение} few {# новых сообщения} many {# новых сообщений} other {# новых сообщения}}",
-    "statLandingOff": "Ещё не опубликована"
+    "statLandingOff": "Ещё не опубликована",
+    "expandTools": "Открыть инструменты Pro ({count})",
+    "collapseTools": "Скрыть инструменты Pro"
   },
   "affinity": {
     "badgeMessages": "{count, plural, one {# новое сообщение} few {# новых сообщения} many {# новых сообщений} other {# новых сообщения}}",

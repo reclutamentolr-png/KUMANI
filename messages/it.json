@@ -3055,7 +3055,9 @@
     "teaserBody": "Fidelizzazione clienti, preventivi, ricevute e promozioni per la tua attività.",
     "teaserCta": "Scopri Pro",
     "statLandingOn": "Pubblicata · {count, plural, =0 {nessun messaggio nuovo} one {# messaggio nuovo} other {# messaggi nuovi}}",
-    "statLandingOff": "Non ancora pubblicata"
+    "statLandingOff": "Non ancora pubblicata",
+    "expandTools": "Apri gli strumenti Pro ({count})",
+    "collapseTools": "Chiudi gli strumenti Pro"
   },
   "affinity": {
     "badgeMessages": "{count, plural, one {# nuovo messaggio} other {# nuovi messaggi}}",

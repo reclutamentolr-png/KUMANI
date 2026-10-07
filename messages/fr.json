@@ -3055,7 +3055,9 @@
     "teaserBody": "Fidélité client, devis, reçus et promotions pour votre activité.",
     "teaserCta": "Découvrir Pro",
     "statLandingOn": "Publiée · {count, plural, =0 {aucun nouveau message} one {# nouveau message} other {# nouveaux messages}}",
-    "statLandingOff": "Pas encore publiée"
+    "statLandingOff": "Pas encore publiée",
+    "expandTools": "Ouvrir les outils Pro ({count})",
+    "collapseTools": "Fermer les outils Pro"
   },
   "affinity": {
     "badgeMessages": "{count, plural, one {# nouveau message} other {# nouveaux messages}}",
