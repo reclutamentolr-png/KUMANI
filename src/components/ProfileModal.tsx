@@ -106,7 +106,7 @@ export default function ProfileModal({ isOpen, onClose, initialData, userId, onC
     : []
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={close}>
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 text-[var(--ink)]" onClick={close}>
       <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         {/* Header Modale */}
         <div className="flex justify-between items-center p-6 border-b border-[var(--gold)]/25">

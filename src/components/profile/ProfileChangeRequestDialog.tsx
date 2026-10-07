@@ -63,7 +63,7 @@ export default function ProfileChangeRequestDialog({ current, onClose, onSent }:
   }
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 p-4 text-[var(--ink)]" onClick={onClose}>
       <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         <div className="flex justify-between items-center p-5 border-b border-gray-100">
           <div className="flex items-center gap-3">

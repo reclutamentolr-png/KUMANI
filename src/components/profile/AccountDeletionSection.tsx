@@ -134,7 +134,7 @@ function AccountDeletionDialog({ onClose, onSent }: { onClose: () => void; onSen
 
   return (
     <div
-      className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60] p-4"
+      className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60] p-4 text-[var(--ink)]"
       onClick={(e) => {
         e.stopPropagation()
         onClose()
