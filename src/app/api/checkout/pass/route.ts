@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
-import { getStripe } from '@/lib/stripe'
+import { getStripe, managedPayments, MANAGED_PAYMENTS_ON } from '@/lib/stripe'
 import { parseVatInput } from '@/lib/vat'
 import { getToolPassOffer, TOOL_PASS_TYPE } from '@/lib/toolPasses'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
@@ -78,13 +78,15 @@ export async function POST(request: Request) {
       customerId = customer.id
     }
 
+    // Stripe Managed Payments: acceso solo con STRIPE_MANAGED_PAYMENTS=on
+    const managed = managedPayments()
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
-      payment_method_types: ['card'],
+      ...(MANAGED_PAYMENTS_ON ? managed.params : { payment_method_types: ['card'] }),
       line_items: [
         {
           quantity: 1,
-          price_data: { currency: 'eur', unit_amount: offer.priceCents, product_data: { name: productName } },
+          price_data: { currency: 'eur', unit_amount: offer.priceCents, product_data: { name: productName, ...(managed.productTaxCode ? { tax_code: managed.productTaxCode } : {}) } },
         },
       ],
       metadata: meta,
@@ -95,7 +97,7 @@ export async function POST(request: Request) {
       success_url: `${SITE_URL}${pagePath}?success=1&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${SITE_URL}${pagePath}?canceled=1`,
       ...(customerId ? { customer: customerId } : { customer_email: user.email, customer_creation: 'always' as const }),
-    })
+    }, managed.options)
     if (!session.url) throw new Error('URL di pagamento mancante')
     // Prova del consenso (avvio immediato o dichiarazione aziendale + Termini)
     const service = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {

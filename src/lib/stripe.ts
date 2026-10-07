@@ -16,3 +16,28 @@ export function getStripe(): Stripe {
   }
   return client
 }
+
+// Stripe Managed Payments (Stripe venditore ufficiale: IVA e ricevute in
+// tutti i paesi). Si accende solo con STRIPE_MANAGED_PAYMENTS=on in Vercel,
+// prima in test e poi in produzione; spento, i pagamenti restano come prima.
+// Richiede una versione API recente solo per queste richieste (il resto
+// dell'integrazione e i webhook restano sulla versione fissata sopra).
+export const MANAGED_PAYMENTS_ON = process.env.STRIPE_MANAGED_PAYMENTS === 'on'
+const MANAGED_API_VERSION = '2025-03-31.basil'
+
+export function managedPayments(): {
+  // Da aggiungere ai parametri della Checkout Session
+  params: Record<string, unknown>
+  // Opzioni della richiesta (versione API)
+  options: Stripe.RequestOptions | undefined
+  // Codice fiscale del prodotto per i prezzi creati al momento (Pass, regali)
+  productTaxCode: string | undefined
+} {
+  if (!MANAGED_PAYMENTS_ON) return { params: {}, options: undefined, productTaxCode: undefined }
+  return {
+    params: { managed_payments: { enabled: true } },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    options: { apiVersion: MANAGED_API_VERSION as any },
+    productTaxCode: process.env.STRIPE_PRODUCT_TAX_CODE || undefined,
+  }
+}

@@ -4,7 +4,7 @@ import { SITE_URL } from '@/lib/siteUrl'
 import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
-import { getStripe } from '@/lib/stripe'
+import { getStripe, managedPayments, MANAGED_PAYMENTS_ON } from '@/lib/stripe'
 import { parseVatInput } from '@/lib/vat'
 import { getToolPassOffer } from '@/lib/toolPasses'
 import { getPlanPrices } from '@/lib/planPrices'
@@ -95,10 +95,12 @@ export async function POST(request: Request) {
       customerId = customer.id
     }
 
+    // Stripe Managed Payments: acceso solo con STRIPE_MANAGED_PAYMENTS=on
+    const managed = managedPayments()
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
-      payment_method_types: ['card'],
-      line_items: [{ quantity, price_data: { currency: 'eur', unit_amount: unitCents, product_data: { name: item } } }],
+      ...(MANAGED_PAYMENTS_ON ? managed.params : { payment_method_types: ['card'] }),
+      line_items: [{ quantity, price_data: { currency: 'eur', unit_amount: unitCents, product_data: { name: item, ...(managed.productTaxCode ? { tax_code: managed.productTaxCode } : {}) } } }],
       metadata: meta,
       payment_intent_data: { metadata: meta },
       // Ricevuta/fattura a chi compra (non è una fattura di abbonamento:
@@ -107,7 +109,7 @@ export async function POST(request: Request) {
       success_url: `${SITE_URL}${prefix}/regali?success=1&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${SITE_URL}${prefix}/regali?canceled=1`,
       ...(customerId ? { customer: customerId } : { customer_email: user.email, customer_creation: 'always' as const }),
-    })
+    }, managed.options)
     if (!session.url) throw new Error('URL di pagamento mancante')
     const db = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
       auth: { autoRefreshToken: false, persistSession: false },

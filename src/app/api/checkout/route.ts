@@ -1,7 +1,7 @@
 import { SITE_URL } from '@/lib/siteUrl'
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { getStripe } from '@/lib/stripe'
+import { getStripe, managedPayments, MANAGED_PAYMENTS_ON } from '@/lib/stripe'
 import { isActiveSubscription } from '@/lib/subscriptionGate'
 import { cookies } from 'next/headers'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
@@ -111,10 +111,12 @@ export async function POST(request: Request) {
           })
         : null
 
+    // Stripe Managed Payments: acceso solo con STRIPE_MANAGED_PAYMENTS=on
+    const managed = managedPayments()
     const session = await getStripe().checkout.sessions.create({
       mode: 'subscription',
       ...(coupon ? { discounts: [{ coupon: coupon.id }] } : {}),
-      payment_method_types: ['card'],
+      ...(MANAGED_PAYMENTS_ON ? managed.params : { payment_method_types: ['card'] }),
       line_items: [
         {
           price: priceId,
@@ -143,7 +145,7 @@ export async function POST(request: Request) {
       success_url: `${SITE_URL}/billing?success=true&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${SITE_URL}/billing?canceled=true`,
       ...(customerId ? { customer: customerId } : { customer_email: user.email }),
-    })
+    }, managed.options)
 
     // Controllo esplicito per evitare l'errore "string | null" di TypeScript
     if (!session.url) {
