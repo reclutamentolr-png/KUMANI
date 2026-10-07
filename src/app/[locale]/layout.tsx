@@ -7,6 +7,7 @@ import ImpersonationBanner from '@/components/ImpersonationBanner'
 import ToolGuideButton from '@/components/ToolGuideButton'
 import AppNav from '@/components/nav/AppNav'
 import RecentToolTracker from '@/components/nav/RecentToolTracker'
+import FocusDebug from '@/components/FocusDebug'
 import { ROOT_VIEWPORT, rootMetadata } from '@/lib/rootMetadata'
 import { defaultLocale, locales } from '../../../i18n'
 
@@ -54,6 +55,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         {/* Menu fisso delle pagine principali e servizi usati di recente */}
         <AppNav />
         <RecentToolTracker />
+        <FocusDebug />
       </MaintenanceGate>
     </AppShell>
   )
