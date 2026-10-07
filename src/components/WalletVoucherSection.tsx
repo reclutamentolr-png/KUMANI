@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { useRouter } from 'next/navigation'
-import { Award, Check, ChevronDown, Copy, LoaderCircle, Receipt, Share2, Star, Ticket } from 'lucide-react'
+import { Award, Check, ChevronDown, Copy, LoaderCircle, Printer, Receipt, Share2, Star, Ticket } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { redeemVoucher, type MyVoucher } from '@/app/actions/vouchers'
 import type { RankDefinition } from '@/lib/ranks'
@@ -223,6 +223,9 @@ export default function WalletVoucherSection({
                                 >
                                   <Share2 className="h-3.5 w-3.5" /> {tw('voucherShareWhatsapp')}
                                 </a>
+                                <Link href={`/wallet/voucher/${v.id}/stampa`} className="inline-flex items-center gap-1 font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
+                                  <Printer className="h-3.5 w-3.5" /> {t('printLink')}
+                                </Link>
                               </>
                             )}
                             {v.status !== 'revoked' && (

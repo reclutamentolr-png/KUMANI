@@ -2981,16 +2981,6 @@
     "error_not_owner": "Operação não permitida.",
     "error_error": "Algo correu mal. Tente novamente."
   },
-  "voucherCard": {
-    "titlePro": "1 ano de KUMANI Pro de oferta",
-    "title": "1 ano de KUMANI de oferta",
-    "offeredBy": "Oferecido por {business}",
-    "codeLabel": "Código de ativação",
-    "howTo": "Leia o QR ou aceda a {site}/register e introduza o código. Válido uma única vez.",
-    "print": "Imprimir",
-    "adminSummary": "{available} vouchers disponíveis para imprimir de {total}",
-    "noneAvailable": "Nenhum voucher disponível: já foram todos usados."
-  },
   "plans": {
     "trialNote": "{days} dias de teste grátis, sem cartão.",
     "ctaStartTrial": "Experimente o Pro grátis durante {days} dias",
@@ -5960,7 +5950,8 @@
     "groupPrize": "Prémio {rank}",
     "groupOther": "Outros vouchers",
     "groupCount": "{count, plural, one {# voucher} other {# vouchers}}",
-    "ruleWelcomeCap": "O Bónus de Acolhimento é uma boas-vindas, não um rendimento: só o recebe pelas pessoas acolhidas nos seus 5 lugares diretos, portanto no máximo 5 vezes (até {maxBase} pontos com o Base, {maxPro} com o Pro). Os prémios a sério vêm das pessoas que convida."
+    "ruleWelcomeCap": "O Bónus de Acolhimento é uma boas-vindas, não um rendimento: só o recebe pelas pessoas acolhidas nos seus 5 lugares diretos, portanto no máximo 5 vezes (até {maxBase} pontos com o Base, {maxPro} com o Pro). Os prémios a sério vêm das pessoas que convida.",
+    "printLink": "Imprimir cartão"
   },
   "voucherReceipt": {
     "back": "Voltar à Carteira",
@@ -9961,5 +9952,57 @@
     "importEdit": "Editar a ficha",
     "importButton": "Usar a minha ficha da atividade",
     "menuLink": "Ficha da atividade"
+  },
+  "voucherPrint": {
+    "title": "Imprime o teu voucher",
+    "intro": "Escolhe o design, o formato e a frase do verso: descarrega o PDF para imprimir em casa ou levar à gráfica. O QR abre o registo com o código já preenchido.",
+    "backToWallet": "Voltar ao Wallet",
+    "design": "Design",
+    "designs": {
+      "A": "Clássico",
+      "B": "Minimal",
+      "C": "Premium"
+    },
+    "format": "Formato",
+    "formats": {
+      "card": "Cartão de visita",
+      "postcard": "Postal"
+    },
+    "phrase": "Frase no verso",
+    "phraseCustom": "Escrevo a minha frase",
+    "customPlaceholder": "Um presente especial para ti.",
+    "phrases": {
+      "p1": "O melhor presente é fazer parte de uma comunidade que cresce em conjunto.",
+      "p2": "Alguém pensou em ti. Bem-vindo à KUMANI.",
+      "p3": "Um ano de ferramentas, ligações e oportunidades: começa agora.",
+      "p4": "Para ti, um ano para crescer connosco.",
+      "p5": "As coisas bonitas partilham-se. Esta é para ti.",
+      "p6": "Obrigado por fazeres parte da nossa história."
+    },
+    "offeredBy": "Oferecido por {business}",
+    "front": "Frente",
+    "back": "Verso",
+    "count": "{count, plural, one {# voucher para imprimir} other {# vouchers para imprimir}}",
+    "noCodes": "Nenhum voucher disponível para imprimir.",
+    "pdfPrinter": "PDF para a gráfica",
+    "pdfPrinterHint": "Alta definição, 3 mm de sangria para o corte: frente e verso de cada voucher, uma página cada.",
+    "pdfHome": "PDF para imprimir em casa",
+    "pdfHomeHintCard": "Até 10 por folha A4 com marcas de corte: imprime frente e verso (lado longo) e recorta.",
+    "pdfHomeHintPostcard": "Até 2 por folha A4 com marcas de corte: imprime frente e verso (lado longo) e recorta.",
+    "progress": "A preparar o PDF… {done} de {total}",
+    "error": "Não foi possível criar o PDF. Tenta novamente.",
+    "goldNote": "Na impressão digital o dourado fica amarelo ocre: para um efeito metálico pede à gráfica estampagem a quente a ouro. Usa papel grosso (mínimo 300 g).",
+    "card": {
+      "voucher": "Voucher",
+      "gift": "Um ano de presente",
+      "oneYear": "1 ano",
+      "planBase": "1 ano de KUMANI",
+      "planPro": "1 ano de KUMANI Pro",
+      "codeLabel": "Código de ativação",
+      "codeShort": "Código",
+      "howToLong": "Lê o QR ou vai a {site}/register · válido uma só vez",
+      "howToShort": "Ativa em {site}/register · válido uma vez",
+      "scan": "Lê e ativa"
+    }
   }
 }

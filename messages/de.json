@@ -2981,16 +2981,6 @@
     "error_not_owner": "Vorgang nicht erlaubt.",
     "error_error": "Etwas ist schiefgelaufen. Bitte erneut versuchen."
   },
-  "voucherCard": {
-    "titlePro": "1 Jahr KUMANI Pro geschenkt",
-    "title": "1 Jahr KUMANI geschenkt",
-    "offeredBy": "Ein Geschenk von {business}",
-    "codeLabel": "Aktivierungscode",
-    "howTo": "Scanne den QR-Code oder gehe auf {site}/register und gib den Code ein. Nur einmal gültig.",
-    "print": "Drucken",
-    "adminSummary": "{available} von {total} Vouchern zum Drucken verfügbar",
-    "noneAvailable": "Keine Voucher verfügbar: Alle wurden bereits verwendet."
-  },
   "plans": {
     "trialNote": "{days} Tage kostenlos testen, ohne Karte.",
     "ctaStartTrial": "Pro {days} Tage kostenlos testen",
@@ -5960,7 +5950,8 @@
     "groupPrize": "Prämie {rank}",
     "groupOther": "Weitere Gutscheine",
     "groupCount": "{count, plural, one {# Gutschein} other {# Gutscheine}}",
-    "ruleWelcomeCap": "Der Willkommensbonus ist ein Willkommen, kein Einkommen: Du bekommst ihn nur für Personen, die auf deinen 5 direkten Plätzen landen, also höchstens 5-mal (bis zu {maxBase} Punkte mit Base, {maxPro} mit Pro). Die echten Belohnungen kommen von den Personen, die du selbst einlädst."
+    "ruleWelcomeCap": "Der Willkommensbonus ist ein Willkommen, kein Einkommen: Du bekommst ihn nur für Personen, die auf deinen 5 direkten Plätzen landen, also höchstens 5-mal (bis zu {maxBase} Punkte mit Base, {maxPro} mit Pro). Die echten Belohnungen kommen von den Personen, die du selbst einlädst.",
+    "printLink": "Karte drucken"
   },
   "voucherReceipt": {
     "back": "Zurück zur Brieftasche",
@@ -9961,5 +9952,57 @@
     "importEdit": "Profil bearbeiten",
     "importButton": "Firmenprofil verwenden",
     "menuLink": "Firmenprofil"
+  },
+  "voucherPrint": {
+    "title": "Gutschein drucken",
+    "intro": "Wähle Design, Format und den Spruch auf der Rückseite: Lade das PDF herunter, um es zu Hause zu drucken oder in die Druckerei zu bringen. Der QR-Code öffnet die Registrierung mit bereits eingetragenem Code.",
+    "backToWallet": "Zurück zum Wallet",
+    "design": "Design",
+    "designs": {
+      "A": "Klassisch",
+      "B": "Minimal",
+      "C": "Premium"
+    },
+    "format": "Format",
+    "formats": {
+      "card": "Visitenkarte",
+      "postcard": "Postkarte"
+    },
+    "phrase": "Spruch auf der Rückseite",
+    "phraseCustom": "Eigenen Spruch schreiben",
+    "customPlaceholder": "Ein besonderes Geschenk für dich.",
+    "phrases": {
+      "p1": "Das schönste Geschenk ist, Teil einer Community zu sein, die gemeinsam wächst.",
+      "p2": "Jemand hat an dich gedacht. Willkommen bei KUMANI.",
+      "p3": "Ein Jahr voller Tools, Kontakte und Chancen: Fang jetzt an.",
+      "p4": "Für dich: ein Jahr, um gemeinsam mit uns zu wachsen.",
+      "p5": "Schöne Dinge teilt man. Das hier ist für dich.",
+      "p6": "Danke, dass du Teil unserer Geschichte bist."
+    },
+    "offeredBy": "Geschenkt von {business}",
+    "front": "Vorderseite",
+    "back": "Rückseite",
+    "count": "{count, plural, one {# Gutschein zum Drucken} other {# Gutscheine zum Drucken}}",
+    "noCodes": "Keine Gutscheine zum Drucken verfügbar.",
+    "pdfPrinter": "PDF für die Druckerei",
+    "pdfPrinterHint": "Hohe Auflösung, 3 mm Beschnitt: Vorder- und Rückseite jedes Gutscheins, je eine Seite.",
+    "pdfHome": "PDF zum Drucken zu Hause",
+    "pdfHomeHintCard": "Bis zu 10 pro A4-Blatt mit Schnittmarken: beidseitig drucken (lange Kante) und ausschneiden.",
+    "pdfHomeHintPostcard": "Bis zu 2 pro A4-Blatt mit Schnittmarken: beidseitig drucken (lange Kante) und ausschneiden.",
+    "progress": "PDF wird erstellt … {done} von {total}",
+    "error": "Das PDF konnte nicht erstellt werden. Bitte versuche es erneut.",
+    "goldNote": "Im Digitaldruck wird Gold zu Ockergelb: Für einen Metallic-Effekt frage die Druckerei nach Heißfolienprägung in Gold. Verwende dickes Papier (mindestens 300 g).",
+    "card": {
+      "voucher": "Gutschein",
+      "gift": "Ein Jahr geschenkt",
+      "oneYear": "1 Jahr",
+      "planBase": "1 Jahr KUMANI",
+      "planPro": "1 Jahr KUMANI Pro",
+      "codeLabel": "Aktivierungscode",
+      "codeShort": "Code",
+      "howToLong": "QR scannen oder {site}/register öffnen · nur einmal gültig",
+      "howToShort": "Aktivieren auf {site}/register · einmal gültig",
+      "scan": "Scannen und aktivieren"
+    }
   }
 }

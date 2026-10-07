@@ -1427,7 +1427,7 @@ L'accesso viene registrato.`)) return
                       rel="noopener noreferrer"
                       className="text-xs font-semibold text-[var(--ink)] hover:text-[var(--gold)] mr-3"
                     >
-                      Stampa cartoncini
+                      Stampa voucher (PDF)
                     </a>
                     <button type="button" onClick={() => downloadBatchCsv(b)} className="text-xs font-semibold text-gray-700">
                       Scarica CSV

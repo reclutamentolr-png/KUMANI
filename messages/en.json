@@ -2981,16 +2981,6 @@
     "error_not_owner": "Operation not allowed.",
     "error_error": "Something went wrong. Please try again."
   },
-  "voucherCard": {
-    "titlePro": "1 year of KUMANI Pro as a gift",
-    "title": "1 year of KUMANI as a gift",
-    "offeredBy": "Offered by {business}",
-    "codeLabel": "Activation code",
-    "howTo": "Scan the QR or go to {site}/register and enter the code. Valid once only.",
-    "print": "Print",
-    "adminSummary": "{available} vouchers available to print out of {total}",
-    "noneAvailable": "No vouchers available: they have all been used."
-  },
   "plans": {
     "trialNote": "{days}-day free trial, no card required.",
     "ctaStartTrial": "Try Pro free for {days} days",
@@ -5960,7 +5950,8 @@
     "groupPrize": "{rank} prize",
     "groupOther": "Other vouchers",
     "groupCount": "{count, plural, one {# voucher} other {# vouchers}}",
-    "ruleWelcomeCap": "The Welcome Bonus is a welcome, not an income: you only get it for people placed in your 5 direct spots, so at most 5 times (up to {maxBase} points with Base, {maxPro} with Pro). The real rewards come from the people you invite yourself."
+    "ruleWelcomeCap": "The Welcome Bonus is a welcome, not an income: you only get it for people placed in your 5 direct spots, so at most 5 times (up to {maxBase} points with Base, {maxPro} with Pro). The real rewards come from the people you invite yourself.",
+    "printLink": "Print card"
   },
   "voucherReceipt": {
     "back": "Back to Wallet",
@@ -9961,5 +9952,57 @@
     "importEdit": "Edit profile",
     "importButton": "Use my business profile",
     "menuLink": "Business profile"
+  },
+  "voucherPrint": {
+    "title": "Print your voucher",
+    "intro": "Choose the design, the format and the message on the back: download the PDF to print at home or take to a print shop. The QR code opens sign-up with the code already filled in.",
+    "backToWallet": "Back to Wallet",
+    "design": "Design",
+    "designs": {
+      "A": "Classic",
+      "B": "Minimal",
+      "C": "Premium"
+    },
+    "format": "Format",
+    "formats": {
+      "card": "Business card",
+      "postcard": "Postcard"
+    },
+    "phrase": "Message on the back",
+    "phraseCustom": "I’ll write my own",
+    "customPlaceholder": "A special gift for you.",
+    "phrases": {
+      "p1": "The best gift is being part of a community that grows together.",
+      "p2": "Someone was thinking of you. Welcome to KUMANI.",
+      "p3": "A year of tools, connections and opportunities: start now.",
+      "p4": "For you: a year to grow together with us.",
+      "p5": "Beautiful things are meant to be shared. This one is for you.",
+      "p6": "Thank you for being part of our story."
+    },
+    "offeredBy": "Offered by {business}",
+    "front": "Front",
+    "back": "Back",
+    "count": "{count, plural, one {# voucher to print} other {# vouchers to print}}",
+    "noCodes": "No vouchers available to print.",
+    "pdfPrinter": "PDF for the print shop",
+    "pdfPrinterHint": "High definition, 3 mm bleed for trimming: front and back of each voucher, one page each.",
+    "pdfHome": "PDF to print at home",
+    "pdfHomeHintCard": "Up to 10 per A4 sheet with crop marks: print double-sided (long edge) and cut out.",
+    "pdfHomeHintPostcard": "Up to 2 per A4 sheet with crop marks: print double-sided (long edge) and cut out.",
+    "progress": "Preparing the PDF… {done} of {total}",
+    "error": "The PDF could not be created. Please try again.",
+    "goldNote": "In digital printing gold comes out as ochre yellow: for a metallic effect ask the print shop for hot-foil gold. Use thick paper (at least 300 gsm).",
+    "card": {
+      "voucher": "Voucher",
+      "gift": "A year as a gift",
+      "oneYear": "1 year",
+      "planBase": "1 year of KUMANI",
+      "planPro": "1 year of KUMANI Pro",
+      "codeLabel": "Activation code",
+      "codeShort": "Code",
+      "howToLong": "Scan the QR or go to {site}/register · valid once only",
+      "howToShort": "Activate at {site}/register · valid once",
+      "scan": "Scan and activate"
+    }
   }
 }

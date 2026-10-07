@@ -2981,16 +2981,6 @@
     "error_not_owner": "Opération non autorisée.",
     "error_error": "Un problème est survenu. Réessayez."
   },
-  "voucherCard": {
-    "titlePro": "1 an de KUMANI Pro offert",
-    "title": "1 an de KUMANI offert",
-    "offeredBy": "Offert par {business}",
-    "codeLabel": "Code d'activation",
-    "howTo": "Scannez le QR ou allez sur {site}/register et saisissez le code. Valable une seule fois.",
-    "print": "Imprimer",
-    "adminSummary": "{available} vouchers disponibles à imprimer sur {total}",
-    "noneAvailable": "Aucun voucher disponible : ils ont tous été utilisés."
-  },
   "plans": {
     "trialNote": "{days} jours d'essai gratuit, sans carte.",
     "ctaStartTrial": "Essayer Pro gratuitement {days} jours",
@@ -5960,7 +5950,8 @@
     "groupPrize": "Prix {rank}",
     "groupOther": "Autres bons",
     "groupCount": "{count, plural, one {# bon} other {# bons}}",
-    "ruleWelcomeCap": "Le Bonus d’Accueil est un cadeau de bienvenue, pas un revenu : vous ne le recevez que pour les personnes accueillies dans vos 5 places directes, donc 5 fois au maximum (jusqu’à {maxBase} points avec le Base, {maxPro} avec le Pro). Les vraies récompenses viennent des personnes que vous invitez vous-même."
+    "ruleWelcomeCap": "Le Bonus d’Accueil est un cadeau de bienvenue, pas un revenu : vous ne le recevez que pour les personnes accueillies dans vos 5 places directes, donc 5 fois au maximum (jusqu’à {maxBase} points avec le Base, {maxPro} avec le Pro). Les vraies récompenses viennent des personnes que vous invitez vous-même.",
+    "printLink": "Imprimer la carte"
   },
   "voucherReceipt": {
     "back": "Retour au Portefeuille",
@@ -9961,5 +9952,57 @@
     "importEdit": "Modifier la fiche",
     "importButton": "Utiliser ma fiche entreprise",
     "menuLink": "Fiche entreprise"
+  },
+  "voucherPrint": {
+    "title": "Imprimez votre bon",
+    "intro": "Choisissez le graphisme, le format et la phrase au verso : téléchargez le PDF à imprimer chez vous ou à apporter chez l’imprimeur. Le QR ouvre l’inscription avec le code déjà saisi.",
+    "backToWallet": "Retour au Wallet",
+    "design": "Graphisme",
+    "designs": {
+      "A": "Classique",
+      "B": "Minimal",
+      "C": "Premium"
+    },
+    "format": "Format",
+    "formats": {
+      "card": "Carte de visite",
+      "postcard": "Carte postale"
+    },
+    "phrase": "Phrase au verso",
+    "phraseCustom": "J’écris ma phrase",
+    "customPlaceholder": "Un cadeau spécial pour toi.",
+    "phrases": {
+      "p1": "Le plus beau cadeau, c’est de faire partie d’une communauté qui grandit ensemble.",
+      "p2": "Quelqu’un a pensé à toi. Bienvenue chez KUMANI.",
+      "p3": "Un an d’outils, de rencontres et d’opportunités : commence maintenant.",
+      "p4": "Pour toi, une année pour grandir avec nous.",
+      "p5": "Les belles choses se partagent. Celle-ci est pour toi.",
+      "p6": "Merci de faire partie de notre histoire."
+    },
+    "offeredBy": "Offert par {business}",
+    "front": "Recto",
+    "back": "Verso",
+    "count": "{count, plural, one {# bon à imprimer} other {# bons à imprimer}}",
+    "noCodes": "Aucun bon disponible à imprimer.",
+    "pdfPrinter": "PDF pour l’imprimeur",
+    "pdfPrinterHint": "Haute définition, 3 mm de fond perdu pour la coupe : recto et verso de chaque bon, une page chacun.",
+    "pdfHome": "PDF à imprimer chez soi",
+    "pdfHomeHintCard": "Jusqu’à 10 par feuille A4 avec traits de coupe : imprimez en recto verso (bord long) et découpez.",
+    "pdfHomeHintPostcard": "Jusqu’à 2 par feuille A4 avec traits de coupe : imprimez en recto verso (bord long) et découpez.",
+    "progress": "Préparation du PDF… {done} sur {total}",
+    "error": "Impossible de créer le PDF. Réessayez.",
+    "goldNote": "En impression numérique, l’or devient jaune ocre : pour un effet métallisé, demandez à l’imprimeur une dorure à chaud. Utilisez un papier épais (300 g minimum).",
+    "card": {
+      "voucher": "Bon",
+      "gift": "Un an offert",
+      "oneYear": "1 an",
+      "planBase": "1 an de KUMANI",
+      "planPro": "1 an de KUMANI Pro",
+      "codeLabel": "Code d’activation",
+      "codeShort": "Code",
+      "howToLong": "Scannez le QR ou allez sur {site}/register · valable une seule fois",
+      "howToShort": "Activez sur {site}/register · valable une fois",
+      "scan": "Scannez et activez"
+    }
   }
 }

@@ -34,7 +34,7 @@ export const SECTION_LABELS: Record<string, string> = {
   wallet: 'Wallet',
   rewards: 'Premi',
   kuRewards: 'KU Karma',
-  voucherCard: 'Voucher',
+  voucherPrint: 'Voucher da stampare (biglietto e cartolina)',
   toolPass: 'Pass dei singoli servizi',
   toolTiers: 'Dashboard: servizi in fasce Gratis / Base / Pro',
   share: 'Pulsante Condividi… (menu del telefono)',
