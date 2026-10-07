@@ -100,7 +100,7 @@ export async function POST(request: Request) {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       ...(MANAGED_PAYMENTS_ON ? managed.params : { payment_method_types: ['card'] }),
-      line_items: [{ quantity, price_data: { currency: 'eur', unit_amount: unitCents, product_data: { name: item, ...(managed.productTaxCode ? { tax_code: managed.productTaxCode } : {}) } } }],
+      line_items: [{ quantity, price_data: { currency: 'eur', unit_amount: unitCents, product_data: { name: item, ...(managed.productTaxCode ? { tax_code: managed.productTaxCode } : {}) }, ...(MANAGED_PAYMENTS_ON ? { tax_behavior: 'inclusive' as const } : {}) } }],
       metadata: meta,
       payment_intent_data: { metadata: meta },
       // Ricevuta/fattura a chi compra (non è una fattura di abbonamento:

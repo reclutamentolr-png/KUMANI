@@ -86,7 +86,7 @@ export async function POST(request: Request) {
       line_items: [
         {
           quantity: 1,
-          price_data: { currency: 'eur', unit_amount: offer.priceCents, product_data: { name: productName, ...(managed.productTaxCode ? { tax_code: managed.productTaxCode } : {}) } },
+          price_data: { currency: 'eur', unit_amount: offer.priceCents, product_data: { name: productName, ...(managed.productTaxCode ? { tax_code: managed.productTaxCode } : {}) }, ...(MANAGED_PAYMENTS_ON ? { tax_behavior: 'inclusive' as const } : {}) },
         },
       ],
       metadata: meta,
