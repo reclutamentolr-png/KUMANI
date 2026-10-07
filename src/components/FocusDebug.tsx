@@ -38,7 +38,14 @@ export default function FocusDebug() {
       add(`DOWN su ${describe(e.target)} | sopra: ${describe(top)} | bloccato: ${e.defaultPrevented}`)
       setTimeout(() => add(`dopo il clic, cursore su: ${describe(document.activeElement)}`), 50)
     }
-    const onFocusIn = (e: FocusEvent) => add(`FOCUS → ${describe(e.target)}`)
+    const onFocusIn = (e: FocusEvent) => {
+      add(`FOCUS → ${describe(e.target)}`)
+      const el = e.target as HTMLElement
+      if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+        const cs = getComputedStyle(el)
+        add(`   colori: testo ${cs.color} | riempimento ${cs.getPropertyValue('-webkit-text-fill-color')} | cursore ${cs.caretColor} | sfondo ${cs.backgroundColor} | schema ${cs.colorScheme} | opacità ${cs.opacity}`)
+      }
+    }
     const onFocusOut = (e: FocusEvent) => add(`perde focus ${describe(e.target)} → va a ${describe(e.relatedTarget)}`)
     const onKey = (e: KeyboardEvent) => add(`TASTO "${e.key.length === 1 ? '•' : e.key}" su ${describe(e.target)} | bloccato: ${e.defaultPrevented}`)
     const onKeyAfter = (e: KeyboardEvent) => {

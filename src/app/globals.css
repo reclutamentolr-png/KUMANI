@@ -66,6 +66,13 @@ body {
   font-family: var(--font-geist-sans), sans-serif;
 }
 
+/* Campi sempre leggibili: il sito è chiaro, quindi i moduli usano i colori
+   chiari anche se il browser o il sistema sono in modalità scura (altrimenti
+   il testo dei campi può diventare bianco su bianco) */
+:root {
+  color-scheme: light;
+}
+
 ::selection {
   background: var(--gold);
   color: var(--ink);
