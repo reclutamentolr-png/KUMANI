@@ -32,7 +32,7 @@ export default function FocusDebug() {
 
   useEffect(() => {
     if (!on) return
-    const add = (text: string) => setLines((prev) => [`${new Date().toLocaleTimeString()} ${text}`, ...prev].slice(0, 14))
+    const add = (text: string) => setLines((prev) => [`${new Date().toLocaleTimeString()} ${text}`, ...prev].slice(0, 18))
     const onDown = (e: PointerEvent) => {
       const top = document.elementFromPoint(e.clientX, e.clientY)
       add(`DOWN su ${describe(e.target)} | sopra: ${describe(top)} | bloccato: ${e.defaultPrevented}`)
@@ -44,6 +44,21 @@ export default function FocusDebug() {
     const onKeyAfter = (e: KeyboardEvent) => {
       if (e.defaultPrevented) add(`TASTO bloccato da qualcuno della pagina`)
     }
+    // Inserimento del testo: chi lo blocca e chi lo riporta a vuoto
+    const onBeforeInput = (e: Event) => {
+      const ie = e as InputEvent
+      setTimeout(() => add(`BEFOREINPUT ${ie.inputType} su ${describe(e.target)} | bloccato: ${e.defaultPrevented}`), 0)
+    }
+    const onInput = (e: Event) => {
+      const el = e.target as HTMLInputElement
+      const len = typeof el.value === 'string' ? el.value.length : -1
+      const props = Object.keys(el).find((k) => k.startsWith('__reactProps'))
+      const hasOnChange = props ? typeof (el as unknown as Record<string, { onChange?: unknown }>)[props]?.onChange === 'function' : false
+      add(`INPUT su ${describe(el)} | lunghezza subito: ${len} | React onChange: ${hasOnChange}`)
+      setTimeout(() => add(`   dopo 50ms lunghezza: ${typeof el.value === 'string' ? el.value.length : -1} | ancora nella pagina: ${el.isConnected}`), 50)
+    }
+    document.addEventListener('beforeinput', onBeforeInput, true)
+    document.addEventListener('input', onInput, true)
     window.addEventListener('pointerdown', onDown, true)
     document.addEventListener('focusin', onFocusIn, true)
     document.addEventListener('focusout', onFocusOut, true)
@@ -51,6 +66,8 @@ export default function FocusDebug() {
     window.addEventListener('keydown', onKeyAfter)
     add(`diagnosi attiva · ${navigator.userAgent.match(/(Edg|Chrome|Firefox|Safari)\/[\d.]+/)?.[0] ?? ''}`)
     return () => {
+      document.removeEventListener('beforeinput', onBeforeInput, true)
+      document.removeEventListener('input', onInput, true)
       window.removeEventListener('pointerdown', onDown, true)
       document.removeEventListener('focusin', onFocusIn, true)
       document.removeEventListener('focusout', onFocusOut, true)
