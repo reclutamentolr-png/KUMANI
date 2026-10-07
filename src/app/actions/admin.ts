@@ -1483,7 +1483,7 @@ export async function adminListEvents(filter: 'pending' | 'published' | 'reporte
   const service = getServiceClient()
   // Anche luogo esatto e link: lo Staff deve vedere cosa approva
   const columns =
-    'id, organizer_id, title, description, type, mode, starts_at, ends_at, timezone, venue_name, address, city, country_code, map_link, online_link, languages, capacity, price, is_18plus, kids_friendly, status, review_note, created_at, series_id, fidelity_stamp'
+    'id, organizer_id, title, description, type, mode, starts_at, ends_at, timezone, venue_name, address, city, country_code, map_link, online_link, languages, capacity, price, is_18plus, kids_friendly, status, review_note, created_at, series_id, fidelity_stamp, free_declared_at, free_fee_eur'
   let query = service.from('events').select(columns)
   if (filter === 'reported') {
     const { data: reports } = await service.from('event_reports').select('event_id').eq('status', 'open').limit(500)
@@ -1607,7 +1607,7 @@ export async function adminListEventReports() {
   if (!admin) return { reports: [], error: 'Non autorizzato' }
   const { data, error } = await getServiceClient()
     .from('event_reports')
-    .select('id, reason, status, created_at, reporter, event:events(id, title, status, organizer_id, starts_at)')
+    .select('id, reason, kind, status, created_at, reporter, event:events(id, title, status, organizer_id, starts_at, price, free_declared_at)')
     .order('status', { ascending: false })
     .order('created_at', { ascending: false })
     .limit(200)
@@ -1615,10 +1615,20 @@ export async function adminListEventReports() {
   const rows = (data ?? []) as unknown as {
     id: string
     reason: string
+    // 'free_paid' = pagamento chiesto per un evento dichiarato gratuito
+    kind: 'other' | 'free_paid'
     status: 'open' | 'closed'
     created_at: string
     reporter: string
-    event: { id: string; title: string; status: string; organizer_id: string; starts_at: string } | null
+    event: {
+      id: string
+      title: string
+      status: string
+      organizer_id: string
+      starts_at: string
+      price: number
+      free_declared_at: string | null
+    } | null
   }[]
   const people = await eventPeople(rows.flatMap((r) => [r.reporter, r.event?.organizer_id ?? '']))
   return {
@@ -1642,12 +1652,12 @@ export async function adminListEventFees() {
   // Le commissioni nascono quando l'organizzatore torna su Events: qui si
   // calcolano anche per chi non è più rientrato dopo un evento a pagamento.
   const service = getServiceClient()
+  // Anche gli eventi gratuiti con quota fissa per iscritto
   const { data: unsettled } = await service
     .from('events')
     .select('organizer_id')
     .eq('status', 'published')
-    .gt('price', 0)
-    .gt('fee_percent', 0)
+    .or('and(price.gt.0,fee_percent.gt.0),and(price.eq.0,free_fee_eur.gt.0)')
     .lt('starts_at', new Date().toISOString())
     .limit(1000)
   for (const organizerId of new Set((unsettled ?? []).map((e) => e.organizer_id as string))) {
@@ -1719,6 +1729,40 @@ export async function adminSetEventsFeePercent(percent: number, kind: 'standard'
   const { error } = await getServiceClient()
     .from('system_settings')
     .upsert({ key: setting.key, value: JSON.stringify(value) }, { onConflict: 'key' })
+  if (error) return { success: false, error: error.message }
+  return { success: true }
+}
+
+// Quota fissa per iscritto sugli eventi gratuiti (system_settings
+// 'events_free_fee_eur', stringa JSON, es. '"2"'; 0 = nessuna commissione).
+// Ogni evento conserva la quota valida quando è stato salvato gratuito.
+export async function adminGetEventsFreeFee() {
+  const admin = await verifyAdmin('settings.read')
+  if (!admin) return { fee: null, error: 'Non autorizzato' }
+  const { data } = await getServiceClient().from('system_settings').select('value').eq('key', 'events_free_fee_eur').maybeSingle()
+  let fee = 0
+  if (data?.value != null) {
+    const raw = String(data.value)
+    let parsed = Number.NaN
+    try {
+      parsed = Number(JSON.parse(raw))
+    } catch {
+      parsed = Number(raw.replace(/"/g, ''))
+    }
+    if (Number.isFinite(parsed) && parsed >= 0) fee = parsed
+  }
+  return { fee, error: null }
+}
+
+export async function adminSetEventsFreeFee(fee: number) {
+  const admin = await verifyAdmin('settings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!Number.isFinite(fee) || fee < 0 || fee > 50) return { success: false, error: 'La quota per iscritto deve essere tra 0 e 50 €' }
+  if (Math.abs(fee * 100 - Math.round(fee * 100)) > 1e-6) return { success: false, error: 'La quota per iscritto ha al massimo 2 decimali' }
+  const value = String(Math.round(fee * 100) / 100)
+  const { error } = await getServiceClient()
+    .from('system_settings')
+    .upsert({ key: 'events_free_fee_eur', value: JSON.stringify(value) }, { onConflict: 'key' })
   if (error) return { success: false, error: error.message }
   return { success: true }
 }

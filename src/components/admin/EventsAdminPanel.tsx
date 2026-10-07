@@ -7,6 +7,7 @@ import {
   adminBanEvent,
   adminDeleteEventReview,
   adminGetEventsFeePercent,
+  adminGetEventsFreeFee,
   adminListEventFees,
   adminListEventReports,
   adminListEventReviews,
@@ -14,6 +15,7 @@ import {
   adminResolveEventReport,
   adminReviewEvent,
   adminSetEventsFeePercent,
+  adminSetEventsFreeFee,
   adminUnbanEvent,
   adminWaiveEventFee,
 } from '@/app/actions/admin'
@@ -51,6 +53,7 @@ export default function EventsAdminPanel({
   const [working, setWorking] = useState<string | null>(null)
   const [percent, setPercent] = useState('')
   const [superPercent, setSuperPercent] = useState('')
+  const [freeFee, setFreeFee] = useState('')
   const [percentSaved, setPercentSaved] = useState<string | null>(null)
 
   const load = useCallback(async (current: Tab) => {
@@ -92,6 +95,9 @@ export default function EventsAdminPanel({
     adminGetEventsFeePercent('super').then((result) => {
       if (result.percent !== null) setSuperPercent(String(result.percent))
     })
+    adminGetEventsFreeFee().then((result) => {
+      if (result.fee !== null) setFreeFee(String(result.fee))
+    })
   }, [canReadSettings])
 
   const run = async (id: string, action: () => Promise<{ success: boolean; error?: string; warning?: string }>) => {
@@ -118,11 +124,17 @@ export default function EventsAdminPanel({
 
   const savePercent = async (e: React.FormEvent) => {
     e.preventDefault()
-    const [standard, reduced] = await Promise.all([
+    const freeText = freeFee.trim().replace(',', '.') || '0'
+    if (!/^\d{1,2}(\.\d{1,2})?$/.test(freeText) || Number(freeText) > 50) {
+      setPercentSaved('Errore: la quota per iscritto sugli eventi gratuiti va da 0 a 50 €, al massimo 2 decimali')
+      return
+    }
+    const [standard, reduced, free] = await Promise.all([
       adminSetEventsFeePercent(Number(percent.replace(',', '.')), 'standard'),
       adminSetEventsFeePercent(Number(superPercent.replace(',', '.')), 'super'),
+      adminSetEventsFreeFee(Number(freeText)),
     ])
-    const failed = [standard, reduced].find((r) => !r.success)
+    const failed = [standard, reduced, free].find((r) => !r.success)
     setPercentSaved(failed ? `Errore: ${failed.error}` : 'Salvato')
   }
 
@@ -189,10 +201,28 @@ export default function EventsAdminPanel({
             <Percent className="h-4 w-4 text-gray-400" />
           </div>
         </div>
+        <div>
+          <label className="mb-1 block text-sm font-semibold text-gray-700">Quota fissa per iscritto sugli eventi gratuiti (€)</label>
+          <div className="flex items-center gap-2">
+            <input
+              value={freeFee}
+              onChange={(e) => {
+                setFreeFee(e.target.value.replace(/[^0-9.,]/g, ''))
+                setPercentSaved(null)
+              }}
+              inputMode="decimal"
+              className="w-24 rounded-lg border border-gray-300 px-3 py-2"
+            />
+            <span className="text-sm text-gray-400">€</span>
+          </div>
+        </div>
         <button type="submit" className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-semibold text-white">
           Salva
         </button>
-        <p className="text-xs text-gray-500">Da 0 a 30. Vale per i nuovi eventi (ogni evento conserva la percentuale con cui è stato creato).</p>
+        <p className="text-xs text-gray-500">
+          Percentuali da 0 a 30, quota fissa da 0 a 50 € (0 = eventi gratuiti senza commissione). Valgono per i nuovi eventi: ogni evento conserva la
+          percentuale o la quota con cui è stato salvato (dopo le prime iscrizioni non cambia più).
+        </p>
         {percentSaved && <p className="w-full text-sm font-semibold text-gray-700">{percentSaved}</p>}
       </form>
       )}
@@ -230,7 +260,12 @@ export default function EventsAdminPanel({
                           {when(event.starts_at, event.timezone)} ({event.timezone}) · {event.mode} · {event.city || 'online'} {event.country_code ?? ''}
                         </p>
                         <p className="text-xs text-gray-500">
-                          Organizzatore {name(event.organizer)} · {event.people}/{event.capacity} iscritti · {Number(event.price) > 0 ? money(event.price) : 'gratis'}
+                          Organizzatore {name(event.organizer)} · {event.people}/{event.capacity} iscritti · {Number(event.price) > 0 ? money(event.price) : 'gratuito'}
+                          {Number(event.price) > 0
+                            ? ''
+                            : event.free_declared_at
+                              ? ` (dichiarato «nessun pagamento» il ${when(event.free_declared_at)}${Number(event.free_fee_eur) > 0 ? `, quota ${money(event.free_fee_eur)} per iscritto` : ''})`
+                              : ' (senza dichiarazione: evento creato prima della regola)'}
                           {event.is_18plus ? ' · 18+' : ''}
                           {event.fidelity_stamp ? ' · timbro Kumi Card' : ''}
                           {event.kids_friendly ? ' · adatto ai bambini' : ''}
@@ -324,15 +359,34 @@ export default function EventsAdminPanel({
             : (
               <div className="space-y-3">
                 {reports.map((report) => (
-                  <div key={report.id} className={`rounded-xl border bg-white p-4 shadow-sm ${report.status === 'open' ? 'border-red-200' : 'border-gray-200 opacity-70'}`}>
+                  <div
+                    key={report.id}
+                    className={`rounded-xl border bg-white p-4 shadow-sm ${
+                      report.status === 'open' ? (report.kind === 'free_paid' ? 'border-2 border-red-500' : 'border-red-200') : 'border-gray-200 opacity-70'
+                    }`}
+                  >
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div className="text-sm">
                         <p className="flex items-center gap-1.5 font-semibold text-gray-900">
                           <Flag className="h-4 w-4 text-red-500" /> {report.event?.title ?? '—'} {report.event && eventLink(report.event.id)}
                         </p>
+                        {report.kind === 'free_paid' && (
+                          <p className="mt-1">
+                            <span className="inline-flex rounded-full bg-red-600 px-2 py-0.5 text-xs font-bold text-white">
+                              Pagamento chiesto per un evento dichiarato gratuito
+                            </span>
+                          </p>
+                        )}
                         <p className="text-xs text-gray-500">
                           Organizzatore {name(report.organizer)} · stato {report.event?.status}
                         </p>
+                        {report.event && Number(report.event.price) === 0 && (
+                          <p className="text-xs text-gray-500">
+                            {report.event.free_declared_at
+                              ? `Evento gratuito: dichiarazione «nessun pagamento» del ${when(report.event.free_declared_at)}`
+                              : 'Evento gratuito senza dichiarazione (creato prima della regola)'}
+                          </p>
+                        )}
                         <p className="text-xs text-gray-500">
                           Segnalato da {name(report.reporter)} · {when(report.created_at)}
                         </p>
@@ -442,7 +496,9 @@ export default function EventsAdminPanel({
                         <td className="px-3 py-2 font-medium text-gray-900">{fee.event?.title ?? '—'}</td>
                         <td className="px-3 py-2 text-gray-600">{name(fee.organizer)}</td>
                         <td className="px-3 py-2 text-xs text-gray-500">
-                          {fee.participants} × {money(fee.price)} × {Number(fee.percent)}%
+                          {Number(fee.price) > 0
+                            ? `${fee.participants} × ${money(fee.price)} × ${Number(fee.percent)}%`
+                            : `${fee.participants} × ${money(fee.participants > 0 ? Number(fee.amount) / fee.participants : 0)} (evento gratuito, quota fissa)`}
                         </td>
                         <td className="px-3 py-2 font-semibold">{money(fee.amount)}</td>
                         <td className="px-3 py-2">

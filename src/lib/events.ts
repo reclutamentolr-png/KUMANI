@@ -110,7 +110,15 @@ export type EventDetail = EventCard & {
 
 export type EventFeeInfo = { id: string; amount: number; status: 'due' | 'paid' | 'waived'; participants: number; percent: number }
 
-export type OrganizedEvent = EventCard & { review_note: string | null; checked_in: number; fee: EventFeeInfo | null }
+export type OrganizedEvent = EventCard & {
+  review_note: string | null
+  checked_in: number
+  fee: EventFeeInfo | null
+  // Evento gratuito: data della dichiarazione «nessun pagamento» e quota
+  // fissa per iscritto valida per questo evento (0 = nessuna commissione)
+  free_declared_at?: string | null
+  free_fee_eur?: number
+}
 
 export type EventPassItem = EventCard & { pass: string | null; my_status: 'registered' | 'checked_in' | 'waitlist' }
 
@@ -143,6 +151,8 @@ export type OrganizerStatus = {
   trusted: boolean
   fees_due: number
   fee_percent: number
+  // Quota fissa per iscritto sugli eventi gratuiti (0 = nessuna commissione)
+  free_fee_eur?: number
   // Fase 2: livello e reputazione
   level?: OrganizerLevel
   avg_rating?: number | null

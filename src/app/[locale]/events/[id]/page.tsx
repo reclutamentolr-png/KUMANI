@@ -222,9 +222,13 @@ export default async function EventPage({ params, searchParams }: Props) {
 
               <InfoRow icon={<Euro className="h-5 w-5" />} label={t('price')}>
                 <p className="font-semibold text-[var(--ink)]">
-                  {event.price ? t('pricePerPerson', { price: formatEventPrice(event.price, event.currency, locale) }) : t('free')}
+                  {event.price ? t('pricePerPerson', { price: formatEventPrice(event.price, event.currency, locale) }) : t('freeBadge')}
                 </p>
-                {event.price > 0 && <p className="text-sm text-[var(--muted)]">{t('priceNote')}</p>}
+                {event.price > 0 ? (
+                  <p className="text-sm text-[var(--muted)]">{t('priceNote')}</p>
+                ) : (
+                  <p className="mt-1 rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-800">{t('freeNote')}</p>
+                )}
               </InfoRow>
             </section>
 

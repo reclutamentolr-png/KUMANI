@@ -4271,7 +4271,12 @@
     "reviewThanks": "Danke! Deine Bewertung wurde gespeichert.",
     "reviewEdit": "Bewertung bearbeiten",
     "reviewPickStars": "Wähle eine Bewertung von 1 bis 5 Sternen.",
-    "reviewNotAllowed": "Du kannst dieses Event nicht (mehr) bewerten: Das geht innerhalb von 30 Tagen, wenn du teilgenommen hast."
+    "reviewNotAllowed": "Du kannst dieses Event nicht (mehr) bewerten: Das geht innerhalb von 30 Tagen, wenn du teilgenommen hast.",
+    "freeBadge": "Kostenlos",
+    "freeNote": "Der Veranstalter hat erklärt, dass von dir keine Zahlung verlangt wird, weder am Eingang noch danach. Falls doch, melde es dem Staff.",
+    "reportFreePaid": "Für ein als kostenlos erklärtes Event wurde von mir eine Zahlung verlangt",
+    "reportOther": "Anderes Problem",
+    "reportFreePaidPlaceholder": "Wenn du möchtest, füge Details hinzu: wie viel, wann und wie es verlangt wurde…"
   },
   "eventsHome": {
     "eyebrow": "KUMANI Events",
@@ -4481,7 +4486,18 @@
     "noShowsBadge": "{count, plural, one {# × nicht erschienen} other {# × nicht erschienen}}",
     "noShowsTitle": "So oft hat sich die Person für andere Events angemeldet, ohne zu erscheinen",
     "attendedBadge": "{count, plural, one {# Event} other {# Events}}",
-    "attendedTitle": "KUMANI-Events, an denen die Person tatsächlich teilgenommen hat"
+    "attendedTitle": "KUMANI-Events, an denen die Person tatsächlich teilgenommen hat",
+    "fieldPriceMode": "Eintritt",
+    "priceModeFree": "Kostenloses Event",
+    "priceModePaid": "Kostenpflichtiges Event",
+    "freeDeclaration": "Ich erkläre, dass von den Teilnehmenden keine Zahlung verlangt wird, weder am Eingang noch danach",
+    "freeNoFee": "Keine KUMANI-Gebühr.",
+    "freeFeeNotice": "Bei kostenlosen Events behält KUMANI {fee} pro Anmeldung ein.",
+    "freeNoFeeShort": "Kostenlose Events: keine KUMANI-Gebühr.",
+    "fieldPricePaidHint": "Was jede teilnehmende Person dir direkt vor Ort zahlt.",
+    "error_free_declaration": "Für ein kostenloses Event musst du erklären, dass von den Teilnehmenden keine Zahlung verlangt wird.",
+    "error_price_paid": "Für ein kostenpflichtiges Event gib einen Preis über 0 € an oder wähle „Kostenloses Event“.",
+    "feeFormulaFree": "{participants} Angemeldete × {fee} (kostenloses Event)"
   },
   "verification": {
     "title_timebank": "An der Time Bank teilnehmen",

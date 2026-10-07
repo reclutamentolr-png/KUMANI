@@ -81,6 +81,10 @@ export type EventFormInput = {
   languages: string[]
   capacity: string
   price: string
+  // Evento gratuito (prezzo 0) o a pagamento; per i gratuiti è obbligatoria
+  // la dichiarazione «nessun pagamento, né all'ingresso né dopo»
+  free: boolean
+  freeDeclared: boolean
   is18plus: boolean
   kidsFriendly: boolean
   rulesAccepted: boolean
@@ -120,8 +124,12 @@ export async function saveEvent(
     if (!text) return null
     return /^https?:\/\//i.test(text) ? text : `https://${text}`
   }
-  const price = Number(input.price.replace(/\s/g, '').replace(',', '.') || '0')
+  const price = input.free ? 0 : Number(input.price.replace(/\s/g, '').replace(',', '.') || '0')
   if (!Number.isFinite(price) || price < 0 || price > 10000) return { error: 'price' }
+  // A pagamento serve un prezzo; gratuito serve la dichiarazione (event_save
+  // lo ricontrolla sul prezzo effettivo, bloccato dopo le prime iscrizioni)
+  if (!input.free && price <= 0) return { error: 'price_paid' }
+  if (input.free && !input.freeDeclared) return { error: 'free_declaration' }
 
   const payload = {
     title: input.title.trim().slice(0, 100),
@@ -140,6 +148,7 @@ export async function saveEvent(
     languages: input.languages.filter((l) => (EVENT_LANGUAGES as readonly string[]).includes(l)),
     capacity: Number.parseInt(input.capacity, 10) || 0,
     price: Math.round(price * 100) / 100,
+    free_declared: input.free && input.freeDeclared,
     is_18plus: input.is18plus,
     kids_friendly: input.kidsFriendly,
     rules_accepted: input.rulesAccepted,
@@ -192,9 +201,12 @@ export async function openPass(token: string): Promise<CheckInResult & { event_i
   return (await rpc<CheckInResult & { event_id?: string; role?: string }>('event_pass_open', { p_token: token })) ?? { result: 'invalid' }
 }
 
-export async function reportEvent(eventId: string, reason: string): Promise<string> {
+// kind 'free_paid': «Mi è stato chiesto un pagamento per un evento dichiarato
+// gratuito» (il testo in questo caso è facoltativo)
+export async function reportEvent(eventId: string, reason: string, kind: 'other' | 'free_paid' = 'other'): Promise<string> {
   if (!UUID_RE.test(eventId)) return 'invalid'
-  return (await rpc<string>('event_report', { p_event: eventId, p_reason: reason.slice(0, 1000) })) ?? 'saveError'
+  const p_kind = kind === 'free_paid' ? 'free_paid' : 'other'
+  return (await rpc<string>('event_report', { p_event: eventId, p_reason: reason.slice(0, 1000), p_kind })) ?? 'saveError'
 }
 
 // Fase 2: recensione dopo l'evento (1–5 stelle, commento facoltativo)

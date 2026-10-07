@@ -4271,7 +4271,12 @@
     "reviewThanks": "¡Gracias! Tu reseña se ha guardado.",
     "reviewEdit": "Editar la reseña",
     "reviewPickStars": "Elige una valoración de 1 a 5 estrellas.",
-    "reviewNotAllowed": "No puedes (o ya no puedes) valorar este evento: se puede hacer en un plazo de 30 días, si has participado."
+    "reviewNotAllowed": "No puedes (o ya no puedes) valorar este evento: se puede hacer en un plazo de 30 días, si has participado.",
+    "freeBadge": "Gratuito",
+    "freeNote": "El organizador ha declarado que no se te pedirá ningún pago, ni en la entrada ni después. Si ocurre, repórtalo al Staff.",
+    "reportFreePaid": "Me pidieron un pago por un evento declarado gratuito",
+    "reportOther": "Otro problema",
+    "reportFreePaidPlaceholder": "Si quieres, añade detalles: cuánto, cuándo y cómo te lo pidieron…"
   },
   "eventsHome": {
     "eyebrow": "KUMANI Events",
@@ -4481,7 +4486,18 @@
     "noShowsBadge": "{count, plural, one {# ausencia} other {# ausencias}}",
     "noShowsTitle": "Veces que se ha inscrito en otros eventos sin presentarse",
     "attendedBadge": "{count, plural, one {# evento} other {# eventos}}",
-    "attendedTitle": "Eventos KUMANI en los que ha participado de verdad"
+    "attendedTitle": "Eventos KUMANI en los que ha participado de verdad",
+    "fieldPriceMode": "Entrada",
+    "priceModeFree": "Evento gratuito",
+    "priceModePaid": "Evento de pago",
+    "freeDeclaration": "Declaro que a los participantes no se les pedirá ningún pago, ni en la entrada ni después",
+    "freeNoFee": "Sin comisión de KUMANI.",
+    "freeFeeNotice": "En los eventos gratuitos KUMANI retiene {fee} por inscrito.",
+    "freeNoFeeShort": "Eventos gratuitos: sin comisión de KUMANI.",
+    "fieldPricePaidHint": "Lo que cada participante te paga directamente, en el lugar.",
+    "error_free_declaration": "Para un evento gratuito debes declarar que a los participantes no se les pedirá ningún pago.",
+    "error_price_paid": "Para un evento de pago indica un precio mayor de 0 €, o elige «Evento gratuito».",
+    "feeFormulaFree": "{participants} inscritos × {fee} (evento gratuito)"
   },
   "verification": {
     "title_timebank": "Participe en la Time Bank",

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { LoaderCircle, Lock, Repeat, ShieldCheck, Stamp } from 'lucide-react'
+import { Euro, Gift, LoaderCircle, Lock, Repeat, ShieldCheck, Stamp } from 'lucide-react'
 import { saveEvent, type EventFormInput } from '@/app/actions/events'
 import {
   EVENT_COUNTRIES,
@@ -61,7 +61,10 @@ function fromEvent(event: OrganizedEvent): EventFormInput {
     onlineLink: '',
     languages: event.languages,
     capacity: String(event.capacity),
-    price: event.price > 0 ? String(event.price) : '0',
+    price: event.price > 0 ? String(event.price) : '',
+    // Evento gratuito già salvato: la dichiarazione risulta già data
+    free: !(event.price > 0),
+    freeDeclared: !(event.price > 0),
     is18plus: event.is_18plus,
     kidsFriendly: event.kids_friendly,
     rulesAccepted: false,
@@ -91,7 +94,9 @@ function emptyForm(locale: string, hasCard: boolean): EventFormInput {
     onlineLink: '',
     languages: (EVENT_LANGUAGES as readonly string[]).includes(locale) ? [locale] : ['it'],
     capacity: '20',
-    price: '0',
+    price: '',
+    free: true,
+    freeDeclared: false,
     is18plus: false,
     kidsFriendly: false,
     rulesAccepted: false,
@@ -109,6 +114,7 @@ export default function EventForm({
   initial,
   maxCapacity,
   feePercent,
+  freeFee = 0,
   fidelityCard,
   businessProfile = null,
   onSaved,
@@ -118,6 +124,8 @@ export default function EventForm({
   initial?: Partial<Pick<EventFormInput, 'address' | 'mapLink' | 'onlineLink'>>
   maxCapacity: number
   feePercent: number
+  // Quota fissa KUMANI per iscritto sugli eventi gratuiti (0 = nessuna commissione)
+  freeFee?: number
   // Kumi Card attiva dell'organizzatore: abilita il timbro a chi entra
   fidelityCard?: OrganizerStatus['fidelity_card']
   // Scheda attività: per un nuovo evento il luogo si può riprendere da lì
@@ -127,6 +135,7 @@ export default function EventForm({
   const t = useTranslations('eventsOrganizer')
   const te = useTranslations('events')
   const locale = useLocale()
+  const money = (value: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(value)
   const [form, setForm] = useState<EventFormInput>(() => (event ? { ...fromEvent(event), ...initial } : emptyForm(locale, !!fidelityCard)))
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -155,6 +164,7 @@ export default function EventForm({
     if (form.languages.length === 0) return setError(t('error_languages'))
     if (!form.rulesAccepted) return setError(t('error_rules'))
     if (needsLink && !form.onlineLink.trim()) return setError(t('error_online_link'))
+    if (!priceLocked && form.free && !form.freeDeclared) return setError(t('error_free_declaration'))
     setBusy(true)
     setError(null)
     const result = await saveEvent(event?.id ?? null, form)
@@ -362,25 +372,80 @@ export default function EventForm({
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <div>
+        <div className="col-span-2 sm:col-span-1">
           <label className={label}>{t('fieldCapacity')}</label>
           <input type="number" inputMode="numeric" className={input} min={1} max={maxCapacity} required value={form.capacity} onChange={(e) => set('capacity', e.target.value)} />
           <p className={hint}>{t('fieldCapacityHint', { max: maxCapacity })}</p>
         </div>
-        <div>
-          <label className={label}>{t('fieldPrice')}</label>
-          <input
-            inputMode="decimal"
-            className={input}
-            value={form.price}
-            disabled={priceLocked}
-            maxLength={8}
-            onChange={(e) => set('price', e.target.value.replace(/[^0-9.,]/g, ''))}
-          />
-          <p className={hint}>{priceLocked ? t('fieldPriceLocked') : t('fieldPriceHint')}</p>
-        </div>
       </div>
-      <p className="rounded-xl bg-[var(--gold-pale)]/50 px-3 py-2 text-xs leading-5 text-gray-700">{t('priceExplain', { percent: feePercent })}</p>
+
+      {/* Gratuito / a pagamento: dopo le prime iscrizioni non si cambia più */}
+      <div className="rounded-xl border border-gray-200 bg-gray-50/60 p-4">
+        <label className={`${label} flex items-center gap-1.5`}>
+          <Euro className="h-4 w-4 text-[var(--gold)]" /> {t('fieldPriceMode')}
+        </label>
+        <div role="radiogroup" aria-label={t('fieldPriceMode')} className="grid grid-cols-2 gap-1 rounded-xl bg-gray-200/70 p-1">
+          {([true, false] as const).map((free) => (
+            <button
+              key={String(free)}
+              type="button"
+              role="radio"
+              aria-checked={form.free === free}
+              disabled={priceLocked}
+              onClick={() => set('free', free)}
+              className={`flex items-center justify-center gap-1.5 rounded-lg px-2 py-2.5 text-sm font-bold transition disabled:cursor-not-allowed ${
+                form.free === free
+                  ? free
+                    ? 'bg-emerald-600 text-white shadow-sm'
+                    : 'bg-[var(--ink)] text-white shadow-sm'
+                  : 'text-gray-600 hover:bg-white/70 disabled:hover:bg-transparent'
+              }`}
+            >
+              {free ? <Gift className="h-4 w-4" /> : <Euro className="h-4 w-4" />} {free ? t('priceModeFree') : t('priceModePaid')}
+            </button>
+          ))}
+        </div>
+        {priceLocked && (
+          <p className={`${hint} flex items-center gap-1`}>
+            <Lock className="h-3 w-3" /> {t('fieldPriceLocked')}
+          </p>
+        )}
+
+        {form.free ? (
+          <div className="mt-3 space-y-2">
+            <label className="flex items-start gap-3 rounded-xl border border-emerald-200 bg-white p-3 text-sm text-gray-800">
+              <input
+                type="checkbox"
+                className="mt-0.5 h-4 w-4 accent-emerald-600"
+                checked={form.freeDeclared}
+                disabled={priceLocked}
+                required={!priceLocked}
+                onChange={(e) => set('freeDeclared', e.target.checked)}
+              />
+              <span className="font-semibold">{t('freeDeclaration')}</span>
+            </label>
+            <p className="rounded-xl bg-emerald-50 px-3 py-2 text-xs font-semibold leading-5 text-emerald-800">
+              {freeFee > 0 ? t('freeFeeNotice', { fee: money(freeFee) }) : t('freeNoFee')}
+            </p>
+          </div>
+        ) : (
+          <div className="mt-3">
+            <label className={label}>{t('fieldPrice')}</label>
+            <input
+              inputMode="decimal"
+              className={input}
+              value={form.price}
+              disabled={priceLocked}
+              required={!priceLocked}
+              maxLength={8}
+              placeholder="10"
+              onChange={(e) => set('price', e.target.value.replace(/[^0-9.,]/g, ''))}
+            />
+            <p className={hint}>{t('fieldPricePaidHint')}</p>
+            <p className="mt-2 rounded-xl bg-[var(--gold-pale)]/50 px-3 py-2 text-xs leading-5 text-gray-700">{t('priceExplain', { percent: feePercent })}</p>
+          </div>
+        )}
+      </div>
 
       <div className="space-y-2">
         <label className="flex items-start gap-3 text-sm text-gray-700">

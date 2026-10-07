@@ -1,5 +1,5 @@
 import { useLocale, useTranslations } from 'next-intl'
-import { Baby, BadgeCheck, Crown, Repeat, Sprout, Stamp, Star } from 'lucide-react'
+import { Baby, BadgeCheck, Crown, Gift, Repeat, Sprout, Stamp, Star } from 'lucide-react'
 import type { EventCard, OrganizerLevel } from '@/lib/events'
 
 // Piccoli elementi condivisi tra calendario e scheda evento.
@@ -14,14 +14,19 @@ export function formatEventPrice(price: number, currency: string, locale: string
   }).format(price)
 }
 
-// Prezzo: gratis, oppure pagato sul posto direttamente all'organizzatore.
+// Prezzo: «Gratuito» ben visibile (l'organizzatore ha dichiarato che non
+// chiederà pagamenti), oppure pagato sul posto direttamente all'organizzatore.
 export function PriceBadge({ event, dark = false }: { event: Pick<EventCard, 'price' | 'currency'>; dark?: boolean }) {
   const t = useTranslations('events')
   const locale = useLocale()
   if (!event.price) {
     return (
-      <span className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${dark ? 'bg-emerald-400/15 text-emerald-300' : 'bg-emerald-50 text-emerald-700'}`}>
-        {t('free')}
+      <span
+        className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-extrabold uppercase tracking-wide shadow-sm ${
+          dark ? 'bg-emerald-500 text-white' : 'bg-emerald-600 text-white'
+        }`}
+      >
+        <Gift className="h-3.5 w-3.5" /> {t('freeBadge')}
       </span>
     )
   }

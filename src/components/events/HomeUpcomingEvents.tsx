@@ -3,7 +3,7 @@ import { ArrowRight, CalendarHeart, MapPin, Video } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { EVENT_TYPE_EMOJI, formatEventDate } from '@/lib/events'
 import { getHomeEvents } from '@/lib/eventsHome'
-import { formatEventPrice } from './EventBadges'
+import { PriceBadge, formatEventPrice } from './EventBadges'
 
 // Fascia "Prossimi eventi" della Home pubblica: le prossime date di KUMANI
 // Events (una sola per serie). Senza eventi in programma resta un invito
@@ -61,9 +61,13 @@ export default async function HomeUpcomingEvents() {
                     </p>
                   )}
                   <div className="mt-auto flex items-center justify-between gap-2 pt-4 text-xs">
-                    <span className="rounded-full bg-white/10 px-2.5 py-0.5 font-semibold text-white/80">
-                      {event.price ? te('priceOnSite', { price: formatEventPrice(event.price, event.currency, locale) }) : te('free')}
-                    </span>
+                    {event.price ? (
+                      <span className="rounded-full bg-white/10 px-2.5 py-0.5 font-semibold text-white/80">
+                        {te('priceOnSite', { price: formatEventPrice(event.price, event.currency, locale) })}
+                      </span>
+                    ) : (
+                      <PriceBadge event={event} dark />
+                    )}
                     <span className="inline-flex items-center gap-1 font-semibold text-[var(--gold-bright)] group-hover:text-white">
                       {t('open')} <ArrowRight className="h-3.5 w-3.5" />
                     </span>

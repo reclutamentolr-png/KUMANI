@@ -4271,7 +4271,12 @@
     "reviewThanks": "Thank you! Your review has been saved.",
     "reviewEdit": "Edit your review",
     "reviewPickStars": "Choose a rating from 1 to 5 stars.",
-    "reviewNotAllowed": "You can't review this event (any more): reviews are possible within 30 days, if you attended."
+    "reviewNotAllowed": "You can't review this event (any more): reviews are possible within 30 days, if you attended.",
+    "freeBadge": "Free",
+    "freeNote": "The organizer has declared that you will not be asked for any payment, neither at the entrance nor afterwards. If it happens, report it to the Staff.",
+    "reportFreePaid": "I was asked to pay for an event declared free",
+    "reportOther": "Other problem",
+    "reportFreePaidPlaceholder": "If you like, add details: how much, when and how you were asked…"
   },
   "eventsHome": {
     "eyebrow": "KUMANI Events",
@@ -4481,7 +4486,18 @@
     "noShowsBadge": "{count, plural, one {# no-show} other {# no-shows}}",
     "noShowsTitle": "Times they signed up for other events without turning up",
     "attendedBadge": "{count, plural, one {# event} other {# events}}",
-    "attendedTitle": "KUMANI events they actually attended"
+    "attendedTitle": "KUMANI events they actually attended",
+    "fieldPriceMode": "Admission",
+    "priceModeFree": "Free event",
+    "priceModePaid": "Paid event",
+    "freeDeclaration": "I declare that participants will not be asked for any payment, neither at the entrance nor afterwards",
+    "freeNoFee": "No KUMANI fee.",
+    "freeFeeNotice": "For free events KUMANI keeps {fee} per attendee.",
+    "freeNoFeeShort": "Free events: no KUMANI fee.",
+    "fieldPricePaidHint": "What each participant pays you directly, on site.",
+    "error_free_declaration": "For a free event you must declare that participants will not be asked for any payment.",
+    "error_price_paid": "For a paid event enter a price above €0, or choose “Free event”.",
+    "feeFormulaFree": "{participants} attendees × {fee} (free event)"
   },
   "verification": {
     "title_timebank": "Join the Time Bank",

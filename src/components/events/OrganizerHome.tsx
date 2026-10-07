@@ -60,6 +60,7 @@ export default function OrganizerHome({
 
   const money = (value: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(value)
   const percent = status?.fee_percent ?? 0
+  const freeFee = Number(status?.free_fee_eur ?? 0)
   // Posti massimi secondo il livello (20 / 100 / 300)
   const maxCapacity = status?.max_capacity ?? (status?.trusted ? 100 : 20)
   const dueTotal = Math.round(fees.filter((f) => f.status === 'due').reduce((sum, f) => sum + Number(f.amount), 0) * 100) / 100
@@ -167,7 +168,11 @@ export default function OrganizerHome({
                 )}
               </>
             )}
-            {status && <p className="text-xs leading-5 text-[var(--muted)]">{t('feeNotice', { percent })}</p>}
+            {status && (
+              <p className="text-xs leading-5 text-[var(--muted)]">
+                {t('feeNotice', { percent })} {freeFee > 0 ? t('freeFeeNotice', { fee: money(freeFee) }) : t('freeNoFeeShort')}
+              </p>
+            )}
           </div>
           {status?.verified && status.plan && (
             <div className="flex flex-col items-stretch gap-1 sm:items-end">
@@ -201,7 +206,9 @@ export default function OrganizerHome({
                   <div className="min-w-0">
                     <p className="font-semibold text-[var(--ink)]">{fee.title}</p>
                     <p className="text-xs text-[var(--muted)]">
-                      {t('feeFormula', { participants: fee.participants, price: money(Number(fee.price)), percent: Number(fee.percent) })}
+                      {Number(fee.price) > 0
+                        ? t('feeFormula', { participants: fee.participants, price: money(Number(fee.price)), percent: Number(fee.percent) })
+                        : t('feeFormulaFree', { participants: fee.participants, fee: money(fee.participants > 0 ? Number(fee.amount) / fee.participants : 0) })}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
@@ -413,6 +420,7 @@ export default function OrganizerHome({
             initial={sheet.kind === 'edit' ? sheet.initial : undefined}
             maxCapacity={maxCapacity}
             feePercent={percent}
+            freeFee={sheet.kind === 'edit' && sheet.event.people > 0 ? Number(sheet.event.free_fee_eur ?? 0) : freeFee}
             fidelityCard={status?.fidelity_card ?? null}
             businessProfile={businessProfile}
             onSaved={(result) => {

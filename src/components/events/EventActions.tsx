@@ -41,6 +41,8 @@ export default function EventActions({
   const [copied, setCopied] = useState(false)
   const [reportOpen, setReportOpen] = useState(false)
   const [reason, setReason] = useState('')
+  // Motivo «mi è stato chiesto un pagamento» (solo per gli eventi gratuiti)
+  const [reportKind, setReportKind] = useState<'other' | 'free_paid'>('other')
   const [reportState, setReportState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
   // Appena messo in lista d'attesa (prima che la pagina si aggiorni)
   const [justWaitlisted, setJustWaitlisted] = useState(false)
@@ -119,10 +121,11 @@ export default function EventActions({
     }
   }
 
+  const reportReady = reportKind === 'free_paid' || reason.trim().length >= 5
   const sendReport = async () => {
-    if (reason.trim().length < 5) return
+    if (!reportReady) return
     setReportState('sending')
-    const result = await reportEvent(event.id, reason.trim())
+    const result = await reportEvent(event.id, reason.trim(), reportKind)
     setReportState(result === 'ok' ? 'sent' : 'error')
   }
 
@@ -361,19 +364,40 @@ export default function EventActions({
           ) : (
             <>
               <p className="mb-3 text-sm text-gray-600">{t('reportHint')}</p>
+              {!event.price && (
+                <div role="radiogroup" aria-label={t('reportTitle')} className="mb-3 space-y-2">
+                  {(['free_paid', 'other'] as const).map((kind) => (
+                    <label
+                      key={kind}
+                      className={`flex items-start gap-3 rounded-xl border px-3 py-2.5 text-sm ${
+                        reportKind === kind ? (kind === 'free_paid' ? 'border-red-300 bg-red-50 text-red-800' : 'border-gray-400 bg-gray-50') : 'border-gray-200'
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="event-report-kind"
+                        className="mt-0.5 h-4 w-4 accent-red-600"
+                        checked={reportKind === kind}
+                        onChange={() => setReportKind(kind)}
+                      />
+                      <span className="font-semibold">{kind === 'free_paid' ? t('reportFreePaid') : t('reportOther')}</span>
+                    </label>
+                  ))}
+                </div>
+              )}
               <textarea
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
                 rows={5}
                 maxLength={1000}
-                placeholder={t('reportPlaceholder')}
+                placeholder={reportKind === 'free_paid' ? t('reportFreePaidPlaceholder') : t('reportPlaceholder')}
                 className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm focus:border-[var(--gold)] focus:outline-none"
               />
               {reportState === 'error' && <p className="mt-2 text-sm font-semibold text-red-600">{t('error_saveError')}</p>}
               <button
                 type="button"
                 onClick={sendReport}
-                disabled={reason.trim().length < 5 || reportState === 'sending'}
+                disabled={!reportReady || reportState === 'sending'}
                 className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-red-600 py-3 font-bold text-white disabled:opacity-50"
               >
                 {reportState === 'sending' && <LoaderCircle className="h-4 w-4 animate-spin" />} {t('reportSend')}
