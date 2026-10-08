@@ -2473,7 +2473,8 @@
     "layerPlaceholder": "Camada (ex. Primário 150 g/m²)",
     "layerBase": "Suporte",
     "layerRemove": "Eliminar camada",
-    "layerAdd": "Adicionar camada"
+    "layerAdd": "Adicionar camada",
+    "cancelConfirm": "Tens alterações por guardar: queres sair sem as guardar?"
   },
   "kumaniCv": {
     "title": "KUMANI CV",

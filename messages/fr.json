@@ -2473,7 +2473,8 @@
     "layerPlaceholder": "Couche (ex. Primaire 150 g/m²)",
     "layerBase": "Support",
     "layerRemove": "Supprimer la couche",
-    "layerAdd": "Ajouter une couche"
+    "layerAdd": "Ajouter une couche",
+    "cancelConfirm": "Vous avez des modifications non enregistrées : quitter sans les enregistrer ?"
   },
   "kumaniCv": {
     "title": "KUMANI CV",

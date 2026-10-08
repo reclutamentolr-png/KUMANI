@@ -2473,7 +2473,8 @@
     "layerPlaceholder": "Layer (e.g. Primer 150 g/m²)",
     "layerBase": "Substrate",
     "layerRemove": "Delete layer",
-    "layerAdd": "Add layer"
+    "layerAdd": "Add layer",
+    "cancelConfirm": "You have unsaved changes: leave without saving them?"
   },
   "kumaniCv": {
     "title": "KUMANI CV",

@@ -106,7 +106,9 @@ export default function QuotePdfPreview({ form, issuer, logoUrl, quoteNumber }: 
           {busy && <LoaderCircle className="h-4 w-4 animate-spin text-[var(--gold)]" />}
         </p>
         <div className="h-[calc(100vh-8.5rem)] overflow-hidden rounded-xl border border-gray-300 bg-gray-100 shadow-lg">
-          {url ? <iframe title={t('livePreview')} src={`${url}#toolbar=0&navpanes=0&view=FitH`} className="h-full w-full" /> : null}
+          {/* Riquadro nuovo a ogni aggiornamento (key): cambiare solo l'indirizzo aggiungerebbe una
+              pagina alla cronologia del browser e «Indietro» sfoglierebbe le anteprime */}
+          {url ? <iframe key={url} title={t('livePreview')} src={`${url}#toolbar=0&navpanes=0&view=FitH`} className="h-full w-full" /> : null}
         </div>
         <p className="mt-2 text-xs text-gray-500">{t('livePreviewHint')}</p>
       </div>

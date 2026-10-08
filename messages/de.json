@@ -2473,7 +2473,8 @@
     "layerPlaceholder": "Schicht (z. B. Grundierung 150 g/m²)",
     "layerBase": "Untergrund",
     "layerRemove": "Schicht löschen",
-    "layerAdd": "Schicht hinzufügen"
+    "layerAdd": "Schicht hinzufügen",
+    "cancelConfirm": "Du hast ungespeicherte Änderungen: ohne Speichern verlassen?"
   },
   "kumaniCv": {
     "title": "KUMANI CV",

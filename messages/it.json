@@ -2527,7 +2527,8 @@
     "layerPlaceholder": "Strato (es. Primer 150 gr/mq)",
     "layerBase": "Supporto",
     "layerRemove": "Elimina strato",
-    "layerAdd": "Aggiungi strato"
+    "layerAdd": "Aggiungi strato",
+    "cancelConfirm": "Hai modifiche non salvate: vuoi uscire senza salvarle?"
   },
   "kumaniCv": {
     "title": "KUMANI CV",

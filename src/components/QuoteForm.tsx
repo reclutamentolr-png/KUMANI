@@ -105,6 +105,22 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
   const [clientQuery, setClientQuery] = useState('')
   const [clientListOpen, setClientListOpen] = useState(false)
 
+  // Modifiche non salvate: confronto con il modulo di partenza
+  const [initialSnapshot] = useState(() => JSON.stringify(form))
+  const dirty = JSON.stringify(form) !== initialSnapshot
+  useEffect(() => {
+    if (!dirty || saving) return
+    const onBeforeUnload = (e: BeforeUnloadEvent) => e.preventDefault()
+    window.addEventListener('beforeunload', onBeforeUnload)
+    return () => window.removeEventListener('beforeunload', onBeforeUnload)
+  }, [dirty, saving])
+  // «Annulla»: in modifica torna al preventivo, se nuovo all'elenco; con
+  // modifiche non salvate chiede prima conferma
+  const cancel = () => {
+    if (dirty && !confirm(t('cancelConfirm'))) return
+    router.push(mode === 'edit' && quoteId ? `/marketplace/preventivi/${quoteId}${fromDashboardSuffix}` : `/marketplace/preventivi${fromDashboardSuffix}`)
+  }
+
   useEffect(() => {
     listSavedClients().then((result) => {
       if (result.success) setSavedClients(result.data)
@@ -673,7 +689,7 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
         <div className="flex gap-3">
         <button
           type="button"
-          onClick={() => router.back()}
+          onClick={cancel}
           className="px-6 py-3 rounded-xl font-semibold text-sm border border-[var(--gold)]/40 bg-white text-[var(--ink)] hover:bg-[var(--gold-pale)] transition-all"
         >
           {t('cancelAction')}

@@ -2473,7 +2473,8 @@
     "layerPlaceholder": "Capa (ej. Imprimación 150 g/m²)",
     "layerBase": "Soporte",
     "layerRemove": "Eliminar capa",
-    "layerAdd": "Añadir capa"
+    "layerAdd": "Añadir capa",
+    "cancelConfirm": "Tienes cambios sin guardar: ¿quieres salir sin guardarlos?"
   },
   "kumaniCv": {
     "title": "KUMANI CV",
