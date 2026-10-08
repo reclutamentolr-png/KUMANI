@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { Eye, LoaderCircle } from 'lucide-react'
 import { buildQuotePdfLabels, loadImageAsDataUrl } from '@/lib/pdfHelpers'
-import { computeQuoteTotal, computeSectionsTotal, type QuoteFormData } from '@/lib/quotes'
+import { computeQuoteTotal, computeSectionsTotal, quoteImageUrl, type QuoteFormData } from '@/lib/quotes'
 import type { IssuerForPdf, QuoteForPdf } from '@/lib/quotePdfShared'
 
 // Anteprima dal vivo del preventivo (solo su schermi larghi): è il PDF vero,
@@ -16,6 +16,8 @@ export default function QuotePdfPreview({ form, issuer, logoUrl, quoteNumber }: 
   const [url, setUrl] = useState<string | null>(null)
   const [busy, setBusy] = useState(true)
   const logo = useRef<string | null | undefined>(undefined)
+  // Immagini delle sezioni già scaricate (si scaricano una volta sola)
+  const images = useRef<Record<string, string>>({})
 
   useEffect(() => {
     let cancelled = false
@@ -26,7 +28,13 @@ export default function QuotePdfPreview({ form, issuer, logoUrl, quoteNumber }: 
         if (logo.current === undefined) logo.current = logoUrl ? await loadImageAsDataUrl(logoUrl).catch(() => null) : null
         const descriptive = form.layout === 'descriptive'
         const items = form.items.filter((i) => i.description.trim())
-        const sections = form.sections.filter((s) => s.title.trim() || s.body.trim() || s.amount !== null)
+        const sections = form.sections.filter((s) => s.title.trim() || s.body.trim() || s.amount !== null || s.image || (s.layers?.length ?? 0) > 0)
+        for (const s of sections) {
+          if (s.kind === 'image' && s.image && !images.current[s.image]) {
+            const data = await loadImageAsDataUrl(quoteImageUrl(s.image)).catch(() => null)
+            if (data) images.current[s.image] = data
+          }
+        }
         const quote: QuoteForPdf = {
           quote_number: quoteNumber,
           client_name: form.clientName || '—',
@@ -58,6 +66,7 @@ export default function QuotePdfPreview({ form, issuer, logoUrl, quoteNumber }: 
           issuer,
           logoDataUrl: logo.current,
           labels: buildQuotePdfLabels(t),
+          sectionImages: images.current,
           formatDate: (iso: string) => (iso ? new Date(iso).toLocaleDateString(locale) : ''),
           formatCurrency: (n: number) => n.toLocaleString(locale, { style: 'currency', currency: 'EUR' }),
         })

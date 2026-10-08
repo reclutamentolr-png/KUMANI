@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { Share2, MessageCircle, Mail, Printer, LoaderCircle } from 'lucide-react'
 import type { QuoteForPdf, IssuerForPdf } from '@/lib/quotePdf'
-import { loadImageAsDataUrl, buildQuotePdfLabels } from '@/lib/pdfHelpers'
+import { loadImageAsDataUrl, buildQuotePdfLabels, loadQuoteSectionImages } from '@/lib/pdfHelpers'
+import { quoteImageUrl } from '@/lib/quotes'
 
 type Props = {
   quote: QuoteForPdf
@@ -24,7 +25,9 @@ export default function QuoteShareButtons({ quote, issuer, logoUrl }: Props) {
     // jsPDF solo al clic, fuori dal bundle iniziale
     const { generateQuotePdfBlob } = await import('@/lib/quotePdf')
     const logoDataUrl = logoUrl ? await loadImageAsDataUrl(logoUrl) : null
+    const sectionImages = await loadQuoteSectionImages(quote.sections, quoteImageUrl)
     return generateQuotePdfBlob({
+      sectionImages,
       quote,
       issuer,
       logoDataUrl,

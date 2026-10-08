@@ -79,3 +79,19 @@ export async function loadImageAsDataUrl(url: string): Promise<string | null> {
     return null
   }
 }
+
+// Immagini delle sezioni del preventivo descrittivo, pronte per il PDF
+export async function loadQuoteSectionImages(sections: { kind: string; image?: string | null }[] | null | undefined, urlOf: (path: string) => string): Promise<Record<string, string>> {
+  const paths = [...new Set((sections ?? []).filter((s) => s.kind === 'image' && s.image).map((s) => s.image as string))]
+  const entries = await Promise.all(
+    paths.map(async (path) => {
+      try {
+        const data = await loadImageAsDataUrl(urlOf(path))
+        return data ? ([path, data] as const) : null
+      } catch {
+        return null
+      }
+    })
+  )
+  return Object.fromEntries(entries.filter(Boolean) as [string, string][])
+}

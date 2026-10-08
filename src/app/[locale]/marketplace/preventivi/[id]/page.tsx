@@ -9,7 +9,8 @@ import QuoteShareButtons from '@/components/QuoteShareButtons'
 import QuoteActions from '@/components/QuoteActions'
 import QuoteWorkChain from '@/components/ecosystem/QuoteWorkChain'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
-import { sectionLines, type QuoteItem, type QuoteSection } from '@/lib/quotes'
+import { quoteImageUrl, sectionLines, type QuoteItem, type QuoteSection } from '@/lib/quotes'
+import { LayersView } from '@/components/quotes/QuoteSectionExtras'
 
 export default async function QuoteDetailPage({
   params,
@@ -120,7 +121,20 @@ export default async function QuoteDetailPage({
                       <span className="mt-1 block h-0.5 w-8 bg-[var(--gold)]" />
                     </h3>
                   )}
-                  {s.kind === 'text' ? (
+                  {s.kind === 'image' ? (
+                    <figure className="space-y-2">
+                      {s.image && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={quoteImageUrl(s.image)} alt={s.title} className="max-h-96 w-full rounded-lg border border-gray-200 object-contain" />
+                      )}
+                      {s.body && <figcaption className="text-sm italic text-gray-500">{s.body}</figcaption>}
+                    </figure>
+                  ) : s.kind === 'layers' ? (
+                    <div className="space-y-2">
+                      <LayersView layers={s.layers ?? []} />
+                      {s.body && <p className="text-sm italic text-gray-500">{s.body}</p>}
+                    </div>
+                  ) : s.kind === 'text' ? (
                     <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-700">{s.body}</p>
                   ) : s.kind === 'numbered' ? (
                     <ol className="list-decimal space-y-1 pl-6 text-sm text-gray-700">

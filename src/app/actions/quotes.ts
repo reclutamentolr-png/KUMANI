@@ -4,8 +4,10 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
 import { hasActivePreventiviAccess } from '@/lib/quotes-server'
 import {
+  MAX_QUOTE_LAYERS,
   MAX_QUOTE_PRESETS,
   MAX_QUOTE_SECTIONS,
+  QUOTE_SECTION_KINDS,
   QUOTE_LAYOUTS,
   QUOTE_LOGO_POSITIONS,
   QUOTE_VAT_MODES,
@@ -13,6 +15,7 @@ import {
   computeSectionsTotal,
   type QuoteFormData,
   type QuoteItem,
+  type QuoteLayer,
   type QuotePreset,
   type QuoteSection,
   type SavedClientRow,
@@ -35,30 +38,42 @@ function cleanItems(items: QuoteItem[]): QuoteItem[] {
   })
 }
 
-const SECTION_KINDS = ['text', 'numbered', 'bullets'] as const
+const SECTION_KINDS = QUOTE_SECTION_KINDS
+const HEX = /^#[0-9a-f]{6}$/i
+function cleanLayers(layers: unknown): QuoteLayer[] {
+  return (Array.isArray(layers) ? layers : [])
+    .slice(0, MAX_QUOTE_LAYERS)
+    .map((l) => ({ label: clip((l as QuoteLayer)?.label, 160), color: HEX.test(String((l as QuoteLayer)?.color)) ? String((l as QuoteLayer).color) : '#cfcfcf' }))
+    .filter((l) => l.label.trim())
+}
 const clip = (v: unknown, max: number) => String(v ?? '').slice(0, max)
 
 // Sezioni del preventivo descrittivo ricostruite campo per campo
-function cleanSections(sections: QuoteSection[]): QuoteSection[] {
+function cleanSections(sections: QuoteSection[], userId: string): QuoteSection[] {
   return (Array.isArray(sections) ? sections : [])
     .slice(0, MAX_QUOTE_SECTIONS)
     .map((s) => {
       const amount = s?.amount === null || s?.amount === undefined || String(s.amount) === '' ? null : Number(s.amount)
-      return {
+      const kind = SECTION_KINDS.includes(s?.kind) ? s.kind : 'text'
+      const section: QuoteSection = {
         title: clip(s?.title, 160),
-        kind: SECTION_KINDS.includes(s?.kind as (typeof SECTION_KINDS)[number]) ? s.kind : 'text',
+        kind,
         body: clip(s?.body, 6000),
         amount: amount !== null && Number.isFinite(amount) ? Math.round(amount * 100) / 100 : null,
       }
+      // Immagine: solo dalla propria cartella delle immagini dei preventivi
+      if (kind === 'image' && typeof s.image === 'string' && s.image.startsWith(`${userId}/quote-images/`) && /^[0-9a-f-]{36}\/quote-images\/[A-Za-z0-9._-]{1,80}$/i.test(s.image)) section.image = s.image
+      if (kind === 'layers') section.layers = cleanLayers(s.layers)
+      return section
     })
-    .filter((s) => s.title.trim() || s.body.trim() || s.amount !== null)
+    .filter((s) => s.title.trim() || s.body.trim() || s.amount !== null || s.image || (s.layers?.length ?? 0) > 0)
 }
 
 // Campi comuni di salvataggio (le due modalità)
-function quoteFields(form: QuoteFormData) {
+function quoteFields(form: QuoteFormData, userId: string) {
   const layout = QUOTE_LAYOUTS.includes(form.layout) ? form.layout : 'table'
   const items = layout === 'table' ? cleanItems(form.items) : []
-  const sections = layout === 'descriptive' ? cleanSections(form.sections) : []
+  const sections = layout === 'descriptive' ? cleanSections(form.sections, userId) : []
   return {
     layout,
     logo_position: QUOTE_LOGO_POSITIONS.includes(form.logoPosition) ? form.logoPosition : 'left',
@@ -213,7 +228,7 @@ export async function createQuote(
   if (!gate.ok) return { success: false, message: gate.message }
 
   const supabase = await createClient()
-  const fields = quoteFields(form)
+  const fields = quoteFields(form, gate.userId)
 
   for (let attempt = 0; attempt < 5; attempt++) {
     const { data: maxRow } = await supabase
@@ -259,7 +274,7 @@ export async function updateQuote(id: string, form: QuoteFormData): Promise<Acti
   if (!gate.ok) return { success: false, message: gate.message }
 
   const supabase = await createClient()
-  const fields = quoteFields(form)
+  const fields = quoteFields(form, gate.userId)
 
   const { error } = await supabase
     .from('quotes')
@@ -316,12 +331,14 @@ export async function duplicateQuote(id: string): Promise<ActionResult<{ id: str
 function cleanPresets(presets: QuotePreset[]): QuotePreset[] {
   return (Array.isArray(presets) ? presets : [])
     .slice(0, MAX_QUOTE_PRESETS)
-    .map((p) => ({
-      title: clip(p?.title, 160),
-      kind: SECTION_KINDS.includes(p?.kind as (typeof SECTION_KINDS)[number]) ? p.kind : 'text',
-      body: clip(p?.body, 6000),
-    }))
-    .filter((p) => p.title.trim() || p.body.trim())
+    .map((p) => {
+      // Le immagini non diventano sezioni pronte (restano nel preventivo)
+      const kind = SECTION_KINDS.includes(p?.kind) && p.kind !== 'image' ? p.kind : 'text'
+      const preset: QuotePreset = { title: clip(p?.title, 160), kind, body: clip(p?.body, 6000) }
+      if (kind === 'layers') preset.layers = cleanLayers(p.layers)
+      return preset
+    })
+    .filter((p) => p.title.trim() || p.body.trim() || (p.layers?.length ?? 0) > 0)
 }
 
 export async function listQuotePresets(): Promise<QuotePreset[]> {

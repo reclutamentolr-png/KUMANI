@@ -60,6 +60,8 @@ export function generateQuotePdfBlob(params: {
   labels: PdfLabels
   formatDate: (iso: string) => string
   formatCurrency: (n: number) => string
+  // Immagini delle sezioni del preventivo descrittivo (percorso → data URL)
+  sectionImages?: Record<string, string>
 }): Blob {
   const { quote, issuer, logoDataUrl, labels, formatDate, formatCurrency } = params
   // Preventivo descrittivo: impaginazione a sezioni

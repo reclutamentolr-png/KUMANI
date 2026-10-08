@@ -4,9 +4,12 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { ArrowDown, ArrowUp, BookmarkPlus, Check, ChevronDown, LibraryBig, Plus, Trash2, X } from 'lucide-react'
 import { saveQuotePresets } from '@/app/actions/quotes'
+import { LayersEditor, SectionImagePicker } from '@/components/quotes/QuoteSectionExtras'
 import {
   MAX_QUOTE_PRESETS,
   MAX_QUOTE_SECTIONS,
+  QUOTE_LAYER_COLORS,
+  QUOTE_SECTION_KINDS,
   QUOTE_VAT_MODES,
   computeSectionsTotal,
   emptyQuoteSection,
@@ -22,7 +25,7 @@ import {
 const input =
   'w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm bg-white'
 const label = 'block text-sm font-medium text-gray-700 mb-1'
-const KINDS: QuoteSectionKind[] = ['text', 'numbered', 'bullets']
+const KINDS: QuoteSectionKind[] = QUOTE_SECTION_KINDS
 // Sezioni pronte di partenza (testo nelle 7 lingue), finché non se ne salvano di proprie
 const STARTERS = ['oursCharges', 'yourCharges', 'technicalNote', 'conditions'] as const
 
@@ -71,10 +74,10 @@ export default function QuoteSectionsEditor({ form, setForm, initialPresets }: P
   }
   const saveAsPreset = async (i: number) => {
     const s = sections[i]
-    if (!s.title.trim() && !s.body.trim()) return
+    if (!s.title.trim() && !s.body.trim() && !(s.layers?.length)) return
     const others = presets.filter((p) => p.title.trim().toLowerCase() !== s.title.trim().toLowerCase())
     if (others.length >= MAX_QUOTE_PRESETS) return setPresetError(true)
-    if (await persist([...others, { title: s.title, kind: s.kind, body: s.body }])) {
+    if (await persist([...others, { title: s.title, kind: s.kind, body: s.body, ...(s.kind === 'layers' ? { layers: s.layers ?? [] } : {}) }])) {
       setSavedIndex(i)
       setTimeout(() => setSavedIndex(null), 2000)
     }
@@ -116,7 +119,14 @@ export default function QuoteSectionsEditor({ form, setForm, initialPresets }: P
                   <button
                     key={k}
                     type="button"
-                    onClick={() => update(i, { kind: k })}
+                    onClick={() =>
+                      update(i, {
+                        kind: k,
+                        ...(k === 'layers' && !(s.layers?.length)
+                          ? { layers: [{ label: '', color: QUOTE_LAYER_COLORS[0] }, { label: '', color: QUOTE_LAYER_COLORS[1] }] }
+                          : {}),
+                      })
+                    }
                     aria-pressed={s.kind === k}
                     className={`rounded-lg border px-3 py-1 text-xs font-semibold ${s.kind === k ? 'border-[var(--gold)] bg-[var(--ink)] text-[var(--gold-bright)]' : 'border-gray-200 text-gray-600'}`}
                   >
@@ -124,16 +134,18 @@ export default function QuoteSectionsEditor({ form, setForm, initialPresets }: P
                   </button>
                 ))}
               </div>
+              {s.kind === 'image' && <SectionImagePicker value={s.image} onChange={(path) => update(i, { image: path })} />}
+              {s.kind === 'layers' && <LayersEditor layers={s.layers ?? []} onChange={(layers) => update(i, { layers })} />}
               <div>
                 <textarea
                   className={input}
-                  rows={s.kind === 'text' ? 4 : 5}
+                  rows={s.kind === 'text' ? 4 : s.kind === 'image' || s.kind === 'layers' ? 2 : 5}
                   maxLength={6000}
                   value={s.body}
-                  placeholder={s.kind === 'text' ? t('sectionTextPlaceholder') : t('sectionListPlaceholder')}
+                  placeholder={s.kind === 'text' ? t('sectionTextPlaceholder') : s.kind === 'image' ? t('imageCaptionPlaceholder') : s.kind === 'layers' ? t('layersNotePlaceholder') : t('sectionListPlaceholder')}
                   onChange={(e) => update(i, { body: e.target.value })}
                 />
-                {s.kind !== 'text' && <p className="mt-1 text-xs text-gray-400">{t('sectionListHint')}</p>}
+                {(s.kind === 'numbered' || s.kind === 'bullets') && <p className="mt-1 text-xs text-gray-400">{t('sectionListHint')}</p>}
               </div>
               <div className="flex flex-wrap items-end justify-between gap-3">
                 <div className="w-48">
@@ -149,9 +161,11 @@ export default function QuoteSectionsEditor({ form, setForm, initialPresets }: P
                   />
                 </div>
                 <div className="flex items-center gap-1">
+                  {s.kind !== 'image' && (
                   <button type="button" onClick={() => saveAsPreset(i)} title={t('presetSave')} className="inline-flex items-center gap-1 rounded-lg px-2 py-1.5 text-xs font-semibold text-[var(--gold)] hover:bg-[var(--gold-pale)]">
                     {savedIndex === i ? <Check className="h-4 w-4" /> : <BookmarkPlus className="h-4 w-4" />} {savedIndex === i ? t('presetSaved') : t('presetSave')}
                   </button>
+                  )}
                   <button type="button" onClick={() => move(i, -1)} disabled={i === 0} aria-label={t('moveUp')} className="rounded-lg p-1.5 text-gray-500 hover:bg-gray-100 disabled:opacity-30">
                     <ArrowUp className="h-4 w-4" />
                   </button>

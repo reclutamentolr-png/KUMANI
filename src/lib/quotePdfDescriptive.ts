@@ -1,5 +1,5 @@
 import { jsPDF } from 'jspdf'
-import { sectionLines, type QuoteSection } from '@/lib/quotes'
+import { sectionLines, type QuoteLayer, type QuoteSection } from '@/lib/quotes'
 import type { QuotePdfLabels } from '@/lib/pdfHelpers'
 import { INK, MUTED, accentRgb, drawLogo, formatClientAddressLine, formatIssuerAddressLine, type IssuerForPdf, type QuoteForPdf } from '@/lib/quotePdfShared'
 
@@ -16,8 +16,11 @@ export function generateDescriptiveQuotePdfBlob(params: {
   labels: QuotePdfLabels
   formatDate: (iso: string) => string
   formatCurrency: (n: number) => string
+  // Immagini delle sezioni già caricate (percorso → data URL)
+  sectionImages?: Record<string, string>
 }): Blob {
   const { quote, issuer, logoDataUrl, labels, formatDate, formatCurrency } = params
+  const sectionImages = params.sectionImages ?? {}
   const doc = new jsPDF({ unit: 'pt', format: 'a4' })
   const pageWidth = doc.internal.pageSize.getWidth()
   const pageHeight = doc.internal.pageSize.getHeight()
@@ -116,8 +119,20 @@ export function generateDescriptiveQuotePdfBlob(params: {
   const sections = (quote.sections ?? []) as QuoteSection[]
   for (const s of sections) {
     const title = s.title?.trim()
+    // Disegno o immagine: il titolo va nella stessa pagina (mai da solo in fondo)
+    let block = 0
+    if (s.kind === 'layers' && (s.layers ?? []).some((l) => l.label.trim())) {
+      block = drawLayers(doc, (s.layers ?? []).filter((l) => l.label.trim()), margin, 0, width, true) + 6
+    } else if (s.kind === 'image' && s.image && sectionImages[s.image]) {
+      try {
+        const props = doc.getImageProperties(sectionImages[s.image])
+        block = Math.min((props.height / props.width) * width, 330) + 8
+      } catch {
+        block = 0
+      }
+    }
     if (title) {
-      ensure(40)
+      ensure(40 + block)
       y += 6
       doc.setFont('helvetica', 'bold')
       doc.setFontSize(12.5)
@@ -132,7 +147,36 @@ export function generateDescriptiveQuotePdfBlob(params: {
       doc.line(margin, y - 10, margin + 34, y - 10)
       y += 4
     }
-    if (s.kind === 'text') {
+    if (s.kind === 'image') {
+      const data = s.image ? sectionImages[s.image] : undefined
+      if (data) {
+        try {
+          const props = doc.getImageProperties(data)
+          let w = width
+          let h = (props.height / props.width) * w
+          const maxH = 330
+          if (h > maxH) {
+            h = maxH
+            w = (props.width / props.height) * h
+          }
+          ensure(h + 8)
+          doc.addImage(data, margin + (width - w) / 2, y, w, h)
+          y += h + 10
+        } catch {
+          // immagine non leggibile: si salta
+        }
+      }
+      if (s.body.trim()) paragraph(s.body.trim(), 9, MUTED, 'italic')
+    } else if (s.kind === 'layers') {
+      const layers = (s.layers ?? []).filter((l) => l.label.trim())
+      if (layers.length) {
+        const h = drawLayers(doc, layers, margin, 0, width, true)
+        ensure(h + 6)
+        drawLayers(doc, layers, margin, y, width, false)
+        y += h + 8
+      }
+      if (s.body.trim()) paragraph(s.body.trim(), 9, MUTED, 'italic')
+    } else if (s.kind === 'text') {
       if (s.body.trim()) {
         for (const para of s.body.trim().split(/\n{2,}/)) {
           paragraph(para.replace(/\n/g, ' '), 10, INK)
@@ -241,4 +285,93 @@ export function generateDescriptiveQuotePdfBlob(params: {
     }
   }
   return doc.output('blob')
+}
+
+const hexRgb = (hex: string): [number, number, number] => {
+  const n = parseInt(hex.replace('#', ''), 16)
+  return Number.isFinite(n) ? [(n >> 16) & 255, (n >> 8) & 255, n & 255] : [207, 207, 207]
+}
+const darker = ([r, g, b]: [number, number, number]): [number, number, number] => [Math.round(r * 0.72), Math.round(g * 0.72), Math.round(b * 0.72)]
+
+/**
+ * Stratigrafia: il primo strato è il supporto (blocco in basso a tutta
+ * larghezza, con il nome dentro); gli altri sono fasce sottili sovrapposte a
+ * scaletta, ognuna indicata da un riquadro con il suo nome e una freccia.
+ * Con `measure` calcola solo l'altezza, senza disegnare.
+ */
+function drawLayers(doc: jsPDF, layers: QuoteLayer[], x: number, y: number, width: number, measure: boolean): number {
+  const [base, ...upper] = layers
+  const m = upper.length
+  const boxW = Math.min(215, width * 0.44)
+  const stepX = m > 1 ? Math.max(20, Math.min(62, (width - boxW - 60) / (m - 1))) : 0
+  const layerStep = m > 0 ? Math.min(42, (width * 0.55) / m) : 0
+  const thick = 8
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(8.5)
+
+  // Riquadri delle etichette, a scaletta verso il basso a destra
+  let cursor = y
+  const boxes = upper.map((layer, i) => {
+    const lines = doc.splitTextToSize(layer.label, boxW - 14) as string[]
+    const h = lines.length * 10.5 + 9
+    const bx = Math.min(x + 46 + i * stepX, x + width - boxW)
+    const box = { x: bx, y: cursor, h, lines }
+    cursor += h + 7
+    return box
+  })
+  const stackTop = (m > 0 ? cursor : y) + 18
+  const baseY = stackTop + m * thick
+  const baseH = 40
+  const total = baseY + baseH - y + 4
+  if (measure) return total
+
+  // Strati sopra il supporto (dal più alto, disegnati dopo così restano sopra)
+  upper.forEach((layer, i) => {
+    const j = i + 1
+    const ly = baseY - j * thick
+    const lx = x + 26 + i * layerStep
+    const color = hexRgb(layer.color)
+    doc.setFillColor(...color)
+    doc.setDrawColor(...darker(color))
+    doc.setLineWidth(0.6)
+    doc.rect(lx, ly, x + width - lx, thick, 'FD')
+  })
+  // Supporto
+  const baseColor = hexRgb(base.color)
+  doc.setFillColor(...baseColor)
+  doc.setDrawColor(...darker(baseColor))
+  doc.setLineWidth(0.8)
+  doc.rect(x, baseY, width, baseH, 'FD')
+  doc.setFont('helvetica', 'bold')
+  doc.setFontSize(9)
+  const lum = baseColor[0] * 0.3 + baseColor[1] * 0.59 + baseColor[2] * 0.11
+  doc.setTextColor(...((lum < 120 ? [255, 255, 255] : [30, 30, 30]) as [number, number, number]))
+  doc.text(doc.splitTextToSize(base.label, width - 20) as string[], x + 10, baseY + 16)
+
+  // Riquadri e frecce verso l'inizio di ogni strato
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(8.5)
+  boxes.forEach((box, i) => {
+    const j = i + 1
+    doc.setDrawColor(40, 40, 40)
+    doc.setLineWidth(0.6)
+    doc.setFillColor(255, 255, 255)
+    doc.rect(box.x, box.y, boxW, box.h, 'FD')
+    doc.setTextColor(30, 30, 30)
+    doc.text(box.lines, box.x + 7, box.y + 12)
+    const fromX = box.x + 14
+    const fromY = box.y + box.h
+    const toX = x + 26 + i * layerStep + 10
+    const toY = baseY - j * thick
+    doc.setDrawColor(40, 40, 40)
+    doc.setLineWidth(0.7)
+    doc.line(fromX, fromY, toX, toY)
+    // Punta della freccia sullo strato
+    const ang = Math.atan2(toY - fromY, toX - fromX)
+    const a1 = ang + Math.PI - 0.35
+    const a2 = ang + Math.PI + 0.35
+    doc.setFillColor(40, 40, 40)
+    doc.triangle(toX, toY, toX + 6 * Math.cos(a1), toY + 6 * Math.sin(a1), toX + 6 * Math.cos(a2), toY + 6 * Math.sin(a2), 'F')
+  })
+  return total
 }
