@@ -47,6 +47,7 @@ import {
   type MovementType,
 } from '@/lib/magazzino'
 import { askConfirm } from '@/lib/confirm'
+import CancelButton, { cancelButtonLgClass } from '@/components/ui/CancelButton'
 
 const input =
   'w-full rounded-xl border border-gray-300 px-3 py-2.5 text-[15px] focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30'
@@ -788,9 +789,12 @@ function ProductForm({
           </div>
         </div>
       )}
-      <button type="submit" disabled={busy} className={primary}>
-        {busy && <LoaderCircle className="h-4 w-4 animate-spin" />} {product ? t('saveProduct') : t('createProduct')}
-      </button>
+      <div className="flex gap-2">
+        <CancelButton className={cancelButtonLgClass} />
+        <button type="submit" disabled={busy} className={primary}>
+          {busy && <LoaderCircle className="h-4 w-4 animate-spin" />} {product ? t('saveProduct') : t('createProduct')}
+        </button>
+      </div>
 
       {newCategory !== null && (
         <Sheet title={t('newCategoryTitle')} onClose={() => setNewCategory(null)}>
@@ -812,9 +816,12 @@ function ProductForm({
               }}
             />
             {categoryError && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm font-semibold text-red-700">{categoryError}</p>}
-            <button type="button" disabled={categoryBusy || !newCategory.trim()} onClick={addCategory} className={primary}>
-              {categoryBusy ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />} {t('createCategory')}
-            </button>
+            <div className="flex gap-2">
+              <CancelButton className={cancelButtonLgClass} />
+              <button type="button" disabled={categoryBusy || !newCategory.trim()} onClick={addCategory} className={primary}>
+                {categoryBusy ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />} {t('createCategory')}
+              </button>
+            </div>
           </div>
         </Sheet>
       )}
@@ -905,9 +912,12 @@ function MoveForm({
         <input className={input} maxLength={300} value={notes} placeholder={t('fieldMoveNotesPlaceholder')} onChange={(e) => setNotes(e.target.value)} />
       </div>
       {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm font-semibold text-red-700">{error}</p>}
-      <button type="submit" disabled={busy} className={primary}>
-        {busy && <LoaderCircle className="h-4 w-4 animate-spin" />} {t(`confirm_${type}`)}
-      </button>
+      <div className="flex gap-2">
+        <CancelButton className={cancelButtonLgClass} />
+        <button type="submit" disabled={busy} className={primary}>
+          {busy && <LoaderCircle className="h-4 w-4 animate-spin" />} {t(`confirm_${type}`)}
+        </button>
+      </div>
     </form>
   )
 }

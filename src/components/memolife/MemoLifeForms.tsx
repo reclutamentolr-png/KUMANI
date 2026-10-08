@@ -7,6 +7,7 @@ import Link from '@/components/LocalizedLink'
 import { suggestLifeCalendarCategory } from '@/lib/lifeCalendarHints'
 import { deleteAppointment, deleteContact, deleteNote, deleteTask, saveAppointment, saveContact, saveNote, saveTask } from '@/app/actions/memolife'
 import { askConfirm } from '@/lib/confirm'
+import CancelButton, { SheetCloseContext } from '@/components/ui/CancelButton'
 
 // Moduli di MemoLife in una finestra (dal basso su telefono). Salvano con le
 // azioni del server; "onDone" ricarica i dati.
@@ -26,7 +27,8 @@ export function Sheet({ title, onClose, children }: { title: string; onClose: ()
             <X className="h-5 w-5" />
           </button>
         </div>
-        {children}
+        {/* «Annulla» dei moduli dentro la finestra la chiude */}
+        <SheetCloseContext.Provider value={onClose}>{children}</SheetCloseContext.Provider>
       </div>
     </div>
   )
@@ -64,9 +66,12 @@ function Actions({ busy, error, onDelete, deleteConfirm }: { busy: boolean; erro
         ) : (
           <span />
         )}
-        <button type="submit" disabled={busy} className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-2.5 font-bold text-[var(--ink)] shadow-md hover:brightness-110 disabled:opacity-50">
-          {busy && <LoaderCircle className="h-4 w-4 animate-spin" />} {t('save')}
-        </button>
+        <div className="flex items-center gap-2">
+          <CancelButton />
+          <button type="submit" disabled={busy} className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-2.5 font-bold text-[var(--ink)] shadow-md hover:brightness-110 disabled:opacity-50">
+            {busy && <LoaderCircle className="h-4 w-4 animate-spin" />} {t('save')}
+          </button>
+        </div>
       </div>
     </>
   )

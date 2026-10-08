@@ -8,6 +8,7 @@ import { createVehicle, updateVehicle } from '@/app/actions/garage'
 import { todayKey } from '@/lib/agenda'
 import { defaultLocale } from '../../../i18n'
 import type { GarageVehicle, VehicleForm, VehicleKind } from '@/lib/garage'
+import CancelButton, { cancelButtonLgClass } from '@/components/ui/CancelButton'
 
 const input =
   'w-full rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 text-[var(--ink)] outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/20'
@@ -203,14 +204,17 @@ export default function VehicleFormView({ vehicle, spendlyAvailable }: { vehicle
 
       {error && <p className="rounded-xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">{error}</p>}
 
-      <button
-        type="submit"
-        disabled={isPending}
-        className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--ink)] px-5 py-3.5 font-bold text-white hover:bg-[var(--ink-soft)] disabled:opacity-60"
-      >
-        {isPending && <LoaderCircle className="h-4 w-4 animate-spin" />}
-        {vehicle ? t('saveChanges') : t('saveVehicle')}
-      </button>
+      <div className="flex gap-2">
+        <CancelButton className={cancelButtonLgClass} fallbackHref="/marketplace/garage" />
+        <button
+          type="submit"
+          disabled={isPending}
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--ink)] px-5 py-3.5 font-bold text-white hover:bg-[var(--ink-soft)] disabled:opacity-60"
+        >
+          {isPending && <LoaderCircle className="h-4 w-4 animate-spin" />}
+          {vehicle ? t('saveChanges') : t('saveVehicle')}
+        </button>
+      </div>
     </form>
   )
 }

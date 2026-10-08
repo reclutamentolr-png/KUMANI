@@ -9,6 +9,7 @@ import { createClient } from '@/lib/supabase/client'
 import { createItem, updateItem, createLocation } from '@/app/actions/findo'
 import { buildBreadcrumb, validatePhotoFile, photoExtension, type FindoLocation, type FindoItemFormData } from '@/lib/findo'
 import { resizeImageFile } from '@/lib/resizeImage'
+import CancelButton, { cancelButtonLgClass } from '@/components/ui/CancelButton'
 
 type Props =
   | { mode: 'create'; locations: FindoLocation[] }
@@ -125,7 +126,7 @@ export default function FindoItemForm(props: Props) {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8 space-y-6">
+    <div data-cancel-scope className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8 space-y-6">
       <div className="flex flex-col items-center gap-3">
         <div
           onClick={() => fileInputRef.current?.click()}
@@ -255,23 +256,26 @@ export default function FindoItemForm(props: Props) {
         </div>
       )}
 
-      <button
-        onClick={handleSubmit}
-        disabled={!isValid || saving || uploadingPhoto}
-        className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] rounded-xl font-bold shadow-md hover:brightness-105 transition-all disabled:opacity-50"
-      >
-        {saving ? (
-          <>
-            <LoaderCircle className="w-5 h-5 animate-spin" />
-            {t('saving')}
-          </>
-        ) : (
-          <>
-            <CheckCircle className="w-5 h-5" />
-            {props.mode === 'create' ? t('create') : t('saveChanges')}
-          </>
-        )}
-      </button>
+      <div className="flex gap-2">
+        <CancelButton className={cancelButtonLgClass} fallbackHref="/marketplace/findo" />
+        <button
+          onClick={handleSubmit}
+          disabled={!isValid || saving || uploadingPhoto}
+          className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] rounded-xl font-bold shadow-md hover:brightness-105 transition-all disabled:opacity-50"
+        >
+          {saving ? (
+            <>
+              <LoaderCircle className="w-5 h-5 animate-spin" />
+              {t('saving')}
+            </>
+          ) : (
+            <>
+              <CheckCircle className="w-5 h-5" />
+              {props.mode === 'create' ? t('create') : t('saveChanges')}
+            </>
+          )}
+        </button>
+      </div>
     </div>
   )
 }

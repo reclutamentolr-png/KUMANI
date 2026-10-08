@@ -8,6 +8,7 @@ import { createHome, updateHome } from '@/app/actions/casa'
 import { HOME_KINDS, emptyHomeForm, type CasaHome, type HomeForm } from '@/lib/casa'
 import { defaultLocale } from '../../../i18n'
 import { input, label, primaryBtn } from '@/components/casa/shared'
+import CancelButton, { cancelButtonLgClass } from '@/components/ui/CancelButton'
 
 export default function HomeFormView({ home }: { home?: CasaHome }) {
   const t = useTranslations('casa')
@@ -74,9 +75,12 @@ export default function HomeFormView({ home }: { home?: CasaHome }) {
         <textarea id="home-notes" className={`${input} min-h-[90px]`} value={form.notes} onChange={(e) => set('notes', e.target.value)} maxLength={1000} placeholder={t('homeNotesPlaceholder')} />
       </div>
       {error && <p className="text-sm text-red-600">{error}</p>}
-      <button type="submit" disabled={isPending} className={`${primaryBtn} w-full sm:w-auto`}>
-        {isPending && <LoaderCircle className="h-4 w-4 animate-spin" />} {home ? t('saveChanges') : t('createHome')}
-      </button>
+      <div className="flex gap-2">
+        <CancelButton className={cancelButtonLgClass} fallbackHref={home ? `/marketplace/casa/${home.id}` : '/marketplace/casa'} />
+        <button type="submit" disabled={isPending} className={`${primaryBtn} flex-1 sm:flex-none`}>
+          {isPending && <LoaderCircle className="h-4 w-4 animate-spin" />} {home ? t('saveChanges') : t('createHome')}
+        </button>
+      </div>
     </form>
   )
 }

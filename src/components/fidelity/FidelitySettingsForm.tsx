@@ -18,6 +18,7 @@ import {
 } from '@/lib/fidelity'
 import BusinessProfileImport from '@/components/businessProfile/BusinessProfileImport'
 import { businessWebsiteUrl, type BusinessProfile } from '@/lib/businessProfile'
+import CancelButton, { cancelButtonClass } from '@/components/ui/CancelButton'
 
 const inputClass = 'w-full rounded-lg border border-[var(--gold)]/30 p-2.5 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]'
 
@@ -180,6 +181,8 @@ export default function FidelitySettingsForm({
             {t('cancel')}
           </button>
         )}
+        {/* Prima creazione della carta: si torna indietro senza crearla */}
+        {!card && <CancelButton className={cancelButtonClass} fallbackHref="/dashboard" />}
       </div>
     </form>
   )

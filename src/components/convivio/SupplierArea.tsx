@@ -11,6 +11,7 @@ import { countryName, EVENT_COUNTRIES, MIN_FEE_PAYMENT } from '@/lib/events'
 import { prettyVat, VAT_COUNTRIES_EU, VAT_COUNTRIES_OTHER, vatExample } from '@/lib/vat'
 import ConvivioCardItem from './ConvivioCardItem'
 import ConvivioCreateForm from './ConvivioCreateForm'
+import CancelButton, { cancelButtonClass } from '@/components/ui/CancelButton'
 
 const input = 'w-full rounded-xl border border-[var(--gold)]/30 px-3 py-2.5 text-[15px] focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30'
 const label = 'mb-1 block text-sm font-semibold text-gray-700'
@@ -243,9 +244,12 @@ export default function SupplierArea({
                 <span className="block text-xs text-[var(--muted)]">{t('acceptsGroupOrdersHint')}</span>
               </span>
             </label>
-            <button type="submit" disabled={busy} className="flex items-center gap-2 rounded-xl bg-[var(--ink)] px-5 py-2.5 font-bold text-white disabled:opacity-50">
-              {busy && <LoaderCircle className="h-4 w-4 animate-spin" />} {t('save')}
-            </button>
+            <div className="flex flex-wrap items-center gap-2">
+              {supplier && <CancelButton className={cancelButtonClass} onCancel={() => setEditing(false)} />}
+              <button type="submit" disabled={busy} className="flex items-center gap-2 rounded-xl bg-[var(--ink)] px-5 py-2.5 font-bold text-white disabled:opacity-50">
+                {busy && <LoaderCircle className="h-4 w-4 animate-spin" />} {t('save')}
+              </button>
+            </div>
             <p className="flex items-start gap-1.5 text-xs text-[var(--muted)]">
               <Globe className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--gold)]" /> {t('supplierAbroadNote')}
             </p>

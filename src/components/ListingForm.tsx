@@ -7,6 +7,7 @@ import { LISTING_COST, type ListingCategory, CATEGORY_ICONS, CATEGORY_I18N_KEYS,
 import { X, AlertCircle, CheckCircle2, Sparkles } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import ListingLocationFields, { type ListingLocationValue } from '@/components/listings/ListingLocationFields'
+import CancelButton, { cancelButtonClass } from '@/components/ui/CancelButton'
 
 type Props = {
   userId: string
@@ -196,9 +197,12 @@ export default function ListingForm({ userId, currentPoints, onCloseUrl, network
 
         <div className="flex items-center justify-between pt-4 border-t border-gray-200">
           <p className="text-sm text-gray-600">{t('cost')}: <strong className="text-yellow-600">{LISTING_COST} {commonT('points')}</strong> ({t('remaining')}: <strong>{currentPoints - LISTING_COST}</strong> {commonT('points')})</p>
-          <button type="submit" disabled={loading || !canPublish || !canAffordShowcase} className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white px-6 py-2.5 rounded-lg font-bold shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
-            {loading ? t('publishing') : t('publish')}
-          </button>
+          <div className="flex shrink-0 items-center gap-2">
+            <CancelButton className={cancelButtonClass} href={onCloseUrl} />
+            <button type="submit" disabled={loading || !canPublish || !canAffordShowcase} className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white px-6 py-2.5 rounded-lg font-bold shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+              {loading ? t('publishing') : t('publish')}
+            </button>
+          </div>
         </div>
       </form>
     </div>

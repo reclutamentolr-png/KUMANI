@@ -12,6 +12,7 @@ import {
   type TimebankProfileData,
 } from '@/lib/timebank'
 import { EVENT_COUNTRIES, countryName, languageName } from '@/lib/events'
+import CancelButton, { cancelButtonLgClass } from '@/components/ui/CancelButton'
 
 export const inputClass =
   'w-full rounded-xl border border-gray-300 px-3 py-2.5 text-[15px] focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30'
@@ -116,9 +117,12 @@ export function ProfileForm({ initial, onSaved }: { initial: TimebankProfileData
         <input className={inputClass} maxLength={120} value={availability} placeholder={t('fieldAvailabilityPlaceholder')} onChange={(e) => setAvailability(e.target.value)} />
       </div>
       {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm font-semibold text-red-700">{error}</p>}
-      <button type="submit" disabled={busy} className={primary}>
-        {busy && <LoaderCircle className="h-4 w-4 animate-spin" />} {initial ? t('saveProfile') : t('joinCta')}
-      </button>
+      <div className="flex gap-2">
+        <CancelButton className={cancelButtonLgClass} />
+        <button type="submit" disabled={busy} className={primary}>
+          {busy && <LoaderCircle className="h-4 w-4 animate-spin" />} {initial ? t('saveProfile') : t('joinCta')}
+        </button>
+      </div>
     </form>
   )
 }
@@ -236,9 +240,12 @@ export function PostForm({ kind, defaults, onSaved }: { kind: 'request' | 'offer
       </div>
       <p className={hintClass}>{t('excludedNotice')}</p>
       {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm font-semibold text-red-700">{error}</p>}
-      <button type="submit" disabled={busy} className={primary}>
-        {busy && <LoaderCircle className="h-4 w-4 animate-spin" />} {kind === 'request' ? t('publishRequest') : t('publishOffer')}
-      </button>
+      <div className="flex gap-2">
+        <CancelButton className={cancelButtonLgClass} />
+        <button type="submit" disabled={busy} className={primary}>
+          {busy && <LoaderCircle className="h-4 w-4 animate-spin" />} {kind === 'request' ? t('publishRequest') : t('publishOffer')}
+        </button>
+      </div>
     </form>
   )
 }
@@ -289,9 +296,12 @@ export function ProposeForm({ post, onSent }: { post: TimebankPost; onSent: () =
         <textarea className={inputClass} rows={3} maxLength={500} value={note} placeholder={t('fieldMessagePlaceholder')} onChange={(e) => setNote(e.target.value)} />
       </div>
       {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm font-semibold text-red-700">{error}</p>}
-      <button type="submit" disabled={busy} className={primary}>
-        {busy && <LoaderCircle className="h-4 w-4 animate-spin" />} {t('sendProposal')}
-      </button>
+      <div className="flex gap-2">
+        <CancelButton className={cancelButtonLgClass} />
+        <button type="submit" disabled={busy} className={primary}>
+          {busy && <LoaderCircle className="h-4 w-4 animate-spin" />} {t('sendProposal')}
+        </button>
+      </div>
     </form>
   )
 }

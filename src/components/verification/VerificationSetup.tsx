@@ -9,6 +9,7 @@ import { Sheet } from '@/components/memolife/MemoLifeForms'
 import { acceptRules, submitIdentityDocument, verifyTaxCode, type IdentityDocType } from '@/app/actions/verification'
 import { EVENT_COUNTRIES, countryName } from '@/lib/events'
 import { resizeImageFile } from '@/lib/resizeImage'
+import CancelButton, { cancelButtonLgClass } from '@/components/ui/CancelButton'
 
 const input = 'w-full rounded-xl border border-gray-300 px-3 py-2.5 text-[15px] focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30'
 const label = 'mb-1 block text-sm font-semibold text-gray-700'
@@ -300,9 +301,12 @@ export default function VerificationSetup({
                     <p className="mt-1 text-xs text-gray-500">{tc('taxCodeHint')}</p>
                   </div>
                   {error?.step === 'identity' && <p className="text-sm font-semibold text-red-600">{error.message}</p>}
-                  <button type="submit" disabled={busy !== null || taxCode.length !== 16} className={primaryButton}>
-                    {busy === 'taxCode' ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <BadgeCheck className="h-4 w-4" />} {t('verifyTaxCode')}
-                  </button>
+                  <div className="flex gap-2">
+                    <CancelButton className={cancelButtonLgClass} />
+                    <button type="submit" disabled={busy !== null || taxCode.length !== 16} className={primaryButton}>
+                      {busy === 'taxCode' ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <BadgeCheck className="h-4 w-4" />} {t('verifyTaxCode')}
+                    </button>
+                  </div>
                 </form>
               ) : (
                 <form onSubmit={submitDocument} className="space-y-3">
@@ -387,9 +391,12 @@ export default function VerificationSetup({
                     <Lock className="mt-0.5 h-4 w-4 shrink-0 text-[var(--gold)]" /> {t('privacy')}
                   </p>
                   {error?.step === 'identity' && <p className="text-sm font-semibold text-red-600">{error.message}</p>}
-                  <button type="submit" disabled={busy !== null || !file || !docType || !country} className={primaryButton}>
-                    {busy === 'document' ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />} {t('sendDocument')}
-                  </button>
+                  <div className="flex gap-2">
+                    <CancelButton className={cancelButtonLgClass} />
+                    <button type="submit" disabled={busy !== null || !file || !docType || !country} className={primaryButton}>
+                      {busy === 'document' ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />} {t('sendDocument')}
+                    </button>
+                  </div>
                 </form>
               )}
             </>

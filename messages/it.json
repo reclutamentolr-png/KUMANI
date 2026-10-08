@@ -23,7 +23,10 @@
     "confirmDeleteTitle": "Vuoi eliminarlo?",
     "confirmOk": "Conferma",
     "confirmDelete": "Elimina",
-    "confirmCancel": "Annulla"
+    "confirmCancel": "Annulla",
+    "leaveUnsavedTitle": "Uscire senza salvare?",
+    "leaveUnsavedText": "Hai fatto delle modifiche che non sono ancora salvate. Se esci adesso le perdi.",
+    "leaveUnsavedOk": "Esci senza salvare"
   },
   "landingHome": {
     "statLanguagesLabel": "lingue: KUMANI parla la tua",

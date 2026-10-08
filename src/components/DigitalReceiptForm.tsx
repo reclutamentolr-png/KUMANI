@@ -30,6 +30,7 @@ import {
   type DigitalReceiptFormData,
 } from '@/lib/digitalReceipt'
 import { RECEIPT_VAT_MODES } from '@/lib/digitalReceipt'
+import CancelButton, { cancelButtonLgClass } from '@/components/ui/CancelButton'
 
 const TEMPLATE_ICONS: Record<ReceiptTemplate, typeof Package> = {
   delivery: Package,
@@ -141,7 +142,7 @@ export default function DigitalReceiptForm({
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8 space-y-6">
+    <div data-cancel-scope className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8 space-y-6">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">{t('templateLabel')}</label>
         <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
@@ -350,23 +351,26 @@ export default function DigitalReceiptForm({
         </div>
       )}
 
-      <button
-        onClick={handleSubmit}
-        disabled={!isValid || saving || uploadingPhoto}
-        className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] rounded-xl font-bold shadow-md hover:brightness-105 transition-all disabled:opacity-50"
-      >
-        {saving ? (
-          <>
-            <LoaderCircle className="w-5 h-5 animate-spin" />
-            {t('saving')}
-          </>
-        ) : (
-          <>
-            <CheckCircle className="w-5 h-5" />
-            {t('create')}
-          </>
-        )}
-      </button>
+      <div className="flex gap-2">
+        <CancelButton className={cancelButtonLgClass} fallbackHref="/marketplace/digital-receipt" />
+        <button
+          onClick={handleSubmit}
+          disabled={!isValid || saving || uploadingPhoto}
+          className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] rounded-xl font-bold shadow-md hover:brightness-105 transition-all disabled:opacity-50"
+        >
+          {saving ? (
+            <>
+              <LoaderCircle className="w-5 h-5 animate-spin" />
+              {t('saving')}
+            </>
+          ) : (
+            <>
+              <CheckCircle className="w-5 h-5" />
+              {t('create')}
+            </>
+          )}
+        </button>
+      </div>
     </div>
   )
 }

@@ -1376,7 +1376,10 @@
     "confirmDeleteTitle": "¿Quieres eliminarlo?",
     "confirmOk": "Confirmar",
     "confirmDelete": "Eliminar",
-    "confirmCancel": "Cancelar"
+    "confirmCancel": "Cancelar",
+    "leaveUnsavedTitle": "¿Salir sin guardar?",
+    "leaveUnsavedText": "Tienes cambios que aún no están guardados. Si sales ahora, los perderás.",
+    "leaveUnsavedOk": "Salir sin guardar"
   },
   "magazzino": {
     "deleteForever": "Eliminar definitivamente",

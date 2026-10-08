@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { LoaderCircle } from 'lucide-react'
 import { CHECKLIST_TEMPLATE, CURRENCIES, TRIP_EMOJIS } from '@/lib/travel'
+import CancelButton, { cancelButtonLgClass } from '@/components/ui/CancelButton'
 
 const input = 'w-full rounded-xl border border-gray-300 px-3 py-2.5 text-[15px] focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30'
 const label = 'mb-1 block text-sm font-semibold text-gray-700'
@@ -125,14 +126,17 @@ export default function TravelTripForm({
         </label>
       )}
       {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
-      <button
-        type="submit"
-        disabled={busy}
-        className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-5 py-3 font-bold text-[var(--ink)] disabled:opacity-60"
-      >
-        {busy && <LoaderCircle className="h-4 w-4 animate-spin" />}
-        {mode === 'create' ? t('createCta') : t('save')}
-      </button>
+      <div className="flex gap-2">
+        <CancelButton className={cancelButtonLgClass} />
+        <button
+          type="submit"
+          disabled={busy}
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-5 py-3 font-bold text-[var(--ink)] disabled:opacity-60"
+        >
+          {busy && <LoaderCircle className="h-4 w-4 animate-spin" />}
+          {mode === 'create' ? t('createCta') : t('save')}
+        </button>
+      </div>
     </form>
   )
 }

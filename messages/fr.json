@@ -1376,7 +1376,10 @@
     "confirmDeleteTitle": "Le supprimer ?",
     "confirmOk": "Confirmer",
     "confirmDelete": "Supprimer",
-    "confirmCancel": "Annuler"
+    "confirmCancel": "Annuler",
+    "leaveUnsavedTitle": "Quitter sans enregistrer ?",
+    "leaveUnsavedText": "Vous avez des modifications qui ne sont pas encore enregistrées. Si vous quittez maintenant, elles seront perdues.",
+    "leaveUnsavedOk": "Quitter sans enregistrer"
   },
   "magazzino": {
     "deleteForever": "Supprimer définitivement",

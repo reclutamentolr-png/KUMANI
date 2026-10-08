@@ -28,6 +28,7 @@ import {
   type Recurrence,
   type LifeCalendarItemFormData,
 } from '@/lib/lifeCalendar'
+import CancelButton, { cancelButtonLgClass } from '@/components/ui/CancelButton'
 
 type Profile = { id: string; name: string; icon: string }
 
@@ -126,7 +127,7 @@ export default function LifeCalendarItemForm(props: Props) {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8 space-y-6">
+    <div data-cancel-scope className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8 space-y-6">
       <div>
         <label className="block text-sm font-medium text-[var(--ink)] mb-1">{t('titleField')}</label>
         <input
@@ -287,23 +288,26 @@ export default function LifeCalendarItemForm(props: Props) {
         </div>
       )}
 
-      <button
-        onClick={handleSubmit}
-        disabled={!isValid || saving}
-        className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] rounded-xl font-bold shadow-md hover:brightness-105 transition-all disabled:opacity-50"
-      >
-        {saving ? (
-          <>
-            <LoaderCircle className="w-5 h-5 animate-spin" />
-            {t('saving')}
-          </>
-        ) : (
-          <>
-            <CheckCircle className="w-5 h-5" />
-            {props.mode === 'create' ? t('create') : t('saveChanges')}
-          </>
-        )}
-      </button>
+      <div className="flex gap-2">
+        <CancelButton className={cancelButtonLgClass} fallbackHref="/marketplace/life-calendar" />
+        <button
+          onClick={handleSubmit}
+          disabled={!isValid || saving}
+          className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] rounded-xl font-bold shadow-md hover:brightness-105 transition-all disabled:opacity-50"
+        >
+          {saving ? (
+            <>
+              <LoaderCircle className="w-5 h-5 animate-spin" />
+              {t('saving')}
+            </>
+          ) : (
+            <>
+              <CheckCircle className="w-5 h-5" />
+              {props.mode === 'create' ? t('create') : t('saveChanges')}
+            </>
+          )}
+        </button>
+      </div>
     </div>
   )
 }

@@ -1376,7 +1376,10 @@
     "confirmDeleteTitle": "Wirklich löschen?",
     "confirmOk": "Bestätigen",
     "confirmDelete": "Löschen",
-    "confirmCancel": "Abbrechen"
+    "confirmCancel": "Abbrechen",
+    "leaveUnsavedTitle": "Ohne Speichern verlassen?",
+    "leaveUnsavedText": "Du hast Änderungen, die noch nicht gespeichert sind. Wenn du jetzt gehst, gehen sie verloren.",
+    "leaveUnsavedOk": "Ohne Speichern verlassen"
   },
   "magazzino": {
     "deleteForever": "Endgültig löschen",

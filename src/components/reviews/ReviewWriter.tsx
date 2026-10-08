@@ -8,6 +8,7 @@ import Link from '@/components/LocalizedLink'
 import { deleteMyReview, submitReview } from '@/app/actions/reviews'
 import { REVIEW_BODY_MAX, REVIEW_BODY_MIN, type MyReviewOption } from '@/lib/reviews'
 import { askConfirm } from '@/lib/confirm'
+import CancelButton, { cancelButtonLgClass } from '@/components/ui/CancelButton'
 
 const STATUS_STYLE = {
   pending: 'bg-amber-50 text-amber-800',
@@ -178,6 +179,7 @@ function ReviewForm({ option, locale }: { option: MyReviewOption; locale: string
           </label>
           {error && <p className="text-sm font-semibold text-red-600">{error}</p>}
           <div className="flex flex-wrap items-center gap-3">
+            <CancelButton className={cancelButtonLgClass} fallbackHref="/dashboard" />
             <button
               type="submit"
               disabled={isPending || rating === 0 || !consent}

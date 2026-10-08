@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { CheckCircle, LoaderCircle, XCircle } from 'lucide-react'
 import { publishOfferCampaign, updateOfferCampaign } from '@/app/actions/offermaker'
 import type { GeneratedCampaignDraft, OfferFormAnswers } from '@/lib/offermaker'
+import CancelButton, { cancelButtonLgClass } from '@/components/ui/CancelButton'
 
 type Props =
   | {
@@ -68,7 +69,7 @@ export default function OfferMakerReview(props: Props) {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-[0_14px_40px_rgba(23,23,23,0.08)] border border-[var(--gold)]/25 p-6 sm:p-8 space-y-6">
+    <div data-cancel-scope className="bg-white rounded-2xl shadow-[0_14px_40px_rgba(23,23,23,0.08)] border border-[var(--gold)]/25 p-6 sm:p-8 space-y-6">
       <h3 className="text-lg font-bold text-[var(--ink)]">{t('reviewTitle')}</h3>
 
       <div className="space-y-4">
@@ -118,6 +119,7 @@ export default function OfferMakerReview(props: Props) {
             {t('back')}
           </button>
         )}
+        {props.mode !== 'create' && <CancelButton className={cancelButtonLgClass} fallbackHref="/marketplace/offermaker" />}
         <button
           onClick={handleSubmit}
           disabled={saving}

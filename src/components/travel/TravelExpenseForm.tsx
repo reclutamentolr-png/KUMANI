@@ -6,6 +6,7 @@ import { LoaderCircle, Trash2 } from 'lucide-react'
 import { deleteExpense, saveExpense } from '@/app/actions/travel'
 import { CURRENCIES, EXPENSE_CATEGORIES, EXPENSE_EMOJI, type TripExpense, type TripMember } from '@/lib/travel'
 import { askConfirm } from '@/lib/confirm'
+import CancelButton, { cancelButtonLgClass } from '@/components/ui/CancelButton'
 
 const input = 'w-full rounded-xl border border-gray-300 px-3 py-2.5 text-[15px] focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30'
 const label = 'mb-1 block text-sm font-semibold text-gray-700'
@@ -174,6 +175,7 @@ export default function TravelExpenseForm({
             <Trash2 className="h-4 w-4" /> {t('delete')}
           </button>
         )}
+        <CancelButton className={cancelButtonLgClass} />
         <button type="submit" disabled={busy} className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[var(--ink)] px-5 py-3 font-bold text-white disabled:opacity-60">
           {busy && <LoaderCircle className="h-4 w-4 animate-spin" />}
           {t('save')}

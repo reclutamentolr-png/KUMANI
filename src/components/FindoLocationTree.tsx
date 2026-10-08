@@ -10,6 +10,7 @@ import { askConfirm } from '@/lib/confirm'
 
 function LocationNode({ node, depth }: { node: FindoLocationNode; depth: number }) {
   const t = useTranslations('findo')
+  const commonT = useTranslations('common')
   const router = useRouter()
   const [expanded, setExpanded] = useState(true)
   const [adding, setAdding] = useState(false)
@@ -88,6 +89,16 @@ function LocationNode({ node, depth }: { node: FindoLocationNode; depth: number 
             className="px-2 py-1 rounded-lg text-xs bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] font-bold shadow-sm hover:brightness-105 disabled:opacity-50"
           >
             {t('add')}
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setAdding(false)
+              setNewName('')
+            }}
+            className="px-2 py-1 rounded-lg text-xs font-semibold text-gray-600 border border-gray-300 bg-white hover:bg-gray-50"
+          >
+            {commonT('cancel')}
           </button>
         </div>
       )}

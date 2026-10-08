@@ -8,6 +8,7 @@ import { SPOTLIGHT_STORY_MAX_LENGTH, type SpotlightModerationStatus, type Spotli
 import Link from '@/components/LocalizedLink'
 import { CheckCircle2, Clock, Home, Pencil, Trash2 } from 'lucide-react'
 import { askConfirm } from '@/lib/confirm'
+import CancelButton, { cancelButtonClass } from '@/components/ui/CancelButton'
 
 type FormState = {
   displayName: string
@@ -323,10 +324,12 @@ export default function SpotlightForm({
               >
                 {saving ? t('saving') : t('save')}
               </button>
-              {profile && (
+              {profile ? (
                 <button type="button" onClick={handleCancelEdit} className={grayButton}>
                   {t('cancelEdit')}
                 </button>
+              ) : (
+                <CancelButton className={cancelButtonClass} fallbackHref="/dashboard" />
               )}
             </div>
 

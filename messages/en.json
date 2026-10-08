@@ -23,7 +23,10 @@
     "confirmDeleteTitle": "Delete it?",
     "confirmOk": "Confirm",
     "confirmDelete": "Delete",
-    "confirmCancel": "Cancel"
+    "confirmCancel": "Cancel",
+    "leaveUnsavedTitle": "Leave without saving?",
+    "leaveUnsavedText": "You have changes that are not saved yet. If you leave now you will lose them.",
+    "leaveUnsavedOk": "Leave without saving"
   },
   "landingHome": {
     "statLanguagesLabel": "languages: KUMANI speaks yours",

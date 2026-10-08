@@ -17,6 +17,7 @@ import {
 import { STANDARD_COLORS, ALL_STANDARD_COLOR_KEYS } from '@/lib/standardColorPalette'
 import BusinessProfileImport from '@/components/businessProfile/BusinessProfileImport'
 import { businessWebsiteUrl, type BusinessProfile } from '@/lib/businessProfile'
+import CancelButton, { cancelButtonLgClass } from '@/components/ui/CancelButton'
 
 type Props = (
   | { mode: 'create' }
@@ -137,7 +138,7 @@ export default function QrProForm(props: Props) {
   const d = form.destination as unknown as Record<string, string>
 
   return (
-    <div className="bg-white rounded-2xl shadow-[0_14px_40px_rgba(23,23,23,0.08)] border border-[var(--gold)]/25 p-6 sm:p-8 space-y-6">
+    <div data-cancel-scope className="bg-white rounded-2xl shadow-[0_14px_40px_rgba(23,23,23,0.08)] border border-[var(--gold)]/25 p-6 sm:p-8 space-y-6">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">{t('labelField')}</label>
         <input
@@ -490,23 +491,26 @@ export default function QrProForm(props: Props) {
         </div>
       )}
 
-      <button
-        onClick={handleSubmit}
-        disabled={!isValid || saving}
-        className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] rounded-xl font-bold shadow-md hover:brightness-105 transition-all disabled:opacity-50"
-      >
-        {saving ? (
-          <>
-            <LoaderCircle className="w-5 h-5 animate-spin" />
-            {t('saving')}
-          </>
-        ) : (
-          <>
-            <CheckCircle className="w-5 h-5" />
-            {props.mode === 'create' ? t('create') : t('saveChanges')}
-          </>
-        )}
-      </button>
+      <div className="flex gap-2">
+        <CancelButton className={cancelButtonLgClass} fallbackHref="/marketplace/qr-code-pro" />
+        <button
+          onClick={handleSubmit}
+          disabled={!isValid || saving}
+          className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] rounded-xl font-bold shadow-md hover:brightness-105 transition-all disabled:opacity-50"
+        >
+          {saving ? (
+            <>
+              <LoaderCircle className="w-5 h-5 animate-spin" />
+              {t('saving')}
+            </>
+          ) : (
+            <>
+              <CheckCircle className="w-5 h-5" />
+              {props.mode === 'create' ? t('create') : t('saveChanges')}
+            </>
+          )}
+        </button>
+      </div>
     </div>
   )
 }
