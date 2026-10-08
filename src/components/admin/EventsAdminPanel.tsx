@@ -19,6 +19,7 @@ import {
   adminUnbanEvent,
   adminWaiveEventFee,
 } from '@/app/actions/admin'
+import { askConfirm } from '@/lib/confirm'
 
 type Person = { first_name: string | null; last_name: string | null; email: string | null } | null
 type AdminEvent = Awaited<ReturnType<typeof adminListEvents>>['events'][number] & { organizer: Person }
@@ -115,10 +116,10 @@ export default function EventsAdminPanel({
     run(event.id, () => adminReviewEvent(event.id, approve, note ?? ''))
   }
 
-  const ban = (event: Pick<AdminEvent, 'id' | 'title' | 'series_id'>) => {
+  const ban = async (event: Pick<AdminEvent, 'id' | 'title' | 'series_id'>) => {
     const note = prompt(`Bloccare "${event.title}"? Scrivi il motivo (lo vede l'organizzatore):`)
     if (note === null) return
-    const wholeSeries = !!event.series_id && confirm('È una serie di date: bloccare anche tutte le date successive? (Annulla = solo questa data)')
+    const wholeSeries = !!event.series_id && (await askConfirm('È una serie di date: bloccare anche tutte le date successive? (Annulla = solo questa data)'))
     run(event.id, () => adminBanEvent(event.id, note, wholeSeries))
   }
 
@@ -339,7 +340,7 @@ export default function EventsAdminPanel({
                         <button
                           type="button"
                           disabled={working === event.id}
-                          onClick={() => confirm(`Sbloccare e ripubblicare "${event.title}"?`) && run(event.id, () => adminUnbanEvent(event.id))}
+                          onClick={async () => (await askConfirm(`Sbloccare e ripubblicare "${event.title}"?`)) && run(event.id, () => adminUnbanEvent(event.id))}
                           className="flex items-center gap-1 rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-50"
                         >
                           <RotateCcw className="h-3.5 w-3.5" /> Sblocca
@@ -461,7 +462,7 @@ export default function EventsAdminPanel({
                       <button
                         type="button"
                         disabled={working === review.id}
-                        onClick={() => confirm("Eliminare questa recensione? La media dell'organizzatore verrà ricalcolata.") && run(review.id, () => adminDeleteEventReview(review.id))}
+                        onClick={async () => (await askConfirm("Eliminare questa recensione? La media dell'organizzatore verrà ricalcolata.")) && run(review.id, () => adminDeleteEventReview(review.id))}
                         className="flex items-center gap-1 rounded-lg border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50 disabled:opacity-50"
                       >
                         <Trash2 className="h-3.5 w-3.5" /> Elimina recensione
@@ -515,7 +516,7 @@ export default function EventsAdminPanel({
                             <button
                               type="button"
                               disabled={working === fee.id}
-                              onClick={() => confirm('Condonare questa commissione?') && run(fee.id, () => adminWaiveEventFee(fee.id))}
+                              onClick={async () => (await askConfirm('Condonare questa commissione?')) && run(fee.id, () => adminWaiveEventFee(fee.id))}
                               className="rounded-lg border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-50"
                             >
                               Condona

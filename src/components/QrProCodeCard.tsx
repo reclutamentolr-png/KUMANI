@@ -7,6 +7,7 @@ import Link from '@/components/LocalizedLink'
 import { MousePointerClick, Trash2, Pencil, Link2, MessageCircle, Phone, MessageSquare, Mail, Wifi, Contact } from 'lucide-react'
 import { deleteQrCode } from '@/app/actions/qrPro'
 import type { QrContentType } from '@/lib/qrPro'
+import { askConfirm } from '@/lib/confirm'
 
 type QrCode = {
   id: string
@@ -33,7 +34,7 @@ export default function QrProCodeCard({ qrCode }: { qrCode: QrCode }) {
   const Icon = TYPE_ICONS[qrCode.content_type]
 
   const handleDelete = async () => {
-    if (!confirm(t('deleteConfirm'))) return
+    if (!(await askConfirm(t('deleteConfirm')))) return
     setDeleting(true)
     const result = await deleteQrCode(qrCode.id)
     setDeleting(false)

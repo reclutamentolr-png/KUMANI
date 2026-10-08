@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { Trash2 } from 'lucide-react'
 import { deleteItem } from '@/app/actions/lifeCalendar'
+import { askConfirm } from '@/lib/confirm'
 
 export default function LifeCalendarDeleteButton({ id }: { id: string }) {
   const t = useTranslations('lifeCalendar')
@@ -12,7 +13,7 @@ export default function LifeCalendarDeleteButton({ id }: { id: string }) {
   const [deleting, setDeleting] = useState(false)
 
   const handleDelete = async () => {
-    if (!confirm(t('deleteConfirm'))) return
+    if (!(await askConfirm(t('deleteConfirm')))) return
     setDeleting(true)
     const result = await deleteItem(id)
     if (result.success) {

@@ -15,6 +15,7 @@ import {
 } from '@/app/actions/admin'
 import type { AdminRewardRow, AdminRewardRedemption } from '@/lib/adminTypes'
 import { Pencil, Trash2, Gift } from 'lucide-react'
+import { askConfirm } from '@/lib/confirm'
 
 // Sezione "rewards" dell'Admin, caricata solo quando la si apre.
 export default function AdminRewardsPanel({ loadBadges }: { loadBadges: () => void }) {
@@ -48,7 +49,7 @@ export default function AdminRewardsPanel({ loadBadges }: { loadBadges: () => vo
   // possono riscattare premi; catalogo e riscatti restano salvati.
   const toggleRewardsCatalog = async () => {
     const next = !rewardsCatalogOn
-    const ok = confirm(
+    const ok = await askConfirm(
       next
         ? 'Attivare il Catalogo Premi? Gli utenti vedranno la pagina Premi e potranno riscattare i premi visibili con i KU Points.'
         : 'Disattivare il Catalogo Premi? La pagina Premi sparisce e nessuno può più riscattare premi. Catalogo e riscatti già fatti restano salvati.'
@@ -101,7 +102,7 @@ export default function AdminRewardsPanel({ loadBadges }: { loadBadges: () => vo
   }
 
   const handleDeleteReward = async (rewardId: string) => {
-    if (!confirm('Eliminare questo premio? Possibile solo se non è mai stato riscattato.')) return
+    if (!(await askConfirm('Eliminare questo premio? Possibile solo se non è mai stato riscattato.'))) return
     const result = await deleteReward(rewardId)
     if (result.success) {
       setRewards((prev) => prev.filter((r) => r.id !== rewardId))

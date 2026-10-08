@@ -21,6 +21,7 @@ import {
   Send,
   LoaderCircle,
 } from 'lucide-react'
+import { askConfirm } from '@/lib/confirm'
 
 // Sezione "messages" dell'Admin, caricata solo quando la si apre.
 export default function AdminMessagesPanel() {
@@ -105,7 +106,7 @@ export default function AdminMessagesPanel() {
   }
 
   const handleDeleteMessage = async (id: string) => {
-    if (!confirm('Eliminare definitivamente questo messaggio?')) return
+    if (!(await askConfirm('Eliminare definitivamente questo messaggio?'))) return
     const result = await deleteAdminMessage(id)
     if (result.success) {
       setMessages((prev) => prev.filter((m) => m.id !== id))

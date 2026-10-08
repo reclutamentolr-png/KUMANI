@@ -14,6 +14,7 @@ import type { BusinessProfile } from '@/lib/businessProfile'
 import EventAttendees from './EventAttendees'
 import OrganizerReputation from './OrganizerReputation'
 import { LevelBadge } from './EventBadges'
+import { askConfirm } from '@/lib/confirm'
 
 type Notice = 'paid' | 'pending' | 'canceled' | 'error' | 'none' | null
 type SheetState =
@@ -84,9 +85,9 @@ export default function OrganizerHome({
   }
 
   const doCancel = async (event: OrganizedEvent) => {
-    if (!confirm(t('cancelConfirm', { title: event.title }))) return
+    if (!(await askConfirm(t('cancelConfirm', { title: event.title })))) return
     // Date ripetute: si può annullare anche il resto della serie
-    const following = !!event.series_id && confirm(t('cancelSeriesConfirm'))
+    const following = !!event.series_id && (await askConfirm(t('cancelSeriesConfirm')))
     setWorking(event.id)
     const result = await cancelEvent(event.id, following)
     setWorking(null)

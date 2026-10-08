@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { KeyRound, LoaderCircle } from 'lucide-react'
 import { adminSendPasswordReset } from '@/app/actions/password'
 import { notify } from '@/lib/adminNotify'
+import { askConfirm } from '@/lib/confirm'
 
 // Admin → Gestisci Utente: invia al Kumano l'email con il codice per scegliere
 // una nuova password. Lo Staff non vede né imposta la password.
@@ -11,7 +12,7 @@ export default function AdminPasswordReset({ userId }: { userId: string }) {
   const [busy, setBusy] = useState(false)
 
   const run = async () => {
-    if (!window.confirm('Inviare a questa persona l’email con il codice per scegliere una nuova password?')) return
+    if (!(await askConfirm('Inviare a questa persona l’email con il codice per scegliere una nuova password?'))) return
     setBusy(true)
     const r = await adminSendPasswordReset(userId, 'it')
     setBusy(false)

@@ -4,6 +4,7 @@ import { notify } from '@/lib/adminNotify'
 import { useCallback, useEffect, useState } from 'react'
 import { LoaderCircle, RefreshCw, Undo2 } from 'lucide-react'
 import { adminListWithdrawals, adminRefundWithdrawal, adminRejectWithdrawal, type AdminWithdrawal } from '@/app/actions/withdrawals'
+import { askConfirm } from '@/lib/confirm'
 
 type Tab = 'pending' | 'handled'
 
@@ -47,7 +48,7 @@ export default function WithdrawalsPanel({ onChanged }: { onChanged?: () => void
 
   const refund = async (item: AdminWithdrawal, mode: 'full' | 'proportional') => {
     const amount = mode === 'full' ? item.refundFullCents : item.refundProportionalCents
-    const ok = confirm(
+    const ok = await askConfirm(
       `Rimborsare ${euro(amount)} a ${fullName(item.user)}?\n\n` +
         `• rimborso sulla carta tramite Stripe (${mode === 'full' ? 'importo totale' : 'parte non usata'})\n` +
         `• abbonamento chiuso subito, profilo riportato al piano gratuito\n` +
@@ -73,7 +74,7 @@ export default function WithdrawalsPanel({ onChanged }: { onChanged?: () => void
       notify('Scrivi nella nota il motivo del rifiuto: il cliente lo vedrà nella pagina Abbonamento.')
       return
     }
-    if (!confirm(`Rifiutare la richiesta di recesso di ${fullName(item.user)}? L'abbonamento resterà attivo.`)) return
+    if (!(await askConfirm(`Rifiutare la richiesta di recesso di ${fullName(item.user)}? L'abbonamento resterà attivo.`))) return
     setWorking(item.id)
     try {
       const result = await adminRejectWithdrawal(item.id, note)

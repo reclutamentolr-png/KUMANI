@@ -16,6 +16,7 @@ import {
   BadgeCheck,
   Sparkles,
 } from 'lucide-react'
+import { askConfirm } from '@/lib/confirm'
 
 // Sezione "settings" dell'Admin, caricata solo quando la si apre.
 export default function AdminSettingsPanel() {
@@ -74,7 +75,7 @@ export default function AdminSettingsPanel() {
   }
 
   const handleCreateHouseAccount = async () => {
-    if (!confirm(`Creare l'account KUMANI con l'email ${houseEmail}? Da quel momento chiunque potrà iscriversi senza codice invito.`)) return
+    if (!(await askConfirm(`Creare l'account KUMANI con l'email ${houseEmail}? Da quel momento chiunque potrà iscriversi senza codice invito.`))) return
     setCreatingHouse(true)
     const result = await createHouseAccount(houseEmail)
     setCreatingHouse(false)

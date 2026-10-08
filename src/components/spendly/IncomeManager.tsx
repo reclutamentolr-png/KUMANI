@@ -18,6 +18,7 @@ import {
   type IncomeType,
   parseAmount,
 } from '@/lib/spendly'
+import { askConfirm } from '@/lib/confirm'
 
 const CATEGORY_KEY: Record<IncomeCategory, string> = {
   stipendio: 'categoryStipendio',
@@ -113,7 +114,7 @@ export default function IncomeManager({ items, year }: { items: SpendlyIncome[];
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm(t('deleteConfirm'))) return
+    if (!(await askConfirm(t('deleteConfirm')))) return
     const result = await deleteIncome(id)
     if (result.success) router.refresh()
   }

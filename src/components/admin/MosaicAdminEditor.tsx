@@ -15,6 +15,7 @@ import {
   type MosaicAdminSeason,
 } from '@/app/actions/admin'
 import { MOSAIC_PALETTE, bytesToBase64, cellRgb, decodeCanvas, imageToTemplate, paintCells, type MosaicZone } from '@/lib/mosaic'
+import { askConfirm } from '@/lib/confirm'
 
 type Rect = { x: number; y: number; w: number; h: number }
 type Mode = 'select' | 'paint' | 'erase'
@@ -179,8 +180,8 @@ export default function MosaicAdminEditor({
     setPeople(result.rows)
   }
 
-  const clearArea = () => {
-    if (!selection || !confirm(`Togliere tutte le tessere nell'area ${selection.w}×${selection.h}? Le caselle tornano libere.`)) return
+  const clearArea = async () => {
+    if (!selection || !(await askConfirm(`Togliere tutte le tessere nell'area ${selection.w}×${selection.h}? Le caselle tornano libere.`))) return
     run(
       () => adminMosaicClearArea(season.id, selection),
       async () => {
@@ -199,8 +200,8 @@ export default function MosaicAdminEditor({
     run(() => adminMosaicAddZone(season.id, selection, label), load)
   }
 
-  const clearUser = (userId: string, label: string) => {
-    if (!confirm(`Togliere tutte le tessere di ${label} da questa stagione?`)) return
+  const clearUser = async (userId: string, label: string) => {
+    if (!(await askConfirm(`Togliere tutte le tessere di ${label} da questa stagione?`))) return
     run(
       () => adminClearMosaicUser(season.id, userId),
       async () => {
@@ -401,7 +402,7 @@ export default function MosaicAdminEditor({
                   </span>
                   <button
                     type="button"
-                    onClick={() => confirm('Eliminare la zona protetta? Le tessere già presenti restano.') && run(() => adminMosaicDeleteZone(zone.id), load)}
+                    onClick={async () => (await askConfirm('Eliminare la zona protetta? Le tessere già presenti restano.')) && run(() => adminMosaicDeleteZone(zone.id), load)}
                     className={`${small} border-red-200 text-red-600`}
                   >
                     <Trash2 className="h-3.5 w-3.5" />
@@ -444,7 +445,7 @@ export default function MosaicAdminEditor({
             {template && (
               <button
                 type="button"
-                onClick={() => (templateDirty ? load(true) : confirm('Togliere la sagoma guida dalla stagione?') && saveTemplate(null))}
+                onClick={async () => (templateDirty ? load(true) : (await askConfirm('Togliere la sagoma guida dalla stagione?')) && saveTemplate(null))}
                 className={`${small} border-red-200 text-red-600`}
               >
                 <Trash2 className="h-3.5 w-3.5" /> {templateDirty ? 'Annulla' : 'Togli sagoma'}

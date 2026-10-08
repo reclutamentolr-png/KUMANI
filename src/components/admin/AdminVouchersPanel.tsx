@@ -16,6 +16,7 @@ import {
   BadgeCheck,
   Sparkles,
 } from 'lucide-react'
+import { askConfirm } from '@/lib/confirm'
 
 // Sezione "vouchers" dell'Admin, caricata solo quando la si apre.
 export default function AdminVouchersPanel() {
@@ -94,7 +95,7 @@ export default function AdminVouchersPanel() {
   }
 
   const handleRevokeVoucher = async (voucherId: string) => {
-    if (!confirm('Revocare questo voucher? Solo i voucher non ancora riscattati possono essere revocati.')) return
+    if (!(await askConfirm('Revocare questo voucher? Solo i voucher non ancora riscattati possono essere revocati.'))) return
     const result = await revokeVoucher(voucherId)
     if (result.success) {
       setVouchers((prev) => prev.map((v) => (v.id === voucherId ? { ...v, status: 'revoked' } : v)))

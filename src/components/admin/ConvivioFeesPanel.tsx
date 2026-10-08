@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { ExternalLink, LoaderCircle, Percent } from 'lucide-react'
 import { prettyVat, registryLookupUrl } from '@/lib/vat'
 import { adminGetConvivioFeePercent, adminListConvivioFees, adminSetConvivioFeePercent, adminWaiveConvivioFee } from '@/app/actions/admin'
+import { askConfirm } from '@/lib/confirm'
 
 type AdminConvivioFee = Awaited<ReturnType<typeof adminListConvivioFees>>['fees'][number]
 type Person = AdminConvivioFee['supplier']
@@ -42,7 +43,7 @@ export default function ConvivioFeesPanel({ locale, canReadSettings = true }: { 
   }, [load, canReadSettings])
 
   const waive = async (fee: AdminConvivioFee) => {
-    if (!confirm(`Condonare la commissione di ${money(fee.amount)} per "${fee.group?.title ?? '—'}"?`)) return
+    if (!(await askConfirm(`Condonare la commissione di ${money(fee.amount)} per "${fee.group?.title ?? '—'}"?`))) return
     setWorking(fee.id)
     const result = await adminWaiveConvivioFee(fee.id)
     setWorking(null)

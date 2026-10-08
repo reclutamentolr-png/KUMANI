@@ -18,6 +18,7 @@ import {
   type SpendlyFixedExpense,
   type SpendlyFixedPayment,
 } from '@/lib/spendly'
+import { askConfirm } from '@/lib/confirm'
 
 const FREQUENCIES: FixedExpenseFrequency[] = ['mensile', 'bimestrale', 'trimestrale', 'semestrale', 'annuale', 'una_tantum']
 const FREQUENCY_KEY: Record<FixedExpenseFrequency, string> = {
@@ -239,7 +240,7 @@ export default function BillsManager({
               <button
                 type="button"
                 onClick={async () => {
-                  if (!inactiveBill && !confirm(t('deactivateConfirm', { name: bill.description }))) return
+                  if (!inactiveBill && !(await askConfirm(t('deactivateConfirm', { name: bill.description })))) return
                   await quick(null, () => setBillActive(bill.id, inactiveBill))
                 }}
                 className="rounded-md p-1.5 hover:bg-gray-100 hover:text-[var(--ink)]"
@@ -252,7 +253,7 @@ export default function BillsManager({
             <button
               type="button"
               onClick={async () => {
-                if (!confirm(t('deleteBillConfirm', { name: bill.description }))) return
+                if (!(await askConfirm(t('deleteBillConfirm', { name: bill.description })))) return
                 await quick(null, () => deleteFixedExpense(bill.id), 'deleteError')
               }}
               className="rounded-md p-1.5 hover:bg-red-50 hover:text-red-600"

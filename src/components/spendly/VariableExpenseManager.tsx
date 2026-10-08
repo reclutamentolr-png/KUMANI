@@ -18,6 +18,7 @@ import {
   type VariableExpenseCategory,
   parseAmount,
 } from '@/lib/spendly'
+import { askConfirm } from '@/lib/confirm'
 
 const CATEGORY_KEY: Record<VariableExpenseCategory, string> = {
   spesa_alimentari: 'categorySpesaAlimentari',
@@ -115,7 +116,7 @@ export default function VariableExpenseManager({ items, year }: { items: Spendly
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm(t('deleteConfirm'))) return
+    if (!(await askConfirm(t('deleteConfirm')))) return
     const result = await deleteVariableExpense(id)
     if (result.success) router.refresh()
   }

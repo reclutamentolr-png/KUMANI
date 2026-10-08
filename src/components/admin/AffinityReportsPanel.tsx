@@ -4,6 +4,7 @@ import { notify } from '@/lib/adminNotify'
 import { useCallback, useEffect, useState } from 'react'
 import { Flag, LoaderCircle } from 'lucide-react'
 import { listAffinityReports, resolveAffinityReport } from '@/app/actions/admin'
+import { askConfirm } from '@/lib/confirm'
 
 type Person = { id: string; first_name: string | null; last_name: string | null; email: string | null; is_blocked?: boolean }
 type Report = { id: string; reason: string; status: 'open' | 'closed'; created_at: string; reporter: Person | null; reported: Person | null }
@@ -30,7 +31,7 @@ export default function AffinityReportsPanel() {
 
   const resolve = async (report: Report, block: boolean) => {
     const who = `${report.reported?.first_name ?? ''} ${report.reported?.last_name ?? ''}`.trim()
-    if (block && !confirm(`Bloccare l'account di ${who} su tutta la piattaforma?`)) return
+    if (block && !(await askConfirm(`Bloccare l'account di ${who} su tutta la piattaforma?`))) return
     setWorking(report.id)
     const result = await resolveAffinityReport(report.id, block)
     setWorking(null)

@@ -52,6 +52,7 @@ import TravelTripForm from './TravelTripForm'
 import TravelActivityForm from './TravelActivityForm'
 import TravelBudget from './TravelBudget'
 import TravelDocuments from './TravelDocuments'
+import { askConfirm } from '@/lib/confirm'
 
 type Bundle = TripBundle
 type Tab = 'itinerary' | 'budget' | 'checklist' | 'documents' | 'members'
@@ -326,7 +327,7 @@ export default function TravelWorkspace({
             {detail.can_edit && (
               <button
                 type="button"
-                onClick={() => confirm(t('deleteItemConfirm', { name: item.title })) && run(() => deleteChecklistItem(item.id))}
+                onClick={async () => (await askConfirm(t('deleteItemConfirm', { name: item.title }))) && run(() => deleteChecklistItem(item.id))}
                 className="rounded-md p-1 text-gray-300 hover:bg-red-50 hover:text-red-500"
                 aria-label={t('delete')}
               >
@@ -387,7 +388,7 @@ export default function TravelWorkspace({
                 <button
                   type="button"
                   onClick={async () => {
-                    if (!confirm(t('removeMemberConfirm', { name: m.name }))) return
+                    if (!(await askConfirm(t('removeMemberConfirm', { name: m.name })))) return
                     const result = await removeTripMember(m.id)
                     if (!result.success) alert(t(`error_${result.error}`))
                     await refresh()
@@ -521,7 +522,7 @@ export default function TravelWorkspace({
             <button
               type="button"
               onClick={async () => {
-                if (!confirm(t('rotateCodeConfirm'))) return
+                if (!(await askConfirm(t('rotateCodeConfirm')))) return
                 const result = await rotateInviteCode(detail.id)
                 if (!result.success) alert(t(`error_${result.error}`))
                 await refresh()
@@ -562,7 +563,7 @@ export default function TravelWorkspace({
               <button
                 type="button"
                 onClick={async () => {
-                  if (!confirm(t('deleteTripConfirm', { name: detail.title }))) return
+                  if (!(await askConfirm(t('deleteTripConfirm', { name: detail.title })))) return
                   const result = await deleteTrip(tripId)
                   if (result.success) router.push(homePath)
                   else alert(t('error_saveError'))
@@ -576,7 +577,7 @@ export default function TravelWorkspace({
             <button
               type="button"
               onClick={async () => {
-                if (!confirm(t('leaveConfirm', { name: detail.title }))) return
+                if (!(await askConfirm(t('leaveConfirm', { name: detail.title })))) return
                 const result = await removeTripMember(myMemberId)
                 if (result.success) router.push(homePath)
                 else alert(t(`error_${result.error}`))

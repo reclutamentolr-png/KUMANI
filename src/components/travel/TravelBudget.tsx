@@ -8,6 +8,7 @@ import { addSettlement, deleteSettlement } from '@/app/actions/travel'
 import { EXPENSE_CATEGORIES, EXPENSE_EMOJI, memberBalances, settleUp, type TripDetail, type TripExpense, type TripSettlement } from '@/lib/travel'
 import TravelExpenseForm from './TravelExpenseForm'
 import TripSpendlyBox from '@/components/ecosystem/TripSpendlyBox'
+import { askConfirm } from '@/lib/confirm'
 
 // Spese del viaggio: il mio saldo, "chi deve quanto a chi" con i
 // trasferimenti minimi, i rimborsi già fatti e l'elenco delle spese.
@@ -52,7 +53,7 @@ export default function TravelBudget({
   const canManage = (createdBy: string) => detail.is_owner || createdBy === myUserId
 
   const settle = async (from: string, to: string, amount: number) => {
-    if (!confirm(t('settleConfirm', { from: name(from), to: name(to), amount: fromCents(amount) }))) return
+    if (!(await askConfirm(t('settleConfirm', { from: name(from), to: name(to), amount: fromCents(amount) })))) return
     setBusy(`${from}-${to}`)
     try {
       const result = await addSettlement(detail.id, from, to, amount)
@@ -64,7 +65,7 @@ export default function TravelBudget({
   }
 
   const undoSettlement = async (id: string) => {
-    if (!confirm(t('undoSettlementConfirm'))) return
+    if (!(await askConfirm(t('undoSettlementConfirm')))) return
     setBusy(id)
     try {
       const result = await deleteSettlement(id)

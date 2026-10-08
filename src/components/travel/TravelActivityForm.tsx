@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { LoaderCircle, Trash2 } from 'lucide-react'
 import { deleteActivity, saveActivity } from '@/app/actions/travel'
 import type { TripActivity, TripMember } from '@/lib/travel'
+import { askConfirm } from '@/lib/confirm'
 
 const input = 'w-full rounded-xl border border-gray-300 px-3 py-2.5 text-[15px] focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30'
 const label = 'mb-1 block text-sm font-semibold text-gray-700'
@@ -57,7 +58,7 @@ export default function TravelActivityForm({
   }
 
   const remove = async () => {
-    if (!activity || !confirm(t('deleteActivityConfirm', { name: activity.title }))) return
+    if (!activity || !(await askConfirm(t('deleteActivityConfirm', { name: activity.title })))) return
     setBusy(true)
     try {
       const result = await deleteActivity(activity.id)

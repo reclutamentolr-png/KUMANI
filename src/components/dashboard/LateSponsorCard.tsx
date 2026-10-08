@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { LoaderCircle, UserPlus } from 'lucide-react'
 import { claimLateSponsor } from '@/app/actions/lateSponsor'
+import { askConfirm } from '@/lib/confirm'
 
 // Dashboard: chi si è iscritto senza codice può indicare, entro la data
 // mostrata, il codice di chi l'ha invitato (una sola volta).
@@ -20,7 +21,7 @@ export default function LateSponsorCard({ until }: { until: string }) {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!code.trim()) return
-    if (!window.confirm(t('confirm', { code: code.trim().toUpperCase() }))) return
+    if (!(await askConfirm(t('confirm', { code: code.trim().toUpperCase() })))) return
     setBusy(true)
     const r = await claimLateSponsor(code)
     setBusy(false)

@@ -18,6 +18,7 @@ import {
   type QuoteSection,
   type QuoteSectionKind,
 } from '@/lib/quotes'
+import { askConfirm } from '@/lib/confirm'
 
 // Preventivo descrittivo: oggetto, lettera di apertura, sezioni (testo o
 // elenco, con importo facoltativo), sezioni pronte, totale, chiusura e firma.
@@ -83,7 +84,7 @@ export default function QuoteSectionsEditor({ form, setForm, initialPresets }: P
     }
   }
   const removePreset = async (index: number) => {
-    if (!confirm(t('presetDeleteConfirm'))) return
+    if (!(await askConfirm(t('presetDeleteConfirm')))) return
     await persist(presets.filter((_, j) => j !== index))
   }
 

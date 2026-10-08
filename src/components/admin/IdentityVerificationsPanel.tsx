@@ -4,6 +4,7 @@ import { notify } from '@/lib/adminNotify'
 import { useCallback, useEffect, useState } from 'react'
 import { Check, ExternalLink, FileText, LoaderCircle, RefreshCw, ScanFace, X } from 'lucide-react'
 import { adminListIdentityVerifications, adminReviewIdentity, type AdminIdentityVerification } from '@/app/actions/admin'
+import { askConfirm } from '@/lib/confirm'
 
 type Tab = 'pending' | 'reviewed'
 
@@ -52,7 +53,7 @@ export default function IdentityVerificationsPanel() {
       notify('Scrivi il motivo del rifiuto (lo vede l\'utente).')
       return
     }
-    if (approve && !confirm(`Approvare il documento di ${fullName(item.user)}? Il file verrà cancellato.`)) return
+    if (approve && !(await askConfirm(`Approvare il documento di ${fullName(item.user)}? Il file verrà cancellato.`))) return
     setWorking(item.id)
     const result = await adminReviewIdentity(item.id, approve, note)
     setWorking(null)

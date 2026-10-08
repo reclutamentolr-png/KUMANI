@@ -15,6 +15,7 @@ import {
   type MosaicAdminSeason,
 } from '@/app/actions/admin'
 import MosaicAdminEditor from './MosaicAdminEditor'
+import { askConfirm } from '@/lib/confirm'
 
 const REASON: Record<string, string> = { offensive: 'Offensiva', advertising: 'Pubblicità', other: 'Altro' }
 
@@ -87,14 +88,14 @@ export default function MosaicAdminPanel() {
   }
 
   const clearUser = async (seasonId: string, userId: string, label: string) => {
-    if (!confirm(`Togliere tutte le tessere di ${label} da questa stagione? Le caselle tornano libere.`)) return
+    if (!(await askConfirm(`Togliere tutte le tessere di ${label} da questa stagione? Le caselle tornano libere.`))) return
     const result = await adminClearMosaicUser(seasonId, userId)
     if (!result.success) return notify('Errore: ' + (result.error ?? ''))
     await Promise.all([showPeople(seasonId), load()])
   }
 
   const remove = async (season: MosaicAdminSeason) => {
-    if (!confirm(`Eliminare la stagione "${season.title}"${season.filled ? ` e le sue ${season.filled} tessere` : ''}? Non si può annullare.`)) return
+    if (!(await askConfirm(`Eliminare la stagione "${season.title}"${season.filled ? ` e le sue ${season.filled} tessere` : ''}? Non si può annullare.`))) return
     const result = await adminDeleteMosaicSeason(season.id)
     if (!result.success) return notify('Errore: ' + (result.error ?? ''))
     await load()

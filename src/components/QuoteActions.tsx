@@ -7,6 +7,7 @@ import Link from '@/components/LocalizedLink'
 import { Copy, Pencil, Trash2, LoaderCircle } from 'lucide-react'
 import { deleteQuote, duplicateQuote } from '@/app/actions/quotes'
 import { useFromDashboardSuffix } from '@/lib/useFromDashboard'
+import { askConfirm } from '@/lib/confirm'
 
 export default function QuoteActions({ id }: { id: string }) {
   const t = useTranslations('preventivi')
@@ -27,7 +28,7 @@ export default function QuoteActions({ id }: { id: string }) {
   }
 
   const handleDelete = async () => {
-    if (!confirm(t('deleteConfirm'))) return
+    if (!(await askConfirm(t('deleteConfirm')))) return
     setDeleting(true)
     const result = await deleteQuote(id)
     if (result.success) {

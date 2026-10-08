@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import Link from '@/components/LocalizedLink'
 import { MousePointerClick, Trash2, Pencil, ExternalLink } from 'lucide-react'
 import { deleteOfferCampaign } from '@/app/actions/offermaker'
+import { askConfirm } from '@/lib/confirm'
 
 type Campaign = {
   id: string
@@ -22,7 +23,7 @@ export default function OfferMakerCampaignCard({ campaign }: { campaign: Campaig
   const [deleting, setDeleting] = useState(false)
 
   const handleDelete = async () => {
-    if (!confirm(t('deleteConfirm'))) return
+    if (!(await askConfirm(t('deleteConfirm')))) return
     setDeleting(true)
     const result = await deleteOfferCampaign(campaign.id)
     setDeleting(false)

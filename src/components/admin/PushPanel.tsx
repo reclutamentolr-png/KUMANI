@@ -6,6 +6,7 @@ import { adminPushOverview, adminPushUserStatus, adminSendPushCampaign, type Pus
 import { notify } from '@/lib/adminNotify'
 import AdminUserPicker from '@/components/admin/AdminUserPicker'
 import type { StaffUserHit } from '@/app/actions/admin'
+import { askConfirm } from '@/lib/confirm'
 
 // Admin → Notifiche push: avvisi dello Staff sui telefoni e computer dei
 // Kumani che hanno attivato le notifiche (e non hanno spento "Avvisi dello
@@ -71,7 +72,7 @@ export default function PushPanel() {
     if (audience === 'user' && !person) return
     const langLabel = LANGUAGES.find(([code]) => code === locale)?.[1]
     const target = audience === 'user' ? personName : `${AUDIENCE_LABEL[audience]} · ${langLabel}`
-    if (!window.confirm(`Inviare la notifica a: ${target}?`)) return
+    if (!(await askConfirm(`Inviare la notifica a: ${target}?`))) return
     setSending(true)
     const r = await adminSendPushCampaign({ title, body, url, audience, locale, userId: person?.id })
     setSending(false)

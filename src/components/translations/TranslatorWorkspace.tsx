@@ -23,6 +23,7 @@ import {
   type TranslationCheck,
   type TranslatorLocale,
 } from '@/lib/translationKeys'
+import { askConfirm } from '@/lib/confirm'
 
 // Area Traduttori: interfaccia volutamente solo in italiano (si traduce
 // sempre partendo dall'italiano), niente chiavi next-intl.
@@ -125,12 +126,12 @@ export function TranslatorLogoutButton({
   confirmLeave,
 }: {
   variant?: 'dark' | 'light'
-  confirmLeave?: () => boolean
+  confirmLeave?: () => boolean | Promise<boolean>
 }) {
   const [busy, setBusy] = useState(false)
 
   const logout = async () => {
-    if (confirmLeave && !confirmLeave()) return
+    if (confirmLeave && !(await confirmLeave())) return
     setBusy(true)
     try {
       await createClient().auth.signOut({ scope: 'local' })
@@ -213,9 +214,9 @@ export default function TranslatorWorkspace({ name, locales }: { name: string; l
     return () => window.removeEventListener('beforeunload', onBeforeUnload)
   }, [])
 
-  const confirmLeave = useCallback(() => {
+  const confirmLeave = useCallback(async () => {
     if (dirty.current.size === 0) return true
-    const ok = window.confirm('Ci sono modifiche non salvate. Vuoi uscire lo stesso?')
+    const ok = await askConfirm('Ci sono modifiche non salvate. Vuoi uscire lo stesso?')
     if (ok) dirty.current.clear()
     return ok
   }, [])
@@ -264,23 +265,23 @@ export default function TranslatorWorkspace({ name, locales }: { name: string; l
       })
   }
 
-  const openSection = (id: string) => {
-    if (!confirmLeave()) return
+  const openSection = async (id: string) => {
+    if (!(await confirmLeave())) return
     setView({ kind: 'section', id })
     loadItems(() => loadTranslationSection(locale, id))
     window.scrollTo({ top: 0 })
   }
 
-  const openSearch = (query: string) => {
+  const openSearch = async (query: string) => {
     const q = query.trim()
-    if (q.length < 2 || !confirmLeave()) return
+    if (q.length < 2 || !(await confirmLeave())) return
     setView({ kind: 'search', query: q })
     loadItems(() => searchTranslations(locale, q))
     window.scrollTo({ top: 0 })
   }
 
-  const goOverview = () => {
-    if (!confirmLeave()) return
+  const goOverview = async () => {
+    if (!(await confirmLeave())) return
     itemsRequest.current++
     setView({ kind: 'overview' })
     setItems(null)
@@ -290,8 +291,8 @@ export default function TranslatorWorkspace({ name, locales }: { name: string; l
     window.scrollTo({ top: 0 })
   }
 
-  const changeLocale = (next: TranslatorLocale) => {
-    if (next === locale || !confirmLeave()) return
+  const changeLocale = async (next: TranslatorLocale) => {
+    if (next === locale || !(await confirmLeave())) return
     try {
       localStorage.setItem(LOCALE_STORAGE_KEY, next)
     } catch {
@@ -799,9 +800,9 @@ const ItemCard = memo(function ItemCard({
     run('ok', () => saveTranslation(locale, item.key, item.value), 'Confermato')
   }
 
-  const reset = () => {
+  const reset = async () => {
     if (busy) return
-    if (!window.confirm('Vuoi tornare al testo di base del sito? La tua versione di questo testo verrà tolta.')) return
+    if (!(await askConfirm('Vuoi tornare al testo di base del sito? La tua versione di questo testo verrà tolta.'))) return
     run('reset', () => resetTranslation(locale, item.key), 'Ripristinato il testo di base')
   }
 

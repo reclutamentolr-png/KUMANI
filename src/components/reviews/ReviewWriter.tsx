@@ -7,6 +7,7 @@ import { Check, Clock, LoaderCircle, PenLine, Star, Trash2, XCircle } from 'luci
 import Link from '@/components/LocalizedLink'
 import { deleteMyReview, submitReview } from '@/app/actions/reviews'
 import { REVIEW_BODY_MAX, REVIEW_BODY_MIN, type MyReviewOption } from '@/lib/reviews'
+import { askConfirm } from '@/lib/confirm'
 
 const STATUS_STYLE = {
   pending: 'bg-amber-50 text-amber-800',
@@ -107,8 +108,8 @@ function ReviewForm({ option, locale }: { option: MyReviewOption; locale: string
     })
   }
 
-  const remove = () => {
-    if (!option.review || !confirm(t('deleteConfirm'))) return
+  const remove = async () => {
+    if (!option.review || !(await askConfirm(t('deleteConfirm')))) return
     startTransition(async () => {
       const result = await deleteMyReview(option.review!.id)
       if (!result.success) setError(t('error_saveError'))

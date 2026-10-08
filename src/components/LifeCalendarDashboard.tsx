@@ -8,6 +8,7 @@ import { Search, PlusCircle, CalendarClock, Archive, X } from 'lucide-react'
 import { deleteProfile } from '@/app/actions/lifeCalendar'
 import LifeCalendarItemCard from '@/components/LifeCalendarItemCard'
 import { getItemStatus, CATEGORIES, type Category, type ItemStatus } from '@/lib/lifeCalendar'
+import { askConfirm } from '@/lib/confirm'
 
 type Item = {
   id: string
@@ -49,7 +50,7 @@ export default function LifeCalendarDashboard({
   const [manageProfiles, setManageProfiles] = useState(false)
 
   const removeProfile = async (profile: Profile) => {
-    if (!confirm(t('deleteProfileConfirm', { name: profile.name }))) return
+    if (!(await askConfirm(t('deleteProfileConfirm', { name: profile.name })))) return
     await deleteProfile(profile.id)
     router.refresh()
   }

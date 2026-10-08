@@ -36,6 +36,7 @@ import {
 } from '@/app/actions/translations'
 import { LOCALE_LABELS, SECTION_LABELS, TRANSLATOR_LOCALES, isTranslatorLocale } from '@/lib/translationLocales'
 import ShareCredentials from '@/components/admin/ShareCredentials'
+import { askConfirm } from '@/lib/confirm'
 
 type Tab = 'translators' | 'audit' | 'changes'
 
@@ -349,9 +350,9 @@ function TranslatorRow({ translator, onChanged }: { translator: AdminTranslator;
     if (password.length < MIN_PASSWORD) return setError(`La password deve avere almeno ${MIN_PASSWORD} caratteri.`)
     return run(() => adminSetTranslatorPassword(translator.id, password), 'Password cambiata. Comunicala al traduttore: non verrà più mostrata.')
   }
-  const toggleActive = () => {
+  const toggleActive = async () => {
     const suspend = translator.isActive
-    const ok = confirm(
+    const ok = await askConfirm(
       suspend
         ? `Sospendere ${translator.name}? Non potrà più entrare né modificare traduzioni finché non lo riattivi.`
         : `Riattivare ${translator.name}? Potrà di nuovo entrare con la sua password.`,
@@ -359,8 +360,8 @@ function TranslatorRow({ translator, onChanged }: { translator: AdminTranslator;
     if (!ok) return
     return run(() => adminUpdateTranslator(translator.id, { isActive: !suspend }), suspend ? 'Account sospeso.' : 'Account riattivato.')
   }
-  const remove = () => {
-    const ok = confirm(
+  const remove = async () => {
+    const ok = await askConfirm(
       `ATTENZIONE: eliminare definitivamente l'account di ${translator.name} (${translator.email ?? '—'})?\n\n` +
         `L'account viene eliminato, le sue traduzioni restano nel sito.\n` +
         `Non potrà più entrare e l'operazione non si può annullare. Se vuoi solo bloccarlo per un po', usa "Sospendi".`,
@@ -590,7 +591,7 @@ function ChangesTab() {
   )
 
   const revert = async (change: TranslationChange) => {
-    const ok = confirm(
+    const ok = await askConfirm(
       `Ripristinare il testo precedente?\n\n${localeLabel(change.locale)} · ${change.key}\n\n` +
         `Tornerà a: ${change.oldValue === null ? 'testo di base' : `"${change.oldValue.slice(0, 200)}${change.oldValue.length > 200 ? '…' : ''}"`}`,
     )

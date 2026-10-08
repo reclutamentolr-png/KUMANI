@@ -18,7 +18,12 @@
     "by": "di",
     "points": "Punti",
     "backToDashboard": "Torna alla Dashboard",
-    "closeProfile": "Chiudi profilo"
+    "closeProfile": "Chiudi profilo",
+    "confirmTitle": "Sei sicuro?",
+    "confirmDeleteTitle": "Vuoi eliminarlo?",
+    "confirmOk": "Conferma",
+    "confirmDelete": "Elimina",
+    "confirmCancel": "Annulla"
   },
   "landingHome": {
     "statLanguagesLabel": "lingue: KUMANI parla la tua",

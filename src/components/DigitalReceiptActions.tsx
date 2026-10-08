@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { Undo2, Trash2, LoaderCircle } from 'lucide-react'
 import { confirmReturn, deleteReceipt } from '@/app/actions/digitalReceipt'
+import { askConfirm } from '@/lib/confirm'
 
 export default function DigitalReceiptActions({
   id,
@@ -19,7 +20,7 @@ export default function DigitalReceiptActions({
   const [deleting, setDeleting] = useState(false)
 
   const handleConfirmReturn = async () => {
-    if (!confirm(t('confirmReturnConfirm'))) return
+    if (!(await askConfirm(t('confirmReturnConfirm')))) return
     setReturning(true)
     const result = await confirmReturn(id)
     setReturning(false)
@@ -31,7 +32,7 @@ export default function DigitalReceiptActions({
   }
 
   const handleDelete = async () => {
-    if (!confirm(t('deleteConfirm'))) return
+    if (!(await askConfirm(t('deleteConfirm')))) return
     setDeleting(true)
     const result = await deleteReceipt(id)
     if (result.success) {

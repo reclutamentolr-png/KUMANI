@@ -10,6 +10,7 @@ import { Sheet } from '@/components/memolife/MemoLifeForms'
 import { registerToEvent, reportEvent, reviewEvent, unregisterFromEvent } from '@/app/actions/events'
 import { eventPassUrl, formatEventDate, type EventDetail } from '@/lib/events'
 import NativeShareButton from '@/components/NativeShareButton'
+import { askConfirm } from '@/lib/confirm'
 
 const REGISTER_ERRORS = ['full', 'age', 'started', 'organizer', 'not_available', 'not_logged', 'not_allowed', 'invalid', 'suspended']
 
@@ -83,7 +84,7 @@ export default function EventActions({
   }
 
   const leave = async (fromWaitlist = false) => {
-    if (!confirm(t(fromWaitlist ? 'waitlistLeaveConfirm' : 'unregisterConfirm'))) return
+    if (!(await askConfirm(t(fromWaitlist ? 'waitlistLeaveConfirm' : 'unregisterConfirm')))) return
     setBusy(true)
     setError(null)
     const result = await unregisterFromEvent(event.id)

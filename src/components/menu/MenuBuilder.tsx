@@ -53,6 +53,7 @@ import {
 } from '@/lib/menu'
 import BusinessProfileImport from '@/components/businessProfile/BusinessProfileImport'
 import type { BusinessProfile } from '@/lib/businessProfile'
+import { askConfirm } from '@/lib/confirm'
 
 export type MenuInventoryProduct = { id: string; name: string; stock: number; unit: string }
 
@@ -216,7 +217,7 @@ export default function MenuBuilder({
   }
 
   const translateWithAi = async () => {
-    if (!confirm(t('aiConfirm'))) return
+    if (!(await askConfirm(t('aiConfirm')))) return
     setBusy(true)
     setError(null)
     setNotice(null)
@@ -377,8 +378,8 @@ export default function MenuBuilder({
           <button
             type="button"
             disabled={busy}
-            onClick={() =>
-              confirm(t('deleteMenuConfirm')) &&
+            onClick={async () =>
+              (await askConfirm(t('deleteMenuConfirm'))) &&
               run(deleteMenu, () => {
                 setShowSettings(true)
                 setSettings((current) => ({ ...current, isActive: true }))
@@ -520,7 +521,7 @@ export default function MenuBuilder({
                 label={t('delete')}
                 disabled={busy}
                 danger
-                onClick={() => confirm(t('deleteCategoryConfirm')) && run(() => deleteMenuCategory(category.id))}
+                onClick={async () => (await askConfirm(t('deleteCategoryConfirm'))) && run(() => deleteMenuCategory(category.id))}
               >
                 <Trash2 className="h-4 w-4" />
               </IconButton>
@@ -594,7 +595,7 @@ export default function MenuBuilder({
                     <IconButton label={t('edit')} disabled={busy} onClick={() => openItem(category.id, item)}>
                       <Pencil className="h-4 w-4" />
                     </IconButton>
-                    <IconButton label={t('delete')} disabled={busy} danger onClick={() => confirm(t('deleteItemConfirm')) && run(() => deleteMenuItem(item.id))}>
+                    <IconButton label={t('delete')} disabled={busy} danger onClick={async () => (await askConfirm(t('deleteItemConfirm'))) && run(() => deleteMenuItem(item.id))}>
                       <Trash2 className="h-4 w-4" />
                     </IconButton>
                   </span>

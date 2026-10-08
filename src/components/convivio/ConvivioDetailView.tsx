@@ -22,6 +22,7 @@ import { createClient } from '@/lib/supabase/client'
 import { convivioPhotoUrl, formatEuro, savingPercent, type ConvivioDetail, type ConvivioMessage, type ShowcaseInfo } from '@/lib/convivio'
 import ConvivioShowcaseBox from './ConvivioShowcaseBox'
 import { ProgressBar, STATUS_STYLE } from './ConvivioCardItem'
+import { askConfirm } from '@/lib/confirm'
 
 // Dettaglio di una cordata: adesione (con quantità), avanzamento in tempo
 // reale, istruzioni di pagamento/ritiro, chat del gruppo, azioni del
@@ -338,7 +339,7 @@ export default function ConvivioDetailView({
                     <button
                       type="button"
                       disabled={busy}
-                      onClick={() => confirm(t('leaveConfirm')) && run(() => leaveConvivio(data.id), t('left'))}
+                      onClick={async () => (await askConfirm(t('leaveConfirm'))) && run(() => leaveConvivio(data.id), t('left'))}
                       className="rounded-xl px-4 py-3 text-sm font-semibold text-red-600 hover:bg-red-50"
                     >
                       {t('leave')}
@@ -391,7 +392,7 @@ export default function ConvivioDetailView({
                 <button
                   type="button"
                   disabled={busy}
-                  onClick={() => confirm(t('supplierDeclineConfirm')) && run(() => supplierRespond(data.id, 'decline'), t('supplierDeclined'))}
+                  onClick={async () => (await askConfirm(t('supplierDeclineConfirm'))) && run(() => supplierRespond(data.id, 'decline'), t('supplierDeclined'))}
                   className="rounded-xl px-4 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50"
                 >
                   {t('supplierDecline')}
@@ -411,7 +412,7 @@ export default function ConvivioDetailView({
               <button type="button" disabled={busy} onClick={() => run(() => answerCounter(data.id, true), t('counterAccepted'))} className="rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-bold text-white">
                 {t('acceptCounter')}
               </button>
-              <button type="button" disabled={busy} onClick={() => confirm(t('rejectCounterConfirm')) && run(() => answerCounter(data.id, false))} className="rounded-xl px-4 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50">
+              <button type="button" disabled={busy} onClick={async () => (await askConfirm(t('rejectCounterConfirm'))) && run(() => answerCounter(data.id, false))} className="rounded-xl px-4 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50">
                 {t('rejectCounter')}
               </button>
             </div>
@@ -428,7 +429,7 @@ export default function ConvivioDetailView({
                 <button
                   type="button"
                   disabled={busy || !reached}
-                  onClick={() => confirm(t('orderConfirm')) && run(() => setConvivioStatus(data.id, 'ordered'), t('orderedDone'))}
+                  onClick={async () => (await askConfirm(t('orderConfirm'))) && run(() => setConvivioStatus(data.id, 'ordered'), t('orderedDone'))}
                   className="rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-4 py-2.5 text-sm font-bold text-[var(--ink)] disabled:opacity-40"
                 >
                   {t('markInPreparation')}
@@ -438,7 +439,7 @@ export default function ConvivioDetailView({
                 <button
                   type="button"
                   disabled={busy}
-                  onClick={() => confirm(t('completeConfirm')) && run(() => setConvivioStatus(data.id, 'completed'), t('completedDone'))}
+                  onClick={async () => (await askConfirm(t('completeConfirm'))) && run(() => setConvivioStatus(data.id, 'completed'), t('completedDone'))}
                   className="rounded-xl bg-emerald-500 px-4 py-2.5 text-sm font-bold text-white"
                 >
                   {t('markCompleted')}
@@ -520,7 +521,7 @@ export default function ConvivioDetailView({
                 <button
                   type="button"
                   disabled={busy || !reached}
-                  onClick={() => confirm(t('orderConfirm')) && run(() => setConvivioStatus(data.id, 'ordered'), t('orderedDone'))}
+                  onClick={async () => (await askConfirm(t('orderConfirm'))) && run(() => setConvivioStatus(data.id, 'ordered'), t('orderedDone'))}
                   className="rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-4 py-2.5 text-sm font-bold text-[var(--ink)] disabled:opacity-40"
                 >
                   {t('markOrdered')}
@@ -530,7 +531,7 @@ export default function ConvivioDetailView({
                 <button
                   type="button"
                   disabled={busy}
-                  onClick={() => confirm(t('completeConfirm')) && run(() => setConvivioStatus(data.id, 'completed'), t('completedDone'))}
+                  onClick={async () => (await askConfirm(t('completeConfirm'))) && run(() => setConvivioStatus(data.id, 'completed'), t('completedDone'))}
                   className="rounded-xl bg-emerald-500 px-4 py-2.5 text-sm font-bold text-white"
                 >
                   {t('markCompleted')}
@@ -540,7 +541,7 @@ export default function ConvivioDetailView({
                 <button
                   type="button"
                   disabled={busy}
-                  onClick={() => confirm(t('cancelConfirm')) && run(() => setConvivioStatus(data.id, 'cancelled'), t('cancelledDone'))}
+                  onClick={async () => (await askConfirm(t('cancelConfirm'))) && run(() => setConvivioStatus(data.id, 'cancelled'), t('cancelledDone'))}
                   className="flex items-center gap-1 rounded-xl px-4 py-2.5 text-sm font-semibold text-red-300 hover:bg-white/10"
                 >
                   <X className="h-4 w-4" /> {t('cancelConvivio')}

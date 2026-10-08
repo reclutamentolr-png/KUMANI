@@ -6,6 +6,7 @@ import { ArrowRight, FileBadge, LoaderCircle, Trash2, X } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { suggestLifeCalendarCategory } from '@/lib/lifeCalendarHints'
 import { deleteAppointment, deleteContact, deleteNote, deleteTask, saveAppointment, saveContact, saveNote, saveTask } from '@/app/actions/memolife'
+import { askConfirm } from '@/lib/confirm'
 
 // Moduli di MemoLife in una finestra (dal basso su telefono). Salvano con le
 // azioni del server; "onDone" ricarica i dati.
@@ -55,7 +56,7 @@ function Actions({ busy, error, onDelete, deleteConfirm }: { busy: boolean; erro
         {onDelete ? (
           <button
             type="button"
-            onClick={() => (!deleteConfirm || confirm(deleteConfirm)) && onDelete()}
+            onClick={async () => (!deleteConfirm || (await askConfirm(deleteConfirm))) && onDelete()}
             className="flex items-center gap-1.5 rounded-xl px-3 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50"
           >
             <Trash2 className="h-4 w-4" /> {t('delete')}

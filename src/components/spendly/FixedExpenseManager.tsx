@@ -25,6 +25,7 @@ import {
   type FixedExpenseCategory,
   type FixedExpenseFrequency,
 } from '@/lib/spendly'
+import { askConfirm } from '@/lib/confirm'
 
 const CATEGORY_KEY: Record<FixedExpenseCategory, string> = {
   mutuo_affitto: 'categoryMutuoAffitto',
@@ -221,7 +222,7 @@ export default function FixedExpenseManager({
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm(t('deleteConfirm'))) return
+    if (!(await askConfirm(t('deleteConfirm')))) return
     const result = await deleteFixedExpense(id).catch(() => ({ success: false as const }))
     if (!result.success) {
       alert(t('deleteError'))

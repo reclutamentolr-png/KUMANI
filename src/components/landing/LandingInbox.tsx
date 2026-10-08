@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { Inbox, Mail, MailOpen, MessageCircle, Phone, Trash2 } from 'lucide-react'
 import { deleteLandingMessage, markLandingMessageRead, type LandingMessage } from '@/app/actions/landing'
+import { askConfirm } from '@/lib/confirm'
 
 // Casella dei messaggi arrivati dal modulo "Scrivimi" della Landing Page.
 // Aprendo un messaggio si segna come letto; da qui si risponde con un tocco
@@ -29,7 +30,7 @@ export default function LandingInbox({ initial }: { initial: LandingMessage[] })
   }
 
   const remove = async (id: string) => {
-    if (!confirm(t('inboxDeleteConfirm'))) return
+    if (!(await askConfirm(t('inboxDeleteConfirm')))) return
     const r = await deleteLandingMessage(id)
     if (r.success) setMessages((list) => list.filter((x) => x.id !== id))
   }

@@ -6,6 +6,7 @@ import { Check, Copy, LoaderCircle, MessageCircle, Plus, Trash2 } from 'lucide-r
 import { adminListTrialCodes, createTrialCode, deleteTrialCode, listMyTrialCodes, type TrialCodeRow } from '@/app/actions/trials'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { MAX_ACTIVE_TRIAL_CODES, TRIAL_DURATIONS, TRIAL_TOOLS } from '@/lib/trials'
+import { askConfirm } from '@/lib/confirm'
 
 // Codici di prova dei servizi: crea, manda (WhatsApp o link) e cancella.
 // Usato dai Kumani (Base/Pro), dagli agenti e in Admin (tutti i codici).
@@ -66,7 +67,7 @@ export default function TrialCodesManager({ admin = false, siteUrl }: { admin?: 
     setRows((prev) => [r.row, ...(prev ?? [])])
   }
   const remove = async (row: TrialCodeRow) => {
-    if (!confirm(row.status === 'active' ? t('deleteActiveConfirm') : t('deleteConfirm'))) return
+    if (!(await askConfirm(row.status === 'active' ? t('deleteActiveConfirm') : t('deleteConfirm')))) return
     const r = await deleteTrialCode(row.id)
     if (r.success) setRows((prev) => (prev ?? []).filter((x) => x.id !== row.id || admin).map((x) => (x.id === row.id ? { ...x, status: 'deleted' } : x)))
   }

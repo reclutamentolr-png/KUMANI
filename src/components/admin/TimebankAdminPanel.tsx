@@ -4,6 +4,7 @@ import { notify } from '@/lib/adminNotify'
 import { useCallback, useEffect, useState } from 'react'
 import { Check, Flag, LoaderCircle, Trash2, X } from 'lucide-react'
 import { adminCloseTimebankReport, adminListTimebank, adminRemoveTimebankPost, adminResolveTimebankDispute } from '@/app/actions/admin'
+import { askConfirm } from '@/lib/confirm'
 
 type Person = { first_name: string | null; last_name: string | null; email: string | null } | null
 type Row = Record<string, unknown> & { id: string }
@@ -119,7 +120,7 @@ export default function TimebankAdminPanel() {
                   <button
                     type="button"
                     disabled={working === row.id}
-                    onClick={() => confirm('Rimuovere questo annuncio dalla bacheca?') && run(row.id, () => adminRemoveTimebankPost(row.id))}
+                    onClick={async () => (await askConfirm('Rimuovere questo annuncio dalla bacheca?')) && run(row.id, () => adminRemoveTimebankPost(row.id))}
                     className={`${button} mt-3 border border-red-200 text-red-600 hover:bg-red-50`}
                   >
                     <Trash2 className="h-3.5 w-3.5" /> Rimuovi annuncio
@@ -143,8 +144,8 @@ export default function TimebankAdminPanel() {
                         <button
                           type="button"
                           disabled={working === row.id}
-                          onClick={() =>
-                            confirm('Rimuovere l’annuncio e chiudere la segnalazione?') &&
+                          onClick={async () =>
+                            (await askConfirm('Rimuovere l’annuncio e chiudere la segnalazione?')) &&
                             run(row.id, async () => {
                               const removed = await adminRemoveTimebankPost(row.post_id as string)
                               if (!removed.success) return removed

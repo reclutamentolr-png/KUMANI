@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import Link from '@/components/LocalizedLink'
 import { FileUser, Trash2, LoaderCircle } from 'lucide-react'
 import { deleteCv } from '@/app/actions/cv'
+import { askConfirm } from '@/lib/confirm'
 
 type Cv = {
   id: string
@@ -22,7 +23,7 @@ export default function CvCard({ cv, fromDashboardSuffix = '' }: { cv: Cv; fromD
   const [deleting, setDeleting] = useState(false)
 
   const handleDelete = async () => {
-    if (!confirm(t('deleteConfirm'))) return
+    if (!(await askConfirm(t('deleteConfirm')))) return
     setDeleting(true)
     const result = await deleteCv(cv.id)
     if (result.success) {

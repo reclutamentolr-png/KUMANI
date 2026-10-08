@@ -1369,7 +1369,12 @@
     "by": "от",
     "points": "Баллы",
     "backToDashboard": "Назад в панель управления",
-    "closeProfile": "Закрыть профиль"
+    "closeProfile": "Закрыть профиль",
+    "confirmTitle": "Вы уверены?",
+    "confirmDeleteTitle": "Удалить?",
+    "confirmOk": "Подтвердить",
+    "confirmDelete": "Удалить",
+    "confirmCancel": "Отмена"
   },
   "magazzino": {
     "deleteForever": "Удалить навсегда",

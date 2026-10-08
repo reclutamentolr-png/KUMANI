@@ -98,6 +98,7 @@ import {
   BriefcaseBusiness,
   MessageSquareQuote,
 } from 'lucide-react'
+import { askConfirm } from '@/lib/confirm'
 
 // Ogni sezione dell'Admin si scarica solo quando la si apre
 const loading = () => <AdminPanelLoading />
@@ -428,7 +429,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
   }
 
   const handleRevokeCoupon = async (couponId: string) => {
-    if (!confirm('Revocare questo coupon? L\'operazione non è reversibile.')) return
+    if (!(await askConfirm('Revocare questo coupon? L\'operazione non è reversibile.'))) return
     const result = await revokeCoupon(couponId)
     if (result.success) {
       setCoupons((prev) => prev.filter((c) => c.id !== couponId))
@@ -439,7 +440,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
 
   const handleCreateBatch = async () => {
     const quantity = parseInt(batchForm.quantity, 10) || 0
-    if (!confirm(`Generare ${quantity} coupon ${batchForm.plan === 'pro' ? 'PRO' : 'Base'} di attivazione per "${batchForm.businessName}"?`)) return
+    if (!(await askConfirm(`Generare ${quantity} coupon ${batchForm.plan === 'pro' ? 'PRO' : 'Base'} di attivazione per "${batchForm.businessName}"?`))) return
     setCreatingBatch(true)
     const result = await createVoucherBatch({
       businessName: batchForm.businessName,
@@ -508,7 +509,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
   }
 
   const handleDeleteReportedListing = async (listingId: string) => {
-    if (!confirm('Eliminare definitivamente questo annuncio? L\'operazione non è reversibile.')) return
+    if (!(await askConfirm('Eliminare definitivamente questo annuncio? L\'operazione non è reversibile.'))) return
     const result = await deleteReportedListing(listingId)
     if (result.success) {
       setListingReports((prev) => prev.filter((r) => r.listing_id !== listingId))
@@ -593,7 +594,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
   }
 
   const handleToggleBlock = async (user: AdminUserRow) => {
-    if (!confirm(`Sei sicuro di voler ${user.is_blocked ? 'SBLOCCARE' : 'BLOCCARE'} l'utente ${user.email}?`)) return
+    if (!(await askConfirm(`Sei sicuro di voler ${user.is_blocked ? 'SBLOCCARE' : 'BLOCCARE'} l'utente ${user.email}?`))) return
     const newBlockedStatus = !user.is_blocked
     // Lato server: is_blocked non è più scrivibile dal browser.
     const result = await adminUpdateProfile(user.id, { is_blocked: newBlockedStatus })
@@ -667,9 +668,9 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
 
     // ✅ IMPERSONIFICAZIONE: stessa scheda + link di ripristino admin
   const handleImpersonate = async (user: AdminUserRow) => {
-    if (!confirm(`Vuoi impersonare ${user.first_name} ${user.last_name}?\n\nVerrai loggato come questo utente.\nPotrai tornare al tuo account admin in qualsiasi momento con il pulsante "Torna Admin" della fascia arancione.
+    if (!(await askConfirm(`Vuoi impersonare ${user.first_name} ${user.last_name}?\n\nVerrai loggato come questo utente.\nPotrai tornare al tuo account admin in qualsiasi momento con il pulsante "Torna Admin" della fascia arancione.
 
-L'accesso viene registrato.`)) return
+L'accesso viene registrato.`))) return
 
     setImpersonatingId(user.id)
     try {

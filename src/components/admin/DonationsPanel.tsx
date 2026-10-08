@@ -13,6 +13,7 @@ import {
   type AdminAssociation,
   type AdminPayout,
 } from '@/app/actions/donations'
+import { askConfirm } from '@/lib/confirm'
 
 const euro = (cents: number) => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(cents / 100)
 const input = 'w-full rounded-lg border border-gray-300 p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--gold)]'
@@ -130,7 +131,7 @@ export default function DonationsPanel() {
         </div>
         <p className="text-xs text-gray-500">
           Esempio: con il 5% un Base da 49 € dona 2,45 € e un Pro da 149 € dona 7,45 € (si calcola su quanto incassato davvero,
-          sconti compresi). La nuova percentuale vale per i pagamenti da quel momento. Riferimento per i punti: un'attivazione
+          sconti compresi). La nuova percentuale vale per i pagamenti da quel momento. Riferimento per i punti: un&apos;attivazione
           Base ne dà 10 a chi ha invitato, un Pro 120. 0 al valore del punto = donazione di punti spenta.
         </p>
         <button
@@ -166,11 +167,11 @@ export default function DonationsPanel() {
                   Modifica
                 </button>
                 {a.is_active ? (
-                  <button type="button" disabled={busy !== null} onClick={() => confirm('Disattivare questa associazione? Le donazioni smettono di maturare finché non ne attivi un\'altra.') && run('off', () => adminSetActiveAssociation(null))} className="rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-semibold text-gray-700">
+                  <button type="button" disabled={busy !== null} onClick={async () => (await askConfirm('Disattivare questa associazione? Le donazioni smettono di maturare finché non ne attivi un\'altra.')) && run('off', () => adminSetActiveAssociation(null))} className="rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-semibold text-gray-700">
                     Disattiva
                   </button>
                 ) : (
-                  <button type="button" disabled={busy !== null} onClick={() => confirm(`Rendere "${a.name}" l'associazione attiva? Le nuove donazioni andranno a lei.`) && run('on', () => adminSetActiveAssociation(a.id))} className="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white">
+                  <button type="button" disabled={busy !== null} onClick={async () => (await askConfirm(`Rendere "${a.name}" l'associazione attiva? Le nuove donazioni andranno a lei.`)) && run('on', () => adminSetActiveAssociation(a.id))} className="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white">
                     Rendi attiva
                   </button>
                 )}
@@ -256,7 +257,7 @@ export default function DonationsPanel() {
                   <td className="text-gray-600">{p.reference ?? '—'}</td>
                   <td className="text-right font-semibold">{euro(p.amount_cents)}</td>
                   <td className="text-right">
-                    <button type="button" aria-label="Elimina" disabled={busy !== null} onClick={() => confirm('Eliminare questo versamento?') && run('del', () => adminDeletePayout(p.id))} className="p-1 text-red-600">
+                    <button type="button" aria-label="Elimina" disabled={busy !== null} onClick={async () => (await askConfirm('Eliminare questo versamento?')) && run('del', () => adminDeletePayout(p.id))} className="p-1 text-red-600">
                       <Trash2 className="h-4 w-4" />
                     </button>
                   </td>

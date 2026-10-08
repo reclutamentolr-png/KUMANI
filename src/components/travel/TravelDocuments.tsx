@@ -6,6 +6,7 @@ import { AlertTriangle, CheckCircle2, CircleSlash, LoaderCircle, Pencil, Plus, S
 import { Sheet } from '@/components/memolife/MemoLifeForms'
 import { deleteDocument, saveDocument, setRequiredDocs } from '@/app/actions/travel'
 import { DOC_TYPES, docStatus, type DocStatus, type DocType, type TripDetail, type TripDocument } from '@/lib/travel'
+import { askConfirm } from '@/lib/confirm'
 
 const input = 'w-full rounded-xl border border-gray-300 px-3 py-2.5 text-[15px] focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30'
 const label = 'mb-1 block text-sm font-semibold text-gray-700'
@@ -243,7 +244,7 @@ function DocumentForm({
   }
 
   const remove = async () => {
-    if (!doc || !confirm(t('deleteDocConfirm'))) return
+    if (!doc || !(await askConfirm(t('deleteDocConfirm')))) return
     setBusy(true)
     try {
       const result = await deleteDocument(doc.id)

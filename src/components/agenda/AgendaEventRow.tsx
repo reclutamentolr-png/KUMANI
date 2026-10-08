@@ -8,6 +8,7 @@ import { markBillPaid, setTaskDone, unmarkBillPaid } from '@/app/actions/agenda'
 import { markHandled } from '@/app/actions/lifeCalendar'
 import { agendaStatus, daysBetween, type AgendaEvent } from '@/lib/agenda'
 import { parseAmount } from '@/lib/spendly'
+import { askConfirm } from '@/lib/confirm'
 
 const KIND_ICON = { appointment: CalendarClock, task: CheckCircle2, bill: Receipt, deadline: FileBadge, trip: Plane, event: PartyPopper }
 export const KIND_COLOR = {
@@ -135,7 +136,7 @@ export default function AgendaEventRow({
       ) : event.kind === 'deadline' ? (
         <button
           type="button"
-          onClick={() => confirm(event.recurring ? t('renewConfirm', { name: event.title }) : t('completeConfirm', { name: event.title })) && run(() => markHandled(event.refId))}
+          onClick={async () => (await askConfirm(event.recurring ? t('renewConfirm', { name: event.title }) : t('completeConfirm', { name: event.title }))) && run(() => markHandled(event.refId))}
           className="flex shrink-0 items-center gap-1 rounded-lg bg-rose-600 px-2.5 py-1.5 text-xs font-bold text-white hover:bg-rose-700"
         >
           {event.recurring ? <RotateCcw className="h-3.5 w-3.5" /> : <Check className="h-3.5 w-3.5" />} {event.recurring ? t('markRenewed') : t('markDone')}

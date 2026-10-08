@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { PlusCircle, Trash2, ChevronRight, ChevronDown, MapPin, LoaderCircle } from 'lucide-react'
 import { createLocation, deleteLocation } from '@/app/actions/findo'
 import { buildLocationTree, type FindoLocation, type FindoLocationNode } from '@/lib/findo'
+import { askConfirm } from '@/lib/confirm'
 
 function LocationNode({ node, depth }: { node: FindoLocationNode; depth: number }) {
   const t = useTranslations('findo')
@@ -31,7 +32,7 @@ function LocationNode({ node, depth }: { node: FindoLocationNode; depth: number 
   }
 
   const handleDelete = async () => {
-    if (!confirm(t('deleteLocationConfirm'))) return
+    if (!(await askConfirm(t('deleteLocationConfirm')))) return
     setDeleting(true)
     const result = await deleteLocation(node.id)
     if (result.success) {

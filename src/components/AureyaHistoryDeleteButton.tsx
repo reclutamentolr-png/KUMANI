@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { Trash2, LoaderCircle } from 'lucide-react'
 import { deleteTestResult } from '@/app/actions/aureya'
+import { askConfirm } from '@/lib/confirm'
 
 export default function AureyaHistoryDeleteButton({ id }: { id: string }) {
   const t = useTranslations('aureya')
@@ -12,7 +13,7 @@ export default function AureyaHistoryDeleteButton({ id }: { id: string }) {
   const [deleting, setDeleting] = useState(false)
 
   const handleDelete = async () => {
-    if (!confirm(t('deleteConfirm'))) return
+    if (!(await askConfirm(t('deleteConfirm')))) return
     setDeleting(true)
     const result = await deleteTestResult(id)
     if (result.success) {

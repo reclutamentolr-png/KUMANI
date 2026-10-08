@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Check, EyeOff, Plus, Trash2, X } from 'lucide-react'
 import { adminAddFabulaWord, adminListFabula, adminRemoveFabulaWord, adminSetFabulaStatus } from '@/app/actions/admin'
 import { diceEmoji } from '@/lib/fabula'
+import { askConfirm } from '@/lib/confirm'
 
 type Tab = 'pending' | 'hidden' | 'published' | 'words'
 type Row = Record<string, unknown>
@@ -156,7 +157,7 @@ export default function FabulaAdminPanel() {
                     </button>
                     <button
                       type="button"
-                      onClick={() => confirm('Rimuovere la storia? L’autore non la vedrà più.') && act(() => adminSetFabulaStatus(String(row.id), 'removed'))}
+                      onClick={async () => (await askConfirm('Rimuovere la storia? L’autore non la vedrà più.')) && act(() => adminSetFabulaStatus(String(row.id), 'removed'))}
                       className={`${button} border border-red-200 text-red-600`}
                     >
                       <Trash2 className="h-3.5 w-3.5" /> Rimuovi

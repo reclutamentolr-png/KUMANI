@@ -7,6 +7,7 @@ import Link from '@/components/LocalizedLink'
 import { CheckCircle2, RefreshCw, LoaderCircle, Trash2 } from 'lucide-react'
 import { markHandled, deleteItem } from '@/app/actions/lifeCalendar'
 import { getItemStatus, daysUntil, type ItemStatus } from '@/lib/lifeCalendar'
+import { askConfirm } from '@/lib/confirm'
 
 type Item = {
   id: string
@@ -34,7 +35,7 @@ export default function LifeCalendarItemCard({ item }: { item: Item }) {
   const isRecurring = item.recurrence !== 'none'
 
   const handleMarkHandled = async () => {
-    if (!isRecurring && !confirm(t('archiveConfirm'))) return
+    if (!isRecurring && !(await askConfirm(t('archiveConfirm')))) return
 
     setHandling(true)
     const result = await markHandled(item.id)
@@ -55,7 +56,7 @@ export default function LifeCalendarItemCard({ item }: { item: Item }) {
   }
 
   const handleDelete = async () => {
-    if (!confirm(t('deleteConfirm'))) return
+    if (!(await askConfirm(t('deleteConfirm')))) return
     setDeleting(true)
     const result = await deleteItem(item.id)
     if (result.success) {

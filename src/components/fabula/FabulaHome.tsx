@@ -30,6 +30,7 @@ import {
   type FabulaStory,
 } from '@/lib/fabula'
 import { renderFabulaShareCard } from '@/lib/fabulaShareCard'
+import { askConfirm } from '@/lib/confirm'
 
 type Tab = 'write' | 'gallery' | 'mine'
 type Notice = { text: string; tone: 'ok' | 'error' | 'info' }
@@ -313,7 +314,7 @@ export default function FabulaHome({
                       : undefined
                   }
                   onDelete={async () => {
-                    if (!confirm(t('deleteConfirm'))) return
+                    if (!(await askConfirm(t('deleteConfirm')))) return
                     const result = await deleteFabulaStory(story.id)
                     if (result !== 'ok') return setNotice({ text: errorText(result), tone: 'error' })
                     if (story.roll_date === status.today) setMyToday(null)

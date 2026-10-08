@@ -1369,7 +1369,12 @@
     "by": "par",
     "points": "Points",
     "backToDashboard": "Retour au Dashboard",
-    "closeProfile": "Fermer le profil"
+    "closeProfile": "Fermer le profil",
+    "confirmTitle": "Êtes-vous sûr ?",
+    "confirmDeleteTitle": "Le supprimer ?",
+    "confirmOk": "Confirmer",
+    "confirmDelete": "Supprimer",
+    "confirmCancel": "Annuler"
   },
   "magazzino": {
     "deleteForever": "Supprimer définitivement",

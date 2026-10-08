@@ -18,7 +18,12 @@
     "by": "by",
     "points": "Points",
     "backToDashboard": "Back to Dashboard",
-    "closeProfile": "Close profile"
+    "closeProfile": "Close profile",
+    "confirmTitle": "Are you sure?",
+    "confirmDeleteTitle": "Delete it?",
+    "confirmOk": "Confirm",
+    "confirmDelete": "Delete",
+    "confirmCancel": "Cancel"
   },
   "landingHome": {
     "statLanguagesLabel": "languages: KUMANI speaks yours",

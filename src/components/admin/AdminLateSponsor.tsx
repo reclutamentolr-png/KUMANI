@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { LoaderCircle, UserPlus } from 'lucide-react'
 import { adminAssignLateSponsor } from '@/app/actions/lateSponsor'
 import { notify } from '@/lib/adminNotify'
+import { askConfirm } from '@/lib/confirm'
 
 // Admin → Gestisci Utente: assegna chi ha invitato una persona iscritta
 // senza codice (anche dopo i 15 giorni), su richiesta del Kumano.
@@ -23,7 +24,7 @@ export default function AdminLateSponsor({ userId }: { userId: string }) {
   const run = async () => {
     const clean = code.trim().toUpperCase()
     if (!clean) return
-    if (!window.confirm(`Spostare questa persona nella stella del Kumano con codice ${clean}? Si può fare una sola volta.`)) return
+    if (!(await askConfirm(`Spostare questa persona nella stella del Kumano con codice ${clean}? Si può fare una sola volta.`))) return
     setBusy(true)
     const r = await adminAssignLateSponsor(userId, clean)
     setBusy(false)

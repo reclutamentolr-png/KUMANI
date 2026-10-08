@@ -6,6 +6,7 @@ import { Camera, CheckCircle2, Clock, ImageOff, LoaderCircle, Megaphone, Trash2,
 import { cancelShowcase, getShowcaseInfo, removeConvivioPhoto, requestShowcase, uploadConvivioPhoto } from '@/app/actions/kordataShowcase'
 import { convivioPhotoUrl, type ShowcaseInfo } from '@/lib/convivio'
 import { resizeImageFile } from '@/lib/resizeImage'
+import { askConfirm } from '@/lib/confirm'
 
 // Per capocordata e fornitore confermato: foto del lotto e richiesta di
 // comparire nella vetrina della homepage (approvata dallo Staff).
@@ -39,7 +40,7 @@ export default function ConvivioShowcaseBox({ groupId, initial, onPhoto }: { gro
   }
 
   const dropPhoto = async () => {
-    if (!confirm(t('removePhotoConfirm'))) return
+    if (!(await askConfirm(t('removePhotoConfirm')))) return
     setBusy('photo')
     const result = await removeConvivioPhoto(groupId)
     setBusy(null)
@@ -57,7 +58,7 @@ export default function ConvivioShowcaseBox({ groupId, initial, onPhoto }: { gro
   }
 
   const withdraw = async () => {
-    if (!confirm(t('cancelConfirm'))) return
+    if (!(await askConfirm(t('cancelConfirm')))) return
     setBusy('request')
     const result = await cancelShowcase(groupId)
     setBusy(null)

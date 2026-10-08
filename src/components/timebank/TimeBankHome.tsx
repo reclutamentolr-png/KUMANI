@@ -46,6 +46,7 @@ import {
   type TimebankStatus,
 } from '@/lib/timebank'
 import { PostForm, ProfileForm, ProposeForm, inputClass } from './TimeBankForms'
+import { askConfirm } from '@/lib/confirm'
 
 type SheetState =
   | { kind: 'verify' }
@@ -286,7 +287,7 @@ export default function TimeBankHome({ status, initialPosts, initialMy }: { stat
                 {post.status === 'open' && status.online && (
                   <button
                     type="button"
-                    onClick={() => confirm(t('closePostConfirm')) && act(() => closeTimebankPost(post.id), t('postClosed'))}
+                    onClick={async () => (await askConfirm(t('closePostConfirm'))) && act(() => closeTimebankPost(post.id), t('postClosed'))}
                     className="mt-3 rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50"
                   >
                     {t('closePost')}
@@ -510,14 +511,14 @@ function ExchangeSheet({
               <button
                 type="button"
                 disabled={busy}
-                onClick={() => confirm(t('confirmPrompt', { hours: Number(exchange.hours) })) && run(() => confirmTimebankExchange(exchange.id), t('confirmedWaiting'))}
+                onClick={async () => (await askConfirm(t('confirmPrompt', { hours: Number(exchange.hours) }))) && run(() => confirmTimebankExchange(exchange.id), t('confirmedWaiting'))}
                 className={`${button} bg-[var(--ink)] text-white`}
               >
                 <BadgeCheck className="h-4 w-4 text-[var(--gold-bright)]" /> {t('confirmDone')}
               </button>
             )}
             {(exchange.status === 'proposed' || exchange.status === 'accepted') && !exchange.my_confirmed && !exchange.other_confirmed && (
-              <button type="button" disabled={busy} onClick={() => confirm(t('cancelConfirm')) && run(() => cancelTimebankExchange(exchange.id), t('cancelled'))} className={`${button} border border-gray-300 text-gray-700`}>
+              <button type="button" disabled={busy} onClick={async () => (await askConfirm(t('cancelConfirm'))) && run(() => cancelTimebankExchange(exchange.id), t('cancelled'))} className={`${button} border border-gray-300 text-gray-700`}>
                 {t('cancelExchange')}
               </button>
             )}

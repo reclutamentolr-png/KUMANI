@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { markMessagesAsRead, deleteConversationAction } from '@/app/actions/listings'
 import { User, FileText, Trash2 } from 'lucide-react'
+import { askConfirm } from '@/lib/confirm'
 
 type ConversationItemProps = {
   convKey: string
@@ -62,7 +63,7 @@ export default function ConversationItem({
   // ✅ CANCELLAZIONE CORRETTA: chiama la server action e ricarica la pagina
   const handleDelete = async (e: React.SyntheticEvent) => {
     e.stopPropagation()
-    if (!confirm(t('confirmDelete'))) return
+    if (!(await askConfirm(t('confirmDelete')))) return
 
     setIsDeleting(true)
     const result = await deleteConversationAction(currentUserId, otherUserId, listingId || undefined)

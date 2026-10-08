@@ -14,6 +14,7 @@ import {
 } from '@/app/actions/adminCosts'
 import { COST_CATEGORIES, COST_CATEGORY_LABEL, FREQUENCY_LABEL, type CostCategory, type CostFrequency } from '@/lib/platformCosts'
 import { notify } from '@/lib/adminNotify'
+import { askConfirm } from '@/lib/confirm'
 
 // Admin → Costi e margini: quanto costa la piattaforma (fissi e variabili),
 // i costi automatici (commissioni, provvigioni, donazioni, voucher usati),
@@ -98,12 +99,12 @@ export default function CostsPanel() {
   }
 
   const removeCost = async (cost: PlatformCost) => {
-    if (!window.confirm(`Eliminare il costo "${cost.name}"? Se è solo terminato, meglio indicare la data di fine.`)) return
+    if (!(await askConfirm(`Eliminare il costo "${cost.name}"? Se è solo terminato, meglio indicare la data di fine.`))) return
     await adminDeleteCost(cost.id)
     reload()
   }
   const removeExpense = async (e: PlatformExpense) => {
-    if (!window.confirm(`Eliminare la spesa "${e.description}"?`)) return
+    if (!(await askConfirm(`Eliminare la spesa "${e.description}"?`))) return
     await adminDeleteExpense(e.id)
     reload()
   }

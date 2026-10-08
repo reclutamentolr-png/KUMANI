@@ -19,6 +19,7 @@ import { useAffinityRealtime } from '@/lib/useAffinityRealtime'
 import AffinityChat from './AffinityChat'
 import AffinityRadar from './AffinityRadar'
 import ArchetypeIcon from './ArchetypeIcon'
+import { askConfirm } from '@/lib/confirm'
 
 // Affinity Amicizie (sotto il risultato del gioco): requisiti, consenso,
 // presentazioni della settimana, risposte, match con chat, blocca/segnala.
@@ -180,7 +181,7 @@ export default function AffinityFriends({ myMap }: { myMap: AffinityMap }) {
               </button>
               <button
                 type="button"
-                onClick={() => confirm(t('f_pauseConfirm')) && save(false)}
+                onClick={async () => (await askConfirm(t('f_pauseConfirm'))) && save(false)}
                 className="inline-flex items-center gap-1.5 rounded-xl px-4 py-3 text-sm font-semibold text-red-600 hover:bg-red-50"
               >
                 <Pause className="h-4 w-4" /> {t('f_pause')}
@@ -202,7 +203,7 @@ export default function AffinityFriends({ myMap }: { myMap: AffinityMap }) {
   }
 
   const block = async (intro: FriendIntro) => {
-    if (!confirm(t('f_blockConfirm', { name: intro.first_name ?? '' }))) return
+    if (!(await askConfirm(t('f_blockConfirm', { name: intro.first_name ?? '' })))) return
     await blockAffinityUser(intro.other_id)
     await load()
   }

@@ -8,6 +8,7 @@ import { ArrowRight, Heart, HeartHandshake, LoaderCircle, Sparkles, User } from 
 import Link from '@/components/LocalizedLink'
 import { donateNetworkPoints } from '@/app/actions/donations'
 import { euroFormat, percentFormat, type DonationSummary, type MyDonations } from '@/lib/donationTypes'
+import { askConfirm } from '@/lib/confirm'
 
 // Portafoglio → Donazioni: l'associazione sostenuta (fascia con foto), le
 // cifre in evidenza (community, versato, il tuo contributo), la donazione dei
@@ -36,7 +37,7 @@ export default function WalletDonations({
 
   const donate = async () => {
     if (!canDonate) return
-    if (!confirm(t('donateConfirm', { points: amount, amount: eur(amount * value), association: active.name }))) return
+    if (!(await askConfirm(t('donateConfirm', { points: amount, amount: eur(amount * value), association: active.name })))) return
     setBusy(true)
     setMessage(null)
     const result = await donateNetworkPoints(amount)

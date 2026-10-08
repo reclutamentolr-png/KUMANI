@@ -48,6 +48,7 @@ import {
   isValidVatNumber,
   type TaxRegime,
 } from '@/lib/agents'
+import { askConfirm } from '@/lib/confirm'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const PHONE_RE = /^\+?[0-9 ()-]{6,30}$/
@@ -648,7 +649,7 @@ function CommissionsDetail({ agent, onChanged }: { agent: AdminAgent; onChanged:
     const ids = matured.filter((c) => selected.has(c.id)).map((c) => c.id)
     if (ids.length === 0) return setError('Seleziona almeno una provvigione maturata.')
     if (!/^\d{4}-\d{2}-\d{2}$/.test(paidOn)) return setError('Data del pagamento non valida.')
-    const ok = confirm(
+    const ok = await askConfirm(
       `Registrare il pagamento di ${euro(selectedTotal)} a ${agent.firstName} ${agent.lastName}?\n\n` +
         `${ids.length} ${ids.length === 1 ? 'provvigione' : 'provvigioni'} · bonifico del ${dateOnly(paidOn)}` +
         (reference.trim() ? ` · rif. ${reference.trim()}` : '') +
@@ -678,7 +679,7 @@ function CommissionsDetail({ agent, onChanged }: { agent: AdminAgent; onChanged:
     setNotice(null)
     const note = prompt(`Motivo dell'annullamento della provvigione di ${euro(c.commissionCents)} (${c.customer}):`, '')
     if (note === null) return
-    if (!confirm(`Annullare la provvigione di ${euro(c.commissionCents)}? L'operazione non si può annullare.`)) return
+    if (!(await askConfirm(`Annullare la provvigione di ${euro(c.commissionCents)}? L'operazione non si può annullare.`))) return
     setBusy(true)
     try {
       const result = await adminCancelAgentCommission(c.id, note)
@@ -902,9 +903,9 @@ function AgentRow({ agent, onChanged }: { agent: AdminAgent; onChanged: () => Pr
     if (password.length < MIN_PASSWORD) return setError(`La password deve avere almeno ${MIN_PASSWORD} caratteri.`)
     return run(() => adminSetAgentPassword(agent.id, password), "Password cambiata. Comunicala all'agente: non verrà più mostrata.")
   }
-  const toggleActive = () => {
+  const toggleActive = async () => {
     const suspend = agent.isActive
-    const ok = confirm(
+    const ok = await askConfirm(
       suspend
         ? `Sospendere ${name}? Non potrà più entrare e perde i servizi finché non lo riattivi. Le provvigioni restano.`
         : `Riattivare ${name}? Potrà di nuovo entrare con la sua password.`,

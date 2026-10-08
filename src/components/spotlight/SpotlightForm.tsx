@@ -7,6 +7,7 @@ import { deleteSpotlightProfile, revokeSpotlightHomeConsent, revokeSpotlightOptI
 import { SPOTLIGHT_STORY_MAX_LENGTH, type SpotlightModerationStatus, type SpotlightProfile } from '@/lib/spotlight'
 import Link from '@/components/LocalizedLink'
 import { CheckCircle2, Clock, Home, Pencil, Trash2 } from 'lucide-react'
+import { askConfirm } from '@/lib/confirm'
 
 type FormState = {
   displayName: string
@@ -101,7 +102,7 @@ export default function SpotlightForm({
   }
 
   const handleRevoke = async () => {
-    if (!confirm(t('revokeConfirm'))) return
+    if (!(await askConfirm(t('revokeConfirm')))) return
     const result = await revokeSpotlightOptIn()
     if (result.success) {
       setConsent(false)
@@ -120,7 +121,7 @@ export default function SpotlightForm({
   }
 
   const handleDelete = async () => {
-    if (!confirm(t('deleteConfirm'))) return
+    if (!(await askConfirm(t('deleteConfirm')))) return
     const result = await deleteSpotlightProfile()
     if (result.success) {
       setForm(emptyForm(null))

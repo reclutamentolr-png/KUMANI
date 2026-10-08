@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
 import { AlertTriangle, Shield } from 'lucide-react'
 import { endImpersonation, readImpersonation } from '@/lib/impersonation'
+import { askConfirm } from '@/lib/confirm'
 
 // Fascia arancione durante l'impersonificazione, in cima a ogni pagina.
 // Fa parte della pagina (non galleggia sopra), così non copre l'intestazione.
@@ -20,7 +21,7 @@ export default function ImpersonationBanner() {
   }, [])
 
   const handleExit = async () => {
-    if (!confirm(t('exitImpersonation'))) return
+    if (!(await askConfirm(t('exitImpersonation')))) return
     const restoreUrl = session?.restoreUrl
     endImpersonation()
     // Si chiude solo la sessione di questo browser: l'utente resta collegato

@@ -7,6 +7,7 @@ import { KUMANI_MAILBOXES } from '@/lib/contactInfo'
 import AdminUserPicker from '@/components/admin/AdminUserPicker'
 import { notify } from '@/lib/adminNotify'
 import type { StaffUserHit } from '@/app/actions/admin'
+import { askConfirm } from '@/lib/confirm'
 
 // Admin → Invio Email: si scrive un'email da support@, privacy@ o
 // info@kumani.io. Le risposte arrivano all'indirizzo scelto (e quindi nella
@@ -74,7 +75,7 @@ export default function EmailComposePanel() {
       notify('Aggiungi almeno un destinatario')
       return
     }
-    if (!window.confirm(`Inviare l’email da ${from} a ${recipients.length} destinatar${recipients.length === 1 ? 'io' : 'i'}?`)) return
+    if (!(await askConfirm(`Inviare l’email da ${from} a ${recipients.length} destinatar${recipients.length === 1 ? 'io' : 'i'}?`))) return
     setSending(true)
     const result = await adminSendEmail({ from, to: recipients, subject, body, copyToSelf })
     setSending(false)

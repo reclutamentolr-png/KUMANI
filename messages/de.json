@@ -1369,7 +1369,12 @@
     "by": "von",
     "points": "Punkte",
     "backToDashboard": "Zurück zum Dashboard",
-    "closeProfile": "Profil schließen"
+    "closeProfile": "Profil schließen",
+    "confirmTitle": "Bist du sicher?",
+    "confirmDeleteTitle": "Wirklich löschen?",
+    "confirmOk": "Bestätigen",
+    "confirmDelete": "Löschen",
+    "confirmCancel": "Abbrechen"
   },
   "magazzino": {
     "deleteForever": "Endgültig löschen",

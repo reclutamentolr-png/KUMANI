@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import Link from '@/components/LocalizedLink'
 import { Star, Trash2, Package, MapPin, LoaderCircle } from 'lucide-react'
 import { toggleFavorite, deleteItem } from '@/app/actions/findo'
+import { askConfirm } from '@/lib/confirm'
 
 type Item = {
   id: string
@@ -35,7 +36,7 @@ export default function FindoItemCard({ item }: { item: Item }) {
   }
 
   const handleDelete = async () => {
-    if (!confirm(t('deleteConfirm'))) return
+    if (!(await askConfirm(t('deleteConfirm')))) return
     setDeleting(true)
     const result = await deleteItem(item.id)
     if (result.success) {

@@ -4,6 +4,7 @@ import { notify } from '@/lib/adminNotify'
 import { useCallback, useEffect, useState } from 'react'
 import { ExternalLink, Flag, LoaderCircle } from 'lucide-react'
 import { listConvivioReports, resolveConvivioReport } from '@/app/actions/admin'
+import { askConfirm } from '@/lib/confirm'
 
 type Person = { first_name: string | null; last_name: string | null; email: string | null }
 type Report = {
@@ -35,7 +36,7 @@ export default function ConvivioReportsPanel({ locale }: { locale: string }) {
   }, [load])
 
   const resolve = async (report: Report, cancel: boolean) => {
-    if (cancel && !confirm(`Annullare la cordata "${report.group?.title ?? ''}"?`)) return
+    if (cancel && !(await askConfirm(`Annullare la cordata "${report.group?.title ?? ''}"?`))) return
     setWorking(report.id)
     const result = await resolveConvivioReport(report.id, cancel)
     setWorking(null)

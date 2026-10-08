@@ -10,6 +10,7 @@ import {
   adminRejectProfileRequest,
   type AdminProfileRequest,
 } from '@/app/actions/admin'
+import { askConfirm } from '@/lib/confirm'
 
 type Tab = 'pending' | 'handled'
 
@@ -102,7 +103,7 @@ export default function ProfileRequestsPanel({ onChanged }: { onChanged?: () => 
         return
       }
     }
-    if (!confirm(`Applicare le modifiche al profilo di ${fullName(item.user)}?`)) return
+    if (!(await askConfirm(`Applicare le modifiche al profilo di ${fullName(item.user)}?`))) return
     setWorking(item.id)
     await afterAction(await adminApproveProfileRequest(item.id, edited, notes[item.id] ?? ''))
   }
@@ -113,13 +114,13 @@ export default function ProfileRequestsPanel({ onChanged }: { onChanged?: () => 
       notify("Scrivi il motivo del rifiuto (lo vede l'utente).")
       return
     }
-    if (!confirm(`Rifiutare la richiesta di ${fullName(item.user)}?`)) return
+    if (!(await askConfirm(`Rifiutare la richiesta di ${fullName(item.user)}?`))) return
     setWorking(item.id)
     await afterAction(await adminRejectProfileRequest(item.id, note))
   }
 
   const cancel = async (item: AdminProfileRequest) => {
-    if (!confirm(`Annullare la richiesta di ${fullName(item.user)}? Nessun dato verrà modificato.`)) return
+    if (!(await askConfirm(`Annullare la richiesta di ${fullName(item.user)}? Nessun dato verrà modificato.`))) return
     setWorking(item.id)
     await afterAction(await adminCancelProfileRequest(item.id, notes[item.id] ?? ''))
   }

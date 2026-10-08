@@ -52,6 +52,7 @@ import {
   type SectionKey,
   type TitledText,
 } from '@/lib/landing'
+import { askConfirm } from '@/lib/confirm'
 
 type LocalDraft = { savedAt: number; slug: string; template: LandingTemplate; accent: string; contentLocale: LandingLocale; content: LandingContent }
 
@@ -265,7 +266,7 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
 
   const runAi = async () => {
     const hasText = c.hero.title || c.hero.text || c.services.items.length || c.about.text
-    if (hasText && !confirm(t('aiConfirm'))) return
+    if (hasText && !(await askConfirm(t('aiConfirm')))) return
     setAiBusy(true)
     setMessage(null)
     const r = await generateLandingDraft(ai, contentLocale, c.hero.name)

@@ -33,6 +33,7 @@ import QuotePdfPreview from '@/components/quotes/QuotePdfPreview'
 import type { IssuerForPdf } from '@/lib/quotePdfShared'
 import VatCheck from '@/components/ecosystem/VatCheck'
 import IbanInlineCheck from '@/components/ecosystem/IbanInlineCheck'
+import { askConfirm } from '@/lib/confirm'
 
 type IssuerSummary = {
   company_name: string | null
@@ -128,8 +129,8 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
   }, [dirty, saving])
   // «Annulla»: in modifica torna al preventivo, se nuovo all'elenco; con
   // modifiche non salvate chiede prima conferma
-  const cancel = () => {
-    if (dirty && !confirm(t('cancelConfirm'))) return
+  const cancel = async () => {
+    if (dirty && !(await askConfirm(t('cancelConfirm')))) return
     router.push(mode === 'edit' && quoteId ? `/marketplace/preventivi/${quoteId}${fromDashboardSuffix}` : `/marketplace/preventivi${fromDashboardSuffix}`)
   }
 

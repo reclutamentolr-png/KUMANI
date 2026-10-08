@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Boxes, CheckCircle, FileCheck2, LoaderCircle } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { unloadQuoteStock } from '@/app/actions/quotes'
+import { askConfirm } from '@/lib/confirm'
 
 // Catena di lavoro del Pro, sotto il preventivo: scarico dei prodotti dal
 // Magazzino (una volta sola) e ricevuta di pagamento già compilata.
@@ -29,7 +30,7 @@ export default function QuoteWorkChain({
   if (!showUnload && !showReceipt) return null
 
   const unload = async () => {
-    if (!window.confirm(t('quoteUnloadConfirm'))) return
+    if (!(await askConfirm(t('quoteUnloadConfirm')))) return
     setBusy(true)
     setMessage(null)
     try {

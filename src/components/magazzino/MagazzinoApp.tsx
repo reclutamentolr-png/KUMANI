@@ -46,6 +46,7 @@ import {
   type InventoryProduct,
   type MovementType,
 } from '@/lib/magazzino'
+import { askConfirm } from '@/lib/confirm'
 
 const input =
   'w-full rounded-xl border border-gray-300 px-3 py-2.5 text-[15px] focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30'
@@ -293,7 +294,7 @@ export default function MagazzinoApp({
                           <IconButton
                             title={t('remove')}
                             onClick={async () => {
-                              if (!confirm(t('removeConfirm', { name: p.name }))) return
+                              if (!(await askConfirm(t('removeConfirm', { name: p.name })))) return
                               const result = await removeProduct(p.id)
                               setNotice(result === 'archived' ? t('archived') : result === 'deleted' ? t('deleted') : errorText(result))
                               await refresh()
@@ -319,7 +320,7 @@ export default function MagazzinoApp({
                           <IconButton
                             title={t('deleteForever')}
                             onClick={async () => {
-                              if (!confirm(t('deleteForeverConfirm', { name: p.name }))) return
+                              if (!(await askConfirm(t('deleteForeverConfirm', { name: p.name })))) return
                               const result = await deleteProductForever(p.id)
                               setNotice(result === 'deleted' ? t('deleted') : errorText(result))
                               await refresh()
@@ -773,7 +774,7 @@ function ProductForm({
               type="button"
               disabled={busy}
               onClick={async () => {
-                if (!confirm(t('deleteForeverConfirm', { name: conflict.name }))) return
+                if (!(await askConfirm(t('deleteForeverConfirm', { name: conflict.name })))) return
                 setBusy(true)
                 const result = await deleteProductForever(conflict.id)
                 setBusy(false)

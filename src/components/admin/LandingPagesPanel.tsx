@@ -4,6 +4,7 @@ import { notify } from '@/lib/adminNotify'
 import { useCallback, useEffect, useState } from 'react'
 import { ExternalLink, Flag, LoaderCircle, PanelsTopLeft, Search } from 'lucide-react'
 import { closeLandingReport, listLandingPagesAdmin, setLandingSuspended } from '@/app/actions/admin'
+import { askConfirm } from '@/lib/confirm'
 
 type Owner = { first_name: string | null; last_name: string | null; email: string | null }
 type PageRow = { owner_id: string; slug: string; is_published: boolean; suspended: boolean; suspended_reason: string | null; updated_at: string; owner: Owner | null }
@@ -45,7 +46,7 @@ export default function LandingPagesPanel() {
       const answer = prompt(`Sospendere kumani.io/p/${slug}? Scrivi il motivo (lo vede il titolare):`)
       if (answer === null) return
       reason = answer
-    } else if (!confirm(`Riattivare kumani.io/p/${slug}?`)) return
+    } else if (!(await askConfirm(`Riattivare kumani.io/p/${slug}?`))) return
     setWorking(ownerId)
     const result = await setLandingSuspended(ownerId, on, reason)
     setWorking(null)

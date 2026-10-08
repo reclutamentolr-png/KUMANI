@@ -23,6 +23,7 @@ import {
   type RentalReport,
 } from '@/lib/garage'
 import { defaultLocale } from '../../../i18n'
+import { askConfirm } from '@/lib/confirm'
 
 // Separatore delle migliaia anche con 4 cifre (in italiano «3.870 km», non «3870 km»)
 const GROUP = 'always' as unknown as boolean
@@ -95,8 +96,8 @@ export default function VehicleDetail({
   const report = rentalReport(vehicle, readings, today)
   const lastKm = readings.length ? readings[readings.length - 1].km : vehicle.initial_km
 
-  const remove = () => {
-    if (!confirm(t('deleteVehicleConfirm', { name: vehicle.name }))) return
+  const remove = async () => {
+    if (!(await askConfirm(t('deleteVehicleConfirm', { name: vehicle.name })))) return
     run(() => deleteVehicle(vehicle.id), () => router.push(`${prefix}/marketplace/garage`))
   }
 
@@ -355,7 +356,7 @@ function ReadingHistory({ vehicle, readings }: { vehicle: GarageVehicle; reading
                     <button
                       type="button"
                       disabled={isPending}
-                      onClick={() => confirm(t('deleteReadingConfirm')) && run(() => deleteReading(reading.id))}
+                      onClick={async () => (await askConfirm(t('deleteReadingConfirm'))) && run(() => deleteReading(reading.id))}
                       aria-label={t('delete')}
                       className="rounded-lg p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-600"
                     >
@@ -449,7 +450,7 @@ function DeadlineRow({ deadline, today, onEdit }: { deadline: GarageDeadline; to
             <button
               type="button"
               disabled={isPending}
-              onClick={() => confirm(t('deleteDeadlineConfirm')) && run(() => deleteDeadline(deadline.id))}
+              onClick={async () => (await askConfirm(t('deleteDeadlineConfirm'))) && run(() => deleteDeadline(deadline.id))}
               aria-label={t('delete')}
               className="shrink-0 rounded-lg p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-600"
             >
@@ -630,7 +631,7 @@ function ExpensesSection({ vehicleId, expenses, today, spendlyAvailable }: { veh
               <button
                 type="button"
                 disabled={isPending}
-                onClick={() => confirm(t('deleteExpenseConfirm')) && run(() => deleteExpense(expense.id))}
+                onClick={async () => (await askConfirm(t('deleteExpenseConfirm'))) && run(() => deleteExpense(expense.id))}
                 aria-label={t('delete')}
                 className="shrink-0 rounded-lg p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-600"
               >

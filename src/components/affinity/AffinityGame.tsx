@@ -10,6 +10,7 @@ import AffinityFriends from './AffinityFriends'
 import AffinityQuiz from './AffinityQuiz'
 import AffinityRadar from './AffinityRadar'
 import ArchetypeIcon from './ArchetypeIcon'
+import { askConfirm } from '@/lib/confirm'
 
 type Saved = { map: AffinityMap; archetype: AffinityArchetype; duoCode: string }
 
@@ -44,7 +45,7 @@ export default function AffinityGame({ initial, siteUrl }: { initial: Saved | nu
   }
 
   const remove = async () => {
-    if (!confirm(t('deleteConfirm'))) return
+    if (!(await askConfirm(t('deleteConfirm')))) return
     setBusy(true)
     const result = await deleteAffinityMap()
     setBusy(false)

@@ -5,6 +5,7 @@ import { notify } from '@/lib/adminNotify'
 import { getAdminFinancialSummary, adminSetFinanceStatsSince } from '@/app/actions/admin'
 import type { ReportTab } from '@/components/admin/ReportsPanel'
 import { PiggyBank } from 'lucide-react'
+import { askConfirm } from '@/lib/confirm'
 
 // Sezione "financials" dell'Admin, caricata solo quando la si apre.
 export default function AdminFinancialsPanel({ openReport }: { openReport: (tab: ReportTab) => void }) {
@@ -108,7 +109,7 @@ export default function AdminFinancialsPanel({ openReport }: { openReport: (tab:
             <button
               type="button"
               onClick={async () => {
-                if (!confirm('Ripartire da zero da adesso? I movimenti di Stripe precedenti non verranno più contati (restano su Stripe).')) return
+                if (!(await askConfirm('Ripartire da zero da adesso? I movimenti di Stripe precedenti non verranno più contati (restano su Stripe).'))) return
                 const r = await adminSetFinanceStatsSince(true)
                 if (!r.success) notify('Errore: ' + r.error)
                 await loadFinancialSummary()

@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { LoaderCircle, Trash2 } from 'lucide-react'
 import { deleteExpense, saveExpense } from '@/app/actions/travel'
 import { CURRENCIES, EXPENSE_CATEGORIES, EXPENSE_EMOJI, type TripExpense, type TripMember } from '@/lib/travel'
+import { askConfirm } from '@/lib/confirm'
 
 const input = 'w-full rounded-xl border border-gray-300 px-3 py-2.5 text-[15px] focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30'
 const label = 'mb-1 block text-sm font-semibold text-gray-700'
@@ -66,7 +67,7 @@ export default function TravelExpenseForm({
   }
 
   const remove = async () => {
-    if (!expense || !confirm(t('deleteExpenseConfirm', { name: expense.description }))) return
+    if (!expense || !(await askConfirm(t('deleteExpenseConfirm', { name: expense.description })))) return
     setBusy(true)
     try {
       const result = await deleteExpense(expense.id)

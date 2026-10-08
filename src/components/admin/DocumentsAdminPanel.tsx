@@ -14,6 +14,7 @@ import {
 import { DOC_BUCKET, DOC_CATEGORIES, DOC_FORMATS, DOC_LOCALES, DOC_MIME, type DocCategory, type DocFormat, type DocLocale, type KumaniDoc, type Localized } from '@/lib/documents'
 import { notify } from '@/lib/adminNotify'
 import FlyersAdminSection from '@/components/admin/FlyersAdminSection'
+import { askConfirm } from '@/lib/confirm'
 
 // Admin → Documenti KUMANI: il materiale ufficiale che gli iscritti trovano in
 // Documenti → Doc KUMANI. Ogni documento ha titolo e descrizione nelle 7
@@ -66,7 +67,7 @@ export default function DocumentsAdminPanel() {
   }
 
   const remove = async (d: KumaniDoc) => {
-    if (!window.confirm(`Eliminare "${d.title.it}" e tutti i suoi file?`)) return
+    if (!(await askConfirm(`Eliminare "${d.title.it}" e tutti i suoi file?`))) return
     setBusy('del-' + d.id)
     const r = await adminDeleteDocument(d.id)
     setBusy(null)
@@ -94,7 +95,7 @@ export default function DocumentsAdminPanel() {
   }
 
   const removeFile = async (fileId: string) => {
-    if (!window.confirm('Eliminare questo file?')) return
+    if (!(await askConfirm('Eliminare questo file?'))) return
     setBusy('df-' + fileId)
     const r = await adminDeleteDocFile(fileId)
     setBusy(null)

@@ -9,6 +9,7 @@ import {
   adminListDeletionRequests,
   type AdminDeletionRequest,
 } from '@/app/actions/admin'
+import { askConfirm } from '@/lib/confirm'
 
 type Tab = 'pending' | 'handled'
 
@@ -63,7 +64,7 @@ export default function AccountDeletionsPanel({ onChanged, canDelete = true }: {
 
   const execute = async (item: AdminDeletionRequest) => {
     const name = fullName(item.user)
-    const ok = confirm(
+    const ok = await askConfirm(
       `ATTENZIONE: operazione IRREVERSIBILE.\n\n` +
         `Stai per cancellare l'account di ${name} (${item.user?.email ?? '—'}):\n` +
         `• abbonamenti Stripe annullati subito, senza rimborso\n` +
@@ -99,7 +100,7 @@ export default function AccountDeletionsPanel({ onChanged, canDelete = true }: {
       notify('Scrivi una nota con il motivo dell’annullamento (es. richiesta ritirata dall’utente).')
       return
     }
-    if (!confirm(`Annullare la richiesta di cancellazione di ${fullName(item.user)}? L'account resterà attivo.`)) return
+    if (!(await askConfirm(`Annullare la richiesta di cancellazione di ${fullName(item.user)}? L'account resterà attivo.`))) return
     setWorking(item.id)
     try {
       const result = await adminCancelDeletion(item.id, note)
