@@ -3,6 +3,7 @@
 import { randomBytes } from 'crypto'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
+import { isGuestRequest } from '@/lib/guestServer'
 import { isMenuTemplate, type MenuTemplate } from '@/lib/menuThemes'
 import { getAnthropicClient, MissingApiKeyError } from '@/lib/anthropic'
 import { ANTHROPIC_MODEL } from '@/lib/offermaker'
@@ -357,6 +358,8 @@ export async function translateMenuMissing(): Promise<
 > {
   const g = await gate()
   if (!g.ok) return { success: false, message: g.message }
+  // In prova (ospite) niente AI
+  if (await isGuestRequest()) return { success: false, message: 'aiUnavailable' }
   const data = await loadMenuData(g.supabase, g.userId)
   if (!data.menu) return { success: false, message: 'saveError' }
 

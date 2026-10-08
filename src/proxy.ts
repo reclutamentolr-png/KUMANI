@@ -45,7 +45,7 @@ const PAID_TOOLS = [
 ];
 
 // Pagine consentite agli agenti venditori e servizi della community esclusi
-const AGENT_ALLOWED = /^\/(agente|marketplace|login|auth|forgot-password|reset-password|maintenance)(\/|$)/;
+const AGENT_ALLOWED = /^\/(agente|codici-prova|marketplace|login|auth|forgot-password|reset-password|maintenance)(\/|$)/;
 const AGENT_BLOCKED_TOOLS = /^\/marketplace\/(listings|chat|convivio|timebank|affinity|spotlight|mosaic|fabula|veritas)(\/|$)/;
 
 // Pagine consentite ai traduttori (tutto il resto riporta all'Area Traduttori)
@@ -86,7 +86,7 @@ async function proxySettings(): Promise<ProxySettings> {
 
 // Utente letto dal token della sessione (id e ruolo scritto dal server in
 // app_metadata, che è dentro il token firmato).
-type SessionUser = { id: string; app_metadata?: { role?: string } };
+type SessionUser = { id: string; app_metadata?: { role?: string; trial_tool?: string; trial_until?: string } };
 
 const LOCALE_COOKIE = { path: '/', maxAge: 60 * 60 * 24 * 365, sameSite: 'lax' as const };
 
@@ -197,6 +197,29 @@ export async function proxy(request: NextRequest) {
     }
   }
 
+  // Ospiti in prova (codice di prova, ruolo scritto dal server nell'account):
+  // solo il servizio della prova, fino alla scadenza; poi la pagina di fine
+  // prova. Niente dashboard, rete, Wallet, community né altri servizi.
+  if (user && user.app_metadata?.role === 'guest') {
+    const segments = request.nextUrl.pathname.split('/').filter(Boolean);
+    const hasLocale = !!segments[0] && locales.includes(segments[0]);
+    const localePrefix = hasLocale ? `/${segments[0]}` : '';
+    const barePath = '/' + (hasLocale ? segments.slice(1) : segments).join('/');
+    const tool = user.app_metadata.trial_tool ?? '';
+    const until = Date.parse(user.app_metadata.trial_until ?? '');
+    const active = Number.isFinite(until) && until > Date.now();
+    if (!active) {
+      if (!/^\/(prova|auth|terms|privacy|register)(\/|$)/.test(barePath)) {
+        return NextResponse.redirect(new URL(`${localePrefix}/prova/fine`, request.url));
+      }
+    } else {
+      const toolPath = new RegExp(`^/marketplace/${tool.replace(/[^a-z0-9-]/g, '')}(/|$)`);
+      if (!toolPath.test(barePath) && !/^\/(prova|auth|terms|privacy|maintenance)(\/|$)/.test(barePath)) {
+        return NextResponse.redirect(new URL(`${localePrefix}/marketplace/${tool}`, request.url));
+      }
+    }
+  }
+
   // Controllo del piano per gli strumenti (vedi sotto): parte subito, in
   // parallelo al controllo della manutenzione, invece che dopo.
   const toolName = extractToolName(request.nextUrl.pathname);
@@ -264,6 +287,10 @@ export async function proxy(request: NextRequest) {
       // bacheca o categorie, non passano da qui). Strumento Pro senza piano
       // Pro → pagina "Passa a Pro"; altrimenti dashboard con "Abbonati ora".
       if (access.known && !access.allowed) {
+        // Ospite con la prova chiusa in anticipo (codice cancellato): fine prova
+        if (user.app_metadata?.role === 'guest') {
+          return NextResponse.redirect(new URL(`${localePrefix}/prova/fine`, request.url));
+        }
         // Kordata, Bacheca e chat spente dallo Staff restano consultabili in
         // sola lettura (la pagina mostra il banner "sospeso", le scritture
         // sono bloccate dal database): si passa se il motivo è solo lo spegnimento.

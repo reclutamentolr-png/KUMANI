@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
+import { isGuestRequest } from '@/lib/guestServer'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { awardToolPoint } from '@/lib/toolPoints'
 import { locales } from '../../../i18n'
@@ -163,6 +164,8 @@ export async function createFidelityClaim(
   quantity: number
 ): Promise<{ success: true; code: string; expiresAt: string } | Fail<'unauthorized' | 'saveError'>> {
   if (!(await hasCassaAccess(cardId))) return { success: false, message: 'unauthorized' }
+  // In prova (ospite) niente QR per i clienti veri
+  if (await isGuestRequest()) return { success: false, message: 'unauthorized' }
 
   const service = getFidelityServiceClient()
   // Pulizia opportunistica dei QR scaduti di questa tessera (nessun cron).

@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { notify } from '@/lib/adminNotify'
+import { SITE_URL } from '@/lib/siteUrl'
 import AdminPanelLoading from '@/components/admin/AdminPanelLoading'
 import AdminToaster from '@/components/admin/AdminToaster'
 import { useState, useEffect, type ComponentProps } from 'react'
@@ -113,6 +114,7 @@ const IdentityVerificationsPanel = dynamic(() => import('@/components/admin/Iden
 const ConvivioFeesPanel = dynamic(() => import('@/components/admin/ConvivioFeesPanel'), { loading })
 const KordataShowcasePanel = dynamic(() => import('@/components/admin/KordataShowcasePanel'), { loading })
 const AdminOverviewPanel = dynamic(() => import('@/components/admin/AdminOverviewPanel'), { loading })
+const TrialCodesManager = dynamic(() => import('@/components/trials/TrialCodesManager'), { loading })
 const GiftOrdersPanel = dynamic(() => import('@/components/admin/GiftOrdersPanel'), { loading })
 const QualifiedMembersPanel = dynamic(() => import('@/components/admin/QualifiedMembersPanel'), { loading })
 const ContactMessagesPanel = dynamic(() => import('@/components/admin/ContactMessagesPanel'), { loading })
@@ -302,12 +304,12 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
   const [voucherBatches, setVoucherBatches] = useState<AdminVoucherBatch[]>([])
   const [batchForm, setBatchForm] = useState<{ businessName: string; quantity: string; priceEur: string; invoiceRef: string; notes: string; plan: 'base' | 'pro' }>({ businessName: '', quantity: '10', priceEur: '400', invoiceRef: '', notes: '', plan: 'base' })
   const [creatingBatch, setCreatingBatch] = useState(false)
-  const [couponArea, setCouponArea] = useState<'merchant' | 'community' | 'pass' | 'gifts'>('merchant')
+  const [couponArea, setCouponArea] = useState<'merchant' | 'community' | 'pass' | 'gifts' | 'trials'>('merchant')
 
   const loadOnlineUsers = async () => {
     try {
       const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000).toISOString()
-      const { count } = await supabase.from('profiles').select('id', { count: 'exact', head: true }).gte('last_seen', fifteenMinutesAgo)
+      const { count } = await supabase.from('profiles').select('id', { count: 'exact', head: true }).gte('last_seen', fifteenMinutesAgo).is('guest_until', null)
       setOnlineUsers(count || 0)
     } catch (error) {
       console.error('Errore caricamento utenti online:', error)
@@ -1400,6 +1402,7 @@ L'accesso viene registrato.`)) return
           ['community', '👥 Coupon per la community'],
           ['pass', '🎟️ Pass servizio'],
           ['gifts', '🎁 Regali'],
+          ['trials', '⏱️ Codici prova'],
         ] as const).map(([key, label]) => (
           <button
             key={key}
@@ -1413,7 +1416,7 @@ L'accesso viene registrato.`)) return
           </button>
         ))}
       </div>
-      {couponArea === 'merchant' ? renderMerchantCoupons() : couponArea === 'pass' ? <PassCodesPanel /> : couponArea === 'gifts' ? <GiftOrdersPanel /> : renderCommunityCoupons()}
+      {couponArea === 'merchant' ? renderMerchantCoupons() : couponArea === 'pass' ? <PassCodesPanel /> : couponArea === 'gifts' ? <GiftOrdersPanel /> : couponArea === 'trials' ? <TrialCodesManager admin siteUrl={SITE_URL} /> : renderCommunityCoupons()}
     </div>
   )
 

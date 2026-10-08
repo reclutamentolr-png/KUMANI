@@ -83,7 +83,7 @@ export default function AppNav() {
     const supabase = createClient()
     const update = (user: User | null | undefined) => {
       const role = (user?.app_metadata as { role?: string } | undefined)?.role
-      setMember(!!user && role !== 'agent' && role !== 'translator')
+      setMember(!!user && role !== 'agent' && role !== 'translator' && role !== 'guest')
     }
     supabase.auth.getSession().then(({ data }) => update(data.session?.user))
     const { data } = supabase.auth.onAuthStateChange((_event, session) => update(session?.user))

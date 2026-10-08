@@ -521,7 +521,7 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
         <BusinessProfileImport profile={businessProfile} onImport={importProfile} />
 
         {/* Stato e indirizzo pubblico */}
-        <section className="rounded-2xl bg-[var(--ink)] p-5 text-white shadow-lg">
+        <section data-guest-hide className="rounded-2xl bg-[var(--ink)] p-5 text-white shadow-lg">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <span
               className={`rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide ${
@@ -568,7 +568,7 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
         </section>
 
         {/* Testi con l'AI */}
-        <section className="rounded-2xl border border-[var(--gold)]/40 bg-[var(--gold)]/5 p-4 sm:p-5">
+        <section data-guest-hide className="rounded-2xl border border-[var(--gold)]/40 bg-[var(--gold)]/5 p-4 sm:p-5">
           <button type="button" onClick={() => setAiOpen(!aiOpen)} className="flex w-full items-center justify-between gap-3 text-left" aria-expanded={aiOpen}>
             <span className="flex items-center gap-2 text-base font-bold text-gray-900">
               <Sparkles className="h-5 w-5 text-[var(--gold)]" /> {t('sectionAi')}

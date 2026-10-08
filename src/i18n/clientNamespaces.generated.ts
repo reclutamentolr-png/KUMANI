@@ -82,6 +82,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "toolTiers",
   "tour",
   "travel",
+  "trials",
   "turnstile",
   "verificaIban",
   "verification",

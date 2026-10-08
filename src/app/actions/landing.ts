@@ -4,6 +4,7 @@ import { createHash, randomBytes } from 'crypto'
 import { headers } from 'next/headers'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
+import { isGuestRequest } from '@/lib/guestServer'
 import { getAnthropicClient, MissingApiKeyError } from '@/lib/anthropic'
 import { ANTHROPIC_MODEL } from '@/lib/offermaker'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
@@ -60,7 +61,8 @@ export async function saveLanding(input: LandingSaveInput): Promise<{ success: t
 
   const row = {
     slug,
-    is_published: !!input.isPublished,
+    // In prova (ospite) la pagina non si pubblica mai
+    is_published: !!input.isPublished && !(await isGuestRequest()),
     template: isLandingTemplate(input.template) ? input.template : 'scuro',
     accent,
     content_locale: isLandingLocale(input.contentLocale) ? input.contentLocale : 'it',
@@ -174,6 +176,8 @@ export async function generateLandingDraft(
 ): Promise<{ success: true; draft: LandingAiDraft } | { success: false; message: string }> {
   const g = await gate()
   if (!g.ok) return { success: false, message: g.message }
+  // In prova (ospite) niente AI
+  if (await isGuestRequest()) return { success: false, message: 'aiUnavailable' }
   const clip = (v: unknown, max: number) => (typeof v === 'string' ? v.trim().slice(0, max) : '')
   const a = {
     business: clip(answers.business, 300),

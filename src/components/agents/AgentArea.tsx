@@ -590,6 +590,7 @@ function Payouts({ payouts }: { payouts: AgentOverview['payouts'] }) {
 
 export default function AgentArea({ overview }: { overview: AgentOverview }) {
   const t = useTranslations('agentArea')
+  const tTrial = useTranslations('trials')
   const { agent } = overview
 
   return (
@@ -622,6 +623,16 @@ export default function AgentArea({ overview }: { overview: AgentOverview }) {
 
       <main className="mx-auto max-w-6xl space-y-6 px-4 py-6">
         <LinkCard agent={agent} />
+        <LocalizedLink
+          href="/codici-prova"
+          className="flex items-center justify-between gap-3 rounded-2xl border border-[var(--gold)]/30 bg-white p-4 shadow-sm hover:border-[var(--gold)]"
+        >
+          <span>
+            <span className="block font-bold text-[var(--ink)]">{tTrial('linkTitle')}</span>
+            <span className="block text-sm text-[var(--muted)]">{tTrial('linkHint')}</span>
+          </span>
+          <span className="shrink-0 text-xl text-[var(--gold)]">→</span>
+        </LocalizedLink>
         <Periods periods={overview.periods} />
         <Ranking ranking={overview.ranking} />
         <WalletCard wallet={overview.wallet} agent={agent} />

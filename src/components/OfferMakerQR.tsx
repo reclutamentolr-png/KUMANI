@@ -59,7 +59,7 @@ export default function OfferMakerQR({
   }
 
   return (
-    <div className="flex flex-col items-center gap-3">
+    <div data-guest-hide className="flex flex-col items-center gap-3">
       {loading ? (
         <div className="w-40 h-40 bg-gray-100 rounded-xl flex items-center justify-center animate-pulse">
           <span className="text-xs text-gray-400">{generatingLabel}</span>

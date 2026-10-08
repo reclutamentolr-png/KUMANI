@@ -216,7 +216,7 @@ export default function MagazzinoApp({
             <button type="button" onClick={() => setSheet({ kind: 'scan' })} className="inline-flex items-center gap-2 rounded-xl border border-[var(--ink)] bg-white px-4 py-2.5 text-sm font-bold text-[var(--ink)]">
               <ScanBarcode className="h-4 w-4" /> {t('scan')}
             </button>
-            <button type="button" onClick={exportProducts} disabled={products.length === 0} className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 disabled:opacity-50">
+            <button type="button" data-guest-hide onClick={exportProducts} disabled={products.length === 0} className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 disabled:opacity-50">
               <Download className="h-4 w-4" /> {t('exportProducts')}
             </button>
           </div>
@@ -371,7 +371,7 @@ export default function MagazzinoApp({
               <button type="submit" className="flex flex-1 items-center justify-center gap-1 rounded-xl bg-[var(--ink)] px-3 text-sm font-semibold text-white">
                 {loadingMoves ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />} {t('filter')}
               </button>
-              <button type="button" onClick={exportMovements} disabled={!movements?.length || exporting} className="rounded-xl border border-gray-200 px-3 text-gray-700 disabled:opacity-50" aria-label={t('exportMovements')}>
+              <button type="button" data-guest-hide onClick={exportMovements} disabled={!movements?.length || exporting} className="rounded-xl border border-gray-200 px-3 text-gray-700 disabled:opacity-50" aria-label={t('exportMovements')}>
                 <Download className="h-4 w-4" />
               </button>
             </div>

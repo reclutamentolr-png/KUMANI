@@ -98,7 +98,7 @@ export default function QuoteShareButtons({ quote, issuer, logoUrl }: Props) {
   }, [])
 
   return (
-    <div className="flex flex-wrap items-center gap-3">
+    <div data-guest-hide className="flex flex-wrap items-center gap-3">
       {nativeSupported ? (
         <button
           onClick={handleNativeShare}

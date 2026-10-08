@@ -51,7 +51,7 @@ export default function CvPdfButton({ cv, photoUrl, publicUrl }: Props) {
   }
 
   return (
-    <button
+    <button data-guest-hide
       onClick={handleDownload}
       disabled={generating}
       className="flex items-center gap-2 px-5 py-3 rounded-xl text-sm bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] font-bold shadow-md hover:brightness-105 transition-all disabled:opacity-50"

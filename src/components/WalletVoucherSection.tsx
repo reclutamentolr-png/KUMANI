@@ -40,6 +40,7 @@ export default function WalletVoucherSection({
   const t = useTranslations('voucherWallet')
   const tw = useTranslations('wallet')
   const td = useTranslations('dashboard')
+  const tTrial = useTranslations('trials')
   const locale = useLocale()
   const router = useRouter()
   const euro = (cents: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(cents / 100)
@@ -107,6 +108,14 @@ export default function WalletVoucherSection({
 
   return (
     <div className="space-y-6">
+      {/* Codici di prova dei servizi, da mandare a chi vuole provare senza registrarsi */}
+      <Link href="/codici-prova" className="flex items-center justify-between gap-3 rounded-xl border border-[var(--gold)]/30 bg-white p-4 hover:border-[var(--gold)]">
+        <span>
+          <span className="block font-bold text-[var(--ink)]">{tTrial('linkTitle')}</span>
+          <span className="block text-sm text-[var(--muted)]">{tTrial('linkHint')}</span>
+        </span>
+        <span className="shrink-0 text-xl text-[var(--gold)]">→</span>
+      </Link>
       {/* Saldi */}
       <div className="grid grid-cols-2 gap-3">
         <div className="rounded-xl border border-gray-200 bg-white p-4">

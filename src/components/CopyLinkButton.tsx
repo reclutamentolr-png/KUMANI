@@ -43,7 +43,7 @@ export default function CopyLinkButton({
   }
 
   return (
-    <button
+    <button data-guest-hide
       onClick={handleCopy}
       className={`flex items-center gap-2 px-4 py-3 rounded-lg font-medium transition-colors ${colorClassName}`}
     >

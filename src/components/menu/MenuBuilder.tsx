@@ -422,6 +422,7 @@ export default function MenuBuilder({
           <p className="mt-3 truncate font-mono text-xs text-white/60">{publicUrl}</p>
           <div className="mt-4 flex flex-wrap gap-2">
             <a
+              data-guest-hide
               href={publicUrl}
               target="_blank"
               rel="noopener noreferrer"
@@ -429,15 +430,16 @@ export default function MenuBuilder({
             >
               <ExternalLink className="h-4 w-4" /> {t('openMenu')}
             </a>
-            <button type="button" onClick={copyLink} className="inline-flex items-center gap-1.5 rounded-lg border border-white/25 px-3 py-2 text-sm font-semibold">
+            <button type="button" data-guest-hide onClick={copyLink} className="inline-flex items-center gap-1.5 rounded-lg border border-white/25 px-3 py-2 text-sm font-semibold">
               {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />} {copied ? t('copied') : t('copyLink')}
             </button>
             {qr && (
-              <a href={qr} download={`menu-qr-${menu.token}.png`} className="inline-flex items-center gap-1.5 rounded-lg border border-white/25 px-3 py-2 text-sm font-semibold">
+              <a data-guest-hide href={qr} download={`menu-qr-${menu.token}.png`} className="inline-flex items-center gap-1.5 rounded-lg border border-white/25 px-3 py-2 text-sm font-semibold">
                 <Download className="h-4 w-4" /> {t('downloadQr')}
               </a>
             )}
             <a
+              data-guest-hide
               href={`${menuBasePath}/print`}
               target="_blank"
               rel="noopener noreferrer"
@@ -446,6 +448,7 @@ export default function MenuBuilder({
               <Printer className="h-4 w-4" /> {t('printMenu')}
             </a>
             <a
+              data-guest-hide
               href={`${menuBasePath}/tent`}
               target="_blank"
               rel="noopener noreferrer"
@@ -464,7 +467,7 @@ export default function MenuBuilder({
         </div>
         {qr && (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={qr} alt="QR" className="mx-auto h-36 w-36 rounded-xl bg-white p-2 sm:h-40 sm:w-40" />
+          <img data-guest-hide src={qr} alt="QR" className="mx-auto h-36 w-36 rounded-xl bg-white p-2 sm:h-40 sm:w-40" />
         )}
       </div>
 
@@ -474,7 +477,7 @@ export default function MenuBuilder({
       {notice && <p className="rounded-xl bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800">{notice}</p>}
 
       {languages.length > 1 && data.categories.length > 0 && (
-        <div className="flex flex-col gap-3 rounded-2xl border border-[var(--gold)]/30 bg-[var(--gold-pale)]/60 p-4 sm:flex-row sm:items-center sm:justify-between">
+        <div data-guest-hide className="flex flex-col gap-3 rounded-2xl border border-[var(--gold)]/30 bg-[var(--gold-pale)]/60 p-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="flex items-center gap-1.5 font-bold text-[var(--ink)]">
               <Sparkles className="h-4 w-4 text-[var(--gold)]" /> {t('aiTitle')}

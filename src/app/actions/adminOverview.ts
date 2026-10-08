@@ -67,7 +67,8 @@ export async function adminOverview(): Promise<AdminOverview | null> {
   const nowIso = new Date().toISOString()
   const count = async (query: PromiseLike<{ count: number | null }>) => (await query).count ?? 0
   const activeNow = `subscription_expires_at.is.null,subscription_expires_at.gt.${nowIso}`
-  const profiles = () => service.from('profiles').select('id', { count: 'exact', head: true })
+  // Gli ospiti in prova (codici di prova) non sono utenti registrati
+  const profiles = () => service.from('profiles').select('id', { count: 'exact', head: true }).is('guest_until', null)
 
   // ---- Utenti
   const [total, blocked, base, pro, proTrial] = await Promise.all([
