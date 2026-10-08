@@ -46,13 +46,14 @@ export default function GuestTrialBar({ toolTitle, until }: { toolTitle: string;
 
   return (
     <>
-      <div aria-hidden className="h-24 shrink-0" />
+      <div aria-hidden className="h-32 shrink-0 sm:h-24" />
       <div className="fixed inset-x-0 bottom-0 z-50 border-t border-[var(--gold)]/40 bg-[var(--ink)] px-3 pb-[max(env(safe-area-inset-bottom),0.5rem)] pt-2.5 text-white shadow-[0_-10px_30px_rgba(23,23,23,0.3)] print:hidden">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-4 gap-y-2">
+        <div className="mx-auto flex max-w-5xl flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-bold text-[var(--gold-bright)]">{t('barTitle', { tool: toolTitle })}</p>
-            <p className="flex items-center gap-1.5 text-xs text-white/75">
-              <Clock className="h-3.5 w-3.5" /> {remaining} · {t('barNote')}
+            <p className="text-sm font-bold leading-tight text-[var(--gold-bright)]">{t('barTitle', { tool: toolTitle })}</p>
+            <p className="mt-0.5 flex items-center gap-1.5 text-xs text-white/75">
+              <Clock className="h-3.5 w-3.5 shrink-0" /> {remaining}
+              <span className="hidden sm:inline">· {t('barNote')}</span>
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -60,7 +61,7 @@ export default function GuestTrialBar({ toolTitle, until }: { toolTitle: string;
               type="button"
               onClick={signup}
               disabled={busy !== null}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-4 py-2 text-sm font-bold text-[var(--ink)] disabled:opacity-60"
+              className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-4 py-2 text-sm font-bold text-[var(--ink)] disabled:opacity-60 sm:flex-none"
             >
               {busy === 'signup' ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />} {t('barSignup')}
             </button>

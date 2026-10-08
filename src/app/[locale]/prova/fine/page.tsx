@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import Logo from '@/components/Logo'
 import TrialEnded from '@/components/trials/TrialEnded'
+import { trialSignupHref } from '@/app/actions/trials'
 
 export const dynamic = 'force-dynamic'
 
@@ -13,6 +14,9 @@ export default async function TrialEndPage({ params }: { params: Promise<{ local
   const { locale } = await params
   setRequestLocale(locale)
   const t = await getTranslations('trials')
+  // Link di registrazione con l'invito di chi ha mandato il codice: letto qui,
+  // finché l'accesso da ospite c'è ancora
+  const signupHref = await trialSignupHref()
   return (
     <div className="flex min-h-screen items-center justify-center bg-[var(--paper)] px-4 py-10">
       <div className="w-full max-w-lg overflow-hidden rounded-3xl border border-[var(--gold)]/30 bg-white text-center shadow-xl">
@@ -22,7 +26,7 @@ export default async function TrialEndPage({ params }: { params: Promise<{ local
         <div className="space-y-4 p-6 sm:p-8">
           <h1 className="text-2xl font-bold text-[var(--ink)]">{t('endTitle')}</h1>
           <p className="text-gray-700">{t('endText')}</p>
-          <TrialEnded />
+          <TrialEnded signupHref={signupHref} />
         </div>
       </div>
     </div>
