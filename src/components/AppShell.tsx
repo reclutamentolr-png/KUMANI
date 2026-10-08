@@ -6,6 +6,7 @@ import { getEnabledLocales } from '@/lib/enabledLocales'
 import { EnabledLocalesProvider } from '@/components/EnabledLocalesProvider'
 import { NeurobalanceAudioProvider } from '@/components/NeurobalanceAudioProvider'
 import FloatingAudioPlayer from '@/components/FloatingAudioPlayer'
+import ToolOpenTracker from '@/components/analytics/ToolOpenTracker'
 import '@/app/globals.css'
 
 const geistSans = Geist({
@@ -37,6 +38,7 @@ export default async function AppShell({ locale, children }: { locale: string; c
             <NeurobalanceAudioProvider>
               {children}
               <FloatingAudioPlayer />
+              <ToolOpenTracker />
             </NeurobalanceAudioProvider>
           </EnabledLocalesProvider>
         </NextIntlClientProvider>

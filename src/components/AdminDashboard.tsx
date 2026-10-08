@@ -32,7 +32,6 @@ import {
   deleteReportedListing,
   type StaffUserHit,
   adminGetUserMatrix,
-  adminOverviewCounts,
 } from '@/app/actions/admin'
 import type {
   AdminUserRow,
@@ -61,8 +60,6 @@ import {
   Settings,
   Palette,
   BarChart3,
-  UserCheck,
-  Activity,
   Lock,
   ToggleLeft,
   ToggleRight,
@@ -115,6 +112,7 @@ const FabulaAdminPanel = dynamic(() => import('@/components/admin/FabulaAdminPan
 const IdentityVerificationsPanel = dynamic(() => import('@/components/admin/IdentityVerificationsPanel'), { loading })
 const ConvivioFeesPanel = dynamic(() => import('@/components/admin/ConvivioFeesPanel'), { loading })
 const KordataShowcasePanel = dynamic(() => import('@/components/admin/KordataShowcasePanel'), { loading })
+const AdminOverviewPanel = dynamic(() => import('@/components/admin/AdminOverviewPanel'), { loading })
 const GiftOrdersPanel = dynamic(() => import('@/components/admin/GiftOrdersPanel'), { loading })
 const QualifiedMembersPanel = dynamic(() => import('@/components/admin/QualifiedMembersPanel'), { loading })
 const ContactMessagesPanel = dynamic(() => import('@/components/admin/ContactMessagesPanel'), { loading })
@@ -263,7 +261,6 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
 
   const badgeLabel = (count: number) => (count > 99 ? '99+' : String(count))
 
-  const [stats, setStats] = useState({ totalUsers: 0, activeUsers: 0, totalNodes: 0, blockedUsers: 0 })
   const [onlineUsers, setOnlineUsers] = useState(0)
   const [users, setUsers] = useState<AdminUserRow[]>([])
   const [searchTerm, setSearchTerm] = useState('')
@@ -306,12 +303,6 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
   const [batchForm, setBatchForm] = useState<{ businessName: string; quantity: string; priceEur: string; invoiceRef: string; notes: string; plan: 'base' | 'pro' }>({ businessName: '', quantity: '10', priceEur: '400', invoiceRef: '', notes: '', plan: 'base' })
   const [creatingBatch, setCreatingBatch] = useState(false)
   const [couponArea, setCouponArea] = useState<'merchant' | 'community' | 'pass' | 'gifts'>('merchant')
-
-  const loadStats = async () => {
-    // Dal server: la matrice non è leggibile dal browser
-    const counts = await adminOverviewCounts()
-    if (counts) setStats(counts)
-  }
 
   const loadOnlineUsers = async () => {
     try {
@@ -550,7 +541,6 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
       // Caricamento dei dati della sezione (con il segnale "caricamento"):
       // è proprio il compito di questo effetto
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      loadStats()
       loadOnlineUsers()
       const interval = setInterval(loadOnlineUsers, 30000)
       return () => clearInterval(interval)
@@ -795,54 +785,7 @@ L'accesso viene registrato.`)) return
     setActiveSection(fallbackSection)
   }
 
-  const renderOverview = () => (
-    <div className="space-y-6">
-      <div className="bg-[var(--ink)] rounded-2xl p-8 text-white shadow-lg">
-        <h2 className="text-3xl font-bold mb-2">Benvenuto, {userName.split(' ')[0]}!</h2>
-        <p className="text-white/80">Ecco lo stato attuale della tua piattaforma Kumani.</p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-          <div className="flex items-center gap-2 text-sm text-gray-500 uppercase tracking-wide">
-            <Users className="w-4 h-4" />
-            Utenti Totali
-          </div>
-          <div className="text-4xl font-bold text-[var(--gold)] mt-2">{stats.totalUsers}</div>
-        </div>
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-          <div className="flex items-center gap-2 text-sm text-gray-500 uppercase tracking-wide">
-            <UserCheck className="w-4 h-4" />
-            Abbonamenti Attivi
-          </div>
-          <div className="text-4xl font-bold text-green-600 mt-2">{stats.activeUsers}</div>
-        </div>
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-          <div className="flex items-center gap-2 text-sm text-gray-500 uppercase tracking-wide">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <Activity className="w-4 h-4" />
-            Online Ora
-          </div>
-          <div className="text-4xl font-bold text-green-600 mt-2">{onlineUsers}</div>
-          <div className="text-xs text-gray-400 mt-1">Ultimi 15 min</div>
-        </div>
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-          <div className="flex items-center gap-2 text-sm text-gray-500 uppercase tracking-wide">
-            <GitBranch className="w-4 h-4" />
-            Nodi Matrice
-          </div>
-          <div className="text-4xl font-bold text-orange-600 mt-2">{stats.totalNodes}</div>
-        </div>
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-          <div className="flex items-center gap-2 text-sm text-gray-500 uppercase tracking-wide">
-            <Lock className="w-4 h-4" />
-            Utenti Bloccati
-          </div>
-          <div className="text-4xl font-bold text-red-600 mt-2">{stats.blockedUsers}</div>
-        </div>
-      </div>
-    </div>
-  )
+  const renderOverview = () => <AdminOverviewPanel userName={userName} onlineUsers={onlineUsers} />
 
   const renderUsers = () => (
     <div className="space-y-6">
