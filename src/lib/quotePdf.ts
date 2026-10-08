@@ -176,12 +176,14 @@ export function generateQuotePdfBlob(params: {
 
   // ── Fondo dell'ultima pagina: modalità di pagamento e note sempre allo
   // stesso posto, qualunque sia il numero di righe ──
-  const textWidth = pageWidth - margin * 2
+  // «Per accettazione (Timbro e Firma)» a destra: pagamento e note più stretti
+  const signature = quote.signature !== false
+  const textWidth = (pageWidth - margin * 2) * (signature ? 0.62 : 1)
   const footerBlocks = [
     quote.payment_info ? { label: labels.paymentInfoLabel, lines: doc.splitTextToSize(quote.payment_info, textWidth) as string[] } : null,
     quote.notes ? { label: labels.notesLabel, lines: doc.splitTextToSize(quote.notes, textWidth) as string[] } : null,
   ].filter(Boolean) as { label: string; lines: string[] }[]
-  const footerHeight = footerBlocks.reduce((h, b) => h + 14 + b.lines.length * 13 + 14, 0)
+  const footerHeight = Math.max(footerBlocks.reduce((h, b) => h + 14 + b.lines.length * 13 + 14, 0), signature ? 70 : 0)
   const pageNumberSpace = 22
   // Note molto lunghe: il fondo prende al massimo metà pagina, poi va su una pagina sua
   const footerOwnPage = footerHeight > (pageHeight - margin * 2) * 0.5
@@ -243,8 +245,8 @@ export function generateQuotePdfBlob(params: {
   const totalValue = formatCurrency(quote.total)
   doc.text(totalValue, pageWidth - margin - 10 - doc.getTextWidth(totalValue), y + 4)
 
-  // ── Fondo fisso: modalità di pagamento + note ──
-  if (footerBlocks.length) {
+  // ── Fondo fisso: modalità di pagamento + note, firma per accettazione ──
+  if (footerBlocks.length || signature) {
     if (footerOwnPage) doc.addPage()
     let fy = footerTop
     doc.setDrawColor(210, 210, 210)
@@ -260,6 +262,21 @@ export function generateQuotePdfBlob(params: {
       doc.setFontSize(9.5)
       doc.text(block.lines, margin, fy)
       fy += block.lines.length * 13 + 14
+    }
+    if (signature) {
+      const sx = pageWidth - margin - 170
+      const sy = footerTop + 6
+      doc.setFont('helvetica', 'bold')
+      doc.setFontSize(10)
+      doc.setTextColor(...INK)
+      doc.text(labels.signatureLabel, sx + 85, sy, { align: 'center' })
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(8.5)
+      doc.setTextColor(...MUTED)
+      doc.text(labels.signatureHint, sx + 85, sy + 13, { align: 'center' })
+      doc.setDrawColor(...INK)
+      doc.setLineWidth(0.7)
+      doc.line(sx, sy + 52, sx + 170, sy + 52)
     }
   }
 

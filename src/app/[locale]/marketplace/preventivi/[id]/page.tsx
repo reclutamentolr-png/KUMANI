@@ -209,6 +209,13 @@ export default async function QuoteDetailPage({
               <p className="text-sm text-gray-700 whitespace-pre-wrap">{quote.notes}</p>
             </div>
           )}
+          {quote.layout !== 'descriptive' && quote.signature !== false && (
+            <div className="ml-auto mt-6 w-56 text-center text-sm">
+              <p className="font-bold text-[var(--ink)]">{t('pdfSignature')}</p>
+              <p className="text-xs text-gray-500">{t('pdfSignatureHint')}</p>
+              <div className="mt-10 border-b border-[var(--ink)]" />
+            </div>
+          )}
           </div>
         </div>
 

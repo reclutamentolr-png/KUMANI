@@ -655,6 +655,14 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
           />
         </div>
 
+        {/* Nel descrittivo la casella è nell'editor delle sezioni, vicino alla chiusura */}
+        {!descriptive && (
+          <label className="flex items-center gap-2 text-sm font-medium text-gray-800">
+            <input type="checkbox" className="h-5 w-5 accent-[var(--gold)]" checked={form.signature} onChange={(e) => setForm((p) => ({ ...p, signature: e.target.checked }))} />
+            {t('signatureField')}
+          </label>
+        )}
+
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-center gap-2 text-red-800 text-sm">
             <XCircle className="w-5 h-5 shrink-0" />
