@@ -25,7 +25,7 @@
     "synergyTitle": "Wie die Tools miteinander sprechen",
     "synergySubtitle": "Du kaufst keine einzelnen Tools: Jedes stärkt die anderen.",
     "synergy1Title": "Ein Kalender für alles",
-    "synergy1Text": "MemoLife-Termine, Spendly-Rechnungen und Life-Calendar-Fristen im selben Kalender.",
+    "synergy1Text": "MemoLife-Termine, Spendly-Rechnungen und Fristen aus Life Calendar, Wohnung und Garage im selben Kalender.",
     "synergy2Title": "Travel ↔ Life Calendar",
     "synergy2Text": "Abreise und Rückkehr landen im Kalender, das Ablaufdatum des Reisepasses wird zur Erinnerung.",
     "synergy3Title": "Menü → Kumi Card",
@@ -81,7 +81,7 @@
     "planPerYear": "/ Jahr",
     "planBaseName": "Base",
     "planBaseDescription": "Für Privatpersonen und Familien",
-    "planBaseFeature1": "MemoLife mit Kalender, Spendly und Rechnungen, Life Calendar",
+    "planBaseFeature1": "MemoLife mit Kalender, Spendly und Rechnungen, Life Calendar, Kumani Garage, KUMANI Casa",
     "planBaseFeature2": "Sicherheit, Wohlbefinden, QR-Codes, Link in Bio und WhatsApp",
     "planBaseFeature3": "Affinity Freundschaften, Veritas und Spiele für die Gruppe",
     "planBaseFeature4": "Pinnwand, Kordata und Punkte, die zu Boni werden",
@@ -427,7 +427,7 @@
     "inviteTileHint": "Teile deinen Link: Wer sich anmeldet, kommt in deinen KUMANI-Stern.",
     "sponsorHint": "Die Person, die dich zu KUMANI eingeladen hat.",
     "noSponsorHint": "Du stehst am Anfang deines Sterns: Niemand hat dich eingeladen.",
-    "inviteShareMessage": "Hallo! Ich lade dich zu KUMANI ein: über 35 digitale Dienste in einer App und eine Community, die sich gegenseitig hilft. Melde dich über meinen Link an: {link}",
+    "inviteShareMessage": "Hallo! Ich lade dich zu KUMANI ein: über 40 digitale Dienste in einer App und eine Community, die sich gegenseitig hilft. Melde dich über meinen Link an: {link}",
     "inviteShareWhatsapp": "Per WhatsApp einladen",
     "peopleTitle": "Deine KUMANI",
     "peopleTabActive": "Aktiv",
@@ -2651,7 +2651,7 @@
     "shareCardTitle": "Deine KUMANI-Visitenkarte",
     "shareCardIntro": "Hier ist die Vorschau. Du kannst die Vorstellung vor dem Senden ändern: Der QR-Code führt zu deinem Einladungslink.",
     "shareCardTextLabel": "Vorstellung (bearbeitbar)",
-    "shareCardDefaultText": "KUMANI ist ein Ökosystem aus über 35 digitalen Diensten in einer App: Online-Sicherheit, Organisation, Wohlbefinden und Werkzeuge für die Arbeit, mit einer Community, die sich gegenseitig hilft. Ein Abo, alles inklusive.",
+    "shareCardDefaultText": "KUMANI ist ein Ökosystem aus über 40 digitalen Diensten in einer App: Online-Sicherheit, Organisation, Wohlbefinden und Werkzeuge für die Arbeit, mit einer Community, die sich gegenseitig hilft. Ein Abo, alles inklusive.",
     "shareCardHeadline": "Deine Ideen, unsere Hände. Gemeinsam.",
     "shareCardMember": "KUMANI-Mitglied",
     "shareCardScan": "Scanne den QR-Code und entdecke KUMANI",
@@ -6879,14 +6879,24 @@
         "p3d": "Nachrichten im Dashboard und aufs Handy."
       },
       "garage": {
-        "sub": "Eigene Autos und Leasing",
-        "tagline": "Du weißt immer, ob du im Leasing-Kilometerrahmen bist, und vergisst nie mehr Steuer oder Versicherung.",
-        "p1": "Kilometerkontrolle",
-        "p1d": "Budget Tag für Tag und Kosten der Mehrkilometer.",
-        "p2": "Fristen mit Erinnerung",
-        "p2d": "Kfz-Steuer, Versicherung, HU und Inspektion.",
-        "p3": "Kosten in Spendly",
-        "p3d": "Tanken und Wartung in deinem Budget."
+        "sub": "Autos und Motorräder, eigen und geleast",
+        "tagline": "Du weißt immer, ob du im Kilometerrahmen des Leasings bist, vergisst weder Kfz-Steuer noch Versicherung und hast deine Unterlagen immer dabei.",
+        "p1": "Leasing-Kilometerkontrolle",
+        "p1d": "Tagesbudget und Kosten der Mehrkilometer.",
+        "p2": "Fristen und Kosten",
+        "p2d": "Kfz-Steuer, Versicherung, HU; Kosten auch in Spendly.",
+        "p3": "Unterlagen immer dabei",
+        "p3d": "Fotos von Fahrzeugschein und Versicherung, Auto und Motorrad."
+      },
+      "casa": {
+        "sub": "Dein Zuhause an einem Ort",
+        "tagline": "Wartungen, Rechnungen, Garantien und Unterlagen zur Wohnung: Du vergisst nichts mehr.",
+        "p1": "Wartungen mit Erinnerungen",
+        "p1d": "Heizung, Klimaanlage, Rauchmelder: schon vorbereitet.",
+        "p2": "Verträge und Rechnungen",
+        "p2d": "Nummern und Störungsdienst, Rechnungen in Spendly.",
+        "p3": "Garantien und Unterlagen",
+        "p3d": "Kassenbons, Anleitungen, Verträge und Policen sicher."
       }
     }
   },
@@ -7554,7 +7564,9 @@
       "step3Title": "Kilometer aktualisieren und Budget prüfen",
       "step3Text": "Gib ab und zu den aktuellen Kilometerstand mit Datum ein: Du siehst sofort, ob du im Budget bist, wie viele km pro Tag dir noch bleiben und die Prognose zum Vertragsende.",
       "step4Title": "Fristen und Kosten",
-      "step4Text": "Füge Kfz-Steuer, Versicherung, HU und Inspektion hinzu: Sie erscheinen in der Agenda der Startseite und wir erinnern dich vorher. Wenn du zahlst, tippe auf „Bezahlt“: Es wird eine Autokostenposition, auch in Spendly."
+      "step4Text": "Füge Kfz-Steuer, Versicherung, HU und Inspektion hinzu: Sie erscheinen in der Agenda der Startseite und wir erinnern dich vorher. Wenn du zahlst, tippe auf „Bezahlt“: Es wird zu Fahrzeugkosten, auch in Spendly.",
+      "step5Title": "Unterlagen immer dabei",
+      "step5Text": "Lade im Bereich „Unterlagen“ ein Foto oder PDF vom Fahrzeugschein, der Versicherung und anderen Unterlagen hoch, auch Vorder- und Rückseite: Nur du kannst sie sehen und du findest sie auch unter Dokumente."
     },
     "casa": {
       "title": "KUMANI Casa",
@@ -7703,7 +7715,7 @@
         },
         "3": {
           "1": "Organisation",
-          "2": "MemoLife, Life Calendar, Spendly, Kumani Garage, Findo, KUMANI Travel, KUMANI CV"
+          "2": "MemoLife, Life Calendar, Spendly, Kumani Garage, KUMANI Casa, Findo, KUMANI Travel, KUMANI CV"
         },
         "4": {
           "1": "Wohlbefinden",
@@ -7769,7 +7781,7 @@
           "3": "im Jahr",
           "4": "Für Privatpersonen und Familien",
           "5": "Alles aus Kostenlos + {base, plural, one {# Dienst} other {# Dienste}}",
-          "6": "MemoLife, Spendly, Life Calendar, Link in Bio, SVAT, CheckMail, Neurobalance, Travel, Jobsuche"
+          "6": "MemoLife, Spendly, Life Calendar, Kumani Garage, KUMANI Casa, Link in Bio, SVAT, CheckMail, Neurobalance, Travel, Jobsuche"
         },
         "3": {
           "1": "Pro",
@@ -8492,7 +8504,7 @@
     "siteTitle": "KUMANI – Hände, die dir helfen",
     "siteDescription": "KUMANI ist ein Ökosystem digitaler Alltagswerkzeuge für Selbstständige, Privatpersonen und Familien: dynamische QR-Codes, Link in Bio, Betrugs-Check, Ausgabenverwaltung und mehr. Fairer Preis, öffentliche Regeln.",
     "homeTitle": "KUMANI – Digitale Werkzeuge und eine Community, die sich hilft",
-    "homeDescription": "Deine Ideen, unsere Hände, gemeinsam: über 35 digitale Dienste in einer App, Tarife Gratis, Base und Pro und eine Community, die sich wirklich hilft.",
+    "homeDescription": "Deine Ideen, unsere Hände, gemeinsam: über 40 digitale Dienste in einer App, Tarife Gratis, Base und Pro und eine Community, die sich wirklich hilft.",
     "registerTitle": "Kostenlos registrieren",
     "registerDescription": "Erstelle dein kostenloses KUMANI-Konto in Sekunden und teste sofort die kostenlosen Dienste.",
     "loginTitle": "Anmelden",
@@ -9107,15 +9119,15 @@
       ]
     },
     "garage": {
-      "title": "Leasing-Kilometer kontrollieren und Autofristen · Kumani Garage",
-      "description": "Wisse immer, ob du im Kilometerrahmen deines Leasings bist: Budget Tag für Tag, Prognose zum Vertragsende und Kosten der Mehrkilometer. Dazu Kfz-Steuer, Versicherung, HU und Autokosten.",
+      "title": "Leasing-Kilometerkontrolle, Fristen und Unterlagen für Auto und Motorrad · Kumani Garage",
+      "description": "Du weißt immer, ob du im Kilometerrahmen des Leasings bist: Tagesbudget, Hochrechnung zum Vertragsende und Kosten der Mehrkilometer. Dazu Kfz-Steuer, Versicherung, HU, Kosten und Unterlagen für Auto und Motorrad.",
       "heading": "So behältst du die Leasing-Kilometer im Blick",
       "intro": "Beim Leasing zahlst du Mehrkilometer bei der Rückgabe, und oft merkt man es zu spät. Kumani Garage berechnet das Kilometerbudget Tag für Tag aus dem Vertrag und sagt dir sofort, ob du im Plan bist, wie viele km pro Tag dir noch bleiben und was du am Ende zahlen könntest.",
       "points": [
         "Kilometerbudget Tag für Tag, nach Vertragsmonat und -jahr",
         "Prognose zum Vertragsende und geschätzte Kosten der Mehrkilometer",
         "Kfz-Steuer, Versicherung, HU und Inspektion mit Erinnerungen",
-        "Autokosten auch im Spendly-Budget erfasst"
+        "Kosten auch in Spendly erfasst und Fotos von Fahrzeugschein und Versicherung immer dabei"
       ],
       "faq": [
         {
@@ -9127,8 +9139,34 @@
           "a": "Bei der Rückgabe zahlst du jeden Mehrkilometer zum Preis aus dem Vertrag (meist einige Cent pro km). Wenn du diesen Preis eingibst, zeigt dir Kumani Garage, wie viel du beim aktuellen Tempo zahlen könntest."
         },
         {
-          "q": "Ist es auch für ein eigenes Auto nützlich?",
-          "a": "Ja: Für ein eigenes Auto behältst du Fristen (Kfz-Steuer, Versicherung, HU, Inspektion) und Kosten im Blick, die auch in Spendly landen."
+          "q": "Lohnt es sich auch für ein eigenes Auto oder Motorrad?",
+          "a": "Ja: Für eigene Autos und Motorräder verwaltest du die Fristen (Kfz-Steuer, Versicherung, HU, Inspektion), die Kosten, die auch in Spendly landen, und die Fotos von Fahrzeugschein und Versicherung."
+        }
+      ]
+    },
+    "casa": {
+      "title": "Wohnung verwalten: Wartungen, Rechnungen, Garantien und Unterlagen · KUMANI Casa",
+      "description": "Dein ganzes Zuhause an einem Ort: Wartungen mit Erinnerungen (Heizung, Klimaanlage, Rauchmelder), Verträge und Rechnungen, Geräte mit Garantie und die Unterlagen zur Wohnung.",
+      "heading": "Wie du Fristen und Unterlagen der Wohnung in Ordnung hältst",
+      "intro": "Heizungswartung, Filter der Klimaanlage, Versicherung, Gerätegarantien, Verträge: Die Fristen rund um die Wohnung sind zahlreich und verstreut. KUMANI Casa sammelt sie für jede Wohnung, erinnert dich rechtzeitig und hält Vertragsnummern, Kassenbons, Anleitungen und Unterlagen griffbereit.",
+      "points": [
+        "Fertige Wartungen mit Wiederholung und Erinnerungen",
+        "Verträge mit Kundennummer, Zählpunktnummer und Störungsnummer, Rechnungen mit Spendly verknüpft",
+        "Geräte mit Kassenbon, Anleitung und Erinnerung vor Garantieende",
+        "Verträge, Policen, Anlagenzertifikate, Energieausweis und Grundriss, nur für dich sichtbar"
+      ],
+      "faq": [
+        {
+          "q": "Wie oft muss die Heizung gewartet werden?",
+          "a": "Das hängt von der Anleitung und den örtlichen Vorschriften ab: Meist wird jährlich gewartet. In KUMANI Casa wählst du die fertige Wartung und stellst die passende Wiederholung ein."
+        },
+        {
+          "q": "Kann ich mehrere Wohnungen verwalten?",
+          "a": "Ja: Hauptwohnsitz, Zweitwohnung oder vermietete Wohnung, jede mit ihren Fristen, Verträgen, Geräten und Unterlagen."
+        },
+        {
+          "q": "Muss ich Rechnungen doppelt eingeben?",
+          "a": "Nein: Der Vertrag wird mit der Rechnung verknüpft, die du schon in Spendly hast (oder dort anlegst), und du markierst sie nur einmal als bezahlt."
         }
       ]
     }

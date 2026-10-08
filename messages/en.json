@@ -56,7 +56,7 @@
     "synergyTitle": "How the tools talk to each other",
     "synergySubtitle": "You’re not buying separate tools: each one feeds the others.",
     "synergy1Title": "One agenda for everything",
-    "synergy1Text": "MemoLife appointments, Spendly bills and Life Calendar deadlines in the same calendar.",
+    "synergy1Text": "MemoLife appointments, Spendly bills and Life Calendar, home and Garage deadlines in the same calendar.",
     "synergy2Title": "Travel ↔ Life Calendar",
     "synergy2Text": "Departures and returns land in your agenda, the passport expiry becomes a reminder.",
     "synergy3Title": "Menu → Kumi Card",
@@ -112,7 +112,7 @@
     "planPerYear": "/ year",
     "planBaseName": "Base",
     "planBaseDescription": "For individuals and families",
-    "planBaseFeature1": "MemoLife with agenda, Spendly and bills, Life Calendar",
+    "planBaseFeature1": "MemoLife with agenda, Spendly and bills, Life Calendar, Kumani Garage, KUMANI Casa",
     "planBaseFeature2": "Security, wellness, QR codes, Link in Bio and WhatsApp",
     "planBaseFeature3": "Affinity Friends, Veritas and games to play together",
     "planBaseFeature4": "Classifieds board, Kordata and points that turn into rewards",
@@ -466,7 +466,7 @@
     "inviteTileHint": "Share your link: whoever signs up joins your KUMANI star.",
     "sponsorHint": "The person who invited you to KUMANI.",
     "noSponsorHint": "You are at the start of your star: nobody invited you.",
-    "inviteShareMessage": "Hi! I invite you to KUMANI: more than 35 digital services in one app and a community that helps each other. Sign up with my link: {link}",
+    "inviteShareMessage": "Hi! I invite you to KUMANI: more than 40 digital services in one app and a community that helps each other. Sign up with my link: {link}",
     "inviteShareWhatsapp": "Invite on WhatsApp",
     "peopleTitle": "Your KUMANI",
     "peopleTabActive": "Active",
@@ -2651,7 +2651,7 @@
     "shareCardTitle": "Your KUMANI business card",
     "shareCardIntro": "Here is the preview. You can edit the introduction before sending it: the QR code leads to your invite link.",
     "shareCardTextLabel": "Introduction (editable)",
-    "shareCardDefaultText": "KUMANI is an ecosystem of more than 35 digital services in a single app: online security, organisation, wellbeing and tools for work, with a community that helps each other. One subscription, everything included.",
+    "shareCardDefaultText": "KUMANI is an ecosystem of more than 40 digital services in a single app: online security, organisation, wellbeing and tools for work, with a community that helps each other. One subscription, everything included.",
     "shareCardHeadline": "Your ideas, our hands. Together.",
     "shareCardMember": "KUMANI Member",
     "shareCardScan": "Scan the QR code to discover KUMANI",
@@ -6879,14 +6879,24 @@
         "p3d": "Messages in the dashboard and a phone notification."
       },
       "garage": {
-        "sub": "Owned and leased cars",
-        "tagline": "Always know if you are within your lease mileage, and never forget road tax or insurance again.",
-        "p1": "Lease mileage check",
-        "p1d": "Day-by-day budget and extra-km cost.",
-        "p2": "Deadlines with reminders",
-        "p2d": "Road tax, insurance, inspection and service.",
-        "p3": "Expenses in Spendly",
-        "p3d": "Fuel and maintenance in your budget."
+        "sub": "Cars and motorbikes, owned and leased",
+        "tagline": "Always know if you are within your lease mileage, never forget road tax and insurance, and keep your documents with you.",
+        "p1": "Lease mileage tracking",
+        "p1d": "Day-by-day budget and cost of extra km.",
+        "p2": "Deadlines and expenses",
+        "p2d": "Road tax, insurance, MOT; expenses in Spendly too.",
+        "p3": "Documents always with you",
+        "p3d": "Photos of registration and insurance for cars and motorbikes."
+      },
+      "casa": {
+        "sub": "Your home in one place",
+        "tagline": "Maintenance, bills, warranties and home documents: you never forget a thing.",
+        "p1": "Maintenance with reminders",
+        "p1d": "Boiler, air conditioner, detectors: ready-made.",
+        "p2": "Utilities and bills",
+        "p2d": "Codes and fault line, bills in Spendly.",
+        "p3": "Warranties and documents",
+        "p3d": "Receipts, manuals, contracts and policies kept safe."
       }
     }
   },
@@ -7554,7 +7564,9 @@
       "step3Title": "Update the mileage and check the budget",
       "step3Text": "Every now and then enter the current km with the date: you instantly see if you are within budget, how many km per day you can still drive and the end-of-contract projection.",
       "step4Title": "Deadlines and expenses",
-      "step4Text": "Add road tax, insurance, inspection and service: they appear in the Home agenda and we remind you ahead of time. When you pay, tap «Paid»: it becomes a car expense, also in Spendly."
+      "step4Text": "Add road tax, insurance, inspection and service: they appear in the Home agenda and we remind you ahead of time. When you pay, tap «Paid»: it becomes a vehicle expense, also in Spendly.",
+      "step5Title": "Documents always with you",
+      "step5Text": "In the «Documents» section upload a photo or PDF of the registration, the insurance and other documents, front and back too: only you can see them and you also find them in Documents."
     },
     "casa": {
       "title": "KUMANI Casa",
@@ -7703,7 +7715,7 @@
         },
         "3": {
           "1": "Organisation",
-          "2": "MemoLife, Life Calendar, Spendly, Kumani Garage, Findo, KUMANI Travel, KUMANI CV"
+          "2": "MemoLife, Life Calendar, Spendly, Kumani Garage, KUMANI Casa, Findo, KUMANI Travel, KUMANI CV"
         },
         "4": {
           "1": "Wellbeing",
@@ -7769,7 +7781,7 @@
           "3": "a year",
           "4": "For individuals and families",
           "5": "Everything in Free + {base, plural, one {# service} other {# services}}",
-          "6": "MemoLife, Spendly, Life Calendar, Link in Bio, SVAT, CheckMail, Neurobalance, Travel, Find a Job"
+          "6": "MemoLife, Spendly, Life Calendar, Kumani Garage, KUMANI Casa, Link in Bio, SVAT, CheckMail, Neurobalance, Travel, Find a Job"
         },
         "3": {
           "1": "Pro",
@@ -8492,7 +8504,7 @@
     "siteTitle": "KUMANI – Hands that lend you a hand",
     "siteDescription": "KUMANI is an ecosystem of everyday digital tools for freelancers, individuals and families: dynamic QR codes, link in bio, scam checks, expense tracking and more. Fair price, public rules.",
     "homeTitle": "KUMANI – Digital tools and a community that helps each other",
-    "homeDescription": "Your ideas, our hands, together: over 35 digital services in one app, Free, Base and Pro plans, and a community that truly helps each other.",
+    "homeDescription": "Your ideas, our hands, together: over 40 digital services in one app, Free, Base and Pro plans, and a community that truly helps each other.",
     "registerTitle": "Sign up for free",
     "registerDescription": "Create your free KUMANI account in seconds and try the free services right away.",
     "loginTitle": "Log in",
@@ -9107,15 +9119,15 @@
       ]
     },
     "garage": {
-      "title": "Lease mileage tracker and car deadlines · Kumani Garage",
-      "description": "Always know if you are within your lease mileage: day-by-day budget, end-of-contract projection and extra-km cost. Plus road tax, insurance, inspection and car expenses.",
+      "title": "Lease mileage tracking, deadlines and documents for cars and motorbikes · Kumani Garage",
+      "description": "Always know if you are within your lease mileage: day-by-day budget, end-of-contract projection and cost of extra km. Plus road tax, insurance, inspection, expenses and documents for cars and motorbikes.",
       "heading": "How to keep track of your lease mileage",
       "intro": "With a long-term lease, extra km are charged when you return the car, and people often notice too late. Kumani Garage works out your mileage budget day by day from the contract and tells you right away if you are on track, how many km per day you can still drive and what you might pay at the end.",
       "points": [
         "Mileage budget accrued day by day, by contract month and year",
         "End-of-contract projection and estimated extra-km cost",
         "Road tax, insurance, inspection and service with reminders",
-        "Car expenses also recorded in your Spendly budget"
+        "Expenses recorded in Spendly too and photos of registration and insurance always with you"
       ],
       "faq": [
         {
@@ -9127,8 +9139,34 @@
           "a": "When you return the car you pay every extra km at the price in the contract (usually a few cents per km). If you enter that cost, Kumani Garage shows how much you might pay at your current pace."
         },
         {
-          "q": "Is it useful for a car I own?",
-          "a": "Yes: for an owned car you keep track of deadlines (road tax, insurance, inspection, service) and expenses, which also go into Spendly."
+          "q": "Is it also useful for an owned car or motorbike?",
+          "a": "Yes: for owned cars and motorbikes you keep the deadlines (road tax, insurance, inspection, service), the expenses, which also go into Spendly, and photos of the registration and insurance."
+        }
+      ]
+    },
+    "casa": {
+      "title": "Home management: maintenance, bills, warranties and documents · KUMANI Casa",
+      "description": "Your whole home in one place: maintenance with reminders (boiler, air conditioner, detectors), utilities and bills, appliances with their warranty and your home documents.",
+      "heading": "How to keep home deadlines and documents in order",
+      "intro": "Boiler service, air conditioner filters, insurance, appliance warranties, contracts: home deadlines are many and scattered. KUMANI Casa gathers them for each home, reminds you ahead of time and keeps utility codes, receipts, manuals and documents at hand.",
+      "points": [
+        "Ready-made maintenance tasks with their repeat and reminders",
+        "Utilities with customer number, supply point code and fault line, bills linked to Spendly",
+        "Appliances with receipt, manual and a reminder before the warranty ends",
+        "Contracts, policies, system certificates, energy certificate and floor plan, visible only to you"
+      ],
+      "faq": [
+        {
+          "q": "How often should a boiler be serviced?",
+          "a": "It depends on the system manual and your local rules: servicing is usually yearly. In KUMANI Casa you pick the ready-made task and set the repeat that suits you."
+        },
+        {
+          "q": "Can I keep more than one home?",
+          "a": "Yes: main home, second home or a home you rent out, each with its own deadlines, utilities, appliances and documents."
+        },
+        {
+          "q": "Do I have to enter bills twice?",
+          "a": "No: the utility links to the bill you already have in Spendly (or you create it from there) and you mark it paid only once."
         }
       ]
     }

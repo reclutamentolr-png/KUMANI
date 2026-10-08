@@ -25,7 +25,7 @@
     "synergyTitle": "Como as ferramentas falam entre si",
     "synergySubtitle": "Não está a comprar ferramentas separadas: cada uma alimenta as outras.",
     "synergy1Title": "Uma agenda para tudo",
-    "synergy1Text": "Compromissos do MemoLife, contas do Spendly e prazos do Life Calendar no mesmo calendário.",
+    "synergy1Text": "Compromissos do MemoLife, contas do Spendly e prazos do Life Calendar, da casa e do Garage no mesmo calendário.",
     "synergy2Title": "Travel ↔ Life Calendar",
     "synergy2Text": "Partidas e regressos entram na agenda, a validade do passaporte torna-se um lembrete.",
     "synergy3Title": "Menu → Kumi Card",
@@ -81,7 +81,7 @@
     "planPerYear": "/ ano",
     "planBaseName": "Base",
     "planBaseDescription": "Para particulares e famílias",
-    "planBaseFeature1": "MemoLife com agenda, Spendly e contas, Life Calendar",
+    "planBaseFeature1": "MemoLife com agenda, Spendly e contas, Life Calendar, Kumani Garage, KUMANI Casa",
     "planBaseFeature2": "Segurança, bem-estar, códigos QR, Link in Bio e WhatsApp",
     "planBaseFeature3": "Affinity Amizades, Veritas e jogos em grupo",
     "planBaseFeature4": "Mural de anúncios, Kordata e pontos que viram bónus",
@@ -427,7 +427,7 @@
     "inviteTileHint": "Partilhe a sua ligação: quem se inscrever entra na sua estrela KUMANI.",
     "sponsorHint": "A pessoa que o convidou para o KUMANI.",
     "noSponsorHint": "Está no início da sua estrela: ninguém o convidou.",
-    "inviteShareMessage": "Olá! Convido-te para o KUMANI: mais de 35 serviços digitais numa só app e uma comunidade que se ajuda. Inscreve-te com a minha ligação: {link}",
+    "inviteShareMessage": "Olá! Convido-te para o KUMANI: mais de 40 serviços digitais numa só app e uma comunidade que se ajuda. Inscreve-te com a minha ligação: {link}",
     "inviteShareWhatsapp": "Convidar pelo WhatsApp",
     "peopleTitle": "Os seus KUMANI",
     "peopleTabActive": "Ativos",
@@ -2651,7 +2651,7 @@
     "shareCardTitle": "O seu cartão de visita KUMANI",
     "shareCardIntro": "Aqui está a pré-visualização. Pode alterar a apresentação antes de a enviar: o QR leva à sua ligação de convite.",
     "shareCardTextLabel": "Apresentação (editável)",
-    "shareCardDefaultText": "O KUMANI é um ecossistema de mais de 35 serviços digitais numa só app: segurança online, organização, bem-estar e ferramentas para o trabalho, com uma comunidade que se ajuda. Uma só subscrição, tudo incluído.",
+    "shareCardDefaultText": "O KUMANI é um ecossistema de mais de 40 serviços digitais numa só app: segurança online, organização, bem-estar e ferramentas para o trabalho, com uma comunidade que se ajuda. Uma só subscrição, tudo incluído.",
     "shareCardHeadline": "As suas ideias, as nossas mãos. Juntos.",
     "shareCardMember": "Membro KUMANI",
     "shareCardScan": "Leia o QR para descobrir o KUMANI",
@@ -6879,14 +6879,24 @@
         "p3d": "Mensagens no painel e notificação no telemóvel."
       },
       "garage": {
-        "sub": "Carros próprios e em renting",
-        "tagline": "Sabe sempre se está dentro dos km do renting e não se esquece mais do IUC nem do seguro.",
-        "p1": "Controlo de km",
+        "sub": "Carros e motas, próprios e em renting",
+        "tagline": "Sabe sempre se está dentro dos km do renting, não se esquece do IUC e do seguro e tem os documentos sempre consigo.",
+        "p1": "Controlo de km do renting",
         "p1d": "Orçamento dia a dia e custo dos km a mais.",
-        "p2": "Prazos com lembretes",
-        "p2d": "IUC, seguro, inspeção e revisão.",
-        "p3": "Despesas no Spendly",
-        "p3d": "Combustível e manutenção no seu orçamento."
+        "p2": "Prazos e despesas",
+        "p2d": "IUC, seguro, inspeção; despesas também no Spendly.",
+        "p3": "Documentos sempre consigo",
+        "p3d": "Fotos do documento único e do seguro, carros e motas."
+      },
+      "casa": {
+        "sub": "A casa toda num só lugar",
+        "tagline": "Manutenções, faturas, garantias e documentos da casa: já não se esquece de nada.",
+        "p1": "Manutenções com lembretes",
+        "p1d": "Caldeira, ar condicionado, detetores: já preparadas.",
+        "p2": "Serviços e faturas",
+        "p2d": "Códigos e número de avarias, faturas no Spendly.",
+        "p3": "Garantias e documentos",
+        "p3d": "Talões, manuais, contratos e apólices em segurança."
       }
     }
   },
@@ -7554,7 +7564,9 @@
       "step3Title": "Atualize os km e controle o orçamento",
       "step3Text": "De vez em quando introduza os km atuais com a data: vê logo se está dentro do orçamento, quantos km por dia ainda pode fazer e a projeção no fim do contrato.",
       "step4Title": "Prazos e despesas",
-      "step4Text": "Adicione IUC, seguro, inspeção e revisão: aparecem na agenda do Início e avisamos antes. Quando pagar, toque em «Pago»: passa a ser uma despesa do carro, também no Spendly."
+      "step4Text": "Adicione IUC, seguro, inspeção e revisão: aparecem na agenda do Início e avisamos antes. Quando pagar, toque em «Pago»: passa a ser uma despesa do veículo, também no Spendly.",
+      "step5Title": "Documentos sempre consigo",
+      "step5Text": "Na secção «Documentos» carregue a fotografia ou o PDF do documento único, do seguro e de outros documentos, também frente e verso: só você os vê e também os encontra em Documentos."
     },
     "casa": {
       "title": "KUMANI Casa",
@@ -7703,7 +7715,7 @@
         },
         "3": {
           "1": "Organização",
-          "2": "MemoLife, Life Calendar, Spendly, Kumani Garage, Findo, KUMANI Travel, KUMANI CV"
+          "2": "MemoLife, Life Calendar, Spendly, Kumani Garage, KUMANI Casa, Findo, KUMANI Travel, KUMANI CV"
         },
         "4": {
           "1": "Bem-estar",
@@ -7769,7 +7781,7 @@
           "3": "por ano",
           "4": "Para particulares e famílias",
           "5": "Todo o Grátis + {base, plural, one {# serviço} other {# serviços}}",
-          "6": "MemoLife, Spendly, Life Calendar, Link in Bio, SVAT, CheckMail, Neurobalance, Travel, Encontrar Trabalho"
+          "6": "MemoLife, Spendly, Life Calendar, Kumani Garage, KUMANI Casa, Link in Bio, SVAT, CheckMail, Neurobalance, Travel, Encontrar Trabalho"
         },
         "3": {
           "1": "Pro",
@@ -8492,7 +8504,7 @@
     "siteTitle": "KUMANI – Mãos que lhe dão uma mão",
     "siteDescription": "A KUMANI é um ecossistema de ferramentas digitais úteis todos os dias para trabalhadores independentes, particulares e famílias: códigos QR dinâmicos, link na bio, verificação antiburla, gestão de despesas e mais. Preço justo, regras públicas.",
     "homeTitle": "KUMANI – Ferramentas digitais e uma comunidade que se ajuda",
-    "homeDescription": "As suas ideias, as nossas mãos, juntos: mais de 35 serviços digitais numa só app, planos Grátis, Base e Pro, e uma comunidade que se ajuda de verdade.",
+    "homeDescription": "As suas ideias, as nossas mãos, juntos: mais de 40 serviços digitais numa só app, planos Grátis, Base e Pro, e uma comunidade que se ajuda de verdade.",
     "registerTitle": "Registe-se grátis",
     "registerDescription": "Crie a sua conta KUMANI grátis em segundos e experimente já os serviços gratuitos.",
     "loginTitle": "Entrar",
@@ -9107,15 +9119,15 @@
       ]
     },
     "garage": {
-      "title": "Controlo de km do renting e prazos do carro · Kumani Garage",
-      "description": "Saiba sempre se está dentro dos km do seu renting: orçamento dia a dia, projeção no fim do contrato e custo dos km extra. Mais IUC, seguro, inspeção e despesas.",
+      "title": "Controlo de km do renting, prazos e documentos de carros e motas · Kumani Garage",
+      "description": "Sabe sempre se está dentro dos km do renting: orçamento dia a dia, projeção no fim do contrato e custo dos km a mais. Mais IUC, seguro, inspeção, despesas e documentos de carros e motas.",
       "heading": "Como controlar os quilómetros do renting",
       "intro": "No renting, os km extra pagam-se na devolução do carro, e muitas vezes só se percebe tarde demais. O Kumani Garage calcula o orçamento de km dia a dia a partir do contrato e diz-lhe logo se está dentro do previsto, quantos km por dia ainda pode fazer e quanto poderá pagar no fim.",
       "points": [
         "Orçamento de km acumulado dia a dia, por mês e ano de contrato",
         "Projeção no fim do contrato e custo estimado dos km extra",
         "IUC, seguro, inspeção e revisão com lembretes",
-        "Despesas do carro registadas também no orçamento do Spendly"
+        "Despesas registadas também no Spendly e fotos do documento único e do seguro sempre consigo"
       ],
       "faq": [
         {
@@ -9127,8 +9139,34 @@
           "a": "Na devolução paga cada km extra ao preço do contrato (normalmente alguns cêntimos por km). Se introduzir esse custo, o Kumani Garage mostra-lhe quanto poderá pagar ao ritmo atual."
         },
         {
-          "q": "Serve também para um carro próprio?",
-          "a": "Sim: num carro próprio acompanha os prazos (IUC, seguro, inspeção, revisão) e as despesas, que vão também para o Spendly."
+          "q": "Também serve para um carro ou uma mota própria?",
+          "a": "Sim: para carros e motas próprios mantém os prazos (IUC, seguro, inspeção, revisão), as despesas, que vão também para o Spendly, e as fotos do documento único e do seguro."
+        }
+      ]
+    },
+    "casa": {
+      "title": "Gestão da casa: manutenções, faturas, garantias e documentos · KUMANI Casa",
+      "description": "A casa toda num só lugar: manutenções com lembretes (caldeira, ar condicionado, detetores), serviços e faturas, eletrodomésticos com a garantia e os documentos da casa.",
+      "heading": "Como manter em ordem os prazos e os documentos da casa",
+      "intro": "Manutenção da caldeira, filtros do ar condicionado, seguro, garantias dos eletrodomésticos, contratos: os prazos da casa são muitos e dispersos. O KUMANI Casa reúne-os para cada casa, avisa antes e tem à mão códigos dos serviços, talões, manuais e documentos.",
+      "points": [
+        "Manutenções já preparadas com a sua repetição e lembretes",
+        "Serviços com número de cliente, código do ponto de entrega e número de avarias, faturas ligadas ao Spendly",
+        "Eletrodomésticos com talão, manual e aviso antes do fim da garantia",
+        "Contratos, apólices, certificados das instalações, certificado energético e planta, visíveis só para si"
+      ],
+      "faq": [
+        {
+          "q": "De quanto em quanto tempo se faz a manutenção da caldeira?",
+          "a": "Depende do manual da instalação e das regras locais: normalmente a manutenção é anual. No KUMANI Casa escolhe a manutenção já preparada e define a repetição que lhe convém."
+        },
+        {
+          "q": "Posso gerir várias casas?",
+          "a": "Sim: habitação principal, segunda habitação ou casa arrendada, cada uma com os seus prazos, serviços, aparelhos e documentos."
+        },
+        {
+          "q": "É preciso introduzir as faturas duas vezes?",
+          "a": "Não: o serviço liga-se à fatura que já tem no Spendly (ou cria-a a partir daí) e marca-a como paga uma só vez."
         }
       ]
     }

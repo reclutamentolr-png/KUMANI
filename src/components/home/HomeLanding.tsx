@@ -201,7 +201,7 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
               <div className="text-xs sm:text-sm text-gray-400">{t('statWeeklyLabel')}</div>
             </div>
             <div>
-              <div className="text-2xl sm:text-3xl font-bold text-white">35+</div>
+              <div className="text-2xl sm:text-3xl font-bold text-white">40+</div>
               <div className="text-xs sm:text-sm text-gray-400">{t('statServicesLabel')}</div>
             </div>
           </div>

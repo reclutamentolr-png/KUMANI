@@ -36,7 +36,6 @@ export default async function ToolPassPage({
   const info = getMarketplaceTools((key) => marketplaceT(key)).find((item) => item.toolName === tool)
   if (!info) notFound()
   const t = await getTranslations('toolPass')
-  const tw = await getTranslations('withdrawal')
   const tg2 = await getTranslations('gifts')
 
   // Ritorno dal pagamento: il pass si conferma anche senza webhook
