@@ -4,7 +4,9 @@ import { getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
 import { ArrowLeft, FileUser } from 'lucide-react'
 import { hasActiveCvAccess } from '@/lib/cv-server'
-import CvForm, { emptyCvForm } from '@/components/CvForm'
+import CvForm from '@/components/CvForm'
+import { emptyCvForm } from '@/lib/cv'
+import { isGuestUser } from '@/lib/trials'
 
 export default async function NewCvPage({ searchParams }: { searchParams: Promise<{ from?: string }> }) {
   const t = await getTranslations('kumaniCv')
@@ -26,20 +28,24 @@ export default async function NewCvPage({ searchParams }: { searchParams: Promis
   const { data: existing } = await supabase.from('cvs').select('id').eq('user_id', user.id).limit(1).maybeSingle()
   if (existing) redirect(`/marketplace/kumani-cv/${existing.id}/edit${backSuffix}`)
 
-  // CV nuovo già compilato con i dati del profilo
+  // CV nuovo già compilato con i dati del profilo (non per l'ospite in prova:
+  // il suo profilo è tecnico, senza dati veri)
+  const guest = isGuestUser(user)
   const { data: profile } = await supabase
     .rpc('get_my_profile')
     .maybeSingle<{ first_name: string | null; last_name: string | null; email: string | null; phone: string | null; city: string | null; province: string | null; occupation: string | null }>()
   const fullName = [profile?.first_name, profile?.last_name].filter(Boolean).join(' ').trim()
   const location = [profile?.city, profile?.province ? `(${profile.province})` : ''].filter(Boolean).join(' ').trim()
-  const initialData = {
-    ...emptyCvForm(),
-    fullName,
-    roleTitle: profile?.occupation ?? '',
-    email: profile?.email ?? user.email ?? '',
-    phone: profile?.phone ?? '',
-    location,
-  }
+  const initialData = guest
+    ? emptyCvForm()
+    : {
+        ...emptyCvForm(),
+        fullName,
+        roleTitle: profile?.occupation ?? '',
+        email: profile?.email ?? user.email ?? '',
+        phone: profile?.phone ?? '',
+        location,
+      }
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -60,7 +66,7 @@ export default async function NewCvPage({ searchParams }: { searchParams: Promis
       </header>
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        {(fullName || initialData.email) && (
+        {!guest && (fullName || initialData.email) && (
           <p className="mb-6 rounded-xl border border-[var(--gold)]/40 bg-[var(--gold-pale)] px-4 py-3 text-sm text-[var(--ink)]">{t('prefilledFromProfile')}</p>
         )}
         <CvForm mode="create" initialData={initialData} />

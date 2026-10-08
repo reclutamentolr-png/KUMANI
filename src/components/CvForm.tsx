@@ -18,6 +18,7 @@ import {
   emptyCertification,
   emptyLink,
   validateCvPhotoFile,
+  emptyCvForm,
   cvPhotoExtension,
   type CvFormData,
 } from '@/lib/cv'
@@ -41,26 +42,6 @@ type Props = {
   cvId?: string
   initialData?: CvFormData
   initialPhotoUrl?: string | null
-}
-
-export function emptyCvForm(): CvFormData {
-  return {
-    title: '',
-    template: 'minimal',
-    contentLanguage: 'it',
-    fullName: '',
-    roleTitle: '',
-    summary: '',
-    email: '',
-    phone: '',
-    location: '',
-    links: [],
-    experiences: [emptyExperience()],
-    education: [emptyEducation()],
-    skills: [emptySkill()],
-    languages: [emptyLanguage()],
-    certifications: [],
-  }
 }
 
 const inputClass =

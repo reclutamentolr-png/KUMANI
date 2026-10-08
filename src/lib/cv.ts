@@ -115,3 +115,25 @@ export function cvPhotoExtension(file: File): string {
   const fromType = file.type.split('/')[1]?.split(/[+;]/)[0]
   return fromType || 'jpg'
 }
+
+// Modulo CV vuoto (usato anche dalla pagina «Nuovo CV» sul server, per
+// precompilarlo con i dati del profilo: per questo non sta nel componente)
+export function emptyCvForm(): CvFormData {
+  return {
+    title: '',
+    template: 'minimal',
+    contentLanguage: 'it',
+    fullName: '',
+    roleTitle: '',
+    summary: '',
+    email: '',
+    phone: '',
+    location: '',
+    links: [],
+    experiences: [emptyExperience()],
+    education: [emptyEducation()],
+    skills: [emptySkill()],
+    languages: [emptyLanguage()],
+    certifications: [],
+  }
+}
