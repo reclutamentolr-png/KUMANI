@@ -4,8 +4,8 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import Link from '@/components/LocalizedLink'
-import { Pencil, Trash2, LoaderCircle } from 'lucide-react'
-import { deleteQuote } from '@/app/actions/quotes'
+import { Copy, Pencil, Trash2, LoaderCircle } from 'lucide-react'
+import { deleteQuote, duplicateQuote } from '@/app/actions/quotes'
 import { useFromDashboardSuffix } from '@/lib/useFromDashboard'
 
 export default function QuoteActions({ id }: { id: string }) {
@@ -13,6 +13,18 @@ export default function QuoteActions({ id }: { id: string }) {
   const router = useRouter()
   const fromDashboardSuffix = useFromDashboardSuffix()
   const [deleting, setDeleting] = useState(false)
+  const [duplicating, setDuplicating] = useState(false)
+
+  // Copia completa con un nuovo numero: si apre subito in modifica
+  const handleDuplicate = async () => {
+    setDuplicating(true)
+    const result = await duplicateQuote(id)
+    if (result.success) router.push(`/marketplace/preventivi/${result.data.id}/edit${fromDashboardSuffix}`)
+    else {
+      alert(t(result.message))
+      setDuplicating(false)
+    }
+  }
 
   const handleDelete = async () => {
     if (!confirm(t('deleteConfirm'))) return
@@ -35,6 +47,14 @@ export default function QuoteActions({ id }: { id: string }) {
         <Pencil className="w-4 h-4" />
         {t('editQuote')}
       </Link>
+      <button
+        onClick={handleDuplicate}
+        disabled={duplicating}
+        className="flex items-center gap-2 px-5 py-3 rounded-xl font-medium text-sm border border-[var(--gold)]/40 bg-white text-[var(--ink)] hover:bg-[var(--gold-pale)] transition-all disabled:opacity-50"
+      >
+        {duplicating ? <LoaderCircle className="w-4 h-4 animate-spin" /> : <Copy className="w-4 h-4" />}
+        {t('duplicateQuote')}
+      </button>
       <button
         onClick={handleDelete}
         disabled={deleting}

@@ -16,7 +16,61 @@ export interface QuoteInventoryProduct {
   stock: number
 }
 
+// Due modalità: tabella di voci (quantità × prezzo) o documento descrittivo a sezioni
+export type QuoteLayout = 'table' | 'descriptive'
+export const QUOTE_LAYOUTS: QuoteLayout[] = ['table', 'descriptive']
+// Posizione del logo nel PDF: a sinistra, al centro, a destra o su una fascia
+export type QuoteLogoPosition = 'left' | 'center' | 'right' | 'band'
+export const QUOTE_LOGO_POSITIONS: QuoteLogoPosition[] = ['left', 'center', 'right', 'band']
+// Come si legge il prezzo: «+ IVA», «IVA inclusa» o nessuna indicazione
+export type QuoteVatMode = 'plus' | 'included' | 'none'
+export const QUOTE_VAT_MODES: QuoteVatMode[] = ['plus', 'included', 'none']
+
+// Sezione del preventivo descrittivo: titolo, testo libero o elenco (una
+// riga per voce) e importo facoltativo
+export type QuoteSectionKind = 'text' | 'numbered' | 'bullets'
+export interface QuoteSection {
+  title: string
+  kind: QuoteSectionKind
+  body: string
+  amount: number | null
+}
+// Sezione pronta salvata nel profilo azienda (senza importo)
+export interface QuotePreset {
+  title: string
+  kind: QuoteSectionKind
+  body: string
+}
+
+export const MAX_QUOTE_SECTIONS = 30
+export const MAX_QUOTE_PRESETS = 20
+
+export function emptyQuoteSection(kind: QuoteSectionKind = 'text'): QuoteSection {
+  return { title: '', kind, body: '', amount: null }
+}
+
+export function computeSectionsTotal(sections: QuoteSection[]): number {
+  return sections.reduce((sum, s) => sum + (typeof s.amount === 'number' && Number.isFinite(s.amount) ? s.amount : 0), 0)
+}
+
+// Righe dell'elenco (una per riga, senza righe vuote né numeri/trattini già scritti a mano)
+export function sectionLines(body: string): string[] {
+  return body
+    .split(/\r?\n/)
+    .map((l) => l.replace(/^\s*(?:\d+[.)]|[-–•*])\s+/, '').trim())
+    .filter(Boolean)
+}
+
 export interface QuoteFormData {
+  layout: QuoteLayout
+  logoPosition: QuoteLogoPosition
+  subject: string
+  intro: string
+  sections: QuoteSection[]
+  showTotal: boolean
+  vatMode: QuoteVatMode
+  closing: string
+  signature: boolean
   clientName: string
   clientEmail: string
   clientPhone: string

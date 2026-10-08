@@ -46,6 +46,15 @@ export default async function EditQuotePage({
     : null
 
   const initialData: QuoteFormData = {
+    layout: quote.layout === 'descriptive' ? 'descriptive' : 'table',
+    logoPosition: quote.logo_position || 'left',
+    subject: quote.subject || '',
+    intro: quote.intro || '',
+    sections: Array.isArray(quote.sections) ? quote.sections : [],
+    showTotal: quote.show_total !== false,
+    vatMode: quote.vat_mode || 'plus',
+    closing: quote.closing || '',
+    signature: quote.signature !== false,
     clientName: quote.client_name || '',
     clientEmail: quote.client_email || '',
     clientPhone: quote.client_phone || '',

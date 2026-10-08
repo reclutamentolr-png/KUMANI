@@ -4,17 +4,22 @@ import { useEffect, useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import Link from '@/components/LocalizedLink'
-import { CheckCircle, LoaderCircle, XCircle, Plus, Trash2, Pencil, User, Boxes, Search, X } from 'lucide-react'
+import { CheckCircle, LoaderCircle, XCircle, Plus, Trash2, Pencil, User, Boxes, Search, X, Table2, ScrollText } from 'lucide-react'
 import { createQuote, updateQuote, listSavedClients } from '@/app/actions/quotes'
 import {
   emptyQuoteItem,
   computeQuoteTotal,
+  QUOTE_LAYOUTS,
+  QUOTE_LOGO_POSITIONS,
+  type QuoteLogoPosition,
+  type QuotePreset,
   type QuoteFormData,
   type QuoteInventoryProduct,
   type SavedClientRow,
 } from '@/lib/quotes'
 import { useFromDashboardSuffix } from '@/lib/useFromDashboard'
 import QuoteClientQuickEditModal from '@/components/QuoteClientQuickEditModal'
+import QuoteSectionsEditor from '@/components/quotes/QuoteSectionsEditor'
 import VatCheck from '@/components/ecosystem/VatCheck'
 import IbanInlineCheck from '@/components/ecosystem/IbanInlineCheck'
 
@@ -26,6 +31,9 @@ type IssuerSummary = {
   phone: string | null
   // Dalla Scheda attività: riempie il pagamento dei nuovi preventivi
   payment_info?: string | null
+  // Ultima posizione del logo scelta e sezioni pronte del preventivo descrittivo
+  quote_logo_position?: string | null
+  quote_presets?: QuotePreset[] | null
 } | null
 
 type Props = {
@@ -40,8 +48,17 @@ type Props = {
   initialLine?: { description: string; unitPrice: number }
 }
 
-function defaultForm(paymentInfo = ''): QuoteFormData {
+function defaultForm(paymentInfo = '', logoPosition: QuoteLogoPosition = 'left', intro = '', closing = ''): QuoteFormData {
   return {
+    layout: 'table',
+    logoPosition,
+    subject: '',
+    intro,
+    sections: [],
+    showTotal: true,
+    vatMode: 'plus',
+    closing,
+    signature: true,
     clientName: '',
     clientEmail: '',
     clientPhone: '',
@@ -69,7 +86,9 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
 
   const [form, setForm] = useState<QuoteFormData>(() => {
     if (initialData) return initialData
-    const base = defaultForm(issuerPayment)
+    const savedPosition = issuer?.quote_logo_position
+    const position = QUOTE_LOGO_POSITIONS.includes(savedPosition as QuoteLogoPosition) ? (savedPosition as QuoteLogoPosition) : 'left'
+    const base = defaultForm(issuerPayment, position, t('defaultIntro'), t('defaultClosing'))
     return initialLine ? { ...base, items: [{ ...emptyQuoteItem(), ...initialLine }] } : base
   })
   const [pickerOpen, setPickerOpen] = useState(false)
@@ -133,8 +152,13 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
     setClientListOpen(false)
   }
 
+  const descriptive = form.layout === 'descriptive'
   const total = computeQuoteTotal(form.items)
-  const isValid = form.clientName.trim().length > 0 && form.items.some((i) => i.description.trim().length > 0)
+  const isValid =
+    form.clientName.trim().length > 0 &&
+    (descriptive
+      ? form.sections.some((s) => s.title.trim() || s.body.trim()) || form.subject.trim().length > 0
+      : form.items.some((i) => i.description.trim().length > 0))
 
   const updateItem = (index: number, patch: Partial<(typeof form.items)[number]>) => {
     setForm((prev) => ({
@@ -172,6 +196,7 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
       const cleanedForm: QuoteFormData = {
         ...form,
         items: form.items.filter((i) => i.description.trim().length > 0),
+        sections: form.sections.filter((x) => x.title.trim() || x.body.trim() || x.amount !== null),
       }
       if (mode === 'create') {
         const result = await createQuote(cleanedForm)
@@ -215,6 +240,64 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
           <Pencil className="w-3.5 h-3.5" />
           {t('editBusinessProfile')}
         </Link>
+      </div>
+
+      {/* Modalità del preventivo e posizione del logo nel PDF */}
+      <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8 space-y-5">
+        <div>
+          <h3 className="mb-3 font-bold text-[var(--ink)]">{t('layoutTitle')}</h3>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {QUOTE_LAYOUTS.map((l) => (
+              <button
+                key={l}
+                type="button"
+                onClick={() => setForm((prev) => ({ ...prev, layout: l }))}
+                aria-pressed={form.layout === l}
+                className={`rounded-xl border-2 p-4 text-left transition ${form.layout === l ? 'border-[var(--gold)] bg-[var(--gold-pale)]/50' : 'border-gray-200 hover:border-[var(--gold)]/50'}`}
+              >
+                <span className="flex items-center gap-2 font-bold text-[var(--ink)]">
+                  {l === 'table' ? <Table2 className="h-5 w-5 text-[var(--gold)]" /> : <ScrollText className="h-5 w-5 text-[var(--gold)]" />}
+                  {t(`layout_${l}`)}
+                </span>
+                <span className="mt-1 block text-xs text-gray-600">{t(`layout_${l}_hint`)}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+        <div>
+          <h3 className="mb-3 font-bold text-[var(--ink)]">{t('logoPositionTitle')}</h3>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            {QUOTE_LOGO_POSITIONS.map((pos) => (
+              <button
+                key={pos}
+                type="button"
+                onClick={() => setForm((prev) => ({ ...prev, logoPosition: pos }))}
+                aria-pressed={form.logoPosition === pos}
+                className={`rounded-xl border-2 p-2 text-center transition ${form.logoPosition === pos ? 'border-[var(--gold)] bg-[var(--gold-pale)]/50' : 'border-gray-200 hover:border-[var(--gold)]/50'}`}
+              >
+                {/* Miniatura della pagina con il logo nella posizione */}
+                <span className="relative mx-auto block h-14 w-11 rounded border border-gray-300 bg-white">
+                  {pos === 'band' ? (
+                    <>
+                      <span className="absolute inset-x-0 top-1.5 h-2 bg-gray-400" />
+                      <span className="absolute inset-x-0 top-3.5 h-0.5 bg-[var(--gold)]" />
+                      <span className="absolute left-1/2 top-0.5 h-4 w-4 -translate-x-1/2 rounded-sm bg-[var(--ink)]" />
+                    </>
+                  ) : (
+                    <span
+                      className={`absolute top-1.5 h-3 w-3 rounded-sm bg-[var(--ink)] ${pos === 'left' ? 'left-1.5' : pos === 'right' ? 'right-1.5' : 'left-1/2 -translate-x-1/2'}`}
+                    />
+                  )}
+                  <span className="absolute inset-x-1.5 top-7 h-0.5 bg-gray-200" />
+                  <span className="absolute inset-x-1.5 top-9 h-0.5 bg-gray-200" />
+                  <span className="absolute inset-x-1.5 top-11 h-0.5 bg-gray-200" />
+                </span>
+                <span className="mt-1.5 block text-xs font-semibold text-[var(--ink)]">{t(`logoPosition_${pos}`)}</span>
+              </button>
+            ))}
+          </div>
+          {!logoUrl && <p className="mt-2 text-xs text-gray-500">{t('logoPositionNoLogo')}</p>}
+        </div>
       </div>
 
       <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8 space-y-6">
@@ -381,6 +464,11 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
           </div>
         </div>
 
+        {descriptive ? (
+          <div className="border-t border-[var(--gold)]/15 pt-6">
+            <QuoteSectionsEditor form={form} setForm={setForm} initialPresets={Array.isArray(issuer?.quote_presets) ? issuer.quote_presets : []} />
+          </div>
+        ) : (
         <div className="border-t border-[var(--gold)]/15 pt-6">
           <h3 className="font-bold text-[var(--ink)] mb-4">{t('itemsSectionTitle')}</h3>
           {/* Titoli delle colonne */}
@@ -527,6 +615,7 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
             </div>
           </div>
         </div>
+        )}
 
         <div className="border-t border-[var(--gold)]/15 pt-6">
           <label className="block text-sm font-medium text-gray-700 mb-1">{t('paymentInfoField')}</label>

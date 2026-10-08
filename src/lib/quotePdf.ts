@@ -1,59 +1,14 @@
 import { jsPDF } from 'jspdf'
-import type { QuoteItem } from '@/lib/quotes'
+import { generateDescriptiveQuotePdfBlob } from '@/lib/quotePdfDescriptive'
+import { INK, GOLD, MUTED, accentRgb, drawLogo, formatClientAddressLine, formatIssuerAddressLine, type IssuerForPdf, type QuoteForPdf } from '@/lib/quotePdfShared'
 import type { QuotePdfLabels } from '@/lib/pdfHelpers'
 
 // Helper senza jsPDF ri-esportati per chi li importava da qui
 export { buildQuotePdfLabels, loadImageAsDataUrl } from '@/lib/pdfHelpers'
 
-export type QuoteForPdf = {
-  quote_number: number
-  client_name: string
-  client_email: string | null
-  client_phone: string | null
-  client_address: string | null
-  client_city: string | null
-  client_postal_code: string | null
-  client_pec: string | null
-  client_vat: string | null
-  issue_date: string
-  valid_until: string | null
-  items: QuoteItem[]
-  payment_info: string | null
-  notes: string | null
-  total: number
-}
-
-export type IssuerForPdf = {
-  company_name: string | null
-  vat_number: string | null
-  address: string | null
-  city: string | null
-  postal_code: string | null
-  province: string | null
-  pec: string | null
-  email: string | null
-  phone: string | null
-} | null
+export type { QuoteForPdf, IssuerForPdf } from '@/lib/quotePdfShared'
 
 type PdfLabels = QuotePdfLabels
-
-const INK: [number, number, number] = [23, 23, 23]
-const GOLD: [number, number, number] = [199, 161, 90]
-const MUTED: [number, number, number] = [110, 110, 110]
-
-/** "Via Roma 1, 12100 Cuneo (CN)" — skips whatever parts are missing. */
-function formatIssuerAddressLine(issuer: IssuerForPdf): string | null {
-  if (!issuer) return null
-  const cityPart = [issuer.postal_code, issuer.city].filter(Boolean).join(' ')
-  const provincePart = issuer.province ? `(${issuer.province})` : ''
-  return [issuer.address, [cityPart, provincePart].filter(Boolean).join(' ')].filter(Boolean).join(', ') || null
-}
-
-/** "Via Roma 1, 12100 Cuneo" — same shape as the issuer's, minus province. */
-function formatClientAddressLine(quote: QuoteForPdf): string | null {
-  const cityPart = [quote.client_postal_code, quote.client_city].filter(Boolean).join(' ')
-  return [quote.client_address, cityPart].filter(Boolean).join(', ') || null
-}
 
 /**
  * Hard character-count wrap (default 65/line) instead of jsPDF's
@@ -107,6 +62,9 @@ export function generateQuotePdfBlob(params: {
   formatCurrency: (n: number) => string
 }): Blob {
   const { quote, issuer, logoDataUrl, labels, formatDate, formatCurrency } = params
+  // Preventivo descrittivo: impaginazione a sezioni
+  if (quote.layout === 'descriptive') return generateDescriptiveQuotePdfBlob(params)
+  const position = quote.logo_position ?? 'left'
 
   const doc = new jsPDF({ unit: 'pt', format: 'a4' })
   const pageWidth = doc.internal.pageSize.getWidth()
@@ -118,8 +76,12 @@ export function generateQuotePdfBlob(params: {
   const rightW = pageWidth - margin * 2 - colGap - leftW
 
   // ── Header, left column: logo + issuer ──
-  let leftY = margin + 6
-  if (logoDataUrl) {
+  // Logo al centro, a destra o sulla fascia: sopra, a tutta larghezza; le
+  // due colonne (azienda e cliente) partono sotto
+  // (+16: i testi si scrivono sulla riga di base, il titolo grande sale di circa 16 pt)
+  const headerTop = position === 'left' ? margin + 6 : drawLogo(doc, logoDataUrl, position, accentRgb(issuer), margin) + 16
+  let leftY = headerTop
+  if (logoDataUrl && position === 'left') {
     try {
       const imgProps = doc.getImageProperties(logoDataUrl)
       const w = 64
@@ -149,7 +111,7 @@ export function generateQuotePdfBlob(params: {
   })
 
   // ── Header, right column: big title + number/date + client ("attn:") ──
-  let rightY = margin + 6
+  let rightY = headerTop
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(22)
   doc.setTextColor(...INK)

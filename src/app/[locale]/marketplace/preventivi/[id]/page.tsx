@@ -9,7 +9,7 @@ import QuoteShareButtons from '@/components/QuoteShareButtons'
 import QuoteActions from '@/components/QuoteActions'
 import QuoteWorkChain from '@/components/ecosystem/QuoteWorkChain'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
-import type { QuoteItem } from '@/lib/quotes'
+import { sectionLines, type QuoteItem, type QuoteSection } from '@/lib/quotes'
 
 export default async function QuoteDetailPage({
   params,
@@ -104,6 +104,55 @@ export default async function QuoteDetailPage({
             {quote.valid_until && <p>{t('validUntilField')}: {new Date(quote.valid_until).toLocaleDateString()}</p>}
           </div>
 
+          {quote.layout === 'descriptive' ? (
+            <div className="space-y-6 border-t border-[var(--gold)]/15 pt-4">
+              {quote.subject && (
+                <p className="text-[var(--ink)]">
+                  <span className="font-bold">{t('subjectField')}:</span> {quote.subject}
+                </p>
+              )}
+              {quote.intro && <p className="whitespace-pre-wrap text-gray-700">{quote.intro}</p>}
+              {((quote.sections || []) as QuoteSection[]).map((s, i) => (
+                <section key={i}>
+                  {s.title && (
+                    <h3 className="mb-2 text-lg font-bold text-[var(--ink)]">
+                      {s.title}
+                      <span className="mt-1 block h-0.5 w-8 bg-[var(--gold)]" />
+                    </h3>
+                  )}
+                  {s.kind === 'text' ? (
+                    <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-700">{s.body}</p>
+                  ) : s.kind === 'numbered' ? (
+                    <ol className="list-decimal space-y-1 pl-6 text-sm text-gray-700">
+                      {sectionLines(s.body).map((line, j) => (
+                        <li key={j}>{line}</li>
+                      ))}
+                    </ol>
+                  ) : (
+                    <ul className="list-disc space-y-1 pl-6 text-sm text-gray-700">
+                      {sectionLines(s.body).map((line, j) => (
+                        <li key={j}>{line}</li>
+                      ))}
+                    </ul>
+                  )}
+                  {typeof s.amount === 'number' && (
+                    <p className="mt-2 text-right font-bold text-[var(--gold)]">
+                      {s.amount.toLocaleString(undefined, { style: 'currency', currency: 'EUR' })}
+                      {quote.vat_mode === 'plus' ? ` ${t('vatPlus')}` : quote.vat_mode === 'included' ? ` ${t('vatIncluded')}` : ''}
+                    </p>
+                  )}
+                </section>
+              ))}
+              {quote.closing && <p className="whitespace-pre-wrap text-gray-700">{quote.closing}</p>}
+              {quote.signature !== false && (
+                <div className="ml-auto w-56 pt-4 text-center text-sm">
+                  <p className="font-bold text-[var(--ink)]">{t('pdfSignature')}</p>
+                  <p className="text-xs text-gray-500">{t('pdfSignatureHint')}</p>
+                  <div className="mt-10 border-b border-[var(--ink)]" />
+                </div>
+              )}
+            </div>
+          ) : (
           <div className="border-t border-[var(--gold)]/15 pt-4">
             <table className="w-full text-sm">
               <thead>
@@ -130,6 +179,7 @@ export default async function QuoteDetailPage({
               </tbody>
             </table>
           </div>
+          )}
 
           <div className="mt-auto pt-6">
           {quote.payment_info && (

@@ -17,6 +17,12 @@ export type QuotePdfLabels = {
   notesLabel: string
   pecLabel: string
   pageOf: (page: number, pages: number) => string
+  dearLabel: string
+  subjectLabel: string
+  signatureLabel: string
+  signatureHint: string
+  vatPlus: string
+  vatIncluded: string
 }
 
 /** Shared between the download button and the share/print flow so the two never drift apart. */
@@ -37,6 +43,12 @@ export function buildQuotePdfLabels(t: (key: string, values?: Record<string, str
     notesLabel: t('notesField'),
     pecLabel: t('pecField'),
     pageOf: (page, pages) => t('pdfPageOf', { page, pages }),
+    dearLabel: t('pdfDear'),
+    subjectLabel: t('subjectField'),
+    signatureLabel: t('pdfSignature'),
+    signatureHint: t('pdfSignatureHint'),
+    vatPlus: t('vatPlus'),
+    vatIncluded: t('vatIncluded'),
   }
 }
 

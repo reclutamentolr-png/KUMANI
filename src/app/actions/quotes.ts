@@ -4,9 +4,17 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
 import { hasActivePreventiviAccess } from '@/lib/quotes-server'
 import {
+  MAX_QUOTE_PRESETS,
+  MAX_QUOTE_SECTIONS,
+  QUOTE_LAYOUTS,
+  QUOTE_LOGO_POSITIONS,
+  QUOTE_VAT_MODES,
   computeQuoteTotal,
+  computeSectionsTotal,
   type QuoteFormData,
   type QuoteItem,
+  type QuotePreset,
+  type QuoteSection,
   type SavedClientRow,
   type SavedClientFormData,
 } from '@/lib/quotes'
@@ -25,6 +33,66 @@ function cleanItems(items: QuoteItem[]): QuoteItem[] {
     if (typeof item?.productId === 'string' && UUID_RE.test(item.productId)) row.productId = item.productId
     return row
   })
+}
+
+const SECTION_KINDS = ['text', 'numbered', 'bullets'] as const
+const clip = (v: unknown, max: number) => String(v ?? '').slice(0, max)
+
+// Sezioni del preventivo descrittivo ricostruite campo per campo
+function cleanSections(sections: QuoteSection[]): QuoteSection[] {
+  return (Array.isArray(sections) ? sections : [])
+    .slice(0, MAX_QUOTE_SECTIONS)
+    .map((s) => {
+      const amount = s?.amount === null || s?.amount === undefined || String(s.amount) === '' ? null : Number(s.amount)
+      return {
+        title: clip(s?.title, 160),
+        kind: SECTION_KINDS.includes(s?.kind as (typeof SECTION_KINDS)[number]) ? s.kind : 'text',
+        body: clip(s?.body, 6000),
+        amount: amount !== null && Number.isFinite(amount) ? Math.round(amount * 100) / 100 : null,
+      }
+    })
+    .filter((s) => s.title.trim() || s.body.trim() || s.amount !== null)
+}
+
+// Campi comuni di salvataggio (le due modalità)
+function quoteFields(form: QuoteFormData) {
+  const layout = QUOTE_LAYOUTS.includes(form.layout) ? form.layout : 'table'
+  const items = layout === 'table' ? cleanItems(form.items) : []
+  const sections = layout === 'descriptive' ? cleanSections(form.sections) : []
+  return {
+    layout,
+    logo_position: QUOTE_LOGO_POSITIONS.includes(form.logoPosition) ? form.logoPosition : 'left',
+    subject: clip(form.subject, 300) || null,
+    intro: clip(form.intro, 3000) || null,
+    closing: clip(form.closing, 1000) || null,
+    sections,
+    show_total: form.showTotal !== false,
+    vat_mode: QUOTE_VAT_MODES.includes(form.vatMode) ? form.vatMode : 'plus',
+    signature: form.signature !== false,
+    client_name: form.clientName,
+    client_email: form.clientEmail || null,
+    client_phone: form.clientPhone || null,
+    client_address: form.clientAddress || null,
+    client_city: form.clientCity || null,
+    client_postal_code: form.clientPostalCode || null,
+    client_pec: form.clientPec || null,
+    client_vat: form.clientVat || null,
+    issue_date: form.issueDate,
+    valid_until: form.validUntil || null,
+    items,
+    payment_info: form.paymentInfo || null,
+    notes: form.notes || null,
+    total: layout === 'descriptive' ? computeSectionsTotal(sections) : computeQuoteTotal(items),
+  }
+}
+
+// Ricorda l'ultima posizione del logo scelta (proposta nei preventivi nuovi)
+async function rememberLogoPosition(supabase: SupabaseClient, userId: string, position: string) {
+  try {
+    await supabase.from('quote_issuer_profiles').update({ quote_logo_position: position }).eq('user_id', userId)
+  } catch {
+    // facoltativo
+  }
 }
 
 type ActionResult<T> = { success: true; data: T } | { success: false; message: string }
@@ -145,8 +213,7 @@ export async function createQuote(
   if (!gate.ok) return { success: false, message: gate.message }
 
   const supabase = await createClient()
-  const items = cleanItems(form.items)
-  const total = computeQuoteTotal(items)
+  const fields = quoteFields(form)
 
   for (let attempt = 0; attempt < 5; attempt++) {
     const { data: maxRow } = await supabase
@@ -164,20 +231,7 @@ export async function createQuote(
       .insert({
         user_id: gate.userId,
         quote_number: nextNumber,
-        client_name: form.clientName,
-        client_email: form.clientEmail || null,
-        client_phone: form.clientPhone || null,
-        client_address: form.clientAddress || null,
-        client_city: form.clientCity || null,
-        client_postal_code: form.clientPostalCode || null,
-        client_pec: form.clientPec || null,
-        client_vat: form.clientVat || null,
-        issue_date: form.issueDate,
-        valid_until: form.validUntil || null,
-        items,
-        payment_info: form.paymentInfo || null,
-        notes: form.notes || null,
-        total,
+        ...fields,
       })
       .select('id, quote_number')
       .single()
@@ -185,6 +239,7 @@ export async function createQuote(
     if (!error && data) {
       await awardToolPoint('preventivi')
       await upsertSavedClient(supabase, gate.userId, form)
+      await rememberLogoPosition(supabase, gate.userId, fields.logo_position)
       return { success: true, data: { id: data.id, quote_number: data.quote_number } }
     }
 
@@ -204,26 +259,12 @@ export async function updateQuote(id: string, form: QuoteFormData): Promise<Acti
   if (!gate.ok) return { success: false, message: gate.message }
 
   const supabase = await createClient()
-  const items = cleanItems(form.items)
-  const total = computeQuoteTotal(items)
+  const fields = quoteFields(form)
 
   const { error } = await supabase
     .from('quotes')
     .update({
-      client_name: form.clientName,
-      client_email: form.clientEmail || null,
-      client_phone: form.clientPhone || null,
-      client_address: form.clientAddress || null,
-      client_city: form.clientCity || null,
-      client_postal_code: form.clientPostalCode || null,
-      client_pec: form.clientPec || null,
-      client_vat: form.clientVat || null,
-      issue_date: form.issueDate,
-      valid_until: form.validUntil || null,
-      items,
-      payment_info: form.paymentInfo || null,
-      notes: form.notes || null,
-      total,
+      ...fields,
       updated_at: new Date().toISOString(),
     })
     .eq('id', id)
@@ -235,7 +276,76 @@ export async function updateQuote(id: string, form: QuoteFormData): Promise<Acti
   }
 
   await upsertSavedClient(supabase, gate.userId, form)
+  await rememberLogoPosition(supabase, gate.userId, fields.logo_position)
   return { success: true, data: null }
+}
+
+// «Duplica preventivo»: copia completa con un nuovo numero e la data di oggi
+export async function duplicateQuote(id: string): Promise<ActionResult<{ id: string }>> {
+  const gate = await requireActivePreventiviAccess()
+  if (!gate.ok) return { success: false, message: gate.message }
+  const supabase = await createClient()
+  const { data: source } = await supabase.from('quotes').select('*').eq('id', id).eq('user_id', gate.userId).maybeSingle()
+  if (!source) return { success: false, message: 'saveError' }
+  const copy = { ...source } as Record<string, unknown>
+  for (const key of ['id', 'quote_number', 'created_at', 'updated_at', 'stock_unloaded_at']) delete copy[key]
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const { data: maxRow } = await supabase
+      .from('quotes')
+      .select('quote_number')
+      .eq('user_id', gate.userId)
+      .order('quote_number', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+    const { data, error } = await supabase
+      .from('quotes')
+      .insert({ ...copy, quote_number: (maxRow?.quote_number || 0) + 1, issue_date: new Date().toISOString().slice(0, 10) })
+      .select('id')
+      .single()
+    if (!error && data) return { success: true, data: { id: data.id } }
+    if (error && error.code !== '23505') {
+      console.error('[Quotes] duplicateQuote failed:', error)
+      return { success: false, message: 'saveError' }
+    }
+  }
+  return { success: false, message: 'saveError' }
+}
+
+// ---- Sezioni pronte (profilo azienda)
+
+function cleanPresets(presets: QuotePreset[]): QuotePreset[] {
+  return (Array.isArray(presets) ? presets : [])
+    .slice(0, MAX_QUOTE_PRESETS)
+    .map((p) => ({
+      title: clip(p?.title, 160),
+      kind: SECTION_KINDS.includes(p?.kind as (typeof SECTION_KINDS)[number]) ? p.kind : 'text',
+      body: clip(p?.body, 6000),
+    }))
+    .filter((p) => p.title.trim() || p.body.trim())
+}
+
+export async function listQuotePresets(): Promise<QuotePreset[]> {
+  const gate = await requireActivePreventiviAccess()
+  if (!gate.ok) return []
+  const supabase = await createClient()
+  const { data } = await supabase.from('quote_issuer_profiles').select('quote_presets').eq('user_id', gate.userId).maybeSingle()
+  return cleanPresets((data?.quote_presets ?? []) as QuotePreset[])
+}
+
+export async function saveQuotePresets(presets: QuotePreset[]): Promise<ActionResult<QuotePreset[]>> {
+  const gate = await requireActivePreventiviAccess()
+  if (!gate.ok) return { success: false, message: gate.message }
+  const supabase = await createClient()
+  const clean = cleanPresets(presets)
+  const { data: existing } = await supabase.from('quote_issuer_profiles').select('user_id').eq('user_id', gate.userId).maybeSingle()
+  const { error } = existing
+    ? await supabase.from('quote_issuer_profiles').update({ quote_presets: clean }).eq('user_id', gate.userId)
+    : await supabase.from('quote_issuer_profiles').insert({ user_id: gate.userId, quote_presets: clean })
+  if (error) {
+    console.error('[Quotes] saveQuotePresets failed:', error)
+    return { success: false, message: 'saveError' }
+  }
+  return { success: true, data: clean }
 }
 
 export async function deleteQuote(id: string): Promise<ActionResult<null>> {
