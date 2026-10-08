@@ -41,7 +41,7 @@ export const FLYERS: FlyerConfig[] = [
   { tool: 'spendly', style: 'phone', category: 'personal', icon: 'PiggyBank', points: ['ChartLine', 'Wallet', 'CalendarDays'], shot: 'spendly-2' },
   { tool: 'fincheck', style: 'phone', category: 'personal', icon: 'Gauge', points: ['ClipboardList', 'ChartColumn', 'ListChecks'], shot: 'fincheck-3' },
   { tool: 'garage', style: 'phone', category: 'personal', icon: 'Car', points: ['Gauge', 'Bell', 'FolderOpen'], shot: 'garage-3' },
-  { tool: 'casa', style: 'phone', category: 'personal', icon: 'House', points: ['CalendarClock', 'Zap', 'ShieldCheck'], shot: 'casa-1' },
+  { tool: 'casa', style: 'phone', category: 'personal', icon: 'House', points: ['CalendarClock', 'Zap', 'ShieldCheck'], shot: 'casa-4' },
   { tool: 'findo', style: 'phone', category: 'personal', icon: 'MapPin', points: ['Camera', 'Search', 'House'], shot: 'findo-1' },
   { tool: 'travel', style: 'photo', category: 'personal', icon: 'Plane', points: ['CalendarDays', 'ListChecks', 'Users'], photo: '/flyers/photos/group-travel.webp' },
   { tool: 'kumani-cv', style: 'phone', category: 'personal', icon: 'IdCard', points: ['FileText', 'RefreshCw', 'Globe'], shot: 'kumani-cv-1' },
