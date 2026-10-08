@@ -2479,7 +2479,8 @@
     "bandColor": "Farbe des Bands",
     "bandLineColor": "Farbe der Linie",
     "bandHeight": "Höhe des Bands",
-    "bandReset": "Zurücksetzen"
+    "bandReset": "Zurücksetzen",
+    "bandLineHeight": "Stärke der Linie"
   },
   "kumaniCv": {
     "title": "KUMANI CV",

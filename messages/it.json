@@ -2533,7 +2533,8 @@
     "bandColor": "Colore della fascia",
     "bandLineColor": "Colore della riga",
     "bandHeight": "Altezza della fascia",
-    "bandReset": "Ripristina"
+    "bandReset": "Ripristina",
+    "bandLineHeight": "Spessore della riga"
   },
   "kumaniCv": {
     "title": "KUMANI CV",

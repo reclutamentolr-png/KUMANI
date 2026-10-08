@@ -2479,7 +2479,8 @@
     "bandColor": "Цвет полосы",
     "bandLineColor": "Цвет линии",
     "bandHeight": "Высота полосы",
-    "bandReset": "Сбросить"
+    "bandReset": "Сбросить",
+    "bandLineHeight": "Толщина линии"
   },
   "kumaniCv": {
     "title": "KUMANI CV",

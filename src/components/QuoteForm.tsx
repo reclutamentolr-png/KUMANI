@@ -16,6 +16,8 @@ import {
   BAND_HEIGHT_MIN,
   DEFAULT_BAND_STYLE,
   LINE_COLORS,
+  LINE_HEIGHT_MAX,
+  LINE_HEIGHT_MIN,
   cleanBandStyle,
   type QuoteBandStyle,
   type QuoteLogoPosition,
@@ -331,7 +333,8 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
           {!logoUrl && <p className="mt-2 text-xs text-gray-500">{t('logoPositionNoLogo')}</p>}
           {form.logoPosition === 'band' && (() => {
             // Senza scelta: grigio e il colore dell'azienda per la riga
-            const band = form.bandStyle ?? { ...DEFAULT_BAND_STYLE, line: /^#[0-9a-f]{6}$/i.test(issuer?.accent ?? '') ? (issuer!.accent as string) : DEFAULT_BAND_STYLE.line }
+            // (scelte salvate prima dello spessore della riga: completate con i valori di base)
+            const band = form.bandStyle ? { ...DEFAULT_BAND_STYLE, ...form.bandStyle } : { ...DEFAULT_BAND_STYLE, line: /^#[0-9a-f]{6}$/i.test(issuer?.accent ?? '') ? (issuer!.accent as string) : DEFAULT_BAND_STYLE.line }
             const setBand = (patch: Partial<QuoteBandStyle>) => setForm((prev) => ({ ...prev, bandStyle: { ...band, ...patch } }))
             const swatches = (colors: string[], value: string, key: 'band' | 'line') => (
               <div className="flex flex-wrap items-center gap-1.5">
@@ -362,7 +365,7 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
                 {/* Miniatura: fascia, riga e riquadro del logo */}
                 <div className="relative h-20 overflow-hidden rounded-lg border border-gray-200 bg-white">
                   <div className="absolute inset-x-0" style={{ top: 34 - band.height / 3, height: band.height / 1.5, background: band.band }} />
-                  <div className="absolute inset-x-0 h-1" style={{ top: 34 + band.height / 3, background: band.line }} />
+                  <div className="absolute inset-x-0" style={{ top: 34 + band.height / 3, height: Math.max(1, band.lineHeight / 1.5), background: band.line }} />
                   <div className="absolute left-1/2 top-1.5 flex h-16 w-28 -translate-x-1/2 items-center justify-center bg-[#141414]">
                     {logoUrl && (
                       // eslint-disable-next-line @next/next/no-img-element
@@ -380,20 +383,36 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
                     {swatches(LINE_COLORS, band.line, 'line')}
                   </div>
                 </div>
-                <label className="block">
-                  <span className="mb-1 flex justify-between text-xs font-semibold text-gray-600">
-                    {t('bandHeight')} <span>{band.height} pt</span>
-                  </span>
-                  <input
-                    type="range"
-                    min={BAND_HEIGHT_MIN}
-                    max={BAND_HEIGHT_MAX}
-                    step={2}
-                    value={band.height}
-                    onChange={(e) => setBand({ height: Number(e.target.value) })}
-                    className="w-full accent-[var(--gold)]"
-                  />
-                </label>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <label className="block">
+                    <span className="mb-1 flex justify-between text-xs font-semibold text-gray-600">
+                      {t('bandHeight')} <span>{band.height} pt</span>
+                    </span>
+                    <input
+                      type="range"
+                      min={BAND_HEIGHT_MIN}
+                      max={BAND_HEIGHT_MAX}
+                      step={2}
+                      value={band.height}
+                      onChange={(e) => setBand({ height: Number(e.target.value) })}
+                      className="w-full accent-[var(--gold)]"
+                    />
+                  </label>
+                  <label className="block">
+                    <span className="mb-1 flex justify-between text-xs font-semibold text-gray-600">
+                      {t('bandLineHeight')} <span>{band.lineHeight} pt</span>
+                    </span>
+                    <input
+                      type="range"
+                      min={LINE_HEIGHT_MIN}
+                      max={LINE_HEIGHT_MAX}
+                      step={1}
+                      value={band.lineHeight}
+                      onChange={(e) => setBand({ lineHeight: Number(e.target.value) })}
+                      className="w-full accent-[var(--gold)]"
+                    />
+                  </label>
+                </div>
               </div>
             )
           })()}

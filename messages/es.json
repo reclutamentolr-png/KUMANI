@@ -2479,7 +2479,8 @@
     "bandColor": "Color de la franja",
     "bandLineColor": "Color de la línea",
     "bandHeight": "Altura de la franja",
-    "bandReset": "Restablecer"
+    "bandReset": "Restablecer",
+    "bandLineHeight": "Grosor de la línea"
   },
   "kumaniCv": {
     "title": "KUMANI CV",

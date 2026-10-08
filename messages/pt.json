@@ -2479,7 +2479,8 @@
     "bandColor": "Cor da faixa",
     "bandLineColor": "Cor da linha",
     "bandHeight": "Altura da faixa",
-    "bandReset": "Repor"
+    "bandReset": "Repor",
+    "bandLineHeight": "Espessura da linha"
   },
   "kumaniCv": {
     "title": "KUMANI CV",

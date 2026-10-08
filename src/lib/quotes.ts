@@ -69,10 +69,14 @@ export interface QuoteBandStyle {
   band: string
   line: string
   height: number
+  // Spessore della riga sotto la fascia (pt)
+  lineHeight: number
 }
 export const BAND_HEIGHT_MIN = 14
 export const BAND_HEIGHT_MAX = 60
-export const DEFAULT_BAND_STYLE: QuoteBandStyle = { band: '#969696', line: '#c79a3b', height: 30 }
+export const LINE_HEIGHT_MIN = 1
+export const LINE_HEIGHT_MAX = 14
+export const DEFAULT_BAND_STYLE: QuoteBandStyle = { band: '#969696', line: '#c79a3b', height: 30, lineHeight: 3 }
 export const BAND_COLORS = ['#969696', '#171717', '#1f3a5f', '#2f5d50', '#7a1f2b', '#c79a3b', '#e7e2d6', '#ffffff']
 export const LINE_COLORS = ['#c79a3b', '#f0a830', '#e11d48', '#2563eb', '#16a34a', '#171717', '#ffffff', '#969696']
 
@@ -82,7 +86,9 @@ export function cleanBandStyle(v: unknown): QuoteBandStyle | null {
   const o = v as Partial<QuoteBandStyle>
   const hex = (c: unknown, d: string) => (typeof c === 'string' && /^#[0-9a-f]{6}$/i.test(c) ? c : d)
   const h = Math.round(Number(o.height))
+  const lh = Math.round(Number(o.lineHeight))
   return {
+    lineHeight: Number.isFinite(lh) ? Math.min(LINE_HEIGHT_MAX, Math.max(LINE_HEIGHT_MIN, lh)) : DEFAULT_BAND_STYLE.lineHeight,
     band: hex(o.band, DEFAULT_BAND_STYLE.band),
     line: hex(o.line, DEFAULT_BAND_STYLE.line),
     height: Number.isFinite(h) ? Math.min(BAND_HEIGHT_MAX, Math.max(BAND_HEIGHT_MIN, h)) : DEFAULT_BAND_STYLE.height,

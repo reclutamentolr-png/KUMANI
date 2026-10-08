@@ -2479,7 +2479,8 @@
     "bandColor": "Band colour",
     "bandLineColor": "Line colour",
     "bandHeight": "Band height",
-    "bandReset": "Reset"
+    "bandReset": "Reset",
+    "bandLineHeight": "Line thickness"
   },
   "kumaniCv": {
     "title": "KUMANI CV",

@@ -128,7 +128,7 @@ export function drawLogo(doc: jsPDF, logoDataUrl: string | null, position: Quote
     doc.setFillColor(...bandRgb)
     doc.rect(0, bandY, pageWidth, bandH, 'F')
     doc.setFillColor(...lineRgb)
-    doc.rect(0, bandY + bandH, pageWidth, 3, 'F')
+    doc.rect(0, bandY + bandH, pageWidth, style?.lineHeight ?? 3, 'F')
     const boxW = 170
     const boxX = (pageWidth - boxW) / 2
     doc.setFillColor(20, 20, 20)
