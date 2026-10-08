@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useDeferredValue, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
 import {
   ArrowDown,
@@ -14,9 +14,12 @@ import {
   Eye,
   EyeOff,
   LoaderCircle,
+  Monitor,
   Plus,
+  RotateCcw,
   Save,
   Share2,
+  Smartphone,
   Sparkles,
   Trash2,
   TriangleAlert,
@@ -49,6 +52,8 @@ import {
   type SectionKey,
   type TitledText,
 } from '@/lib/landing'
+
+type LocalDraft = { savedAt: number; slug: string; template: LandingTemplate; accent: string; contentLocale: LandingLocale; content: LandingContent }
 
 export type LandingEditorInitial = {
   exists: boolean
@@ -118,6 +123,8 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
   const [aiOpen, setAiOpen] = useState(!initial.exists)
   const [ai, setAi] = useState<LandingAiAnswers>({ business: '', city: '', audience: '', services: '', strengths: '' })
   const [aiBusy, setAiBusy] = useState(false)
+  const [device, setDevice] = useState<'phone' | 'desktop'>('phone')
+  const [localDraft, setLocalDraft] = useState<LocalDraft | null>(null)
 
   const publicUrl = `${siteUrl.replace(/\/$/, '')}/p/${savedSlug || slug}`
   const err = (code: string) => (t.has(`err_${code}`) ? t(`err_${code}`) : t('err_saveError'))
@@ -136,6 +143,54 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
     window.addEventListener('beforeunload', onBeforeUnload)
     return () => window.removeEventListener('beforeunload', onBeforeUnload)
   }, [dirty])
+
+  // Copia di sicurezza nel browser delle modifiche non salvate (pagina chiusa
+  // per sbaglio, batteria scarica…): alla riapertura si può ripristinarla
+  const draftKey = 'kumani-landing-draft'
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(draftKey)
+      if (!raw) return
+      const d = JSON.parse(raw) as LocalDraft
+      // Mostrata dopo il primo disegno: la memoria del browser c'è solo qui
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      if (d?.content && JSON.stringify(d.content) !== JSON.stringify(initial.content)) setLocalDraft(d)
+      else localStorage.removeItem(draftKey)
+    } catch {
+      /* memoria del browser non disponibile */
+    }
+    // Solo all'apertura dell'editor
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  useEffect(() => {
+    if (!dirty || localDraft) return
+    const timer = setTimeout(() => {
+      try {
+        localStorage.setItem(draftKey, JSON.stringify({ savedAt: Date.now(), slug, template, accent, contentLocale, content: c } satisfies LocalDraft))
+      } catch {
+        /* memoria piena o non disponibile */
+      }
+    }, 800)
+    return () => clearTimeout(timer)
+  }, [dirty, localDraft, slug, template, accent, contentLocale, c])
+  const restoreDraft = () => {
+    if (!localDraft) return
+    setC(localDraft.content)
+    setTemplate(localDraft.template)
+    setAccent(localDraft.accent)
+    setContentLocale(localDraft.contentLocale)
+    if (localDraft.slug) setSlug(localDraft.slug)
+    setDirty(true)
+    setLocalDraft(null)
+  }
+  const discardDraft = () => {
+    try {
+      localStorage.removeItem(draftKey)
+    } catch {
+      /* niente da fare */
+    }
+    setLocalDraft(null)
+  }
 
   // Indirizzo libero? Controllo mentre si scrive (con un attimo di pausa)
   const slugTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -165,6 +220,11 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
     setSavedSlug(slug)
     setSlugStatus('idle')
     setDirty(false)
+    try {
+      localStorage.removeItem(draftKey)
+    } catch {
+      /* niente da fare */
+    }
     setMessage({ ok: true, text: t('saved') })
   }
 
@@ -254,10 +314,13 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
   const labels = labelsByLocale[contentLocale]
   const status = initial.suspended ? 'suspended' : isPublished && savedSlug ? 'published' : 'draft'
 
+  // L'anteprima segue la scrittura con un attimo di ritardo: i campi restano
+  // fluidi anche con pagine lunghe e tante foto
+  const previewContent = useDeferredValue(c)
   const preview = useMemo(
     () => (
       <LandingView
-        content={c}
+        content={previewContent}
         template={template}
         accent={accent}
         labels={labels}
@@ -265,10 +328,27 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
         menuUrl={menuUrl}
         createHref="#"
         preview
-        contactFormSlot={<LandingContactForm slug="" labels={formLabelsByLocale[contentLocale]} ownerName={c.hero.name} privacyHref="" preview />}
+        contactFormSlot={<LandingContactForm slug="" labels={formLabelsByLocale[contentLocale]} ownerName={previewContent.hero.name} privacyHref="" preview />}
       />
     ),
-    [c, template, accent, labels, contentLocale, menuUrl, formLabelsByLocale]
+    [previewContent, template, accent, labels, contentLocale, menuUrl, formLabelsByLocale]
+  )
+  // Telefono: larghezza reale. Computer: la pagina larga 1100 px, rimpicciolita
+  const devicePreview = (width: number) => (device === 'phone' ? preview : <div style={{ width: 1100, zoom: width / 1100 }}>{preview}</div>)
+  const deviceSwitch = (dark?: boolean) => (
+    <div className={`inline-flex rounded-lg p-0.5 text-xs font-semibold ${dark ? 'bg-white/10' : 'bg-gray-100'}`}>
+      {(['phone', 'desktop'] as const).map((d) => (
+        <button
+          key={d}
+          type="button"
+          onClick={() => setDevice(d)}
+          aria-pressed={device === d}
+          className={`inline-flex items-center gap-1 rounded-md px-2.5 py-1 ${device === d ? 'bg-white text-gray-900 shadow' : dark ? 'text-white/80' : 'text-gray-600'}`}
+        >
+          {d === 'phone' ? <Smartphone className="h-3.5 w-3.5" /> : <Monitor className="h-3.5 w-3.5" />} {t(d === 'phone' ? 'previewPhone' : 'previewDesktop')}
+        </button>
+      ))}
+    </div>
   )
 
   const blockEditors: Record<SectionKey, ReactNode> = {
@@ -426,6 +506,18 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_400px]">
       <div className="space-y-4">
+        {localDraft && (
+          <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
+            <RotateCcw className="h-5 w-5 shrink-0" />
+            <span className="min-w-0 flex-1">{t('draftFound', { time: new Date(localDraft.savedAt).toLocaleString() })}</span>
+            <button type="button" onClick={restoreDraft} className="rounded-lg bg-amber-600 px-3 py-1.5 font-semibold text-white hover:bg-amber-700">
+              {t('draftRestore')}
+            </button>
+            <button type="button" onClick={discardDraft} className="rounded-lg px-3 py-1.5 font-semibold text-amber-900 hover:bg-amber-100">
+              {t('draftDiscard')}
+            </button>
+          </div>
+        )}
         <BusinessProfileImport profile={businessProfile} onImport={importProfile} />
 
         {/* Stato e indirizzo pubblico */}
@@ -798,21 +890,29 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
       {/* Anteprima: a fianco sul computer, a tutto schermo sul telefono */}
       <aside className="hidden lg:block">
         <div className="sticky top-24">
-          <p className="mb-2 flex items-center gap-2 text-sm font-semibold text-gray-600">
-            <Eye className="h-4 w-4" /> {t('preview')}
-          </p>
-          <div className="h-[calc(100vh-9rem)] overflow-y-auto rounded-[2rem] border-8 border-gray-900 bg-white shadow-xl">{preview}</div>
+          <div className="mb-2 flex items-center justify-between gap-2">
+            <p className="flex items-center gap-2 text-sm font-semibold text-gray-600">
+              <Eye className="h-4 w-4" /> {t('preview')}
+            </p>
+            {deviceSwitch()}
+          </div>
+          <div
+            className={`h-[calc(100vh-9rem)] overflow-y-auto overflow-x-hidden bg-white shadow-xl ${device === 'phone' ? 'rounded-[2rem] border-8 border-gray-900' : 'rounded-xl border-4 border-gray-900'}`}
+          >
+            {devicePreview(384)}
+          </div>
         </div>
       </aside>
       {showPreview && (
         <div className="fixed inset-0 z-50 flex flex-col bg-black/80 lg:hidden" role="dialog" aria-modal="true" aria-label={t('preview')}>
           <div className="flex items-center justify-between px-4 py-3 text-white">
             <span className="font-semibold">{t('preview')}</span>
+            {deviceSwitch(true)}
             <button type="button" onClick={() => setShowPreview(false)} className="inline-flex items-center gap-1 rounded-lg bg-white/10 px-3 py-1.5 text-sm font-semibold">
               <X className="h-4 w-4" /> {t('closePreview')}
             </button>
           </div>
-          <div className="flex-1 overflow-y-auto bg-white">{preview}</div>
+          <div className="flex-1 overflow-y-auto overflow-x-hidden bg-white">{devicePreview(typeof window === 'undefined' ? 390 : window.innerWidth)}</div>
         </div>
       )}
     </div>
@@ -939,7 +1039,7 @@ function PhotoField({
       <div className="flex items-center gap-3">
         {value && (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={landingPhotoUrl(value)} alt="" className={`h-16 rounded-lg object-cover ${square ? 'w-16' : 'w-24'}`} />
+          <img src={landingPhotoUrl(value)} alt="" className={`h-16 rounded-lg ${square ? 'w-16 border border-gray-200 bg-gray-50 object-contain p-1' : 'w-24 object-cover'}`} />
         )}
         <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-800 hover:bg-gray-50">
           {busy ? <LoaderCircle className="h-4 w-4 animate-spin" /> : value ? <Camera className="h-4 w-4" /> : <Plus className="h-4 w-4" />}

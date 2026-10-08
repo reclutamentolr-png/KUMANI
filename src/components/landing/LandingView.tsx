@@ -102,12 +102,12 @@ export default function LandingView({ content: c, template, accent, labels, lang
     about:
       c.about.on && (c.about.text || c.about.photo) ? (
         <section key="about" className="px-5 py-12 @xl:px-8">
-          <div className={`grid items-center gap-8 ${c.about.photo ? 'md:grid-cols-2' : ''}`}>
+          <div className={`grid items-center gap-8 ${c.about.photo ? '@3xl:grid-cols-2' : ''}`}>
             {c.about.photo && (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={landingPhotoUrl(c.about.photo)} alt="" className="aspect-[4/3] w-full rounded-2xl object-cover" loading="lazy" />
             )}
-            <div>
+            <div className="min-w-0 [overflow-wrap:anywhere]">
               {heading(c.about.title, labels.about)}
               <p className="whitespace-pre-line text-lg leading-relaxed" style={{ color: 'var(--lp-muted)' }}>{c.about.text}</p>
             </div>
@@ -235,7 +235,7 @@ export default function LandingView({ content: c, template, accent, labels, lang
     <div
       lang={lang}
       style={{ ...vars, background: 'var(--lp-bg)', color: 'var(--lp-text)' }}
-      className={`@container min-h-full ${landingSerif.variable}`}
+      className={`@container min-h-full [overflow-wrap:anywhere] ${landingSerif.variable}`}
       data-lp-serif={serif ? '' : undefined}
     >
       {/* Presentazione */}
@@ -246,12 +246,12 @@ export default function LandingView({ content: c, template, accent, labels, lang
           <div className="mb-10 flex items-center gap-3">
             {c.hero.logo && (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={landingPhotoUrl(c.hero.logo)} alt="" className="h-11 w-11 rounded-xl object-cover" />
+              <img src={landingPhotoUrl(c.hero.logo)} alt="" className="h-12 w-auto max-w-[10rem] shrink-0 rounded-lg object-contain" />
             )}
-            <span className="text-lg font-bold">{c.hero.name}</span>
+            <span className="min-w-0 break-words text-lg font-bold">{c.hero.name}</span>
           </div>
-          <div className={`grid items-center gap-8 ${c.hero.photo ? 'md:grid-cols-[1.2fr_1fr]' : ''}`}>
-            <div>
+          <div className={`grid items-center gap-8 ${c.hero.photo ? '@3xl:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]' : ''}`}>
+            <div className="min-w-0 [overflow-wrap:anywhere]">
               {c.hero.title && <h1 className="text-4xl font-bold leading-tight @xl:text-5xl">{c.hero.title}</h1>}
               {c.hero.subtitle && <p className="mt-4 text-xl font-medium" style={{ color: template === 'colore' && !heroBg ? th.heroText : heroBg ? '#ffffff' : 'var(--lp-accent)', opacity: heroBg ? 0.95 : 1 }}>{c.hero.subtitle}</p>}
               {c.hero.text && <p className="mt-4 whitespace-pre-line text-lg leading-relaxed" style={{ color: th.heroMuted }}>{c.hero.text}</p>}

@@ -9162,7 +9162,12 @@
     "bg_gold": "Gold",
     "fontTitle": "Schrift der Überschriften",
     "font_modern": "Modern",
-    "font_elegant": "Elegant"
+    "font_elegant": "Elegant",
+    "previewPhone": "Handy",
+    "previewDesktop": "Computer",
+    "draftFound": "Du hast ungespeicherte Änderungen vom {time}: wiederherstellen?",
+    "draftRestore": "Wiederherstellen",
+    "draftDiscard": "Verwerfen"
   },
   "landingPublic": {
     "services": "Leistungen",

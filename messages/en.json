@@ -9162,7 +9162,12 @@
     "bg_gold": "Gold",
     "fontTitle": "Heading font",
     "font_modern": "Modern",
-    "font_elegant": "Elegant"
+    "font_elegant": "Elegant",
+    "previewPhone": "Phone",
+    "previewDesktop": "Desktop",
+    "draftFound": "You have unsaved changes from {time}: restore them?",
+    "draftRestore": "Restore",
+    "draftDiscard": "Discard"
   },
   "landingPublic": {
     "services": "Services",

@@ -9162,7 +9162,12 @@
     "bg_gold": "Золото",
     "fontTitle": "Шрифт заголовков",
     "font_modern": "Современный",
-    "font_elegant": "Элегантный"
+    "font_elegant": "Элегантный",
+    "previewPhone": "Телефон",
+    "previewDesktop": "Компьютер",
+    "draftFound": "Есть несохранённые изменения от {time}: восстановить их?",
+    "draftRestore": "Восстановить",
+    "draftDiscard": "Отменить"
   },
   "landingPublic": {
     "services": "Услуги",

@@ -9162,7 +9162,12 @@
     "bg_gold": "Or",
     "fontTitle": "Police des titres",
     "font_modern": "Moderne",
-    "font_elegant": "Élégante"
+    "font_elegant": "Élégante",
+    "previewPhone": "Téléphone",
+    "previewDesktop": "Ordinateur",
+    "draftFound": "Vous avez des modifications non enregistrées du {time} : les restaurer ?",
+    "draftRestore": "Restaurer",
+    "draftDiscard": "Ignorer"
   },
   "landingPublic": {
     "services": "Services",
