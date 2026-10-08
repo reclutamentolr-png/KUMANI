@@ -14,6 +14,10 @@ type LogoProps = {
 }
 
 export default function Logo({ size = 40, className = '', priority = false }: LogoProps) {
+  // Senza misure nel className il CSS di base (height: auto) seguirebbe le
+  // proporzioni del file (non quadrato): il logo uscirebbe piccolo e Next
+  // avvisa nel terminale. Qui resta sempre un quadrato di `size`.
+  const sized = /(^|\s)([a-z]+:)?[hw]-/.test(className)
   return (
     <Image
       src={SRC}
@@ -21,6 +25,7 @@ export default function Logo({ size = 40, className = '', priority = false }: Lo
       width={size}
       height={size}
       priority={priority}
+      style={sized ? undefined : { width: size, height: size }}
       className={`shrink-0 object-cover ${className}`}
     />
   )
