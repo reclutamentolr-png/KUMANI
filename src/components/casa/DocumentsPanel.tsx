@@ -93,7 +93,7 @@ export default function DocumentsPanel({
                       >
                         <span className="truncate">{doc.title}</span> <ExternalLink className="h-3.5 w-3.5 shrink-0" />
                       </a>
-                      <p className="truncate text-xs text-[var(--muted)]">
+                      <p className="text-xs text-[var(--muted)]">
                         {f.date(doc.created_at.slice(0, 10))}
                         {doc.size_bytes ? ` · ${f.size(doc.size_bytes)}` : ''}
                         {doc.expires_on && (

@@ -83,13 +83,14 @@ export default function DeadlinesPanel({ homeId, deadlines, today }: { homeId: s
                 >
                   {overdue ? <AlertTriangle className="h-5 w-5" /> : d.category === 'warranties' ? <ShieldCheck className="h-5 w-5" /> : <CalendarClock className="h-5 w-5" />}
                 </span>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate font-bold text-[var(--ink)]">{d.title}</p>
+                {/* Con poco spazio i pulsanti vanno a capo: il titolo resta intero */}
+                <div className="min-w-[11rem] flex-1">
+                  <p className="break-words font-bold text-[var(--ink)]">{d.title}</p>
                   <p className={`text-sm ${overdue ? 'font-semibold text-red-600' : 'text-[var(--muted)]'}`}>
                     {f.date(d.due_date)} · {overdue ? t('overdueDays', { days: -days }) : days === 0 ? t('today') : t('inDays', { days })} · {recurrenceText(d)}
                   </p>
                 </div>
-                <div className="flex shrink-0 items-center gap-1">
+                <div className="ml-auto flex shrink-0 items-center gap-1">
                   <button
                     type="button"
                     onClick={() => done(d)}
