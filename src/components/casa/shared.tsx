@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { FileText, LoaderCircle, Paperclip, Upload, X } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
-import { resizeImageFile } from '@/lib/resizeImage'
+import { prepareDocumentFile } from '@/lib/documentImage'
 import { CASA_FILE_MAX_BYTES, CASA_FILE_TYPES, fileExtension } from '@/lib/casa'
 import { discardUpload } from '@/app/actions/casa'
 
@@ -99,11 +99,9 @@ export function Sheet({ title, onClose, children }: { title: string; onClose: ()
 // Carica un file (PDF o foto) nella cartella della casa. Le foto grandi si
 // rimpiccioliscono prima. Restituisce il percorso nello spazio privato.
 export async function uploadCasaFile(homeId: string, file: File): Promise<{ path: string; name: string; type: string; size: number } | { error: 'fileType' | 'fileSize' | 'uploadError' }> {
-  let upload: File = file
   if (!CASA_FILE_TYPES.includes(file.type)) return { error: 'fileType' }
-  if (file.type.startsWith('image/')) {
-    upload = (await resizeImageFile(file, 2000, 0.85).catch(() => null)) ?? file
-  }
+  // Foto ottimizzate per lo spazio ma buone anche da stampare
+  const upload = await prepareDocumentFile(file)
   if (upload.size > CASA_FILE_MAX_BYTES) return { error: 'fileSize' }
   const supabase = createClient()
   const {

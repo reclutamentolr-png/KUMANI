@@ -6,7 +6,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import { ExternalLink, FileText, IdCard, LoaderCircle, Plus, ShieldCheck, Trash2, type LucideIcon } from 'lucide-react'
 import { addVehicleDocument, deleteVehicleDocument } from '@/app/actions/garage'
 import { createClient } from '@/lib/supabase/client'
-import { resizeImageFile } from '@/lib/resizeImage'
+import { prepareDocumentFile } from '@/lib/documentImage'
 import { GARAGE_DOC_KINDS, type GarageDocKind, type GarageDocument } from '@/lib/garage'
 import { askConfirm } from '@/lib/confirm'
 
@@ -39,8 +39,8 @@ export default function VehicleDocuments({ vehicleId, documents, fileUrls }: { v
     if (input.current) input.current.value = ''
     if (!file || !kind) return
     if (!FILE_TYPES.includes(file.type)) return setError(t('error_fileType'))
-    // Le foto grandi si rimpiccioliscono (si leggono comunque bene)
-    const ready = file.type.startsWith('image/') ? ((await resizeImageFile(file, 2000, 0.85).catch(() => null)) ?? file) : file
+    // Foto ottimizzate per lo spazio ma buone anche da stampare
+    const ready = await prepareDocumentFile(file)
     if (ready.size > MAX_BYTES) return setError(t('error_fileSize'))
     setBusy(kind)
     const supabase = createClient()
