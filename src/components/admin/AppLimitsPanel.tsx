@@ -5,6 +5,7 @@ import { Brush, Gauge, LoaderCircle, RotateCcw, Save } from 'lucide-react'
 import { notify } from '@/lib/adminNotify'
 import { adminListAppLimits, adminRunCleanupNow, adminSaveAppLimits, type AppLimitRow } from '@/app/actions/admin'
 import { askConfirm } from '@/lib/confirm'
+import UsageReport from '@/components/admin/UsageReport'
 
 const UNIT: Record<AppLimitRow['kind'], string> = {
   count: 'massimo',
@@ -102,6 +103,9 @@ export default function AppLimitsPanel() {
           {cleaning ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Brush className="h-4 w-4" />} Pulizia adesso
         </button>
       </div>
+
+      {/* Chi occupa più spazio e chi si avvicina ai limiti */}
+      <UsageReport />
 
       {sections.map(([section, items]) => (
         <section key={section} className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">

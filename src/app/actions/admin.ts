@@ -3244,3 +3244,20 @@ export async function adminRunCleanupNow() {
   if (error) return { success: false, error: error.message, result: null }
   return { success: true, error: null, result: data as Record<string, number | string> }
 }
+
+// Chi occupa più spazio e chi si avvicina ai limiti (Admin → Limiti e pulizia)
+export type UsageTopRow = { user_id: string; name: string | null; email: string | null; file_bytes: number; files: number; db_bytes: number; db_rows: number; buckets: Record<string, { files: number; bytes: number }> }
+export type LimitsTopRow = { user_id: string; name: string | null; email: string | null; key: string; section: string; label: string; used: number; max: number; pct: number }
+
+export async function adminUsageReport(limit = 10): Promise<{ usage: UsageTopRow[]; limits: LimitsTopRow[]; error: string | null }> {
+  const admin = await verifyAdmin('settings.read')
+  if (!admin) return { usage: [], limits: [], error: 'Non autorizzato' }
+  const service = getServiceClient()
+  const [usage, limits] = await Promise.all([service.rpc('admin_usage_top', { p_limit: limit }), service.rpc('admin_limits_top', { p_limit: limit })])
+  if (usage.error || limits.error) return { usage: [], limits: [], error: (usage.error ?? limits.error)!.message }
+  return {
+    usage: ((usage.data ?? []) as UsageTopRow[]).map((r) => ({ ...r, file_bytes: Number(r.file_bytes), files: Number(r.files), db_bytes: Number(r.db_bytes), db_rows: Number(r.db_rows) })),
+    limits: ((limits.data ?? []) as LimitsTopRow[]).map((r) => ({ ...r, used: Number(r.used), max: Number(r.max), pct: Number(r.pct) })),
+    error: null,
+  }
+}
