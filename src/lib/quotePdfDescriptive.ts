@@ -45,7 +45,7 @@ export function generateDescriptiveQuotePdfBlob(params: {
   let y = 0
   const newPage = (first = false) => {
     if (!first) doc.addPage()
-    y = drawLogo(doc, logoDataUrl, position, accent, margin)
+    y = drawLogo(doc, logoDataUrl, position, accent, margin, quote.band_style)
   }
   const ensure = (h: number) => {
     if (y + h > rowsBottom) newPage()

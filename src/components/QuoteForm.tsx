@@ -11,6 +11,13 @@ import {
   computeQuoteTotal,
   QUOTE_LAYOUTS,
   QUOTE_LOGO_POSITIONS,
+  BAND_COLORS,
+  BAND_HEIGHT_MAX,
+  BAND_HEIGHT_MIN,
+  DEFAULT_BAND_STYLE,
+  LINE_COLORS,
+  cleanBandStyle,
+  type QuoteBandStyle,
   type QuoteLogoPosition,
   type QuotePreset,
   type QuoteFormData,
@@ -36,6 +43,8 @@ type IssuerSummary = {
   // Ultima posizione del logo scelta e sezioni pronte del preventivo descrittivo
   quote_logo_position?: string | null
   quote_presets?: QuotePreset[] | null
+  quote_band_style?: QuoteBandStyle | null
+  accent?: string | null
 } | null
 
 type Props = {
@@ -52,10 +61,11 @@ type Props = {
   quoteNumber?: number
 }
 
-function defaultForm(paymentInfo = '', logoPosition: QuoteLogoPosition = 'left', intro = '', closing = ''): QuoteFormData {
+function defaultForm(paymentInfo = '', logoPosition: QuoteLogoPosition = 'left', intro = '', closing = '', bandStyle: QuoteBandStyle | null = null): QuoteFormData {
   return {
     layout: 'table',
     logoPosition,
+    bandStyle,
     subject: '',
     intro,
     sections: [],
@@ -92,7 +102,7 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
     if (initialData) return initialData
     const savedPosition = issuer?.quote_logo_position
     const position = QUOTE_LOGO_POSITIONS.includes(savedPosition as QuoteLogoPosition) ? (savedPosition as QuoteLogoPosition) : 'left'
-    const base = defaultForm(issuerPayment, position, t('defaultIntro'), t('defaultClosing'))
+    const base = defaultForm(issuerPayment, position, t('defaultIntro'), t('defaultClosing'), cleanBandStyle(issuer?.quote_band_style))
     return initialLine ? { ...base, items: [{ ...emptyQuoteItem(), ...initialLine }] } : base
   })
   const [pickerOpen, setPickerOpen] = useState(false)
@@ -319,6 +329,74 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
             ))}
           </div>
           {!logoUrl && <p className="mt-2 text-xs text-gray-500">{t('logoPositionNoLogo')}</p>}
+          {form.logoPosition === 'band' && (() => {
+            // Senza scelta: grigio e il colore dell'azienda per la riga
+            const band = form.bandStyle ?? { ...DEFAULT_BAND_STYLE, line: /^#[0-9a-f]{6}$/i.test(issuer?.accent ?? '') ? (issuer!.accent as string) : DEFAULT_BAND_STYLE.line }
+            const setBand = (patch: Partial<QuoteBandStyle>) => setForm((prev) => ({ ...prev, bandStyle: { ...band, ...patch } }))
+            const swatches = (colors: string[], value: string, key: 'band' | 'line') => (
+              <div className="flex flex-wrap items-center gap-1.5">
+                {colors.map((c) => (
+                  <button
+                    key={c}
+                    type="button"
+                    onClick={() => setBand({ [key]: c })}
+                    aria-label={c}
+                    aria-pressed={value.toLowerCase() === c}
+                    className={`h-7 w-7 rounded-full border-2 ${value.toLowerCase() === c ? 'border-[var(--ink)] ring-2 ring-[var(--gold)]/40' : 'border-gray-200'}`}
+                    style={{ background: c }}
+                  />
+                ))}
+                <input type="color" value={value} onChange={(e) => setBand({ [key]: e.target.value })} className="h-7 w-9 cursor-pointer rounded border border-gray-300" />
+              </div>
+            )
+            return (
+              <div className="mt-4 space-y-3 rounded-xl border border-[var(--gold)]/25 bg-[var(--background)] p-4">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-sm font-bold text-[var(--ink)]">{t('bandStyleTitle')}</p>
+                  {form.bandStyle && (
+                    <button type="button" onClick={() => setForm((prev) => ({ ...prev, bandStyle: null }))} className="text-xs font-semibold text-[var(--gold)] hover:underline">
+                      {t('bandReset')}
+                    </button>
+                  )}
+                </div>
+                {/* Miniatura: fascia, riga e riquadro del logo */}
+                <div className="relative h-20 overflow-hidden rounded-lg border border-gray-200 bg-white">
+                  <div className="absolute inset-x-0" style={{ top: 34 - band.height / 3, height: band.height / 1.5, background: band.band }} />
+                  <div className="absolute inset-x-0 h-1" style={{ top: 34 + band.height / 3, background: band.line }} />
+                  <div className="absolute left-1/2 top-1.5 flex h-16 w-28 -translate-x-1/2 items-center justify-center bg-[#141414]">
+                    {logoUrl && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={logoUrl} alt="" className="max-h-12 max-w-24 object-contain" />
+                    )}
+                  </div>
+                </div>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div>
+                    <span className="mb-1 block text-xs font-semibold text-gray-600">{t('bandColor')}</span>
+                    {swatches(BAND_COLORS, band.band, 'band')}
+                  </div>
+                  <div>
+                    <span className="mb-1 block text-xs font-semibold text-gray-600">{t('bandLineColor')}</span>
+                    {swatches(LINE_COLORS, band.line, 'line')}
+                  </div>
+                </div>
+                <label className="block">
+                  <span className="mb-1 flex justify-between text-xs font-semibold text-gray-600">
+                    {t('bandHeight')} <span>{band.height} pt</span>
+                  </span>
+                  <input
+                    type="range"
+                    min={BAND_HEIGHT_MIN}
+                    max={BAND_HEIGHT_MAX}
+                    step={2}
+                    value={band.height}
+                    onChange={(e) => setBand({ height: Number(e.target.value) })}
+                    className="w-full accent-[var(--gold)]"
+                  />
+                </label>
+              </div>
+            )
+          })()}
         </div>
       </div>
 

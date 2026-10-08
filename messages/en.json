@@ -2474,7 +2474,12 @@
     "layerBase": "Substrate",
     "layerRemove": "Delete layer",
     "layerAdd": "Add layer",
-    "cancelConfirm": "You have unsaved changes: leave without saving them?"
+    "cancelConfirm": "You have unsaved changes: leave without saving them?",
+    "bandStyleTitle": "Band colours and height",
+    "bandColor": "Band colour",
+    "bandLineColor": "Line colour",
+    "bandHeight": "Band height",
+    "bandReset": "Reset"
   },
   "kumaniCv": {
     "title": "KUMANI CV",

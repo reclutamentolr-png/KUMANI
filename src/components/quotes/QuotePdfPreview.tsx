@@ -53,6 +53,7 @@ export default function QuotePdfPreview({ form, issuer, logoUrl, quoteNumber }: 
           total: descriptive ? computeSectionsTotal(sections) : computeQuoteTotal(items),
           layout: form.layout,
           logo_position: form.logoPosition,
+          band_style: form.bandStyle,
           subject: form.subject,
           intro: form.intro,
           closing: form.closing,

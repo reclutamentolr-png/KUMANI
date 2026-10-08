@@ -2474,7 +2474,12 @@
     "layerBase": "Soporte",
     "layerRemove": "Eliminar capa",
     "layerAdd": "Añadir capa",
-    "cancelConfirm": "Tienes cambios sin guardar: ¿quieres salir sin guardarlos?"
+    "cancelConfirm": "Tienes cambios sin guardar: ¿quieres salir sin guardarlos?",
+    "bandStyleTitle": "Colores y altura de la franja",
+    "bandColor": "Color de la franja",
+    "bandLineColor": "Color de la línea",
+    "bandHeight": "Altura de la franja",
+    "bandReset": "Restablecer"
   },
   "kumaniCv": {
     "title": "KUMANI CV",

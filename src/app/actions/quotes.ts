@@ -11,6 +11,7 @@ import {
   QUOTE_LAYOUTS,
   QUOTE_LOGO_POSITIONS,
   QUOTE_VAT_MODES,
+  cleanBandStyle,
   computeQuoteTotal,
   computeSectionsTotal,
   type QuoteFormData,
@@ -77,6 +78,7 @@ function quoteFields(form: QuoteFormData, userId: string) {
   return {
     layout,
     logo_position: QUOTE_LOGO_POSITIONS.includes(form.logoPosition) ? form.logoPosition : 'left',
+    band_style: cleanBandStyle(form.bandStyle),
     subject: clip(form.subject, 300) || null,
     intro: clip(form.intro, 3000) || null,
     closing: clip(form.closing, 1000) || null,
@@ -102,9 +104,12 @@ function quoteFields(form: QuoteFormData, userId: string) {
 }
 
 // Ricorda l'ultima posizione del logo scelta (proposta nei preventivi nuovi)
-async function rememberLogoPosition(supabase: SupabaseClient, userId: string, position: string) {
+async function rememberLogoPosition(supabase: SupabaseClient, userId: string, position: string, bandStyle?: unknown) {
   try {
-    await supabase.from('quote_issuer_profiles').update({ quote_logo_position: position }).eq('user_id', userId)
+    await supabase
+      .from('quote_issuer_profiles')
+      .update({ quote_logo_position: position, ...(bandStyle ? { quote_band_style: bandStyle } : {}) })
+      .eq('user_id', userId)
   } catch {
     // facoltativo
   }
@@ -254,7 +259,7 @@ export async function createQuote(
     if (!error && data) {
       await awardToolPoint('preventivi')
       await upsertSavedClient(supabase, gate.userId, form)
-      await rememberLogoPosition(supabase, gate.userId, fields.logo_position)
+      await rememberLogoPosition(supabase, gate.userId, fields.logo_position, fields.band_style)
       return { success: true, data: { id: data.id, quote_number: data.quote_number } }
     }
 
@@ -291,7 +296,7 @@ export async function updateQuote(id: string, form: QuoteFormData): Promise<Acti
   }
 
   await upsertSavedClient(supabase, gate.userId, form)
-  await rememberLogoPosition(supabase, gate.userId, fields.logo_position)
+  await rememberLogoPosition(supabase, gate.userId, fields.logo_position, fields.band_style)
   return { success: true, data: null }
 }
 

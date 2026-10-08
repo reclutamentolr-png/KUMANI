@@ -1,5 +1,5 @@
 import type { jsPDF } from 'jspdf'
-import type { QuoteItem, QuoteLayout, QuoteLogoPosition, QuoteSection, QuoteVatMode } from '@/lib/quotes'
+import { cleanBandStyle, type QuoteBandStyle, type QuoteItem, type QuoteLayout, type QuoteLogoPosition, type QuoteSection, type QuoteVatMode } from '@/lib/quotes'
 
 // Parti comuni ai due PDF del preventivo (tabellare e descrittivo): tipi,
 // colori, indirizzi e logo nella posizione scelta.
@@ -24,6 +24,7 @@ export type QuoteForPdf = {
   // salvati prima hanno solo la tabella, logo a sinistra)
   layout?: QuoteLayout | null
   logo_position?: QuoteLogoPosition | null
+  band_style?: QuoteBandStyle | null
   subject?: string | null
   intro?: string | null
   closing?: string | null
@@ -51,6 +52,11 @@ export type Rgb = [number, number, number]
 export const INK: Rgb = [23, 23, 23]
 export const GOLD: Rgb = [199, 161, 90]
 export const MUTED: Rgb = [110, 110, 110]
+
+export function hexToRgb(hex: string): Rgb {
+  const n = parseInt(hex.replace('#', ''), 16)
+  return Number.isFinite(n) ? [(n >> 16) & 255, (n >> 8) & 255, n & 255] : [150, 150, 150]
+}
 
 export function accentRgb(issuer: IssuerForPdf): Rgb {
   const hex = issuer?.accent?.trim() ?? ''
@@ -80,7 +86,7 @@ export function formatClientAddressLine(quote: QuoteForPdf): string | null {
  * dell'azienda (il logo al centro su un riquadro scuro). Restituisce la
  * prima riga libera sotto il logo. Senza logo, la fascia resta comunque.
  */
-export function drawLogo(doc: jsPDF, logoDataUrl: string | null, position: QuoteLogoPosition, accent: Rgb, margin: number): number {
+export function drawLogo(doc: jsPDF, logoDataUrl: string | null, position: QuoteLogoPosition, accent: Rgb, margin: number, bandStyle?: QuoteBandStyle | null): number {
   const pageWidth = doc.internal.pageSize.getWidth()
   const top = margin - 6
   let props: { width: number; height: number } | null = null
@@ -112,14 +118,18 @@ export function drawLogo(doc: jsPDF, logoDataUrl: string | null, position: Quote
   }
 
   if (position === 'band') {
-    const bandY = top + 6
-    const bandH = 30
-    doc.setFillColor(150, 150, 150)
+    // Colori e altezza scelti nel preventivo (senza scelta: grigio e colore dell'azienda)
+    const style = cleanBandStyle(bandStyle)
+    const bandRgb = style ? hexToRgb(style.band) : ([150, 150, 150] as Rgb)
+    const lineRgb = style ? hexToRgb(style.line) : accent
+    const bandH = style?.height ?? 30
+    const boxH = Math.max(56, bandH + 36)
+    const bandY = top + (boxH - bandH) / 2 - 12
+    doc.setFillColor(...bandRgb)
     doc.rect(0, bandY, pageWidth, bandH, 'F')
-    doc.setFillColor(...accent)
+    doc.setFillColor(...lineRgb)
     doc.rect(0, bandY + bandH, pageWidth, 3, 'F')
     const boxW = 170
-    const boxH = 66
     const boxX = (pageWidth - boxW) / 2
     doc.setFillColor(20, 20, 20)
     doc.rect(boxX, top, boxW, boxH, 'F')

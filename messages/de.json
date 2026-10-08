@@ -2474,7 +2474,12 @@
     "layerBase": "Untergrund",
     "layerRemove": "Schicht löschen",
     "layerAdd": "Schicht hinzufügen",
-    "cancelConfirm": "Du hast ungespeicherte Änderungen: ohne Speichern verlassen?"
+    "cancelConfirm": "Du hast ungespeicherte Änderungen: ohne Speichern verlassen?",
+    "bandStyleTitle": "Farben und Höhe des Bands",
+    "bandColor": "Farbe des Bands",
+    "bandLineColor": "Farbe der Linie",
+    "bandHeight": "Höhe des Bands",
+    "bandReset": "Zurücksetzen"
   },
   "kumaniCv": {
     "title": "KUMANI CV",

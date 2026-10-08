@@ -2528,7 +2528,12 @@
     "layerBase": "Supporto",
     "layerRemove": "Elimina strato",
     "layerAdd": "Aggiungi strato",
-    "cancelConfirm": "Hai modifiche non salvate: vuoi uscire senza salvarle?"
+    "cancelConfirm": "Hai modifiche non salvate: vuoi uscire senza salvarle?",
+    "bandStyleTitle": "Colori e altezza della fascia",
+    "bandColor": "Colore della fascia",
+    "bandLineColor": "Colore della riga",
+    "bandHeight": "Altezza della fascia",
+    "bandReset": "Ripristina"
   },
   "kumaniCv": {
     "title": "KUMANI CV",

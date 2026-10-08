@@ -81,7 +81,7 @@ export function generateQuotePdfBlob(params: {
   // Logo al centro, a destra o sulla fascia: sopra, a tutta larghezza; le
   // due colonne (azienda e cliente) partono sotto
   // (+16: i testi si scrivono sulla riga di base, il titolo grande sale di circa 16 pt)
-  const headerTop = position === 'left' ? margin + 6 : drawLogo(doc, logoDataUrl, position, accentRgb(issuer), margin) + 16
+  const headerTop = position === 'left' ? margin + 6 : drawLogo(doc, logoDataUrl, position, accentRgb(issuer), margin, quote.band_style) + 16
   let leftY = headerTop
   if (logoDataUrl && position === 'left') {
     try {

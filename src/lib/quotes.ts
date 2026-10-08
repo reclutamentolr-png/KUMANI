@@ -64,6 +64,31 @@ export function quoteImageUrl(path: string): string {
   return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/quote-logos-v2/${path}`
 }
 
+// Aspetto della «Fascia» del logo: colore della fascia, della riga sotto e altezza (pt)
+export interface QuoteBandStyle {
+  band: string
+  line: string
+  height: number
+}
+export const BAND_HEIGHT_MIN = 14
+export const BAND_HEIGHT_MAX = 60
+export const DEFAULT_BAND_STYLE: QuoteBandStyle = { band: '#969696', line: '#c79a3b', height: 30 }
+export const BAND_COLORS = ['#969696', '#171717', '#1f3a5f', '#2f5d50', '#7a1f2b', '#c79a3b', '#e7e2d6', '#ffffff']
+export const LINE_COLORS = ['#c79a3b', '#f0a830', '#e11d48', '#2563eb', '#16a34a', '#171717', '#ffffff', '#969696']
+
+// Valori sicuri (colori esadecimali, altezza nei limiti)
+export function cleanBandStyle(v: unknown): QuoteBandStyle | null {
+  if (!v || typeof v !== 'object') return null
+  const o = v as Partial<QuoteBandStyle>
+  const hex = (c: unknown, d: string) => (typeof c === 'string' && /^#[0-9a-f]{6}$/i.test(c) ? c : d)
+  const h = Math.round(Number(o.height))
+  return {
+    band: hex(o.band, DEFAULT_BAND_STYLE.band),
+    line: hex(o.line, DEFAULT_BAND_STYLE.line),
+    height: Number.isFinite(h) ? Math.min(BAND_HEIGHT_MAX, Math.max(BAND_HEIGHT_MIN, h)) : DEFAULT_BAND_STYLE.height,
+  }
+}
+
 export const MAX_QUOTE_SECTIONS = 30
 export const MAX_QUOTE_PRESETS = 20
 
@@ -86,6 +111,7 @@ export function sectionLines(body: string): string[] {
 export interface QuoteFormData {
   layout: QuoteLayout
   logoPosition: QuoteLogoPosition
+  bandStyle: QuoteBandStyle | null
   subject: string
   intro: string
   sections: QuoteSection[]

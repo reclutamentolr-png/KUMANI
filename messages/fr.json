@@ -2474,7 +2474,12 @@
     "layerBase": "Support",
     "layerRemove": "Supprimer la couche",
     "layerAdd": "Ajouter une couche",
-    "cancelConfirm": "Vous avez des modifications non enregistrées : quitter sans les enregistrer ?"
+    "cancelConfirm": "Vous avez des modifications non enregistrées : quitter sans les enregistrer ?",
+    "bandStyleTitle": "Couleurs et hauteur du bandeau",
+    "bandColor": "Couleur du bandeau",
+    "bandLineColor": "Couleur de la ligne",
+    "bandHeight": "Hauteur du bandeau",
+    "bandReset": "Réinitialiser"
   },
   "kumaniCv": {
     "title": "KUMANI CV",

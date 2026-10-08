@@ -48,6 +48,7 @@ export default async function EditQuotePage({
   const initialData: QuoteFormData = {
     layout: quote.layout === 'descriptive' ? 'descriptive' : 'table',
     logoPosition: quote.logo_position || 'left',
+    bandStyle: quote.band_style ?? null,
     subject: quote.subject || '',
     intro: quote.intro || '',
     sections: Array.isArray(quote.sections) ? quote.sections : [],

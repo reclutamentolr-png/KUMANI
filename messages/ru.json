@@ -2474,7 +2474,12 @@
     "layerBase": "Основание",
     "layerRemove": "Удалить слой",
     "layerAdd": "Добавить слой",
-    "cancelConfirm": "Есть несохранённые изменения: выйти без сохранения?"
+    "cancelConfirm": "Есть несохранённые изменения: выйти без сохранения?",
+    "bandStyleTitle": "Цвета и высота полосы",
+    "bandColor": "Цвет полосы",
+    "bandLineColor": "Цвет линии",
+    "bandHeight": "Высота полосы",
+    "bandReset": "Сбросить"
   },
   "kumaniCv": {
     "title": "KUMANI CV",
