@@ -64,6 +64,34 @@ export function generateDescriptiveQuotePdfBlob(params: {
 
   newPage(true)
 
+  // ── Dati dell'azienda in alto, allineati come il logo (fascia: al centro) ──
+  const issuerLines = [
+    issuer?.company_name,
+    formatIssuerAddressLine(issuer),
+    issuer?.vat_number,
+    [issuer?.phone, issuer?.email].filter(Boolean).join(' · ') || null,
+    issuer?.pec ? `${labels.pecLabel}: ${issuer.pec}` : null,
+  ].filter(Boolean) as string[]
+  if (issuerLines.length) {
+    const align = position === 'left' ? 'left' : position === 'right' ? 'right' : 'center'
+    const ax = align === 'left' ? margin : align === 'right' ? pageWidth - margin : pageWidth / 2
+    issuerLines.forEach((line, i) => {
+      const size = i === 0 ? 11.5 : 9
+      doc.setFont('helvetica', i === 0 ? 'bold' : 'normal')
+      doc.setFontSize(size)
+      doc.setTextColor(...(i === 0 ? INK : MUTED))
+      for (const l of doc.splitTextToSize(line, width * 0.75) as string[]) {
+        doc.text(l, ax, y, { align })
+        y += size * 1.3
+      }
+    })
+    y += 8
+    doc.setDrawColor(220, 220, 220)
+    doc.setLineWidth(0.5)
+    doc.line(margin, y, pageWidth - margin, y)
+    y += 22
+  }
+
   // ── Destinatario ──
   doc.setFont('helvetica', 'normal')
   doc.setFontSize(10)
@@ -223,19 +251,11 @@ export function generateDescriptiveQuotePdfBlob(params: {
     y += 44
   }
 
-  // ── Chiusura e dati dell'azienda ──
+  // ── Chiusura ──
   if (quote.closing?.trim()) {
     paragraph(quote.closing.trim(), 10.5, INK)
     y += 10
   }
-  const issuerLines = [
-    issuer?.company_name,
-    formatIssuerAddressLine(issuer),
-    issuer?.vat_number,
-    [issuer?.phone, issuer?.email].filter(Boolean).join(' · ') || null,
-    issuer?.pec ? `${labels.pecLabel}: ${issuer.pec}` : null,
-  ].filter(Boolean) as string[]
-  issuerLines.forEach((line, i) => paragraph(line, i === 0 ? 10.5 : 9.5, i === 0 ? INK : MUTED, i === 0 ? 'bold' : 'normal'))
 
   // ── Fondo fisso: se non c'è posto sotto il testo, pagina nuova ──
   if (footerHeight > 0) {

@@ -97,13 +97,15 @@ export default function QuotePdfPreview({ form, issuer, logoUrl, quoteNumber }: 
   }, [])
 
   return (
-    <aside className="hidden xl:block">
-      <div className="sticky top-24">
+    // Alta quanto tutto il modulo (self-stretch): così il riquadro dentro resta
+    // fermo sullo schermo mentre si scorre il modulo, con la sua barra interna
+    <aside className="hidden xl:block xl:self-stretch">
+      <div className="sticky top-20">
         <p className="mb-2 flex items-center gap-2 text-sm font-semibold text-gray-600">
           <Eye className="h-4 w-4" /> {t('livePreview')}
           {busy && <LoaderCircle className="h-4 w-4 animate-spin text-[var(--gold)]" />}
         </p>
-        <div className="h-[calc(100vh-8rem)] overflow-hidden rounded-xl border border-gray-300 bg-gray-100 shadow-lg">
+        <div className="h-[calc(100vh-8.5rem)] overflow-hidden rounded-xl border border-gray-300 bg-gray-100 shadow-lg">
           {url ? <iframe title={t('livePreview')} src={`${url}#toolbar=0&navpanes=0&view=FitH`} className="h-full w-full" /> : null}
         </div>
         <p className="mt-2 text-xs text-gray-500">{t('livePreviewHint')}</p>
