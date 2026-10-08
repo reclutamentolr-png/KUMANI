@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from 'next/font/google'
+import localFont from 'next/font/local'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
 import { CLIENT_NAMESPACES } from '@/i18n/clientNamespaces.generated'
@@ -10,14 +10,19 @@ import ToolOpenTracker from '@/components/analytics/ToolOpenTracker'
 import ConfirmHost from '@/components/ConfirmHost'
 import '@/app/globals.css'
 
-const geistSans = Geist({
+// Caratteri dentro il progetto (src/fonts, latino e cirillico): la build non
+// dipende da Google Fonts
+const geistSans = localFont({
+  src: '../fonts/Geist.woff2',
+  weight: '100 900',
   variable: '--font-geist-sans',
-  subsets: ['latin'],
 })
 
-const geistMono = Geist_Mono({
+const geistMono = localFont({
+  src: '../fonts/GeistMono.woff2',
+  weight: '100 900',
   variable: '--font-geist-mono',
-  subsets: ['latin'],
+  preload: false,
 })
 
 // <html> e <body> di tutto il sito: usati dal layout della lingua

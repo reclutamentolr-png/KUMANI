@@ -1,14 +1,16 @@
 'use client'
 
 import { forwardRef, type CSSProperties } from 'react'
-import { Inter, Playfair_Display } from 'next/font/google'
+import localFont from 'next/font/local'
 
 // Biglietto da visita KUMANI: 85×55 mm (1050×680 px) più 3 mm di margine di
 // taglio per lato (37 px), quindi 1124×754 px in tutto. Il contenuto resta
 // dentro l'area sicura; lo sfondo nero arriva fino al bordo del margine.
 
-const inter = Inter({ subsets: ['latin', 'cyrillic'], weight: ['400', '600', '700'] })
-const playfair = Playfair_Display({ subsets: ['latin', 'cyrillic'], weight: ['600', '700'] })
+// Caratteri dentro il progetto (src/fonts, latino e cirillico): la build non
+// dipende da Google Fonts
+const inter = localFont({ src: '../../fonts/Inter.woff2', weight: '100 900' })
+const playfair = localFont({ src: '../../fonts/PlayfairDisplay.woff2', weight: '400 900' })
 
 export const CARD_W = 1050
 export const CARD_H = 680

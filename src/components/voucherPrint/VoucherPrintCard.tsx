@@ -1,7 +1,7 @@
 'use client'
 
 import { forwardRef, type CSSProperties, type ReactNode } from 'react'
-import { Cinzel, Cormorant_Garamond, IBM_Plex_Mono, Inter } from 'next/font/google'
+import localFont from 'next/font/local'
 
 // Voucher KUMANI da stampare: tre grafiche (A Classico, B Minimal,
 // C Premium), fronte nero con il logo oro e retro con frase, codice e QR.
@@ -14,10 +14,17 @@ import { Cinzel, Cormorant_Garamond, IBM_Plex_Mono, Inter } from 'next/font/goog
 // segnati con data-slot): è il modello che il PDF usa una volta sola, poi
 // codice e QR vengono disegnati sopra per ogni voucher.
 
-const cinzel = Cinzel({ subsets: ['latin'], weight: ['500', '700'] })
-const cormorant = Cormorant_Garamond({ subsets: ['latin', 'cyrillic'], weight: ['500', '600'], style: ['normal', 'italic'] })
-const mono = IBM_Plex_Mono({ subsets: ['latin', 'cyrillic'], weight: ['600'] })
-const inter = Inter({ subsets: ['latin', 'cyrillic'], weight: ['400', '600', '700'] })
+// Caratteri dentro il progetto (src/fonts, latino e cirillico): la build non
+// dipende da Google Fonts
+const cinzel = localFont({ src: '../../fonts/Cinzel.woff2', weight: '400 900' })
+const cormorant = localFont({
+  src: [
+    { path: '../../fonts/CormorantGaramond.woff2', weight: '300 700', style: 'normal' },
+    { path: '../../fonts/CormorantGaramond-Italic.woff2', weight: '300 700', style: 'italic' },
+  ],
+})
+const mono = localFont({ src: '../../fonts/IBMPlexMono-SemiBold.woff2', weight: '600' })
+const inter = localFont({ src: '../../fonts/Inter.woff2', weight: '100 900' })
 
 export type VoucherDesign = 'A' | 'B' | 'C'
 export type VoucherFormat = 'card' | 'postcard'

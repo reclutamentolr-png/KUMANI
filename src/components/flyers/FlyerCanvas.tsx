@@ -1,7 +1,7 @@
 'use client'
 
 import { forwardRef, type CSSProperties } from 'react'
-import { Inter, Playfair_Display } from 'next/font/google'
+import localFont from 'next/font/local'
 import {
   AudioWaveform, Award, BadgeCheck, Bell, BellRing, BookOpen, Bookmark, BriefcaseBusiness, Building2, Calculator, CalendarCheck, CalendarClock,
   CalendarDays, Camera, Car, ChartColumn, ChartLine, Circle, CircleCheck, ClipboardList, ClipboardPaste, Clock, Compass, Dices, Download, Ear, Eye,
@@ -18,8 +18,10 @@ import type { FlyerConfig } from '@/lib/flyers'
 // browser con i testi ufficiali e il QR di chi scarica; FlyerExport lo
 // trasforma in immagine e PDF.
 
-const inter = Inter({ subsets: ['latin', 'cyrillic'], weight: ['400', '500', '600', '700', '800'] })
-const playfair = Playfair_Display({ subsets: ['latin', 'cyrillic'], weight: ['700', '800'] })
+// Caratteri dentro il progetto (src/fonts, latino e cirillico): la build non
+// dipende da Google Fonts
+const inter = localFont({ src: '../../fonts/Inter.woff2', weight: '100 900' })
+const playfair = localFont({ src: '../../fonts/PlayfairDisplay.woff2', weight: '400 900' })
 
 const ICONS: Record<string, LucideIcon> = {
   AudioWaveform, Award, BadgeCheck, Bell, BellRing, BookOpen, Bookmark, BriefcaseBusiness, Building2, Calculator, CalendarCheck, CalendarClock,
