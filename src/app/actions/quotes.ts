@@ -404,3 +404,20 @@ export async function unloadQuoteStock(quoteId: string): Promise<UnloadQuoteResu
   const code = known.find((k) => k === res.error) ?? 'failed'
   return { ok: false, error: code, name: res.name, stock: res.stock !== undefined ? Number(res.stock) : undefined }
 }
+
+// Dati completi per PDF e condivisione dall'elenco dei preventivi (che ha solo
+// numero, cliente, data e totale): preventivo, profilo azienda e logo
+export async function getQuotePdfData(id: string): Promise<
+  ActionResult<{ quote: Record<string, unknown>; issuer: Record<string, unknown> | null; logoUrl: string | null }>
+> {
+  const gate = await requireActivePreventiviAccess()
+  if (!gate.ok) return { success: false, message: gate.message }
+  const supabase = await createClient()
+  const [{ data: quote }, { data: issuer }] = await Promise.all([
+    supabase.from('quotes').select('*').eq('id', id).eq('user_id', gate.userId).maybeSingle(),
+    supabase.from('quote_issuer_profiles').select('*').eq('user_id', gate.userId).maybeSingle(),
+  ])
+  if (!quote) return { success: false, message: 'saveError' }
+  const logoUrl = issuer?.logo_path ? supabase.storage.from('quote-logos-v2').getPublicUrl(issuer.logo_path).data.publicUrl : null
+  return { success: true, data: { quote, issuer, logoUrl } }
+}
