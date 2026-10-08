@@ -32,7 +32,7 @@ import {
 type Profile = { id: string; name: string; icon: string }
 
 type Props =
-  | { mode: 'create'; profiles: Profile[] }
+  | { mode: 'create'; profiles: Profile[]; prefill?: { title?: string; category?: Category; dueDate?: string } }
   | { mode: 'edit'; id: string; initial: LifeCalendarItemFormData; profiles: Profile[] }
 
 const CATEGORY_ICONS: Record<Category, typeof User> = {
@@ -50,14 +50,15 @@ const CATEGORY_ICONS: Record<Category, typeof User> = {
 
 const REMINDER_CHOICES = [180, 90, 60, 30, 14, 7, 1]
 
-function defaultForm(): LifeCalendarItemFormData {
+function defaultForm(prefill?: { title?: string; category?: Category; dueDate?: string }): LifeCalendarItemFormData {
+  const category = prefill?.category ?? 'other'
   return {
-    title: '',
-    category: 'other',
+    title: prefill?.title ?? '',
+    category,
     profileId: null,
-    dueDate: '',
+    dueDate: prefill?.dueDate ?? '',
     notes: '',
-    reminderOffsets: REMINDER_PRESETS.other,
+    reminderOffsets: REMINDER_PRESETS[category],
     recurrence: 'none',
     recurrenceCustomDays: null,
   }
@@ -66,7 +67,7 @@ function defaultForm(): LifeCalendarItemFormData {
 export default function LifeCalendarItemForm(props: Props) {
   const t = useTranslations('lifeCalendar')
   const router = useRouter()
-  const [form, setForm] = useState<LifeCalendarItemFormData>(props.mode === 'edit' ? props.initial : defaultForm())
+  const [form, setForm] = useState<LifeCalendarItemFormData>(props.mode === 'edit' ? props.initial : defaultForm(props.prefill))
   const [profiles, setProfiles] = useState<Profile[]>(props.profiles)
   const [newProfileName, setNewProfileName] = useState('')
   const [addingProfile, setAddingProfile] = useState(false)

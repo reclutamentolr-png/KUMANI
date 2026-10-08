@@ -5,8 +5,12 @@ import Link from '@/components/LocalizedLink'
 import { ArrowLeft, CalendarClock } from 'lucide-react'
 import { hasActiveLifeCalendarAccess } from '@/lib/lifeCalendar-server'
 import LifeCalendarItemForm from '@/components/LifeCalendarItemForm'
+import { CATEGORIES, type Category } from '@/lib/lifeCalendar'
 
-export default async function NewLifeCalendarItemPage() {
+// Da MemoLife si arriva con titolo, categoria e data già compilati
+// (?title=…&category=…&due=AAAA-MM-GG), vedi lib/lifeCalendarHints.
+export default async function NewLifeCalendarItemPage({ searchParams }: { searchParams: Promise<{ title?: string; category?: string; due?: string }> }) {
+  const sp = await searchParams
   const t = await getTranslations('lifeCalendar')
 
   const supabase = await createClient()
@@ -45,7 +49,15 @@ export default async function NewLifeCalendarItemPage() {
       </header>
 
       <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <LifeCalendarItemForm mode="create" profiles={profiles || []} />
+        <LifeCalendarItemForm
+          mode="create"
+          profiles={profiles || []}
+          prefill={{
+            title: sp.title?.slice(0, 200),
+            category: (CATEGORIES as readonly string[]).includes(sp.category ?? '') ? (sp.category as Category) : undefined,
+            dueDate: /^\d{4}-\d{2}-\d{2}$/.test(sp.due ?? '') ? sp.due : undefined,
+          }}
+        />
       </main>
     </div>
   )

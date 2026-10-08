@@ -2,7 +2,9 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { LoaderCircle, Trash2, X } from 'lucide-react'
+import { ArrowRight, FileBadge, LoaderCircle, Trash2, X } from 'lucide-react'
+import Link from '@/components/LocalizedLink'
+import { suggestLifeCalendarCategory } from '@/lib/lifeCalendarHints'
 import { deleteAppointment, deleteContact, deleteNote, deleteTask, saveAppointment, saveContact, saveNote, saveTask } from '@/app/actions/memolife'
 
 // Moduli di MemoLife in una finestra (dal basso su telefono). Salvano con le
@@ -108,9 +110,11 @@ export function AppointmentForm({ draft, onDone }: { draft: AppointmentDraft; on
 
 export type TaskDraft = { id?: string; title: string; dueDate: string; priority: string; description: string }
 
-export function TaskForm({ draft, onDone }: { draft: TaskDraft; onDone: () => void }) {
+export function TaskForm({ draft, onDone, lifeCalendar }: { draft: TaskDraft; onDone: () => void; lifeCalendar?: boolean }) {
   const t = useTranslations('agenda')
   const [form, setForm] = useState(draft)
+  // «Patente», «revisione», «assicurazione»…: è una scadenza da rinnovare, va in Life Calendar
+  const deadline = lifeCalendar && !form.id ? suggestLifeCalendarCategory(form.title) : null
   const { busy, error, run } = useSubmit(onDone)
   return (
     <form
@@ -123,6 +127,19 @@ export function TaskForm({ draft, onDone }: { draft: TaskDraft; onDone: () => vo
       <div>
         <label className={label}>{t('fieldTitle')}</label>
         <input className={input} value={form.title} maxLength={200} required autoFocus placeholder={t('taskPlaceholder')} onChange={(e) => setForm({ ...form, title: e.target.value })} />
+        {deadline && (
+          <div className="mt-2 rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm text-rose-900">
+            <p className="flex items-start gap-2">
+              <FileBadge className="mt-0.5 h-4 w-4 shrink-0" /> {t('lifeCalendarHint')}
+            </p>
+            <Link
+              href={`/marketplace/life-calendar/new?title=${encodeURIComponent(form.title.trim())}&category=${deadline}${form.dueDate ? `&due=${form.dueDate}` : ''}`}
+              className="mt-2 inline-flex items-center gap-1 font-semibold text-rose-800 hover:text-rose-950"
+            >
+              {t('lifeCalendarHintCta')} <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        )}
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>

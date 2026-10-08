@@ -461,7 +461,7 @@ export default function MemoLifeApp({
       )}
       {editor?.kind === 'task' && (
         <Sheet title={editor.draft.id ? t('editTask') : t('add_task')} onClose={() => setEditor(null)}>
-          <TaskForm draft={editor.draft} onDone={refresh} />
+          <TaskForm draft={editor.draft} onDone={refresh} lifeCalendar={sources.lifeCalendar} />
         </Sheet>
       )}
       {editor?.kind === 'note' && (
