@@ -6410,7 +6410,8 @@
     "kind_receipt_received": "Reçus confirmés",
     "pptxLite": "PowerPoint Lite",
     "pptxFull": "PowerPoint Full",
-    "pptxVariants": "Lite : la présentation courte. Full : en plus, tous les services un par un."
+    "pptxVariants": "Lite : la présentation courte. Full : en plus, tous les services un par un.",
+    "docsCount": "{count, plural, one {# document} other {# documents}}"
   },
   "flyers": {
     "cta": "Inscrivez-vous gratuitement sur",

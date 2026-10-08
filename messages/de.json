@@ -6410,7 +6410,8 @@
     "kind_receipt_received": "Bestätigte Belege",
     "pptxLite": "PowerPoint Lite",
     "pptxFull": "PowerPoint Full",
-    "pptxVariants": "Lite: die kurze Präsentation. Full: zusätzlich alle Dienste, einer nach dem anderen."
+    "pptxVariants": "Lite: die kurze Präsentation. Full: zusätzlich alle Dienste, einer nach dem anderen.",
+    "docsCount": "{count, plural, one {# Dokument} other {# Dokumente}}"
   },
   "flyers": {
     "cta": "Kostenlos registrieren auf",

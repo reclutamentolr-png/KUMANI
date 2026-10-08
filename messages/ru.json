@@ -6410,7 +6410,8 @@
     "kind_receipt_received": "Подтверждённые расписки",
     "pptxLite": "PowerPoint Lite",
     "pptxFull": "PowerPoint Full",
-    "pptxVariants": "Lite — короткая презентация. Full — плюс все сервисы, по одному."
+    "pptxVariants": "Lite — короткая презентация. Full — плюс все сервисы, по одному.",
+    "docsCount": "{count, plural, one {# документ} few {# документа} many {# документов} other {# документа}}"
   },
   "flyers": {
     "cta": "Бесплатная регистрация на",

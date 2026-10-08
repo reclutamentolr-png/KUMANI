@@ -5,6 +5,7 @@ import {
   ArrowRight,
   BadgeCheck,
   CalendarCheck,
+  ChevronDown,
   Download,
   FileText,
   FolderOpen,
@@ -46,6 +47,16 @@ const KIND_ICONS: Record<PersonalDocKind, LucideIcon> = {
   coupon: TicketPercent,
   event: CalendarCheck,
   voucher: Ticket,
+}
+// Fascia colorata di ogni categoria (chiusa, con il numero di documenti)
+const KIND_BANDS: Record<PersonalDocKind, string> = {
+  quote: 'from-[#1f3a5f] to-[#2f5d8a]',
+  receipt: 'from-[#14532d] to-[#1f7a4a]',
+  receipt_received: 'from-[#0f5257] to-[#16808a]',
+  cv: 'from-[#4c1d95] to-[#6d3fc4]',
+  coupon: 'from-[#9a3412] to-[#d0571c]',
+  event: 'from-[#831843] to-[#b4316b]',
+  voucher: 'from-[#1a1a1a] to-[#3a3226]',
 }
 const KIND_ORDER: PersonalDocKind[] = ['quote', 'receipt', 'receipt_received', 'cv', 'coupon', 'event', 'voucher']
 
@@ -285,14 +296,23 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
         {groups.map(({ kind, items }) => {
           const Icon = KIND_ICONS[kind]
           return (
-            <div key={kind} className="rounded-2xl border border-[var(--gold)]/30 bg-white shadow-sm">
-              <h2 className="flex items-center gap-2 border-b border-[var(--gold)]/20 px-5 py-3 font-bold text-[var(--ink)]">
-                <Icon className="h-5 w-5 text-[var(--gold)]" /> {t(`kind_${kind}`)} <span className="text-sm font-normal text-[var(--muted)]">({items.length})</span>
-              </h2>
+            <details key={kind} className="group overflow-hidden rounded-2xl border border-[var(--gold)]/30 bg-white shadow-sm">
+              <summary
+                className={`flex cursor-pointer list-none items-center gap-3 bg-gradient-to-r ${KIND_BANDS[kind]} px-5 py-4 text-white transition hover:brightness-110 [&::-webkit-details-marker]:hidden`}
+              >
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/15 ring-1 ring-white/25">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <span className="min-w-0 flex-1 truncate text-base font-bold">{t(`kind_${kind}`)}</span>
+                <span className="shrink-0 rounded-full bg-white px-2.5 py-0.5 text-sm font-bold text-[var(--ink)]" aria-label={t('docsCount', { count: items.length })}>
+                  {items.length}
+                </span>
+                <ChevronDown className="h-5 w-5 shrink-0 transition-transform group-open:rotate-180" />
+              </summary>
               <ul className="divide-y divide-[var(--gold)]/10">
                 {items.map((d) => (
                   <li key={d.id}>
-                    <Link href={d.href} className="group flex items-center justify-between gap-3 px-5 py-3 transition hover:bg-[var(--gold-pale)]/50">
+                    <Link href={d.href} className="group/doc flex items-center justify-between gap-3 px-5 py-3 transition hover:bg-[var(--gold-pale)]/50">
                       <div className="min-w-0">
                         <p className="truncate font-semibold text-[var(--ink)]">{d.title || t('untitled')}</p>
                         <p className="truncate text-xs text-[var(--muted)]">
@@ -301,13 +321,13 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
                         </p>
                       </div>
                       <span className="flex shrink-0 items-center gap-1 text-sm font-semibold text-[var(--gold)]">
-                        {t('open')} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                        {t('open')} <ArrowRight className="h-4 w-4 transition-transform group-hover/doc:translate-x-0.5" />
                       </span>
                     </Link>
                   </li>
                 ))}
               </ul>
-            </div>
+            </details>
           )
         })}
       </section>
