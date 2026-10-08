@@ -2455,7 +2455,9 @@
     "pdfDear": "An",
     "pdfSignature": "Zur Annahme",
     "pdfSignatureHint": "(Stempel und Unterschrift)",
-    "duplicateQuote": "Duplizieren"
+    "duplicateQuote": "Duplizieren",
+    "livePreview": "Live-Vorschau",
+    "livePreviewHint": "Das ist das echte PDF: Es aktualisiert sich beim Schreiben."
   },
   "kumaniCv": {
     "title": "KUMANI CV",

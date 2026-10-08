@@ -2455,7 +2455,9 @@
     "pdfDear": "Exmos. Srs.",
     "pdfSignature": "Para aceitação",
     "pdfSignatureHint": "(Carimbo e assinatura)",
-    "duplicateQuote": "Duplicar"
+    "duplicateQuote": "Duplicar",
+    "livePreview": "Pré-visualização ao vivo",
+    "livePreviewHint": "É o PDF real: atualiza-se enquanto escreves."
   },
   "kumaniCv": {
     "title": "KUMANI CV",

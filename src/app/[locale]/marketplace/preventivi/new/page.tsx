@@ -41,6 +41,9 @@ export default async function NewQuotePage({
     .maybeSingle()
 
   const inventoryProducts = await loadQuoteInventoryProducts(supabase, user.id)
+  // Numero che avrà il preventivo (per l'anteprima dal vivo)
+  const { data: lastQuote } = await supabase.from('quotes').select('quote_number').eq('user_id', user.id).order('quote_number', { ascending: false }).limit(1).maybeSingle()
+  const nextNumber = (lastQuote?.quote_number ?? 0) + 1
 
   const logoUrl = profile?.logo_path
     ? supabase.storage.from('quote-logos-v2').getPublicUrl(profile.logo_path).data.publicUrl
@@ -49,7 +52,7 @@ export default async function NewQuotePage({
   return (
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+        <div className="max-w-3xl xl:max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <Link
             href={`/marketplace/preventivi${backSuffix}`}
             className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
@@ -64,7 +67,7 @@ export default async function NewQuotePage({
         </div>
       </header>
 
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <main className="max-w-3xl xl:max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {initialLine && (
           <p className="mb-6 flex items-center gap-2 rounded-xl border border-[var(--gold)]/30 bg-[var(--gold-pale)] px-4 py-3 text-sm text-[var(--ink)]">
             <Calculator className="h-4 w-4 shrink-0 text-[var(--gold)]" />
@@ -77,6 +80,7 @@ export default async function NewQuotePage({
           mode="create"
           inventoryProducts={inventoryProducts ?? undefined}
           initialLine={initialLine}
+          quoteNumber={nextNumber}
         />
       </main>
     </div>

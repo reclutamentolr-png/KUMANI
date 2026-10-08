@@ -2455,7 +2455,9 @@
     "pdfDear": "À l’attention de",
     "pdfSignature": "Bon pour accord",
     "pdfSignatureHint": "(Cachet et signature)",
-    "duplicateQuote": "Dupliquer"
+    "duplicateQuote": "Dupliquer",
+    "livePreview": "Aperçu en direct",
+    "livePreviewHint": "C’est le vrai PDF : il se met à jour pendant que vous écrivez."
   },
   "kumaniCv": {
     "title": "KUMANI CV",

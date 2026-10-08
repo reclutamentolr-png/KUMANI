@@ -2455,7 +2455,9 @@
     "pdfDear": "Кому:",
     "pdfSignature": "Согласовано",
     "pdfSignatureHint": "(печать и подпись)",
-    "duplicateQuote": "Дублировать"
+    "duplicateQuote": "Дублировать",
+    "livePreview": "Предпросмотр",
+    "livePreviewHint": "Это настоящий PDF: он обновляется по мере ввода."
   },
   "kumaniCv": {
     "title": "KUMANI CV",

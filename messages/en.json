@@ -2455,7 +2455,9 @@
     "pdfDear": "To:",
     "pdfSignature": "For acceptance",
     "pdfSignatureHint": "(Stamp and Signature)",
-    "duplicateQuote": "Duplicate"
+    "duplicateQuote": "Duplicate",
+    "livePreview": "Live preview",
+    "livePreviewHint": "This is the real PDF: it updates as you type."
   },
   "kumaniCv": {
     "title": "KUMANI CV",

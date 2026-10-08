@@ -20,6 +20,8 @@ import {
 import { useFromDashboardSuffix } from '@/lib/useFromDashboard'
 import QuoteClientQuickEditModal from '@/components/QuoteClientQuickEditModal'
 import QuoteSectionsEditor from '@/components/quotes/QuoteSectionsEditor'
+import QuotePdfPreview from '@/components/quotes/QuotePdfPreview'
+import type { IssuerForPdf } from '@/lib/quotePdfShared'
 import VatCheck from '@/components/ecosystem/VatCheck'
 import IbanInlineCheck from '@/components/ecosystem/IbanInlineCheck'
 
@@ -46,6 +48,8 @@ type Props = {
   inventoryProducts?: QuoteInventoryProduct[]
   // Prima riga già pronta (es. dalle Calcolatrici) su un modulo nuovo
   initialLine?: { description: string; unitPrice: number }
+  // Numero del preventivo (nuovo: il prossimo libero) per l'anteprima
+  quoteNumber?: number
 }
 
 function defaultForm(paymentInfo = '', logoPosition: QuoteLogoPosition = 'left', intro = '', closing = ''): QuoteFormData {
@@ -75,7 +79,7 @@ function defaultForm(paymentInfo = '', logoPosition: QuoteLogoPosition = 'left',
   }
 }
 
-export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData, inventoryProducts, initialLine }: Props) {
+export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData, inventoryProducts, initialLine, quoteNumber }: Props) {
   const t = useTranslations('preventivi')
   const tb = useTranslations('businessProfile')
   const te = useTranslations('ecosystem')
@@ -220,6 +224,8 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
 
   return (
     <>
+    {/* Su schermi larghi: modulo a sinistra, anteprima dal vivo del PDF a destra */}
+    <div className="xl:grid xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:items-start xl:gap-8">
     <div className="space-y-6">
       {/* Issuer block — read-only, edited only from its own page */}
       <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 flex items-center justify-between gap-4 flex-wrap">
@@ -683,6 +689,8 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
         </button>
         </div>
       </div>
+    </div>
+    <QuotePdfPreview form={form} issuer={issuer as unknown as IssuerForPdf} logoUrl={logoUrl} quoteNumber={quoteNumber ?? 0} />
     </div>
     {editingClient && (
       <QuoteClientQuickEditModal

@@ -2509,7 +2509,9 @@
     "pdfDear": "Spett.le",
     "pdfSignature": "Per accettazione",
     "pdfSignatureHint": "(Timbro e Firma)",
-    "duplicateQuote": "Duplica"
+    "duplicateQuote": "Duplica",
+    "livePreview": "Anteprima dal vivo",
+    "livePreviewHint": "È il PDF vero: si aggiorna mentre scrivi."
   },
   "kumaniCv": {
     "title": "KUMANI CV",
