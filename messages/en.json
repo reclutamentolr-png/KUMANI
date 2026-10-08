@@ -3965,7 +3965,8 @@
     "backHome": "Back to Home",
     "goDashboard": "Go to Dashboard",
     "notFoundTitle": "Page not found",
-    "notFoundDescription": "The address you opened doesn’t exist or has been moved."
+    "notFoundDescription": "The address you opened doesn’t exist or has been moved.",
+    "goBack": "Go back"
   },
   "billingPage": {
     "titleActive": "Subscription active",

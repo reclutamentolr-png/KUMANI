@@ -1,10 +1,11 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { RotateCcw } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import Logo from '@/components/Logo'
+import { createClient } from '@/lib/supabase/client'
 
 // Errore imprevisto in una pagina: messaggio chiaro, "Riprova" e ritorno
 // alla Home invece della schermata bianca di Next.
@@ -14,6 +15,15 @@ export default function LocaleError({ error, retry }: { error: Error & { digest?
   useEffect(() => {
     console.error(error)
   }, [error])
+
+  // Chi è collegato torna alla Dashboard, non alla homepage pubblica
+  const [loggedIn, setLoggedIn] = useState(false)
+  useEffect(() => {
+    createClient()
+      .auth.getSession()
+      .then(({ data }) => setLoggedIn(!!data.session))
+      .catch(() => {})
+  }, [])
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[var(--ink)] px-4 text-white">
@@ -29,8 +39,8 @@ export default function LocaleError({ error, retry }: { error: Error & { digest?
           >
             <RotateCcw className="h-4 w-4" /> {t('retry')}
           </button>
-          <Link href="/" className="rounded-xl border border-white/20 px-6 py-3 font-semibold hover:bg-white/10">
-            {t('backHome')}
+          <Link href={loggedIn ? '/dashboard' : '/'} className="rounded-xl border border-white/20 px-6 py-3 font-semibold hover:bg-white/10">
+            {loggedIn ? t('goDashboard') : t('backHome')}
           </Link>
         </div>
         {error.digest && <p className="mt-6 text-xs text-white/30">{error.digest}</p>}

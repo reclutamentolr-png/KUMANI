@@ -1,6 +1,7 @@
 import { CANONICAL_ORIGIN } from '@/lib/seo'
 import JsonLd from '@/components/seo/JsonLd'
 import Link from '@/components/LocalizedLink'
+import HomeLoginLink from '@/components/home/HomeLoginLink'
 import Image from 'next/image'
 import { getTranslations } from 'next-intl/server'
 import {
@@ -44,11 +45,12 @@ import { HOME_LAYOUT_CONFIG, type HomeLayoutKey } from '@/lib/homeLayouts'
 // (src/app/[locale]/page.tsx, preparata in anticipo e tenuta in memoria) e
 // dall'anteprima degli aspetti nell'Admin (admin/anteprima-home/[layout]).
 export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayoutKey }) {
-  const [t, tg, tr, tcat] = await Promise.all([
+  const [t, tg, tr, tcat, errorT] = await Promise.all([
     getTranslations('landingHome'),
     getTranslations('guides'),
     getTranslations('reviews'),
     getTranslations('catalog'),
+    getTranslations('errorPages'),
   ])
   const L = HOME_LAYOUT_CONFIG[layoutKey]
   // Apertura con testo a sinistra sul computer (foto a lato)
@@ -111,12 +113,11 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
               {t('aboutLink')}
             </Link>
             <LanguageSwitcher dark />
-            <Link
-              href="/login"
+            <HomeLoginLink
+              loginLabel={t('login')}
+              dashboardLabel={errorT('goDashboard')}
               className="text-white/80 hover:text-[var(--gold-bright)] font-medium transition-colors text-sm sm:text-base"
-            >
-              {t('login')}
-            </Link>
+            />
             <Link
               href="/register"
               className="bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] hover:brightness-110 text-[var(--ink)] px-3 sm:px-6 py-1.5 sm:py-2 rounded-lg font-bold transition-all shadow-lg hover:shadow-xl text-sm sm:text-base"
@@ -183,12 +184,11 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
               {t('heroCta')}
               <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </Link>
-            <Link
-              href="/login"
+            <HomeLoginLink
+              loginLabel={t('login')}
+              dashboardLabel={errorT('goDashboard')}
               className="bg-white/5 hover:bg-white/10 backdrop-blur text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-bold text-base sm:text-lg transition-all border border-white/15 flex items-center justify-center"
-            >
-              {t('login')}
-            </Link>
+            />
           </div>
           {/* Stats */}
           <div className={`grid grid-cols-3 gap-3 sm:gap-6 max-w-xl mx-auto ${leftHero ? 'lg:mx-0' : ''}`}>

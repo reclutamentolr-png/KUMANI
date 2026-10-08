@@ -1,4 +1,6 @@
-import { notFound } from 'next/navigation'
+import { redirect } from 'next/navigation'
+import { getLocale } from 'next-intl/server'
+import { defaultLocale } from '../../../../../../i18n'
 import { getTranslations } from 'next-intl/server'
 import { ArrowLeft } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
@@ -13,7 +15,7 @@ export const dynamic = 'force-dynamic'
 export default async function VehiclePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const t = await getTranslations('garage')
-  const supabase = await createClient()
+  const [supabase, locale] = await Promise.all([createClient(), getLocale()])
   const {
     data: { user },
   } = await supabase.auth.getUser()
@@ -22,7 +24,8 @@ export default async function VehiclePage({ params }: { params: Promise<{ id: st
     hasActiveToolAccess(supabase, user!.id, 'spendly'),
   ])
   const vehicle = vehicles[0]
-  if (!vehicle) notFound()
+  // Eliminato (anche da un'altra finestra): si torna all'elenco, non alla 404
+  if (!vehicle) redirect(`${locale === defaultLocale ? '' : `/${locale}`}/marketplace/garage`)
 
   return (
     <div className="space-y-5">

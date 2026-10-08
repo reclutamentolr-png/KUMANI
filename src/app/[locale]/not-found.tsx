@@ -1,5 +1,5 @@
 import { getTranslations } from 'next-intl/server'
-import Link from '@/components/LocalizedLink'
+import NotFoundActions from '@/components/NotFoundActions'
 import Logo from '@/components/Logo'
 
 // Pagina 404 tradotta, in stile KUMANI.
@@ -12,17 +12,7 @@ export default async function LocaleNotFound() {
         <p className="text-6xl font-bold text-[var(--gold-bright)]">404</p>
         <h1 className="mt-4 text-2xl font-bold">{t('notFoundTitle')}</h1>
         <p className="mt-3 text-white/70">{t('notFoundDescription')}</p>
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
-          <Link
-            href="/"
-            className="rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3 font-bold text-[var(--ink)]"
-          >
-            {t('backHome')}
-          </Link>
-          <Link href="/dashboard" className="rounded-xl border border-white/20 px-6 py-3 font-semibold hover:bg-white/10">
-            {t('goDashboard')}
-          </Link>
-        </div>
+        <NotFoundActions backLabel={t('goBack')} homeLabel={t('backHome')} dashboardLabel={t('goDashboard')} />
       </div>
     </div>
   )

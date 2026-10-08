@@ -3965,7 +3965,8 @@
     "backHome": "Torna alla Home",
     "goDashboard": "Vai alla Dashboard",
     "notFoundTitle": "Pagina non trovata",
-    "notFoundDescription": "L’indirizzo che hai aperto non esiste o è stato spostato."
+    "notFoundDescription": "L’indirizzo che hai aperto non esiste o è stato spostato.",
+    "goBack": "Torna indietro"
   },
   "billingPage": {
     "titleActive": "Abbonamento Attivo",

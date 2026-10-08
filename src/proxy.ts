@@ -221,6 +221,23 @@ export async function proxy(request: NextRequest) {
     }
   }
 
+  // Già collegato e sulla pagina di accesso (link «Accedi» della homepage,
+  // segnalibro…): niente nuovo login, si entra direttamente. Con ?next= si
+  // torna lì (solo indirizzi interni); gli ospiti in prova restano dove sono.
+  if (user && user.app_metadata?.role !== 'guest') {
+    const segments = request.nextUrl.pathname.split('/').filter(Boolean);
+    const hasLocale = !!segments[0] && locales.includes(segments[0]);
+    const localePrefix = hasLocale ? `/${segments[0]}` : '';
+    const barePath = '/' + (hasLocale ? segments.slice(1) : segments).join('/');
+    if (barePath === '/login') {
+      const role = user.app_metadata?.role;
+      const next = request.nextUrl.searchParams.get('next') ?? '';
+      const home = role === 'agent' ? '/agente' : role === 'translator' ? '/traduzioni' : '/dashboard';
+      const target = !role && next.startsWith('/') && !next.startsWith('//') && !next.startsWith('/\\') ? next : home;
+      return NextResponse.redirect(new URL(`${localePrefix}${target}`, request.url));
+    }
+  }
+
   // Controllo del piano per gli strumenti (vedi sotto): parte subito, in
   // parallelo al controllo della manutenzione, invece che dopo.
   const toolName = extractToolName(request.nextUrl.pathname);

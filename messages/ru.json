@@ -3965,7 +3965,8 @@
     "backHome": "На главную",
     "goDashboard": "В панель",
     "notFoundTitle": "Страница не найдена",
-    "notFoundDescription": "Этот адрес не существует или был перемещён."
+    "notFoundDescription": "Этот адрес не существует или был перемещён.",
+    "goBack": "Вернуться назад"
   },
   "billingPage": {
     "titleActive": "Подписка активна",

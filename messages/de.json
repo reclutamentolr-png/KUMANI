@@ -3965,7 +3965,8 @@
     "backHome": "Zur Startseite",
     "goDashboard": "Zum Dashboard",
     "notFoundTitle": "Seite nicht gefunden",
-    "notFoundDescription": "Die aufgerufene Adresse existiert nicht oder wurde verschoben."
+    "notFoundDescription": "Die aufgerufene Adresse existiert nicht oder wurde verschoben.",
+    "goBack": "Zurück"
   },
   "billingPage": {
     "titleActive": "Abo aktiv",

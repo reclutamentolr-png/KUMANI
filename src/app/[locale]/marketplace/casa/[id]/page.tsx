@@ -1,4 +1,6 @@
-import { notFound } from 'next/navigation'
+import { redirect } from 'next/navigation'
+import { getLocale } from 'next-intl/server'
+import { defaultLocale } from '../../../../../../i18n'
 import { getTranslations } from 'next-intl/server'
 import { ArrowLeft } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
@@ -14,7 +16,7 @@ export const dynamic = 'force-dynamic'
 export default async function HomePage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ tab?: string }> }) {
   const [{ id }, { tab }] = await Promise.all([params, searchParams])
   const t = await getTranslations('casa')
-  const supabase = await createClient()
+  const [supabase, locale] = await Promise.all([createClient(), getLocale()])
   const {
     data: { user },
   } = await supabase.auth.getUser()
@@ -23,7 +25,8 @@ export default async function HomePage({ params, searchParams }: { params: Promi
     hasActiveToolAccess(supabase, user!.id, 'spendly'),
     hasActiveToolAccess(supabase, user!.id, 'findo'),
   ])
-  if (!data) notFound()
+  // Eliminato (anche da un'altra finestra): si torna all'elenco, non alla 404
+  if (!data) redirect(`${locale === defaultLocale ? '' : `/${locale}`}/marketplace/casa`)
   const initialTab = (CASA_TABS as readonly string[]).includes(tab ?? '') ? (tab as CasaTab) : 'deadlines'
 
   return (

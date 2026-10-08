@@ -3965,7 +3965,8 @@
     "backHome": "Retour à l’accueil",
     "goDashboard": "Aller au tableau de bord",
     "notFoundTitle": "Page introuvable",
-    "notFoundDescription": "L’adresse que vous avez ouverte n’existe pas ou a été déplacée."
+    "notFoundDescription": "L’adresse que vous avez ouverte n’existe pas ou a été déplacée.",
+    "goBack": "Revenir en arrière"
   },
   "billingPage": {
     "titleActive": "Abonnement actif",
