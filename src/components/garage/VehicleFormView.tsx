@@ -3,11 +3,11 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
-import { CarFront, KeyRound, LoaderCircle } from 'lucide-react'
+import { CarFront, KeyRound, LoaderCircle, Motorbike } from 'lucide-react'
 import { createVehicle, updateVehicle } from '@/app/actions/garage'
 import { todayKey } from '@/lib/agenda'
 import { defaultLocale } from '../../../i18n'
-import type { GarageVehicle, VehicleForm, VehicleKind } from '@/lib/garage'
+import type { GarageVehicle, VehicleForm, VehicleKind, VehicleType } from '@/lib/garage'
 import CancelButton, { cancelButtonLgClass } from '@/components/ui/CancelButton'
 
 const input =
@@ -34,6 +34,7 @@ export default function VehicleFormView({ vehicle, spendlyAvailable }: { vehicle
   const [error, setError] = useState<string | null>(null)
 
   const [kind, setKind] = useState<VehicleKind>(vehicle?.kind ?? 'owned')
+  const [vehicleType, setVehicleType] = useState<VehicleType>(vehicle?.vehicle_type ?? 'car')
   const [name, setName] = useState(vehicle?.name ?? '')
   const [model, setModel] = useState(vehicle?.model ?? '')
   const [plate, setPlate] = useState(vehicle?.plate ?? '')
@@ -54,6 +55,7 @@ export default function VehicleFormView({ vehicle, spendlyAvailable }: { vehicle
     setError(null)
     const form: VehicleForm = {
       kind,
+      vehicleType,
       name,
       model,
       plate,
@@ -84,10 +86,30 @@ export default function VehicleFormView({ vehicle, spendlyAvailable }: { vehicle
   return (
     <form onSubmit={submit} className="space-y-6">
       <section className="rounded-2xl border border-[var(--gold)]/30 bg-white p-5 shadow-sm">
+        {/* Auto o moto */}
+        <p className={label}>{t('typeQuestion')}</p>
+        <div className="mb-5 grid grid-cols-2 gap-3">
+          {(['car', 'motorbike'] as const).map((value) => {
+            const Icon = value === 'motorbike' ? Motorbike : CarFront
+            return (
+              <button
+                key={value}
+                type="button"
+                onClick={() => setVehicleType(value)}
+                aria-pressed={vehicleType === value}
+                className={`flex items-center gap-2 rounded-xl border-2 p-3.5 text-left font-bold text-[var(--ink)] transition-colors ${
+                  vehicleType === value ? 'border-[var(--gold)] bg-[var(--gold-pale)]' : 'border-gray-200 hover:border-[var(--gold)]/50'
+                }`}
+              >
+                <Icon className="h-5 w-5 text-[var(--gold)]" /> {t(`type_${value}`)}
+              </button>
+            )
+          })}
+        </div>
         <p className={label}>{t('kindQuestion')}</p>
         <div className="grid grid-cols-2 gap-3">
           {(['owned', 'rental'] as const).map((value) => {
-            const Icon = value === 'rental' ? KeyRound : CarFront
+            const Icon = value === 'rental' ? KeyRound : vehicleType === 'motorbike' ? Motorbike : CarFront
             return (
               <button
                 key={value}
@@ -111,13 +133,13 @@ export default function VehicleFormView({ vehicle, spendlyAvailable }: { vehicle
             <label htmlFor="g-name" className={label}>
               {t('name')} *
             </label>
-            <input id="g-name" required maxLength={60} value={name} onChange={(e) => setName(e.target.value)} placeholder={t('namePlaceholder')} className={input} />
+            <input id="g-name" required maxLength={60} value={name} onChange={(e) => setName(e.target.value)} placeholder={vehicleType === 'motorbike' ? t('namePlaceholderMoto') : t('namePlaceholder')} className={input} />
           </div>
           <div>
             <label htmlFor="g-model" className={label}>
               {t('model')}
             </label>
-            <input id="g-model" maxLength={80} value={model} onChange={(e) => setModel(e.target.value)} placeholder={t('modelPlaceholder')} className={input} />
+            <input id="g-model" maxLength={80} value={model} onChange={(e) => setModel(e.target.value)} placeholder={vehicleType === 'motorbike' ? t('modelPlaceholderMoto') : t('modelPlaceholder')} className={input} />
           </div>
           <div>
             <label htmlFor="g-plate" className={label}>

@@ -1,8 +1,8 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { GarageDeadline, GarageExpense, GarageReading, GarageVehicle } from '@/lib/garage'
+import type { GarageDeadline, GarageDocument, GarageExpense, GarageReading, GarageVehicle } from '@/lib/garage'
 
 const VEHICLE_COLUMNS =
-  'id, kind, name, model, plate, initial_km, rental_start, rental_months, rental_km_included, rental_monthly_fee, rental_down_payment, rental_extra_km_cost, rental_unused_km_refund, rental_includes_tax, rental_includes_insurance, spendly_fixed_id, created_at'
+  'id, kind, vehicle_type, name, model, plate, initial_km, rental_start, rental_months, rental_km_included, rental_monthly_fee, rental_down_payment, rental_extra_km_cost, rental_unused_km_refund, rental_includes_tax, rental_includes_insurance, spendly_fixed_id, created_at'
 
 const toNumber = (value: unknown) => (value === null || value === undefined ? null : Number(value))
 
@@ -30,8 +30,25 @@ export async function loadGarage(supabase: SupabaseClient, userId: string, vehic
     .eq(...only('vehicle_id'))
     .order('spent_on', { ascending: false })
     .limit(2000)
-  const [v, r, d, e] = await Promise.all([vehicles, readings, deadlines, expenses])
+  // Documenti solo nella pagina del veicolo, con i link firmati per aprirli
+  const documents = vehicleId
+    ? supabase
+        .from('garage_documents')
+        .select('id, vehicle_id, kind, title, file_path, file_name, mime_type, size_bytes, created_at')
+        .eq('user_id', userId)
+        .eq('vehicle_id', vehicleId)
+        .order('created_at', { ascending: false })
+    : Promise.resolve({ data: [] as GarageDocument[] })
+  const [v, r, d, e, docs] = await Promise.all([vehicles, readings, deadlines, expenses, documents])
+  const docList = (docs.data ?? []) as GarageDocument[]
+  const fileUrls: Record<string, string> = {}
+  if (docList.length) {
+    const { data: signed } = await supabase.storage.from('garage-files').createSignedUrls(docList.map((x) => x.file_path), 3600)
+    for (const s of signed ?? []) if (s.path && s.signedUrl) fileUrls[s.path] = s.signedUrl
+  }
   return {
+    documents: docList,
+    fileUrls,
     vehicles: (v.data ?? []).map((row) => normalizeVehicle(row as Record<string, unknown>)),
     readings: (r.data ?? []) as GarageReading[],
     deadlines: (d.data ?? []).map((row) => ({ ...row, amount: toNumber(row.amount) })) as GarageDeadline[],

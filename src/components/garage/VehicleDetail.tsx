@@ -3,7 +3,8 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
-import { AlertTriangle, CalendarClock, CarFront, Check, CheckCircle2, Gauge, KeyRound, LoaderCircle, Pencil, Plus, RotateCcw, Trash2, Wallet, X } from 'lucide-react'
+import { AlertTriangle, CalendarClock, CarFront, Check, CheckCircle2, Gauge, KeyRound, LoaderCircle, Motorbike, Pencil, Plus, RotateCcw, Trash2, Wallet, X } from 'lucide-react'
+import VehicleDocuments from '@/components/garage/VehicleDocuments'
 import Link from '@/components/LocalizedLink'
 import { addExpense, addReading, deleteDeadline, deleteExpense, deleteReading, deleteVehicle, payDeadline, saveDeadline } from '@/app/actions/garage'
 import { daysBetween } from '@/lib/agenda'
@@ -17,6 +18,7 @@ import {
   type DeadlineRecurrence,
   type ExpenseKind,
   type GarageDeadline,
+  type GarageDocument,
   type GarageExpense,
   type GarageReading,
   type GarageVehicle,
@@ -80,6 +82,8 @@ export default function VehicleDetail({
   expenses,
   today,
   spendlyAvailable,
+  documents,
+  fileUrls,
 }: {
   vehicle: GarageVehicle
   readings: GarageReading[]
@@ -87,6 +91,8 @@ export default function VehicleDetail({
   expenses: GarageExpense[]
   today: string
   spendlyAvailable: boolean
+  documents: GarageDocument[]
+  fileUrls: Record<string, string>
 }) {
   const t = useTranslations('garage')
   const router = useRouter()
@@ -106,11 +112,11 @@ export default function VehicleDetail({
       <section className={card}>
         <div className="flex items-start gap-3">
           <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[var(--ink)] text-[var(--gold-bright)]">
-            {vehicle.kind === 'rental' ? <KeyRound className="h-6 w-6" /> : <CarFront className="h-6 w-6" />}
+            {vehicle.kind === 'rental' ? <KeyRound className="h-6 w-6" /> : vehicle.vehicle_type === 'motorbike' ? <Motorbike className="h-6 w-6" /> : <CarFront className="h-6 w-6" />}
           </span>
           <div className="min-w-0 flex-1">
             <h1 className="truncate text-2xl font-bold text-[var(--ink)]">{vehicle.name}</h1>
-            <p className="text-sm text-[var(--muted)]">{[vehicle.model, vehicle.plate, t(`kind_${vehicle.kind}`)].filter(Boolean).join(' · ')}</p>
+            <p className="text-sm text-[var(--muted)]">{[vehicle.model, vehicle.plate, t(`type_${vehicle.vehicle_type}`), t(`kind_${vehicle.kind}`)].filter(Boolean).join(' · ')}</p>
           </div>
           <div className="flex shrink-0 gap-1">
             <Link
@@ -136,6 +142,8 @@ export default function VehicleDetail({
       <ReadingHistory vehicle={vehicle} readings={readings} />
 
       <DeadlinesSection vehicle={vehicle} deadlines={deadlines} today={today} />
+
+      <VehicleDocuments vehicleId={vehicle.id} documents={documents} fileUrls={fileUrls} />
 
       <ExpensesSection vehicleId={vehicle.id} expenses={expenses} today={today} spendlyAvailable={spendlyAvailable} />
     </div>

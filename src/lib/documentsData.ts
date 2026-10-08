@@ -1,5 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { KumaniDoc, PersonalDoc } from '@/lib/documents'
+import { getTranslations } from 'next-intl/server'
 
 // Letture per la pagina Documenti, con il client dell'utente: le regole del
 // database (RLS) mostrano solo i documenti pubblicati e solo i dati propri.
@@ -21,7 +22,7 @@ export async function listKumaniDocuments(supabase: SupabaseClient): Promise<Kum
 const LIMIT = 50
 
 export async function listPersonalDocuments(supabase: SupabaseClient, userId: string): Promise<PersonalDoc[]> {
-  const [quotes, receipts, cvs, coupons, events, vouchers, received, homeDocs] = await Promise.all([
+  const [quotes, receipts, cvs, coupons, events, vouchers, received, homeDocs, vehicleDocs] = await Promise.all([
     supabase.from('quotes').select('id, quote_number, client_name, created_at').eq('user_id', userId).order('created_at', { ascending: false }).limit(LIMIT),
     supabase.from('digital_receipts').select('id, object_name, recipient_name, created_at').eq('user_id', userId).order('created_at', { ascending: false }).limit(LIMIT),
     supabase.from('cvs').select('id, title, full_name, created_at').eq('user_id', userId).order('created_at', { ascending: false }).limit(LIMIT),
@@ -45,6 +46,8 @@ export async function listPersonalDocuments(supabase: SupabaseClient, userId: st
     supabase.rpc('my_received_receipts', { p_limit: LIMIT }),
     // KUMANI Casa: i documenti di ogni casa
     supabase.from('casa_documents').select('id, home_id, title, created_at, home:casa_homes(name)').eq('user_id', userId).order('created_at', { ascending: false }).limit(LIMIT),
+    // Kumani Garage: libretto, assicurazione… di ogni veicolo
+    supabase.from('garage_documents').select('id, vehicle_id, kind, created_at, vehicle:garage_vehicles(name)').eq('user_id', userId).order('created_at', { ascending: false }).limit(LIMIT),
   ])
 
   const docs: PersonalDoc[] = []
@@ -72,6 +75,14 @@ export async function listPersonalDocuments(supabase: SupabaseClient, userId: st
     docs.push({ kind: 'home_doc', id: d.id, title: d.title, subtitle: home?.name || null, date: d.created_at, href: `/marketplace/casa/${d.home_id}?tab=documents` })
   }
 
-  for (const res of [quotes, receipts, cvs, coupons, events, vouchers, received, homeDocs]) if (res.error) console.error('[documenti] personali:', res.error.message)
+  if (vehicleDocs.data?.length) {
+    const tg = await getTranslations('garage')
+    for (const d of vehicleDocs.data) {
+      const vehicle = (Array.isArray(d.vehicle) ? d.vehicle[0] : d.vehicle) as { name?: string } | null
+      docs.push({ kind: 'vehicle_doc', id: d.id, title: tg(`doc_${d.kind}`), subtitle: vehicle?.name || null, date: d.created_at, href: `/marketplace/garage/${d.vehicle_id}` })
+    }
+  }
+
+  for (const res of [quotes, receipts, cvs, coupons, events, vouchers, received, homeDocs, vehicleDocs]) if (res.error) console.error('[documenti] personali:', res.error.message)
   return docs
 }

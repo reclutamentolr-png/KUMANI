@@ -17,7 +17,7 @@ export default async function VehiclePage({ params }: { params: Promise<{ id: st
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  const [{ vehicles, readings, deadlines, expenses }, spendlyAvailable] = await Promise.all([
+  const [{ vehicles, readings, deadlines, expenses, documents, fileUrls }, spendlyAvailable] = await Promise.all([
     loadGarage(supabase, user!.id, id),
     hasActiveToolAccess(supabase, user!.id, 'spendly'),
   ])
@@ -29,7 +29,7 @@ export default async function VehiclePage({ params }: { params: Promise<{ id: st
       <Link href="/marketplace/garage" className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
         <ArrowLeft className="h-4 w-4" /> {t('backToGarage')}
       </Link>
-      <VehicleDetail vehicle={vehicle} readings={readings} deadlines={deadlines} expenses={expenses} today={todayKey()} spendlyAvailable={spendlyAvailable} />
+      <VehicleDetail vehicle={vehicle} readings={readings} deadlines={deadlines} expenses={expenses} today={todayKey()} spendlyAvailable={spendlyAvailable} documents={documents} fileUrls={fileUrls} />
     </div>
   )
 }

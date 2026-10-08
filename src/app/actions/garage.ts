@@ -10,7 +10,10 @@ import {
   DEADLINE_KINDS,
   DEADLINE_RECURRENCES,
   EXPENSE_KINDS,
+  GARAGE_DOC_KINDS,
   VEHICLE_KINDS,
+  VEHICLE_TYPES,
+  type GarageDocKind,
   nextDueDate,
   rentalEnd,
   type DeadlineKind,
@@ -34,12 +37,21 @@ async function gate(): Promise<{ ok: true; userId: string; supabase: Supabase } 
   return { ok: true, userId: user.id, supabase }
 }
 
+// Limiti per persona: 3 auto e 3 moto di proprietà, 2 noleggi
+function vehicleLimitMessage(message: string | undefined): string {
+  if (message?.includes('garage_rentals_limit')) return 'rentalsLimit'
+  if (message?.includes('garage_cars_limit')) return 'carsLimit'
+  if (message?.includes('garage_motorbikes_limit')) return 'motorbikesLimit'
+  return 'saveError'
+}
+
 const money = (value: number | null | undefined) => (value === null || value === undefined || !Number.isFinite(value) || value < 0 ? null : Math.round(value * 100) / 100)
 
 function vehicleRow(form: VehicleForm) {
   const rental = form.kind === 'rental'
   return {
     kind: form.kind,
+    vehicle_type: form.vehicleType,
     name: form.name.trim().slice(0, 60),
     model: form.model.trim().slice(0, 80) || null,
     plate: form.plate.trim().toUpperCase().slice(0, 15) || null,
@@ -57,7 +69,7 @@ function vehicleRow(form: VehicleForm) {
 }
 
 function invalidVehicle(form: VehicleForm): string | null {
-  if (!VEHICLE_KINDS.includes(form.kind)) return 'invalid'
+  if (!VEHICLE_KINDS.includes(form.kind) || !VEHICLE_TYPES.includes(form.vehicleType)) return 'invalid'
   if (!form.name.trim()) return 'nameRequired'
   if (form.kind === 'rental') {
     if (!DATE.test(form.rentalStart)) return 'rentalStartRequired'
@@ -144,7 +156,7 @@ export async function createVehicle(form: VehicleForm): Promise<ActionResult<{ i
     .single()
   if (error || !data) {
     console.error('[Garage] createVehicle failed:', error)
-    return { success: false, message: error?.message?.includes('garage_vehicles_limit') ? 'vehiclesLimit' : 'saveError' }
+    return { success: false, message: vehicleLimitMessage(error?.message) }
   }
   await syncRentalFee(g.supabase, g.userId, data.id, row, form.addFeeToSpendly, null)
   await awardToolPoint('garage')
@@ -167,7 +179,7 @@ export async function updateVehicle(id: string, form: VehicleForm): Promise<Acti
     .maybeSingle()
   if (error || !data) {
     console.error('[Garage] updateVehicle failed:', error)
-    return { success: false, message: 'saveError' }
+    return { success: false, message: vehicleLimitMessage(error?.message) }
   }
   await syncRentalFee(g.supabase, g.userId, id, row, form.addFeeToSpendly, data.spendly_fixed_id as string | null)
   return { success: true, data: null }
@@ -184,11 +196,13 @@ export async function deleteVehicle(id: string): Promise<ActionResult<null>> {
   const { data: vehicle } = await supabase.from('garage_vehicles').select('spendly_fixed_id').eq('id', id).eq('user_id', user.id).maybeSingle()
   if (vehicle?.spendly_fixed_id) await supabase.from('spendly_fixed_expenses').delete().eq('id', vehicle.spendly_fixed_id).eq('user_id', user.id)
   if (vehicle) await supabase.from('spendly_variable_expenses').delete().eq('user_id', user.id).eq('source', `garage_down:${id}`)
+  const { data: docs } = await supabase.from('garage_documents').select('file_path').eq('vehicle_id', id).eq('user_id', user.id)
   const { error } = await supabase.from('garage_vehicles').delete().eq('id', id).eq('user_id', user.id)
   if (error) {
     console.error('[Garage] deleteVehicle failed:', error)
     return { success: false, message: 'saveError' }
   }
+  if (docs?.length) await supabase.storage.from('garage-files').remove(docs.map((d) => d.file_path as string))
   return { success: true, data: null }
 }
 
@@ -375,5 +389,51 @@ export async function payDeadline(id: string, input: { amount: number; paidOn: s
     return { success: false, message: 'saveError' }
   }
   await awardToolPoint('garage')
+  return { success: true, data: null }
+}
+
+// ---------- Documenti del veicolo (libretto, assicurazione…) ----------
+
+// Il file è già nello spazio privato (caricato dal browser nella cartella
+// dell'utente e del veicolo): qui si registra il documento.
+export async function addVehicleDocument(
+  vehicleId: string,
+  input: { kind: GarageDocKind; filePath: string; fileName: string; mimeType: string; sizeBytes: number }
+): Promise<ActionResult<null>> {
+  const g = await gate()
+  if (!g.ok) return { success: false, message: g.message }
+  if (!GARAGE_DOC_KINDS.includes(input.kind)) return { success: false, message: 'invalid' }
+  if (!new RegExp(`^${g.userId}/${vehicleId}/[A-Za-z0-9-]{8,64}\\.(pdf|jpg|png|webp)$`).test(input.filePath)) return { success: false, message: 'invalid' }
+  const { data: vehicle } = await g.supabase.from('garage_vehicles').select('id').eq('id', vehicleId).eq('user_id', g.userId).maybeSingle()
+  if (!vehicle) return { success: false, message: 'notFound' }
+  const { error } = await g.supabase.from('garage_documents').insert({
+    vehicle_id: vehicleId,
+    user_id: g.userId,
+    kind: input.kind,
+    file_path: input.filePath,
+    file_name: input.fileName.trim().slice(0, 160) || null,
+    mime_type: input.mimeType.slice(0, 80) || null,
+    size_bytes: Number.isFinite(input.sizeBytes) ? Math.max(0, Math.round(input.sizeBytes)) : null,
+  })
+  if (error) {
+    console.error('[Garage] addVehicleDocument failed:', error)
+    await g.supabase.storage.from('garage-files').remove([input.filePath])
+    return { success: false, message: error.message.includes('garage_documents_limit') ? 'documentsLimit' : 'saveError' }
+  }
+  await awardToolPoint('garage')
+  return { success: true, data: null }
+}
+
+export async function deleteVehicleDocument(id: string): Promise<ActionResult<null>> {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return { success: false, message: 'notLoggedIn' }
+  const { data: doc } = await supabase.from('garage_documents').select('file_path').eq('id', id).eq('user_id', user.id).maybeSingle()
+  if (!doc) return { success: false, message: 'notFound' }
+  const { error } = await supabase.from('garage_documents').delete().eq('id', id).eq('user_id', user.id)
+  if (error) return { success: false, message: 'saveError' }
+  await supabase.storage.from('garage-files').remove([doc.file_path as string])
   return { success: true, data: null }
 }

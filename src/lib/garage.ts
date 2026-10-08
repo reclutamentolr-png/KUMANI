@@ -5,6 +5,25 @@ import { addDays, daysBetween } from '@/lib/agenda'
 export const VEHICLE_KINDS = ['owned', 'rental'] as const
 export type VehicleKind = (typeof VEHICLE_KINDS)[number]
 
+// Auto o moto (stesse scadenze, spese e controllo dei km)
+export const VEHICLE_TYPES = ['car', 'motorbike'] as const
+export type VehicleType = (typeof VEHICLE_TYPES)[number]
+
+// Documenti del veicolo (foto o PDF nello spazio privato garage-files)
+export const GARAGE_DOC_KINDS = ['registration', 'insurance', 'other'] as const
+export type GarageDocKind = (typeof GARAGE_DOC_KINDS)[number]
+export type GarageDocument = {
+  id: string
+  vehicle_id: string
+  kind: GarageDocKind
+  title: string | null
+  file_path: string
+  file_name: string | null
+  mime_type: string | null
+  size_bytes: number | null
+  created_at: string
+}
+
 export const DEADLINE_KINDS = ['bollo', 'assicurazione', 'revisione', 'tagliando', 'gomme', 'altro'] as const
 export type DeadlineKind = (typeof DEADLINE_KINDS)[number]
 
@@ -27,6 +46,7 @@ export const DEADLINE_EXPENSE_KIND: Record<DeadlineKind, ExpenseKind> = {
 export type GarageVehicle = {
   id: string
   kind: VehicleKind
+  vehicle_type: VehicleType
   name: string
   model: string | null
   plate: string | null
@@ -58,6 +78,7 @@ export type GarageExpense = { id: string; vehicle_id: string; kind: ExpenseKind;
 
 export type VehicleForm = {
   kind: VehicleKind
+  vehicleType: VehicleType
   name: string
   model: string
   plate: string

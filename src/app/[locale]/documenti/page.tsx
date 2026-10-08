@@ -21,6 +21,7 @@ import {
   BookMarked,
   Building2,
   House,
+  CarFront,
 } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import DeckDownloadButton from '@/components/documents/DeckDownloadButton'
@@ -49,6 +50,7 @@ const KIND_ICONS: Record<PersonalDocKind, LucideIcon> = {
   event: CalendarCheck,
   voucher: Ticket,
   home_doc: House,
+  vehicle_doc: CarFront,
 }
 // Fascia colorata di ogni categoria (chiusa, con il numero di documenti)
 const KIND_BANDS: Record<PersonalDocKind, string> = {
@@ -60,8 +62,9 @@ const KIND_BANDS: Record<PersonalDocKind, string> = {
   event: 'from-[#831843] to-[#b4316b]',
   voucher: 'from-[#1a1a1a] to-[#3a3226]',
   home_doc: 'from-[#7a5a12] to-[#b08a2e]',
+  vehicle_doc: 'from-[#334155] to-[#55657d]',
 }
-const KIND_ORDER: PersonalDocKind[] = ['quote', 'receipt', 'receipt_received', 'cv', 'coupon', 'event', 'voucher', 'home_doc']
+const KIND_ORDER: PersonalDocKind[] = ['quote', 'receipt', 'receipt_received', 'cv', 'coupon', 'event', 'voucher', 'home_doc', 'vehicle_doc']
 
 const mb = (n: number) => `${(n / 1024 / 1024).toFixed(1)} MB`
 

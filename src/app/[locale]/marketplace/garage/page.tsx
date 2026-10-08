@@ -1,5 +1,5 @@
 import { getLocale, getTranslations } from 'next-intl/server'
-import { AlertTriangle, CalendarClock, CarFront, ChevronRight, Gauge, KeyRound, Plus, Sparkles } from 'lucide-react'
+import { AlertTriangle, CalendarClock, CarFront, ChevronRight, Gauge, KeyRound, Motorbike, Plus, Sparkles } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { createClient } from '@/lib/supabase/server'
 import { loadGarage } from '@/lib/garage-server'
@@ -78,12 +78,12 @@ export default async function GaragePage() {
               >
                 <div className="flex items-start gap-3">
                   <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[var(--ink)] text-[var(--gold-bright)]">
-                    {vehicle.kind === 'rental' ? <KeyRound className="h-5 w-5" /> : <CarFront className="h-5 w-5" />}
+                    {vehicle.kind === 'rental' ? <KeyRound className="h-5 w-5" /> : vehicle.vehicle_type === 'motorbike' ? <Motorbike className="h-5 w-5" /> : <CarFront className="h-5 w-5" />}
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-lg font-bold text-[var(--ink)]">{vehicle.name}</p>
                     <p className="truncate text-sm text-[var(--muted)]">
-                      {[vehicle.model, vehicle.plate, t(`kind_${vehicle.kind}`)].filter(Boolean).join(' · ')}
+                      {[vehicle.model, vehicle.plate, t(`type_${vehicle.vehicle_type}`), t(`kind_${vehicle.kind}`)].filter(Boolean).join(' · ')}
                     </p>
                   </div>
                   <ChevronRight className="h-5 w-5 shrink-0 text-[var(--muted)] transition-transform group-hover:translate-x-0.5" />
