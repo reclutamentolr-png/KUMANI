@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { hasActiveFindoAccess } from '@/lib/findo-server'
 import { buildBreadcrumb, type FindoItemFormData, type FindoLocation } from '@/lib/findo'
 import { awardToolPoint } from '@/lib/toolPoints'
+import { limitError } from '@/lib/appLimits'
 
 type ActionResult<T> =
   | { success: true; data: T }
@@ -50,6 +51,8 @@ export async function createItem(
 
   if (error) {
     console.error('[Findo] createItem failed:', error)
+    const limit = await limitError(error)
+    if (limit) return limit
     return { success: false, message: 'saveError' }
   }
 
@@ -211,6 +214,8 @@ export async function createLocation(
 
   if (error || !data) {
     console.error('[Findo] createLocation failed:', error)
+    const limit = await limitError(error)
+    if (limit) return limit
     return { success: false, message: 'saveError' }
   }
 

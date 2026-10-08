@@ -8,6 +8,7 @@ import { createClient } from '@/lib/supabase/client'
 import { prepareDocumentFile } from '@/lib/documentImage'
 import { CASA_FILE_MAX_BYTES, CASA_FILE_TYPES, fileExtension } from '@/lib/casa'
 import { discardUpload } from '@/app/actions/casa'
+import { limitTextOf } from '@/lib/limitText'
 
 export const input =
   'w-full rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-[var(--ink)] outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/20'
@@ -47,7 +48,7 @@ export function useAction() {
       const result = await action()
       if (!result.success) {
         const key = `error_${(result as { message: string }).message}`
-        setError(t.has(key) ? t(key) : t('error_saveError'))
+        setError(limitTextOf(result) ?? (t.has(key) ? t(key) : t('error_saveError')))
         return
       }
       after?.()
@@ -98,7 +99,7 @@ export function Sheet({ title, onClose, children }: { title: string; onClose: ()
 
 // Carica un file (PDF o foto) nella cartella della casa. Le foto grandi si
 // rimpiccioliscono prima. Restituisce il percorso nello spazio privato.
-export async function uploadCasaFile(homeId: string, file: File): Promise<{ path: string; name: string; type: string; size: number } | { error: 'fileType' | 'fileSize' | 'uploadError' }> {
+export async function uploadCasaFile(homeId: string, file: File): Promise<{ path: string; name: string; type: string; size: number } | { error: 'fileType' | 'fileSize' | 'uploadError' | 'filesLimit' }> {
   if (!CASA_FILE_TYPES.includes(file.type)) return { error: 'fileType' }
   // Foto ottimizzate per lo spazio ma buone anche da stampare
   const upload = await prepareDocumentFile(file)
@@ -112,7 +113,8 @@ export async function uploadCasaFile(homeId: string, file: File): Promise<{ path
   const { error } = await supabase.storage.from('casa-files').upload(path, upload, { contentType: upload.type, upsert: false })
   if (error) {
     console.error('[Casa] upload failed:', error.message)
-    return { error: 'uploadError' }
+    // Rifiutato dal tetto dei file per persona (impostato dall'Admin)
+    return { error: /row-level security/i.test(error.message) ? 'filesLimit' : 'uploadError' }
   }
   return { path, name: file.name, type: upload.type, size: upload.size }
 }

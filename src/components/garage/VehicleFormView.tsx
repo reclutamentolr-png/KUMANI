@@ -9,6 +9,7 @@ import { todayKey } from '@/lib/agenda'
 import { defaultLocale } from '../../../i18n'
 import type { GarageVehicle, VehicleForm, VehicleKind, VehicleType } from '@/lib/garage'
 import CancelButton, { cancelButtonLgClass } from '@/components/ui/CancelButton'
+import { limitTextOf } from '@/lib/limitText'
 
 const input =
   'w-full rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 text-[var(--ink)] outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/20'
@@ -74,7 +75,7 @@ export default function VehicleFormView({ vehicle, spendlyAvailable }: { vehicle
     startTransition(async () => {
       const result = vehicle ? await updateVehicle(vehicle.id, form) : await createVehicle(form)
       if (!result.success) {
-        setError(t(`error_${result.message}`))
+        setError(limitTextOf(result) ?? (t.has(`error_${result.message}`) ? t(`error_${result.message}`) : t('error_saveError')))
         return
       }
       const id = vehicle ? vehicle.id : (result.data as { id: string }).id

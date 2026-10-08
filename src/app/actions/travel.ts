@@ -15,11 +15,12 @@ import {
   type TripSettlement,
   type TripSummary,
 } from '@/lib/travel'
+import { limitError } from '@/lib/appLimits'
 
 // KUMANI Travel: le regole (chi crea, chi entra, chi vede) sono nelle
 // funzioni SQL trip_* e nelle RLS; qui solo validazione e passaggio dati.
 
-type Result = { success: true; id?: string } | { success: false; error: string }
+type Result = { success: true; id?: string } | { success: false; error: string; limitText?: string }
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/
 const TIME_RE = /^([01]\d|2[0-3]):[0-5]\d$/
@@ -299,7 +300,10 @@ export async function addChecklistItem(tripId: string, title: string, assignedTo
     assigned_to: assignedTo && UUID_RE.test(assignedTo) ? assignedTo : null,
     position: count ?? 0,
   })
-  if (error) return { success: false, error: 'saveError' }
+  if (error) {
+    const limit = await limitError(error)
+    return limit ? { success: false, error: 'limitReached', limitText: limit.limitText } : { success: false, error: 'saveError' }
+  }
   return { success: true }
 }
 
@@ -511,7 +515,10 @@ export async function saveDocument(
     return { success: true, id: input.id }
   }
   const { data, error } = await supabase.from('trip_documents').insert({ ...row, trip_id: tripId, member_id: member.id }).select('id').single()
-  if (error || !data) return { success: false, error: 'saveError' }
+  if (error || !data) {
+    const limit = await limitError(error)
+    return limit ? { success: false, error: 'limitReached', limitText: limit.limitText } : { success: false, error: 'saveError' }
+  }
   return { success: true, id: data.id }
 }
 

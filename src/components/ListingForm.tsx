@@ -8,6 +8,7 @@ import { X, AlertCircle, CheckCircle2, Sparkles } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import ListingLocationFields, { type ListingLocationValue } from '@/components/listings/ListingLocationFields'
 import CancelButton, { cancelButtonClass } from '@/components/ui/CancelButton'
+import { limitTextOf } from '@/lib/limitText'
 
 type Props = {
   userId: string
@@ -75,7 +76,7 @@ export default function ListingForm({ userId, currentPoints, onCloseUrl, network
         setFeatureError(!result.featured)
       }
     } else {
-      setError(result.message ?? t('publishError'))
+      setError(limitTextOf(result) ?? result.message ?? t('publishError'))
     }
     setLoading(false)
   }

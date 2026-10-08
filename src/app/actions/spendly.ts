@@ -10,6 +10,7 @@ import type {
   IncomeType,
   VariableExpenseCategory,
 } from '@/lib/spendly'
+import { limitError } from '@/lib/appLimits'
 
 type ActionResult<T> =
   | { success: true; data: T }
@@ -67,6 +68,8 @@ export async function createIncome(form: IncomeFormData): Promise<ActionResult<{
 
   if (error || !data) {
     console.error('[Spendly] createIncome failed:', error)
+    const limit = await limitError(error)
+    if (limit) return limit
     return { success: false, message: 'saveError' }
   }
 
@@ -152,6 +155,8 @@ export async function createFixedExpense(form: FixedExpenseFormData): Promise<Ac
 
   if (error || !data) {
     console.error('[Spendly] createFixedExpense failed:', error)
+    const limit = await limitError(error)
+    if (limit) return limit
     return { success: false, message: 'saveError' }
   }
 
@@ -233,6 +238,8 @@ export async function createVariableExpense(form: VariableExpenseFormData): Prom
 
   if (error || !data) {
     console.error('[Spendly] createVariableExpense failed:', error)
+    const limit = await limitError(error)
+    if (limit) return limit
     return { success: false, message: 'saveError' }
   }
 

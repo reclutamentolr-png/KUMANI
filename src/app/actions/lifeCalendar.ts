@@ -5,6 +5,7 @@ import { hasActiveLifeCalendarAccess } from '@/lib/lifeCalendar-server'
 import { computeNextDueDate, type LifeCalendarItemFormData } from '@/lib/lifeCalendar'
 import { awardToolPoint } from '@/lib/toolPoints'
 import { todayKey } from '@/lib/agenda'
+import { limitError } from '@/lib/appLimits'
 
 type ActionResult<T> =
   | { success: true; data: T }
@@ -60,6 +61,8 @@ export async function createItem(form: LifeCalendarItemFormData): Promise<Action
 
   if (error || !data) {
     console.error('[LifeCalendar] createItem failed:', error)
+    const limit = await limitError(error)
+    if (limit) return limit
     return { success: false, message: 'saveError' }
   }
 
@@ -180,6 +183,8 @@ export async function createProfile(name: string, icon: string): Promise<ActionR
 
   if (error || !data) {
     console.error('[LifeCalendar] createProfile failed:', error)
+    const limit = await limitError(error)
+    if (limit) return limit
     return { success: false, message: 'saveError' }
   }
 

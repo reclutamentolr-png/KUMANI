@@ -9,6 +9,7 @@ import { createClient } from '@/lib/supabase/client'
 import { prepareDocumentFile } from '@/lib/documentImage'
 import { GARAGE_DOC_KINDS, type GarageDocKind, type GarageDocument } from '@/lib/garage'
 import { askConfirm } from '@/lib/confirm'
+import { limitTextOf } from '@/lib/limitText'
 
 const card = 'rounded-2xl border border-[var(--gold)]/30 bg-white p-5 shadow-[0_8px_24px_rgba(23,23,23,0.06)]'
 const FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp']
@@ -55,11 +56,12 @@ export default function VehicleDocuments({ vehicleId, documents, fileUrls }: { v
     const { error: uploadError } = await supabase.storage.from('garage-files').upload(path, ready, { contentType: ready.type })
     if (uploadError) {
       setBusy(null)
-      return setError(t('error_uploadError'))
+      // Rifiutato dal tetto dei file per persona (impostato dall'Admin)
+      return setError(/row-level security/i.test(uploadError.message) ? t('error_filesLimit') : t('error_uploadError'))
     }
     const result = await addVehicleDocument(vehicleId, { kind, filePath: path, fileName: file.name, mimeType: ready.type, sizeBytes: ready.size })
     setBusy(null)
-    if (!result.success) return setError(t.has(`error_${result.message}`) ? t(`error_${result.message}`) : t('error_saveError'))
+    if (!result.success) return setError(limitTextOf(result) ?? (t.has(`error_${result.message}`) ? t(`error_${result.message}`) : t('error_saveError')))
     router.refresh()
   }
 

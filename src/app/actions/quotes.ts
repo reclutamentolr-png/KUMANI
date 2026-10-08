@@ -23,6 +23,7 @@ import {
   type SavedClientFormData,
 } from '@/lib/quotes'
 import { awardToolPoint } from '@/lib/toolPoints'
+import { limitError } from '@/lib/appLimits'
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
@@ -265,6 +266,8 @@ export async function createQuote(
 
     if (error && error.code !== '23505') {
       console.error('[Quotes] createQuote failed:', error)
+      const limit = await limitError(error)
+      if (limit) return limit
       return { success: false, message: 'saveError' }
     }
     // 23505 (unique violation on quote_number): another quote was created
@@ -325,6 +328,8 @@ export async function duplicateQuote(id: string): Promise<ActionResult<{ id: str
     if (!error && data) return { success: true, data: { id: data.id } }
     if (error && error.code !== '23505') {
       console.error('[Quotes] duplicateQuote failed:', error)
+      const limit = await limitError(error)
+      if (limit) return limit
       return { success: false, message: 'saveError' }
     }
   }

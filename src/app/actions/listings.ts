@@ -7,6 +7,7 @@ import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { revalidatePath } from 'next/cache'
 import { invalidateListingsCache } from '@/lib/listings-server'
 import { LISTING_COST, cleanListingCity, isListingCountry, type CreateListingData, type UpdateListingData } from '@/lib/listings'
+import { limitError } from '@/lib/appLimits'
 
 // ✅ Service client per bypassare RLS
 const getServiceClient = () =>
@@ -76,6 +77,8 @@ export async function createListingAction(data: CreateListingData) {
     // Rollback punti se fallisce (solo server: refund_points non è più
     // chiamabile dal client, accreditava qualsiasi importo a chiunque).
     await getServiceClient().rpc('add_daily_points_for', { p_user_id: user.id, p_amount: LISTING_COST })
+    const limit = await limitError(error)
+    if (limit) return limit
     return { success: false, message: 'Errore nella creazione dell\'annuncio' }
   }
   invalidateListingsCache()

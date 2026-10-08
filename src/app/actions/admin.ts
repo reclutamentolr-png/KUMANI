@@ -3202,3 +3202,45 @@ export async function adminSetFinanceStatsSince(fromNow: boolean) {
     .upsert({ key: 'finance_stats_since', value: fromNow ? new Date().toISOString() : '' }, { onConflict: 'key' })
   return { success: !error, error: error?.message ?? null }
 }
+
+// ---------- Limiti per persona e pulizia automatica (tabella app_limits) ----------
+
+export type AppLimitRow = { key: string; value: number; kind: 'count' | 'files' | 'keep' | 'days' | 'months'; section: string; label: string; sort: number; updated_at: string }
+
+export async function adminListAppLimits(): Promise<{ items: AppLimitRow[]; error: string | null }> {
+  const admin = await verifyAdmin('settings.read')
+  if (!admin) return { items: [], error: 'Non autorizzato' }
+  const { data, error } = await getServiceClient().from('app_limits').select('key, value, kind, section, label, sort, updated_at').order('sort')
+  if (error) return { items: [], error: error.message }
+  return { items: (data ?? []) as AppLimitRow[], error: null }
+}
+
+// Salva solo i valori cambiati; valgono subito (i controlli li leggono a ogni salvataggio)
+export async function adminSaveAppLimits(changes: { key: string; value: number }[]) {
+  const admin = await verifyAdmin('settings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  const service = getServiceClient()
+  const { data: known } = await service.from('app_limits').select('key')
+  const keys = new Set((known ?? []).map((r) => r.key as string))
+  for (const change of changes) {
+    if (!keys.has(change.key)) return { success: false, error: `Limite sconosciuto: ${change.key}` }
+    if (!Number.isInteger(change.value) || change.value < 0 || change.value > 10_000_000) return { success: false, error: `Valore non valido per ${change.key}` }
+  }
+  for (const change of changes) {
+    const { error } = await service
+      .from('app_limits')
+      .update({ value: change.value, updated_at: new Date().toISOString(), updated_by: admin.id })
+      .eq('key', change.key)
+    if (error) return { success: false, error: error.message }
+  }
+  return { success: true }
+}
+
+// Pulizia notturna lanciata subito (stessa funzione del lavoro delle 2:30)
+export async function adminRunCleanupNow() {
+  const admin = await verifyAdmin('settings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato', result: null }
+  const { data, error } = await getServiceClient().rpc('kumani_nightly_cleanup')
+  if (error) return { success: false, error: error.message, result: null }
+  return { success: true, error: null, result: data as Record<string, number | string> }
+}

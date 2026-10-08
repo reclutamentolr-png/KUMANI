@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { awardToolPoint } from '@/lib/toolPoints'
 import { romeToInstant } from '@/lib/agenda'
+import { limitError } from '@/lib/appLimits'
 
 // MemoLife = l'agenda: appuntamenti, promemoria, note, rubrica. Ogni azione
 // ricontrolla accesso (piano) e proprietà del dato. Le bollette non sono più
@@ -30,7 +31,7 @@ async function save(table: string, id: string | undefined, fields: Record<string
   const { error } = id
     ? await g.supabase.from(table).update(fields).eq('id', id).eq('user_id', g.userId)
     : await g.supabase.from(table).insert({ ...fields, user_id: g.userId })
-  if (error) return { success: false, message: 'saveError' }
+  if (error) return (await limitError(error)) ?? { success: false, message: 'saveError' }
   if (!id) await awardToolPoint('memolife')
   return { success: true }
 }

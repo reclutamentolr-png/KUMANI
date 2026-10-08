@@ -59,6 +59,7 @@ import {
   GitBranch,
   ShoppingBag,
   Settings,
+  Gauge,
   Palette,
   BarChart3,
   Lock,
@@ -108,6 +109,7 @@ const LandingPagesPanel = dynamic(() => import('@/components/admin/LandingPagesP
 const ReviewsPanel = dynamic(() => import('@/components/admin/ReviewsPanel'), { loading })
 const ConvivioReportsPanel = dynamic(() => import('@/components/admin/ConvivioReportsPanel'), { loading })
 const EventsAdminPanel = dynamic(() => import('@/components/admin/EventsAdminPanel'), { loading })
+const AppLimitsPanel = dynamic(() => import('@/components/admin/AppLimitsPanel'), { loading })
 const TimebankAdminPanel = dynamic(() => import('@/components/admin/TimebankAdminPanel'), { loading })
 const MosaicAdminPanel = dynamic(() => import('@/components/admin/MosaicAdminPanel'), { loading })
 const FabulaAdminPanel = dynamic(() => import('@/components/admin/FabulaAdminPanel'), { loading })
@@ -701,6 +703,7 @@ L'accesso viene registrato.`))) return
   { id: 'reports', label: 'Statistiche e classifiche', Icon: BarChart3, permission: 'stats.read' as Permission, group: 'general' },
   { id: 'marketplace', label: 'Strumenti e interruttori', Icon: ShoppingBag, permission: 'marketplace.read' as Permission, group: 'general' },
   { id: 'settings', label: 'Impostazioni', Icon: Settings, permission: 'settings.read' as Permission, group: 'general' },
+  { id: 'appLimits', label: 'Limiti e pulizia', Icon: Gauge, permission: 'settings.read' as Permission, group: 'general' },
   { id: 'languages', label: 'Lingue del sito', Icon: Globe2, permission: 'settings.read' as Permission, group: 'general' },
   { id: 'homeLayout', label: 'Aspetto homepage', Icon: Palette, permission: 'settings.read' as Permission, group: 'general' },
   { id: 'donations', label: 'Donazioni', Icon: HeartHandshake, permission: 'settings.read' as Permission, group: 'general' },
@@ -1806,6 +1809,7 @@ L'accesso viene registrato.`))) return
         {activeSection === 'push' && <PushPanel />}
         {activeSection === 'documents' && <DocumentsAdminPanel />}
         {activeSection === 'settings' && <AdminSettingsPanel />}
+        {activeSection === 'appLimits' && <AppLimitsPanel />}
       </div>
 
       {renderManageModal()}

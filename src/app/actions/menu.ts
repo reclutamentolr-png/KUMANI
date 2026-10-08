@@ -22,11 +22,9 @@ import {
   type MenuDietTag,
   type MenuLocale,
 } from '@/lib/menu'
+import { limitError } from '@/lib/appLimits'
 
 type MenuResult = { success: true; data: MenuData } | { success: false; message: string }
-
-const MAX_CATEGORIES = 40
-const MAX_ITEMS = 400
 
 const getServiceClient = () =>
   createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
@@ -119,9 +117,8 @@ export async function saveMenuCategory(input: { id?: string; names: LocalizedTex
     if (error) return { success: false, message: 'saveError' }
   } else {
     const { count } = await g.supabase.from('menu_categories').select('id', { count: 'exact', head: true }).eq('menu_id', menuId)
-    if ((count ?? 0) >= MAX_CATEGORIES) return { success: false, message: 'limitReached' }
     const { error } = await g.supabase.from('menu_categories').insert({ menu_id: menuId, names, position: count ?? 0 })
-    if (error) return { success: false, message: 'saveError' }
+    if (error) return (await limitError(error)) ?? { success: false, message: 'saveError' }
   }
   return done(g.supabase, g.userId)
 }
@@ -188,14 +185,12 @@ export async function saveMenuItem(input: {
     if (error) return { success: false, message: 'saveError' }
     if (previous?.photo_path && previous.photo_path !== photoPath) await removePhotos([previous.photo_path])
   } else {
-    const { count } = await g.supabase.from('menu_items').select('id', { count: 'exact', head: true }).eq('menu_id', menuId)
-    if ((count ?? 0) >= MAX_ITEMS) return { success: false, message: 'limitReached' }
     const { count: inCategory } = await g.supabase
       .from('menu_items')
       .select('id', { count: 'exact', head: true })
       .eq('category_id', input.categoryId)
     const { error } = await g.supabase.from('menu_items').insert({ ...fields, menu_id: menuId, position: inCategory ?? 0 })
-    if (error) return { success: false, message: 'saveError' }
+    if (error) return (await limitError(error)) ?? { success: false, message: 'saveError' }
   }
   return done(g.supabase, g.userId)
 }

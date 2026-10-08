@@ -5,6 +5,7 @@ import { hasActiveQrProAccess } from '@/lib/qrPro-server'
 import { generateShortCode } from '@/lib/shortLink'
 import { awardToolPoint } from '@/lib/toolPoints'
 import type { QrCodeFormData, LinkDestination } from '@/lib/qrPro'
+import { limitError } from '@/lib/appLimits'
 
 type ActionResult<T> =
   | { success: true; data: T }
@@ -91,6 +92,8 @@ export async function createQrCode(input: QrCodeFormData): Promise<ActionResult<
 
     if (error && error.code !== '23505') {
       console.error('[QrPro] createQrCode failed:', error)
+      const limit = await limitError(error)
+      if (limit) return limit
       return { success: false, message: 'saveError' }
     }
   }

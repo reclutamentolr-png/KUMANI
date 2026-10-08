@@ -18,6 +18,7 @@ import {
   type HomeForm,
   type UtilityForm,
 } from '@/lib/casa'
+import { limitError } from '@/lib/appLimits'
 
 type ActionResult<T> = { success: true; data: T } | { success: false; message: string }
 type Supabase = Awaited<ReturnType<typeof createClient>>
@@ -64,7 +65,6 @@ async function ownsHome(supabase: Supabase, userId: string, homeId: string) {
   return data as { id: string; name: string } | null
 }
 
-const limitMessage = (error: { message?: string } | null, key: string) => (error?.message?.includes(`casa_${key}_limit`) ? `${key}Limit` : 'saveError')
 
 // Scadenza di Life Calendar che nasce da un dato della casa (fine offerta,
 // fine garanzia, documento che scade): creata, aggiornata o tolta con il dato.
@@ -128,7 +128,7 @@ export async function createHome(form: HomeForm): Promise<ActionResult<{ id: str
     .single()
   if (error || !data) {
     console.error('[Casa] createHome failed:', error)
-    return { success: false, message: limitMessage(error, 'homes') }
+    return (await limitError(error)) ?? { success: false, message: 'saveError' }
   }
   await awardToolPoint('casa')
   return { success: true, data: { id: data.id as string } }
@@ -298,7 +298,7 @@ export async function saveUtility(homeId: string, form: UtilityForm, id?: string
     console.error('[Casa] saveUtility failed:', saved.error)
     // La bolletta appena creata non resta orfana
     if (form.billMode === 'new' && spendlyId) await g.supabase.from('spendly_fixed_expenses').delete().eq('id', spendlyId).eq('user_id', g.userId)
-    return { success: false, message: limitMessage(saved.error, 'utilities') }
+    return (await limitError(saved.error)) ?? { success: false, message: 'saveError' }
   }
 
   const linked = await syncLinkedDeadline(
@@ -374,7 +374,7 @@ export async function saveAppliance(homeId: string, form: ApplianceForm, id?: st
         .single()
   if (saved.error || !saved.data) {
     console.error('[Casa] saveAppliance failed:', saved.error)
-    return { success: false, message: limitMessage(saved.error, 'appliances') }
+    return (await limitError(saved.error)) ?? { success: false, message: 'saveError' }
   }
   // File sostituiti o tolti: via anche dallo spazio
   if (before) await removeFiles(g.supabase, [before.receipt_path !== row.receipt_path ? before.receipt_path : null, before.manual_path !== row.manual_path ? before.manual_path : null])
@@ -439,7 +439,7 @@ export async function saveDocument(homeId: string, form: DocumentForm, id?: stri
     if (error || !data) {
       console.error('[Casa] saveDocument failed:', error)
       await removeFiles(g.supabase, [form.filePath])
-      return { success: false, message: limitMessage(error, 'documents') }
+      return (await limitError(error)) ?? { success: false, message: 'saveError' }
     }
     saved = data as Saved
   }

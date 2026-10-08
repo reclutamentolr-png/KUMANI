@@ -26,6 +26,7 @@ import {
 } from '@/lib/garage'
 import { defaultLocale } from '../../../i18n'
 import { askConfirm } from '@/lib/confirm'
+import { limitTextOf } from '@/lib/limitText'
 
 // Separatore delle migliaia anche con 4 cifre (in italiano «3.870 km», non «3870 km»)
 const GROUP = 'always' as unknown as boolean
@@ -65,7 +66,7 @@ function useAction() {
     startTransition(async () => {
       const result = await action()
       if (!result.success) {
-        setError(t(`error_${result.message ?? 'saveError'}`))
+        setError(limitTextOf(result) ?? (t.has(`error_${result.message ?? 'saveError'}`) ? t(`error_${result.message ?? 'saveError'}`) : t('error_saveError')))
         return
       }
       after?.()

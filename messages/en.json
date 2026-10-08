@@ -26,7 +26,9 @@
     "confirmCancel": "Cancel",
     "leaveUnsavedTitle": "Leave without saving?",
     "leaveUnsavedText": "You have changes that are not saved yet. If you leave now you will lose them.",
-    "leaveUnsavedOk": "Leave without saving"
+    "leaveUnsavedOk": "Leave without saving",
+    "limitReached": "You have reached the maximum allowed ({max}). Delete what you no longer need to add more.",
+    "filesLimitReached": "You have reached the maximum number of files for this service. Delete the ones you no longer need."
   },
   "landingHome": {
     "statLanguagesLabel": "languages: KUMANI speaks yours",
@@ -1379,7 +1381,8 @@
     "notLoggedIn": "You need to sign in.",
     "subscriptionRequired": "Spendly requires an active subscription.",
     "saveError": "Couldn't save. Please try again.",
-    "deleteError": "Couldn't delete. Please try again."
+    "deleteError": "Couldn't delete. Please try again.",
+    "limitReached": "You have reached the maximum allowed. Delete what you no longer need to add more."
   },
   "magazzino": {
     "deleteForever": "Delete permanently",
@@ -2051,7 +2054,8 @@
     "generateError": "Could not generate the offer. Please try again.",
     "rateLimited": "The AI service is temporarily busy. Please try again shortly.",
     "publishError": "Could not publish the campaign. Please try again.",
-    "deleteError": "Could not delete the campaign. Please try again."
+    "deleteError": "Could not delete the campaign. Please try again.",
+    "limitReached": "You have reached the maximum allowed. Delete what you no longer need to add more."
   },
   "qrCodePro": {
     "invalidUrl": "Enter a valid link starting with http:// or https://",
@@ -2116,7 +2120,8 @@
     "addressLabel": "Street address",
     "cityLabel": "City",
     "postalCodeLabel": "Postal code",
-    "countryLabel": "Country"
+    "countryLabel": "Country",
+    "limitReached": "You have reached the maximum allowed. Delete what you no longer need to add more."
   },
   "lifeCalendar": {
     "customDaysRequired": "For a custom repeat, enter every how many days.",
@@ -2197,7 +2202,8 @@
     "deleteError": "Could not delete. Please try again.",
     "casaBadge": "KUMANI Casa · {name}",
     "openInCasa": "Open in KUMANI Casa",
-    "casaNotice": "This deadline belongs to your home: tap to open it in KUMANI Casa."
+    "casaNotice": "This deadline belongs to your home: tap to open it in KUMANI Casa.",
+    "limitReached": "You have reached the maximum allowed. Delete what you no longer need to add more."
   },
   "findo": {
     "title": "Findo",
@@ -2247,7 +2253,8 @@
     "notLoggedIn": "You need to be logged in.",
     "subscriptionRequired": "Findo requires an active subscription.",
     "saveError": "Could not save. Please try again.",
-    "deleteError": "Could not delete. Please try again."
+    "deleteError": "Could not delete. Please try again.",
+    "limitReached": "You have reached the maximum allowed. Delete what you no longer need to add more."
   },
   "digitalReceipt": {
     "title": "Digital Receipts",
@@ -2341,7 +2348,8 @@
     "saveOpenDocuments": "Open Documents",
     "pendingSaved": "The receipt you received has been saved to your account.",
     "pendingOpen": "Open the receipt",
-    "pendingClose": "Close"
+    "pendingClose": "Close",
+    "limitReached": "You have reached the maximum allowed. Delete what you no longer need to add more."
   },
   "preventivi": {
     "title": "Quotes",
@@ -2515,7 +2523,8 @@
     "bandLineColor": "Line colour",
     "bandHeight": "Band height",
     "bandReset": "Reset",
-    "bandLineHeight": "Line thickness"
+    "bandLineHeight": "Line thickness",
+    "limitReached": "You have reached the maximum allowed. Delete what you no longer need to add more."
   },
   "kumaniCv": {
     "title": "KUMANI CV",
@@ -4203,7 +4212,8 @@
     "template_currency": "Cash / local currency",
     "template_bank": "Tell the bank about the trip",
     "template_localTransport": "Local transport (trains, car, passes)",
-    "template_luggage": "Luggage and check-in"
+    "template_luggage": "Luggage and check-in",
+    "error_limitReached": "You have reached the maximum allowed. Delete what you no longer need to add more."
   },
   "events": {
     "error_suspended": "Service temporarily suspended. Please try again later.",
@@ -9624,19 +9634,13 @@
     "error_dateInvalid": "Check the date (it cannot be in the future).",
     "error_notFound": "Vehicle not found.",
     "error_kmBelowInitial": "Mileage cannot be lower than the starting mileage.",
-    "error_readingsLimit": "You have reached the maximum number of readings.",
-    "error_deadlinesLimit": "You have reached the maximum number of deadlines.",
     "error_amountInvalid": "Enter a valid amount.",
-    "error_expensesLimit": "You have reached the maximum number of expenses.",
     "rentalDownDescription": "Rental down payment {name}",
     "typeQuestion": "Car or motorbike?",
     "type_car": "Car",
     "type_motorbike": "Motorbike",
     "namePlaceholderMoto": "E.g. My motorbike",
     "modelPlaceholderMoto": "E.g. Honda CB 500 F",
-    "error_carsLimit": "You can track up to 3 owned cars.",
-    "error_motorbikesLimit": "You can track up to 3 owned motorbikes.",
-    "error_rentalsLimit": "You can track up to 2 leased vehicles.",
     "documentsTitle": "Documents",
     "documentsHint": "Photos or PDFs of the registration document, the insurance and other documents, front and back too: only you can see them.",
     "documentsFileHint": "PDF, JPG, PNG or WebP, up to 10 MB.",
@@ -9650,7 +9654,8 @@
     "error_fileType": "Unsupported format: use PDF, JPG, PNG or WebP.",
     "error_fileSize": "The file is larger than 10 MB.",
     "error_uploadError": "Upload failed. Please try again.",
-    "error_documentsLimit": "You have reached the maximum number of documents (100)."
+    "error_limitReached": "You have reached the maximum allowed. Delete what you no longer need to add more.",
+    "error_filesLimit": "You have reached the maximum number of files for this service. Delete the ones you no longer need."
   },
   "reviews": {
     "pageTitle": "Kumani reviews",
@@ -10443,10 +10448,6 @@
     "error_dateInvalid": "Invalid date.",
     "error_customDaysRequired": "Enter how many days between repeats.",
     "error_notFound": "Not found: it may have been deleted.",
-    "error_homesLimit": "You can add up to 3 homes.",
-    "error_utilitiesLimit": "You have reached the maximum number of utilities (50).",
-    "error_appliancesLimit": "You have reached the maximum number of appliances (200).",
-    "error_documentsLimit": "You have reached the maximum number of documents (300).",
     "error_billNotFound": "Bill not found in Spendly.",
     "error_billAlreadyLinked": "This bill is already linked to another utility.",
     "error_billAmountInvalid": "Enter the bill amount.",
@@ -10459,6 +10460,8 @@
     "findoNone": "Not set",
     "findoEmpty": "You have no places in Findo yet.",
     "findoCreate": "Create places",
-    "findoOpen": "Open Findo"
+    "findoOpen": "Open Findo",
+    "error_limitReached": "You have reached the maximum allowed. Delete what you no longer need to add more.",
+    "error_filesLimit": "You have reached the maximum number of files for this service. Delete the ones you no longer need."
   }
 }

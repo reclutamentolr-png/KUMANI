@@ -1350,7 +1350,8 @@
     "notLoggedIn": "Debes iniciar sesión.",
     "subscriptionRequired": "Spendly requiere una suscripción activa.",
     "saveError": "No se pudo guardar. Inténtalo de nuevo.",
-    "deleteError": "No se pudo eliminar. Inténtalo de nuevo."
+    "deleteError": "No se pudo eliminar. Inténtalo de nuevo.",
+    "limitReached": "Has alcanzado el número máximo permitido. Elimina lo que ya no necesites para añadir más."
   },
   "common": {
     "publicOfflineProfileTitle": "Perfil no disponible temporalmente",
@@ -1379,7 +1380,9 @@
     "confirmCancel": "Cancelar",
     "leaveUnsavedTitle": "¿Salir sin guardar?",
     "leaveUnsavedText": "Tienes cambios que aún no están guardados. Si sales ahora, los perderás.",
-    "leaveUnsavedOk": "Salir sin guardar"
+    "leaveUnsavedOk": "Salir sin guardar",
+    "limitReached": "Has alcanzado el número máximo permitido ({max}). Elimina lo que ya no necesites para añadir más.",
+    "filesLimitReached": "Has alcanzado el número máximo de archivos de este servicio. Elimina los que ya no necesites."
   },
   "magazzino": {
     "deleteForever": "Eliminar definitivamente",
@@ -2051,7 +2054,8 @@
     "generateError": "No se pudo generar la oferta. Inténtalo de nuevo.",
     "rateLimited": "El servicio de IA está momentáneamente ocupado. Inténtalo de nuevo en un momento.",
     "publishError": "No se pudo publicar la campaña. Inténtalo de nuevo.",
-    "deleteError": "No se pudo eliminar la campaña. Inténtalo de nuevo."
+    "deleteError": "No se pudo eliminar la campaña. Inténtalo de nuevo.",
+    "limitReached": "Has alcanzado el número máximo permitido. Elimina lo que ya no necesites para añadir más."
   },
   "qrCodePro": {
     "invalidUrl": "Introduce un enlace válido que empiece por http:// o https://",
@@ -2116,7 +2120,8 @@
     "addressLabel": "Dirección",
     "cityLabel": "Ciudad",
     "postalCodeLabel": "Código postal",
-    "countryLabel": "País"
+    "countryLabel": "País",
+    "limitReached": "Has alcanzado el número máximo permitido. Elimina lo que ya no necesites para añadir más."
   },
   "lifeCalendar": {
     "customDaysRequired": "Para la repetición personalizada indica cada cuántos días.",
@@ -2197,7 +2202,8 @@
     "deleteError": "No se pudo eliminar. Inténtalo de nuevo.",
     "casaBadge": "KUMANI Casa · {name}",
     "openInCasa": "Abrir en KUMANI Casa",
-    "casaNotice": "Este vencimiento es de tu vivienda: toca para abrirla en KUMANI Casa."
+    "casaNotice": "Este vencimiento es de tu vivienda: toca para abrirla en KUMANI Casa.",
+    "limitReached": "Has alcanzado el número máximo permitido. Elimina lo que ya no necesites para añadir más."
   },
   "findo": {
     "title": "Findo",
@@ -2247,7 +2253,8 @@
     "notLoggedIn": "Debes iniciar sesión.",
     "subscriptionRequired": "Findo requiere una suscripción activa.",
     "saveError": "No se pudo guardar. Inténtalo de nuevo.",
-    "deleteError": "No se pudo eliminar. Inténtalo de nuevo."
+    "deleteError": "No se pudo eliminar. Inténtalo de nuevo.",
+    "limitReached": "Has alcanzado el número máximo permitido. Elimina lo que ya no necesites para añadir más."
   },
   "digitalReceipt": {
     "title": "Recibos Digitales",
@@ -2341,7 +2348,8 @@
     "saveOpenDocuments": "Abrir Documentos",
     "pendingSaved": "El recibo que has recibido se ha guardado en tu cuenta.",
     "pendingOpen": "Abrir el recibo",
-    "pendingClose": "Cerrar"
+    "pendingClose": "Cerrar",
+    "limitReached": "Has alcanzado el número máximo permitido. Elimina lo que ya no necesites para añadir más."
   },
   "preventivi": {
     "title": "Presupuestos",
@@ -2515,7 +2523,8 @@
     "bandLineColor": "Color de la línea",
     "bandHeight": "Altura de la franja",
     "bandReset": "Restablecer",
-    "bandLineHeight": "Grosor de la línea"
+    "bandLineHeight": "Grosor de la línea",
+    "limitReached": "Has alcanzado el número máximo permitido. Elimina lo que ya no necesites para añadir más."
   },
   "kumaniCv": {
     "title": "KUMANI CV",
@@ -4203,7 +4212,8 @@
     "template_currency": "Efectivo / moneda local",
     "template_bank": "Avisar al banco del viaje",
     "template_localTransport": "Transporte local (trenes, coche, pases)",
-    "template_luggage": "Equipaje y check-in"
+    "template_luggage": "Equipaje y check-in",
+    "error_limitReached": "Has alcanzado el número máximo permitido. Elimina lo que ya no necesites para añadir más."
   },
   "events": {
     "error_suspended": "Servicio suspendido temporalmente. Inténtelo más tarde.",
@@ -9624,19 +9634,13 @@
     "error_dateInvalid": "Revisa la fecha (no puede ser futura).",
     "error_notFound": "Vehículo no encontrado.",
     "error_kmBelowInitial": "Los km no pueden ser menos que los iniciales.",
-    "error_readingsLimit": "Has alcanzado el número máximo de lecturas.",
-    "error_deadlinesLimit": "Has alcanzado el número máximo de vencimientos.",
     "error_amountInvalid": "Introduce un importe válido.",
-    "error_expensesLimit": "Has alcanzado el número máximo de gastos.",
     "rentalDownDescription": "Entrada del alquiler {name}",
     "typeQuestion": "¿Coche o moto?",
     "type_car": "Coche",
     "type_motorbike": "Moto",
     "namePlaceholderMoto": "Ej. Mi moto",
     "modelPlaceholderMoto": "Ej. Honda CB 500 F",
-    "error_carsLimit": "Puedes seguir como máximo 3 coches en propiedad.",
-    "error_motorbikesLimit": "Puedes seguir como máximo 3 motos en propiedad.",
-    "error_rentalsLimit": "Puedes seguir como máximo 2 vehículos de renting.",
     "documentsTitle": "Documentos",
     "documentsHint": "Fotos o PDF del permiso de circulación, del seguro y de otros documentos, también por las dos caras: solo los ves tú.",
     "documentsFileHint": "PDF, JPG, PNG o WebP, máximo 10 MB.",
@@ -9650,7 +9654,8 @@
     "error_fileType": "Formato no compatible: usa PDF, JPG, PNG o WebP.",
     "error_fileSize": "El archivo supera los 10 MB.",
     "error_uploadError": "No se ha podido subir. Inténtalo de nuevo.",
-    "error_documentsLimit": "Has alcanzado el número máximo de documentos (100)."
+    "error_limitReached": "Has alcanzado el número máximo permitido. Elimina lo que ya no necesites para añadir más.",
+    "error_filesLimit": "Has alcanzado el número máximo de archivos de este servicio. Elimina los que ya no necesites."
   },
   "reviews": {
     "pageTitle": "Opiniones de los Kumani",
@@ -10443,10 +10448,6 @@
     "error_dateInvalid": "Fecha no válida.",
     "error_customDaysRequired": "Escribe cada cuántos días se repite.",
     "error_notFound": "No encontrado: quizá se ha eliminado.",
-    "error_homesLimit": "Puedes añadir hasta 3 viviendas.",
-    "error_utilitiesLimit": "Has alcanzado el número máximo de suministros (50).",
-    "error_appliancesLimit": "Has alcanzado el número máximo de aparatos (200).",
-    "error_documentsLimit": "Has alcanzado el número máximo de documentos (300).",
     "error_billNotFound": "Factura no encontrada en Spendly.",
     "error_billAlreadyLinked": "Esta factura ya está enlazada a otro suministro.",
     "error_billAmountInvalid": "Escribe el importe de la factura.",
@@ -10459,6 +10460,8 @@
     "findoNone": "Sin indicar",
     "findoEmpty": "Aún no tienes ubicaciones en Findo.",
     "findoCreate": "Crear ubicaciones",
-    "findoOpen": "Abrir Findo"
+    "findoOpen": "Abrir Findo",
+    "error_limitReached": "Has alcanzado el número máximo permitido. Elimina lo que ya no necesites para añadir más.",
+    "error_filesLimit": "Has alcanzado el número máximo de archivos de este servicio. Elimina los que ya no necesites."
   }
 }

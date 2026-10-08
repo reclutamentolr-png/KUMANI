@@ -21,6 +21,7 @@ import {
   type ExpenseKind,
   type VehicleForm,
 } from '@/lib/garage'
+import { limitError } from '@/lib/appLimits'
 
 type ActionResult<T> = { success: true; data: T } | { success: false; message: string }
 type Supabase = Awaited<ReturnType<typeof createClient>>
@@ -35,14 +36,6 @@ async function gate(): Promise<{ ok: true; userId: string; supabase: Supabase } 
   if (!user) return { ok: false, message: 'notLoggedIn' }
   if (!(await hasActiveToolAccess(supabase, user.id, 'garage'))) return { ok: false, message: 'subscriptionRequired' }
   return { ok: true, userId: user.id, supabase }
-}
-
-// Limiti per persona: 3 auto e 3 moto di proprietà, 2 noleggi
-function vehicleLimitMessage(message: string | undefined): string {
-  if (message?.includes('garage_rentals_limit')) return 'rentalsLimit'
-  if (message?.includes('garage_cars_limit')) return 'carsLimit'
-  if (message?.includes('garage_motorbikes_limit')) return 'motorbikesLimit'
-  return 'saveError'
 }
 
 const money = (value: number | null | undefined) => (value === null || value === undefined || !Number.isFinite(value) || value < 0 ? null : Math.round(value * 100) / 100)
@@ -156,7 +149,7 @@ export async function createVehicle(form: VehicleForm): Promise<ActionResult<{ i
     .single()
   if (error || !data) {
     console.error('[Garage] createVehicle failed:', error)
-    return { success: false, message: vehicleLimitMessage(error?.message) }
+    return (await limitError(error)) ?? { success: false, message: 'saveError' }
   }
   await syncRentalFee(g.supabase, g.userId, data.id, row, form.addFeeToSpendly, null)
   await awardToolPoint('garage')
@@ -179,7 +172,7 @@ export async function updateVehicle(id: string, form: VehicleForm): Promise<Acti
     .maybeSingle()
   if (error || !data) {
     console.error('[Garage] updateVehicle failed:', error)
-    return { success: false, message: vehicleLimitMessage(error?.message) }
+    return (await limitError(error)) ?? { success: false, message: 'saveError' }
   }
   await syncRentalFee(g.supabase, g.userId, id, row, form.addFeeToSpendly, data.spendly_fixed_id as string | null)
   return { success: true, data: null }
@@ -222,7 +215,7 @@ export async function addReading(vehicleId: string, input: { km: number; readOn:
     .insert({ vehicle_id: vehicleId, user_id: g.userId, km, read_on: input.readOn, note: input.note.trim().slice(0, 120) || null })
   if (error) {
     console.error('[Garage] addReading failed:', error)
-    return { success: false, message: error.message.includes('garage_readings_limit') ? 'readingsLimit' : 'saveError' }
+    return (await limitError(error)) ?? { success: false, message: 'saveError' }
   }
   await awardToolPoint('garage')
   return { success: true, data: null }
@@ -259,7 +252,7 @@ export async function saveDeadline(vehicleId: string, input: DeadlineInput, id?:
     : await g.supabase.from('garage_deadlines').insert({ ...row, vehicle_id: vehicleId, user_id: g.userId })
   if (error) {
     console.error('[Garage] saveDeadline failed:', error)
-    return { success: false, message: error.message.includes('garage_deadlines_limit') ? 'deadlinesLimit' : 'saveError' }
+    return (await limitError(error)) ?? { success: false, message: 'saveError' }
   }
   await awardToolPoint('garage')
   return { success: true, data: null }
@@ -326,7 +319,7 @@ async function insertExpense(
   if (error) {
     console.error('[Garage] addExpense failed:', error)
     if (spendlyId) await g.supabase.from('spendly_variable_expenses').delete().eq('id', spendlyId)
-    return { success: false, message: error.message.includes('garage_expenses_limit') ? 'expensesLimit' : 'saveError' }
+    return (await limitError(error)) ?? { success: false, message: 'saveError' }
   }
   return { success: true, data: null }
 }
@@ -418,7 +411,7 @@ export async function addVehicleDocument(
   if (error) {
     console.error('[Garage] addVehicleDocument failed:', error)
     await g.supabase.storage.from('garage-files').remove([input.filePath])
-    return { success: false, message: error.message.includes('garage_documents_limit') ? 'documentsLimit' : 'saveError' }
+    return (await limitError(error)) ?? { success: false, message: 'saveError' }
   }
   await awardToolPoint('garage')
   return { success: true, data: null }

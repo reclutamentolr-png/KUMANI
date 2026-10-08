@@ -8,6 +8,7 @@ import { suggestLifeCalendarCategory } from '@/lib/lifeCalendarHints'
 import { deleteAppointment, deleteContact, deleteNote, deleteTask, saveAppointment, saveContact, saveNote, saveTask } from '@/app/actions/memolife'
 import { askConfirm } from '@/lib/confirm'
 import CancelButton, { SheetCloseContext } from '@/components/ui/CancelButton'
+import { limitTextOf } from '@/lib/limitText'
 
 // Moduli di MemoLife in una finestra (dal basso su telefono). Salvano con le
 // azioni del server; "onDone" ricarica i dati.
@@ -44,7 +45,7 @@ function useSubmit(onDone: () => void) {
     const result = await action()
     setBusy(false)
     if (result.success) onDone()
-    else setError(result.message === 'invalid' ? t('errorInvalid') : t('errorSave'))
+    else setError(limitTextOf(result) ?? (result.message === 'invalid' ? t('errorInvalid') : t('errorSave')))
   }
   return { busy, error, run }
 }

@@ -9,6 +9,7 @@ import { HOME_KINDS, emptyHomeForm, type CasaHome, type HomeForm } from '@/lib/c
 import { defaultLocale } from '../../../i18n'
 import { input, label, primaryBtn } from '@/components/casa/shared'
 import CancelButton, { cancelButtonLgClass } from '@/components/ui/CancelButton'
+import { limitTextOf } from '@/lib/limitText'
 
 export default function HomeFormView({ home }: { home?: CasaHome }) {
   const t = useTranslations('casa')
@@ -28,7 +29,7 @@ export default function HomeFormView({ home }: { home?: CasaHome }) {
     startTransition(async () => {
       const result = home ? await updateHome(home.id, form) : await createHome(form)
       if (!result.success) {
-        setError(t.has(`error_${result.message}`) ? t(`error_${result.message}`) : t('error_saveError'))
+        setError(limitTextOf(result) ?? (t.has(`error_${result.message}`) ? t(`error_${result.message}`) : t('error_saveError')))
         return
       }
       const id = home ? home.id : (result.data as { id: string }).id

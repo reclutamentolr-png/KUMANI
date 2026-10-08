@@ -6,6 +6,7 @@ import { generateShortCode } from '@/lib/shortLink'
 import type { DigitalReceiptFormData } from '@/lib/digitalReceipt'
 import { createItem as createLifeCalendarItem } from '@/app/actions/lifeCalendar'
 import { awardToolPoint } from '@/lib/toolPoints'
+import { limitError } from '@/lib/appLimits'
 
 type ActionResult<T> =
   | { success: true; data: T }
@@ -122,6 +123,8 @@ export async function createReceipt(
       console.error('[DigitalReceipt] createReceipt failed:', error)
       // La ricevuta non è stata salvata: niente promemoria orfano.
       await closeLinkedLifeCalendarItem(supabase, gate.userId, lifeCalendarItemId, 'delete')
+      const limit = await limitError(error)
+      if (limit) return limit
       return { success: false, message: 'saveError' }
     }
   }

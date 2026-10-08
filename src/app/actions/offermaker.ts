@@ -11,6 +11,7 @@ import {
   type GeneratedCampaignDraft,
   type OfferFormAnswers,
 } from '@/lib/offermaker'
+import { limitError } from '@/lib/appLimits'
 
 type ActionResult<T> =
   | { success: true; data: T }
@@ -249,6 +250,8 @@ export async function publishOfferCampaign(
     // Unique violation on `code` — retry with a new one. Any other error, bail out.
     if (error && error.code !== '23505') {
       console.error('[OfferMaker] publishOfferCampaign failed:', error)
+      const limit = await limitError(error)
+      if (limit) return limit
       return { success: false, message: 'publishError' }
     }
   }
