@@ -41,7 +41,7 @@ export default async function MemoLifePage({
     loadAgenda(supabase, user.id, { from: month.from, to: month.to, sources, includeDone: true }),
     supabase.from('tasks').select('id, title, description, due_date, priority, completed, created_at').eq('user_id', user.id).order('created_at', { ascending: false }).limit(300),
     supabase.from('notes').select('id, title, content, created_at').eq('user_id', user.id).order('created_at', { ascending: false }).limit(300),
-    supabase.from('contacts').select('id, name, phone, email, company, notes').eq('user_id', user.id).order('name').limit(500),
+    supabase.from('contacts').select('id, name, phone, email, company, notes').eq('user_id', user.id).order('name').limit(2000),
   ])
 
   return (

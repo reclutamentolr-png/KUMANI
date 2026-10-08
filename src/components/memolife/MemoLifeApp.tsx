@@ -8,6 +8,7 @@ import {
   CalendarClock,
   CalendarDays,
   CheckCircle2,
+  Download,
   ExternalLink,
   FileBadge,
   Mail,
@@ -17,6 +18,7 @@ import {
   Plus,
   Receipt,
   Search,
+  Upload,
   Sun,
 } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
@@ -26,6 +28,7 @@ import { setTaskDone } from '@/app/actions/agenda'
 import { addDays, monthRange, type AgendaEvent } from '@/lib/agenda'
 import type { AgendaSources } from '@/lib/agenda-server'
 import MemoLifeCalendar from './MemoLifeCalendar'
+import ContactsImport, { exportContactsVcf } from './ContactsImport'
 import {
   AppointmentForm,
   ContactForm,
@@ -49,6 +52,7 @@ type Editor =
   | { kind: 'note'; draft: NoteDraft }
   | { kind: 'contact'; draft: ContactDraft }
   | { kind: 'menu' }
+  | { kind: 'import' }
   | null
 
 const TABS: { key: Tab; icon: typeof Sun }[] = [
@@ -363,6 +367,28 @@ export default function MemoLifeApp({
           </div>
         ))}
 
+      {tab === 'contacts' && (
+        <div className="mb-3 flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setEditor({ kind: 'import' })}
+            className="flex items-center gap-1.5 rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-[var(--ink)] hover:border-[var(--gold)]"
+          >
+            <Upload className="h-4 w-4" /> {t('importContacts')}
+          </button>
+          {contacts.length > 0 && (
+            <button
+              type="button"
+              onClick={() => exportContactsVcf(contacts)}
+              className="flex items-center gap-1.5 rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-[var(--ink)] hover:border-[var(--gold)]"
+            >
+              <Download className="h-4 w-4" /> {t('exportContacts')}
+            </button>
+          )}
+          <span className="ml-auto text-xs text-[var(--muted)]">{t('contactsCount', { count: contacts.length })}</span>
+        </div>
+      )}
+
       {tab === 'contacts' &&
         (visibleContacts.length === 0 ? (
           <p className="rounded-xl bg-white px-4 py-6 text-center text-sm text-[var(--muted)]">{t('emptyContacts')}</p>
@@ -472,6 +498,11 @@ export default function MemoLifeApp({
       {editor?.kind === 'contact' && (
         <Sheet title={editor.draft.id ? t('editContact') : t('add_contact')} onClose={() => setEditor(null)}>
           <ContactForm draft={editor.draft} onDone={refresh} />
+        </Sheet>
+      )}
+      {editor?.kind === 'import' && (
+        <Sheet title={t('importContacts')} onClose={() => setEditor(null)}>
+          <ContactsImport existing={contacts} onDone={refresh} />
         </Sheet>
       )}
     </div>

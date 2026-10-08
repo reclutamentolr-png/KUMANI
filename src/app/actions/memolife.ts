@@ -4,7 +4,8 @@ import { createClient } from '@/lib/supabase/server'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { awardToolPoint } from '@/lib/toolPoints'
 import { romeToInstant } from '@/lib/agenda'
-import { limitError } from '@/lib/appLimits'
+import { appLimitValue, limitError } from '@/lib/appLimits'
+import { cleanContact, emailKey, phoneKey, type ImportedContact } from '@/lib/contactsImport'
 
 // MemoLife = l'agenda: appuntamenti, promemoria, note, rubrica. Ogni azione
 // ricontrolla accesso (piano) e proprietà del dato. Le bollette non sono più
@@ -92,4 +93,81 @@ export async function saveContact(input: { id?: string; name: string; phone: str
 
 export async function deleteContact(id: string): Promise<Result> {
   return remove('contacts', id)
+}
+
+// Importazione della rubrica (file .vcf / .csv o rubrica del telefono). Lo
+// stesso contatto (stesso telefono o stessa email) non viene duplicato: si
+// completano solo i campi vuoti di quello già salvato. Si aggiungono contatti
+// solo fino al limite impostato dall'Admin.
+export type ImportContactsResult =
+  | { success: true; added: number; updated: number; skipped: number; overLimit: number }
+  | { success: false; message: string }
+
+const IMPORT_MAX = 3000
+
+export async function importContacts(items: ImportedContact[]): Promise<ImportContactsResult> {
+  const g = await gate()
+  if (!g.ok) return { success: false, message: g.message }
+  if (!Array.isArray(items) || !items.length) return { success: false, message: 'invalid' }
+  const incoming = items.slice(0, IMPORT_MAX).map((c) => cleanContact(c ?? {})).filter((c): c is ImportedContact => !!c)
+
+  const { data: existing, error } = await g.supabase.from('contacts').select('id, name, phone, email, company, notes').eq('user_id', g.userId).limit(20000)
+  if (error) return { success: false, message: 'saveError' }
+  type Row = NonNullable<typeof existing>[number]
+  const byPhone = new Map<string, Row>()
+  const byEmail = new Map<string, Row>()
+  const index = (row: Row) => {
+    const p = phoneKey(row.phone)
+    const e = emailKey(row.email)
+    if (p && !byPhone.has(p)) byPhone.set(p, row)
+    if (e && !byEmail.has(e)) byEmail.set(e, row)
+  }
+  for (const row of existing ?? []) index(row)
+
+  const toInsert: ImportedContact[] = []
+  const updates = new Map<string, Partial<Row>>()
+  let skipped = 0
+  for (const c of incoming) {
+    const match = (phoneKey(c.phone) && byPhone.get(phoneKey(c.phone))) || (emailKey(c.email) && byEmail.get(emailKey(c.email))) || null
+    if (!match) {
+      const row = { id: '', ...c } as Row
+      toInsert.push(c)
+      index(row)
+      continue
+    }
+    if (!match.id) {
+      skipped++
+      continue
+    }
+    const patch: Partial<Row> = {}
+    for (const field of ['phone', 'email', 'company', 'notes'] as const) {
+      if (!match[field] && c[field]) patch[field] = match[field] = c[field]
+    }
+    if (Object.keys(patch).length) updates.set(match.id, { ...updates.get(match.id), ...patch })
+    else skipped++
+  }
+
+  for (const [id, patch] of updates) {
+    await g.supabase.from('contacts').update(patch).eq('id', id).eq('user_id', g.userId)
+  }
+
+  const max = await appLimitValue('memolife_contacts')
+  const room = max === null ? toInsert.length : Math.max(0, max - (existing?.length ?? 0))
+  const accepted = toInsert.slice(0, room)
+  let added = 0
+  for (let i = 0; i < accepted.length; i += 200) {
+    const chunk = accepted.slice(i, i + 200).map((c) => ({
+      user_id: g.userId,
+      name: c.name,
+      phone: c.phone || null,
+      email: c.email || null,
+      company: c.company || null,
+      notes: c.notes || null,
+    }))
+    const { error: insertError } = await g.supabase.from('contacts').insert(chunk)
+    if (insertError) break
+    added += chunk.length
+  }
+  if (added) await awardToolPoint('memolife')
+  return { success: true, added, updated: updates.size, skipped, overLimit: toInsert.length - added }
 }
