@@ -49,6 +49,10 @@ export default async function NewQuotePage({
     ? supabase.storage.from('quote-logos-v2').getPublicUrl(profile.logo_path).data.publicUrl
     : null
 
+  // KUMANI Shop: pagamento online possibile solo con il conto Stripe pronto
+  const { data: stripeAccount } = await supabase.from('seller_stripe_accounts').select('charges_enabled').eq('user_id', user.id).maybeSingle()
+  const canChargeOnline = !!stripeAccount?.charges_enabled
+
   return (
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
@@ -75,6 +79,7 @@ export default async function NewQuotePage({
           </p>
         )}
         <QuoteForm
+          canChargeOnline={canChargeOnline}
           issuer={profile || null}
           logoUrl={logoUrl}
           mode="create"

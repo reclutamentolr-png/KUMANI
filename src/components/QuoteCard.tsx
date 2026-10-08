@@ -16,6 +16,9 @@ type Quote = {
   client_name: string
   issue_date: string
   total: number
+  // KUMANI Shop: accettato o pagato dal cliente dalla pagina del preventivo
+  accepted_at?: string | null
+  payment_status?: string | null
 }
 
 export default function QuoteCard({ quote, fromDashboardSuffix = '' }: { quote: Quote; fromDashboardSuffix?: string }) {
@@ -115,6 +118,11 @@ export default function QuoteCard({ quote, fromDashboardSuffix = '' }: { quote: 
           <h3 className="font-semibold text-[var(--ink)] truncate">
             {t('quoteNumberLabel', { number: quote.quote_number })}
           </h3>
+          {quote.payment_status === 'paid' ? (
+            <span className="shrink-0 rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-bold text-emerald-800">{t('badgePaid')}</span>
+          ) : quote.accepted_at ? (
+            <span className="shrink-0 rounded-full bg-sky-100 px-2 py-0.5 text-[11px] font-bold text-sky-800">{t('badgeAccepted')}</span>
+          ) : null}
         </div>
         <p className="text-xs text-gray-500 mt-0.5">
           {quote.client_name} · {new Date(quote.issue_date).toLocaleDateString(locale)}

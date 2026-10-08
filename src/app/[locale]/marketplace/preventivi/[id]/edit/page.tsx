@@ -5,7 +5,7 @@ import Link from '@/components/LocalizedLink'
 import { ArrowLeft, FileSpreadsheet } from 'lucide-react'
 import { hasActivePreventiviAccess, loadQuoteInventoryProducts } from '@/lib/quotes-server'
 import QuoteForm from '@/components/QuoteForm'
-import type { QuoteFormData } from '@/lib/quotes'
+import { DEFAULT_DEPOSIT_PERCENT, QUOTE_PAYMENT_MODES, type QuoteFormData } from '@/lib/quotes'
 
 export default async function EditQuotePage({
   params,
@@ -69,7 +69,13 @@ export default async function EditQuotePage({
     items: quote.items && quote.items.length > 0 ? quote.items : [{ description: '', quantity: 1, unitPrice: 0 }],
     paymentInfo: quote.payment_info || '',
     notes: quote.notes || '',
+    paymentMode: QUOTE_PAYMENT_MODES.includes(quote.payment_mode) ? quote.payment_mode : 'none',
+    depositPercent: quote.deposit_percent ?? DEFAULT_DEPOSIT_PERCENT,
   }
+
+  // KUMANI Shop: pagamento online possibile solo con il conto Stripe pronto
+  const { data: stripeAccount } = await supabase.from('seller_stripe_accounts').select('charges_enabled').eq('user_id', user.id).maybeSingle()
+  const canChargeOnline = !!stripeAccount?.charges_enabled
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -91,6 +97,7 @@ export default async function EditQuotePage({
 
       <main className="max-w-3xl xl:max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <QuoteForm
+          canChargeOnline={canChargeOnline}
           issuer={profile || null}
           logoUrl={logoUrl}
           mode="edit"

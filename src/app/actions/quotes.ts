@@ -1,5 +1,6 @@
 'use server'
 
+import { randomBytes } from 'crypto'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
 import { hasActivePreventiviAccess } from '@/lib/quotes-server'
@@ -21,6 +22,8 @@ import {
   type QuoteSection,
   type SavedClientRow,
   type SavedClientFormData,
+  QUOTE_PAYMENT_MODES,
+  DEFAULT_DEPOSIT_PERCENT,
 } from '@/lib/quotes'
 import { awardToolPoint } from '@/lib/toolPoints'
 import { limitError } from '@/lib/appLimits'
@@ -100,6 +103,8 @@ function quoteFields(form: QuoteFormData, userId: string) {
     items,
     payment_info: form.paymentInfo || null,
     notes: form.notes || null,
+    payment_mode: QUOTE_PAYMENT_MODES.includes(form.paymentMode) ? form.paymentMode : 'none',
+    deposit_percent: form.paymentMode === 'deposit' ? Math.min(100, Math.max(1, Math.round(Number(form.depositPercent) || DEFAULT_DEPOSIT_PERCENT))) : null,
     total: layout === 'descriptive' ? computeSectionsTotal(sections) : computeQuoteTotal(items),
   }
 }
@@ -430,4 +435,22 @@ export async function getQuotePdfData(id: string): Promise<
   if (!quote) return { success: false, message: 'saveError' }
   const logoUrl = issuer?.logo_path ? supabase.storage.from('quote-logos-v2').getPublicUrl(issuer.logo_path).data.publicUrl : null
   return { success: true, data: { quote, issuer, logoUrl } }
+}
+
+// Link pubblico del preventivo (pagina per il cliente: leggere, accettare e
+// pagare online). Creato la prima volta che serve, poi resta lo stesso.
+export async function getQuotePublicLink(id: string): Promise<ActionResult<{ token: string }>> {
+  const gate = await requireActivePreventiviAccess()
+  if (!gate.ok) return { success: false, message: gate.message }
+  const supabase = await createClient()
+  const { data: quote } = await supabase.from('quotes').select('public_token').eq('id', id).eq('user_id', gate.userId).maybeSingle()
+  if (!quote) return { success: false, message: 'saveError' }
+  if (quote.public_token) return { success: true, data: { token: quote.public_token as string } }
+  const token = randomBytes(16).toString('base64url')
+  const { error } = await supabase.from('quotes').update({ public_token: token }).eq('id', id).eq('user_id', gate.userId)
+  if (error) {
+    console.error('[Quotes] getQuotePublicLink failed:', error)
+    return { success: false, message: 'saveError' }
+  }
+  return { success: true, data: { token } }
 }

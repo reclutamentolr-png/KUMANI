@@ -8,6 +8,8 @@ import BusinessProfileForm from '@/components/businessProfile/BusinessProfileFor
 import { createClient } from '@/lib/supabase/server'
 import { getMyBusinessProfile } from '@/lib/businessProfile-server'
 import { getSessionUser } from '@/lib/session'
+import SellerPaymentsCard from '@/components/shop/SellerPaymentsCard'
+import { getSellerPaymentStatus } from '@/app/actions/shop'
 
 // «Scheda attività»: i dati dell'attività scritti una volta sola e ripresi
 // da tutti i servizi. ?from=/percorso riporta al servizio da cui si arriva.
@@ -16,10 +18,10 @@ export default async function BusinessProfilePage({
   searchParams,
 }: {
   params: Promise<{ locale: string }>
-  searchParams: Promise<{ from?: string }>
+  searchParams: Promise<{ from?: string; stripe?: string }>
 }) {
   const { locale } = await params
-  const { from } = await searchParams
+  const { from, stripe } = await searchParams
   const user = await getSessionUser()
   if (!user) redirect(`/${locale}/login?next=/scheda-attivita`)
 
@@ -30,6 +32,8 @@ export default async function BusinessProfilePage({
     supabase.rpc('can_use_tool', { p_tool: 'link-in-bio' }).maybeSingle<{ allowed: boolean }>(),
   ])
   const allowed = !!proAccess?.allowed || !!baseAccess?.allowed
+  // KUMANI Shop: pagamenti online dei preventivi (solo con il Pro)
+  const sellerPayments = proAccess?.allowed ? await getSellerPaymentStatus() : null
   const back = from && /^\/(?!\/)[A-Za-z0-9/_-]*$/.test(from) ? from : null
 
   return (
@@ -43,7 +47,10 @@ export default async function BusinessProfilePage({
         )}
         <p className="text-[var(--muted)]">{t('intro')}</p>
         {allowed ? (
-          <BusinessProfileForm initial={profile} />
+          <>
+            <BusinessProfileForm initial={profile} />
+            {sellerPayments && <SellerPaymentsCard initial={sellerPayments} returning={stripe === 'return' || stripe === 'refresh'} />}
+          </>
         ) : (
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[var(--gold)]/40 bg-[var(--gold-pale)] p-5 text-[var(--ink)]">
             <span>{t('planRequired')}</span>

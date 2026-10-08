@@ -138,6 +138,20 @@ export interface QuoteFormData {
   items: QuoteItem[]
   paymentInfo: string
   notes: string
+  // Pagamento online (KUMANI Shop): nessuno, totale o acconto in percentuale
+  paymentMode: QuotePaymentMode
+  depositPercent: number
+}
+
+export const QUOTE_PAYMENT_MODES = ['none', 'full', 'deposit'] as const
+export type QuotePaymentMode = (typeof QUOTE_PAYMENT_MODES)[number]
+export const DEFAULT_DEPOSIT_PERCENT = 30
+
+// Importo da pagare online (centesimi): tutto o l'acconto
+export function quoteAmountDueCents(total: number, mode: QuotePaymentMode, depositPercent: number | null): number {
+  const cents = Math.round(Number(total) * 100)
+  if (mode === 'deposit') return Math.round((cents * Math.min(100, Math.max(1, depositPercent ?? DEFAULT_DEPOSIT_PERCENT))) / 100)
+  return mode === 'full' ? cents : 0
 }
 
 // A client saved once and recalled on future quotes instead of retyping —

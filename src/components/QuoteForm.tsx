@@ -19,6 +19,8 @@ import {
   LINE_HEIGHT_MAX,
   LINE_HEIGHT_MIN,
   cleanBandStyle,
+  DEFAULT_DEPOSIT_PERCENT,
+  type QuotePaymentMode,
   type QuoteBandStyle,
   type QuoteLogoPosition,
   type QuotePreset,
@@ -62,6 +64,8 @@ type Props = {
   initialLine?: { description: string; unitPrice: number }
   // Numero del preventivo (nuovo: il prossimo libero) per l'anteprima
   quoteNumber?: number
+  // KUMANI Shop: conto Stripe collegato e pronto per incassare
+  canChargeOnline?: boolean
 }
 
 function defaultForm(paymentInfo = '', logoPosition: QuoteLogoPosition = 'left', intro = '', closing = '', bandStyle: QuoteBandStyle | null = null): QuoteFormData {
@@ -88,11 +92,13 @@ function defaultForm(paymentInfo = '', logoPosition: QuoteLogoPosition = 'left',
     validUntil: '',
     items: [emptyQuoteItem()],
     paymentInfo,
+    paymentMode: 'none',
+    depositPercent: DEFAULT_DEPOSIT_PERCENT,
     notes: '',
   }
 }
 
-export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData, inventoryProducts, initialLine, quoteNumber }: Props) {
+export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData, inventoryProducts, initialLine, quoteNumber, canChargeOnline = false }: Props) {
   const t = useTranslations('preventivi')
   const tb = useTranslations('businessProfile')
   const te = useTranslations('ecosystem')
@@ -756,6 +762,45 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
             >
               {tb('importButton')}
             </button>
+          )}
+        </div>
+
+        {/* KUMANI Shop: il cliente accetta e paga online dalla pagina del preventivo */}
+        <div className="border-t border-[var(--gold)]/15 pt-6">
+          <label className="block text-sm font-medium text-gray-700 mb-1">{t('onlinePaymentField')}</label>
+          <p className="text-xs text-gray-400 mb-2">{canChargeOnline ? t('onlinePaymentHint') : t('onlinePaymentConnectHint')}</p>
+          {canChargeOnline ? (
+            <div className="flex flex-wrap items-center gap-2">
+              {(['none', 'full', 'deposit'] as QuotePaymentMode[]).map((m) => (
+                <button
+                  key={m}
+                  type="button"
+                  onClick={() => setForm((prev) => ({ ...prev, paymentMode: m }))}
+                  className={`rounded-full border px-3.5 py-1.5 text-sm font-semibold transition ${
+                    form.paymentMode === m ? 'border-[var(--ink)] bg-[var(--ink)] text-[var(--gold-bright)]' : 'border-gray-200 bg-white text-gray-700 hover:border-[var(--gold)]'
+                  }`}
+                >
+                  {t(`onlinePayment_${m}`)}
+                </button>
+              ))}
+              {form.paymentMode === 'deposit' && (
+                <label className="flex items-center gap-1.5 text-sm text-gray-700">
+                  <input
+                    type="number"
+                    min={1}
+                    max={100}
+                    value={form.depositPercent}
+                    onChange={(e) => setForm((prev) => ({ ...prev, depositPercent: Number(e.target.value) || 0 }))}
+                    className="w-20 rounded-lg border-2 border-[var(--gold)]/20 px-2 py-1 text-right focus:border-[var(--gold)] focus:outline-none"
+                  />
+                  %
+                </label>
+              )}
+            </div>
+          ) : (
+            <Link href="/scheda-attivita?from=/marketplace/preventivi" className="text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
+              {t('onlinePaymentConnect')}
+            </Link>
           )}
         </div>
 
