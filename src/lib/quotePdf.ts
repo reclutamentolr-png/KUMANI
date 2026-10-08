@@ -110,6 +110,7 @@ export function generateQuotePdfBlob(params: {
 
   const doc = new jsPDF({ unit: 'pt', format: 'a4' })
   const pageWidth = doc.internal.pageSize.getWidth()
+  const pageHeight = doc.internal.pageSize.getHeight()
   const margin = 44
   const rightEdge = pageWidth - margin
   const colGap = 20
@@ -201,29 +202,53 @@ export function generateQuotePdfBlob(params: {
   y += 26
 
   // ── Items table ──
+  // Colonne: i numeri allineati a destra, ognuno nel suo spazio
   const col = {
     desc: margin,
-    qty: pageWidth - margin - 200,
-    price: pageWidth - margin - 130,
-    total: pageWidth - margin - 60,
+    qty: pageWidth - margin - 170,
+    price: pageWidth - margin - 85,
+    total: pageWidth - margin - 6,
   }
 
-  doc.setFillColor(...INK)
-  doc.rect(margin, y - 12, pageWidth - margin * 2, 20, 'F')
-  doc.setFont('helvetica', 'bold')
-  doc.setFontSize(9)
-  doc.setTextColor(255, 255, 255)
-  doc.text(labels.descriptionHeader, col.desc + 6, y + 2)
-  doc.text(labels.quantityHeader, col.qty, y + 2)
-  doc.text(labels.unitPriceHeader, col.price, y + 2)
-  doc.text(labels.totalHeader, col.total, y + 2)
-  y += 22
+  // ── Fondo dell'ultima pagina: modalità di pagamento e note sempre allo
+  // stesso posto, qualunque sia il numero di righe ──
+  const textWidth = pageWidth - margin * 2
+  const footerBlocks = [
+    quote.payment_info ? { label: labels.paymentInfoLabel, lines: doc.splitTextToSize(quote.payment_info, textWidth) as string[] } : null,
+    quote.notes ? { label: labels.notesLabel, lines: doc.splitTextToSize(quote.notes, textWidth) as string[] } : null,
+  ].filter(Boolean) as { label: string; lines: string[] }[]
+  const footerHeight = footerBlocks.reduce((h, b) => h + 14 + b.lines.length * 13 + 14, 0)
+  const pageNumberSpace = 22
+  // Note molto lunghe: il fondo prende al massimo metà pagina, poi va su una pagina sua
+  const footerOwnPage = footerHeight > (pageHeight - margin * 2) * 0.5
+  const footerTop = footerOwnPage ? margin + 18 : pageHeight - margin - pageNumberSpace - footerHeight
+  const rowsBottom = pageHeight - margin - pageNumberSpace
 
-  doc.setFont('helvetica', 'normal')
-  doc.setTextColor(30, 30, 30)
+  const tableHeader = () => {
+    doc.setFillColor(...INK)
+    doc.rect(margin, y - 12, pageWidth - margin * 2, 20, 'F')
+    doc.setFont('helvetica', 'bold')
+    doc.setFontSize(9)
+    doc.setTextColor(255, 255, 255)
+    doc.text(labels.descriptionHeader, col.desc + 6, y + 2)
+    doc.text(labels.quantityHeader, col.qty, y + 2, { align: 'right' })
+    doc.text(labels.unitPriceHeader, col.price, y + 2, { align: 'right' })
+    doc.text(labels.totalHeader, col.total, y + 2, { align: 'right' })
+    y += 22
+    doc.setFont('helvetica', 'normal')
+    doc.setTextColor(30, 30, 30)
+  }
+  tableHeader()
+
   quote.items.forEach((item, i) => {
-    const descLines = wrapTextByChars(item.description || '', 65)
+    const descLines = wrapTextByChars(item.description || '', 50)
     const rowHeight = Math.max(18, descLines.length * 12 + 6)
+    // Riga che non ci sta: si continua nella pagina successiva, con i titoli delle colonne
+    if (y + rowHeight > rowsBottom) {
+      doc.addPage()
+      y = margin + 18
+      tableHeader()
+    }
 
     if (i % 2 === 1) {
       doc.setFillColor(247, 247, 245)
@@ -232,11 +257,17 @@ export function generateQuotePdfBlob(params: {
 
     doc.setFontSize(9.5)
     doc.text(descLines, col.desc + 6, y)
-    doc.text(String(item.quantity), col.qty, y)
-    doc.text(formatCurrency(item.unitPrice), col.price, y)
-    doc.text(formatCurrency(item.quantity * item.unitPrice), col.total, y)
+    doc.text(String(item.quantity), col.qty, y, { align: 'right' })
+    doc.text(formatCurrency(item.unitPrice), col.price, y, { align: 'right' })
+    doc.text(formatCurrency(item.quantity * item.unitPrice), col.total, y, { align: 'right' })
     y += rowHeight
   })
+
+  // Il totale deve stare sopra al fondo fisso: se non c'è posto, pagina nuova
+  if (y + 30 > (footerOwnPage ? rowsBottom : footerTop)) {
+    doc.addPage()
+    y = margin + 18
+  }
 
   // ── Total — a shaded band closing the table, like the reference's "Totale dovuto" row ──
   doc.setFillColor(240, 240, 238)
@@ -247,34 +278,37 @@ export function generateQuotePdfBlob(params: {
   doc.text(labels.totalLabel, margin + 10, y + 4)
   const totalValue = formatCurrency(quote.total)
   doc.text(totalValue, pageWidth - margin - 10 - doc.getTextWidth(totalValue), y + 4)
-  y += 40
 
-  // ── Footer: payment info + notes ──
-  if (quote.payment_info) {
-    doc.setFont('helvetica', 'bold')
-    doc.setFontSize(9)
-    doc.setTextColor(60, 60, 60)
-    doc.text(labels.paymentInfoLabel.toUpperCase(), margin, y)
-    y += 14
-    doc.setFont('helvetica', 'normal')
-    doc.setFontSize(9.5)
-    doc.setTextColor(60, 60, 60)
-    const paymentLines = doc.splitTextToSize(quote.payment_info, pageWidth - margin * 2)
-    doc.text(paymentLines, margin, y)
-    y += paymentLines.length * 13 + 20
+  // ── Fondo fisso: modalità di pagamento + note ──
+  if (footerBlocks.length) {
+    if (footerOwnPage) doc.addPage()
+    let fy = footerTop
+    doc.setDrawColor(210, 210, 210)
+    doc.line(margin, fy - 10, pageWidth - margin, fy - 10)
+    fy += 6
+    for (const block of footerBlocks) {
+      doc.setFont('helvetica', 'bold')
+      doc.setFontSize(9)
+      doc.setTextColor(60, 60, 60)
+      doc.text(block.label.toUpperCase(), margin, fy)
+      fy += 14
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(9.5)
+      doc.text(block.lines, margin, fy)
+      fy += block.lines.length * 13 + 14
+    }
   }
 
-  if (quote.notes) {
-    doc.setFont('helvetica', 'bold')
-    doc.setFontSize(9)
-    doc.setTextColor(60, 60, 60)
-    doc.text(labels.notesLabel.toUpperCase(), margin, y)
-    y += 14
-    doc.setFont('helvetica', 'normal')
-    doc.setFontSize(9.5)
-    doc.setTextColor(60, 60, 60)
-    const noteLines = doc.splitTextToSize(quote.notes, pageWidth - margin * 2)
-    doc.text(noteLines, margin, y)
+  // Numero di pagina (solo se le pagine sono più di una)
+  const pages = doc.getNumberOfPages()
+  if (pages > 1) {
+    for (let p = 1; p <= pages; p++) {
+      doc.setPage(p)
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(8)
+      doc.setTextColor(...MUTED)
+      doc.text(labels.pageOf(p, pages), pageWidth / 2, pageHeight - margin + 8, { align: 'center' })
+    }
   }
 
   return doc.output('blob')

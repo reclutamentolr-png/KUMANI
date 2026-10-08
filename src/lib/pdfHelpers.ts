@@ -16,6 +16,7 @@ export type QuotePdfLabels = {
   paymentInfoLabel: string
   notesLabel: string
   pecLabel: string
+  pageOf: (page: number, pages: number) => string
 }
 
 /** Shared between the download button and the share/print flow so the two never drift apart. */
@@ -35,6 +36,7 @@ export function buildQuotePdfLabels(t: (key: string, values?: Record<string, str
     paymentInfoLabel: t('paymentInfoField'),
     notesLabel: t('notesField'),
     pecLabel: t('pecField'),
+    pageOf: (page, pages) => t('pdfPageOf', { page, pages }),
   }
 }
 

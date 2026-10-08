@@ -2360,7 +2360,7 @@
     "validUntilField": "Válido hasta",
     "itemsSectionTitle": "Líneas de presupuesto",
     "itemDescriptionPlaceholder": "Descripción",
-    "itemQuantityPlaceholder": "Cantidad",
+    "itemQuantityPlaceholder": "Cant. / Uds. / Horas",
     "itemPricePlaceholder": "Precio unitario",
     "addItemAction": "Añadir línea",
     "totalLabel": "Total",
@@ -2380,7 +2380,7 @@
     "downloadPdf": "Descargar PDF",
     "pdfError": "No se pudo generar el PDF. Inténtalo de nuevo.",
     "itemDescriptionHeader": "Descripción",
-    "itemQuantityHeader": "Cant.",
+    "itemQuantityHeader": "Cant. / Uds. / Horas",
     "itemPriceHeader": "Precio unit.",
     "itemTotalHeader": "Total",
     "shareSummaryText": "Presupuesto N.º {number} para {client} — Total: {total}",
@@ -2392,7 +2392,10 @@
     "notLoggedIn": "Debes iniciar sesión.",
     "subscriptionRequired": "Presupuestos requiere una suscripción activa.",
     "saveError": "No se pudo guardar. Inténtalo de nuevo.",
-    "deleteError": "No se pudo eliminar. Inténtalo de nuevo."
+    "deleteError": "No se pudo eliminar. Inténtalo de nuevo.",
+    "clientSearchPlaceholder": "Busca un cliente guardado…",
+    "clientSearchEmpty": "No se ha encontrado ningún cliente",
+    "pdfPageOf": "Página {page} de {pages}"
   },
   "kumaniCv": {
     "title": "KUMANI CV",

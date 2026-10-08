@@ -2360,7 +2360,7 @@
     "validUntilField": "Действительно до",
     "itemsSectionTitle": "Позиции предложения",
     "itemDescriptionPlaceholder": "Описание",
-    "itemQuantityPlaceholder": "Количество",
+    "itemQuantityPlaceholder": "Кол-во / шт. / ч",
     "itemPricePlaceholder": "Цена за единицу",
     "addItemAction": "Добавить позицию",
     "totalLabel": "Итого",
@@ -2380,7 +2380,7 @@
     "downloadPdf": "Скачать PDF",
     "pdfError": "Не удалось создать PDF. Попробуйте ещё раз.",
     "itemDescriptionHeader": "Описание",
-    "itemQuantityHeader": "Кол-во",
+    "itemQuantityHeader": "Кол-во / шт. / ч",
     "itemPriceHeader": "Цена за ед.",
     "itemTotalHeader": "Итого",
     "shareSummaryText": "Предложение № {number} для {client} — Итого: {total}",
@@ -2392,7 +2392,10 @@
     "notLoggedIn": "Необходимо войти в систему.",
     "subscriptionRequired": "Для использования этого инструмента нужна активная подписка.",
     "saveError": "Не удалось сохранить. Попробуйте ещё раз.",
-    "deleteError": "Не удалось удалить. Попробуйте ещё раз."
+    "deleteError": "Не удалось удалить. Попробуйте ещё раз.",
+    "clientSearchPlaceholder": "Найти сохранённого клиента…",
+    "clientSearchEmpty": "Клиент не найден",
+    "pdfPageOf": "Страница {page} из {pages}"
   },
   "kumaniCv": {
     "title": "KUMANI CV",

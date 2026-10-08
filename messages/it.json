@@ -2414,7 +2414,7 @@
     "validUntilField": "Valido fino al",
     "itemsSectionTitle": "Voci di preventivo",
     "itemDescriptionPlaceholder": "Descrizione",
-    "itemQuantityPlaceholder": "Quantità",
+    "itemQuantityPlaceholder": "Q.tà / Pz. / Ore",
     "itemPricePlaceholder": "Prezzo unitario",
     "addItemAction": "Aggiungi voce",
     "totalLabel": "Totale",
@@ -2434,7 +2434,7 @@
     "downloadPdf": "Scarica PDF",
     "pdfError": "Non è stato possibile generare il PDF. Riprova.",
     "itemDescriptionHeader": "Descrizione",
-    "itemQuantityHeader": "Qtà",
+    "itemQuantityHeader": "Q.tà / Pz. / Ore",
     "itemPriceHeader": "Prezzo unit.",
     "itemTotalHeader": "Totale",
     "shareSummaryText": "Preventivo N. {number} per {client} — Totale: {total}",
@@ -2446,7 +2446,10 @@
     "notLoggedIn": "Devi effettuare l'accesso.",
     "subscriptionRequired": "Preventivi richiede un abbonamento attivo.",
     "saveError": "Non è stato possibile salvare. Riprova.",
-    "deleteError": "Non è stato possibile eliminare. Riprova."
+    "deleteError": "Non è stato possibile eliminare. Riprova.",
+    "clientSearchPlaceholder": "Cerca un cliente salvato…",
+    "clientSearchEmpty": "Nessun cliente trovato",
+    "pdfPageOf": "Pagina {page} di {pages}"
   },
   "kumaniCv": {
     "title": "KUMANI CV",

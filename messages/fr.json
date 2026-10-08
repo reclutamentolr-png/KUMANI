@@ -2360,7 +2360,7 @@
     "validUntilField": "Valable jusqu'au",
     "itemsSectionTitle": "Lignes de devis",
     "itemDescriptionPlaceholder": "Description",
-    "itemQuantityPlaceholder": "Quantité",
+    "itemQuantityPlaceholder": "Qté / Pcs / H",
     "itemPricePlaceholder": "Prix unitaire",
     "addItemAction": "Ajouter une ligne",
     "totalLabel": "Total",
@@ -2380,7 +2380,7 @@
     "downloadPdf": "Télécharger le PDF",
     "pdfError": "Impossible de générer le PDF. Réessayez.",
     "itemDescriptionHeader": "Description",
-    "itemQuantityHeader": "Qté",
+    "itemQuantityHeader": "Qté / Pcs / H",
     "itemPriceHeader": "Prix unit.",
     "itemTotalHeader": "Total",
     "shareSummaryText": "Devis N° {number} pour {client} — Total : {total}",
@@ -2392,7 +2392,10 @@
     "notLoggedIn": "Vous devez être connecté.",
     "subscriptionRequired": "Devis nécessite un abonnement actif.",
     "saveError": "Impossible d'enregistrer. Réessayez.",
-    "deleteError": "Impossible de supprimer. Réessayez."
+    "deleteError": "Impossible de supprimer. Réessayez.",
+    "clientSearchPlaceholder": "Rechercher un client enregistré…",
+    "clientSearchEmpty": "Aucun client trouvé",
+    "pdfPageOf": "Page {page} sur {pages}"
   },
   "kumaniCv": {
     "title": "KUMANI CV",

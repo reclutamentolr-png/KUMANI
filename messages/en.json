@@ -2360,7 +2360,7 @@
     "validUntilField": "Valid until",
     "itemsSectionTitle": "Quote items",
     "itemDescriptionPlaceholder": "Description",
-    "itemQuantityPlaceholder": "Quantity",
+    "itemQuantityPlaceholder": "Qty / Pcs / Hrs",
     "itemPricePlaceholder": "Unit price",
     "addItemAction": "Add item",
     "totalLabel": "Total",
@@ -2380,7 +2380,7 @@
     "downloadPdf": "Download PDF",
     "pdfError": "Could not generate the PDF. Please try again.",
     "itemDescriptionHeader": "Description",
-    "itemQuantityHeader": "Qty",
+    "itemQuantityHeader": "Qty / Pcs / Hrs",
     "itemPriceHeader": "Unit price",
     "itemTotalHeader": "Total",
     "shareSummaryText": "Quote No. {number} for {client} — Total: {total}",
@@ -2392,7 +2392,10 @@
     "notLoggedIn": "You need to be logged in.",
     "subscriptionRequired": "Quotes requires an active subscription.",
     "saveError": "Could not save. Please try again.",
-    "deleteError": "Could not delete. Please try again."
+    "deleteError": "Could not delete. Please try again.",
+    "clientSearchPlaceholder": "Search a saved client…",
+    "clientSearchEmpty": "No client found",
+    "pdfPageOf": "Page {page} of {pages}"
   },
   "kumaniCv": {
     "title": "KUMANI CV",

@@ -2360,7 +2360,7 @@
     "validUntilField": "Válido até",
     "itemsSectionTitle": "Itens do orçamento",
     "itemDescriptionPlaceholder": "Descrição",
-    "itemQuantityPlaceholder": "Quantidade",
+    "itemQuantityPlaceholder": "Qtd. / Pç. / Horas",
     "itemPricePlaceholder": "Preço unitário",
     "addItemAction": "Adicionar item",
     "totalLabel": "Total",
@@ -2380,7 +2380,7 @@
     "downloadPdf": "Descarregar PDF",
     "pdfError": "Não foi possível gerar o PDF. Tente novamente.",
     "itemDescriptionHeader": "Descrição",
-    "itemQuantityHeader": "Qtd.",
+    "itemQuantityHeader": "Qtd. / Pç. / Horas",
     "itemPriceHeader": "Preço unit.",
     "itemTotalHeader": "Total",
     "shareSummaryText": "Orçamento N.º {number} para {client} — Total: {total}",
@@ -2392,7 +2392,10 @@
     "notLoggedIn": "Tem de iniciar sessão.",
     "subscriptionRequired": "Orçamentos requer uma subscrição ativa.",
     "saveError": "Não foi possível guardar. Tente novamente.",
-    "deleteError": "Não foi possível eliminar. Tente novamente."
+    "deleteError": "Não foi possível eliminar. Tente novamente.",
+    "clientSearchPlaceholder": "Procura um cliente guardado…",
+    "clientSearchEmpty": "Nenhum cliente encontrado",
+    "pdfPageOf": "Página {page} de {pages}"
   },
   "kumaniCv": {
     "title": "KUMANI CV",

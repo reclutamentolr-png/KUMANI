@@ -79,6 +79,8 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
   const [savedClients, setSavedClients] = useState<SavedClientRow[]>([])
   const [selectedClientId, setSelectedClientId] = useState('')
   const [editingClient, setEditingClient] = useState<SavedClientRow | null>(null)
+  const [clientQuery, setClientQuery] = useState('')
+  const [clientListOpen, setClientListOpen] = useState(false)
 
   useEffect(() => {
     listSavedClients().then((result) => {
@@ -117,6 +119,19 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
   }
 
   const selectedClient = savedClients.find((c) => c.id === selectedClientId) || null
+  // Ricerca tra i clienti salvati: nome, città, P.IVA, email o telefono
+  const clientMatches = useMemo(() => {
+    const q = clientQuery.trim().toLowerCase()
+    const list = q
+      ? savedClients.filter((c) => [c.name, c.city, c.vat, c.email, c.phone].some((v) => v?.toLowerCase().includes(q)))
+      : savedClients
+    return list.slice(0, 8)
+  }, [clientQuery, savedClients])
+  const pickClient = (client: SavedClientRow) => {
+    handleSelectSavedClient(client.id)
+    setClientQuery('')
+    setClientListOpen(false)
+  }
 
   const total = computeQuoteTotal(form.items)
   const isValid = form.clientName.trim().length > 0 && form.items.some((i) => i.description.trim().length > 0)
@@ -207,20 +222,54 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
           <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
             <h3 className="font-bold text-[var(--ink)]">{t('clientSectionTitle')}</h3>
             {savedClients.length > 0 && (
-              <div className="flex items-center gap-2">
-                <User className="w-4 h-4 text-[var(--gold)]" />
-                <select
-                  value={selectedClientId}
-                  onChange={(e) => handleSelectSavedClient(e.target.value)}
-                  className="px-3 py-1.5 border-2 border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--gold)]"
-                >
-                  <option value="">{t('savedClientPlaceholder')}</option>
-                  {savedClients.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
+              <div className="flex w-full items-center gap-2 sm:w-auto">
+                <div className="relative w-full sm:w-80">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--gold)]" />
+                  <input
+                    type="search"
+                    value={clientQuery}
+                    onChange={(e) => {
+                      setClientQuery(e.target.value)
+                      setClientListOpen(true)
+                    }}
+                    onFocus={() => setClientListOpen(true)}
+                    onBlur={() => setTimeout(() => setClientListOpen(false), 150)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && clientMatches[0]) {
+                        e.preventDefault()
+                        pickClient(clientMatches[0])
+                      }
+                      if (e.key === 'Escape') setClientListOpen(false)
+                    }}
+                    placeholder={selectedClient ? selectedClient.name : t('clientSearchPlaceholder')}
+                    aria-label={t('clientSearchPlaceholder')}
+                    className="w-full rounded-lg border-2 border-gray-200 py-1.5 pl-9 pr-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--gold)]"
+                  />
+                  {clientListOpen && (
+                    <ul className="absolute right-0 z-20 mt-1 max-h-72 w-full overflow-y-auto rounded-xl border border-gray-200 bg-white py-1 shadow-xl">
+                      {clientMatches.length === 0 ? (
+                        <li className="px-3 py-2 text-sm text-gray-500">{t('clientSearchEmpty')}</li>
+                      ) : (
+                        clientMatches.map((c) => (
+                          <li key={c.id}>
+                            <button
+                              type="button"
+                              onMouseDown={(e) => e.preventDefault()}
+                              onClick={() => pickClient(c)}
+                              className={`flex w-full items-start gap-2 px-3 py-2 text-left text-sm hover:bg-[var(--gold-pale)] ${c.id === selectedClientId ? 'bg-[var(--gold-pale)]/60' : ''}`}
+                            >
+                              <User className="mt-0.5 h-4 w-4 shrink-0 text-[var(--gold)]" />
+                              <span className="min-w-0">
+                                <span className="block truncate font-semibold text-[var(--ink)]">{c.name}</span>
+                                <span className="block truncate text-xs text-gray-500">{[c.city, c.vat, c.email].filter(Boolean).join(' · ')}</span>
+                              </span>
+                            </button>
+                          </li>
+                        ))
+                      )}
+                    </ul>
+                  )}
+                </div>
                 {selectedClient && (
                   <button
                     type="button"
@@ -334,6 +383,12 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
 
         <div className="border-t border-[var(--gold)]/15 pt-6">
           <h3 className="font-bold text-[var(--ink)] mb-4">{t('itemsSectionTitle')}</h3>
+          {/* Titoli delle colonne */}
+          <div className="mb-1.5 grid grid-cols-12 gap-2 px-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--muted)]">
+            <span className="col-span-6">{t('itemDescriptionHeader')}</span>
+            <span className="col-span-2">{t('itemQuantityHeader')}</span>
+            <span className="col-span-3">{t('itemPriceHeader')}</span>
+          </div>
           <div className="space-y-3">
             {form.items.map((item, index) => (
               <div key={index} className="grid grid-cols-12 gap-2 items-start">

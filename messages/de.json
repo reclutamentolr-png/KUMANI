@@ -2360,7 +2360,7 @@
     "validUntilField": "Gültig bis",
     "itemsSectionTitle": "Angebotspositionen",
     "itemDescriptionPlaceholder": "Beschreibung",
-    "itemQuantityPlaceholder": "Menge",
+    "itemQuantityPlaceholder": "Menge / Stk. / Std.",
     "itemPricePlaceholder": "Einzelpreis",
     "addItemAction": "Position hinzufügen",
     "totalLabel": "Gesamt",
@@ -2380,7 +2380,7 @@
     "downloadPdf": "PDF herunterladen",
     "pdfError": "Das PDF konnte nicht erstellt werden. Versuche es erneut.",
     "itemDescriptionHeader": "Beschreibung",
-    "itemQuantityHeader": "Menge",
+    "itemQuantityHeader": "Menge / Stk. / Std.",
     "itemPriceHeader": "Einzelpreis",
     "itemTotalHeader": "Gesamt",
     "shareSummaryText": "Angebot Nr. {number} für {client} — Gesamt: {total}",
@@ -2392,7 +2392,10 @@
     "notLoggedIn": "Du musst angemeldet sein.",
     "subscriptionRequired": "Angebote erfordert ein aktives Abonnement.",
     "saveError": "Konnte nicht gespeichert werden. Versuche es erneut.",
-    "deleteError": "Konnte nicht gelöscht werden. Versuche es erneut."
+    "deleteError": "Konnte nicht gelöscht werden. Versuche es erneut.",
+    "clientSearchPlaceholder": "Gespeicherten Kunden suchen…",
+    "clientSearchEmpty": "Kein Kunde gefunden",
+    "pdfPageOf": "Seite {page} von {pages}"
   },
   "kumaniCv": {
     "title": "KUMANI CV",

@@ -73,7 +73,8 @@ export default async function QuoteDetailPage({
       </header>
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
-        <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8">
+        {/* Come un foglio: pagamento e note restano in fondo, comunque siano lunghe le righe */}
+        <div className="flex flex-col bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8 sm:min-h-[1100px]">
           <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
             <div>
               <p className="text-xs font-semibold text-[var(--gold)] uppercase tracking-wide mb-1">{t('clientSectionTitle')}</p>
@@ -130,6 +131,7 @@ export default async function QuoteDetailPage({
             </table>
           </div>
 
+          <div className="mt-auto pt-6">
           {quote.payment_info && (
             <div className="border-t border-[var(--gold)]/15 mt-6 pt-4">
               <p className="text-xs font-semibold text-[var(--gold)] uppercase tracking-wide mb-1">{t('paymentInfoField')}</p>
@@ -143,6 +145,7 @@ export default async function QuoteDetailPage({
               <p className="text-sm text-gray-700 whitespace-pre-wrap">{quote.notes}</p>
             </div>
           )}
+          </div>
         </div>
 
         <div className="space-y-4">
