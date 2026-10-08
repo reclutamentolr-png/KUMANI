@@ -2315,7 +2315,8 @@
     "valueField_declared_payment": "Оплаченная сумма",
     "confirmReceipt_declared_payment": "Подтверждаю указанный платёж",
     "showIssuerField": "Показывать логотип и данные моей компании",
-    "showIssuerHint": "Берутся из Карточки компании. Отключите для расписки между частными лицами."
+    "showIssuerHint": "Берутся из Карточки компании. Отключите для расписки между частными лицами.",
+    "recipientField_declared_payment": "Оплатил(а)"
   },
   "preventivi": {
     "title": "Коммерческие предложения",

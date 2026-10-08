@@ -157,7 +157,7 @@ export default function DigitalReceiptPdfButton({ receipt, receiptUrl, photoUrl,
 
       field(t('objectField'), receipt.object_name)
       field(t('serialField'), receipt.serial_number)
-      field(t('recipientField'), receipt.recipient_name)
+      field(t.has(`recipientField_${receipt.template}`) ? t(`recipientField_${receipt.template}`) : t('recipientField'), receipt.recipient_name)
       field(t('dateField'), formatDate(receipt.delivery_date))
       field(t('reasonField'), receipt.reason)
       field(t('quantityField'), receipt.quantity != null ? String(receipt.quantity) : null)

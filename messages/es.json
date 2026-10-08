@@ -2315,7 +2315,8 @@
     "valueField_declared_payment": "Importe pagado",
     "confirmReceipt_declared_payment": "Confirmo el pago indicado",
     "showIssuerField": "Mostrar logo y datos de mi actividad",
-    "showIssuerHint": "Tomados de la Ficha de actividad. Quítalos para un recibo entre particulares."
+    "showIssuerHint": "Tomados de la Ficha de actividad. Quítalos para un recibo entre particulares.",
+    "recipientField_declared_payment": "Pagado por"
   },
   "preventivi": {
     "title": "Presupuestos",

@@ -115,7 +115,7 @@ export default function DigitalReceiptPublicView({ receipt: initial }: { receipt
             </div>
           )}
           <div className="flex justify-between border-b border-[var(--gold)]/15 pb-2">
-            <span className="text-gray-500">{t('recipientField')}</span>
+            <span className="text-gray-500">{byTemplate('recipientField')}</span>
             <span className="text-[var(--ink)] font-medium">{receipt.recipient_name}</span>
           </div>
           <div className="flex justify-between border-b border-[var(--gold)]/15 pb-2">

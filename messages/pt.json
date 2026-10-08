@@ -2315,7 +2315,8 @@
     "valueField_declared_payment": "Valor pago",
     "confirmReceipt_declared_payment": "Confirmo o pagamento indicado",
     "showIssuerField": "Mostrar logótipo e dados da minha atividade",
-    "showIssuerHint": "Retirados da Ficha da atividade. Desativa-os para um recibo entre particulares."
+    "showIssuerHint": "Retirados da Ficha da atividade. Desativa-os para um recibo entre particulares.",
+    "recipientField_declared_payment": "Pago por"
   },
   "preventivi": {
     "title": "Orçamentos",

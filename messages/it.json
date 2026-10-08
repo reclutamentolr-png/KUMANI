@@ -2214,7 +2214,8 @@
     "valueField_declared_payment": "Importo pagato",
     "confirmReceipt_declared_payment": "Confermo il pagamento indicato",
     "showIssuerField": "Mostra logo e dati della mia attività",
-    "showIssuerHint": "Presi dalla Scheda attività. Toglili per una ricevuta tra privati."
+    "showIssuerHint": "Presi dalla Scheda attività. Toglili per una ricevuta tra privati.",
+    "recipientField_declared_payment": "Pagato da"
   },
   "spendly": {
     "navBills": "Bollette",

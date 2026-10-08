@@ -2315,7 +2315,8 @@
     "valueField_declared_payment": "Montant payé",
     "confirmReceipt_declared_payment": "Je confirme le paiement indiqué",
     "showIssuerField": "Afficher le logo et les données de mon activité",
-    "showIssuerHint": "Repris de la Fiche activité. Désactivez-les pour un reçu entre particuliers."
+    "showIssuerHint": "Repris de la Fiche activité. Désactivez-les pour un reçu entre particuliers.",
+    "recipientField_declared_payment": "Payé par"
   },
   "preventivi": {
     "title": "Devis",

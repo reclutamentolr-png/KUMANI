@@ -2315,7 +2315,8 @@
     "valueField_declared_payment": "Amount paid",
     "confirmReceipt_declared_payment": "I confirm the payment shown",
     "showIssuerField": "Show my business logo and details",
-    "showIssuerHint": "Taken from your Business profile. Turn them off for a receipt between private individuals."
+    "showIssuerHint": "Taken from your Business profile. Turn them off for a receipt between private individuals.",
+    "recipientField_declared_payment": "Paid by"
   },
   "preventivi": {
     "title": "Quotes",
