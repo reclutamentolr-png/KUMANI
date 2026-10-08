@@ -29,6 +29,7 @@ import {
   type ReceiptTemplate,
   type DigitalReceiptFormData,
 } from '@/lib/digitalReceipt'
+import { RECEIPT_VAT_MODES } from '@/lib/digitalReceipt'
 
 const TEMPLATE_ICONS: Record<ReceiptTemplate, typeof Package> = {
   delivery: Package,
@@ -54,6 +55,8 @@ function defaultForm(): DigitalReceiptFormData {
     notes: '',
     quantity: null,
     declaredValue: null,
+    vatMode: 'none',
+    showIssuer: true,
     expectedReturnDate: '',
     addLifeCalendarReminder: true,
   }
@@ -269,7 +272,7 @@ export default function DigitalReceiptForm({
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">{t('valueField')}</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">{t(form.template === 'declared_payment' ? 'valueField_declared_payment' : 'valueField')}</label>
           <input
             type="number"
             min={0}
@@ -279,8 +282,31 @@ export default function DigitalReceiptForm({
             placeholder="€"
             className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30 text-sm"
           />
+          {form.declaredValue !== null && (
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {RECEIPT_VAT_MODES.map((m) => (
+                <button
+                  key={m}
+                  type="button"
+                  onClick={() => setForm((prev) => ({ ...prev, vatMode: m }))}
+                  aria-pressed={form.vatMode === m}
+                  className={`rounded-lg border px-3 py-1 text-xs font-semibold ${form.vatMode === m ? 'border-[var(--gold)] bg-[var(--ink)] text-[var(--gold-bright)]' : 'border-gray-200 text-gray-600'}`}
+                >
+                  {t(`vatMode_${m}`)}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
+
+      <label className="flex items-start gap-2 text-sm text-gray-800">
+        <input type="checkbox" className="mt-0.5 h-5 w-5 accent-[var(--gold)]" checked={form.showIssuer} onChange={(e) => setForm((prev) => ({ ...prev, showIssuer: e.target.checked }))} />
+        <span>
+          {t('showIssuerField')}
+          <span className="block text-xs text-gray-500">{t('showIssuerHint')}</span>
+        </span>
+      </label>
 
       {form.template === 'loan' && (
         <div className="bg-[var(--gold-pale)] border border-[var(--gold)]/30 rounded-xl p-4 space-y-3">

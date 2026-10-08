@@ -2306,7 +2306,16 @@
     "saveError": "Konnte nicht gespeichert werden. Versuche es erneut.",
     "deleteError": "Konnte nicht gelöscht werden. Versuche es erneut.",
     "alreadyConfirmedError": "Diese Quittung wurde bereits bestätigt und kann nicht mehr bearbeitet werden.",
-    "notFound": "Quittung nicht gefunden."
+    "notFound": "Quittung nicht gefunden.",
+    "vatMode_none": "Ohne Angabe",
+    "vatMode_plus": "zzgl. MwSt.",
+    "vatMode_included": "inkl. MwSt.",
+    "vatPlus": "zzgl. MwSt.",
+    "vatIncluded": "inkl. MwSt.",
+    "valueField_declared_payment": "Bezahlter Betrag",
+    "confirmReceipt_declared_payment": "Ich bestätige die angegebene Zahlung",
+    "showIssuerField": "Logo und Daten meines Unternehmens anzeigen",
+    "showIssuerHint": "Aus dem Geschäftsprofil. Für eine Quittung zwischen Privatpersonen ausschalten."
   },
   "preventivi": {
     "title": "Angebote",

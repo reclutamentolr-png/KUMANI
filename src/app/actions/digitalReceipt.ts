@@ -104,6 +104,8 @@ export async function createReceipt(
         notes: form.notes || null,
         quantity: form.quantity,
         declared_value: form.declaredValue,
+        vat_mode: ['plus', 'included', 'none'].includes(form.vatMode) ? form.vatMode : 'none',
+        show_issuer: form.showIssuer !== false,
         expected_return_date: form.expectedReturnDate || null,
         photo_path: photoPath,
         life_calendar_item_id: lifeCalendarItemId,

@@ -2205,7 +2205,16 @@
     "saveError": "Non è stato possibile salvare. Riprova.",
     "deleteError": "Non è stato possibile eliminare. Riprova.",
     "alreadyConfirmedError": "Questa ricevuta è già stata confermata e non può essere modificata.",
-    "notFound": "Ricevuta non trovata."
+    "notFound": "Ricevuta non trovata.",
+    "vatMode_none": "Nessuna indicazione",
+    "vatMode_plus": "+ IVA",
+    "vatMode_included": "IVA inclusa",
+    "vatPlus": "+ IVA",
+    "vatIncluded": "IVA inclusa",
+    "valueField_declared_payment": "Importo pagato",
+    "confirmReceipt_declared_payment": "Confermo il pagamento indicato",
+    "showIssuerField": "Mostra logo e dati della mia attività",
+    "showIssuerHint": "Presi dalla Scheda attività. Toglili per una ricevuta tra privati."
   },
   "spendly": {
     "navBills": "Bollette",

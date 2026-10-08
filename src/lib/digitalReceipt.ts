@@ -21,8 +21,21 @@ export interface DigitalReceiptFormData {
   notes: string
   quantity: number | null
   declaredValue: number | null
+  // Come leggere il valore: «+ IVA», «IVA inclusa» o nessuna indicazione
+  vatMode: ReceiptVatMode
+  // Intestazione con logo e dati della Scheda attività
+  showIssuer: boolean
   expectedReturnDate: string // ISO date, only meaningful for 'loan'
   addLifeCalendarReminder: boolean
+}
+
+export const RECEIPT_VAT_MODES = ['none', 'plus', 'included'] as const
+export type ReceiptVatMode = (typeof RECEIPT_VAT_MODES)[number]
+
+// Valore con la valuta e l'indicazione dell'IVA (es. «7.300,00 € + IVA»)
+export function formatReceiptValue(value: number, vatMode: string | null | undefined, locale: string, labels: { plus: string; included: string }): string {
+  const money = Number(value).toLocaleString(locale, { style: 'currency', currency: 'EUR' })
+  return vatMode === 'plus' ? `${money} ${labels.plus}` : vatMode === 'included' ? `${money} ${labels.included}` : money
 }
 
 export const MAX_PHOTO_SIZE_BYTES = 5 * 1024 * 1024 // 5MB

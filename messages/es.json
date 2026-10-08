@@ -2306,7 +2306,16 @@
     "saveError": "No se pudo guardar. Inténtalo de nuevo.",
     "deleteError": "No se pudo eliminar. Inténtalo de nuevo.",
     "alreadyConfirmedError": "Este recibo ya ha sido confirmado y no se puede modificar.",
-    "notFound": "Recibo no encontrado."
+    "notFound": "Recibo no encontrado.",
+    "vatMode_none": "Sin indicación",
+    "vatMode_plus": "+ IVA",
+    "vatMode_included": "IVA incluido",
+    "vatPlus": "+ IVA",
+    "vatIncluded": "IVA incluido",
+    "valueField_declared_payment": "Importe pagado",
+    "confirmReceipt_declared_payment": "Confirmo el pago indicado",
+    "showIssuerField": "Mostrar logo y datos de mi actividad",
+    "showIssuerHint": "Tomados de la Ficha de actividad. Quítalos para un recibo entre particulares."
   },
   "preventivi": {
     "title": "Presupuestos",

@@ -2306,7 +2306,16 @@
     "saveError": "Impossible d'enregistrer. Réessayez.",
     "deleteError": "Impossible de supprimer. Réessayez.",
     "alreadyConfirmedError": "Ce reçu a déjà été confirmé et ne peut plus être modifié.",
-    "notFound": "Reçu introuvable."
+    "notFound": "Reçu introuvable.",
+    "vatMode_none": "Sans indication",
+    "vatMode_plus": "+ TVA",
+    "vatMode_included": "TVA incluse",
+    "vatPlus": "+ TVA",
+    "vatIncluded": "TVA incluse",
+    "valueField_declared_payment": "Montant payé",
+    "confirmReceipt_declared_payment": "Je confirme le paiement indiqué",
+    "showIssuerField": "Afficher le logo et les données de mon activité",
+    "showIssuerHint": "Repris de la Fiche activité. Désactivez-les pour un reçu entre particuliers."
   },
   "preventivi": {
     "title": "Devis",

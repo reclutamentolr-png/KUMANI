@@ -25,6 +25,16 @@ interface PublicReceiptRow {
   photo_path: string | null
   confirmed_at: string | null
   returned_at: string | null
+  vat_mode: string | null
+  issuer_company: string | null
+  issuer_vat: string | null
+  issuer_address: string | null
+  issuer_city: string | null
+  issuer_postal_code: string | null
+  issuer_province: string | null
+  issuer_phone: string | null
+  issuer_email: string | null
+  issuer_logo_path: string | null
 }
 
 export default async function DigitalReceiptPublicPage({
@@ -62,7 +72,13 @@ export default async function DigitalReceiptPublicPage({
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      <DigitalReceiptPublicView receipt={{ ...data, photo_url: photoUrl }} />
+      <DigitalReceiptPublicView
+        receipt={{
+          ...data,
+          photo_url: photoUrl,
+          issuer_logo_url: data.issuer_logo_path ? supabase.storage.from('quote-logos-v2').getPublicUrl(data.issuer_logo_path).data.publicUrl : null,
+        }}
+      />
       {spendly !== 'no_value' && (
         <div className="mx-auto max-w-lg px-4 pb-12 sm:px-6">
           <ReceiptSpendlyBox code={code} initialStatus={spendly} loginHref={`/login?next=/ricevute/${code}`} />

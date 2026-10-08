@@ -47,6 +47,13 @@ export default async function DigitalReceiptDetailPage({
   const issuedByName =
     [profile?.first_name, profile?.last_name].filter(Boolean).join(' ').trim() || profile?.email || user.email || ''
 
+  // Scheda attività: intestazione con logo nel PDF della ricevuta
+  const { data: issuer } = await supabase
+    .from('quote_issuer_profiles')
+    .select('company_name, vat_number, address, city, postal_code, province, phone, email, logo_path')
+    .eq('user_id', user.id)
+    .maybeSingle()
+  const issuerLogoUrl = issuer?.logo_path ? supabase.storage.from('quote-logos-v2').getPublicUrl(issuer.logo_path).data.publicUrl : null
   const photoUrl = receipt.photo_path
     ? supabase.storage.from('receipt-photos-v2').getPublicUrl(receipt.photo_path).data.publicUrl
     : null
@@ -124,6 +131,8 @@ export default async function DigitalReceiptDetailPage({
             receiptUrl={receiptUrl}
             photoUrl={photoUrl}
             issuedByName={issuedByName}
+            issuer={issuer}
+            issuerLogoUrl={issuerLogoUrl}
           />
           <DigitalReceiptActions
             id={receipt.id}

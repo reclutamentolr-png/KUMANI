@@ -2306,7 +2306,16 @@
     "saveError": "Не удалось сохранить. Попробуйте ещё раз.",
     "deleteError": "Не удалось удалить. Попробуйте ещё раз.",
     "alreadyConfirmedError": "Эта расписка уже подтверждена и не может быть изменена.",
-    "notFound": "Расписка не найдена."
+    "notFound": "Расписка не найдена.",
+    "vatMode_none": "Без пометки",
+    "vatMode_plus": "+ НДС",
+    "vatMode_included": "с НДС",
+    "vatPlus": "+ НДС",
+    "vatIncluded": "с НДС",
+    "valueField_declared_payment": "Оплаченная сумма",
+    "confirmReceipt_declared_payment": "Подтверждаю указанный платёж",
+    "showIssuerField": "Показывать логотип и данные моей компании",
+    "showIssuerHint": "Берутся из Карточки компании. Отключите для расписки между частными лицами."
   },
   "preventivi": {
     "title": "Коммерческие предложения",

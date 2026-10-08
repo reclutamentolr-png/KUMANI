@@ -37,7 +37,7 @@ export default async function NewDigitalReceiptPage({
   if (typeof fromQuote === 'string' && UUID_RE.test(fromQuote)) {
     const { data: quote } = await supabase
       .from('quotes')
-      .select('quote_number, client_name, total, issue_date')
+      .select('quote_number, client_name, total, issue_date, vat_mode')
       .eq('id', fromQuote)
       .eq('user_id', user.id)
       .maybeSingle()
@@ -51,6 +51,7 @@ export default async function NewDigitalReceiptPage({
         objectName: te('receiptFromQuoteObject', { number: quote.quote_number }),
         recipientName: quote.client_name || '',
         declaredValue: quote.total !== null && quote.total !== undefined ? Number(quote.total) : null,
+        vatMode: quote.vat_mode === 'plus' || quote.vat_mode === 'included' ? quote.vat_mode : 'none',
         deliveryDate: todayKey(),
         notes: te('receiptFromQuoteNotes', { number: quote.quote_number, date: issued }),
       }
