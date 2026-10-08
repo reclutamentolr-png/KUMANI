@@ -9906,7 +9906,7 @@
     "receiptSpendlyOpen": "Ouvrir Spendly",
     "receiptSpendlyNoAccess": "Avec le plan Base, vous notez cette dépense dans Spendly en un geste.",
     "receiptSpendlyDiscover": "Découvrir Spendly",
-    "receiptSpendlyLogin": "Vous avez un compte KUMANI ? Connectez-vous et notez cette dépense dans Spendly en un geste.",
+    "receiptSpendlyLogin": "Inscrivez-vous gratuitement et notez cette dépense dans Spendly en un geste. Vous avez déjà un compte ? Connectez-vous.",
     "receiptSpendlyLoginCta": "Se connecter",
     "quoteFromInventory": "Ajouter depuis le Stock",
     "quoteInventorySearch": "Rechercher un produit…",
@@ -9998,7 +9998,8 @@
     "nudgeWellnessToNeuro": "Envie d’aller plus loin ? NeuroBalance vous accompagne avec des sons binauraux et de la nature pour vous détendre, dormir ou vous concentrer.",
     "nudgeQrToPro": "Avec QR Code Pro, vous changez la destination même après avoir imprimé le QR et vous voyez combien de fois il est scanné.",
     "nudgeBioToLanding": "Prêt pour une vraie page pour votre activité ? La Landing page se remplit toute seule avec votre fiche entreprise.",
-    "nudgeProfileToPro": "Avec le Pro, votre fiche entreprise remplit toute seule Devis, Landing page, Menu, Kumi Card Fidelity et Signature e-mail."
+    "nudgeProfileToPro": "Avec le Pro, votre fiche entreprise remplit toute seule Devis, Landing page, Menu, Kumi Card Fidelity et Signature e-mail.",
+    "receiptSpendlySignupCta": "Inscription gratuite"
   },
   "businessProfile": {
     "title": "Fiche entreprise",

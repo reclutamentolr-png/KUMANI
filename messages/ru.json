@@ -9906,7 +9906,7 @@
     "receiptSpendlyOpen": "Открыть Spendly",
     "receiptSpendlyNoAccess": "С тарифом Base этот расход можно записать в Spendly одним касанием.",
     "receiptSpendlyDiscover": "Узнать о Spendly",
-    "receiptSpendlyLogin": "Есть аккаунт KUMANI? Войдите и запишите этот расход в Spendly одним касанием.",
+    "receiptSpendlyLogin": "Зарегистрируйтесь бесплатно и отметьте этот расход в Spendly одним касанием. Уже есть аккаунт? Войдите.",
     "receiptSpendlyLoginCta": "Войти",
     "quoteFromInventory": "Добавить со склада",
     "quoteInventorySearch": "Найдите товар…",
@@ -9998,7 +9998,8 @@
     "nudgeWellnessToNeuro": "Хотите большего? NeuroBalance поможет расслабиться, уснуть или сосредоточиться с бинауральными звуками и звуками природы.",
     "nudgeQrToPro": "С QR Code Pro можно менять адрес даже после печати QR и видеть, сколько раз его отсканировали.",
     "nudgeBioToLanding": "Готовы к настоящей странице для бизнеса? Лендинг заполнится сам по вашей карточке бизнеса.",
-    "nudgeProfileToPro": "С тарифом Pro карточка бизнеса сама заполняет Сметы, Лендинг, Меню, Kumi Card Fidelity и Подпись email."
+    "nudgeProfileToPro": "С тарифом Pro карточка бизнеса сама заполняет Сметы, Лендинг, Меню, Kumi Card Fidelity и Подпись email.",
+    "receiptSpendlySignupCta": "Бесплатная регистрация"
   },
   "businessProfile": {
     "title": "Карточка бизнеса",

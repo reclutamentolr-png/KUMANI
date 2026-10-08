@@ -9906,7 +9906,7 @@
     "receiptSpendlyOpen": "Open Spendly",
     "receiptSpendlyNoAccess": "With the Base plan you can record this expense in Spendly in one tap.",
     "receiptSpendlyDiscover": "Discover Spendly",
-    "receiptSpendlyLogin": "Do you have a KUMANI account? Log in and record this expense in Spendly in one tap.",
+    "receiptSpendlyLogin": "Sign up for free and record this expense in Spendly with one tap. Already have an account? Log in.",
     "receiptSpendlyLoginCta": "Log in",
     "quoteFromInventory": "Add from Inventory",
     "quoteInventorySearch": "Search a product…",
@@ -9998,7 +9998,8 @@
     "nudgeWellnessToNeuro": "Want to go further? NeuroBalance guides you with binaural and nature sounds to relax, sleep or focus.",
     "nudgeQrToPro": "With QR Code Pro you can change the destination even after printing the QR and see how many times it’s scanned.",
     "nudgeBioToLanding": "Ready for a real page for your business? The Landing page fills itself in from your business profile.",
-    "nudgeProfileToPro": "With Pro your business profile automatically fills in Quotes, Landing page, Menu, Kumi Card Fidelity and Email signature."
+    "nudgeProfileToPro": "With Pro your business profile automatically fills in Quotes, Landing page, Menu, Kumi Card Fidelity and Email signature.",
+    "receiptSpendlySignupCta": "Sign up for free"
   },
   "businessProfile": {
     "title": "Business profile",

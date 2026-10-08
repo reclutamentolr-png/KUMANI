@@ -1,3 +1,4 @@
+import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import type { ReceiptTemplate } from '@/lib/digitalReceipt'
@@ -70,6 +71,25 @@ export default async function DigitalReceiptPublicPage({
     spendly = user ? (((await supabase.rpc('receipt_spendly_status', { p_code: code })).data as ReceiptSpendlyStatus | null) ?? 'no_value') : 'login'
   }
 
+  // Chi non ha un account si registra con l'invito di chi ha emesso la ricevuta
+  let signupHref = '/register'
+  if (spendly === 'login') {
+    const service = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+      auth: { autoRefreshToken: false, persistSession: false },
+    })
+    const { data: owner } = await service.from('digital_receipts').select('user_id').eq('code', code).maybeSingle()
+    if (owner?.user_id) {
+      const { data: issuerProfile } = await service
+        .from('profiles')
+        .select('referral_code, is_admin, guest_until')
+        .eq('id', owner.user_id)
+        .maybeSingle<{ referral_code: string | null; is_admin: boolean; guest_until: string | null }>()
+      if (issuerProfile?.referral_code && !issuerProfile.is_admin && !issuerProfile.guest_until) {
+        signupHref = `/register?sponsor=${encodeURIComponent(issuerProfile.referral_code)}`
+      }
+    }
+  }
+
   return (
     <div className="min-h-screen bg-[var(--background)]">
       <DigitalReceiptPublicView
@@ -81,7 +101,7 @@ export default async function DigitalReceiptPublicPage({
       />
       {spendly !== 'no_value' && (
         <div className="mx-auto max-w-lg px-4 pb-12 sm:px-6">
-          <ReceiptSpendlyBox code={code} initialStatus={spendly} loginHref={`/login?next=/ricevute/${code}`} />
+          <ReceiptSpendlyBox code={code} initialStatus={spendly} loginHref={`/login?next=/ricevute/${code}`} signupHref={signupHref} />
         </div>
       )}
     </div>

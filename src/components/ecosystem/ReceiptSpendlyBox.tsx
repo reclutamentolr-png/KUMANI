@@ -8,7 +8,18 @@ import { addReceiptToSpendly, type ReceiptSpendlyStatus } from '@/app/actions/ec
 
 // Ricevuta digitale → Spendly: l'importo della ricevuta entra in Spendly con
 // un tocco, come spesa per chi la riceve e come entrata per chi l'ha fatta.
-export default function ReceiptSpendlyBox({ code, initialStatus, loginHref }: { code: string; initialStatus: ReceiptSpendlyStatus; loginHref?: string }) {
+export default function ReceiptSpendlyBox({
+  code,
+  initialStatus,
+  loginHref,
+  signupHref,
+}: {
+  code: string
+  initialStatus: ReceiptSpendlyStatus
+  loginHref?: string
+  // Registrazione con l'invito di chi ha emesso la ricevuta
+  signupHref?: string
+}) {
   const t = useTranslations('ecosystem')
   const [status, setStatus] = useState(initialStatus)
   const [kind] = useState<'expense' | 'income'>(initialStatus === 'income' ? 'income' : 'expense')
@@ -62,9 +73,15 @@ export default function ReceiptSpendlyBox({ code, initialStatus, loginHref }: { 
           {t('receiptSpendlyDiscover')}
         </Link>
       ) : (
-        <Link href={loginHref ?? '/login'} className="inline-flex shrink-0 items-center justify-center rounded-xl border border-emerald-300 bg-white px-4 py-2.5 text-sm font-bold text-emerald-700 hover:bg-emerald-50">
-          {t('receiptSpendlyLoginCta')}
-        </Link>
+        // Senza account: prima la registrazione (con l'invito di chi ha emesso la ricevuta), poi l'accesso
+        <div className="flex shrink-0 flex-wrap gap-2">
+          <Link href={signupHref ?? '/register'} className="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-emerald-700">
+            {t('receiptSpendlySignupCta')}
+          </Link>
+          <Link href={loginHref ?? '/login'} className="inline-flex items-center justify-center rounded-xl border border-emerald-300 bg-white px-4 py-2.5 text-sm font-bold text-emerald-700 hover:bg-emerald-50">
+            {t('receiptSpendlyLoginCta')}
+          </Link>
+        </div>
       )}
     </div>
   )
