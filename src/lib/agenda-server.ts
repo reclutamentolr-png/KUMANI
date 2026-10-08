@@ -130,7 +130,7 @@ export async function loadAgenda(supabase: SupabaseClient, userId: string, optio
       (async () => {
         const { data } = await supabase
           .from('life_calendar_items')
-          .select('id, title, due_date, recurrence, reminder_offsets, notes')
+          .select('id, title, due_date, recurrence, reminder_offsets, notes, casa_home_id')
           .eq('user_id', userId)
           .eq('status', 'active')
           .lte('due_date', addDays(to, 400))
@@ -141,7 +141,19 @@ export async function loadAgenda(supabase: SupabaseClient, userId: string, optio
           const reminderDays = Math.max(7, ...((item.reminder_offsets as number[] | null) ?? []))
           const remindNow = options.useReminders && date > to && daysBetween(today, date) <= reminderDays
           if (!inRange && !overdue && !remindNow) continue
-          events.push({ key: `deadline:${item.id}`, kind: 'deadline', date, time: null, title: item.title, amount: null, done: false, refId: item.id, note: item.notes, recurring: item.recurrence !== 'none' })
+          events.push({
+            key: `deadline:${item.id}`,
+            kind: 'deadline',
+            date,
+            time: null,
+            title: item.title,
+            amount: null,
+            done: false,
+            refId: item.id,
+            note: item.notes,
+            recurring: item.recurrence !== 'none',
+            casaHomeId: (item.casa_home_id as string | null) ?? undefined,
+          })
         }
       })()
     )

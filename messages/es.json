@@ -2191,7 +2191,10 @@
     "notLoggedIn": "Debes iniciar sesión.",
     "subscriptionRequired": "Life Calendar requiere una suscripción activa.",
     "saveError": "No se pudo guardar. Inténtalo de nuevo.",
-    "deleteError": "No se pudo eliminar. Inténtalo de nuevo."
+    "deleteError": "No se pudo eliminar. Inténtalo de nuevo.",
+    "casaBadge": "KUMANI Casa · {name}",
+    "openInCasa": "Abrir en KUMANI Casa",
+    "casaNotice": "Este vencimiento es de tu vivienda: toca para abrirla en KUMANI Casa."
   },
   "findo": {
     "title": "Findo",
@@ -3684,7 +3687,8 @@
     "errorSave": "No se pudo guardar. Inténtalo de nuevo.",
     "openGarage": "Abrir",
     "lifeCalendarHint": "Parece un vencimiento que se renueva: ponlo en Life Calendar, te avisa con antelación y te recuerda también las próximas renovaciones.",
-    "lifeCalendarHintCta": "Añadirlo a Life Calendar"
+    "lifeCalendarHintCta": "Añadirlo a Life Calendar",
+    "openCasa": "Abrir en KUMANI Casa"
   },
   "convivio": {
     "error_suspended": "Servicio suspendido temporalmente. Inténtelo más tarde.",
@@ -10424,6 +10428,11 @@
     "error_fileRequired": "Elige el archivo que quieres subir.",
     "error_fileType": "Formato no compatible: usa PDF, JPG, PNG o WebP.",
     "error_fileSize": "El archivo supera los 10 MB.",
-    "error_uploadError": "No se ha podido subir. Inténtalo de nuevo."
+    "error_uploadError": "No se ha podido subir. Inténtalo de nuevo.",
+    "findoLocation": "Dónde está (Findo)",
+    "findoNone": "Sin indicar",
+    "findoEmpty": "Aún no tienes ubicaciones en Findo.",
+    "findoCreate": "Crear ubicaciones",
+    "findoOpen": "Abrir Findo"
   }
 }

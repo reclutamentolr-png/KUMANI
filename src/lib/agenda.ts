@@ -28,6 +28,8 @@ export type AgendaEvent = {
   organizing?: boolean
   // Kumani Garage: scadenza dell'auto (si gestisce nella pagina dell'auto)
   garageVehicleId?: string
+  // KUMANI Casa: scadenza di una casa (voce di Life Calendar collegata)
+  casaHomeId?: string
 }
 
 // Giorno di calendario a Roma di un istante ('2026-10-16').

@@ -2191,7 +2191,10 @@
     "notLoggedIn": "Vous devez être connecté.",
     "subscriptionRequired": "Life Calendar nécessite un abonnement actif.",
     "saveError": "Impossible d'enregistrer. Réessayez.",
-    "deleteError": "Impossible de supprimer. Réessayez."
+    "deleteError": "Impossible de supprimer. Réessayez.",
+    "casaBadge": "KUMANI Casa · {name}",
+    "openInCasa": "Ouvrir dans KUMANI Casa",
+    "casaNotice": "Cette échéance concerne votre logement : touchez pour l’ouvrir dans KUMANI Casa."
   },
   "findo": {
     "title": "Findo",
@@ -3684,7 +3687,8 @@
     "errorSave": "L'enregistrement a échoué. Réessayez.",
     "openGarage": "Ouvrir",
     "lifeCalendarHint": "Cela ressemble à une échéance qui se renouvelle : ajoutez-la à Life Calendar, il vous prévient à l’avance et vous rappelle aussi les prochains renouvellements.",
-    "lifeCalendarHintCta": "L’ajouter à Life Calendar"
+    "lifeCalendarHintCta": "L’ajouter à Life Calendar",
+    "openCasa": "Ouvrir dans KUMANI Casa"
   },
   "convivio": {
     "error_suspended": "Service momentanément suspendu. Veuillez réessayer plus tard.",
@@ -10424,6 +10428,11 @@
     "error_fileRequired": "Choisissez le fichier à envoyer.",
     "error_fileType": "Format non pris en charge : utilisez PDF, JPG, PNG ou WebP.",
     "error_fileSize": "Le fichier dépasse 10 Mo.",
-    "error_uploadError": "Échec de l’envoi. Réessayez."
+    "error_uploadError": "Échec de l’envoi. Réessayez.",
+    "findoLocation": "Où il se trouve (Findo)",
+    "findoNone": "Non indiqué",
+    "findoEmpty": "Vous n’avez pas encore d’emplacements dans Findo.",
+    "findoCreate": "Créer les emplacements",
+    "findoOpen": "Ouvrir Findo"
   }
 }

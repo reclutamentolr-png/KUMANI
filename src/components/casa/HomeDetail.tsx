@@ -6,7 +6,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import { CalendarClock, FileText, House, MapPin, Pencil, Plug, Trash2, Zap, type LucideIcon } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { deleteHome } from '@/app/actions/casa'
-import { CASA_TABS, type CasaAppliance, type CasaBill, type CasaDeadline, type CasaDocument, type CasaHome, type CasaTab, type CasaUtility } from '@/lib/casa'
+import { CASA_TABS, type CasaAppliance, type CasaBill, type CasaDeadline, type CasaDocument, type CasaHome, type CasaTab, type CasaUtility, type FindoPlace } from '@/lib/casa'
 import { askConfirm } from '@/lib/confirm'
 import { defaultLocale } from '../../../i18n'
 import DeadlinesPanel from '@/components/casa/DeadlinesPanel'
@@ -24,9 +24,11 @@ export default function HomeDetail({
   documents,
   bills,
   linkedBillIds,
+  findoPlaces,
   fileUrls,
   today,
   spendlyAvailable,
+  findoAvailable,
   initialTab,
 }: {
   home: CasaHome
@@ -36,9 +38,11 @@ export default function HomeDetail({
   documents: CasaDocument[]
   bills: CasaBill[]
   linkedBillIds: string[]
+  findoPlaces: FindoPlace[]
   fileUrls: Record<string, string>
   today: string
   spendlyAvailable: boolean
+  findoAvailable: boolean
   initialTab: CasaTab
 }) {
   const t = useTranslations('casa')
@@ -131,7 +135,7 @@ export default function HomeDetail({
 
       {tab === 'deadlines' && <DeadlinesPanel homeId={home.id} deadlines={deadlines} today={today} />}
       {tab === 'utilities' && <UtilitiesPanel homeId={home.id} utilities={utilities} bills={bills} linkedBillIds={linkedBillIds} today={today} spendlyAvailable={spendlyAvailable} />}
-      {tab === 'appliances' && <AppliancesPanel homeId={home.id} appliances={appliances} fileUrls={fileUrls} today={today} />}
+      {tab === 'appliances' && <AppliancesPanel homeId={home.id} appliances={appliances} fileUrls={fileUrls} today={today} findoPlaces={findoPlaces} findoAvailable={findoAvailable} />}
       {tab === 'documents' && <DocumentsPanel homeId={home.id} documents={documents} fileUrls={fileUrls} today={today} />}
     </div>
   )

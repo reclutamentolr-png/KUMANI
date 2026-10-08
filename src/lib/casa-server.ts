@@ -1,13 +1,14 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { fixedExpenseDueDate, type SpendlyFixedExpense } from '@/lib/spendly'
-import type { CasaAppliance, CasaBill, CasaDeadline, CasaDocument, CasaHome, CasaUtility } from '@/lib/casa'
+import type { CasaAppliance, CasaBill, CasaDeadline, CasaDocument, CasaHome, CasaUtility, FindoPlace } from '@/lib/casa'
+import { buildBreadcrumb, type FindoLocation } from '@/lib/findo'
 import { todayKey } from '@/lib/agenda'
 
 const HOME_COLUMNS = 'id, name, kind, address, notes, created_at'
 const DEADLINE_COLUMNS = 'id, title, category, due_date, recurrence, recurrence_custom_days, notes, casa_home_id'
 const UTILITY_COLUMNS = 'id, home_id, kind, provider, customer_code, supply_code, support_phone, offer_ends_on, notes, spendly_fixed_id'
 const APPLIANCE_COLUMNS =
-  'id, home_id, name, brand, model, serial_number, room, purchased_on, price, store, warranty_until, support_phone, notes, receipt_path, manual_path'
+  'id, home_id, name, brand, model, serial_number, room, purchased_on, price, store, warranty_until, support_phone, notes, receipt_path, manual_path, findo_location_id'
 const DOCUMENT_COLUMNS = 'id, home_id, kind, title, file_path, file_name, mime_type, size_bytes, expires_on, created_at'
 
 const toNumber = (value: unknown) => (value === null || value === undefined ? null : Number(value))
@@ -55,7 +56,7 @@ export async function loadHomes(supabase: SupabaseClient, userId: string) {
 export async function loadHome(supabase: SupabaseClient, userId: string, homeId: string) {
   const { data: home } = await supabase.from('casa_homes').select(HOME_COLUMNS).eq('id', homeId).eq('user_id', userId).maybeSingle()
   if (!home) return null
-  const [d, u, a, docs, bills, linked] = await Promise.all([
+  const [d, u, a, docs, bills, linked, places] = await Promise.all([
     supabase.from('life_calendar_items').select(DEADLINE_COLUMNS).eq('user_id', userId).eq('casa_home_id', homeId).eq('status', 'active').order('due_date'),
     supabase.from('casa_utilities').select(UTILITY_COLUMNS).eq('user_id', userId).eq('home_id', homeId).order('created_at'),
     supabase.from('casa_appliances').select(APPLIANCE_COLUMNS).eq('user_id', userId).eq('home_id', homeId).order('name'),
@@ -69,6 +70,8 @@ export async function loadHome(supabase: SupabaseClient, userId: string, homeId:
       .order('description'),
     // Bollette già collegate a un'utenza (anche di altre case)
     supabase.from('casa_utilities').select('spendly_fixed_id').eq('user_id', userId).not('spendly_fixed_id', 'is', null),
+    // Posizioni di Findo: dove si trovano gli apparecchi
+    supabase.from('findo_locations').select('id, parent_id, name, icon').eq('user_id', userId),
   ])
   const today = todayKey()
   const appliances = (a.data ?? []).map((row) => ({ ...row, price: toNumber(row.price) })) as CasaAppliance[]
@@ -100,6 +103,9 @@ export async function loadHome(supabase: SupabaseClient, userId: string, homeId:
         next_due: nextBillDue(expense, today),
       }
     }) as CasaBill[],
+    findoPlaces: ((places.data ?? []) as FindoLocation[])
+      .map((loc, _i, all) => ({ id: loc.id, path: buildBreadcrumb(loc.id, all) }))
+      .sort((x, y) => x.path.localeCompare(y.path)) as FindoPlace[],
     linkedBillIds: (linked.data ?? []).map((row) => row.spendly_fixed_id as string),
     fileUrls,
   }

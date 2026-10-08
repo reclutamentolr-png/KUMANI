@@ -29,11 +29,13 @@ export default async function LifeCalendarPage() {
     recurrence: string
     profile_id: string | null
     life_calendar_profiles: { name: string } | null
+    casa_home_id: string | null
+    casa_homes: { name: string } | null
   }
 
   const { data: itemsRaw } = await supabase
     .from('life_calendar_items')
-    .select('id, title, category, due_date, recurrence, profile_id, life_calendar_profiles(name)')
+    .select('id, title, category, due_date, recurrence, profile_id, life_calendar_profiles(name), casa_home_id, casa_homes(name)')
     .eq('user_id', user.id)
     .eq('status', 'active')
     .returns<ItemRow[]>()
@@ -46,6 +48,9 @@ export default async function LifeCalendarPage() {
     recurrence: item.recurrence,
     profile_id: item.profile_id,
     profile_name: item.life_calendar_profiles?.name ?? null,
+    // Voce nata in KUMANI Casa: la scheda mostra la casa
+    casa_home_id: item.casa_home_id,
+    casa_home_name: item.casa_homes?.name ?? null,
   }))
 
   const { data: profiles } = await supabase

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { CalendarClock, Check, CheckCircle2, FileBadge, LoaderCircle, PartyPopper, Plane, Receipt, RotateCcw, Undo2 } from 'lucide-react'
+import { CalendarClock, Check, CheckCircle2, FileBadge, House, LoaderCircle, PartyPopper, Plane, Receipt, RotateCcw, Undo2 } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { markBillPaid, setTaskDone, unmarkBillPaid } from '@/app/actions/agenda'
 import { markHandled } from '@/app/actions/lifeCalendar'
@@ -40,7 +40,7 @@ export default function AgendaEventRow({
   const locale = useLocale()
   const [busy, setBusy] = useState(false)
   const status = agendaStatus(event, today)
-  const Icon = KIND_ICON[event.kind]
+  const Icon = event.casaHomeId ? House : KIND_ICON[event.kind]
 
   // Azione rapida: lo spinner si spegne sempre, anche se l'azione fallisce
   // (false o { success: false }), e in quel caso l'utente viene avvisato.
@@ -85,7 +85,9 @@ export default function AgendaEventRow({
       ? t(event.tripEdge === 'end' ? 'tripReturn' : 'tripDeparture')
       : event.kind === 'event' && event.organizing
         ? t('eventOrganizing')
-        : t(`source_${event.kind}`),
+        : event.casaHomeId
+          ? 'KUMANI Casa'
+          : t(`source_${event.kind}`),
   ].filter(Boolean)
 
   const tone =
@@ -102,10 +104,18 @@ export default function AgendaEventRow({
       <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-white ${KIND_COLOR[event.kind]}`}>
         <Icon className="h-4 w-4" />
       </span>
-      <button type="button" disabled={!onOpen} onClick={() => onOpen?.(event)} className="min-w-0 flex-1 text-left disabled:cursor-default">
-        <p className={`truncate text-sm font-semibold text-[var(--ink)] ${event.done ? 'line-through' : ''}`}>{event.title}</p>
-        <p className={`truncate text-xs ${status === 'overdue' ? 'font-semibold text-red-600' : 'text-[var(--muted)]'}`}>{details.join(' · ')}</p>
-      </button>
+      {event.casaHomeId ? (
+        // Scadenza di KUMANI Casa: il titolo apre la casa
+        <Link href={`/marketplace/casa/${event.casaHomeId}`} title={t('openCasa')} className="group min-w-0 flex-1 text-left">
+          <p className="truncate text-sm font-semibold text-[var(--ink)] group-hover:text-[var(--gold)]">{event.title}</p>
+          <p className={`truncate text-xs ${status === 'overdue' ? 'font-semibold text-red-600' : 'text-[var(--muted)]'}`}>{details.join(' · ')}</p>
+        </Link>
+      ) : (
+        <button type="button" disabled={!onOpen} onClick={() => onOpen?.(event)} className="min-w-0 flex-1 text-left disabled:cursor-default">
+          <p className={`truncate text-sm font-semibold text-[var(--ink)] ${event.done ? 'line-through' : ''}`}>{event.title}</p>
+          <p className={`truncate text-xs ${status === 'overdue' ? 'font-semibold text-red-600' : 'text-[var(--muted)]'}`}>{details.join(' · ')}</p>
+        </button>
+      )}
       {busy ? (
         <LoaderCircle className="h-5 w-5 shrink-0 animate-spin text-[var(--gold)]" />
       ) : event.kind === 'bill' ? (

@@ -2191,7 +2191,10 @@
     "notLoggedIn": "Du musst angemeldet sein.",
     "subscriptionRequired": "Life Calendar erfordert ein aktives Abonnement.",
     "saveError": "Konnte nicht gespeichert werden. Versuche es erneut.",
-    "deleteError": "Konnte nicht gelöscht werden. Versuche es erneut."
+    "deleteError": "Konnte nicht gelöscht werden. Versuche es erneut.",
+    "casaBadge": "KUMANI Casa · {name}",
+    "openInCasa": "In KUMANI Casa öffnen",
+    "casaNotice": "Diese Frist gehört zu deiner Wohnung: Tippe, um sie in KUMANI Casa zu öffnen."
   },
   "findo": {
     "title": "Findo",
@@ -3684,7 +3687,8 @@
     "errorSave": "Speichern fehlgeschlagen. Bitte erneut versuchen.",
     "openGarage": "Öffnen",
     "lifeCalendarHint": "Das sieht nach einer Frist aus, die sich erneuert: Trag sie in Life Calendar ein – es erinnert dich rechtzeitig und auch an die nächsten Verlängerungen.",
-    "lifeCalendarHintCta": "Zu Life Calendar hinzufügen"
+    "lifeCalendarHintCta": "Zu Life Calendar hinzufügen",
+    "openCasa": "In KUMANI Casa öffnen"
   },
   "convivio": {
     "error_suspended": "Dienst vorübergehend ausgesetzt. Bitte versuchen Sie es später erneut.",
@@ -10424,6 +10428,11 @@
     "error_fileRequired": "Wähle die Datei zum Hochladen.",
     "error_fileType": "Format nicht unterstützt: Verwende PDF, JPG, PNG oder WebP.",
     "error_fileSize": "Die Datei ist größer als 10 MB.",
-    "error_uploadError": "Hochladen fehlgeschlagen. Bitte versuche es erneut."
+    "error_uploadError": "Hochladen fehlgeschlagen. Bitte versuche es erneut.",
+    "findoLocation": "Wo es steht (Findo)",
+    "findoNone": "Nicht angegeben",
+    "findoEmpty": "Du hast noch keine Orte in Findo.",
+    "findoCreate": "Orte anlegen",
+    "findoOpen": "Findo öffnen"
   }
 }

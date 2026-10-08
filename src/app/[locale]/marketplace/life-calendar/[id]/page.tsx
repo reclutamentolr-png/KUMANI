@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import { getTranslations, getLocale } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
-import { ArrowLeft, History } from 'lucide-react'
+import { ArrowLeft, ChevronRight, History, House } from 'lucide-react'
 import { hasActiveLifeCalendarAccess } from '@/lib/lifeCalendar-server'
 import LifeCalendarItemForm from '@/components/LifeCalendarItemForm'
 import DeleteItemButton from '@/components/LifeCalendarDeleteButton'
@@ -36,6 +36,11 @@ export default async function LifeCalendarItemDetailPage({
 
   if (!item) notFound()
 
+  // Voce nata in KUMANI Casa: richiamo alla casa
+  const { data: casaHome } = item.casa_home_id
+    ? await supabase.from('casa_homes').select('id, name').eq('id', item.casa_home_id).maybeSingle<{ id: string; name: string }>()
+    : { data: null }
+
   const { data: profiles } = await supabase
     .from('life_calendar_profiles')
     .select('id, name, icon')
@@ -64,6 +69,21 @@ export default async function LifeCalendarItemDetailPage({
       </header>
 
       <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
+        {casaHome && (
+          <Link
+            href={`/marketplace/casa/${casaHome.id}`}
+            className="flex items-center gap-3 rounded-2xl border border-[var(--gold)]/40 bg-[var(--ink)] p-4 text-white shadow-sm hover:border-[var(--gold)]"
+          >
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)]">
+              <House className="h-5 w-5" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-sm font-bold">{t('casaBadge', { name: casaHome.name })}</span>
+              <span className="block text-xs text-white/70">{t('casaNotice')}</span>
+            </span>
+            <ChevronRight className="h-5 w-5 shrink-0 text-[var(--gold-bright)]" />
+          </Link>
+        )}
         <LifeCalendarItemForm
           mode="edit"
           id={item.id}

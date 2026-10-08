@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import Link from '@/components/LocalizedLink'
-import { CheckCircle2, RefreshCw, LoaderCircle, Trash2 } from 'lucide-react'
+import { CheckCircle2, House, RefreshCw, LoaderCircle, Trash2 } from 'lucide-react'
 import { markHandled, deleteItem } from '@/app/actions/lifeCalendar'
 import { getItemStatus, daysUntil, type ItemStatus } from '@/lib/lifeCalendar'
 import { askConfirm } from '@/lib/confirm'
@@ -16,6 +16,8 @@ type Item = {
   due_date: string
   recurrence: string
   profile_name?: string | null
+  casa_home_id?: string | null
+  casa_home_name?: string | null
 }
 
 const STATUS_DOT: Record<ItemStatus, string> = {
@@ -73,6 +75,16 @@ export default function LifeCalendarItemCard({ item }: { item: Item }) {
         <span className={`mt-1.5 w-3 h-3 rounded-full shrink-0 ring-2 ring-white shadow ${STATUS_DOT[status]}`} />
         <div className="min-w-0">
           <h3 className="font-semibold text-[var(--ink)] truncate">{item.title}</h3>
+          {item.casa_home_id && (
+            <Link
+              href={`/marketplace/casa/${item.casa_home_id}`}
+              title={t('openInCasa')}
+              className="mt-1 inline-flex max-w-full items-center gap-1 rounded-full bg-[var(--ink)] px-2 py-0.5 text-[11px] font-bold text-[var(--gold-bright)] hover:brightness-125"
+            >
+              <House className="h-3 w-3 shrink-0" />
+              <span className="truncate">{t('casaBadge', { name: item.casa_home_name ?? '' })}</span>
+            </Link>
+          )}
           <p className="text-xs text-[var(--muted)] mt-0.5">
             {t(`category_${item.category}`)}
             {item.profile_name ? ` · ${item.profile_name}` : ''}

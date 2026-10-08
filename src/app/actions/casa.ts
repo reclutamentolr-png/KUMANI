@@ -334,6 +334,11 @@ export async function saveAppliance(homeId: string, form: ApplianceForm, id?: st
   if (!form.name.trim()) return { success: false, message: 'nameRequired' }
   if ((form.purchasedOn && !DATE.test(form.purchasedOn)) || (form.warrantyUntil && !DATE.test(form.warrantyUntil))) return { success: false, message: 'dateInvalid' }
   if (!ownFile(form.receiptPath, g.userId, homeId) || !ownFile(form.manualPath, g.userId, homeId)) return { success: false, message: 'invalid' }
+  // Posizione di Findo: solo tra le proprie
+  if (form.findoLocationId) {
+    const { data: place } = await g.supabase.from('findo_locations').select('id').eq('id', form.findoLocationId).eq('user_id', g.userId).maybeSingle()
+    if (!place) return { success: false, message: 'invalid' }
+  }
 
   type Before = { receipt_path: string | null; manual_path: string | null; life_calendar_item_id: string | null }
   let before: Before | null = null
@@ -357,6 +362,7 @@ export async function saveAppliance(homeId: string, form: ApplianceForm, id?: st
     notes: text(form.notes, 500),
     receipt_path: form.receiptPath || null,
     manual_path: form.manualPath || null,
+    findo_location_id: form.findoLocationId || null,
     updated_at: new Date().toISOString(),
   }
   const saved = id

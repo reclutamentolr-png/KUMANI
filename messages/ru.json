@@ -2191,7 +2191,10 @@
     "notLoggedIn": "Необходимо войти в аккаунт.",
     "subscriptionRequired": "Life Calendar требует активной подписки.",
     "saveError": "Не удалось сохранить. Попробуйте ещё раз.",
-    "deleteError": "Не удалось удалить. Попробуйте ещё раз."
+    "deleteError": "Не удалось удалить. Попробуйте ещё раз.",
+    "casaBadge": "KUMANI Casa · {name}",
+    "openInCasa": "Открыть в KUMANI Casa",
+    "casaNotice": "Этот срок относится к вашему жилью: нажмите, чтобы открыть его в KUMANI Casa."
   },
   "findo": {
     "title": "Findo",
@@ -3684,7 +3687,8 @@
     "errorSave": "Не удалось сохранить. Попробуйте ещё раз.",
     "openGarage": "Открыть",
     "lifeCalendarHint": "Похоже на срок, который нужно продлевать: добавьте его в Life Calendar — он заранее предупредит и напомнит о следующих продлениях.",
-    "lifeCalendarHintCta": "Добавить в Life Calendar"
+    "lifeCalendarHintCta": "Добавить в Life Calendar",
+    "openCasa": "Открыть в KUMANI Casa"
   },
   "convivio": {
     "error_suspended": "Сервис временно приостановлен. Повторите попытку позже.",
@@ -10424,6 +10428,11 @@
     "error_fileRequired": "Выберите файл для загрузки.",
     "error_fileType": "Формат не поддерживается: используйте PDF, JPG, PNG или WebP.",
     "error_fileSize": "Файл больше 10 МБ.",
-    "error_uploadError": "Не удалось загрузить. Попробуйте ещё раз."
+    "error_uploadError": "Не удалось загрузить. Попробуйте ещё раз.",
+    "findoLocation": "Где находится (Findo)",
+    "findoNone": "Не указано",
+    "findoEmpty": "У вас пока нет мест в Findo.",
+    "findoCreate": "Создать места",
+    "findoOpen": "Открыть Findo"
   }
 }

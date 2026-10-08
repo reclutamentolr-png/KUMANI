@@ -18,6 +18,8 @@ type Item = {
   recurrence: string
   profile_id: string | null
   profile_name?: string | null
+  casa_home_id?: string | null
+  casa_home_name?: string | null
 }
 
 type Profile = { id: string; name: string }

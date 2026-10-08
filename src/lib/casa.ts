@@ -90,6 +90,13 @@ export interface CasaAppliance {
   notes: string | null
   receipt_path: string | null
   manual_path: string | null
+  findo_location_id: string | null
+}
+
+// Posizione di Findo da scegliere per un apparecchio (percorso completo)
+export interface FindoPlace {
+  id: string
+  path: string
 }
 
 export interface CasaDocument {
@@ -153,6 +160,7 @@ export type ApplianceForm = {
   notes: string
   receiptPath: string | null
   manualPath: string | null
+  findoLocationId: string | null
 }
 
 export type DocumentForm = {

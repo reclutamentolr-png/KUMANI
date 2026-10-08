@@ -2,9 +2,10 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { LoaderCircle, Pencil, Phone, Plug, Plus, ShieldAlert, ShieldCheck, ShieldX, Trash2 } from 'lucide-react'
+import { LoaderCircle, MapPin, Pencil, Phone, Plug, Plus, ShieldAlert, ShieldCheck, ShieldX, Trash2 } from 'lucide-react'
+import Link from '@/components/LocalizedLink'
 import { deleteAppliance, discardUpload, saveAppliance } from '@/app/actions/casa'
-import { legalWarrantyEnd, warrantyState, type ApplianceForm, type CasaAppliance } from '@/lib/casa'
+import { legalWarrantyEnd, warrantyState, type ApplianceForm, type CasaAppliance, type FindoPlace } from '@/lib/casa'
 import { askConfirm } from '@/lib/confirm'
 import { FileField, FileLink, Sheet, card, ghostBtn, input, label, parseNumber, primaryBtn, useAction, useFormat } from '@/components/casa/shared'
 
@@ -22,16 +23,21 @@ export default function AppliancesPanel({
   appliances,
   fileUrls,
   today,
+  findoPlaces,
+  findoAvailable,
 }: {
   homeId: string
   appliances: CasaAppliance[]
   fileUrls: Record<string, string>
   today: string
+  findoPlaces: FindoPlace[]
+  findoAvailable: boolean
 }) {
   const t = useTranslations('casa')
   const f = useFormat()
   const { run, isPending, error, setError } = useAction()
   const [editing, setEditing] = useState<Editing | null>(null)
+  const placeById = new Map(findoPlaces.map((p) => [p.id, p.path]))
 
   const open = (a?: CasaAppliance) => {
     setError(null)
@@ -53,6 +59,7 @@ export default function AppliancesPanel({
         notes: a?.notes ?? '',
         receiptPath: a?.receipt_path ?? null,
         manualPath: a?.manual_path ?? null,
+        findoLocationId: a?.findo_location_id ?? null,
       },
     })
   }
@@ -124,6 +131,16 @@ export default function AppliancesPanel({
                     </span>
                   )}
                 </div>
+                {a.findo_location_id && placeById.has(a.findo_location_id) && (
+                  <Link
+                    href="/marketplace/findo"
+                    title={t('findoOpen')}
+                    className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-[var(--ink)] hover:text-[var(--gold)]"
+                  >
+                    <MapPin className="h-3.5 w-3.5 shrink-0 text-[var(--gold)]" />
+                    <span className="truncate">{placeById.get(a.findo_location_id)!.replace(/ > /g, ' › ')}</span>
+                  </Link>
+                )}
                 {(a.receipt_path || a.manual_path || a.support_phone) && (
                   <div className="mt-3 flex flex-wrap gap-2 border-t border-gray-100 pt-3">
                     {a.receipt_path && <FileLink url={fileUrls[a.receipt_path]}>{t('receiptFile')}</FileLink>}
@@ -222,6 +239,31 @@ export default function AppliancesPanel({
               </div>
             </div>
             <p className="-mt-2 text-xs text-[var(--muted)]">{t('warrantyHint')}</p>
+            {/* Dove si trova: le posizioni di Findo (casa › stanza › mobile) */}
+            {findoAvailable && (
+              <div>
+                <label className={label} htmlFor="ap-findo">
+                  {t('findoLocation')}
+                </label>
+                {findoPlaces.length ? (
+                  <select id="ap-findo" className={input} value={editing.form.findoLocationId ?? ''} onChange={(e) => set('findoLocationId', e.target.value || null)}>
+                    <option value="">{t('findoNone')}</option>
+                    {findoPlaces.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.path.replace(/ > /g, ' › ')}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <p className="rounded-xl bg-[var(--paper)] px-3 py-2 text-sm text-[var(--muted)]">
+                    {t('findoEmpty')}{' '}
+                    <Link href="/marketplace/findo/locations" className="font-bold text-[var(--gold)] hover:text-[var(--ink)]">
+                      {t('findoCreate')}
+                    </Link>
+                  </p>
+                )}
+              </div>
+            )}
             <div>
               <label className={label} htmlFor="ap-phone">
                 {t('supportPhone')}

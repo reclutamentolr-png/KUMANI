@@ -2191,7 +2191,10 @@
     "notLoggedIn": "You need to be logged in.",
     "subscriptionRequired": "Life Calendar requires an active subscription.",
     "saveError": "Could not save. Please try again.",
-    "deleteError": "Could not delete. Please try again."
+    "deleteError": "Could not delete. Please try again.",
+    "casaBadge": "KUMANI Casa · {name}",
+    "openInCasa": "Open in KUMANI Casa",
+    "casaNotice": "This deadline belongs to your home: tap to open it in KUMANI Casa."
   },
   "findo": {
     "title": "Findo",
@@ -3684,7 +3687,8 @@
     "errorSave": "Saving failed. Please try again.",
     "openGarage": "Open",
     "lifeCalendarHint": "This looks like a deadline that renews: put it in Life Calendar, it warns you in advance and reminds you of the next renewals too.",
-    "lifeCalendarHintCta": "Add it to Life Calendar"
+    "lifeCalendarHintCta": "Add it to Life Calendar",
+    "openCasa": "Open in KUMANI Casa"
   },
   "convivio": {
     "error_suspended": "Service temporarily suspended. Please try again later.",
@@ -10424,6 +10428,11 @@
     "error_fileRequired": "Choose the file to upload.",
     "error_fileType": "Unsupported format: use PDF, JPG, PNG or WebP.",
     "error_fileSize": "The file is larger than 10 MB.",
-    "error_uploadError": "Upload failed. Please try again."
+    "error_uploadError": "Upload failed. Please try again.",
+    "findoLocation": "Where it is (Findo)",
+    "findoNone": "Not set",
+    "findoEmpty": "You have no places in Findo yet.",
+    "findoCreate": "Create places",
+    "findoOpen": "Open Findo"
   }
 }

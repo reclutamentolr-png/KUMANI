@@ -18,7 +18,11 @@ export default async function HomePage({ params, searchParams }: { params: Promi
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  const [data, spendlyAvailable] = await Promise.all([loadHome(supabase, user!.id, id), hasActiveToolAccess(supabase, user!.id, 'spendly')])
+  const [data, spendlyAvailable, findoAvailable] = await Promise.all([
+    loadHome(supabase, user!.id, id),
+    hasActiveToolAccess(supabase, user!.id, 'spendly'),
+    hasActiveToolAccess(supabase, user!.id, 'findo'),
+  ])
   if (!data) notFound()
   const initialTab = (CASA_TABS as readonly string[]).includes(tab ?? '') ? (tab as CasaTab) : 'deadlines'
 
@@ -27,7 +31,7 @@ export default async function HomePage({ params, searchParams }: { params: Promi
       <Link href="/marketplace/casa" className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
         <ArrowLeft className="h-4 w-4" /> {t('backToCasa')}
       </Link>
-      <HomeDetail {...data} today={todayKey()} spendlyAvailable={spendlyAvailable} initialTab={initialTab} />
+      <HomeDetail {...data} today={todayKey()} spendlyAvailable={spendlyAvailable} findoAvailable={findoAvailable} initialTab={initialTab} />
     </div>
   )
 }

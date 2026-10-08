@@ -2090,7 +2090,10 @@
     "notLoggedIn": "Devi effettuare l'accesso.",
     "subscriptionRequired": "Life Calendar richiede un abbonamento attivo.",
     "saveError": "Non è stato possibile salvare. Riprova.",
-    "deleteError": "Non è stato possibile eliminare. Riprova."
+    "deleteError": "Non è stato possibile eliminare. Riprova.",
+    "casaBadge": "KUMANI Casa · {name}",
+    "openInCasa": "Apri in KUMANI Casa",
+    "casaNotice": "Questa scadenza è della tua casa: tocca per aprirla in KUMANI Casa."
   },
   "findo": {
     "title": "Findo",
@@ -3684,7 +3687,8 @@
     "errorSave": "Salvataggio non riuscito. Riprova.",
     "openGarage": "Apri",
     "lifeCalendarHint": "Sembra una scadenza che si rinnova: mettila in Life Calendar, ti avvisa in anticipo e ti ricorda anche i prossimi rinnovi.",
-    "lifeCalendarHintCta": "Aggiungila a Life Calendar"
+    "lifeCalendarHintCta": "Aggiungila a Life Calendar",
+    "openCasa": "Apri in KUMANI Casa"
   },
   "convivio": {
     "error_suspended": "Servizio momentaneamente sospeso. Riprova più tardi.",
@@ -10424,6 +10428,11 @@
     "error_fileRequired": "Scegli il file da caricare.",
     "error_fileType": "Formato non supportato: usa PDF, JPG, PNG o WebP.",
     "error_fileSize": "Il file supera 10 MB.",
-    "error_uploadError": "Caricamento non riuscito. Riprova."
+    "error_uploadError": "Caricamento non riuscito. Riprova.",
+    "findoLocation": "Dove si trova (Findo)",
+    "findoNone": "Non indicato",
+    "findoEmpty": "Non hai ancora posizioni in Findo.",
+    "findoCreate": "Crea le posizioni",
+    "findoOpen": "Apri Findo"
   }
 }
