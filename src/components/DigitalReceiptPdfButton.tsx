@@ -131,7 +131,7 @@ export default function DigitalReceiptPdfButton({ receipt, receiptUrl, photoUrl,
       y += 16
       doc.text(`${t('pdfCodeLabel')}: ${receipt.code}`, margin, y)
       y += 16
-      if (!showIssuer) {
+      if (!showIssuer && issuedByName) {
         doc.text(`${t('pdfIssuedByLabel')}: ${issuedByName}`, margin, y)
         y += 16
       }

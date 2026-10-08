@@ -21,6 +21,7 @@ import LateSponsorCard from '@/components/dashboard/LateSponsorCard'
 import PushInviteCard from '@/components/dashboard/PushInviteCard'
 import { getLateSponsorStatus } from '@/lib/lateSponsor'
 import DashboardReturnScroll from '@/components/dashboard/DashboardReturnScroll'
+import PendingReceiptClaim from '@/components/receipts/PendingReceiptClaim'
 import DashboardTour from '@/components/dashboard/DashboardTour'
 import InterestsOnboarding from '@/components/dashboard/InterestsOnboarding'
 import LandingMessagesAlert from '@/components/dashboard/LandingMessagesAlert'
@@ -221,6 +222,8 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         <ActivityTracker userId={user.id} />
         <DashboardReturnScroll />
+        {/* Ricevuta da salvare dopo la registrazione partita dalla ricevuta */}
+        <PendingReceiptClaim />
 
         {/* Iscritto senza codice: può ancora indicare chi l'ha invitato */}
         {lateSponsor.eligible && lateSponsor.until && <LateSponsorCard until={lateSponsor.until} />}

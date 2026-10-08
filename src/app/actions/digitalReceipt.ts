@@ -183,3 +183,21 @@ export async function confirmReturn(id: string): Promise<ActionResult<null>> {
 
   return { success: true, data: null }
 }
+
+// Chi riceve la ricevuta (anche Free) la salva nel proprio account: la
+// ritrova in Wallet e Documenti. 'login' senza accesso, 'taken' se è già di
+// un'altra persona, 'owner' se è sua.
+export async function claimReceipt(code: string): Promise<'saved' | 'login' | 'taken' | 'owner' | 'missing' | 'error'> {
+  if (!/^[A-Za-z0-9]{4,20}$/.test(code)) return 'missing'
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return 'login'
+  const { data, error } = await supabase.rpc('claim_digital_receipt', { p_code: code })
+  if (error) {
+    console.error('[DigitalReceipt] claimReceipt failed:', error.message)
+    return 'error'
+  }
+  return (data as 'saved' | 'login' | 'taken' | 'owner' | 'missing') ?? 'error'
+}

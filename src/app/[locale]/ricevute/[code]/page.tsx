@@ -6,6 +6,10 @@ import DigitalReceiptPublicView from '@/components/DigitalReceiptPublicView'
 import PublicPageOffline from '@/components/PublicPageOffline'
 import ReceiptSpendlyBox from '@/components/ecosystem/ReceiptSpendlyBox'
 import type { ReceiptSpendlyStatus } from '@/app/actions/ecosystem'
+import ReceiptSaveBox from '@/components/receipts/ReceiptSaveBox'
+import DigitalReceiptPdfButton from '@/components/DigitalReceiptPdfButton'
+import { SITE_URL } from '@/lib/siteUrl'
+import { defaultLocale } from '../../../../../i18n'
 
 // Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
 // richiesta, mai preparata in anticipo né tenuta in memoria
@@ -36,14 +40,17 @@ interface PublicReceiptRow {
   issuer_phone: string | null
   issuer_email: string | null
   issuer_logo_path: string | null
+  created_at: string
+  saved_by_me: boolean | null
+  can_save: boolean | null
 }
 
 export default async function DigitalReceiptPublicPage({
   params,
 }: {
-  params: Promise<{ code: string }>
+  params: Promise<{ locale: string; code: string }>
 }) {
-  const { code } = await params
+  const { locale, code } = await params
 
   const supabase = await createClient()
   const { data, error } = await supabase
@@ -73,7 +80,7 @@ export default async function DigitalReceiptPublicPage({
 
   // Chi non ha un account si registra con l'invito di chi ha emesso la ricevuta
   let signupHref = '/register'
-  if (spendly === 'login') {
+  if (!user) {
     const service = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
       auth: { autoRefreshToken: false, persistSession: false },
     })
@@ -90,20 +97,46 @@ export default async function DigitalReceiptPublicPage({
     }
   }
 
+  const issuerLogoUrl = data.issuer_logo_path ? supabase.storage.from('quote-logos-v2').getPublicUrl(data.issuer_logo_path).data.publicUrl : null
+  const loginHref = `/login?next=/ricevute/${code}`
+  // Chi l'ha salvata nel proprio account (anche Free) scarica il PDF
+  const savedByMe = data.saved_by_me === true
+  const receiptUrl = locale === defaultLocale ? `${SITE_URL}/ricevute/${data.code}` : `${SITE_URL}/${locale}/ricevute/${data.code}`
+  const hasIssuer = !!(data.issuer_company || data.issuer_logo_path)
+
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      <DigitalReceiptPublicView
-        receipt={{
-          ...data,
-          photo_url: photoUrl,
-          issuer_logo_url: data.issuer_logo_path ? supabase.storage.from('quote-logos-v2').getPublicUrl(data.issuer_logo_path).data.publicUrl : null,
-        }}
-      />
-      {spendly !== 'no_value' && (
-        <div className="mx-auto max-w-lg px-4 pb-12 sm:px-6">
-          <ReceiptSpendlyBox code={code} initialStatus={spendly} loginHref={`/login?next=/ricevute/${code}`} signupHref={signupHref} />
-        </div>
-      )}
+      <DigitalReceiptPublicView receipt={{ ...data, photo_url: photoUrl, issuer_logo_url: issuerLogoUrl }} />
+      <div className="mx-auto flex max-w-lg flex-col gap-4 px-4 pb-12 sm:px-6">
+        <ReceiptSaveBox code={code} savedByMe={savedByMe} canSave={data.can_save === true} loggedIn={!!user} signupHref={signupHref} loginHref={loginHref} />
+        {savedByMe && (
+          <DigitalReceiptPdfButton
+            receipt={{ ...data, show_issuer: hasIssuer }}
+            receiptUrl={receiptUrl}
+            photoUrl={photoUrl}
+            issuedByName=""
+            issuer={
+              hasIssuer
+                ? {
+                    company_name: data.issuer_company,
+                    vat_number: data.issuer_vat,
+                    address: data.issuer_address,
+                    city: data.issuer_city,
+                    postal_code: data.issuer_postal_code,
+                    province: data.issuer_province,
+                    phone: data.issuer_phone,
+                    email: data.issuer_email,
+                  }
+                : null
+            }
+            issuerLogoUrl={issuerLogoUrl}
+          />
+        )}
+        {/* Senza account la registrazione passa dal riquadro «Salvala gratis» */}
+        {spendly !== 'no_value' && spendly !== 'login' && (
+          <ReceiptSpendlyBox code={code} initialStatus={spendly} loginHref={loginHref} signupHref={signupHref} />
+        )}
+      </div>
     </div>
   )
 }
