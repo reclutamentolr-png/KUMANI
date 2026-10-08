@@ -31,6 +31,7 @@ export type GuideSlug =
   | 'findo'
   | 'life-calendar'
   | 'garage'
+  | 'casa'
   | 'memolife'
   | 'spendly'
   | 'fincheck'

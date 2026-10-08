@@ -7536,6 +7536,23 @@
       "step3Text": "De vez en cuando introduce los km actuales con la fecha: ves al momento si estás dentro del presupuesto, cuántos km al día puedes hacer todavía y la proyección al final del contrato.",
       "step4Title": "Vencimientos y gastos",
       "step4Text": "Añade impuesto, seguro, ITV y revisión: aparecen en la agenda del Inicio y te avisamos antes. Cuando pagues, toca «Pagado»: se convierte en un gasto del coche, también en Spendly."
+    },
+    "casa": {
+      "title": "KUMANI Casa",
+      "summary": "Toda la casa en un solo lugar: mantenimientos y vencimientos con recordatorios, suministros enlazados a las facturas de Spendly, electrodomésticos con su garantía y los documentos de la vivienda.",
+      "cta": "Abrir KUMANI Casa",
+      "step1Title": "Añade tu vivienda",
+      "step1Text": "Toca «Añadir vivienda», escribe un nombre y, si quieres, la dirección. Puedes tener hasta 5 viviendas: habitual, segunda vivienda o en alquiler. Cada ficha muestra el próximo vencimiento y las garantías que están a punto de terminar.",
+      "step2Title": "Vencimientos y mantenimientos ya preparados",
+      "step2Text": "En «Vencimientos» toca «Añadir vencimiento» y elige un mantenimiento ya preparado (caldera, filtros del aire acondicionado, detectores de humo…): se rellenan el título y cada cuánto se repite, tú solo eliges la fecha. Cuando lo hayas hecho, toca «Hecho» y pasa a la siguiente vez.",
+      "step2Tip": "Los vencimientos de la vivienda también aparecen en Life Calendar y en la agenda de Inicio, y con las notificaciones activadas te avisamos 30, 7 y 1 día antes.",
+      "step3Title": "Suministros y facturas",
+      "step3Text": "En «Suministros» añade luz, gas, agua y los demás: compañía, número de cliente, código de suministro y el teléfono de averías, que llamas con un toque. Con la fecha de fin de la oferta te recordamos revisar el precio.",
+      "step3Tip": "Enlaza la factura que ya tienes en Spendly o créala desde aquí: sigue en los gastos fijos de Spendly, donde la marcas pagada con el importe real.",
+      "step4Title": "Electrodomésticos y garantías",
+      "step4Text": "En «Aparatos» añade lavadora, frigorífico, caldera…: marca, modelo, estancia, fecha de compra, la foto del tique y el manual. Ves al momento hasta cuándo están en garantía y te avisamos antes de que termine.",
+      "step5Title": "Los documentos de la vivienda",
+      "step5Text": "En «Documentos» sube el contrato, la póliza, los certificados de las instalaciones, el certificado energético y el plano, en PDF o en foto: solo los ves tú. Si un documento vence, pon la fecha y te recordamos renovarlo. También los encuentras en Documentos → Mis docs."
     }
   },
   "deckTexts": {

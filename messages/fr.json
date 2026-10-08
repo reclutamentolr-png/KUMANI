@@ -7536,6 +7536,23 @@
       "step3Text": "De temps en temps, saisissez les km actuels avec la date : vous voyez tout de suite si vous êtes dans le budget, combien de km par jour il vous reste et la projection en fin de contrat.",
       "step4Title": "Échéances et dépenses",
       "step4Text": "Ajoutez taxe, assurance, contrôle technique et révision : elles apparaissent dans l’agenda de l’Accueil et nous vous prévenons avant. Quand vous payez, touchez « Payée » : cela devient une dépense de la voiture, aussi dans Spendly."
+    },
+    "casa": {
+      "title": "KUMANI Casa",
+      "summary": "Toute la maison au même endroit : entretiens et échéances avec rappels, contrats liés aux factures de Spendly, appareils avec leur garantie et documents du logement.",
+      "cta": "Ouvrir KUMANI Casa",
+      "step1Title": "Ajoutez votre logement",
+      "step1Text": "Touchez « Ajouter un logement », indiquez un nom et, si vous voulez, l’adresse. Vous pouvez avoir jusqu’à 5 logements : résidence principale, secondaire ou mise en location. Chaque fiche montre la prochaine échéance et les garanties qui se terminent bientôt.",
+      "step2Title": "Échéances et entretiens déjà prêts",
+      "step2Text": "Dans « Échéances », touchez « Ajouter une échéance » et choisissez un entretien déjà prêt (chaudière, filtres de la climatisation, détecteurs de fumée…) : le titre et la fréquence se remplissent, vous choisissez seulement la date. Une fois fait, touchez « Fait » et il passe à la fois suivante.",
+      "step2Tip": "Les échéances du logement apparaissent aussi dans Life Calendar et dans l’agenda de l’accueil, et avec les notifications activées nous vous prévenons 30, 7 et 1 jour avant.",
+      "step3Title": "Contrats et factures",
+      "step3Text": "Dans « Contrats », ajoutez électricité, gaz, eau et les autres : fournisseur, numéro client, code du point de livraison et numéro de dépannage, que vous appelez d’un toucher. Avec la date de fin de l’offre, nous vous rappelons de vérifier le prix.",
+      "step3Tip": "Liez la facture que vous avez déjà dans Spendly ou créez-la d’ici : elle reste dans les dépenses fixes de Spendly, où vous la marquez payée avec le montant réel.",
+      "step4Title": "Appareils et garanties",
+      "step4Text": "Dans « Appareils », ajoutez lave-linge, réfrigérateur, chaudière… : marque, modèle, pièce, date d’achat, la photo du ticket et la notice. Vous voyez tout de suite jusqu’à quand ils sont sous garantie, et nous vous prévenons avant la fin.",
+      "step5Title": "Les documents du logement",
+      "step5Text": "Dans « Documents », envoyez bail, police d’assurance, certificats des installations, diagnostic énergétique et plan, en PDF ou en photo : vous seul·e pouvez les voir. Si un document expire, indiquez la date et nous vous rappelons de le renouveler. Vous les retrouvez aussi dans Documents → Mes docs."
     }
   },
   "deckTexts": {

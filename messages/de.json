@@ -7536,6 +7536,23 @@
       "step3Text": "Gib ab und zu den aktuellen Kilometerstand mit Datum ein: Du siehst sofort, ob du im Budget bist, wie viele km pro Tag dir noch bleiben und die Prognose zum Vertragsende.",
       "step4Title": "Fristen und Kosten",
       "step4Text": "Füge Kfz-Steuer, Versicherung, HU und Inspektion hinzu: Sie erscheinen in der Agenda der Startseite und wir erinnern dich vorher. Wenn du zahlst, tippe auf „Bezahlt“: Es wird eine Autokostenposition, auch in Spendly."
+    },
+    "casa": {
+      "title": "KUMANI Casa",
+      "summary": "Dein ganzes Zuhause an einem Ort: Wartungen und Fristen mit Erinnerungen, Verträge verknüpft mit den Rechnungen in Spendly, Geräte mit Garantie und die Unterlagen zur Wohnung.",
+      "cta": "KUMANI Casa öffnen",
+      "step1Title": "Füge deine Wohnung hinzu",
+      "step1Text": "Tippe auf „Wohnung hinzufügen“, gib einen Namen und, wenn du willst, die Adresse ein. Du kannst bis zu 5 Wohnungen haben: Hauptwohnsitz, Zweitwohnung oder vermietet. Jede Karte zeigt die nächste Frist und die Garantien, die bald enden.",
+      "step2Title": "Fristen und fertige Wartungen",
+      "step2Text": "Tippe unter „Fristen“ auf „Frist hinzufügen“ und wähle eine fertige Wartung (Heizung, Filter der Klimaanlage, Rauchmelder…): Titel und Häufigkeit sind schon ausgefüllt, du wählst nur das Datum. Wenn sie erledigt ist, tippe auf „Erledigt“ und es geht zum nächsten Termin.",
+      "step2Tip": "Die Fristen der Wohnung erscheinen auch im Life Calendar und in der Agenda der Startseite, und mit aktivierten Mitteilungen erinnern wir dich 30, 7 und 1 Tag vorher.",
+      "step3Title": "Verträge und Rechnungen",
+      "step3Text": "Füge unter „Verträge“ Strom, Gas, Wasser und weitere hinzu: Anbieter, Kundennummer, Zählpunktnummer und die Störungsnummer, die du mit einem Tippen anrufst. Mit dem Enddatum des Tarifs erinnern wir dich daran, den Preis zu prüfen.",
+      "step3Tip": "Verknüpfe die Rechnung, die du schon in Spendly hast, oder lege sie hier an: Sie bleibt bei den Fixkosten in Spendly, wo du sie mit dem echten Betrag als bezahlt markierst.",
+      "step4Title": "Geräte und Garantien",
+      "step4Text": "Füge unter „Geräte“ Waschmaschine, Kühlschrank, Heizung… hinzu: Marke, Modell, Raum, Kaufdatum, ein Foto vom Kassenbon und die Anleitung. Du siehst sofort, bis wann Garantie besteht, und wir erinnern dich vor dem Ende.",
+      "step5Title": "Die Unterlagen zur Wohnung",
+      "step5Text": "Lade unter „Unterlagen“ Mietvertrag, Versicherungspolice, Anlagenzertifikate, Energieausweis und Grundriss als PDF oder Foto hoch: Nur du kannst sie sehen. Wenn ein Dokument abläuft, gib das Datum ein und wir erinnern dich an die Verlängerung. Du findest sie auch unter Dokumente → Meine Dokumente."
     }
   },
   "deckTexts": {

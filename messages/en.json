@@ -7536,6 +7536,23 @@
       "step3Text": "Every now and then enter the current km with the date: you instantly see if you are within budget, how many km per day you can still drive and the end-of-contract projection.",
       "step4Title": "Deadlines and expenses",
       "step4Text": "Add road tax, insurance, inspection and service: they appear in the Home agenda and we remind you ahead of time. When you pay, tap «Paid»: it becomes a car expense, also in Spendly."
+    },
+    "casa": {
+      "title": "KUMANI Casa",
+      "summary": "Your whole home in one place: maintenance and deadlines with reminders, utilities linked to your Spendly bills, appliances with their warranty and your home documents.",
+      "cta": "Open KUMANI Casa",
+      "step1Title": "Add your home",
+      "step1Text": "Tap “Add home”, enter a name and, if you like, the address. You can have up to 5 homes: main home, second home or rented out. Each card shows the next deadline and the warranties about to end.",
+      "step2Title": "Deadlines and ready-made maintenance",
+      "step2Text": "In “Deadlines” tap “Add deadline” and pick a ready-made maintenance task (boiler, air conditioner filters, smoke detectors…): the title and how often it repeats are filled in, you only choose the date. When it is done, tap “Done” and it moves to the next time.",
+      "step2Tip": "Home deadlines also appear in Life Calendar and in the Home agenda, and with notifications on we remind you 30, 7 and 1 day before.",
+      "step3Title": "Utilities and bills",
+      "step3Text": "In “Utilities” add electricity, gas, water and the others: provider, customer number, supply point code and the fault line, which you call with one tap. With the offer end date we remind you to check the price.",
+      "step3Tip": "Link the bill you already have in Spendly or create it from here: it stays in Spendly’s fixed expenses, where you mark it paid with the real amount.",
+      "step4Title": "Appliances and warranties",
+      "step4Text": "In “Appliances” add the washing machine, fridge, boiler…: brand, model, room, purchase date, a photo of the receipt and the manual. You see right away how long they are under warranty, and we remind you before it ends.",
+      "step5Title": "Your home documents",
+      "step5Text": "In “Documents” upload the contract, insurance policy, system certificates, energy certificate and floor plan, as a PDF or a photo: only you can see them. If a document expires, enter the date and we remind you to renew it. You also find them in Documents → My docs."
     }
   },
   "deckTexts": {

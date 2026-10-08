@@ -34,6 +34,7 @@ export const GUIDE_STRUCTURE: GuideStructure[] = [
   { slug: 'findo', category: 'organize', minutes: 2, steps: 3, href: '/marketplace/findo' },
   { slug: 'life-calendar', category: 'organize', minutes: 2, steps: 3, href: '/marketplace/life-calendar' },
   { slug: 'garage', category: 'organize', minutes: 3, steps: 4, href: '/marketplace/garage' },
+  { slug: 'casa', category: 'organize', minutes: 3, steps: 5, href: '/marketplace/casa' },
   { slug: 'memolife', category: 'organize', minutes: 2, steps: 2, href: '/marketplace/memolife' },
   { slug: 'spendly', category: 'organize', minutes: 3, steps: 4, href: '/marketplace/spendly' },
   { slug: 'fincheck', category: 'organize', minutes: 3, steps: 5, href: '/marketplace/fincheck' },

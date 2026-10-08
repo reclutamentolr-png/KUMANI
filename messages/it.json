@@ -7536,6 +7536,23 @@
       "step3Text": "Ogni tanto inserisci i km attuali con la data: vedi subito se sei nel budget, quanti km al giorno puoi ancora fare e la proiezione a fine contratto.",
       "step4Title": "Scadenze e spese",
       "step4Text": "Aggiungi bollo, assicurazione, revisione e tagliando: compaiono nell’agenda della Home e ti avvisiamo prima. Quando paghi tocca «Pagata»: diventa una spesa dell’auto, anche in Spendly."
+    },
+    "casa": {
+      "title": "KUMANI Casa",
+      "summary": "Tutta la casa in un posto: manutenzioni e scadenze con promemoria, utenze collegate alle bollette di Spendly, elettrodomestici con la garanzia e i documenti della casa.",
+      "cta": "Apri KUMANI Casa",
+      "step1Title": "Aggiungi la tua casa",
+      "step1Text": "Tocca «Aggiungi casa», scrivi un nome e, se vuoi, l’indirizzo. Puoi avere fino a 5 case: principale, seconda casa o data in affitto. Ogni scheda mostra la prossima scadenza e le garanzie che stanno per finire.",
+      "step2Title": "Scadenze e manutenzioni già pronte",
+      "step2Text": "In «Scadenze» tocca «Aggiungi scadenza» e scegli una manutenzione già pronta (caldaia, filtri del condizionatore, rilevatori di fumo…): si riempiono il titolo e ogni quanto si ripete, tu scegli solo la data. Quando l’hai fatta tocca «Fatto» e passa alla volta successiva.",
+      "step2Tip": "Le scadenze della casa compaiono anche in Life Calendar e nell’agenda della Home, e con le notifiche attive ti avvisiamo 30, 7 e 1 giorno prima.",
+      "step3Title": "Utenze e bollette",
+      "step3Text": "In «Utenze» aggiungi luce, gas, acqua e le altre: fornitore, codice cliente, POD o PDR e il numero per i guasti, che chiami con un tocco. Con la data di fine offerta ti ricordiamo di controllare il prezzo.",
+      "step3Tip": "Collega la bolletta che hai già in Spendly oppure creala da qui: resta tra le spese fisse di Spendly, dove la segni pagata con l’importo vero.",
+      "step4Title": "Elettrodomestici e garanzie",
+      "step4Text": "In «Apparecchi» aggiungi lavatrice, frigorifero, caldaia…: marca, modello, stanza, data d’acquisto, la foto dello scontrino e il manuale. Vedi subito fino a quando sono in garanzia e ti avvisiamo prima che finisca.",
+      "step5Title": "I documenti della casa",
+      "step5Text": "In «Documenti» carica contratto, polizza, certificati degli impianti, APE e planimetria, in PDF o in foto: li vedi solo tu. Se un documento scade, inserisci la data e ti ricordiamo di rinnovarlo. Li ritrovi anche in Documenti → Doc Personali."
     }
   },
   "deckTexts": {
