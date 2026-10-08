@@ -21,7 +21,7 @@ export async function listKumaniDocuments(supabase: SupabaseClient): Promise<Kum
 const LIMIT = 50
 
 export async function listPersonalDocuments(supabase: SupabaseClient, userId: string): Promise<PersonalDoc[]> {
-  const [quotes, receipts, cvs, coupons, events, vouchers, received] = await Promise.all([
+  const [quotes, receipts, cvs, coupons, events, vouchers, received, homeDocs] = await Promise.all([
     supabase.from('quotes').select('id, quote_number, client_name, created_at').eq('user_id', userId).order('created_at', { ascending: false }).limit(LIMIT),
     supabase.from('digital_receipts').select('id, object_name, recipient_name, created_at').eq('user_id', userId).order('created_at', { ascending: false }).limit(LIMIT),
     supabase.from('cvs').select('id, title, full_name, created_at').eq('user_id', userId).order('created_at', { ascending: false }).limit(LIMIT),
@@ -43,6 +43,8 @@ export async function listPersonalDocuments(supabase: SupabaseClient, userId: st
       .limit(LIMIT),
     // Ricevute fatte da altri e confermate con l'accesso
     supabase.rpc('my_received_receipts', { p_limit: LIMIT }),
+    // KUMANI Casa: i documenti di ogni casa
+    supabase.from('casa_documents').select('id, home_id, title, created_at, home:casa_homes(name)').eq('user_id', userId).order('created_at', { ascending: false }).limit(LIMIT),
   ])
 
   const docs: PersonalDoc[] = []
@@ -65,6 +67,11 @@ export async function listPersonalDocuments(supabase: SupabaseClient, userId: st
   for (const r of (received.data ?? []) as { code: string; object_name: string; delivery_date: string; confirmed_at: string | null }[])
     docs.push({ kind: 'receipt_received', id: r.code, title: r.object_name || r.code, subtitle: null, date: r.confirmed_at || r.delivery_date, href: `/ricevute/${r.code}` })
 
-  for (const res of [quotes, receipts, cvs, coupons, events, vouchers, received]) if (res.error) console.error('[documenti] personali:', res.error.message)
+  for (const d of homeDocs.data ?? []) {
+    const home = (Array.isArray(d.home) ? d.home[0] : d.home) as { name?: string } | null
+    docs.push({ kind: 'home_doc', id: d.id, title: d.title, subtitle: home?.name || null, date: d.created_at, href: `/marketplace/casa/${d.home_id}?tab=documents` })
+  }
+
+  for (const res of [quotes, receipts, cvs, coupons, events, vouchers, received, homeDocs]) if (res.error) console.error('[documenti] personali:', res.error.message)
   return docs
 }

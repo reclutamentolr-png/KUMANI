@@ -26,6 +26,7 @@ const PAID_TOOLS = [
   'qr-code-pro',
   'life-calendar',
   'garage',
+  'casa',
   'findo',
   'digital-receipt',
   'aureya',

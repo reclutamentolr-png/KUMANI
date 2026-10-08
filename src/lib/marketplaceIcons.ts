@@ -1,5 +1,6 @@
 import {
   CarFront,
+  House,
   ShieldUser,
   Smartphone,
   Link2,
@@ -51,6 +52,7 @@ import {
 // not another.
 export const marketplaceIconMap: Record<string, LucideIcon> = {
   CarFront,
+  House,
   ShieldUser,
   Gauge,
   Smartphone,

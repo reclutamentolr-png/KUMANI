@@ -79,6 +79,7 @@ export const SECTION_LABELS: Record<string, string> = {
   offermaker: 'OfferMaker',
   lifeCalendar: 'Life Calendar',
   garage: 'Kumani Garage',
+  casa: 'KUMANI Casa',
   reviews: 'Recensioni',
   catalog: 'Catalogo servizi',
   findo: 'Findo',

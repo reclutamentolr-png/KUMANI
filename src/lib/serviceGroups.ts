@@ -20,6 +20,7 @@ const GROUP_OF: Record<string, ServiceGroup> = {
   memolife: 'money',
   'life-calendar': 'money',
   garage: 'money',
+  casa: 'money',
   findo: 'money',
   travel: 'money',
   // Lavoro

@@ -1,10 +1,13 @@
 import { NextResponse } from 'next/server'
 import { localizedPath, notifyUser, pushConfigured, pushDb } from '@/lib/push'
+import { fixedExpenseDueDate, type SpendlyFixedExpense } from '@/lib/spendly'
 
 // Promemoria giornalieri con le notifiche push (Vercel Cron, vedi vercel.json):
 // - abbonamento senza rinnovo automatico (voucher, Staff) che scade entro 3 giorni;
 // - eventi a cui si è iscritti che iniziano entro 36 ore;
-// - FinCheck: invito a rifare il test 3 mesi dopo l'ultimo.
+// - FinCheck: invito a rifare il test 3 mesi dopo l'ultimo;
+// - scadenze di Garage e di Life Calendar (anche KUMANI Casa);
+// - bollette di Spendly non pagate (3 giorni prima e il giorno stesso).
 // Ogni promemoria parte una volta sola (push_log). Solo per chi ha attivato
 // le notifiche su almeno un dispositivo.
 
@@ -182,5 +185,86 @@ export async function GET(request: Request) {
     }
   }
 
-  return NextResponse.json({ expiry, events, fincheck, garage })
+  // Life Calendar (anche le scadenze di KUMANI Casa, delle ricevute e dei
+  // documenti di viaggio): nei giorni di anticipo scelti per la voce e il
+  // giorno stesso
+  let lifeCalendar = 0
+  for (let i = 0; i < userIds.length; i += 200) {
+    const chunk = userIds.slice(i, i + 200)
+    const { data: items } = await db
+      .from('life_calendar_items')
+      .select('id, user_id, title, due_date, reminder_offsets, casa_home_id')
+      .in('user_id', chunk)
+      .eq('status', 'active')
+      .gte('due_date', today)
+      .lte('due_date', dayKey(400))
+    for (const item of items ?? []) {
+      const days = Math.round((Date.parse(`${item.due_date}T12:00:00Z`) - Date.parse(`${today}T12:00:00Z`)) / DAY)
+      const offsets = (item.reminder_offsets as number[] | null) ?? []
+      if (days !== 0 && !offsets.includes(days)) continue
+      const homeId = item.casa_home_id as string | null
+      await notifyUser(
+        item.user_id as string,
+        'expiry',
+        (t, locale) => ({
+          title: t(homeId ? 'casaDeadlineTitle' : 'lifeDeadlineTitle'),
+          body: t(days === 0 ? 'lifeDeadlineToday' : 'lifeDeadlineBody', {
+            what: item.title as string,
+            days,
+            date: new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', timeZone: 'UTC' }).format(new Date(`${item.due_date}T12:00:00Z`)),
+          }),
+          url: localizedPath(locale, homeId ? `/marketplace/casa/${homeId}` : '/marketplace/life-calendar'),
+          tag: `life-${item.id}`,
+        }),
+        { kind: 'life_deadline', ref: `${item.id}:${item.due_date}:${days}` }
+      )
+      lifeCalendar++
+    }
+  }
+
+  // Spendly: bollette non ancora segnate pagate, 3 giorni prima e il giorno stesso
+  let bills = 0
+  const billDays = [0, 3]
+  const months = [today.slice(0, 7), dayKey(3).slice(0, 7)].filter((m, idx, all) => all.indexOf(m) === idx)
+  for (let i = 0; i < userIds.length; i += 200) {
+    const chunk = userIds.slice(i, i + 200)
+    const { data: expenses } = await db
+      .from('spendly_fixed_expenses')
+      .select('id, user_id, description, amount, frequency, category, start_date, end_date, billing_day, notes')
+      .in('user_id', chunk)
+      .eq('category', 'bollette')
+      .lte('start_date', dayKey(3))
+    if (!expenses?.length) continue
+    const { data: payments } = await db
+      .from('spendly_fixed_payments')
+      .select('expense_id, period')
+      .in('expense_id', expenses.map((e) => e.id as string))
+      .in('period', months.map((m) => `${m}-01`))
+    const paid = new Set((payments ?? []).map((p) => `${p.expense_id}:${p.period}`))
+    for (const expense of expenses) {
+      for (const month of months) {
+        const due = fixedExpenseDueDate({ ...(expense as SpendlyFixedExpense), amount: Number(expense.amount) }, Number(month.slice(0, 4)), Number(month.slice(5, 7)))
+        const days = billDays.find((d) => dayKey(d) === due)
+        if (!due || days === undefined || paid.has(`${expense.id}:${month}-01`)) continue
+        await notifyUser(
+          expense.user_id as string,
+          'expiry',
+          (t, locale) => ({
+            title: t('billTitle'),
+            body: t(days === 0 ? 'billToday' : 'billBody', {
+              what: expense.description as string,
+              amount: new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(Number(expense.amount)),
+              days,
+            }),
+            url: localizedPath(locale, '/marketplace/spendly/bollette'),
+            tag: `bill-${expense.id}`,
+          }),
+          { kind: 'spendly_bill', ref: `${expense.id}:${due}:${days}` }
+        )
+        bills++
+      }
+    }
+  }
+
+  return NextResponse.json({ expiry, events, fincheck, garage, lifeCalendar, bills })
 }

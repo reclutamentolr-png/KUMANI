@@ -3,7 +3,7 @@
 
 export const TRIAL_TOOLS = {
   pro: ['fidelity', 'digital-receipt', 'preventivi', 'magazzino', 'calcolatrici', 'landing-page', 'menu'],
-  base: ['link-in-bio', 'memolife', 'life-calendar', 'garage', 'findo', 'spendly', 'kumani-cv'],
+  base: ['link-in-bio', 'memolife', 'life-calendar', 'garage', 'casa', 'findo', 'spendly', 'kumani-cv'],
 } as const
 
 export type TrialTool = (typeof TRIAL_TOOLS)['pro'][number] | (typeof TRIAL_TOOLS)['base'][number]

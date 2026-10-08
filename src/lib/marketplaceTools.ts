@@ -204,6 +204,17 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       requiresSubscription: true,
     },
     {
+      toolName: 'casa',
+      href: '/marketplace/casa',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'House',
+      title: t('casa'),
+      description: t('casaDescription'),
+      color: 'gold',
+      category: 'personal',
+      requiresSubscription: true,
+    },
+    {
       toolName: 'findo',
       href: '/marketplace/findo',
       gradient: 'bg-[var(--ink)]',
