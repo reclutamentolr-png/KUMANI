@@ -30,6 +30,8 @@ const GROUP_ICON: Record<string, string> = { security: 'ShieldCheck', money: 'Wa
 const PLAN_BADGE: Record<DeckPlan, { fill: string; text: string }> = { free: { fill: '3E7C59', text: 'FFFFFF' }, base: { fill: 'C79A3B', text: '171717' }, pro: { fill: '171717', text: 'E7C56A' } }
 // Servizi per slide (griglia 2 × 4): oltre, il gruppo si divide in più slide
 const PER_SLIDE = 8
+// Schermate della sorpresa per la slide (public/deck/surprise-<lingua>.png)
+const SURPRISE_SHOTS = ['it', 'en', 'fr', 'es', 'pt', 'de', 'ru']
 const LANG: Record<string, string> = { it: 'it-IT', en: 'en-GB', fr: 'fr-FR', es: 'es-ES', pt: 'pt-PT', de: 'de-DE', ru: 'ru-RU' }
 
 // Oggetti con chiavi "1", "2"… (come nei file delle lingue) → array
@@ -436,9 +438,9 @@ export async function buildDeck(
     }
     card(s, 0.6, 6.25, 7.55, 0.55, 'a6-badge', C.accent1)
     Tx(s, S.surprise.badge, { x: 0.8, y: 6.27, w: 7.2, h: 0.5, fontSize: fs(15), bold: true, color: C.text1, valign: 'middle', objectName: 'a6-badgetx' })
-    // Telefono con una sorpresa aperta
+    // Telefono con una sorpresa aperta, nella lingua della presentazione
     s.addShape(pres.ShapeType.roundRect, { x: 9.05, y: 1.45, w: 3.15, h: 5.2, rectRadius: 0.3, fill: { color: '000000' }, line: { color: HEX.gold, width: 1.5 }, shadow: SH(), objectName: 'a1-tel' } as any)
-    s.addImage({ path: `${IMG}/surprise.png`, x: 9.3, y: 1.6, w: 2.65, h: 4.9, objectName: 'a1-pagina' } as any)
+    s.addImage({ path: `${IMG}/surprise-${SURPRISE_SHOTS.includes(locale) ? locale : 'en'}.png`, x: 9.3, y: 1.6, w: 2.65, h: 4.9, objectName: 'a1-pagina' } as any)
     s.addNotes(S.surprise.notes)
   }
 
