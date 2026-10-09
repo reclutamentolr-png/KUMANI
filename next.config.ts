@@ -32,7 +32,8 @@ const nextConfig: NextConfig = {
       {
         // Sicurezza su tutte le pagine: niente KUMANI dentro siti altrui
         // (clickjacking), solo HTTPS, nessun "indovina il tipo di file",
-        // fotocamera solo per i nostri scanner QR
+        // fotocamera solo per i nostri scanner QR, microfono solo per i vocali
+        // registrati nelle sorprese (sempre dal nostro sito)
         source: '/:path*',
         headers: [
           { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
@@ -40,7 +41,7 @@ const nextConfig: NextConfig = {
           { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-          { key: 'Permissions-Policy', value: 'camera=(self), microphone=(), geolocation=(), payment=(self)' },
+          { key: 'Permissions-Policy', value: 'camera=(self), microphone=(self), geolocation=(), payment=(self)' },
         ],
       },
       {

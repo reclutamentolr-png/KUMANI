@@ -16,6 +16,7 @@ import {
   type SurpriseRow,
   type SurpriseStepRow,
   type SurpriseView,
+  type SurpriseViewStep,
 } from '@/lib/surprise'
 
 // KUMANI Sorpresa lato server: prezzi, pagamento (ritorno da Stripe e
@@ -99,8 +100,36 @@ async function signed(paths: string[]): Promise<Map<string, string>> {
   return new Map((data ?? []).filter((d) => d.signedUrl && d.path).map((d) => [d.path as string, d.signedUrl as string]))
 }
 
+// Colonne delle tappe lette dal server (la risposta dell'indovinello resta
+// sul server: serve solo per il controllo)
+export const STEP_SELECT = 'id, day, position, title, message, hint, media_path, media_type, kind, gallery, extra, riddle_answer, solved_at'
+
+function stepPaths(s: SurpriseStepRow): string[] {
+  return [s.media_path, ...(s.gallery ?? [])].filter(Boolean) as string[]
+}
+
+// Contenuto completo di una tappa (link firmati già pronti)
+export function fullStep(s: SurpriseStepRow, day: number, at: Date, urls: Map<string, string>): SurpriseViewStep {
+  return {
+    id: s.id,
+    day,
+    unlockAt: at.toISOString(),
+    open: true,
+    kind: s.kind,
+    ...(s.kind === 'riddle' ? { riddle: { question: s.extra?.question ?? '', solved: true } } : {}),
+    title: s.title,
+    message: s.message,
+    hint: s.hint,
+    mediaUrl: s.media_path ? (urls.get(s.media_path) ?? null) : null,
+    mediaType: s.media_type,
+    gallery: (s.gallery ?? []).map((p) => urls.get(p)).filter(Boolean) as string[],
+    extra: { placeName: s.extra?.placeName, placeAddress: s.extra?.placeAddress, mapUrl: s.extra?.mapUrl, songUrl: s.extra?.songUrl, songTitle: s.extra?.songTitle },
+  }
+}
+
 // Contenuto da mostrare: con revealAll (anteprima di chi crea) tutto aperto;
-// altrimenti solo le tappe già arrivate al loro momento.
+// altrimenti solo le tappe già arrivate al loro momento, e degli indovinelli
+// non ancora risolti solo la domanda.
 export async function buildSurpriseView(gift: SurpriseRow, steps: SurpriseStepRow[], revealAll: boolean): Promise<SurpriseView> {
   const days = surpriseDays(gift.kind)
   const startAt = gift.start_at ?? new Date().toISOString()
@@ -109,35 +138,34 @@ export async function buildSurpriseView(gift: SurpriseRow, steps: SurpriseStepRo
   const opened = visibleSteps.map((s) => {
     const day = Math.min(s.day, days)
     const at = unlockAt(startAt, day)
-    return { s, day, at, open: revealAll || at.getTime() <= now }
+    const open = revealAll || at.getTime() <= now
+    const locked = open && s.kind === 'riddle' && !s.solved_at && !revealAll
+    return { s, day, at, open, locked }
   })
   const voucherAt = voucherUnlockAt(startAt, gift.kind)
   const voucherOpen = revealAll || voucherAt.getTime() <= now
   const urls = await signed([
-    ...opened.filter((o) => o.open && o.s.media_path).map((o) => o.s.media_path as string),
+    ...opened.filter((o) => o.open && !o.locked).flatMap((o) => stepPaths(o.s)),
     ...(voucherOpen && gift.cover_path ? [gift.cover_path] : []),
+    ...(gift.music === 'own' && gift.music_path ? [gift.music_path] : []),
   ])
   return {
     kind: gift.kind,
     theme: gift.theme,
+    occasion: gift.occasion ?? 'generic',
+    revealStyle: gift.reveal_style ?? 'box',
+    music: gift.music ?? null,
+    musicUrl: gift.music === 'own' && gift.music_path ? (urls.get(gift.music_path) ?? null) : null,
     recipientName: gift.recipient_name,
     senderName: gift.sender_name,
     startAt,
     days,
-    steps: opened.map(({ s, day, at, open }) =>
-      open
-        ? {
-            id: s.id,
-            day,
-            unlockAt: at.toISOString(),
-            open: true,
-            title: s.title,
-            message: s.message,
-            hint: s.hint,
-            mediaUrl: s.media_path ? (urls.get(s.media_path) ?? null) : null,
-            mediaType: s.media_type,
-          }
-        : { id: s.id, day, unlockAt: at.toISOString(), open: false }
+    steps: opened.map(({ s, day, at, open, locked }) =>
+      !open
+        ? { id: s.id, day, unlockAt: at.toISOString(), open: false, kind: s.kind }
+        : locked
+          ? { id: s.id, day, unlockAt: at.toISOString(), open: true, kind: 'riddle' as const, riddle: { question: s.extra?.question ?? '', solved: false } }
+          : fullStep(s, day, at, urls)
     ),
     voucher: voucherOpen
       ? {
@@ -153,6 +181,11 @@ export async function buildSurpriseView(gift: SurpriseRow, steps: SurpriseStepRo
   }
 }
 
+// Link firmati per una sola tappa (indovinello appena risolto)
+export async function signedStep(s: SurpriseStepRow, day: number, at: Date): Promise<SurpriseViewStep> {
+  return fullStep(s, day, at, await signed(stepPaths(s)))
+}
+
 // Pagina pubblica: sorpresa attiva e non rimborsata. La prima apertura viene
 // segnata e chi l'ha creata riceve una notifica.
 export async function loadPublicSurprise(token: string): Promise<SurpriseView | null> {
@@ -160,7 +193,7 @@ export async function loadPublicSurprise(token: string): Promise<SurpriseView | 
   const db = surpriseDb()
   const { data: gift } = await db.from('surprise_gifts').select('*').eq('public_token', token).eq('status', 'active').is('refunded_at', null).maybeSingle()
   if (!gift) return null
-  const { data: steps } = await db.from('surprise_steps').select('id, day, position, title, message, hint, media_path, media_type').eq('gift_id', gift.id)
+  const { data: steps } = await db.from('surprise_steps').select(STEP_SELECT).eq('gift_id', gift.id)
   if (!gift.opened_at) {
     const { data: marked } = await db.from('surprise_gifts').update({ opened_at: new Date().toISOString() }).eq('id', gift.id).is('opened_at', null).select('id')
     if (marked?.length) {

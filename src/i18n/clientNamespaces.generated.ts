@@ -79,6 +79,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "spendly",
   "spotlight",
   "surprise",
+  "surpriseTpl",
   "svat",
   "timebank",
   "toolMember",

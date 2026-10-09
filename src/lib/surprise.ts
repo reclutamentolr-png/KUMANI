@@ -14,6 +14,52 @@ export const SURPRISE_PRICE_KEYS: Record<SurpriseKind, string> = {
   journey7: 'surprise_price_journey7_cents',
 }
 
+export const SURPRISE_OCCASIONS = ['generic', 'birthday', 'love', 'wedding', 'baby', 'christmas', 'parents', 'graduation', 'party', 'thanks'] as const
+export type SurpriseOccasion = (typeof SURPRISE_OCCASIONS)[number]
+export const REVEAL_STYLES = ['box', 'envelope', 'scratch'] as const
+export type RevealStyle = (typeof REVEAL_STYLES)[number]
+// Musica: registrazioni vere libere da diritti (pubblico dominio o CC0, da
+// Wikimedia Commons) su Cloudflare R2 in «sorprese/<brano>.mp3», oppure un
+// audio caricato da chi crea
+export const MUSIC_TRACKS = ['birthday', 'radetzky', 'joy', 'pomp', 'danube', 'clair', 'nocturne', 'gymno', 'air', 'lullaby', 'twinkle', 'jingle', 'silentnight'] as const
+export const musicFile = (track: MusicTrack) => `sorprese/${track}.mp3`
+export type MusicTrack = (typeof MUSIC_TRACKS)[number]
+export type SurpriseMusic = MusicTrack | 'own'
+export const STEP_KINDS = ['message', 'gallery', 'riddle', 'place', 'song'] as const
+export type StepKind = (typeof STEP_KINDS)[number]
+export const REACTIONS = ['love', 'joy', 'wow', 'thanks'] as const
+export type Reaction = (typeof REACTIONS)[number]
+export const GALLERY_MAX = 6
+
+export const isOccasion = (v: unknown): v is SurpriseOccasion => typeof v === 'string' && (SURPRISE_OCCASIONS as readonly string[]).includes(v)
+export const isRevealStyle = (v: unknown): v is RevealStyle => typeof v === 'string' && (REVEAL_STYLES as readonly string[]).includes(v)
+export const isMusic = (v: unknown): v is SurpriseMusic => v === 'own' || (typeof v === 'string' && (MUSIC_TRACKS as readonly string[]).includes(v))
+export const isStepKind = (v: unknown): v is StepKind => typeof v === 'string' && (STEP_KINDS as readonly string[]).includes(v)
+export const isReaction = (v: unknown): v is Reaction => typeof v === 'string' && (REACTIONS as readonly string[]).includes(v)
+
+// Ogni occasione: tema di colori consigliato, effetto all'apertura e musica
+export const OCCASION_STYLE: Record<SurpriseOccasion, { theme: SurpriseTheme; particles: 'confetti' | 'hearts' | 'snow' | 'stars'; music: MusicTrack }> = {
+  generic: { theme: 'gold', particles: 'confetti', music: 'gymno' },
+  birthday: { theme: 'gold', particles: 'confetti', music: 'birthday' },
+  love: { theme: 'rose', particles: 'hearts', music: 'clair' },
+  wedding: { theme: 'gold', particles: 'hearts', music: 'danube' },
+  baby: { theme: 'sky', particles: 'stars', music: 'twinkle' },
+  christmas: { theme: 'green', particles: 'snow', music: 'jingle' },
+  parents: { theme: 'rose', particles: 'hearts', music: 'lullaby' },
+  graduation: { theme: 'night', particles: 'stars', music: 'pomp' },
+  party: { theme: 'night', particles: 'confetti', music: 'radetzky' },
+  thanks: { theme: 'sky', particles: 'stars', music: 'air' },
+}
+
+// Risposta dell'indovinello: senza maiuscole, accenti, spazi e punteggiatura
+export function normalizeAnswer(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/\p{M}/gu, '')
+    .replace(/[^\p{L}\p{N}]+/gu, '')
+}
+
 export const SURPRISE_MAX = {
   recipient: 60,
   sender: 60,
@@ -24,6 +70,11 @@ export const SURPRISE_MAX = {
   stepMessage: 1500,
   hint: 300,
   mediaBytes: 20 * 1024 * 1024,
+  question: 300,
+  answer: 100,
+  place: 120,
+  link: 500,
+  reply: 1000,
 }
 
 export const isSurpriseKind = (v: unknown): v is SurpriseKind => typeof v === 'string' && (SURPRISE_KINDS as readonly string[]).includes(v)
@@ -52,6 +103,8 @@ export const THEME_STYLE: Record<SurpriseTheme, { bg: string; card: string; acce
   night: { bg: 'from-[#120f24] via-[#231c45] to-[#0a0816]', card: 'bg-[#f4f1ff]', accent: '#8b6cf0', text: 'text-[#120f24]' },
 }
 
+export type StepExtra = { question?: string; placeName?: string; placeAddress?: string; mapUrl?: string; songUrl?: string; songTitle?: string }
+
 export type SurpriseStepRow = {
   id: string
   day: number
@@ -61,6 +114,21 @@ export type SurpriseStepRow = {
   hint: string
   media_path: string | null
   media_type: 'image' | 'video' | 'audio' | null
+  kind: StepKind
+  gallery: string[]
+  extra: StepExtra
+  riddle_answer?: string | null
+  solved_at?: string | null
+}
+
+// Tappa a cui manca qualcosa (es. da un modello): canzone senza link, luogo
+// senza nome né indirizzo, galleria senza foto, indovinello senza risposta
+export function stepIncomplete(s: Pick<SurpriseStepRow, 'kind' | 'extra' | 'gallery' | 'riddle_answer'>): boolean {
+  if (s.kind === 'song') return !s.extra?.songUrl
+  if (s.kind === 'place') return !s.extra?.placeName && !s.extra?.placeAddress
+  if (s.kind === 'gallery') return !(s.gallery ?? []).length
+  if (s.kind === 'riddle') return !s.extra?.question || !s.riddle_answer
+  return false
 }
 
 export type SurpriseRow = {
@@ -68,6 +136,10 @@ export type SurpriseRow = {
   kind: SurpriseKind
   status: 'draft' | 'active'
   theme: SurpriseTheme
+  occasion: SurpriseOccasion
+  reveal_style: RevealStyle
+  music: SurpriseMusic | null
+  music_path: string | null
   recipient_name: string
   sender_name: string
   title: string
@@ -85,22 +157,32 @@ export type SurpriseRow = {
   created_at: string
 }
 
-// Quello che vede chi riceve: le tappe chiuse arrivano senza contenuto
+// Quello che vede chi riceve: le tappe chiuse (e gli indovinelli non
+// risolti) arrivano senza contenuto
 export type SurpriseViewStep = {
   id: string
   day: number
   unlockAt: string
   open: boolean
+  kind: StepKind
+  // Indovinello aperto ma non ancora risolto: si vede solo la domanda
+  riddle?: { question: string; solved: boolean }
   title?: string
   message?: string
   hint?: string
   mediaUrl?: string | null
   mediaType?: 'image' | 'video' | 'audio' | null
+  gallery?: string[]
+  extra?: StepExtra
 }
 
 export type SurpriseView = {
   kind: SurpriseKind
   theme: SurpriseTheme
+  occasion: SurpriseOccasion
+  revealStyle: RevealStyle
+  music: SurpriseMusic | null
+  musicUrl: string | null
   recipientName: string
   senderName: string
   startAt: string
