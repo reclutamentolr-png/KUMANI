@@ -8122,6 +8122,8 @@
     "s6": "Accéder à vos données et en obtenir une copie.|Les rectifier ou demander leur suppression.|Limiter un traitement ou vous y opposer.|Retirer un consentement à tout moment.|Introduire une réclamation auprès de l’autorité de protection des données de votre pays.",
     "s7t": "Cookies",
     "s7": "KUMANI utilise uniquement des cookies techniques, nécessaires pour rester connecté et faire fonctionner le site. Nous n’utilisons pas de cookies de profilage ni publicitaires.",
+    "s7list": "« sb-…-auth-token » (Supabase, notre fournisseur de base de données) : vous garde connecté à votre compte en toute sécurité. Il dure jusqu'à 400 jours ou jusqu'à votre déconnexion.|« sb-…-auth-token-code-verifier » : utilisé uniquement lors d'une connexion par un lien reçu par e-mail ou de la récupération du mot de passe ; il sert quelques minutes.|« NEXT_LOCALE » : mémorise la langue choisie. Il dure 1 an.|Cloudflare Turnstile : contrôle anti-robot sur les pages de connexion, d'inscription et de récupération du mot de passe, pour protéger les comptes contre les attaques automatisées. C'est un service de sécurité de Cloudflare, chargé uniquement sur ces pages.|Stripe : lorsque vous payez, vous allez sur les pages de Stripe, qui utilise ses propres cookies pour la sécurité des paiements et contre la fraude (voir la politique de confidentialité de Stripe).|Mémoire du navigateur (localStorage) : petites préférences comme l'onglet ouvert ou un brouillon pas encore envoyé. Elles restent sur votre appareil et ne nous sont pas envoyées.",
+    "s7note": "Ce sont tous des cookies techniques et nécessaires : la loi n'exige pas votre consentement. Vous pouvez toutefois les supprimer ou les bloquer dans les réglages du navigateur, mais certaines fonctions (comme rester connecté) ne marcheront plus. Si nous utilisons un jour des cookies facultatifs, par exemple pour des statistiques, nous vous demanderons d'abord votre consentement et vous pourrez le modifier à tout moment depuis « Préférences cookies ».",
     "s8t": "Contact",
     "s8": "Pour exercer vos droits ou pour toute question sur la confidentialité, écrivez à {email}."
   },
@@ -10610,5 +10612,23 @@
     "error_profileIncomplete": "Complétez et enregistrez raison sociale, numéro de TVA, adresse et e-mail.",
     "error_connectUnavailable": "Les paiements en ligne ne sont pas encore actifs sur KUMANI. Réessayez plus tard.",
     "error_stripeError": "Stripe ne répond pas. Réessayez dans un instant."
+  },
+  "cookieConsent": {
+    "title": "Cookies",
+    "text": "Nous utilisons les cookies techniques nécessaires au fonctionnement du site. Avec votre consentement, nous utilisons aussi des cookies facultatifs : vous pouvez les accepter, les refuser ou choisir par catégorie, et changer d'avis à tout moment.",
+    "policyLink": "Politique cookies",
+    "accept": "Tout accepter",
+    "reject": "Refuser",
+    "customize": "Personnaliser",
+    "save": "Enregistrer mes choix",
+    "closeReject": "Fermer (refuser les cookies facultatifs)",
+    "necessaryTitle": "Nécessaires",
+    "alwaysOn": "toujours actifs",
+    "necessaryText": "Ils vous gardent connecté, mémorisent votre langue et protègent le site. Ils ne peuvent pas être désactivés.",
+    "cat_analytics_title": "Statistiques",
+    "cat_analytics_text": "Ils nous aident à comprendre comment le site est utilisé afin de l'améliorer.",
+    "cat_marketing_title": "Marketing",
+    "cat_marketing_text": "Ils mesurent les campagnes et vous montrent des contenus plus adaptés sur d’autres sites.",
+    "preferencesLink": "Préférences cookies"
   }
 }

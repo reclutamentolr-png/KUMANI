@@ -19,6 +19,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "common",
   "contactPage",
   "convivio",
+  "cookieConsent",
   "dashboard",
   "digitalReceipt",
   "documentoSicuro",

@@ -1,3 +1,4 @@
+import { CookiePreferencesLink } from '@/components/consent/ConsentGate'
 import { CANONICAL_ORIGIN } from '@/lib/seo'
 import JsonLd from '@/components/seo/JsonLd'
 import Link from '@/components/LocalizedLink'
@@ -521,6 +522,7 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
               <Link href="/recensioni" className="hover:text-[var(--gold-bright)] transition-colors">{tr('footerLink')}</Link>
               <Link href="/catalogo" className="hover:text-[var(--gold-bright)] transition-colors">{tcat('footerLink')}</Link>
               <Link href="/privacy" className="hover:text-[var(--gold-bright)] transition-colors">Privacy</Link>
+              <CookiePreferencesLink className="hover:text-[var(--gold-bright)] transition-colors" />
               <Link href="/terms" className="hover:text-[var(--gold-bright)] transition-colors">{t('terms')}</Link>
               <Link href="/contact" className="hover:text-[var(--gold-bright)] transition-colors">{t('contact')}</Link>
             </div>

@@ -4,6 +4,7 @@ import { getLocale, getTranslations, setRequestLocale } from 'next-intl/server'
 import { ArrowLeft, Info, Lock } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { CONTACT_INFO } from '@/lib/contactInfo'
+import { CookiePreferencesLink } from '@/components/consent/ConsentGate'
 
 // Informativa Privacy essenziale (7 lingue, namespace "privacyPage"). La
 // versione completa è in revisione dal consulente: è nello storico git di
@@ -72,7 +73,7 @@ export default async function PrivacyPage({ params }: LocaleProps) {
           {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => {
             const body = t.raw(`s${n}`) as string
             return (
-              <section key={n} className="rounded-2xl border border-[var(--gold)]/25 bg-white p-5 shadow-sm sm:p-6">
+              <section key={n} id={n === 7 ? 'cookie' : undefined} className="scroll-mt-24 rounded-2xl border border-[var(--gold)]/25 bg-white p-5 shadow-sm sm:p-6">
                 <h2 className="text-lg font-bold text-[var(--ink)]">
                   {n}. {t(`s${n}t`)}
                 </h2>
@@ -84,6 +85,18 @@ export default async function PrivacyPage({ params }: LocaleProps) {
                   </ul>
                 ) : (
                   <p className="mt-3 text-sm leading-relaxed text-[var(--muted)] sm:text-base">{withEmail(body)}</p>
+                )}
+                {/* Cookie: elenco preciso (nome, a cosa serve, durata) */}
+                {n === 7 && (
+                  <>
+                    <ul className="mt-3 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-[var(--muted)] sm:text-base">
+                      {(t.raw('s7list') as string).split('|').map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                    <p className="mt-3 text-sm leading-relaxed text-[var(--muted)] sm:text-base">{t('s7note')}</p>
+                    <CookiePreferencesLink className="mt-3 text-sm font-semibold text-[var(--gold)] underline" />
+                  </>
                 )}
               </section>
             )

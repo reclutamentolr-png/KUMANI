@@ -8122,6 +8122,8 @@
     "s6": "Access your data and get a copy.|Correct it or ask for it to be deleted.|Restrict or object to processing.|Withdraw consent at any time.|Lodge a complaint with the data protection authority of your country.",
     "s7t": "Cookies",
     "s7": "KUMANI uses only technical cookies, needed to keep you logged in and make the site work. We do not use profiling or advertising cookies.",
+    "s7list": "“sb-…-auth-token” (Supabase, our database provider): keeps you securely logged in to your account. It lasts up to 400 days or until you log out.|“sb-…-auth-token-code-verifier”: used only when you sign in with a link received by email or reset your password; it is needed for a few minutes.|“NEXT_LOCALE”: remembers the language you chose. It lasts 1 year.|Cloudflare Turnstile: anti-robot check on the login, registration and password recovery pages, to protect accounts from automated attacks. It is a Cloudflare security service, loaded only on those pages.|Stripe: when you pay you go to Stripe's pages, which use their own cookies for payment security and fraud prevention (see Stripe's privacy policy).|Browser storage (localStorage): small preferences such as the open tab or a draft not yet sent. They stay on your device and are not sent to us.",
+    "s7note": "These are all technical, necessary cookies: by law your consent is not required. You can still delete or block them in your browser settings, but some features (such as staying logged in) will stop working. If we use optional cookies in the future, for example for statistics, we will ask for your consent first and you will be able to change it at any time from “Cookie preferences”.",
     "s8t": "Contact",
     "s8": "To exercise your rights or for any privacy question, write to {email}."
   },
@@ -10610,5 +10612,23 @@
     "error_profileIncomplete": "Complete and save company name, VAT number, address and email.",
     "error_connectUnavailable": "Online payments are not active on KUMANI yet. Please try again later.",
     "error_stripeError": "Stripe is not responding. Please try again shortly."
+  },
+  "cookieConsent": {
+    "title": "Cookies",
+    "text": "We use the technical cookies needed for the site to work. With your consent we also use optional cookies: you can accept them, reject them or choose by category, and change your mind at any time.",
+    "policyLink": "Cookie policy",
+    "accept": "Accept all",
+    "reject": "Reject",
+    "customize": "Customise",
+    "save": "Save choices",
+    "closeReject": "Close (reject optional cookies)",
+    "necessaryTitle": "Necessary",
+    "alwaysOn": "always on",
+    "necessaryText": "They keep you logged in, remember your language and protect the site. They cannot be turned off.",
+    "cat_analytics_title": "Statistics",
+    "cat_analytics_text": "They help us understand how the site is used so we can improve it.",
+    "cat_marketing_title": "Marketing",
+    "cat_marketing_text": "They measure campaigns and show you more relevant content on other sites.",
+    "preferencesLink": "Cookie preferences"
   }
 }

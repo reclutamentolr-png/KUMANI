@@ -8122,6 +8122,8 @@
     "s6": "Auskunft über deine Daten und eine Kopie erhalten.|Sie berichtigen oder löschen lassen.|Eine Verarbeitung einschränken oder ihr widersprechen.|Eine Einwilligung jederzeit widerrufen.|Beschwerde bei der Datenschutzbehörde deines Landes einlegen.",
     "s7t": "Cookies",
     "s7": "KUMANI verwendet nur technische Cookies, die nötig sind, damit du angemeldet bleibst und die Website funktioniert. Wir verwenden keine Profiling- oder Werbe-Cookies.",
+    "s7list": "„sb-…-auth-token“ (Supabase, unser Datenbank-Anbieter): hält dich sicher in deinem Konto angemeldet. Bis zu 400 Tage oder bis zur Abmeldung.|„sb-…-auth-token-code-verifier“: nur bei der Anmeldung über einen per E-Mail erhaltenen Link oder beim Zurücksetzen des Passworts; wird wenige Minuten benötigt.|„NEXT_LOCALE“: merkt sich die gewählte Sprache. 1 Jahr.|Cloudflare Turnstile: Anti-Roboter-Prüfung auf den Seiten für Anmeldung, Registrierung und Passwort-Wiederherstellung, um Konten vor automatisierten Angriffen zu schützen. Ein Sicherheitsdienst von Cloudflare, nur auf diesen Seiten geladen.|Stripe: Beim Bezahlen gelangst du auf die Seiten von Stripe, das eigene Cookies für die Zahlungssicherheit und gegen Betrug verwendet (siehe Datenschutzhinweise von Stripe).|Browserspeicher (localStorage): kleine Einstellungen wie der geöffnete Tab oder ein noch nicht gesendeter Entwurf. Sie bleiben auf deinem Gerät und werden nicht an uns gesendet.",
+    "s7note": "Es handelt sich ausschließlich um technisch notwendige Cookies: Gesetzlich ist keine Einwilligung erforderlich. Du kannst sie trotzdem in den Browsereinstellungen löschen oder blockieren, dann funktionieren aber einige Funktionen (z. B. angemeldet bleiben) nicht mehr. Sollten wir künftig optionale Cookies verwenden, etwa für Statistiken, fragen wir vorher nach deiner Einwilligung, die du jederzeit unter „Cookie-Einstellungen“ ändern kannst.",
     "s8t": "Kontakt",
     "s8": "Um deine Rechte auszuüben oder für Fragen zum Datenschutz schreib an {email}."
   },
@@ -10610,5 +10612,23 @@
     "error_profileIncomplete": "Fülle Firmenname, USt-IdNr., Adresse und E-Mail aus und speichere.",
     "error_connectUnavailable": "Online-Zahlungen sind bei KUMANI noch nicht aktiv. Bitte versuche es später.",
     "error_stripeError": "Stripe antwortet nicht. Versuche es gleich noch einmal."
+  },
+  "cookieConsent": {
+    "title": "Cookies",
+    "text": "Wir verwenden die technischen Cookies, die für den Betrieb der Website nötig sind. Mit deiner Einwilligung verwenden wir auch optionale Cookies: Du kannst sie annehmen, ablehnen oder nach Kategorie wählen und deine Wahl jederzeit ändern.",
+    "policyLink": "Cookie-Hinweise",
+    "accept": "Alle akzeptieren",
+    "reject": "Ablehnen",
+    "customize": "Anpassen",
+    "save": "Auswahl speichern",
+    "closeReject": "Schließen (optionale ablehnen)",
+    "necessaryTitle": "Notwendig",
+    "alwaysOn": "immer aktiv",
+    "necessaryText": "Sie halten dich angemeldet, merken sich die Sprache und schützen die Website. Sie können nicht deaktiviert werden.",
+    "cat_analytics_title": "Statistik",
+    "cat_analytics_text": "Sie helfen uns zu verstehen, wie die Website genutzt wird, um sie zu verbessern.",
+    "cat_marketing_title": "Marketing",
+    "cat_marketing_text": "Sie messen Kampagnen und zeigen dir passendere Inhalte auf anderen Websites.",
+    "preferencesLink": "Cookie-Einstellungen"
   }
 }
