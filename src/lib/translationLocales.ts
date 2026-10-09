@@ -73,6 +73,8 @@ export const SECTION_LABELS: Record<string, string> = {
   spotlightHome: 'Kumano del Giorno (homepage)',
   aureya: 'Aureya',
   magazzino: 'Magazzino PRO',
+  shop: 'KUMANI Shop',
+  shopPublic: 'KUMANI Shop (negozio pubblico)',
   timebank: 'Banca del Tempo',
   verifoto: 'VeriFoto',
   svat: 'SVAT',

@@ -33,6 +33,7 @@ const GROUP_OF: Record<string, ServiceGroup> = {
   'firma-email': 'work',
   // La tua attività e farti conoscere
   'landing-page': 'business',
+  shop: 'business',
   menu: 'business',
   fidelity: 'business',
   'qr-code-pro': 'business',

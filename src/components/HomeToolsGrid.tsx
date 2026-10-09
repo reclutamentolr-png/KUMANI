@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { freeFirst } from '@/lib/freeFirst'
 import {
   CarFront,
+  Store,
   House,
   ShieldUser,
   PanelsTopLeft,
@@ -119,6 +120,7 @@ export default function HomeToolsGrid({ freeToolNames = [] }: { freeToolNames?: 
     { name: 'offermaker', icon: Wand2, title: t('toolOffermakerTitle'), desc: t('toolOffermakerDescription'), category: 'marketing' },
     { name: 'menu', icon: UtensilsCrossed, title: tc('menu'), desc: tc('menuDescription'), category: 'marketing' },
     { name: 'landing-page', icon: PanelsTopLeft, title: tc('landingPage'), desc: tc('landingPageDescription'), category: 'marketing' },
+    { name: 'shop', icon: Store, title: tc('shop'), desc: tc('shopDescription'), category: 'marketing' },
     { name: 'svat', icon: ShieldCheck, title: t('toolSvatTitle'), desc: t('toolSvatDescription'), category: 'security' },
     { name: 'verifoto', icon: ScanEye, title: tc('verifoto'), desc: tc('verifotoDescription'), category: 'security' },
     { name: 'checkmail', icon: MailSearch, title: tc('checkmail'), desc: tc('checkmailDescription'), category: 'security' },

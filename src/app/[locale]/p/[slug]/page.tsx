@@ -8,6 +8,7 @@ import { CANONICAL_ORIGIN } from '@/lib/seo'
 import { landingPhotoUrl } from '@/lib/landing'
 import { getLandingFormLabels, getLandingLabels } from '@/lib/landing-server'
 import { loadPublicLanding } from '@/lib/landing-public'
+import { openShopSlugForLanding } from '@/lib/shopServer'
 
 // Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
 // richiesta, mai preparata in anticipo né tenuta in memoria
@@ -43,6 +44,8 @@ export default async function PublicLandingPage({ params }: Props) {
   if (!page) notFound()
   const c = page.content
   const [labels, formLabels] = await Promise.all([getLandingLabels(page.content_locale), getLandingFormLabels(page.content_locale)])
+  // Negozio aperto del titolare (KUMANI Shop): pulsante «Visita il negozio»
+  const shopSlug = await openShopSlugForLanding(page.slug)
   const url = `${CANONICAL_ORIGIN}/p/${page.slug}`
 
   // Dati per Google: attività locale con contatti e social (niente stelle:
@@ -81,6 +84,7 @@ export default async function PublicLandingPage({ params }: Props) {
         labels={labels}
         lang={page.content_locale}
         menuUrl={page.menu_token ? `/m/${page.menu_token}` : null}
+        shopUrl={shopSlug ? `${page.content_locale === 'it' ? '' : `/${page.content_locale}`}/shop/${shopSlug}` : null}
         createHref={page.referral_code ? `/register?sponsor=${encodeURIComponent(page.referral_code)}` : '/register'}
         reportSlot={<ReportLandingButton slug={page.slug} locale={page.content_locale} />}
         contactFormSlot={

@@ -8,7 +8,7 @@ export async function getLandingLabels(locale: LandingLocale): Promise<LandingLa
   const t = await getTranslations({ locale, namespace: 'landingPublic' })
   const keys = [
     'services', 'about', 'method', 'testimonials', 'testimonialsNote', 'googleReviews', 'gallery', 'hours', 'contacts',
-    'call', 'whatsapp', 'email', 'openMap', 'seeMenu', 'vat', 'madeWith', 'createYours',
+    'call', 'whatsapp', 'email', 'openMap', 'seeMenu', 'seeShop', 'vat', 'madeWith', 'createYours',
   ] as const
   return Object.fromEntries(keys.map((k) => [k, t(k)])) as LandingLabels
 }

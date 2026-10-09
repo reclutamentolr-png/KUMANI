@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react'
-import { Clock, Mail, MapPin, MessageCircle, Phone, Star, UtensilsCrossed } from 'lucide-react'
+import { Clock, Mail, MapPin, MessageCircle, Phone, Star, ShoppingBag, UtensilsCrossed } from 'lucide-react'
 import { ctaHref, heroBackground, landingPhotoUrl, landingTheme, type LandingContent, type LandingTemplate, type SectionKey } from '@/lib/landing'
 import { landingSerif } from '@/components/landing/landingFonts'
 
@@ -21,6 +21,7 @@ export type LandingLabels = {
   email: string
   openMap: string
   seeMenu: string
+  seeShop: string
   vat: string
   madeWith: string
   createYours: string
@@ -33,6 +34,8 @@ type Props = {
   labels: LandingLabels
   lang: string
   menuUrl?: string | null
+  // Negozio KUMANI Shop aperto del titolare
+  shopUrl?: string | null
   createHref?: string
   // Pulsante "Segnala" (solo sulla pagina pubblica)
   reportSlot?: ReactNode
@@ -51,7 +54,7 @@ const SOCIAL_LABELS: Record<keyof LandingContent['social'], string> = {
   website: 'Web',
 }
 
-export default function LandingView({ content: c, template, accent, labels, lang, menuUrl, createHref, reportSlot, contactFormSlot, preview }: Props) {
+export default function LandingView({ content: c, template, accent, labels, lang, menuUrl, shopUrl, createHref, reportSlot, contactFormSlot, preview }: Props) {
   const base = landingTheme(template, accent)
   // Sfondo a tema (foto o sfumatura): la presentazione diventa scura con testo chiaro
   const heroBg = heroBackground(c.style)
@@ -274,6 +277,15 @@ export default function LandingView({ content: c, template, accent, labels, lang
                     style={{ borderColor: template === 'colore' || heroBg ? th.heroText : 'var(--lp-accent)', color: template === 'colore' || heroBg ? th.heroText : 'var(--lp-accent)' }}
                   >
                     <UtensilsCrossed className="h-5 w-5" /> {labels.seeMenu}
+                  </a>
+                )}
+                {shopUrl && (
+                  <a
+                    href={preview ? undefined : shopUrl}
+                    className="inline-flex items-center gap-2 rounded-xl border px-5 py-3.5 font-semibold"
+                    style={{ borderColor: template === 'colore' || heroBg ? th.heroText : 'var(--lp-accent)', color: template === 'colore' || heroBg ? th.heroText : 'var(--lp-accent)' }}
+                  >
+                    <ShoppingBag className="h-5 w-5" /> {labels.seeShop}
                   </a>
                 )}
               </div>

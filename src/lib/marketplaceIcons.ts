@@ -44,6 +44,7 @@ import {
   BriefcaseBusiness,
   Gauge,
   Gift,
+  Store,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -97,4 +98,5 @@ export const marketplaceIconMap: Record<string, LucideIcon> = {
   Dices,
   BriefcaseBusiness,
   Gift,
+  Store,
 }

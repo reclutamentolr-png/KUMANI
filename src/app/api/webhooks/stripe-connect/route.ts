@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import type Stripe from 'stripe'
 import { getStripe } from '@/lib/stripe'
 import { recordQuotePayment, syncSellerAccount } from '@/lib/shopPayments'
+import { recordShopOrderPayment } from '@/lib/shopServer'
 
 // Webhook di Stripe Connect (eventi dei conti dei venditori, KUMANI Shop):
 // endpoint separato da quello degli abbonamenti, con la sua chiave
@@ -29,6 +30,7 @@ export async function POST(req: NextRequest) {
       case 'checkout.session.async_payment_succeeded': {
         const session = event.data.object as Stripe.Checkout.Session
         if (session.metadata?.kind === 'quote') await recordQuotePayment(session)
+        if (session.metadata?.kind === 'shop_order') await recordShopOrderPayment(session)
         break
       }
       case 'account.updated':
