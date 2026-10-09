@@ -406,7 +406,44 @@ export default function SurpriseExperience({ view, preview = false, editorHref, 
     audio.current.play().then(() => setPlaying(true)).catch(() => setPlaying(false))
   }, [view.music, view.musicUrl])
 
-  useEffect(() => () => stopMusic(), [stopMusic])
+  // Uscendo dalla pagina la musica si chiude del tutto
+  useEffect(
+    () => () => {
+      stopMusic()
+      if (audio.current) {
+        audio.current.removeAttribute('src')
+        audio.current.load()
+        audio.current = null
+      }
+    },
+    [stopMusic]
+  )
+
+  // Telefono: passando a un'altra app o scheda (WhatsApp, Home, blocco
+  // schermo) musica, video e vocali si fermano; tornando, la musica riparte
+  // se stava suonando
+  useEffect(() => {
+    let resume = false
+    const hide = () => {
+      resume = !!audio.current && !audio.current.paused
+      audio.current?.pause()
+      document.querySelectorAll('audio, video').forEach((el) => (el as HTMLMediaElement).pause())
+      setPlaying(false)
+    }
+    const onVisibility = () => {
+      if (document.visibilityState === 'hidden') hide()
+      else if (resume && audio.current) {
+        resume = false
+        audio.current.play().then(() => setPlaying(true)).catch(() => setPlaying(false))
+      }
+    }
+    document.addEventListener('visibilitychange', onVisibility)
+    window.addEventListener('pagehide', hide)
+    return () => {
+      document.removeEventListener('visibilitychange', onVisibility)
+      window.removeEventListener('pagehide', hide)
+    }
+  }, [])
 
   const open = () => {
     setOpened(true)
