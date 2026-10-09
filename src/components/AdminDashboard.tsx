@@ -1,5 +1,6 @@
 'use client'
 
+import AdminGlobalSearch from '@/components/admin/AdminGlobalSearch'
 import dynamic from 'next/dynamic'
 import { notify } from '@/lib/adminNotify'
 import { SITE_URL } from '@/lib/siteUrl'
@@ -1693,6 +1694,20 @@ L'accesso viene registrato.`))) return
   }
 
   return (
+    <>
+    {/* Ricerca generale: sezioni, impostazioni, utenti, sorprese, codici, IP */}
+    <AdminGlobalSearch
+      sections={availableMenuItems.map((item) => ({ id: item.id, label: item.label }))}
+      onSection={(id) => setActiveSection(id)}
+      onUser={(user) => {
+        setActiveSection('users')
+        openManageModal(user)
+      }}
+      onCoupons={(area) => {
+        setActiveSection('coupons')
+        setCouponArea(area)
+      }}
+    />
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
       <AdminToaster />
       <div className="lg:col-span-1">
@@ -1828,5 +1843,6 @@ L'accesso viene registrato.`))) return
       {renderManageModal()}
       {renderProfileEditModal()}
     </div>
+    </>
   )
 }
