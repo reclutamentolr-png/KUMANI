@@ -1,6 +1,4 @@
 import SurpriseRepliesPopup from '@/components/surprise/SurpriseRepliesPopup'
-import NewsCard from '@/components/notifications/NewsCard'
-import { getNotifications } from '@/app/actions/notifications'
 import { getUnreadReplies } from '@/lib/surpriseReplies'
 import SurpriseDashboardCard from '@/components/surprise/SurpriseDashboardCard'
 import { SITE_URL } from '@/lib/siteUrl'
@@ -82,7 +80,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   // dashboard impiegava secondi): ruolo admin, profilo completo (solo
   // tramite get_my_profile(): le colonne personali non sono leggibili
   // direttamente), messaggi non letti, piano e strumenti, preferiti.
-  const [adminRole, profile, unreadMessagesCount, access, favoriteToolNames, { count: landingUnread }, reviewOptions, lateSponsor, planPrices, { data: giftWelcome }, surpriseReplies, news] = await Promise.all([
+  const [adminRole, profile, unreadMessagesCount, access, favoriteToolNames, { count: landingUnread }, reviewOptions, lateSponsor, planPrices, { data: giftWelcome }, surpriseReplies] = await Promise.all([
     hasAdminRole(supabase, user.id),
     profilePromise,
     getUnreadMessagesCount(user.id),
@@ -100,8 +98,6 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     supabase.rpc('my_gift_welcome'),
     // KUMANI Sorpresa: ringraziamenti non ancora letti (popup)
     getUnreadReplies(supabase),
-    // Centro avvisi: gli ultimi 3 da leggere («Novità per te»)
-    getNotifications({ limit: 3, unreadOnly: true }),
   ])
   const canReview = reviewOptions.some((option) => option.purchaseLabel && !option.review)
   const { userPlan, isSettingEnabled, isToolEnabled, requiredPlan } = access
@@ -239,9 +235,6 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
 
         {/* Invito ad attivare le notifiche push su questo dispositivo */}
         <PushInviteCard />
-
-        {/* Centro avvisi: le novità da leggere (rete, scadenze, messaggi…) */}
-        {news.items.length > 0 && <NewsCard items={news.items} unread={news.unread} />}
 
         {/* Messaggi non letti dalla Bacheca: in cima, prima di tutto */}
         {unreadMessagesCount > 0 && <BachecaMessagesAlert initialCount={unreadMessagesCount} />}
