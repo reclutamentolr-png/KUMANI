@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import {
   AlertCircle,
@@ -114,7 +114,14 @@ function ShopForm({ userId, settings, canOpen, hasProducts, onSaved }: { userId:
   const [busy, setBusy] = useState(false)
   const [notice, setNotice] = useState<{ ok: boolean; text: string } | null>(null)
   const set = <K extends keyof ShopSettings>(k: K, v: ShopSettings[K]) => setForm((f) => ({ ...f, [k]: v }))
-  const url = typeof window !== 'undefined' && form.slug ? `${window.location.origin.replace(/localhost:\d+|127\.0\.0\.1:\d+/, 'kumani.io').replace('http://', 'https://')}${shopPath(form.slug)}` : ''
+  // Indirizzo pubblico (sempre sul dominio kumani.io, anche in prova); letto
+  // dopo l'apertura della pagina, così server e browser mostrano lo stesso
+  const [origin, setOrigin] = useState('')
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- l'indirizzo del sito esiste solo nel browser
+    setOrigin(window.location.origin.replace(/localhost:\d+|127\.0\.0\.1:\d+/, 'kumani.io').replace('http://', 'https://'))
+  }, [])
+  const url = origin && form.slug ? `${origin}${shopPath(form.slug)}` : ''
 
   const save = async (patch?: Partial<ShopSettings>) => {
     const next = { ...form, ...patch }
