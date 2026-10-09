@@ -14,5 +14,5 @@ export default async function SurprisePublicPage({ params }: { params: Promise<{
   setRequestLocale(locale)
   const view = await loadPublicSurprise(token)
   if (!view) notFound()
-  return <SurpriseExperience view={view} />
+  return <SurpriseExperience view={view} token={token} />
 }

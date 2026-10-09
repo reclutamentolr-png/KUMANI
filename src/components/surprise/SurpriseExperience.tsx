@@ -41,7 +41,7 @@ function Media({ url, type }: { url: string; type: 'image' | 'video' | 'audio' |
   if (type === 'video') return <video src={url} controls playsInline className="mt-3 w-full rounded-xl bg-black" />
   if (type === 'audio') return <audio src={url} controls className="mt-3 w-full" />
   // eslint-disable-next-line @next/next/no-img-element -- link firmato e temporaneo dello Storage
-  return <img src={url} alt="" className="mt-3 w-full rounded-xl object-cover" />
+  return <img src={url} alt="" className="mt-3 h-auto max-h-[75vh] w-full rounded-xl object-contain" />
 }
 
 function StepCard({ step, accent }: { step: SurpriseViewStep; accent: string }) {
@@ -80,11 +80,46 @@ function StepCard({ step, accent }: { step: SurpriseViewStep; accent: string }) 
   )
 }
 
-export default function SurpriseExperience({ view, preview = false, editorHref }: { view: SurpriseView; preview?: boolean; editorHref?: string }) {
+// Su questo dispositivo il regalo è già stato aperto: alle visite successive
+// si vede subito il contenuto (con le tappe nel frattempo sbloccate)
+const openedKey = (token: string) => `kumani_surprise_opened_${token}`
+
+export default function SurpriseExperience({
+  view,
+  preview = false,
+  editorHref,
+  token,
+}: {
+  view: SurpriseView
+  preview?: boolean
+  editorHref?: string
+  token?: string
+}) {
   const t = useTranslations('surprise')
   const locale = useLocale()
   const style = THEME_STYLE[view.theme]
-  const [opened, setOpened] = useState(preview)
+  const [opened, setOpened] = useState<boolean | null>(preview ? true : null)
+
+  useEffect(() => {
+    if (preview) return
+    let seen = false
+    try {
+      seen = !!token && localStorage.getItem(openedKey(token)) === '1'
+    } catch {
+      // memoria del browser non disponibile: si mostra la scatola
+    }
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- la memoria del browser si legge solo nel browser
+    setOpened(seen)
+  }, [preview, token])
+
+  const open = () => {
+    setOpened(true)
+    try {
+      if (token) localStorage.setItem(openedKey(token), '1')
+    } catch {
+      // nulla da fare
+    }
+  }
   const v = view.voucher
 
   return (
@@ -105,8 +140,10 @@ export default function SurpriseExperience({ view, preview = false, editorHref }
           {view.senderName && <p className="mt-1 text-white/80">{t('viewFrom', { name: view.senderName })}</p>}
         </div>
 
-        {!opened ? (
-          <button type="button" onClick={() => setOpened(true)} className="group mx-auto mt-14 flex flex-col items-center">
+        {opened === null ? (
+          <div className="h-64" />
+        ) : !opened ? (
+          <button type="button" onClick={open} className="group mx-auto mt-14 flex flex-col items-center">
             <span
               className="flex h-40 w-40 items-center justify-center rounded-3xl shadow-2xl transition-transform group-hover:scale-105 group-active:scale-95 motion-safe:animate-[bounce_2.4s_ease-in-out_infinite]"
               style={{ background: `linear-gradient(135deg, ${style.accent}, #ffffff55)` }}
@@ -132,7 +169,7 @@ export default function SurpriseExperience({ view, preview = false, editorHref }
               <div className={`overflow-hidden rounded-3xl ${style.card} ${style.text} shadow-2xl`}>
                 {v.coverUrl && (
                   // eslint-disable-next-line @next/next/no-img-element -- link firmato e temporaneo dello Storage
-                  <img src={v.coverUrl} alt="" className="h-56 w-full object-cover" />
+                  <img src={v.coverUrl} alt="" className="block h-auto max-h-[75vh] w-full bg-black/5 object-contain" />
                 )}
                 <div className="p-6">
                   <p className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider" style={{ color: style.accent }}>

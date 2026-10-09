@@ -51,7 +51,7 @@ function MediaPreview({ url, type }: { url: string; type: MediaType | null }) {
   if (type === 'video') return <video src={url} controls playsInline className="max-h-56 w-full rounded-xl bg-black" />
   if (type === 'audio') return <audio src={url} controls className="w-full" />
   // eslint-disable-next-line @next/next/no-img-element -- link firmato temporaneo
-  return <img src={url} alt="" className="max-h-56 w-full rounded-xl object-cover" />
+  return <img src={url} alt="" className="max-h-80 w-full rounded-xl bg-gray-100 object-contain" />
 }
 
 type StepDraft = { id?: string; day: number; title: string; message: string; hint: string; mediaPath: string | null; mediaType: MediaType | null; mediaUrl: string | null }
