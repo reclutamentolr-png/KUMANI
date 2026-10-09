@@ -58,9 +58,9 @@ export async function pageMetadata(path: string, meta: Metadata = {}, { ownImage
       url: canonical,
       title,
       description,
-      ...(ownImage ? {} : { images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'KUMANI' }] }),
+      ...(ownImage ? {} : { images: [{ url: '/og-kumani.jpg', width: 1200, height: 630, alt: 'KUMANI' }] }),
       ...(meta.openGraph ?? {}),
     },
-    twitter: { card: 'summary_large_image', title, description, ...(ownImage ? {} : { images: ['/og-image.jpg'] }), ...(meta.twitter ?? {}) },
+    twitter: { card: 'summary_large_image', title, description, ...(ownImage ? {} : { images: ['/og-kumani.jpg'] }), ...(meta.twitter ?? {}) },
   }
 }

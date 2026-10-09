@@ -34,9 +34,9 @@ export async function rootMetadata(locale: string): Promise<Metadata> {
       siteName: 'KUMANI',
       title,
       description,
-      images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'KUMANI' }],
+      images: [{ url: '/og-kumani.jpg', width: 1200, height: 630, alt: 'KUMANI' }],
     },
-    twitter: { card: 'summary_large_image', title, description, images: ['/og-image.jpg'] },
+    twitter: { card: 'summary_large_image', title, description, images: ['/og-kumani.jpg'] },
     robots: INDEXABLE
       ? { index: true, follow: true, googleBot: { index: true, follow: true, 'max-video-preview': -1, 'max-image-preview': 'large', 'max-snippet': -1 } }
       : { index: false, follow: false },
