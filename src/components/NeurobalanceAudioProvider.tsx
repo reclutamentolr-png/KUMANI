@@ -66,6 +66,10 @@ export function NeurobalanceAudioProvider({ children }: { children: ReactNode })
   const listenedSecondsRef = useRef(0)
   const pointAwardedRef = useRef(false)
   const natureEngineRef = useRef<NatureSoundsEngine | null>(null)
+  // Un solo audio alla volta: ogni avvio prende un numero nuovo; un avvio
+  // ancora in caricamento quando ne parte un altro (clic veloci) si annulla
+  // invece di suonare insieme al nuovo.
+  const sessionRef = useRef(0)
 
   useEffect(() => {
     natureEngineRef.current = new NatureSoundsEngine()
@@ -109,6 +113,7 @@ export function NeurobalanceAudioProvider({ children }: { children: ReactNode })
   }, [isPlaying])
 
   const stopAudio = () => {
+    sessionRef.current++
     oscillatorsRef.current.forEach((oscillator) => oscillator.stop())
     oscillatorsRef.current = []
     setIsPlaying(false)
@@ -127,6 +132,7 @@ export function NeurobalanceAudioProvider({ children }: { children: ReactNode })
   }
 
   const playTrack = async (track: Track) => {
+    const session = ++sessionRef.current
     const audio = new Audio()
     const opus = audio.canPlayType('audio/webm; codecs="opus"') !== ''
     audio.src = `${track.src}.${opus ? 'webm' : 'm4a'}`
@@ -144,17 +150,24 @@ export function NeurobalanceAudioProvider({ children }: { children: ReactNode })
     setRemaining(track.duration)
     try {
       await audio.play()
+      if (session !== sessionRef.current) {
+        audio.pause()
+        return
+      }
       setIsPlaying(true)
     } catch (err) {
+      if (session !== sessionRef.current) return
       console.error('[NeurobalanceAudio] failed to play track:', track.id, err)
       setIsPlaying(false)
     }
   }
 
   const playWith = async (carrier: number, beat: number, durationSeconds: number) => {
+    const session = ++sessionRef.current
     const audioContext = audioContextRef.current ?? new AudioContext()
     audioContextRef.current = audioContext
     await audioContext.resume()
+    if (session !== sessionRef.current) return
     const gain = audioContext.createGain()
     gain.gain.value = volume
     gain.connect(audioContext.destination)

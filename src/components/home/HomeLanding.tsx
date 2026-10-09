@@ -55,6 +55,8 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
   const L = HOME_LAYOUT_CONFIG[layoutKey]
   // Apertura con testo a sinistra sul computer (foto a lato)
   const leftHero = L.hero.kind === 'split' || L.hero.kind === 'side'
+  const heroBadgeClass =
+    'rounded-2xl border border-[var(--gold)]/60 bg-[var(--gold)]/15 px-5 py-3 text-lg font-semibold leading-snug text-white shadow-[0_10px_30px_rgba(199,154,59,0.18)] backdrop-blur sm:px-7 sm:py-4 sm:text-xl'
 
   // Codice referral, riconoscimento pubblico e Kordata (acquisti di gruppo).
   // Niente "struttura a matrice" in evidenza — non deve sembrare un network.
@@ -156,8 +158,10 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
           <div className={`flex mb-5 sm:mb-7 ${leftHero ? 'justify-center lg:justify-start' : 'justify-center'}`}>
             {L.hero.video ? <HeroLogoVideo label="KUMANI" /> : <Logo size={96} priority className="sm:h-28 sm:w-28 h-24 w-24" />}
           </div>
-          {/* Il manifesto in una frase: ben visibile, non un'etichetta */}
-          <div className="mx-auto mb-6 inline-flex max-w-3xl items-center gap-3 rounded-2xl border border-[var(--gold)]/60 bg-[var(--gold)]/15 px-5 py-3 text-lg font-semibold leading-snug text-white shadow-[0_10px_30px_rgba(199,154,59,0.18)] backdrop-blur sm:mb-8 sm:px-7 sm:py-4 sm:text-xl">
+          {/* Il manifesto in una frase: ben visibile, non un'etichetta. Nel
+              tema con la foto di lato, sul computer sta in alto a destra
+              sopra le mani (vedi sotto). */}
+          <div className={`mx-auto mb-6 inline-flex max-w-3xl items-center gap-3 sm:mb-8 ${heroBadgeClass} ${L.hero.kind === 'side' ? 'lg:hidden' : ''}`}>
             <Sparkles className="h-5 w-5 shrink-0 text-[var(--gold-bright)] sm:h-6 sm:w-6" />
             {t('heroBadge')}
           </div>
@@ -214,6 +218,16 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
         </div>
         {L.hero.kind === 'side' && L.hero.image && L.hero.mobileImage && (
           <HeroSideImage image={L.hero.image} mobileImage={L.hero.mobileImage} position={L.hero.position} />
+        )}
+        {L.hero.kind === 'side' && (
+          <div className="pointer-events-none absolute inset-x-0 top-0 z-10 hidden lg:block">
+            <div className="mx-auto flex max-w-7xl justify-end px-8 pt-12">
+              <div className={`pointer-events-auto flex max-w-xl items-center gap-3 text-left ${heroBadgeClass}`}>
+                <Sparkles className="h-6 w-6 shrink-0 text-[var(--gold-bright)]" />
+                {t('heroBadge')}
+              </div>
+            </div>
+          </div>
         )}
       </section>
 
