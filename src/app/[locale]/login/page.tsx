@@ -17,6 +17,22 @@ import TurnstileWidget, { useTurnstile } from '@/components/auth/TurnstileWidget
 import { authErrorKey } from '@/lib/authErrors'
 import { reportLoginFailure } from '@/app/actions/security'
 
+// Operazioni dopo l'accesso (punto del giorno, codice di benvenuto): non
+// devono mai bloccare l'ingresso. Se il server non risponde in tempo o la
+// pagina è di una versione precedente del sito (azione non più trovata), si
+// va avanti lo stesso.
+const AFTER_LOGIN_TIMEOUT_MS = 5000
+function nonBlocking(task: () => Promise<unknown>): Promise<void> {
+  return Promise.race([task().then(() => undefined), new Promise<void>((resolve) => setTimeout(resolve, AFTER_LOGIN_TIMEOUT_MS))]).catch(() => undefined)
+}
+
+// Ingresso dopo l'accesso: caricamento completo della pagina, così la
+// dashboard arriva sempre con la sessione appena creata (con la navigazione
+// interna a volte restava la pagina di accesso finché non si aggiornava)
+function go(path: string) {
+  window.location.assign(path)
+}
+
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -59,81 +75,85 @@ export default function LoginPage() {
     const role = (authData.user?.app_metadata as { role?: string } | undefined)?.role
     if (role === 'translator' || role === 'agent') {
       endImpersonation()
-      router.push(`/${locale}/${role === 'translator' ? 'traduzioni' : 'agente'}`)
-      router.refresh()
+      go(`/${locale}/${role === 'translator' ? 'traduzioni' : 'agente'}`)
       return
     }
 
-    if (authData.user) {
-      const { data: profile, error: profileError } = await supabase
-        .from('profiles')
-        .select('is_blocked')
-        .eq('id', authData.user.id)
-        .single()
+    // Qualunque imprevisto nei controlli dopo l'accesso: si entra lo stesso
+    // (la sessione è già attiva)
+    try {
+      if (authData.user) {
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('is_blocked')
+          .eq('id', authData.user.id)
+          .single()
 
-      if (profileError) {
-        console.error('Errore nel controllo profilo:', profileError)
-      }
-
-      // Accesso creato ma registrazione mai completata (nessun profilo): si
-      // prova a completarla subito con i dati salvati da RegisterForm nei
-      // metadata dell'utente. Se non riesce (es. invito non più valido) si
-      // completa da "Registrati" con la stessa email e password.
-      if (!profile && profileError?.code === 'PGRST116') {
-        const meta = (authData.user.user_metadata ?? {}) as {
-          first_name?: string
-          last_name?: string
-          country_code?: string
-          city?: string
-          referral_code?: string
-          voucher_code?: string
-          professional?: boolean
-          agent_code?: string
+        if (profileError) {
+          console.error('Errore nel controllo profilo:', profileError)
         }
-        const { data: status, error: registrationError } = meta.first_name && meta.last_name && meta.country_code
-          ? await supabase.rpc('complete_registration', {
-              p_first_name: meta.first_name,
-              p_last_name: meta.last_name,
-              p_country: meta.country_code,
-              p_city: meta.city ?? '',
-              p_referral_code: meta.referral_code ?? '',
-              p_agent_code: meta.agent_code ?? '',
-            })
-          : { data: null, error: null }
 
-        if (registrationError || status !== 'ok') {
+        // Accesso creato ma registrazione mai completata (nessun profilo): si
+        // prova a completarla subito con i dati salvati da RegisterForm nei
+        // metadata dell'utente. Se non riesce (es. invito non più valido) si
+        // completa da "Registrati" con la stessa email e password.
+        if (!profile && profileError?.code === 'PGRST116') {
+          const meta = (authData.user.user_metadata ?? {}) as {
+            first_name?: string
+            last_name?: string
+            country_code?: string
+            city?: string
+            referral_code?: string
+            voucher_code?: string
+            professional?: boolean
+            agent_code?: string
+          }
+          const { data: status, error: registrationError } = meta.first_name && meta.last_name && meta.country_code
+            ? await supabase.rpc('complete_registration', {
+                p_first_name: meta.first_name,
+                p_last_name: meta.last_name,
+                p_country: meta.country_code,
+                p_city: meta.city ?? '',
+                p_referral_code: meta.referral_code ?? '',
+                p_agent_code: meta.agent_code ?? '',
+              })
+            : { data: null, error: null }
+
+          if (registrationError || status !== 'ok') {
+            await supabase.auth.signOut()
+            setError(t('registrationIncomplete'))
+            setLoading(false)
+            return
+          }
+
+          // Come in RegisterForm: codice (voucher, Pass o regalo) e prova Pro, senza bloccare l'accesso
+          // se non vanno a buon fine (si riprovano dalla dashboard).
+          const activationCode = (meta.voucher_code ?? '').trim().toUpperCase()
+          if (activationCode) await nonBlocking(() => redeemActivationCode(activationCode, { welcome: true }))
+        }
+
+        if (profile?.is_blocked) {
           await supabase.auth.signOut()
-          setError(t('registrationIncomplete'))
+          setError(t('blockedAccount'))
           setLoading(false)
           return
         }
 
-        // Come in RegisterForm: codice (voucher, Pass o regalo) e prova Pro, senza bloccare l'accesso
-        // se non vanno a buon fine (si riprovano dalla dashboard).
-        const activationCode = (meta.voucher_code ?? '').trim().toUpperCase()
-        if (activationCode) await redeemActivationCode(activationCode, { welcome: true })
+        await nonBlocking(() => awardDailyPoint())
+        // Nuovo accesso: il promemoria "completa il profilo" riparte da zero.
+        resetProfileReminder()
+        // Accesso normale: nessuna impersonificazione in corso in questa scheda
+        endImpersonation()
       }
-
-      if (profile?.is_blocked) {
-        await supabase.auth.signOut()
-        setError(t('blockedAccount'))
-        setLoading(false)
-        return
-      }
-
-      await awardDailyPoint()
-      // Nuovo accesso: il promemoria "completa il profilo" riparte da zero.
-      resetProfileReminder()
-      // Accesso normale: nessuna impersonificazione in corso in questa scheda
-      endImpersonation()
+    } catch (err) {
+      console.error('[accesso] controlli dopo l’accesso:', err)
     }
 
     // ?next=/viaggi/invito/CODICE: dopo l'accesso si torna alla pagina di
     // partenza (solo percorsi interni, mai altri siti).
     const next = new URLSearchParams(window.location.search).get('next') ?? ''
     const safeNext = /^\/(?!\/)[A-Za-z0-9/_\-.?=&%]*$/.test(next) ? next : null
-    router.push(safeNext ? `/${locale}${safeNext}` : `/${locale}/dashboard`)
-    router.refresh()
+    go(safeNext ? `/${locale}${safeNext}` : `/${locale}/dashboard`)
   }
 
   return (

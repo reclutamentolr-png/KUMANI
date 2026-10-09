@@ -4,7 +4,7 @@ import { TERMS_VERSION } from '@/lib/legal'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 // ✅ Usa next/navigation per entrambi. Il middleware di next-intl gestirà la lingua automaticamente!
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl' // ✅ Aggiungilo qui
 import Link from 'next/link'
 import { europeanCountries } from '@/lib/european-countries'
@@ -21,7 +21,6 @@ const RESEND_COOLDOWN_SECONDS = 30
 type Step = 'form' | 'verify' | 'done'
 
 export default function RegisterForm({ detectedCountry = '' }: { detectedCountry?: string }) {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const locale = useLocale() // ✅ Ottiene 'it', 'en', ecc.
   const t = useTranslations('auth')
@@ -284,7 +283,8 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
       const activationCode = (meta.voucher_code ?? formData.voucher_code).trim().toUpperCase()
       let delay = 2000
       if (activationCode) {
-        const outcome = await redeemActivationCode(activationCode, { welcome: true })
+        // Se il server non risponde l'account resta creato: il codice si riprova dalla dashboard
+        const outcome = await redeemActivationCode(activationCode, { welcome: true }).catch(() => ({ success: false as const, kind: undefined, reason: undefined, expiresAt: undefined }))
         const until = outcome.expiresAt ? new Date(outcome.expiresAt).toLocaleDateString(locale) : ''
         setVoucherOutcome(
           outcome.success
@@ -304,7 +304,8 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
 
       setStep('done')
       setTimeout(() => {
-        router.push(professional ? `/${locale}/pro?prova=1` : `/${locale}/dashboard`)
+        // Caricamento completo: la pagina arriva sempre con la sessione nuova
+        window.location.assign(professional ? `/${locale}/pro?prova=1` : `/${locale}/dashboard`)
       }, delay)
     } catch (err: unknown) {
       setError(authErrorText(t, err, t('errorCreatingUser')))
