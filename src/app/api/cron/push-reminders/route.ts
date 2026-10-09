@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { localizedPath, notifyUser, pushConfigured, pushDb } from '@/lib/push'
+import { localizedPath, notifyUser, pushDb } from '@/lib/push'
 import { fixedExpenseDueDate, type SpendlyFixedExpense } from '@/lib/spendly'
 
 // Promemoria giornalieri con le notifiche push (Vercel Cron, vedi vercel.json):
@@ -8,8 +8,8 @@ import { fixedExpenseDueDate, type SpendlyFixedExpense } from '@/lib/spendly'
 // - FinCheck: invito a rifare il test 3 mesi dopo l'ultimo;
 // - scadenze di Garage e di Life Calendar (anche KUMANI Casa);
 // - bollette di Spendly non pagate (3 giorni prima e il giorno stesso).
-// Ogni promemoria parte una volta sola (push_log). Solo per chi ha attivato
-// le notifiche su almeno un dispositivo.
+// Ogni promemoria parte una volta sola (push_log). Per tutti nel Centro
+// avvisi; sul telefono per chi ha attivato le notifiche.
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -21,11 +21,15 @@ export async function GET(request: Request) {
   if (!secret || request.headers.get('authorization') !== `Bearer ${secret}`) {
     return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
   }
-  if (!pushConfigured()) return NextResponse.json({ skipped: 'not_configured' })
-
+  // Tutti gli iscritti: i promemoria restano nel Centro avvisi dell'app e
+  // arrivano anche sul telefono a chi ha attivato le notifiche
   const db = pushDb()
-  const { data: subs } = await db.from('push_subscriptions').select('user_id')
-  const userIds = [...new Set((subs ?? []).map((s) => s.user_id as string))]
+  const userIds: string[] = []
+  for (let from = 0; ; from += 1000) {
+    const { data: page } = await db.from('profiles').select('id').order('id').range(from, from + 999)
+    userIds.push(...(page ?? []).map((p) => p.id as string))
+    if (!page || page.length < 1000) break
+  }
   if (!userIds.length) return NextResponse.json({ expiry: 0, events: 0 })
 
   const now = Date.now()

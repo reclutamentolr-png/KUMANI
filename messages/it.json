@@ -8337,7 +8337,9 @@
     "surpriseOpenedTitle": "🎁 Sorpresa vista!",
     "surpriseOpenedBody": "{name} ha appena aperto il regalo e visto la tua sorpresa.",
     "surpriseReplyTitle": "💌 Un ringraziamento per te",
-    "surpriseReplyBody": "{name} ha risposto alla tua sorpresa."
+    "surpriseReplyBody": "{name} ha risposto alla tua sorpresa.",
+    "signupTitle": "👋 Nuovo iscritto nella tua rete",
+    "signupBody": "{name} ha creato il suo account KUMANI con il tuo invito."
   },
   "pushInvite": {
     "title": "Attiva le notifiche",
@@ -11046,5 +11048,25 @@
     "thanks_title": "Un regalo per dirti grazie",
     "thanks_message": "Grazie per tutto quello che hai fatto. Questo è per te.",
     "thanks_howTo": ""
+  },
+  "notifications": {
+    "title": "Avvisi",
+    "pageIntro": "Novità della tua rete, scadenze, eventi e messaggi",
+    "empty": "Nessun avviso per ora.",
+    "markAll": "Segna tutto come letto",
+    "seeAll": "Vedi tutti gli avvisi",
+    "seeAllShort": "Vedi tutti",
+    "filter_all": "Tutti",
+    "filter_network": "Rete",
+    "filter_expiry": "Scadenze",
+    "filter_events": "Eventi",
+    "filter_messages": "Messaggi",
+    "newsTitle": "Novità per te",
+    "newsMore": "{n, plural, one {e un altro avviso da leggere} other {e altri # avvisi da leggere}}",
+    "bellLabel": "{n, plural, =0 {Avvisi} one {Avvisi: 1 da leggere} other {Avvisi: # da leggere}}",
+    "loadMore": "Carica altri",
+    "close": "Chiudi",
+    "unread": "Da leggere",
+    "keepNote": "Gli avvisi restano qui per 90 giorni."
   }
 }

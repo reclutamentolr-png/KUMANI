@@ -81,7 +81,9 @@ export async function usersWithCategoryOff(category: PushCategory, userIds: stri
 type Translator = Awaited<ReturnType<typeof getTranslations<'pushNotifications'>>>
 
 /**
- * Notifica a una persona, nella lingua di ogni suo dispositivo.
+ * Notifica a una persona: resta nel Centro avvisi dell'app (campanella e
+ * «Novità per te», testi in tutte le lingue) e, se ha attivato le notifiche,
+ * arriva anche sul telefono nella lingua di ogni suo dispositivo.
  * once: { kind, ref } per non mandarla due volte (registro push_log).
  */
 export async function notifyUser(
@@ -91,11 +93,7 @@ export async function notifyUser(
   once?: { kind: string; ref: string }
 ) {
   try {
-    if (!pushConfigured()) return
     const db = pushDb()
-    const { data: subs } = await db.from('push_subscriptions').select('id, user_id, endpoint, p256dh, auth, locale').eq('user_id', userId)
-    if (!subs?.length) return
-    if ((await usersWithCategoryOff(category, [userId])).size) return
     if (once) {
       const { data: logged } = await db
         .from('push_log')
@@ -104,10 +102,22 @@ export async function notifyUser(
       if (!logged?.length) return
     }
     const payloads = new Map<string, PushPayload>()
-    for (const locale of new Set(subs.map((s) => pushLocale(s.locale)))) {
+    for (const locale of locales) {
       const t = await getTranslations({ locale, namespace: 'pushNotifications' })
       payloads.set(locale, build(t, locale))
     }
+
+    // 1. Centro avvisi (anche senza notifiche sul telefono)
+    const texts = Object.fromEntries([...payloads].map(([locale, p]) => [locale, { title: p.title, body: p.body, url: p.url ?? null }]))
+    const kind = once?.kind ?? payloads.get(defaultLocale)?.tag ?? null
+    const { error: inboxError } = await db.from('user_notifications').insert({ user_id: userId, category, kind, texts })
+    if (inboxError) console.error('[avvisi] avviso non salvato:', inboxError.message)
+
+    // 2. Notifica sul telefono
+    if (!pushConfigured()) return
+    const { data: subs } = await db.from('push_subscriptions').select('id, user_id, endpoint, p256dh, auth, locale').eq('user_id', userId)
+    if (!subs?.length) return
+    if ((await usersWithCategoryOff(category, [userId])).size) return
     await sendToSubscriptions(subs as SubscriptionRow[], (row) => payloads.get(pushLocale(row.locale))!)
   } catch (error) {
     console.error('[push] notifica non inviata:', error)

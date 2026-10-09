@@ -16,6 +16,7 @@ import {
   ChevronRight
 } from 'lucide-react'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
+import NotificationBell from '@/components/notifications/NotificationBell'
 import ProfileModal, { type ProfileChangeState } from './ProfileModal'
 import { getMyChangeRequest } from '@/app/actions/profileChanges'
 import { OPEN_PROFILE_EVENT } from '@/components/nav/AppNav'
@@ -82,6 +83,8 @@ export default function DashboardHeaderActions({ user, profile, isAdmin }: Dashb
 
   return (
     <>
+      {/* Centro avvisi */}
+      <NotificationBell />
       {/* Telefono: un solo pulsante ☰ */}
       <button
         type="button"

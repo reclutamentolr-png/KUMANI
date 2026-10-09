@@ -16,6 +16,7 @@ import Logo from '@/components/Logo'
 import TurnstileWidget, { useTurnstile } from '@/components/auth/TurnstileWidget'
 import { authErrorKey } from '@/lib/authErrors'
 import { reportLoginFailure } from '@/app/actions/security'
+import { notifyInviterOfSignup } from '@/app/actions/notifications'
 
 // Operazioni dopo l'accesso (punto del giorno, codice di benvenuto): non
 // devono mai bloccare l'ingresso. Se il server non risponde in tempo o la
@@ -125,6 +126,8 @@ export default function LoginPage() {
             setLoading(false)
             return
           }
+          // Iscrizione appena completata: avviso a chi ha invitato
+          await nonBlocking(() => notifyInviterOfSignup())
 
           // Come in RegisterForm: codice (voucher, Pass o regalo) e prova Pro, senza bloccare l'accesso
           // se non vanno a buon fine (si riprovano dalla dashboard).

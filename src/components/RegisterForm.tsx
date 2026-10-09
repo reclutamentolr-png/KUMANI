@@ -12,6 +12,7 @@ import { User, Mail, Lock, MapPin, AlertCircle, Loader2, Home, ShieldCheck, Chec
 import Logo from '@/components/Logo'
 import { authErrorText } from '@/lib/authErrors'
 import { checkActivationCode, giftGiverReferral, redeemActivationCode } from '@/app/actions/codes'
+import { notifyInviterOfSignup } from '@/app/actions/notifications'
 import { GIFT_CODE_RE } from '@/lib/gifts'
 import { isDisposableEmail } from '@/lib/disposableEmail'
 import TurnstileWidget, { useTurnstile } from '@/components/auth/TurnstileWidget'
@@ -276,6 +277,8 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
 
       // Consensi dell'iscrizione (Termini, Privacy, marketing) nello storico
       await supabase.rpc('record_registration_consents')
+      // Avviso a chi ha invitato (non blocca l'iscrizione)
+      notifyInviterOfSignup().catch(() => {})
 
       // Codice (voucher, Pass o regalo): attivato ora. Se non va a buon fine
       // l'account resta creato: il codice si riprova dalla dashboard con
