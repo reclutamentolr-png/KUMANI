@@ -11,7 +11,7 @@ import {
   type GeneratedCampaignDraft,
   type OfferFormAnswers,
 } from '@/lib/offermaker'
-import { limitError } from '@/lib/appLimits'
+import { limitError, logAiLimit } from '@/lib/appLimits'
 
 type ActionResult<T> =
   | { success: true; data: T }
@@ -125,7 +125,10 @@ export async function generateOfferDraft(
     console.error('[OfferMaker] usage update failed:', usageError)
     return { success: false, message: 'generateError' }
   }
-  if (taken === null) return { success: false, message: 'aiLimitReached' }
+  if (taken === null) {
+    await logAiLimit(gate.userId, 'offermaker')
+    return { success: false, message: 'aiLimitReached' }
+  }
 
   try {
     const message = await client.messages.create({

@@ -1,7 +1,10 @@
 'use server'
+
+import { headers } from 'next/headers'
 import { SITE_URL } from '@/lib/siteUrl'
 
 import { createClient } from '@/lib/supabase/server'
+import { clientIp, logSecurityEvent } from '@/lib/security'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { createHash, randomBytes } from 'crypto'
 import type { Permission } from '@/lib/admin-permissions'
@@ -50,7 +53,13 @@ async function verifyAdmin(requiredPermission?: Permission) {
     .eq('user_id', user.id)
     .single()
 
-  if (!adminRecord) return null
+  if (!adminRecord) {
+    // Una persona che non è Staff ha chiamato direttamente una funzione
+    // dell'Admin (dall'interfaccia non può succedere): registro di sicurezza
+    const h = await headers()
+    await logSecurityEvent({ kind: 'admin_action_denied', userId: user.id, ip: clientIp(h), userAgent: h.get('user-agent'), detail: { permission: requiredPermission ?? null } })
+    return null
+  }
   if (!requiredPermission) return user
 
   const roles = adminRecord.admin_roles as { permissions?: string[] } | { permissions?: string[] }[] | null

@@ -8117,7 +8117,7 @@
     "s4t": "Who receives the data",
     "s4": "Only the technical providers needed to run KUMANI (hosting, database in Europe, email delivery, payments with Stripe), who use the data only for that purpose. We do not sell your data to anyone.",
     "s5t": "How long we keep it",
-    "s5": "As long as your account is active. You can delete your account from your profile: the related data is deleted or anonymised, except what the law requires us to keep (for example tax records of payments).",
+    "s5": "As long as your account is active. You can delete your account from your profile: the related data is deleted or anonymised, except what the law requires us to keep (for example tax records of payments). The security log (IP address, browser type and pages opened in case of failed logins, intrusion attempts or unusual use) is kept for 30 days and then deleted.",
     "s6t": "Your rights",
     "s6": "Access your data and get a copy.|Correct it or ask for it to be deleted.|Restrict or object to processing.|Withdraw consent at any time.|Lodge a complaint with the data protection authority of your country.",
     "s7t": "Cookies",
@@ -8273,7 +8273,9 @@
     "quotePaidTitle": "Quote no. {number} paid",
     "quotePaidBody": "{client} paid {amount} online.",
     "quoteAcceptedTitle": "Quote no. {number} accepted",
-    "quoteAcceptedBody": "Accepted by {name}."
+    "quoteAcceptedBody": "Accepted by {name}.",
+    "securityAlertTitle": "KUMANI · Security alert",
+    "securityDigestBody": "{count, plural, one {# new security alert to check in Admin → Security.} other {# new security alerts to check in Admin → Security.}}"
   },
   "pushInvite": {
     "title": "Turn on notifications",

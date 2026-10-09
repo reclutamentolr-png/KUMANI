@@ -8117,7 +8117,7 @@
     "s4t": "Qui reçoit les données",
     "s4": "Uniquement les prestataires techniques nécessaires au fonctionnement de KUMANI (hébergement, base de données en Europe, envoi des e-mails, paiements avec Stripe), qui les utilisent seulement à cette fin. Nous ne vendons vos données à personne.",
     "s5t": "Combien de temps",
-    "s5": "Tant que votre compte est actif. Vous pouvez supprimer votre compte depuis votre profil : les données liées sont supprimées ou anonymisées, sauf celles que la loi nous oblige à conserver (par exemple les données fiscales des paiements).",
+    "s5": "Tant que votre compte est actif. Vous pouvez supprimer votre compte depuis votre profil : les données liées sont supprimées ou anonymisées, sauf celles que la loi nous oblige à conserver (par exemple les données fiscales des paiements). Le journal de sécurité (adresse IP, type de navigateur et pages ouvertes en cas d'échecs de connexion, de tentatives d'intrusion ou d'utilisation anormale) est conservé 30 jours puis supprimé.",
     "s6t": "Vos droits",
     "s6": "Accéder à vos données et en obtenir une copie.|Les rectifier ou demander leur suppression.|Limiter un traitement ou vous y opposer.|Retirer un consentement à tout moment.|Introduire une réclamation auprès de l’autorité de protection des données de votre pays.",
     "s7t": "Cookies",
@@ -8273,7 +8273,9 @@
     "quotePaidTitle": "Devis n° {number} payé",
     "quotePaidBody": "{client} a payé {amount} en ligne.",
     "quoteAcceptedTitle": "Devis n° {number} accepté",
-    "quoteAcceptedBody": "Accepté par {name}."
+    "quoteAcceptedBody": "Accepté par {name}.",
+    "securityAlertTitle": "KUMANI · Alerte de sécurité",
+    "securityDigestBody": "{count, plural, one {# nouvelle alerte de sécurité à vérifier dans Admin → Sécurité.} other {# nouvelles alertes de sécurité à vérifier dans Admin → Sécurité.}}"
   },
   "pushInvite": {
     "title": "Activez les notifications",

@@ -60,6 +60,7 @@ import {
   ShoppingBag,
   Settings,
   Gauge,
+  ShieldAlert,
   Palette,
   BarChart3,
   Lock,
@@ -110,6 +111,7 @@ const ReviewsPanel = dynamic(() => import('@/components/admin/ReviewsPanel'), { 
 const ConvivioReportsPanel = dynamic(() => import('@/components/admin/ConvivioReportsPanel'), { loading })
 const EventsAdminPanel = dynamic(() => import('@/components/admin/EventsAdminPanel'), { loading })
 const AppLimitsPanel = dynamic(() => import('@/components/admin/AppLimitsPanel'), { loading })
+const SecurityPanel = dynamic(() => import('@/components/admin/SecurityPanel'), { loading })
 const TimebankAdminPanel = dynamic(() => import('@/components/admin/TimebankAdminPanel'), { loading })
 const MosaicAdminPanel = dynamic(() => import('@/components/admin/MosaicAdminPanel'), { loading })
 const FabulaAdminPanel = dynamic(() => import('@/components/admin/FabulaAdminPanel'), { loading })
@@ -226,6 +228,9 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
         const n = Number(value)
         if (Number.isFinite(n) && n > 0) next[key] = n
       }
+      // Sicurezza: avvisi aperti medi o gravi (RPC a parte)
+      const { data: security } = await supabase.rpc('admin_security_badge')
+      if (Number(security) > 0) next.security = Number(security)
       setBadges(next)
     } catch (error) {
       console.error('Errore caricamento pallini admin:', error)
@@ -698,6 +703,7 @@ L'accesso viene registrato.`))) return
   const menuItems = [
   { id: 'platforms', label: 'Piattaforme collegate', Icon: PlugZap, permission: 'stats.read' as Permission, group: 'general' },
   { id: 'overview', label: 'Panoramica', Icon: LayoutDashboard, permission: 'stats.read' as Permission, group: 'general' },
+  { id: 'security', label: 'Sicurezza', Icon: ShieldAlert, permission: 'settings.read' as Permission, group: 'general' },
   { id: 'financials', label: 'Amministrazione', Icon: PiggyBank, permission: 'stats.read' as Permission, group: 'general' },
   { id: 'costs', label: 'Costi e margini', Icon: Calculator, permission: 'stats.read' as Permission, group: 'general' },
   { id: 'reports', label: 'Statistiche e classifiche', Icon: BarChart3, permission: 'stats.read' as Permission, group: 'general' },
@@ -1810,6 +1816,7 @@ L'accesso viene registrato.`))) return
         {activeSection === 'documents' && <DocumentsAdminPanel />}
         {activeSection === 'settings' && <AdminSettingsPanel />}
         {activeSection === 'appLimits' && <AppLimitsPanel />}
+        {activeSection === 'security' && <SecurityPanel />}
       </div>
 
       {renderManageModal()}

@@ -2,9 +2,11 @@
 
 import { randomInt } from 'node:crypto'
 import { redirect } from 'next/navigation'
+import { headers } from 'next/headers'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
 import { verifyAdmin } from '@/lib/verifyAdmin'
+import { clientIp, logSecurityEvent } from '@/lib/security'
 import {
   MAX_ACTIVE_TRIAL_CODES,
   TRIAL_ACTIVATE_DAYS,
@@ -228,6 +230,10 @@ export async function startTrial(formData: FormData): Promise<void> {
     .is('revoked_at', null)
     .select('id')
   if (!claimed?.length) back('invalid')
+
+  // Nel registro di sicurezza: tante prove dallo stesso IP = abuso dei codici
+  const h = await headers()
+  await logSecurityEvent({ kind: 'trial_start', ip: clientIp(h), userAgent: h.get('user-agent'), detail: { code: trial.code, tool: trial.tool } })
 
   const release = () => service.from('trial_codes').update({ redeemed_at: null, access_until: null }).eq('id', trial.id)
   const email = `ospite-${trial.code.toLowerCase()}-${randomInt(1_000_000)}@guest.kumani.invalid`

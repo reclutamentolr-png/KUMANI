@@ -1,9 +1,11 @@
 'use server'
 
+import { headers } from 'next/headers'
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { verifyAdmin } from '@/lib/verifyAdmin'
+import { clientIp, logSecurityEvent } from '@/lib/security'
 import { escapeHtml, sendEmail } from '@/lib/email'
 import { SITE_URL } from '@/lib/siteUrl'
 import { CONTACT_INFO } from '@/lib/contactInfo'
@@ -84,6 +86,9 @@ export async function changeMyPassword(
     const rateLimited = signInError.status === 429 || /rate limit/i.test(signInError.message)
     if (rateLimited) return { success: false, code: 'rate_limit' }
     if (signInError.code === 'captcha_failed' || /captcha/i.test(signInError.message)) return { success: false, code: 'captcha' }
+    // Password attuale sbagliata più volte: account forse in mano ad altri
+    const h = await headers()
+    await logSecurityEvent({ kind: 'password_check_failed', userId: user.id, ip: clientIp(h), userAgent: h.get('user-agent') })
     return { success: false, code: 'wrong_current' }
   }
   await check.auth.signOut({ scope: 'local' }).catch(() => {})

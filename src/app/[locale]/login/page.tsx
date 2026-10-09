@@ -15,6 +15,7 @@ import MaintenanceGate from '@/components/MaintenanceGate'
 import Logo from '@/components/Logo'
 import TurnstileWidget, { useTurnstile } from '@/components/auth/TurnstileWidget'
 import { authErrorKey } from '@/lib/authErrors'
+import { reportLoginFailure } from '@/app/actions/security'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -48,6 +49,8 @@ export default function LoginPage() {
       // Verifica anti-robot o troppi tentativi: messaggio specifico, altrimenti credenziali errate
       const key = authErrorKey(authError)
       setError(t(key === 'captchaError' || key === 'tooManyRequestsError' ? key : 'invalidCredentials'))
+      // Email o password sbagliate: nel registro di sicurezza (Admin → Sicurezza)
+      if (authError.code === 'invalid_credentials' || /invalid login credentials/i.test(authError.message)) reportLoginFailure(email).catch(() => {})
       setLoading(false)
       return
     }

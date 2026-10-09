@@ -1,5 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import { headers } from 'next/headers'
+import { clientIp, logSecurityEvent } from '@/lib/security'
 import Link from '@/components/LocalizedLink'
 import { ArrowLeft, Shield } from 'lucide-react'
 import AdminDashboard from '@/components/AdminDashboard'
@@ -65,6 +67,9 @@ export default async function AdminPage({
   const isAdmin = profile?.is_admin || adminRecord
   
   if (!isAdmin) {
+    // Chi non è Staff e apre l'Admin finisce nel registro di sicurezza
+    const h = await headers()
+    await logSecurityEvent({ kind: 'admin_denied', userId: user.id, ip: clientIp(h), path: '/admin', userAgent: h.get('user-agent') })
     redirect(`/${locale}/dashboard`)
   }
   

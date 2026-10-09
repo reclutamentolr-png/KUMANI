@@ -2,7 +2,9 @@ import createMiddleware from 'next-intl/middleware';
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
+import type { NextFetchEvent } from 'next/server';
 import { readProxySettings } from './lib/enabledLocalesCore';
+import { blockedIps, clientIp, PROBE_PATH, recordSecurityEvent } from './lib/securityCore';
 import { locales, defaultLocale } from '../i18n';
 
 const intlMiddleware = createMiddleware({
@@ -106,7 +108,27 @@ async function canPreviewHiddenLocales(
   return profile?.is_admin === true || !!staff;
 }
 
-export async function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest, event: NextFetchEvent) {
+  // Sicurezza: IP bloccati dall'Admin (Admin → Sicurezza) e indirizzi da
+  // hacker (WordPress, phpMyAdmin…), che su KUMANI non esistono: si
+  // registra il tentativo e si risponde «non trovato» senza aprire il sito.
+  const ip = clientIp(request.headers);
+  if (ip && (await blockedIps()).has(ip)) {
+    return new NextResponse('Accesso bloccato / Access blocked', { status: 403 });
+  }
+  if (PROBE_PATH.test(request.nextUrl.pathname)) {
+    event.waitUntil(
+      recordSecurityEvent({
+        kind: 'probe',
+        severity: 'low',
+        ip,
+        path: request.nextUrl.pathname,
+        userAgent: request.headers.get('user-agent'),
+      })
+    );
+    return new NextResponse('Not found', { status: 404 });
+  }
+
   const { locales: enabledLocales, maintenanceOn } = await proxySettings();
   const urlSegments = request.nextUrl.pathname.split('/').filter(Boolean);
   const urlLocale = urlSegments[0] && locales.includes(urlSegments[0]) ? urlSegments[0] : null;

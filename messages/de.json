@@ -8117,7 +8117,7 @@
     "s4t": "Wer die Daten erhält",
     "s4": "Nur die technischen Dienstleister, die KUMANI zum Betrieb braucht (Hosting, Datenbank in Europa, E-Mail-Versand, Zahlungen über Stripe) und die die Daten nur dafür nutzen. Wir verkaufen deine Daten an niemanden.",
     "s5t": "Wie lange",
-    "s5": "Solange dein Konto aktiv ist. Du kannst dein Konto im Profil löschen: Die zugehörigen Daten werden gelöscht oder anonymisiert, außer denen, die wir gesetzlich aufbewahren müssen (z. B. steuerliche Zahlungsdaten).",
+    "s5": "Solange dein Konto aktiv ist. Du kannst dein Konto im Profil löschen: Die zugehörigen Daten werden gelöscht oder anonymisiert, außer denen, die wir gesetzlich aufbewahren müssen (z. B. steuerliche Zahlungsdaten). Das Sicherheitsprotokoll (IP-Adresse, Browsertyp und aufgerufene Seiten bei fehlgeschlagenen Anmeldungen, Eindringversuchen oder ungewöhnlicher Nutzung) wird 30 Tage aufbewahrt und danach gelöscht.",
     "s6t": "Deine Rechte",
     "s6": "Auskunft über deine Daten und eine Kopie erhalten.|Sie berichtigen oder löschen lassen.|Eine Verarbeitung einschränken oder ihr widersprechen.|Eine Einwilligung jederzeit widerrufen.|Beschwerde bei der Datenschutzbehörde deines Landes einlegen.",
     "s7t": "Cookies",
@@ -8273,7 +8273,9 @@
     "quotePaidTitle": "Angebot Nr. {number} bezahlt",
     "quotePaidBody": "{client} hat {amount} online bezahlt.",
     "quoteAcceptedTitle": "Angebot Nr. {number} angenommen",
-    "quoteAcceptedBody": "Angenommen von {name}."
+    "quoteAcceptedBody": "Angenommen von {name}.",
+    "securityAlertTitle": "KUMANI · Sicherheitswarnung",
+    "securityDigestBody": "{count, plural, one {# neue Sicherheitswarnung zum Prüfen unter Admin → Sicherheit.} other {# neue Sicherheitswarnungen zum Prüfen unter Admin → Sicherheit.}}"
   },
   "pushInvite": {
     "title": "Benachrichtigungen aktivieren",

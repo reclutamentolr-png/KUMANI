@@ -8117,7 +8117,7 @@
     "s4t": "Chi riceve i dati",
     "s4": "Solo i fornitori tecnici che servono a far funzionare KUMANI (hosting, database in Europa, invio delle email, pagamenti con Stripe), che usano i dati solo per questo scopo. Non vendiamo i tuoi dati a nessuno.",
     "s5t": "Per quanto tempo",
-    "s5": "Finché il tuo account è attivo. Puoi cancellare l’account dal tuo profilo: i dati collegati vengono cancellati o resi anonimi, salvo quelli che la legge ci obbliga a conservare (ad esempio i dati fiscali dei pagamenti).",
+    "s5": "Finché il tuo account è attivo. Puoi cancellare l’account dal tuo profilo: i dati collegati vengono cancellati o resi anonimi, salvo quelli che la legge ci obbliga a conservare (ad esempio i dati fiscali dei pagamenti). Il registro di sicurezza (indirizzo IP, tipo di browser e pagine aperte in caso di accessi falliti, tentativi di intrusione o uso anomalo) viene conservato per 30 giorni e poi cancellato.",
     "s6t": "I tuoi diritti",
     "s6": "Accedere ai tuoi dati e riceverne una copia.|Correggerli o chiederne la cancellazione.|Limitare o opporti a un trattamento.|Revocare un consenso in qualsiasi momento.|Presentare reclamo all’autorità per la protezione dei dati del tuo paese.",
     "s7t": "Cookie",
@@ -8273,7 +8273,9 @@
     "quotePaidTitle": "Preventivo n. {number} pagato",
     "quotePaidBody": "{client} ha pagato {amount} online.",
     "quoteAcceptedTitle": "Preventivo n. {number} accettato",
-    "quoteAcceptedBody": "Accettato da {name}."
+    "quoteAcceptedBody": "Accettato da {name}.",
+    "securityAlertTitle": "KUMANI · Avviso di sicurezza",
+    "securityDigestBody": "{count, plural, one {# nuovo avviso di sicurezza da controllare in Admin → Sicurezza.} other {# nuovi avvisi di sicurezza da controllare in Admin → Sicurezza.}}"
   },
   "pushInvite": {
     "title": "Attiva le notifiche",

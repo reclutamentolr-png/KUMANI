@@ -22,7 +22,7 @@ import {
   type MenuDietTag,
   type MenuLocale,
 } from '@/lib/menu'
-import { limitError } from '@/lib/appLimits'
+import { limitError, logAiLimit } from '@/lib/appLimits'
 
 type MenuResult = { success: true; data: MenuData } | { success: false; message: string }
 
@@ -395,7 +395,10 @@ export async function translateMenuMissing(): Promise<
   const limit = Number(String(limitRow?.value ?? '5').replace(/"/g, '')) || 5
   // Contatore atomico: richieste in parallelo non superano il limite
   const { data: taken } = await service.rpc('ai_quota_take', { p_kind: 'menu', p_user: g.userId, p_limit: limit })
-  if (taken === null || taken === undefined) return { success: false, message: 'aiLimitReached' }
+  if (taken === null || taken === undefined) {
+    await logAiLimit(g.userId, 'menu')
+    return { success: false, message: 'aiLimitReached' }
+  }
 
   const results = new Map<string, LocalizedText>()
   try {

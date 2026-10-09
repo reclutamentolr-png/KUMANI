@@ -1,5 +1,7 @@
 'use server'
 
+import { logAiLimit } from '@/lib/appLimits'
+
 import { createHash, randomBytes } from 'crypto'
 import { headers } from 'next/headers'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
@@ -200,7 +202,10 @@ export async function generateLandingDraft(
   const { data: limitRow } = await service.from('system_settings').select('value').eq('key', 'landing_ai_daily_runs').maybeSingle()
   const limit = Number(String(limitRow?.value ?? '5').replace(/"/g, '')) || 5
   const { data: taken } = await service.rpc('ai_quota_take', { p_kind: 'landing', p_user: g.userId, p_limit: limit })
-  if (taken === null || taken === undefined) return { success: false, message: 'aiLimitReached' }
+  if (taken === null || taken === undefined) {
+    await logAiLimit(g.userId, 'landing')
+    return { success: false, message: 'aiLimitReached' }
+  }
 
   const titled = { type: 'object', properties: { title: { type: 'string' }, text: { type: 'string' } }, required: ['title', 'text'] }
   try {

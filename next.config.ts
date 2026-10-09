@@ -13,6 +13,20 @@ const nextConfig: NextConfig = {
       bodySizeLimit: '6mb',
     },
   },
+  // Sicurezza: file che cercano solo gli hacker (.php, .env, .git…) non
+  // esistono su KUMANI. Il proxy non vede i percorsi con il punto, quindi
+  // passano da qui: si registra il tentativo (Admin → Sicurezza) e si
+  // risponde «non trovato».
+  async rewrites() {
+    return {
+      beforeFiles: [
+        { source: '/:probe(.*\\.(?:php\\d?|phtml|asp|aspx|jsp|cgi|sql|bak|old|swp|ini|cfg|log|sh|env)(?:/.*)?)', destination: '/api/security/probe?p=:probe' },
+        { source: '/:probe((?:.*/)?\\.(?:env|git|svn|hg|aws|ssh|docker|vscode|idea|htaccess|htpasswd|DS_Store)(?:[./].*)?)', destination: '/api/security/probe?p=:probe' },
+      ],
+      afterFiles: [],
+      fallback: [],
+    };
+  },
   async headers() {
     return [
       {
