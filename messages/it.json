@@ -8123,7 +8123,7 @@
     "s7t": "Cookie",
     "s7": "KUMANI usa solo cookie tecnici, necessari per farti restare collegato e far funzionare il sito. Non usiamo cookie di profilazione né pubblicitari.",
     "s7list": "«sb-…-auth-token» (Supabase, nostro fornitore del database): ti tiene collegato al tuo account in modo sicuro. Dura fino a 400 giorni o finché non esci.|«sb-…-auth-token-code-verifier»: usato solo durante l'accesso con un link ricevuto via email o il recupero della password; serve per pochi minuti.|«NEXT_LOCALE»: ricorda la lingua che hai scelto. Dura 1 anno.|Cloudflare Turnstile: controllo anti-robot sulle pagine di accesso, registrazione e recupero password, per proteggere gli account da attacchi automatici. È un servizio di sicurezza di Cloudflare, caricato solo su quelle pagine.|Stripe: quando paghi vai sulle pagine di Stripe, che usa i propri cookie per la sicurezza dei pagamenti e contro le frodi (vedi l'informativa di Stripe).|Memoria del browser (localStorage): piccole preferenze come la scheda aperta o una bozza non ancora inviata. Restano sul tuo dispositivo e non vengono inviate a noi.",
-    "s7consentCookie": "«kumani_consent»: ricorda le tue scelte sui cookie facoltativi. Dura 6 mesi, poi te le chiediamo di nuovo.",
+    "s7consentCookie": "«kumani_consent»: ricorda che hai visto l'avviso sui cookie e le tue eventuali scelte. Dura 6 mesi, poi te lo mostriamo di nuovo.",
     "s7note": "Sono tutti cookie tecnici e necessari: per legge non serve il tuo consenso. Puoi comunque cancellarli o bloccarli dalle impostazioni del browser, ma alcune funzioni (come restare collegato) smetteranno di funzionare. Se in futuro useremo cookie facoltativi, ad esempio per le statistiche, ti chiederemo prima il consenso e potrai cambiarlo in qualsiasi momento da «Preferenze cookie».",
     "s8t": "Contatti",
     "s8": "Per esercitare i tuoi diritti o per qualsiasi domanda sulla privacy scrivi a {email}."
@@ -10630,6 +10630,8 @@
     "cat_analytics_text": "Ci aiutano a capire come viene usato il sito per migliorarlo.",
     "cat_marketing_title": "Marketing",
     "cat_marketing_text": "Servono a misurare le campagne e a mostrarti contenuti più adatti a te su altri siti.",
-    "preferencesLink": "Preferenze cookie"
+    "preferencesLink": "Preferenze cookie",
+    "infoText": "Usiamo solo cookie tecnici, necessari per farti restare collegato e far funzionare il sito. Nessun cookie di profilazione o pubblicitario.",
+    "gotIt": "Ho capito"
   }
 }

@@ -5,7 +5,7 @@ import { ArrowLeft, Info, Lock } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { CONTACT_INFO } from '@/lib/contactInfo'
 import { CookiePreferencesLink } from '@/components/consent/ConsentGate'
-import { getActiveConsentCategories } from '@/lib/consentServer'
+import { getConsentConfig } from '@/lib/consentServer'
 
 // Informativa Privacy essenziale (7 lingue, namespace "privacyPage"). La
 // versione completa è in revisione dal consulente: è nello storico git di
@@ -31,8 +31,8 @@ export default async function PrivacyPage({ params }: LocaleProps) {
   setRequestLocale((await params).locale)
   const locale = await getLocale()
   const t = await getTranslations('privacyPage')
-  // Con cookie facoltativi accesi dall'Admin si aggiunge il cookie delle scelte
-  const consentOn = (await getActiveConsentCategories()).length > 0
+  // Con il banner acceso dall'Admin si aggiunge il cookie che lo ricorda
+  const consentOn = (await getConsentConfig()).enabled
   const email = CONTACT_INFO.privacyEmail ?? 'privacy@kumani.io'
   const date = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(LAST_UPDATE))
   const withEmail = (text: string) => {

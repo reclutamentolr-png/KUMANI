@@ -1,9 +1,13 @@
 // Consenso ai cookie facoltativi (Linee guida del Garante, 10 giugno 2021).
 //
-// Le categorie attive si accendono da Admin → Impostazioni → «Cookie
-// facoltativi» (system_settings.cookie_consent_categories). Nessuna attiva =
-// nessun banner e nessun link «Preferenze cookie»: oggi KUMANI usa solo
-// cookie tecnici. Prima di accendere una categoria:
+// Si regola da Admin → Impostazioni → «Banner cookie»
+// (system_settings.cookie_consent_categories = { enabled, categories }):
+// - spento: nessun banner;
+// - acceso senza categorie: avviso informativo («solo cookie tecnici», Ho
+//   capito), ricordato per 6 mesi;
+// - acceso con Statistiche e/o Marketing: banner del consenso completo e
+//   link «Preferenze cookie».
+// Prima di accendere una categoria:
 //   1. caricare gli script (statistiche, pixel…) solo dentro
 //      <ConsentGate category="..."> o con useConsent, mai direttamente;
 //   2. descrivere i nuovi cookie nell'informativa (privacyPage.s7list).
@@ -22,6 +26,9 @@ export const CONSENT_VERSION = 1
 export const CONSENT_MAX_AGE = 60 * 60 * 24 * 182 // circa 6 mesi
 export const CONSENT_CHANGED_EVENT = 'kumani:consent-changed'
 export const OPEN_PREFERENCES_EVENT = 'kumani:cookie-preferences'
+
+export type ConsentConfig = { enabled: boolean; categories: ConsentCategory[] }
+export const CONSENT_OFF: ConsentConfig = { enabled: false, categories: [] }
 
 export type ConsentChoices = Partial<Record<ConsentCategory, boolean>>
 export type ConsentState = { v: number; at: string; choices: ConsentChoices }
@@ -47,12 +54,26 @@ export function readConsent(): ConsentState | null {
   return parseConsent(entry?.trim().slice(CONSENT_COOKIE.length + 1))
 }
 
-// Serve chiedere? Sì se ci sono categorie attive e manca una scelta valida
-// per la versione attuale o per una categoria accesa dopo
-export function needsConsent(state: ConsentState | null, active: ConsentCategory[]): boolean {
-  if (!active.length) return false
+// Valore salvato dall'Admin: { enabled, categories } (o il vecchio elenco)
+export function parseConsentConfig(value: unknown): ConsentConfig {
+  if (Array.isArray(value)) {
+    const categories = [...new Set(value.filter(isConsentCategory))]
+    return { enabled: categories.length > 0, categories }
+  }
+  if (value && typeof value === 'object') {
+    const v = value as { enabled?: unknown; categories?: unknown }
+    const categories = Array.isArray(v.categories) ? [...new Set(v.categories.filter(isConsentCategory))] : []
+    return { enabled: v.enabled === true, categories: v.enabled === true ? categories : [] }
+  }
+  return CONSENT_OFF
+}
+
+// Serve mostrare il banner? Sì se è acceso e manca una scelta valida (o
+// l'avviso visto) per la versione attuale o per una categoria accesa dopo
+export function needsConsent(state: ConsentState | null, config: ConsentConfig): boolean {
+  if (!config.enabled) return false
   if (!state || state.v < CONSENT_VERSION) return true
-  return active.some((c) => typeof state.choices[c] !== 'boolean')
+  return config.categories.some((c) => typeof state.choices[c] !== 'boolean')
 }
 
 export function writeConsent(choices: ConsentChoices, active: ConsentCategory[]): ConsentState {
@@ -66,8 +87,8 @@ export function writeConsent(choices: ConsentChoices, active: ConsentCategory[])
   return state
 }
 
-export function hasConsent(category: ConsentCategory, active: ConsentCategory[], state: ConsentState | null = readConsent()): boolean {
-  return active.includes(category) && !!state && state.v >= CONSENT_VERSION && state.choices[category] === true
+export function hasConsent(category: ConsentCategory, config: ConsentConfig, state: ConsentState | null = readConsent()): boolean {
+  return config.enabled && config.categories.includes(category) && !!state && state.v >= CONSENT_VERSION && state.choices[category] === true
 }
 
 export function openCookiePreferences() {

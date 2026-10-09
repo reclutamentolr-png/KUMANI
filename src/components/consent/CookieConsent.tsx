@@ -5,23 +5,25 @@ import { useTranslations } from 'next-intl'
 import { Cookie, X } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { needsConsent, OPEN_PREFERENCES_EVENT, readConsent, writeConsent, type ConsentCategory, type ConsentChoices } from '@/lib/consent'
-import { useActiveConsentCategories } from '@/components/consent/ConsentGate'
+import { useConsentConfig } from '@/components/consent/ConsentGate'
 
-// Banner dei cookie facoltativi (vedi lib/consent.ts). Senza categorie accese
-// dall'Admin non mostra nulla. «Accetta» e «Rifiuta» hanno lo stesso aspetto; la
-// X chiude come un rifiuto; «Personalizza» apre le scelte per categoria.
+// Banner dei cookie (vedi lib/consent.ts), acceso da Admin → Impostazioni.
+// Senza categorie facoltative è solo un avviso («Ho capito»). Con categorie:
+// «Accetta» e «Rifiuta» hanno lo stesso aspetto, la X chiude come un rifiuto,
+// «Personalizza» apre le scelte per categoria.
 export default function CookieConsent() {
   const t = useTranslations('cookieConsent')
-  const active = useActiveConsentCategories()
+  const config = useConsentConfig()
+  const active = config.categories
   const [open, setOpen] = useState(false)
   const [detailed, setDetailed] = useState(false)
   const [choices, setChoices] = useState<ConsentChoices>({})
 
   useEffect(() => {
-    if (!active.length) return
+    if (!config.enabled) return
     const state = readConsent()
     // eslint-disable-next-line react-hooks/set-state-in-effect -- il cookie si legge solo nel browser
-    if (needsConsent(state, active)) setOpen(true)
+    if (needsConsent(state, config)) setOpen(true)
     const reopen = () => {
       setChoices(readConsent()?.choices ?? {})
       setDetailed(true)
@@ -29,9 +31,33 @@ export default function CookieConsent() {
     }
     window.addEventListener(OPEN_PREFERENCES_EVENT, reopen)
     return () => window.removeEventListener(OPEN_PREFERENCES_EVENT, reopen)
-  }, [active])
+  }, [config])
 
-  if (!active.length || !open) return null
+  if (!config.enabled || !open) return null
+
+  // Solo cookie tecnici: avviso informativo, nessuna scelta da fare
+  if (!active.length) {
+    const ok = () => {
+      writeConsent({}, [])
+      setOpen(false)
+    }
+    return (
+      <div role="dialog" aria-modal="false" aria-label={t('title')} className="fixed inset-x-0 bottom-0 z-[70] p-3 sm:p-4">
+        <div className="relative mx-auto flex max-w-3xl flex-col gap-3 rounded-2xl border border-[var(--gold)]/40 bg-white p-4 shadow-2xl sm:flex-row sm:items-center sm:p-5">
+          <p className="flex-1 text-sm leading-relaxed text-gray-600">
+            <Cookie className="mr-1.5 inline h-4 w-4 align-[-2px] text-[var(--gold)]" />
+            {t('infoText')}{' '}
+            <Link href="/privacy#cookie" className="font-semibold text-[var(--gold)] underline">
+              {t('policyLink')}
+            </Link>
+          </p>
+          <button type="button" onClick={ok} className="shrink-0 rounded-xl bg-[var(--ink)] px-5 py-2.5 text-sm font-bold text-white hover:brightness-125">
+            {t('gotIt')}
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   const save = (value: ConsentChoices) => {
     writeConsent(value, active)

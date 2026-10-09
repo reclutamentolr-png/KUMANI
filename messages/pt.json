@@ -8123,7 +8123,7 @@
     "s7t": "Cookies",
     "s7": "A KUMANI usa apenas cookies técnicos, necessários para manter a sessão e fazer o site funcionar. Não usamos cookies de perfil nem publicitários.",
     "s7list": "«sb-…-auth-token» (Supabase, o nosso fornecedor de base de dados): mantém a sessão iniciada na sua conta de forma segura. Dura até 400 dias ou até terminar a sessão.|«sb-…-auth-token-code-verifier»: usado apenas ao entrar com uma ligação recebida por email ou ao recuperar a palavra-passe; serve durante alguns minutos.|«NEXT_LOCALE»: lembra o idioma escolhido. Dura 1 ano.|Cloudflare Turnstile: verificação anti-robô nas páginas de acesso, registo e recuperação da palavra-passe, para proteger as contas de ataques automáticos. É um serviço de segurança da Cloudflare, carregado apenas nessas páginas.|Stripe: quando paga vai para as páginas da Stripe, que usa os seus próprios cookies para a segurança dos pagamentos e contra a fraude (consulte a política de privacidade da Stripe).|Memória do navegador (localStorage): pequenas preferências como o separador aberto ou um rascunho ainda não enviado. Ficam no seu dispositivo e não nos são enviadas.",
-    "s7consentCookie": "«kumani_consent»: lembra as suas escolhas sobre os cookies opcionais. Dura 6 meses; depois voltamos a perguntar.",
+    "s7consentCookie": "«kumani_consent»: lembra que viu o aviso sobre cookies e as suas eventuais escolhas. Dura 6 meses; depois voltamos a mostrá-lo.",
     "s7note": "São todos cookies técnicos e necessários: por lei não é preciso o seu consentimento. Pode ainda assim apagá-los ou bloqueá-los nas definições do navegador, mas algumas funções (como manter a sessão iniciada) deixarão de funcionar. Se no futuro usarmos cookies opcionais, por exemplo para estatísticas, pediremos primeiro o seu consentimento e poderá alterá-lo a qualquer momento em «Preferências de cookies».",
     "s8t": "Contactos",
     "s8": "Para exercer os seus direitos ou para qualquer pergunta sobre privacidade escreva para {email}."
@@ -10630,6 +10630,8 @@
     "cat_analytics_text": "Ajudam-nos a perceber como o site é usado para o melhorar.",
     "cat_marketing_title": "Marketing",
     "cat_marketing_text": "Servem para medir campanhas e mostrar-lhe conteúdos mais adequados noutros sites.",
-    "preferencesLink": "Preferências de cookies"
+    "preferencesLink": "Preferências de cookies",
+    "infoText": "Usamos apenas cookies técnicos, necessários para manter a sessão iniciada e fazer o site funcionar. Nenhum cookie de perfil ou publicidade.",
+    "gotIt": "Percebi"
   }
 }

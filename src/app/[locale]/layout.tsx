@@ -9,7 +9,7 @@ import AppNav from '@/components/nav/AppNav'
 import RecentToolTracker from '@/components/nav/RecentToolTracker'
 import CookieConsent from '@/components/consent/CookieConsent'
 import { ConsentProvider } from '@/components/consent/ConsentGate'
-import { getActiveConsentCategories } from '@/lib/consentServer'
+import { getConsentConfig } from '@/lib/consentServer'
 import { ROOT_VIEWPORT, rootMetadata } from '@/lib/rootMetadata'
 import { defaultLocale, locales } from '../../../i18n'
 
@@ -43,12 +43,12 @@ export const viewport: Viewport = ROOT_VIEWPORT
 export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {
   const locale = validLocale((await params).locale)
   setRequestLocale(locale)
-  // Cookie facoltativi accesi da Admin → Impostazioni (oggi nessuno)
-  const consentCategories = await getActiveConsentCategories()
+  // Banner cookie impostato da Admin → Impostazioni (oggi spento)
+  const consentConfig = await getConsentConfig()
 
   return (
     <AppShell locale={locale}>
-      <ConsentProvider categories={consentCategories}>
+      <ConsentProvider config={consentConfig}>
       <MaintenanceGate>
         {/* Fascia "stai impersonando": in cima a ogni pagina, solo per lo Staff */}
         <ImpersonationBanner />
@@ -60,7 +60,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         {/* Menu fisso delle pagine principali e servizi usati di recente */}
         <AppNav />
         <RecentToolTracker />
-        {/* Banner dei cookie facoltativi: solo se l'Admin ne ha accesi (lib/consent.ts) */}
+        {/* Banner dei cookie: solo se acceso dall'Admin (lib/consent.ts) */}
         <CookieConsent />
       </MaintenanceGate>
       </ConsentProvider>
