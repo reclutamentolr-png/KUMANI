@@ -7650,7 +7650,7 @@
       "step4Text": "Quando estiver pronta, no fim da página ativa-a com cartão ou com os teus pontos: KU Karma ou KU Points confirmados. Assim que fica ativa recebes o link para enviar por WhatsApp, por email ou como preferires.",
       "step4Tip": "Por baixo do botão de pagamento vês quantos pontos são precisos e quantos tens: se não chegarem, o botão fica cinzento.",
       "step5Title": "O agradecimento e a arrumação",
-      "step5Text": "Quando quem a recebe abre o presente ficas logo a saber, e pode responder-te com uma reação, uma mensagem ou uma foto: encontras isso com o envelope cor-de-rosa em «As minhas surpresas» e num quadro assim que entras no painel. As surpresas de que já não precisas apagam-se com o caixote do lixo."
+      "step5Text": "Quando quem a recebe abre o presente ficas logo a saber, e pode responder-te com uma reação, uma mensagem ou uma foto: encontras isso com o envelope cor-de-rosa em «As minhas surpresas» e num quadro assim que entras no painel. Os rascunhos de que já não precisas apagam-se com o caixote do lixo; as surpresas já pagas ficam."
     }
   },
   "deckTexts": {
@@ -11003,7 +11003,6 @@
     "error_videoTooLong": "Vídeo demasiado longo: mesmo comprimido ultrapassaria os 10 MB. Escolhe um mais curto (cerca de 2-3 minutos no máximo).",
     "error_audioTooLong": "Áudio demasiado longo: mesmo comprimido ultrapassaria os 10 MB. Escolhe um mais curto.",
     "deleteSurprise": "Eliminar «{title}»",
-    "deleteActiveConfirm": "Eliminar «{title}»? A surpresa já foi enviada: o link deixará de funcionar e as fotos, os vídeos e os agradecimentos também serão apagados. O preço ou os pontos usados não são devolvidos.",
     "deleteError": "Não foi possível eliminar a surpresa. Tenta de novo.",
     "status_seen": "Vista",
     "seenAt": "{name} viu-a a {date}"

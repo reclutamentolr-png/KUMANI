@@ -7,16 +7,15 @@ import { LoaderCircle, Trash2 } from 'lucide-react'
 import { deleteSurprise } from '@/app/actions/surprise'
 import { askConfirm } from '@/lib/confirm'
 
-// Cestino accanto a ogni sorpresa in «Le mie sorprese»: chi l'ha creata fa
-// pulizia da solo. Per una sorpresa già inviata l'avviso dice che il link
-// non funzionerà più.
-export default function DeleteSurpriseButton({ id, title, active }: { id: string; title: string; active: boolean }) {
+// Cestino accanto alle bozze in «Le mie sorprese»: chi le ha create fa
+// pulizia da solo (le sorprese pagate restano)
+export default function DeleteSurpriseButton({ id, title }: { id: string; title: string }) {
   const t = useTranslations('surprise')
   const router = useRouter()
   const [busy, setBusy] = useState(false)
 
   const remove = async () => {
-    if (!(await askConfirm(active ? t('deleteActiveConfirm', { title }) : t('deleteDraftConfirm'), { tone: 'danger' }))) return
+    if (!(await askConfirm(t('deleteDraftConfirm'), { tone: 'danger' }))) return
     setBusy(true)
     const r = await deleteSurprise(id)
     setBusy(false)

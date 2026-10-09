@@ -197,7 +197,8 @@ export default async function SurprisesPage({ params }: { params: Promise<{ loca
                                 : t('status_active')}
                       </span>
                     </Link>
-                    <DeleteSurpriseButton id={g.id} title={g.title || t('untitled')} active={g.status === 'active' && !g.refunded_at} />
+                    {/* Solo le bozze: dietro le altre c'è un pagamento */}
+                    {g.status === 'draft' ? <DeleteSurpriseButton id={g.id} title={g.title || t('untitled')} /> : <span aria-hidden className="w-11 shrink-0" />}
                   </li>
                 ))}
               </ul>

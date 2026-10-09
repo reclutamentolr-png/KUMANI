@@ -7650,7 +7650,7 @@
       "step4Text": "Wenn sie fertig ist, aktiviere sie unten auf der Seite mit Karte oder mit deinen Punkten: KU Karma oder bestätigte KU Points. Sobald sie aktiv ist, bekommst du den Link zum Verschicken per WhatsApp, E-Mail oder wie du möchtest.",
       "step4Tip": "Unter dem Bezahlknopf siehst du, wie viele Punkte nötig sind und wie viele du hast: Reichen sie nicht, bleibt der Knopf grau.",
       "step5Title": "Das Dankeschön und Aufräumen",
-      "step5Text": "Wenn der Empfänger das Geschenk öffnet, weißt du es sofort, und er kann dir mit einer Reaktion, einer Nachricht oder einem Foto antworten: Du findest es mit dem rosa Umschlag unter „Meine Überraschungen“ und in einem Kasten, sobald du dein Dashboard öffnest. Überraschungen, die du nicht mehr brauchst, löschst du mit dem Papierkorb."
+      "step5Text": "Wenn der Empfänger das Geschenk öffnet, weißt du es sofort, und er kann dir mit einer Reaktion, einer Nachricht oder einem Foto antworten: Du findest es mit dem rosa Umschlag unter „Meine Überraschungen“ und in einem Kasten, sobald du dein Dashboard öffnest. Entwürfe, die du nicht mehr brauchst, löschst du mit dem Papierkorb; bereits bezahlte Überraschungen bleiben."
     }
   },
   "deckTexts": {
@@ -11003,7 +11003,6 @@
     "error_videoTooLong": "Video zu lang: Auch komprimiert wäre es größer als 10 MB. Wähle ein kürzeres (höchstens etwa 2–3 Minuten).",
     "error_audioTooLong": "Audio zu lang: Auch komprimiert wäre es größer als 10 MB. Wähle ein kürzeres.",
     "deleteSurprise": "„{title}“ löschen",
-    "deleteActiveConfirm": "„{title}“ löschen? Die Überraschung wurde bereits verschickt: Der Link funktioniert dann nicht mehr und auch Fotos, Videos und Dankeschöns werden gelöscht. Preis oder verwendete Punkte werden nicht erstattet.",
     "deleteError": "Die Überraschung konnte nicht gelöscht werden. Bitte versuche es erneut.",
     "status_seen": "Gesehen",
     "seenAt": "{name} hat sie am {date} gesehen"

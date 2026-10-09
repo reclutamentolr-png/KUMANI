@@ -7650,7 +7650,7 @@
       "step4Text": "Quand elle est prête, en bas de la page, activez-la par carte ou avec vos points : KU Karma ou KU Points confirmés. Dès qu’elle est activée, vous recevez le lien à envoyer sur WhatsApp, par e-mail ou comme vous le souhaitez.",
       "step4Tip": "Sous le bouton de paiement, vous voyez combien de points il faut et combien vous en avez : s’ils ne suffisent pas, le bouton reste gris.",
       "step5Title": "Le remerciement et le rangement",
-      "step5Text": "Quand la personne ouvre le cadeau, vous le savez tout de suite, et elle peut vous répondre par une réaction, un message ou une photo : vous le trouvez avec l’enveloppe rose dans « Mes surprises » et dans un encadré dès que vous ouvrez votre tableau de bord. Les surprises dont vous n’avez plus besoin se suppriment avec la corbeille."
+      "step5Text": "Quand la personne ouvre le cadeau, vous le savez tout de suite, et elle peut vous répondre par une réaction, un message ou une photo : vous le trouvez avec l’enveloppe rose dans « Mes surprises » et dans un encadré dès que vous ouvrez votre tableau de bord. Les brouillons dont vous n’avez plus besoin se suppriment avec la corbeille ; les surprises déjà payées restent."
     }
   },
   "deckTexts": {
@@ -11003,7 +11003,6 @@
     "error_videoTooLong": "Vidéo trop longue : même compressée, elle dépasserait 10 Mo. Choisissez-en une plus courte (environ 2-3 minutes maximum).",
     "error_audioTooLong": "Audio trop long : même compressé, il dépasserait 10 Mo. Choisissez-en un plus court.",
     "deleteSurprise": "Supprimer « {title} »",
-    "deleteActiveConfirm": "Supprimer « {title} » ? La surprise a déjà été envoyée : le lien ne fonctionnera plus et les photos, vidéos et remerciements seront aussi supprimés. Le prix ou les points utilisés ne sont pas remboursés.",
     "deleteError": "Impossible de supprimer la surprise. Réessayez.",
     "status_seen": "Vue",
     "seenAt": "{name} l’a vue le {date}"

@@ -7650,7 +7650,7 @@
       "step4Text": "When it’s ready, at the bottom of the page activate it by card or with your points: KU Karma or confirmed KU Points. As soon as it’s active you get the link to send on WhatsApp, by email or however you like.",
       "step4Tip": "Below the payment button you can see how many points are needed and how many you have: if they’re not enough, the button stays grey.",
       "step5Title": "The thank-you and tidying up",
-      "step5Text": "When the recipient opens the gift you know right away, and they can reply with a reaction, a message or a photo: you’ll find it with the pink envelope in “My surprises” and in a box as soon as you open your dashboard. Surprises you no longer need can be deleted with the bin."
+      "step5Text": "When the recipient opens the gift you know right away, and they can reply with a reaction, a message or a photo: you’ll find it with the pink envelope in “My surprises” and in a box as soon as you open your dashboard. Drafts you no longer need can be deleted with the bin; surprises already paid for stay."
     }
   },
   "deckTexts": {
@@ -11003,7 +11003,6 @@
     "error_videoTooLong": "Video too long: even compressed it would exceed 10 MB. Choose a shorter one (about 2-3 minutes at most).",
     "error_audioTooLong": "Audio too long: even compressed it would exceed 10 MB. Choose a shorter one.",
     "deleteSurprise": "Delete “{title}”",
-    "deleteActiveConfirm": "Delete “{title}”? The surprise has already been sent: the link will stop working and photos, videos and thank-yous will be deleted too. The price or points used are not refunded.",
     "deleteError": "The surprise could not be deleted. Please try again.",
     "status_seen": "Seen",
     "seenAt": "{name} saw it on {date}"

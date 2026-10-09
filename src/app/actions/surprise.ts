@@ -197,18 +197,19 @@ export async function deleteSurpriseStep(stepId: string): Promise<Result> {
   return { success: true }
 }
 
-// Cancellazione di una sorpresa (bozza o già inviata: il link smette di
-// funzionare) con tutti i suoi file, tappe e ringraziamenti
+// Si cancellano solo le bozze (con file e tappe): una sorpresa pagata resta,
+// perché dietro c'è un pagamento
 export async function deleteSurprise(id: string): Promise<Result> {
   const g = await me()
   if (!g) return { success: false, message: 'notLoggedIn' }
   if (!/^[0-9a-f-]{36}$/i.test(id)) return { success: false, message: 'notFound' }
-  const { data: gift } = await g.supabase.from('surprise_gifts').select('id').eq('id', id).eq('user_id', g.userId).maybeSingle()
+  const { data: gift } = await g.supabase.from('surprise_gifts').select('status').eq('id', id).eq('user_id', g.userId).maybeSingle()
   if (!gift) return { success: false, message: 'notFound' }
+  if (gift.status !== 'draft') return { success: false, message: 'activeCannotDelete' }
   const db = surpriseDb()
   const { data: files } = await db.storage.from('surprise-media').list(`${g.userId}/${id}`, { limit: 1000 })
   if (files?.length) await db.storage.from('surprise-media').remove(files.map((f) => `${g.userId}/${id}/${f.name}`))
-  const { error } = await g.supabase.from('surprise_gifts').delete().eq('id', id).eq('user_id', g.userId)
+  const { error } = await g.supabase.from('surprise_gifts').delete().eq('id', id).eq('user_id', g.userId).eq('status', 'draft')
   if (error) return { success: false, message: 'deleteError' }
   return { success: true }
 }
