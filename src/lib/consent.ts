@@ -1,21 +1,21 @@
 // Consenso ai cookie facoltativi (Linee guida del Garante, 10 giugno 2021).
 //
-// Oggi KUMANI usa solo cookie tecnici: OPTIONAL_CATEGORIES è vuoto, quindi il
-// banner non compare e il link «Preferenze cookie» non si vede. Il giorno in
-// cui si aggiungono statistiche o pixel:
-//   1. aggiungere la categoria qui sotto (e alzare CONSENT_VERSION se cambia
-//      qualcosa per chi ha già scelto, così il banner ricompare);
-//   2. caricare gli script solo dentro <ConsentGate category="..."> (o con
-//      useConsent), mai direttamente;
-//   3. descrivere i nuovi cookie nell'informativa (privacyPage.s7list),
-//      compreso «kumani_consent» che ricorda le scelte per 6 mesi.
-// Regole già rispettate dal banner: «Accetta» e «Rifiuta» ugualmente visibili,
+// Le categorie attive si accendono da Admin → Impostazioni → «Cookie
+// facoltativi» (system_settings.cookie_consent_categories). Nessuna attiva =
+// nessun banner e nessun link «Preferenze cookie»: oggi KUMANI usa solo
+// cookie tecnici. Prima di accendere una categoria:
+//   1. caricare gli script (statistiche, pixel…) solo dentro
+//      <ConsentGate category="..."> o con useConsent, mai direttamente;
+//   2. descrivere i nuovi cookie nell'informativa (privacyPage.s7list).
+// Se si accende una categoria nuova, il banner ricompare a chi aveva già
+// scelto (manca la scelta per quella categoria).
+// Regole rispettate dal banner: «Accetta» e «Rifiuta» ugualmente visibili,
 // la X vale come rifiuto, niente caselle già spuntate, scelta per categoria,
 // scelte modificabili in ogni momento, nuova richiesta solo dopo 6 mesi.
 
 export type ConsentCategory = 'analytics' | 'marketing'
 
-export const OPTIONAL_CATEGORIES: ConsentCategory[] = []
+export const ALL_CONSENT_CATEGORIES: ConsentCategory[] = ['analytics', 'marketing']
 
 export const CONSENT_COOKIE = 'kumani_consent'
 export const CONSENT_VERSION = 1
@@ -25,6 +25,10 @@ export const OPEN_PREFERENCES_EVENT = 'kumani:cookie-preferences'
 
 export type ConsentChoices = Partial<Record<ConsentCategory, boolean>>
 export type ConsentState = { v: number; at: string; choices: ConsentChoices }
+
+export function isConsentCategory(value: unknown): value is ConsentCategory {
+  return typeof value === 'string' && (ALL_CONSENT_CATEGORIES as string[]).includes(value)
+}
 
 export function parseConsent(raw: string | undefined | null): ConsentState | null {
   if (!raw) return null
@@ -43,17 +47,18 @@ export function readConsent(): ConsentState | null {
   return parseConsent(entry?.trim().slice(CONSENT_COOKIE.length + 1))
 }
 
-// Serve chiedere? Sì se ci sono categorie facoltative e manca una scelta
-// valida per la versione attuale (o per una categoria aggiunta dopo)
-export function needsConsent(state: ConsentState | null): boolean {
-  if (!OPTIONAL_CATEGORIES.length) return false
+// Serve chiedere? Sì se ci sono categorie attive e manca una scelta valida
+// per la versione attuale o per una categoria accesa dopo
+export function needsConsent(state: ConsentState | null, active: ConsentCategory[]): boolean {
+  if (!active.length) return false
   if (!state || state.v < CONSENT_VERSION) return true
-  return OPTIONAL_CATEGORIES.some((c) => typeof state.choices[c] !== 'boolean')
+  return active.some((c) => typeof state.choices[c] !== 'boolean')
 }
 
-export function writeConsent(choices: ConsentChoices): ConsentState {
-  const clean: ConsentChoices = {}
-  for (const c of OPTIONAL_CATEGORIES) clean[c] = choices[c] === true
+export function writeConsent(choices: ConsentChoices, active: ConsentCategory[]): ConsentState {
+  // Si conservano le scelte già fatte per categorie oggi spente
+  const clean: ConsentChoices = { ...(readConsent()?.choices ?? {}) }
+  for (const c of active) clean[c] = choices[c] === true
   const state: ConsentState = { v: CONSENT_VERSION, at: new Date().toISOString(), choices: clean }
   const secure = location.protocol === 'https:' ? '; Secure' : ''
   document.cookie = `${CONSENT_COOKIE}=${encodeURIComponent(JSON.stringify(state))}; path=/; max-age=${CONSENT_MAX_AGE}; SameSite=Lax${secure}`
@@ -61,8 +66,8 @@ export function writeConsent(choices: ConsentChoices): ConsentState {
   return state
 }
 
-export function hasConsent(category: ConsentCategory, state: ConsentState | null = readConsent()): boolean {
-  return OPTIONAL_CATEGORIES.includes(category) && !!state && state.v >= CONSENT_VERSION && state.choices[category] === true
+export function hasConsent(category: ConsentCategory, active: ConsentCategory[], state: ConsentState | null = readConsent()): boolean {
+  return active.includes(category) && !!state && state.v >= CONSENT_VERSION && state.choices[category] === true
 }
 
 export function openCookiePreferences() {

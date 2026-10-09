@@ -4,30 +4,24 @@ import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Cookie, X } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
-import {
-  needsConsent,
-  OPEN_PREFERENCES_EVENT,
-  OPTIONAL_CATEGORIES,
-  readConsent,
-  writeConsent,
-  type ConsentCategory,
-  type ConsentChoices,
-} from '@/lib/consent'
+import { needsConsent, OPEN_PREFERENCES_EVENT, readConsent, writeConsent, type ConsentCategory, type ConsentChoices } from '@/lib/consent'
+import { useActiveConsentCategories } from '@/components/consent/ConsentGate'
 
-// Banner dei cookie facoltativi (vedi lib/consent.ts). Con OPTIONAL_CATEGORIES
-// vuoto non mostra nulla. «Accetta» e «Rifiuta» hanno lo stesso aspetto; la
+// Banner dei cookie facoltativi (vedi lib/consent.ts). Senza categorie accese
+// dall'Admin non mostra nulla. «Accetta» e «Rifiuta» hanno lo stesso aspetto; la
 // X chiude come un rifiuto; «Personalizza» apre le scelte per categoria.
 export default function CookieConsent() {
   const t = useTranslations('cookieConsent')
+  const active = useActiveConsentCategories()
   const [open, setOpen] = useState(false)
   const [detailed, setDetailed] = useState(false)
   const [choices, setChoices] = useState<ConsentChoices>({})
 
   useEffect(() => {
-    if (!OPTIONAL_CATEGORIES.length) return
+    if (!active.length) return
     const state = readConsent()
     // eslint-disable-next-line react-hooks/set-state-in-effect -- il cookie si legge solo nel browser
-    if (needsConsent(state)) setOpen(true)
+    if (needsConsent(state, active)) setOpen(true)
     const reopen = () => {
       setChoices(readConsent()?.choices ?? {})
       setDetailed(true)
@@ -35,16 +29,16 @@ export default function CookieConsent() {
     }
     window.addEventListener(OPEN_PREFERENCES_EVENT, reopen)
     return () => window.removeEventListener(OPEN_PREFERENCES_EVENT, reopen)
-  }, [])
+  }, [active])
 
-  if (!OPTIONAL_CATEGORIES.length || !open) return null
+  if (!active.length || !open) return null
 
   const save = (value: ConsentChoices) => {
-    writeConsent(value)
+    writeConsent(value, active)
     setOpen(false)
     setDetailed(false)
   }
-  const all = (value: boolean) => Object.fromEntries(OPTIONAL_CATEGORIES.map((c) => [c, value])) as ConsentChoices
+  const all = (value: boolean) => Object.fromEntries(active.map((c) => [c, value])) as ConsentChoices
   const button = 'flex-1 rounded-xl border-2 border-[var(--ink)] bg-white px-4 py-2.5 text-sm font-bold text-[var(--ink)] hover:bg-gray-50 sm:flex-none sm:min-w-32'
 
   return (
@@ -74,7 +68,7 @@ export default function CookieConsent() {
                 <span className="text-gray-600">{t('necessaryText')}</span>
               </span>
             </label>
-            {OPTIONAL_CATEGORIES.map((c: ConsentCategory) => (
+            {active.map((c: ConsentCategory) => (
               <label key={c} className="flex cursor-pointer items-start gap-3 rounded-xl border border-gray-200 p-3 text-sm hover:border-[var(--gold)]">
                 <input
                   type="checkbox"

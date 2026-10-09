@@ -1,19 +1,31 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { CONSENT_CHANGED_EVENT, hasConsent, openCookiePreferences, OPTIONAL_CATEGORIES, readConsent, type ConsentCategory } from '@/lib/consent'
+import { CONSENT_CHANGED_EVENT, hasConsent, openCookiePreferences, readConsent, type ConsentCategory } from '@/lib/consent'
 
-// true solo se la persona ha accettato quella categoria (si aggiorna appena
-// cambia scelta). Da usare per caricare statistiche, pixel e simili.
+// Categorie di cookie facoltativi accese dall'Admin, passate dal layout
+const ActiveCategories = createContext<ConsentCategory[]>([])
+
+export function ConsentProvider({ categories, children }: { categories: ConsentCategory[]; children: React.ReactNode }) {
+  return <ActiveCategories.Provider value={categories}>{children}</ActiveCategories.Provider>
+}
+
+export function useActiveConsentCategories(): ConsentCategory[] {
+  return useContext(ActiveCategories)
+}
+
+// true solo se la categoria è accesa e la persona l'ha accettata (si aggiorna
+// appena cambia scelta). Da usare per caricare statistiche, pixel e simili.
 export function useConsent(category: ConsentCategory): boolean {
+  const active = useActiveConsentCategories()
   const [allowed, setAllowed] = useState(false)
   useEffect(() => {
-    const update = () => setAllowed(hasConsent(category, readConsent()))
+    const update = () => setAllowed(hasConsent(category, active, readConsent()))
     update()
     window.addEventListener(CONSENT_CHANGED_EVENT, update)
     return () => window.removeEventListener(CONSENT_CHANGED_EVENT, update)
-  }, [category])
+  }, [category, active])
   return allowed
 }
 
@@ -26,7 +38,8 @@ export default function ConsentGate({ category, children }: { category: ConsentC
 // quando il sito usa cookie facoltativi
 export function CookiePreferencesLink({ className }: { className?: string }) {
   const t = useTranslations('cookieConsent')
-  if (!OPTIONAL_CATEGORIES.length) return null
+  const active = useActiveConsentCategories()
+  if (!active.length) return null
   return (
     <button type="button" onClick={openCookiePreferences} className={className}>
       {t('preferencesLink')}

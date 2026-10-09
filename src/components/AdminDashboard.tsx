@@ -148,6 +148,7 @@ const AdminFinancialsPanel = dynamic(() => import('@/components/admin/AdminFinan
 const AdminRewardsPanel = dynamic(() => import('@/components/admin/AdminRewardsPanel'), { loading })
 const AdminMessagesPanel = dynamic(() => import('@/components/admin/AdminMessagesPanel'), { loading })
 const AdminSettingsPanel = dynamic(() => import('@/components/admin/AdminSettingsPanel'), { loading })
+const CookieConsentSettings = dynamic(() => import('@/components/admin/CookieConsentSettings'), { loading })
 
 // Strumenti e interruttori raggruppati come nel Marketplace. Le sezioni della
 // piattaforma che non sono strumenti vanno in Community; il resto in "Altro".
@@ -1814,7 +1815,12 @@ L'accesso viene registrato.`))) return
         {activeSection === 'emailSend' && <EmailComposePanel />}
         {activeSection === 'push' && <PushPanel />}
         {activeSection === 'documents' && <DocumentsAdminPanel />}
-        {activeSection === 'settings' && <AdminSettingsPanel />}
+        {activeSection === 'settings' && (
+          <>
+            <CookieConsentSettings />
+            <AdminSettingsPanel />
+          </>
+        )}
         {activeSection === 'appLimits' && <AppLimitsPanel />}
         {activeSection === 'security' && <SecurityPanel />}
       </div>
