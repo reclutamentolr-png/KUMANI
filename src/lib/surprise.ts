@@ -4,7 +4,7 @@
 export const SURPRISE_TYPE = 'surprise'
 export const SURPRISE_KINDS = ['voucher', 'journey3', 'journey7'] as const
 export type SurpriseKind = (typeof SURPRISE_KINDS)[number]
-export const SURPRISE_THEMES = ['gold', 'rose', 'sky', 'green', 'night'] as const
+export const SURPRISE_THEMES = ['gold', 'rose', 'sky', 'green', 'night', 'coral', 'ruby', 'lilac', 'teal', 'silver'] as const
 export type SurpriseTheme = (typeof SURPRISE_THEMES)[number]
 
 export const DEFAULT_SURPRISE_PRICES: Record<SurpriseKind, number> = { voucher: 290, journey3: 990, journey7: 1590 }
@@ -69,7 +69,7 @@ export const SURPRISE_MAX = {
   stepTitle: 80,
   stepMessage: 1500,
   hint: 300,
-  mediaBytes: 20 * 1024 * 1024,
+  mediaBytes: 10 * 1024 * 1024,
   question: 300,
   answer: 100,
   place: 120,
@@ -101,6 +101,11 @@ export const THEME_STYLE: Record<SurpriseTheme, { bg: string; card: string; acce
   sky: { bg: 'from-[#0b2140] via-[#123a6b] to-[#071528]', card: 'bg-[#eef6ff]', accent: '#3b8be0', text: 'text-[#0b2140]' },
   green: { bg: 'from-[#0c2a1c] via-[#14452e] to-[#061a10]', card: 'bg-[#effaf3]', accent: '#2fa36b', text: 'text-[#0c2a1c]' },
   night: { bg: 'from-[#120f24] via-[#231c45] to-[#0a0816]', card: 'bg-[#f4f1ff]', accent: '#8b6cf0', text: 'text-[#120f24]' },
+  coral: { bg: 'from-[#3a1208] via-[#6b2614] to-[#1f0904]', card: 'bg-[#fff3ee]', accent: '#f06a43', text: 'text-[#3a1208]' },
+  ruby: { bg: 'from-[#2e0508] via-[#5a0d14] to-[#1a0204]', card: 'bg-[#fff0f0]', accent: '#d32f3f', text: 'text-[#2e0508]' },
+  lilac: { bg: 'from-[#2a1436] via-[#4a2660] to-[#170a1f]', card: 'bg-[#faf2ff]', accent: '#b57be0', text: 'text-[#2a1436]' },
+  teal: { bg: 'from-[#062a2c] via-[#0d4a4d] to-[#031618]', card: 'bg-[#ecfbfa]', accent: '#1fb3a8', text: 'text-[#062a2c]' },
+  silver: { bg: 'from-[#1c1f24] via-[#363b44] to-[#0e1013]', card: 'bg-[#f4f6f8]', accent: '#9aa5b4', text: 'text-[#1c1f24]' },
 }
 
 export type StepExtra = { question?: string; placeName?: string; placeAddress?: string; mapUrl?: string; songUrl?: string; songTitle?: string }
@@ -152,8 +157,11 @@ export type SurpriseRow = {
   public_token: string | null
   paid_at: string | null
   amount_cents: number | null
+  paid_with?: 'card' | 'karma' | 'ku_points' | null
+  points_spent?: number | null
   refunded_at: string | null
   opened_at: string | null
+  link_opened_at?: string | null
   created_at: string
 }
 

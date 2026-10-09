@@ -42,6 +42,7 @@ export const FLYERS: FlyerConfig[] = [
   { tool: 'fincheck', style: 'phone', category: 'personal', icon: 'Gauge', points: ['ClipboardList', 'ChartColumn', 'ListChecks'], shot: 'fincheck-3' },
   { tool: 'garage', style: 'phone', category: 'personal', icon: 'Car', points: ['Gauge', 'Bell', 'FolderOpen'], shot: 'garage-3' },
   { tool: 'casa', style: 'phone', category: 'personal', icon: 'House', points: ['CalendarClock', 'Zap', 'ShieldCheck'], shot: 'casa-4' },
+  { tool: 'sorprese', style: 'phone', category: 'svago', icon: 'Gift', points: ['PartyPopper', 'Route', 'Coins'], shot: 'sorprese-dono' },
   { tool: 'findo', style: 'phone', category: 'personal', icon: 'MapPin', points: ['Camera', 'Search', 'House'], shot: 'findo-1' },
   { tool: 'travel', style: 'photo', category: 'personal', icon: 'Plane', points: ['CalendarDays', 'ListChecks', 'Users'], photo: '/flyers/photos/group-travel.webp' },
   { tool: 'kumani-cv', style: 'phone', category: 'personal', icon: 'IdCard', points: ['FileText', 'RefreshCw', 'Globe'], shot: 'kumani-cv-1' },
@@ -72,4 +73,5 @@ export const flyerKey = (tool: string) => tool.replace(/-/g, '_')
 export const getFlyer = (tool: string) => FLYERS.find((f) => f.tool === tool) ?? null
 
 // Dati che servono per disegnare un volantino (preparati dal server)
-export type FlyerPlan = { plan: 'free' | 'base' | 'pro'; planPrice: number; passPrice: number | null }
+// 'surprise' = KUMANI Sorpresa: per tutti, si paga ogni sorpresa (planPrice = prezzo più basso)
+export type FlyerPlan = { plan: 'free' | 'base' | 'pro' | 'surprise'; planPrice: number; passPrice: number | null }

@@ -5,7 +5,8 @@ import { headers } from 'next/headers'
 import { notifyUser } from '@/lib/push'
 import { clientIp } from '@/lib/securityCore'
 import { normalizeAnswer, isReaction, surpriseDays, unlockAt, SURPRISE_MAX, type SurpriseStepRow, type SurpriseViewStep } from '@/lib/surprise'
-import { markOpened, signedStep, STEP_SELECT, surpriseDb } from '@/lib/surpriseServer'
+import { markLinkOpened, markOpened, signedStep, STEP_SELECT, surpriseDb } from '@/lib/surpriseServer'
+import { createClient } from '@/lib/supabase/server'
 
 // Azioni di chi riceve la sorpresa (nessun account, solo il link): risposta
 // agli indovinelli e ringraziamento a chi ha regalato. Freni in memoria
@@ -86,9 +87,28 @@ export async function sendSurpriseReply(token: string, form: FormData): Promise<
   return { ok: true }
 }
 
-// Chi riceve ha aperto il regalo (non l'anteprima di WhatsApp)
+// Chi guarda, se è collegato (chi ha creato la sorpresa non conta)
+async function viewerId(): Promise<string | null> {
+  try {
+    const {
+      data: { user },
+    } = await (await createClient()).auth.getUser()
+    return user?.id ?? null
+  } catch {
+    return null
+  }
+}
+
+// Chi riceve ha aperto il link (la pagina nel browser, non l'anteprima di WhatsApp)
+export async function markSurpriseLinkOpened(token: string): Promise<void> {
+  const ip = clientIp(await headers()) ?? 'x'
+  if (tooMany(`link:${ip}`, 30, 60 * 60_000)) return
+  await markLinkOpened(token, await viewerId())
+}
+
+// Chi riceve ha aperto il regalo e visto la sorpresa
 export async function markSurpriseOpened(token: string): Promise<void> {
   const ip = clientIp(await headers()) ?? 'x'
   if (tooMany(`open:${ip}`, 30, 60 * 60_000)) return
-  await markOpened(token)
+  await markOpened(token, await viewerId())
 }

@@ -122,7 +122,7 @@ export function generateCatalogPdf(catalog: Catalog, labels: CatalogPdfLabels, f
       if (y + Math.min(estimate, BOTTOM - M) > BOTTOM) newPage()
 
       write(item.title, 15, INK, { gap: 0 })
-      const badge = item.passPrice ? `${planText(item.plan)} · ${labels.passFrom(item.passPrice)}` : planText(item.plan)
+      const badge = item.priceNote ? item.priceNote : item.passPrice ? `${planText(item.plan)} · ${labels.passFrom(item.passPrice)}` : planText(item.plan)
       write(badge, 9, GOLD, { gap: 6 })
       write(`${labels.purposeLabel} ${item.purpose}`, 10.5, INK, { gap: 6 })
 

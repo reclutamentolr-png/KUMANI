@@ -50,12 +50,15 @@ export default function FlyerView({ config, plan, title, inviteUrl, screenshotLa
     points: [1, 2, 3].map((n) => [t(`tools.${k}.p${n}`), t(`tools.${k}.p${n}d`)] as [string, string]),
     note: t.has(`tools.${k}.note`) ? t(`tools.${k}.note`) : null,
     category: t(`cat_${config.category}`),
-    planLabel: plan.plan === 'free' ? t('includedFree') : plan.plan === 'pro' ? t('includedPro') : t('includedBase'),
-    priceLabel: plan.plan === 'free' ? t('priceFree') : t('pricePerYear', { price: money(plan.planPrice) }),
+    planLabel: plan.plan === 'surprise' ? t('includedSurprise') : plan.plan === 'free' ? t('includedFree') : plan.plan === 'pro' ? t('includedPro') : t('includedBase'),
+    priceLabel:
+      plan.plan === 'surprise' ? t('priceSurprise', { price: money(plan.planPrice) }) : plan.plan === 'free' ? t('priceFree') : t('pricePerYear', { price: money(plan.planPrice) }),
     passLabel:
-      plan.plan === 'free'
-        ? t('freeNote')
-        : [plan.passPrice ? t('passAlso', { price: money(plan.passPrice) }) : null, plan.plan === 'pro' ? t('proTrial') : null].filter(Boolean).join('\n') || null,
+      plan.plan === 'surprise'
+        ? t('surpriseNote')
+        : plan.plan === 'free'
+          ? t('freeNote')
+          : [plan.passPrice ? t('passAlso', { price: money(plan.passPrice) }) : null, plan.plan === 'pro' ? t('proTrial') : null].filter(Boolean).join('\n') || null,
     cta: t('cta'),
     url: 'kumani.io',
     tagLine: t('tagLine'),
@@ -138,7 +141,8 @@ export default function FlyerView({ config, plan, title, inviteUrl, screenshotLa
           disabled={busy !== null || !qrSvg}
           className="inline-flex items-center gap-2 rounded-xl bg-[var(--ink)] px-5 py-3 font-extrabold text-white shadow-sm transition hover:brightness-125 disabled:opacity-60"
         >
-          {busy === 'share' ? <LoaderCircle className="h-5 w-5 animate-spin" /> : <Share2 className="h-5 w-5 text-[var(--gold-bright)]" />} {busy === 'share' ? t('generating') : t('share')}
+          {busy === 'share' ? <LoaderCircle className="h-5 w-5 animate-spin" /> : <Share2 className="h-5 w-5 text-[var(--gold-bright)]" />}{' '}
+          {busy === 'share' ? t('generating') : t('share')}
         </button>
         <button
           type="button"

@@ -32,6 +32,7 @@ export type GuideSlug =
   | 'life-calendar'
   | 'garage'
   | 'casa'
+  | 'sorprese'
   | 'memolife'
   | 'spendly'
   | 'fincheck'

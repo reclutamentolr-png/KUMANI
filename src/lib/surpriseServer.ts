@@ -50,12 +50,25 @@ export async function fulfillSurpriseSession(session: Stripe.Checkout.Session): 
   const meta = session.metadata ?? {}
   if (meta.type !== SURPRISE_TYPE || !meta.buyerId || !meta.giftId || session.payment_status !== 'paid') return null
   const db = surpriseDb()
-  const { data: gift } = await db.from('surprise_gifts').select('id, user_id, status, start_at, public_token').eq('id', meta.giftId).maybeSingle()
-  if (!gift || gift.user_id !== meta.buyerId) return null
+  const { data: gift, error: readError } = await db.from('surprise_gifts').select('id, user_id, status, start_at, public_token, stripe_session_id').eq('id', meta.giftId).maybeSingle()
+  // Errore del database: si riprova (il webhook ritorna), mai un rimborso alla cieca
+  if (readError) throw new Error(readError.message)
+  if (gift && gift.user_id !== meta.buyerId) return null
+  const paymentIntent = typeof session.payment_intent === 'string' ? session.payment_intent : (session.payment_intent?.id ?? null)
+  // Già attivata con un altro pagamento (i punti, o un secondo checkout con la
+  // carta rimasto aperto) oppure cancellata durante il pagamento: questa
+  // carta si rimborsa subito
+  if (!gift || (gift.status === 'active' && gift.stripe_session_id !== session.id)) {
+    if (paymentIntent) {
+      await getStripe()
+        .refunds.create({ payment_intent: paymentIntent, metadata: { reason: 'surprise_duplicate', giftId: meta.giftId } }, { idempotencyKey: `surprise-dup-${session.id}` })
+        .catch((e) => console.error('[sorpresa] rimborso del doppio pagamento non riuscito:', paymentIntent, e instanceof Error ? e.message : e))
+    }
+    return gift ? (gift.id as string) : null
+  }
   if (gift.status === 'active' && gift.public_token) return gift.id as string
   const kind = isSurpriseKind(meta.kind) ? meta.kind : 'voucher'
-  const paymentIntent = typeof session.payment_intent === 'string' ? session.payment_intent : (session.payment_intent?.id ?? null)
-  const { error } = await db
+  const { data: updated, error } = await db
     .from('surprise_gifts')
     .update({
       status: 'active',
@@ -63,13 +76,17 @@ export async function fulfillSurpriseSession(session: Stripe.Checkout.Session): 
       public_token: gift.public_token ?? newToken(),
       paid_at: new Date().toISOString(),
       amount_cents: session.amount_total ?? null,
+      paid_with: 'card',
       stripe_session_id: session.id,
       stripe_payment_intent: paymentIntent,
       start_at: gift.start_at ?? new Date().toISOString(),
     })
     .eq('id', gift.id)
     .eq('status', 'draft')
+    .select('id')
   if (error) throw new Error(error.message)
+  // Nello stesso istante è stata attivata con i punti: si rimborsa la carta
+  if (!updated?.length) return fulfillSurpriseSession(session)
   return gift.id as string
 }
 
@@ -214,18 +231,28 @@ export async function surpriseShareInfo(token: string) {
 
 // Prima apertura vera (tocco sulla scatola, busta o carta): si segna e chi
 // l'ha creata riceve una notifica, una volta sola
-export async function markOpened(token: string) {
+// Chi riceve ha aperto il link (pagina caricata nel browser, non l'anteprima
+// di WhatsApp): «Aperta». La sorpresa diventa «Vista» con markOpened.
+export async function markLinkOpened(token: string, viewerId: string | null = null) {
+  if (!/^[A-Za-z0-9_-]{16,40}$/.test(token)) return
+  let query = surpriseDb().from('surprise_gifts').update({ link_opened_at: new Date().toISOString() }).eq('public_token', token).eq('status', 'active').is('link_opened_at', null)
+  if (viewerId) query = query.neq('user_id', viewerId)
+  await query
+}
+
+// Chi riceve ha aperto il regalo e visto la sorpresa: «Vista».
+// viewerId: chi guarda è collegato; se è chi ha creato la sorpresa non conta
+export async function markOpened(token: string, viewerId: string | null = null) {
   if (!/^[A-Za-z0-9_-]{16,40}$/.test(token)) return
   const db = surpriseDb()
-  const { data: marked } = await db
-    .from('surprise_gifts')
-    .update({ opened_at: new Date().toISOString() })
-    .eq('public_token', token)
-    .eq('status', 'active')
-    .is('opened_at', null)
-    .select('id, user_id, recipient_name')
+  const now = new Date().toISOString()
+  let query = db.from('surprise_gifts').update({ opened_at: now }).eq('public_token', token).eq('status', 'active').is('opened_at', null)
+  if (viewerId) query = query.neq('user_id', viewerId)
+  const { data: marked } = await query.select('id, user_id, recipient_name, link_opened_at')
   const gift = marked?.[0]
   if (!gift) return
+  // Vista vuol dire anche che il link è stato aperto
+  if (!gift.link_opened_at) await db.from('surprise_gifts').update({ link_opened_at: now }).eq('id', gift.id).is('link_opened_at', null)
   await notifyUser(
     gift.user_id as string,
     'messages',

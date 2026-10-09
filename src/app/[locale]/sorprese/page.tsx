@@ -1,12 +1,13 @@
 import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
-import { ArrowLeft, CalendarHeart, Gift, Heart, LogIn, Route, Sparkles, UserPlus } from 'lucide-react'
+import { ArrowLeft, CalendarHeart, Gift, Heart, LogIn, Mail, Route, Sparkles, UserPlus } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { createClient } from '@/lib/supabase/server'
 import { getSurprisePrices } from '@/lib/surpriseServer'
 import { SURPRISE_KINDS, type SurpriseKind } from '@/lib/surprise'
 import NewSurpriseButton from '@/components/surprise/NewSurpriseButton'
 import TemplatePicker from '@/components/surprise/TemplatePicker'
+import DeleteSurpriseButton from '@/components/surprise/DeleteSurpriseButton'
 import { pageMetadata } from '@/lib/seo'
 
 // KUMANI Sorpresa: presentazione e prezzi. Chi non è iscritto (anche chi ha
@@ -38,16 +39,25 @@ export default async function SurprisesPage({ params }: { params: Promise<{ loca
     data: { user },
   } = await supabase.auth.getUser()
 
-  const [prices, { data: gifts }] = await Promise.all([
+  const [prices, { data: gifts }, { data: replies }] = await Promise.all([
     getSurprisePrices(),
     user
       ? supabase
           .from('surprise_gifts')
-          .select('id, kind, status, title, recipient_name, opened_at, refunded_at, created_at')
+          .select('id, kind, status, title, recipient_name, opened_at, link_opened_at, refunded_at, created_at')
           .eq('user_id', user.id)
           .order('created_at', { ascending: false })
       : Promise.resolve({ data: null }),
+    // Ringraziamenti ricevuti (le regole del database mostrano solo i propri)
+    user ? supabase.from('surprise_replies').select('gift_id, read_at') : Promise.resolve({ data: null }),
   ])
+  const replyCount = new Map<string, { all: number; unread: number }>()
+  for (const r of replies ?? []) {
+    const c = replyCount.get(r.gift_id) ?? { all: 0, unread: 0 }
+    c.all++
+    if (!r.read_at) c.unread++
+    replyCount.set(r.gift_id, c)
+  }
   const money = (cents: number) =>
     new Intl.NumberFormat(locale, {
       style: 'currency',
@@ -144,8 +154,8 @@ export default async function SurprisesPage({ params }: { params: Promise<{ loca
             ) : (
               <ul className="mt-3 space-y-2">
                 {gifts.map((g) => (
-                  <li key={g.id}>
-                    <Link href={`/sorprese/${g.id}`} className="flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 hover:border-[var(--gold)]">
+                  <li key={g.id} className="flex items-center gap-2">
+                    <Link href={`/sorprese/${g.id}`} className="flex min-w-0 flex-1 items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 hover:border-[var(--gold)]">
                       <Gift className="h-5 w-5 shrink-0 text-[var(--gold)]" />
                       <span className="min-w-0 flex-1">
                         <span className="block truncate font-semibold text-[var(--ink)]">{g.title || t('untitled')}</span>
@@ -154,6 +164,15 @@ export default async function SurprisesPage({ params }: { params: Promise<{ loca
                           {t(`kind_${g.kind as SurpriseKind}`)} · {date(g.created_at)}
                         </span>
                       </span>
+                      {/* Busta dei ringraziamenti: rosa con «nuovo» se ce ne sono da leggere */}
+                      {replyCount.get(g.id) && (
+                        <span
+                          title={t('repliesCount', { n: replyCount.get(g.id)!.all })}
+                          className={`relative flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold ${replyCount.get(g.id)!.unread ? 'bg-rose-500 text-white' : 'bg-rose-50 text-rose-700'}`}
+                        >
+                          <Mail className="h-3.5 w-3.5" /> {replyCount.get(g.id)!.unread ? t('repliesNew', { n: replyCount.get(g.id)!.unread }) : replyCount.get(g.id)!.all}
+                        </span>
+                      )}
                       <span
                         className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${
                           g.refunded_at
@@ -162,12 +181,23 @@ export default async function SurprisesPage({ params }: { params: Promise<{ loca
                               ? 'bg-amber-100 text-amber-800'
                               : g.opened_at
                                 ? 'bg-emerald-100 text-emerald-800'
-                                : 'bg-sky-100 text-sky-800'
+                                : g.link_opened_at
+                                  ? 'bg-violet-100 text-violet-800'
+                                  : 'bg-sky-100 text-sky-800'
                         }`}
                       >
-                        {g.refunded_at ? t('status_refunded') : g.status === 'draft' ? t('status_draft') : g.opened_at ? t('status_opened') : t('status_active')}
+                        {g.refunded_at
+                          ? t('status_refunded')
+                          : g.status === 'draft'
+                            ? t('status_draft')
+                            : g.opened_at
+                              ? t('status_seen')
+                              : g.link_opened_at
+                                ? t('status_opened')
+                                : t('status_active')}
                       </span>
                     </Link>
+                    <DeleteSurpriseButton id={g.id} title={g.title || t('untitled')} active={g.status === 'active' && !g.refunded_at} />
                   </li>
                 ))}
               </ul>

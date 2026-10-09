@@ -4,6 +4,7 @@ import { getMessages, getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { DOC_LOCALES, type DocLocale } from '@/lib/documents'
 import { deckCatalog, deckServices } from '@/lib/deck/deckData'
+import { getSurprisePrices } from '@/lib/surpriseServer'
 import type { DeckCatalogGroup, DeckPlan, DeckVariant } from '@/lib/deck/types'
 
 // Testi con i numeri dei servizi (plurali ICU della lingua)
@@ -64,6 +65,12 @@ export async function getDeckTexts(
   const { services, counts } = deckServices(enabled, (key) => tm(key), { name: td('full.chatName'), description: td('full.chatDesc') })
   const texts = structuredClone(messages.deckTexts) as Record<string, unknown>
   for (const key of COUNTED_KEYS) setPath(texts, key, td(key, { ...counts, price: '{price}' }))
+  // KUMANI Sorpresa: prezzo più basso (Admin), nel formato della lingua
+  const surprise = texts.surprise as { badge?: string } | undefined
+  if (surprise?.badge) {
+    const cents = Math.min(...Object.values(await getSurprisePrices()))
+    surprise.badge = surprise.badge.replace('{price}', new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(cents / 100))
+  }
 
   const catalog =
     variant === 'full'

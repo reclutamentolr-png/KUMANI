@@ -197,16 +197,45 @@ export async function deleteSurpriseStep(stepId: string): Promise<Result> {
   return { success: true }
 }
 
-// Solo le bozze si cancellano: una sorpresa pagata resta (il link funziona)
+// Cancellazione di una sorpresa (bozza o già inviata: il link smette di
+// funzionare) con tutti i suoi file, tappe e ringraziamenti
 export async function deleteSurprise(id: string): Promise<Result> {
   const g = await me()
   if (!g) return { success: false, message: 'notLoggedIn' }
-  const { data: gift } = await g.supabase.from('surprise_gifts').select('status').eq('id', id).eq('user_id', g.userId).maybeSingle()
+  if (!/^[0-9a-f-]{36}$/i.test(id)) return { success: false, message: 'notFound' }
+  const { data: gift } = await g.supabase.from('surprise_gifts').select('id').eq('id', id).eq('user_id', g.userId).maybeSingle()
   if (!gift) return { success: false, message: 'notFound' }
-  if (gift.status !== 'draft') return { success: false, message: 'activeCannotDelete' }
   const db = surpriseDb()
   const { data: files } = await db.storage.from('surprise-media').list(`${g.userId}/${id}`, { limit: 1000 })
   if (files?.length) await db.storage.from('surprise-media').remove(files.map((f) => `${g.userId}/${id}/${f.name}`))
-  await g.supabase.from('surprise_gifts').delete().eq('id', id).eq('user_id', g.userId)
+  const { error } = await g.supabase.from('surprise_gifts').delete().eq('id', id).eq('user_id', g.userId)
+  if (error) return { success: false, message: 'deleteError' }
   return { success: true }
+}
+
+// Ringraziamenti letti: di una sorpresa (aprendola) o tutti (dal popup della
+// dashboard). Solo per le sorprese di chi lo chiede.
+export async function markSurpriseRepliesRead(giftId?: string): Promise<Result> {
+  const g = await me()
+  if (!g) return { success: false, message: 'notLoggedIn' }
+  let query = g.supabase.from('surprise_gifts').select('id').eq('user_id', g.userId)
+  if (giftId) query = query.eq('id', giftId)
+  const { data: gifts } = await query
+  const ids = (gifts ?? []).map((x) => x.id as string)
+  if (!ids.length) return { success: true }
+  await surpriseDb().from('surprise_replies').update({ read_at: new Date().toISOString() }).in('gift_id', ids).is('read_at', null)
+  return { success: true }
+}
+
+// Pagamento con i punti (KU Karma oppure KU Points confermati): punti scalati
+// e sorpresa attivata insieme, nel database
+export async function paySurpriseWithPoints(giftId: string, currency: 'karma' | 'ku_points'): Promise<Result> {
+  const g = await me()
+  if (!g) return { success: false, message: 'notLoggedIn' }
+  if (currency !== 'karma' && currency !== 'ku_points') return { success: false, message: 'invalid' }
+  const { data, error } = await g.supabase
+    .rpc('pay_surprise_with_points', { p_gift_id: giftId, p_currency: currency })
+    .maybeSingle<{ success: boolean; reason: string | null; points: number }>()
+  if (error || !data) return { success: false, message: 'payment' }
+  return data.success ? { success: true, id: giftId } : { success: false, message: data.reason ?? 'payment' }
 }

@@ -32,6 +32,7 @@ import {
 import Link from '@/components/LocalizedLink'
 import { createClient } from '@/lib/supabase/client'
 import { resizeImageFile } from '@/lib/resizeImage'
+import { compressAudio, compressVideo, MediaTooLongError } from '@/lib/compressMedia'
 import { askConfirm } from '@/lib/confirm'
 import { audioUrl } from '@/lib/audioUrl'
 import { deleteSurprise, deleteSurpriseStep, saveSurprise, saveSurpriseStep } from '@/app/actions/surprise'
@@ -87,14 +88,40 @@ function mediaTypeOf(file: File): MediaType | null {
   return null
 }
 
-// Carica un file nella cartella della sorpresa (foto ridotte prima)
-async function uploadMedia(userId: string, giftId: string, file: File): Promise<{ path: string; type: MediaType; url: string } | { error: string }> {
+// Carica un file nella cartella della sorpresa: foto ridotte, video e audio
+// compressi nel browser; nessun file oltre i 10 MB
+const COMPRESS_FROM = 3 * 1024 * 1024
+async function uploadMedia(
+  userId: string,
+  giftId: string,
+  file: File,
+  onProgress?: (p: number) => void
+): Promise<{ path: string; type: MediaType; url: string } | { error: string }> {
   const type = mediaTypeOf(file)
   if (!type) return { error: 'error_fileType' }
+  const max = SURPRISE_MAX.mediaBytes
   let upload: File = file
-  if (type === 'image') upload = (await resizeImageFile(file, 1600, 0.82)) ?? file
-  if (upload.size > SURPRISE_MAX.mediaBytes) return { error: 'error_tooBig' }
-  const ext = type === 'image' ? 'jpg' : (file.name.split('.').pop() || 'bin').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 5)
+  if (type === 'image') {
+    upload = (await resizeImageFile(file, 1600, 0.82)) ?? file
+    if (upload.size > max) upload = (await resizeImageFile(file, 1200, 0.7, { keepIfUnderBytes: 0 })) ?? upload
+  } else if (file.size > COMPRESS_FROM) {
+    try {
+      onProgress?.(0)
+      upload = (await (type === 'video' ? compressVideo(file, max, onProgress) : compressAudio(file, max, onProgress))) ?? file
+    } catch (e) {
+      if (e instanceof MediaTooLongError) return { error: type === 'video' ? 'error_videoTooLong' : 'error_audioTooLong' }
+      upload = file
+    }
+  }
+  if (upload.size > max) return { error: 'error_tooBig' }
+  const ext =
+    type === 'image'
+      ? 'jpg'
+      : upload.type === 'video/mp4'
+        ? 'mp4'
+        : upload.type === 'audio/mp4'
+          ? 'm4a'
+          : (file.name.split('.').pop() || 'bin').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 5)
   const path = `${userId}/${giftId}/${crypto.randomUUID()}.${ext}`
   const supabase = createClient()
   const { error } = await supabase.storage.from('surprise-media').upload(path, upload, { contentType: upload.type.split(';')[0] || undefined, upsert: false })
@@ -129,6 +156,7 @@ function StepForm({ userId, giftId, days, initial, onClose }: { userId: string; 
   const t = useTranslations('surprise')
   const [step, setStep] = useState(initial)
   const [busy, setBusy] = useState(false)
+  const [progress, setProgress] = useState<number | null>(null)
   const [error, setError] = useState<string | null>(null)
   const set = <K extends keyof StepDraft>(key: K, value: StepDraft[K]) => setStep((s) => ({ ...s, [key]: value }))
   const setExtra = (key: keyof StepExtra, value: string) => setStep((s) => ({ ...s, extra: { ...s.extra, [key]: value } }))
@@ -137,8 +165,9 @@ function StepForm({ userId, giftId, days, initial, onClose }: { userId: string; 
     if (!file) return
     setBusy(true)
     setError(null)
-    const r = await uploadMedia(userId, giftId, file)
+    const r = await uploadMedia(userId, giftId, file, (p) => setProgress(p))
     setBusy(false)
+    setProgress(null)
     if ('error' in r) return setError(t(r.error))
     setStep((s) => ({ ...s, mediaPath: r.path, mediaType: r.type, mediaUrl: r.url }))
   }
@@ -309,6 +338,11 @@ function StepForm({ userId, giftId, days, initial, onClose }: { userId: string; 
               <VoiceRecorder disabled={busy} onRecorded={(f) => pick(f)} />
             </div>
           )}
+          {progress !== null && (
+            <p role="status" className="mt-2 flex items-center gap-2 text-sm font-semibold text-[var(--ink)]">
+              <LoaderCircle className="h-4 w-4 animate-spin" /> {t('compressing', { pct: Math.round(progress * 100) })}
+            </p>
+          )}
           <p className="mt-1 text-xs text-gray-500">{t('mediaHint')}</p>
         </div>
       )}
@@ -352,6 +386,20 @@ function MusicPicker({
   const player = useRef<HTMLAudioElement | null>(null)
 
   useEffect(() => () => player.current?.pause(), [])
+  // Passando a un'altra app o scheda l'ascolto di prova si ferma
+  useEffect(() => {
+    const stop = () => {
+      player.current?.pause()
+      setPlaying(null)
+    }
+    const onVisibility = () => document.visibilityState === 'hidden' && stop()
+    document.addEventListener('visibilitychange', onVisibility)
+    window.addEventListener('pagehide', stop)
+    return () => {
+      document.removeEventListener('visibilitychange', onVisibility)
+      window.removeEventListener('pagehide', stop)
+    }
+  }, [])
 
   // Ascolto di prova del brano (si ferma da solo dopo 20 secondi)
   const preview = (track: MusicTrack) => {

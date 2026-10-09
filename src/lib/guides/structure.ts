@@ -15,6 +15,7 @@ export const GUIDE_STRUCTURE: GuideStructure[] = [
   { slug: 'invito', category: 'promote', minutes: 3, steps: 4, href: '/dashboard/rete' },
   { slug: 'voucher', category: 'promote', minutes: 3, steps: 3, href: '/wallet' },
   { slug: 'wallet', category: 'wallet', minutes: 4, steps: 5, href: '/wallet' },
+  { slug: 'sorprese', category: 'wallet', minutes: 4, steps: 5, href: '/sorprese' },
   { slug: 'qr-generator', category: 'promoteTools', minutes: 2, steps: 4, href: '/marketplace/qr-generator' },
   { slug: 'whatsapp-messages', category: 'promoteTools', minutes: 2, steps: 3, href: '/marketplace/whatsapp-messages' },
   { slug: 'link-in-bio', category: 'promoteTools', minutes: 3, steps: 4, href: '/marketplace/link-in-bio' },

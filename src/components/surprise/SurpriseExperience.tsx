@@ -31,7 +31,7 @@ import Link from '@/components/LocalizedLink'
 import { resizeImageFile } from '@/lib/resizeImage'
 import { audioUrl } from '@/lib/audioUrl'
 import { musicFile, OCCASION_STYLE, REACTIONS, THEME_STYLE, type Reaction, type SurpriseOccasion, type SurpriseView, type SurpriseViewStep } from '@/lib/surprise'
-import { markSurpriseOpened, sendSurpriseReply, solveSurpriseRiddle } from '@/app/actions/surprisePublic'
+import { markSurpriseLinkOpened, markSurpriseOpened, sendSurpriseReply, solveSurpriseRiddle } from '@/app/actions/surprisePublic'
 import Celebration from './Celebration'
 import Reveal from './Reveal'
 import { letterFont } from './surpriseFonts'
@@ -387,6 +387,11 @@ export default function SurpriseExperience({ view, preview = false, editorHref, 
     // eslint-disable-next-line react-hooks/set-state-in-effect -- la memoria del browser si legge solo nel browser
     setOpened(seen)
   }, [preview, token])
+
+  // Link aperto da una persona (le anteprime di WhatsApp non eseguono la pagina)
+  useEffect(() => {
+    if (token && !preview) markSurpriseLinkOpened(token).catch(() => {})
+  }, [token, preview])
 
   const stopMusic = useCallback(() => {
     audio.current?.pause()

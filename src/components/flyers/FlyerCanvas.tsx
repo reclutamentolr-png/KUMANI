@@ -4,11 +4,11 @@ import { forwardRef, type CSSProperties } from 'react'
 import localFont from 'next/font/local'
 import {
   AudioWaveform, Award, BadgeCheck, Bell, BellRing, BookOpen, Bookmark, BriefcaseBusiness, Building2, Calculator, CalendarCheck, CalendarClock,
-  CalendarDays, Camera, Car, ChartColumn, ChartLine, Circle, CircleCheck, ClipboardList, ClipboardPaste, Clock, Compass, Dices, Download, Ear, Eye,
+  CalendarDays, Camera, Car, ChartColumn, ChartLine, Circle, CircleCheck, ClipboardList, ClipboardPaste, Clock, Coins, Compass, Dices, Download, Ear, Eye,
   EyeOff, FileDown, FileSpreadsheet, FileText, Flower2, FolderOpen, Gauge, Gift, Globe, GraduationCap, Grid3x3, HandHelping, Handshake,
   HeartHandshake, House, IdCard, Image as ImageIcon, KeyRound, Landmark, Languages, Laugh, Lightbulb, Link, ListChecks, Mail, MailWarning,
   Map as MapIcon, MapPin, Megaphone, MessageCircle, MessageSquareWarning, Moon, Music, NotebookPen, Package, Palette, Paperclip, PenLine, Pencil,
-  Percent, PiggyBank, Plane, QrCode, Receipt, RefreshCw, Repeat, ScanBarcode, Search, Send, Share2, ShieldCheck, ShoppingBasket, SlidersHorizontal,
+  PartyPopper, Percent, PiggyBank, Plane, QrCode, Receipt, RefreshCw, Repeat, Route, ScanBarcode, Search, Send, Share2, ShieldCheck, ShoppingBasket, SlidersHorizontal,
   Smartphone, Sparkles, Stamp, Star, Store, Swords, Tag, Ticket, Timer, TreePine, TriangleAlert, UserSearch, Users, Utensils, VenetianMask, Wallet,
   Wheat, Wind, Zap, type LucideIcon,
 } from 'lucide-react'
@@ -25,11 +25,11 @@ const playfair = localFont({ src: '../../fonts/PlayfairDisplay.woff2', weight: '
 
 const ICONS: Record<string, LucideIcon> = {
   AudioWaveform, Award, BadgeCheck, Bell, BellRing, BookOpen, Bookmark, BriefcaseBusiness, Building2, Calculator, CalendarCheck, CalendarClock,
-  CalendarDays, Camera, Car, ChartColumn, ChartLine, Circle, CircleCheck, ClipboardList, ClipboardPaste, Clock, Compass, Dices, Download, Ear, Eye,
+  CalendarDays, Camera, Car, ChartColumn, ChartLine, Circle, CircleCheck, ClipboardList, ClipboardPaste, Clock, Coins, Compass, Dices, Download, Ear, Eye,
   EyeOff, FileDown, FileSpreadsheet, FileText, Flower2, FolderOpen, Gauge, Gift, Globe, GraduationCap, Grid3x3, HandHelping, Handshake,
   HeartHandshake, House, IdCard, Image: ImageIcon, KeyRound, Landmark, Languages, Laugh, Lightbulb, Link, ListChecks, Mail, MailWarning,
   Map: MapIcon, MapPin, Megaphone, MessageCircle, MessageSquareWarning, Moon, Music, NotebookPen, Package, Palette, Paperclip, PenLine, Pencil,
-  Percent, PiggyBank, Plane, QrCode, Receipt, RefreshCw, Repeat, ScanBarcode, Search, Send, Share2, ShieldCheck, ShoppingBasket, SlidersHorizontal,
+  PartyPopper, Percent, PiggyBank, Plane, QrCode, Receipt, RefreshCw, Repeat, Route, ScanBarcode, Search, Send, Share2, ShieldCheck, ShoppingBasket, SlidersHorizontal,
   Smartphone, Sparkles, Stamp, Star, Store, Swords, Tag, Ticket, Timer, TreePine, TriangleAlert, UserSearch, Users, Utensils, VenetianMask, Wallet,
   Wheat, Wind, Zap,
 }

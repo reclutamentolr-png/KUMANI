@@ -5,6 +5,7 @@ import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { SERVICE_GROUPS, serviceGroupOf } from '@/lib/serviceGroups'
 import { toolGuideFor } from '@/lib/guides/toolGuides'
 import { getPlanPrices } from '@/lib/planPrices'
+import { getSurprisePrices } from '@/lib/surpriseServer'
 
 // Catalogo dei servizi (pagina /catalogo e PDF): per ogni servizio acceso
 // solo l'essenziale, preso dai testi che esistono già — a cosa serve e i 3
@@ -17,6 +18,8 @@ export type CatalogItem = {
   iconName: string
   plan: 'free' | 'base' | 'pro'
   passPrice: string | null
+  // Prezzo a uso (KUMANI Sorpresa): al posto del piano
+  priceNote?: string | null
   purpose: string
   points: { title: string; text: string }[]
   steps: { title: string; text: string }[]
@@ -60,13 +63,15 @@ function firstSentence(text: string): string {
 }
 
 export async function getCatalog(locale: string): Promise<Catalog> {
-  const [messages, tm, th, tc, settings, prices] = await Promise.all([
+  const [messages, tm, th, tc, ts, settings, prices, surprisePrices] = await Promise.all([
     getMessages() as Promise<Record<string, unknown>>,
     getTranslations('marketplace'),
     getTranslations('hub'),
     getTranslations('catalog'),
+    getTranslations('surprise'),
     fetchSettings(),
     getPlanPrices(),
+    getSurprisePrices(),
   ])
   const flyers = ((messages.flyers as Texts | undefined)?.tools ?? {}) as Texts
   const guides = (messages.guideTexts ?? {}) as Texts
@@ -122,6 +127,9 @@ export async function getCatalog(locale: string): Promise<Catalog> {
       (item): item is CatalogItem => item !== null
     ),
   })
+  // KUMANI Sorpresa (per tutti, si paga ogni sorpresa): nella Community
+  const surprise = build('sorprese', `KUMANI ${ts('title')}`, ts('intro'), 'Gift', '/sorprese', '/sorprese')
+  if (surprise) groups[groups.length - 1].items.push({ ...surprise, priceNote: tc('surprisePrice', { price: new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(Math.min(...Object.values(surprisePrices)) / 100) }) })
 
   const visible = groups.filter((group) => group.items.length > 0)
   return {

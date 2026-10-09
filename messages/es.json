@@ -6933,8 +6933,21 @@
         "p2d": "Códigos y teléfono de averías, facturas en Spendly.",
         "p3": "Garantías y documentos",
         "p3d": "Tiques, manuales, contratos y pólizas a salvo."
+      },
+      "sorprese": {
+        "sub": "Regala una experiencia",
+        "tagline": "Un vale regalo o un recorrido sorpresa que se desvela día a día, para enviar con un enlace.",
+        "p1": "Para cada ocasión",
+        "p1d": "Cumpleaños, amor, Navidad: colores, música y efectos.",
+        "p2": "Recorridos de 3 o 7 días",
+        "p2d": "Fotos, vídeos, adivinanzas, lugares y canciones.",
+        "p3": "También con tus puntos",
+        "p3d": "Con tarjeta, KU Karma o KU Points."
       }
-    }
+    },
+    "includedSurprise": "Para todos, también con la cuenta gratuita",
+    "priceSurprise": "Desde {price} por sorpresa",
+    "surpriseNote": "La creas y la pruebas gratis: solo pagas al activarla."
   },
   "guideTexts": {
     "categories": {
@@ -7620,6 +7633,24 @@
       "step4Text": "En «Aparatos» añade lavadora, frigorífico, caldera…: marca, modelo, estancia, fecha de compra, la foto del tique y el manual. Ves al momento hasta cuándo están en garantía y te avisamos antes de que termine.",
       "step5Title": "Los documentos de la vivienda",
       "step5Text": "En «Documentos» sube el contrato, la póliza, los certificados de las instalaciones, el certificado energético y el plano, en PDF o en foto: solo los ves tú. Si un documento vence, pon la fecha y te recordamos renovarlo. También los encuentras en Documentos → Mis docs."
+    },
+    "sorprese": {
+      "title": "KUMANI Sorpresa",
+      "summary": "Regala una experiencia con un vale regalo o un recorrido sorpresa que se desvela día a día: lo creas gratis, lo activas con tarjeta o con tus puntos y lo envías con un enlace.",
+      "cta": "Crear una sorpresa",
+      "step1Title": "Elige por dónde empezar",
+      "step1Text": "En el Wallet toca «Crear una sorpresa», o abre kumani.io/sorprese. Elige una plantilla lista (mamá, aniversario, cumpleaños, gracias) o toca «Crear una sorpresa» para empezar desde cero. Después elige el tipo: vale regalo, recorrido de 3 días o de 7 días.",
+      "step1Tip": "Crear y probar la sorpresa es gratis: solo pagas cuando la activas para enviarla.",
+      "step2Title": "Ocasión, colores, apertura y música",
+      "step2Text": "Escribe para quién es, de parte de quién y tu mensaje. Elige la ocasión (cumpleaños, amor, Navidad…): el icono, los colores y el efecto al abrir se adaptan solos. Puedes elegir entre 10 colores, cómo se abre (caja, sobre con carta, rasca y descubre) y una música de fondo o un audio tuyo.",
+      "step3Title": "Las etapas del recorrido",
+      "step3Text": "En los recorridos añades las etapas de cada día: un mensaje, una galería de hasta 6 fotos, una adivinanza con su respuesta, un lugar con el mapa o una canción. Puedes adjuntar fotos, vídeos o un mensaje de voz grabado con el móvil: se comprimen solos y quedan por debajo de 10 MB.",
+      "step3Tip": "Toca «Vista previa» para ver la sorpresa como la verá quien la recibe, apertura incluida.",
+      "step4Title": "Actívala con tarjeta o con puntos",
+      "step4Text": "Cuando esté lista, al final de la página actívala con tarjeta o con tus puntos: KU Karma o KU Points confirmados. En cuanto se activa recibes el enlace para enviarlo por WhatsApp, por email o como prefieras.",
+      "step4Tip": "Debajo del botón de pago ves cuántos puntos hacen falta y cuántos tienes: si no bastan, el botón queda en gris.",
+      "step5Title": "El agradecimiento y la limpieza",
+      "step5Text": "Cuando quien la recibe abre el regalo lo sabes enseguida, y puede responderte con una reacción, un mensaje o una foto: lo encuentras con el sobre rosa en «Mis sorpresas» y en un recuadro nada más entrar en el panel. Las sorpresas que ya no necesitas se eliminan con la papelera."
     }
   },
   "deckTexts": {
@@ -8098,6 +8129,30 @@
       "notes": "{group}: {count, plural, one {# servicio} other {# servicios}}. {names}. De cada uno basta decir para qué sirve y a quién ayuda; la etiqueta indica el plan que lo incluye.",
       "foot": "Presentación completa, con todos los servicios · kumani.io",
       "docTitle": "KUMANI — Presentación completa con todos los servicios"
+    },
+    "surprise": {
+      "title": "KUMANI Sorpresa",
+      "sub": "Regalar una experiencia, no solo un objeto.",
+      "rows": {
+        "1": {
+          "1": "Vale regalo o recorrido",
+          "2": "Un masaje, una cena, un fin de semana, o un recorrido de 3 o 7 días que se desvela día a día."
+        },
+        "2": {
+          "1": "Etapas que emocionan",
+          "2": "Mensajes, fotos, vídeos, audios, adivinanzas, lugares con el mapa y canciones."
+        },
+        "3": {
+          "1": "Cada ocasión",
+          "2": "Cumpleaños, amor, boda, Navidad, graduación: colores, música y apertura a elegir."
+        },
+        "4": {
+          "1": "El gracias vuelve",
+          "2": "Quien la recibe responde con una reacción, un mensaje o una foto."
+        }
+      },
+      "badge": "Para todos · desde {price} por sorpresa · también con KU Karma o KU Points",
+      "notes": "KUMANI Sorpresa está abierta a todos, también a quien tiene la cuenta gratuita. Se crea y se prueba gratis; solo se paga para activar el enlace que se envía, con tarjeta o con puntos: los KU Karma ganados usando KUMANI o los KU Points confirmados. Quien la recibe abre el regalo en el móvil sin registrarse y puede dar las gracias: la respuesta llega al panel de quien la creó."
     }
   },
   "privacyPage": {
@@ -8279,8 +8334,8 @@
     "quoteAcceptedBody": "Aceptado por {name}.",
     "securityAlertTitle": "KUMANI · Aviso de seguridad",
     "securityDigestBody": "{count, plural, one {# nuevo aviso de seguridad para revisar en Admin → Seguridad.} other {# nuevos avisos de seguridad para revisar en Admin → Seguridad.}}",
-    "surpriseOpenedTitle": "🎁 ¡Sorpresa abierta!",
-    "surpriseOpenedBody": "{name} acaba de abrir tu sorpresa.",
+    "surpriseOpenedTitle": "🎁 ¡Sorpresa vista!",
+    "surpriseOpenedBody": "{name} acaba de abrir el regalo y ver tu sorpresa.",
     "surpriseReplyTitle": "💌 Un agradecimiento para ti",
     "surpriseReplyBody": "{name} ha respondido a tu sorpresa."
   },
@@ -9851,7 +9906,8 @@
         "step3Title": "Guarda y postúlate",
         "step3Text": "Guarda las ofertas y búsquedas que te interesan y postúlate en la web del anuncio."
       }
-    }
+    },
+    "surprisePrice": "Para todos · desde {price} por sorpresa"
   },
   "kordataShowcase": {
     "eyebrow": "Kordata",
@@ -10680,7 +10736,7 @@
     "madeWith": "Creado con KUMANI ·",
     "madeWithCta": "Crea tú también una sorpresa",
     "error_fileType": "Solo puedes subir fotos, vídeos o audios.",
-    "error_tooBig": "Archivo demasiado grande: máximo 20 MB.",
+    "error_tooBig": "Archivo demasiado grande: máximo 10 MB.",
     "error_filesLimit": "Has alcanzado el número máximo de archivos para las sorpresas.",
     "error_uploadError": "No se ha podido subir. Inténtalo de nuevo.",
     "stepDay": "Cuándo se abre",
@@ -10691,7 +10747,7 @@
     "stepMedia": "Foto, vídeo o audio (opcional)",
     "removeMedia": "Quitar",
     "addMedia": "Añadir",
-    "mediaHint": "Fotos, vídeos cortos o un mensaje de voz, hasta 20 MB.",
+    "mediaHint": "Fotos, vídeos cortos o un mensaje de voz, hasta 10 MB: las fotos y los vídeos se comprimen automáticamente.",
     "cancel": "Cancelar",
     "saveStep": "Guardar la etapa",
     "error_stepEmpty": "Escribe algo o añade una foto, un vídeo o un audio.",
@@ -10757,8 +10813,8 @@
     "paidOk": "Pago realizado: ¡la sorpresa está activa! Ahora envíala.",
     "canceled": "Pago cancelado: la sorpresa sigue siendo un borrador.",
     "shareTitle": "Enviar la sorpresa",
-    "openedAt": "{name} la abrió el {date}",
-    "notOpened": "Todavía no abierta",
+    "openedAt": "{name} abrió el enlace el {date}, pero aún no ha abierto el regalo",
+    "notOpened": "Enlace todavía no abierto",
     "startsAt": "empieza el {date}",
     "endsAt": "regalo final el {date} ({days} días)",
     "payTitle": "Activar y enviar",
@@ -10915,7 +10971,42 @@
     "previewReplay": "Volver a ver la apertura",
     "ogCta": "Toca para abrirla",
     "ogDescription": "De parte de {name}: ábrela para descubrir la sorpresa.",
-    "ogDescriptionNoSender": "Ábrela para descubrir la sorpresa."
+    "ogDescriptionNoSender": "Ábrela para descubrir la sorpresa.",
+    "newBadge": "Nuevo",
+    "repliesCount": "{n, plural, one {# agradecimiento} other {# agradecimientos}}",
+    "repliesNew": "{n, plural, one {# nuevo} other {# nuevos}}",
+    "popupTitle": "{n, plural, one {💌 Has recibido un agradecimiento} other {💌 Has recibido # agradecimientos}}",
+    "popupLine": "{name} ha respondido a «{title}»",
+    "popupOpen": "Abrir la sorpresa",
+    "popupMarkRead": "Marcar como leído",
+    "popupLater": "Más tarde",
+    "popupMore": "{n, plural, one {y otro más en «Mis sorpresas»} other {y # más en «Mis sorpresas»}}",
+    "pointsTitle": "O paga con tus puntos",
+    "pointsText": "Usa los KU Karma que ganaste usando KUMANI o tus KU Points confirmados: la sorpresa se activa enseguida.",
+    "pointsKarma": "{n} KU Karma",
+    "pointsKu": "{n} KU Points",
+    "pointsBalance": "Tienes {n}",
+    "pointsMissing": "faltan {n}",
+    "pointsPay": "Pagar con {what}",
+    "pointsConfirm": "¿Usar {what} para activar la sorpresa? Los puntos usados no se devuelven.",
+    "pointsYes": "Sí, activar",
+    "pointsNo": "Cancelar",
+    "pointsInsufficient": "No tienes suficientes puntos disponibles.",
+    "pointsError": "No se han podido usar los puntos. Inténtalo de nuevo.",
+    "paidWithPoints": "pagada con {what}",
+    "theme_coral": "Coral",
+    "theme_ruby": "Rubí",
+    "theme_lilac": "Lila",
+    "theme_teal": "Turquesa",
+    "theme_silver": "Plata",
+    "compressing": "Comprimiendo… {pct} %",
+    "error_videoTooLong": "Vídeo demasiado largo: incluso comprimido superaría los 10 MB. Elige uno más corto (unos 2-3 minutos como máximo).",
+    "error_audioTooLong": "Audio demasiado largo: incluso comprimido superaría los 10 MB. Elige uno más corto.",
+    "deleteSurprise": "Eliminar «{title}»",
+    "deleteActiveConfirm": "¿Eliminar «{title}»? La sorpresa ya se ha enviado: el enlace dejará de funcionar y también se borrarán las fotos, los vídeos y los agradecimientos. El precio o los puntos usados no se devuelven.",
+    "deleteError": "No se ha podido eliminar la sorpresa. Inténtalo de nuevo.",
+    "status_seen": "Vista",
+    "seenAt": "{name} la vio el {date}"
   },
   "surpriseTpl": {
     "mom_name": "Un masaje para mamá",

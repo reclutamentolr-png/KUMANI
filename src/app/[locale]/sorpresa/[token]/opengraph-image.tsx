@@ -19,6 +19,11 @@ const BG: Record<string, [string, string]> = {
   sky: ['#123a6b', '#071528'],
   green: ['#14452e', '#061a10'],
   night: ['#231c45', '#0a0816'],
+  coral: ['#6b2614', '#1f0904'],
+  ruby: ['#5a0d14', '#1a0204'],
+  lilac: ['#4a2660', '#170a1f'],
+  teal: ['#0d4a4d', '#031618'],
+  silver: ['#363b44', '#0e1013'],
 }
 const clip = (text: string, max: number) => (text.length > max ? text.slice(0, max - 1).trimEnd() + '…' : text)
 

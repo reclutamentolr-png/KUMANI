@@ -4,6 +4,7 @@ import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { getPlanPrices } from '@/lib/planPrices'
 import { getToolPassOffer } from '@/lib/toolPasses'
 import { FLYERS, type FlyerPlan } from '@/lib/flyers'
+import { getSurprisePrices } from '@/lib/surpriseServer'
 
 // Dati dei volantini letti dal server: nomi dei servizi nella lingua
 // dell'utente, piano e prezzi attuali, volantini attivati in Admin.
@@ -18,10 +19,16 @@ export async function getFlyerTitles(): Promise<Record<string, string>> {
   titles.timebank = mt('timebank')
   titles.events = mt('events')
   titles.spotlight = st('title')
+  titles.sorprese = `KUMANI ${(await getTranslations('surprise'))('title')}`
   return titles
 }
 
 export async function getFlyerPlan(supabase: SupabaseClient, tool: string): Promise<FlyerPlan> {
+  // KUMANI Sorpresa: per tutti, si paga ogni sorpresa (dal prezzo più basso)
+  if (tool === 'sorprese') {
+    const prices = await getSurprisePrices()
+    return { plan: 'surprise', planPrice: Math.min(...Object.values(prices)) / 100, passPrice: null }
+  }
   const [offer, prices] = await Promise.all([getToolPassOffer(supabase, tool), getPlanPrices()])
   const plan = offer.requiredPlan === 'pro' ? 'pro' : offer.requiredPlan === 'free' ? 'free' : 'base'
   return {

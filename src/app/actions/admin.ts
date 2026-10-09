@@ -104,6 +104,7 @@ const GENERAL_SETTINGS_KEYS = new Set([
   'activity_thanks_points', 'pro_invite_extra_points', 'pro_trial_days', 'affinity_intros_per_week',
   'listing_feature_cost_7d', 'listing_feature_cost_15d', 'menu_ai_daily_runs', 'shop_commission_percent',
   'surprise_price_voucher_cents', 'surprise_price_journey3_cents', 'surprise_price_journey7_cents',
+  'surprise_karma_voucher', 'surprise_karma_journey3', 'surprise_karma_journey7', 'surprise_kupoints_voucher', 'surprise_kupoints_journey3', 'surprise_kupoints_journey7',
   'veritas_write_seconds', 'veritas_vote_seconds', 'veritas_reveal_seconds',
   'verifoto_daily_user', 'verifoto_monthly_ops', 'checkmail_daily_user', 'scudo_dati_other_cost', 'scudo_dati_daily_cap',
   'mosaic_pixels_day', 'mosaic_bonus_pixels', 'mosaic_min_login_days',
@@ -151,6 +152,12 @@ export async function adminSaveSystemSettings(settings: Record<string, unknown>)
     if (key in settings) {
       const cents = settings[key]
       if (!Number.isInteger(cents) || (cents as number) < 50 || (cents as number) > 100000) return { success: false, error: 'Prezzo di KUMANI Sorpresa non valido (da 0,50 € a 1.000 €).' }
+    }
+  }
+  for (const key of ['surprise_karma_voucher', 'surprise_karma_journey3', 'surprise_karma_journey7', 'surprise_kupoints_voucher', 'surprise_kupoints_journey3', 'surprise_kupoints_journey7']) {
+    if (key in settings) {
+      const points = settings[key]
+      if (!Number.isInteger(points) || (points as number) < 0 || (points as number) > 1000000) return { success: false, error: 'Costo in punti di KUMANI Sorpresa non valido (numero intero, 0 = non si può pagare con quei punti).' }
     }
   }
   if (Object.keys(settings).length === 0) return { success: true }

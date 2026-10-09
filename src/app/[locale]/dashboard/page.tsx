@@ -1,3 +1,5 @@
+import SurpriseRepliesPopup from '@/components/surprise/SurpriseRepliesPopup'
+import { getUnreadReplies } from '@/lib/surpriseReplies'
 import SurpriseDashboardCard from '@/components/surprise/SurpriseDashboardCard'
 import { SITE_URL } from '@/lib/siteUrl'
 import { createClient } from '@/lib/supabase/server'
@@ -78,7 +80,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   // dashboard impiegava secondi): ruolo admin, profilo completo (solo
   // tramite get_my_profile(): le colonne personali non sono leggibili
   // direttamente), messaggi non letti, piano e strumenti, preferiti.
-  const [adminRole, profile, unreadMessagesCount, access, favoriteToolNames, { count: landingUnread }, reviewOptions, lateSponsor, planPrices, { data: giftWelcome }] = await Promise.all([
+  const [adminRole, profile, unreadMessagesCount, access, favoriteToolNames, { count: landingUnread }, reviewOptions, lateSponsor, planPrices, { data: giftWelcome }, surpriseReplies] = await Promise.all([
     hasAdminRole(supabase, user.id),
     profilePromise,
     getUnreadMessagesCount(user.id),
@@ -94,6 +96,8 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     getPlanPrices(),
     // Arrivato con il regalo di un Pass e senza piano: dashboard essenziale
     supabase.rpc('my_gift_welcome'),
+    // KUMANI Sorpresa: ringraziamenti non ancora letti (popup)
+    getUnreadReplies(supabase),
   ])
   const canReview = reviewOptions.some((option) => option.purchaseLabel && !option.review)
   const { userPlan, isSettingEnabled, isToolEnabled, requiredPlan } = access
@@ -239,6 +243,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
         {/* Invito a recensire chi ha acquistato e non l'ha ancora fatto */}
         {canReview && <ReviewInviteCard />}
 
+        {surpriseReplies.total > 0 && <SurpriseRepliesPopup replies={surpriseReplies.items} total={surpriseReplies.total} />}
         {giftWelcome === true ? (
           <GiftWelcomeDashboard firstName={profile?.first_name ?? null} services={catalog.items} passExpiry={access.passExpiresAt} />
         ) : (

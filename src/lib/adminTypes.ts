@@ -229,6 +229,12 @@ export type AdminSystemSettings = {
   surprise_price_voucher_cents: number
   surprise_price_journey3_cents: number
   surprise_price_journey7_cents: number
+  surprise_karma_voucher: number
+  surprise_karma_journey3: number
+  surprise_karma_journey7: number
+  surprise_kupoints_voucher: number
+  surprise_kupoints_journey3: number
+  surprise_kupoints_journey7: number
   veritas_write_seconds: number
   veritas_vote_seconds: number
   veritas_reveal_seconds: number

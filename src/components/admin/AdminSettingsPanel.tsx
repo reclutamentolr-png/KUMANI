@@ -56,6 +56,12 @@ export default function AdminSettingsPanel() {
     surprise_price_voucher_cents: 290,
     surprise_price_journey3_cents: 990,
     surprise_price_journey7_cents: 1590,
+    surprise_karma_voucher: 300,
+    surprise_karma_journey3: 1000,
+    surprise_karma_journey7: 1600,
+    surprise_kupoints_voucher: 18,
+    surprise_kupoints_journey3: 60,
+    surprise_kupoints_journey7: 96,
     veritas_write_seconds: 90,
     veritas_vote_seconds: 45,
     veritas_reveal_seconds: 15,
@@ -502,6 +508,35 @@ export default function AdminSettingsPanel() {
               ))}
             </div>
             <p className="text-xs text-gray-500 mt-1">Quanto paga chi crea una sorpresa per attivare il link (IVA compresa). Vale per le sorprese pagate da adesso.</p>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">KUMANI Sorpresa: costo in punti</label>
+            <div className="grid max-w-xl gap-3 sm:grid-cols-3">
+              {(
+                [
+                  ['surprise_karma_voucher', 'Buono regalo · KU Karma'],
+                  ['surprise_karma_journey3', 'Percorso 3 giorni · KU Karma'],
+                  ['surprise_karma_journey7', 'Percorso 7 giorni · KU Karma'],
+                  ['surprise_kupoints_voucher', 'Buono regalo · KU Points'],
+                  ['surprise_kupoints_journey3', 'Percorso 3 giorni · KU Points'],
+                  ['surprise_kupoints_journey7', 'Percorso 7 giorni · KU Points'],
+                ] as const
+              ).map(([key, name]) => (
+                <label key={key} className="text-xs text-gray-600">
+                  {name}
+                  <input
+                    type="number"
+                    min="0"
+                    max="1000000"
+                    step="1"
+                    value={(systemSettings[key] as number) ?? 0}
+                    onChange={(e) => setSystemSettings({ ...systemSettings, [key]: Math.max(0, parseInt(e.target.value, 10) || 0) })}
+                    className={`mt-1 ${INPUT}`}
+                  />
+                </label>
+              ))}
+            </div>
+            <p className="text-xs text-gray-500 mt-1">In alternativa alla carta, chi crea la sorpresa può pagarla con i KU Karma oppure con i KU Points confermati (mai quelli ancora in conferma). 0 = non si può pagare con quei punti. Riferimento: 294 KU Points = voucher da 49 €; 300 KU Karma = 5 € di sconto sul rinnovo.</p>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Traduzioni AI del Menù al giorno (per ristorante)</label>

@@ -6,7 +6,10 @@ import Link from '@/components/LocalizedLink'
 import CheckoutForm from '@/components/billing/CheckoutForm'
 import SurpriseEditor from '@/components/surprise/SurpriseEditor'
 import SurpriseShare from '@/components/surprise/SurpriseShare'
+import SurprisePointsPay from '@/components/surprise/SurprisePointsPay'
+import { getMyNetworkWallet } from '@/lib/networkWallet'
 import { createClient } from '@/lib/supabase/server'
+import MarkRepliesRead from '@/components/surprise/MarkRepliesRead'
 import { getCheckoutTexts } from '@/lib/checkoutTexts'
 import { SITE_URL } from '@/lib/siteUrl'
 import { confirmSurpriseSession, getSurprisePrices, STEP_SELECT } from '@/lib/surpriseServer'
@@ -45,7 +48,7 @@ export default async function SurpriseEditPage({
   if (!gift) notFound()
   const { data: steps } = await supabase.from('surprise_steps').select(STEP_SELECT).eq('gift_id', id)
   // Ringraziamenti di chi ha ricevuto la sorpresa
-  const { data: replies } = await supabase.from('surprise_replies').select('id, reaction, message, photo_path, created_at').eq('gift_id', id).order('created_at', { ascending: false })
+  const { data: replies } = await supabase.from('surprise_replies').select('id, reaction, message, photo_path, created_at, read_at').eq('gift_id', id).order('created_at', { ascending: false })
   const paths = [
     gift.cover_path,
     gift.music_path,
@@ -64,6 +67,21 @@ export default async function SurpriseEditPage({
   const incomplete = row.kind === 'voucher' ? 0 : ((steps ?? []) as SurpriseStepRow[]).filter(stepIncomplete).length
   const checkoutTexts = { ...(await getCheckoutTexts(locale)), consentLabel: t('consentLabel'), consentHint: t('consentHint') }
   const url = row.public_token ? `${SITE_URL}${prefix}${surprisePath(row.public_token)}` : null
+  // Pagamento con i punti (costi decisi in Admin; 0 = non disponibile)
+  let points: { costs: Record<'karma' | 'ku_points', number>; balances: Record<'karma' | 'ku_points', number> } | null = null
+  if (row.status === 'draft' && ready) {
+    const [{ data: costs }, { data: profile }, wallet] = await Promise.all([
+      supabase.rpc('surprise_points_costs'),
+      supabase.rpc('get_my_profile').maybeSingle<{ daily_points: number | null }>(),
+      getMyNetworkWallet(supabase),
+    ])
+    const c = costs as Record<'karma' | 'ku_points', Record<string, number>> | null
+    if (c)
+      points = {
+        costs: { karma: Number(c.karma?.[row.kind]) || 0, ku_points: Number(c.ku_points?.[row.kind]) || 0 },
+        balances: { karma: profile?.daily_points ?? 0, ku_points: Math.max(wallet.networkPoints - wallet.pendingPoints, 0) },
+      }
+  }
 
   return (
     <div className="min-h-screen bg-[var(--background)] pb-28">
@@ -91,10 +109,13 @@ export default async function SurpriseEditPage({
               {row.refunded_at
                 ? t('status_refunded')
                 : row.opened_at
-                  ? t('openedAt', { name: row.recipient_name, date: when(row.opened_at) })
-                  : t('notOpened')}
+                  ? t('seenAt', { name: row.recipient_name, date: when(row.opened_at) })
+                  : row.link_opened_at
+                    ? t('openedAt', { name: row.recipient_name, date: when(row.link_opened_at) })
+                    : t('notOpened')}
               {row.start_at && row.kind !== 'voucher' ? ` · ${t('startsAt', { date: when(row.start_at) })}` : ''}
               {row.start_at && row.kind !== 'voucher' ? ` · ${t('endsAt', { date: when(voucherUnlockAt(row.start_at, row.kind).toISOString()), days: surpriseDays(row.kind) })}` : ''}
+              {row.paid_with === 'karma' || row.paid_with === 'ku_points' ? ` · ${t('paidWithPoints', { what: t(row.paid_with === 'karma' ? 'pointsKarma' : 'pointsKu', { n: row.points_spent ?? 0 }) })}` : ''}
             </p>
             {!row.refunded_at && (
               <div className="mt-4">
@@ -104,6 +125,8 @@ export default async function SurpriseEditPage({
           </section>
         )}
 
+        {/* Aprendo la sorpresa i ringraziamenti diventano letti (qui si vedono ancora come «nuovi») */}
+        {replies?.some((r) => !r.read_at) && <MarkRepliesRead giftId={row.id} />}
         {!!replies?.length && (
           <section className="mt-5 rounded-2xl border border-rose-200 bg-rose-50/60 p-5 shadow-sm">
             <h2 className="flex items-center gap-2 text-lg font-bold text-[var(--ink)]">
@@ -115,6 +138,7 @@ export default async function SurpriseEditPage({
                 return (
                   <li key={r.id} className="rounded-xl bg-white p-4">
                     <p className="flex items-center gap-2 text-xs text-gray-500">
+                      {!r.read_at && <span className="rounded-full bg-rose-500 px-2 py-0.5 text-[11px] font-bold text-white">{t('newBadge')}</span>}
                       {Icon && <Icon className="h-4 w-4 text-rose-500" />}
                       {r.reaction ? t(`reaction_${r.reaction}`) : ''} · {when(r.created_at)}
                     </p>
@@ -162,6 +186,7 @@ export default async function SurpriseEditPage({
                   </button>
                 </CheckoutForm>
                 <p className="mt-2 text-xs text-gray-500">{t('saveBeforePay')}</p>
+                {points && <SurprisePointsPay giftId={row.id} costs={points.costs} balances={points.balances} />}
               </div>
             )}
           </section>

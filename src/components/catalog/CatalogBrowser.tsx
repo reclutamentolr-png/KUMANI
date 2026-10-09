@@ -8,11 +8,7 @@ import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 import { GROUP_STYLE, type ServiceGroup } from '@/lib/serviceGroups'
 import type { Catalog, CatalogItem } from '@/lib/catalog-server'
 
-const normalize = (text: string) =>
-  text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
+const normalize = (text: string) => text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
 
 const COMMUNITY_STYLE = { dot: 'bg-sky-700', tile: 'bg-sky-50 text-sky-800' }
 const styleOf = (group: string) => (group in GROUP_STYLE ? GROUP_STYLE[group as ServiceGroup] : COMMUNITY_STYLE)
@@ -51,7 +47,12 @@ export default function CatalogBrowser({ catalog }: { catalog: Catalog }) {
             className="w-full rounded-xl border border-[var(--gold)]/35 bg-white py-3 pl-12 pr-11 text-[var(--ink)] outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/25"
           />
           {query && (
-            <button type="button" onClick={() => setQuery('')} aria-label={t('clearSearch')} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-[var(--muted)] hover:bg-gray-100">
+            <button
+              type="button"
+              onClick={() => setQuery('')}
+              aria-label={t('clearSearch')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-[var(--muted)] hover:bg-gray-100"
+            >
               <X className="h-4 w-4" />
             </button>
           )}
@@ -106,10 +107,20 @@ function CatalogEntry({ item, tile }: { item: CatalogItem; tile: string }) {
         <div className="min-w-0 flex-1">
           <h3 className="text-xl font-bold text-[var(--ink)]">{item.title}</h3>
           <p className="mt-1 flex flex-wrap gap-1.5">
-            <span className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${item.plan === 'free' ? 'bg-emerald-50 text-emerald-700' : item.plan === 'pro' ? 'bg-[var(--ink)] text-[var(--gold-bright)]' : 'bg-[var(--gold-pale)] text-[var(--ink)]'}`}>
-              {plan}
-            </span>
-            {item.passPrice && <span className="rounded-full border border-dashed border-[var(--gold)] px-2.5 py-0.5 text-xs font-semibold text-[var(--ink)]">{t('passFrom', { price: item.passPrice })}</span>}
+            {item.priceNote ? (
+              <span className="rounded-full bg-rose-50 px-2.5 py-0.5 text-xs font-bold text-rose-700">{item.priceNote}</span>
+            ) : (
+              <span
+                className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${item.plan === 'free' ? 'bg-emerald-50 text-emerald-700' : item.plan === 'pro' ? 'bg-[var(--ink)] text-[var(--gold-bright)]' : 'bg-[var(--gold-pale)] text-[var(--ink)]'}`}
+              >
+                {plan}
+              </span>
+            )}
+            {item.passPrice && (
+              <span className="rounded-full border border-dashed border-[var(--gold)] px-2.5 py-0.5 text-xs font-semibold text-[var(--ink)]">
+                {t('passFrom', { price: item.passPrice })}
+              </span>
+            )}
           </p>
         </div>
       </header>
@@ -159,7 +170,10 @@ function CatalogEntry({ item, tile }: { item: CatalogItem; tile: string }) {
           {t('openService')} <ArrowRight className="h-4 w-4" />
         </Link>
         {item.guideHref && (
-          <Link href={item.guideHref} className="inline-flex items-center gap-1.5 rounded-xl border border-[var(--gold)]/45 px-4 py-2 text-sm font-bold text-[var(--ink)] hover:bg-[var(--gold-pale)]">
+          <Link
+            href={item.guideHref}
+            className="inline-flex items-center gap-1.5 rounded-xl border border-[var(--gold)]/45 px-4 py-2 text-sm font-bold text-[var(--ink)] hover:bg-[var(--gold-pale)]"
+          >
             <BookOpen className="h-4 w-4 text-[var(--gold)]" /> {t('fullGuide')}
           </Link>
         )}
