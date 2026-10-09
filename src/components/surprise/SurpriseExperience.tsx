@@ -367,7 +367,8 @@ export default function SurpriseExperience({ view, preview = false, editorHref, 
   const occasion = OCCASION_STYLE[view.occasion]
   const Icon = OCCASION_ICON[view.occasion]
   const accent = style.accent
-  const [opened, setOpened] = useState<boolean | null>(preview ? true : null)
+  // Anteprima: si parte dall'apertura scelta (scatola, busta, gratta e scopri)
+  const [opened, setOpened] = useState<boolean | null>(preview ? false : null)
   // Indovinelli risolti in questa visita (il resto arriva dal server)
   const [solved, setSolved] = useState<Record<string, SurpriseViewStep>>({})
   const steps = view.steps.map((s) => solved[s.id] ?? s)
@@ -412,7 +413,7 @@ export default function SurpriseExperience({ view, preview = false, editorHref, 
     setBurst((b) => b + 1)
     startMusic()
     try {
-      if (token) localStorage.setItem(openedKey(token), '1')
+      if (token && !preview) localStorage.setItem(openedKey(token), '1')
     } catch {
       // nulla da fare
     }
@@ -447,6 +448,18 @@ export default function SurpriseExperience({ view, preview = false, editorHref, 
       {preview && (
         <div className="relative mx-auto mb-6 flex max-w-xl flex-wrap items-center justify-between gap-2 rounded-2xl bg-white/10 px-4 py-3 text-sm backdrop-blur">
           <span>{t('previewBanner')}</span>
+          {opened && (
+            <button
+              type="button"
+              onClick={() => {
+                stopMusic()
+                setOpened(false)
+              }}
+              className="min-h-11 cursor-pointer font-semibold underline underline-offset-4"
+            >
+              {t('previewReplay')}
+            </button>
+          )}
           {editorHref && (
             <Link href={editorHref} className="font-semibold underline underline-offset-4">
               {t('backToEditor')}

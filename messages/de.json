@@ -10911,7 +10911,8 @@
     "occasionTitle_party": "Es wird gefeiert für",
     "musicAdd": "Musik hinzufügen",
     "stepIncomplete": "Unvollständig",
-    "payIncompleteSteps": "{n, plural, one {# Etappe ist unvollständig (Lied ohne Link, Ort ohne Adresse…): Der Empfänger würde sie unvollständig sehen.} other {# Etappen sind unvollständig (Lied ohne Link, Ort ohne Adresse…): Der Empfänger würde sie unvollständig sehen.}}"
+    "payIncompleteSteps": "{n, plural, one {# Etappe ist unvollständig (Lied ohne Link, Ort ohne Adresse…): Der Empfänger würde sie unvollständig sehen.} other {# Etappen sind unvollständig (Lied ohne Link, Ort ohne Adresse…): Der Empfänger würde sie unvollständig sehen.}}",
+    "previewReplay": "Öffnung erneut ansehen"
   },
   "surpriseTpl": {
     "mom_name": "Eine Massage für Mama",

@@ -10911,7 +10911,8 @@
     "occasionTitle_party": "É festa para",
     "musicAdd": "Adicionar música",
     "stepIncomplete": "Por completar",
-    "payIncompleteSteps": "{n, plural, one {# etapa está por completar (canção sem ligação, local sem morada…): quem a receber vê-la-ia incompleta.} other {# etapas estão por completar (canção sem ligação, local sem morada…): quem as receber vê-las-ia incompletas.}}"
+    "payIncompleteSteps": "{n, plural, one {# etapa está por completar (canção sem ligação, local sem morada…): quem a receber vê-la-ia incompleta.} other {# etapas estão por completar (canção sem ligação, local sem morada…): quem as receber vê-las-ia incompletas.}}",
+    "previewReplay": "Rever a abertura"
   },
   "surpriseTpl": {
     "mom_name": "Uma massagem para a mãe",

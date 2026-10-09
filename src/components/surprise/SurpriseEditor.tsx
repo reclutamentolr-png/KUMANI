@@ -482,6 +482,9 @@ export default function SurpriseEditor({
     coverPath: gift.cover_path,
   }
   const [form, setForm] = useState(initial)
+  // Ultima versione salvata: dopo «Salva» il modulo risulta subito salvato
+  // (Anteprima attiva) anche se il server ripulisce i testi
+  const [saved, setSaved] = useState(initial)
   const [coverUrl, setCoverUrl] = useState<string | null>(gift.cover_path ? (mediaUrls[gift.cover_path] ?? null) : null)
   const [musicUrl, setMusicUrl] = useState<string | null>(gift.music_path ? (mediaUrls[gift.music_path] ?? null) : null)
   const [busy, setBusy] = useState(false)
@@ -490,7 +493,7 @@ export default function SurpriseEditor({
   const days = surpriseDays(form.kind)
   const money = (cents: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(cents / 100)
 
-  const dirty = JSON.stringify(form) !== JSON.stringify(initial)
+  const dirty = JSON.stringify(form) !== JSON.stringify(saved)
 
   const set = <K extends keyof typeof form>(key: K, value: (typeof form)[K]) => setForm((f) => ({ ...f, [key]: value }))
 
@@ -504,6 +507,7 @@ export default function SurpriseEditor({
     const r = await saveSurprise(gift.id, { ...form, startAt: form.startAt ? new Date(form.startAt).toISOString() : null })
     setBusy(false)
     if (!r.success) return setNotice({ ok: false, text: t(`error_${r.message}`) })
+    setSaved(form)
     setNotice({ ok: true, text: t('saved') })
     router.refresh()
   }
@@ -731,9 +735,9 @@ export default function SurpriseEditor({
         <button
           type="button"
           onClick={() => {
-            setForm(initial)
-            setCoverUrl(gift.cover_path ? (mediaUrls[gift.cover_path] ?? null) : null)
-            setMusicUrl(gift.music_path ? (mediaUrls[gift.music_path] ?? null) : null)
+            setForm(saved)
+            setCoverUrl(saved.coverPath ? (mediaUrls[saved.coverPath] ?? coverUrl) : null)
+            setMusicUrl(saved.musicPath ? (mediaUrls[saved.musicPath] ?? musicUrl) : null)
             setNotice(null)
           }}
           disabled={busy || !dirty}

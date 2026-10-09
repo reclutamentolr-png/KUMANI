@@ -10911,7 +10911,8 @@
     "occasionTitle_party": "Si fa festa per",
     "musicAdd": "Aggiungi una musica",
     "stepIncomplete": "Da completare",
-    "payIncompleteSteps": "{n, plural, one {# tappa è da completare (canzone senza link, luogo senza indirizzo…): chi riceve la vedrebbe incompleta.} other {# tappe sono da completare (canzone senza link, luogo senza indirizzo…): chi riceve le vedrebbe incomplete.}}"
+    "payIncompleteSteps": "{n, plural, one {# tappa è da completare (canzone senza link, luogo senza indirizzo…): chi riceve la vedrebbe incompleta.} other {# tappe sono da completare (canzone senza link, luogo senza indirizzo…): chi riceve le vedrebbe incomplete.}}",
+    "previewReplay": "Rivedi l'apertura"
   },
   "surpriseTpl": {
     "mom_name": "Un massaggio per la mamma",

@@ -10911,7 +10911,8 @@
     "occasionTitle_party": "Let's celebrate",
     "musicAdd": "Add music",
     "stepIncomplete": "To complete",
-    "payIncompleteSteps": "{n, plural, one {# step needs completing (song without link, place without address…): the recipient would see it incomplete.} other {# steps need completing (song without link, place without address…): the recipient would see them incomplete.}}"
+    "payIncompleteSteps": "{n, plural, one {# step needs completing (song without link, place without address…): the recipient would see it incomplete.} other {# steps need completing (song without link, place without address…): the recipient would see them incomplete.}}",
+    "previewReplay": "Replay the opening"
   },
   "surpriseTpl": {
     "mom_name": "A massage for Mum",
