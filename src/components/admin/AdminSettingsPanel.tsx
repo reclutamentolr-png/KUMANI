@@ -19,6 +19,11 @@ import {
 import { askConfirm } from '@/lib/confirm'
 
 // Sezione "settings" dell'Admin, caricata solo quando la si apre.
+
+// Un solo stile per tutti i campi (numeri e testi): stessa grandezza del
+// testo e stessi margini in ogni sezione
+const INPUT =
+  'w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]'
 export default function AdminSettingsPanel() {
   const supabase = createClient()
   const [systemSettings, setSystemSettings] = useState<AdminSystemSettings>({
@@ -162,7 +167,7 @@ export default function AdminSettingsPanel() {
         </div>
         <div className="space-y-6 p-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+            <label className="mb-1 flex items-center gap-2 text-sm font-medium text-gray-700">
               <BadgeCheck className="w-4 h-4" />
               Prezzi degli abbonamenti
             </label>
@@ -172,8 +177,8 @@ export default function AdminSettingsPanel() {
             </p>
             {planPrices ? (
               <div className="flex flex-wrap gap-3 text-sm">
-                <span className="rounded-lg bg-gray-100 px-3 py-2 font-semibold text-gray-800">Base: {planPrices.base} € / anno</span>
-                <span className="rounded-lg bg-gray-100 px-3 py-2 font-semibold text-gray-800">Pro: {planPrices.pro} € / anno</span>
+                <span className="rounded-lg bg-gray-100 px-3 py-2 text-sm font-semibold text-gray-800">Base: {planPrices.base} € / anno</span>
+                <span className="rounded-lg bg-gray-100 px-3 py-2 text-sm font-semibold text-gray-800">Pro: {planPrices.pro} € / anno</span>
                 {planPrices.source !== 'stripe' && (
                   <span className="rounded-lg bg-amber-50 px-3 py-2 text-amber-800">Stripe non raggiungibile: valori di riserva salvati</span>
                 )}
@@ -183,7 +188,7 @@ export default function AdminSettingsPanel() {
             )}
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+            <label className="mb-1 flex items-center gap-2 text-sm font-medium text-gray-700">
               <GitBranch className="w-4 h-4" />
               Piano Pro: prova gratuita
             </label>
@@ -199,7 +204,7 @@ export default function AdminSettingsPanel() {
                   min="1"
                   value={systemSettings.pro_trial_days ?? 15}
                   onChange={(e) => setSystemSettings({ ...systemSettings, pro_trial_days: parseInt(e.target.value, 10) || 1 })}
-                  className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                  className={INPUT}
                 />
               </label>
             </div>
@@ -215,7 +220,7 @@ export default function AdminSettingsPanel() {
         </div>
         <div className="space-y-6 p-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+            <label className="mb-1 flex items-center gap-2 text-sm font-medium text-gray-700">
               <Users className="w-4 h-4" />
               Iscrizioni senza invito
             </label>
@@ -240,7 +245,7 @@ export default function AdminSettingsPanel() {
                     value={houseEmail}
                     onChange={(e) => setHouseEmail(e.target.value)}
                     placeholder="email dell'account KUMANI (es. community@...)"
-                    className="flex-1 p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                    className={`flex-1 ${INPUT.replace('w-full ', '')}`}
                   />
                   <button
                     type="button"
@@ -265,7 +270,7 @@ export default function AdminSettingsPanel() {
         </div>
         <div className="space-y-6 p-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+            <label className="mb-1 flex items-center gap-2 text-sm font-medium text-gray-700">
               <GitBranch className="w-4 h-4" />
               KU Points
             </label>
@@ -285,7 +290,7 @@ export default function AdminSettingsPanel() {
                   min="0"
                   value={systemSettings.network_points_activation_base ?? 10}
                   onChange={(e) => setSystemSettings({ ...systemSettings, network_points_activation_base: parseInt(e.target.value, 10) || 0 })}
-                  className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                  className={INPUT}
                 />
               </label>
               <label className="block max-w-xs">
@@ -295,7 +300,7 @@ export default function AdminSettingsPanel() {
                   min="0"
                   value={systemSettings.network_points_activation_pro ?? 120}
                   onChange={(e) => setSystemSettings({ ...systemSettings, network_points_activation_pro: parseInt(e.target.value, 10) || 0 })}
-                  className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                  className={INPUT}
                 />
               </label>
               <label className="block max-w-xs">
@@ -305,7 +310,7 @@ export default function AdminSettingsPanel() {
                   min="0"
                   value={systemSettings.network_points_upgrade_pro ?? 110}
                   onChange={(e) => setSystemSettings({ ...systemSettings, network_points_upgrade_pro: parseInt(e.target.value, 10) || 0 })}
-                  className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                  className={INPUT}
                 />
               </label>
             </div>
@@ -318,7 +323,7 @@ export default function AdminSettingsPanel() {
                   min="1"
                   value={systemSettings.welcome_bonus_from_direct ?? 6}
                   onChange={(e) => setSystemSettings({ ...systemSettings, welcome_bonus_from_direct: parseInt(e.target.value, 10) || 1 })}
-                  className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                  className={INPUT}
                 />
               </label>
               <label className="block max-w-xs">
@@ -328,7 +333,7 @@ export default function AdminSettingsPanel() {
                   min="0"
                   value={systemSettings.welcome_bonus_base ?? 1}
                   onChange={(e) => setSystemSettings({ ...systemSettings, welcome_bonus_base: parseInt(e.target.value, 10) || 0 })}
-                  className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                  className={INPUT}
                 />
               </label>
               <label className="block max-w-xs">
@@ -338,7 +343,7 @@ export default function AdminSettingsPanel() {
                   min="0"
                   value={systemSettings.welcome_bonus_pro ?? 10}
                   onChange={(e) => setSystemSettings({ ...systemSettings, welcome_bonus_pro: parseInt(e.target.value, 10) || 0 })}
-                  className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                  className={INPUT}
                 />
               </label>
             </div>
@@ -350,7 +355,7 @@ export default function AdminSettingsPanel() {
             </p>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+            <label className="mb-1 flex items-center gap-2 text-sm font-medium text-gray-700">
               <GitBranch className="w-4 h-4" />
               Qualifiche e voucher premio
             </label>
@@ -377,7 +382,7 @@ export default function AdminSettingsPanel() {
                           rules[index] = { ...rule, [field]: parseInt(e.target.value, 10) || 0 }
                           setSystemSettings({ ...systemSettings, qualifications: rules })
                         }}
-                        className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                        className={INPUT}
                       />
                     </label>
                   ))}
@@ -391,7 +396,7 @@ export default function AdminSettingsPanel() {
                 min="0"
                 value={systemSettings.black_plus_every ?? 6}
                 onChange={(e) => setSystemSettings({ ...systemSettings, black_plus_every: parseInt(e.target.value, 10) || 0 })}
-                className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                className={INPUT}
               />
             </label>
             <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl">
@@ -402,7 +407,7 @@ export default function AdminSettingsPanel() {
                   min="0"
                   value={systemSettings.voucher_value_base_eur ?? 49}
                   onChange={(e) => setSystemSettings({ ...systemSettings, voucher_value_base_eur: parseInt(e.target.value, 10) || 0 })}
-                  className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                  className={INPUT}
                 />
               </label>
               <label className="block max-w-xs">
@@ -412,13 +417,13 @@ export default function AdminSettingsPanel() {
                   min="0"
                   value={systemSettings.voucher_value_pro_eur ?? 149}
                   onChange={(e) => setSystemSettings({ ...systemSettings, voucher_value_pro_eur: parseInt(e.target.value, 10) || 0 })}
-                  className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                  className={INPUT}
                 />
               </label>
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+            <label className="mb-1 flex items-center gap-2 text-sm font-medium text-gray-700">
               <Sparkles className="w-4 h-4" />
               Annunci in Vetrina
             </label>
@@ -433,7 +438,7 @@ export default function AdminSettingsPanel() {
                   min="0"
                   value={systemSettings.listing_feature_cost_7d ?? 20}
                   onChange={(e) => setSystemSettings({ ...systemSettings, listing_feature_cost_7d: parseInt(e.target.value, 10) || 0 })}
-                  className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                  className={INPUT}
                 />
                 <span className="text-sm text-gray-500 whitespace-nowrap">/ 7gg</span>
               </div>
@@ -443,7 +448,7 @@ export default function AdminSettingsPanel() {
                   min="0"
                   value={systemSettings.listing_feature_cost_15d ?? 35}
                   onChange={(e) => setSystemSettings({ ...systemSettings, listing_feature_cost_15d: parseInt(e.target.value, 10) || 0 })}
-                  className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                  className={INPUT}
                 />
                 <span className="text-sm text-gray-500 whitespace-nowrap">/ 15gg</span>
               </div>
@@ -468,7 +473,7 @@ export default function AdminSettingsPanel() {
               step="0.5"
               value={systemSettings.shop_commission_percent ?? 0}
               onChange={(e) => setSystemSettings({ ...systemSettings, shop_commission_percent: Math.max(0, Math.min(20, Number(e.target.value) || 0)) })}
-              className="w-full max-w-xs p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+              className={`max-w-xs ${INPUT}`}
             />
             <p className="text-xs text-gray-500 mt-1">Trattenuta da KUMANI su ogni pagamento (oltre al costo di Stripe pagato dal venditore). 0 = nessuna commissione. Prima di attivarla serve il parere della commercialista.</p>
           </div>
@@ -491,7 +496,7 @@ export default function AdminSettingsPanel() {
                     step="0.10"
                     value={((systemSettings[key] as number) ?? 0) / 100}
                     onChange={(e) => setSystemSettings({ ...systemSettings, [key]: Math.round((Number(e.target.value) || 0) * 100) })}
-                    className="mt-1 w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                    className={`mt-1 ${INPUT}`}
                   />
                 </label>
               ))}
@@ -506,12 +511,12 @@ export default function AdminSettingsPanel() {
               max="100"
               value={systemSettings.menu_ai_daily_runs ?? 5}
               onChange={(e) => setSystemSettings({ ...systemSettings, menu_ai_daily_runs: Math.max(0, parseInt(e.target.value, 10) || 0) })}
-              className="w-full max-w-xs p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+              className={`max-w-xs ${INPUT}`}
             />
             <p className="text-xs text-gray-500 mt-1">Ogni traduzione ha un piccolo costo sulla chiave AI del progetto.</p>
           </div>
           <div>
-            <p className="block text-sm font-medium text-gray-700 mb-2">VeriFoto: rilevatore AI (Sightengine, quota gratuita)</p>
+            <p className="block text-sm font-medium text-gray-700 mb-1">VeriFoto: rilevatore AI (Sightengine, quota gratuita)</p>
             <div className="grid grid-cols-2 gap-3 max-w-md">
               <label className="text-xs text-gray-600">
                 Analisi per utente al giorno
@@ -521,7 +526,7 @@ export default function AdminSettingsPanel() {
                   max="50"
                   value={systemSettings.verifoto_daily_user ?? 1}
                   onChange={(e) => setSystemSettings({ ...systemSettings, verifoto_daily_user: Math.max(0, parseInt(e.target.value, 10) || 0) })}
-                  className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                  className={`mt-1 ${INPUT}`}
                 />
               </label>
               <label className="text-xs text-gray-600">
@@ -532,7 +537,7 @@ export default function AdminSettingsPanel() {
                   max="2000"
                   value={systemSettings.verifoto_monthly_ops ?? 1800}
                   onChange={(e) => setSystemSettings({ ...systemSettings, verifoto_monthly_ops: Math.min(2000, Math.max(0, parseInt(e.target.value, 10) || 0)) })}
-                  className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                  className={`mt-1 ${INPUT}`}
                 />
               </label>
             </div>
@@ -542,19 +547,19 @@ export default function AdminSettingsPanel() {
             </p>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">CheckMail: analisi per utente al giorno</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">CheckMail: analisi per utente al giorno</label>
             <input
               type="number"
               min="0"
               max="100"
               value={systemSettings.checkmail_daily_user ?? 10}
               onChange={(e) => setSystemSettings({ ...systemSettings, checkmail_daily_user: Math.max(0, parseInt(e.target.value, 10) || 0) })}
-              className="w-full max-w-xs p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+              className={`max-w-xs ${INPUT}`}
             />
             <p className="text-xs text-gray-500 mt-1">Ogni analisi usa anche la chiave AI del progetto (lettura del testo), con un piccolo costo.</p>
           </div>
           <div>
-            <p className="block text-sm font-medium text-gray-700 mb-2">Scudo Dati</p>
+            <p className="block text-sm font-medium text-gray-700 mb-1">Scudo Dati</p>
             <div className="grid grid-cols-2 gap-3 max-w-md">
               <label className="text-xs text-gray-600">
                 KU Karma per controllare un&apos;altra email
@@ -564,7 +569,7 @@ export default function AdminSettingsPanel() {
                   max="100"
                   value={systemSettings.scudo_dati_other_cost ?? 3}
                   onChange={(e) => setSystemSettings({ ...systemSettings, scudo_dati_other_cost: Math.min(100, Math.max(0, parseInt(e.target.value, 10) || 0)) })}
-                  className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                  className={`mt-1 ${INPUT}`}
                 />
               </label>
               <label className="text-xs text-gray-600">
@@ -575,7 +580,7 @@ export default function AdminSettingsPanel() {
                   max="10000"
                   value={systemSettings.scudo_dati_daily_cap ?? 90}
                   onChange={(e) => setSystemSettings({ ...systemSettings, scudo_dati_daily_cap: Math.min(10000, Math.max(0, parseInt(e.target.value, 10) || 0)) })}
-                  className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                  className={`mt-1 ${INPUT}`}
                 />
               </label>
             </div>
@@ -585,7 +590,7 @@ export default function AdminSettingsPanel() {
             </p>
           </div>
           <div>
-            <p className="block text-sm font-medium text-gray-700 mb-2">Veritas: durata delle fasi (secondi)</p>
+            <p className="block text-sm font-medium text-gray-700 mb-1">Veritas: durata delle fasi (secondi)</p>
             <div className="grid grid-cols-3 gap-3 max-w-md">
               {([
                 ['veritas_write_seconds', 'Scrittura', 90],
@@ -600,14 +605,14 @@ export default function AdminSettingsPanel() {
                     max="600"
                     value={systemSettings[key] ?? fallback}
                     onChange={(e) => setSystemSettings({ ...systemSettings, [key]: Math.max(5, parseInt(e.target.value, 10) || 5) })}
-                    className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                    className={`mt-1 ${INPUT}`}
                   />
                 </label>
               ))}
             </div>
           </div>
           <div>
-            <p className="block text-sm font-medium text-gray-700 mb-2">KUMANI Mosaic</p>
+            <p className="block text-sm font-medium text-gray-700 mb-1">KUMANI Mosaic</p>
             <div className="grid grid-cols-3 gap-3 max-w-md">
               {([
                 ['mosaic_pixels_day', 'Tessere al giorno', 3, 1, 50],
@@ -622,7 +627,7 @@ export default function AdminSettingsPanel() {
                     max={max}
                     value={systemSettings[key] ?? fallback}
                     onChange={(e) => setSystemSettings({ ...systemSettings, [key]: Math.min(max, Math.max(min, parseInt(e.target.value, 10) || min)) })}
-                    className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                    className={`mt-1 ${INPUT}`}
                   />
                 </label>
               ))}
@@ -633,7 +638,7 @@ export default function AdminSettingsPanel() {
             </p>
           </div>
           <div>
-            <p className="block text-sm font-medium text-gray-700 mb-2">Kumani Fabula</p>
+            <p className="block text-sm font-medium text-gray-700 mb-1">Kumani Fabula</p>
             <div className="grid grid-cols-2 gap-3 max-w-md">
               {([
                 ['fabula_min_login_days', 'Giorni di accesso per pubblicare subito', 7, 0, 365],
@@ -647,7 +652,7 @@ export default function AdminSettingsPanel() {
                     max={max}
                     value={systemSettings[key] ?? fallback}
                     onChange={(e) => setSystemSettings({ ...systemSettings, [key]: Math.min(max, Math.max(min, parseInt(e.target.value, 10) || min)) })}
-                    className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                    className={`mt-1 ${INPUT}`}
                   />
                 </label>
               ))}
@@ -657,7 +662,7 @@ export default function AdminSettingsPanel() {
             </p>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+            <label className="mb-1 flex items-center gap-2 text-sm font-medium text-gray-700">
               <Users className="w-4 h-4" />
               Affinity Amicizie
             </label>
@@ -673,7 +678,7 @@ export default function AdminSettingsPanel() {
                 max="20"
                 value={systemSettings.affinity_intros_per_week ?? 3}
                 onChange={(e) => setSystemSettings({ ...systemSettings, affinity_intros_per_week: Math.min(20, parseInt(e.target.value, 10) || 0) })}
-                className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                className={INPUT}
               />
             </label>
           </div>
@@ -706,12 +711,12 @@ export default function AdminSettingsPanel() {
 
           {systemSettings.maintenance_mode && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Messaggio di Manutenzione</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Messaggio di Manutenzione</label>
               <textarea
                 value={systemSettings.maintenance_message || ''}
                 onChange={(e) => setSystemSettings({...systemSettings, maintenance_message: e.target.value})}
                 rows={3}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500"
               />
             </div>
           )}

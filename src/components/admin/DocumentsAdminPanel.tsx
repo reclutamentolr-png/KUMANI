@@ -125,7 +125,7 @@ export default function DocumentsAdminPanel() {
           <div className="grid gap-3 sm:grid-cols-3">
             <label className="text-sm">
               <span className="mb-1 block font-semibold text-gray-700">Tipo</span>
-              <select value={draft.category} onChange={(e) => setDraft({ ...draft, category: e.target.value as DocCategory })} className="w-full rounded-lg border border-gray-300 px-3 py-2">
+              <select value={draft.category} onChange={(e) => setDraft({ ...draft, category: e.target.value as DocCategory })} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]">
                 {DOC_CATEGORIES.map((c) => (
                   <option key={c} value={c}>
                     {CATEGORY_NAMES[c]}
@@ -135,7 +135,7 @@ export default function DocumentsAdminPanel() {
             </label>
             <label className="text-sm">
               <span className="mb-1 block font-semibold text-gray-700">Ordine (più basso = prima)</span>
-              <input type="number" value={draft.sort_order} onChange={(e) => setDraft({ ...draft, sort_order: Number(e.target.value) })} className="w-full rounded-lg border border-gray-300 px-3 py-2" />
+              <input type="number" value={draft.sort_order} onChange={(e) => setDraft({ ...draft, sort_order: Number(e.target.value) })} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]" />
             </label>
             <label className="flex items-center gap-2 pt-6 text-sm font-semibold text-gray-700">
               <input type="checkbox" checked={draft.is_published} onChange={(e) => setDraft({ ...draft, is_published: e.target.checked })} />

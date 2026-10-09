@@ -178,7 +178,7 @@ export default function AdminMessagesPanel() {
                     value={messageUserSearch}
                     onChange={(e) => setMessageUserSearch(e.target.value)}
                     placeholder="Cerca per nome o email..."
-                    className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]"
                   />
                   {filteredMessageUsers.length > 0 && (
                     <div className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-56 overflow-y-auto">
@@ -227,7 +227,7 @@ export default function AdminMessagesPanel() {
               type="text"
               value={messageTitle[currentLang] || ''}
               onChange={(e) => setMessageTitle((prev) => ({ ...prev, [currentLang]: e.target.value }))}
-              className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]"
             />
           </div>
           <div>
@@ -236,7 +236,7 @@ export default function AdminMessagesPanel() {
               value={messageBody[currentLang] || ''}
               onChange={(e) => setMessageBody((prev) => ({ ...prev, [currentLang]: e.target.value }))}
               rows={4}
-              className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]"
             />
           </div>
 

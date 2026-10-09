@@ -1465,7 +1465,7 @@ L'accesso viene registrato.`))) return
                 type="date"
                 value={couponForm.expiresAt}
                 onChange={(e) => setCouponForm({ ...couponForm, expiresAt: e.target.value })}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]"
               />
             </div>
             <div className="md:col-span-2">
@@ -1475,7 +1475,7 @@ L'accesso viene registrato.`))) return
                 placeholder="Es. Spedizione gratuita"
                 value={couponForm.title}
                 onChange={(e) => setCouponForm({ ...couponForm, title: e.target.value })}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]"
               />
             </div>
             <div className="md:col-span-2">
@@ -1611,23 +1611,23 @@ L'accesso viene registrato.`))) return
 
           <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div><label className="block text-sm font-medium text-gray-700 mb-1">Nome</label>
-              <input type="text" value={profileForm.first_name || ''} onChange={(e) => setProfileForm({...profileForm, first_name: e.target.value})} className="w-full p-2 border rounded-lg" /></div>
+              <input type="text" value={profileForm.first_name || ''} onChange={(e) => setProfileForm({...profileForm, first_name: e.target.value})} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]" /></div>
             <div><label className="block text-sm font-medium text-gray-700 mb-1">Cognome</label>
-              <input type="text" value={profileForm.last_name || ''} onChange={(e) => setProfileForm({...profileForm, last_name: e.target.value})} className="w-full p-2 border rounded-lg" /></div>
+              <input type="text" value={profileForm.last_name || ''} onChange={(e) => setProfileForm({...profileForm, last_name: e.target.value})} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]" /></div>
             <div><label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
-              <input type="text" value={profileForm.username || ''} onChange={(e) => setProfileForm({...profileForm, username: e.target.value})} className="w-full p-2 border rounded-lg" /></div>
+              <input type="text" value={profileForm.username || ''} onChange={(e) => setProfileForm({...profileForm, username: e.target.value})} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]" /></div>
             <div><label className="block text-sm font-medium text-gray-700 mb-1">Referral Code</label>
-              <input type="text" value={profileForm.referral_code || ''} onChange={(e) => setProfileForm({...profileForm, referral_code: e.target.value})} className="w-full p-2 border rounded-lg" /></div>
+              <input type="text" value={profileForm.referral_code || ''} onChange={(e) => setProfileForm({...profileForm, referral_code: e.target.value})} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]" /></div>
             <div><label className="block text-sm font-medium text-gray-700 mb-1">Telefono</label>
-              <input type="tel" value={profileForm.phone || ''} onChange={(e) => setProfileForm({...profileForm, phone: e.target.value})} className="w-full p-2 border rounded-lg" /></div>
+              <input type="tel" value={profileForm.phone || ''} onChange={(e) => setProfileForm({...profileForm, phone: e.target.value})} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]" /></div>
             <div><label className="block text-sm font-medium text-gray-700 mb-1">Paese</label>
-              <input type="text" value={profileForm.country_code || ''} onChange={(e) => setProfileForm({...profileForm, country_code: e.target.value})} className="w-full p-2 border rounded-lg" /></div>
+              <input type="text" value={profileForm.country_code || ''} onChange={(e) => setProfileForm({...profileForm, country_code: e.target.value})} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]" /></div>
             <div><label className="block text-sm font-medium text-gray-700 mb-1">Data di nascita</label>
-              <input type="date" value={profileForm.date_of_birth || ''} onChange={(e) => setProfileForm({...profileForm, date_of_birth: e.target.value})} className="w-full p-2 border rounded-lg" /></div>
+              <input type="date" value={profileForm.date_of_birth || ''} onChange={(e) => setProfileForm({...profileForm, date_of_birth: e.target.value})} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]" /></div>
             <div><label className="block text-sm font-medium text-gray-700 mb-1">Occupazione</label>
-              <input type="text" value={profileForm.occupation || ''} onChange={(e) => setProfileForm({...profileForm, occupation: e.target.value})} className="w-full p-2 border rounded-lg" /></div>
+              <input type="text" value={profileForm.occupation || ''} onChange={(e) => setProfileForm({...profileForm, occupation: e.target.value})} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]" /></div>
             <div><label className="block text-sm font-medium text-gray-700 mb-1">Punti giornalieri</label>
-              <input type="number" value={profileForm.daily_points || 0} onChange={(e) => setProfileForm({...profileForm, daily_points: parseInt(e.target.value) || 0})} className="w-full p-2 border rounded-lg" /></div>
+              <input type="number" value={profileForm.daily_points || 0} onChange={(e) => setProfileForm({...profileForm, daily_points: parseInt(e.target.value) || 0})} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]" /></div>
             <div><label className="block text-sm font-medium text-gray-700 mb-1">Abbonamento</label>
               <select
                 value={profileForm.subscription_status || 'free'}
@@ -1649,7 +1649,7 @@ L'accesso viene registrato.`))) return
                       : profileForm.subscription_expires_at
                   })
                 }}
-                className="w-full p-2 border rounded-lg"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]"
               >
                 <option value="free">Free</option>
                 <option value="active">Active</option>
@@ -1659,7 +1659,7 @@ L'accesso viene registrato.`))) return
               <select
                 value={profileForm.subscription_plan || 'base'}
                 onChange={(e) => setProfileForm({ ...profileForm, subscription_plan: e.target.value })}
-                className="w-full p-2 border rounded-lg"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]"
               >
                 <option value="base">Base</option>
                 <option value="pro">Pro</option>
@@ -1671,7 +1671,7 @@ L'accesso viene registrato.`))) return
                 type="date"
                 value={profileForm.subscription_expires_at || ''}
                 onChange={(e) => setProfileForm({...profileForm, subscription_expires_at: e.target.value})}
-                className="w-full p-2 border rounded-lg"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]"
               />
               <p className="text-xs text-gray-400 mt-1">Vuoto = nessuna scadenza (resta attivo per sempre)</p>
             </div>

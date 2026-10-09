@@ -220,7 +220,7 @@ export default function AdminVouchersPanel() {
                 placeholder="Punti da caricare"
                 value={creditForm.amount}
                 onChange={(e) => setCreditForm({ ...creditForm, amount: e.target.value })}
-                className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]"
               />
             </div>
             <button
