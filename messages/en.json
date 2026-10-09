@@ -10912,7 +10912,10 @@
     "musicAdd": "Add music",
     "stepIncomplete": "To complete",
     "payIncompleteSteps": "{n, plural, one {# step needs completing (song without link, place without address…): the recipient would see it incomplete.} other {# steps need completing (song without link, place without address…): the recipient would see them incomplete.}}",
-    "previewReplay": "Replay the opening"
+    "previewReplay": "Replay the opening",
+    "ogCta": "Tap to open it",
+    "ogDescription": "From {name}: open it to discover the surprise.",
+    "ogDescriptionNoSender": "Open it to discover the surprise."
   },
   "surpriseTpl": {
     "mom_name": "A massage for Mum",

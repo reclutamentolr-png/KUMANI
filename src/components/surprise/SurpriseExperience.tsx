@@ -31,7 +31,7 @@ import Link from '@/components/LocalizedLink'
 import { resizeImageFile } from '@/lib/resizeImage'
 import { audioUrl } from '@/lib/audioUrl'
 import { musicFile, OCCASION_STYLE, REACTIONS, THEME_STYLE, type Reaction, type SurpriseOccasion, type SurpriseView, type SurpriseViewStep } from '@/lib/surprise'
-import { sendSurpriseReply, solveSurpriseRiddle } from '@/app/actions/surprisePublic'
+import { markSurpriseOpened, sendSurpriseReply, solveSurpriseRiddle } from '@/app/actions/surprisePublic'
 import Celebration from './Celebration'
 import Reveal from './Reveal'
 import { letterFont } from './surpriseFonts'
@@ -412,6 +412,7 @@ export default function SurpriseExperience({ view, preview = false, editorHref, 
     setOpened(true)
     setBurst((b) => b + 1)
     startMusic()
+    if (token && !preview) markSurpriseOpened(token).catch(() => {})
     try {
       if (token && !preview) localStorage.setItem(openedKey(token), '1')
     } catch {

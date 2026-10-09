@@ -186,29 +186,55 @@ export async function signedStep(s: SurpriseStepRow, day: number, at: Date): Pro
   return fullStep(s, day, at, await signed(stepPaths(s)))
 }
 
-// Pagina pubblica: sorpresa attiva e non rimborsata. La prima apertura viene
-// segnata e chi l'ha creata riceve una notifica.
+// Pagina pubblica: sorpresa attiva e non rimborsata. Non segna l'apertura:
+// la pagina la scaricano anche WhatsApp e gli altri per l'anteprima del
+// link. «Aperta» si segna quando chi riceve tocca il regalo
+// (markSurpriseOpened).
 export async function loadPublicSurprise(token: string): Promise<SurpriseView | null> {
   if (!/^[A-Za-z0-9_-]{16,40}$/.test(token)) return null
   const db = surpriseDb()
   const { data: gift } = await db.from('surprise_gifts').select('*').eq('public_token', token).eq('status', 'active').is('refunded_at', null).maybeSingle()
   if (!gift) return null
   const { data: steps } = await db.from('surprise_steps').select(STEP_SELECT).eq('gift_id', gift.id)
-  if (!gift.opened_at) {
-    const { data: marked } = await db.from('surprise_gifts').update({ opened_at: new Date().toISOString() }).eq('id', gift.id).is('opened_at', null).select('id')
-    if (marked?.length) {
-      await notifyUser(
-        gift.user_id as string,
-        'messages',
-        (t, locale) => ({
-          title: t('surpriseOpenedTitle'),
-          body: t('surpriseOpenedBody', { name: (gift.recipient_name as string) || '—' }),
-          url: `${locale === 'it' ? '' : `/${locale}`}/sorprese/${gift.id}`,
-          tag: `surprise-${gift.id}`,
-        }),
-        { kind: 'surprise_opened', ref: gift.id as string }
-      )
-    }
-  }
   return buildSurpriseView(gift as SurpriseRow, (steps ?? []) as SurpriseStepRow[], false)
+}
+
+// Solo i dati dell'anteprima del link (titolo e immagine): nessun contenuto
+export async function surpriseShareInfo(token: string) {
+  if (!/^[A-Za-z0-9_-]{16,40}$/.test(token)) return null
+  const { data } = await surpriseDb()
+    .from('surprise_gifts')
+    .select('recipient_name, sender_name, theme, occasion')
+    .eq('public_token', token)
+    .eq('status', 'active')
+    .is('refunded_at', null)
+    .maybeSingle()
+  return data as { recipient_name: string; sender_name: string; theme: SurpriseRow['theme']; occasion: SurpriseRow['occasion'] } | null
+}
+
+// Prima apertura vera (tocco sulla scatola, busta o carta): si segna e chi
+// l'ha creata riceve una notifica, una volta sola
+export async function markOpened(token: string) {
+  if (!/^[A-Za-z0-9_-]{16,40}$/.test(token)) return
+  const db = surpriseDb()
+  const { data: marked } = await db
+    .from('surprise_gifts')
+    .update({ opened_at: new Date().toISOString() })
+    .eq('public_token', token)
+    .eq('status', 'active')
+    .is('opened_at', null)
+    .select('id, user_id, recipient_name')
+  const gift = marked?.[0]
+  if (!gift) return
+  await notifyUser(
+    gift.user_id as string,
+    'messages',
+    (t, locale) => ({
+      title: t('surpriseOpenedTitle'),
+      body: t('surpriseOpenedBody', { name: (gift.recipient_name as string) || '—' }),
+      url: `${locale === 'it' ? '' : `/${locale}`}/sorprese/${gift.id}`,
+      tag: `surprise-${gift.id}`,
+    }),
+    { kind: 'surprise_opened', ref: gift.id as string }
+  )
 }

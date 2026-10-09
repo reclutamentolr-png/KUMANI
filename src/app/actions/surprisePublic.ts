@@ -5,7 +5,7 @@ import { headers } from 'next/headers'
 import { notifyUser } from '@/lib/push'
 import { clientIp } from '@/lib/securityCore'
 import { normalizeAnswer, isReaction, surpriseDays, unlockAt, SURPRISE_MAX, type SurpriseStepRow, type SurpriseViewStep } from '@/lib/surprise'
-import { signedStep, STEP_SELECT, surpriseDb } from '@/lib/surpriseServer'
+import { markOpened, signedStep, STEP_SELECT, surpriseDb } from '@/lib/surpriseServer'
 
 // Azioni di chi riceve la sorpresa (nessun account, solo il link): risposta
 // agli indovinelli e ringraziamento a chi ha regalato. Freni in memoria
@@ -84,4 +84,11 @@ export async function sendSurpriseReply(token: string, form: FormData): Promise<
     tag: `surprise-reply-${gift.id}`,
   }))
   return { ok: true }
+}
+
+// Chi riceve ha aperto il regalo (non l'anteprima di WhatsApp)
+export async function markSurpriseOpened(token: string): Promise<void> {
+  const ip = clientIp(await headers()) ?? 'x'
+  if (tooMany(`open:${ip}`, 30, 60 * 60_000)) return
+  await markOpened(token)
 }

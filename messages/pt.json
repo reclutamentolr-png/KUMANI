@@ -10912,7 +10912,10 @@
     "musicAdd": "Adicionar música",
     "stepIncomplete": "Por completar",
     "payIncompleteSteps": "{n, plural, one {# etapa está por completar (canção sem ligação, local sem morada…): quem a receber vê-la-ia incompleta.} other {# etapas estão por completar (canção sem ligação, local sem morada…): quem as receber vê-las-ia incompletas.}}",
-    "previewReplay": "Rever a abertura"
+    "previewReplay": "Rever a abertura",
+    "ogCta": "Toque para abrir",
+    "ogDescription": "Da parte de {name}: abra para descobrir a surpresa.",
+    "ogDescriptionNoSender": "Abra para descobrir a surpresa."
   },
   "surpriseTpl": {
     "mom_name": "Uma massagem para a mãe",
