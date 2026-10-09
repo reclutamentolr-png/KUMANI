@@ -1,3 +1,4 @@
+import SurpriseDashboardCard from '@/components/surprise/SurpriseDashboardCard'
 import { SITE_URL } from '@/lib/siteUrl'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
@@ -247,6 +248,9 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
             ) : (
               !isPro && proTools.length > 0 && <ProTeaser trialExpired={proTrialExpired} />
             )}
+
+            {/* KUMANI Sorpresa: regalare un'esperienza (buono o percorso) */}
+            <SurpriseDashboardCard />
 
             <DashboardTipo2
               profile={profile}

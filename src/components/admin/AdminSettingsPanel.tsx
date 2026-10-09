@@ -48,6 +48,9 @@ export default function AdminSettingsPanel() {
     listing_feature_cost_15d: 35,
     menu_ai_daily_runs: 5,
     shop_commission_percent: 0,
+    surprise_price_voucher_cents: 290,
+    surprise_price_journey3_cents: 990,
+    surprise_price_journey7_cents: 1590,
     veritas_write_seconds: 90,
     veritas_vote_seconds: 45,
     veritas_reveal_seconds: 15,
@@ -468,6 +471,32 @@ export default function AdminSettingsPanel() {
               className="w-full max-w-xs p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
             />
             <p className="text-xs text-gray-500 mt-1">Trattenuta da KUMANI su ogni pagamento (oltre al costo di Stripe pagato dal venditore). 0 = nessuna commissione. Prima di attivarla serve il parere della commercialista.</p>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">KUMANI Sorpresa: prezzi (€)</label>
+            <div className="grid max-w-xl gap-3 sm:grid-cols-3">
+              {(
+                [
+                  ['surprise_price_voucher_cents', 'Buono regalo'],
+                  ['surprise_price_journey3_cents', 'Percorso 3 giorni'],
+                  ['surprise_price_journey7_cents', 'Percorso 7 giorni'],
+                ] as const
+              ).map(([key, name]) => (
+                <label key={key} className="text-xs text-gray-600">
+                  {name}
+                  <input
+                    type="number"
+                    min="0.5"
+                    max="1000"
+                    step="0.10"
+                    value={((systemSettings[key] as number) ?? 0) / 100}
+                    onChange={(e) => setSystemSettings({ ...systemSettings, [key]: Math.round((Number(e.target.value) || 0) * 100) })}
+                    className="mt-1 w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+                  />
+                </label>
+              ))}
+            </div>
+            <p className="text-xs text-gray-500 mt-1">Quanto paga chi crea una sorpresa per attivare il link (IVA compresa). Vale per le sorprese pagate da adesso.</p>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Traduzioni AI del Menù al giorno (per ristorante)</label>

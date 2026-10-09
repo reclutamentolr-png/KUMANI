@@ -226,6 +226,9 @@ export type AdminSystemSettings = {
   listing_feature_cost_15d: number
   menu_ai_daily_runs: number
   shop_commission_percent: number
+  surprise_price_voucher_cents: number
+  surprise_price_journey3_cents: number
+  surprise_price_journey7_cents: number
   veritas_write_seconds: number
   veritas_vote_seconds: number
   veritas_reveal_seconds: number

@@ -89,7 +89,7 @@ function WalletSection({
 
 export default async function WalletPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
-  const [t, td, tg, supabase] = await Promise.all([getTranslations('wallet'), getTranslations('dashboard'), getTranslations('gifts'), createClient()])
+  const [t, td, tg, ts, supabase] = await Promise.all([getTranslations('wallet'), getTranslations('dashboard'), getTranslations('gifts'), getTranslations('surprise'), createClient()])
   // Utente letto una volta sola per la pagina e la sua intestazione
   preloadSession()
   const user = await getSessionUser()
@@ -648,6 +648,13 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
             <p className="text-sm leading-6 text-[var(--muted)]">{tg('walletText')}</p>
             <Link href="/regali" className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[var(--ink)] px-4 py-2.5 text-sm font-bold text-[var(--gold-bright)]">
               <Gift className="h-4 w-4" /> {tg('walletButton')}
+            </Link>
+          </div>
+          {/* KUMANI Sorpresa: buono o percorso a sorpresa per un'esperienza */}
+          <div className="mt-4 flex flex-col gap-3 border-t border-[var(--gold)]/15 pt-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm leading-6 text-[var(--muted)]">{ts('walletText')}</p>
+            <Link href="/sorprese" className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-4 py-2.5 text-sm font-bold text-[var(--ink)]">
+              <Sparkles className="h-4 w-4" /> {ts('walletButton')}
             </Link>
           </div>
         </WalletSection>

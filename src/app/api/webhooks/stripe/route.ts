@@ -11,6 +11,8 @@ import { accrueSubscriptionDonation, reverseSubscriptionDonation } from '@/lib/d
 import { grantToolPassFromSession, revokeToolPassForCharge, TOOL_PASS_TYPE } from '@/lib/toolPasses'
 import { GIFT_TYPE } from '@/lib/gifts'
 import { fulfillGiftSession, revokeGiftForCharge, sendGiftConfirmation } from '@/lib/giftsServer'
+import { SURPRISE_TYPE } from '@/lib/surprise'
+import { fulfillSurpriseSession, revokeSurpriseForCharge } from '@/lib/surpriseServer'
 
 // Creato alla richiesta e non al caricamento del modulo: così `next build`
 // non fallisce se le variabili d'ambiente non sono disponibili in build.
@@ -64,6 +66,8 @@ export async function POST(req: NextRequest) {
         await revokeToolPassForCharge(event.data.object as Stripe.Charge)
         // Regalo rimborsato: i codici non ancora attivati non valgono più
         await revokeGiftForCharge(event.data.object as Stripe.Charge)
+        // Sorpresa rimborsata: il link non si apre più
+        await revokeSurpriseForCharge(event.data.object as Stripe.Charge)
       }
       return NextResponse.json({ received: true })
     } catch (err) {
@@ -114,6 +118,20 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ received: true })
     } catch (err) {
       console.error('❌ Regalo non creato:', err instanceof Error ? err.message : err)
+      return NextResponse.json({ error: 'db_update_failed' }, { status: 500 })
+    }
+  }
+
+  // Sorpresa (pagamento una tantum): si attiva il link; mai come abbonamento
+  if (
+    (event.type === 'checkout.session.completed' || event.type === 'checkout.session.async_payment_succeeded') &&
+    (event.data.object as Stripe.Checkout.Session).metadata?.type === SURPRISE_TYPE
+  ) {
+    try {
+      await fulfillSurpriseSession(event.data.object as Stripe.Checkout.Session)
+      return NextResponse.json({ received: true })
+    } catch (err) {
+      console.error('❌ Sorpresa non attivata:', err instanceof Error ? err.message : err)
       return NextResponse.json({ error: 'db_update_failed' }, { status: 500 })
     }
   }

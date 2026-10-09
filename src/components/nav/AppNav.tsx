@@ -19,6 +19,7 @@ const MEMBER_AREAS = [
   '/community',
   '/wallet',
   '/regali',
+  '/sorprese',
   '/documenti',
   '/marketplace',
   '/donazioni',
@@ -47,7 +48,7 @@ const TABS = [
     Icon: Users,
     match: ['/community', '/dashboard/rete', '/donazioni', '/events', '/convivio', '/spotlight', '/marketplace/listings', '/marketplace/chat', '/marketplace/spotlight', '/marketplace/convivio', '/marketplace/timebank'],
   },
-  { key: 'wallet', href: '/wallet', Icon: Wallet, match: ['/wallet', '/regali'] },
+  { key: 'wallet', href: '/wallet', Icon: Wallet, match: ['/wallet', '/regali', '/sorprese'] },
 ] as const
 
 // Evento con cui "Profilo" apre la finestra del profilo quando la pagina ha
@@ -91,7 +92,8 @@ export default function AppNav() {
   }, [])
 
   const path = barePathOf(pathname)
-  if (!member || !MEMBER_AREAS.some((area) => under(path, area))) return null
+  // Anteprima di una sorpresa: a schermo intero, come la vede chi la riceve
+  if (!member || !MEMBER_AREAS.some((area) => under(path, area)) || path.endsWith('/anteprima')) return null
   const current = activeTab(path)
 
   const openProfile = () => {

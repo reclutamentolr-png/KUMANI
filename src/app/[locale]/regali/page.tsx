@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
-import { ArrowLeft, CheckCircle2, Gift, Send, UserPlus } from 'lucide-react'
+import { ArrowLeft, ArrowRight, CheckCircle2, Gift, Send, Sparkles, UserPlus } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import GiftBuyForm, { type GiftOption } from '@/components/gifts/GiftBuyForm'
 import GiftOrdersList from '@/components/gifts/GiftOrdersList'
@@ -33,6 +33,7 @@ export default async function GiftsPage({
   if (!user) redirect(`/${locale}/login?next=${encodeURIComponent('/regali')}`)
 
   const t = await getTranslations('gifts')
+  const ts = await getTranslations('surprise')
   const tm = await getTranslations('marketplace')
 
   // Ritorno dal pagamento: i codici si creano anche senza webhook
@@ -108,6 +109,16 @@ export default async function GiftsPage({
             </li>
           ))}
         </ol>
+
+        {/* KUMANI Sorpresa: regalare un'esperienza (buono o percorso nel tempo) */}
+        <Link href="/sorprese" className="flex items-center gap-3 rounded-2xl border border-[var(--gold)]/40 bg-gradient-to-r from-[var(--ink)] to-[#2b2110] p-4 text-white shadow-sm hover:brightness-110">
+          <Sparkles className="h-6 w-6 shrink-0 text-[var(--gold-bright)]" />
+          <span className="min-w-0 flex-1">
+            <span className="block font-bold">{ts('regaliTitle')}</span>
+            <span className="block text-sm text-white/75">{ts('walletText')}</span>
+          </span>
+          <ArrowRight className="h-5 w-5 shrink-0 text-[var(--gold-bright)]" />
+        </Link>
 
         <section className="relative overflow-hidden rounded-2xl border border-[var(--gold)]/45 bg-[var(--paper)] p-6 shadow-sm">
           <div aria-hidden className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-[var(--gold)] via-[var(--gold-bright)] to-[var(--gold)]" />

@@ -103,6 +103,7 @@ const GENERAL_SETTINGS_KEYS = new Set([
   'welcome_bonus_base', 'welcome_bonus_pro', 'welcome_bonus_from_direct',
   'activity_thanks_points', 'pro_invite_extra_points', 'pro_trial_days', 'affinity_intros_per_week',
   'listing_feature_cost_7d', 'listing_feature_cost_15d', 'menu_ai_daily_runs', 'shop_commission_percent',
+  'surprise_price_voucher_cents', 'surprise_price_journey3_cents', 'surprise_price_journey7_cents',
   'veritas_write_seconds', 'veritas_vote_seconds', 'veritas_reveal_seconds',
   'verifoto_daily_user', 'verifoto_monthly_ops', 'checkmail_daily_user', 'scudo_dati_other_cost', 'scudo_dati_daily_cap',
   'mosaic_pixels_day', 'mosaic_bonus_pixels', 'mosaic_min_login_days',
@@ -145,6 +146,12 @@ export async function adminSaveSystemSettings(settings: Record<string, unknown>)
   if ('shop_commission_percent' in settings) {
     const pct = settings.shop_commission_percent
     if (typeof pct !== 'number' || !Number.isFinite(pct) || pct < 0 || pct > 20) return { success: false, error: 'Commissione KUMANI Shop non valida (da 0 a 20%).' }
+  }
+  for (const key of ['surprise_price_voucher_cents', 'surprise_price_journey3_cents', 'surprise_price_journey7_cents']) {
+    if (key in settings) {
+      const cents = settings[key]
+      if (!Number.isInteger(cents) || (cents as number) < 50 || (cents as number) > 100000) return { success: false, error: 'Prezzo di KUMANI Sorpresa non valido (da 0,50 € a 1.000 €).' }
+    }
   }
   if (Object.keys(settings).length === 0) return { success: true }
   const rows = Object.entries(settings).map(([key, value]) => ({ key, value: JSON.stringify(value) }))
