@@ -14,7 +14,9 @@ export const serviceDb = () =>
 
 // Stato del conto collegato copiato da Stripe
 export async function syncSellerAccount(account: Stripe.Account) {
-  const { error } = await serviceDb()
+  const db = serviceDb()
+  const { data: before } = await db.from('seller_stripe_accounts').select('user_id, charges_enabled').eq('stripe_account_id', account.id).maybeSingle()
+  const { error } = await db
     .from('seller_stripe_accounts')
     .update({
       charges_enabled: !!account.charges_enabled,
@@ -24,6 +26,16 @@ export async function syncSellerAccount(account: Stripe.Account) {
     })
     .eq('stripe_account_id', account.id)
   if (error) console.error('[Shop] syncSellerAccount failed:', error.message)
+  // Avviso al venditore quando i pagamenti si attivano o vengono sospesi
+  const now = !!account.charges_enabled
+  if (!error && before && !!before.charges_enabled !== now) {
+    await notifyUser(before.user_id as string, 'messages', (t, locale) => ({
+      title: t(now ? 'shopPaymentsActiveTitle' : 'shopPaymentsPausedTitle'),
+      body: t(now ? 'shopPaymentsActiveBody' : 'shopPaymentsPausedBody'),
+      url: localizedPath(locale, '/marketplace/shop?tab=payments'),
+      tag: `stripe-${account.id}`,
+    }))
+  }
 }
 
 // Commissione di KUMANI (Admin → Impostazioni, 0 al lancio)

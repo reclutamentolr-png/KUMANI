@@ -50,7 +50,7 @@ export async function getSellerPaymentStatus(): Promise<SellerPaymentStatus | nu
 
 // Collega (o completa) il conto Stripe: restituisce il link della procedura
 // guidata di Stripe. Servono la Scheda attività completa e le condizioni accettate.
-export async function startStripeOnboarding(acceptTerms: boolean): Promise<Result<{ url: string }>> {
+export async function startStripeOnboarding(acceptTerms: boolean, returnTo: 'profile' | 'shop' = 'profile'): Promise<Result<{ url: string }>> {
   const s = await seller()
   if (!s) return { success: false, message: 'notAllowed' }
   if (!acceptTerms) return { success: false, message: 'termsRequired' }
@@ -75,11 +75,13 @@ export async function startStripeOnboarding(acceptTerms: boolean): Promise<Resul
       row = { stripe_account_id: account.id }
     }
     const locale = await getLocale()
-    const back = `${SITE_URL}${localizedPath(locale, '/scheda-attivita')}`
+    // Ritorno dove si è partiti: Scheda attività o KUMANI Shop → Pagamenti
+    const back = `${SITE_URL}${localizedPath(locale, returnTo === 'shop' ? '/marketplace/shop' : '/scheda-attivita')}`
+    const query = returnTo === 'shop' ? '?tab=payments&stripe=' : '?stripe='
     const link = await stripe.accountLinks.create({
       account: row.stripe_account_id as string,
-      refresh_url: `${back}?stripe=refresh`,
-      return_url: `${back}?stripe=return`,
+      refresh_url: `${back}${query}refresh`,
+      return_url: `${back}${query}return`,
       type: 'account_onboarding',
     })
     return { success: true, data: { url: link.url } }
@@ -247,5 +249,106 @@ export async function confirmQuotePayment(token: string, sessionId: string): Pro
   } catch (error) {
     console.error('[Shop] confirmQuotePayment failed:', error)
     return false
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Guida al collegamento (KUMANI Shop → Pagamenti): cosa manca nella Scheda
+// attività e cosa chiede Stripe, letto dal conto in tempo reale
+// ---------------------------------------------------------------------------
+
+export type RequirementGroup = 'document' | 'identity' | 'address' | 'contact' | 'bank' | 'business' | 'tax' | 'terms' | 'other'
+export type ProfileField = 'company_name' | 'vat_number' | 'address' | 'email'
+
+export type SellerPaymentsDetail = SellerPaymentStatus & {
+  payoutsEnabled: boolean
+  missingProfile: ProfileField[]
+  // Da completare (scaduti per primi)
+  due: { group: RequirementGroup; pastDue: boolean }[]
+  // Dati rifiutati da Stripe (con il motivo di Stripe, in inglese)
+  errors: { group: RequirementGroup; code: string; reason: string }[]
+  pendingVerification: boolean
+  // Perché i pagamenti sono fermi: in verifica, dati mancanti, rifiutato, altro
+  blocked: 'review' | 'requirements' | 'rejected' | 'other' | null
+  deadline: string | null
+  testMode: boolean
+}
+
+function requirementGroup(key: string): RequirementGroup {
+  if (/verification\.(additional_)?document/.test(key)) return 'document'
+  if (key.startsWith('external_account')) return 'bank'
+  if (key.startsWith('tos_acceptance')) return 'terms'
+  if (/tax_id|vat_id|registration_number/.test(key)) return 'tax'
+  if (/\.address/.test(key)) return 'address'
+  if (/phone|email/.test(key)) return 'contact'
+  if (/dob|first_name|last_name|id_number|relationship|representative|owners|directors|executives|individual\.|person_/.test(key)) return 'identity'
+  if (/^business_profile|^business_type|^company\.|^settings\./.test(key)) return 'business'
+  return 'other'
+}
+
+export async function getSellerPaymentsDetail(): Promise<SellerPaymentsDetail | null> {
+  const s = await seller()
+  if (!s) return null
+  const db = serviceDb()
+  const [{ data: issuer }, { data: row }] = await Promise.all([
+    db.from('quote_issuer_profiles').select('company_name, vat_number, address, email').eq('user_id', s.user.id).maybeSingle(),
+    db.from('seller_stripe_accounts').select('stripe_account_id, charges_enabled, payouts_enabled, details_submitted').eq('user_id', s.user.id).maybeSingle(),
+  ])
+  const missingProfile = (['company_name', 'vat_number', 'address', 'email'] as ProfileField[]).filter((f) => !String(issuer?.[f] ?? '').trim())
+  const testMode = (process.env.STRIPE_SECRET_KEY ?? '').startsWith('sk_test_')
+  const base: SellerPaymentsDetail = {
+    connected: !!row,
+    chargesEnabled: !!row?.charges_enabled,
+    detailsSubmitted: !!row?.details_submitted,
+    payoutsEnabled: !!row?.payouts_enabled,
+    profileReady: missingProfile.length === 0,
+    missingProfile,
+    due: [],
+    errors: [],
+    pendingVerification: false,
+    blocked: null,
+    deadline: null,
+    testMode,
+  }
+  if (!row) return base
+  try {
+    const account = await getStripe().accounts.retrieve(row.stripe_account_id as string)
+    await syncSellerAccount(account)
+    const req = account.requirements
+    const seen = new Set<string>()
+    const due: SellerPaymentsDetail['due'] = []
+    for (const [keys, pastDue] of [[req?.past_due ?? [], true], [req?.currently_due ?? [], false]] as const) {
+      for (const key of keys) {
+        const group = requirementGroup(key)
+        if (seen.has(group)) continue
+        seen.add(group)
+        due.push({ group, pastDue })
+      }
+    }
+    const reason = req?.disabled_reason ?? null
+    return {
+      ...base,
+      chargesEnabled: !!account.charges_enabled,
+      payoutsEnabled: !!account.payouts_enabled,
+      detailsSubmitted: !!account.details_submitted,
+      due,
+      errors: (req?.errors ?? []).slice(0, 10).map((e) => ({ group: requirementGroup(e.requirement), code: e.code, reason: e.reason })),
+      pendingVerification: (req?.pending_verification?.length ?? 0) > 0,
+      blocked: account.charges_enabled
+        ? null
+        : !reason
+          ? null
+          : reason.startsWith('rejected')
+            ? 'rejected'
+            : reason === 'under_review' || reason === 'requirements.pending_verification'
+              ? 'review'
+              : reason.startsWith('requirements')
+                ? 'requirements'
+                : 'other',
+      deadline: req?.current_deadline ? new Date(req.current_deadline * 1000).toISOString() : null,
+    }
+  } catch (error) {
+    console.error('[Shop] stato del conto Stripe non letto:', error instanceof Error ? error.message : error)
+    return base
   }
 }

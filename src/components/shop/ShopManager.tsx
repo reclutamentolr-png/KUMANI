@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import {
   AlertCircle,
   CheckCircle2,
+  CreditCard,
   ExternalLink,
   ImagePlus,
   LoaderCircle,
@@ -18,18 +19,19 @@ import {
   Truck,
   X,
 } from 'lucide-react'
-import Link from '@/components/LocalizedLink'
 import CopyButton from '@/components/CopyButton'
 import { createClient } from '@/lib/supabase/client'
 import { resizeImageFile } from '@/lib/resizeImage'
 import { askConfirm } from '@/lib/confirm'
+import SellerPaymentsGuide from '@/components/shop/SellerPaymentsGuide'
+import type { SellerPaymentsDetail } from '@/app/actions/shop'
 import { deleteShopProduct, saveShopProduct, saveShopSettings, updateShopOrder, type MyShop } from '@/app/actions/shopStore'
 import { formatCents, shopPath, slugify, type OrderStatus, type ShopOrder, type ShopProduct, type ShopSettings } from '@/lib/shop'
 
 // KUMANI Shop, pagina del venditore: il negozio (nome, indirizzo, consegna,
 // condizioni, aperto/chiuso), i prodotti e gli ordini.
 
-type Tab = 'shop' | 'products' | 'orders'
+type Tab = 'shop' | 'products' | 'orders' | 'payments'
 const input = 'w-full rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-[15px] text-[var(--ink)] outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/25'
 const label = 'mb-1 block text-sm font-semibold text-gray-700'
 const toCents = (v: string) => Math.round(Number(v.replace(',', '.')) * 100)
@@ -44,9 +46,9 @@ async function uploadImage(userId: string, file: File): Promise<string | null> {
 }
 const publicImage = (path: string | null) => (path ? createClient().storage.from('shop-media').getPublicUrl(path).data.publicUrl : null)
 
-export default function ShopManager({ userId, initial, initialTab }: { userId: string; initial: MyShop; initialTab: Tab }) {
+export default function ShopManager({ userId, initial, initialTab, payments }: { userId: string; initial: MyShop; initialTab: Tab; payments: SellerPaymentsDetail | null }) {
   const t = useTranslations('shop')
-  const [tab, setTab] = useState<Tab>(initial.settings ? initialTab : 'shop')
+  const [tab, setTab] = useState<Tab>(initial.settings || initialTab === 'payments' ? initialTab : 'shop')
   const [settings, setSettings] = useState<ShopSettings | null>(initial.settings)
   const [products, setProducts] = useState<ShopProduct[]>(initial.products)
   const [orders, setOrders] = useState<ShopOrder[]>(initial.orders)
@@ -63,23 +65,25 @@ export default function ShopManager({ userId, initial, initialTab }: { userId: s
             <li>{initial.profileReady ? '✓' : '•'} {t('readyProfile')}</li>
             <li>{initial.stripeReady ? '✓' : '•'} {t('readyStripe')}</li>
           </ul>
-          <Link href="/scheda-attivita" className="mt-3 inline-flex min-h-10 items-center rounded-xl bg-[var(--ink)] px-4 text-sm font-bold text-white">
-            {t('readyCta')}
-          </Link>
+          {tab !== 'payments' && (
+            <button type="button" onClick={() => setTab('payments')} className="mt-3 inline-flex min-h-10 cursor-pointer items-center rounded-xl bg-[var(--ink)] px-4 text-sm font-bold text-white">
+              {t('readyCta')}
+            </button>
+          )}
         </div>
       )}
 
       <div className="flex gap-1 rounded-2xl border border-[var(--gold)]/25 bg-white p-1 shadow-sm">
-        {(['shop', 'products', 'orders'] as Tab[]).map((k) => (
+        {(['shop', 'products', 'orders', 'payments'] as Tab[]).map((k) => (
           <button
             key={k}
             type="button"
-            disabled={k !== 'shop' && !settings}
+            disabled={(k === 'products' || k === 'orders') && !settings}
             onClick={() => setTab(k)}
-            className={`flex min-h-11 flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl px-2 text-sm font-bold transition disabled:cursor-not-allowed disabled:opacity-40 ${tab === k ? 'bg-[var(--ink)] text-white shadow' : 'text-gray-600 hover:text-[var(--ink)]'}`}
+            className={`flex min-h-11 flex-1 cursor-pointer flex-col items-center justify-center gap-0.5 rounded-xl px-1 py-1 text-sm font-bold sm:flex-row sm:gap-2 transition disabled:cursor-not-allowed disabled:opacity-40 ${tab === k ? 'bg-[var(--ink)] text-white shadow' : 'text-gray-600 hover:text-[var(--ink)]'}`}
           >
-            {k === 'shop' ? <Store className="h-4 w-4" /> : k === 'products' ? <Package className="h-4 w-4" /> : <ShoppingBag className="h-4 w-4" />}
-            <span>{t(`tab_${k}`)}</span>
+            {k === 'shop' ? <Store className="h-4 w-4" /> : k === 'products' ? <Package className="h-4 w-4" /> : k === 'orders' ? <ShoppingBag className="h-4 w-4" /> : <CreditCard className="h-4 w-4" />}
+            <span className="text-xs sm:text-sm">{t(`tab_${k}`)}</span>
             {k === 'orders' && toDo > 0 && <span className="rounded-full bg-rose-500 px-1.5 text-xs text-white">{toDo}</span>}
           </button>
         ))}
@@ -88,6 +92,7 @@ export default function ShopManager({ userId, initial, initialTab }: { userId: s
       {tab === 'shop' && <ShopForm userId={userId} settings={settings} canOpen={initial.profileReady && initial.stripeReady} hasProducts={products.some((p) => p.isActive)} onSaved={setSettings} />}
       {tab === 'products' && <Products userId={userId} products={products} setProducts={setProducts} inventory={initial.inventory} />}
       {tab === 'orders' && <Orders orders={orders} setOrders={setOrders} />}
+      {tab === 'payments' && payments && <SellerPaymentsGuide detail={payments} />}
     </div>
   )
 }

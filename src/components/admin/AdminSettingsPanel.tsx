@@ -1,5 +1,6 @@
 'use client'
 
+import AdminTestSellerBox from '@/components/admin/AdminTestSellerBox'
 import { useState, useEffect } from 'react'
 import { notify } from '@/lib/adminNotify'
 import { createClient } from '@/lib/supabase/client'
@@ -483,6 +484,7 @@ export default function AdminSettingsPanel() {
             />
             <p className="text-xs text-gray-500 mt-1">Trattenuta da KUMANI su ogni pagamento (oltre al costo di Stripe pagato dal venditore). 0 = nessuna commissione. Prima di attivarla serve il parere della commercialista.</p>
           </div>
+          <AdminTestSellerBox input={INPUT} />
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">KUMANI Sorpresa: prezzi (€)</label>
             <div className="grid max-w-xl gap-3 sm:grid-cols-3">

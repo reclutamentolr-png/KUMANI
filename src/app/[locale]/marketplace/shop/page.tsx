@@ -5,6 +5,7 @@ import { ArrowLeft, Store } from 'lucide-react'
 import ToolBackLink from '@/components/ToolBackLink'
 import ShopManager from '@/components/shop/ShopManager'
 import { getMyShop } from '@/app/actions/shopStore'
+import { getSellerPaymentsDetail } from '@/app/actions/shop'
 import { createClient } from '@/lib/supabase/server'
 
 export const dynamic = 'force-dynamic'
@@ -22,9 +23,11 @@ export default async function ShopPage({ searchParams }: { searchParams: Promise
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) redirect(`/${locale}/login?next=/marketplace/shop`)
+  // Prima lo stato del conto Stripe (aggiorna anche il database), poi il negozio
+  const payments = await getSellerPaymentsDetail()
   const shop = await getMyShop()
   if (!shop) redirect(`/${locale}/pro?tool=shop`)
-  const initialTab = tab === 'orders' ? 'orders' : tab === 'products' ? 'products' : 'shop'
+  const initialTab = tab === 'orders' ? 'orders' : tab === 'products' ? 'products' : tab === 'payments' ? 'payments' : 'shop'
 
   return (
     <div className="min-h-screen bg-[var(--background)] pb-24">
@@ -54,7 +57,7 @@ export default async function ShopPage({ searchParams }: { searchParams: Promise
           <h2 className="relative mt-2 text-2xl font-bold sm:text-3xl">{t('heroTitle')}</h2>
           <p className="relative mt-2 text-white/70">{t('heroText')}</p>
         </div>
-        <ShopManager userId={user.id} initial={shop} initialTab={initialTab} />
+        <ShopManager userId={user.id} initial={shop} initialTab={initialTab} payments={payments} />
       </main>
     </div>
   )
