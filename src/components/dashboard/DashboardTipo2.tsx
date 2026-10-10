@@ -9,9 +9,9 @@ import type { MyProfile } from '@/lib/myProfile'
 import type { ServiceItem } from '@/lib/servicesCatalog'
 import NativeShareButton from '@/components/NativeShareButton'
 
-// Home: corta. In cima lo stato (KU Karma, abbonamento, codice invito), poi i
-// servizi preferiti, gli usati di recente e un suggerimento, l'agenda e le
-// guide. Tutti i servizi sono nella pagina Servizi; rete, Kumano del Giorno
+// Home: corta. In cima lo stato (KU Karma, abbonamento, codice invito), poi
+// la fascia «Oggi», «In cosa possiamo darti una mano?», i servizi preferiti,
+// gli usati di recente e un suggerimento, e le guide. Tutti i servizi sono nella pagina Servizi; rete, Kumano del Giorno
 // e donazioni nella pagina Community (menu fisso in basso).
 const TILE =
   'flex min-w-0 flex-col rounded-2xl border border-[var(--gold)]/30 bg-white p-3 shadow-[0_6px_18px_rgba(23,23,23,0.06)] transition-colors hover:border-[var(--gold)] sm:p-4'
@@ -25,6 +25,7 @@ export default async function DashboardTipo2({
   basePrice,
   proTrialDaysLeft = null,
   agenda = null,
+  needs = null,
   wellness = null,
 }: {
   profile: MyProfile | null
@@ -37,8 +38,10 @@ export default async function DashboardTipo2({
   // Prova Pro in corso: il riquadro dell'abbonamento propone Pro come
   // scelta principale e il Base come alternativa.
   proTrialDaysLeft?: number | null
-  // Riquadro "I prossimi giorni" (agenda unica), già pronto dal server
+  // Fascia «Oggi» (agenda unica), già pronta dal server
   agenda?: React.ReactNode
+  // «In cosa possiamo darti una mano?» in versione compatta
+  needs?: React.ReactNode
   // «Il tuo benessere di oggi», già pronto dal server
   wellness?: React.ReactNode
 }) {
@@ -116,14 +119,17 @@ export default async function DashboardTipo2({
         </div>
       )}
 
+      {/* Subito dopo lo stato: oggi e poi «In cosa possiamo darti una mano?» */}
+      {agenda}
+
+      {needs}
+
       <HomeServices items={services} favorites={favoriteToolNames} />
 
       {wellness}
 
       {/* Novità di Affinity Amicizie (solo per chi partecipa) */}
       <AffinityBadge />
-
-      {agenda}
 
       {/* Guide e documenti */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">

@@ -3728,7 +3728,8 @@
     "openGarage": "Öffnen",
     "lifeCalendarHint": "Das sieht nach einer Frist aus, die sich erneuert: Trag sie in Life Calendar ein – es erinnert dich rechtzeitig und auch an die nächsten Verlängerungen.",
     "lifeCalendarHintCta": "Zu Life Calendar hinzufügen",
-    "openCasa": "In KUMANI Casa öffnen"
+    "openCasa": "In KUMANI Casa öffnen",
+    "peekLabel": "Dein Kalender: {n, plural, =0 {heute nichts zu tun} one {# Sache heute zu tun} other {# Sachen heute zu tun}}"
   },
   "convivio": {
     "error_suspended": "Dienst vorübergehend ausgesetzt. Bitte versuchen Sie es später erneut.",
@@ -11356,6 +11357,17 @@
     "intro_work": "Jobangebote, ein guter Lebenslauf und professionelle Angebote.",
     "intro_people": "Gleichgesinnte, Events in deiner Nähe und Spiele zum gemeinsamen Spielen.",
     "intro_relax": "Klänge, Atmung und ein wenig Farbe, um zur Ruhe zu kommen.",
-    "intro_gift": "Ein Gutschein oder eine Überraschungsreise, per Link verschickt."
+    "intro_gift": "Ein Gutschein oder eine Überraschungsreise, per Link verschickt.",
+    "short_scams": "Vor Betrug schützen",
+    "short_organize": "Meine Tage planen",
+    "short_money": "Finanzen, Haus und Auto",
+    "short_business": "Geschäft und Kunden",
+    "short_work": "Arbeit",
+    "short_people": "Menschen kennenlernen",
+    "short_relax": "Abschalten",
+    "short_gift": "Etwas schenken",
+    "dashHint": "Tippe auf eine Antwort: Darunter erscheinen die passenden Dienste.",
+    "dashOpen": "Öffnen",
+    "dashHide": "Ausblenden"
   }
 }

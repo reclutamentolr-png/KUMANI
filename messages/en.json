@@ -3728,7 +3728,8 @@
     "openGarage": "Open",
     "lifeCalendarHint": "This looks like a deadline that renews: put it in Life Calendar, it warns you in advance and reminds you of the next renewals too.",
     "lifeCalendarHintCta": "Add it to Life Calendar",
-    "openCasa": "Open in KUMANI Casa"
+    "openCasa": "Open in KUMANI Casa",
+    "peekLabel": "Your calendar: {n, plural, =0 {nothing to do today} one {# thing to do today} other {# things to do today}}"
   },
   "convivio": {
     "error_suspended": "Service temporarily suspended. Please try again later.",
@@ -11356,6 +11357,17 @@
     "intro_work": "Job offers, a well-made CV and professional quotes.",
     "intro_people": "Like-minded people, events near you and games to play together.",
     "intro_relax": "Sounds, breathing and a little colour to find your calm again.",
-    "intro_gift": "A voucher or a surprise journey to send with a link."
+    "intro_gift": "A voucher or a surprise journey to send with a link.",
+    "short_scams": "Protect me from scams",
+    "short_organize": "Organise my days",
+    "short_money": "Money, home and car",
+    "short_business": "Business and customers",
+    "short_work": "Work",
+    "short_people": "Meet people",
+    "short_relax": "Unwind",
+    "short_gift": "Give a gift",
+    "dashHint": "Tap an answer: the right services appear below.",
+    "dashOpen": "Open",
+    "dashHide": "Hide"
   }
 }

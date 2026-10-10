@@ -3728,7 +3728,8 @@
     "openGarage": "Apri",
     "lifeCalendarHint": "Sembra una scadenza che si rinnova: mettila in Life Calendar, ti avvisa in anticipo e ti ricorda anche i prossimi rinnovi.",
     "lifeCalendarHintCta": "Aggiungila a Life Calendar",
-    "openCasa": "Apri in KUMANI Casa"
+    "openCasa": "Apri in KUMANI Casa",
+    "peekLabel": "Il tuo calendario: {n, plural, =0 {niente da fare oggi} one {# cosa da fare oggi} other {# cose da fare oggi}}"
   },
   "convivio": {
     "error_suspended": "Servizio momentaneamente sospeso. Riprova più tardi.",
@@ -11356,6 +11357,17 @@
     "intro_work": "Offerte di lavoro, un CV fatto bene e preventivi professionali.",
     "intro_people": "Persone affini, eventi vicino a te e giochi da fare insieme.",
     "intro_relax": "Suoni, respiro e un po’ di colore per ritrovare la calma.",
-    "intro_gift": "Un buono o un percorso a sorpresa da mandare con un link."
+    "intro_gift": "Un buono o un percorso a sorpresa da mandare con un link.",
+    "short_scams": "Difendermi dalle truffe",
+    "short_organize": "Organizzare le giornate",
+    "short_money": "Conti, casa e auto",
+    "short_business": "Attività e clienti",
+    "short_work": "Lavoro",
+    "short_people": "Conoscere persone",
+    "short_relax": "Staccare",
+    "short_gift": "Fare un regalo",
+    "dashHint": "Tocca una risposta: qui sotto compaiono i servizi giusti.",
+    "dashOpen": "Apri",
+    "dashHide": "Nascondi"
   }
 }

@@ -16,4 +16,5 @@ export const HOME_NEEDS = [
 
 export type HomeNeedKey = (typeof HOME_NEEDS)[number]['key']
 export type HomeNeedItem = { name: string; title: string; description: string; href: string; iconName: string }
-export type HomeNeed = { key: HomeNeedKey; icon: string; label: string; intro: string; items: HomeNeedItem[] }
+// short: etichetta breve per la versione compatta in dashboard
+export type HomeNeed = { key: HomeNeedKey; icon: string; label: string; short: string; intro: string; items: HomeNeedItem[] }

@@ -2,7 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
-import { loadAgenda } from '@/lib/agenda-server'
+import { loadAgenda, type AgendaSources } from '@/lib/agenda-server'
 import { addDays, daysBetween, todayKey, type AgendaEvent } from '@/lib/agenda'
 
 // Azioni rapide dell'agenda unica (dashboard e calendario di MemoLife):
@@ -46,6 +46,31 @@ export async function getAgendaRange(from: string, to: string): Promise<AgendaEv
     includeDone: true,
     overdueSince: from < todayKey() ? from : addDays(todayKey(), -90),
   })
+}
+
+// Icona calendario in alto (tutte le pagine): oggi, le cose da recuperare e
+// i prossimi 6 giorni, come la fascia «Oggi» della dashboard. null = niente
+// agenda (nessuno strumento attivo e nessun impegno): l'icona non compare.
+export async function getAgendaPeek(): Promise<{ today: string; events: AgendaEvent[]; sources: AgendaSources } | null> {
+  const { supabase, user } = await session()
+  if (!user) return null
+  const [memolife, spendly, lifeCalendar] = await Promise.all([
+    hasActiveToolAccess(supabase, user.id, 'memolife'),
+    hasActiveToolAccess(supabase, user.id, 'spendly'),
+    hasActiveToolAccess(supabase, user.id, 'life-calendar'),
+  ])
+  const sources = { memolife, spendly, lifeCalendar }
+  const today = todayKey()
+  const events = await loadAgenda(supabase, user.id, {
+    from: today,
+    to: addDays(today, 6),
+    overdueSince: addDays(today, -60),
+    sources,
+    useReminders: true,
+  })
+  // Garage, viaggi ed eventi arrivano anche senza i tre strumenti
+  if (!memolife && !spendly && !lifeCalendar && events.length === 0) return null
+  return { today, events, sources }
 }
 
 // Bolletta / spesa fissa pagata per un mese, con l'importo reale.

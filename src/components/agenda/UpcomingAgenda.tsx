@@ -10,13 +10,16 @@ import { addDays, type AgendaEvent } from '@/lib/agenda'
 import type { AgendaSources } from '@/lib/agenda-server'
 import AgendaEventRow, { KIND_COLOR } from './AgendaEventRow'
 import QuickAddMenu from './QuickAddMenu'
+import { forgetAgendaPeek } from './AgendaPeekButton'
 
 const MAX_ROWS = 6
+const NEXT_ROWS = 3
 
-// Dashboard → "I prossimi giorni": striscia dei 7 giorni con i pallini degli
-// impegni e la lista (prima le cose scadute) dai tre strumenti, con le azioni
-// rapide. Un giorno toccato filtra la lista; le frecce scorrono di una
-// settimana (le altre settimane si caricano al volo, senza le cose scadute).
+// Dashboard → fascia «Oggi», in cima alla Home: la data di oggi, la striscia
+// dei 7 giorni con i pallini degli impegni e la lista divisa in «Da
+// recuperare», «Oggi» e «Prossimi giorni», con le azioni rapide. Un giorno
+// toccato filtra la lista; le frecce scorrono di una settimana (le altre
+// settimane si caricano al volo, senza le cose scadute).
 export default function UpcomingAgenda({ events, today, sources }: { events: AgendaEvent[]; today: string; sources: AgendaSources }) {
   const t = useTranslations('agenda')
   const locale = useLocale()
@@ -73,6 +76,24 @@ export default function UpcomingAgenda({ events, today, sources }: { events: Age
     ? capitalize(monthOf(start, true))
     : `${capitalize(monthOf(start, !sameYear))} – ${capitalize(monthOf(end, true))}`
   const shown = list.slice(0, MAX_ROWS)
+  const todayLabel = new Date(`${today}T12:00:00Z`).toLocaleDateString(locale, { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' })
+  // Settimana di oggi senza un giorno scelto: lista divisa in tre parti
+  const sectioned = week === 0 && !selected
+  const todayList = events.filter((e) => e.date === today)
+  const nextList = events.filter((e) => e.date > today)
+  const changed = () => {
+    forgetAgendaPeek()
+    router.refresh()
+    if (week !== 0) getAgendaRange(start, end).then((result) => setOtherWeek(result.filter((e) => e.date >= start && e.date <= end)))
+  }
+  const rows = (items: AgendaEvent[]) => (
+    <ul className="space-y-2">
+      {items.map((event) => (
+        <AgendaEventRow key={event.key} event={event} today={today} onChanged={changed} compact />
+      ))}
+    </ul>
+  )
+  const sectionTitle = 'mb-2 text-[11px] font-bold uppercase tracking-[0.15em]'
 
   return (
     <section className="overflow-hidden rounded-2xl border border-[var(--gold)]/40 bg-white shadow-[0_14px_40px_rgba(23,23,23,0.12)]">
@@ -83,7 +104,10 @@ export default function UpcomingAgenda({ events, today, sources }: { events: Age
           <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--gold)]/20">
             <CalendarDays className="h-5 w-5 text-[var(--gold-bright)]" />
           </span>
-          {t('upcomingTitle')}
+          <span className="flex min-w-0 flex-col leading-tight">
+            <span className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-[var(--gold-bright)]">{t('sectionToday')}</span>
+            <span className="truncate first-letter:uppercase">{todayLabel}</span>
+          </span>
           {overdue.length > 0 && (
             <span className="rounded-full bg-red-500 px-2 py-0.5 text-xs font-bold text-white">{t('overdueCount', { count: overdue.length })}</span>
           )}
@@ -165,26 +189,36 @@ export default function UpcomingAgenda({ events, today, sources }: { events: Age
 
       {/* Parte bassa chiara: impegni */}
       <div className="px-4 py-5 sm:px-5">
-      {shown.length === 0 ? (
+      {sectioned ? (
+        <div className="space-y-4">
+          {overdue.length > 0 && (
+            <div>
+              <p className={`${sectionTitle} text-rose-700`}>{t('sectionOverdue')}</p>
+              {rows(overdue.slice(0, NEXT_ROWS))}
+            </div>
+          )}
+          <div>
+            <p className={`${sectionTitle} text-[var(--gold)]`}>{t('sectionToday')}</p>
+            {todayList.length === 0 ? (
+              <p className="rounded-xl border border-dashed border-[var(--gold)]/50 bg-[var(--gold-pale)]/50 px-4 py-3 text-center text-sm font-medium text-[var(--ink)]">{t('emptyToday')}</p>
+            ) : (
+              rows(todayList)
+            )}
+          </div>
+          {nextList.length > 0 && (
+            <div>
+              <p className={`${sectionTitle} text-[var(--muted)]`}>{t('sectionNextDays')}</p>
+              {rows(nextList.slice(0, NEXT_ROWS))}
+            </div>
+          )}
+        </div>
+      ) : shown.length === 0 ? (
         <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-[var(--gold)]/50 bg-[var(--gold-pale)]/50 px-4 py-6 text-center">
           <CalendarDays className="h-7 w-7 text-[var(--gold)]" />
           <p className="text-sm font-medium text-[var(--ink)]">{selected ? t('nothingThatDay') : t('nothingUpcoming')}</p>
         </div>
       ) : (
-        <ul className="space-y-2">
-          {shown.map((event) => (
-            <AgendaEventRow
-              key={event.key}
-              event={event}
-              today={today}
-              onChanged={() => {
-                router.refresh()
-                if (week !== 0) getAgendaRange(start, end).then((result) => setOtherWeek(result.filter((e) => e.date >= start && e.date <= end)))
-              }}
-              compact
-            />
-          ))}
-        </ul>
+        rows(shown)
       )}
 
       {sources.memolife && (

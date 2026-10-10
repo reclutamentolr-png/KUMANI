@@ -18,6 +18,7 @@ import {
 } from 'lucide-react'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import NotificationBell from '@/components/notifications/NotificationBell'
+import AgendaPeekButton from '@/components/agenda/AgendaPeekButton'
 import { InstallAppLink } from '@/components/InstallAppBanner'
 import ProfileModal, { type ProfileChangeState } from './ProfileModal'
 import { getMyChangeRequest } from '@/app/actions/profileChanges'
@@ -86,6 +87,8 @@ export default function DashboardHeaderActions({ user, profile, isAdmin }: Dashb
 
   return (
     <>
+      {/* Oggi e i prossimi giorni, da ogni pagina */}
+      <AgendaPeekButton />
       {/* Centro avvisi */}
       <NotificationBell />
       {/* Telefono: un solo pulsante ☰ */}

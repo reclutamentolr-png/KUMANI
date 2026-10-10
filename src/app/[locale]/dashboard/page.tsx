@@ -43,6 +43,8 @@ import { getPlanPrices } from '@/lib/planPrices'
 import { getServicesCatalog } from '@/lib/servicesCatalog'
 import type { MyProfile } from '@/lib/myProfile'
 import GiftWelcomeDashboard from '@/components/gifts/GiftWelcomeDashboard'
+import DashboardNeeds from '@/components/dashboard/DashboardNeeds'
+import { buildHomeNeeds } from '@/lib/homeNeedsServer'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -156,7 +158,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   }
 
 
-  // "I prossimi giorni": appuntamenti, promemoria, bollette e scadenze dei
+  // Fascia «Oggi»: appuntamenti, promemoria, bollette e scadenze dei
   // prossimi 7 giorni (più quelle scadute negli ultimi 60), dagli strumenti
   // che l'utente può usare.
   const agendaSources = {
@@ -189,6 +191,12 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     wellnessPromise,
   ])
   const { newlyAchievedRank } = network
+  // «In cosa possiamo darti una mano?»: qui i servizi portano allo strumento
+  const serviceHref = new Map(catalog.items.map((item) => [item.toolName, item.href]))
+  const [needs, needsT] = await Promise.all([
+    buildHomeNeeds((name) => serviceHref.get(name) ?? `/strumenti/${name}`),
+    getTranslations('homeNeeds'),
+  ])
   // Bonus della rete: dopo aver mostrato la pagina
   await deferNetworkClaims(supabase)
   proTrial = trial
@@ -264,6 +272,12 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
               proTrialDaysLeft={proTrial?.daysLeft ?? null}
               wellness={wellnessToday ? <WellnessTodayCard initial={wellnessToday as WellnessToday} /> : null}
               agenda={hasAgenda ? <UpcomingAgenda events={agendaEvents} today={agendaToday} sources={agendaSources} /> : null}
+              needs={
+                <DashboardNeeds
+                  needs={needs}
+                  texts={{ title: needsT('title'), hint: needsT('dashHint'), open: needsT('dashOpen'), hide: needsT('dashHide') }}
+                />
+              }
             />
             {/* Primo accesso: prima "Cosa ti interessa?" (riempie i preferiti),
                 poi il tour (una volta sola; si rivede dal Centro guide) */}
