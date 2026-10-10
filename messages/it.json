@@ -11333,5 +11333,29 @@
     "menuText": "Apri il menu del browser (⋮ o ☰) e scegli «Installa app» oppure «Aggiungi a schermata Home».",
     "gotIt": "Ho capito",
     "menuLink": "Installa l’app"
+  },
+  "homeNeeds": {
+    "eyebrow": "Partiamo da te",
+    "title": "Di cosa hai bisogno oggi?",
+    "subtitle": "Scegli quello che ti serve: ti mostriamo i servizi KUMANI giusti, senza perderti tra tutti gli altri.",
+    "hint": "Tocca una risposta per vedere i servizi adatti a te.",
+    "open": "Scopri",
+    "all": "Oppure guarda tutti i servizi",
+    "need_scams": "Voglio difendermi dalle truffe",
+    "need_organize": "Voglio organizzare le mie giornate",
+    "need_money": "Voglio tenere in ordine conti, casa e auto",
+    "need_business": "Ho un’attività e cerco clienti",
+    "need_work": "Cerco lavoro o lavoro in proprio",
+    "need_people": "Voglio conoscere persone",
+    "need_relax": "Ho bisogno di staccare",
+    "need_gift": "Voglio fare un regalo speciale",
+    "intro_scams": "Messaggi sospetti, IBAN da controllare, dati personali finiti online: ecco da dove partire.",
+    "intro_organize": "Scadenze, promemoria e concentrazione: tutto in un posto solo.",
+    "intro_money": "Spese, bollette, manutenzioni della casa e scadenze dell’auto sotto controllo.",
+    "intro_business": "Un sito vetrina, un negozio online, la tessera fedeltà e i QR per farti trovare.",
+    "intro_work": "Offerte di lavoro, un CV fatto bene e preventivi professionali.",
+    "intro_people": "Persone affini, eventi vicino a te e giochi da fare insieme.",
+    "intro_relax": "Suoni, respiro e un po’ di colore per ritrovare la calma.",
+    "intro_gift": "Un buono o un percorso a sorpresa da mandare con un link."
   }
 }

@@ -29,6 +29,9 @@ import {
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import Logo from '@/components/Logo'
 import { InstallAppLink } from '@/components/InstallAppBanner'
+import HomeNeeds from '@/components/home/HomeNeeds'
+import { HOME_NEEDS, type HomeNeed, type HomeNeedItem } from '@/lib/homeNeeds'
+import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import HomeKumanoDelGiorno from '@/components/spotlight/HomeKumanoDelGiorno'
 import HomeUpcomingEvents from '@/components/events/HomeUpcomingEvents'
 import HomeKordataShowcase from '@/components/convivio/HomeKordataShowcase'
@@ -47,15 +50,32 @@ import { HOME_LAYOUT_CONFIG, type HomeLayoutKey } from '@/lib/homeLayouts'
 // (src/app/[locale]/page.tsx, preparata in anticipo e tenuta in memoria) e
 // dall'anteprima degli aspetti nell'Admin (admin/anteprima-home/[layout]).
 export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayoutKey }) {
-  const [t, tg, tr, tcat, errorT, tInstall] = await Promise.all([
+  const [t, tg, tr, tcat, errorT, tInstall, tNeeds, tMarket, tSurprise] = await Promise.all([
     getTranslations('landingHome'),
     getTranslations('guides'),
     getTranslations('reviews'),
     getTranslations('catalog'),
     getTranslations('errorPages'),
     getTranslations('install'),
+    getTranslations('homeNeeds'),
+    getTranslations('marketplace'),
+    getTranslations('surprise'),
   ])
   const L = HOME_LAYOUT_CONFIG[layoutKey]
+  // «Di cosa hai bisogno oggi?»: per ogni risposta i servizi giusti
+  const toolsByName = new Map(getMarketplaceTools(tMarket).map((tool) => [tool.toolName, tool]))
+  const needs: HomeNeed[] = HOME_NEEDS.map((need) => ({
+    key: need.key,
+    icon: need.icon,
+    label: tNeeds(`need_${need.key}`),
+    intro: tNeeds(`intro_${need.key}`),
+    items: (need.items as readonly string[]).flatMap((name): HomeNeedItem[] => {
+      if (name === 'events') return [{ name, title: tMarket('events'), description: tMarket('eventsDescription'), href: '/events', iconName: 'Users' }]
+      if (name === 'sorprese') return [{ name, title: `KUMANI ${tSurprise('title')}`, description: tSurprise('intro'), href: '/sorprese', iconName: 'Gift' }]
+      const tool = toolsByName.get(name)
+      return tool ? [{ name, title: tool.title.split(/\s[-–—]\s/)[0], description: tool.description, href: `/strumenti/${name}`, iconName: tool.iconName }] : []
+    }),
+  }))
   // Apertura con testo a sinistra sul computer (foto a lato)
   const leftHero = L.hero.kind === 'split' || L.hero.kind === 'side'
   const heroBadgeClass =
@@ -233,6 +253,14 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
           </div>
         )}
       </section>
+
+      {/* 💬 DI COSA HAI BISOGNO OGGI? Una domanda semplice che porta ai servizi giusti */}
+      <HomeSection bg={{ tone: 'light', variant: 'cream' }} className="py-12 sm:py-16">
+        <HomeNeeds
+          needs={needs}
+          texts={{ eyebrow: tNeeds('eyebrow'), title: tNeeds('title'), subtitle: tNeeds('subtitle'), hint: tNeeds('hint'), open: tNeeds('open'), all: tNeeds('all') }}
+        />
+      </HomeSection>
 
       {/* 🛠️ SEZIONE: IL MARKETPLACE — i servizi nei tre livelli Gratis, Base
           e Pro, con "Dettagli" per l'elenco completo e trasparente. */}

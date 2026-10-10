@@ -11333,5 +11333,29 @@
     "menuText": "Öffne das Browsermenü (⋮ oder ☰) und wähle „App installieren“ oder „Zum Startbildschirm hinzufügen“.",
     "gotIt": "Verstanden",
     "menuLink": "App installieren"
+  },
+  "homeNeeds": {
+    "eyebrow": "Fangen wir bei dir an",
+    "title": "Was brauchst du heute?",
+    "subtitle": "Wähle, was du brauchst: Wir zeigen dir die passenden KUMANI-Dienste, ohne dass du dich in allen anderen verlierst.",
+    "hint": "Tippe auf eine Antwort, um passende Dienste zu sehen.",
+    "open": "Entdecken",
+    "all": "Oder alle Dienste ansehen",
+    "need_scams": "Ich will mich vor Betrug schützen",
+    "need_organize": "Ich will meine Tage organisieren",
+    "need_money": "Ich will Finanzen, Haus und Auto im Griff haben",
+    "need_business": "Ich habe ein Geschäft und suche Kunden",
+    "need_work": "Ich suche Arbeit oder bin selbstständig",
+    "need_people": "Ich will Menschen kennenlernen",
+    "need_relax": "Ich muss abschalten",
+    "need_gift": "Ich will ein besonderes Geschenk machen",
+    "intro_scams": "Verdächtige Nachrichten, IBAN prüfen, persönliche Daten im Netz: Hier fängst du an.",
+    "intro_organize": "Fristen, Erinnerungen und Konzentration: alles an einem Ort.",
+    "intro_money": "Ausgaben, Rechnungen, Hauswartung und Fristen fürs Auto im Blick.",
+    "intro_business": "Eine Website, ein Online-Shop, die Kundenkarte und QR-Codes, damit man dich findet.",
+    "intro_work": "Jobangebote, ein guter Lebenslauf und professionelle Angebote.",
+    "intro_people": "Gleichgesinnte, Events in deiner Nähe und Spiele zum gemeinsamen Spielen.",
+    "intro_relax": "Klänge, Atmung und ein wenig Farbe, um zur Ruhe zu kommen.",
+    "intro_gift": "Ein Gutschein oder eine Überraschungsreise, per Link verschickt."
   }
 }

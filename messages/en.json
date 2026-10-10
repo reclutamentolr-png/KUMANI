@@ -11333,5 +11333,29 @@
     "menuText": "Open the browser menu (⋮ or ☰) and choose “Install app” or “Add to Home screen”.",
     "gotIt": "Got it",
     "menuLink": "Install the app"
+  },
+  "homeNeeds": {
+    "eyebrow": "Let’s start with you",
+    "title": "What do you need today?",
+    "subtitle": "Choose what you need: we’ll show you the right KUMANI services, without getting lost among all the others.",
+    "hint": "Tap an answer to see the services that suit you.",
+    "open": "Discover",
+    "all": "Or browse all services",
+    "need_scams": "I want to protect myself from scams",
+    "need_organize": "I want to organise my days",
+    "need_money": "I want to keep money, home and car in order",
+    "need_business": "I have a business and want customers",
+    "need_work": "I’m looking for work or I’m self-employed",
+    "need_people": "I want to meet people",
+    "need_relax": "I need to unwind",
+    "need_gift": "I want to give a special gift",
+    "intro_scams": "Suspicious messages, IBANs to check, personal data leaked online: here’s where to start.",
+    "intro_organize": "Deadlines, reminders and focus: all in one place.",
+    "intro_money": "Expenses, bills, home maintenance and car deadlines under control.",
+    "intro_business": "A showcase website, an online shop, a loyalty card and QR codes to be found.",
+    "intro_work": "Job offers, a well-made CV and professional quotes.",
+    "intro_people": "Like-minded people, events near you and games to play together.",
+    "intro_relax": "Sounds, breathing and a little colour to find your calm again.",
+    "intro_gift": "A voucher or a surprise journey to send with a link."
   }
 }

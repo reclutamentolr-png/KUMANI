@@ -11333,5 +11333,29 @@
     "menuText": "Ouvrez le menu du navigateur (⋮ ou ☰) et choisissez « Installer l’application » ou « Ajouter à l’écran d’accueil ».",
     "gotIt": "J’ai compris",
     "menuLink": "Installer l’app"
+  },
+  "homeNeeds": {
+    "eyebrow": "Commençons par vous",
+    "title": "De quoi avez-vous besoin aujourd’hui ?",
+    "subtitle": "Choisissez ce qu’il vous faut : nous vous montrons les bons services KUMANI, sans vous perdre parmi tous les autres.",
+    "hint": "Touchez une réponse pour voir les services adaptés.",
+    "open": "Découvrir",
+    "all": "Ou voir tous les services",
+    "need_scams": "Je veux me protéger des arnaques",
+    "need_organize": "Je veux organiser mes journées",
+    "need_money": "Je veux gérer budget, maison et voiture",
+    "need_business": "J’ai une activité et je cherche des clients",
+    "need_work": "Je cherche du travail ou je suis indépendant",
+    "need_people": "Je veux rencontrer des gens",
+    "need_relax": "J’ai besoin de décompresser",
+    "need_gift": "Je veux faire un cadeau spécial",
+    "intro_scams": "Messages suspects, IBAN à vérifier, données personnelles en ligne : voici par où commencer.",
+    "intro_organize": "Échéances, rappels et concentration : tout au même endroit.",
+    "intro_money": "Dépenses, factures, entretien de la maison et échéances de la voiture sous contrôle.",
+    "intro_business": "Un site vitrine, une boutique en ligne, une carte de fidélité et des QR codes pour être trouvé.",
+    "intro_work": "Offres d’emploi, un CV soigné et des devis professionnels.",
+    "intro_people": "Des personnes qui vous ressemblent, des événements près de chez vous et des jeux à plusieurs.",
+    "intro_relax": "Des sons, la respiration et un peu de couleur pour retrouver le calme.",
+    "intro_gift": "Un bon cadeau ou un parcours surprise à envoyer avec un lien."
   }
 }
