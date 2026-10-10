@@ -8340,7 +8340,9 @@
     "shopPaymentsActiveTitle": "✅ Paiements en ligne actifs",
     "shopPaymentsActiveBody": "Stripe a vérifié votre compte : vous pouvez désormais recevoir les paiements de la boutique et des devis.",
     "shopPaymentsPausedTitle": "⚠️ Paiements en ligne suspendus",
-    "shopPaymentsPausedBody": "Stripe demande des informations supplémentaires : ouvrez KUMANI Shop → Paiements pour voir ce qui manque."
+    "shopPaymentsPausedBody": "Stripe demande des informations supplémentaires : ouvrez KUMANI Shop → Paiements pour voir ce qui manque.",
+    "nexusAbandonedTitle": "Votre défi NEXUS est terminé",
+    "nexusAbandonedBody": "Les autres joueurs ont quitté le défi {code} : vous gagnez."
   },
   "pushInvite": {
     "title": "Activez les notifications",
@@ -11480,6 +11482,8 @@
     "duel_guestCtaText": "Inscrivez-vous gratuitement à KUMANI : de nouveaux mots croisés chaque jour, des défis entre amis et de nombreux services utiles.",
     "duel_guestCta": "S’inscrire gratuitement",
     "duel_toHome": "Aller sur KUMANI",
-    "duel_bannerMine": "À vous de jouer !"
+    "duel_bannerMine": "À vous de jouer !",
+    "duel_playerLeft": "{name} a quitté la partie.",
+    "duel_endAbandoned": "Les autres joueurs ont quitté la partie. Voici la grille avec toutes les réponses."
   }
 }

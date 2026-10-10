@@ -8340,7 +8340,9 @@
     "shopPaymentsActiveTitle": "✅ Online-Zahlungen aktiv",
     "shopPaymentsActiveBody": "Stripe hat dein Konto geprüft: Du kannst jetzt die Zahlungen für Shop und Angebote empfangen.",
     "shopPaymentsPausedTitle": "⚠️ Online-Zahlungen ausgesetzt",
-    "shopPaymentsPausedBody": "Stripe braucht weitere Angaben: Öffne KUMANI Shop → Zahlungen, um zu sehen, was fehlt."
+    "shopPaymentsPausedBody": "Stripe braucht weitere Angaben: Öffne KUMANI Shop → Zahlungen, um zu sehen, was fehlt.",
+    "nexusAbandonedTitle": "Deine NEXUS-Herausforderung ist vorbei",
+    "nexusAbandonedBody": "Die anderen Spieler haben die Herausforderung {code} verlassen: Du hast gewonnen."
   },
   "pushInvite": {
     "title": "Benachrichtigungen aktivieren",
@@ -11480,6 +11482,8 @@
     "duel_guestCtaText": "Melde dich kostenlos bei KUMANI an: jeden Tag ein neues Kreuzworträtsel, Herausforderungen mit Freunden und viele nützliche Dienste.",
     "duel_guestCta": "Kostenlos anmelden",
     "duel_toHome": "Zu KUMANI",
-    "duel_bannerMine": "Du bist dran!"
+    "duel_bannerMine": "Du bist dran!",
+    "duel_playerLeft": "{name} hat das Spiel verlassen.",
+    "duel_endAbandoned": "Die anderen Spieler haben das Spiel verlassen. Hier ist das Rätsel mit allen Lösungen."
   }
 }

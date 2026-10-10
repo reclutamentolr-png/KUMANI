@@ -77,4 +77,6 @@ export type NexusDuelState = {
   lastMove: { seat: number; slotId: string | null; correct: boolean; points: number; word: string | null } | null
   // posti dei vincitori (più di uno = pari merito)
   winners: number[]
+  // finita perché tutti gli altri sono usciti
+  abandoned: boolean
 }

@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { isToolOnline } from '@/lib/toolOnline'
 import { awardToolPoint } from '@/lib/toolPoints'
+import { localizedPath, notifyUser } from '@/lib/push'
 import { buildNexus, rngFrom } from '@/lib/nexus/grid'
 import {
   NEXUS_DUEL_SIZE,
@@ -139,6 +140,24 @@ async function profileName(userId: string): Promise<string> {
   return cleanName(data?.first_name ?? '') || 'Kumano'
 }
 
+// Tutti gli altri sono usciti: chi resta (di solito chi ha creato la sfida)
+// vince e riceve l'avviso, anche se non sta guardando la pagina
+async function notifyAbandoned(duel: Duel, players: Player[]) {
+  const left = active(players)
+  if (left.length !== 1 || !left[0].user_id || players.length < 2) return
+  await notifyUser(
+    left[0].user_id,
+    'messages',
+    (t, locale) => ({
+      title: t('nexusAbandonedTitle'),
+      body: t('nexusAbandonedBody', { code: duel.code }),
+      url: localizedPath(locale, `/nexus/${duel.code}`),
+      tag: `nexus-${duel.code}`,
+    }),
+    { kind: 'nexus_abandoned', ref: duel.id }
+  )
+}
+
 async function finish(duel: Duel) {
   await service()
     .from('nexus_duels')
@@ -154,20 +173,29 @@ async function maybeFinish(duel: Duel, players: Player[], claimed: number, total
   await finish(duel)
 }
 
-// Turno scaduto: passa al prossimo (una volta sola, anche con due letture insieme)
-async function advanceIfExpired(duel: Duel, players: Player[], claimed: number, totalSlots: number) {
+// Turno scaduto: passa al prossimo (una volta sola, anche con due letture
+// insieme). Chi lascia scadere due turni di fila ha abbandonato la partita.
+async function advanceIfExpired(duel: Duel, players: Player[], moves: Move[], totalSlots: number) {
   if (duel.status !== 'live' || !duel.turn_ends_at || new Date(duel.turn_ends_at).getTime() > Date.now()) return false
+  const idle = duel.turn_player
+  const previous = [...moves].reverse().find((m) => m.player_id === idle)
+  const gone = !!idle && !!previous && previous.slot_id === null
+  const after = gone ? players.map((p) => (p.id === idle ? { ...p, left_at: now() } : p)) : players
   const { data } = await service()
     .from('nexus_duels')
-    .update({ turn_player: nextTurn(players, duel.turn_player), turn_ends_at: turnEnd(players), stall: duel.stall + 1, updated_at: now() })
+    .update({ turn_player: nextTurn(after, idle), turn_ends_at: turnEnd(after), stall: duel.stall + 1, updated_at: now() })
     .eq('id', duel.id)
     .eq('status', 'live')
     .eq('turn_ends_at', duel.turn_ends_at)
     .select(DUEL_COLUMNS)
     .maybeSingle<Duel>()
   if (!data) return true
-  if (duel.turn_player) await service().from('nexus_duel_moves').insert({ duel_id: duel.id, player_id: duel.turn_player, slot_id: null, correct: false })
-  await maybeFinish(data, players, claimed, totalSlots)
+  if (idle) await service().from('nexus_duel_moves').insert({ duel_id: duel.id, player_id: idle, slot_id: null, correct: false })
+  if (gone) await service().from('nexus_duel_players').update({ left_at: now() }).eq('id', idle)
+  if (active(after).length < 2) {
+    await finish(data)
+    await notifyAbandoned(data, after)
+  } else await maybeFinish(data, after, moves.filter((m) => m.correct).length, totalSlots)
   await signal(duel.id)
   return true
 }
@@ -221,6 +249,7 @@ async function stateOf(duel: Duel, me: Player | null, loggedIn: boolean, players
         }
       : null,
     winners: finished ? stillIn.filter((p) => p.score === best).map((p) => p.seat) : [],
+    abandoned: finished && stillIn.length === 1 && players.some((p) => !!p.left_at),
   }
 }
 
@@ -305,7 +334,7 @@ export async function getNexusDuel(code: string, token?: string | null): Promise
   let moves = await movesOf(duel.id)
   if (me && duel.status === 'live') {
     const total = gridOf(duel).puzzle.slots.length
-    if (await advanceIfExpired(duel, players, moves.filter((m) => m.correct).length, total)) {
+    if (await advanceIfExpired(duel, players, moves, total)) {
       duel = (await loadDuel(code)) ?? duel
       ;[players, moves] = await Promise.all([playersOf(duel.id), movesOf(duel.id)])
     }
@@ -382,8 +411,10 @@ export async function leaveNexusDuel(code: string, token: string | null): Promis
   } else {
     await service().from('nexus_duel_players').update({ left_at: now() }).eq('id', me.id)
     const after = players.map((p) => (p.id === me.id ? { ...p, left_at: now() } : p))
-    if (active(after).length < 2) await finish(duel)
-    else if (duel.turn_player === me.id) {
+    if (active(after).length < 2) {
+      await finish(duel)
+      await notifyAbandoned(duel, after)
+    } else if (duel.turn_player === me.id) {
       await service()
         .from('nexus_duels')
         .update({ turn_player: nextTurn(after, me.id), turn_ends_at: turnEnd(after), updated_at: now() })

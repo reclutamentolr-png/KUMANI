@@ -8340,7 +8340,9 @@
     "shopPaymentsActiveTitle": "✅ Online payments active",
     "shopPaymentsActiveBody": "Stripe has verified your account: you can now receive payments for your shop and quotes.",
     "shopPaymentsPausedTitle": "⚠️ Online payments paused",
-    "shopPaymentsPausedBody": "Stripe needs some more information: open KUMANI Shop → Payments to see what’s missing."
+    "shopPaymentsPausedBody": "Stripe needs some more information: open KUMANI Shop → Payments to see what’s missing.",
+    "nexusAbandonedTitle": "Your NEXUS challenge is over",
+    "nexusAbandonedBody": "The other players left challenge {code}: you win."
   },
   "pushInvite": {
     "title": "Turn on notifications",
@@ -11480,6 +11482,8 @@
     "duel_guestCtaText": "Join KUMANI for free: a new crossword every day, challenges with friends and many useful services.",
     "duel_guestCta": "Join for free",
     "duel_toHome": "Go to KUMANI",
-    "duel_bannerMine": "Your turn!"
+    "duel_bannerMine": "Your turn!",
+    "duel_playerLeft": "{name} left the game.",
+    "duel_endAbandoned": "The other players left the game. Here is the grid with all the answers."
   }
 }

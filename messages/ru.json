@@ -8340,7 +8340,9 @@
     "shopPaymentsActiveTitle": "✅ Онлайн-платежи активны",
     "shopPaymentsActiveBody": "Stripe проверил ваш аккаунт: теперь вы можете принимать платежи за товары магазина и коммерческие предложения.",
     "shopPaymentsPausedTitle": "⚠️ Онлайн-платежи приостановлены",
-    "shopPaymentsPausedBody": "Stripe запрашивает дополнительные сведения: откройте KUMANI Shop → Платежи, чтобы увидеть, чего не хватает."
+    "shopPaymentsPausedBody": "Stripe запрашивает дополнительные сведения: откройте KUMANI Shop → Платежи, чтобы увидеть, чего не хватает.",
+    "nexusAbandonedTitle": "Ваш вызов NEXUS завершён",
+    "nexusAbandonedBody": "Остальные игроки покинули вызов {code}: вы победили."
   },
   "pushInvite": {
     "title": "Включите уведомления",
@@ -11480,6 +11482,8 @@
     "duel_guestCtaText": "Зарегистрируйтесь в KUMANI бесплатно: новый кроссворд каждый день, вызовы друзьям и много полезных сервисов.",
     "duel_guestCta": "Зарегистрироваться бесплатно",
     "duel_toHome": "Перейти в KUMANI",
-    "duel_bannerMine": "Ваш ход!"
+    "duel_bannerMine": "Ваш ход!",
+    "duel_playerLeft": "{name} покинул(а) игру.",
+    "duel_endAbandoned": "Остальные игроки покинули игру. Вот сетка со всеми ответами."
   }
 }

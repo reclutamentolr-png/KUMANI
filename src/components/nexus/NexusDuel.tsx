@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { Clock, Copy, Crown, Flag, Handshake, LoaderCircle, Play, Send, Share2, Swords, UserRound } from 'lucide-react'
@@ -134,6 +134,14 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
   const nameOf = (seat: number | null) => state.players.find((p) => p.seat === seat)?.name ?? ''
   const myTurn = state.status === 'live' && state.mySeat !== null && state.turnSeat === state.mySeat
   const meLeft = state.players.find((p) => p.me)?.left ?? false
+
+  // Qualcuno è uscito (o è stato tolto dopo due turni lasciati scadere): avviso
+  const leftBefore = useRef(new Set(state.players.filter((p) => p.left).map((p) => p.seat)))
+  useEffect(() => {
+    const gone = state.players.filter((p) => p.left && !p.me && !leftBefore.current.has(p.seat))
+    leftBefore.current = new Set(state.players.filter((p) => p.left).map((p) => p.seat))
+    if (gone.length) setNotice({ text: t('duel_playerLeft', { name: gone.map((p) => p.name).join(', ') }), tone: 'error' })
+  }, [state.players, t])
   // Si sceglie e si scrive solo nel proprio turno
   const canPlay = myTurn && !meLeft
 
@@ -468,7 +476,7 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
               </li>
             ))}
           </ol>
-          <p className="text-sm text-white/75">{state.stalledOut ? t('duel_endStall') : t('duel_endSolution')}</p>
+          <p className="text-sm text-white/75">{state.abandoned ? t('duel_endAbandoned') : state.stalledOut ? t('duel_endStall') : t('duel_endSolution')}</p>
           {!state.loggedIn ? (
             <div className="flex w-full flex-col gap-2 rounded-2xl bg-white/10 p-4">
               <p className="font-extrabold text-[var(--gold-bright)]">{t('duel_guestCtaTitle')}</p>
