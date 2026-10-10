@@ -11181,7 +11181,8 @@
     "status_delivered": "Livrée",
     "status_cancelled": "Annulée et remboursée",
     "tab_payments": "Paiements",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "cancelTitle": "Annuler la commande ?"
   },
   "shopPublic": {
     "shipping": "Livraison",

@@ -11181,7 +11181,8 @@
     "status_delivered": "Доставлен",
     "status_cancelled": "Отменён, деньги возвращены",
     "tab_payments": "Платежи",
-    "cancel": "Отмена"
+    "cancel": "Отмена",
+    "cancelTitle": "Отменить заказ?"
   },
   "shopPublic": {
     "shipping": "Доставка",

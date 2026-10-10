@@ -11181,7 +11181,8 @@
     "status_delivered": "Delivered",
     "status_cancelled": "Cancelled and refunded",
     "tab_payments": "Payments",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "cancelTitle": "Cancel the order?"
   },
   "shopPublic": {
     "shipping": "Shipping",

@@ -480,7 +480,7 @@ function Orders({ orders, setOrders }: { orders: ShopOrder[]; setOrders: (fn: (o
   const date = (iso: string) => new Date(iso).toLocaleString(locale, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
 
   const change = async (o: ShopOrder, status: OrderStatus) => {
-    if (status === 'cancelled' && !(await askConfirm(t('cancelConfirm', { amount: formatCents(o.totalCents, locale) }), { tone: 'danger' }))) return
+    if (status === 'cancelled' && !(await askConfirm(t('cancelConfirm', { amount: formatCents(o.totalCents, locale) }), { tone: 'danger', title: t('cancelTitle'), confirmLabel: t('cancelRefund') }))) return
     setBusy(true)
     setError(null)
     const r = await updateShopOrder(o.id, status, status === 'shipped' ? tracking : undefined)

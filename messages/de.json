@@ -11181,7 +11181,8 @@
     "status_delivered": "Zugestellt",
     "status_cancelled": "Storniert und erstattet",
     "tab_payments": "Zahlungen",
-    "cancel": "Abbrechen"
+    "cancel": "Abbrechen",
+    "cancelTitle": "Bestellung stornieren?"
   },
   "shopPublic": {
     "shipping": "Versand",
