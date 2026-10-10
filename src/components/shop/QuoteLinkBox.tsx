@@ -21,6 +21,7 @@ export default function QuoteLinkBox({
   paidAmount,
   paidAt,
   siteUrl,
+  vatMissing = false,
 }: {
   // Indirizzo del sito (server): il link è uguale sul server e nel browser
   siteUrl: string
@@ -35,6 +36,8 @@ export default function QuoteLinkBox({
   paymentStatus: string
   paidAmount: number | null
   paidAt: string | null
+  // «+ IVA» senza aliquota (preventivi salvati prima): niente pagamento online
+  vatMissing?: boolean
 }) {
   const t = useTranslations('quotePublic')
   const locale = useLocale()
@@ -73,8 +76,10 @@ export default function QuoteLinkBox({
           <p className="text-sm text-[var(--muted)]">
             {paymentMode === 'none'
               ? t('linkHintAccept')
-              : !canCharge
-                ? t('linkHintNoStripe')
+              : vatMissing
+                ? t('linkHintVatMissing')
+                : !canCharge
+                  ? t('linkHintNoStripe')
                 : paymentMode === 'deposit'
                   ? t('linkHintDeposit', { percent: depositPercent ?? 0 })
                   : t('linkHintFull')}

@@ -2530,7 +2530,13 @@
     "onlinePaymentConnect": "Ligar o Stripe na Ficha da atividade",
     "badgePaid": "Pago",
     "badgeAccepted": "Aceite",
-    "quoteLocked": "Este orçamento já foi aceite ou pago: já não pode ser alterado. Usa «Duplicar» para criar um novo."
+    "quoteLocked": "Este orçamento já foi aceite ou pago: já não pode ser alterado. Usa «Duplicar» para criar um novo.",
+    "netLabel": "Valor tributável",
+    "vatRateLabel": "IVA {rate}%",
+    "vatRateField": "Taxa de IVA",
+    "vatNoneHint": "Sem IVA indicado (ex. regime simplificado ou serviço isento): o cliente paga exatamente o valor escrito.",
+    "vatIncludedRate": "IVA {rate}% incluído",
+    "vatRateRequired": "Com o pagamento online escolha a taxa de IVA: serve para calcular quanto o cliente paga."
   },
   "kumaniCv": {
     "title": "KUMANI CV",
@@ -10716,7 +10722,9 @@
     "error_sellerNotReady": "O vendedor ainda não pode receber pagamentos online: contacte-o.",
     "error_stripeError": "Não foi possível iniciar o pagamento. Tente novamente daqui a pouco.",
     "error_notFound": "Orçamento não disponível.",
-    "error_saveError": "Não foi possível concluir a operação. Tente novamente."
+    "error_saveError": "Não foi possível concluir a operação. Tente novamente.",
+    "error_vatMissing": "O pagamento online ainda não está disponível: quem fez o orçamento deve indicar a taxa de IVA.",
+    "linkHintVatMissing": "O cliente pode ler e aceitar o orçamento. Para que pague online, edite o orçamento e escolha a taxa de IVA."
   },
   "shopSeller": {
     "title": "Pagamentos online (Stripe)",

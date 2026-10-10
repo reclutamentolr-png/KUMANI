@@ -2,6 +2,7 @@ import { jsPDF } from 'jspdf'
 import { generateDescriptiveQuotePdfBlob } from '@/lib/quotePdfDescriptive'
 import { INK, GOLD, MUTED, accentRgb, drawLogo, formatClientAddressLine, formatIssuerAddressLine, type IssuerForPdf, type QuoteForPdf } from '@/lib/quotePdfShared'
 import type { QuotePdfLabels } from '@/lib/pdfHelpers'
+import { quoteVatBreakdown } from '@/lib/quotes'
 
 // Helper senza jsPDF ri-esportati per chi li importava da qui
 export { buildQuotePdfLabels, loadImageAsDataUrl } from '@/lib/pdfHelpers'
@@ -230,9 +231,23 @@ export function generateQuotePdfBlob(params: {
   })
 
   // Il totale deve stare sopra al fondo fisso: se non c'è posto, pagina nuova
-  if (y + 30 > (footerOwnPage ? rowsBottom : footerTop)) {
+  const breakdown = quoteVatBreakdown(quote.total, quote.vat_mode, quote.vat_rate)
+  if (y + (breakdown ? 64 : 30) > (footerOwnPage ? rowsBottom : footerTop)) {
     doc.addPage()
     y = margin + 18
+  }
+
+  // ── Imponibile e IVA sopra al totale, quando c'è l'aliquota ──
+  if (breakdown) {
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(9.5)
+    doc.setTextColor(...MUTED)
+    for (const [label, value] of [[labels.netLabel, breakdown.net], [labels.vatRateLabel(breakdown.rate), breakdown.vat]] as const) {
+      doc.text(label, margin + 10, y)
+      doc.text(formatCurrency(value), pageWidth - margin - 10, y, { align: 'right' })
+      y += 16
+    }
+    y += 6
   }
 
   // ── Total — a shaded band closing the table, like the reference's "Totale dovuto" row ──
@@ -242,7 +257,8 @@ export function generateQuotePdfBlob(params: {
   doc.setFontSize(11)
   doc.setTextColor(...INK)
   doc.text(labels.totalLabel, margin + 10, y + 4)
-  const totalValue = formatCurrency(quote.total)
+  const vatSuffix = breakdown ? '' : quote.vat_mode === 'plus' ? ` ${labels.vatPlus}` : quote.vat_mode === 'included' ? ` ${labels.vatIncluded}` : ''
+  const totalValue = `${formatCurrency(breakdown ? breakdown.gross : quote.total)}${vatSuffix}`
   doc.text(totalValue, pageWidth - margin - 10 - doc.getTextWidth(totalValue), y + 4)
 
   // ── Fondo fisso: modalità di pagamento + note, firma per accettazione ──

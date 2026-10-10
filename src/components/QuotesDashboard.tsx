@@ -13,6 +13,8 @@ type Quote = {
   client_name: string
   issue_date: string
   total: number
+  vat_mode?: string | null
+  vat_rate?: number | null
 }
 
 export default function QuotesDashboard({ quotes }: { quotes: Quote[] }) {

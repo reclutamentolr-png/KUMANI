@@ -2530,7 +2530,13 @@
     "onlinePaymentConnect": "Connecter Stripe dans la Fiche entreprise",
     "badgePaid": "Payé",
     "badgeAccepted": "Accepté",
-    "quoteLocked": "Ce devis a déjà été accepté ou payé : il ne peut plus être modifié. Utilisez « Dupliquer » pour en créer un nouveau."
+    "quoteLocked": "Ce devis a déjà été accepté ou payé : il ne peut plus être modifié. Utilisez « Dupliquer » pour en créer un nouveau.",
+    "netLabel": "Montant HT",
+    "vatRateLabel": "TVA {rate} %",
+    "vatRateField": "Taux de TVA",
+    "vatNoneHint": "Sans TVA indiquée (ex. régime forfaitaire ou prestation exonérée) : le client paie exactement le montant indiqué.",
+    "vatIncludedRate": "TVA {rate} % incluse",
+    "vatRateRequired": "Avec le paiement en ligne, choisissez le taux de TVA : il sert à calculer ce que paie le client."
   },
   "kumaniCv": {
     "title": "KUMANI CV",
@@ -10716,7 +10722,9 @@
     "error_sellerNotReady": "Le vendeur ne peut pas encore recevoir de paiements en ligne : contactez-le.",
     "error_stripeError": "Le paiement n’a pas pu démarrer. Réessayez dans un instant.",
     "error_notFound": "Devis non disponible.",
-    "error_saveError": "L’opération n’a pas pu aboutir. Réessayez."
+    "error_saveError": "L’opération n’a pas pu aboutir. Réessayez.",
+    "error_vatMissing": "Le paiement en ligne n'est pas encore disponible : l'auteur du devis doit indiquer le taux de TVA.",
+    "linkHintVatMissing": "Le client peut lire et accepter le devis. Pour qu’il paie en ligne, modifiez le devis et choisissez le taux de TVA."
   },
   "shopSeller": {
     "title": "Paiements en ligne (Stripe)",

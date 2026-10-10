@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server'
-import { quoteImageUrl, sectionLines, type QuoteItem, type QuoteSection } from '@/lib/quotes'
+import { quoteGrossTotal, quoteImageUrl, quoteVatBreakdown, sectionLines, type QuoteItem, type QuoteSection } from '@/lib/quotes'
+import QuoteTotals from '@/components/quotes/QuoteTotals'
 import { LayersView } from '@/components/quotes/QuoteSectionExtras'
 
 // Il preventivo come un foglio (cliente, righe o sezioni, totale, pagamento,
@@ -8,6 +9,14 @@ import { LayersView } from '@/components/quotes/QuoteSectionExtras'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function QuoteSheet({ quote }: { quote: Record<string, any> }) {
   const t = await getTranslations('preventivi')
+  // Totale da pagare: con l'aliquota è il totale con l'IVA
+  const breakdown = quoteVatBreakdown(Number(quote.total), quote.vat_mode, quote.vat_rate)
+  const totalsLabels = { total: t('totalLabel'), net: t('netLabel'), vat: (rate: number) => t('vatRateLabel', { rate }), vatPlus: t('vatPlus'), vatIncluded: t('vatIncluded') }
+  const totalsBlock = (
+    <div className="mt-4 flex justify-end">
+      <QuoteTotals total={Number(quote.total)} vatMode={quote.vat_mode} vatRate={quote.vat_rate} labels={totalsLabels} />
+    </div>
+  )
   // Come un foglio: pagamento e note restano in fondo, comunque siano lunghe le righe
   return (
   <div className="flex flex-col bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8 sm:min-h-[1100px]">
@@ -30,8 +39,13 @@ export default async function QuoteSheet({ quote }: { quote: Record<string, any>
       <div className="text-right">
         <p className="text-xs font-semibold text-[var(--gold)] uppercase tracking-wide mb-1">{t('totalLabel')}</p>
         <p className="text-3xl font-bold text-[var(--gold)]">
-          {Number(quote.total).toLocaleString(undefined, { style: 'currency', currency: 'EUR' })}
+          {quoteGrossTotal(Number(quote.total), quote.vat_mode, quote.vat_rate).toLocaleString(undefined, { style: 'currency', currency: 'EUR' })}
         </p>
+        {breakdown ? (
+          <p className="text-xs text-gray-500">{t('vatIncludedRate', { rate: breakdown.rate })}</p>
+        ) : quote.vat_mode === 'plus' ? (
+          <p className="text-xs text-gray-500">{t('vatPlus')}</p>
+        ) : null}
       </div>
     </div>
 
@@ -92,6 +106,7 @@ export default async function QuoteSheet({ quote }: { quote: Record<string, any>
             )}
           </section>
         ))}
+        {quote.show_total !== false && (quote.sections || []).some((s: QuoteSection) => typeof s.amount === 'number') && totalsBlock}
         {quote.closing && <p className="whitespace-pre-wrap text-gray-700">{quote.closing}</p>}
         {quote.signature !== false && (
           <div className="ml-auto w-56 pt-4 text-center text-sm">
@@ -127,6 +142,7 @@ export default async function QuoteSheet({ quote }: { quote: Record<string, any>
           ))}
         </tbody>
       </table>
+      {totalsBlock}
     </div>
     )}
 

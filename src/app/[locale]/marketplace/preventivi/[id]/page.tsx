@@ -10,7 +10,7 @@ import QuoteShareButtons from '@/components/QuoteShareButtons'
 import QuoteActions from '@/components/QuoteActions'
 import QuoteWorkChain from '@/components/ecosystem/QuoteWorkChain'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
-import { type QuoteItem } from '@/lib/quotes'
+import { quoteVatUnknown, type QuoteItem } from '@/lib/quotes'
 import QuoteSheet from '@/components/quotes/QuoteSheet'
 import QuoteLinkBox from '@/components/shop/QuoteLinkBox'
 import { SITE_URL } from '@/lib/siteUrl'
@@ -94,6 +94,7 @@ export default async function QuoteDetailPage({
           paymentStatus={quote.payment_status ?? 'unpaid'}
           paidAmount={quote.paid_amount !== null && quote.paid_amount !== undefined ? Number(quote.paid_amount) : null}
           paidAt={quote.paid_at ?? null}
+          vatMissing={quoteVatUnknown(quote.vat_mode, quote.vat_rate)}
         />
 
         <div className="space-y-4">

@@ -26,7 +26,7 @@ export default async function PreventiviPage({ searchParams }: { searchParams: P
 
   const { data: quotes } = await supabase
     .from('quotes')
-    .select('id, quote_number, client_name, issue_date, total, accepted_at, payment_status')
+    .select('id, quote_number, client_name, issue_date, total, vat_mode, vat_rate, accepted_at, payment_status')
     .eq('user_id', user.id)
 
   const { data: issuerProfile } = await supabase

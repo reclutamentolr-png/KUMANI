@@ -60,6 +60,7 @@ export default function QuotePdfPreview({ form, issuer, logoUrl, quoteNumber }: 
           sections,
           show_total: form.showTotal,
           vat_mode: form.vatMode,
+          vat_rate: form.vatRate,
           signature: form.signature,
         }
         const blob = generateQuotePdfBlob({

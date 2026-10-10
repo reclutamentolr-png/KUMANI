@@ -9,7 +9,7 @@ import QuoteSheet from '@/components/quotes/QuoteSheet'
 import QuotePdfButton from '@/components/QuotePdfButton'
 import QuotePublicActions from '@/components/shop/QuotePublicActions'
 import { confirmQuotePayment } from '@/app/actions/shop'
-import { quoteAmountDueCents, type QuotePaymentMode } from '@/lib/quotes'
+import { quoteAmountDueCents, quoteGrossTotal, quoteVatUnknown, type QuotePaymentMode, type QuoteVatMode } from '@/lib/quotes'
 import type { IssuerForPdf, QuoteForPdf } from '@/lib/quotePdf'
 
 // Pagina del preventivo per il cliente (link dal venditore): lo legge, lo
@@ -23,6 +23,8 @@ type PublicQuote = {
   quote: Record<string, any> & {
     quote_number: number
     total: number
+    vat_mode: QuoteVatMode | null
+    vat_rate: number | null
     payment_mode: QuotePaymentMode
     deposit_percent: number | null
     payment_status: string
@@ -50,7 +52,8 @@ export default async function PublicQuotePage({ params, searchParams }: { params
   const sellerName = issuer?.company_name || t('sellerFallback')
   const logoUrl = issuer?.logo_path ? supabase.storage.from('quote-logos-v2').getPublicUrl(issuer.logo_path).data.publicUrl : null
   const today = new Date().toISOString().slice(0, 10)
-  const amountDue = quoteAmountDueCents(Number(quote.total), quote.payment_mode, quote.deposit_percent) / 100
+  // Il cliente paga il totale con l'IVA (o l'acconto su quel totale)
+  const amountDue = quoteAmountDueCents(quoteGrossTotal(Number(quote.total), quote.vat_mode, quote.vat_rate), quote.payment_mode, quote.deposit_percent) / 100
   const address = [issuer?.address, [issuer?.postal_code, issuer?.city].filter(Boolean).join(' '), issuer?.province].filter(Boolean).join(', ')
 
   return (
@@ -95,7 +98,8 @@ export default async function PublicQuotePage({ params, searchParams }: { params
           mode={quote.payment_mode}
           depositPercent={quote.deposit_percent}
           amountDue={amountDue}
-          canCharge={pub.can_charge}
+          // «+ IVA» senza aliquota (preventivi vecchi): si accetta ma non si paga online
+          canCharge={pub.can_charge && !quoteVatUnknown(quote.vat_mode, quote.vat_rate)}
           expired={!!quote.valid_until && quote.valid_until < today}
           acceptedAt={quote.accepted_at}
           acceptedBy={quote.accepted_by_name}

@@ -23,6 +23,7 @@ import {
   type SavedClientRow,
   type SavedClientFormData,
   QUOTE_PAYMENT_MODES,
+  QUOTE_VAT_RATES,
   DEFAULT_DEPOSIT_PERCENT,
 } from '@/lib/quotes'
 import { awardToolPoint } from '@/lib/toolPoints'
@@ -89,6 +90,8 @@ function quoteFields(form: QuoteFormData, userId: string) {
     sections,
     show_total: form.showTotal !== false,
     vat_mode: QUOTE_VAT_MODES.includes(form.vatMode) ? form.vatMode : 'plus',
+    // Aliquota solo con «+ IVA» o «IVA inclusa», tra quelle ammesse
+    vat_rate: form.vatMode !== 'none' && (QUOTE_VAT_RATES as readonly number[]).includes(Number(form.vatRate)) ? Number(form.vatRate) : null,
     signature: form.signature !== false,
     client_name: form.clientName,
     client_email: form.clientEmail || null,
@@ -240,6 +243,8 @@ export async function createQuote(
 
   const supabase = await createClient()
   const fields = quoteFields(form, gate.userId)
+  // Pagamento online con «+ IVA»: serve l'aliquota, altrimenti il cliente pagherebbe senza IVA
+  if (fields.payment_mode !== 'none' && fields.vat_mode === 'plus' && fields.vat_rate === null) return { success: false, message: 'vatRateRequired' }
 
   for (let attempt = 0; attempt < 5; attempt++) {
     const { data: maxRow } = await supabase
@@ -288,6 +293,8 @@ export async function updateQuote(id: string, form: QuoteFormData): Promise<Acti
 
   const supabase = await createClient()
   const fields = quoteFields(form, gate.userId)
+  // Pagamento online con «+ IVA»: serve l'aliquota, altrimenti il cliente pagherebbe senza IVA
+  if (fields.payment_mode !== 'none' && fields.vat_mode === 'plus' && fields.vat_rate === null) return { success: false, message: 'vatRateRequired' }
 
   // Accettato dal cliente o pagato: non si modifica più (si duplica)
   const { data: current } = await supabase.from('quotes').select('accepted_at, payment_status').eq('id', id).eq('user_id', gate.userId).maybeSingle()

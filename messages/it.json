@@ -2584,7 +2584,13 @@
     "onlinePaymentConnect": "Collega Stripe nella Scheda attività",
     "badgePaid": "Pagato",
     "badgeAccepted": "Accettato",
-    "quoteLocked": "Questo preventivo è già stato accettato o pagato: non si può più modificare. Usa «Duplica» per farne uno nuovo."
+    "quoteLocked": "Questo preventivo è già stato accettato o pagato: non si può più modificare. Usa «Duplica» per farne uno nuovo.",
+    "netLabel": "Imponibile",
+    "vatRateLabel": "IVA {rate}%",
+    "vatRateField": "Aliquota IVA",
+    "vatNoneHint": "Senza IVA indicata (es. regime forfettario o prestazione esente): il cliente paga esattamente l'importo scritto.",
+    "vatIncludedRate": "IVA {rate}% inclusa",
+    "vatRateRequired": "Con il pagamento online scegli l'aliquota IVA: serve per calcolare quanto paga il cliente."
   },
   "kumaniCv": {
     "title": "KUMANI CV",
@@ -10716,7 +10722,9 @@
     "error_sellerNotReady": "Il venditore non può ancora ricevere pagamenti online: contattalo.",
     "error_stripeError": "Il pagamento non è partito. Riprova tra poco.",
     "error_notFound": "Preventivo non disponibile.",
-    "error_saveError": "Non è stato possibile completare l’operazione. Riprova."
+    "error_saveError": "Non è stato possibile completare l’operazione. Riprova.",
+    "error_vatMissing": "Il pagamento online non è ancora disponibile: chi ha fatto il preventivo deve indicare l'aliquota IVA.",
+    "linkHintVatMissing": "Il cliente può leggere e accettare il preventivo. Per farlo pagare online, modifica il preventivo e scegli l'aliquota IVA."
   },
   "shopSeller": {
     "title": "Pagamenti online (Stripe)",

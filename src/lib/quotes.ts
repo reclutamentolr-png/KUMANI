@@ -25,6 +25,43 @@ export const QUOTE_LOGO_POSITIONS: QuoteLogoPosition[] = ['left', 'center', 'rig
 // Come si legge il prezzo: «+ IVA», «IVA inclusa» o nessuna indicazione
 export type QuoteVatMode = 'plus' | 'included' | 'none'
 export const QUOTE_VAT_MODES: QuoteVatMode[] = ['plus', 'included', 'none']
+// Aliquote IVA italiane proposte (ordinaria, ridotte)
+export const QUOTE_VAT_RATES = [22, 10, 5, 4] as const
+export const DEFAULT_VAT_RATE = 22
+
+export type QuoteVatBreakdown = { net: number; vat: number; gross: number; rate: number }
+
+const cents = (n: number) => Math.round(n * 100) / 100
+
+/**
+ * Imponibile, IVA e totale di un preventivo. `total` è la somma delle righe o
+ * delle sezioni come le scrive il venditore: con «+ IVA» è l'imponibile, con
+ * «IVA inclusa» è già il totale. Senza aliquota (preventivi vecchi o «senza
+ * indicazione») non c'è scomposizione: null.
+ */
+export function quoteVatBreakdown(total: number, mode: QuoteVatMode | null | undefined, rate: number | null | undefined): QuoteVatBreakdown | null {
+  const amount = Number(total) || 0
+  const r = Number(rate)
+  if (!rate || !Number.isFinite(r) || r <= 0 || (mode !== 'plus' && mode !== 'included')) return null
+  if (mode === 'plus') {
+    const net = cents(amount)
+    const vat = cents((net * r) / 100)
+    return { net, vat, gross: cents(net + vat), rate: r }
+  }
+  const gross = cents(amount)
+  const net = cents(gross / (1 + r / 100))
+  return { net, vat: cents(gross - net), gross, rate: r }
+}
+
+/** Quanto paga il cliente in tutto (con l'IVA quando c'è l'aliquota). */
+export function quoteGrossTotal(total: number, mode: QuoteVatMode | null | undefined, rate: number | null | undefined): number {
+  return quoteVatBreakdown(total, mode, rate)?.gross ?? cents(Number(total) || 0)
+}
+
+/** «+ IVA» senza aliquota: non si sa quanto pagherà il cliente (niente pagamento online). */
+export function quoteVatUnknown(mode: QuoteVatMode | null | undefined, rate: number | null | undefined): boolean {
+  return mode === 'plus' && !rate
+}
 
 // Sezione del preventivo descrittivo: titolo, testo libero o elenco (una
 // riga per voce) e importo facoltativo
@@ -123,6 +160,8 @@ export interface QuoteFormData {
   sections: QuoteSection[]
   showTotal: boolean
   vatMode: QuoteVatMode
+  // Aliquota IVA (22, 10, 5, 4): con «+ IVA» o «IVA inclusa»
+  vatRate: number | null
   closing: string
   signature: boolean
   clientName: string

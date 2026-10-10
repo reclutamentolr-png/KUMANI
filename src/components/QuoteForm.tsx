@@ -20,6 +20,7 @@ import {
   LINE_HEIGHT_MIN,
   cleanBandStyle,
   DEFAULT_DEPOSIT_PERCENT,
+  DEFAULT_VAT_RATE,
   type QuotePaymentMode,
   type QuoteBandStyle,
   type QuoteLogoPosition,
@@ -32,6 +33,8 @@ import { useFromDashboardSuffix } from '@/lib/useFromDashboard'
 import QuoteClientQuickEditModal from '@/components/QuoteClientQuickEditModal'
 import QuoteSectionsEditor from '@/components/quotes/QuoteSectionsEditor'
 import QuotePdfPreview from '@/components/quotes/QuotePdfPreview'
+import QuoteTotals from '@/components/quotes/QuoteTotals'
+import QuoteVatControls from '@/components/quotes/QuoteVatControls'
 import type { IssuerForPdf } from '@/lib/quotePdfShared'
 import VatCheck from '@/components/ecosystem/VatCheck'
 import IbanInlineCheck from '@/components/ecosystem/IbanInlineCheck'
@@ -78,6 +81,7 @@ function defaultForm(paymentInfo = '', logoPosition: QuoteLogoPosition = 'left',
     sections: [],
     showTotal: true,
     vatMode: 'plus',
+    vatRate: DEFAULT_VAT_RATE,
     closing,
     signature: true,
     clientName: '',
@@ -193,6 +197,13 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
 
   const descriptive = form.layout === 'descriptive'
   const total = computeQuoteTotal(form.items)
+  const totalsLabels = {
+    total: t('totalLabel'),
+    net: t('netLabel'),
+    vat: (rate: number) => t('vatRateLabel', { rate }),
+    vatPlus: t('vatPlus'),
+    vatIncluded: t('vatIncluded'),
+  }
   const isValid =
     form.clientName.trim().length > 0 &&
     (descriptive
@@ -732,13 +743,9 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
             </div>
           )}
 
-          <div className="mt-6 flex justify-end">
-            <div className="bg-[var(--gold-pale)] rounded-xl px-5 py-3 text-right">
-              <p className="text-xs text-[var(--ink)]/70 uppercase tracking-wide">{t('totalLabel')}</p>
-              <p className="text-2xl font-bold text-[var(--ink)]">
-                {total.toLocaleString(undefined, { style: 'currency', currency: 'EUR' })}
-              </p>
-            </div>
+          <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <QuoteVatControls vatMode={form.vatMode} vatRate={form.vatRate} onChange={(v) => setForm((p) => ({ ...p, ...v }))} />
+            <QuoteTotals total={total} vatMode={form.vatMode} vatRate={form.vatRate} labels={totalsLabels} className="sm:ml-auto" />
           </div>
         </div>
         )}

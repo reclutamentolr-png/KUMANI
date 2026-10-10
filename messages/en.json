@@ -2530,7 +2530,13 @@
     "onlinePaymentConnect": "Connect Stripe in the Business profile",
     "badgePaid": "Paid",
     "badgeAccepted": "Accepted",
-    "quoteLocked": "This quote has already been accepted or paid: it can no longer be changed. Use “Duplicate” to make a new one."
+    "quoteLocked": "This quote has already been accepted or paid: it can no longer be changed. Use “Duplicate” to make a new one.",
+    "netLabel": "Net amount",
+    "vatRateLabel": "VAT {rate}%",
+    "vatRateField": "VAT rate",
+    "vatNoneHint": "No VAT shown (e.g. flat-rate scheme or exempt service): the client pays exactly the amount written.",
+    "vatIncludedRate": "VAT {rate}% included",
+    "vatRateRequired": "With online payment, choose the VAT rate: it is needed to work out what the client pays."
   },
   "kumaniCv": {
     "title": "KUMANI CV",
@@ -10716,7 +10722,9 @@
     "error_sellerNotReady": "The seller cannot receive online payments yet: please contact them.",
     "error_stripeError": "The payment could not start. Please try again shortly.",
     "error_notFound": "Quote not available.",
-    "error_saveError": "The operation could not be completed. Please try again."
+    "error_saveError": "The operation could not be completed. Please try again.",
+    "error_vatMissing": "Online payment is not available yet: the sender of the quote must set the VAT rate.",
+    "linkHintVatMissing": "The client can read and accept the quote. To let them pay online, edit the quote and choose the VAT rate."
   },
   "shopSeller": {
     "title": "Online payments (Stripe)",

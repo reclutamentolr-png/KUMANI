@@ -2530,7 +2530,13 @@
     "onlinePaymentConnect": "Stripe im Firmenprofil verbinden",
     "badgePaid": "Bezahlt",
     "badgeAccepted": "Angenommen",
-    "quoteLocked": "Dieses Angebot wurde bereits angenommen oder bezahlt: Es kann nicht mehr geändert werden. Nutze „Duplizieren“ für ein neues."
+    "quoteLocked": "Dieses Angebot wurde bereits angenommen oder bezahlt: Es kann nicht mehr geändert werden. Nutze „Duplizieren“ für ein neues.",
+    "netLabel": "Nettobetrag",
+    "vatRateLabel": "MwSt. {rate} %",
+    "vatRateField": "MwSt.-Satz",
+    "vatNoneHint": "Ohne ausgewiesene MwSt. (z. B. Pauschalregelung oder steuerfreie Leistung): Der Kunde zahlt genau den angegebenen Betrag.",
+    "vatIncludedRate": "inkl. {rate} % MwSt.",
+    "vatRateRequired": "Bei Online-Zahlung den MwSt.-Satz wählen: Er wird gebraucht, um den Zahlbetrag des Kunden zu berechnen."
   },
   "kumaniCv": {
     "title": "KUMANI CV",
@@ -10716,7 +10722,9 @@
     "error_sellerNotReady": "Der Verkäufer kann noch keine Online-Zahlungen empfangen: Kontaktiere ihn.",
     "error_stripeError": "Die Zahlung konnte nicht gestartet werden. Versuche es gleich noch einmal.",
     "error_notFound": "Angebot nicht verfügbar.",
-    "error_saveError": "Der Vorgang konnte nicht abgeschlossen werden. Bitte versuche es erneut."
+    "error_saveError": "Der Vorgang konnte nicht abgeschlossen werden. Bitte versuche es erneut.",
+    "error_vatMissing": "Online-Zahlung ist noch nicht möglich: Der Absender des Angebots muss den MwSt.-Satz angeben.",
+    "linkHintVatMissing": "Der Kunde kann das Angebot lesen und annehmen. Damit er online zahlen kann, das Angebot bearbeiten und den MwSt.-Satz wählen."
   },
   "shopSeller": {
     "title": "Online-Zahlungen (Stripe)",

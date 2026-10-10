@@ -7,7 +7,7 @@ import Link from '@/components/LocalizedLink'
 import { Copy, Download, FileSpreadsheet, LoaderCircle, Pencil, Share2 } from 'lucide-react'
 import { duplicateQuote, getQuotePdfData } from '@/app/actions/quotes'
 import { buildQuotePdfLabels, loadImageAsDataUrl, loadQuoteSectionImages } from '@/lib/pdfHelpers'
-import { quoteImageUrl } from '@/lib/quotes'
+import { quoteGrossTotal, quoteImageUrl, type QuoteVatMode } from '@/lib/quotes'
 import type { IssuerForPdf, QuoteForPdf } from '@/lib/quotePdfShared'
 
 type Quote = {
@@ -16,6 +16,8 @@ type Quote = {
   client_name: string
   issue_date: string
   total: number
+  vat_mode?: string | null
+  vat_rate?: number | null
   // KUMANI Shop: accettato o pagato dal cliente dalla pagina del preventivo
   accepted_at?: string | null
   payment_status?: string | null
@@ -77,7 +79,7 @@ export default function QuoteCard({ quote, fromDashboardSuffix = '' }: { quote: 
     setBusy('share')
     try {
       const { blob } = await buildPdf()
-      const summary = t('shareSummaryText', { number: quote.quote_number, client: quote.client_name, total: quote.total.toLocaleString(locale, { style: 'currency', currency: 'EUR' }) })
+      const summary = t('shareSummaryText', { number: quote.quote_number, client: quote.client_name, total: quoteGrossTotal(Number(quote.total), quote.vat_mode as QuoteVatMode | null, quote.vat_rate != null ? Number(quote.vat_rate) : null).toLocaleString(locale, { style: 'currency', currency: 'EUR' }) })
       const file = new File([blob], fileName, { type: 'application/pdf' })
       if (navigator.canShare?.({ files: [file] })) {
         await navigator.share({ files: [file], title: t('pdfDocumentTitle', { number: quote.quote_number }), text: summary })
@@ -130,7 +132,7 @@ export default function QuoteCard({ quote, fromDashboardSuffix = '' }: { quote: 
       </div>
 
       <div className="text-right shrink-0">
-        <p className="font-bold text-[var(--ink)]">{quote.total.toLocaleString(locale, { style: 'currency', currency: 'EUR' })}</p>
+        <p className="font-bold text-[var(--ink)]">{quoteGrossTotal(Number(quote.total), quote.vat_mode as QuoteVatMode | null, quote.vat_rate != null ? Number(quote.vat_rate) : null).toLocaleString(locale, { style: 'currency', currency: 'EUR' })}</p>
       </div>
 
       <div className="flex shrink-0 items-center gap-1.5">

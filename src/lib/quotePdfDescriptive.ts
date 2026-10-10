@@ -1,5 +1,5 @@
 import { jsPDF } from 'jspdf'
-import { sectionLines, type QuoteLayer, type QuoteSection } from '@/lib/quotes'
+import { quoteVatBreakdown, sectionLines, type QuoteLayer, type QuoteSection } from '@/lib/quotes'
 import type { QuotePdfLabels } from '@/lib/pdfHelpers'
 import { INK, MUTED, accentRgb, drawLogo, formatClientAddressLine, formatIssuerAddressLine, type IssuerForPdf, type QuoteForPdf } from '@/lib/quotePdfShared'
 
@@ -240,14 +240,26 @@ export function generateDescriptiveQuotePdfBlob(params: {
 
   // ── Totale ──
   if (quote.show_total !== false && sections.some((s) => typeof s.amount === 'number')) {
-    ensure(34)
+    const breakdown = quoteVatBreakdown(quote.total, quote.vat_mode, quote.vat_rate)
+    ensure(breakdown ? 70 : 34)
+    if (breakdown) {
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(10)
+      doc.setTextColor(...MUTED)
+      for (const [label, value] of [[labels.netLabel, breakdown.net], [labels.vatRateLabel(breakdown.rate), breakdown.vat]] as const) {
+        doc.text(label, margin + 10, y)
+        doc.text(formatCurrency(value), pageWidth - margin - 10, y, { align: 'right' })
+        y += 16
+      }
+      y += 4
+    }
     doc.setFillColor(240, 240, 238)
     doc.rect(margin, y - 4, width, 28, 'F')
     doc.setFont('helvetica', 'bold')
     doc.setFontSize(11.5)
     doc.setTextColor(...INK)
     doc.text(labels.totalLabel, margin + 10, y + 14)
-    doc.text(`${formatCurrency(quote.total)}${vat}`, pageWidth - margin - 10, y + 14, { align: 'right' })
+    doc.text(breakdown ? formatCurrency(breakdown.gross) : `${formatCurrency(quote.total)}${vat}`, pageWidth - margin - 10, y + 14, { align: 'right' })
     y += 44
   }
 

@@ -23,6 +23,8 @@ export type QuotePdfLabels = {
   signatureHint: string
   vatPlus: string
   vatIncluded: string
+  netLabel: string
+  vatRateLabel: (rate: number) => string
 }
 
 /** Shared between the download button and the share/print flow so the two never drift apart. */
@@ -49,6 +51,8 @@ export function buildQuotePdfLabels(t: (key: string, values?: Record<string, str
     signatureHint: t('pdfSignatureHint'),
     vatPlus: t('vatPlus'),
     vatIncluded: t('vatIncluded'),
+    netLabel: t('netLabel'),
+    vatRateLabel: (rate) => t('vatRateLabel', { rate }),
   }
 }
 

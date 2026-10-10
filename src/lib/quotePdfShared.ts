@@ -31,6 +31,8 @@ export type QuoteForPdf = {
   sections?: QuoteSection[] | null
   show_total?: boolean | null
   vat_mode?: QuoteVatMode | null
+  // Aliquota IVA: con «+ IVA» o «IVA inclusa» si stampano imponibile, IVA e totale
+  vat_rate?: number | null
   signature?: boolean | null
 }
 

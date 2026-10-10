@@ -1,5 +1,7 @@
 'use client'
 
+import QuoteTotals from '@/components/quotes/QuoteTotals'
+import QuoteVatControls from '@/components/quotes/QuoteVatControls'
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { ArrowDown, ArrowUp, BookmarkPlus, Check, ChevronDown, LibraryBig, Plus, Trash2, X } from 'lucide-react'
@@ -10,7 +12,6 @@ import {
   MAX_QUOTE_SECTIONS,
   QUOTE_LAYER_COLORS,
   QUOTE_SECTION_KINDS,
-  QUOTE_VAT_MODES,
   computeSectionsTotal,
   emptyQuoteSection,
   type QuoteFormData,
@@ -89,8 +90,6 @@ export default function QuoteSectionsEditor({ form, setForm, initialPresets }: P
   }
 
   const total = computeSectionsTotal(sections)
-  const money = (n: number) => n.toLocaleString(undefined, { style: 'currency', currency: 'EUR' })
-  const vatSuffix = form.vatMode === 'plus' ? ` ${t('vatPlus')}` : form.vatMode === 'included' ? ` ${t('vatIncluded')}` : ''
 
   return (
     <div className="space-y-6">
@@ -226,31 +225,15 @@ export default function QuoteSectionsEditor({ form, setForm, initialPresets }: P
             <input type="checkbox" className="h-5 w-5 accent-[var(--gold)]" checked={form.showTotal} onChange={(e) => setForm((p) => ({ ...p, showTotal: e.target.checked }))} />
             {t('showTotalField')}
           </label>
-          <div>
-            <span className="mb-1 block text-xs font-medium text-gray-600">{t('vatModeField')}</span>
-            <div className="flex flex-wrap gap-1.5">
-              {QUOTE_VAT_MODES.map((m) => (
-                <button
-                  key={m}
-                  type="button"
-                  onClick={() => setForm((p) => ({ ...p, vatMode: m }))}
-                  aria-pressed={form.vatMode === m}
-                  className={`rounded-lg border px-3 py-1 text-xs font-semibold ${form.vatMode === m ? 'border-[var(--gold)] bg-[var(--ink)] text-[var(--gold-bright)]' : 'border-gray-200 text-gray-600'}`}
-                >
-                  {t(`vatMode_${m}`)}
-                </button>
-              ))}
-            </div>
-          </div>
+          <QuoteVatControls vatMode={form.vatMode} vatRate={form.vatRate} onChange={(v) => setForm((p) => ({ ...p, ...v }))} />
         </div>
         {form.showTotal && (
-          <div className="rounded-xl bg-[var(--gold-pale)] px-5 py-3 text-right">
-            <p className="text-xs uppercase tracking-wide text-[var(--ink)]/70">{t('totalLabel')}</p>
-            <p className="text-2xl font-bold text-[var(--ink)]">
-              {money(total)}
-              <span className="text-sm font-semibold">{vatSuffix}</span>
-            </p>
-          </div>
+          <QuoteTotals
+            total={total}
+            vatMode={form.vatMode}
+            vatRate={form.vatRate}
+            labels={{ total: t('totalLabel'), net: t('netLabel'), vat: (rate: number) => t('vatRateLabel', { rate }), vatPlus: t('vatPlus'), vatIncluded: t('vatIncluded') }}
+          />
         )}
       </div>
 

@@ -6,7 +6,7 @@ import { hasActivePreventiviAccess } from '@/lib/quotes-server'
 import { getStripe } from '@/lib/stripe'
 import { SITE_URL } from '@/lib/siteUrl'
 import { localizedPath, notifyUser } from '@/lib/push'
-import { quoteAmountDueCents, type QuotePaymentMode } from '@/lib/quotes'
+import { quoteAmountDueCents, quoteGrossTotal, quoteVatUnknown, type QuotePaymentMode, type QuoteVatMode } from '@/lib/quotes'
 import { recordQuotePayment, retrieveConnectedSession, serviceDb, syncSellerAccount } from '@/lib/shopPayments'
 
 // KUMANI Shop, fase 1: il venditore collega il suo conto Stripe (conto
@@ -126,6 +126,8 @@ type PublicQuoteRow = {
   quote_number: number
   client_email: string | null
   total: number
+  vat_mode: QuoteVatMode | null
+  vat_rate: number | null
   payment_mode: QuotePaymentMode
   deposit_percent: number | null
   payment_status: string
@@ -138,7 +140,7 @@ async function quoteByToken(token: string) {
   const db = serviceDb()
   const { data: quote } = await db
     .from('quotes')
-    .select('id, user_id, quote_number, client_email, total, payment_mode, deposit_percent, payment_status, accepted_at, valid_until')
+    .select('id, user_id, quote_number, client_email, total, vat_mode, vat_rate, payment_mode, deposit_percent, payment_status, accepted_at, valid_until')
     .eq('public_token', token)
     .maybeSingle<PublicQuoteRow>()
   if (!quote) return null
@@ -185,7 +187,10 @@ export async function startQuoteCheckout(token: string, name: string): Promise<R
   if (who.length < 2) return { success: false, message: 'nameRequired' }
   if (quote.payment_status === 'paid') return { success: false, message: 'alreadyPaid' }
   if (quote.valid_until && quote.valid_until < new Date().toISOString().slice(0, 10)) return { success: false, message: 'expired' }
-  const amount = quoteAmountDueCents(quote.total, quote.payment_mode, quote.deposit_percent)
+  // «+ IVA» senza aliquota: non si sa il totale da pagare
+  if (quoteVatUnknown(quote.vat_mode, quote.vat_rate)) return { success: false, message: 'vatMissing' }
+  // Si paga il totale con l'IVA (o l'acconto su quel totale)
+  const amount = quoteAmountDueCents(quoteGrossTotal(quote.total, quote.vat_mode, quote.vat_rate), quote.payment_mode, quote.deposit_percent)
   if (amount < 50) return { success: false, message: 'noPayment' }
   const db = serviceDb()
   const { data: account } = await db.from('seller_stripe_accounts').select('stripe_account_id, charges_enabled').eq('user_id', quote.user_id).maybeSingle()

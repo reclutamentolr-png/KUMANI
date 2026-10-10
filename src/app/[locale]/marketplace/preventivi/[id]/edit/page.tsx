@@ -6,7 +6,7 @@ import Link from '@/components/LocalizedLink'
 import { ArrowLeft, FileSpreadsheet } from 'lucide-react'
 import { hasActivePreventiviAccess, loadQuoteInventoryProducts } from '@/lib/quotes-server'
 import QuoteForm from '@/components/QuoteForm'
-import { DEFAULT_DEPOSIT_PERCENT, QUOTE_PAYMENT_MODES, type QuoteFormData } from '@/lib/quotes'
+import { DEFAULT_DEPOSIT_PERCENT, DEFAULT_VAT_RATE, QUOTE_PAYMENT_MODES, type QuoteFormData } from '@/lib/quotes'
 
 export default async function EditQuotePage({
   params,
@@ -57,6 +57,8 @@ export default async function EditQuotePage({
     sections: Array.isArray(quote.sections) ? quote.sections : [],
     showTotal: quote.show_total !== false,
     vatMode: quote.vat_mode || 'plus',
+    // Preventivi vecchi senza aliquota: si propone il 22% (visibile nel modulo prima di salvare)
+    vatRate: quote.vat_rate != null ? Number(quote.vat_rate) : (quote.vat_mode || 'plus') === 'none' ? null : DEFAULT_VAT_RATE,
     closing: quote.closing || '',
     signature: quote.signature !== false,
     clientName: quote.client_name || '',
