@@ -261,7 +261,13 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
     const hasLocale = !!segments[0] && locales.includes(segments[0]);
     const localePrefix = hasLocale ? `/${segments[0]}` : '';
     const barePath = '/' + (hasLocale ? segments.slice(1) : segments).join('/');
-    if (barePath === '/login') {
+    // Prima di saltare il login si chiede conferma a Supabase: un token
+    // ancora valido può appartenere a una sessione già chiusa (uscita da un
+    // altro dispositivo). In quel caso la sessione si cancella qui (cookie
+    // tolti dalla risposta) e si mostra il login, invece di rimandare alla
+    // dashboard, che rimanderebbe al login all'infinito.
+    const confirmed = barePath === '/login' ? (await supabase.auth.getUser()).data.user : null;
+    if (barePath === '/login' && confirmed) {
       const role = user.app_metadata?.role;
       const next = request.nextUrl.searchParams.get('next') ?? '';
       const home = role === 'agent' ? '/agente' : role === 'translator' ? '/traduzioni' : '/dashboard';
