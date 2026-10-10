@@ -10,8 +10,9 @@ import type { ServiceItem } from '@/lib/servicesCatalog'
 import NativeShareButton from '@/components/NativeShareButton'
 
 // Home: corta. In cima lo stato (KU Karma, abbonamento, codice invito), poi
-// la fascia «Oggi», «In cosa possiamo darti una mano?», i servizi preferiti,
-// gli usati di recente e un suggerimento, e le guide. Tutti i servizi sono nella pagina Servizi; rete, Kumano del Giorno
+// la fascia «Oggi» e «In cosa possiamo darti una mano?», gli inviti, l'Area
+// Professionisti e la Sorpresa, i servizi preferiti, gli usati di recente e
+// un suggerimento, e le guide. Tutti i servizi sono nella pagina Servizi; rete, Kumano del Giorno
 // e donazioni nella pagina Community (menu fisso in basso).
 const TILE =
   'flex min-w-0 flex-col rounded-2xl border border-[var(--gold)]/30 bg-white p-3 shadow-[0_6px_18px_rgba(23,23,23,0.06)] transition-colors hover:border-[var(--gold)] sm:p-4'
@@ -26,6 +27,8 @@ export default async function DashboardTipo2({
   proTrialDaysLeft = null,
   agenda = null,
   needs = null,
+  afterStatus = null,
+  afterToday = null,
   wellness = null,
 }: {
   profile: MyProfile | null
@@ -42,6 +45,10 @@ export default async function DashboardTipo2({
   agenda?: React.ReactNode
   // «In cosa possiamo darti una mano?» in versione compatta
   needs?: React.ReactNode
+  // Messaggi da leggere: subito sotto la riga di stato
+  afterStatus?: React.ReactNode
+  // Inviti, Area Professionisti e Sorpresa: dopo «Oggi», prima dei servizi
+  afterToday?: React.ReactNode
   // «Il tuo benessere di oggi», già pronto dal server
   wellness?: React.ReactNode
 }) {
@@ -119,16 +126,20 @@ export default async function DashboardTipo2({
         </div>
       )}
 
+      {afterStatus}
+
       {/* Subito dopo lo stato: oggi e «In cosa possiamo darti una mano?»
           (una sotto l'altra sul telefono, affiancate sul computer) */}
       {agenda ? (
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,28rem)_minmax(0,1fr)] lg:items-start lg:gap-6">
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[minmax(0,28rem)_minmax(0,1fr)] lg:items-start lg:gap-6">
           {agenda}
           {needs}
         </div>
       ) : (
         needs
       )}
+
+      {afterToday}
 
       <HomeServices items={services} favorites={favoriteToolNames} />
 

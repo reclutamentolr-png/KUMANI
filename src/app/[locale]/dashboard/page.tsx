@@ -236,33 +236,20 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
         {/* Ricevuta da salvare dopo la registrazione partita dalla ricevuta */}
         <PendingReceiptClaim />
 
-        {/* Iscritto senza codice: può ancora indicare chi l'ha invitato */}
-        {lateSponsor.eligible && lateSponsor.until && <LateSponsorCard until={lateSponsor.until} />}
-
-        {/* Invito ad attivare le notifiche push su questo dispositivo */}
-        <PushInviteCard />
-
-        {/* Messaggi non letti dalla Bacheca: in cima, prima di tutto */}
-        {unreadMessagesCount > 0 && <BachecaMessagesAlert initialCount={unreadMessagesCount} />}
-        {(landingUnread ?? 0) > 0 && <LandingMessagesAlert count={landingUnread ?? 0} />}
-
-        {/* Invito a recensire chi ha acquistato e non l'ha ancora fatto */}
-        {canReview && <ReviewInviteCard />}
-
         {surpriseReplies.total > 0 && <SurpriseRepliesPopup replies={surpriseReplies.items} total={surpriseReplies.total} />}
         {giftWelcome === true ? (
-          <GiftWelcomeDashboard firstName={profile?.first_name ?? null} services={catalog.items} passExpiry={access.passExpiresAt} />
+          <>
+            {unreadMessagesCount > 0 && <BachecaMessagesAlert initialCount={unreadMessagesCount} />}
+            {(landingUnread ?? 0) > 0 && <LandingMessagesAlert count={landingUnread ?? 0} />}
+            {lateSponsor.eligible && lateSponsor.until && <LateSponsorCard until={lateSponsor.until} />}
+            <PushInviteCard />
+            {canReview && <ReviewInviteCard />}
+            <GiftWelcomeDashboard firstName={profile?.first_name ?? null} services={catalog.items} passExpiry={access.passExpiresAt} />
+          </>
         ) : (
           <>
-            {isPro && proTools.length > 0 ? (
-              <ProArea tools={proTools} stats={proAreaStats} trial={proTrial} renewsOn={proRenewsOn} favoriteToolNames={favoriteToolNames} />
-            ) : (
-              !isPro && proTools.length > 0 && <ProTeaser trialExpired={proTrialExpired} />
-            )}
-
-            {/* KUMANI Sorpresa: regalare un'esperienza (buono o percorso) */}
-            <SurpriseDashboardCard />
-
+            {/* In cima la riga di stato, poi «Oggi» e «In cosa possiamo darti
+                una mano?»; inviti, Area Professionisti e Sorpresa dopo */}
             <DashboardTipo2
               profile={profile}
               shareUrl={shareUrl}
@@ -277,6 +264,32 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
                   needs={needs}
                   texts={{ title: needsT('title'), hint: needsT('dashHint'), open: needsT('dashOpen'), hide: needsT('dashHide') }}
                 />
+              }
+              afterStatus={
+                (unreadMessagesCount > 0 || (landingUnread ?? 0) > 0) && (
+                  <>
+                    {/* Messaggi non letti dalla Bacheca e dalla Landing */}
+                    {unreadMessagesCount > 0 && <BachecaMessagesAlert initialCount={unreadMessagesCount} />}
+                    {(landingUnread ?? 0) > 0 && <LandingMessagesAlert count={landingUnread ?? 0} />}
+                  </>
+                )
+              }
+              afterToday={
+                <>
+                  {/* Iscritto senza codice: può ancora indicare chi l'ha invitato */}
+                  {lateSponsor.eligible && lateSponsor.until && <LateSponsorCard until={lateSponsor.until} />}
+                  {/* Invito ad attivare le notifiche push su questo dispositivo */}
+                  <PushInviteCard />
+                  {/* Invito a recensire chi ha acquistato e non l'ha ancora fatto */}
+                  {canReview && <ReviewInviteCard />}
+                  {isPro && proTools.length > 0 ? (
+                    <ProArea tools={proTools} stats={proAreaStats} trial={proTrial} renewsOn={proRenewsOn} favoriteToolNames={favoriteToolNames} />
+                  ) : (
+                    !isPro && proTools.length > 0 && <ProTeaser trialExpired={proTrialExpired} />
+                  )}
+                  {/* KUMANI Sorpresa: regalare un'esperienza (buono o percorso) */}
+                  <SurpriseDashboardCard />
+                </>
               }
             />
             {/* Primo accesso: prima "Cosa ti interessa?" (riempie i preferiti),
