@@ -11180,7 +11180,8 @@
     "status_shipped": "Shipped",
     "status_delivered": "Delivered",
     "status_cancelled": "Cancelled and refunded",
-    "tab_payments": "Payments"
+    "tab_payments": "Payments",
+    "cancel": "Cancel"
   },
   "shopPublic": {
     "shipping": "Shipping",

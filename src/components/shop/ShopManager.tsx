@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import {
   AlertCircle,
@@ -99,6 +100,8 @@ export default function ShopManager({ userId, initial, initialTab, payments }: {
 
 function ShopForm({ userId, settings, canOpen, hasProducts, onSaved }: { userId: string; settings: ShopSettings | null; canOpen: boolean; hasProducts: boolean; onSaved: (s: ShopSettings) => void }) {
   const t = useTranslations('shop')
+  const locale = useLocale()
+  const router = useRouter()
   const [form, setForm] = useState<ShopSettings>(
     settings ?? {
       slug: '',
@@ -275,9 +278,20 @@ function ShopForm({ userId, settings, canOpen, hasProducts, onSaved }: { userId:
       </section>
 
       {notice && <p className={`rounded-xl px-4 py-3 text-sm font-semibold ${notice.ok ? 'bg-emerald-50 text-emerald-800' : 'bg-amber-50 text-amber-800'}`}>{notice.text}</p>}
-      <button type="button" onClick={() => save()} disabled={busy} className="inline-flex min-h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 font-bold text-[var(--ink)] shadow disabled:opacity-60">
-        {busy && <LoaderCircle className="h-4 w-4 animate-spin" />} {t('save')}
-      </button>
+      <div className="flex gap-3">
+        {/* Annulla: si torna alla pagina precedente senza salvare */}
+        <button
+          type="button"
+          onClick={() => (window.history.length > 1 ? router.back() : router.push(`/${locale === 'it' ? '' : `${locale}/`}dashboard`))}
+          disabled={busy}
+          className="min-h-12 cursor-pointer rounded-xl border border-gray-300 bg-white px-6 font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-60"
+        >
+          {t('cancel')}
+        </button>
+        <button type="button" onClick={() => save()} disabled={busy} className="inline-flex min-h-12 flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 font-bold text-[var(--ink)] shadow disabled:opacity-60">
+          {busy && <LoaderCircle className="h-4 w-4 animate-spin" />} {t('save')}
+        </button>
+      </div>
     </div>
   )
 }

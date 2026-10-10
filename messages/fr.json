@@ -11180,7 +11180,8 @@
     "status_shipped": "Expédiée",
     "status_delivered": "Livrée",
     "status_cancelled": "Annulée et remboursée",
-    "tab_payments": "Paiements"
+    "tab_payments": "Paiements",
+    "cancel": "Annuler"
   },
   "shopPublic": {
     "shipping": "Livraison",
