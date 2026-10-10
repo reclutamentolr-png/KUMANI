@@ -6435,9 +6435,12 @@
     "per_week": "week",
     "per_day": "day",
     "per_hour": "hour",
-    "quotaLeft": "Searches left this week: {left} of {limit}",
-    "quotaNone": "No searches left this week: next one from {date}",
-    "error_quota": "You have used the {limit} searches available in these 7 days (trial phase). The next one will be available {date}."
+    "quotaLeft": "Weekly credit: {left} of {limit} pages",
+    "quotaNone": "Weekly credit used up: it refills from {date}",
+    "error_quota": "You have used the {limit} pages of credit for these 7 days (trial phase). It refills from {date}.",
+    "error_quotaCost": "This search can use up to {cost} pages, but you have {left} left. Choose «Quick» or remove some alternative names.",
+    "searchCost": "{cost, plural, one {This search uses at most # page of results} other {This search uses at most # pages of results}}: only the pages actually read are counted.",
+    "quotaInfo": "Each week you have {limit} pages: a Quick search with one name uses 2, a Maximum one with 4 names up to 40."
   },
   "documents": {
     "title": "Documents",

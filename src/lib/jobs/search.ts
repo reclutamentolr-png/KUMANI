@@ -2,6 +2,8 @@ import { SITE_URL } from '@/lib/siteUrl'
 import { ProxyAgent, fetch as undiciFetch } from 'undici'
 import {
   JOB_COUNTRIES,
+  JOB_SEARCH_PAGES,
+  jobSearchVariants,
   type JobFilters,
   type JobResult,
   type JobSearchEvent,
@@ -14,7 +16,6 @@ import {
 // Careerjet restituisce solo titolo, azienda, luogo, stipendio, data e un
 // breve riassunto: i filtri "fini" lavorano su questi campi.
 const ENDPOINT = 'https://search.api.careerjet.net/v4/query'
-const PAGES: Record<JobFilters['depth'], number> = { quick: 2, deep: 5, max: 10 }
 const CONCURRENCY = 4
 
 type CareerjetJob = {
@@ -147,10 +148,10 @@ function scamFlags(job: { title: string; company: string; snippet: string; salar
 
 // --- Ricerca completa ---
 
-export async function* searchJobs(filters: JobFilters, caller: Caller): AsyncGenerator<JobSearchEvent> {
-  // Varianti: il ruolo principale più gli altri nomi indicati (al massimo 4)
-  const variants = [filters.keywords.trim(), ...list(filters.synonyms)].filter(Boolean).slice(0, 4)
-  const pages = PAGES[filters.depth]
+// meter.calls: richieste davvero fatte alla fonte (per il credito settimanale)
+export async function* searchJobs(filters: JobFilters, caller: Caller, meter: { calls: number } = { calls: 0 }): AsyncGenerator<JobSearchEvent> {
+  const variants = jobSearchVariants(filters)
+  const pages = JOB_SEARCH_PAGES[filters.depth]
   const tasks = variants.flatMap((kw) => Array.from({ length: pages }, (_, i) => ({ kw, page: i + 1 })))
   const total = tasks.length
 
@@ -163,6 +164,7 @@ export async function* searchJobs(filters: JobFilters, caller: Caller): AsyncGen
   yield { type: 'progress', step: 'search', done, total, found: 0 }
   for (let i = 0; i < tasks.length; i += CONCURRENCY) {
     const batch = tasks.slice(i, i + CONCURRENCY).filter((task) => !exhausted.has(task.kw))
+    meter.calls += batch.length
     const results = await Promise.allSettled(batch.map((task) => fetchPage(filters, task.kw, task.page, caller)))
     results.forEach((r, j) => {
       if (r.status === 'fulfilled') {

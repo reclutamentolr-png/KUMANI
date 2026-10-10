@@ -6435,9 +6435,12 @@
     "per_week": "Woche",
     "per_day": "Tag",
     "per_hour": "Stunde",
-    "quotaLeft": "Verfügbare Suchen diese Woche: {left} von {limit}",
-    "quotaNone": "Keine Suchen mehr diese Woche: die nächste ab {date}",
-    "error_quota": "Du hast die {limit} verfügbaren Suchen dieser 7 Tage genutzt (Testphase). Die nächste ist verfügbar ab {date}."
+    "quotaLeft": "Wochenguthaben: {left} von {limit} Seiten",
+    "quotaNone": "Wochenguthaben aufgebraucht: es lädt sich ab {date} wieder auf",
+    "error_quota": "Du hast die {limit} Seiten Guthaben dieser 7 Tage verbraucht (Testphase). Es lädt sich ab {date} wieder auf.",
+    "error_quotaCost": "Diese Suche kann bis zu {cost} Seiten verbrauchen, dir bleiben aber {left}. Wähle «Schnell» oder entferne einige alternative Bezeichnungen.",
+    "searchCost": "{cost, plural, one {Diese Suche verbraucht höchstens # Ergebnisseite} other {Diese Suche verbraucht höchstens # Ergebnisseiten}}: Gezählt werden nur die tatsächlich gelesenen.",
+    "quotaInfo": "Jede Woche hast du {limit} Seiten: Eine schnelle Suche mit einer Bezeichnung verbraucht 2, eine maximale mit 4 Bezeichnungen bis zu 40."
   },
   "documents": {
     "title": "Dokumente",

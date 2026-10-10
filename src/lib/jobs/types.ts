@@ -60,6 +60,49 @@ export const DEFAULT_FILTERS: Omit<JobFilters, 'country'> = {
   sort: 'relevance',
 }
 
+// Pagine chieste alla fonte per ogni nome del ruolo, secondo la profondità
+export const JOB_SEARCH_PAGES: Record<Depth, number> = { quick: 2, deep: 5, max: 10 }
+
+// Nomi cercati: il ruolo principale più gli altri nomi indicati (al massimo 4)
+export const jobSearchVariants = (filters: Pick<JobFilters, 'keywords' | 'synonyms'>) =>
+  [filters.keywords.trim(), ...filters.synonyms.split(',').map((x) => x.trim())].filter(Boolean).slice(0, 4)
+
+// Costo massimo di una ricerca in pagine del credito settimanale (una pagina
+// = una richiesta alla fonte); alla fine si paga solo quello che si è usato
+export const jobSearchCost = (filters: Pick<JobFilters, 'keywords' | 'synonyms' | 'depth'>) =>
+  Math.max(jobSearchVariants(filters).length, 1) * JOB_SEARCH_PAGES[filters.depth]
+
+const pickValue = <T extends string>(value: unknown, allowed: readonly T[], fallback: T): T => (allowed.includes(value as T) ? (value as T) : fallback)
+const textValue = (value: unknown, max: number) => String(value ?? '').slice(0, max).trim()
+const numValue = (value: unknown, min: number, max: number, fallback: number) => {
+  const n = Number(value)
+  return Number.isFinite(n) ? Math.min(max, Math.max(min, Math.round(n))) : fallback
+}
+
+// Filtri arrivati dal browser: solo i campi previsti, con valori ammessi
+export function readJobFilters(body: Record<string, unknown>): JobFilters | null {
+  if (!isJobCountry(body.country)) return null
+  const keywords = textValue(body.keywords, 80)
+  if (keywords.length < 2) return null
+  return {
+    country: body.country,
+    keywords,
+    synonyms: textValue(body.synonyms, 200),
+    location: textValue(body.location, 80),
+    radiusKm: numValue(body.radiusKm, 0, 200, DEFAULT_FILTERS.radiusKm),
+    contract: pickValue(body.contract, ['any', 'permanent', 'contract', 'temporary', 'internship'] as const, 'any'),
+    hours: pickValue(body.hours, ['any', 'full', 'part'] as const, 'any'),
+    minSalary: numValue(body.minSalary, 0, 10_000_000, 0),
+    includeNoSalary: body.includeNoSalary !== false,
+    postedDays: numValue(body.postedDays, 0, 60, 0),
+    remoteOnly: body.remoteOnly === true,
+    exclude: textValue(body.exclude, 200),
+    hideSuspicious: body.hideSuspicious === true,
+    depth: pickValue(body.depth, ['quick', 'deep', 'max'] as const, 'deep'),
+    sort: pickValue(body.sort, ['relevance', 'date', 'salary'] as const, 'relevance'),
+  }
+}
+
 // Motivi per cui un annuncio va guardato con attenzione
 export type ScamFlag = 'payToApply' | 'chatOnly' | 'easyMoney' | 'unrealisticPay' | 'noCompany' | 'personalData'
 

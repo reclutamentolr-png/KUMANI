@@ -2,7 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
-import type { JobFilters, JobResult } from '@/lib/jobs/types'
+import { readJobFilters, type JobFilters, type JobResult } from '@/lib/jobs/types'
 
 // Trova Lavoro: annunci preferiti e ricerche salvate dell'utente.
 
@@ -65,8 +65,10 @@ export async function saveJobSearch(name: string, filters: JobFilters): Promise<
   const { supabase, user, allowed } = await gate()
   if (!user || !allowed) return { success: false, message: 'forbidden' }
   const clean = String(name ?? '').trim().slice(0, 80)
-  if (!clean) return { success: false, message: 'invalid' }
-  const { data, error } = await supabase.from('job_searches').insert({ user_id: user.id, name: clean, filters }).select('id').single()
+  // Si salvano solo i campi previsti, con valori ammessi
+  const safe = filters && typeof filters === 'object' ? readJobFilters(filters as unknown as Record<string, unknown>) : null
+  if (!clean || !safe) return { success: false, message: 'invalid' }
+  const { data, error } = await supabase.from('job_searches').insert({ user_id: user.id, name: clean, filters: safe }).select('id').single()
   if (error || !data) return { success: false, message: error?.message.includes('limit') ? 'searchesLimit' : 'saveError' }
   return { success: true, data: { id: data.id } }
 }

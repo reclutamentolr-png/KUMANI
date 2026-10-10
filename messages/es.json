@@ -6435,9 +6435,12 @@
     "per_week": "semana",
     "per_day": "día",
     "per_hour": "hora",
-    "quotaLeft": "Búsquedas disponibles esta semana: {left} de {limit}",
-    "quotaNone": "Sin búsquedas esta semana: la próxima desde {date}",
-    "error_quota": "Has usado las {limit} búsquedas disponibles en estos 7 días (fase de prueba). La próxima estará disponible {date}."
+    "quotaLeft": "Crédito de la semana: {left} páginas de {limit}",
+    "quotaNone": "Crédito de la semana agotado: se recarga a partir del {date}",
+    "error_quota": "Has usado las {limit} páginas de crédito de estos 7 días (fase de prueba). Se recarga a partir del {date}.",
+    "error_quotaCost": "Esta búsqueda puede usar hasta {cost} páginas, pero te quedan {left}. Elige «Rápida» o quita algún nombre alternativo.",
+    "searchCost": "{cost, plural, one {Esta búsqueda usa como máximo # página de resultados} other {Esta búsqueda usa como máximo # páginas de resultados}}: solo se cuentan las que se leen de verdad.",
+    "quotaInfo": "Cada semana tienes {limit} páginas: una búsqueda Rápida con un solo nombre usa 2, una Máxima con 4 nombres hasta 40."
   },
   "documents": {
     "title": "Documentos",

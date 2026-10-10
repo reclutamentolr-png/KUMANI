@@ -27,6 +27,7 @@ import { removeJobFavorite, removeJobSearch, saveJobFavorite, saveJobSearch } fr
 import {
   DEFAULT_FILTERS,
   JOB_COUNTRIES,
+  jobSearchCost,
   type JobCountry,
   type JobFilters,
   type JobQuota,
@@ -112,8 +113,14 @@ export default function JobSearch({
       setError(t('errorKeywords'))
       return
     }
+    // Credito settimanale in pagine: la ricerca deve starci tutta
+    const cost = jobSearchCost(query)
     if (quotaLeft === 0) {
       setError(t('error_quota', { limit: quota?.limit ?? 0, date: quotaDate(quota?.nextAt ?? null) }))
+      return
+    }
+    if (quotaLeft !== null && cost > quotaLeft) {
+      setError(t('error_quotaCost', { cost, left: quotaLeft }))
       return
     }
     setTab('search')
@@ -150,7 +157,12 @@ export default function JobSearch({
         if (event.type === 'error') {
           if (event.code === 'quota') {
             setQuota(event.quota)
-            setError(t('error_quota', { limit: event.quota.limit ?? 0, date: quotaDate(event.quota.nextAt) }))
+            const left = Math.max((event.quota.limit ?? 0) - event.quota.used, 0)
+            setError(
+              left > 0
+                ? t('error_quotaCost', { cost: jobSearchCost(query), left })
+                : t('error_quota', { limit: event.quota.limit ?? 0, date: quotaDate(event.quota.nextAt) })
+            )
           } else {
             setError(t(`error_${event.code}`))
             // Ricerca non riuscita: il server non la conta
@@ -445,6 +457,11 @@ export default function JobSearch({
                   {quotaLeft === 0
                     ? t('quotaNone', { date: quotaDate(quota?.nextAt ?? null) })
                     : t('quotaLeft', { left: quotaLeft, limit: quota?.limit ?? 0 })}
+                </span>
+              )}
+              {quotaLeft !== null && filters.keywords.trim().length >= 2 && (
+                <span className={`w-full text-xs ${jobSearchCost(filters) > quotaLeft ? 'font-semibold text-red-700' : 'text-[var(--muted)]'}`}>
+                  {t('searchCost', { cost: jobSearchCost(filters) })} {t('quotaInfo', { limit: quota?.limit ?? 0 })}
                 </span>
               )}
               {!running && filters.keywords.trim().length >= 2 && (
