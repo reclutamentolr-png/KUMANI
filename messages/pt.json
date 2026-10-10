@@ -6938,6 +6938,16 @@
         "p2d": "Fotos, vídeos, adivinhas, lugares e canções.",
         "p3": "Também com os teus pontos",
         "p3d": "Com cartão, KU Karma ou KU Points."
+      },
+      "nexus": {
+        "sub": "As palavras cruzadas do dia",
+        "tagline": "Uma grelha nova todos os dias e desafios com amigos, mesmo não registados.",
+        "p1": "Uma grelha por dia",
+        "p1d": "Igual para todos, em italiano ou em inglês.",
+        "p2": "Desafia os amigos",
+        "p2d": "De 2 a 4 jogadores, à vez, por uma ligação.",
+        "p3": "Cruzamentos e pontos",
+        "p3d": "Cada palavra tomada fica com a tua cor."
       }
     },
     "includedSurprise": "Para todos, também com a conta gratuita",
@@ -7646,6 +7656,23 @@
       "step4Tip": "Por baixo do botão de pagamento vês quantos pontos são precisos e quantos tens: se não chegarem, o botão fica cinzento.",
       "step5Title": "O agradecimento e a arrumação",
       "step5Text": "Quando quem a recebe abre o presente ficas logo a saber, e pode responder-te com uma reação, uma mensagem ou uma foto: encontras isso com o envelope cor-de-rosa em «As minhas surpresas» e num quadro assim que entras no painel. Os rascunhos de que já não precisas apagam-se com o caixote do lixo; as surpresas já pagas ficam."
+    },
+    "nexus": {
+      "title": "KUMANI Nexus",
+      "summary": "As palavras cruzadas do dia e o Desafio com amigos: uma grelha nova todos os dias e jogos de 2 a 4 jogadores.",
+      "cta": "Abrir Nexus",
+      "step1Title": "Começa as palavras cruzadas do dia",
+      "step1Text": "Todos os dias há uma grelha nova, igual para todos, em italiano ou em inglês (escolhe-se em cima). Vês quantas palavras há: o tempo só começa quando tocas em «Começar».",
+      "step2Title": "Escolhe uma palavra e escreve-a",
+      "step2Text": "Toca numa casa para escolher a palavra; toca outra vez para passar de horizontal a vertical, ou usa as setas ao lado da definição. Escreve com o teclado em baixo: podes escrever a palavra inteira, as letras já certas são saltadas.",
+      "step3Title": "Palavras certas e ajudas",
+      "step3Text": "Quando uma palavra está completa verificamo-la: se estiver certa fica verde e fixa; se estiver errada, a barra da definição fica vermelha. Encravado? A lâmpada revela a letra da casa escolhida.",
+      "step3Tip": "As ajudas usadas aparecem no resultado, mas a grelha conta na mesma para a tua sequência.",
+      "step4Title": "Grelha completa",
+      "step4Text": "No fim vês o teu tempo, os dias seguidos e as ajudas usadas, e recebes KU Karma. «Partilhar o resultado» cria uma imagem com a forma da grelha, sem revelar as palavras.",
+      "step5Title": "Desafia os amigos",
+      "step5Text": "Com «Desafia os amigos» crias um jogo e envias o código por WhatsApp: os amigos entram pela ligação, mesmo sem se registarem. Quando forem de 2 a 4, toca em «Começar o jogo». À vez escolhe-se uma palavra e toca-se em «Tentar»: cada palavra certa fica com a tua cor e vale 1 ponto por letra, +3 por cada cruzamento e o dobro na casa ×2.",
+      "step5Tip": "Quem deixa passar duas vezes seguidas sai do jogo. Enquanto ninguém entrar, podes cancelar o desafio."
     }
   },
   "deckTexts": {
@@ -7789,7 +7816,7 @@
         },
         "6": {
           "1": "Comunidade e lazer",
-          "2": "Anúncios, Kordata, Time Bank, Events, Affinity, Veritas, Mosaic, Fabula"
+          "2": "Anúncios, Kordata, Time Bank, Events, Affinity, Veritas, Mosaic, Fabula, Nexus"
         }
       },
       "notes": "Os serviços estão divididos em seis áreas: dar-se a conhecer, proteger-se das burlas, organização pessoal, bem-estar, trabalho, comunidade e lazer. Entra-se com uma só conta."
@@ -7946,7 +7973,7 @@
         },
         "6": {
           "1": "Jogos",
-          "2": "Veritas, Mosaic e Fabula para jogar juntos"
+          "2": "Veritas, Mosaic, Fabula e Nexus para jogar juntos"
         }
       },
       "notes": "A KUMANI não são só ferramentas: é uma comunidade. Anúncios, compras em grupo com a Kordata, o Time Bank para trocar ajuda, eventos ao vivo e jogos com amigos."
@@ -9276,6 +9303,32 @@
         {
           "q": "É preciso introduzir as faturas duas vezes?",
           "a": "Não: o serviço liga-se à fatura que já tem no Spendly (ou cria-a a partir daí) e marca-a como paga uma só vez."
+        }
+      ]
+    },
+    "nexus": {
+      "title": "Palavras cruzadas online do dia e desafios com amigos – KUMANI Nexus",
+      "description": "Palavras cruzadas novas todos os dias, iguais para todos, em italiano ou em inglês. Desafia de 2 a 4 amigos à vez: até quem não está registado pode jogar pela ligação.",
+      "heading": "As palavras cruzadas do dia, sozinho ou com amigos",
+      "intro": "Todos os dias uma grelha nova, igual para toda a comunidade: joga-se no telemóvel com um teclado pensado para as palavras cruzadas, o tempo começa quando quiseres e as palavras certas ficam fixas. Com o Desafio joga-se a 2, 3 ou 4 na mesma grelha, à vez: cada palavra encontrada fica com a tua cor e os cruzamentos valem pontos extra.",
+      "points": [
+        "Uma grelha nova todos os dias, em italiano ou em inglês",
+        "Palavras verificadas logo e ajuda que revela uma letra",
+        "Dias seguidos, tempo e imagem do resultado para partilhar",
+        "Desafio de 2 a 4 jogadores: entra-se pela ligação, mesmo sem registo"
+      ],
+      "faq": [
+        {
+          "q": "As palavras cruzadas mudam todos os dias?",
+          "a": "Sim: à meia-noite chega uma grelha nova, igual para todos."
+        },
+        {
+          "q": "Como funciona o Desafio com amigos?",
+          "a": "Crias o jogo, envias o código por WhatsApp e começas quando forem de 2 a 4. À vez tenta-se uma palavra: se estiver certa fica com a tua cor e vale 1 ponto por letra mais 3 por cada cruzamento."
+        },
+        {
+          "q": "Quem convido tem de estar registado?",
+          "a": "Não: quem recebe a ligação pode entrar com um nome e jogar logo. No fim pode registar-se grátis."
         }
       ]
     }

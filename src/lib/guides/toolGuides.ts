@@ -45,6 +45,7 @@ export const TOOL_GUIDES: { path: string; slug: GuideSlug }[] = [
   { path: '/marketplace/mosaic', slug: 'mosaic' },
   { path: '/marketplace/oxygen', slug: 'oxygen' },
   { path: '/marketplace/fabula', slug: 'fabula' },
+  { path: '/marketplace/nexus', slug: 'nexus' },
   { path: '/marketplace/neurobalance', slug: 'neurobalance' },
   { path: '/marketplace/aureya', slug: 'aureya' },
   { path: '/viaggi', slug: 'travel' },

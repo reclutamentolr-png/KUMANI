@@ -6938,6 +6938,16 @@
         "p2d": "Photos, videos, riddles, places and songs.",
         "p3": "With your points too",
         "p3d": "By card, with KU Karma or KU Points."
+      },
+      "nexus": {
+        "sub": "The daily crossword",
+        "tagline": "A new grid every day and challenges with friends, even if they are not members.",
+        "p1": "One grid a day",
+        "p1d": "The same for everyone, in Italian or English.",
+        "p2": "Challenge friends",
+        "p2d": "2 to 4 players, taking turns, from a link.",
+        "p3": "Crossings and points",
+        "p3d": "Every word you take has your colour."
       }
     },
     "includedSurprise": "For everyone, free account included",
@@ -7646,6 +7656,23 @@
       "step4Tip": "Below the payment button you can see how many points are needed and how many you have: if they’re not enough, the button stays grey.",
       "step5Title": "The thank-you and tidying up",
       "step5Text": "When the recipient opens the gift you know right away, and they can reply with a reaction, a message or a photo: you’ll find it with the pink envelope in “My surprises” and in a box as soon as you open your dashboard. Drafts you no longer need can be deleted with the bin; surprises already paid for stay."
+    },
+    "nexus": {
+      "title": "KUMANI Nexus",
+      "summary": "The daily crossword and the Challenge with friends: a new grid every day and games for 2 to 4 players.",
+      "cta": "Open Nexus",
+      "step1Title": "Start the daily crossword",
+      "step1Text": "Every day there is a new grid, the same for everyone, in Italian or English (choose at the top). You can see how many words there are: the timer only starts when you tap “Start”.",
+      "step2Title": "Choose a word and type it",
+      "step2Text": "Tap a square to choose the word; tap it again to switch between across and down, or use the arrows next to the clue. Type with the keyboard at the bottom: you can type the whole word, letters that are already right are skipped.",
+      "step3Title": "Right words and hints",
+      "step3Text": "When a word is complete we check it: if it is right it turns green and stays in place, if it is wrong the clue bar turns red. Stuck? The light bulb reveals the letter in the chosen square.",
+      "step3Tip": "Hints used are shown in your result, but the grid still counts for your streak.",
+      "step4Title": "Grid completed",
+      "step4Text": "When the grid is done you see your time, your streak and the hints used, and you earn KU Karma. “Share your result” creates an image with the shape of the grid, without giving away the words.",
+      "step5Title": "Challenge friends",
+      "step5Text": "With “Challenge friends” you create a game and send the code on WhatsApp: friends join from the link, even without signing up. When there are 2 to 4 of you, tap “Start the game”. In turn you choose a word and tap “Try”: each right word takes your colour and is worth 1 point per letter, +3 for each crossing and double on the ×2 square.",
+      "step5Tip": "Anyone who lets two turns in a row run out leaves the game. Until someone joins, you can cancel the challenge."
     }
   },
   "deckTexts": {
@@ -7789,7 +7816,7 @@
         },
         "6": {
           "1": "Community and fun",
-          "2": "Listings, Kordata, Time Bank, Events, Affinity, Veritas, Mosaic, Fabula"
+          "2": "Listings, Kordata, Time Bank, Events, Affinity, Veritas, Mosaic, Fabula, Nexus"
         }
       },
       "notes": "The services are grouped into six areas: getting noticed, protection against scams, personal organisation, wellbeing, work, community and fun. One account gives access to all of them."
@@ -7946,7 +7973,7 @@
         },
         "6": {
           "1": "Games",
-          "2": "Veritas, Mosaic and Fabula to play together"
+          "2": "Veritas, Mosaic, Fabula and Nexus to play together"
         }
       },
       "notes": "KUMANI is not just tools: it is a community. Listings, group purchases with Kordata, the Time Bank to exchange help, live events and games to play with friends."
@@ -9276,6 +9303,32 @@
         {
           "q": "Do I have to enter bills twice?",
           "a": "No: the utility links to the bill you already have in Spendly (or you create it from there) and you mark it paid only once."
+        }
+      ]
+    },
+    "nexus": {
+      "title": "Daily online crossword and challenges with friends – KUMANI Nexus",
+      "description": "A new crossword every day, the same for everyone, in Italian or English. Challenge 2 to 4 friends on a turn-based grid: even people who are not members can play from the link.",
+      "heading": "The daily crossword, on your own or with friends",
+      "intro": "Every day a new grid, the same for the whole community: you play on your phone with a keyboard designed for crosswords, the timer starts when you are ready and right words stay in place. With the Challenge, 2, 3 or 4 people play on the same grid taking turns: every word you find takes your colour and crossings earn extra points.",
+      "points": [
+        "A new grid every day, in Italian or English",
+        "Words checked straight away and a hint that reveals a letter",
+        "Streak, time and a result image to share",
+        "Challenge for 2 to 4 players: join from the link, even without signing up"
+      ],
+      "faq": [
+        {
+          "q": "Does the crossword change every day?",
+          "a": "Yes: a new grid arrives at midnight, the same for everyone."
+        },
+        {
+          "q": "How does the Challenge with friends work?",
+          "a": "You create the game, send the code on WhatsApp and start it when there are 2 to 4 of you. In turn you try a word: if it is right it takes your colour and is worth 1 point per letter plus 3 for each crossing."
+        },
+        {
+          "q": "Do the people I invite need an account?",
+          "a": "No: whoever receives the link can join with a name and play right away. At the end they can sign up for free."
         }
       ]
     }

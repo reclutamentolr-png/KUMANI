@@ -52,6 +52,7 @@ export const FLYERS: FlyerConfig[] = [
   { tool: 'affinity', style: 'phone', category: 'svago', icon: 'Sparkles', points: ['Compass', 'Swords', 'HeartHandshake'], shot: 'affinity-2' },
   { tool: 'mosaic', style: 'phone', category: 'svago', icon: 'Grid3x3', points: ['Users', 'CalendarDays', 'Award'], shot: 'mosaic-1' },
   { tool: 'fabula', style: 'phone', category: 'svago', icon: 'Dices', points: ['Dices', 'PenLine', 'BookOpen'], shot: 'fabula-1' },
+  { tool: 'nexus', style: 'phone', category: 'svago', icon: 'Puzzle', points: ['CalendarDays', 'Swords', 'Users'], shot: 'nexus-2' },
   { tool: 'convivio', style: 'phone', category: 'community', icon: 'ShoppingBasket', points: ['BadgeCheck', 'Users', 'Handshake'], shot: 'convivio-1' },
   { tool: 'timebank', style: 'photo', category: 'community', icon: 'Clock', points: ['GraduationCap', 'HandHelping', 'ShieldCheck'], photo: '/flyers/photos/community-help.webp' },
   { tool: 'events', style: 'photo', category: 'community', icon: 'Ticket', points: ['QrCode', 'CalendarCheck', 'Megaphone'], photo: '/flyers/photos/friends-dinner.webp' },

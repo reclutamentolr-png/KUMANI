@@ -6938,6 +6938,16 @@
         "p2d": "Fotos, Videos, Rätsel, Orte und Lieder.",
         "p3": "Auch mit deinen Punkten",
         "p3d": "Mit Karte, KU Karma oder KU Points."
+      },
+      "nexus": {
+        "sub": "Das Kreuzworträtsel des Tages",
+        "tagline": "Jeden Tag ein neues Rätsel und Herausforderungen mit Freunden, auch ohne Anmeldung.",
+        "p1": "Ein Rätsel pro Tag",
+        "p1d": "Für alle gleich, auf Italienisch oder Englisch.",
+        "p2": "Fordere Freunde heraus",
+        "p2d": "2 bis 4 Spieler, abwechselnd, per Link.",
+        "p3": "Kreuzungen und Punkte",
+        "p3d": "Jedes geholte Wort trägt deine Farbe."
       }
     },
     "includedSurprise": "Für alle, auch mit dem kostenlosen Konto",
@@ -7646,6 +7656,23 @@
       "step4Tip": "Unter dem Bezahlknopf siehst du, wie viele Punkte nötig sind und wie viele du hast: Reichen sie nicht, bleibt der Knopf grau.",
       "step5Title": "Das Dankeschön und Aufräumen",
       "step5Text": "Wenn der Empfänger das Geschenk öffnet, weißt du es sofort, und er kann dir mit einer Reaktion, einer Nachricht oder einem Foto antworten: Du findest es mit dem rosa Umschlag unter „Meine Überraschungen“ und in einem Kasten, sobald du dein Dashboard öffnest. Entwürfe, die du nicht mehr brauchst, löschst du mit dem Papierkorb; bereits bezahlte Überraschungen bleiben."
+    },
+    "nexus": {
+      "title": "KUMANI Nexus",
+      "summary": "Das Kreuzworträtsel des Tages und die Herausforderung mit Freunden: jeden Tag ein neues Rätsel und Spiele für 2 bis 4 Spieler.",
+      "cta": "Nexus öffnen",
+      "step1Title": "Starte das Rätsel des Tages",
+      "step1Text": "Jeden Tag gibt es ein neues Rätsel, für alle gleich, auf Italienisch oder Englisch (oben wählbar). Du siehst, wie viele Wörter es gibt: Die Zeit läuft erst, wenn du auf „Starten“ tippst.",
+      "step2Title": "Wähle ein Wort und schreib es",
+      "step2Text": "Tippe auf ein Feld, um das Wort zu wählen; tippe noch einmal, um zwischen waagerecht und senkrecht zu wechseln, oder nutze die Pfeile neben der Frage. Schreib mit der Tastatur unten: Du kannst das ganze Wort schreiben, schon richtige Buchstaben werden übersprungen.",
+      "step3Title": "Richtige Wörter und Hilfen",
+      "step3Text": "Ist ein Wort vollständig, prüfen wir es: Ist es richtig, wird es grün und bleibt fest; ist es falsch, wird die Fragenleiste rot. Festgefahren? Die Glühbirne zeigt den Buchstaben im gewählten Feld.",
+      "step3Tip": "Genutzte Hilfen stehen im Ergebnis, das Rätsel zählt trotzdem für deine Serie.",
+      "step4Title": "Rätsel gelöst",
+      "step4Text": "Am Ende siehst du deine Zeit, deine Serie und die genutzten Hilfen und bekommst KU Karma. „Ergebnis teilen“ erstellt ein Bild mit der Form des Rätsels, ohne die Wörter zu verraten.",
+      "step5Title": "Fordere deine Freunde heraus",
+      "step5Text": "Mit „Freunde herausfordern“ erstellst du ein Spiel und schickst den Code per WhatsApp: Freunde kommen über den Link rein, auch ohne Anmeldung. Wenn ihr 2 bis 4 seid, tippe auf „Spiel starten“. Abwechselnd wählt ihr ein Wort und tippt auf „Versuchen“: Jedes richtige Wort bekommt deine Farbe und bringt 1 Punkt pro Buchstabe, +3 pro Kreuzung und das Doppelte auf dem ×2-Feld.",
+      "step5Tip": "Wer zwei Züge hintereinander verstreichen lässt, scheidet aus. Solange niemand beigetreten ist, kannst du die Herausforderung absagen."
     }
   },
   "deckTexts": {
@@ -7789,7 +7816,7 @@
         },
         "6": {
           "1": "Community und Freizeit",
-          "2": "Anzeigen, Kordata, Time Bank, Events, Affinity, Veritas, Mosaic, Fabula"
+          "2": "Anzeigen, Kordata, Time Bank, Events, Affinity, Veritas, Mosaic, Fabula, Nexus"
         }
       },
       "notes": "Die Dienste sind in sechs Bereiche gegliedert: sichtbar werden, Schutz vor Betrug, persönliche Organisation, Wohlbefinden, Arbeit, Community und Freizeit. Ein einziges Konto genügt."
@@ -7946,7 +7973,7 @@
         },
         "6": {
           "1": "Spiele",
-          "2": "Veritas, Mosaic und Fabula gemeinsam spielen"
+          "2": "Veritas, Mosaic, Fabula und Nexus gemeinsam spielen"
         }
       },
       "notes": "KUMANI ist nicht nur Werkzeug: Es ist eine Community. Anzeigen, Gruppenkäufe mit der Kordata, die Time Bank zum Austausch von Hilfe, Events vor Ort und Spiele mit Freunden."
@@ -9276,6 +9303,32 @@
         {
           "q": "Muss ich Rechnungen doppelt eingeben?",
           "a": "Nein: Der Vertrag wird mit der Rechnung verknüpft, die du schon in Spendly hast (oder dort anlegst), und du markierst sie nur einmal als bezahlt."
+        }
+      ]
+    },
+    "nexus": {
+      "title": "Kreuzworträtsel des Tages online und Herausforderungen mit Freunden – KUMANI Nexus",
+      "description": "Jeden Tag ein neues Kreuzworträtsel, für alle gleich, auf Italienisch oder Englisch. Fordere 2 bis 4 Freunde abwechselnd heraus: auch Nicht-Mitglieder spielen über den Link mit.",
+      "heading": "Das Kreuzworträtsel des Tages, allein oder mit Freunden",
+      "intro": "Jeden Tag ein neues Rätsel, für die ganze Community gleich: Gespielt wird auf dem Handy mit einer Tastatur fürs Kreuzworträtsel, die Zeit startet, wann du willst, und richtige Wörter bleiben stehen. Bei der Herausforderung spielen 2, 3 oder 4 Personen abwechselnd auf demselben Rätsel: Jedes gefundene Wort bekommt deine Farbe und Kreuzungen bringen Extrapunkte.",
+      "points": [
+        "Jeden Tag ein neues Rätsel, auf Italienisch oder Englisch",
+        "Wörter werden sofort geprüft, eine Hilfe zeigt einen Buchstaben",
+        "Serie, Zeit und ein Ergebnisbild zum Teilen",
+        "Herausforderung für 2 bis 4 Spieler: Einstieg per Link, auch ohne Anmeldung"
+      ],
+      "faq": [
+        {
+          "q": "Ändert sich das Rätsel jeden Tag?",
+          "a": "Ja: Um Mitternacht kommt ein neues Rätsel, für alle gleich."
+        },
+        {
+          "q": "Wie funktioniert die Herausforderung mit Freunden?",
+          "a": "Du erstellst das Spiel, schickst den Code per WhatsApp und startest, wenn ihr 2 bis 4 seid. Abwechselnd versucht ihr ein Wort: Ist es richtig, bekommt es deine Farbe und bringt 1 Punkt pro Buchstabe plus 3 pro Kreuzung."
+        },
+        {
+          "q": "Müssen die Eingeladenen angemeldet sein?",
+          "a": "Nein: Wer den Link bekommt, kann mit einem Namen einsteigen und sofort spielen. Am Ende kann er sich kostenlos anmelden."
         }
       ]
     }

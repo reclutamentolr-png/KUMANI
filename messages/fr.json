@@ -6938,6 +6938,16 @@
         "p2d": "Photos, vidéos, énigmes, lieux et chansons.",
         "p3": "Aussi avec vos points",
         "p3d": "Par carte, avec les KU Karma ou les KU Points."
+      },
+      "nexus": {
+        "sub": "Les mots croisés du jour",
+        "tagline": "Une nouvelle grille chaque jour et des défis entre amis, même non inscrits.",
+        "p1": "Une grille par jour",
+        "p1d": "La même pour tous, en italien ou en anglais.",
+        "p2": "Défiez vos amis",
+        "p2d": "De 2 à 4 joueurs, à tour de rôle, par un lien.",
+        "p3": "Croisements et points",
+        "p3d": "Chaque mot pris prend votre couleur."
       }
     },
     "includedSurprise": "Pour tous, même avec le compte gratuit",
@@ -7646,6 +7656,23 @@
       "step4Tip": "Sous le bouton de paiement, vous voyez combien de points il faut et combien vous en avez : s’ils ne suffisent pas, le bouton reste gris.",
       "step5Title": "Le remerciement et le rangement",
       "step5Text": "Quand la personne ouvre le cadeau, vous le savez tout de suite, et elle peut vous répondre par une réaction, un message ou une photo : vous le trouvez avec l’enveloppe rose dans « Mes surprises » et dans un encadré dès que vous ouvrez votre tableau de bord. Les brouillons dont vous n’avez plus besoin se suppriment avec la corbeille ; les surprises déjà payées restent."
+    },
+    "nexus": {
+      "title": "KUMANI Nexus",
+      "summary": "Les mots croisés du jour et le Défi entre amis : une nouvelle grille chaque jour et des parties de 2 à 4 joueurs.",
+      "cta": "Ouvrir Nexus",
+      "step1Title": "Commencez les mots croisés du jour",
+      "step1Text": "Chaque jour une nouvelle grille, la même pour tous, en italien ou en anglais (à choisir en haut). Vous voyez combien de mots il y a : le temps ne démarre que lorsque vous touchez « Commencer ».",
+      "step2Title": "Choisissez un mot et écrivez-le",
+      "step2Text": "Touchez une case pour choisir le mot ; touchez-la à nouveau pour passer de l’horizontal au vertical, ou utilisez les flèches à côté de la définition. Écrivez avec le clavier en bas : vous pouvez écrire le mot entier, les lettres déjà justes sont sautées.",
+      "step3Title": "Mots justes et aides",
+      "step3Text": "Quand un mot est complet, nous le vérifions : s’il est juste, il devient vert et reste fixé ; s’il est faux, la barre de la définition devient rouge. Bloqué ? L’ampoule révèle la lettre de la case choisie.",
+      "step3Tip": "Les aides utilisées apparaissent dans le résultat, mais la grille compte quand même pour votre série.",
+      "step4Title": "Grille terminée",
+      "step4Text": "À la fin vous voyez votre temps, votre série et les aides utilisées, et vous recevez du KU Karma. « Partager le résultat » crée une image avec la forme de la grille, sans dévoiler les mots.",
+      "step5Title": "Défiez vos amis",
+      "step5Text": "Avec « Défier des amis » vous créez une partie et envoyez le code sur WhatsApp : vos amis entrent par le lien, même sans s’inscrire. Quand vous êtes de 2 à 4, touchez « Lancer la partie ». À tour de rôle on choisit un mot et on touche « Essayer » : chaque mot juste prend votre couleur et vaut 1 point par lettre, +3 par croisement et le double sur la case ×2.",
+      "step5Tip": "Qui laisse passer deux tours de suite quitte la partie. Tant que personne n’est entré, vous pouvez annuler le défi."
     }
   },
   "deckTexts": {
@@ -7789,7 +7816,7 @@
         },
         "6": {
           "1": "Communauté et loisirs",
-          "2": "Annonces, Kordata, Time Bank, Events, Affinity, Veritas, Mosaic, Fabula"
+          "2": "Annonces, Kordata, Time Bank, Events, Affinity, Veritas, Mosaic, Fabula, Nexus"
         }
       },
       "notes": "Les services sont répartis en six domaines : se faire connaître, se protéger des arnaques, s’organiser, bien-être, travail, communauté et loisirs. Un seul compte donne accès à tout."
@@ -7946,7 +7973,7 @@
         },
         "6": {
           "1": "Jeux",
-          "2": "Veritas, Mosaic et Fabula à faire ensemble"
+          "2": "Veritas, Mosaic, Fabula et Nexus à faire ensemble"
         }
       },
       "notes": "KUMANI, ce n’est pas que des outils : c’est une communauté. Annonces, achats groupés avec la Kordata, Time Bank pour échanger de l’aide, événements en vrai et jeux entre amis."
@@ -9276,6 +9303,32 @@
         {
           "q": "Faut-il saisir les factures deux fois ?",
           "a": "Non : le contrat se lie à la facture que vous avez déjà dans Spendly (ou vous la créez depuis là) et vous la marquez payée une seule fois."
+        }
+      ]
+    },
+    "nexus": {
+      "title": "Mots croisés du jour en ligne et défis entre amis – KUMANI Nexus",
+      "description": "Une nouvelle grille de mots croisés chaque jour, la même pour tous, en italien ou en anglais. Défiez 2 à 4 amis à tour de rôle : même les non-inscrits peuvent jouer par le lien.",
+      "heading": "Les mots croisés du jour, seul ou entre amis",
+      "intro": "Chaque jour une nouvelle grille, la même pour toute la communauté : on joue sur le téléphone avec un clavier pensé pour les mots croisés, le temps démarre quand vous le voulez et les mots justes restent fixés. Avec le Défi, on joue à 2, 3 ou 4 sur la même grille, à tour de rôle : chaque mot trouvé prend votre couleur et les croisements rapportent des points en plus.",
+      "points": [
+        "Une nouvelle grille chaque jour, en italien ou en anglais",
+        "Mots vérifiés tout de suite et aide qui révèle une lettre",
+        "Série de jours, temps et image du résultat à partager",
+        "Défi de 2 à 4 joueurs : on entre par le lien, même sans inscription"
+      ],
+      "faq": [
+        {
+          "q": "Les mots croisés changent-ils chaque jour ?",
+          "a": "Oui : à minuit arrive une nouvelle grille, la même pour tous."
+        },
+        {
+          "q": "Comment fonctionne le Défi entre amis ?",
+          "a": "Vous créez la partie, envoyez le code sur WhatsApp et la lancez quand vous êtes de 2 à 4. À tour de rôle on essaie un mot : s’il est juste, il prend votre couleur et vaut 1 point par lettre plus 3 par croisement."
+        },
+        {
+          "q": "Les personnes invitées doivent-elles être inscrites ?",
+          "a": "Non : qui reçoit le lien peut entrer avec un prénom et jouer tout de suite. À la fin, il peut s’inscrire gratuitement."
         }
       ]
     }

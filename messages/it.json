@@ -6938,6 +6938,16 @@
         "p2d": "Foto, video, indovinelli, luoghi e canzoni.",
         "p3": "Anche con i tuoi punti",
         "p3d": "Con la carta, i KU Karma o i KU Points."
+      },
+      "nexus": {
+        "sub": "Il cruciverba del giorno",
+        "tagline": "Una griglia nuova ogni giorno e sfide con gli amici, anche non iscritti.",
+        "p1": "Una griglia al giorno",
+        "p1d": "Uguale per tutti, in italiano o in inglese.",
+        "p2": "Sfida gli amici",
+        "p2d": "Da 2 a 4 giocatori, a turni, dal link.",
+        "p3": "Incroci e punti",
+        "p3d": "Ogni parola presa ha il tuo colore."
       }
     },
     "includedSurprise": "Per tutti, anche con l’account gratuito",
@@ -7646,6 +7656,23 @@
       "step4Tip": "Sotto il pulsante di pagamento vedi quanti punti servono e quanti ne hai: se non bastano, il pulsante resta grigio.",
       "step5Title": "Il ringraziamento e la pulizia",
       "step5Text": "Quando chi riceve apre il regalo lo sai subito, e può risponderti con una reazione, un messaggio o una foto: lo trovi con la busta rosa in «Le mie sorprese» e in un riquadro appena entri in dashboard. Le bozze che non ti servono più si eliminano con il cestino; le sorprese già pagate restano."
+    },
+    "nexus": {
+      "title": "KUMANI Nexus",
+      "summary": "Il cruciverba del giorno e la Sfida con gli amici: una griglia nuova ogni giorno e partite da 2 a 4 giocatori.",
+      "cta": "Apri Nexus",
+      "step1Title": "Inizia il cruciverba del giorno",
+      "step1Text": "Ogni giorno c’è una griglia nuova, uguale per tutti, in italiano o in inglese (si sceglie in alto). Vedi quante parole ci sono: il tempo parte solo quando tocchi «Inizia».",
+      "step2Title": "Scegli una parola e scrivila",
+      "step2Text": "Tocca una casella per scegliere la parola; toccala di nuovo per passare da orizzontale a verticale, oppure usa le frecce accanto alla definizione. Scrivi con la tastiera in basso: puoi scrivere la parola intera, le lettere già giuste si saltano da sole.",
+      "step3Title": "Parole giuste e aiuti",
+      "step3Text": "Quando una parola è completa la controlliamo: se è giusta diventa verde e resta fissata, se è sbagliata la barra della definizione diventa rossa. Bloccato? La lampadina svela la lettera della casella scelta.",
+      "step3Tip": "Gli aiuti usati restano nel risultato, ma la griglia vale lo stesso per i giorni di fila.",
+      "step4Title": "Griglia completata",
+      "step4Text": "A griglia finita vedi il tuo tempo, i giorni di fila e gli aiuti usati, e ricevi KU Karma. «Condividi il risultato» crea un’immagine con la forma della griglia, senza svelare le parole.",
+      "step5Title": "Sfida gli amici",
+      "step5Text": "Con «Sfida gli amici» crei una partita e mandi il codice su WhatsApp: gli amici entrano dal link anche senza iscriversi. Quando siete da 2 a 4 tocca «Inizia la partita». A turno si sceglie una parola e si tocca «Prova»: ogni parola giusta prende il tuo colore e vale 1 punto per lettera, +3 per ogni incrocio e il doppio sulla casella ×2.",
+      "step5Tip": "Chi lascia scadere due turni di fila esce dalla partita. Finché nessuno è entrato, puoi annullare la sfida."
     }
   },
   "deckTexts": {
@@ -7789,7 +7816,7 @@
         },
         "6": {
           "1": "Community e svago",
-          "2": "Bacheca, Kordata, Banca del Tempo, Events, Affinity, Veritas, Mosaic, Fabula"
+          "2": "Bacheca, Kordata, Banca del Tempo, Events, Affinity, Veritas, Mosaic, Fabula, Nexus"
         }
       },
       "notes": "I servizi sono divisi in sei aree: farsi conoscere, sicurezza contro le truffe, organizzazione personale, benessere, lavoro, community e svago. Si entra con un solo account."
@@ -7946,7 +7973,7 @@
         },
         "6": {
           "1": "Giochi",
-          "2": "Veritas, Mosaic e Fabula da fare insieme"
+          "2": "Veritas, Mosaic, Fabula e Nexus da fare insieme"
         }
       },
       "notes": "KUMANI non è solo strumenti: è una community. Bacheca annunci, acquisti di gruppo con la Kordata, Banca del Tempo per scambiarsi aiuto, eventi dal vivo e giochi da fare con gli amici."
@@ -9276,6 +9303,32 @@
         {
           "q": "Le bollette vanno inserite due volte?",
           "a": "No: l’utenza si collega alla bolletta che hai già in Spendly (o la crei da lì) e la segni pagata una volta sola."
+        }
+      ]
+    },
+    "nexus": {
+      "title": "Cruciverba online del giorno e sfide con gli amici – KUMANI Nexus",
+      "description": "Un cruciverba nuovo ogni giorno, uguale per tutti, in italiano o in inglese. Sfida da 2 a 4 amici in una griglia a turni: anche chi non è iscritto può giocare dal link.",
+      "heading": "Il cruciverba del giorno, da soli o con gli amici",
+      "intro": "Ogni giorno una griglia nuova, uguale per tutta la community: si gioca dal telefono con una tastiera pensata per il cruciverba, il tempo parte quando vuoi tu e le parole giuste restano fissate. Con la Sfida si gioca in 2, 3 o 4 sulla stessa griglia, a turni: ogni parola trovata prende il tuo colore e gli incroci valgono punti in più.",
+      "points": [
+        "Una griglia nuova ogni giorno, in italiano o in inglese",
+        "Parole controllate subito e aiuto che svela una lettera",
+        "Giorni di fila, tempo e immagine del risultato da condividere",
+        "Sfida da 2 a 4 giocatori: si entra dal link, anche senza iscrizione"
+      ],
+      "faq": [
+        {
+          "q": "Il cruciverba cambia ogni giorno?",
+          "a": "Sì: a mezzanotte arriva una griglia nuova, uguale per tutti."
+        },
+        {
+          "q": "Come funziona la Sfida con gli amici?",
+          "a": "Crei la partita, mandi il codice su WhatsApp e quando siete da 2 a 4 la avvii. A turno si prova una parola: se è giusta prende il tuo colore e vale 1 punto per lettera più 3 per ogni incrocio."
+        },
+        {
+          "q": "Chi invito deve essere iscritto?",
+          "a": "No: chi riceve il link può entrare con un nome e giocare subito. A fine partita può iscriversi gratis."
         }
       ]
     }

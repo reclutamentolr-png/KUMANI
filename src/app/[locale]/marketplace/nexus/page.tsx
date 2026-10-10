@@ -1,5 +1,5 @@
 import { getLocale, getTranslations } from 'next-intl/server'
-import { ArrowLeft, Puzzle } from 'lucide-react'
+import { ArrowLeft, BookOpen, Puzzle } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import ToolBackLink from '@/components/ToolBackLink'
 import NexusGame from '@/components/nexus/NexusGame'
@@ -12,7 +12,7 @@ export const dynamic = 'force-dynamic'
 // KUMANI NEXUS (SVAGO, gratis) — fase 1: il cruciverba del giorno.
 // ?lang=it|en sceglie la lingua della griglia (di base quella del sito).
 export default async function NexusPage({ searchParams }: { searchParams: Promise<{ lang?: string }> }) {
-  const [t, tc, locale, { lang }] = await Promise.all([getTranslations('nexus'), getTranslations('common'), getLocale(), searchParams])
+  const [t, tc, tg, locale, { lang }] = await Promise.all([getTranslations('nexus'), getTranslations('common'), getTranslations('guides'), getLocale(), searchParams])
   const gridLocale: NexusLocale = (NEXUS_LOCALES as readonly string[]).includes(lang ?? '') ? (lang as NexusLocale) : nexusLocaleFor(locale)
   const status = await getNexusStatus(gridLocale)
 
@@ -39,7 +39,13 @@ export default async function NexusPage({ searchParams }: { searchParams: Promis
       </header>
 
       <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-2 px-4 pt-4">
-        <p className="text-lg font-extrabold text-[var(--ink)]">{t('title')}</p>
+        <div className="flex items-center gap-3">
+          <p className="text-lg font-extrabold text-[var(--ink)]">{t('title')}</p>
+          {/* Sul telefono il pulsante fisso della guida lascerebbe spazio alla tastiera: la guida è qui */}
+          <Link href="/guida/nexus?from=%2Fmarketplace%2Fnexus" className="flex min-h-9 items-center gap-1 text-sm font-semibold text-[var(--gold)] underline-offset-4 hover:underline sm:hidden">
+            <BookOpen className="h-4 w-4" /> {tg('howToUse')}
+          </Link>
+        </div>
         {/* Lingua della griglia */}
         <div className="flex items-center gap-1 rounded-full border border-[var(--gold)]/30 bg-white p-1 text-xs font-bold" role="group" aria-label={t('gridLanguage')}>
           {NEXUS_LOCALES.map((code) => (

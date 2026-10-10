@@ -20,6 +20,8 @@ export default function ToolGuideButton() {
   const barePath = '/' + segments.join('/')
   const slug = toolGuideFor(barePath)
   if (!slug) return null
+  // NEXUS: sul telefono in basso c'è la tastiera del gioco (la guida è in alto nella pagina)
+  const keyboard = barePath.startsWith('/marketplace/nexus')
 
   return (
     <Link
@@ -27,7 +29,7 @@ export default function ToolGuideButton() {
       href={`/guida/${slug}?from=${encodeURIComponent(barePath)}`}
       aria-label={t('howToUse')}
       title={t('howToUse')}
-      className="tool-guide-fab fixed bottom-4 right-4 z-40 flex h-12 w-12 items-center justify-center gap-2 rounded-full border border-[var(--gold)]/60 bg-[var(--gold-pale)] text-sm font-semibold text-[var(--ink)] shadow-[0_12px_35px_rgba(23,23,23,0.25)] transition-all hover:-translate-y-0.5 hover:border-[var(--gold)] print:hidden sm:h-auto sm:w-auto sm:px-4 sm:py-3"
+      className={`tool-guide-fab fixed bottom-4 right-4 z-40 ${keyboard ? 'hidden sm:flex' : 'flex'} h-12 w-12 items-center justify-center gap-2 rounded-full border border-[var(--gold)]/60 bg-[var(--gold-pale)] text-sm font-semibold text-[var(--ink)] shadow-[0_12px_35px_rgba(23,23,23,0.25)] transition-all hover:-translate-y-0.5 hover:border-[var(--gold)] print:hidden sm:h-auto sm:w-auto sm:px-4 sm:py-3`}
     >
       <BookOpen className="h-5 w-5 text-[var(--gold)] sm:h-4 sm:w-4" />
       <span className="hidden sm:inline">{t('howToUse')}</span>

@@ -52,6 +52,7 @@ export type GuideSlug =
   | 'mosaic'
   | 'oxygen'
   | 'fabula'
+  | 'nexus'
   | 'neurobalance'
   | 'aureya'
   | 'travel'

@@ -6938,6 +6938,16 @@
         "p2d": "Fotos, vídeos, adivinanzas, lugares y canciones.",
         "p3": "También con tus puntos",
         "p3d": "Con tarjeta, KU Karma o KU Points."
+      },
+      "nexus": {
+        "sub": "El crucigrama del día",
+        "tagline": "Una cuadrícula nueva cada día y desafíos con amigos, aunque no estén registrados.",
+        "p1": "Una cuadrícula al día",
+        "p1d": "Igual para todos, en italiano o en inglés.",
+        "p2": "Desafía a tus amigos",
+        "p2d": "De 2 a 4 jugadores, por turnos, desde un enlace.",
+        "p3": "Cruces y puntos",
+        "p3d": "Cada palabra tomada lleva tu color."
       }
     },
     "includedSurprise": "Para todos, también con la cuenta gratuita",
@@ -7646,6 +7656,23 @@
       "step4Tip": "Debajo del botón de pago ves cuántos puntos hacen falta y cuántos tienes: si no bastan, el botón queda en gris.",
       "step5Title": "El agradecimiento y la limpieza",
       "step5Text": "Cuando quien la recibe abre el regalo lo sabes enseguida, y puede responderte con una reacción, un mensaje o una foto: lo encuentras con el sobre rosa en «Mis sorpresas» y en un recuadro nada más entrar en el panel. Los borradores que ya no necesitas se eliminan con la papelera; las sorpresas ya pagadas se quedan."
+    },
+    "nexus": {
+      "title": "KUMANI Nexus",
+      "summary": "El crucigrama del día y el Desafío con amigos: una cuadrícula nueva cada día y partidas de 2 a 4 jugadores.",
+      "cta": "Abrir Nexus",
+      "step1Title": "Empieza el crucigrama del día",
+      "step1Text": "Cada día hay una cuadrícula nueva, igual para todos, en italiano o en inglés (se elige arriba). Ves cuántas palabras hay: el tiempo solo empieza cuando tocas «Empezar».",
+      "step2Title": "Elige una palabra y escríbela",
+      "step2Text": "Toca una casilla para elegir la palabra; tócala otra vez para pasar de horizontal a vertical, o usa las flechas junto a la definición. Escribe con el teclado de abajo: puedes escribir la palabra entera, las letras ya correctas se saltan solas.",
+      "step3Title": "Palabras correctas y ayudas",
+      "step3Text": "Cuando una palabra está completa la comprobamos: si es correcta se vuelve verde y queda fija; si no, la barra de la definición se pone roja. ¿Atascado? La bombilla revela la letra de la casilla elegida.",
+      "step3Tip": "Las ayudas usadas aparecen en el resultado, pero la cuadrícula cuenta igualmente para tu racha.",
+      "step4Title": "Cuadrícula completada",
+      "step4Text": "Al terminar ves tu tiempo, los días seguidos y las ayudas usadas, y recibes KU Karma. «Compartir el resultado» crea una imagen con la forma de la cuadrícula, sin revelar las palabras.",
+      "step5Title": "Desafía a tus amigos",
+      "step5Text": "Con «Desafía a tus amigos» creas una partida y envías el código por WhatsApp: tus amigos entran desde el enlace, incluso sin registrarse. Cuando seáis de 2 a 4, toca «Empezar la partida». Por turnos se elige una palabra y se toca «Probar»: cada palabra correcta toma tu color y vale 1 punto por letra, +3 por cada cruce y el doble en la casilla ×2.",
+      "step5Tip": "Quien deja pasar dos turnos seguidos sale de la partida. Mientras nadie haya entrado, puedes cancelar el desafío."
     }
   },
   "deckTexts": {
@@ -7789,7 +7816,7 @@
         },
         "6": {
           "1": "Comunidad y ocio",
-          "2": "Anuncios, Kordata, Time Bank, Events, Affinity, Veritas, Mosaic, Fabula"
+          "2": "Anuncios, Kordata, Time Bank, Events, Affinity, Veritas, Mosaic, Fabula, Nexus"
         }
       },
       "notes": "Los servicios se dividen en seis áreas: darse a conocer, protegerse de las estafas, organización personal, bienestar, trabajo, comunidad y ocio. Se entra con una sola cuenta."
@@ -7946,7 +7973,7 @@
         },
         "6": {
           "1": "Juegos",
-          "2": "Veritas, Mosaic y Fabula para jugar juntos"
+          "2": "Veritas, Mosaic, Fabula y Nexus para jugar juntos"
         }
       },
       "notes": "KUMANI no son solo herramientas: es una comunidad. Anuncios, compras en grupo con la Kordata, el Time Bank para intercambiar ayuda, eventos en persona y juegos con amigos."
@@ -9276,6 +9303,32 @@
         {
           "q": "¿Hay que introducir las facturas dos veces?",
           "a": "No: el suministro se enlaza a la factura que ya tienes en Spendly (o la creas desde ahí) y la marcas pagada una sola vez."
+        }
+      ]
+    },
+    "nexus": {
+      "title": "Crucigrama online del día y desafíos con amigos – KUMANI Nexus",
+      "description": "Un crucigrama nuevo cada día, igual para todos, en italiano o en inglés. Desafía de 2 a 4 amigos por turnos: incluso quien no está registrado puede jugar desde el enlace.",
+      "heading": "El crucigrama del día, solo o con amigos",
+      "intro": "Cada día una cuadrícula nueva, igual para toda la comunidad: se juega desde el móvil con un teclado pensado para el crucigrama, el tiempo empieza cuando tú quieras y las palabras correctas quedan fijas. Con el Desafío se juega entre 2, 3 o 4 en la misma cuadrícula, por turnos: cada palabra encontrada toma tu color y los cruces valen puntos extra.",
+      "points": [
+        "Una cuadrícula nueva cada día, en italiano o en inglés",
+        "Palabras comprobadas al momento y ayuda que revela una letra",
+        "Días seguidos, tiempo e imagen del resultado para compartir",
+        "Desafío de 2 a 4 jugadores: se entra desde el enlace, incluso sin registrarse"
+      ],
+      "faq": [
+        {
+          "q": "¿El crucigrama cambia cada día?",
+          "a": "Sí: a medianoche llega una cuadrícula nueva, igual para todos."
+        },
+        {
+          "q": "¿Cómo funciona el Desafío con amigos?",
+          "a": "Creas la partida, envías el código por WhatsApp y la empiezas cuando seáis de 2 a 4. Por turnos se prueba una palabra: si es correcta toma tu color y vale 1 punto por letra más 3 por cada cruce."
+        },
+        {
+          "q": "¿Quien invito tiene que estar registrado?",
+          "a": "No: quien recibe el enlace puede entrar con un nombre y jugar enseguida. Al final puede registrarse gratis."
         }
       ]
     }
