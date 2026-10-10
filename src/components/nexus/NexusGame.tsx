@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { ChevronLeft, ChevronRight, Clock, Flame, Lightbulb, LoaderCircle, PartyPopper, Share2 } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Clock, Flame, Lightbulb, LoaderCircle, PartyPopper, Play, Share2 } from 'lucide-react'
 import { checkNexusWord, finishNexus, revealNexusLetter } from '@/app/actions/nexus'
 import { renderNexusShareCard } from '@/lib/nexusShareCard'
 import NexusKeyboard from './NexusKeyboard'
@@ -15,7 +15,7 @@ import type { NexusDir, NexusResult, NexusSlot, NexusStatus } from '@/lib/nexus/
 // resta fissata. A griglia finita il risultato si salva e si condivide.
 // I progressi restano su questo dispositivo fino a mezzanotte.
 
-type Saved = { letters: string[][]; locked: string[]; hints: number; seconds: number }
+type Saved = { letters: string[][]; locked: string[]; hints: number; seconds: number; started?: boolean }
 type Cell = { r: number; c: number }
 
 const key = (r: number, c: number) => `${r},${c}`
@@ -50,6 +50,8 @@ export default function NexusGame({ status }: { status: NexusStatus }) {
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const [restored, setRestored] = useState(false)
+  // Il tempo parte solo dopo «Inizia»
+  const [started, setStarted] = useState(false)
   const checking = useRef(new Set<string>())
   const finishing = useRef(false)
 
@@ -79,6 +81,7 @@ export default function NexusGame({ status }: { status: NexusStatus }) {
         setLocked(new Set(saved.locked ?? []))
         setHints(saved.hints ?? 0)
         setSeconds(saved.seconds ?? 0)
+        setStarted(saved.started ?? (saved.seconds ?? 0) > 0)
         /* eslint-enable react-hooks/set-state-in-effect */
       }
     } catch {
@@ -90,20 +93,20 @@ export default function NexusGame({ status }: { status: NexusStatus }) {
   useEffect(() => {
     if (!restored) return
     try {
-      localStorage.setItem(storageKey, JSON.stringify({ letters, locked: [...locked], hints, seconds } satisfies Saved))
+      localStorage.setItem(storageKey, JSON.stringify({ letters, locked: [...locked], hints, seconds, started } satisfies Saved))
     } catch {
       // vale solo per questa visita
     }
-  }, [restored, storageKey, letters, locked, hints, seconds])
+  }, [restored, storageKey, letters, locked, hints, seconds, started])
 
   // Cronometro: corre solo con la pagina in vista
   useEffect(() => {
-    if (done || !restored) return
+    if (done || !restored || !started) return
     const timer = setInterval(() => {
       if (document.visibilityState === 'visible') setSeconds((s) => s + 1)
     }, 1000)
     return () => clearInterval(timer)
-  }, [done, restored])
+  }, [done, restored, started])
 
   const finish = useCallback(
     async (grid: string[][], usedHints: number, time: number) => {
@@ -240,7 +243,7 @@ export default function NexusGame({ status }: { status: NexusStatus }) {
 
   // Tastiera del computer
   useEffect(() => {
-    if (done) return
+    if (done || !started) return
     const onKey = (e: KeyboardEvent) => {
       if (e.ctrlKey || e.metaKey || e.altKey) return
       const target = e.target as HTMLElement | null
@@ -343,6 +346,31 @@ export default function NexusGame({ status }: { status: NexusStatus }) {
         </button>
         <NexusDuelButton gridLocale={puzzle.locale} />
         <p className="text-sm text-gray-500">{t('nextGrid')}</p>
+      </section>
+    )
+  }
+
+  // Prima di iniziare: la griglia resta coperta e il tempo fermo
+  if (!started) {
+    const across = puzzle.slots.filter((s) => s.dir === 'a').length
+    return (
+      <section className="mx-auto flex max-w-md flex-col items-center gap-4 px-4 py-8 text-center">
+        <div className="grid w-44 gap-[3px] rounded-2xl bg-[var(--ink)] p-1.5" style={{ gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))` }} aria-hidden>
+          {puzzle.open.flatMap((row, r) => row.map((isOpen, c) => <span key={key(r, c)} className={`aspect-square rounded-[3px] ${isOpen ? 'bg-white' : 'bg-[var(--ink)]'}`} />))}
+        </div>
+        <p className="text-sm font-bold text-[var(--ink)] first-letter:uppercase">{dateLabel}</p>
+        <p className="text-base text-gray-600">{t('startText', { words: puzzle.slots.length, across, down: puzzle.slots.length - across })}</p>
+        <button
+          type="button"
+          onClick={() => setStarted(true)}
+          disabled={!restored}
+          className="flex min-h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-2xl bg-[var(--ink)] px-4 text-base font-extrabold text-[var(--gold-bright)] disabled:opacity-60"
+        >
+          <Play className="h-5 w-5" /> {t('start')}
+        </button>
+        <p className="flex items-center gap-1.5 text-sm text-gray-500">
+          <Flame className="h-4 w-4 text-[var(--gold)]" /> {t('streak', { n: streak })}
+        </p>
       </section>
     )
   }

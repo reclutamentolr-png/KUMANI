@@ -11,12 +11,22 @@ import { NEXUS_MAX_PLAYERS, slotCells, type NexusDir, type NexusDuelState, type 
 import { askConfirm } from '@/lib/confirm'
 import NexusKeyboard from './NexusKeyboard'
 
-// KUMANI NEXUS — la Sfida da 2 a 4 giocatori. Lo stato arriva dal server (le
-// risposte non escono mai di lì); a ogni mossa il server manda un segnale sul
-// canale della sfida e tutti i browser rileggono lo stato.
+// KUMANI NEXUS — la Sfida da 2 a 4 giocatori, aperta anche a chi non è
+// iscritto (ospite: un nome e un codice segreto che resta in questo browser).
+// Lo stato arriva dal server (le risposte non escono mai di lì); a ogni mossa
+// il server manda un segnale sul canale della sfida e tutti rileggono lo stato.
 
 type Cell = { r: number; c: number }
 const key = (r: number, c: number) => `${r},${c}`
+const seatKey = (code: string) => `nexus:${code}`
+
+function readToken(code: string): string | null {
+  try {
+    return localStorage.getItem(seatKey(code))
+  } catch {
+    return null
+  }
+}
 
 // Un colore per posto: si distinguono anche per chiarezza, non solo per tinta
 const SEAT = [
@@ -39,19 +49,33 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
   const [notice, setNotice] = useState<{ text: string; tone: 'ok' | 'error' } | null>(null)
   const [copied, setCopied] = useState(false)
   const [link, setLink] = useState('')
+  const [token, setToken] = useState<string | null>(null)
+  const [nickname, setNickname] = useState('')
+  const prefix = locale === 'it' ? '' : `/${locale}`
 
-  const refresh = useCallback(async () => {
-    const next = await getNexusDuel(state.code).catch(() => null)
-    if (!next || 'error' in next) return
-    setOffset(new Date(next.serverNow).getTime() - Date.now())
-    setState(next)
-  }, [state.code])
+  const refresh = useCallback(
+    async (seat: string | null = token) => {
+      const next = await getNexusDuel(state.code, seat).catch(() => null)
+      if (!next || 'error' in next) return
+      setOffset(new Date(next.serverNow).getTime() - Date.now())
+      setState(next)
+    },
+    [state.code, token]
+  )
 
+  // Ospite già entrato: il suo codice segreto è in questo browser.
   // Indirizzo da mandare agli amici (dal browser: niente differenze col server)
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setLink(`${window.location.origin}${locale === 'it' ? '' : `/${locale}`}/marketplace/nexus/duello/${state.code}`)
-  }, [locale, state.code])
+    const saved = readToken(state.code)
+    /* eslint-disable react-hooks/set-state-in-effect */
+    setLink(`${window.location.origin}${prefix}/nexus/${state.code}`)
+    if (saved) {
+      setToken(saved)
+      refresh(saved)
+    }
+    /* eslint-enable react-hooks/set-state-in-effect */
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.code, prefix])
 
   // Tempo reale: segnale della sfida, più una lettura di riserva
   useEffect(() => {
@@ -150,7 +174,7 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
     if (!active || !ready || !myTurn || busy) return
     setBusy(true)
     setNotice(null)
-    const res = await playNexusDuel(state.code, active.id, guess).catch(() => ({ error: 'error' }))
+    const res = await playNexusDuel(state.code, token, active.id, guess).catch(() => ({ error: 'error' }))
     setBusy(false)
     if ('error' in res) {
       setNotice({ text: res.error === 'notYourTurn' ? t('duel_notYourTurn') : res.error === 'taken' ? t('duel_taken') : t('error_check'), tone: 'error' })
@@ -196,20 +220,42 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
     if ('error' in res) setNotice({ text: errorText(res.error), tone: 'error' })
     await refresh()
   }
-  const join = () => run(() => joinNexusDuel(state.code), (e) => (e === 'full' ? t('duel_full') : t('error_load')))
+  const join = async () => {
+    if (!state.loggedIn && !nickname.trim()) {
+      setNotice({ text: t('duel_nameNeeded'), tone: 'error' })
+      return
+    }
+    setBusy(true)
+    const res = await joinNexusDuel(state.code, nickname, token).catch(() => ({ error: 'error' }))
+    setBusy(false)
+    if ('error' in res) {
+      setNotice({ text: res.error === 'full' ? t('duel_full') : res.error === 'name' ? t('duel_nameNeeded') : t('error_load'), tone: 'error' })
+      return
+    }
+    setNotice(null)
+    if (res.token) {
+      try {
+        localStorage.setItem(seatKey(state.code), res.token)
+      } catch {
+        // senza memoria del browser si gioca finché la pagina resta aperta
+      }
+      setToken(res.token)
+    }
+    await refresh(res.token ?? token)
+  }
   const start = () => run(() => startNexusDuel(state.code), () => t('duel_needTwo'))
   const leave = async () => {
     const message = state.status === 'live' ? t('duel_leaveConfirm') : state.isHost ? t('duel_cancelConfirm') : t('duel_exitConfirm')
     if (!(await askConfirm(message, { tone: 'danger' }))) return
     const exitLobby = state.status === 'waiting' && !state.isHost
-    await run(() => leaveNexusDuel(state.code), () => t('error_save'))
-    if (exitLobby) router.push(`${locale === 'it' ? '' : `/${locale}`}/marketplace/nexus`)
+    await run(() => leaveNexusDuel(state.code, token), () => t('error_save'))
+    if (exitLobby) router.push(state.loggedIn ? `${prefix}/marketplace/nexus` : `${prefix}/`)
   }
   const rematch = async () => {
     setBusy(true)
     const res = await createNexusDuel(state.locale).catch(() => ({ error: 'error' }))
     if ('code' in res) {
-      router.push(`${locale === 'it' ? '' : `/${locale}`}/marketplace/nexus/duello/${res.code}`)
+      router.push(`${prefix}/nexus/${res.code}`)
       return
     }
     setBusy(false)
@@ -247,6 +293,20 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
         </span>
         <h2 className="text-2xl font-extrabold text-[var(--ink)]">{t('duel_invitedTitle', { name: host?.name ?? '' })}</h2>
         <p className="text-base text-gray-600">{t('duel_invitedText', { n: state.players.length })}</p>
+        {state.canJoin && !state.loggedIn && (
+          <label className="w-full text-left">
+            <span className="mb-1 block text-sm font-semibold text-[var(--ink)]">{t('duel_nameLabel')}</span>
+            <input
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+              maxLength={24}
+              autoComplete="nickname"
+              placeholder={t('duel_namePlaceholder')}
+              className="min-h-12 w-full rounded-xl border border-gray-300 bg-white px-3 text-base text-[var(--ink)] outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30"
+            />
+            <span className="mt-1 block text-xs text-gray-500">{t('duel_guestHint')}</span>
+          </label>
+        )}
         {state.canJoin ? (
           <button
             type="button"
@@ -383,6 +443,18 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
             ))}
           </ol>
           <p className="text-sm text-white/75">{state.stalledOut ? t('duel_endStall') : t('duel_endSolution')}</p>
+          {!state.loggedIn ? (
+            <div className="flex w-full flex-col gap-2 rounded-2xl bg-white/10 p-4">
+              <p className="font-extrabold text-[var(--gold-bright)]">{t('duel_guestCtaTitle')}</p>
+              <p className="text-sm text-white/80">{t('duel_guestCtaText')}</p>
+              <Link
+                href={state.hostReferral ? `/register?sponsor=${encodeURIComponent(state.hostReferral)}` : '/register'}
+                className="flex min-h-12 items-center justify-center rounded-xl bg-[var(--gold-bright)] px-4 font-extrabold text-[var(--ink)]"
+              >
+                {t('duel_guestCta')}
+              </Link>
+            </div>
+          ) : (
           <div className="flex w-full flex-col gap-2 sm:flex-row">
             <button type="button" onClick={rematch} disabled={busy} className="flex min-h-12 flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl bg-[var(--gold-bright)] px-4 font-extrabold text-[var(--ink)] disabled:opacity-60">
               {busy ? <LoaderCircle className="h-5 w-5 animate-spin" /> : <Swords className="h-5 w-5" />} {t('duel_rematch')}
@@ -391,6 +463,7 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
               {t('duel_backToDaily')}
             </Link>
           </div>
+          )}
         </div>
       ) : (
         <div className="mt-2 flex items-center justify-between gap-2 text-sm">

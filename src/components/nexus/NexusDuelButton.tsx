@@ -19,7 +19,7 @@ export default function NexusDuelButton({ gridLocale, className }: { gridLocale:
     setFailed(false)
     const res = await createNexusDuel(gridLocale).catch(() => ({ error: 'error' }))
     if ('code' in res) {
-      router.push(`${locale === 'it' ? '' : `/${locale}`}/marketplace/nexus/duello/${res.code}`)
+      router.push(`${locale === 'it' ? '' : `/${locale}`}/nexus/${res.code}`)
       return
     }
     setBusy(false)

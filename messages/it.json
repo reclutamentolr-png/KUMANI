@@ -11469,6 +11469,16 @@
     "duel_exit": "Esci dalla sfida",
     "duel_exitConfirm": "Uscire da questa sfida?",
     "duel_leftShort": "uscito",
-    "duel_over": "Partita finita"
+    "duel_over": "Partita finita",
+    "start": "Inizia",
+    "startText": "{words} parole da trovare ({across} orizzontali e {down} verticali). Il tempo parte quando tocchi «Inizia».",
+    "duel_nameLabel": "Il tuo nome",
+    "duel_namePlaceholder": "Come ti vedranno gli altri",
+    "duel_nameNeeded": "Scrivi il tuo nome per entrare nella sfida.",
+    "duel_guestHint": "Non serve iscriversi: si gioca subito.",
+    "duel_guestCtaTitle": "Ti è piaciuto?",
+    "duel_guestCtaText": "Iscriviti gratis a KUMANI: un cruciverba nuovo ogni giorno, sfide con gli amici e tanti servizi utili.",
+    "duel_guestCta": "Iscriviti gratis",
+    "duel_toHome": "Vai a KUMANI"
   }
 }

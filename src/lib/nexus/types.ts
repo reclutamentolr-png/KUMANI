@@ -58,6 +58,10 @@ export type NexusDuelState = {
   // il mio posto (null = non partecipo: posso unirmi se la sfida aspetta)
   mySeat: number | null
   isHost: boolean
+  // collegato con un account KUMANI (gli ospiti no)
+  loggedIn: boolean
+  // codice invito di chi ha creato la sfida (solo per gli ospiti: iscrizione a fine partita)
+  hostReferral: string | null
   canJoin: boolean
   players: NexusDuelPlayer[]
   turnSeat: number | null

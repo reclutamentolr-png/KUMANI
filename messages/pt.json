@@ -11469,6 +11469,16 @@
     "duel_exit": "Sair do desafio",
     "duel_exitConfirm": "Sair deste desafio?",
     "duel_leftShort": "saiu",
-    "duel_over": "Jogo terminado"
+    "duel_over": "Jogo terminado",
+    "start": "Começar",
+    "startText": "{words} palavras para encontrar ({across} horizontais e {down} verticais). O tempo começa quando tocas em «Começar».",
+    "duel_nameLabel": "O teu nome",
+    "duel_namePlaceholder": "Como os outros te vão ver",
+    "duel_nameNeeded": "Escreve o teu nome para entrar no desafio.",
+    "duel_guestHint": "Não é preciso registar-se: joga-se logo.",
+    "duel_guestCtaTitle": "Gostaste?",
+    "duel_guestCtaText": "Regista-te grátis na KUMANI: palavras cruzadas novas todos os dias, desafios com amigos e muitos serviços úteis.",
+    "duel_guestCta": "Regista-te grátis",
+    "duel_toHome": "Ir para a KUMANI"
   }
 }

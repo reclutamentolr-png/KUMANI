@@ -11469,6 +11469,16 @@
     "duel_exit": "Leave the challenge",
     "duel_exitConfirm": "Leave this challenge?",
     "duel_leftShort": "left",
-    "duel_over": "Game over"
+    "duel_over": "Game over",
+    "start": "Start",
+    "startText": "{words} words to find ({across} across and {down} down). The timer starts when you tap “Start”.",
+    "duel_nameLabel": "Your name",
+    "duel_namePlaceholder": "How the others will see you",
+    "duel_nameNeeded": "Type your name to join the challenge.",
+    "duel_guestHint": "No sign-up needed: you can play right away.",
+    "duel_guestCtaTitle": "Did you enjoy it?",
+    "duel_guestCtaText": "Join KUMANI for free: a new crossword every day, challenges with friends and many useful services.",
+    "duel_guestCta": "Join for free",
+    "duel_toHome": "Go to KUMANI"
   }
 }

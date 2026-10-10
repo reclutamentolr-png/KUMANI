@@ -11469,6 +11469,16 @@
     "duel_exit": "Quitter le défi",
     "duel_exitConfirm": "Quitter ce défi ?",
     "duel_leftShort": "parti",
-    "duel_over": "Partie terminée"
+    "duel_over": "Partie terminée",
+    "start": "Commencer",
+    "startText": "{words} mots à trouver ({across} horizontaux et {down} verticaux). Le temps démarre quand vous touchez « Commencer ».",
+    "duel_nameLabel": "Votre prénom",
+    "duel_namePlaceholder": "Comme les autres vous verront",
+    "duel_nameNeeded": "Écrivez votre prénom pour entrer dans le défi.",
+    "duel_guestHint": "Pas besoin de s’inscrire : on joue tout de suite.",
+    "duel_guestCtaTitle": "Ça vous a plu ?",
+    "duel_guestCtaText": "Inscrivez-vous gratuitement à KUMANI : de nouveaux mots croisés chaque jour, des défis entre amis et de nombreux services utiles.",
+    "duel_guestCta": "S’inscrire gratuitement",
+    "duel_toHome": "Aller sur KUMANI"
   }
 }
