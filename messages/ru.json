@@ -10298,7 +10298,12 @@
     "nudgeQrToPro": "С QR Code Pro можно менять адрес даже после печати QR и видеть, сколько раз его отсканировали.",
     "nudgeBioToLanding": "Готовы к настоящей странице для бизнеса? Лендинг заполнится сам по вашей карточке бизнеса.",
     "nudgeProfileToPro": "С тарифом Pro карточка бизнеса сама заполняет Сметы, Лендинг, Меню, Kumi Card Fidelity и Подпись email.",
-    "receiptSpendlySignupCta": "Бесплатная регистрация"
+    "receiptSpendlySignupCta": "Бесплатная регистрация",
+    "wellnessBreathHint": "Завершите дыхательную сессию.",
+    "wellnessFocusHint": "Завершите сессию концентрации (пропуск не считается).",
+    "wellnessMindHint": "Сохраните или отправьте рисунок Mandala либо слушайте NeuroBalance 10 минут.",
+    "wellnessStepDone": "Сделано сегодня ✓",
+    "wellnessOpen": "Открыть {tool}"
   },
   "businessProfile": {
     "title": "Карточка бизнеса",

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { Brain, Check, Flame, Gift, LoaderCircle, Palette, Wind } from 'lucide-react'
+import { AudioWaveform, Brain, Check, Flame, Gift, LoaderCircle, Palette, Wind } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { claimWellnessBonus, type WellnessToday } from '@/app/actions/ecosystem'
 
@@ -15,10 +15,21 @@ export default function WellnessTodayCard({ initial }: { initial: WellnessToday 
   const [busy, setBusy] = useState(false)
   const [awarded, setAwarded] = useState<number | null>(null)
 
+  // Ogni passo dice cosa lo completa; il terzo si fa con Mandala o NeuroBalance
   const steps = [
-    { done: state.breath, label: t('wellnessBreath'), href: '/marketplace/oxygen', Icon: Wind },
-    { done: state.focus, label: t('wellnessFocus'), href: '/marketplace/focus', Icon: Brain },
-    { done: state.mind, label: t('wellnessMind'), href: '/marketplace/mandala', Icon: Palette },
+    { key: 'breath', done: state.breath, label: t('wellnessBreath'), hint: t('wellnessBreathHint'), Icon: Wind, links: [{ href: '/marketplace/oxygen', label: 'Oxygen', Icon: Wind }] },
+    { key: 'focus', done: state.focus, label: t('wellnessFocus'), hint: t('wellnessFocusHint'), Icon: Brain, links: [{ href: '/marketplace/focus', label: 'Focus', Icon: Brain }] },
+    {
+      key: 'mind',
+      done: state.mind,
+      label: t('wellnessMind'),
+      hint: t('wellnessMindHint'),
+      Icon: Palette,
+      links: [
+        { href: '/marketplace/mandala', label: 'Mandala', Icon: Palette },
+        { href: '/marketplace/neurobalance', label: 'NeuroBalance', Icon: AudioWaveform },
+      ],
+    },
   ]
   const doneCount = steps.filter((s) => s.done).length
   const complete = doneCount === steps.length
@@ -46,22 +57,35 @@ export default function WellnessTodayCard({ initial }: { initial: WellnessToday 
       <p className="mb-4 text-sm text-[var(--muted)]">
         {state.claimed ? t('wellnessDoneToday') : t('wellnessIntro', { bonus: state.bonus })}
       </p>
-      <div className="grid gap-2 sm:grid-cols-3">
-        {steps.map(({ done, label, href, Icon }) => (
-          <Link
-            key={href}
-            href={href}
-            className={`flex items-center gap-3 rounded-xl border px-3 py-2.5 text-sm font-semibold transition ${
-              done ? 'border-emerald-300 bg-emerald-50 text-emerald-800' : 'border-teal-200 bg-white text-[var(--ink)] hover:border-teal-400'
-            }`}
+      <ul className="grid gap-2 sm:grid-cols-3">
+        {steps.map(({ key, done, label, hint, Icon, links }) => (
+          <li
+            key={key}
+            className={`flex flex-col gap-2 rounded-xl border px-3 py-2.5 text-sm ${done ? 'border-emerald-300 bg-emerald-50 text-emerald-800' : 'border-teal-200 bg-white text-[var(--ink)]'}`}
           >
-            <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${done ? 'bg-emerald-500 text-white' : 'bg-teal-100 text-teal-700'}`}>
-              {done ? <Check className="h-4 w-4" /> : <Icon className="h-4 w-4" />}
+            <span className="flex items-center gap-3 font-semibold">
+              <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${done ? 'bg-emerald-500 text-white' : 'bg-teal-100 text-teal-700'}`}>
+                {done ? <Check className="h-4 w-4" /> : <Icon className="h-4 w-4" />}
+              </span>
+              <span className="min-w-0">{label}</span>
             </span>
-            <span className="min-w-0">{label}</span>
-          </Link>
+            <span className={`text-xs ${done ? 'text-emerald-700' : 'text-[var(--muted)]'}`}>{done ? t('wellnessStepDone') : hint}</span>
+            {!done && (
+              <span className="mt-auto flex flex-wrap gap-1.5">
+                {links.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="inline-flex min-h-9 items-center gap-1.5 rounded-lg border border-teal-200 px-2.5 text-xs font-bold text-teal-800 transition hover:border-teal-400 hover:bg-teal-50"
+                  >
+                    <link.Icon className="h-3.5 w-3.5" /> {t('wellnessOpen', { tool: link.label })}
+                  </Link>
+                ))}
+              </span>
+            )}
+          </li>
         ))}
-      </div>
+      </ul>
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
         <span className="text-xs font-semibold text-[var(--muted)]">{t('wellnessProgress', { done: doneCount, total: steps.length })}</span>
         {state.claimed ? (

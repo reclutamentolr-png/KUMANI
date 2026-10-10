@@ -10298,7 +10298,12 @@
     "nudgeQrToPro": "Con QR Code Pro cambias el destino incluso después de imprimir el QR y ves cuántas veces se escanea.",
     "nudgeBioToLanding": "¿Listo para una página de verdad para tu negocio? La Landing page se rellena sola con tu ficha del negocio.",
     "nudgeProfileToPro": "Con el Pro tu ficha del negocio rellena sola Presupuestos, Landing page, Menú, Kumi Card Fidelity y Firma de email.",
-    "receiptSpendlySignupCta": "Regístrate gratis"
+    "receiptSpendlySignupCta": "Regístrate gratis",
+    "wellnessBreathHint": "Termina una sesión de respiración.",
+    "wellnessFocusHint": "Termina una sesión de concentración (saltarla no cuenta).",
+    "wellnessMindHint": "Guarda o comparte un dibujo de Mandala, o escucha NeuroBalance durante 10 minutos.",
+    "wellnessStepDone": "Hecho hoy ✓",
+    "wellnessOpen": "Abrir {tool}"
   },
   "businessProfile": {
     "title": "Ficha del negocio",
