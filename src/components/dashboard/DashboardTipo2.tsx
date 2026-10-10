@@ -119,10 +119,16 @@ export default async function DashboardTipo2({
         </div>
       )}
 
-      {/* Subito dopo lo stato: oggi e poi «In cosa possiamo darti una mano?» */}
-      {agenda}
-
-      {needs}
+      {/* Subito dopo lo stato: oggi e «In cosa possiamo darti una mano?»
+          (una sotto l'altra sul telefono, affiancate sul computer) */}
+      {agenda ? (
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,28rem)_minmax(0,1fr)] lg:items-start lg:gap-6">
+          {agenda}
+          {needs}
+        </div>
+      ) : (
+        needs
+      )}
 
       <HomeServices items={services} favorites={favoriteToolNames} />
 
