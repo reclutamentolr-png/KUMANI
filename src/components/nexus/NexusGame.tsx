@@ -149,7 +149,7 @@ export default function NexusGame({ status }: { status: NexusStatus }) {
           .then((ok) => {
             if (!ok) {
               setWrong(slot.id)
-              setTimeout(() => setWrong((w) => (w === slot.id ? null : w)), 1100)
+              setTimeout(() => setWrong((w) => (w === slot.id ? null : w)), 2200)
               return
             }
             setLocked((prev) => {
@@ -182,19 +182,26 @@ export default function NexusGame({ status }: { status: NexusStatus }) {
 
   const type = (letter: string) => {
     if (done) return
-    const target = locked.has(key(cursor.r, cursor.c)) ? moveInSlot(cursor, 1) : cursor
-    if (!target) return
+    const cells = cellsOf(activeSlot)
+    let index = cells.findIndex((x) => x.r === cursor.r && x.c === cursor.c)
+    if (index < 0) return
+    // Caselle già giuste: se si scrive la stessa lettera si va avanti (chi
+    // scrive la parola intera), altrimenti la lettera va nella prossima libera
+    while (index < cells.length && locked.has(key(cells[index].r, cells[index].c))) {
+      if (letters[cells[index].r][cells[index].c] === letter) {
+        setCursor(cells[Math.min(index + 1, cells.length - 1)])
+        return
+      }
+      index++
+    }
+    if (index >= cells.length) return
+    const target = cells[index]
     const grid = letters.map((row) => [...row])
     grid[target.r][target.c] = letter
     setLetters(grid)
     setError(null)
-    // Avanti alla prossima casella libera della parola
-    const cells = cellsOf(activeSlot)
-    const index = cells.findIndex((x) => x.r === target.r && x.c === target.c)
-    const nextEmpty = cells.slice(index + 1).find((x) => !locked.has(key(x.r, x.c)) && !grid[x.r][x.c])
-    const nextFree = nextEmpty ?? cells.slice(index + 1).find((x) => !locked.has(key(x.r, x.c)))
-    if (nextFree) setCursor(nextFree)
-    else setCursor(target)
+    // Avanti alla casella successiva della parola
+    setCursor(cells[Math.min(index + 1, cells.length - 1)])
     checkAround(target, grid, locked)
   }
 
@@ -375,8 +382,35 @@ export default function NexusGame({ status }: { status: NexusStatus }) {
     )
   }
 
+  // Definizione scelta (sul telefono resta sopra la tastiera)
+  const clueBar = (
+    <div className={`flex items-center gap-1.5 rounded-2xl p-1.5 text-white transition-colors ${wrong ? 'bg-rose-800' : 'bg-[var(--ink)]'}`}>
+            <button type="button" onClick={() => goSlot(-1)} aria-label={t('prevClue')} className="flex h-11 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl text-white/70 hover:bg-white/10">
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <span className="shrink-0 rounded-lg bg-[var(--gold-bright)] px-2 py-1 text-sm font-extrabold text-[var(--ink)]">{clueTag}</span>
+            <p className="min-w-0 flex-1 px-1 text-[15px] font-semibold leading-snug" aria-live="polite">
+              {activeSlot.clue} <span className="text-white/60">({activeSlot.len})</span>
+              {wrong && <span className="block text-sm font-bold text-rose-100">{t('wrong')}</span>}
+            </p>
+            <button
+              type="button"
+              onClick={hint}
+              disabled={busy}
+              aria-label={t('hint')}
+              title={t('hint')}
+              className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-[var(--gold-bright)]/50 text-[var(--gold-bright)] hover:bg-white/10 disabled:opacity-60"
+            >
+              {busy ? <LoaderCircle className="h-5 w-5 animate-spin" /> : <Lightbulb className="h-5 w-5" />}
+            </button>
+            <button type="button" onClick={() => goSlot(1)} aria-label={t('nextClue')} className="flex h-11 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl text-white/70 hover:bg-white/10">
+              <ChevronRight className="h-5 w-5" />
+            </button>
+          </div>
+  )
+
   return (
-    <section className="mx-auto max-w-4xl px-3 pb-56 pt-3 sm:px-6 sm:pb-10">
+    <section className="mx-auto max-w-4xl px-3 pb-72 pt-3 sm:px-6 sm:pb-10">
       <div className="mb-3 flex items-center justify-between text-sm font-bold text-[var(--ink)]">
         <span className="flex items-center gap-1.5">
           <Flame className="h-4 w-4 text-[var(--gold)]" /> {t('streak', { n: streak })}
@@ -418,30 +452,8 @@ export default function NexusGame({ status }: { status: NexusStatus }) {
           </div>
 
           {/* La definizione della parola scelta */}
-          <div className="mt-3 flex items-center gap-1.5 rounded-2xl bg-[var(--ink)] p-1.5 text-white">
-            <button type="button" onClick={() => goSlot(-1)} aria-label={t('prevClue')} className="flex h-11 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl text-white/70 hover:bg-white/10">
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-            <span className="shrink-0 rounded-lg bg-[var(--gold-bright)] px-2 py-1 text-sm font-extrabold text-[var(--ink)]">{clueTag}</span>
-            <p className="min-w-0 flex-1 px-1 text-[15px] font-semibold leading-snug" aria-live="polite">
-              {activeSlot.clue} <span className="text-white/60">({activeSlot.len})</span>
-            </p>
-            <button
-              type="button"
-              onClick={hint}
-              disabled={busy}
-              aria-label={t('hint')}
-              title={t('hint')}
-              className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-[var(--gold-bright)]/50 text-[var(--gold-bright)] hover:bg-white/10 disabled:opacity-60"
-            >
-              {busy ? <LoaderCircle className="h-5 w-5 animate-spin" /> : <Lightbulb className="h-5 w-5" />}
-            </button>
-            <button type="button" onClick={() => goSlot(1)} aria-label={t('nextClue')} className="flex h-11 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl text-white/70 hover:bg-white/10">
-              <ChevronRight className="h-5 w-5" />
-            </button>
-          </div>
-          {wrong && <p className="mt-2 text-center text-sm font-semibold text-rose-700">{t('wrong')}</p>}
-          {error && <p className="mt-2 text-center text-sm font-semibold text-rose-700">{error}</p>}
+          <div className="mt-3 hidden sm:block">{clueBar}</div>
+          {error && <p className="mt-2 hidden text-center text-sm font-semibold text-rose-700 sm:block">{error}</p>}
           <p className="mt-2 hidden text-center text-xs text-gray-500 sm:block">{t('keyboardHint')}</p>
         </div>
 
@@ -480,7 +492,17 @@ export default function NexusGame({ status }: { status: NexusStatus }) {
       </div>
 
       {/* Tastiera sul telefono */}
-      <NexusKeyboard onLetter={type} onDelete={erase} deleteLabel={t('delete')} />
+      <NexusKeyboard
+        onLetter={type}
+        onDelete={erase}
+        deleteLabel={t('delete')}
+        top={
+          <>
+            {clueBar}
+            {error && <p className="mt-1 text-center text-xs font-bold text-rose-700">{error}</p>}
+          </>
+        }
+      />
     </section>
   )
 }

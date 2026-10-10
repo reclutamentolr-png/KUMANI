@@ -44,6 +44,12 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
   const [offset, setOffset] = useState(0)
   const [clock, setClock] = useState(() => Date.now())
   const [slotId, setSlotId] = useState<string | null>(null)
+  // Posizione di scrittura dentro la parola scelta
+  const [pos, setPos] = useState(0)
+  const selectSlot = (id: string | null) => {
+    setSlotId(id)
+    setPos(0)
+  }
   const [draft, setDraft] = useState<Record<string, string>>({})
   const [busy, setBusy] = useState(false)
   const [notice, setNotice] = useState<{ text: string; tone: 'ok' | 'error' } | null>(null)
@@ -156,6 +162,8 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
       setSlotId(null)
       return
     }
+    // Nuovo turno: via il messaggio della mossa precedente
+    setNotice(null)
     try {
       navigator.vibrate?.(200)
     } catch {
@@ -185,23 +193,41 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
     if (options.length === 0) return
     // Toccando di nuovo la stessa casella si passa all'altra parola
     const current = options.findIndex((s) => s.id === slotId)
-    setSlotId(options[(current + 1) % options.length].id)
+    selectSlot(options[(current + 1) % options.length].id)
   }
 
   const type = (letter: string) => {
     if (!canPlay || !active || busy) return
-    const next = activeCells.find((cell) => !fixed(cell) && !draft[key(cell.r, cell.c)])
-    if (next) setDraft((d) => ({ ...d, [key(next.r, next.c)]: letter }))
+    let index = pos
+    // Lettere già sulla griglia: se si scrive la stessa si va avanti (chi
+    // scrive la parola intera), altrimenti la lettera va nella prossima libera
+    while (index < activeCells.length && fixed(activeCells[index])) {
+      if (letterAt(activeCells[index]) === letter) {
+        setPos(index + 1)
+        return
+      }
+      index++
+    }
+    if (index >= activeCells.length) return
+    const cell = activeCells[index]
+    setDraft((d) => ({ ...d, [key(cell.r, cell.c)]: letter }))
+    setPos(index + 1)
   }
   const erase = () => {
     if (!canPlay || !active || busy) return
-    const last = [...activeCells].reverse().find((cell) => !fixed(cell) && draft[key(cell.r, cell.c)])
-    if (!last) return
+    let index = Math.min(pos, activeCells.length) - 1
+    while (index >= 0 && fixed(activeCells[index])) index--
+    if (index < 0) {
+      setPos(0)
+      return
+    }
+    const cell = activeCells[index]
     setDraft((d) => {
       const copy = { ...d }
-      delete copy[key(last.r, last.c)]
+      delete copy[key(cell.r, cell.c)]
       return copy
     })
+    setPos(index)
   }
 
   const submit = async () => {
@@ -223,6 +249,7 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
         for (const cell of activeCells) delete copy[key(cell.r, cell.c)]
         return copy
       })
+      setPos(0)
     }
     await refresh()
   }
@@ -280,7 +307,8 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
   const start = () => run(() => startNexusDuel(state.code), () => t('duel_needTwo'))
   const leave = async () => {
     const message = state.status === 'live' ? t('duel_leaveConfirm') : state.isHost ? t('duel_cancelConfirm') : t('duel_exitConfirm')
-    if (!(await askConfirm(message, { tone: 'danger' }))) return
+    const confirmLabel = state.status === 'live' ? t('duel_leave') : state.isHost ? t('duel_cancel') : t('duel_exit')
+    if (!(await askConfirm(message, { tone: 'danger', confirmLabel }))) return
     const exitLobby = state.status === 'waiting'
     await run(() => leaveNexusDuel(state.code, token), () => t('error_save'))
     // Dalla sala d'attesa (sfida annullata o uscita): si torna a NEXUS
@@ -457,26 +485,60 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
     )
   }
 
+  // Definizione scelta con i punti e «Prova» (sul telefono sopra la tastiera)
+  const cluePanel = (
+    <div className="rounded-2xl bg-[var(--ink)] p-3 text-white">
+              {active ? (
+                <>
+                  <div className="flex items-start gap-2">
+                    <span className="shrink-0 rounded-lg bg-[var(--gold-bright)] px-2 py-1 text-sm font-extrabold text-[var(--ink)]">
+                      {active.num} {active.dir === 'a' ? '→' : '↓'}
+                    </span>
+                    <p className="min-w-0 flex-1 text-[15px] font-semibold leading-snug">
+                      {active.clue} <span className="text-white/60">({active.len})</span>
+                    </p>
+                  </div>
+                  <div className="mt-2.5 flex items-center justify-between gap-2">
+                    <span className="text-xs font-bold text-[var(--gold-bright)]">
+                      {t('duel_preview', { points: preview, crossings })}
+                      {doubled ? ' · ×2' : ''}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={submit}
+                      disabled={!ready || !myTurn || busy}
+                      className="flex min-h-11 cursor-pointer items-center gap-1.5 rounded-xl bg-[var(--gold-bright)] px-4 text-sm font-extrabold text-[var(--ink)] disabled:cursor-default disabled:opacity-50"
+                    >
+                      {busy ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />} {t('duel_submit')}
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <p className="text-center text-sm text-white/80">{myTurn ? t('duel_pickWord') : t('duel_waitTurn', { name: nameOf(state.turnSeat) })}</p>
+              )}
+            </div>
+  )
+
   // --- Partita (in corso o finita) ---
   const finished = state.status === 'finished'
   const ranking = [...state.players].sort((a, b) => Number(a.left) - Number(b.left) || b.score - a.score)
   const iWon = state.mySeat !== null && state.winners.includes(state.mySeat)
   return (
-    <section className="mx-auto max-w-4xl px-3 pb-56 pt-3 sm:px-6 sm:pb-10">
+    <section className={`mx-auto max-w-4xl px-3 pt-3 sm:px-6 sm:pb-10 ${finished ? 'pb-10' : 'pb-80'}`}>
       {/* Punteggi e turno */}
-      <div className={`grid gap-2 ${state.players.length > 2 ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-2'}`}>
+      <div className={`grid gap-1.5 sm:gap-2 ${['grid-cols-2', 'grid-cols-2', 'grid-cols-3', 'grid-cols-4'][state.players.length - 1] ?? 'grid-cols-4'}`}>
         {state.players.map((p) => {
           const turn = !finished && state.turnSeat === p.seat
           return (
             <div
               key={p.seat}
-              className={`flex items-center gap-2 rounded-2xl px-2.5 py-2 ${turn ? `${SEAT[p.seat].cell} ${SEAT[p.seat].ring}` : 'border border-gray-200 bg-white'} ${turn && p.me ? 'motion-safe:animate-pulse' : ''} ${p.left ? 'opacity-50' : ''}`}
+              className={`flex min-w-0 items-center gap-1.5 rounded-2xl px-2 py-1.5 sm:gap-2 sm:px-2.5 sm:py-2 ${turn ? `${SEAT[p.seat].cell} ${SEAT[p.seat].ring}` : 'border border-gray-200 bg-white'} ${turn && p.me ? 'motion-safe:animate-pulse' : ''} ${p.left ? 'opacity-50' : ''}`}
             >
-              <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-extrabold ${SEAT[p.seat].badge}`}>{p.name.slice(0, 1).toUpperCase()}</span>
+              <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-extrabold sm:h-8 sm:w-8 ${SEAT[p.seat].badge}`}>{p.name.slice(0, 1).toUpperCase()}</span>
               <span className="min-w-0">
-                <span className="block text-xl font-extrabold leading-none text-[var(--ink)]">{p.score}</span>
-                <span className={`block truncate text-xs font-bold ${SEAT[p.seat].text}`}>
-                  {p.left ? `${p.name} · ${t('duel_leftShort')}` : turn ? (p.me ? t('duel_yourTurn') : t('duel_theirTurn', { name: p.name })) : p.me ? `${p.name} (${t('duel_youShort')})` : p.name}
+                <span className="block text-lg font-extrabold leading-none text-[var(--ink)] sm:text-xl">{p.score}</span>
+                <span className={`block truncate text-[11px] font-bold sm:text-xs ${SEAT[p.seat].text}`}>
+                  {p.left ? `${p.name} · ${t('duel_leftShort')}` : p.me ? `${p.name} (${t('duel_youShort')})` : p.name}
                 </span>
               </span>
             </div>
@@ -532,7 +594,7 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
           {/* Di chi è il turno: grande e nel colore del giocatore; lampeggia solo quando tocca a me */}
           <div
             role="status"
-            className={`mt-2 flex items-center justify-center gap-2 rounded-2xl px-4 py-3 text-center text-lg font-extrabold ${
+            className={`mt-2 flex items-center gap-2 rounded-2xl px-3 py-2.5 text-lg font-extrabold ${
               myTurn
                 ? 'bg-[var(--ink)] text-[var(--gold-bright)] motion-safe:animate-pulse'
                 : state.turnSeat !== null
@@ -540,19 +602,17 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
                   : 'bg-white text-[var(--ink)]'
             }`}
           >
-            {state.turnSeat !== null && (
-              <span className={`flex h-8 w-8 items-center justify-center rounded-full text-sm ${SEAT[state.turnSeat].badge}`}>{nameOf(state.turnSeat).slice(0, 1).toUpperCase()}</span>
+            {!myTurn && state.turnSeat !== null && (
+              <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm ${SEAT[state.turnSeat].badge}`}>{nameOf(state.turnSeat).slice(0, 1).toUpperCase()}</span>
             )}
-            {myTurn ? t('duel_bannerMine') : t('duel_theirTurn', { name: nameOf(state.turnSeat) })}
+            <span className="min-w-0 flex-1 truncate text-center">{myTurn ? t('duel_bannerMine') : t('duel_theirTurn', { name: nameOf(state.turnSeat) })}</span>
+            <span className={`flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-sm font-extrabold tabular-nums ${secondsLeft <= 10 ? 'bg-rose-100 text-rose-800' : 'bg-white/90 text-[var(--ink)]'}`}>
+              <Clock className="h-4 w-4" /> 0:{String(secondsLeft).padStart(2, '0')}
+            </span>
           </div>
-        <div className="mt-2 flex items-center justify-between gap-2 text-sm">
-          <p className="min-w-0 flex-1 truncate rounded-xl border border-[var(--gold)]/20 bg-white px-3 py-2 text-[13px] text-[var(--ink)]" aria-live="polite">
+          <p className="mt-1.5 truncate px-1 text-[13px] text-gray-600" aria-live="polite">
             {lastMoveText}
           </p>
-          <span className={`flex shrink-0 items-center gap-1 rounded-full px-3 py-1.5 font-extrabold tabular-nums ${secondsLeft <= 10 ? 'bg-rose-100 text-rose-800' : 'bg-[var(--gold-pale)] text-[var(--ink)]'}`}>
-            <Clock className="h-4 w-4" /> 0:{String(secondsLeft).padStart(2, '0')}
-          </span>
-        </div>
         </>
       )}
 
@@ -584,39 +644,8 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
             )}
           </div>
 
-          {!finished && !meLeft && (
-            <div className="mt-3 rounded-2xl bg-[var(--ink)] p-3 text-white">
-              {active ? (
-                <>
-                  <div className="flex items-start gap-2">
-                    <span className="shrink-0 rounded-lg bg-[var(--gold-bright)] px-2 py-1 text-sm font-extrabold text-[var(--ink)]">
-                      {active.num} {active.dir === 'a' ? '→' : '↓'}
-                    </span>
-                    <p className="min-w-0 flex-1 text-[15px] font-semibold leading-snug">
-                      {active.clue} <span className="text-white/60">({active.len})</span>
-                    </p>
-                  </div>
-                  <div className="mt-2.5 flex items-center justify-between gap-2">
-                    <span className="text-xs font-bold text-[var(--gold-bright)]">
-                      {t('duel_preview', { points: preview, crossings })}
-                      {doubled ? ' · ×2' : ''}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={submit}
-                      disabled={!ready || !myTurn || busy}
-                      className="flex min-h-11 cursor-pointer items-center gap-1.5 rounded-xl bg-[var(--gold-bright)] px-4 text-sm font-extrabold text-[var(--ink)] disabled:cursor-default disabled:opacity-50"
-                    >
-                      {busy ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />} {t('duel_submit')}
-                    </button>
-                  </div>
-                </>
-              ) : (
-                <p className="text-center text-sm text-white/80">{myTurn ? t('duel_pickWord') : t('duel_waitTurn', { name: nameOf(state.turnSeat) })}</p>
-              )}
-            </div>
-          )}
-          {notice && <p className={`mt-2 text-center text-sm font-semibold ${notice.tone === 'ok' ? 'text-emerald-700' : 'text-rose-700'}`}>{notice.text}</p>}
+          {!finished && !meLeft && <div className="mt-3 hidden sm:block">{cluePanel}</div>}
+          {notice && <p className={`mt-2 hidden text-center text-sm font-semibold sm:block ${notice.tone === 'ok' ? 'text-emerald-700' : 'text-rose-700'}`}>{notice.text}</p>}
           {!finished && !meLeft && (
             <button type="button" onClick={leave} disabled={busy} className="mx-auto mt-3 flex min-h-11 cursor-pointer items-center gap-1.5 text-sm font-semibold text-gray-500 hover:text-rose-700">
               <Flag className="h-4 w-4" /> {t('duel_leave')}
@@ -639,7 +668,7 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
                         <button
                           type="button"
                           disabled={!!claim || finished || !canPlay}
-                          onClick={() => setSlotId(s.id)}
+                          onClick={() => selectSlot(s.id)}
                           className={`flex w-full cursor-pointer gap-2 rounded-lg px-2 py-1.5 text-left text-sm disabled:cursor-default ${s.id === active?.id ? 'bg-[var(--gold-pale)] font-semibold' : 'hover:bg-gray-50'} ${
                             claim ? `${SEAT[claim.seat].text} line-through` : 'text-[var(--ink)]'
                           }`}
@@ -659,7 +688,20 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
         </div>
       </div>
 
-      {!finished && !meLeft && <NexusKeyboard onLetter={type} onDelete={erase} deleteLabel={t('delete')} disabled={!canPlay || !active} />}
+      {!finished && !meLeft && (
+        <NexusKeyboard
+          onLetter={type}
+          onDelete={erase}
+          deleteLabel={t('delete')}
+          disabled={!canPlay || !active}
+          top={
+            <>
+              {cluePanel}
+              {notice && <p className={`mt-1 text-center text-xs font-bold ${notice.tone === 'ok' ? 'text-emerald-800' : 'text-rose-700'}`}>{notice.text}</p>}
+            </>
+          }
+        />
+      )}
     </section>
   )
 }

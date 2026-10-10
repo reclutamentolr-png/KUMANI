@@ -1,14 +1,29 @@
 'use client'
 
+import type { ReactNode } from 'react'
 import { Delete } from 'lucide-react'
 
 // Tastiera di KUMANI NEXUS sul telefono: fissa in basso, così la griglia non
 // viene coperta dalla tastiera del sistema.
 const KEY_ROWS = ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM']
 
-export default function NexusKeyboard({ onLetter, onDelete, deleteLabel, disabled = false }: { onLetter: (letter: string) => void; onDelete: () => void; deleteLabel: string; disabled?: boolean }) {
+export default function NexusKeyboard({
+  onLetter,
+  onDelete,
+  deleteLabel,
+  disabled = false,
+  top = null,
+}: {
+  onLetter: (letter: string) => void
+  onDelete: () => void
+  deleteLabel: string
+  disabled?: boolean
+  // sopra i tasti (es. la definizione scelta): resta sempre in vista
+  top?: ReactNode
+}) {
   return (
     <div className="fixed inset-x-0 bottom-0 z-30 border-t border-[var(--gold)]/20 bg-[#EDE6D6] px-1 pb-[max(env(safe-area-inset-bottom),0.75rem)] pt-2 sm:hidden">
+      {top && <div className="mx-auto mb-2 max-w-md px-1">{top}</div>}
       <div className={`mx-auto flex max-w-md flex-col gap-1.5 ${disabled ? 'opacity-50' : ''}`}>
         {KEY_ROWS.map((row, i) => (
           <div key={row} className="flex justify-center gap-[5px]">
