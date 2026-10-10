@@ -11484,6 +11484,8 @@
     "duel_toHome": "Zu KUMANI",
     "duel_bannerMine": "Du bist dran!",
     "duel_playerLeft": "{name} hat das Spiel verlassen.",
-    "duel_endAbandoned": "Die anderen Spieler haben das Spiel verlassen. Hier ist das Rätsel mit allen Lösungen."
+    "duel_endAbandoned": "Die anderen Spieler haben das Spiel verlassen. Hier ist das Rätsel mit allen Lösungen.",
+    "duel_cancelledTitle": "Herausforderung abgesagt",
+    "duel_cancelledText": "{name} hat diese Herausforderung vor dem Start abgesagt."
   }
 }

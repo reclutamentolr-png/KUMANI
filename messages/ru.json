@@ -11484,6 +11484,8 @@
     "duel_toHome": "Перейти в KUMANI",
     "duel_bannerMine": "Ваш ход!",
     "duel_playerLeft": "{name} покинул(а) игру.",
-    "duel_endAbandoned": "Остальные игроки покинули игру. Вот сетка со всеми ответами."
+    "duel_endAbandoned": "Остальные игроки покинули игру. Вот сетка со всеми ответами.",
+    "duel_cancelledTitle": "Вызов отменён",
+    "duel_cancelledText": "{name} отменил(а) этот вызов до начала игры."
   }
 }

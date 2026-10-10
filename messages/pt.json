@@ -11484,6 +11484,8 @@
     "duel_toHome": "Ir para a KUMANI",
     "duel_bannerMine": "É a tua vez!",
     "duel_playerLeft": "{name} saiu do jogo.",
-    "duel_endAbandoned": "Os outros jogadores abandonaram o jogo. Aqui está a grelha com todas as respostas."
+    "duel_endAbandoned": "Os outros jogadores abandonaram o jogo. Aqui está a grelha com todas as respostas.",
+    "duel_cancelledTitle": "Desafio cancelado",
+    "duel_cancelledText": "{name} cancelou este desafio antes de começar."
   }
 }

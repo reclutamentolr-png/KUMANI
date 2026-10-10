@@ -17,7 +17,8 @@ create table public.nexus_duels (
   code text not null unique check (code ~ '^[A-Z0-9]{6}$'),
   locale text not null check (locale in ('it', 'en')),
   seed text not null,
-  status text not null default 'waiting' check (status in ('waiting', 'live', 'finished')),
+  -- cancelled = annullata da chi l'ha creata prima di iniziare
+  status text not null default 'waiting' check (status in ('waiting', 'live', 'finished', 'cancelled')),
   host_id uuid not null references auth.users(id) on delete cascade,
   -- giocatore di turno (nexus_duel_players.id)
   turn_player uuid,

@@ -34,7 +34,7 @@ export default async function NexusChallengePage({ params }: { params: Promise<{
       {'error' in state ? (
         <div className="mx-auto mt-10 max-w-md px-4 text-center">
           <p className="rounded-2xl border border-gray-200 bg-white p-6 text-sm text-[var(--muted)]">
-            {state.error === 'notFound' ? t('duel_notFound') : state.error === 'full' ? t('duel_full') : t('error_load')}
+            {state.error === 'notFound' ? t('duel_notFound') : state.error === 'cancelled' ? t('duel_cancelledTitle') : state.error === 'full' ? t('duel_full') : t('error_load')}
           </p>
           <Link href={loggedIn ? '/marketplace/nexus' : '/'} className="mt-4 inline-flex min-h-11 items-center font-semibold text-[var(--ink)] underline">
             {loggedIn ? t('duel_backToDaily') : t('duel_toHome')}

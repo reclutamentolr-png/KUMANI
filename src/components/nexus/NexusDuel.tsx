@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
-import { Clock, Copy, Crown, Flag, Handshake, LoaderCircle, Play, Send, Share2, Swords, UserRound } from 'lucide-react'
+import { Clock, Copy, Crown, Flag, Handshake, LoaderCircle, LogOut, Play, Send, Share2, Swords, UserRound, X } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { createClient } from '@/lib/supabase/client'
 import { createNexusDuel, getNexusDuel, joinNexusDuel, leaveNexusDuel, playNexusDuel, startNexusDuel } from '@/app/actions/nexusDuel'
@@ -51,11 +51,14 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
   const [link, setLink] = useState('')
   const [token, setToken] = useState<string | null>(null)
   const [nickname, setNickname] = useState('')
+  // Annullata da chi l'ha creata mentre aspettavamo
+  const [cancelled, setCancelled] = useState(false)
   const prefix = locale === 'it' ? '' : `/${locale}`
 
   const refresh = useCallback(
     async (seat: string | null = token) => {
       const next = await getNexusDuel(state.code, seat).catch(() => null)
+      if (next && 'error' in next && next.error === 'cancelled') setCancelled(true)
       if (!next || 'error' in next) return
       setOffset(new Date(next.serverNow).getTime() - Date.now())
       setState(next)
@@ -278,8 +281,9 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
   const leave = async () => {
     const message = state.status === 'live' ? t('duel_leaveConfirm') : state.isHost ? t('duel_cancelConfirm') : t('duel_exitConfirm')
     if (!(await askConfirm(message, { tone: 'danger' }))) return
-    const exitLobby = state.status === 'waiting' && !state.isHost
+    const exitLobby = state.status === 'waiting'
     await run(() => leaveNexusDuel(state.code, token), () => t('error_save'))
+    // Dalla sala d'attesa (sfida annullata o uscita): si torna a NEXUS
     if (exitLobby) router.push(state.loggedIn ? `${prefix}/marketplace/nexus` : `${prefix}/`)
   }
   const rematch = async () => {
@@ -314,6 +318,25 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
   })()
 
   const host = state.players.find((p) => p.seat === 0)
+
+  // --- Sfida annullata da chi l'ha creata ---
+  if (cancelled) {
+    return (
+      <section className="mx-auto flex max-w-md flex-col items-center gap-4 px-4 py-10 text-center">
+        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 text-gray-500">
+          <X className="h-8 w-8" />
+        </span>
+        <h2 className="text-2xl font-extrabold text-[var(--ink)]">{t('duel_cancelledTitle')}</h2>
+        <p className="text-base text-gray-600">{t('duel_cancelledText', { name: host?.name ?? '' })}</p>
+        <Link
+          href={state.loggedIn ? '/marketplace/nexus' : '/'}
+          className="flex min-h-12 w-full items-center justify-center rounded-2xl bg-[var(--ink)] px-4 font-extrabold text-[var(--gold-bright)]"
+        >
+          {state.loggedIn ? t('duel_backToDaily') : t('duel_toHome')}
+        </Link>
+      </section>
+    )
+  }
 
   // --- Non partecipi: unisciti (se la sfida aspetta) ---
   if (state.mySeat === null) {
@@ -415,16 +438,21 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
               {busy ? <LoaderCircle className="h-5 w-5 animate-spin" /> : <Play className="h-5 w-5" />} {t('duel_start')}
             </button>
           )}
+          <button
+            type="button"
+            onClick={leave}
+            disabled={busy}
+            className="mt-2 flex min-h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-rose-200 px-4 font-bold text-rose-700 hover:bg-rose-50 disabled:opacity-50"
+          >
+            {state.isHost ? <X className="h-5 w-5" /> : <LogOut className="h-5 w-5" />} {state.isHost ? t('duel_cancel') : t('duel_exit')}
+          </button>
           <p className="mt-2 flex items-center justify-center gap-2 text-center text-sm text-gray-600" aria-live="polite">
             <LoaderCircle className="h-4 w-4 shrink-0 animate-spin" />
             {state.isHost ? (state.players.length < 2 ? t('duel_waiting') : t('duel_readyHint')) : t('duel_waitHost', { name: host?.name ?? '' })}
           </p>
         </div>
-        <DuelRules />
         {notice && <p className="text-center text-sm font-semibold text-rose-700">{notice.text}</p>}
-        <button type="button" onClick={leave} disabled={busy} className="min-h-11 cursor-pointer text-sm font-semibold text-gray-500 hover:text-rose-700">
-          {state.isHost ? t('duel_cancel') : t('duel_exit')}
-        </button>
+        <DuelRules />
       </section>
     )
   }

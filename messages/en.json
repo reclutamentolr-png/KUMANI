@@ -11484,6 +11484,8 @@
     "duel_toHome": "Go to KUMANI",
     "duel_bannerMine": "Your turn!",
     "duel_playerLeft": "{name} left the game.",
-    "duel_endAbandoned": "The other players left the game. Here is the grid with all the answers."
+    "duel_endAbandoned": "The other players left the game. Here is the grid with all the answers.",
+    "duel_cancelledTitle": "Challenge cancelled",
+    "duel_cancelledText": "{name} cancelled this challenge before it started."
   }
 }

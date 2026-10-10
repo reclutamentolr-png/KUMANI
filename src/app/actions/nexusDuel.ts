@@ -30,7 +30,7 @@ type Duel = {
   code: string
   locale: NexusLocale
   seed: string
-  status: 'waiting' | 'live' | 'finished'
+  status: 'waiting' | 'live' | 'finished' | 'cancelled'
   host_id: string
   turn_player: string | null
   turn_ends_at: string | null
@@ -224,7 +224,8 @@ async function stateOf(duel: Duel, me: Player | null, loggedIn: boolean, players
     code: duel.code,
     channel: `nexus:${duel.id}`,
     locale: duel.locale,
-    status: duel.status,
+    // le sfide annullate non arrivano qui (getNexusDuel risponde «cancelled»)
+    status: duel.status === 'cancelled' ? 'finished' : duel.status,
     mySeat: me?.seat ?? null,
     isHost: !!me && me.user_id === duel.host_id,
     loggedIn,
@@ -282,6 +283,7 @@ export async function joinNexusDuel(code: string, nickname: string, token?: stri
   const { user } = await viewer()
   const duel = await loadDuel(code)
   if (!duel) return { error: 'notFound' }
+  if (duel.status === 'cancelled') return { error: 'cancelled' }
   const players = await playersOf(duel.id)
   if (findMe(players, user?.id ?? null, token)) return { ok: true }
   if (duel.status !== 'waiting') return { error: 'full' }
@@ -328,6 +330,7 @@ export async function getNexusDuel(code: string, token?: string | null): Promise
   const { user } = await viewer()
   let duel = await loadDuel(code)
   if (!duel) return { error: 'notFound' }
+  if (duel.status === 'cancelled') return { error: 'cancelled' }
   let players = await playersOf(duel.id)
   const me = findMe(players, user?.id ?? null, token)
   if (!me && duel.status !== 'waiting') return { error: 'full' }
@@ -400,13 +403,15 @@ export async function playNexusDuel(code: string, token: string | null, slotId: 
 export async function leaveNexusDuel(code: string, token: string | null): Promise<{ ok: true } | { error: string }> {
   const { user } = await viewer()
   const duel = await loadDuel(code)
-  if (!duel || duel.status === 'finished') return { error: 'notFound' }
+  if (!duel || duel.status === 'finished' || duel.status === 'cancelled') return { error: 'notFound' }
   const players = await playersOf(duel.id)
   const me = findMe(players, user?.id ?? null, token)
   if (!me) return { error: 'notFound' }
 
   if (duel.status === 'waiting') {
-    if (me.user_id === duel.host_id) await finish(duel)
+    // Chi l'ha creata la annulla per tutti; gli altri escono soltanto
+    if (me.user_id === duel.host_id)
+      await service().from('nexus_duels').update({ status: 'cancelled', updated_at: now() }).eq('id', duel.id).eq('status', 'waiting')
     else await service().from('nexus_duel_players').delete().eq('id', me.id)
   } else {
     await service().from('nexus_duel_players').update({ left_at: now() }).eq('id', me.id)
