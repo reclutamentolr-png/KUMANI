@@ -43,6 +43,16 @@ export default function InstallAppBanner() {
   // 'ios' = Safari su iPhone/iPad; 'menu' = installazione dal menu del browser
   const [help, setHelp] = useState<null | 'ios' | 'menu'>(null)
   const [isIOS, setIsIOS] = useState(false)
+  // Sopra il menu fisso in basso se c'è (soci collegati), altrimenti in fondo allo schermo
+  const [aboveNav, setAboveNav] = useState(false)
+  useEffect(() => {
+    if (!visible) return
+    const check = () => setAboveNav(!!document.querySelector('[data-app-nav]'))
+    check()
+    // Il menu compare dopo aver letto la sessione: si ricontrolla poco dopo
+    const timer = setTimeout(check, 1500)
+    return () => clearTimeout(timer)
+  }, [visible, pathname])
 
   const read = (key: string) => {
     try {
@@ -113,7 +123,9 @@ export default function InstallAppBanner() {
   if (!visible) return null
 
   return (
-    <div role="region" aria-label={t('title')} className="fixed inset-x-3 bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] z-[60] mx-auto max-w-2xl print:hidden">
+    <div role="region" aria-label={t('title')} className={`fixed inset-x-3 z-[60] mx-auto max-w-2xl print:hidden ${
+        aboveNav ? 'bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] sm:bottom-24' : 'bottom-[calc(env(safe-area-inset-bottom)+0.75rem)]'
+      }`}>
       <div className="rounded-2xl border-2 border-[var(--gold)]/60 bg-white p-4 shadow-[0_18px_50px_rgba(23,23,23,0.28)]">
         {help ? (
           <div className="space-y-3">
