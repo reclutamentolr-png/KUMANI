@@ -102,7 +102,7 @@ const GENERAL_SETTINGS_KEYS = new Set([
   'maintenance_mode', 'maintenance_message', 'matrix_slot_bonus_points', 'matrix_spillover_bonus_points',
   'welcome_bonus_base', 'welcome_bonus_pro', 'welcome_bonus_from_direct',
   'activity_thanks_points', 'pro_invite_extra_points', 'pro_trial_days', 'affinity_intros_per_week',
-  'listing_feature_cost_7d', 'listing_feature_cost_15d', 'menu_ai_daily_runs', 'shop_commission_percent',
+  'listing_feature_cost_7d', 'listing_feature_cost_15d', 'menu_ai_daily_runs',
   'surprise_price_voucher_cents', 'surprise_price_journey3_cents', 'surprise_price_journey7_cents',
   'surprise_karma_voucher', 'surprise_karma_journey3', 'surprise_karma_journey7', 'surprise_kupoints_voucher', 'surprise_kupoints_journey3', 'surprise_kupoints_journey7',
   'veritas_write_seconds', 'veritas_vote_seconds', 'veritas_reveal_seconds',
@@ -143,10 +143,6 @@ export async function adminSaveSystemSettings(settings: Record<string, unknown>)
   if ('black_plus_every' in settings) {
     const every = settings.black_plus_every
     if (!Number.isInteger(every) || (every as number) < 0 || (every as number) > 1000) return { success: false, error: 'Black continuo: numero di attivazioni non valido (0 = spento).' }
-  }
-  if ('shop_commission_percent' in settings) {
-    const pct = settings.shop_commission_percent
-    if (typeof pct !== 'number' || !Number.isFinite(pct) || pct < 0 || pct > 20) return { success: false, error: 'Commissione KUMANI Shop non valida (da 0 a 20%).' }
   }
   for (const key of ['surprise_price_voucher_cents', 'surprise_price_journey3_cents', 'surprise_price_journey7_cents']) {
     if (key in settings) {

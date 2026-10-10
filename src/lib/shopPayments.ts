@@ -38,13 +38,6 @@ export async function syncSellerAccount(account: Stripe.Account) {
   }
 }
 
-// Commissione di KUMANI (Admin → Impostazioni, 0 al lancio)
-export async function shopCommissionPercent(): Promise<number> {
-  const { data } = await serviceDb().from('system_settings').select('value').eq('key', 'shop_commission_percent').maybeSingle()
-  const value = Number(data?.value ?? 0)
-  return Number.isFinite(value) && value > 0 && value < 50 ? value : 0
-}
-
 // Pagamento riuscito di una Checkout Session sul conto del venditore:
 // preventivo pagato (e accettato), avviso al venditore. Idempotente.
 export async function recordQuotePayment(session: Stripe.Checkout.Session) {

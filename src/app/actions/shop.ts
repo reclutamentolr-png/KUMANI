@@ -7,7 +7,7 @@ import { getStripe } from '@/lib/stripe'
 import { SITE_URL } from '@/lib/siteUrl'
 import { localizedPath, notifyUser } from '@/lib/push'
 import { quoteAmountDueCents, type QuotePaymentMode } from '@/lib/quotes'
-import { recordQuotePayment, retrieveConnectedSession, serviceDb, shopCommissionPercent, syncSellerAccount } from '@/lib/shopPayments'
+import { recordQuotePayment, retrieveConnectedSession, serviceDb, syncSellerAccount } from '@/lib/shopPayments'
 
 // KUMANI Shop, fase 1: il venditore collega il suo conto Stripe (conto
 // Standard di Stripe Connect) e il cliente accetta e paga il preventivo
@@ -195,8 +195,6 @@ export async function startQuoteCheckout(token: string, name: string): Promise<R
   const locale = await getLocale()
   const t = await getTranslations('quotePublic')
   const page = `${SITE_URL}${localizedPath(locale, `/preventivo/${token}`)}`
-  const commission = await shopCommissionPercent()
-  const fee = commission > 0 ? Math.round((amount * commission) / 100) : 0
   try {
     const session = await getStripe().checkout.sessions.create(
       {
@@ -219,7 +217,7 @@ export async function startQuoteCheckout(token: string, name: string): Promise<R
             },
           },
         ],
-        payment_intent_data: { ...(fee > 0 ? { application_fee_amount: fee } : {}), metadata: { quote_id: quote.id } },
+        payment_intent_data: { metadata: { quote_id: quote.id } },
         metadata: { kind: 'quote', quote_id: quote.id, accepted_by_name: who },
         success_url: `${page}?paid={CHECKOUT_SESSION_ID}`,
         cancel_url: `${page}?cancelled=1`,

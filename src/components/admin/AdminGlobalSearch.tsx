@@ -11,7 +11,7 @@ import type { AdminUserRow } from '@/lib/adminTypes'
 
 // Parole che portano alla sezione giusta anche se non sono nel nome
 const KEYWORDS: Record<string, string> = {
-  settings: 'impostazioni prezzi prezzo sorpresa sorprese commissione shop preventivi abbonamenti base pro prova ku points qualifiche voucher valore menu traduzioni veritas mosaic fabula affinity scudo checkmail verifoto manutenzione banner cookie consenso statistiche marketing',
+  settings: 'impostazioni prezzi prezzo sorpresa sorprese shop preventivi abbonamenti base pro prova ku points qualifiche voucher valore menu traduzioni veritas mosaic fabula affinity scudo checkmail verifoto manutenzione banner cookie consenso statistiche marketing',
   appLimits: 'limiti pulizia soglie file spazio storage utilizzo top 10 sicurezza soglie',
   security: 'sicurezza intrusi hacker ip bloccati avvisi accessi falliti sospensione',
   financials: 'amministrazione incassi fatturato stripe tasse iva entrate',

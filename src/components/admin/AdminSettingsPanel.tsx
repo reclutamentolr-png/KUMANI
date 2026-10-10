@@ -52,7 +52,6 @@ export default function AdminSettingsPanel() {
     listing_feature_cost_7d: 20,
     listing_feature_cost_15d: 35,
     menu_ai_daily_runs: 5,
-    shop_commission_percent: 0,
     surprise_price_voucher_cents: 290,
     surprise_price_journey3_cents: 990,
     surprise_price_journey7_cents: 1590,
@@ -470,19 +469,6 @@ export default function AdminSettingsPanel() {
           <span className="text-xs text-gray-600">limiti e parametri degli strumenti</span>
         </div>
         <div className="space-y-6 p-5">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Commissione KUMANI Shop sui pagamenti dei preventivi (%)</label>
-            <input
-              type="number"
-              min="0"
-              max="20"
-              step="0.5"
-              value={systemSettings.shop_commission_percent ?? 0}
-              onChange={(e) => setSystemSettings({ ...systemSettings, shop_commission_percent: Math.max(0, Math.min(20, Number(e.target.value) || 0)) })}
-              className={`max-w-xs ${INPUT}`}
-            />
-            <p className="text-xs text-gray-500 mt-1">Trattenuta da KUMANI su ogni pagamento (oltre al costo di Stripe pagato dal venditore). 0 = nessuna commissione. Prima di attivarla serve il parere della commercialista.</p>
-          </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">KUMANI Sorpresa: prezzi (€)</label>
             <div className="grid max-w-xl gap-3 sm:grid-cols-3">

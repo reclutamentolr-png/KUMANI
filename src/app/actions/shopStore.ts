@@ -10,7 +10,7 @@ import { SITE_URL } from '@/lib/siteUrl'
 import { localizedPath } from '@/lib/push'
 import { clientIp } from '@/lib/securityCore'
 import { limitError } from '@/lib/appLimits'
-import { retrieveConnectedSession, serviceDb, shopCommissionPercent } from '@/lib/shopPayments'
+import { retrieveConnectedSession, serviceDb } from '@/lib/shopPayments'
 import { inventoryStock, loadPublicShop, mapOrder, mapProduct, mapSettings, ORDER_FLOW, recordShopOrderPayment, sendOrderEmail } from '@/lib/shopServer'
 import { EU_COUNTRIES, isValidSlug, SHOP_MAX, shippingCents, shopPath, type OrderStatus, type ShopOrder, type ShopProduct, type ShopSettings } from '@/lib/shop'
 
@@ -200,7 +200,7 @@ export async function updateShopOrder(id: string, status: OrderStatus, tracking?
     if (current.stripe_payment_intent && account?.stripe_account_id) {
       try {
         await getStripe().refunds.create(
-          { payment_intent: current.stripe_payment_intent as string, refund_application_fee: true },
+          { payment_intent: current.stripe_payment_intent as string },
           { stripeAccount: account.stripe_account_id as string, idempotencyKey: `shop-refund-${id}` }
         )
       } catch (error) {
@@ -288,8 +288,6 @@ export async function startShopCheckout(input: CheckoutInput): Promise<Result<{ 
   const shipping = shippingCents(shop.settings, subtotal, delivery, address?.country ?? 'IT')
   if (shipping == null) return { success: false, message: 'countryNotServed' }
   const total = subtotal + shipping
-  const commission = await shopCommissionPercent()
-  const fee = commission > 0 ? Math.round((total * commission) / 100) : 0
 
   const locale = await getLocale()
   const t = await getTranslations('shopPublic')
@@ -310,7 +308,6 @@ export async function startShopCheckout(input: CheckoutInput): Promise<Result<{ 
       subtotal_cents: subtotal,
       shipping_cents: shipping,
       total_cents: total,
-      fee_cents: fee,
       locale,
     })
     .select('id')
@@ -331,7 +328,7 @@ export async function startShopCheckout(input: CheckoutInput): Promise<Result<{ 
           ...items.map((i) => ({ quantity: i.quantity, price_data: { currency: 'eur', unit_amount: i.price_cents, product_data: { name: i.name } } })),
           ...(shipping > 0 ? [{ quantity: 1, price_data: { currency: 'eur', unit_amount: shipping, product_data: { name: t('shipping') } } }] : []),
         ],
-        payment_intent_data: { ...(fee > 0 ? { application_fee_amount: fee } : {}), description: `${shop.settings.name} · KUMANI Shop`, metadata: { order_id: order.id } },
+        payment_intent_data: { description: `${shop.settings.name} · KUMANI Shop`, metadata: { order_id: order.id } },
         metadata: { kind: 'shop_order', order_id: order.id },
         success_url: `${base}/ordine/${token}?paid={CHECKOUT_SESSION_ID}`,
         cancel_url: `${base}?cancelled=1`,
