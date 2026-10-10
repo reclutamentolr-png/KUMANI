@@ -62,7 +62,7 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
     getTranslations('surprise'),
   ])
   const L = HOME_LAYOUT_CONFIG[layoutKey]
-  // «Di cosa hai bisogno oggi?»: per ogni risposta i servizi giusti
+  // «In cosa possiamo darti una mano?»: per ogni risposta i servizi giusti
   const toolsByName = new Map(getMarketplaceTools(tMarket).map((tool) => [tool.toolName, tool]))
   const needs: HomeNeed[] = HOME_NEEDS.map((need) => ({
     key: need.key,
@@ -254,7 +254,7 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
         )}
       </section>
 
-      {/* 💬 DI COSA HAI BISOGNO OGGI? Una domanda semplice che porta ai servizi giusti */}
+      {/* 💬 IN COSA POSSIAMO DARTI UNA MANO? Una domanda semplice che porta ai servizi giusti */}
       <HomeSection bg={{ tone: 'light', variant: 'cream' }} className="py-12 sm:py-16">
         <HomeNeeds
           needs={needs}

@@ -1,4 +1,4 @@
-// Homepage: «Di cosa hai bisogno oggi?». Ogni bisogno porta a pochi servizi
+// Homepage: «In cosa possiamo darti una mano?». Ogni bisogno porta a pochi servizi
 // (pagine pubbliche /strumenti/<servizio>, più Eventi e KUMANI Sorpresa).
 // Testi dei bisogni nel namespace "homeNeeds"; nomi e descrizioni dei
 // servizi sono quelli del Marketplace.

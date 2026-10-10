@@ -6,7 +6,7 @@ import Link from '@/components/LocalizedLink'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 import type { HomeNeed } from '@/lib/homeNeeds'
 
-// Homepage: «Di cosa hai bisogno oggi?». Si sceglie una risposta semplice e
+// Homepage: «In cosa possiamo darti una mano?». Si sceglie una risposta semplice e
 // compaiono i servizi giusti, ognuno con la sua pagina: una porta d'ingresso
 // più semplice della griglia di tutti i servizi.
 
