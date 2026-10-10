@@ -58,7 +58,7 @@ if (link !== '-') {
 // Niente invito "Installa Kumani" sulle schermate delle guide
 await send('Page.navigate', { url: base + '/privacy' })
 await sleep(4000)
-await evaluate("localStorage.setItem('install_prompt_dismissed', 'true'); localStorage.setItem('kumani_tour_seen', '1')")
+await evaluate("localStorage.setItem('install_prompt_dismissed', 'true'); localStorage.setItem('kumani_install_snoozed_until', String(Date.now() + 365 * 86400000)); localStorage.setItem('kumani_tour_seen', '1')")
 
 for (const shot of shots) {
   await send('Page.navigate', { url: base + shot.path })

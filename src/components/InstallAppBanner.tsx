@@ -20,7 +20,9 @@ type BeforeInstallPromptEvent = Event & {
 
 export const SHOW_INSTALL_EVENT = 'kumani:show-install'
 const SNOOZE_KEY = 'kumani_install_snoozed_until'
-const INSTALLED_KEY = 'install_prompt_dismissed'
+// Solo app installata davvero (la vecchia finestra salvava anche il «Non ora»
+// per sempre in install_prompt_dismissed: non vale più)
+const INSTALLED_KEY = 'kumani_app_installed'
 const SNOOZE_DAYS = 14
 const AUTO_PATHS = /^(?:\/[a-z]{2})?(?:\/dashboard)?\/?$/
 
