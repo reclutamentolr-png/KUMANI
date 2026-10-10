@@ -137,8 +137,14 @@ export default function SVATPage({
 
   // Controlli sull'azienda (partita IVA): il testo è tradotto con i dati VIES
   const isCompanyCheck = (c: SVATCheck) => COMPANY_CHECKS.includes(c.id)
-  const detailText = (c: SVATCheck) =>
-    isCompanyCheck(c) && c.detailsKey && t.has(c.detailsKey) ? t(c.detailsKey, c.detailsInterp) : c.details
+  // Dettagli tradotti per tutti i controlli quando il testo esiste nella
+  // lingua (e ha i dati che chiede); altrimenti il testo tecnico del server
+  const detailText = (c: SVATCheck) => {
+    if (!c.detailsKey || !t.has(c.detailsKey)) return c.details
+    const raw = String(t.raw(c.detailsKey))
+    if (raw.includes('{') && !c.detailsInterp) return c.details
+    return t(c.detailsKey, c.detailsInterp)
+  }
   const isCompany = !!result?.checks.some(isCompanyCheck)
 
   const switchTab = (tab: 'website' | 'vat' | 'qr') => {
@@ -157,36 +163,43 @@ export default function SVATPage({
 
   const exportToPDF = () => {
     if (!result) return
+    // Tutto il testo passa da esc(): dominio, record DNS e dati WHOIS li
+    // sceglie il proprietario del sito controllato (niente HTML/script).
+    const esc = (value: unknown) =>
+      String(value ?? '').replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch] as string)
+    const badgeClass = ['green', 'yellow', 'red'].includes(result.badge) ? result.badge : 'red'
+    // noopener: la finestra non può raggiungere la pagina di KUMANI
     const printWindow = window.open('', '_blank')
     if (!printWindow) return
+    printWindow.opener = null
     printWindow.document.write(`
       <html>
         <head>
-          <title>SVAT Report - ${result.domain || result.input}</title>
+          <title>SVAT Report - ${esc(result.domain || result.input)}</title>
           <style>
             body { font-family: sans-serif; padding: 20px; }
             .score { font-size: 48px; font-weight: bold; }
-            .badge-${result.badge} { color: ${result.badge === 'green' ? '#16a34a' : result.badge === 'yellow' ? '#ca8a04' : '#dc2626'}; }
+            .badge-${badgeClass} { color: ${result.badge === 'green' ? '#16a34a' : result.badge === 'yellow' ? '#ca8a04' : '#dc2626'}; }
           </style>
         </head>
         <body>
           <h1>SVAT - Anti-Fraud Verification Report</h1>
-          <h2>${result.domain || result.input}</h2>
-          <p>Reliability Score: <span class="score badge-${result.badge}">${result.score}/100</span></p>
-          <p>Badge: ${result.badge.toUpperCase()}</p>
+          <h2>${esc(result.domain || result.input)}</h2>
+          <p>Reliability Score: <span class="score badge-${badgeClass}">${Number(result.score) || 0}/100</span></p>
+          <p>Badge: ${esc(badgeClass.toUpperCase())}</p>
           <h3>Checks Summary</h3>
           <ul>
-            <li>Total checks: ${result.summary.totalChecks}</li>
-            <li>OK: ${result.summary.okCount}</li>
-            <li>Warnings: ${result.summary.warningCount}</li>
-            <li>Risks: ${result.summary.riskCount}</li>
+            <li>Total checks: ${esc(result.summary.totalChecks)}</li>
+            <li>OK: ${esc(result.summary.okCount)}</li>
+            <li>Warnings: ${esc(result.summary.warningCount)}</li>
+            <li>Risks: ${esc(result.summary.riskCount)}</li>
           </ul>
           <h3>Detailed Results</h3>
           ${result.checks.map((c) => `
             <div style="margin-bottom: 15px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
-              <strong>${t(c.name)}</strong> - Status: ${c.status.toUpperCase()}
-              <p>${detailText(c)}</p>
-              ${c.source ? `<p>Source: ${c.source}</p>` : ''}
+              <strong>${esc(t(c.name))}</strong> - Status: ${esc(String(c.status).toUpperCase())}
+              <p>${esc(detailText(c))}</p>
+              ${c.source ? `<p>Source: ${esc(c.source)}</p>` : ''}
             </div>
           `).join('')}
         </body>
@@ -333,7 +346,7 @@ export default function SVATPage({
               <h3 className="text-lg font-semibold text-[var(--muted)] mb-2">{t('scoreTitle')}</h3>
               <div className={`text-6xl font-bold mb-2 ${getScoreColor(result.score)}`}>
                 {result.score}
-                <span className="text-2xl text-[var(--muted)]">/{t('scoreRange')}</span>
+                <span className="text-2xl text-[var(--muted)]">/100</span>
               </div>
               <div className="flex items-center justify-center gap-3 mb-4">
                 <div className={`h-4 w-4 rounded-full ${BadgeColor({ badge: result.badge })}`} />

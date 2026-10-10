@@ -117,6 +117,8 @@ export function NeurobalanceAudioProvider({ children }: { children: ReactNode })
     oscillatorsRef.current.forEach((oscillator) => oscillator.stop())
     oscillatorsRef.current = []
     setIsPlaying(false)
+    // Motore audio a riposo finché non si riparte (batteria)
+    audioContextRef.current?.suspend().catch(() => {})
   }
 
   // Ferma e scarica l'audio registrato (passando a un tono o a un'altra traccia)
@@ -208,7 +210,9 @@ export function NeurobalanceAudioProvider({ children }: { children: ReactNode })
     const selected = presets.find((preset) => preset.id === selectedId) ?? presets[0]
     const carrier = selectedSpecialSound?.frequency ?? selected.carrier
     const beat = selectedSpecialSound ? 4 : selected.beat
-    await playWith(carrier, beat, selectedSpecialSound ? 15 * 60 : selected.duration * 60)
+    const full = selectedSpecialSound ? 15 * 60 : selected.duration * 60
+    // Ripresa dopo «Pausa»: si continua dal tempo che restava, non da capo
+    await playWith(carrier, beat, remaining > 0 && remaining < full ? remaining : full)
   }
 
   const handlePresetCardClick = async (preset: Preset) => {

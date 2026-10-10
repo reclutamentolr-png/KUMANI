@@ -8,7 +8,7 @@ import { Download, Eraser, Paintbrush, Share2, Trash2, Undo2 } from 'lucide-reac
 const SEGMENT_OPTIONS = [6, 8, 12, 16] as const
 const PALETTE = ['#c79a3b', '#e7c56a', '#4f46e5', '#7c3aed', '#dc2626', '#fdf8ee'] as const
 const CANVAS_SIZE = 900
-const MAX_HISTORY = 20
+const MAX_HISTORY = 10
 
 const BACKGROUND_COLOR: Record<'dark' | 'ivory', string> = {
   dark: '#171717',
@@ -48,7 +48,8 @@ export default function MandalaCanvas({ referralUrl }: { referralUrl: string }) 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-    const dpr = window.devicePixelRatio || 1
+    // Al massimo 2: oltre la tela pesa troppo in memoria per «Annulla»
+    const dpr = Math.min(window.devicePixelRatio || 1, 2)
     canvas.width = CANVAS_SIZE * dpr
     canvas.height = CANVAS_SIZE * dpr
     const ctx = canvas.getContext('2d')
@@ -62,7 +63,8 @@ export default function MandalaCanvas({ referralUrl }: { referralUrl: string }) 
   const pushHistory = useCallback(() => {
     const ctx = ctxRef.current
     if (!ctx) return
-    historyRef.current.push(ctx.getImageData(0, 0, CANVAS_SIZE, CANVAS_SIZE))
+    // Tutta la tela in pixel reali (sugli schermi retina è più grande di CANVAS_SIZE)
+    historyRef.current.push(ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height))
     if (historyRef.current.length > MAX_HISTORY) historyRef.current.shift()
     setCanUndo(historyRef.current.length > 0)
   }, [])
@@ -108,8 +110,9 @@ export default function MandalaCanvas({ referralUrl }: { referralUrl: string }) 
       ctx.lineCap = 'round'
       ctx.lineJoin = 'round'
       ctx.lineWidth = thickness
-      ctx.globalCompositeOperation = tool === 'eraser' ? 'destination-out' : 'source-over'
-      ctx.strokeStyle = tool === 'eraser' ? 'rgba(0,0,0,1)' : color
+      // La gomma ridipinge con il colore di fondo (niente buchi trasparenti)
+      ctx.globalCompositeOperation = 'source-over'
+      ctx.strokeStyle = tool === 'eraser' ? BACKGROUND_COLOR[background] : color
 
       for (let i = 0; i < segments; i++) {
         const angle = i * angleStep
@@ -130,7 +133,7 @@ export default function MandalaCanvas({ referralUrl }: { referralUrl: string }) 
         ctx.restore()
       }
     },
-    [segments, thickness, tool, color]
+    [segments, thickness, tool, color, background]
   )
 
   const getPoint = (e: React.PointerEvent<HTMLCanvasElement>) => {

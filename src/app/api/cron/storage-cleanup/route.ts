@@ -21,6 +21,7 @@ export async function GET(request: Request) {
     auth: { autoRefreshToken: false, persistSession: false },
   })
   const nexus = await cleanNexus(db)
+  const scudo = await cleanScudo(db)
 
   const { data, error } = await db.rpc('storage_orphans', { p_limit: 500 })
   if (error) {
@@ -41,7 +42,7 @@ export async function GET(request: Request) {
       else removed[bucket] += chunk.length
     }
   }
-  return NextResponse.json({ removed, nexus, at: new Date().toISOString() })
+  return NextResponse.json({ removed, nexus, scudo, at: new Date().toISOString() })
 }
 
 // KUMANI Nexus: sfide finite o annullate da più di 30 giorni, mai iniziate da
@@ -59,5 +60,21 @@ async function cleanNexus(db: SupabaseClient) {
   await run('waiting', db.from('nexus_duels').delete({ count: 'exact' }).eq('status', 'waiting').lt('created_at', ago(3)))
   await run('stalled', db.from('nexus_duels').delete({ count: 'exact' }).eq('status', 'live').lt('updated_at', ago(2)))
   await run('days', db.from('nexus_days').delete({ count: 'exact' }).lt('day', ago(7).slice(0, 10)))
+  return counts
+}
+
+// Scudo Dati: gli esiti salvati valgono 24 ore (poi si ricontrolla), i
+// contatori servono solo per il giorno: si tolgono dopo 2 e 30 giorni
+async function cleanScudo(db: SupabaseClient) {
+  const ago = (days: number) => new Date(Date.now() - days * 86_400_000).toISOString()
+  const counts: Record<string, number> = {}
+  const run = async (label: string, query: PromiseLike<{ count: number | null; error: { message: string } | null }>) => {
+    const { count, error } = await query
+    if (error) console.error(`[storage-cleanup] scudo ${label}:`, error.message)
+    counts[label] = count ?? 0
+  }
+  await run('cache', db.from('scudo_dati_cache').delete({ count: 'exact' }).lt('checked_at', ago(2)))
+  await run('usage', db.from('scudo_dati_usage').delete({ count: 'exact' }).lt('day', ago(30).slice(0, 10)))
+  await run('calls', db.from('scudo_dati_calls').delete({ count: 'exact' }).lt('day', ago(30).slice(0, 10)))
   return counts
 }

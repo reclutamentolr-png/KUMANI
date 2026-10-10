@@ -219,7 +219,7 @@
   },
   "authRegister": {
     "registerTitle": "Konto erstellen",
-    "registerDescription": "Werde Teil von Tausenden digitalen Unternehmern",
+    "registerDescription": "Werde Teil der Community, die sich gegenseitig hilft",
     "alreadyHaveAccount": "Du hast bereits ein Konto?",
     "loginHere": "Hier anmelden",
     "byCreatingAccount": "Mit dem Klick auf Konto erstellen akzeptierst du unsere",
@@ -569,7 +569,7 @@
     "viewFullMarketplace": "Ganzes Ökosystem ansehen",
     "yourNetwork": "Deine KUMANI-Community",
     "viewFullNetwork": "Ganze Community ansehen",
-    "activeKumaniLabel": "aktive KUMANI",
+    "activeKumaniLabel": "{n, plural, one {aktiver KUMANI} other {aktive KUMANI}}",
     "pendingKumaniLabel": "noch nicht aktiv",
     "goToFavorites": "Zu deinen bevorzugten Diensten",
     "pointsCardLabel": "Deine Punkte für tägliche Zugriffe:",
@@ -602,7 +602,7 @@
     "qualificationVouchersHint": "Du findest sie in deinem Wallet im Bereich Gutscheine, mit Hinweisen zum Verschenken.",
     "qualificationBlackExtra": "Außerdem hast du einen Pro-Gutschein für ein Jahr nur für dich und bekommst ab jetzt 1 Gutschein alle {every} neuen Aktivierungen. Auf dich warten auch die Vitrine im Kumano des Tages, die Einladung zum jährlichen KUMANI-Event und der Rat der Black.",
     "qualificationOpenWallet": "Zu deinen Gutscheinen",
-    "rankPendingLine": "In Bestätigung: +{acts} Aktivierungen, +{points} KU Points",
+    "rankPendingLine": "In Bestätigung: {acts, plural, one {+# Aktivierung} other {+# Aktivierungen}}, +{points} KU Points",
     "receivedWelcomeNote": "Den Willkommensbonus bekommst du nur für Personen auf deinen 5 direkten Plätzen: höchstens 5 Personen."
   },
   "marketplace": {
@@ -10118,7 +10118,8 @@
     "passLink": "Den Pass {service} verschenken",
     "shareLearnMore": "Hier erfährst du, was es ist und wie es funktioniert:",
     "learnMoreService": "Mehr über {service} erfahren",
-    "learnMorePlan": "Alle enthaltenen Dienste entdecken"
+    "learnMorePlan": "Alle enthaltenen Dienste entdecken",
+    "redeem_plan_mismatch": "Du hast schon einen anderen Tarif aktiv: Du kannst dieses Geschenk nutzen, wenn dein Tarif abläuft, oder es bleibt für jemand anderen gültig."
   },
   "relatedServices": {
     "banner": "Ist {tool} hilfreich? Entdecke die anderen Dienste der Gruppe",

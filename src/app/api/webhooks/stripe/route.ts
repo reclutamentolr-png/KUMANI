@@ -138,7 +138,12 @@ export async function POST(req: NextRequest) {
 
   // Commissioni KUMANI (Events: 'event_fee', Kordata: 'convivio_fee').
   // Gestite a parte e mai come abbonamento (i loro metadati non hanno userId).
-  if (event.type === 'checkout.session.completed' && isPlatformFeeType((event.data.object as Stripe.Checkout.Session).metadata?.type)) {
+  // Anche i pagamenti confermati dopo (es. bonifico SEPA): markPlatformFeesPaid
+  // ricontrolla su Stripe che la sessione risulti pagata.
+  if (
+    (event.type === 'checkout.session.completed' || event.type === 'checkout.session.async_payment_succeeded') &&
+    isPlatformFeeType((event.data.object as Stripe.Checkout.Session).metadata?.type)
+  ) {
     const feeSession = event.data.object as Stripe.Checkout.Session
     try {
       await markPlatformFeesPaid(feeSession.id)
@@ -151,7 +156,9 @@ export async function POST(req: NextRequest) {
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session
-    const userId = session.metadata?.userId
+    // Pagamento non ancora arrivato (metodi a conferma ritardata): il piano si
+    // attiva con invoice.paid / customer.subscription.updated, non qui
+    const userId = session.payment_status === 'unpaid' ? undefined : session.metadata?.userId
 
     // Scadenza: la fine del periodo reale dell'abbonamento Stripe. Se non si
     // riesce a leggerla si stima 1 anno (piano annuale); si corregge comunque

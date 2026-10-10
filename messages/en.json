@@ -250,7 +250,7 @@
   },
   "authRegister": {
     "registerTitle": "Create your account",
-    "registerDescription": "Join thousands of digital entrepreneurs",
+    "registerDescription": "Join the community that lends a hand",
     "alreadyHaveAccount": "Already have an account?",
     "loginHere": "Log in here",
     "byCreatingAccount": "By clicking Create your account you accept our",
@@ -428,7 +428,7 @@
     "viewFullMarketplace": "View the whole Ecosystem",
     "yourNetwork": "Your KUMANI Community",
     "viewFullNetwork": "View the full Community",
-    "activeKumaniLabel": "active KUMANI",
+    "activeKumaniLabel": "{n, plural, one {active KUMANI} other {active KUMANI}}",
     "pendingKumaniLabel": "not yet active",
     "goToFavorites": "Go to your favorite services",
     "pointsCardLabel": "Your points earned for logging in:",
@@ -633,7 +633,7 @@
     "qualificationVouchersHint": "You’ll find them in your Wallet, in the vouchers section, with instructions on how to give them.",
     "qualificationBlackExtra": "You also get a one-year Pro voucher just for you, and from now on 1 voucher every {every} new activations. The Kumano of the Day showcase, an invitation to the annual KUMANI event and the Black Council are waiting for you too.",
     "qualificationOpenWallet": "Go to your vouchers",
-    "rankPendingLine": "Being confirmed: +{acts} activations, +{points} KU Points",
+    "rankPendingLine": "Being confirmed: {acts, plural, one {+# activation} other {+# activations}}, +{points} KU Points",
     "receivedWelcomeNote": "You only get the Welcome Bonus for people who land in your 5 direct spots: at most 5 people."
   },
   "marketplace": {
@@ -10118,7 +10118,8 @@
     "passLink": "Give the {service} Pass to someone",
     "shareLearnMore": "Find out what it is and how it works:",
     "learnMoreService": "Find out more about {service}",
-    "learnMorePlan": "Discover every service included"
+    "learnMorePlan": "Discover every service included",
+    "redeem_plan_mismatch": "You already have a different plan active: you can use this gift when your plan expires, or it stays valid for someone else."
   },
   "relatedServices": {
     "banner": "Finding {tool} useful? Discover the other services in",

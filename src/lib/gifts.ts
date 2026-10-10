@@ -20,6 +20,7 @@ export type GiftRedeemReason =
   | 'unavailable'
   | 'already_included'
   | 'already_subscribed'
+  | 'plan_mismatch'
   | 'error'
 
 export type GiftCodeInfo = {

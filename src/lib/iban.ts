@@ -72,9 +72,10 @@ export interface IbanResult {
   italian: ItalianParts | null
 }
 
-/** Toglie spazi (anche non separabili), trattini e mette in maiuscolo. */
+/** Toglie l'etichetta «IBAN:» (copiata da un messaggio), spazi (anche non
+ * separabili), trattini e mette in maiuscolo. */
 export function normalizeIban(input: string): string {
-  return input.replace(/[\s  -]+/g, '').toUpperCase()
+  return input.replace(/^\s*IBAN\s*[:.-]?\s*/i, '').replace(/[\s  -]+/g, '').toUpperCase()
 }
 
 /** Raggruppa a blocchi di 4 caratteri. */

@@ -84,6 +84,15 @@ export async function sendGiftConfirmation(session: Stripe.Checkout.Session, ord
   if (!to || (session.amount_total ?? 0) <= 0) return
   const { data: codes } = await service().from('gift_codes').select('code, valid_until').eq('order_id', orderId).order('created_at')
   if (!codes?.length) return
+  // Una sola email per ordine: webhook e ritorno da Stripe (anche ricaricando
+  // la pagina) possono arrivare entrambi, parte solo chi «prenota» l'invio
+  const { data: claimed } = await service()
+    .from('gift_orders')
+    .update({ confirmation_sent_at: new Date().toISOString() })
+    .eq('id', orderId)
+    .is('confirmation_sent_at', null)
+    .select('id')
+  if (!claimed?.length) return
 
   const locale = meta.locale && locales.includes(meta.locale) ? meta.locale : defaultLocale
   const t = await getTranslations({ locale, namespace: 'purchaseEmail' })
@@ -153,5 +162,11 @@ ${paragraphs
 <p>${escapeHtml(t('signature'))}</p>
 </div></div></body></html>`
 
-  await sendEmail({ to, subject, html, text, idempotencyKey: `gift-${session.id}` })
+  try {
+    await sendEmail({ to, subject, html, text, idempotencyKey: `gift-${session.id}` })
+  } catch (err) {
+    // Non partita: si potrà riprovare (webhook ripetuto o ritorno da Stripe)
+    await service().from('gift_orders').update({ confirmation_sent_at: null }).eq('id', orderId)
+    throw err
+  }
 }

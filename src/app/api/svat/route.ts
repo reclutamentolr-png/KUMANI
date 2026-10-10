@@ -28,13 +28,22 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
-  const body = await request.json()
-  const { input } = body
+  let body: { input?: unknown; mode?: unknown }
+  try {
+    body = await request.json()
+  } catch {
+    return NextResponse.json({ error: 'Input required' }, { status: 400 })
+  }
+  const input = typeof body.input === 'string' ? body.input.trim() : ''
   // Due ricerche separate: 'website' (solo sito) o 'vat' (solo partita IVA).
   // Senza mode si indovina dall'input, come prima.
   const mode: 'website' | 'vat' | 'auto' = body.mode === 'vat' || body.mode === 'website' ? body.mode : 'auto'
-  if (!input || typeof input !== 'string') {
+  if (!input) {
     return NextResponse.json({ error: 'Input required' }, { status: 400 })
+  }
+  // Un indirizzo o una partita IVA, non un testo intero
+  if (input.length > 300) {
+    return NextResponse.json({ error: 'invalidUrl' }, { status: 400 })
   }
 
   const checks: SVATCheck[] = []
@@ -50,9 +59,18 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'invalidUrl' }, { status: 400 })
   }
   const isURL = !vat && looksLikeURL
-  const domain = isURL
-    ? input.replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0]
-    : input
+  // Senza «https://» i controlli sul sito non partivano (amazon.it 85, https://amazon.it 41):
+  // l'indirizzo si completa sempre e il dominio si ricava da lì
+  let url = input
+  let domain = input
+  if (isURL) {
+    url = /^https?:\/\//i.test(input) ? input : `https://${input}`
+    try {
+      domain = new URL(url).hostname.toLowerCase().replace(/^www\./, '')
+    } catch {
+      return NextResponse.json({ error: 'invalidUrl' }, { status: 400 })
+    }
+  }
 
   if (isURL) {
     // Shared lookups: WHOIS (checkWHOIS + checkDomainAge) and the homepage
@@ -63,7 +81,7 @@ export async function POST(request: NextRequest) {
     // WAF/rate-limiter blocks some of them (which used to cost legitimate,
     // well-protected sites points for no fraud-related reason).
     const whoisTextPromise = fetchWhoisText(domain)
-    const pagePromise = fetchPageHtml(input)
+    const pagePromise = fetchPageHtml(url)
 
     // Run all checks in parallel
     const results = await Promise.allSettled([
@@ -73,8 +91,8 @@ export async function POST(request: NextRequest) {
       checkDMARC(domain),
       checkMX(domain),
       checkPTR(domain),
-      checkHTTPHeaders(input),
-      checkSSL(input, domain),
+      checkHTTPHeaders(url),
+      checkSSL(url, domain),
       checkAbuseIPDB(domain),
       checkContentScraping(pagePromise),
       checkLegalPages(pagePromise),
@@ -639,6 +657,20 @@ async function checkSSL(url: string, domain: string): Promise<SVATCheck | null> 
 interface FetchedPage {
   html: string
   status: number
+  // Pagina leggibile: risposta 2xx con testo vero. Molti siti seri bloccano i
+  // programmi o costruiscono la pagina in JavaScript: senza testo non si può
+  // giudicare (prima finivano «possibile truffa», es. Amazon 41).
+  readable: boolean
+}
+
+function pageText(html: string) {
+  return html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
+    .replace(/<!--[\s\S]*?-->/g, '')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
 }
 
 async function fetchPageHtml(url: string): Promise<FetchedPage | null> {
@@ -653,8 +685,10 @@ async function fetchPageHtml(url: string): Promise<FetchedPage | null> {
       },
       next: { revalidate: 3600 },
     })
-    const html = await res.text()
-    return { html, status: res.status }
+    // Basta l'inizio della pagina (niente pagine giganti in memoria)
+    const html = (await res.text()).slice(0, 2_000_000)
+    const ok = res.status >= 200 && res.status < 300
+    return { html, status: res.status, readable: ok && pageText(html).length >= 200 }
   } catch {
     return null
   }
@@ -665,44 +699,24 @@ async function checkContentScraping(pagePromise: Promise<FetchedPage | null>): P
   const page = await pagePromise
   if (!page) return null
 
-  if (page.status < 200 || page.status >= 300) {
+  // Pagina non leggibile (bloccata ai programmi o fatta in JavaScript): da
+  // verificare a mano, senza togliere punti
+  if (!page.readable) {
     return {
       id: 'contentScraping',
       name: 'checkContentScraping',
-      status: 'warning',
-      points: -5,
-      details: `Could not fetch page content (HTTP ${page.status})`,
+      status: 'check',
+      points: 0,
+      details: `Could not read the page content (HTTP ${page.status})`,
       detailsKey: 'contentFetchError',
       source: 'Page scrape',
     }
   }
 
   const html = page.html
-
-  // Strip HTML tags for text content analysis
-  const text = html
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
-    .replace(/<!--[\s\S]*?-->/g, '')
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim()
-
-  const textLength = text.length
+  const textLength = pageText(html).length
   const hasH1 = /<h1[^>]*>([^<]+)<\/h1>/i.test(html)
   const hasH2 = /<h2[^>]*>([^<]+)<\/h2>/i.test(html)
-
-  if (textLength < 200) {
-    return {
-      id: 'contentScraping',
-      name: 'checkContentScraping',
-      status: 'risk',
-      points: -15,
-      details: `Page content too short (${textLength} characters) — possible placeholder/scam page`,
-      detailsKey: 'contentTooShort',
-      source: 'Page scrape',
-    }
-  }
 
   let contentDetails = `Content length: ${textLength} chars`
   if (hasH1) contentDetails += ' | H1 present ✓'
@@ -723,7 +737,7 @@ async function checkContentScraping(pagePromise: Promise<FetchedPage | null>): P
 // 8. Analisi struttura link/footer — pagine legali
 async function checkLegalPages(pagePromise: Promise<FetchedPage | null>): Promise<SVATCheck | null> {
   const page = await pagePromise
-  if (!page || page.status < 200 || page.status >= 300) return null
+  if (!page || !page.readable) return null
 
   const html = page.html.toLowerCase()
 
@@ -779,7 +793,7 @@ async function checkLegalPages(pagePromise: Promise<FetchedPage | null>): Promis
 // 9. Valutazione recensioni/testimonianze
 async function checkReviews(pagePromise: Promise<FetchedPage | null>): Promise<SVATCheck | null> {
   const page = await pagePromise
-  if (!page || page.status < 200 || page.status >= 300) return null
+  if (!page || !page.readable) return null
 
   const html = page.html.toLowerCase()
 
@@ -822,7 +836,7 @@ async function checkReviews(pagePromise: Promise<FetchedPage | null>): Promise<S
 // 10. Valutazione del modello di business
 async function checkBusinessModel(pagePromise: Promise<FetchedPage | null>): Promise<SVATCheck | null> {
   const page = await pagePromise
-  if (!page || page.status < 200 || page.status >= 300) return null
+  if (!page || !page.readable) return null
 
   const html = page.html.toLowerCase()
 

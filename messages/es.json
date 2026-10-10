@@ -219,7 +219,7 @@
   },
   "authRegister": {
     "registerTitle": "Crea tu cuenta",
-    "registerDescription": "Únete a miles de emprendedores digitales",
+    "registerDescription": "Únete a la comunidad que se echa una mano",
     "alreadyHaveAccount": "¿Ya tienes una cuenta?",
     "loginHere": "Accede aquí",
     "byCreatingAccount": "Al hacer clic en Crear tu cuenta aceptas nuestros",
@@ -569,7 +569,7 @@
     "viewFullMarketplace": "Ver todo el Ecosistema",
     "yourNetwork": "Tu Comunidad KUMANI",
     "viewFullNetwork": "Ver toda la Comunidad",
-    "activeKumaniLabel": "KUMANI activos",
+    "activeKumaniLabel": "{n, plural, one {KUMANI activo} other {KUMANI activos}}",
     "pendingKumaniLabel": "aún no activos",
     "goToFavorites": "Ir a tus servicios favoritos",
     "pointsCardLabel": "Tus puntos acumulados por los accesos:",
@@ -602,7 +602,7 @@
     "qualificationVouchersHint": "Los encuentras en tu Wallet, en la sección de vouchers, con las indicaciones para regalarlos.",
     "qualificationBlackExtra": "Además tienes un voucher Pro de un año solo para ti y desde ahora recibes 1 voucher cada {every} nuevas activaciones. También te esperan el escaparate del Kumano del Día, la invitación al evento anual KUMANI y el Consejo de los Black.",
     "qualificationOpenWallet": "Ir a tus vouchers",
-    "rankPendingLine": "En confirmación: +{acts} activaciones, +{points} KU Points",
+    "rankPendingLine": "En confirmación: {acts, plural, one {+# activación} other {+# activaciones}}, +{points} KU Points",
     "receivedWelcomeNote": "Solo recibes el Bono de Acogida por quien entra en tus 5 puestos directos: como máximo 5 personas."
   },
   "marketplace": {
@@ -10118,7 +10118,8 @@
     "passLink": "Regala el Pass {service} a alguien",
     "shareLearnMore": "Descubre qué es y cómo funciona:",
     "learnMoreService": "Descubre más sobre {service}",
-    "learnMorePlan": "Descubre todos los servicios incluidos"
+    "learnMorePlan": "Descubre todos los servicios incluidos",
+    "redeem_plan_mismatch": "Ya tienes otro plan activo: podrás usar este regalo cuando tu plan caduque, o sigue siendo válido para otra persona."
   },
   "relatedServices": {
     "banner": "¿Te resulta útil {tool}? Descubre los otros servicios del grupo",

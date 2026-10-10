@@ -1,18 +1,29 @@
+import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
 
 /**
- * Awards +1 daily_points the first time this tool is used today by the
- * current user. Safe to call after any mutation succeeds: the actual
- * once-per-tool-per-day cap is enforced by a unique constraint in the
- * award_tool_point() RPC, not here, so repeating the call is a no-op
- * rather than a double-award. Never throws — a failure here must not
- * fail the action that already succeeded.
+ * KU Karma del giorno (una volta per servizio al giorno) a chi ha appena usato
+ * un servizio. Va chiamata dal server dopo che l'azione è riuscita: la
+ * funzione del database non è più chiamabile dal browser
+ * (award_tool_point_for, solo chiave di servizio). Il limite di una volta al
+ * giorno lo fa il database, quindi ripetere la chiamata non dà punti in più.
+ * Non lancia mai errori: il punto non deve far fallire l'azione già riuscita.
  */
-export async function awardToolPoint(toolName: string) {
+export async function awardToolPoint(toolName: string): Promise<{ awarded: boolean; new_balance: number } | null> {
   try {
     const supabase = await createClient()
-    await supabase.rpc('award_tool_point', { p_tool_name: toolName })
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    if (!user) return null
+    const service = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+      auth: { autoRefreshToken: false, persistSession: false },
+    })
+    const { data } = await service
+      .rpc('award_tool_point_for', { p_user: user.id, p_tool_name: toolName })
+      .maybeSingle<{ awarded: boolean; new_balance: number }>()
+    return data ?? null
   } catch {
-    // Never let a points-award failure fail the caller's already-succeeded action.
+    return null
   }
 }

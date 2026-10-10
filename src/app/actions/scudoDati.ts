@@ -142,7 +142,7 @@ export async function checkMyEmail(): Promise<ScudoResponse> {
 
   const result = await fetchXon(email, hash)
   if (typeof result === 'string') {
-    await supabase.rpc('scudo_dati_release', { p_kind: 'own' })
+    await service().rpc('scudo_dati_release_for', { p_user: user.id, p_kind: 'own' })
     return { ok: false, error: result }
   }
   await awardToolPoint('scudo-dati')
@@ -177,7 +177,7 @@ export async function checkOtherEmail(rawEmail: string): Promise<ScudoResponse> 
   const hash = hashEmail(email)
   const result = (await cached(hash)) ?? (await fetchXon(email, hash))
   if (typeof result === 'string') {
-    await supabase.rpc('scudo_dati_release', { p_kind: 'other' })
+    await service().rpc('scudo_dati_release_for', { p_user: user.id, p_kind: 'other' })
     return { ok: false, error: result }
   }
 
@@ -188,20 +188,14 @@ export async function checkOtherEmail(rawEmail: string): Promise<ScudoResponse> 
       .rpc('spend_daily_points', { p_amount: cost })
       .single<{ success: boolean; new_daily_points: number }>()
     if (spendError || !spent?.success) {
-      await supabase.rpc('scudo_dati_release', { p_kind: 'other' })
+      await service().rpc('scudo_dati_release_for', { p_user: user.id, p_kind: 'other' })
       return { ok: false, error: 'karma', cost, balance: spent?.new_daily_points ?? balance }
     }
     newBalance = spent.new_daily_points
   }
   // KU Karma del giorno per l'uso del servizio (una volta al giorno): il
   // saldo restituito tiene conto anche di questo
-  try {
-    const { data: award } = await supabase
-      .rpc('award_tool_point', { p_tool_name: 'scudo-dati' })
-      .maybeSingle<{ awarded: boolean; new_balance: number }>()
-    if (award?.awarded) newBalance = award.new_balance
-  } catch {
-    // Il punto del giorno non deve far fallire un controllo già riuscito
-  }
+  const award = await awardToolPoint('scudo-dati')
+  if (award?.awarded) newBalance = award.new_balance
   return { ok: true, result, balance: newBalance }
 }

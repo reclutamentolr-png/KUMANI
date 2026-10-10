@@ -33,7 +33,7 @@ export default async function NetworkSummaryCard({ network }: { network: Dashboa
       <div className="mt-5 grid grid-cols-3 gap-2 sm:gap-3">
         <div className="rounded-xl border border-white/10 bg-white/[0.06] px-4 py-3">
           <p className="text-4xl font-extrabold leading-none text-[var(--gold-bright)]">{activeKumaniCount}</p>
-          <p className="mt-1.5 text-xs font-medium text-white/70">{t('activeKumaniLabel')}</p>
+          <p className="mt-1.5 text-xs font-medium text-white/70">{t('activeKumaniLabel', { n: activeKumaniCount })}</p>
         </div>
         <div className="rounded-xl border border-white/10 bg-white/[0.06] px-4 py-3">
           <p className="text-4xl font-extrabold leading-none text-white">{pendingKumaniCount}</p>

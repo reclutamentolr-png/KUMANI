@@ -25,10 +25,25 @@ function listingLocation(data: { countryCode?: string; city?: string; isRemote?:
   return { country_code: countryCode, city: cleanListingCity(data.city), is_remote: Boolean(data.isRemote) }
 }
 
+// Testi, prezzo e immagine ripuliti sul server (i limiti del modulo valgono
+// solo nel browser): titolo 100, descrizione 1000, prezzo ≥ 0, immagine solo https
+function listingFields(data: { title?: string; description?: string; category?: string; price?: number | string | null; imageUrl?: string | null }) {
+  const title = String(data.title ?? '').trim().slice(0, 100)
+  const description = String(data.description ?? '').trim().slice(0, 1000)
+  const priceNumber = data.price === null || data.price === undefined || data.price === '' ? null : Number(data.price)
+  const price = priceNumber === null ? null : Number.isFinite(priceNumber) && priceNumber >= 0 ? Math.min(priceNumber, 10_000_000) : NaN
+  const imageUrl = String(data.imageUrl ?? '').trim()
+  const image = imageUrl === '' ? null : /^https:\/\/[^\s"'<>]{4,2000}$/i.test(imageUrl) ? imageUrl : undefined
+  if (!title || !description || Number.isNaN(price) || image === undefined) return null
+  return { title, description, category: data.category, price, image_url: image }
+}
+
 export async function createListingAction(data: CreateListingData) {
   if (!(await isToolOnline('listings'))) return { success: false, message: 'La Bacheca è momentaneamente sospesa: puoi consultare gli annunci ma non pubblicare o modificare.' }
   const location = listingLocation(data)
   if (!location) return { success: false, message: 'Scegli la nazione dell\'annuncio' }
+  const fields = listingFields(data)
+  if (!fields) return { success: false, message: 'Controlla titolo, descrizione, prezzo e immagine (link https).' }
   const supabase = await createClient()
 
   // The acting user is always the authenticated session, never data.userId
@@ -62,11 +77,7 @@ export async function createListingAction(data: CreateListingData) {
     .from('listings')
     .insert({
       user_id: user.id,
-      title: data.title,
-      description: data.description,
-      category: data.category,
-      price: data.price,
-      image_url: data.imageUrl,
+      ...fields,
       ...location,
       expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
     })
@@ -121,6 +132,8 @@ export async function updateListingAction(listingId: string, data: UpdateListing
   if (!(await isToolOnline('listings'))) return { success: false, message: 'La Bacheca è momentaneamente sospesa: puoi consultare gli annunci ma non pubblicare o modificare.' }
   const location = listingLocation(data)
   if (!location) return { success: false, message: 'Scegli la nazione dell\'annuncio' }
+  const fields = listingFields(data)
+  if (!fields) return { success: false, message: 'Controlla titolo, descrizione, prezzo e immagine (link https).' }
   const supabase = await createClient()
   const {
     data: { user },
@@ -130,11 +143,7 @@ export async function updateListingAction(listingId: string, data: UpdateListing
   const { data: listing, error } = await supabase
     .from('listings')
     .update({
-      title: data.title,
-      description: data.description,
-      category: data.category,
-      price: data.price,
-      image_url: data.imageUrl,
+      ...fields,
       ...location,
     })
     .eq('id', listingId)

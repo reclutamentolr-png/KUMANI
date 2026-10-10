@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { hasActiveAureyaAccess } from '@/lib/aureya-server'
 import {
+  ACOUSTIC_FREQUENCIES,
   ACUITY_LEVELS,
   AMSLER_SIZE,
   computeAcousticScore,
@@ -38,15 +39,31 @@ export async function saveAcousticTestResult(result: AcousticTestResult): Promis
   const gate = await requireActiveAureyaAccess()
   if (!gate.ok) return { success: false, message: gate.message }
 
+  // Solo valori ammessi (come per gli altri test): due orecchie, frequenze
+  // del test, livello tra 0 e 1, dispositivo noto
+  const frequencies: readonly number[] = ACOUSTIC_FREQUENCIES
+  const device = result?.device === 'headphones' || result?.device === 'speaker' ? result.device : null
+  const thresholds = (Array.isArray(result?.thresholds) ? result.thresholds : [])
+    .filter(
+      (t) =>
+        (t?.ear === 'left' || t?.ear === 'right') &&
+        frequencies.includes(Number(t?.frequency)) &&
+        (t?.level === null || (typeof t?.level === 'number' && t.level >= 0 && t.level <= 1))
+    )
+    .slice(0, frequencies.length * 2)
+    .map((t) => ({ ear: t.ear, frequency: t.frequency, level: t.level }))
+  if (!device || thresholds.length === 0) return { success: false, message: 'saveError' }
+  const clean = { device, thresholds } as AcousticTestResult
+
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('aureya_test_results')
     .insert({
       user_id: gate.userId,
       test_type: 'acoustic',
-      result,
-      score: computeAcousticScore(result.thresholds),
-      device_confirmation: result.device,
+      result: clean,
+      score: computeAcousticScore(clean.thresholds),
+      device_confirmation: device,
     })
     .select('id')
     .single()

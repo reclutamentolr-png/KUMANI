@@ -169,10 +169,12 @@ export async function adminRefundWithdrawal(id: string, mode: 'full' | 'proporti
     for (const item of amounts) {
       const amount = mode === 'full' ? item.full : item.proportional
       if (!item.paymentIntent || amount <= 0) continue
-      // Chiave di idempotenza: un doppio clic non rimborsa due volte
+      // Chiave di idempotenza senza la modalità: un doppio clic, o «Pieno» e
+      // poi «Proporzionale», non rimborsano due volte la stessa fattura
+      // (con importo diverso Stripe rifiuta la seconda richiesta)
       const refund = await stripe.refunds.create(
         { payment_intent: item.paymentIntent, amount, reason: 'requested_by_customer', metadata: { withdrawal_request: id, invoice: item.id } },
-        { idempotencyKey: `withdrawal-${id}-${item.id}-${mode}` }
+        { idempotencyKey: `withdrawal-${id}-${item.id}` }
       )
       refundIds.push(refund.id)
       refunded += amount

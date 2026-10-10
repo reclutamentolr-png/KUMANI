@@ -219,7 +219,7 @@
   },
   "authRegister": {
     "registerTitle": "Создать аккаунт",
-    "registerDescription": "Присоединяйтесь к тысячам цифровых предпринимателей",
+    "registerDescription": "Присоединяйтесь к сообществу, которое помогает друг другу",
     "alreadyHaveAccount": "Уже есть аккаунт?",
     "loginHere": "Войти здесь",
     "byCreatingAccount": "Нажимая «Создать аккаунт», вы принимаете наши",
@@ -569,7 +569,7 @@
     "viewFullMarketplace": "Вся Экосистема",
     "yourNetwork": "Твоё сообщество KUMANI",
     "viewFullNetwork": "Посмотреть всё сообщество",
-    "activeKumaniLabel": "активных KUMANI",
+    "activeKumaniLabel": "{n, plural, one {активный KUMANI} few {активных KUMANI} many {активных KUMANI} other {активных KUMANI}}",
     "pendingKumaniLabel": "ещё не активны",
     "goToFavorites": "Перейти к избранным сервисам",
     "pointsCardLabel": "Ваши баллы, накопленные за входы в систему:",
@@ -602,7 +602,7 @@
     "qualificationVouchersHint": "Они в вашем Кошельке, в разделе ваучеров, с подсказками, как их подарить.",
     "qualificationBlackExtra": "Кроме того, у вас есть ваучер Pro на год лично для вас, а с этого момента — 1 ваучер за каждые {every} новых активаций. Вас также ждут витрина «Кумано дня», приглашение на ежегодное мероприятие KUMANI и Совет Black.",
     "qualificationOpenWallet": "К вашим ваучерам",
-    "rankPendingLine": "На подтверждении: +{acts} активаций, +{points} KU Points",
+    "rankPendingLine": "На подтверждении: {acts, plural, one {+# активация} few {+# активации} many {+# активаций} other {+# активации}}, +{points} KU Points",
     "receivedWelcomeNote": "Бонус приёма начисляется только за тех, кто попадает на ваши 5 прямых мест: не более 5 человек."
   },
   "marketplace": {
@@ -10118,7 +10118,8 @@
     "passLink": "Подарить Pass {service}",
     "shareLearnMore": "Узнай, что это и как работает:",
     "learnMoreService": "Подробнее о {service}",
-    "learnMorePlan": "Все включённые сервисы"
+    "learnMorePlan": "Все включённые сервисы",
+    "redeem_plan_mismatch": "У вас уже активен другой тариф: подарок можно использовать, когда он закончится, или он останется для кого-то другого."
   },
   "relatedServices": {
     "banner": "{tool} пригодился? Посмотрите другие сервисы группы",

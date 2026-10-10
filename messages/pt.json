@@ -219,7 +219,7 @@
   },
   "authRegister": {
     "registerTitle": "Crie a sua conta",
-    "registerDescription": "Junte-se a milhares de empreendedores digitais",
+    "registerDescription": "Junta-te à comunidade que se ajuda",
     "alreadyHaveAccount": "Já tem uma conta?",
     "loginHere": "Entre aqui",
     "byCreatingAccount": "Ao clicar em Criar a sua conta, aceita os nossos",
@@ -569,7 +569,7 @@
     "viewFullMarketplace": "Ver todo o Ecossistema",
     "yourNetwork": "A sua Comunidade KUMANI",
     "viewFullNetwork": "Ver toda a Comunidade",
-    "activeKumaniLabel": "KUMANI ativos",
+    "activeKumaniLabel": "{n, plural, one {KUMANI ativo} other {KUMANI ativos}}",
     "pendingKumaniLabel": "ainda não ativos",
     "goToFavorites": "Aceda aos seus serviços favoritos",
     "pointsCardLabel": "Os seus pontos acumulados pelos acessos:",
@@ -602,7 +602,7 @@
     "qualificationVouchersHint": "Encontra-os no seu Wallet, na secção dos vouchers, com as indicações para os oferecer.",
     "qualificationBlackExtra": "Além disso, tem um voucher Pro de um ano só para si e a partir de agora recebe 1 voucher a cada {every} novas ativações. Esperam-no também a montra do Kumano do Dia, o convite para o evento anual KUMANI e o Conselho dos Black.",
     "qualificationOpenWallet": "Ver os seus vouchers",
-    "rankPendingLine": "Em confirmação: +{acts} ativações, +{points} KU Points",
+    "rankPendingLine": "Em confirmação: {acts, plural, one {+# ativação} other {+# ativações}}, +{points} KU Points",
     "receivedWelcomeNote": "Só recebe o Bónus de Acolhimento por quem entra nos seus 5 lugares diretos: no máximo 5 pessoas."
   },
   "marketplace": {
@@ -10118,7 +10118,8 @@
     "passLink": "Ofereça o Pass {service} a alguém",
     "shareLearnMore": "Descobre o que é e como funciona:",
     "learnMoreService": "Saiba mais sobre {service}",
-    "learnMorePlan": "Descubra todos os serviços incluídos"
+    "learnMorePlan": "Descubra todos os serviços incluídos",
+    "redeem_plan_mismatch": "Já tens outro plano ativo: podes usar este presente quando o teu plano expirar, ou continua válido para outra pessoa."
   },
   "relatedServices": {
     "banner": "O {tool} é-lhe útil? Descubra os outros serviços do grupo",

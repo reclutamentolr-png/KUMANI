@@ -250,7 +250,7 @@
   },
   "authRegister": {
     "registerTitle": "Crea il tuo account",
-    "registerDescription": "Unisciti a migliaia di imprenditori digitali",
+    "registerDescription": "Entra nella community che si dà una mano",
     "alreadyHaveAccount": "Hai già un account?",
     "loginHere": "Accedi qui",
     "byCreatingAccount": "Cliccando Crea il tuo account accetti i nostri",
@@ -428,7 +428,7 @@
     "viewFullMarketplace": "Vedi tutto l’Ecosistema",
     "yourNetwork": "La tua Community KUMANI",
     "viewFullNetwork": "Vedi la Community completa",
-    "activeKumaniLabel": "KUMANI attivi",
+    "activeKumaniLabel": "{n, plural, one {KUMANI attivo} other {KUMANI attivi}}",
     "pendingKumaniLabel": "non ancora attivi",
     "goToFavorites": "Vai ai tuoi servizi preferiti",
     "pointsCardLabel": "I tuoi punti accumulati per gli accessi:",
@@ -633,7 +633,7 @@
     "qualificationVouchersHint": "Li trovi nel tuo Wallet, nella sezione dei voucher, con le indicazioni per regalarli.",
     "qualificationBlackExtra": "In più hai un voucher Pro di un anno tutto per te e da ora ricevi 1 voucher ogni {every} nuove attivazioni. Ti aspettano anche la vetrina nel Kumano del Giorno, l’invito all’evento annuale KUMANI e il Consiglio dei Black.",
     "qualificationOpenWallet": "Vai ai tuoi voucher",
-    "rankPendingLine": "In conferma: +{acts} attivazioni, +{points} KU Points",
+    "rankPendingLine": "In conferma: {acts, plural, one {+# attivazione} other {+# attivazioni}}, +{points} KU Points",
     "receivedWelcomeNote": "Ricevi il Bonus Accoglienza solo per chi entra nei tuoi 5 posti diretti: al massimo 5 persone."
   },
   "marketplace": {
@@ -10118,7 +10118,8 @@
     "passLink": "Regala il Pass {service} a qualcuno",
     "shareLearnMore": "Scopri cos’è e come funziona:",
     "learnMoreService": "Scopri di più su {service}",
-    "learnMorePlan": "Scopri tutti i servizi inclusi"
+    "learnMorePlan": "Scopri tutti i servizi inclusi",
+    "redeem_plan_mismatch": "Hai già un altro piano attivo: questo regalo si può usare quando il tuo piano scade, oppure resta valido per qualcun altro."
   },
   "relatedServices": {
     "banner": "Ti è utile {tool}? Scopri gli altri servizi del gruppo",
