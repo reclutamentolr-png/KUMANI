@@ -96,7 +96,9 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
       .subscribe()
     const onVisible = () => document.visibilityState === 'visible' && refresh()
     document.addEventListener('visibilitychange', onVisible)
-    const fallback = setInterval(() => document.visibilityState === 'visible' && refresh(), 8000)
+    // Riserva se un segnale si perde: le mosse arrivano già col segnale in
+    // diretta, e allo scadere del tempo la pagina rilegge da sola
+    const fallback = setInterval(() => document.visibilityState === 'visible' && refresh(), 20000)
     return () => {
       document.removeEventListener('visibilitychange', onVisible)
       clearInterval(fallback)

@@ -27,8 +27,11 @@ type LocaleLayoutProps = {
 // (leggono la sessione, oppure dichiarano dynamic = 'force-dynamic').
 // La manutenzione la applica il proxy a ogni richiesta, anche alle pagine in
 // memoria; qui il MaintenanceGate la mostra a schermo.
+// Preparate in anticipo solo le lingue principali (pubblicazione più veloce):
+// le altre si creano alla prima visita e poi restano pronte come queste.
+const PREBUILT_LOCALES = ['it', 'en']
 export function generateStaticParams() {
-  return locales.map((locale) => ({ locale }))
+  return locales.filter((locale) => PREBUILT_LOCALES.includes(locale)).map((locale) => ({ locale }))
 }
 
 const validLocale = (locale: string) => (locales.includes(locale) ? locale : defaultLocale)
