@@ -7,9 +7,10 @@ import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 import type { HomeNeed } from '@/lib/homeNeeds'
 
 // Dashboard: «In cosa possiamo darti una mano?» in versione compatta, subito
-// sotto la fascia «Oggi». Risposte brevi in fila; toccandone una compaiono i
-// servizi giusti, ognuno con «Apri». Si può chiudere (resta una riga sola,
-// che la riapre) e la scelta si ricorda su questo dispositivo.
+// sotto la fascia «Oggi». Risposte brevi, tutte a vista (due per riga sul telefono);
+// toccandone una compaiono i servizi giusti, ognuno con «Apri». Si può
+// chiudere (resta una riga sola, che la riapre) e la scelta si ricorda su
+// questo dispositivo.
 
 const NEED_ICON: Record<string, LucideIcon> = { ShieldCheck, CalendarDays, PiggyBank, Store, BriefcaseBusiness, Users, Leaf, Gift }
 const EXTRA_ICON: Record<string, LucideIcon> = { Gift, Users }
@@ -68,7 +69,7 @@ export default function DashboardNeeds({
 
       {!hidden && (
         <>
-          <div className="-mx-4 mt-3 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0" role="group" aria-label={texts.title}>
+          <div className="mt-3 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap" role="group" aria-label={texts.title}>
             {needs.map((n) => {
               const Icon = NEED_ICON[n.icon] ?? Smartphone
               const on = active === n.key
@@ -80,11 +81,11 @@ export default function DashboardNeeds({
                   aria-pressed={on}
                   aria-controls="dash-needs-answer"
                   title={n.label}
-                  className={`flex min-h-11 shrink-0 cursor-pointer items-center gap-2 whitespace-nowrap rounded-full border-[1.5px] py-1.5 pl-1.5 pr-3.5 text-sm font-semibold text-[var(--ink)] transition ${
+                  className={`flex min-h-11 min-w-0 cursor-pointer items-center gap-1.5 rounded-full border-[1.5px] py-1.5 pl-1.5 pr-3 text-left text-[13px] font-semibold leading-tight sm:gap-2 sm:pr-3.5 sm:text-sm text-[var(--ink)] transition ${
                     on ? 'border-[var(--ink)] bg-[var(--gold-pale)] shadow-md' : 'border-[var(--gold)]/35 bg-white hover:border-[var(--gold)]'
                   }`}
                 >
-                  <span className={`flex h-7 w-7 items-center justify-center rounded-full ${on ? 'bg-[var(--ink)] text-[var(--gold-bright)]' : 'bg-[var(--gold-pale)] text-[var(--ink)]'}`}>
+                  <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${on ? 'bg-[var(--ink)] text-[var(--gold-bright)]' : 'bg-[var(--gold-pale)] text-[var(--ink)]'}`}>
                     <Icon className="h-4 w-4" />
                   </span>
                   {n.short}
