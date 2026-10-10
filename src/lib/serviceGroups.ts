@@ -49,6 +49,7 @@ const GROUP_OF: Record<string, ServiceGroup> = {
   aureya: 'wellness',
   // Svago
   fabula: 'fun',
+  nexus: 'fun',
   mosaic: 'fun',
   affinity: 'fun',
   veritas: 'fun',
@@ -64,7 +65,7 @@ export const STARTER_SERVICES: Record<ServiceGroup, string[]> = {
   work: ['trova-lavoro', 'kumani-cv', 'preventivi'],
   business: ['landing-page', 'qr-generator', 'whatsapp-messages', 'link-in-bio'],
   wellness: ['oxygen', 'focus', 'neurobalance'],
-  fun: ['fabula', 'mosaic', 'veritas'],
+  fun: ['nexus', 'fabula', 'mosaic', 'veritas'],
 }
 
 // Colori dei gruppi (pallino e icone delle schede)

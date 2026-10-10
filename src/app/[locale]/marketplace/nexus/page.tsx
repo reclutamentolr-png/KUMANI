@@ -1,0 +1,76 @@
+import { getLocale, getTranslations } from 'next-intl/server'
+import { ArrowLeft, Puzzle } from 'lucide-react'
+import Link from '@/components/LocalizedLink'
+import ToolBackLink from '@/components/ToolBackLink'
+import NexusGame from '@/components/nexus/NexusGame'
+import { getNexusStatus } from '@/app/actions/nexus'
+import { NEXUS_LOCALES, nexusLocaleFor, type NexusLocale } from '@/lib/nexus/types'
+
+export const dynamic = 'force-dynamic'
+
+// KUMANI NEXUS (SVAGO, gratis) — fase 1: il cruciverba del giorno.
+// ?lang=it|en sceglie la lingua della griglia (di base quella del sito).
+export default async function NexusPage({ searchParams }: { searchParams: Promise<{ lang?: string }> }) {
+  const [t, tc, locale, { lang }] = await Promise.all([getTranslations('nexus'), getTranslations('common'), getLocale(), searchParams])
+  const gridLocale: NexusLocale = (NEXUS_LOCALES as readonly string[]).includes(lang ?? '') ? (lang as NexusLocale) : nexusLocaleFor(locale)
+  const status = await getNexusStatus(gridLocale)
+
+  return (
+    <div className="min-h-screen bg-[var(--background)]">
+      <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
+        <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-3">
+          <ToolBackLink
+            className="flex min-h-11 items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
+            dashboardLabel={
+              <>
+                <ArrowLeft className="h-5 w-5" /> {tc('backToDashboard')}
+              </>
+            }
+          >
+            <ArrowLeft className="h-5 w-5" />
+            {t('back')}
+          </ToolBackLink>
+          <h1 className="flex items-center gap-2 font-semibold tracking-wide">
+            <Puzzle className="h-5 w-5 text-[var(--gold-bright)]" />
+            KUMANI Nexus
+          </h1>
+        </div>
+      </header>
+
+      <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-2 px-4 pt-4">
+        <p className="text-lg font-extrabold text-[var(--ink)]">{t('title')}</p>
+        {/* Lingua della griglia */}
+        <div className="flex items-center gap-1 rounded-full border border-[var(--gold)]/30 bg-white p-1 text-xs font-bold" role="group" aria-label={t('gridLanguage')}>
+          {NEXUS_LOCALES.map((code) => (
+            <Link
+              key={code}
+              href={`/marketplace/nexus?lang=${code}`}
+              aria-current={code === gridLocale ? 'true' : undefined}
+              className={`flex min-h-9 items-center rounded-full px-3 ${code === gridLocale ? 'bg-[var(--ink)] text-white' : 'text-[var(--ink)] hover:bg-[var(--gold-pale)]'}`}
+            >
+              {t(`lang_${code}`)}
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {status ? (
+        <NexusGame key={`${status.puzzle.day}:${gridLocale}`} status={status} />
+      ) : (
+        <p className="mx-auto mt-8 max-w-md rounded-2xl border border-gray-200 bg-white p-6 text-center text-sm text-[var(--muted)]">{t('error_load')}</p>
+      )}
+
+      <div className="mx-auto mb-10 max-w-4xl px-4">
+        <div className="rounded-2xl border border-[var(--gold)]/25 bg-white p-6 shadow-sm">
+          <h2 className="mb-3 font-bold text-[var(--ink)]">{t('howTitle')}</h2>
+          <ol className="space-y-2 text-sm leading-6 text-[var(--muted)]">
+            <li>1. {t('rule1')}</li>
+            <li>2. {t('rule2')}</li>
+            <li>3. {t('rule3')}</li>
+            <li>4. {t('rule4')}</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  )
+}

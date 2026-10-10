@@ -931,7 +931,9 @@
     "casa": "KUMANI Casa",
     "casaDescription": "Tutta la casa in un posto: manutenzioni con promemoria, utenze e bollette, elettrodomestici con garanzia e documenti.",
     "shop": "KUMANI Shop",
-    "shopDescription": "Il tuo negozio online: prodotti, carrello, pagamento con carta, spedizione o ritiro e ordini."
+    "shopDescription": "Il tuo negozio online: prodotti, carrello, pagamento con carta, spedizione o ritiro e ordini.",
+    "nexus": "KUMANI Nexus",
+    "nexusDescription": "Il cruciverba del giorno: una griglia nuova ogni giorno, uguale per tutti, in italiano o in inglese."
   },
   "neurobalance": {
     "tracksLabel": "Audio di rilassamento",
@@ -11369,5 +11371,42 @@
     "dashHint": "Tocca una risposta: qui sotto compaiono i servizi giusti.",
     "dashOpen": "Apri",
     "dashHide": "Nascondi"
+  },
+  "nexus": {
+    "back": "Torna a Svago",
+    "title": "Il cruciverba del giorno",
+    "gridLanguage": "Lingua della griglia",
+    "lang_it": "Italiano",
+    "lang_en": "English",
+    "error_load": "Non è stato possibile caricare la griglia. Riprova tra poco.",
+    "error_save": "Non è stato possibile salvare il risultato. Riprova.",
+    "error_check": "Controllo non riuscito: riprova.",
+    "howTitle": "Come si gioca",
+    "rule1": "Ogni giorno una griglia nuova, uguale per tutti: a mezzanotte arriva la prossima.",
+    "rule2": "Tocca una casella per scegliere la parola; toccala di nuovo per passare da orizzontale a verticale.",
+    "rule3": "Quando una parola è completa la controlliamo: se è giusta diventa verde e resta fissata.",
+    "rule4": "Bloccato? La lampadina svela la lettera della casella scelta. Completa la griglia ogni giorno per allungare la serie.",
+    "streak": "{n, plural, one {# giorno di fila} other {# giorni di fila}}",
+    "gridLabel": "Griglia del cruciverba",
+    "cellLabel": "Riga {row}, colonna {col}: {letter}",
+    "prevClue": "Definizione precedente",
+    "nextClue": "Definizione successiva",
+    "hint": "Aiuto: mostra una lettera",
+    "wrong": "Non è quella giusta: riprova.",
+    "keyboardHint": "Puoi scrivere con la tastiera; Invio o Tab per passare alla definizione successiva.",
+    "across": "Orizzontali",
+    "down": "Verticali",
+    "delete": "Cancella",
+    "doneTitle": "Griglia completata!",
+    "doneText": "Hai risolto tutte le parole in {time}.",
+    "statStreak": "{n, plural, one {giorno di fila} other {giorni di fila}}",
+    "statTime": "il tuo tempo",
+    "statHints": "{n, plural, one {aiuto usato} other {aiuti usati}}",
+    "cardTitle": "Immagine da condividere",
+    "share": "Condividi il risultato",
+    "nextGrid": "La prossima griglia arriva domani a mezzanotte.",
+    "cardLine": "{streak, plural, one {# giorno di fila} other {# giorni di fila}} · {hints, plural, =0 {senza aiuti} one {# aiuto} other {# aiuti}}",
+    "cardFooter": "Il cruciverba del giorno su KUMANI",
+    "shareText": "Ho completato il cruciverba del giorno di KUMANI Nexus in {time}! Prova anche tu:"
   }
 }

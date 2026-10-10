@@ -451,5 +451,15 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       color: 'gold',
       category: 'svago',
     },
+    {
+      toolName: 'nexus',
+      href: '/marketplace/nexus',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'Puzzle',
+      title: t('nexus'),
+      description: t('nexusDescription'),
+      color: 'gold',
+      category: 'svago',
+    },
   ]
 }

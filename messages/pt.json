@@ -900,7 +900,9 @@
     "casa": "KUMANI Casa",
     "casaDescription": "A casa toda num só lugar: manutenções com lembretes, serviços e faturas, eletrodomésticos com garantia e documentos.",
     "shop": "KUMANI Shop",
-    "shopDescription": "A tua loja online: produtos, carrinho, pagamento com cartão, envio ou levantamento e encomendas."
+    "shopDescription": "A tua loja online: produtos, carrinho, pagamento com cartão, envio ou levantamento e encomendas.",
+    "nexus": "KUMANI Nexus",
+    "nexusDescription": "As palavras cruzadas do dia: uma grelha nova todos os dias, igual para todos, em italiano ou em inglês."
   },
   "neurobalance": {
     "tracksLabel": "Áudios de relaxamento",
@@ -11369,5 +11371,42 @@
     "dashHint": "Toca numa resposta: os serviços certos aparecem aqui em baixo.",
     "dashOpen": "Abrir",
     "dashHide": "Ocultar"
+  },
+  "nexus": {
+    "back": "Voltar a Lazer",
+    "title": "As palavras cruzadas do dia",
+    "gridLanguage": "Idioma da grelha",
+    "lang_it": "Italiano",
+    "lang_en": "English",
+    "error_load": "Não foi possível carregar a grelha. Tenta de novo daqui a pouco.",
+    "error_save": "Não foi possível guardar o resultado. Tenta de novo.",
+    "error_check": "Verificação falhada: tenta de novo.",
+    "howTitle": "Como se joga",
+    "rule1": "Todos os dias uma grelha nova, igual para todos: a próxima chega à meia-noite.",
+    "rule2": "Toca numa casa para escolher a palavra; toca outra vez para passar de horizontal a vertical.",
+    "rule3": "Quando uma palavra está completa verificamo-la: se estiver certa fica verde e fixa.",
+    "rule4": "Encravado? A lâmpada revela a letra da casa escolhida. Completa a grelha todos os dias para aumentar a tua sequência.",
+    "streak": "{n, plural, one {# dia seguido} other {# dias seguidos}}",
+    "gridLabel": "Grelha das palavras cruzadas",
+    "cellLabel": "Linha {row}, coluna {col}: {letter}",
+    "prevClue": "Definição anterior",
+    "nextClue": "Definição seguinte",
+    "hint": "Ajuda: mostrar uma letra",
+    "wrong": "Não é essa: tenta de novo.",
+    "keyboardHint": "Podes escrever com o teclado; Enter ou Tab para passar à definição seguinte.",
+    "across": "Horizontais",
+    "down": "Verticais",
+    "delete": "Apagar",
+    "doneTitle": "Grelha completa!",
+    "doneText": "Resolveste todas as palavras em {time}.",
+    "statStreak": "{n, plural, one {dia seguido} other {dias seguidos}}",
+    "statTime": "o teu tempo",
+    "statHints": "{n, plural, one {ajuda usada} other {ajudas usadas}}",
+    "cardTitle": "Imagem para partilhar",
+    "share": "Partilhar o resultado",
+    "nextGrid": "A próxima grelha chega amanhã à meia-noite.",
+    "cardLine": "{streak, plural, one {# dia seguido} other {# dias seguidos}} · {hints, plural, =0 {sem ajudas} one {# ajuda} other {# ajudas}}",
+    "cardFooter": "As palavras cruzadas do dia na KUMANI",
+    "shareText": "Completei as palavras cruzadas do dia da KUMANI Nexus em {time}! Experimenta também:"
   }
 }

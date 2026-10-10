@@ -900,7 +900,9 @@
     "casa": "KUMANI Casa",
     "casaDescription": "Toda la casa en un solo lugar: mantenimientos con recordatorios, suministros y facturas, electrodomésticos con garantía y documentos.",
     "shop": "KUMANI Shop",
-    "shopDescription": "Tu tienda online: productos, carrito, pago con tarjeta, envío o recogida y pedidos."
+    "shopDescription": "Tu tienda online: productos, carrito, pago con tarjeta, envío o recogida y pedidos.",
+    "nexus": "KUMANI Nexus",
+    "nexusDescription": "El crucigrama del día: una cuadrícula nueva cada día, igual para todos, en italiano o en inglés."
   },
   "neurobalance": {
     "tracksLabel": "Audios de relajación",
@@ -11369,5 +11371,42 @@
     "dashHint": "Toca una respuesta: abajo aparecen los servicios adecuados.",
     "dashOpen": "Abrir",
     "dashHide": "Ocultar"
+  },
+  "nexus": {
+    "back": "Volver a Ocio",
+    "title": "El crucigrama del día",
+    "gridLanguage": "Idioma de la cuadrícula",
+    "lang_it": "Italiano",
+    "lang_en": "English",
+    "error_load": "No se pudo cargar la cuadrícula. Inténtalo de nuevo en un momento.",
+    "error_save": "No se pudo guardar el resultado. Inténtalo de nuevo.",
+    "error_check": "Comprobación fallida: inténtalo de nuevo.",
+    "howTitle": "Cómo se juega",
+    "rule1": "Cada día una cuadrícula nueva, igual para todos: la siguiente llega a medianoche.",
+    "rule2": "Toca una casilla para elegir la palabra; tócala otra vez para pasar de horizontal a vertical.",
+    "rule3": "Cuando una palabra está completa la comprobamos: si es correcta se vuelve verde y queda fija.",
+    "rule4": "¿Atascado? La bombilla revela la letra de la casilla elegida. Completa la cuadrícula cada día para alargar tu racha.",
+    "streak": "{n, plural, one {# día seguido} other {# días seguidos}}",
+    "gridLabel": "Cuadrícula del crucigrama",
+    "cellLabel": "Fila {row}, columna {col}: {letter}",
+    "prevClue": "Definición anterior",
+    "nextClue": "Definición siguiente",
+    "hint": "Ayuda: mostrar una letra",
+    "wrong": "No es esa: inténtalo de nuevo.",
+    "keyboardHint": "Puedes escribir con el teclado; Intro o Tab para pasar a la siguiente definición.",
+    "across": "Horizontales",
+    "down": "Verticales",
+    "delete": "Borrar",
+    "doneTitle": "¡Cuadrícula completada!",
+    "doneText": "Has resuelto todas las palabras en {time}.",
+    "statStreak": "{n, plural, one {día seguido} other {días seguidos}}",
+    "statTime": "tu tiempo",
+    "statHints": "{n, plural, one {ayuda usada} other {ayudas usadas}}",
+    "cardTitle": "Imagen para compartir",
+    "share": "Compartir el resultado",
+    "nextGrid": "La próxima cuadrícula llega mañana a medianoche.",
+    "cardLine": "{streak, plural, one {# día seguido} other {# días seguidos}} · {hints, plural, =0 {sin ayudas} one {# ayuda} other {# ayudas}}",
+    "cardFooter": "El crucigrama del día en KUMANI",
+    "shareText": "¡He completado el crucigrama del día de KUMANI Nexus en {time}! Pruébalo tú también:"
   }
 }

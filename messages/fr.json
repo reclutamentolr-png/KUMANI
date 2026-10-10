@@ -900,7 +900,9 @@
     "casa": "KUMANI Casa",
     "casaDescription": "Toute la maison au même endroit : entretiens avec rappels, contrats et factures, appareils avec garantie et documents.",
     "shop": "KUMANI Shop",
-    "shopDescription": "Votre boutique en ligne : produits, panier, paiement par carte, livraison ou retrait, et commandes."
+    "shopDescription": "Votre boutique en ligne : produits, panier, paiement par carte, livraison ou retrait, et commandes.",
+    "nexus": "KUMANI Nexus",
+    "nexusDescription": "Les mots croisés du jour : une nouvelle grille chaque jour, la même pour tous, en italien ou en anglais."
   },
   "neurobalance": {
     "tracksLabel": "Audios de relaxation",
@@ -11369,5 +11371,42 @@
     "dashHint": "Touchez une réponse : les bons services apparaissent ci-dessous.",
     "dashOpen": "Ouvrir",
     "dashHide": "Masquer"
+  },
+  "nexus": {
+    "back": "Retour à Loisirs",
+    "title": "Les mots croisés du jour",
+    "gridLanguage": "Langue de la grille",
+    "lang_it": "Italiano",
+    "lang_en": "English",
+    "error_load": "Impossible de charger la grille. Réessayez dans un instant.",
+    "error_save": "Impossible d’enregistrer le résultat. Réessayez.",
+    "error_check": "Vérification échouée : réessayez.",
+    "howTitle": "Comment jouer",
+    "rule1": "Chaque jour une nouvelle grille, la même pour tous : la suivante arrive à minuit.",
+    "rule2": "Touchez une case pour choisir le mot ; touchez-la à nouveau pour passer de l’horizontal au vertical.",
+    "rule3": "Quand un mot est complet, nous le vérifions : s’il est juste, il devient vert et reste fixé.",
+    "rule4": "Bloqué ? L’ampoule révèle la lettre de la case choisie. Terminez la grille chaque jour pour allonger votre série.",
+    "streak": "{n, plural, one {# jour d’affilée} other {# jours d’affilée}}",
+    "gridLabel": "Grille de mots croisés",
+    "cellLabel": "Ligne {row}, colonne {col} : {letter}",
+    "prevClue": "Définition précédente",
+    "nextClue": "Définition suivante",
+    "hint": "Aide : révéler une lettre",
+    "wrong": "Ce n’est pas ça : réessayez.",
+    "keyboardHint": "Vous pouvez écrire au clavier ; Entrée ou Tab pour passer à la définition suivante.",
+    "across": "Horizontalement",
+    "down": "Verticalement",
+    "delete": "Effacer",
+    "doneTitle": "Grille terminée !",
+    "doneText": "Vous avez trouvé tous les mots en {time}.",
+    "statStreak": "{n, plural, one {jour d’affilée} other {jours d’affilée}}",
+    "statTime": "votre temps",
+    "statHints": "{n, plural, one {aide utilisée} other {aides utilisées}}",
+    "cardTitle": "Image à partager",
+    "share": "Partager le résultat",
+    "nextGrid": "La prochaine grille arrive demain à minuit.",
+    "cardLine": "{streak, plural, one {# jour d’affilée} other {# jours d’affilée}} · {hints, plural, =0 {sans aide} one {# aide} other {# aides}}",
+    "cardFooter": "Les mots croisés du jour sur KUMANI",
+    "shareText": "J’ai terminé les mots croisés du jour de KUMANI Nexus en {time} ! Essayez aussi :"
   }
 }

@@ -931,7 +931,9 @@
     "casa": "KUMANI Casa",
     "casaDescription": "Your whole home in one place: maintenance with reminders, utilities and bills, appliances with warranty, and documents.",
     "shop": "KUMANI Shop",
-    "shopDescription": "Your online shop: products, cart, card payment, shipping or pickup, and orders."
+    "shopDescription": "Your online shop: products, cart, card payment, shipping or pickup, and orders.",
+    "nexus": "KUMANI Nexus",
+    "nexusDescription": "The daily crossword: a new grid every day, the same for everyone, in Italian or English."
   },
   "neurobalance": {
     "tracksLabel": "Relaxation audio",
@@ -11369,5 +11371,42 @@
     "dashHint": "Tap an answer: the right services appear below.",
     "dashOpen": "Open",
     "dashHide": "Hide"
+  },
+  "nexus": {
+    "back": "Back to Fun",
+    "title": "The daily crossword",
+    "gridLanguage": "Grid language",
+    "lang_it": "Italiano",
+    "lang_en": "English",
+    "error_load": "The grid could not be loaded. Please try again shortly.",
+    "error_save": "Your result could not be saved. Please try again.",
+    "error_check": "Check failed: please try again.",
+    "howTitle": "How to play",
+    "rule1": "A new grid every day, the same for everyone: the next one arrives at midnight.",
+    "rule2": "Tap a square to choose the word; tap it again to switch between across and down.",
+    "rule3": "When a word is complete we check it: if it is right it turns green and stays in place.",
+    "rule4": "Stuck? The light bulb reveals the letter in the chosen square. Finish the grid every day to grow your streak.",
+    "streak": "{n, plural, one {# day in a row} other {# days in a row}}",
+    "gridLabel": "Crossword grid",
+    "cellLabel": "Row {row}, column {col}: {letter}",
+    "prevClue": "Previous clue",
+    "nextClue": "Next clue",
+    "hint": "Help: reveal a letter",
+    "wrong": "Not quite: try again.",
+    "keyboardHint": "You can type with your keyboard; Enter or Tab moves to the next clue.",
+    "across": "Across",
+    "down": "Down",
+    "delete": "Delete",
+    "doneTitle": "Grid completed!",
+    "doneText": "You solved every word in {time}.",
+    "statStreak": "{n, plural, one {day in a row} other {days in a row}}",
+    "statTime": "your time",
+    "statHints": "{n, plural, one {hint used} other {hints used}}",
+    "cardTitle": "Image to share",
+    "share": "Share your result",
+    "nextGrid": "The next grid arrives tomorrow at midnight.",
+    "cardLine": "{streak, plural, one {# day in a row} other {# days in a row}} · {hints, plural, =0 {no hints} one {# hint} other {# hints}}",
+    "cardFooter": "The daily crossword on KUMANI",
+    "shareText": "I finished the KUMANI Nexus daily crossword in {time}! Give it a try:"
   }
 }

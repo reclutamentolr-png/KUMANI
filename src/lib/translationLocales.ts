@@ -103,6 +103,7 @@ export const SECTION_LABELS: Record<string, string> = {
   eventsOrganizer: 'KUMANI Events (organizzatori)',
   mosaic: 'Mosaic',
   fabula: 'Fabula',
+  nexus: 'KUMANI Nexus',
   checkmail: 'CheckMail',
   oxygen: 'OXYGEN',
   antitruffa: 'Manuale Anti-Truffa (condivisione)',

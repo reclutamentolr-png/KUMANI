@@ -7,6 +7,6 @@ export const HOME_TOOL_NAMES = [
   'memolife', 'life-calendar', 'garage', 'casa', 'findo', 'digital-receipt', 'spendly', 'fincheck', 'travel',
   'mandala', 'oxygen', 'neurobalance', 'aureya',
   'preventivi', 'magazzino', 'kumani-cv', 'trova-lavoro',
-  'affinity', 'veritas', 'mosaic', 'fabula',
+  'affinity', 'veritas', 'mosaic', 'fabula', 'nexus',
   'listings', 'spotlight', 'convivio', 'events', 'timebank',
 ]

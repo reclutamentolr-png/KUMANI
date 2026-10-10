@@ -900,7 +900,9 @@
     "casa": "KUMANI Casa",
     "casaDescription": "Dein ganzes Zuhause an einem Ort: Wartungen mit Erinnerungen, Verträge und Rechnungen, Geräte mit Garantie und Unterlagen.",
     "shop": "KUMANI Shop",
-    "shopDescription": "Dein Onlineshop: Produkte, Warenkorb, Kartenzahlung, Versand oder Abholung und Bestellungen."
+    "shopDescription": "Dein Onlineshop: Produkte, Warenkorb, Kartenzahlung, Versand oder Abholung und Bestellungen.",
+    "nexus": "KUMANI Nexus",
+    "nexusDescription": "Das Kreuzworträtsel des Tages: jeden Tag ein neues Rätsel, für alle gleich, auf Italienisch oder Englisch."
   },
   "neurobalance": {
     "tracksLabel": "Entspannungsaudios",
@@ -11369,5 +11371,42 @@
     "dashHint": "Tippe auf eine Antwort: Darunter erscheinen die passenden Dienste.",
     "dashOpen": "Öffnen",
     "dashHide": "Ausblenden"
+  },
+  "nexus": {
+    "back": "Zurück zu Freizeit",
+    "title": "Das Kreuzworträtsel des Tages",
+    "gridLanguage": "Sprache des Rätsels",
+    "lang_it": "Italiano",
+    "lang_en": "English",
+    "error_load": "Das Rätsel konnte nicht geladen werden. Bitte versuche es gleich noch einmal.",
+    "error_save": "Das Ergebnis konnte nicht gespeichert werden. Bitte versuche es erneut.",
+    "error_check": "Prüfung fehlgeschlagen: bitte erneut versuchen.",
+    "howTitle": "So wird gespielt",
+    "rule1": "Jeden Tag ein neues Rätsel, für alle gleich: um Mitternacht kommt das nächste.",
+    "rule2": "Tippe auf ein Feld, um das Wort zu wählen; tippe noch einmal, um zwischen waagerecht und senkrecht zu wechseln.",
+    "rule3": "Ist ein Wort vollständig, prüfen wir es: Ist es richtig, wird es grün und bleibt fest.",
+    "rule4": "Festgefahren? Die Glühbirne zeigt den Buchstaben im gewählten Feld. Löse das Rätsel jeden Tag, um deine Serie zu verlängern.",
+    "streak": "{n, plural, one {# Tag in Folge} other {# Tage in Folge}}",
+    "gridLabel": "Kreuzworträtsel",
+    "cellLabel": "Zeile {row}, Spalte {col}: {letter}",
+    "prevClue": "Vorherige Frage",
+    "nextClue": "Nächste Frage",
+    "hint": "Hilfe: einen Buchstaben zeigen",
+    "wrong": "Nicht ganz: versuch es noch einmal.",
+    "keyboardHint": "Du kannst mit der Tastatur schreiben; Enter oder Tab springt zur nächsten Frage.",
+    "across": "Waagerecht",
+    "down": "Senkrecht",
+    "delete": "Löschen",
+    "doneTitle": "Rätsel gelöst!",
+    "doneText": "Du hast alle Wörter in {time} gelöst.",
+    "statStreak": "{n, plural, one {Tag in Folge} other {Tage in Folge}}",
+    "statTime": "deine Zeit",
+    "statHints": "{n, plural, one {Hilfe genutzt} other {Hilfen genutzt}}",
+    "cardTitle": "Bild zum Teilen",
+    "share": "Ergebnis teilen",
+    "nextGrid": "Das nächste Rätsel kommt morgen um Mitternacht.",
+    "cardLine": "{streak, plural, one {# Tag in Folge} other {# Tage in Folge}} · {hints, plural, =0 {ohne Hilfe} one {# Hilfe} other {# Hilfen}}",
+    "cardFooter": "Das Kreuzworträtsel des Tages auf KUMANI",
+    "shareText": "Ich habe das Kreuzworträtsel des Tages von KUMANI Nexus in {time} gelöst! Probier es auch:"
   }
 }

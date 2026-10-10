@@ -93,7 +93,7 @@ export default function AppNav() {
 
   const path = barePathOf(pathname)
   // Anteprima di una sorpresa: a schermo intero, come la vede chi la riceve
-  if (!member || !MEMBER_AREAS.some((area) => under(path, area)) || path.endsWith('/anteprima')) return null
+  if (!member || !MEMBER_AREAS.some((area) => under(path, area)) || path.endsWith('/anteprima') || under(path, '/marketplace/nexus')) return null
   const current = activeTab(path)
 
   const openProfile = () => {
