@@ -3,6 +3,7 @@ import { ArrowLeft, Puzzle } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import ToolBackLink from '@/components/ToolBackLink'
 import NexusGame from '@/components/nexus/NexusGame'
+import NexusDuelButton from '@/components/nexus/NexusDuelButton'
 import { getNexusStatus } from '@/app/actions/nexus'
 import { NEXUS_LOCALES, nexusLocaleFor, type NexusLocale } from '@/lib/nexus/types'
 
@@ -60,7 +61,20 @@ export default async function NexusPage({ searchParams }: { searchParams: Promis
         <p className="mx-auto mt-8 max-w-md rounded-2xl border border-gray-200 bg-white p-6 text-center text-sm text-[var(--muted)]">{t('error_load')}</p>
       )}
 
-      <div className="mx-auto mb-10 max-w-4xl px-4">
+      <div className="mx-auto mb-10 flex max-w-4xl flex-col gap-4 px-4">
+        {/* Duello con un amico */}
+        {status && (
+          <div className="flex flex-col gap-3 rounded-2xl bg-[var(--ink)] p-5 text-white sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-lg font-extrabold">{t('duel_ctaTitle')}</p>
+              <p className="text-sm text-white/75">{t('duel_ctaText')}</p>
+            </div>
+            <NexusDuelButton
+              gridLocale={gridLocale}
+              className="flex min-h-12 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-xl bg-[var(--gold-bright)] px-5 font-extrabold text-[var(--ink)] disabled:opacity-60"
+            />
+          </div>
+        )}
         <div className="rounded-2xl border border-[var(--gold)]/25 bg-white p-6 shadow-sm">
           <h2 className="mb-3 font-bold text-[var(--ink)]">{t('howTitle')}</h2>
           <ol className="space-y-2 text-sm leading-6 text-[var(--muted)]">

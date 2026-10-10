@@ -23,10 +23,16 @@ function parse(raw: string, size: number): Entry[] {
   return out
 }
 
-const BANKS: Record<NexusLocale, Entry[]> = { it: parse(WORDS_IT, NEXUS_SIZE), en: parse(WORDS_EN, NEXUS_SIZE) }
+const RAW: Record<NexusLocale, string> = { it: WORDS_IT, en: WORDS_EN }
+const banks = new Map<string, Entry[]>()
+const bankFor = (locale: NexusLocale, size: number) => {
+  const k = `${locale}:${size}`
+  if (!banks.has(k)) banks.set(k, parse(RAW[locale], size))
+  return banks.get(k)!
+}
 
 // Numeri casuali ripetibili a partire da un testo (stesso testo, stessa sequenza)
-function rngFrom(seed: string) {
+export function rngFrom(seed: string) {
   let h = 1779033703 ^ seed.length
   for (let i = 0; i < seed.length; i++) {
     h = Math.imul(h ^ seed.charCodeAt(i), 3432918353)
@@ -51,7 +57,7 @@ function shuffle<T>(list: T[], rnd: () => number): T[] {
   return out
 }
 
-function build(bank: Entry[], size: number, rnd: () => number): Placed[] {
+function build(bank: Entry[], size: number, rnd: () => number, maxWords: number): Placed[] {
   const letters: (string | null)[][] = Array.from({ length: size }, () => Array(size).fill(null))
   const used: { a: boolean; d: boolean }[][] = Array.from({ length: size }, () => Array.from({ length: size }, () => ({ a: false, d: false })))
   const placed: Placed[] = []
@@ -99,10 +105,10 @@ function build(bank: Entry[], size: number, rnd: () => number): Placed[] {
   place(first, firstDir === 'a' ? fixed : start, firstDir === 'a' ? start : fixed, firstDir)
 
   const usedWords = new Set([first.word])
-  for (let round = 0; round < 3 && placed.length < 14; round++) {
+  for (let round = 0; round < 3 && placed.length < maxWords; round++) {
     let added = false
     for (const entry of shuffle(bank, rnd)) {
-      if (placed.length >= 14) break
+      if (placed.length >= maxWords) break
       if (usedWords.has(entry.word)) continue
       // Posizioni in cui una lettera della parola cade su una lettera uguale
       const options: { row: number; col: number; dir: NexusDir; crossings: number }[] = []
@@ -137,26 +143,29 @@ function build(bank: Entry[], size: number, rnd: () => number): Placed[] {
 
 const cache = new Map<string, NexusSolution>()
 
-export function nexusSolution(day: string, locale: NexusLocale): NexusSolution {
-  const key = `${locale}:${day}`
-  const hit = cache.get(key)
+// Griglia da un testo qualsiasi (seme): la stessa ogni volta
+export function buildNexus(seed: string, day: string, locale: NexusLocale, size: number): NexusSolution {
+  const cacheKey = `${seed}:${locale}:${size}`
+  const hit = cache.get(cacheKey)
   if (hit) return hit
 
-  const size = NEXUS_SIZE
-  const bank = BANKS[locale]
-  const rnd = rngFrom(`nexus:${key}`)
-  // Diversi tentativi: si tiene la griglia più piena
+  const bank = bankFor(locale, size)
+  const rnd = rngFrom(seed)
+  // Parole e caselle che si vogliono almeno (griglia ben piena)
+  const maxWords = size >= 9 ? 20 : 14
+  const goodWords = size >= 9 ? 15 : 11
+  const goodFilled = Math.round(size * size * 0.6)
   let best: Placed[] = []
   let bestScore = -1
   for (let attempt = 0; attempt < 24; attempt++) {
-    const placed = build(bank, size, rnd)
+    const placed = build(bank, size, rnd, maxWords)
     const filled = new Set(placed.flatMap((p) => Array.from({ length: p.word.length }, (_, k) => `${p.row + (p.dir === 'd' ? k : 0)},${p.col + (p.dir === 'a' ? k : 0)}`))).size
     const score = filled + placed.length * 2
     if (score > bestScore) {
       best = placed
       bestScore = score
     }
-    if (placed.length >= 11 && filled >= 30) break
+    if (placed.length >= goodWords && filled >= goodFilled) break
   }
 
   const letters: string[][] = Array.from({ length: size }, () => Array(size).fill(''))
@@ -178,7 +187,12 @@ export function nexusSolution(day: string, locale: NexusLocale): NexusSolution {
     letters,
     answers,
   }
-  if (cache.size > 50) cache.clear()
-  cache.set(key, solution)
+  if (cache.size > 200) cache.clear()
+  cache.set(cacheKey, solution)
   return solution
+}
+
+// Il cruciverba del giorno
+export function nexusSolution(day: string, locale: NexusLocale): NexusSolution {
+  return buildNexus(`nexus:${locale}:${day}`, day, locale, NEXUS_SIZE)
 }

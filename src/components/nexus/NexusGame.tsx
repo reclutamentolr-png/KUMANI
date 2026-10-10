@@ -2,9 +2,11 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { ChevronLeft, ChevronRight, Clock, Delete, Flame, Lightbulb, LoaderCircle, PartyPopper, Share2 } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Clock, Flame, Lightbulb, LoaderCircle, PartyPopper, Share2 } from 'lucide-react'
 import { checkNexusWord, finishNexus, revealNexusLetter } from '@/app/actions/nexus'
 import { renderNexusShareCard } from '@/lib/nexusShareCard'
+import NexusKeyboard from './NexusKeyboard'
+import NexusDuelButton from './NexusDuelButton'
 import type { NexusDir, NexusResult, NexusSlot, NexusStatus } from '@/lib/nexus/types'
 
 // KUMANI NEXUS, il cruciverba del giorno: si tocca una casella (toccandola di
@@ -16,7 +18,6 @@ import type { NexusDir, NexusResult, NexusSlot, NexusStatus } from '@/lib/nexus/
 type Saved = { letters: string[][]; locked: string[]; hints: number; seconds: number }
 type Cell = { r: number; c: number }
 
-const KEY_ROWS = ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM']
 const key = (r: number, c: number) => `${r},${c}`
 
 const cellsOf = (slot: NexusSlot): Cell[] =>
@@ -340,6 +341,7 @@ export default function NexusGame({ status }: { status: NexusStatus }) {
         >
           <Share2 className="h-5 w-5" /> {t('share')}
         </button>
+        <NexusDuelButton gridLocale={puzzle.locale} />
         <p className="text-sm text-gray-500">{t('nextGrid')}</p>
       </section>
     )
@@ -450,34 +452,7 @@ export default function NexusGame({ status }: { status: NexusStatus }) {
       </div>
 
       {/* Tastiera sul telefono */}
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-[var(--gold)]/20 bg-[#EDE6D6] px-1 pb-[max(env(safe-area-inset-bottom),0.75rem)] pt-2 sm:hidden">
-        <div className="mx-auto flex max-w-md flex-col gap-1.5">
-          {KEY_ROWS.map((row, i) => (
-            <div key={row} className="flex justify-center gap-[5px]">
-              {row.split('').map((letter) => (
-                <button
-                  key={letter}
-                  type="button"
-                  onClick={() => type(letter)}
-                  className="h-12 max-w-[36px] flex-1 cursor-pointer rounded-lg bg-white text-base font-bold text-[var(--ink)] shadow-[0_1px_0_rgba(23,23,23,0.2)] active:bg-[var(--gold-pale)]"
-                >
-                  {letter}
-                </button>
-              ))}
-              {i === 2 && (
-                <button
-                  type="button"
-                  onClick={erase}
-                  aria-label={t('delete')}
-                  className="flex h-12 w-14 cursor-pointer items-center justify-center rounded-lg bg-[#CFC5AF] text-[var(--ink)] active:brightness-95"
-                >
-                  <Delete className="h-5 w-5" />
-                </button>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
+      <NexusKeyboard onLetter={type} onDelete={erase} deleteLabel={t('delete')} />
     </section>
   )
 }
