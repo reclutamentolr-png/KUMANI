@@ -37,14 +37,17 @@ export const slotCells = (slot: NexusSlot): { r: number; c: number }[] =>
   Array.from({ length: slot.len }, (_, k) => ({ r: slot.row + (slot.dir === 'd' ? k : 0), c: slot.col + (slot.dir === 'a' ? k : 0) }))
 
 // ---------------------------------------------------------------------------
-// Duello (fase 2)
+// Sfida da 2 a 4 giocatori (fase 2)
 // ---------------------------------------------------------------------------
 export const NEXUS_DUEL_SIZE = 9
-export const NEXUS_TURN_SECONDS = 60
-// Turni di fila senza parole trovate dopo i quali la partita finisce
-export const NEXUS_STALL_LIMIT = 8
+export const NEXUS_MAX_PLAYERS = 4
+// Secondi per turno: 60 in due, 45 in tre o quattro (l'attesa resta breve)
+export const nexusTurnSeconds = (players: number) => (players > 2 ? 45 : 60)
+// Turni di fila senza parole trovate, per giocatore, dopo i quali la partita finisce
+export const NEXUS_STALL_PER_PLAYER = 4
 
-export type NexusDuelClaim = { slotId: string; mine: boolean; points: number; crossings: number }
+export type NexusDuelPlayer = { seat: number; name: string; score: number; me: boolean; left: boolean }
+export type NexusDuelClaim = { slotId: string; seat: number; points: number; crossings: number }
 
 export type NexusDuelState = {
   code: string
@@ -52,21 +55,22 @@ export type NexusDuelState = {
   channel: string
   locale: NexusLocale
   status: 'waiting' | 'live' | 'finished'
-  // null = non partecipi (puoi unirti se la sfida aspetta un avversario)
-  me: 'host' | 'guest' | null
+  // il mio posto (null = non partecipo: posso unirmi se la sfida aspetta)
+  mySeat: number | null
+  isHost: boolean
   canJoin: boolean
-  host: { name: string; score: number }
-  guest: { name: string; score: number } | null
-  myTurn: boolean
+  players: NexusDuelPlayer[]
+  turnSeat: number | null
   turnEndsAt: string | null
   serverNow: string
-  stall: number
+  stalledOut: boolean
   puzzle: { size: number; open: boolean[][]; numbers: number[][]; slots: NexusSlot[] }
   // caselle ×2 ("riga,colonna")
   special: string[]
   claims: NexusDuelClaim[]
-  // lettere delle parole già prese (le altre caselle vuote)
+  // lettere delle parole già prese (a fine partita tutta la soluzione)
   letters: string[][]
-  lastMove: { mine: boolean; slotId: string | null; correct: boolean; points: number; word: string | null } | null
-  result: 'won' | 'lost' | 'draw' | null
+  lastMove: { seat: number; slotId: string | null; correct: boolean; points: number; word: string | null } | null
+  // posti dei vincitori (più di uno = pari merito)
+  winners: number[]
 }

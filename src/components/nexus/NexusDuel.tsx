@@ -3,20 +3,28 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
-import { Clock, Copy, Crown, Flag, Handshake, LoaderCircle, Send, Share2, Swords } from 'lucide-react'
+import { Clock, Copy, Crown, Flag, Handshake, LoaderCircle, Play, Send, Share2, Swords, UserRound } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { createClient } from '@/lib/supabase/client'
-import { createNexusDuel, getNexusDuel, joinNexusDuel, leaveNexusDuel, playNexusDuel } from '@/app/actions/nexusDuel'
-import { NEXUS_STALL_LIMIT, slotCells, type NexusDir, type NexusDuelState, type NexusSlot } from '@/lib/nexus/types'
+import { createNexusDuel, getNexusDuel, joinNexusDuel, leaveNexusDuel, playNexusDuel, startNexusDuel } from '@/app/actions/nexusDuel'
+import { NEXUS_MAX_PLAYERS, slotCells, type NexusDir, type NexusDuelState, type NexusSlot } from '@/lib/nexus/types'
 import { askConfirm } from '@/lib/confirm'
 import NexusKeyboard from './NexusKeyboard'
 
-// KUMANI NEXUS — il duello con un amico. Lo stato arriva dal server (le
+// KUMANI NEXUS — la Sfida da 2 a 4 giocatori. Lo stato arriva dal server (le
 // risposte non escono mai di lì); a ogni mossa il server manda un segnale sul
-// canale della sfida e i due browser rileggono lo stato.
+// canale della sfida e tutti i browser rileggono lo stato.
 
 type Cell = { r: number; c: number }
 const key = (r: number, c: number) => `${r},${c}`
+
+// Un colore per posto: si distinguono anche per chiarezza, non solo per tinta
+const SEAT = [
+  { cell: 'bg-[var(--gold-bright)]', badge: 'bg-[var(--ink)] text-[var(--gold-bright)]', text: 'text-[#8A6417]', ring: 'shadow-[0_0_0_2px_var(--ink)]' },
+  { cell: 'bg-teal-200', badge: 'bg-teal-800 text-white', text: 'text-teal-800', ring: 'shadow-[0_0_0_2px_#115e59]' },
+  { cell: 'bg-violet-200', badge: 'bg-violet-800 text-white', text: 'text-violet-800', ring: 'shadow-[0_0_0_2px_#5b21b6]' },
+  { cell: 'bg-orange-200', badge: 'bg-orange-800 text-white', text: 'text-orange-800', ring: 'shadow-[0_0_0_2px_#9a3412]' },
+]
 
 export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
   const t = useTranslations('nexus')
@@ -24,12 +32,13 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
   const router = useRouter()
   const [state, setState] = useState<NexusDuelState>(initial)
   const [offset, setOffset] = useState(0)
-  const [now, setNow] = useState(() => Date.now())
+  const [clock, setClock] = useState(() => Date.now())
   const [slotId, setSlotId] = useState<string | null>(null)
   const [draft, setDraft] = useState<Record<string, string>>({})
   const [busy, setBusy] = useState(false)
   const [notice, setNotice] = useState<{ text: string; tone: 'ok' | 'error' } | null>(null)
   const [copied, setCopied] = useState(false)
+  const [link, setLink] = useState('')
 
   const refresh = useCallback(async () => {
     const next = await getNexusDuel(state.code).catch(() => null)
@@ -37,6 +46,12 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
     setOffset(new Date(next.serverNow).getTime() - Date.now())
     setState(next)
   }, [state.code])
+
+  // Indirizzo da mandare agli amici (dal browser: niente differenze col server)
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setLink(`${window.location.origin}${locale === 'it' ? '' : `/${locale}`}/marketplace/nexus/duello/${state.code}`)
+  }, [locale, state.code])
 
   // Tempo reale: segnale della sfida, più una lettura di riserva
   useEffect(() => {
@@ -58,11 +73,11 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
 
   useEffect(() => {
     if (state.status !== 'live') return
-    const tick = setInterval(() => setNow(Date.now()), 500)
+    const tick = setInterval(() => setClock(Date.now()), 500)
     return () => clearInterval(tick)
   }, [state.status])
 
-  const secondsLeft = state.turnEndsAt ? Math.max(0, Math.ceil((new Date(state.turnEndsAt).getTime() - (now + offset)) / 1000)) : 0
+  const secondsLeft = state.turnEndsAt ? Math.max(0, Math.ceil((new Date(state.turnEndsAt).getTime() - (clock + offset)) / 1000)) : 0
   // Tempo scaduto: si chiede al server di passare il turno
   useEffect(() => {
     if (state.status === 'live' && state.turnEndsAt && secondsLeft === 0) {
@@ -72,12 +87,12 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
   }, [state.status, state.turnEndsAt, secondsLeft, refresh])
 
   const claimOf = useMemo(() => new Map(state.claims.map((c) => [c.slotId, c])), [state.claims])
-  // Chi possiede ogni casella (l'ultima parola presa che ci passa)
+  // Di chi è ogni casella (l'ultima parola presa che ci passa)
   const ownerOf = useMemo(() => {
-    const map = new Map<string, 'me' | 'them'>()
+    const map = new Map<string, number>()
     for (const claim of state.claims) {
       const slot = state.puzzle.slots.find((s) => s.id === claim.slotId)
-      if (slot) for (const { r, c } of slotCells(slot)) map.set(key(r, c), claim.mine ? 'me' : 'them')
+      if (slot) for (const { r, c } of slotCells(slot)) map.set(key(r, c), claim.seat)
     }
     return map
   }, [state.claims, state.puzzle.slots])
@@ -92,6 +107,9 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
     return map
   }, [state.puzzle.slots])
 
+  const nameOf = (seat: number | null) => state.players.find((p) => p.seat === seat)?.name ?? ''
+  const myTurn = state.status === 'live' && state.mySeat !== null && state.turnSeat === state.mySeat
+  const meLeft = state.players.find((p) => p.me)?.left ?? false
   const active = state.puzzle.slots.find((s) => s.id === slotId && !claimOf.has(s.id)) ?? null
   const activeCells = active ? slotCells(active) : []
   const fixed = (cell: Cell) => !!state.letters[cell.r]?.[cell.c]
@@ -115,8 +133,7 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
   const type = (letter: string) => {
     if (!active || busy) return
     const next = activeCells.find((cell) => !fixed(cell) && !draft[key(cell.r, cell.c)])
-    if (!next) return
-    setDraft((d) => ({ ...d, [key(next.r, next.c)]: letter }))
+    if (next) setDraft((d) => ({ ...d, [key(next.r, next.c)]: letter }))
   }
   const erase = () => {
     if (!active || busy) return
@@ -130,7 +147,7 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
   }
 
   const submit = async () => {
-    if (!active || !ready || !state.myTurn || busy) return
+    if (!active || !ready || !myTurn || busy) return
     setBusy(true)
     setNotice(null)
     const res = await playNexusDuel(state.code, active.id, guess).catch(() => ({ error: 'error' }))
@@ -172,37 +189,33 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
     return () => window.removeEventListener('keydown', onKey)
   })
 
-  const join = async () => {
+  const run = async (action: () => Promise<{ ok: true } | { error: string }>, errorText: (error: string) => string) => {
     setBusy(true)
-    const res = await joinNexusDuel(state.code).catch(() => ({ error: 'error' }))
+    const res = await action().catch(() => ({ error: 'error' }))
     setBusy(false)
-    if ('error' in res) setNotice({ text: res.error === 'full' ? t('duel_full') : t('error_load'), tone: 'error' })
+    if ('error' in res) setNotice({ text: errorText(res.error), tone: 'error' })
     await refresh()
   }
-
+  const join = () => run(() => joinNexusDuel(state.code), (e) => (e === 'full' ? t('duel_full') : t('error_load')))
+  const start = () => run(() => startNexusDuel(state.code), () => t('duel_needTwo'))
   const leave = async () => {
-    if (!(await askConfirm(state.status === 'live' ? t('duel_leaveConfirm') : t('duel_cancelConfirm'), { tone: 'danger' }))) return
-    setBusy(true)
-    await leaveNexusDuel(state.code).catch(() => null)
-    setBusy(false)
-    await refresh()
+    const message = state.status === 'live' ? t('duel_leaveConfirm') : state.isHost ? t('duel_cancelConfirm') : t('duel_exitConfirm')
+    if (!(await askConfirm(message, { tone: 'danger' }))) return
+    const exitLobby = state.status === 'waiting' && !state.isHost
+    await run(() => leaveNexusDuel(state.code), () => t('error_save'))
+    if (exitLobby) router.push(`${locale === 'it' ? '' : `/${locale}`}/marketplace/nexus`)
   }
-
   const rematch = async () => {
     setBusy(true)
     const res = await createNexusDuel(state.locale).catch(() => ({ error: 'error' }))
+    if ('code' in res) {
+      router.push(`${locale === 'it' ? '' : `/${locale}`}/marketplace/nexus/duello/${res.code}`)
+      return
+    }
     setBusy(false)
-    if ('code' in res) router.push(`${locale === 'it' ? '' : `/${locale}`}/marketplace/nexus/duello/${res.code}`)
-    else setNotice({ text: t('error_save'), tone: 'error' })
+    setNotice({ text: t('error_save'), tone: 'error' })
   }
 
-  // Indirizzo da mandare all'amico (dal browser: niente differenze col server)
-  const [link, setLink] = useState('')
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setLink(`${window.location.origin}${locale === 'it' ? '' : `/${locale}`}/marketplace/nexus/duello/${state.code}`)
-  }, [locale, state.code])
-  const inviteText = t('duel_inviteText', { code: state.code })
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(link)
@@ -213,28 +226,27 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
     }
   }
 
-  const meName = state.me === 'guest' ? state.guest?.name : state.host.name
-  const themName = state.me === 'guest' ? state.host.name : state.guest?.name
-  const myScore = state.me === 'guest' ? (state.guest?.score ?? 0) : state.host.score
-  const theirScore = state.me === 'guest' ? state.host.score : (state.guest?.score ?? 0)
   const lastMoveText = (() => {
     const m = state.lastMove
-    const name = themName ?? ''
-    if (!m) return state.myTurn ? t('duel_firstMoveMine') : t('duel_firstMoveTheirs', { name })
-    if (m.slotId === null) return m.mine ? t('duel_lastTimeoutMine') : t('duel_lastTimeoutTheirs', { name })
-    if (!m.correct) return m.mine ? t('duel_lastWrongMine') : t('duel_lastWrongTheirs', { name })
-    return m.mine ? t('duel_lastCorrectMine', { word: m.word ?? '', points: m.points }) : t('duel_lastCorrectTheirs', { name, word: m.word ?? '', points: m.points })
+    if (!m) return state.turnSeat === state.mySeat ? t('duel_firstMoveMine') : t('duel_firstMoveTheirs', { name: nameOf(state.turnSeat) })
+    const mine = m.seat === state.mySeat
+    const name = nameOf(m.seat)
+    if (m.slotId === null) return mine ? t('duel_lastTimeoutMine') : t('duel_lastTimeoutTheirs', { name })
+    if (!m.correct) return mine ? t('duel_lastWrongMine') : t('duel_lastWrongTheirs', { name })
+    return mine ? t('duel_lastCorrectMine', { word: m.word ?? '', points: m.points }) : t('duel_lastCorrectTheirs', { name, word: m.word ?? '', points: m.points })
   })()
 
+  const host = state.players.find((p) => p.seat === 0)
+
   // --- Non partecipi: unisciti (se la sfida aspetta) ---
-  if (!state.me) {
+  if (state.mySeat === null) {
     return (
       <section className="mx-auto flex max-w-md flex-col items-center gap-4 px-4 py-10 text-center">
         <span className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--gold-bright)] text-[var(--ink)]">
           <Swords className="h-8 w-8" />
         </span>
-        <h2 className="text-2xl font-extrabold text-[var(--ink)]">{t('duel_invitedTitle', { name: state.host.name })}</h2>
-        <p className="text-base text-gray-600">{t('duel_invitedText')}</p>
+        <h2 className="text-2xl font-extrabold text-[var(--ink)]">{t('duel_invitedTitle', { name: host?.name ?? '' })}</h2>
+        <p className="text-base text-gray-600">{t('duel_invitedText', { n: state.players.length })}</p>
         {state.canJoin ? (
           <button
             type="button"
@@ -252,7 +264,7 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
     )
   }
 
-  // --- In attesa dell'amico ---
+  // --- Sala d'attesa ---
   if (state.status === 'waiting') {
     return (
       <section className="mx-auto flex max-w-md flex-col gap-4 px-4 py-6">
@@ -265,7 +277,7 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
           <p className="text-4xl font-extrabold tracking-[0.18em] text-[var(--gold-bright)]">{state.code}</p>
           <div className="flex w-full gap-2">
             <a
-              href={`https://wa.me/?text=${encodeURIComponent(`${inviteText} ${link}`)}`}
+              href={`https://wa.me/?text=${encodeURIComponent(`${t('duel_inviteText', { code: state.code })} ${link}`)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-[var(--gold-bright)] px-3 text-[15px] font-extrabold text-[var(--ink)]"
@@ -281,13 +293,46 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
               <Copy className="h-5 w-5" />
             </button>
           </div>
-          <p className="flex items-center gap-2 text-sm text-white/75" aria-live="polite">
-            {copied ? t('duel_copied') : <><LoaderCircle className="h-4 w-4 animate-spin" /> {t('duel_waiting')}</>}
+          {copied && <p className="text-sm text-white/75">{t('duel_copied')}</p>}
+        </div>
+
+        {/* Giocatori entrati */}
+        <div className="rounded-2xl border border-[var(--gold)]/25 bg-white p-4">
+          <p className="mb-2 text-sm font-extrabold text-[var(--ink)]">{t('duel_players', { n: state.players.length, max: NEXUS_MAX_PLAYERS })}</p>
+          <ul className="grid grid-cols-2 gap-2">
+            {Array.from({ length: NEXUS_MAX_PLAYERS }, (_, seat) => {
+              const p = state.players.find((x) => x.seat === seat)
+              return (
+                <li key={seat} className={`flex min-h-12 items-center gap-2 rounded-xl px-2.5 ${p ? 'bg-[var(--gold-pale)]/60' : 'border border-dashed border-gray-300'}`}>
+                  <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-extrabold ${p ? SEAT[seat].badge : 'bg-gray-100 text-gray-400'}`}>
+                    {p ? p.name.slice(0, 1).toUpperCase() : <UserRound className="h-4 w-4" />}
+                  </span>
+                  <span className={`min-w-0 truncate text-sm ${p ? 'font-bold text-[var(--ink)]' : 'text-gray-500'}`}>
+                    {p ? (p.me ? `${p.name} (${t('duel_youShort')})` : p.name) : t('duel_emptySeat')}
+                  </span>
+                </li>
+              )
+            })}
+          </ul>
+          {state.isHost && (
+            <button
+              type="button"
+              onClick={start}
+              disabled={busy || state.players.length < 2}
+              className="mt-3 flex min-h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[var(--ink)] px-4 font-extrabold text-[var(--gold-bright)] disabled:cursor-default disabled:opacity-50"
+            >
+              {busy ? <LoaderCircle className="h-5 w-5 animate-spin" /> : <Play className="h-5 w-5" />} {t('duel_start')}
+            </button>
+          )}
+          <p className="mt-2 flex items-center justify-center gap-2 text-center text-sm text-gray-600" aria-live="polite">
+            <LoaderCircle className="h-4 w-4 shrink-0 animate-spin" />
+            {state.isHost ? (state.players.length < 2 ? t('duel_waiting') : t('duel_readyHint')) : t('duel_waitHost', { name: host?.name ?? '' })}
           </p>
         </div>
         <DuelRules />
+        {notice && <p className="text-center text-sm font-semibold text-rose-700">{notice.text}</p>}
         <button type="button" onClick={leave} disabled={busy} className="min-h-11 cursor-pointer text-sm font-semibold text-gray-500 hover:text-rose-700">
-          {t('duel_cancel')}
+          {state.isHost ? t('duel_cancel') : t('duel_exit')}
         </button>
       </section>
     )
@@ -295,31 +340,49 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
 
   // --- Partita (in corso o finita) ---
   const finished = state.status === 'finished'
+  const ranking = [...state.players].sort((a, b) => Number(a.left) - Number(b.left) || b.score - a.score)
+  const iWon = state.mySeat !== null && state.winners.includes(state.mySeat)
   return (
     <section className="mx-auto max-w-4xl px-3 pb-56 pt-3 sm:px-6 sm:pb-10">
       {/* Punteggi e turno */}
-      <div className="grid grid-cols-2 gap-2">
-        <div className={`flex items-center gap-2.5 rounded-2xl px-3 py-2 ${state.myTurn ? 'bg-[var(--gold-bright)] shadow-[0_0_0_2px_var(--ink)]' : 'bg-[var(--gold-pale)]'}`}>
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--ink)] text-xs font-extrabold text-[var(--gold-bright)]">{t('duel_youShort')}</span>
-          <span className="min-w-0">
-            <span className="block text-2xl font-extrabold leading-none text-[var(--ink)]">{myScore}</span>
-            <span className="block truncate text-xs font-bold text-[var(--ink)]">{finished ? meName : state.myTurn ? t('duel_yourTurn') : meName}</span>
-          </span>
-        </div>
-        <div className={`flex items-center gap-2.5 rounded-2xl px-3 py-2 ${!state.myTurn && !finished ? 'bg-teal-100 shadow-[0_0_0_2px_#0F766E]' : 'bg-teal-50'}`}>
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-teal-700 text-xs font-extrabold text-white">{(themName ?? '?').slice(0, 1).toUpperCase()}</span>
-          <span className="min-w-0">
-            <span className="block text-2xl font-extrabold leading-none text-[var(--ink)]">{theirScore}</span>
-            <span className="block truncate text-xs font-bold text-[var(--ink)]">{finished || state.myTurn ? themName : t('duel_theirTurn', { name: themName ?? '' })}</span>
-          </span>
-        </div>
+      <div className={`grid gap-2 ${state.players.length > 2 ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-2'}`}>
+        {state.players.map((p) => {
+          const turn = !finished && state.turnSeat === p.seat
+          return (
+            <div key={p.seat} className={`flex items-center gap-2 rounded-2xl bg-white px-2.5 py-2 ${turn ? SEAT[p.seat].ring : 'border border-gray-200'} ${p.left ? 'opacity-50' : ''}`}>
+              <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-extrabold ${SEAT[p.seat].badge}`}>{p.name.slice(0, 1).toUpperCase()}</span>
+              <span className="min-w-0">
+                <span className="block text-xl font-extrabold leading-none text-[var(--ink)]">{p.score}</span>
+                <span className={`block truncate text-xs font-bold ${SEAT[p.seat].text}`}>
+                  {p.left ? `${p.name} · ${t('duel_leftShort')}` : turn ? (p.me ? t('duel_yourTurn') : t('duel_theirTurn', { name: p.name })) : p.me ? `${p.name} (${t('duel_youShort')})` : p.name}
+                </span>
+              </span>
+            </div>
+          )
+        })}
       </div>
 
       {finished ? (
         <div className="mt-3 flex flex-col items-center gap-3 rounded-3xl bg-[var(--ink)] p-5 text-center text-white">
           <Crown className="h-8 w-8 text-[var(--gold-bright)]" />
-          <p className="text-2xl font-extrabold">{state.result === 'won' ? t('duel_won') : state.result === 'lost' ? t('duel_lost', { name: themName ?? '' }) : t('duel_draw')}</p>
-          <p className="text-sm text-white/75">{state.stall >= NEXUS_STALL_LIMIT ? t('duel_endStall') : t('duel_endSolution')}</p>
+          <p className="text-2xl font-extrabold">
+            {state.winners.length > 1 ? t('duel_draw') : iWon ? t('duel_won') : state.winners.length === 1 ? t('duel_lost', { name: nameOf(state.winners[0]) }) : t('duel_over')}
+          </p>
+          <ol className="w-full space-y-1.5 text-left">
+            {ranking.map((p, i) => (
+              <li key={p.seat} className="flex items-center gap-2 rounded-xl bg-white/10 px-3 py-2">
+                <span className="w-5 font-extrabold text-[var(--gold-bright)]">{i + 1}</span>
+                <span className={`flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-extrabold ${SEAT[p.seat].badge}`}>{p.name.slice(0, 1).toUpperCase()}</span>
+                <span className="min-w-0 flex-1 truncate font-semibold">
+                  {p.name}
+                  {p.me ? ` (${t('duel_youShort')})` : ''}
+                  {p.left ? ` · ${t('duel_leftShort')}` : ''}
+                </span>
+                <span className="font-extrabold">{p.score}</span>
+              </li>
+            ))}
+          </ol>
+          <p className="text-sm text-white/75">{state.stalledOut ? t('duel_endStall') : t('duel_endSolution')}</p>
           <div className="flex w-full flex-col gap-2 sm:flex-row">
             <button type="button" onClick={rematch} disabled={busy} className="flex min-h-12 flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl bg-[var(--gold-bright)] px-4 font-extrabold text-[var(--ink)] disabled:opacity-60">
               {busy ? <LoaderCircle className="h-5 w-5 animate-spin" /> : <Swords className="h-5 w-5" />} {t('duel_rematch')}
@@ -349,13 +412,13 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
                 const k = key(r, c)
                 const owner = ownerOf.get(k)
                 const inActive = activeCells.some((cell) => cell.r === r && cell.c === c)
-                const bg = inActive ? 'bg-[var(--gold-pale)] shadow-[inset_0_0_0_2px_var(--ink)]' : owner === 'me' ? 'bg-[var(--gold-bright)]' : owner === 'them' ? 'bg-teal-100' : 'bg-white'
+                const bg = inActive ? 'bg-[var(--gold-pale)] shadow-[inset_0_0_0_2px_var(--ink)]' : owner !== undefined ? SEAT[owner].cell : 'bg-white'
                 const letter = letterAt({ r, c })
                 return (
                   <button
                     key={k}
                     type="button"
-                    onClick={() => !finished && choose({ r, c })}
+                    onClick={() => !finished && !meLeft && choose({ r, c })}
                     aria-label={t('cellLabel', { row: r + 1, col: c + 1, letter: letter || '–' })}
                     className={`relative flex aspect-square cursor-pointer items-center justify-center rounded-[4px] text-[clamp(0.9rem,4.6vw,1.4rem)] font-extrabold text-[var(--ink)] ${bg}`}
                   >
@@ -368,7 +431,7 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
             )}
           </div>
 
-          {!finished && (
+          {!finished && !meLeft && (
             <div className="mt-3 rounded-2xl bg-[var(--ink)] p-3 text-white">
               {active ? (
                 <>
@@ -388,7 +451,7 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
                     <button
                       type="button"
                       onClick={submit}
-                      disabled={!ready || !state.myTurn || busy}
+                      disabled={!ready || !myTurn || busy}
                       className="flex min-h-11 cursor-pointer items-center gap-1.5 rounded-xl bg-[var(--gold-bright)] px-4 text-sm font-extrabold text-[var(--ink)] disabled:cursor-default disabled:opacity-50"
                     >
                       {busy ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />} {t('duel_submit')}
@@ -396,19 +459,19 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
                   </div>
                 </>
               ) : (
-                <p className="text-center text-sm text-white/80">{state.myTurn ? t('duel_pickWord') : t('duel_waitTurn', { name: themName ?? '' })}</p>
+                <p className="text-center text-sm text-white/80">{myTurn ? t('duel_pickWord') : t('duel_waitTurn', { name: nameOf(state.turnSeat) })}</p>
               )}
             </div>
           )}
           {notice && <p className={`mt-2 text-center text-sm font-semibold ${notice.tone === 'ok' ? 'text-emerald-700' : 'text-rose-700'}`}>{notice.text}</p>}
-          {!finished && (
+          {!finished && !meLeft && (
             <button type="button" onClick={leave} disabled={busy} className="mx-auto mt-3 flex min-h-11 cursor-pointer items-center gap-1.5 text-sm font-semibold text-gray-500 hover:text-rose-700">
               <Flag className="h-4 w-4" /> {t('duel_leave')}
             </button>
           )}
         </div>
 
-        {/* Definizioni ancora libere */}
+        {/* Definizioni */}
         <div className="grid flex-1 gap-4 sm:grid-cols-2 lg:grid-cols-1">
           {(['a', 'd'] as NexusDir[]).map((d) => (
             <div key={d} className="rounded-2xl border border-[var(--gold)]/25 bg-white p-4">
@@ -422,17 +485,17 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
                       <li key={s.id}>
                         <button
                           type="button"
-                          disabled={!!claim || finished}
+                          disabled={!!claim || finished || meLeft}
                           onClick={() => setSlotId(s.id)}
                           className={`flex w-full cursor-pointer gap-2 rounded-lg px-2 py-1.5 text-left text-sm disabled:cursor-default ${s.id === active?.id ? 'bg-[var(--gold-pale)] font-semibold' : 'hover:bg-gray-50'} ${
-                            claim ? (claim.mine ? 'text-[#8A6417] line-through' : 'text-teal-700 line-through') : 'text-[var(--ink)]'
+                            claim ? `${SEAT[claim.seat].text} line-through` : 'text-[var(--ink)]'
                           }`}
                         >
                           <span className="w-5 shrink-0 font-bold">{s.num}</span>
                           <span className="flex-1">
                             {s.clue} ({s.len})
                           </span>
-                          {claim && <span className="shrink-0 text-xs font-bold no-underline">+{claim.points}</span>}
+                          {claim && <span className="shrink-0 text-xs font-bold">+{claim.points}</span>}
                         </button>
                       </li>
                     )
@@ -443,7 +506,7 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
         </div>
       </div>
 
-      {!finished && <NexusKeyboard onLetter={type} onDelete={erase} deleteLabel={t('delete')} disabled={!active} />}
+      {!finished && !meLeft && <NexusKeyboard onLetter={type} onDelete={erase} deleteLabel={t('delete')} disabled={!active} />}
     </section>
   )
 }
