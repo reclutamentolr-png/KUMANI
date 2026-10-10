@@ -134,23 +134,12 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
   const urlSegments = request.nextUrl.pathname.split('/').filter(Boolean);
   const urlLocale = urlSegments[0] && locales.includes(urlSegments[0]) ? urlSegments[0] : null;
 
-  let response = intlMiddleware(request);
-
-  // Lingua scelta in automatico (lingua del telefono o cookie di una visita
-  // precedente) ma spenta dall'Admin: si resta in italiano
-  const location = response.headers.get('location');
-  if (!urlLocale && location) {
-    const target = new URL(location, request.url).pathname.split('/').filter(Boolean)[0];
-    if (target && locales.includes(target) && !enabledLocales.includes(target)) {
-      const headers = new Headers(request.headers);
-      headers.set('accept-language', defaultLocale);
-      const otherCookies = request.cookies.getAll().filter((c) => c.name !== 'NEXT_LOCALE').map((c) => `${c.name}=${c.value}`);
-      headers.set('cookie', [...otherCookies, `NEXT_LOCALE=${defaultLocale}`].join('; '));
-      response = intlMiddleware(new NextRequest(request.url, { headers }));
-      response.cookies.set('NEXT_LOCALE', defaultLocale, LOCALE_COOKIE);
-    }
-  }
-
+  // Sessione: si rinnova PRIMA di tutto il resto. Il token nuovo va nella
+  // richiesta (così la pagina e le azioni del server lo usano subito, senza
+  // rinnovarlo una seconda volta con il vecchio: era il ciclo dashboard →
+  // login → dashboard a sessione scaduta) e nella risposta per il browser.
+  let response: NextResponse | null = null;
+  const refreshedCookies: { name: string; value: string; options?: Parameters<NextResponse['cookies']['set']>[2] }[] = [];
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -161,9 +150,10 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
-          cookiesToSet.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, options)
-          );
+          cookiesToSet.forEach((cookie) => {
+            refreshedCookies.push(cookie);
+            response?.cookies.set(cookie.name, cookie.value, cookie.options);
+          });
         },
       },
     }
@@ -183,6 +173,25 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
       }
     } catch {
       user = null;
+    }
+  }
+
+  response = intlMiddleware(request);
+  refreshedCookies.forEach((cookie) => response!.cookies.set(cookie.name, cookie.value, cookie.options));
+
+  // Lingua scelta in automatico (lingua del telefono o cookie di una visita
+  // precedente) ma spenta dall'Admin: si resta in italiano
+  const location = response.headers.get('location');
+  if (!urlLocale && location) {
+    const target = new URL(location, request.url).pathname.split('/').filter(Boolean)[0];
+    if (target && locales.includes(target) && !enabledLocales.includes(target)) {
+      const headers = new Headers(request.headers);
+      headers.set('accept-language', defaultLocale);
+      const otherCookies = request.cookies.getAll().filter((c) => c.name !== 'NEXT_LOCALE').map((c) => `${c.name}=${c.value}`);
+      headers.set('cookie', [...otherCookies, `NEXT_LOCALE=${defaultLocale}`].join('; '));
+      response = intlMiddleware(new NextRequest(request.url, { headers }));
+      response.cookies.set('NEXT_LOCALE', defaultLocale, LOCALE_COOKIE);
+      refreshedCookies.forEach((cookie) => response!.cookies.set(cookie.name, cookie.value, cookie.options));
     }
   }
 
