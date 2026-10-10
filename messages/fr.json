@@ -11445,7 +11445,7 @@
     "duel_lastTimeoutMine": "Temps écoulé : le tour est passé.",
     "duel_lastTimeoutTheirs": "{name} n’a pas joué à temps.",
     "duel_pickWord": "Touchez une case ou une définition libre pour choisir le mot.",
-    "duel_waitTurn": "Attendez le coup de {name} : en attendant, choisissez votre prochain mot.",
+    "duel_waitTurn": "Attendez le coup de {name} : à votre tour, vous pourrez choisir votre mot.",
     "duel_preview": "+{points} points · {crossings, plural, =0 {aucun croisement} one {# croisement} other {# croisements}}",
     "duel_submit": "Essayer",
     "duel_correct": "Juste ! +{points} points",

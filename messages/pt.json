@@ -11445,7 +11445,7 @@
     "duel_lastTimeoutMine": "O tempo acabou: a vez passou.",
     "duel_lastTimeoutTheirs": "{name} não jogou a tempo.",
     "duel_pickWord": "Toca numa casa ou numa definição livre para escolher a palavra.",
-    "duel_waitTurn": "Espera pela jogada de {name}: entretanto podes escolher a tua próxima palavra.",
+    "duel_waitTurn": "Espera pela jogada de {name}: quando for a tua vez poderás escolher a palavra.",
     "duel_preview": "+{points} pontos · {crossings, plural, =0 {sem cruzamentos} one {# cruzamento} other {# cruzamentos}}",
     "duel_submit": "Tentar",
     "duel_correct": "Certo! +{points} pontos",

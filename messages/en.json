@@ -11445,7 +11445,7 @@
     "duel_lastTimeoutMine": "Time is up: the turn has passed.",
     "duel_lastTimeoutTheirs": "{name} did not play in time.",
     "duel_pickWord": "Tap a square or a free clue to choose the word.",
-    "duel_waitTurn": "Wait for {name}’s move: meanwhile you can choose your next word.",
+    "duel_waitTurn": "Wait for {name}’s move: when it is your turn you can choose your word.",
     "duel_preview": "+{points} points · {crossings, plural, =0 {no crossings} one {# crossing} other {# crossings}}",
     "duel_submit": "Try",
     "duel_correct": "Right! +{points} points",

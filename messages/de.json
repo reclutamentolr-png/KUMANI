@@ -11445,7 +11445,7 @@
     "duel_lastTimeoutMine": "Zeit abgelaufen: der Zug ist vorbei.",
     "duel_lastTimeoutTheirs": "{name} hat nicht rechtzeitig gespielt.",
     "duel_pickWord": "Tippe auf ein Feld oder eine freie Frage, um das Wort zu wählen.",
-    "duel_waitTurn": "Warte auf den Zug von {name}: Inzwischen kannst du dein nächstes Wort wählen.",
+    "duel_waitTurn": "Warte auf den Zug von {name}: Wenn du dran bist, kannst du dein Wort wählen.",
     "duel_preview": "+{points} Punkte · {crossings, plural, =0 {keine Kreuzung} one {# Kreuzung} other {# Kreuzungen}}",
     "duel_submit": "Versuchen",
     "duel_correct": "Richtig! +{points} Punkte",

@@ -11445,7 +11445,7 @@
     "duel_lastTimeoutMine": "Tempo scaduto: il turno è passato.",
     "duel_lastTimeoutTheirs": "{name} non ha giocato in tempo.",
     "duel_pickWord": "Tocca una casella o una definizione libera per scegliere la parola.",
-    "duel_waitTurn": "Aspetta la mossa di {name}: intanto puoi scegliere la prossima parola.",
+    "duel_waitTurn": "Aspetta la mossa di {name}: quando tocca a te potrai scegliere la parola.",
     "duel_preview": "+{points} punti · {crossings, plural, =0 {nessun incrocio} one {# incrocio} other {# incroci}}",
     "duel_submit": "Prova",
     "duel_correct": "Giusta! +{points} punti",
