@@ -13,10 +13,12 @@ import {
   Building2,
   Menu,
   X,
-  ChevronRight
+  ChevronRight,
+  Smartphone
 } from 'lucide-react'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import NotificationBell from '@/components/notifications/NotificationBell'
+import { InstallAppLink } from '@/components/InstallAppBanner'
 import ProfileModal, { type ProfileChangeState } from './ProfileModal'
 import { getMyChangeRequest } from '@/app/actions/profileChanges'
 import { OPEN_PROFILE_EVENT } from '@/components/nav/AppNav'
@@ -38,6 +40,7 @@ export default function DashboardHeaderActions({ user, profile, isAdmin }: Dashb
   const lockT = useTranslations('profileLock')
   const docsT = useTranslations('documents')
   const bpT = useTranslations('businessProfile')
+  const tInstall = useTranslations('install')
   // Profilo ancora da completare (il database imposta profile_completed_at
   // quando tutti i dati obbligatori sono presenti): pallino arancione.
   const profileIncomplete = !profile?.profile_completed_at
@@ -144,6 +147,10 @@ export default function DashboardHeaderActions({ user, profile, isAdmin }: Dashb
               <Wallet className="h-5 w-5 text-[var(--gold-bright)]" /> <span className="flex-1">{t('myWallet')}</span>
               <ChevronRight className="h-4 w-4 text-white/40" />
             </Link>
+            <InstallAppLink className={`${menuItem} w-full text-left`}>
+              <Smartphone className="h-5 w-5 text-[var(--gold-bright)]" /> <span className="flex-1">{tInstall('menuLink')}</span>
+              <ChevronRight className="h-4 w-4 text-white/40" />
+            </InstallAppLink>
             {isAdmin && (
               <Link href="/admin" onClick={() => setMenuOpen(false)} className={menuItem}>
                 <Settings className="h-5 w-5 text-red-400" /> <span className="flex-1">{t('adminPanel')}</span>

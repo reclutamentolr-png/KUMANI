@@ -40,6 +40,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "gifts",
   "guides",
   "hub",
+  "install",
   "jobs",
   "kordataShowcase",
   "kuRewards",

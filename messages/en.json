@@ -593,17 +593,7 @@
     "adminAccount": "Admin account:",
     "exitImpersonation": "Exit impersonation and return to your admin account?",
     "returnAdmin": "Return to Admin",
-    "installTitle": "Install Kumani",
-    "installDesc": "Log in faster, like a real app",
-    "installIOS": "On iPhone/iPad, just 2 taps:",
-    "installStep1": "Tap",
     "shareButton": "Share",
-    "installStep1Lower": "at the bottom",
-    "installStep2": "Choose",
-    "addToHome": "\"Add to Home Screen\"",
-    "installPrompt": "Add Kumani to your home screen: you'll get a dedicated icon and it will open fullscreen without the browser bar.",
-    "installNow": "Install Now",
-    "notNow": "Not now",
     "gotIt": "Got it",
     "newMessage": "You have 1 new message",
     "newMessages": "You have {count} new messages",
@@ -11330,5 +11320,18 @@
     "afterFees": "Stripe keeps its fees on each payment. Statements, payouts and receipts are in your Stripe dashboard.",
     "openStripe": "Open your Stripe dashboard",
     "step1Done": "Done: your seller details are ready and customers see them before paying."
+  },
+  "install": {
+    "title": "Take KUMANI with you",
+    "text": "Add it to your Home screen and open it like an app.",
+    "add": "Add to Home screen",
+    "later": "Not now",
+    "iosTitle": "Add KUMANI to your Home screen",
+    "iosStep1": "Tap the Share button at the bottom (the square with the arrow).",
+    "iosStep2": "Scroll down and choose “Add to Home Screen”.",
+    "menuTitle": "Install KUMANI from your browser",
+    "menuText": "Open the browser menu (⋮ or ☰) and choose “Install app” or “Add to Home screen”.",
+    "gotIt": "Got it",
+    "menuLink": "Install the app"
   }
 }

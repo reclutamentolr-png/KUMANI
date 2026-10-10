@@ -544,17 +544,7 @@
     "adminAccount": "Cuenta admin:",
     "exitImpersonation": "¿Quieres salir del modo suplantación y volver a tu cuenta de admin?",
     "returnAdmin": "Volver a Admin",
-    "installTitle": "Instalar Kumani",
-    "installDesc": "Accede más rápido, como una app de verdad",
-    "installIOS": "En iPhone/iPad bastan 2 toques:",
-    "installStep1": "Toca",
     "shareButton": "Compartir",
-    "installStep1Lower": "abajo",
-    "installStep2": "Elige",
-    "addToHome": "\"Añadir a la pantalla de inicio\"",
-    "installPrompt": "Añade Kumani a tu pantalla de inicio: tendrás un icono propio y se abrirá a pantalla completa, sin la barra del navegador.",
-    "installNow": "Instalar ahora",
-    "notNow": "Ahora no",
     "gotIt": "Entendido",
     "newMessage": "Tienes 1 mensaje nuevo",
     "newMessages": "Tienes {count} mensajes nuevos",
@@ -11330,5 +11320,18 @@
     "afterFees": "Stripe retiene sus comisiones en cada pago. Extractos, ingresos y recibos están en tu panel de Stripe.",
     "openStripe": "Abre tu panel de Stripe",
     "step1Done": "Hecho: tus datos de vendedor están listos y los clientes los ven antes de pagar."
+  },
+  "install": {
+    "title": "Lleva KUMANI contigo",
+    "text": "Añádelo a la pantalla de inicio y ábrelo como una app.",
+    "add": "Añadir a inicio",
+    "later": "Ahora no",
+    "iosTitle": "Añade KUMANI a la pantalla de inicio",
+    "iosStep1": "Toca el botón Compartir abajo (el cuadrado con la flecha).",
+    "iosStep2": "Desliza y elige «Añadir a pantalla de inicio».",
+    "menuTitle": "Instala KUMANI desde el navegador",
+    "menuText": "Abre el menú del navegador (⋮ o ☰) y elige «Instalar app» o «Añadir a pantalla de inicio».",
+    "gotIt": "Entendido",
+    "menuLink": "Instalar la app"
   }
 }

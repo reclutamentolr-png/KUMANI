@@ -1,3 +1,4 @@
+import InstallAppBanner from '@/components/InstallAppBanner'
 import type { Metadata, Viewport } from 'next'
 import { setRequestLocale } from 'next-intl/server'
 import AppShell from '@/components/AppShell'
@@ -60,6 +61,8 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         {/* Menu fisso delle pagine principali e servizi usati di recente */}
         <AppNav />
         <RecentToolTracker />
+        {/* «Porta KUMANI con te»: installare il sito come app (homepage e dashboard) */}
+        <InstallAppBanner />
         {/* Banner dei cookie: solo se acceso dall'Admin (lib/consent.ts) */}
         <CookieConsent />
       </MaintenanceGate>

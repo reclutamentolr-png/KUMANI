@@ -10,7 +10,6 @@ import ActivityTracker from '@/components/ActivityTracker'
 import ChatModalWrapper from '@/components/ChatModalWrapper'
 import ListingDetailModalWrapper from '@/components/ListingDetailModalWrapper'
 import { getUnreadMessagesCount } from '@/lib/listings-server'
-import InstallAppPrompt from '@/components/InstallAppPrompt'
 import RankAchievementModal from '@/components/RankAchievementModal'
 import RenewalReminderModal from '@/components/RenewalReminderModal'
 import AdminMessagePopup from '@/components/AdminMessagePopup'
@@ -220,7 +219,6 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
         <AdminMessagePopup />
       )}
 
-      <InstallAppPrompt />
 
       <AppHeader loaded={{ user, profile, isAdmin: userIsAdmin }} />
 

@@ -28,6 +28,7 @@ import {
 } from 'lucide-react'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import Logo from '@/components/Logo'
+import { InstallAppLink } from '@/components/InstallAppBanner'
 import HomeKumanoDelGiorno from '@/components/spotlight/HomeKumanoDelGiorno'
 import HomeUpcomingEvents from '@/components/events/HomeUpcomingEvents'
 import HomeKordataShowcase from '@/components/convivio/HomeKordataShowcase'
@@ -46,12 +47,13 @@ import { HOME_LAYOUT_CONFIG, type HomeLayoutKey } from '@/lib/homeLayouts'
 // (src/app/[locale]/page.tsx, preparata in anticipo e tenuta in memoria) e
 // dall'anteprima degli aspetti nell'Admin (admin/anteprima-home/[layout]).
 export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayoutKey }) {
-  const [t, tg, tr, tcat, errorT] = await Promise.all([
+  const [t, tg, tr, tcat, errorT, tInstall] = await Promise.all([
     getTranslations('landingHome'),
     getTranslations('guides'),
     getTranslations('reviews'),
     getTranslations('catalog'),
     getTranslations('errorPages'),
+    getTranslations('install'),
   ])
   const L = HOME_LAYOUT_CONFIG[layoutKey]
   // Apertura con testo a sinistra sul computer (foto a lato)
@@ -525,6 +527,7 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
               <CookiePreferencesLink className="hover:text-[var(--gold-bright)] transition-colors" />
               <Link href="/terms" className="hover:text-[var(--gold-bright)] transition-colors">{t('terms')}</Link>
               <Link href="/contact" className="hover:text-[var(--gold-bright)] transition-colors">{t('contact')}</Link>
+              <InstallAppLink className="cursor-pointer hover:text-[var(--gold-bright)] transition-colors">{tInstall('menuLink')}</InstallAppLink>
             </div>
             <div className="text-gray-400 text-xs sm:text-sm text-center">
               {t('copyright')}
