@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { Mail, MapPin, Phone } from 'lucide-react'
 import ShopFront from '@/components/shop/ShopFront'
-import { loadPublicShop } from '@/lib/shopServer'
+import { loadPublicShop, releaseShopReservation } from '@/lib/shopServer'
 
 // Negozio pubblico del professionista (KUMANI Shop): si compra anche senza
 // essere iscritti. Il venditore è chi gestisce il negozio; KUMANI fornisce
@@ -26,6 +26,8 @@ export default async function PublicShopPage({ params, searchParams }: { params:
   const [{ locale, slug }, { cancelled }] = await Promise.all([params, searchParams])
   setRequestLocale(locale)
   const t = await getTranslations('shopPublic')
+  // Ritorno dal pagamento senza pagare: i pezzi prenotati tornano liberi
+  if (cancelled && cancelled !== '1') await releaseShopReservation(cancelled)
   const shop = await loadPublicShop(slug)
   if (!shop) notFound()
   const { settings, seller } = shop

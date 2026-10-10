@@ -513,10 +513,16 @@ function Orders({ orders, setOrders }: { orders: ShopOrder[]; setOrders: (fn: (o
                   {date(o.paidAt ?? o.createdAt)} · {t(o.delivery === 'pickup' ? 'pickup' : 'shipping')} · {formatCents(o.totalCents, locale)}
                 </span>
               </span>
+              {o.stockShort && (o.status === 'paid' || o.status === 'ready') && <span className="shrink-0 rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-800">{t('stockShortBadge')}</span>}
               <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-bold ${STATUS_TONE[o.status]}`}>{t(`status_${o.status}`)}</span>
             </button>
             {open && (
               <div className="space-y-3 border-t border-gray-100 px-4 py-4 text-sm">
+                {o.stockShort && (o.status === 'paid' || o.status === 'ready') && (
+                  <p role="alert" className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-amber-900">
+                    <strong>{t('stockShortTitle')}</strong> {o.stockShort.map((s) => `${s.missing} × ${s.name}`).join(', ')}. {t('stockShortText')}
+                  </p>
+                )}
                 <ul className="space-y-1">
                   {o.items.map((i) => (
                     <li key={i.product_id} className="flex justify-between gap-3">

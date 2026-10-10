@@ -54,6 +54,8 @@ export type ShopOrder = {
   createdAt: string
   paidAt: string | null
   shippedAt: string | null
+  // Pezzi che mancavano quando è arrivato il pagamento (da verificare)
+  stockShort: { name: string; missing: number }[] | null
 }
 
 export const SHOP_MAX = { name: 80, description: 600, pickupInfo: 300, policy: 2000, productName: 120, productDescription: 1500, notes: 500, cartLines: 30, quantity: 99 }

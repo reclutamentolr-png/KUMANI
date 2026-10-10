@@ -317,6 +317,16 @@ export async function startShopCheckout(input: CheckoutInput): Promise<Result<{ 
     return { success: false, message: 'saveError' }
   }
 
+  // Pezzi da parte per 35 minuti; se intanto li ha presi un altro cliente,
+  // l'ordine è già stato cancellato
+  const { data: reserved, error: reserveError } = await db.rpc('shop_reserve_order', { p_order: order.id })
+  if (reserveError) {
+    console.error('[Shop] prenotazione non riuscita:', reserveError.message)
+    await db.from('shop_orders').delete().eq('id', order.id).eq('status', 'pending')
+    return { success: false, message: 'saveError' }
+  }
+  if (!reserved) return { success: false, message: 'outOfStock' }
+
   const base = `${SITE_URL}${localizedPath(locale, shopPath(shop.settings.slug))}`
   try {
     const session = await getStripe().checkout.sessions.create(
@@ -331,8 +341,9 @@ export async function startShopCheckout(input: CheckoutInput): Promise<Result<{ 
         payment_intent_data: { description: `${shop.settings.name} · KUMANI Shop`, metadata: { order_id: order.id } },
         metadata: { kind: 'shop_order', order_id: order.id },
         success_url: `${base}/ordine/${token}?paid={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${base}?cancelled=1`,
-        expires_at: Math.floor(Date.now() / 1000) + 60 * 60,
+        cancel_url: `${base}?cancelled=${token}`,
+        // Il minimo di Stripe è 30 minuti; la prenotazione dura un po' di più
+        expires_at: Math.floor(Date.now() / 1000) + 31 * 60,
       },
       { stripeAccount: shop.stripeAccountId }
     )

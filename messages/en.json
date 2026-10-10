@@ -8378,7 +8378,9 @@
     "shopPaymentsPausedTitle": "⚠️ Online payments paused",
     "shopPaymentsPausedBody": "Stripe needs some more information: open KUMANI Shop → Payments to see what’s missing.",
     "nexusAbandonedTitle": "Your NEXUS challenge is over",
-    "nexusAbandonedBody": "The other players left challenge {code}: you win."
+    "nexusAbandonedBody": "The other players left challenge {code}: you win.",
+    "shopOrderShortTitle": "⚠️ Order no. {number}: items short",
+    "shopOrderShortBody": "{name} paid {amount}, but stock is short of: {missing}. Check or refund."
   },
   "pushInvite": {
     "title": "Turn on notifications",
@@ -11242,7 +11244,10 @@
     "status_cancelled": "Cancelled and refunded",
     "tab_payments": "Payments",
     "cancel": "Cancel",
-    "cancelTitle": "Cancel the order?"
+    "cancelTitle": "Cancel the order?",
+    "stockShortBadge": "Check",
+    "stockShortTitle": "Items were short at payment:",
+    "stockShortText": "Check you have them; otherwise contact the customer or use «Cancel and refund»."
   },
   "shopPublic": {
     "shipping": "Shipping",
@@ -11268,7 +11273,7 @@
     "error_deliveryInvalid": "Choose how to receive your order.",
     "error_cartEmpty": "Your cart is empty.",
     "error_productGone": "A product is no longer for sale: reload the page.",
-    "error_outOfStock": "A product is no longer available in the chosen quantity.",
+    "error_outOfStock": "A product is no longer available in the chosen quantity: someone may be paying for it right now. Try again in a few minutes.",
     "error_addressInvalid": "Complete the shipping address.",
     "error_countryNotServed": "The seller doesn’t ship to this country.",
     "error_saveError": "Order not created. Please try again.",

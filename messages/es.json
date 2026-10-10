@@ -8378,7 +8378,9 @@
     "shopPaymentsPausedTitle": "⚠️ Pagos en línea suspendidos",
     "shopPaymentsPausedBody": "Stripe pide algo más de información: abre KUMANI Shop → Pagos para ver qué falta.",
     "nexusAbandonedTitle": "Tu desafío NEXUS ha terminado",
-    "nexusAbandonedBody": "Los demás jugadores han abandonado el desafío {code}: has ganado."
+    "nexusAbandonedBody": "Los demás jugadores han abandonado el desafío {code}: has ganado.",
+    "shopOrderShortTitle": "⚠️ Pedido n.º {number}: faltan piezas",
+    "shopOrderShortBody": "{name} ha pagado {amount}, pero en el stock faltan: {missing}. Revisa o reembolsa."
   },
   "pushInvite": {
     "title": "Activa las notificaciones",
@@ -11242,7 +11244,10 @@
     "status_cancelled": "Cancelado y reembolsado",
     "tab_payments": "Pagos",
     "cancel": "Cancelar",
-    "cancelTitle": "¿Cancelar el pedido?"
+    "cancelTitle": "¿Cancelar el pedido?",
+    "stockShortBadge": "Revisar",
+    "stockShortTitle": "Faltaban piezas al pagar:",
+    "stockShortText": "Comprueba que las tienes; si no, contacta con el cliente o usa «Cancelar y reembolsar»."
   },
   "shopPublic": {
     "shipping": "Envío",
@@ -11268,7 +11273,7 @@
     "error_deliveryInvalid": "Elige cómo recibir el pedido.",
     "error_cartEmpty": "El carrito está vacío.",
     "error_productGone": "Un producto ya no está a la venta: recarga la página.",
-    "error_outOfStock": "Un producto ya no está disponible en la cantidad elegida.",
+    "error_outOfStock": "Un producto ya no está disponible en la cantidad elegida: quizá alguien lo está pagando ahora mismo. Inténtalo de nuevo en unos minutos.",
     "error_addressInvalid": "Completa la dirección de envío.",
     "error_countryNotServed": "El vendedor no envía a este país.",
     "error_saveError": "Pedido no creado. Inténtalo de nuevo.",

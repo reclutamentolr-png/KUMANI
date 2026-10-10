@@ -4,6 +4,7 @@ import { serviceDb } from '@/lib/shopPayments'
 import { localizedPath, notifyUser } from '@/lib/push'
 import { escapeHtml, sendEmail } from '@/lib/email'
 import { SITE_URL } from '@/lib/siteUrl'
+import { getStripe } from '@/lib/stripe'
 import { formatCents, shopPath, type ShopOrder, type ShopOrderItem, type ShopProduct, type ShopSettings, type ShipAddress, type OrderStatus } from '@/lib/shop'
 import { defaultLocale, locales } from '../../i18n'
 
@@ -57,6 +58,7 @@ export const mapOrder = (row: any): ShopOrder => ({
   createdAt: row.created_at,
   paidAt: row.paid_at ?? null,
   shippedAt: row.shipped_at ?? null,
+  stockShort: Array.isArray(row.stock_short) && row.stock_short.length ? row.stock_short : null,
 })
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
@@ -95,12 +97,21 @@ export async function loadPublicShop(slug: string): Promise<PublicShop | null> {
     db.from('shop_products').select('*').eq('owner_id', ownerId).eq('is_active', true).order('position').order('created_at'),
   ])
   if (!visible || !account?.charges_enabled) return null
-  const stock = await inventoryStock(ownerId, (products ?? []).map((p) => p.inventory_product_id).filter(Boolean) as string[])
+  const [stock, { data: reservedRows }] = await Promise.all([
+    inventoryStock(ownerId, (products ?? []).map((p) => p.inventory_product_id).filter(Boolean) as string[]),
+    db.rpc('shop_reserved', { p_owner: ownerId }),
+  ])
+  // Pezzi tenuti da parte per chi sta pagando: agli altri si mostrano solo i liberi
+  const reserved = new Map(((reservedRows ?? []) as { product_id: string; quantity: number }[]).map((r) => [r.product_id, Number(r.quantity) || 0]))
   const settings = mapSettings(row)
   return {
     ownerId,
     settings,
-    products: (products ?? []).map((p) => ({ ...mapProduct(p, stock), imageUrl: shopImageUrl(p.image_path) })),
+    products: (products ?? []).map((p) => {
+      const product = mapProduct(p, stock)
+      if (product.stock != null) product.stock = Math.max(product.stock - (reserved.get(product.id) ?? 0), 0)
+      return { ...product, imageUrl: shopImageUrl(p.image_path) }
+    }),
     coverUrl: shopImageUrl(settings.coverPath),
     stripeAccountId: account.stripe_account_id as string,
     seller: {
@@ -116,6 +127,28 @@ export async function loadPublicShop(slug: string): Promise<PublicShop | null> {
 
 const pickLocale = (value: string | null | undefined) => (value && locales.includes(value) ? value : defaultLocale)
 const orderUrl = (locale: string, slug: string, token: string) => `${SITE_URL}${localizedPath(locale, `${shopPath(slug)}/ordine/${token}`)}`
+
+// Il cliente è tornato indietro dal pagamento: i pezzi tornano subito
+// disponibili e la pagina di pagamento viene chiusa, così non si paga più
+// un ordine che non è più prenotato.
+export async function releaseShopReservation(token: string): Promise<void> {
+  if (!/^[A-Za-z0-9_-]{16,64}$/.test(token)) return
+  const db = serviceDb()
+  const { data: order } = await db.from('shop_orders').select('id, owner_id, stripe_session_id').eq('public_token', token).eq('status', 'pending').maybeSingle()
+  if (!order) return
+  if (order.stripe_session_id) {
+    const { data: account } = await db.from('seller_stripe_accounts').select('stripe_account_id').eq('user_id', order.owner_id).maybeSingle()
+    if (account) {
+      try {
+        await getStripe().checkout.sessions.expire(order.stripe_session_id as string, {}, { stripeAccount: account.stripe_account_id as string })
+      } catch {
+        // Già pagata o già chiusa: la prenotazione resta, ci pensa il webhook
+        return
+      }
+    }
+  }
+  await db.from('shop_orders').update({ reserved_until: new Date().toISOString() }).eq('id', order.id).eq('status', 'pending')
+}
 
 // Pagamento arrivato (webhook o ritorno dal pagamento): ordine pagato e
 // numerato, giacenze scalate, email al cliente e avviso al venditore. Idempotente.
@@ -134,12 +167,16 @@ export async function recordShopOrderPayment(session: Stripe.Checkout.Session): 
   if (!row) return false
   const order = mapOrder(row)
   const { data: shop } = await db.from('shop_settings').select('slug, name').eq('owner_id', row.owner_id).maybeSingle()
+  // Pezzi che non bastavano: avviso diverso, da controllare prima di spedire
+  const short = order.stockShort?.map((s) => `${s.missing} × ${s.name}`).join(', ')
   await notifyUser(
     row.owner_id as string,
     'messages',
     (t, locale) => ({
-      title: t('shopOrderTitle', { number: order.number ?? 0 }),
-      body: t('shopOrderBody', { name: order.customerName, amount: formatCents(order.totalCents, locale) }),
+      title: short ? t('shopOrderShortTitle', { number: order.number ?? 0 }) : t('shopOrderTitle', { number: order.number ?? 0 }),
+      body: short
+        ? t('shopOrderShortBody', { name: order.customerName, amount: formatCents(order.totalCents, locale), missing: short })
+        : t('shopOrderBody', { name: order.customerName, amount: formatCents(order.totalCents, locale) }),
       url: localizedPath(locale, '/marketplace/shop?tab=orders'),
       tag: `shop-order-${order.id}`,
     }),
