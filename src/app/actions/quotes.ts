@@ -289,6 +289,10 @@ export async function updateQuote(id: string, form: QuoteFormData): Promise<Acti
   const supabase = await createClient()
   const fields = quoteFields(form, gate.userId)
 
+  // Accettato dal cliente o pagato: non si modifica più (si duplica)
+  const { data: current } = await supabase.from('quotes').select('accepted_at, payment_status').eq('id', id).eq('user_id', gate.userId).maybeSingle()
+  if (current && (current.accepted_at || current.payment_status !== 'unpaid')) return { success: false, message: 'quoteLocked' }
+
   const { error } = await supabase
     .from('quotes')
     .update({
@@ -297,6 +301,8 @@ export async function updateQuote(id: string, form: QuoteFormData): Promise<Acti
     })
     .eq('id', id)
     .eq('user_id', gate.userId)
+    .is('accepted_at', null)
+    .eq('payment_status', 'unpaid')
 
   if (error) {
     console.error('[Quotes] updateQuote failed:', error)

@@ -2160,7 +2160,7 @@
     "recurrence_custom": "Personalizado",
     "customDaysPlaceholder": "Número de dias",
     "reminderLabel": "Lembrar-me",
-    "daysBefore": "{count} dias antes",
+    "daysBefore": "{count, plural, one {# dia antes} other {# dias antes}}",
     "notesLabel": "Notas",
     "saving": "A guardar...",
     "create": "Guardar prazo",
@@ -2343,7 +2343,9 @@
     "pendingSaved": "O recibo que recebeu foi guardado na sua conta.",
     "pendingOpen": "Abrir o recibo",
     "pendingClose": "Fechar",
-    "limitReached": "Atingiu o número máximo permitido. Elimine o que já não precisa para adicionar mais."
+    "limitReached": "Atingiu o número máximo permitido. Elimine o que já não precisa para adicionar mais.",
+    "reminderTitle": "Devolução: {object}",
+    "reminderNotes": "Emprestado a {name}"
   },
   "preventivi": {
     "title": "Orçamentos",
@@ -2527,7 +2529,8 @@
     "onlinePayment_deposit": "Sinal",
     "onlinePaymentConnect": "Ligar o Stripe na Ficha da atividade",
     "badgePaid": "Pago",
-    "badgeAccepted": "Aceite"
+    "badgeAccepted": "Aceite",
+    "quoteLocked": "Este orçamento já foi aceite ou pago: já não pode ser alterado. Usa «Duplicar» para criar um novo."
   },
   "kumaniCv": {
     "title": "KUMANI CV",
@@ -11553,5 +11556,9 @@
     "lang_pt": "Português",
     "lang_de": "Deutsch",
     "lang_ru": "Русский"
+  },
+  "bioPublic": {
+    "fallbackBio": "Profissional da comunidade KUMANI",
+    "poweredBy": "Página criada com"
   }
 }

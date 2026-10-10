@@ -2160,7 +2160,7 @@
     "recurrence_custom": "Custom",
     "customDaysPlaceholder": "Number of days",
     "reminderLabel": "Remind me",
-    "daysBefore": "{count} days before",
+    "daysBefore": "{count, plural, one {# day before} other {# days before}}",
     "notesLabel": "Notes",
     "saving": "Saving...",
     "create": "Save deadline",
@@ -2343,7 +2343,9 @@
     "pendingSaved": "The receipt you received has been saved to your account.",
     "pendingOpen": "Open the receipt",
     "pendingClose": "Close",
-    "limitReached": "You have reached the maximum allowed. Delete what you no longer need to add more."
+    "limitReached": "You have reached the maximum allowed. Delete what you no longer need to add more.",
+    "reminderTitle": "Return: {object}",
+    "reminderNotes": "Lent to {name}"
   },
   "preventivi": {
     "title": "Quotes",
@@ -2527,7 +2529,8 @@
     "onlinePayment_deposit": "Deposit",
     "onlinePaymentConnect": "Connect Stripe in the Business profile",
     "badgePaid": "Paid",
-    "badgeAccepted": "Accepted"
+    "badgeAccepted": "Accepted",
+    "quoteLocked": "This quote has already been accepted or paid: it can no longer be changed. Use “Duplicate” to make a new one."
   },
   "kumaniCv": {
     "title": "KUMANI CV",
@@ -11553,5 +11556,9 @@
     "lang_pt": "Português",
     "lang_de": "Deutsch",
     "lang_ru": "Русский"
+  },
+  "bioPublic": {
+    "fallbackBio": "Professional in the KUMANI community",
+    "poweredBy": "Page made with"
   }
 }

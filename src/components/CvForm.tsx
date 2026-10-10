@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { useRouter } from 'next/navigation'
+import { useLocalizedRouter as useRouter } from '@/lib/useLocalizedRouter'
 import { CheckCircle, LoaderCircle, XCircle, Plus, Trash2, ImagePlus, Eye, Pencil } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { createCv, updateCv } from '@/app/actions/cv'

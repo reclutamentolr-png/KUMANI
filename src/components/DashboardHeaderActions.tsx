@@ -18,7 +18,7 @@ import {
 } from 'lucide-react'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import NotificationBell from '@/components/notifications/NotificationBell'
-import AgendaPeekButton from '@/components/agenda/AgendaPeekButton'
+import AgendaPeekButton, { forgetAgendaPeek } from '@/components/agenda/AgendaPeekButton'
 import { InstallAppLink } from '@/components/InstallAppBanner'
 import ProfileModal, { type ProfileChangeState } from './ProfileModal'
 import { getMyChangeRequest } from '@/app/actions/profileChanges'
@@ -79,6 +79,8 @@ export default function DashboardHeaderActions({ user, profile, isAdmin }: Dashb
   const userInitial = profile?.first_name?.charAt(0) || user?.email?.charAt(0) || 'U'
 
   const logoutAction = async () => {
+    // L'agenda in memoria della scheda non resta a chi entra dopo
+    forgetAgendaPeek()
     await forgetPushDevice()
     await logout()
   }

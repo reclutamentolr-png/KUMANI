@@ -395,7 +395,11 @@ export default function MemoLifeApp({
         ) : (
           <ul className="space-y-2">
             {visibleContacts.map((c) => {
-              const digits = (c.phone ?? '').replace(/[^\d+]/g, '').replace(/^\+/, '')
+              // Numero internazionale per WhatsApp: senza prefisso, un cellulare
+              // italiano (3xx, 9-10 cifre) prende +39 (altrimenti wa.me lo legge male)
+              const raw = (c.phone ?? '').replace(/[^\d+]/g, '')
+              const intl = raw.startsWith('+') ? raw.slice(1) : raw.startsWith('00') ? raw.slice(2) : raw
+              const digits = !raw.startsWith('+') && !raw.startsWith('00') && /^3\d{8,9}$/.test(intl) ? `39${intl}` : intl
               return (
                 <li key={c.id} className="flex items-center gap-3 rounded-xl border border-[var(--gold)]/20 bg-white px-3 py-2.5">
                   <button

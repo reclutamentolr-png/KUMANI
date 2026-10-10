@@ -31,7 +31,8 @@ export default function OfferMakerQR({
     import('qrcode')
       .then(({ default: QRCode }) =>
         QRCode.toDataURL(url, {
-          width: 320,
+          // File grande per la stampa (volantini, vetrine)
+          width: 1200,
           margin: 2,
           color: { dark: fgColor, light: bgColor },
           errorCorrectionLevel: 'H',

@@ -273,7 +273,7 @@
     "tipsTitle": "Consigli per massimizzare le conversioni",
     "tipOne": "Stampa il QR code su biglietti da visita e volantini",
     "tipTwo": "Condividilo sui social media con un messaggio accattivante",
-    "tipThree": "Inseriscilo nella firma delle tue emails",
+    "tipThree": "Inseriscilo nella firma delle tue email",
     "customizeQR": "Personalizza il tuo QR",
     "targetLink": "Link di destinazione",
     "lockedLink": "Questo link è bloccato per garantire il tracciamento dei tuoi affiliati.",
@@ -312,7 +312,7 @@
     "template3Message": "Ehi! Volevo condividere con te un'esperienza che ha cambiato il mio modo di vedere il lavoro. Ho iniziato questo percorso e i risultati mi stanno sorprendendo. Se ti va di saperne di più: {url} 🚀",
     "template4Title": "Follow-up dopo incontro",
     "template4Tone": "Caldo",
-    "template4Message": "Ciao! È stato un piacere conoscerti oggi. Come promesso, ecco il link al mio progetto: {url} Quando hai un momento, diamici un feedback! ☕",
+    "template4Message": "Ciao! È stato un piacere conoscerti oggi. Come promesso, ecco il link al mio progetto: {url} Quando hai un momento, dammi un tuo parere! ☕",
     "copiedMsg": "Messaggio copiato! Incollalo in WhatsApp.",
     "copyMsg": "Copia messaggio",
     "copied": "Copiato!",
@@ -2058,7 +2058,7 @@
     "recurrence_custom": "Personalizzato",
     "customDaysPlaceholder": "Numero di giorni",
     "reminderLabel": "Ricordamelo",
-    "daysBefore": "{count} giorni prima",
+    "daysBefore": "{count, plural, one {# giorno prima} other {# giorni prima}}",
     "notesLabel": "Note",
     "saving": "Salvataggio in corso...",
     "create": "Salva scadenza",
@@ -2241,7 +2241,9 @@
     "pendingSaved": "La ricevuta che hai ricevuto è stata salvata nel tuo account.",
     "pendingOpen": "Apri la ricevuta",
     "pendingClose": "Chiudi",
-    "limitReached": "Hai raggiunto il numero massimo consentito. Elimina ciò che non ti serve più per aggiungerne altri."
+    "limitReached": "Hai raggiunto il numero massimo consentito. Elimina ciò che non ti serve più per aggiungerne altri.",
+    "reminderTitle": "Restituzione: {object}",
+    "reminderNotes": "Prestato a {name}"
   },
   "spendly": {
     "navBills": "Bollette",
@@ -2581,7 +2583,8 @@
     "onlinePayment_deposit": "Acconto",
     "onlinePaymentConnect": "Collega Stripe nella Scheda attività",
     "badgePaid": "Pagato",
-    "badgeAccepted": "Accettato"
+    "badgeAccepted": "Accettato",
+    "quoteLocked": "Questo preventivo è già stato accettato o pagato: non si può più modificare. Usa «Duplica» per farne uno nuovo."
   },
   "kumaniCv": {
     "title": "KUMANI CV",
@@ -11553,5 +11556,9 @@
     "lang_pt": "Português",
     "lang_de": "Deutsch",
     "lang_ru": "Русский"
+  },
+  "bioPublic": {
+    "fallbackBio": "Professionista della community KUMANI",
+    "poweredBy": "Pagina creata con"
   }
 }

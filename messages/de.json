@@ -2160,7 +2160,7 @@
     "recurrence_custom": "Individuell",
     "customDaysPlaceholder": "Anzahl der Tage",
     "reminderLabel": "Erinnere mich",
-    "daysBefore": "{count} Tage vorher",
+    "daysBefore": "{count, plural, one {# Tag vorher} other {# Tage vorher}}",
     "notesLabel": "Notizen",
     "saving": "Wird gespeichert...",
     "create": "Frist speichern",
@@ -2343,7 +2343,9 @@
     "pendingSaved": "Die Quittung, die du erhalten hast, wurde in deinem Konto gespeichert.",
     "pendingOpen": "Quittung öffnen",
     "pendingClose": "Schließen",
-    "limitReached": "Du hast die erlaubte Höchstzahl erreicht. Lösche, was du nicht mehr brauchst, um weitere hinzuzufügen."
+    "limitReached": "Du hast die erlaubte Höchstzahl erreicht. Lösche, was du nicht mehr brauchst, um weitere hinzuzufügen.",
+    "reminderTitle": "Rückgabe: {object}",
+    "reminderNotes": "Verliehen an {name}"
   },
   "preventivi": {
     "title": "Angebote",
@@ -2527,7 +2529,8 @@
     "onlinePayment_deposit": "Anzahlung",
     "onlinePaymentConnect": "Stripe im Firmenprofil verbinden",
     "badgePaid": "Bezahlt",
-    "badgeAccepted": "Angenommen"
+    "badgeAccepted": "Angenommen",
+    "quoteLocked": "Dieses Angebot wurde bereits angenommen oder bezahlt: Es kann nicht mehr geändert werden. Nutze „Duplizieren“ für ein neues."
   },
   "kumaniCv": {
     "title": "KUMANI CV",
@@ -11553,5 +11556,9 @@
     "lang_pt": "Português",
     "lang_de": "Deutsch",
     "lang_ru": "Русский"
+  },
+  "bioPublic": {
+    "fallbackBio": "Profi aus der KUMANI-Community",
+    "poweredBy": "Seite erstellt mit"
   }
 }

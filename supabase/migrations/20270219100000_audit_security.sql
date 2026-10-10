@@ -325,3 +325,9 @@ begin
   return query select true, null::text, v_order.kind, v_order.tool, v_new_plan, v_expires, v_order.buyer_id;
 end;
 $$;
+
+-- Findo: foto solo immagini e massimo 10 MB (come Garage e Casa)
+update storage.buckets
+set file_size_limit = 10485760,
+    allowed_mime_types = array['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif']
+where id = 'findo-photos';

@@ -1,5 +1,5 @@
+import { localizedRedirect } from '@/lib/localizedRedirect'
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
 import { ArrowLeft, Calculator, FileSpreadsheet } from 'lucide-react'
@@ -27,11 +27,11 @@ export default async function NewQuotePage({
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  if (!user) return localizedRedirect('/login')
 
   const hasAccess = await hasActivePreventiviAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect('/dashboard')
+    return localizedRedirect('/dashboard')
   }
 
   const { data: profile } = await supabase

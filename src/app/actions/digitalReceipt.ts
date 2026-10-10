@@ -7,6 +7,7 @@ import type { DigitalReceiptFormData } from '@/lib/digitalReceipt'
 import { createItem as createLifeCalendarItem } from '@/app/actions/lifeCalendar'
 import { awardToolPoint } from '@/lib/toolPoints'
 import { limitError } from '@/lib/appLimits'
+import { getTranslations } from 'next-intl/server'
 
 type ActionResult<T> =
   | { success: true; data: T }
@@ -71,12 +72,14 @@ export async function createReceipt(
   let lifeCalendarItemId: string | null = null
   if (form.template === 'loan' && form.expectedReturnDate && form.addLifeCalendarReminder) {
     try {
+      // Testi nella lingua di chi crea la ricevuta
+      const t = await getTranslations('digitalReceipt')
       const reminderResult = await createLifeCalendarItem({
-        title: `Restituzione: ${form.objectName}`,
+        title: t('reminderTitle', { object: form.objectName }),
         category: 'other',
         profileId: null,
         dueDate: form.expectedReturnDate,
-        notes: `Prestato a ${form.recipientName}`,
+        notes: t('reminderNotes', { name: form.recipientName }),
         reminderOffsets: [7, 1],
         recurrence: 'none',
         recurrenceCustomDays: null,

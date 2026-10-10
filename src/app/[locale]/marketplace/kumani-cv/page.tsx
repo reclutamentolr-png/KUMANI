@@ -1,5 +1,5 @@
+import { localizedRedirect } from '@/lib/localizedRedirect'
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
 import ToolBackLink from '@/components/ToolBackLink'
@@ -17,11 +17,11 @@ export default async function KumaniCvPage({ searchParams }: { searchParams: Pro
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  if (!user) return localizedRedirect('/login')
 
   const hasAccess = await hasActiveCvAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect('/dashboard')
+    return localizedRedirect('/dashboard')
   }
 
   const { data: cvs } = await supabase

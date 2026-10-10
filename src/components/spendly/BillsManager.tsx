@@ -78,7 +78,10 @@ export default function BillsManager({
   const [showInactive, setShowInactive] = useState(false)
 
   const paid = new Map(payments.map((p) => [paymentKey(p.expense_id, p.period), p]))
-  const isActive = (b: SpendlyFixedExpense) => !b.end_date || b.end_date >= today
+  // Disattivare mette la fine a oggi (o alla data di inizio, se è nel futuro):
+  // da quel momento la bolletta non è più attiva. Una tantum: fino alla sua data.
+  const isActive = (b: SpendlyFixedExpense) =>
+    b.frequency === 'una_tantum' ? !b.end_date || b.end_date >= today : !b.end_date || (b.end_date > today && b.end_date > b.start_date)
   const active = bills.filter(isActive)
   const inactive = bills.filter((b) => !isActive(b))
   const day = (key: string) => new Date(`${key}T12:00:00Z`).toLocaleDateString(locale, { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' })

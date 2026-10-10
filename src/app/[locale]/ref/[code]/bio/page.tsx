@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 
 import ShareButton from '@/components/ShareButton'
+import { getTranslations } from 'next-intl/server'
 import { resolveBioTheme } from '@/lib/linkInBioThemes'
 import BioThemeScene from '@/components/BioThemeScene'
 import { normalizeLinkUrl } from '@/lib/linkUtils'
@@ -86,7 +87,9 @@ export default async function LinkInBioPublicPage({ params }: { params: Promise<
   }
 
   const baseUrl = SITE_URL
-  const profileUrl = `${baseUrl}/ref/${code}`
+  // Si condivide questa pagina (la bio), non quella di iscrizione
+  const profileUrl = `${baseUrl}/ref/${code}/bio`
+  const t = await getTranslations('bioPublic')
   const theme = resolveBioTheme(linkInBio?.theme)
 
   // Mappa sicura delle icone (usando solo icone garantite in lucide-react)
@@ -129,7 +132,7 @@ export default async function LinkInBioPublicPage({ params }: { params: Promise<
             {linkInBio?.bio_text ? (
               <p className={`text-sm leading-relaxed ${theme.secondaryText}`}>{linkInBio.bio_text}</p>
             ) : (
-              <p className={`text-sm ${theme.secondaryText}`}>Professionista Kumani</p>
+              !profile.occupation && <p className={`text-sm ${theme.secondaryText}`}>{t('fallbackBio')}</p>
             )}
           </div>
 
@@ -166,7 +169,7 @@ export default async function LinkInBioPublicPage({ params }: { params: Promise<
         {/* Footer */}
         <div className="text-center mt-6">
           <p className={`text-xs ${theme.footerText}`}>
-            Powered by <span className="font-semibold">Kumani</span>
+            {t('poweredBy')} <span className="font-semibold">KUMANI</span>
           </p>
         </div>
       </div>

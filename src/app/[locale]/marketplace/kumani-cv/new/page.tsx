@@ -1,3 +1,4 @@
+import { localizedRedirect } from '@/lib/localizedRedirect'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
@@ -17,11 +18,11 @@ export default async function NewCvPage({ searchParams }: { searchParams: Promis
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  if (!user) return localizedRedirect('/login')
 
   const hasAccess = await hasActiveCvAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect('/dashboard')
+    return localizedRedirect('/dashboard')
   }
 
   // Un solo CV per persona: chi ce l'ha già va a modificarlo

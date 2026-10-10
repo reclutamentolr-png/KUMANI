@@ -1,5 +1,6 @@
+import { localizedRedirect } from '@/lib/localizedRedirect'
 import { createClient } from '@/lib/supabase/server'
-import { redirect, notFound } from 'next/navigation'
+import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
 import { ArrowLeft, FileUser } from 'lucide-react'
@@ -23,11 +24,11 @@ export default async function EditCvPage({
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  if (!user) return localizedRedirect('/login')
 
   const hasAccess = await hasActiveCvAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect('/dashboard')
+    return localizedRedirect('/dashboard')
   }
 
   const { data: cv } = await supabase.from('cvs').select('*').eq('id', id).eq('user_id', user.id).single()

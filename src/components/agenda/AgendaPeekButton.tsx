@@ -108,6 +108,9 @@ export default function AgendaPeekButton() {
   const dateLabel = (key: string, long: boolean) =>
     new Date(`${key}T12:00:00Z`).toLocaleDateString(locale, { weekday: long ? 'long' : 'short', day: 'numeric', ...(long ? { month: 'long' } : {}), timeZone: 'UTC' })
 
+  // Scadute: giorno e mese (possono essere di settimane fa)
+  const overdueLabel = (key: string) => new Date(`${key}T12:00:00Z`).toLocaleDateString(locale, { day: 'numeric', month: 'short', timeZone: 'UTC' })
+
   const toggle = () => {
     if (!open) load(true)
     setOpen(!open)
@@ -166,7 +169,7 @@ export default function AgendaPeekButton() {
               {overdue.length > 0 && (
                 <div>
                   <p className="mb-1.5 text-[11px] font-bold uppercase tracking-[0.15em] text-rose-700">{t('sectionOverdue')}</p>
-                  <ul className="space-y-1.5">{overdue.slice(0, 3).map((e) => row(e, dateLabel(e.date, false), true))}</ul>
+                  <ul className="space-y-1.5">{overdue.slice(0, 3).map((e) => row(e, overdueLabel(e.date), true))}</ul>
                 </div>
               )}
               {todayEvents.length === 0 ? (

@@ -1,3 +1,4 @@
+import { localizedRedirect } from '@/lib/localizedRedirect'
 import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
@@ -14,7 +15,7 @@ export default async function EditQuotePage({
   params: Promise<{ locale: string; id: string }>
   searchParams: Promise<{ from?: string }>
 }) {
-  const { id } = await params
+  const { id, locale } = await params
   const { from } = await searchParams
   const backSuffix = from === 'dashboard' ? '?from=dashboard' : ''
   const t = await getTranslations('preventivi')
@@ -23,15 +24,17 @@ export default async function EditQuotePage({
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  if (!user) return localizedRedirect('/login')
 
   const hasAccess = await hasActivePreventiviAccess(supabase, user.id)
   if (!hasAccess) {
-    redirect('/dashboard')
+    return localizedRedirect('/dashboard')
   }
 
   const { data: quote } = await supabase.from('quotes').select('*').eq('id', id).eq('user_id', user.id).single()
   if (!quote) notFound()
+  // Accettato o pagato: si torna alla scheda (lì c'è «Duplica»)
+  if (quote.accepted_at || (quote.payment_status ?? 'unpaid') !== 'unpaid') redirect(`/${locale}/marketplace/preventivi/${id}${backSuffix}`)
 
   const { data: profile } = await supabase
     .from('quote_issuer_profiles')

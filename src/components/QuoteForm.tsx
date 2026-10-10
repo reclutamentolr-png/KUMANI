@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { useRouter } from 'next/navigation'
+import { useLocalizedRouter as useRouter } from '@/lib/useLocalizedRouter'
 import Link from '@/components/LocalizedLink'
 import { CheckCircle, LoaderCircle, XCircle, Plus, Trash2, Pencil, User, Boxes, Search, X, Table2, ScrollText } from 'lucide-react'
 import { createQuote, updateQuote, listSavedClients } from '@/app/actions/quotes'

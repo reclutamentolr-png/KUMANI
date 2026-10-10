@@ -23,7 +23,8 @@ export default function QRGeneratorTool({ referralCode, referralUrl, userName }:
         // qrcode caricato solo quando serve, fuori dal bundle iniziale
         const QRCode = (await import('qrcode')).default
         const url = await QRCode.toDataURL(referralUrl, {
-          width: 400,
+          // File grande per la stampa (anche a 10 cm resta nitido)
+          width: 1200,
           margin: 2,
           color: {
             dark: fgColor,

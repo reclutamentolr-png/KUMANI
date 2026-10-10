@@ -2160,7 +2160,7 @@
     "recurrence_custom": "Свой вариант",
     "customDaysPlaceholder": "Количество дней",
     "reminderLabel": "Напомнить мне",
-    "daysBefore": "За {count} дн. до срока",
+    "daysBefore": "{count, plural, one {За # день до срока} few {За # дня до срока} many {За # дней до срока} other {За # дня до срока}}",
     "notesLabel": "Заметки",
     "saving": "Сохранение...",
     "create": "Сохранить срок",
@@ -2343,7 +2343,9 @@
     "pendingSaved": "Полученная вами квитанция сохранена в вашем аккаунте.",
     "pendingOpen": "Открыть квитанцию",
     "pendingClose": "Закрыть",
-    "limitReached": "Достигнуто максимально допустимое количество. Удалите то, что больше не нужно, чтобы добавить новое."
+    "limitReached": "Достигнуто максимально допустимое количество. Удалите то, что больше не нужно, чтобы добавить новое.",
+    "reminderTitle": "Возврат: {object}",
+    "reminderNotes": "Одолжено: {name}"
   },
   "preventivi": {
     "title": "Коммерческие предложения",
@@ -2527,7 +2529,8 @@
     "onlinePayment_deposit": "Аванс",
     "onlinePaymentConnect": "Подключить Stripe в карточке бизнеса",
     "badgePaid": "Оплачено",
-    "badgeAccepted": "Принято"
+    "badgeAccepted": "Принято",
+    "quoteLocked": "Это коммерческое предложение уже принято или оплачено: изменить его нельзя. Используйте «Дублировать», чтобы создать новое."
   },
   "kumaniCv": {
     "title": "KUMANI CV",
@@ -11553,5 +11556,9 @@
     "lang_pt": "Português",
     "lang_de": "Deutsch",
     "lang_ru": "Русский"
+  },
+  "bioPublic": {
+    "fallbackBio": "Профессионал сообщества KUMANI",
+    "poweredBy": "Страница создана в"
   }
 }

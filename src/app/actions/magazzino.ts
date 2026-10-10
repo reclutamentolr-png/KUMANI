@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { awardToolPoint } from '@/lib/toolPoints'
+import { parseAmount } from '@/lib/spendly'
 import {
   INVENTORY_UNITS,
   MOVEMENTS_EXPORT_MAX,
@@ -21,8 +22,9 @@ const DATE_RE = /^\d{4}-\d{2}-\d{2}$/
 
 const num = (value: string | number | null | undefined) => {
   if (value === null || value === undefined || value === '') return null
-  const n = Number(String(value).replace(/\s/g, '').replace(',', '.'))
-  return Number.isFinite(n) ? n : NaN
+  // Come in Spendly: «1.000» = mille, «1.234,56» e «12,5» letti all'italiana
+  if (typeof value === 'number') return Number.isFinite(value) ? value : NaN
+  return parseAmount(String(value))
 }
 // Mezzanotte italiana (con ora legale) del giorno indicato, più eventuali giorni:
 // i filtri per data seguono il calendario dell'utente, non quello UTC del server

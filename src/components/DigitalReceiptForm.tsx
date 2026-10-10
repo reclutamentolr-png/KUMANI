@@ -133,10 +133,13 @@ export default function DigitalReceiptForm({
       const result = await createReceipt(form, photoPath)
       if (!result.success) {
         setError(result.message)
+        setSaving(false)
         return
       }
       router.push(`/marketplace/digital-receipt/${result.data.id}`)
-    } finally {
+      // Riuscito: il pulsante resta bloccato mentre si cambia pagina (niente doppioni)
+    } catch {
+      setError('saveError')
       setSaving(false)
     }
   }

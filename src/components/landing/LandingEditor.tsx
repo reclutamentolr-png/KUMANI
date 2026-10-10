@@ -546,7 +546,8 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
           </div>
           {initial.suspended && <p className="mt-3 rounded-xl bg-red-500/15 p-3 text-sm text-red-100">{t('suspendedText', { reason: initial.suspendedReason || '—' })}</p>}
           <p className="mt-3 text-xs text-white/60">{t('publishHint')}</p>
-          {savedSlug && (
+          {/* Link, QR e condivisione solo con la pagina pubblicata (in bozza il link dà 404) */}
+          {savedSlug && status === 'published' && (
             <div className="mt-4">
               <p className="text-xs font-semibold uppercase tracking-wide text-[var(--gold-bright)]">{t('yourLink')}</p>
               <p className="mt-1 break-all font-mono text-sm">{publicUrl}</p>

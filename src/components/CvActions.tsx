@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { useRouter } from 'next/navigation'
+import { useLocalizedRouter as useRouter } from '@/lib/useLocalizedRouter'
 import Link from '@/components/LocalizedLink'
 import { Pencil, Trash2, LoaderCircle } from 'lucide-react'
 import { deleteCv } from '@/app/actions/cv'

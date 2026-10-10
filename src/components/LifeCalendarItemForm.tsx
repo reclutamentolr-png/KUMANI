@@ -110,6 +110,7 @@ export default function LifeCalendarItemForm(props: Props) {
         const result = await createItem(form)
         if (!result.success) {
           setError(result.message)
+          setSaving(false)
           return
         }
         router.push('/marketplace/life-calendar')
@@ -117,11 +118,14 @@ export default function LifeCalendarItemForm(props: Props) {
         const result = await updateItem(props.id, form)
         if (!result.success) {
           setError(result.message)
+          setSaving(false)
           return
         }
         router.push('/marketplace/life-calendar')
       }
-    } finally {
+      // Riuscito: il pulsante resta bloccato mentre si cambia pagina (niente doppioni)
+    } catch {
+      setError('saveError')
       setSaving(false)
     }
   }

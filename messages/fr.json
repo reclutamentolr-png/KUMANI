@@ -2160,7 +2160,7 @@
     "recurrence_custom": "Personnalisé",
     "customDaysPlaceholder": "Nombre de jours",
     "reminderLabel": "Me le rappeler",
-    "daysBefore": "{count} jours avant",
+    "daysBefore": "{count, plural, one {# jour avant} other {# jours avant}}",
     "notesLabel": "Notes",
     "saving": "Enregistrement en cours...",
     "create": "Enregistrer l'échéance",
@@ -2343,7 +2343,9 @@
     "pendingSaved": "Le reçu que vous avez reçu a été enregistré dans votre compte.",
     "pendingOpen": "Ouvrir le reçu",
     "pendingClose": "Fermer",
-    "limitReached": "Vous avez atteint le nombre maximum autorisé. Supprimez ce dont vous n’avez plus besoin pour en ajouter d’autres."
+    "limitReached": "Vous avez atteint le nombre maximum autorisé. Supprimez ce dont vous n’avez plus besoin pour en ajouter d’autres.",
+    "reminderTitle": "Restitution : {object}",
+    "reminderNotes": "Prêté à {name}"
   },
   "preventivi": {
     "title": "Devis",
@@ -2527,7 +2529,8 @@
     "onlinePayment_deposit": "Acompte",
     "onlinePaymentConnect": "Connecter Stripe dans la Fiche entreprise",
     "badgePaid": "Payé",
-    "badgeAccepted": "Accepté"
+    "badgeAccepted": "Accepté",
+    "quoteLocked": "Ce devis a déjà été accepté ou payé : il ne peut plus être modifié. Utilisez « Dupliquer » pour en créer un nouveau."
   },
   "kumaniCv": {
     "title": "KUMANI CV",
@@ -11553,5 +11556,9 @@
     "lang_pt": "Português",
     "lang_de": "Deutsch",
     "lang_ru": "Русский"
+  },
+  "bioPublic": {
+    "fallbackBio": "Professionnel de la communauté KUMANI",
+    "poweredBy": "Page créée avec"
   }
 }
