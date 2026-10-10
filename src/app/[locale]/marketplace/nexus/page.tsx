@@ -5,16 +5,21 @@ import ToolBackLink from '@/components/ToolBackLink'
 import NexusGame from '@/components/nexus/NexusGame'
 import NexusDuelButton from '@/components/nexus/NexusDuelButton'
 import { getNexusStatus } from '@/app/actions/nexus'
-import { NEXUS_LOCALES, nexusLocaleFor, type NexusLocale } from '@/lib/nexus/types'
+import { nexusLocalePair, type NexusLocale } from '@/lib/nexus/types'
 
 export const dynamic = 'force-dynamic'
 
-// KUMANI NEXUS (SVAGO, gratis) — fase 1: il cruciverba del giorno.
-// ?lang=it|en sceglie la lingua della griglia (di base quella del sito).
+// KUMANI NEXUS (SVAGO, gratis): il cruciverba del giorno e la Sfida.
+// Due lingue proposte: quella del sito e l'inglese (?lang= sceglie). Dopo
+// «Inizia» la lingua di oggi resta quella fino a domani.
 export default async function NexusPage({ searchParams }: { searchParams: Promise<{ lang?: string }> }) {
   const [t, tc, tg, locale, { lang }] = await Promise.all([getTranslations('nexus'), getTranslations('common'), getTranslations('guides'), getLocale(), searchParams])
-  const gridLocale: NexusLocale = (NEXUS_LOCALES as readonly string[]).includes(lang ?? '') ? (lang as NexusLocale) : nexusLocaleFor(locale)
-  const status = await getNexusStatus(gridLocale)
+  const pair = nexusLocalePair(locale)
+  const requested: NexusLocale = (pair as string[]).includes(lang ?? '') ? (lang as NexusLocale) : pair[0]
+  const status = await getNexusStatus(requested)
+  // Lingua di oggi già scelta: vale quella, anche se fuori dalla coppia
+  const gridLocale: NexusLocale = status?.lockedLocale ?? requested
+  const choices = status?.lockedLocale ? [status.lockedLocale] : pair
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -46,19 +51,28 @@ export default async function NexusPage({ searchParams }: { searchParams: Promis
             <BookOpen className="h-4 w-4" /> {tg('howToUse')}
           </Link>
         </div>
-        {/* Lingua della griglia */}
-        <div className="flex items-center gap-1 rounded-full border border-[var(--gold)]/30 bg-white p-1 text-xs font-bold" role="group" aria-label={t('gridLanguage')}>
-          {NEXUS_LOCALES.map((code) => (
-            <Link
-              key={code}
-              href={`/marketplace/nexus?lang=${code}`}
-              aria-current={code === gridLocale ? 'true' : undefined}
-              className={`flex min-h-9 items-center rounded-full px-3 ${code === gridLocale ? 'bg-[var(--ink)] text-white' : 'text-[var(--ink)] hover:bg-[var(--gold-pale)]'}`}
-            >
-              {t(`lang_${code}`)}
-            </Link>
-          ))}
-        </div>
+        {/* Lingua della griglia: si sceglie finché non si inizia */}
+        {status?.lockedLocale ? (
+          <p className="flex items-center gap-2 text-xs font-semibold text-gray-600">
+            <span className="rounded-full bg-[var(--ink)] px-3 py-1.5 font-bold text-white">{t(`lang_${status.lockedLocale}`)}</span>
+            {t('dayLocked')}
+          </p>
+        ) : (
+          choices.length > 1 && (
+            <div className="flex items-center gap-1 rounded-full border border-[var(--gold)]/30 bg-white p-1 text-xs font-bold" role="group" aria-label={t('gridLanguage')}>
+              {choices.map((code) => (
+                <Link
+                  key={code}
+                  href={`/marketplace/nexus?lang=${code}`}
+                  aria-current={code === gridLocale ? 'true' : undefined}
+                  className={`flex min-h-9 items-center rounded-full px-3 ${code === gridLocale ? 'bg-[var(--ink)] text-white' : 'text-[var(--ink)] hover:bg-[var(--gold-pale)]'}`}
+                >
+                  {t(`lang_${code}`)}
+                </Link>
+              ))}
+            </div>
+          )
+        )}
       </div>
 
       {status ? (

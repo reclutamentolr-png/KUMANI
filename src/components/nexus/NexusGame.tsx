@@ -2,8 +2,9 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
+import { useRouter } from 'next/navigation'
 import { ChevronLeft, ChevronRight, Clock, Flame, Lightbulb, LoaderCircle, PartyPopper, Play, Share2 } from 'lucide-react'
-import { checkNexusWord, finishNexus, revealNexusLetter } from '@/app/actions/nexus'
+import { checkNexusWord, finishNexus, revealNexusLetter, startNexus } from '@/app/actions/nexus'
 import { renderNexusShareCard } from '@/lib/nexusShareCard'
 import NexusKeyboard from './NexusKeyboard'
 import NexusDuelButton from './NexusDuelButton'
@@ -33,6 +34,7 @@ const formatTime = (total: number) => {
 export default function NexusGame({ status }: { status: NexusStatus }) {
   const t = useTranslations('nexus')
   const uiLocale = useLocale()
+  const router = useRouter()
   const { puzzle } = status
   const size = puzzle.size
   const storageKey = `kumani_nexus:${puzzle.day}:${puzzle.locale}`
@@ -357,6 +359,21 @@ export default function NexusGame({ status }: { status: NexusStatus }) {
     )
   }
 
+  // «Inizia»: il server registra la lingua di oggi (resta quella fino a domani).
+  // Se oggi era già stata scelta un'altra lingua, si va a quella griglia.
+  const begin = async () => {
+    setBusy(true)
+    const res = await startNexus(puzzle.day, puzzle.locale).catch(() => null)
+    setBusy(false)
+    if (res && 'locale' in res && res.locale !== puzzle.locale) {
+      router.replace(`${uiLocale === 'it' ? '' : `/${uiLocale}`}/marketplace/nexus?lang=${res.locale}`)
+      return
+    }
+    setStarted(true)
+    // In alto la scelta della lingua lascia il posto alla lingua di oggi
+    router.refresh()
+  }
+
   // Prima di iniziare: la griglia resta coperta e il tempo fermo
   if (!started) {
     const across = puzzle.slots.filter((s) => s.dir === 'a').length
@@ -369,8 +386,8 @@ export default function NexusGame({ status }: { status: NexusStatus }) {
         <p className="text-base text-gray-600">{t('startText', { words: puzzle.slots.length, across, down: puzzle.slots.length - across })}</p>
         <button
           type="button"
-          onClick={() => setStarted(true)}
-          disabled={!restored}
+          onClick={begin}
+          disabled={!restored || busy}
           className="flex min-h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-2xl bg-[var(--ink)] px-4 text-base font-extrabold text-[var(--gold-bright)] disabled:opacity-60"
         >
           <Play className="h-5 w-5" /> {t('start')}

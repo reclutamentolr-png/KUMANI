@@ -6,8 +6,8 @@ import { useRouter } from 'next/navigation'
 import { Clock, Copy, Crown, Flag, Handshake, LoaderCircle, LogOut, Play, Send, Share2, Swords, UserRound, X } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { createClient } from '@/lib/supabase/client'
-import { createNexusDuel, getNexusDuel, joinNexusDuel, leaveNexusDuel, playNexusDuel, startNexusDuel } from '@/app/actions/nexusDuel'
-import { NEXUS_MAX_PLAYERS, slotCells, type NexusDir, type NexusDuelState, type NexusSlot } from '@/lib/nexus/types'
+import { createNexusDuel, getNexusDuel, joinNexusDuel, leaveNexusDuel, playNexusDuel, setNexusDuelLocale, startNexusDuel } from '@/app/actions/nexusDuel'
+import { NEXUS_MAX_PLAYERS, nexusLocalePair, slotCells, type NexusDir, type NexusDuelState, type NexusSlot } from '@/lib/nexus/types'
 import { askConfirm } from '@/lib/confirm'
 import NexusKeyboard from './NexusKeyboard'
 
@@ -305,6 +305,9 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
     await refresh(res.token ?? token)
   }
   const start = () => run(() => startNexusDuel(state.code), () => t('duel_needTwo'))
+  const changeLocale = (code: string) => run(() => setNexusDuelLocale(state.code, code), () => t('error_save'))
+  // Lingue proposte a chi crea la sfida: quella del sito e l'inglese
+  const localeChoices = [...new Set([...nexusLocalePair(locale), state.locale])]
   const leave = async () => {
     const message = state.status === 'live' ? t('duel_leaveConfirm') : state.isHost ? t('duel_cancelConfirm') : t('duel_exitConfirm')
     const confirmLabel = state.status === 'live' ? t('duel_leave') : state.isHost ? t('duel_cancel') : t('duel_exit')
@@ -375,6 +378,9 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
         </span>
         <h2 className="text-2xl font-extrabold text-[var(--ink)]">{t('duel_invitedTitle', { name: host?.name ?? '' })}</h2>
         <p className="text-base text-gray-600">{t('duel_invitedText', { n: state.players.length })}</p>
+        <p className="flex items-center gap-2 text-sm text-gray-600">
+          {t('gridLanguage')}: <span className="rounded-full bg-[var(--ink)] px-3 py-1 text-xs font-bold text-white">{t(`lang_${state.locale}`)}</span>
+        </p>
         {state.canJoin && !state.loggedIn && (
           <label className="w-full text-left">
             <span className="mb-1 block text-sm font-semibold text-[var(--ink)]">{t('duel_nameLabel')}</span>
@@ -436,6 +442,29 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
             </button>
           </div>
           {copied && <p className="text-sm text-white/75">{t('duel_copied')}</p>}
+        </div>
+
+        {/* Lingua della griglia: la sceglie chi ha creato la sfida, prima di iniziare */}
+        <div className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-[var(--gold)]/25 bg-white px-4 py-3">
+          <span className="text-sm font-bold text-[var(--ink)]">{t('gridLanguage')}</span>
+          {state.isHost && localeChoices.length > 1 ? (
+            <div className="flex items-center gap-1 rounded-full border border-[var(--gold)]/30 p-1 text-xs font-bold" role="group" aria-label={t('gridLanguage')}>
+              {localeChoices.map((code) => (
+                <button
+                  key={code}
+                  type="button"
+                  onClick={() => code !== state.locale && changeLocale(code)}
+                  disabled={busy}
+                  aria-pressed={code === state.locale}
+                  className={`flex min-h-9 cursor-pointer items-center rounded-full px-3 ${code === state.locale ? 'bg-[var(--ink)] text-white' : 'text-[var(--ink)] hover:bg-[var(--gold-pale)]'}`}
+                >
+                  {t(`lang_${code}`)}
+                </button>
+              ))}
+            </div>
+          ) : (
+            <span className="rounded-full bg-[var(--ink)] px-3 py-1.5 text-xs font-bold text-white">{t(`lang_${state.locale}`)}</span>
+          )}
         </div>
 
         {/* Giocatori entrati */}

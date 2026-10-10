@@ -11539,6 +11539,12 @@
     "duel_playerLeft": "{name} a quitté la partie.",
     "duel_endAbandoned": "Les autres joueurs ont quitté la partie. Voici la grille avec toutes les réponses.",
     "duel_cancelledTitle": "Défi annulé",
-    "duel_cancelledText": "{name} a annulé ce défi avant qu’il ne commence."
+    "duel_cancelledText": "{name} a annulé ce défi avant qu’il ne commence.",
+    "dayLocked": "Aujourd’hui vous jouez dans cette langue : vous pourrez la changer demain.",
+    "lang_fr": "Français",
+    "lang_es": "Español",
+    "lang_pt": "Português",
+    "lang_de": "Deutsch",
+    "lang_ru": "Русский"
   }
 }

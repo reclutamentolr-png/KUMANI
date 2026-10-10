@@ -5,7 +5,18 @@ export const NEXUS_SIZE = 7
 export const NEXUS_LOCALES = ['it', 'en'] as const
 export type NexusLocale = (typeof NEXUS_LOCALES)[number]
 
-export const nexusLocaleFor = (locale: string): NexusLocale => (locale === 'it' ? 'it' : 'en')
+const isNexusLocale = (value: string): value is NexusLocale => (NEXUS_LOCALES as readonly string[]).includes(value)
+
+// Le due lingue proposte: quella del sito e l'inglese (chi usa il sito in
+// inglese: inglese e italiano). Solo le lingue che hanno già le loro parole.
+export function nexusLocalePair(siteLocale: string): NexusLocale[] {
+  const wanted = [siteLocale, siteLocale === 'en' ? 'it' : 'en']
+  const pair = [...new Set(wanted)].filter(isNexusLocale)
+  return pair.length ? pair : ['en']
+}
+
+// Lingua proposta per prima
+export const nexusLocaleFor = (siteLocale: string): NexusLocale => nexusLocalePair(siteLocale)[0]
 
 export type NexusDir = 'a' | 'd'
 
@@ -30,6 +41,8 @@ export type NexusStatus = {
   // Già completata oggi (in questa lingua)
   result: NexusResult | null
   streak: number
+  // lingua già scelta per oggi (con «Inizia»): resta quella fino a domani
+  lockedLocale: NexusLocale | null
 }
 
 // Caselle di una parola

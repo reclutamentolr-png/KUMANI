@@ -11539,6 +11539,12 @@
     "duel_playerLeft": "{name} saiu do jogo.",
     "duel_endAbandoned": "Os outros jogadores abandonaram o jogo. Aqui está a grelha com todas as respostas.",
     "duel_cancelledTitle": "Desafio cancelado",
-    "duel_cancelledText": "{name} cancelou este desafio antes de começar."
+    "duel_cancelledText": "{name} cancelou este desafio antes de começar.",
+    "dayLocked": "Hoje jogas neste idioma: amanhã poderás mudá-lo.",
+    "lang_fr": "Français",
+    "lang_es": "Español",
+    "lang_pt": "Português",
+    "lang_de": "Deutsch",
+    "lang_ru": "Русский"
   }
 }

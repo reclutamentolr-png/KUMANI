@@ -11539,6 +11539,12 @@
     "duel_playerLeft": "{name} left the game.",
     "duel_endAbandoned": "The other players left the game. Here is the grid with all the answers.",
     "duel_cancelledTitle": "Challenge cancelled",
-    "duel_cancelledText": "{name} cancelled this challenge before it started."
+    "duel_cancelledText": "{name} cancelled this challenge before it started.",
+    "dayLocked": "Today you play in this language: you can change it tomorrow.",
+    "lang_fr": "Français",
+    "lang_es": "Español",
+    "lang_pt": "Português",
+    "lang_de": "Deutsch",
+    "lang_ru": "Русский"
   }
 }

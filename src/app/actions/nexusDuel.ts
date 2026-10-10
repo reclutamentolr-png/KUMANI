@@ -306,6 +306,18 @@ export async function joinNexusDuel(code: string, nickname: string, token?: stri
   return { error: 'full' }
 }
 
+// Lingua della griglia: la sceglie chi ha creato la sfida, solo prima di iniziare
+export async function setNexusDuelLocale(code: string, locale: string): Promise<{ ok: true } | { error: string }> {
+  if (!(NEXUS_LOCALES as readonly string[]).includes(locale)) return { error: 'invalid' }
+  const { user } = await viewer()
+  const duel = await loadDuel(code)
+  if (!user || !duel || duel.host_id !== user.id) return { error: 'notFound' }
+  const { data } = await service().from('nexus_duels').update({ locale, updated_at: now() }).eq('id', duel.id).eq('status', 'waiting').select('id').maybeSingle()
+  if (!data) return { error: 'notReady' }
+  await signal(duel.id)
+  return { ok: true }
+}
+
 // Chi ha creato la sfida la avvia quando ci sono almeno 2 giocatori
 export async function startNexusDuel(code: string): Promise<{ ok: true } | { error: string }> {
   const { user } = await viewer()
