@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { ArrowRight, BriefcaseBusiness, CalendarDays, ChevronDown, Gift, Leaf, PiggyBank, ShieldCheck, Smartphone, Store, Users, type LucideIcon } from 'lucide-react'
+import { ArrowRight, HandPlatter, Hourglass, Star, Tag, BriefcaseBusiness, CalendarDays, ChevronDown, Gamepad2, Gift, Leaf, Megaphone, PiggyBank, ShieldCheck, Smartphone, Store, Users, type LucideIcon } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 import type { HomeNeed } from '@/lib/homeNeeds'
@@ -12,8 +12,8 @@ import type { HomeNeed } from '@/lib/homeNeeds'
 // chiudere (resta una riga sola, che la riapre) e la scelta si ricorda su
 // questo dispositivo.
 
-const NEED_ICON: Record<string, LucideIcon> = { ShieldCheck, CalendarDays, PiggyBank, Store, BriefcaseBusiness, Users, Leaf, Gift }
-const EXTRA_ICON: Record<string, LucideIcon> = { Gift, Users }
+const NEED_ICON: Record<string, LucideIcon> = { ShieldCheck, CalendarDays, PiggyBank, Store, Megaphone, BriefcaseBusiness, Users, Gamepad2, Leaf, Gift }
+const EXTRA_ICON: Record<string, LucideIcon> = { Gift, Users, Tag, HandPlatter, Hourglass, Star }
 const HIDDEN_KEY = 'kumani_dash_needs_hidden'
 
 export default function DashboardNeeds({

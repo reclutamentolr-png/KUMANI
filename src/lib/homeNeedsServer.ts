@@ -5,6 +5,13 @@ import { HOME_NEEDS, type HomeNeed, type HomeNeedItem } from '@/lib/homeNeeds'
 // «In cosa possiamo darti una mano?» con i testi della lingua: per ogni
 // risposta i servizi giusti. hrefFor sceglie dove porta un servizio (Home
 // pubblica: la sua pagina /strumenti; dashboard: lo strumento).
+const COMMUNITY: Record<string, { titleKey: string; href: string; iconName: string }> = {
+  listings: { titleKey: 'listings', href: '/marketplace/listings', iconName: 'Tag' },
+  convivio: { titleKey: 'convivio', href: '/marketplace/convivio', iconName: 'HandPlatter' },
+  timebank: { titleKey: 'timebank', href: '/marketplace/timebank', iconName: 'Hourglass' },
+  spotlight: { titleKey: 'kumanoDelGiorno', href: '/marketplace/spotlight', iconName: 'Star' },
+}
+
 export async function buildHomeNeeds(hrefFor: (toolName: string) => string = (name) => `/strumenti/${name}`): Promise<HomeNeed[]> {
   const [tNeeds, tMarket, tSurprise] = await Promise.all([getTranslations('homeNeeds'), getTranslations('marketplace'), getTranslations('surprise')])
   const toolsByName = new Map(getMarketplaceTools(tMarket).map((tool) => [tool.toolName, tool]))
@@ -16,6 +23,9 @@ export async function buildHomeNeeds(hrefFor: (toolName: string) => string = (na
     intro: tNeeds(`intro_${need.key}`),
     items: (need.items as readonly string[]).flatMap((name): HomeNeedItem[] => {
       if (name === 'events') return [{ name, title: tMarket('events'), description: tMarket('eventsDescription'), href: '/events', iconName: 'Users' }]
+      // Sezioni della Community (non sono servizi del Marketplace)
+      const community = COMMUNITY[name]
+      if (community) return [{ name, title: tMarket(community.titleKey), description: tMarket(`${community.titleKey}Description`), href: community.href, iconName: community.iconName }]
       if (name === 'sorprese') return [{ name, title: `KUMANI ${tSurprise('title')}`, description: tSurprise('intro'), href: '/sorprese', iconName: 'Gift' }]
       const tool = toolsByName.get(name)
       return tool ? [{ name, title: tool.title.split(/\s[-–—]\s/)[0], description: tool.description, href: hrefFor(name), iconName: tool.iconName }] : []
