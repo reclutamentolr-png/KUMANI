@@ -9,6 +9,7 @@ import { createClient } from '@/lib/supabase/server'
 import { SITE_URL } from '@/lib/siteUrl'
 import { getLandingFormLabels, getLandingLabels } from '@/lib/landing-server'
 import { getMyBusinessProfile } from '@/lib/businessProfile-server'
+import { getBrandFor } from '@/lib/brand-server'
 import { cleanLandingContent, emptyLandingContent, isLandingLocale, isLandingTemplate, landingFromBusinessProfile, LANDING_LOCALES, slugify, type LandingLocale } from '@/lib/landing'
 import { toolMetadata } from '@/lib/toolMetadata'
 
@@ -41,6 +42,7 @@ export default async function LandingPageEditorPage({ params, searchParams }: { 
   const startLocale: LandingLocale = isLandingLocale(locale) ? locale : 'it'
   // Prima volta: la pagina parte già con i dati della Scheda attività
   const prefill = row ? null : landingFromBusinessProfile(emptyLandingContent(fullName), business)
+  const brandInfo = await getBrandFor(supabase, user.id)
   const initial: LandingEditorInitial = row
     ? {
         exists: true,
@@ -112,7 +114,7 @@ export default async function LandingPageEditorPage({ params, searchParams }: { 
             <LandingInbox initial={messages} />
           </div>
         ) : (
-          <LandingEditor initial={initial} siteUrl={SITE_URL} labelsByLocale={labelsByLocale} formLabelsByLocale={formLabelsByLocale} menuUrl={menuUrl} businessProfile={business} />
+          <LandingEditor initial={initial} siteUrl={SITE_URL} labelsByLocale={labelsByLocale} formLabelsByLocale={formLabelsByLocale} menuUrl={menuUrl} businessProfile={business} brand={brandInfo.colors} followBrand={!!brandInfo.follow.landing} />
         )}
       </main>
     </div>

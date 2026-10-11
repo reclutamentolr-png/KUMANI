@@ -6,6 +6,9 @@ import { Check, ClipboardCopy, Code2, Download, Link2, Palette, RotateCcw, Share
 import { completeFirmaEmail } from '@/app/actions/firmaEmail'
 import SignatureInstructions from '@/components/firmaEmail/SignatureInstructions'
 import BusinessProfileImport from '@/components/businessProfile/BusinessProfileImport'
+import BrandFollowNotice from '@/components/businessProfile/BrandFollowNotice'
+import { setBrandFollow } from '@/app/actions/brand'
+import type { BrandColors } from '@/lib/brand'
 import { BUSINESS_SOCIALS, businessFullAddress, businessWebsiteUrl, type BusinessProfile } from '@/lib/businessProfile'
 import { clearDraft, parseDraft, saveDraft } from '@/components/firmaEmail/draft'
 import {
@@ -140,15 +143,32 @@ export default function SignatureEditor({
   cardUrl,
   rawDraft,
   business,
+  brand = null,
+  followBrand = false,
 }: {
   prefill: Prefill
   cardUrl: string | null
   rawDraft: string | null
   business: BusinessProfile | null
+  brand?: BrandColors | null
+  followBrand?: boolean
 }) {
   const t = useTranslations('firmaEmail')
   const [initial] = useState(() => parseDraft(rawDraft, fromPrefill(prefill, business)))
-  const [data, setData] = useState<SignatureData>(() => initial?.data ?? fromPrefill(prefill, business))
+  // Segue i colori del brand: il colore è sempre il principale del brand
+  const [following, setFollowing] = useState(followBrand && !!brand)
+  const [data, setData] = useState<SignatureData>(() => {
+    const start = initial?.data ?? fromPrefill(prefill, business)
+    return followBrand && brand ? { ...start, color: brand.primary } : start
+  })
+  // Colore cambiato a mano: la firma non segue più il brand
+  const setColorByHand = (value: string) => {
+    setData((prev) => ({ ...prev, color: value }))
+    if (following) {
+      setFollowing(false)
+      void setBrandFollow('email', false)
+    }
+  }
   const [template, setTemplate] = useState<SignatureTemplate>(() => initial?.template ?? 'classic')
   const [status, setStatus] = useState<Status>(null)
   const [frameHeight, setFrameHeight] = useState(180)
@@ -314,12 +334,23 @@ export default function SignatureEditor({
         </Section>
 
         <Section icon={<Palette className="h-5 w-5" />} title={t('sectionBrand')}>
+          <div className="mb-3">
+            <BrandFollowNotice
+              service="email"
+              brand={brand}
+              following={following}
+              onFollow={() => {
+                setFollowing(true)
+                if (brand) setData((prev) => ({ ...prev, color: brand.primary }))
+              }}
+            />
+          </div>
           <div className="flex flex-wrap items-center gap-3">
             <label className="flex items-center gap-3 text-sm font-medium text-[var(--ink)]">
               <input
                 type="color"
                 value={color}
-                onChange={e => setData(prev => ({ ...prev, color: e.target.value }))}
+                onChange={e => setColorByHand(e.target.value)}
                 className="h-11 w-14 cursor-pointer rounded-lg border border-black/10 bg-white p-1"
               />
               {t('brandColor')}
@@ -328,7 +359,7 @@ export default function SignatureEditor({
             {color !== DEFAULT_BRAND_COLOR ? (
               <button
                 type="button"
-                onClick={() => setData(prev => ({ ...prev, color: DEFAULT_BRAND_COLOR }))}
+                onClick={() => setColorByHand(DEFAULT_BRAND_COLOR)}
                 className="rounded-full border border-[var(--gold)]/40 px-3 py-1.5 text-xs font-medium text-[var(--ink)] transition hover:bg-[var(--gold-pale)]/60"
               >
                 {t('resetColor')}

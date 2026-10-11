@@ -17,7 +17,6 @@ export async function saveBusinessProfile(
   if (!form.companyName.trim()) return { success: false, message: 'companyRequired' }
 
   const clean = (v: string, max: number) => v.trim().slice(0, max) || null
-  const accent = /^#[0-9a-fA-F]{6}$/.test(form.accent) ? form.accent : null
   const socials: Record<string, string> = {}
   for (const key of BUSINESS_SOCIALS) {
     const v = (form.socials[key] ?? '').trim().slice(0, 300)
@@ -42,7 +41,7 @@ export async function saveBusinessProfile(
     whatsapp: clean(form.whatsapp, 40),
     website: clean(form.website, 300),
     socials,
-    accent,
+    // accent: lo gestiscono «I colori del tuo brand» (brand_colors)
     tagline: clean(form.tagline, 160),
     opening_hours: hours,
     payment_info: clean(form.paymentInfo, 500),

@@ -11,6 +11,8 @@ import { validateLogoFile, logoExtension } from '@/lib/quotes'
 import { resizeImageFile } from '@/lib/resizeImage'
 import VatCheck from '@/components/ecosystem/VatCheck'
 import IbanInlineCheck from '@/components/ecosystem/IbanInlineCheck'
+import Link from '@/components/LocalizedLink'
+import type { BrandPalette } from '@/lib/brand'
 
 const INPUT =
   'w-full rounded-lg border-2 border-[var(--gold)]/20 px-3 py-2 text-sm focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30'
@@ -38,7 +40,7 @@ function Section({ icon, title, children }: { icon: ReactNode; title: string; ch
 
 // Modulo della «Scheda attività»: i dati si scrivono qui una volta sola e
 // i servizi li riprendono con «Usa i dati della Scheda attività».
-export default function BusinessProfileForm({ initial }: { initial: BusinessProfile }) {
+export default function BusinessProfileForm({ initial, brand = null }: { initial: BusinessProfile; brand?: BrandPalette | null }) {
   const t = useTranslations('businessProfile')
   const router = useRouter()
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -239,21 +241,18 @@ export default function BusinessProfileForm({ initial }: { initial: BusinessProf
       </Section>
 
       <Section icon={<Palette className="h-5 w-5" />} title={t('brandTitle')}>
-        <div className="flex flex-wrap items-center gap-3">
-          <input
-            type="color"
-            value={form.accent || '#c79a3b'}
-            onChange={(e) => set('accent', e.target.value)}
-            className="h-10 w-16 cursor-pointer rounded border border-gray-200"
-            aria-label={t('accent')}
-          />
-          <span className="text-sm text-[var(--muted)]">{form.accent ? t('accentChosen', { color: form.accent }) : t('accentHint')}</span>
-          {form.accent && (
-            <button type="button" onClick={() => set('accent', '')} className="text-xs font-semibold text-gray-500 hover:text-red-600">
-              {t('accentReset')}
-            </button>
-          )}
+        {/* I colori del brand: si scelgono nella pagina dedicata, i servizi li seguono */}
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2" aria-hidden="true">
+            {(brand ? [brand.primary, brand.accent, brand.background, brand.text] : [form.accent || '#c79a3b']).map((c, i) => (
+              <span key={i} className="h-9 w-9 rounded-full border border-black/10" style={{ background: c }} />
+            ))}
+          </div>
+          <Link href="/scheda-attivita/colori" className="inline-flex min-h-11 items-center rounded-xl bg-[var(--ink)] px-4 text-sm font-bold text-[var(--gold-bright)] hover:opacity-90">
+            {brand ? t('brandChange') : t('brandChoose')}
+          </Link>
         </div>
+        <p className="mt-2 text-sm text-[var(--muted)]">{brand ? t('brandFollowHint') : t('brandIntroHint')}</p>
       </Section>
 
       <Section icon={<Wallet className="h-5 w-5" />} title={t('paymentTitle')}>

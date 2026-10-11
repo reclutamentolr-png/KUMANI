@@ -18,11 +18,18 @@ import { STANDARD_COLORS, ALL_STANDARD_COLOR_KEYS } from '@/lib/standardColorPal
 import BusinessProfileImport from '@/components/businessProfile/BusinessProfileImport'
 import { businessWebsiteUrl, type BusinessProfile } from '@/lib/businessProfile'
 import CancelButton, { cancelButtonLgClass } from '@/components/ui/CancelButton'
+import BrandFollowNotice from '@/components/businessProfile/BrandFollowNotice'
+import type { BrandColors } from '@/lib/brand'
 
 type Props = (
   | { mode: 'create' }
   | { mode: 'edit'; id: string; initial: QrCodeFormData }
-) & { business?: BusinessProfile | null }
+) & {
+  business?: BusinessProfile | null
+  // «I colori del tuo brand»: colori e se i QR li seguono
+  brand?: BrandColors | null
+  followBrand?: boolean
+}
 
 // Tipi che si possono riempire con la Scheda attività
 const IMPORT_TYPES: QrContentType[] = ['vcard', 'whatsapp', 'phone', 'email', 'link']
@@ -50,7 +57,12 @@ function defaultForm(): QrCodeFormData {
 export default function QrProForm(props: Props) {
   const t = useTranslations('qrCodePro')
   const router = useRouter()
-  const [form, setForm] = useState<QrCodeFormData>(props.mode === 'edit' ? props.initial : defaultForm())
+  const brand = props.brand ?? null
+  const [brandFollowing, setBrandFollowing] = useState(!!props.followBrand && !!brand)
+  const [form, setForm] = useState<QrCodeFormData>(() =>
+    props.mode === 'edit' ? props.initial : props.followBrand && brand ? { ...defaultForm(), fgColor: brand.qr, bgColor: '#ffffff' } : defaultForm()
+  )
+  const followingNow = brandFollowing && !!brand && form.fgColor.toLowerCase() === brand.qr.toLowerCase() && form.bgColor.toLowerCase() === '#ffffff'
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -92,7 +104,7 @@ export default function QrProForm(props: Props) {
       const hex = /^#[0-9a-f]{6}$/i.test(p.accent.trim()) ? p.accent.trim().toLowerCase() : ''
       const luminance = hex ? (0.299 * parseInt(hex.slice(1, 3), 16) + 0.587 * parseInt(hex.slice(3, 5), 16) + 0.114 * parseInt(hex.slice(5, 7), 16)) / 255 : 1
       const accent = luminance < 0.6 ? hex : ''
-      return { ...prev, destination: next as unknown as QrDestination, fgColor: accent || prev.fgColor }
+      return { ...prev, destination: next as unknown as QrDestination, fgColor: followingNow && brand ? brand.qr : accent || prev.fgColor }
     })
   }
 
@@ -428,6 +440,17 @@ export default function QrProForm(props: Props) {
           </>
         )}
       </div>
+
+      <BrandFollowNotice
+        service="qr"
+        brand={brand}
+        following={followingNow}
+        onFollow={() => {
+          if (!brand) return
+          setBrandFollowing(true)
+          setForm((prev) => ({ ...prev, fgColor: brand.qr, bgColor: '#ffffff' }))
+        }}
+      />
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">{t('quickColorsLabel')}</label>

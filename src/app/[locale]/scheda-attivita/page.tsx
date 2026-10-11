@@ -11,6 +11,7 @@ import { getMyBusinessProfile } from '@/lib/businessProfile-server'
 import { getSessionUser } from '@/lib/session'
 import SellerPaymentsCard from '@/components/shop/SellerPaymentsCard'
 import { getSellerPaymentStatus } from '@/app/actions/shop'
+import { getBrand } from '@/app/actions/brand'
 
 // «Scheda attività»: i dati dell'attività scritti una volta sola e ripresi
 // da tutti i servizi. ?from=/percorso riporta al servizio da cui si arriva.
@@ -34,10 +35,11 @@ export default async function BusinessProfilePage({
   if (!user) redirect(`/${locale}/login?next=/scheda-attivita`)
 
   const [t, supabase] = await Promise.all([getTranslations('businessProfile'), createClient()])
-  const [profile, { data: proAccess }, { data: baseAccess }] = await Promise.all([
+  const [profile, { data: proAccess }, { data: baseAccess }, brand] = await Promise.all([
     getMyBusinessProfile(supabase, user.id),
     supabase.rpc('can_use_tool', { p_tool: 'preventivi' }).maybeSingle<{ allowed: boolean }>(),
     supabase.rpc('can_use_tool', { p_tool: 'link-in-bio' }).maybeSingle<{ allowed: boolean }>(),
+    getBrand(),
   ])
   const allowed = !!proAccess?.allowed || !!baseAccess?.allowed
   // KUMANI Shop: pagamenti online dei preventivi (solo con il Pro)
@@ -56,7 +58,7 @@ export default async function BusinessProfilePage({
         <p className="text-[var(--muted)]">{t('intro')}</p>
         {allowed ? (
           <>
-            <BusinessProfileForm initial={profile} />
+            <BusinessProfileForm initial={profile} brand={brand?.palette ?? null} />
             {sellerPayments && <SellerPaymentsCard initial={sellerPayments} returning={stripe === 'return' || stripe === 'refresh'} />}
           </>
         ) : (

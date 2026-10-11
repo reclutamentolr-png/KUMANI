@@ -2,6 +2,8 @@
 
 import { useDeferredValue, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
+import BrandFollowNotice from '@/components/businessProfile/BrandFollowNotice'
+import type { BrandColors } from '@/lib/brand'
 import {
   ArrowDown,
   ArrowUp,
@@ -76,6 +78,9 @@ type Props = {
   formLabelsByLocale: Record<LandingLocale, LandingFormLabels>
   menuUrl: string | null
   businessProfile: BusinessProfile | null
+  // «I colori del tuo brand»: colori e se la pagina li segue
+  brand?: BrandColors | null
+  followBrand?: boolean
 }
 
 const input = 'w-full rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-gray-900 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30'
@@ -107,7 +112,7 @@ function Card({ title, children, defaultOpen = true, right }: { title: string; c
   )
 }
 
-export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLabelsByLocale, menuUrl, businessProfile }: Props) {
+export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLabelsByLocale, menuUrl, businessProfile, brand = null, followBrand = false }: Props) {
   const t = useTranslations('landingEditor')
   const [slug, setSlug] = useState(initial.slug)
   const [savedSlug, setSavedSlug] = useState(initial.exists ? initial.slug : '')
@@ -115,6 +120,7 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
   const [searchVisible, setSearchVisible] = useState(initial.searchVisible)
   const [template, setTemplate] = useState<LandingTemplate>(initial.template)
   const [accent, setAccent] = useState(initial.accent)
+  const [brandFollowing, setBrandFollowing] = useState(followBrand)
   const [contentLocale, setContentLocale] = useState<LandingLocale>(initial.contentLocale)
   const [c, setC] = useState<LandingContent>(initial.content)
   const [dirty, setDirty] = useState(!initial.exists)
@@ -713,6 +719,18 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
           </div>
           <div>
             <span className={label}>{t('accentLabel')}</span>
+            <div className="mb-2">
+              <BrandFollowNotice
+                service="landing"
+                brand={brand}
+                following={brandFollowing && !!brand && accent.toLowerCase() === brand.primary.toLowerCase()}
+                onFollow={() => {
+                  if (!brand) return
+                  setBrandFollowing(true)
+                  setAccent(brand.primary.toLowerCase())
+                }}
+              />
+            </div>
             <div className="flex flex-wrap items-center gap-2">
               {LANDING_ACCENTS.map((color) => (
                 <button

@@ -8,6 +8,7 @@ import { getTranslations } from 'next-intl/server'
 import LinkInBioEditor from '@/components/LinkInBioEditor'
 import CopyLinkButton from '@/components/CopyLinkButton'
 import { getMyBusinessProfile } from '@/lib/businessProfile-server'
+import { cleanPalette, type BrandColors } from '@/lib/brand'
 import {
   Link2,
   ArrowLeft,
@@ -66,6 +67,8 @@ export default async function LinkInBioPage({ params }: { params: Promise<{ loca
   }
 
   const businessProfile = await getMyBusinessProfile(supabase, user.id)
+  const { data: brandRow } = await supabase.from('quote_issuer_profiles').select('brand_colors').eq('user_id', user.id).maybeSingle()
+  const brand = brandRow?.brand_colors && cleanPalette(brandRow.brand_colors) ? (brandRow.brand_colors as BrandColors) : null
   const baseUrl = SITE_URL
   
   const bioUrl = `${baseUrl}/${locale}/ref/${profile.referral_code}/bio`
@@ -109,7 +112,7 @@ export default async function LinkInBioPage({ params }: { params: Promise<{ loca
         {/* Editor reale + anteprima live (la stessa istanza di stato guida
             entrambi i pannelli, quindi resta sincronizzata mentre si scrive
             e dopo il salvataggio — niente più mockup statico scollegato). */}
-        <LinkInBioEditor userId={user.id} firstName={profile.first_name} lastName={profile.last_name} businessProfile={businessProfile} />
+        <LinkInBioEditor userId={user.id} firstName={profile.first_name} lastName={profile.last_name} businessProfile={businessProfile} brand={brand} />
 
         {/* URL della Bio con pulsante copia */}
         <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 mb-8">

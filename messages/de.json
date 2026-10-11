@@ -10488,7 +10488,11 @@
     "importDone": "Daten aus dem Profil übernommen: prüfen und speichern.",
     "importEdit": "Profil bearbeiten",
     "importButton": "Firmenprofil verwenden",
-    "menuLink": "Firmenprofil"
+    "menuLink": "Firmenprofil",
+    "brandChange": "Farben ändern",
+    "brandChoose": "Markenfarben wählen",
+    "brandFollowHint": "Dienste, die deiner Marke folgen, passen sich selbst an, wenn du die Farben änderst.",
+    "brandIntroHint": "Vier Farben aus dem Logo oder erzeugt, auf Lesbarkeit geprüft und von all deinen Diensten verwendet."
   },
   "voucherPrint": {
     "title": "Gutschein drucken",
@@ -12021,5 +12025,145 @@
       "start": "Beginn",
       "end": "Ende"
     }
+  },
+  "brand": {
+    "title": "Die Farben deiner Marke",
+    "subtitle": "Farben einmal wählen: deine Dienste übernehmen sie",
+    "intro": "Vier Farben für dein Unternehmen. Landing Page, Angebote, QR Code PRO, Link in Bio und E-Mail-Signatur verwenden sie automatisch und passen sich an, wenn du sie änderst.",
+    "stepsLabel": "Schritte",
+    "steps": {
+      "s1": "Farben",
+      "s2": "Lesbarkeit",
+      "s3": "Dienste"
+    },
+    "sourceLabel": "Womit beginnen",
+    "sources": {
+      "logo": "Aus dem Logo",
+      "harmony": "Erzeugen",
+      "hand": "Von Hand"
+    },
+    "logoAlt": "Dein Logo",
+    "logoTitle": "Farben aus deinem Logo",
+    "noLogoTitle": "Du hast noch kein Logo",
+    "noLogoText": "Lade es im Firmenprofil hoch oder nutze „Erzeugen“ oder „Von Hand“.",
+    "noLogoCta": "Zum Firmenprofil",
+    "logoError": "Die Farben dieses Logos können nicht gelesen werden: Nutze „Erzeugen“ oder „Von Hand“.",
+    "logoReading": "Farben des Logos werden gelesen…",
+    "logoText": "Auf deinem Handy berechnet: Das Logo wird nirgendwo hochgeladen.",
+    "harmonyTitle": "Starte mit einer Farbe und wähle die Kombination",
+    "harmonyBase": "Deine Ausgangsfarbe",
+    "harmonies": {
+      "contrast": "Kontrast",
+      "warm": "Warme Harmonie",
+      "lively": "Lebhaft"
+    },
+    "harmonyHints": {
+      "contrast": "Gegensätzliche Farben: Sie heben sich gegenseitig hervor.",
+      "warm": "Benachbarte Farben: weich und ordentlich.",
+      "lively": "Drei entfernte Farben: fröhlich und jung."
+    },
+    "handTitle": "Hast du schon deine Farben?",
+    "handText": "Tippe auf das Quadrat jeder Rolle und wähle die Farbe oder gib den Code ein (z. B. #7A2E1F).",
+    "rolesTitle": "Deine Marke",
+    "rolesText": "Tippe auf eine Rolle, dann auf eine Farbe unten, oder auf das Quadrat für eine freie Farbe.",
+    "pickColor": "Farbe wählen: {role}",
+    "roles": {
+      "primary": "Hauptfarbe",
+      "accent": "Akzent",
+      "background": "Hintergrund",
+      "text": "Text"
+    },
+    "roleHints": {
+      "primary": "Schaltflächen, Kopfzeilen, Band der Angebote",
+      "accent": "Details, Linien, Symbole",
+      "background": "Hintergrund der Seiten",
+      "text": "Überschriften und Absätze"
+    },
+    "candidatesLogo": "Logofarben · tippen, um sie als „{role}“ zu nutzen",
+    "candidatesHarmony": "Vorgeschlagene Farben · tippen, um sie als „{role}“ zu nutzen",
+    "useColor": "{color} als {role} verwenden",
+    "next2": "Weiter: Lesbarkeit prüfen",
+    "allReadable": "Alles gut lesbar",
+    "someUnreadable": "{count, plural, one {1 Kombination ist schlecht lesbar} other {# Kombinationen sind schlecht lesbar}}",
+    "allReadableText": "Deine Farben passen überall.",
+    "someUnreadableText": "Tippe auf „Korrigieren“: Wir schlagen den nächsten gut lesbaren Farbton vor.",
+    "pairs": {
+      "textOnBackground": {
+        "sample": "Über uns",
+        "label": "Text auf dem Hintergrund"
+      },
+      "onPrimary": {
+        "sample": "Jetzt buchen",
+        "label": "Text auf der Hauptfarbe"
+      },
+      "primaryOnBackground": {
+        "sample": "Unsere Leistungen",
+        "label": "Hauptfarbe auf dem Hintergrund"
+      },
+      "accentOnBackground": {
+        "sample": "Neu",
+        "label": "Akzent auf dem Hintergrund (Überschriften und Symbole)"
+      }
+    },
+    "sampleText": "Probetext zum Lesen",
+    "readable": "Gut lesbar",
+    "unreadable": "Schlecht lesbar",
+    "fix": "Korrigieren",
+    "wcagNote": "„Korrigieren“ macht die Farbe gerade so viel dunkler oder heller wie nötig, ohne den Farbton zu ändern. Die Prüfung folgt den internationalen Barrierefreiheitsregeln (WCAG, Stufe AA).",
+    "back": "Zurück",
+    "next3": "Weiter: Dienste wählen",
+    "servicesTitle": "Welche Dienste folgen deiner Marke?",
+    "servicesText": "Angehakte übernehmen deine Farben sofort und passen sich selbst an, wenn du sie änderst. Änderst du in einem Dienst eine Farbe von Hand, folgt dieser Dienst nicht mehr.",
+    "services": {
+      "landing": {
+        "name": "Landing Page",
+        "hint": "Farbe von Schaltflächen und Kopfzeilen"
+      },
+      "quotes": {
+        "name": "Angebote",
+        "hint": "Band und Linie neuer Angebote (bestehende bleiben unverändert)"
+      },
+      "qr": {
+        "name": "QR Code PRO",
+        "hint": "Farbe der Codes, immer dunkel und vom Handy lesbar"
+      },
+      "bio": {
+        "name": "Link in Bio",
+        "hint": "Hintergrund, Schaltflächen und Texte der Seite"
+      },
+      "email": {
+        "name": "E-Mail-Signatur",
+        "hint": "Farbe von Name und Linie der Signatur"
+      }
+    },
+    "soon": {
+      "shop": "KUMANI Shop",
+      "menu": "Digitale Speisekarte"
+    },
+    "soonHint": "Demnächst",
+    "errors": {
+      "planRequired": "Du brauchst den Base- oder Pro-Tarif.",
+      "saveError": "Speichern nicht möglich. Bitte erneut versuchen."
+    },
+    "savedTitle": "Farben gespeichert",
+    "savedText": "Die gewählten Dienste verwenden bereits deine Farben.",
+    "backToProfile": "Zurück zum Firmenprofil",
+    "save": "Farben speichern",
+    "preview": "Vorschau",
+    "previewTitle": "Dein Unternehmen",
+    "previewText": "Ein Vorstellungssatz in deinen Farben, so wie ihn deine Kunden sehen.",
+    "previewButton": "Kontakt",
+    "previewShort": "Willkommen!",
+    "previewQuote": "ANGEBOT Nr. 12",
+    "previewLink": "Meine Website",
+    "notice": {
+      "choose": "Wähle die Farben deiner Marke",
+      "following": "Folgt den Farben deiner Marke",
+      "change": "Ändern",
+      "notFollowing": "Folgt nicht den Farben deiner Marke",
+      "use": "Markenfarben verwenden"
+    },
+    "bioTheme": "Die Farben deiner Marke",
+    "bioThemeHint": "Aus dem Firmenprofil; passen sich selbst an"
   }
 }

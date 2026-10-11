@@ -9,6 +9,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "antitruffa",
   "aureya",
   "auth",
+  "brand",
   "businessCard",
   "businessProfile",
   "calcolatrici",

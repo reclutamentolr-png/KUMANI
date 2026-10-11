@@ -10488,7 +10488,11 @@
     "importDone": "Datos tomados de la ficha: revisa y guarda.",
     "importEdit": "Editar la ficha",
     "importButton": "Usar mi ficha del negocio",
-    "menuLink": "Ficha del negocio"
+    "menuLink": "Ficha del negocio",
+    "brandChange": "Cambiar los colores",
+    "brandChoose": "Elegir los colores de la marca",
+    "brandFollowHint": "Los servicios que siguen tu marca se actualizan solos cuando cambias los colores.",
+    "brandIntroHint": "Cuatro colores sacados del logo o generados, comprobados para que se lean bien y usados por todos tus servicios."
   },
   "voucherPrint": {
     "title": "Imprime tu vale",
@@ -12021,5 +12025,145 @@
       "start": "Inicio",
       "end": "Fin"
     }
+  },
+  "brand": {
+    "title": "Los colores de tu marca",
+    "subtitle": "Elige tus colores una vez: tus servicios los siguen",
+    "intro": "Cuatro colores para tu negocio. Landing Page, Presupuestos, QR Code PRO, Link in Bio y Firma de email los usan solos y se actualizan cuando los cambias.",
+    "stepsLabel": "Pasos",
+    "steps": {
+      "s1": "Colores",
+      "s2": "Legibilidad",
+      "s3": "Servicios"
+    },
+    "sourceLabel": "Por dónde empezar",
+    "sources": {
+      "logo": "Del logo",
+      "harmony": "Generar",
+      "hand": "A mano"
+    },
+    "logoAlt": "Tu logo",
+    "logoTitle": "Colores sacados de tu logo",
+    "noLogoTitle": "Aún no tienes logo",
+    "noLogoText": "Súbelo en la Ficha del negocio, o usa «Generar» o «A mano».",
+    "noLogoCta": "Ir a la Ficha del negocio",
+    "logoError": "No podemos leer los colores de este logo: usa «Generar» o «A mano».",
+    "logoReading": "Leyendo los colores del logo…",
+    "logoText": "Calculados en tu teléfono: el logo no se sube a ningún sitio.",
+    "harmonyTitle": "Parte de un color y elige la combinación",
+    "harmonyBase": "Tu color de partida",
+    "harmonies": {
+      "contrast": "Contraste",
+      "warm": "Armonía cálida",
+      "lively": "Vivo"
+    },
+    "harmonyHints": {
+      "contrast": "Colores opuestos: se realzan entre sí.",
+      "warm": "Colores cercanos: efecto suave y ordenado.",
+      "lively": "Tres colores distantes: alegre y joven."
+    },
+    "handTitle": "¿Ya tienes tus colores?",
+    "handText": "Toca el cuadrado de cada rol y elige el color, o escribe su código (ej. #7A2E1F).",
+    "rolesTitle": "Tu marca",
+    "rolesText": "Toca un rol y luego un color de abajo, o el cuadrado para elegir uno libre.",
+    "pickColor": "Elige el color: {role}",
+    "roles": {
+      "primary": "Principal",
+      "accent": "Acento",
+      "background": "Fondo",
+      "text": "Texto"
+    },
+    "roleHints": {
+      "primary": "Botones, cabeceras, banda de los presupuestos",
+      "accent": "Detalles, líneas, iconos",
+      "background": "El fondo de las páginas",
+      "text": "Títulos y párrafos"
+    },
+    "candidatesLogo": "Colores del logo · toca para usarlo como «{role}»",
+    "candidatesHarmony": "Colores propuestos · toca para usarlo como «{role}»",
+    "useColor": "Usar {color} como {role}",
+    "next2": "Siguiente: comprueba la legibilidad",
+    "allReadable": "Todo legible",
+    "someUnreadable": "{count, plural, one {1 combinación se lee mal} other {# combinaciones se leen mal}}",
+    "allReadableText": "Tus colores funcionan en todas partes.",
+    "someUnreadableText": "Toca «Corregir»: te proponemos el tono más cercano que se lee bien.",
+    "pairs": {
+      "textOnBackground": {
+        "sample": "Quiénes somos",
+        "label": "Texto sobre el fondo"
+      },
+      "onPrimary": {
+        "sample": "Reserva ahora",
+        "label": "Texto sobre el color principal"
+      },
+      "primaryOnBackground": {
+        "sample": "Nuestros servicios",
+        "label": "Principal sobre el fondo"
+      },
+      "accentOnBackground": {
+        "sample": "Novedades",
+        "label": "Acento sobre el fondo (títulos e iconos)"
+      }
+    },
+    "sampleText": "Texto de prueba para leer",
+    "readable": "Se lee bien",
+    "unreadable": "Se lee mal",
+    "fix": "Corregir",
+    "wcagNote": "«Corregir» oscurece o aclara el color lo justo, sin cambiar su tono. El control sigue las normas internacionales de accesibilidad (WCAG, nivel AA).",
+    "back": "Atrás",
+    "next3": "Siguiente: elige los servicios",
+    "servicesTitle": "¿Qué servicios siguen tu marca?",
+    "servicesText": "Los marcados toman tus colores ya y se actualizan solos cuando los cambias. Si cambias un color a mano en un servicio, ese servicio deja de seguirlos.",
+    "services": {
+      "landing": {
+        "name": "Landing Page",
+        "hint": "Color de botones y cabeceras"
+      },
+      "quotes": {
+        "name": "Presupuestos",
+        "hint": "Banda y línea de los nuevos presupuestos (los ya hechos no cambian)"
+      },
+      "qr": {
+        "name": "QR Code PRO",
+        "hint": "Color de los códigos, siempre oscuro y legible por el móvil"
+      },
+      "bio": {
+        "name": "Link in Bio",
+        "hint": "Fondo, botones y textos de la página"
+      },
+      "email": {
+        "name": "Firma de email",
+        "hint": "Color del nombre y la línea de la firma"
+      }
+    },
+    "soon": {
+      "shop": "KUMANI Shop",
+      "menu": "Menú digital"
+    },
+    "soonHint": "Próximamente",
+    "errors": {
+      "planRequired": "Necesitas el plan Base o Pro.",
+      "saveError": "No se ha podido guardar. Inténtalo de nuevo."
+    },
+    "savedTitle": "Colores guardados",
+    "savedText": "Los servicios elegidos ya usan tus colores.",
+    "backToProfile": "Volver a la Ficha del negocio",
+    "save": "Guardar los colores",
+    "preview": "Vista previa",
+    "previewTitle": "Tu negocio",
+    "previewText": "Una frase de presentación con tus colores, como la verán tus clientes.",
+    "previewButton": "Contáctanos",
+    "previewShort": "¡Bienvenidos!",
+    "previewQuote": "PRESUPUESTO n.º 12",
+    "previewLink": "Mi web",
+    "notice": {
+      "choose": "Elige los colores de tu marca",
+      "following": "Sigue los colores de tu marca",
+      "change": "Cambiar",
+      "notFollowing": "No sigue los colores de tu marca",
+      "use": "Usar los colores de la marca"
+    },
+    "bioTheme": "Los colores de tu marca",
+    "bioThemeHint": "De la Ficha del negocio; se actualizan solos"
   }
 }

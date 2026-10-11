@@ -10488,7 +10488,11 @@
     "importDone": "Details taken from your business profile: check and save.",
     "importEdit": "Edit profile",
     "importButton": "Use my business profile",
-    "menuLink": "Business profile"
+    "menuLink": "Business profile",
+    "brandChange": "Change colors",
+    "brandChoose": "Choose brand colors",
+    "brandFollowHint": "Services that follow your brand update by themselves when you change the colors.",
+    "brandIntroHint": "Four colors taken from your logo or generated, checked for readability and used by all your services."
   },
   "voucherPrint": {
     "title": "Print your voucher",
@@ -12021,5 +12025,145 @@
       "start": "Start",
       "end": "End"
     }
+  },
+  "brand": {
+    "title": "Your brand colors",
+    "subtitle": "Choose your colors once: your services follow them",
+    "intro": "Four colors for your business. Landing Page, Quotes, QR Code PRO, Link in Bio and Email signature use them automatically and update when you change them.",
+    "stepsLabel": "Steps",
+    "steps": {
+      "s1": "Colors",
+      "s2": "Readability",
+      "s3": "Services"
+    },
+    "sourceLabel": "Where to start",
+    "sources": {
+      "logo": "From logo",
+      "harmony": "Generate",
+      "hand": "By hand"
+    },
+    "logoAlt": "Your logo",
+    "logoTitle": "Colors taken from your logo",
+    "noLogoTitle": "You don’t have a logo yet",
+    "noLogoText": "Upload it in your Business profile, or use “Generate” or “By hand”.",
+    "noLogoCta": "Go to your Business profile",
+    "logoError": "We can’t read the colors of this logo: use “Generate” or “By hand”.",
+    "logoReading": "Reading your logo’s colors…",
+    "logoText": "Worked out on your phone: the logo isn’t uploaded anywhere.",
+    "harmonyTitle": "Start from a color and pick a combination",
+    "harmonyBase": "Your starting color",
+    "harmonies": {
+      "contrast": "Contrast",
+      "warm": "Warm harmony",
+      "lively": "Lively"
+    },
+    "harmonyHints": {
+      "contrast": "Opposite colors: they make each other stand out.",
+      "warm": "Neighbouring colors: soft and tidy.",
+      "lively": "Three distant colors: cheerful and young."
+    },
+    "handTitle": "Already have your colors?",
+    "handText": "Tap each role’s square and pick the color, or type its code (e.g. #7A2E1F).",
+    "rolesTitle": "Your brand",
+    "rolesText": "Tap a role, then a color below, or tap the square to pick any color.",
+    "pickColor": "Pick the color: {role}",
+    "roles": {
+      "primary": "Primary",
+      "accent": "Accent",
+      "background": "Background",
+      "text": "Text"
+    },
+    "roleHints": {
+      "primary": "Buttons, headers, quote band",
+      "accent": "Details, lines, icons",
+      "background": "Page background",
+      "text": "Headings and paragraphs"
+    },
+    "candidatesLogo": "Logo colors · tap to use as “{role}”",
+    "candidatesHarmony": "Suggested colors · tap to use as “{role}”",
+    "useColor": "Use {color} as {role}",
+    "next2": "Next: check readability",
+    "allReadable": "Everything is readable",
+    "someUnreadable": "{count, plural, one {1 combination is hard to read} other {# combinations are hard to read}}",
+    "allReadableText": "Your colors work everywhere.",
+    "someUnreadableText": "Tap “Fix”: we suggest the closest shade that reads well.",
+    "pairs": {
+      "textOnBackground": {
+        "sample": "About us",
+        "label": "Text on background"
+      },
+      "onPrimary": {
+        "sample": "Book now",
+        "label": "Text on primary color"
+      },
+      "primaryOnBackground": {
+        "sample": "Our services",
+        "label": "Primary on background"
+      },
+      "accentOnBackground": {
+        "sample": "New",
+        "label": "Accent on background (headings and icons)"
+      }
+    },
+    "sampleText": "Sample text to read",
+    "readable": "Reads well",
+    "unreadable": "Hard to read",
+    "fix": "Fix",
+    "wcagNote": "“Fix” darkens or lightens the color just enough, keeping its hue. The check follows international accessibility rules (WCAG, level AA).",
+    "back": "Back",
+    "next3": "Next: choose services",
+    "servicesTitle": "Which services follow your brand?",
+    "servicesText": "Ticked ones take your colors now and update by themselves when you change them. If you change a color by hand in a service, that service stops following.",
+    "services": {
+      "landing": {
+        "name": "Landing Page",
+        "hint": "Button and header color"
+      },
+      "quotes": {
+        "name": "Quotes",
+        "hint": "Band and line of new quotes (existing ones stay as they are)"
+      },
+      "qr": {
+        "name": "QR Code PRO",
+        "hint": "Code color, always dark and readable by phones"
+      },
+      "bio": {
+        "name": "Link in Bio",
+        "hint": "Page background, buttons and text"
+      },
+      "email": {
+        "name": "Email signature",
+        "hint": "Color of the name and signature line"
+      }
+    },
+    "soon": {
+      "shop": "KUMANI Shop",
+      "menu": "Digital menu"
+    },
+    "soonHint": "Coming soon",
+    "errors": {
+      "planRequired": "You need the Base or Pro plan.",
+      "saveError": "Could not save. Please try again."
+    },
+    "savedTitle": "Colors saved",
+    "savedText": "The chosen services already use your colors.",
+    "backToProfile": "Back to your Business profile",
+    "save": "Save colors",
+    "preview": "Preview",
+    "previewTitle": "Your business",
+    "previewText": "An introduction line in your colors, as your customers will see it.",
+    "previewButton": "Contact us",
+    "previewShort": "Welcome!",
+    "previewQuote": "QUOTE no. 12",
+    "previewLink": "My website",
+    "notice": {
+      "choose": "Choose your brand colors",
+      "following": "Follows your brand colors",
+      "change": "Change",
+      "notFollowing": "Doesn’t follow your brand colors",
+      "use": "Use brand colors"
+    },
+    "bioTheme": "Your brand colors",
+    "bioThemeHint": "From your Business profile; they update by themselves"
   }
 }

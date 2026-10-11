@@ -3,9 +3,10 @@
 import { useState, useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
+import type { BrandColors } from '@/lib/brand'
 import { saveLinkInBio } from '@/app/actions/linkInBio'
 import { normalizeLinkUrl, displayLinkValue } from '@/lib/linkUtils'
-import { BIO_THEMES, ALL_BIO_THEME_KEYS, DEFAULT_BIO_THEME, PREMIUM_BIO_THEME_KEYS, resolveBioTheme, type BioThemeKey } from '@/lib/linkInBioThemes'
+import { BIO_THEMES, ALL_BIO_THEME_KEYS, DEFAULT_BIO_THEME, PREMIUM_BIO_THEME_KEYS, resolveBioTheme, brandBioVars, type BioThemeKey } from '@/lib/linkInBioThemes'
 import { KU_UNLOCK_LINKINBIO_THEMES, linkInBioThemeUnlockKey } from '@/lib/ku'
 import { buyKuUnlock } from '@/app/actions/ku'
 import Link from '@/components/LocalizedLink'
@@ -41,13 +42,17 @@ export default function LinkInBioEditor({
   firstName,
   lastName,
   businessProfile = null,
+  brand = null,
 }: {
+  // «I colori del tuo brand» (Scheda attività): tema «brand» se ci sono
+  brand?: BrandColors | null
   userId: string
   firstName?: string
   lastName?: string
   businessProfile?: BusinessProfile | null
 }) {
   const t = useTranslations('marketplace')
+  const tb = useTranslations('brand')
   const supabase = createClient()
   const [bioText, setBioText] = useState('')
   const [links, setLinks] = useState<LinkItem[]>([])
@@ -109,14 +114,14 @@ export default function LinkInBioEditor({
         } catch {
           setLinks([])
         }
-        if (data.theme && ALL_BIO_THEME_KEYS.includes(data.theme as BioThemeKey)) {
+        if (data.theme && (ALL_BIO_THEME_KEYS.includes(data.theme as BioThemeKey) || (data.theme === 'brand' && brand))) {
           setTheme(data.theme as BioThemeKey)
         }
       }
       setLoading(false)
     }
     fetchData()
-  }, [userId, supabase])
+  }, [userId, supabase, brand])
 
   const addLink = () => {
     setLinks([
@@ -171,6 +176,7 @@ export default function LinkInBioEditor({
   if (loading) return <div className="text-center py-8 text-[var(--muted)]">{t('loadingEditor')}</div>
 
   const previewStyle = resolveBioTheme(previewTheme ?? theme)
+  const previewVars = (previewTheme ?? theme) === 'brand' ? brandBioVars(brand) : undefined
   const baseThemes = ALL_BIO_THEME_KEYS.filter((key) => !PREMIUM_BIO_THEME_KEYS.includes(key))
   // Un tema speciale si mostra se è già tuo, se si può sbloccare o se è
   // quello in uso (sblocchi spenti dopo averlo scelto).
@@ -209,6 +215,28 @@ export default function LinkInBioEditor({
         {/* Theme Picker */}
         <div className="mb-6">
           <label className="block text-sm font-semibold text-[var(--ink)] mb-2">{t('bioThemeLabel')}</label>
+          {brand && (
+            <button
+              type="button"
+              onClick={() => {
+                setTheme('brand')
+                setPreviewTheme(null)
+              }}
+              aria-pressed={theme === 'brand' && !previewTheme}
+              className={`mb-3 flex min-h-12 w-full items-center gap-3 rounded-xl border px-3 text-left transition-colors ${theme === 'brand' && !previewTheme ? 'border-[var(--ink)] bg-[var(--gold-pale)]/60' : 'border-[var(--gold)]/30 bg-white hover:bg-[var(--gold-pale)]/40'}`}
+            >
+              <span className="flex shrink-0 -space-x-1.5" aria-hidden="true">
+                {[brand.primary, brand.accent, brand.background, brand.text].map((c, i) => (
+                  <span key={i} className="h-6 w-6 rounded-full border-2 border-white" style={{ background: c }} />
+                ))}
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block text-sm font-bold text-[var(--ink)]">{tb('bioTheme')}</span>
+                <span className="block text-xs text-[var(--muted)]">{tb('bioThemeHint')}</span>
+              </span>
+              {theme === 'brand' && !previewTheme && <Check className="h-4 w-4 shrink-0 text-[var(--ink)]" />}
+            </button>
+          )}
           <div className="flex flex-wrap gap-2">
             {baseThemes.map((key) => {
               const style = BIO_THEMES[key]
@@ -390,7 +418,7 @@ export default function LinkInBioEditor({
             </button>
           </div>
         )}
-        <div className={`relative overflow-hidden rounded-2xl p-6 text-center ${previewStyle.pageBg}`}>
+        <div className={`relative overflow-hidden rounded-2xl p-6 text-center ${previewStyle.pageBg}`} style={previewVars as React.CSSProperties | undefined}>
           {previewStyle.scene && <BioThemeScene scene={previewStyle.scene} className="absolute inset-0 h-full w-full" />}
           {previewTheme && (
             <span className="absolute left-3 top-3 z-10 inline-flex items-center gap-1 rounded-full bg-black/45 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur">

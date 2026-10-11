@@ -19,7 +19,7 @@ import {
 
 import ShareButton from '@/components/ShareButton'
 import { getTranslations } from 'next-intl/server'
-import { resolveBioTheme } from '@/lib/linkInBioThemes'
+import { resolveBioTheme, brandBioVars } from '@/lib/linkInBioThemes'
 import BioThemeScene from '@/components/BioThemeScene'
 import { normalizeLinkUrl } from '@/lib/linkUtils'
 import PublicPageOffline from '@/components/PublicPageOffline'
@@ -91,7 +91,7 @@ export default async function LinkInBioPublicPage({ params }: { params: Promise<
   // solo la riga di questo profilo.
   const { data: linkInBio } = await service
     .from('link_in_bio')
-    .select('bio_text, links, theme')
+    .select('bio_text, links, theme, brand_colors')
     .eq('user_id', profile.id)
     .maybeSingle()
 
@@ -113,7 +113,9 @@ export default async function LinkInBioPublicPage({ params }: { params: Promise<
   // Si condivide questa pagina (la bio), non quella di iscrizione
   const profileUrl = `${baseUrl}/ref/${code}/bio`
   const t = await getTranslations('bioPublic')
-  const theme = resolveBioTheme(linkInBio?.theme)
+  // Tema «brand»: i colori della Scheda attività (se mancano, il tema di partenza)
+  const brandVars = linkInBio?.theme === 'brand' ? brandBioVars(linkInBio?.brand_colors) : undefined
+  const theme = resolveBioTheme(linkInBio?.theme === 'brand' && !brandVars ? null : linkInBio?.theme)
 
   // Mappa sicura delle icone (usando solo icone garantite in lucide-react)
   const getIcon = (iconName: string) => {
@@ -135,7 +137,7 @@ export default async function LinkInBioPublicPage({ params }: { params: Promise<
   }
 
   return (
-    <div className={`relative min-h-screen ${theme.pageBg} py-12 px-4`}>
+    <div className={`relative min-h-screen ${theme.pageBg} py-12 px-4`} style={brandVars as React.CSSProperties | undefined}>
       {theme.scene && <BioThemeScene scene={theme.scene} className="pointer-events-none fixed inset-0 h-full w-full" />}
       <div className="relative max-w-md mx-auto">
         {/* Card Principale */}

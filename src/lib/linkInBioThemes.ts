@@ -21,6 +21,8 @@ export type BioThemeKey =
   | 'aurora'
   | 'notte'
   | 'tramonto'
+  // «I colori del tuo brand» (Scheda attività): colori in variabili CSS
+  | 'brand'
 
 export type BioSceneKey = 'aurora' | 'notte' | 'tramonto'
 
@@ -44,6 +46,22 @@ export interface BioThemeStyle {
 }
 
 export const BIO_THEMES: Record<BioThemeKey, BioThemeStyle> = {
+  brand: {
+    key: 'brand',
+    label: 'Brand',
+    swatchClass: 'bg-[var(--bio-primary)]',
+    pageBg: 'bg-[var(--bio-page)]',
+    cardBg: 'bg-[var(--bio-card)] border border-black/5',
+    avatarBg: 'bg-[var(--bio-primary)]',
+    avatarText: 'text-[var(--bio-on-primary)]',
+    nameText: 'text-[var(--bio-text)]',
+    secondaryText: 'text-[var(--bio-text)]',
+    linkBg: 'bg-[var(--bio-primary)] hover:brightness-110',
+    linkText: 'text-[var(--bio-on-primary)]',
+    linkIconBg: 'bg-[var(--bio-accent)]',
+    linkIconText: 'text-[var(--bio-on-accent)]',
+    footerText: 'text-[var(--bio-text)]',
+  },
   aurora: {
     key: 'aurora',
     label: 'Aurora boreale',
@@ -306,4 +324,27 @@ export const DEFAULT_BIO_THEME: BioThemeKey = 'rosa'
 
 export function resolveBioTheme(key: string | null | undefined): BioThemeStyle {
   return BIO_THEMES[key as BioThemeKey] || BIO_THEMES[DEFAULT_BIO_THEME]
+}
+
+// Variabili CSS del tema «brand» (sul contenitore della pagina)
+export function brandBioVars(colors: unknown): Record<string, string> | undefined {
+  const c = colors && typeof colors === 'object' ? (colors as Record<string, unknown>) : null
+  const hex = (v: unknown) => (typeof v === 'string' && /^#[0-9a-f]{6}$/i.test(v) ? v : null)
+  if (!c || !hex(c.primary) || !hex(c.accent) || !hex(c.background) || !hex(c.text)) return undefined
+  const on = (bg: string) => {
+    const lum = (h: string) => {
+      const ch = [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255).map((v) => (v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)))
+      return 0.2126 * ch[0] + 0.7152 * ch[1] + 0.0722 * ch[2]
+    }
+    return lum(bg) > 0.4 ? '#171717' : '#ffffff'
+  }
+  return {
+    '--bio-page': hex(c.background)!,
+    '--bio-card': '#ffffff',
+    '--bio-primary': hex(c.primary)!,
+    '--bio-on-primary': hex(c.onPrimary) ?? on(hex(c.primary)!),
+    '--bio-accent': hex(c.accent)!,
+    '--bio-on-accent': on(hex(c.accent)!),
+    '--bio-text': hex(c.text)!,
+  }
 }

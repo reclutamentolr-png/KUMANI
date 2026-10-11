@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 import { SITE_URL } from '@/lib/siteUrl'
 import type { MyProfile } from '@/lib/myProfile'
 import { getMyBusinessProfile } from '@/lib/businessProfile-server'
+import { getBrandFor } from '@/lib/brand-server'
 import { toolMetadata } from '@/lib/toolMetadata'
 
 // Nome del servizio nella scheda del browser
@@ -29,6 +30,7 @@ export default async function FirmaEmailPage() {
   const [{ data: me }, business] = user
     ? await Promise.all([supabase.rpc('get_my_profile').maybeSingle<MyProfile>(), getMyBusinessProfile(supabase, user.id)])
     : [{ data: null }, null]
+  const brandInfo = user ? await getBrandFor(supabase, user.id) : { colors: null, follow: {} }
 
   const text = (value: unknown) => (typeof value === 'string' ? value.trim() : '')
   const prefill = {
@@ -75,7 +77,7 @@ export default async function FirmaEmailPage() {
           </div>
         </div>
 
-        <SignatureBuilder prefill={prefill} cardUrl={cardUrl} business={business} />
+        <SignatureBuilder prefill={prefill} cardUrl={cardUrl} business={business} brand={brandInfo.colors} followBrand={!!brandInfo.follow.email} />
 
         <p className="mt-6 text-center text-xs leading-5 text-[var(--muted)]">{t('privacyNote')}</p>
       </main>
