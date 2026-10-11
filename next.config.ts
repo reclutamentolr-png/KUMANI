@@ -3,6 +3,29 @@ import type { NextConfig } from 'next';
 
 const withNextIntl = createNextIntlPlugin('./i18n.ts');
 
+// Percorsi delle pagine pubbliche con dati personali (vedi headers sotto)
+const PRIVATE_PAGES = [
+  '/cv/:path*',
+  '/ref/:path*',
+  '/c/:path*',
+  '/ricevute/:path*',
+  '/preventivo/:path*',
+  '/f/:path*',
+  '/sorpresa/:path*',
+  '/regalo/:path*',
+  '/prova/:path*',
+  '/viaggi/invito/:path*',
+  '/convivio/:path+',
+  '/affinity/duo/:path*',
+  '/veritas/:path+',
+  '/nexus/:path+',
+  '/offerte/:path*',
+  '/m/:path*',
+  '/shop/:slug/ordine/:path*',
+  '/events/pass/:path*',
+  '/spotlight',
+]
+
 const nextConfig: NextConfig = {
   // Non dire a chi visita con quale tecnologia è fatto il sito
   poweredByHeader: false,
@@ -52,12 +75,14 @@ const nextConfig: NextConfig = {
         missing: [{ type: 'host', value: '(?:www\\.)?kumani\\.io' }],
         headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
       },
-      {
-        // CV pubblici (con email e telefono): visibili solo a chi ha il link,
-        // mai nei motori di ricerca né nelle loro copie
-        source: '/:locale(it|en|fr|es|pt|de|ru)?/cv/:code*',
+      // Pagine con dati personali (CV, link di invito e Link in Bio, ricevute,
+      // preventivi, tessere fedeltà, sorprese, regali, inviti a viaggi e gruppi,
+      // giochi con i nomi dei partecipanti, Kumano del giorno…): visibili solo a
+      // chi ha il link, mai nei motori di ricerca, nelle loro copie o tra le immagini
+      ...PRIVATE_PAGES.map((path) => ({
+        source: `/:locale(it|en|fr|es|pt|de|ru)?${path}`,
         headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive, nosnippet, noimageindex' }],
-      },
+      })),
       {
         // Service worker delle notifiche push: sempre la versione più recente
         source: '/sw.js',

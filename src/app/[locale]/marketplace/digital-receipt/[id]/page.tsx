@@ -12,6 +12,7 @@ import DigitalReceiptActions from '@/components/DigitalReceiptActions'
 import DigitalReceiptPdfButton from '@/components/DigitalReceiptPdfButton'
 import ReceiptSpendlyBox from '@/components/ecosystem/ReceiptSpendlyBox'
 import type { ReceiptSpendlyStatus } from '@/app/actions/ecosystem'
+import { signedPhotoUrl } from '@/lib/privatePhotos'
 
 export default async function DigitalReceiptDetailPage({
   params,
@@ -54,9 +55,7 @@ export default async function DigitalReceiptDetailPage({
     .eq('user_id', user.id)
     .maybeSingle()
   const issuerLogoUrl = issuer?.logo_path ? supabase.storage.from('quote-logos-v2').getPublicUrl(issuer.logo_path).data.publicUrl : null
-  const photoUrl = receipt.photo_path
-    ? supabase.storage.from('receipt-photos-v2').getPublicUrl(receipt.photo_path).data.publicUrl
-    : null
+  const photoUrl = await signedPhotoUrl('receipt-photos-v2', receipt.photo_path)
 
   const baseUrl = SITE_URL
   const receiptUrl =

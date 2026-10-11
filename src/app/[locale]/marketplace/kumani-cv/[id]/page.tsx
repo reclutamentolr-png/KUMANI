@@ -14,6 +14,7 @@ import CvShareButtons from '@/components/CvShareButtons'
 import CvToBioButton from '@/components/ecosystem/CvToBioButton'
 import CvActions from '@/components/CvActions'
 import CvTemplateRenderer from '@/components/cv/CvTemplateRenderer'
+import { signedPhotoUrl } from '@/lib/privatePhotos'
 
 export default async function CvDetailPage({
   params,
@@ -41,7 +42,7 @@ export default async function CvDetailPage({
   const { data: cv } = await supabase.from('cvs').select('*').eq('id', id).eq('user_id', user.id).single()
   if (!cv) notFound()
 
-  const photoUrl = cv.photo_path ? supabase.storage.from('cv-photos').getPublicUrl(cv.photo_path).data.publicUrl : null
+  const photoUrl = await signedPhotoUrl('cv-photos', cv.photo_path)
 
   const baseUrl = SITE_URL
   const publicUrl = locale === defaultLocale ? `${baseUrl}/cv/${cv.code}` : `${baseUrl}/${locale}/cv/${cv.code}`

@@ -7,6 +7,7 @@ import { ArrowLeft, FileUser } from 'lucide-react'
 import { hasActiveCvAccess } from '@/lib/cv-server'
 import CvForm from '@/components/CvForm'
 import type { CvFormData } from '@/lib/cv'
+import { signedPhotoUrl } from '@/lib/privatePhotos'
 
 export default async function EditCvPage({
   params,
@@ -34,7 +35,7 @@ export default async function EditCvPage({
   const { data: cv } = await supabase.from('cvs').select('*').eq('id', id).eq('user_id', user.id).single()
   if (!cv) notFound()
 
-  const photoUrl = cv.photo_path ? supabase.storage.from('cv-photos').getPublicUrl(cv.photo_path).data.publicUrl : null
+  const photoUrl = await signedPhotoUrl('cv-photos', cv.photo_path)
 
   const initialData: CvFormData = {
     title: cv.title,

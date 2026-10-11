@@ -7,6 +7,7 @@ import { Crown } from 'lucide-react'
 import CvTemplateRenderer from '@/components/cv/CvTemplateRenderer'
 import type { CvTemplate, CvLink, CvExperience, CvEducation, CvSkill, CvLanguage, CvCertification } from '@/lib/cv'
 import PublicPageOffline from '@/components/PublicPageOffline'
+import { signedPhotoUrl } from '@/lib/privatePhotos'
 
 // Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
 // richiesta, mai preparata in anticipo né tenuta in memoria
@@ -52,9 +53,8 @@ export default async function CvPublicPage({ params }: { params: Promise<{ code:
     notFound()
   }
 
-  const photoUrl = data.photo_path
-    ? supabase.storage.from('cv-photos').getPublicUrl(data.photo_path).data.publicUrl
-    : null
+  // Foto da spazio privato: link firmato che scade dopo un'ora
+  const photoUrl = await signedPhotoUrl('cv-photos', data.photo_path)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-100 via-white to-[var(--gold-pale)] py-8 px-4">

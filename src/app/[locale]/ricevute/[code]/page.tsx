@@ -10,6 +10,7 @@ import ReceiptSaveBox from '@/components/receipts/ReceiptSaveBox'
 import DigitalReceiptPdfButton from '@/components/DigitalReceiptPdfButton'
 import { SITE_URL } from '@/lib/siteUrl'
 import { defaultLocale } from '../../../../../i18n'
+import { signedPhotoUrl } from '@/lib/privatePhotos'
 
 // Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
 // richiesta, mai preparata in anticipo né tenuta in memoria
@@ -64,9 +65,7 @@ export default async function DigitalReceiptPublicPage({
     notFound()
   }
 
-  const photoUrl = data.photo_path
-    ? supabase.storage.from('receipt-photos-v2').getPublicUrl(data.photo_path).data.publicUrl
-    : null
+  const photoUrl = await signedPhotoUrl('receipt-photos-v2', data.photo_path)
 
   // Ricevuta con un importo pagato: chi ha l'accesso la segna in Spendly
   const {
