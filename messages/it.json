@@ -7065,6 +7065,48 @@
         "p2d": "Cronometro sul lavoro e quanto ti resta.",
         "p3": "Incassi in ordine",
         "p3d": "Pagamenti, ricevute e dati per il commercialista."
+      },
+      "hopla": {
+        "sub": "Dal telefono al computer",
+        "tagline": "Foto e video dal telefono al PC in un attimo: inquadri il codice e arrivano.",
+        "p1": "Senza cavi né app",
+        "p1d": "Basta la fotocamera del telefono.",
+        "p2": "Diretto e privato",
+        "p2d": "I file non passano da nessun server.",
+        "p3": "Anche video grandi",
+        "p3d": "Salvati subito in una cartella del PC."
+      },
+      "firma_pdf": {
+        "sub": "Firma i documenti dal telefono",
+        "tagline": "Firma, data e testo sui tuoi PDF, poi scarichi o condividi il documento firmato.",
+        "p1": "Firma in tre modi",
+        "p1d": "Scrivi il nome, disegnala o carica la foto.",
+        "p2": "Data e testo",
+        "p2d": "Dove servono, su ogni pagina.",
+        "p3": "Il PDF resta tuo",
+        "p3d": "Si firma sul dispositivo, senza caricarlo.",
+        "note": "Firma elettronica semplice, non la firma digitale qualificata."
+      },
+      "rete_antitruffa": {
+        "sub": "La community che ti protegge",
+        "tagline": "Segnala numeri, siti e IBAN usati per truffare: chi li controlla vede l’avviso.",
+        "p1": "Segnala in un minuto",
+        "p1d": "Telefono, sito, IBAN, email o profilo.",
+        "p2": "Avvisi nei controlli",
+        "p2d": "In SVAT, Verifica IBAN e CheckMail.",
+        "p3": "Chi mi ha chiamato?",
+        "p3d": "Scopri se un numero è stato segnalato.",
+        "note": "Gratis per tutti gli iscritti."
+      },
+      "scudo_dati": {
+        "sub": "I tuoi dati sono già in giro?",
+        "tagline": "Scopri se la tua email o una password sono finite in una fuga di dati.",
+        "p1": "Controlla la tua email",
+        "p1d": "In quali fughe compare e cosa è uscito.",
+        "p2": "Password già circolate",
+        "p2d": "Senza che la password lasci il telefono.",
+        "p3": "Fuori da Google",
+        "p3d": "I passi per togliere i tuoi dati dalla ricerca."
       }
     },
     "includedSurprise": "Per tutti, anche con l’account gratuito",
@@ -7862,6 +7904,69 @@
       "step5Title": "Scarica o condividi",
       "step5Text": "Tocca «Scarica il PDF firmato»: il file si chiama come l’originale con «-firmato». Dal telefono puoi anche condividerlo subito, per esempio su WhatsApp.",
       "step5Tip": "È una firma elettronica semplice: va bene per accettazioni, moduli e molti contratti, non sostituisce la firma digitale qualificata."
+    },
+    "rete_antitruffa": {
+      "title": "Rete Anti-Truffa",
+      "summary": "Segnala numeri, siti, IBAN ed email usati per truffare e guarda gli avvisi della community: gratis per tutti.",
+      "cta": "Apri la Rete Anti-Truffa",
+      "step1Title": "Guarda l’allerta",
+      "step1Text": "Nella scheda «Allerta» vedi quante segnalazioni ci sono state negli ultimi 7 giorni, le truffe in aumento e gli ultimi avvisi confermati dallo Staff.",
+      "step1Tip": "Accendi «Le truffe della settimana» per ricevere ogni lunedì una notifica con le truffe più segnalate.",
+      "step2Title": "Segnala una truffa",
+      "step2Text": "In «Segnala» scegli cosa segnalare (telefono, sito, IBAN, email, profilo social o QR code), il tipo di truffa e racconta cosa è successo. Se vuoi aggiungi uno screenshot: lo vede solo lo Staff.",
+      "step2Tip": "Niente nomi di persone: si segnalano solo numeri, siti e dati usati dai truffatori.",
+      "step3Title": "L’avviso nei controlli",
+      "step3Text": "Quando lo Staff conferma, chi controlla lo stesso dato con SVAT, Verifica IBAN o CheckMail vede l’avviso rosso della community, con il tipo di truffa e i racconti degli iscritti.",
+      "step4Title": "Chi mi ha chiamato?",
+      "step4Text": "Scrivi il numero che ti ha chiamato o scritto: vedi se è stato segnalato, di che paese è e se è un numero a pagamento.",
+      "step4Tip": "I truffatori possono falsificare i numeri: nel dubbio non dare codici o soldi e richiama tu il numero ufficiale.",
+      "step5Title": "Le tue segnalazioni",
+      "step5Text": "In «Le mie» segui lo stato di ogni segnalazione e quante persone ha messo in guardia. Con le segnalazioni confermate ricevi KU Karma e diventi Guardiano di bronzo, d’argento e d’oro."
+    },
+    "scudo_dati": {
+      "title": "Scudo Dati",
+      "summary": "Scopri se la tua email o una password sono finite in una fuga di dati e cosa fare subito.",
+      "cta": "Apri Scudo Dati",
+      "step1Title": "Controlla la tua email",
+      "step1Text": "Tocca «Controlla» nel riquadro «La tua email»: verifichiamo l’email del tuo account nelle fughe di dati conosciute. È gratis.",
+      "step2Title": "Un’altra email",
+      "step2Text": "Puoi controllare anche l’email di un familiare o della tua attività. Vedi in quali fughe compare e quali dati sono stati esposti.",
+      "step2Tip": "Costa 3 KU Karma e li scaliamo solo se il controllo riesce.",
+      "step3Title": "Controlla una password",
+      "step3Text": "Scrivi una password e tocca «Controlla»: ti diciamo se è già comparsa nelle liste dei truffatori. Se sì, cambiala ovunque la usi.",
+      "step3Tip": "La password non lascia il tuo dispositivo: esce solo l’inizio della sua impronta.",
+      "step4Title": "Togli i tuoi dati da Google",
+      "step4Text": "Segui i passi per usare «Risultati che ti riguardano» di Google: trovi dove compaiono telefono, indirizzo ed email e chiedi di toglierli dalla ricerca."
+    },
+    "trova_lavoro": {
+      "title": "Trova Lavoro",
+      "summary": "Offerte di lavoro da tante fonti, con filtri accurati e controllo anti-truffa.",
+      "cta": "Apri Trova Lavoro",
+      "step1Title": "Cosa e dove cerchi",
+      "step1Text": "Scrivi il lavoro che cerchi, scegli paese, città e raggio. Con contratto, orario e «Filtri avanzati» restringi i risultati.",
+      "step1Tip": "Sotto il pulsante vedi il credito della settimana: si contano solo le pagine di risultati lette davvero.",
+      "step2Title": "Leggi le offerte",
+      "step2Text": "Le offerte arrivano da più fonti, senza doppioni e con i segnali di truffa già controllati. Vedi stipendio, data e perché corrisponde alla tua ricerca, poi apri l’annuncio per candidarti.",
+      "step3Title": "Salva preferiti e ricerche",
+      "step3Text": "Tocca la stella per salvare un’offerta tra i «Preferiti» e salva una ricerca per rifarla con un tocco.",
+      "step4Title": "Prepara il CV",
+      "step4Text": "Prima di candidarti crea o aggiorna il CV con KUMANI CV.",
+      "step4Tip": "Un lavoro vero non chiede mai soldi o dati bancari prima del colloquio."
+    },
+    "proposte": {
+      "title": "Proposte della community",
+      "summary": "Proponi idee per migliorare KUMANI e sostieni quelle degli altri iscritti.",
+      "cta": "Apri le Proposte",
+      "step1Title": "Dove si trovano",
+      "step1Text": "In Community trovi la scheda «Proposte» e la striscia «Le proposte più sostenute». Tocca «Tutte le proposte» per vederle ordinate per sostegni, nuove o realizzate.",
+      "step2Title": "Fai una proposta",
+      "step2Text": "Con il piano Base o Pro tocca «Fai una proposta»: scegli di cosa parla, scrivi un titolo chiaro e spiega l’idea. Mentre scrivi ti mostriamo le proposte simili.",
+      "step2Tip": "Puoi fare una proposta a settimana; lo Staff la controlla prima di pubblicarla.",
+      "step3Title": "Sostieni le idee che ti piacciono",
+      "step3Text": "Apri una proposta e tocca «Sostieni questa proposta». Il sostegno è anonimo: si vede solo il numero. Sostenere è gratis per tutti.",
+      "step4Title": "Segui lo stato e la risposta",
+      "step4Text": "Lo Staff risponde e aggiorna lo stato: nuova, in valutazione, pianificata, realizzata. Ricevi una notifica quando una proposta che sostieni va avanti.",
+      "step4Tip": "Se la tua proposta viene realizzata ricevi KU Karma."
     }
   },
   "deckTexts": {
@@ -7989,7 +8094,7 @@
         },
         "2": {
           "1": "Sicurezza anti-truffa",
-          "2": "SVAT, VeriFoto, CheckMail, Verifica IBAN, Scudo Dati, Documento Sicuro, Manuale Anti-Truffa"
+          "2": "Rete Anti-Truffa, SVAT, VeriFoto, CheckMail, Verifica IBAN, Scudo Dati, Documento Sicuro, Manuale Anti-Truffa"
         },
         "3": {
           "1": "Organizzazione",
@@ -8001,7 +8106,7 @@
         },
         "5": {
           "1": "Lavoro",
-          "2": "Trova Lavoro, Preventivi, Clienti e Lavori, Ricevute Digitali, Magazzino PRO, Calcolatrici PRO"
+          "2": "Trova Lavoro, Preventivi, Clienti e Lavori, Ricevute Digitali, Magazzino PRO, Calcolatrici PRO, Firma PDF, Hoplà"
         },
         "6": {
           "1": "Community e svago",
@@ -8051,7 +8156,7 @@
           "3": "per sempre",
           "4": "Per iniziare, senza carta di credito",
           "5": "{free, plural, one {# servizio incluso} other {# servizi inclusi}}",
-          "6": "QR Code, Messaggi WhatsApp, Verifica IBAN, Bacheca, Kordata, Banca del Tempo, giochi e benessere"
+          "6": "Rete Anti-Truffa, QR Code, Messaggi WhatsApp, Verifica IBAN, Bacheca, Kordata, Banca del Tempo, giochi e benessere"
         },
         "2": {
           "1": "Base",
@@ -8059,7 +8164,7 @@
           "3": "all’anno",
           "4": "Per privati e famiglie",
           "5": "Tutto il Gratis + {base, plural, one {# servizio} other {# servizi}}",
-          "6": "MemoLife, Spendly, Life Calendar, Kumani Garage, KUMANI Casa, Link in Bio, SVAT, CheckMail, Neurobalance, Travel, Trova Lavoro"
+          "6": "MemoLife, Spendly, Life Calendar, Kumani Garage, KUMANI Casa, Link in Bio, SVAT, CheckMail, Neurobalance, Travel, Trova Lavoro, Firma PDF, Hoplà"
         },
         "3": {
           "1": "Pro",
@@ -8165,7 +8270,7 @@
           "2": "Veritas, Mosaic, Fabula e Nexus da fare insieme"
         }
       },
-      "notes": "KUMANI non è solo strumenti: è una community. Bacheca annunci, acquisti di gruppo con la Kordata, Banca del Tempo per scambiarsi aiuto, eventi dal vivo e giochi da fare con gli amici."
+      "notes": "KUMANI non è solo strumenti: è una community. Bacheca annunci, acquisti di gruppo con la Kordata, Banca del Tempo per scambiarsi aiuto, eventi dal vivo e giochi da fare con gli amici. Con le Proposte della community gli iscritti suggeriscono e sostengono le idee per migliorare KUMANI, e lo Staff risponde."
     },
     "s12": {
       "title": "Due tipi di punti, regole pubbliche",
@@ -8349,6 +8454,30 @@
       },
       "badge": "Incluso nel piano Pro · collegato a Preventivi, Shop e Ricevute",
       "notes": "Clienti e Lavori è il gestionale tascabile di chi lavora con i clienti, soprattutto artigiani. Ogni preventivo salvato crea la scheda del cliente; da un preventivo accettato nasce il lavoro, con stato, cose da fare, cronometro, materiali e spese, e il margine si calcola da solo. I pagamenti ricevuti si registrano anche in contanti o con bonifico, con la ricevuta digitale in un tocco. Ogni mattina la sezione Oggi dice chi sentire e cosa incassare, e i dati si esportano per il commercialista."
+    },
+    "antitruffa": {
+      "title": "Rete Anti-Truffa",
+      "sub": "La community che si protegge a vicenda: gratis per tutti gli iscritti.",
+      "rows": {
+        "1": {
+          "1": "Segnala in un minuto",
+          "2": "Numeri, siti, IBAN, email, profili e QR code usati per truffare, con il racconto e uno screenshot."
+        },
+        "2": {
+          "1": "Avvisi nei controlli",
+          "2": "Dopo la conferma dello Staff, chi controlla lo stesso dato con SVAT, Verifica IBAN o CheckMail vede l’avviso."
+        },
+        "3": {
+          "1": "Chi mi ha chiamato?",
+          "2": "Scopri se un numero è stato segnalato, di che paese è e se è a pagamento."
+        },
+        "4": {
+          "1": "Allerta e Guardiani",
+          "2": "Le truffe della settimana, KU Karma per chi segnala e i distintivi di bronzo, argento e oro."
+        }
+      },
+      "badge": "Gratis per tutti · chi segnala resta anonimo",
+      "notes": "La Rete Anti-Truffa trasforma ogni iscritto in una sentinella. Si segnalano solo dati usati dai truffatori, mai nomi di persone; lo Staff controlla prima di pubblicare. Da quel momento chi controlla lo stesso numero, sito o IBAN vede l’avviso rosso con il tipo di truffa e i racconti degli iscritti. Più iscritti, più protezione per tutti: è il motivo più semplice per invitare amici e parenti."
     },
     "full": {
       "section": "Tutti i servizi",

@@ -7065,6 +7065,48 @@
         "p2d": "A timer on the job and what you keep.",
         "p3": "Payments in order",
         "p3d": "Payments, receipts and data for your accountant."
+      },
+      "hopla": {
+        "sub": "From phone to computer",
+        "tagline": "Photos and videos from your phone to your computer in a flash: scan the code and they arrive.",
+        "p1": "No cables, no apps",
+        "p1d": "Your phone camera is all you need.",
+        "p2": "Direct and private",
+        "p2d": "Files don’t go through any server.",
+        "p3": "Big videos too",
+        "p3d": "Saved straight into a folder on your computer."
+      },
+      "firma_pdf": {
+        "sub": "Sign documents from your phone",
+        "tagline": "Signature, date and text on your PDFs, then download or share the signed document.",
+        "p1": "Sign three ways",
+        "p1d": "Type your name, draw it or upload a photo.",
+        "p2": "Date and text",
+        "p2d": "Wherever needed, on any page.",
+        "p3": "The PDF stays yours",
+        "p3d": "Signed on your device, never uploaded.",
+        "note": "Simple electronic signature, not a qualified digital signature."
+      },
+      "rete_antitruffa": {
+        "sub": "The community that protects you",
+        "tagline": "Report numbers, websites and IBANs used for scams: anyone checking them sees the warning.",
+        "p1": "Report in a minute",
+        "p1d": "Phone, website, IBAN, email or profile.",
+        "p2": "Warnings in the checks",
+        "p2d": "In SVAT, IBAN Check and CheckMail.",
+        "p3": "Who called me?",
+        "p3d": "See whether a number has been reported.",
+        "note": "Free for all members."
+      },
+      "scudo_dati": {
+        "sub": "Is your data already out there?",
+        "tagline": "Find out whether your email or a password has ended up in a data breach.",
+        "p1": "Check your email",
+        "p1d": "Which breaches it’s in and what leaked.",
+        "p2": "Leaked passwords",
+        "p2d": "Without the password leaving your phone.",
+        "p3": "Off Google",
+        "p3d": "Steps to remove your data from Search."
       }
     },
     "includedSurprise": "For everyone, free account included",
@@ -7862,6 +7904,69 @@
       "step5Title": "Download or share",
       "step5Text": "Tap “Download the signed PDF”: the file keeps the original name plus “-signed”. On a phone you can also share it straight away, for example on WhatsApp.",
       "step5Tip": "It’s a simple electronic signature: fine for approvals, forms and many contracts; it doesn’t replace a qualified digital signature."
+    },
+    "rete_antitruffa": {
+      "title": "Anti-Scam Network",
+      "summary": "Report numbers, websites, IBANs and emails used for scams and see the community’s warnings: free for everyone.",
+      "cta": "Open the Anti-Scam Network",
+      "step1Title": "Check the alerts",
+      "step1Text": "In “Alerts” you see how many reports there were in the last 7 days, the scams on the rise and the latest warnings confirmed by the Staff.",
+      "step1Tip": "Turn on “Scams of the week” to get a notification every Monday with the most reported scams.",
+      "step2Title": "Report a scam",
+      "step2Text": "In “Report” choose what to report (phone, website, IBAN, email, social profile or QR code), the type of scam and describe what happened. You can add a screenshot: only the Staff sees it.",
+      "step2Tip": "No names of people: report only the numbers, websites and details used by scammers.",
+      "step3Title": "The warning in the checks",
+      "step3Text": "Once the Staff confirms, anyone checking the same detail with SVAT, IBAN Check or CheckMail sees the red community warning, with the type of scam and members’ accounts.",
+      "step4Title": "Who called me?",
+      "step4Text": "Type the number that called or texted you: see whether it has been reported, which country it’s from and whether it’s a premium-rate number.",
+      "step4Tip": "Scammers can spoof numbers: if in doubt, don’t give codes or money and call the official number back yourself.",
+      "step5Title": "Your reports",
+      "step5Text": "In “Mine” follow the status of each report and how many people it warned. Confirmed reports earn you KU Karma and the Bronze, Silver and Gold Guardian badges."
+    },
+    "scudo_dati": {
+      "title": "Data Shield",
+      "summary": "Find out whether your email or a password has ended up in a data breach and what to do straight away.",
+      "cta": "Open Data Shield",
+      "step1Title": "Check your email",
+      "step1Text": "Tap “Check” in “Your email”: we check your account email against known data breaches. It’s free.",
+      "step2Title": "Another email",
+      "step2Text": "You can also check a family member’s or your business email. You see which breaches it appears in and which data was exposed.",
+      "step2Tip": "It costs 3 KU Karma, deducted only if the check succeeds.",
+      "step3Title": "Check a password",
+      "step3Text": "Type a password and tap “Check”: we tell you whether it has already appeared on scammers’ lists. If so, change it wherever you use it.",
+      "step3Tip": "The password never leaves your device: only the start of its fingerprint is sent.",
+      "step4Title": "Remove your data from Google",
+      "step4Text": "Follow the steps to use Google’s “Results about you”: find where your phone, address and email appear and ask for them to be removed from Search."
+    },
+    "trova_lavoro": {
+      "title": "Find a Job",
+      "summary": "Job offers from many sources, with accurate filters and an anti-scam check.",
+      "cta": "Open Find a Job",
+      "step1Title": "What and where",
+      "step1Text": "Type the job you’re looking for and choose country, city and radius. Contract, hours and “Advanced filters” narrow the results down.",
+      "step1Tip": "Under the button you see this week’s credit: only result pages actually read are counted.",
+      "step2Title": "Read the offers",
+      "step2Text": "Offers come from several sources, without duplicates and with scam signals already checked. You see salary, date and why it matches your search, then open the ad to apply.",
+      "step3Title": "Save favourites and searches",
+      "step3Text": "Tap the star to save an offer to “Favourites” and save a search to run it again with one tap.",
+      "step4Title": "Get your CV ready",
+      "step4Text": "Before applying, create or update your CV with KUMANI CV.",
+      "step4Tip": "A real job never asks for money or bank details before the interview."
+    },
+    "proposte": {
+      "title": "Community proposals",
+      "summary": "Suggest ideas to improve KUMANI and support other members’ ideas.",
+      "cta": "Open Proposals",
+      "step1Title": "Where to find them",
+      "step1Text": "In Community you’ll find the “Proposals” card and the “Most supported proposals” strip. Tap “All proposals” to see them sorted by support, new or done.",
+      "step2Title": "Make a proposal",
+      "step2Text": "With the Base or Pro plan tap “Make a proposal”: choose what it’s about, write a clear title and explain the idea. While you type we show similar proposals.",
+      "step2Tip": "You can make one proposal a week; the Staff checks it before publishing.",
+      "step3Title": "Support the ideas you like",
+      "step3Text": "Open a proposal and tap “Support this proposal”. Support is anonymous: only the number is shown. Supporting is free for everyone.",
+      "step4Title": "Follow status and reply",
+      "step4Text": "The Staff replies and updates the status: new, being evaluated, planned, done. You get a notification when a proposal you support moves forward.",
+      "step4Tip": "If your proposal gets built you receive KU Karma."
     }
   },
   "deckTexts": {
@@ -7989,7 +8094,7 @@
         },
         "2": {
           "1": "Anti-scam security",
-          "2": "SVAT, VeriFoto, CheckMail, IBAN Check, Data Shield, Safe Document, Anti-Scam Manual"
+          "2": "Anti-Scam Network, SVAT, VeriFoto, CheckMail, IBAN Check, Data Shield, Safe Document, Anti-Scam Manual"
         },
         "3": {
           "1": "Organisation",
@@ -8001,7 +8106,7 @@
         },
         "5": {
           "1": "Work",
-          "2": "Find a Job, Quotes, Clients & Jobs, Digital Receipts, Magazzino PRO, PRO Calculators"
+          "2": "Find a Job, Quotes, Clients & Jobs, Digital Receipts, Magazzino PRO, PRO Calculators, Sign PDF, Hoplà"
         },
         "6": {
           "1": "Community and fun",
@@ -8051,7 +8156,7 @@
           "3": "forever",
           "4": "To get started, no credit card",
           "5": "{free, plural, one {# service included} other {# services included}}",
-          "6": "QR Code, WhatsApp Messages, IBAN Check, Listings, Kordata, Time Bank, games and wellbeing"
+          "6": "Anti-Scam Network, QR Code, WhatsApp Messages, IBAN Check, Listings, Kordata, Time Bank, games and wellbeing"
         },
         "2": {
           "1": "Base",
@@ -8059,7 +8164,7 @@
           "3": "a year",
           "4": "For individuals and families",
           "5": "Everything in Free + {base, plural, one {# service} other {# services}}",
-          "6": "MemoLife, Spendly, Life Calendar, Kumani Garage, KUMANI Casa, Link in Bio, SVAT, CheckMail, Neurobalance, Travel, Find a Job"
+          "6": "MemoLife, Spendly, Life Calendar, Kumani Garage, KUMANI Casa, Link in Bio, SVAT, CheckMail, Neurobalance, Travel, Find a Job, Sign PDF, Hoplà"
         },
         "3": {
           "1": "Pro",
@@ -8165,7 +8270,7 @@
           "2": "Veritas, Mosaic, Fabula and Nexus to play together"
         }
       },
-      "notes": "KUMANI is not just tools: it is a community. Listings, group purchases with Kordata, the Time Bank to exchange help, live events and games to play with friends."
+      "notes": "KUMANI is not just tools: it is a community. Listings, group purchases with Kordata, the Time Bank to exchange help, live events and games to play with friends. With Community proposals, members suggest and support ideas to improve KUMANI, and the Staff replies."
     },
     "s12": {
       "title": "Two kinds of points, public rules",
@@ -8349,6 +8454,30 @@
       },
       "badge": "Included in the Pro plan · linked to Quotes, Shop and Receipts",
       "notes": "Clients & Jobs is the pocket manager for anyone who works with clients, especially tradespeople. Every saved quote creates the client card; an accepted quote becomes a job, with status, to-dos, timer, materials and expenses, and the margin works itself out. Payments received are recorded even in cash or by bank transfer, with a digital receipt in one tap. Every morning the Today section says who to contact and what to collect, and the data can be exported for the accountant."
+    },
+    "antitruffa": {
+      "title": "Anti-Scam Network",
+      "sub": "A community that protects each other: free for all members.",
+      "rows": {
+        "1": {
+          "1": "Report in a minute",
+          "2": "Numbers, websites, IBANs, emails, profiles and QR codes used for scams, with an account and a screenshot."
+        },
+        "2": {
+          "1": "Warnings in the checks",
+          "2": "Once the Staff confirms, anyone checking the same detail with SVAT, IBAN Check or CheckMail sees the warning."
+        },
+        "3": {
+          "1": "Who called me?",
+          "2": "See whether a number has been reported, which country it’s from and whether it’s premium-rate."
+        },
+        "4": {
+          "1": "Alerts and Guardians",
+          "2": "Scams of the week, KU Karma for reporters and Bronze, Silver and Gold badges."
+        }
+      },
+      "badge": "Free for everyone · reporters stay anonymous",
+      "notes": "The Anti-Scam Network turns every member into a lookout. Only details used by scammers are reported, never people’s names, and the Staff checks before publishing. From then on, anyone checking the same number, website or IBAN sees the red warning with the type of scam and members’ accounts. More members, more protection for everyone: the simplest reason to invite friends and family."
     },
     "full": {
       "section": "All services",

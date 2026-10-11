@@ -7065,6 +7065,48 @@
         "p2d": "Cronómetro no trabalho e quanto lhe fica.",
         "p3": "Recebimentos em ordem",
         "p3d": "Pagamentos, recibos e dados para o contabilista."
+      },
+      "hopla": {
+        "sub": "Do telemóvel para o computador",
+        "tagline": "Fotos e vídeos do telemóvel para o PC num instante: digitaliza o código e chegam.",
+        "p1": "Sem cabos nem apps",
+        "p1d": "Basta a câmara do telemóvel.",
+        "p2": "Direto e privado",
+        "p2d": "Os ficheiros não passam por nenhum servidor.",
+        "p3": "Também vídeos grandes",
+        "p3d": "Guardados logo numa pasta do PC."
+      },
+      "firma_pdf": {
+        "sub": "Assine documentos no telemóvel",
+        "tagline": "Assinatura, data e texto nos seus PDF, depois descarregue ou partilhe o documento assinado.",
+        "p1": "Assine de três formas",
+        "p1d": "Escreva o nome, desenhe ou carregue uma foto.",
+        "p2": "Data e texto",
+        "p2d": "Onde for preciso, em cada página.",
+        "p3": "O PDF continua seu",
+        "p3d": "Assinado no dispositivo, sem o enviar.",
+        "note": "Assinatura eletrónica simples, não a assinatura digital qualificada."
+      },
+      "rete_antitruffa": {
+        "sub": "A comunidade que o protege",
+        "tagline": "Denuncie números, sites e IBAN usados em burlas: quem os verificar vê o aviso.",
+        "p1": "Denuncie num minuto",
+        "p1d": "Telefone, site, IBAN, email ou perfil.",
+        "p2": "Avisos nas verificações",
+        "p2d": "No SVAT, Verificar IBAN e CheckMail.",
+        "p3": "Quem me ligou?",
+        "p3d": "Veja se um número foi denunciado.",
+        "note": "Gratuito para todos os membros."
+      },
+      "scudo_dati": {
+        "sub": "Os seus dados já circulam?",
+        "tagline": "Descubra se o seu email ou uma palavra-passe acabaram numa fuga de dados.",
+        "p1": "Verifique o seu email",
+        "p1d": "Em que fugas aparece e o que saiu.",
+        "p2": "Palavras-passe expostas",
+        "p2d": "Sem a palavra-passe sair do telemóvel.",
+        "p3": "Fora do Google",
+        "p3d": "Os passos para retirar os seus dados da pesquisa."
       }
     },
     "includedSurprise": "Para todos, também com a conta gratuita",
@@ -7862,6 +7904,69 @@
       "step5Title": "Descarregue ou partilhe",
       "step5Text": "Toque em «Descarregar o PDF assinado»: o ficheiro mantém o nome original com «-assinado». No telemóvel pode também partilhá-lo logo, por exemplo no WhatsApp.",
       "step5Tip": "É uma assinatura eletrónica simples: serve para aceitações, formulários e muitos contratos, mas não substitui a assinatura digital qualificada."
+    },
+    "rete_antitruffa": {
+      "title": "Rede Antifraude",
+      "summary": "Denuncie números, sites, IBAN e emails usados em burlas e veja os avisos da comunidade: gratuito para todos.",
+      "cta": "Abrir a Rede Antifraude",
+      "step1Title": "Veja os alertas",
+      "step1Text": "Em «Alertas» vê quantas denúncias houve nos últimos 7 dias, as burlas em aumento e os últimos avisos confirmados pelo Staff.",
+      "step1Tip": "Ative «As burlas da semana» para receber todas as segundas uma notificação com as burlas mais denunciadas.",
+      "step2Title": "Denuncie uma burla",
+      "step2Text": "Em «Denunciar» escolha o que denunciar (telefone, site, IBAN, email, perfil social ou código QR), o tipo de burla e conte o que aconteceu. Pode juntar uma captura: só o Staff a vê.",
+      "step2Tip": "Nada de nomes de pessoas: denunciam-se só números, sites e dados usados pelos burlões.",
+      "step3Title": "O aviso nas verificações",
+      "step3Text": "Quando o Staff confirma, quem verificar o mesmo dado com SVAT, Verificar IBAN ou CheckMail vê o aviso vermelho da comunidade, com o tipo de burla e os relatos dos membros.",
+      "step4Title": "Quem me ligou?",
+      "step4Text": "Escreva o número que lhe ligou ou escreveu: veja se foi denunciado, de que país é e se é de valor acrescentado.",
+      "step4Tip": "Os burlões podem falsificar números: na dúvida não dê códigos nem dinheiro e ligue você para o número oficial.",
+      "step5Title": "As suas denúncias",
+      "step5Text": "Em «As minhas» acompanhe o estado de cada denúncia e quantas pessoas avisou. Com denúncias confirmadas recebe KU Karma e os distintivos de Guardião de bronze, prata e ouro."
+    },
+    "scudo_dati": {
+      "title": "Escudo de Dados",
+      "summary": "Descubra se o seu email ou uma palavra-passe acabaram numa fuga de dados e o que fazer logo.",
+      "cta": "Abrir o Escudo de Dados",
+      "step1Title": "Verifique o seu email",
+      "step1Text": "Toque em «Verificar» em «O seu email»: verificamos o email da sua conta nas fugas de dados conhecidas. É gratuito.",
+      "step2Title": "Outro email",
+      "step2Text": "Pode verificar também o email de um familiar ou do seu negócio. Vê em que fugas aparece e que dados foram expostos.",
+      "step2Tip": "Custa 3 KU Karma, descontados só se a verificação resultar.",
+      "step3Title": "Verifique uma palavra-passe",
+      "step3Text": "Escreva uma palavra-passe e toque em «Verificar»: dizemos-lhe se já apareceu nas listas dos burlões. Se sim, mude-a onde a usa.",
+      "step3Tip": "A palavra-passe não sai do seu dispositivo: só é enviado o início da sua impressão digital.",
+      "step4Title": "Retire os seus dados do Google",
+      "step4Text": "Siga os passos para usar «Resultados sobre si» do Google: encontre onde aparecem telefone, morada e email e peça que os retirem da pesquisa."
+    },
+    "trova_lavoro": {
+      "title": "Encontrar Emprego",
+      "summary": "Ofertas de emprego de muitas fontes, com filtros precisos e controlo antifraude.",
+      "cta": "Abrir Encontrar Emprego",
+      "step1Title": "O quê e onde",
+      "step1Text": "Escreva o emprego que procura e escolha país, cidade e raio. Com contrato, horário e «Filtros avançados» afina os resultados.",
+      "step1Tip": "Por baixo do botão vê o crédito da semana: só contam as páginas de resultados lidas de facto.",
+      "step2Title": "Leia as ofertas",
+      "step2Text": "As ofertas chegam de várias fontes, sem duplicados e com os sinais de burla já verificados. Vê salário, data e porque corresponde, depois abra o anúncio para se candidatar.",
+      "step3Title": "Guarde favoritos e pesquisas",
+      "step3Text": "Toque na estrela para guardar uma oferta nos «Favoritos» e guarde uma pesquisa para a repetir com um toque.",
+      "step4Title": "Prepare o CV",
+      "step4Text": "Antes de se candidatar, crie ou atualize o CV com o KUMANI CV.",
+      "step4Tip": "Um emprego verdadeiro nunca pede dinheiro nem dados bancários antes da entrevista."
+    },
+    "proposte": {
+      "title": "Propostas da comunidade",
+      "summary": "Proponha ideias para melhorar a KUMANI e apoie as dos outros membros.",
+      "cta": "Abrir as Propostas",
+      "step1Title": "Onde estão",
+      "step1Text": "Em Comunidade encontra o cartão «Propostas» e a faixa «As propostas mais apoiadas». Toque em «Todas as propostas» para as ver por apoios, novas ou concretizadas.",
+      "step2Title": "Faça uma proposta",
+      "step2Text": "Com o plano Base ou Pro toque em «Fazer uma proposta»: escolha o tema, escreva um título claro e explique a ideia. Enquanto escreve mostramos propostas parecidas.",
+      "step2Tip": "Pode fazer uma proposta por semana; o Staff verifica-a antes de a publicar.",
+      "step3Title": "Apoie as ideias de que gosta",
+      "step3Text": "Abra uma proposta e toque em «Apoiar esta proposta». O apoio é anónimo: só se vê o número. Apoiar é gratuito para todos.",
+      "step4Title": "Acompanhe o estado e a resposta",
+      "step4Text": "O Staff responde e atualiza o estado: nova, em avaliação, planeada, concretizada. Recebe uma notificação quando uma proposta que apoia avança.",
+      "step4Tip": "Se a sua proposta for concretizada, recebe KU Karma."
     }
   },
   "deckTexts": {
@@ -7989,7 +8094,7 @@
         },
         "2": {
           "1": "Segurança antiburla",
-          "2": "SVAT, VeriFoto, CheckMail, Verificar IBAN, Escudo de Dados, Documento Seguro, Manual Antiburla"
+          "2": "Rede Antifraude, SVAT, VeriFoto, CheckMail, Verificar IBAN, Escudo de Dados, Documento Seguro, Manual Antiburla"
         },
         "3": {
           "1": "Organização",
@@ -8001,7 +8106,7 @@
         },
         "5": {
           "1": "Trabalho",
-          "2": "Encontrar Trabalho, Orçamentos, Clientes e Trabalhos, Recibos Digitais, Magazzino PRO, Calculadoras PRO"
+          "2": "Encontrar Trabalho, Orçamentos, Clientes e Trabalhos, Recibos Digitais, Magazzino PRO, Calculadoras PRO, Assinar PDF, Hoplà"
         },
         "6": {
           "1": "Comunidade e lazer",
@@ -8051,7 +8156,7 @@
           "3": "para sempre",
           "4": "Para começar, sem cartão de crédito",
           "5": "{free, plural, one {# serviço incluído} other {# serviços incluídos}}",
-          "6": "QR Code, Mensagens WhatsApp, Verificar IBAN, Anúncios, Kordata, Time Bank, jogos e bem-estar"
+          "6": "Rede Antifraude, QR Code, Mensagens WhatsApp, Verificar IBAN, Anúncios, Kordata, Time Bank, jogos e bem-estar"
         },
         "2": {
           "1": "Base",
@@ -8059,7 +8164,7 @@
           "3": "por ano",
           "4": "Para particulares e famílias",
           "5": "Todo o Grátis + {base, plural, one {# serviço} other {# serviços}}",
-          "6": "MemoLife, Spendly, Life Calendar, Kumani Garage, KUMANI Casa, Link in Bio, SVAT, CheckMail, Neurobalance, Travel, Encontrar Trabalho"
+          "6": "MemoLife, Spendly, Life Calendar, Kumani Garage, KUMANI Casa, Link in Bio, SVAT, CheckMail, Neurobalance, Travel, Encontrar Trabalho, Assinar PDF, Hoplà"
         },
         "3": {
           "1": "Pro",
@@ -8165,7 +8270,7 @@
           "2": "Veritas, Mosaic, Fabula e Nexus para jogar juntos"
         }
       },
-      "notes": "A KUMANI não são só ferramentas: é uma comunidade. Anúncios, compras em grupo com a Kordata, o Time Bank para trocar ajuda, eventos ao vivo e jogos com amigos."
+      "notes": "A KUMANI não são só ferramentas: é uma comunidade. Anúncios, compras em grupo com a Kordata, o Time Bank para trocar ajuda, eventos ao vivo e jogos com amigos. Com as Propostas da comunidade, os membros sugerem e apoiam ideias para melhorar a KUMANI, e o Staff responde."
     },
     "s12": {
       "title": "Dois tipos de pontos, regras públicas",
@@ -8349,6 +8454,30 @@
       },
       "badge": "Incluído no plano Pro · ligado a Orçamentos, Shop e Recibos",
       "notes": "Clientes e Trabalhos é o gestor de bolso de quem trabalha com clientes, sobretudo artesãos. Cada orçamento guardado cria a ficha do cliente; um orçamento aceite torna-se um trabalho, com estado, tarefas, cronómetro, materiais e despesas, e a margem calcula-se sozinha. Os pagamentos recebidos registam-se também em dinheiro ou por transferência, com o recibo digital num toque. Todas as manhãs a secção Hoje diz quem contactar e o que receber, e os dados exportam-se para o contabilista."
+    },
+    "antitruffa": {
+      "title": "Rede Antifraude",
+      "sub": "Uma comunidade que se protege mutuamente: gratuito para todos os membros.",
+      "rows": {
+        "1": {
+          "1": "Denuncie num minuto",
+          "2": "Números, sites, IBAN, emails, perfis e códigos QR usados em burlas, com o relato e uma captura."
+        },
+        "2": {
+          "1": "Avisos nas verificações",
+          "2": "Depois da confirmação do Staff, quem verificar o mesmo dado com SVAT, Verificar IBAN ou CheckMail vê o aviso."
+        },
+        "3": {
+          "1": "Quem me ligou?",
+          "2": "Veja se um número foi denunciado, de que país é e se é de valor acrescentado."
+        },
+        "4": {
+          "1": "Alertas e Guardiões",
+          "2": "As burlas da semana, KU Karma para quem denuncia e distintivos de bronze, prata e ouro."
+        }
+      },
+      "badge": "Gratuito para todos · quem denuncia fica anónimo",
+      "notes": "A Rede Antifraude transforma cada membro numa sentinela. Só se denunciam dados usados pelos burlões, nunca nomes, e o Staff verifica antes de publicar. A partir daí, quem verificar o mesmo número, site ou IBAN vê o aviso vermelho com o tipo de burla e os relatos dos membros. Mais membros, mais proteção para todos."
     },
     "full": {
       "section": "Todos os serviços",

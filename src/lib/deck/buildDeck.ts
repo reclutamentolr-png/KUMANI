@@ -353,6 +353,27 @@ export async function buildDeck(
     s.addNotes(S.s10.notes)
   }
 
+  // 10b. Rete Anti-Truffa: la community che si protegge a vicenda
+  {
+    const s = pres.addSlide({ masterName: 'KUMANI scuro', sectionTitle: sec[3] })
+    titled(s, S.antitruffa.title, S.antitruffa.sub)
+    const ics = ['Flag', 'ShieldAlert', 'PhoneCall', 'Award']
+    for (let i = 0; i < 4; i++) {
+      const y = 1.95 + i * 1.08
+      await circleIcon(s, ics[i], 0.6, y, 0.72, C.accent1, HEX.ink, `a${i + 2}-ic${i}`)
+      Tx(s, [
+        { text: S.antitruffa.rows[i][0], options: { bold: true, color: C.background1, fontSize: fs(18), breakLine: true } },
+        { text: S.antitruffa.rows[i][1], options: { color: C.accent3, fontSize: fs(14) } },
+      ], { x: 1.55, y: y - 0.08, w: 6.6, h: 1.0, valign: 'top', objectName: `a${i + 2}-tx${i}` })
+    }
+    card(s, 0.6, 6.25, 7.55, 0.55, 'a6-badge', C.accent1)
+    Tx(s, S.antitruffa.badge, { x: 0.8, y: 6.27, w: 7.2, h: 0.5, fontSize: fs(15), bold: true, color: C.text1, valign: 'middle', objectName: 'a6-badgetx' })
+    // Telefono con l'avviso della community
+    s.addShape(pres.ShapeType.roundRect, { x: 9.05, y: 1.45, w: 3.15, h: 5.2, rectRadius: 0.3, fill: { color: '000000' }, line: { color: HEX.gold, width: 1.5 }, shadow: SH(), objectName: 'a1-tel' } as any)
+    s.addImage({ path: `${IMG}/antitruffa-${locale === 'it' ? 'it' : 'en'}.jpg`, x: 9.3, y: 1.6, w: 2.65, h: 4.9, objectName: 'a1-pagina' } as any)
+    s.addNotes(S.antitruffa.notes)
+  }
+
   // Full: tutti i servizi, uno per uno (prima della Community)
   if (full) {
     pres.addSection({ title: S.full.section })

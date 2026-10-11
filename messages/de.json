@@ -7065,6 +7065,48 @@
         "p2d": "Zeitmessung am Auftrag und was dir bleibt.",
         "p3": "Zahlungen im Griff",
         "p3d": "Zahlungen, Belege und Daten für die Buchhaltung."
+      },
+      "hopla": {
+        "sub": "Vom Handy auf den Computer",
+        "tagline": "Fotos und Videos im Nu vom Handy auf den PC: Code scannen und schon sind sie da.",
+        "p1": "Ohne Kabel und App",
+        "p1d": "Die Handykamera reicht.",
+        "p2": "Direkt und privat",
+        "p2d": "Die Dateien laufen über keinen Server.",
+        "p3": "Auch große Videos",
+        "p3d": "Direkt in einem Ordner am PC gespeichert."
+      },
+      "firma_pdf": {
+        "sub": "Am Handy unterschreiben",
+        "tagline": "Unterschrift, Datum und Text auf deinen PDFs – dann laden oder teilen.",
+        "p1": "Drei Arten zu unterschreiben",
+        "p1d": "Namen tippen, zeichnen oder Foto laden.",
+        "p2": "Datum und Text",
+        "p2d": "Wo nötig, auf jeder Seite.",
+        "p3": "Das PDF bleibt deins",
+        "p3d": "Auf dem Gerät unterschrieben, nie hochgeladen.",
+        "note": "Einfache elektronische Signatur, keine qualifizierte Signatur."
+      },
+      "rete_antitruffa": {
+        "sub": "Die Community, die dich schützt",
+        "tagline": "Melde Nummern, Websites und IBANs von Betrügern: Wer sie prüft, sieht die Warnung.",
+        "p1": "In einer Minute melden",
+        "p1d": "Telefon, Website, IBAN, E-Mail oder Profil.",
+        "p2": "Warnungen in den Prüfungen",
+        "p2d": "In SVAT, IBAN-Prüfung und CheckMail.",
+        "p3": "Wer hat mich angerufen?",
+        "p3d": "Sieh nach, ob eine Nummer gemeldet ist.",
+        "note": "Kostenlos für alle Mitglieder."
+      },
+      "scudo_dati": {
+        "sub": "Sind deine Daten schon im Umlauf?",
+        "tagline": "Finde heraus, ob deine E-Mail oder ein Passwort in einem Datenleck gelandet ist.",
+        "p1": "E-Mail prüfen",
+        "p1d": "In welchen Lecks sie steht und was raus ist.",
+        "p2": "Geleakte Passwörter",
+        "p2d": "Ohne dass das Passwort das Handy verlässt.",
+        "p3": "Raus aus Google",
+        "p3d": "Die Schritte, um deine Daten aus der Suche zu entfernen."
       }
     },
     "includedSurprise": "Für alle, auch mit dem kostenlosen Konto",
@@ -7862,6 +7904,69 @@
       "step5Title": "Herunterladen oder teilen",
       "step5Text": "Tippe auf „Unterschriebenes PDF herunterladen“: Die Datei behält den Originalnamen mit „-unterschrieben“. Am Handy kannst du sie auch gleich teilen, zum Beispiel über WhatsApp.",
       "step5Tip": "Es ist eine einfache elektronische Signatur: geeignet für Zustimmungen, Formulare und viele Verträge, ersetzt aber keine qualifizierte elektronische Signatur."
+    },
+    "rete_antitruffa": {
+      "title": "Anti-Betrugs-Netz",
+      "summary": "Melde Nummern, Websites, IBANs und E-Mails, die für Betrug genutzt werden, und sieh die Warnungen der Community: kostenlos für alle.",
+      "cta": "Anti-Betrugs-Netz öffnen",
+      "step1Title": "Warnungen ansehen",
+      "step1Text": "Unter «Warnungen» siehst du die Meldungen der letzten 7 Tage, zunehmende Betrugsmaschen und die zuletzt vom Staff bestätigten Warnungen.",
+      "step1Tip": "Schalte «Betrug der Woche» ein, um jeden Montag eine Benachrichtigung mit den häufigsten Maschen zu bekommen.",
+      "step2Title": "Betrug melden",
+      "step2Text": "Unter «Melden» wählst du, was du meldest (Telefon, Website, IBAN, E-Mail, Social-Profil oder QR-Code), die Art des Betrugs und beschreibst, was passiert ist. Ein Screenshot ist möglich: Nur das Staff sieht ihn.",
+      "step2Tip": "Keine Namen von Personen: Gemeldet werden nur Nummern, Websites und Angaben von Betrügern.",
+      "step3Title": "Die Warnung in den Prüfungen",
+      "step3Text": "Nach der Bestätigung durch das Staff sieht jeder, der dieselbe Angabe mit SVAT, IBAN-Prüfung oder CheckMail prüft, die rote Community-Warnung mit Betrugsart und Schilderungen.",
+      "step4Title": "Wer hat mich angerufen?",
+      "step4Text": "Gib die Nummer ein, die dich angerufen oder angeschrieben hat: Du siehst, ob sie gemeldet wurde, aus welchem Land sie stammt und ob sie kostenpflichtig ist.",
+      "step4Tip": "Betrüger können Nummern fälschen: Gib im Zweifel keine Codes oder Geld heraus und ruf selbst die offizielle Nummer an.",
+      "step5Title": "Deine Meldungen",
+      "step5Text": "Unter «Meine» verfolgst du den Status jeder Meldung und wie viele Personen sie gewarnt hat. Bestätigte Meldungen bringen KU Karma und die Abzeichen Bronze-, Silber- und Gold-Wächter."
+    },
+    "scudo_dati": {
+      "title": "Datenschild",
+      "summary": "Finde heraus, ob deine E-Mail oder ein Passwort in einem Datenleck gelandet ist, und was du sofort tun solltest.",
+      "cta": "Datenschild öffnen",
+      "step1Title": "Deine E-Mail prüfen",
+      "step1Text": "Tippe unter «Deine E-Mail» auf «Prüfen»: Wir prüfen die E-Mail deines Kontos in bekannten Datenlecks. Kostenlos.",
+      "step2Title": "Eine andere E-Mail",
+      "step2Text": "Du kannst auch die E-Mail eines Familienmitglieds oder deines Betriebs prüfen. Du siehst, in welchen Lecks sie vorkommt und welche Daten betroffen sind.",
+      "step2Tip": "Kostet 3 KU Karma, nur abgezogen, wenn die Prüfung klappt.",
+      "step3Title": "Ein Passwort prüfen",
+      "step3Text": "Gib ein Passwort ein und tippe auf «Prüfen»: Wir sagen dir, ob es schon auf Listen von Betrügern steht. Wenn ja, ändere es überall.",
+      "step3Tip": "Das Passwort verlässt dein Gerät nicht: Nur der Anfang seines Fingerabdrucks wird gesendet.",
+      "step4Title": "Deine Daten aus Google entfernen",
+      "step4Text": "Folge den Schritten für Googles «Ergebnisse über dich»: Finde, wo Telefon, Adresse und E-Mail erscheinen, und beantrage die Entfernung aus der Suche."
+    },
+    "trova_lavoro": {
+      "title": "Job finden",
+      "summary": "Stellenangebote aus vielen Quellen, mit genauen Filtern und Betrugsprüfung.",
+      "cta": "Job finden öffnen",
+      "step1Title": "Was und wo",
+      "step1Text": "Gib den gesuchten Job ein und wähle Land, Stadt und Umkreis. Mit Vertrag, Arbeitszeit und «Erweiterte Filter» grenzt du die Ergebnisse ein.",
+      "step1Tip": "Unter der Schaltfläche siehst du das Wochenguthaben: Gezählt werden nur tatsächlich gelesene Ergebnisseiten.",
+      "step2Title": "Angebote lesen",
+      "step2Text": "Die Angebote kommen aus mehreren Quellen, ohne Dubletten und mit bereits geprüften Betrugssignalen. Du siehst Gehalt, Datum und warum es passt, dann öffnest du die Anzeige zum Bewerben.",
+      "step3Title": "Favoriten und Suchen speichern",
+      "step3Text": "Tippe auf den Stern, um ein Angebot in «Favoriten» zu speichern, und speichere eine Suche, um sie mit einem Tipp zu wiederholen.",
+      "step4Title": "Lebenslauf vorbereiten",
+      "step4Text": "Erstelle oder aktualisiere vor der Bewerbung deinen Lebenslauf mit KUMANI CV.",
+      "step4Tip": "Ein echter Job verlangt vor dem Gespräch nie Geld oder Bankdaten."
+    },
+    "proposte": {
+      "title": "Vorschläge der Community",
+      "summary": "Schlage Ideen vor, um KUMANI zu verbessern, und unterstütze die anderer Mitglieder.",
+      "cta": "Vorschläge öffnen",
+      "step1Title": "Wo du sie findest",
+      "step1Text": "In der Community findest du die Karte «Vorschläge» und den Streifen «Die meistunterstützten Vorschläge». Tippe auf «Alle Vorschläge», um sie nach Unterstützung, neu oder umgesetzt zu sehen.",
+      "step2Title": "Vorschlag machen",
+      "step2Text": "Mit Base oder Pro tippst du auf «Vorschlag machen»: Wähle das Thema, schreibe einen klaren Titel und erkläre die Idee. Beim Tippen zeigen wir ähnliche Vorschläge.",
+      "step2Tip": "Du kannst einen Vorschlag pro Woche machen; das Staff prüft ihn vor der Veröffentlichung.",
+      "step3Title": "Ideen unterstützen",
+      "step3Text": "Öffne einen Vorschlag und tippe auf «Diesen Vorschlag unterstützen». Die Unterstützung ist anonym: Nur die Zahl ist sichtbar. Unterstützen ist für alle kostenlos.",
+      "step4Title": "Status und Antwort verfolgen",
+      "step4Text": "Das Staff antwortet und aktualisiert den Status: neu, wird geprüft, geplant, umgesetzt. Du wirst benachrichtigt, wenn ein unterstützter Vorschlag vorankommt.",
+      "step4Tip": "Wird dein Vorschlag umgesetzt, bekommst du KU Karma."
     }
   },
   "deckTexts": {
@@ -7989,7 +8094,7 @@
         },
         "2": {
           "1": "Schutz vor Betrug",
-          "2": "SVAT, VeriFoto, CheckMail, IBAN-Prüfung, Datenschild, Sicheres Dokument, Anti-Betrugs-Handbuch"
+          "2": "Anti-Betrugs-Netz, SVAT, VeriFoto, CheckMail, IBAN-Prüfung, Datenschild, Sicheres Dokument, Anti-Betrugs-Handbuch"
         },
         "3": {
           "1": "Organisation",
@@ -8001,7 +8106,7 @@
         },
         "5": {
           "1": "Arbeit",
-          "2": "Jobsuche, Angebote, Kunden & Aufträge, Digitale Belege, Magazzino PRO, PRO-Rechner"
+          "2": "Jobsuche, Angebote, Kunden & Aufträge, Digitale Belege, Magazzino PRO, PRO-Rechner, PDF unterschreiben, Hoplà"
         },
         "6": {
           "1": "Community und Freizeit",
@@ -8051,7 +8156,7 @@
           "3": "für immer",
           "4": "Zum Start, ohne Kreditkarte",
           "5": "{free, plural, one {# Dienst} other {# Dienste}} inklusive",
-          "6": "QR-Code, WhatsApp-Nachrichten, IBAN-Prüfung, Anzeigen, Kordata, Time Bank, Spiele und Wohlbefinden"
+          "6": "Anti-Betrugs-Netz, QR-Code, WhatsApp-Nachrichten, IBAN-Prüfung, Anzeigen, Kordata, Time Bank, Spiele und Wohlbefinden"
         },
         "2": {
           "1": "Base",
@@ -8059,7 +8164,7 @@
           "3": "im Jahr",
           "4": "Für Privatpersonen und Familien",
           "5": "Alles aus Kostenlos + {base, plural, one {# Dienst} other {# Dienste}}",
-          "6": "MemoLife, Spendly, Life Calendar, Kumani Garage, KUMANI Casa, Link in Bio, SVAT, CheckMail, Neurobalance, Travel, Jobsuche"
+          "6": "MemoLife, Spendly, Life Calendar, Kumani Garage, KUMANI Casa, Link in Bio, SVAT, CheckMail, Neurobalance, Travel, Jobsuche, PDF unterschreiben, Hoplà"
         },
         "3": {
           "1": "Pro",
@@ -8165,7 +8270,7 @@
           "2": "Veritas, Mosaic, Fabula und Nexus gemeinsam spielen"
         }
       },
-      "notes": "KUMANI ist nicht nur Werkzeug: Es ist eine Community. Anzeigen, Gruppenkäufe mit der Kordata, die Time Bank zum Austausch von Hilfe, Events vor Ort und Spiele mit Freunden."
+      "notes": "KUMANI ist nicht nur Werkzeug: Es ist eine Community. Anzeigen, Gruppenkäufe mit der Kordata, die Time Bank zum Austausch von Hilfe, Events vor Ort und Spiele mit Freunden. Mit den Vorschlägen der Community schlagen Mitglieder Ideen zur Verbesserung von KUMANI vor und unterstützen sie, und das Staff antwortet."
     },
     "s12": {
       "title": "Zwei Arten von Punkten, öffentliche Regeln",
@@ -8349,6 +8454,30 @@
       },
       "badge": "Im Pro-Tarif enthalten · verbunden mit Angeboten, Shop und Belegen",
       "notes": "Kunden & Aufträge ist die Taschenverwaltung für alle, die mit Kunden arbeiten, besonders Handwerker. Jedes gespeicherte Angebot legt die Kundenkarte an; aus einem angenommenen Angebot wird ein Auftrag mit Status, To-dos, Zeitmessung, Material und Kosten, und die Marge rechnet sich von selbst. Erhaltene Zahlungen werden auch bar oder per Überweisung erfasst, mit digitalem Beleg per Tipp. Jeden Morgen zeigt der Bereich Heute, wen du kontaktieren und was du einnehmen solltest, und die Daten lassen sich für die Buchhaltung exportieren."
+    },
+    "antitruffa": {
+      "title": "Anti-Betrugs-Netz",
+      "sub": "Eine Community, die sich gegenseitig schützt: kostenlos für alle Mitglieder.",
+      "rows": {
+        "1": {
+          "1": "In einer Minute melden",
+          "2": "Nummern, Websites, IBANs, E-Mails, Profile und QR-Codes von Betrügern, mit Schilderung und Screenshot."
+        },
+        "2": {
+          "1": "Warnungen in den Prüfungen",
+          "2": "Nach Bestätigung durch das Staff sieht jeder, der dieselbe Angabe mit SVAT, IBAN-Prüfung oder CheckMail prüft, die Warnung."
+        },
+        "3": {
+          "1": "Wer hat mich angerufen?",
+          "2": "Sieh nach, ob eine Nummer gemeldet ist, aus welchem Land sie stammt und ob sie kostenpflichtig ist."
+        },
+        "4": {
+          "1": "Warnungen und Wächter",
+          "2": "Betrug der Woche, KU Karma für Meldende und Abzeichen in Bronze, Silber und Gold."
+        }
+      },
+      "badge": "Kostenlos für alle · Meldende bleiben anonym",
+      "notes": "Das Anti-Betrugs-Netz macht jedes Mitglied zum Wächter. Gemeldet werden nur Angaben von Betrügern, nie Namen, und das Staff prüft vor der Veröffentlichung. Danach sieht jeder, der dieselbe Nummer, Website oder IBAN prüft, die rote Warnung mit Betrugsart und Schilderungen. Mehr Mitglieder, mehr Schutz für alle."
     },
     "full": {
       "section": "Alle Dienste",

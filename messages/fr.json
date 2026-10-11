@@ -7065,6 +7065,48 @@
         "p2d": "Chrono sur le chantier et ce qu’il vous reste.",
         "p3": "Encaissements en ordre",
         "p3d": "Paiements, reçus et données pour le comptable."
+      },
+      "hopla": {
+        "sub": "Du téléphone à l’ordinateur",
+        "tagline": "Photos et vidéos du téléphone au PC en un instant : scannez le code et elles arrivent.",
+        "p1": "Sans câble ni appli",
+        "p1d": "L’appareil photo du téléphone suffit.",
+        "p2": "Direct et privé",
+        "p2d": "Les fichiers ne passent par aucun serveur.",
+        "p3": "Même les grosses vidéos",
+        "p3d": "Enregistrées directement dans un dossier du PC."
+      },
+      "firma_pdf": {
+        "sub": "Signez vos documents depuis le téléphone",
+        "tagline": "Signature, date et texte sur vos PDF, puis téléchargez ou partagez le document signé.",
+        "p1": "Signez de trois façons",
+        "p1d": "Tapez votre nom, dessinez ou chargez une photo.",
+        "p2": "Date et texte",
+        "p2d": "Où il faut, sur chaque page.",
+        "p3": "Le PDF reste à vous",
+        "p3d": "Signé sur l’appareil, jamais envoyé.",
+        "note": "Signature électronique simple, pas une signature numérique qualifiée."
+      },
+      "rete_antitruffa": {
+        "sub": "La communauté qui vous protège",
+        "tagline": "Signalez les numéros, sites et IBAN utilisés pour arnaquer : qui les vérifie voit l’alerte.",
+        "p1": "Signalez en une minute",
+        "p1d": "Téléphone, site, IBAN, e-mail ou profil.",
+        "p2": "Alertes dans les vérifications",
+        "p2d": "Dans SVAT, Vérification IBAN et CheckMail.",
+        "p3": "Qui m’a appelé ?",
+        "p3d": "Voyez si un numéro a été signalé.",
+        "note": "Gratuit pour tous les membres."
+      },
+      "scudo_dati": {
+        "sub": "Vos données circulent-elles déjà ?",
+        "tagline": "Découvrez si votre e-mail ou un mot de passe a fini dans une fuite de données.",
+        "p1": "Vérifiez votre e-mail",
+        "p1d": "Dans quelles fuites il apparaît et ce qui a fuité.",
+        "p2": "Mots de passe divulgués",
+        "p2d": "Sans que le mot de passe quitte le téléphone.",
+        "p3": "Hors de Google",
+        "p3d": "Les étapes pour retirer vos données de la recherche."
       }
     },
     "includedSurprise": "Pour tous, même avec le compte gratuit",
@@ -7862,6 +7904,69 @@
       "step5Title": "Téléchargez ou partagez",
       "step5Text": "Touchez « Télécharger le PDF signé » : le fichier garde le nom d’origine suivi de « -signe ». Sur téléphone, vous pouvez aussi le partager tout de suite, par exemple sur WhatsApp.",
       "step5Tip": "C’est une signature électronique simple : elle convient aux acceptations, formulaires et à de nombreux contrats, mais ne remplace pas la signature numérique qualifiée."
+    },
+    "rete_antitruffa": {
+      "title": "Réseau Anti-Arnaque",
+      "summary": "Signalez les numéros, sites, IBAN et e-mails utilisés pour arnaquer et voyez les alertes de la communauté : gratuit pour tous.",
+      "cta": "Ouvrir le Réseau Anti-Arnaque",
+      "step1Title": "Consultez les alertes",
+      "step1Text": "Dans « Alertes », vous voyez les signalements des 7 derniers jours, les arnaques en hausse et les dernières alertes confirmées par le Staff.",
+      "step1Tip": "Activez « Les arnaques de la semaine » pour recevoir chaque lundi une notification avec les arnaques les plus signalées.",
+      "step2Title": "Signalez une arnaque",
+      "step2Text": "Dans « Signaler », choisissez quoi signaler (téléphone, site, IBAN, e-mail, profil social ou code QR), le type d’arnaque et racontez ce qui s’est passé. Vous pouvez ajouter une capture : seul le Staff la voit.",
+      "step2Tip": "Pas de noms de personnes : on signale seulement les numéros, sites et données utilisés par les escrocs.",
+      "step3Title": "L’alerte dans les vérifications",
+      "step3Text": "Une fois confirmé par le Staff, quiconque vérifie la même donnée avec SVAT, Vérification IBAN ou CheckMail voit l’alerte rouge de la communauté, avec le type d’arnaque et les récits des membres.",
+      "step4Title": "Qui m’a appelé ?",
+      "step4Text": "Saisissez le numéro qui vous a appelé ou écrit : voyez s’il a été signalé, de quel pays il est et s’il est surtaxé.",
+      "step4Tip": "Les escrocs peuvent falsifier les numéros : dans le doute, ne donnez ni codes ni argent et rappelez vous-même le numéro officiel.",
+      "step5Title": "Vos signalements",
+      "step5Text": "Dans « Les miens », suivez l’état de chaque signalement et combien de personnes il a mises en garde. Les signalements confirmés vous rapportent des KU Karma et les badges Gardien de bronze, d’argent et d’or."
+    },
+    "scudo_dati": {
+      "title": "Bouclier Données",
+      "summary": "Découvrez si votre e-mail ou un mot de passe a fini dans une fuite de données et quoi faire tout de suite.",
+      "cta": "Ouvrir Bouclier Données",
+      "step1Title": "Vérifiez votre e-mail",
+      "step1Text": "Touchez « Vérifier » dans « Votre e-mail » : nous vérifions l’e-mail de votre compte dans les fuites de données connues. C’est gratuit.",
+      "step2Title": "Un autre e-mail",
+      "step2Text": "Vous pouvez aussi vérifier l’e-mail d’un proche ou de votre activité. Vous voyez dans quelles fuites il apparaît et quelles données ont été exposées.",
+      "step2Tip": "Cela coûte 3 KU Karma, déduits seulement si la vérification réussit.",
+      "step3Title": "Vérifiez un mot de passe",
+      "step3Text": "Saisissez un mot de passe et touchez « Vérifier » : nous vous disons s’il figure déjà dans les listes des escrocs. Si oui, changez-le partout où vous l’utilisez.",
+      "step3Tip": "Le mot de passe ne quitte pas votre appareil : seul le début de son empreinte est envoyé.",
+      "step4Title": "Retirez vos données de Google",
+      "step4Text": "Suivez les étapes pour utiliser « Résultats vous concernant » de Google : trouvez où apparaissent téléphone, adresse et e-mail et demandez leur retrait de la recherche."
+    },
+    "trova_lavoro": {
+      "title": "Trouver un emploi",
+      "summary": "Des offres d’emploi de nombreuses sources, avec des filtres précis et un contrôle anti-arnaque.",
+      "cta": "Ouvrir Trouver un emploi",
+      "step1Title": "Quoi et où",
+      "step1Text": "Saisissez l’emploi recherché, choisissez pays, ville et rayon. Contrat, horaires et « Filtres avancés » affinent les résultats.",
+      "step1Tip": "Sous le bouton, vous voyez le crédit de la semaine : seules les pages de résultats réellement lues sont comptées.",
+      "step2Title": "Lisez les offres",
+      "step2Text": "Les offres viennent de plusieurs sources, sans doublons et avec les signaux d’arnaque déjà vérifiés. Vous voyez salaire, date et pourquoi elle correspond, puis ouvrez l’annonce pour postuler.",
+      "step3Title": "Enregistrez favoris et recherches",
+      "step3Text": "Touchez l’étoile pour garder une offre dans « Favoris » et enregistrez une recherche pour la relancer d’un geste.",
+      "step4Title": "Préparez votre CV",
+      "step4Text": "Avant de postuler, créez ou mettez à jour votre CV avec KUMANI CV.",
+      "step4Tip": "Un vrai emploi ne demande jamais d’argent ni de coordonnées bancaires avant l’entretien."
+    },
+    "proposte": {
+      "title": "Propositions de la communauté",
+      "summary": "Proposez des idées pour améliorer KUMANI et soutenez celles des autres membres.",
+      "cta": "Ouvrir les Propositions",
+      "step1Title": "Où les trouver",
+      "step1Text": "Dans Communauté, vous trouvez la carte « Propositions » et le bandeau « Les propositions les plus soutenues ». Touchez « Toutes les propositions » pour les trier par soutiens, nouveautés ou réalisées.",
+      "step2Title": "Faites une proposition",
+      "step2Text": "Avec la formule Base ou Pro, touchez « Faire une proposition » : choisissez le sujet, écrivez un titre clair et expliquez l’idée. Pendant la saisie, nous montrons les propositions similaires.",
+      "step2Tip": "Vous pouvez faire une proposition par semaine ; le Staff la contrôle avant publication.",
+      "step3Title": "Soutenez les idées qui vous plaisent",
+      "step3Text": "Ouvrez une proposition et touchez « Soutenir cette proposition ». Le soutien est anonyme : seul le nombre est visible. Soutenir est gratuit pour tous.",
+      "step4Title": "Suivez l’état et la réponse",
+      "step4Text": "Le Staff répond et met à jour l’état : nouvelle, en évaluation, prévue, réalisée. Vous êtes notifié quand une proposition que vous soutenez avance.",
+      "step4Tip": "Si votre proposition est réalisée, vous recevez des KU Karma."
     }
   },
   "deckTexts": {
@@ -7989,7 +8094,7 @@
         },
         "2": {
           "1": "Sécurité anti-arnaque",
-          "2": "SVAT, VeriFoto, CheckMail, Vérification IBAN, Bouclier Données, Document Sûr, Manuel anti-arnaques"
+          "2": "Réseau Anti-Arnaque, SVAT, VeriFoto, CheckMail, Vérification IBAN, Bouclier Données, Document Sûr, Manuel anti-arnaques"
         },
         "3": {
           "1": "Organisation",
@@ -8001,7 +8106,7 @@
         },
         "5": {
           "1": "Travail",
-          "2": "Trouver un emploi, Devis, Clients et Chantiers, Reçus numériques, Magazzino PRO, Calculatrices PRO"
+          "2": "Trouver un emploi, Devis, Clients et Chantiers, Reçus numériques, Magazzino PRO, Calculatrices PRO, Signer un PDF, Hoplà"
         },
         "6": {
           "1": "Communauté et loisirs",
@@ -8051,7 +8156,7 @@
           "3": "pour toujours",
           "4": "Pour commencer, sans carte bancaire",
           "5": "{free, plural, one {# service inclus} other {# services inclus}}",
-          "6": "QR Code, Messages WhatsApp, Vérification IBAN, Annonces, Kordata, Time Bank, jeux et bien-être"
+          "6": "Réseau Anti-Arnaque, QR Code, Messages WhatsApp, Vérification IBAN, Annonces, Kordata, Time Bank, jeux et bien-être"
         },
         "2": {
           "1": "Base",
@@ -8059,7 +8164,7 @@
           "3": "par an",
           "4": "Pour les particuliers et les familles",
           "5": "Tout le Gratuit + {base, plural, one {# service} other {# services}}",
-          "6": "MemoLife, Spendly, Life Calendar, Kumani Garage, KUMANI Casa, Link in Bio, SVAT, CheckMail, Neurobalance, Travel, Trouver un emploi"
+          "6": "MemoLife, Spendly, Life Calendar, Kumani Garage, KUMANI Casa, Link in Bio, SVAT, CheckMail, Neurobalance, Travel, Trouver un emploi, Signer un PDF, Hoplà"
         },
         "3": {
           "1": "Pro",
@@ -8165,7 +8270,7 @@
           "2": "Veritas, Mosaic, Fabula et Nexus à faire ensemble"
         }
       },
-      "notes": "KUMANI, ce n’est pas que des outils : c’est une communauté. Annonces, achats groupés avec la Kordata, Time Bank pour échanger de l’aide, événements en vrai et jeux entre amis."
+      "notes": "KUMANI, ce n’est pas que des outils : c’est une communauté. Annonces, achats groupés avec la Kordata, Time Bank pour échanger de l’aide, événements en vrai et jeux entre amis. Avec les Propositions de la communauté, les membres proposent et soutiennent des idées pour améliorer KUMANI, et le Staff répond."
     },
     "s12": {
       "title": "Deux types de points, des règles publiques",
@@ -8349,6 +8454,30 @@
       },
       "badge": "Inclus dans la formule Pro · relié aux Devis, au Shop et aux Reçus",
       "notes": "Clients et Chantiers est le gestionnaire de poche de ceux qui travaillent avec des clients, surtout les artisans. Chaque devis enregistré crée la fiche client ; un devis accepté devient un chantier, avec état, tâches, chrono, matériaux et frais, et la marge se calcule seule. Les paiements reçus s’enregistrent aussi en espèces ou par virement, avec le reçu numérique d’un geste. Chaque matin, la section Aujourd’hui indique qui contacter et quoi encaisser, et les données s’exportent pour le comptable."
+    },
+    "antitruffa": {
+      "title": "Réseau Anti-Arnaque",
+      "sub": "Une communauté qui se protège mutuellement : gratuit pour tous les membres.",
+      "rows": {
+        "1": {
+          "1": "Signalez en une minute",
+          "2": "Numéros, sites, IBAN, e-mails, profils et codes QR utilisés pour arnaquer, avec un récit et une capture."
+        },
+        "2": {
+          "1": "Alertes dans les vérifications",
+          "2": "Après confirmation du Staff, qui vérifie la même donnée avec SVAT, Vérification IBAN ou CheckMail voit l’alerte."
+        },
+        "3": {
+          "1": "Qui m’a appelé ?",
+          "2": "Voyez si un numéro a été signalé, de quel pays il est et s’il est surtaxé."
+        },
+        "4": {
+          "1": "Alertes et Gardiens",
+          "2": "Les arnaques de la semaine, des KU Karma pour qui signale et les badges bronze, argent et or."
+        }
+      },
+      "badge": "Gratuit pour tous · les signalements restent anonymes",
+      "notes": "Le Réseau Anti-Arnaque fait de chaque membre une sentinelle. On ne signale que des données utilisées par les escrocs, jamais des noms, et le Staff vérifie avant de publier. Ensuite, quiconque vérifie le même numéro, site ou IBAN voit l’alerte rouge avec le type d’arnaque et les récits des membres. Plus de membres, plus de protection pour tous."
     },
     "full": {
       "section": "Tous les services",
