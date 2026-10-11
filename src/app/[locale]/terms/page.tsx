@@ -217,6 +217,19 @@ export default async function TermsPage({ params }: LocaleProps) {
                 contenuto. La firma può essere ricordata, su scelta dell&apos;utente, solo nella memoria del suo browser.
               </p>
               <p>
+                <strong className="text-gray-900">Segnalazioni della community (Rete Anti-Truffa).</strong> Gli iscritti possono segnalare
+                numeri di telefono, siti, IBAN, indirizzi email, profili social e QR code usati per truffe. Si segnalano solo questi dati,
+                mai nomi di persone, e solo esperienze vere: segnalazioni false, diffamatorie o fatte per danneggiare qualcuno sono vietate
+                e possono portare alla sospensione dell&apos;account. Le segnalazioni sono controllate dallo Staff prima di diventare un
+                avviso, visibile a chi controlla lo stesso dato con gli strumenti della Piattaforma insieme al numero di segnalazioni, al
+                tipo di truffa e ai racconti senza il nome di chi ha segnalato (al più la città). Gli avvisi indicano un rischio segnalato
+                dalla community e non sono un accertamento: un numero può essere falsificato da terzi. Chi ritiene un avviso errato (per
+                esempio il titolare del numero o del sito) può contestarlo dall&apos;avviso stesso o scrivendo a support@kumani.io; lo Staff
+                lo ritira se la contestazione è fondata. Gli avvisi scadono dopo 12 mesi senza nuove segnalazioni; gli screenshot allegati li
+                vede solo lo Staff e vengono cancellati dopo la decisione. Una segnalazione alla community non sostituisce la denuncia alle
+                autorità.
+              </p>
+              <p>
                 <strong className="text-gray-900">Eventi della community (KUMANI Events).</strong> Gli eventi sono organizzati dagli
                 utenti verificati, che ne sono gli unici responsabili (svolgimento, sicurezza del luogo, autorizzazioni e obblighi fiscali).
                 La Piattaforma fornisce gli strumenti (pubblicazione, iscrizioni, pass e check-in), approva i primi eventi di ogni

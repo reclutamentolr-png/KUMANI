@@ -2,6 +2,9 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
+import Link from '@/components/LocalizedLink'
+import CommunityWarning from '@/components/scamNet/CommunityWarning'
+import { reportHref } from '@/lib/scamNet'
 import {
   Camera,
   Upload,
@@ -85,8 +88,6 @@ function IndicatorIcon({ type }: { type: 'ok' | 'warning' | 'risk' }) {
   return <XCircle className="h-4 w-4 text-red-500 shrink-0" />
 }
 
-const REPORT_TYPES = ['phishing', 'scam', 'impersonation'] as const
-
 export default function QRCheckScanner() {
   const t = useTranslations('svat.qrCheck')
 
@@ -94,9 +95,6 @@ export default function QRCheckScanner() {
   const [analyzing, setAnalyzing] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [result, setResult] = useState<QRAnalysis | null>(null)
-  const [reportOpen, setReportOpen] = useState(false)
-  const [reportSent, setReportSent] = useState(false)
-  const [reportError, setReportError] = useState(false)
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -126,9 +124,6 @@ export default function QRCheckScanner() {
     setAnalyzing(true)
     setError(null)
     setResult(null)
-    setReportOpen(false)
-    setReportSent(false)
-    setReportError(false)
     try {
       const res = await fetch('/api/svat/qr-decode', {
         method: 'POST',
@@ -240,29 +235,6 @@ export default function QRCheckScanner() {
     stopCamera()
     setResult(null)
     setError(null)
-    setReportOpen(false)
-    setReportSent(false)
-    setReportError(false)
-  }
-
-  const submitReport = async (type: (typeof REPORT_TYPES)[number]) => {
-    if (!result) return
-    setReportError(false)
-    try {
-      const res = await fetch('/api/svat/qr-decode/report', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ qrData: result.raw, type }),
-      })
-      if (res.ok) {
-        setReportSent(true)
-        setReportOpen(false)
-      } else {
-        setReportError(true)
-      }
-    } catch {
-      setReportError(true)
-    }
   }
 
   const riskLevelKey =
@@ -412,6 +384,9 @@ export default function QRCheckScanner() {
             </div>
           )}
 
+          {/* Avviso della Rete Anti-Truffa (link, numero o email del QR) */}
+          <CommunityWarning items={[{ kind: 'qr', value: result.raw }]} />
+
           {result.communitySignals && result.communitySignals.totalReports > 0 && (
             <div className="bg-red-50 border border-red-200 rounded-xl p-4">
               <div className="flex items-center gap-2 text-red-700 font-medium text-sm mb-1">
@@ -441,41 +416,13 @@ export default function QRCheckScanner() {
               </a>
             )}
 
-            {!reportSent ? (
-              <div className="relative">
-                <button
-                  onClick={() => setReportOpen((v) => !v)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-sm bg-white border border-[var(--gold)]/40 text-[var(--ink)] hover:border-[var(--gold)] transition-all"
-                >
-                  <Flag className="w-4 h-4" />
-                  {t('reportIssue')}
-                </button>
-                {reportOpen && (
-                  <div className="absolute z-10 mt-2 bg-white border border-[var(--gold)]/25 rounded-xl shadow-lg overflow-hidden min-w-40">
-                    {REPORT_TYPES.map((rt) => (
-                      <button
-                        key={rt}
-                        onClick={() => submitReport(rt)}
-                        className="block w-full text-left px-4 py-2 text-sm text-[var(--ink)] hover:bg-[var(--gold-pale)]"
-                      >
-                        {t(rt === 'impersonation' ? 'impersonationReport' : rt)}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <span className="text-sm text-green-600 flex items-center gap-1">
-                <CheckCircle className="w-4 h-4" />
-                {t('reportSuccess')}
-              </span>
-            )}
-            {reportError && (
-              <span className="text-sm text-red-600 flex items-center gap-1">
-                <XCircle className="w-4 h-4" />
-                {t('reportError')}
-              </span>
-            )}
+            <Link
+              href={reportHref('qr', result.raw)}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-sm bg-white border border-[var(--gold)]/40 text-[var(--ink)] hover:border-[var(--gold)] transition-all"
+            >
+              <Flag className="w-4 h-4" />
+              {t('reportIssue')}
+            </Link>
 
             <button
               onClick={reset}

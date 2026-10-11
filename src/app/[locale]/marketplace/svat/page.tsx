@@ -24,6 +24,7 @@ import {
   QrCode,
 } from 'lucide-react'
 import QRCheckScanner from '@/components/QRCheckScanner'
+import CommunityWarning from '@/components/scamNet/CommunityWarning'
 
 interface SVATCheck {
   id: string
@@ -341,6 +342,8 @@ export default function SVATPage({
 
         {result && (
           <div className="space-y-8">
+            {/* Avviso della Rete Anti-Truffa (solo se il sito è stato segnalato e confermato) */}
+            {result.domain && <CommunityWarning items={[{ kind: 'site', value: result.domain }]} report={{ kind: 'site', value: result.domain }} />}
             {/* Score Card */}
             <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8 text-center">
               <h3 className="text-lg font-semibold text-[var(--muted)] mb-2">{t('scoreTitle')}</h3>

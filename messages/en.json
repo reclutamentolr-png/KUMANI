@@ -962,7 +962,9 @@
     "hopla": "Hoplà",
     "hoplaDescription": "Photos and videos from your phone to your computer in a flash: scan the code and they arrive. No cables, no apps, no uploading to the internet.",
     "firmaPdf": "Sign PDF",
-    "firmaPdfDescription": "Sign your PDFs from your phone or computer: signature, date and text where needed, then download the signed document. The file never leaves your device."
+    "firmaPdfDescription": "Sign your PDFs from your phone or computer: signature, date and text where needed, then download the signed document. The file never leaves your device.",
+    "reteAntitruffa": "Anti-Scam Network",
+    "reteAntitruffaDescription": "The community that protects you: report phone numbers, websites, IBANs and emails used for scams, see the scams of the week and check who called you. Free for everyone."
   },
   "neurobalance": {
     "tracksLabel": "Relaxation audio",
@@ -8399,7 +8401,7 @@
     "s1t": "Who processes the data",
     "s1": "The data controller will be shown on this page with full details. For any question about your data you can already write to {email}.",
     "s2t": "What data we process",
-    "s2": "Account data: email and password (encrypted, nobody can read it).|Profile data: first name, last name, country, city and whatever you choose to add.|The content you create in the tools, such as agenda, expenses, deadlines, quotes or listings.|Payments: handled by Stripe; KUMANI never sees or stores card details.|Technical data, such as IP address and browser type, for the security of the service.|Usage data: when you use KUMANI and for how long (length of visits, phone or computer), for internal statistics on how the platform is used; deleted after 13 months.",
+    "s2": "Account data: email and password (encrypted, nobody can read it).|Profile data: first name, last name, country, city and whatever you choose to add.|The content you create in the tools, such as agenda, expenses, deadlines, quotes or listings.|Payments: handled by Stripe; KUMANI never sees or stores card details.|Technical data, such as IP address and browser type, for the security of the service.|Usage data: when you use KUMANI and for how long (length of visits, phone or computer), for internal statistics on how the platform is used; deleted after 13 months.|Anti-scam reports: the details you report (numbers, websites, IBANs, emails, profiles) and your account of what happened; others only see the number of reports, the type of scam, the account and at most your city, never your name; screenshots are seen only by the Staff and deleted after the check.",
     "s3t": "Why we process it",
     "s3": "To provide the service you chose (performance of the contract).|To comply with legal obligations, such as tax rules.|For security and to prevent abuse and scams (legitimate interest).|To show your story on the homepage only if you consent, which you can withdraw at any time.|We do not send advertising emails without your consent.",
     "s4t": "Who receives the data",
@@ -8497,7 +8499,9 @@
     "testSent": "Test sent: it should arrive in a few seconds.",
     "error": "Something went wrong. Please try again shortly.",
     "cat_messages": "Messages",
-    "cat_messages_hint": "When someone writes to you from your Landing Page."
+    "cat_messages_hint": "When someone writes to you from your Landing Page.",
+    "cat_alerts": "Scams of the week",
+    "cat_alerts_hint": "Every Monday the scams most reported by the community"
   },
   "pushNotifications": {
     "testTitle": "Notifications on",
@@ -8612,7 +8616,26 @@
     "proposalStatus_done": "done",
     "proposalStatus_declined": "not now",
     "proposalStatus_changes": "needs changes",
-    "proposalStatus_rejected": "not published"
+    "proposalStatus_rejected": "not published",
+    "scamConfirmedTitle": "Report confirmed: thank you!",
+    "scamConfirmedBody": "Your warning about {value} now protects people who check it. {ku, plural, =0 {} other {You received # KU Karma.}}",
+    "scamDismissedTitle": "Report not published",
+    "scamDismissedBody": "Your report about {value} wasn’t published. {note}",
+    "scamNeedsInfoTitle": "Proof needed",
+    "scamNeedsInfoBody": "For your report about {value} the Staff asks for a screenshot or a few details. {note}",
+    "scamDigestTitle": "Scams of the week",
+    "scamDigestBody": "{count, plural, one {# new confirmed report} other {# new confirmed reports}}: {top}. Open to learn how to spot them.",
+    "scamCategory_courier": "Fake courier",
+    "scamCategory_bank": "Fake bank operator",
+    "scamCategory_investment": "Miracle investments",
+    "scamCategory_romance": "Romance scam",
+    "scamCategory_rental": "Non-existent rental",
+    "scamCategory_marketplace": "Online buying and selling",
+    "scamCategory_job": "Fake job",
+    "scamCategory_support": "Fake tech support",
+    "scamCategory_prize": "Fake prize or gift",
+    "scamCategory_phishing": "Data theft (phishing)",
+    "scamCategory_other": "Other"
   },
   "pushInvite": {
     "title": "Turn on notifications",
@@ -10510,10 +10533,10 @@
     "chatSafetyCheck": "Check",
     "chatSafetyHint": "Before paying or opening a link from someone you don’t know, check it.",
     "checkBoxTitle": "Check now",
-    "checkBoxText": "Paste an IBAN, an email, a VAT number or a website: I’ll take you to the right tool.",
-    "checkBoxPlaceholder": "IBAN, email, VAT number or website…",
+    "checkBoxText": "Paste an IBAN, an email, a VAT number, a website or a phone number: I’ll take you to the right tool.",
+    "checkBoxPlaceholder": "IBAN, email, VAT number, website or phone…",
     "checkBoxButton": "Check",
-    "checkBoxUnknown": "I can’t recognise what you entered: paste an IBAN, an email, a VAT number or a website address.",
+    "checkBoxUnknown": "I don’t recognise what you wrote: paste an IBAN, an email, a VAT number, a website address or a phone number.",
     "tripSpendlyTitle": "Your share in Spendly",
     "tripSpendlyHint": "{count, plural, one {# expense} other {# expenses}} shared with you, your share is {total}: add it to your Spendly expenses in one tap.",
     "tripSpendlyButton": "Add to Spendly",
@@ -12605,5 +12628,184 @@
     "remember": "Remember my signature on this device",
     "consent": "By signing I agree that this electronic signature represents my signature on the documents I place it on, including contracts.",
     "sign": "Sign"
+  },
+  "scamNet": {
+    "badge": "The community that protects you",
+    "heroTitle": "Anti-Scam Network",
+    "heroText": "Report phone numbers, websites, IBANs, emails and profiles used for scams. Once the Staff has checked them, anyone checking the same detail sees the warning: your report can save someone else’s savings.",
+    "title": "Anti-Scam Network",
+    "loading": "Loading",
+    "reportCta": "Report a scam",
+    "reportAnother": "Report another scam",
+    "sentTitle": "Thank you, report sent",
+    "sentPending": "The Staff usually checks it within a day: once it’s confirmed you get a notification and +2 KU Karma.",
+    "sentConfirmed": "This detail had already been confirmed: your report strengthens the warning and earns you +2 KU Karma right away.",
+    "police": "A community report isn’t a police complaint: if you lost money or data, report it to the police too.",
+    "policeLink": "Polizia Postale – Commissariato di PS online",
+    "tabs": {
+      "alerts": "Alerts",
+      "report": "Report",
+      "phone": "Who called me?",
+      "mine": "Mine"
+    },
+    "kinds": {
+      "phone": "Phone",
+      "site": "Website or link",
+      "iban": "IBAN",
+      "email": "Email",
+      "social": "Social profile",
+      "qr": "QR code"
+    },
+    "categories": {
+      "courier": "Fake courier",
+      "bank": "Fake bank operator",
+      "investment": "Miracle investments",
+      "romance": "Romance scam",
+      "rental": "Non-existent rental",
+      "marketplace": "Online buying and selling",
+      "job": "Fake job",
+      "support": "Fake tech support",
+      "prize": "Fake prize or gift",
+      "phishing": "Data theft (phishing)",
+      "other": "Other"
+    },
+    "categoryHints": {
+      "courier": "Texts or emails about a parcel “on hold” with a link to pay small fees: they steal your card details.",
+      "bank": "They call or write “from the bank” and ask for codes or to move your money to a “safe” account.",
+      "investment": "Sure, quick profits, often with crypto and a “consultant” on WhatsApp.",
+      "romance": "Someone met online wins your trust and then asks for money for an emergency.",
+      "rental": "Homes or cars for rent that don’t exist, with a deposit to pay straight away.",
+      "marketplace": "Fake sellers or buyers on listings and marketplaces, payments outside the platform.",
+      "job": "Easy job offers that ask for money to start or for your documents.",
+      "support": "Fake technicians who get you to install software to control your phone or computer.",
+      "prize": "Non-existent prizes, gifts or refunds you must pay for or leave your data to get.",
+      "phishing": "Messages and pages that imitate well-known services to steal passwords and data.",
+      "other": "Other scams."
+    },
+    "form": {
+      "kind": "What do you want to report",
+      "value": {
+        "phone": "Phone number",
+        "site": "Website or link",
+        "iban": "IBAN",
+        "email": "Email address",
+        "social": "Profile link or @name",
+        "qr": "QR code content"
+      },
+      "placeholder": {
+        "phone": "+39 351 000 0000",
+        "site": "e.g. post-delivery.info",
+        "iban": "IT60 X054 2811 1010 0000 0123 456",
+        "email": "e.g. support@bank-verify.co",
+        "social": "e.g. instagram.com/name or @name",
+        "qr": "Text or link read from the QR"
+      },
+      "category": "Type of scam",
+      "categoryPick": "Choose the type",
+      "description": "What happened (optional)",
+      "descriptionPlaceholder": "Describe in a few lines what they asked for or promised. Don’t write your own or other people’s data.",
+      "evidence": "Proof (optional)",
+      "evidenceAdd": "Add the screenshot",
+      "evidenceHint": "Only the Staff sees it and it’s deleted after the check. Cover your own data first.",
+      "evidenceAdded": "Screenshot added",
+      "evidenceRemove": "Remove the screenshot",
+      "rules": "I’m reporting a real experience. No names of people or unfounded accusations: the Staff checks before publishing.",
+      "send": "Send the report",
+      "reward": "+2 KU Karma when the Staff confirms it"
+    },
+    "errors": {
+      "invalid_value": "This doesn’t look valid: check how you wrote it.",
+      "limit": "You’ve reached today’s maximum number of reports: try again tomorrow.",
+      "already": "You’ve already reported this: thank you!",
+      "auth": "Log in to report.",
+      "save": "The report couldn’t be sent. Please try again.",
+      "evidenceType": "Upload an image (screenshot or photo).",
+      "evidenceUpload": "The image couldn’t be uploaded. Please try again."
+    },
+    "warning": {
+      "eyebrow": "Community warning",
+      "title": "{count, plural, one {Reported by # member} other {Reported by # members}}",
+      "last": "Last report {when} · confirmed by the KUMANI Staff",
+      "quote": "A member · {when}",
+      "quoteCity": "A member · {city} · {when}",
+      "spoof": "Careful: scammers sometimes use spoofed numbers or other people’s numbers. If this number calls you, don’t give codes or money and call the official number back yourself.",
+      "what": "What to do: don’t pay, don’t give codes or passwords, don’t click links. If you’ve already given data or money, call your bank straight away.",
+      "contest": "Is it your number or website and you think it’s a mistake? Contest the warning",
+      "contestLabel": "Explain to the Staff why the warning is wrong",
+      "contestSend": "Send the objection",
+      "contestSent": "Objection sent: the Staff will check it.",
+      "contestError": "It couldn’t be sent (write at least 10 characters).",
+      "report": "Did this happen to you? Report it to the Anti-Scam Network",
+      "reportToo": "You too? Add your report"
+    },
+    "alerts": {
+      "reports": "reports",
+      "hits": "checks with a warning",
+      "reporters": "members on guard",
+      "week": "In the last 7 days",
+      "trendingTitle": "The scams going around now",
+      "trendingEmpty": "No new confirmed scams this week.",
+      "new": "new",
+      "reportsCount": "{count, plural, one {# report} other {# reports}}",
+      "recentTitle": "Latest confirmed warnings",
+      "maskedNote": "Numbers and IBANs are partly hidden: to see whether a number has been reported, use “Who called me?”.",
+      "weeklyTitle": "Scams of the week",
+      "weeklyText": "Every Monday a notification with the most reported scams. You can turn it off whenever you like."
+    },
+    "phone": {
+      "label": "Number that called or texted you",
+      "check": "Check the number",
+      "hint": "Without a prefix it’s treated as an Italian number.",
+      "invalid": "This number doesn’t look valid.",
+      "clean": "No confirmed reports",
+      "cleanText": "That doesn’t mean it’s safe: if they ask for money, codes or data, stop and check.",
+      "country": "Country",
+      "type": "Type",
+      "premium": "Premium-rate number: calling it back can cost a lot. Don’t call back unknown numbers of this kind.",
+      "foreign": "Foreign number: if you weren’t expecting calls from abroad, don’t call back.",
+      "report": "Report this number"
+    },
+    "phoneTypes": {
+      "MOBILE": "Mobile",
+      "FIXED_LINE": "Landline",
+      "FIXED_LINE_OR_MOBILE": "Landline or mobile",
+      "PREMIUM_RATE": "Premium rate",
+      "SHARED_COST": "Shared cost",
+      "TOLL_FREE": "Toll-free",
+      "VOIP": "Internet (VoIP)",
+      "UAN": "Company single number",
+      "PERSONAL_NUMBER": "Personal number",
+      "PAGER": "Pager",
+      "VOICEMAIL": "Voicemail",
+      "UNKNOWN": "Not recognised"
+    },
+    "levels": {
+      "none": "Become a Guardian",
+      "bronze": "Bronze Guardian",
+      "silver": "Silver Guardian",
+      "gold": "Gold Guardian"
+    },
+    "mine": {
+      "warned": "{count, plural, =0 {Your confirmed reports will warn people who check} one {Your reports have warned # person} other {Your reports have warned # people}}",
+      "progress": "{confirmed, plural, one {# confirmed report} other {# confirmed reports}} · {missing} more to become {next}",
+      "progressMax": "{confirmed} confirmed reports: you’re at the top level, thank you!",
+      "empty": "You haven’t made any reports yet.",
+      "staffNote": "Staff note:",
+      "anonymous": "Your name never appears: others only see how many people reported and, if available, the city.",
+      "addNote": "Add details (optional)",
+      "addEvidence": "Add the proof and resend"
+    },
+    "status": {
+      "pending": "Being checked",
+      "confirmed": "Confirmed",
+      "dismissed": "Not published",
+      "needs_info": "Proof needed"
+    },
+    "statusText": {
+      "pending": "The Staff usually checks it within a day.",
+      "confirmed": "{count, plural, =0 {+2 KU Karma · the warning is active.} one {+2 KU Karma · it warned # person.} other {+2 KU Karma · it warned # people.}}",
+      "dismissed": "There isn’t enough to publish it.",
+      "needs_info": "The Staff asks for a screenshot or a few more details."
+    }
   }
 }

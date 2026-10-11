@@ -58,6 +58,7 @@ import {
   ChevronUp,
   type LucideIcon,
   MonitorSmartphone,
+  ShieldAlert,
 } from 'lucide-react'
 
 type Category = 'marketing' | 'security' | 'personal' | 'wellness' | 'lavoro' | 'svago' | 'community'
@@ -128,6 +129,7 @@ export default function HomeToolsGrid({ freeToolNames = [] }: { freeToolNames?: 
     { name: 'checkmail', icon: MailSearch, title: tc('checkmail'), desc: tc('checkmailDescription'), category: 'security' },
     { name: 'antitruffa', icon: BookOpenCheck, title: tc('antitruffa'), desc: tc('antitruffaDescription'), category: 'security' },
     { name: 'verifica-iban', icon: Landmark, title: tc('verificaIban'), desc: tc('verificaIbanDescription'), category: 'security' },
+    { name: 'rete-antitruffa', icon: ShieldAlert, title: tc('reteAntitruffa'), desc: tc('reteAntitruffaDescription'), category: 'security' },
     { name: 'scudo-dati', icon: ShieldUser, title: tc('scudoDati'), desc: tc('scudoDatiDescription'), category: 'security' },
     { name: 'documento-sicuro', icon: FileLock2, title: tc('documentoSicuro'), desc: tc('documentoSicuroDescription'), category: 'security' },
     { name: 'memolife', icon: Brain, title: t('toolMemolifeTitle'), desc: t('toolMemolifeDescription'), category: 'personal' },

@@ -926,7 +926,9 @@
     "hopla": "Hoplà",
     "hoplaDescription": "Fotos e vídeos do telemóvel para o computador num instante: digitaliza o código e chegam. Sem cabos, sem apps, sem os carregar na internet.",
     "firmaPdf": "Assinar PDF",
-    "firmaPdfDescription": "Assine os seus PDF no telemóvel ou no computador: assinatura, data e texto onde for preciso, e descarregue o documento assinado. O ficheiro nunca sai do seu dispositivo."
+    "firmaPdfDescription": "Assine os seus PDF no telemóvel ou no computador: assinatura, data e texto onde for preciso, e descarregue o documento assinado. O ficheiro nunca sai do seu dispositivo.",
+    "reteAntitruffa": "Rede Antifraude",
+    "reteAntitruffaDescription": "A comunidade que o protege: denuncie números, sites, IBAN e emails usados em burlas, veja as burlas da semana e verifique quem lhe ligou. Gratuito para todos."
   },
   "neurobalance": {
     "tracksLabel": "Áudios de relaxamento",
@@ -8399,7 +8401,7 @@
     "s1t": "Quem trata os dados",
     "s1": "O responsável pelo tratamento será indicado nesta página com os seus dados completos. Para qualquer pergunta sobre os seus dados já pode escrever para {email}.",
     "s2t": "Que dados tratamos",
-    "s2": "Dados da conta: email e palavra-passe (cifrada, ninguém a pode ler).|Dados do perfil: nome, apelido, país, cidade e o que decidir acrescentar.|Os conteúdos que cria nas ferramentas, por exemplo agenda, despesas, prazos, orçamentos ou anúncios.|Pagamentos: feitos através da Stripe; a KUMANI não vê nem guarda os dados do cartão.|Dados técnicos, como o endereço IP e o tipo de navegador, para a segurança do serviço.|Dados de utilização: quando usa a KUMANI e durante quanto tempo (duração das visitas, telemóvel ou computador), para estatísticas internas sobre a utilização da plataforma; apagados ao fim de 13 meses.",
+    "s2": "Dados da conta: email e palavra-passe (cifrada, ninguém a pode ler).|Dados do perfil: nome, apelido, país, cidade e o que decidir acrescentar.|Os conteúdos que cria nas ferramentas, por exemplo agenda, despesas, prazos, orçamentos ou anúncios.|Pagamentos: feitos através da Stripe; a KUMANI não vê nem guarda os dados do cartão.|Dados técnicos, como o endereço IP e o tipo de navegador, para a segurança do serviço.|Dados de utilização: quando usa a KUMANI e durante quanto tempo (duração das visitas, telemóvel ou computador), para estatísticas internas sobre a utilização da plataforma; apagados ao fim de 13 meses.|Denúncias antifraude: os dados que denuncia (números, sites, IBAN, emails, perfis) e o seu relato; os outros só veem o número de denúncias, o tipo de burla, o relato e no máximo a sua cidade, nunca o seu nome; as capturas só o Staff as vê e são apagadas após a verificação.",
     "s3t": "Porque os tratamos",
     "s3": "Para lhe prestar o serviço que escolheu (execução do contrato).|Para cumprir obrigações legais, por exemplo fiscais.|Para a segurança e para prevenir abusos e burlas (interesse legítimo).|Para mostrar a sua história na página inicial apenas com o seu consentimento, que pode retirar quando quiser.|Não enviamos publicidade por email sem o seu consentimento.",
     "s4t": "Quem recebe os dados",
@@ -8497,7 +8499,9 @@
     "testSent": "Teste enviado: deve chegar dentro de segundos.",
     "error": "Algo correu mal. Tente novamente daqui a pouco.",
     "cat_messages": "Mensagens",
-    "cat_messages_hint": "Quando alguém lhe escreve a partir da sua Landing Page."
+    "cat_messages_hint": "Quando alguém lhe escreve a partir da sua Landing Page.",
+    "cat_alerts": "Burlas da semana",
+    "cat_alerts_hint": "Todas as segundas-feiras as burlas mais denunciadas pela comunidade"
   },
   "pushNotifications": {
     "testTitle": "Notificações ativas",
@@ -8612,7 +8616,26 @@
     "proposalStatus_done": "concretizada",
     "proposalStatus_declined": "agora não",
     "proposalStatus_changes": "a alterar",
-    "proposalStatus_rejected": "não publicada"
+    "proposalStatus_rejected": "não publicada",
+    "scamConfirmedTitle": "Denúncia confirmada: obrigado!",
+    "scamConfirmedBody": "O seu aviso sobre {value} já protege quem o verifica. {ku, plural, =0 {} other {Recebeu # KU Karma.}}",
+    "scamDismissedTitle": "Denúncia não publicada",
+    "scamDismissedBody": "A denúncia sobre {value} não foi publicada. {note}",
+    "scamNeedsInfoTitle": "Falta uma prova",
+    "scamNeedsInfoBody": "Para a denúncia sobre {value} o Staff pede uma captura ou alguns detalhes. {note}",
+    "scamDigestTitle": "As burlas da semana",
+    "scamDigestBody": "{count, plural, one {# nova denúncia confirmada} other {# novas denúncias confirmadas}}: {top}. Abra para saber reconhecê-las.",
+    "scamCategory_courier": "Falso estafeta",
+    "scamCategory_bank": "Falso funcionário do banco",
+    "scamCategory_investment": "Investimentos milagrosos",
+    "scamCategory_romance": "Burla sentimental",
+    "scamCategory_rental": "Arrendamento inexistente",
+    "scamCategory_marketplace": "Compra e venda online",
+    "scamCategory_job": "Falso emprego",
+    "scamCategory_support": "Falso apoio técnico",
+    "scamCategory_prize": "Falso prémio ou presente",
+    "scamCategory_phishing": "Roubo de dados (phishing)",
+    "scamCategory_other": "Outra"
   },
   "pushInvite": {
     "title": "Ative as notificações",
@@ -10510,10 +10533,10 @@
     "chatSafetyCheck": "Verificar",
     "chatSafetyHint": "Antes de pagar ou abrir um link de alguém que não conhece, verifique-o.",
     "checkBoxTitle": "Verificar já",
-    "checkBoxText": "Cole um IBAN, um email, um número de IVA ou um site: levo-o à ferramenta certa.",
-    "checkBoxPlaceholder": "IBAN, email, número de IVA ou site…",
+    "checkBoxText": "Cole um IBAN, um email, um NIF de empresa, um site ou um número de telefone: levo-o à ferramenta certa.",
+    "checkBoxPlaceholder": "IBAN, email, NIF, site ou telefone…",
     "checkBoxButton": "Verificar",
-    "checkBoxUnknown": "Não reconheço o que escreveu: cole um IBAN, um email, um número de IVA ou o endereço de um site.",
+    "checkBoxUnknown": "Não reconheço o que escreveu: cole um IBAN, um email, um NIF de empresa, o endereço de um site ou um número de telefone.",
     "tripSpendlyTitle": "A sua parte no Spendly",
     "tripSpendlyHint": "{count, plural, one {# despesa partilhada} other {# despesas partilhadas}} consigo, a sua parte é {total}: adicione-a às suas despesas do Spendly com um toque.",
     "tripSpendlyButton": "Adicionar ao Spendly",
@@ -12605,5 +12628,184 @@
     "remember": "Lembrar a minha assinatura neste dispositivo",
     "consent": "Ao assinar aceito que esta assinatura eletrónica represente a minha assinatura nos documentos onde a coloco, incluindo contratos.",
     "sign": "Assinar"
+  },
+  "scamNet": {
+    "badge": "A comunidade que o protege",
+    "heroTitle": "Rede Antifraude",
+    "heroText": "Denuncie números, sites, IBAN, emails e perfis usados para burlas. Depois da verificação do Staff, quem verificar o mesmo dado vê o aviso: a sua denúncia pode salvar as poupanças de outra pessoa.",
+    "title": "Rede Antifraude",
+    "loading": "A carregar",
+    "reportCta": "Denunciar uma burla",
+    "reportAnother": "Denunciar outra burla",
+    "sentTitle": "Obrigado, denúncia enviada",
+    "sentPending": "O Staff costuma verificá-la num dia: quando for confirmada recebe uma notificação e +2 KU Karma.",
+    "sentConfirmed": "Este dado já estava confirmado: a sua denúncia reforça o aviso e vale-lhe logo +2 KU Karma.",
+    "police": "Avisar a comunidade não é uma queixa à polícia: se perdeu dinheiro ou dados, apresente também queixa às autoridades.",
+    "policeLink": "Polizia Postale – Commissariato di PS online",
+    "tabs": {
+      "alerts": "Alertas",
+      "report": "Denunciar",
+      "phone": "Quem me ligou?",
+      "mine": "As minhas"
+    },
+    "kinds": {
+      "phone": "Telefone",
+      "site": "Site ou link",
+      "iban": "IBAN",
+      "email": "Email",
+      "social": "Perfil social",
+      "qr": "Código QR"
+    },
+    "categories": {
+      "courier": "Falso estafeta",
+      "bank": "Falso funcionário do banco",
+      "investment": "Investimentos milagrosos",
+      "romance": "Burla sentimental",
+      "rental": "Arrendamento inexistente",
+      "marketplace": "Compra e venda online",
+      "job": "Falso emprego",
+      "support": "Falso apoio técnico",
+      "prize": "Falso prémio ou presente",
+      "phishing": "Roubo de dados (phishing)",
+      "other": "Outra"
+    },
+    "categoryHints": {
+      "courier": "SMS ou emails de uma encomenda «retida» com link para pagar pequenas despesas: roubam os dados do cartão.",
+      "bank": "Ligam ou escrevem «do banco» e pedem códigos ou que transfira o dinheiro para uma conta «segura».",
+      "investment": "Lucros certos e rápidos, muitas vezes com criptomoedas e um «consultor» no WhatsApp.",
+      "romance": "Alguém conhecido online ganha a sua confiança e depois pede dinheiro para uma emergência.",
+      "rental": "Casas ou carros para alugar que não existem, com sinal a pagar logo.",
+      "marketplace": "Vendedores ou compradores falsos em anúncios, pagamentos fora da plataforma.",
+      "job": "Ofertas de emprego fáceis que pedem dinheiro para começar ou os seus documentos.",
+      "support": "Falsos técnicos que o levam a instalar programas para controlar o telemóvel ou o computador.",
+      "prize": "Prémios, presentes ou reembolsos inexistentes pelos quais tem de pagar ou deixar dados.",
+      "phishing": "Mensagens e páginas que imitam serviços conhecidos para roubar palavras-passe e dados.",
+      "other": "Outras burlas."
+    },
+    "form": {
+      "kind": "O que quer denunciar",
+      "value": {
+        "phone": "Número de telefone",
+        "site": "Site ou link",
+        "iban": "IBAN",
+        "email": "Endereço de email",
+        "social": "Link do perfil ou @nome",
+        "qr": "Conteúdo do código QR"
+      },
+      "placeholder": {
+        "phone": "+351 912 000 000",
+        "site": "ex. entrega-encomenda.info",
+        "iban": "PT50 0002 0123 1234 5678 9015 4",
+        "email": "ex. apoio@banco-verifica.co",
+        "social": "ex. instagram.com/nome ou @nome",
+        "qr": "Texto ou link lido do QR"
+      },
+      "category": "Tipo de burla",
+      "categoryPick": "Escolha o tipo",
+      "description": "O que aconteceu (opcional)",
+      "descriptionPlaceholder": "Conte em poucas linhas o que lhe pediram ou prometeram. Não escreva dados seus nem de outras pessoas.",
+      "evidence": "Prova (opcional)",
+      "evidenceAdd": "Adicionar a captura de ecrã",
+      "evidenceHint": "Só o Staff a vê e é apagada depois da verificação. Tape antes os seus dados.",
+      "evidenceAdded": "Captura adicionada",
+      "evidenceRemove": "Retirar a captura",
+      "rules": "Denuncio uma experiência real. Sem nomes de pessoas nem acusações sem fundamento: o Staff verifica antes de publicar.",
+      "send": "Enviar a denúncia",
+      "reward": "+2 KU Karma quando o Staff a confirmar"
+    },
+    "errors": {
+      "invalid_value": "O dado não parece válido: verifique como o escreveu.",
+      "limit": "Atingiu o número máximo de denúncias de hoje: tente amanhã.",
+      "already": "Já denunciou este dado: obrigado!",
+      "auth": "Inicie sessão para denunciar.",
+      "save": "Não foi possível enviar a denúncia. Tente novamente.",
+      "evidenceType": "Carregue uma imagem (captura ou foto).",
+      "evidenceUpload": "Não foi possível carregar a imagem. Tente novamente."
+    },
+    "warning": {
+      "eyebrow": "Aviso da comunidade",
+      "title": "{count, plural, one {Denunciado por # membro} other {Denunciado por # membros}}",
+      "last": "Última denúncia {when} · confirmada pelo Staff KUMANI",
+      "quote": "Um membro · {when}",
+      "quoteCity": "Um membro · {city} · {when}",
+      "spoof": "Atenção: os burlões usam por vezes números falsificados ou de outras pessoas. Se este número lhe ligar, não dê códigos nem dinheiro e ligue você para o número oficial.",
+      "what": "O que fazer: não pague, não dê códigos nem palavras-passe, não clique em links. Se já deu dados ou dinheiro, ligue logo para o seu banco.",
+      "contest": "É o seu número ou o seu site e acha que é um erro? Conteste o aviso",
+      "contestLabel": "Explique ao Staff porque o aviso está errado",
+      "contestSend": "Enviar a contestação",
+      "contestSent": "Contestação enviada: o Staff vai verificá-la.",
+      "contestError": "Não foi possível enviar (escreva pelo menos 10 caracteres).",
+      "report": "Aconteceu-lhe com este dado? Denuncie-o à Rede Antifraude",
+      "reportToo": "Também consigo? Junte a sua denúncia"
+    },
+    "alerts": {
+      "reports": "denúncias",
+      "hits": "verificações com aviso",
+      "reporters": "membros atentos",
+      "week": "Nos últimos 7 dias",
+      "trendingTitle": "As burlas que circulam agora",
+      "trendingEmpty": "Nenhuma burla nova confirmada esta semana.",
+      "new": "nova",
+      "reportsCount": "{count, plural, one {# denúncia} other {# denúncias}}",
+      "recentTitle": "Últimos avisos confirmados",
+      "maskedNote": "Números e IBAN estão em parte ocultos: para saber se um número foi denunciado use «Quem me ligou?».",
+      "weeklyTitle": "As burlas da semana",
+      "weeklyText": "Todas as segundas-feiras uma notificação com as burlas mais denunciadas. Pode desligá-la quando quiser."
+    },
+    "phone": {
+      "label": "Número que lhe ligou ou escreveu",
+      "check": "Verificar o número",
+      "hint": "Sem indicativo é considerado um número italiano.",
+      "invalid": "Este número não parece válido.",
+      "clean": "Nenhuma denúncia confirmada",
+      "cleanText": "Não quer dizer que seja seguro: se lhe pedirem dinheiro, códigos ou dados, pare e verifique.",
+      "country": "País",
+      "type": "Tipo",
+      "premium": "Número de valor acrescentado: ligar de volta pode custar muito. Não ligue para números desconhecidos deste tipo.",
+      "foreign": "Número estrangeiro: se não esperava chamadas do estrangeiro, não ligue de volta.",
+      "report": "Denunciar este número"
+    },
+    "phoneTypes": {
+      "MOBILE": "Telemóvel",
+      "FIXED_LINE": "Fixo",
+      "FIXED_LINE_OR_MOBILE": "Fixo ou telemóvel",
+      "PREMIUM_RATE": "Valor acrescentado",
+      "SHARED_COST": "Custo partilhado",
+      "TOLL_FREE": "Gratuito",
+      "VOIP": "Internet (VoIP)",
+      "UAN": "Número único de empresa",
+      "PERSONAL_NUMBER": "Número pessoal",
+      "PAGER": "Pager",
+      "VOICEMAIL": "Correio de voz",
+      "UNKNOWN": "Não reconhecido"
+    },
+    "levels": {
+      "none": "Torne-se Guardião",
+      "bronze": "Guardião de bronze",
+      "silver": "Guardião de prata",
+      "gold": "Guardião de ouro"
+    },
+    "mine": {
+      "warned": "{count, plural, =0 {As suas denúncias confirmadas vão avisar quem verificar} one {As suas denúncias avisaram # pessoa} other {As suas denúncias avisaram # pessoas}}",
+      "progress": "{confirmed, plural, one {# denúncia confirmada} other {# denúncias confirmadas}} · faltam {missing} para ser {next}",
+      "progressMax": "{confirmed} denúncias confirmadas: está no nível mais alto, obrigado!",
+      "empty": "Ainda não fez denúncias.",
+      "staffNote": "Nota do Staff:",
+      "anonymous": "O seu nome nunca aparece: os outros só veem quantas pessoas denunciaram e, se houver, a cidade.",
+      "addNote": "Adicionar detalhes (opcional)",
+      "addEvidence": "Adicionar a prova e reenviar"
+    },
+    "status": {
+      "pending": "Em verificação",
+      "confirmed": "Confirmada",
+      "dismissed": "Não publicada",
+      "needs_info": "Falta uma prova"
+    },
+    "statusText": {
+      "pending": "O Staff costuma verificá-la num dia.",
+      "confirmed": "{count, plural, =0 {+2 KU Karma · o aviso está ativo.} one {+2 KU Karma · avisou # pessoa.} other {+2 KU Karma · avisou # pessoas.}}",
+      "dismissed": "Não há elementos suficientes para a publicar.",
+      "needs_info": "O Staff pede uma captura ou mais alguns detalhes."
+    }
   }
 }

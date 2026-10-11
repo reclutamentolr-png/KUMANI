@@ -107,6 +107,7 @@ export async function POST(request: NextRequest) {
       aiAvailable,
       hasHeaders: verdict.summary.hasHeaders,
       leftToday,
+      community: { sender: verdict.summary.fromAddress ?? null, domains: (verdict.summary.linkDomains ?? []).slice(0, 10) },
     })
   } catch (error) {
     console.error('[checkmail] analysis failed:', error instanceof Error ? error.message : 'unknown')

@@ -150,6 +150,16 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       category: 'security',
     },
     {
+      toolName: 'rete-antitruffa',
+      href: '/marketplace/rete-antitruffa',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'ShieldAlert',
+      title: t('reteAntitruffa'),
+      description: t('reteAntitruffaDescription'),
+      color: 'gold',
+      category: 'security',
+    },
+    {
       toolName: 'scudo-dati',
       href: '/marketplace/scudo-dati',
       gradient: 'bg-[var(--ink)]',

@@ -926,7 +926,9 @@
     "hopla": "Hoplà",
     "hoplaDescription": "Fotos und Videos im Nu vom Handy auf den Computer: Code scannen und schon sind sie da. Ohne Kabel, ohne App, ohne Upload ins Internet.",
     "firmaPdf": "PDF unterschreiben",
-    "firmaPdfDescription": "Unterschreibe deine PDFs am Handy oder Computer: Unterschrift, Datum und Text, wo nötig, dann lädst du das unterschriebene Dokument herunter. Die Datei verlässt nie dein Gerät."
+    "firmaPdfDescription": "Unterschreibe deine PDFs am Handy oder Computer: Unterschrift, Datum und Text, wo nötig, dann lädst du das unterschriebene Dokument herunter. Die Datei verlässt nie dein Gerät.",
+    "reteAntitruffa": "Anti-Betrugs-Netz",
+    "reteAntitruffaDescription": "Die Community, die dich schützt: Melde Nummern, Websites, IBANs und E-Mails, die für Betrug genutzt werden, sieh dir den Betrug der Woche an und prüfe, wer dich angerufen hat. Kostenlos für alle."
   },
   "neurobalance": {
     "tracksLabel": "Entspannungsaudios",
@@ -8399,7 +8401,7 @@
     "s1t": "Wer die Daten verarbeitet",
     "s1": "Der Verantwortliche wird auf dieser Seite mit vollständigen Angaben genannt. Für Fragen zu deinen Daten kannst du schon jetzt an {email} schreiben.",
     "s2t": "Welche Daten wir verarbeiten",
-    "s2": "Kontodaten: E-Mail und Passwort (verschlüsselt, niemand kann es lesen).|Profildaten: Vorname, Nachname, Land, Stadt und was du zusätzlich angibst.|Die Inhalte, die du in den Tools erstellst, z. B. Kalender, Ausgaben, Fristen, Angebote oder Anzeigen.|Zahlungen: laufen über Stripe; KUMANI sieht und speichert keine Kartendaten.|Technische Daten wie IP-Adresse und Browsertyp, für die Sicherheit des Dienstes.|Nutzungsdaten: wann und wie lange du KUMANI nutzt (Dauer der Besuche, Handy oder Computer), für interne Statistiken zur Nutzung der Plattform; sie werden nach 13 Monaten gelöscht.",
+    "s2": "Kontodaten: E-Mail und Passwort (verschlüsselt, niemand kann es lesen).|Profildaten: Vorname, Nachname, Land, Stadt und was du zusätzlich angibst.|Die Inhalte, die du in den Tools erstellst, z. B. Kalender, Ausgaben, Fristen, Angebote oder Anzeigen.|Zahlungen: laufen über Stripe; KUMANI sieht und speichert keine Kartendaten.|Technische Daten wie IP-Adresse und Browsertyp, für die Sicherheit des Dienstes.|Nutzungsdaten: wann und wie lange du KUMANI nutzt (Dauer der Besuche, Handy oder Computer), für interne Statistiken zur Nutzung der Plattform; sie werden nach 13 Monaten gelöscht.|Anti-Betrugs-Meldungen: die gemeldeten Angaben (Nummern, Websites, IBANs, E-Mails, Profile) und deine Schilderung; andere sehen nur die Zahl der Meldungen, die Betrugsart, die Schilderung und höchstens deine Stadt, nie deinen Namen; Screenshots sieht nur das Staff, sie werden nach der Prüfung gelöscht.",
     "s3t": "Warum wir sie verarbeiten",
     "s3": "Um dir den gewählten Dienst bereitzustellen (Vertragserfüllung).|Um gesetzliche Pflichten zu erfüllen, z. B. steuerliche.|Für die Sicherheit und zur Vorbeugung von Missbrauch und Betrug (berechtigtes Interesse).|Um deine Geschichte nur mit deiner Einwilligung auf der Startseite zu zeigen, die du jederzeit widerrufen kannst.|Wir senden keine Werbe-E-Mails ohne deine Einwilligung.",
     "s4t": "Wer die Daten erhält",
@@ -8497,7 +8499,9 @@
     "testSent": "Test gesendet: Er sollte in wenigen Sekunden ankommen.",
     "error": "Etwas hat nicht funktioniert. Versuche es gleich noch einmal.",
     "cat_messages": "Nachrichten",
-    "cat_messages_hint": "Wenn dir jemand über deine Landing Page schreibt."
+    "cat_messages_hint": "Wenn dir jemand über deine Landing Page schreibt.",
+    "cat_alerts": "Betrug der Woche",
+    "cat_alerts_hint": "Jeden Montag die von der Community am häufigsten gemeldeten Maschen"
   },
   "pushNotifications": {
     "testTitle": "Benachrichtigungen aktiv",
@@ -8612,7 +8616,26 @@
     "proposalStatus_done": "umgesetzt",
     "proposalStatus_declined": "nicht jetzt",
     "proposalStatus_changes": "zu ändern",
-    "proposalStatus_rejected": "nicht veröffentlicht"
+    "proposalStatus_rejected": "nicht veröffentlicht",
+    "scamConfirmedTitle": "Meldung bestätigt: danke!",
+    "scamConfirmedBody": "Deine Warnung zu {value} schützt jetzt alle, die sie prüfen. {ku, plural, =0 {} other {Du hast # KU Karma erhalten.}}",
+    "scamDismissedTitle": "Meldung nicht veröffentlicht",
+    "scamDismissedBody": "Die Meldung zu {value} wurde nicht veröffentlicht. {note}",
+    "scamNeedsInfoTitle": "Beweis nötig",
+    "scamNeedsInfoBody": "Für die Meldung zu {value} bittet das Staff um einen Screenshot oder Details. {note}",
+    "scamDigestTitle": "Betrug der Woche",
+    "scamDigestBody": "{count, plural, one {# neue bestätigte Meldung} other {# neue bestätigte Meldungen}}: {top}. Öffnen, um sie zu erkennen.",
+    "scamCategory_courier": "Falscher Paketdienst",
+    "scamCategory_bank": "Falscher Bankmitarbeiter",
+    "scamCategory_investment": "Wunder-Investments",
+    "scamCategory_romance": "Liebesbetrug",
+    "scamCategory_rental": "Nicht existierende Miete",
+    "scamCategory_marketplace": "Online-Kauf und -Verkauf",
+    "scamCategory_job": "Falscher Job",
+    "scamCategory_support": "Falscher technischer Support",
+    "scamCategory_prize": "Falscher Gewinn oder Geschenk",
+    "scamCategory_phishing": "Datendiebstahl (Phishing)",
+    "scamCategory_other": "Sonstiges"
   },
   "pushInvite": {
     "title": "Benachrichtigungen aktivieren",
@@ -10510,10 +10533,10 @@
     "chatSafetyCheck": "Prüfen",
     "chatSafetyHint": "Bevor du zahlst oder einen Link von jemandem öffnest, den du nicht kennst, prüfe ihn.",
     "checkBoxTitle": "Jetzt prüfen",
-    "checkBoxText": "Füge eine IBAN, eine E-Mail, eine USt-IdNr. oder eine Website ein: Ich bringe dich zum richtigen Tool.",
-    "checkBoxPlaceholder": "IBAN, E-Mail, USt-IdNr. oder Website…",
+    "checkBoxText": "Füge eine IBAN, eine E-Mail, eine USt-IdNr., eine Website oder eine Telefonnummer ein: Ich bringe dich zum richtigen Werkzeug.",
+    "checkBoxPlaceholder": "IBAN, E-Mail, USt-IdNr., Website oder Telefon…",
     "checkBoxButton": "Prüfen",
-    "checkBoxUnknown": "Ich erkenne die Eingabe nicht: Füge eine IBAN, eine E-Mail, eine USt-IdNr. oder eine Website-Adresse ein.",
+    "checkBoxUnknown": "Ich erkenne nicht, was du geschrieben hast: Füge eine IBAN, eine E-Mail, eine USt-IdNr., eine Website-Adresse oder eine Telefonnummer ein.",
     "tripSpendlyTitle": "Dein Anteil in Spendly",
     "tripSpendlyHint": "{count, plural, one {# geteilte Ausgabe} other {# geteilte Ausgaben}} mit dir, dein Anteil beträgt {total}: Füge ihn mit einem Tipp zu deinen Spendly-Ausgaben hinzu.",
     "tripSpendlyButton": "Zu Spendly hinzufügen",
@@ -12605,5 +12628,184 @@
     "remember": "Unterschrift auf diesem Gerät merken",
     "consent": "Mit der Unterschrift akzeptiere ich, dass diese elektronische Unterschrift meine Unterschrift auf den Dokumenten darstellt, auf denen ich sie einfüge, auch auf Verträgen.",
     "sign": "Unterschreiben"
+  },
+  "scamNet": {
+    "badge": "Die Community, die dich schützt",
+    "heroTitle": "Anti-Betrugs-Netz",
+    "heroText": "Melde Telefonnummern, Websites, IBANs, E-Mails und Profile, die für Betrug genutzt werden. Nach der Prüfung durch das Staff sieht jeder, der dieselbe Angabe prüft, die Warnung: Deine Meldung kann die Ersparnisse eines anderen retten.",
+    "title": "Anti-Betrugs-Netz",
+    "loading": "Wird geladen",
+    "reportCta": "Betrug melden",
+    "reportAnother": "Weiteren Betrug melden",
+    "sentTitle": "Danke, Meldung gesendet",
+    "sentPending": "Das Staff prüft sie meist innerhalb eines Tages: Nach der Bestätigung bekommst du eine Benachrichtigung und +2 KU Karma.",
+    "sentConfirmed": "Diese Angabe war schon bestätigt: Deine Meldung verstärkt die Warnung und bringt dir sofort +2 KU Karma.",
+    "police": "Eine Meldung an die Community ist keine Anzeige: Wenn du Geld oder Daten verloren hast, erstatte auch Anzeige bei der Polizei.",
+    "policeLink": "Polizia Postale – Commissariato di PS online",
+    "tabs": {
+      "alerts": "Warnungen",
+      "report": "Melden",
+      "phone": "Wer hat mich angerufen?",
+      "mine": "Meine"
+    },
+    "kinds": {
+      "phone": "Telefon",
+      "site": "Website oder Link",
+      "iban": "IBAN",
+      "email": "E-Mail",
+      "social": "Social-Profil",
+      "qr": "QR-Code"
+    },
+    "categories": {
+      "courier": "Falscher Paketdienst",
+      "bank": "Falscher Bankmitarbeiter",
+      "investment": "Wunder-Investments",
+      "romance": "Liebesbetrug",
+      "rental": "Nicht existierende Miete",
+      "marketplace": "Online-Kauf und -Verkauf",
+      "job": "Falscher Job",
+      "support": "Falscher technischer Support",
+      "prize": "Falscher Gewinn oder Geschenk",
+      "phishing": "Datendiebstahl (Phishing)",
+      "other": "Sonstiges"
+    },
+    "categoryHints": {
+      "courier": "SMS oder E-Mails zu einem Paket «in Zustellung» mit Link für kleine Gebühren: Sie stehlen die Kartendaten.",
+      "bank": "Sie rufen «von der Bank» an oder schreiben und verlangen Codes oder eine Überweisung auf ein «sicheres» Konto.",
+      "investment": "Sichere, schnelle Gewinne, oft mit Krypto und einem «Berater» auf WhatsApp.",
+      "romance": "Jemand, den du online kennengelernt hast, gewinnt dein Vertrauen und bittet dann um Geld für einen Notfall.",
+      "rental": "Wohnungen oder Autos zur Miete, die es nicht gibt, mit sofort zu zahlender Kaution.",
+      "marketplace": "Falsche Verkäufer oder Käufer bei Anzeigen, Zahlungen außerhalb der Plattform.",
+      "job": "Einfache Jobangebote, die Geld für den Start oder deine Ausweise verlangen.",
+      "support": "Falsche Techniker, die dich Programme zur Fernsteuerung von Handy oder Computer installieren lassen.",
+      "prize": "Nicht existierende Preise, Geschenke oder Erstattungen, für die du zahlen oder Daten angeben sollst.",
+      "phishing": "Nachrichten und Seiten, die bekannte Dienste nachahmen, um Passwörter und Daten zu stehlen.",
+      "other": "Andere Betrugsarten."
+    },
+    "form": {
+      "kind": "Was möchtest du melden",
+      "value": {
+        "phone": "Telefonnummer",
+        "site": "Website oder Link",
+        "iban": "IBAN",
+        "email": "E-Mail-Adresse",
+        "social": "Profil-Link oder @Name",
+        "qr": "Inhalt des QR-Codes"
+      },
+      "placeholder": {
+        "phone": "+49 151 00000000",
+        "site": "z. B. paket-zustellung.info",
+        "iban": "DE89 3704 0044 0532 0130 00",
+        "email": "z. B. support@bank-pruefung.co",
+        "social": "z. B. instagram.com/name oder @name",
+        "qr": "Text oder Link aus dem QR"
+      },
+      "category": "Art des Betrugs",
+      "categoryPick": "Art wählen",
+      "description": "Was ist passiert (optional)",
+      "descriptionPlaceholder": "Beschreibe in wenigen Zeilen, was man von dir wollte oder dir versprochen hat. Schreib keine Daten von dir oder anderen.",
+      "evidence": "Beweis (optional)",
+      "evidenceAdd": "Screenshot hinzufügen",
+      "evidenceHint": "Nur das Staff sieht ihn, nach der Prüfung wird er gelöscht. Verdecke vorher deine Daten.",
+      "evidenceAdded": "Screenshot hinzugefügt",
+      "evidenceRemove": "Screenshot entfernen",
+      "rules": "Ich melde eine echte Erfahrung. Keine Namen von Personen und keine haltlosen Vorwürfe: Das Staff prüft vor der Veröffentlichung.",
+      "send": "Meldung senden",
+      "reward": "+2 KU Karma, wenn das Staff sie bestätigt"
+    },
+    "errors": {
+      "invalid_value": "Die Angabe scheint ungültig: Prüfe die Schreibweise.",
+      "limit": "Du hast die maximale Zahl an Meldungen für heute erreicht: Versuch es morgen wieder.",
+      "already": "Du hast diese Angabe schon gemeldet: danke!",
+      "auth": "Melde dich an, um etwas zu melden.",
+      "save": "Die Meldung konnte nicht gesendet werden. Bitte erneut versuchen.",
+      "evidenceType": "Lade ein Bild hoch (Screenshot oder Foto).",
+      "evidenceUpload": "Das Bild konnte nicht hochgeladen werden. Bitte erneut versuchen."
+    },
+    "warning": {
+      "eyebrow": "Warnung der Community",
+      "title": "{count, plural, one {Gemeldet von # Mitglied} other {Gemeldet von # Mitgliedern}}",
+      "last": "Letzte Meldung {when} · bestätigt vom KUMANI-Staff",
+      "quote": "Ein Mitglied · {when}",
+      "quoteCity": "Ein Mitglied · {city} · {when}",
+      "spoof": "Achtung: Betrüger nutzen manchmal gefälschte Nummern oder die anderer Personen. Wenn dich diese Nummer anruft, gib keine Codes oder Geld heraus und ruf selbst die offizielle Nummer zurück.",
+      "what": "Was tun: nicht zahlen, keine Codes oder Passwörter angeben, keine Links anklicken. Wenn du schon Daten oder Geld gegeben hast, ruf sofort deine Bank an.",
+      "contest": "Ist es deine Nummer oder Website und hältst du es für einen Fehler? Warnung anfechten",
+      "contestLabel": "Erkläre dem Staff, warum die Warnung falsch ist",
+      "contestSend": "Einspruch senden",
+      "contestSent": "Einspruch gesendet: Das Staff prüft ihn.",
+      "contestError": "Senden nicht möglich (mindestens 10 Zeichen).",
+      "report": "Ist dir das mit dieser Angabe passiert? Melde es dem Anti-Betrugs-Netz",
+      "reportToo": "Dir auch? Füge deine Meldung hinzu"
+    },
+    "alerts": {
+      "reports": "Meldungen",
+      "hits": "Prüfungen mit Warnung",
+      "reporters": "wachsame Mitglieder",
+      "week": "In den letzten 7 Tagen",
+      "trendingTitle": "Betrugsmaschen, die gerade umgehen",
+      "trendingEmpty": "Diese Woche kein neuer bestätigter Betrug.",
+      "new": "neu",
+      "reportsCount": "{count, plural, one {# Meldung} other {# Meldungen}}",
+      "recentTitle": "Zuletzt bestätigte Warnungen",
+      "maskedNote": "Nummern und IBANs sind teilweise verdeckt: Ob eine Nummer gemeldet ist, siehst du unter «Wer hat mich angerufen?».",
+      "weeklyTitle": "Betrug der Woche",
+      "weeklyText": "Jeden Montag eine Benachrichtigung mit den am häufigsten gemeldeten Maschen. Du kannst sie jederzeit ausschalten."
+    },
+    "phone": {
+      "label": "Nummer, die dich angerufen oder angeschrieben hat",
+      "check": "Nummer prüfen",
+      "hint": "Ohne Vorwahl gilt sie als italienische Nummer.",
+      "invalid": "Diese Nummer scheint ungültig.",
+      "clean": "Keine bestätigten Meldungen",
+      "cleanText": "Das heißt nicht, dass sie sicher ist: Wenn man Geld, Codes oder Daten verlangt, stopp und prüfe.",
+      "country": "Land",
+      "type": "Art",
+      "premium": "Kostenpflichtige Sondernummer: Ein Rückruf kann teuer werden. Ruf solche unbekannten Nummern nicht zurück.",
+      "foreign": "Ausländische Nummer: Wenn du keine Anrufe aus dem Ausland erwartest, ruf nicht zurück.",
+      "report": "Diese Nummer melden"
+    },
+    "phoneTypes": {
+      "MOBILE": "Mobil",
+      "FIXED_LINE": "Festnetz",
+      "FIXED_LINE_OR_MOBILE": "Festnetz oder mobil",
+      "PREMIUM_RATE": "Kostenpflichtig",
+      "SHARED_COST": "Geteilte Kosten",
+      "TOLL_FREE": "Gebührenfrei",
+      "VOIP": "Internet (VoIP)",
+      "UAN": "Firmen-Sammelnummer",
+      "PERSONAL_NUMBER": "Persönliche Nummer",
+      "PAGER": "Pager",
+      "VOICEMAIL": "Mailbox",
+      "UNKNOWN": "Nicht erkannt"
+    },
+    "levels": {
+      "none": "Werde Wächter",
+      "bronze": "Bronze-Wächter",
+      "silver": "Silber-Wächter",
+      "gold": "Gold-Wächter"
+    },
+    "mine": {
+      "warned": "{count, plural, =0 {Deine bestätigten Meldungen werden Prüfende warnen} one {Deine Meldungen haben # Person gewarnt} other {Deine Meldungen haben # Personen gewarnt}}",
+      "progress": "{confirmed, plural, one {# bestätigte Meldung} other {# bestätigte Meldungen}} · noch {missing} bis {next}",
+      "progressMax": "{confirmed} bestätigte Meldungen: Du bist auf der höchsten Stufe, danke!",
+      "empty": "Du hast noch keine Meldungen gemacht.",
+      "staffNote": "Hinweis des Staff:",
+      "anonymous": "Dein Name erscheint nie: Andere sehen nur, wie viele Personen gemeldet haben, und ggf. die Stadt.",
+      "addNote": "Details hinzufügen (optional)",
+      "addEvidence": "Beweis hinzufügen und erneut senden"
+    },
+    "status": {
+      "pending": "In Prüfung",
+      "confirmed": "Bestätigt",
+      "dismissed": "Nicht veröffentlicht",
+      "needs_info": "Beweis nötig"
+    },
+    "statusText": {
+      "pending": "Das Staff prüft sie meist innerhalb eines Tages.",
+      "confirmed": "{count, plural, =0 {+2 KU Karma · die Warnung ist aktiv.} one {+2 KU Karma · hat # Person gewarnt.} other {+2 KU Karma · hat # Personen gewarnt.}}",
+      "dismissed": "Es gibt nicht genug Anhaltspunkte für eine Veröffentlichung.",
+      "needs_info": "Das Staff bittet um einen Screenshot oder ein paar Details mehr."
+    }
   }
 }

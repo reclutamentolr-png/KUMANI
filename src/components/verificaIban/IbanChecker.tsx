@@ -1,6 +1,6 @@
 'use client'
 
-import { useId, useMemo, useRef, useState, type FormEvent } from 'react'
+import { useId, useMemo, useRef, useState, useSyncExternalStore, type FormEvent } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import {
   AlertTriangle,
@@ -30,6 +30,7 @@ import {
   type PaymentContext,
   type SignalLevel,
 } from '@/lib/iban'
+import CommunityWarning from '@/components/scamNet/CommunityWarning'
 
 // VERIFICA IBAN: controllo tutto nel browser (formato, lunghezza per paese,
 // checksum mod 97). Nessuna chiamata di rete, niente viene salvato; l'unica
@@ -57,6 +58,8 @@ function LevelIcon({ level }: { level: SignalLevel }) {
   return <Info className="mt-0.5 h-5 w-5 shrink-0 text-sky-600" aria-hidden />
 }
 
+const noopSubscribe = () => () => {}
+
 export default function IbanChecker({ initialIban = '' }: { initialIban?: string }) {
   const t = useTranslations('verificaIban')
   const locale = useLocale()
@@ -73,12 +76,18 @@ export default function IbanChecker({ initialIban = '' }: { initialIban?: string
   const [homeCountry, setHomeCountry] = useState('IT')
   const [copyState, setCopyState] = useState<'idle' | 'copied' | 'failed'>('idle')
 
+  // Nomi dei paesi e ordine alfabetico dipendono dal dizionario del browser:
+  // l'elenco completo si compone solo nel browser (prima del caricamento
+  // c'è solo il paese scelto), così server e browser non si contraddicono
+  const mounted = useSyncExternalStore(noopSubscribe, () => true, () => false)
   const countries = useMemo(
     () =>
-      Object.keys(IBAN_LENGTHS)
-        .map((code) => ({ code, name: countryName(code, locale) }))
-        .sort((a, b) => a.name.localeCompare(b.name, locale)),
-    [locale],
+      mounted
+        ? Object.keys(IBAN_LENGTHS)
+            .map((code) => ({ code, name: countryName(code, locale) }))
+            .sort((a, b) => a.name.localeCompare(b.name, locale))
+        : [{ code: homeCountry, name: homeCountry }],
+    [locale, mounted, homeCountry],
   )
 
   function check(event: FormEvent<HTMLFormElement>) {
@@ -186,6 +195,8 @@ export default function IbanChecker({ initialIban = '' }: { initialIban?: string
       <div aria-live="polite">
         {result && (
           <div className="space-y-5">
+            {/* Avviso della Rete Anti-Truffa (solo IBAN segnalati e confermati) */}
+            {result.valid && <CommunityWarning items={[{ kind: 'iban', value: result.normalized }]} report={{ kind: 'iban', value: result.normalized }} />}
             {/* Esito */}
             <div
               className={`rounded-2xl border p-5 sm:p-6 ${result.valid ? 'border-emerald-200 bg-emerald-50' : 'border-red-200 bg-red-50'}`}
@@ -216,7 +227,7 @@ export default function IbanChecker({ initialIban = '' }: { initialIban?: string
                     <p className="mt-3 text-sm text-gray-700">
                       <span className="font-semibold">{t('countryLabel')}</span>{' '}
                       <span aria-hidden>{countryFlag(result.country)} </span>
-                      {countryName(result.country, locale)} ({result.country})
+                      {mounted ? countryName(result.country, locale) : result.country} ({result.country})
                       {result.expectedLength !== null && (
                         <span className="text-gray-500"> · {t('lengthLabel', { n: result.expectedLength })}</span>
                       )}

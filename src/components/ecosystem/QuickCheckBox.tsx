@@ -28,6 +28,11 @@ export function quickCheckTarget(raw: string): string | null {
   // la cifra di controllo è sbagliata si va in SVAT, che spiega l'errore
   if (parseVatInput(value)) return `/marketplace/svat?vat=${encodeURIComponent(value)}`
 
+  // Numero di telefono: «Chi mi ha chiamato?» nella Rete Anti-Truffa
+  if (/^(\+|00)?[\d\s().-]{6,20}$/.test(value) && value.replace(/\D/g, '').length >= 6) {
+    return `/marketplace/rete-antitruffa?tab=numero&n=${encodeURIComponent(value)}`
+  }
+
   // Sito: inizia con http oppure contiene un punto e nessuno spazio
   if (/^https?:\/\//i.test(value) || (value.includes('.') && !/\s/.test(value) && /[a-z]/i.test(value))) {
     return `/marketplace/svat?url=${encodeURIComponent(value)}`
@@ -36,7 +41,7 @@ export function quickCheckTarget(raw: string): string | null {
 }
 
 // Box «Controlla» nella pagina dei servizi (gruppo Sicurezza): un campo solo
-// per IBAN, email, partita IVA o sito; porta allo strumento già compilato.
+// per IBAN, email, partita IVA, sito o numero di telefono; porta allo strumento già compilato.
 export default function QuickCheckBox() {
   const t = useTranslations('ecosystem')
   const locale = useLocale()

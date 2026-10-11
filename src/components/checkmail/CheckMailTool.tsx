@@ -4,6 +4,7 @@ import { useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { ChevronDown, ClipboardPaste, FileUp, LoaderCircle, Lock, MailSearch, RotateCcw, ShieldAlert, ShieldCheck, Smartphone, Sparkles, TriangleAlert } from 'lucide-react'
 import type { CheckMailResponse } from '@/lib/checkmail/types'
+import CommunityWarning from '@/components/scamNet/CommunityWarning'
 
 type Mode = 'file' | 'paste' | 'quick'
 type OkResult = Extract<CheckMailResponse, { status: 'ok' }>
@@ -209,9 +210,15 @@ export function CheckMailResult({ result, onNew }: { result: OkResult; onNew: ()
   const style = LEVEL_STYLE[result.level]
   const signals = result.findings.filter((f) => f.points > 0)
   const notes = result.findings.filter((f) => f.points === 0)
+  // Mittente e domini dei link controllati anche nella Rete Anti-Truffa
+  const community = [
+    ...(result.community?.sender ? [{ kind: 'email' as const, value: result.community.sender }] : []),
+    ...(result.community?.domains ?? []).map((d) => ({ kind: 'site' as const, value: d })),
+  ]
 
   return (
     <div className="space-y-4">
+      {community.length > 0 && <CommunityWarning items={community} report={result.community?.sender ? { kind: 'email', value: result.community.sender } : null} />}
       <div className={`rounded-2xl border p-5 sm:p-6 ${style.box}`}>
         <div className="flex items-start gap-4">
           <style.Icon className={`h-10 w-10 shrink-0 ${style.text}`} />

@@ -2,7 +2,7 @@
 
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
-import { Bell, CalendarClock, MessageCircle, ShieldCheck, Ticket, Users, type LucideIcon } from 'lucide-react'
+import { Bell, CalendarClock, MessageCircle, ShieldAlert, ShieldCheck, Ticket, Users, type LucideIcon } from 'lucide-react'
 import { markNotificationsRead, type NotificationItem } from '@/app/actions/notifications'
 import type { PushCategory } from '@/lib/push'
 
@@ -12,12 +12,13 @@ import type { PushCategory } from '@/lib/push'
 
 export const NOTIFICATIONS_CHANGED = 'kumani:notifications-changed'
 
-const ICON: Record<PushCategory, LucideIcon> = { network: Users, expiry: CalendarClock, events: Ticket, messages: MessageCircle, staff: ShieldCheck }
+const ICON: Record<PushCategory, LucideIcon> = { network: Users, expiry: CalendarClock, events: Ticket, messages: MessageCircle, staff: ShieldCheck, alerts: ShieldAlert }
 const TONE: Record<PushCategory, string> = {
   network: 'bg-[var(--gold-pale)] text-[var(--ink)]',
   expiry: 'bg-amber-100 text-amber-800',
   events: 'bg-sky-100 text-sky-800',
   messages: 'bg-rose-100 text-rose-700',
+  alerts: 'bg-red-100 text-red-800',
   staff: 'bg-gray-100 text-gray-700',
 }
 

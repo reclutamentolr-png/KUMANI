@@ -4,7 +4,7 @@
 // servizi sono quelli del Marketplace.
 
 export const HOME_NEEDS = [
-  { key: 'scams', icon: 'ShieldCheck', items: ['antitruffa', 'checkmail', 'verifica-iban', 'svat', 'verifoto', 'scudo-dati', 'documento-sicuro'] },
+  { key: 'scams', icon: 'ShieldCheck', items: ['rete-antitruffa', 'antitruffa', 'checkmail', 'verifica-iban', 'svat', 'verifoto', 'scudo-dati', 'documento-sicuro'] },
   { key: 'organize', icon: 'CalendarDays', items: ['life-calendar', 'memolife', 'focus', 'travel', 'findo', 'hopla'] },
   { key: 'money', icon: 'PiggyBank', items: ['spendly', 'fincheck', 'casa', 'garage', 'digital-receipt'] },
   { key: 'business', icon: 'Store', items: ['landing-page', 'shop', 'menu', 'fidelity', 'offermaker', 'listings'] },
