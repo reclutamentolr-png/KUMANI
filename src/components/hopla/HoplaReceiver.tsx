@@ -3,13 +3,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import type { RealtimeChannel } from '@supabase/supabase-js'
-import { Check, Download, FileVideo, File as FileIcon, FolderOpen, LoaderCircle, RefreshCw, ShieldCheck, Smartphone, Wifi, X, Zap } from 'lucide-react'
+import { Check, Download, FileVideo, File as FileIcon, FolderOpen, Globe, LoaderCircle, RefreshCw, ShieldCheck, Smartphone, Trash2, Wifi, X, Zap } from 'lucide-react'
 import { hoplaReceived } from '@/app/actions/hopla'
+import Link from '@/components/LocalizedLink'
 import { createClient } from '@/lib/supabase/client'
 import {
   HOPLA_CONNECT_TIMEOUT,
   HOPLA_ICE,
   HOPLA_MEMORY_WARN,
+  connectionRoute,
   formatBytes,
   hoplaChannel,
   newHoplaId,
@@ -19,12 +21,13 @@ import {
   type HoplaCtrl,
   type HoplaDevice,
   type HoplaFileMeta,
+  type HoplaRoute,
   type HoplaSignal,
 } from '@/lib/hopla'
 
 type Phase = 'starting' | 'waiting' | 'connecting' | 'connected' | 'asking' | 'receiving' | 'done' | 'failed' | 'lost'
 
-type Received = { key: number; i: number; name: string; size: number; type: string; url: string | null; saved: boolean }
+type Received = { key: number; i: number; name: string; size: number; type: string; url: string | null; saved: boolean; dir: DirHandle | null }
 
 type DirHandle = FileSystemDirectoryHandle
 type Writer = { write: (data: ArrayBuffer) => Promise<void>; close: () => Promise<void>; abort?: () => Promise<void> }
@@ -49,7 +52,9 @@ export default function HoplaReceiver() {
   const [device, setDevice] = useState<HoplaDevice>('other')
   const [incoming, setIncoming] = useState<HoplaFileMeta[]>([])
   const [received, setReceived] = useState<Received[]>([])
-  const [progress, setProgress] = useState({ bytes: 0, total: 0, speed: 0, file: 0 })
+  const [progress, setProgress] = useState({ bytes: 0, total: 0, speed: 0, file: 0, fileBytes: 0 })
+  const [route, setRoute] = useState<HoplaRoute>(null)
+  const [confirmDelete, setConfirmDelete] = useState<number | null>(null)
   const [folderName, setFolderName] = useState<string | null>(null)
   const [folderSupported, setFolderSupported] = useState(false)
 
@@ -65,6 +70,7 @@ export default function HoplaReceiver() {
   const incomingRef = useRef<HoplaFileMeta[]>([])
   const currentRef = useRef<{ meta: HoplaFileMeta; name: string; writer: Writer | null; chunks: ArrayBuffer[]; handle: FileSystemFileHandle | null } | null>(null)
   const bytesRef = useRef(0)
+  const fileBytesRef = useRef(0)
   const startRef = useRef(0)
   const urlsRef = useRef<string[]>([])
   const seqRef = useRef(0)
@@ -127,6 +133,7 @@ export default function HoplaReceiver() {
       if (current.writer) await current.writer.write(data)
       else current.chunks.push(data)
       bytesRef.current += data.byteLength
+      fileBytesRef.current += data.byteLength
       return
     }
     const msg = parseCtrl(data)
@@ -152,7 +159,8 @@ export default function HoplaReceiver() {
       } else {
         currentRef.current = { meta, name: meta.name, writer: null, chunks: [], handle: null }
       }
-      setProgress((p) => ({ ...p, file: msg.i }))
+      fileBytesRef.current = 0
+      setProgress((p) => ({ ...p, file: msg.i, fileBytes: 0 }))
     } else if (msg.t === 'end') {
       const current = currentRef.current
       if (!current || current.meta.i !== msg.i) return
@@ -168,7 +176,7 @@ export default function HoplaReceiver() {
         url = URL.createObjectURL(new Blob(current.chunks, { type: current.meta.type || 'application/octet-stream' }))
       }
       if (url) urlsRef.current.push(url)
-      setReceived((list) => [...list, { key: ++seqRef.current, i: current.meta.i, name: current.name, size: current.meta.size, type: current.meta.type, url, saved: !!current.writer }])
+      setReceived((list) => [...list, { key: ++seqRef.current, i: current.meta.i, name: current.name, size: current.meta.size, type: current.meta.type, url, saved: !!current.writer, dir: current.writer ? dirRef.current : null }])
       sendCtrl({ t: 'saved', i: msg.i })
     } else if (msg.t === 'done') {
       setPhase('done')
@@ -191,10 +199,15 @@ export default function HoplaReceiver() {
   const setupChannel = (dc: RTCDataChannel) => {
     dc.binaryType = 'arraybuffer'
     dc.onopen = () => {
+      if (dcRef.current !== dc) return
       if (timerRef.current) clearTimeout(timerRef.current)
       setPhase('connected')
+      const pc = pcRef.current
+      if (pc) connectionRoute(pc).then(setRoute)
     }
-    dc.onmessage = (e) => enqueue(e.data as string | ArrayBuffer)
+    dc.onmessage = (e) => {
+      if (dcRef.current === dc) enqueue(e.data as string | ArrayBuffer)
+    }
     dc.onclose = () => {
       if (dcRef.current !== dc) return
       // Il telefono si è scollegato: si libera il posto per ricollegarsi allo stesso codice
@@ -306,7 +319,7 @@ export default function HoplaReceiver() {
     if (phase !== 'receiving') return
     const timer = setInterval(() => {
       const seconds = (performance.now() - startRef.current) / 1000
-      setProgress((p) => ({ ...p, bytes: bytesRef.current, speed: seconds > 0.5 ? bytesRef.current / seconds : 0 }))
+      setProgress((p) => ({ ...p, bytes: bytesRef.current, fileBytes: fileBytesRef.current, speed: seconds > 0.5 ? bytesRef.current / seconds : 0 }))
     }, 250)
     return () => clearInterval(timer)
   }, [phase])
@@ -328,9 +341,12 @@ export default function HoplaReceiver() {
     }
     bytesRef.current = 0
     startRef.current = performance.now()
-    setProgress({ bytes: 0, total: totalIncoming, speed: 0, file: 0 })
+    fileBytesRef.current = 0
+    setProgress({ bytes: 0, total: totalIncoming, speed: 0, file: 0, fileBytes: 0 })
     setPhase('receiving')
     sendCtrl({ t: 'accept' })
+    // Il percorso può cambiare dopo i primi secondi: lo si ricontrolla
+    if (pcRef.current) connectionRoute(pcRef.current).then((r) => r && setRoute(r))
   }
 
   const refuse = () => {
@@ -350,6 +366,18 @@ export default function HoplaReceiver() {
     }
   }
 
+  // Cestino: toglie il file dall'elenco; se era stato salvato nella cartella lo cancella anche da lì
+  const remove = async (item: Received) => {
+    if (item.saved && confirmDelete !== item.key) {
+      setConfirmDelete(item.key)
+      return
+    }
+    setConfirmDelete(null)
+    if (item.saved && item.dir) await item.dir.removeEntry(item.name).catch(() => {})
+    if (item.url) URL.revokeObjectURL(item.url)
+    setReceived((list) => list.filter((r) => r.key !== item.key))
+  }
+
   const restart = () => {
     setPhase('starting')
     setQr(null)
@@ -359,6 +387,9 @@ export default function HoplaReceiver() {
 
   const deviceName = t(`devices.${device}`)
   const percent = progress.total > 0 ? Math.min(100, Math.round((progress.bytes / progress.total) * 100)) : 0
+  const currentMeta = incoming[progress.file]
+  const filePercent = currentMeta?.size ? Math.min(100, Math.round((progress.fileBytes / currentMeta.size) * 100)) : 0
+  const slow = route === 'internet' && progress.speed > 0 && progress.speed < 300 * 1024 && progress.bytes > 2 * 1024 * 1024
   const showQr = phase === 'starting' || phase === 'waiting' || phase === 'connecting' || phase === 'failed' || phase === 'lost'
 
   return (
@@ -476,25 +507,48 @@ export default function HoplaReceiver() {
         </section>
       )}
 
+      {(phase === 'connected' || phase === 'receiving' || phase === 'asking') && route && (
+        <p className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-xs font-bold text-[var(--muted)] shadow-sm">
+          {route === 'local' ? <Wifi className="h-3.5 w-3.5 text-[#1d6b34]" aria-hidden="true" /> : <Globe className="h-3.5 w-3.5 text-[#7a5a14]" aria-hidden="true" />}
+          {route === 'local' ? t('routeLocal') : t('routeInternet')}
+        </p>
+      )}
+
       {phase === 'receiving' && (
-        <section className={`${card} space-y-3`} aria-labelledby="hopla-progress">
-          <h2 id="hopla-progress" className="flex items-center gap-2 text-xl font-extrabold text-[var(--ink)]">
-            <LoaderCircle className="h-5 w-5 animate-spin text-[var(--gold)]" aria-hidden="true" /> {t('receiving')}
-          </h2>
+        <section className={`${card} space-y-4`} aria-labelledby="hopla-progress">
+          <div className="flex items-end justify-between gap-3">
+            <h2 id="hopla-progress" className="flex items-center gap-2 text-xl font-extrabold text-[var(--ink)]">
+              <LoaderCircle className="h-5 w-5 animate-spin text-[var(--gold)]" aria-hidden="true" /> {t('receiving')}
+            </h2>
+            <span className="text-4xl font-extrabold tabular-nums text-[var(--ink)]" aria-hidden="true">
+              {percent}%
+            </span>
+          </div>
           <div className="h-3 overflow-hidden rounded-full bg-[var(--background)]" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={percent} aria-label={t('receiving')}>
             <div className="h-full rounded-full bg-[var(--gold)] transition-[width] duration-200" style={{ width: `${percent}%` }} />
           </div>
           <p className="flex flex-wrap justify-between gap-2 text-sm tabular-nums text-[var(--muted)]">
             <span>{t('progress', { done: formatBytes(progress.bytes, locale), total: formatBytes(progress.total, locale) })}</span>
             <span>
-              {t('fileOf', { n: Math.min(received.length + 1, incoming.length), count: incoming.length })}
+              {t('fileOf', { n: Math.min(progress.file + 1, incoming.length), count: incoming.length })}
               {progress.speed > 0 ? ` · ${t('speed', { speed: formatBytes(progress.speed, locale) })}` : ''}
             </span>
           </p>
+          {currentMeta && (
+            <div className="space-y-1.5 rounded-2xl bg-[var(--background)] p-3">
+              <p className="flex justify-between gap-3 text-sm">
+                <span className="truncate font-semibold text-[var(--ink)]">{currentMeta.name}</span>
+                <span className="shrink-0 font-bold tabular-nums text-[var(--ink)]">{filePercent}%</span>
+              </p>
+              <div className="h-1.5 overflow-hidden rounded-full bg-white" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={filePercent} aria-label={currentMeta.name}>
+                <div className="h-full rounded-full bg-[var(--ink)] transition-[width] duration-200" style={{ width: `${filePercent}%` }} />
+              </div>
+            </div>
+          )}
+          {slow && <p className="rounded-2xl bg-[#fff4e5] p-3 text-sm text-[#7a4a00]">{t('slowTip')}</p>}
           {folderName && <p className="text-sm text-[var(--muted)]">{t('savingIn', { folder: folderName })}</p>}
         </section>
       )}
-
 
       {received.length > 0 && (
         <section className={`${card} space-y-4`} aria-labelledby="hopla-received">
@@ -534,12 +588,32 @@ export default function HoplaReceiver() {
                       <span className="inline-flex items-center gap-1 font-bold text-[#1d6b34]">
                         <Check className="h-3.5 w-3.5" aria-hidden="true" /> {t('saved')}
                       </span>
-                    ) : item.url ? (
-                      <a href={item.url} download={item.name} className="inline-flex min-h-8 items-center gap-1 font-bold text-[#7a5a14] hover:underline">
-                        <Download className="h-3.5 w-3.5" aria-hidden="true" /> {t('download')}
-                      </a>
                     ) : null}
                   </p>
+                  {confirmDelete === item.key ? (
+                    <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
+                      <span className="font-semibold text-[#a12a2a]">{t('deleteConfirm')}</span>
+                      <button type="button" onClick={() => remove(item)} className="min-h-8 rounded-full bg-[#a12a2a] px-3 font-bold text-white">
+                        {t('deleteYes')}
+                      </button>
+                      <button type="button" onClick={() => setConfirmDelete(null)} className="min-h-8 rounded-full border border-[var(--gold)]/40 px-3 font-bold text-[var(--ink)]">
+                        {t('deleteNo')}
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-between gap-2 pt-1">
+                      {item.url && !item.saved ? (
+                        <a href={item.url} download={item.name} className="inline-flex min-h-9 items-center gap-1 text-xs font-bold text-[#7a5a14] hover:underline">
+                          <Download className="h-4 w-4" aria-hidden="true" /> {t('download')}
+                        </a>
+                      ) : (
+                        <span />
+                      )}
+                      <button type="button" onClick={() => remove(item)} className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--muted)] hover:bg-[#fdf2f2] hover:text-[#a12a2a]" aria-label={t('deleteAria', { name: item.name })} title={t('delete')}>
+                        <Trash2 className="h-4 w-4" aria-hidden="true" />
+                      </button>
+                    </div>
+                  )}
                 </div>
               </li>
             ))}
@@ -565,6 +639,36 @@ export default function HoplaReceiver() {
           </div>
         </div>
       </section>
+
+      <details className={`${card} group`}>
+        <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 text-base font-extrabold text-[var(--ink)]">
+          {t('infoTitle')}
+          <span className="text-xl text-[var(--gold)] transition-transform group-open:rotate-45" aria-hidden="true">
+            +
+          </span>
+        </summary>
+        <div className="mt-4 grid gap-5 md:grid-cols-2">
+          <dl className="space-y-3 text-sm">
+            {(['info1', 'info2', 'info3', 'info4'] as const).map((key) => (
+              <div key={key}>
+                <dt className="font-bold text-[var(--ink)]">{t(`${key}Title`)}</dt>
+                <dd className="text-[var(--muted)]">{t(key)}</dd>
+              </div>
+            ))}
+          </dl>
+          <div className="text-sm">
+            <p className="font-bold text-[var(--ink)]">{t('rulesTitle')}</p>
+            <ul className="mt-1.5 space-y-1.5 text-[var(--muted)]">
+              {(['rule1', 'rule2', 'rule3', 'rule4', 'rule5'] as const).map((key) => (
+                <li key={key}>• {t(key)}</li>
+              ))}
+            </ul>
+            <Link href="/terms" className="mt-3 inline-flex min-h-10 items-center font-bold text-[#7a5a14] hover:underline">
+              {t('termsLink')}
+            </Link>
+          </div>
+        </div>
+      </details>
     </div>
   )
 }

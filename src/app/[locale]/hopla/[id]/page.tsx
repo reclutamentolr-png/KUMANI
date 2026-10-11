@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
+import Link from '@/components/LocalizedLink'
 import Logo from '@/components/Logo'
 import HoplaSender from '@/components/hopla/HoplaSender'
 import { HOPLA_ID_RE } from '@/lib/hopla'
@@ -34,6 +35,12 @@ export default async function HoplaPhonePage({ params }: { params: Promise<{ id:
       <main className="mx-auto max-w-md px-4 py-6">
         <HoplaSender id={id} />
         <p className="mt-8 text-center text-xs leading-5 text-[var(--muted)]">{t('privacyText')}</p>
+        <p className="mt-2 text-center text-xs leading-5 text-[var(--muted)]">
+          {t('phoneTerms')}{' '}
+          <Link href="/terms" className="font-bold text-[#7a5a14] underline-offset-2 hover:underline">
+            {t('termsLink')}
+          </Link>
+        </p>
       </main>
     </div>
   )

@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: LocaleProps): Promise<Metadat
   return pageMetadata('/terms', { title: t('termsTitle'), description: t('termsDescription') })
 }
 
-const LAST_UPDATE = '4 ottobre 2026'
+const LAST_UPDATE = '11 ottobre 2026'
 
 export default async function TermsPage({ params }: LocaleProps) {
   setRequestLocale((await params).locale)
@@ -190,6 +190,21 @@ export default async function TermsPage({ params }: LocaleProps) {
                 avvengono sul dispositivo dell&apos;utente senza caricare la foto; solo se l&apos;utente lo sceglie, una copia ridotta e priva di
                 metadati viene inviata a un fornitore esterno di rilevamento per l&apos;analisi e non viene conservata dalla
                 Piattaforma. L&apos;utente deve caricare solo immagini che ha il diritto di usare.
+              </p>
+              <p>
+                <strong className="text-gray-900">Trasferimento dal telefono al computer (Hoplà).</strong> I file passano direttamente tra
+                i dispositivi dell&apos;utente, con un collegamento punto a punto cifrato (WebRTC con cifratura DTLS): non vengono caricati
+                né conservati sui server della Piattaforma o di altri fornitori e la Piattaforma non può vederne il contenuto. Per mettere
+                in contatto i due dispositivi vengono scambiati per pochi istanti soltanto dati tecnici di collegamento (come gli indirizzi
+                di rete dei dispositivi), tramite il fornitore di infrastruttura della Piattaforma e un servizio di rilevamento della rete;
+                questi dati non contengono i file. Il codice QR vale solo finché la pagina resta aperta sul computer e ogni invio va
+                confermato da chi riceve. L&apos;utente è l&apos;unico responsabile dei file che invia e riceve: deve avere il diritto di
+                usarli e condividerli e non può trasferire contenuti illeciti, violenti, pornografici, offensivi, programmi dannosi o file
+                che violano la riservatezza o i diritti di terzi. Hoplà non è un servizio di archiviazione né di backup: l&apos;utente
+                conserva sempre una copia dei propri file. Il trasferimento dipende dalla rete e dai dispositivi (per esempio cambiando
+                rete o con lo schermo spento può interrompersi) e non è garantito; la Piattaforma non risponde di invii interrotti o
+                incompleti, fatti salvi i diritti del consumatore previsti dalla legge. In caso di uso improprio la Piattaforma può
+                sospendere l&apos;accesso al servizio.
               </p>
               <p>
                 <strong className="text-gray-900">Eventi della community (KUMANI Events).</strong> Gli eventi sono organizzati dagli

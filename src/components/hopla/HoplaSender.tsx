@@ -24,7 +24,7 @@ import {
 
 type Phase = 'joining' | 'connecting' | 'ready' | 'waiting' | 'sending' | 'done' | 'refused' | 'expired' | 'busy' | 'failed' | 'lost'
 
-type WakeLock = { release: () => Promise<void> }
+type WakeLock = { release: () => Promise<void>; released?: boolean; addEventListener?: (type: 'release', cb: () => void) => void }
 type WakeNavigator = Navigator & { wakeLock?: { request: (type: 'screen') => Promise<WakeLock> } }
 
 const primary =
@@ -53,6 +53,9 @@ export default function HoplaSender({ id }: { id: string }) {
   const savedRef = useRef<{ last: number; resolve: (() => void) | null }>({ last: -1, resolve: null })
   const acceptRef = useRef<((ok: boolean) => void) | null>(null)
   const wakeRef = useRef<WakeLock | null>(null)
+  const sentRef = useRef(0)
+  // Schermo tenuto acceso: true sì, false il browser non lo permette, null non serve ora
+  const [awake, setAwake] = useState<boolean | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   const go = (next: Phase) => {
@@ -98,6 +101,8 @@ export default function HoplaSender({ id }: { id: string }) {
         if (e.candidate) signal({ kind: 'ice', peer, from: 'phone', candidate: e.candidate.toJSON() })
       }
       pc.onconnectionstatechange = () => {
+        // Solo il collegamento attuale: uno vecchio che muore dopo non deve toccare quello nuovo
+        if (pcRef.current !== pc) return
         if (pc.connectionState === 'failed') go(phaseRef.current === 'connecting' ? 'failed' : 'lost')
       }
       pc.ondatachannel = (e) => {
@@ -115,8 +120,8 @@ export default function HoplaSender({ id }: { id: string }) {
           if (msg) onCtrl(msg)
         }
         dc.onclose = () => {
-          if (!['done', 'refused', 'expired', 'busy', 'failed'].includes(phaseRef.current)) go('lost')
-          else if (phaseRef.current === 'done') go('lost')
+          if (dcRef.current !== dc) return
+          if (!['refused', 'expired', 'busy', 'failed'].includes(phaseRef.current)) go('lost')
         }
       }
       connectTimer = setTimeout(() => {
@@ -174,12 +179,50 @@ export default function HoplaSender({ id }: { id: string }) {
 
   // Con lo schermo spento o un'altra app davanti l'invio si ferma: lo diciamo
   useEffect(() => {
-    const onVisibility = () => setHidden(document.visibilityState === 'hidden')
+    const onVisibility = () => {
+      setHidden(document.visibilityState === 'hidden')
+      // Il blocco dello schermo si perde quando la pagina va in secondo piano: lo si riprende
+      if (document.visibilityState === 'visible' && (phaseRef.current === 'waiting' || phaseRef.current === 'sending')) keepAwake()
+    }
     document.addEventListener('visibilitychange', onVisibility)
     return () => document.removeEventListener('visibilitychange', onVisibility)
   }, [])
 
   const total = files.reduce((sum, f) => sum + f.size, 0)
+
+  // Tiene acceso lo schermo durante l'invio. Va chiesto subito al tocco su «Invia»:
+  // più tardi il browser può non concederlo.
+  function keepAwake() {
+    const api = (navigator as WakeNavigator).wakeLock
+    if (!api) {
+      setAwake(false)
+      return
+    }
+    if (wakeRef.current && !wakeRef.current.released) return
+    api
+      .request('screen')
+      .then((lock) => {
+        wakeRef.current = lock
+        setAwake(true)
+        lock.addEventListener?.('release', () => {
+          if (wakeRef.current === lock) setAwake(document.visibilityState === 'visible' ? false : null)
+        })
+      })
+      .catch(() => setAwake(false))
+  }
+
+  function letSleep() {
+    wakeRef.current?.release().catch(() => {})
+    wakeRef.current = null
+    setAwake(null)
+  }
+
+  // Avanzamento 4 volte al secondo (non a ogni pezzo: sui telefoni lenti pesa)
+  useEffect(() => {
+    if (phase !== 'sending') return
+    const timer = setInterval(() => setSentBytes(sentRef.current), 250)
+    return () => clearInterval(timer)
+  }, [phase])
 
   const addFiles = (list: FileList | null) => {
     if (!list?.length) return
@@ -192,6 +235,7 @@ export default function HoplaSender({ id }: { id: string }) {
   const sendAll = async () => {
     const dc = dcRef.current
     if (!dc || dc.readyState !== 'open' || !files.length) return
+    keepAwake()
     go('waiting')
     setSentBytes(0)
     setSentFiles(0)
@@ -201,17 +245,15 @@ export default function HoplaSender({ id }: { id: string }) {
     })
     acceptRef.current = null
     if (!ok) {
+      letSleep()
       go('refused')
       return
     }
+    sentRef.current = 0
     go('sending')
-    try {
-      wakeRef.current = (await (navigator as WakeNavigator).wakeLock?.request('screen')) ?? null
-    } catch {
-      wakeRef.current = null
-    }
+    keepAwake()
     const maxSize = pcRef.current?.sctp?.maxMessageSize
-    const chunk = maxSize ? Math.min(HOPLA_CHUNK, maxSize) : HOPLA_CHUNK
+    const chunk = maxSize ? Math.min(HOPLA_CHUNK, maxSize) : 64 * 1024
     const allSaved = new Promise<void>((resolve) => {
       savedRef.current = { last: files.length - 1, resolve }
     })
@@ -225,24 +267,29 @@ export default function HoplaSender({ id }: { id: string }) {
           const buffer = await file.slice(offset, offset + chunk).arrayBuffer()
           dc.send(buffer)
           sent += buffer.byteLength
-          setSentBytes(sent)
+          sentRef.current = sent
         }
         sendCtrl({ t: 'end', i })
       }
+      setSentBytes(sent)
       await allSaved
       sendCtrl({ t: 'done' })
       go('done')
     } catch {
       go('lost')
     } finally {
-      wakeRef.current?.release().catch(() => {})
-      wakeRef.current = null
+      letSleep()
     }
   }
 
   const retry = () => {
+    // Il vecchio collegamento si chiude davvero prima di aprirne uno nuovo
+    const oldDc = dcRef.current
+    const oldPc = pcRef.current
     dcRef.current = null
     pcRef.current = null
+    oldDc?.close()
+    oldPc?.close()
     go('joining')
     setAttempt((n) => n + 1)
   }
@@ -329,7 +376,13 @@ export default function HoplaSender({ id }: { id: string }) {
               <p className="text-center text-sm font-bold text-[var(--ink)]">
                 {percent}% · {t('progress', { done: formatBytes(sentBytes, locale), total: formatBytes(total, locale) })}
               </p>
-              <p className="rounded-2xl bg-[#fff4e5] p-3 text-center text-sm font-semibold text-[#7a4a00]">{hidden ? t('phoneHidden') : t('phoneSending')}</p>
+              {hidden || awake === false ? (
+                <p className="rounded-2xl bg-[#fff4e5] p-3 text-center text-sm font-semibold text-[#7a4a00]">{hidden ? t('phoneHidden') : t('phoneNoWake')}</p>
+              ) : (
+                <p className="flex items-center justify-center gap-2 rounded-2xl bg-[#e6f4ea] p-3 text-center text-sm font-semibold text-[#1d6b34]">
+                  <Check className="h-4 w-4 shrink-0" aria-hidden="true" /> {awake ? t('phoneAwake') : t('phoneSending')}
+                </p>
+              )}
             </section>
           )}
         </>

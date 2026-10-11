@@ -6,9 +6,11 @@
 // se il collegamento diretto non riesce si chiede la stessa Wi-Fi.
 export const HOPLA_ICE: RTCIceServer[] = [{ urls: 'stun:stun.cloudflare.com:3478' }]
 
-export const HOPLA_CHUNK = 64 * 1024
+// Pezzi da 256 KB (o il massimo che accetta chi riceve): meno pezzi, invio più fluido
+export const HOPLA_CHUNK = 256 * 1024
+// Coda massima 8 MB: Chrome chiude il canale se si superano 16 MB in attesa
 export const HOPLA_HIGH_WATER = 8 * 1024 * 1024
-export const HOPLA_LOW_WATER = 1024 * 1024
+export const HOPLA_LOW_WATER = 2 * 1024 * 1024
 // Senza cartella (file tenuti in memoria) oltre questa soglia si avvisa
 export const HOPLA_MEMORY_WARN = 1.5 * 1024 * 1024 * 1024
 // Tempo massimo per collegarsi dopo che il telefono si è presentato
@@ -84,6 +86,63 @@ export function formatBytes(bytes: number, locale: string): string {
     unit++
   }
   return new Intl.NumberFormat(locale, { style: 'unit', unit: units[unit], unitDisplay: 'short', maximumFractionDigits: unit >= 2 ? 1 : 0 }).format(value)
+}
+
+// Tipo di collegamento scelto: stessa rete (indirizzi locali) o via internet
+export type HoplaRoute = 'local' | 'internet' | null
+
+// Indirizzo di una rete privata (casa, ufficio) o nome locale nascosto (.local)
+function isPrivateAddress(address: string | undefined): boolean {
+  if (!address) return false
+  const a = address.toLowerCase()
+  return (
+    a.endsWith('.local') ||
+    /^10\./.test(a) ||
+    /^192\.168\./.test(a) ||
+    /^172\.(1[6-9]|2\d|3[01])\./.test(a) ||
+    /^169\.254\./.test(a) ||
+    /^f[cd][0-9a-f]{2}:/.test(a) ||
+    /^fe80:/.test(a)
+  )
+}
+
+async function readRoute(pc: RTCPeerConnection): Promise<HoplaRoute> {
+  const stats = await pc.getStats()
+  let pairId: string | undefined
+  stats.forEach((r) => {
+    if (r.type === 'transport' && r.selectedCandidatePairId) pairId = r.selectedCandidatePairId
+  })
+  let pair: { localCandidateId?: string; remoteCandidateId?: string } | undefined
+  stats.forEach((r) => {
+    if (r.type !== 'candidate-pair') return
+    if ((pairId && r.id === pairId) || (!pairId && r.state === 'succeeded' && r.nominated)) pair = r
+  })
+  if (!pair?.remoteCandidateId) return null
+  const remote = stats.get(pair.remoteCandidateId) as { candidateType?: string; address?: string; ip?: string } | undefined
+  if (!remote) return null
+  // In rete locale l'altro dispositivo si presenta con il suo indirizzo privato
+  if (remote.candidateType === 'host') return 'local'
+  if (remote.candidateType === 'prflx') {
+    const address = remote.address || remote.ip
+    // Indirizzo non ancora noto (arriva un attimo dopo): si riprova
+    if (!address) return null
+    return isPrivateAddress(address) ? 'local' : 'internet'
+  }
+  return remote.candidateType ? 'internet' : null
+}
+
+export async function connectionRoute(pc: RTCPeerConnection): Promise<HoplaRoute> {
+  // Subito dopo il collegamento le statistiche possono non essere complete: si riprova per qualche secondo
+  for (let attempt = 0; attempt < 6; attempt++) {
+    try {
+      const route = await readRoute(pc)
+      if (route) return route
+    } catch {
+      return null
+    }
+    await new Promise((r) => setTimeout(r, 800))
+  }
+  return null
 }
 
 export function parseCtrl(data: string): HoplaCtrl | null {
