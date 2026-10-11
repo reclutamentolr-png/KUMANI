@@ -8480,7 +8480,10 @@
     "duplicateSubStaffTitle": "Abbonamento doppio rimborsato",
     "duplicateSubStaffBody": "{email} aveva pagato due abbonamenti: il secondo ({amount}) è stato chiuso e rimborsato in automatico.",
     "quoteDuplicateTitle": "Preventivo n. {number} pagato due volte",
-    "quoteDuplicateBody": "Il cliente ha pagato una seconda volta ({amount}): il pagamento in più è stato rimborsato in automatico dal tuo conto Stripe."
+    "quoteDuplicateBody": "Il cliente ha pagato una seconda volta ({amount}): il pagamento in più è stato rimborsato in automatico dal tuo conto Stripe.",
+    "clientiTitle": "Clienti e Lavori: oggi",
+    "clientiSteps": "{count, plural, one {# cliente da sentire} other {# clienti da sentire}}",
+    "clientiCollect": "{count, plural, one {# lavoro consegnato da incassare} other {# lavori consegnati da incassare}}"
   },
   "pushInvite": {
     "title": "Attiva le notifiche",
@@ -10426,7 +10429,8 @@
     "wellnessFocusHint": "Finisci una sessione di concentrazione (saltarla non vale).",
     "wellnessMindHint": "Salva o condividi un disegno di Mandala, oppure ascolta NeuroBalance per 10 minuti.",
     "wellnessStepDone": "Fatto oggi ✓",
-    "wellnessOpen": "Apri {tool}"
+    "wellnessOpen": "Apri {tool}",
+    "receiptFromPaymentBanner": "Ricevuta del pagamento registrato in Clienti e Lavori ({name})."
   },
   "businessProfile": {
     "title": "Scheda attività",
@@ -11954,6 +11958,68 @@
       "starts": "Inizia oggi",
       "delivery": "Consegna oggi",
       "deliveryLate": "{days, plural, one {Consegna in ritardo di # giorno} other {Consegna in ritardo di # giorni}}"
+    },
+    "extras": {
+      "stamps": "Kumi Card {business}: {stamps} timbri",
+      "ordersTitle": "Ordini dello Shop",
+      "ordersTotal": "Speso: {amount}",
+      "orderNumber": "Ordine n. {number}",
+      "status": {
+        "pending": "in attesa di pagamento",
+        "paid": "pagato",
+        "ready": "pronto",
+        "shipped": "spedito",
+        "delivered": "consegnato",
+        "cancelled": "annullato"
+      },
+      "ordersHint": "Gli ordini pagati online si collegano da soli al cliente; non entrano nei conti dei lavori."
+    },
+    "import": {
+      "open": "Importa clienti",
+      "title": "Importa clienti",
+      "text": "Scegli chi trasformare in cliente. Chi è già tra i tuoi clienti (stesso nome, telefono o email) non si importa due volte.",
+      "sourceLabel": "Da dove importare",
+      "sources": {
+        "kumi": "Kumi Card",
+        "memolife": "Rubrica di MemoLife"
+      },
+      "loading": "Caricamento",
+      "empty": {
+        "kumi": "Nessun cliente con nome sulle tue Kumi Card.",
+        "memolife": "Nessun contatto nella Rubrica di MemoLife."
+      },
+      "selectAll": "Seleziona tutti ({count})",
+      "already": "già tra i clienti",
+      "done": "{count, plural, =0 {Nessun cliente nuovo importato.} one {Importato # cliente.} other {Importati # clienti.}}",
+      "run": "{count, plural, =0 {Importa} other {Importa (#)}}",
+      "close": "Chiudi"
+    },
+    "receipt": {
+      "object": "Pagamento ricevuto",
+      "objectJob": "Pagamento per «{title}»",
+      "open": "Apri la ricevuta",
+      "make": "Fai la ricevuta"
+    },
+    "export": {
+      "title": "Per il commercialista",
+      "text": "Scarica i dati in file CSV, che si aprono con Excel.",
+      "kinds": {
+        "clients": "Clienti",
+        "jobs": "Lavori",
+        "payments": "Pagamenti",
+        "time": "Ore"
+      },
+      "file": {
+        "clients": "clienti",
+        "jobs": "lavori",
+        "payments": "pagamenti",
+        "time": "ore"
+      },
+      "client": "Cliente",
+      "deliveredOn": "Consegnato il",
+      "jobOrQuote": "Lavoro o preventivo",
+      "start": "Inizio",
+      "end": "Fine"
     }
   }
 }

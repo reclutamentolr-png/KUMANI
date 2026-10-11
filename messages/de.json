@@ -8480,7 +8480,10 @@
     "duplicateSubStaffTitle": "Doppeltes Abo erstattet",
     "duplicateSubStaffBody": "{email} hatte zwei Abos bezahlt: Das zweite ({amount}) wurde automatisch beendet und erstattet.",
     "quoteDuplicateTitle": "Angebot Nr. {number} zweimal bezahlt",
-    "quoteDuplicateBody": "Der Kunde hat ein zweites Mal bezahlt ({amount}): Die zusätzliche Zahlung wurde automatisch von deinem Stripe-Konto erstattet."
+    "quoteDuplicateBody": "Der Kunde hat ein zweites Mal bezahlt ({amount}): Die zusätzliche Zahlung wurde automatisch von deinem Stripe-Konto erstattet.",
+    "clientiTitle": "Kunden & Aufträge: heute",
+    "clientiSteps": "{count, plural, one {# Kunde zu kontaktieren} other {# Kunden zu kontaktieren}}",
+    "clientiCollect": "{count, plural, one {# übergebener Auftrag offen} other {# übergebene Aufträge offen}}"
   },
   "pushInvite": {
     "title": "Benachrichtigungen aktivieren",
@@ -10426,7 +10429,8 @@
     "wellnessFocusHint": "Beende eine Konzentrationsphase (Überspringen zählt nicht).",
     "wellnessMindHint": "Speichere oder teile ein Mandala-Bild oder höre 10 Minuten NeuroBalance.",
     "wellnessStepDone": "Heute erledigt ✓",
-    "wellnessOpen": "{tool} öffnen"
+    "wellnessOpen": "{tool} öffnen",
+    "receiptFromPaymentBanner": "Beleg für die in Kunden & Aufträge erfasste Zahlung ({name})."
   },
   "businessProfile": {
     "title": "Firmenprofil",
@@ -11954,6 +11958,68 @@
       "starts": "Beginnt heute",
       "delivery": "Übergabe heute",
       "deliveryLate": "{days, plural, one {Übergabe # Tag überfällig} other {Übergabe # Tage überfällig}}"
+    },
+    "extras": {
+      "stamps": "Kumi Card {business}: {stamps} Stempel",
+      "ordersTitle": "Shop-Bestellungen",
+      "ordersTotal": "Ausgegeben: {amount}",
+      "orderNumber": "Bestellung Nr. {number}",
+      "status": {
+        "pending": "wartet auf Zahlung",
+        "paid": "bezahlt",
+        "ready": "bereit",
+        "shipped": "versandt",
+        "delivered": "zugestellt",
+        "cancelled": "storniert"
+      },
+      "ordersHint": "Online bezahlte Bestellungen werden automatisch dem Kunden zugeordnet; sie zählen nicht im Konto der Aufträge."
+    },
+    "import": {
+      "open": "Kunden importieren",
+      "title": "Kunden importieren",
+      "text": "Wähle, wer Kunde werden soll. Wer schon zu deinen Kunden gehört (gleicher Name, Telefon oder E-Mail), wird nicht doppelt importiert.",
+      "sourceLabel": "Importieren aus",
+      "sources": {
+        "kumi": "Kumi Card",
+        "memolife": "MemoLife-Adressbuch"
+      },
+      "loading": "Wird geladen",
+      "empty": {
+        "kumi": "Keine Kunden mit Namen auf deinen Kumi Cards.",
+        "memolife": "Keine Kontakte im MemoLife-Adressbuch."
+      },
+      "selectAll": "Alle auswählen ({count})",
+      "already": "bereits Kunde",
+      "done": "{count, plural, =0 {Keine neuen Kunden importiert.} one {# Kunde importiert.} other {# Kunden importiert.}}",
+      "run": "{count, plural, =0 {Importieren} other {Importieren (#)}}",
+      "close": "Schließen"
+    },
+    "receipt": {
+      "object": "Zahlung erhalten",
+      "objectJob": "Zahlung für „{title}“",
+      "open": "Beleg öffnen",
+      "make": "Beleg erstellen"
+    },
+    "export": {
+      "title": "Für die Buchhaltung",
+      "text": "Lade deine Daten als CSV-Dateien herunter, die sich mit Excel öffnen.",
+      "kinds": {
+        "clients": "Kunden",
+        "jobs": "Aufträge",
+        "payments": "Zahlungen",
+        "time": "Stunden"
+      },
+      "file": {
+        "clients": "kunden",
+        "jobs": "auftraege",
+        "payments": "zahlungen",
+        "time": "stunden"
+      },
+      "client": "Kunde",
+      "deliveredOn": "Übergeben am",
+      "jobOrQuote": "Auftrag oder Angebot",
+      "start": "Beginn",
+      "end": "Ende"
     }
   }
 }

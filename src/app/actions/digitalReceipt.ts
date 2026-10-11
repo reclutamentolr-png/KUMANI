@@ -59,7 +59,9 @@ async function closeLinkedLifeCalendarItem(
 
 export async function createReceipt(
   form: DigitalReceiptFormData,
-  photoPath: string | null
+  photoPath: string | null,
+  // Clienti e Lavori: pagamento registrato a cui collegare la ricevuta
+  paymentId?: string | null
 ): Promise<ActionResult<{ id: string; code: string }>> {
   const gate = await requireActiveDigitalReceiptAccess()
   if (!gate.ok) return { success: false, message: gate.message }
@@ -141,6 +143,9 @@ export async function createReceipt(
 
     if (!error && data) {
       await awardToolPoint('digital-receipt')
+      if (paymentId && /^[0-9a-f-]{36}$/i.test(paymentId)) {
+        await supabase.from('client_payments').update({ receipt_id: data.id }).eq('id', paymentId).eq('user_id', gate.userId).is('receipt_id', null)
+      }
       return { success: true, data: { id: data.id, code: data.code } }
     }
 

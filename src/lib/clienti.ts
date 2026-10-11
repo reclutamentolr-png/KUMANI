@@ -164,6 +164,7 @@ export interface ClientPayment {
   paid_on: string
   method: PaymentMethod
   note: string | null
+  receipt_id: string | null
 }
 
 export interface JobFormData {
@@ -272,3 +273,34 @@ export interface TodayData {
   lateDue: { id: string; title: string; clientName: string; due: string }[]
   openJobs: number
 }
+
+// Fase 5: ordini dello Shop, timbri Kumi Card e importazione di clienti
+export interface ClientShopOrder {
+  id: string
+  number: number
+  status: string
+  total: number
+  created_at: string
+}
+
+export interface ClientStamps {
+  business: string
+  stamps: number
+  total: number
+}
+
+export const IMPORT_SOURCES = ['kumi', 'memolife'] as const
+export type ImportSource = (typeof IMPORT_SOURCES)[number]
+
+export interface ImportCandidate {
+  id: string
+  name: string
+  phone: string | null
+  email: string | null
+  detail: string | null
+  already: boolean
+}
+
+// Esportazione per il commercialista
+export const EXPORT_KINDS = ['clients', 'jobs', 'payments', 'time'] as const
+export type ExportKind = (typeof EXPORT_KINDS)[number]

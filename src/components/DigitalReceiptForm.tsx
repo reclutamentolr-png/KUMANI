@@ -66,7 +66,10 @@ function defaultForm(): DigitalReceiptFormData {
 export default function DigitalReceiptForm({
   initialData,
   savedClients = [],
+  paymentId,
 }: {
+  // Clienti e Lavori: la ricevuta nasce da un pagamento registrato
+  paymentId?: string
   // Campi già compilati (es. dal preventivo); gli altri restano quelli di default
   initialData?: Partial<DigitalReceiptFormData>
   // Nomi dei clienti salvati nei Preventivi, suggeriti nel campo destinatario
@@ -130,7 +133,7 @@ export default function DigitalReceiptForm({
     setSaving(true)
     setError(null)
     try {
-      const result = await createReceipt(form, photoPath)
+      const result = await createReceipt(form, photoPath, paymentId)
       if (!result.success) {
         setError(result.message)
         setSaving(false)

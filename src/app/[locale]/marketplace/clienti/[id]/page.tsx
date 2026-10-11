@@ -3,7 +3,7 @@ import { getTranslations } from 'next-intl/server'
 import { ArrowLeft, BookUser } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import ClienteCard from '@/components/clienti/ClienteCard'
-import { getClientCard } from '@/app/actions/clienti'
+import { getClientCard, getClientExtras } from '@/app/actions/clienti'
 import { createClient } from '@/lib/supabase/server'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { toolMetadata } from '@/lib/toolMetadata'
@@ -21,7 +21,11 @@ export default async function ClientePage({ params }: { params: Promise<{ locale
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  const canQuote = user ? await hasActiveToolAccess(supabase, user.id, 'preventivi') : false
+  const [canQuote, canReceipt, extras] = await Promise.all([
+    user ? hasActiveToolAccess(supabase, user.id, 'preventivi') : Promise.resolve(false),
+    user ? hasActiveToolAccess(supabase, user.id, 'digital-receipt') : Promise.resolve(false),
+    getClientExtras(id, data.client.phone),
+  ])
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -39,7 +43,7 @@ export default async function ClientePage({ params }: { params: Promise<{ locale
       </header>
 
       <main className="mx-auto max-w-3xl px-4 py-8">
-        <ClienteCard client={data.client} quotes={data.quotes} jobs={data.jobs} payments={data.payments} canQuote={canQuote} />
+        <ClienteCard client={data.client} quotes={data.quotes} jobs={data.jobs} payments={data.payments} canQuote={canQuote} orders={extras.orders} stamps={extras.stamps} canReceipt={canReceipt} />
       </main>
     </div>
   )

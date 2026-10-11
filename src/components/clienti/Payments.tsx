@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { LoaderCircle, Plus, Trash2 } from 'lucide-react'
+import { FileCheck2, LoaderCircle, Plus, Trash2 } from 'lucide-react'
+import Link from '@/components/LocalizedLink'
 import { askConfirm } from '@/lib/confirm'
 import { addPayment, deletePayment } from '@/app/actions/clienti'
 import { CLIENT_LIMITS, PAYMENT_METHODS, formatEur, romeToday, type ClientJob, type ClientPayment, type ClientQuote, type PaymentFormData } from '@/lib/clienti'
@@ -19,8 +20,10 @@ export default function Payments({
   jobs,
   fixedJobId,
   suggestedAmount,
+  canReceipt = false,
   onChange,
 }: {
+  canReceipt?: boolean
   clientId: string
   payments: ClientPayment[]
   onlineQuotes: ClientQuote[]
@@ -86,6 +89,25 @@ export default function Payments({
               </span>
               <span className="flex shrink-0 items-center gap-1">
                 <span className="font-extrabold text-[#1d6b34]">{formatEur(r.amount, locale)}</span>
+                {r.payment?.receipt_id ? (
+                  <Link
+                    href={`/marketplace/digital-receipt/${r.payment.receipt_id}`}
+                    aria-label={t('receipt.open')}
+                    title={t('receipt.open')}
+                    className="flex h-10 w-10 items-center justify-center rounded-full text-[#1d6b34] hover:bg-[#e7f4ea]"
+                  >
+                    <FileCheck2 className="h-4 w-4" />
+                  </Link>
+                ) : r.payment && canReceipt ? (
+                  <Link
+                    href={`/marketplace/digital-receipt/new?fromPayment=${r.payment.id}`}
+                    aria-label={t('receipt.make')}
+                    title={t('receipt.make')}
+                    className="flex h-10 w-10 items-center justify-center rounded-full text-[var(--muted)] hover:bg-[var(--gold-pale)] hover:text-[var(--ink)]"
+                  >
+                    <FileCheck2 className="h-4 w-4" />
+                  </Link>
+                ) : null}
                 {r.payment && (
                   <button
                     type="button"

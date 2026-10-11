@@ -8480,7 +8480,10 @@
     "duplicateSubStaffTitle": "Duplicate subscription refunded",
     "duplicateSubStaffBody": "{email} had paid for two subscriptions: the second one ({amount}) was closed and refunded automatically.",
     "quoteDuplicateTitle": "Quote no. {number} paid twice",
-    "quoteDuplicateBody": "The customer paid a second time ({amount}): the extra payment was refunded automatically from your Stripe account."
+    "quoteDuplicateBody": "The customer paid a second time ({amount}): the extra payment was refunded automatically from your Stripe account.",
+    "clientiTitle": "Clients & Jobs: today",
+    "clientiSteps": "{count, plural, one {# client to contact} other {# clients to contact}}",
+    "clientiCollect": "{count, plural, one {# delivered job to collect} other {# delivered jobs to collect}}"
   },
   "pushInvite": {
     "title": "Turn on notifications",
@@ -10426,7 +10429,8 @@
     "wellnessFocusHint": "Finish a focus session (skipping it does not count).",
     "wellnessMindHint": "Save or share a Mandala drawing, or listen to NeuroBalance for 10 minutes.",
     "wellnessStepDone": "Done today ✓",
-    "wellnessOpen": "Open {tool}"
+    "wellnessOpen": "Open {tool}",
+    "receiptFromPaymentBanner": "Receipt for the payment recorded in Clients & Jobs ({name})."
   },
   "businessProfile": {
     "title": "Business profile",
@@ -11954,6 +11958,68 @@
       "starts": "Starts today",
       "delivery": "Delivery today",
       "deliveryLate": "{days, plural, one {Delivery # day late} other {Delivery # days late}}"
+    },
+    "extras": {
+      "stamps": "Kumi Card {business}: {stamps} stamps",
+      "ordersTitle": "Shop orders",
+      "ordersTotal": "Spent: {amount}",
+      "orderNumber": "Order no. {number}",
+      "status": {
+        "pending": "awaiting payment",
+        "paid": "paid",
+        "ready": "ready",
+        "shipped": "shipped",
+        "delivered": "delivered",
+        "cancelled": "cancelled"
+      },
+      "ordersHint": "Orders paid online link to the client automatically; they don’t count in the job accounts."
+    },
+    "import": {
+      "open": "Import clients",
+      "title": "Import clients",
+      "text": "Choose who to turn into a client. Anyone already among your clients (same name, phone or email) isn’t imported twice.",
+      "sourceLabel": "Import from",
+      "sources": {
+        "kumi": "Kumi Card",
+        "memolife": "MemoLife contacts"
+      },
+      "loading": "Loading",
+      "empty": {
+        "kumi": "No customers with a name on your Kumi Cards.",
+        "memolife": "No contacts in MemoLife."
+      },
+      "selectAll": "Select all ({count})",
+      "already": "already a client",
+      "done": "{count, plural, =0 {No new clients imported.} one {# client imported.} other {# clients imported.}}",
+      "run": "{count, plural, =0 {Import} other {Import (#)}}",
+      "close": "Close"
+    },
+    "receipt": {
+      "object": "Payment received",
+      "objectJob": "Payment for “{title}”",
+      "open": "Open the receipt",
+      "make": "Make the receipt"
+    },
+    "export": {
+      "title": "For your accountant",
+      "text": "Download your data as CSV files that open in Excel.",
+      "kinds": {
+        "clients": "Clients",
+        "jobs": "Jobs",
+        "payments": "Payments",
+        "time": "Hours"
+      },
+      "file": {
+        "clients": "clients",
+        "jobs": "jobs",
+        "payments": "payments",
+        "time": "hours"
+      },
+      "client": "Client",
+      "deliveredOn": "Delivered on",
+      "jobOrQuote": "Job or quote",
+      "start": "Start",
+      "end": "End"
     }
   }
 }

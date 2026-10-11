@@ -8,6 +8,8 @@ import { fixedExpenseDueDate, type SpendlyFixedExpense } from '@/lib/spendly'
 // - FinCheck: invito a rifare il test 3 mesi dopo l'ultimo;
 // - scadenze di Garage e di Life Calendar (anche KUMANI Casa);
 // - bollette di Spendly non pagate (3 giorni prima e il giorno stesso).
+// - Clienti e Lavori: quanti clienti sentire oggi e quanti lavori consegnati
+//   aspettano il saldo (una volta al giorno, solo con il servizio nel piano).
 // Ogni promemoria parte una volta sola (push_log). Per tutti nel Centro
 // avvisi; sul telefono per chi ha attivato le notifiche.
 
@@ -270,5 +272,56 @@ export async function GET(request: Request) {
     }
   }
 
-  return NextResponse.json({ expiry, events, fincheck, garage, lifeCalendar, bills })
+  // Clienti e Lavori: riepilogo del mattino
+  let clienti = 0
+  const summary = new Map<string, { steps: number; collect: number }>()
+  const bump = (userId: string, key: 'steps' | 'collect') => {
+    const row = summary.get(userId) ?? { steps: 0, collect: 0 }
+    row[key]++
+    summary.set(userId, row)
+  }
+  for (let from = 0; ; from += 1000) {
+    const { data: steps } = await db.from('quote_clients').select('id, user_id').not('next_step', 'is', null).lte('next_step_due', today).order('id').range(from, from + 999)
+    for (const row of steps ?? []) bump(row.user_id as string, 'steps')
+    if (!steps || steps.length < 1000) break
+  }
+  // Lavori consegnati con un saldo ancora aperto (prezzo − pagamenti, come in «Oggi»)
+  for (let from = 0; ; from += 1000) {
+    const { data: done } = await db.from('client_jobs').select('id, user_id, amount, quote_id').eq('stage', 'done').order('id').range(from, from + 999)
+    if (done?.length) {
+      const jobIds = done.map((j) => j.id as string)
+      const quoteIds = done.map((j) => j.quote_id as string | null).filter((id): id is string => !!id)
+      const [{ data: pays }, { data: quotes }] = await Promise.all([
+        db.from('client_payments').select('job_id, amount').in('job_id', jobIds),
+        quoteIds.length ? db.from('quotes').select('id, total, vat_mode, vat_rate, payment_status, paid_amount').in('id', quoteIds) : Promise.resolve({ data: [] }),
+      ])
+      for (const job of done) {
+        const quote = (quotes ?? []).find((q) => q.id === job.quote_id)
+        const gross = quote ? Number(quote.total) * (quote.vat_mode === 'plus' && Number(quote.vat_rate) > 0 ? 1 + Number(quote.vat_rate) / 100 : 1) : null
+        const price = job.amount !== null ? Number(job.amount) : gross
+        if (price === null) continue
+        const paid = (pays ?? []).filter((p) => p.job_id === job.id).reduce((sum, p) => sum + Number(p.amount), 0) + (quote?.payment_status === 'paid' ? Number(quote.paid_amount) : 0)
+        if (price - paid > 0.009) bump(job.user_id as string, 'collect')
+      }
+    }
+    if (!done || done.length < 1000) break
+  }
+  for (const [userId, counts] of summary) {
+    const { data: access } = await db.rpc('tool_access', { p_user_id: userId, p_tool: 'clienti' }).maybeSingle<{ allowed: boolean }>()
+    if (!access?.allowed) continue
+    await notifyUser(
+      userId,
+      'expiry',
+      (t, locale) => ({
+        title: t('clientiTitle'),
+        body: [counts.steps ? t('clientiSteps', { count: counts.steps }) : null, counts.collect ? t('clientiCollect', { count: counts.collect }) : null].filter(Boolean).join(' · '),
+        url: localizedPath(locale, '/marketplace/clienti'),
+        tag: 'clienti-today',
+      }),
+      { kind: 'clienti_today', ref: today }
+    )
+    clienti++
+  }
+
+  return NextResponse.json({ expiry, events, fincheck, garage, lifeCalendar, bills, clienti })
 }

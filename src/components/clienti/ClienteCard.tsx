@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { Check, FilePlus2, Hammer, LoaderCircle, Mail, MessageCircle, Pencil, Phone, Trash2 } from 'lucide-react'
+import { Check, FilePlus2, Hammer, LoaderCircle, Mail, MessageCircle, Pencil, Phone, ShoppingBag, Stamp, Trash2 } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { useLocalizedRouter as useRouter } from '@/lib/useLocalizedRouter'
 import { askConfirm } from '@/lib/confirm'
@@ -21,6 +21,8 @@ import {
   type ClientQuote,
   type JobFormData,
   type ClientRecord,
+  type ClientShopOrder,
+  type ClientStamps,
 } from '@/lib/clienti'
 import ClientForm, { inputClass } from './ClientForm'
 import JobForm from './JobForm'
@@ -36,12 +38,18 @@ export default function ClienteCard({
   jobs,
   payments: initialPayments,
   canQuote,
+  orders,
+  stamps,
+  canReceipt,
 }: {
+  canReceipt: boolean
   client: ClientRecord
   quotes: ClientQuote[]
   jobs: ClientJob[]
   payments: ClientPayment[]
   canQuote: boolean
+  orders: ClientShopOrder[]
+  stamps: ClientStamps[]
 }) {
   const t = useTranslations('clienti')
   const locale = useLocale()
@@ -133,6 +141,16 @@ export default function ClienteCard({
       <div>
         <h2 className="break-words text-3xl font-bold text-[var(--ink)]">{client.name}</h2>
         {subtitle && <p className="mt-1 text-sm text-[var(--muted)]">{subtitle}</p>}
+        {stamps.length > 0 && (
+          <p className="mt-2 flex flex-wrap gap-2">
+            {stamps.map((s, i) => (
+              <span key={i} className="inline-flex items-center gap-1.5 rounded-full bg-[var(--gold-pale)] px-3 py-1 text-xs font-bold text-[#7a5a14]">
+                <Stamp className="h-3.5 w-3.5" aria-hidden="true" />
+                {t('extras.stamps', { business: s.business, stamps: s.stamps, total: s.total })}
+              </span>
+            ))}
+          </p>
+        )}
       </div>
 
       {(client.phone || client.email) && (
@@ -247,6 +265,7 @@ export default function ClienteCard({
           onlineQuotes={quotes.filter((q) => q.paid_amount > 0)}
           jobs={jobs}
           suggestedAmount={owed}
+          canReceipt={canReceipt}
           onChange={(next) => {
             setPayments(next)
             router.refresh()
@@ -358,6 +377,36 @@ export default function ClienteCard({
           </ul>
         )}
       </section>
+
+      {orders.length > 0 && (
+        <section className={card}>
+          <div className="flex flex-wrap items-baseline justify-between gap-3">
+            <h3 className="flex items-center gap-2 text-base font-extrabold text-[var(--ink)]">
+              <ShoppingBag className="h-4 w-4 text-[var(--gold)]" aria-hidden="true" />
+              {t('extras.ordersTitle')}
+            </h3>
+            <span className="text-sm font-semibold text-[var(--muted)]">
+              {t('extras.ordersTotal', { amount: formatEur(orders.filter((o) => o.status !== 'cancelled').reduce((s, o) => s + o.total, 0), locale) })}
+            </span>
+          </div>
+          <ul className="mt-2 divide-y divide-[var(--gold)]/15">
+            {orders.map((o) => (
+              <li key={o.id}>
+                <Link href="/marketplace/shop?tab=orders" className="flex items-center justify-between gap-3 py-3 hover:text-[#8a6a1f]">
+                  <span className="min-w-0">
+                    <span className="block font-bold text-[var(--ink)]">{t('extras.orderNumber', { number: o.number })}</span>
+                    <span className="block text-sm text-[var(--muted)]">
+                      {new Date(o.created_at).toLocaleDateString(locale, { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Europe/Rome' })} · {t(`extras.status.${o.status}`)}
+                    </span>
+                  </span>
+                  <span className={`shrink-0 font-extrabold ${o.status === 'cancelled' ? 'text-[var(--muted)] line-through' : 'text-[var(--ink)]'}`}>{formatEur(o.total, locale)}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-1 text-xs text-[var(--muted)]">{t('extras.ordersHint')}</p>
+        </section>
+      )}
 
       <section className={card}>
         <label className="block">

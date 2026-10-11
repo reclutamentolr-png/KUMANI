@@ -5,6 +5,8 @@ import Link from '@/components/LocalizedLink'
 import ClientJobView from '@/components/clienti/ClientJobView'
 import { getJob } from '@/app/actions/clienti'
 import { toolMetadata } from '@/lib/toolMetadata'
+import { createClient } from '@/lib/supabase/server'
+import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 
 export const generateMetadata = toolMetadata('clienti')
 
@@ -14,6 +16,11 @@ export default async function ClientJobPage({ params }: { params: Promise<{ loca
   const t = await getTranslations('clienti')
   const data = await getJob(jobId)
   if (!data) notFound()
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  const canReceipt = user ? await hasActiveToolAccess(supabase, user.id, 'digital-receipt') : false
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -44,6 +51,7 @@ export default async function ClientJobPage({ params }: { params: Promise<{ loca
           costs={data.costs}
           files={data.files}
           products={data.products}
+          canReceipt={canReceipt}
         />
       </main>
     </div>

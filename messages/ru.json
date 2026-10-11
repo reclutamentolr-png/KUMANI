@@ -8480,7 +8480,10 @@
     "duplicateSubStaffTitle": "Двойная подписка возвращена",
     "duplicateSubStaffBody": "{email} оплатил(а) две подписки: вторая ({amount}) автоматически закрыта и возвращена.",
     "quoteDuplicateTitle": "Предложение № {number} оплачено дважды",
-    "quoteDuplicateBody": "Клиент заплатил повторно ({amount}): лишний платёж автоматически возвращён с вашего счёта Stripe."
+    "quoteDuplicateBody": "Клиент заплатил повторно ({amount}): лишний платёж автоматически возвращён с вашего счёта Stripe.",
+    "clientiTitle": "Клиенты и заказы: сегодня",
+    "clientiSteps": "{count, plural, one {# клиент — связаться} few {# клиента — связаться} many {# клиентов — связаться} other {# клиента — связаться}}",
+    "clientiCollect": "{count, plural, one {# сданный заказ ждёт оплаты} few {# сданных заказа ждут оплаты} many {# сданных заказов ждут оплаты} other {# сданных заказа ждут оплаты}}"
   },
   "pushInvite": {
     "title": "Включите уведомления",
@@ -10426,7 +10429,8 @@
     "wellnessFocusHint": "Завершите сессию концентрации (пропуск не считается).",
     "wellnessMindHint": "Сохраните или отправьте рисунок Mandala либо слушайте NeuroBalance 10 минут.",
     "wellnessStepDone": "Сделано сегодня ✓",
-    "wellnessOpen": "Открыть {tool}"
+    "wellnessOpen": "Открыть {tool}",
+    "receiptFromPaymentBanner": "Квитанция за платёж, записанный в «Клиенты и заказы» ({name})."
   },
   "businessProfile": {
     "title": "Карточка бизнеса",
@@ -11954,6 +11958,68 @@
       "starts": "Начало сегодня",
       "delivery": "Сдача сегодня",
       "deliveryLate": "{days, plural, one {Сдача просрочена на # день} few {Сдача просрочена на # дня} many {Сдача просрочена на # дней} other {Сдача просрочена на # дня}}"
+    },
+    "extras": {
+      "stamps": "Kumi Card {business}: {stamps} штамп.",
+      "ordersTitle": "Заказы в Shop",
+      "ordersTotal": "Потрачено: {amount}",
+      "orderNumber": "Заказ № {number}",
+      "status": {
+        "pending": "ожидает оплаты",
+        "paid": "оплачен",
+        "ready": "готов",
+        "shipped": "отправлен",
+        "delivered": "доставлен",
+        "cancelled": "отменён"
+      },
+      "ordersHint": "Заказы, оплаченные онлайн, сами привязываются к клиенту; в расчёты по заказам-работам они не входят."
+    },
+    "import": {
+      "open": "Импорт клиентов",
+      "title": "Импорт клиентов",
+      "text": "Выберите, кого сделать клиентами. Те, кто уже есть среди клиентов (то же имя, телефон или email), повторно не импортируются.",
+      "sourceLabel": "Откуда импортировать",
+      "sources": {
+        "kumi": "Kumi Card",
+        "memolife": "Контакты MemoLife"
+      },
+      "loading": "Загрузка",
+      "empty": {
+        "kumi": "На ваших Kumi Card нет клиентов с именем.",
+        "memolife": "В контактах MemoLife никого нет."
+      },
+      "selectAll": "Выбрать всех ({count})",
+      "already": "уже клиент",
+      "done": "{count, plural, =0 {Новых клиентов не импортировано.} one {Импортирован # клиент.} few {Импортировано # клиента.} many {Импортировано # клиентов.} other {Импортировано # клиента.}}",
+      "run": "{count, plural, =0 {Импортировать} other {Импортировать (#)}}",
+      "close": "Закрыть"
+    },
+    "receipt": {
+      "object": "Оплата получена",
+      "objectJob": "Оплата за «{title}»",
+      "open": "Открыть квитанцию",
+      "make": "Сделать квитанцию"
+    },
+    "export": {
+      "title": "Для бухгалтера",
+      "text": "Скачайте данные в файлах CSV — они открываются в Excel.",
+      "kinds": {
+        "clients": "Клиенты",
+        "jobs": "Заказы",
+        "payments": "Платежи",
+        "time": "Часы"
+      },
+      "file": {
+        "clients": "klienty",
+        "jobs": "zakazy",
+        "payments": "platezhi",
+        "time": "chasy"
+      },
+      "client": "Клиент",
+      "deliveredOn": "Сдан",
+      "jobOrQuote": "Заказ или смета",
+      "start": "Начало",
+      "end": "Конец"
     }
   }
 }

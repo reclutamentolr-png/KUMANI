@@ -2,13 +2,15 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { ArrowRight, Plus, Search, Timer } from 'lucide-react'
+import { ArrowRight, Download, Plus, Search, Timer } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { useLocalizedRouter as useRouter } from '@/lib/useLocalizedRouter'
 import { createClientRecord } from '@/app/actions/clienti'
 import { CLIENT_FILTERS, EMPTY_CLIENT_FORM, formatClock, formatEur, isStepDue, type ClientFilter, type ClientOverview, type TodayData } from '@/lib/clienti'
 import ClientForm, { inputClass } from './ClientForm'
 import TodaySection from './TodaySection'
+import ImportPanel from './ImportPanel'
+import ExportBox from './ExportBox'
 
 type RunningTimer = { jobId: string; jobTitle: string; clientName: string; startedAt: string } | null
 
@@ -19,6 +21,7 @@ export default function ClientiList({ clients, running, today }: { clients: Clie
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState<ClientFilter>('all')
   const [adding, setAdding] = useState(false)
+  const [importing, setImporting] = useState(false)
 
   const dueCount = clients.filter((c) => isStepDue(c.next_step_due)).length
   const owedTotal = clients.reduce((sum, c) => sum + c.owed, 0)
@@ -59,15 +62,27 @@ export default function ClientiList({ clients, running, today }: { clients: Clie
           <h2 className="mb-4 text-lg font-bold text-[var(--ink)]">{t('newClient')}</h2>
           <ClientForm initial={EMPTY_CLIENT_FORM} submitLabel={t('saveClient')} onSubmit={create} onCancel={() => setAdding(false)} />
         </section>
+      ) : importing ? (
+        <ImportPanel onClose={() => setImporting(false)} />
       ) : (
-        <button
-          type="button"
-          onClick={() => setAdding(true)}
-          className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[var(--ink)] px-5 text-base font-bold text-[var(--gold-bright)] transition-opacity hover:opacity-90 sm:w-auto"
-        >
-          <Plus className="h-5 w-5" />
-          {t('newClient')}
-        </button>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <button
+            type="button"
+            onClick={() => setAdding(true)}
+            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[var(--ink)] px-5 text-base font-bold text-[var(--gold-bright)] transition-opacity hover:opacity-90 sm:w-auto"
+          >
+            <Plus className="h-5 w-5" />
+            {t('newClient')}
+          </button>
+          <button
+            type="button"
+            onClick={() => setImporting(true)}
+            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl border border-[var(--gold)]/40 bg-white px-5 text-base font-semibold text-[var(--ink)] hover:bg-[var(--gold-pale)] sm:w-auto"
+          >
+            <Download className="h-5 w-5" />
+            {t('import.open')}
+          </button>
+        </div>
       )}
 
       <label className="block text-sm font-semibold text-[var(--muted)]">
@@ -133,6 +148,8 @@ export default function ClientiList({ clients, running, today }: { clients: Clie
       )}
 
       <p className="text-xs text-[var(--muted)]">{t('fromQuotesHint')}</p>
+
+      {clients.length > 0 && <ExportBox />}
     </div>
   )
 }

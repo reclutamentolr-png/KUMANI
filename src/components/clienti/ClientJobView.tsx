@@ -41,7 +41,9 @@ export default function ClientJobView({
   costs: initialCosts,
   files: initialFiles,
   products,
+  canReceipt,
 }: {
+  canReceipt: boolean
   job: ClientJob
   client: { id: string; name: string }
   payments: ClientPayment[]
@@ -212,6 +214,7 @@ export default function ClientJobView({
           jobs={[job]}
           fixedJobId={job.id}
           suggestedAmount={left ?? undefined}
+          canReceipt={canReceipt}
           onChange={(next) => {
             setPayments(next)
             router.refresh()

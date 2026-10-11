@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { getTranslations, getLocale } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
-import { ArrowLeft, FileCheck2, FileSpreadsheet } from 'lucide-react'
+import { ArrowLeft, BookUser, FileCheck2, FileSpreadsheet } from 'lucide-react'
 import { hasActiveDigitalReceiptAccess } from '@/lib/digitalReceipt-server'
 import { todayKey } from '@/lib/agenda'
 import type { DigitalReceiptFormData } from '@/lib/digitalReceipt'
@@ -13,12 +13,12 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 export default async function NewDigitalReceiptPage({
   searchParams,
 }: {
-  searchParams: Promise<{ fromQuote?: string }>
+  searchParams: Promise<{ fromQuote?: string; fromPayment?: string }>
 }) {
   const t = await getTranslations('digitalReceipt')
   const te = await getTranslations('ecosystem')
   const locale = await getLocale()
-  const { fromQuote } = await searchParams
+  const { fromQuote, fromPayment } = await searchParams
 
   const supabase = await createClient()
   const {
@@ -58,6 +58,36 @@ export default async function NewDigitalReceiptPage({
     }
   }
 
+  // Ricevuta di un pagamento registrato in Clienti e Lavori (?fromPayment=<id>)
+  let paymentId: string | undefined
+  let paymentClient: string | null = null
+  if (!initialData && typeof fromPayment === 'string' && UUID_RE.test(fromPayment)) {
+    const { data: payment } = await supabase
+      .from('client_payments')
+      .select('id, client_id, job_id, amount, paid_on, method, note, receipt_id')
+      .eq('id', fromPayment)
+      .eq('user_id', user.id)
+      .maybeSingle()
+    if (payment && !payment.receipt_id) {
+      const [{ data: client }, { data: job }] = await Promise.all([
+        supabase.from('quote_clients').select('name').eq('id', payment.client_id).eq('user_id', user.id).maybeSingle(),
+        payment.job_id ? supabase.from('client_jobs').select('title').eq('id', payment.job_id).eq('user_id', user.id).maybeSingle() : Promise.resolve({ data: null }),
+      ])
+      const tc = await getTranslations('clienti')
+      paymentId = payment.id
+      paymentClient = client?.name ?? null
+      initialData = {
+        template: 'declared_payment',
+        objectName: job?.title ? tc('receipt.objectJob', { title: job.title }) : tc('receipt.object'),
+        recipientName: client?.name ?? '',
+        declaredValue: Number(payment.amount),
+        vatMode: 'none',
+        deliveryDate: payment.paid_on,
+        notes: [tc(`pay.methods.${payment.method}`), payment.note].filter(Boolean).join(' · '),
+      }
+    }
+  }
+
   // Clienti salvati nei Preventivi: suggeriti come destinatari
   const { data: clients } = await supabase
     .from('quote_clients')
@@ -92,7 +122,13 @@ export default async function NewDigitalReceiptPage({
             {te('receiptFromQuoteBanner', { number: quoteNumber })}
           </p>
         )}
-        <DigitalReceiptForm initialData={initialData} savedClients={savedClients} />
+        {paymentId && (
+          <p className="mb-6 flex items-center gap-2 rounded-xl border border-[var(--gold)]/30 bg-[var(--gold-pale)] px-4 py-3 text-sm text-[var(--ink)]">
+            <BookUser className="h-4 w-4 shrink-0 text-[var(--gold)]" />
+            {te('receiptFromPaymentBanner', { name: paymentClient ?? '' })}
+          </p>
+        )}
+        <DigitalReceiptForm initialData={initialData} savedClients={savedClients} paymentId={paymentId} />
       </main>
     </div>
   )

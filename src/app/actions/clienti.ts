@@ -4,6 +4,8 @@ import { createClient } from '@/lib/supabase/server'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { awardToolPoint } from '@/lib/toolPoints'
 import { limitError } from '@/lib/appLimits'
+import { fetchAllRows } from '@/lib/fetchAllRows'
+import { getTranslations } from 'next-intl/server'
 import {
   CLIENT_LIMITS,
   JOB_STAGES,
@@ -21,6 +23,13 @@ import {
   type JobProduct,
   type TimeEntry,
   type TodayData,
+  EXPORT_KINDS,
+  type ExportKind,
+  IMPORT_SOURCES,
+  type ClientShopOrder,
+  type ClientStamps,
+  type ImportCandidate,
+  type ImportSource,
   type ClientFormData,
   type ClientJob,
   type ClientPayment,
@@ -87,7 +96,7 @@ export async function listClients(): Promise<ClientOverview[]> {
 type Supabase = NonNullable<Awaited<ReturnType<typeof gate>>>['supabase']
 
 const JOB_COLUMNS = 'id, client_id, quote_id, title, stage, amount, address, start_date, due_date, notes, checklist, hourly_cost'
-const PAYMENT_COLUMNS = 'id, job_id, amount, paid_on, method, note'
+const PAYMENT_COLUMNS = 'id, job_id, amount, paid_on, method, note, receipt_id'
 
 function toJob(row: Record<string, unknown>): ClientJob {
   return {
@@ -704,4 +713,186 @@ export async function getToday(): Promise<TodayData | null> {
   }
   const d = data as TodayData
   return { ...d, toCollect: d.toCollect.map((x) => ({ ...x, left: Number(x.left) || 0, days: Number(x.days) || 0 })), openJobs: Number(d.openJobs) || 0 }
+}
+
+// ——— Fase 5: Shop, Kumi Card e MemoLife ———
+
+const phoneKey = (phone: string | null | undefined) => {
+  const digits = (phone ?? '').replace(/\D/g, '')
+  return digits.length >= 6 ? digits.slice(-9) : ''
+}
+
+// Ordini dello Shop collegati e timbri Kumi Card (stesso telefono) del cliente
+export async function getClientExtras(clientId: string, phone: string | null): Promise<{ orders: ClientShopOrder[]; stamps: ClientStamps[] }> {
+  const g = await gate()
+  if (!g || !UUID_RE.test(clientId)) return { orders: [], stamps: [] }
+  const [{ data: orders }, { data: cards }] = await Promise.all([
+    g.supabase.from('shop_orders').select('id, number, status, total_cents, created_at').eq('owner_id', g.userId).eq('client_id', clientId).order('created_at', { ascending: false }).limit(100),
+    g.supabase.from('fidelity_cards').select('id, business_name').eq('owner_id', g.userId),
+  ])
+  const stamps: ClientStamps[] = []
+  const key = phoneKey(phone)
+  if (key && cards?.length) {
+    const { data: members } = await g.supabase.from('fidelity_members').select('card_id, contact_phone, stamps_count, total_stamps').in('card_id', cards.map((c) => c.id)).limit(5000)
+    for (const m of members ?? []) {
+      if (phoneKey(m.contact_phone) !== key) continue
+      const card = cards.find((c) => c.id === m.card_id)
+      stamps.push({ business: card?.business_name ?? '', stamps: Number(m.stamps_count) || 0, total: Number(m.total_stamps) || 0 })
+    }
+  }
+  return {
+    orders: (orders ?? []).map((o) => ({ id: o.id, number: o.number, status: o.status, total: (Number(o.total_cents) || 0) / 100, created_at: o.created_at })),
+    stamps,
+  }
+}
+
+async function existingKeys(supabase: Supabase, userId: string) {
+  const { data } = await supabase.from('quote_clients').select('name, phone, email').eq('user_id', userId).limit(5000)
+  return {
+    names: new Set((data ?? []).map((c) => c.name.trim().toLowerCase())),
+    phones: new Set((data ?? []).map((c) => phoneKey(c.phone)).filter(Boolean)),
+    emails: new Set((data ?? []).map((c) => (c.email ?? '').trim().toLowerCase()).filter(Boolean)),
+  }
+}
+
+async function readSource(supabase: Supabase, userId: string, source: ImportSource): Promise<ImportCandidate[]> {
+  if (source === 'kumi') {
+    const { data: cards } = await supabase.from('fidelity_cards').select('id, business_name').eq('owner_id', userId)
+    if (!cards?.length) return []
+    const { data } = await supabase.from('fidelity_members').select('id, card_id, customer_name, contact_phone, total_stamps').in('card_id', cards.map((c) => c.id)).order('created_at', { ascending: false }).limit(2000)
+    return (data ?? [])
+      .filter((m) => (m.customer_name ?? '').trim())
+      .map((m) => ({
+        id: m.id,
+        name: m.customer_name!.trim(),
+        phone: m.contact_phone ?? null,
+        email: null,
+        detail: cards.length > 1 ? cards.find((c) => c.id === m.card_id)?.business_name ?? null : null,
+        already: false,
+      }))
+  }
+  const { data } = await supabase.from('contacts').select('id, name, phone, email').eq('user_id', userId).order('name').limit(2000)
+  return (data ?? []).filter((c) => (c.name ?? '').trim()).map((c) => ({ id: c.id, name: c.name.trim(), phone: c.phone ?? null, email: c.email ?? null, detail: null, already: false }))
+}
+
+export async function listImportCandidates(source: ImportSource): Promise<ImportCandidate[]> {
+  const g = await gate()
+  if (!g || !IMPORT_SOURCES.includes(source)) return []
+  const [rows, keys] = await Promise.all([readSource(g.supabase, g.userId, source), existingKeys(g.supabase, g.userId)])
+  return rows.map((r) => ({
+    ...r,
+    already: keys.names.has(r.name.toLowerCase()) || (!!phoneKey(r.phone) && keys.phones.has(phoneKey(r.phone))) || (!!r.email && keys.emails.has(r.email.toLowerCase())),
+  }))
+}
+
+// Importa i contatti scelti (riletti qui dal server); i doppioni si saltano
+export async function importClients(source: ImportSource, ids: string[]): Promise<ActionResult<{ imported: number }>> {
+  const g = await gate()
+  if (!g || !IMPORT_SOURCES.includes(source)) return { success: false, message: 'subscriptionRequired' }
+  const wanted = new Set((Array.isArray(ids) ? ids : []).filter((id) => UUID_RE.test(id)).slice(0, 500))
+  if (!wanted.size) return { success: true, data: { imported: 0 } }
+  const [rows, keys] = await Promise.all([readSource(g.supabase, g.userId, source), existingKeys(g.supabase, g.userId)])
+  const toInsert: { user_id: string; name: string; phone: string | null; email: string | null }[] = []
+  for (const r of rows) {
+    if (!wanted.has(r.id)) continue
+    const name = r.name.slice(0, CLIENT_LIMITS.name)
+    const lower = name.toLowerCase()
+    const pk = phoneKey(r.phone)
+    const email = r.email?.trim().toLowerCase() ?? ''
+    if (keys.names.has(lower) || (pk && keys.phones.has(pk)) || (email && keys.emails.has(email))) continue
+    keys.names.add(lower)
+    if (pk) keys.phones.add(pk)
+    if (email) keys.emails.add(email)
+    toInsert.push({ user_id: g.userId, name, phone: r.phone ? r.phone.slice(0, CLIENT_LIMITS.phone) : null, email: r.email ? r.email.slice(0, CLIENT_LIMITS.email) : null })
+  }
+  if (!toInsert.length) return { success: true, data: { imported: 0 } }
+  const { error } = await g.supabase.from('quote_clients').insert(toInsert)
+  if (error) {
+    console.error('[Clienti] importClients failed:', error)
+    const limit = await limitError(error)
+    if (limit) return limit
+    return { success: false, message: 'saveError' }
+  }
+  await awardToolPoint('clienti')
+  return { success: true, data: { imported: toInsert.length } }
+}
+
+// ——— Esportazione per il commercialista (CSV) ———
+
+type CsvRow = (string | number | null)[]
+
+export async function exportClienti(kind: ExportKind): Promise<CsvRow[] | null> {
+  const g = await gate()
+  if (!g || !EXPORT_KINDS.includes(kind)) return null
+  const t = await getTranslations('clienti')
+  const uid = g.userId
+  const all = async <T,>(table: string, columns: string, order: string) =>
+    (await fetchAllRows<T>((from, to) => g.supabase.from(table).select(columns).eq('user_id', uid).order(order).order('id').range(from, to) as unknown as PromiseLike<{ data: T[] | null; error: { message: string } | null }>)).data
+  const money = (n: number | null | undefined) => (n === null || n === undefined ? null : Math.round(Number(n) * 100) / 100)
+  const romeDay = (iso: string) => new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Rome' }).format(new Date(iso))
+  const romeTime = (iso: string) => new Intl.DateTimeFormat('it-IT', { timeZone: 'Europe/Rome', hour: '2-digit', minute: '2-digit' }).format(new Date(iso))
+
+  type ClientRow = { id: string; name: string; contact_name: string | null; phone: string | null; email: string | null; vat: string | null; address: string | null; city: string | null; postal_code: string | null; pec: string | null; next_step: string | null; next_step_due: string | null; notes: string | null }
+  type JobRow = { id: string; client_id: string; title: string; stage: string; amount: number | null; start_date: string | null; due_date: string | null; delivered_at: string | null; hourly_cost: number | null }
+  const clients = await all<ClientRow>('quote_clients', 'id, name, contact_name, phone, email, vat, address, city, postal_code, pec, next_step, next_step_due, notes', 'name')
+  const clientName = new Map(clients.map((c) => [c.id, c.name]))
+
+  if (kind === 'clients') {
+    const overview = await listClients()
+    const byId = new Map(overview.map((o) => [o.id, o]))
+    return [
+      [t('fields.name'), t('fields.contactName'), t('fields.phone'), t('fields.email'), t('fields.vat'), t('fields.address'), t('fields.city'), t('fields.postalCode'), t('fields.pec'), t('acceptedTotal'), t('paidTotal'), t('owedTotal'), t('nextStepTitle'), t('stepWhen'), t('notesTitle')],
+      ...clients.map((c) => {
+        const o = byId.get(c.id)
+        return [c.name, c.contact_name, c.phone, c.email, c.vat, c.address, c.city, c.postal_code, c.pec, money(o?.accepted_total ?? 0), money(o?.paid_total ?? 0), money(o?.owed ?? 0), c.next_step, c.next_step_due, c.notes]
+      }),
+    ]
+  }
+
+  const jobs = await all<JobRow>('client_jobs', 'id, client_id, title, stage, amount, start_date, due_date, delivered_at, hourly_cost', 'created_at')
+  const jobTitle = new Map(jobs.map((j) => [j.id, j.title]))
+
+  if (kind === 'jobs') {
+    type EntryRow = { job_id: string; started_at: string; ended_at: string | null }
+    type CostRow = { job_id: string; kind: string; quantity: number; unit_cost: number }
+    const [entries, costs] = await Promise.all([
+      all<EntryRow>('job_time_entries', 'id, job_id, started_at, ended_at', 'started_at'),
+      all<CostRow>('job_costs', 'id, job_id, kind, quantity, unit_cost', 'created_at'),
+    ])
+    return [
+      [t('export.client'), t('jobs.title'), t('jobs.stageLabel'), t('jobs.price'), t('jobs.startDate'), t('jobs.dueDate'), t('export.deliveredOn'), t('time.hours'), t('time.hourlyCost'), t('margin.materials'), t('margin.expenses')],
+      ...jobs.map((j) => {
+        const minutes = entries.filter((e) => e.job_id === j.id && e.ended_at).reduce((s, e) => s + (new Date(e.ended_at!).getTime() - new Date(e.started_at).getTime()) / 60_000, 0)
+        const sum = (k: string) => costs.filter((c) => c.job_id === j.id && c.kind === k).reduce((s, c) => s + Number(c.quantity) * Number(c.unit_cost), 0)
+        return [clientName.get(j.client_id) ?? '', j.title, t(`jobs.stages.${j.stage}`), money(j.amount), j.start_date, j.due_date, j.delivered_at ? romeDay(j.delivered_at) : null, Math.round(minutes / 6) / 10, money(j.hourly_cost), money(sum('material')), money(sum('expense'))]
+      }),
+    ]
+  }
+
+  if (kind === 'payments') {
+    type PayRow = { client_id: string; job_id: string | null; amount: number; paid_on: string; method: string; note: string | null }
+    const payments = await all<PayRow>('client_payments', 'id, client_id, job_id, amount, paid_on, method, note', 'paid_on')
+    const { data: online } = await g.supabase
+      .from('quotes')
+      .select('client_id, quote_number, paid_amount, paid_at')
+      .eq('user_id', uid)
+      .eq('payment_status', 'paid')
+      .not('client_id', 'is', null)
+      .limit(5000)
+    const rows: CsvRow[] = [
+      ...payments.map((p) => [p.paid_on, clientName.get(p.client_id) ?? '', p.job_id ? jobTitle.get(p.job_id) ?? '' : '', money(p.amount), t(`pay.methods.${p.method}`), p.note]),
+      ...(online ?? []).map((q) => [q.paid_at ? romeDay(q.paid_at) : '', clientName.get(q.client_id as string) ?? '', t('quoteNumber', { number: q.quote_number }), money(Number(q.paid_amount)), t('pay.online'), null]),
+    ].sort((a, b) => String(a[0]).localeCompare(String(b[0])))
+    return [[t('pay.date'), t('export.client'), t('export.jobOrQuote'), t('pay.amount'), t('pay.method'), t('pay.note')], ...rows]
+  }
+
+  type EntryRow = { job_id: string; started_at: string; ended_at: string | null; note: string | null }
+  const entries = await all<EntryRow>('job_time_entries', 'id, job_id, started_at, ended_at, note', 'started_at')
+  const jobClient = new Map(jobs.map((j) => [j.id, clientName.get(j.client_id) ?? '']))
+  return [
+    [t('time.day'), t('export.client'), t('jobs.title'), t('export.start'), t('export.end'), t('time.hours'), t('time.note')],
+    ...entries
+      .filter((e) => e.ended_at)
+      .map((e) => [romeDay(e.started_at), jobClient.get(e.job_id) ?? '', jobTitle.get(e.job_id) ?? '', romeTime(e.started_at), romeTime(e.ended_at!), Math.round((new Date(e.ended_at!).getTime() - new Date(e.started_at).getTime()) / 360_000) / 10, e.note]),
+  ]
 }
