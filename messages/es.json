@@ -7047,6 +7047,16 @@
         "p2d": "De 2 a 4 jugadores, por turnos, desde un enlace.",
         "p3": "Cruces y puntos",
         "p3d": "Cada palabra tomada lleva tu color."
+      },
+      "clienti": {
+        "sub": "Clientes, trabajos y cobros en el bolsillo",
+        "tagline": "A quién contactar, cuánto te deben y cuánto ganas, desde el móvil.",
+        "p1": "Hoy",
+        "p1d": "A quién llamar y qué cobrar, cada mañana.",
+        "p2": "Tiempo y margen",
+        "p2d": "Cronómetro en el trabajo y cuánto te queda.",
+        "p3": "Cobros en orden",
+        "p3d": "Pagos, recibos y datos para tu gestor."
       }
     },
     "includedSurprise": "Para todos, también con la cuenta gratuita",

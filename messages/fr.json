@@ -7047,6 +7047,16 @@
         "p2d": "De 2 à 4 joueurs, à tour de rôle, par un lien.",
         "p3": "Croisements et points",
         "p3d": "Chaque mot pris prend votre couleur."
+      },
+      "clienti": {
+        "sub": "Clients, chantiers et encaissements en poche",
+        "tagline": "Qui contacter, ce qu’on vous doit et ce que vous gagnez, depuis le téléphone.",
+        "p1": "Aujourd’hui",
+        "p1d": "Qui rappeler et quoi encaisser, chaque matin.",
+        "p2": "Temps et marge",
+        "p2d": "Chrono sur le chantier et ce qu’il vous reste.",
+        "p3": "Encaissements en ordre",
+        "p3d": "Paiements, reçus et données pour le comptable."
       }
     },
     "includedSurprise": "Pour tous, même avec le compte gratuit",

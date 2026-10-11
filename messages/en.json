@@ -7047,6 +7047,16 @@
         "p2d": "2 to 4 players, taking turns, from a link.",
         "p3": "Crossings and points",
         "p3d": "Every word you take has your colour."
+      },
+      "clienti": {
+        "sub": "Clients, jobs and payments in your pocket",
+        "tagline": "Who to contact, what you’re owed and what you earn, from your phone.",
+        "p1": "Today",
+        "p1d": "Who to call back and what to collect, every morning.",
+        "p2": "Time and margin",
+        "p2d": "A timer on the job and what you keep.",
+        "p3": "Payments in order",
+        "p3d": "Payments, receipts and data for your accountant."
       }
     },
     "includedSurprise": "For everyone, free account included",

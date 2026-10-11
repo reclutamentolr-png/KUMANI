@@ -7047,6 +7047,16 @@
         "p2d": "2 bis 4 Spieler, abwechselnd, per Link.",
         "p3": "Kreuzungen und Punkte",
         "p3d": "Jedes geholte Wort trägt deine Farbe."
+      },
+      "clienti": {
+        "sub": "Kunden, Aufträge, Zahlungen",
+        "tagline": "Wen du anrufst, was offen ist und was du verdienst – vom Handy aus.",
+        "p1": "Heute",
+        "p1d": "Wen du zurückrufst und was offen ist, jeden Morgen.",
+        "p2": "Zeit und Marge",
+        "p2d": "Zeitmessung am Auftrag und was dir bleibt.",
+        "p3": "Zahlungen im Griff",
+        "p3d": "Zahlungen, Belege und Daten für die Buchhaltung."
       }
     },
     "includedSurprise": "Für alle, auch mit dem kostenlosen Konto",

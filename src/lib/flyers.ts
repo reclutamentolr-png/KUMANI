@@ -25,6 +25,7 @@ export const FLYERS: FlyerConfig[] = [
   { tool: 'fidelity', style: 'photo', category: 'pro', icon: 'Stamp', points: ['Smartphone', 'Gift', 'Repeat'], photo: '/flyers/photos/fidelity.webp' },
   { tool: 'preventivi', style: 'photo', category: 'pro', icon: 'FileText', points: ['Smartphone', 'FileDown', 'Send'], photo: '/flyers/photos/preventivi.webp' },
   { tool: 'digital-receipt', style: 'photo', category: 'pro', icon: 'Receipt', points: ['Clock', 'BadgeCheck', 'FolderOpen'], photo: '/flyers/photos/digital-receipt.webp' },
+  { tool: 'clienti', style: 'phone', category: 'pro', icon: 'BookUser', points: ['CalendarCheck', 'Timer', 'Wallet'], shot: 'clienti-1' },
   { tool: 'magazzino', style: 'photo', category: 'pro', icon: 'Package', points: ['ScanBarcode', 'BellRing', 'FileSpreadsheet'], photo: '/flyers/photos/magazzino.webp' },
   { tool: 'qr-code-pro', style: 'photo', category: 'pro', icon: 'QrCode', points: ['RefreshCw', 'ChartColumn', 'Store'], photo: '/flyers/photos/qr-code-pro.webp' },
   { tool: 'firma-email', style: 'photo', category: 'pro', icon: 'Mail', points: ['ClipboardPaste', 'Palette', 'IdCard'], photo: '/flyers/photos/firma-email.webp' },

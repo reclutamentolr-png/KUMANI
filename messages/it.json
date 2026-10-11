@@ -7047,6 +7047,16 @@
         "p2d": "Da 2 a 4 giocatori, a turni, dal link.",
         "p3": "Incroci e punti",
         "p3d": "Ogni parola presa ha il tuo colore."
+      },
+      "clienti": {
+        "sub": "Clienti, lavori e incassi in tasca",
+        "tagline": "Chi sentire, quanto ti devono e quanto guadagni su ogni lavoro, dal telefono.",
+        "p1": "Oggi",
+        "p1d": "Chi richiamare e cosa incassare, ogni mattina.",
+        "p2": "Tempo e margine",
+        "p2d": "Cronometro sul lavoro e quanto ti resta.",
+        "p3": "Incassi in ordine",
+        "p3d": "Pagamenti, ricevute e dati per il commercialista."
       }
     },
     "includedSurprise": "Per tutti, anche con l’account gratuito",

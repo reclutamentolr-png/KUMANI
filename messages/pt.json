@@ -7047,6 +7047,16 @@
         "p2d": "De 2 a 4 jogadores, à vez, por uma ligação.",
         "p3": "Cruzamentos e pontos",
         "p3d": "Cada palavra tomada fica com a tua cor."
+      },
+      "clienti": {
+        "sub": "Clientes, trabalhos e recebimentos no bolso",
+        "tagline": "Quem contactar, quanto lhe devem e quanto ganha, no telemóvel.",
+        "p1": "Hoje",
+        "p1d": "Quem voltar a ligar e o que receber, todas as manhãs.",
+        "p2": "Tempo e margem",
+        "p2d": "Cronómetro no trabalho e quanto lhe fica.",
+        "p3": "Recebimentos em ordem",
+        "p3d": "Pagamentos, recibos e dados para o contabilista."
       }
     },
     "includedSurprise": "Para todos, também com a conta gratuita",
