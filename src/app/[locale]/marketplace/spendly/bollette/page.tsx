@@ -4,6 +4,7 @@ import BillsManager from '@/components/spendly/BillsManager'
 import { createClient } from '@/lib/supabase/server'
 import { todayKey } from '@/lib/agenda'
 import type { SpendlyFixedExpense, SpendlyFixedPayment } from '@/lib/spendly'
+import { fetchAllRows } from '@/lib/fetchAllRows'
 
 // Spendly → Bollette: scadenze che si ripetono con importo variabile (luce,
 // gas, acqua, telefono…). Nel database sono spese fisse con categoria
@@ -26,14 +27,18 @@ export default async function SpendlyBillsPage({ searchParams }: { searchParams:
 
   const ids = (bills ?? []).map((b) => b.id)
   const { data: payments } = ids.length
-    ? await supabase
+    ? await fetchAllRows((from, to) =>
+      supabase
         .from('spendly_fixed_payments')
         .select('expense_id, period, amount, paid_on')
         .eq('user_id', user.id)
         .in('expense_id', ids)
         .order('period', { ascending: false })
         .limit(500)
+        .order('id')
+        .range(from, to)
         .returns<SpendlyFixedPayment[]>()
+    )
     : { data: [] as SpendlyFixedPayment[] }
 
   return (

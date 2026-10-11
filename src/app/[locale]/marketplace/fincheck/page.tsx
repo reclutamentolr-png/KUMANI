@@ -7,6 +7,7 @@ import FinCheckApp, { type FinCheckResultRow } from '@/components/fincheck/FinCh
 import { hasActiveSpendlyAccess } from '@/lib/spendly-server'
 import { checkupMonths, computeCheckup, type CheckupResult } from '@/lib/fincheck'
 import type { SpendlyFixedExpense, SpendlyFixedPayment, SpendlyIncome, SpendlyVariableExpense } from '@/lib/spendly'
+import { fetchAllRows } from '@/lib/fetchAllRows'
 
 // FinCheck: test di educazione finanziaria (gratuito) e check-up del
 // bilancio con i dati di Spendly (per chi ha Spendly nel proprio piano).
@@ -40,36 +41,48 @@ export default async function FinCheckPage({ params }: { params: Promise<{ local
   if (hasSpendly) {
     const today = new Date()
     const months = checkupMonths(today)
-    const from = `${months[0].year}-${String(months[0].month).padStart(2, '0')}-01`
+    const periodFrom = `${months[0].year}-${String(months[0].month).padStart(2, '0')}-01`
     const last = months[months.length - 1]
-    const to = new Date(Date.UTC(last.year, last.month, 0)).toISOString().slice(0, 10)
+    const periodTo = new Date(Date.UTC(last.year, last.month, 0)).toISOString().slice(0, 10)
     const [{ data: income }, { data: fixed }, { data: variable }, { data: payments }] = await Promise.all([
-      supabase
-        .from('spendly_income')
-        .select('id, description, amount, income_type, category, income_date, notes')
-        .eq('user_id', user.id)
-        .gte('income_date', from)
-        .lte('income_date', to)
-        .returns<SpendlyIncome[]>(),
+      fetchAllRows((from, to) =>
+        supabase
+          .from('spendly_income')
+          .select('id, description, amount, income_type, category, income_date, notes')
+          .eq('user_id', user.id)
+          .gte('income_date', periodFrom)
+          .lte('income_date', periodTo)
+          .order('id')
+          .range(from, to)
+          .returns<SpendlyIncome[]>()
+      ),
       supabase
         .from('spendly_fixed_expenses')
         .select('id, description, amount, frequency, category, start_date, end_date, billing_day, notes')
         .eq('user_id', user.id)
         .returns<SpendlyFixedExpense[]>(),
-      supabase
-        .from('spendly_variable_expenses')
-        .select('id, description, amount, expense_date, category, notes')
-        .eq('user_id', user.id)
-        .gte('expense_date', from)
-        .lte('expense_date', to)
-        .returns<SpendlyVariableExpense[]>(),
-      supabase
-        .from('spendly_fixed_payments')
-        .select('expense_id, period, amount, paid_on')
-        .eq('user_id', user.id)
-        .gte('period', from)
-        .lte('period', to)
-        .returns<SpendlyFixedPayment[]>(),
+      fetchAllRows((from, to) =>
+        supabase
+          .from('spendly_variable_expenses')
+          .select('id, description, amount, expense_date, category, notes')
+          .eq('user_id', user.id)
+          .gte('expense_date', periodFrom)
+          .lte('expense_date', periodTo)
+          .order('id')
+          .range(from, to)
+          .returns<SpendlyVariableExpense[]>()
+      ),
+      fetchAllRows((from, to) =>
+        supabase
+          .from('spendly_fixed_payments')
+          .select('expense_id, period, amount, paid_on')
+          .eq('user_id', user.id)
+          .gte('period', periodFrom)
+          .lte('period', periodTo)
+          .order('id')
+          .range(from, to)
+          .returns<SpendlyFixedPayment[]>()
+      ),
     ])
     checkup = computeCheckup(income ?? [], fixed ?? [], variable ?? [], payments ?? [], today)
   }

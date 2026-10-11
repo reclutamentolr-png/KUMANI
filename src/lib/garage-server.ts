@@ -1,5 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { GarageDeadline, GarageDocument, GarageExpense, GarageReading, GarageVehicle } from '@/lib/garage'
+import { fetchAllRows } from '@/lib/fetchAllRows'
 
 const VEHICLE_COLUMNS =
   'id, kind, vehicle_type, name, model, plate, initial_km, rental_start, rental_months, rental_km_included, rental_monthly_fee, rental_down_payment, rental_extra_km_cost, rental_unused_km_refund, rental_includes_tax, rental_includes_insurance, spendly_fixed_id, created_at'
@@ -21,15 +22,21 @@ export async function loadGarage(supabase: SupabaseClient, userId: string, vehic
   // Con vehicleId solo quell'auto (il secondo filtro altrimenti ripete user_id)
   const only = (column: string) => [vehicleId ? column : 'user_id', vehicleId ?? userId] as const
   const vehicles = supabase.from('garage_vehicles').select(VEHICLE_COLUMNS).eq('user_id', userId).eq(...only('id')).order('created_at')
-  const readings = supabase.from('garage_readings').select('id, vehicle_id, km, read_on, note').eq('user_id', userId).eq(...only('vehicle_id')).order('read_on').order('created_at')
+  // Rilevazioni e spese possono superare le 1000 righe: si leggono tutte
+  const readings = fetchAllRows((from, to) =>
+    supabase.from('garage_readings').select('id, vehicle_id, km, read_on, note').eq('user_id', userId).eq(...only('vehicle_id')).order('read_on').order('created_at').order('id').range(from, to)
+  )
   const deadlines = supabase.from('garage_deadlines').select('id, vehicle_id, kind, title, due_date, amount, recurrence').eq('user_id', userId).eq(...only('vehicle_id')).order('due_date')
-  const expenses = supabase
-    .from('garage_expenses')
-    .select('id, vehicle_id, kind, amount, spent_on, note')
-    .eq('user_id', userId)
-    .eq(...only('vehicle_id'))
-    .order('spent_on', { ascending: false })
-    .limit(2000)
+  const expenses = fetchAllRows((from, to) =>
+    supabase
+      .from('garage_expenses')
+      .select('id, vehicle_id, kind, amount, spent_on, note')
+      .eq('user_id', userId)
+      .eq(...only('vehicle_id'))
+      .order('spent_on', { ascending: false })
+      .order('id')
+      .range(from, to)
+  )
   // Documenti solo nella pagina del veicolo, con i link firmati per aprirli
   const documents = vehicleId
     ? supabase

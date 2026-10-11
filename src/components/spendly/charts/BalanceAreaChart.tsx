@@ -1,6 +1,7 @@
 'use client'
 
-import { MONTH_SHORT_IT } from '@/lib/spendly'
+import { useLocale } from 'next-intl'
+import { monthNames } from '@/lib/spendly'
 
 type Point = { month: number; balance: number }
 
@@ -13,6 +14,8 @@ type Point = { month: number; balance: number }
 // di respiro del grafico, così corrispondono esattamente a ciò che la
 // curva mostra.
 export default function BalanceAreaChart({ data }: { data: Point[] }) {
+  const locale = useLocale()
+  const monthShort = monthNames(locale, 'short')
   const width = 700
   const height = 240
   const padding = { top: 16, right: 60, bottom: 24, left: 16 }
@@ -52,7 +55,7 @@ export default function BalanceAreaChart({ data }: { data: Point[] }) {
       ))}
       {data.map((d, i) => (
         <text key={d.month} x={x(i)} y={height - 4} textAnchor="middle" className="fill-[var(--muted)] text-[10px]">
-          {MONTH_SHORT_IT[d.month - 1]}
+          {monthShort[d.month - 1]}
         </text>
       ))}
 

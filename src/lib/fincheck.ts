@@ -4,7 +4,9 @@
 // nel namespace "fincheck" dei messaggi.
 
 import {
+  fixedExpenseActiveInMonth,
   fixedExpenseAppliesToMonth,
+  fixedExpenseStep,
   paymentKey,
   periodOf,
   type SpendlyFixedExpense,
@@ -129,6 +131,15 @@ export function computeCheckup(
     const bucket: MonthBucket = { income: 0, fixed: {}, variable: {} }
     for (const item of income) if (item.income_date.slice(0, 7) === key) bucket.income += Number(item.amount)
     for (const item of fixed) {
+      // Spese bimestrali, trimestrali, semestrali e annuali spalmate sui mesi
+      // (un'annuale da 750 € conta 62,50 € al mese): il check-up guarda la
+      // spesa media, non il mese in cui capita la scadenza
+      const step = fixedExpenseStep(item.frequency)
+      if (step > 1) {
+        if (!fixedExpenseActiveInMonth(item, year, month)) continue
+        bucket.fixed[item.category] = (bucket.fixed[item.category] ?? 0) + Number(item.amount) / step
+        continue
+      }
       if (!fixedExpenseAppliesToMonth(item, year, month)) continue
       const amount = paid.get(paymentKey(item.id, periodOf(year, month))) ?? Number(item.amount)
       bucket.fixed[item.category] = (bucket.fixed[item.category] ?? 0) + amount

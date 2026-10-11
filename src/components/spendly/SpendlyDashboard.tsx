@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import { todayKey } from '@/lib/agenda'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { TrendingUp, Repeat, Wallet, PiggyBank, AlertTriangle } from 'lucide-react'
 import KpiCard from './KpiCard'
 import YearSelect from './YearSelect'
@@ -13,7 +13,7 @@ import {
   computeMonthlyTotals,
   formatCurrency,
   dashboardYears,
-  MONTH_NAMES_IT,
+  monthNames,
   VARIABLE_EXPENSE_CATEGORIES,
   type SpendlyIncome,
   type SpendlyFixedExpense,
@@ -46,6 +46,8 @@ export default function SpendlyDashboard({
   year: number
 }) {
   const t = useTranslations('spendly')
+  const locale = useLocale()
+  const monthLong = monthNames(locale)
   const [selectedMonth, setSelectedMonth] = useState(() => Number(todayKey().slice(5, 7)))
 
   const monthly = useMemo(
@@ -121,7 +123,7 @@ export default function SpendlyDashboard({
           onChange={(e) => setSelectedMonth(parseInt(e.target.value, 10))}
           className="rounded-lg border border-[var(--gold)]/30 bg-[var(--paper)] px-3 py-2 text-sm font-medium text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]"
         >
-          {MONTH_NAMES_IT.map((name, i) => (
+          {monthLong.map((name, i) => (
             <option key={name} value={i + 1}>
               {name}
             </option>
@@ -137,7 +139,7 @@ export default function SpendlyDashboard({
       </div>
 
       <div className="rounded-2xl border border-[var(--gold)]/20 bg-[var(--paper)] p-5 mb-8">
-        <h3 className="text-sm font-bold text-[var(--ink)] mb-3">{t('variableExpensesByCategory', { month: MONTH_NAMES_IT[selectedMonth - 1] })}</h3>
+        <h3 className="text-sm font-bold text-[var(--ink)] mb-3">{t('variableExpensesByCategory', { month: monthLong[selectedMonth - 1] })}</h3>
         {selectedCategoryData.length === 0 ? (
           <p className="text-sm text-[var(--muted)]">{t('noDataToShow')}</p>
         ) : (
@@ -160,7 +162,7 @@ export default function SpendlyDashboard({
               className={`rounded-xl border p-4 ${negative ? 'border-red-300 bg-red-50' : 'border-[var(--gold)]/20 bg-[var(--paper)]'}`}
             >
               <div className="flex items-center justify-between mb-2">
-                <span className="font-bold text-[var(--ink)] text-sm">{MONTH_NAMES_IT[m.month - 1]}</span>
+                <span className="font-bold text-[var(--ink)] text-sm">{monthLong[m.month - 1]}</span>
                 {negative && <AlertTriangle className="w-4 h-4 text-red-500" />}
               </div>
               <dl className="space-y-1 text-xs text-[var(--muted)]">

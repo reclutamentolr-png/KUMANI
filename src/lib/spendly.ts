@@ -72,6 +72,19 @@ export const MONTH_NAMES_IT = [
 
 export const MONTH_SHORT_IT = ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'] as const
 
+// Nomi dei mesi nella lingua dell'utente (con l'iniziale maiuscola)
+export function monthNames(locale: string, width: 'long' | 'short' = 'long'): string[] {
+  try {
+    const format = new Intl.DateTimeFormat(locale, { month: width, timeZone: 'UTC' })
+    return Array.from({ length: 12 }, (_, i) => {
+      const name = format.format(new Date(Date.UTC(2024, i, 15))).replace(/\.$/, '')
+      return name.charAt(0).toLocaleUpperCase(locale) + name.slice(1)
+    })
+  } catch {
+    return [...(width === 'long' ? MONTH_NAMES_IT : MONTH_SHORT_IT)]
+  }
+}
+
 const FREQUENCY_STEP: Record<FixedExpenseFrequency, number> = {
   mensile: 1,
   bimestrale: 2,
@@ -123,6 +136,18 @@ function yearMonthIndex(dateStr: string): number {
  * trimestrale che inizia a novembre 2026 tocca anche febbraio/maggio
  * 2027).
  */
+/** Mesi tra una scadenza e l'altra (0 = una tantum). */
+export function fixedExpenseStep(frequency: FixedExpenseFrequency): number {
+  return FREQUENCY_STEP[frequency]
+}
+
+/** La spesa fissa è in corso in quel mese (tra inizio e fine), anche se non scade lì. */
+export function fixedExpenseActiveInMonth(expense: SpendlyFixedExpense, year: number, month: number): boolean {
+  const targetIdx = year * 12 + (month - 1)
+  if (targetIdx < yearMonthIndex(expense.start_date)) return false
+  return !expense.end_date || targetIdx <= yearMonthIndex(expense.end_date)
+}
+
 export function fixedExpenseAppliesToMonth(expense: SpendlyFixedExpense, year: number, month: number): boolean {
   const targetIdx = year * 12 + (month - 1)
   const startIdx = yearMonthIndex(expense.start_date)

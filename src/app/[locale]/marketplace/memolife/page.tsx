@@ -39,8 +39,10 @@ export default async function MemoLifePage({
   const [upcoming, monthEvents, { data: tasks }, { data: notes }, { data: contacts }] = await Promise.all([
     loadAgenda(supabase, user.id, { from: today, to: addDays(today, 6), overdueSince: addDays(today, -60), sources, includeDone: true, useReminders: true }),
     loadAgenda(supabase, user.id, { from: month.from, to: month.to, sources, includeDone: true }),
-    supabase.from('tasks').select('id, title, description, due_date, priority, completed, created_at').eq('user_id', user.id).order('created_at', { ascending: false }).limit(300),
-    supabase.from('notes').select('id, title, content, created_at').eq('user_id', user.id).order('created_at', { ascending: false }).limit(300),
+    // Tutti i promemoria e le note (al massimo 1000 e 500 a persona): prima
+    // quelli da fare, così un promemoria aperto non sparisce mai
+    supabase.from('tasks').select('id, title, description, due_date, priority, completed, created_at').eq('user_id', user.id).order('completed').order('created_at', { ascending: false }).limit(1000),
+    supabase.from('notes').select('id, title, content, created_at').eq('user_id', user.id).order('created_at', { ascending: false }).limit(1000),
     supabase.from('contacts').select('id, name, phone, email, company, notes').eq('user_id', user.id).order('name').limit(2000),
   ])
 

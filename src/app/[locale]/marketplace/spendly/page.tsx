@@ -7,6 +7,7 @@ import { ArrowRight, HeartPulse } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import type { SpendlyIncome, SpendlyFixedExpense, SpendlyFixedPayment, SpendlyVariableExpense } from '@/lib/spendly'
 import { currentYear } from '@/lib/spendly'
+import { fetchAllRows } from '@/lib/fetchAllRows'
 
 export default async function SpendlyDashboardPage({
   searchParams,
@@ -23,13 +24,17 @@ export default async function SpendlyDashboardPage({
   if (!user) redirect(`/${await getLocale()}/login`)
 
   const [{ data: income }, { data: fixedExpenses }, { data: variableExpenses }, { data: payments }] = await Promise.all([
-    supabase
-      .from('spendly_income')
-      .select('id, description, amount, income_type, category, income_date, notes')
-      .eq('user_id', user.id)
-      .gte('income_date', `${year}-01-01`)
-      .lte('income_date', `${year}-12-31`)
-      .returns<SpendlyIncome[]>(),
+    fetchAllRows((from, to) =>
+      supabase
+        .from('spendly_income')
+        .select('id, description, amount, income_type, category, income_date, notes')
+        .eq('user_id', user.id)
+        .gte('income_date', `${year}-01-01`)
+        .lte('income_date', `${year}-12-31`)
+        .order('id')
+        .range(from, to)
+        .returns<SpendlyIncome[]>()
+    ),
     // Nessun filtro per anno: fixedExpenseAppliesToMonth (in computeMonthlyTotals)
     // decide da sola, mese per mese, se una spesa fissa (con il suo
     // start_date/end_date) ricade nell'anno richiesto — anche quando la
@@ -39,20 +44,28 @@ export default async function SpendlyDashboardPage({
       .select('id, description, amount, frequency, category, start_date, end_date, billing_day, notes')
       .eq('user_id', user.id)
       .returns<SpendlyFixedExpense[]>(),
-    supabase
-      .from('spendly_variable_expenses')
-      .select('id, description, amount, expense_date, category, notes')
-      .eq('user_id', user.id)
-      .gte('expense_date', `${year}-01-01`)
-      .lte('expense_date', `${year}-12-31`)
-      .returns<SpendlyVariableExpense[]>(),
-    supabase
-      .from('spendly_fixed_payments')
-      .select('expense_id, period, amount, paid_on')
-      .eq('user_id', user.id)
-      .gte('period', `${year}-01-01`)
-      .lte('period', `${year}-12-01`)
-      .returns<SpendlyFixedPayment[]>(),
+    fetchAllRows((from, to) =>
+      supabase
+        .from('spendly_variable_expenses')
+        .select('id, description, amount, expense_date, category, notes')
+        .eq('user_id', user.id)
+        .gte('expense_date', `${year}-01-01`)
+        .lte('expense_date', `${year}-12-31`)
+        .order('id')
+        .range(from, to)
+        .returns<SpendlyVariableExpense[]>()
+    ),
+    fetchAllRows((from, to) =>
+      supabase
+        .from('spendly_fixed_payments')
+        .select('expense_id, period, amount, paid_on')
+        .eq('user_id', user.id)
+        .gte('period', `${year}-01-01`)
+        .lte('period', `${year}-12-01`)
+        .order('id')
+        .range(from, to)
+        .returns<SpendlyFixedPayment[]>()
+    ),
   ])
 
   const te = await getTranslations('ecosystem')

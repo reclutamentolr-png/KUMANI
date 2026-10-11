@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import IncomeManager from '@/components/spendly/IncomeManager'
 import type { SpendlyIncome } from '@/lib/spendly'
 import { currentYear } from '@/lib/spendly'
+import { fetchAllRows } from '@/lib/fetchAllRows'
 
 export default async function SpendlyIncomePage({
   searchParams,
@@ -19,14 +20,18 @@ export default async function SpendlyIncomePage({
   } = await supabase.auth.getUser()
   if (!user) redirect(`/${await getLocale()}/login`)
 
-  const { data: income } = await supabase
-    .from('spendly_income')
-    .select('id, description, amount, income_type, category, income_date, notes')
-    .eq('user_id', user.id)
-    .gte('income_date', `${year}-01-01`)
-    .lte('income_date', `${year}-12-31`)
-    .order('income_date', { ascending: false })
-    .returns<SpendlyIncome[]>()
+  const { data: income } = await fetchAllRows((from, to) =>
+    supabase
+      .from('spendly_income')
+      .select('id, description, amount, income_type, category, income_date, notes')
+      .eq('user_id', user.id)
+      .gte('income_date', `${year}-01-01`)
+      .lte('income_date', `${year}-12-31`)
+      .order('income_date', { ascending: false })
+      .order('id')
+      .range(from, to)
+      .returns<SpendlyIncome[]>()
+  )
 
   return <IncomeManager items={income || []} year={year} />
 }

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import { todayKey } from '@/lib/agenda'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { ChevronLeft, ChevronRight, TrendingUp, Repeat, Wallet, CheckCircle2, AlertTriangle, XCircle } from 'lucide-react'
 import YearSelect from './YearSelect'
 import {
@@ -10,8 +10,7 @@ import {
   computeMonthCapacity,
   formatCurrency,
   currentYearOnly,
-  MONTH_NAMES_IT,
-  MONTH_SHORT_IT,
+  monthNames,
   type SpendlyIncome,
   type SpendlyFixedExpense,
   type SpendlyFixedPayment,
@@ -39,6 +38,9 @@ export default function SpendlyCapacity({
   year: number
 }) {
   const t = useTranslations('spendly')
+  const locale = useLocale()
+  const monthShort = monthNames(locale, 'short')
+  const monthLong = monthNames(locale)
   const [selectedMonth, setSelectedMonth] = useState(() => Number(todayKey().slice(5, 7)))
 
   const capacities = useMemo(() => {
@@ -73,7 +75,7 @@ export default function SpendlyCapacity({
         >
           <ChevronLeft className="w-4 h-4" />
         </button>
-        {MONTH_SHORT_IT.map((label, i) => (
+        {monthShort.map((label, i) => (
           <button
             key={label}
             type="button"
@@ -97,7 +99,7 @@ export default function SpendlyCapacity({
       </div>
 
       <div className="rounded-2xl border border-[var(--gold)]/20 bg-[var(--paper)] p-6 mb-8">
-        <h3 className="text-lg font-bold text-[var(--ink)]">{MONTH_NAMES_IT[selectedMonth - 1]} {year}</h3>
+        <h3 className="text-lg font-bold text-[var(--ink)]">{monthLong[selectedMonth - 1]} {year}</h3>
         <p className="text-xs text-[var(--muted)] mb-4">{t('capacityFormula')}</p>
 
         <div className="space-y-3">
@@ -132,7 +134,7 @@ export default function SpendlyCapacity({
             const s = STATUS_STYLE[c.status]
             return (
               <li key={c.month} className="flex items-center gap-4 px-5 py-3">
-                <span className="w-20 shrink-0 text-sm font-medium text-[var(--ink)]">{MONTH_NAMES_IT[c.month - 1]}</span>
+                <span className="w-20 shrink-0 text-sm font-medium text-[var(--ink)]">{monthLong[c.month - 1]}</span>
                 <div className="flex-1 h-2 rounded-full bg-[var(--background)] overflow-hidden">
                   <div className={`h-full rounded-full ${s.bar}`} style={{ width: `${Math.min(100, c.usedPercent)}%` }} />
                 </div>

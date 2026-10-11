@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import FixedExpenseManager from '@/components/spendly/FixedExpenseManager'
 import type { SpendlyFixedExpense, SpendlyFixedPayment } from '@/lib/spendly'
 import { currentYear } from '@/lib/spendly'
+import { fetchAllRows } from '@/lib/fetchAllRows'
 
 export default async function SpendlyFixedExpensesPage({
   searchParams,
@@ -34,13 +35,17 @@ export default async function SpendlyFixedExpensesPage({
       .order('start_date', { ascending: false })
       .returns<SpendlyFixedExpense[]>(),
     // Scadenze già pagate nell'anno (stato "Pagata" e importo reale)
-    supabase
-      .from('spendly_fixed_payments')
-      .select('expense_id, period, amount, paid_on')
-      .eq('user_id', user.id)
-      .gte('period', `${year}-01-01`)
-      .lte('period', `${year}-12-01`)
-      .returns<SpendlyFixedPayment[]>(),
+    fetchAllRows((from, to) =>
+      supabase
+        .from('spendly_fixed_payments')
+        .select('expense_id, period, amount, paid_on')
+        .eq('user_id', user.id)
+        .gte('period', `${year}-01-01`)
+        .lte('period', `${year}-12-01`)
+        .order('id')
+        .range(from, to)
+        .returns<SpendlyFixedPayment[]>()
+    ),
   ])
 
   return (

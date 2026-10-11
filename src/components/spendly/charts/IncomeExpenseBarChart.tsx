@@ -1,6 +1,7 @@
 'use client'
 
-import { MONTH_SHORT_IT } from '@/lib/spendly'
+import { useLocale } from 'next-intl'
+import { monthNames } from '@/lib/spendly'
 
 type Point = { month: number; income: number; expenses: number }
 
@@ -9,6 +10,8 @@ type Point = { month: number; income: number; expenses: number }
 // questi grafici sono semplice SVG disegnato a mano, sullo stesso principio
 // dei mini-grafici già presenti altrove nell'app.
 export default function IncomeExpenseBarChart({ data }: { data: Point[] }) {
+  const locale = useLocale()
+  const monthShort = monthNames(locale, 'short')
   const width = 700
   const height = 220
   const padding = { top: 16, right: 12, bottom: 24, left: 12 }
@@ -35,7 +38,7 @@ export default function IncomeExpenseBarChart({ data }: { data: Point[] }) {
             <rect x={cx - barW - 2} y={baseY - incomeH} width={barW} height={incomeH} rx={2} fill="var(--gold-bright)" />
             <rect x={cx + 2} y={baseY - expenseH} width={barW} height={expenseH} rx={2} fill="#dc2626" fillOpacity={0.8} />
             <text x={cx} y={height - 4} textAnchor="middle" className="fill-[var(--muted)] text-[10px]">
-              {MONTH_SHORT_IT[d.month - 1]}
+              {monthShort[d.month - 1]}
             </text>
           </g>
         )

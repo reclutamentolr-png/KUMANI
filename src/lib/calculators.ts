@@ -53,6 +53,9 @@ export function parseDecimal(input: string): number | null {
       // "1.234.567": separatori delle migliaia
       if (parts.slice(1).some((p) => p.length !== 3)) return null
       normalized = parts.join('')
+    } else if (sep === '.' && /^[1-9]\d{0,2}\.\d{3}$/.test(s)) {
+      // "1.500" all'italiana = millecinquecento (come in Spendly e Magazzino)
+      normalized = parts.join('')
     } else {
       normalized = parts.join('.')
     }
