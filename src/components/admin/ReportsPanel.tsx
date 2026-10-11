@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { BarChart3, LoaderCircle } from 'lucide-react'
+import SessionsReport from './SessionsReport'
 import {
   adminReportAgents,
   adminReportCommunityVouchers,
@@ -18,9 +19,10 @@ import {
   type VoucherRanking,
 } from '@/app/actions/adminReports'
 
-export type ReportTab = 'passes' | 'shops' | 'agents' | 'vouchers' | 'donors' | 'points'
+export type ReportTab = 'sessions' | 'passes' | 'shops' | 'agents' | 'vouchers' | 'donors' | 'points'
 
 const TABS: { key: ReportTab; label: string }[] = [
+  { key: 'sessions', label: 'Sessioni e tempo medio' },
   { key: 'passes', label: 'Pass servizi' },
   { key: 'shops', label: 'Negozi (lotti voucher)' },
   { key: 'agents', label: 'Agenti' },
@@ -83,7 +85,7 @@ const Rank = ({ n }: { n: number }) => (
 
 // Admin → Statistiche e classifiche: chi usa e fa rendere le funzioni di
 // KUMANI (Pass, negozi, agenti, voucher, donazioni, punti).
-export default function ReportsPanel({ initialTab = 'passes' }: { initialTab?: ReportTab }) {
+export default function ReportsPanel({ initialTab = 'sessions' }: { initialTab?: ReportTab }) {
   const [tab, setTab] = useState<ReportTab>(initialTab)
   const [data, setData] = useState<Partial<Record<ReportTab, unknown>>>({})
   const [error, setError] = useState<string | null>(null)
@@ -94,8 +96,10 @@ export default function ReportsPanel({ initialTab = 'passes' }: { initialTab?: R
   }, [initialTab])
 
   useEffect(() => {
-    if (data[tab] !== undefined) return
+    // Le sessioni hanno il loro caricamento (con la scelta del periodo)
+    if (tab === 'sessions' || data[tab] !== undefined) return
     const load = {
+      sessions: async () => ({}),
       passes: adminReportPasses,
       shops: adminReportShops,
       agents: adminReportAgents,
@@ -137,7 +141,8 @@ export default function ReportsPanel({ initialTab = 'passes' }: { initialTab?: R
       </div>
 
       {error && <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
-      {current === undefined && !error && (
+      {tab === 'sessions' && <SessionsReport />}
+      {tab !== 'sessions' && current === undefined && !error && (
         <p className="flex items-center gap-2 text-sm text-gray-500">
           <LoaderCircle className="h-4 w-4 animate-spin" /> Caricamento…
         </p>

@@ -202,3 +202,30 @@ export async function adminReportPoints(): Promise<{ top: PointsRanking } | { er
     }),
   }
 }
+
+// Sessioni d'uso e tempo medio per sessione (tabella user_sessions)
+export type SessionStats = {
+  days: number
+  sessions: number
+  users: number
+  avg_seconds: number
+  median_seconds: number
+  total_seconds: number
+  mobile_sessions: number
+  mobile_avg_seconds: number
+  desktop_avg_seconds: number
+  prev_sessions: number
+  prev_users: number
+  prev_avg_seconds: number
+  buckets: Record<string, number>
+  daily: { day: string; sessions: number; users: number; avg_seconds: number }[]
+  first_session: string | null
+}
+
+export async function adminReportSessions(days: number): Promise<SessionStats | { error: string }> {
+  if (!(await verifyAdmin('stats.read'))) return { error: 'Non autorizzato' }
+  const period = [7, 30, 90].includes(days) ? days : 30
+  const { data, error } = await db().rpc('admin_session_stats', { p_days: period })
+  if (error || !data) return { error: error?.message ?? 'Statistiche non disponibili' }
+  return data as SessionStats
+}

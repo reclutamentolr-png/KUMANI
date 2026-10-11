@@ -199,7 +199,7 @@ type AdminDashboardProps = {
 export default function AdminDashboard({ permissions, userName, locale, initialSection }: AdminDashboardProps) {
   const [activeSection, setActiveSection] = useState(initialSection || 'overview')
   // Scheda aperta in Statistiche e classifiche (dai pulsanti "Dettaglio")
-  const [reportTab, setReportTab] = useState<ReportTab>('passes')
+  const [reportTab, setReportTab] = useState<ReportTab>('sessions')
   const openReport = (tab: ReportTab) => {
     setReportTab(tab)
     setActiveSection('reports')

@@ -7,6 +7,7 @@ import ProfileReminder from '@/components/ProfileReminder'
 import ImpersonationBanner from '@/components/ImpersonationBanner'
 import ToolGuideButton from '@/components/ToolGuideButton'
 import AppNav from '@/components/nav/AppNav'
+import SessionTracker from '@/components/SessionTracker'
 import RecentToolTracker from '@/components/nav/RecentToolTracker'
 import CookieConsent from '@/components/consent/CookieConsent'
 import { ConsentProvider } from '@/components/consent/ConsentGate'
@@ -64,6 +65,8 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         {/* Menu fisso delle pagine principali e servizi usati di recente */}
         <AppNav />
         <RecentToolTracker />
+        {/* Sessioni d'uso (tempo medio per sessione nelle statistiche dell'Admin) */}
+        <SessionTracker />
         {/* «Porta KUMANI con te»: installare il sito come app (homepage e dashboard) */}
         <InstallAppBanner />
         {/* Banner dei cookie: solo se acceso dall'Admin (lib/consent.ts) */}

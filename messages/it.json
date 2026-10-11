@@ -8399,7 +8399,7 @@
     "s1t": "Chi tratta i dati",
     "s1": "Il titolare del trattamento sarà indicato su questa pagina con i suoi dati completi. Per qualsiasi domanda sui tuoi dati puoi già scrivere a {email}.",
     "s2t": "Quali dati trattiamo",
-    "s2": "Dati dell’account: email e password (cifrata, nessuno può leggerla).|Dati del profilo: nome, cognome, paese, città e quelli che scegli di aggiungere.|I contenuti che crei negli strumenti, ad esempio agenda, spese, scadenze, preventivi o annunci.|Pagamenti: avvengono tramite Stripe; KUMANI non vede né conserva i dati della carta.|Dati tecnici, come indirizzo IP e tipo di browser, per la sicurezza del servizio.",
+    "s2": "Dati dell’account: email e password (cifrata, nessuno può leggerla).|Dati del profilo: nome, cognome, paese, città e quelli che scegli di aggiungere.|I contenuti che crei negli strumenti, ad esempio agenda, spese, scadenze, preventivi o annunci.|Pagamenti: avvengono tramite Stripe; KUMANI non vede né conserva i dati della carta.|Dati tecnici, come indirizzo IP e tipo di browser, per la sicurezza del servizio.|Dati di utilizzo: quando usi KUMANI e per quanto tempo (durata delle visite, telefono o computer), per statistiche interne su come viene usata la piattaforma; vengono cancellati dopo 13 mesi.",
     "s3t": "Perché li trattiamo",
     "s3": "Per fornirti il servizio che hai scelto (esecuzione del contratto).|Per rispettare obblighi di legge, ad esempio fiscali.|Per la sicurezza e per prevenire abusi e truffe (legittimo interesse).|Per mostrare la tua storia in homepage solo se dai il consenso, che puoi revocare quando vuoi.|Non inviamo pubblicità via email senza il tuo consenso.",
     "s4t": "Chi riceve i dati",

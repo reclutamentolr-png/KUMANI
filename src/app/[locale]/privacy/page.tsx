@@ -12,7 +12,7 @@ import { getConsentConfig } from '@/lib/consentServer'
 // questo file (commit precedente a "privacy essenziale") e tornerà qui,
 // con i dati del titolare, quando sarà approvata.
 
-const LAST_UPDATE = '2026-10-09'
+const LAST_UPDATE = '2026-10-11'
 const LIST_SECTIONS = new Set([2, 3, 6])
 
 // Pagina uguale per tutti: preparata in anticipo per ogni lingua e rifatta

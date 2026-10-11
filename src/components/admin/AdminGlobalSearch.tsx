@@ -18,6 +18,7 @@ const KEYWORDS: Record<string, string> = {
   financials: 'amministrazione incassi fatturato stripe tasse iva entrate',
   costs: 'costi margini spese',
   overview: 'panoramica riepilogo',
+  reports: 'statistiche sessioni tempo medio durata visite utilizzo classifiche',
   platforms: 'piattaforme collegate vercel supabase stripe resend cloudflare',
   homeLayout: 'homepage tema aspetto home',
   languages: 'lingue traduzioni',
