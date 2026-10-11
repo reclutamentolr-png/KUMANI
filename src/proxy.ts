@@ -45,6 +45,7 @@ const PAID_TOOLS = [
   'magazzino',
   'clienti',
   'hopla',
+  'firma-pdf',
   'documento-sicuro',
   'firma-email',
   'calcolatrici',

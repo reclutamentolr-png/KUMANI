@@ -75,6 +75,7 @@ export const SECTION_LABELS: Record<string, string> = {
   magazzino: 'Magazzino PRO',
   clienti: 'Clienti e Lavori',
   hopla: 'Hoplà',
+  firmaPdf: 'Firma PDF',
   proposals: 'Proposte della community',
   shop: 'KUMANI Shop',
   shopPublic: 'KUMANI Shop (negozio pubblico)',

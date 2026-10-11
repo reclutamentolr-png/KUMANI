@@ -207,6 +207,16 @@ export default async function TermsPage({ params }: LocaleProps) {
                 sospendere l&apos;accesso al servizio.
               </p>
               <p>
+                <strong className="text-gray-900">Firma dei documenti (Firma PDF).</strong> Il documento viene aperto, firmato e salvato
+                sul dispositivo dell&apos;utente: non viene caricato né conservato sui server della Piattaforma. La firma apposta con
+                Firma PDF è una firma elettronica semplice: con la conferma l&apos;utente accetta che rappresenti la propria firma sui
+                documenti che firma, ma non è una firma digitale qualificata né avanzata; il suo valore è liberamente valutabile secondo la
+                legge (in Italia art. 20 del Codice dell&apos;Amministrazione Digitale) e per gli atti per cui la legge richiede una firma
+                qualificata o la forma scritta autenticata occorrono altri strumenti. Firma soltanto l&apos;utente che usa il servizio:
+                l&apos;utente deve firmare solo a proprio nome e documenti che ha il diritto di firmare ed è responsabile del loro
+                contenuto. La firma può essere ricordata, su scelta dell&apos;utente, solo nella memoria del suo browser.
+              </p>
+              <p>
                 <strong className="text-gray-900">Eventi della community (KUMANI Events).</strong> Gli eventi sono organizzati dagli
                 utenti verificati, che ne sono gli unici responsabili (svolgimento, sicurezza del luogo, autorizzazioni e obblighi fiscali).
                 La Piattaforma fornisce gli strumenti (pubblicazione, iscrizioni, pass e check-in), approva i primi eventi di ogni

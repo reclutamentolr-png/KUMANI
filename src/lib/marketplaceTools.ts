@@ -357,6 +357,17 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       requiresSubscription: true,
     },
     {
+      toolName: 'firma-pdf',
+      href: '/marketplace/firma-pdf',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'Signature',
+      title: t('firmaPdf'),
+      description: t('firmaPdfDescription'),
+      color: 'gold',
+      category: 'lavoro',
+      requiresSubscription: true,
+    },
+    {
       toolName: 'magazzino',
       href: '/marketplace/magazzino',
       gradient: 'bg-[var(--ink)]',

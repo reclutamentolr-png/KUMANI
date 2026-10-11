@@ -36,6 +36,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "fincheck",
   "findo",
   "firmaEmail",
+  "firmaPdf",
   "flyers",
   "focus",
   "garage",

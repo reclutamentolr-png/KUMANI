@@ -146,6 +146,7 @@ export default function HomeToolsGrid({ freeToolNames = [] }: { freeToolNames?: 
     { name: 'aureya', icon: Stethoscope, title: tc('aureya'), desc: tc('aureyaDescription'), category: 'wellness' },
     { name: 'preventivi', icon: FileSpreadsheet, title: tc('preventivi'), desc: tc('preventiviDescription'), category: 'lavoro' },
     { name: 'hopla', icon: MonitorSmartphone, title: tc('hopla'), desc: tc('hoplaDescription'), category: 'personal' },
+    { name: 'firma-pdf', icon: Signature, title: tc('firmaPdf'), desc: tc('firmaPdfDescription'), category: 'lavoro' },
     { name: 'magazzino', icon: Warehouse, title: tc('magazzino'), desc: tc('magazzinoDescription'), category: 'lavoro' },
     { name: 'calcolatrici', icon: Calculator, title: tc('calcolatrici'), desc: tc('calcolatriciDescription'), category: 'lavoro' },
     { name: 'trova-lavoro', icon: BriefcaseBusiness, title: tc('trovaLavoro'), desc: tc('trovaLavoroDescription'), category: 'lavoro' },
