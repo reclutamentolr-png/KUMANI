@@ -1,13 +1,14 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Gift, Globe, KeyRound, LayoutGrid, LoaderCircle, Search, ShieldAlert, Ticket, User, X } from 'lucide-react'
+import { Gift, Globe, KeyRound, LayoutGrid, LoaderCircle, Search, ShieldAlert, Ticket, ToggleRight, User, X } from 'lucide-react'
 import { adminGlobalSearch, type AdminSearchResults } from '@/app/actions/adminSearch'
 import type { AdminUserRow } from '@/lib/adminTypes'
 
 // Ricerca generale dell'Admin: sezioni e impostazioni (anche per parola
 // chiave, es. «prezzo sorpresa» → Impostazioni), utenti, sorprese, codici
-// regalo e di prova, indirizzi IP. Ctrl+K (o /) per andarci subito.
+// regalo e di prova, indirizzi IP e i singoli servizi (nome vero, nome tecnico
+// e categoria: «firma» → Firma email e Firma PDF). Ctrl+K (o /) per andarci subito.
 
 // Parole che portano alla sezione giusta anche se non sono nel nome
 const KEYWORDS: Record<string, string> = {
@@ -30,15 +31,23 @@ const KEYWORDS: Record<string, string> = {
 }
 
 type Section = { id: string; label: string }
+export type SearchTool = { name: string; title: string; group: string }
+
+// Minuscole e senza accenti: «hopla» trova «Hoplà»
+const norm = (v: string) => v.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 
 export default function AdminGlobalSearch({
   sections,
+  tools = [],
   onSection,
+  onTool,
   onUser,
   onCoupons,
 }: {
   sections: Section[]
+  tools?: SearchTool[]
   onSection: (id: string) => void
+  onTool?: (name: string) => void
   onUser: (user: AdminUserRow) => void
   onCoupons: (area: 'gifts' | 'trials') => void
 }) {
@@ -99,6 +108,17 @@ export default function AdminGlobalSearch({
       .slice(0, 6)
   }, [q, sections])
 
+  const toolHits = useMemo(() => {
+    const words = norm(q.trim()).split(/\s+/).filter(Boolean)
+    if (!words.length) return []
+    return tools
+      .filter((tool) => {
+        const hay = norm(`${tool.title} ${tool.name} ${tool.name.replace(/-/g, ' ')} ${tool.group}`)
+        return words.every((w) => hay.includes(w))
+      })
+      .slice(0, 8)
+  }, [q, tools])
+
   const close = () => {
     setOpen(false)
     setQ('')
@@ -110,6 +130,7 @@ export default function AdminGlobalSearch({
     term.length >= 2 &&
     !loading &&
     !sectionHits.length &&
+    !toolHits.length &&
     !r?.users.length &&
     !r?.surprises.length &&
     !r?.giftCodes.length &&
@@ -131,7 +152,7 @@ export default function AdminGlobalSearch({
             setOpen(true)
           }}
           onFocus={() => setOpen(true)}
-          placeholder="Cerca nell'Admin: sezioni, impostazioni, utenti, sorprese, codici, IP…"
+          placeholder="Cerca nell'Admin: sezioni, servizi, impostazioni, utenti, sorprese, codici, IP…"
           className="w-full rounded-xl border border-gray-200 bg-white py-3 pl-12 pr-24 text-[15px] shadow-sm focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30"
           aria-label="Cerca nell'Admin"
         />
@@ -156,6 +177,22 @@ export default function AdminGlobalSearch({
               {sectionHits.map((s) => (
                 <button key={s.id} type="button" className={row} onClick={() => (onSection(s.id), close())}>
                   <LayoutGrid className="h-4 w-4 text-[var(--gold)]" /> {s.label}
+                </button>
+              ))}
+            </>
+          )}
+          {toolHits.length > 0 && onTool && (
+            <>
+              <p className={head}>Servizi (Strumenti e interruttori)</p>
+              {toolHits.map((tool) => (
+                <button key={tool.name} type="button" className={row} onClick={() => (onTool(tool.name), close())}>
+                  <ToggleRight className="h-4 w-4 text-[var(--gold)]" />
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate font-semibold">{tool.title}</span>
+                    <span className="block truncate text-xs text-gray-500">
+                      {tool.group} · {tool.name}
+                    </span>
+                  </span>
                 </button>
               ))}
             </>

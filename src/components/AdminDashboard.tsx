@@ -6,7 +6,8 @@ import { notify } from '@/lib/adminNotify'
 import { SITE_URL } from '@/lib/siteUrl'
 import AdminPanelLoading from '@/components/admin/AdminPanelLoading'
 import AdminToaster from '@/components/admin/AdminToaster'
-import { useState, useEffect, type ComponentProps } from 'react'
+import { useState, useEffect, useMemo, type ComponentProps } from 'react'
+import { useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
 import { hasPermission, Permission } from '@/lib/admin-permissions'
 import type MatrixTreeComponent from '@/components/MatrixTree'
@@ -209,6 +210,11 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
   const [openGroup, setOpenGroup] = useState<string | null | undefined>(undefined)
   // Strumenti e interruttori: gruppi chiusi finché non si aprono
   const [openToolGroups, setOpenToolGroups] = useState<Set<string>>(new Set())
+  // Servizio scelto dalla ricerca: la sua scheda viene mostrata ed evidenziata
+  const [focusTool, setFocusTool] = useState<string | null>(null)
+  const tm = useTranslations('marketplace')
+  const toolTitles = useMemo(() => new Map(getMarketplaceTools(tm).map((tool) => [tool.toolName, tool.title])), [tm])
+  const toolTitle = (name: string) => toolTitles.get(name) ?? name.replace(/-/g, ' ').replace(/^./, (c) => c.toUpperCase())
 
   // Riflette la sezione attiva nell'URL (senza navigazione né reload), così
   // aggiornando la pagina si resta nella stessa voce del menu.
@@ -943,6 +949,14 @@ L'accesso viene registrato.`))) return
     </div>
   )
 
+  useEffect(() => {
+    if (!focusTool || activeSection !== 'marketplace') return
+    const el = document.getElementById(`tool-${focusTool}`)
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    const timer = setTimeout(() => setFocusTool(null), 4000)
+    return () => clearTimeout(timer)
+  }, [focusTool, activeSection, marketplaceUsage, openToolGroups])
+
   const renderMarketplace = () => {
     const filteredTools = marketplaceUsage.filter((tool) => tool.tool_name !== 'nfc-smart-hub')
     // Raggruppati per categoria, come nel Marketplace; le sezioni della
@@ -995,10 +1009,11 @@ L'accesso viene registrato.`))) return
             {isOpen && (
             <div className="grid grid-cols-1 gap-4 border-t border-gray-100 bg-gray-50/60 p-4 md:grid-cols-2">
               {group.tools.map((tool) => (
-                <div key={tool.tool_name} className={`bg-white p-6 rounded-xl border shadow-sm ${!tool.is_enabled ? 'opacity-60 bg-gray-50' : ''}`}>
+                <div key={tool.tool_name} id={`tool-${tool.tool_name}`} className={`bg-white p-6 rounded-xl border shadow-sm scroll-mt-24 ${!tool.is_enabled ? 'opacity-60 bg-gray-50' : ''} ${focusTool === tool.tool_name ? 'ring-4 ring-[var(--gold)]/60' : ''}`}>
                   <div className="flex items-start justify-between mb-4">
                     <div>
-                      <h3 className="text-lg font-bold text-gray-900 capitalize">{tool.tool_name.replace(/-/g, ' ')}</h3>
+                      <h3 className="text-lg font-bold text-gray-900">{toolTitle(tool.tool_name)}</h3>
+                      <p className="font-mono text-xs text-gray-400">{tool.tool_name}</p>
                       <p className="text-sm text-gray-500 mt-1">{tool.description || 'Strumento del marketplace'}</p>
                     </div>
                     <button
@@ -1701,6 +1716,16 @@ L'accesso viene registrato.`))) return
     {/* Ricerca generale: sezioni, impostazioni, utenti, sorprese, codici, IP */}
     <AdminGlobalSearch
       sections={availableMenuItems.map((item) => ({ id: item.id, label: item.label }))}
+      tools={
+        availableMenuItems.some((item) => item.id === 'marketplace')
+          ? getMarketplaceTools(tm).map((tool) => ({ name: tool.toolName, title: tool.title, group: TOOL_GROUPS.find((g) => g.id === tool.category)?.label ?? '' }))
+          : []
+      }
+      onTool={(name) => {
+        setActiveSection('marketplace')
+        setOpenToolGroups((prev) => new Set(prev).add(toolCategoryOf(name)))
+        setFocusTool(name)
+      }}
       onSection={(id) => setActiveSection(id)}
       onUser={(user) => {
         setActiveSection('users')
