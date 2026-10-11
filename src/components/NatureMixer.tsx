@@ -51,8 +51,9 @@ export default function NatureMixer() {
                   onClick={async () => {
                     const starting = activeNature !== preset.id
                     await toggleNature(preset.id)
-                    // I comandi (mixer) sono nel riquadro in alto: ci si porta lì
-                    if (starting) document.getElementById('nb-player')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                    // I comandi (mixer) sono nel riquadro in alto: ci si porta lì quando
+                    // sono comparsi, con il riquadro intero sotto la barra in alto
+                    if (starting) setTimeout(() => document.getElementById('nb-player')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150)
                   }}
                   disabled={natureLoading !== null && !isLoading}
                   className="flex w-full items-start justify-between gap-2 text-left disabled:opacity-40"

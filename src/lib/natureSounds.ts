@@ -65,6 +65,10 @@ export class NatureSoundsEngine {
   private layerGeneration = 0
 
   private ensure(): AudioContext {
+    // iPhone (Safari 16.4+): l'audio è «musica», continua anche a schermo
+    // spento e con il silenzioso, invece di fermarsi
+    const session = (navigator as Navigator & { audioSession?: { type: string } }).audioSession
+    if (session) session.type = 'playback'
     if (!this.ctx) {
       const AC = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
       const ctx = new AC()
@@ -86,6 +90,10 @@ export class NatureSoundsEngine {
         return filter
       })
       previous.connect(this.master)
+      // Interrotto dal sistema (chiamata, schermo spento): appena si può, si riparte
+      ctx.onstatechange = () => {
+        if (ctx.state !== 'running' && this.current && !this.current.audio.paused && document.visibilityState === 'visible') ctx.resume().catch(() => {})
+      }
     }
     if (this.ctx.state === 'suspended') this.ctx.resume()
     return this.ctx
@@ -198,8 +206,13 @@ export class NatureSoundsEngine {
     await this.ctx?.suspend().catch(() => {})
   }
 
+  // C'è un suono in corso (non in pausa)
+  isActive() {
+    return !!this.current
+  }
+
   async resume() {
-    await this.ctx?.resume().catch(() => {})
+    if (this.ctx && this.ctx.state !== 'running') await this.ctx.resume().catch(() => {})
     await Promise.all([this.current?.audio.play(), this.layer?.audio.play()]).catch(() => {})
   }
 

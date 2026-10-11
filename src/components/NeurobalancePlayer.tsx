@@ -60,7 +60,7 @@ export default function NeurobalancePlayer() {
 
   return (
     <section className="overflow-hidden rounded-3xl border border-[var(--gold)]/25 bg-[var(--paper)] shadow-[0_14px_40px_rgba(23,23,23,0.12)]">
-      <div className="bg-[radial-gradient(circle_at_top_right,rgba(199,154,59,0.25),transparent_42%),linear-gradient(135deg,#171717,#292722)] px-6 py-8 text-white sm:px-10" id="nb-player">
+      <div className="bg-[radial-gradient(circle_at_top_right,rgba(199,154,59,0.25),transparent_42%),linear-gradient(135deg,#171717,#292722)] scroll-mt-20 px-6 py-8 text-white sm:px-10" id="nb-player">
         {idle && (
           <div className="flex flex-col gap-5">
             <p className="text-xs font-bold uppercase tracking-[0.28em] text-[var(--gold-bright)]">{t('chooseLabel')}</p>

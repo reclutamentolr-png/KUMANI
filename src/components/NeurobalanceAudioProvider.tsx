@@ -1,6 +1,7 @@
 'use client'
 
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
+import { useTranslations } from 'next-intl'
 import { awardNeurobalancePoint } from '@/app/actions/neurobalance'
 import { EQ_NEUTRAL, NATURE_MOODS, NatureSoundsEngine, type NaturePreset } from '@/lib/natureSounds'
 import { presets, specialSounds, tracks, MIN_LISTEN_SECONDS_FOR_POINT, type Preset, type SpecialSound, type Track } from '@/lib/neurobalancePresets'
@@ -65,6 +66,9 @@ export function useNeurobalanceAudio() {
 // neurobalance. Spostandolo qui la sessione resta attiva ovunque nell'app,
 // controllabile dal mini player fluttuante (FloatingAudioPlayer).
 export function NeurobalanceAudioProvider({ children }: { children: ReactNode }) {
+  const t = useTranslations('neurobalance')
+  // Nome del suono per il lettore di sistema (schermata di blocco)
+  const natureTitle = (id: NaturePreset) => t(`naturePresets.${id}.label`)
   const [selectedId, setSelectedId] = useState(presets[0].id)
   const [isPlaying, setIsPlaying] = useState(false)
   const [remaining, setRemaining] = useState(presets[0].duration * 60)
@@ -373,6 +377,48 @@ export function NeurobalanceAudioProvider({ children }: { children: ReactNode })
     }, 1800)
     return () => clearInterval(interval)
   }, [natureAnimate, activeNature, naturePaused])
+
+  // Lettore di sistema (schermata di blocco, centro di controllo, cuffie):
+  // play e pausa comandano il nostro motore; a suono fermato il lettore sparisce
+  useEffect(() => {
+    if (!('mediaSession' in navigator)) return
+    const ms = navigator.mediaSession
+    if (!activeNature) {
+      ms.metadata = null
+      ms.playbackState = 'none'
+      for (const action of ['play', 'pause', 'stop'] as MediaSessionAction[]) {
+        try {
+          ms.setActionHandler(action, null)
+        } catch {}
+      }
+      return
+    }
+    ms.metadata = new MediaMetadata({ title: natureTitle(activeNature), artist: 'KUMANI NeuroBalance' })
+    ms.playbackState = naturePaused ? 'paused' : 'playing'
+    const eng = natureEngineRef.current
+    const handlers: [MediaSessionAction, () => void][] = [
+      ['play', () => void eng?.resume().then(() => setNaturePaused(false))],
+      ['pause', () => void eng?.pause().then(() => setNaturePaused(true))],
+      ['stop', () => endNature()],
+    ]
+    for (const [action, handler] of handlers) {
+      try {
+        ms.setActionHandler(action, handler)
+      } catch {}
+    }
+    // endNature e natureTitle leggono solo setter e ref stabili
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeNature, naturePaused])
+
+  // Tornando sulla pagina (schermo riacceso, cambio app) il motore riparte
+  // se il suono doveva essere in riproduzione
+  useEffect(() => {
+    const onVisible = () => {
+      if (document.visibilityState === 'visible' && activeNature && !naturePaused) void natureEngineRef.current?.resume()
+    }
+    document.addEventListener('visibilitychange', onVisible)
+    return () => document.removeEventListener('visibilitychange', onVisible)
+  }, [activeNature, naturePaused])
 
   const toggleNaturePause = async () => {
     const eng = natureEngineRef.current
