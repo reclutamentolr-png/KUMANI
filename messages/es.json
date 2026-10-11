@@ -9637,7 +9637,9 @@
     "previewDesktop": "Ordenador",
     "draftFound": "Tienes cambios sin guardar del {time}: ¿quieres recuperarlos?",
     "draftRestore": "Recuperar",
-    "draftDiscard": "Descartar"
+    "draftDiscard": "Descartar",
+    "searchVisible": "Que te encuentren en Google",
+    "searchVisibleHint": "Desactivado: solo quien tiene el enlace ve la página. Activado: puede aparecer en Google y otros buscadores. Actívalo solo si te parece bien que cualquiera encuentre tu nombre, contactos y dirección."
   },
   "landingPublic": {
     "services": "Servicios",
@@ -11349,7 +11351,9 @@
     "cancelTitle": "¿Cancelar el pedido?",
     "stockShortBadge": "Revisar",
     "stockShortTitle": "Faltaban piezas al pagar:",
-    "stockShortText": "Comprueba que las tienes; si no, contacta con el cliente o usa «Cancelar y reembolsar»."
+    "stockShortText": "Comprueba que las tienes; si no, contacta con el cliente o usa «Cancelar y reembolsar».",
+    "searchVisible": "Que te encuentren en Google",
+    "searchVisibleHint": "Desactivado: solo quien tiene el enlace ve la tienda. Activado: puede aparecer en Google y otros buscadores, con los datos del vendedor (nombre, email, teléfono, dirección)."
   },
   "shopPublic": {
     "shipping": "Envío",

@@ -17,6 +17,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const description = shop.settings.description || shop.seller.name
   return {
     title: { absolute: `${shop.settings.name} · KUMANI Shop` },
+    // Sui motori di ricerca solo se il venditore ha acceso «Fatti trovare su Google»
+    ...(shop.settings.searchVisible ? {} : { robots: { index: false, follow: false, nocache: true } }),
     description,
     openGraph: { title: shop.settings.name, description, type: 'website', siteName: 'KUMANI', ...(shop.coverUrl ? { images: [shop.coverUrl] } : {}) },
   }

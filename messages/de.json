@@ -9637,7 +9637,9 @@
     "previewDesktop": "Computer",
     "draftFound": "Du hast ungespeicherte Änderungen vom {time}: wiederherstellen?",
     "draftRestore": "Wiederherstellen",
-    "draftDiscard": "Verwerfen"
+    "draftDiscard": "Verwerfen",
+    "searchVisible": "Bei Google gefunden werden",
+    "searchVisibleHint": "Aus: Nur wer den Link hat, sieht die Seite. An: Sie kann bei Google und anderen Suchmaschinen erscheinen. Schalte es nur ein, wenn jeder deinen Namen, deine Kontakte und deine Adresse finden darf."
   },
   "landingPublic": {
     "services": "Leistungen",
@@ -11349,7 +11351,9 @@
     "cancelTitle": "Bestellung stornieren?",
     "stockShortBadge": "Prüfen",
     "stockShortTitle": "Bei der Zahlung fehlten Stücke:",
-    "stockShortText": "Prüfen Sie, ob Sie sie haben; sonst den Kunden kontaktieren oder «Stornieren und erstatten» nutzen."
+    "stockShortText": "Prüfen Sie, ob Sie sie haben; sonst den Kunden kontaktieren oder «Stornieren und erstatten» nutzen.",
+    "searchVisible": "Bei Google gefunden werden",
+    "searchVisibleHint": "Aus: Nur wer den Link hat, sieht den Shop. An: Er kann bei Google und anderen Suchmaschinen erscheinen, mit den Daten des Verkäufers (Name, E-Mail, Telefon, Adresse)."
   },
   "shopPublic": {
     "shipping": "Versand",

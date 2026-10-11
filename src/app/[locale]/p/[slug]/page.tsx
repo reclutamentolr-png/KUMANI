@@ -33,6 +33,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: { absolute: title },
     description,
     alternates: { canonical: url },
+    // Sui motori di ricerca solo se il titolare ha acceso «Fatti trovare su Google»
+    ...(page.search_visible ? {} : { robots: { index: false, follow: false, nocache: true } }),
     openGraph: { type: 'website', url, title, description, locale: OG_LOCALE[page.content_locale], siteName: hero.name || 'KUMANI' },
     twitter: { card: 'summary_large_image', title, description },
   }

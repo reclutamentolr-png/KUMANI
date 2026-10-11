@@ -9637,7 +9637,9 @@
     "previewDesktop": "Ordinateur",
     "draftFound": "Vous avez des modifications non enregistrées du {time} : les restaurer ?",
     "draftRestore": "Restaurer",
-    "draftDiscard": "Ignorer"
+    "draftDiscard": "Ignorer",
+    "searchVisible": "Être trouvé sur Google",
+    "searchVisibleHint": "Désactivé : seules les personnes ayant le lien voient la page. Activé : elle peut apparaître dans Google et les autres moteurs. Activez-le seulement si vous acceptez que n’importe qui trouve votre nom, vos contacts et votre adresse."
   },
   "landingPublic": {
     "services": "Services",
@@ -11349,7 +11351,9 @@
     "cancelTitle": "Annuler la commande ?",
     "stockShortBadge": "À vérifier",
     "stockShortTitle": "Pièces manquantes au paiement :",
-    "stockShortText": "Vérifiez que vous les avez ; sinon contactez le client ou utilisez « Annuler et rembourser »."
+    "stockShortText": "Vérifiez que vous les avez ; sinon contactez le client ou utilisez « Annuler et rembourser ».",
+    "searchVisible": "Être trouvé sur Google",
+    "searchVisibleHint": "Désactivé : seules les personnes ayant le lien voient la boutique. Activé : elle peut apparaître dans Google et les autres moteurs, avec les coordonnées du vendeur (nom, e-mail, téléphone, adresse)."
   },
   "shopPublic": {
     "shipping": "Livraison",

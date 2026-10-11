@@ -60,6 +60,7 @@ export type LandingEditorInitial = {
   exists: boolean
   slug: string
   isPublished: boolean
+  searchVisible: boolean
   template: LandingTemplate
   accent: string
   contentLocale: LandingLocale
@@ -111,6 +112,7 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
   const [slug, setSlug] = useState(initial.slug)
   const [savedSlug, setSavedSlug] = useState(initial.exists ? initial.slug : '')
   const [isPublished, setIsPublished] = useState(initial.isPublished)
+  const [searchVisible, setSearchVisible] = useState(initial.searchVisible)
   const [template, setTemplate] = useState<LandingTemplate>(initial.template)
   const [accent, setAccent] = useState(initial.accent)
   const [contentLocale, setContentLocale] = useState<LandingLocale>(initial.contentLocale)
@@ -211,7 +213,7 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
   const save = async () => {
     setSaving(true)
     setMessage(null)
-    const r = await saveLanding({ slug, isPublished, template, accent, contentLocale, content: c })
+    const r = await saveLanding({ slug, isPublished, searchVisible, template, accent, contentLocale, content: c })
     setSaving(false)
     if (!r.success) {
       setMessage({ ok: false, text: err(r.message) })
@@ -546,6 +548,22 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
           </div>
           {initial.suspended && <p className="mt-3 rounded-xl bg-red-500/15 p-3 text-sm text-red-100">{t('suspendedText', { reason: initial.suspendedReason || '—' })}</p>}
           <p className="mt-3 text-xs text-white/60">{t('publishHint')}</p>
+          {/* Motori di ricerca: spento di partenza, lo sceglie il titolare */}
+          <label className="mt-3 flex cursor-pointer items-start gap-2 text-sm">
+            <input
+              type="checkbox"
+              className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--gold)]"
+              checked={searchVisible}
+              onChange={(e) => {
+                setSearchVisible(e.target.checked)
+                touch()
+              }}
+            />
+            <span>
+              <span className="block font-semibold">{t('searchVisible')}</span>
+              <span className="block text-xs text-white/60">{t('searchVisibleHint')}</span>
+            </span>
+          </label>
           {/* Link, QR e condivisione solo con la pagina pubblicata (in bozza il link dà 404) */}
           {savedSlug && status === 'published' && (
             <div className="mt-4">

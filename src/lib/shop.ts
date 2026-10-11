@@ -7,6 +7,8 @@ export type ShopSettings = {
   description: string
   coverPath: string | null
   isOpen: boolean
+  // «Fatti trovare su Google» (spento di partenza)
+  searchVisible: boolean
   pickupEnabled: boolean
   pickupInfo: string
   shippingEnabled: boolean

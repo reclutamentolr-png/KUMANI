@@ -9637,7 +9637,9 @@
     "previewDesktop": "Computador",
     "draftFound": "Tens alterações não guardadas de {time}: queres recuperá-las?",
     "draftRestore": "Recuperar",
-    "draftDiscard": "Descartar"
+    "draftDiscard": "Descartar",
+    "searchVisible": "Ser encontrado no Google",
+    "searchVisibleHint": "Desligado: só quem tem o link vê a página. Ligado: pode aparecer no Google e noutros motores de pesquisa. Ligue-o só se aceitar que qualquer pessoa encontre o seu nome, contactos e morada."
   },
   "landingPublic": {
     "services": "Serviços",
@@ -11349,7 +11351,9 @@
     "cancelTitle": "Cancelar a encomenda?",
     "stockShortBadge": "A verificar",
     "stockShortTitle": "Faltavam peças no pagamento:",
-    "stockShortText": "Verifique se as tem; caso contrário contacte o cliente ou use «Cancelar e reembolsar»."
+    "stockShortText": "Verifique se as tem; caso contrário contacte o cliente ou use «Cancelar e reembolsar».",
+    "searchVisible": "Ser encontrado no Google",
+    "searchVisibleHint": "Desligado: só quem tem o link vê a loja. Ligado: pode aparecer no Google e noutros motores de pesquisa, com os dados do vendedor (nome, email, telefone, morada)."
   },
   "shopPublic": {
     "shipping": "Envio",

@@ -110,6 +110,7 @@ export async function saveShopSettings(input: ShopSettingsInput): Promise<Result
     description: clean(input.description, SHOP_MAX.description),
     cover_path: coverPath,
     is_open: isOpen,
+    search_visible: input.searchVisible === true,
     pickup_enabled: pickup,
     pickup_info: clean(input.pickupInfo, SHOP_MAX.pickupInfo),
     shipping_enabled: shipping,

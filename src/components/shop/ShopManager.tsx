@@ -109,6 +109,7 @@ function ShopForm({ userId, settings, canOpen, hasProducts, onSaved }: { userId:
       description: '',
       coverPath: null,
       isOpen: false,
+      searchVisible: false,
       pickupEnabled: true,
       pickupInfo: '',
       shippingEnabled: false,
@@ -275,6 +276,17 @@ function ShopForm({ userId, settings, canOpen, hasProducts, onSaved }: { userId:
         <h2 className="text-lg font-bold text-[var(--ink)]">{t('sectionPolicy')}</h2>
         <p className="text-sm text-gray-600">{t('policyHint')}</p>
         <textarea value={form.returnsPolicy} maxLength={2000} rows={7} onChange={(e) => set('returnsPolicy', e.target.value)} className={input} />
+      </section>
+
+      {/* Motori di ricerca: spento di partenza, lo sceglie il venditore */}
+      <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+        <label className="flex cursor-pointer items-start gap-3">
+          <input type="checkbox" checked={form.searchVisible} onChange={(e) => set('searchVisible', e.target.checked)} className="mt-1 h-5 w-5 shrink-0 accent-[var(--gold)]" />
+          <span>
+            <span className="block font-bold text-[var(--ink)]">{t('searchVisible')}</span>
+            <span className="block text-sm text-gray-600">{t('searchVisibleHint')}</span>
+          </span>
+        </label>
       </section>
 
       {notice && <p className={`rounded-xl px-4 py-3 text-sm font-semibold ${notice.ok ? 'bg-emerald-50 text-emerald-800' : 'bg-amber-50 text-amber-800'}`}>{notice.text}</p>}

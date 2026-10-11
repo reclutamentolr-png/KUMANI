@@ -44,6 +44,7 @@ async function gate() {
 export type LandingSaveInput = {
   slug: string
   isPublished: boolean
+  searchVisible?: boolean
   template: LandingTemplate
   accent: string
   contentLocale: LandingLocale
@@ -65,6 +66,7 @@ export async function saveLanding(input: LandingSaveInput): Promise<{ success: t
     slug,
     // In prova (ospite) la pagina non si pubblica mai
     is_published: !!input.isPublished && !(await isGuestRequest()),
+    search_visible: input.searchVisible === true,
     template: isLandingTemplate(input.template) ? input.template : 'scuro',
     accent,
     content_locale: isLandingLocale(input.contentLocale) ? input.contentLocale : 'it',

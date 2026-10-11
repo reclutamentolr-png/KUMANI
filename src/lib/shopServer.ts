@@ -18,6 +18,7 @@ export const mapSettings = (row: any): ShopSettings => ({
   description: row.description ?? '',
   coverPath: row.cover_path ?? null,
   isOpen: !!row.is_open,
+  searchVisible: row.search_visible === true,
   pickupEnabled: !!row.pickup_enabled,
   pickupInfo: row.pickup_info ?? '',
   shippingEnabled: !!row.shipping_enabled,

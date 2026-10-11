@@ -9637,7 +9637,9 @@
     "previewDesktop": "Desktop",
     "draftFound": "You have unsaved changes from {time}: restore them?",
     "draftRestore": "Restore",
-    "draftDiscard": "Discard"
+    "draftDiscard": "Discard",
+    "searchVisible": "Get found on Google",
+    "searchVisibleHint": "Off: only people with the link can see the page. On: it can appear in Google and other search engines. Turn it on only if you are happy for anyone to find your name, contacts and address."
   },
   "landingPublic": {
     "services": "Services",
@@ -11349,7 +11351,9 @@
     "cancelTitle": "Cancel the order?",
     "stockShortBadge": "Check",
     "stockShortTitle": "Items were short at payment:",
-    "stockShortText": "Check you have them; otherwise contact the customer or use «Cancel and refund»."
+    "stockShortText": "Check you have them; otherwise contact the customer or use «Cancel and refund».",
+    "searchVisible": "Get found on Google",
+    "searchVisibleHint": "Off: only people with the link can see the shop. On: it can appear in Google and other search engines, with the seller details (name, email, phone, address)."
   },
   "shopPublic": {
     "shipping": "Shipping",

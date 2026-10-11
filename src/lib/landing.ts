@@ -369,5 +369,7 @@ export type PublicLanding = {
   content: LandingContent
   updated_at: string
   referral_code: string | null
+  // «Fatti trovare su Google» (scelta del titolare)
+  search_visible: boolean
   menu_token: string | null
 }

@@ -9637,7 +9637,9 @@
     "previewDesktop": "Computer",
     "draftFound": "Hai modifiche non salvate del {time}: vuoi ripristinarle?",
     "draftRestore": "Ripristina",
-    "draftDiscard": "Scarta"
+    "draftDiscard": "Scarta",
+    "searchVisible": "Fatti trovare su Google",
+    "searchVisibleHint": "Spento: la pagina la vede solo chi ha il link. Acceso: può comparire nelle ricerche di Google e degli altri motori. Accendilo solo se va bene che nome, contatti e indirizzo siano trovabili da chiunque."
   },
   "landingPublic": {
     "services": "Servizi",
@@ -11349,7 +11351,9 @@
     "cancelTitle": "Annullare l’ordine?",
     "stockShortBadge": "Da verificare",
     "stockShortTitle": "Mancavano pezzi al pagamento:",
-    "stockShortText": "Controlla di averli; altrimenti contatta il cliente o usa «Annulla e rimborsa»."
+    "stockShortText": "Controlla di averli; altrimenti contatta il cliente o usa «Annulla e rimborsa».",
+    "searchVisible": "Fatti trovare su Google",
+    "searchVisibleHint": "Spento: il negozio lo vede solo chi ha il link. Acceso: può comparire nelle ricerche di Google e degli altri motori, con i dati del venditore (nome, email, telefono, indirizzo)."
   },
   "shopPublic": {
     "shipping": "Spedizione",

@@ -29,7 +29,7 @@ export default async function LandingPageEditorPage({ params, searchParams }: { 
   if (!user) redirect(`/${locale}/login`)
 
   const [{ data: row }, { data: profile }, { data: menu }, messages, business] = await Promise.all([
-    supabase.from('landing_pages').select('slug, is_published, template, accent, content_locale, content, suspended, suspended_reason').eq('owner_id', user.id).maybeSingle(),
+    supabase.from('landing_pages').select('slug, is_published, search_visible, template, accent, content_locale, content, suspended, suspended_reason').eq('owner_id', user.id).maybeSingle(),
     supabase.rpc('get_my_profile').maybeSingle<{ first_name: string | null; last_name: string | null }>(),
     supabase.from('menus').select('token, is_active').eq('owner_id', user.id).maybeSingle(),
     getLandingMessages(),
@@ -46,6 +46,7 @@ export default async function LandingPageEditorPage({ params, searchParams }: { 
         exists: true,
         slug: row.slug,
         isPublished: row.is_published,
+        searchVisible: row.search_visible === true,
         template: isLandingTemplate(row.template) ? row.template : 'scuro',
         accent: row.accent,
         contentLocale: isLandingLocale(row.content_locale) ? row.content_locale : startLocale,
@@ -57,6 +58,7 @@ export default async function LandingPageEditorPage({ params, searchParams }: { 
         exists: false,
         slug: slugify(business.companyName) || slugify(fullName) || `pagina-${user.id.slice(0, 6)}`,
         isPublished: false,
+        searchVisible: false,
         template: 'scuro',
         accent: prefill?.accent ?? '#c79a3b',
         contentLocale: startLocale,

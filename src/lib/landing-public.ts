@@ -19,5 +19,6 @@ export const loadPublicLanding = cache(async (slugInput: string): Promise<Public
     updated_at: String(row.updated_at ?? ''),
     referral_code: typeof row.referral_code === 'string' ? row.referral_code : null,
     menu_token: typeof row.menu_token === 'string' ? row.menu_token : null,
+    search_visible: row.search_visible === true,
   }
 })
