@@ -12464,6 +12464,15 @@
     "phoneExpired": "Questo codice non è più attivo.",
     "phoneBusy": "Al computer è già collegato un altro telefono.",
     "phoneLostText": "I file già inviati sono arrivati.",
-    "phoneRescan": "Sul computer apri Hoplà e inquadra il nuovo codice."
+    "phoneRescan": "Sul computer apri Hoplà e inquadra il nuovo codice.",
+    "phoneRetry": "Ricollegati",
+    "phoneScan": "Scansiona di nuovo il codice",
+    "phoneNetworkHint": "Se hai cambiato rete (per esempio dal Wi-Fi al 4G) il collegamento si interrompe: con telefono e computer sulla stessa Wi-Fi funziona sempre.",
+    "phoneKeptFiles": "{count, plural, one {Il file scelto resta pronto} other {I # file scelti restano pronti}} per l’invio.",
+    "scanTitle": "Inquadra il codice sul computer",
+    "scanClose": "Chiudi",
+    "scanDenied": "Non riesco ad aprire la fotocamera. Consenti l’accesso alla fotocamera oppure inquadra il codice con l’app Fotocamera del telefono.",
+    "scanWrong": "Questo non è un codice di Hoplà: inquadra quello sul computer.",
+    "lostPcText": "Il telefono si è scollegato (per esempio cambiando rete). Dal telefono tocca «Ricollegati» oppure inquadra di nuovo il codice."
   }
 }

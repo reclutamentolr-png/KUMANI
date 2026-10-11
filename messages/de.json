@@ -12464,6 +12464,15 @@
     "phoneExpired": "Dieser Code ist nicht mehr aktiv.",
     "phoneBusy": "Mit dem Computer ist schon ein anderes Handy verbunden.",
     "phoneLostText": "Bereits gesendete Dateien sind angekommen.",
-    "phoneRescan": "Öffne Hoplà am Computer und scanne den neuen Code."
+    "phoneRescan": "Öffne Hoplà am Computer und scanne den neuen Code.",
+    "phoneRetry": "Neu verbinden",
+    "phoneScan": "Code erneut scannen",
+    "phoneNetworkHint": "Wenn du das Netz gewechselt hast (zum Beispiel von WLAN zu 4G), bricht die Verbindung ab: Mit Handy und Computer im selben WLAN klappt es immer.",
+    "phoneKeptFiles": "{count, plural, one {Die gewählte Datei ist} other {Die # gewählten Dateien sind}} weiter bereit zum Senden.",
+    "scanTitle": "Richte die Kamera auf den Code am Computer",
+    "scanClose": "Schließen",
+    "scanDenied": "Die Kamera lässt sich nicht öffnen. Erlaube den Kamerazugriff oder scanne den Code mit der Kamera-App des Handys.",
+    "scanWrong": "Das ist kein Hoplà-Code: Richte die Kamera auf den Code am Computer.",
+    "lostPcText": "Das Handy hat die Verbindung verloren (zum Beispiel durch einen Netzwechsel). Tippe auf dem Handy auf „Neu verbinden“ oder scanne den Code erneut."
   }
 }

@@ -197,7 +197,9 @@ export default function HoplaReceiver() {
     dc.onmessage = (e) => enqueue(e.data as string | ArrayBuffer)
     dc.onclose = () => {
       if (dcRef.current !== dc) return
-      setPhase((p) => (p === 'done' ? 'done' : p === 'waiting' ? p : 'lost'))
+      // Il telefono si è scollegato: si libera il posto per ricollegarsi allo stesso codice
+      closePeer()
+      setPhase('lost')
     }
   }
 
@@ -213,10 +215,15 @@ export default function HoplaReceiver() {
       if (e.candidate) send({ kind: 'ice', peer, from: 'pc', candidate: e.candidate.toJSON() })
     }
     pc.onconnectionstatechange = () => {
-      if (pc.connectionState === 'failed') setPhase((p) => (p === 'connecting' ? 'failed' : 'lost'))
+      if (pc.connectionState !== 'failed' || pcRef.current !== pc) return
+      closePeer()
+      setPhase((p) => (p === 'connecting' ? 'failed' : 'lost'))
     }
     timerRef.current = setTimeout(() => {
-      if (dc.readyState !== 'open') setPhase('failed')
+      if (dc.readyState !== 'open' && pcRef.current === pc) {
+        closePeer()
+        setPhase('failed')
+      }
     }, HOPLA_CONNECT_TIMEOUT)
     const offer = await pc.createOffer()
     await pc.setLocalDescription(offer)
@@ -250,7 +257,7 @@ export default function HoplaReceiver() {
       else await pc.addIceCandidate(s.candidate).catch(() => {})
     } else if (s.kind === 'bye' && s.from === 'phone') {
       closePeer()
-      setPhase((p) => (p === 'done' ? 'done' : 'waiting'))
+      setPhase('waiting')
     }
   }
   const onSignalRef = useRef(onSignal)
@@ -352,10 +359,20 @@ export default function HoplaReceiver() {
 
   const deviceName = t(`devices.${device}`)
   const percent = progress.total > 0 ? Math.min(100, Math.round((progress.bytes / progress.total) * 100)) : 0
-  const showQr = phase === 'starting' || phase === 'waiting' || phase === 'connecting'
+  const showQr = phase === 'starting' || phase === 'waiting' || phase === 'connecting' || phase === 'failed' || phase === 'lost'
 
   return (
     <div className="space-y-5">
+      {(phase === 'failed' || phase === 'lost') && (
+        <section className="flex gap-3 rounded-3xl border border-[#f2c9c9] bg-[#fdf2f2] p-4" role="alert">
+          <Wifi className="mt-0.5 h-5 w-5 shrink-0 text-[#a12a2a]" aria-hidden="true" />
+          <div>
+            <p className="font-extrabold text-[var(--ink)]">{phase === 'failed' ? t('failedTitle') : t('lostTitle')}</p>
+            <p className="text-sm text-[var(--muted)]">{phase === 'failed' ? t('failedText') : t('lostPcText')}</p>
+          </div>
+        </section>
+      )}
+
       {showQr && (
         <section className={`${card} grid items-center gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,300px)]`} aria-live="polite">
           <div className="space-y-5">
@@ -478,17 +495,6 @@ export default function HoplaReceiver() {
         </section>
       )}
 
-      {(phase === 'failed' || phase === 'lost') && (
-        <section className={`${card} space-y-3`} role="alert">
-          <h2 className="flex items-center gap-2 text-xl font-extrabold text-[var(--ink)]">
-            <Wifi className="h-5 w-5 text-[#a12a2a]" aria-hidden="true" /> {phase === 'failed' ? t('failedTitle') : t('lostTitle')}
-          </h2>
-          <p className="text-[var(--muted)]">{phase === 'failed' ? t('failedText') : t('lostText')}</p>
-          <button type="button" onClick={restart} className={primary}>
-            <RefreshCw className="h-5 w-5" aria-hidden="true" /> {t('retry')}
-          </button>
-        </section>
-      )}
 
       {received.length > 0 && (
         <section className={`${card} space-y-4`} aria-labelledby="hopla-received">

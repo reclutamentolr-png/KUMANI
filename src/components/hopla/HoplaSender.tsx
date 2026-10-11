@@ -3,8 +3,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import type { RealtimeChannel } from '@supabase/supabase-js'
-import { Check, ImagePlus, LoaderCircle, Monitor, Plus, Send, Wifi, X } from 'lucide-react'
+import { Check, ImagePlus, LoaderCircle, Monitor, Plus, RefreshCw, ScanLine, Send, Wifi, X } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import HoplaScanner from './HoplaScanner'
 import {
   HOPLA_CHUNK,
   HOPLA_CONNECT_TIMEOUT,
@@ -44,7 +45,10 @@ export default function HoplaSender({ id }: { id: string }) {
   const channelRef = useRef<RealtimeChannel | null>(null)
   const pcRef = useRef<RTCPeerConnection | null>(null)
   const dcRef = useRef<RTCDataChannel | null>(null)
-  const peerRef = useRef(newPeerId())
+  const peerRef = useRef('')
+  // Ogni tentativo (anche «Ricollegati») rientra sullo stesso codice con un nuovo canale
+  const [attempt, setAttempt] = useState(0)
+  const [scanning, setScanning] = useState(false)
   const phaseRef = useRef<Phase>('joining')
   const savedRef = useRef<{ last: number; resolve: (() => void) | null }>({ last: -1, resolve: null })
   const acceptRef = useRef<((ok: boolean) => void) | null>(null)
@@ -59,7 +63,8 @@ export default function HoplaSender({ id }: { id: string }) {
   const sendCtrl = (msg: HoplaCtrl) => dcRef.current?.send(JSON.stringify(msg))
 
   useEffect(() => {
-    const peer = peerRef.current
+    const peer = newPeerId()
+    peerRef.current = peer
     const supabase = createClient()
     const channel = supabase.channel(hoplaChannel(id), { config: { broadcast: { self: false } } })
     const signal = (payload: HoplaSignal) => channel.send({ type: 'broadcast', event: 'signal', payload })
@@ -165,7 +170,7 @@ export default function HoplaSender({ id }: { id: string }) {
       pcRef.current?.close()
       supabase.removeChannel(channel)
     }
-  }, [id])
+  }, [id, attempt])
 
   // Con lo schermo spento o un'altra app davanti l'invio si ferma: lo diciamo
   useEffect(() => {
@@ -233,6 +238,20 @@ export default function HoplaSender({ id }: { id: string }) {
       wakeRef.current?.release().catch(() => {})
       wakeRef.current = null
     }
+  }
+
+  const retry = () => {
+    dcRef.current = null
+    pcRef.current = null
+    go('joining')
+    setAttempt((n) => n + 1)
+  }
+
+  // Codice letto dalla fotocamera: se è lo stesso ci si ricollega, altrimenti si apre il nuovo
+  const onScanned = (path: string, scannedId: string) => {
+    setScanning(false)
+    if (scannedId === id) retry()
+    else window.location.assign(path)
   }
 
   const again = () => {
@@ -344,9 +363,21 @@ export default function HoplaSender({ id }: { id: string }) {
             {phase === 'expired' ? t('phoneExpired') : phase === 'busy' ? t('phoneBusy') : phase === 'failed' ? t('failedTitle') : t('lostTitle')}
           </p>
           {(phase === 'failed' || phase === 'lost') && <p className="text-sm text-[var(--muted)]">{phase === 'failed' ? t('failedText') : t('phoneLostText')}</p>}
-          <p className="text-sm text-[var(--muted)]">{t('phoneRescan')}</p>
+          {(phase === 'failed' || phase === 'lost') && <p className="text-sm text-[var(--muted)]">{t('phoneNetworkHint')}</p>}
+          <div className="space-y-2 pt-1">
+            {phase !== 'busy' && (
+              <button type="button" onClick={retry} className={primary}>
+                <RefreshCw className="h-5 w-5" aria-hidden="true" /> {t('phoneRetry')}
+              </button>
+            )}
+            <button type="button" onClick={() => setScanning(true)} className={phase === 'busy' ? primary : secondary}>
+              <ScanLine className="h-5 w-5" aria-hidden="true" /> {t('phoneScan')}
+            </button>
+          </div>
+          {files.length > 0 && <p className="text-xs text-[var(--muted)]">{t('phoneKeptFiles', { count: files.length })}</p>}
         </section>
       )}
+      {scanning && <HoplaScanner onClose={() => setScanning(false)} onFound={onScanned} />}
     </div>
   )
 }
