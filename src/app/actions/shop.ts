@@ -133,6 +133,7 @@ type PublicQuoteRow = {
   payment_status: string
   accepted_at: string | null
   valid_until: string | null
+  stripe_checkout_session_id: string | null
 }
 
 async function quoteByToken(token: string) {
@@ -140,7 +141,7 @@ async function quoteByToken(token: string) {
   const db = serviceDb()
   const { data: quote } = await db
     .from('quotes')
-    .select('id, user_id, quote_number, client_email, total, vat_mode, vat_rate, payment_mode, deposit_percent, payment_status, accepted_at, valid_until')
+    .select('id, user_id, quote_number, client_email, total, vat_mode, vat_rate, payment_mode, deposit_percent, payment_status, accepted_at, valid_until, stripe_checkout_session_id')
     .eq('public_token', token)
     .maybeSingle<PublicQuoteRow>()
   if (!quote) return null
@@ -197,6 +198,26 @@ export async function startQuoteCheckout(token: string, name: string): Promise<R
   if (!account?.charges_enabled) return { success: false, message: 'sellerNotReady' }
   const { data: issuer } = await db.from('quote_issuer_profiles').select('company_name').eq('user_id', quote.user_id).maybeSingle()
 
+  // Pagamento già aperto (altra scheda o secondo tocco): si riprende quello,
+  // così il cliente non paga due volte; se risulta già pagato si registra
+  if (quote.stripe_checkout_session_id) {
+    try {
+      const open = await retrieveConnectedSession(quote.stripe_checkout_session_id, account.stripe_account_id as string)
+      if (open.metadata?.quote_id === quote.id) {
+        if (open.payment_status === 'paid') {
+          await recordQuotePayment(open, account.stripe_account_id as string)
+          return { success: false, message: 'alreadyPaid' }
+        }
+        if (open.status === 'open' && open.amount_total === amount && open.url) {
+          await db.from('quotes').update({ accepted_by_name: who }).eq('id', quote.id)
+          return { success: true, data: { url: open.url } }
+        }
+      }
+    } catch {
+      // sessione non più leggibile: se ne crea una nuova
+    }
+  }
+
   const locale = await getLocale()
   const t = await getTranslations('quotePublic')
   const page = `${SITE_URL}${localizedPath(locale, `/preventivo/${token}`)}`
@@ -248,7 +269,7 @@ export async function confirmQuotePayment(token: string, sessionId: string): Pro
   try {
     const session = await retrieveConnectedSession(sessionId, account.stripe_account_id as string)
     if (session.metadata?.quote_id !== quote.id) return false
-    return await recordQuotePayment(session)
+    return await recordQuotePayment(session, account.stripe_account_id as string)
   } catch (error) {
     console.error('[Shop] confirmQuotePayment failed:', error)
     return false

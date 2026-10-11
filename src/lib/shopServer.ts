@@ -1,6 +1,6 @@
 import type Stripe from 'stripe'
 import { getTranslations } from 'next-intl/server'
-import { serviceDb } from '@/lib/shopPayments'
+import { isSellerAccount, serviceDb } from '@/lib/shopPayments'
 import { localizedPath, notifyUser } from '@/lib/push'
 import { escapeHtml, sendEmail } from '@/lib/email'
 import { SITE_URL } from '@/lib/siteUrl'
@@ -152,10 +152,16 @@ export async function releaseShopReservation(token: string): Promise<void> {
 
 // Pagamento arrivato (webhook o ritorno dal pagamento): ordine pagato e
 // numerato, giacenze scalate, email al cliente e avviso al venditore. Idempotente.
-export async function recordShopOrderPayment(session: Stripe.Checkout.Session): Promise<boolean> {
+export async function recordShopOrderPayment(session: Stripe.Checkout.Session, accountId: string): Promise<boolean> {
   const orderId = session.metadata?.order_id
   if (!orderId || session.payment_status !== 'paid') return false
   const db = serviceDb()
+  // Solo pagamenti arrivati sul conto Stripe del negozio di quell'ordine
+  const { data: owner } = await db.from('shop_orders').select('owner_id').eq('id', orderId).maybeSingle()
+  if (!owner || !(await isSellerAccount(owner.owner_id as string, accountId))) {
+    console.error(`[Shop] pagamento dell'ordine ${orderId} arrivato sul conto sbagliato (${accountId}): ignorato`)
+    return false
+  }
   const paymentIntent = typeof session.payment_intent === 'string' ? session.payment_intent : (session.payment_intent?.id ?? null)
   const { data: number, error } = await db.rpc('shop_mark_order_paid', { p_order: orderId, p_session: session.id, p_payment_intent: paymentIntent })
   if (error) {

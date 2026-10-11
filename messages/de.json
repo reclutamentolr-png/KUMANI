@@ -8390,7 +8390,17 @@
     "nexusAbandonedTitle": "Deine NEXUS-Herausforderung ist vorbei",
     "nexusAbandonedBody": "Die anderen Spieler haben die Herausforderung {code} verlassen: Du hast gewonnen.",
     "shopOrderShortTitle": "⚠️ Bestellung Nr. {number}: Stücke fehlen",
-    "shopOrderShortBody": "{name} hat {amount} bezahlt, aber im Bestand fehlen: {missing}. Prüfen oder erstatten."
+    "shopOrderShortBody": "{name} hat {amount} bezahlt, aber im Bestand fehlen: {missing}. Prüfen oder erstatten.",
+    "disputeStaffTitle": "⚠️ Zahlung angefochten",
+    "disputeStaffBody": "Ein Kunde hat bei seiner Bank eine Zahlung über {amount} angefochten (Grund: {reason}). Antworte vor Fristablauf in Stripe.",
+    "disputeSellerTitle": "⚠️ Ein Kunde hat eine Zahlung angefochten",
+    "disputeSellerBody": "Eine mit KUMANI erhaltene Zahlung über {amount} wurde bei der Bank angefochten. Öffne Stripe und reiche vor Fristablauf Nachweise ein (Angebot, Belege, Lieferung).",
+    "duplicateSubTitle": "Doppelte Zahlung erstattet",
+    "duplicateSubBody": "Du hattest das Abo zweimal bezahlt: Die zweite Zahlung ({amount}) wurde storniert und erstattet. Dein Tarif bleibt aktiv.",
+    "duplicateSubStaffTitle": "Doppeltes Abo erstattet",
+    "duplicateSubStaffBody": "{email} hatte zwei Abos bezahlt: Das zweite ({amount}) wurde automatisch beendet und erstattet.",
+    "quoteDuplicateTitle": "Angebot Nr. {number} zweimal bezahlt",
+    "quoteDuplicateBody": "Der Kunde hat ein zweites Mal bezahlt ({amount}): Die zusätzliche Zahlung wurde automatisch von deinem Stripe-Konto erstattet."
   },
   "pushInvite": {
     "title": "Benachrichtigungen aktivieren",

@@ -8390,7 +8390,17 @@
     "nexusAbandonedTitle": "La tua sfida NEXUS è finita",
     "nexusAbandonedBody": "Gli altri giocatori hanno abbandonato la sfida {code}: hai vinto tu.",
     "shopOrderShortTitle": "⚠️ Ordine n. {number}: mancano pezzi",
-    "shopOrderShortBody": "{name} ha pagato {amount}, ma in giacenza mancano: {missing}. Controlla o rimborsa."
+    "shopOrderShortBody": "{name} ha pagato {amount}, ma in giacenza mancano: {missing}. Controlla o rimborsa.",
+    "disputeStaffTitle": "⚠️ Pagamento contestato",
+    "disputeStaffBody": "Un cliente ha contestato con la banca un pagamento di {amount} (motivo: {reason}). Rispondi da Stripe entro la scadenza.",
+    "disputeSellerTitle": "⚠️ Un cliente ha contestato un pagamento",
+    "disputeSellerBody": "Un pagamento di {amount} ricevuto con KUMANI è stato contestato con la banca. Apri Stripe e invia le prove (preventivo, ricevute, consegna) entro la scadenza.",
+    "duplicateSubTitle": "Pagamento doppio rimborsato",
+    "duplicateSubBody": "Avevi pagato l’abbonamento due volte: il secondo pagamento ({amount}) è stato annullato e rimborsato. Il tuo piano resta attivo.",
+    "duplicateSubStaffTitle": "Abbonamento doppio rimborsato",
+    "duplicateSubStaffBody": "{email} aveva pagato due abbonamenti: il secondo ({amount}) è stato chiuso e rimborsato in automatico.",
+    "quoteDuplicateTitle": "Preventivo n. {number} pagato due volte",
+    "quoteDuplicateBody": "Il cliente ha pagato una seconda volta ({amount}): il pagamento in più è stato rimborsato in automatico dal tuo conto Stripe."
   },
   "pushInvite": {
     "title": "Attiva le notifiche",

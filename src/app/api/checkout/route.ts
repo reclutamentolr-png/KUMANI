@@ -10,6 +10,7 @@ import { getCheckoutTexts } from '@/lib/checkoutTexts'
 import { getPlanPrices } from '@/lib/planPrices'
 import { computePassCredit } from '@/lib/passCredit'
 import { parseVatInput } from '@/lib/vat'
+import { expireOpenSubscriptionCheckouts } from '@/lib/paymentSafety'
 import { locales, defaultLocale } from '../../../../i18n'
 
 export async function POST(request: Request) {
@@ -110,6 +111,10 @@ export async function POST(request: Request) {
             metadata: { userId: user.id, pass_ids: purchaseMeta.pass_ids },
           })
         : null
+
+    // Pagine di pagamento aperte in altre schede: si chiudono, così non si
+    // pagano due abbonamenti (un errore qui non blocca il pagamento)
+    if (!MANAGED_PAYMENTS_ON) await expireOpenSubscriptionCheckouts(user.id).catch((err) => console.error('⚠️ Checkout aperti non chiusi:', err))
 
     // Stripe Managed Payments: acceso solo con STRIPE_MANAGED_PAYMENTS=on
     const managed = managedPayments()

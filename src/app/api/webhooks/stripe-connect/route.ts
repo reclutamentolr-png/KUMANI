@@ -3,11 +3,14 @@ import type Stripe from 'stripe'
 import { getStripe } from '@/lib/stripe'
 import { recordQuotePayment, syncSellerAccount } from '@/lib/shopPayments'
 import { recordShopOrderPayment } from '@/lib/shopServer'
+import { notifySellerDispute } from '@/lib/paymentSafety'
 
 // Webhook di Stripe Connect (eventi dei conti dei venditori, KUMANI Shop):
 // endpoint separato da quello degli abbonamenti, con la sua chiave
 // STRIPE_CONNECT_WEBHOOK_SECRET. Eventi: checkout.session.completed,
-// checkout.session.async_payment_succeeded, account.updated.
+// checkout.session.async_payment_succeeded, account.updated,
+// charge.dispute.created. Ogni pagamento vale solo se è arrivato sul conto
+// del venditore del preventivo o dell'ordine (event.account).
 
 export const dynamic = 'force-dynamic'
 
@@ -29,10 +32,14 @@ export async function POST(req: NextRequest) {
       case 'checkout.session.completed':
       case 'checkout.session.async_payment_succeeded': {
         const session = event.data.object as Stripe.Checkout.Session
-        if (session.metadata?.kind === 'quote') await recordQuotePayment(session)
-        if (session.metadata?.kind === 'shop_order') await recordShopOrderPayment(session)
+        if (!event.account) break
+        if (session.metadata?.kind === 'quote') await recordQuotePayment(session, event.account)
+        if (session.metadata?.kind === 'shop_order') await recordShopOrderPayment(session, event.account)
         break
       }
+      case 'charge.dispute.created':
+        if (event.account) await notifySellerDispute(event.data.object as Stripe.Dispute, event.account)
+        break
       case 'account.updated':
         await syncSellerAccount(event.data.object as Stripe.Account)
         break

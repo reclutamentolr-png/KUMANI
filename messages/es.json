@@ -8390,7 +8390,17 @@
     "nexusAbandonedTitle": "Tu desafío NEXUS ha terminado",
     "nexusAbandonedBody": "Los demás jugadores han abandonado el desafío {code}: has ganado.",
     "shopOrderShortTitle": "⚠️ Pedido n.º {number}: faltan piezas",
-    "shopOrderShortBody": "{name} ha pagado {amount}, pero en el stock faltan: {missing}. Revisa o reembolsa."
+    "shopOrderShortBody": "{name} ha pagado {amount}, pero en el stock faltan: {missing}. Revisa o reembolsa.",
+    "disputeStaffTitle": "⚠️ Pago impugnado",
+    "disputeStaffBody": "Un cliente ha impugnado con su banco un pago de {amount} (motivo: {reason}). Responde en Stripe antes del plazo.",
+    "disputeSellerTitle": "⚠️ Un cliente ha impugnado un pago",
+    "disputeSellerBody": "Un pago de {amount} recibido con KUMANI ha sido impugnado ante el banco. Abre Stripe y envía las pruebas (presupuesto, recibos, entrega) antes del plazo.",
+    "duplicateSubTitle": "Pago duplicado reembolsado",
+    "duplicateSubBody": "Habías pagado la suscripción dos veces: el segundo pago ({amount}) se ha anulado y reembolsado. Tu plan sigue activo.",
+    "duplicateSubStaffTitle": "Suscripción duplicada reembolsada",
+    "duplicateSubStaffBody": "{email} había pagado dos suscripciones: la segunda ({amount}) se cerró y reembolsó automáticamente.",
+    "quoteDuplicateTitle": "Presupuesto n.º {number} pagado dos veces",
+    "quoteDuplicateBody": "El cliente pagó una segunda vez ({amount}): el pago de más se reembolsó automáticamente desde tu cuenta de Stripe."
   },
   "pushInvite": {
     "title": "Activa las notificaciones",

@@ -8390,7 +8390,17 @@
     "nexusAbandonedTitle": "Ваш вызов NEXUS завершён",
     "nexusAbandonedBody": "Остальные игроки покинули вызов {code}: вы победили.",
     "shopOrderShortTitle": "⚠️ Заказ № {number}: не хватает товара",
-    "shopOrderShortBody": "{name} оплатил(а) {amount}, но на складе не хватает: {missing}. Проверьте или верните деньги."
+    "shopOrderShortBody": "{name} оплатил(а) {amount}, но на складе не хватает: {missing}. Проверьте или верните деньги.",
+    "disputeStaffTitle": "⚠️ Платёж оспорен",
+    "disputeStaffBody": "Клиент оспорил в банке платёж на {amount} (причина: {reason}). Ответьте в Stripe до истечения срока.",
+    "disputeSellerTitle": "⚠️ Клиент оспорил платёж",
+    "disputeSellerBody": "Платёж на {amount}, полученный через KUMANI, оспорен в банке. Откройте Stripe и отправьте доказательства (предложение, чеки, доставка) до истечения срока.",
+    "duplicateSubTitle": "Двойной платёж возвращён",
+    "duplicateSubBody": "Вы оплатили подписку дважды: второй платёж ({amount}) отменён и возвращён. Ваш тариф остаётся активным.",
+    "duplicateSubStaffTitle": "Двойная подписка возвращена",
+    "duplicateSubStaffBody": "{email} оплатил(а) две подписки: вторая ({amount}) автоматически закрыта и возвращена.",
+    "quoteDuplicateTitle": "Предложение № {number} оплачено дважды",
+    "quoteDuplicateBody": "Клиент заплатил повторно ({amount}): лишний платёж автоматически возвращён с вашего счёта Stripe."
   },
   "pushInvite": {
     "title": "Включите уведомления",

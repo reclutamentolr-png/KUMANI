@@ -368,7 +368,7 @@ export async function confirmShopOrder(token: string, sessionId: string): Promis
   try {
     const session = await retrieveConnectedSession(sessionId, account.stripe_account_id as string)
     if (session.metadata?.order_id !== order.id) return false
-    return await recordShopOrderPayment(session)
+    return await recordShopOrderPayment(session, account.stripe_account_id as string)
   } catch (error) {
     console.error('[Shop] conferma ordine:', error instanceof Error ? error.message : error)
     return false

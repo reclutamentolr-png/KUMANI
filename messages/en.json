@@ -8390,7 +8390,17 @@
     "nexusAbandonedTitle": "Your NEXUS challenge is over",
     "nexusAbandonedBody": "The other players left challenge {code}: you win.",
     "shopOrderShortTitle": "⚠️ Order no. {number}: items short",
-    "shopOrderShortBody": "{name} paid {amount}, but stock is short of: {missing}. Check or refund."
+    "shopOrderShortBody": "{name} paid {amount}, but stock is short of: {missing}. Check or refund.",
+    "disputeStaffTitle": "⚠️ Payment disputed",
+    "disputeStaffBody": "A customer disputed a payment of {amount} with their bank (reason: {reason}). Respond in Stripe before the deadline.",
+    "disputeSellerTitle": "⚠️ A customer disputed a payment",
+    "disputeSellerBody": "A payment of {amount} received with KUMANI was disputed with the bank. Open Stripe and send your evidence (quote, receipts, delivery) before the deadline.",
+    "duplicateSubTitle": "Duplicate payment refunded",
+    "duplicateSubBody": "You paid for the subscription twice: the second payment ({amount}) was cancelled and refunded. Your plan stays active.",
+    "duplicateSubStaffTitle": "Duplicate subscription refunded",
+    "duplicateSubStaffBody": "{email} had paid for two subscriptions: the second one ({amount}) was closed and refunded automatically.",
+    "quoteDuplicateTitle": "Quote no. {number} paid twice",
+    "quoteDuplicateBody": "The customer paid a second time ({amount}): the extra payment was refunded automatically from your Stripe account."
   },
   "pushInvite": {
     "title": "Turn on notifications",

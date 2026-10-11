@@ -13,6 +13,7 @@ import { GIFT_TYPE } from '@/lib/gifts'
 import { fulfillGiftSession, revokeGiftForCharge, sendGiftConfirmation } from '@/lib/giftsServer'
 import { SURPRISE_TYPE } from '@/lib/surprise'
 import { fulfillSurpriseSession, revokeSurpriseForCharge } from '@/lib/surpriseServer'
+import { cancelDuplicateSubscription, notifyPlatformDispute } from '@/lib/paymentSafety'
 
 // Creato alla richiesta e non al caricamento del modulo: così `next build`
 // non fallisce se le variabili d'ambiente non sono disponibili in build.
@@ -154,8 +155,24 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  // Contestazione (chargeback) di un pagamento a KUMANI: avviso agli admin
+  if (event.type === 'charge.dispute.created') {
+    await notifyPlatformDispute(event.data.object as Stripe.Dispute).catch((err) => console.error('⚠️ Avviso contestazione non inviato:', err))
+    return NextResponse.json({ received: true })
+  }
+
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session
+    // Secondo abbonamento pagato da un'altra scheda: chiuso e rimborsato,
+    // il piano resta quello già attivo
+    if (session.mode === 'subscription' && session.payment_status !== 'unpaid') {
+      try {
+        if (await cancelDuplicateSubscription(session)) return NextResponse.json({ received: true })
+      } catch (err) {
+        console.error('❌ Controllo abbonamento doppio:', err instanceof Error ? err.message : err)
+        return NextResponse.json({ error: 'duplicate_check_failed' }, { status: 500 })
+      }
+    }
     // Pagamento non ancora arrivato (metodi a conferma ritardata): il piano si
     // attiva con invoice.paid / customer.subscription.updated, non qui
     const userId = session.payment_status === 'unpaid' ? undefined : session.metadata?.userId
@@ -201,7 +218,8 @@ export async function POST(req: NextRequest) {
   // Handle subscription deletion/cancellation
   if (event.type === 'customer.subscription.deleted' || event.type === 'customer.subscription.updated') {
     const subscription = event.data.object as Stripe.Subscription
-    const userId = subscription.metadata?.userId
+    // Doppione chiuso da cancelDuplicateSubscription: il piano resta l'altro
+    const userId = subscription.metadata?.duplicate === '1' ? undefined : subscription.metadata?.userId
     if (userId) {
       // Attivo anche in prova e durante i nuovi tentativi di addebito
       // (past_due); disdetto o scaduto → 'free' (i valori ammessi nel
