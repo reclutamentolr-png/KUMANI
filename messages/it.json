@@ -1003,8 +1003,8 @@
         "hint": "Minimalismo sonoro"
       },
       "fire": {
-        "label": "Fuoco",
-        "hint": "Calore serale"
+        "label": "Camino",
+        "hint": "Calore di casa"
       },
       "night": {
         "label": "Notte",
@@ -1013,6 +1013,10 @@
       "storm": {
         "label": "Temporale",
         "hint": "Cocooning totale"
+      },
+      "birds": {
+        "label": "Uccelli all’alba",
+        "hint": "Risveglio in campagna"
       }
     },
     "timeRemaining": "Tempo restante",
@@ -7517,7 +7521,7 @@
       "step2Title": "Special Sound",
       "step2Text": "Frequenze portanti da ascoltare con cuffie stereo, a volume basso e confortevole. Tocca il pulsante play accanto a quella che vuoi ascoltare.",
       "step3Title": "Suoni della natura",
-      "step3Text": "Pioggia, oceano, ruscello, foresta, vento, fuoco, notte e temporale: attivane uno e mescolalo alla tua sessione.",
+      "step3Text": "Pioggia, oceano, ruscello, foresta, uccelli all’alba, vento, camino, notte e temporale: attivane uno e regolalo con il mixer.",
       "step3Tip": "Neurobalance è pensato per il relax, non è una terapia."
     },
     "aureya": {

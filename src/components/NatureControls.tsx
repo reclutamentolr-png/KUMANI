@@ -5,7 +5,7 @@ import { Pause, Play, RotateCcw, Square, Volume2 } from 'lucide-react'
 import { useNeurobalanceAudio } from '@/components/NeurobalanceAudioProvider'
 import { EQ_BANDS, NATURE_MOODS, type NaturePreset } from '@/lib/natureSounds'
 
-const SOUNDS: NaturePreset[] = ['rain', 'ocean', 'stream', 'forest', 'wind', 'fire', 'night', 'storm']
+const SOUNDS: NaturePreset[] = ['rain', 'ocean', 'stream', 'forest', 'birds', 'wind', 'fire', 'night', 'storm']
 const TIMERS: (number | null)[] = [15, 30, 60, 480, null]
 const hzLabel = (hz: number) => (hz >= 1000 ? `${hz / 1000}k` : String(hz))
 

@@ -967,8 +967,8 @@
         "hint": "Minimalistische Klanglandschaft"
       },
       "fire": {
-        "label": "Feuer",
-        "hint": "Abendliche Wärme"
+        "label": "Kamin",
+        "hint": "Wärme von Zuhause"
       },
       "night": {
         "label": "Nacht",
@@ -977,6 +977,10 @@
       "storm": {
         "label": "Gewitter",
         "hint": "Völliges Einkuscheln"
+      },
+      "birds": {
+        "label": "Vögel im Morgengrauen",
+        "hint": "Aufwachen auf dem Land"
       }
     },
     "timeRemaining": "Verbleibende Zeit",
@@ -7517,7 +7521,7 @@
       "step2Title": "Special Sound",
       "step2Text": "Trägerfrequenzen zum Hören mit Stereokopfhörern, bei niedriger, angenehmer Lautstärke. Tippe auf den Play-Button neben der gewünschten.",
       "step3Title": "Naturklänge",
-      "step3Text": "Regen, Ozean, Bach, Wald, Wind, Feuer, Nacht und Gewitter: Schalte einen ein und misch ihn in deine Sitzung.",
+      "step3Text": "Regen, Ozean, Bach, Wald, Vögel im Morgengrauen, Wind, Kamin, Nacht und Gewitter: Schalte einen ein und stelle ihn mit dem Mixer ein.",
       "step3Tip": "Neurobalance ist zum Entspannen gedacht, es ist keine Therapie."
     },
     "aureya": {

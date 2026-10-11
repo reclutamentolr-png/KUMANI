@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { CloudLightning, CloudRain, Droplets, Flame, LoaderCircle, Moon, Pause, Play, Trees, Waves, Wind, type LucideIcon } from 'lucide-react'
+import { Bird, CloudLightning, CloudRain, Droplets, Flame, LoaderCircle, Moon, Pause, Play, Trees, Waves, Wind, type LucideIcon } from 'lucide-react'
 import { useNeurobalanceAudio } from '@/components/NeurobalanceAudioProvider'
 import type { NaturePreset } from '@/lib/natureSounds'
 
@@ -10,6 +10,7 @@ const PRESETS: { id: NaturePreset; Icon: LucideIcon }[] = [
   { id: 'ocean', Icon: Waves },
   { id: 'stream', Icon: Droplets },
   { id: 'forest', Icon: Trees },
+  { id: 'birds', Icon: Bird },
   { id: 'wind', Icon: Wind },
   { id: 'fire', Icon: Flame },
   { id: 'night', Icon: Moon },

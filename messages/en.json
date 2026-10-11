@@ -1003,8 +1003,8 @@
         "hint": "Minimal soundscape"
       },
       "fire": {
-        "label": "Fire",
-        "hint": "Evening warmth"
+        "label": "Fireplace",
+        "hint": "Warmth of home"
       },
       "night": {
         "label": "Night",
@@ -1013,6 +1013,10 @@
       "storm": {
         "label": "Storm",
         "hint": "Full cocooning"
+      },
+      "birds": {
+        "label": "Dawn birds",
+        "hint": "Waking in the countryside"
       }
     },
     "timeRemaining": "Time remaining",
@@ -7517,7 +7521,7 @@
       "step2Title": "Special Sound",
       "step2Text": "Carrier frequencies to listen to with stereo headphones, at a low, comfortable volume. Tap the play button next to the one you want.",
       "step3Title": "Nature sounds",
-      "step3Text": "Rain, ocean, stream, forest, wind, fire, night and thunderstorm: turn one on and mix it into your session.",
+      "step3Text": "Rain, ocean, stream, forest, dawn birds, wind, fireplace, night and thunderstorm: turn one on and shape it with the mixer.",
       "step3Tip": "Neurobalance is meant for relaxation, it isn’t a therapy."
     },
     "aureya": {

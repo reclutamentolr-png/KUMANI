@@ -5,17 +5,20 @@ import { audioUrl } from './audioUrl'
 
 export type NaturePreset =
   | 'rain' | 'ocean' | 'wind' | 'stream'
-  | 'fire' | 'forest' | 'night' | 'storm'
+  | 'fire' | 'forest' | 'night' | 'storm' | 'birds'
 
 export const NATURE_SOUND_FILES: Record<NaturePreset, string> = {
   rain: audioUrl('rain.mp3'),
   ocean: audioUrl('ocean.mp3'),
   wind: audioUrl('wind.mp3'),
   stream: audioUrl('river.mp3'),
-  fire: audioUrl('fire.mp3'),
+  // Camino acceso (Freesound 501417, visionear, CC0): sostituisce il vecchio «Fuoco»
+  fire: audioUrl('fireplace.mp3'),
   forest: audioUrl('forest.mp3'),
   night: audioUrl('night.mp3'),
   storm: audioUrl('thunderstorm.mp3'),
+  // Uccelli all'alba (Freesound 573080, squashy555, CC0)
+  birds: audioUrl('birds.mp3'),
 }
 
 const CROSSFADE_SECONDS = 1.2

@@ -967,8 +967,8 @@
         "hint": "Paysage sonore minimaliste"
       },
       "fire": {
-        "label": "Feu",
-        "hint": "Chaleur du soir"
+        "label": "Cheminée",
+        "hint": "Chaleur du foyer"
       },
       "night": {
         "label": "Nuit",
@@ -977,6 +977,10 @@
       "storm": {
         "label": "Orage",
         "hint": "Cocooning total"
+      },
+      "birds": {
+        "label": "Oiseaux à l’aube",
+        "hint": "Réveil à la campagne"
       }
     },
     "timeRemaining": "Temps restant",
@@ -7517,7 +7521,7 @@
       "step2Title": "Special Sound",
       "step2Text": "Des fréquences porteuses à écouter avec des écouteurs stéréo, à volume bas et confortable. Touchez le bouton lecture à côté de celle que vous voulez.",
       "step3Title": "Sons de la nature",
-      "step3Text": "Pluie, océan, ruisseau, forêt, vent, feu, nuit et orage : activez-en un et mélangez-le à votre session.",
+      "step3Text": "Pluie, océan, ruisseau, forêt, oiseaux à l’aube, vent, cheminée, nuit et orage : activez-en un et réglez-le avec la table de mixage.",
       "step3Tip": "Neurobalance est pensé pour la détente, ce n’est pas une thérapie."
     },
     "aureya": {
