@@ -954,7 +954,9 @@
     "listingErr_create": "Non è stato possibile pubblicare l'annuncio. Riprova.",
     "listingErr_edit": "Non è stato possibile modificare l'annuncio. Riprova.",
     "listingErr_delete": "Non è stato possibile eliminare l'annuncio. Riprova.",
-    "listingErr_republish": "Non è stato possibile ripubblicare l'annuncio. Riprova."
+    "listingErr_republish": "Non è stato possibile ripubblicare l'annuncio. Riprova.",
+    "clienti": "Clienti e Lavori",
+    "clientiDescription": "Schede dei tuoi clienti con contatti, preventivi, quanto ti devono e il prossimo passo da fare. Collegato ai Preventivi."
   },
   "neurobalance": {
     "tracksLabel": "Audio di rilassamento",
@@ -2665,7 +2667,8 @@
     "vatNoneHint": "Senza IVA indicata (es. regime forfettario o prestazione esente): il cliente paga esattamente l'importo scritto.",
     "vatIncludedRate": "IVA {rate}% inclusa",
     "vatRateRequired": "Con il pagamento online scegli l'aliquota IVA: serve per calcolare quanto paga il cliente.",
-    "negativeTotal": "Il totale non può essere negativo: gli sconti superano gli importi."
+    "negativeTotal": "Il totale non può essere negativo: gli sconti superano gli importi.",
+    "openClientCard": "Scheda cliente"
   },
   "kumaniCv": {
     "title": "KUMANI CV",
@@ -9439,6 +9442,32 @@
           "a": "No: chi riceve il link può entrare con un nome e giocare subito. A fine partita può iscriversi gratis."
         }
       ]
+    },
+    "clienti": {
+      "title": "Gestione clienti semplice per artigiani e piccole attività · Clienti e Lavori",
+      "description": "Schede clienti con contatti, preventivi, importi da incassare e promemoria del prossimo passo, collegate ai tuoi preventivi.",
+      "heading": "Come tenere in ordine i clienti senza un gestionale complicato",
+      "intro": "Chi lavora con i clienti perde soldi soprattutto per le cose dimenticate: un preventivo da risentire, un saldo da ricordare, una telefonata rimandata. Clienti e Lavori mette ogni cliente in una scheda e ti dice chi sentire oggi e chi deve ancora pagare.",
+      "points": [
+        "Scheda del cliente con telefono, WhatsApp, email e note",
+        "Preventivi del cliente con accettati, incassati e quanto resta",
+        "Prossimo passo con data: chi richiamare oggi",
+        "Nuovo preventivo già compilato dalla scheda"
+      ],
+      "faq": [
+        {
+          "q": "Devo inserire i clienti a mano?",
+          "a": "No: ogni preventivo salvato aggiunge o aggiorna il suo cliente. Puoi anche aggiungerne di nuovi dalla pagina dei clienti."
+        },
+        {
+          "q": "Come sa quanto mi deve un cliente?",
+          "a": "Somma i preventivi accettati (IVA compresa) e toglie i pagamenti online ricevuti con i Preventivi."
+        },
+        {
+          "q": "Funziona dal telefono?",
+          "a": "Sì: dalla scheda chiami, scrivi su WhatsApp o mandi un'email con un tocco."
+        }
+      ]
     }
   },
   "landingEditor": {
@@ -11691,5 +11720,85 @@
     "deleteConfirm": "Cancellare tutti i dati di {service} ({count, plural, one {# elemento} other {# elementi}}), compresi foto e documenti? Non si può annullare: se ti servono, scaricali prima.",
     "error": "Operazione non riuscita. Riprova.",
     "note": "Shop, Menu, Kumi Card, Travel ed Events non sono qui perché contengono anche dati di clienti o partecipanti: gestiscili dal servizio o chiedi allo Staff."
+  },
+  "clienti": {
+    "back": "Torna all’Ecosistema",
+    "title": "Clienti e Lavori",
+    "cardTitle": "Scheda cliente",
+    "eyebrow": "Piano Pro · Lavoro",
+    "heroTitle": "Ogni cliente, tutto in un posto.",
+    "heroText": "Contatti, preventivi, quanto ti deve e cosa fare dopo. I clienti dei tuoi Preventivi sono già qui.",
+    "toCollect": "Da incassare",
+    "toContactToday": "Da sentire oggi",
+    "newClient": "Nuovo cliente",
+    "saveClient": "Salva cliente",
+    "cancel": "Annulla",
+    "search": "Cerca",
+    "searchPlaceholder": "Nome, città, telefono…",
+    "filtersLabel": "Filtra i clienti",
+    "filters": {
+      "all": "Tutti",
+      "due": "Da sentire",
+      "owed": "Devono pagare"
+    },
+    "emptyTitle": "Ancora nessun cliente",
+    "emptyText": "Aggiungine uno qui sopra, oppure crea un preventivo: il cliente si salva da solo.",
+    "noResults": "Nessun cliente con questa ricerca o questo filtro.",
+    "quotesCount": "{count, plural, one {# preventivo} other {# preventivi}}",
+    "owes": "deve {amount}",
+    "settled": "in pari",
+    "dueBadge": "Da fare",
+    "noStep": "Nessun passo in sospeso",
+    "fromQuotesHint": "I clienti arrivano anche da soli: ogni preventivo salvato aggiunge o aggiorna il suo cliente.",
+    "fields": {
+      "name": "Nome o ragione sociale",
+      "contactName": "Referente",
+      "phone": "Telefono",
+      "email": "Email",
+      "vat": "Partita IVA o codice fiscale",
+      "address": "Indirizzo",
+      "city": "Città",
+      "postalCode": "CAP",
+      "pec": "PEC"
+    },
+    "errors": {
+      "nameRequired": "Scrivi il nome del cliente.",
+      "duplicateName": "Hai già un cliente con questo nome.",
+      "saveError": "Non è stato possibile salvare. Riprova."
+    },
+    "vatShort": "P. IVA {vat}",
+    "call": "Chiama",
+    "email": "Email",
+    "moneyTitle": "Conti con questo cliente",
+    "acceptedTotal": "Preventivi accettati",
+    "paidTotal": "Incassato online",
+    "owedTotal": "Deve ancora",
+    "moneyHint": "Importi IVA compresa. «Incassato» conta i pagamenti online ricevuti con i Preventivi.",
+    "nextStepTitle": "Prossimo passo",
+    "stepDone": "Fatto",
+    "quickCall": "Richiamare",
+    "quickSendQuote": "Mandare il preventivo",
+    "quickFollowQuote": "Risentire per il preventivo",
+    "quickPayment": "Ricordare il pagamento",
+    "stepOther": "Altro passo",
+    "stepPlaceholder": "Es. Sopralluogo per le misure",
+    "stepWhen": "Quando",
+    "stepSave": "Salva passo",
+    "quotesTitle": "Preventivi",
+    "newQuote": "Nuovo preventivo",
+    "noQuotes": "Nessun preventivo per questo cliente.",
+    "quoteNumber": "Preventivo n. {number}",
+    "quotePaid": "pagato",
+    "quoteRefunded": "rimborsato",
+    "quoteAccepted": "accettato",
+    "quoteWaiting": "in attesa",
+    "paidOnline": "incassati {amount}",
+    "notesTitle": "Note",
+    "notesPlaceholder": "Es. Preferisce essere chiamato dopo le 17. Paga con bonifico.",
+    "saveNotes": "Salva note",
+    "saved": "Salvato",
+    "editClient": "Modifica dati",
+    "deleteClient": "Elimina cliente",
+    "deleteConfirm": "Eliminare il cliente «{name}»? I suoi preventivi restano, ma non saranno più collegati a una scheda."
   }
 }

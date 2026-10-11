@@ -918,7 +918,9 @@
     "listingErr_create": "Impossible de publier l'annonce. Réessayez.",
     "listingErr_edit": "Impossible de modifier l'annonce. Réessayez.",
     "listingErr_delete": "Impossible de supprimer l'annonce. Réessayez.",
-    "listingErr_republish": "Impossible de republier l'annonce. Réessayez."
+    "listingErr_republish": "Impossible de republier l'annonce. Réessayez.",
+    "clienti": "Clients et Chantiers",
+    "clientiDescription": "Fiches clients avec contacts, devis, ce qu’ils vous doivent et la prochaine étape. Relié aux Devis."
   },
   "neurobalance": {
     "tracksLabel": "Audios de relaxation",
@@ -2611,7 +2613,8 @@
     "vatNoneHint": "Sans TVA indiquée (ex. régime forfaitaire ou prestation exonérée) : le client paie exactement le montant indiqué.",
     "vatIncludedRate": "TVA {rate} % incluse",
     "vatRateRequired": "Avec le paiement en ligne, choisissez le taux de TVA : il sert à calculer ce que paie le client.",
-    "negativeTotal": "Le total ne peut pas être négatif : les remises dépassent les montants."
+    "negativeTotal": "Le total ne peut pas être négatif : les remises dépassent les montants.",
+    "openClientCard": "Fiche client"
   },
   "kumaniCv": {
     "title": "KUMANI CV",
@@ -9439,6 +9442,32 @@
           "a": "Non : qui reçoit le lien peut entrer avec un prénom et jouer tout de suite. À la fin, il peut s’inscrire gratuitement."
         }
       ]
+    },
+    "clienti": {
+      "title": "Gestion clients simple pour artisans et petites entreprises · Clients et Chantiers",
+      "description": "Fiches clients avec contacts, devis, montants à encaisser et rappels de la prochaine étape, reliées à vos devis.",
+      "heading": "Comment suivre ses clients sans logiciel compliqué",
+      "intro": "Quand on travaille avec des clients, on perd de l’argent surtout à cause des oublis : un devis à relancer, un solde à rappeler, un appel repoussé. Clients et Chantiers donne une fiche à chaque client et vous dit qui contacter aujourd’hui et qui doit encore payer.",
+      "points": [
+        "Fiche client avec téléphone, WhatsApp, e-mail et notes",
+        "Les devis du client avec montants acceptés, encaissés et restants",
+        "Prochaine étape avec date : qui rappeler aujourd’hui",
+        "Nouveau devis déjà rempli depuis la fiche"
+      ],
+      "faq": [
+        {
+          "q": "Dois-je saisir les clients à la main ?",
+          "a": "Non : chaque devis enregistré ajoute ou met à jour son client. Vous pouvez aussi en ajouter depuis la page des clients."
+        },
+        {
+          "q": "Comment sait-il ce qu’un client me doit ?",
+          "a": "Il additionne les devis acceptés (TTC) et soustrait les paiements en ligne reçus via les Devis."
+        },
+        {
+          "q": "Ça marche sur téléphone ?",
+          "a": "Oui : depuis la fiche, vous appelez, écrivez sur WhatsApp ou envoyez un e-mail d’un geste."
+        }
+      ]
     }
   },
   "landingEditor": {
@@ -11691,5 +11720,85 @@
     "deleteConfirm": "Supprimer toutes les données de {service} ({count, plural, one {# élément} other {# éléments}}), photos et documents compris ? Impossible à annuler : téléchargez-les d’abord si vous en avez besoin.",
     "error": "Opération échouée. Réessayez.",
     "note": "Shop, Menu, Kumi Card, Travel et Events ne figurent pas ici car ils contiennent aussi des données de clients ou de participants : gérez-les depuis le service ou demandez au Staff."
+  },
+  "clienti": {
+    "back": "Retour à l’Écosystème",
+    "title": "Clients et Chantiers",
+    "cardTitle": "Fiche client",
+    "eyebrow": "Formule Pro · Travail",
+    "heroTitle": "Chaque client, tout au même endroit.",
+    "heroText": "Contacts, devis, ce qu’il vous doit et la prochaine chose à faire. Les clients de vos Devis sont déjà ici.",
+    "toCollect": "À encaisser",
+    "toContactToday": "À contacter aujourd’hui",
+    "newClient": "Nouveau client",
+    "saveClient": "Enregistrer le client",
+    "cancel": "Annuler",
+    "search": "Rechercher",
+    "searchPlaceholder": "Nom, ville, téléphone…",
+    "filtersLabel": "Filtrer les clients",
+    "filters": {
+      "all": "Tous",
+      "due": "À contacter",
+      "owed": "Doivent payer"
+    },
+    "emptyTitle": "Aucun client pour l’instant",
+    "emptyText": "Ajoutez-en un ci-dessus, ou créez un devis : le client est enregistré automatiquement.",
+    "noResults": "Aucun client pour cette recherche ou ce filtre.",
+    "quotesCount": "{count, plural, one {# devis} other {# devis}}",
+    "owes": "doit {amount}",
+    "settled": "à jour",
+    "dueBadge": "À faire",
+    "noStep": "Aucune étape en attente",
+    "fromQuotesHint": "Les clients arrivent aussi tout seuls : chaque devis enregistré ajoute ou met à jour son client.",
+    "fields": {
+      "name": "Nom ou raison sociale",
+      "contactName": "Interlocuteur",
+      "phone": "Téléphone",
+      "email": "E-mail",
+      "vat": "N° de TVA ou code fiscal",
+      "address": "Adresse",
+      "city": "Ville",
+      "postalCode": "Code postal",
+      "pec": "E-mail certifié (PEC)"
+    },
+    "errors": {
+      "nameRequired": "Indiquez le nom du client.",
+      "duplicateName": "Vous avez déjà un client portant ce nom.",
+      "saveError": "Impossible d’enregistrer. Réessayez."
+    },
+    "vatShort": "TVA {vat}",
+    "call": "Appeler",
+    "email": "E-mail",
+    "moneyTitle": "Comptes avec ce client",
+    "acceptedTotal": "Devis acceptés",
+    "paidTotal": "Encaissé en ligne",
+    "owedTotal": "Reste dû",
+    "moneyHint": "Montants TTC. « Encaissé » compte les paiements en ligne reçus via les Devis.",
+    "nextStepTitle": "Prochaine étape",
+    "stepDone": "Fait",
+    "quickCall": "Rappeler",
+    "quickSendQuote": "Envoyer le devis",
+    "quickFollowQuote": "Relancer pour le devis",
+    "quickPayment": "Rappeler le paiement",
+    "stepOther": "Autre étape",
+    "stepPlaceholder": "Ex. Visite pour prendre les mesures",
+    "stepWhen": "Quand",
+    "stepSave": "Enregistrer l’étape",
+    "quotesTitle": "Devis",
+    "newQuote": "Nouveau devis",
+    "noQuotes": "Aucun devis pour ce client.",
+    "quoteNumber": "Devis n° {number}",
+    "quotePaid": "payé",
+    "quoteRefunded": "remboursé",
+    "quoteAccepted": "accepté",
+    "quoteWaiting": "en attente",
+    "paidOnline": "{amount} encaissés",
+    "notesTitle": "Notes",
+    "notesPlaceholder": "Ex. Préfère être appelé après 17 h. Paie par virement.",
+    "saveNotes": "Enregistrer les notes",
+    "saved": "Enregistré",
+    "editClient": "Modifier les données",
+    "deleteClient": "Supprimer le client",
+    "deleteConfirm": "Supprimer le client « {name} » ? Ses devis restent, mais ne seront plus liés à une fiche."
   }
 }

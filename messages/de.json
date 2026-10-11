@@ -918,7 +918,9 @@
     "listingErr_create": "Die Anzeige konnte nicht veröffentlicht werden. Versuche es erneut.",
     "listingErr_edit": "Die Anzeige konnte nicht bearbeitet werden. Versuche es erneut.",
     "listingErr_delete": "Die Anzeige konnte nicht gelöscht werden. Versuche es erneut.",
-    "listingErr_republish": "Die Anzeige konnte nicht erneut veröffentlicht werden. Versuche es erneut."
+    "listingErr_republish": "Die Anzeige konnte nicht erneut veröffentlicht werden. Versuche es erneut.",
+    "clienti": "Kunden & Aufträge",
+    "clientiDescription": "Kundenkarten mit Kontakten, Angeboten, offenen Beträgen und dem nächsten Schritt. Mit den Angeboten verbunden."
   },
   "neurobalance": {
     "tracksLabel": "Entspannungsaudios",
@@ -2611,7 +2613,8 @@
     "vatNoneHint": "Ohne ausgewiesene MwSt. (z. B. Pauschalregelung oder steuerfreie Leistung): Der Kunde zahlt genau den angegebenen Betrag.",
     "vatIncludedRate": "inkl. {rate} % MwSt.",
     "vatRateRequired": "Bei Online-Zahlung den MwSt.-Satz wählen: Er wird gebraucht, um den Zahlbetrag des Kunden zu berechnen.",
-    "negativeTotal": "Die Summe darf nicht negativ sein: Die Rabatte übersteigen die Beträge."
+    "negativeTotal": "Die Summe darf nicht negativ sein: Die Rabatte übersteigen die Beträge.",
+    "openClientCard": "Kundenkarte"
   },
   "kumaniCv": {
     "title": "KUMANI CV",
@@ -9439,6 +9442,32 @@
           "a": "Nein: Wer den Link bekommt, kann mit einem Namen einsteigen und sofort spielen. Am Ende kann er sich kostenlos anmelden."
         }
       ]
+    },
+    "clienti": {
+      "title": "Einfache Kundenverwaltung für Handwerker und kleine Betriebe · Kunden & Aufträge",
+      "description": "Kundenkarten mit Kontakten, Angeboten, offenen Beträgen und Erinnerungen an den nächsten Schritt, verbunden mit deinen Angeboten.",
+      "heading": "Kunden im Griff behalten ohne komplizierte Software",
+      "intro": "Wer mit Kunden arbeitet, verliert Geld vor allem durch Vergessenes: ein Angebot zum Nachfassen, eine offene Rechnung, ein verschobener Anruf. Kunden & Aufträge gibt jedem Kunden eine Karte und zeigt dir, wen du heute kontaktieren solltest und wer noch zahlen muss.",
+      "points": [
+        "Kundenkarte mit Telefon, WhatsApp, E-Mail und Notizen",
+        "Angebote des Kunden mit angenommenen, erhaltenen und offenen Beträgen",
+        "Nächster Schritt mit Datum: wen du heute zurückrufst",
+        "Neues Angebot direkt von der Karte ausgefüllt"
+      ],
+      "faq": [
+        {
+          "q": "Muss ich Kunden von Hand eingeben?",
+          "a": "Nein: Jedes gespeicherte Angebot legt seinen Kunden an oder aktualisiert ihn. Neue kannst du auch auf der Kundenseite hinzufügen."
+        },
+        {
+          "q": "Woher weiß es, was ein Kunde mir schuldet?",
+          "a": "Es addiert die angenommenen Angebote (inkl. MwSt.) und zieht die Online-Zahlungen aus den Angeboten ab."
+        },
+        {
+          "q": "Funktioniert es auf dem Handy?",
+          "a": "Ja: Von der Karte aus rufst du an, schreibst per WhatsApp oder sendest eine E-Mail mit einem Tipp."
+        }
+      ]
     }
   },
   "landingEditor": {
@@ -11691,5 +11720,85 @@
     "deleteConfirm": "Alle Daten in {service} ({count, plural, one {# Eintrag} other {# Einträge}}) einschließlich Fotos und Dokumenten löschen? Das kann nicht rückgängig gemacht werden: Lade sie vorher herunter, wenn du sie brauchst.",
     "error": "Vorgang fehlgeschlagen. Versuche es erneut.",
     "note": "Shop, Menu, Kumi Card, Travel und Events sind hier nicht aufgeführt, weil sie auch Daten von Kunden oder Teilnehmern enthalten: Verwalte sie im Dienst oder frag das Staff."
+  },
+  "clienti": {
+    "back": "Zurück zum Ökosystem",
+    "title": "Kunden & Aufträge",
+    "cardTitle": "Kundenkarte",
+    "eyebrow": "Pro-Tarif · Arbeit",
+    "heroTitle": "Jeder Kunde, alles an einem Ort.",
+    "heroText": "Kontakte, Angebote, offene Beträge und der nächste Schritt. Die Kunden aus deinen Angeboten sind schon da.",
+    "toCollect": "Offen",
+    "toContactToday": "Heute melden",
+    "newClient": "Neuer Kunde",
+    "saveClient": "Kunden speichern",
+    "cancel": "Abbrechen",
+    "search": "Suchen",
+    "searchPlaceholder": "Name, Ort, Telefon…",
+    "filtersLabel": "Kunden filtern",
+    "filters": {
+      "all": "Alle",
+      "due": "Zu melden",
+      "owed": "Zahlung offen"
+    },
+    "emptyTitle": "Noch keine Kunden",
+    "emptyText": "Füge oben einen hinzu oder erstelle ein Angebot: Der Kunde wird automatisch gespeichert.",
+    "noResults": "Keine Kunden für diese Suche oder diesen Filter.",
+    "quotesCount": "{count, plural, one {# Angebot} other {# Angebote}}",
+    "owes": "schuldet {amount}",
+    "settled": "ausgeglichen",
+    "dueBadge": "Fällig",
+    "noStep": "Kein offener Schritt",
+    "fromQuotesHint": "Kunden kommen auch von selbst: Jedes gespeicherte Angebot legt seinen Kunden an oder aktualisiert ihn.",
+    "fields": {
+      "name": "Name oder Firma",
+      "contactName": "Ansprechpartner",
+      "phone": "Telefon",
+      "email": "E-Mail",
+      "vat": "USt-IdNr. oder Steuernummer",
+      "address": "Adresse",
+      "city": "Ort",
+      "postalCode": "PLZ",
+      "pec": "Zertifizierte E-Mail (PEC)"
+    },
+    "errors": {
+      "nameRequired": "Gib den Namen des Kunden ein.",
+      "duplicateName": "Du hast bereits einen Kunden mit diesem Namen.",
+      "saveError": "Speichern nicht möglich. Bitte erneut versuchen."
+    },
+    "vatShort": "USt-IdNr. {vat}",
+    "call": "Anrufen",
+    "email": "E-Mail",
+    "moneyTitle": "Konto mit diesem Kunden",
+    "acceptedTotal": "Angenommene Angebote",
+    "paidTotal": "Online erhalten",
+    "owedTotal": "Noch offen",
+    "moneyHint": "Beträge inkl. MwSt. „Erhalten“ zählt die Online-Zahlungen aus den Angeboten.",
+    "nextStepTitle": "Nächster Schritt",
+    "stepDone": "Erledigt",
+    "quickCall": "Zurückrufen",
+    "quickSendQuote": "Angebot senden",
+    "quickFollowQuote": "Wegen Angebot nachfragen",
+    "quickPayment": "An Zahlung erinnern",
+    "stepOther": "Anderer Schritt",
+    "stepPlaceholder": "Z. B. Vor-Ort-Termin zum Ausmessen",
+    "stepWhen": "Wann",
+    "stepSave": "Schritt speichern",
+    "quotesTitle": "Angebote",
+    "newQuote": "Neues Angebot",
+    "noQuotes": "Keine Angebote für diesen Kunden.",
+    "quoteNumber": "Angebot Nr. {number}",
+    "quotePaid": "bezahlt",
+    "quoteRefunded": "erstattet",
+    "quoteAccepted": "angenommen",
+    "quoteWaiting": "offen",
+    "paidOnline": "{amount} erhalten",
+    "notesTitle": "Notizen",
+    "notesPlaceholder": "Z. B. Lieber Anrufe nach 17 Uhr. Zahlt per Überweisung.",
+    "saveNotes": "Notizen speichern",
+    "saved": "Gespeichert",
+    "editClient": "Daten bearbeiten",
+    "deleteClient": "Kunden löschen",
+    "deleteConfirm": "Den Kunden „{name}“ löschen? Seine Angebote bleiben erhalten, sind aber keiner Karte mehr zugeordnet."
   }
 }

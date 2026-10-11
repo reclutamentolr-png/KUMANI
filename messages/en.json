@@ -954,7 +954,9 @@
     "listingErr_create": "The listing could not be published. Try again.",
     "listingErr_edit": "The listing could not be edited. Try again.",
     "listingErr_delete": "The listing could not be deleted. Try again.",
-    "listingErr_republish": "The listing could not be republished. Try again."
+    "listingErr_republish": "The listing could not be republished. Try again.",
+    "clienti": "Clients & Jobs",
+    "clientiDescription": "Client cards with contacts, quotes, what they owe you and the next step to take. Linked to Quotes."
   },
   "neurobalance": {
     "tracksLabel": "Relaxation audio",
@@ -2611,7 +2613,8 @@
     "vatNoneHint": "No VAT shown (e.g. flat-rate scheme or exempt service): the client pays exactly the amount written.",
     "vatIncludedRate": "VAT {rate}% included",
     "vatRateRequired": "With online payment, choose the VAT rate: it is needed to work out what the client pays.",
-    "negativeTotal": "The total cannot be negative: the discounts exceed the amounts."
+    "negativeTotal": "The total cannot be negative: the discounts exceed the amounts.",
+    "openClientCard": "Client card"
   },
   "kumaniCv": {
     "title": "KUMANI CV",
@@ -9439,6 +9442,32 @@
           "a": "No: whoever receives the link can join with a name and play right away. At the end they can sign up for free."
         }
       ]
+    },
+    "clienti": {
+      "title": "Simple client management for tradespeople and small businesses · Clients & Jobs",
+      "description": "Client cards with contacts, quotes, amounts to collect and next-step reminders, linked to your quotes.",
+      "heading": "How to keep track of clients without complicated software",
+      "intro": "When you work with clients, money is lost mostly through forgotten things: a quote to follow up, a balance to chase, a call put off. Clients & Jobs gives each client a card and tells you who to contact today and who still has to pay.",
+      "points": [
+        "Client card with phone, WhatsApp, email and notes",
+        "The client’s quotes with accepted, collected and outstanding amounts",
+        "Next step with a date: who to call back today",
+        "New quote already filled in from the card"
+      ],
+      "faq": [
+        {
+          "q": "Do I have to enter clients by hand?",
+          "a": "No: every saved quote adds or updates its client. You can also add new ones from the clients page."
+        },
+        {
+          "q": "How does it know what a client owes me?",
+          "a": "It adds up accepted quotes (VAT included) and subtracts the online payments received through Quotes."
+        },
+        {
+          "q": "Does it work on my phone?",
+          "a": "Yes: from the card you call, message on WhatsApp or send an email with one tap."
+        }
+      ]
     }
   },
   "landingEditor": {
@@ -11691,5 +11720,85 @@
     "deleteConfirm": "Delete all data in {service} ({count, plural, one {# item} other {# items}}), including photos and documents? This cannot be undone: if you need them, download them first.",
     "error": "Operation failed. Try again.",
     "note": "Shop, Menu, Kumi Card, Travel and Events are not listed because they also hold customers’ or participants’ data: manage them from the service or ask the Staff."
+  },
+  "clienti": {
+    "back": "Back to the Ecosystem",
+    "title": "Clients & Jobs",
+    "cardTitle": "Client card",
+    "eyebrow": "Pro plan · Work",
+    "heroTitle": "Every client, all in one place.",
+    "heroText": "Contacts, quotes, what they owe you and what to do next. The clients from your Quotes are already here.",
+    "toCollect": "To collect",
+    "toContactToday": "To contact today",
+    "newClient": "New client",
+    "saveClient": "Save client",
+    "cancel": "Cancel",
+    "search": "Search",
+    "searchPlaceholder": "Name, city, phone…",
+    "filtersLabel": "Filter clients",
+    "filters": {
+      "all": "All",
+      "due": "To contact",
+      "owed": "Owe you"
+    },
+    "emptyTitle": "No clients yet",
+    "emptyText": "Add one above, or create a quote: the client is saved automatically.",
+    "noResults": "No clients match this search or filter.",
+    "quotesCount": "{count, plural, one {# quote} other {# quotes}}",
+    "owes": "owes {amount}",
+    "settled": "settled",
+    "dueBadge": "Due",
+    "noStep": "No pending step",
+    "fromQuotesHint": "Clients also arrive on their own: every saved quote adds or updates its client.",
+    "fields": {
+      "name": "Name or company name",
+      "contactName": "Contact person",
+      "phone": "Phone",
+      "email": "Email",
+      "vat": "VAT number or tax code",
+      "address": "Address",
+      "city": "City",
+      "postalCode": "Postcode",
+      "pec": "Certified email (PEC)"
+    },
+    "errors": {
+      "nameRequired": "Enter the client’s name.",
+      "duplicateName": "You already have a client with this name.",
+      "saveError": "Could not save. Please try again."
+    },
+    "vatShort": "VAT {vat}",
+    "call": "Call",
+    "email": "Email",
+    "moneyTitle": "Accounts with this client",
+    "acceptedTotal": "Accepted quotes",
+    "paidTotal": "Collected online",
+    "owedTotal": "Still owed",
+    "moneyHint": "Amounts include VAT. “Collected” counts the online payments received through Quotes.",
+    "nextStepTitle": "Next step",
+    "stepDone": "Done",
+    "quickCall": "Call back",
+    "quickSendQuote": "Send the quote",
+    "quickFollowQuote": "Follow up on the quote",
+    "quickPayment": "Remind about payment",
+    "stepOther": "Other step",
+    "stepPlaceholder": "E.g. Site visit to take measurements",
+    "stepWhen": "When",
+    "stepSave": "Save step",
+    "quotesTitle": "Quotes",
+    "newQuote": "New quote",
+    "noQuotes": "No quotes for this client.",
+    "quoteNumber": "Quote no. {number}",
+    "quotePaid": "paid",
+    "quoteRefunded": "refunded",
+    "quoteAccepted": "accepted",
+    "quoteWaiting": "pending",
+    "paidOnline": "{amount} collected",
+    "notesTitle": "Notes",
+    "notesPlaceholder": "E.g. Prefers calls after 5 pm. Pays by bank transfer.",
+    "saveNotes": "Save notes",
+    "saved": "Saved",
+    "editClient": "Edit details",
+    "deleteClient": "Delete client",
+    "deleteConfirm": "Delete the client “{name}”? Their quotes stay, but will no longer be linked to a card."
   }
 }

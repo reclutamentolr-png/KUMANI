@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, BookUser } from 'lucide-react'
 import { hasActivePreventiviAccess } from '@/lib/quotes-server'
 import QuotePdfButton from '@/components/QuotePdfButton'
 import QuoteShareButtons from '@/components/QuoteShareButtons'
@@ -53,9 +53,10 @@ export default async function QuoteDetailPage({
 
   // Catena di lavoro: scarico dal Magazzino (righe collegate) e ricevuta di pagamento
   const hasLinkedProducts = ((quote.items || []) as QuoteItem[]).some((item) => typeof item.productId === 'string')
-  const [canMagazzino, canReceipt] = await Promise.all([
+  const [canMagazzino, canReceipt, canClienti] = await Promise.all([
     hasLinkedProducts ? hasActiveToolAccess(supabase, user.id, 'magazzino') : Promise.resolve(false),
     hasActiveToolAccess(supabase, user.id, 'digital-receipt'),
+    quote.client_id ? hasActiveToolAccess(supabase, user.id, 'clienti') : Promise.resolve(false),
   ])
   // KUMANI Shop: il venditore può incassare online (conto Stripe pronto)
   const { data: stripeAccount } = await supabase.from('seller_stripe_accounts').select('charges_enabled').eq('user_id', user.id).maybeSingle()
@@ -101,6 +102,15 @@ export default async function QuoteDetailPage({
           <div className="flex flex-wrap items-center gap-3">
             <QuotePdfButton quote={quote} issuer={issuer || null} logoUrl={logoUrl} />
             <QuoteActions id={quote.id} />
+            {canClienti && (
+              <Link
+                href={`/marketplace/clienti/${quote.client_id}`}
+                className="flex items-center gap-2 px-5 py-3 rounded-xl font-medium text-sm border border-[var(--gold)]/40 bg-white text-[var(--ink)] hover:bg-[var(--gold-pale)] transition-all"
+              >
+                <BookUser className="h-4 w-4 text-[var(--gold)]" />
+                {t('openClientCard')}
+              </Link>
+            )}
           </div>
           <QuoteShareButtons quote={quote} issuer={issuer || null} logoUrl={logoUrl} />
           <QuoteWorkChain

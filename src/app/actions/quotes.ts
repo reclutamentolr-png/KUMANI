@@ -155,7 +155,7 @@ async function requireActivePreventiviAccess(): Promise<
  * retyped. Best-effort — a failure here must not fail the quote save that
  * already succeeded.
  */
-async function upsertSavedClient(supabase: SupabaseClient, userId: string, form: QuoteFormData) {
+async function upsertSavedClient(supabase: SupabaseClient, userId: string, form: QuoteFormData, quoteId?: string) {
   const name = form.clientName.trim()
   if (!name) return
   try {
@@ -171,18 +171,25 @@ async function upsertSavedClient(supabase: SupabaseClient, userId: string, form:
       phone: form.clientPhone || null,
       updated_at: new Date().toISOString(),
     }
+    // Stesso nome (senza distinguere maiuscole); % e _ presi alla lettera
     const { data: existing } = await supabase
       .from('quote_clients')
       .select('id')
       .eq('user_id', userId)
-      .ilike('name', name)
+      .ilike('name', name.replace(/[\\%_]/g, (c) => `\\${c}`))
+      .order('created_at')
+      .limit(1)
       .maybeSingle()
 
-    if (existing) {
-      await supabase.from('quote_clients').update(payload).eq('id', existing.id)
+    let clientId = existing?.id as string | undefined
+    if (clientId) {
+      await supabase.from('quote_clients').update(payload).eq('id', clientId)
     } else {
-      await supabase.from('quote_clients').insert(payload)
+      const { data: created } = await supabase.from('quote_clients').insert(payload).select('id').single()
+      clientId = created?.id
     }
+    // Clienti e Lavori: il preventivo resta collegato alla scheda del cliente
+    if (quoteId && clientId) await supabase.from('quotes').update({ client_id: clientId }).eq('id', quoteId).eq('user_id', userId)
   } catch (err) {
     console.error('[Quotes] upsertSavedClient failed (non-blocking):', err)
   }
@@ -273,7 +280,7 @@ export async function createQuote(
 
     if (!error && data) {
       await awardToolPoint('preventivi')
-      await upsertSavedClient(supabase, gate.userId, form)
+      await upsertSavedClient(supabase, gate.userId, form, data.id)
       await rememberLogoPosition(supabase, gate.userId, fields.logo_position, fields.band_style)
       return { success: true, data: { id: data.id, quote_number: data.quote_number } }
     }
@@ -322,7 +329,7 @@ export async function updateQuote(id: string, form: QuoteFormData): Promise<Acti
     return { success: false, message: 'saveError' }
   }
 
-  await upsertSavedClient(supabase, gate.userId, form)
+  await upsertSavedClient(supabase, gate.userId, form, id)
   await rememberLogoPosition(supabase, gate.userId, fields.logo_position, fields.band_style)
   return { success: true, data: null }
 }

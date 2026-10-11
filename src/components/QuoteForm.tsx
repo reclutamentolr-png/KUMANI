@@ -69,6 +69,8 @@ type Props = {
   quoteNumber?: number
   // KUMANI Shop: conto Stripe collegato e pronto per incassare
   canChargeOnline?: boolean
+  // Clienti e Lavori: «Nuovo preventivo» dalla scheda, cliente già compilato
+  initialClient?: SavedClientRow
 }
 
 function defaultForm(paymentInfo = '', logoPosition: QuoteLogoPosition = 'left', intro = '', closing = '', bandStyle: QuoteBandStyle | null = null): QuoteFormData {
@@ -102,7 +104,21 @@ function defaultForm(paymentInfo = '', logoPosition: QuoteLogoPosition = 'left',
   }
 }
 
-export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData, inventoryProducts, initialLine, quoteNumber, canChargeOnline = false }: Props) {
+// Campi del cliente salvato nel modulo del preventivo
+function clientFormFields(client: SavedClientRow) {
+  return {
+    clientName: client.name,
+    clientVat: client.vat || '',
+    clientAddress: client.address || '',
+    clientCity: client.city || '',
+    clientPostalCode: client.postal_code || '',
+    clientPec: client.pec || '',
+    clientEmail: client.email || '',
+    clientPhone: client.phone || '',
+  }
+}
+
+export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData, inventoryProducts, initialLine, quoteNumber, canChargeOnline = false, initialClient }: Props) {
   const t = useTranslations('preventivi')
   const locale = useLocale()
   const tb = useTranslations('businessProfile')
@@ -117,14 +133,15 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
     const savedPosition = issuer?.quote_logo_position
     const position = QUOTE_LOGO_POSITIONS.includes(savedPosition as QuoteLogoPosition) ? (savedPosition as QuoteLogoPosition) : 'left'
     const base = defaultForm(issuerPayment, position, t('defaultIntro'), t('defaultClosing'), cleanBandStyle(issuer?.quote_band_style))
-    return initialLine ? { ...base, items: [{ ...emptyQuoteItem(), ...initialLine }] } : base
+    const withLine = initialLine ? { ...base, items: [{ ...emptyQuoteItem(), ...initialLine }] } : base
+    return initialClient ? { ...withLine, ...clientFormFields(initialClient) } : withLine
   })
   const [pickerOpen, setPickerOpen] = useState(false)
   const [pickerQuery, setPickerQuery] = useState('')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [savedClients, setSavedClients] = useState<SavedClientRow[]>([])
-  const [selectedClientId, setSelectedClientId] = useState('')
+  const [selectedClientId, setSelectedClientId] = useState(initialClient?.id ?? '')
   const [editingClient, setEditingClient] = useState<SavedClientRow | null>(null)
   const [clientQuery, setClientQuery] = useState('')
   const [clientListOpen, setClientListOpen] = useState(false)
@@ -152,17 +169,7 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
   }, [])
 
   const applyClientToForm = (client: SavedClientRow) => {
-    setForm((prev) => ({
-      ...prev,
-      clientName: client.name,
-      clientVat: client.vat || '',
-      clientAddress: client.address || '',
-      clientCity: client.city || '',
-      clientPostalCode: client.postal_code || '',
-      clientPec: client.pec || '',
-      clientEmail: client.email || '',
-      clientPhone: client.phone || '',
-    }))
+    setForm((prev) => ({ ...prev, ...clientFormFields(client) }))
   }
 
   const handleSelectSavedClient = (clientId: string) => {

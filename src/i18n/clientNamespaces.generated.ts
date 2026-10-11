@@ -16,6 +16,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "catalog",
   "chat",
   "checkmail",
+  "clienti",
   "common",
   "contactPage",
   "convivio",

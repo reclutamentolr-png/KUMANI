@@ -335,6 +335,17 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       requiresSubscription: true,
     },
     {
+      toolName: 'clienti',
+      href: '/marketplace/clienti',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'BookUser',
+      title: t('clienti'),
+      description: t('clientiDescription'),
+      color: 'gold',
+      category: 'lavoro',
+      requiresSubscription: true,
+    },
+    {
       toolName: 'magazzino',
       href: '/marketplace/magazzino',
       gradient: 'bg-[var(--ink)]',

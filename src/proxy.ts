@@ -43,6 +43,7 @@ const PAID_TOOLS = [
   'verifoto',
   'checkmail',
   'magazzino',
+  'clienti',
   'documento-sicuro',
   'firma-email',
   'calcolatrici',

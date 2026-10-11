@@ -27,6 +27,7 @@ const GROUP_OF: Record<string, ServiceGroup> = {
   'trova-lavoro': 'work',
   'kumani-cv': 'work',
   preventivi: 'work',
+  clienti: 'work',
   'digital-receipt': 'work',
   magazzino: 'work',
   calcolatrici: 'work',

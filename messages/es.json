@@ -918,7 +918,9 @@
     "listingErr_create": "No se ha podido publicar el anuncio. Inténtalo de nuevo.",
     "listingErr_edit": "No se ha podido editar el anuncio. Inténtalo de nuevo.",
     "listingErr_delete": "No se ha podido eliminar el anuncio. Inténtalo de nuevo.",
-    "listingErr_republish": "No se ha podido volver a publicar el anuncio. Inténtalo de nuevo."
+    "listingErr_republish": "No se ha podido volver a publicar el anuncio. Inténtalo de nuevo.",
+    "clienti": "Clientes y Trabajos",
+    "clientiDescription": "Fichas de tus clientes con contactos, presupuestos, lo que te deben y el próximo paso. Conectado a Presupuestos."
   },
   "neurobalance": {
     "tracksLabel": "Audios de relajación",
@@ -2611,7 +2613,8 @@
     "vatNoneHint": "Sin IVA indicado (p. ej. régimen simplificado o servicio exento): el cliente paga exactamente el importe escrito.",
     "vatIncludedRate": "IVA {rate}% incluido",
     "vatRateRequired": "Con el pago online elige el tipo de IVA: sirve para calcular cuánto paga el cliente.",
-    "negativeTotal": "El total no puede ser negativo: los descuentos superan los importes."
+    "negativeTotal": "El total no puede ser negativo: los descuentos superan los importes.",
+    "openClientCard": "Ficha del cliente"
   },
   "kumaniCv": {
     "title": "KUMANI CV",
@@ -9439,6 +9442,32 @@
           "a": "No: quien recibe el enlace puede entrar con un nombre y jugar enseguida. Al final puede registrarse gratis."
         }
       ]
+    },
+    "clienti": {
+      "title": "Gestión de clientes sencilla para autónomos y pequeños negocios · Clientes y Trabajos",
+      "description": "Fichas de clientes con contactos, presupuestos, importes por cobrar y recordatorios del próximo paso, conectadas a tus presupuestos.",
+      "heading": "Cómo tener los clientes en orden sin un programa complicado",
+      "intro": "Quien trabaja con clientes pierde dinero sobre todo por los olvidos: un presupuesto por seguir, un saldo por recordar, una llamada aplazada. Clientes y Trabajos da a cada cliente una ficha y te dice a quién contactar hoy y quién aún debe pagar.",
+      "points": [
+        "Ficha del cliente con teléfono, WhatsApp, email y notas",
+        "Presupuestos del cliente con importes aceptados, cobrados y pendientes",
+        "Próximo paso con fecha: a quién volver a llamar hoy",
+        "Nuevo presupuesto ya rellenado desde la ficha"
+      ],
+      "faq": [
+        {
+          "q": "¿Tengo que introducir los clientes a mano?",
+          "a": "No: cada presupuesto guardado añade o actualiza su cliente. También puedes añadir nuevos desde la página de clientes."
+        },
+        {
+          "q": "¿Cómo sabe cuánto me debe un cliente?",
+          "a": "Suma los presupuestos aceptados (IVA incluido) y resta los pagos online recibidos con los Presupuestos."
+        },
+        {
+          "q": "¿Funciona desde el móvil?",
+          "a": "Sí: desde la ficha llamas, escribes por WhatsApp o envías un email con un toque."
+        }
+      ]
     }
   },
   "landingEditor": {
@@ -11691,5 +11720,85 @@
     "deleteConfirm": "¿Eliminar todos los datos de {service} ({count, plural, one {# elemento} other {# elementos}}), incluidas fotos y documentos? No se puede deshacer: si los necesitas, descárgalos antes.",
     "error": "La operación ha fallado. Inténtalo de nuevo.",
     "note": "Shop, Menu, Kumi Card, Travel y Events no aparecen aquí porque también contienen datos de clientes o participantes: gestiónalos desde el servicio o pide ayuda al Staff."
+  },
+  "clienti": {
+    "back": "Volver al Ecosistema",
+    "title": "Clientes y Trabajos",
+    "cardTitle": "Ficha del cliente",
+    "eyebrow": "Plan Pro · Trabajo",
+    "heroTitle": "Cada cliente, todo en un solo lugar.",
+    "heroText": "Contactos, presupuestos, lo que te debe y qué hacer después. Los clientes de tus Presupuestos ya están aquí.",
+    "toCollect": "Por cobrar",
+    "toContactToday": "Para contactar hoy",
+    "newClient": "Nuevo cliente",
+    "saveClient": "Guardar cliente",
+    "cancel": "Cancelar",
+    "search": "Buscar",
+    "searchPlaceholder": "Nombre, ciudad, teléfono…",
+    "filtersLabel": "Filtrar clientes",
+    "filters": {
+      "all": "Todos",
+      "due": "Para contactar",
+      "owed": "Deben pagar"
+    },
+    "emptyTitle": "Aún no hay clientes",
+    "emptyText": "Añade uno arriba o crea un presupuesto: el cliente se guarda solo.",
+    "noResults": "Ningún cliente con esta búsqueda o este filtro.",
+    "quotesCount": "{count, plural, one {# presupuesto} other {# presupuestos}}",
+    "owes": "debe {amount}",
+    "settled": "al día",
+    "dueBadge": "Pendiente",
+    "noStep": "Ningún paso pendiente",
+    "fromQuotesHint": "Los clientes también llegan solos: cada presupuesto guardado añade o actualiza su cliente.",
+    "fields": {
+      "name": "Nombre o razón social",
+      "contactName": "Persona de contacto",
+      "phone": "Teléfono",
+      "email": "Email",
+      "vat": "NIF o código fiscal",
+      "address": "Dirección",
+      "city": "Ciudad",
+      "postalCode": "Código postal",
+      "pec": "Email certificado (PEC)"
+    },
+    "errors": {
+      "nameRequired": "Escribe el nombre del cliente.",
+      "duplicateName": "Ya tienes un cliente con este nombre.",
+      "saveError": "No se ha podido guardar. Inténtalo de nuevo."
+    },
+    "vatShort": "NIF {vat}",
+    "call": "Llamar",
+    "email": "Email",
+    "moneyTitle": "Cuentas con este cliente",
+    "acceptedTotal": "Presupuestos aceptados",
+    "paidTotal": "Cobrado online",
+    "owedTotal": "Aún debe",
+    "moneyHint": "Importes con IVA incluido. «Cobrado» cuenta los pagos online recibidos con los Presupuestos.",
+    "nextStepTitle": "Próximo paso",
+    "stepDone": "Hecho",
+    "quickCall": "Volver a llamar",
+    "quickSendQuote": "Enviar el presupuesto",
+    "quickFollowQuote": "Preguntar por el presupuesto",
+    "quickPayment": "Recordar el pago",
+    "stepOther": "Otro paso",
+    "stepPlaceholder": "Ej. Visita para tomar medidas",
+    "stepWhen": "Cuándo",
+    "stepSave": "Guardar paso",
+    "quotesTitle": "Presupuestos",
+    "newQuote": "Nuevo presupuesto",
+    "noQuotes": "Ningún presupuesto para este cliente.",
+    "quoteNumber": "Presupuesto n.º {number}",
+    "quotePaid": "pagado",
+    "quoteRefunded": "reembolsado",
+    "quoteAccepted": "aceptado",
+    "quoteWaiting": "pendiente",
+    "paidOnline": "{amount} cobrados",
+    "notesTitle": "Notas",
+    "notesPlaceholder": "Ej. Prefiere que le llamen después de las 17. Paga por transferencia.",
+    "saveNotes": "Guardar notas",
+    "saved": "Guardado",
+    "editClient": "Editar datos",
+    "deleteClient": "Eliminar cliente",
+    "deleteConfirm": "¿Eliminar el cliente «{name}»? Sus presupuestos se conservan, pero ya no estarán vinculados a una ficha."
   }
 }

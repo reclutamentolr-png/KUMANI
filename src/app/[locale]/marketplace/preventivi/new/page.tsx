@@ -9,11 +9,11 @@ import QuoteForm from '@/components/QuoteForm'
 export default async function NewQuotePage({
   searchParams,
 }: {
-  searchParams: Promise<{ from?: string; line?: string; price?: string }>
+  searchParams: Promise<{ from?: string; line?: string; price?: string; client?: string }>
 }) {
   const t = await getTranslations('preventivi')
   const te = await getTranslations('ecosystem')
-  const { from, line, price } = await searchParams
+  const { from, line, price, client } = await searchParams
   const backSuffix = from === 'dashboard' ? '?from=dashboard' : ''
 
   // Riga arrivata dalle Calcolatrici (?line=…&price=…)
@@ -53,6 +53,12 @@ export default async function NewQuotePage({
   const { data: stripeAccount } = await supabase.from('seller_stripe_accounts').select('charges_enabled').eq('user_id', user.id).maybeSingle()
   const canChargeOnline = !!stripeAccount?.charges_enabled
 
+  // Dalla scheda di Clienti e Lavori (?client=…): cliente già compilato
+  const { data: initialClient } =
+    typeof client === 'string' && /^[0-9a-f-]{36}$/i.test(client)
+      ? await supabase.from('quote_clients').select('id, user_id, name, vat, address, city, postal_code, pec, email, phone, updated_at').eq('id', client).eq('user_id', user.id).maybeSingle()
+      : { data: null }
+
   return (
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
@@ -86,6 +92,7 @@ export default async function NewQuotePage({
           inventoryProducts={inventoryProducts ?? undefined}
           initialLine={initialLine}
           quoteNumber={nextNumber}
+          initialClient={initialClient ?? undefined}
         />
       </main>
     </div>
