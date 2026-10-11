@@ -2,29 +2,47 @@
 
 import { useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { Check, FilePlus2, LoaderCircle, Mail, MessageCircle, Pencil, Phone, Trash2 } from 'lucide-react'
+import { Check, FilePlus2, Hammer, LoaderCircle, Mail, MessageCircle, Pencil, Phone, Trash2 } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { useLocalizedRouter as useRouter } from '@/lib/useLocalizedRouter'
 import { askConfirm } from '@/lib/confirm'
-import { deleteClientRecord, saveClientNotes, setNextStep, updateClientRecord } from '@/app/actions/clienti'
+import { createJob, deleteClientRecord, saveClientNotes, setNextStep, updateClientRecord } from '@/app/actions/clienti'
 import {
   CLIENT_LIMITS,
   QUICK_STEPS,
+  STAGE_STYLES,
   formatEur,
   isStepDue,
   romeToday,
   whatsappDigits,
   type ClientFormData,
+  type ClientJob,
+  type ClientPayment,
   type ClientQuote,
+  type JobFormData,
   type ClientRecord,
 } from '@/lib/clienti'
 import ClientForm, { inputClass } from './ClientForm'
+import JobForm from './JobForm'
+import Payments from './Payments'
 
 const card = 'rounded-3xl border border-[var(--gold)]/25 bg-white p-5 shadow-sm'
 const contactBtn =
   'flex min-h-16 flex-col items-center justify-center gap-1 rounded-2xl text-sm font-bold transition-opacity hover:opacity-90'
 
-export default function ClienteCard({ client: initial, quotes, canQuote }: { client: ClientRecord; quotes: ClientQuote[]; canQuote: boolean }) {
+export default function ClienteCard({
+  client: initial,
+  quotes,
+  jobs,
+  payments: initialPayments,
+  canQuote,
+}: {
+  client: ClientRecord
+  quotes: ClientQuote[]
+  jobs: ClientJob[]
+  payments: ClientPayment[]
+  canQuote: boolean
+}) {
   const t = useTranslations('clienti')
   const locale = useLocale()
   const router = useRouter()
@@ -36,10 +54,13 @@ export default function ClienteCard({ client: initial, quotes, canQuote }: { cli
   const [notes, setNotes] = useState(initial.notes ?? '')
   const [notesState, setNotesState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
   const [error, setError] = useState<string | null>(null)
+  const [payments, setPayments] = useState(initialPayments)
+  const [addingJob, setAddingJob] = useState(false)
 
   const formatDay = (day: string) => new Date(`${day}T12:00:00`).toLocaleDateString(locale, { weekday: 'short', day: 'numeric', month: 'long' })
-  const accepted = quotes.filter((q) => q.accepted).reduce((s, q) => s + q.gross, 0)
-  const paid = quotes.reduce((s, q) => s + q.paid_amount, 0)
+  // Da incassare: preventivi accettati + lavori senza preventivo; incassato: online + registrati
+  const accepted = quotes.filter((q) => q.accepted).reduce((s, q) => s + q.gross, 0) + jobs.filter((j) => !j.quote_id).reduce((s, j) => s + (j.amount ?? 0), 0)
+  const paid = quotes.reduce((s, q) => s + q.paid_amount, 0) + payments.reduce((s, p) => s + p.amount, 0)
   const owed = Math.max(0, Math.round((accepted - paid) * 100) / 100)
   const wa = whatsappDigits(client.phone)
   const subtitle = [client.contact_name, [client.address, client.city].filter(Boolean).join(', '), client.vat ? t('vatShort', { vat: client.vat }) : null]
@@ -95,6 +116,14 @@ export default function ClienteCard({ client: initial, quotes, canQuote }: { cli
     }
     router.push('/marketplace/clienti')
   }
+
+  const newJob = async (form: JobFormData) => {
+    const result = await createJob(client.id, form)
+    if (!result.success) return t(`errors.${['titleRequired', 'amountInvalid'].includes(result.message) ? result.message : 'saveError'}`)
+    router.push(`/marketplace/clienti/lavoro/${result.data.id}`)
+    return null
+  }
+  const jobPrice = (j: ClientJob) => j.amount ?? quotes.find((q) => q.id === j.quote_id)?.gross ?? null
 
   const quoteState = (q: ClientQuote) =>
     q.payment_status === 'paid' ? t('quotePaid') : q.payment_status === 'refunded' ? t('quoteRefunded') : q.accepted ? t('quoteAccepted') : t('quoteWaiting')
@@ -152,6 +181,77 @@ export default function ClienteCard({ client: initial, quotes, canQuote }: { cli
           </div>
         </div>
         <p className="mt-3 text-xs text-white/60">{t('moneyHint')}</p>
+      </section>
+
+      <section className={card}>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h3 className="text-base font-extrabold text-[var(--ink)]">{t('jobs.listTitle')}</h3>
+          {!addingJob && (
+            <button
+              type="button"
+              onClick={() => setAddingJob(true)}
+              className="inline-flex min-h-10 items-center gap-1.5 rounded-full bg-[var(--ink)] px-4 text-sm font-bold text-[var(--gold-bright)] hover:opacity-90"
+            >
+              <Hammer className="h-4 w-4" aria-hidden="true" />
+              {t('jobs.new')}
+            </button>
+          )}
+        </div>
+        {addingJob && (
+          <div className="mt-4 rounded-2xl bg-[var(--background)] p-4">
+            <JobForm
+              initial={{ title: '', amount: '', quoteId: '', address: [client.address, client.city].filter(Boolean).join(', '), startDate: '', dueDate: '' }}
+              quotes={quotes.filter((q) => q.payment_status !== 'refunded')}
+              submitLabel={t('jobs.create')}
+              onSubmit={newJob}
+              onCancel={() => setAddingJob(false)}
+            />
+          </div>
+        )}
+        {jobs.length === 0 && !addingJob ? (
+          <p className="mt-2 text-sm text-[var(--muted)]">{t('jobs.none')}</p>
+        ) : (
+          <ul className="mt-2 divide-y divide-[var(--gold)]/15">
+            {jobs.map((j) => {
+              const price = jobPrice(j)
+              const done = j.checklist.filter((i) => i.done).length
+              return (
+                <li key={j.id}>
+                  <Link href={`/marketplace/clienti/lavoro/${j.id}`} className="flex items-center justify-between gap-3 py-3 hover:text-[#8a6a1f]">
+                    <span className="min-w-0">
+                      <span className="block break-words font-bold text-[var(--ink)]">{j.title}</span>
+                      <span className="block text-sm text-[var(--muted)]">
+                        {[
+                          price === null ? null : formatEur(price, locale),
+                          j.checklist.length > 0 ? t('jobs.checklistCount', { done, total: j.checklist.length }) : null,
+                          j.due_date ? t('jobs.dueShort', { date: formatDay(j.due_date) }) : null,
+                        ]
+                          .filter(Boolean)
+                          .join(' · ')}
+                      </span>
+                    </span>
+                    <span className={`shrink-0 rounded-full px-3 py-1 text-xs font-extrabold ${STAGE_STYLES[j.stage]}`}>{t(`jobs.stages.${j.stage}`)}</span>
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+        )}
+      </section>
+
+      <section className={card}>
+        <h3 className="text-base font-extrabold text-[var(--ink)]">{t('pay.title')}</h3>
+        <Payments
+          clientId={client.id}
+          payments={payments}
+          onlineQuotes={quotes.filter((q) => q.paid_amount > 0)}
+          jobs={jobs}
+          suggestedAmount={owed}
+          onChange={(next) => {
+            setPayments(next)
+            router.refresh()
+          }}
+        />
       </section>
 
       <section className={card}>

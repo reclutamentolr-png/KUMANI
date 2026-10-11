@@ -24,6 +24,7 @@ export const MY_DATA_SERVICES: MyDataService[] = [
   { key: 'qr-code-pro', tool: 'qr-code-pro', tables: [t('qr_pro_codes')], buckets: [] },
   { key: 'trova-lavoro', tool: 'trova-lavoro', tables: [t('job_favorites'), t('job_searches')], buckets: [] },
   { key: 'preventivi', tool: 'preventivi', tables: [t('quotes'), t('quote_clients')], buckets: [] },
+  { key: 'clienti', tool: 'clienti', tables: [t('client_payments'), t('client_jobs')], buckets: [] },
   { key: 'magazzino', tool: 'magazzino', tables: [t('inventory_movements', 'owner_id'), t('inventory_products', 'owner_id'), t('inventory_categories', 'owner_id')], buckets: [] },
   { key: 'aureya', tool: 'aureya', tables: [t('aureya_test_results')], buckets: [] },
 ]

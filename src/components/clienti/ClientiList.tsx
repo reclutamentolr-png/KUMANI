@@ -112,7 +112,7 @@ export default function ClientiList({ clients }: { clients: ClientOverview[] }) 
         <ul className="grid gap-3 md:grid-cols-2">
           {shown.map((c) => {
             const due = isStepDue(c.next_step_due)
-            const meta = [c.contact_name, c.city, c.quotes_count > 0 ? t('quotesCount', { count: c.quotes_count }) : null].filter(Boolean).join(' · ')
+            const meta = [c.contact_name, c.city, c.open_jobs > 0 ? t('jobs.openCount', { count: c.open_jobs }) : null, c.quotes_count > 0 ? t('quotesCount', { count: c.quotes_count }) : null].filter(Boolean).join(' · ')
             return (
               <li key={c.id}>
                 <Link

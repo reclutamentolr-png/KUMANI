@@ -15,6 +15,11 @@ export const CLIENT_LIMITS = {
   phone: 60,
   notes: 3000,
   nextStep: 200,
+  jobTitle: 200,
+  checklistItem: 200,
+  checklistItems: 50,
+  paymentNote: 200,
+  maxAmount: 10_000_000,
 } as const
 
 export interface ClientOverview {
@@ -28,6 +33,7 @@ export interface ClientOverview {
   next_step_due: string | null
   updated_at: string
   quotes_count: number
+  open_jobs: number
   accepted_total: number
   paid_total: number
   owed: number
@@ -59,6 +65,7 @@ export interface ClientQuote {
   accepted: boolean
   payment_status: string
   paid_amount: number
+  paid_at: string | null
 }
 
 export interface ClientFormData {
@@ -116,4 +123,71 @@ export function whatsappDigits(phone: string | null): string | null {
 
 export function formatEur(value: number, locale: string): string {
   return new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2 }).format(Number(value) || 0)
+}
+
+// Lavori (fase 2): stato, cose da fare e pagamenti registrati a mano
+export const JOB_STAGES = ['todo', 'doing', 'done', 'paid'] as const
+export type JobStage = (typeof JOB_STAGES)[number]
+export const PAYMENT_METHODS = ['transfer', 'cash', 'card', 'other'] as const
+export type PaymentMethod = (typeof PAYMENT_METHODS)[number]
+
+export interface ChecklistItem {
+  text: string
+  done: boolean
+}
+
+export interface ClientJob {
+  id: string
+  client_id: string
+  quote_id: string | null
+  title: string
+  stage: JobStage
+  amount: number | null
+  address: string | null
+  start_date: string | null
+  due_date: string | null
+  notes: string | null
+  checklist: ChecklistItem[]
+}
+
+export interface ClientPayment {
+  id: string
+  job_id: string | null
+  amount: number
+  paid_on: string
+  method: PaymentMethod
+  note: string | null
+}
+
+export interface JobFormData {
+  title: string
+  amount: string
+  quoteId: string
+  address: string
+  startDate: string
+  dueDate: string
+}
+
+export interface PaymentFormData {
+  amount: string
+  paidOn: string
+  method: PaymentMethod
+  jobId: string
+  note: string
+}
+
+// Importo scritto all'italiana («1.234,56», «12,5») o con il punto decimale
+export function parseEuro(value: string): number | null {
+  const raw = value.trim().replace(/\s|€/g, '')
+  if (!raw) return null
+  const normalized = raw.includes(',') ? raw.replace(/\./g, '').replace(',', '.') : /^\d{1,3}(\.\d{3})+$/.test(raw) ? raw.replace(/\./g, '') : raw
+  const n = Number(normalized)
+  return Number.isFinite(n) ? Math.round(n * 100) / 100 : null
+}
+
+export const STAGE_STYLES: Record<JobStage, string> = {
+  todo: 'bg-[var(--background)] text-[var(--muted)]',
+  doing: 'bg-[#e8f0ff] text-[#1e4fa3]',
+  done: 'bg-[var(--gold-pale)] text-[#7a5a14]',
+  paid: 'bg-[#e7f4ea] text-[#1d6b34]',
 }

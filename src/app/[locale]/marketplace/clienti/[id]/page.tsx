@@ -39,7 +39,7 @@ export default async function ClientePage({ params }: { params: Promise<{ locale
       </header>
 
       <main className="mx-auto max-w-3xl px-4 py-8">
-        <ClienteCard client={data.client} quotes={data.quotes} canQuote={canQuote} />
+        <ClienteCard client={data.client} quotes={data.quotes} jobs={data.jobs} payments={data.payments} canQuote={canQuote} />
       </main>
     </div>
   )
