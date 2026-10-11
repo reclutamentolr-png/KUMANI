@@ -11932,7 +11932,7 @@
     "files": {
       "title": "Photos et documents",
       "typeError": "Vous pouvez envoyer des photos (JPG, PNG, WebP) ou des PDF.",
-      "sizeError": "Le fichier dépasse 10 Mo.",
+      "sizeError": "Le fichier dépasse 5 Mo.",
       "limitError": "Vous avez atteint le nombre maximal de fichiers.",
       "deleteConfirm": "Supprimer « {name} » ?",
       "delete": "Supprimer {name}",

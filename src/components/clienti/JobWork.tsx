@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { FileText, LoaderCircle, Pause, Play, Plus, Trash2, Upload } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
-import { prepareDocumentFile } from '@/lib/documentImage'
+import { resizeImageFile } from '@/lib/resizeImage'
 import { fileExtension } from '@/lib/casa'
 import { askConfirm } from '@/lib/confirm'
 import { limitTextOf } from '@/lib/limitText'
@@ -25,6 +25,9 @@ import {
   type TimeEntry,
 } from '@/lib/clienti'
 import { inputClass } from './ClientForm'
+
+const JOB_PHOTO_MAX_SIDE = 1600
+const JOB_PHOTO_QUALITY = 0.72
 
 const card = 'rounded-3xl border border-[var(--gold)]/25 bg-white p-5 shadow-sm'
 const labelClass = 'block text-sm font-semibold text-[var(--muted)]'
@@ -477,7 +480,10 @@ export function FilesCard({ jobId, files, onFiles }: { jobId: string; files: Job
         setError(t('files.typeError'))
         continue
       }
-      const file = await prepareDocumentFile(original)
+      // Foto compresse al massimo prima del caricamento (lato lungo 1600 px,
+      // JPEG al 72%): una foto del telefono da 3–5 MB scende a circa 150–300 KB.
+      // I PDF restano come sono.
+      const file = original.type.startsWith('image/') ? ((await resizeImageFile(original, JOB_PHOTO_MAX_SIDE, JOB_PHOTO_QUALITY, { keepIfUnderBytes: 200 * 1024 })) ?? original) : original
       if (file.size > JOB_FILE_MAX_BYTES) {
         setError(t('files.sizeError'))
         continue

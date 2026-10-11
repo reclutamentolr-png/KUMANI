@@ -11932,7 +11932,7 @@
     "files": {
       "title": "Фото и документы",
       "typeError": "Можно загрузить фото (JPG, PNG, WebP) или PDF.",
-      "sizeError": "Файл больше 10 МБ.",
+      "sizeError": "Файл больше 5 МБ.",
       "limitError": "Достигнуто максимальное число файлов.",
       "deleteConfirm": "Удалить «{name}»?",
       "delete": "Удалить {name}",

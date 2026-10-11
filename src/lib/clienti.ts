@@ -239,7 +239,7 @@ export interface JobProduct {
 }
 
 export const JOB_FILE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf']
-export const JOB_FILE_MAX_BYTES = 10 * 1024 * 1024
+export const JOB_FILE_MAX_BYTES = 5 * 1024 * 1024
 
 // Imponibile del preventivo: «IVA inclusa» va scorporata
 export function quoteNet(total: number, vatMode: string | null, vatRate: number | null): number {

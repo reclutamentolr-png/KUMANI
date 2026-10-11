@@ -11932,7 +11932,7 @@
     "files": {
       "title": "Fotos y documentos",
       "typeError": "Puedes subir fotos (JPG, PNG, WebP) o PDF.",
-      "sizeError": "El archivo supera los 10 MB.",
+      "sizeError": "El archivo supera los 5 MB.",
       "limitError": "Has alcanzado el número máximo de archivos.",
       "deleteConfirm": "¿Eliminar «{name}»?",
       "delete": "Eliminar {name}",
