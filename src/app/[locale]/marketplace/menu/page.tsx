@@ -7,6 +7,10 @@ import MenuBuilder from '@/components/menu/MenuBuilder'
 import { createClient } from '@/lib/supabase/server'
 import { loadMenuData } from '@/lib/menu-server'
 import { getMyBusinessProfile } from '@/lib/businessProfile-server'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('menu')
 
 // KUMANI Menu — builder del ristoratore (strumento Pro: l'accesso lo
 // controlla il middleware con can_use_tool, e ogni azione lo ricontrolla).

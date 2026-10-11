@@ -4,6 +4,10 @@ import ToolBackLink from '@/components/ToolBackLink'
 import FabulaHome from '@/components/fabula/FabulaHome'
 import { SuspendedBanner } from '@/components/ServiceSuspended'
 import { getFabulaGallery, getFabulaMy, getFabulaStatus } from '@/app/actions/fabula'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('fabula')
 
 // Kumani Fabula (SVAGO, gratis): sei dadi, una micro-storia.
 export default async function FabulaPage() {

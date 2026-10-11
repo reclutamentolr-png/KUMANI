@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import NextStepNudge from '@/components/ecosystem/NextStepNudge'
 import { getTranslations } from 'next-intl/server'
@@ -13,6 +14,13 @@ import { getSellerPaymentStatus } from '@/app/actions/shop'
 
 // «Scheda attività»: i dati dell'attività scritti una volta sola e ripresi
 // da tutti i servizi. ?from=/percorso riporta al servizio da cui si arriva.
+// Titolo della scheda del browser
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'businessProfile' })
+  return { title: t('title') }
+}
+
 export default async function BusinessProfilePage({
   params,
   searchParams,

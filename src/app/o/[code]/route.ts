@@ -15,7 +15,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     .single()) as { data: { code: string; locale: string } | null }
 
   if (!data) {
-    return NextResponse.redirect(new URL('/', request.url), 307)
+    return NextResponse.redirect(new URL('/qr-non-attivo', request.url), 307)
   }
 
   const path = data.locale && data.locale !== defaultLocale ? `/${data.locale}/offerte/${data.code}` : `/offerte/${data.code}`

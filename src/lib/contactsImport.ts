@@ -172,7 +172,9 @@ export function parseContactsFile(name: string, text: string): ImportedContact[]
 
 // ---------- Esportazione vCard 3.0 ----------
 
-const escapeVcard = (v: string) => v.replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/([,;])/g, '\\$1')
+// Virgole, punti e virgola e a capo dentro un campo vCard (altrimenti il
+// contatto si rompe: «Rossi, Bianchi & C.» diventerebbe due campi)
+export const escapeVcard = (v: string) => v.replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/([,;])/g, '\\$1')
 
 export function toVcf(contacts: { name: string; phone: string | null; email: string | null; company: string | null; notes: string | null }[]): string {
   return contacts

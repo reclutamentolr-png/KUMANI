@@ -57,7 +57,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     .single()) as { data: QrDestinationRow | null }
 
   if (!data) {
-    return NextResponse.redirect(new URL('/', request.url), 307)
+    return NextResponse.redirect(new URL('/qr-non-attivo', request.url), 307)
   }
 
   if (data.content_type === 'vcard') {
@@ -93,7 +93,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     return new NextResponse('Not found', { status: 404 })
   }
   if (!target) {
-    return NextResponse.redirect(new URL('/', request.url), 307)
+    return NextResponse.redirect(new URL('/qr-non-attivo', request.url), 307)
   }
 
   return NextResponse.redirect(target, 307)

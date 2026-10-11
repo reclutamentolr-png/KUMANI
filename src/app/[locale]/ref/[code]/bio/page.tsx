@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     auth: { autoRefreshToken: false, persistSession: false },
   })
   const { data: profile } = await service.from('profiles').select('id, first_name, last_name, occupation').eq('referral_code', code).maybeSingle()
-  if (!profile) return { title: 'KUMANI' }
+  if (!profile) return { title: { absolute: 'KUMANI' } }
   const { data: bio } = await service.from('link_in_bio').select('bio_text').eq('user_id', profile.id).maybeSingle()
   const t = await getTranslations({ locale, namespace: 'bioPublic' })
   const name = [profile.first_name, profile.last_name].filter(Boolean).join(' ') || 'KUMANI'

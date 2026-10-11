@@ -8,6 +8,10 @@ import ChatModalWrapper from '@/components/ChatModalWrapper'
 import ConversationItem from '@/components/ConversationItem' // ✅ Import del componente client separato
 import { SuspendedBanner } from '@/components/ServiceSuspended'
 import { isToolOnline } from '@/lib/toolOnline'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('chat')
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0

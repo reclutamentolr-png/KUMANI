@@ -5,6 +5,10 @@ import { redirect } from 'next/navigation'
 import MandalaCanvas from '@/components/MandalaCanvas'
 import Link from '@/components/LocalizedLink'
 import { ArrowLeft, ArrowRight, Flower2, Share2, Sparkles, Waves } from 'lucide-react'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('mandala')
 
 export default async function MandalaPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params

@@ -23,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('antitruffa')
   const url = guideShareUrl(locale)
   return {
-    title: `${g.title} · KUMANI`,
+    title: { absolute: `${g.title} · KUMANI` },
     description: t('metaDescription'),
     alternates: { canonical: url },
     openGraph: { title: g.title, description: `“${g.motto}”`, url, siteName: 'KUMANI', type: 'article' },

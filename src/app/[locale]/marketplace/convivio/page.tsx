@@ -7,6 +7,10 @@ import { getLeaderStatus, getMySupplier, listConvivi } from '@/app/actions/convi
 import { createClient } from '@/lib/supabase/server'
 import { SuspendedBanner } from '@/components/ServiceSuspended'
 import { isToolOnline } from '@/lib/toolOnline'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('convivio')
 
 // Kordata (Community): acquisti di gruppo proposti dai Kumani.
 export default async function ConvivioPage({ params }: { params: Promise<{ locale: string }> }) {

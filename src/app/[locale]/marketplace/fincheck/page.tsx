@@ -8,6 +8,10 @@ import { hasActiveSpendlyAccess } from '@/lib/spendly-server'
 import { checkupMonths, computeCheckup, type CheckupResult } from '@/lib/fincheck'
 import type { SpendlyFixedExpense, SpendlyFixedPayment, SpendlyIncome, SpendlyVariableExpense } from '@/lib/spendly'
 import { fetchAllRows } from '@/lib/fetchAllRows'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('fincheck')
 
 // FinCheck: test di educazione finanziaria (gratuito) e check-up del
 // bilancio con i dati di Spendly (per chi ha Spendly nel proprio piano).

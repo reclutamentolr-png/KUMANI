@@ -3,6 +3,10 @@ import { ArrowLeft, MailSearch } from 'lucide-react'
 import ToolBackLink from '@/components/ToolBackLink'
 import CheckMailTool from '@/components/checkmail/CheckMailTool'
 import { createClient } from '@/lib/supabase/server'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('checkmail')
 
 // KUMANI CheckMail (Sicurezza e Verifica, piano Base): la pagina è protetta
 // dal proxy come gli altri strumenti; qui solo le analisi rimaste oggi.

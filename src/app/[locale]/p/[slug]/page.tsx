@@ -24,7 +24,7 @@ const OG_LOCALE: Record<string, string> = { it: 'it_IT', en: 'en_GB', fr: 'fr_FR
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const page = await loadPublicLanding(slug)
-  if (!page) return { title: 'KUMANI', robots: { index: false, follow: false } }
+  if (!page) return { title: { absolute: 'KUMANI' }, robots: { index: false, follow: false } }
   const { hero, seo } = page.content
   const title = [hero.name, hero.title].filter(Boolean).join(' · ') || 'KUMANI'
   const description = seo.description || hero.subtitle || hero.text.slice(0, 160)

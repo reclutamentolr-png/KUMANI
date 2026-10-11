@@ -37,7 +37,7 @@ function hasStarted(iso: string): boolean {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params
   const event = await loadEvent(id)
-  if (!event) return { title: 'KUMANI Events' }
+  if (!event) return { title: { absolute: 'KUMANI Events' } }
   return pageMetadata(`/events/${id}`, { title: { absolute: `${event.title} · KUMANI Events` }, description: event.description.slice(0, 160) }, { ownImage: true })
 }
 

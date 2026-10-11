@@ -5,6 +5,10 @@ import Link from '@/components/LocalizedLink'
 import { hasActiveAureyaAccess } from '@/lib/aureya-server'
 import { ArrowLeft, AlertTriangle, Ear, Eye, Grid3x3, Sparkles, Stethoscope } from 'lucide-react'
 import AureyaHistoryDeleteButton from '@/components/AureyaHistoryDeleteButton'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('aureya')
 
 interface ResultRow {
   id: string

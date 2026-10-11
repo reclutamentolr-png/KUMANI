@@ -6,6 +6,10 @@ import ToolBackLink from '@/components/ToolBackLink'
 import { ArrowLeft, FileUser, Sparkles, PlusCircle } from 'lucide-react'
 import { hasActiveCvAccess } from '@/lib/cv-server'
 import CvsDashboard from '@/components/CvsDashboard'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('kumani-cv')
 
 export default async function KumaniCvPage({ searchParams }: { searchParams: Promise<{ from?: string }> }) {
   const t = await getTranslations('kumaniCv')

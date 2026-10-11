@@ -7,6 +7,10 @@ import { createClient } from '@/lib/supabase/server'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { loadAgenda } from '@/lib/agenda-server'
 import { addDays, monthRange, todayKey } from '@/lib/agenda'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('memolife')
 
 // MemoLife — l'agenda personale: "Oggi" con tutto ciò che conta (anche
 // bollette di Spendly e scadenze di Life Calendar), calendario unico,

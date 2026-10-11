@@ -4,6 +4,7 @@ import { getTranslations } from 'next-intl/server'
 import { ArrowRight, Mail, MessageCircle, Phone, UserPlus } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { createClient } from '@/lib/supabase/server'
+import { escapeVcard } from '@/lib/contactsImport'
 
 // Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
 // richiesta, mai preparata in anticipo né tenuta in memoria
@@ -25,7 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<{ code: str
   const { code } = await params
   const card = await loadCard(code)
   const name = card ? `${card.first_name ?? ''} ${card.last_name ?? ''}`.trim() : 'KUMANI'
-  return { title: `${name} · KUMANI`, robots: { index: false, follow: false } }
+  return { title: { absolute: `${name} · KUMANI` }, robots: { index: false, follow: false } }
 }
 
 export default async function BusinessCardPublicPage({ params }: { params: Promise<{ code: string }> }) {
@@ -42,10 +43,10 @@ export default async function BusinessCardPublicPage({ params }: { params: Promi
   const vcard = [
     'BEGIN:VCARD',
     'VERSION:3.0',
-    `N:${card.last_name ?? ''};${card.first_name ?? ''};;;`,
-    `FN:${name}`,
+    `N:${escapeVcard(card.last_name ?? '')};${escapeVcard(card.first_name ?? '')};;;`,
+    `FN:${escapeVcard(name)}`,
     card.phone || card.whatsapp ? `TEL;TYPE=CELL:${digits((card.phone || card.whatsapp)!)}` : '',
-    card.email ? `EMAIL:${card.email}` : '',
+    card.email ? `EMAIL:${escapeVcard(card.email)}` : '',
     'END:VCARD',
   ]
     .filter(Boolean)

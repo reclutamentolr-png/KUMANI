@@ -2,6 +2,10 @@ import { getTranslations } from 'next-intl/server'
 import { ArrowLeft, FileLock2 } from 'lucide-react'
 import ToolBackLink from '@/components/ToolBackLink'
 import DocumentoSicuroTool from '@/components/documentoSicuro/DocumentoSicuroTool'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('documento-sicuro')
 
 // DOCUMENTO SICURO (Sicurezza, piano Base): filigrana, zone oscurate e
 // rimozione dei dati nascosti prima di inviare la foto di un documento.

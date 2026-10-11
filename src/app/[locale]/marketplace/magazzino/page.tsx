@@ -3,6 +3,10 @@ import { ArrowLeft, Warehouse } from 'lucide-react'
 import ToolBackLink from '@/components/ToolBackLink'
 import MagazzinoApp from '@/components/magazzino/MagazzinoApp'
 import { getDashboard, listCategories, listProducts } from '@/app/actions/magazzino'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('magazzino')
 
 // Magazzino PRO (piano Pro): la pagina è protetta dal proxy come gli altri strumenti.
 export default async function MagazzinoPage() {

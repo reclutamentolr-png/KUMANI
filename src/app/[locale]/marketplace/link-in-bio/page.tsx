@@ -15,6 +15,10 @@ import {
   ExternalLink,
   AlertTriangle
 } from 'lucide-react'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('link-in-bio')
 
 export default async function LinkInBioPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params

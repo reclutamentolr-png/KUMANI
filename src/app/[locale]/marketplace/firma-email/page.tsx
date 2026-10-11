@@ -6,6 +6,10 @@ import { createClient } from '@/lib/supabase/server'
 import { SITE_URL } from '@/lib/siteUrl'
 import type { MyProfile } from '@/lib/myProfile'
 import { getMyBusinessProfile } from '@/lib/businessProfile-server'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('firma-email')
 
 // Firma Email (Marketing, PRO): generatore di firme email professionali.
 // Tutto avviene nel browser; il server legge solo il profilo (nome, email,

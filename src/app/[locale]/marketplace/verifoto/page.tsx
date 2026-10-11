@@ -3,6 +3,10 @@ import { ArrowLeft, ScanEye } from 'lucide-react'
 import ToolBackLink from '@/components/ToolBackLink'
 import VeriFotoTool from '@/components/verifoto/VeriFotoTool'
 import { createClient } from '@/lib/supabase/server'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('verifoto')
 
 // VeriFoto (Sicurezza e Verifica, piano Base): la pagina è protetta dal proxy
 // come gli altri strumenti; qui solo lo stato del rilevatore per l'utente.

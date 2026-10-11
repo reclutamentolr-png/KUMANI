@@ -7,6 +7,10 @@ import { ArrowLeft, PackageSearch, Sparkles, PlusCircle } from 'lucide-react'
 import { hasActiveFindoAccess } from '@/lib/findo-server'
 import { buildBreadcrumb, type FindoLocation } from '@/lib/findo'
 import FindoDashboard from '@/components/FindoDashboard'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('findo')
 
 export default async function FindoPage() {
   const t = await getTranslations('findo')

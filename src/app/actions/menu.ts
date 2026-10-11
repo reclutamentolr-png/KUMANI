@@ -156,7 +156,11 @@ export async function saveMenuItem(input: {
   if (!name) return { success: false, message: 'nameRequired' }
   // La foto deve essere nella cartella dell'utente (caricata con uploadMenuPhoto).
   const photoPath = input.photoPath && input.photoPath.startsWith(`${g.userId}/`) ? input.photoPath : null
-  const price = input.price === null || Number.isNaN(Number(input.price)) ? null : Math.round(Math.max(0, Number(input.price)) * 100) / 100
+  // Prezzo tra 0 e 99.999,99 €
+  const price = input.price === null || !Number.isFinite(Number(input.price)) ? null : Math.round(Math.min(99999.99, Math.max(0, Number(input.price))) * 100) / 100
+  // La categoria deve essere di questo menù
+  const { data: category } = await g.supabase.from('menu_categories').select('id').eq('id', input.categoryId).eq('menu_id', menuId).maybeSingle()
+  if (!category) return { success: false, message: 'saveError' }
   const fields = {
     category_id: input.categoryId,
     name,

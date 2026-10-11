@@ -5,6 +5,10 @@ import ToolBackLink from '@/components/ToolBackLink'
 import ScudoDatiTool from '@/components/scudoDati/ScudoDatiTool'
 import { createClient } from '@/lib/supabase/server'
 import { maskEmail } from '@/lib/scudoDati'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('scudo-dati')
 
 // SCUDO DATI (Sicurezza, gratis per tutti): la tua email è finita in una
 // fuga di dati? Controllo della propria email (gratis), di un'altra email

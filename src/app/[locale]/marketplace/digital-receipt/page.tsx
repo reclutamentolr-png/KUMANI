@@ -6,6 +6,10 @@ import Link from '@/components/LocalizedLink'
 import { ArrowLeft, FileCheck2, Sparkles, PlusCircle } from 'lucide-react'
 import { hasActiveDigitalReceiptAccess } from '@/lib/digitalReceipt-server'
 import DigitalReceiptDashboard from '@/components/DigitalReceiptDashboard'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('digital-receipt')
 
 export default async function DigitalReceiptPage() {
   const t = await getTranslations('digitalReceipt')

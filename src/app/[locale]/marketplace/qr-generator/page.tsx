@@ -13,6 +13,10 @@ import {
   Sparkles,
   Smartphone
 } from 'lucide-react'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('qr-generator')
 
 // ✅ Aggiunto params per ottenere la lingua corrente
 export default async function QRGeneratorPage({ params }: { params: Promise<{ locale: string }> }) {

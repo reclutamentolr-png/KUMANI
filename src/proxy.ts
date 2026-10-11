@@ -350,11 +350,12 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
         // Kordata, Bacheca e chat spente dallo Staff restano consultabili in
         // sola lettura (la pagina mostra il banner "sospeso", le scritture
         // sono bloccate dal database): si passa se il motivo è solo lo spegnimento.
-        // Le due letture qui sotto sono alternative (piano 'free' oppure
-        // no), quindi al più una: non c'è nulla da mettere in parallelo.
-        if (READ_ONLY_WHEN_OFF.includes(toolName) && access.required_plan === 'free') {
-          const { data: online } = await supabase.rpc('tool_online', { p_tool: toolName });
-          if (online === false) return response;
+        // Servizio spento dallo Staff: non è una questione di piano, quindi
+        // niente «Passa a Pro» ma una pagina che spiega la sospensione
+        const { data: online } = await supabase.rpc('tool_online', { p_tool: toolName });
+        if (online === false) {
+          if (READ_ONLY_WHEN_OFF.includes(toolName) && access.required_plan === 'free') return response;
+          return NextResponse.redirect(new URL(`${localePrefix}/servizio-sospeso?tool=${encodeURIComponent(toolName)}`, request.url));
         }
         // Servizio acquistabile anche da solo (pass): pagina del pass, che
         // propone pass, codice o abbonamento.

@@ -3,6 +3,10 @@ import NextStepNudge from '@/components/ecosystem/NextStepNudge'
 import { ArrowLeft, Wind } from 'lucide-react'
 import ToolBackLink from '@/components/ToolBackLink'
 import OxygenSession from '@/components/oxygen/OxygenSession'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('oxygen')
 
 // KUMANI OXYGEN (Benessere, gratis per tutti gli iscritti): respirazione
 // 4-7-8 guidata a testo. La pagina è protetta dal proxy come gli altri

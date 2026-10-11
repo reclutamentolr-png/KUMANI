@@ -6,6 +6,10 @@ import ToolBackLink from '@/components/ToolBackLink'
 import { ArrowLeft, FileSpreadsheet, Sparkles, Pencil, PlusCircle } from 'lucide-react'
 import { hasActivePreventiviAccess } from '@/lib/quotes-server'
 import QuotesDashboard from '@/components/QuotesDashboard'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('preventivi')
 
 export default async function PreventiviPage({ searchParams }: { searchParams: Promise<{ from?: string }> }) {
   const t = await getTranslations('preventivi')

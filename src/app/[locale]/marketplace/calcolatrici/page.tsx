@@ -3,6 +3,10 @@ import { ArrowLeft, Calculator } from 'lucide-react'
 import ToolBackLink from '@/components/ToolBackLink'
 import CalcolatriciApp from '@/components/calcolatrici/CalcolatriciApp'
 import { createClient } from '@/lib/supabase/server'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('calcolatrici')
 
 // CALCOLATRICI PRO (Lavoro, piano PRO): IVA, ritenuta d'acconto, sconti,
 // ricarico e margine. La pagina è protetta dal proxy come gli altri

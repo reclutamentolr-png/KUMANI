@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 import { getTranslations } from 'next-intl/server'
@@ -53,14 +54,9 @@ export default async function PublicMenuPage({
   const { lang: langParam } = await searchParams
   const menu = await loadMenu(token)
 
-  if (!menu) {
-    const t = await getTranslations({ locale: 'it', namespace: 'menuPublic' })
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-[var(--ink)] px-6 text-center text-white">
-        <p className="max-w-sm text-white/80">{t('notAvailable')}</p>
-      </div>
-    )
-  }
+  // Menù inesistente o non più attivo: risposta «non trovato» (404) con il
+  // messaggio per il cliente (not-found.tsx accanto)
+  if (!menu) notFound()
 
   const fallback: MenuLocale = isMenuLocale(menu.default_locale) ? menu.default_locale : 'it'
   const available = (menu.languages ?? []).filter(isMenuLocale) as MenuLocale[]

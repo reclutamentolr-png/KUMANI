@@ -11,6 +11,10 @@ import FidelityCustomers from '@/components/fidelity/FidelityCustomers'
 import FidelityBarChart from '@/components/fidelity/FidelityBarChart'
 import { FIDELITY_LOST_AFTER_DAYS, effectiveStamps, type FidelityCard, type FidelityMember } from '@/lib/fidelity'
 import { FIDELITY_STATS_TIMEZONE, FIDELITY_STATS_WEEKS, computeFidelityStats, statsWindowStartIso, type FidelityEventRow } from '@/lib/fidelity-stats'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('fidelity')
 
 const CARD_COLUMNS =
   'id, owner_id, business_name, prize, stamps_needed, min_hours_between_stamps, stamps_expire_days, review_url, close_to_prize_percent, is_active, created_at'

@@ -8,6 +8,10 @@ import Link from '@/components/LocalizedLink'
 import type { SpendlyIncome, SpendlyFixedExpense, SpendlyFixedPayment, SpendlyVariableExpense } from '@/lib/spendly'
 import { currentYear } from '@/lib/spendly'
 import { fetchAllRows } from '@/lib/fetchAllRows'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('spendly')
 
 export default async function SpendlyDashboardPage({
   searchParams,

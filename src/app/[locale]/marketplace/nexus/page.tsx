@@ -6,6 +6,10 @@ import NexusGame from '@/components/nexus/NexusGame'
 import NexusDuelButton from '@/components/nexus/NexusDuelButton'
 import { getNexusStatus } from '@/app/actions/nexus'
 import { nexusLocalePair, type NexusLocale } from '@/lib/nexus/types'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('nexus')
 
 export const dynamic = 'force-dynamic'
 

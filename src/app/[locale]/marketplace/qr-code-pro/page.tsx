@@ -5,6 +5,10 @@ import Link from '@/components/LocalizedLink'
 import { QrCode, ArrowLeft, PlusCircle, Sparkles } from 'lucide-react'
 import { hasActiveQrProAccess } from '@/lib/qrPro-server'
 import QrProCodeCard from '@/components/QrProCodeCard'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('qr-code-pro')
 
 export default async function QrCodeProPage() {
   const t = await getTranslations('qrCodePro')

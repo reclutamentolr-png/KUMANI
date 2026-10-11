@@ -5,6 +5,10 @@ import ToolBackLink from '@/components/ToolBackLink'
 import NeurobalancePlayer from '@/components/NeurobalancePlayer'
 import Link from '@/components/LocalizedLink'
 import { ArrowLeft, ArrowRight, Brain, Flower2, Headphones, ShieldCheck, Sparkles, Waves } from 'lucide-react'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('neurobalance')
 
 export default async function NeurobalancePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params

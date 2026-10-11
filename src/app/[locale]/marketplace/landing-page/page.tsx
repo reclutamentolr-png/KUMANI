@@ -10,6 +10,10 @@ import { SITE_URL } from '@/lib/siteUrl'
 import { getLandingFormLabels, getLandingLabels } from '@/lib/landing-server'
 import { getMyBusinessProfile } from '@/lib/businessProfile-server'
 import { cleanLandingContent, emptyLandingContent, isLandingLocale, isLandingTemplate, landingFromBusinessProfile, LANDING_LOCALES, slugify, type LandingLocale } from '@/lib/landing'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('landing-page')
 
 // Landing Page — editor del titolare (servizio Pro: l'accesso lo controlla
 // il proxy con can_use_tool, e ogni azione lo ricontrolla).

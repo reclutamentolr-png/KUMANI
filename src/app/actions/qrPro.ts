@@ -135,14 +135,15 @@ export async function updateQrCode(id: string, input: QrCodeFormData): Promise<A
   return { success: true, data: null }
 }
 
+// Cancellare i propri QR non richiede il piano attivo: i dati restano sempre propri
 export async function deleteQrCode(id: string): Promise<ActionResult<null>> {
-  const gate = await requireActiveQrProAccess()
-  if (!gate.ok) {
-    return { success: false, message: gate.message }
-  }
-
   const supabase = await createClient()
-  const { error } = await supabase.from('qr_pro_codes').delete().eq('id', id).eq('user_id', gate.userId)
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return { success: false, message: 'notLoggedIn' }
+
+  const { error } = await supabase.from('qr_pro_codes').delete().eq('id', id).eq('user_id', user.id)
 
   if (error) {
     console.error('[QrPro] deleteQrCode failed:', error)

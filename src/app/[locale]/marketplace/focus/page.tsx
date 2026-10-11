@@ -3,6 +3,10 @@ import NextStepNudge from '@/components/ecosystem/NextStepNudge'
 import { ArrowLeft, Timer } from 'lucide-react'
 import ToolBackLink from '@/components/ToolBackLink'
 import FocusTimer from '@/components/focus/FocusTimer'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('focus')
 
 // KUMANI Focus (Benessere, gratis per tutti gli iscritti): timer a intervalli
 // con la tecnica del pomodoro, fratello di OXYGEN. La pagina è protetta dal

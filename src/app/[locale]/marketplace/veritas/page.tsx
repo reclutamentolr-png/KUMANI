@@ -4,6 +4,10 @@ import { ArrowLeft, VenetianMask } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import VeritasHome from '@/components/veritas/VeritasHome'
 import { createClient } from '@/lib/supabase/server'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('veritas')
 
 // Veritas — "Chi sta mentendo?": crea una stanza per giocare con gli amici.
 export default async function VeritasPage({ params }: { params: Promise<{ locale: string }> }) {

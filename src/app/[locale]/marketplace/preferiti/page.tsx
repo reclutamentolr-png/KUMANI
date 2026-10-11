@@ -9,6 +9,10 @@ import { getFavoriteToolNames } from '@/lib/favorites'
 import FavoritesGrid from '@/components/FavoritesGrid'
 import AppHeader from '@/components/nav/AppHeader'
 import { getSessionUser, preloadSession } from '@/lib/session'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('preferiti')
 
 export default async function MarketplaceFavoritesPage({
   params,

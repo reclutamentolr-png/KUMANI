@@ -12,6 +12,10 @@ import {
   Send
 } from 'lucide-react'
 import WhatsAppTemplates from '@/components/WhatsAppTemplates'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('whatsapp-messages')
 
 // ✅ Aggiunto params per ottenere la lingua corrente
 export default async function WhatsAppPage({ params }: { params: Promise<{ locale: string }> }) {

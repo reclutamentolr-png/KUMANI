@@ -5,6 +5,10 @@ import { createClient } from '@/lib/supabase/server'
 import { loadGarage } from '@/lib/garage-server'
 import { deadlineState, rentalReport } from '@/lib/garage'
 import { todayKey } from '@/lib/agenda'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('garage')
 
 // Separatore delle migliaia anche con 4 cifre (in italiano «3.870 km», non «3870 km»)
 const GROUP = 'always' as unknown as boolean

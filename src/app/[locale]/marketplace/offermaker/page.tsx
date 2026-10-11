@@ -7,6 +7,10 @@ import { Wand2, ArrowLeft, Sparkles, ListChecks } from 'lucide-react'
 import OfferMakerWizard from '@/components/OfferMakerWizard'
 import { hasActiveOfferMakerAccess } from '@/lib/offermaker-server'
 import { getMyBusinessProfile } from '@/lib/businessProfile-server'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('offermaker')
 
 export default async function OfferMakerPage() {
   const t = await getTranslations('offermaker')

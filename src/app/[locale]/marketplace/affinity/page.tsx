@@ -6,6 +6,10 @@ import Link from '@/components/LocalizedLink'
 import AffinityGame from '@/components/affinity/AffinityGame'
 import { createClient } from '@/lib/supabase/server'
 import { isAffinityArchetype, isAffinityMap } from '@/lib/affinity'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('affinity')
 
 export default async function AffinityPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params

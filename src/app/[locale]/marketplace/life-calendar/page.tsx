@@ -5,6 +5,10 @@ import Link from '@/components/LocalizedLink'
 import { ArrowLeft, CalendarClock, Sparkles, PlusCircle } from 'lucide-react'
 import { hasActiveLifeCalendarAccess } from '@/lib/lifeCalendar-server'
 import LifeCalendarDashboard from '@/components/LifeCalendarDashboard'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('life-calendar')
 
 export default async function LifeCalendarPage() {
   const t = await getTranslations('lifeCalendar')

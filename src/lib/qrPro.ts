@@ -1,3 +1,4 @@
+import { escapeVcard } from '@/lib/contactsImport'
 export const QR_CONTENT_TYPES = ['link', 'whatsapp', 'phone', 'sms', 'email', 'wifi', 'vcard'] as const
 export type QrContentType = (typeof QR_CONTENT_TYPES)[number]
 
@@ -105,20 +106,21 @@ export function buildWifiQrPayload(d: WifiDestination): string {
 }
 
 export function buildVcardContent(d: VcardDestination): string {
+  const e = (value: string | null | undefined) => escapeVcard(value ?? '')
   const lines = [
     'BEGIN:VCARD',
     'VERSION:3.0',
-    `N:${d.lastName};${d.firstName};;;`,
-    `FN:${[d.firstName, d.lastName].filter(Boolean).join(' ')}`,
-    d.company && `ORG:${d.company}`,
-    d.jobTitle && `TITLE:${d.jobTitle}`,
-    d.phone && `TEL;TYPE=WORK,VOICE:${d.phone}`,
-    d.mobile && `TEL;TYPE=CELL:${d.mobile}`,
-    d.fax && `TEL;TYPE=FAX:${d.fax}`,
-    d.email && `EMAIL:${d.email}`,
-    d.website && `URL:${d.website}`,
+    `N:${e(d.lastName)};${e(d.firstName)};;;`,
+    `FN:${e([d.firstName, d.lastName].filter(Boolean).join(' '))}`,
+    d.company && `ORG:${e(d.company)}`,
+    d.jobTitle && `TITLE:${e(d.jobTitle)}`,
+    d.phone && `TEL;TYPE=WORK,VOICE:${e(d.phone)}`,
+    d.mobile && `TEL;TYPE=CELL:${e(d.mobile)}`,
+    d.fax && `TEL;TYPE=FAX:${e(d.fax)}`,
+    d.email && `EMAIL:${e(d.email)}`,
+    d.website && `URL:${e(d.website)}`,
     (d.address || d.city || d.postalCode || d.country) &&
-      `ADR;TYPE=WORK:;;${d.address || ''};${d.city || ''};;${d.postalCode || ''};${d.country || ''}`,
+      `ADR;TYPE=WORK:;;${e(d.address)};${e(d.city)};;${e(d.postalCode)};${e(d.country)}`,
     'END:VCARD',
   ].filter(Boolean)
   return lines.join('\r\n')

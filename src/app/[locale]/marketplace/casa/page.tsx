@@ -5,6 +5,10 @@ import { createClient } from '@/lib/supabase/server'
 import { loadHomes } from '@/lib/casa-server'
 import { warrantyState } from '@/lib/casa'
 import { todayKey } from '@/lib/agenda'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('casa')
 
 export const dynamic = 'force-dynamic'
 

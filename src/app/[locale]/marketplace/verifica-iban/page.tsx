@@ -3,6 +3,10 @@ import NextStepNudge from '@/components/ecosystem/NextStepNudge'
 import { ArrowLeft, Landmark } from 'lucide-react'
 import ToolBackLink from '@/components/ToolBackLink'
 import IbanChecker from '@/components/verificaIban/IbanChecker'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('verifica-iban')
 
 // VERIFICA IBAN (Sicurezza, gratis per tutti): prima di un bonifico si
 // incolla l'IBAN e si controlla che sia scritto correttamente, di che paese

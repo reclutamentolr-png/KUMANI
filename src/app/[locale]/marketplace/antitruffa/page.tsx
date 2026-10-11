@@ -27,6 +27,10 @@ import { guideShareUrl } from '@/lib/antitruffa/shareUrl'
 import { createClient } from '@/lib/supabase/server'
 import { getGuideContent } from '@/lib/antitruffa/content'
 import type { GuideContent, Scam } from '@/lib/antitruffa/types'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('antitruffa')
 
 // Manuale "Come difendersi dalle truffe online" (Sicurezza e Verifica,
 // gratis per tutti i Kumani). Contenuti statici per lingua in

@@ -4,6 +4,10 @@ import ToolBackLink from '@/components/ToolBackLink'
 import TimeBankHome from '@/components/timebank/TimeBankHome'
 import { SuspendedBanner } from '@/components/ServiceSuspended'
 import { getTimebankMy, getTimebankStatus, listTimebankBoard } from '@/app/actions/timebank'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('timebank')
 
 // KUMANI Time Bank (Community, gratis per gli iscritti verificati).
 export default async function TimeBankPage() {

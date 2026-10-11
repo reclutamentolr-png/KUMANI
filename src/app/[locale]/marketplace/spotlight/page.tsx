@@ -7,6 +7,10 @@ import SpotlightForm from '@/components/spotlight/SpotlightForm'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { isEmptySpotlightProfile, type SpotlightProfile } from '@/lib/spotlight'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('spotlight')
 
 export default async function SpotlightManagePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params

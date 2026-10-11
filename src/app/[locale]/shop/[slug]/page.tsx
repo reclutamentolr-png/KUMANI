@@ -13,7 +13,7 @@ export const dynamic = 'force-dynamic'
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }): Promise<Metadata> {
   const { slug } = await params
   const shop = await loadPublicShop(slug)
-  if (!shop) return { title: 'KUMANI Shop', robots: { index: false, follow: false } }
+  if (!shop) return { title: { absolute: 'KUMANI Shop' }, robots: { index: false, follow: false } }
   const description = shop.settings.description || shop.seller.name
   return {
     title: { absolute: `${shop.settings.name} · KUMANI Shop` },

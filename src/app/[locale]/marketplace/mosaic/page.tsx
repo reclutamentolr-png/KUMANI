@@ -5,6 +5,10 @@ import ToolBackLink from '@/components/ToolBackLink'
 import MosaicBoard from '@/components/mosaic/MosaicBoard'
 import { SuspendedBanner } from '@/components/ServiceSuspended'
 import { getMosaicStatus } from '@/app/actions/mosaic'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('mosaic')
 
 // KUMANI Mosaic (SVAGO, gratis): l'opera collettiva a tessere della community.
 export default async function MosaicPage() {

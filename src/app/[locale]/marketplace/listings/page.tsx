@@ -18,6 +18,10 @@ import ListingCard, { CATEGORY_STYLE } from '@/components/listings/ListingCard'
 import ListingsFilters from '@/components/listings/ListingsFilters'
 import { SuspendedBanner } from '@/components/ServiceSuspended'
 import { isToolOnline } from '@/lib/toolOnline'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('listings')
 
 // Parole senza significato nella ricerca (articoli, preposizioni) in 7 lingue
 const SEARCH_STOPWORDS = new Set([

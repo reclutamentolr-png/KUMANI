@@ -7,6 +7,10 @@ import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import JobSearch from '@/components/jobs/JobSearch'
 import { listJobFavorites, listJobSearches } from '@/app/actions/jobs'
 import { isJobCountry, type JobCountry, type JobQuota } from '@/lib/jobs/types'
+import { toolMetadata } from '@/lib/toolMetadata'
+
+// Nome del servizio nella scheda del browser
+export const generateMetadata = toolMetadata('trova-lavoro')
 
 // Trova Lavoro: offerte di lavoro da fonti esterne con filtri accurati.
 // KUMANI non ospita annunci e non raccoglie CV: ci si candida sul sito
