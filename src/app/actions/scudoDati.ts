@@ -160,6 +160,8 @@ export async function checkOtherEmail(rawEmail: string): Promise<ScudoResponse> 
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) return { ok: false, error: 'auth' }
+  // La propria email come «altra email»: è il controllo gratuito
+  if (email === (user.email ?? '').trim().toLowerCase()) return checkMyEmail()
 
   const [cost, { data: profile }] = await Promise.all([
     costOfOther(),

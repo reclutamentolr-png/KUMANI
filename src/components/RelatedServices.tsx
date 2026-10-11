@@ -85,7 +85,7 @@ export default function RelatedServices() {
               <Compass className="h-4.5 w-4.5" />
             </span>
             <span className="min-w-0 text-sm text-[var(--ink)]">
-              {t('banner', { tool: tool.title })} <span className="font-bold">{th(`group_${group}`)}</span>
+              {t('banner', { tool: tool.title.replace(/[?？]\s*$/, '') })} <span className="font-bold">{th(`group_${group}`)}</span>
             </span>
           </span>
           <span className="flex shrink-0 items-center gap-1 text-sm font-bold text-[var(--gold)] group-hover:text-[var(--ink)]">

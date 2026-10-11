@@ -3,6 +3,7 @@
 import { completeMandala } from '@/app/actions/mandala'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
+import { askConfirm } from '@/lib/confirm'
 import { Download, Eraser, Paintbrush, Share2, Trash2, Undo2 } from 'lucide-react'
 
 const SEGMENT_OPTIONS = [6, 8, 12, 16] as const
@@ -69,9 +70,12 @@ export default function MandalaCanvas({ referralUrl }: { referralUrl: string }) 
     setCanUndo(historyRef.current.length > 0)
   }, [])
 
-  const handleBackgroundChange = (bg: 'dark' | 'ivory') => {
+  // Cambiare sfondo ricopre il disegno: se c'è già qualcosa si chiede prima
+  // (si può comunque tornare indietro con «Annulla»)
+  const handleBackgroundChange = async (bg: 'dark' | 'ivory') => {
     const ctx = ctxRef.current
-    if (!ctx) return
+    if (!ctx || bg === background) return
+    if (canUndo && !(await askConfirm(t('bgChangeConfirm')))) return
     pushHistory()
     setBackground(bg)
     fillBackground(ctx, bg)

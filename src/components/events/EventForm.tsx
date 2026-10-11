@@ -181,12 +181,12 @@ export default function EventForm({
   return (
     <form onSubmit={submit} className="space-y-4">
       <div>
-        <label className={label}>{t('fieldTitle')}</label>
-        <input className={input} value={form.title} minLength={3} maxLength={100} required placeholder={t('fieldTitlePlaceholder')} onChange={(e) => set('title', e.target.value)} />
+        <label htmlFor="ev-field-1" className={label}>{t('fieldTitle')}</label>
+        <input id="ev-field-1" className={input} value={form.title} minLength={3} maxLength={100} required placeholder={t('fieldTitlePlaceholder')} onChange={(e) => set('title', e.target.value)} />
       </div>
       <div>
-        <label className={label}>{t('fieldDescription')}</label>
-        <textarea
+        <label htmlFor="ev-field-2" className={label}>{t('fieldDescription')}</label>
+        <textarea id="ev-field-2"
           className={input}
           rows={5}
           value={form.description}
@@ -236,20 +236,20 @@ export default function EventForm({
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className={label}>{t('fieldDate')}</label>
-          <input type="date" className={input} value={form.date} required onChange={(e) => set('date', e.target.value)} />
+          <label htmlFor="ev-field-3" className={label}>{t('fieldDate')}</label>
+          <input id="ev-field-3" type="date" className={input} value={form.date} required onChange={(e) => set('date', e.target.value)} />
         </div>
         <div>
-          <label className={label}>{t('fieldTime')}</label>
-          <input type="time" className={input} value={form.time} required onChange={(e) => set('time', e.target.value)} />
+          <label htmlFor="ev-field-4" className={label}>{t('fieldTime')}</label>
+          <input id="ev-field-4" type="time" className={input} value={form.time} required onChange={(e) => set('time', e.target.value)} />
         </div>
         <div>
-          <label className={label}>{t('fieldEndDate')}</label>
-          <input type="date" className={input} value={form.endDate} min={form.date || undefined} onChange={(e) => set('endDate', e.target.value)} />
+          <label htmlFor="ev-field-5" className={label}>{t('fieldEndDate')}</label>
+          <input id="ev-field-5" type="date" className={input} value={form.endDate} min={form.date || undefined} onChange={(e) => set('endDate', e.target.value)} />
         </div>
         <div>
-          <label className={label}>{t('fieldEndTime')}</label>
-          <input type="time" className={input} value={form.endTime} onChange={(e) => set('endTime', e.target.value)} />
+          <label htmlFor="ev-field-6" className={label}>{t('fieldEndTime')}</label>
+          <input id="ev-field-6" type="time" className={input} value={form.endTime} onChange={(e) => set('endTime', e.target.value)} />
         </div>
       </div>
       <p className={hint}>{t('fieldEndHint')}</p>
@@ -276,8 +276,8 @@ export default function EventForm({
           </div>
           {form.repeat !== 'none' && (
             <div className="mt-3">
-              <label className={label}>{t('fieldRepeatCount')}</label>
-              <input
+              <label htmlFor="ev-field-7" className={label}>{t('fieldRepeatCount')}</label>
+              <input id="ev-field-7"
                 type="number"
                 inputMode="numeric"
                 className={input}
@@ -294,8 +294,8 @@ export default function EventForm({
       )}
 
       <div>
-        <label className={label}>{t('fieldTimezone')}</label>
-        <select className={input} value={form.timezone} onChange={(e) => set('timezone', e.target.value)}>
+        <label htmlFor="ev-field-8" className={label}>{t('fieldTimezone')}</label>
+        <select id="ev-field-8" className={input} value={form.timezone} onChange={(e) => set('timezone', e.target.value)}>
           {!(EVENT_TIMEZONES as readonly string[]).includes(form.timezone) && <option value={form.timezone}>{form.timezone}</option>}
           {EVENT_TIMEZONES.map((tz) => (
             <option key={tz} value={tz}>
@@ -310,24 +310,24 @@ export default function EventForm({
         <div className="space-y-4 rounded-xl border border-gray-200 bg-gray-50/60 p-4">
           {!event && <BusinessProfileImport profile={businessProfile} onImport={importBusinessProfile} />}
           <div>
-            <label className={label}>{t('fieldVenue')}</label>
-            <input className={input} value={form.venueName} maxLength={120} placeholder={t('fieldVenuePlaceholder')} onChange={(e) => set('venueName', e.target.value)} />
+            <label htmlFor="ev-field-9" className={label}>{t('fieldVenue')}</label>
+            <input id="ev-field-9" className={input} value={form.venueName} maxLength={120} placeholder={t('fieldVenuePlaceholder')} onChange={(e) => set('venueName', e.target.value)} />
           </div>
           <div>
-            <label className={label}>{t('fieldAddress')}</label>
-            <input className={input} value={form.address} maxLength={200} onChange={(e) => set('address', e.target.value)} />
+            <label htmlFor="ev-field-10" className={label}>{t('fieldAddress')}</label>
+            <input id="ev-field-10" className={input} value={form.address} maxLength={200} onChange={(e) => set('address', e.target.value)} />
             <p className={`${hint} flex items-center gap-1`}>
               <Lock className="h-3 w-3" /> {t('fieldAddressHint')}
             </p>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className={label}>{t('fieldCity')}</label>
-              <input className={input} value={form.city} maxLength={80} required onChange={(e) => set('city', e.target.value)} />
+              <label htmlFor="ev-field-11" className={label}>{t('fieldCity')}</label>
+              <input id="ev-field-11" className={input} value={form.city} maxLength={80} required onChange={(e) => set('city', e.target.value)} />
             </div>
             <div>
-              <label className={label}>{t('fieldCountry')}</label>
-              <select className={input} value={form.countryCode} onChange={(e) => set('countryCode', e.target.value)}>
+              <label htmlFor="ev-field-12" className={label}>{t('fieldCountry')}</label>
+              <select id="ev-field-12" className={input} value={form.countryCode} onChange={(e) => set('countryCode', e.target.value)}>
                 {EVENT_COUNTRIES.map((code) => (
                   <option key={code} value={code}>
                     {countryName(code, locale)}
@@ -337,16 +337,16 @@ export default function EventForm({
             </div>
           </div>
           <div>
-            <label className={label}>{t('fieldMapLink')}</label>
-            <input className={input} value={form.mapLink} maxLength={500} placeholder="https://maps.google.com/…" onChange={(e) => set('mapLink', e.target.value)} />
+            <label htmlFor="ev-field-13" className={label}>{t('fieldMapLink')}</label>
+            <input id="ev-field-13" className={input} value={form.mapLink} maxLength={500} placeholder="https://maps.google.com/…" onChange={(e) => set('mapLink', e.target.value)} />
           </div>
         </div>
       )}
 
       {needsLink && (
         <div>
-          <label className={label}>{t('fieldOnlineLink')}</label>
-          <input className={input} value={form.onlineLink} maxLength={500} required placeholder="https://meet…" onChange={(e) => set('onlineLink', e.target.value)} />
+          <label htmlFor="ev-field-14" className={label}>{t('fieldOnlineLink')}</label>
+          <input id="ev-field-14" className={input} value={form.onlineLink} maxLength={500} required placeholder="https://meet…" onChange={(e) => set('onlineLink', e.target.value)} />
           <p className={`${hint} flex items-center gap-1`}>
             <Lock className="h-3 w-3" /> {t('fieldOnlineLinkHint')}
           </p>
@@ -374,8 +374,8 @@ export default function EventForm({
 
       <div className="grid grid-cols-2 gap-3">
         <div className="col-span-2 sm:col-span-1">
-          <label className={label}>{t('fieldCapacity')}</label>
-          <input type="number" inputMode="numeric" className={input} min={1} max={maxCapacity} required value={form.capacity} onChange={(e) => set('capacity', e.target.value)} />
+          <label htmlFor="ev-field-15" className={label}>{t('fieldCapacity')}</label>
+          <input id="ev-field-15" type="number" inputMode="numeric" className={input} min={1} max={maxCapacity} required value={form.capacity} onChange={(e) => set('capacity', e.target.value)} />
           <p className={hint}>{t('fieldCapacityHint', { max: maxCapacity })}</p>
         </div>
       </div>
@@ -431,8 +431,8 @@ export default function EventForm({
           </div>
         ) : (
           <div className="mt-3">
-            <label className={label}>{t('fieldPrice')}</label>
-            <input
+            <label htmlFor="ev-field-16" className={label}>{t('fieldPrice')}</label>
+            <input id="ev-field-16"
               inputMode="decimal"
               className={input}
               value={form.price}

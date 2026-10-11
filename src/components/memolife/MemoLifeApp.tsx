@@ -206,11 +206,11 @@ export default function MemoLifeApp({
               setTab(key)
               setQuery('')
             }}
-            className={`flex min-w-[4.5rem] flex-1 flex-col items-center gap-0.5 rounded-xl px-2 py-2 text-xs font-semibold transition-colors sm:flex-row sm:justify-center sm:gap-1.5 sm:text-sm ${
+            className={`flex min-w-0 flex-1 flex-col items-center gap-0.5 rounded-xl px-1 py-2 text-[11px] font-semibold transition-colors sm:flex-row sm:justify-center sm:gap-1.5 sm:text-sm ${
               tab === key ? 'bg-[var(--ink)] text-white' : 'text-[var(--muted)] hover:bg-gray-100'
             }`}
           >
-            <Icon className="h-4 w-4" /> {t(`tab_${key}`)}
+            <Icon className="h-4 w-4 shrink-0" /> <span className="max-w-full truncate">{t(`tab_${key}`)}</span>
           </button>
         ))}
       </nav>

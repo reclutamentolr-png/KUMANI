@@ -49,6 +49,8 @@ export default function VeriFotoTool({
     setDetector(null)
     setAnalysis(null)
     setView('original')
+    // Foto nuova: il consenso si chiede di nuovo
+    setConsent(false)
     if (!ACCEPTED.test(file.type) || file.size > MAX_FILE) {
       setError(t('invalidFile'))
       return

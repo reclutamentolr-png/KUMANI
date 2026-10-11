@@ -129,7 +129,10 @@ export default function FixedExpenseManager({
     const answer = prompt(t('paidAmountPrompt', { name: row.item.description }), String(row.item.amount).replace('.', ','))
     if (answer === null) return
     const amount = parseAmount(answer)
-    if (Number.isNaN(amount) || amount < 0) return
+    if (Number.isNaN(amount) || amount < 0) {
+      alert(t('invalidPaidAmount'))
+      return
+    }
     await runPayment(row, () => markBillPaid(row.item.id, row.period, amount))
   }
 

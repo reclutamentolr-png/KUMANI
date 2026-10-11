@@ -112,7 +112,9 @@ export function canvasToJpeg(canvas: HTMLCanvasElement): Promise<Blob> {
   })
 }
 
-export function exportFileName(date = new Date()) {
+// prefix: «documento-protetto» nella lingua del sito (solo lettere e trattini)
+export function exportFileName(prefix = 'documento-protetto', date = new Date()) {
   const pad = (value: number) => String(value).padStart(2, '0')
-  return `documento-protetto-${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}.jpg`
+  const safe = prefix.normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/[^A-Za-z0-9Ѐ-ӿ-]+/g, '-').replace(/^-+|-+$/g, '') || 'document'
+  return `${safe}-${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}.jpg`
 }

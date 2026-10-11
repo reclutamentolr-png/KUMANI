@@ -56,8 +56,18 @@ export default function CheckMailTool({
       form.set('subject', subject)
       form.set('text', text)
     }
+    // Oltre 4 MB il file non arriva nemmeno al server: avviso chiaro subito
+    if (mode === 'file' && file && file.size > 4 * 1024 * 1024) {
+      setError(t('error_too_large'))
+      setBusy(false)
+      return
+    }
     try {
       const response = await fetch('/api/checkmail', { method: 'POST', body: form })
+      if (response.status === 413) {
+        setError(t('error_too_large'))
+        return
+      }
       const data = (await response.json()) as CheckMailResponse
       if (typeof data.leftToday === 'number') setLeftToday(data.leftToday)
       if (data.status === 'ok') {

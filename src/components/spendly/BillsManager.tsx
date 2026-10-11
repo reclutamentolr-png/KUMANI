@@ -91,9 +91,9 @@ export default function BillsManager({
     .flatMap((bill) => occurrences(bill, addDays(today, -90), addDays(today, 30), paid))
     .filter((o) => !o.payment)
     .sort((a, b) => a.date.localeCompare(b.date))
-  // Pagate di recente (ultimi 60 giorni), per poter annullare
+  // Pagate di recente (ultimi 60 giorni) o in anticipo (prossimi 30), per poter annullare
   const recentlyPaid = bills
-    .flatMap((bill) => occurrences(bill, addDays(today, -60), today, paid))
+    .flatMap((bill) => occurrences(bill, addDays(today, -60), addDays(today, 30), paid))
     .filter((o) => o.payment)
     .sort((a, b) => b.date.localeCompare(a.date))
     .slice(0, 6)
@@ -128,8 +128,24 @@ export default function BillsManager({
     const answer = prompt(t('paidAmountPrompt', { name: o.bill.description }), String(o.bill.amount).replace('.', ','))
     if (answer === null) return
     const amount = parseAmount(answer)
-    if (Number.isNaN(amount) || amount < 0) return
+    if (Number.isNaN(amount) || amount < 0) {
+      alert(t('invalidPaidAmount'))
+      return
+    }
     await quick(o.bill.id + o.period, () => markBillPaid(o.bill.id, o.period, amount))
+  }
+
+  // Tutte le scadute insieme, ognuna con l'importo previsto (si può
+  // correggere dopo con «Annulla» e di nuovo «Pagata»)
+  const overdueList = toPay.filter((o) => o.date < today)
+  const payAllOverdue = async () => {
+    if (!(await askConfirm(t('payAllOverdueConfirm', { count: overdueList.length })))) return
+    await quick('all', async () => {
+      for (const o of overdueList) {
+        if (!(await markBillPaid(o.bill.id, o.period, o.bill.amount))) return false
+      }
+      return true
+    })
   }
 
   const unpay = async (o: Occurrence) => {
@@ -321,9 +337,21 @@ export default function BillsManager({
       </div>
 
       <section className="mb-6 rounded-2xl border border-[var(--gold)]/30 bg-[var(--paper)] p-5">
-        <h3 className="mb-3 flex items-center gap-2 font-bold text-[var(--ink)]">
-          <Receipt className="h-5 w-5 text-[var(--gold)]" /> {t('toPayTitle')}
-        </h3>
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <h3 className="flex items-center gap-2 font-bold text-[var(--ink)]">
+            <Receipt className="h-5 w-5 text-[var(--gold)]" /> {t('toPayTitle')}
+          </h3>
+          {overdueList.length > 1 && (
+            <button
+              type="button"
+              disabled={busy === 'all'}
+              onClick={payAllOverdue}
+              className="inline-flex min-h-9 items-center gap-1 rounded-lg border border-emerald-600 px-3 text-xs font-bold text-emerald-700 hover:bg-emerald-50 disabled:opacity-50"
+            >
+              <CheckCircle2 className="h-3.5 w-3.5" /> {t('payAllOverdue', { count: overdueList.length })}
+            </button>
+          )}
+        </div>
         {toPay.length === 0 ? <p className="text-sm text-[var(--muted)]">{t('nothingToPay')}</p> : <ul className="space-y-2">{toPay.map(occurrenceRow)}</ul>}
         {recentlyPaid.length > 0 && (
           <>

@@ -265,6 +265,7 @@ export default function WalletVoucherSection({
             value={redeemCode}
             onChange={(e) => setRedeemCode(e.target.value)}
             placeholder={tw('voucherRedeemPlaceholder')}
+            aria-label={tw('voucherRedeemPlaceholder')}
             className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm uppercase tracking-wider focus:border-[var(--gold)] focus:outline-none"
           />
           <button

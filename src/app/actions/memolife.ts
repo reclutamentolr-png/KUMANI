@@ -147,8 +147,10 @@ export async function importContacts(items: ImportedContact[]): Promise<ImportCo
     else skipped++
   }
 
-  for (const [id, patch] of updates) {
-    await g.supabase.from('contacts').update(patch).eq('id', id).eq('user_id', g.userId)
+  // Aggiornamenti dei contatti già presenti: 20 alla volta invece che uno per uno
+  const pending = [...updates]
+  for (let i = 0; i < pending.length; i += 20) {
+    await Promise.all(pending.slice(i, i + 20).map(([id, patch]) => g.supabase.from('contacts').update(patch).eq('id', id).eq('user_id', g.userId)))
   }
 
   const max = await appLimitValue('memolife_contacts')

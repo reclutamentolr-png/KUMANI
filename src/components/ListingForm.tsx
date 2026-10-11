@@ -76,7 +76,7 @@ export default function ListingForm({ userId, currentPoints, onCloseUrl, network
         setFeatureError(!result.featured)
       }
     } else {
-      setError(limitTextOf(result) ?? result.message ?? t('publishError'))
+      setError(limitTextOf(result) ?? (result.message && t.has(result.message) ? t(result.message) : t('publishError')))
     }
     setLoading(false)
   }

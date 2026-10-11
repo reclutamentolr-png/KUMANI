@@ -116,7 +116,7 @@ export default function FabulaHome({
 
   return (
     <div className="space-y-6">
-      <div className="flex gap-2 overflow-x-auto">
+      <div className="grid grid-cols-3 gap-2">
         {tabs.map(([value, label, Icon]) => (
           <button
             key={value}
@@ -125,7 +125,7 @@ export default function FabulaHome({
               setTab(value)
               setNotice(null)
             }}
-            className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold ${
+            className={`flex min-w-0 items-center justify-center gap-1.5 rounded-xl px-2 py-2.5 text-sm font-bold ${
               tab === value ? 'bg-[var(--ink)] text-white' : 'border border-gray-200 bg-white text-gray-700'
             }`}
           >

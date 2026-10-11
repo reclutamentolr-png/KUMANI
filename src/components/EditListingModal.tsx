@@ -56,7 +56,7 @@ export default function EditListingModal({ isOpen, onClose, listing, citiesByCou
 
     setSaving(false)
     if (!result.success) {
-      setError(result.message ?? t('editListingError'))
+      setError(result.message && t.has(result.message) ? t(result.message) : t('editListingError'))
       return
     }
 

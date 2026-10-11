@@ -11,7 +11,9 @@ import type { VeritasRoomInfo, VeritasState } from '@/lib/veritas'
 export async function createVeritasRoom(nickname: string, locale: string, rounds: number) {
   const supabase = await createClient()
   const { data, error } = await supabase.rpc('veritas_create_room', { p_nickname: nickname, p_locale: locale, p_rounds: rounds })
-  if (error || !data) return { success: false as const }
+  // Oltre le 20 stanze al giorno: messaggio dedicato invece dell'errore generico
+  if (error?.message?.includes('too_many_rooms')) return { success: false as const, error: 'too_many_rooms' }
+  if (error || !data) return { success: false as const, error: 'error' }
   await awardToolPoint('veritas')
   return { success: true as const, ...(data as { code: string; room_id: string; player_id: string; token: string }) }
 }

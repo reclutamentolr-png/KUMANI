@@ -237,19 +237,19 @@ export default function ShopFront({ settings, products, sellerName }: { settings
                 )}
                 {delivery === 'pickup' && settings.pickupInfo && <p className="whitespace-pre-wrap rounded-xl bg-gray-50 p-3 text-sm text-gray-700">{settings.pickupInfo}</p>}
                 <div className="grid gap-3">
-                  <input value={form.name} autoComplete="name" placeholder={t('fieldName')} onChange={(e) => setForm({ ...form, name: e.target.value })} className={input} />
-                  <input value={form.email} type="email" autoComplete="email" placeholder={t('fieldEmail')} onChange={(e) => setForm({ ...form, email: e.target.value })} className={input} />
-                  <input value={form.phone} type="tel" autoComplete="tel" placeholder={t('fieldPhone')} onChange={(e) => setForm({ ...form, phone: e.target.value })} className={input} />
+                  <input value={form.name} autoComplete="name" placeholder={t('fieldName')} aria-label={t('fieldName')} onChange={(e) => setForm({ ...form, name: e.target.value })} className={input} />
+                  <input value={form.email} type="email" autoComplete="email" placeholder={t('fieldEmail')} aria-label={t('fieldEmail')} onChange={(e) => setForm({ ...form, email: e.target.value })} className={input} />
+                  <input value={form.phone} type="tel" autoComplete="tel" placeholder={t('fieldPhone')} aria-label={t('fieldPhone')} onChange={(e) => setForm({ ...form, phone: e.target.value })} className={input} />
                   {delivery === 'shipping' && (
                     <>
-                      <input value={form.line} autoComplete="street-address" placeholder={t('fieldAddress')} onChange={(e) => setForm({ ...form, line: e.target.value })} className={input} />
+                      <input value={form.line} autoComplete="street-address" placeholder={t('fieldAddress')} aria-label={t('fieldAddress')} onChange={(e) => setForm({ ...form, line: e.target.value })} className={input} />
                       <div className="grid grid-cols-[1fr_7rem] gap-3">
-                        <input value={form.city} autoComplete="address-level2" placeholder={t('fieldCity')} onChange={(e) => setForm({ ...form, city: e.target.value })} className={input} />
-                        <input value={form.postal_code} autoComplete="postal-code" placeholder={t('fieldPostal')} onChange={(e) => setForm({ ...form, postal_code: e.target.value })} className={input} />
+                        <input value={form.city} autoComplete="address-level2" placeholder={t('fieldCity')} aria-label={t('fieldCity')} onChange={(e) => setForm({ ...form, city: e.target.value })} className={input} />
+                        <input value={form.postal_code} autoComplete="postal-code" placeholder={t('fieldPostal')} aria-label={t('fieldPostal')} onChange={(e) => setForm({ ...form, postal_code: e.target.value })} className={input} />
                       </div>
                       <div className="grid grid-cols-2 gap-3">
-                        <input value={form.province} placeholder={t('fieldProvince')} onChange={(e) => setForm({ ...form, province: e.target.value })} className={input} />
-                        <select value={form.country} onChange={(e) => setForm({ ...form, country: e.target.value })} className={input}>
+                        <input value={form.province} placeholder={t('fieldProvince')} aria-label={t('fieldProvince')} onChange={(e) => setForm({ ...form, province: e.target.value })} className={input} />
+                        <select value={form.country} aria-label={t('fieldCountry')} onChange={(e) => setForm({ ...form, country: e.target.value })} className={input}>
                           <option value="IT">Italia</option>
                           {settings.shippingEuCents != null &&
                             EU_COUNTRIES.map((c) => (
@@ -261,7 +261,7 @@ export default function ShopFront({ settings, products, sellerName }: { settings
                       </div>
                     </>
                   )}
-                  <textarea value={form.notes} maxLength={500} rows={2} placeholder={t('fieldNotes')} onChange={(e) => setForm({ ...form, notes: e.target.value })} className={input} />
+                  <textarea value={form.notes} maxLength={500} rows={2} placeholder={t('fieldNotes')} aria-label={t('fieldNotes')} onChange={(e) => setForm({ ...form, notes: e.target.value })} className={input} />
                 </div>
                 <div className="space-y-1 rounded-xl bg-gray-50 p-3 text-sm">
                   <p className="flex justify-between">

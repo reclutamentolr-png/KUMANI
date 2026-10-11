@@ -39,11 +39,11 @@ function listingFields(data: { title?: string; description?: string; category?: 
 }
 
 export async function createListingAction(data: CreateListingData) {
-  if (!(await isToolOnline('listings'))) return { success: false, message: 'La Bacheca è momentaneamente sospesa: puoi consultare gli annunci ma non pubblicare o modificare.' }
+  if (!(await isToolOnline('listings'))) return { success: false, message: 'listingErr_suspended' }
   const location = listingLocation(data)
-  if (!location) return { success: false, message: 'Scegli la nazione dell\'annuncio' }
+  if (!location) return { success: false, message: 'listingErr_country' }
   const fields = listingFields(data)
-  if (!fields) return { success: false, message: 'Controlla titolo, descrizione, prezzo e immagine (link https).' }
+  if (!fields) return { success: false, message: 'listingErr_fields' }
   const supabase = await createClient()
 
   // The acting user is always the authenticated session, never data.userId
@@ -53,7 +53,7 @@ export async function createListingAction(data: CreateListingData) {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return { success: false, message: 'Devi effettuare l\'accesso' }
+  if (!user) return { success: false, message: 'listingErr_login' }
 
   // 1+2. Spende atomicamente da daily_points (mai network_points, che è
   // riservato a voucher e vetrina) — stesso guard "nella WHERE dell'UPDATE"
@@ -64,7 +64,7 @@ export async function createListingAction(data: CreateListingData) {
     .single<{ success: boolean; new_daily_points: number }>()
 
   if (spendError || !spendResult) {
-    return { success: false, message: 'Errore nell\'aggiornamento punti' }
+    return { success: false, message: 'listingErr_points' }
   }
   if (!spendResult.success) {
     return { success: false, message: `Ti servono almeno ${LISTING_COST} punti per pubblicare un annuncio` }
@@ -90,7 +90,7 @@ export async function createListingAction(data: CreateListingData) {
     await getServiceClient().rpc('add_daily_points_for', { p_user_id: user.id, p_amount: LISTING_COST })
     const limit = await limitError(error)
     if (limit) return limit
-    return { success: false, message: 'Errore nella creazione dell\'annuncio' }
+    return { success: false, message: 'listingErr_create' }
   }
   invalidateListingsCache()
 
@@ -129,16 +129,16 @@ export async function createListingAction(data: CreateListingData) {
 // filtered .update() relying on the existing RLS UPDATE policy as a second
 // layer. Doesn't touch points/cost — editing is free, only creation costs.
 export async function updateListingAction(listingId: string, data: UpdateListingData) {
-  if (!(await isToolOnline('listings'))) return { success: false, message: 'La Bacheca è momentaneamente sospesa: puoi consultare gli annunci ma non pubblicare o modificare.' }
+  if (!(await isToolOnline('listings'))) return { success: false, message: 'listingErr_suspended' }
   const location = listingLocation(data)
-  if (!location) return { success: false, message: 'Scegli la nazione dell\'annuncio' }
+  if (!location) return { success: false, message: 'listingErr_country' }
   const fields = listingFields(data)
-  if (!fields) return { success: false, message: 'Controlla titolo, descrizione, prezzo e immagine (link https).' }
+  if (!fields) return { success: false, message: 'listingErr_fields' }
   const supabase = await createClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return { success: false, message: 'Devi effettuare l\'accesso' }
+  if (!user) return { success: false, message: 'listingErr_login' }
 
   const { data: listing, error } = await supabase
     .from('listings')
@@ -151,7 +151,7 @@ export async function updateListingAction(listingId: string, data: UpdateListing
     .select()
     .single()
 
-  if (error || !listing) return { success: false, message: 'Errore nella modifica dell\'annuncio' }
+  if (error || !listing) return { success: false, message: 'listingErr_edit' }
   invalidateListingsCache()
   return { success: true, listing }
 }
@@ -182,7 +182,7 @@ export async function deleteListingAction(listingId: string, userId: string) {
   const supabase = await createClient()
   const { error } = await supabase.from('listings').delete().eq('id', listingId).eq('user_id', userId)
 
-  if (error) return { success: false, message: 'Errore nell\'eliminazione' }
+  if (error) return { success: false, message: 'listingErr_delete' }
   invalidateListingsCache()
   return { success: true }
 }
@@ -194,12 +194,12 @@ export async function deleteListingAction(listingId: string, userId: string) {
 // authenticated session, not a client-supplied userId, same reasoning as
 // createListingAction.
 export async function republishListingAction(listingId: string) {
-  if (!(await isToolOnline('listings'))) return { success: false, message: 'La Bacheca è momentaneamente sospesa: puoi consultare gli annunci ma non pubblicare o modificare.' }
+  if (!(await isToolOnline('listings'))) return { success: false, message: 'listingErr_suspended' }
   const supabase = await createClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return { success: false, message: 'Devi effettuare l\'accesso' }
+  if (!user) return { success: false, message: 'listingErr_login' }
 
   const { error } = await supabase
     .from('listings')
@@ -207,7 +207,7 @@ export async function republishListingAction(listingId: string) {
     .eq('id', listingId)
     .eq('user_id', user.id)
 
-  if (error) return { success: false, message: 'Errore durante la ripubblicazione' }
+  if (error) return { success: false, message: 'listingErr_republish' }
   invalidateListingsCache()
   return { success: true }
 }
@@ -275,11 +275,11 @@ export async function deleteConversationAction(
 ) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { success: false, error: 'Non autenticato' }
+  if (!user) return { success: false, error: 'listingErr_login' }
   const currentUserId = user.id
 
   if (!UUID_RE.test(otherUserId) || (listingId && listingId !== 'direct' && !UUID_RE.test(listingId))) {
-    return { success: false, error: 'Conversazione non valida' }
+    return { success: false, error: 'chatErr_invalid' }
   }
   const conversationFilter = `and(sender_id.eq.${currentUserId},receiver_id.eq.${otherUserId}),and(sender_id.eq.${otherUserId},receiver_id.eq.${currentUserId})`
 
@@ -297,13 +297,13 @@ export async function deleteConversationAction(
   const firstMessage = firstMessages?.[0]
 
   if (firstMsgError || !firstMessage) {
-    return { success: false, error: 'Conversazione non trovata' }
+    return { success: false, error: 'chatErr_notFound' }
   }
 
   if (firstMessage.sender_id !== currentUserId) {
     return {
       success: false,
-      error: 'Non hai i permessi per cancellare questa conversazione'
+      error: 'chatErr_forbidden'
     }
   }
 

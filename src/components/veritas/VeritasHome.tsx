@@ -27,7 +27,7 @@ export default function VeritasHome({ defaultNickname }: { defaultNickname: stri
     const result = await createVeritasRoom(nickname, language, rounds)
     if (!result.success) {
       setBusy(false)
-      setError(t('error_error'))
+      setError(result.error && t.has(`error_${result.error}`) ? t(`error_${result.error}`) : t('error_error'))
       return
     }
     saveVeritasSeat(result.code, { room_id: result.room_id, token: result.token })

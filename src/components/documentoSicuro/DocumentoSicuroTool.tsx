@@ -89,6 +89,11 @@ export default function DocumentoSicuroTool() {
     const file = event.target.files?.[0]
     event.target.value = ''
     if (!file) return
+    // Un PDF non si può ancora proteggere: si spiega cosa fare
+    if (file.type === 'application/pdf' || /\.pdf$/i.test(file.name)) {
+      setError(t('errorPdf'))
+      return
+    }
     setLoading(true)
     setError(null)
     setNotice(null)
@@ -175,7 +180,7 @@ export default function DocumentoSicuroTool() {
       const url = URL.createObjectURL(blob)
       const link = document.createElement('a')
       link.href = url
-      link.download = exportFileName()
+      link.download = exportFileName(t('fileNamePrefix'))
       document.body.appendChild(link)
       link.click()
       link.remove()
@@ -195,7 +200,7 @@ export default function DocumentoSicuroTool() {
     setNotice(null)
     try {
       const blob = await canvasToJpeg(canvasRef.current)
-      const file = new File([blob], exportFileName(), { type: 'image/jpeg' })
+      const file = new File([blob], exportFileName(t('fileNamePrefix')), { type: 'image/jpeg' })
       if (!navigator.canShare({ files: [file] })) {
         setNotice({ kind: 'error', text: t('shareUnsupported') })
         return

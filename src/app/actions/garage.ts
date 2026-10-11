@@ -359,6 +359,25 @@ export async function payDeadline(id: string, input: { amount: number; paidOn: s
     .maybeSingle()
   if (!deadline) return { success: false, message: 'notFound' }
 
+  // Prima si «prenota» la scadenza (si sposta o si toglie solo se ha ancora la
+  // data letta): con due tocchi o due schede il secondo non trova più la riga
+  // e non registra una seconda spesa
+  const next = nextDueDate(deadline.due_date as string, deadline.recurrence as DeadlineRecurrence)
+  const { data: claimed, error } = next
+    ? await g.supabase
+        .from('garage_deadlines')
+        .update({ due_date: next, amount: money(input.amount) ?? undefined, updated_at: new Date().toISOString() })
+        .eq('id', id)
+        .eq('user_id', g.userId)
+        .eq('due_date', deadline.due_date as string)
+        .select('id')
+    : await g.supabase.from('garage_deadlines').delete().eq('id', id).eq('user_id', g.userId).eq('due_date', deadline.due_date as string).select('id')
+  if (error) {
+    console.error('[Garage] payDeadline failed:', error)
+    return { success: false, message: 'saveError' }
+  }
+  if (!claimed?.length) return { success: true, data: null }
+
   if (input.amount > 0) {
     const result = await insertExpense(g, deadline.vehicle_id as string, {
       kind: DEADLINE_EXPENSE_KIND[deadline.kind as DeadlineKind],
@@ -367,19 +386,6 @@ export async function payDeadline(id: string, input: { amount: number; paidOn: s
       note: (deadline.title as string | null) ?? '',
     })
     if (!result.success) return result
-  }
-
-  const next = nextDueDate(deadline.due_date as string, deadline.recurrence as DeadlineRecurrence)
-  const { error } = next
-    ? await g.supabase
-        .from('garage_deadlines')
-        .update({ due_date: next, amount: money(input.amount) ?? undefined, updated_at: new Date().toISOString() })
-        .eq('id', id)
-        .eq('user_id', g.userId)
-    : await g.supabase.from('garage_deadlines').delete().eq('id', id).eq('user_id', g.userId)
-  if (error) {
-    console.error('[Garage] payDeadline failed:', error)
-    return { success: false, message: 'saveError' }
   }
   await awardToolPoint('garage')
   return { success: true, data: null }
