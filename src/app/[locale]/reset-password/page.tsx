@@ -73,7 +73,7 @@ export default function ResetPasswordPage() {
       setError(t('passwordsDoNotMatch'))
       return
     }
-    if (password.length < 6) {
+    if (password.length < 8) {
       setError(t('passwordTooShort'))
       return
     }
@@ -149,7 +149,7 @@ export default function ResetPasswordPage() {
                       id="password"
                       type="password"
                       required
-                      minLength={6}
+                      minLength={8}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       className="w-full rounded-md border border-stone-300 bg-white pl-10 pr-4 py-2.5 shadow-sm focus:border-[var(--gold)] focus:ring-[var(--gold)]"
@@ -165,7 +165,7 @@ export default function ResetPasswordPage() {
                       id="confirmPassword"
                       type="password"
                       required
-                      minLength={6}
+                      minLength={8}
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       className="w-full rounded-md border border-stone-300 bg-white pl-10 pr-4 py-2.5 shadow-sm focus:border-[var(--gold)] focus:ring-[var(--gold)]"

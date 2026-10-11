@@ -37,7 +37,7 @@ export default function PasswordChangeSection() {
     e.preventDefault()
     if (saving) return
     setError(null)
-    if (next.length < 6) return setError(t('errorTooShort'))
+    if (next.length < 8) return setError(t('errorTooShort'))
     if (next !== confirm) return setError(t('errorMismatch'))
     if (next === current) return setError(t('errorSame'))
     setSaving(true)
@@ -113,11 +113,11 @@ export default function PasswordChangeSection() {
           </div>
           <div>
             <label htmlFor="pw-new" className="mb-1 block text-xs font-medium text-gray-700">{t('new')}</label>
-            <input id="pw-new" type={show ? 'text' : 'password'} autoComplete="new-password" required minLength={6} maxLength={72} value={next} onChange={(e) => setNext(e.target.value)} className={inputClass} />
+            <input id="pw-new" type={show ? 'text' : 'password'} autoComplete="new-password" required minLength={8} maxLength={72} value={next} onChange={(e) => setNext(e.target.value)} className={inputClass} />
           </div>
           <div>
             <label htmlFor="pw-confirm" className="mb-1 block text-xs font-medium text-gray-700">{t('confirm')}</label>
-            <input id="pw-confirm" type={show ? 'text' : 'password'} autoComplete="new-password" required minLength={6} maxLength={72} value={confirm} onChange={(e) => setConfirm(e.target.value)} className={inputClass} />
+            <input id="pw-confirm" type={show ? 'text' : 'password'} autoComplete="new-password" required minLength={8} maxLength={72} value={confirm} onChange={(e) => setConfirm(e.target.value)} className={inputClass} />
           </div>
           <button type="button" onClick={() => setShow((value) => !value)} className="flex items-center gap-1 text-xs font-medium text-gray-500 hover:text-[var(--ink)]">
             {show ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />} {show ? t('hide') : t('show')}
