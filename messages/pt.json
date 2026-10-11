@@ -372,7 +372,12 @@
     "passActivated": "Código Pass ativado: o serviço é seu até {date}.",
     "proTrialNext": "Agora ative o teste Pro gratuito: pedimos o número de IVA ou o código fiscal.",
     "disposableEmail": "Não são aceites emails temporários ou descartáveis: use um endereço que consulta de facto.",
-    "captchaError": "A verificação anti-robô falhou: tente novamente."
+    "captchaError": "A verificação anti-robô falhou: tente novamente.",
+    "pwStrength_short": "Demasiado curta: pelo menos 8 caracteres",
+    "pwStrength_weak": "Fraca",
+    "pwStrength_medium": "Média",
+    "pwStrength_strong": "Forte",
+    "pwStrengthHint": "mais longa, com maiúsculas, números e símbolos é mais segura"
   },
   "dashboard": {
     "receivedLabel": "Da Comunidade",

@@ -372,7 +372,12 @@
     "passActivated": "Code Pass activé : le service est à vous jusqu’au {date}.",
     "proTrialNext": "Activez maintenant l’essai Pro gratuit : nous vous demandons votre numéro de TVA ou code fiscal.",
     "disposableEmail": "Les adresses e-mail temporaires ou jetables ne sont pas acceptées : utilisez une adresse que vous consultez vraiment.",
-    "captchaError": "Vérification anti-robot échouée : réessayez."
+    "captchaError": "Vérification anti-robot échouée : réessayez.",
+    "pwStrength_short": "Trop court : au moins 8 caractères",
+    "pwStrength_weak": "Faible",
+    "pwStrength_medium": "Moyen",
+    "pwStrength_strong": "Fort",
+    "pwStrengthHint": "plus long, avec majuscules, chiffres et symboles, c’est plus sûr"
   },
   "dashboard": {
     "receivedLabel": "De la Communauté",

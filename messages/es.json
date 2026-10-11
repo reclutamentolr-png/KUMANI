@@ -372,7 +372,12 @@
     "passActivated": "Código Pass activado: el servicio es tuyo hasta el {date}.",
     "proTrialNext": "Ahora activa la prueba Pro gratuita: te pedimos el NIF-IVA o el código fiscal.",
     "disposableEmail": "No se aceptan correos temporales o desechables: usa una dirección que revises de verdad.",
-    "captchaError": "La verificación anti-robot no se ha superado: inténtalo de nuevo."
+    "captchaError": "La verificación anti-robot no se ha superado: inténtalo de nuevo.",
+    "pwStrength_short": "Demasiado corta: al menos 8 caracteres",
+    "pwStrength_weak": "Débil",
+    "pwStrength_medium": "Media",
+    "pwStrength_strong": "Fuerte",
+    "pwStrengthHint": "más larga, con mayúsculas, números y símbolos es más segura"
   },
   "dashboard": {
     "receivedLabel": "De la Comunidad",

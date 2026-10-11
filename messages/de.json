@@ -372,7 +372,12 @@
     "passActivated": "Pass-Code aktiviert: Der Dienst gehört dir bis {date}.",
     "proTrialNext": "Starte jetzt den kostenlosen Pro-Test: Wir fragen nach USt-IdNr. oder Steuercode.",
     "disposableEmail": "Temporäre oder Wegwerf-E-Mail-Adressen werden nicht akzeptiert: Nutze eine Adresse, die du wirklich liest.",
-    "captchaError": "Anti-Bot-Prüfung fehlgeschlagen: bitte erneut versuchen."
+    "captchaError": "Anti-Bot-Prüfung fehlgeschlagen: bitte erneut versuchen.",
+    "pwStrength_short": "Zu kurz: mindestens 8 Zeichen",
+    "pwStrength_weak": "Schwach",
+    "pwStrength_medium": "Mittel",
+    "pwStrength_strong": "Stark",
+    "pwStrengthHint": "länger, mit Großbuchstaben, Zahlen und Sonderzeichen ist sicherer"
   },
   "dashboard": {
     "receivedLabel": "Aus der Community",

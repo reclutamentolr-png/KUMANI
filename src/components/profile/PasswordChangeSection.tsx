@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import { AlertCircle, CheckCircle2, Eye, EyeOff, KeyRound } from 'lucide-react'
 import { changeMyPassword } from '@/app/actions/password'
 import TurnstileWidget, { TURNSTILE_ENABLED, useTurnstile } from '@/components/auth/TurnstileWidget'
+import PasswordStrength from '@/components/PasswordStrength'
 
 // Nel profilo: cambio password con la password attuale (chi l'ha dimenticata
 // usa "Password dimenticata" dalla pagina di accesso).
@@ -114,6 +115,7 @@ export default function PasswordChangeSection() {
           <div>
             <label htmlFor="pw-new" className="mb-1 block text-xs font-medium text-gray-700">{t('new')}</label>
             <input id="pw-new" type={show ? 'text' : 'password'} autoComplete="new-password" required minLength={8} maxLength={72} value={next} onChange={(e) => setNext(e.target.value)} className={inputClass} />
+            <PasswordStrength password={next} />
           </div>
           <div>
             <label htmlFor="pw-confirm" className="mb-1 block text-xs font-medium text-gray-700">{t('confirm')}</label>

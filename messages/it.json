@@ -403,7 +403,12 @@
     "passActivated": "Codice Pass attivato: il servizio è tuo fino al {date}.",
     "proTrialNext": "Ora attiva la prova Pro gratuita: ti chiediamo la Partita IVA o il codice fiscale.",
     "disposableEmail": "Email temporanee o usa e getta non sono accettate: usa un indirizzo che controlli davvero.",
-    "captchaError": "Verifica anti-robot non riuscita: riprova."
+    "captchaError": "Verifica anti-robot non riuscita: riprova.",
+    "pwStrength_short": "Troppo corta: servono almeno 8 caratteri",
+    "pwStrength_weak": "Debole",
+    "pwStrength_medium": "Media",
+    "pwStrength_strong": "Forte",
+    "pwStrengthHint": "più lunga, con maiuscole, numeri e simboli è più sicura"
   },
   "dashboard": {
     "receivedLabel": "Dalla Community",

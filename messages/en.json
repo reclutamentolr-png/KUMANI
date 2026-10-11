@@ -403,7 +403,12 @@
     "passActivated": "Pass code activated: the service is yours until {date}.",
     "proTrialNext": "Now start your free Pro trial: we’ll ask for your VAT number or tax code.",
     "disposableEmail": "Temporary or disposable email addresses are not accepted: use an address you actually check.",
-    "captchaError": "Anti-bot check failed: please try again."
+    "captchaError": "Anti-bot check failed: please try again.",
+    "pwStrength_short": "Too short: at least 8 characters needed",
+    "pwStrength_weak": "Weak",
+    "pwStrength_medium": "Medium",
+    "pwStrength_strong": "Strong",
+    "pwStrengthHint": "longer, with capitals, numbers and symbols is safer"
   },
   "dashboard": {
     "receivedLabel": "From the Community",

@@ -11,6 +11,7 @@ import MaintenanceGate from '@/components/MaintenanceGate'
 import Logo from '@/components/Logo'
 import { authErrorText } from '@/lib/authErrors'
 import TurnstileWidget, { useTurnstile } from '@/components/auth/TurnstileWidget'
+import PasswordStrength from '@/components/PasswordStrength'
 
 const RESEND_COOLDOWN_SECONDS = 30
 
@@ -207,6 +208,7 @@ export default function ForgotPasswordPage() {
                         className="w-full rounded-md border border-stone-300 bg-white pl-10 pr-4 py-2.5 shadow-sm focus:border-[var(--gold)] focus:ring-[var(--gold)]"
                       />
                     </div>
+                    <PasswordStrength password={password} />
                   </div>
 
                   <div>
