@@ -7772,6 +7772,42 @@
       "step5Title": "Fordere deine Freunde heraus",
       "step5Text": "Mit „Freunde herausfordern“ erstellst du ein Spiel und schickst den Code per WhatsApp: Freunde kommen über den Link rein, auch ohne Anmeldung. Wenn ihr 2 bis 4 seid, tippe auf „Spiel starten“. Abwechselnd wählt ihr ein Wort und tippt auf „Versuchen“: Jedes richtige Wort bekommt deine Farbe und bringt 1 Punkt pro Buchstabe, +3 pro Kreuzung und das Doppelte auf dem ×2-Feld.",
       "step5Tip": "Wer zwei Züge hintereinander verstreichen lässt, scheidet aus. Solange niemand beigetreten ist, kannst du die Herausforderung absagen."
+    },
+    "clienti": {
+      "title": "Kunden & Aufträge",
+      "summary": "Kunden, Aufträge, Zeit, Marge und Zahlungen an einem Ort, verbunden mit deinen Angeboten.",
+      "cta": "Kunden & Aufträge öffnen",
+      "step1Title": "Heute",
+      "step1Text": "Oben findest du „Heute“: was noch offen ist, wen du kontaktieren solltest (mit „Anrufen“ und „Erledigt“), übergebene, noch nicht bezahlte Aufträge und was heute beginnt oder fällig ist.",
+      "step1Tip": "Bei einem übergebenen, unbezahlten Auftrag öffnet „WhatsApp-Erinnerung“ eine fertig geschriebene Nachricht an den Kunden.",
+      "step2Title": "Deine Kunden",
+      "step2Text": "In der Liste suchst du nach Name, Ort oder Telefon und filterst „Zu melden“ oder „Zahlung offen“. Füge einen Kunden mit „Neuer Kunde“ hinzu oder importiere ihn aus der Kumi Card und dem MemoLife-Adressbuch.",
+      "step2Tip": "Jedes gespeicherte Angebot und jede bezahlte Shop-Bestellung legt seinen Kunden automatisch an oder aktualisiert ihn.",
+      "step3Title": "Die Kundenkarte",
+      "step3Text": "Von der Karte aus rufst du an, schreibst per WhatsApp oder sendest eine E-Mail mit einem Tipp. Du siehst Vereinbartes, Erhaltenes und Offenes und legst den „Nächsten Schritt“ mit Datum fest.",
+      "step4Title": "Aufträge",
+      "step4Text": "Mit „Neuer Auftrag“ legst du einen Auftrag an, auch aus einem angenommenen Angebot. Auf seiner Seite änderst du den Status (Offen, In Arbeit, Übergeben, Bezahlt) und hakst die To-dos ab.",
+      "step5Title": "Zeit und Marge",
+      "step5Text": "Starte die Zeitmessung bei der Arbeit: Sie läuft weiter, auch wenn du die Seite schließt. Lege die Stundenkosten fest und füge Material und Kosten hinzu, auch aus Magazzino PRO: „Marge des Auftrags“ zeigt dir, was dir bleibt.",
+      "step5Tip": "Auf derselben Seite lädst du Baustellenfotos und Dokumente hoch: Sie bleiben privat.",
+      "step6Title": "Zahlungen und Buchhaltung",
+      "step6Text": "Erfasse Zahlungen in bar, per Überweisung oder Karte: Das Kundenkonto aktualisiert sich. Aus einer Zahlung erstellst du den digitalen Beleg schon ausgefüllt.",
+      "step6Tip": "Unten in der Kundenliste lädst du Kunden, Aufträge, Zahlungen und Stunden als Excel-Dateien (CSV) für die Buchhaltung herunter."
+    },
+    "brand": {
+      "title": "Die Farben deiner Marke",
+      "summary": "Vier Farben, einmal gewählt und von Landing Page, Angeboten, QR Code PRO, Link in Bio und E-Mail-Signatur verwendet.",
+      "cta": "Markenfarben wählen",
+      "step1Title": "Wo du sie findest",
+      "step1Text": "Öffne das Firmenprofil über das Menü oben rechts und tippe im Farbbereich auf „Markenfarben wählen“. Verfügbar im Base- und Pro-Tarif.",
+      "step2Title": "Wähle die Farben",
+      "step2Text": "Starte „Aus dem Logo“ (die Farben werden direkt auf dem Handy aus dem Logo des Firmenprofils gelesen), mit „Erzeugen“ und einer Kombination oder „Von Hand“. Vergib die vier Rollen: Hauptfarbe, Akzent, Hintergrund und Text.",
+      "step2Tip": "Tippe auf eine Rolle und dann auf einen Farbpunkt, um sie zu ändern; die Vorschau aktualisiert sich sofort.",
+      "step3Title": "Prüfe die Lesbarkeit",
+      "step3Text": "Im zweiten Schritt siehst du, ob Texte und Schaltflächen gut lesbar sind. Ist eine Kombination schlecht lesbar, schlägt „Korrigieren“ den nächsten passenden Farbton vor.",
+      "step4Title": "Dienste wählen und speichern",
+      "step4Text": "Hake die Dienste an, die deiner Marke folgen sollen, und tippe auf „Farben speichern“. Änderst du die Farben, passen sich diese Dienste selbst an.",
+      "step4Tip": "Änderst du in einem Dienst eine Farbe von Hand, folgt er der Marke nicht mehr: Mit „Markenfarben verwenden“ schaltest du es wieder ein."
     }
   },
   "deckTexts": {

@@ -7772,6 +7772,42 @@
       "step5Title": "Challenge friends",
       "step5Text": "With “Challenge friends” you create a game and send the code on WhatsApp: friends join from the link, even without signing up. When there are 2 to 4 of you, tap “Start the game”. In turn you choose a word and tap “Try”: each right word takes your colour and is worth 1 point per letter, +3 for each crossing and double on the ×2 square.",
       "step5Tip": "Anyone who lets two turns in a row run out leaves the game. Until someone joins, you can cancel the challenge."
+    },
+    "clienti": {
+      "title": "Clients & Jobs",
+      "summary": "Clients, jobs, time, margin and payments in one place, linked to your Quotes.",
+      "cta": "Open Clients & Jobs",
+      "step1Title": "Today",
+      "step1Text": "At the top you’ll find “Today”: what you have to collect, who to contact (with “Call” and “Done”), delivered jobs not yet paid and what starts or is due today.",
+      "step1Tip": "On a delivered, unpaid job, “WhatsApp reminder” opens a ready-written message for the client.",
+      "step2Title": "Your clients",
+      "step2Text": "In the list you search by name, city or phone and filter “To contact” or “Owe you”. Add a client with “New client” or import them from Kumi Card and MemoLife contacts.",
+      "step2Tip": "Every saved quote and every paid Shop order adds or updates its client automatically.",
+      "step3Title": "The client card",
+      "step3Text": "From the card you call, message on WhatsApp or send an email with one tap. You see what’s agreed, what you’ve collected and what’s still owed, and set the “Next step” with a date.",
+      "step4Title": "Jobs",
+      "step4Text": "With “New job” you create a job, also from an accepted quote. On its page you change the status (To start, In progress, Delivered, Paid) and tick off the things to do.",
+      "step5Title": "Time and margin",
+      "step5Text": "Start the timer while you work: it keeps running even if you close the page. Set the hourly cost and add materials and expenses, also from Magazzino PRO: “Job margin” tells you what you keep.",
+      "step5Tip": "On the same page you upload site photos and documents: they stay private.",
+      "step6Title": "Payments and your accountant",
+      "step6Text": "Record payments received in cash, by bank transfer or card: the client’s accounts update. From a payment you make the digital receipt already filled in.",
+      "step6Tip": "At the bottom of the client list you download clients, jobs, payments and hours as Excel files (CSV) for your accountant."
+    },
+    "brand": {
+      "title": "Your brand colors",
+      "summary": "Four colors chosen once and used by Landing Page, Quotes, QR Code PRO, Link in Bio and Email signature.",
+      "cta": "Choose brand colors",
+      "step1Title": "Where to find it",
+      "step1Text": "Open your Business profile from the menu at the top right and, in the colors section, tap “Choose brand colors”. It works with the Base and Pro plans.",
+      "step2Title": "Choose the colors",
+      "step2Text": "Start “From logo” (colors are read from your Business profile logo, right on your phone), from “Generate” with a combination, or “By hand”. Assign the four roles: primary, accent, background and text.",
+      "step2Tip": "Tap a role and then a color dot to change it; the preview updates straight away.",
+      "step3Title": "Check readability",
+      "step3Text": "In the second step you see whether text and buttons read well. If a combination is hard to read, “Fix” suggests the closest shade that works.",
+      "step4Title": "Choose services and save",
+      "step4Text": "Tick the services that should follow your brand and tap “Save colors”. When you change the colors, those services update by themselves.",
+      "step4Tip": "If you change a color by hand in a service, it stops following your brand: “Use brand colors” turns it back on."
     }
   },
   "deckTexts": {

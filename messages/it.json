@@ -7772,6 +7772,42 @@
       "step5Title": "Sfida gli amici",
       "step5Text": "Con «Sfida gli amici» crei una partita e mandi il codice su WhatsApp: gli amici entrano dal link anche senza iscriversi. Quando siete da 2 a 4 tocca «Inizia la partita». A turno si sceglie una parola e si tocca «Prova»: ogni parola giusta prende il tuo colore e vale 1 punto per lettera, +3 per ogni incrocio e il doppio sulla casella ×2.",
       "step5Tip": "Chi lascia scadere due turni di fila esce dalla partita. Finché nessuno è entrato, puoi annullare la sfida."
+    },
+    "clienti": {
+      "title": "Clienti e Lavori",
+      "summary": "Clienti, lavori, tempo, margine e incassi in un solo posto, collegati ai Preventivi.",
+      "cta": "Apri Clienti e Lavori",
+      "step1Title": "Oggi",
+      "step1Text": "In cima trovi la sezione «Oggi»: quanto devi incassare, chi sentire (con «Chiama» e «Fatto»), i lavori consegnati non ancora saldati e cosa inizia o va consegnato oggi.",
+      "step1Tip": "Su un lavoro consegnato e non pagato, «Promemoria WhatsApp» apre il messaggio già scritto per il cliente.",
+      "step2Title": "I tuoi clienti",
+      "step2Text": "Nell’elenco cerchi per nome, città o telefono e filtri «Da sentire» o «Devono pagare». Aggiungi un cliente con «Nuovo cliente» o importalo dalla Kumi Card e dalla Rubrica di MemoLife.",
+      "step2Tip": "Ogni preventivo salvato e ogni ordine pagato dello Shop aggiunge o aggiorna da solo il suo cliente.",
+      "step3Title": "La scheda cliente",
+      "step3Text": "Dalla scheda chiami, scrivi su WhatsApp o mandi un’email con un tocco. Vedi quanto è concordato, quanto hai incassato e quanto deve ancora, e fissi il «Prossimo passo» con la data.",
+      "step4Title": "I lavori",
+      "step4Text": "Con «Nuovo lavoro» crei un lavoro, anche da un preventivo accettato. Nella sua pagina cambi lo stato (Da iniziare, In corso, Consegnato, Pagato) e spunti le cose da fare.",
+      "step5Title": "Tempo e margine",
+      "step5Text": "Avvia il cronometro quando lavori: continua anche se chiudi la pagina. Imposta il costo orario e aggiungi materiali e spese, anche da Magazzino PRO: «Margine del lavoro» ti dice quanto ti resta.",
+      "step5Tip": "Nella stessa pagina carichi foto e documenti del cantiere: restano privati.",
+      "step6Title": "Pagamenti e commercialista",
+      "step6Text": "Registra i pagamenti ricevuti in contanti, con bonifico o carta: i conti del cliente si aggiornano. Da un pagamento fai la ricevuta digitale già compilata.",
+      "step6Tip": "In fondo all’elenco clienti scarichi clienti, lavori, pagamenti e ore in file Excel (CSV) per il commercialista."
+    },
+    "brand": {
+      "title": "I colori del tuo brand",
+      "summary": "Quattro colori scelti una volta e usati da Landing Page, Preventivi, QR Code PRO, Link in Bio e Firma email.",
+      "cta": "Scegli i colori del brand",
+      "step1Title": "Dove si trova",
+      "step1Text": "Apri la Scheda attività dal menu in alto a destra e, nella sezione dei colori, tocca «Scegli i colori del brand». Funziona con il piano Base e con il Pro.",
+      "step2Title": "Scegli i colori",
+      "step2Text": "Parti «Dal logo» (i colori si leggono dal logo della Scheda attività, direttamente sul telefono), da «Genera» con un abbinamento oppure «A mano». Assegna i quattro ruoli: principale, accento, sfondo e testo.",
+      "step2Tip": "Tocca un ruolo e poi un pallino colorato per cambiarlo; l’anteprima si aggiorna subito.",
+      "step3Title": "Controlla la leggibilità",
+      "step3Text": "Nel secondo passo vedi se testi e pulsanti si leggono bene. Se un abbinamento si legge male, «Correggi» propone la sfumatura più vicina che va bene.",
+      "step4Title": "Scegli i servizi e salva",
+      "step4Text": "Spunta i servizi che devono seguire il brand e tocca «Salva i colori». Quando cambi i colori, quei servizi si aggiornano da soli.",
+      "step4Tip": "Se cambi un colore a mano in un servizio, smette di seguire il brand: con «Usa i colori del brand» lo riattivi."
     }
   },
   "deckTexts": {

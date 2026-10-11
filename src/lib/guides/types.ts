@@ -43,6 +43,8 @@ export type GuideSlug =
   | 'preventivi'
   | 'digital-receipt'
   | 'magazzino'
+  | 'clienti'
+  | 'brand'
   | 'qr-code-pro'
   | 'firma-email'
   | 'calcolatrici'

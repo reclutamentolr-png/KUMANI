@@ -127,8 +127,9 @@ export function whatsappDigits(phone: string | null): string | null {
   return digits.length >= 8 ? digits : null
 }
 
+// Separatore delle migliaia sempre (in italiano «8.380,00 €», non «8380,00 €»)
 export function formatEur(value: number, locale: string): string {
-  return new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2 }).format(Number(value) || 0)
+  return new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2, useGrouping: 'always' } as Intl.NumberFormatOptions).format(Number(value) || 0)
 }
 
 // Lavori (fase 2): stato, cose da fare e pagamenti registrati a mano

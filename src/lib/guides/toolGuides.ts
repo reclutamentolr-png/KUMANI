@@ -36,6 +36,8 @@ export const TOOL_GUIDES: { path: string; slug: GuideSlug }[] = [
   { path: '/marketplace/preventivi', slug: 'preventivi' },
   { path: '/marketplace/digital-receipt', slug: 'digital-receipt' },
   { path: '/marketplace/magazzino', slug: 'magazzino' },
+  { path: '/marketplace/clienti', slug: 'clienti' },
+  { path: '/scheda-attivita/colori', slug: 'brand' },
   { path: '/marketplace/qr-code-pro', slug: 'qr-code-pro' },
   { path: '/marketplace/firma-email', slug: 'firma-email' },
   { path: '/marketplace/calcolatrici', slug: 'calcolatrici' },

@@ -190,17 +190,21 @@ export async function colorsFromImage(url: string, count = 6): Promise<string[]>
 }
 
 // Proposta di ruoli dai colori del logo: il più saturo e scuro come principale
+// I colori arrivano ordinati per quanto compaiono nel logo: il principale è
+// il colore vivo più presente, già leggibile con testo bianco sopra
 export function paletteFromSwatches(swatches: string[]): BrandPalette {
   if (!swatches.length) return { ...DEFAULT_PALETTE }
   const sat = (hex: string) => {
     const [r, g, b] = channels(hex)
     return Math.max(r, g, b) - Math.min(r, g, b)
   }
-  const byInk = [...swatches].sort((a, b) => contrast(b, '#ffffff') - contrast(a, '#ffffff'))
-  const colorful = [...swatches].sort((a, b) => sat(b) - sat(a))
-  const primary = colorful.find((c) => contrast(c, '#ffffff') >= 3) ?? byInk[0]
-  const accent = colorful.find((c) => c !== primary) ?? primary
+  const colorful = swatches.filter((c) => sat(c) > 40)
+  const pool = colorful.length ? colorful : swatches
+  const base = pool.find((c) => contrast(c, '#ffffff') >= 4.5) ?? pool[0]
+  const primary = fixContrast(base, '#ffffff', 4.5)
+  const accent = pool.find((c) => c !== base) ?? swatches.find((c) => c !== base) ?? primary
   const background = '#ffffff'
-  const text = fixContrast(byInk[0] === primary ? '#1f1f1f' : byInk[0], background)
+  const darkest = [...swatches].sort((a, b) => contrast(b, '#ffffff') - contrast(a, '#ffffff'))[0]
+  const text = fixContrast(darkest === base ? '#1f1f1f' : darkest, background, 7)
   return { primary, accent: fixContrast(accent, background, 3), background, text }
 }

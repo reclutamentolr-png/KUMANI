@@ -7772,6 +7772,42 @@
       "step5Title": "Défiez vos amis",
       "step5Text": "Avec « Défier des amis » vous créez une partie et envoyez le code sur WhatsApp : vos amis entrent par le lien, même sans s’inscrire. Quand vous êtes de 2 à 4, touchez « Lancer la partie ». À tour de rôle on choisit un mot et on touche « Essayer » : chaque mot juste prend votre couleur et vaut 1 point par lettre, +3 par croisement et le double sur la case ×2.",
       "step5Tip": "Qui laisse passer deux tours de suite quitte la partie. Tant que personne n’est entré, vous pouvez annuler le défi."
+    },
+    "clienti": {
+      "title": "Clients et Chantiers",
+      "summary": "Clients, chantiers, temps, marge et encaissements au même endroit, reliés à vos Devis.",
+      "cta": "Ouvrir Clients et Chantiers",
+      "step1Title": "Aujourd’hui",
+      "step1Text": "En haut, la section « Aujourd’hui » : ce qu’il reste à encaisser, qui contacter (avec « Appeler » et « Fait »), les chantiers livrés pas encore soldés et ce qui commence ou se livre aujourd’hui.",
+      "step1Tip": "Sur un chantier livré non payé, « Rappel WhatsApp » ouvre un message déjà rédigé pour le client.",
+      "step2Title": "Vos clients",
+      "step2Text": "Dans la liste, cherchez par nom, ville ou téléphone et filtrez « À contacter » ou « Doivent payer ». Ajoutez un client avec « Nouveau client » ou importez-le depuis la Kumi Card et le carnet de MemoLife.",
+      "step2Tip": "Chaque devis enregistré et chaque commande payée du Shop ajoute ou met à jour son client tout seul.",
+      "step3Title": "La fiche client",
+      "step3Text": "Depuis la fiche, vous appelez, écrivez sur WhatsApp ou envoyez un e-mail d’un geste. Vous voyez le montant convenu, l’encaissé et le reste dû, et fixez la « Prochaine étape » avec une date.",
+      "step4Title": "Les chantiers",
+      "step4Text": "Avec « Nouveau chantier », créez un chantier, aussi à partir d’un devis accepté. Sur sa page, changez l’état (À commencer, En cours, Livré, Payé) et cochez les choses à faire.",
+      "step5Title": "Temps et marge",
+      "step5Text": "Lancez le chrono quand vous travaillez : il continue même si vous fermez la page. Indiquez le coût horaire et ajoutez matériaux et frais, aussi depuis Magazzino PRO : « Marge du chantier » vous dit ce qu’il vous reste.",
+      "step5Tip": "Sur la même page, ajoutez photos et documents du chantier : ils restent privés.",
+      "step6Title": "Paiements et comptable",
+      "step6Text": "Enregistrez les paiements reçus en espèces, par virement ou par carte : les comptes du client se mettent à jour. Depuis un paiement, faites le reçu numérique déjà rempli.",
+      "step6Tip": "En bas de la liste des clients, téléchargez clients, chantiers, paiements et heures en fichiers Excel (CSV) pour le comptable."
+    },
+    "brand": {
+      "title": "Les couleurs de votre marque",
+      "summary": "Quatre couleurs choisies une fois et utilisées par Landing Page, Devis, QR Code PRO, Link in Bio et Signature e-mail.",
+      "cta": "Choisir les couleurs de la marque",
+      "step1Title": "Où la trouver",
+      "step1Text": "Ouvrez la Fiche entreprise depuis le menu en haut à droite et, dans la section des couleurs, touchez « Choisir les couleurs de la marque ». Disponible avec les formules Base et Pro.",
+      "step2Title": "Choisissez les couleurs",
+      "step2Text": "Partez « Du logo » (les couleurs sont lues sur le logo de la Fiche entreprise, directement sur le téléphone), de « Générer » avec une association, ou « À la main ». Attribuez les quatre rôles : principale, accent, fond et texte.",
+      "step2Tip": "Touchez un rôle puis une pastille de couleur pour le changer ; l’aperçu se met à jour aussitôt.",
+      "step3Title": "Vérifiez la lisibilité",
+      "step3Text": "À la deuxième étape, vous voyez si textes et boutons se lisent bien. Si une association se lit mal, « Corriger » propose la nuance la plus proche qui convient.",
+      "step4Title": "Choisissez les services et enregistrez",
+      "step4Text": "Cochez les services qui doivent suivre la marque et touchez « Enregistrer les couleurs ». Quand vous changez les couleurs, ces services se mettent à jour seuls.",
+      "step4Tip": "Si vous changez une couleur à la main dans un service, il cesse de suivre la marque : « Utiliser les couleurs de la marque » le réactive."
     }
   },
   "deckTexts": {

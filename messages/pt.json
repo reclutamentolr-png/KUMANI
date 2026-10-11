@@ -7772,6 +7772,42 @@
       "step5Title": "Desafia os amigos",
       "step5Text": "Com «Desafia os amigos» crias um jogo e envias o código por WhatsApp: os amigos entram pela ligação, mesmo sem se registarem. Quando forem de 2 a 4, toca em «Começar o jogo». À vez escolhe-se uma palavra e toca-se em «Tentar»: cada palavra certa fica com a tua cor e vale 1 ponto por letra, +3 por cada cruzamento e o dobro na casa ×2.",
       "step5Tip": "Quem deixa passar duas vezes seguidas sai do jogo. Enquanto ninguém entrar, podes cancelar o desafio."
+    },
+    "clienti": {
+      "title": "Clientes e Trabalhos",
+      "summary": "Clientes, trabalhos, tempo, margem e recebimentos num só lugar, ligados aos seus Orçamentos.",
+      "cta": "Abrir Clientes e Trabalhos",
+      "step1Title": "Hoje",
+      "step1Text": "No topo encontra a secção «Hoje»: quanto tem a receber, quem contactar (com «Ligar» e «Feito»), os trabalhos entregues ainda por pagar e o que começa ou é entregue hoje.",
+      "step1Tip": "Num trabalho entregue e não pago, «Lembrete WhatsApp» abre a mensagem já escrita para o cliente.",
+      "step2Title": "Os seus clientes",
+      "step2Text": "Na lista pesquisa por nome, cidade ou telefone e filtra «A contactar» ou «Devem pagar». Adicione um cliente com «Novo cliente» ou importe-o da Kumi Card e da agenda do MemoLife.",
+      "step2Tip": "Cada orçamento guardado e cada encomenda paga da Shop adiciona ou atualiza o seu cliente sozinho.",
+      "step3Title": "A ficha do cliente",
+      "step3Text": "A partir da ficha liga, escreve no WhatsApp ou envia um email com um toque. Vê o acordado, o recebido e o que ainda deve, e marca o «Próximo passo» com data.",
+      "step4Title": "Os trabalhos",
+      "step4Text": "Com «Novo trabalho» cria um trabalho, também a partir de um orçamento aceite. Na sua página muda o estado (Por começar, Em curso, Entregue, Pago) e marca as tarefas.",
+      "step5Title": "Tempo e margem",
+      "step5Text": "Inicie o cronómetro quando trabalha: continua mesmo que feche a página. Defina o custo por hora e adicione materiais e despesas, também do Magazzino PRO: «Margem do trabalho» diz-lhe quanto lhe fica.",
+      "step5Tip": "Na mesma página carrega fotos e documentos da obra: ficam privados.",
+      "step6Title": "Pagamentos e contabilista",
+      "step6Text": "Registe os pagamentos recebidos em dinheiro, por transferência ou cartão: as contas do cliente atualizam-se. A partir de um pagamento faz o recibo digital já preenchido.",
+      "step6Tip": "No fim da lista de clientes descarrega clientes, trabalhos, pagamentos e horas em ficheiros Excel (CSV) para o contabilista."
+    },
+    "brand": {
+      "title": "As cores da sua marca",
+      "summary": "Quatro cores escolhidas uma vez e usadas por Landing Page, Orçamentos, QR Code PRO, Link in Bio e Assinatura de email.",
+      "cta": "Escolher as cores da marca",
+      "step1Title": "Onde está",
+      "step1Text": "Abra a Ficha da atividade no menu em cima à direita e, na secção das cores, toque em «Escolher as cores da marca». Funciona com os planos Base e Pro.",
+      "step2Title": "Escolha as cores",
+      "step2Text": "Comece «Do logótipo» (as cores são lidas do logótipo da Ficha da atividade, no próprio telemóvel), de «Gerar» com uma combinação ou «À mão». Atribua os quatro papéis: principal, destaque, fundo e texto.",
+      "step2Tip": "Toque num papel e depois num círculo de cor para o mudar; a pré-visualização atualiza-se logo.",
+      "step3Title": "Verifique a legibilidade",
+      "step3Text": "No segundo passo vê se textos e botões se leem bem. Se uma combinação se lê mal, «Corrigir» propõe o tom mais próximo que funciona.",
+      "step4Title": "Escolha os serviços e guarde",
+      "step4Text": "Assinale os serviços que devem seguir a marca e toque em «Guardar as cores». Quando muda as cores, esses serviços atualizam-se sozinhos.",
+      "step4Tip": "Se mudar uma cor à mão num serviço, deixa de seguir a marca: com «Usar as cores da marca» volta a ativá-lo."
     }
   },
   "deckTexts": {

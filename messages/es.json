@@ -7772,6 +7772,42 @@
       "step5Title": "Desafía a tus amigos",
       "step5Text": "Con «Desafía a tus amigos» creas una partida y envías el código por WhatsApp: tus amigos entran desde el enlace, incluso sin registrarse. Cuando seáis de 2 a 4, toca «Empezar la partida». Por turnos se elige una palabra y se toca «Probar»: cada palabra correcta toma tu color y vale 1 punto por letra, +3 por cada cruce y el doble en la casilla ×2.",
       "step5Tip": "Quien deja pasar dos turnos seguidos sale de la partida. Mientras nadie haya entrado, puedes cancelar el desafío."
+    },
+    "clienti": {
+      "title": "Clientes y Trabajos",
+      "summary": "Clientes, trabajos, tiempo, margen y cobros en un solo lugar, conectados con tus Presupuestos.",
+      "cta": "Abrir Clientes y Trabajos",
+      "step1Title": "Hoy",
+      "step1Text": "Arriba encuentras la sección «Hoy»: cuánto tienes que cobrar, a quién contactar (con «Llamar» y «Hecho»), los trabajos entregados sin saldar y lo que empieza o se entrega hoy.",
+      "step1Tip": "En un trabajo entregado y sin pagar, «Recordatorio WhatsApp» abre el mensaje ya escrito para el cliente.",
+      "step2Title": "Tus clientes",
+      "step2Text": "En la lista buscas por nombre, ciudad o teléfono y filtras «Para contactar» o «Deben pagar». Añade un cliente con «Nuevo cliente» o impórtalo desde la Kumi Card y la agenda de MemoLife.",
+      "step2Tip": "Cada presupuesto guardado y cada pedido pagado del Shop añade o actualiza su cliente solo.",
+      "step3Title": "La ficha del cliente",
+      "step3Text": "Desde la ficha llamas, escribes por WhatsApp o envías un email con un toque. Ves lo acordado, lo cobrado y lo que aún debe, y fijas el «Próximo paso» con fecha.",
+      "step4Title": "Los trabajos",
+      "step4Text": "Con «Nuevo trabajo» creas un trabajo, también desde un presupuesto aceptado. En su página cambias el estado (Por empezar, En curso, Entregado, Pagado) y marcas las tareas.",
+      "step5Title": "Tiempo y margen",
+      "step5Text": "Inicia el cronómetro cuando trabajas: sigue aunque cierres la página. Indica el coste por hora y añade materiales y gastos, también desde Magazzino PRO: «Margen del trabajo» te dice cuánto te queda.",
+      "step5Tip": "En la misma página subes fotos y documentos de la obra: son privados.",
+      "step6Title": "Pagos y gestor",
+      "step6Text": "Registra los pagos recibidos en efectivo, por transferencia o con tarjeta: las cuentas del cliente se actualizan. Desde un pago haces el recibo digital ya rellenado.",
+      "step6Tip": "Al final de la lista de clientes descargas clientes, trabajos, pagos y horas en archivos Excel (CSV) para tu gestor."
+    },
+    "brand": {
+      "title": "Los colores de tu marca",
+      "summary": "Cuatro colores elegidos una vez y usados por Landing Page, Presupuestos, QR Code PRO, Link in Bio y Firma de email.",
+      "cta": "Elegir los colores de la marca",
+      "step1Title": "Dónde está",
+      "step1Text": "Abre la Ficha del negocio desde el menú arriba a la derecha y, en la sección de colores, toca «Elegir los colores de la marca». Funciona con los planes Base y Pro.",
+      "step2Title": "Elige los colores",
+      "step2Text": "Empieza «Del logo» (los colores se leen del logo de la Ficha del negocio, en el propio móvil), desde «Generar» con una combinación o «A mano». Asigna los cuatro roles: principal, acento, fondo y texto.",
+      "step2Tip": "Toca un rol y luego un círculo de color para cambiarlo; la vista previa se actualiza al momento.",
+      "step3Title": "Comprueba la legibilidad",
+      "step3Text": "En el segundo paso ves si textos y botones se leen bien. Si una combinación se lee mal, «Corregir» propone el tono más cercano que funciona.",
+      "step4Title": "Elige los servicios y guarda",
+      "step4Text": "Marca los servicios que deben seguir la marca y toca «Guardar los colores». Cuando cambias los colores, esos servicios se actualizan solos.",
+      "step4Tip": "Si cambias un color a mano en un servicio, deja de seguir la marca: con «Usar los colores de la marca» lo reactivas."
     }
   },
   "deckTexts": {
