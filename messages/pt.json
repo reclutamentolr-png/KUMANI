@@ -167,7 +167,7 @@
     "toolDigitalReceiptTitle": "Recibos Digitais",
     "toolDigitalReceiptDescription": "Recibo digital privado para entregas, empréstimos e trocas, com confirmação do destinatário.",
     "toolNeurobalanceTitle": "Neurobalance",
-    "toolNeurobalanceDescription": "Frequências binaurais para a regeneração e o equilíbrio profundo.",
+    "toolNeurobalanceDescription": "Sons para relaxar: frequências, meditação e natureza.",
     "toolListingsTitle": "Anúncios da Comunidade",
     "toolListingsDescription": "Publique serviços e produtos, encontre colaborações na comunidade.",
     "bonusEyebrow": "Programa de Vantagens",
@@ -706,7 +706,7 @@
     "memolife": "MemoLife",
     "memolifeDescription": "A tua agenda do dia a dia: compromissos, lembretes, notas e contactos. No calendário vês também faturas e prazos.",
     "neurobalance": "Neurobalance",
-    "neurobalanceDescription": "Frequências binaurais para regeneração e equilíbrio profundo.",
+    "neurobalanceDescription": "Sons para relaxar: frequências, meditação e natureza.",
     "aureya": "Aureya",
     "aureyaDescription": "Audição, acuidade visual e grelha de Amsler: registe e compare os resultados ao longo do tempo.",
     "spendly": "Spendly",
@@ -937,7 +937,7 @@
     },
     "backToMarketplace": "Voltar ao Ecossistema",
     "eyebrow": "Neuroacústica consciente",
-    "subtitle": "Frequências binaurais para regeneração e equilíbrio profundo.",
+    "subtitle": "Sons para relaxar: frequências, meditação e natureza.",
     "headphones": "Use auscultadores estéreo para distinguir os dois canais",
     "sessionAudio": "Sessão de áudio",
     "specialSoundLabel": "Special Sound",
@@ -1014,19 +1014,19 @@
     },
     "specialSounds": {
       "guarigione": {
-        "name": "Cura",
+        "name": "Calma profunda",
         "description": "Uma frequência para explorar durante uma pausa relaxante."
       },
       "ripristina-benessere": {
-        "name": "Restaurar o bem-estar",
-        "description": "Uma escuta para acompanhar um momento de renovação."
+        "name": "Novo começo",
+        "description": "Uma escuta pensada para acompanhar um momento de pausa."
       },
       "liberare-tensione": {
         "name": "Libertar a tensão",
         "description": "Um tom suave para desacelerar."
       },
       "riparazione-dna": {
-        "name": "Reparação do DNA",
+        "name": "Harmonia",
         "description": "Uma escuta meditativa tradicionalmente associada ao amor."
       },
       "innalzare-vibrazioni": {

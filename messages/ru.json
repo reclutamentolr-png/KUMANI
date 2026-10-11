@@ -167,7 +167,7 @@
     "toolDigitalReceiptTitle": "Цифровые расписки",
     "toolDigitalReceiptDescription": "Частная цифровая расписка для доставок, займов и обменов с подтверждением получателя.",
     "toolNeurobalanceTitle": "Neurobalance",
-    "toolNeurobalanceDescription": "Бинауральные частоты для регенерации и глубокого баланса.",
+    "toolNeurobalanceDescription": "Звуки для расслабления: частоты, медитация и природа.",
     "toolListingsTitle": "Доска объявлений сообщества",
     "toolListingsDescription": "Публикуйте услуги и товары, находите сотрудничество в сообществе.",
     "bonusEyebrow": "Программа преимуществ",
@@ -706,7 +706,7 @@
     "memolife": "MemoLife",
     "memolifeDescription": "Ваш ежедневник: встречи, напоминания, заметки и контакты. В календаре видны также счета и сроки.",
     "neurobalance": "Neurobalance",
-    "neurobalanceDescription": "Бинауральные частоты для восстановления и глубокого равновесия.",
+    "neurobalanceDescription": "Звуки для расслабления: частоты, медитация и природа.",
     "aureya": "Aureya",
     "aureyaDescription": "Слух, острота зрения и сетка Амслера: сохраняй и сравнивай результаты со временем.",
     "spendly": "Spendly",
@@ -937,7 +937,7 @@
     },
     "backToMarketplace": "Назад в Экосистему",
     "eyebrow": "Осознанная нейроакустика",
-    "subtitle": "Бинауральные частоты для восстановления и глубокого равновесия.",
+    "subtitle": "Звуки для расслабления: частоты, медитация и природа.",
     "headphones": "Используйте стереонаушники для разделения каналов",
     "sessionAudio": "Аудиосессия",
     "specialSoundLabel": "Special Sound",
@@ -1014,19 +1014,19 @@
     },
     "specialSounds": {
       "guarigione": {
-        "name": "Исцеление",
+        "name": "Глубокий покой",
         "description": "Частота для спокойной расслабляющей паузы."
       },
       "ripristina-benessere": {
-        "name": "Восстановление благополучия",
-        "description": "Для момента обновления."
+        "name": "Новое начало",
+        "description": "Прослушивание, чтобы сопровождать минуту паузы."
       },
       "liberare-tensione": {
         "name": "Снять напряжение",
         "description": "Мягкий тон для замедления."
       },
       "riparazione-dna": {
-        "name": "Восстановление ДНК",
+        "name": "Гармония",
         "description": "Медитативное прослушивание, традиционно связанное с любовью."
       },
       "innalzare-vibrazioni": {

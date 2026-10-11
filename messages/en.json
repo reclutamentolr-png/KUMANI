@@ -171,7 +171,7 @@
     "toolDigitalReceiptTitle": "Digital Receipts",
     "toolDigitalReceiptDescription": "A private digital receipt for deliveries, loans and exchanges, with recipient confirmation.",
     "toolNeurobalanceTitle": "Neurobalance",
-    "toolNeurobalanceDescription": "Binaural frequencies for deep regeneration and balance.",
+    "toolNeurobalanceDescription": "Sounds to help you relax: frequencies, meditation and nature.",
     "toolListingsTitle": "Community Listings",
     "toolListingsDescription": "Post services and products, find collaborations in the community.",
     "bonusEyebrow": "Rewards Program",
@@ -752,7 +752,7 @@
     "memolife": "MemoLife",
     "memolifeDescription": "Your everyday diary: appointments, reminders, notes and contacts. The calendar also shows your bills and deadlines.",
     "neurobalance": "Neurobalance",
-    "neurobalanceDescription": "Binaural frequencies for regeneration and deep balance.",
+    "neurobalanceDescription": "Sounds to help you relax: frequencies, meditation and nature.",
     "aureya": "Aureya",
     "aureyaDescription": "Hearing, visual acuity and the Amsler grid: record and compare your results over time.",
     "spendly": "Spendly",
@@ -973,7 +973,7 @@
     },
     "backToMarketplace": "Back to the Ecosystem",
     "eyebrow": "Mindful neuroacoustics",
-    "subtitle": "Binaural frequencies for regeneration and deep balance.",
+    "subtitle": "Sounds to help you relax: frequencies, meditation and nature.",
     "headphones": "Use stereo headphones to distinguish the two channels",
     "sessionAudio": "Audio session",
     "specialSoundLabel": "Special Sound",
@@ -1050,19 +1050,19 @@
     },
     "specialSounds": {
       "guarigione": {
-        "name": "Healing",
+        "name": "Deep stillness",
         "description": "A sound frequency to explore during a relaxing pause."
       },
       "ripristina-benessere": {
-        "name": "Restore wellbeing",
-        "description": "A listening experience for a moment of renewal."
+        "name": "New beginning",
+        "description": "A listening experience to accompany a moment of pause."
       },
       "liberare-tensione": {
         "name": "Release tension",
         "description": "A gentle tone for slowing down and letting go."
       },
       "riparazione-dna": {
-        "name": "DNA repair",
+        "name": "Harmony",
         "description": "A meditative listening experience traditionally associated with the frequency of love."
       },
       "innalzare-vibrazioni": {
