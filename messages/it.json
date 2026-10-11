@@ -11934,6 +11934,26 @@
       "delete": "Elimina {name}",
       "add": "Aggiungi",
       "hint": "Foto del cantiere, contratti, schede tecniche. Restano private: le vedi solo tu."
+    },
+    "listTitle": "Clienti",
+    "today": {
+      "title": "Oggi",
+      "toCollect": "Da incassare",
+      "afterDelivery": "Consegnati, da incassare",
+      "openJobs": "Lavori aperti",
+      "allClear": "Tutto in ordine: nessuno da sentire e niente da incassare dopo una consegna.",
+      "stepsTitle": "Da sentire",
+      "lateDays": "{days, plural, one {in ritardo di # giorno} other {in ritardo di # giorni}}",
+      "doneFor": "Fatto: {name}",
+      "collectTitle": "Consegnati, da incassare",
+      "reminderText": "Buongiorno {name}, le ricordo il saldo di {amount} per «{title}». Grazie!",
+      "deliveredToday": "consegnato oggi",
+      "deliveredDays": "{days, plural, one {consegnato da # giorno} other {consegnato da # giorni}}",
+      "remind": "Promemoria WhatsApp",
+      "agendaTitle": "In agenda",
+      "starts": "Inizia oggi",
+      "delivery": "Consegna oggi",
+      "deliveryLate": "{days, plural, one {Consegna in ritardo di # giorno} other {Consegna in ritardo di # giorni}}"
     }
   }
 }

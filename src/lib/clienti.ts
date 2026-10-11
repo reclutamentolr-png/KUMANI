@@ -262,3 +262,13 @@ export function formatClock(ms: number): string {
   const pad = (n: number) => String(n).padStart(2, '0')
   return `${Math.floor(total / 3600)}:${pad(Math.floor((total % 3600) / 60))}:${pad(total % 60)}`
 }
+
+// Fase 4: la sezione «Oggi» (my_clients_today)
+export interface TodayData {
+  today: string
+  steps: { id: string; name: string; phone: string | null; step: string; due: string }[]
+  toCollect: { id: string; title: string; clientId: string; clientName: string; phone: string | null; left: number; days: number }[]
+  agenda: { id: string; title: string; clientName: string; kind: 'start' | 'due' }[]
+  lateDue: { id: string; title: string; clientName: string; due: string }[]
+  openJobs: number
+}

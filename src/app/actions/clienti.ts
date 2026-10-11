@@ -20,6 +20,7 @@ import {
   type JobFile,
   type JobProduct,
   type TimeEntry,
+  type TodayData,
   type ClientFormData,
   type ClientJob,
   type ClientPayment,
@@ -689,4 +690,18 @@ export async function deleteJobFile(id: string): Promise<ActionResult<null>> {
   if (error) return { success: false, message: 'saveError' }
   await g.supabase.storage.from(JOB_BUCKET).remove([row.path])
   return { success: true, data: null }
+}
+
+// ——— «Oggi» (fase 4) ———
+
+export async function getToday(): Promise<TodayData | null> {
+  const g = await gate()
+  if (!g) return null
+  const { data, error } = await g.supabase.rpc('my_clients_today')
+  if (error || !data) {
+    console.error('[Clienti] getToday failed:', error)
+    return null
+  }
+  const d = data as TodayData
+  return { ...d, toCollect: d.toCollect.map((x) => ({ ...x, left: Number(x.left) || 0, days: Number(x.days) || 0 })), openJobs: Number(d.openJobs) || 0 }
 }

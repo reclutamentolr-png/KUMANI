@@ -11934,6 +11934,26 @@
       "delete": "Eliminar {name}",
       "add": "Añadir",
       "hint": "Fotos de la obra, contratos, fichas técnicas. Son privados: solo los ves tú."
+    },
+    "listTitle": "Clientes",
+    "today": {
+      "title": "Hoy",
+      "toCollect": "Por cobrar",
+      "afterDelivery": "Entregados, por cobrar",
+      "openJobs": "Trabajos abiertos",
+      "allClear": "Todo en orden: nadie a quien contactar y nada por cobrar tras una entrega.",
+      "stepsTitle": "Para contactar",
+      "lateDays": "{days, plural, one {# día de retraso} other {# días de retraso}}",
+      "doneFor": "Hecho: {name}",
+      "collectTitle": "Entregados, por cobrar",
+      "reminderText": "Hola {name}, le recuerdo el saldo de {amount} por «{title}». ¡Gracias!",
+      "deliveredToday": "entregado hoy",
+      "deliveredDays": "{days, plural, one {entregado hace # día} other {entregado hace # días}}",
+      "remind": "Recordatorio WhatsApp",
+      "agendaTitle": "En agenda",
+      "starts": "Empieza hoy",
+      "delivery": "Entrega hoy",
+      "deliveryLate": "{days, plural, one {Entrega con # día de retraso} other {Entrega con # días de retraso}}"
     }
   }
 }

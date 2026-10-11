@@ -11934,6 +11934,26 @@
       "delete": "Supprimer {name}",
       "add": "Ajouter",
       "hint": "Photos du chantier, contrats, fiches techniques. Ils restent privés : vous seul les voyez."
+    },
+    "listTitle": "Clients",
+    "today": {
+      "title": "Aujourd’hui",
+      "toCollect": "À encaisser",
+      "afterDelivery": "Livrés, à encaisser",
+      "openJobs": "Chantiers ouverts",
+      "allClear": "Tout est en ordre : personne à contacter et rien à encaisser après une livraison.",
+      "stepsTitle": "À contacter",
+      "lateDays": "{days, plural, one {# jour de retard} other {# jours de retard}}",
+      "doneFor": "Fait : {name}",
+      "collectTitle": "Livrés, à encaisser",
+      "reminderText": "Bonjour {name}, je vous rappelle le solde de {amount} pour « {title} ». Merci !",
+      "deliveredToday": "livré aujourd’hui",
+      "deliveredDays": "{days, plural, one {livré il y a # jour} other {livré il y a # jours}}",
+      "remind": "Rappel WhatsApp",
+      "agendaTitle": "Au programme",
+      "starts": "Commence aujourd’hui",
+      "delivery": "Livraison aujourd’hui",
+      "deliveryLate": "{days, plural, one {Livraison en retard de # jour} other {Livraison en retard de # jours}}"
     }
   }
 }

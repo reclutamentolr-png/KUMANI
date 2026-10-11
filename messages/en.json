@@ -11934,6 +11934,26 @@
       "delete": "Delete {name}",
       "add": "Add",
       "hint": "Site photos, contracts, data sheets. They stay private: only you can see them."
+    },
+    "listTitle": "Clients",
+    "today": {
+      "title": "Today",
+      "toCollect": "To collect",
+      "afterDelivery": "Delivered, unpaid",
+      "openJobs": "Open jobs",
+      "allClear": "All clear: nobody to contact and nothing to collect after a delivery.",
+      "stepsTitle": "To contact",
+      "lateDays": "{days, plural, one {# day late} other {# days late}}",
+      "doneFor": "Done: {name}",
+      "collectTitle": "Delivered, still to collect",
+      "reminderText": "Hello {name}, a friendly reminder about the balance of {amount} for “{title}”. Thank you!",
+      "deliveredToday": "delivered today",
+      "deliveredDays": "{days, plural, one {delivered # day ago} other {delivered # days ago}}",
+      "remind": "WhatsApp reminder",
+      "agendaTitle": "On the agenda",
+      "starts": "Starts today",
+      "delivery": "Delivery today",
+      "deliveryLate": "{days, plural, one {Delivery # day late} other {Delivery # days late}}"
     }
   }
 }

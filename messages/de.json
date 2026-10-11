@@ -11934,6 +11934,26 @@
       "delete": "{name} löschen",
       "add": "Hinzufügen",
       "hint": "Baustellenfotos, Verträge, Datenblätter. Sie bleiben privat: Nur du siehst sie."
+    },
+    "listTitle": "Kunden",
+    "today": {
+      "title": "Heute",
+      "toCollect": "Offen",
+      "afterDelivery": "Übergeben, unbezahlt",
+      "openJobs": "Offene Aufträge",
+      "allClear": "Alles erledigt: niemand zu kontaktieren und nichts nach einer Übergabe offen.",
+      "stepsTitle": "Zu kontaktieren",
+      "lateDays": "{days, plural, one {# Tag überfällig} other {# Tage überfällig}}",
+      "doneFor": "Erledigt: {name}",
+      "collectTitle": "Übergeben, noch offen",
+      "reminderText": "Guten Tag {name}, ich erinnere freundlich an den offenen Betrag von {amount} für „{title}“. Vielen Dank!",
+      "deliveredToday": "heute übergeben",
+      "deliveredDays": "{days, plural, one {vor # Tag übergeben} other {vor # Tagen übergeben}}",
+      "remind": "WhatsApp-Erinnerung",
+      "agendaTitle": "Auf dem Plan",
+      "starts": "Beginnt heute",
+      "delivery": "Übergabe heute",
+      "deliveryLate": "{days, plural, one {Übergabe # Tag überfällig} other {Übergabe # Tage überfällig}}"
     }
   }
 }

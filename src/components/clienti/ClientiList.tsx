@@ -6,12 +6,13 @@ import { ArrowRight, Plus, Search, Timer } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { useLocalizedRouter as useRouter } from '@/lib/useLocalizedRouter'
 import { createClientRecord } from '@/app/actions/clienti'
-import { CLIENT_FILTERS, EMPTY_CLIENT_FORM, formatClock, formatEur, isStepDue, type ClientFilter, type ClientOverview } from '@/lib/clienti'
+import { CLIENT_FILTERS, EMPTY_CLIENT_FORM, formatClock, formatEur, isStepDue, type ClientFilter, type ClientOverview, type TodayData } from '@/lib/clienti'
 import ClientForm, { inputClass } from './ClientForm'
+import TodaySection from './TodaySection'
 
 type RunningTimer = { jobId: string; jobTitle: string; clientName: string; startedAt: string } | null
 
-export default function ClientiList({ clients, running }: { clients: ClientOverview[]; running: RunningTimer }) {
+export default function ClientiList({ clients, running, today }: { clients: ClientOverview[]; running: RunningTimer; today: TodayData | null }) {
   const t = useTranslations('clienti')
   const locale = useLocale()
   const router = useRouter()
@@ -49,20 +50,9 @@ export default function ClientiList({ clients, running }: { clients: ClientOverv
   return (
     <div className="space-y-5">
       {running && <RunningBand running={running} />}
-      <div className="grid grid-cols-2 gap-3">
-        <div className="rounded-2xl border border-[var(--gold)]/25 bg-white p-4">
-          <p className="text-xs font-semibold text-[var(--muted)]">{t('toCollect')}</p>
-          <p className="mt-1 text-xl font-extrabold text-[var(--ink)]">{formatEur(owedTotal, locale)}</p>
-        </div>
-        <button
-          type="button"
-          onClick={() => setFilter('due')}
-          className="rounded-2xl border border-[var(--gold)]/25 bg-white p-4 text-left transition-colors hover:border-[var(--gold)]"
-        >
-          <p className="text-xs font-semibold text-[var(--muted)]">{t('toContactToday')}</p>
-          <p className={`mt-1 text-xl font-extrabold ${dueCount > 0 ? 'text-[#8a6a1f]' : 'text-[var(--ink)]'}`}>{dueCount}</p>
-        </button>
-      </div>
+      {today && clients.length > 0 && <TodaySection data={today} owedTotal={owedTotal} />}
+
+      <h2 className="pt-2 text-2xl font-bold text-[var(--ink)]">{t('listTitle')}</h2>
 
       {adding ? (
         <section className="rounded-3xl border border-[var(--gold)]/30 bg-white p-5 shadow-sm">
