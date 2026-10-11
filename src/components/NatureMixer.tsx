@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { CloudLightning, CloudRain, Droplets, Flame, LoaderCircle, Moon, Pause, Play, Trees, Volume2, Waves, Wind, type LucideIcon } from 'lucide-react'
+import { CloudLightning, CloudRain, Droplets, Flame, LoaderCircle, Moon, Pause, Play, Trees, Waves, Wind, type LucideIcon } from 'lucide-react'
 import { useNeurobalanceAudio } from '@/components/NeurobalanceAudioProvider'
 import type { NaturePreset } from '@/lib/natureSounds'
 
@@ -20,7 +20,7 @@ const PRESETS: { id: NaturePreset; Icon: LucideIcon }[] = [
 // NeurobalancePlayer) — questo componente è solo la vista.
 export default function NatureMixer() {
   const t = useTranslations('neurobalance')
-  const { activeNature, natureLoading, natureVolume, toggleNature, setNatureVolume } = useNeurobalanceAudio()
+  const { activeNature, natureLoading, toggleNature } = useNeurobalanceAudio()
 
   return (
     <div className="relative overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-[var(--ink)] via-[#20202a] to-[var(--ink)] p-5 shadow-xl sm:p-6">
@@ -47,7 +47,12 @@ export default function NatureMixer() {
               >
                 <button
                   type="button"
-                  onClick={() => toggleNature(preset.id)}
+                  onClick={async () => {
+                    const starting = activeNature !== preset.id
+                    await toggleNature(preset.id)
+                    // I comandi (mixer) sono nel riquadro in alto: ci si porta lì
+                    if (starting) document.getElementById('nb-player')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                  }}
                   disabled={natureLoading !== null && !isLoading}
                   className="flex w-full items-start justify-between gap-2 text-left disabled:opacity-40"
                 >
@@ -72,33 +77,15 @@ export default function NatureMixer() {
                 </button>
 
                 {isActive && (
-                  <>
-                    <div className="mt-2 flex items-end gap-0.5" aria-hidden="true">
-                      {Array.from({ length: 10 }, (_, index) => (
-                        <span
-                          key={index}
-                          className={`flex-1 rounded-full bg-[var(--gold-bright)]/70 animate-pulse ${index % 3 === 0 ? 'h-3' : index % 2 === 0 ? 'h-2' : 'h-1.5'}`}
-                          style={{ animationDelay: `${index * 90}ms` }}
-                        />
-                      ))}
-                    </div>
-                    <div className="mt-2 flex items-center gap-2">
-                      <Volume2 className="h-3.5 w-3.5 shrink-0 text-[var(--gold-bright)]" />
-                      <label htmlFor={`nature-volume-${preset.id}`} className="sr-only">
-                        {t('natureVolumeLabel')}
-                      </label>
-                      <input
-                        id={`nature-volume-${preset.id}`}
-                        type="range"
-                        min={0}
-                        max={1}
-                        step={0.05}
-                        value={natureVolume}
-                        onChange={(event) => setNatureVolume(Number(event.target.value))}
-                        className="w-full accent-[var(--gold)]"
+                  <div className="mt-2 flex items-end gap-0.5" aria-hidden="true">
+                    {Array.from({ length: 10 }, (_, index) => (
+                      <span
+                        key={index}
+                        className={`flex-1 rounded-full bg-[var(--gold-bright)]/70 animate-pulse ${index % 3 === 0 ? 'h-3' : index % 2 === 0 ? 'h-2' : 'h-1.5'}`}
+                        style={{ animationDelay: `${index * 90}ms` }}
                       />
-                    </div>
-                  </>
+                    ))}
+                  </div>
                 )}
               </div>
             )

@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
 import { awardNeurobalancePoint } from '@/app/actions/neurobalance'
-import { NatureSoundsEngine, type NaturePreset } from '@/lib/natureSounds'
+import { EQ_NEUTRAL, NATURE_MOODS, NatureSoundsEngine, type NaturePreset } from '@/lib/natureSounds'
 import { presets, specialSounds, tracks, MIN_LISTEN_SECONDS_FOR_POINT, type Preset, type SpecialSound, type Track } from '@/lib/neurobalancePresets'
 
 interface NeurobalanceAudioValue {
@@ -18,6 +18,27 @@ interface NeurobalanceAudioValue {
   activeNature: NaturePreset | null
   natureLoading: NaturePreset | null
   natureVolume: number
+  // Mixer della natura (riquadro nero): equalizzatore, atmosfere, animazione,
+  // spegnimento automatico, pausa e secondo suono
+  natureEq: number[]
+  natureMood: string | null
+  natureAnimate: boolean
+  naturePaused: boolean
+  natureTimerMinutes: number | null
+  natureTimerEndsAt: number | null
+  natureLayer: NaturePreset | null
+  natureLayerVolume: number
+  setNatureBand: (index: number, value: number) => void
+  applyNatureMood: (id: string) => void
+  toggleNatureAnimate: () => void
+  toggleNaturePause: () => Promise<void>
+  setNatureTimer: (minutes: number | null) => void
+  toggleNatureLayer: (id: NaturePreset) => Promise<void>
+  setNatureLayerVolume: (volume: number) => void
+  // Qualcosa scelto da quando si è aperta la pagina (all'inizio nulla è preimpostato)
+  hasSelection: boolean
+  // Scelta una sessione, una frequenza o un audio registrato (non solo la natura)
+  sessionChosen: boolean
   handlePresetCardClick: (preset: Preset) => Promise<void>
   handleSpecialSoundCardClick: (sound: SpecialSound) => Promise<void>
   handleTrackCardClick: (track: Track) => Promise<void>
@@ -56,6 +77,19 @@ export function NeurobalanceAudioProvider({ children }: { children: ReactNode })
   const [activeNature, setActiveNature] = useState<NaturePreset | null>(null)
   const [natureLoading, setNatureLoading] = useState<NaturePreset | null>(null)
   const [natureVolume, setNatureVolumeState] = useState(0.6)
+  const [natureEq, setNatureEq] = useState<number[]>([...EQ_NEUTRAL])
+  const [natureMood, setNatureMood] = useState<string | null>('natural')
+  const [natureAnimate, setNatureAnimate] = useState(false)
+  const [naturePaused, setNaturePaused] = useState(false)
+  const [natureTimerMinutes, setNatureTimerMinutes] = useState<number | null>(null)
+  const [natureTimerEndsAt, setNatureTimerEndsAt] = useState<number | null>(null)
+  const [natureLayer, setNatureLayerState] = useState<NaturePreset | null>(null)
+  const [natureLayerVolume, setNatureLayerVolumeState] = useState(0.35)
+  const [hasSelection, setHasSelection] = useState(false)
+  const [sessionChosen, setSessionChosen] = useState(false)
+  // Valori di partenza dell'animazione (l'atmosfera scelta o i cursori mossi a mano)
+  const eqBaseRef = useRef<number[]>([...EQ_NEUTRAL])
+  const eqRef = useRef<number[]>([...EQ_NEUTRAL])
 
   const audioContextRef = useRef<AudioContext | null>(null)
   const gainRef = useRef<GainNode | null>(null)
@@ -217,6 +251,8 @@ export function NeurobalanceAudioProvider({ children }: { children: ReactNode })
 
   const handlePresetCardClick = async (preset: Preset) => {
     const isThisPlaying = isPlaying && !selectedTrack && !selectedSpecialSound && selectedId === preset.id
+    setHasSelection(true)
+    setSessionChosen(true)
     stopAudio()
     stopTrack()
     if (isThisPlaying) return
@@ -227,6 +263,8 @@ export function NeurobalanceAudioProvider({ children }: { children: ReactNode })
 
   const handleSpecialSoundCardClick = async (sound: SpecialSound) => {
     const isThisPlaying = isPlaying && selectedSpecialSound?.id === sound.id
+    setHasSelection(true)
+    setSessionChosen(true)
     stopAudio()
     stopTrack()
     if (isThisPlaying) return
@@ -235,6 +273,8 @@ export function NeurobalanceAudioProvider({ children }: { children: ReactNode })
   }
 
   const handleTrackCardClick = async (track: Track) => {
+    setHasSelection(true)
+    setSessionChosen(true)
     // La stessa traccia: pausa o ripresa; un'altra: si riparte da capo
     if (selectedTrack?.id === track.id && trackRef.current) {
       await togglePlayback()
@@ -259,23 +299,128 @@ export function NeurobalanceAudioProvider({ children }: { children: ReactNode })
     setRemaining(selectedSpecialSound ? 15 * 60 : selected.duration * 60)
   }
 
+  // Fine del suono della natura: si azzerano pausa, secondo suono e timer
+  const endNature = () => {
+    natureEngineRef.current?.fadeStop()
+    setActiveNature(null)
+    setNaturePaused(false)
+    setNatureLayerState(null)
+    setNatureTimerEndsAt(null)
+  }
+
   const toggleNature = async (id: NaturePreset) => {
     const eng = natureEngineRef.current
     if (!eng || natureLoading) return
+    setHasSelection(true)
     if (activeNature === id) {
-      eng.fadeStop()
-      setActiveNature(null)
+      endNature()
       return
     }
     setNatureLoading(id)
     try {
+      eng.setEq(eqRef.current, 0.01)
       await eng.start(id, natureVolume)
       setActiveNature(id)
+      setNaturePaused(false)
+      // Il secondo suono non può essere uguale al principale
+      if (natureLayer === id) {
+        setNatureLayerState(null)
+        void eng.setLayer(null)
+      }
+      if (natureTimerMinutes && !natureTimerEndsAt) setNatureTimerEndsAt(Date.now() + natureTimerMinutes * 60_000)
     } catch (err) {
       console.error('[NeurobalanceAudio] failed to start nature sound:', id, err)
     } finally {
       setNatureLoading(null)
     }
+  }
+
+  const applyEq = (values: number[], smooth?: number) => {
+    eqRef.current = values
+    setNatureEq(values)
+    natureEngineRef.current?.setEq(values, smooth)
+  }
+
+  const setNatureBand = (index: number, value: number) => {
+    const next = eqRef.current.slice()
+    next[index] = Math.max(0, Math.min(100, Math.round(value)))
+    eqBaseRef.current = next
+    setNatureMood(null)
+    applyEq(next)
+  }
+
+  const applyNatureMood = (id: string) => {
+    const mood = NATURE_MOODS.find((m) => m.id === id)
+    if (!mood) return
+    const values = mood.values ? [...mood.values] : EQ_NEUTRAL.map(() => Math.round(20 + Math.random() * 60))
+    eqBaseRef.current = values
+    setNatureMood(id)
+    applyEq(values, 0.25)
+  }
+
+  const toggleNatureAnimate = () => setNatureAnimate((on) => !on)
+
+  // Animazione: i cursori si muovono piano attorno ai valori scelti
+  useEffect(() => {
+    if (!natureAnimate || !activeNature || naturePaused) return
+    const interval = setInterval(() => {
+      const next = eqRef.current.map((value, index) => {
+        const base = eqBaseRef.current[index]
+        const drift = value + (Math.random() * 12 - 6) + (base - value) * 0.25
+        return Math.max(0, Math.min(100, Math.round(drift)))
+      })
+      applyEq(next, 1.2)
+    }, 1800)
+    return () => clearInterval(interval)
+  }, [natureAnimate, activeNature, naturePaused])
+
+  const toggleNaturePause = async () => {
+    const eng = natureEngineRef.current
+    if (!eng || !activeNature) return
+    if (naturePaused) {
+      await eng.resume()
+      setNaturePaused(false)
+    } else {
+      await eng.pause()
+      setNaturePaused(true)
+    }
+  }
+
+  // Spegnimento automatico: null = mai
+  const setNatureTimer = (minutes: number | null) => {
+    setNatureTimerMinutes(minutes)
+    setNatureTimerEndsAt(minutes && activeNature ? Date.now() + minutes * 60_000 : null)
+  }
+
+  useEffect(() => {
+    if (!natureTimerEndsAt) return
+    const wait = Math.max(0, natureTimerEndsAt - Date.now())
+    const timeout = setTimeout(() => {
+      natureEngineRef.current?.fadeStop(4)
+      setActiveNature(null)
+      setNaturePaused(false)
+      setNatureLayerState(null)
+      setNatureTimerEndsAt(null)
+    }, wait)
+    return () => clearTimeout(timeout)
+  }, [natureTimerEndsAt])
+
+  const toggleNatureLayer = async (id: NaturePreset) => {
+    const eng = natureEngineRef.current
+    if (!eng || !activeNature || id === activeNature) return
+    const next = natureLayer === id ? null : id
+    setNatureLayerState(next)
+    try {
+      await eng.setLayer(next)
+    } catch (err) {
+      console.error('[NeurobalanceAudio] failed to start second sound:', id, err)
+      setNatureLayerState(null)
+    }
+  }
+
+  const setNatureLayerVolume = (v: number) => {
+    setNatureLayerVolumeState(v)
+    natureEngineRef.current?.setLayerVolume(v)
   }
 
   const setNatureVolume = (v: number) => {
@@ -286,8 +431,7 @@ export function NeurobalanceAudioProvider({ children }: { children: ReactNode })
   const stopEverything = () => {
     stopAudio()
     stopTrack()
-    natureEngineRef.current?.fadeStop()
-    setActiveNature(null)
+    endNature()
   }
 
   return (
@@ -305,6 +449,23 @@ export function NeurobalanceAudioProvider({ children }: { children: ReactNode })
         activeNature,
         natureLoading,
         natureVolume,
+        natureEq,
+        natureMood,
+        natureAnimate,
+        naturePaused,
+        natureTimerMinutes,
+        natureTimerEndsAt,
+        natureLayer,
+        natureLayerVolume,
+        setNatureBand,
+        applyNatureMood,
+        toggleNatureAnimate,
+        toggleNaturePause,
+        setNatureTimer,
+        toggleNatureLayer,
+        setNatureLayerVolume,
+        hasSelection,
+        sessionChosen,
         handlePresetCardClick,
         handleSpecialSoundCardClick,
         handleTrackCardClick,
