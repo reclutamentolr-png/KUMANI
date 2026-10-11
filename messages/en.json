@@ -7824,6 +7824,42 @@
       "step4Title": "Choose services and save",
       "step4Text": "Tick the services that should follow your brand and tap “Save colors”. When you change the colors, those services update by themselves.",
       "step4Tip": "If you change a color by hand in a service, it stops following your brand: “Use brand colors” turns it back on."
+    },
+    "hopla": {
+      "title": "Hoplà: from phone to computer",
+      "summary": "Photos and videos from your phone to your computer in a flash, with no cables and no uploading.",
+      "cta": "Open Hoplà",
+      "step1Title": "Open Hoplà on the computer",
+      "step1Text": "On the computer open Hoplà from the services: a QR code appears. It works while the page stays open; “New code” makes a new one.",
+      "step1Tip": "Phone and computer on the same Wi-Fi: that’s the fastest way.",
+      "step2Title": "Scan the code with your phone",
+      "step2Text": "Open the phone camera and point it at the code: Hoplà opens, with nothing to install and no login. When you see “Connected to the computer”, tap “Choose photos and videos”.",
+      "step3Title": "Choose and send",
+      "step3Text": "Pick the photos and videos you want, check the list (the × removes a file) and tap “Send to computer”.",
+      "step3Tip": "While sending, stay on the page with the screen on: if the connection drops, “Reconnect” resumes with the same files.",
+      "step4Title": "Confirm on the computer",
+      "step4Text": "The computer shows who is sending, how many files and how big they are. With Chrome or Edge “Choose a folder and receive” saves them straight into a folder; otherwise “Receive and download later”. You can also decline.",
+      "step5Title": "Receive and save",
+      "step5Text": "Follow the percentage of each file. At the end download them one by one or all together; the bin removes the ones you don’t need.",
+      "step5Tip": "Files go straight from the phone to the computer: they don’t pass through KUMANI’s servers and nobody keeps them."
+    },
+    "firma_pdf": {
+      "title": "Sign PDF",
+      "summary": "Signature, date and text on your PDFs from your phone or computer, without uploading them anywhere.",
+      "cta": "Sign a PDF",
+      "step1Title": "Choose the PDF",
+      "step1Text": "Open Sign PDF and tap “Choose the PDF to sign” (or drag it in, on a computer). The pages appear one below the other.",
+      "step1Tip": "The document opens on your device: it isn’t uploaded anywhere.",
+      "step2Title": "Create your signature",
+      "step2Text": "Tap “Signature”: type your name (pick a style), draw your signature with your finger or the mouse, or upload a photo of it. Choose black or blue ink and tap “Sign”.",
+      "step2Tip": "With “Remember my signature on this device” it’s ready next time.",
+      "step3Title": "Put it in the right place",
+      "step3Text": "Tap the spot on the document where the signature goes. Drag it to move it and use the gold dot to resize it; the pencil changes it, the bin removes it.",
+      "step4Title": "Add date and text",
+      "step4Text": "“Date” adds the date (today or another one, in two formats) and “Text” adds words like “Read and approved”. You place and move them like the signature, on any page.",
+      "step5Title": "Download or share",
+      "step5Text": "Tap “Download the signed PDF”: the file keeps the original name plus “-signed”. On a phone you can also share it straight away, for example on WhatsApp.",
+      "step5Tip": "It’s a simple electronic signature: fine for approvals, forms and many contracts; it doesn’t replace a qualified digital signature."
     }
   },
   "deckTexts": {

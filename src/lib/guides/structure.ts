@@ -40,6 +40,8 @@ export const GUIDE_STRUCTURE: GuideStructure[] = [
   { slug: 'spendly', category: 'organize', minutes: 3, steps: 4, href: '/marketplace/spendly' },
   { slug: 'fincheck', category: 'organize', minutes: 3, steps: 5, href: '/marketplace/fincheck' },
   { slug: 'svat', category: 'organize', minutes: 2, steps: 4, href: '/marketplace/svat' },
+  { slug: 'hopla', category: 'organize', minutes: 2, steps: 5, href: '/marketplace/hopla' },
+  { slug: 'firma-pdf', category: 'organize', minutes: 2, steps: 5, href: '/marketplace/firma-pdf' },
   { slug: 'menu', category: 'pro', minutes: 3, steps: 4, href: '/marketplace/menu' },
   { slug: 'landing-page', category: 'pro', minutes: 4, steps: 5, href: '/marketplace/landing-page' },
   { slug: 'fidelity', category: 'pro', minutes: 3, steps: 5, href: '/marketplace/fidelity' },

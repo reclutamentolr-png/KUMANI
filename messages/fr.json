@@ -7824,6 +7824,42 @@
       "step4Title": "Choisissez les services et enregistrez",
       "step4Text": "Cochez les services qui doivent suivre la marque et touchez « Enregistrer les couleurs ». Quand vous changez les couleurs, ces services se mettent à jour seuls.",
       "step4Tip": "Si vous changez une couleur à la main dans un service, il cesse de suivre la marque : « Utiliser les couleurs de la marque » le réactive."
+    },
+    "hopla": {
+      "title": "Hoplà : du téléphone à l’ordinateur",
+      "summary": "Photos et vidéos du téléphone à l’ordinateur en un instant, sans câble et sans rien mettre en ligne.",
+      "cta": "Ouvrir Hoplà",
+      "step1Title": "Ouvrez Hoplà sur l’ordinateur",
+      "step1Text": "Sur l’ordinateur, ouvrez Hoplà depuis les services : un code QR apparaît. Il fonctionne tant que la page reste ouverte ; « Nouveau code » en crée un autre.",
+      "step1Tip": "Téléphone et ordinateur sur le même Wi-Fi : c’est le plus rapide.",
+      "step2Title": "Scannez le code avec le téléphone",
+      "step2Text": "Ouvrez l’appareil photo du téléphone et visez le code : Hoplà s’ouvre, sans rien installer ni se connecter. Quand vous voyez « Connecté à l’ordinateur », touchez « Choisir photos et vidéos ».",
+      "step3Title": "Choisissez et envoyez",
+      "step3Text": "Choisissez les photos et vidéos, vérifiez la liste (la × retire un fichier) et touchez « Envoyer à l’ordinateur ».",
+      "step3Tip": "Pendant l’envoi, restez sur la page avec l’écran allumé : si la connexion tombe, « Se reconnecter » reprend avec les mêmes fichiers.",
+      "step4Title": "Confirmez sur l’ordinateur",
+      "step4Text": "L’ordinateur indique qui envoie, combien de fichiers et leur poids. Avec Chrome ou Edge, « Choisir le dossier et recevoir » les enregistre directement dans un dossier ; sinon « Recevoir et télécharger après ». Vous pouvez aussi refuser.",
+      "step5Title": "Recevez et enregistrez",
+      "step5Text": "Suivez le pourcentage de chaque fichier. À la fin, téléchargez-les un par un ou tous ensemble ; la corbeille retire ceux dont vous n’avez pas besoin.",
+      "step5Tip": "Les fichiers vont directement du téléphone à l’ordinateur : ils ne passent pas par les serveurs de KUMANI et personne ne les conserve."
+    },
+    "firma_pdf": {
+      "title": "Signer un PDF",
+      "summary": "Signature, date et texte sur vos PDF depuis le téléphone ou l’ordinateur, sans les envoyer nulle part.",
+      "cta": "Signer un PDF",
+      "step1Title": "Choisissez le PDF",
+      "step1Text": "Ouvrez Signer un PDF et touchez « Choisir le PDF à signer » (ou glissez-le, sur ordinateur). Les pages s’affichent les unes sous les autres.",
+      "step1Tip": "Le document s’ouvre sur votre appareil : il n’est envoyé nulle part.",
+      "step2Title": "Créez votre signature",
+      "step2Text": "Touchez « Signature » : tapez votre nom (choisissez un style), dessinez la signature avec le doigt ou la souris, ou chargez-en une photo. Choisissez l’encre noire ou bleue et touchez « Signer ».",
+      "step2Tip": "Avec « Mémoriser ma signature sur cet appareil », elle est prête la prochaine fois.",
+      "step3Title": "Placez-la au bon endroit",
+      "step3Text": "Touchez l’endroit du document où va la signature. Faites-la glisser pour la déplacer et utilisez le point doré pour l’agrandir ; le crayon la modifie, la corbeille la retire.",
+      "step4Title": "Ajoutez date et texte",
+      "step4Text": "« Date » ajoute la date (aujourd’hui ou une autre, en deux formats) et « Texte » des mentions comme « Lu et approuvé ». Ils se placent et se déplacent comme la signature, sur n’importe quelle page.",
+      "step5Title": "Téléchargez ou partagez",
+      "step5Text": "Touchez « Télécharger le PDF signé » : le fichier garde le nom d’origine suivi de « -signe ». Sur téléphone, vous pouvez aussi le partager tout de suite, par exemple sur WhatsApp.",
+      "step5Tip": "C’est une signature électronique simple : elle convient aux acceptations, formulaires et à de nombreux contrats, mais ne remplace pas la signature numérique qualifiée."
     }
   },
   "deckTexts": {

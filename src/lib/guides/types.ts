@@ -49,6 +49,8 @@ export type GuideSlug =
   | 'firma-email'
   | 'calcolatrici'
   | 'svat'
+  | 'hopla'
+  | 'firma-pdf'
   | 'focus'
   | 'mandala'
   | 'mosaic'

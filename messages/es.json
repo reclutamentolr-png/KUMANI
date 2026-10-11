@@ -7824,6 +7824,42 @@
       "step4Title": "Elige los servicios y guarda",
       "step4Text": "Marca los servicios que deben seguir la marca y toca «Guardar los colores». Cuando cambias los colores, esos servicios se actualizan solos.",
       "step4Tip": "Si cambias un color a mano en un servicio, deja de seguir la marca: con «Usar los colores de la marca» lo reactivas."
+    },
+    "hopla": {
+      "title": "Hoplà: del móvil al ordenador",
+      "summary": "Fotos y vídeos del móvil al ordenador en un momento, sin cables y sin subirlos a internet.",
+      "cta": "Abrir Hoplà",
+      "step1Title": "Abre Hoplà en el ordenador",
+      "step1Text": "En el ordenador abre Hoplà desde los servicios: aparece un código QR. Funciona mientras la página esté abierta; «Nuevo código» crea otro.",
+      "step1Tip": "Móvil y ordenador en la misma Wi-Fi: es lo más rápido.",
+      "step2Title": "Escanea el código con el móvil",
+      "step2Text": "Abre la cámara del móvil y enfoca el código: se abre Hoplà, sin instalar nada ni iniciar sesión. Cuando veas «Conectado al ordenador», toca «Elegir fotos y vídeos».",
+      "step3Title": "Elige y envía",
+      "step3Text": "Elige las fotos y los vídeos, revisa la lista (la × quita un archivo) y toca «Enviar al ordenador».",
+      "step3Tip": "Durante el envío quédate en la página con la pantalla encendida: si se corta la conexión, «Volver a conectar» sigue con los mismos archivos.",
+      "step4Title": "Confirma en el ordenador",
+      "step4Text": "El ordenador muestra quién envía, cuántos archivos y cuánto pesan. Con Chrome o Edge, «Elegir la carpeta y recibir» los guarda directamente en una carpeta; si no, «Recibir y descargar después». También puedes rechazar.",
+      "step5Title": "Recibe y guarda",
+      "step5Text": "Sigue el porcentaje de cada archivo. Al final descárgalos uno a uno o todos juntos; con la papelera quitas los que no necesitas.",
+      "step5Tip": "Los archivos van directamente del móvil al ordenador: no pasan por los servidores de KUMANI y nadie los conserva."
+    },
+    "firma_pdf": {
+      "title": "Firmar PDF",
+      "summary": "Firma, fecha y texto en tus PDF desde el móvil o el ordenador, sin subirlos a ningún sitio.",
+      "cta": "Firmar un PDF",
+      "step1Title": "Elige el PDF",
+      "step1Text": "Abre Firmar PDF y toca «Elige el PDF que quieres firmar» (o arrástralo, en el ordenador). Las páginas aparecen una debajo de otra.",
+      "step1Tip": "El documento se abre en tu dispositivo: no se sube a ningún sitio.",
+      "step2Title": "Crea tu firma",
+      "step2Text": "Toca «Firma»: escribe tu nombre (elige un estilo), dibuja la firma con el dedo o el ratón o sube una foto de ella. Elige tinta negra o azul y toca «Firmar».",
+      "step2Tip": "Con «Recordar mi firma en este dispositivo» la tendrás lista la próxima vez.",
+      "step3Title": "Colócala en su sitio",
+      "step3Text": "Toca el punto del documento donde va la firma. Arrástrala para moverla y usa el punto dorado para agrandarla; el lápiz la cambia y la papelera la quita.",
+      "step4Title": "Añade fecha y texto",
+      "step4Text": "«Fecha» añade la fecha (hoy u otra, en dos formatos) y «Texto» frases como «Leído y aprobado». Se colocan y se mueven como la firma, en cualquier página.",
+      "step5Title": "Descarga o comparte",
+      "step5Text": "Toca «Descargar el PDF firmado»: el archivo conserva el nombre original con «-firmado». Desde el móvil también puedes compartirlo enseguida, por ejemplo por WhatsApp.",
+      "step5Tip": "Es una firma electrónica simple: sirve para aceptaciones, formularios y muchos contratos, pero no sustituye a la firma digital cualificada."
     }
   },
   "deckTexts": {

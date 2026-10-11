@@ -7824,6 +7824,42 @@
       "step4Title": "Escolha os serviços e guarde",
       "step4Text": "Assinale os serviços que devem seguir a marca e toque em «Guardar as cores». Quando muda as cores, esses serviços atualizam-se sozinhos.",
       "step4Tip": "Se mudar uma cor à mão num serviço, deixa de seguir a marca: com «Usar as cores da marca» volta a ativá-lo."
+    },
+    "hopla": {
+      "title": "Hoplà: do telemóvel para o computador",
+      "summary": "Fotos e vídeos do telemóvel para o computador num instante, sem cabos e sem os carregar na internet.",
+      "cta": "Abrir o Hoplà",
+      "step1Title": "Abra o Hoplà no computador",
+      "step1Text": "No computador abra o Hoplà nos serviços: aparece um código QR. Funciona enquanto a página estiver aberta; «Novo código» cria outro.",
+      "step1Tip": "Telemóvel e computador na mesma Wi-Fi: é o mais rápido.",
+      "step2Title": "Digitalize o código com o telemóvel",
+      "step2Text": "Abra a câmara do telemóvel e aponte para o código: o Hoplà abre, sem instalar nada nem iniciar sessão. Quando vir «Ligado ao computador», toque em «Escolher fotos e vídeos».",
+      "step3Title": "Escolha e envie",
+      "step3Text": "Escolha as fotos e os vídeos, verifique a lista (o × retira um ficheiro) e toque em «Enviar para o computador».",
+      "step3Tip": "Durante o envio fique na página com o ecrã ligado: se a ligação cair, «Voltar a ligar» continua com os mesmos ficheiros.",
+      "step4Title": "Confirme no computador",
+      "step4Text": "O computador mostra quem envia, quantos ficheiros e quanto pesam. Com o Chrome ou o Edge, «Escolher a pasta e receber» guarda-os diretamente numa pasta; caso contrário, «Receber e descarregar depois». Também pode recusar.",
+      "step5Title": "Receba e guarde",
+      "step5Text": "Acompanhe a percentagem de cada ficheiro. No fim, descarregue-os um a um ou todos juntos; com o caixote retira os que não precisa.",
+      "step5Tip": "Os ficheiros vão diretamente do telemóvel para o computador: não passam pelos servidores da KUMANI e ninguém os guarda."
+    },
+    "firma_pdf": {
+      "title": "Assinar PDF",
+      "summary": "Assinatura, data e texto nos seus PDF no telemóvel ou no computador, sem os enviar para lado nenhum.",
+      "cta": "Assinar um PDF",
+      "step1Title": "Escolha o PDF",
+      "step1Text": "Abra Assinar PDF e toque em «Escolha o PDF a assinar» (ou arraste-o, no computador). As páginas aparecem umas por baixo das outras.",
+      "step1Tip": "O documento abre no seu dispositivo: não é enviado para lado nenhum.",
+      "step2Title": "Crie a sua assinatura",
+      "step2Text": "Toque em «Assinatura»: escreva o nome (escolha um estilo), desenhe a assinatura com o dedo ou o rato ou carregue uma foto dela. Escolha tinta preta ou azul e toque em «Assinar».",
+      "step2Tip": "Com «Lembrar a minha assinatura neste dispositivo» fica pronta para a próxima vez.",
+      "step3Title": "Coloque-a no sítio certo",
+      "step3Text": "Toque no ponto do documento onde vai a assinatura. Arraste-a para a mover e use o ponto dourado para a aumentar; o lápis altera-a e o caixote retira-a.",
+      "step4Title": "Adicione data e texto",
+      "step4Text": "«Data» adiciona a data (hoje ou outra, em dois formatos) e «Texto» frases como «Lido e aprovado». Colocam-se e movem-se como a assinatura, em qualquer página.",
+      "step5Title": "Descarregue ou partilhe",
+      "step5Text": "Toque em «Descarregar o PDF assinado»: o ficheiro mantém o nome original com «-assinado». No telemóvel pode também partilhá-lo logo, por exemplo no WhatsApp.",
+      "step5Tip": "É uma assinatura eletrónica simples: serve para aceitações, formulários e muitos contratos, mas não substitui a assinatura digital qualificada."
     }
   },
   "deckTexts": {

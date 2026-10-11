@@ -7824,6 +7824,42 @@
       "step4Title": "Scegli i servizi e salva",
       "step4Text": "Spunta i servizi che devono seguire il brand e tocca «Salva i colori». Quando cambi i colori, quei servizi si aggiornano da soli.",
       "step4Tip": "Se cambi un colore a mano in un servizio, smette di seguire il brand: con «Usa i colori del brand» lo riattivi."
+    },
+    "hopla": {
+      "title": "Hoplà: dal telefono al computer",
+      "summary": "Foto e video dal telefono al computer in un attimo, senza cavi e senza caricarli su internet.",
+      "cta": "Apri Hoplà",
+      "step1Title": "Apri Hoplà sul computer",
+      "step1Text": "Sul computer apri Hoplà dai servizi: compare un codice QR. Il codice vale finché la pagina resta aperta; con «Nuovo codice» ne crei un altro.",
+      "step1Tip": "Telefono e computer sulla stessa Wi-Fi: è il modo più veloce.",
+      "step2Title": "Inquadra il codice col telefono",
+      "step2Text": "Apri la fotocamera del telefono e inquadra il codice: si apre la pagina di Hoplà, senza installare nulla e senza accedere. Quando vedi «Collegato al computer», tocca «Scegli foto e video».",
+      "step3Title": "Scegli e invia",
+      "step3Text": "Scegli le foto e i video che vuoi, controlla l’elenco (con la × togli un file) e tocca «Invia al computer».",
+      "step3Tip": "Durante l’invio resta sulla pagina con lo schermo acceso: se il collegamento cade, «Ricollegati» riprende con gli stessi file.",
+      "step4Title": "Conferma sul computer",
+      "step4Text": "Sul computer vedi chi invia, quanti file e quanto pesano. Con Chrome o Edge «Scegli la cartella e ricevi» li salva direttamente in una cartella; altrimenti «Ricevi e scarica dopo». Puoi anche rifiutare.",
+      "step5Title": "Ricevi e salva",
+      "step5Text": "Segui la percentuale di ogni file. Alla fine li scarichi uno per uno o tutti insieme; con il cestino togli quelli che non ti servono.",
+      "step5Tip": "I file vanno direttamente dal telefono al computer: non passano dai server di KUMANI e nessuno li conserva."
+    },
+    "firma_pdf": {
+      "title": "Firma PDF",
+      "summary": "Firma, data e testo sui tuoi PDF dal telefono o dal computer, senza caricarli da nessuna parte.",
+      "cta": "Firma un PDF",
+      "step1Title": "Scegli il PDF",
+      "step1Text": "Apri Firma PDF e tocca «Scegli il PDF da firmare» (o trascinalo, dal computer). Le pagine compaiono una sotto l’altra.",
+      "step1Tip": "Il documento si apre sul tuo dispositivo: non viene caricato da nessuna parte.",
+      "step2Title": "Crea la tua firma",
+      "step2Text": "Tocca «Firma»: puoi digitare il nome (scegli lo stile), disegnare la firma con il dito o il mouse oppure caricare la foto della firma. Scegli l’inchiostro nero o blu e tocca «Firma».",
+      "step2Tip": "Con «Ricorda la firma su questo dispositivo» la ritrovi pronta la prossima volta.",
+      "step3Title": "Mettila al posto giusto",
+      "step3Text": "Tocca il punto del documento dove va la firma. Poi trascinala per spostarla, usa il pallino dorato per ingrandirla; con la matita la cambi, con il cestino la togli.",
+      "step4Title": "Aggiungi data e testo",
+      "step4Text": "Con «Data» aggiungi la data (di oggi o un’altra, in due formati) e con «Testo» scritte come «Letto e approvato». Si mettono e si spostano come la firma, anche su altre pagine.",
+      "step5Title": "Scarica o condividi",
+      "step5Text": "Tocca «Scarica il PDF firmato»: il file si chiama come l’originale con «-firmato». Dal telefono puoi anche condividerlo subito, per esempio su WhatsApp.",
+      "step5Tip": "È una firma elettronica semplice: va bene per accettazioni, moduli e molti contratti, non sostituisce la firma digitale qualificata."
     }
   },
   "deckTexts": {
