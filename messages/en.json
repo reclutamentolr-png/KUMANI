@@ -11631,5 +11631,16 @@
   "bioPublic": {
     "fallbackBio": "Professional in the KUMANI community",
     "poweredBy": "Page made with"
+  },
+  "myData": {
+    "title": "My data in the services",
+    "intro": "The data you saved in the services stays yours, even without an active plan: you can download a copy or delete it.",
+    "empty": "No data saved in the services.",
+    "count": "{count, plural, one {# item} other {# items}}",
+    "download": "Download",
+    "delete": "Delete all",
+    "deleteConfirm": "Delete all data in {service} ({count, plural, one {# item} other {# items}}), including photos and documents? This cannot be undone: if you need them, download them first.",
+    "error": "Operation failed. Try again.",
+    "note": "Shop, Menu, Kumi Card, Travel and Events are not listed because they also hold customers’ or participants’ data: manage them from the service or ask the Staff."
   }
 }

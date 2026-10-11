@@ -6,6 +6,7 @@ import { User, Save, X, CheckCircle2, AlertCircle, Lock, FileEdit, Clock, XCircl
 import ProfileFieldsGrid, { ConfirmLockBox, MissingFieldsBox, useProfileFieldLabel } from '@/components/profile/ProfileFieldsGrid'
 import ProfileChangeRequestDialog from '@/components/profile/ProfileChangeRequestDialog'
 import AccountDeletionSection from '@/components/profile/AccountDeletionSection'
+import MyDataSection from '@/components/profile/MyDataSection'
 import PasswordChangeSection from '@/components/profile/PasswordChangeSection'
 import PushSettingsSection from '@/components/profile/PushSettingsSection'
 import MarketingConsentSection from '@/components/profile/MarketingConsentSection'
@@ -272,6 +273,9 @@ export default function ProfileModal({ isOpen, onClose, initialData, userId, onC
           </ProfileCard>
           <ProfileCard>
             <MarketingConsentSection isOpen={isOpen} />
+          </ProfileCard>
+          <ProfileCard>
+            <MyDataSection isOpen={isOpen} />
           </ProfileCard>
           <ProfileCard tone="red">
             <AccountDeletionSection isOpen={isOpen} />

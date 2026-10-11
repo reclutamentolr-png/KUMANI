@@ -11631,5 +11631,16 @@
   "bioPublic": {
     "fallbackBio": "Profesional de la comunidad KUMANI",
     "poweredBy": "Página creada con"
+  },
+  "myData": {
+    "title": "Mis datos en los servicios",
+    "intro": "Los datos que guardaste en los servicios siguen siendo tuyos, incluso sin plan activo: puedes descargar una copia o eliminarlos.",
+    "empty": "No hay datos guardados en los servicios.",
+    "count": "{count, plural, one {# elemento} other {# elementos}}",
+    "download": "Descargar",
+    "delete": "Eliminar todo",
+    "deleteConfirm": "¿Eliminar todos los datos de {service} ({count, plural, one {# elemento} other {# elementos}}), incluidas fotos y documentos? No se puede deshacer: si los necesitas, descárgalos antes.",
+    "error": "La operación ha fallado. Inténtalo de nuevo.",
+    "note": "Shop, Menu, Kumi Card, Travel y Events no aparecen aquí porque también contienen datos de clientes o participantes: gestiónalos desde el servicio o pide ayuda al Staff."
   }
 }

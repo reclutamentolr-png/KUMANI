@@ -58,6 +58,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "menuBuilder",
   "menuPublic",
   "mosaic",
+  "myData",
   "neurobalance",
   "nexus",
   "notifications",

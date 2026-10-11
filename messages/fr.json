@@ -11631,5 +11631,16 @@
   "bioPublic": {
     "fallbackBio": "Professionnel de la communauté KUMANI",
     "poweredBy": "Page créée avec"
+  },
+  "myData": {
+    "title": "Mes données dans les services",
+    "intro": "Les données enregistrées dans les services restent à vous, même sans formule active : vous pouvez en télécharger une copie ou les supprimer.",
+    "empty": "Aucune donnée enregistrée dans les services.",
+    "count": "{count, plural, one {# élément} other {# éléments}}",
+    "download": "Télécharger",
+    "delete": "Tout supprimer",
+    "deleteConfirm": "Supprimer toutes les données de {service} ({count, plural, one {# élément} other {# éléments}}), photos et documents compris ? Impossible à annuler : téléchargez-les d’abord si vous en avez besoin.",
+    "error": "Opération échouée. Réessayez.",
+    "note": "Shop, Menu, Kumi Card, Travel et Events ne figurent pas ici car ils contiennent aussi des données de clients ou de participants : gérez-les depuis le service ou demandez au Staff."
   }
 }

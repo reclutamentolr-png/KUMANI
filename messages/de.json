@@ -11631,5 +11631,16 @@
   "bioPublic": {
     "fallbackBio": "Profi aus der KUMANI-Community",
     "poweredBy": "Seite erstellt mit"
+  },
+  "myData": {
+    "title": "Meine Daten in den Diensten",
+    "intro": "Die Daten, die du in den Diensten gespeichert hast, gehören dir – auch ohne aktiven Tarif: Du kannst eine Kopie herunterladen oder sie löschen.",
+    "empty": "Keine Daten in den Diensten gespeichert.",
+    "count": "{count, plural, one {# Eintrag} other {# Einträge}}",
+    "download": "Herunterladen",
+    "delete": "Alles löschen",
+    "deleteConfirm": "Alle Daten in {service} ({count, plural, one {# Eintrag} other {# Einträge}}) einschließlich Fotos und Dokumenten löschen? Das kann nicht rückgängig gemacht werden: Lade sie vorher herunter, wenn du sie brauchst.",
+    "error": "Vorgang fehlgeschlagen. Versuche es erneut.",
+    "note": "Shop, Menu, Kumi Card, Travel und Events sind hier nicht aufgeführt, weil sie auch Daten von Kunden oder Teilnehmern enthalten: Verwalte sie im Dienst oder frag das Staff."
   }
 }

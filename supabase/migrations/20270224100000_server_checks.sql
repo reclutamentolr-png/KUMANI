@@ -77,12 +77,14 @@ set search_path = public
 as $$
 declare
   v_ref uuid := (to_jsonb(new) ->> tg_argv[0])::uuid;
+  v_ok boolean;
 begin
   if v_ref is null then
     return new;
   end if;
-  execute format('select 1 from public.%I where id = $1 and user_id = $2', tg_argv[1]) using v_ref, new.user_id;
-  if not found then
+  -- EXECUTE non aggiorna FOUND: il risultato si legge con INTO
+  execute format('select exists (select 1 from public.%I where id = $1 and user_id = $2)', tg_argv[1]) into v_ok using v_ref, new.user_id;
+  if not coalesce(v_ok, false) then
     raise exception 'not_own_reference' using errcode = '42501';
   end if;
   return new;
