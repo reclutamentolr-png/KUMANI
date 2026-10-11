@@ -20,14 +20,18 @@ export const NATURE_SOUND_FILES: Record<NaturePreset, string> = {
 
 const CROSSFADE_SECONDS = 1.2
 
-type ActiveSource = { source: AudioBufferSourceNode; gain: GainNode }
+// I file si ascoltano in streaming (elemento <audio> collegato al mixer),
+// non più scaricati e decodificati interi in memoria: «Foresta» decodificata
+// occupava 100-200 MB e su iPhone poteva far chiudere la scheda. Il volume
+// passa dal mixer (su iPhone il volume dell'elemento <audio> non si cambia).
+type ActiveSource = { audio: HTMLAudioElement; node: MediaElementAudioSourceNode; gain: GainNode }
 
 export class NatureSoundsEngine {
   private ctx: AudioContext | null = null
   private master: GainNode | null = null
   private current: ActiveSource | null = null
-  private buffers = new Map<NaturePreset, AudioBuffer>()
-  private pendingLoads = new Map<NaturePreset, Promise<AudioBuffer>>()
+  // Cresce a ogni start/stop: un avvio superato da un altro non parte
+  private generation = 0
 
   private ensure(): AudioContext {
     if (!this.ctx) {
@@ -41,24 +45,14 @@ export class NatureSoundsEngine {
     return this.ctx
   }
 
-  private async loadBuffer(ctx: AudioContext, preset: NaturePreset): Promise<AudioBuffer> {
-    const cached = this.buffers.get(preset)
-    if (cached) return cached
-
-    const pending = this.pendingLoads.get(preset)
-    if (pending) return pending
-
-    const promise = (async () => {
-      const res = await fetch(NATURE_SOUND_FILES[preset])
-      if (!res.ok) throw new Error(`Failed to fetch nature sound: ${preset}`)
-      const arrayBuffer = await res.arrayBuffer()
-      const decoded = await ctx.decodeAudioData(arrayBuffer)
-      this.buffers.set(preset, decoded)
-      this.pendingLoads.delete(preset)
-      return decoded
-    })()
-    this.pendingLoads.set(preset, promise)
-    return promise
+  private release(active: ActiveSource) {
+    try {
+      active.audio.pause()
+      active.audio.removeAttribute('src')
+      active.audio.load()
+    } catch {}
+    active.node.disconnect()
+    active.gain.disconnect()
   }
 
   // Fades the currently playing source out (if any) while fading the new
@@ -68,35 +62,43 @@ export class NatureSoundsEngine {
     const ctx = this.ensure()
     await ctx.resume()
     this.master!.gain.value = volume
+    const generation = ++this.generation
 
-    const buffer = await this.loadBuffer(ctx, preset)
-    // The engine may have been stopped (or asked to play something else)
-    // while this decode was in flight — bail out rather than starting a
-    // now-stale source.
-    if (!this.ctx) return
+    const audio = new Audio()
+    audio.crossOrigin = 'anonymous'
+    audio.loop = true
+    audio.preload = 'auto'
+    audio.src = NATURE_SOUND_FILES[preset]
+    const node = ctx.createMediaElementSource(audio)
+    const gain = ctx.createGain()
+    gain.gain.value = 0
+    node.connect(gain).connect(this.master!)
+    const active: ActiveSource = { audio, node, gain }
+
+    try {
+      await audio.play()
+    } catch (error) {
+      this.release(active)
+      throw error
+    }
+    // Fermato o sostituito mentre partiva: non si sovrappone
+    if (generation !== this.generation || !this.ctx) {
+      this.release(active)
+      return
+    }
 
     const now = ctx.currentTime
-    const source = ctx.createBufferSource()
-    source.buffer = buffer
-    source.loop = true
-    const gain = ctx.createGain()
     gain.gain.setValueAtTime(0, now)
     gain.gain.linearRampToValueAtTime(1, now + CROSSFADE_SECONDS)
-    source.connect(gain).connect(this.master!)
-    source.start()
 
     const previous = this.current
-    this.current = { source, gain }
+    this.current = active
 
     if (previous) {
       previous.gain.gain.cancelScheduledValues(now)
       previous.gain.gain.setValueAtTime(previous.gain.gain.value, now)
       previous.gain.gain.linearRampToValueAtTime(0, now + CROSSFADE_SECONDS)
-      setTimeout(() => {
-        try { previous.source.stop() } catch {}
-        previous.source.disconnect()
-        previous.gain.disconnect()
-      }, CROSSFADE_SECONDS * 1000 + 100)
+      setTimeout(() => this.release(previous), CROSSFADE_SECONDS * 1000 + 100)
     }
   }
 
@@ -107,25 +109,25 @@ export class NatureSoundsEngine {
   }
 
   fadeStop(seconds = 0.8) {
+    this.generation++
     if (!this.ctx || !this.current) return this.stop()
-    const { source, gain } = this.current
+    const active = this.current
     const now = this.ctx.currentTime
-    gain.gain.cancelScheduledValues(now)
-    gain.gain.setValueAtTime(gain.gain.value, now)
-    gain.gain.linearRampToValueAtTime(0, now + seconds)
+    active.gain.gain.cancelScheduledValues(now)
+    active.gain.gain.setValueAtTime(active.gain.gain.value, now)
+    active.gain.gain.linearRampToValueAtTime(0, now + seconds)
     this.current = null
     setTimeout(() => {
-      try { source.stop() } catch {}
-      source.disconnect()
-      gain.disconnect()
+      this.release(active)
+      // Niente da suonare: il mixer si ferma (batteria)
+      if (!this.current) this.ctx?.suspend().catch(() => {})
     }, seconds * 1000 + 100)
   }
 
   stop() {
+    this.generation++
     if (this.current) {
-      try { this.current.source.stop() } catch {}
-      this.current.source.disconnect()
-      this.current.gain.disconnect()
+      this.release(this.current)
       this.current = null
     }
     if (this.ctx) {
@@ -133,7 +135,5 @@ export class NatureSoundsEngine {
       this.ctx = null
       this.master = null
     }
-    this.buffers.clear()
-    this.pendingLoads.clear()
   }
 }

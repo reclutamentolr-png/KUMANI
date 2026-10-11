@@ -99,11 +99,22 @@ export default function VeritasRoom({
   }, [seat, refresh])
 
   // Orologio per il conto alla rovescia; allo scadere si rilegge lo stato
-  // (è la lettura che fa avanzare la fase).
+  // (è la lettura che fa avanzare la fase). Gira solo se c'è un conto alla
+  // rovescia e la pagina è visibile, una volta al secondo (batteria).
+  const phaseEndsAt = game?.phase_ends_at ?? null
   useEffect(() => {
-    const tick = setInterval(() => setNow(Date.now()), 500)
-    return () => clearInterval(tick)
-  }, [])
+    if (!phaseEndsAt) return
+    const update = () => {
+      if (!document.hidden) setNow(Date.now())
+    }
+    update()
+    const tick = setInterval(update, 1000)
+    document.addEventListener('visibilitychange', update)
+    return () => {
+      clearInterval(tick)
+      document.removeEventListener('visibilitychange', update)
+    }
+  }, [phaseEndsAt])
 
   const remaining = game?.phase_ends_at && now ? Math.max(0, Math.ceil((new Date(game.phase_ends_at).getTime() - (now + offset)) / 1000)) : null
 

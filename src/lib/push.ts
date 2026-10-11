@@ -66,16 +66,25 @@ export async function sendToSubscriptions(rows: SubscriptionRow[], payloadFor: (
       else console.error('[push] invio non riuscito:', status, (result.reason as Error)?.message)
     })
   }
-  if (gone.length) await db.from('push_subscriptions').delete().in('id', gone)
-  if (ok.length) await db.from('push_subscriptions').update({ last_success_at: new Date().toISOString() }).in('id', ok)
+  // A gruppi di 100: con tanti dispositivi l'elenco non sta in un'unica richiesta
+  for (let i = 0; i < gone.length; i += 100) await db.from('push_subscriptions').delete().in('id', gone.slice(i, i + 100))
+  const now = new Date().toISOString()
+  for (let i = 0; i < ok.length; i += 100) await db.from('push_subscriptions').update({ last_success_at: now }).in('id', ok.slice(i, i + 100))
   return { sent, failed }
 }
 
 // Utenti che hanno disattivato una categoria
+// A gruppi di 100 persone (un elenco lungo non sta in una richiesta); se la
+// lettura fallisce si ferma tutto, invece di avvisare anche chi ha detto no
 export async function usersWithCategoryOff(category: PushCategory, userIds: string[]) {
-  if (!userIds.length) return new Set<string>()
-  const { data } = await pushDb().from('push_preferences').select('user_id').eq(category, false).in('user_id', userIds)
-  return new Set((data ?? []).map((row) => row.user_id as string))
+  const off = new Set<string>()
+  const db = pushDb()
+  for (let i = 0; i < userIds.length; i += 100) {
+    const { data, error } = await db.from('push_preferences').select('user_id').eq(category, false).in('user_id', userIds.slice(i, i + 100))
+    if (error) throw new Error(`push_preferences: ${error.message}`)
+    for (const row of data ?? []) off.add(row.user_id as string)
+  }
+  return off
 }
 
 type Translator = Awaited<ReturnType<typeof getTranslations<'pushNotifications'>>>

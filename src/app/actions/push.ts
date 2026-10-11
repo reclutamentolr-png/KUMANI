@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { verifyAdmin } from '@/lib/verifyAdmin'
+import { fetchAllRows } from '@/lib/fetchAllRows'
 import {
   PUSH_CATEGORIES,
   localizedPath,
@@ -182,19 +183,33 @@ export async function adminSendPushCampaign(input: { title: string; body: string
   if (!url) url = '/dashboard'
 
   const db = pushDb()
-  let query = db.from('push_subscriptions').select('id, user_id, endpoint, p256dh, auth, locale')
-  if (locale) query = query.eq('locale', locale)
-  if (targetUserId) query = query.eq('user_id', targetUserId)
-  const { data: subs } = await query
-  let rows = subs ?? []
+  // Tutti i dispositivi, a pagine (oltre le 1000 righe la lettura singola si fermava)
+  const { data: subs, error: subsError } = await fetchAllRows((from, to) => {
+    let query = db.from('push_subscriptions').select('id, user_id, endpoint, p256dh, auth, locale')
+    if (locale) query = query.eq('locale', locale)
+    if (targetUserId) query = query.eq('user_id', targetUserId)
+    return query.order('id').range(from, to)
+  }, 100000)
+  if (subsError) return { success: false, error: 'Lettura dei dispositivi non riuscita: riprova.' }
+  let rows = subs
   if (targetUserId && !rows.length) return { success: false, error: 'Questa persona non ha attivato le notifiche su nessun dispositivo.' }
   const userIds = [...new Set(rows.map((r) => r.user_id))]
-  const off = await usersWithCategoryOff('staff', userIds)
+  let off: Set<string>
+  try {
+    off = await usersWithCategoryOff('staff', userIds)
+  } catch {
+    return { success: false, error: 'Non riesco a leggere chi ha disattivato gli avvisi: invio annullato, riprova.' }
+  }
   rows = rows.filter((r) => !off.has(r.user_id))
   if (targetUserId && !rows.length) return { success: false, error: 'Questa persona ha disattivato gli avvisi di KUMANI.' }
   if ((audience === 'active' || audience === 'inactive') && rows.length) {
-    const { data: profiles } = await db.from('profiles').select('id, subscription_status, subscription_expires_at').in('id', [...new Set(rows.map((r) => r.user_id))])
-    const active = new Set((profiles ?? []).filter(isActive).map((p) => p.id as string))
+    const ids = [...new Set(rows.map((r) => r.user_id))]
+    const active = new Set<string>()
+    for (let i = 0; i < ids.length; i += 100) {
+      const { data: profiles, error } = await db.from('profiles').select('id, subscription_status, subscription_expires_at').in('id', ids.slice(i, i + 100))
+      if (error) return { success: false, error: 'Lettura dei piani non riuscita: riprova.' }
+      for (const p of profiles ?? []) if (isActive(p)) active.add(p.id as string)
+    }
     rows = rows.filter((r) => (audience === 'active' ? active.has(r.user_id) : !active.has(r.user_id)))
   }
   const recipients = new Set(rows.map((r) => r.user_id)).size

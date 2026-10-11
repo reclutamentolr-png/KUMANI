@@ -61,7 +61,8 @@ type Notice = 'focusDone' | 'breakDone' | null
 type NotifyState = 'unknown' | 'unsupported' | NotificationPermission
 type Sentinel = { release: () => Promise<void>; addEventListener?: (type: 'release', listener: () => void) => void }
 
-const TICK_MS = 250
+// Una volta al secondo basta: il tempo viene dall'orologio reale (endAt)
+const TICK_MS = 1000
 const RING_RADIUS = 108
 const RING_LENGTH = 2 * Math.PI * RING_RADIUS
 const PRESET_IDS: PresetId[] = ['classic', 'long', 'short', 'custom']

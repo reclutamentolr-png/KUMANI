@@ -7,6 +7,9 @@ import { ArrowLeft, Shield } from 'lucide-react'
 import AdminDashboard from '@/components/AdminDashboard'
 import { Permission } from '@/lib/admin-permissions'
 
+// Le azioni dello Staff (es. avviso a tutti su molti dispositivi) possono durare più a lungo
+export const maxDuration = 120
+
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 

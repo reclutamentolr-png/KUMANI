@@ -5,6 +5,9 @@ import { useTranslations } from 'next-intl'
 import { Bell, BellOff, Pause, Play, RotateCcw, ShieldAlert, SkipForward, Smartphone, Square, Wind } from 'lucide-react'
 import { completeOxygenSession } from '@/app/actions/oxygen'
 
+// Blocco dello schermo acceso (Screen Wake Lock), come lo restituisce il browser
+type WakeLockHandle = { released?: boolean; release: () => Promise<void>; addEventListener?: (type: 'release', listener: () => void) => void }
+
 // KUMANI OXYGEN: respirazione 4-7-8 guidata a testo. Una sequenza di passi
 // (frasi, preparazione, cicli) scandita da un timer al secondo; il cerchio
 // si espande in 4 s, resta pieno 7 s e si svuota in 8 s. Suono (generato dal
@@ -89,7 +92,7 @@ export default function OxygenSession() {
   const [elapsed, setElapsed] = useState(0)
   const [reducedMotion, setReducedMotion] = useState(false)
   const audio = useRef<AudioContext | null>(null)
-  const wakeLock = useRef<{ release: () => Promise<void> } | null>(null)
+  const wakeLock = useRef<WakeLockHandle | null>(null)
   // Impostazioni lette dal timer senza farlo ripartire
   const settings = useRef({ sound, vibration })
   useEffect(() => {
@@ -107,8 +110,13 @@ export default function OxygenSession() {
   // Schermo acceso durante la sessione (dove il browser lo consente)
   const keepScreenOn = useCallback(async (on: boolean) => {
     try {
-      if (on && !wakeLock.current && 'wakeLock' in navigator) {
-        wakeLock.current = await (navigator as Navigator & { wakeLock: { request: (type: 'screen') => Promise<{ release: () => Promise<void> }> } }).wakeLock.request('screen')
+      // Il browser toglie il blocco quando si cambia app: in quel caso se ne chiede uno nuovo
+      if (on && (!wakeLock.current || wakeLock.current.released) && 'wakeLock' in navigator) {
+        const lock = await (navigator as Navigator & { wakeLock: { request: (type: 'screen') => Promise<WakeLockHandle> } }).wakeLock.request('screen')
+        lock.addEventListener?.('release', () => {
+          if (wakeLock.current === lock) wakeLock.current = null
+        })
+        wakeLock.current = lock
       } else if (!on && wakeLock.current) {
         await wakeLock.current.release()
         wakeLock.current = null
@@ -153,14 +161,20 @@ export default function OxygenSession() {
     if (step.kind === 'cycle' && (elapsed === 0 || elapsed === 4 || elapsed === 11)) cue(cyclePhase(elapsed).phase)
   }, [elapsed, stepIndex, steps, status, cue, keepScreenOn])
 
-  // Pausa automatica se si cambia app o scheda
+  // Pausa automatica se si cambia app o scheda; al ritorno, sessione in
+  // pausa: lo schermo resta di nuovo acceso (il browser aveva tolto il blocco)
+  const statusRef = useRef(status)
+  useEffect(() => {
+    statusRef.current = status
+  }, [status])
   useEffect(() => {
     const onHide = () => {
       if (document.hidden) setStatus((current) => (current === 'running' ? 'paused' : current))
+      else if (statusRef.current === 'running' || statusRef.current === 'paused') void keepScreenOn(true)
     }
     document.addEventListener('visibilitychange', onHide)
     return () => document.removeEventListener('visibilitychange', onHide)
-  }, [])
+  }, [keepScreenOn])
 
   useEffect(() => () => void keepScreenOn(false), [keepScreenOn])
 

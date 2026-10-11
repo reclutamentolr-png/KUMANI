@@ -108,8 +108,16 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
 
   useEffect(() => {
     if (state.status !== 'live') return
-    const tick = setInterval(() => setClock(Date.now()), 500)
-    return () => clearInterval(tick)
+    // Una volta al secondo e solo con la pagina visibile (batteria)
+    const update = () => {
+      if (!document.hidden) setClock(Date.now())
+    }
+    const tick = setInterval(update, 1000)
+    document.addEventListener('visibilitychange', update)
+    return () => {
+      clearInterval(tick)
+      document.removeEventListener('visibilitychange', update)
+    }
   }, [state.status])
 
   const secondsLeft = state.turnEndsAt ? Math.max(0, Math.ceil((new Date(state.turnEndsAt).getTime() - (clock + offset)) / 1000)) : 0
