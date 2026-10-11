@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { getDashboardNetworkData } from '@/lib/dashboardNetworkData'
 import { getCommunityItems } from '@/lib/servicesCatalog'
 import AppHeader from '@/components/nav/AppHeader'
+import ProposalsStrip from '@/components/proposals/ProposalsStrip'
 import NetworkSummaryCard from '@/components/dashboard/NetworkSummaryCard'
 import { CommunityBlock } from '@/components/dashboard/CommunityBlock'
 import KumanoDelGiornoPreview from '@/components/dashboard/KumanoDelGiornoPreview'
@@ -39,6 +40,7 @@ export default async function CommunityPage({ params }: { params: Promise<{ loca
       <main className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
         <NetworkSummaryCard network={network} />
         {communityItems.length > 0 && <CommunityBlock items={communityItems} />}
+        {communityItems.some((i) => i.toolName === 'community-proposals' && !i.locked) && <ProposalsStrip />}
         <KumanoDelGiornoPreview />
         <DashboardDonations />
       </main>

@@ -74,6 +74,7 @@ export async function getCommunityItems(supabase: SupabaseClient, userId: string
     { toolName: 'community-convivio', setting: 'convivio', href: '/marketplace/convivio', iconName: 'HandPlatter', title: tm('convivio'), description: tm('convivioDescription') },
     { toolName: 'community-events', setting: 'events', href: '/events', iconName: 'PartyPopper', title: tm('events'), description: tm('eventsDescription') },
     { toolName: 'community-timebank', setting: 'timebank', href: '/marketplace/timebank', iconName: 'Hourglass', title: tm('timebank'), description: tm('timebankDescription') },
+    { toolName: 'community-proposals', setting: 'proposte', href: '/community/proposte', iconName: 'Lightbulb', title: tm('proposte'), description: tm('proposteDescription') },
   ]
     .filter((item) => access.isSettingEnabled(item.setting))
     .map(({ setting, ...item }) => ({ ...item, locked: setting !== 'events' && !access.isToolEnabled(setting) }))

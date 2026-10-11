@@ -92,6 +92,7 @@ import {
   HeartHandshake,
   Undo2,
   Hourglass,
+  Lightbulb,
   Grid3x3,
   Dices,
   ChevronDown,
@@ -114,6 +115,7 @@ const EventsAdminPanel = dynamic(() => import('@/components/admin/EventsAdminPan
 const AppLimitsPanel = dynamic(() => import('@/components/admin/AppLimitsPanel'), { loading })
 const SecurityPanel = dynamic(() => import('@/components/admin/SecurityPanel'), { loading })
 const TimebankAdminPanel = dynamic(() => import('@/components/admin/TimebankAdminPanel'), { loading })
+const ProposalsAdminPanel = dynamic(() => import('@/components/admin/ProposalsAdminPanel'), { loading })
 const MosaicAdminPanel = dynamic(() => import('@/components/admin/MosaicAdminPanel'), { loading })
 const FabulaAdminPanel = dynamic(() => import('@/components/admin/FabulaAdminPanel'), { loading })
 const IdentityVerificationsPanel = dynamic(() => import('@/components/admin/IdentityVerificationsPanel'), { loading })
@@ -740,6 +742,7 @@ L'accesso viene registrato.`))) return
   { id: 'reviews', label: 'Recensioni', Icon: MessageSquareQuote, permission: 'listings.read' as Permission, group: 'community' },
   { id: 'events', label: 'Eventi', Icon: CalendarDays, permission: 'listings.read' as Permission, group: 'community' },
   { id: 'timebank', label: 'Time Bank', Icon: Hourglass, permission: 'listings.read' as Permission, group: 'community' },
+  { id: 'proposals', label: 'Proposte', Icon: Lightbulb, permission: 'listings.read' as Permission, group: 'community' },
   { id: 'affinity', label: 'Affinity', Icon: Flag, permission: 'listings.read' as Permission, group: 'community' },
   { id: 'convivio', label: 'Segnalazioni', Icon: Flag, permission: 'listings.read' as Permission, group: 'kordata' },
   { id: 'convivioFees', label: 'Commissioni', Icon: HandCoins, permission: 'listings.read' as Permission, group: 'kordata' },
@@ -1823,6 +1826,7 @@ L'accesso viene registrato.`))) return
         {activeSection === 'convivioShowcase' && <KordataShowcasePanel locale={locale} />}
         {activeSection === 'convivioFees' && <ConvivioFeesPanel locale={locale} canReadSettings={hasPermission(permissions, 'settings.read')} />}
         {activeSection === 'timebank' && <TimebankAdminPanel />}
+        {activeSection === 'proposals' && <ProposalsAdminPanel />}
         {activeSection === 'mosaic' && <MosaicAdminPanel />}
         {activeSection === 'fabula' && <FabulaAdminPanel />}
         {activeSection === 'contactMessages' && <ContactMessagesPanel />}

@@ -25,7 +25,7 @@ export function CommunityBlock({ items }: { items: CommunityItem[] }) {
           <p className="mt-0.5 text-sm text-[var(--muted)]">{t('communitySub')}</p>
         </div>
       </div>
-      <div className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item) => {
           const Icon = marketplaceIconMap[item.iconName] || Smartphone
           return (
