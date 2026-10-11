@@ -64,6 +64,28 @@ export async function createReceipt(
   const gate = await requireActiveDigitalReceiptAccess()
   if (!gate.ok) return { success: false, message: gate.message }
 
+  // Dati puliti prima di salvarli (anche il database ha gli stessi limiti)
+  const text = (value: unknown, max: number) => String(value ?? '').trim().slice(0, max)
+  const day = (value: unknown) => (/^\d{4}-\d{2}-\d{2}$/.test(String(value ?? '')) ? String(value) : null)
+  form = {
+    ...form,
+    objectName: text(form.objectName, 160),
+    serialNumber: text(form.serialNumber, 100),
+    recipientName: text(form.recipientName, 120),
+    reason: text(form.reason, 500),
+    notes: text(form.notes, 2000),
+    deliveryDate: day(form.deliveryDate) ?? '',
+    expectedReturnDate: day(form.expectedReturnDate) ?? '',
+  }
+  const quantity = form.quantity == null || String(form.quantity) === '' ? null : Math.floor(Number(form.quantity))
+  const declaredValue = form.declaredValue == null || String(form.declaredValue) === '' ? null : Number(form.declaredValue)
+  if (!form.objectName || !form.deliveryDate) return { success: false, message: 'saveError' }
+  if (quantity !== null && !(quantity >= 1 && quantity <= 100000)) return { success: false, message: 'invalidQuantity' }
+  if (declaredValue !== null && !(declaredValue >= 0 && declaredValue <= 10_000_000)) return { success: false, message: 'invalidValue' }
+  if (form.expectedReturnDate && form.expectedReturnDate < form.deliveryDate) return { success: false, message: 'returnBeforeDelivery' }
+  // La foto solo dalla propria cartella
+  if (photoPath && (!photoPath.startsWith(`${gate.userId}/`) || photoPath.includes('..'))) photoPath = null
+
   const supabase = await createClient()
 
   // Loan + expected return date + opted-in: create a non-blocking Life
@@ -106,8 +128,8 @@ export async function createReceipt(
         delivery_date: form.deliveryDate,
         reason: form.reason || null,
         notes: form.notes || null,
-        quantity: form.quantity,
-        declared_value: form.declaredValue,
+        quantity,
+        declared_value: declaredValue,
         vat_mode: ['plus', 'included', 'none'].includes(form.vatMode) ? form.vatMode : 'none',
         show_issuer: form.showIssuer !== false,
         expected_return_date: form.expectedReturnDate || null,
@@ -176,6 +198,7 @@ export async function confirmReturn(id: string): Promise<ActionResult<null>> {
     .eq('id', id)
     .eq('user_id', gate.userId)
     .eq('template', 'loan')
+    .is('returned_at', null)
     .select('life_calendar_item_id')
     .maybeSingle()
 
@@ -183,6 +206,8 @@ export async function confirmReturn(id: string): Promise<ActionResult<null>> {
     console.error('[DigitalReceipt] confirmReturn failed:', error)
     return { success: false, message: 'saveError' }
   }
+  // Nessuna riga cambiata: ricevuta non trovata, non è un prestito o è già restituita
+  if (!updated) return { success: false, message: 'returnNotFound' }
 
   // Oggetto restituito: il promemoria di restituzione non serve più.
   await closeLinkedLifeCalendarItem(supabase, gate.userId, updated?.life_calendar_item_id, 'archive')

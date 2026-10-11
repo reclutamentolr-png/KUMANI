@@ -26,6 +26,13 @@ import {
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/
 const TIME_RE = /^([01]\d|2[0-3]):[0-5]\d$/
+// Data vera del calendario: «2027-02-31» ha la forma giusta ma non esiste
+const realDate = (value: string) => {
+  if (!DATE_RE.test(value)) return false
+  const [y, m, d] = value.split('-').map(Number)
+  const date = new Date(Date.UTC(y, m - 1, d))
+  return date.getUTCFullYear() === y && date.getUTCMonth() === m - 1 && date.getUTCDate() === d
+}
 
 async function rpc<T>(name: string, args: Record<string, unknown> = {}): Promise<T | null> {
   const supabase = await createClient()
@@ -104,6 +111,7 @@ export async function saveEvent(
   if (eventId && !UUID_RE.test(eventId)) return { error: 'invalid' }
   if (!(EVENT_TYPES as readonly string[]).includes(input.type) || !(EVENT_MODES as readonly string[]).includes(input.mode)) return { error: 'invalid' }
   if (!DATE_RE.test(input.date) || !TIME_RE.test(input.time)) return { error: 'invalid' }
+  if (!realDate(input.date) || (input.endDate && DATE_RE.test(input.endDate) && !realDate(input.endDate))) return { error: 'invalid_date' }
   const repeat = !eventId && (EVENT_REPEATS as readonly string[]).includes(input.repeat) ? input.repeat : 'none'
   const repeatCount = Number.parseInt(input.repeatCount, 10) || 0
   if (repeat !== 'none' && (repeatCount < 2 || repeatCount > EVENT_MAX_SERIES_DATES)) return { error: 'repeat_count' }
@@ -120,7 +128,7 @@ export async function saveEvent(
     endsAt = zonedToUtc(endDate, input.endTime, timezone)
   }
   const link = (value: string) => {
-    const text = value.trim()
+    const text = value.trim().slice(0, 500)
     if (!text) return null
     return /^https?:\/\//i.test(text) ? text : `https://${text}`
   }

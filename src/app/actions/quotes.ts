@@ -32,12 +32,14 @@ import { limitError } from '@/lib/appLimits'
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
 // Righe ricostruite campo per campo: productId resta solo se è un uuid
+// Quantità mai negative; prezzo anche negativo (uno sconto), entro limiti sensati
+const bounded = (value: unknown, min: number, max: number) => Math.min(max, Math.max(min, Number(value) || 0))
 function cleanItems(items: QuoteItem[]): QuoteItem[] {
-  return (Array.isArray(items) ? items : []).map((item) => {
+  return (Array.isArray(items) ? items : []).slice(0, 200).map((item) => {
     const row: QuoteItem = {
-      description: String(item?.description ?? ''),
-      quantity: Number(item?.quantity) || 0,
-      unitPrice: Number(item?.unitPrice) || 0,
+      description: String(item?.description ?? '').slice(0, 1000),
+      quantity: bounded(item?.quantity, 0, 1_000_000),
+      unitPrice: Math.round(bounded(item?.unitPrice, -10_000_000, 10_000_000) * 100) / 100,
     }
     if (typeof item?.productId === 'string' && UUID_RE.test(item.productId)) row.productId = item.productId
     return row
@@ -93,19 +95,19 @@ function quoteFields(form: QuoteFormData, userId: string) {
     // Aliquota solo con «+ IVA» o «IVA inclusa», tra quelle ammesse
     vat_rate: form.vatMode !== 'none' && (QUOTE_VAT_RATES as readonly number[]).includes(Number(form.vatRate)) ? Number(form.vatRate) : null,
     signature: form.signature !== false,
-    client_name: form.clientName,
-    client_email: form.clientEmail || null,
-    client_phone: form.clientPhone || null,
-    client_address: form.clientAddress || null,
-    client_city: form.clientCity || null,
-    client_postal_code: form.clientPostalCode || null,
-    client_pec: form.clientPec || null,
-    client_vat: form.clientVat || null,
-    issue_date: form.issueDate,
-    valid_until: form.validUntil || null,
+    client_name: clip(form.clientName, 200),
+    client_email: clip(form.clientEmail, 200) || null,
+    client_phone: clip(form.clientPhone, 60) || null,
+    client_address: clip(form.clientAddress, 300) || null,
+    client_city: clip(form.clientCity, 120) || null,
+    client_postal_code: clip(form.clientPostalCode, 20) || null,
+    client_pec: clip(form.clientPec, 200) || null,
+    client_vat: clip(form.clientVat, 40) || null,
+    issue_date: /^\d{4}-\d{2}-\d{2}$/.test(String(form.issueDate)) ? form.issueDate : new Date().toISOString().slice(0, 10),
+    valid_until: /^\d{4}-\d{2}-\d{2}$/.test(String(form.validUntil)) ? form.validUntil : null,
     items,
-    payment_info: form.paymentInfo || null,
-    notes: form.notes || null,
+    payment_info: clip(form.paymentInfo, 2000) || null,
+    notes: clip(form.notes, 3000) || null,
     payment_mode: QUOTE_PAYMENT_MODES.includes(form.paymentMode) ? form.paymentMode : 'none',
     deposit_percent: form.paymentMode === 'deposit' ? Math.min(100, Math.max(1, Math.round(Number(form.depositPercent) || DEFAULT_DEPOSIT_PERCENT))) : null,
     total: layout === 'descriptive' ? computeSectionsTotal(sections) : computeQuoteTotal(items),
@@ -245,6 +247,8 @@ export async function createQuote(
   const fields = quoteFields(form, gate.userId)
   // Pagamento online con «+ IVA»: serve l'aliquota, altrimenti il cliente pagherebbe senza IVA
   if (fields.payment_mode !== 'none' && fields.vat_mode === 'plus' && fields.vat_rate === null) return { success: false, message: 'vatRateRequired' }
+  // Sconti più grandi dei prezzi: un totale negativo non ha senso
+  if (Number(fields.total) < 0) return { success: false, message: 'negativeTotal' }
 
   for (let attempt = 0; attempt < 5; attempt++) {
     const { data: maxRow } = await supabase
@@ -295,6 +299,8 @@ export async function updateQuote(id: string, form: QuoteFormData): Promise<Acti
   const fields = quoteFields(form, gate.userId)
   // Pagamento online con «+ IVA»: serve l'aliquota, altrimenti il cliente pagherebbe senza IVA
   if (fields.payment_mode !== 'none' && fields.vat_mode === 'plus' && fields.vat_rate === null) return { success: false, message: 'vatRateRequired' }
+  // Sconti più grandi dei prezzi: un totale negativo non ha senso
+  if (Number(fields.total) < 0) return { success: false, message: 'negativeTotal' }
 
   // Accettato dal cliente o pagato: non si modifica più (si duplica)
   const { data: current } = await supabase.from('quotes').select('accepted_at, payment_status').eq('id', id).eq('user_id', gate.userId).maybeSingle()

@@ -1,3 +1,4 @@
+import { todayKey } from '@/lib/agenda'
 export const CATEGORIES = [
   'person',
   'auto',
@@ -45,24 +46,19 @@ export const REMINDER_PRESETS: Record<Category, number[]> = {
 }
 
 export function getItemStatus(dueDate: string): ItemStatus {
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  const due = new Date(dueDate)
-  due.setHours(0, 0, 0, 0)
-  const daysUntil = Math.round((due.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
+  const daysLeft = daysUntil(dueDate)
 
-  if (daysUntil < 0) return 'expired'
-  if (daysUntil <= 7) return 'urgent'
-  if (daysUntil <= 30) return 'upcoming'
+  if (daysLeft < 0) return 'expired'
+  if (daysLeft <= 7) return 'urgent'
+  if (daysLeft <= 30) return 'upcoming'
   return 'regular'
 }
 
+// Giorni di calendario fino alla scadenza, contati sul giorno di Roma (come
+// i promemoria): uguali sul server e nel browser, a qualsiasi ora
 export function daysUntil(dueDate: string): number {
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  const due = new Date(dueDate)
-  due.setHours(0, 0, 0, 0)
-  return Math.round((due.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
+  const day = (key: string) => Date.UTC(Number(key.slice(0, 4)), Number(key.slice(5, 7)) - 1, Number(key.slice(8, 10)))
+  return Math.round((day(dueDate.slice(0, 10)) - day(todayKey())) / 86_400_000)
 }
 
 // Somma mesi a una data 'YYYY-MM-DD' in UTC, fermandosi all'ultimo giorno del

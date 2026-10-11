@@ -2352,7 +2352,11 @@
     "pendingClose": "Schließen",
     "limitReached": "Du hast die erlaubte Höchstzahl erreicht. Lösche, was du nicht mehr brauchst, um weitere hinzuzufügen.",
     "reminderTitle": "Rückgabe: {object}",
-    "reminderNotes": "Verliehen an {name}"
+    "reminderNotes": "Verliehen an {name}",
+    "invalidQuantity": "Die Menge muss eine ganze Zahl von 1 bis 100.000 sein.",
+    "invalidValue": "Der angegebene Wert muss zwischen 0 und 10.000.000 € liegen.",
+    "returnBeforeDelivery": "Das Rückgabedatum darf nicht vor der Übergabe liegen.",
+    "returnNotFound": "Rückgabe nicht erfasst: Diese Quittung ist keine offene Leihe (vielleicht schon als zurückgegeben markiert)."
   },
   "preventivi": {
     "title": "Angebote",
@@ -2543,7 +2547,8 @@
     "vatRateField": "MwSt.-Satz",
     "vatNoneHint": "Ohne ausgewiesene MwSt. (z. B. Pauschalregelung oder steuerfreie Leistung): Der Kunde zahlt genau den angegebenen Betrag.",
     "vatIncludedRate": "inkl. {rate} % MwSt.",
-    "vatRateRequired": "Bei Online-Zahlung den MwSt.-Satz wählen: Er wird gebraucht, um den Zahlbetrag des Kunden zu berechnen."
+    "vatRateRequired": "Bei Online-Zahlung den MwSt.-Satz wählen: Er wird gebraucht, um den Zahlbetrag des Kunden zu berechnen.",
+    "negativeTotal": "Die Summe darf nicht negativ sein: Die Rabatte übersteigen die Beträge."
   },
   "kumaniCv": {
     "title": "KUMANI CV",
@@ -3064,7 +3069,9 @@
     "deleteCardText": "{count, plural, =0 {Die Karte wird endgültig gelöscht. Das kann nicht rückgängig gemacht werden.} one {Die Karte, 1 Kunde und alle seine Stempel werden endgültig gelöscht: Der Kunde sieht seine Karte nicht mehr. Das kann nicht rückgängig gemacht werden.} other {Die Karte, # Kunden und alle ihre Stempel werden endgültig gelöscht: Die Kunden sehen ihre Karten nicht mehr. Das kann nicht rückgängig gemacht werden.}}",
     "deleteCardConfirm": "Endgültig löschen",
     "deleting": "Wird gelöscht...",
-    "savedInKumaniWallet": "Auch in deinem KUMANI-Wallet gespeichert"
+    "savedInKumaniWallet": "Auch in deinem KUMANI-Wallet gespeichert",
+    "claimNetworkError": "Keine oder instabile Verbindung: Der Stempel wurde nicht erfasst.",
+    "retry": "Erneut versuchen"
   },
   "referralLanding": {
     "invalidTitle": "Ungültiger Code",
@@ -4673,7 +4680,8 @@
     "fieldPricePaidHint": "Was jede teilnehmende Person dir direkt vor Ort zahlt.",
     "error_free_declaration": "Für ein kostenloses Event musst du erklären, dass von den Teilnehmenden keine Zahlung verlangt wird.",
     "error_price_paid": "Für ein kostenpflichtiges Event gib einen Preis über 0 € an oder wähle „Kostenloses Event“.",
-    "feeFormulaFree": "{participants} Angemeldete × {fee} (kostenloses Event)"
+    "feeFormulaFree": "{participants} Angemeldete × {fee} (kostenloses Event)",
+    "error_invalid_date": "Dieses Datum gibt es im Kalender nicht: Tag und Monat prüfen."
   },
   "verification": {
     "title_timebank": "An der Time Bank teilnehmen",

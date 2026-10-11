@@ -53,6 +53,12 @@ const nextConfig: NextConfig = {
         headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
       },
       {
+        // CV pubblici (con email e telefono): visibili solo a chi ha il link,
+        // mai nei motori di ricerca né nelle loro copie
+        source: '/:locale(it|en|fr|es|pt|de|ru)?/cv/:code*',
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive, nosnippet, noimageindex' }],
+      },
+      {
         // Service worker delle notifiche push: sempre la versione più recente
         source: '/sw.js',
         headers: [

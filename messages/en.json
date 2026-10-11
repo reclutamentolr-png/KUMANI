@@ -2352,7 +2352,11 @@
     "pendingClose": "Close",
     "limitReached": "You have reached the maximum allowed. Delete what you no longer need to add more.",
     "reminderTitle": "Return: {object}",
-    "reminderNotes": "Lent to {name}"
+    "reminderNotes": "Lent to {name}",
+    "invalidQuantity": "Quantity must be a whole number from 1 to 100,000.",
+    "invalidValue": "The declared value must be between 0 and €10,000,000.",
+    "returnBeforeDelivery": "The return date cannot be before the delivery date.",
+    "returnNotFound": "Return not recorded: this receipt is not an open loan (it may already be marked as returned)."
   },
   "preventivi": {
     "title": "Quotes",
@@ -2543,7 +2547,8 @@
     "vatRateField": "VAT rate",
     "vatNoneHint": "No VAT shown (e.g. flat-rate scheme or exempt service): the client pays exactly the amount written.",
     "vatIncludedRate": "VAT {rate}% included",
-    "vatRateRequired": "With online payment, choose the VAT rate: it is needed to work out what the client pays."
+    "vatRateRequired": "With online payment, choose the VAT rate: it is needed to work out what the client pays.",
+    "negativeTotal": "The total cannot be negative: the discounts exceed the amounts."
   },
   "kumaniCv": {
     "title": "KUMANI CV",
@@ -3064,7 +3069,9 @@
     "deleteCardText": "{count, plural, =0 {The card will be permanently deleted. This can't be undone.} one {The card, 1 customer and all their stamps will be permanently deleted: the customer won't see their card anymore. This can't be undone.} other {The card, # customers and all their stamps will be permanently deleted: customers won't see their cards anymore. This can't be undone.}}",
     "deleteCardConfirm": "Delete permanently",
     "deleting": "Deleting...",
-    "savedInKumaniWallet": "Also saved in your KUMANI Wallet"
+    "savedInKumaniWallet": "Also saved in your KUMANI Wallet",
+    "claimNetworkError": "No or unstable connection: the stamp was not recorded.",
+    "retry": "Try again"
   },
   "referralLanding": {
     "invalidTitle": "Invalid code",
@@ -4673,7 +4680,8 @@
     "fieldPricePaidHint": "What each participant pays you directly, on site.",
     "error_free_declaration": "For a free event you must declare that participants will not be asked for any payment.",
     "error_price_paid": "For a paid event enter a price above €0, or choose “Free event”.",
-    "feeFormulaFree": "{participants} attendees × {fee} (free event)"
+    "feeFormulaFree": "{participants} attendees × {fee} (free event)",
+    "error_invalid_date": "This date does not exist in the calendar: check the day and month."
   },
   "verification": {
     "title_timebank": "Join the Time Bank",

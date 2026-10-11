@@ -1,6 +1,9 @@
 'use server'
 
+import { createHash } from 'node:crypto'
 import { revalidatePath } from 'next/cache'
+import { headers } from 'next/headers'
+import { clientIp } from '@/lib/securityCore'
 import { createClient } from '@/lib/supabase/server'
 import { isGuestRequest } from '@/lib/guestServer'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
@@ -136,9 +139,12 @@ export async function unlockFidelityCassa(
 ): Promise<{ success: true } | Fail<'wrongPin' | 'locked' | 'notFound'>> {
   const service = getFidelityServiceClient()
   if (typeof cardId !== 'string' || !/^[0-9a-f-]{36}$/i.test(cardId)) return { success: false, message: 'notFound' }
-  // Ogni tentativo si conta PRIMA di provare il PIN, in modo atomico: anche
-  // con tante richieste insieme il blocco scatta dopo 5 tentativi.
-  const { data: attempt } = await service.rpc('fidelity_pin_attempt', { p_card: cardId, p_max: PIN_MAX_ATTEMPTS, p_lock_minutes: PIN_LOCK_MINUTES })
+  // Ogni tentativo si conta PRIMA di provare il PIN, in modo atomico, per
+  // dispositivo (impronta dell'IP): chi sbaglia apposta blocca solo sé
+  // stesso, non la cassa del negozio. Il database ha anche un tetto per tessera.
+  const ip = clientIp(await headers()) ?? 'unknown'
+  const client = createHash('sha256').update(`${cardId}:${ip}`).digest('hex').slice(0, 32)
+  const { data: attempt } = await service.rpc('fidelity_pin_attempt_device', { p_card: cardId, p_client: client, p_max: PIN_MAX_ATTEMPTS, p_lock_minutes: PIN_LOCK_MINUTES })
   if (attempt === 'notfound') return { success: false, message: 'notFound' }
   if (attempt !== 'try') return { success: false, message: 'locked' }
   const { data: card } = await service.from('fidelity_cards').select('pin_hash').eq('id', cardId).maybeSingle()
@@ -148,7 +154,7 @@ export async function unlockFidelityCassa(
     return { success: false, message: 'wrongPin' }
   }
 
-  await service.from('fidelity_cards').update({ pin_failed_attempts: 0, pin_locked_until: null }).eq('id', cardId)
+  await service.rpc('fidelity_pin_success', { p_card: cardId, p_client: client })
   await openCassaSession(cardId)
   return { success: true }
 }

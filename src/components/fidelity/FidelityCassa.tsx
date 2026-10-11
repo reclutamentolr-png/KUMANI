@@ -46,10 +46,15 @@ function PinUnlock({ card }: { card: CardInfo }) {
     e.preventDefault()
     setBusy(true)
     setError(null)
-    const result = await unlockFidelityCassa(card.id, pin)
-    setBusy(false)
-    if (result.success) router.refresh()
-    else setError(t(`pinError_${result.message}`))
+    try {
+      const result = await unlockFidelityCassa(card.id, pin)
+      if (result.success) router.refresh()
+      else setError(t(`pinError_${result.message}`))
+    } catch {
+      setError(t('claimNetworkError'))
+    } finally {
+      setBusy(false)
+    }
   }
 
   return (

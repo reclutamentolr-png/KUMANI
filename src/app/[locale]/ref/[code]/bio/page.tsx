@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { SITE_URL } from '@/lib/siteUrl'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { notFound } from 'next/navigation' // ✅ IMPORT AGGIUNTO PER RISOLVERE TS2304
@@ -26,6 +27,28 @@ import PublicPageOffline from '@/components/PublicPageOffline'
 // Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
 // richiesta, mai preparata in anticipo né tenuta in memoria
 export const dynamic = 'force-dynamic'
+
+// Titolo e anteprima propri (WhatsApp, social, scheda del browser): nome,
+// professione e presentazione di chi ha la pagina
+export async function generateMetadata({ params }: { params: Promise<{ locale: string; code: string }> }): Promise<Metadata> {
+  const { locale, code } = await params
+  const service = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  })
+  const { data: profile } = await service.from('profiles').select('id, first_name, last_name, occupation').eq('referral_code', code).maybeSingle()
+  if (!profile) return { title: 'KUMANI' }
+  const { data: bio } = await service.from('link_in_bio').select('bio_text').eq('user_id', profile.id).maybeSingle()
+  const t = await getTranslations({ locale, namespace: 'bioPublic' })
+  const name = [profile.first_name, profile.last_name].filter(Boolean).join(' ') || 'KUMANI'
+  const description = (bio?.bio_text || profile.occupation || t('fallbackBio')).slice(0, 200)
+  const title = profile.occupation ? `${name} · ${profile.occupation}` : name
+  return {
+    title: { absolute: `${title} · KUMANI` },
+    description,
+    openGraph: { title, description, type: 'profile', siteName: 'KUMANI', url: `${SITE_URL}/ref/${code}/bio` },
+    twitter: { card: 'summary', title, description },
+  }
+}
 
 export default async function LinkInBioPublicPage({ params }: { params: Promise<{ code: string }> }) {
   const resolvedParams = await params

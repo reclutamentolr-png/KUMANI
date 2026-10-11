@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useLocalizedRouter as useRouter } from '@/lib/useLocalizedRouter'
 import Link from '@/components/LocalizedLink'
 import { CheckCircle, LoaderCircle, XCircle, Plus, Trash2, Pencil, User, Boxes, Search, X, Table2, ScrollText } from 'lucide-react'
@@ -104,6 +104,7 @@ function defaultForm(paymentInfo = '', logoPosition: QuoteLogoPosition = 'left',
 
 export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData, inventoryProducts, initialLine, quoteNumber, canChargeOnline = false }: Props) {
   const t = useTranslations('preventivi')
+  const locale = useLocale()
   const tb = useTranslations('businessProfile')
   const te = useTranslations('ecosystem')
   const tm = useTranslations('magazzino')
@@ -724,7 +725,7 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
                             {[
                               product.sku,
                               te('quoteInventoryStock', {
-                                stock: Number(product.stock).toLocaleString(undefined, { maximumFractionDigits: 3 }),
+                                stock: Number(product.stock).toLocaleString(locale, { maximumFractionDigits: 3 }),
                                 unit: tm.has(`unit_${product.unit}`) ? tm(`unit_${product.unit}`) : product.unit,
                               }),
                             ]
@@ -733,7 +734,7 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
                           </span>
                         </span>
                         <span className="shrink-0 text-sm font-semibold text-[var(--ink)]">
-                          {(Number(product.sale_price) || 0).toLocaleString(undefined, { style: 'currency', currency: 'EUR' })}
+                          {(Number(product.sale_price) || 0).toLocaleString(locale, { style: 'currency', currency: 'EUR' })}
                         </span>
                       </button>
                     </li>
@@ -745,7 +746,7 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
 
           <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <QuoteVatControls vatMode={form.vatMode} vatRate={form.vatRate} onChange={(v) => setForm((p) => ({ ...p, ...v }))} />
-            <QuoteTotals total={total} vatMode={form.vatMode} vatRate={form.vatRate} labels={totalsLabels} className="sm:ml-auto" />
+            <QuoteTotals total={total} vatMode={form.vatMode} vatRate={form.vatRate} labels={totalsLabels} locale={locale} className="sm:ml-auto" />
           </div>
         </div>
         )}

@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { quoteGrossTotal, quoteImageUrl, quoteVatBreakdown, sectionLines, type QuoteItem, type QuoteSection } from '@/lib/quotes'
 import QuoteTotals from '@/components/quotes/QuoteTotals'
 import { LayersView } from '@/components/quotes/QuoteSectionExtras'
@@ -9,12 +9,14 @@ import { LayersView } from '@/components/quotes/QuoteSectionExtras'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function QuoteSheet({ quote }: { quote: Record<string, any> }) {
   const t = await getTranslations('preventivi')
+  // Importi sempre nel formato della lingua della pagina
+  const locale = await getLocale()
   // Totale da pagare: con l'aliquota è il totale con l'IVA
   const breakdown = quoteVatBreakdown(Number(quote.total), quote.vat_mode, quote.vat_rate)
   const totalsLabels = { total: t('totalLabel'), net: t('netLabel'), vat: (rate: number) => t('vatRateLabel', { rate }), vatPlus: t('vatPlus'), vatIncluded: t('vatIncluded') }
   const totalsBlock = (
     <div className="mt-4 flex justify-end">
-      <QuoteTotals total={Number(quote.total)} vatMode={quote.vat_mode} vatRate={quote.vat_rate} labels={totalsLabels} />
+      <QuoteTotals total={Number(quote.total)} vatMode={quote.vat_mode} vatRate={quote.vat_rate} labels={totalsLabels} locale={locale} />
     </div>
   )
   // Come un foglio: pagamento e note restano in fondo, comunque siano lunghe le righe
@@ -39,7 +41,7 @@ export default async function QuoteSheet({ quote }: { quote: Record<string, any>
       <div className="text-right">
         <p className="text-xs font-semibold text-[var(--gold)] uppercase tracking-wide mb-1">{t('totalLabel')}</p>
         <p className="text-3xl font-bold text-[var(--gold)]">
-          {quoteGrossTotal(Number(quote.total), quote.vat_mode, quote.vat_rate).toLocaleString(undefined, { style: 'currency', currency: 'EUR' })}
+          {quoteGrossTotal(Number(quote.total), quote.vat_mode, quote.vat_rate).toLocaleString(locale, { style: 'currency', currency: 'EUR' })}
         </p>
         {breakdown ? (
           <p className="text-xs text-gray-500">{t('vatIncludedRate', { rate: breakdown.rate })}</p>
@@ -100,7 +102,7 @@ export default async function QuoteSheet({ quote }: { quote: Record<string, any>
             )}
             {typeof s.amount === 'number' && (
               <p className="mt-2 text-right font-bold text-[var(--gold)]">
-                {s.amount.toLocaleString(undefined, { style: 'currency', currency: 'EUR' })}
+                {s.amount.toLocaleString(locale, { style: 'currency', currency: 'EUR' })}
                 {quote.vat_mode === 'plus' ? ` ${t('vatPlus')}` : quote.vat_mode === 'included' ? ` ${t('vatIncluded')}` : ''}
               </p>
             )}
@@ -133,10 +135,10 @@ export default async function QuoteSheet({ quote }: { quote: Record<string, any>
               <td className="py-2 text-[var(--ink)]">{item.description}</td>
               <td className="py-2 text-right text-gray-600">{item.quantity}</td>
               <td className="py-2 text-right text-gray-600">
-                {Number(item.unitPrice).toLocaleString(undefined, { style: 'currency', currency: 'EUR' })}
+                {Number(item.unitPrice).toLocaleString(locale, { style: 'currency', currency: 'EUR' })}
               </td>
               <td className="py-2 text-right font-medium text-[var(--ink)]">
-                {(item.quantity * item.unitPrice).toLocaleString(undefined, { style: 'currency', currency: 'EUR' })}
+                {(item.quantity * item.unitPrice).toLocaleString(locale, { style: 'currency', currency: 'EUR' })}
               </td>
             </tr>
           ))}

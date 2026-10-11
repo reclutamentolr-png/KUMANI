@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import Link from '@/components/LocalizedLink'
 import { CheckCircle2, House, RefreshCw, LoaderCircle, Trash2 } from 'lucide-react'
@@ -29,6 +29,7 @@ const STATUS_DOT: Record<ItemStatus, string> = {
 
 export default function LifeCalendarItemCard({ item }: { item: Item }) {
   const t = useTranslations('lifeCalendar')
+  const locale = useLocale()
   const router = useRouter()
   const [handling, setHandling] = useState(false)
   const [deleting, setDeleting] = useState(false)
@@ -40,7 +41,7 @@ export default function LifeCalendarItemCard({ item }: { item: Item }) {
     if (!isRecurring && !(await askConfirm(t('archiveConfirm')))) return
 
     setHandling(true)
-    const result = await markHandled(item.id)
+    const result = await markHandled(item.id, item.due_date)
     setHandling(false)
 
     if (!result.success) {
@@ -51,7 +52,8 @@ export default function LifeCalendarItemCard({ item }: { item: Item }) {
     if (result.data.archived) {
       alert(t('archivedSuccess'))
     } else if (result.data.newDueDate) {
-      alert(t('renewedSuccess', { date: new Date(result.data.newDueDate).toLocaleDateString() }))
+      // Data a mezzogiorno UTC: niente «giorno prima» nei fusi a ovest
+      alert(t('renewedSuccess', { date: new Date(`${result.data.newDueDate}T12:00:00Z`).toLocaleDateString(locale, { timeZone: 'UTC' }) }))
     }
 
     router.refresh()

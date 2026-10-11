@@ -6,6 +6,15 @@ import { buildBreadcrumb, type FindoItemFormData, type FindoLocation } from '@/l
 import { awardToolPoint } from '@/lib/toolPoints'
 import { limitError } from '@/lib/appLimits'
 
+// Dati puliti prima di salvarli (anche il database ha gli stessi limiti)
+function cleanItem(form: FindoItemFormData, userId: string, photoPath: string | null | undefined) {
+  const name = String(form.name ?? '').trim().slice(0, 120)
+  const tags = Array.from(new Set((Array.isArray(form.tags) ? form.tags : []).map((tag) => String(tag).trim().slice(0, 40)).filter(Boolean))).slice(0, 20)
+  // La foto solo dalla propria cartella
+  const photo = photoPath === undefined ? undefined : photoPath && photoPath.startsWith(`${userId}/`) && !photoPath.includes('..') ? photoPath : null
+  return { name, category: String(form.category ?? '').trim().slice(0, 60) || null, tags, photo }
+}
+
 type ActionResult<T> =
   | { success: true; data: T }
   | { success: false; message: string }
@@ -38,15 +47,17 @@ export async function createItem(
   const gate = await requireActiveFindoAccess()
   if (!gate.ok) return { success: false, message: gate.message }
 
+  const clean = cleanItem(form, gate.userId, photoPath)
+  if (!clean.name) return { success: false, message: 'saveError' }
   const supabase = await createClient()
   const { error } = await supabase.from('findo_items').insert({
     id,
     user_id: gate.userId,
     location_id: form.locationId,
-    name: form.name,
-    category: form.category || null,
-    tags: form.tags,
-    photo_path: photoPath,
+    name: clean.name,
+    category: clean.category,
+    tags: clean.tags,
+    photo_path: clean.photo ?? null,
   })
 
   if (error) {
@@ -68,16 +79,18 @@ export async function updateItem(
   const gate = await requireActiveFindoAccess()
   if (!gate.ok) return { success: false, message: gate.message }
 
+  const clean = cleanItem(form, gate.userId, photoPath)
+  if (!clean.name) return { success: false, message: 'saveError' }
   const supabase = await createClient()
   const update: Record<string, unknown> = {
     location_id: form.locationId,
-    name: form.name,
-    category: form.category || null,
-    tags: form.tags,
+    name: clean.name,
+    category: clean.category,
+    tags: clean.tags,
     updated_at: new Date().toISOString(),
   }
-  if (photoPath !== undefined) {
-    update.photo_path = photoPath
+  if (clean.photo !== undefined) {
+    update.photo_path = clean.photo
   }
 
   // Foto precedente, da cancellare se viene sostituita o tolta
@@ -92,7 +105,7 @@ export async function updateItem(
     return { success: false, message: 'saveError' }
   }
 
-  if (before?.photo_path && before.photo_path !== photoPath) {
+  if (before?.photo_path && before.photo_path !== clean.photo) {
     await supabase.storage.from('findo-photos').remove([before.photo_path])
   }
 
@@ -205,10 +218,12 @@ export async function createLocation(
   const gate = await requireActiveFindoAccess()
   if (!gate.ok) return { success: false, message: gate.message }
 
+  const cleanName = String(name ?? '').trim().slice(0, 100)
+  if (!cleanName) return { success: false, message: 'saveError' }
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('findo_locations')
-    .insert({ user_id: gate.userId, name, parent_id: parentId, icon })
+    .insert({ user_id: gate.userId, name: cleanName, parent_id: parentId, icon: String(icon ?? '').slice(0, 40) })
     .select('id, name, icon, parent_id')
     .single()
 

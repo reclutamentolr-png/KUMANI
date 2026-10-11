@@ -2250,7 +2250,11 @@
     "pendingClose": "Chiudi",
     "limitReached": "Hai raggiunto il numero massimo consentito. Elimina ciò che non ti serve più per aggiungerne altri.",
     "reminderTitle": "Restituzione: {object}",
-    "reminderNotes": "Prestato a {name}"
+    "reminderNotes": "Prestato a {name}",
+    "invalidQuantity": "La quantità deve essere un numero intero da 1 a 100.000.",
+    "invalidValue": "Il valore dichiarato deve essere tra 0 e 10.000.000 €.",
+    "returnBeforeDelivery": "La data di restituzione non può essere prima della consegna.",
+    "returnNotFound": "Restituzione non registrata: la ricevuta non è un prestito aperto (forse è già stata segnata come restituita)."
   },
   "spendly": {
     "navBills": "Bollette",
@@ -2597,7 +2601,8 @@
     "vatRateField": "Aliquota IVA",
     "vatNoneHint": "Senza IVA indicata (es. regime forfettario o prestazione esente): il cliente paga esattamente l'importo scritto.",
     "vatIncludedRate": "IVA {rate}% inclusa",
-    "vatRateRequired": "Con il pagamento online scegli l'aliquota IVA: serve per calcolare quanto paga il cliente."
+    "vatRateRequired": "Con il pagamento online scegli l'aliquota IVA: serve per calcolare quanto paga il cliente.",
+    "negativeTotal": "Il totale non può essere negativo: gli sconti superano gli importi."
   },
   "kumaniCv": {
     "title": "KUMANI CV",
@@ -3064,7 +3069,9 @@
     "deleteCardText": "{count, plural, =0 {La tessera verrà eliminata definitivamente. L'operazione non è reversibile.} one {Verranno eliminati definitivamente la tessera, 1 cliente e tutti i suoi timbri: il cliente non vedrà più la sua tessera. L'operazione non è reversibile.} other {Verranno eliminati definitivamente la tessera, # clienti e tutti i loro timbri: i clienti non vedranno più le loro tessere. L'operazione non è reversibile.}}",
     "deleteCardConfirm": "Elimina definitivamente",
     "deleting": "Eliminazione...",
-    "savedInKumaniWallet": "Salvata anche nel tuo Wallet KUMANI"
+    "savedInKumaniWallet": "Salvata anche nel tuo Wallet KUMANI",
+    "claimNetworkError": "Connessione assente o instabile: il timbro non è stato registrato.",
+    "retry": "Riprova"
   },
   "referralLanding": {
     "invalidTitle": "Codice non valido",
@@ -4673,7 +4680,8 @@
     "fieldPricePaidHint": "Quanto paga ogni partecipante, sul posto, direttamente a te.",
     "error_free_declaration": "Per un evento gratuito devi dichiarare che ai partecipanti non sarà chiesto alcun pagamento.",
     "error_price_paid": "Per un evento a pagamento indica un prezzo maggiore di 0 €, oppure scegli «Evento gratuito».",
-    "feeFormulaFree": "{participants} iscritti × {fee} (evento gratuito)"
+    "feeFormulaFree": "{participants} iscritti × {fee} (evento gratuito)",
+    "error_invalid_date": "Questa data non esiste nel calendario: controlla giorno e mese."
   },
   "verification": {
     "title_timebank": "Partecipa alla Time Bank",

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
@@ -10,6 +11,11 @@ import PublicPageOffline from '@/components/PublicPageOffline'
 // Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
 // richiesta, mai preparata in anticipo né tenuta in memoria
 export const dynamic = 'force-dynamic'
+
+// Anche nella pagina: niente Google, niente copie in cache, niente anteprime
+export const metadata: Metadata = {
+  robots: { index: false, follow: false, nocache: true, googleBot: { index: false, follow: false, noimageindex: true, 'max-snippet': 0 } },
+}
 
 interface PublicCvRow {
   code: string

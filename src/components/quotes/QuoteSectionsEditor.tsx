@@ -3,7 +3,7 @@
 import QuoteTotals from '@/components/quotes/QuoteTotals'
 import QuoteVatControls from '@/components/quotes/QuoteVatControls'
 import { useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { ArrowDown, ArrowUp, BookmarkPlus, Check, ChevronDown, LibraryBig, Plus, Trash2, X } from 'lucide-react'
 import { saveQuotePresets } from '@/app/actions/quotes'
 import { LayersEditor, SectionImagePicker } from '@/components/quotes/QuoteSectionExtras'
@@ -39,6 +39,7 @@ type Props = {
 
 export default function QuoteSectionsEditor({ form, setForm, initialPresets }: Props) {
   const t = useTranslations('preventivi')
+  const locale = useLocale()
   const [presets, setPresets] = useState<QuotePreset[]>(initialPresets)
   const [presetsOpen, setPresetsOpen] = useState(false)
   const [savedIndex, setSavedIndex] = useState<number | null>(null)
@@ -232,6 +233,7 @@ export default function QuoteSectionsEditor({ form, setForm, initialPresets }: P
             total={total}
             vatMode={form.vatMode}
             vatRate={form.vatRate}
+            locale={locale}
             labels={{ total: t('totalLabel'), net: t('netLabel'), vat: (rate: number) => t('vatRateLabel', { rate }), vatPlus: t('vatPlus'), vatIncluded: t('vatIncluded') }}
           />
         )}

@@ -3,7 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { awardToolPoint } from '@/lib/toolPoints'
 import { normalizeLinkUrl } from '@/lib/linkUtils'
-import { PREMIUM_BIO_THEME_KEYS, type BioThemeKey } from '@/lib/linkInBioThemes'
+import { BIO_THEMES, PREMIUM_BIO_THEME_KEYS, type BioThemeKey } from '@/lib/linkInBioThemes'
 import { KU_UNLOCK_LINKINBIO_THEMES, linkInBioThemeUnlockKey } from '@/lib/ku'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 
@@ -27,6 +27,9 @@ export async function saveLinkInBio(bioText: string, links: LinkItem[], theme: B
     return { success: false, message: 'subscriptionRequired' }
   }
 
+  // Solo temi esistenti
+  if (!Object.prototype.hasOwnProperty.call(BIO_THEMES, theme)) return { success: false }
+
   if (PREMIUM_BIO_THEME_KEYS.includes(theme)) {
     const { data: unlock } = await supabase
       .from('ku_unlock_purchases')
@@ -38,14 +41,24 @@ export async function saveLinkInBio(bioText: string, links: LinkItem[], theme: B
     if (!unlock) return { success: false, locked: true }
   }
 
-  const cleanLinks = links
+  // Al massimo 30 link, testi accorciati, solo i campi previsti (anche il
+  // database ha un limite sulla grandezza)
+  const cleanLinks = (Array.isArray(links) ? links : [])
+    .map((l) => ({
+      id: String(l?.id ?? '').slice(0, 40) || crypto.randomUUID(),
+      title: String(l?.title ?? '').trim().slice(0, 80),
+      url: String(l?.url ?? '').trim().slice(0, 500),
+      icon: /^[a-z0-9_-]{1,30}$/i.test(String(l?.icon ?? '')) ? String(l.icon) : 'default',
+      enabled: l?.enabled !== false,
+    }))
     .filter((l) => l.title && l.url)
+    .slice(0, 30)
     .map((l) => ({ ...l, url: normalizeLinkUrl(l.icon, l.url) }))
 
   const { error } = await supabase.from('link_in_bio').upsert(
     {
       user_id: user.id,
-      bio_text: bioText,
+      bio_text: String(bioText ?? '').slice(0, 500),
       links: JSON.stringify(cleanLinks),
       theme,
       updated_at: new Date().toISOString(),

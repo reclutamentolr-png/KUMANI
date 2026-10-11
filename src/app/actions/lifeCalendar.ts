@@ -33,6 +33,21 @@ async function requireActiveLifeCalendarAccess(): Promise<
 
 // "Personalizzato" richiede un numero di giorni valido: senza, al rinnovo la
 // scadenza veniva archiviata invece di spostarsi avanti.
+// Dati puliti prima di salvarli (anche il database ha gli stessi limiti)
+function cleanForm(form: LifeCalendarItemFormData) {
+  const offsets = Array.from(new Set((Array.isArray(form.reminderOffsets) ? form.reminderOffsets : []).map(Number)))
+    .filter((n) => Number.isInteger(n) && n >= 0 && n <= 730)
+    .slice(0, 10)
+  const custom = Number(form.recurrenceCustomDays)
+  return {
+    title: String(form.title ?? '').trim().slice(0, 160),
+    notes: String(form.notes ?? '').trim().slice(0, 2000) || null,
+    dueDate: /^\d{4}-\d{2}-\d{2}$/.test(String(form.dueDate)) ? form.dueDate : null,
+    offsets,
+    customDays: form.recurrence === 'custom' && Number.isInteger(custom) ? Math.min(Math.max(custom, 1), 3650) : form.recurrenceCustomDays,
+  }
+}
+
 function invalidCustomRecurrence(form: LifeCalendarItemFormData): boolean {
   return form.recurrence === 'custom' && !(Number(form.recurrenceCustomDays) >= 1)
 }
@@ -42,19 +57,21 @@ export async function createItem(form: LifeCalendarItemFormData): Promise<Action
   if (!gate.ok) return { success: false, message: gate.message }
   if (invalidCustomRecurrence(form)) return { success: false, message: 'customDaysRequired' }
 
+  const clean = cleanForm(form)
+  if (!clean.title || !clean.dueDate) return { success: false, message: 'saveError' }
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('life_calendar_items')
     .insert({
       user_id: gate.userId,
       profile_id: form.profileId,
-      title: form.title,
+      title: clean.title,
       category: form.category,
-      due_date: form.dueDate,
-      notes: form.notes || null,
-      reminder_offsets: form.reminderOffsets,
+      due_date: clean.dueDate,
+      notes: clean.notes,
+      reminder_offsets: clean.offsets,
       recurrence: form.recurrence,
-      recurrence_custom_days: form.recurrenceCustomDays,
+      recurrence_custom_days: clean.customDays,
     })
     .select('id')
     .single()
@@ -75,18 +92,20 @@ export async function updateItem(id: string, form: LifeCalendarItemFormData): Pr
   if (!gate.ok) return { success: false, message: gate.message }
   if (invalidCustomRecurrence(form)) return { success: false, message: 'customDaysRequired' }
 
+  const clean = cleanForm(form)
+  if (!clean.title || !clean.dueDate) return { success: false, message: 'saveError' }
   const supabase = await createClient()
   const { error } = await supabase
     .from('life_calendar_items')
     .update({
       profile_id: form.profileId,
-      title: form.title,
+      title: clean.title,
       category: form.category,
-      due_date: form.dueDate,
-      notes: form.notes || null,
-      reminder_offsets: form.reminderOffsets,
+      due_date: clean.dueDate,
+      notes: clean.notes,
+      reminder_offsets: clean.offsets,
       recurrence: form.recurrence,
-      recurrence_custom_days: form.recurrenceCustomDays,
+      recurrence_custom_days: clean.customDays,
       updated_at: new Date().toISOString(),
     })
     .eq('id', id)
@@ -115,8 +134,12 @@ export async function deleteItem(id: string): Promise<ActionResult<null>> {
   return { success: true, data: null }
 }
 
+// expectedDueDate: la scadenza che la persona vedeva quando ha toccato
+// «Rinnovata». Se nel frattempo è già cambiata (doppio tocco, due schede)
+// non si sposta di nuovo.
 export async function markHandled(
-  id: string
+  id: string,
+  expectedDueDate?: string
 ): Promise<ActionResult<{ archived: boolean; newDueDate: string | null }>> {
   const gate = await requireActiveLifeCalendarAccess()
   if (!gate.ok) return { success: false, message: gate.message }
@@ -124,7 +147,7 @@ export async function markHandled(
   const supabase = await createClient()
   const { data: item, error: fetchError } = await supabase
     .from('life_calendar_items')
-    .select('id, due_date, recurrence, recurrence_custom_days')
+    .select('id, due_date, recurrence, recurrence_custom_days, status')
     .eq('id', id)
     .eq('user_id', gate.userId)
     .single()
@@ -132,6 +155,8 @@ export async function markHandled(
   if (fetchError || !item) {
     return { success: false, message: 'saveError' }
   }
+  if (item.status === 'archived') return { success: true, data: { archived: true, newDueDate: null } }
+  if (expectedDueDate && item.due_date !== expectedDueDate) return { success: true, data: { archived: false, newDueDate: item.due_date } }
 
   // La nuova scadenza deve cadere da oggi in poi (fuso di Roma): se la voce era
   // scaduta da più periodi si avanza più volte, con un tetto di sicurezza.
@@ -161,6 +186,7 @@ export async function markHandled(
     )
     .eq('id', id)
     .eq('user_id', gate.userId)
+    .eq('due_date', item.due_date)
 
   if (updateError) {
     console.error('[LifeCalendar] markHandled update failed:', updateError)
@@ -177,7 +203,7 @@ export async function createProfile(name: string, icon: string): Promise<ActionR
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('life_calendar_profiles')
-    .insert({ user_id: gate.userId, name, icon })
+    .insert({ user_id: gate.userId, name: String(name ?? '').trim().slice(0, 60), icon: String(icon ?? '').slice(0, 40) })
     .select('id, name, icon')
     .single()
 

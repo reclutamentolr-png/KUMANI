@@ -5,6 +5,7 @@ import { hasActiveCvAccess } from '@/lib/cv-server'
 import { generateShortCode } from '@/lib/shortLink'
 import type { CvFormData } from '@/lib/cv'
 import { awardToolPoint } from '@/lib/toolPoints'
+import { normalizeExternalUrl } from '@/lib/linkUtils'
 
 type ActionResult<T> = { success: true; data: T } | { success: false; message: string }
 
@@ -22,23 +23,44 @@ async function requireActiveCvAccess(): Promise<{ ok: true; userId: string } | {
   return { ok: true, userId: user.id }
 }
 
+// Dati puliti prima di salvarli (anche il database ha gli stessi limiti):
+// testi accorciati, elenchi con un massimo di voci, link con https://
+const text = (value: unknown, max: number) => String(value ?? '').trim().slice(0, max)
+const list = <T,>(value: unknown, max: number, map: (item: Record<string, unknown>) => T): T[] =>
+  (Array.isArray(value) ? value : []).slice(0, max).map((item) => map((item ?? {}) as Record<string, unknown>))
+
 function toRow(form: CvFormData) {
   return {
-    title: form.title,
+    title: text(form.title, 120),
     template: form.template,
-    content_language: form.contentLanguage,
-    full_name: form.fullName,
-    role_title: form.roleTitle || null,
-    summary: form.summary || null,
-    email: form.email || null,
-    phone: form.phone || null,
-    location: form.location || null,
-    links: form.links,
-    experiences: form.experiences,
-    education: form.education,
-    skills: form.skills,
-    languages: form.languages,
-    certifications: form.certifications,
+    content_language: text(form.contentLanguage, 10) || 'it',
+    full_name: text(form.fullName, 120),
+    role_title: text(form.roleTitle, 160) || null,
+    summary: text(form.summary, 3000) || null,
+    email: text(form.email, 200) || null,
+    phone: text(form.phone, 40) || null,
+    location: text(form.location, 120) || null,
+    links: list(form.links, 10, (l) => ({ label: text(l.label, 60), url: normalizeExternalUrl(text(l.url, 500)) })).filter((l) => l.url),
+    experiences: list(form.experiences, 30, (e) => ({
+      company: text(e.company, 120),
+      role: text(e.role, 120),
+      location: text(e.location, 120),
+      startDate: text(e.startDate, 10),
+      endDate: text(e.endDate, 10),
+      current: e.current === true,
+      description: text(e.description, 1500),
+    })),
+    education: list(form.education, 20, (e) => ({
+      institution: text(e.institution, 160),
+      degree: text(e.degree, 160),
+      field: text(e.field, 160),
+      startDate: text(e.startDate, 10),
+      endDate: text(e.endDate, 10),
+      current: e.current === true,
+    })),
+    skills: list(form.skills, 40, (s) => ({ name: text(s.name, 60), level: [1, 2, 3, 4].includes(Number(s.level)) ? Number(s.level) : 2 })),
+    languages: list(form.languages, 15, (l) => ({ name: text(l.name, 40), level: ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].includes(String(l.level)) ? String(l.level) : 'B1' })),
+    certifications: list(form.certifications, 30, (c) => ({ name: text(c.name, 160), issuer: text(c.issuer, 120), date: text(c.date, 10) })),
   }
 }
 
@@ -75,6 +97,11 @@ export async function createCv(form: CvFormData, rawPhotoPath: string | null): P
     if (error && error.code !== '23505') {
       console.error('[Cv] createCv failed:', error)
       return { success: false, message: 'saveError' }
+    }
+    // Codice doppio o CV creato nello stesso momento da un'altra scheda
+    if (error) {
+      const { data: again } = await supabase.from('cvs').select('id').eq('user_id', gate.userId).limit(1).maybeSingle()
+      if (again) return { success: false, message: 'oneCvOnly' }
     }
   }
 

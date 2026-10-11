@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl'
 import { formatCvDate } from '@/lib/cv'
 import type { CvExperience, CvEducation, CvSkill, CvLanguage, CvCertification, CvLink } from '@/lib/cv'
+import { normalizeExternalUrl } from '@/lib/linkUtils'
 
 // Small presentational building blocks shared by all 3 CV templates, so
 // field rendering (dates, skill dots, link styling) lives in one place
@@ -88,7 +89,7 @@ export function CvCertificationItem({ item, contentLanguage, light }: { item: Cv
 export function CvLinkItem({ item, light }: { item: CvLink; light?: boolean }) {
   return (
     <a
-      href={item.url}
+      href={normalizeExternalUrl(item.url)}
       target="_blank"
       rel="noopener noreferrer"
       className={`block text-xs mb-1.5 truncate hover:underline ${light ? 'text-white/90' : 'text-[var(--gold)]'}`}
