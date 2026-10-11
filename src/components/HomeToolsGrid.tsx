@@ -57,6 +57,7 @@ import {
   ChevronDown,
   ChevronUp,
   type LucideIcon,
+  MonitorSmartphone,
 } from 'lucide-react'
 
 type Category = 'marketing' | 'security' | 'personal' | 'wellness' | 'lavoro' | 'svago' | 'community'
@@ -144,6 +145,7 @@ export default function HomeToolsGrid({ freeToolNames = [] }: { freeToolNames?: 
     { name: 'neurobalance', icon: Waves, title: t('toolNeurobalanceTitle'), desc: t('toolNeurobalanceDescription'), category: 'wellness' },
     { name: 'aureya', icon: Stethoscope, title: tc('aureya'), desc: tc('aureyaDescription'), category: 'wellness' },
     { name: 'preventivi', icon: FileSpreadsheet, title: tc('preventivi'), desc: tc('preventiviDescription'), category: 'lavoro' },
+    { name: 'hopla', icon: MonitorSmartphone, title: tc('hopla'), desc: tc('hoplaDescription'), category: 'personal' },
     { name: 'magazzino', icon: Warehouse, title: tc('magazzino'), desc: tc('magazzinoDescription'), category: 'lavoro' },
     { name: 'calcolatrici', icon: Calculator, title: tc('calcolatrici'), desc: tc('calcolatriciDescription'), category: 'lavoro' },
     { name: 'trova-lavoro', icon: BriefcaseBusiness, title: tc('trovaLavoro'), desc: tc('trovaLavoroDescription'), category: 'lavoro' },

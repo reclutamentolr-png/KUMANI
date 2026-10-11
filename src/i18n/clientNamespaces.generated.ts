@@ -41,6 +41,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "garage",
   "gifts",
   "guides",
+  "hopla",
   "hub",
   "install",
   "jobs",

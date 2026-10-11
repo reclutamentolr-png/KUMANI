@@ -346,6 +346,17 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       requiresSubscription: true,
     },
     {
+      toolName: 'hopla',
+      href: '/marketplace/hopla',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'MonitorSmartphone',
+      title: t('hopla'),
+      description: t('hoplaDescription'),
+      color: 'gold',
+      category: 'personal',
+      requiresSubscription: true,
+    },
+    {
       toolName: 'magazzino',
       href: '/marketplace/magazzino',
       gradient: 'bg-[var(--ink)]',

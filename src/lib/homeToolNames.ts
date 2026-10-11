@@ -6,7 +6,7 @@ export const HOME_TOOL_NAMES = [
   'svat', 'verifoto', 'checkmail', 'antitruffa', 'verifica-iban', 'scudo-dati', 'documento-sicuro', 'firma-email', 'calcolatrici', 'focus',
   'memolife', 'life-calendar', 'garage', 'casa', 'findo', 'digital-receipt', 'spendly', 'fincheck', 'travel',
   'mandala', 'oxygen', 'neurobalance', 'aureya',
-  'preventivi', 'clienti', 'magazzino', 'kumani-cv', 'trova-lavoro',
+  'preventivi', 'clienti', 'hopla', 'magazzino', 'kumani-cv', 'trova-lavoro',
   'affinity', 'veritas', 'mosaic', 'fabula', 'nexus',
   'listings', 'spotlight', 'convivio', 'events', 'timebank',
 ]

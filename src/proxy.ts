@@ -44,6 +44,7 @@ const PAID_TOOLS = [
   'checkmail',
   'magazzino',
   'clienti',
+  'hopla',
   'documento-sicuro',
   'firma-email',
   'calcolatrici',

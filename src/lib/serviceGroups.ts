@@ -28,6 +28,7 @@ const GROUP_OF: Record<string, ServiceGroup> = {
   'kumani-cv': 'work',
   preventivi: 'work',
   clienti: 'work',
+  hopla: 'work',
   'digital-receipt': 'work',
   magazzino: 'work',
   calcolatrici: 'work',
