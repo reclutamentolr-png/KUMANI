@@ -19,6 +19,10 @@ export const CLIENT_LIMITS = {
   checklistItem: 200,
   checklistItems: 50,
   paymentNote: 200,
+  costDescription: 200,
+  timeNote: 200,
+  maxHourlyCost: 10_000,
+  maxHoursEntry: 24,
   maxAmount: 10_000_000,
 } as const
 
@@ -66,6 +70,8 @@ export interface ClientQuote {
   payment_status: string
   paid_amount: number
   paid_at: string | null
+  // Imponibile (senza IVA): per il margine del lavoro
+  net: number
 }
 
 export interface ClientFormData {
@@ -148,6 +154,7 @@ export interface ClientJob {
   due_date: string | null
   notes: string | null
   checklist: ChecklistItem[]
+  hourly_cost: number | null
 }
 
 export interface ClientPayment {
@@ -190,4 +197,68 @@ export const STAGE_STYLES: Record<JobStage, string> = {
   doing: 'bg-[#e8f0ff] text-[#1e4fa3]',
   done: 'bg-[var(--gold-pale)] text-[#7a5a14]',
   paid: 'bg-[#e7f4ea] text-[#1d6b34]',
+}
+
+// Fase 3: tempo, costi, foto e documenti del lavoro
+export interface TimeEntry {
+  id: string
+  started_at: string
+  ended_at: string | null
+  note: string | null
+}
+
+export const COST_KINDS = ['material', 'expense'] as const
+export type CostKind = (typeof COST_KINDS)[number]
+
+export interface JobCost {
+  id: string
+  kind: CostKind
+  description: string
+  quantity: number
+  unit_cost: number
+  product_id: string | null
+  stock_unloaded: boolean
+}
+
+export interface JobFile {
+  id: string
+  name: string
+  mime: string
+  size: number
+  created_at: string
+  url: string | null
+}
+
+export interface JobProduct {
+  id: string
+  name: string
+  unit: string
+  purchase_price: number
+  stock: number
+}
+
+export const JOB_FILE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf']
+export const JOB_FILE_MAX_BYTES = 10 * 1024 * 1024
+
+// Imponibile del preventivo: «IVA inclusa» va scorporata
+export function quoteNet(total: number, vatMode: string | null, vatRate: number | null): number {
+  const rate = Number(vatRate) || 0
+  const value = vatMode === 'included' && rate > 0 ? total / (1 + rate / 100) : total
+  return Math.round(value * 100) / 100
+}
+
+// Minuti di una sessione (acceso: fino a adesso)
+export function entryMinutes(entry: TimeEntry, now = Date.now()): number {
+  const end = entry.ended_at ? new Date(entry.ended_at).getTime() : now
+  return Math.max(0, (end - new Date(entry.started_at).getTime()) / 60_000)
+}
+
+export function formatHours(minutes: number, locale: string): string {
+  return new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(minutes / 60)
+}
+
+export function formatClock(ms: number): string {
+  const total = Math.max(0, Math.floor(ms / 1000))
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${Math.floor(total / 3600)}:${pad(Math.floor((total % 3600) / 60))}:${pad(total % 60)}`
 }

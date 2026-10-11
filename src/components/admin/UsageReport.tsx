@@ -12,6 +12,7 @@ const BUCKET_LABEL: Record<string, string> = {
   'receipt-photos-v2': 'Ricevute',
   'menu-photos': 'Menu',
   'casa-files': 'Casa',
+  'job-files': 'Clienti e Lavori',
   'garage-files': 'Garage',
   'identity-docs': 'Identità',
   'convivio-photos': 'Kordata',

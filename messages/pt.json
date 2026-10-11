@@ -11766,7 +11766,12 @@
       "duplicateName": "Já tem um cliente com este nome.",
       "saveError": "Não foi possível guardar. Tente novamente.",
       "titleRequired": "Escreva o título do trabalho.",
-      "amountInvalid": "Escreva um valor válido."
+      "amountInvalid": "Escreva um valor válido.",
+      "hoursInvalid": "Escreva as horas (de 0,1 a 24).",
+      "descriptionRequired": "Escreva a descrição.",
+      "quantityInvalid": "Escreva uma quantidade válida.",
+      "stockInsufficient": "Stock insuficiente para esta quantidade.",
+      "stockError": "Não foi possível retirar do Magazzino PRO."
     },
     "vatShort": "NIF {vat}",
     "call": "Ligar",
@@ -11864,6 +11869,71 @@
       "notePlaceholder": "Ex. Sinal de 30%",
       "save": "Registar pagamento",
       "add": "Registar um pagamento"
+    },
+    "time": {
+      "title": "Tempo no trabalho",
+      "total": "Total {hours} horas",
+      "start": "Iniciar o cronómetro",
+      "stop": "Parar o cronómetro",
+      "hint": "O cronómetro continua mesmo que feche a página: encontra-o em Clientes e Trabalhos.",
+      "hourlyCost": "Custo por hora (€)",
+      "addManual": "Adicionar horas à mão",
+      "showSessions": "Ver sessões ({count})",
+      "hideSessions": "Ocultar sessões",
+      "day": "Dia",
+      "hours": "Horas",
+      "note": "Nota",
+      "save": "Adicionar",
+      "hoursShort": "{hours} horas",
+      "running": "em curso",
+      "delete": "Eliminar sessão",
+      "deleteConfirm": "Eliminar esta sessão de trabalho?",
+      "runningBand": "Cronómetro a decorrer"
+    },
+    "margin": {
+      "title": "Margem do trabalho",
+      "price": "Preço ao cliente (sem IVA)",
+      "materials": "Materiais",
+      "expenses": "Outras despesas",
+      "labor": "Horas × custo por hora ({hours} × {rate})",
+      "laborNoRate": "Horas × custo por hora (não definido)",
+      "left": "Fica-lhe",
+      "noPrice": "Defina o preço do trabalho ou ligue um orçamento para ver a margem.",
+      "hint": "Verde a partir de 25%, amarelo a partir de 10%, vermelho abaixo."
+    },
+    "costs": {
+      "title": "Materiais e despesas",
+      "none": "Nenhum custo registado.",
+      "kinds": {
+        "material": "Material",
+        "expense": "Despesa"
+      },
+      "unloaded": "retirado do Magazzino PRO",
+      "delete": "Eliminar custo",
+      "deleteConfirm": "Eliminar «{name}»?",
+      "deleteConfirmStock": "Eliminar «{name}»? A mercadoria retirada não volta sozinha ao Magazzino PRO: se precisar, registe uma entrada no Magazzino PRO.",
+      "kindLabel": "Tipo de custo",
+      "fromStock": "Do Magazzino PRO",
+      "noProduct": "Nenhum produto (escrevo eu)",
+      "inStock": "{qty} {unit} em stock",
+      "description": "Descrição",
+      "materialPlaceholder": "Ex. Azulejos 30×60",
+      "expensePlaceholder": "Ex. Remoção de entulho",
+      "quantity": "Quantidade",
+      "unitCost": "Custo unitário (€)",
+      "unload": "Retirar também do Magazzino PRO",
+      "save": "Adicionar custo",
+      "add": "Adicionar material ou despesa"
+    },
+    "files": {
+      "title": "Fotos e documentos",
+      "typeError": "Pode carregar fotos (JPG, PNG, WebP) ou PDF.",
+      "sizeError": "O ficheiro tem mais de 10 MB.",
+      "limitError": "Atingiu o número máximo de ficheiros.",
+      "deleteConfirm": "Eliminar «{name}»?",
+      "delete": "Eliminar {name}",
+      "add": "Adicionar",
+      "hint": "Fotos da obra, contratos, fichas técnicas. Ficam privados: só você os vê."
     }
   }
 }

@@ -34,7 +34,17 @@ export default async function ClientJobPage({ params }: { params: Promise<{ loca
       </header>
 
       <main className="mx-auto max-w-3xl px-4 py-8">
-        <ClientJobView job={data.job} client={data.client} payments={data.payments} quote={data.quote} quotes={data.quotes} />
+        <ClientJobView
+          job={data.job}
+          client={data.client}
+          payments={data.payments}
+          quote={data.quote}
+          quotes={data.quotes}
+          entries={data.entries}
+          costs={data.costs}
+          files={data.files}
+          products={data.products}
+        />
       </main>
     </div>
   )

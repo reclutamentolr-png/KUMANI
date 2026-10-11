@@ -11766,7 +11766,12 @@
       "duplicateName": "Du hast bereits einen Kunden mit diesem Namen.",
       "saveError": "Speichern nicht möglich. Bitte erneut versuchen.",
       "titleRequired": "Gib den Titel des Auftrags ein.",
-      "amountInvalid": "Gib einen gültigen Betrag ein."
+      "amountInvalid": "Gib einen gültigen Betrag ein.",
+      "hoursInvalid": "Gib die Stunden ein (0,1 bis 24).",
+      "descriptionRequired": "Gib eine Beschreibung ein.",
+      "quantityInvalid": "Gib eine gültige Menge ein.",
+      "stockInsufficient": "Nicht genug Bestand für diese Menge.",
+      "stockError": "Entnahme aus Magazzino PRO nicht möglich."
     },
     "vatShort": "USt-IdNr. {vat}",
     "call": "Anrufen",
@@ -11864,6 +11869,71 @@
       "notePlaceholder": "Z. B. Anzahlung 30 %",
       "save": "Zahlung erfassen",
       "add": "Zahlung erfassen"
+    },
+    "time": {
+      "title": "Zeit am Auftrag",
+      "total": "Gesamt {hours} Std.",
+      "start": "Zeitmessung starten",
+      "stop": "Zeitmessung stoppen",
+      "hint": "Die Zeitmessung läuft weiter, auch wenn du die Seite schließt: Du findest sie unter Kunden & Aufträge.",
+      "hourlyCost": "Stundenkosten (€)",
+      "addManual": "Stunden von Hand eintragen",
+      "showSessions": "Einträge ansehen ({count})",
+      "hideSessions": "Einträge ausblenden",
+      "day": "Tag",
+      "hours": "Stunden",
+      "note": "Notiz",
+      "save": "Hinzufügen",
+      "hoursShort": "{hours} Std.",
+      "running": "läuft",
+      "delete": "Eintrag löschen",
+      "deleteConfirm": "Diesen Arbeitseintrag löschen?",
+      "runningBand": "Zeitmessung läuft"
+    },
+    "margin": {
+      "title": "Marge des Auftrags",
+      "price": "Preis für den Kunden (netto)",
+      "materials": "Material",
+      "expenses": "Sonstige Kosten",
+      "labor": "Stunden × Stundenkosten ({hours} × {rate})",
+      "laborNoRate": "Stunden × Stundenkosten (nicht festgelegt)",
+      "left": "Dir bleibt",
+      "noPrice": "Lege den Preis des Auftrags fest oder verknüpfe ein Angebot, um die Marge zu sehen.",
+      "hint": "Grün ab 25 %, gelb ab 10 %, rot darunter."
+    },
+    "costs": {
+      "title": "Material und Kosten",
+      "none": "Noch keine Kosten erfasst.",
+      "kinds": {
+        "material": "Material",
+        "expense": "Kosten"
+      },
+      "unloaded": "aus Magazzino PRO entnommen",
+      "delete": "Kosten löschen",
+      "deleteConfirm": "„{name}“ löschen?",
+      "deleteConfirmStock": "„{name}“ löschen? Die entnommene Ware kommt nicht von selbst in Magazzino PRO zurück: Buche bei Bedarf einen Zugang in Magazzino PRO.",
+      "kindLabel": "Kostenart",
+      "fromStock": "Aus Magazzino PRO",
+      "noProduct": "Kein Produkt (selbst eingeben)",
+      "inStock": "{qty} {unit} auf Lager",
+      "description": "Beschreibung",
+      "materialPlaceholder": "Z. B. Fliesen 30×60",
+      "expensePlaceholder": "Z. B. Schuttentsorgung",
+      "quantity": "Menge",
+      "unitCost": "Stückkosten (€)",
+      "unload": "Auch aus Magazzino PRO entnehmen",
+      "save": "Kosten hinzufügen",
+      "add": "Material oder Kosten hinzufügen"
+    },
+    "files": {
+      "title": "Fotos und Dokumente",
+      "typeError": "Du kannst Fotos (JPG, PNG, WebP) oder PDFs hochladen.",
+      "sizeError": "Die Datei ist größer als 10 MB.",
+      "limitError": "Du hast die maximale Anzahl an Dateien erreicht.",
+      "deleteConfirm": "„{name}“ löschen?",
+      "delete": "{name} löschen",
+      "add": "Hinzufügen",
+      "hint": "Baustellenfotos, Verträge, Datenblätter. Sie bleiben privat: Nur du siehst sie."
     }
   }
 }

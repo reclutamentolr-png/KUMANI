@@ -11766,7 +11766,12 @@
       "duplicateName": "Hai già un cliente con questo nome.",
       "saveError": "Non è stato possibile salvare. Riprova.",
       "titleRequired": "Scrivi il titolo del lavoro.",
-      "amountInvalid": "Scrivi un importo valido."
+      "amountInvalid": "Scrivi un importo valido.",
+      "hoursInvalid": "Scrivi le ore (da 0,1 a 24).",
+      "descriptionRequired": "Scrivi la descrizione.",
+      "quantityInvalid": "Scrivi una quantità valida.",
+      "stockInsufficient": "Giacenza insufficiente in Magazzino per questa quantità.",
+      "stockError": "Non è stato possibile scaricare dal Magazzino."
     },
     "vatShort": "P. IVA {vat}",
     "call": "Chiama",
@@ -11864,6 +11869,71 @@
       "notePlaceholder": "Es. Acconto 30%",
       "save": "Registra pagamento",
       "add": "Registra un pagamento"
+    },
+    "time": {
+      "title": "Tempo sul lavoro",
+      "total": "Totale {hours} ore",
+      "start": "Avvia il cronometro",
+      "stop": "Ferma il cronometro",
+      "hint": "Il cronometro continua anche se chiudi la pagina: lo ritrovi in Clienti e Lavori.",
+      "hourlyCost": "Costo orario (€)",
+      "addManual": "Aggiungi ore a mano",
+      "showSessions": "Vedi le sessioni ({count})",
+      "hideSessions": "Nascondi le sessioni",
+      "day": "Giorno",
+      "hours": "Ore",
+      "note": "Nota",
+      "save": "Aggiungi",
+      "hoursShort": "{hours} ore",
+      "running": "in corso",
+      "delete": "Elimina sessione",
+      "deleteConfirm": "Eliminare questa sessione di lavoro?",
+      "runningBand": "Cronometro in corso"
+    },
+    "margin": {
+      "title": "Margine del lavoro",
+      "price": "Prezzo al cliente (senza IVA)",
+      "materials": "Materiali",
+      "expenses": "Altre spese",
+      "labor": "Ore × costo orario ({hours} × {rate})",
+      "laborNoRate": "Ore × costo orario (non impostato)",
+      "left": "Ti resta",
+      "noPrice": "Imposta il prezzo del lavoro o collega un preventivo per vedere il margine.",
+      "hint": "Verde dal 25%, giallo dal 10%, rosso sotto."
+    },
+    "costs": {
+      "title": "Materiali e spese",
+      "none": "Nessun costo registrato.",
+      "kinds": {
+        "material": "Materiale",
+        "expense": "Spesa"
+      },
+      "unloaded": "scaricato dal Magazzino",
+      "delete": "Elimina costo",
+      "deleteConfirm": "Eliminare «{name}»?",
+      "deleteConfirmStock": "Eliminare «{name}»? La merce scaricata non torna da sola in Magazzino: se serve, fai un carico dal Magazzino.",
+      "kindLabel": "Tipo di costo",
+      "fromStock": "Dal Magazzino",
+      "noProduct": "Nessun prodotto (scrivo io)",
+      "inStock": "{qty} {unit} in giacenza",
+      "description": "Descrizione",
+      "materialPlaceholder": "Es. Piastrelle 30×60",
+      "expensePlaceholder": "Es. Smaltimento macerie",
+      "quantity": "Quantità",
+      "unitCost": "Costo unitario (€)",
+      "unload": "Scarica anche dal Magazzino",
+      "save": "Aggiungi costo",
+      "add": "Aggiungi materiale o spesa"
+    },
+    "files": {
+      "title": "Foto e documenti",
+      "typeError": "Puoi caricare foto (JPG, PNG, WebP) o PDF.",
+      "sizeError": "Il file supera i 10 MB.",
+      "limitError": "Hai raggiunto il numero massimo di file.",
+      "deleteConfirm": "Eliminare «{name}»?",
+      "delete": "Elimina {name}",
+      "add": "Aggiungi",
+      "hint": "Foto del cantiere, contratti, schede tecniche. Restano private: le vedi solo tu."
     }
   }
 }

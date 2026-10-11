@@ -2,7 +2,7 @@ import { getTranslations } from 'next-intl/server'
 import { ArrowLeft, BookUser } from 'lucide-react'
 import ToolBackLink from '@/components/ToolBackLink'
 import ClientiList from '@/components/clienti/ClientiList'
-import { listClients } from '@/app/actions/clienti'
+import { getRunningTimer, listClients } from '@/app/actions/clienti'
 import { toolMetadata } from '@/lib/toolMetadata'
 
 // Nome del servizio nella scheda del browser
@@ -12,7 +12,7 @@ export const generateMetadata = toolMetadata('clienti')
 export default async function ClientiPage() {
   const t = await getTranslations('clienti')
   const tc = await getTranslations('common')
-  const clients = await listClients()
+  const [clients, running] = await Promise.all([listClients(), getRunningTimer()])
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -45,7 +45,7 @@ export default async function ClientiPage() {
             <p className="mt-3 text-base text-white/70 sm:text-lg">{t('heroText')}</p>
           </div>
         </div>
-        <ClientiList clients={clients} />
+        <ClientiList clients={clients} running={running} />
       </main>
     </div>
   )

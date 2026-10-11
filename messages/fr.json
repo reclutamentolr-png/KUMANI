@@ -11766,7 +11766,12 @@
       "duplicateName": "Vous avez déjà un client portant ce nom.",
       "saveError": "Impossible d’enregistrer. Réessayez.",
       "titleRequired": "Indiquez le titre du chantier.",
-      "amountInvalid": "Indiquez un montant valide."
+      "amountInvalid": "Indiquez un montant valide.",
+      "hoursInvalid": "Indiquez les heures (de 0,1 à 24).",
+      "descriptionRequired": "Indiquez une description.",
+      "quantityInvalid": "Indiquez une quantité valide.",
+      "stockInsufficient": "Stock insuffisant pour cette quantité.",
+      "stockError": "Impossible de sortir de Magazzino PRO."
     },
     "vatShort": "TVA {vat}",
     "call": "Appeler",
@@ -11864,6 +11869,71 @@
       "notePlaceholder": "Ex. Acompte 30 %",
       "save": "Enregistrer le paiement",
       "add": "Enregistrer un paiement"
+    },
+    "time": {
+      "title": "Temps sur le chantier",
+      "total": "Total {hours} h",
+      "start": "Démarrer le chrono",
+      "stop": "Arrêter le chrono",
+      "hint": "Le chrono continue même si vous fermez la page : vous le retrouvez dans Clients et Chantiers.",
+      "hourlyCost": "Coût horaire (€)",
+      "addManual": "Ajouter des heures à la main",
+      "showSessions": "Voir les sessions ({count})",
+      "hideSessions": "Masquer les sessions",
+      "day": "Jour",
+      "hours": "Heures",
+      "note": "Note",
+      "save": "Ajouter",
+      "hoursShort": "{hours} h",
+      "running": "en cours",
+      "delete": "Supprimer la session",
+      "deleteConfirm": "Supprimer cette session de travail ?",
+      "runningBand": "Chrono en cours"
+    },
+    "margin": {
+      "title": "Marge du chantier",
+      "price": "Prix au client (HT)",
+      "materials": "Matériaux",
+      "expenses": "Autres frais",
+      "labor": "Heures × coût horaire ({hours} × {rate})",
+      "laborNoRate": "Heures × coût horaire (non défini)",
+      "left": "Il vous reste",
+      "noPrice": "Indiquez le prix du chantier ou reliez un devis pour voir la marge.",
+      "hint": "Vert dès 25 %, jaune dès 10 %, rouge en dessous."
+    },
+    "costs": {
+      "title": "Matériaux et frais",
+      "none": "Aucun coût enregistré.",
+      "kinds": {
+        "material": "Matériau",
+        "expense": "Frais"
+      },
+      "unloaded": "sorti de Magazzino PRO",
+      "delete": "Supprimer le coût",
+      "deleteConfirm": "Supprimer « {name} » ?",
+      "deleteConfirmStock": "Supprimer « {name} » ? La marchandise sortie ne revient pas toute seule dans Magazzino PRO : si besoin, faites une entrée dans Magazzino PRO.",
+      "kindLabel": "Type de coût",
+      "fromStock": "Depuis Magazzino PRO",
+      "noProduct": "Aucun produit (je l’écris)",
+      "inStock": "{qty} {unit} en stock",
+      "description": "Description",
+      "materialPlaceholder": "Ex. Carrelage 30×60",
+      "expensePlaceholder": "Ex. Évacuation des gravats",
+      "quantity": "Quantité",
+      "unitCost": "Coût unitaire (€)",
+      "unload": "Sortir aussi de Magazzino PRO",
+      "save": "Ajouter le coût",
+      "add": "Ajouter un matériau ou des frais"
+    },
+    "files": {
+      "title": "Photos et documents",
+      "typeError": "Vous pouvez envoyer des photos (JPG, PNG, WebP) ou des PDF.",
+      "sizeError": "Le fichier dépasse 10 Mo.",
+      "limitError": "Vous avez atteint le nombre maximal de fichiers.",
+      "deleteConfirm": "Supprimer « {name} » ?",
+      "delete": "Supprimer {name}",
+      "add": "Ajouter",
+      "hint": "Photos du chantier, contrats, fiches techniques. Ils restent privés : vous seul les voyez."
     }
   }
 }

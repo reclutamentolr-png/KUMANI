@@ -11766,7 +11766,12 @@
       "duplicateName": "You already have a client with this name.",
       "saveError": "Could not save. Please try again.",
       "titleRequired": "Enter the job title.",
-      "amountInvalid": "Enter a valid amount."
+      "amountInvalid": "Enter a valid amount.",
+      "hoursInvalid": "Enter the hours (0.1 to 24).",
+      "descriptionRequired": "Enter a description.",
+      "quantityInvalid": "Enter a valid quantity.",
+      "stockInsufficient": "Not enough stock for this quantity.",
+      "stockError": "Could not take it out of Magazzino PRO."
     },
     "vatShort": "VAT {vat}",
     "call": "Call",
@@ -11864,6 +11869,71 @@
       "notePlaceholder": "E.g. 30% deposit",
       "save": "Record payment",
       "add": "Record a payment"
+    },
+    "time": {
+      "title": "Time on the job",
+      "total": "Total {hours} hours",
+      "start": "Start the timer",
+      "stop": "Stop the timer",
+      "hint": "The timer keeps running even if you close the page: you’ll find it in Clients & Jobs.",
+      "hourlyCost": "Hourly cost (€)",
+      "addManual": "Add hours manually",
+      "showSessions": "See sessions ({count})",
+      "hideSessions": "Hide sessions",
+      "day": "Day",
+      "hours": "Hours",
+      "note": "Note",
+      "save": "Add",
+      "hoursShort": "{hours} hours",
+      "running": "running",
+      "delete": "Delete session",
+      "deleteConfirm": "Delete this work session?",
+      "runningBand": "Timer running"
+    },
+    "margin": {
+      "title": "Job margin",
+      "price": "Price to the client (excl. VAT)",
+      "materials": "Materials",
+      "expenses": "Other expenses",
+      "labor": "Hours × hourly cost ({hours} × {rate})",
+      "laborNoRate": "Hours × hourly cost (not set)",
+      "left": "You keep",
+      "noPrice": "Set the job price or link a quote to see the margin.",
+      "hint": "Green from 25%, yellow from 10%, red below."
+    },
+    "costs": {
+      "title": "Materials and expenses",
+      "none": "No costs recorded.",
+      "kinds": {
+        "material": "Material",
+        "expense": "Expense"
+      },
+      "unloaded": "taken from Magazzino PRO",
+      "delete": "Delete cost",
+      "deleteConfirm": "Delete “{name}”?",
+      "deleteConfirmStock": "Delete “{name}”? The goods taken out don’t go back to Magazzino PRO by themselves: if needed, record a stock-in in Magazzino PRO.",
+      "kindLabel": "Cost type",
+      "fromStock": "From Magazzino PRO",
+      "noProduct": "No product (I’ll type it)",
+      "inStock": "{qty} {unit} in stock",
+      "description": "Description",
+      "materialPlaceholder": "E.g. 30×60 tiles",
+      "expensePlaceholder": "E.g. Rubble disposal",
+      "quantity": "Quantity",
+      "unitCost": "Unit cost (€)",
+      "unload": "Also take it out of Magazzino PRO",
+      "save": "Add cost",
+      "add": "Add material or expense"
+    },
+    "files": {
+      "title": "Photos and documents",
+      "typeError": "You can upload photos (JPG, PNG, WebP) or PDFs.",
+      "sizeError": "The file is over 10 MB.",
+      "limitError": "You’ve reached the maximum number of files.",
+      "deleteConfirm": "Delete “{name}”?",
+      "delete": "Delete {name}",
+      "add": "Add",
+      "hint": "Site photos, contracts, data sheets. They stay private: only you can see them."
     }
   }
 }

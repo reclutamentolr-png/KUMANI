@@ -16,12 +16,18 @@ import {
   type ClientJob,
   type ClientPayment,
   type ClientQuote,
+  type JobCost,
+  type JobFile,
   type JobFormData,
+  type JobProduct,
   type JobStage,
+  type TimeEntry,
+  entryMinutes,
 } from '@/lib/clienti'
 import { inputClass } from './ClientForm'
 import JobForm from './JobForm'
 import Payments from './Payments'
+import { CostsCard, FilesCard, MarginCard, TimeCard } from './JobWork'
 
 const card = 'rounded-3xl border border-[var(--gold)]/25 bg-white p-5 shadow-sm'
 
@@ -31,12 +37,20 @@ export default function ClientJobView({
   payments: initialPayments,
   quote,
   quotes,
+  entries: initialEntries,
+  costs: initialCosts,
+  files: initialFiles,
+  products,
 }: {
   job: ClientJob
   client: { id: string; name: string }
   payments: ClientPayment[]
   quote: ClientQuote | null
   quotes: ClientQuote[]
+  entries: TimeEntry[]
+  costs: JobCost[]
+  files: JobFile[]
+  products: JobProduct[] | null
 }) {
   const t = useTranslations('clienti')
   const locale = useLocale()
@@ -46,6 +60,9 @@ export default function ClientJobView({
   const [editing, setEditing] = useState(false)
   const [newItem, setNewItem] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [entries, setEntries] = useState(initialEntries)
+  const [costs, setCosts] = useState(initialCosts)
+  const [files, setFiles] = useState(initialFiles)
 
   const linkedQuote = quotes.find((q) => q.id === job.quote_id) ?? quote
   const price = job.amount ?? linkedQuote?.gross ?? null
@@ -120,6 +137,9 @@ export default function ClientJobView({
   }
 
   const doneCount = job.checklist.filter((i) => i.done).length
+  // Margine sull'imponibile: dal preventivo collegato (senza IVA) o dal prezzo del lavoro
+  const marginPrice = linkedQuote ? linkedQuote.net : job.amount
+  const workedMinutes = entries.filter((e) => e.ended_at).reduce((s, e) => s + entryMinutes(e), 0)
 
   return (
     <div className="space-y-5">
@@ -155,20 +175,30 @@ export default function ClientJobView({
         </p>
       )}
 
-      <section className="rounded-3xl bg-[var(--ink)] p-5 text-white shadow-[0_14px_40px_rgba(23,23,23,0.2)]">
-        <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--gold-bright)]">{t('jobs.moneyTitle')}</p>
+      <TimeCard
+        jobId={job.id}
+        entries={entries}
+        onEntries={setEntries}
+        hourlyCost={job.hourly_cost}
+        onHourlyCost={(value) => setJob((prev) => ({ ...prev, hourly_cost: value }))}
+      />
+
+      <MarginCard price={marginPrice} costs={costs} minutes={workedMinutes} hourlyCost={job.hourly_cost} />
+
+      <section className="rounded-3xl border border-[var(--gold)]/25 bg-white p-5 shadow-sm">
+        <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#8a6a1f]">{t('jobs.moneyTitle')}</p>
         <div className="mt-3 grid grid-cols-3 gap-3">
           <div>
-            <p className="text-xs text-white/65">{t('jobs.price')}</p>
-            <p className="mt-0.5 text-lg font-extrabold">{price === null ? '—' : formatEur(price, locale)}</p>
+            <p className="text-xs text-[var(--muted)]">{t('jobs.price')}</p>
+            <p className="mt-0.5 text-lg font-extrabold text-[var(--ink)]">{price === null ? '—' : formatEur(price, locale)}</p>
           </div>
           <div>
-            <p className="text-xs text-white/65">{t('jobs.paid')}</p>
-            <p className="mt-0.5 text-lg font-extrabold text-[#9be0ae]">{formatEur(paid, locale)}</p>
+            <p className="text-xs text-[var(--muted)]">{t('jobs.paid')}</p>
+            <p className="mt-0.5 text-lg font-extrabold text-[#1d6b34]">{formatEur(paid, locale)}</p>
           </div>
           <div>
-            <p className="text-xs text-white/65">{t('jobs.left')}</p>
-            <p className="mt-0.5 text-lg font-extrabold text-[var(--gold-bright)]">{left === null ? '—' : formatEur(left, locale)}</p>
+            <p className="text-xs text-[var(--muted)]">{t('jobs.left')}</p>
+            <p className="mt-0.5 text-lg font-extrabold text-[#8a6a1f]">{left === null ? '—' : formatEur(left, locale)}</p>
           </div>
         </div>
       </section>
@@ -246,6 +276,10 @@ export default function ClientJobView({
           </form>
         )}
       </section>
+
+      <CostsCard jobId={job.id} costs={costs} onCosts={setCosts} products={products} />
+
+      <FilesCard jobId={job.id} files={files} onFiles={setFiles} />
 
       <section className={card}>
         {editing ? (

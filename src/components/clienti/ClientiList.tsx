@@ -1,15 +1,17 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { ArrowRight, Plus, Search } from 'lucide-react'
+import { ArrowRight, Plus, Search, Timer } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { useLocalizedRouter as useRouter } from '@/lib/useLocalizedRouter'
 import { createClientRecord } from '@/app/actions/clienti'
-import { CLIENT_FILTERS, EMPTY_CLIENT_FORM, formatEur, isStepDue, type ClientFilter, type ClientOverview } from '@/lib/clienti'
+import { CLIENT_FILTERS, EMPTY_CLIENT_FORM, formatClock, formatEur, isStepDue, type ClientFilter, type ClientOverview } from '@/lib/clienti'
 import ClientForm, { inputClass } from './ClientForm'
 
-export default function ClientiList({ clients }: { clients: ClientOverview[] }) {
+type RunningTimer = { jobId: string; jobTitle: string; clientName: string; startedAt: string } | null
+
+export default function ClientiList({ clients, running }: { clients: ClientOverview[]; running: RunningTimer }) {
   const t = useTranslations('clienti')
   const locale = useLocale()
   const router = useRouter()
@@ -46,6 +48,7 @@ export default function ClientiList({ clients }: { clients: ClientOverview[] }) 
 
   return (
     <div className="space-y-5">
+      {running && <RunningBand running={running} />}
       <div className="grid grid-cols-2 gap-3">
         <div className="rounded-2xl border border-[var(--gold)]/25 bg-white p-4">
           <p className="text-xs font-semibold text-[var(--muted)]">{t('toCollect')}</p>
@@ -141,5 +144,33 @@ export default function ClientiList({ clients }: { clients: ClientOverview[] }) 
 
       <p className="text-xs text-[var(--muted)]">{t('fromQuotesHint')}</p>
     </div>
+  )
+}
+
+// Cronometro acceso su un lavoro: si ritrova qui anche dopo aver chiuso la pagina
+function RunningBand({ running }: { running: NonNullable<RunningTimer> }) {
+  const t = useTranslations('clienti')
+  const [now, setNow] = useState(() => Date.now())
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(id)
+  }, [])
+  return (
+    <Link
+      href={`/marketplace/clienti/lavoro/${running.jobId}`}
+      className="flex items-center justify-between gap-3 rounded-2xl bg-[var(--ink)] px-4 py-3 text-white shadow-lg"
+    >
+      <span className="flex min-w-0 items-center gap-3">
+        <Timer className="h-5 w-5 shrink-0 text-[var(--gold-bright)]" aria-hidden="true" />
+        <span className="min-w-0">
+          <span className="block text-xs font-bold text-[var(--gold-bright)]">{t('time.runningBand')}</span>
+          <span className="block truncate text-sm font-semibold">
+            {running.jobTitle}
+            {running.clientName ? ` · ${running.clientName}` : ''}
+          </span>
+        </span>
+      </span>
+      <span className="shrink-0 text-xl font-extrabold tabular-nums text-[var(--gold-bright)]">{formatClock(now - new Date(running.startedAt).getTime())}</span>
+    </Link>
   )
 }
