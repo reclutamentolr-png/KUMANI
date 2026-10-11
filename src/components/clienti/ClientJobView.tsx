@@ -140,7 +140,12 @@ export default function ClientJobView({
 
   const doneCount = job.checklist.filter((i) => i.done).length
   // Margine sull'imponibile: dal preventivo collegato (senza IVA) o dal prezzo del lavoro
-  const marginPrice = linkedQuote ? linkedQuote.net : job.amount
+  // (prezzo del lavoro senza l'IVA del preventivo, se il lavoro ha un prezzo suo)
+  const marginPrice = linkedQuote
+    ? job.amount !== null && linkedQuote.gross > 0
+      ? Math.round(job.amount * (linkedQuote.net / linkedQuote.gross) * 100) / 100
+      : linkedQuote.net
+    : job.amount
   const workedMinutes = entries.filter((e) => e.ended_at).reduce((s, e) => s + entryMinutes(e), 0)
 
   return (

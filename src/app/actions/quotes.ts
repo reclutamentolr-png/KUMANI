@@ -116,6 +116,8 @@ function quoteFields(form: QuoteFormData, userId: string) {
 
 // Ricorda l'ultima posizione del logo scelta (proposta nei preventivi nuovi)
 async function rememberLogoPosition(supabase: SupabaseClient, userId: string, position: string, bandStyle?: unknown) {
+  // Uno stile uguale a quello salvato non cambia nulla (e non stacca i
+  // Preventivi dai colori del brand); uno diverso è una scelta a mano
   try {
     await supabase
       .from('quote_issuer_profiles')
@@ -159,18 +161,22 @@ async function upsertSavedClient(supabase: SupabaseClient, userId: string, form:
   const name = form.clientName.trim()
   if (!name) return
   try {
-    const payload = {
-      user_id: userId,
-      name,
-      vat: form.clientVat || null,
-      address: form.clientAddress || null,
-      city: form.clientCity || null,
-      postal_code: form.clientPostalCode || null,
-      pec: form.clientPec || null,
-      email: form.clientEmail || null,
-      phone: form.clientPhone || null,
-      updated_at: new Date().toISOString(),
-    }
+    // Solo i campi scritti: un campo lasciato vuoto nel preventivo non
+    // cancella il dato già salvato nella scheda del cliente
+    const filled = Object.fromEntries(
+      Object.entries({
+        vat: form.clientVat,
+        address: form.clientAddress,
+        city: form.clientCity,
+        postal_code: form.clientPostalCode,
+        pec: form.clientPec,
+        email: form.clientEmail,
+        phone: form.clientPhone,
+      })
+        .map(([k, v]) => [k, typeof v === 'string' ? v.trim() : ''])
+        .filter(([, v]) => v)
+    )
+    const payload = { user_id: userId, name, ...filled, updated_at: new Date().toISOString() }
     // Stesso nome (senza distinguere maiuscole); % e _ presi alla lettera
     const { data: existing } = await supabase
       .from('quote_clients')
@@ -330,7 +336,9 @@ export async function updateQuote(id: string, form: QuoteFormData): Promise<Acti
   }
 
   await upsertSavedClient(supabase, gate.userId, form, id)
-  await rememberLogoPosition(supabase, gate.userId, fields.logo_position, fields.band_style)
+  // In modifica si ricorda solo la posizione del logo: la fascia di un
+  // preventivo vecchio non deve diventare lo stile dei preventivi nuovi
+  await rememberLogoPosition(supabase, gate.userId, fields.logo_position)
   return { success: true, data: null }
 }
 

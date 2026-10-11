@@ -41,9 +41,10 @@ export default function BrandWizard({ initial }: { initial: BrandState }) {
   const [logoError, setLogoError] = useState(false)
   const [harmony, setHarmony] = useState<Harmony>('contrast')
   const [baseColor, setBaseColor] = useState(initial.palette?.primary ?? '#7a2e1f')
-  const [follow, setFollow] = useState<BrandFollow>(() =>
-    firstTime || !Object.values(initial.follow).some(Boolean) ? Object.fromEntries(BRAND_SERVICES.map((s) => [s, true])) : initial.follow
-  )
+  // Prima volta: tutti i servizi proposti; poi le scelte salvate
+  const [follow, setFollow] = useState<BrandFollow>(() => (firstTime ? Object.fromEntries(BRAND_SERVICES.map((s) => [s, true])) : initial.follow))
+  // Colori toccati a mano: i colori del logo non li sovrascrivono più
+  const [touched, setTouched] = useState(false)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -56,12 +57,13 @@ export default function BrandWizard({ initial }: { initial: BrandState }) {
       .then((swatches) => {
         if (!alive) return
         setLogoSwatches(swatches)
-        if (firstTime && swatches.length) setPalette(paletteFromSwatches(swatches))
+        if (firstTime && !touched && swatches.length) changePalette(paletteFromSwatches(swatches))
       })
       .catch(() => alive && (setLogoError(true), setLogoSwatches([])))
     return () => {
       alive = false
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [source, initial.logoUrl, logoSwatches, firstTime])
 
   const generated = useMemo(() => harmonyPalette(hueOf(baseColor), harmony), [baseColor, harmony])
@@ -71,13 +73,19 @@ export default function BrandWizard({ initial }: { initial: BrandState }) {
   const onPrimary = readableOn(palette.primary)
   const qr = qrColor(palette)
 
-  const setRole = (role: BrandRole, hex: string) => {
-    setPalette((prev) => ({ ...prev, [role]: hex.toLowerCase() }))
+  // Ogni cambiamento dei colori va salvato di nuovo
+  function changePalette(next: BrandPalette) {
+    setPalette(next)
     setSaved(false)
+  }
+  const setRole = (role: BrandRole, hex: string) => {
+    setTouched(true)
+    changePalette({ ...palette, [role]: hex.toLowerCase() })
   }
   const pickHarmony = (h: Harmony) => {
     setHarmony(h)
-    setPalette(harmonyPalette(hueOf(baseColor), h).palette)
+    setTouched(true)
+    changePalette(harmonyPalette(hueOf(baseColor), h).palette)
   }
   const fixPair = (role: BrandRole, against: string, min: number) => setRole(role, fixContrast(palette[role], against, min))
 
@@ -129,7 +137,7 @@ export default function BrandWizard({ initial }: { initial: BrandState }) {
             <section className={`${card} flex items-center gap-4`}>
               {initial.logoUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={initial.logoUrl} alt={t('logoAlt')} className="h-20 w-20 shrink-0 rounded-2xl border border-[var(--gold)]/25 bg-white object-contain p-1" />
+                <img src={initial.logoUrl} crossOrigin="anonymous" alt={t('logoAlt')} className="h-20 w-20 shrink-0 rounded-2xl border border-[var(--gold)]/25 bg-white object-contain p-1" />
               ) : null}
               <div className="min-w-0">
                 <p className="font-bold text-[var(--ink)]">{initial.logoUrl ? t('logoTitle') : t('noLogoTitle')}</p>
@@ -154,7 +162,8 @@ export default function BrandWizard({ initial }: { initial: BrandState }) {
                   value={baseColor}
                   onChange={(e) => {
                     setBaseColor(e.target.value)
-                    setPalette(harmonyPalette(hueOf(e.target.value), harmony).palette)
+                    setTouched(true)
+                    changePalette(harmonyPalette(hueOf(e.target.value), harmony).palette)
                   }}
                   className="h-11 w-16 cursor-pointer rounded-lg border border-[var(--gold)]/35"
                 />
@@ -186,7 +195,7 @@ export default function BrandWizard({ initial }: { initial: BrandState }) {
                 key={role}
                 className={`flex items-center gap-3 rounded-2xl p-2 ${active === role ? 'border-2 border-[var(--ink)] bg-[var(--gold-pale)]/50' : 'border border-[var(--gold)]/20'}`}
               >
-                <label className="relative h-11 w-11 shrink-0 cursor-pointer overflow-hidden rounded-xl border border-black/10" style={{ background: palette[role] }}>
+                <label className="relative h-11 w-11 shrink-0 cursor-pointer overflow-hidden rounded-xl border border-black/10 focus-within:ring-2 focus-within:ring-[var(--ink)] focus-within:ring-offset-2" style={{ background: palette[role] }}>
                   <span className="sr-only">{t('pickColor', { role: t(`roles.${role}`) })}</span>
                   <input type="color" value={palette[role]} onChange={(e) => setRole(role, e.target.value)} onFocus={() => setActive(role)} className="absolute inset-0 h-full w-full cursor-pointer opacity-0" />
                 </label>

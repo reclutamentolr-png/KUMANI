@@ -6,6 +6,7 @@ import { ArrowRight, Download, Plus, Search, Timer } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { useLocalizedRouter as useRouter } from '@/lib/useLocalizedRouter'
 import { createClientRecord } from '@/app/actions/clienti'
+import { limitTextOf } from '@/lib/limitText'
 import { CLIENT_FILTERS, EMPTY_CLIENT_FORM, formatClock, formatEur, isStepDue, type ClientFilter, type ClientOverview, type TodayData } from '@/lib/clienti'
 import ClientForm, { inputClass } from './ClientForm'
 import TodaySection from './TodaySection'
@@ -45,7 +46,7 @@ export default function ClientiList({ clients, running, today }: { clients: Clie
 
   const create = async (form: typeof EMPTY_CLIENT_FORM) => {
     const result = await createClientRecord(form)
-    if (!result.success) return t(`errors.${result.message === 'duplicateName' || result.message === 'nameRequired' ? result.message : 'saveError'}`)
+    if (!result.success) return limitTextOf(result) ?? t(`errors.${result.message === 'duplicateName' || result.message === 'nameRequired' ? result.message : 'saveError'}`)
     router.push(`/marketplace/clienti/${result.data.id}`)
     return null
   }

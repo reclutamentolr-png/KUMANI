@@ -67,7 +67,7 @@ export default async function LinkInBioPage({ params }: { params: Promise<{ loca
   }
 
   const businessProfile = await getMyBusinessProfile(supabase, user.id)
-  const { data: brandRow } = await supabase.from('quote_issuer_profiles').select('brand_colors').eq('user_id', user.id).maybeSingle()
+  const { data: brandRow } = await supabase.from('quote_issuer_profiles').select('brand_colors, brand_follow').eq('user_id', user.id).maybeSingle()
   const brand = brandRow?.brand_colors && cleanPalette(brandRow.brand_colors) ? (brandRow.brand_colors as BrandColors) : null
   const baseUrl = SITE_URL
   
@@ -112,7 +112,7 @@ export default async function LinkInBioPage({ params }: { params: Promise<{ loca
         {/* Editor reale + anteprima live (la stessa istanza di stato guida
             entrambi i pannelli, quindi resta sincronizzata mentre si scrive
             e dopo il salvataggio — niente più mockup statico scollegato). */}
-        <LinkInBioEditor userId={user.id} firstName={profile.first_name} lastName={profile.last_name} businessProfile={businessProfile} brand={brand} />
+        <LinkInBioEditor userId={user.id} firstName={profile.first_name} lastName={profile.last_name} businessProfile={businessProfile} brand={brand} followBrand={(brandRow?.brand_follow as Record<string, unknown> | null)?.bio === true} />
 
         {/* URL della Bio con pulsante copia */}
         <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 mb-8">

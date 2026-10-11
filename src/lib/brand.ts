@@ -130,9 +130,10 @@ export function harmonyPalette(baseHue: number, harmony: Harmony): { palette: Br
   const shift = harmony === 'contrast' ? 180 : harmony === 'warm' ? 35 : 120
   const h2 = (baseHue + shift) % 360
   const h3 = (baseHue + (harmony === 'lively' ? 240 : harmony === 'warm' ? -25 + 360 : 30)) % 360
-  const primary = hsl(baseHue, 55, 32)
-  const accent = hsl(h2, 70, 55)
   const background = hsl(baseHue, 35, 96)
+  // Principale leggibile sia con testo bianco sopra sia sullo sfondo
+  const primary = fixContrast(fixContrast(hsl(baseHue, 55, 32), '#ffffff', 4.5), background, 4.5)
+  const accent = hsl(h2, 70, 55)
   const text = hsl(baseHue, 15, 15)
   const palette = { primary, accent: fixContrast(accent, background, 3), background, text: fixContrast(text, background) }
   const swatches = [primary, accent, background, text, hsl(h3, 55, 45), hsl(h2, 45, 85), hsl(baseHue, 60, 50), hsl(h3, 30, 25)]

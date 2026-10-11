@@ -43,9 +43,11 @@ export default function LinkInBioEditor({
   lastName,
   businessProfile = null,
   brand = null,
+  followBrand = false,
 }: {
   // «I colori del tuo brand» (Scheda attività): tema «brand» se ci sono
   brand?: BrandColors | null
+  followBrand?: boolean
   userId: string
   firstName?: string
   lastName?: string
@@ -56,7 +58,8 @@ export default function LinkInBioEditor({
   const supabase = createClient()
   const [bioText, setBioText] = useState('')
   const [links, setLinks] = useState<LinkItem[]>([])
-  const [theme, setTheme] = useState<BioThemeKey>(DEFAULT_BIO_THEME)
+  // Pagina nuova che segue il brand: parte dal tema «brand»
+  const [theme, setTheme] = useState<BioThemeKey>(brand && followBrand ? 'brand' : DEFAULT_BIO_THEME)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [justSaved, setJustSaved] = useState(false)

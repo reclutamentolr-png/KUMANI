@@ -12,6 +12,7 @@ import {
   PAYMENT_METHODS,
   parseEuro,
   quoteGross,
+  romeToday,
   quoteNet,
   COST_KINDS,
   JOB_FILE_MAX_BYTES,
@@ -264,6 +265,13 @@ export async function deleteClientRecord(id: string): Promise<ActionResult<null>
 // ——— Lavori (fase 2) ———
 
 const dateOrNull = (value: string) => (DATE_RE.test(value) ? value : null)
+
+// Il preventivo di un lavoro dev'essere dello stesso cliente (o di nessuno)
+async function quoteOfClient(supabase: Supabase, userId: string, quoteId: string | null, clientId: string): Promise<boolean> {
+  if (!quoteId) return true
+  const { data } = await supabase.from('quotes').select('client_id').eq('id', quoteId).eq('user_id', userId).maybeSingle()
+  return !!data && (data.client_id === null || data.client_id === clientId)
+}
 function amountOrNull(value: string): number | null | 'invalid' {
   if (!value.trim()) return null
   const n = parseEuro(value)
@@ -290,6 +298,7 @@ export async function createJob(clientId: string, form: JobFormData): Promise<Ac
   const { amount, fields } = jobFields(form)
   if (!fields.title) return { success: false, message: 'titleRequired' }
   if (amount === 'invalid') return { success: false, message: 'amountInvalid' }
+  if (!(await quoteOfClient(g.supabase, g.userId, fields.quote_id, clientId))) return { success: false, message: 'saveError' }
   const { data, error } = await g.supabase
     .from('client_jobs')
     .insert({ user_id: g.userId, client_id: clientId, ...fields, amount, hourly_cost: await lastHourlyCost() })
@@ -352,6 +361,8 @@ export async function updateJob(jobId: string, form: JobFormData, notes: string)
   const { amount, fields } = jobFields(form)
   if (!fields.title) return { success: false, message: 'titleRequired' }
   if (amount === 'invalid') return { success: false, message: 'amountInvalid' }
+  const { data: current } = await g.supabase.from('client_jobs').select('client_id').eq('id', jobId).eq('user_id', g.userId).maybeSingle()
+  if (!current || !(await quoteOfClient(g.supabase, g.userId, fields.quote_id, current.client_id))) return { success: false, message: 'saveError' }
   const { error } = await g.supabase
     .from('client_jobs')
     .update({ ...fields, amount, notes: orNull(clip(notes, CLIENT_LIMITS.notes)), updated_at: new Date().toISOString() })
@@ -416,6 +427,11 @@ export async function addPayment(clientId: string, form: PaymentFormData): Promi
   if (!g) return { success: false, message: 'subscriptionRequired' }
   const amount = parseEuro(form.amount)
   if (amount === null || amount <= 0 || amount > CLIENT_LIMITS.maxAmount) return { success: false, message: 'amountInvalid' }
+  // Il lavoro del pagamento dev'essere dello stesso cliente
+  if (UUID_RE.test(form.jobId)) {
+    const { data: job } = await g.supabase.from('client_jobs').select('client_id').eq('id', form.jobId).eq('user_id', g.userId).maybeSingle()
+    if (!job || job.client_id !== clientId) return { success: false, message: 'saveError' }
+  }
   const { data, error } = await g.supabase
     .from('client_payments')
     .insert({
@@ -423,7 +439,7 @@ export async function addPayment(clientId: string, form: PaymentFormData): Promi
       client_id: clientId,
       job_id: UUID_RE.test(form.jobId) ? form.jobId : null,
       amount,
-      paid_on: dateOrNull(form.paidOn) ?? new Date().toISOString().slice(0, 10),
+      paid_on: dateOrNull(form.paidOn) ?? romeToday(),
       method: PAYMENT_METHODS.includes(form.method) ? form.method : 'other',
       note: orNull(clip(form.note, CLIENT_LIMITS.paymentNote)),
     })

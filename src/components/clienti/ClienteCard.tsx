@@ -6,6 +6,7 @@ import { Check, FilePlus2, Hammer, LoaderCircle, Mail, MessageCircle, Pencil, Ph
 import Link from '@/components/LocalizedLink'
 import { useLocalizedRouter as useRouter } from '@/lib/useLocalizedRouter'
 import { askConfirm } from '@/lib/confirm'
+import { limitTextOf } from '@/lib/limitText'
 import { createJob, deleteClientRecord, saveClientNotes, setNextStep, updateClientRecord } from '@/app/actions/clienti'
 import {
   CLIENT_LIMITS,
@@ -67,7 +68,13 @@ export default function ClienteCard({
 
   const formatDay = (day: string) => new Date(`${day}T12:00:00`).toLocaleDateString(locale, { weekday: 'short', day: 'numeric', month: 'long' })
   // Da incassare: preventivi accettati + lavori senza preventivo; incassato: online + registrati
-  const accepted = quotes.filter((q) => q.accepted).reduce((s, q) => s + q.gross, 0) + jobs.filter((j) => !j.quote_id).reduce((s, j) => s + (j.amount ?? 0), 0)
+  const jobQuoteIds = new Set(jobs.map((j) => j.quote_id).filter(Boolean))
+  const jobPriceFor = (j: ClientJob) => {
+    if (j.amount !== null) return j.amount
+    const q = quotes.find((x) => x.id === j.quote_id)
+    return q && q.payment_status !== 'refunded' ? q.gross : 0
+  }
+  const accepted = jobs.reduce((s, j) => s + jobPriceFor(j), 0) + quotes.filter((q) => q.accepted && !jobQuoteIds.has(q.id)).reduce((s, q) => s + q.gross, 0)
   const paid = quotes.reduce((s, q) => s + q.paid_amount, 0) + payments.reduce((s, p) => s + p.amount, 0)
   const owed = Math.max(0, Math.round((accepted - paid) * 100) / 100)
   const wa = whatsappDigits(client.phone)
@@ -97,7 +104,7 @@ export default function ClienteCard({
 
   const saveDetails = async (form: ClientFormData) => {
     const result = await updateClientRecord(client.id, form)
-    if (!result.success) return t(`errors.${result.message === 'duplicateName' || result.message === 'nameRequired' ? result.message : 'saveError'}`)
+    if (!result.success) return limitTextOf(result) ?? t(`errors.${result.message === 'duplicateName' || result.message === 'nameRequired' ? result.message : 'saveError'}`)
     setClient((prev) => ({
       ...prev,
       name: form.name.trim(),
@@ -127,7 +134,7 @@ export default function ClienteCard({
 
   const newJob = async (form: JobFormData) => {
     const result = await createJob(client.id, form)
-    if (!result.success) return t(`errors.${['titleRequired', 'amountInvalid'].includes(result.message) ? result.message : 'saveError'}`)
+    if (!result.success) return limitTextOf(result) ?? t(`errors.${['titleRequired', 'amountInvalid'].includes(result.message) ? result.message : 'saveError'}`)
     router.push(`/marketplace/clienti/lavoro/${result.data.id}`)
     return null
   }

@@ -331,16 +331,22 @@ export function brandBioVars(colors: unknown): Record<string, string> | undefine
   const c = colors && typeof colors === 'object' ? (colors as Record<string, unknown>) : null
   const hex = (v: unknown) => (typeof v === 'string' && /^#[0-9a-f]{6}$/i.test(v) ? v : null)
   if (!c || !hex(c.primary) || !hex(c.accent) || !hex(c.background) || !hex(c.text)) return undefined
-  const on = (bg: string) => {
-    const lum = (h: string) => {
-      const ch = [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255).map((v) => (v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)))
-      return 0.2126 * ch[0] + 0.7152 * ch[1] + 0.0722 * ch[2]
-    }
-    return lum(bg) > 0.4 ? '#171717' : '#ffffff'
+  const lum = (h: string) => {
+    const ch = [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255).map((v) => (v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)))
+    return 0.2126 * ch[0] + 0.7152 * ch[1] + 0.0722 * ch[2]
   }
+  // Testo bianco o quasi nero: quello con più contrasto (come readableOn)
+  const on = (bg: string) => ((1.05) / (lum(bg) + 0.05) >= (lum(bg) + 0.05) / (lum('#171717') + 0.05) ? '#ffffff' : '#171717')
+  // Il riquadro ha lo sfondo del brand (il testo è controllato su quello);
+  // la pagina intorno è appena più scura o più chiara
+  const bg = hex(c.background)!
+  const page = '#' + [1, 3, 5].map((i) => {
+    const v = parseInt(bg.slice(i, i + 2), 16)
+    return Math.round(lum(bg) > 0.5 ? v * 0.93 : v + (255 - v) * 0.08).toString(16).padStart(2, '0')
+  }).join('')
   return {
-    '--bio-page': hex(c.background)!,
-    '--bio-card': '#ffffff',
+    '--bio-page': page,
+    '--bio-card': bg,
     '--bio-primary': hex(c.primary)!,
     '--bio-on-primary': hex(c.onPrimary) ?? on(hex(c.primary)!),
     '--bio-accent': hex(c.accent)!,

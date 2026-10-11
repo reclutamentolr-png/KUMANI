@@ -288,16 +288,19 @@ export async function GET(request: Request) {
   // Lavori consegnati con un saldo ancora aperto (prezzo − pagamenti, come in «Oggi»)
   for (let from = 0; ; from += 1000) {
     const { data: done } = await db.from('client_jobs').select('id, user_id, amount, quote_id').eq('stage', 'done').order('id').range(from, from + 999)
-    if (done?.length) {
-      const jobIds = done.map((j) => j.id as string)
-      const quoteIds = done.map((j) => j.quote_id as string | null).filter((id): id is string => !!id)
+    // A blocchi di 100: indirizzi delle richieste corti e risposte complete
+    for (let k = 0; k < (done?.length ?? 0); k += 100) {
+      const part = done!.slice(k, k + 100)
+      const jobIds = part.map((j) => j.id as string)
+      const quoteIds = part.map((j) => j.quote_id as string | null).filter((id): id is string => !!id)
       const [{ data: pays }, { data: quotes }] = await Promise.all([
-        db.from('client_payments').select('job_id, amount').in('job_id', jobIds),
+        db.from('client_payments').select('job_id, amount').in('job_id', jobIds).limit(5000),
         quoteIds.length ? db.from('quotes').select('id, total, vat_mode, vat_rate, payment_status, paid_amount').in('id', quoteIds) : Promise.resolve({ data: [] }),
       ])
-      for (const job of done) {
+      for (const job of part) {
         const quote = (quotes ?? []).find((q) => q.id === job.quote_id)
-        const gross = quote ? Number(quote.total) * (quote.vat_mode === 'plus' && Number(quote.vat_rate) > 0 ? 1 + Number(quote.vat_rate) / 100 : 1) : null
+        // Come in «Oggi»: un preventivo rimborsato non dà un prezzo
+        const gross = quote && quote.payment_status !== 'refunded' ? Number(quote.total) * (quote.vat_mode === 'plus' && Number(quote.vat_rate) > 0 ? 1 + Number(quote.vat_rate) / 100 : 1) : null
         const price = job.amount !== null ? Number(job.amount) : gross
         if (price === null) continue
         const paid = (pays ?? []).filter((p) => p.job_id === job.id).reduce((sum, p) => sum + Number(p.amount), 0) + (quote?.payment_status === 'paid' ? Number(quote.paid_amount) : 0)

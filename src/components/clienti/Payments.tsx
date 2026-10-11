@@ -72,7 +72,7 @@ export default function Payments({
 
   const rows = [
     ...payments.map((p) => ({ key: p.id, day: p.paid_on, amount: p.amount, label: [t(`pay.methods.${p.method}`), jobTitle(p.job_id), p.note].filter(Boolean).join(' · '), payment: p })),
-    ...onlineQuotes.map((q) => ({ key: `q-${q.id}`, day: (q.paid_at ?? q.issue_date).slice(0, 10), amount: q.paid_amount, label: `${t('pay.online')} · ${t('quoteNumber', { number: q.quote_number })}`, payment: null })),
+    ...onlineQuotes.map((q) => ({ key: `q-${q.id}`, day: q.paid_at ? new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Rome' }).format(new Date(q.paid_at)) : q.issue_date, amount: q.paid_amount, label: `${t('pay.online')} · ${t('quoteNumber', { number: q.quote_number })}`, payment: null })),
   ]
 
   return (
