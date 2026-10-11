@@ -7947,7 +7947,7 @@
         },
         "5": {
           "1": "Work",
-          "2": "Find a Job, Quotes, Digital Receipts, Magazzino PRO, PRO Calculators"
+          "2": "Find a Job, Quotes, Clients & Jobs, Digital Receipts, Magazzino PRO, PRO Calculators"
         },
         "6": {
           "1": "Community and fun",
@@ -7973,19 +7973,19 @@
           "2": "the table QR leads to your contacts"
         },
         "4": {
-          "1": "Kordata and Professionals",
-          "2": "group purchases find Pro suppliers"
+          "1": "Quotes and Clients & Jobs",
+          "2": "from quote to job, all the way to payment"
         },
         "5": {
           "1": "Points in one wallet",
           "2": "every tool you use grows your KU Karma"
         },
         "6": {
-          "1": "KUMANI Events",
-          "2": "QR pass in the wallet, event in the agenda"
+          "1": "Your brand colors",
+          "2": "one choice, all your services"
         }
       },
-      "notes": "The strength of KUMANI is that the tools talk to each other. The agenda gathers appointments, bills and deadlines. Trips land in the calendar. The restaurant menu leads to the Kumi Card. And every tool you use adds KU Karma to your wallet."
+      "notes": "KUMANI’s strength is that its tools talk to each other. The agenda gathers appointments, bills and deadlines. Trips end up in the calendar. The restaurant menu leads to the Kumi Card. An accepted quote becomes a job in Clients & Jobs, all the way to payment. Brand colors are chosen once and used by every service. And every tool you use grows the KU Karma in your wallet."
     },
     "s8": {
       "title": "Three plans, an honest price",
@@ -8013,7 +8013,7 @@
           "3": "a year",
           "4": "For those who work with clients",
           "5": "Everything in Base + {pro, plural, one {# Pro service} other {# Pro services}}",
-          "6": "KUMANI Menu, Kumi Card, Quotes, Digital Receipts, Magazzino, QR Code PRO, Landing Page. 15 days free."
+          "6": "KUMANI Menu, Kumi Card, Quotes, Clients & Jobs, Digital Receipts, Magazzino, QR Code PRO, Landing Page. 15 days free."
         }
       },
       "passBold": "Need just one service? ",
@@ -8049,7 +8049,7 @@
           "2": "Change the destination and count the scans"
         }
       },
-      "notes": "For professionals the Pro plan adds practical tools: the table QR menu, the digital loyalty card, quotes and receipts in a few taps, stock management and trackable QR codes. Plus the Professional Area and the option to become a Kordata supplier."
+      "notes": "For professionals, the Pro plan adds practical tools: the QR menu at the table, the digital loyalty card, quotes and receipts in a few taps, Clients & Jobs to follow clients, jobs and payments, stock management and trackable QR codes. Plus the Professionals Area and the chance to become a supplier for Kordata groups."
     },
     "s10": {
       "title": "Safer against online scams",
@@ -8271,6 +8271,30 @@
       "badgePro": "Included in the Pro plan",
       "badgePass": "Included in the Pro plan · or on its own for {price} a year",
       "notes": "Many professionals have no website or do not want to pay for one. With the Landing Page they create it from their phone in a few minutes: they answer five questions and AI writes the introduction, then they choose template, colour, photos and blocks. The page has an address on kumani.io, is ready for Google and customers write through the “Message me” form: the message arrives in the dashboard and as a notification on the phone. It is included in Pro and can also be bought on its own."
+    },
+    "clienti": {
+      "title": "Clients & Jobs",
+      "sub": "Clients, jobs, time and payments in one place, from your phone.",
+      "rows": {
+        "1": {
+          "1": "Today",
+          "2": "Who to contact, what to collect after a delivery and what’s on the agenda, with a ready-written WhatsApp reminder."
+        },
+        "2": {
+          "1": "The client card",
+          "2": "Call or message with one tap, see quotes, jobs and what they still owe you."
+        },
+        "3": {
+          "1": "Time and margin",
+          "2": "A timer on the job, materials also from Magazzino PRO and expenses: see straight away what you keep."
+        },
+        "4": {
+          "1": "Payments and accountant",
+          "2": "Cash or bank transfer payments, a receipt in one tap and an export for your accountant."
+        }
+      },
+      "badge": "Included in the Pro plan · linked to Quotes, Shop and Receipts",
+      "notes": "Clients & Jobs is the pocket manager for anyone who works with clients, especially tradespeople. Every saved quote creates the client card; an accepted quote becomes a job, with status, to-dos, timer, materials and expenses, and the margin works itself out. Payments received are recorded even in cash or by bank transfer, with a digital receipt in one tap. Every morning the Today section says who to contact and what to collect, and the data can be exported for the accountant."
     },
     "full": {
       "section": "All services",

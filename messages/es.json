@@ -7947,7 +7947,7 @@
         },
         "5": {
           "1": "Trabajo",
-          "2": "Buscar Trabajo, Presupuestos, Recibos Digitales, Magazzino PRO, Calculadoras PRO"
+          "2": "Buscar Trabajo, Presupuestos, Clientes y Trabajos, Recibos Digitales, Magazzino PRO, Calculadoras PRO"
         },
         "6": {
           "1": "Comunidad y ocio",
@@ -7973,19 +7973,19 @@
           "2": "el QR de la mesa lleva a tus contactos"
         },
         "4": {
-          "1": "Kordata y Profesionales",
-          "2": "las compras en grupo encuentran proveedores Pro"
+          "1": "Presupuestos y Clientes y Trabajos",
+          "2": "del presupuesto al trabajo, hasta el cobro"
         },
         "5": {
           "1": "Puntos en un solo wallet",
           "2": "cada herramienta usada hace crecer tus KU Karma"
         },
         "6": {
-          "1": "KUMANI Events",
-          "2": "pase QR en el wallet, evento en la agenda"
+          "1": "Los colores de tu marca",
+          "2": "una elección, todos tus servicios"
         }
       },
-      "notes": "La fuerza de KUMANI es que las herramientas se comunican. La agenda reúne citas, facturas y vencimientos. Los viajes llegan al calendario. El menú del restaurante lleva a la Kumi Card. Y cada herramienta usada hace crecer los KU Karma en el wallet."
+      "notes": "La fuerza de KUMANI es que las herramientas se hablan. La agenda reúne citas, facturas y vencimientos. Los viajes acaban en el calendario. El menú del restaurante lleva a la Kumi Card. Un presupuesto aceptado se convierte en un trabajo en Clientes y Trabajos, hasta el cobro. Los colores de la marca se eligen una vez y los usan todos los servicios. Y cada herramienta usada hace crecer los KU Karma del wallet."
     },
     "s8": {
       "title": "Tres planes, un precio honesto",
@@ -8013,7 +8013,7 @@
           "3": "al año",
           "4": "Para quien trabaja con clientes",
           "5": "Todo el Base + {pro, plural, one {# servicio Pro} other {# servicios Pro}}",
-          "6": "KUMANI Menu, Kumi Card, Presupuestos, Recibos Digitales, Magazzino, QR Code PRO, Landing Page. 15 días gratis."
+          "6": "KUMANI Menu, Kumi Card, Presupuestos, Clientes y Trabajos, Recibos Digitales, Magazzino, QR Code PRO, Landing Page. 15 días gratis."
         }
       },
       "passBold": "¿Necesitas un solo servicio? ",
@@ -8049,7 +8049,7 @@
           "2": "Cambias el destino y cuentas los escaneos"
         }
       },
-      "notes": "Para los profesionales, el plan Pro añade herramientas concretas: el menú con QR en la mesa, la tarjeta de fidelidad digital, presupuestos y recibos en pocos toques, el inventario y los QR rastreables. Además, el Área Profesional y la posibilidad de ser proveedor de las Kordatas."
+      "notes": "Para los profesionales, el plan Pro añade herramientas concretas: el menú con QR en la mesa, la tarjeta de fidelidad digital, presupuestos y recibos en pocos toques, Clientes y Trabajos para seguir clientes, trabajos y cobros, el almacén y los QR medibles. Además, el Área Profesionales y la posibilidad de ser proveedor de las Kordata."
     },
     "s10": {
       "title": "Más seguros frente a las estafas",
@@ -8271,6 +8271,30 @@
       "badgePro": "Incluida en el plan Pro",
       "badgePass": "Incluida en el plan Pro · o sola por {price} al año",
       "notes": "Muchos profesionales no tienen web o no quieren pagar por una. Con la Landing Page la crean desde el móvil en pocos minutos: responden a cinco preguntas y la IA escribe la presentación, luego eligen plantilla, color, fotos y bloques. La página tiene una dirección en kumani.io, está lista para Google y los clientes escriben desde el formulario «Escríbeme»: el mensaje llega al panel y con una notificación en el móvil. Está incluida en el Pro y también se puede comprar sola."
+    },
+    "clienti": {
+      "title": "Clientes y Trabajos",
+      "sub": "Clientes, trabajos, tiempo y cobros en un solo lugar, desde el móvil.",
+      "rows": {
+        "1": {
+          "1": "Hoy",
+          "2": "A quién contactar, qué cobrar tras una entrega y qué hay en agenda, con el recordatorio de WhatsApp ya escrito."
+        },
+        "2": {
+          "1": "La ficha del cliente",
+          "2": "Llamas o escribes con un toque, ves presupuestos, trabajos y lo que aún te debe."
+        },
+        "3": {
+          "1": "Tiempo y margen",
+          "2": "Cronómetro en el trabajo, materiales también desde Magazzino PRO y gastos: ves enseguida cuánto te queda."
+        },
+        "4": {
+          "1": "Cobros y gestor",
+          "2": "Pagos en efectivo o por transferencia, recibo en un toque y exportación para tu gestor."
+        }
+      },
+      "badge": "Incluido en el plan Pro · conectado con Presupuestos, Shop y Recibos",
+      "notes": "Clientes y Trabajos es el gestor de bolsillo de quien trabaja con clientes, sobre todo autónomos y artesanos. Cada presupuesto guardado crea la ficha del cliente; un presupuesto aceptado se convierte en un trabajo, con estado, tareas, cronómetro, materiales y gastos, y el margen se calcula solo. Los pagos recibidos se registran también en efectivo o por transferencia, con el recibo digital en un toque. Cada mañana la sección Hoy dice a quién contactar y qué cobrar, y los datos se exportan para el gestor."
     },
     "full": {
       "section": "Todos los servicios",

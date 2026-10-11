@@ -7947,7 +7947,7 @@
         },
         "5": {
           "1": "Arbeit",
-          "2": "Jobsuche, Angebote, Digitale Belege, Magazzino PRO, PRO-Rechner"
+          "2": "Jobsuche, Angebote, Kunden & Aufträge, Digitale Belege, Magazzino PRO, PRO-Rechner"
         },
         "6": {
           "1": "Community und Freizeit",
@@ -7973,19 +7973,19 @@
           "2": "der Tisch-QR führt zu deinen Kontakten"
         },
         "4": {
-          "1": "Kordata und Profis",
-          "2": "Gruppenkäufe finden Pro-Anbieter"
+          "1": "Angebote und Kunden & Aufträge",
+          "2": "vom Angebot zum Auftrag bis zur Zahlung"
         },
         "5": {
           "1": "Punkte in einem Wallet",
           "2": "jedes genutzte Tool mehrt deine KU Karma"
         },
         "6": {
-          "1": "KUMANI Events",
-          "2": "QR-Pass im Wallet, Event im Kalender"
+          "1": "Die Farben deiner Marke",
+          "2": "einmal gewählt, in allen Diensten"
         }
       },
-      "notes": "Die Stärke von KUMANI: Die Werkzeuge sprechen miteinander. Der Kalender sammelt Termine, Rechnungen und Fristen. Reisen landen im Kalender. Das Restaurantmenü führt zur Kumi Card. Und jedes genutzte Werkzeug lässt das KU Karma im Wallet wachsen."
+      "notes": "Die Stärke von KUMANI: Die Werkzeuge sprechen miteinander. Die Agenda sammelt Termine, Rechnungen und Fristen. Reisen landen im Kalender. Die Speisekarte des Restaurants führt zur Kumi Card. Ein angenommenes Angebot wird in Kunden & Aufträge zum Auftrag, bis zur Zahlung. Die Markenfarben wählt man einmal, alle Dienste verwenden sie. Und jedes genutzte Werkzeug lässt das KU Karma im Wallet wachsen."
     },
     "s8": {
       "title": "Drei Tarife, ein ehrlicher Preis",
@@ -8013,7 +8013,7 @@
           "3": "im Jahr",
           "4": "Für alle, die mit Kunden arbeiten",
           "5": "Alles aus Base + {pro, plural, one {# Pro-Dienst} other {# Pro-Dienste}}",
-          "6": "KUMANI Menu, Kumi Card, Angebote, Digitale Belege, Magazzino, QR Code PRO, Landing Page. 15 Tage kostenlos."
+          "6": "KUMANI Menu, Kumi Card, Angebote, Kunden & Aufträge, Digitale Belege, Magazzino, QR Code PRO, Landing Page. 15 Tage kostenlos."
         }
       },
       "passBold": "Nur ein Dienst nötig? ",
@@ -8049,7 +8049,7 @@
           "2": "Ziel ändern und Scans zählen"
         }
       },
-      "notes": "Für Profis bietet der Pro-Tarif konkrete Werkzeuge: das Menü mit Tisch-QR, die digitale Treuekarte, Angebote und Belege mit wenigen Klicks, die Lagerverwaltung und verfolgbare QR-Codes. Dazu der Profi-Bereich und die Möglichkeit, Kordata-Anbieter zu werden."
+      "notes": "Für Selbstständige bringt der Pro-Tarif konkrete Werkzeuge: die Speisekarte mit QR am Tisch, die digitale Treuekarte, Angebote und Belege mit wenigen Tipps, Kunden & Aufträge für Kunden, Aufträge und Zahlungen, die Lagerverwaltung und messbare QR-Codes. Dazu der Bereich für Profis und die Möglichkeit, Lieferant der Kordata-Gruppen zu werden."
     },
     "s10": {
       "title": "Sicherer gegen Online-Betrug",
@@ -8271,6 +8271,30 @@
       "badgePro": "Im Pro-Tarif enthalten",
       "badgePass": "Im Pro-Tarif enthalten · oder einzeln für {price} im Jahr",
       "notes": "Viele Selbstständige haben keine Website oder wollen nicht dafür zahlen. Mit der Landing Page erstellen sie sie in wenigen Minuten am Handy: Sie beantworten fünf Fragen, die KI schreibt die Vorstellung, dann wählen sie Vorlage, Farbe, Fotos und Blöcke. Die Seite hat eine Adresse auf kumani.io, ist bereit für Google, und Kunden schreiben über das Formular „Schreib mir“: Die Nachricht kommt ins Dashboard und als Benachrichtigung aufs Handy. Sie ist in Pro enthalten und kann auch einzeln gekauft werden."
+    },
+    "clienti": {
+      "title": "Kunden & Aufträge",
+      "sub": "Kunden, Aufträge, Zeit und Zahlungen an einem Ort, vom Handy aus.",
+      "rows": {
+        "1": {
+          "1": "Heute",
+          "2": "Wen du kontaktieren solltest, was nach einer Übergabe offen ist und was ansteht, mit fertig geschriebener WhatsApp-Erinnerung."
+        },
+        "2": {
+          "1": "Die Kundenkarte",
+          "2": "Anrufen oder schreiben mit einem Tipp, Angebote, Aufträge und offene Beträge im Blick."
+        },
+        "3": {
+          "1": "Zeit und Marge",
+          "2": "Zeitmessung am Auftrag, Material auch aus Magazzino PRO und Kosten: Du siehst sofort, was dir bleibt."
+        },
+        "4": {
+          "1": "Zahlungen und Buchhaltung",
+          "2": "Zahlungen bar oder per Überweisung, Beleg mit einem Tipp und Export für die Buchhaltung."
+        }
+      },
+      "badge": "Im Pro-Tarif enthalten · verbunden mit Angeboten, Shop und Belegen",
+      "notes": "Kunden & Aufträge ist die Taschenverwaltung für alle, die mit Kunden arbeiten, besonders Handwerker. Jedes gespeicherte Angebot legt die Kundenkarte an; aus einem angenommenen Angebot wird ein Auftrag mit Status, To-dos, Zeitmessung, Material und Kosten, und die Marge rechnet sich von selbst. Erhaltene Zahlungen werden auch bar oder per Überweisung erfasst, mit digitalem Beleg per Tipp. Jeden Morgen zeigt der Bereich Heute, wen du kontaktieren und was du einnehmen solltest, und die Daten lassen sich für die Buchhaltung exportieren."
     },
     "full": {
       "section": "Alle Dienste",

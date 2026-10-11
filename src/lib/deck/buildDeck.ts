@@ -237,7 +237,7 @@ export async function buildDeck(
     const s = pres.addSlide({ masterName: 'KUMANI scuro', sectionTitle: sec[2] })
     titled(s, S.s7.title, S.s7.sub)
     const cx = 6.67, cy = 4.3
-    const ics = ['CalendarCheck', 'Plane', 'Utensils', 'ShoppingBasket', 'Wallet', 'Ticket']
+    const ics = ['CalendarCheck', 'Plane', 'Utensils', 'BookUser', 'Wallet', 'Palette']
     const pos = [[0.6, 2.0], [0.6, 3.6], [0.6, 5.2], [8.93, 2.0], [8.93, 3.6], [8.93, 5.2]]
     const nw = 3.8, nh = 1.3
     for (let i = 0; i < 6; i++) line(s, cx, cy, i < 3 ? pos[i][0] + nw : pos[i][0], pos[i][1] + nh / 2, { color: HEX.gold, width: 1.25, dashType: 'dash' }, `a${i + 2}-ln${i}`)
@@ -314,6 +314,27 @@ export async function buildDeck(
     s.addShape(pres.ShapeType.roundRect, { x: 9.05, y: 1.45, w: 3.15, h: 5.2, rectRadius: 0.3, fill: { color: '000000' }, line: { color: HEX.gold, width: 1.5 }, shadow: SH(), objectName: 'a1-tel' } as any)
     s.addImage({ path: `${IMG}/landing.png`, x: 9.3, y: 1.6, w: 2.65, h: 4.9, objectName: 'a1-pagina' } as any)
     s.addNotes(S.landing.notes)
+  }
+
+  // 9c. Clienti e Lavori: clienti, lavori, tempo e incassi in tasca
+  {
+    const s = pres.addSlide({ masterName: 'KUMANI scuro', sectionTitle: sec[3] })
+    titled(s, S.clienti.title, S.clienti.sub)
+    const ics = ['CalendarCheck', 'BookUser', 'Timer', 'Wallet']
+    for (let i = 0; i < 4; i++) {
+      const y = 1.95 + i * 1.08
+      await circleIcon(s, ics[i], 0.6, y, 0.72, C.accent1, HEX.ink, `a${i + 2}-ic${i}`)
+      Tx(s, [
+        { text: S.clienti.rows[i][0], options: { bold: true, color: C.background1, fontSize: fs(18), breakLine: true } },
+        { text: S.clienti.rows[i][1], options: { color: C.accent3, fontSize: fs(14) } },
+      ], { x: 1.55, y: y - 0.08, w: 6.6, h: 1.0, valign: 'top', objectName: `a${i + 2}-tx${i}` })
+    }
+    card(s, 0.6, 6.25, 7.55, 0.55, 'a6-badge', C.accent1)
+    Tx(s, S.clienti.badge, { x: 0.8, y: 6.27, w: 7.2, h: 0.5, fontSize: fs(15), bold: true, color: C.text1, valign: 'middle', objectName: 'a6-badgetx' })
+    // Telefono con la pagina «Oggi»
+    s.addShape(pres.ShapeType.roundRect, { x: 9.05, y: 1.45, w: 3.15, h: 5.2, rectRadius: 0.3, fill: { color: '000000' }, line: { color: HEX.gold, width: 1.5 }, shadow: SH(), objectName: 'a1-tel' } as any)
+    s.addImage({ path: `${IMG}/clienti-${locale === 'it' ? 'it' : 'en'}.jpg`, x: 9.3, y: 1.6, w: 2.65, h: 4.9, objectName: 'a1-pagina' } as any)
+    s.addNotes(S.clienti.notes)
   }
 
   // 10. Sicurezza
