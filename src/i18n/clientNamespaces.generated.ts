@@ -111,6 +111,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "voucherReceipt",
   "voucherWallet",
   "wallet",
+  "webinar",
   "whatsappPage",
   "withdrawal"
 ]

@@ -11,6 +11,7 @@ const PRIVATE_PAGES = [
   '/ricevute/:path*',
   '/preventivo/:path*',
   '/hopla/:path*',
+  '/webinar/:path*',
   '/f/:path*',
   '/sorpresa/:path*',
   '/regalo/:path*',
