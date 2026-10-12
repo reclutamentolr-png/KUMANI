@@ -12690,7 +12690,13 @@
     "rule4": "Die Übertragung hängt vom Netz und den Geräten ab: Ein Netzwechsel oder ein ausgeschalteter Bildschirm kann sie unterbrechen.",
     "rule5": "Bei Missbrauch können wir den Zugang zu Hoplà sperren.",
     "termsLink": "Vollständige Bedingungen",
-    "phoneTerms": "Mit dem Senden akzeptierst du die Nutzungsregeln von Hoplà."
+    "phoneTerms": "Mit dem Senden akzeptierst du die Nutzungsregeln von Hoplà.",
+    "cancelSend": "Senden abbrechen",
+    "cancelReceive": "Empfang abbrechen",
+    "phoneCancelled": "Senden abgebrochen: Bereits angekommene Dateien bleiben auf dem Computer.",
+    "phoneCancelledByPc": "Der Computer hat den Empfang abgebrochen: Bereits angekommene Dateien bleiben dort.",
+    "pcCancelledByPhone": "Das Handy hat das Senden abgebrochen: Die halbe Datei wurde verworfen, angekommene Dateien bleiben hier.",
+    "pcCancelled": "Empfang abgebrochen: Die halbe Datei wurde verworfen, angekommene Dateien bleiben hier."
   },
   "firmaPdf": {
     "badge": "Unterschreibe deine Dokumente",
@@ -12756,7 +12762,11 @@
     "uploadEmpty": "Ich finde die Unterschrift im Bild nicht: Versuche ein klareres Foto auf weißem Papier.",
     "remember": "Unterschrift auf diesem Gerät merken",
     "consent": "Mit der Unterschrift akzeptiere ich, dass diese elektronische Unterschrift meine Unterschrift auf den Dokumenten darstellt, auf denen ich sie einfüge, auch auf Verträgen.",
-    "sign": "Unterschreiben"
+    "sign": "Unterschreiben",
+    "cancelDoc": "Abbrechen",
+    "cancelConfirm": "Dokument schließen? Hinzugefügte Unterschriften, Daten und Texte gehen verloren.",
+    "cancelYes": "Ja, schließen",
+    "cancelNo": "Weiter unterschreiben"
   },
   "scamNet": {
     "badge": "Die Community, die dich schützt",

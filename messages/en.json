@@ -12690,7 +12690,13 @@
     "rule4": "Transfers depend on the network and the devices: switching networks or the screen turning off can interrupt them.",
     "rule5": "In case of misuse we may suspend access to Hoplà.",
     "termsLink": "Full terms",
-    "phoneTerms": "By sending you accept Hoplà’s usage rules."
+    "phoneTerms": "By sending you accept Hoplà’s usage rules.",
+    "cancelSend": "Cancel sending",
+    "cancelReceive": "Cancel receiving",
+    "phoneCancelled": "Sending cancelled: files that already arrived stay on the computer.",
+    "phoneCancelledByPc": "The computer cancelled the transfer: files that already arrived stay there.",
+    "pcCancelledByPhone": "The phone cancelled the transfer: the half-received file was discarded, the ones that arrived stay here.",
+    "pcCancelled": "Receiving cancelled: the half-received file was discarded, the ones that arrived stay here."
   },
   "firmaPdf": {
     "badge": "Sign your documents",
@@ -12756,7 +12762,11 @@
     "uploadEmpty": "I can’t find the signature in the image: try a clearer photo on white paper.",
     "remember": "Remember my signature on this device",
     "consent": "By signing I agree that this electronic signature represents my signature on the documents I place it on, including contracts.",
-    "sign": "Sign"
+    "sign": "Sign",
+    "cancelDoc": "Cancel",
+    "cancelConfirm": "Close the document? Signatures, dates and text you added will be lost.",
+    "cancelYes": "Yes, close",
+    "cancelNo": "Keep signing"
   },
   "scamNet": {
     "badge": "The community that protects you",

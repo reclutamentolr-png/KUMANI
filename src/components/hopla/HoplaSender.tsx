@@ -8,6 +8,7 @@ import { createClient } from '@/lib/supabase/client'
 import HoplaScanner from './HoplaScanner'
 import {
   HOPLA_CHUNK,
+  HOPLA_CTRL_LABEL,
   HOPLA_CONNECT_TIMEOUT,
   HOPLA_HIGH_WATER,
   HOPLA_ICE,
@@ -45,6 +46,10 @@ export default function HoplaSender({ id }: { id: string }) {
   const channelRef = useRef<RealtimeChannel | null>(null)
   const pcRef = useRef<RTCPeerConnection | null>(null)
   const dcRef = useRef<RTCDataChannel | null>(null)
+  const ctrlRef = useRef<RTCDataChannel | null>(null)
+  // Annullamento: chi l'ha chiesto e come svegliare l'invio fermo in attesa
+  const cancelRef = useRef<{ by: 'me' | 'pc' | null; wake: (() => void) | null }>({ by: null, wake: null })
+  const [cancelled, setCancelled] = useState<'me' | 'pc' | null>(null)
   const peerRef = useRef('')
   // Ogni tentativo (anche «Ricollegati») rientra sullo stesso codice con un nuovo canale
   const [attempt, setAttempt] = useState(0)
@@ -64,6 +69,19 @@ export default function HoplaSender({ id }: { id: string }) {
   }
 
   const sendCtrl = (msg: HoplaCtrl) => dcRef.current?.send(JSON.stringify(msg))
+  // L'annullamento passa dal canale dei comandi, così arriva subito
+  const sendCancel = () => {
+    const ctrl = ctrlRef.current
+    const ch = ctrl?.readyState === 'open' ? ctrl : dcRef.current
+    if (ch?.readyState === 'open') ch.send(JSON.stringify({ t: 'cancel' }))
+  }
+  const stopSending = (by: 'me' | 'pc') => {
+    if (cancelRef.current.by) return
+    cancelRef.current.by = by
+    acceptRef.current?.(false)
+    savedRef.current.resolve?.()
+    cancelRef.current.wake?.()
+  }
 
   useEffect(() => {
     const peer = newPeerId()
@@ -84,7 +102,10 @@ export default function HoplaSender({ id }: { id: string }) {
       else if (msg.t === 'saved') {
         setSentFiles((n) => Math.max(n, msg.i + 1))
         if (msg.i === savedRef.current.last) savedRef.current.resolve?.()
-      } else if (msg.t === 'cancel') go('lost')
+      } else if (msg.t === 'cancel') {
+        // Il computer ha annullato la ricezione
+        if (phaseRef.current === 'waiting' || phaseRef.current === 'sending') stopSending('pc')
+      }
     }
 
     const onOffer = async (sdp: RTCSessionDescriptionInit) => {
@@ -106,6 +127,14 @@ export default function HoplaSender({ id }: { id: string }) {
         if (pc.connectionState === 'failed') go(phaseRef.current === 'connecting' ? 'failed' : 'lost')
       }
       pc.ondatachannel = (e) => {
+        if (e.channel.label === HOPLA_CTRL_LABEL) {
+          ctrlRef.current = e.channel
+          e.channel.onmessage = (m) => {
+            const msg = typeof m.data === 'string' ? parseCtrl(m.data) : null
+            if (msg) onCtrl(msg)
+          }
+          return
+        }
         const dc = e.channel
         dc.binaryType = 'arraybuffer'
         dc.bufferedAmountLowThreshold = HOPLA_LOW_WATER
@@ -171,6 +200,7 @@ export default function HoplaSender({ id }: { id: string }) {
       if (expireTimer) clearTimeout(expireTimer)
       if (connectTimer) clearTimeout(connectTimer)
       onLeave()
+      ctrlRef.current?.close()
       dcRef.current?.close()
       pcRef.current?.close()
       supabase.removeChannel(channel)
@@ -236,6 +266,11 @@ export default function HoplaSender({ id }: { id: string }) {
     const dc = dcRef.current
     if (!dc || dc.readyState !== 'open' || !files.length) return
     keepAwake()
+    cancelRef.current = { by: null, wake: null }
+    setCancelled(null)
+    const cancelWait = new Promise<void>((resolve) => {
+      cancelRef.current.wake = resolve
+    })
     go('waiting')
     setSentBytes(0)
     setSentFiles(0)
@@ -246,7 +281,10 @@ export default function HoplaSender({ id }: { id: string }) {
     acceptRef.current = null
     if (!ok) {
       letSleep()
-      go('refused')
+      if (cancelRef.current.by) {
+        setCancelled(cancelRef.current.by)
+        go('ready')
+      } else go('refused')
       return
     }
     sentRef.current = 0
@@ -262,17 +300,25 @@ export default function HoplaSender({ id }: { id: string }) {
       for (const [i, file] of files.entries()) {
         sendCtrl({ t: 'start', i })
         for (let offset = 0; offset < file.size; offset += chunk) {
+          if (cancelRef.current.by) break
           if (dc.readyState !== 'open') throw new Error('closed')
-          if (dc.bufferedAmount > HOPLA_HIGH_WATER) await waitForBuffer(dc)
+          if (dc.bufferedAmount > HOPLA_HIGH_WATER) await Promise.race([waitForBuffer(dc), cancelWait])
+          if (cancelRef.current.by) break
           const buffer = await file.slice(offset, offset + chunk).arrayBuffer()
           dc.send(buffer)
           sent += buffer.byteLength
           sentRef.current = sent
         }
+        if (cancelRef.current.by) break
         sendCtrl({ t: 'end', i })
       }
       setSentBytes(sent)
-      await allSaved
+      if (!cancelRef.current.by) await Promise.race([allSaved, cancelWait])
+      if (cancelRef.current.by) {
+        setCancelled(cancelRef.current.by)
+        go('ready')
+        return
+      }
       sendCtrl({ t: 'done' })
       go('done')
     } catch {
@@ -280,6 +326,12 @@ export default function HoplaSender({ id }: { id: string }) {
     } finally {
       letSleep()
     }
+  }
+
+  // «Annulla invio»: si ferma subito, il computer scarta il file a metà
+  const cancelSend = () => {
+    sendCancel()
+    stopSending('me')
   }
 
   const retry = () => {
@@ -302,6 +354,7 @@ export default function HoplaSender({ id }: { id: string }) {
   }
 
   const again = () => {
+    setCancelled(null)
     setFiles([])
     setSentBytes(0)
     setSentFiles(0)
@@ -358,15 +411,25 @@ export default function HoplaSender({ id }: { id: string }) {
             </section>
           )}
 
+          {phase === 'ready' && cancelled && (
+            <p className="rounded-2xl bg-[#fff4e5] p-3 text-center text-sm font-semibold text-[#7a4a00]" role="status">
+              {cancelled === 'me' ? t('phoneCancelled') : t('phoneCancelledByPc')}
+            </p>
+          )}
           {phase === 'ready' && files.length > 0 && (
             <button type="button" onClick={sendAll} className={primary}>
               <Send className="h-5 w-5" aria-hidden="true" /> {t('phoneSend')}
             </button>
           )}
           {phase === 'waiting' && (
-            <p className="flex items-center justify-center gap-2 rounded-2xl bg-[var(--gold-pale)] p-4 text-center font-bold text-[var(--ink)]" role="status">
-              <LoaderCircle className="h-5 w-5 animate-spin text-[var(--gold)]" aria-hidden="true" /> {t('phoneWaiting')}
-            </p>
+            <div className="space-y-2">
+              <p className="flex items-center justify-center gap-2 rounded-2xl bg-[var(--gold-pale)] p-4 text-center font-bold text-[var(--ink)]" role="status">
+                <LoaderCircle className="h-5 w-5 animate-spin text-[var(--gold)]" aria-hidden="true" /> {t('phoneWaiting')}
+              </p>
+              <button type="button" onClick={cancelSend} className={`${secondary} text-[#a12a2a]`}>
+                <X className="h-5 w-5" aria-hidden="true" /> {t('cancelSend')}
+              </button>
+            </div>
           )}
           {phase === 'sending' && (
             <section className="space-y-2" role="status">
@@ -383,6 +446,9 @@ export default function HoplaSender({ id }: { id: string }) {
                   <Check className="h-4 w-4 shrink-0" aria-hidden="true" /> {awake ? t('phoneAwake') : t('phoneSending')}
                 </p>
               )}
+              <button type="button" onClick={cancelSend} className={`${secondary} text-[#a12a2a]`}>
+                <X className="h-5 w-5" aria-hidden="true" /> {t('cancelSend')}
+              </button>
             </section>
           )}
         </>

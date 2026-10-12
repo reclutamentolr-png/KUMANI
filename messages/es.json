@@ -12690,7 +12690,13 @@
     "rule4": "El envío depende de la red y de los dispositivos: si cambias de red o se apaga la pantalla puede interrumpirse.",
     "rule5": "En caso de uso indebido podemos suspender el acceso a Hoplà.",
     "termsLink": "Condiciones completas",
-    "phoneTerms": "Al enviar aceptas las normas de uso de Hoplà."
+    "phoneTerms": "Al enviar aceptas las normas de uso de Hoplà.",
+    "cancelSend": "Cancelar envío",
+    "cancelReceive": "Cancelar recepción",
+    "phoneCancelled": "Envío cancelado: los archivos que ya llegaron se quedan en el ordenador.",
+    "phoneCancelledByPc": "El ordenador ha cancelado la recepción: los archivos que ya llegaron se quedan allí.",
+    "pcCancelledByPhone": "El móvil ha cancelado el envío: el archivo a medias se ha descartado, los que ya llegaron se quedan aquí.",
+    "pcCancelled": "Recepción cancelada: el archivo a medias se ha descartado, los que ya llegaron se quedan aquí."
   },
   "firmaPdf": {
     "badge": "Firma tus documentos",
@@ -12756,7 +12762,11 @@
     "uploadEmpty": "No encuentro la firma en la imagen: prueba con una foto más clara sobre papel blanco.",
     "remember": "Recordar mi firma en este dispositivo",
     "consent": "Al firmar acepto que esta firma electrónica represente mi firma en los documentos donde la coloque, incluidos los contratos.",
-    "sign": "Firmar"
+    "sign": "Firmar",
+    "cancelDoc": "Cancelar",
+    "cancelConfirm": "¿Cerrar el documento? Se perderán las firmas, fechas y textos añadidos.",
+    "cancelYes": "Sí, cerrar",
+    "cancelNo": "Seguir firmando"
   },
   "scamNet": {
     "badge": "La comunidad que te protege",

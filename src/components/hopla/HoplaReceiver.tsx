@@ -9,6 +9,7 @@ import Link from '@/components/LocalizedLink'
 import { createClient } from '@/lib/supabase/client'
 import {
   HOPLA_CONNECT_TIMEOUT,
+  HOPLA_CTRL_LABEL,
   HOPLA_ICE,
   HOPLA_MEMORY_WARN,
   connectionRoute,
@@ -57,10 +58,15 @@ export default function HoplaReceiver() {
   const [confirmDelete, setConfirmDelete] = useState<number | null>(null)
   const [folderName, setFolderName] = useState<string | null>(null)
   const [folderSupported, setFolderSupported] = useState(false)
+  // Ultimo invio annullato: dal telefono o da qui
+  const [cancelled, setCancelled] = useState<'phone' | 'me' | null>(null)
 
   const channelRef = useRef<RealtimeChannel | null>(null)
   const pcRef = useRef<RTCPeerConnection | null>(null)
   const dcRef = useRef<RTCDataChannel | null>(null)
+  const ctrlRef = useRef<RTCDataChannel | null>(null)
+  // Dopo un annullamento i pezzi ancora in viaggio si scartano fino al prossimo invio
+  const ignoreRef = useRef(false)
   const peerRef = useRef<string | null>(null)
   // Indirizzi di rete arrivati prima della risposta del telefono: in attesa
   const iceQueueRef = useRef<RTCIceCandidateInit[]>([])
@@ -92,8 +98,10 @@ export default function HoplaReceiver() {
   const closePeer = useCallback(() => {
     if (timerRef.current) clearTimeout(timerRef.current)
     timerRef.current = null
+    ctrlRef.current?.close()
     dcRef.current?.close()
     pcRef.current?.close()
+    ctrlRef.current = null
     dcRef.current = null
     pcRef.current = null
     peerRef.current = null
@@ -127,6 +135,12 @@ export default function HoplaReceiver() {
   }
 
   const handleMessage = async (data: string | ArrayBuffer) => {
+    if (ignoreRef.current) {
+      // Si riparte solo con una nuova offerta del telefono
+      const next = typeof data === 'string' ? parseCtrl(data) : null
+      if (next?.t !== 'offer') return
+      ignoreRef.current = false
+    }
     if (typeof data !== 'string') {
       const current = currentRef.current
       if (!current) return
@@ -145,6 +159,7 @@ export default function HoplaReceiver() {
       if (!files.length) return
       incomingRef.current = files
       setIncoming(files)
+      setCancelled(null)
       setPhase('asking')
     } else if (msg.t === 'start') {
       const meta = incomingRef.current[msg.i]
@@ -182,9 +197,24 @@ export default function HoplaReceiver() {
       setPhase('done')
       hoplaReceived().catch(() => {})
     } else if (msg.t === 'cancel') {
-      await dropCurrent()
-      setPhase('connected')
+      cancelIncoming('phone')
     }
+  }
+
+  // Annullamento (dal telefono o con «Annulla ricezione»): subito, il file a metà si scarta
+  const cancelIncoming = (by: 'phone' | 'me') => {
+    ignoreRef.current = true
+    setIncoming([])
+    setCancelled(by)
+    setPhase((p) => (p === 'receiving' || p === 'asking' ? 'connected' : p))
+    queueRef.current = queueRef.current.then(() => dropCurrent()).catch(() => {})
+  }
+
+  const cancelReceive = () => {
+    const ctrl = ctrlRef.current
+    const ch = ctrl?.readyState === 'open' ? ctrl : dcRef.current
+    if (ch?.readyState === 'open') ch.send(JSON.stringify({ t: 'cancel' }))
+    cancelIncoming('me')
   }
 
   // Tutti i messaggi in fila: le scritture su disco sono asincrone
@@ -224,6 +254,13 @@ export default function HoplaReceiver() {
     const dc = pc.createDataChannel('hopla', { ordered: true })
     dcRef.current = dc
     setupChannel(dc)
+    // Canale dei comandi urgenti: l'«annulla» del telefono arriva subito
+    const ctrl = pc.createDataChannel(HOPLA_CTRL_LABEL, { ordered: true })
+    ctrlRef.current = ctrl
+    ctrl.onmessage = (e) => {
+      if (ctrlRef.current !== ctrl || typeof e.data !== 'string') return
+      if (parseCtrl(e.data)?.t === 'cancel') cancelIncoming('phone')
+    }
     pc.onicecandidate = (e) => {
       if (e.candidate) send({ kind: 'ice', peer, from: 'pc', candidate: e.candidate.toJSON() })
     }
@@ -462,6 +499,12 @@ export default function HoplaReceiver() {
         </section>
       )}
 
+      {phase === 'connected' && cancelled && (
+        <p className="rounded-2xl bg-[#fff4e5] p-3 text-sm font-semibold text-[#7a4a00]" role="status">
+          {cancelled === 'phone' ? t('pcCancelledByPhone') : t('pcCancelled')}
+        </p>
+      )}
+
       {phase === 'asking' && (
         <section className={`${card} space-y-4`} aria-labelledby="hopla-ask">
           <div className="flex items-start gap-3">
@@ -547,6 +590,9 @@ export default function HoplaReceiver() {
           )}
           {slow && <p className="rounded-2xl bg-[#fff4e5] p-3 text-sm text-[#7a4a00]">{t('slowTip')}</p>}
           {folderName && <p className="text-sm text-[var(--muted)]">{t('savingIn', { folder: folderName })}</p>}
+          <button type="button" onClick={cancelReceive} className={`${secondary} text-[#a12a2a]`}>
+            <X className="h-5 w-5" aria-hidden="true" /> {t('cancelReceive')}
+          </button>
         </section>
       )}
 

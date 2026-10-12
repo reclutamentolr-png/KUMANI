@@ -8,9 +8,12 @@ export const HOPLA_ICE: RTCIceServer[] = [{ urls: 'stun:stun.cloudflare.com:3478
 
 // Pezzi da 256 KB (o il massimo che accetta chi riceve): meno pezzi, invio più fluido
 export const HOPLA_CHUNK = 256 * 1024
-// Coda massima 8 MB: Chrome chiude il canale se si superano 16 MB in attesa
-export const HOPLA_HIGH_WATER = 8 * 1024 * 1024
-export const HOPLA_LOW_WATER = 2 * 1024 * 1024
+// Coda corta (2 MB): veloce lo stesso, e dopo un «annulla» resta poco da smaltire
+// (Chrome chiude il canale se si superano 16 MB in attesa)
+export const HOPLA_HIGH_WATER = 2 * 1024 * 1024
+export const HOPLA_LOW_WATER = 512 * 1024
+// Canale a parte per i comandi urgenti: l'«annulla» non fa la coda dietro ai pezzi del file
+export const HOPLA_CTRL_LABEL = 'hopla-ctrl'
 // Senza cartella (file tenuti in memoria) oltre questa soglia si avvisa
 export const HOPLA_MEMORY_WARN = 1.5 * 1024 * 1024 * 1024
 // Tempo massimo per collegarsi dopo che il telefono si è presentato

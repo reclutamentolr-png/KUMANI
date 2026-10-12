@@ -191,6 +191,7 @@ export default function FirmaPdfApp({ signatureFonts, textFont, defaultName }: {
   const [saving, setSaving] = useState<'download' | 'share' | null>(null)
   const [doneMsg, setDoneMsg] = useState(false)
   const [canShare, setCanShare] = useState(false)
+  const [confirmClose, setConfirmClose] = useState(false)
   // Documento aperto in PDF.js: si chiude quando se ne apre un altro o si esce
   const taskRef = useRef<LoadingTask | null>(null)
   const dragRef = useRef<{ id: string; mode: 'move' | 'resize'; startX: number; startY: number; orig: PdfField; rect: DOMRect } | null>(null)
@@ -425,6 +426,25 @@ export default function FirmaPdfApp({ signatureFonts, textFont, defaultName }: {
     }
   }
 
+  // «Annulla»: chiude il documento e si torna alla scelta del PDF
+  const closeDocument = () => {
+    taskRef.current?.destroy().catch(() => {})
+    taskRef.current = null
+    setConfirmClose(false)
+    setFields([])
+    setSelected(null)
+    setPlacing(null)
+    setDialog(null)
+    setError(null)
+    setDoneMsg(false)
+    setPdf(null)
+    setDoc(null)
+  }
+  const askClose = () => {
+    if (fields.length && !doneMsg) setConfirmClose(true)
+    else closeDocument()
+  }
+
   const tools: { kind: FieldKind; icon: typeof Signature; label: string }[] = [
     { kind: 'signature', icon: Signature, label: t('toolSign') },
     { kind: 'date', icon: CalendarDays, label: t('toolDate') },
@@ -472,11 +492,31 @@ export default function FirmaPdfApp({ signatureFonts, textFont, defaultName }: {
         <p className="min-w-0 truncate text-base font-extrabold text-[var(--ink)]">
           {doc.name}.pdf <span className="font-semibold text-[var(--muted)]">· {t('pages', { count: doc.sizes.length })}</span>
         </p>
-        <label className="inline-flex min-h-10 cursor-pointer items-center gap-1.5 text-sm font-bold text-[#7a5a14] hover:underline">
-          <FileUp className="h-4 w-4" aria-hidden="true" /> {t('changeFile')}
-          <input type="file" accept="application/pdf,.pdf" className="sr-only" onChange={(e) => openFile(e.target.files?.[0])} />
-        </label>
+        <div className="flex items-center gap-3">
+          <label className="inline-flex min-h-10 cursor-pointer items-center gap-1.5 text-sm font-bold text-[#7a5a14] hover:underline">
+            <FileUp className="h-4 w-4" aria-hidden="true" /> {t('changeFile')}
+            <input type="file" accept="application/pdf,.pdf" className="sr-only" onChange={(e) => openFile(e.target.files?.[0])} />
+          </label>
+          <button type="button" onClick={askClose} className="inline-flex min-h-10 items-center gap-1.5 rounded-full border border-[#a12a2a]/30 bg-white px-3 text-sm font-bold text-[#a12a2a] hover:bg-[#fdf2f2]">
+            <X className="h-4 w-4" aria-hidden="true" /> {t('cancelDoc')}
+          </button>
+        </div>
       </div>
+      {confirmClose && (
+        <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-[#a12a2a]/25 bg-[#fdf2f2] p-4" role="alertdialog" aria-labelledby="close-doc">
+          <p id="close-doc" className="min-w-0 flex-1 text-sm font-semibold text-[#a12a2a]">
+            {t('cancelConfirm')}
+          </p>
+          <div className="flex gap-2">
+            <button type="button" onClick={closeDocument} className="min-h-10 rounded-full bg-[#a12a2a] px-4 text-sm font-bold text-white">
+              {t('cancelYes')}
+            </button>
+            <button type="button" onClick={() => setConfirmClose(false)} className="min-h-10 rounded-full border border-[var(--ink)]/20 bg-white px-4 text-sm font-bold text-[var(--ink)]">
+              {t('cancelNo')}
+            </button>
+          </div>
+        </div>
+      )}
       {error && (
         <p className="rounded-2xl bg-[#fdf2f2] p-3 text-sm font-semibold text-[#a12a2a]" role="alert">
           {error}
