@@ -4,7 +4,7 @@
 // conferma del browser, così nulla si blocca.
 
 export type ConfirmTone = 'danger' | 'warning' | 'default'
-export type ConfirmOptions = { title?: string; confirmLabel?: string; tone?: ConfirmTone }
+export type ConfirmOptions = { title?: string; confirmLabel?: string; cancelLabel?: string; tone?: ConfirmTone }
 export type ConfirmRequest = ConfirmOptions & { message: string; resolve: (ok: boolean) => void }
 
 let show: ((req: ConfirmRequest) => void) | null = null

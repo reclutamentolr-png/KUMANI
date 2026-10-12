@@ -74,7 +74,7 @@ export default function ConfirmHost() {
             onClick={() => close(false)}
             className="flex-1 rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50"
           >
-            {t('confirmCancel')}
+            {current.cancelLabel ?? t('confirmCancel')}
           </button>
           <button
             ref={okRef}
