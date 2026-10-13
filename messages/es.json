@@ -3,7 +3,7 @@
     "statLanguagesLabel": "idiomas: KUMANI habla el tuyo",
     "statWeeklyValue": "< 1 €",
     "statWeeklyLabel": "a la semana con Base: menos que un café",
-    "statServicesLabel": "servicios entre Base y Pro",
+    "statServicesLabel": "servicios activos",
     "proInfoBadge": "Incluido en el plan Pro",
     "proInfoClose": "Cerrar",
     "proInfoFidelity": "La tarjeta de fidelidad que tus clientes nunca pierden: la llevan en el móvil, tú sellas con un toque y eliges el premio. Ves quién está a un paso del premio y lo invitas a volver: más visitas sin imprimir ni una tarjeta.",
@@ -1420,7 +1420,15 @@
     "limitReached": "Has alcanzado el número máximo permitido. Elimina lo que ya no necesites para añadir más.",
     "invalidPaidAmount": "Importe no válido: escribe un número, p. ej. 45,90.",
     "payAllOverdue": "Marcar todas pagadas ({count})",
-    "payAllOverdueConfirm": "¿Marcar como pagadas las {count} facturas vencidas, con el importe previsto? Puedes corregir cada una después."
+    "payAllOverdueConfirm": "¿Marcar como pagadas las {count} facturas vencidas, con el importe previsto? Puedes corregir cada una después.",
+    "paymentMethodField": "Método de pago",
+    "paymentMethodNone": "No indicado",
+    "paymentMethodCard": "Tarjeta de crédito/débito",
+    "paymentMethodTransfer": "Transferencia",
+    "paymentMethodCash": "Efectivo",
+    "paymentMethodOther": "Otro",
+    "alreadyPaidField": "Ya pagada",
+    "alreadyPaidHint": "{count, plural, one {El vencimiento hasta hoy figura como pagado, no vencido.} other {Los # vencimientos hasta hoy figuran como pagados, no vencidos.}}"
   },
   "common": {
     "publicOfflineProfileTitle": "Perfil no disponible temporalmente",

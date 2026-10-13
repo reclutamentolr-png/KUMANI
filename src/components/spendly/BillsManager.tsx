@@ -9,12 +9,16 @@ import { createFixedExpense, deleteFixedExpense, setBillActive, updateFixedExpen
 import { markBillPaid, unmarkBillPaid } from '@/app/actions/agenda'
 import { addDays } from '@/lib/agenda'
 import {
+  dueDatesUntil,
   fixedExpenseDueDate,
   formatCurrency,
   parseAmount,
   paymentKey,
   periodOf,
+  PAYMENT_METHODS,
+  PAYMENT_METHOD_KEY,
   type FixedExpenseFrequency,
+  type PaymentMethod,
   type SpendlyFixedExpense,
   type SpendlyFixedPayment,
 } from '@/lib/spendly'
@@ -30,7 +34,17 @@ const FREQUENCY_KEY: Record<FixedExpenseFrequency, string> = {
   una_tantum: 'frequencyOneOff',
 }
 
-type Form = { id?: string; description: string; amount: string; frequency: FixedExpenseFrequency; date: string; notes: string }
+type Form = {
+  id?: string
+  description: string
+  amount: string
+  frequency: FixedExpenseFrequency
+  date: string
+  notes: string
+  paymentMethod: PaymentMethod | ''
+  // Solo all'inserimento: scadenze fino a oggi già pagate
+  alreadyPaid: boolean
+}
 type Occurrence = { bill: SpendlyFixedExpense; date: string; period: string; payment?: SpendlyFixedPayment }
 
 const input = 'w-full p-2.5 border border-[var(--gold)]/30 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none'
@@ -70,7 +84,15 @@ export default function BillsManager({
   const t = useTranslations('spendly')
   const locale = useLocale()
   const router = useRouter()
-  const emptyForm: Form = { description: '', amount: '', frequency: 'mensile', date: today, notes: '' }
+  const emptyForm: Form = { description: '', amount: '', frequency: 'mensile', date: today, notes: '', paymentMethod: '', alreadyPaid: true }
+  // Quante scadenze della bolletta che si sta inserendo cadono entro oggi
+  const pastDueCount = (f: Form) =>
+    !f.date || f.date > today
+      ? 0
+      : dueDatesUntil(
+          { id: '', description: '', amount: 0, frequency: f.frequency, category: 'bollette', start_date: f.date, end_date: f.frequency === 'una_tantum' ? f.date : null, billing_day: Number(f.date.slice(8, 10)), notes: null },
+          today
+        ).length
   const [form, setForm] = useState<Form | null>(autoOpen ? emptyForm : null)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -175,10 +197,11 @@ export default function BillsManager({
       endDate: oneOff ? form.date : original?.frequency === 'una_tantum' ? null : (original?.end_date ?? null),
       billingDay: Number(form.date.slice(8, 10)),
       notes: form.notes,
+      paymentMethod: form.paymentMethod || null,
     }
     let result: { success: boolean } = { success: false }
     try {
-      result = form.id ? await updateFixedExpense(form.id, payload) : await createFixedExpense(payload)
+      result = form.id ? await updateFixedExpense(form.id, payload) : await createFixedExpense({ ...payload, alreadyPaid: form.alreadyPaid && pastDueCount(form) > 0 })
     } catch (err) {
       console.error('[Spendly] bill save failed:', err)
     } finally {
@@ -208,7 +231,7 @@ export default function BillsManager({
           </p>
           <p className={`text-xs ${overdue ? 'font-semibold text-red-600' : 'text-[var(--muted)]'}`}>
             {o.payment
-              ? t('paidOn', { amount: formatCurrency(o.payment.amount) })
+              ? t('paidOn', { amount: formatCurrency(o.payment.amount) }) + (o.payment.payment_method ? ` · ${t(PAYMENT_METHOD_KEY[o.payment.payment_method])}` : '')
               : overdue
                 ? t('overdueSince', { date: day(o.date) })
                 : t('dueOn', { date: day(o.date) })}
@@ -242,6 +265,7 @@ export default function BillsManager({
             <p className="font-bold text-[var(--ink)]">{bill.description}</p>
             <p className="text-xs text-[var(--muted)]">
               {t(FREQUENCY_KEY[bill.frequency])}
+              {bill.payment_method ? ` · ${t(PAYMENT_METHOD_KEY[bill.payment_method])}` : ''}
               {next ? ` · ${t('nextDue', { date: day(next) })}` : ''}
               {inactiveBill ? ` · ${t('billInactive')}` : ''}
             </p>
@@ -249,7 +273,7 @@ export default function BillsManager({
           <div className="flex shrink-0 items-center gap-1 text-[var(--muted)]">
             <button
               type="button"
-              onClick={() => setForm({ id: bill.id, description: bill.description, amount: String(bill.amount).replace('.', ','), frequency: bill.frequency, date: bill.start_date, notes: bill.notes ?? '' })}
+              onClick={() => setForm({ id: bill.id, description: bill.description, amount: String(bill.amount).replace('.', ','), frequency: bill.frequency, date: bill.start_date, notes: bill.notes ?? '', paymentMethod: bill.payment_method ?? '', alreadyPaid: false })}
               className="rounded-md p-1.5 hover:bg-gray-100 hover:text-[var(--ink)]"
               aria-label={t('edit')}
             >
@@ -405,6 +429,26 @@ export default function BillsManager({
               <input type="date" className={input} value={form.date} required onChange={(e) => setForm({ ...form, date: e.target.value })} />
               <p className="mt-1 text-xs text-[var(--muted)]">{form.frequency === 'una_tantum' ? t('billOneOffHint') : t('billDateHint')}</p>
             </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium text-[var(--ink)]">{t('paymentMethodField')}</label>
+              <select className={input} value={form.paymentMethod} onChange={(e) => setForm({ ...form, paymentMethod: e.target.value as PaymentMethod | '' })}>
+                <option value="">{t('paymentMethodNone')}</option>
+                {PAYMENT_METHODS.map((m) => (
+                  <option key={m} value={m}>
+                    {t(PAYMENT_METHOD_KEY[m])}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {!form.id && pastDueCount(form) > 0 && (
+              <label className="flex items-start gap-2.5 rounded-lg border border-emerald-200 bg-emerald-50/60 p-3 text-sm text-[var(--ink)]">
+                <input type="checkbox" checked={form.alreadyPaid} onChange={(e) => setForm({ ...form, alreadyPaid: e.target.checked })} className="mt-0.5 h-4 w-4 accent-emerald-600" />
+                <span>
+                  <span className="font-medium">{t('alreadyPaidField')}</span>
+                  <span className="block text-xs text-[var(--muted)]">{t('alreadyPaidHint', { count: pastDueCount(form) })}</span>
+                </span>
+              </label>
+            )}
             <div>
               <label className="mb-1 block text-sm font-medium text-[var(--ink)]">{t('notesField')}</label>
               <textarea className={`${input} resize-none`} rows={2} value={form.notes} placeholder={t('billNotesPlaceholder')} onChange={(e) => setForm({ ...form, notes: e.target.value })} />

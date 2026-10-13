@@ -23,6 +23,18 @@ export const FIXED_EXPENSE_CATEGORIES = [
 ] as const
 export type FixedExpenseCategory = (typeof FIXED_EXPENSE_CATEGORIES)[number]
 
+// Come si paga una spesa fissa o una bolletta (vuoto = non indicato)
+export const PAYMENT_METHODS = ['carta', 'bonifico', 'contanti', 'altro'] as const
+export type PaymentMethod = (typeof PAYMENT_METHODS)[number]
+export const isPaymentMethod = (value: unknown): value is PaymentMethod => PAYMENT_METHODS.includes(value as PaymentMethod)
+// Chiavi delle traduzioni (spendly.*)
+export const PAYMENT_METHOD_KEY: Record<PaymentMethod, string> = {
+  carta: 'paymentMethodCard',
+  bonifico: 'paymentMethodTransfer',
+  contanti: 'paymentMethodCash',
+  altro: 'paymentMethodOther',
+}
+
 export const VARIABLE_EXPENSE_CATEGORIES = [
   'spesa_alimentari',
   'svago_ristoranti',
@@ -54,6 +66,7 @@ export interface SpendlyFixedExpense {
   end_date: string | null
   billing_day: number | null
   notes: string | null
+  payment_method?: PaymentMethod | null
 }
 
 export interface SpendlyVariableExpense {
@@ -182,12 +195,30 @@ export function fixedExpenseDueDate(expense: SpendlyFixedExpense, year: number, 
   return `${year}-${String(month).padStart(2, '0')}-${String(Math.min(wanted, lastDay)).padStart(2, '0')}`
 }
 
+/**
+ * Scadenze di una spesa fissa dalla data di inizio fino a oggi compreso,
+ * per segnarle pagate quando si inserisce una spesa già saldata (al
+ * massimo gli ultimi 120 mesi).
+ */
+export function dueDatesUntil(expense: SpendlyFixedExpense, today: string): { period: string; date: string }[] {
+  const out: { period: string; date: string }[] = []
+  const endIdx = yearMonthIndex(today)
+  for (let idx = Math.max(yearMonthIndex(expense.start_date), endIdx - 120); idx <= endIdx; idx++) {
+    const year = Math.floor(idx / 12)
+    const month = (idx % 12) + 1
+    const date = fixedExpenseDueDate(expense, year, month)
+    if (date && date <= today) out.push({ period: periodOf(year, month), date })
+  }
+  return out
+}
+
 /** Pagamento registrato per una scadenza (importo reale pagato). */
 export interface SpendlyFixedPayment {
   expense_id: string
   period: string
   amount: number
   paid_on: string
+  payment_method?: PaymentMethod | null
 }
 
 /** Chiave "spesa:mese" per ritrovare in fretta il pagamento di una scadenza. */

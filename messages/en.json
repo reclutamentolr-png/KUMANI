@@ -39,7 +39,7 @@
     "statLanguagesLabel": "languages: KUMANI speaks yours",
     "statWeeklyValue": "< €1",
     "statWeeklyLabel": "a week with Base: less than a coffee",
-    "statServicesLabel": "services across Base and Pro",
+    "statServicesLabel": "active services",
     "proInfoBadge": "Included in the Pro plan",
     "proInfoClose": "Close",
     "proInfoFidelity": "The loyalty card your customers never lose: they keep it on their phone, you stamp it with one tap and choose the reward. See who is one step away from the reward and invite them back: more visits, without printing a single card.",
@@ -1456,7 +1456,15 @@
     "limitReached": "You have reached the maximum allowed. Delete what you no longer need to add more.",
     "invalidPaidAmount": "Invalid amount: type a number, e.g. 45.90.",
     "payAllOverdue": "Mark all paid ({count})",
-    "payAllOverdueConfirm": "Mark all {count} overdue bills as paid, with the expected amount? You can correct each one later."
+    "payAllOverdueConfirm": "Mark all {count} overdue bills as paid, with the expected amount? You can correct each one later.",
+    "paymentMethodField": "Payment method",
+    "paymentMethodNone": "Not specified",
+    "paymentMethodCard": "Credit/debit card",
+    "paymentMethodTransfer": "Bank transfer",
+    "paymentMethodCash": "Cash",
+    "paymentMethodOther": "Other",
+    "alreadyPaidField": "Already paid",
+    "alreadyPaidHint": "{count, plural, one {The payment due up to today is marked as paid, not overdue.} other {The # payments due up to today are marked as paid, not overdue.}}"
   },
   "magazzino": {
     "deleteForever": "Delete permanently",

@@ -3,7 +3,7 @@
     "statLanguagesLabel": "Sprachen: KUMANI spricht deine",
     "statWeeklyValue": "< 1 €",
     "statWeeklyLabel": "pro Woche mit Base: weniger als ein Kaffee",
-    "statServicesLabel": "Services in Base und Pro",
+    "statServicesLabel": "aktive Services",
     "proInfoBadge": "Im Pro-Tarif enthalten",
     "proInfoClose": "Schließen",
     "proInfoFidelity": "Die Treuekarte, die deine Kunden nie verlieren: Sie haben sie auf dem Handy, du stempelst mit einem Tippen und wählst die Prämie. Du siehst, wer kurz vor der Prämie steht, und lädst ihn zum Wiederkommen ein: mehr Besuche, ohne eine einzige Karte zu drucken.",
@@ -1420,7 +1420,15 @@
     "limitReached": "Du hast die erlaubte Höchstzahl erreicht. Lösche, was du nicht mehr brauchst, um weitere hinzuzufügen.",
     "invalidPaidAmount": "Ungültiger Betrag: Gib eine Zahl ein, z. B. 45,90.",
     "payAllOverdue": "Alle als bezahlt markieren ({count})",
-    "payAllOverdueConfirm": "Alle {count} überfälligen Rechnungen mit dem erwarteten Betrag als bezahlt markieren? Du kannst jede später korrigieren."
+    "payAllOverdueConfirm": "Alle {count} überfälligen Rechnungen mit dem erwarteten Betrag als bezahlt markieren? Du kannst jede später korrigieren.",
+    "paymentMethodField": "Zahlungsart",
+    "paymentMethodNone": "Nicht angegeben",
+    "paymentMethodCard": "Kredit-/Debitkarte",
+    "paymentMethodTransfer": "Überweisung",
+    "paymentMethodCash": "Bar",
+    "paymentMethodOther": "Andere",
+    "alreadyPaidField": "Bereits bezahlt",
+    "alreadyPaidHint": "{count, plural, one {Die Fälligkeit bis heute gilt als bezahlt, nicht überfällig.} other {Die # Fälligkeiten bis heute gelten als bezahlt, nicht überfällig.}}"
   },
   "common": {
     "publicOfflineProfileTitle": "Profil vorübergehend nicht verfügbar",

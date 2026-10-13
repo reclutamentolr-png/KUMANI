@@ -3,13 +3,17 @@
 import { createClient } from '@/lib/supabase/server'
 import { hasActiveSpendlyAccess } from '@/lib/spendly-server'
 import { awardToolPoint } from '@/lib/toolPoints'
-import type {
-  FixedExpenseCategory,
-  FixedExpenseFrequency,
-  IncomeCategory,
-  IncomeType,
-  VariableExpenseCategory,
+import {
+  dueDatesUntil,
+  isPaymentMethod,
+  type FixedExpenseCategory,
+  type FixedExpenseFrequency,
+  type IncomeCategory,
+  type IncomeType,
+  type PaymentMethod,
+  type VariableExpenseCategory,
 } from '@/lib/spendly'
+import { todayKey } from '@/lib/agenda'
 import { limitError } from '@/lib/appLimits'
 
 type ActionResult<T> =
@@ -130,6 +134,10 @@ export interface FixedExpenseFormData {
   endDate: string | null
   billingDay: number | null
   notes: string
+  // Come si paga (vuoto = non indicato); assente = non cambiarlo
+  paymentMethod?: PaymentMethod | null
+  // Solo all'inserimento: le scadenze fino a oggi risultano già pagate
+  alreadyPaid?: boolean
 }
 
 export async function createFixedExpense(form: FixedExpenseFormData): Promise<ActionResult<{ id: string }>> {
@@ -149,6 +157,7 @@ export async function createFixedExpense(form: FixedExpenseFormData): Promise<Ac
       end_date: form.endDate,
       billing_day: form.billingDay,
       notes: form.notes || null,
+      payment_method: isPaymentMethod(form.paymentMethod) ? form.paymentMethod : null,
     })
     .select('id')
     .single()
@@ -158,6 +167,24 @@ export async function createFixedExpense(form: FixedExpenseFormData): Promise<Ac
     const limit = await limitError(error)
     if (limit) return limit
     return { success: false, message: 'saveError' }
+  }
+
+  // Spesa già saldata (es. pagata subito con la carta): le scadenze fino a
+  // oggi si registrano pagate, con l'importo e il metodo indicati, così non
+  // compaiono come scadute
+  if (form.alreadyPaid) {
+    const method = isPaymentMethod(form.paymentMethod) ? form.paymentMethod : null
+    const due = dueDatesUntil(
+      { id: data.id, description: form.description, amount: form.amount, frequency: form.frequency, category: form.category, start_date: form.startDate, end_date: form.endDate, billing_day: form.billingDay, notes: null },
+      todayKey()
+    )
+    if (due.length > 0) {
+      const { error: paidError } = await supabase.from('spendly_fixed_payments').upsert(
+        due.map((d) => ({ user_id: gate.userId, expense_id: data.id, period: d.period, amount: form.amount, paid_on: d.date, payment_method: method })),
+        { onConflict: 'expense_id,period' }
+      )
+      if (paidError) console.error('[Spendly] createFixedExpense alreadyPaid failed:', paidError)
+    }
   }
 
   await awardToolPoint('spendly')
@@ -180,6 +207,7 @@ export async function updateFixedExpense(id: string, form: FixedExpenseFormData)
       end_date: form.endDate,
       billing_day: form.billingDay,
       notes: form.notes || null,
+      ...(form.paymentMethod === undefined ? {} : { payment_method: isPaymentMethod(form.paymentMethod) ? form.paymentMethod : null }),
       updated_at: new Date().toISOString(),
     })
     .eq('id', id)

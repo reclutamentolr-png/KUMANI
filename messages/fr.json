@@ -3,7 +3,7 @@
     "statLanguagesLabel": "langues : KUMANI parle la vôtre",
     "statWeeklyValue": "< 1 €",
     "statWeeklyLabel": "par semaine avec Base : moins qu’un café",
-    "statServicesLabel": "services entre Base et Pro",
+    "statServicesLabel": "services actifs",
     "proInfoBadge": "Inclus dans l'offre Pro",
     "proInfoClose": "Fermer",
     "proInfoFidelity": "La carte de fidélité que vos clients ne perdent jamais : ils la gardent sur leur téléphone, vous tamponnez d'un geste et choisissez la récompense. Voyez qui est à un pas de la récompense et invitez-le à revenir : plus de visites, sans imprimer une seule carte.",
@@ -1420,7 +1420,15 @@
     "limitReached": "Vous avez atteint le nombre maximum autorisé. Supprimez ce dont vous n’avez plus besoin pour en ajouter d’autres.",
     "invalidPaidAmount": "Montant non valide : saisissez un nombre, par ex. 45,90.",
     "payAllOverdue": "Tout marquer payé ({count})",
-    "payAllOverdueConfirm": "Marquer les {count} factures échues comme payées, avec le montant prévu ? Vous pourrez corriger chacune ensuite."
+    "payAllOverdueConfirm": "Marquer les {count} factures échues comme payées, avec le montant prévu ? Vous pourrez corriger chacune ensuite.",
+    "paymentMethodField": "Moyen de paiement",
+    "paymentMethodNone": "Non indiqué",
+    "paymentMethodCard": "Carte de crédit/débit",
+    "paymentMethodTransfer": "Virement",
+    "paymentMethodCash": "Espèces",
+    "paymentMethodOther": "Autre",
+    "alreadyPaidField": "Déjà payée",
+    "alreadyPaidHint": "{count, plural, one {L'échéance jusqu'à aujourd'hui est marquée comme payée, pas en retard.} other {Les # échéances jusqu'à aujourd'hui sont marquées comme payées, pas en retard.}}"
   },
   "common": {
     "publicOfflineProfileTitle": "Profil momentanément indisponible",

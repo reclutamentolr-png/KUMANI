@@ -78,10 +78,12 @@ export async function markBillPaid(expenseId: string, period: string, amount: nu
   const { supabase, user } = await session()
   if (!user || !(await hasActiveToolAccess(supabase, user.id, 'spendly'))) return false
   if (!/^\d{4}-\d{2}-01$/.test(period) || !(amount >= 0)) return false
+  // Il pagamento ricorda il metodo abituale della spesa (carta, bonifico…)
+  const { data: expense } = await supabase.from('spendly_fixed_expenses').select('payment_method').eq('id', expenseId).eq('user_id', user.id).maybeSingle()
   const { error } = await supabase
     .from('spendly_fixed_payments')
     .upsert(
-      { user_id: user.id, expense_id: expenseId, period, amount: Math.round(amount * 100) / 100, paid_on: todayKey() },
+      { user_id: user.id, expense_id: expenseId, period, amount: Math.round(amount * 100) / 100, paid_on: todayKey(), payment_method: expense?.payment_method ?? null },
       { onConflict: 'expense_id,period' }
     )
   return !error

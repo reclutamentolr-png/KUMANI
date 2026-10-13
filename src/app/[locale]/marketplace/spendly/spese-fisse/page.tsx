@@ -26,7 +26,7 @@ export default async function SpendlyFixedExpensesPage({
   const [{ data: fixedExpenses }, { data: payments }] = await Promise.all([
     supabase
       .from('spendly_fixed_expenses')
-      .select('id, description, amount, frequency, category, start_date, end_date, billing_day, notes')
+      .select('id, description, amount, frequency, category, start_date, end_date, billing_day, notes, payment_method')
       .eq('user_id', user.id)
       // Le bollette hanno la loro scheda (Spendly → Bollette)
       .neq('category', 'bollette')
@@ -38,7 +38,7 @@ export default async function SpendlyFixedExpensesPage({
     fetchAllRows((from, to) =>
       supabase
         .from('spendly_fixed_payments')
-        .select('expense_id, period, amount, paid_on')
+        .select('expense_id, period, amount, paid_on, payment_method')
         .eq('user_id', user.id)
         .gte('period', `${year}-01-01`)
         .lte('period', `${year}-12-01`)

@@ -18,12 +18,16 @@ import {
   currentYearOnly,
   fixedExpenseAppliesToMonth,
   fixedExpenseDueDate,
+  dueDatesUntil,
   paymentKey,
   periodOf,
+  PAYMENT_METHODS,
+  PAYMENT_METHOD_KEY,
   type SpendlyFixedExpense,
   type SpendlyFixedPayment,
   type FixedExpenseCategory,
   type FixedExpenseFrequency,
+  type PaymentMethod,
 } from '@/lib/spendly'
 import { askConfirm } from '@/lib/confirm'
 
@@ -55,6 +59,9 @@ type FormState = {
   endDate: string
   billingDay: string
   notes: string
+  paymentMethod: PaymentMethod | ''
+  // Solo all'inserimento: scadenze fino a oggi già pagate
+  alreadyPaid: boolean
 }
 
 // Giorno di oggi in Italia (toISOString darebbe il giorno UTC).
@@ -65,7 +72,45 @@ function todayISO() {
 const formatDay = (key: string) => new Date(`${key}T12:00:00Z`).toLocaleDateString('it-IT')
 
 function emptyForm(): FormState {
-  return { description: '', amount: '', frequency: 'mensile', category: 'mutuo_affitto', startDate: todayISO(), endDate: '', billingDay: '', notes: '' }
+  return {
+    description: '',
+    amount: '',
+    frequency: 'mensile',
+    category: 'mutuo_affitto',
+    startDate: todayISO(),
+    endDate: '',
+    billingDay: '',
+    notes: '',
+    paymentMethod: '',
+    alreadyPaid: true,
+  }
+}
+
+// Dati del modulo come verranno salvati (una tantum: una sola scadenza alla
+// data indicata; giorno di scadenza vuoto = giorno della data di inizio)
+function toPayload(form: FormState, amount: number) {
+  const oneOff = form.frequency === 'una_tantum'
+  return {
+    description: form.description.trim(),
+    amount,
+    frequency: form.frequency,
+    category: form.category,
+    startDate: form.startDate,
+    endDate: oneOff ? form.startDate : form.endDate || null,
+    billingDay: oneOff ? Number(form.startDate.slice(8, 10)) : form.billingDay ? parseInt(form.billingDay, 10) : Number(form.startDate.slice(8, 10)),
+    notes: form.notes,
+    paymentMethod: form.paymentMethod || null,
+  }
+}
+
+// Quante scadenze della spesa che si sta inserendo cadono entro oggi
+function pastDueCount(form: FormState, today: string) {
+  if (!form.startDate || form.startDate > today) return 0
+  const p = toPayload(form, 0)
+  return dueDatesUntil(
+    { id: '', description: '', amount: 0, frequency: p.frequency, category: p.category, start_date: p.startDate, end_date: p.endDate, billing_day: p.billingDay, notes: null },
+    today
+  ).length
 }
 
 export default function FixedExpenseManager({
@@ -177,6 +222,8 @@ export default function FixedExpenseManager({
       endDate: item.frequency === 'una_tantum' ? '' : item.end_date || '',
       billingDay: item.billing_day ? String(item.billing_day) : '',
       notes: item.notes || '',
+      paymentMethod: item.payment_method ?? '',
+      alreadyPaid: false,
     })
     setError(null)
     setModalOpen(true)
@@ -199,20 +246,10 @@ export default function FixedExpenseManager({
       return
     }
 
-    // Una tantum: una sola scadenza, alla data indicata.
-    const oneOff = form.frequency === 'una_tantum'
-    const payload = {
-      description: form.description.trim(),
-      amount,
-      frequency: form.frequency,
-      category: form.category,
-      startDate: form.startDate,
-      endDate: oneOff ? form.startDate : form.endDate || null,
-      billingDay: oneOff ? Number(form.startDate.slice(8, 10)) : form.billingDay ? parseInt(form.billingDay, 10) : Number(form.startDate.slice(8, 10)),
-      notes: form.notes,
-    }
-
-    const result = editing ? await updateFixedExpense(editing.id, payload) : await createFixedExpense(payload)
+    const payload = toPayload(form, amount)
+    const result = editing
+      ? await updateFixedExpense(editing.id, payload)
+      : await createFixedExpense({ ...payload, alreadyPaid: form.alreadyPaid && pastDueCount(form, today) > 0 })
 
     setSaving(false)
     if (!result.success) {
@@ -292,7 +329,8 @@ export default function FixedExpenseManager({
                       </p>
                       <p className="text-xs text-[var(--muted)]">
                         {row.payment
-                          ? t('paidOn', { amount: formatCurrency(row.payment.amount) })
+                          ? t('paidOn', { amount: formatCurrency(row.payment.amount) }) +
+                            (row.payment.payment_method ? ` · ${t(PAYMENT_METHOD_KEY[row.payment.payment_method])}` : '')
                           : overdue
                             ? t('overdueSince', { date: formatDay(row.date) })
                             : t('dueOn', { date: formatDay(row.date) })}
@@ -353,6 +391,7 @@ export default function FixedExpenseManager({
                               item.end_date ? ` → ${formatDay(item.end_date)}` : ''
                             }`}
                       </span>
+                      {item.payment_method && <span>· {t(PAYMENT_METHOD_KEY[item.payment_method])}</span>}
                     </div>
                   </div>
                 </div>
@@ -465,6 +504,35 @@ export default function FixedExpenseManager({
                 />
                 <p className="mt-1 text-xs text-[var(--muted)]">{t('dueDayHint')}</p>
               </div>
+            )}
+            <div>
+              <label className="block text-sm font-medium text-[var(--ink)] mb-1">{t('paymentMethodField')}</label>
+              <select
+                value={form.paymentMethod}
+                onChange={(e) => setForm({ ...form, paymentMethod: e.target.value as PaymentMethod | '' })}
+                className="w-full p-2.5 border border-[var(--gold)]/30 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:outline-none"
+              >
+                <option value="">{t('paymentMethodNone')}</option>
+                {PAYMENT_METHODS.map((m) => (
+                  <option key={m} value={m}>
+                    {t(PAYMENT_METHOD_KEY[m])}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {!editing && pastDueCount(form, today) > 0 && (
+              <label className="flex items-start gap-2.5 rounded-lg border border-emerald-200 bg-emerald-50/60 p-3 text-sm text-[var(--ink)]">
+                <input
+                  type="checkbox"
+                  checked={form.alreadyPaid}
+                  onChange={(e) => setForm({ ...form, alreadyPaid: e.target.checked })}
+                  className="mt-0.5 h-4 w-4 accent-emerald-600"
+                />
+                <span>
+                  <span className="font-medium">{t('alreadyPaidField')}</span>
+                  <span className="block text-xs text-[var(--muted)]">{t('alreadyPaidHint', { count: pastDueCount(form, today) })}</span>
+                </span>
+              </label>
             )}
             <div>
               <label className="block text-sm font-medium text-[var(--ink)] mb-1">{t('notesField')}</label>

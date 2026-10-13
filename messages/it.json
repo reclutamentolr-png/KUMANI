@@ -39,7 +39,7 @@
     "statLanguagesLabel": "lingue: KUMANI parla la tua",
     "statWeeklyValue": "< 1 €",
     "statWeeklyLabel": "a settimana con Base: meno di un caffè",
-    "statServicesLabel": "servizi tra Base e Pro",
+    "statServicesLabel": "servizi attivi",
     "proInfoBadge": "Incluso nel piano Pro",
     "proInfoClose": "Chiudi",
     "proInfoFidelity": "La tessera fedeltà che i clienti non perdono mai: la tengono sul telefono, tu timbri con un tocco e scegli il premio. Vedi chi è a un passo dal premio e lo inviti a tornare: più visite, senza stampare un solo cartoncino.",
@@ -2483,7 +2483,15 @@
     "limitReached": "Hai raggiunto il numero massimo consentito. Elimina ciò che non ti serve più per aggiungerne altri.",
     "invalidPaidAmount": "Importo non valido: scrivi un numero, per esempio 45,90.",
     "payAllOverdue": "Segna tutte pagate ({count})",
-    "payAllOverdueConfirm": "Segnare come pagate tutte le {count} bollette scadute, con l'importo previsto? Puoi correggere ognuna dopo."
+    "payAllOverdueConfirm": "Segnare come pagate tutte le {count} bollette scadute, con l'importo previsto? Puoi correggere ognuna dopo.",
+    "paymentMethodField": "Metodo di pagamento",
+    "paymentMethodNone": "Non indicato",
+    "paymentMethodCard": "Carta di credito/debito",
+    "paymentMethodTransfer": "Bonifico",
+    "paymentMethodCash": "Contanti",
+    "paymentMethodOther": "Altro",
+    "alreadyPaidField": "Già pagata",
+    "alreadyPaidHint": "{count, plural, one {La scadenza fino a oggi risulta pagata, non scaduta.} other {Le # scadenze fino a oggi risultano pagate, non scadute.}}"
   },
   "preventivi": {
     "title": "Preventivi",
