@@ -43,6 +43,9 @@ import HomeCommunity from '@/components/home/HomeCommunity'
 import HeroLogoVideo from '@/components/home/HeroLogoVideo'
 import HeroSideImage from '@/components/home/HeroSideImage'
 import { HOME_LAYOUT_CONFIG, type HomeLayoutKey } from '@/lib/homeLayouts'
+import { getEnabledLocales } from '@/lib/enabledLocales'
+import { countEnabledTools } from '@/lib/freeTools'
+import { CATALOG_TOOL_NAMES } from '@/lib/catalog-server'
 
 // Contenuto della Home pubblica. `layoutKey`: aspetto scelto dall'Admin
 // (cambiano solo sfondi e immagini, mai i contenuti). Usato dalla Home
@@ -60,7 +63,8 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
   ])
   const L = HOME_LAYOUT_CONFIG[layoutKey]
   // «In cosa possiamo darti una mano?»: per ogni risposta i servizi giusti
-  const needs = await buildHomeNeeds()
+  // Numeri sotto l'apertura: lingue attive e servizi accesi (decisi dall'Admin)
+  const [needs, enabledLocales, serviceCount] = await Promise.all([buildHomeNeeds(), getEnabledLocales(), countEnabledTools(CATALOG_TOOL_NAMES)])
   // Apertura con testo a sinistra sul computer (foto a lato)
   const leftHero = L.hero.kind === 'split' || L.hero.kind === 'side'
   const heroBadgeClass =
@@ -205,7 +209,7 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
           {/* Stats */}
           <div className={`grid grid-cols-3 gap-3 sm:gap-6 max-w-xl mx-auto ${leftHero ? 'lg:mx-0' : ''}`}>
             <div>
-              <div className="text-2xl sm:text-3xl font-bold text-white">7</div>
+              <div className="text-2xl sm:text-3xl font-bold text-white">{enabledLocales.length}</div>
               <div className="text-xs sm:text-sm text-gray-400">{t('statLanguagesLabel')}</div>
             </div>
             <div>
@@ -213,7 +217,7 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
               <div className="text-xs sm:text-sm text-gray-400">{t('statWeeklyLabel')}</div>
             </div>
             <div>
-              <div className="text-2xl sm:text-3xl font-bold text-white">40+</div>
+              <div className="text-2xl sm:text-3xl font-bold text-white">{serviceCount ?? '40+'}</div>
               <div className="text-xs sm:text-sm text-gray-400">{t('statServicesLabel')}</div>
             </div>
           </div>

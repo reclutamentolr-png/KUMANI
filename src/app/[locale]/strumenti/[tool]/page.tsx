@@ -34,11 +34,11 @@ const toolSetting = cache(async (toolName: string) => {
 // pulsante "Condividi" dentro ogni strumento (?ref=CODICE). Chi arriva qui
 // si iscrive con il codice invito di chi ha condiviso già inserito.
 // Pagina uguale per tutti: preparata in anticipo per ogni lingua e servizio e
-// rifatta in background al massimo ogni 5 minuti (piano e acceso/spento
-// decisi dall'Admin compaiono entro 5 minuti, come nella Home). Le parti
+// rifatta in background al massimo una volta al giorno (piano e acceso/spento
+// decisi dall'Admin la rifanno subito: vedi admin.ts). Le parti
 // personali (chi ha condiviso con ?ref, pulsanti per chi è già iscritto) le
 // completa il browser: components/strumenti/ToolShareActions.
-export const revalidate = 300
+export const revalidate = 86400
 
 export function generateStaticParams() {
   return getMarketplaceTools((key) => key).map(({ toolName }) => ({ tool: toolName }))

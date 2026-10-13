@@ -29,7 +29,7 @@ const fetchReviews = unstable_cache(
     }
   },
   ['public-reviews'],
-  { revalidate: 600, tags: [REVIEWS_CACHE_TAG] }
+  { revalidate: 86400, tags: [REVIEWS_CACHE_TAG] }
 )
 
 export function getPublicReviews(options: { subject?: string | null; locale: string; limit?: number }) {

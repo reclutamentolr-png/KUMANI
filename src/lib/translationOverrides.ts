@@ -22,7 +22,7 @@ const fetchOverrides = unstable_cache(
     return Object.fromEntries(data.map((row) => [row.key as string, row.value as string]))
   },
   ['translation-overrides-v2'],
-  { revalidate: 600, tags: [TRANSLATIONS_CACHE_TAG] }
+  { revalidate: 86400, tags: [TRANSLATIONS_CACHE_TAG] }
 )
 
 export async function getTranslationOverrides(locale: string): Promise<Record<string, string>> {

@@ -54,6 +54,14 @@ const COMMUNITY = [
   { toolName: 'spotlight', href: '/marketplace/spotlight', iconName: 'Star', titleKey: 'kumanoDelGiorno' },
 ]
 
+// Tutti i servizi del Catalogo (accesi o no): stesso elenco di getCatalog,
+// per contarli nella Home senza leggere testi e prezzi
+export const CATALOG_TOOL_NAMES = [
+  ...getMarketplaceTools((key) => key).map((tool) => tool.toolName),
+  ...COMMUNITY.map((c) => c.toolName),
+  'sorprese',
+]
+
 type Texts = Record<string, Record<string, unknown>>
 
 // Prima frase di un testo (i passi della guida restano brevi)

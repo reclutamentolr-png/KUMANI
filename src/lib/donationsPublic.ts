@@ -20,7 +20,7 @@ export const getPublicDonationSummary = unstable_cache(
   },
   // v2: dati in percentuale (la vecchia memoria non aveva percent_bp)
   ['donation-summary-v2'],
-  { tags: [DONATIONS_CACHE_TAG], revalidate: 300 }
+  { tags: [DONATIONS_CACHE_TAG], revalidate: 86400 }
 )
 
 export function refreshDonationSummary() {

@@ -32,7 +32,7 @@ const fetchHomeEvents = unstable_cache(
     return events
   },
   ['home-events'],
-  { revalidate: 600 },
+  { revalidate: 3600 },
 )
 
 export function getHomeEvents(): Promise<EventCard[] | null> {

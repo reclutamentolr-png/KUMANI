@@ -253,7 +253,7 @@ type DnsAnswer = { name?: string; type?: number; Type?: number; TTL?: number; da
 async function checkSPF(domain: string): Promise<SVATCheck | null> {
   try {
     const res = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=TXT`, {
-      next: { revalidate: 3600 },
+      cache: 'no-store',
     })
     if (!res.ok) return null
 
@@ -296,7 +296,7 @@ async function checkSPF(domain: string): Promise<SVATCheck | null> {
 async function checkDMARC(domain: string): Promise<SVATCheck | null> {
   try {
     const res = await fetch(`https://dns.google/resolve?name=_dmarc.${encodeURIComponent(domain)}&type=TXT`, {
-      next: { revalidate: 3600 },
+      cache: 'no-store',
     })
     if (!res.ok) return null
 
@@ -346,7 +346,7 @@ async function checkDMARC(domain: string): Promise<SVATCheck | null> {
 async function checkMX(domain: string): Promise<SVATCheck | null> {
   try {
     const res = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=MX`, {
-      next: { revalidate: 3600 },
+      cache: 'no-store',
     })
     if (!res.ok) return null
 
@@ -392,7 +392,7 @@ async function checkHTTPHeaders(url: string): Promise<SVATCheck | null> {
         'User-Agent': 'SVAT-Checker/1.0 (anti-fraud verification)',
       },
       redirect: 'follow',
-      next: { revalidate: 3600 },
+      cache: 'no-store',
     })
 
     const headers: Record<string, string> = {}
@@ -475,7 +475,7 @@ async function checkSSL(url: string, domain: string): Promise<SVATCheck | null> 
         'User-Agent': 'SVAT-SSL-Checker/1.0',
       },
       redirect: 'follow',
-      next: { revalidate: 3600 },
+      cache: 'no-store',
     })
 
     if (!res.ok && res.status !== 301 && res.status !== 302) {
@@ -508,7 +508,7 @@ async function checkSSL(url: string, domain: string): Promise<SVATCheck | null> 
 
     // Try to get certificate info from SSL Labs
     const certRes = await fetch(`https://api.ssllabs.com/api/v3/analyze?host=${encodeURIComponent(domain)}&publish=off&all=done`, {
-      next: { revalidate: 3600 },
+      cache: 'no-store',
     })
 
     if (certRes.ok) {
@@ -588,7 +588,7 @@ async function checkSSL(url: string, domain: string): Promise<SVATCheck | null> 
     // Fallback: use another SSL API to get certificate details
     try {
       const sslInfoRes = await fetch(`https://ssl-checker-api.vercel.app/api/check?domain=${encodeURIComponent(domain)}`, {
-        next: { revalidate: 3600 },
+        cache: 'no-store',
       })
       if (sslInfoRes.ok) {
         const sslInfo = await sslInfoRes.json()
@@ -683,7 +683,7 @@ async function fetchPageHtml(url: string): Promise<FetchedPage | null> {
           'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
         'Accept-Language': 'en-US,en;q=0.5',
       },
-      next: { revalidate: 3600 },
+      cache: 'no-store',
     })
     // Basta l'inizio della pagina (niente pagine giganti in memoria)
     const html = (await res.text()).slice(0, 2_000_000)
@@ -887,7 +887,7 @@ async function checkPTR(domain: string): Promise<SVATCheck | null> {
   try {
     // Get A record first
     const res = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=A`, {
-      next: { revalidate: 3600 },
+      cache: 'no-store',
     })
     if (!res.ok) return null
 
@@ -913,7 +913,7 @@ async function checkPTR(domain: string): Promise<SVATCheck | null> {
     // Query PTR record for the IP
     const reversedIp = ip.split('.').reverse().join('.')
     const ptrRes = await fetch(`https://dns.google/resolve?name=${reversedIp}.in-addr.arpa&type=PTR`, {
-      next: { revalidate: 3600 },
+      cache: 'no-store',
     })
 
     if (!ptrRes.ok) {
@@ -979,7 +979,7 @@ async function checkAbuseIPDB(domain: string): Promise<SVATCheck | null> {
 
     // Get A record first
     const dnsRes = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=A`, {
-      next: { revalidate: 3600 },
+      cache: 'no-store',
     })
     if (!dnsRes.ok) return null
 
@@ -992,7 +992,7 @@ async function checkAbuseIPDB(domain: string): Promise<SVATCheck | null> {
         'Key': apiKey,
         'Accept': 'application/json',
       },
-      next: { revalidate: 3600 },
+      cache: 'no-store',
     })
 
     if (!res.ok) return null

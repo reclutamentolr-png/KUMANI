@@ -133,7 +133,7 @@ async function countByCategory(supabase: SupabaseClient, search?: ListingSearch)
 const cachedCategoryCounts = unstable_cache(
   async (country: string, city: string) => countByCategory(serviceClient(), { country: country || undefined, city: city || undefined }),
   ['listing-category-counts'],
-  { revalidate: 300, tags: [LISTINGS_CACHE_TAG] }
+  { revalidate: 3600, tags: [LISTINGS_CACHE_TAG] }
 )
 
 /** Quanti annunci attivi per categoria (con la ricerca, senza il filtro di categoria). */
@@ -180,7 +180,7 @@ export const getListingCitiesByCountry = unstable_cache(async () => {
   }
   for (const list of Object.values(byCountry)) list.sort((a, b) => a.localeCompare(b))
   return byCountry
-}, ['listing-cities'], { revalidate: 300, tags: [LISTINGS_CACHE_TAG] })
+}, ['listing-cities'], { revalidate: 3600, tags: [LISTINGS_CACHE_TAG] })
 
 export async function getUserListings(userId: string) {
   const supabase = await createClient()

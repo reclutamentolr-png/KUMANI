@@ -10,7 +10,7 @@ import { createHash, randomBytes } from 'crypto'
 import type { Permission } from '@/lib/admin-permissions'
 import { generateShortCode } from '@/lib/shortLink'
 import { getStripe } from '@/lib/stripe'
-import { updateTag } from 'next/cache'
+import { revalidatePath, updateTag } from 'next/cache'
 import { SPOTLIGHT_HOME_CACHE_TAG, type SpotlightModerationStatus } from '@/lib/spotlight'
 import { getPlanPrices } from '@/lib/planPrices'
 import { KU_FEATURE_KEYS, type KuFeatureKey } from '@/lib/ku'
@@ -18,6 +18,7 @@ import { invalidateListingsCache } from '@/lib/listings-server'
 import { generatePassCode } from '@/lib/toolPasses'
 import { DEFAULT_HOME_LAYOUT, isHomeLayout } from '@/lib/homeLayouts'
 import { HOME_LAYOUT_CACHE_TAG } from '@/lib/homeLayoutServer'
+import { TOOL_PLANS_CACHE_TAG } from '@/lib/freeTools'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { getTranslations } from 'next-intl/server'
 import type { AdminCouponRow, AdminRewardRedemption, ListingReport, ListingReportRow } from '@/lib/adminTypes'
@@ -170,6 +171,13 @@ export async function adminGetPlanPrices() {
   return getPlanPrices()
 }
 
+// Piano o acceso/spento cambiati: rifà subito le pagine pubbliche dei servizi
+// (tenute in memoria un giorno) e la griglia della Home
+function refreshToolPages() {
+  updateTag(TOOL_PLANS_CACHE_TAG)
+  revalidatePath('/[locale]/strumenti/[tool]', 'page')
+}
+
 export async function adminSetToolEnabled(toolName: string, enabled: boolean) {
   const admin = await verifyAdmin('marketplace.write')
   if (!admin) return { success: false, error: 'Non autorizzato' }
@@ -178,6 +186,7 @@ export async function adminSetToolEnabled(toolName: string, enabled: boolean) {
     .update({ is_enabled: enabled, updated_at: new Date().toISOString() })
     .eq('tool_name', toolName)
   if (error) return { success: false, error: error.message }
+  refreshToolPages()
   return { success: true }
 }
 
@@ -1405,6 +1414,7 @@ export async function updateToolPlan(toolName: string, plan: 'free' | 'base' | '
     .update({ required_plan: plan, updated_at: new Date().toISOString() })
     .eq('tool_name', toolName)
   if (error) return { success: false, error: error.message }
+  refreshToolPages()
   return { success: true }
 }
 

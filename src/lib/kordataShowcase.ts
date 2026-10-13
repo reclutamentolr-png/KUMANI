@@ -17,7 +17,7 @@ const fetchShowcase = unstable_cache(
     return (data ?? []) as ShowcaseCard[]
   },
   ['kordata-showcase'],
-  { revalidate: 600, tags: [SHOWCASE_CACHE_TAG] }
+  { revalidate: 86400, tags: [SHOWCASE_CACHE_TAG] }
 )
 
 export function getKordataShowcase(): Promise<ShowcaseCard[]> {
