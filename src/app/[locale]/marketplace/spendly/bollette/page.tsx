@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import { todayKey } from '@/lib/agenda'
 import type { SpendlyFixedExpense, SpendlyFixedPayment } from '@/lib/spendly'
 import { fetchAllRows } from '@/lib/fetchAllRows'
+import { settleAutoPayments } from '@/lib/spendly-server'
 
 // Spendly → Bollette: scadenze che si ripetono con importo variabile (luce,
 // gas, acqua, telefono…). Nel database sono spese fisse con categoria
@@ -17,9 +18,11 @@ export default async function SpendlyBillsPage({ searchParams }: { searchParams:
   } = await supabase.auth.getUser()
   if (!user) redirect(`/${await getLocale()}/login`)
 
+  // Addebito automatico: prima registra le scadenze arrivate
+  await settleAutoPayments(supabase, user.id)
   const { data: bills } = await supabase
     .from('spendly_fixed_expenses')
-    .select('id, description, amount, frequency, category, start_date, end_date, billing_day, notes, payment_method')
+    .select('id, description, amount, frequency, category, start_date, end_date, billing_day, notes, payment_method, auto_pay_from')
     .eq('user_id', user.id)
     .eq('category', 'bollette')
     .order('description')

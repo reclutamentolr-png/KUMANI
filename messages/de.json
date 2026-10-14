@@ -1428,7 +1428,10 @@
     "paymentMethodCash": "Bar",
     "paymentMethodOther": "Andere",
     "alreadyPaidField": "Bereits bezahlt",
-    "alreadyPaidHint": "{count, plural, one {Die Fälligkeit bis heute gilt als bezahlt, nicht überfällig.} other {Die # Fälligkeiten bis heute gelten als bezahlt, nicht überfällig.}}"
+    "alreadyPaidHint": "{count, plural, one {Die Fälligkeit bis heute gilt als bezahlt, nicht überfällig.} other {Die # Fälligkeiten bis heute gelten als bezahlt, nicht überfällig.}}",
+    "autoPayField": "Automatische Abbuchung",
+    "autoPayHint": "Am Fälligkeitstag markiert Spendly sie automatisch als bezahlt, mit dem geplanten Betrag. Wenn du einen anderen Betrag bezahlt hast, tippe auf «Rückgängig» und dann auf «Bezahlt» mit dem richtigen Betrag.",
+    "autoPayBadge": "Automatische Abbuchung"
   },
   "common": {
     "publicOfflineProfileTitle": "Profil vorübergehend nicht verfügbar",

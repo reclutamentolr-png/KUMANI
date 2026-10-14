@@ -8,6 +8,7 @@ import Link from '@/components/LocalizedLink'
 import type { SpendlyIncome, SpendlyFixedExpense, SpendlyFixedPayment, SpendlyVariableExpense } from '@/lib/spendly'
 import { currentYear } from '@/lib/spendly'
 import { fetchAllRows } from '@/lib/fetchAllRows'
+import { settleAutoPayments } from '@/lib/spendly-server'
 import { toolMetadata } from '@/lib/toolMetadata'
 
 // Nome del servizio nella scheda del browser
@@ -27,6 +28,8 @@ export default async function SpendlyDashboardPage({
   } = await supabase.auth.getUser()
   if (!user) redirect(`/${await getLocale()}/login`)
 
+  // Addebito automatico: prima registra le scadenze arrivate
+  await settleAutoPayments(supabase, user.id)
   const [{ data: income }, { data: fixedExpenses }, { data: variableExpenses }, { data: payments }] = await Promise.all([
     fetchAllRows((from, to) =>
       supabase

@@ -1464,7 +1464,10 @@
     "paymentMethodCash": "Cash",
     "paymentMethodOther": "Other",
     "alreadyPaidField": "Already paid",
-    "alreadyPaidHint": "{count, plural, one {The payment due up to today is marked as paid, not overdue.} other {The # payments due up to today are marked as paid, not overdue.}}"
+    "alreadyPaidHint": "{count, plural, one {The payment due up to today is marked as paid, not overdue.} other {The # payments due up to today are marked as paid, not overdue.}}",
+    "autoPayField": "Automatic debit",
+    "autoPayHint": "On the due date Spendly marks it as paid on its own, with the expected amount. If you paid a different amount, tap «Undo» and then «Paid» with the right amount.",
+    "autoPayBadge": "Automatic debit"
   },
   "magazzino": {
     "deleteForever": "Delete permanently",

@@ -5,6 +5,7 @@ import FixedExpenseManager from '@/components/spendly/FixedExpenseManager'
 import type { SpendlyFixedExpense, SpendlyFixedPayment } from '@/lib/spendly'
 import { currentYear } from '@/lib/spendly'
 import { fetchAllRows } from '@/lib/fetchAllRows'
+import { settleAutoPayments } from '@/lib/spendly-server'
 
 export default async function SpendlyFixedExpensesPage({
   searchParams,
@@ -20,13 +21,15 @@ export default async function SpendlyFixedExpensesPage({
   } = await supabase.auth.getUser()
   if (!user) redirect(`/${await getLocale()}/login`)
 
+  // Addebito automatico: prima registra le scadenze arrivate
+  await settleAutoPayments(supabase, user.id)
   // Mostra le spese fisse ancora "attive" durante l'anno selezionato: sono
   // iniziate entro il 31/12 dell'anno e non sono ancora terminate prima del
   // 1/1 dello stesso anno (end_date nullo = nessuna scadenza).
   const [{ data: fixedExpenses }, { data: payments }] = await Promise.all([
     supabase
       .from('spendly_fixed_expenses')
-      .select('id, description, amount, frequency, category, start_date, end_date, billing_day, notes, payment_method')
+      .select('id, description, amount, frequency, category, start_date, end_date, billing_day, notes, payment_method, auto_pay_from')
       .eq('user_id', user.id)
       // Le bollette hanno la loro scheda (Spendly → Bollette)
       .neq('category', 'bollette')

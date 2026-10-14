@@ -1428,7 +1428,10 @@
     "paymentMethodCash": "Dinheiro",
     "paymentMethodOther": "Outro",
     "alreadyPaidField": "Já paga",
-    "alreadyPaidHint": "{count, plural, one {O vencimento até hoje fica como pago, não vencido.} other {Os # vencimentos até hoje ficam como pagos, não vencidos.}}"
+    "alreadyPaidHint": "{count, plural, one {O vencimento até hoje fica como pago, não vencido.} other {Os # vencimentos até hoje ficam como pagos, não vencidos.}}",
+    "autoPayField": "Débito automático",
+    "autoPayHint": "No dia do vencimento o Spendly marca como paga sozinho, com o valor previsto. Se você pagou outro valor, toque em «Anular» e depois em «Paga» com o valor certo.",
+    "autoPayBadge": "Débito automático"
   },
   "common": {
     "publicOfflineProfileTitle": "Perfil temporariamente indisponível",

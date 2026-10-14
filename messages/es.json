@@ -1428,7 +1428,10 @@
     "paymentMethodCash": "Efectivo",
     "paymentMethodOther": "Otro",
     "alreadyPaidField": "Ya pagada",
-    "alreadyPaidHint": "{count, plural, one {El vencimiento hasta hoy figura como pagado, no vencido.} other {Los # vencimientos hasta hoy figuran como pagados, no vencidos.}}"
+    "alreadyPaidHint": "{count, plural, one {El vencimiento hasta hoy figura como pagado, no vencido.} other {Los # vencimientos hasta hoy figuran como pagados, no vencidos.}}",
+    "autoPayField": "Cargo automático",
+    "autoPayHint": "El día del vencimiento Spendly la marca como pagada sola, con el importe previsto. Si pagaste otro importe, pulsa «Deshacer» y luego «Pagada» con el importe correcto.",
+    "autoPayBadge": "Cargo automático"
   },
   "common": {
     "publicOfflineProfileTitle": "Perfil no disponible temporalmente",

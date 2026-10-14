@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation'
 import Link from '@/components/LocalizedLink'
 import { ArrowLeft, Gauge, Sparkles } from 'lucide-react'
 import FinCheckApp, { type FinCheckResultRow } from '@/components/fincheck/FinCheckApp'
-import { hasActiveSpendlyAccess } from '@/lib/spendly-server'
+import { hasActiveSpendlyAccess, settleAutoPayments } from '@/lib/spendly-server'
 import { checkupMonths, computeCheckup, type CheckupResult } from '@/lib/fincheck'
 import type { SpendlyFixedExpense, SpendlyFixedPayment, SpendlyIncome, SpendlyVariableExpense } from '@/lib/spendly'
 import { fetchAllRows } from '@/lib/fetchAllRows'
@@ -48,6 +48,7 @@ export default async function FinCheckPage({ params }: { params: Promise<{ local
     const periodFrom = `${months[0].year}-${String(months[0].month).padStart(2, '0')}-01`
     const last = months[months.length - 1]
     const periodTo = new Date(Date.UTC(last.year, last.month, 0)).toISOString().slice(0, 10)
+    await settleAutoPayments(supabase, user.id)
     const [{ data: income }, { data: fixed }, { data: variable }, { data: payments }] = await Promise.all([
       fetchAllRows((from, to) =>
         supabase

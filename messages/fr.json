@@ -1428,7 +1428,10 @@
     "paymentMethodCash": "Espèces",
     "paymentMethodOther": "Autre",
     "alreadyPaidField": "Déjà payée",
-    "alreadyPaidHint": "{count, plural, one {L'échéance jusqu'à aujourd'hui est marquée comme payée, pas en retard.} other {Les # échéances jusqu'à aujourd'hui sont marquées comme payées, pas en retard.}}"
+    "alreadyPaidHint": "{count, plural, one {L'échéance jusqu'à aujourd'hui est marquée comme payée, pas en retard.} other {Les # échéances jusqu'à aujourd'hui sont marquées comme payées, pas en retard.}}",
+    "autoPayField": "Prélèvement automatique",
+    "autoPayHint": "À la date d'échéance, Spendly la marque comme payée toute seule, avec le montant prévu. Si vous avez payé un autre montant, appuyez sur «Annuler» puis sur «Payée» avec le bon montant.",
+    "autoPayBadge": "Prélèvement automatique"
   },
   "common": {
     "publicOfflineProfileTitle": "Profil momentanément indisponible",

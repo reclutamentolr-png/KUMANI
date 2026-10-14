@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { localizedPath, notifyUser, pushDb } from '@/lib/push'
 import { fixedExpenseDueDate, type SpendlyFixedExpense } from '@/lib/spendly'
+import { settleAutoPayments } from '@/lib/spendly-server'
 
 // Promemoria giornalieri con le notifiche push (Vercel Cron, vedi vercel.json):
 // - abbonamento senza rinnovo automatico (voucher, Staff) che scade entro 3 giorni;
@@ -234,6 +235,8 @@ export async function GET(request: Request) {
   const months = [today.slice(0, 7), dayKey(3).slice(0, 7)].filter((m, idx, all) => all.indexOf(m) === idx)
   for (let i = 0; i < userIds.length; i += 200) {
     const chunk = userIds.slice(i, i + 200)
+    // Addebito automatico: le bollette già addebitate oggi non vanno ricordate
+    await settleAutoPayments(db, chunk)
     const { data: expenses } = await db
       .from('spendly_fixed_expenses')
       .select('id, user_id, description, amount, frequency, category, start_date, end_date, billing_day, notes')

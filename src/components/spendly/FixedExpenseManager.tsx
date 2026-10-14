@@ -62,6 +62,8 @@ type FormState = {
   paymentMethod: PaymentMethod | ''
   // Solo all'inserimento: scadenze fino a oggi già pagate
   alreadyPaid: boolean
+  // Addebito automatico: il giorno della scadenza si segna pagata da sola
+  autoPay: boolean
 }
 
 // Giorno di oggi in Italia (toISOString darebbe il giorno UTC).
@@ -83,6 +85,7 @@ function emptyForm(): FormState {
     notes: '',
     paymentMethod: '',
     alreadyPaid: true,
+    autoPay: false,
   }
 }
 
@@ -100,6 +103,7 @@ function toPayload(form: FormState, amount: number) {
     billingDay: oneOff ? Number(form.startDate.slice(8, 10)) : form.billingDay ? parseInt(form.billingDay, 10) : Number(form.startDate.slice(8, 10)),
     notes: form.notes,
     paymentMethod: form.paymentMethod || null,
+    autoPay: form.autoPay,
   }
 }
 
@@ -224,6 +228,7 @@ export default function FixedExpenseManager({
       notes: item.notes || '',
       paymentMethod: item.payment_method ?? '',
       alreadyPaid: false,
+      autoPay: !!item.auto_pay_from,
     })
     setError(null)
     setModalOpen(true)
@@ -392,6 +397,7 @@ export default function FixedExpenseManager({
                             }`}
                       </span>
                       {item.payment_method && <span>· {t(PAYMENT_METHOD_KEY[item.payment_method])}</span>}
+                      {item.auto_pay_from && <span>· {t('autoPayBadge')}</span>}
                     </div>
                   </div>
                 </div>
@@ -520,6 +526,18 @@ export default function FixedExpenseManager({
                 ))}
               </select>
             </div>
+            <label className="flex items-start gap-2.5 rounded-lg border border-[var(--gold)]/30 bg-[var(--background)] p-3 text-sm text-[var(--ink)]">
+              <input
+                type="checkbox"
+                checked={form.autoPay}
+                onChange={(e) => setForm({ ...form, autoPay: e.target.checked })}
+                className="mt-0.5 h-4 w-4 accent-emerald-600"
+              />
+              <span>
+                <span className="font-medium">{t('autoPayField')}</span>
+                <span className="block text-xs text-[var(--muted)]">{t('autoPayHint')}</span>
+              </span>
+            </label>
             {!editing && pastDueCount(form, today) > 0 && (
               <label className="flex items-start gap-2.5 rounded-lg border border-emerald-200 bg-emerald-50/60 p-3 text-sm text-[var(--ink)]">
                 <input

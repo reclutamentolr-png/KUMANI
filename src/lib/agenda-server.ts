@@ -2,6 +2,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import { getTranslations } from 'next-intl/server'
 import { addDays, dateKeyOf, daysBetween, sortAgenda, timeOf, todayKey, type AgendaEvent } from '@/lib/agenda'
 import { fixedExpenseDueDate, paymentKey, periodOf, type SpendlyFixedExpense, type SpendlyFixedPayment } from '@/lib/spendly'
+import { settleAutoPayments } from '@/lib/spendly-server'
 
 export type AgendaSources = { memolife: boolean; spendly: boolean; lifeCalendar: boolean }
 
@@ -68,6 +69,7 @@ export async function loadAgenda(supabase: SupabaseClient, userId: string, optio
   if (sources.spendly) {
     jobs.push(
       (async () => {
+        await settleAutoPayments(supabase, userId)
         const [{ data: expenses }, { data: payments }] = await Promise.all([
           supabase
             .from('spendly_fixed_expenses')

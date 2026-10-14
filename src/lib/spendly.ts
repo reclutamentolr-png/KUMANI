@@ -67,6 +67,8 @@ export interface SpendlyFixedExpense {
   billing_day: number | null
   notes: string | null
   payment_method?: PaymentMethod | null
+  // Addebito automatico: primo giorno ancora da registrare (vuoto = spento)
+  auto_pay_from?: string | null
 }
 
 export interface SpendlyVariableExpense {

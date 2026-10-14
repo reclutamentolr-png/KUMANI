@@ -5,6 +5,7 @@ import SpendlyCapacity from '@/components/spendly/SpendlyCapacity'
 import type { SpendlyIncome, SpendlyFixedExpense, SpendlyFixedPayment, SpendlyVariableExpense } from '@/lib/spendly'
 import { currentYear } from '@/lib/spendly'
 import { fetchAllRows } from '@/lib/fetchAllRows'
+import { settleAutoPayments } from '@/lib/spendly-server'
 
 export default async function SpendlyCapacityPage({
   searchParams,
@@ -20,6 +21,8 @@ export default async function SpendlyCapacityPage({
   } = await supabase.auth.getUser()
   if (!user) redirect(`/${await getLocale()}/login`)
 
+  // Addebito automatico: prima registra le scadenze arrivate
+  await settleAutoPayments(supabase, user.id)
   const [{ data: income }, { data: fixedExpenses }, { data: variableExpenses }, { data: payments }] = await Promise.all([
     fetchAllRows((from, to) =>
       supabase

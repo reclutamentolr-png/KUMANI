@@ -138,6 +138,8 @@ export interface FixedExpenseFormData {
   paymentMethod?: PaymentMethod | null
   // Solo all'inserimento: le scadenze fino a oggi risultano già pagate
   alreadyPaid?: boolean
+  // Addebito automatico (si segna pagata da sola); assente = non cambiarlo
+  autoPay?: boolean
 }
 
 export async function createFixedExpense(form: FixedExpenseFormData): Promise<ActionResult<{ id: string }>> {
@@ -158,6 +160,7 @@ export async function createFixedExpense(form: FixedExpenseFormData): Promise<Ac
       billing_day: form.billingDay,
       notes: form.notes || null,
       payment_method: isPaymentMethod(form.paymentMethod) ? form.paymentMethod : null,
+      auto_pay_from: form.autoPay ? todayKey() : null,
     })
     .select('id')
     .single()
@@ -196,6 +199,13 @@ export async function updateFixedExpense(id: string, form: FixedExpenseFormData)
   if (!gate.ok) return { success: false, message: gate.message }
 
   const supabase = await createClient()
+  // Addebito automatico: se era già acceso resta la sua data, altrimenti
+  // parte da oggi (le scadenze passate non pagate restano da segnare)
+  let autoPay = {}
+  if (form.autoPay !== undefined) {
+    const { data: current } = await supabase.from('spendly_fixed_expenses').select('auto_pay_from').eq('id', id).eq('user_id', gate.userId).maybeSingle()
+    autoPay = { auto_pay_from: form.autoPay ? (current?.auto_pay_from ?? todayKey()) : null }
+  }
   const { error } = await supabase
     .from('spendly_fixed_expenses')
     .update({
@@ -208,6 +218,7 @@ export async function updateFixedExpense(id: string, form: FixedExpenseFormData)
       billing_day: form.billingDay,
       notes: form.notes || null,
       ...(form.paymentMethod === undefined ? {} : { payment_method: isPaymentMethod(form.paymentMethod) ? form.paymentMethod : null }),
+      ...autoPay,
       updated_at: new Date().toISOString(),
     })
     .eq('id', id)

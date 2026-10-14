@@ -2491,7 +2491,10 @@
     "paymentMethodCash": "Contanti",
     "paymentMethodOther": "Altro",
     "alreadyPaidField": "Già pagata",
-    "alreadyPaidHint": "{count, plural, one {La scadenza fino a oggi risulta pagata, non scaduta.} other {Le # scadenze fino a oggi risultano pagate, non scadute.}}"
+    "alreadyPaidHint": "{count, plural, one {La scadenza fino a oggi risulta pagata, non scaduta.} other {Le # scadenze fino a oggi risultano pagate, non scadute.}}",
+    "autoPayField": "Addebito automatico",
+    "autoPayHint": "Il giorno della scadenza Spendly la segna pagata da sola, con l'importo previsto. Se hai pagato un importo diverso, premi «Annulla» e poi «Pagata» con l'importo giusto.",
+    "autoPayBadge": "Addebito automatico"
   },
   "preventivi": {
     "title": "Preventivi",

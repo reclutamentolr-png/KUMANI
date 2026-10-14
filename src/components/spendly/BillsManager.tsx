@@ -44,6 +44,8 @@ type Form = {
   paymentMethod: PaymentMethod | ''
   // Solo all'inserimento: scadenze fino a oggi già pagate
   alreadyPaid: boolean
+  // Addebito automatico: il giorno della scadenza si segna pagata da sola
+  autoPay: boolean
 }
 type Occurrence = { bill: SpendlyFixedExpense; date: string; period: string; payment?: SpendlyFixedPayment }
 
@@ -84,7 +86,7 @@ export default function BillsManager({
   const t = useTranslations('spendly')
   const locale = useLocale()
   const router = useRouter()
-  const emptyForm: Form = { description: '', amount: '', frequency: 'mensile', date: today, notes: '', paymentMethod: '', alreadyPaid: true }
+  const emptyForm: Form = { description: '', amount: '', frequency: 'mensile', date: today, notes: '', paymentMethod: '', alreadyPaid: true, autoPay: false }
   // Quante scadenze della bolletta che si sta inserendo cadono entro oggi
   const pastDueCount = (f: Form) =>
     !f.date || f.date > today
@@ -198,6 +200,7 @@ export default function BillsManager({
       billingDay: Number(form.date.slice(8, 10)),
       notes: form.notes,
       paymentMethod: form.paymentMethod || null,
+      autoPay: form.autoPay,
     }
     let result: { success: boolean } = { success: false }
     try {
@@ -266,6 +269,7 @@ export default function BillsManager({
             <p className="text-xs text-[var(--muted)]">
               {t(FREQUENCY_KEY[bill.frequency])}
               {bill.payment_method ? ` · ${t(PAYMENT_METHOD_KEY[bill.payment_method])}` : ''}
+              {bill.auto_pay_from ? ` · ${t('autoPayBadge')}` : ''}
               {next ? ` · ${t('nextDue', { date: day(next) })}` : ''}
               {inactiveBill ? ` · ${t('billInactive')}` : ''}
             </p>
@@ -273,7 +277,7 @@ export default function BillsManager({
           <div className="flex shrink-0 items-center gap-1 text-[var(--muted)]">
             <button
               type="button"
-              onClick={() => setForm({ id: bill.id, description: bill.description, amount: String(bill.amount).replace('.', ','), frequency: bill.frequency, date: bill.start_date, notes: bill.notes ?? '', paymentMethod: bill.payment_method ?? '', alreadyPaid: false })}
+              onClick={() => setForm({ id: bill.id, description: bill.description, amount: String(bill.amount).replace('.', ','), frequency: bill.frequency, date: bill.start_date, notes: bill.notes ?? '', paymentMethod: bill.payment_method ?? '', alreadyPaid: false, autoPay: !!bill.auto_pay_from })}
               className="rounded-md p-1.5 hover:bg-gray-100 hover:text-[var(--ink)]"
               aria-label={t('edit')}
             >
@@ -440,6 +444,13 @@ export default function BillsManager({
                 ))}
               </select>
             </div>
+            <label className="flex items-start gap-2.5 rounded-lg border border-[var(--gold)]/30 bg-[var(--background)] p-3 text-sm text-[var(--ink)]">
+              <input type="checkbox" checked={form.autoPay} onChange={(e) => setForm({ ...form, autoPay: e.target.checked })} className="mt-0.5 h-4 w-4 accent-emerald-600" />
+              <span>
+                <span className="font-medium">{t('autoPayField')}</span>
+                <span className="block text-xs text-[var(--muted)]">{t('autoPayHint')}</span>
+              </span>
+            </label>
             {!form.id && pastDueCount(form) > 0 && (
               <label className="flex items-start gap-2.5 rounded-lg border border-emerald-200 bg-emerald-50/60 p-3 text-sm text-[var(--ink)]">
                 <input type="checkbox" checked={form.alreadyPaid} onChange={(e) => setForm({ ...form, alreadyPaid: e.target.checked })} className="mt-0.5 h-4 w-4 accent-emerald-600" />
