@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import { getTranslations } from 'next-intl/server'
-import Link from '@/components/LocalizedLink'
 
 // «KUMANI sta arrivando»: la pagina che il proxy mostra a chi non è iscritto
 // mentre il pre-lancio è acceso (lib/prelaunch). A lancio fatto il proxy la
 // rimanda alla Home. Fuori dai motori di ricerca: si indicizza il sito vero.
+// Niente link all'accesso: da lì si arriverebbe alla registrazione; chi ha
+// un account va direttamente su /login.
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('comingSoon')
   return { title: t('metaTitle'), description: t('subtitle'), robots: { index: false, follow: false } }
@@ -18,10 +19,9 @@ export default async function ComingSoonPage() {
       {/* Medaglione che gira su se stesso, con il riflesso dorato sotto */}
       <div className="coming-soon-stage relative mb-10 h-44 w-44 sm:h-56 sm:w-56">
         <div className="absolute inset-0 rounded-full bg-[var(--gold)]/25 blur-3xl" aria-hidden />
-        {/* Due facce, come una moneta: girando non si vede mai il logo a specchio */}
+        {/* Un'immagine sola: girando non si vedono mai il retro né due loghi sovrapposti */}
         <div className="coming-soon-coin relative h-full w-full">
-          <Image src="/senza_sfondo.png" alt="KUMANI" width={224} height={224} priority className="coming-soon-face absolute inset-0 h-full w-full object-cover" />
-          <Image src="/senza_sfondo.png" alt="" width={224} height={224} priority className="coming-soon-face coming-soon-back absolute inset-0 h-full w-full object-cover" />
+          <Image src="/senza_sfondo.png" alt="KUMANI" width={224} height={224} priority className="h-full w-full object-cover" />
         </div>
         <div className="coming-soon-shadow absolute -bottom-8 left-1/2 h-4 w-28 -translate-x-1/2 rounded-full bg-black/60 blur-md" aria-hidden />
       </div>
@@ -35,13 +35,6 @@ export default async function ComingSoonPage() {
         <span className="coming-soon-dot h-2 w-2 rounded-full bg-[var(--gold-bright)] [animation-delay:200ms]" />
         <span className="coming-soon-dot h-2 w-2 rounded-full bg-[var(--gold-bright)] [animation-delay:400ms]" />
       </div>
-
-      <p className="absolute bottom-6 left-0 right-0 text-sm text-white/50">
-        {t('member')}{' '}
-        <Link href="/login" className="font-semibold text-[var(--gold-bright)] underline-offset-4 hover:underline">
-          {t('login')}
-        </Link>
-      </p>
     </main>
   )
 }
