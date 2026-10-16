@@ -8,6 +8,7 @@ import { fetchAllRows } from '@/lib/fetchAllRows'
 import { SITE_URL } from '@/lib/siteUrl'
 import { forecastMonth, previousMonthsTotals, romeMonthToday } from '@/lib/spendlyForecast'
 import { isMonthKey, monthRange, sharedBalances, type SharedExpense, type SharedGroup, type SharedRecurring, type SharedSettlement } from '@/lib/spendlyShared'
+import HubBar from '@/components/hubs/HubBar'
 
 // Un gruppo delle spese condivise: mese per mese le spese, «chi deve quanto a
 // chi» (su tutte le spese e i rimborsi), le spese fisse, la previsione del
@@ -84,15 +85,16 @@ export default async function SharedGroupPage({
   return (
     <div className="min-h-screen bg-[var(--background)] pb-16">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
-          <Link href="/spese-condivise" className="flex items-center gap-2 text-sm font-medium hover:text-[var(--gold-bright)]">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 gap-3">
+          <Link href="/spese-condivise" className="flex items-center gap-2 text-sm font-medium hover:text-[var(--gold-bright)] shrink-0">
             <ArrowLeft className="h-5 w-5" /> {t('backGroups')}
           </Link>
-          <span className="flex items-center gap-2 font-semibold">
-            <Users className="h-5 w-5 text-[var(--gold-bright)]" /> {t('title')}
+          <span className="flex items-center gap-2 font-semibold min-w-0 text-right leading-tight">
+            <Users className="h-5 w-5 text-[var(--gold-bright)] shrink-0" /> {t('title')}
           </span>
         </div>
       </header>
+      <HubBar />
       <main className="mx-auto max-w-5xl px-4 py-6">
         <SharedGroupView
           group={group}

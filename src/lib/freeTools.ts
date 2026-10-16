@@ -39,6 +39,16 @@ export async function getFreeToolNames(toolNames: string[]): Promise<string[]> {
   return toolNames.filter((name) => (plans[name] || (LEGACY_PAID_TOOLS.includes(name) ? 'base' : 'free')) === 'free')
 }
 
+// Strumenti spenti dall'Admin (spariscono dalle schede dei servizi uniti e dai
+// bisogni della Home). Vuoto se la lettura non riesce.
+export async function getDisabledTools(): Promise<string[]> {
+  try {
+    return (await fetchToolPlans()).disabled
+  } catch {
+    return []
+  }
+}
+
 // Quanti tra i servizi indicati sono accesi (spenti dall'Admin = esclusi):
 // il numero dei servizi nella Home. Null se la lettura non riesce.
 export async function countEnabledTools(toolNames: string[]): Promise<number | null> {

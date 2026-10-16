@@ -77,12 +77,12 @@ export default async function GuidePage({ params, searchParams }: Props) {
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
           {/* Aperta da "Come si usa": si torna al servizio, non all'elenco */}
-          <Link href={from ?? '/guida'} className="flex min-w-0 items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]">
+          <Link href={from ?? '/guida'} className="flex min-w-0 items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)] shrink-0">
             <ArrowLeft className="h-5 w-5 shrink-0" />
             <span className="truncate">{from === '/dashboard' ? t('backToDashboard') : from ? t('backToService', { name: guide.title }) : t('backToGuides')}</span>
           </Link>
-          <span className="flex items-center gap-2 font-semibold tracking-wide">
-            <BookOpen className="h-5 w-5 text-[var(--gold-bright)]" /> {t('linkLabel')}
+          <span className="flex items-center gap-2 font-semibold tracking-wide min-w-0 text-right leading-tight">
+            <BookOpen className="h-5 w-5 text-[var(--gold-bright)] shrink-0" /> {t('linkLabel')}
           </span>
         </div>
       </header>

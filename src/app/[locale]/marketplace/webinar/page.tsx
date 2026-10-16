@@ -54,17 +54,17 @@ export default async function WebinarPage({ params }: { params: Promise<{ locale
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
           <ToolBackLink
             className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
-            dashboardLabel={
+            label={
               <>
-                <ArrowLeft className="h-5 w-5" /> {tc('backToDashboard')}
+                <ArrowLeft className="h-5 w-5" /> {tc('backToServices')}
               </>
             }
           >
             <ArrowLeft className="h-5 w-5" />
             {tm('backToMarketplace')}
           </ToolBackLink>
-          <h1 className="flex items-center gap-2 font-semibold tracking-wide">
-            <Radio className="h-5 w-5 text-[var(--gold-bright)]" />
+          <h1 className="flex items-center gap-2 font-semibold tracking-wide min-w-0 text-right leading-tight">
+            <Radio className="h-5 w-5 text-[var(--gold-bright)] shrink-0" />
             {t('name')}
           </h1>
         </div>

@@ -7,6 +7,7 @@ import NexusDuelButton from '@/components/nexus/NexusDuelButton'
 import { getNexusStatus } from '@/app/actions/nexus'
 import { nexusLocalePair, type NexusLocale } from '@/lib/nexus/types'
 import { toolMetadata } from '@/lib/toolMetadata'
+import HubBar from '@/components/hubs/HubBar'
 
 // Nome del servizio nella scheda del browser
 export const generateMetadata = toolMetadata('nexus')
@@ -31,21 +32,22 @@ export default async function NexusPage({ searchParams }: { searchParams: Promis
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-3">
           <ToolBackLink
             className="flex min-h-11 items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
-            dashboardLabel={
+            label={
               <>
-                <ArrowLeft className="h-5 w-5" /> {tc('backToDashboard')}
+                <ArrowLeft className="h-5 w-5" /> {tc('backToServices')}
               </>
             }
           >
             <ArrowLeft className="h-5 w-5" />
             {t('back')}
           </ToolBackLink>
-          <h1 className="flex items-center gap-2 font-semibold tracking-wide">
-            <Puzzle className="h-5 w-5 text-[var(--gold-bright)]" />
+          <h1 className="flex items-center gap-2 font-semibold tracking-wide min-w-0 text-right leading-tight">
+            <Puzzle className="h-5 w-5 text-[var(--gold-bright)] shrink-0" />
             KUMANI Nexus
           </h1>
         </div>
       </header>
+      <HubBar />
 
       <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-2 px-4 pt-4">
         <div className="flex items-center gap-3">

@@ -8,6 +8,7 @@ import OfferMakerWizard from '@/components/OfferMakerWizard'
 import { hasActiveOfferMakerAccess } from '@/lib/offermaker-server'
 import { getMyBusinessProfile } from '@/lib/businessProfile-server'
 import { toolMetadata } from '@/lib/toolMetadata'
+import HubBar from '@/components/hubs/HubBar'
 
 // Nome del servizio nella scheda del browser
 export const generateMetadata = toolMetadata('offermaker')
@@ -40,12 +41,12 @@ export default async function OfferMakerPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center gap-3">
           <ToolBackLink
             className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
-            dashboardLabel={<><ArrowLeft className="w-5 h-5" /> {commonT('backToDashboard')}</>}
+            label={<><ArrowLeft className="w-5 h-5" /> {commonT('backToServices')}</>}
           >
             <ArrowLeft className="w-5 h-5" />
             {t('backToMarketplace')}
           </ToolBackLink>
-          <div className="flex items-center gap-3 sm:gap-4">
+          <div className="flex items-center gap-3 sm:gap-4 min-w-0 text-right leading-tight">
             <Link
               href="/marketplace/offermaker/campaigns"
               className="flex items-center gap-2 text-sm font-medium text-white/80 hover:text-[var(--gold-bright)] transition-colors"
@@ -53,13 +54,14 @@ export default async function OfferMakerPage() {
               <ListChecks className="w-4 h-4" />
               {t('myCampaigns')}
             </Link>
-            <h1 className="flex items-center gap-2 font-semibold tracking-wide">
-              <Wand2 className="h-5 w-5 text-[var(--gold-bright)]" />
+            <h1 className="flex items-center gap-2 font-semibold tracking-wide min-w-0 text-right leading-tight">
+              <Wand2 className="h-5 w-5 text-[var(--gold-bright)] shrink-0" />
               {t('title')}
             </h1>
           </div>
         </div>
       </header>
+      <HubBar />
 
       <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="relative mb-8 overflow-hidden rounded-3xl bg-[var(--ink)] p-6 text-center text-white shadow-[0_14px_40px_rgba(23,23,23,0.25)] sm:p-8">

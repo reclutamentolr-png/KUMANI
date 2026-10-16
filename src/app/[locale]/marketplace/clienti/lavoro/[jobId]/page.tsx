@@ -7,6 +7,7 @@ import { getJob } from '@/app/actions/clienti'
 import { toolMetadata } from '@/lib/toolMetadata'
 import { createClient } from '@/lib/supabase/server'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
+import HubBar from '@/components/hubs/HubBar'
 
 export const generateMetadata = toolMetadata('clienti')
 
@@ -28,7 +29,7 @@ export default async function ClientJobPage({ params }: { params: Promise<{ loca
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 py-4">
           <Link
             href={`/marketplace/clienti/${data.client.id}`}
-            className="flex min-w-0 items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
+            className="flex min-w-0 items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)] shrink-0"
           >
             <ArrowLeft className="h-5 w-5 shrink-0" />
             <span className="truncate">{data.client.name}</span>
@@ -39,6 +40,7 @@ export default async function ClientJobPage({ params }: { params: Promise<{ loca
           </p>
         </div>
       </header>
+      <HubBar />
 
       <main className="mx-auto max-w-3xl px-4 py-8">
         <ClientJobView

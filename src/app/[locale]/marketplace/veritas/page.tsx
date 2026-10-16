@@ -5,6 +5,7 @@ import Link from '@/components/LocalizedLink'
 import VeritasHome from '@/components/veritas/VeritasHome'
 import { createClient } from '@/lib/supabase/server'
 import { toolMetadata } from '@/lib/toolMetadata'
+import HubBar from '@/components/hubs/HubBar'
 
 // Nome del servizio nella scheda del browser
 export const generateMetadata = toolMetadata('veritas')
@@ -24,16 +25,17 @@ export default async function VeritasPage({ params }: { params: Promise<{ locale
   return (
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          <Link href="/dashboard" className="flex items-center gap-2 text-sm font-medium text-white transition-colors hover:text-[var(--gold-bright)]">
-            <ArrowLeft className="h-5 w-5" /> {commonT('backToDashboard')}
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8 gap-3">
+          <Link href="/servizi" className="flex items-center gap-2 text-sm font-medium text-white transition-colors hover:text-[var(--gold-bright)] shrink-0">
+            <ArrowLeft className="h-5 w-5" /> {commonT('backToServices')}
           </Link>
-          <div className="flex items-center gap-2">
-            <VenetianMask className="h-5 w-5 text-[var(--gold-bright)]" />
+          <div className="flex items-center gap-2 min-w-0 text-right leading-tight">
+            <VenetianMask className="h-5 w-5 text-[var(--gold-bright)] shrink-0" />
             <span className="font-semibold tracking-wide">Veritas</span>
           </div>
         </div>
       </header>
+      <HubBar />
       <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="relative mb-10 overflow-hidden rounded-3xl bg-[var(--ink)] p-6 text-center text-white shadow-[0_14px_40px_rgba(23,23,23,0.25)] sm:p-8">
           <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full border border-[var(--gold)]/25 bg-[var(--gold)]/10" />

@@ -7,6 +7,7 @@ import { hasActiveDigitalReceiptAccess } from '@/lib/digitalReceipt-server'
 import { todayKey } from '@/lib/agenda'
 import type { DigitalReceiptFormData } from '@/lib/digitalReceipt'
 import DigitalReceiptForm from '@/components/DigitalReceiptForm'
+import HubBar from '@/components/hubs/HubBar'
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
@@ -100,20 +101,21 @@ export default async function NewDigitalReceiptPage({
   return (
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center gap-3">
           <Link
             href="/marketplace/digital-receipt"
-            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
+            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)] shrink-0"
           >
             <ArrowLeft className="w-5 h-5" />
             {t('title')}
           </Link>
-          <h1 className="flex items-center gap-2 font-semibold tracking-wide">
-            <FileCheck2 className="h-5 w-5 text-[var(--gold-bright)]" />
+          <h1 className="flex items-center gap-2 font-semibold tracking-wide min-w-0 text-right leading-tight">
+            <FileCheck2 className="h-5 w-5 text-[var(--gold-bright)] shrink-0" />
             {t('newReceipt')}
           </h1>
         </div>
       </header>
+      <HubBar />
 
       <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {quoteNumber !== null && (

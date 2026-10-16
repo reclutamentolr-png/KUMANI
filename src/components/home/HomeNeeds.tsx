@@ -60,6 +60,32 @@ export default function HomeNeeds({
             <ul className={`mt-4 grid gap-3 ${need.items.length > 2 ? 'sm:grid-cols-2' : ''} ${need.items.length > 3 ? 'lg:grid-cols-4' : need.items.length === 3 ? 'lg:grid-cols-3' : ''}`}>
               {need.items.map((item) => {
                 const Icon = marketplaceIconMap[item.iconName] ?? EXTRA_ICON[item.iconName] ?? Smartphone
+                // Servizio unito: tutte le sue schede, ognuna con la sua pagina
+                if (item.links?.length)
+                  return (
+                    <li key={item.name}>
+                      <div className="flex h-full items-start gap-3 rounded-2xl border border-gray-200 bg-[var(--background)] p-3 sm:flex-col sm:gap-0 sm:p-4">
+                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--ink)] text-[var(--gold-bright)]">
+                          <Icon className="h-5 w-5" />
+                        </span>
+                        <span className="flex min-w-0 flex-1 flex-col sm:mt-3">
+                          <span className="font-bold text-[var(--ink)]">{item.title}</span>
+                          <span className="mt-0.5 line-clamp-3 text-sm leading-snug text-gray-600 sm:mt-1">{item.description}</span>
+                          <span className="mt-2 flex flex-wrap gap-1.5 sm:mt-3">
+                            {item.links.map((link) => (
+                              <Link
+                                key={link.href}
+                                href={link.href}
+                                className="inline-flex min-h-9 items-center gap-1 rounded-full border border-[var(--gold)]/40 bg-white px-3 text-xs font-semibold text-[var(--ink)] transition hover:border-[var(--gold)] hover:bg-[var(--gold)]/10"
+                              >
+                                {link.title} <ArrowRight className="h-3 w-3" />
+                              </Link>
+                            ))}
+                          </span>
+                        </span>
+                      </div>
+                    </li>
+                  )
                 return (
                   <li key={item.name}>
                     <Link

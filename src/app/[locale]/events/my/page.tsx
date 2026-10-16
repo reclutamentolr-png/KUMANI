@@ -55,12 +55,12 @@ export default async function EventsMyPage({
   return (
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-          <Link href="/events" className="flex items-center gap-2 text-sm font-medium hover:text-[var(--gold-bright)]">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 gap-3">
+          <Link href="/events" className="flex items-center gap-2 text-sm font-medium hover:text-[var(--gold-bright)] shrink-0">
             <ArrowLeft className="h-5 w-5" /> {t('backToEvents')}
           </Link>
-          <div className="flex items-center gap-2">
-            <CalendarHeart className="h-5 w-5 text-[var(--gold-bright)]" />
+          <div className="flex items-center gap-2 min-w-0 text-right leading-tight">
+            <CalendarHeart className="h-5 w-5 text-[var(--gold-bright)] shrink-0" />
             <span className="font-semibold tracking-wide">KUMANI Events</span>
           </div>
         </div>

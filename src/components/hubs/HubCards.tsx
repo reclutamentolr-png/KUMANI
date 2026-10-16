@@ -36,7 +36,7 @@ export default function HubCards({ hubs, items }: { hubs: readonly ServiceHub[];
             <span className="mt-2 text-sm text-[var(--muted)]">{t(`${hub}.description`)}</span>
             <span className="mt-3 flex flex-wrap gap-1.5">
               {HUB_TABS[hub]
-                .filter((tab) => tab.key !== 'all')
+                .filter((tab) => tab.key !== 'all' && (!tab.tool || openOf.has(tab.tool)))
                 .map((tab) => {
                   const locked = !!tab.tool && openOf.get(tab.tool) === false
                   return (

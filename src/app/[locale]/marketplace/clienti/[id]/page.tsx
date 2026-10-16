@@ -7,6 +7,7 @@ import { getClientCard, getClientExtras } from '@/app/actions/clienti'
 import { createClient } from '@/lib/supabase/server'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { toolMetadata } from '@/lib/toolMetadata'
+import HubBar from '@/components/hubs/HubBar'
 
 export const generateMetadata = toolMetadata('clienti')
 
@@ -30,8 +31,8 @@ export default async function ClientePage({ params }: { params: Promise<{ locale
   return (
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
-        <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-4">
-          <Link href="/marketplace/clienti" className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]">
+        <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-4 gap-3">
+          <Link href="/marketplace/clienti" className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)] shrink-0">
             <ArrowLeft className="h-5 w-5" />
             {t('title')}
           </Link>
@@ -41,6 +42,7 @@ export default async function ClientePage({ params }: { params: Promise<{ locale
           </p>
         </div>
       </header>
+      <HubBar />
 
       <main className="mx-auto max-w-3xl px-4 py-8">
         <ClienteCard client={data.client} quotes={data.quotes} jobs={data.jobs} payments={data.payments} canQuote={canQuote} orders={extras.orders} stamps={extras.stamps} canReceipt={canReceipt} />

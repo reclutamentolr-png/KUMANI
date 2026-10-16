@@ -8,6 +8,7 @@ import { hasActiveCvAccess } from '@/lib/cv-server'
 import CvForm from '@/components/CvForm'
 import { emptyCvForm } from '@/lib/cv'
 import { isGuestUser } from '@/lib/trials'
+import HubBar from '@/components/hubs/HubBar'
 
 export default async function NewCvPage({ searchParams }: { searchParams: Promise<{ from?: string }> }) {
   const t = await getTranslations('kumaniCv')
@@ -51,20 +52,21 @@ export default async function NewCvPage({ searchParams }: { searchParams: Promis
   return (
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center gap-3">
           <Link
             href={`/marketplace/kumani-cv${backSuffix}`}
-            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
+            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)] shrink-0"
           >
             <ArrowLeft className="w-5 h-5" />
             {t('title')}
           </Link>
-          <h1 className="flex items-center gap-2 font-semibold tracking-wide">
-            <FileUser className="h-5 w-5 text-[var(--gold-bright)]" />
+          <h1 className="flex items-center gap-2 font-semibold tracking-wide min-w-0 text-right leading-tight">
+            <FileUser className="h-5 w-5 text-[var(--gold-bright)] shrink-0" />
             {t('newCv')}
           </h1>
         </div>
       </header>
+      <HubBar />
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {!guest && (fullName || initialData.email) && (

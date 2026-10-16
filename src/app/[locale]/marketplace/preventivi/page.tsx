@@ -7,6 +7,7 @@ import { ArrowLeft, FileSpreadsheet, Sparkles, Pencil, PlusCircle } from 'lucide
 import { hasActivePreventiviAccess } from '@/lib/quotes-server'
 import QuotesDashboard from '@/components/QuotesDashboard'
 import { toolMetadata } from '@/lib/toolMetadata'
+import HubBar from '@/components/hubs/HubBar'
 
 // Nome del servizio nella scheda del browser
 export const generateMetadata = toolMetadata('preventivi')
@@ -42,20 +43,21 @@ export default async function PreventiviPage({ searchParams }: { searchParams: P
   return (
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center gap-3">
           <ToolBackLink
             className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
-            dashboardLabel={<><ArrowLeft className="w-5 h-5" /> {commonT('backToDashboard')}</>}
+            label={<><ArrowLeft className="w-5 h-5" /> {commonT('backToServices')}</>}
           >
             <ArrowLeft className="w-5 h-5" />
             {t('backToMarketplace')}
           </ToolBackLink>
-          <h1 className="flex items-center gap-2 font-semibold tracking-wide">
-            <FileSpreadsheet className="h-5 w-5 text-[var(--gold-bright)]" />
+          <h1 className="flex items-center gap-2 font-semibold tracking-wide min-w-0 text-right leading-tight">
+            <FileSpreadsheet className="h-5 w-5 text-[var(--gold-bright)] shrink-0" />
             {t('title')}
           </h1>
         </div>
       </header>
+      <HubBar />
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="relative mb-8 overflow-hidden rounded-3xl bg-[var(--ink)] p-6 text-white shadow-[0_14px_40px_rgba(23,23,23,0.25)] sm:p-8">

@@ -21,23 +21,23 @@ export default async function GarageLayout({ children }: { children: React.React
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      {/* Servizio unito «Casa e auto» (lib/serviceHubs) */}
-      <HubBar />
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
           <ToolBackLink
             className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
-            dashboardLabel={
+            label={
               <>
-                <ArrowLeft className="h-5 w-5" /> {commonT('backToDashboard')}
+                <ArrowLeft className="h-5 w-5" /> {commonT('backToServices')}
               </>
             }
           />
-          <span className="flex items-center gap-2 font-semibold tracking-wide">
-            <CarFront className="h-5 w-5 text-[var(--gold-bright)]" /> {marketplaceT('garage')}
+          <span className="flex min-w-0 items-center gap-2 text-right font-semibold leading-tight tracking-wide">
+            <CarFront className="h-5 w-5 text-[var(--gold-bright)] shrink-0" /> {marketplaceT('garage')}
           </span>
         </div>
       </header>
+      {/* Servizio unito «Casa e auto» (lib/serviceHubs) */}
+      <HubBar />
       <main className="mx-auto max-w-4xl px-4 py-6 sm:px-6 sm:py-10 lg:px-8">{children}</main>
     </div>
   )

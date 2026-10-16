@@ -1,7 +1,6 @@
 import { unstable_cache } from 'next/cache'
 import { getMessages, getTranslations } from 'next-intl/server'
 import { createClient } from '@supabase/supabase-js'
-import { moreThan } from '@/lib/countText'
 import { collapseByHub, HUB_ICON_NAME, HUB_PUBLIC_HREF, HUB_REPRESENTATIVE, hubTabKey, TOOL_HUB } from '@/lib/serviceHubs'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { SERVICE_GROUPS, serviceGroupOf } from '@/lib/serviceGroups'
@@ -30,7 +29,7 @@ export type CatalogItem = {
 }
 
 export type CatalogGroup = { key: string; label: string; items: CatalogItem[] }
-// total: servizi come li vede l'utente; tools: «più di N» strumenti (lib/countText)
+// total: servizi come li vede l'utente; tools: strumenti accesi (ognuno conta)
 export type Catalog = { groups: CatalogGroup[]; total: number; tools: number; basePrice: string; proPrice: string }
 
 type Setting = { tool_name: string; is_enabled: boolean; required_plan: string | null; pass_enabled: boolean | null; pass_price_cents: number | null }
@@ -57,7 +56,7 @@ const COMMUNITY = [
   { toolName: 'spotlight', href: '/marketplace/spotlight', iconName: 'Star', titleKey: 'kumanoDelGiorno' },
 ]
 
-// Tutti gli strumenti (ognuno conta): per «Più di N strumenti»
+// Tutti gli strumenti (ognuno conta): per «N strumenti in M servizi»
 export const ALL_TOOL_NAMES = [...getMarketplaceTools((key) => key).map((tool) => tool.toolName), ...COMMUNITY.map((c) => c.toolName), 'sorprese']
 
 // Tutti i servizi del Catalogo (accesi o no): stesso elenco di getCatalog,
@@ -170,7 +169,7 @@ export async function getCatalog(locale: string): Promise<Catalog> {
   return {
     groups: visible,
     total: visible.reduce((sum, group) => sum + group.items.length, 0),
-    tools: moreThan(toolCount),
+    tools: toolCount,
     basePrice: eur(prices.base),
     proPrice: eur(prices.pro),
   }

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
-import { AtSign, Camera, Globe, Landmark, LogIn, Phone, UserPlus } from 'lucide-react'
+import { ArrowLeft, AtSign, Camera, Globe, Landmark, LogIn, Phone, ScanSearch, UserPlus } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import Logo from '@/components/Logo'
 import QuickCheckBox from '@/components/ecosystem/QuickCheckBox'
@@ -31,6 +31,7 @@ const TOOLS = [
 export default async function QuickCheckPage({ searchParams }: { searchParams: Promise<{ text?: string; url?: string; title?: string; q?: string }> }) {
   const sp = await searchParams
   const t = await getTranslations('quickCheckPage')
+  const [commonT, errorT, hubsT] = await Promise.all([getTranslations('common'), getTranslations('errorPages'), getTranslations('serviceHubs')])
   const supabase = await createClient()
   const {
     data: { user },
@@ -43,6 +44,17 @@ export default async function QuickCheckPage({ searchParams }: { searchParams: P
 
   return (
     <div className="min-h-screen bg-[var(--background)] pb-20">
+      {/* Come negli altri servizi: in cima si torna indietro (ai servizi o, per chi non è iscritto, alla Home) */}
+      <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
+        <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 py-4">
+          <Link href={user ? '/servizi' : '/'} className="flex shrink-0 items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]">
+            <ArrowLeft className="h-5 w-5" /> {user ? commonT('backToServices') : errorT('backHome')}
+          </Link>
+          <span className="flex min-w-0 items-center gap-2 text-right font-semibold leading-tight tracking-wide">
+            <ScanSearch className="h-5 w-5 shrink-0 text-[var(--gold-bright)]" /> {hubsT('controlla.title')}
+          </span>
+        </div>
+      </header>
       {/* Speculum · Controlla: le schede dei singoli controlli */}
       {user && <HubBar />}
       <div className="bg-gradient-to-br from-[var(--ink)] to-[#2b2110] px-4 pb-14 pt-6 text-white">

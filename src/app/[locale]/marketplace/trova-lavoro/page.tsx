@@ -8,6 +8,7 @@ import JobSearch from '@/components/jobs/JobSearch'
 import { listJobFavorites, listJobSearches } from '@/app/actions/jobs'
 import { isJobCountry, type JobCountry, type JobQuota } from '@/lib/jobs/types'
 import { toolMetadata } from '@/lib/toolMetadata'
+import HubBar from '@/components/hubs/HubBar'
 
 // Nome del servizio nella scheda del browser
 export const generateMetadata = toolMetadata('trova-lavoro')
@@ -49,19 +50,20 @@ export default async function TrovaLavoroPage() {
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
           <ToolBackLink
             className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
-            dashboardLabel={
+            label={
               <>
-                <ArrowLeft className="h-5 w-5" /> {commonT('backToDashboard')}
+                <ArrowLeft className="h-5 w-5" /> {commonT('backToServices')}
               </>
             }
           >
             <ArrowLeft className="h-5 w-5" /> {marketplaceT('backToMarketplace')}
           </ToolBackLink>
-          <span className="flex items-center gap-2 font-semibold tracking-wide">
-            <BriefcaseBusiness className="h-5 w-5 text-[var(--gold-bright)]" /> {marketplaceT('trovaLavoro')}
+          <span className="flex min-w-0 items-center gap-2 text-right font-semibold leading-tight tracking-wide">
+            <BriefcaseBusiness className="h-5 w-5 text-[var(--gold-bright)] shrink-0" /> {marketplaceT('trovaLavoro')}
           </span>
         </div>
       </header>
+      <HubBar />
 
       <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
         <section className="relative mb-8 overflow-hidden rounded-3xl bg-[var(--ink)] p-6 text-white shadow-[0_14px_40px_rgba(23,23,23,0.25)] sm:p-8">

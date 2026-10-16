@@ -4,6 +4,7 @@ import ToolBackLink from '@/components/ToolBackLink'
 import MagazzinoApp from '@/components/magazzino/MagazzinoApp'
 import { getDashboard, listCategories, listProducts } from '@/app/actions/magazzino'
 import { toolMetadata } from '@/lib/toolMetadata'
+import HubBar from '@/components/hubs/HubBar'
 
 // Nome del servizio nella scheda del browser
 export const generateMetadata = toolMetadata('magazzino')
@@ -17,24 +18,25 @@ export default async function MagazzinoPage() {
   return (
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 gap-3">
           <ToolBackLink
             className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
-            dashboardLabel={
+            label={
               <>
-                <ArrowLeft className="h-5 w-5" /> {tc('backToDashboard')}
+                <ArrowLeft className="h-5 w-5" /> {tc('backToServices')}
               </>
             }
           >
             <ArrowLeft className="h-5 w-5" />
             {t('back')}
           </ToolBackLink>
-          <h1 className="flex items-center gap-2 font-semibold tracking-wide">
-            <Warehouse className="h-5 w-5 text-[var(--gold-bright)]" />
+          <h1 className="flex items-center gap-2 font-semibold tracking-wide min-w-0 text-right leading-tight">
+            <Warehouse className="h-5 w-5 text-[var(--gold-bright)] shrink-0" />
             {t('title')}
           </h1>
         </div>
       </header>
+      <HubBar />
 
       <main className="mx-auto max-w-6xl px-4 py-8">
         <div className="relative mb-6 overflow-hidden rounded-3xl bg-[var(--ink)] p-6 text-white shadow-[0_14px_40px_rgba(23,23,23,0.25)] sm:p-8">

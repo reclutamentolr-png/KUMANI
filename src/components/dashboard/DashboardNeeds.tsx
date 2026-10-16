@@ -101,6 +101,31 @@ export default function DashboardNeeds({
                 <ul className={`mt-3 grid gap-2 ${need.items.length > 1 ? 'sm:grid-cols-2' : ''}`}>
                   {need.items.map((item) => {
                     const Icon = marketplaceIconMap[item.iconName] ?? EXTRA_ICON[item.iconName] ?? Smartphone
+                    // Servizio unito: tutte le sue schede, ognuna apre il suo strumento
+                    if (item.links?.length)
+                      return (
+                        <li key={item.name} className="sm:col-span-2">
+                          <div className="flex h-full items-start gap-3 rounded-xl border border-gray-200 bg-[var(--background)] p-2.5">
+                            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--ink)] text-[var(--gold-bright)]">
+                              <Icon className="h-5 w-5" />
+                            </span>
+                            <span className="min-w-0 flex-1">
+                              <span className="block font-bold text-[var(--ink)]">{item.title}</span>
+                              <span className="flex flex-wrap gap-1.5 pt-1.5">
+                                {item.links.map((link) => (
+                                  <Link
+                                    key={link.href}
+                                    href={link.href}
+                                    className="inline-flex min-h-9 items-center gap-1 rounded-full border border-[var(--gold)]/40 bg-white px-3 text-xs font-semibold text-[var(--ink)] transition hover:border-[var(--gold)] hover:bg-[var(--gold)]/10"
+                                  >
+                                    {link.title} <ArrowRight className="h-3 w-3" />
+                                  </Link>
+                                ))}
+                              </span>
+                            </span>
+                          </div>
+                        </li>
+                      )
                     return (
                       <li key={item.name}>
                         <Link

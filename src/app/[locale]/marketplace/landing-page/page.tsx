@@ -12,6 +12,7 @@ import { getMyBusinessProfile } from '@/lib/businessProfile-server'
 import { getBrandFor } from '@/lib/brand-server'
 import { cleanLandingContent, emptyLandingContent, isLandingLocale, isLandingTemplate, landingFromBusinessProfile, LANDING_LOCALES, slugify, type LandingLocale } from '@/lib/landing'
 import { toolMetadata } from '@/lib/toolMetadata'
+import HubBar from '@/components/hubs/HubBar'
 
 // Nome del servizio nella scheda del browser
 export const generateMetadata = toolMetadata('landing-page')
@@ -76,16 +77,17 @@ export default async function LandingPageEditorPage({ params, searchParams }: { 
   return (
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          <Link href="/dashboard" className="flex items-center gap-2 text-sm font-medium text-white transition-colors hover:text-[var(--gold-bright)]">
-            <ArrowLeft className="h-5 w-5" /> {commonT('backToDashboard')}
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8 gap-3">
+          <Link href="/servizi" className="flex items-center gap-2 text-sm font-medium text-white transition-colors hover:text-[var(--gold-bright)] shrink-0">
+            <ArrowLeft className="h-5 w-5" /> {commonT('backToServices')}
           </Link>
-          <div className="flex items-center gap-2">
-            <PanelsTopLeft className="h-5 w-5 text-[var(--gold-bright)]" />
+          <div className="flex items-center gap-2 min-w-0 text-right leading-tight">
+            <PanelsTopLeft className="h-5 w-5 text-[var(--gold-bright)] shrink-0" />
             <span className="font-semibold tracking-wide">{t('title')}</span>
           </div>
         </div>
       </header>
+      <HubBar />
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-6">
           <h1 className="text-3xl font-bold tracking-tight text-gray-900">{t('title')}</h1>

@@ -47,11 +47,11 @@ export default async function FlyerPage({ params }: { params: Promise<{ tool: st
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="mx-auto flex max-w-2xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
-          <Link href="/documenti" className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]">
+          <Link href="/documenti" className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)] shrink-0">
             <ArrowLeft className="h-5 w-5" /> {t('back')}
           </Link>
-          <span className="flex items-center gap-2 font-semibold tracking-wide">
-            <Megaphone className="h-5 w-5 text-[var(--gold-bright)]" /> {titles[tool] ?? tool}
+          <span className="flex items-center gap-2 font-semibold tracking-wide min-w-0 text-right leading-tight">
+            <Megaphone className="h-5 w-5 text-[var(--gold-bright)] shrink-0" /> {titles[tool] ?? tool}
           </span>
         </div>
       </header>

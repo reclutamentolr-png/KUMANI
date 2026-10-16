@@ -19,20 +19,20 @@ export default async function TimeBankPage() {
   return (
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 gap-3">
           <ToolBackLink
             className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
-            dashboardLabel={
+            label={
               <>
-                <ArrowLeft className="h-5 w-5" /> {tc('backToDashboard')}
+                <ArrowLeft className="h-5 w-5" /> {tc('backToServices')}
               </>
             }
           >
             <ArrowLeft className="h-5 w-5" />
             {t('back')}
           </ToolBackLink>
-          <h1 className="flex items-center gap-2 font-semibold tracking-wide">
-            <Hourglass className="h-5 w-5 text-[var(--gold-bright)]" />
+          <h1 className="flex items-center gap-2 font-semibold tracking-wide min-w-0 text-right leading-tight">
+            <Hourglass className="h-5 w-5 text-[var(--gold-bright)] shrink-0" />
             KUMANI Time Bank
           </h1>
         </div>

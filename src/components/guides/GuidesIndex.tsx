@@ -67,11 +67,11 @@ export default function GuidesIndex({ guides: allGuides, categories, order, docs
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
           {/* Chi ha fatto l'accesso torna alla dashboard, gli altri alla home */}
-          <Link href={member ? '/dashboard' : '/'} className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]">
+          <Link href={member ? '/dashboard' : '/'} className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)] shrink-0">
             <ArrowLeft className="h-5 w-5" /> {member ? t('backToDashboard') : t('backToHome')}
           </Link>
-          <span className="flex items-center gap-2 font-semibold tracking-wide">
-            <BookOpen className="h-5 w-5 text-[var(--gold-bright)]" /> {t('linkLabel')}
+          <span className="flex items-center gap-2 font-semibold tracking-wide min-w-0 text-right leading-tight">
+            <BookOpen className="h-5 w-5 text-[var(--gold-bright)] shrink-0" /> {t('linkLabel')}
           </span>
         </div>
       </header>

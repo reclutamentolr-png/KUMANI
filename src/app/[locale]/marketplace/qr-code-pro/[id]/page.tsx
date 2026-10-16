@@ -11,6 +11,7 @@ import { getBrandFor } from '@/lib/brand-server'
 import OfferMakerQR from '@/components/OfferMakerQR'
 import CopyLinkButton from '@/components/CopyLinkButton'
 import { buildWifiQrPayload, type QrContentType, type QrDestination, type WifiDestination } from '@/lib/qrPro'
+import HubBar from '@/components/hubs/HubBar'
 
 export default async function QrCodeDetailPage({
   params,
@@ -54,17 +55,18 @@ export default async function QrCodeDetailPage({
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center gap-3">
           <Link
             href="/marketplace/qr-code-pro"
-            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
+            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)] shrink-0"
           >
             <ArrowLeft className="w-5 h-5" />
             {t('title')}
           </Link>
-          <h1 className="flex min-w-0 items-center gap-2 font-semibold tracking-wide">
+          <h1 className="flex min-w-0 items-center gap-2 font-semibold tracking-wide text-right leading-tight">
             <QrCode className="h-5 w-5 shrink-0 text-[var(--gold-bright)]" />
             <span className="truncate max-w-[10rem] sm:max-w-xs">{qrCode.label}</span>
           </h1>
         </div>
       </header>
+      <HubBar />
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
         <div className="rounded-3xl bg-[var(--ink)] p-6 text-white shadow-[0_14px_40px_rgba(23,23,23,0.25)] sm:p-8">

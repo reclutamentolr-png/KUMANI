@@ -4,6 +4,7 @@ import ToolBackLink from '@/components/ToolBackLink'
 import ScamNetHub, { type HubTab } from '@/components/scamNet/ScamNetHub'
 import { SCAM_KINDS, type ScamKind } from '@/lib/scamNet'
 import { toolMetadata } from '@/lib/toolMetadata'
+import HubBar from '@/components/hubs/HubBar'
 
 // Nome del servizio nella scheda del browser
 export const generateMetadata = toolMetadata('rete-antitruffa')
@@ -29,21 +30,22 @@ export default async function ReteAntitruffaPage({ searchParams }: { searchParam
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
           <ToolBackLink
             className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
-            dashboardLabel={
+            label={
               <>
-                <ArrowLeft className="h-5 w-5" /> {tc('backToDashboard')}
+                <ArrowLeft className="h-5 w-5" /> {tc('backToServices')}
               </>
             }
           >
             <ArrowLeft className="h-5 w-5" />
             {tm('backToMarketplace')}
           </ToolBackLink>
-          <h1 className="flex items-center gap-2 font-semibold tracking-wide">
-            <ShieldAlert className="h-5 w-5 text-[var(--gold-bright)]" />
+          <h1 className="flex items-center gap-2 font-semibold tracking-wide min-w-0 text-right leading-tight">
+            <ShieldAlert className="h-5 w-5 text-[var(--gold-bright)] shrink-0" />
             {tm('reteAntitruffa')}
           </h1>
         </div>
       </header>
+      <HubBar />
       <main className="mx-auto max-w-3xl px-4 py-6 sm:px-6 sm:py-10">
         <div className="relative mb-6 overflow-hidden rounded-3xl bg-[var(--ink)] p-6 text-white shadow-[0_14px_40px_rgba(23,23,23,0.25)] sm:p-8">
           <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full border border-[var(--gold)]/25 bg-[var(--gold)]/10" />

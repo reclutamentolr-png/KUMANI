@@ -5,6 +5,7 @@ import Link from '@/components/LocalizedLink'
 import { ArrowLeft, Calculator, FileSpreadsheet } from 'lucide-react'
 import { hasActivePreventiviAccess, loadQuoteInventoryProducts } from '@/lib/quotes-server'
 import QuoteForm from '@/components/QuoteForm'
+import HubBar from '@/components/hubs/HubBar'
 
 export default async function NewQuotePage({
   searchParams,
@@ -62,20 +63,21 @@ export default async function NewQuotePage({
   return (
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
-        <div className="max-w-3xl xl:max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+        <div className="max-w-3xl xl:max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center gap-3">
           <Link
             href={`/marketplace/preventivi${backSuffix}`}
-            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
+            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)] shrink-0"
           >
             <ArrowLeft className="w-5 h-5" />
             {t('title')}
           </Link>
-          <h1 className="flex items-center gap-2 font-semibold tracking-wide">
-            <FileSpreadsheet className="h-5 w-5 text-[var(--gold-bright)]" />
+          <h1 className="flex items-center gap-2 font-semibold tracking-wide min-w-0 text-right leading-tight">
+            <FileSpreadsheet className="h-5 w-5 text-[var(--gold-bright)] shrink-0" />
             {t('newQuote')}
           </h1>
         </div>
       </header>
+      <HubBar />
 
       <main className="max-w-3xl xl:max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {initialLine && (

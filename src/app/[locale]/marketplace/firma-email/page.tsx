@@ -8,6 +8,7 @@ import type { MyProfile } from '@/lib/myProfile'
 import { getMyBusinessProfile } from '@/lib/businessProfile-server'
 import { getBrandFor } from '@/lib/brand-server'
 import { toolMetadata } from '@/lib/toolMetadata'
+import HubBar from '@/components/hubs/HubBar'
 
 // Nome del servizio nella scheda del browser
 export const generateMetadata = toolMetadata('firma-email')
@@ -48,21 +49,22 @@ export default async function FirmaEmailPage() {
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
           <ToolBackLink
             className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
-            dashboardLabel={
+            label={
               <>
-                <ArrowLeft className="h-5 w-5" /> {tc('backToDashboard')}
+                <ArrowLeft className="h-5 w-5" /> {tc('backToServices')}
               </>
             }
           >
             <ArrowLeft className="h-5 w-5" />
             {tm('backToMarketplace')}
           </ToolBackLink>
-          <h1 className="flex items-center gap-2 text-right font-semibold tracking-wide">
+          <h1 className="flex items-center gap-2 text-right font-semibold tracking-wide min-w-0 leading-tight">
             <Signature className="h-5 w-5 shrink-0 text-[var(--gold-bright)]" />
             {tm('firmaEmail')}
           </h1>
         </div>
       </header>
+      <HubBar />
 
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
         <div className="relative mb-8 overflow-hidden rounded-3xl bg-[var(--ink)] p-6 text-white shadow-[0_14px_40px_rgba(23,23,23,0.25)] sm:p-8">

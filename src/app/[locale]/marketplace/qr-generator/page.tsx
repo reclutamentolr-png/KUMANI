@@ -14,6 +14,7 @@ import {
   Smartphone
 } from 'lucide-react'
 import { toolMetadata } from '@/lib/toolMetadata'
+import HubBar from '@/components/hubs/HubBar'
 
 // Nome del servizio nella scheda del browser
 export const generateMetadata = toolMetadata('qr-generator')
@@ -45,17 +46,18 @@ export default async function QRGeneratorPage({ params }: { params: Promise<{ lo
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
           <ToolBackLink
             className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
-            dashboardLabel={<><ArrowLeft className="w-5 h-5" /> {commonT('backToDashboard')}</>}
+            label={<><ArrowLeft className="w-5 h-5" /> {commonT('backToServices')}</>}
           >
             <ArrowLeft className="w-5 h-5" />
             {t('back')}
           </ToolBackLink>
-          <div className="flex items-center gap-2">
-            <QrCode className="h-5 w-5 text-[var(--gold-bright)]" />
-            <h1 className="font-semibold tracking-wide">{t('title')}</h1>
+          <div className="flex items-center gap-2 min-w-0 text-right leading-tight">
+            <QrCode className="h-5 w-5 text-[var(--gold-bright)] shrink-0" />
+            <h1 className="font-semibold tracking-wide min-w-0 text-right leading-tight">{t('title')}</h1>
           </div>
         </div>
       </header>
+      <HubBar />
 
       <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Hero */}

@@ -1,47 +1,186 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { BookUser, Briefcase, CalendarClock, House, PanelsTopLeft, Store, Dices, Flower2, PiggyBank, QrCode, Signature, Lock, Megaphone, ScanSearch, ShieldCheck, type LucideIcon } from 'lucide-react'
+import {
+  AtSign,
+  BadgeCheck,
+  BookOpenCheck,
+  BookUser,
+  Briefcase,
+  BriefcaseBusiness,
+  Calculator,
+  CalendarClock,
+  CalendarDays,
+  Camera,
+  CarFront,
+  Dices,
+  Eye,
+  FileLock2,
+  FileText,
+  FileUser,
+  Flower2,
+  Globe,
+  Grid3x3,
+  HeartPulse,
+  House,
+  Landmark,
+  Link2,
+  Lock,
+  MailSearch,
+  Megaphone,
+  MessageCircle,
+  MonitorSmartphone,
+  Music,
+  PackageSearch,
+  PanelsTopLeft,
+  PhoneCall,
+  PiggyBank,
+  Puzzle,
+  QrCode,
+  Receipt,
+  ScanSearch,
+  ShieldCheck,
+  ShieldUser,
+  ShoppingBag,
+  Signature,
+  Stamp,
+  Store,
+  Tag,
+  Timer,
+  Users,
+  UtensilsCrossed,
+  VenetianMask,
+  Wallet,
+  Warehouse,
+  Wind,
+  type LucideIcon,
+} from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { HUB_TABS, hubOf, type ServiceHub } from '@/lib/serviceHubs'
 
-const HUB_ICON: Record<ServiceHub, LucideIcon> = { controlla: ScanSearch, proteggi: ShieldCheck, segnala: Megaphone, benessere: Flower2, giochi: Dices, qr: QrCode, spendly: PiggyBank, lavoro: Briefcase, gestione: BookUser, ufficio: Signature, negozio: Store, vetrina: PanelsTopLeft, agenda: CalendarClock, casaauto: House }
+const HUB_ICON: Record<ServiceHub, LucideIcon> = {
+  controlla: ScanSearch,
+  proteggi: ShieldCheck,
+  segnala: Megaphone,
+  benessere: Flower2,
+  giochi: Dices,
+  qr: QrCode,
+  spendly: PiggyBank,
+  lavoro: Briefcase,
+  gestione: BookUser,
+  ufficio: Signature,
+  negozio: Store,
+  vetrina: PanelsTopLeft,
+  agenda: CalendarClock,
+  casaauto: House,
+}
 
-// Barra comune in cima agli strumenti di un servizio unito (Controlla,
-// Proteggi, Segnala, Benessere, Giochi) e le sue schede. Le schede del piano che non si ha
-// mostrano il lucchetto (aprendole si arriva a dove si sbloccano).
-export default function HubNav({ locked }: { locked: string[] }) {
+// Icona di ogni scheda («servizio.scheda»)
+const TAB_ICON: Record<string, LucideIcon> = {
+  'controlla.all': ScanSearch,
+  'controlla.site': Globe,
+  'controlla.email': MailSearch,
+  'controlla.photo': Camera,
+  'controlla.iban': Landmark,
+  'controlla.phone': PhoneCall,
+  'proteggi.data': ShieldUser,
+  'proteggi.documents': FileLock2,
+  'segnala.network': Users,
+  'segnala.manual': BookOpenCheck,
+  'benessere.sounds': Music,
+  'benessere.breathe': Wind,
+  'benessere.focus': Timer,
+  'benessere.mandala': Flower2,
+  'benessere.senses': Eye,
+  'giochi.crossword': Grid3x3,
+  'giochi.veritas': VenetianMask,
+  'giochi.fabula': Dices,
+  'giochi.mosaic': Puzzle,
+  'qr.invite': QrCode,
+  'qr.pro': BadgeCheck,
+  'spendly.accounts': Wallet,
+  'spendly.checkup': HeartPulse,
+  'spendly.shared': Users,
+  'lavoro.jobs': BriefcaseBusiness,
+  'lavoro.cv': FileUser,
+  'gestione.clients': BookUser,
+  'gestione.quotes': FileText,
+  'gestione.receipts': Receipt,
+  'gestione.warehouse': Warehouse,
+  'gestione.calculators': Calculator,
+  'ufficio.pdf': Signature,
+  'ufficio.email': AtSign,
+  'ufficio.hopla': MonitorSmartphone,
+  'negozio.shop': ShoppingBag,
+  'negozio.menu': UtensilsCrossed,
+  'negozio.card': Stamp,
+  'negozio.offers': Tag,
+  'vetrina.bio': Link2,
+  'vetrina.landing': PanelsTopLeft,
+  'vetrina.whatsapp': MessageCircle,
+  'agenda.agenda': CalendarDays,
+  'agenda.deadlines': CalendarClock,
+  'casaauto.home': House,
+  'casaauto.car': CarFront,
+  'casaauto.findo': PackageSearch,
+}
+
+// Barra comune in cima agli strumenti di un servizio unito: a sinistra il
+// servizio con la sua icona, poi le schede come pulsanti con icona (quella
+// aperta in oro). Le schede del piano che non si ha hanno il lucchetto
+// (aprendole si arriva a dove si sbloccano); quelle spente dall'Admin non ci sono.
+export default function HubNav({ locked, hidden = [] }: { locked: string[]; hidden?: string[] }) {
   const t = useTranslations('serviceHubs')
   const pathname = usePathname()
   const search = useSearchParams()
   const where = hubOf(pathname, search.toString())
+  const scroller = useRef<HTMLDivElement>(null)
+  // Sul telefono la barra scorre: la scheda aperta va sempre in vista
+  useEffect(() => {
+    const box = scroller.current
+    const active = box?.querySelector<HTMLElement>('[aria-current="page"]')
+    if (box && active) box.scrollLeft = active.offsetLeft - (box.clientWidth - active.offsetWidth) / 2
+  }, [where?.hub, where?.tab])
   if (!where) return null
   const Icon = HUB_ICON[where.hub]
   return (
     <nav aria-label={t(`${where.hub}.title`)} className="border-b border-[var(--gold)]/20 bg-[#0f0f0f] text-white print:hidden">
-      <div className="mx-auto flex max-w-5xl items-center gap-3 overflow-x-auto px-4 sm:px-6 lg:px-8">
-        <span className="flex shrink-0 items-center gap-1.5 py-2.5 text-xs font-bold uppercase tracking-wider text-[var(--gold-bright)]">
-          <Icon className="h-4 w-4" aria-hidden /> {t(`${where.hub}.short`)}
+      <div ref={scroller} className="relative mx-auto flex max-w-5xl items-center gap-3 overflow-x-auto px-4 py-2.5 [scrollbar-width:none] sm:px-6 lg:px-8">
+        <span className="flex shrink-0 items-center gap-2 pr-1">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--gold)]/15 text-[var(--gold-bright)]">
+            <Icon className="h-4 w-4" aria-hidden />
+          </span>
+          <span className="hidden text-sm font-extrabold tracking-wide text-[var(--gold-bright)] sm:inline">{t(`${where.hub}.title`)}</span>
         </span>
-        <div className="flex gap-1">
-          {HUB_TABS[where.hub].map((tab) => {
-            const active = tab.key === where.tab
-            const isLocked = !!tab.tool && locked.includes(tab.tool)
-            return (
-              <Link
-                key={tab.key}
-                href={tab.href}
-                aria-current={active ? 'page' : undefined}
-                className={`flex items-center gap-1 whitespace-nowrap border-b-2 px-3 py-2.5 text-sm font-medium transition-colors ${
-                  active ? 'border-[var(--gold)] text-[var(--gold-bright)]' : 'border-transparent text-white/65 hover:text-white'
-                }`}
-              >
-                {isLocked && <Lock className="h-3.5 w-3.5" aria-label={t('locked')} />}
-                {t(`${where.hub}.tab_${tab.key}`)}
-              </Link>
-            )
-          })}
+        <span className="hidden h-6 w-px shrink-0 bg-white/15 sm:block" aria-hidden />
+        <div className="flex gap-2">
+          {HUB_TABS[where.hub]
+            .filter((tab) => !tab.tool || !hidden.includes(tab.tool))
+            .map((tab) => {
+              const active = tab.key === where.tab
+              const isLocked = !!tab.tool && locked.includes(tab.tool)
+              const TabIcon = TAB_ICON[`${where.hub}.${tab.key}`] ?? Icon
+              return (
+                <Link
+                  key={tab.key}
+                  href={tab.href}
+                  aria-current={active ? 'page' : undefined}
+                  className={`flex min-h-10 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 text-sm font-semibold transition-colors ${
+                    active
+                      ? 'bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] shadow-[0_0_18px_rgba(233,200,90,0.35)]'
+                      : isLocked
+                        ? 'bg-white/5 text-white/55 hover:bg-white/10 hover:text-white/80'
+                        : 'bg-white/10 text-white/90 hover:bg-white/20 hover:text-white'
+                  }`}
+                >
+                  <TabIcon className="h-4 w-4" aria-hidden />
+                  {t(`${where.hub}.tab_${tab.key}`)}
+                  {isLocked && <Lock className="h-3.5 w-3.5" aria-label={t('locked')} />}
+                </Link>
+              )
+            })}
         </div>
       </div>
     </nav>

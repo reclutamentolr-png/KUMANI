@@ -17,6 +17,7 @@ import {
   AlertTriangle
 } from 'lucide-react'
 import { toolMetadata } from '@/lib/toolMetadata'
+import HubBar from '@/components/hubs/HubBar'
 
 // Nome del servizio nella scheda del browser
 export const generateMetadata = toolMetadata('link-in-bio')
@@ -41,12 +42,13 @@ export default async function LinkInBioPage({ params }: { params: Promise<{ loca
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <ToolBackLink
               className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
-              dashboardLabel={<><ArrowLeft className="w-5 h-5" /> {commonT('backToDashboard')}</>}
+              label={<><ArrowLeft className="w-5 h-5" /> {commonT('backToServices')}</>}
             >
               <ArrowLeft className="w-5 h-5" /> {t('backToMarketplace')}
             </ToolBackLink>
           </div>
         </header>
+        <HubBar />
         <main className="flex-1 flex items-center justify-center p-4">
           <div className="bg-[var(--gold-pale)] border border-[var(--gold)]/40 rounded-2xl p-8 max-w-md text-center">
             <AlertTriangle className="w-12 h-12 text-[var(--gold)] mx-auto mb-4" />
@@ -79,17 +81,18 @@ export default async function LinkInBioPage({ params }: { params: Promise<{ loca
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
           <ToolBackLink
             className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
-            dashboardLabel={<><ArrowLeft className="w-5 h-5" /> {commonT('backToDashboard')}</>}
+            label={<><ArrowLeft className="w-5 h-5" /> {commonT('backToServices')}</>}
           >
             <ArrowLeft className="w-5 h-5" />
             {t('backToMarketplace')}
           </ToolBackLink>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 min-w-0 text-right leading-tight">
             <Link2 className="w-5 h-5 text-[var(--gold-bright)]" />
-            <h1 className="font-semibold tracking-wide">{t('linkInBio')}</h1>
+            <h1 className="font-semibold tracking-wide min-w-0 text-right leading-tight">{t('linkInBio')}</h1>
           </div>
         </div>
       </header>
+      <HubBar />
 
       <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="relative mb-8 overflow-hidden rounded-3xl bg-[var(--ink)] p-6 text-white shadow-[0_14px_40px_rgba(23,23,23,0.25)] sm:p-8">

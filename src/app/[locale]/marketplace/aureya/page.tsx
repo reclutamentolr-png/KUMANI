@@ -6,6 +6,7 @@ import { hasActiveAureyaAccess } from '@/lib/aureya-server'
 import { ArrowLeft, AlertTriangle, Ear, Eye, Grid3x3, Sparkles, Stethoscope } from 'lucide-react'
 import AureyaHistoryDeleteButton from '@/components/AureyaHistoryDeleteButton'
 import { toolMetadata } from '@/lib/toolMetadata'
+import HubBar from '@/components/hubs/HubBar'
 
 // Nome del servizio nella scheda del browser
 export const generateMetadata = toolMetadata('aureya')
@@ -47,19 +48,20 @@ export default async function AureyaPage({ params }: { params: Promise<{ locale:
   return (
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8 gap-3">
           <Link
-            href="/dashboard"
-            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
+            href="/servizi"
+            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)] shrink-0"
           >
-            <ArrowLeft className="h-5 w-5" /> {commonT('backToDashboard')}
+            <ArrowLeft className="h-5 w-5" /> {commonT('backToServices')}
           </Link>
-          <div className="flex items-center gap-2">
-            <Stethoscope className="h-5 w-5 text-[var(--gold-bright)]" />
+          <div className="flex items-center gap-2 min-w-0 text-right leading-tight">
+            <Stethoscope className="h-5 w-5 text-[var(--gold-bright)] shrink-0" />
             <span className="font-semibold tracking-wide">Aureya</span>
           </div>
         </div>
       </header>
+      <HubBar />
 
       <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
         <div className="relative mb-8 overflow-hidden rounded-3xl bg-[var(--ink)] p-6 text-white shadow-[0_14px_40px_rgba(23,23,23,0.25)] sm:p-8">

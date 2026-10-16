@@ -28,6 +28,7 @@ import { createClient } from '@/lib/supabase/server'
 import { getGuideContent } from '@/lib/antitruffa/content'
 import type { GuideContent, Scam } from '@/lib/antitruffa/types'
 import { toolMetadata } from '@/lib/toolMetadata'
+import HubBar from '@/components/hubs/HubBar'
 
 // Nome del servizio nella scheda del browser
 export const generateMetadata = toolMetadata('antitruffa')
@@ -59,21 +60,22 @@ export default async function AntitruffaPage() {
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
           <ToolBackLink
             className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"
-            dashboardLabel={
+            label={
               <>
-                <ArrowLeft className="h-5 w-5" /> {tc('backToDashboard')}
+                <ArrowLeft className="h-5 w-5" /> {tc('backToServices')}
               </>
             }
           >
             <ArrowLeft className="h-5 w-5" />
             {tm('backToMarketplace')}
           </ToolBackLink>
-          <h1 className="flex items-center gap-2 text-right font-semibold tracking-wide">
+          <h1 className="flex items-center gap-2 text-right font-semibold tracking-wide min-w-0 leading-tight">
             <BookOpenCheck className="h-5 w-5 shrink-0 text-[var(--gold-bright)]" />
             {tm('antitruffa')}
           </h1>
         </div>
       </header>
+      <HubBar />
 
       <main data-guide className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 print:max-w-none print:p-0">
         {/* Copertina */}

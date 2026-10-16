@@ -6,6 +6,7 @@ import MandalaCanvas from '@/components/MandalaCanvas'
 import Link from '@/components/LocalizedLink'
 import { ArrowLeft, ArrowRight, Flower2, Share2, Sparkles, Waves } from 'lucide-react'
 import { toolMetadata } from '@/lib/toolMetadata'
+import HubBar from '@/components/hubs/HubBar'
 
 // Nome del servizio nella scheda del browser
 export const generateMetadata = toolMetadata('mandala')
@@ -25,11 +26,12 @@ export default async function MandalaPage({ params }: { params: Promise<{ locale
   return (
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          <Link href="/dashboard" className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]"><ArrowLeft className="h-5 w-5" /> {commonT('backToDashboard')}</Link>
-          <div className="flex items-center gap-2"><Flower2 className="h-5 w-5 text-[var(--gold-bright)]" /><span className="font-semibold tracking-wide">Mandala KUMANI</span></div>
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8 gap-3">
+          <Link href="/servizi" className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)] shrink-0"><ArrowLeft className="h-5 w-5" /> {commonT('backToServices')}</Link>
+          <div className="flex items-center gap-2 min-w-0 text-right leading-tight"><Flower2 className="h-5 w-5 text-[var(--gold-bright)] shrink-0" /><span className="font-semibold tracking-wide">Mandala KUMANI</span></div>
         </div>
       </header>
+      <HubBar />
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
         <div className="relative mb-8 overflow-hidden rounded-3xl bg-[var(--ink)] p-6 text-white shadow-[0_14px_40px_rgba(23,23,23,0.25)] sm:p-8">
           <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full border border-[var(--gold)]/25 bg-[var(--gold)]/10" />

@@ -40,11 +40,11 @@ export default async function WebinarStudioPage({ params }: { params: Promise<{ 
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
-          <Link href="/marketplace/webinar" className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)]">
+          <Link href="/marketplace/webinar" className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)] shrink-0">
             <ArrowLeft className="h-5 w-5" />
             {t('myWebinars')}
           </Link>
-          <h1 className="flex min-w-0 items-center gap-2 font-semibold tracking-wide">
+          <h1 className="flex min-w-0 items-center gap-2 font-semibold tracking-wide text-right leading-tight">
             <Radio className="h-5 w-5 shrink-0 text-[var(--gold-bright)]" />
             <span className="truncate">{w.title}</span>
           </h1>
