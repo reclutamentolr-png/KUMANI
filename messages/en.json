@@ -13327,5 +13327,139 @@
     "disclaimer": "The dossier shows the result of KUMANI’s automatic checks at the time indicated: it helps you decide, it is not an expert report or legal evidence.",
     "file": "kumani-dossier",
     "error": "The dossier could not be created. Please try again."
+  },
+  "serviceHubs": {
+    "locked": "Not included in your plan",
+    "open": "Open",
+    "controlla": {
+      "title": "Speculum",
+      "short": "Check",
+      "tagline": "Check before you trust",
+      "description": "Websites, emails, photos, IBANs and numbers: paste what you received and find out if it’s a scam.",
+      "tab_all": "All in one",
+      "tab_site": "Website & VAT",
+      "tab_email": "Email",
+      "tab_photo": "Photo",
+      "tab_iban": "IBAN",
+      "tab_phone": "Number"
+    },
+    "proteggi": {
+      "title": "Scudo Dati",
+      "short": "Protect",
+      "tagline": "Protect your data",
+      "description": "Data breaches, passwords, your data on Google and ID photos to send safely.",
+      "tab_data": "Your data",
+      "tab_documents": "Documents"
+    },
+    "segnala": {
+      "title": "Anti-Scam Network",
+      "short": "Report",
+      "tagline": "Report and learn",
+      "description": "Warn others, see the scams going around and learn to spot them with the manual.",
+      "tab_network": "Network",
+      "tab_manual": "Manual"
+    },
+    "benessere": {
+      "title": "KUMANI Wellbeing",
+      "short": "Wellbeing",
+      "tagline": "Relax, breathe, focus",
+      "description": "Relaxing sounds, guided breathing, interval focus, mandalas to draw and sight and hearing checks.",
+      "tab_sounds": "Sounds",
+      "tab_breathe": "Breathe",
+      "tab_focus": "Focus",
+      "tab_mandala": "Mandala",
+      "tab_senses": "Sight & hearing"
+    },
+    "giochi": {
+      "title": "KUMANI Games",
+      "short": "Games",
+      "tagline": "Daily games and games to play together",
+      "description": "The daily crossword, who’s lying with friends, dice micro-stories and the community’s shared artwork.",
+      "tab_crossword": "Crossword",
+      "tab_veritas": "Veritas",
+      "tab_fabula": "Fabula",
+      "tab_mosaic": "Mosaic"
+    },
+    "qr": {
+      "title": "QR Code",
+      "short": "QR Code",
+      "tagline": "QR codes ready to print and share",
+      "description": "Your invite QR in your colours and, with PRO, QR codes for websites, WhatsApp, Wi-Fi and contacts: change the destination after printing and see how many people scan them.",
+      "tab_invite": "Your invite QR",
+      "tab_pro": "Custom QR codes"
+    },
+    "spendly": {
+      "title": "Spendly",
+      "short": "Spendly",
+      "tagline": "Your money under control",
+      "description": "Income, expenses and bills month by month, a check-up of your finances and the expenses to split with the people you live with.",
+      "tab_accounts": "Accounts",
+      "tab_checkup": "Check-up",
+      "tab_shared": "Shared expenses"
+    },
+    "lavoro": {
+      "title": "KUMANI Jobs",
+      "short": "Jobs",
+      "tagline": "Your CV and the right jobs",
+      "description": "Find job offers near you and create the CV to send, with its own page to share.",
+      "tab_jobs": "Job offers",
+      "tab_cv": "Your CV"
+    },
+    "gestione": {
+      "title": "Business management",
+      "short": "Business",
+      "tagline": "Clients, quotes, receipts and stock",
+      "description": "Your clients and jobs, quotes, digital receipts, stock and calculators for the numbers: all connected, from first contact to payment.",
+      "tab_clients": "Clients & jobs",
+      "tab_quotes": "Quotes",
+      "tab_receipts": "Receipts",
+      "tab_warehouse": "Stock",
+      "tab_calculators": "Calculators"
+    },
+    "ufficio": {
+      "title": "KUMANI Office",
+      "short": "Office",
+      "tagline": "Sign, present yourself, transfer",
+      "description": "Sign PDFs from your phone, create your email signature and move photos and videos from phone to computer without cables.",
+      "tab_pdf": "Sign PDF",
+      "tab_email": "Email signature",
+      "tab_hopla": "Phone to PC"
+    },
+    "negozio": {
+      "title": "KUMANI Shop",
+      "short": "Shop",
+      "tagline": "Sell and bring customers back",
+      "description": "Your online shop, your venue’s menu with a table QR code, the Kumi Card loyalty card and offers ready to share.",
+      "tab_shop": "Online shop",
+      "tab_menu": "Menu",
+      "tab_card": "Kumi Card",
+      "tab_offers": "Offers"
+    },
+    "vetrina": {
+      "title": "Get known",
+      "short": "Get known",
+      "tagline": "Your online showcase",
+      "description": "Your Link in Bio, your business page and WhatsApp messages ready to invite people and introduce yourself.",
+      "tab_bio": "Link in Bio",
+      "tab_landing": "Landing Page",
+      "tab_whatsapp": "WhatsApp messages"
+    },
+    "agenda": {
+      "title": "KUMANI Agenda",
+      "short": "Agenda",
+      "tagline": "Appointments, reminders and deadlines",
+      "description": "Your everyday agenda with reminders, notes and contacts, plus document and renewal deadlines with advance alerts.",
+      "tab_agenda": "Agenda",
+      "tab_deadlines": "Deadlines"
+    },
+    "casaauto": {
+      "title": "Home & car",
+      "short": "Home & car",
+      "tagline": "Everything about your home and vehicles",
+      "description": "Utilities, appliances and home documents, car and motorbike deadlines and costs, and where you put everything.",
+      "tab_home": "Home",
+      "tab_car": "Car & motorbike",
+      "tab_findo": "Where I put it"
+    }
   }
 }

@@ -4,6 +4,7 @@ import { AtSign, Camera, Globe, Landmark, LogIn, Phone, UserPlus } from 'lucide-
 import Link from '@/components/LocalizedLink'
 import Logo from '@/components/Logo'
 import QuickCheckBox from '@/components/ecosystem/QuickCheckBox'
+import HubBar from '@/components/hubs/HubBar'
 import { createClient } from '@/lib/supabase/server'
 import { pageMetadata } from '@/lib/seo'
 
@@ -42,6 +43,8 @@ export default async function QuickCheckPage({ searchParams }: { searchParams: P
 
   return (
     <div className="min-h-screen bg-[var(--background)] pb-20">
+      {/* Speculum · Controlla: le schede dei singoli controlli */}
+      {user && <HubBar />}
       <div className="bg-gradient-to-br from-[var(--ink)] to-[#2b2110] px-4 pb-14 pt-6 text-white">
         <div className="mx-auto max-w-3xl">
           <Link href={user ? '/dashboard' : '/'} aria-label="KUMANI">

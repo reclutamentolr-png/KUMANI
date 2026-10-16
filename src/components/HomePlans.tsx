@@ -7,6 +7,7 @@ import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { getPlanPrices } from '@/lib/planPrices'
 import PlanDetails, { type PlanDetailsTool } from '@/components/PlanDetails'
 import type { MarketplaceCategory } from '@/lib/marketplaceTools'
+import { collapseByHub, HUB_ICON_NAME, hubLabel } from '@/lib/serviceHubs'
 
 export type ToolRow = { tool_name: string; is_enabled: boolean; required_plan: string | null; pass_enabled?: boolean | null; pass_price_cents?: number | null }
 
@@ -32,9 +33,10 @@ const PREVIEW = 6
 // include il precedente, con i servizi reali di ogni piano, più la fascia
 // del Pass per chi vuole un solo servizio.
 export default async function HomePlans() {
-  const [t, marketplaceT, locale, prices, rows] = await Promise.all([
+  const [t, marketplaceT, hubsT, locale, prices, rows] = await Promise.all([
     getTranslations('landingHome'),
     getTranslations('marketplace'),
+    getTranslations('serviceHubs'),
     getLocale(),
     getPlanPrices(),
     fetchToolRows().catch(() => [] as ToolRow[]),
@@ -52,7 +54,9 @@ export default async function HomePlans() {
     svago: marketplaceT('categorySvago'),
   }
   // Servizi di un piano, con descrizione e argomento (per "Dettagli")
+  // Servizi uniti come una voce sola: «Speculum · Sito e P.IVA, Email, Foto»…
   const detailsOf = (plan: string): PlanDetailsTool[] =>
+    collapseByHub(
     tools
       .filter((tool) => planOf(tool.toolName) === plan)
       .map((tool) => {
@@ -65,7 +69,15 @@ export default async function HomePlans() {
           categoryLabel: categoryLabel[tool.category],
           ...(row?.pass_enabled && plan !== 'free' ? { passPrice: eur((row.pass_price_cents ?? 1000) / 100) } : {}),
         }
+      }),
+      (hub, members) => ({
+        toolName: `hub-${hub}`,
+        title: hubLabel(hub, members.map((m) => m.toolName), hubsT),
+        description: hubsT(`${hub}.description`),
+        iconName: HUB_ICON_NAME[hub],
+        categoryLabel: members[0].categoryLabel,
       })
+    )
   const freeTools = detailsOf('free')
   const baseTools = detailsOf('base')
   const proTools = detailsOf('pro')

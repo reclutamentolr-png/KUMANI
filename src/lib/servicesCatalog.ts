@@ -4,6 +4,7 @@ import { getMarketplaceAccessState, type MarketplaceAccessState } from '@/lib/ma
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { getFavoriteToolNames } from '@/lib/favorites'
 import { serviceGroupOf, type ServiceGroup } from '@/lib/serviceGroups'
+import { hubTabKey, TOOL_HUB } from '@/lib/serviceHubs'
 import { toolGuideFor } from '@/lib/guides/toolGuides'
 import type { CommunityItem } from '@/components/dashboard/CommunityBlock'
 
@@ -31,8 +32,9 @@ export async function getServicesCatalog(
   // Già letti dalla pagina (es. la Home): non si rileggono
   loaded?: { access: MarketplaceAccessState; favorites: string[] }
 ) {
-  const [tm, access, favorites] = await Promise.all([
+  const [tm, th, access, favorites] = await Promise.all([
     getTranslations('marketplace'),
+    getTranslations('serviceHubs'),
     loaded?.access ?? getMarketplaceAccessState(supabase, userId),
     loaded?.favorites ?? getFavoriteToolNames(supabase, userId),
   ])
@@ -47,7 +49,8 @@ export async function getServicesCatalog(
       const passCents = open ? null : access.passPriceCents(tool.toolName)
       return {
         toolName: tool.toolName,
-        title: tool.title,
+        // Sicurezza: il servizio e la scheda («Speculum · Email»)
+        title: TOOL_HUB[tool.toolName] ? `${th(`${TOOL_HUB[tool.toolName]}.title`)} · ${th(`${TOOL_HUB[tool.toolName]}.tab_${hubTabKey(tool.toolName)}`)}` : tool.title,
         description: tool.description,
         iconName: tool.iconName,
         href: tool.href,

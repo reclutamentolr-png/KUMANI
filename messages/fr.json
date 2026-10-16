@@ -13327,5 +13327,139 @@
     "disclaimer": "Le dossier présente le résultat des contrôles automatiques de KUMANI au moment indiqué : c’est une aide à la décision, pas une expertise ni une preuve légale.",
     "file": "dossier-kumani",
     "error": "Impossible de créer le dossier. Réessaie."
+  },
+  "serviceHubs": {
+    "locked": "Non inclus dans ton offre",
+    "open": "Ouvrir",
+    "controlla": {
+      "title": "Speculum",
+      "short": "Vérifier",
+      "tagline": "Vérifie avant de faire confiance",
+      "description": "Sites, emails, photos, IBAN et numéros : colle ce que tu as reçu et découvre si c’est une arnaque.",
+      "tab_all": "Tout en un",
+      "tab_site": "Site et TVA",
+      "tab_email": "Email",
+      "tab_photo": "Photo",
+      "tab_iban": "IBAN",
+      "tab_phone": "Numéro"
+    },
+    "proteggi": {
+      "title": "Scudo Dati",
+      "short": "Protéger",
+      "tagline": "Protège tes données",
+      "description": "Fuites de données, mots de passe, tes données sur Google et les photos de documents à envoyer en sécurité.",
+      "tab_data": "Tes données",
+      "tab_documents": "Documents"
+    },
+    "segnala": {
+      "title": "Réseau Anti-Arnaque",
+      "short": "Signaler",
+      "tagline": "Signale et apprends",
+      "description": "Préviens les autres, regarde les arnaques du moment et apprends à les reconnaître avec le manuel.",
+      "tab_network": "Réseau",
+      "tab_manual": "Manuel"
+    },
+    "benessere": {
+      "title": "KUMANI Bien-être",
+      "short": "Bien-être",
+      "tagline": "Détends-toi, respire, concentre-toi",
+      "description": "Des sons pour te détendre, la respiration guidée, la concentration par intervalles, des mandalas à dessiner et des tests de vue et d’ouïe.",
+      "tab_sounds": "Sons",
+      "tab_breathe": "Respire",
+      "tab_focus": "Concentration",
+      "tab_mandala": "Mandala",
+      "tab_senses": "Vue et ouïe"
+    },
+    "giochi": {
+      "title": "KUMANI Jeux",
+      "short": "Jeux",
+      "tagline": "Jeux du jour et à plusieurs",
+      "description": "Les mots croisés du jour, qui ment entre amis, des micro-histoires aux dés et l’œuvre collective de la communauté.",
+      "tab_crossword": "Mots croisés",
+      "tab_veritas": "Veritas",
+      "tab_fabula": "Fabula",
+      "tab_mosaic": "Mosaic"
+    },
+    "qr": {
+      "title": "QR Code",
+      "short": "QR Code",
+      "tagline": "Des QR prêts à imprimer et partager",
+      "description": "Le QR de ton invitation à tes couleurs et, avec PRO, des QR pour sites, WhatsApp, Wi-Fi et contacts : tu changes la destination après l’impression et tu vois combien de personnes les scannent.",
+      "tab_invite": "QR de ton invitation",
+      "tab_pro": "QR personnalisés"
+    },
+    "spendly": {
+      "title": "Spendly",
+      "short": "Spendly",
+      "tagline": "Ton argent sous contrôle",
+      "description": "Revenus, dépenses et factures mois par mois, le bilan de tes comptes et les dépenses à partager avec les personnes qui vivent avec toi.",
+      "tab_accounts": "Comptes",
+      "tab_checkup": "Bilan",
+      "tab_shared": "Dépenses partagées"
+    },
+    "lavoro": {
+      "title": "KUMANI Emploi",
+      "short": "Emploi",
+      "tagline": "Ton CV et les bonnes offres",
+      "description": "Cherche des offres d’emploi près de chez toi et crée le CV à envoyer, avec sa page à partager.",
+      "tab_jobs": "Offres",
+      "tab_cv": "Ton CV"
+    },
+    "gestione": {
+      "title": "Gestion de l’activité",
+      "short": "Activité",
+      "tagline": "Clients, devis, reçus et stock",
+      "description": "Tes clients et chantiers, les devis, les reçus numériques, le stock et les calculatrices pour les comptes : tout est relié, du premier contact à l’encaissement.",
+      "tab_clients": "Clients et chantiers",
+      "tab_quotes": "Devis",
+      "tab_receipts": "Reçus",
+      "tab_warehouse": "Stock",
+      "tab_calculators": "Calculatrices"
+    },
+    "ufficio": {
+      "title": "KUMANI Bureau",
+      "short": "Bureau",
+      "tagline": "Signe, présente-toi, transfère",
+      "description": "Signe des PDF depuis ton téléphone, crée la signature de tes emails et transfère photos et vidéos du téléphone à l’ordinateur sans câble.",
+      "tab_pdf": "Signer un PDF",
+      "tab_email": "Signature email",
+      "tab_hopla": "Du téléphone au PC"
+    },
+    "negozio": {
+      "title": "KUMANI Boutique",
+      "short": "Boutique",
+      "tagline": "Vends et fais revenir tes clients",
+      "description": "La boutique en ligne, le menu de ton établissement avec QR sur la table, la carte de fidélité Kumi Card et des offres prêtes à partager.",
+      "tab_shop": "Boutique en ligne",
+      "tab_menu": "Menu",
+      "tab_card": "Kumi Card",
+      "tab_offers": "Offres"
+    },
+    "vetrina": {
+      "title": "Te faire connaître",
+      "short": "Te faire connaître",
+      "tagline": "Ta vitrine en ligne",
+      "description": "Ton Link in Bio, la page de ton activité et des messages WhatsApp prêts pour inviter et te présenter.",
+      "tab_bio": "Link in Bio",
+      "tab_landing": "Landing Page",
+      "tab_whatsapp": "Messages WhatsApp"
+    },
+    "agenda": {
+      "title": "KUMANI Agenda",
+      "short": "Agenda",
+      "tagline": "Rendez-vous, rappels et échéances",
+      "description": "Ton agenda de tous les jours avec rappels, notes et contacts, et les échéances des documents et renouvellements avec des alertes à l’avance.",
+      "tab_agenda": "Agenda",
+      "tab_deadlines": "Échéances"
+    },
+    "casaauto": {
+      "title": "Maison et voiture",
+      "short": "Maison et voiture",
+      "tagline": "Tout sur ta maison et tes véhicules",
+      "description": "Contrats, appareils et documents de la maison, échéances et frais de la voiture et de la moto, et où tu as rangé chaque chose.",
+      "tab_home": "Maison",
+      "tab_car": "Voiture et moto",
+      "tab_findo": "Où je l’ai mis"
+    }
   }
 }

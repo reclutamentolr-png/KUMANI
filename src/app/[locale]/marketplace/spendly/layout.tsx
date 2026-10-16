@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { getTranslations, getLocale } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
 import SpendlyNav from '@/components/spendly/SpendlyNav'
+import HubBar from '@/components/hubs/HubBar'
 import { ArrowLeft, PiggyBank, Sparkles } from 'lucide-react'
 import { hasActiveSpendlyAccess } from '@/lib/spendly-server'
 
@@ -28,6 +29,8 @@ export default async function SpendlyLayout({ children }: { children: React.Reac
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
+      {/* Spendly come servizio unito: Conti, Check-up (FinCheck), Spese condivise */}
+      <HubBar />
       <header className="bg-[var(--ink)] text-white border-b border-[var(--gold)]/25 shadow-lg sticky top-0 z-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <Link

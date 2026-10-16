@@ -13327,5 +13327,139 @@
     "disclaimer": "Das Dossier zeigt das Ergebnis der automatischen Prüfungen von KUMANI zum angegebenen Zeitpunkt: Es hilft bei der Entscheidung, ist aber kein Gutachten und kein rechtlicher Beweis.",
     "file": "kumani-dossier",
     "error": "Das Dossier konnte nicht erstellt werden. Bitte versuche es erneut."
+  },
+  "serviceHubs": {
+    "locked": "Nicht in deinem Plan enthalten",
+    "open": "Öffnen",
+    "controlla": {
+      "title": "Speculum",
+      "short": "Prüfen",
+      "tagline": "Erst prüfen, dann vertrauen",
+      "description": "Websites, E-Mails, Fotos, IBANs und Nummern: Füge ein, was du bekommen hast, und erfahre, ob es Betrug ist.",
+      "tab_all": "Alles in einem",
+      "tab_site": "Website & USt-ID",
+      "tab_email": "E-Mail",
+      "tab_photo": "Foto",
+      "tab_iban": "IBAN",
+      "tab_phone": "Nummer"
+    },
+    "proteggi": {
+      "title": "Scudo Dati",
+      "short": "Schützen",
+      "tagline": "Schütze deine Daten",
+      "description": "Datenlecks, Passwörter, deine Daten bei Google und Ausweisfotos, die du sicher verschicken willst.",
+      "tab_data": "Deine Daten",
+      "tab_documents": "Dokumente"
+    },
+    "segnala": {
+      "title": "Anti-Betrugs-Netz",
+      "short": "Melden",
+      "tagline": "Melden und lernen",
+      "description": "Warne andere, sieh dir aktuelle Betrugsmaschen an und lerne mit dem Handbuch, sie zu erkennen.",
+      "tab_network": "Netz",
+      "tab_manual": "Handbuch"
+    },
+    "benessere": {
+      "title": "KUMANI Wohlbefinden",
+      "short": "Wohlbefinden",
+      "tagline": "Entspannen, atmen, konzentrieren",
+      "description": "Entspannende Klänge, geführtes Atmen, Konzentration in Intervallen, Mandalas zum Malen und Seh- und Hörtests.",
+      "tab_sounds": "Klänge",
+      "tab_breathe": "Atmen",
+      "tab_focus": "Konzentration",
+      "tab_mandala": "Mandala",
+      "tab_senses": "Sehen & Hören"
+    },
+    "giochi": {
+      "title": "KUMANI Spiele",
+      "short": "Spiele",
+      "tagline": "Spiele des Tages und für gemeinsam",
+      "description": "Das Kreuzworträtsel des Tages, wer lügt mit Freunden, Würfel-Mikrogeschichten und das Gemeinschaftswerk der Community.",
+      "tab_crossword": "Kreuzworträtsel",
+      "tab_veritas": "Veritas",
+      "tab_fabula": "Fabula",
+      "tab_mosaic": "Mosaic"
+    },
+    "qr": {
+      "title": "QR Code",
+      "short": "QR Code",
+      "tagline": "QR-Codes zum Drucken und Teilen",
+      "description": "Der QR-Code deiner Einladung in deinen Farben und mit PRO QR-Codes für Websites, WhatsApp, WLAN und Kontakte: Ändere das Ziel nach dem Druck und sieh, wie viele sie scannen.",
+      "tab_invite": "QR deiner Einladung",
+      "tab_pro": "Eigene QR-Codes"
+    },
+    "spendly": {
+      "title": "Spendly",
+      "short": "Spendly",
+      "tagline": "Dein Geld im Griff",
+      "description": "Einnahmen, Ausgaben und Rechnungen Monat für Monat, der Check-up deiner Finanzen und die Ausgaben, die du mit deinen Mitbewohnern teilst.",
+      "tab_accounts": "Konten",
+      "tab_checkup": "Check-up",
+      "tab_shared": "Geteilte Ausgaben"
+    },
+    "lavoro": {
+      "title": "KUMANI Jobs",
+      "short": "Jobs",
+      "tagline": "Dein Lebenslauf und die passenden Jobs",
+      "description": "Finde Stellenangebote in deiner Nähe und erstelle den Lebenslauf zum Versenden, mit eigener Seite zum Teilen.",
+      "tab_jobs": "Stellen",
+      "tab_cv": "Dein Lebenslauf"
+    },
+    "gestione": {
+      "title": "Geschäftsverwaltung",
+      "short": "Geschäft",
+      "tagline": "Kunden, Angebote, Quittungen und Lager",
+      "description": "Deine Kunden und Aufträge, Angebote, digitale Quittungen, das Lager und Rechner für die Zahlen: alles verbunden, vom ersten Kontakt bis zur Zahlung.",
+      "tab_clients": "Kunden & Aufträge",
+      "tab_quotes": "Angebote",
+      "tab_receipts": "Quittungen",
+      "tab_warehouse": "Lager",
+      "tab_calculators": "Rechner"
+    },
+    "ufficio": {
+      "title": "KUMANI Büro",
+      "short": "Büro",
+      "tagline": "Unterschreiben, vorstellen, übertragen",
+      "description": "Unterschreibe PDFs am Handy, erstelle deine E-Mail-Signatur und übertrage Fotos und Videos ohne Kabel vom Handy auf den Computer.",
+      "tab_pdf": "PDF unterschreiben",
+      "tab_email": "E-Mail-Signatur",
+      "tab_hopla": "Handy zum PC"
+    },
+    "negozio": {
+      "title": "KUMANI Laden",
+      "short": "Laden",
+      "tagline": "Verkaufen und Kunden zurückholen",
+      "description": "Der Online-Shop, die Speisekarte deines Lokals mit QR am Tisch, die Kundenkarte Kumi Card und Angebote zum Teilen.",
+      "tab_shop": "Online-Shop",
+      "tab_menu": "Speisekarte",
+      "tab_card": "Kumi Card",
+      "tab_offers": "Angebote"
+    },
+    "vetrina": {
+      "title": "Bekannt werden",
+      "short": "Bekannt werden",
+      "tagline": "Dein Online-Schaufenster",
+      "description": "Dein Link in Bio, die Seite deines Unternehmens und WhatsApp-Nachrichten zum Einladen und Vorstellen.",
+      "tab_bio": "Link in Bio",
+      "tab_landing": "Landingpage",
+      "tab_whatsapp": "WhatsApp-Nachrichten"
+    },
+    "agenda": {
+      "title": "KUMANI Agenda",
+      "short": "Agenda",
+      "tagline": "Termine, Erinnerungen und Fristen",
+      "description": "Dein Kalender für jeden Tag mit Erinnerungen, Notizen und Kontakten sowie Fristen für Dokumente und Verlängerungen mit Vorab-Hinweisen.",
+      "tab_agenda": "Agenda",
+      "tab_deadlines": "Fristen"
+    },
+    "casaauto": {
+      "title": "Haus & Auto",
+      "short": "Haus & Auto",
+      "tagline": "Alles rund um Haus und Fahrzeuge",
+      "description": "Verträge, Geräte und Dokumente des Hauses, Fristen und Kosten für Auto und Motorrad und wo du alles hingelegt hast.",
+      "tab_home": "Haus",
+      "tab_car": "Auto & Motorrad",
+      "tab_findo": "Wo ist es?"
+    }
   }
 }

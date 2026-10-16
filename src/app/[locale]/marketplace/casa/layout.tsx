@@ -4,6 +4,7 @@ import { ArrowLeft, House } from 'lucide-react'
 import ToolBackLink from '@/components/ToolBackLink'
 import { createClient } from '@/lib/supabase/server'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
+import HubBar from '@/components/hubs/HubBar'
 
 // KUMANI Casa: accesso (piano Base o Pass) e intestazione comuni a tutte le
 // pagine del servizio.
@@ -20,6 +21,8 @@ export default async function CasaLayout({ children }: { children: React.ReactNo
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
+      {/* Servizio unito «Casa e auto» (lib/serviceHubs) */}
+      <HubBar />
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
           <ToolBackLink

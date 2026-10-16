@@ -64,7 +64,7 @@ export const serviceGroupOf = (toolName: string): ServiceGroup => GROUP_OF[toolN
 // Servizi proposti come preferiti per ogni interesse (primo accesso): i
 // primi della lista che l'utente può davvero usare
 export const STARTER_SERVICES: Record<ServiceGroup, string[]> = {
-  security: ['svat', 'verifica-iban', 'scudo-dati', 'checkmail', 'antitruffa'],
+  security: ['verifica-iban', 'scudo-dati', 'rete-antitruffa'],
   money: ['spendly', 'fincheck', 'memolife'],
   work: ['trova-lavoro', 'kumani-cv', 'preventivi'],
   business: ['landing-page', 'qr-generator', 'whatsapp-messages', 'link-in-bio'],

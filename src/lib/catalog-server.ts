@@ -1,6 +1,7 @@
 import { unstable_cache } from 'next/cache'
 import { getMessages, getTranslations } from 'next-intl/server'
 import { createClient } from '@supabase/supabase-js'
+import { collapseByHub, HUB_ICON_NAME, HUB_PUBLIC_HREF, HUB_REPRESENTATIVE, hubTabKey, TOOL_HUB } from '@/lib/serviceHubs'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { SERVICE_GROUPS, serviceGroupOf } from '@/lib/serviceGroups'
 import { toolGuideFor } from '@/lib/guides/toolGuides'
@@ -57,7 +58,10 @@ const COMMUNITY = [
 // Tutti i servizi del Catalogo (accesi o no): stesso elenco di getCatalog,
 // per contarli nella Home senza leggere testi e prezzi
 export const CATALOG_TOOL_NAMES = [
-  ...getMarketplaceTools((key) => key).map((tool) => tool.toolName),
+  // La sicurezza conta come tre servizi (uno strumento per ciascuno)
+  ...getMarketplaceTools((key) => key)
+    .map((tool) => tool.toolName)
+    .filter((name) => !TOOL_HUB[name] || Object.values(HUB_REPRESENTATIVE).includes(name)),
   ...COMMUNITY.map((c) => c.toolName),
   'sorprese',
 ]
@@ -71,12 +75,13 @@ function firstSentence(text: string): string {
 }
 
 export async function getCatalog(locale: string): Promise<Catalog> {
-  const [messages, tm, th, tc, ts, settings, prices, surprisePrices] = await Promise.all([
+  const [messages, tm, th, tc, ts, tsh, settings, prices, surprisePrices] = await Promise.all([
     getMessages() as Promise<Record<string, unknown>>,
     getTranslations('marketplace'),
     getTranslations('hub'),
     getTranslations('catalog'),
     getTranslations('surprise'),
+    getTranslations('serviceHubs'),
     fetchSettings(),
     getPlanPrices(),
     getSurprisePrices(),
@@ -128,6 +133,20 @@ export async function getCatalog(locale: string): Promise<Catalog> {
       .map((tool) => build(tool.toolName, tool.title, tool.description, tool.iconName, tool.href, `/strumenti/${tool.toolName}`))
       .filter((item): item is CatalogItem => item !== null),
   }))
+  // Servizi uniti: uno per servizio, con le schede come punti forti
+  for (const group of groups)
+    group.items = collapseByHub(group.items, (hub, members) => ({
+      toolName: `hub-${hub}`,
+      title: `${tsh(`${hub}.title`)} · ${tsh(`${hub}.tagline`)}`,
+      iconName: HUB_ICON_NAME[hub],
+      plan: members.some((m) => m.plan === 'free') ? 'free' : members.some((m) => m.plan === 'base') ? 'base' : 'pro',
+      passPrice: null,
+      purpose: tsh(`${hub}.description`),
+      points: members.slice(0, 5).map((m) => ({ title: tsh(`${hub}.tab_${hubTabKey(m.toolName) ?? 'all'}`), text: m.purpose })),
+      steps: [],
+      openHref: HUB_PUBLIC_HREF[hub],
+      guideHref: null,
+    }))
   groups.push({
     key: 'community',
     label: tc('groupCommunity'),
