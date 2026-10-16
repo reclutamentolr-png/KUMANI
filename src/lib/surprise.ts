@@ -157,8 +157,9 @@ export type SurpriseRow = {
   public_token: string | null
   paid_at: string | null
   amount_cents: number | null
-  paid_with?: 'card' | 'karma' | 'ku_points' | null
+  paid_with?: 'card' | 'karma' | 'ku_points' | 'plan' | null
   points_spent?: number | null
+  plan_credit?: string | null
   refunded_at: string | null
   opened_at: string | null
   link_opened_at?: string | null
@@ -210,3 +211,23 @@ export type SurpriseView = {
 export function surprisePath(token: string) {
   return `/sorpresa/${token}`
 }
+
+// Sorprese incluse nel piano Base o Pro (funzione my_surprise_plan del database):
+// quota per tipo che si ricarica ogni «months» mesi e regali disponibili adesso
+// (rinnovo dell'abbonamento o festa in corso, sempre un percorso di 3 giorni).
+export type SurpriseQuota = { total: number; used: number; left: number; months: 1 | 3 | 12; since: string }
+export type SurpriseBonus = { key: string; reason: string; kind: SurpriseKind }
+export type SurprisePlanStatus = { plan: 'none' | 'base' | 'pro'; quota: Partial<Record<SurpriseKind, SurpriseQuota>>; bonus: SurpriseBonus[] }
+
+export function parseSurprisePlan(raw: unknown): SurprisePlanStatus {
+  const r = (raw ?? {}) as Partial<SurprisePlanStatus>
+  const plan = r.plan === 'base' || r.plan === 'pro' ? r.plan : 'none'
+  return { plan, quota: plan === 'none' ? {} : (r.quota ?? {}), bonus: plan === 'none' ? [] : (r.bonus ?? []) }
+}
+
+// Motivo del regalo senza l'anno: 'rinnovo', 'natale', 'mamma', 'papa', 'san-valentino'
+export const bonusReason = (b: SurpriseBonus) => b.reason.replace(/-\d{4}$/, '')
+
+// Quante sorprese di quel tipo si possono attivare gratis adesso
+export const planFreeFor = (s: SurprisePlanStatus, kind: SurpriseKind) =>
+  (s.quota[kind]?.left ?? 0) + s.bonus.filter((b) => b.kind === kind).length

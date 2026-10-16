@@ -7,13 +7,15 @@ import CheckoutForm from '@/components/billing/CheckoutForm'
 import SurpriseEditor from '@/components/surprise/SurpriseEditor'
 import SurpriseShare from '@/components/surprise/SurpriseShare'
 import SurprisePointsPay from '@/components/surprise/SurprisePointsPay'
+import SurprisePlanClaim from '@/components/surprise/SurprisePlanClaim'
+import { BONUS_KEY } from '@/components/surprise/SurprisePlanSummary'
 import { getMyNetworkWallet } from '@/lib/networkWallet'
 import { createClient } from '@/lib/supabase/server'
 import MarkRepliesRead from '@/components/surprise/MarkRepliesRead'
 import { getCheckoutTexts } from '@/lib/checkoutTexts'
 import { SITE_URL } from '@/lib/siteUrl'
 import { confirmSurpriseSession, getSurprisePrices, STEP_SELECT } from '@/lib/surpriseServer'
-import { stepIncomplete, surpriseDays, surprisePath, voucherUnlockAt, type SurpriseRow, type SurpriseStepRow } from '@/lib/surprise'
+import { bonusReason, parseSurprisePlan, planFreeFor, SURPRISE_KINDS, stepIncomplete, surpriseDays, surprisePath, voucherUnlockAt, type SurpriseRow, type SurpriseStepRow } from '@/lib/surprise'
 
 // Editor di una sorpresa: contenuto, anteprima, pagamento (bozza) oppure
 // invio del link (attiva).
@@ -69,12 +71,24 @@ export default async function SurpriseEditPage({
   const url = row.public_token ? `${SITE_URL}${prefix}${surprisePath(row.public_token)}` : null
   // Pagamento con i punti (costi decisi in Admin; 0 = non disponibile)
   let points: { costs: Record<'karma' | 'ku_points', number>; balances: Record<'karma' | 'ku_points', number> } | null = null
-  if (row.status === 'draft' && ready) {
+  // Sorpresa inclusa nel piano: quale si userebbe, nello stesso ordine del
+  // database (festa in corso, quota del periodo, regalo del rinnovo)
+  let planWhat: string | null = null
+  const plan = row.status === 'draft' ? parseSurprisePlan((await supabase.rpc('my_surprise_plan')).data) : null
+  // Nella scelta del tipo: «Inclusa nel piano» al posto del prezzo finché ce ne sono
+  const freeLeft = plan ? Object.fromEntries(SURPRISE_KINDS.map((k) => [k, planFreeFor(plan, k)])) : {}
+  if (plan && row.status === 'draft' && ready) {
     const [{ data: costs }, { data: profile }, wallet] = await Promise.all([
       supabase.rpc('surprise_points_costs'),
       supabase.rpc('get_my_profile').maybeSingle<{ daily_points: number | null }>(),
       getMyNetworkWallet(supabase),
     ])
+    const festa = plan.bonus.find((b) => b.kind === row.kind && b.reason !== 'rinnovo')
+    const quota = plan.quota[row.kind]
+    const renewal = plan.bonus.find((b) => b.kind === row.kind && b.reason === 'rinnovo')
+    if (festa) planWhat = t(BONUS_KEY[bonusReason(festa)] ?? 'bonus_renewal')
+    else if (quota && quota.left > 0) planWhat = t('planClaimQuota', { left: quota.left, period: t(`period_${quota.months}`) })
+    else if (renewal) planWhat = t('bonus_renewal')
     const c = costs as Record<'karma' | 'ku_points', Record<string, number>> | null
     if (c)
       points = {
@@ -116,6 +130,7 @@ export default async function SurpriseEditPage({
               {row.start_at && row.kind !== 'voucher' ? ` · ${t('startsAt', { date: when(row.start_at) })}` : ''}
               {row.start_at && row.kind !== 'voucher' ? ` · ${t('endsAt', { date: when(voucherUnlockAt(row.start_at, row.kind).toISOString()), days: surpriseDays(row.kind) })}` : ''}
               {row.paid_with === 'karma' || row.paid_with === 'ku_points' ? ` · ${t('paidWithPoints', { what: t(row.paid_with === 'karma' ? 'pointsKarma' : 'pointsKu', { n: row.points_spent ?? 0 }) })}` : ''}
+              {row.paid_with === 'plan' ? ` · ${t('paidWithPlan')}` : ''}
             </p>
             {!row.refunded_at && (
               <div className="mt-4">
@@ -155,7 +170,7 @@ export default async function SurpriseEditPage({
         )}
 
         <div className="mt-6">
-          <SurpriseEditor userId={user.id} gift={row} steps={(steps ?? []) as SurpriseStepRow[]} mediaUrls={mediaUrls} prices={prices} />
+          <SurpriseEditor userId={user.id} gift={row} steps={(steps ?? []) as SurpriseStepRow[]} mediaUrls={mediaUrls} prices={prices} freeLeft={freeLeft} />
         </div>
 
         {row.status === 'draft' && (
@@ -174,7 +189,9 @@ export default async function SurpriseEditPage({
                     <Info className="mt-0.5 h-4 w-4 shrink-0" /> {t('payIncompleteSteps', { n: incomplete })}
                   </p>
                 )}
+                {planWhat && <SurprisePlanClaim giftId={row.id} what={planWhat} />}
                 <p className="mb-3 text-sm text-gray-700">
+                  {planWhat ? `${t('planOrPay')} ` : ''}
                   {t('payFor', { kind: t(`kind_${row.kind}`) })} <strong className="text-lg text-[var(--ink)]">{money(prices[row.kind])}</strong>
                 </p>
                 <CheckoutForm action={`/api/checkout/surprise?id=${row.id}`} texts={checkoutTexts}>

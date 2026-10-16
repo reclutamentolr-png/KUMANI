@@ -1,7 +1,7 @@
 import { unstable_cache } from 'next/cache'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
-import { ArrowRight, Briefcase, Check, Ticket } from 'lucide-react'
+import { ArrowRight, Briefcase, Check, Gift, Ticket } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { getPlanPrices } from '@/lib/planPrices'
@@ -88,6 +88,13 @@ export default async function HomePlans() {
     </ul>
   )
 
+  // KUMANI Sorpresa: sorprese incluse e regali (rinnovo e feste) per Base e Pro
+  const surprises = (text: string) => (
+    <p className="mt-3 flex items-start gap-2 rounded-xl border border-[var(--gold)]/40 bg-[var(--gold)]/10 px-3 py-2 text-sm font-semibold text-white">
+      <Gift className="mt-0.5 h-4 w-4 shrink-0 text-[var(--gold-bright)]" /> {text}
+    </p>
+  )
+
   return (
     <>
       <div className="grid grid-cols-1 gap-5 md:grid-cols-3 sm:gap-6">
@@ -123,6 +130,7 @@ export default async function HomePlans() {
           <p className="mt-2 min-h-[40px] text-sm text-gray-300">{t('planBaseDescription')}</p>
           <p className="mt-4 text-xs font-extrabold uppercase tracking-wide text-[var(--gold-bright)]">{t('planBaseIncluded', { count: base.length })}</p>
           {list(base)}
+          {surprises(t('planSurpriseBase'))}
           <PlanDetails
             planName={t('planBaseName')}
             price={`${eur(prices.base)} ${t('planPerYear')}`}
@@ -152,6 +160,7 @@ export default async function HomePlans() {
           <p className="mt-2 min-h-[40px] text-sm text-gray-300">{t('planProDescription')}</p>
           <p className="mt-4 text-xs font-extrabold uppercase tracking-wide text-[var(--gold-bright)]">{t('planProIncluded', { count: pro.length })}</p>
           {list(pro, true)}
+          {surprises(t('planSurprisePro'))}
           <PlanDetails
             planName={t('planProName')}
             price={`${eur(prices.pro)} ${t('planPerYear')}`}

@@ -106,6 +106,7 @@ const GENERAL_SETTINGS_KEYS = new Set([
   'listing_feature_cost_7d', 'listing_feature_cost_15d', 'menu_ai_daily_runs',
   'surprise_price_voucher_cents', 'surprise_price_journey3_cents', 'surprise_price_journey7_cents',
   'surprise_karma_voucher', 'surprise_karma_journey3', 'surprise_karma_journey7', 'surprise_kupoints_voucher', 'surprise_kupoints_journey3', 'surprise_kupoints_journey7',
+  'surprise_plan_base_voucher', 'surprise_plan_base_voucher_months', 'surprise_plan_base_journey3', 'surprise_plan_base_journey3_months', 'surprise_plan_base_journey7', 'surprise_plan_base_journey7_months', 'surprise_plan_pro_voucher', 'surprise_plan_pro_voucher_months', 'surprise_plan_pro_journey3', 'surprise_plan_pro_journey3_months', 'surprise_plan_pro_journey7', 'surprise_plan_pro_journey7_months', 'surprise_bonus_renewal', 'surprise_bonus_feste',
   'veritas_write_seconds', 'veritas_vote_seconds', 'veritas_reveal_seconds',
   'verifoto_daily_user', 'verifoto_monthly_ops', 'checkmail_daily_user', 'scudo_dati_other_cost', 'scudo_dati_daily_cap',
   'mosaic_pixels_day', 'mosaic_bonus_pixels', 'mosaic_min_login_days',
@@ -156,6 +157,12 @@ export async function adminSaveSystemSettings(settings: Record<string, unknown>)
       const points = settings[key]
       if (!Number.isInteger(points) || (points as number) < 0 || (points as number) > 1000000) return { success: false, error: 'Costo in punti di KUMANI Sorpresa non valido (numero intero, 0 = non si può pagare con quei punti).' }
     }
+  }
+  // Sorprese incluse nel piano: quante per tipo (0-100), ogni 1, 3 o 12 mesi; regali 0/1
+  for (const key of Object.keys(settings).filter((k) => k.startsWith('surprise_plan_') || k.startsWith('surprise_bonus_'))) {
+    const v = settings[key]
+    const ok = key.endsWith('_months') ? v === 1 || v === 3 || v === 12 : key.startsWith('surprise_bonus_') ? v === 0 || v === 1 : Number.isInteger(v) && (v as number) >= 0 && (v as number) <= 100
+    if (!ok) return { success: false, error: 'Sorprese incluse nel piano: valori non validi (quantità da 0 a 100, ogni 1, 3 o 12 mesi).' }
   }
   if (Object.keys(settings).length === 0) return { success: true }
   const rows = Object.entries(settings).map(([key, value]) => ({ key, value: JSON.stringify(value) }))

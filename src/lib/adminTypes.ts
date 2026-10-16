@@ -234,6 +234,20 @@ export type AdminSystemSettings = {
   surprise_kupoints_voucher: number
   surprise_kupoints_journey3: number
   surprise_kupoints_journey7: number
+  surprise_plan_base_voucher: number
+  surprise_plan_base_voucher_months: number
+  surprise_plan_base_journey3: number
+  surprise_plan_base_journey3_months: number
+  surprise_plan_base_journey7: number
+  surprise_plan_base_journey7_months: number
+  surprise_plan_pro_voucher: number
+  surprise_plan_pro_voucher_months: number
+  surprise_plan_pro_journey3: number
+  surprise_plan_pro_journey3_months: number
+  surprise_plan_pro_journey7: number
+  surprise_plan_pro_journey7_months: number
+  surprise_bonus_renewal: number
+  surprise_bonus_feste: number
   veritas_write_seconds: number
   veritas_vote_seconds: number
   veritas_reveal_seconds: number

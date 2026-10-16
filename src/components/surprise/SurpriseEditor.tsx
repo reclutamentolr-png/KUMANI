@@ -502,12 +502,15 @@ export default function SurpriseEditor({
   steps,
   mediaUrls,
   prices,
+  freeLeft = {},
 }: {
   userId: string
   gift: SurpriseRow
   steps: SurpriseStepRow[]
   mediaUrls: Record<string, string>
   prices: Record<SurpriseKind, number>
+  // Sorprese incluse nel piano Base o Pro ancora disponibili, per tipo (quota + regali)
+  freeLeft?: Partial<Record<SurpriseKind, number>>
 }) {
   const t = useTranslations('surprise')
   const locale = useLocale()
@@ -642,7 +645,13 @@ export default function SurpriseEditor({
                 <Icon className="h-5 w-5 text-[var(--gold)]" />
                 <span className="mt-1 block font-bold text-[var(--ink)]">{t(`kind_${kind}`)}</span>
                 <span className="block text-xs text-gray-500">{t(`kind_${kind}_desc`)}</span>
-                <span className="mt-1 block text-sm font-bold">{money(prices[kind])}</span>
+                {!active && (freeLeft[kind] ?? 0) > 0 ? (
+                  <span className="mt-1 block text-sm font-bold text-emerald-700">
+                    {t('kindIncluded')} <span className="font-semibold">· {t('kindIncludedLeft', { n: freeLeft[kind] ?? 0 })}</span>
+                  </span>
+                ) : (
+                  <span className="mt-1 block text-sm font-bold">{money(prices[kind])}</span>
+                )}
               </button>
             )
           })}

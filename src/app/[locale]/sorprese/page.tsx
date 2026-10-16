@@ -4,7 +4,8 @@ import { ArrowLeft, CalendarHeart, Gift, Heart, LogIn, Mail, Route, Sparkles, Us
 import Link from '@/components/LocalizedLink'
 import { createClient } from '@/lib/supabase/server'
 import { getSurprisePrices } from '@/lib/surpriseServer'
-import { SURPRISE_KINDS, type SurpriseKind } from '@/lib/surprise'
+import { parseSurprisePlan, planFreeFor, SURPRISE_KINDS, type SurpriseKind } from '@/lib/surprise'
+import SurprisePlanSummary from '@/components/surprise/SurprisePlanSummary'
 import NewSurpriseButton from '@/components/surprise/NewSurpriseButton'
 import TemplatePicker from '@/components/surprise/TemplatePicker'
 import DeleteSurpriseButton from '@/components/surprise/DeleteSurpriseButton'
@@ -39,7 +40,7 @@ export default async function SurprisesPage({ params }: { params: Promise<{ loca
     data: { user },
   } = await supabase.auth.getUser()
 
-  const [prices, { data: gifts }, { data: replies }] = await Promise.all([
+  const [prices, { data: gifts }, { data: replies }, { data: planRaw }] = await Promise.all([
     getSurprisePrices(),
     user
       ? supabase
@@ -50,7 +51,10 @@ export default async function SurprisesPage({ params }: { params: Promise<{ loca
       : Promise.resolve({ data: null }),
     // Ringraziamenti ricevuti (le regole del database mostrano solo i propri)
     user ? supabase.from('surprise_replies').select('gift_id, read_at') : Promise.resolve({ data: null }),
+    // Sorprese incluse nel piano Base o Pro
+    user ? supabase.rpc('my_surprise_plan') : Promise.resolve({ data: null }),
   ])
+  const plan = parseSurprisePlan(planRaw)
   const replyCount = new Map<string, { all: number; unread: number }>()
   for (const r of replies ?? []) {
     const c = replyCount.get(r.gift_id) ?? { all: 0, unread: 0 }
@@ -106,12 +110,19 @@ export default async function SurprisesPage({ params }: { params: Promise<{ loca
                 <Icon className="h-6 w-6 text-[var(--gold)]" />
                 <p className="mt-2 font-bold text-[var(--ink)]">{t(`kind_${kind}`)}</p>
                 <p className="mt-1 text-sm text-[var(--muted)]">{t(`kind_${kind}_desc`)}</p>
-                <p className="mt-2 text-lg font-bold text-[var(--ink)]">{money(prices[kind])}</p>
+                {planFreeFor(plan, kind) > 0 ? (
+                  <p className="mt-2 text-lg font-bold text-emerald-700">
+                    {t('kindIncluded')} <span className="text-sm font-semibold">· {t('kindIncludedLeft', { n: planFreeFor(plan, kind) })}</span>
+                  </p>
+                ) : (
+                  <p className="mt-2 text-lg font-bold text-[var(--ink)]">{money(prices[kind])}</p>
+                )}
               </div>
             )
           })}
         </div>
         <p className="mt-3 text-center text-sm text-[var(--muted)]">{t('freeUntilPay')}</p>
+        {user && <SurprisePlanSummary status={plan} />}
 
         {!user ? (
           <>

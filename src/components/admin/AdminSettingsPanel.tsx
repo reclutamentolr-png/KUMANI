@@ -61,6 +61,20 @@ export default function AdminSettingsPanel() {
     surprise_kupoints_voucher: 18,
     surprise_kupoints_journey3: 60,
     surprise_kupoints_journey7: 96,
+    surprise_plan_base_voucher: 3,
+    surprise_plan_base_voucher_months: 1,
+    surprise_plan_base_journey3: 1,
+    surprise_plan_base_journey3_months: 3,
+    surprise_plan_base_journey7: 0,
+    surprise_plan_base_journey7_months: 3,
+    surprise_plan_pro_voucher: 10,
+    surprise_plan_pro_voucher_months: 1,
+    surprise_plan_pro_journey3: 1,
+    surprise_plan_pro_journey3_months: 1,
+    surprise_plan_pro_journey7: 1,
+    surprise_plan_pro_journey7_months: 3,
+    surprise_bonus_renewal: 1,
+    surprise_bonus_feste: 1,
     veritas_write_seconds: 90,
     veritas_vote_seconds: 45,
     veritas_reveal_seconds: 15,
@@ -523,6 +537,69 @@ export default function AdminSettingsPanel() {
               ))}
             </div>
             <p className="text-xs text-gray-500 mt-1">In alternativa alla carta, chi crea la sorpresa può pagarla con i KU Karma oppure con i KU Points confermati (mai quelli ancora in conferma). 0 = non si può pagare con quei punti. Riferimento: 294 KU Points = voucher da 49 €; 300 KU Karma = 5 € di sconto sul rinnovo.</p>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">KUMANI Sorpresa: incluse nei piani</label>
+            <div className="grid max-w-2xl gap-3 sm:grid-cols-3">
+              {(['base', 'pro'] as const).flatMap((plan) =>
+                (
+                  [
+                    ['voucher', 'Buono regalo'],
+                    ['journey3', 'Percorso 3 giorni'],
+                    ['journey7', 'Percorso 7 giorni'],
+                  ] as const
+                ).map(([kind, name]) => {
+                  const key = `surprise_plan_${plan}_${kind}` as const
+                  const months = `${key}_months` as const
+                  return (
+                    <div key={key} className="text-xs text-gray-600">
+                      {name} · {plan === 'pro' ? 'Pro' : 'Base'}
+                      <div className="mt-1 flex gap-2">
+                        <input
+                          type="number"
+                          min="0"
+                          max="100"
+                          step="1"
+                          aria-label={`${name} · ${plan} · quante`}
+                          value={(systemSettings[key] as number) ?? 0}
+                          onChange={(e) => setSystemSettings({ ...systemSettings, [key]: Math.min(100, Math.max(0, parseInt(e.target.value, 10) || 0)) })}
+                          className={`w-20 ${INPUT}`}
+                        />
+                        <select
+                          aria-label={`${name} · ${plan} · ogni quanto`}
+                          value={(systemSettings[months] as number) ?? 1}
+                          onChange={(e) => setSystemSettings({ ...systemSettings, [months]: Number(e.target.value) })}
+                          className={`flex-1 ${INPUT}`}
+                        >
+                          <option value={1}>al mese</option>
+                          <option value={3}>ogni 3 mesi</option>
+                          <option value={12}>all’anno</option>
+                        </select>
+                      </div>
+                    </div>
+                  )
+                }),
+              )}
+            </div>
+            <div className="mt-3 flex flex-col gap-2 text-sm text-gray-700">
+              {(
+                [
+                  ['surprise_bonus_renewal', 'Percorso 3 giorni in regalo a ogni attivazione e rinnovo dell’abbonamento (non per la prova Pro)'],
+                  ['surprise_bonus_feste', 'Percorso 3 giorni in regalo nelle feste: San Valentino (1-14 febbraio), Festa del papà (12-19 marzo), Festa della mamma (la settimana fino alla seconda domenica di maggio), Natale (1-25 dicembre)'],
+                ] as const
+              ).map(([key, name]) => (
+                <label key={key} className="flex items-start gap-2">
+                  <input
+                    type="checkbox"
+                    checked={((systemSettings[key] as number) ?? 1) === 1}
+                    onChange={(e) => setSystemSettings({ ...systemSettings, [key]: e.target.checked ? 1 : 0 })}
+                    className="mt-1"
+                  />
+                  {name}
+                </label>
+              ))}
+            </div>
+            <p className="text-xs text-gray-500 mt-1">Chi ha Base o Pro attiva gratis queste sorprese; finite quelle paga con la carta o con i punti. Le quote ripartono a inizio mese, trimestre o anno (ora di Roma). 0 = nessuna inclusa per quel tipo. Si usa prima il regalo della festa, poi la quota, poi il regalo del rinnovo.</p>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Traduzioni AI del Menù al giorno (per ristorante)</label>

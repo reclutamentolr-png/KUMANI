@@ -240,3 +240,15 @@ export async function paySurpriseWithPoints(giftId: string, currency: 'karma' | 
   if (error || !data) return { success: false, message: 'payment' }
   return data.success ? { success: true, id: giftId } : { success: false, message: data.reason ?? 'payment' }
 }
+
+// Sorpresa inclusa nel piano Base o Pro (quota del periodo o regalo di rinnovo e
+// feste): il database sceglie quale usare e attiva subito la sorpresa.
+export async function claimSurpriseWithPlan(giftId: string): Promise<Result> {
+  const g = await me()
+  if (!g) return { success: false, message: 'notLoggedIn' }
+  const { data, error } = await g.supabase
+    .rpc('claim_surprise_with_plan', { p_gift_id: giftId })
+    .maybeSingle<{ success: boolean; reason: string | null; credit: string | null }>()
+  if (error || !data) return { success: false, message: 'payment' }
+  return data.success ? { success: true, id: giftId } : { success: false, message: data.reason ?? 'payment' }
+}
