@@ -612,7 +612,11 @@
     "qualificationBlackExtra": "Além disso, tem um voucher Pro de um ano só para si e a partir de agora recebe 1 voucher a cada {every} novas ativações. Esperam-no também a montra do Kumano do Dia, o convite para o evento anual KUMANI e o Conselho dos Black.",
     "qualificationOpenWallet": "Ver os seus vouchers",
     "rankPendingLine": "Em confirmação: {acts, plural, one {+# ativação} other {+# ativações}}, +{points} KU Points",
-    "receivedWelcomeNote": "Só recebe o Bónus de Acolhimento por quem entra nos seus 5 lugares diretos: no máximo 5 pessoas."
+    "receivedWelcomeNote": "Só recebe o Bónus de Acolhimento por quem entra nos seus 5 lugares diretos: no máximo 5 pessoas.",
+    "karmaTodayLogin": "Acesso",
+    "karmaTodayBadge": "+{n} hoje",
+    "karmaTodayTitle": "Hoje ganhaste {n} KU Karma:",
+    "karmaTodayNone": "Hoje ainda não ganhaste KU Karma: cada serviço que usas dá-te, uma vez por dia."
   },
   "marketplace": {
     "fabula": "Kumani Fabula",

@@ -648,7 +648,11 @@
     "qualificationBlackExtra": "You also get a one-year Pro voucher just for you, and from now on 1 voucher every {every} new activations. The Kumano of the Day showcase, an invitation to the annual KUMANI event and the Black Council are waiting for you too.",
     "qualificationOpenWallet": "Go to your vouchers",
     "rankPendingLine": "Being confirmed: {acts, plural, one {+# activation} other {+# activations}}, +{points} KU Points",
-    "receivedWelcomeNote": "You only get the Welcome Bonus for people who land in your 5 direct spots: at most 5 people."
+    "receivedWelcomeNote": "You only get the Welcome Bonus for people who land in your 5 direct spots: at most 5 people.",
+    "karmaTodayLogin": "Sign-in",
+    "karmaTodayBadge": "+{n} today",
+    "karmaTodayTitle": "Today you earned {n} KU Karma:",
+    "karmaTodayNone": "You haven’t earned any KU Karma today yet: every service you use gives you some, once a day."
   },
   "marketplace": {
     "fabula": "Kumani Fabula",

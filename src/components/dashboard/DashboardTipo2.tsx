@@ -7,6 +7,7 @@ import AffinityBadge from './AffinityBadge'
 import HomeServices from './HomeServices'
 import type { MyProfile } from '@/lib/myProfile'
 import type { ServiceItem } from '@/lib/servicesCatalog'
+import type { KarmaToday } from '@/lib/karmaToday'
 import NativeShareButton from '@/components/NativeShareButton'
 
 // Home: corta. In cima lo stato (KU Karma, abbonamento, codice invito), poi
@@ -30,6 +31,7 @@ export default async function DashboardTipo2({
   afterStatus = null,
   afterToday = null,
   wellness = null,
+  karmaToday = null,
 }: {
   profile: MyProfile | null
   shareUrl: string
@@ -51,6 +53,8 @@ export default async function DashboardTipo2({
   afterToday?: React.ReactNode
   // «Il tuo benessere di oggi», già pronto dal server
   wellness?: React.ReactNode
+  // KU Karma presi oggi: accesso e servizi usati (getKarmaToday)
+  karmaToday?: KarmaToday | null
 }) {
   const t = await getTranslations('dashboard')
   const guidesT = await getTranslations('guides')
@@ -58,6 +62,9 @@ export default async function DashboardTipo2({
   const hubT = await getTranslations('hub')
   const locale = await getLocale()
   const subscribed = profile?.subscription_status === 'active'
+  // Da dove arrivano i KU Karma di oggi: «Accesso +1 · Spendly +1 · …»
+  const serviceTitle = new Map(services.map((s) => [s.toolName, s.title]))
+  const karmaSources = (karmaToday?.items ?? []).map((i) => `${i.key === 'daily_login' ? t('karmaTodayLogin') : (serviceTitle.get(i.key) ?? i.key)} +${i.points}`)
 
   return (
     <>
@@ -68,6 +75,7 @@ export default async function DashboardTipo2({
             <Sparkles className="hidden h-3.5 w-3.5 shrink-0 text-[var(--gold)] sm:block" /> <span className="truncate">{t('kuPointsLabel')}</span>
           </span>
           <span className="mt-1 text-2xl font-extrabold leading-none text-[var(--ink)] sm:text-3xl">{profile?.daily_points || 0}</span>
+          {!!karmaToday?.total && <span className="mt-1 text-[11px] font-bold text-emerald-700">{t('karmaTodayBadge', { n: karmaToday.total })}</span>}
           <span className="mt-auto pt-1.5 text-[11px] font-semibold text-[var(--gold)]">{hubT('stripWallet')}</span>
         </Link>
 
@@ -112,6 +120,23 @@ export default async function DashboardTipo2({
           </span>
         </div>
       </div>
+
+      {/* KU Karma di oggi: da dove sono arrivati, oppure come prenderli */}
+      {karmaToday && (
+        <Link
+          href="/wallet"
+          className="flex items-start gap-2 rounded-xl border border-[var(--gold)]/30 bg-[var(--gold)]/[0.06] px-3 py-2 text-xs text-[var(--ink)] hover:border-[var(--gold)] sm:text-sm"
+        >
+          <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-[var(--gold)]" />
+          {karmaToday.total > 0 ? (
+            <span>
+              <strong>{t('karmaTodayTitle', { n: karmaToday.total })}</strong> {karmaSources.join(' · ')}
+            </span>
+          ) : (
+            <span>{t('karmaTodayNone')}</span>
+          )}
+        </Link>
+      )}
 
       {/* Senza abbonamento né prova: abbonarsi o usare un voucher */}
       {!subscribed && proTrialDaysLeft === null && (

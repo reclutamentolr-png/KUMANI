@@ -19,6 +19,7 @@ import { getMarketplaceAccessState } from '@/lib/marketplaceAccess'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { getFavoriteToolNames } from '@/lib/favorites'
 import DashboardTipo2 from '@/components/dashboard/DashboardTipo2'
+import { getKarmaToday } from '@/lib/karmaToday'
 import LateSponsorCard from '@/components/dashboard/LateSponsorCard'
 import PushInviteCard from '@/components/dashboard/PushInviteCard'
 import { getLateSponsorStatus } from '@/lib/lateSponsor'
@@ -172,7 +173,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
 
   // 4. Rete (già partita), agenda, prova Pro e dati dell'Area
   //    Professionisti: anche queste insieme.
-  const [network, agendaEvents, trial, stats, catalog, { data: wellnessToday }] = await Promise.all([
+  const [network, agendaEvents, trial, stats, catalog, { data: wellnessToday }, karmaToday] = await Promise.all([
     networkPromise,
     hasAgenda
       ? loadAgenda(supabase, user.id, {
@@ -189,6 +190,8 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     getServicesCatalog(supabase, user.id, locale, { access, favorites: favoriteToolNames }),
     // «Il tuo benessere di oggi»: i tre passi e il bonus
     wellnessPromise,
+    // KU Karma presi oggi (accesso e servizi), accanto ai KU Karma
+    getKarmaToday(supabase, user.id).catch(() => null),
   ])
   const { newlyAchievedRank } = network
   // «In cosa possiamo darti una mano?»: qui i servizi portano allo strumento
@@ -257,6 +260,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
               favoriteToolNames={favoriteToolNames}
               basePrice={basePrice}
               proTrialDaysLeft={proTrial?.daysLeft ?? null}
+              karmaToday={karmaToday}
               wellness={wellnessToday ? <WellnessTodayCard initial={wellnessToday as WellnessToday} /> : null}
               agenda={hasAgenda ? <UpcomingAgenda events={agendaEvents} today={agendaToday} sources={agendaSources} /> : null}
               needs={

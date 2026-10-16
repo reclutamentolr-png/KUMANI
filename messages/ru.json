@@ -612,7 +612,11 @@
     "qualificationBlackExtra": "Кроме того, у вас есть ваучер Pro на год лично для вас, а с этого момента — 1 ваучер за каждые {every} новых активаций. Вас также ждут витрина «Кумано дня», приглашение на ежегодное мероприятие KUMANI и Совет Black.",
     "qualificationOpenWallet": "К вашим ваучерам",
     "rankPendingLine": "На подтверждении: {acts, plural, one {+# активация} few {+# активации} many {+# активаций} other {+# активации}}, +{points} KU Points",
-    "receivedWelcomeNote": "Бонус приёма начисляется только за тех, кто попадает на ваши 5 прямых мест: не более 5 человек."
+    "receivedWelcomeNote": "Бонус приёма начисляется только за тех, кто попадает на ваши 5 прямых мест: не более 5 человек.",
+    "karmaTodayLogin": "Вход",
+    "karmaTodayBadge": "+{n} сегодня",
+    "karmaTodayTitle": "Сегодня вы получили {n} KU Karma:",
+    "karmaTodayNone": "Сегодня вы ещё не получили KU Karma: каждый сервис, которым вы пользуетесь, даёт его раз в день."
   },
   "marketplace": {
     "fabula": "Kumani Fabula",
