@@ -44,8 +44,7 @@ import HeroLogoVideo from '@/components/home/HeroLogoVideo'
 import HeroSideImage from '@/components/home/HeroSideImage'
 import { HOME_LAYOUT_CONFIG, type HomeLayoutKey } from '@/lib/homeLayouts'
 import { getEnabledLocales } from '@/lib/enabledLocales'
-import { countEnabledTools } from '@/lib/freeTools'
-import { CATALOG_TOOL_NAMES } from '@/lib/catalog-server'
+import { getAppCounts } from '@/lib/appCounts'
 
 // Contenuto della Home pubblica. `layoutKey`: aspetto scelto dall'Admin
 // (cambiano solo sfondi e immagini, mai i contenuti). Usato dalla Home
@@ -63,8 +62,8 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
   ])
   const L = HOME_LAYOUT_CONFIG[layoutKey]
   // «In cosa possiamo darti una mano?»: per ogni risposta i servizi giusti
-  // Numeri sotto l'apertura: lingue attive e servizi accesi (decisi dall'Admin)
-  const [needs, enabledLocales, serviceCount] = await Promise.all([buildHomeNeeds(), getEnabledLocales(), countEnabledTools(CATALOG_TOOL_NAMES)])
+  // Numeri sotto l'apertura: lingue attive, servizi e strumenti accesi (decisi dall'Admin)
+  const [needs, enabledLocales, counts] = await Promise.all([buildHomeNeeds(), getEnabledLocales(), getAppCounts()])
   // Apertura con testo a sinistra sul computer (foto a lato)
   const leftHero = L.hero.kind === 'split' || L.hero.kind === 'side'
   const heroBadgeClass =
@@ -217,10 +216,11 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
               <div className="text-xs sm:text-sm text-gray-400">{t('statWeeklyLabel')}</div>
             </div>
             <div>
-              <div className="text-2xl sm:text-3xl font-bold text-white">{serviceCount ?? '40+'}</div>
+              <div className="text-2xl sm:text-3xl font-bold text-white">{counts.services}</div>
               <div className="text-xs sm:text-sm text-gray-400">{t('statServicesLabel')}</div>
             </div>
           </div>
+          <p className={`mt-4 max-w-xl text-sm font-semibold text-[var(--gold-bright)] ${leftHero ? 'mx-auto lg:mx-0' : 'mx-auto'}`}>{t('statTagline', counts)}</p>
           </div>
           {L.hero.kind === 'split' && L.hero.image && (
             <div className="relative hidden aspect-[4/3] overflow-hidden rounded-[28px] border-[6px] border-white shadow-[0_24px_60px_rgba(23,23,23,0.28)] lg:block">

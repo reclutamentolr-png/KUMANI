@@ -234,7 +234,7 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
               <BookMarked className="h-6 w-6" />
             </span>
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-bold uppercase tracking-wider text-[var(--gold)]">{catalogT('eyebrow', { count: catalog.total })}</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-[var(--gold)]">{catalogT('eyebrow', { count: catalog.total, tools: catalog.tools })}</p>
               <h2 className="text-xl font-bold text-[var(--ink)]">{catalogT('pageTitle')}</h2>
               <p className="mt-1 text-sm text-[var(--muted)]">{catalogT('intro')}</p>
             </div>

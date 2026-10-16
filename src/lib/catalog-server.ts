@@ -1,6 +1,7 @@
 import { unstable_cache } from 'next/cache'
 import { getMessages, getTranslations } from 'next-intl/server'
 import { createClient } from '@supabase/supabase-js'
+import { moreThan } from '@/lib/countText'
 import { collapseByHub, HUB_ICON_NAME, HUB_PUBLIC_HREF, HUB_REPRESENTATIVE, hubTabKey, TOOL_HUB } from '@/lib/serviceHubs'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { SERVICE_GROUPS, serviceGroupOf } from '@/lib/serviceGroups'
@@ -29,7 +30,8 @@ export type CatalogItem = {
 }
 
 export type CatalogGroup = { key: string; label: string; items: CatalogItem[] }
-export type Catalog = { groups: CatalogGroup[]; total: number; basePrice: string; proPrice: string }
+// total: servizi come li vede l'utente; tools: «più di N» strumenti (lib/countText)
+export type Catalog = { groups: CatalogGroup[]; total: number; tools: number; basePrice: string; proPrice: string }
 
 type Setting = { tool_name: string; is_enabled: boolean; required_plan: string | null; pass_enabled: boolean | null; pass_price_cents: number | null }
 
@@ -54,6 +56,9 @@ const COMMUNITY = [
   { toolName: 'timebank', href: '/marketplace/timebank', iconName: 'Hourglass', titleKey: 'timebank' },
   { toolName: 'spotlight', href: '/marketplace/spotlight', iconName: 'Star', titleKey: 'kumanoDelGiorno' },
 ]
+
+// Tutti gli strumenti (ognuno conta): per «Più di N strumenti»
+export const ALL_TOOL_NAMES = [...getMarketplaceTools((key) => key).map((tool) => tool.toolName), ...COMMUNITY.map((c) => c.toolName), 'sorprese']
 
 // Tutti i servizi del Catalogo (accesi o no): stesso elenco di getCatalog,
 // per contarli nella Home senza leggere testi e prezzi
@@ -133,6 +138,8 @@ export async function getCatalog(locale: string): Promise<Catalog> {
       .map((tool) => build(tool.toolName, tool.title, tool.description, tool.iconName, tool.href, `/strumenti/${tool.toolName}`))
       .filter((item): item is CatalogItem => item !== null),
   }))
+  // Strumenti accesi, prima di unirli nei loro servizi
+  let toolCount = groups.reduce((sum, group) => sum + group.items.length, 0)
   // Servizi uniti: uno per servizio, con le schede come punti forti
   for (const group of groups)
     group.items = collapseByHub(group.items, (hub, members) => ({
@@ -158,10 +165,12 @@ export async function getCatalog(locale: string): Promise<Catalog> {
   const surprise = build('sorprese', `KUMANI ${ts('title')}`, ts('intro'), 'Gift', '/sorprese', '/sorprese')
   if (surprise) groups[groups.length - 1].items.push({ ...surprise, priceNote: tc('surprisePrice', { price: new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(Math.min(...Object.values(surprisePrices)) / 100) }) })
 
+  toolCount += groups[groups.length - 1].items.length
   const visible = groups.filter((group) => group.items.length > 0)
   return {
     groups: visible,
     total: visible.reduce((sum, group) => sum + group.items.length, 0),
+    tools: moreThan(toolCount),
     basePrice: eur(prices.base),
     proPrice: eur(prices.pro),
   }

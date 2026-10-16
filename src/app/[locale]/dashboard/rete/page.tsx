@@ -1,4 +1,5 @@
 import { SITE_URL } from '@/lib/siteUrl'
+import { getAppCounts } from '@/lib/appCounts'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
@@ -39,7 +40,8 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
   // dal browser/sessione utente le colonne personali non sono più leggibili.
   // La rete parte subito e usa il profilo solo dopo le sue letture.
   const profilePromise = getSessionProfile()
-  const [network, profile] = await Promise.all([getDashboardNetworkData(supabase, user, profilePromise, locale), profilePromise])
+  // appCounts: «più di N strumenti in M servizi» nel messaggio d'invito
+  const [network, profile, appCounts] = await Promise.all([getDashboardNetworkData(supabase, user, profilePromise, locale), profilePromise, getAppCounts()])
   const {
     rootNode,
     activeDownlineForTree,
@@ -132,7 +134,7 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
               <CopyButton text={shareUrl} />
             </div>
             <a
-              href={`https://wa.me/?text=${encodeURIComponent(t('inviteShareMessage', { link: shareUrl }))}`}
+              href={`https://wa.me/?text=${encodeURIComponent(t('inviteShareMessage', { link: shareUrl, ...appCounts }))}`}
               target="_blank"
               rel="noopener noreferrer"
               className="relative mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-4 py-2.5 text-sm font-bold text-[var(--ink)] hover:brightness-110"
@@ -142,7 +144,7 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
             <NativeShareButton
               url={shareUrl}
               title="KUMANI"
-              text={t('inviteShareMessage', { link: '' }).trim()}
+              text={t('inviteShareMessage', { link: '', ...appCounts }).trim()}
               variant="glass"
               copyFallback={false}
               className="relative mt-2 w-full"

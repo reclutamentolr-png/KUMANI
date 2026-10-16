@@ -217,7 +217,8 @@
     "communityTransparencyRest": "la clasificación y las calificaciones (Kuman Green, Kuman Star, Kuman Black) reflejan lo activa que es tu Comunidad y dan vouchers para activar personas nuevas, no dinero. Los KU Points solo se usan dentro de la plataforma.",
     "aboutLink": "Quiénes somos",
     "planSurpriseBase": "KUMANI Sorpresa: sorpresas incluidas cada mes, más un recorrido de 3 días de regalo en la renovación y en las fiestas",
-    "planSurprisePro": "KUMANI Sorpresa: más sorpresas incluidas, también los recorridos de 7 días, más los regalos en la renovación y en las fiestas"
+    "planSurprisePro": "KUMANI Sorpresa: más sorpresas incluidas, también los recorridos de 7 días, más los regalos en la renovación y en las fiestas",
+    "statTagline": "Más de {tools} herramientas en {services} servicios. Una sola app."
   },
   "authRegister": {
     "registerTitle": "Crea tu cuenta",
@@ -436,7 +437,7 @@
     "inviteTileHint": "Comparte tu enlace: quien se registre entra en tu estrella KUMANI.",
     "sponsorHint": "La persona que te invitó a KUMANI.",
     "noSponsorHint": "Estás al inicio de tu estrella: nadie te ha invitado.",
-    "inviteShareMessage": "¡Hola! Te invito a KUMANI: más de 40 servicios digitales en una sola app y una comunidad que se ayuda. Regístrate con mi enlace: {link}",
+    "inviteShareMessage": "¡Hola! Te invito a KUMANI: más de {tools} herramientas en {services} servicios, en una sola app, y una comunidad que se ayuda. Regístrate con mi enlace: {link}",
     "inviteShareWhatsapp": "Invitar por WhatsApp",
     "peopleTitle": "Tus KUMANI",
     "peopleTabActive": "Activos",
@@ -9069,7 +9070,7 @@
     "siteTitle": "KUMANI – Manos que te echan una mano",
     "siteDescription": "KUMANI es un ecosistema de herramientas digitales útiles cada día para autónomos, particulares y familias: códigos QR dinámicos, link en bio, verificación antiestafa, control de gastos y más. Precio justo, reglas públicas.",
     "homeTitle": "KUMANI – Herramientas digitales y una comunidad que se ayuda",
-    "homeDescription": "Tus ideas, nuestras manos, juntos: más de 40 servicios digitales en una sola app, planes Gratis, Base y Pro, y una comunidad que se ayuda de verdad.",
+    "homeDescription": "Tus ideas, nuestras manos, juntos: más de {tools} herramientas en {services} servicios, en una sola app, planes Gratis, Base y Pro, y una comunidad que se ayuda de verdad.",
     "registerTitle": "Regístrate gratis",
     "registerDescription": "Crea tu cuenta KUMANI gratis en pocos segundos y prueba enseguida los servicios gratuitos.",
     "loginTitle": "Iniciar sesión",
@@ -10386,7 +10387,7 @@
   },
   "catalog": {
     "pageTitle": "Catálogo de servicios",
-    "eyebrow": "{count} servicios en una sola app",
+    "eyebrow": "Más de {tools} herramientas en {count} servicios. Una sola app.",
     "intro": "Todos los servicios KUMANI por categoría: para qué sirven, qué puedes hacer y cómo se usan, en pocas líneas. Como un manual para hojear.",
     "plansLine": "Gratis al registrarte · Base {base}/año · Pro {pro}/año",
     "searchPlaceholder": "Busca un servicio o una palabra…",
@@ -10406,7 +10407,7 @@
     "generating": "Preparando el PDF…",
     "pdfError": "No se ha podido crear el PDF, inténtalo de nuevo.",
     "pdfTitle": "Catálogo de servicios KUMANI",
-    "pdfSubtitle": "{count} servicios digitales en una sola app",
+    "pdfSubtitle": "Más de {tools} herramientas en {count} servicios, en una sola app",
     "pdfUpdated": "Actualizado: {date}",
     "pdfFileName": "catalogo-servicios",
     "footerLink": "Catálogo de servicios",

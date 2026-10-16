@@ -45,7 +45,7 @@ export default function CatalogPdfButton({ catalog, variant = 'gold' }: { catalo
         catalog,
         {
           title: t('pdfTitle'),
-          subtitle: t('pdfSubtitle', { count: catalog.total }),
+          subtitle: t('pdfSubtitle', { count: catalog.total, tools: catalog.tools }),
           intro: t('intro'),
           updated: t('pdfUpdated', { date }),
           plansLine: t('plansLine', { base: catalog.basePrice, pro: catalog.proPrice }),

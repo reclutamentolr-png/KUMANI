@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { pageMetadata } from '@/lib/seo'
+import { getAppCounts } from '@/lib/appCounts'
 import { getHomeLayout } from '@/lib/homeLayoutServer'
 import HomeLanding from '@/components/home/HomeLanding'
 
@@ -17,8 +18,8 @@ export const revalidate = 3600
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   setRequestLocale((await params).locale)
-  const t = await getTranslations('seo')
-  return pageMetadata('', { title: { absolute: t('homeTitle') }, description: t('homeDescription') })
+  const [t, counts] = await Promise.all([getTranslations('seo'), getAppCounts()])
+  return pageMetadata('', { title: { absolute: t('homeTitle') }, description: t('homeDescription', counts) })
 }
 
 export default async function LandingPage({ params }: Props) {
