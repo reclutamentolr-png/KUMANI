@@ -9,9 +9,10 @@ import { flyerKey, type FlyerConfig, type FlyerPlan } from '@/lib/flyers'
 // Anteprima del volantino e download come immagine (PNG) o PDF, creati nel
 // browser al momento: testi ufficiali aggiornati e QR con il link di invito.
 
-type Props = { config: FlyerConfig; plan: FlyerPlan; title: string; inviteUrl: string | null; screenshotLang: 'it' | 'en' }
+// hubName: servizio unito di cui fa parte lo strumento (lib/serviceHubs), se c'è
+type Props = { config: FlyerConfig; plan: FlyerPlan; title: string; inviteUrl: string | null; screenshotLang: 'it' | 'en'; hubName?: string | null }
 
-export default function FlyerView({ config, plan, title, inviteUrl, screenshotLang }: Props) {
+export default function FlyerView({ config, plan, title, inviteUrl, screenshotLang, hubName }: Props) {
   const t = useTranslations('flyers')
   const locale = useLocale()
   const node = useRef<HTMLDivElement>(null)
@@ -49,7 +50,7 @@ export default function FlyerView({ config, plan, title, inviteUrl, screenshotLa
     tagline: t(`tools.${k}.tagline`),
     points: [1, 2, 3].map((n) => [t(`tools.${k}.p${n}`), t(`tools.${k}.p${n}d`)] as [string, string]),
     note: t.has(`tools.${k}.note`) ? t(`tools.${k}.note`) : null,
-    category: t(`cat_${config.category}`),
+    category: hubName ? t('partOf', { hub: hubName }) : t(`cat_${config.category}`),
     planLabel: plan.plan === 'surprise' ? t('includedSurprise') : plan.plan === 'free' ? t('includedFree') : plan.plan === 'pro' ? t('includedPro') : t('includedBase'),
     priceLabel:
       plan.plan === 'surprise' ? t('priceSurprise', { price: money(plan.planPrice) }) : plan.plan === 'free' ? t('priceFree') : t('pricePerYear', { price: money(plan.planPrice) }),

@@ -5,11 +5,13 @@ import { pageMetadata } from '@/lib/seo'
 import Image from 'next/image'
 import { notFound, redirect } from 'next/navigation'
 import { getLocale, getTranslations } from 'next-intl/server'
-import { ArrowLeft, ArrowRight, BookOpen, Clock, Lightbulb } from 'lucide-react'
+import { ArrowLeft, ArrowRight, BookOpen, Clock, Lightbulb, PanelsTopLeft } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { createClient } from '@/lib/supabase/server'
 import { getGuidesContent, guideShot, PUBLIC_GUIDES } from '@/lib/guides/content'
 import type { GuideSlug } from '@/lib/guides/types'
+import { HUB_TABS, hubOf } from '@/lib/serviceHubs'
+import { getDisabledTools } from '@/lib/freeTools'
 
 // Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
 // richiesta, mai preparata in anticipo né tenuta in memoria
@@ -56,6 +58,18 @@ export default async function GuidePage({ params, searchParams }: Props) {
   const prev = guides[index - 1]
   const next = guides[index + 1]
   const total = guide.steps.length
+  // Servizio unito (lib/serviceHubs): le altre schede della barra in cima,
+  // senza quelle spente dall'Admin
+  const where = hubOf(guide.cta.href, '')
+  let hubNote: { hub: string; tabs: string } | null = null
+  if (where) {
+    const [tHubs, disabled] = await Promise.all([getTranslations('serviceHubs'), getDisabledTools()])
+    const others = HUB_TABS[where.hub]
+      .filter((tab) => tab.key !== where.tab && (!tab.tool || !disabled.includes(tab.tool)))
+      .map((tab) => tHubs(`${where.hub}.tab_${tab.key}`))
+    if (others.length)
+      hubNote = { hub: tHubs(`${where.hub}.title`), tabs:new Intl.ListFormat(locale, { type: 'conjunction' }).format(others) }
+  }
   const ld = {
     '@context': 'https://schema.org',
     '@type': 'HowTo',
@@ -98,6 +112,16 @@ export default async function GuidePage({ params, searchParams }: Props) {
             </span>
           </p>
         </div>
+
+        {/* La barra in cima ai servizi uniti: le schede non hanno un passo con la schermata */}
+        {hubNote && (
+          <p className="mb-6 flex gap-3 rounded-2xl border border-[var(--gold)]/30 bg-[var(--gold-pale)] px-4 py-3 text-sm leading-6 text-[var(--ink)]">
+            <PanelsTopLeft className="mt-0.5 h-5 w-5 shrink-0 text-[var(--gold)]" />
+            <span>
+              <strong>{t('hubBarTitle', { hub: hubNote.hub })}</strong> {t('hubBarText', { tabs: hubNote.tabs })}
+            </span>
+          </p>
+        )}
 
         <ol className="space-y-6">
           {guide.steps.map((step, i) => (

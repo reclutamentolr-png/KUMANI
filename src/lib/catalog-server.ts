@@ -62,7 +62,7 @@ export const ALL_TOOL_NAMES = [...getMarketplaceTools((key) => key).map((tool) =
 // Tutti i servizi del Catalogo (accesi o no): stesso elenco di getCatalog,
 // per contarli nella Home senza leggere testi e prezzi
 export const CATALOG_TOOL_NAMES = [
-  // La sicurezza conta come tre servizi (uno strumento per ciascuno)
+  // Un servizio unito conta una volta sola: al suo posto il suo rappresentante
   ...getMarketplaceTools((key) => key)
     .map((tool) => tool.toolName)
     .filter((name) => !TOOL_HUB[name] || Object.values(HUB_REPRESENTATIVE).includes(name)),

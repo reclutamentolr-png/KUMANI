@@ -2782,7 +2782,7 @@
     "shareCardTitle": "Deine KUMANI-Visitenkarte",
     "shareCardIntro": "Hier ist die Vorschau. Du kannst die Vorstellung vor dem Senden ändern: Der QR-Code führt zu deinem Einladungslink.",
     "shareCardTextLabel": "Vorstellung (bearbeitbar)",
-    "shareCardDefaultText": "KUMANI ist ein Ökosystem aus über 40 digitalen Diensten in einer App: Online-Sicherheit, Organisation, Wohlbefinden und Werkzeuge für die Arbeit, mit einer Community, die sich gegenseitig hilft. Ein Abo, alles inklusive.",
+    "shareCardDefaultText": "KUMANI ist eine einzige App mit {tools} Tools in {services} Diensten: Online-Sicherheit, Organisation, Wohlbefinden und Werkzeuge für die Arbeit, mit einer Community, die sich gegenseitig hilft. Ein Abo, alles inklusive.",
     "shareCardHeadline": "Deine Ideen, unsere Hände. Gemeinsam.",
     "shareCardMember": "KUMANI-Mitglied",
     "shareCardScan": "Scanne den QR-Code und entdecke KUMANI",
@@ -6448,7 +6448,9 @@
     "membersLogin": "Anmelden",
     "howItWorks": "So funktioniert’s",
     "howItWorksService": "So funktioniert {service}",
-    "backToDashboard": "Zurück zum Dashboard"
+    "backToDashboard": "Zurück zum Dashboard",
+    "hubBarTitle": "Gehört zu {hub}.",
+    "hubBarText": "Über die Leiste oben auf der Seite wechselst du mit einem Tippen zu {tabs}."
   },
   "tour": {
     "stepOf": "Schritt {n} von {total}",
@@ -6630,7 +6632,7 @@
     "cat_community": "Community",
     "cat_pro": "Für dein Geschäft",
     "sectionTitle": "Flyer der Dienste",
-    "sectionIntro": "Ein Flyer für jeden Dienst, zum Teilen auf WhatsApp und Social Media oder zum Drucken. Der QR-Code führt zu deinem persönlichen Einladungslink.",
+    "sectionIntro": "Ein Flyer für jedes Tool, nach Diensten gruppiert, zum Teilen auf WhatsApp und Social Media oder zum Drucken. Der QR-Code führt zu deinem persönlichen Einladungslink.",
     "image": "Bild",
     "pdf": "PDF",
     "preview": "Vorschau",
@@ -7148,7 +7150,8 @@
     },
     "includedSurprise": "Für alle, auch mit dem kostenlosen Konto",
     "priceSurprise": "Ab {price} pro Überraschung",
-    "surpriseNote": "Kostenlos erstellen und ausprobieren: Du zahlst erst beim Aktivieren."
+    "surpriseNote": "Kostenlos erstellen und ausprobieren: Du zahlst erst beim Aktivieren.",
+    "partOf": "Gehört zu {hub}"
   },
   "guideTexts": {
     "categories": {
@@ -8127,27 +8130,27 @@
       "areas": {
         "1": {
           "1": "Sichtbar werden",
-          "2": "QR-Code, Link in Bio, WhatsApp-Nachrichten, E-Mail-Signatur, KUMANI Menu, Kumi Card"
+          "2": "{hub_vetrina}, {name_negozio}, {name_qr}"
         },
         "2": {
           "1": "Schutz vor Betrug",
-          "2": "Anti-Betrugs-Netz, SVAT, VeriFoto, CheckMail, IBAN-Prüfung, Datenschild, Sicheres Dokument, Anti-Betrugs-Handbuch"
+          "2": "{hub_controlla}, {name_proteggi}, {name_segnala}"
         },
         "3": {
           "1": "Organisation",
-          "2": "MemoLife, Life Calendar, Spendly, Kumani Garage, KUMANI Casa, Findo, KUMANI Travel, KUMANI CV"
+          "2": "{name_agenda}, {hub_spendly}, {name_casaauto}, KUMANI Travel"
         },
         "4": {
           "1": "Wohlbefinden",
-          "2": "Neurobalance, Aureya, Oxygen, Mandala, KUMANI Focus"
+          "2": "{hub_benessere}"
         },
         "5": {
           "1": "Arbeit",
-          "2": "Jobsuche, Angebote, Kunden & Aufträge, Digitale Belege, Magazzino PRO, PRO-Rechner, PDF unterschreiben, Hoplà"
+          "2": "{name_lavoro}, {hub_gestione}, {name_ufficio}"
         },
         "6": {
           "1": "Community und Freizeit",
-          "2": "Anzeigen, Kordata, Time Bank, Events, Affinity, Veritas, Mosaic, Fabula, Nexus"
+          "2": "Anzeigen, Kordata, Time Bank, Events, Affinity, {hub_giochi}"
         }
       },
       "notes": "Die Dienste sind in sechs Bereiche gegliedert: sichtbar werden, Schutz vor Betrug, persönliche Organisation, Wohlbefinden, Arbeit, Community und Freizeit. Ein einziges Konto genügt."
@@ -8169,7 +8172,7 @@
           "2": "der Tisch-QR führt zu deinen Kontakten"
         },
         "4": {
-          "1": "Angebote und Kunden & Aufträge",
+          "1": "{name_gestione}",
           "2": "vom Angebot zum Auftrag bis zur Zahlung"
         },
         "5": {
@@ -8181,7 +8184,7 @@
           "2": "einmal gewählt, in allen Diensten"
         }
       },
-      "notes": "Die Stärke von KUMANI: Die Werkzeuge sprechen miteinander. Die Agenda sammelt Termine, Rechnungen und Fristen. Reisen landen im Kalender. Die Speisekarte des Restaurants führt zur Kumi Card. Ein angenommenes Angebot wird in Kunden & Aufträge zum Auftrag, bis zur Zahlung. Die Markenfarben wählt man einmal, alle Dienste verwenden sie. Und jedes genutzte Werkzeug lässt das KU Karma im Wallet wachsen."
+      "notes": "Die Stärke von KUMANI: Die Werkzeuge sprechen miteinander. Die Agenda sammelt Termine, Rechnungen und Fristen. Reisen landen im Kalender. Die Speisekarte des Restaurants führt zur Kumi Card. Ein angenommenes Angebot wird in {name_gestione} zum Auftrag, bis zur Zahlung. Die Markenfarben wählt man einmal, alle Dienste verwenden sie. Und jedes genutzte Werkzeug lässt das KU Karma im Wallet wachsen."
     },
     "s8": {
       "title": "Drei Tarife, ein ehrlicher Preis",
@@ -8193,7 +8196,7 @@
           "3": "für immer",
           "4": "Zum Start, ohne Kreditkarte",
           "5": "{free, plural, one {# Dienst} other {# Dienste}} inklusive",
-          "6": "Anti-Betrugs-Netz, QR-Code, WhatsApp-Nachrichten, IBAN-Prüfung, Anzeigen, Kordata, Time Bank, Spiele und Wohlbefinden"
+          "6": "{name_segnala}, QR-Code, WhatsApp-Nachrichten, {tab_controlla_iban}, Anzeigen, Kordata, Time Bank, Spiele und Wohlbefinden"
         },
         "2": {
           "1": "Base",
@@ -8201,7 +8204,7 @@
           "3": "im Jahr",
           "4": "Für Privatpersonen und Familien",
           "5": "Alles aus Kostenlos + {base, plural, one {# Dienst} other {# Dienste}}",
-          "6": "MemoLife, Spendly, Life Calendar, Kumani Garage, KUMANI Casa, Link in Bio, SVAT, CheckMail, Neurobalance, Travel, Jobsuche, PDF unterschreiben, Hoplà"
+          "6": "{name_agenda}, {name_spendly}, {name_casaauto}, Link in Bio, {name_controlla}, Neurobalance, Travel, {name_lavoro}, {name_ufficio}"
         },
         "3": {
           "1": "Pro",
@@ -8209,7 +8212,7 @@
           "3": "im Jahr",
           "4": "Für alle, die mit Kunden arbeiten",
           "5": "Alles aus Base + {pro, plural, one {# Pro-Dienst} other {# Pro-Dienste}}",
-          "6": "KUMANI Menu, Kumi Card, Angebote, Kunden & Aufträge, Digitale Belege, Magazzino, QR Code PRO, Landing Page. 15 Tage kostenlos."
+          "6": "{hub_gestione}, KUMANI Menu, Kumi Card, QR Code PRO, Landing Page. 15 Tage kostenlos."
         }
       },
       "passBold": "Nur ein Dienst nötig? ",
@@ -8237,7 +8240,7 @@
           "2": "Lieferungen und Anzahlungen vom Kunden bestätigt"
         },
         "5": {
-          "1": "Magazzino PRO",
+          "1": "{tabname_gestione_warehouse}",
           "2": "Bestand und Barcodes per Handy"
         },
         "6": {
@@ -8245,38 +8248,38 @@
           "2": "Ziel ändern und Scans zählen"
         }
       },
-      "notes": "Für Selbstständige bringt der Pro-Tarif konkrete Werkzeuge: die Speisekarte mit QR am Tisch, die digitale Treuekarte, Angebote und Belege mit wenigen Tipps, Kunden & Aufträge für Kunden, Aufträge und Zahlungen, die Lagerverwaltung und messbare QR-Codes. Dazu der Bereich für Profis und die Möglichkeit, Lieferant der Kordata-Gruppen zu werden."
+      "notes": "Für Selbstständige bringt der Pro-Tarif konkrete Werkzeuge: die Speisekarte mit QR am Tisch, die digitale Treuekarte, Angebote und Belege mit wenigen Tipps, {name_gestione} für Kunden, Aufträge und Zahlungen, die Lagerverwaltung und messbare QR-Codes. Dazu der Bereich für Profis und die Möglichkeit, Lieferant der Kordata-Gruppen zu werden."
     },
     "s10": {
       "title": "Sicherer gegen Online-Betrug",
       "sub": "Prüfungen in Sekunden, bevor du vertraust, zahlst oder ein Dokument sendest.",
       "items": {
         "1": {
-          "1": "SVAT",
+          "1": "{tab_controlla_site}",
           "2": "Risikobewertung einer Website oder Firma"
         },
         "2": {
-          "1": "VeriFoto",
+          "1": "{tab_controlla_photo}",
           "2": "Erkennt, ob ein Foto mit KI erzeugt oder bearbeitet wurde"
         },
         "3": {
-          "1": "CheckMail",
+          "1": "{tab_controlla_email}",
           "2": "Prüft eine verdächtige E-Mail: Absender, Links, Anhänge"
         },
         "4": {
-          "1": "IBAN-Prüfung",
+          "1": "{tab_controlla_iban}",
           "2": "Prüft die IBAN vor einer Überweisung · kostenlos"
         },
         "5": {
-          "1": "Sicheres Dokument",
+          "1": "{tab_proteggi_documents}",
           "2": "Wasserzeichen und verdeckte Daten vor dem Senden"
         },
         "6": {
-          "1": "Anti-Betrugs-Handbuch",
+          "1": "{tab_segnala_manual}",
           "2": "Die häufigsten Maschen und was zu tun ist · kostenlos"
         }
       },
-      "notes": "Online-Betrug ist ein Problem für alle, die im Netz arbeiten. KUMANI bietet sechs Werkzeuge: Prüfung von Websites und Firmen, falsche Fotos, verdächtige E-Mails, IBAN, Schutz von Dokumenten und ein aktuelles Handbuch. IBAN-Prüfung und Handbuch sind für alle kostenlos. Die Ergebnisse sind automatische Hinweise, keine Garantie."
+      "notes": "Online-Betrug ist ein Problem für alle, die im Netz arbeiten. KUMANI begegnet ihm mit drei Diensten: {name_controlla} prüft Websites und Firmen, verdächtige E-Mails, gefälschte Fotos, IBANs und Telefonnummern; {name_proteggi} schützt deine Daten und Dokumente, bevor du sie verschickst; {name_segnala} sammelt die Meldungen der Community und das aktuelle Handbuch. Die IBAN-Prüfung und das Handbuch sind für alle kostenlos. Die Ergebnisse sind automatische Hinweise, keine Garantie."
     },
     "s11": {
       "title": "Eine Community, die mit anpackt",
@@ -8469,7 +8472,7 @@
       "notes": "Viele Selbstständige haben keine Website oder wollen nicht dafür zahlen. Mit der Landing Page erstellen sie sie in wenigen Minuten am Handy: Sie beantworten fünf Fragen, die KI schreibt die Vorstellung, dann wählen sie Vorlage, Farbe, Fotos und Blöcke. Die Seite hat eine Adresse auf kumani.io, ist bereit für Google, und Kunden schreiben über das Formular „Schreib mir“: Die Nachricht kommt ins Dashboard und als Benachrichtigung aufs Handy. Sie ist in Pro enthalten und kann auch einzeln gekauft werden."
     },
     "clienti": {
-      "title": "Kunden & Aufträge",
+      "title": "{name_gestione}",
       "sub": "Kunden, Aufträge, Zeit und Zahlungen an einem Ort, vom Handy aus.",
       "rows": {
         "1": {
@@ -8482,7 +8485,7 @@
         },
         "3": {
           "1": "Zeit und Marge",
-          "2": "Zeitmessung am Auftrag, Material auch aus Magazzino PRO und Kosten: Du siehst sofort, was dir bleibt."
+          "2": "Zeitmessung am Auftrag, Material auch aus {tabname_gestione_warehouse} und Kosten: Du siehst sofort, was dir bleibt."
         },
         "4": {
           "1": "Zahlungen und Buchhaltung",
@@ -8490,7 +8493,7 @@
         }
       },
       "badge": "Im Pro-Tarif enthalten · verbunden mit Angeboten, Shop und Belegen",
-      "notes": "Kunden & Aufträge ist die Taschenverwaltung für alle, die mit Kunden arbeiten, besonders Handwerker. Jedes gespeicherte Angebot legt die Kundenkarte an; aus einem angenommenen Angebot wird ein Auftrag mit Status, To-dos, Zeitmessung, Material und Kosten, und die Marge rechnet sich von selbst. Erhaltene Zahlungen werden auch bar oder per Überweisung erfasst, mit digitalem Beleg per Tipp. Jeden Morgen zeigt der Bereich Heute, wen du kontaktieren und was du einnehmen solltest, und die Daten lassen sich für die Buchhaltung exportieren."
+      "notes": "{name_gestione} ist die Taschenverwaltung für alle, die mit Kunden arbeiten, besonders Handwerker. Jedes gespeicherte Angebot legt die Kundenkarte an; aus einem angenommenen Angebot wird ein Auftrag mit Status, To-dos, Zeitmessung, Material und Kosten, und die Marge rechnet sich von selbst. Erhaltene Zahlungen werden auch bar oder per Überweisung erfasst, mit digitalem Beleg per Tipp. Jeden Morgen zeigt der Bereich Heute, wen du kontaktieren und was du einnehmen solltest, und die Daten lassen sich für die Buchhaltung exportieren."
     },
     "antitruffa": {
       "title": "Anti-Betrugs-Netz",
@@ -8502,7 +8505,7 @@
         },
         "2": {
           "1": "Warnungen in den Prüfungen",
-          "2": "Nach Bestätigung durch das Staff sieht jeder, der dieselbe Angabe mit SVAT, IBAN-Prüfung oder CheckMail prüft, die Warnung."
+          "2": "Nach Bestätigung durch das Staff sieht jeder, der dieselbe Angabe mit {name_controlla} prüft, die Warnung."
         },
         "3": {
           "1": "Wer hat mich angerufen?",
@@ -8519,7 +8522,7 @@
     "full": {
       "section": "Alle Dienste",
       "title": "Alle KUMANI-Dienste",
-      "sub": "{total, plural, one {# Dienst} other {# Dienste}}, nach Bedarf geordnet, einer nach dem anderen.",
+      "sub": "{total, plural, one {# Dienst} other {# Dienste}} mit {tools} Tools, nach Bedarf geordnet.",
       "legend": "Das farbige Etikett zeigt, welcher Tarif den Dienst enthält.",
       "count": "{count, plural, one {# Dienst} other {# Dienste}}",
       "groupSub": "{count, plural, one {# Dienst} other {# Dienste}} · Alle KUMANI-Dienste",
@@ -10062,7 +10065,6 @@
     "nav_wallet": "Wallet",
     "nav_profile": "Profil",
     "servicesTitle": "Dienste",
-    "servicesSubtitle": "{count, plural, one {# Dienst} other {# Dienste}}, nach deinem Bedarf sortiert",
     "searchPlaceholder": "Dienst suchen…",
     "clearSearch": "Suche löschen",
     "filtersLabel": "Dienste filtern",
@@ -13409,7 +13411,7 @@
     "gestione": {
       "title": "Geschäftsverwaltung",
       "short": "Geschäft",
-      "tagline": "Kunden, Angebote, Quittungen und Lager",
+      "tagline": "Kunden, Angebote, Quittungen, Lager und Rechner",
       "description": "Deine Kunden und Aufträge, Angebote, digitale Quittungen, das Lager und Rechner für die Zahlen: alles verbunden, vom ersten Kontakt bis zur Zahlung.",
       "tab_clients": "Kunden & Aufträge",
       "tab_quotes": "Angebote",
@@ -13430,7 +13432,7 @@
       "title": "KUMANI Laden",
       "short": "Laden",
       "tagline": "Verkaufen und Kunden zurückholen",
-      "description": "Der Online-Shop, die Speisekarte deines Lokals mit QR am Tisch, die Kundenkarte Kumi Card und Angebote zum Teilen.",
+      "description": "Der Online-Shop, die Speisekarte deines Lokals mit QR am Tisch und die Kundenkarte Kumi Card.",
       "tab_shop": "Online-Shop",
       "tab_menu": "Speisekarte",
       "tab_card": "Kumi Card",
@@ -13467,6 +13469,8 @@
     "metaTitle": "KUMANI kommt bald",
     "eyebrow": "Fast geschafft",
     "title": "KUMANI kommt bald",
-    "subtitle": "Eine einzige App, die dich vor Betrug schützt, deine Finanzen verwaltet, dein Geschäft wachsen lässt und dir guttut. Wir legen gerade letzte Hand an."
+    "subtitle": "Eine einzige App, die dich vor Betrug schützt, deine Finanzen verwaltet, dein Geschäft wachsen lässt und dir guttut. Wir legen gerade letzte Hand an.",
+    "community": "Community",
+    "slogan": "Die Community, die sich gegenseitig hilft"
   }
 }

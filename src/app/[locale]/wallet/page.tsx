@@ -30,6 +30,7 @@ import { listMyVouchers } from '@/app/actions/vouchers'
 import { listMyRedemptions } from '@/app/actions/rewards'
 import { isRewardsCatalogEnabled } from '@/lib/rewardsCatalog'
 import WalletMembershipCard from '@/components/WalletMembershipCard'
+import { getAppCounts } from '@/lib/appCounts'
 import WalletDonations from '@/components/donations/WalletDonations'
 import { getPublicDonationSummary } from '@/lib/donationsPublic'
 import { getMyDonations } from '@/app/actions/donations'
@@ -89,7 +90,7 @@ function WalletSection({
 
 export default async function WalletPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
-  const [t, td, tg, ts, supabase] = await Promise.all([getTranslations('wallet'), getTranslations('dashboard'), getTranslations('gifts'), getTranslations('surprise'), createClient()])
+  const [t, td, tg, ts, supabase, appCounts] = await Promise.all([getTranslations('wallet'), getTranslations('dashboard'), getTranslations('gifts'), getTranslations('surprise'), createClient(), getAppCounts()])
   // Utente letto una volta sola per la pagina e la sua intestazione
   preloadSession()
   const user = await getSessionUser()
@@ -241,6 +242,7 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
             rankLabel={currentRank ? td(currentRank.labelKey) : null}
             validUntil={planName && profile.subscription_expires_at ? new Date(profile.subscription_expires_at).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' }) : null}
             qrUrl={referralUrl}
+            counts={appCounts}
           />
         </WalletSection>
 

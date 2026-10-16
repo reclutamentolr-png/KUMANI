@@ -28,7 +28,8 @@ import DeckDownloadButton from '@/components/documents/DeckDownloadButton'
 import FlyerGrid from '@/components/flyers/FlyerGrid'
 import { createClient } from '@/lib/supabase/server'
 import { listKumaniDocuments, listPersonalDocuments } from '@/lib/documentsData'
-import { getFlyerTitles, listPublishedFlyers } from '@/lib/flyersData'
+import { getFlyerHubNames, getFlyerTitles, listPublishedFlyers } from '@/lib/flyersData'
+import { SERVICE_HUBS, TOOL_HUB } from '@/lib/serviceHubs'
 import { FLYERS } from '@/lib/flyers'
 import { DOC_LOCALES, pickLocalized, type DocLocale, type KumaniDocFile, type PersonalDocKind } from '@/lib/documents'
 import AppHeader from '@/components/nav/AppHeader'
@@ -140,10 +141,11 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
   )
 
   async function kumaniTab() {
-    const [docs, published, flyerTitles, catalog, catalogT, flyersT] = await Promise.all([
+    const [docs, published, flyerTitles, flyerHubs, catalog, catalogT, flyersT] = await Promise.all([
       listKumaniDocuments(supabase),
       listPublishedFlyers(supabase),
       getFlyerTitles(),
+      getFlyerHubNames(),
       getCatalog(locale),
       getTranslations('catalog'),
       getTranslations('flyers'),
@@ -253,7 +255,15 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
               <Megaphone className="h-5 w-5 text-[var(--gold)]" /> {flyersT('sectionTitle')}
             </h2>
             <p className="mt-1 text-sm text-[var(--muted)]">{flyersT('sectionIntro')}</p>
-            <FlyerGrid items={flyers.map((f) => ({ tool: f.tool, title: flyerTitles[f.tool] ?? f.tool, categoryKey: f.category, category: flyersT(`cat_${f.category}`) }))} />
+            {/* Un box per servizio unito (nell'ordine dei servizi), poi le altre aree */}
+            <FlyerGrid
+              items={flyers
+                .map((f) => {
+                  const hub = TOOL_HUB[f.tool]
+                  return { tool: f.tool, title: flyerTitles[f.tool] ?? f.tool, categoryKey: hub ? `hub-${hub}` : f.category, category: hub ? flyerHubs[f.tool] : flyersT(`cat_${f.category}`), order: hub ? SERVICE_HUBS.indexOf(hub) : SERVICE_HUBS.length }
+                })
+                .sort((a, b) => a.order - b.order)}
+            />
           </div>
         )}
       </section>

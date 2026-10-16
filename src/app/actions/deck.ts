@@ -3,7 +3,7 @@
 import { getMessages, getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { DOC_LOCALES, type DocLocale } from '@/lib/documents'
-import { deckCatalog, deckServices } from '@/lib/deck/deckData'
+import { deckCatalog, deckServices, fillHubNames } from '@/lib/deck/deckData'
 import { getSurprisePrices } from '@/lib/surpriseServer'
 import type { DeckCatalogGroup, DeckPlan, DeckVariant } from '@/lib/deck/types'
 
@@ -40,10 +40,11 @@ export async function getDeckTexts(
   if (!DOC_LOCALES.includes(locale as DocLocale)) return { error: 'locale' }
   const messages = (await getMessages({ locale })) as Record<string, unknown>
   if (!messages.deckTexts) return { error: 'missing' }
-  const [td, tm, th, { data: settings }, { data: donation }] = await Promise.all([
+  const [td, tm, th, tsh, { data: settings }, { data: donation }] = await Promise.all([
     getTranslations({ locale, namespace: 'deckTexts' }),
     getTranslations({ locale, namespace: 'marketplace' }),
     getTranslations({ locale, namespace: 'hub' }),
+    getTranslations({ locale, namespace: 'serviceHubs' }),
     supabase.from('marketplace_settings').select('tool_name, is_enabled, required_plan, pass_enabled, pass_price_cents'),
     // Percentuale di ogni abbonamento donata (Admin → Donazioni)
     supabase.rpc('donation_public_summary'),
@@ -62,9 +63,17 @@ export async function getDeckTexts(
   // Servizi accesi e quanti sono per piano: i numeri vanno nei testi ({price}
   // resta, lo riempie il browser con il prezzo formattato)
   const enabled = new Map(on.map((r) => [r.tool_name, r.required_plan ?? 'free']))
-  const { services, counts } = deckServices(enabled, (key) => tm(key), { name: td('full.chatName'), description: td('full.chatDesc') })
+  const { services, counts } = deckServices(enabled, (key) => tm(key), { name: td('full.chatName'), description: td('full.chatDesc') }, (key) => tsh(key))
   const texts = structuredClone(messages.deckTexts) as Record<string, unknown>
   for (const key of COUNTED_KEYS) setPath(texts, key, td(key, { ...counts, price: '{price}' }))
+  // Nomi dei servizi uniti ({name_…}, {hub_…}, {tab_…}) come nella barra dell'app
+  const fillAll = (node: Record<string, unknown>) => {
+    for (const [key, value] of Object.entries(node)) {
+      if (typeof value === 'string') node[key] = fillHubNames(value, enabled, (k) => tsh(k))
+      else if (value && typeof value === 'object') fillAll(value as Record<string, unknown>)
+    }
+  }
+  fillAll(texts)
   // KUMANI Sorpresa: prezzo più basso (Admin), nel formato della lingua
   const surprise = texts.surprise as { badge?: string } | undefined
   if (surprise?.badge) {

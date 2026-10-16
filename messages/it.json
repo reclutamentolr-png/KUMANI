@@ -2836,7 +2836,7 @@
     "shareCardTitle": "Il tuo biglietto da visita KUMANI",
     "shareCardIntro": "Ecco l’anteprima. Puoi modificare la presentazione prima di inviarla: il QR porta al tuo link di invito.",
     "shareCardTextLabel": "Presentazione (modificabile)",
-    "shareCardDefaultText": "KUMANI è un ecosistema di oltre 40 servizi digitali in un'unica app: sicurezza online, organizzazione, benessere e strumenti per chi lavora, con una community che si aiuta. Un solo abbonamento, tutto incluso.",
+    "shareCardDefaultText": "KUMANI è un'unica app con {tools} strumenti in {services} servizi: sicurezza online, organizzazione, benessere e strumenti per chi lavora, con una community che si aiuta. Un solo abbonamento, tutto incluso.",
     "shareCardHeadline": "Le tue idee, le nostre mani. Insieme.",
     "shareCardMember": "Membro KUMANI",
     "shareCardScan": "Inquadra il QR per scoprire KUMANI",
@@ -6448,7 +6448,9 @@
     "membersLogin": "Accedi",
     "howItWorks": "Come funziona",
     "howItWorksService": "Come funziona {service}",
-    "backToDashboard": "Torna alla dashboard"
+    "backToDashboard": "Torna alla dashboard",
+    "hubBarTitle": "Fa parte di {hub}.",
+    "hubBarText": "Dalla barra in cima alla pagina passi con un tocco a {tabs}."
   },
   "tour": {
     "stepOf": "Passo {n} di {total}",
@@ -6630,7 +6632,7 @@
     "cat_community": "Community",
     "cat_pro": "Per la tua attività",
     "sectionTitle": "Volantini dei servizi",
-    "sectionIntro": "Un volantino per ogni servizio, da condividere su WhatsApp e social o da stampare. Il QR porta al tuo link di invito personale.",
+    "sectionIntro": "Un volantino per ogni strumento, raggruppati per servizio, da condividere su WhatsApp e social o da stampare. Il QR porta al tuo link di invito personale.",
     "image": "Immagine",
     "pdf": "PDF",
     "preview": "Anteprima",
@@ -7148,7 +7150,8 @@
     },
     "includedSurprise": "Per tutti, anche con l’account gratuito",
     "priceSurprise": "Da {price} a sorpresa",
-    "surpriseNote": "La crei e la provi gratis: paghi solo quando la attivi."
+    "surpriseNote": "La crei e la provi gratis: paghi solo quando la attivi.",
+    "partOf": "Fa parte di {hub}"
   },
   "guideTexts": {
     "categories": {
@@ -8127,27 +8130,27 @@
       "areas": {
         "1": {
           "1": "Farsi conoscere",
-          "2": "QR Code, Link in Bio, Messaggi WhatsApp, Firma Email, KUMANI Menu, Kumi Card"
+          "2": "{hub_vetrina}, {name_negozio}, {name_qr}"
         },
         "2": {
           "1": "Sicurezza anti-truffa",
-          "2": "Rete Anti-Truffa, SVAT, VeriFoto, CheckMail, Verifica IBAN, Scudo Dati, Documento Sicuro, Manuale Anti-Truffa"
+          "2": "{hub_controlla}, {name_proteggi}, {name_segnala}"
         },
         "3": {
           "1": "Organizzazione",
-          "2": "MemoLife, Life Calendar, Spendly, Kumani Garage, KUMANI Casa, Findo, KUMANI Travel, KUMANI CV"
+          "2": "{name_agenda}, {hub_spendly}, {name_casaauto}, KUMANI Travel"
         },
         "4": {
           "1": "Benessere",
-          "2": "Neurobalance, Aureya, Oxygen, Mandala, KUMANI Focus"
+          "2": "{hub_benessere}"
         },
         "5": {
           "1": "Lavoro",
-          "2": "Trova Lavoro, Preventivi, Clienti e Lavori, Ricevute Digitali, Magazzino PRO, Calcolatrici PRO, Firma PDF, Hoplà"
+          "2": "{name_lavoro}, {hub_gestione}, {name_ufficio}"
         },
         "6": {
           "1": "Community e svago",
-          "2": "Bacheca, Kordata, Banca del Tempo, Events, Affinity, Veritas, Mosaic, Fabula, Nexus"
+          "2": "Bacheca, Kordata, Banca del Tempo, Events, Affinity, {hub_giochi}"
         }
       },
       "notes": "I servizi sono divisi in sei aree: farsi conoscere, sicurezza contro le truffe, organizzazione personale, benessere, lavoro, community e svago. Si entra con un solo account."
@@ -8169,7 +8172,7 @@
           "2": "il QR al tavolo porta ai tuoi contatti"
         },
         "4": {
-          "1": "Preventivi e Clienti e Lavori",
+          "1": "{name_gestione}",
           "2": "dal preventivo al lavoro, fino all’incasso"
         },
         "5": {
@@ -8181,7 +8184,7 @@
           "2": "una scelta, tutti i tuoi servizi"
         }
       },
-      "notes": "La forza di KUMANI è che gli strumenti si parlano. L’agenda raccoglie appuntamenti, bollette e scadenze. I viaggi finiscono nel calendario. Il menù del ristorante porta alla Kumi Card. Un preventivo accettato diventa un lavoro in Clienti e Lavori, fino all’incasso. I colori del brand si scelgono una volta e li usano tutti i servizi. E ogni strumento usato fa crescere i KU Karma nel wallet."
+      "notes": "La forza di KUMANI è che gli strumenti si parlano. L’agenda raccoglie appuntamenti, bollette e scadenze. I viaggi finiscono nel calendario. Il menù del ristorante porta alla Kumi Card. Un preventivo accettato diventa un lavoro in {name_gestione}, fino all’incasso. I colori del brand si scelgono una volta e li usano tutti i servizi. E ogni strumento usato fa crescere i KU Karma nel wallet."
     },
     "s8": {
       "title": "Tre piani, un prezzo onesto",
@@ -8193,7 +8196,7 @@
           "3": "per sempre",
           "4": "Per iniziare, senza carta di credito",
           "5": "{free, plural, one {# servizio incluso} other {# servizi inclusi}}",
-          "6": "Rete Anti-Truffa, QR Code, Messaggi WhatsApp, Verifica IBAN, Bacheca, Kordata, Banca del Tempo, giochi e benessere"
+          "6": "{name_segnala}, QR Code, Messaggi WhatsApp, {tab_controlla_iban}, Bacheca, Kordata, Banca del Tempo, giochi e benessere"
         },
         "2": {
           "1": "Base",
@@ -8201,7 +8204,7 @@
           "3": "all’anno",
           "4": "Per privati e famiglie",
           "5": "Tutto il Gratis + {base, plural, one {# servizio} other {# servizi}}",
-          "6": "MemoLife, Spendly, Life Calendar, Kumani Garage, KUMANI Casa, Link in Bio, SVAT, CheckMail, Neurobalance, Travel, Trova Lavoro, Firma PDF, Hoplà"
+          "6": "{name_agenda}, {name_spendly}, {name_casaauto}, Link in Bio, {name_controlla}, Neurobalance, Travel, {name_lavoro}, {name_ufficio}"
         },
         "3": {
           "1": "Pro",
@@ -8209,7 +8212,7 @@
           "3": "all’anno",
           "4": "Per chi lavora con i clienti",
           "5": "Tutto il Base + {pro, plural, one {# servizio Pro} other {# servizi Pro}}",
-          "6": "KUMANI Menu, Kumi Card, Preventivi, Clienti e Lavori, Ricevute Digitali, Magazzino, QR Code PRO, Landing Page. 15 giorni gratis."
+          "6": "{hub_gestione}, KUMANI Menu, Kumi Card, QR Code PRO, Landing Page. 15 giorni gratis."
         }
       },
       "passBold": "Ti serve un solo servizio? ",
@@ -8237,7 +8240,7 @@
           "2": "Consegne e acconti confermati dal cliente"
         },
         "5": {
-          "1": "Magazzino PRO",
+          "1": "{tabname_gestione_warehouse}",
           "2": "Giacenze e codici a barre dal telefono"
         },
         "6": {
@@ -8245,38 +8248,38 @@
           "2": "Cambi destinazione e conti le scansioni"
         }
       },
-      "notes": "Per i professionisti il piano Pro aggiunge strumenti concreti: il menù con QR al tavolo, la tessera fedeltà digitale, preventivi e ricevute in pochi tocchi, Clienti e Lavori per seguire clienti, lavori e incassi, il magazzino e i QR tracciabili. In più l’Area Professionisti e la possibilità di diventare fornitori delle Kordate."
+      "notes": "Per i professionisti il piano Pro aggiunge strumenti concreti: il menù con QR al tavolo, la tessera fedeltà digitale, preventivi e ricevute in pochi tocchi, {name_gestione} per seguire clienti, lavori e incassi, il magazzino e i QR tracciabili. In più l’Area Professionisti e la possibilità di diventare fornitori delle Kordate."
     },
     "s10": {
       "title": "Più sicuri contro le truffe online",
       "sub": "Controlli in pochi secondi, prima di fidarsi, pagare o inviare un documento.",
       "items": {
         "1": {
-          "1": "SVAT",
+          "1": "{tab_controlla_site}",
           "2": "Punteggio di rischio di un sito o di un’azienda"
         },
         "2": {
-          "1": "VeriFoto",
+          "1": "{tab_controlla_photo}",
           "2": "Scopre se una foto è generata o ritoccata con l’AI"
         },
         "3": {
-          "1": "CheckMail",
+          "1": "{tab_controlla_email}",
           "2": "Analizza un’email sospetta: mittente, link, allegati"
         },
         "4": {
-          "1": "Verifica IBAN",
+          "1": "{tab_controlla_iban}",
           "2": "Controlla l’IBAN prima di un bonifico · gratis"
         },
         "5": {
-          "1": "Documento Sicuro",
+          "1": "{tab_proteggi_documents}",
           "2": "Filigrana e dati oscurati prima di inviare un documento"
         },
         "6": {
-          "1": "Manuale Anti-Truffa",
+          "1": "{tab_segnala_manual}",
           "2": "I raggiri più diffusi e cosa fare subito · gratis"
         }
       },
-      "notes": "Le truffe online sono un problema per chiunque lavori in rete. KUMANI offre sei strumenti: verifica di siti e aziende, foto false, email sospette, IBAN, protezione dei documenti e un manuale aggiornato. Verifica IBAN e Manuale sono gratis per tutti. I risultati sono indizi automatici, non una garanzia."
+      "notes": "Le truffe online sono un problema per chiunque lavori in rete. KUMANI le affronta con tre servizi: {name_controlla} controlla siti e aziende, email sospette, foto false, IBAN e numeri di telefono; {name_proteggi} protegge i tuoi dati e i documenti prima di inviarli; {name_segnala} raccoglie le segnalazioni della community e il manuale aggiornato. Il controllo dell’IBAN e il Manuale sono gratis per tutti. I risultati sono indizi automatici, non una garanzia."
     },
     "s11": {
       "title": "Una community che si dà una mano",
@@ -8469,7 +8472,7 @@
       "notes": "Molti professionisti non hanno un sito o non vogliono pagarne uno. Con la Landing Page lo creano dal telefono in pochi minuti: rispondono a cinque domande e l’AI scrive la presentazione, poi scelgono modello, colore, foto e blocchi. La pagina ha un indirizzo su kumani.io, è pronta per Google e i clienti scrivono dal modulo Scrivimi: il messaggio arriva in dashboard e con una notifica sul telefono. È inclusa nel Pro e si può anche acquistare da sola."
     },
     "clienti": {
-      "title": "Clienti e Lavori",
+      "title": "{name_gestione}",
       "sub": "Clienti, lavori, tempo e incassi in un solo posto, dal telefono.",
       "rows": {
         "1": {
@@ -8490,7 +8493,7 @@
         }
       },
       "badge": "Incluso nel piano Pro · collegato a Preventivi, Shop e Ricevute",
-      "notes": "Clienti e Lavori è il gestionale tascabile di chi lavora con i clienti, soprattutto artigiani. Ogni preventivo salvato crea la scheda del cliente; da un preventivo accettato nasce il lavoro, con stato, cose da fare, cronometro, materiali e spese, e il margine si calcola da solo. I pagamenti ricevuti si registrano anche in contanti o con bonifico, con la ricevuta digitale in un tocco. Ogni mattina la sezione Oggi dice chi sentire e cosa incassare, e i dati si esportano per il commercialista."
+      "notes": "{name_gestione} è il gestionale tascabile di chi lavora con i clienti, soprattutto artigiani. Ogni preventivo salvato crea la scheda del cliente; da un preventivo accettato nasce il lavoro, con stato, cose da fare, cronometro, materiali e spese, e il margine si calcola da solo. I pagamenti ricevuti si registrano anche in contanti o con bonifico, con la ricevuta digitale in un tocco. Ogni mattina la sezione Oggi dice chi sentire e cosa incassare, e i dati si esportano per il commercialista."
     },
     "antitruffa": {
       "title": "Rete Anti-Truffa",
@@ -8502,7 +8505,7 @@
         },
         "2": {
           "1": "Avvisi nei controlli",
-          "2": "Dopo la conferma dello Staff, chi controlla lo stesso dato con SVAT, Verifica IBAN o CheckMail vede l’avviso."
+          "2": "Dopo la conferma dello Staff, chi controlla lo stesso dato con {name_controlla} vede l’avviso."
         },
         "3": {
           "1": "Chi mi ha chiamato?",
@@ -8519,7 +8522,7 @@
     "full": {
       "section": "Tutti i servizi",
       "title": "Tutti i servizi KUMANI",
-      "sub": "{total, plural, one {# servizio} other {# servizi}} divisi per bisogno, uno per uno.",
+      "sub": "{total, plural, one {# servizio} other {# servizi}} con {tools} strumenti, divisi per bisogno.",
       "legend": "Il bollino colorato indica il piano che include il servizio.",
       "count": "{count, plural, one {# servizio} other {# servizi}}",
       "groupSub": "{count, plural, one {# servizio} other {# servizi}} · Tutti i servizi KUMANI",
@@ -10062,7 +10065,6 @@
     "nav_wallet": "Wallet",
     "nav_profile": "Profilo",
     "servicesTitle": "Servizi",
-    "servicesSubtitle": "{count, plural, one {# servizio} other {# servizi}}, divisi per quello che ti serve",
     "searchPlaceholder": "Cerca un servizio…",
     "clearSearch": "Cancella la ricerca",
     "filtersLabel": "Filtra i servizi",
@@ -13409,7 +13411,7 @@
     "gestione": {
       "title": "Gestione attività",
       "short": "Attività",
-      "tagline": "Clienti, preventivi, ricevute e magazzino",
+      "tagline": "Clienti, preventivi, ricevute, magazzino e calcolatrici",
       "description": "I tuoi clienti e i lavori, i preventivi, le ricevute digitali, il magazzino e le calcolatrici per i conti: tutto collegato, dal primo contatto all’incasso.",
       "tab_clients": "Clienti e lavori",
       "tab_quotes": "Preventivi",
@@ -13430,7 +13432,7 @@
       "title": "KUMANI Negozio",
       "short": "Negozio",
       "tagline": "Vendi e fai tornare i clienti",
-      "description": "Il negozio online, il menù del locale con il QR al tavolo, la tessera fedeltà Kumi Card e le offerte pronte da condividere.",
+      "description": "Il negozio online, il menù del locale con il QR al tavolo e la tessera fedeltà Kumi Card.",
       "tab_shop": "Shop online",
       "tab_menu": "Menu",
       "tab_card": "Kumi Card",
@@ -13467,6 +13469,8 @@
     "metaTitle": "KUMANI sta arrivando",
     "eyebrow": "Ci siamo quasi",
     "title": "KUMANI sta arrivando",
-    "subtitle": "Un’app sola per proteggerti dalle truffe, gestire i tuoi conti, far crescere la tua attività e prenderti cura di te. Stiamo dando gli ultimi ritocchi."
+    "subtitle": "Un’app sola per proteggerti dalle truffe, gestire i tuoi conti, far crescere la tua attività e prenderti cura di te. Stiamo dando gli ultimi ritocchi.",
+    "community": "Community",
+    "slogan": "La Community che si dà una mano"
   }
 }

@@ -11,6 +11,8 @@ type Props = {
   planName: string | null
   rankLabel: string | null
   shareUrl: string
+  // «50 strumenti in 22 servizi» (lib/appCounts), per il testo proposto
+  counts: { tools: number; services: number }
 }
 
 const W = 1080
@@ -43,10 +45,10 @@ function wrapLines(ctx: CanvasRenderingContext2D, text: string, maxWidth: number
 
 // Biglietto da visita KUMANI da condividere: immagine con nome, piano,
 // presentazione di KUMANI (modificabile) e QR del proprio link di invito.
-export default function MembershipShareCard({ firstName, lastName, memberId, planName, rankLabel, shareUrl }: Props) {
+export default function MembershipShareCard({ firstName, lastName, memberId, planName, rankLabel, shareUrl, counts }: Props) {
   const t = useTranslations('wallet')
   const [open, setOpen] = useState(false)
-  const [text, setText] = useState(t('shareCardDefaultText'))
+  const [text, setText] = useState(() => t('shareCardDefaultText', counts))
   const [copied, setCopied] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const assets = useRef<{ logo: HTMLImageElement | null; qr: HTMLImageElement | null }>({ logo: null, qr: null })
@@ -228,7 +230,7 @@ export default function MembershipShareCard({ firstName, lastName, memberId, pla
                   <span>
                     {text.length}/{MAX_TEXT}
                   </span>
-                  <button type="button" onClick={() => setText(t('shareCardDefaultText'))} className="inline-flex items-center gap-1 font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
+                  <button type="button" onClick={() => setText(t('shareCardDefaultText', counts))} className="inline-flex items-center gap-1 font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
                     <RotateCcw className="h-3.5 w-3.5" /> {t('shareCardReset')}
                   </button>
                 </div>

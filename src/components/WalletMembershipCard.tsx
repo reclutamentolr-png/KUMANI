@@ -16,6 +16,8 @@ type Props = {
   // Scadenza dell'abbonamento attivo (già formattata), se c'è
   validUntil?: string | null
   qrUrl: string
+  // Numeri dell'app per il testo della scheda da condividere
+  counts: { tools: number; services: number }
 }
 
 export default function WalletMembershipCard({
@@ -28,6 +30,7 @@ export default function WalletMembershipCard({
   rankLabel,
   validUntil,
   qrUrl,
+  counts,
 }: Props) {
   const t = useTranslations('wallet')
 
@@ -90,6 +93,7 @@ export default function WalletMembershipCard({
       planName={planName ?? null}
       rankLabel={rankLabel}
       shareUrl={qrUrl}
+      counts={counts}
     />
     <p className="mt-2 text-center text-xs text-[var(--muted)]">{t('shareCardHint')}</p>
     </div>

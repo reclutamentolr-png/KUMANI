@@ -3,7 +3,7 @@
 // (Rete Anti-Truffa); poi KUMANI Benessere, KUMANI Giochi, QR Code, Spendly,
 // KUMANI Lavoro (CV e offerte), Gestione attività (clienti, preventivi, ricevute,
 // magazzino, calcolatrici), KUMANI Ufficio (Firma PDF, Firma Email, Hoplà),
-// KUMANI Negozio (Shop, Menu, Kumi Card, OfferMaker), Farti conoscere (Link in
+// KUMANI Negozio (Shop, Menu, Kumi Card e OfferMaker, se acceso), Farti conoscere (Link in
 // Bio, Landing Page, Messaggi WhatsApp), KUMANI Agenda (MemoLife, Life
 // Calendar) e Casa e auto (Casa, Garage, Findo). Gli strumenti
 // restano dove sono (indirizzi, piani, KU Karma, guide e volantini non
@@ -209,8 +209,8 @@ export function hubTabKey(toolName: string): string | null {
   return hub ? (HUB_TABS[hub].find((tab) => tab.tool === toolName)?.key ?? null) : null
 }
 
-// Sostituisce gli strumenti di sicurezza con i tre servizi, nella posizione
-// del primo di ciascuno; make riceve gli strumenti presenti di quel servizio
+// Sostituisce gli strumenti di ogni servizio unito con il servizio, nella
+// posizione del primo; make riceve gli strumenti presenti di quel servizio
 export function collapseByHub<T extends { toolName: string }>(items: T[], make: (hub: ServiceHub, members: T[]) => T | null): T[] {
   const out: T[] = []
   const done = new Set<ServiceHub>()

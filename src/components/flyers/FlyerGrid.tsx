@@ -9,6 +9,8 @@ import Link from '@/components/LocalizedLink'
 // per nome del servizio (o area): cercando, i risultati si vedono tutti
 type Item = { tool: string; title: string; categoryKey: string; category: string }
 
+// Prima i servizi uniti (categoryKey «hub-…», già in ordine), poi le aree
+
 const CATEGORY_ORDER = ['pro', 'marketing', 'security', 'personal', 'lavoro', 'wellness', 'svago', 'community']
 
 const norm = (s: string) => s.toLocaleLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '')
@@ -18,7 +20,7 @@ export default function FlyerGrid({ items }: { items: Item[] }) {
   const [q, setQ] = useState('')
   const query = norm(q.trim())
   const shown = query ? items.filter((i) => norm(`${i.title} ${i.category} ${i.tool}`).includes(query)) : items
-  const keys = [...CATEGORY_ORDER, ...items.map((i) => i.categoryKey).filter((k) => !CATEGORY_ORDER.includes(k))]
+  const keys = [...items.map((i) => i.categoryKey).filter((k) => k.startsWith('hub-')), ...CATEGORY_ORDER, ...items.map((i) => i.categoryKey)]
   const groups = [...new Set(keys)]
     .map((key) => ({ key, items: items.filter((i) => i.categoryKey === key) }))
     .filter((g) => g.items.length > 0)

@@ -44,8 +44,10 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      <AppHeader title={t('servicesTitle')} subtitle={t('servicesSubtitle', { count: items.length })} />
+      {/* Senza la fascia del titolo: la pagina parte subito dal catalogo e dai servizi */}
+      <AppHeader />
       <main className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
+        <h1 className="sr-only">{t('servicesTitle')}</h1>
         {/* Il catalogo: come funziona ogni servizio, per categorie (anche in PDF) */}
         <Link
           href="/catalogo"

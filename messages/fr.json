@@ -2782,7 +2782,7 @@
     "shareCardTitle": "Votre carte de visite KUMANI",
     "shareCardIntro": "Voici l'aperçu. Vous pouvez modifier la présentation avant de l'envoyer : le QR code mène à votre lien d'invitation.",
     "shareCardTextLabel": "Présentation (modifiable)",
-    "shareCardDefaultText": "KUMANI est un écosystème de plus de 40 services numériques dans une seule appli : sécurité en ligne, organisation, bien-être et outils pour le travail, avec une communauté qui s'entraide. Un seul abonnement, tout compris.",
+    "shareCardDefaultText": "KUMANI est une seule appli avec {tools} outils dans {services} services : sécurité en ligne, organisation, bien-être et outils pour le travail, avec une communauté qui s'entraide. Un seul abonnement, tout compris.",
     "shareCardHeadline": "Vos idées, nos mains. Ensemble.",
     "shareCardMember": "Membre KUMANI",
     "shareCardScan": "Scannez le QR code pour découvrir KUMANI",
@@ -6448,7 +6448,9 @@
     "membersLogin": "Se connecter",
     "howItWorks": "Comment ça marche",
     "howItWorksService": "Comment fonctionne {service}",
-    "backToDashboard": "Retour au tableau de bord"
+    "backToDashboard": "Retour au tableau de bord",
+    "hubBarTitle": "Fait partie de {hub}.",
+    "hubBarText": "Depuis la barre en haut de la page, tu passes en un geste à {tabs}."
   },
   "tour": {
     "stepOf": "Étape {n} sur {total}",
@@ -6630,7 +6632,7 @@
     "cat_community": "Communauté",
     "cat_pro": "Pour votre activité",
     "sectionTitle": "Flyers des services",
-    "sectionIntro": "Un flyer pour chaque service, à partager sur WhatsApp et les réseaux sociaux ou à imprimer. Le QR mène à votre lien d’invitation personnel.",
+    "sectionIntro": "Un flyer pour chaque outil, regroupés par service, à partager sur WhatsApp et les réseaux sociaux ou à imprimer. Le QR mène à votre lien d’invitation personnel.",
     "image": "Image",
     "pdf": "PDF",
     "preview": "Aperçu",
@@ -7148,7 +7150,8 @@
     },
     "includedSurprise": "Pour tous, même avec le compte gratuit",
     "priceSurprise": "À partir de {price} la surprise",
-    "surpriseNote": "Vous la créez et l’essayez gratuitement : vous ne payez qu’à l’activation."
+    "surpriseNote": "Vous la créez et l’essayez gratuitement : vous ne payez qu’à l’activation.",
+    "partOf": "Fait partie de {hub}"
   },
   "guideTexts": {
     "categories": {
@@ -8127,27 +8130,27 @@
       "areas": {
         "1": {
           "1": "Se faire connaître",
-          "2": "QR Code, Link in Bio, Messages WhatsApp, Signature e-mail, KUMANI Menu, Kumi Card"
+          "2": "{hub_vetrina}, {name_negozio}, {name_qr}"
         },
         "2": {
           "1": "Sécurité anti-arnaque",
-          "2": "Réseau Anti-Arnaque, SVAT, VeriFoto, CheckMail, Vérification IBAN, Bouclier Données, Document Sûr, Manuel anti-arnaques"
+          "2": "{hub_controlla}, {name_proteggi}, {name_segnala}"
         },
         "3": {
           "1": "Organisation",
-          "2": "MemoLife, Life Calendar, Spendly, Kumani Garage, KUMANI Casa, Findo, KUMANI Travel, KUMANI CV"
+          "2": "{name_agenda}, {hub_spendly}, {name_casaauto}, KUMANI Travel"
         },
         "4": {
           "1": "Bien-être",
-          "2": "Neurobalance, Aureya, Oxygen, Mandala, KUMANI Focus"
+          "2": "{hub_benessere}"
         },
         "5": {
           "1": "Travail",
-          "2": "Trouver un emploi, Devis, Clients et Chantiers, Reçus numériques, Magazzino PRO, Calculatrices PRO, Signer un PDF, Hoplà"
+          "2": "{name_lavoro}, {hub_gestione}, {name_ufficio}"
         },
         "6": {
           "1": "Communauté et loisirs",
-          "2": "Annonces, Kordata, Time Bank, Events, Affinity, Veritas, Mosaic, Fabula, Nexus"
+          "2": "Annonces, Kordata, Time Bank, Events, Affinity, {hub_giochi}"
         }
       },
       "notes": "Les services sont répartis en six domaines : se faire connaître, se protéger des arnaques, s’organiser, bien-être, travail, communauté et loisirs. Un seul compte donne accès à tout."
@@ -8169,7 +8172,7 @@
           "2": "le QR à table mène à vos contacts"
         },
         "4": {
-          "1": "Devis et Clients et Chantiers",
+          "1": "{name_gestione}",
           "2": "du devis au chantier, jusqu’à l’encaissement"
         },
         "5": {
@@ -8181,7 +8184,7 @@
           "2": "un seul choix, tous vos services"
         }
       },
-      "notes": "La force de KUMANI, c’est que les outils se parlent. L’agenda réunit rendez-vous, factures et échéances. Les voyages arrivent dans le calendrier. Le menu du restaurant mène à la Kumi Card. Un devis accepté devient un chantier dans Clients et Chantiers, jusqu’à l’encaissement. Les couleurs de la marque se choisissent une fois et tous les services les utilisent. Et chaque outil utilisé fait grandir les KU Karma du wallet."
+      "notes": "La force de KUMANI, c’est que les outils se parlent. L’agenda réunit rendez-vous, factures et échéances. Les voyages arrivent dans le calendrier. Le menu du restaurant mène à la Kumi Card. Un devis accepté devient un chantier dans {name_gestione}, jusqu’à l’encaissement. Les couleurs de la marque se choisissent une fois et tous les services les utilisent. Et chaque outil utilisé fait grandir les KU Karma du wallet."
     },
     "s8": {
       "title": "Trois offres, un prix honnête",
@@ -8193,7 +8196,7 @@
           "3": "pour toujours",
           "4": "Pour commencer, sans carte bancaire",
           "5": "{free, plural, one {# service inclus} other {# services inclus}}",
-          "6": "Réseau Anti-Arnaque, QR Code, Messages WhatsApp, Vérification IBAN, Annonces, Kordata, Time Bank, jeux et bien-être"
+          "6": "{name_segnala}, QR Code, Messages WhatsApp, {tab_controlla_iban}, Annonces, Kordata, Time Bank, jeux et bien-être"
         },
         "2": {
           "1": "Base",
@@ -8201,7 +8204,7 @@
           "3": "par an",
           "4": "Pour les particuliers et les familles",
           "5": "Tout le Gratuit + {base, plural, one {# service} other {# services}}",
-          "6": "MemoLife, Spendly, Life Calendar, Kumani Garage, KUMANI Casa, Link in Bio, SVAT, CheckMail, Neurobalance, Travel, Trouver un emploi, Signer un PDF, Hoplà"
+          "6": "{name_agenda}, {name_spendly}, {name_casaauto}, Link in Bio, {name_controlla}, Neurobalance, Travel, {name_lavoro}, {name_ufficio}"
         },
         "3": {
           "1": "Pro",
@@ -8209,7 +8212,7 @@
           "3": "par an",
           "4": "Pour ceux qui travaillent avec des clients",
           "5": "Tout le Base + {pro, plural, one {# service Pro} other {# services Pro}}",
-          "6": "KUMANI Menu, Kumi Card, Devis, Clients et Chantiers, Reçus numériques, Magazzino, QR Code PRO, Landing Page. 15 jours gratuits."
+          "6": "{hub_gestione}, KUMANI Menu, Kumi Card, QR Code PRO, Landing Page. 15 jours gratuits."
         }
       },
       "passBold": "Besoin d’un seul service ? ",
@@ -8237,7 +8240,7 @@
           "2": "Livraisons et acomptes confirmés par le client"
         },
         "5": {
-          "1": "Magazzino PRO",
+          "1": "{tabname_gestione_warehouse}",
           "2": "Stocks et codes-barres depuis le téléphone"
         },
         "6": {
@@ -8245,38 +8248,38 @@
           "2": "Changez la destination et comptez les scans"
         }
       },
-      "notes": "Pour les professionnels, la formule Pro ajoute des outils concrets : le menu avec QR à table, la carte de fidélité numérique, devis et reçus en quelques gestes, Clients et Chantiers pour suivre clients, chantiers et encaissements, le stock et les QR traçables. En plus, l’Espace Professionnels et la possibilité de devenir fournisseur des Kordata."
+      "notes": "Pour les professionnels, la formule Pro ajoute des outils concrets : le menu avec QR à table, la carte de fidélité numérique, devis et reçus en quelques gestes, {name_gestione} pour suivre clients, chantiers et encaissements, le stock et les QR traçables. En plus, l’Espace Professionnels et la possibilité de devenir fournisseur des Kordata."
     },
     "s10": {
       "title": "Mieux protégés contre les arnaques",
       "sub": "Des vérifications en quelques secondes, avant de faire confiance, payer ou envoyer un document.",
       "items": {
         "1": {
-          "1": "SVAT",
+          "1": "{tab_controlla_site}",
           "2": "Score de risque d’un site ou d’une entreprise"
         },
         "2": {
-          "1": "VeriFoto",
+          "1": "{tab_controlla_photo}",
           "2": "Découvre si une photo a été générée ou retouchée par IA"
         },
         "3": {
-          "1": "CheckMail",
+          "1": "{tab_controlla_email}",
           "2": "Analyse un e-mail suspect : expéditeur, liens, pièces jointes"
         },
         "4": {
-          "1": "Vérification IBAN",
+          "1": "{tab_controlla_iban}",
           "2": "Contrôle l’IBAN avant un virement · gratuit"
         },
         "5": {
-          "1": "Document Sûr",
+          "1": "{tab_proteggi_documents}",
           "2": "Filigrane et données masquées avant d’envoyer un document"
         },
         "6": {
-          "1": "Manuel anti-arnaques",
+          "1": "{tab_segnala_manual}",
           "2": "Les arnaques les plus courantes et que faire · gratuit"
         }
       },
-      "notes": "Les arnaques en ligne sont un problème pour tous ceux qui travaillent sur internet. KUMANI propose six outils : vérification des sites et entreprises, fausses photos, e-mails suspects, IBAN, protection des documents et un manuel à jour. La Vérification IBAN et le Manuel sont gratuits pour tous. Les résultats sont des indices automatiques, pas une garantie."
+      "notes": "Les arnaques en ligne sont un problème pour quiconque travaille sur le web. KUMANI y répond avec trois services : {name_controlla} vérifie les sites et les entreprises, les e-mails suspects, les fausses photos, les IBAN et les numéros de téléphone ; {name_proteggi} protège tes données et tes documents avant de les envoyer ; {name_segnala} rassemble les signalements de la communauté et le manuel à jour. La vérification IBAN et le Manuel sont gratuits pour tous. Les résultats sont des indices automatiques, pas une garantie."
     },
     "s11": {
       "title": "Une communauté qui s’entraide",
@@ -8469,7 +8472,7 @@
       "notes": "Beaucoup de professionnels n’ont pas de site ou ne veulent pas en payer un. Avec la Landing Page, ils le créent depuis leur téléphone en quelques minutes : ils répondent à cinq questions et l’IA rédige la présentation, puis ils choisissent modèle, couleur, photos et blocs. La page a une adresse sur kumani.io, elle est prête pour Google et les clients écrivent via le formulaire « Écrivez-moi » : le message arrive dans le tableau de bord et en notification sur le téléphone. Elle est incluse dans l’offre Pro et peut aussi s’acheter seule."
     },
     "clienti": {
-      "title": "Clients et Chantiers",
+      "title": "{name_gestione}",
       "sub": "Clients, chantiers, temps et encaissements au même endroit, depuis le téléphone.",
       "rows": {
         "1": {
@@ -8482,7 +8485,7 @@
         },
         "3": {
           "1": "Temps et marge",
-          "2": "Chrono sur le chantier, matériaux aussi depuis Magazzino PRO et frais : vous voyez tout de suite ce qu’il vous reste."
+          "2": "Chrono sur le chantier, matériaux aussi depuis {tabname_gestione_warehouse} et frais : vous voyez tout de suite ce qu’il vous reste."
         },
         "4": {
           "1": "Encaissements et comptable",
@@ -8490,7 +8493,7 @@
         }
       },
       "badge": "Inclus dans la formule Pro · relié aux Devis, au Shop et aux Reçus",
-      "notes": "Clients et Chantiers est le gestionnaire de poche de ceux qui travaillent avec des clients, surtout les artisans. Chaque devis enregistré crée la fiche client ; un devis accepté devient un chantier, avec état, tâches, chrono, matériaux et frais, et la marge se calcule seule. Les paiements reçus s’enregistrent aussi en espèces ou par virement, avec le reçu numérique d’un geste. Chaque matin, la section Aujourd’hui indique qui contacter et quoi encaisser, et les données s’exportent pour le comptable."
+      "notes": "{name_gestione} est le gestionnaire de poche de ceux qui travaillent avec des clients, surtout les artisans. Chaque devis enregistré crée la fiche client ; un devis accepté devient un chantier, avec état, tâches, chrono, matériaux et frais, et la marge se calcule seule. Les paiements reçus s’enregistrent aussi en espèces ou par virement, avec le reçu numérique d’un geste. Chaque matin, la section Aujourd’hui indique qui contacter et quoi encaisser, et les données s’exportent pour le comptable."
     },
     "antitruffa": {
       "title": "Réseau Anti-Arnaque",
@@ -8502,7 +8505,7 @@
         },
         "2": {
           "1": "Alertes dans les vérifications",
-          "2": "Après confirmation du Staff, qui vérifie la même donnée avec SVAT, Vérification IBAN ou CheckMail voit l’alerte."
+          "2": "Après confirmation du Staff, qui vérifie la même donnée avec {name_controlla} voit l’alerte."
         },
         "3": {
           "1": "Qui m’a appelé ?",
@@ -8519,7 +8522,7 @@
     "full": {
       "section": "Tous les services",
       "title": "Tous les services KUMANI",
-      "sub": "{total, plural, one {# service} other {# services}} classés par besoin, un par un.",
+      "sub": "{total, plural, one {# service} other {# services}} avec {tools} outils, classés par besoin.",
       "legend": "La pastille de couleur indique l’offre qui inclut le service.",
       "count": "{count, plural, one {# service} other {# services}}",
       "groupSub": "{count, plural, one {# service} other {# services}} · Tous les services KUMANI",
@@ -10062,7 +10065,6 @@
     "nav_wallet": "Wallet",
     "nav_profile": "Profil",
     "servicesTitle": "Services",
-    "servicesSubtitle": "{count, plural, one {# service} other {# services}}, classés selon vos besoins",
     "searchPlaceholder": "Rechercher un service…",
     "clearSearch": "Effacer la recherche",
     "filtersLabel": "Filtrer les services",
@@ -13409,7 +13411,7 @@
     "gestione": {
       "title": "Gestion de l’activité",
       "short": "Activité",
-      "tagline": "Clients, devis, reçus et stock",
+      "tagline": "Clients, devis, reçus, stock et calculatrices",
       "description": "Tes clients et chantiers, les devis, les reçus numériques, le stock et les calculatrices pour les comptes : tout est relié, du premier contact à l’encaissement.",
       "tab_clients": "Clients et chantiers",
       "tab_quotes": "Devis",
@@ -13430,7 +13432,7 @@
       "title": "KUMANI Boutique",
       "short": "Boutique",
       "tagline": "Vends et fais revenir tes clients",
-      "description": "La boutique en ligne, le menu de ton établissement avec QR sur la table, la carte de fidélité Kumi Card et des offres prêtes à partager.",
+      "description": "La boutique en ligne, le menu de ton établissement avec QR sur la table et la carte de fidélité Kumi Card.",
       "tab_shop": "Boutique en ligne",
       "tab_menu": "Menu",
       "tab_card": "Kumi Card",
@@ -13467,6 +13469,8 @@
     "metaTitle": "KUMANI arrive",
     "eyebrow": "On y est presque",
     "title": "KUMANI arrive",
-    "subtitle": "Une seule app pour te protéger des arnaques, gérer tes comptes, développer ton activité et prendre soin de toi. Nous apportons les dernières retouches."
+    "subtitle": "Une seule app pour te protéger des arnaques, gérer tes comptes, développer ton activité et prendre soin de toi. Nous apportons les dernières retouches.",
+    "community": "Communauté",
+    "slogan": "La communauté qui s’entraide"
   }
 }

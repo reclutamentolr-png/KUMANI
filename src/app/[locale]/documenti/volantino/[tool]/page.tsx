@@ -7,7 +7,7 @@ import { createClient } from '@/lib/supabase/server'
 import { verifyAdmin } from '@/lib/verifyAdmin'
 import { SITE_URL } from '@/lib/siteUrl'
 import { getFlyer } from '@/lib/flyers'
-import { getFlyerPlan, getFlyerTitles, listPublishedFlyers } from '@/lib/flyersData'
+import { getFlyerHubNames, getFlyerPlan, getFlyerTitles, listPublishedFlyers } from '@/lib/flyersData'
 import FlyerView from '@/components/flyers/FlyerView'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -33,8 +33,9 @@ export default async function FlyerPage({ params }: { params: Promise<{ tool: st
   const published = await listPublishedFlyers(supabase)
   if (!published.has(tool) && !(await verifyAdmin('settings.read'))) notFound()
 
-  const [titles, plan, { data: profile }] = await Promise.all([
+  const [titles, hubNames, plan, { data: profile }] = await Promise.all([
     getFlyerTitles(),
+    getFlyerHubNames(),
     getFlyerPlan(supabase, tool),
     supabase.rpc('get_my_profile').maybeSingle<{ referral_code: string | null }>(),
   ])
@@ -56,7 +57,7 @@ export default async function FlyerPage({ params }: { params: Promise<{ tool: st
         </div>
       </header>
       <main className="mx-auto max-w-2xl px-4 py-6 sm:px-6 sm:py-10">
-        <FlyerView config={config} plan={plan} title={titles[tool] ?? tool} inviteUrl={inviteUrl} screenshotLang={locale === 'it' ? 'it' : 'en'} />
+        <FlyerView config={config} plan={plan} title={titles[tool] ?? tool} inviteUrl={inviteUrl} screenshotLang={locale === 'it' ? 'it' : 'en'} hubName={hubNames[tool] ?? null} />
       </main>
     </div>
   )
