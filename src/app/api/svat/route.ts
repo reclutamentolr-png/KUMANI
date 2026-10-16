@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { BRANDS, isOfficial, lookalikeBrand } from '@/lib/checkmail/engine'
 import { safeFetch } from '@/lib/safeFetch'
 import { createClient } from '@/lib/supabase/server'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
@@ -87,6 +88,7 @@ export async function POST(request: NextRequest) {
     const results = await Promise.allSettled([
       checkWHOIS(domain, whoisTextPromise),
       checkDomainAge(domain, whoisTextPromise),
+      checkLookalike(domain),
       checkSPF(domain),
       checkDMARC(domain),
       checkMX(domain),
@@ -199,6 +201,27 @@ async function checkWHOIS(domain: string, whoisTextPromise: Promise<string | nul
 }
 
 // 2. Età del dominio — data di creazione dal WHOIS (stessa lookup di checkWHOIS, condivisa)
+// Domini «sosia»: imita una banca, Poste, un corriere o un marchio noto
+// (paypa1.com, poste-italiane-verifica.com, amazon.top). Stesso elenco di
+// CheckMail; tutto calcolato qui, senza servizi esterni.
+async function checkLookalike(domain: string): Promise<SVATCheck | null> {
+  const fake = lookalikeBrand(domain)
+  if (fake)
+    return {
+      id: 'lookalike',
+      name: 'checkLookalike',
+      status: 'risk',
+      points: -45,
+      details: `Looks like ${fake.name} but is not an official domain`,
+      detailsKey: 'lookalikeRisk',
+      detailsInterp: { brand: fake.name, official: fake.domains[0] },
+    }
+  const official = BRANDS.find((brand) => isOfficial(domain, brand))
+  if (official)
+    return { id: 'lookalike', name: 'checkLookalike', status: 'ok', points: 10, details: `Official domain of ${official.name}`, detailsKey: 'lookalikeOfficial', detailsInterp: { brand: official.name } }
+  return null
+}
+
 async function checkDomainAge(domain: string, whoisTextPromise: Promise<string | null>): Promise<SVATCheck | null> {
   try {
     const data = await whoisTextPromise

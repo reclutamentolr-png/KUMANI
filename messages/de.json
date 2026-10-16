@@ -616,7 +616,8 @@
     "karmaTodayLogin": "Anmeldung",
     "karmaTodayBadge": "+{n} heute",
     "karmaTodayTitle": "Heute hast du {n} KU Karma bekommen:",
-    "karmaTodayNone": "Heute hast du noch kein KU Karma bekommen: Jeder Dienst, den du nutzt, gibt dir welches, einmal am Tag."
+    "karmaTodayNone": "Heute hast du noch kein KU Karma bekommen: Jeder Dienst, den du nutzt, gibt dir welches, einmal am Tag.",
+    "quickCheckTitle": "Kommt dir etwas komisch vor? Füge es hier ein"
   },
   "marketplace": {
     "fabula": "Kumani Fabula",
@@ -2076,7 +2077,10 @@
       "notAvailable": "Daten nicht verfügbar",
       "openAnyway": "Trotzdem öffnen"
     },
-    "securitySection": "Sicherheit & Schutz"
+    "securitySection": "Sicherheit & Schutz",
+    "checkLookalike": "Ähnlichkeit mit bekannten Seiten",
+    "lookalikeRisk": "Achtung: Sie ähnelt {brand}, ist aber keine offizielle Seite (die echte ist {official}). Das ist der häufigste Trick, um Daten und Geld zu stehlen.",
+    "lookalikeOfficial": "Offizielle Seite von {brand}."
   },
   "offermaker": {
     "aiLimitReached": "Du hast das Tageslimit für KI-Generierungen erreicht – versuch es morgen wieder.",
@@ -5366,7 +5370,9 @@
     "f_domain_new": "Die Domain {domain} ist neu ({days} Tage).",
     "f_sender_no_mx": "Die Absenderdomain ({domain}) kann keine E-Mails empfangen: gefälschte oder Wegwerfadresse.",
     "f_ai_high": "Die Textanalyse zeigt eine hohe Betrugswahrscheinlichkeit.",
-    "f_ai_medium": "Die Textanalyse findet verdächtige Elemente."
+    "f_ai_medium": "Die Textanalyse findet verdächtige Elemente.",
+    "dossierSubject": "Analysierte E-Mail",
+    "dossierLink": "Link zu: {domain}"
   },
   "oxygen": {
     "title": "OXYGEN",
@@ -5641,7 +5647,9 @@
     "antitruffaLink": "Anti-Betrugs-Handbuch",
     "antitruffaLinkText": "Die häufigsten Betrugsmaschen, mit echten Beispielen und was du sofort tun kannst.",
     "checkmailLink": "CheckMail",
-    "checkmailLinkText": "Hast du die IBAN in einer verdächtigen E-Mail bekommen? Prüfe sie hier."
+    "checkmailLinkText": "Hast du die IBAN in einer verdächtigen E-Mail bekommen? Prüfe sie hier.",
+    "dossierTool": "IBAN-Prüfung",
+    "dossierAdvice": "Eine richtig geschriebene IBAN garantiert nicht, dass der Empfänger ehrlich ist: Eine Echtzeitüberweisung lässt sich nicht rückgängig machen."
   },
   "scudoDati": {
     "badge": "Sicherheit · Kostenlos",
@@ -10688,10 +10696,10 @@
     "chatSafetyCheck": "Prüfen",
     "chatSafetyHint": "Bevor du zahlst oder einen Link von jemandem öffnest, den du nicht kennst, prüfe ihn.",
     "checkBoxTitle": "Jetzt prüfen",
-    "checkBoxText": "Füge eine IBAN, eine E-Mail, eine USt-IdNr., eine Website oder eine Telefonnummer ein: Ich bringe dich zum richtigen Werkzeug.",
-    "checkBoxPlaceholder": "IBAN, E-Mail, USt-IdNr., Website oder Telefon…",
+    "checkBoxText": "Füge einen Link, eine E-Mail, eine Nummer, eine IBAN, eine USt-IdNr. oder eine ganze SMS bzw. WhatsApp-Nachricht ein: Ich bringe dich zur richtigen Prüfung.",
+    "checkBoxPlaceholder": "Nachricht, Link oder Nummer hier einfügen…",
     "checkBoxButton": "Prüfen",
-    "checkBoxUnknown": "Ich erkenne nicht, was du geschrieben hast: Füge eine IBAN, eine E-Mail, eine USt-IdNr., eine Website-Adresse oder eine Telefonnummer ein.",
+    "checkBoxUnknown": "Ich habe nichts zum Prüfen gefunden: Füge einen Link, eine E-Mail, eine Telefonnummer, eine IBAN oder eine USt-IdNr. ein.",
     "tripSpendlyTitle": "Dein Anteil in Spendly",
     "tripSpendlyHint": "{count, plural, one {# geteilte Ausgabe} other {# geteilte Ausgaben}} mit dir, dein Anteil beträgt {total}: Füge ihn mit einem Tipp zu deinen Spendly-Ausgaben hinzu.",
     "tripSpendlyButton": "Zu Spendly hinzufügen",
@@ -10737,7 +10745,19 @@
     "wellnessMindHint": "Speichere oder teile ein Mandala-Bild oder höre 10 Minuten NeuroBalance.",
     "wellnessStepDone": "Heute erledigt ✓",
     "wellnessOpen": "{tool} öffnen",
-    "receiptFromPaymentBanner": "Beleg für die in Kunden & Aufträge erfasste Zahlung ({name})."
+    "receiptFromPaymentBanner": "Beleg für die in Kunden & Aufträge erfasste Zahlung ({name}).",
+    "checkBoxPhoto": "Ein Foto prüfen",
+    "checkBoxFound": "Ich habe {n} Dinge zum Prüfen gefunden: Tippe auf das, was du willst.",
+    "checkKind_site": "Website oder Link",
+    "checkKind_email": "E-Mail",
+    "checkKind_iban": "IBAN",
+    "checkKind_phone": "Telefonnummer",
+    "checkKind_vat": "USt-IdNr.",
+    "checkWith_site": "mit SVAT",
+    "checkWith_email": "mit CheckMail",
+    "checkWith_iban": "mit IBAN-Prüfung",
+    "checkWith_phone": "mit Wer hat mich angerufen?",
+    "checkWith_vat": "mit SVAT"
   },
   "businessProfile": {
     "title": "Firmenprofil",
@@ -12966,7 +12986,9 @@
       "type": "Art",
       "premium": "Kostenpflichtige Sondernummer: Ein Rückruf kann teuer werden. Ruf solche unbekannten Nummern nicht zurück.",
       "foreign": "Ausländische Nummer: Wenn du keine Anrufe aus dem Ausland erwartest, ruf nicht zurück.",
-      "report": "Diese Nummer melden"
+      "report": "Diese Nummer melden",
+      "dossierTool": "Wer hat mich angerufen?",
+      "dossierReported": "Von der Community gemeldete Nummer ({n})"
     },
     "phoneTypes": {
       "MOBILE": "Mobil",
@@ -13260,5 +13282,50 @@
     "error_login": "Melde dich an, um fortzufahren.",
     "recurringLineEvery": "alle {months} Monate am {day}. · zahlt {name}",
     "fromCasa": "aus KUMANI Casa"
+  },
+  "quickCheckPage": {
+    "metaTitle": "Erst prüfen, dann vertrauen · KUMANI",
+    "metaDescription": "Eine Nachricht, ein Link, eine Nummer oder eine IBAN kommen dir komisch vor? Füge sie in KUMANI ein und erfahre in Sekunden, ob es Betrug ist.",
+    "title": "Erst prüfen, dann vertrauen",
+    "intro": "Eine Paket-SMS, eine E-Mail der Bank, eine unbekannte Nummer, eine IBAN für eine Überweisung: Füge sie hier ein und erfahre in Sekunden, ob etwas nicht stimmt.",
+    "boxTitle": "Kommt dir etwas komisch vor? Füge es hier ein",
+    "whatTitle": "Was du prüfen kannst",
+    "what_site": "Websites und Links",
+    "what_site_text": "Seit wann es sie gibt, ob sie sicher ist, ob sie einer bekannten Seite ähnelt und ob sie gemeldet wurde.",
+    "what_email": "E-Mails",
+    "what_email_text": "Absender, Links, Anhänge und typische Phishing-Formulierungen.",
+    "what_phone": "Telefonnummern",
+    "what_phone_text": "Ob die Community sie gemeldet hat, aus welchem Land sie kommt und ob sie kostenpflichtig ist.",
+    "what_iban": "IBAN",
+    "what_iban_text": "Ob sie richtig geschrieben ist, zu welchem Land und welcher Bank sie gehört und worauf du vor der Überweisung achten solltest.",
+    "what_photo": "Fotos",
+    "what_photo_text": "Ob es mit künstlicher Intelligenz erstellt oder bearbeitet wurde und wo es sonst noch auftaucht.",
+    "shareTip": "Auf dem Handy, mit installierter KUMANI-App, kannst du bei einer Nachricht oder einem Link auch auf „Teilen“ tippen und KUMANI wählen: Die Prüfung startet von selbst.",
+    "joinTitle": "Registriere dich kostenlos, um zu prüfen",
+    "joinText": "IBAN, Telefonnummern und das Anti-Betrugs-Netz sind für alle kostenlos. Websites, E-Mails und Fotos sind im Base-Plan enthalten.",
+    "register": "Kostenlos registrieren",
+    "login": "Anmelden"
+  },
+  "dossier": {
+    "button": "PDF-Dossier herunterladen",
+    "title": "Prüfungsdossier",
+    "generated": "Erstellt am {date} · Code {code}",
+    "subject": "Was geprüft wurde",
+    "result": "Ergebnis",
+    "checks": "Durchgeführte Prüfungen",
+    "community": "Meldungen der KUMANI-Community",
+    "noCommunity": "Zum Zeitpunkt der Prüfung gab es keine bestätigten Meldungen im Anti-Betrugs-Netz.",
+    "communityMatch": "{value}: {n, plural, one {# bestätigte Meldung} other {# bestätigte Meldungen}} · {category}",
+    "communityLast": "Letzte Meldung: {date}",
+    "advice": "Was jetzt zu tun ist",
+    "advice_risk": "Nicht zahlen, nicht klicken und keine Daten weitergeben. Wenn du schon gezahlt oder Daten weitergegeben hast, ruf sofort deine Bank an, um Karten und Überweisungen zu sperren.",
+    "advice_warning": "Bevor du vertraust, prüfe auf anderem Weg: Ruf das Unternehmen unter der Nummer seiner offiziellen Website an, nicht unter der, die man dir gegeben hat.",
+    "advice_ok": "Es gab keine schweren Warnzeichen, aber bleib vorsichtig: Keine automatische Prüfung kann Betrug ganz ausschließen.",
+    "advice_info": "Bewahre dieses Dossier als Erinnerung auf und frag im Zweifel jemanden, dem du vertraust.",
+    "useTitle": "Wofür dieses Dossier ist",
+    "useText": "Du kannst es einer Anzeige bei der Polizei beilegen, an deine Bank oder an das nachgeahmte Unternehmen schicken oder als Beweis aufbewahren. Der Code oben kennzeichnet diese Prüfung.",
+    "disclaimer": "Das Dossier zeigt das Ergebnis der automatischen Prüfungen von KUMANI zum angegebenen Zeitpunkt: Es hilft bei der Entscheidung, ist aber kein Gutachten und kein rechtlicher Beweis.",
+    "file": "kumani-dossier",
+    "error": "Das Dossier konnte nicht erstellt werden. Bitte versuche es erneut."
   }
 }

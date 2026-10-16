@@ -27,6 +27,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "documentoSicuro",
   "documents",
   "donations",
+  "dossier",
   "ecosystem",
   "errorPages",
   "events",

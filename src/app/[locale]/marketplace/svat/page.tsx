@@ -14,7 +14,6 @@ import {
   Eye,
   TrendingUp,
   ExternalLink,
-  Download,
   Share2,
   RefreshCw,
   CheckCircle,
@@ -25,6 +24,7 @@ import {
 } from 'lucide-react'
 import QRCheckScanner from '@/components/QRCheckScanner'
 import CommunityWarning from '@/components/scamNet/CommunityWarning'
+import DossierButton, { type Dossier } from '@/components/scamNet/DossierButton'
 
 interface SVATCheck {
   id: string
@@ -162,52 +162,17 @@ export default function SVATPage({
     return 'text-red-500'
   }
 
-  const exportToPDF = () => {
-    if (!result) return
-    // Tutto il testo passa da esc(): dominio, record DNS e dati WHOIS li
-    // sceglie il proprietario del sito controllato (niente HTML/script).
-    const esc = (value: unknown) =>
-      String(value ?? '').replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch] as string)
-    const badgeClass = ['green', 'yellow', 'red'].includes(result.badge) ? result.badge : 'red'
-    // noopener: la finestra non può raggiungere la pagina di KUMANI
-    const printWindow = window.open('', '_blank')
-    if (!printWindow) return
-    printWindow.opener = null
-    printWindow.document.write(`
-      <html>
-        <head>
-          <title>SVAT Report - ${esc(result.domain || result.input)}</title>
-          <style>
-            body { font-family: sans-serif; padding: 20px; }
-            .score { font-size: 48px; font-weight: bold; }
-            .badge-${badgeClass} { color: ${result.badge === 'green' ? '#16a34a' : result.badge === 'yellow' ? '#ca8a04' : '#dc2626'}; }
-          </style>
-        </head>
-        <body>
-          <h1>SVAT - Anti-Fraud Verification Report</h1>
-          <h2>${esc(result.domain || result.input)}</h2>
-          <p>Reliability Score: <span class="score badge-${badgeClass}">${Number(result.score) || 0}/100</span></p>
-          <p>Badge: ${esc(badgeClass.toUpperCase())}</p>
-          <h3>Checks Summary</h3>
-          <ul>
-            <li>Total checks: ${esc(result.summary.totalChecks)}</li>
-            <li>OK: ${esc(result.summary.okCount)}</li>
-            <li>Warnings: ${esc(result.summary.warningCount)}</li>
-            <li>Risks: ${esc(result.summary.riskCount)}</li>
-          </ul>
-          <h3>Detailed Results</h3>
-          ${result.checks.map((c) => `
-            <div style="margin-bottom: 15px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
-              <strong>${esc(t(c.name))}</strong> - Status: ${esc(String(c.status).toUpperCase())}
-              <p>${esc(detailText(c))}</p>
-              ${c.source ? `<p>Source: ${esc(c.source)}</p>` : ''}
-            </div>
-          `).join('')}
-        </body>
-      </html>
-    `)
-    printWindow.document.close()
-    printWindow.print()
+  // Dossier del controllo in PDF (al posto della vecchia stampa con i titoli in inglese)
+  const buildDossier = (): Dossier => {
+    const r = result!
+    const status = r.badge === 'green' ? 'ok' : r.badge === 'yellow' ? 'warning' : 'risk'
+    return {
+      tool: 'SVAT',
+      subject: r.domain || r.input,
+      subjectLines: r.domain && r.domain !== r.input ? [r.input] : [],
+      verdict: { status, text: t(r.badge === 'green' ? 'badgeGreen' : r.badge === 'yellow' ? 'badgeYellow' : 'badgeRed'), score: `${r.score}/100` },
+      rows: r.checks.map((c) => ({ label: t(c.name), value: `${detailText(c)}${c.source ? ` (${c.source})` : ''}`, status: c.status === 'check' ? 'info' : c.status })),
+    }
   }
 
   const shareResult = async () => {
@@ -680,13 +645,7 @@ export default function SVATPage({
 
             {/* Actions */}
             <div className="flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap">
-              <button
-                onClick={exportToPDF}
-                className="flex items-center justify-center gap-2 px-5 py-3 bg-white border border-[var(--gold)]/40 hover:border-[var(--gold)] text-[var(--ink)] rounded-xl font-medium transition-all"
-              >
-                <Download className="w-5 h-5" />
-                {t('exportPDF')}
-              </button>
+              <DossierButton build={buildDossier} community={isCompany ? [] : [{ kind: 'site', value: result.domain || result.input }]} />
               <button
                 onClick={shareResult}
                 className="flex items-center justify-center gap-2 px-5 py-3 bg-white border border-[var(--gold)]/40 hover:border-[var(--gold)] text-[var(--ink)] rounded-xl font-medium transition-all"

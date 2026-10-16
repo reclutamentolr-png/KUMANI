@@ -616,7 +616,8 @@
     "karmaTodayLogin": "Acesso",
     "karmaTodayBadge": "+{n} hoje",
     "karmaTodayTitle": "Hoje ganhaste {n} KU Karma:",
-    "karmaTodayNone": "Hoje ainda não ganhaste KU Karma: cada serviço que usas dá-te, uma vez por dia."
+    "karmaTodayNone": "Hoje ainda não ganhaste KU Karma: cada serviço que usas dá-te, uma vez por dia.",
+    "quickCheckTitle": "Algo não te convence? Cola aqui"
   },
   "marketplace": {
     "fabula": "Kumani Fabula",
@@ -2076,7 +2077,10 @@
       "notAvailable": "Dados não disponíveis",
       "openAnyway": "Abrir na mesma"
     },
-    "securitySection": "Segurança e Proteção"
+    "securitySection": "Segurança e Proteção",
+    "checkLookalike": "Semelhança com sites conhecidos",
+    "lookalikeRisk": "Atenção: parece {brand} mas não é um site oficial (o verdadeiro é {official}). É o truque mais usado para roubar dados e dinheiro.",
+    "lookalikeOfficial": "Site oficial de {brand}."
   },
   "offermaker": {
     "aiLimitReached": "Atingiu o limite diário de gerações com IA: tente amanhã.",
@@ -5366,7 +5370,9 @@
     "f_domain_new": "O domínio {domain} é recente ({days} dias).",
     "f_sender_no_mx": "O domínio do remetente ({domain}) não pode receber e-mails: endereço falso ou descartável.",
     "f_ai_high": "A leitura do texto indica uma probabilidade alta de burla.",
-    "f_ai_medium": "A leitura do texto encontra elementos suspeitos."
+    "f_ai_medium": "A leitura do texto encontra elementos suspeitos.",
+    "dossierSubject": "Email analisado",
+    "dossierLink": "Link para: {domain}"
   },
   "oxygen": {
     "title": "OXYGEN",
@@ -5641,7 +5647,9 @@
     "antitruffaLink": "Manual Antiburla",
     "antitruffaLinkText": "As burlas mais comuns, com exemplos reais e o que fazer de imediato.",
     "checkmailLink": "CheckMail",
-    "checkmailLinkText": "Recebeste o IBAN num email suspeito? Verifica-o aqui."
+    "checkmailLinkText": "Recebeste o IBAN num email suspeito? Verifica-o aqui.",
+    "dossierTool": "Verificar IBAN",
+    "dossierAdvice": "Um IBAN bem escrito não garante que quem o recebe seja honesto: uma transferência imediata não se pode anular."
   },
   "scudoDati": {
     "badge": "Segurança · Grátis",
@@ -10688,10 +10696,10 @@
     "chatSafetyCheck": "Verificar",
     "chatSafetyHint": "Antes de pagar ou abrir um link de alguém que não conhece, verifique-o.",
     "checkBoxTitle": "Verificar já",
-    "checkBoxText": "Cole um IBAN, um email, um NIF de empresa, um site ou um número de telefone: levo-o à ferramenta certa.",
-    "checkBoxPlaceholder": "IBAN, email, NIF, site ou telefone…",
+    "checkBoxText": "Cola um link, um email, um número, um IBAN, um NIF de IVA, ou um SMS ou mensagem de WhatsApp inteiro: levo-te à verificação certa.",
+    "checkBoxPlaceholder": "Cola aqui a mensagem, o link, o número…",
     "checkBoxButton": "Verificar",
-    "checkBoxUnknown": "Não reconheço o que escreveu: cole um IBAN, um email, um NIF de empresa, o endereço de um site ou um número de telefone.",
+    "checkBoxUnknown": "Não encontrei nada para verificar: cola um link, um email, um número de telefone, um IBAN ou um número de IVA.",
     "tripSpendlyTitle": "A sua parte no Spendly",
     "tripSpendlyHint": "{count, plural, one {# despesa partilhada} other {# despesas partilhadas}} consigo, a sua parte é {total}: adicione-a às suas despesas do Spendly com um toque.",
     "tripSpendlyButton": "Adicionar ao Spendly",
@@ -10737,7 +10745,19 @@
     "wellnessMindHint": "Guarde ou partilhe um desenho de Mandala, ou ouça NeuroBalance durante 10 minutos.",
     "wellnessStepDone": "Feito hoje ✓",
     "wellnessOpen": "Abrir {tool}",
-    "receiptFromPaymentBanner": "Recibo do pagamento registado em Clientes e Trabalhos ({name})."
+    "receiptFromPaymentBanner": "Recibo do pagamento registado em Clientes e Trabalhos ({name}).",
+    "checkBoxPhoto": "Verificar uma foto",
+    "checkBoxFound": "Encontrei {n} coisas para verificar: toca na que quiseres.",
+    "checkKind_site": "Site ou link",
+    "checkKind_email": "Email",
+    "checkKind_iban": "IBAN",
+    "checkKind_phone": "Número de telefone",
+    "checkKind_vat": "Número de IVA",
+    "checkWith_site": "com SVAT",
+    "checkWith_email": "com CheckMail",
+    "checkWith_iban": "com Verificar IBAN",
+    "checkWith_phone": "com Quem me ligou?",
+    "checkWith_vat": "com SVAT"
   },
   "businessProfile": {
     "title": "Ficha da atividade",
@@ -12966,7 +12986,9 @@
       "type": "Tipo",
       "premium": "Número de valor acrescentado: ligar de volta pode custar muito. Não ligue para números desconhecidos deste tipo.",
       "foreign": "Número estrangeiro: se não esperava chamadas do estrangeiro, não ligue de volta.",
-      "report": "Denunciar este número"
+      "report": "Denunciar este número",
+      "dossierTool": "Quem me ligou?",
+      "dossierReported": "Número denunciado pela comunidade ({n})"
     },
     "phoneTypes": {
       "MOBILE": "Telemóvel",
@@ -13260,5 +13282,50 @@
     "error_login": "Inicia sessão para continuar.",
     "recurringLineEvery": "a cada {months} meses no dia {day} · paga {name}",
     "fromCasa": "de KUMANI Casa"
+  },
+  "quickCheckPage": {
+    "metaTitle": "Verifica antes de confiar · KUMANI",
+    "metaDescription": "Uma mensagem, um link, um número ou um IBAN parecem-te estranhos? Cola-os no KUMANI e descobre em segundos se é burla.",
+    "title": "Verifica antes de confiar",
+    "intro": "Um SMS da transportadora, um email do banco, um número desconhecido, um IBAN para uma transferência: cola-o aqui e descobre em segundos se algo não bate certo.",
+    "boxTitle": "Algo não te convence? Cola aqui",
+    "whatTitle": "O que podes verificar",
+    "what_site": "Sites e links",
+    "what_site_text": "Há quanto tempo existe, se é seguro, se se parece com um site conhecido e se foi denunciado.",
+    "what_email": "Emails",
+    "what_email_text": "Remetente, links, anexos e frases típicas de phishing.",
+    "what_phone": "Números de telefone",
+    "what_phone_text": "Se a comunidade o denunciou, de que país é e se é de valor acrescentado.",
+    "what_iban": "IBAN",
+    "what_iban_text": "Se está bem escrito, de que país e banco é, e os sinais a vigiar antes da transferência.",
+    "what_photo": "Fotos",
+    "what_photo_text": "Se foi criada ou retocada com inteligência artificial, e onde mais aparece.",
+    "shareTip": "No telemóvel, com a app KUMANI instalada, também podes tocar em «Partilhar» numa mensagem ou link e escolher KUMANI: a verificação começa sozinha.",
+    "joinTitle": "Regista-te grátis para fazer as verificações",
+    "joinText": "IBAN, números de telefone e a Rede Antiburla são grátis para todos. Sites, emails e fotos estão incluídos no plano Base.",
+    "register": "Regista-te grátis",
+    "login": "Entrar"
+  },
+  "dossier": {
+    "button": "Descarregar o dossiê PDF",
+    "title": "Dossiê da verificação",
+    "generated": "Criado a {date} · Código {code}",
+    "subject": "O que foi verificado",
+    "result": "Resultado",
+    "checks": "Verificações feitas",
+    "community": "Denúncias da comunidade KUMANI",
+    "noCommunity": "Nenhuma denúncia confirmada na Rede Antiburla no momento da verificação.",
+    "communityMatch": "{value}: {n, plural, one {# denúncia confirmada} other {# denúncias confirmadas}} · {category}",
+    "communityLast": "Última denúncia: {date}",
+    "advice": "O que fazer agora",
+    "advice_risk": "Não pagues, não cliques e não dês dados. Se já pagaste ou deste dados, liga já para o teu banco para bloquear cartões e transferências.",
+    "advice_warning": "Antes de confiar, verifica por outro caminho: liga para a empresa pelo número do site oficial, não pelo que te deram.",
+    "advice_ok": "Não surgiram sinais graves, mas mantém-te prudente: nenhuma verificação automática exclui por completo uma burla.",
+    "advice_info": "Usa este dossiê como lembrete e, na dúvida, pede a opinião de alguém de confiança.",
+    "useTitle": "Para que serve este dossiê",
+    "useText": "Podes anexá-lo a uma queixa à polícia, enviá-lo ao teu banco ou à empresa que estão a imitar, ou guardá-lo como prova. O código em cima identifica esta verificação.",
+    "disclaimer": "O dossiê mostra o resultado das verificações automáticas do KUMANI no momento indicado: é uma ajuda para decidir, não uma perícia nem uma prova legal.",
+    "file": "dossie-kumani",
+    "error": "Não foi possível criar o dossiê. Tenta de novo."
   }
 }

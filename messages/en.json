@@ -652,7 +652,8 @@
     "karmaTodayLogin": "Sign-in",
     "karmaTodayBadge": "+{n} today",
     "karmaTodayTitle": "Today you earned {n} KU Karma:",
-    "karmaTodayNone": "You haven’t earned any KU Karma today yet: every service you use gives you some, once a day."
+    "karmaTodayNone": "You haven’t earned any KU Karma today yet: every service you use gives you some, once a day.",
+    "quickCheckTitle": "Something doesn’t feel right? Paste it here"
   },
   "marketplace": {
     "fabula": "Kumani Fabula",
@@ -2076,7 +2077,10 @@
       "notAvailable": "Data not available",
       "openAnyway": "Open Anyway"
     },
-    "securitySection": "Security & Protection"
+    "securitySection": "Security & Protection",
+    "checkLookalike": "Similarity to known sites",
+    "lookalikeRisk": "Warning: it looks like {brand} but is not one of its official sites (the real one is {official}). It’s the most common trick to steal data and money.",
+    "lookalikeOfficial": "Official site of {brand}."
   },
   "offermaker": {
     "aiLimitReached": "You’ve reached today’s AI generation limit: try again tomorrow.",
@@ -5366,7 +5370,9 @@
     "f_domain_new": "The domain {domain} is recent ({days} days).",
     "f_sender_no_mx": "The sender's domain ({domain}) cannot receive email: a fake or disposable address.",
     "f_ai_high": "Reading the text indicates a high probability of a scam.",
-    "f_ai_medium": "Reading the text finds suspicious elements."
+    "f_ai_medium": "Reading the text finds suspicious elements.",
+    "dossierSubject": "Email analysed",
+    "dossierLink": "Link to: {domain}"
   },
   "oxygen": {
     "title": "OXYGEN",
@@ -5641,7 +5647,9 @@
     "antitruffaLink": "Anti-Scam Guide",
     "antitruffaLinkText": "The most common scams, with real examples and what to do right away.",
     "checkmailLink": "CheckMail",
-    "checkmailLinkText": "Did you get the IBAN in a suspicious email? Check it here."
+    "checkmailLinkText": "Did you get the IBAN in a suspicious email? Check it here.",
+    "dossierTool": "IBAN Check",
+    "dossierAdvice": "A correctly written IBAN doesn’t guarantee the recipient is honest: an instant transfer can’t be undone."
   },
   "scudoDati": {
     "badge": "Security · Free",
@@ -10688,10 +10696,10 @@
     "chatSafetyCheck": "Check",
     "chatSafetyHint": "Before paying or opening a link from someone you don’t know, check it.",
     "checkBoxTitle": "Check now",
-    "checkBoxText": "Paste an IBAN, an email, a VAT number, a website or a phone number: I’ll take you to the right tool.",
-    "checkBoxPlaceholder": "IBAN, email, VAT number, website or phone…",
+    "checkBoxText": "Paste a link, an email, a number, an IBAN, a VAT number, or a whole text or WhatsApp message: I’ll take you to the right check.",
+    "checkBoxPlaceholder": "Paste the message, link, number here…",
     "checkBoxButton": "Check",
-    "checkBoxUnknown": "I don’t recognise what you wrote: paste an IBAN, an email, a VAT number, a website address or a phone number.",
+    "checkBoxUnknown": "I found nothing to check: paste a link, an email, a phone number, an IBAN or a VAT number.",
     "tripSpendlyTitle": "Your share in Spendly",
     "tripSpendlyHint": "{count, plural, one {# expense} other {# expenses}} shared with you, your share is {total}: add it to your Spendly expenses in one tap.",
     "tripSpendlyButton": "Add to Spendly",
@@ -10737,7 +10745,19 @@
     "wellnessMindHint": "Save or share a Mandala drawing, or listen to NeuroBalance for 10 minutes.",
     "wellnessStepDone": "Done today ✓",
     "wellnessOpen": "Open {tool}",
-    "receiptFromPaymentBanner": "Receipt for the payment recorded in Clients & Jobs ({name})."
+    "receiptFromPaymentBanner": "Receipt for the payment recorded in Clients & Jobs ({name}).",
+    "checkBoxPhoto": "Check a photo",
+    "checkBoxFound": "I found {n} things to check: tap the one you want.",
+    "checkKind_site": "Website or link",
+    "checkKind_email": "Email",
+    "checkKind_iban": "IBAN",
+    "checkKind_phone": "Phone number",
+    "checkKind_vat": "VAT number",
+    "checkWith_site": "with SVAT",
+    "checkWith_email": "with CheckMail",
+    "checkWith_iban": "with IBAN Check",
+    "checkWith_phone": "with Who called me?",
+    "checkWith_vat": "with SVAT"
   },
   "businessProfile": {
     "title": "Business profile",
@@ -12966,7 +12986,9 @@
       "type": "Type",
       "premium": "Premium-rate number: calling it back can cost a lot. Don’t call back unknown numbers of this kind.",
       "foreign": "Foreign number: if you weren’t expecting calls from abroad, don’t call back.",
-      "report": "Report this number"
+      "report": "Report this number",
+      "dossierTool": "Who called me?",
+      "dossierReported": "Number reported by the community ({n})"
     },
     "phoneTypes": {
       "MOBILE": "Mobile",
@@ -13260,5 +13282,50 @@
     "error_login": "Log in to continue.",
     "recurringLineEvery": "every {months} months on day {day} · paid by {name}",
     "fromCasa": "from KUMANI Casa"
+  },
+  "quickCheckPage": {
+    "metaTitle": "Check before you trust · KUMANI",
+    "metaDescription": "A message, link, number or IBAN looks odd? Paste it into KUMANI and find out in seconds whether it’s a scam.",
+    "title": "Check before you trust",
+    "intro": "A courier text, a bank email, an unknown number, an IBAN for a transfer: paste it here and find out in seconds if something is wrong.",
+    "boxTitle": "Something doesn’t feel right? Paste it here",
+    "whatTitle": "What you can check",
+    "what_site": "Websites and links",
+    "what_site_text": "How old it is, whether it’s secure, whether it looks like a known site and whether it’s been reported.",
+    "what_email": "Emails",
+    "what_email_text": "Sender, links, attachments and typical phishing phrases.",
+    "what_phone": "Phone numbers",
+    "what_phone_text": "Whether the community has reported it, which country it’s from and whether it’s premium-rate.",
+    "what_iban": "IBANs",
+    "what_iban_text": "Whether it’s written correctly, which country and bank it belongs to, and the warning signs before a transfer.",
+    "what_photo": "Photos",
+    "what_photo_text": "Whether it was made or edited with artificial intelligence, and where else it appears.",
+    "shareTip": "On your phone, with the KUMANI app installed, you can also tap “Share” on a message or link and pick KUMANI: the check starts on its own.",
+    "joinTitle": "Sign up for free to run the checks",
+    "joinText": "IBANs, phone numbers and the Anti-Scam Network are free for everyone. Websites, emails and photos are included in the Base plan.",
+    "register": "Sign up for free",
+    "login": "Log in"
+  },
+  "dossier": {
+    "button": "Download the PDF dossier",
+    "title": "Check dossier",
+    "generated": "Created on {date} · Code {code}",
+    "subject": "What was checked",
+    "result": "Result",
+    "checks": "Checks performed",
+    "community": "KUMANI community reports",
+    "noCommunity": "No confirmed reports in the Anti-Scam Network at the time of the check.",
+    "communityMatch": "{value}: {n, plural, one {# confirmed report} other {# confirmed reports}} · {category}",
+    "communityLast": "Last report: {date}",
+    "advice": "What to do now",
+    "advice_risk": "Don’t pay, don’t click and don’t share any data. If you’ve already paid or shared data, call your bank right away to block cards and transfers.",
+    "advice_warning": "Before trusting it, check another way: call the company on the number from its official website, not the one you were given.",
+    "advice_ok": "No serious warning signs came up, but stay careful: no automatic check can fully rule out a scam.",
+    "advice_info": "Keep this dossier as a reminder and, if in doubt, ask someone you trust.",
+    "useTitle": "What this dossier is for",
+    "useText": "You can attach it to a report to the police, send it to your bank or to the company being impersonated, or keep it as evidence. The code at the top identifies this check.",
+    "disclaimer": "The dossier shows the result of KUMANI’s automatic checks at the time indicated: it helps you decide, it is not an expert report or legal evidence.",
+    "file": "kumani-dossier",
+    "error": "The dossier could not be created. Please try again."
   }
 }

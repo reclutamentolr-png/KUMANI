@@ -7,6 +7,7 @@ import { addScamEvidence, checkPhone, myScamReports, scamAlerts, setScamAlerts, 
 import type { PhoneInfo } from '@/lib/scamNetPhone'
 import { GUARDIAN_LEVELS, type GuardianLevel, type ScamKind } from '@/lib/scamNet'
 import { MatchCard, useTimeAgoShort } from './CommunityWarning'
+import DossierButton, { type Dossier } from './DossierButton'
 import ReportForm, { uploadEvidence } from './ReportForm'
 
 export type HubTab = 'allerta' | 'segnala' | 'numero' | 'mie'
@@ -206,6 +207,24 @@ function PhoneTab({ initial, onReport }: { initial?: string; onReport: (value: s
             {result.info.country && result.info.country !== 'IT' && <p className="rounded-xl bg-[#fff4e5] p-3 text-sm text-[#7a4a00]">{t('phone.foreign')}</p>}
             {!result.match && <p className="text-xs text-[var(--muted)]">{t('warning.spoof')}</p>}
           </section>
+          <DossierButton
+            match={result.match}
+            build={(): Dossier => ({
+              tool: t('phone.dossierTool'),
+              subject: result.info.international,
+              verdict: result.match
+                ? { status: 'risk', text: t('phone.dossierReported', { n: result.match.reports }) }
+                : risky
+                  ? { status: 'warning', text: t('phone.premium') }
+                  : { status: 'ok', text: t('phone.clean') },
+              rows: [
+                { label: `${t('phone.country')}: ${region(result.info.country) ?? '—'}`, status: result.info.country && result.info.country !== 'IT' ? 'warning' : 'info' },
+                { label: `${t('phone.type')}: ${t(`phoneTypes.${type ?? 'UNKNOWN'}`)}`, status: risky ? 'warning' : 'info' },
+                ...(result.info.country && result.info.country !== 'IT' ? [{ label: t('phone.foreign'), status: 'warning' as const }] : []),
+                ...(!result.match ? [{ label: t('warning.spoof'), status: 'info' as const }] : []),
+              ],
+            })}
+          />
           <button type="button" onClick={() => onReport(result.info.international)} className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full border border-[var(--gold)]/40 bg-white font-bold text-[var(--ink)]">
             <Flag className="h-5 w-5" aria-hidden="true" /> {t('phone.report')}
           </button>

@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import { ChevronDown, ClipboardPaste, FileUp, LoaderCircle, Lock, MailSearch, RotateCcw, ShieldAlert, ShieldCheck, Smartphone, Sparkles, TriangleAlert } from 'lucide-react'
 import type { CheckMailResponse } from '@/lib/checkmail/types'
 import CommunityWarning from '@/components/scamNet/CommunityWarning'
+import DossierButton, { type Dossier, type DossierStatus } from '@/components/scamNet/DossierButton'
 
 type Mode = 'file' | 'paste' | 'quick'
 type OkResult = Extract<CheckMailResponse, { status: 'ok' }>
@@ -294,6 +295,24 @@ export function CheckMailResult({ result, onNew }: { result: OkResult; onNew: ()
         <p className="mb-2 font-bold text-[var(--ink)]">{t('adviceTitle')}</p>
         <p className="text-sm leading-6 text-gray-800">{t(`advice_${result.level}`)}</p>
       </div>
+
+      <DossierButton
+        community={community}
+        build={(): Dossier => ({
+          tool: 'CheckMail',
+          subject: result.community?.sender ?? t('dossierSubject'),
+          subjectLines: (result.community?.domains ?? []).map((d) => t('dossierLink', { domain: d })),
+          verdict: { status: result.level === 'high' ? 'risk' : result.level === 'medium' ? 'warning' : 'ok', text: t(`level_${result.level}`), score: `${t('riskLabel')} ${result.score}/100` },
+          rows: [
+            ...result.findings.map((f) => ({
+              label: t(`f_${f.key}`, f.params ?? {}),
+              status: (f.points === 0 ? 'info' : f.severity === 'high' ? 'risk' : f.severity === 'medium' ? 'warning' : 'info') as DossierStatus,
+            })),
+            ...(result.ai ? [{ label: `${t('aiTitle')}: ${t(`cat_${result.ai.category}`)} · ${t('aiRisk', { risk: result.ai.risk })}`, value: result.ai.reasons.join(' · '), status: 'info' as const }] : []),
+          ],
+          advice: [t(`advice_${result.level}`)],
+        })}
+      />
 
       <button
         type="button"

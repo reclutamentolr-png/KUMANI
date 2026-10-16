@@ -9,6 +9,7 @@ import type { MyProfile } from '@/lib/myProfile'
 import type { ServiceItem } from '@/lib/servicesCatalog'
 import type { KarmaToday } from '@/lib/karmaToday'
 import NativeShareButton from '@/components/NativeShareButton'
+import QuickCheckBox from '@/components/ecosystem/QuickCheckBox'
 
 // Home: corta. In cima lo stato (KU Karma, abbonamento, codice invito), poi
 // la fascia «Oggi» e «In cosa possiamo darti una mano?», gli inviti, l'Area
@@ -137,6 +138,9 @@ export default async function DashboardTipo2({
           )}
         </Link>
       )}
+
+      {/* «Qualcosa non ti torna? Incollalo qui»: porta d'ingresso dell'anti-truffa */}
+      <QuickCheckBox title={t('quickCheckTitle')} className="" />
 
       {/* Senza abbonamento né prova: abbonarsi o usare un voucher */}
       {!subscribed && proTrialDaysLeft === null && (

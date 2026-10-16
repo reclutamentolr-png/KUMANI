@@ -35,7 +35,7 @@ export type CheckMailOptions = {
 // ufficiali, è il segnale più forte di truffa.
 // words: frasi cercate senza maiuscole; acronyms: sigle cercate solo in
 // MAIUSCOLO ("TIM", non il nome "Tim").
-const BRANDS: { name: string; words: string[]; acronyms?: string[]; domains: string[] }[] = [
+export const BRANDS: { name: string; words: string[]; acronyms?: string[]; domains: string[] }[] = [
   { name: 'PayPal', words: ['paypal'], domains: ['paypal.com', 'paypal.it', 'paypal.me'] },
   { name: 'Amazon', words: ['amazon'], domains: ['amazon.it', 'amazon.com', 'amazon.de', 'amazon.fr', 'amazon.es', 'amazon.co.uk', 'amazon.eu', 'amazonses.com', 'marketplace.amazon.it', 'amazonaws.com', 'aws.amazon.com', 'awstrack.me', 'primevideo.com', 'audible.it'] },
   { name: 'Poste Italiane', words: ['poste italiane', 'posteitaliane', 'bancoposta', 'postepay'], domains: ['poste.it', 'posteitaliane.it', 'postepay.it'] },
@@ -232,7 +232,8 @@ function domainOf(address: string | null | undefined): string | null {
 // Ufficiale anche lo stesso nome del marchio con un suffisso nazionale o
 // .com/.net/.org/.eu (amazon.nl, paypal.de, google.it), non con estensioni
 // da truffa (paypal.top resta un'imitazione).
-function isOfficial(domain: string, brand: (typeof BRANDS)[number]) {
+// Usate anche da SVAT (domini «sosia» dei siti)
+export function isOfficial(domain: string, brand: (typeof BRANDS)[number]) {
   const reg = registrableDomain(domain)
   if (brand.domains.some((d) => domain === d || domain.endsWith(`.${d}`) || reg === registrableDomain(d))) return true
   const [label, ...rest] = reg.split('.')
@@ -252,7 +253,7 @@ function levenshtein(a: string, b: string) {
 
 // Dominio che imita un marchio: simile a un dominio ufficiale (paypa1.com)
 // oppure con il nome del marchio dentro (paypal-sicurezza.com).
-function lookalikeBrand(domain: string): (typeof BRANDS)[number] | null {
+export function lookalikeBrand(domain: string): (typeof BRANDS)[number] | null {
   const reg = registrableDomain(domain)
   if (FREE_MAIL.has(reg)) return null
   const label = reg.split('.')[0].replace(/0/g, 'o').replace(/1/g, 'l').replace(/rn/g, 'm')
@@ -268,7 +269,9 @@ function lookalikeBrand(domain: string): (typeof BRANDS)[number] | null {
       // di differenza su nomi lunghi (paypa1, amazom), non su parole comuni
       const similar =
         label === officialLabel ||
-        (officialLabel.length >= 6 && label.length >= 5 && !COMMON_WORDS.has(label) && levenshtein(label, officialLabel) === 1)
+        (officialLabel.length >= 6 && label.length >= 5 && !COMMON_WORDS.has(label) && levenshtein(label, officialLabel) === 1) ||
+        // …anche in una parte del nome (netfiix-account: «netfiix» ≈ netflix)
+        (officialLabel.length >= 6 && tokens.length > 1 && tokens.some((tok) => tok.length >= 5 && !COMMON_WORDS.has(tok) && levenshtein(tok, officialLabel) === 1))
       const contains =
         (officialLabel.length >= 5 && tokens.length > 1 && tokens.includes(officialLabel)) ||
         (officialLabel.length >= 6 && label !== officialLabel && (label.startsWith(officialLabel) || label.endsWith(officialLabel)))

@@ -31,6 +31,7 @@ import {
   type SignalLevel,
 } from '@/lib/iban'
 import CommunityWarning from '@/components/scamNet/CommunityWarning'
+import DossierButton, { type Dossier, type DossierStatus } from '@/components/scamNet/DossierButton'
 
 // VERIFICA IBAN: controllo tutto nel browser (formato, lunghezza per paese,
 // checksum mod 97). Nessuna chiamata di rete, niente viene salvato; l'unica
@@ -339,6 +340,32 @@ export default function IbanChecker({ initialIban = '' }: { initialIban?: string
                 )}
               </div>
             )}
+
+            {/* Dossier del controllo in PDF */}
+            <DossierButton
+              community={result.valid ? [{ kind: 'iban', value: result.normalized }] : []}
+              build={(): Dossier => {
+                const country = result.country ? `${countryName(result.country, locale)} (${result.country})` : null
+                return {
+                  tool: t('dossierTool'),
+                  subject: result.formatted || result.normalized,
+                  subjectLines: [
+                    ...(country ? [`${t('countryLabel')} ${country}`] : []),
+                    ...(result.italian ? [`${t('part_abi')} ${result.italian.abi} · ${t('part_cab')} ${result.italian.cab}`] : []),
+                    ...(context ? [`${t('contextTitle')} ${t(CONTEXT_LABEL[context])}`] : []),
+                  ],
+                  verdict: { status: result.valid ? (signals.some((s) => s.level === 'strong') ? 'risk' : signals.some((s) => s.level === 'warning') ? 'warning' : 'ok') : 'risk', text: result.valid ? t('resultValid') : t('resultInvalid') },
+                  rows: [
+                    ...result.issues.map((issue) => ({ label: issueText(issue), status: 'risk' as const })),
+                    ...signals.map((s) => ({
+                      label: t(`signal_${s.key}`, { ibanCountry: countryName(result.country ?? '', locale), homeCountry: countryName(homeCountry, locale) }),
+                      status: (s.level === 'strong' ? 'risk' : s.level === 'warning' ? 'warning' : 'info') as DossierStatus,
+                    })),
+                  ],
+                  advice: [t('dossierAdvice')],
+                }
+              }}
+            />
           </div>
         )}
       </div>
