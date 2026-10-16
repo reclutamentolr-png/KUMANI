@@ -265,7 +265,10 @@
     "byCreatingAccount": "By clicking Create your account you accept our",
     "termsOfService": "Terms of Service",
     "and": "and",
-    "privacyPolicy": "Privacy Policy"
+    "privacyPolicy": "Privacy Policy",
+    "closedTitle": "Sign-ups open soon",
+    "closedText": "KUMANI is about to launch: we’re putting on the finishing touches. Meanwhile, discover what you’ll be able to do with the app.",
+    "closedCta": "Discover KUMANI"
   },
   "qrGenerator": {
     "back": "Back to the Ecosystem",

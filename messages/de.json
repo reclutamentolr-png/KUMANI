@@ -228,7 +228,10 @@
     "byCreatingAccount": "Mit dem Klick auf Konto erstellen akzeptierst du unsere",
     "termsOfService": "Nutzungsbedingungen",
     "and": "und",
-    "privacyPolicy": "Datenschutzerklärung"
+    "privacyPolicy": "Datenschutzerklärung",
+    "closedTitle": "Anmeldungen öffnen bald",
+    "closedText": "KUMANI startet in Kürze: Wir legen gerade letzte Hand an. Entdecke schon jetzt, was du mit der App machen kannst.",
+    "closedCta": "KUMANI entdecken"
   },
   "qrGenerator": {
     "back": "Zurück zum Ökosystem",

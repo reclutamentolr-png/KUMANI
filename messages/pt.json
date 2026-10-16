@@ -228,7 +228,10 @@
     "byCreatingAccount": "Ao clicar em Criar a sua conta, aceita os nossos",
     "termsOfService": "Termos de serviço",
     "and": "e",
-    "privacyPolicy": "Política de privacidade"
+    "privacyPolicy": "Política de privacidade",
+    "closedTitle": "As inscrições abrem em breve",
+    "closedText": "O KUMANI está quase a arrancar: estamos a dar os últimos retoques. Entretanto, descobre o que vais poder fazer com a app.",
+    "closedCta": "Descobrir o KUMANI"
   },
   "qrGenerator": {
     "back": "Voltar ao Ecossistema",

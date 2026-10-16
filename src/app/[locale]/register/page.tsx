@@ -6,6 +6,7 @@ import { headers } from 'next/headers'
 import RegisterForm from '@/components/RegisterForm'
 import MaintenanceGate from '@/components/MaintenanceGate'
 import Logo from '@/components/Logo'
+import { isSignupOpen } from '@/lib/signupOpen'
 
 export const dynamic = 'force-dynamic'
 
@@ -17,6 +18,8 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RegisterPage() {
   const t = await getTranslations('authRegister')
   const tg = await getTranslations('guides')
+  // Iscrizioni chiuse in Supabase (prima del lancio): al posto del modulo l'avviso
+  const open = await isSignupOpen()
   // Nazione da cui ci si collega (Vercel la ricava dall'indirizzo IP): serve
   // solo a preselezionare il campo Nazione, che resta modificabile.
   const detectedCountry = ((await headers()).get('x-vercel-ip-country') ?? '').toUpperCase()
@@ -31,16 +34,25 @@ export default async function RegisterPage() {
             </Link>
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-[var(--ink)]">
-            {t('registerTitle')}
+            {open ? t('registerTitle') : t('closedTitle')}
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            {t('registerDescription')}
+            {open ? t('registerDescription') : t('closedText')}
           </p>
         </div>
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="relative border border-[var(--gold)]/35 bg-[var(--paper)] px-4 py-8 shadow-[0_20px_55px_rgba(23,23,23,0.14)] sm:rounded-lg sm:px-10">
-            <RegisterForm detectedCountry={detectedCountry} />
+            {open ? (
+              <RegisterForm detectedCountry={detectedCountry} />
+            ) : (
+              <Link
+                href="/"
+                className="flex w-full justify-center rounded-md bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-4 py-3 text-sm font-bold text-[var(--ink)] shadow-sm transition hover:brightness-105"
+              >
+                {t('closedCta')}
+              </Link>
+            )}
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
                 {t('alreadyHaveAccount')}{' '}
