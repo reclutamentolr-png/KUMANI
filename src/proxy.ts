@@ -269,7 +269,12 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
     // altro dispositivo). In quel caso la sessione si cancella qui (cookie
     // tolti dalla risposta) e si mostra il login, invece di rimandare alla
     // dashboard, che rimanderebbe al login all'infinito.
-    const confirmed = barePath === '/login' ? (await supabase.auth.getUser()).data.user : null;
+    // Solo aprendo la pagina: le azioni chiamate dal login subito dopo
+    // l'accesso (KU Karma del giorno, codice di benvenuto, avviso a chi ha
+    // invitato) partono verso /login e, rimandate alla dashboard, non
+    // venivano mai eseguite.
+    const opening = request.method === 'GET' && !request.headers.has('next-action');
+    const confirmed = barePath === '/login' && opening ? (await supabase.auth.getUser()).data.user : null;
     if (barePath === '/login' && confirmed) {
       const role = user.app_metadata?.role;
       const next = request.nextUrl.searchParams.get('next') ?? '';
