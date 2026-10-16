@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { fixedExpenseDueDate, type SpendlyFixedExpense } from '@/lib/spendly'
-import type { CasaAppliance, CasaBill, CasaDeadline, CasaDocument, CasaHome, CasaUtility, FindoPlace } from '@/lib/casa'
+import type { CasaAppliance, CasaBill, CasaDeadline, CasaDocument, CasaHome, CasaUtility, FindoPlace, CasaSharedGroup } from '@/lib/casa'
 import { buildBreadcrumb, type FindoLocation } from '@/lib/findo'
 import { todayKey } from '@/lib/agenda'
 
@@ -56,7 +56,7 @@ export async function loadHomes(supabase: SupabaseClient, userId: string) {
 export async function loadHome(supabase: SupabaseClient, userId: string, homeId: string) {
   const { data: home } = await supabase.from('casa_homes').select(HOME_COLUMNS).eq('id', homeId).eq('user_id', userId).maybeSingle()
   if (!home) return null
-  const [d, u, a, docs, bills, linked, places] = await Promise.all([
+  const [d, u, a, docs, bills, linked, places, groups, shared] = await Promise.all([
     supabase.from('life_calendar_items').select(DEADLINE_COLUMNS).eq('user_id', userId).eq('casa_home_id', homeId).eq('status', 'active').order('due_date'),
     supabase.from('casa_utilities').select(UTILITY_COLUMNS).eq('user_id', userId).eq('home_id', homeId).order('created_at'),
     supabase.from('casa_appliances').select(APPLIANCE_COLUMNS).eq('user_id', userId).eq('home_id', homeId).order('name'),
@@ -72,6 +72,9 @@ export async function loadHome(supabase: SupabaseClient, userId: string, homeId:
     supabase.from('casa_utilities').select('spendly_fixed_id').eq('user_id', userId).not('spendly_fixed_id', 'is', null),
     // Posizioni di Findo: dove si trovano gli apparecchi
     supabase.from('findo_locations').select('id, parent_id, name, icon').eq('user_id', userId),
+    // Spese condivise: i miei gruppi e le bollette già divise in un gruppo
+    supabase.rpc('spendly_group_list'),
+    supabase.from('spendly_group_recurring').select('id, group_id, spendly_fixed_id').not('spendly_fixed_id', 'is', null),
   ])
   const today = todayKey()
   const appliances = (a.data ?? []).map((row) => ({ ...row, price: toNumber(row.price) })) as CasaAppliance[]
@@ -107,6 +110,8 @@ export async function loadHome(supabase: SupabaseClient, userId: string, homeId:
       .map((loc, _i, all) => ({ id: loc.id, path: buildBreadcrumb(loc.id, all) }))
       .sort((x, y) => x.path.localeCompare(y.path)) as FindoPlace[],
     linkedBillIds: (linked.data ?? []).map((row) => row.spendly_fixed_id as string),
+    sharedGroups: ((groups.data ?? []) as CasaSharedGroup[]).map((g) => ({ id: g.id, name: g.name, emoji: g.emoji })),
+    sharedBills: ((shared.data ?? []) as { id: string; group_id: string; spendly_fixed_id: string }[]).map((r) => ({ recurringId: r.id, groupId: r.group_id, billId: r.spendly_fixed_id })),
     fileUrls,
   }
 }

@@ -112,6 +112,18 @@ export interface CasaDocument {
   created_at: string
 }
 
+// Spese condivise di Spendly: gruppi in cui dividere una bolletta e bollette già divise
+export interface CasaSharedGroup {
+  id: string
+  name: string
+  emoji: string
+}
+export interface CasaSharedBill {
+  recurringId: string
+  groupId: string
+  billId: string
+}
+
 // Bolletta di Spendly collegata a un'utenza (quella che serve a Casa)
 export interface CasaBill {
   id: string

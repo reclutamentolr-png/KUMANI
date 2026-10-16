@@ -6,7 +6,9 @@ import { getTranslations } from 'next-intl/server'
 import { ArrowRight, HeartPulse } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import type { SpendlyIncome, SpendlyFixedExpense, SpendlyFixedPayment, SpendlyVariableExpense } from '@/lib/spendly'
-import { currentYear } from '@/lib/spendly'
+import { currentYear, monthNames } from '@/lib/spendly'
+import { personalForecast, previousMonthsTotals, romeMonthToday } from '@/lib/spendlyForecast'
+import ForecastCard from '@/components/spendly/ForecastCard'
 import { fetchAllRows } from '@/lib/fetchAllRows'
 import { settleAutoPayments } from '@/lib/spendly-server'
 import { toolMetadata } from '@/lib/toolMetadata'
@@ -75,9 +77,39 @@ export default async function SpendlyDashboardPage({
     ),
   ])
 
+  // Previsione di fine mese: solo per l'anno in corso, dal mese di oggi
+  const today = romeMonthToday()
+  let forecast = null
+  let incomeMonth = 0
+  if (year === today.year) {
+    const monthKey = today.key.slice(0, 7)
+    const from = new Date(Date.UTC(today.year, today.month - 7, 1)).toISOString().slice(0, 10)
+    const { data: past } = await fetchAllRows((from_, to) =>
+      supabase
+        .from('spendly_variable_expenses')
+        .select('id, amount, expense_date')
+        .eq('user_id', user.id)
+        .gte('expense_date', from)
+        .lt('expense_date', `${monthKey}-01`)
+        .order('id')
+        .range(from_, to)
+        .returns<{ id: string; amount: number; expense_date: string }[]>()
+    )
+    const variableThisMonth = (variableExpenses ?? []).filter((v) => v.expense_date.startsWith(monthKey)).reduce((s, v) => s + Number(v.amount), 0)
+    incomeMonth = (income ?? []).filter((i) => i.income_date.startsWith(monthKey)).reduce((s, i) => s + Number(i.amount), 0)
+    const history = previousMonthsTotals(past.map((p) => ({ date: p.expense_date, amount: p.amount })), today.year, today.month)
+    const anyData = variableThisMonth > 0 || history.some((h) => h > 0) || (fixedExpenses ?? []).length > 0
+    if (anyData) forecast = personalForecast({ fixedExpenses: fixedExpenses ?? [], payments: payments ?? [], variableThisMonth, history, today })
+  }
+
   const te = await getTranslations('ecosystem')
   return (
     <>
+    {forecast && (
+      <div className="mx-auto mb-6 max-w-7xl px-4 sm:px-6 lg:px-8">
+        <ForecastCard forecast={forecast} monthName={monthNames(await getLocale())[today.month - 1]} income={incomeMonth} />
+      </div>
+    )}
     <SpendlyDashboard
       income={income || []}
       fixedExpenses={fixedExpenses || []}

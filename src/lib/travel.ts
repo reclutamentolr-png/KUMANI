@@ -180,7 +180,11 @@ const cents = (value: number) => Math.round(value * 100)
 // deve ricevere, negativo = deve dare. La quota di una spesa è divisa in parti
 // uguali; i centesimi che avanzano vanno ai primi della lista, così la somma
 // dei saldi è sempre esattamente zero.
-export function memberBalances(expenses: TripExpense[], settlements: TripSettlement[]): Map<string, number> {
+// Usato anche dalle spese condivise di Spendly (lib/spendlyShared, rate_to_base = 1)
+export function memberBalances(
+  expenses: Pick<TripExpense, 'amount' | 'rate_to_base' | 'paid_by' | 'split_between'>[],
+  settlements: Pick<TripSettlement, 'from_member' | 'to_member' | 'amount'>[]
+): Map<string, number> {
   const balance = new Map<string, number>()
   const add = (id: string, value: number) => balance.set(id, (balance.get(id) ?? 0) + value)
   for (const expense of expenses) {

@@ -90,6 +90,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "shopPublic",
   "shopSeller",
   "spendly",
+  "spendlyShared",
   "spotlight",
   "surprise",
   "surpriseTpl",

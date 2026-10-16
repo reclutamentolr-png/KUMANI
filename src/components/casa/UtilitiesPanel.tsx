@@ -2,10 +2,11 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { Droplets, Flame, Lightbulb, LoaderCircle, Pencil, Phone, Plus, Recycle, Thermometer, Trash2, Wifi, Zap, type LucideIcon } from 'lucide-react'
+import { Droplets, Flame, Lightbulb, LoaderCircle, Pencil, Phone, Plus, Recycle, Thermometer, Trash2, Users, Wifi, Zap, type LucideIcon } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { deleteUtility, saveUtility } from '@/app/actions/casa'
-import { BILL_FREQUENCIES, UTILITY_KINDS, type CasaBill, type CasaUtility, type UtilityForm, type UtilityKind } from '@/lib/casa'
+import { deleteSharedRecurring, linkBillToGroup } from '@/app/actions/spendlyShared'
+import { BILL_FREQUENCIES, UTILITY_KINDS, type CasaBill, type CasaSharedBill, type CasaSharedGroup, type CasaUtility, type UtilityForm, type UtilityKind } from '@/lib/casa'
 import { askConfirm } from '@/lib/confirm'
 import { Sheet, card, ghostBtn, input, label, parseNumber, primaryBtn, useAction, useFormat } from '@/components/casa/shared'
 
@@ -36,6 +37,8 @@ export default function UtilitiesPanel({
   utilities,
   bills,
   linkedBillIds,
+  sharedGroups = [],
+  sharedBills = [],
   today,
   spendlyAvailable,
 }: {
@@ -43,6 +46,9 @@ export default function UtilitiesPanel({
   utilities: CasaUtility[]
   bills: CasaBill[]
   linkedBillIds: string[]
+  // Spese condivise di Spendly: gruppi in cui dividere la bolletta e bollette già divise
+  sharedGroups?: CasaSharedGroup[]
+  sharedBills?: CasaSharedBill[]
   today: string
   spendlyAvailable: boolean
 }) {
@@ -159,6 +165,7 @@ export default function UtilitiesPanel({
                       <Link href="/marketplace/spendly/bollette" className="text-xs font-bold text-[var(--gold)] hover:text-[var(--ink)]">
                         {t('openInSpendly')}
                       </Link>
+                      <BillSharing bill={bill} groups={sharedGroups} shared={sharedBills.filter((s) => s.billId === bill.id)} run={run} isPending={isPending} />
                     </div>
                   ) : (
                     <span className="text-[var(--muted)]">{t('noBillLinked')}</span>
@@ -325,6 +332,76 @@ export default function UtilitiesPanel({
             </div>
           </form>
         </Sheet>
+      )}
+    </div>
+  )
+}
+
+// Spese condivise: dividere la bolletta in un gruppo (casa, coppia, coinquilini).
+// Diventa una spesa fissa del gruppo con la stessa frequenza; quando la
+// bolletta si segna pagata, nel gruppo entra l'importo reale.
+function BillSharing({
+  bill,
+  groups,
+  shared,
+  run,
+  isPending,
+}: {
+  bill: CasaBill
+  groups: CasaSharedGroup[]
+  shared: CasaSharedBill[]
+  run: (action: () => Promise<{ success: boolean; message?: string }>, after?: () => void) => void
+  isPending: boolean
+}) {
+  const t = useTranslations('casa')
+  const available = groups.filter((g) => !shared.some((s) => s.groupId === g.id))
+  const [groupId, setGroupId] = useState(available[0]?.id ?? '')
+  const nameOf = new Map(groups.map((g) => [g.id, `${g.emoji} ${g.name}`]))
+  if (bill.frequency === 'una_tantum') return null
+  return (
+    <div className="mt-2 w-full space-y-2 rounded-xl bg-[var(--gold)]/[0.06] px-3 py-2">
+      {shared.map((s) => (
+        <div key={s.recurringId} className="flex flex-wrap items-center justify-between gap-2 text-xs">
+          <Link href={`/spese-condivise/${s.groupId}`} className="flex items-center gap-1 font-semibold text-[var(--ink)] hover:text-[var(--gold)]">
+            <Users className="h-3.5 w-3.5 text-[var(--gold)]" /> {t('billSharedIn', { group: nameOf.get(s.groupId) ?? '—' })}
+          </Link>
+          <button
+            type="button"
+            disabled={isPending}
+            onClick={() => confirm(t('billUnshareConfirm')) && run(() => deleteSharedRecurring(s.recurringId))}
+            className="font-semibold text-gray-500 hover:text-red-600"
+          >
+            {t('billUnshare')}
+          </button>
+        </div>
+      ))}
+      {groups.length === 0 ? (
+        <Link href="/spese-condivise" className="flex items-center gap-1 text-xs font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
+          <Users className="h-3.5 w-3.5" /> {t('billShareNoGroup')}
+        </Link>
+      ) : (
+        available.length > 0 && (
+          <div className="flex flex-wrap items-center gap-2 text-xs">
+            <Users className="h-3.5 w-3.5 text-[var(--gold)]" />
+            <span className="font-semibold text-[var(--ink)]">{t('billShareIn')}</span>
+            <select value={groupId} onChange={(e) => setGroupId(e.target.value)} aria-label={t('billShareIn')} className="min-h-9 rounded-lg border border-gray-300 bg-white px-2">
+              {available.map((g) => (
+                <option key={g.id} value={g.id}>
+                  {g.emoji} {g.name}
+                </option>
+              ))}
+            </select>
+            <button
+              type="button"
+              disabled={isPending || !groupId}
+              onClick={() => run(() => linkBillToGroup(groupId, bill.id))}
+              className="inline-flex min-h-9 items-center gap-1 rounded-lg bg-[var(--ink)] px-3 font-bold text-white disabled:opacity-60"
+            >
+              {isPending ? <LoaderCircle className="h-3.5 w-3.5 animate-spin" /> : null} {t('billShareButton')}
+            </button>
+            <span className="w-full text-[11px] text-[var(--muted)]">{t('billShareHint')}</span>
+          </div>
+        )
       )}
     </div>
   )
