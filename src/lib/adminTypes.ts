@@ -203,6 +203,9 @@ export type AdminHouseAccount = {
 export type AdminSystemSettings = {
   maintenance_mode: boolean
   maintenance_message: string
+  // Pre-lancio: «KUMANI sta arrivando» per chi non è iscritto (lib/prelaunch)
+  prelaunch_mode: boolean
+  prelaunch_key: string
   matrix_slot_bonus_points: number
   matrix_spillover_bonus_points: number
   // Bonus Accoglienza ceduto dallo sponsor (20270104100000_welcome_bonus_split.sql)

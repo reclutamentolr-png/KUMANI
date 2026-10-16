@@ -25,22 +25,25 @@ export function parseEnabledLocales(raw: unknown): string[] {
 }
 
 // Impostazioni lette dal proxy a ogni pagina, in un'unica richiesta: lingue
-// attive e manutenzione accesa/spenta (il proxy le tiene in memoria qualche
-// secondo, vedi src/proxy.ts).
-export async function readProxySettings(): Promise<{ locales: string[]; maintenanceOn: boolean }> {
+// attive, manutenzione e pre-lancio accesi/spenti, chiave del link
+// d'anteprima (il proxy le tiene in memoria qualche secondo, vedi src/proxy.ts).
+export type ProxySettings = { locales: string[]; maintenanceOn: boolean; prelaunchOn: boolean; prelaunchKey: string }
+export async function readProxySettings(): Promise<ProxySettings> {
   const { data, error } = await createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
     auth: { autoRefreshToken: false, persistSession: false },
   })
     .from('system_settings')
     .select('key, value')
-    .in('key', [ENABLED_LOCALES_KEY, 'maintenance_mode'])
+    .in('key', [ENABLED_LOCALES_KEY, 'maintenance_mode', 'prelaunch_mode', 'prelaunch_key'])
   if (error) throw new Error(error.message)
   const rows = new Map((data ?? []).map((row) => [row.key, row.value]))
   const localesRaw = rows.get(ENABLED_LOCALES_KEY)
-  const maintenanceRaw = String(rows.get('maintenance_mode') ?? 'false').replace(/"/g, '')
+  const flag = (key: string) => String(rows.get(key) ?? 'false').replace(/"/g, '') === 'true'
   return {
     locales: localesRaw !== undefined ? parseEnabledLocales(localesRaw) : [...ALL_SITE_LOCALES],
-    maintenanceOn: maintenanceRaw === 'true',
+    maintenanceOn: flag('maintenance_mode'),
+    prelaunchOn: flag('prelaunch_mode'),
+    prelaunchKey: String(rows.get('prelaunch_key') ?? '').replace(/"/g, ''),
   }
 }
 

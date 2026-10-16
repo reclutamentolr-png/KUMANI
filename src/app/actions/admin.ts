@@ -21,6 +21,7 @@ import { HOME_LAYOUT_CACHE_TAG } from '@/lib/homeLayoutServer'
 import { TOOL_PLANS_CACHE_TAG } from '@/lib/freeTools'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { getTranslations } from 'next-intl/server'
+import { PRELAUNCH_KEY_PATTERN } from '@/lib/prelaunch'
 import type { AdminCouponRow, AdminRewardRedemption, ListingReport, ListingReportRow } from '@/lib/adminTypes'
 
 const getServiceClient = () =>
@@ -100,7 +101,7 @@ const ADMIN_EDITABLE_PROFILE_FIELDS = new Set([
 // Chiavi modificabili dal modulo Impostazioni: commissioni, account KUMANI e
 // il resto hanno i loro pannelli, e non vanno mai riscritte da qui.
 const GENERAL_SETTINGS_KEYS = new Set([
-  'maintenance_mode', 'maintenance_message', 'matrix_slot_bonus_points', 'matrix_spillover_bonus_points',
+  'maintenance_mode', 'maintenance_message', 'prelaunch_mode', 'prelaunch_key', 'matrix_slot_bonus_points', 'matrix_spillover_bonus_points',
   'welcome_bonus_base', 'welcome_bonus_pro', 'welcome_bonus_from_direct',
   'activity_thanks_points', 'pro_invite_extra_points', 'pro_trial_days', 'affinity_intros_per_week',
   'listing_feature_cost_7d', 'listing_feature_cost_15d', 'menu_ai_daily_runs',
@@ -163,6 +164,13 @@ export async function adminSaveSystemSettings(settings: Record<string, unknown>)
     const v = settings[key]
     const ok = key.endsWith('_months') ? v === 1 || v === 3 || v === 12 : key.startsWith('surprise_bonus_') ? v === 0 || v === 1 : Number.isInteger(v) && (v as number) >= 0 && (v as number) <= 100
     if (!ok) return { success: false, error: 'Sorprese incluse nel piano: valori non validi (quantità da 0 a 100, ogni 1, 3 o 12 mesi).' }
+  }
+  // Pre-lancio: la chiave del link d'anteprima (lettere, numeri, - e _) serve per accenderlo
+  if ('prelaunch_key' in settings && !(settings.prelaunch_key === '' || (typeof settings.prelaunch_key === 'string' && PRELAUNCH_KEY_PATTERN.test(settings.prelaunch_key))))
+    return { success: false, error: 'Chiave del link d’anteprima non valida: da 12 a 64 tra lettere, numeri, - e _.' }
+  if (settings.prelaunch_mode === true) {
+    const key = 'prelaunch_key' in settings ? settings.prelaunch_key : (await getServiceClient().from('system_settings').select('value').eq('key', 'prelaunch_key').maybeSingle()).data?.value
+    if (!key || !PRELAUNCH_KEY_PATTERN.test(String(key).replace(/"/g, ''))) return { success: false, error: 'Per accendere il pre-lancio serve la chiave del link d’anteprima.' }
   }
   if (Object.keys(settings).length === 0) return { success: true }
   const rows = Object.entries(settings).map(([key, value]) => ({ key, value: JSON.stringify(value) }))

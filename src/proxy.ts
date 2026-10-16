@@ -3,7 +3,8 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
 import type { NextFetchEvent } from 'next/server';
-import { readProxySettings } from './lib/enabledLocalesCore';
+import { readProxySettings, type ProxySettings } from './lib/enabledLocalesCore';
+import { PRELAUNCH_HIDDEN, PREVIEW_COOKIE, PREVIEW_COOKIE_MAX_AGE, previewToken } from './lib/prelaunch';
 import { blockedIps, clientIp, PROBE_PATH, recordSecurityEvent } from './lib/securityCore';
 import { locales, defaultLocale } from '../i18n';
 
@@ -74,10 +75,9 @@ function extractToolName(pathname: string): string | null {
   return null;
 }
 
-// Lingue attive (Admin → Lingue del sito) e manutenzione accesa/spenta: in
+// Lingue attive (Admin → Lingue del sito), manutenzione e pre-lancio: in
 // memoria 30 secondi in questo processo, così non si legge il database a
 // ogni pagina. Una modifica dall'Admin vale entro 30 secondi.
-type ProxySettings = { locales: string[]; maintenanceOn: boolean };
 let settingsCache: { at: number; value: ProxySettings } | null = null;
 async function proxySettings(): Promise<ProxySettings> {
   if (settingsCache && Date.now() - settingsCache.at < 30_000) return settingsCache.value;
@@ -87,7 +87,7 @@ async function proxySettings(): Promise<ProxySettings> {
     return value;
   } catch {
     // Database non raggiungibile: si controlla la manutenzione come prima
-    return settingsCache?.value ?? { locales: [...locales], maintenanceOn: true };
+    return settingsCache?.value ?? { locales: [...locales], maintenanceOn: true, prelaunchOn: false, prelaunchKey: '' };
   }
 }
 
@@ -133,7 +133,7 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
     return new NextResponse('Not found', { status: 404 });
   }
 
-  const { locales: enabledLocales, maintenanceOn } = await proxySettings();
+  const { locales: enabledLocales, maintenanceOn, prelaunchOn, prelaunchKey } = await proxySettings();
   const urlSegments = request.nextUrl.pathname.split('/').filter(Boolean);
   const urlLocale = urlSegments[0] && locales.includes(urlSegments[0]) ? urlSegments[0] : null;
 
@@ -206,6 +206,44 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
     const redirect = NextResponse.redirect(url);
     redirect.cookies.set('NEXT_LOCALE', defaultLocale, LOCALE_COOKIE);
     return redirect;
+  }
+
+  // Pre-lancio (Admin → Impostazioni → Sistema, vedi lib/prelaunch): chi non
+  // è iscritto e non ha il cookie dell'anteprima vede «KUMANI sta arrivando»
+  // al posto delle pagine di presentazione. Chi ha un account entra.
+  {
+    const localePrefix = urlLocale ? `/${urlLocale}` : '';
+    const barePath = '/' + (urlLocale ? urlSegments.slice(1) : urlSegments).join('/');
+    // Link d'anteprima: con la chiave giusta lascia il cookie e apre la Home
+    if (barePath === '/anteprima') {
+      const ok = prelaunchOn && !!prelaunchKey && request.nextUrl.searchParams.get('chiave') === prelaunchKey;
+      const redirect = NextResponse.redirect(new URL(`${localePrefix}${!prelaunchOn || ok ? '/' : '/in-arrivo'}`, request.url));
+      if (ok) {
+        redirect.cookies.set(PREVIEW_COOKIE, await previewToken(prelaunchKey), {
+          path: '/',
+          maxAge: PREVIEW_COOKIE_MAX_AGE,
+          httpOnly: true,
+          sameSite: 'lax',
+          secure: request.nextUrl.protocol === 'https:',
+        });
+      }
+      return redirect;
+    }
+    // Lancio fatto: la pagina d'attesa porta alla Home
+    if (!prelaunchOn && barePath === '/in-arrivo') {
+      return NextResponse.redirect(new URL(localePrefix || '/', request.url));
+    }
+    if (prelaunchOn && !user && PRELAUNCH_HIDDEN.test(barePath)) {
+      const cookie = request.cookies.get(PREVIEW_COOKIE)?.value;
+      const preview = !!prelaunchKey && !!cookie && cookie === (await previewToken(prelaunchKey));
+      if (!preview) {
+        // Registrazione e altri invii da una pagina nascosta: rifiutati
+        if (request.method !== 'GET' || request.headers.has('next-action')) {
+          return new NextResponse('KUMANI sta arrivando.', { status: 403 });
+        }
+        return NextResponse.redirect(new URL(`${localePrefix}/in-arrivo`, request.url));
+      }
+    }
   }
 
   // Traduttori (account creati dall'Admin, ruolo scritto dal server

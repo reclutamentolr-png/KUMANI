@@ -15,6 +15,9 @@ import {
   Save,
   BadgeCheck,
   Sparkles,
+  Rocket,
+  Copy,
+  RefreshCw,
 } from 'lucide-react'
 import { askConfirm } from '@/lib/confirm'
 
@@ -24,11 +27,19 @@ import { askConfirm } from '@/lib/confirm'
 // testo e stessi margini in ogni sezione
 const INPUT =
   'w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]'
+// Chiave nuova del link d'anteprima del pre-lancio: 24 caratteri casuali
+function newPreviewKey() {
+  const bytes = crypto.getRandomValues(new Uint8Array(18))
+  return btoa(String.fromCharCode(...bytes)).replace(/\+/g, '-').replace(/\//g, '_')
+}
+
 export default function AdminSettingsPanel() {
   const supabase = createClient()
   const [systemSettings, setSystemSettings] = useState<AdminSystemSettings>({
     maintenance_mode: false,
     maintenance_message: 'Sito in manutenzione. Torna presto!',
+    prelaunch_mode: false,
+    prelaunch_key: '',
     matrix_slot_bonus_points: 0,
     matrix_spillover_bonus_points: 0,
     welcome_bonus_base: 1,
@@ -91,6 +102,8 @@ export default function AdminSettingsPanel() {
   })
   // Valori letti all'apertura: si salvano solo i campi cambiati
   const [savedSettings, setSavedSettings] = useState<Record<string, unknown>>({})
+  // Link d'anteprima con l'indirizzo da cui si apre l'Admin (sito o locale)
+  const previewLink = typeof window === 'undefined' ? '' : `${window.location.origin}/anteprima?chiave=${systemSettings.prelaunch_key}`
   const [planPrices, setPlanPrices] = useState<{ base: number; pro: number; source: 'stripe' | 'settings' } | null>(null)
   const [savingSettings, setSavingSettings] = useState(false)
   const [houseAccount, setHouseAccount] = useState<AdminHouseAccount | null>(null)
@@ -787,9 +800,68 @@ export default function AdminSettingsPanel() {
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-[var(--gold)]/30 bg-[var(--gold-pale)] px-5 py-3">
           <Settings className="h-5 w-5 text-[var(--ink)]" />
           <h3 className="text-base font-bold text-[var(--ink)]">Sistema</h3>
-          <span className="text-xs text-gray-600">manutenzione del sito</span>
+          <span className="text-xs text-gray-600">pre-lancio e manutenzione del sito</span>
         </div>
         <div className="space-y-6 p-5">
+          {/* Pre-lancio (lib/prelaunch): «KUMANI sta arrivando» per chi non è iscritto */}
+          <div className="rounded-lg border border-[var(--gold)]/40 bg-[var(--gold-pale)]/50 p-4">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2 font-medium text-[var(--ink)]">
+                  <Rocket className="h-4 w-4" /> Pre-lancio
+                </div>
+                <div className="text-sm text-gray-600">
+                  Se attivo, chi non è iscritto vede «KUMANI sta arrivando» al posto di Home, Servizi, Catalogo, Prezzi, guide e
+                  registrazione. Chi ha un account entra normalmente; restano aperti negozi, menù, CV, preventivi, ricevute e gli altri link
+                  degli iscritti.
+                </div>
+              </div>
+              <button
+                onClick={() =>
+                  setSystemSettings({
+                    ...systemSettings,
+                    prelaunch_mode: !systemSettings.prelaunch_mode,
+                    // Prima accensione: la chiave del link d'anteprima si crea da sola
+                    prelaunch_key: systemSettings.prelaunch_key || newPreviewKey(),
+                  })
+                }
+                className="shrink-0 focus:outline-none"
+                aria-label="Pre-lancio"
+              >
+                {systemSettings.prelaunch_mode ? <ToggleRight className="h-8 w-14 text-[var(--gold)]" /> : <ToggleLeft className="h-8 w-14 text-gray-400" />}
+              </button>
+            </div>
+            {systemSettings.prelaunch_key && (
+              <div className="mt-4 border-t border-[var(--gold)]/30 pt-4">
+                <div className="text-sm font-medium text-gray-700">Link d’anteprima per i test</div>
+                <p className="mb-2 text-xs text-gray-600">
+                  Chi lo apre vede il sito completo per 60 giorni su quel browser (anche senza account). Vale anche in locale, con
+                  l’indirizzo locale al posto di quello del sito. «Nuova chiave» toglie l’accesso a chi aveva il link vecchio.
+                </p>
+                <div className="flex flex-wrap items-center gap-2">
+                  <code className="min-w-0 flex-1 break-all rounded-lg border border-gray-300 bg-white px-3 py-2 text-xs text-gray-900">
+                    {previewLink}
+                  </code>
+                  <button
+                    onClick={() => navigator.clipboard.writeText(previewLink).then(() => notify('Link copiato'))}
+                    className="flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-800 hover:bg-gray-50"
+                  >
+                    <Copy className="h-4 w-4" /> Copia
+                  </button>
+                  <button
+                    onClick={() => setSystemSettings({ ...systemSettings, prelaunch_key: newPreviewKey() })}
+                    className="flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-800 hover:bg-gray-50"
+                  >
+                    <RefreshCw className="h-4 w-4" /> Nuova chiave
+                  </button>
+                </div>
+                {systemSettings.prelaunch_key !== savedSettings.prelaunch_key && (
+                  <p className="mt-2 text-xs font-medium text-amber-700">Salva le impostazioni perché il link valga.</p>
+                )}
+              </div>
+            )}
+          </div>
+
           <div className="flex items-center justify-between p-4 bg-red-50 rounded-lg border border-red-200">
             <div>
               <div className="font-medium text-red-900">Modalità Manutenzione</div>

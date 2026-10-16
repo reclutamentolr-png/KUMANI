@@ -13462,5 +13462,13 @@
       "tab_car": "Voiture et moto",
       "tab_findo": "Où je l’ai mis"
     }
+  },
+  "comingSoon": {
+    "metaTitle": "KUMANI arrive",
+    "eyebrow": "On y est presque",
+    "title": "KUMANI arrive",
+    "subtitle": "Une seule app pour te protéger des arnaques, gérer tes comptes, développer ton activité et prendre soin de toi. Nous apportons les dernières retouches.",
+    "member": "Tu as déjà un compte ?",
+    "login": "Se connecter"
   }
 }
