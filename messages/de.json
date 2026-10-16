@@ -218,7 +218,8 @@
     "aboutLink": "Über uns",
     "planSurpriseBase": "KUMANI Überraschung: jeden Monat Überraschungen inklusive, dazu eine 3-Tage-Reise als Geschenk bei der Verlängerung und an Feiertagen",
     "planSurprisePro": "KUMANI Überraschung: mehr Überraschungen inklusive, auch 7-Tage-Reisen, dazu Geschenke bei der Verlängerung und an Feiertagen",
-    "statTagline": "{tools} Tools in {services} Diensten. Eine App."
+    "statTagline": "{tools} Tools in {services} Diensten. Eine App.",
+    "socialFollow": "KUMANI auf {name}"
   },
   "authRegister": {
     "registerTitle": "Konto erstellen",

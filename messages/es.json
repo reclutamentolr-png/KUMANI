@@ -218,7 +218,8 @@
     "aboutLink": "Quiénes somos",
     "planSurpriseBase": "KUMANI Sorpresa: sorpresas incluidas cada mes, más un recorrido de 3 días de regalo en la renovación y en las fiestas",
     "planSurprisePro": "KUMANI Sorpresa: más sorpresas incluidas, también los recorridos de 7 días, más los regalos en la renovación y en las fiestas",
-    "statTagline": "{tools} herramientas en {services} servicios. Una sola app."
+    "statTagline": "{tools} herramientas en {services} servicios. Una sola app.",
+    "socialFollow": "KUMANI en {name}"
   },
   "authRegister": {
     "registerTitle": "Crea tu cuenta",

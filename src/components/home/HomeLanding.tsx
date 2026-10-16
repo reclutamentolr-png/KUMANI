@@ -28,6 +28,7 @@ import {
 } from 'lucide-react'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import Logo from '@/components/Logo'
+import SocialLinks, { SOCIAL_LINKS } from '@/components/SocialLinks'
 import { InstallAppLink } from '@/components/InstallAppBanner'
 import HomeNeeds from '@/components/home/HomeNeeds'
 import { buildHomeNeeds } from '@/lib/homeNeedsServer'
@@ -104,7 +105,7 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
 
   // Dati strutturati: chi è KUMANI e il sito
   const ld = [
-    { '@context': 'https://schema.org', '@type': 'Organization', name: 'KUMANI', url: CANONICAL_ORIGIN, logo: `${CANONICAL_ORIGIN}/icon-512.png`, slogan: t('heroTitle') + ' ' + t('heroAccent'), email: 'support@kumani.io' },
+    { '@context': 'https://schema.org', '@type': 'Organization', name: 'KUMANI', url: CANONICAL_ORIGIN, logo: `${CANONICAL_ORIGIN}/icon-512.png`, slogan: t('heroTitle') + ' ' + t('heroAccent'), email: 'support@kumani.io', sameAs: SOCIAL_LINKS.map((s) => s.href) },
     { '@context': 'https://schema.org', '@type': 'WebSite', name: 'KUMANI', url: CANONICAL_ORIGIN },
   ]
 
@@ -549,6 +550,10 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
             <div className="text-gray-400 text-xs sm:text-sm text-center">
               {t('copyright')}
             </div>
+          </div>
+          {/* YouTube e Instagram di KUMANI */}
+          <div className="mt-6">
+            <SocialLinks label={(name) => t('socialFollow', { name })} />
           </div>
           <p className="text-gray-500 text-xs text-center mt-6 max-w-3xl mx-auto leading-relaxed">
             {t('footerLegalNote1')}

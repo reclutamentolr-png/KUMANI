@@ -255,7 +255,8 @@
     "aboutLink": "About us",
     "planSurpriseBase": "KUMANI Surprise: surprises included every month, plus a free 3-day journey at renewal and on holidays",
     "planSurprisePro": "KUMANI Surprise: more surprises included, 7-day journeys too, plus gifts at renewal and on holidays",
-    "statTagline": "{tools} tools in {services} services. One app."
+    "statTagline": "{tools} tools in {services} services. One app.",
+    "socialFollow": "KUMANI on {name}"
   },
   "authRegister": {
     "registerTitle": "Create your account",
