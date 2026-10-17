@@ -3,9 +3,9 @@
 import { useEffect, useId, useRef, useState, type FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
-import { ArrowRight, AtSign, Building2, Camera, Globe, Landmark, Phone, ShieldCheck, type LucideIcon } from 'lucide-react'
+import { ArrowRight, AtSign, Building2, Camera, Globe, Landmark, MailSearch, Phone, ShieldCheck, type LucideIcon } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
-import { quickCheckFindings, type QuickCheckFinding, type QuickCheckKind } from '@/lib/quickCheck'
+import { isWholeMessage, MESSAGE_HANDOFF_KEY, quickCheckFindings, type QuickCheckFinding, type QuickCheckKind } from '@/lib/quickCheck'
 import { defaultLocale } from '../../../i18n'
 
 export { quickCheckTarget } from '@/lib/quickCheck'
@@ -14,8 +14,9 @@ const KIND_ICON: Record<QuickCheckKind, LucideIcon> = { site: Globe, email: AtSi
 
 // «Qualcosa non ti torna? Incollalo qui»: un campo solo per un valore (IBAN,
 // email, partita IVA, sito, telefono) o per un messaggio intero (SMS,
-// WhatsApp, email). Una cosa sola → si apre subito lo strumento giusto già
-// compilato; più cose → l'elenco, una per riga. Per le foto: VeriFoto.
+// WhatsApp, email). Un valore solo → si apre subito lo strumento giusto già
+// compilato; un messaggio intero → prima «Analizza tutto il messaggio» (CheckMail
+// con il testo già incollato), poi le singole cose trovate. Per le foto: VeriFoto.
 // Nella pagina Servizi (gruppo Sicurezza), in Dashboard e nella pagina /controlla
 // (dove arrivano anche i contenuti condivisi dal telefono).
 export default function QuickCheckBox({ title, initialText = '', autoRun = false, className = 'mb-4' }: { title?: string; initialText?: string; autoRun?: boolean; className?: string }) {
@@ -26,11 +27,22 @@ export default function QuickCheckBox({ title, initialText = '', autoRun = false
   const [value, setValue] = useState(initialText)
   const [unknown, setUnknown] = useState(false)
   const [findings, setFindings] = useState<QuickCheckFinding[] | null>(null)
+  // Il testo incollato è un messaggio intero (non un valore solo)
+  const [message, setMessage] = useState(false)
   const ran = useRef(false)
   const prefix = locale === defaultLocale ? '' : `/${locale}`
 
   const check = (text: string) => {
     const found = quickCheckFindings(text)
+    // Messaggio intero: niente salto a uno strumento solo (una mail con un link
+    // finiva in SVAT e il resto si perdeva): si sceglie qui
+    if (isWholeMessage(text)) {
+      setUnknown(false)
+      setMessage(true)
+      setFindings(found)
+      return
+    }
+    setMessage(false)
     if (found.length === 0) {
       setFindings(null)
       setUnknown(true)
@@ -53,6 +65,16 @@ export default function QuickCheckBox({ title, initialText = '', autoRun = false
     // eslint-disable-next-line react-hooks/exhaustive-deps -- solo all'apertura
   }, [])
 
+  // «Analizza tutto il messaggio»: il testo va a CheckMail nella memoria della scheda
+  const analyzeMessage = () => {
+    try {
+      sessionStorage.setItem(MESSAGE_HANDOFF_KEY, JSON.stringify({ text: value.slice(0, 4000), at: Date.now() }))
+    } catch {
+      // memoria non disponibile: CheckMail si apre vuoto
+    }
+    router.push(`${prefix}/marketplace/checkmail`)
+  }
+
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     check(value)
@@ -73,6 +95,7 @@ export default function QuickCheckBox({ title, initialText = '', autoRun = false
             setValue(event.target.value)
             setUnknown(false)
             setFindings(null)
+            setMessage(false)
           }}
           onKeyDown={(event) => {
             // Invio controlla (Maiusc+Invio va a capo, per chi incolla un messaggio)
@@ -103,9 +126,23 @@ export default function QuickCheckBox({ title, initialText = '', autoRun = false
       </Link>
       <div aria-live="polite">
         {unknown && <p className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-900">{t('checkBoxUnknown')}</p>}
-        {findings && (
+        {message && (
+          <button
+            type="button"
+            onClick={analyzeMessage}
+            className="mt-3 flex w-full items-center gap-3 rounded-xl bg-[var(--ink)] px-4 py-3 text-left text-white transition-colors hover:bg-black"
+          >
+            <MailSearch className="h-5 w-5 shrink-0 text-[var(--gold-bright)]" aria-hidden />
+            <span className="min-w-0 flex-1">
+              <span className="block text-sm font-bold">{t('checkMessageTitle')}</span>
+              <span className="block text-xs text-white/70">{t('checkMessageText')}</span>
+            </span>
+            <ArrowRight className="h-4 w-4 shrink-0 text-[var(--gold-bright)]" aria-hidden />
+          </button>
+        )}
+        {findings && findings.length > 0 && (
           <div className="mt-3">
-            <p className="text-sm font-semibold text-[var(--ink)]">{t('checkBoxFound', { n: findings.length })}</p>
+            <p className="text-sm font-semibold text-[var(--ink)]">{message ? t('checkMessageOne') : t('checkBoxFound', { n: findings.length })}</p>
             <ul className="mt-2 divide-y divide-gray-100 rounded-xl border border-gray-200">
               {findings.map((f) => {
                 const Icon = KIND_ICON[f.kind]

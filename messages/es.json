@@ -10775,7 +10775,10 @@
     "checkWith_email": "con CheckMail",
     "checkWith_iban": "con Verificar IBAN",
     "checkWith_phone": "con ¿Quién me ha llamado?",
-    "checkWith_vat": "con SVAT"
+    "checkWith_vat": "con SVAT",
+    "checkMessageTitle": "Analiza todo el mensaje",
+    "checkMessageText": "Con CheckMail: revisamos juntos remitente, enlaces, prisas y peticiones de datos.",
+    "checkMessageOne": "O comprueba una cosa cada vez:"
   },
   "businessProfile": {
     "title": "Ficha del negocio",

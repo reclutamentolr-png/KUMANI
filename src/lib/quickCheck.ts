@@ -122,3 +122,25 @@ export function quickCheckFindings(raw: string): QuickCheckFinding[] {
 
   return found.slice(0, 8)
 }
+
+// Un messaggio intero (SMS, WhatsApp, email) e non un valore solo: va a capo
+// oppure ha più parole. In quel caso non si salta mai a uno strumento: si
+// propone di analizzare tutto il messaggio con CheckMail, poi le singole cose.
+export function isWholeMessage(raw: string): boolean {
+  const s = raw.trim()
+  return s.includes('\n') || s.split(/\s+/).length >= 6
+}
+
+// Il messaggio passa a CheckMail nella memoria della scheda (non
+// nell'indirizzo: resta sul telefono e non finisce nella cronologia)
+export const MESSAGE_HANDOFF_KEY = 'kumani_quickcheck_message'
+
+// Mittente (riga «Da:» o la prima email) e oggetto (riga «Oggetto:»), in tutte le lingue del sito
+export function messageParts(raw: string): { sender: string; subject: string; text: string } {
+  const text = raw.slice(0, 4000)
+  const from = /^\s*(?:da|from|de|von|от|mittente)\s*:\s*(.+)$/im.exec(text)?.[1] ?? ''
+  const email = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i
+  const sender = (email.exec(from)?.[0] ?? (from.trim() || email.exec(text)?.[0]) ?? '').slice(0, 300)
+  const subject = (/^\s*(?:oggetto|subject|asunto|objet|assunto|betreff|тема)\s*:\s*(.+)$/im.exec(text)?.[1] ?? '').trim().slice(0, 500)
+  return { sender, subject, text }
+}

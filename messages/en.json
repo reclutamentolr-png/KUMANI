@@ -10775,7 +10775,10 @@
     "checkWith_email": "with CheckMail",
     "checkWith_iban": "with IBAN Check",
     "checkWith_phone": "with Who called me?",
-    "checkWith_vat": "with SVAT"
+    "checkWith_vat": "with SVAT",
+    "checkMessageTitle": "Analyse the whole message",
+    "checkMessageText": "With CheckMail: we look at the sender, links, urgency and requests for data together.",
+    "checkMessageOne": "Or check one thing at a time:"
   },
   "businessProfile": {
     "title": "Business profile",

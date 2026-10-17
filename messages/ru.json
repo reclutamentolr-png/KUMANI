@@ -10775,7 +10775,10 @@
     "checkWith_email": "в CheckMail",
     "checkWith_iban": "в Проверке IBAN",
     "checkWith_phone": "в «Кто мне звонил?»",
-    "checkWith_vat": "в SVAT"
+    "checkWith_vat": "в SVAT",
+    "checkMessageTitle": "Проверить всё сообщение",
+    "checkMessageText": "С CheckMail: проверяем вместе отправителя, ссылки, спешку и запросы данных.",
+    "checkMessageOne": "Или проверьте по одному:"
   },
   "businessProfile": {
     "title": "Карточка бизнеса",

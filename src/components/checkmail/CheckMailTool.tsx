@@ -1,11 +1,12 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { ChevronDown, ClipboardPaste, FileUp, LoaderCircle, Lock, MailSearch, RotateCcw, ShieldAlert, ShieldCheck, Smartphone, Sparkles, TriangleAlert } from 'lucide-react'
 import type { CheckMailResponse } from '@/lib/checkmail/types'
 import CommunityWarning from '@/components/scamNet/CommunityWarning'
 import DossierButton, { type Dossier, type DossierStatus } from '@/components/scamNet/DossierButton'
+import { MESSAGE_HANDOFF_KEY, messageParts } from '@/lib/quickCheck'
 
 type Mode = 'file' | 'paste' | 'quick'
 type OkResult = Extract<CheckMailResponse, { status: 'ok' }>
@@ -42,6 +43,27 @@ export default function CheckMailTool({
   const [result, setResult] = useState<OkResult | null>(null)
   const [leftToday, setLeftToday] = useState(initialLeft)
   const fileInput = useRef<HTMLInputElement>(null)
+
+  // Messaggio incollato in «Controlla subito» (memoria della scheda, una volta
+  // sola e solo se recente): si apre «Dal telefono» già compilato
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem(MESSAGE_HANDOFF_KEY)
+      if (!saved) return
+      sessionStorage.removeItem(MESSAGE_HANDOFF_KEY)
+      const { text: pasted, at } = JSON.parse(saved) as { text?: string; at?: number }
+      if (!pasted || !at || Date.now() - at > 10 * 60 * 1000) return
+      const parts = messageParts(pasted)
+      // Compilazione dal messaggio passato: è proprio il compito di questo effetto
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setMode('quick')
+      setText(parts.text)
+      if (parts.sender) setSender(parts.sender)
+      if (parts.subject) setSubject(parts.subject)
+    } catch {
+      // memoria non disponibile o dato non valido: si parte vuoti
+    }
+  }, [])
 
   const canSubmit = !busy && leftToday > 0 && (mode === 'file' ? !!file : mode === 'paste' ? raw.trim().length > 0 : text.trim().length > 0)
 
