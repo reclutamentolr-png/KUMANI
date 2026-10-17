@@ -8868,7 +8868,9 @@
     "scamCategory_support": "Falso apoio técnico",
     "scamCategory_prize": "Falso prémio ou presente",
     "scamCategory_phishing": "Roubo de dados (phishing)",
-    "scamCategory_other": "Outra"
+    "scamCategory_other": "Outra",
+    "surpriseRemindTitle": "🎁 Chegou a hora: envia a surpresa a {name}",
+    "surpriseRemindBody": "Toca aqui: o WhatsApp abre com a mensagem pronta."
   },
   "pushInvite": {
     "title": "Ative as notificações",
@@ -11656,7 +11658,28 @@
     "paidWithPlan": "incluída no plano",
     "planOrPay": "Ou paga:",
     "kindIncluded": "Incluída no teu plano",
-    "kindIncludedLeft": "restam-te {n}"
+    "kindIncludedLeft": "restam-te {n}",
+    "reminderTitle": "Lembrete para enviar",
+    "reminderIntro": "Escolhe quando queres enviar a surpresa: a essa hora recebes uma notificação e um email com o WhatsApp já preparado, basta tocar em «Enviar».",
+    "reminderWhen": "Dia e hora",
+    "reminderPhone": "Número de WhatsApp de quem a recebe (opcional)",
+    "reminderPhoneHint": "Com o número, o WhatsApp abre logo na conversa certa. Só o usamos para este lembrete e mais ninguém o vê.",
+    "reminderSave": "Definir lembrete",
+    "reminderCancel": "Cancelar",
+    "reminderChange": "Alterar",
+    "reminderRemove": "Remover",
+    "reminderSet": "Vamos lembrar-te de a enviar a {date}.",
+    "reminderSent": "Lembrete enviado a {date}.",
+    "reminderNowTitle": "Chegou a hora: envia a surpresa a {name}! 🎁",
+    "reminderNowText": "A mensagem com o link já está escrita: abre-se o WhatsApp e tocas em «Enviar».",
+    "reminderNowCta": "Enviar agora pelo WhatsApp",
+    "reminderEmailSubject": "🎁 Está na hora de enviar a surpresa a {name}",
+    "reminderEmailIntro": "Olá! Como pediste, lembramos-te de enviar agora a surpresa a {name}.",
+    "reminderEmailHow": "Toca no botão: abre-se o WhatsApp com a mensagem e o link prontos, só tens de carregar em «Enviar».",
+    "reminderEmailLink": "O link da surpresa:",
+    "error_reminderPast": "Escolhe um dia e uma hora no futuro.",
+    "error_reminderTooFar": "O lembrete pode ser definido no máximo com um ano de antecedência.",
+    "error_reminderPhone": "O número não parece correto: escreve-o com o indicativo, por exemplo +351 912 345 678."
   },
   "surpriseTpl": {
     "mom_name": "Uma massagem para a mãe",

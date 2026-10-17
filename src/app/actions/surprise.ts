@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import { templateByKey } from '@/lib/surpriseTemplates'
 import { limitError } from '@/lib/appLimits'
 import { surpriseDb } from '@/lib/surpriseServer'
+import { phoneInfo } from '@/lib/scamNetPhone'
 import { GALLERY_MAX, isMusic, isOccasion, isRevealStyle, isStepKind, isSurpriseKind, isSurpriseTheme, SURPRISE_MAX, type StepExtra } from '@/lib/surprise'
 
 // KUMANI Sorpresa: azioni di chi crea il regalo. Tutto passa dalle regole
@@ -211,6 +212,37 @@ export async function deleteSurprise(id: string): Promise<Result> {
   if (files?.length) await db.storage.from('surprise-media').remove(files.map((f) => `${g.userId}/${id}/${f.name}`))
   const { error } = await g.supabase.from('surprise_gifts').delete().eq('id', id).eq('user_id', g.userId).eq('status', 'draft')
   if (error) return { success: false, message: 'deleteError' }
+  return { success: true }
+}
+
+// Promemoria per l'invio di una sorpresa attiva: data e ora (nel futuro) e,
+// se c'è, il numero WhatsApp di chi la riceve; null li toglie
+export async function setSurpriseReminder(id: string, remindAt: string | null, phone: string | null): Promise<Result> {
+  const g = await me()
+  if (!g) return { success: false, message: 'notLoggedIn' }
+  if (!/^[0-9a-f-]{36}$/i.test(id)) return { success: false, message: 'notFound' }
+  let at: string | null = null
+  if (remindAt) {
+    const when = new Date(remindAt)
+    if (Number.isNaN(when.getTime()) || when.getTime() < Date.now() - 60_000) return { success: false, message: 'reminderPast' }
+    if (when.getTime() > Date.now() + 366 * 86_400_000) return { success: false, message: 'reminderTooFar' }
+    at = when.toISOString()
+  }
+  let number: string | null = null
+  if (at && phone?.trim()) {
+    const info = phoneInfo(phone)
+    if (!info?.valid) return { success: false, message: 'reminderPhone' }
+    number = info.e164
+  }
+  const { data, error } = await g.supabase
+    .from('surprise_gifts')
+    .update({ remind_at: at, remind_phone: number })
+    .eq('id', id)
+    .eq('user_id', g.userId)
+    .eq('status', 'active')
+    .select('id')
+  if (error) return { success: false, message: 'saveError' }
+  if (!data?.length) return { success: false, message: 'notFound' }
   return { success: true }
 }
 

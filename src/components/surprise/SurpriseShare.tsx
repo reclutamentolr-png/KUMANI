@@ -3,10 +3,11 @@
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Check, Copy, Download, Mail, MessageCircle, Share2 } from 'lucide-react'
+import { surpriseWhatsAppUrl } from '@/lib/surprise'
 
 // Invio della sorpresa attiva: WhatsApp, email, condivisione del telefono,
 // copia del link e QR code da stampare o mostrare.
-export default function SurpriseShare({ url, recipientName }: { url: string; recipientName: string }) {
+export default function SurpriseShare({ url, recipientName, phone }: { url: string; recipientName: string; phone?: string | null }) {
   const t = useTranslations('surprise')
   const [copied, setCopied] = useState(false)
   const [qr, setQr] = useState<string | null>(null)
@@ -29,7 +30,7 @@ export default function SurpriseShare({ url, recipientName }: { url: string; rec
   return (
     <div className="space-y-3">
       <div className="grid gap-2 sm:grid-cols-2">
-        <a href={`https://wa.me/?text=${encodeURIComponent(text)}`} target="_blank" rel="noopener noreferrer" className={`${btn} bg-emerald-600 text-white hover:bg-emerald-700`}>
+        <a href={surpriseWhatsAppUrl(text, phone)} target="_blank" rel="noopener noreferrer" className={`${btn} bg-emerald-600 text-white hover:bg-emerald-700`}>
           <MessageCircle className="h-5 w-5" /> {t('whatsapp')}
         </a>
         <a href={`mailto:?subject=${encodeURIComponent(t('emailSubject'))}&body=${encodeURIComponent(text)}`} className={`${btn} bg-[var(--ink)] text-white hover:brightness-125`}>

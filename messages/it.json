@@ -8868,7 +8868,9 @@
     "scamCategory_support": "Falsa assistenza tecnica",
     "scamCategory_prize": "Falsa vincita o regalo",
     "scamCategory_phishing": "Furto di dati (phishing)",
-    "scamCategory_other": "Altro"
+    "scamCategory_other": "Altro",
+    "surpriseRemindTitle": "🎁 È il momento: manda la sorpresa a {name}",
+    "surpriseRemindBody": "Tocca qui: WhatsApp si apre con il messaggio già pronto."
   },
   "pushInvite": {
     "title": "Attiva le notifiche",
@@ -11656,7 +11658,28 @@
     "paidWithPlan": "inclusa nel piano",
     "planOrPay": "Oppure paga:",
     "kindIncluded": "Inclusa nel piano",
-    "kindIncludedLeft": "te ne restano {n}"
+    "kindIncludedLeft": "te ne restano {n}",
+    "reminderTitle": "Promemoria per l’invio",
+    "reminderIntro": "Scegli quando vuoi mandare la sorpresa: a quell’ora ti arrivano una notifica e un’email con WhatsApp già pronto, basta toccare «Invia».",
+    "reminderWhen": "Giorno e ora",
+    "reminderPhone": "Numero WhatsApp di chi la riceve (facoltativo)",
+    "reminderPhoneHint": "Con il numero, WhatsApp si apre già sulla chat giusta. Lo usiamo solo per questo promemoria e non lo vede nessun altro.",
+    "reminderSave": "Imposta il promemoria",
+    "reminderCancel": "Annulla",
+    "reminderChange": "Cambia",
+    "reminderRemove": "Togli",
+    "reminderSet": "Ti ricordiamo di inviarla {date}.",
+    "reminderSent": "Promemoria inviato {date}.",
+    "reminderNowTitle": "È il momento: manda la sorpresa a {name}! 🎁",
+    "reminderNowText": "Il messaggio con il link è già scritto: si apre WhatsApp e tocchi «Invia».",
+    "reminderNowCta": "Invia ora su WhatsApp",
+    "reminderEmailSubject": "🎁 È il momento di mandare la sorpresa a {name}",
+    "reminderEmailIntro": "Ciao! Come ci avevi chiesto, ti ricordiamo di mandare adesso la sorpresa a {name}.",
+    "reminderEmailHow": "Tocca il pulsante: si apre WhatsApp con il messaggio e il link già pronti, ti basta premere «Invia».",
+    "reminderEmailLink": "Il link della sorpresa:",
+    "error_reminderPast": "Scegli un giorno e un’ora nel futuro.",
+    "error_reminderTooFar": "Il promemoria si può impostare al massimo entro un anno.",
+    "error_reminderPhone": "Il numero non sembra corretto: scrivilo con il prefisso, per esempio +39 333 123 4567."
   },
   "surpriseTpl": {
     "mom_name": "Un massaggio per la mamma",

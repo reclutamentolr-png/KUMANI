@@ -8868,7 +8868,9 @@
     "scamCategory_support": "Falso soporte técnico",
     "scamCategory_prize": "Falso premio o regalo",
     "scamCategory_phishing": "Robo de datos (phishing)",
-    "scamCategory_other": "Otra"
+    "scamCategory_other": "Otra",
+    "surpriseRemindTitle": "🎁 Es el momento: envía la sorpresa a {name}",
+    "surpriseRemindBody": "Toca aquí: WhatsApp se abre con el mensaje listo."
   },
   "pushInvite": {
     "title": "Activa las notificaciones",
@@ -11656,7 +11658,28 @@
     "paidWithPlan": "incluida en el plan",
     "planOrPay": "O paga:",
     "kindIncluded": "Incluida en tu plan",
-    "kindIncludedLeft": "te quedan {n}"
+    "kindIncludedLeft": "te quedan {n}",
+    "reminderTitle": "Recordatorio para enviarla",
+    "reminderIntro": "Elige cuándo quieres enviar la sorpresa: a esa hora te llegarán una notificación y un email con WhatsApp ya preparado, solo tienes que tocar «Enviar».",
+    "reminderWhen": "Día y hora",
+    "reminderPhone": "Número de WhatsApp de quien la recibe (opcional)",
+    "reminderPhoneHint": "Con el número, WhatsApp se abre directamente en el chat correcto. Solo lo usamos para este recordatorio y nadie más lo ve.",
+    "reminderSave": "Programar recordatorio",
+    "reminderCancel": "Cancelar",
+    "reminderChange": "Cambiar",
+    "reminderRemove": "Quitar",
+    "reminderSet": "Te recordaremos enviarla el {date}.",
+    "reminderSent": "Recordatorio enviado el {date}.",
+    "reminderNowTitle": "¡Es el momento: envía la sorpresa a {name}! 🎁",
+    "reminderNowText": "El mensaje con el enlace ya está escrito: se abre WhatsApp y tocas «Enviar».",
+    "reminderNowCta": "Enviar ahora por WhatsApp",
+    "reminderEmailSubject": "🎁 Es el momento de enviar la sorpresa a {name}",
+    "reminderEmailIntro": "¡Hola! Como nos pediste, te recordamos que envíes ahora la sorpresa a {name}.",
+    "reminderEmailHow": "Toca el botón: se abre WhatsApp con el mensaje y el enlace listos, solo tienes que pulsar «Enviar».",
+    "reminderEmailLink": "El enlace de la sorpresa:",
+    "error_reminderPast": "Elige un día y una hora en el futuro.",
+    "error_reminderTooFar": "El recordatorio se puede programar como máximo con un año de antelación.",
+    "error_reminderPhone": "El número no parece correcto: escríbelo con el prefijo, por ejemplo +34 612 345 678."
   },
   "surpriseTpl": {
     "mom_name": "Un masaje para mamá",

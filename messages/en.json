@@ -8868,7 +8868,9 @@
     "scamCategory_support": "Fake tech support",
     "scamCategory_prize": "Fake prize or gift",
     "scamCategory_phishing": "Data theft (phishing)",
-    "scamCategory_other": "Other"
+    "scamCategory_other": "Other",
+    "surpriseRemindTitle": "🎁 It’s time: send the surprise to {name}",
+    "surpriseRemindBody": "Tap here: WhatsApp opens with the message ready."
   },
   "pushInvite": {
     "title": "Turn on notifications",
@@ -11656,7 +11658,28 @@
     "paidWithPlan": "included in your plan",
     "planOrPay": "Or pay:",
     "kindIncluded": "Included in your plan",
-    "kindIncludedLeft": "{n} left"
+    "kindIncludedLeft": "{n} left",
+    "reminderTitle": "Reminder to send it",
+    "reminderIntro": "Choose when you want to send the surprise: at that time you’ll get a notification and an email with WhatsApp ready to go, just tap “Send”.",
+    "reminderWhen": "Day and time",
+    "reminderPhone": "Recipient’s WhatsApp number (optional)",
+    "reminderPhoneHint": "With the number, WhatsApp opens straight on the right chat. We only use it for this reminder and nobody else sees it.",
+    "reminderSave": "Set reminder",
+    "reminderCancel": "Cancel",
+    "reminderChange": "Change",
+    "reminderRemove": "Remove",
+    "reminderSet": "We’ll remind you to send it {date}.",
+    "reminderSent": "Reminder sent {date}.",
+    "reminderNowTitle": "It’s time: send the surprise to {name}! 🎁",
+    "reminderNowText": "The message with the link is already written: WhatsApp opens and you tap “Send”.",
+    "reminderNowCta": "Send now on WhatsApp",
+    "reminderEmailSubject": "🎁 Time to send the surprise to {name}",
+    "reminderEmailIntro": "Hi! As you asked, here’s your reminder to send the surprise to {name} now.",
+    "reminderEmailHow": "Tap the button: WhatsApp opens with the message and link ready, just press “Send”.",
+    "reminderEmailLink": "The surprise link:",
+    "error_reminderPast": "Choose a day and time in the future.",
+    "error_reminderTooFar": "You can set the reminder up to one year ahead.",
+    "error_reminderPhone": "The number doesn’t look right: write it with the country code, for example +44 7700 900123."
   },
   "surpriseTpl": {
     "mom_name": "A massage for Mum",

@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
-import { ArrowLeft, CheckCircle2, HandHeart, Heart, Info, PartyPopper, Send, Smile, Sparkles } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, HandHeart, Heart, Info, MessageCircle, PartyPopper, Send, Smile, Sparkles } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import CheckoutForm from '@/components/billing/CheckoutForm'
 import SurpriseEditor from '@/components/surprise/SurpriseEditor'
 import SurpriseShare from '@/components/surprise/SurpriseShare'
+import SurpriseReminder from '@/components/surprise/SurpriseReminder'
 import SurprisePointsPay from '@/components/surprise/SurprisePointsPay'
 import SurprisePlanClaim from '@/components/surprise/SurprisePlanClaim'
 import { BONUS_KEY } from '@/components/surprise/SurprisePlanSummary'
@@ -15,7 +16,7 @@ import MarkRepliesRead from '@/components/surprise/MarkRepliesRead'
 import { getCheckoutTexts } from '@/lib/checkoutTexts'
 import { SITE_URL } from '@/lib/siteUrl'
 import { confirmSurpriseSession, getSurprisePrices, STEP_SELECT } from '@/lib/surpriseServer'
-import { bonusReason, parseSurprisePlan, planFreeFor, SURPRISE_KINDS, stepIncomplete, surpriseDays, surprisePath, voucherUnlockAt, type SurpriseRow, type SurpriseStepRow } from '@/lib/surprise'
+import { bonusReason, parseSurprisePlan, planFreeFor, SURPRISE_KINDS, stepIncomplete, surpriseDays, surprisePath, surpriseWhatsAppUrl, voucherUnlockAt, type SurpriseRow, type SurpriseStepRow } from '@/lib/surprise'
 
 // Editor di una sorpresa: contenuto, anteprima, pagamento (bozza) oppure
 // invio del link (attiva).
@@ -29,7 +30,7 @@ export default async function SurpriseEditPage({
   searchParams,
 }: {
   params: Promise<{ locale: string; id: string }>
-  searchParams: Promise<{ paid?: string; session_id?: string; canceled?: string; error?: string }>
+  searchParams: Promise<{ paid?: string; session_id?: string; canceled?: string; error?: string; invia?: string }>
 }) {
   const { locale, id } = await params
   const sp = await searchParams
@@ -114,6 +115,22 @@ export default async function SurpriseEditPage({
         )}
         {sp.canceled && <p className="mt-4 rounded-xl bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-800">{t('canceled')}</p>}
 
+        {/* Dalla notifica del promemoria: invio su WhatsApp con un tocco */}
+        {sp.invia && row.status === 'active' && url && !row.refunded_at && (
+          <section className="mt-5 rounded-2xl bg-emerald-600 p-5 text-white shadow-lg">
+            <p className="text-lg font-extrabold">{t('reminderNowTitle', { name: row.recipient_name || '—' })}</p>
+            <p className="mt-1 text-sm text-white/85">{t('reminderNowText')}</p>
+            <a
+              href={surpriseWhatsAppUrl(t('shareMessage', { name: row.recipient_name || '', url }), row.remind_phone)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-white px-4 font-extrabold text-emerald-700 sm:w-auto"
+            >
+              <MessageCircle className="h-5 w-5" aria-hidden /> {t('reminderNowCta')}
+            </a>
+          </section>
+        )}
+
         {row.status === 'active' && url && (
           <section className="mt-5 rounded-2xl border-2 border-[var(--gold)]/50 bg-white p-5 shadow-sm">
             <h2 className="flex items-center gap-2 text-lg font-bold text-[var(--ink)]">
@@ -134,7 +151,12 @@ export default async function SurpriseEditPage({
             </p>
             {!row.refunded_at && (
               <div className="mt-4">
-                <SurpriseShare url={url} recipientName={row.recipient_name} />
+                <SurpriseShare url={url} recipientName={row.recipient_name} phone={row.remind_phone} />
+              </div>
+            )}
+            {!row.refunded_at && (
+              <div className="mt-4">
+                <SurpriseReminder id={row.id} remindAt={row.remind_at ?? null} phone={row.remind_phone ?? null} sentAt={row.remind_sent_at ?? null} />
               </div>
             )}
           </section>

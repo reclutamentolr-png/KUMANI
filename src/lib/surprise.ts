@@ -163,6 +163,10 @@ export type SurpriseRow = {
   refunded_at: string | null
   opened_at: string | null
   link_opened_at?: string | null
+  // Promemoria per l'invio (data e ora, numero WhatsApp di chi riceve)
+  remind_at?: string | null
+  remind_phone?: string | null
+  remind_sent_at?: string | null
   created_at: string
 }
 
@@ -210,6 +214,13 @@ export type SurpriseView = {
 
 export function surprisePath(token: string) {
   return `/sorpresa/${token}`
+}
+
+// WhatsApp con il messaggio già scritto: alla persona giusta se c'è il numero
+// (+39…), altrimenti si sceglie il contatto in WhatsApp
+export function surpriseWhatsAppUrl(text: string, phone?: string | null) {
+  const digits = (phone ?? '').replace(/D/g, '')
+  return `https://wa.me/${digits.length >= 6 ? digits : ''}?text=${encodeURIComponent(text)}`
 }
 
 // Sorprese incluse nel piano Base o Pro (funzione my_surprise_plan del database):

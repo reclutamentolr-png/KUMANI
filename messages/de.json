@@ -8868,7 +8868,9 @@
     "scamCategory_support": "Falscher technischer Support",
     "scamCategory_prize": "Falscher Gewinn oder Geschenk",
     "scamCategory_phishing": "Datendiebstahl (Phishing)",
-    "scamCategory_other": "Sonstiges"
+    "scamCategory_other": "Sonstiges",
+    "surpriseRemindTitle": "🎁 Jetzt ist es Zeit: Sende {name} die Überraschung",
+    "surpriseRemindBody": "Hier tippen: WhatsApp öffnet sich mit fertiger Nachricht."
   },
   "pushInvite": {
     "title": "Benachrichtigungen aktivieren",
@@ -11656,7 +11658,28 @@
     "paidWithPlan": "im Plan enthalten",
     "planOrPay": "Oder bezahle:",
     "kindIncluded": "In deinem Plan enthalten",
-    "kindIncludedLeft": "noch {n}"
+    "kindIncludedLeft": "noch {n}",
+    "reminderTitle": "Erinnerung zum Versenden",
+    "reminderIntro": "Wähle, wann du die Überraschung senden möchtest: Dann bekommst du eine Benachrichtigung und eine E-Mail mit fertigem WhatsApp – einfach auf „Senden“ tippen.",
+    "reminderWhen": "Tag und Uhrzeit",
+    "reminderPhone": "WhatsApp-Nummer der beschenkten Person (optional)",
+    "reminderPhoneHint": "Mit der Nummer öffnet sich WhatsApp direkt im richtigen Chat. Wir nutzen sie nur für diese Erinnerung, niemand sonst sieht sie.",
+    "reminderSave": "Erinnerung einstellen",
+    "reminderCancel": "Abbrechen",
+    "reminderChange": "Ändern",
+    "reminderRemove": "Entfernen",
+    "reminderSet": "Wir erinnern dich am {date}.",
+    "reminderSent": "Erinnerung gesendet am {date}.",
+    "reminderNowTitle": "Jetzt ist es Zeit: Sende {name} die Überraschung! 🎁",
+    "reminderNowText": "Die Nachricht mit dem Link ist schon geschrieben: WhatsApp öffnet sich und du tippst auf „Senden“.",
+    "reminderNowCta": "Jetzt per WhatsApp senden",
+    "reminderEmailSubject": "🎁 Zeit, {name} die Überraschung zu senden",
+    "reminderEmailIntro": "Hallo! Wie gewünscht erinnern wir dich daran, {name} jetzt die Überraschung zu senden.",
+    "reminderEmailHow": "Tippe auf den Button: WhatsApp öffnet sich mit Nachricht und Link, du musst nur noch „Senden“ drücken.",
+    "reminderEmailLink": "Der Link zur Überraschung:",
+    "error_reminderPast": "Wähle einen Tag und eine Uhrzeit in der Zukunft.",
+    "error_reminderTooFar": "Die Erinnerung lässt sich höchstens ein Jahr im Voraus einstellen.",
+    "error_reminderPhone": "Die Nummer scheint nicht zu stimmen: Schreib sie mit Ländervorwahl, z. B. +49 151 23456789."
   },
   "surpriseTpl": {
     "mom_name": "Eine Massage für Mama",

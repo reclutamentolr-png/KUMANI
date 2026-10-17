@@ -8868,7 +8868,9 @@
     "scamCategory_support": "Фальшивая техподдержка",
     "scamCategory_prize": "Фальшивый выигрыш или подарок",
     "scamCategory_phishing": "Кража данных (фишинг)",
-    "scamCategory_other": "Другое"
+    "scamCategory_other": "Другое",
+    "surpriseRemindTitle": "🎁 Пора: отправь сюрприз — {name}",
+    "surpriseRemindBody": "Нажми: WhatsApp откроется с готовым сообщением."
   },
   "pushInvite": {
     "title": "Включите уведомления",
@@ -11656,7 +11658,28 @@
     "paidWithPlan": "включено в тариф",
     "planOrPay": "Или оплатите:",
     "kindIncluded": "Включено в тариф",
-    "kindIncludedLeft": "осталось {n}"
+    "kindIncludedLeft": "осталось {n}",
+    "reminderTitle": "Напоминание об отправке",
+    "reminderIntro": "Выбери, когда отправить сюрприз: в это время придут уведомление и письмо с готовым WhatsApp — останется нажать «Отправить».",
+    "reminderWhen": "День и время",
+    "reminderPhone": "Номер WhatsApp получателя (необязательно)",
+    "reminderPhoneHint": "С номером WhatsApp откроется сразу в нужном чате. Мы используем его только для этого напоминания, его никто больше не видит.",
+    "reminderSave": "Установить напоминание",
+    "reminderCancel": "Отмена",
+    "reminderChange": "Изменить",
+    "reminderRemove": "Удалить",
+    "reminderSet": "Напомним отправить {date}.",
+    "reminderSent": "Напоминание отправлено {date}.",
+    "reminderNowTitle": "Пора: отправь сюрприз — {name}! 🎁",
+    "reminderNowText": "Сообщение со ссылкой уже написано: откроется WhatsApp, нажми «Отправить».",
+    "reminderNowCta": "Отправить в WhatsApp",
+    "reminderEmailSubject": "🎁 Пора отправить сюрприз — {name}",
+    "reminderEmailIntro": "Привет! Как ты просил, напоминаем: пора отправить сюрприз — {name}.",
+    "reminderEmailHow": "Нажми кнопку: откроется WhatsApp с готовым сообщением и ссылкой, останется нажать «Отправить».",
+    "reminderEmailLink": "Ссылка на сюрприз:",
+    "error_reminderPast": "Выбери день и время в будущем.",
+    "error_reminderTooFar": "Напоминание можно установить не более чем за год.",
+    "error_reminderPhone": "Номер выглядит неверно: укажи его с кодом страны, например +7 912 345 67 89."
   },
   "surpriseTpl": {
     "mom_name": "Массаж для мамы",

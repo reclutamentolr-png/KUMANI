@@ -8868,7 +8868,9 @@
     "scamCategory_support": "Faux support technique",
     "scamCategory_prize": "Faux gain ou cadeau",
     "scamCategory_phishing": "Vol de données (hameçonnage)",
-    "scamCategory_other": "Autre"
+    "scamCategory_other": "Autre",
+    "surpriseRemindTitle": "🎁 C’est le moment : envoie la surprise à {name}",
+    "surpriseRemindBody": "Touche ici : WhatsApp s’ouvre avec le message prêt."
   },
   "pushInvite": {
     "title": "Activez les notifications",
@@ -11656,7 +11658,28 @@
     "paidWithPlan": "incluse dans l’offre",
     "planOrPay": "Ou paie :",
     "kindIncluded": "Incluse dans ton offre",
-    "kindIncludedLeft": "il t’en reste {n}"
+    "kindIncludedLeft": "il t’en reste {n}",
+    "reminderTitle": "Rappel pour l’envoi",
+    "reminderIntro": "Choisis quand tu veux envoyer la surprise : à cette heure-là, tu reçois une notification et un e-mail avec WhatsApp déjà prêt, il suffit de toucher « Envoyer ».",
+    "reminderWhen": "Jour et heure",
+    "reminderPhone": "Numéro WhatsApp de la personne (facultatif)",
+    "reminderPhoneHint": "Avec le numéro, WhatsApp s’ouvre directement sur la bonne conversation. Nous l’utilisons uniquement pour ce rappel et personne d’autre ne le voit.",
+    "reminderSave": "Programmer le rappel",
+    "reminderCancel": "Annuler",
+    "reminderChange": "Modifier",
+    "reminderRemove": "Supprimer",
+    "reminderSet": "Nous te rappellerons de l’envoyer le {date}.",
+    "reminderSent": "Rappel envoyé le {date}.",
+    "reminderNowTitle": "C’est le moment : envoie la surprise à {name} ! 🎁",
+    "reminderNowText": "Le message avec le lien est déjà écrit : WhatsApp s’ouvre et tu touches « Envoyer ».",
+    "reminderNowCta": "Envoyer maintenant sur WhatsApp",
+    "reminderEmailSubject": "🎁 C’est le moment d’envoyer la surprise à {name}",
+    "reminderEmailIntro": "Bonjour ! Comme demandé, voici ton rappel pour envoyer maintenant la surprise à {name}.",
+    "reminderEmailHow": "Touche le bouton : WhatsApp s’ouvre avec le message et le lien prêts, il ne reste qu’à appuyer sur « Envoyer ».",
+    "reminderEmailLink": "Le lien de la surprise :",
+    "error_reminderPast": "Choisis un jour et une heure dans le futur.",
+    "error_reminderTooFar": "Le rappel peut être programmé au maximum un an à l’avance.",
+    "error_reminderPhone": "Le numéro ne semble pas correct : écris-le avec l’indicatif, par exemple +33 6 12 34 56 78."
   },
   "surpriseTpl": {
     "mom_name": "Un massage pour maman",
