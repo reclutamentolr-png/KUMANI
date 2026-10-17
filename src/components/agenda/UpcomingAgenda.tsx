@@ -99,25 +99,32 @@ export default function UpcomingAgenda({ events, today, sources }: { events: Age
     <section className="overflow-hidden rounded-2xl border border-[var(--gold)]/40 bg-white shadow-[0_14px_40px_rgba(23,23,23,0.12)]">
       {/* Parte alta scura: titolo, settimana e giorni */}
       <div className="bg-gradient-to-br from-[#26221c] to-[var(--ink)] px-4 pb-5 pt-5 text-white sm:px-5">
+      {/* Titolo che si stringe (la data va a puntini), pulsante sempre dentro il riquadro anche sui telefoni stretti */}
       <div className="mb-4 flex items-center justify-between gap-3">
-        <h2 className="flex items-center gap-2 text-lg font-bold text-white sm:text-xl">
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--gold)]/20">
+        <h2 className="flex min-w-0 flex-1 items-center gap-2 text-lg font-bold text-white sm:text-xl">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--gold)]/20">
             <CalendarDays className="h-5 w-5 text-[var(--gold-bright)]" />
           </span>
           <span className="flex min-w-0 flex-col leading-tight">
-            <span className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-[var(--gold-bright)]">{t('sectionToday')}</span>
+            {/* «Oggi» e le scadenze passate sulla riga piccola: la data ha tutta la sua riga */}
+            <span className="flex min-w-0 items-center gap-2 overflow-hidden">
+              <span className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-[var(--gold-bright)]">{t('sectionToday')}</span>
+              {overdue.length > 0 && (
+                <span className="shrink-0 rounded-full bg-red-500 px-2 py-0.5 text-[10px] font-bold normal-case tracking-normal text-white">{t('overdueCount', { count: overdue.length })}</span>
+              )}
+            </span>
             <span className="truncate first-letter:uppercase">{todayLabel}</span>
           </span>
-          {overdue.length > 0 && (
-            <span className="rounded-full bg-red-500 px-2 py-0.5 text-xs font-bold text-white">{t('overdueCount', { count: overdue.length })}</span>
-          )}
         </h2>
         <button
           type="button"
           onClick={() => setAdding(true)}
-          className="flex shrink-0 items-center gap-1 rounded-lg bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-3 py-1.5 text-sm font-bold text-[var(--ink)] shadow hover:brightness-110"
+          aria-label={t('add')}
+          title={t('add')}
+          className="flex min-h-9 shrink-0 items-center gap-1 rounded-lg bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-3 py-1.5 text-sm font-bold text-[var(--ink)] shadow hover:brightness-110"
         >
-          <Plus className="h-4 w-4" /> {t('add')}
+          {/* Sui telefoni molto stretti solo il «+» */}
+          <Plus className="h-4 w-4" aria-hidden /> <span className="hidden min-[360px]:inline">{t('add')}</span>
         </button>
       </div>
 
