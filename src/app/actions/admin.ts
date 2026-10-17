@@ -18,6 +18,7 @@ import { invalidateListingsCache } from '@/lib/listings-server'
 import { generatePassCode } from '@/lib/toolPasses'
 import { DEFAULT_HOME_LAYOUT, isHomeLayout } from '@/lib/homeLayouts'
 import { HOME_LAYOUT_CACHE_TAG } from '@/lib/homeLayoutServer'
+import { DEFAULT_HOME_VIDEO, HOME_VIDEO_CACHE_TAG, youtubeId } from '@/lib/homeVideo'
 import { TOOL_PLANS_CACHE_TAG } from '@/lib/freeTools'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { getTranslations } from 'next-intl/server'
@@ -3190,6 +3191,32 @@ export async function adminSetHomeLayout(layout: string) {
   // La homepage mostra subito il nuovo aspetto
   updateTag(HOME_LAYOUT_CACHE_TAG)
   return { success: true }
+}
+
+// Video della homepage (di solito il tormentone): link di YouTube, vuoto = nascosto
+export async function adminGetHomeVideo() {
+  const admin = await verifyAdmin('settings.read')
+  if (!admin) return { url: null as string | null }
+  const { data } = await getServiceClient().from('system_settings').select('value').eq('key', 'home_video').maybeSingle()
+  if (!data) return { url: `https://youtu.be/${DEFAULT_HOME_VIDEO}` }
+  let value: unknown = data.value
+  try {
+    value = typeof value === 'string' ? JSON.parse(value) : value
+  } catch {
+    // testo semplice
+  }
+  return { url: typeof value === 'string' && value ? `https://youtu.be/${value}` : '' }
+}
+
+export async function adminSetHomeVideo(url: string) {
+  const admin = await verifyAdmin('settings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  const id = url.trim() ? youtubeId(url) : ''
+  if (id === null) return { success: false, error: 'Non è un link di YouTube (es. https://youtu.be/…)' }
+  const { error } = await getServiceClient().from('system_settings').upsert({ key: 'home_video', value: JSON.stringify(id) }, { onConflict: 'key' })
+  if (error) return { success: false, error: error.message }
+  updateTag(HOME_VIDEO_CACHE_TAG)
+  return { success: true, url: id ? `https://youtu.be/${id}` : '' }
 }
 
 // ---------------------------------------------------------------------------

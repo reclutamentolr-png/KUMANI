@@ -256,7 +256,12 @@
     "planSurpriseBase": "KUMANI Surprise: surprises included every month, plus a free 3-day journey at renewal and on holidays",
     "planSurprisePro": "KUMANI Surprise: more surprises included, 7-day journeys too, plus gifts at renewal and on holidays",
     "statTagline": "{tools} tools in {services} services. One app.",
-    "socialFollow": "KUMANI on {name}"
+    "socialFollow": "KUMANI on {name}",
+    "videoEyebrow": "The Kumani anthem",
+    "videoTitle": "Give me a hand",
+    "videoAccent": "KU-MA-NI!",
+    "videoText": "Hands up… Watch the video and do the hands gesture on the chorus too.",
+    "videoPlay": "Watch the video"
   },
   "authRegister": {
     "registerTitle": "Create your account",

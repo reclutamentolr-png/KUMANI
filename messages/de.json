@@ -219,7 +219,12 @@
     "planSurpriseBase": "KUMANI Überraschung: jeden Monat Überraschungen inklusive, dazu eine 3-Tage-Reise als Geschenk bei der Verlängerung und an Feiertagen",
     "planSurprisePro": "KUMANI Überraschung: mehr Überraschungen inklusive, auch 7-Tage-Reisen, dazu Geschenke bei der Verlängerung und an Feiertagen",
     "statTagline": "{tools} Tools in {services} Diensten. Eine App.",
-    "socialFollow": "KUMANI auf {name}"
+    "socialFollow": "KUMANI auf {name}",
+    "videoEyebrow": "Die Kumani-Hymne",
+    "videoTitle": "Hilf mir mal",
+    "videoAccent": "KU-MA-NI!",
+    "videoText": "Hände hoch… Schau dir das Video an und mach beim Refrain die Handbewegung mit.",
+    "videoPlay": "Video ansehen"
   },
   "authRegister": {
     "registerTitle": "Konto erstellen",

@@ -219,7 +219,12 @@
     "planSurpriseBase": "KUMANI Сюрприз: сюрпризы включены каждый месяц, а также 3-дневный маршрут в подарок при продлении и в праздники",
     "planSurprisePro": "KUMANI Сюрприз: больше включённых сюрпризов, в том числе 7-дневные маршруты, а также подарки при продлении и в праздники",
     "statTagline": "{tools, plural, one {# инструмент} few {# инструмента} many {# инструментов} other {# инструмента}} в {services, plural, one {# сервисе} other {# сервисах}}. Одно приложение.",
-    "socialFollow": "KUMANI в {name}"
+    "socialFollow": "KUMANI в {name}",
+    "videoEyebrow": "Гимн Kumani",
+    "videoTitle": "Протяни руку",
+    "videoAccent": "KU-MA-NI!",
+    "videoText": "Руки вверх… Посмотрите видео и повторите жест руками на припеве.",
+    "videoPlay": "Смотреть видео"
   },
   "authRegister": {
     "registerTitle": "Создать аккаунт",

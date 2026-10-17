@@ -41,6 +41,8 @@ import HomePlans from '@/components/HomePlans'
 import HomeSection from '@/components/home/HomeSection'
 import HomeBand from '@/components/home/HomeBand'
 import HomeCommunity from '@/components/home/HomeCommunity'
+import HomeVideo from '@/components/home/HomeVideo'
+import { getHomeVideo } from '@/lib/homeVideo'
 import HeroLogoVideo from '@/components/home/HeroLogoVideo'
 import HeroSideImage from '@/components/home/HeroSideImage'
 import { HOME_LAYOUT_CONFIG, type HomeLayoutKey } from '@/lib/homeLayouts'
@@ -62,6 +64,8 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
     getTranslations('homeNeeds'),
   ])
   const L = HOME_LAYOUT_CONFIG[layoutKey]
+  // Video della Home (Admin → Aspetto homepage), di solito il tormentone
+  const videoId = await getHomeVideo()
   // «In cosa possiamo darti una mano?»: per ogni risposta i servizi giusti
   // Numeri sotto l'apertura: lingue attive, servizi e strumenti accesi (decisi dall'Admin)
   const [needs, enabledLocales, counts] = await Promise.all([buildHomeNeeds(), getEnabledLocales(), getAppCounts()])
@@ -304,6 +308,19 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
           e Kumano del Giorno, con chi può usare ogni spazio */}
       <HomeSection bg={L.community} className="py-12 sm:py-20">
         <HomeCommunity />
+        {/* 🎵 Il tormentone da YouTube: il lettore si carica solo al play */}
+        {videoId && (
+          <div className="mx-auto mt-14 max-w-4xl px-4 text-center sm:mt-20 sm:px-6 lg:px-8">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--gold)]/30 bg-[var(--gold)]/10 px-4 py-1.5 text-sm font-medium text-[var(--gold-bright)]">
+              {t('videoEyebrow')}
+            </div>
+            <h2 className="mb-3 break-words text-3xl font-bold text-white sm:text-5xl">
+              {t('videoTitle')} <span className="whitespace-nowrap bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] bg-clip-text text-transparent">{t('videoAccent')}</span>
+            </h2>
+            <p className="mx-auto mb-8 max-w-2xl text-base text-gray-300 sm:text-lg">{t('videoText')}</p>
+            <HomeVideo id={videoId} title={`${t('videoTitle')} ${t('videoAccent')}`} playLabel={t('videoPlay')} />
+          </div>
+        )}
       </HomeSection>
 
       {/* 🤝 SEZIONE: CONDIVIDI KUMANI — volutamente minimale, niente

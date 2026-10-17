@@ -256,7 +256,12 @@
     "planSurpriseBase": "KUMANI Sorpresa: sorprese incluse ogni mese, più un percorso di 3 giorni in regalo al rinnovo e nelle feste",
     "planSurprisePro": "KUMANI Sorpresa: più sorprese incluse, anche i percorsi di 7 giorni, più i regali al rinnovo e nelle feste",
     "statTagline": "{tools} strumenti in {services} servizi. Una sola app.",
-    "socialFollow": "KUMANI su {name}"
+    "socialFollow": "KUMANI su {name}",
+    "videoEyebrow": "L’inno dei Kumani",
+    "videoTitle": "Dammi una mano",
+    "videoAccent": "KU-MA-NI!",
+    "videoText": "Mani in alto… Guarda il video e fai anche tu il gesto delle mani sul ritornello.",
+    "videoPlay": "Guarda il video"
   },
   "authRegister": {
     "registerTitle": "Crea il tuo account",

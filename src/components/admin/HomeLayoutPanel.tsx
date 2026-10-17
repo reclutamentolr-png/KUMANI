@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { CheckCircle2, ExternalLink, LoaderCircle, Palette } from 'lucide-react'
-import { adminGetHomeLayout, adminSetHomeLayout } from '@/app/actions/admin'
+import { CheckCircle2, ExternalLink, LoaderCircle, Palette, Video } from 'lucide-react'
+import { adminGetHomeLayout, adminGetHomeVideo, adminSetHomeLayout, adminSetHomeVideo } from '@/app/actions/admin'
 import { HOME_LAYOUTS, HOME_LAYOUT_INFO, type HomeLayoutKey } from '@/lib/homeLayouts'
 import { notify } from '@/lib/adminNotify'
 
@@ -13,9 +13,26 @@ export default function HomeLayoutPanel() {
   const [current, setCurrent] = useState<string | null>(null)
   const [saving, setSaving] = useState<HomeLayoutKey | null>(null)
 
+  // Video della homepage (YouTube): link modificabile, vuoto = nascosto
+  const [video, setVideo] = useState<string | null>(null)
+  const [savingVideo, setSavingVideo] = useState(false)
+
   useEffect(() => {
     adminGetHomeLayout().then((result) => setCurrent(result.layout))
+    adminGetHomeVideo().then((result) => setVideo(result.url ?? ''))
   }, [])
+
+  const saveVideo = async () => {
+    setSavingVideo(true)
+    const result = await adminSetHomeVideo(video ?? '')
+    setSavingVideo(false)
+    if (!result.success) {
+      notify('Errore: ' + (result.error ?? ''))
+      return
+    }
+    setVideo(result.url ?? '')
+    notify(result.url ? 'Video della homepage salvato.' : 'Riquadro del video nascosto dalla homepage.', 'success')
+  }
 
   const choose = async (key: HomeLayoutKey) => {
     setSaving(key)
@@ -40,6 +57,33 @@ export default function HomeLayoutPanel() {
           identici in tutte le lingue, quindi cambiare layout non ha effetti sulla SEO. Con &quot;Anteprima&quot; lo vedi in una nuova
           scheda prima di attivarlo.
         </p>
+      </div>
+
+      <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+        <div className="flex items-center gap-2 font-semibold text-gray-900">
+          <Video className="h-5 w-5 text-red-600" /> Video della homepage
+        </div>
+        <p className="mt-1 text-sm text-gray-600">
+          Link di un video di YouTube (pubblico), mostrato nella sezione della community. Il video resta su YouTube e si carica solo quando
+          qualcuno preme play. Lascia vuoto per nascondere il riquadro.
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <input
+            value={video ?? ''}
+            onChange={(e) => setVideo(e.target.value)}
+            placeholder="https://youtu.be/…"
+            disabled={video === null}
+            className="min-w-0 flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]"
+          />
+          <button
+            type="button"
+            onClick={saveVideo}
+            disabled={savingVideo || video === null}
+            className="rounded-lg bg-[var(--ink)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--ink-soft)] disabled:bg-gray-400"
+          >
+            {savingVideo ? 'Salvo…' : 'Salva'}
+          </button>
+        </div>
       </div>
 
       {current === null ? (
