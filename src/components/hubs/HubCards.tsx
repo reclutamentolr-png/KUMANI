@@ -10,7 +10,9 @@ const HUB_ICON: Record<ServiceHub, LucideIcon> = { controlla: ScanSearch, proteg
 
 // Pagina Servizi: i servizi uniti di un gruppo (Sicurezza: Controlla,
 // Proteggi, Segnala; Benessere; Giochi) con le loro schede; quelle del piano
-// che non si ha col lucchetto.
+// che non si ha col lucchetto. Ogni scheda porta al suo strumento; il titolo e
+// «Apri» all'ingresso del servizio (prima tutto il riquadro era un link solo e
+// qualsiasi scheda apriva la prima).
 export default function HubCards({ hubs, items }: { hubs: readonly ServiceHub[]; items: ServiceItem[] }) {
   const t = useTranslations('serviceHubs')
   const openOf = new Map(items.map((i) => [i.toolName, i.open]))
@@ -19,12 +21,8 @@ export default function HubCards({ hubs, items }: { hubs: readonly ServiceHub[];
       {hubs.map((hub) => {
         const Icon = HUB_ICON[hub]
         return (
-          <Link
-            key={hub}
-            href={HUB_HOME[hub]}
-            className="group flex flex-col rounded-2xl border border-[var(--gold)]/35 bg-white p-4 shadow-sm transition-colors hover:border-[var(--gold)] sm:p-5"
-          >
-            <span className="flex items-center gap-3">
+          <div key={hub} className="group flex flex-col rounded-2xl border border-[var(--gold)]/35 bg-white p-4 shadow-sm transition-colors hover:border-[var(--gold)] sm:p-5">
+            <Link href={HUB_HOME[hub]} className="flex items-center gap-3">
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[var(--ink)] text-[var(--gold-bright)]">
                 <Icon className="h-5 w-5" aria-hidden />
               </span>
@@ -32,7 +30,7 @@ export default function HubCards({ hubs, items }: { hubs: readonly ServiceHub[];
                 <span className="block font-extrabold text-[var(--ink)]">{t(`${hub}.title`)}</span>
                 <span className="block text-sm font-semibold text-[var(--gold)]">{t(`${hub}.tagline`)}</span>
               </span>
-            </span>
+            </Link>
             <span className="mt-2 text-sm text-[var(--muted)]">{t(`${hub}.description`)}</span>
             <span className="mt-3 flex flex-wrap gap-1.5">
               {HUB_TABS[hub]
@@ -40,17 +38,21 @@ export default function HubCards({ hubs, items }: { hubs: readonly ServiceHub[];
                 .map((tab) => {
                   const locked = !!tab.tool && openOf.get(tab.tool) === false
                   return (
-                    <span key={tab.key} className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${locked ? 'bg-gray-100 text-gray-500' : 'bg-[var(--gold)]/10 text-[var(--ink)]'}`}>
+                    <Link
+                      key={tab.key}
+                      href={tab.href}
+                      className={`inline-flex min-h-8 items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold transition-colors ${locked ? 'bg-gray-100 text-gray-500 hover:bg-gray-200' : 'bg-[var(--gold)]/10 text-[var(--ink)] hover:bg-[var(--gold)]/25'}`}
+                    >
                       {locked && <Lock className="h-3 w-3" aria-label={t('locked')} />}
                       {t(`${hub}.tab_${tab.key}`)}
-                    </span>
+                    </Link>
                   )
                 })}
             </span>
-            <span className="mt-4 flex items-center gap-1 text-sm font-bold text-[var(--ink)]">
+            <Link href={HUB_HOME[hub]} className="mt-4 flex items-center gap-1 self-start text-sm font-bold text-[var(--ink)]">
               {t('open')} <ArrowRight className="h-4 w-4 text-[var(--gold)] transition-transform group-hover:translate-x-0.5" />
-            </span>
-          </Link>
+            </Link>
+          </div>
         )
       })}
     </div>
