@@ -224,7 +224,11 @@
     "videoTitle": "Dá-me uma mão",
     "videoAccent": "KU-MA-NI!",
     "videoText": "Mãos no ar… Vê o vídeo e faz também o gesto das mãos no refrão.",
-    "videoPlay": "Ver o vídeo"
+    "videoPlay": "Ver o vídeo",
+    "statToolsShort": "{count, plural, one {ferramenta} other {ferramentas}}",
+    "statServicesShort": "{count, plural, one {serviço} other {serviços}}",
+    "statLanguagesShort": "{count, plural, one {língua} other {línguas}}",
+    "statWeeklyShort": "por semana"
   },
   "authRegister": {
     "registerTitle": "Crie a sua conta",

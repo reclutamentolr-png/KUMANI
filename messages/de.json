@@ -224,7 +224,11 @@
     "videoTitle": "Hilf mir mal",
     "videoAccent": "KU-MA-NI!",
     "videoText": "Hände hoch… Schau dir das Video an und mach beim Refrain die Handbewegung mit.",
-    "videoPlay": "Video ansehen"
+    "videoPlay": "Video ansehen",
+    "statToolsShort": "{count, plural, one {Tool} other {Tools}}",
+    "statServicesShort": "{count, plural, one {Dienst} other {Dienste}}",
+    "statLanguagesShort": "{count, plural, one {Sprache} other {Sprachen}}",
+    "statWeeklyShort": "pro Woche"
   },
   "authRegister": {
     "registerTitle": "Konto erstellen",

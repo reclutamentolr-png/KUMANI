@@ -224,7 +224,11 @@
     "videoTitle": "Протяни руку",
     "videoAccent": "KU-MA-NI!",
     "videoText": "Руки вверх… Посмотрите видео и повторите жест руками на припеве.",
-    "videoPlay": "Смотреть видео"
+    "videoPlay": "Смотреть видео",
+    "statToolsShort": "{count, plural, one {инструмент} few {инструмента} many {инструментов} other {инструмента}}",
+    "statServicesShort": "{count, plural, one {сервис} few {сервиса} many {сервисов} other {сервиса}}",
+    "statLanguagesShort": "{count, plural, one {язык} few {языка} many {языков} other {языка}}",
+    "statWeeklyShort": "в неделю"
   },
   "authRegister": {
     "registerTitle": "Создать аккаунт",

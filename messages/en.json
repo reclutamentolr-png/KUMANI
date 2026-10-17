@@ -261,7 +261,11 @@
     "videoTitle": "Give me a hand",
     "videoAccent": "KU-MA-NI!",
     "videoText": "Hands up… Watch the video and do the hands gesture on the chorus too.",
-    "videoPlay": "Watch the video"
+    "videoPlay": "Watch the video",
+    "statToolsShort": "{count, plural, one {tool} other {tools}}",
+    "statServicesShort": "{count, plural, one {service} other {services}}",
+    "statLanguagesShort": "{count, plural, one {language} other {languages}}",
+    "statWeeklyShort": "a week"
   },
   "authRegister": {
     "registerTitle": "Create your account",

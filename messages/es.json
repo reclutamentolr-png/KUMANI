@@ -224,7 +224,11 @@
     "videoTitle": "Échame una mano",
     "videoAccent": "¡KU-MA-NI!",
     "videoText": "Manos arriba… Mira el vídeo y haz tú también el gesto de las manos en el estribillo.",
-    "videoPlay": "Ver el vídeo"
+    "videoPlay": "Ver el vídeo",
+    "statToolsShort": "{count, plural, one {herramienta} other {herramientas}}",
+    "statServicesShort": "{count, plural, one {servicio} other {servicios}}",
+    "statLanguagesShort": "{count, plural, one {idioma} other {idiomas}}",
+    "statWeeklyShort": "a la semana"
   },
   "authRegister": {
     "registerTitle": "Crea tu cuenta",

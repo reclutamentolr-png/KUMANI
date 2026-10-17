@@ -24,7 +24,11 @@ import {
   Plane,
   UtensilsCrossed,
   Coins,
-  PartyPopper
+  PartyPopper,
+  Wrench,
+  LayoutGrid,
+  Languages,
+  Coffee
 } from 'lucide-react'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import Logo from '@/components/Logo'
@@ -210,22 +214,21 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
               className="bg-white/5 hover:bg-white/10 backdrop-blur text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-bold text-base sm:text-lg transition-all border border-white/15 flex items-center justify-center"
             />
           </div>
-          {/* Stats */}
-          <div className={`grid grid-cols-3 gap-3 sm:gap-6 max-w-xl mx-auto ${leftHero ? 'lg:mx-0' : ''}`}>
-            <div>
-              <div className="text-2xl sm:text-3xl font-bold text-white">{enabledLocales.length}</div>
-              <div className="text-xs sm:text-sm text-gray-400">{t('statLanguagesLabel')}</div>
-            </div>
-            <div>
-              <div className="text-2xl sm:text-3xl font-bold text-[var(--gold-bright)]">{t('statWeeklyValue')}</div>
-              <div className="text-xs sm:text-sm text-gray-400">{t('statWeeklyLabel')}</div>
-            </div>
-            <div>
-              <div className="text-2xl sm:text-3xl font-bold text-white">{counts.services}</div>
-              <div className="text-xs sm:text-sm text-gray-400">{t('statServicesLabel')}</div>
-            </div>
+          {/* Numeri: quattro riquadri marcati, icona, numero grande in oro, una parola */}
+          <div className={`grid max-w-2xl grid-cols-2 gap-3 sm:grid-cols-4 ${leftHero ? 'mx-auto lg:mx-0' : 'mx-auto'}`}>
+            {[
+              { Icon: Wrench, value: String(counts.tools), label: t('statToolsShort', { count: counts.tools }) },
+              { Icon: LayoutGrid, value: String(counts.services), label: t('statServicesShort', { count: counts.services }) },
+              { Icon: Languages, value: String(enabledLocales.length), label: t('statLanguagesShort', { count: enabledLocales.length }) },
+              { Icon: Coffee, value: t('statWeeklyValue'), label: t('statWeeklyShort') },
+            ].map(({ Icon, value, label }) => (
+              <div key={label} className="rounded-2xl border border-[var(--gold)]/30 bg-white/[0.04] px-3 py-4 text-center backdrop-blur-sm">
+                <Icon className="mx-auto h-5 w-5 text-[var(--gold-bright)]" aria-hidden />
+                <div className="mt-1.5 whitespace-nowrap bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] bg-clip-text text-3xl font-extrabold leading-tight text-transparent sm:text-4xl">{value}</div>
+                <div className="mt-0.5 text-xs font-semibold uppercase tracking-wider text-gray-400 sm:text-sm">{label}</div>
+              </div>
+            ))}
           </div>
-          <p className={`mt-4 max-w-xl text-sm font-semibold text-[var(--gold-bright)] ${leftHero ? 'mx-auto lg:mx-0' : 'mx-auto'}`}>{t('statTagline', counts)}</p>
           </div>
           {L.hero.kind === 'split' && L.hero.image && (
             <div className="relative hidden aspect-[4/3] overflow-hidden rounded-[28px] border-[6px] border-white shadow-[0_24px_60px_rgba(23,23,23,0.28)] lg:block">

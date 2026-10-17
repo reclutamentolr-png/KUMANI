@@ -224,7 +224,11 @@
     "videoTitle": "Donne-moi un coup de main",
     "videoAccent": "KU-MA-NI !",
     "videoText": "Les mains en l’air… Regarde la vidéo et fais toi aussi le geste des mains sur le refrain.",
-    "videoPlay": "Voir la vidéo"
+    "videoPlay": "Voir la vidéo",
+    "statToolsShort": "{count, plural, one {outil} other {outils}}",
+    "statServicesShort": "{count, plural, one {service} other {services}}",
+    "statLanguagesShort": "{count, plural, one {langue} other {langues}}",
+    "statWeeklyShort": "par semaine"
   },
   "authRegister": {
     "registerTitle": "Créez votre compte",

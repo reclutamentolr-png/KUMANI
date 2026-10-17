@@ -261,7 +261,11 @@
     "videoTitle": "Dammi una mano",
     "videoAccent": "KU-MA-NI!",
     "videoText": "Mani in alto… Guarda il video e fai anche tu il gesto delle mani sul ritornello.",
-    "videoPlay": "Guarda il video"
+    "videoPlay": "Guarda il video",
+    "statToolsShort": "{count, plural, one {strumento} other {strumenti}}",
+    "statServicesShort": "{count, plural, one {servizio} other {servizi}}",
+    "statLanguagesShort": "{count, plural, one {lingua} other {lingue}}",
+    "statWeeklyShort": "a settimana"
   },
   "authRegister": {
     "registerTitle": "Crea il tuo account",
