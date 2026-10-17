@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import {
   CalendarHeart,
+  ChevronDown,
   Eye,
   Gift,
   HelpCircle,
@@ -622,102 +623,122 @@ export default function SurpriseEditor({
 
   return (
     <div className="space-y-6">
-      {/* Tipo */}
-      <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-        <h2 className="text-lg font-bold text-[var(--ink)]">{t('sectionKind')}</h2>
-        {active && (
-          <p className="mt-1 flex items-center gap-1.5 text-sm text-gray-500">
-            <Lock className="h-4 w-4" /> {t('lockedKind')}
-          </p>
-        )}
-        <div className="mt-3 grid gap-2 sm:grid-cols-3">
-          {SURPRISE_KINDS.map((kind) => {
-            const Icon = KIND_ICON[kind]
-            const selected = form.kind === kind
-            return (
-              <button
-                key={kind}
-                type="button"
-                disabled={active}
-                onClick={() => set('kind', kind)}
-                className={`cursor-pointer rounded-xl border-2 p-3 text-left transition-colors disabled:cursor-not-allowed ${selected ? 'border-[var(--gold)] bg-[var(--gold-pale)]/50' : 'border-gray-200 hover:border-[var(--gold)]/60'} ${active && !selected ? 'opacity-40' : ''}`}
-              >
-                <Icon className="h-5 w-5 text-[var(--gold)]" />
-                <span className="mt-1 block font-bold text-[var(--ink)]">{t(`kind_${kind}`)}</span>
-                <span className="block text-xs text-gray-500">{t(`kind_${kind}_desc`)}</span>
-                {!active && (freeLeft[kind] ?? 0) > 0 ? (
-                  <span className="mt-1 block text-sm font-bold text-emerald-700">
-                    {t('kindIncluded')} <span className="font-semibold">· {t('kindIncludedLeft', { n: freeLeft[kind] ?? 0 })}</span>
-                  </span>
-                ) : (
-                  <span className="mt-1 block text-sm font-bold">{money(prices[kind])}</span>
-                )}
-              </button>
-            )
-          })}
-        </div>
-      </section>
+      {/* Tipo: dopo il pagamento non si cambia, quindi solo una riga (senza prezzi) */}
+      {active ? (
+        <p className="flex items-center gap-2 rounded-2xl border border-gray-200 bg-white px-5 py-3 text-sm shadow-sm">
+          {(() => {
+            const KindIcon = KIND_ICON[form.kind]
+            return <KindIcon className="h-5 w-5 text-[var(--gold)]" aria-hidden />
+          })()}
+          <span className="font-bold text-[var(--ink)]">{t(`kind_${form.kind}`)}</span>
+          <span className="ml-auto flex items-center gap-1 text-xs text-gray-500">
+            <Lock className="h-3.5 w-3.5" aria-hidden /> {t('lockedKind')}
+          </span>
+        </p>
+      ) : (
+        <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+          <h2 className="text-lg font-bold text-[var(--ink)]">{t('sectionKind')}</h2>
+          <div className="mt-3 grid gap-2 sm:grid-cols-3">
+            {SURPRISE_KINDS.map((kind) => {
+              const Icon = KIND_ICON[kind]
+              const selected = form.kind === kind
+              return (
+                <button
+                  key={kind}
+                  type="button"
+                  disabled={active}
+                  onClick={() => set('kind', kind)}
+                  className={`cursor-pointer rounded-xl border-2 p-3 text-left transition-colors disabled:cursor-not-allowed ${selected ? 'border-[var(--gold)] bg-[var(--gold-pale)]/50' : 'border-gray-200 hover:border-[var(--gold)]/60'} ${active && !selected ? 'opacity-40' : ''}`}
+                >
+                  <Icon className="h-5 w-5 text-[var(--gold)]" />
+                  <span className="mt-1 block font-bold text-[var(--ink)]">{t(`kind_${kind}`)}</span>
+                  <span className="block text-xs text-gray-500">{t(`kind_${kind}_desc`)}</span>
+                  {!active && (freeLeft[kind] ?? 0) > 0 ? (
+                    <span className="mt-1 block text-sm font-bold text-emerald-700">
+                      {t('kindIncluded')} <span className="font-semibold">· {t('kindIncludedLeft', { n: freeLeft[kind] ?? 0 })}</span>
+                    </span>
+                  ) : (
+                    <span className="mt-1 block text-sm font-bold">{money(prices[kind])}</span>
+                  )}
+                </button>
+              )
+            })}
+          </div>
+        </section>
+      )}
 
-      {/* Occasione e stile */}
-      <section className="space-y-5 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-        <h2 className="text-lg font-bold text-[var(--ink)]">{t('sectionStyle')}</h2>
-        <div>
-          <span className={label}>{t('occasionLabel')}</span>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4" role="radiogroup" aria-label={t('occasionLabel')}>
-            {SURPRISE_OCCASIONS.map((o) => {
-              const Icon = OCCASION_ICON[o]
-              return (
-                <button key={o} type="button" role="radio" aria-checked={form.occasion === o} onClick={() => chooseOccasion(o)} className={card(form.occasion === o)}>
-                  <Icon className="h-6 w-6 text-[var(--gold)]" /> {t(`occasion_${o}`)}
-                </button>
-              )
-            })}
+      {/* Occasione e stile: chiusa quando si modifica una sorpresa già attiva
+          (si vede la scelta in breve), si apre per cambiarla */}
+      <details open={!active} className="group rounded-2xl border border-gray-200 bg-white shadow-sm">
+        <summary className="flex cursor-pointer list-none items-center gap-3 p-5 [&::-webkit-details-marker]:hidden">
+          <span className="min-w-0 flex-1">
+            <span className="block text-lg font-bold text-[var(--ink)]">{t('sectionStyle')}</span>
+            <span className="mt-0.5 flex flex-wrap items-center gap-x-1.5 text-sm text-gray-500 group-open:hidden">
+              <span className="inline-block h-3 w-3 rounded-full" style={{ background: THEME_STYLE[form.theme].accent }} aria-hidden />
+              {t(`occasion_${form.occasion}`)} · {t(`reveal_${form.revealStyle}`)}
+            </span>
+          </span>
+          <ChevronDown className="h-5 w-5 shrink-0 text-[var(--gold)] transition-transform group-open:rotate-180" aria-hidden />
+        </summary>
+        <div className="space-y-5 px-5 pb-5">
+          <div>
+            <span className={label}>{t('occasionLabel')}</span>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4" role="radiogroup" aria-label={t('occasionLabel')}>
+              {SURPRISE_OCCASIONS.map((o) => {
+                const Icon = OCCASION_ICON[o]
+                return (
+                  <button key={o} type="button" role="radio" aria-checked={form.occasion === o} onClick={() => chooseOccasion(o)} className={card(form.occasion === o)}>
+                    <Icon className="h-6 w-6 text-[var(--gold)]" /> {t(`occasion_${o}`)}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+          <div>
+            <span className={label}>{t('revealLabel')}</span>
+            <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label={t('revealLabel')}>
+              {REVEAL_STYLES.map((r) => {
+                const Icon = REVEAL_ICON[r]
+                return (
+                  <button key={r} type="button" role="radio" aria-checked={form.revealStyle === r} onClick={() => set('revealStyle', r)} className={card(form.revealStyle === r)}>
+                    <Icon className="h-6 w-6 text-[var(--gold)]" /> {t(`reveal_${r}`)}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+          <div>
+            <span className={label}>{t('themeLabel')}</span>
+            <div className="flex flex-wrap gap-2">
+              {SURPRISE_THEMES.map((theme: SurpriseTheme) => (
+                <button
+                  key={theme}
+                  type="button"
+                  onClick={() => set('theme', theme)}
+                  aria-label={t(`theme_${theme}`)}
+                  aria-pressed={form.theme === theme}
+                  title={t(`theme_${theme}`)}
+                  className={`h-11 w-11 cursor-pointer rounded-full border-4 ${form.theme === theme ? 'border-[var(--ink)]' : 'border-white shadow'}`}
+                  style={{ background: THEME_STYLE[theme].accent }}
+                />
+              ))}
+            </div>
+          </div>
+          <div>
+            <span className={label}>{t('musicLabel')}</span>
+            <MusicPicker
+              value={form.music}
+              ownUrl={musicUrl}
+              userId={userId}
+              giftId={gift.id}
+              onChange={(music, path, url) => {
+                setForm((f) => ({ ...f, music, musicPath: music === 'own' ? (path ?? f.musicPath) : null }))
+                if (url) setMusicUrl(url)
+              }}
+            />
           </div>
         </div>
-        <div>
-          <span className={label}>{t('revealLabel')}</span>
-          <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label={t('revealLabel')}>
-            {REVEAL_STYLES.map((r) => {
-              const Icon = REVEAL_ICON[r]
-              return (
-                <button key={r} type="button" role="radio" aria-checked={form.revealStyle === r} onClick={() => set('revealStyle', r)} className={card(form.revealStyle === r)}>
-                  <Icon className="h-6 w-6 text-[var(--gold)]" /> {t(`reveal_${r}`)}
-                </button>
-              )
-            })}
-          </div>
-        </div>
-        <div>
-          <span className={label}>{t('themeLabel')}</span>
-          <div className="flex flex-wrap gap-2">
-            {SURPRISE_THEMES.map((theme: SurpriseTheme) => (
-              <button
-                key={theme}
-                type="button"
-                onClick={() => set('theme', theme)}
-                aria-label={t(`theme_${theme}`)}
-                aria-pressed={form.theme === theme}
-                title={t(`theme_${theme}`)}
-                className={`h-11 w-11 cursor-pointer rounded-full border-4 ${form.theme === theme ? 'border-[var(--ink)]' : 'border-white shadow'}`}
-                style={{ background: THEME_STYLE[theme].accent }}
-              />
-            ))}
-          </div>
-        </div>
-        <div>
-          <span className={label}>{t('musicLabel')}</span>
-          <MusicPicker
-            value={form.music}
-            ownUrl={musicUrl}
-            userId={userId}
-            giftId={gift.id}
-            onChange={(music, path, url) => {
-              setForm((f) => ({ ...f, music, musicPath: music === 'own' ? (path ?? f.musicPath) : null }))
-              if (url) setMusicUrl(url)
-            }}
-          />
-        </div>
-      </section>
+      </details>
 
       {/* Per chi e il regalo */}
       <section className="space-y-3 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
