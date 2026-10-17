@@ -16,6 +16,8 @@ import { defaultLocale, locales } from '../../../i18n'
 const MEMBER_AREAS = [
   '/dashboard',
   '/servizi',
+  '/controlla',
+  '/spese-condivise',
   '/community',
   '/wallet',
   '/regali',
