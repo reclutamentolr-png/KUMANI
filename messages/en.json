@@ -13064,7 +13064,8 @@
       "externalTitle": "Search outside KUMANI too",
       "externalText": "Other websites collect reports from people who received calls from this number. They open in a new tab.",
       "externalTellows": "Reports on tellows",
-      "externalGoogle": "Search on Google"
+      "externalGoogle": "Search on Google",
+      "callbackRisk": "This prefix is often used for “one-ring” scam calls: if you don’t know who called, don’t call back. The call can cost several euros per minute."
     },
     "phoneTypes": {
       "MOBILE": "Mobile",

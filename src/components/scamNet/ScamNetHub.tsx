@@ -237,6 +237,7 @@ function PhoneTab({ initial, onReport }: { initial?: string; onReport: (value: s
               <dd className="text-right font-semibold text-[var(--ink)]">{t(`phoneTypes.${type ?? 'UNKNOWN'}`)}</dd>
             </dl>
             {risky && <p className="rounded-xl bg-[#fff4e5] p-3 text-sm font-semibold text-[#7a4a00]">{t('phone.premium')}</p>}
+            {result.info.callbackRisk && <p className="rounded-xl bg-[#fdf2f2] p-3 text-sm font-semibold text-[#a12a2a]">{t('phone.callbackRisk')}</p>}
             {result.info.country && result.info.country !== 'IT' && <p className="rounded-xl bg-[#fff4e5] p-3 text-sm text-[#7a4a00]">{t('phone.foreign')}</p>}
             {!result.match && <p className="text-xs text-[var(--muted)]">{t('warning.spoof')}</p>}
           </section>
@@ -248,12 +249,15 @@ function PhoneTab({ initial, onReport }: { initial?: string; onReport: (value: s
               subject: result.info.international,
               verdict: result.match
                 ? { status: 'risk', text: t('phone.dossierReported', { n: result.match.reports }) }
-                : risky
+                : result.info.callbackRisk
+                  ? { status: 'warning', text: t('phone.callbackRisk') }
+                  : risky
                   ? { status: 'warning', text: t('phone.premium') }
                   : { status: 'ok', text: t('phone.clean') },
               rows: [
                 { label: `${t('phone.country')}: ${region(result.info.country) ?? '—'}`, status: result.info.country && result.info.country !== 'IT' ? 'warning' : 'info' },
                 { label: `${t('phone.type')}: ${t(`phoneTypes.${type ?? 'UNKNOWN'}`)}`, status: risky ? 'warning' : 'info' },
+                ...(result.info.callbackRisk ? [{ label: t('phone.callbackRisk'), status: 'warning' as const }] : []),
                 ...(result.info.country && result.info.country !== 'IT' ? [{ label: t('phone.foreign'), status: 'warning' as const }] : []),
                 ...(!result.match ? [{ label: t('warning.spoof'), status: 'info' as const }] : []),
               ],

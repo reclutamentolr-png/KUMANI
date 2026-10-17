@@ -13064,7 +13064,8 @@
       "externalTitle": "Busca también fuera de KUMANI",
       "externalText": "Otros sitios recogen los avisos de quien recibió llamadas de este número. Se abren en una pestaña nueva.",
       "externalTellows": "Avisos en tellows",
-      "externalGoogle": "Buscar en Google"
+      "externalGoogle": "Buscar en Google",
+      "callbackRisk": "Este prefijo se usa a menudo en las llamadas de «un toque»: si no sabes quién te ha llamado, no devuelvas la llamada. Puede costar varios euros por minuto."
     },
     "phoneTypes": {
       "MOBILE": "Móvil",

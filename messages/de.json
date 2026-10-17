@@ -13064,7 +13064,8 @@
       "externalTitle": "Auch außerhalb von KUMANI suchen",
       "externalText": "Andere Websites sammeln Meldungen von Personen, die von dieser Nummer angerufen wurden. Sie öffnen sich in einem neuen Tab.",
       "externalTellows": "Meldungen bei tellows",
-      "externalGoogle": "Bei Google suchen"
+      "externalGoogle": "Bei Google suchen",
+      "callbackRisk": "Diese Vorwahl wird oft für „Ping-Anrufe“ genutzt: Wenn du nicht weißt, wer angerufen hat, ruf nicht zurück. Der Anruf kann mehrere Euro pro Minute kosten."
     },
     "phoneTypes": {
       "MOBILE": "Mobil",

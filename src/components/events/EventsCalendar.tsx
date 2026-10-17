@@ -16,6 +16,7 @@ import {
 } from '@/lib/events'
 import { EventFlags, LevelBadge, PriceBadge, RatingBadge, SpotsBadge } from './EventBadges'
 import ViewerTime from './ViewerTime'
+import { VerifiedMark } from '@/components/verification/VerifiedBadge'
 
 type Range = 'all' | 'week' | 'month'
 
@@ -257,7 +258,9 @@ export function EventListCard({ event }: { event: EventCard }) {
       </div>
 
       <div className="mt-auto flex flex-wrap items-center gap-2 border-t border-gray-100 pt-3 text-xs text-[var(--muted)]">
-        <span>{t('organizedBy', { name: event.organizer_name })}</span>
+        <span className="inline-flex items-center gap-1">
+          {t('organizedBy', { name: event.organizer_name })} <VerifiedMark verified={event.organizer_verified} />
+        </span>
         <LevelBadge level={event.organizer_level ?? (event.organizer_trusted ? 'trusted' : 'new')} />
         <RatingBadge rating={event.organizer_rating} reviews={event.organizer_reviews} />
       </div>

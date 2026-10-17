@@ -1,5 +1,6 @@
 import { BadgeCheck, Star } from 'lucide-react'
 import type { PublicReview } from '@/lib/reviews'
+import { VerifiedMark } from '@/components/verification/VerifiedBadge'
 
 export function ReviewStars({ rating, size = 'h-4 w-4', label }: { rating: number; size?: string; label?: string }) {
   return (
@@ -43,7 +44,7 @@ export default function ReviewCard({
       <p className={`mt-2 whitespace-pre-line text-sm leading-6 ${dark ? 'text-white/80' : 'text-[var(--ink)]/80'} ${clamp ? 'line-clamp-6' : ''}`}>{review.body}</p>
       <div className={`mt-auto flex flex-wrap items-center justify-between gap-x-3 gap-y-1 pt-4 text-xs ${dark ? 'text-white/60' : 'text-[var(--muted)]'}`}>
         <span>
-          <span className={`font-bold ${dark ? 'text-white' : 'text-[var(--ink)]'}`}>{review.display_name}</span> · {dateText}
+          <span className={`font-bold ${dark ? 'text-white' : 'text-[var(--ink)]'}`}>{review.display_name}</span> <VerifiedMark verified={review.author_verified} /> · {dateText}
         </span>
         <span className={`inline-flex items-center gap-1 font-semibold ${dark ? 'text-[var(--gold-bright)]' : 'text-emerald-700'}`}>
           <BadgeCheck className="h-3.5 w-3.5" /> {verifiedText}

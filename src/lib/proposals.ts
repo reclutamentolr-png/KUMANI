@@ -36,6 +36,7 @@ export interface Proposal {
   published_at: string | null
   status_changed_at: string
   author_name: string | null
+  author_verified?: boolean
   is_mine: boolean
   my_vote: boolean
   my_report?: boolean

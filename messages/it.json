@@ -13064,7 +13064,8 @@
       "externalTitle": "Cerca anche fuori da KUMANI",
       "externalText": "Altri siti raccolgono le segnalazioni di chi ha ricevuto chiamate da questo numero. Si aprono in una nuova scheda.",
       "externalTellows": "Segnalazioni su tellows",
-      "externalGoogle": "Cerca su Google"
+      "externalGoogle": "Cerca su Google",
+      "callbackRisk": "Prefisso usato spesso per le chiamate «squillo e richiama»: se non conosci chi ha chiamato, non richiamare. La telefonata può costare diversi euro al minuto."
     },
     "phoneTypes": {
       "MOBILE": "Cellulare",

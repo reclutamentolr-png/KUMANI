@@ -13064,7 +13064,8 @@
       "externalTitle": "Cherche aussi en dehors de KUMANI",
       "externalText": "D’autres sites recueillent les signalements des personnes appelées par ce numéro. Ils s’ouvrent dans un nouvel onglet.",
       "externalTellows": "Signalements sur tellows",
-      "externalGoogle": "Chercher sur Google"
+      "externalGoogle": "Chercher sur Google",
+      "callbackRisk": "Cet indicatif est souvent utilisé pour les appels « ping » (un seul bip) : si vous ne savez pas qui a appelé, ne rappelez pas. L’appel peut coûter plusieurs euros la minute."
     },
     "phoneTypes": {
       "MOBILE": "Mobile",

@@ -14,6 +14,7 @@ export type PublicReview = {
   body: string
   locale: string
   display_name: string
+  author_verified?: boolean
   purchase_label: PurchaseLabel
   created_at: string
 }

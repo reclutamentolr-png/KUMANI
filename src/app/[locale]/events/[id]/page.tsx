@@ -16,6 +16,7 @@ import { SITE_URL } from '@/lib/siteUrl'
 import { createClient } from '@/lib/supabase/server'
 import { SuspendedBanner } from '@/components/ServiceSuspended'
 import { isToolOnline } from '@/lib/toolOnline'
+import { VerifiedMark } from '@/components/verification/VerifiedBadge'
 
 // Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
 // richiesta, mai preparata in anticipo né tenuta in memoria
@@ -278,7 +279,9 @@ export default async function EventPage({ params, searchParams }: Props) {
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <p className="font-bold text-[var(--ink)]">{event.organizer_name}</p>
+                    <p className="inline-flex items-center gap-1 font-bold text-[var(--ink)]">
+                      {event.organizer_name} <VerifiedMark verified={event.organizer_verified} />
+                    </p>
                     <LevelBadge level={level} showNew />
                   </div>
                   {reviewsCount > 0 && event.organizer_rating != null ? (

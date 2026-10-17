@@ -7,6 +7,7 @@ import Link from '@/components/LocalizedLink'
 import { reportProposal } from '@/app/actions/proposals'
 import { REPORT_REASONS, STATUS_STYLES, VOTABLE_STATUSES, type Proposal, type ReportReason } from '@/lib/proposals'
 import VoteButton from './VoteButton'
+import { VerifiedMark } from '@/components/verification/VerifiedBadge'
 import { useTimeAgo } from './ProposalCard'
 
 const card = 'rounded-3xl border border-[var(--gold)]/25 bg-white p-5 shadow-sm'
@@ -53,7 +54,7 @@ export default function ProposalDetail({ proposal: p, serviceName, shareUrl }: {
         <span className={`inline-block rounded-full px-3 py-1 text-xs font-extrabold ${STATUS_STYLES[p.status]}`}>{t(`status.${p.status}`)}</span>
         <h1 className="break-words text-3xl font-bold leading-tight text-[var(--ink)]">{p.title}</h1>
         <p className="text-sm text-[var(--muted)]">
-          {topic} · {p.is_mine ? t('byYou') : p.author_name ? t('by', { name: p.author_name }) : t('byMember')} · {ago(p.published_at ?? p.created_at)}
+          {topic} · {p.is_mine ? t('byYou') : p.author_name ? t('by', { name: p.author_name }) : t('byMember')} <VerifiedMark verified={!p.is_mine && p.author_verified} /> · {ago(p.published_at ?? p.created_at)}
         </p>
       </div>
 

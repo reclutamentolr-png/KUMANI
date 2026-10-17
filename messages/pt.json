@@ -13064,7 +13064,8 @@
       "externalTitle": "Procura também fora do KUMANI",
       "externalText": "Outros sites reúnem as denúncias de quem recebeu chamadas deste número. Abrem num novo separador.",
       "externalTellows": "Denúncias no tellows",
-      "externalGoogle": "Pesquisar no Google"
+      "externalGoogle": "Pesquisar no Google",
+      "callbackRisk": "Este indicativo é muito usado em chamadas «toca e desliga»: se não sabes quem ligou, não devolvas a chamada. Pode custar vários euros por minuto."
     },
     "phoneTypes": {
       "MOBILE": "Telemóvel",

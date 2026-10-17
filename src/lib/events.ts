@@ -59,6 +59,7 @@ export type EventCard = {
   status: 'pending' | 'published' | 'rejected' | 'cancelled' | 'banned'
   ended: boolean
   organizer_name: string
+  organizer_verified?: boolean
   organizer_referral: string | null
   organizer_trusted: boolean
   // Fase 2: lista d'attesa e reputazione dell'organizzatore

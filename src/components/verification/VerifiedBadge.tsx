@@ -59,3 +59,16 @@ export default function VerifiedBadge({ userId, className = '' }: { userId: stri
     </span>
   )
 }
+
+// Stesso segno quando il sì/no arriva già con i dati (Kordata, Eventi,
+// Recensioni, Proposte): nessuna richiesta in più
+export function VerifiedMark({ verified, className = '' }: { verified?: boolean | null; className?: string }) {
+  const t = useTranslations('verifiedBadge')
+  if (!verified) return null
+  return (
+    <span title={t('tooltip')} className={`inline-flex shrink-0 items-center align-[-0.15em] text-[var(--gold)] ${className}`}>
+      <BadgeCheck className="h-[1.05em] w-[1.05em]" strokeWidth={2.4} aria-hidden />
+      <span className="sr-only">{t('label')}</span>
+    </span>
+  )
+}
