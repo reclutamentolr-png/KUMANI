@@ -6,7 +6,7 @@ import { useLocale } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import Link from '@/components/LocalizedLink'
-import { Mail, Lock, AlertCircle, Loader2, Home, CheckCircle, ShieldCheck } from 'lucide-react'
+import { Mail, Lock, AlertCircle, Loader2, CheckCircle, ShieldCheck } from 'lucide-react'
 import MaintenanceGate from '@/components/MaintenanceGate'
 import Logo from '@/components/Logo'
 import { authErrorText } from '@/lib/authErrors'
@@ -131,15 +131,13 @@ export default function ForgotPasswordPage() {
     <MaintenanceGate>
       <div className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-[var(--background)] py-12 sm:px-6 lg:px-8">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(199,154,59,0.18),transparent_42%)]" />
-        <Link
-          href="/"
-          className="absolute left-6 top-6 flex items-center gap-2 font-semibold text-[var(--ink-soft)] transition-colors hover:text-[var(--gold)]"
-        >
-          <Logo size={32} priority dark />
-          <Home className="w-4 h-4 sm:hidden" />
-        </Link>
-
+        {/* Logo grande al centro, come in Accedi e Registrati */}
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
+          <div className="mb-4 flex justify-center">
+            <Link href="/" className="transition-opacity hover:opacity-80">
+              <Logo size={128} priority dark />
+            </Link>
+          </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-[var(--ink)]">
             {step === 'verify' ? t('enterResetCode') : t('forgotPasswordTitle')}
           </h2>
