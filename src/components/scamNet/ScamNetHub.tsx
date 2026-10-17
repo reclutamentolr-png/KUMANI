@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { BellRing, Flag, ImagePlus, LoaderCircle, PhoneCall, Plus, ShieldAlert, ShieldCheck, TrendingUp, UserRound } from 'lucide-react'
+import { BellRing, Flag, ImagePlus, LoaderCircle, PhoneCall, Plus, ShieldAlert, ShieldCheck, TrendingUp, UserRound, Globe, ExternalLink } from 'lucide-react'
 import { addScamEvidence, checkPhone, myScamReports, scamAlerts, setScamAlerts, type MyScamReport, type ScamAlerts, type ScamMatch } from '@/app/actions/scamNet'
 import type { PhoneInfo } from '@/lib/scamNetPhone'
 import { GUARDIAN_LEVELS, type GuardianLevel, type ScamKind } from '@/lib/scamNet'
@@ -123,6 +123,39 @@ function AlertsTab({ onReport }: { onReport: () => void }) {
   )
 }
 
+// Segnalazioni fuori da KUMANI: pulsanti già pronti per quel numero (si aprono
+// in una nuova scheda). tellows ha una pagina per ogni numero italiano; Google
+// trova anche forum e altri siti di segnalazioni.
+function ExternalPhoneSearch({ info }: { info: PhoneInfo }) {
+  const t = useTranslations('scamNet')
+  const national = info.e164.startsWith('+39') ? info.e164.slice(3) : null
+  const links = [
+    ...(info.country === 'IT' && national ? [{ label: t('phone.externalTellows'), href: `https://www.tellows.it/num/${national}` }] : []),
+    { label: t('phone.externalGoogle'), href: `https://www.google.com/search?q=${encodeURIComponent(`${national ?? info.e164} chi chiama truffa`)}` },
+  ]
+  return (
+    <section className={`${card} space-y-2`}>
+      <p className="flex items-center gap-2 font-extrabold text-[var(--ink)]">
+        <Globe className="h-5 w-5 text-[var(--gold)]" aria-hidden="true" /> {t('phone.externalTitle')}
+      </p>
+      <p className="text-sm text-[var(--muted)]">{t('phone.externalText')}</p>
+      <div className="flex flex-wrap gap-2 pt-1">
+        {links.map((link) => (
+          <a
+            key={link.href}
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-[var(--gold)]/40 bg-white px-4 text-sm font-bold text-[var(--ink)] hover:border-[var(--gold)]"
+          >
+            {link.label} <ExternalLink className="h-4 w-4 text-[var(--gold)]" aria-hidden="true" />
+          </a>
+        ))}
+      </div>
+    </section>
+  )
+}
+
 // ---------- Chi mi ha chiamato? ----------
 function PhoneTab({ initial, onReport }: { initial?: string; onReport: (value: string) => void }) {
   const t = useTranslations('scamNet')
@@ -207,6 +240,7 @@ function PhoneTab({ initial, onReport }: { initial?: string; onReport: (value: s
             {result.info.country && result.info.country !== 'IT' && <p className="rounded-xl bg-[#fff4e5] p-3 text-sm text-[#7a4a00]">{t('phone.foreign')}</p>}
             {!result.match && <p className="text-xs text-[var(--muted)]">{t('warning.spoof')}</p>}
           </section>
+          <ExternalPhoneSearch info={result.info} />
           <DossierButton
             match={result.match}
             build={(): Dossier => ({

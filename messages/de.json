@@ -13009,7 +13009,11 @@
       "foreign": "Ausländische Nummer: Wenn du keine Anrufe aus dem Ausland erwartest, ruf nicht zurück.",
       "report": "Diese Nummer melden",
       "dossierTool": "Wer hat mich angerufen?",
-      "dossierReported": "Von der Community gemeldete Nummer ({n})"
+      "dossierReported": "Von der Community gemeldete Nummer ({n})",
+      "externalTitle": "Auch außerhalb von KUMANI suchen",
+      "externalText": "Andere Websites sammeln Meldungen von Personen, die von dieser Nummer angerufen wurden. Sie öffnen sich in einem neuen Tab.",
+      "externalTellows": "Meldungen bei tellows",
+      "externalGoogle": "Bei Google suchen"
     },
     "phoneTypes": {
       "MOBILE": "Mobil",
