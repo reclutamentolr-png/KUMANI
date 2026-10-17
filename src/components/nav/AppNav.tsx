@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { House, LayoutGrid, UserRound, Users, Wallet } from 'lucide-react'
@@ -91,6 +91,40 @@ export default function AppNav() {
     return () => data.subscription.unsubscribe()
   }, [])
 
+  // iPhone (soprattutto nell'app installata): mentre la pagina carica altri
+  // pezzi durante lo scorrimento, WebKit può spostare il «fondo» su cui è
+  // agganciato il menu, che resta più in alto del bordo visibile. Si confronta il
+  // fondo visibile (visualViewport) con quello della pagina e, se c'è uno
+  // scarto, il menu scende di quanto serve. Senza scarto non cambia nulla; solo
+  // sul telefono (sul computer è un riquadro centrato) e mai verso l'alto
+  // (tastiera aperta).
+  const navRef = useRef<HTMLElement>(null)
+  useEffect(() => {
+    const vv = window.visualViewport
+    const iOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+    if (!member || !vv || !iOS) return
+    let frame = 0
+    const update = () => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(() => {
+        const nav = navRef.current
+        if (!nav) return
+        const gap = Math.round(vv.offsetTop + vv.height - window.innerHeight)
+        nav.style.transform = window.innerWidth < 640 && gap > 0 && gap < 160 ? `translate3d(0, ${gap}px, 0)` : ''
+      })
+    }
+    update()
+    vv.addEventListener('resize', update)
+    vv.addEventListener('scroll', update)
+    window.addEventListener('scroll', update, { passive: true })
+    return () => {
+      cancelAnimationFrame(frame)
+      vv.removeEventListener('resize', update)
+      vv.removeEventListener('scroll', update)
+      window.removeEventListener('scroll', update)
+    }
+  }, [member])
+
   const path = barePathOf(pathname)
   // Anteprima di una sorpresa: a schermo intero, come la vede chi la riceve
   if (!member || !MEMBER_AREAS.some((area) => under(path, area)) || path.endsWith('/anteprima') || under(path, '/marketplace/nexus') || under(path, '/marketplace/firma-pdf')) return null
@@ -117,6 +151,7 @@ export default function AppNav() {
           (app-nav in globals.css): con la sfocatura Safari sposta la barra
           mentre la pagina scorre */}
       <nav
+        ref={navRef}
         data-app-nav
         data-tour="app-nav"
         aria-label={t('navLabel')}
