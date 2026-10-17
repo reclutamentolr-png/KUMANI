@@ -7,6 +7,7 @@ import Link from '@/components/LocalizedLink'
 import FavoriteStarButton from '@/components/FavoriteStarButton'
 import QuickCheckBox from '@/components/ecosystem/QuickCheckBox'
 import HubCards from '@/components/hubs/HubCards'
+import PlanTag from '@/components/PlanTag'
 import { HUB_GROUP, SERVICE_HUBS, TOOL_HUB } from '@/lib/serviceHubs'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 import { GROUP_STYLE, SERVICE_GROUPS } from '@/lib/serviceGroups'
@@ -178,6 +179,7 @@ export function ServiceCard({
         </span>
         <span className={`flex min-w-0 flex-1 flex-col ${compact ? '' : 'pr-7'}`}>
           <span className="truncate font-bold text-[var(--ink)]">{item.title}</span>
+          {!compact && <PlanTag plan={item.plan} className="mt-1" />}
           {!compact && <span className="mt-0.5 line-clamp-2 text-xs leading-5 text-[var(--muted)]">{item.description}</span>}
           {!compact && (
             <span className="mt-2 flex flex-wrap items-center gap-1.5">

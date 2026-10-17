@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl'
 import { ArrowRight, BookUser, Briefcase, CalendarClock, House, PanelsTopLeft, Store, Dices, Flower2, PiggyBank, QrCode, Signature, Lock, Megaphone, ScanSearch, ShieldCheck, type LucideIcon } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
+import PlanTag from '@/components/PlanTag'
 import type { ServiceItem } from '@/lib/servicesCatalog'
 import { HUB_HOME, HUB_TABS, type ServiceHub } from '@/lib/serviceHubs'
 
@@ -16,6 +17,7 @@ const HUB_ICON: Record<ServiceHub, LucideIcon> = { controlla: ScanSearch, proteg
 export default function HubCards({ hubs, items }: { hubs: readonly ServiceHub[]; items: ServiceItem[] }) {
   const t = useTranslations('serviceHubs')
   const openOf = new Map(items.map((i) => [i.toolName, i.open]))
+  const planOf = new Map(items.map((i) => [i.toolName, i.plan]))
   return (
     <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
       {hubs.map((hub) => {
@@ -32,20 +34,22 @@ export default function HubCards({ hubs, items }: { hubs: readonly ServiceHub[];
               </span>
             </Link>
             <span className="mt-2 text-sm text-[var(--muted)]">{t(`${hub}.description`)}</span>
-            <span className="mt-3 flex flex-wrap gap-1.5">
+            <span className="mt-3 flex flex-wrap gap-x-1.5 gap-y-2">
               {HUB_TABS[hub]
                 .filter((tab) => tab.key !== 'all' && (!tab.tool || openOf.has(tab.tool)))
                 .map((tab) => {
                   const locked = !!tab.tool && openOf.get(tab.tool) === false
                   return (
+                    <span key={tab.key} className="flex flex-col items-center gap-1">
                     <Link
-                      key={tab.key}
                       href={tab.href}
                       className={`inline-flex min-h-8 items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold transition-colors ${locked ? 'bg-gray-100 text-gray-500 hover:bg-gray-200' : 'bg-[var(--gold)]/10 text-[var(--ink)] hover:bg-[var(--gold)]/25'}`}
                     >
                       {locked && <Lock className="h-3 w-3" aria-label={t('locked')} />}
                       {t(`${hub}.tab_${tab.key}`)}
                     </Link>
+                    <PlanTag plan={tab.tool ? planOf.get(tab.tool) : null} />
+                    </span>
                   )
                 })}
             </span>

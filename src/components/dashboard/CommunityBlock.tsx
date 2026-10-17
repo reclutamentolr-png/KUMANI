@@ -3,11 +3,12 @@
 import { useTranslations } from 'next-intl'
 import { ArrowRight, Lock, Smartphone, Users } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
+import PlanTag from '@/components/PlanTag'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 
 // Sezioni della Community (Bacheca, Kumano del Giorno, Kordata, Eventi,
 // Banca del Tempo): non sono servizi del Marketplace, niente stella.
-export type CommunityItem = { toolName: string; href: string; iconName: string; title: string; description: string; locked: boolean }
+export type CommunityItem = { toolName: string; href: string; iconName: string; title: string; description: string; locked: boolean; plan: 'free' | 'base' | 'pro' }
 
 export function CommunityBlock({ items }: { items: CommunityItem[] }) {
   const t = useTranslations('toolTiers')
@@ -43,6 +44,7 @@ export function CommunityBlock({ items }: { items: CommunityItem[] }) {
                 )}
               </div>
               <p className="text-sm font-bold text-[var(--ink)] group-hover:text-sky-700">{item.title}</p>
+              <PlanTag plan={item.plan} className="mt-1" />
               <p className="mt-0.5 line-clamp-2 flex-1 text-xs sm:line-clamp-3 leading-5 text-[var(--muted)]">{item.description}</p>
               <div className="mt-2">
                 {item.locked ? (

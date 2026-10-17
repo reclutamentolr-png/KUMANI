@@ -3,6 +3,8 @@
 // Testi dei bisogni nel namespace "homeNeeds"; nomi e descrizioni dei
 // servizi sono quelli del Marketplace.
 
+import type { RequiredPlan } from '@/lib/plans'
+
 export const HOME_NEEDS = [
   { key: 'scams', icon: 'ShieldCheck', items: ['rete-antitruffa', 'antitruffa', 'checkmail', 'verifica-iban', 'svat', 'verifoto', 'scudo-dati', 'documento-sicuro'] },
   { key: 'organize', icon: 'CalendarDays', items: ['life-calendar', 'memolife', 'focus', 'travel', 'findo', 'hopla'] },
@@ -18,6 +20,7 @@ export const HOME_NEEDS = [
 
 export type HomeNeedKey = (typeof HOME_NEEDS)[number]['key']
 // links: servizio unito (lib/serviceHubs) → tutte le sue schede, prima quelle del bisogno
-export type HomeNeedItem = { name: string; title: string; description: string; href: string; iconName: string; links?: { title: string; href: string }[] }
+// plan: piano che comprende lo strumento (solo per gli strumenti del Marketplace)
+export type HomeNeedItem = { name: string; title: string; description: string; href: string; iconName: string; plan?: RequiredPlan; links?: { title: string; href: string; plan?: RequiredPlan }[] }
 // short: etichetta breve per la versione compatta in dashboard
 export type HomeNeed = { key: HomeNeedKey; icon: string; label: string; short: string; intro: string; items: HomeNeedItem[] }

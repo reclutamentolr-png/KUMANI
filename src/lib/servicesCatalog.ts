@@ -80,5 +80,6 @@ export async function getCommunityItems(supabase: SupabaseClient, userId: string
     { toolName: 'community-proposals', setting: 'proposte', href: '/community/proposte', iconName: 'Lightbulb', title: tm('proposte'), description: tm('proposteDescription') },
   ]
     .filter((item) => access.isSettingEnabled(item.setting))
-    .map(({ setting, ...item }) => ({ ...item, locked: setting !== 'events' && !access.isToolEnabled(setting) }))
+    // Eventi: consultarli è sempre gratis
+    .map(({ setting, ...item }) => ({ ...item, locked: setting !== 'events' && !access.isToolEnabled(setting), plan: setting === 'events' ? 'free' : access.requiredPlan(setting) }))
 }

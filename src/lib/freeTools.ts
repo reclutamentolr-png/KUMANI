@@ -1,6 +1,6 @@
 import { unstable_cache } from 'next/cache'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
-import { LEGACY_PAID_TOOLS } from '@/lib/plans'
+import { LEGACY_PAID_TOOLS, type RequiredPlan } from '@/lib/plans'
 
 // Servizi gratuiti (piano richiesto "free", deciso dall'Admin in
 // marketplace_settings): vengono mostrati per primi in ogni categoria.
@@ -37,6 +37,18 @@ export async function getFreeToolNames(toolNames: string[]): Promise<string[]> {
     return []
   }
   return toolNames.filter((name) => (plans[name] || (LEGACY_PAID_TOOLS.includes(name) ? 'base' : 'free')) === 'free')
+}
+
+// Piano richiesto da ogni strumento indicato (stessa regola di sopra). Vuoto se
+// la lettura non riesce: allora non si mostra nessun piano.
+export async function getToolPlanOf(toolNames: string[]): Promise<Record<string, RequiredPlan>> {
+  let plans: ToolPlans
+  try {
+    plans = (await fetchToolPlans()).plans
+  } catch {
+    return {}
+  }
+  return Object.fromEntries(toolNames.map((name) => [name, (plans[name] || (LEGACY_PAID_TOOLS.includes(name) ? 'base' : 'free')) as RequiredPlan]))
 }
 
 // Strumenti spenti dall'Admin (spariscono dalle schede dei servizi uniti e dai

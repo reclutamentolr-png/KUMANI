@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { ArrowRight, HandPlatter, Hourglass, Star, Tag, BriefcaseBusiness, CalendarDays, ChevronDown, Gamepad2, Gift, Leaf, Megaphone, PiggyBank, ShieldCheck, Smartphone, Store, Users, type LucideIcon } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
+import PlanTag from '@/components/PlanTag'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 import type { HomeNeed } from '@/lib/homeNeeds'
 
@@ -111,15 +112,17 @@ export default function DashboardNeeds({
                             </span>
                             <span className="min-w-0 flex-1">
                               <span className="block font-bold text-[var(--ink)]">{item.title}</span>
-                              <span className="flex flex-wrap gap-1.5 pt-1.5">
+                              <span className="flex flex-wrap gap-x-1.5 gap-y-2 pt-1.5">
                                 {item.links.map((link) => (
-                                  <Link
-                                    key={link.href}
-                                    href={link.href}
-                                    className="inline-flex min-h-9 items-center gap-1 rounded-full border border-[var(--gold)]/40 bg-white px-3 text-xs font-semibold text-[var(--ink)] transition hover:border-[var(--gold)] hover:bg-[var(--gold)]/10"
-                                  >
-                                    {link.title} <ArrowRight className="h-3 w-3" />
-                                  </Link>
+                                  <span key={link.href} className="flex flex-col items-center gap-1">
+                                    <Link
+                                      href={link.href}
+                                      className="inline-flex min-h-9 items-center gap-1 rounded-full border border-[var(--gold)]/40 bg-white px-3 text-xs font-semibold text-[var(--ink)] transition hover:border-[var(--gold)] hover:bg-[var(--gold)]/10"
+                                    >
+                                      {link.title} <ArrowRight className="h-3 w-3" />
+                                    </Link>
+                                    <PlanTag plan={link.plan} />
+                                  </span>
                                 ))}
                               </span>
                             </span>
@@ -138,6 +141,7 @@ export default function DashboardNeeds({
                           <span className="min-w-0 flex-1">
                             <span className="block font-bold text-[var(--ink)]">{item.title}</span>
                             <span className="line-clamp-2 text-xs leading-snug text-gray-600">{item.description}</span>
+                            <PlanTag plan={item.plan} className="mt-1" />
                           </span>
                           <span className="inline-flex shrink-0 items-center gap-0.5 text-sm font-semibold text-[var(--ink)]">
                             {texts.open} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
