@@ -11,16 +11,25 @@ import { normalizeDomain, type ScamSource } from '@/lib/scamDomains'
 //   servizi usati in Europa. Scadono 90 giorni dopo l'ultima volta in elenco.
 // - URLhaus di abuse.ch (CC0): siti che distribuiscono virus, solo con nome
 //   (non i semplici indirizzi IP). Scadono dopo 30 giorni.
+// - Consob (Italia): siti oscurati, dai comunicati stampa più recenti.
+// - BaFin (Germania): avvisi su siti non autorizzati, dal feed RSS (solo i
+//   domini nel titolo dell'avviso, scritti dalla BaFin come «nome(.)com»).
+//   Di queste due si raccolgono gli avvisi nuovi: lo storico si accumula notte
+//   dopo notte, e restano finché non si tolgono a mano.
 // Se una fonte non risponde, le altre si caricano lo stesso.
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 300
+
 
 type Row = { domain: string; source: ScamSource; category: string | null; listed_on: string | null; last_seen: string; expires_on: string | null }
 
 const AMF_DATASET = 'https://www.data.gouv.fr/api/1/datasets/641d5dab1d84b530f7720b08/'
 const PHISHDB = 'https://raw.githubusercontent.com/Phishing-Database/Phishing.Database/master/phishing-domains-ACTIVE.txt'
 const URLHAUS = 'https://urlhaus.abuse.ch/downloads/csv_online/'
+const CONSOB_INDEX = 'https://www.consob.it/web/consob/comunicati-stampa'
+const BAFIN_RSS = 'https://www.bafin.de/DE/service/rss/_function/rssnewsfeed.xml?nn=150166'
+const MONTHS_IT = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre']
 
 const EU_TLDS = new Set(['it', 'fr', 'es', 'de', 'pt', 'eu', 'at', 'be', 'nl', 'lu', 'ch', 'ie', 'pl', 'gr', 'ro', 'cz', 'sk', 'hu', 'si', 'hr', 'bg', 'dk', 'se', 'fi', 'ee', 'lv', 'lt', 'mt', 'cy', 'uk', 'no'])
 // Marchi imitati più spesso nelle truffe europee
@@ -49,13 +58,55 @@ async function loadAmf(): Promise<Row[]> {
   const meta = JSON.parse(await fetchText(AMF_DATASET, 30_000)) as { resources: { format: string; url: string; last_modified: string }[] }
   const csv = meta.resources.filter((r) => r.format?.toLowerCase() === 'csv').sort((a, b) => b.last_modified.localeCompare(a.last_modified))[0]
   if (!csv) throw new Error('AMF: nessun CSV')
-  const lines = (await fetchText(csv.url)).replace(/^﻿/, '').split(/\r?\n/).slice(1)
+  const lines = (await fetchText(csv.url)).replace(/^\uFEFF/, '').split(/\r?\n/).slice(1)
   const rows = new Map<string, Row>()
   for (const line of lines) {
     const [name, category, date] = line.split(';').map((v) => v.trim().replace(/^"|"$/g, ''))
     const domain = name ? normalizeDomain(name.replace(/^prénom\.nom@/i, '')) : null
     if (!domain || rows.has(domain)) continue
     rows.set(domain, { domain, source: 'amf', category: amfCategory(category ?? ''), listed_on: /^\d{4}-\d{2}-\d{2}$/.test(date ?? '') ? date : null, last_seen: day(), expires_on: null })
+  }
+  return [...rows.values()]
+}
+
+// Consob: nei comunicati «Consob oscura N siti» l'elenco sta tra «elenco dei
+// siti» e «Sale, così» (il totale); la data è nel titolo del comunicato
+async function loadConsob(): Promise<Row[]> {
+  const index = await fetchText(CONSOB_INDEX, 30_000)
+  const pages = [...new Set(index.match(/https:\/\/www\.consob\.it\/web\/area-pubblica\/w\/comunicato-stampa-del-[a-z0-9-]+/g) ?? [])]
+  const rows = new Map<string, Row>()
+  for (const page of pages.slice(0, 12)) {
+    const text = (await fetchText(page, 30_000)).replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ')
+    if (!/oscuramento/i.test(text)) continue
+    const start = text.search(/elenco dei siti/i)
+    if (start < 0) continue
+    const end = text.slice(start).search(/Sale, cos|complessivamente oscurati/i)
+    const list = text.slice(start, end > 0 ? start + end : start + 8000)
+    const when = text.match(/del (\d{1,2}) (gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre) (\d{4})/i)
+    const listed = when ? `${when[3]}-${String(MONTHS_IT.indexOf(when[2].toLowerCase()) + 1).padStart(2, '0')}-${when[1].padStart(2, '0')}` : day()
+    for (const m of list.matchAll(/(?:https?:\/\/|www\.)[^\s);,"]+/gi)) {
+      const domain = normalizeDomain(m[0])
+      if (!domain || domain.endsWith('consob.it') || rows.has(domain)) continue
+      rows.set(domain, { domain, source: 'consob', category: 'unauthorised', listed_on: listed, last_seen: day(), expires_on: null })
+    }
+  }
+  return [...rows.values()]
+}
+
+// BaFin: avvisi «unerlaubte» del feed; i domini sono nel titolo come «nome(.)com»
+async function loadBafin(): Promise<Row[]> {
+  const rows = new Map<string, Row>()
+  for (const item of (await fetchText(BAFIN_RSS, 30_000)).split('<item>').slice(1)) {
+    const link = item.match(/<link>([^<]*)<\/link>/)?.[1] ?? ''
+    if (!/\/Verbrauchermitteilung\/unerlaubte\//.test(link)) continue
+    const title = (item.match(/<title>([^<]*)<\/title>/)?.[1] ?? '').replace(/&#160;|&nbsp;/g, ' ')
+    const date = item.match(/<pubDate>([^<]*)<\/pubDate>/)?.[1]
+    const listed = date && !Number.isNaN(Date.parse(date)) ? new Date(date).toISOString().slice(0, 10) : day()
+    const category = /identit|fake|gefälscht|falsch/i.test(title) ? 'impersonation' : 'unauthorised'
+    for (const m of title.matchAll(/[a-z0-9-]+(?:\(\.\)[a-z0-9-]+)+/gi)) {
+      const domain = normalizeDomain(m[0].replace(/\(\.\)/g, '.'))
+      if (domain && !rows.has(domain)) rows.set(domain, { domain, source: 'bafin', category, listed_on: listed, last_seen: day(), expires_on: null })
+    }
   }
   return [...rows.values()]
 }
@@ -100,7 +151,7 @@ export async function GET(request: Request) {
     auth: { autoRefreshToken: false, persistSession: false },
   })
   const report: Record<string, number | string> = {}
-  for (const [source, load] of [['amf', loadAmf], ['phishdb', loadPhishDb], ['urlhaus', loadUrlhaus]] as const) {
+  for (const [source, load] of [['amf', loadAmf], ['consob', loadConsob], ['bafin', loadBafin], ['phishdb', loadPhishDb], ['urlhaus', loadUrlhaus]] as const) {
     try {
       const rows = await load()
       await save(db, rows)

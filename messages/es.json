@@ -2107,7 +2107,10 @@
     "scamListPhishing": "Aparece en una lista internacional de sitios de phishing activos: imita a un banco, una empresa de mensajería o un servicio conocido para robar contraseñas y datos de la tarjeta.",
     "scamListMalware": "Aparece en la lista de URLhaus de sitios que distribuyen virus: no descargues nada de aquí.",
     "scamListAlertTitle": "Atención: sitio señalado como fraude",
-    "scamListSource": "Fuente: {source}"
+    "scamListSource": "Fuente: {source}",
+    "scamListConsob": "Bloqueado por la Consob (Italia) el {date}: ofrecía inversiones o criptoactivos sin autorización. No envíes dinero ni datos.",
+    "scamListBafin_unauthorised": "Señalado por la autoridad financiera alemana (BaFin) el {date}: ofrece servicios financieros sin autorización.",
+    "scamListBafin_impersonation": "Señalado por la autoridad financiera alemana (BaFin) el {date}: banco falso o sitio que se hace pasar por una empresa real. No envíes dinero ni datos."
   },
   "offermaker": {
     "aiLimitReached": "Has alcanzado el límite diario de generaciones con IA: inténtalo mañana.",

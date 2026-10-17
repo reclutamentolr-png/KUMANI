@@ -158,10 +158,12 @@ export async function POST(request: NextRequest) {
 // controllo non compare (e non cambia il punteggio).
 const SCAM_SOURCES: Record<ScamDomainHit['source'], { source: string; sourceUrl: string; key: string }> = {
   amf: { source: 'AMF – Autorité des marchés financiers (FR)', sourceUrl: 'https://www.amf-france.org/fr/espace-epargnants/proteger-son-epargne/listes-noires-et-mises-en-garde', key: 'scamListAmf' },
+  consob: { source: 'Consob (IT)', sourceUrl: 'https://www.consob.it/web/consob/comunicati-stampa', key: 'scamListConsob' },
+  bafin: { source: 'BaFin (DE)', sourceUrl: 'https://www.bafin.de/DE/Verbraucher/verbraucher_node.html', key: 'scamListBafin' },
   phishdb: { source: 'Phishing.Database', sourceUrl: 'https://github.com/Phishing-Database/Phishing.Database', key: 'scamListPhishing' },
   urlhaus: { source: 'URLhaus – abuse.ch', sourceUrl: 'https://urlhaus.abuse.ch/', key: 'scamListMalware' },
 }
-const SCAM_ORDER: ScamDomainHit['source'][] = ['amf', 'phishdb', 'urlhaus']
+const SCAM_ORDER: ScamDomainHit['source'][] = ['consob', 'bafin', 'amf', 'phishdb', 'urlhaus']
 
 async function checkScamLists(domain: string): Promise<SVATCheck | null> {
   const db = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
@@ -177,7 +179,8 @@ async function checkScamLists(domain: string): Promise<SVATCheck | null> {
     status: 'risk',
     points: -60,
     details: `${hit.domain} listed by ${info.source}${hit.listed_on ? ` on ${hit.listed_on}` : ''}`,
-    detailsKey: hit.source === 'amf' ? `${info.key}_${hit.category ?? 'unauthorised'}` : info.key,
+    // AMF e BaFin: testo secondo il tipo di avviso
+    detailsKey: hit.source === 'amf' || hit.source === 'bafin' ? `${info.key}_${hit.category ?? 'unauthorised'}` : info.key,
     detailsInterp: { domain: hit.domain, date: hit.listed_on ? hit.listed_on.split('-').reverse().join('/') : '—' },
     source: info.source,
     sourceUrl: info.sourceUrl,

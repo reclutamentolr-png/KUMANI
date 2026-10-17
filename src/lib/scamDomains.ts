@@ -4,7 +4,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 // 20270324100000): caricati ogni notte da /api/cron/scam-feeds, cercati da
 // Speculum nel controllo dei siti.
 
-export type ScamSource = 'amf' | 'phishdb' | 'urlhaus'
+export type ScamSource = 'amf' | 'consob' | 'bafin' | 'phishdb' | 'urlhaus'
 export type ScamDomainHit = { domain: string; source: ScamSource; category: string | null; listed_on: string | null }
 
 // Piattaforme dove chiunque pubblica pagine (o link brevi): non si segnalano

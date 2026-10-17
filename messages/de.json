@@ -2107,7 +2107,10 @@
     "scamListPhishing": "In einer internationalen Liste aktiver Phishing-Seiten: imitiert eine Bank, einen Paketdienst oder einen bekannten Dienst, um Passwörter und Kartendaten zu stehlen.",
     "scamListMalware": "Von URLhaus als Website gelistet, die Schadsoftware verbreitet: hier nichts herunterladen.",
     "scamListAlertTitle": "Achtung: Website als Betrug gemeldet",
-    "scamListSource": "Quelle: {source}"
+    "scamListSource": "Quelle: {source}",
+    "scamListConsob": "Am {date} von der Consob (Italien) gesperrt: bot Anlagen oder Kryptowerte ohne Zulassung an. Kein Geld und keine Daten senden.",
+    "scamListBafin_unauthorised": "Am {date} von der BaFin gemeldet: bietet Finanzdienstleistungen ohne Erlaubnis an.",
+    "scamListBafin_impersonation": "Am {date} von der BaFin gemeldet: Fake-Bank oder Website, die sich als echtes Unternehmen ausgibt. Kein Geld und keine Daten senden."
   },
   "offermaker": {
     "aiLimitReached": "Du hast das Tageslimit für KI-Generierungen erreicht – versuch es morgen wieder.",
