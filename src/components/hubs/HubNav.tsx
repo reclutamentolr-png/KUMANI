@@ -139,14 +139,15 @@ export default function HubNav({ locked, hidden = [] }: { locked: string[]; hidd
   const scroller = useRef<HTMLDivElement>(null)
   const bar = useRef<HTMLElement>(null)
   const [top, setTop] = useState(0)
-  // Sul telefono la barra scorre: la scheda aperta va sempre in vista
+  // Dal tablet in su la barra scorre: la scheda aperta va sempre in vista
   useEffect(() => {
     const box = scroller.current
     const active = box?.querySelector<HTMLElement>('[aria-current="page"]')
-    if (box && active) box.scrollLeft = active.offsetLeft - (box.clientWidth - active.offsetWidth) / 2
+    if (box && active && box.scrollWidth > box.clientWidth) box.scrollLeft = active.offsetLeft - (box.clientWidth - active.offsetWidth) / 2
   }, [where?.hub, where?.tab])
   // La barra resta fissa sotto l'intestazione dello strumento (alta quanto
-  // serve: sul telefono il titolo può andare a capo). Il suo bordo inferiore va
+  // serve: sul telefono il titolo può andare a capo; sull'iPhone l'intestazione
+  // stessa si ferma sotto la barra di stato, e se ne tiene conto). Il bordo inferiore va
   // in --hub-bottom, per le anteprime che seguono lo scorrimento della pagina.
   useEffect(() => {
     const nav = bar.current
@@ -154,7 +155,7 @@ export default function HubNav({ locked, hidden = [] }: { locked: string[]; hidd
     const prev = nav.previousElementSibling
     const header = prev instanceof HTMLElement && prev.matches('header.sticky') ? prev : document.querySelector<HTMLElement>('header.sticky')
     const update = () => {
-      const h = header?.offsetHeight ?? 0
+      const h = header ? header.offsetHeight + (parseFloat(getComputedStyle(header).top) || 0) : 0
       setTop(h)
       document.documentElement.style.setProperty('--hub-bottom', `${h + nav.offsetHeight}px`)
     }
@@ -176,15 +177,16 @@ export default function HubNav({ locked, hidden = [] }: { locked: string[]; hidd
       style={{ top }}
       className="sticky z-10 border-b border-[var(--gold)]/20 bg-[#0f0f0f] text-white print:hidden"
     >
-      <div ref={scroller} className="relative mx-auto flex max-w-5xl items-center gap-3 overflow-x-auto px-4 py-2.5 [scrollbar-width:none] sm:px-6 lg:px-8">
-        <span className="flex shrink-0 items-center gap-2 pr-1">
+      {/* Sul telefono le schede vanno a capo (tutte in vista), dal tablet in su una riga che scorre */}
+      <div ref={scroller} className="relative mx-auto flex max-w-5xl items-center gap-3 px-3 py-2 [scrollbar-width:none] sm:overflow-x-auto sm:px-6 sm:py-2.5 lg:px-8">
+        <span className="hidden shrink-0 items-center gap-2 pr-1 sm:flex">
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--gold)]/15 text-[var(--gold-bright)]">
             <Icon className="h-4 w-4" aria-hidden />
           </span>
           <span className="hidden text-sm font-extrabold tracking-wide text-[var(--gold-bright)] sm:inline">{t(`${where.hub}.title`)}</span>
         </span>
         <span className="hidden h-6 w-px shrink-0 bg-white/15 sm:block" aria-hidden />
-        <div className="flex gap-2">
+        <div className="flex flex-1 flex-wrap justify-center gap-1.5 sm:flex-none sm:flex-nowrap sm:justify-start sm:gap-2">
           {HUB_TABS[where.hub]
             .filter((tab) => !tab.tool || !hidden.includes(tab.tool))
             .map((tab) => {
@@ -196,7 +198,7 @@ export default function HubNav({ locked, hidden = [] }: { locked: string[]; hidd
                   key={tab.key}
                   href={tab.href}
                   aria-current={active ? 'page' : undefined}
-                  className={`flex min-h-10 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 text-sm font-semibold transition-colors ${
+                  className={`flex min-h-9 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-3 text-[13px] font-semibold sm:min-h-10 sm:px-3.5 sm:text-sm transition-colors ${
                     active
                       ? 'bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] shadow-[0_0_18px_rgba(233,200,90,0.35)]'
                       : isLocked
