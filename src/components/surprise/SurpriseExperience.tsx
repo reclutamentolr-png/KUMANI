@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import LinkifiedText from '@/components/LinkifiedText'
 import { useLocale, useTranslations } from 'next-intl'
 import {
   Baby,
@@ -195,7 +196,11 @@ function StepCard({ step, accent, token, onSolved }: { step: SurpriseViewStep; a
       ) : (
         <>
           {step.title && <h3 className="mt-2 font-[family-name:var(--font-letter)] text-3xl font-semibold leading-tight text-gray-900">{step.title}</h3>}
-          {step.message && <p className="mt-3 whitespace-pre-wrap text-base leading-relaxed">{step.message}</p>}
+          {step.message && (
+            <p className="mt-3 whitespace-pre-wrap text-base leading-relaxed">
+              <LinkifiedText text={step.message} />
+            </p>
+          )}
           {step.mediaUrl && <Media url={step.mediaUrl} type={step.mediaType} />}
           {!!step.gallery?.length && <Gallery urls={step.gallery} />}
           {step.kind === 'place' && (step.extra?.placeName || step.extra?.placeAddress) && (
@@ -258,7 +263,11 @@ function Ticket({ view, accent, Icon }: { view: SurpriseView; accent: string; Ic
           <Icon className="h-4 w-4" /> {t('finalGift')}
         </p>
         <h2 className="mt-3 font-[family-name:var(--font-letter)] text-4xl font-semibold leading-[1.05]">{v.title}</h2>
-        {v.message && <p className="mt-4 whitespace-pre-wrap font-[family-name:var(--font-letter)] text-xl italic leading-relaxed opacity-90">{v.message}</p>}
+        {v.message && (
+          <p className="mt-4 whitespace-pre-wrap font-[family-name:var(--font-letter)] text-xl italic leading-relaxed opacity-90">
+            <LinkifiedText text={v.message} />
+          </p>
+        )}
       </div>
       {/* Linea tratteggiata con i semicerchi, come un biglietto */}
       <div aria-hidden className="relative h-6">
@@ -270,7 +279,9 @@ function Ticket({ view, accent, Icon }: { view: SurpriseView; accent: string; Ic
         {v.howToUse && (
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.2em] opacity-60">{t('howToUseTitle')}</p>
-            <p className="mt-1 whitespace-pre-wrap text-base">{v.howToUse}</p>
+            <p className="mt-1 whitespace-pre-wrap text-base">
+              <LinkifiedText text={v.howToUse} />
+            </p>
           </div>
         )}
         <div className="flex flex-wrap items-end justify-between gap-2">
