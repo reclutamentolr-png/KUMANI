@@ -2096,7 +2096,18 @@
     "securitySection": "Sicherheit & Schutz",
     "checkLookalike": "Ähnlichkeit mit bekannten Seiten",
     "lookalikeRisk": "Achtung: Sie ähnelt {brand}, ist aber keine offizielle Seite (die echte ist {official}). Das ist der häufigste Trick, um Daten und Geld zu stehlen.",
-    "lookalikeOfficial": "Offizielle Seite von {brand}."
+    "lookalikeOfficial": "Offizielle Seite von {brand}.",
+    "checkScamLists": "Listen betrügerischer Websites (europäische Behörden und Phishing)",
+    "scamListAmf_impersonation": "Am {date} von der französischen Finanzaufsicht (AMF) gemeldet: gibt sich als zugelassenes Unternehmen oder Behörde aus. Kein Geld und keine Daten senden.",
+    "scamListAmf_crypto": "Am {date} von der französischen Finanzaufsicht (AMF) gemeldet: bietet Kryptowerte ohne Zulassung an.",
+    "scamListAmf_forex": "Am {date} von der französischen Finanzaufsicht (AMF) gemeldet: Online-Trading (Forex, binäre Optionen) ohne Zulassung.",
+    "scamListAmf_goods": "Am {date} von der französischen Finanzaufsicht (AMF) gemeldet: bietet Anlagen in Sachwerte (Gold, Wein, Diamanten…) ohne Zulassung an.",
+    "scamListAmf_crowdfunding": "Am {date} von der französischen Finanzaufsicht (AMF) gemeldet: Geldsammlung oder Immobilienanlagen ohne Zulassung.",
+    "scamListAmf_unauthorised": "Am {date} von der französischen Finanzaufsicht (AMF) gemeldet: bietet Finanzdienstleistungen ohne Zulassung an.",
+    "scamListPhishing": "In einer internationalen Liste aktiver Phishing-Seiten: imitiert eine Bank, einen Paketdienst oder einen bekannten Dienst, um Passwörter und Kartendaten zu stehlen.",
+    "scamListMalware": "Von URLhaus als Website gelistet, die Schadsoftware verbreitet: hier nichts herunterladen.",
+    "scamListAlertTitle": "Achtung: Website als Betrug gemeldet",
+    "scamListSource": "Quelle: {source}"
   },
   "offermaker": {
     "aiLimitReached": "Du hast das Tageslimit für KI-Generierungen erreicht – versuch es morgen wieder.",
@@ -4911,7 +4922,15 @@
     "error_taxCode_surname": "Die Steuernummer passt nicht zum Nachnamen im Profil.",
     "error_taxCode_name": "Die Steuernummer passt nicht zum Vornamen im Profil.",
     "error_taxCode_birthdate": "Die Steuernummer passt nicht zum Geburtsdatum im Profil.",
-    "error_taxCode_used": "Diese Steuernummer ist bereits mit einem anderen Konto verknüpft."
+    "error_taxCode_used": "Diese Steuernummer ist bereits mit einem anderen Konto verknüpft.",
+    "title_kumano": "Werde verifizierter Kumano",
+    "intro_kumano": "Zwei Schritte: vollständiges Profil und verifizierte Identität. Einmal erledigt, gilt es für immer.",
+    "kumano_check_profile": "Vollständiges Profil mit bestätigten Daten",
+    "kumano_check_profile_hint": "Vervollständige es im Profil (unteres Menü).",
+    "kumano_basicsMissing": "Vervollständige zuerst dein Profil und komm dann hierher zurück, um deine Identität zu bestätigen.",
+    "kumano_pendingText": "Danke! Das KUMANI-Staff prüft dein Dokument: Sobald es bestätigt ist, erscheint das goldene ✓ neben deinem Namen.",
+    "kumano_almostThere": "Identität bestätigt! Vervollständige dein Profil und das goldene ✓ erscheint neben deinem Namen.",
+    "done_kumano": "Fertig"
   },
   "contactPage": {
     "metaTitle": "Kontakt — KUMANI",
@@ -13521,5 +13540,25 @@
     "subtitle": "Eine einzige App, die dich vor Betrug schützt, deine Finanzen verwaltet, dein Geschäft wachsen lässt und dir guttut. Wir legen gerade letzte Hand an.",
     "community": "Community",
     "slogan": "Die Community, die sich gegenseitig hilft"
+  },
+  "realData": {
+    "title": "Hier helfen sich echte Menschen gegenseitig",
+    "text": "Verwende deinen echten Namen und deine echten Daten: So vertrauen dir die anderen, und du brauchst sie für die Zeitbank, Kordata und Events.",
+    "whoSees": "Wer sieht meine Daten?",
+    "seeName": "Anderen Kumani zeigen wir nur deinen Vornamen (manchmal mit dem Anfangsbuchstaben des Nachnamens) und in einigen Bereichen deine Stadt.",
+    "seePrivate": "E-Mail, Telefon, Geburtsdatum und Adresse bleiben privat: Sie sind nur sichtbar, wenn du es so wählst, zum Beispiel auf deiner Visitenkarte.",
+    "seeSponsor": "Wer dich eingeladen hat, sieht Vorname, Nachname und Telefonnummer, um dir helfen zu können.",
+    "seeNoSale": "Wir verkaufen deine Daten an niemanden.",
+    "privacyLink": "Datenschutzerklärung"
+  },
+  "verifiedBadge": {
+    "label": "Verifizierter Kumano",
+    "tooltip": "Verifizierter Kumano: Identität geprüft und Profil vollständig",
+    "inviteTitle": "Werde verifizierter Kumano",
+    "inviteText": "Neben deinem Namen erscheint das goldene ✓: Es zeigt den anderen, dass du eine echte Person bist – so wählen sie dich lieber auf der Pinnwand, in der Zeitbank, bei Kordata und Events. Es dauert nur eine Minute.",
+    "invitePending": "Wir haben dein Dokument erhalten: Das Staff prüft es gerade. Sobald es bestätigt ist, erscheint das goldene ✓ neben deinem Namen.",
+    "inviteCta": "Jetzt verifizieren",
+    "inviteStatus": "Stand ansehen",
+    "inviteLater": "Später"
   }
 }

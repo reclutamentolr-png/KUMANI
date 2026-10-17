@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { Save, AlertCircle, X, LogOut, Lock } from 'lucide-react'
 import { logout } from '@/app/actions/logout'
 import { forgetPushDevice } from '@/lib/pushClient'
+import RealDataNote from '@/components/profile/RealDataNote'
 import ProfileFieldsGrid, { ConfirmLockBox, MissingFieldsBox } from '@/components/profile/ProfileFieldsGrid'
 import { useProfileCompletion } from '@/components/profile/useProfileCompletion'
 
@@ -46,6 +47,7 @@ export default function ProfileCompleter({ initialData, onDismiss, onSaved, bloc
       </div>
 
       <form onSubmit={form.submit} noValidate className="space-y-3">
+        <RealDataNote />
         <ProfileFieldsGrid values={form.values} onChange={form.setField} missing={form.missing} accent="amber" />
         <p className="text-[11px] text-gray-500">{lockT('requiredHint')}</p>
 

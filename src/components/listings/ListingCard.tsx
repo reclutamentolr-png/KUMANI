@@ -1,6 +1,7 @@
 import { Eye, Globe2, MapPin, Sparkles, Tag } from 'lucide-react'
 import { countryName } from '@/lib/events'
 import ContactListingButton from '@/components/ContactListingButton'
+import VerifiedBadge from '@/components/verification/VerifiedBadge'
 import ListingDetailButton from '@/components/ListingDetailButton'
 import ListingImageThumbnail from '@/components/ListingImageThumbnail'
 import ReportListingButton from '@/components/ReportListingButton'
@@ -105,7 +106,9 @@ export default function ListingCard({
           <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--ink)] text-[10px] font-bold text-[var(--gold-bright)]">
             {author.charAt(0).toUpperCase() || '?'}
           </span>
-          <span className="font-medium text-gray-700">{author}</span>
+          <span className="inline-flex items-center gap-1 font-medium text-gray-700">
+            {author} <VerifiedBadge userId={listing.user_id} />
+          </span>
           <span>·</span>
           <span>{new Date(listing.created_at).toLocaleDateString(locale, { day: 'numeric', month: 'short' })}</span>
         </div>

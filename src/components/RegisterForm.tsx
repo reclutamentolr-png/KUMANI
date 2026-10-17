@@ -17,6 +17,7 @@ import { GIFT_CODE_RE } from '@/lib/gifts'
 import { isDisposableEmail } from '@/lib/disposableEmail'
 import TurnstileWidget, { useTurnstile } from '@/components/auth/TurnstileWidget'
 import PasswordStrength from '@/components/PasswordStrength'
+import RealDataNote from '@/components/profile/RealDataNote'
 
 const RESEND_COOLDOWN_SECONDS = 30
 
@@ -382,6 +383,7 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
               <Gift className="mt-0.5 h-4 w-4 shrink-0 text-[var(--gold)]" /> {tg('registerGiftBanner')}
             </p>
           )}
+          <RealDataNote />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label htmlFor="first_name" className="block text-sm font-medium text-gray-700 mb-1">{t('firstName')}</label>

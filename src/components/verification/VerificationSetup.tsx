@@ -32,7 +32,8 @@ export type VerificationStatus = {
   identity_rejected_note?: string | null
 }
 
-type Kind = 'kordata' | 'events' | 'timebank'
+// kumano: solo il segno «Kumano verificato» (profilo completo + identità)
+type Kind = 'kordata' | 'events' | 'timebank' | 'kumano'
 
 const DOC_TYPES: IdentityDocType[] = ['id_card', 'passport', 'residence_permit', 'driving_license']
 const FILE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf']
@@ -116,7 +117,7 @@ export default function VerificationSetup({
   const basicsOk = s.subscription && s.account_age && s.profile && !s.blocked
   const allOk = basicsOk && s.tax_code && s.terms
   // Identità e regole si possono sistemare già durante i 30 giorni di attesa
-  const canProceed = s.subscription && !s.blocked
+  const canProceed = (s.subscription || kind === 'kumano') && !s.blocked
 
   const applied = (next: Partial<VerificationStatus>) => {
     setOverrides((prev) => ({ ...prev, ...next }))
@@ -171,6 +172,7 @@ export default function VerificationSetup({
   const submitRules = async () => {
     setBusy('rules')
     setError(null)
+    if (kind === 'kumano') return
     const result = await acceptRules(kind)
     setBusy(null)
     if (!result.success) return setError({ step: 'rules', message: errorText(result.error) })
@@ -204,13 +206,14 @@ export default function VerificationSetup({
     {
       key: 'profile',
       ok: s.profile,
-      text: timebank ? t('timebank_check_profile') : tc('check_profile'),
-      action: !s.profile && <span className="text-xs text-[var(--muted)]">{tc('check_profile_hint')}</span>,
+      text: kind === 'kumano' ? t('kumano_check_profile') : timebank ? t('timebank_check_profile') : tc('check_profile'),
+      action: !s.profile && <span className="text-xs text-[var(--muted)]">{kind === 'kumano' ? t('kumano_check_profile_hint') : tc('check_profile_hint')}</span>,
     },
     { key: 'identity', ok: s.tax_code, pending: !s.tax_code && s.identity_pending, text: !s.tax_code && s.identity_pending ? t('check_identity_pending') : t('check_identity') },
     { key: 'rules', ok: s.terms, text: t(`check_rules_${kind}`) },
   ]
-  const checks = timebank ? allChecks.filter((c) => c.key !== 'subscription') : allChecks
+  const checks =
+    kind === 'kumano' ? allChecks.filter((c) => c.key === 'profile' || c.key === 'identity') : timebank ? allChecks.filter((c) => c.key !== 'subscription') : allChecks
 
   const rules =
     kind === 'kordata'
@@ -243,7 +246,7 @@ export default function VerificationSetup({
       {s.blocked && <p className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-800">{t('blocked')}</p>}
       {!s.blocked && !basicsOk && (
         <p className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-800">
-          {canProceed ? t('basicsMissingCanProceed') : t('basicsMissing')}
+          {kind === 'kumano' ? t('kumano_basicsMissing') : canProceed ? t('basicsMissingCanProceed') : t('basicsMissing')}
         </p>
       )}
 
@@ -259,7 +262,7 @@ export default function VerificationSetup({
               <p className="flex items-center gap-2 font-semibold">
                 <Clock className="h-4 w-4" /> {t('pendingTitle')}
               </p>
-              <p className="mt-1 text-xs leading-5">{t('pendingText')}</p>
+              <p className="mt-1 text-xs leading-5">{kind === 'kumano' ? t('kumano_pendingText') : t('pendingText')}</p>
             </div>
           ) : (
             <>
@@ -426,7 +429,7 @@ export default function VerificationSetup({
         </section>
       )}
 
-      {s.tax_code && s.terms && !allOk && !s.blocked && <p className="mb-4 rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-800">{t('almostThere')}</p>}
+      {s.tax_code && s.terms && !allOk && !s.blocked && <p className="mb-4 rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-800">{kind === 'kumano' ? t('kumano_almostThere') : t('almostThere')}</p>}
 
       <button
         type="button"

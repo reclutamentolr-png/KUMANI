@@ -1,11 +1,12 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { use, useState, type ReactNode } from 'react'
+import { use, useEffect, useRef, useState, type ReactNode } from 'react'
 import ToolBackLink from '@/components/ToolBackLink'
 import {
   ArrowLeft,
   ShieldCheck,
+  ShieldAlert,
   Search,
   LoaderCircle,
   Globe,
@@ -109,9 +110,9 @@ export default function SvatClient({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!input.trim()) return
+  const resultsRef = useRef<HTMLDivElement>(null)
+  const runCheck = async (value: string, tab: 'website' | 'vat' | 'qr', scrollToResult = false) => {
+    if (!value.trim()) return
 
     setLoading(true)
     setError(null)
@@ -121,7 +122,7 @@ export default function SvatClient({
       const res = await fetch('/api/svat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ input: input.trim(), mode: activeTab === 'vat' ? 'vat' : 'website' }),
+        body: JSON.stringify({ input: value.trim(), mode: tab === 'vat' ? 'vat' : 'website' }),
       })
 
       if (!res.ok) {
@@ -131,6 +132,8 @@ export default function SvatClient({
 
       const data = await res.json()
       setResult(data)
+      // Avvio automatico: si va subito al risultato
+      if (scrollToResult) setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
     } catch (err) {
       const message = err instanceof Error ? err.message : 'An error occurred'
       setError(message === 'invalidUrl' ? t('invalidUrl') : message)
@@ -138,6 +141,21 @@ export default function SvatClient({
       setLoading(false)
     }
   }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    void runCheck(input, activeTab)
+  }
+
+  // Arrivando da «Controlla» (o da un link) con ?url= o ?vat= il controllo
+  // parte da solo, una volta, senza dover toccare «Esegui verifica»
+  const autoRan = useRef(false)
+  useEffect(() => {
+    if (autoRan.current || !prefill.value) return
+    autoRan.current = true
+    void runCheck(prefill.value, prefill.tab, true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Controlli sull'azienda (partita IVA): il testo è tradotto con i dati VIES
   const isCompanyCheck = (c: SVATCheck) => COMPANY_CHECKS.includes(c.id)
@@ -310,9 +328,27 @@ export default function SvatClient({
         )}
 
         {result && (
-          <div className="space-y-8">
+          <div ref={resultsRef} className="scroll-mt-[calc(var(--hub-bottom,4rem)+1rem)] space-y-8">
             {/* Avviso della Rete Anti-Truffa (solo se il sito è stato segnalato e confermato) */}
             {result.domain && <CommunityWarning items={[{ kind: 'site', value: result.domain }]} report={{ kind: 'site', value: result.domain }} />}
+            {/* In un elenco di siti truffa (autorità o phishing): avviso in cima, con la fonte */}
+            {(() => {
+              const listed = result.checks.find((c) => c.id === 'scamList' && c.status === 'risk')
+              if (!listed) return null
+              return (
+                <div role="alert" className="rounded-2xl border-2 border-red-300 bg-red-50 p-5 text-red-900 shadow-sm">
+                  <p className="flex items-center gap-2 text-lg font-extrabold">
+                    <ShieldAlert className="h-6 w-6 shrink-0 text-red-600" aria-hidden /> {t('scamListAlertTitle')}
+                  </p>
+                  <p className="mt-2 text-sm leading-relaxed">{detailText(listed)}</p>
+                  {listed.sourceUrl && (
+                    <a href={listed.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-red-800 underline">
+                      {t('scamListSource', { source: listed.source ?? '' })} <ExternalLink className="h-3 w-3" />
+                    </a>
+                  )}
+                </div>
+              )
+            })()}
             {/* Score Card */}
             <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8 text-center">
               <h3 className="text-lg font-semibold text-[var(--muted)] mb-2">{t('scoreTitle')}</h3>

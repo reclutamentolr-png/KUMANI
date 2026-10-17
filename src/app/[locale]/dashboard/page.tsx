@@ -45,6 +45,7 @@ import { getServicesCatalog } from '@/lib/servicesCatalog'
 import type { MyProfile } from '@/lib/myProfile'
 import GiftWelcomeDashboard from '@/components/gifts/GiftWelcomeDashboard'
 import DashboardNeeds from '@/components/dashboard/DashboardNeeds'
+import VerifiedInviteCard from '@/components/verification/VerifiedInviteCard'
 import { buildHomeNeeds } from '@/lib/homeNeedsServer'
 
 export const dynamic = 'force-dynamic'
@@ -282,6 +283,8 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
                 <>
                   {/* Iscritto senza codice: può ancora indicare chi l'ha invitato */}
                   {lateSponsor.eligible && lateSponsor.until && <LateSponsorCard until={lateSponsor.until} />}
+                  {/* Invito a diventare «Kumano verificato» (segno accanto al nome) */}
+                  <VerifiedInviteCard />
                   {/* Invito ad attivare le notifiche push su questo dispositivo */}
                   <PushInviteCard />
                   {/* Invito a recensire chi ha acquistato e non l'ha ancora fatto */}

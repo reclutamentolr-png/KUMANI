@@ -46,6 +46,8 @@ export const SECTION_LABELS: Record<string, string> = {
   toolShare: 'Condivisione dei servizi',
   adminMessage: 'Messaggi dello Staff',
   profileLock: 'Profilo e modifiche dei dati',
+  realData: 'Iscrizione e profilo: invito a usare i dati veri',
+  verifiedBadge: 'Segno «Kumano verificato» e invito in Dashboard',
   accountDeletion: 'Cancellazione account',
   passwordChange: 'Profilo: cambio password',
   passwordEmail: 'Email: avviso di password cambiata',

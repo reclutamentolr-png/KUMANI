@@ -2096,7 +2096,18 @@
     "securitySection": "Security & Protection",
     "checkLookalike": "Similarity to known sites",
     "lookalikeRisk": "Warning: it looks like {brand} but is not one of its official sites (the real one is {official}). It’s the most common trick to steal data and money.",
-    "lookalikeOfficial": "Official site of {brand}."
+    "lookalikeOfficial": "Official site of {brand}.",
+    "checkScamLists": "Scam site lists (European authorities and phishing)",
+    "scamListAmf_impersonation": "Flagged by the French financial authority (AMF) on {date}: it impersonates an authorised company or body. Do not send money or details.",
+    "scamListAmf_crypto": "Flagged by the French financial authority (AMF) on {date}: offers crypto-assets without authorisation.",
+    "scamListAmf_forex": "Flagged by the French financial authority (AMF) on {date}: online trading (forex, binary options) without authorisation.",
+    "scamListAmf_goods": "Flagged by the French financial authority (AMF) on {date}: offers investments in goods (gold, wine, diamonds…) without authorisation.",
+    "scamListAmf_crowdfunding": "Flagged by the French financial authority (AMF) on {date}: fundraising or property investments without authorisation.",
+    "scamListAmf_unauthorised": "Flagged by the French financial authority (AMF) on {date}: offers financial services without authorisation.",
+    "scamListPhishing": "Listed in an international feed of active phishing sites: it imitates a bank, courier or well-known service to steal passwords and card details.",
+    "scamListMalware": "Listed by URLhaus as a site spreading malware: do not download anything from it.",
+    "scamListAlertTitle": "Warning: site flagged as a scam",
+    "scamListSource": "Source: {source}"
   },
   "offermaker": {
     "aiLimitReached": "You’ve reached today’s AI generation limit: try again tomorrow.",
@@ -4911,7 +4922,15 @@
     "error_taxCode_surname": "The tax code does not match the surname in your profile.",
     "error_taxCode_name": "The tax code does not match the first name in your profile.",
     "error_taxCode_birthdate": "The tax code does not match the date of birth in your profile.",
-    "error_taxCode_used": "This tax code is already linked to another account."
+    "error_taxCode_used": "This tax code is already linked to another account.",
+    "title_kumano": "Become a Verified Kumano",
+    "intro_kumano": "Two steps: a complete profile and a verified identity. Done once, it lasts forever.",
+    "kumano_check_profile": "Complete profile with confirmed details",
+    "kumano_check_profile_hint": "Complete it from your Profile (bottom menu).",
+    "kumano_basicsMissing": "Complete your profile first, then come back here to verify your identity.",
+    "kumano_pendingText": "Thank you! The KUMANI Staff is checking your document: once approved, the gold ✓ appears next to your name.",
+    "kumano_almostThere": "Identity verified! Complete your profile and the gold ✓ will appear next to your name.",
+    "done_kumano": "Done"
   },
   "contactPage": {
     "metaTitle": "Contact — KUMANI",
@@ -13521,5 +13540,25 @@
     "subtitle": "One app to protect you from scams, manage your money, grow your business and take care of yourself. We’re putting on the finishing touches.",
     "community": "Community",
     "slogan": "The community that lends a hand"
+  },
+  "realData": {
+    "title": "Here, real people lend each other a hand",
+    "text": "Use your real name and details: it helps others trust you, and you need them for the Time Bank, Kordata and events.",
+    "whoSees": "Who can see my details?",
+    "seeName": "Other Kumani only see your first name (sometimes with your surname initial) and, in some sections, your city.",
+    "seePrivate": "Email, phone, date of birth and address stay private: they are shown only if you choose to, for example on your business card.",
+    "seeSponsor": "The person who invited you sees your name, surname and phone number, so they can help you.",
+    "seeNoSale": "We never sell your data.",
+    "privacyLink": "Privacy policy"
+  },
+  "verifiedBadge": {
+    "label": "Verified Kumano",
+    "tooltip": "Verified Kumano: identity checked and profile complete",
+    "inviteTitle": "Become a Verified Kumano",
+    "inviteText": "A gold ✓ will appear next to your name: it tells others you are a real person, so they are happier to choose you on the Board, Time Bank, Kordata and Events. It only takes a minute.",
+    "invitePending": "We received your document: the Staff is checking it. Once approved, the gold ✓ appears next to your name.",
+    "inviteCta": "Get verified",
+    "inviteStatus": "See your progress",
+    "inviteLater": "Later"
   }
 }

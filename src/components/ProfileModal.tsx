@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { User, Save, X, CheckCircle2, AlertCircle, Lock, FileEdit, Clock, XCircle } from 'lucide-react'
+import RealDataNote from '@/components/profile/RealDataNote'
 import ProfileFieldsGrid, { ConfirmLockBox, MissingFieldsBox, useProfileFieldLabel } from '@/components/profile/ProfileFieldsGrid'
 import ProfileChangeRequestDialog from '@/components/profile/ProfileChangeRequestDialog'
 import AccountDeletionSection from '@/components/profile/AccountDeletionSection'
@@ -221,6 +222,7 @@ export default function ProfileModal({ isOpen, onClose, initialData, userId, onC
             </>
           ) : (
             <form onSubmit={completion.submit} noValidate className="space-y-3">
+              <RealDataNote />
               <ProfileFieldsGrid values={completion.values} onChange={completion.setField} missing={completion.missing} />
               <p className="text-[11px] text-gray-500">{lockT('requiredHint')}</p>
 

@@ -1971,7 +1971,18 @@
     },
     "checkLookalike": "Somiglianza a siti noti",
     "lookalikeRisk": "Attenzione: somiglia a {brand} ma non è un suo sito ufficiale (il sito vero è {official}). È il trucco più usato per rubare dati e soldi.",
-    "lookalikeOfficial": "Sito ufficiale di {brand}."
+    "lookalikeOfficial": "Sito ufficiale di {brand}.",
+    "checkScamLists": "Elenchi di siti truffa (autorità europee e phishing)",
+    "scamListAmf_impersonation": "Segnalato dall’autorità finanziaria francese (AMF) il {date}: si spaccia per una società o un ente autorizzato. Non inviare soldi né dati.",
+    "scamListAmf_crypto": "Segnalato dall’autorità finanziaria francese (AMF) il {date}: offre criptovalute senza autorizzazione.",
+    "scamListAmf_forex": "Segnalato dall’autorità finanziaria francese (AMF) il {date}: trading online (forex, opzioni binarie) senza autorizzazione.",
+    "scamListAmf_goods": "Segnalato dall’autorità finanziaria francese (AMF) il {date}: propone investimenti in beni (oro, vino, diamanti…) senza autorizzazione.",
+    "scamListAmf_crowdfunding": "Segnalato dall’autorità finanziaria francese (AMF) il {date}: raccolta di fondi o investimenti immobiliari senza autorizzazione.",
+    "scamListAmf_unauthorised": "Segnalato dall’autorità finanziaria francese (AMF) il {date}: offre servizi finanziari senza autorizzazione.",
+    "scamListPhishing": "Presente in un elenco internazionale di siti di phishing attivi: imita una banca, un corriere o un servizio noto per rubare password e dati della carta.",
+    "scamListMalware": "Presente nell’elenco URLhaus dei siti che distribuiscono virus: non scaricare niente da qui.",
+    "scamListAlertTitle": "Attenzione: sito segnalato come truffa",
+    "scamListSource": "Fonte: {source}"
   },
   "offermaker": {
     "aiLimitReached": "Hai raggiunto il limite giornaliero di generazioni AI: riprova domani.",
@@ -4911,7 +4922,15 @@
     "error_taxCode_surname": "Il codice fiscale non corrisponde al cognome del profilo.",
     "error_taxCode_name": "Il codice fiscale non corrisponde al nome del profilo.",
     "error_taxCode_birthdate": "Il codice fiscale non corrisponde alla data di nascita del profilo.",
-    "error_taxCode_used": "Questo codice fiscale è già associato a un altro account."
+    "error_taxCode_used": "Questo codice fiscale è già associato a un altro account.",
+    "title_kumano": "Diventa Kumano verificato",
+    "intro_kumano": "Servono due passaggi: il profilo completo e l’identità verificata. Fatto una volta, vale per sempre.",
+    "kumano_check_profile": "Profilo completo con i dati confermati",
+    "kumano_check_profile_hint": "Completalo dal Profilo (menu in basso).",
+    "kumano_basicsMissing": "Completa prima il tuo profilo: poi torna qui per verificare l’identità.",
+    "kumano_pendingText": "Grazie! Lo Staff KUMANI sta controllando il tuo documento: appena è approvato, accanto al tuo nome compare il segno dorato ✓.",
+    "kumano_almostThere": "Identità verificata! Completa il profilo e il segno dorato ✓ comparirà accanto al tuo nome.",
+    "done_kumano": "Fatto"
   },
   "contactPage": {
     "metaTitle": "Contatti · KUMANI",
@@ -13521,5 +13540,25 @@
     "subtitle": "Un’app sola per proteggerti dalle truffe, gestire i tuoi conti, far crescere la tua attività e prenderti cura di te. Stiamo dando gli ultimi ritocchi.",
     "community": "Community",
     "slogan": "La Community che si dà una mano"
+  },
+  "realData": {
+    "title": "Qui ci si dà una mano tra persone vere",
+    "text": "Usa il tuo nome e i tuoi dati reali: così gli altri si fidano di te, e servono per Banca del Tempo, Kordata ed eventi.",
+    "whoSees": "Chi vede i miei dati?",
+    "seeName": "Agli altri Kumani mostriamo solo il tuo nome (a volte con l’iniziale del cognome) e, in alcune sezioni, la città.",
+    "seePrivate": "Email, telefono, data di nascita e indirizzo restano privati: si vedono solo se scegli tu di mostrarli, per esempio sul tuo biglietto da visita.",
+    "seeSponsor": "Chi ti ha invitato vede nome, cognome e telefono, per poterti aiutare.",
+    "seeNoSale": "Non vendiamo i tuoi dati a nessuno.",
+    "privacyLink": "Informativa sulla privacy"
+  },
+  "verifiedBadge": {
+    "label": "Kumano verificato",
+    "tooltip": "Kumano verificato: identità controllata e profilo completo",
+    "inviteTitle": "Diventa Kumano verificato",
+    "inviteText": "Accanto al tuo nome comparirà il segno dorato ✓: dice agli altri che sei una persona vera, così ti scelgono più volentieri in Bacheca, Banca del Tempo, Kordata ed Eventi. Con il codice fiscale basta un minuto.",
+    "invitePending": "Abbiamo ricevuto il tuo documento: lo Staff lo sta controllando. Appena è approvato, accanto al tuo nome compare il segno dorato ✓.",
+    "inviteCta": "Verificati ora",
+    "inviteStatus": "Vedi a che punto sei",
+    "inviteLater": "Più tardi"
   }
 }

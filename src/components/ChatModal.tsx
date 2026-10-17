@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
 import { X, Send, MessageCircle, Tag, Clock, ShieldCheck, ShieldAlert, Mail, Link2 } from 'lucide-react'
 import LocalizedLink from '@/components/LocalizedLink'
+import VerifiedBadge from '@/components/verification/VerifiedBadge'
 import type { ChatListing, ListingMessage } from '@/lib/listings'
 import { detectMessageSafety } from '@/lib/messageSafety'
 import { countryName } from '@/lib/iban'
@@ -167,8 +168,8 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
               <MessageCircle className="w-6 h-6 text-[var(--gold-bright)]" />
             </div>
             <div>
-              <h3 className="font-bold text-[var(--ink)]">
-                {name ? t('titleWith', { name }) : t('title')}
+              <h3 className="flex items-center gap-1 font-bold text-[var(--ink)]">
+                {name ? t('titleWith', { name }) : t('title')} <VerifiedBadge userId={receiverId} />
               </h3>
               <div className="flex items-center gap-1.5 text-xs text-[var(--muted)] mt-0.5">
                 <Tag className="w-3 h-3 text-[var(--gold)]" />

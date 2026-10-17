@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import ChatRetentionNote from '@/components/ChatRetentionNote'
+import VerifiedBadge from '@/components/verification/VerifiedBadge'
 import { useRouter } from 'next/navigation'
 import {
   BadgeCheck,
@@ -408,7 +409,7 @@ function PostCard({ post, canAct, onPropose, onReport }: { post: TimebankPost; c
         {post.when_text ? ` · ${post.when_text}` : ''}
       </p>
       <p className="mt-1 text-xs text-[var(--muted)]">
-        {post.author_name} · {t('authorExchanges', { count: post.author_exchanges })}
+        {post.author_name} <VerifiedBadge userId={post.author_id} /> · {t('authorExchanges', { count: post.author_exchanges })}
       </p>
       <div className="mt-auto flex items-center justify-between gap-2 pt-3">
         {canAct ? (

@@ -5,6 +5,7 @@ import { X, Tag, User, Calendar, Sparkles, MapPin, Globe2 } from 'lucide-react'
 import { countryName } from '@/lib/events'
 import { CATEGORY_ICONS, CATEGORY_I18N_KEYS, type Listing, type ListingCategory } from '@/lib/listings'
 import ContactListingButton from '@/components/ContactListingButton'
+import VerifiedBadge from '@/components/verification/VerifiedBadge'
 import ReportListingButton from '@/components/ReportListingButton'
 import ListingShareButtons from '@/components/listings/ListingShareButtons'
 
@@ -87,7 +88,7 @@ export default function ListingDetailModal({ isOpen, onClose, listing, authorNam
           <div className="flex items-center gap-4 text-xs text-gray-500 pt-2 border-t border-gray-100">
             {authorName && (
               <span className="flex items-center gap-1">
-                <User className="w-3 h-3" /> {authorName}
+                <User className="w-3 h-3" /> {authorName} <VerifiedBadge userId={listing.user_id} />
               </span>
             )}
             {listing.created_at && (

@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { BRANDS, isOfficial, lookalikeBrand } from '@/lib/checkmail/engine'
 import { safeFetch } from '@/lib/safeFetch'
 import { createClient } from '@/lib/supabase/server'
+import { createClient as createServiceClient } from '@supabase/supabase-js'
+import { findScamDomain, type ScamDomainHit } from '@/lib/scamDomains'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { fetchWhoisText, parseWhois } from '@/lib/whois'
 import { parseVatInput, prettyVat, registryLookupUrl, verifyVies } from '@/lib/vat'
@@ -96,6 +98,7 @@ export async function POST(request: NextRequest) {
       checkHTTPHeaders(url),
       checkSSL(url, domain),
       checkAbuseIPDB(domain),
+      checkScamLists(domain),
       checkContentScraping(pagePromise),
       checkLegalPages(pagePromise),
       checkReviews(pagePromise),
@@ -108,6 +111,10 @@ export async function POST(request: NextRequest) {
       }
     })
   }
+
+  // La segnalazione di un elenco di siti truffa va in cima: è la più importante
+  const listed = checks.findIndex((c) => c.id === 'scamList')
+  if (listed > 0) checks.unshift(...checks.splice(listed, 1))
 
   // Calculate score (start at 50 neutral)
   let score = 50
@@ -123,6 +130,8 @@ export async function POST(request: NextRequest) {
   }
 
   score = Math.max(0, Math.min(100, score))
+  // In un elenco di siti truffa (autorità o phishing): rosso, qualunque sia il resto
+  if (checks.some((c) => c.id === 'scamList' && c.status === 'risk')) score = Math.min(score, 15)
 
   let badge: 'green' | 'yellow' | 'red' = 'green'
   if (score < 40) badge = 'red'
@@ -142,6 +151,37 @@ export async function POST(request: NextRequest) {
       checkCount: checks.filter((r) => r.status === 'check').length,
     },
   })
+}
+
+// Elenchi di siti truffa (tabella scam_domains, caricata ogni notte): AMF
+// (Francia), Phishing.Database, URLhaus. Se non c'è nessuna segnalazione il
+// controllo non compare (e non cambia il punteggio).
+const SCAM_SOURCES: Record<ScamDomainHit['source'], { source: string; sourceUrl: string; key: string }> = {
+  amf: { source: 'AMF – Autorité des marchés financiers (FR)', sourceUrl: 'https://www.amf-france.org/fr/espace-epargnants/proteger-son-epargne/listes-noires-et-mises-en-garde', key: 'scamListAmf' },
+  phishdb: { source: 'Phishing.Database', sourceUrl: 'https://github.com/Phishing-Database/Phishing.Database', key: 'scamListPhishing' },
+  urlhaus: { source: 'URLhaus – abuse.ch', sourceUrl: 'https://urlhaus.abuse.ch/', key: 'scamListMalware' },
+}
+const SCAM_ORDER: ScamDomainHit['source'][] = ['amf', 'phishdb', 'urlhaus']
+
+async function checkScamLists(domain: string): Promise<SVATCheck | null> {
+  const db = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  })
+  const hits = await findScamDomain(db, domain)
+  const hit = SCAM_ORDER.map((s) => hits.find((h) => h.source === s)).find(Boolean)
+  if (!hit) return null
+  const info = SCAM_SOURCES[hit.source]
+  return {
+    id: 'scamList',
+    name: 'checkScamLists',
+    status: 'risk',
+    points: -60,
+    details: `${hit.domain} listed by ${info.source}${hit.listed_on ? ` on ${hit.listed_on}` : ''}`,
+    detailsKey: hit.source === 'amf' ? `${info.key}_${hit.category ?? 'unauthorised'}` : info.key,
+    detailsInterp: { domain: hit.domain, date: hit.listed_on ? hit.listed_on.split('-').reverse().join('/') : '—' },
+    source: info.source,
+    sourceUrl: info.sourceUrl,
+  }
 }
 
 // 1. WHOIS lookup — dati di registrazione dominio, titolare, registrar.
