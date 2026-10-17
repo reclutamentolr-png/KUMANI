@@ -14,6 +14,8 @@ export type Clue = {
   textKey: string
   values?: Record<string, string>
   source: string
+  // Solo per il rilevatore AI: la sua stima 0-100, base del punteggio
+  score?: number
 }
 
 export type ProvenanceScan = {
@@ -96,11 +98,15 @@ export function buildClues(scan: ProvenanceScan, camera: CameraInfo, detector: D
     clues.push({ id: 'software', signal: 'edited', weight: 1, textKey: 'clueEditor', values: { software: scan.software }, source: 'EXIF' })
   }
 
+  // Dati di scatto completi e nessun programma di fotoritocco: indizio forte
+  // di una foto vera (da solo basta per «probabilmente reale»; resta un indizio,
+  // i dati si possono falsificare). Con un programma di modifica pesa meno.
   if (camera.make && camera.model && camera.takenAt && camera.exposure) {
+    const edited = !!scan.software && EDITORS.test(scan.software)
     clues.push({
       id: 'camera',
       signal: 'real',
-      weight: 1,
+      weight: edited ? 1 : 2,
       textKey: 'clueCamera',
       values: { camera: `${camera.make} ${camera.model}`.trim() },
       source: 'EXIF',
@@ -111,30 +117,42 @@ export function buildClues(scan: ProvenanceScan, camera: CameraInfo, detector: D
 
   if (detector?.status === 'ok') {
     const pct = String(Math.round(detector.aiScore * 100))
+    const score = Math.round(detector.aiScore * 100)
     if (detector.aiScore >= 0.85) {
-      clues.push({ id: 'detector', signal: 'ai', weight: 2, textKey: 'clueDetectorAi', values: { pct, tool: detector.generator ?? '' }, source: 'Sightengine' })
+      clues.push({ id: 'detector', signal: 'ai', weight: 2, textKey: 'clueDetectorAi', values: { pct, tool: detector.generator ?? '' }, source: 'Sightengine', score })
     } else if (detector.aiScore <= 0.15) {
-      clues.push({ id: 'detector', signal: 'real', weight: 2, textKey: 'clueDetectorReal', values: { pct }, source: 'Sightengine' })
+      clues.push({ id: 'detector', signal: 'real', weight: 2, textKey: 'clueDetectorReal', values: { pct }, source: 'Sightengine', score })
     } else {
-      clues.push({ id: 'detector', signal: 'neutral', weight: 1, textKey: 'clueDetectorUnsure', values: { pct }, source: 'Sightengine' })
+      clues.push({ id: 'detector', signal: 'neutral', weight: 1, textKey: 'clueDetectorUnsure', values: { pct }, source: 'Sightengine', score })
     }
   }
   return clues
 }
 
-// Verdetto: un indizio "quasi prova" (peso 3) decide; altrimenti si sommano
-// i pesi. Senza rilevatore e senza certificati resta "da verificare".
+// Verdetto: un indizio "quasi prova" (peso 3) decide. Altrimenti il punteggio
+// di «rischio AI» 0-100 parte dalla stima del rilevatore, se è stato usato
+// (una foto vera stimata al 3% resta vicina al 3, non torna a 50), oppure da 50
+// (nessuna indicazione), e si sposta con gli indizi dei metadati. Il punteggio
+// sta sempre dentro la fascia del verdetto: basso 0-30, incerto 31-69, alto 70-100.
 export function verdictOf(clues: Clue[]): { verdict: Verdict; score: number } {
-  const sum = (signal: Signal) => clues.filter((c) => c.signal === signal).reduce((s, c) => s + c.weight, 0)
-  const ai = sum('ai')
-  const real = sum('real')
-  if (clues.some((c) => c.signal === 'ai' && c.weight === 3)) return { verdict: 'ai', score: Math.min(95, 80 + ai * 3) }
-  // Punteggio di "rischio AI" 0-100 (50 = nessuna indicazione), sempre
-  // dentro la fascia del verdetto: basso 0-30, incerto 31-69, alto 70-100.
-  const raw = Math.max(5, Math.min(95, 50 + ai * 15 - real * 12))
+  const detector = clues.find((c) => c.id === 'detector' && typeof c.score === 'number')
+  const meta = clues.filter((c) => c.id !== 'detector')
+  const sum = (list: Clue[], signal: Signal) => list.filter((c) => c.signal === signal).reduce((s, c) => s + c.weight, 0)
+  if (clues.some((c) => c.signal === 'ai' && c.weight === 3)) return { verdict: 'ai', score: Math.min(97, 80 + sum(clues, 'ai') * 3) }
+  const ai = sum(meta, 'ai')
+  const real = sum(meta, 'real')
+  const raw = Math.round(Math.max(3, Math.min(97, (detector?.score ?? 50) + ai * 12 - real * 11)))
+  const uncertain = { verdict: 'uncertain' as const, score: Math.min(Math.max(raw, RISK_LOW + 1), RISK_HIGH - 1) }
+  if (detector) {
+    // Con il rilevatore decidono le fasce (mai «reale» se i metadati dicono AI)
+    if (raw >= RISK_HIGH) return { verdict: 'ai', score: raw }
+    if (raw <= RISK_LOW && ai === 0) return { verdict: 'likely_real', score: raw }
+    return uncertain
+  }
+  // Senza rilevatore servono indizi forti dai metadati
   if (ai >= 2 && ai > real) return { verdict: 'ai', score: Math.max(raw, RISK_HIGH) }
   if (real >= 2 && ai === 0) return { verdict: 'likely_real', score: Math.min(raw, RISK_LOW) }
-  return { verdict: 'uncertain', score: Math.min(Math.max(raw, RISK_LOW + 1), RISK_HIGH - 1) }
+  return uncertain
 }
 
 // Fasce del rischio mostrate all'utente
