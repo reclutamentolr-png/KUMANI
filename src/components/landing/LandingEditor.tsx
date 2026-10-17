@@ -927,7 +927,7 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
 
       {/* Anteprima: a fianco sul computer, a tutto schermo sul telefono */}
       <aside className="hidden lg:block">
-        <div className="sticky top-24">
+        <div className="sticky top-[calc(var(--hub-bottom,4rem)+1.5rem)]">
           <div className="mb-2 flex items-center justify-between gap-2">
             <p className="flex items-center gap-2 text-sm font-semibold text-gray-600">
               <Eye className="h-4 w-4" /> {t('preview')}

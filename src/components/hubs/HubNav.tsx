@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import {
@@ -137,16 +137,45 @@ export default function HubNav({ locked, hidden = [] }: { locked: string[]; hidd
   const search = useSearchParams()
   const where = hubOf(pathname, search.toString())
   const scroller = useRef<HTMLDivElement>(null)
+  const bar = useRef<HTMLElement>(null)
+  const [top, setTop] = useState(0)
   // Sul telefono la barra scorre: la scheda aperta va sempre in vista
   useEffect(() => {
     const box = scroller.current
     const active = box?.querySelector<HTMLElement>('[aria-current="page"]')
     if (box && active) box.scrollLeft = active.offsetLeft - (box.clientWidth - active.offsetWidth) / 2
   }, [where?.hub, where?.tab])
+  // La barra resta fissa sotto l'intestazione dello strumento (alta quanto
+  // serve: sul telefono il titolo può andare a capo). Il suo bordo inferiore va
+  // in --hub-bottom, per le anteprime che seguono lo scorrimento della pagina.
+  useEffect(() => {
+    const nav = bar.current
+    if (!nav) return
+    const prev = nav.previousElementSibling
+    const header = prev instanceof HTMLElement && prev.matches('header.sticky') ? prev : document.querySelector<HTMLElement>('header.sticky')
+    const update = () => {
+      const h = header?.offsetHeight ?? 0
+      setTop(h)
+      document.documentElement.style.setProperty('--hub-bottom', `${h + nav.offsetHeight}px`)
+    }
+    update()
+    const observer = new ResizeObserver(update)
+    if (header) observer.observe(header)
+    observer.observe(nav)
+    return () => {
+      observer.disconnect()
+      document.documentElement.style.removeProperty('--hub-bottom')
+    }
+  }, [where?.hub])
   if (!where) return null
   const Icon = HUB_ICON[where.hub]
   return (
-    <nav aria-label={t(`${where.hub}.title`)} className="border-b border-[var(--gold)]/20 bg-[#0f0f0f] text-white print:hidden">
+    <nav
+      ref={bar}
+      aria-label={t(`${where.hub}.title`)}
+      style={{ top }}
+      className="sticky z-10 border-b border-[var(--gold)]/20 bg-[#0f0f0f] text-white print:hidden"
+    >
       <div ref={scroller} className="relative mx-auto flex max-w-5xl items-center gap-3 overflow-x-auto px-4 py-2.5 [scrollbar-width:none] sm:px-6 lg:px-8">
         <span className="flex shrink-0 items-center gap-2 pr-1">
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--gold)]/15 text-[var(--gold-bright)]">

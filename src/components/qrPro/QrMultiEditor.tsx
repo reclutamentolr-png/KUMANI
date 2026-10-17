@@ -99,7 +99,7 @@ export default function QrMultiEditor({ value, onChange }: { value: MultiDestina
       </div>
 
       {/* Anteprima della pagina, in una cornice da telefono */}
-      <div className="lg:sticky lg:top-24 lg:self-start">
+      <div className="lg:sticky lg:top-[calc(var(--hub-bottom,4rem)+1rem)] lg:self-start">
         <p className="mb-2 text-center text-xs font-semibold uppercase tracking-wide text-[var(--gold)]">{t('multiPreview')}</p>
         <div className="mx-auto w-full max-w-[300px] rounded-[2rem] border-[6px] border-[var(--ink)] bg-[var(--background)] p-4 shadow-[0_14px_34px_rgba(23,23,23,0.22)]">
           <div className="max-h-[540px] overflow-y-auto rounded-[1.4rem] bg-[var(--paper)] p-4">

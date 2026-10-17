@@ -102,7 +102,7 @@ export default function QuotePdfPreview({ form, issuer, logoUrl, quoteNumber }: 
     // Alta quanto tutto il modulo (self-stretch): così il riquadro dentro resta
     // fermo sullo schermo mentre si scorre il modulo, con la sua barra interna
     <aside className="hidden xl:block xl:self-stretch">
-      <div className="sticky top-20">
+      <div className="sticky top-[calc(var(--hub-bottom,4rem)+1rem)]">
         <p className="mb-2 flex items-center gap-2 text-sm font-semibold text-gray-600">
           <Eye className="h-4 w-4" /> {t('livePreview')}
           {busy && <LoaderCircle className="h-4 w-4 animate-spin text-[var(--gold)]" />}
