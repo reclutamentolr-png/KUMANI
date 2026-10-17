@@ -362,7 +362,7 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
         href="/"
         className="absolute top-6 left-6 flex items-center gap-2 text-[var(--ink-soft)] hover:text-[var(--gold)] transition-colors font-semibold"
       >
-        <Logo size={32} />
+        <Logo size={32} dark />
         <Home className="w-4 h-4 sm:hidden" />
       </Link>
 

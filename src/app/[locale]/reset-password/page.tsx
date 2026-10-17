@@ -106,7 +106,7 @@ export default function ResetPasswordPage() {
           href="/"
           className="absolute left-6 top-6 flex items-center gap-2 font-semibold text-[var(--ink-soft)] transition-colors hover:text-[var(--gold)]"
         >
-          <Logo size={32} priority />
+          <Logo size={32} priority dark />
           <Home className="w-4 h-4 sm:hidden" />
         </Link>
 

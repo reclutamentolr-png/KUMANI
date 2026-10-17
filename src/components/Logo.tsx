@@ -6,21 +6,25 @@ import Image from 'next/image'
 // piccolo margine trasparente. Essendo trasparente va bene sia su sfondi
 // chiari che scuri, senza bisogno di varianti diverse.
 const SRC = '/senza_sfondo.png'
+// Variante scura (medaglione nero con la K dorata, già rotondo e trasparente
+// attorno): stacca di più sugli sfondi chiari, es. le pagine di accesso
+const SRC_DARK = '/logo-scuro.png'
 
 type LogoProps = {
   size?: number
   className?: string
   priority?: boolean
+  dark?: boolean
 }
 
-export default function Logo({ size = 40, className = '', priority = false }: LogoProps) {
+export default function Logo({ size = 40, className = '', priority = false, dark = false }: LogoProps) {
   // Senza misure nel className il CSS di base (height: auto) seguirebbe le
   // proporzioni del file (non quadrato): il logo uscirebbe piccolo e Next
   // avvisa nel terminale. Qui resta sempre un quadrato di `size`.
   const sized = /(^|\s)([a-z]+:)?[hw]-/.test(className)
   return (
     <Image
-      src={SRC}
+      src={dark ? SRC_DARK : SRC}
       alt="Kumani"
       width={size}
       height={size}

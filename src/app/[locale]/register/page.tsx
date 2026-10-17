@@ -30,7 +30,7 @@ export default async function RegisterPage() {
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="flex justify-center mb-4">
             <Link href="/" className="transition-opacity hover:opacity-80">
-              <Logo size={128} priority />
+              <Logo size={128} priority dark />
             </Link>
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-[var(--ink)]">
