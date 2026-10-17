@@ -3,17 +3,19 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
-import { CheckCircle, LoaderCircle, XCircle, Link2, MessageCircle, Phone, MessageSquare, Mail, Wifi, Contact } from 'lucide-react'
+import { CheckCircle, LoaderCircle, XCircle, Link2, MessageCircle, Phone, MessageSquare, Mail, Wifi, Contact, LayoutList } from 'lucide-react'
 import { createQrCode, updateQrCode } from '@/app/actions/qrPro'
 import {
   QR_CONTENT_TYPES,
-  WIFI_ENCRYPTIONS,
   emptyDestinationFor,
+  isDestinationValid,
+  type MultiDestination,
   type QrContentType,
   type QrCodeFormData,
   type QrDestination,
-  type WifiEncryption,
 } from '@/lib/qrPro'
+import QrDestinationFields from '@/components/qrPro/QrDestinationFields'
+import QrMultiEditor from '@/components/qrPro/QrMultiEditor'
 import { STANDARD_COLORS, ALL_STANDARD_COLOR_KEYS } from '@/lib/standardColorPalette'
 import BusinessProfileImport from '@/components/businessProfile/BusinessProfileImport'
 import { businessWebsiteUrl, type BusinessProfile } from '@/lib/businessProfile'
@@ -42,6 +44,7 @@ const TYPE_ICONS: Record<QrContentType, typeof Link2> = {
   email: Mail,
   wifi: Wifi,
   vcard: Contact,
+  multi: LayoutList,
 }
 
 function defaultForm(): QrCodeFormData {
@@ -108,18 +111,7 @@ export default function QrProForm(props: Props) {
     })
   }
 
-  const isValid = (() => {
-    if (!form.label.trim()) return false
-    const d = form.destination as unknown as Record<string, string>
-    if (form.contentType === 'link') return !!d.url?.trim()
-    if (form.contentType === 'whatsapp') return !!d.phone?.trim()
-    if (form.contentType === 'phone') return !!d.phone?.trim()
-    if (form.contentType === 'sms') return !!d.phone?.trim()
-    if (form.contentType === 'email') return !!d.email?.trim()
-    if (form.contentType === 'wifi') return !!d.ssid?.trim()
-    if (form.contentType === 'vcard') return !!d.firstName?.trim() || !!d.lastName?.trim()
-    return false
-  })()
+  const isValid = !!form.label.trim() && isDestinationValid(form.contentType, form.destination)
 
   const handleSubmit = async () => {
     setSaving(true)
@@ -191,253 +183,10 @@ export default function QrProForm(props: Props) {
           <BusinessProfileImport key={form.contentType} profile={props.business ?? null} onImport={importBusiness} />
         )}
 
-        {form.contentType === 'link' && (
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">{t('urlLabel')}</label>
-            <input
-              type="text"
-              value={d.url || ''}
-              onChange={(e) => setDestField('url', e.target.value)}
-              placeholder="https://..."
-              className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm"
-            />
-          </div>
-        )}
-
-        {(form.contentType === 'whatsapp' || form.contentType === 'phone' || form.contentType === 'sms') && (
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">{t('phoneLabel')}</label>
-            <input
-              type="tel"
-              value={d.phone || ''}
-              onChange={(e) => setDestField('phone', e.target.value)}
-              placeholder="+39 333 1234567"
-              className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm"
-            />
-          </div>
-        )}
-
-        {(form.contentType === 'whatsapp' || form.contentType === 'sms') && (
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">{t('messageLabel')}</label>
-            <textarea
-              value={d.message || ''}
-              onChange={(e) => setDestField('message', e.target.value)}
-              rows={3}
-              className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm"
-            />
-          </div>
-        )}
-
-        {form.contentType === 'email' && (
-          <>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{t('emailLabel')}</label>
-              <input
-                type="email"
-                value={d.email || ''}
-                onChange={(e) => setDestField('email', e.target.value)}
-                className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{t('subjectLabel')}</label>
-              <input
-                type="text"
-                value={d.subject || ''}
-                onChange={(e) => setDestField('subject', e.target.value)}
-                className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{t('messageLabel')}</label>
-              <textarea
-                value={d.body || ''}
-                onChange={(e) => setDestField('body', e.target.value)}
-                rows={3}
-                className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm"
-              />
-            </div>
-          </>
-        )}
-
-        {form.contentType === 'wifi' && (
-          <>
-            <p className="text-xs text-[var(--muted)] bg-[var(--gold-pale)]/50 border border-[var(--gold)]/20 rounded-lg p-3">{t('wifiStaticNotice')}</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('ssidLabel')}</label>
-                <input
-                  type="text"
-                  value={d.ssid || ''}
-                  onChange={(e) => setDestField('ssid', e.target.value)}
-                  className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('encryptionLabel')}</label>
-                <select
-                  value={d.encryption || 'WPA'}
-                  onChange={(e) => setDestField('encryption', e.target.value as WifiEncryption)}
-                  className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm bg-white"
-                >
-                  {WIFI_ENCRYPTIONS.map((enc) => (
-                    <option key={enc} value={enc}>
-                      {t(`encryption_${enc}`)}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            {d.encryption !== 'nopass' && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('wifiPasswordLabel')}</label>
-                <input
-                  type="text"
-                  value={d.password || ''}
-                  onChange={(e) => setDestField('password', e.target.value)}
-                  className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm"
-                />
-              </div>
-            )}
-          </>
-        )}
-
-        {form.contentType === 'vcard' && (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('firstNameLabel')}</label>
-                <input
-                  type="text"
-                  value={d.firstName || ''}
-                  onChange={(e) => setDestField('firstName', e.target.value)}
-                  className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('lastNameLabel')}</label>
-                <input
-                  type="text"
-                  value={d.lastName || ''}
-                  onChange={(e) => setDestField('lastName', e.target.value)}
-                  className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm"
-                />
-              </div>
-            </div>
-
-            <p className="text-xs font-semibold text-[var(--gold)] uppercase tracking-wide pt-2">{t('contactInfoSection')}</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('vcardPhoneLabel')}</label>
-                <input
-                  type="tel"
-                  value={d.phone || ''}
-                  onChange={(e) => setDestField('phone', e.target.value)}
-                  className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('mobileLabel')}</label>
-                <input
-                  type="tel"
-                  value={d.mobile || ''}
-                  onChange={(e) => setDestField('mobile', e.target.value)}
-                  className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('emailLabel')}</label>
-                <input
-                  type="email"
-                  value={d.email || ''}
-                  onChange={(e) => setDestField('email', e.target.value)}
-                  className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('websiteLabel')}</label>
-                <input
-                  type="text"
-                  value={d.website || ''}
-                  onChange={(e) => setDestField('website', e.target.value)}
-                  placeholder="https://..."
-                  className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm"
-                />
-              </div>
-            </div>
-
-            <p className="text-xs font-semibold text-[var(--gold)] uppercase tracking-wide pt-2">{t('companyInfoSection')}</p>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{t('companyLabel')}</label>
-              <input
-                type="text"
-                value={d.company || ''}
-                onChange={(e) => setDestField('company', e.target.value)}
-                className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm"
-              />
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('jobTitleLabel')}</label>
-                <input
-                  type="text"
-                  value={d.jobTitle || ''}
-                  onChange={(e) => setDestField('jobTitle', e.target.value)}
-                  className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('faxLabel')}</label>
-                <input
-                  type="text"
-                  value={d.fax || ''}
-                  onChange={(e) => setDestField('fax', e.target.value)}
-                  className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm"
-                />
-              </div>
-            </div>
-
-            <p className="text-xs font-semibold text-[var(--gold)] uppercase tracking-wide pt-2">{t('positionSection')}</p>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{t('addressLabel')}</label>
-              <input
-                type="text"
-                value={d.address || ''}
-                onChange={(e) => setDestField('address', e.target.value)}
-                className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm"
-              />
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('cityLabel')}</label>
-                <input
-                  type="text"
-                  value={d.city || ''}
-                  onChange={(e) => setDestField('city', e.target.value)}
-                  className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('postalCodeLabel')}</label>
-                <input
-                  type="text"
-                  value={d.postalCode || ''}
-                  onChange={(e) => setDestField('postalCode', e.target.value)}
-                  className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('countryLabel')}</label>
-                <input
-                  type="text"
-                  value={d.country || ''}
-                  onChange={(e) => setDestField('country', e.target.value)}
-                  className="w-full px-3 py-2 border-2 border-[var(--gold)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 focus:border-[var(--gold)] text-sm"
-                />
-              </div>
-            </div>
-          </>
+        {form.contentType === 'multi' ? (
+          <QrMultiEditor value={form.destination as MultiDestination} onChange={(next) => setForm((prev) => ({ ...prev, destination: next }))} />
+        ) : (
+          <QrDestinationFields type={form.contentType} d={d} set={setDestField} />
         )}
       </div>
 

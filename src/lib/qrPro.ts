@@ -1,6 +1,19 @@
 import { escapeVcard } from '@/lib/contactsImport'
-export const QR_CONTENT_TYPES = ['link', 'whatsapp', 'phone', 'sms', 'email', 'wifi', 'vcard'] as const
+// Tipi di un QR che apre una cosa sola; «multi» apre una pagina con più contatti
+export const QR_ITEM_TYPES = ['link', 'whatsapp', 'phone', 'sms', 'email', 'wifi', 'vcard'] as const
+export type QrItemType = (typeof QR_ITEM_TYPES)[number]
+export const QR_CONTENT_TYPES = [...QR_ITEM_TYPES, 'multi'] as const
 export type QrContentType = (typeof QR_CONTENT_TYPES)[number]
+
+// «Più contatti»: chi inquadra il QR vede una pagina (/qr/<codice>) con un
+// pulsante per contatto, nell'ordine scelto. Ogni contatto ha i campi del suo tipo.
+export const MULTI_MAX_ITEMS = 10
+export type MultiItem = { type: QrItemType; label: string; data: Record<string, string> }
+export interface MultiDestination {
+  title: string
+  subtitle: string
+  items: MultiItem[]
+}
 
 export const WIFI_ENCRYPTIONS = ['WPA', 'WEP', 'nopass'] as const
 export type WifiEncryption = (typeof WIFI_ENCRYPTIONS)[number]
@@ -53,6 +66,7 @@ export type QrDestination =
   | EmailDestination
   | WifiDestination
   | VcardDestination
+  | MultiDestination
 
 export interface QrCodeFormData {
   label: string
@@ -76,6 +90,8 @@ export function emptyDestinationFor(type: QrContentType): QrDestination {
       return { email: '', subject: '', body: '' }
     case 'wifi':
       return { ssid: '', password: '', encryption: 'WPA' }
+    case 'multi':
+      return { title: '', subtitle: '', items: [] }
     case 'vcard':
       return {
         firstName: '',
@@ -92,6 +108,62 @@ export function emptyDestinationFor(type: QrContentType): QrDestination {
         postalCode: '',
         country: '',
       }
+  }
+}
+
+// Campi minimi per ogni tipo (modulo e salvataggio)
+export function isDestinationValid(type: QrContentType, d: QrDestination): boolean {
+  if (type === 'multi') {
+    const items = (d as MultiDestination).items ?? []
+    return items.length > 0 && items.length <= MULTI_MAX_ITEMS && items.every((item) => isDestinationValid(item.type, item.data as unknown as QrDestination))
+  }
+  const v = d as unknown as Record<string, string>
+  if (type === 'link') return !!v.url?.trim()
+  if (type === 'whatsapp' || type === 'phone' || type === 'sms') return !!v.phone?.trim()
+  if (type === 'email') return !!v.email?.trim()
+  if (type === 'wifi') return !!v.ssid?.trim()
+  return !!v.firstName?.trim() || !!v.lastName?.trim()
+}
+
+// Indirizzo sicuro di un sito: solo http/https (niente javascript:, data:…),
+// con https:// aggiunto se manca; null se non è un indirizzo valido
+export function safeWebUrl(raw: string): string | null {
+  const value = raw.trim()
+  if (!value) return null
+  const withScheme = /^[a-z][a-z0-9+.-]*:/i.test(value) ? value : `https://${value}`
+  try {
+    const parsed = new URL(withScheme)
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:' ? parsed.toString() : null
+  } catch {
+    return null
+  }
+}
+
+// Dove porta un contatto (sito, WhatsApp, chiamata, SMS, email); null per
+// Wi-Fi e scheda contatto, che hanno una loro visualizzazione
+export function qrItemHref(type: QrItemType, d: Record<string, string>): string | null {
+  switch (type) {
+    case 'link':
+      return d.url ? safeWebUrl(d.url) : null
+    case 'whatsapp': {
+      if (!d.phone) return null
+      const digits = d.phone.replace(/[^\d+]/g, '').replace(/^\+/, '')
+      return `https://wa.me/${digits}${d.message ? `?text=${encodeURIComponent(d.message)}` : ''}`
+    }
+    case 'phone':
+      return d.phone ? `tel:${d.phone.replace(/\s/g, '')}` : null
+    case 'sms':
+      return d.phone ? `sms:${d.phone.replace(/\s/g, '')}${d.message ? `?body=${encodeURIComponent(d.message)}` : ''}` : null
+    case 'email': {
+      if (!d.email) return null
+      const params = new URLSearchParams()
+      if (d.subject) params.set('subject', d.subject)
+      if (d.body) params.set('body', d.body)
+      const query = params.toString()
+      return `mailto:${d.email}${query ? `?${query}` : ''}`
+    }
+    default:
+      return null
   }
 }
 

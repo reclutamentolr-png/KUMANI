@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import Link from '@/components/LocalizedLink'
-import { MousePointerClick, Trash2, Pencil, Link2, MessageCircle, Phone, MessageSquare, Mail, Wifi, Contact } from 'lucide-react'
+import { MousePointerClick, Trash2, Pencil, Link2, MessageCircle, Phone, MessageSquare, Mail, Wifi, Contact, LayoutList } from 'lucide-react'
 import { deleteQrCode } from '@/app/actions/qrPro'
 import type { QrContentType } from '@/lib/qrPro'
 import { askConfirm } from '@/lib/confirm'
@@ -25,6 +25,7 @@ const TYPE_ICONS: Record<QrContentType, typeof Link2> = {
   email: Mail,
   wifi: Wifi,
   vcard: Contact,
+  multi: LayoutList,
 }
 
 export default function QrProCodeCard({ qrCode }: { qrCode: QrCode }) {

@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { hasActiveQrProAccess } from '@/lib/qrPro-server'
 import { generateShortCode } from '@/lib/shortLink'
 import { awardToolPoint } from '@/lib/toolPoints'
-import type { QrCodeFormData, LinkDestination } from '@/lib/qrPro'
+import { MULTI_MAX_ITEMS, QR_ITEM_TYPES, isDestinationValid, safeWebUrl, type LinkDestination, type MultiDestination, type MultiItem, type QrCodeFormData, type QrDestination } from '@/lib/qrPro'
 import { limitError } from '@/lib/appLimits'
 
 type ActionResult<T> =
@@ -35,6 +35,26 @@ async function requireActiveQrProAccess(): Promise<
 // URL http/https (niente javascript:, data:, ecc.) per evitare open redirect
 // malevoli tramite /q/[code]. Se manca lo schema aggiungiamo https://.
 function sanitizeForm(form: QrCodeFormData): { ok: true; form: QrCodeFormData } | { ok: false; message: string } {
+  // «Più contatti»: da 1 a 10 contatti dei tipi ammessi, testi corti, siti solo http/https
+  if (form.contentType === 'multi') {
+    const multi = form.destination as MultiDestination
+    const items = Array.isArray(multi?.items) ? multi.items : []
+    if (items.length === 0 || items.length > MULTI_MAX_ITEMS) return { ok: false, message: 'multiInvalid' }
+    const clean: MultiItem[] = []
+    for (const item of items) {
+      if (!item || !(QR_ITEM_TYPES as readonly string[]).includes(item.type)) return { ok: false, message: 'multiInvalid' }
+      const data: Record<string, string> = {}
+      for (const [key, value] of Object.entries(item.data ?? {})) if (typeof value === 'string') data[key.slice(0, 40)] = value.slice(0, 1000)
+      if (item.type === 'link') {
+        const url = safeWebUrl(data.url ?? '')
+        if (!url) return { ok: false, message: 'invalidUrl' }
+        data.url = url
+      }
+      if (!isDestinationValid(item.type, data as unknown as QrDestination)) return { ok: false, message: 'multiInvalid' }
+      clean.push({ type: item.type, label: String(item.label ?? '').slice(0, 60), data })
+    }
+    return { ok: true, form: { ...form, destination: { title: String(multi.title ?? '').slice(0, 80), subtitle: String(multi.subtitle ?? '').slice(0, 160), items: clean } } }
+  }
   if (form.contentType !== 'link') {
     return { ok: true, form }
   }
