@@ -48,6 +48,7 @@ export const SECTION_LABELS: Record<string, string> = {
   profileLock: 'Profilo e modifiche dei dati',
   realData: 'Iscrizione e profilo: invito a usare i dati veri',
   verifiedBadge: 'Segno «Kumano verificato» e invito in Dashboard',
+  scamTest: 'Test «Mi stanno truffando?»',
   accountDeletion: 'Cancellazione account',
   passwordChange: 'Profilo: cambio password',
   passwordEmail: 'Email: avviso di password cambiata',

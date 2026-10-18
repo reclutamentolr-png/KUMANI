@@ -11,7 +11,7 @@ export const PREVIEW_COOKIE_MAX_AGE = 60 * 60 * 24 * 60 // 60 giorni
 
 // Pagine di presentazione (indirizzo senza lingua): quelle nascoste
 export const PRELAUNCH_HIDDEN =
-  /^\/(?:(?:servizi|catalogo|chi-siamo|contact|pro|donazioni|controlla|regali|register|rewards|spotlight|viaggi|sorprese|events|recensioni(?:\/scrivi)?)|(?:strumenti|documenti|guida|manuale-antitruffa|pass|ref)(?:\/.*)?)?\/?$/
+  /^\/(?:(?:servizi|catalogo|chi-siamo|contact|pro|donazioni|controlla|test-truffa|regali|register|rewards|spotlight|viaggi|sorprese|events|recensioni(?:\/scrivi)?)|(?:strumenti|documenti|guida|manuale-antitruffa|pass|ref)(?:\/.*)?)?\/?$/
 
 // Chiave del link d'anteprima: lettere, numeri, - e _ (da 12 a 64)
 export const PRELAUNCH_KEY_PATTERN = /^[A-Za-z0-9_-]{12,64}$/

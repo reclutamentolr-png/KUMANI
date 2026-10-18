@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
-import { ArrowLeft, AtSign, Camera, Globe, Landmark, LogIn, Phone, ScanSearch, UserPlus } from 'lucide-react'
+import { ArrowLeft, AtSign, Camera, Globe, Landmark, LogIn, Phone, ScanSearch, ShieldQuestion, UserPlus } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import Logo from '@/components/Logo'
 import QuickCheckBox from '@/components/ecosystem/QuickCheckBox'
@@ -83,6 +83,16 @@ export default async function QuickCheckPage({ searchParams }: { searchParams: P
         </ul>
 
         <p className="mt-6 rounded-2xl bg-[var(--gold)]/10 px-4 py-3 text-sm text-[var(--ink)]">{t('shareTip')}</p>
+
+        {/* Il test «Mi stanno truffando?» per chi non sa cosa controllare */}
+        <Link href="/test-truffa" className="mt-4 flex items-center gap-3 rounded-2xl border-2 border-[var(--gold)]/40 bg-white p-4 transition-colors hover:border-[var(--gold)]">
+          <ShieldQuestion className="h-8 w-8 shrink-0 text-[var(--gold)]" aria-hidden />
+          <span className="min-w-0 flex-1">
+            <span className="block font-bold text-[var(--ink)]">{t('testTitle')}</span>
+            <span className="block text-sm text-[var(--muted)]">{t('testText')}</span>
+          </span>
+          <span className="shrink-0 text-sm font-bold text-[var(--ink)]">{t('testCta')} →</span>
+        </Link>
 
         {!user && (
           <div className="mt-8 rounded-2xl border-2 border-[var(--gold)] bg-white p-5 text-center shadow-sm">

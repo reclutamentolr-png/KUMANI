@@ -17,6 +17,7 @@ const MEMBER_AREAS = [
   '/dashboard',
   '/servizi',
   '/controlla',
+  '/test-truffa',
   '/spese-condivise',
   '/community',
   '/wallet',

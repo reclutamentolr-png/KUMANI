@@ -32,6 +32,8 @@ export const HUB_TABS: Record<ServiceHub, HubTab[]> = {
   segnala: [
     { key: 'network', href: '/marketplace/rete-antitruffa', tool: 'rete-antitruffa' },
     { key: 'manual', href: '/marketplace/antitruffa', tool: 'antitruffa' },
+    // «Mi stanno truffando?»: il test, pubblico
+    { key: 'test', href: '/test-truffa', tool: null },
   ],
   benessere: [
     { key: 'sounds', href: '/marketplace/neurobalance', tool: 'neurobalance' },
