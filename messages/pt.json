@@ -2179,7 +2179,12 @@
     "pricesExtreme": "Descontos enormes em todo o lado (até {max}%): a montra típica das lojas falsas.",
     "pricesClosingDown": "«Liquidação total» com descontos até {max}%: um truque muito usado pelas lojas falsas. Verifica bem antes de pagar.",
     "checkPlaceholder": "Textos do site",
-    "placeholderText": "O site ainda tem texto falso ou de exemplo (ex. «lorem ipsum»): feito à pressa e nunca acabado."
+    "placeholderText": "O site ainda tem texto falso ou de exemplo (ex. «lorem ipsum»): feito à pressa e nunca acabado.",
+    "checkWebRisk": "Google: sites perigosos",
+    "webRiskClean": "O Google não o assinala como site perigoso.",
+    "webRiskPhishing": "O Google assinala-o como site enganador (phishing): serve para roubar palavras-passe, dados e dinheiro. Não escrevas nada.",
+    "webRiskMalware": "O Google assinala-o como site que espalha vírus: não o abras nem descarregues nada.",
+    "webRiskUnwanted": "O Google assinala-o porque faz descarregar programas indesejados: não descarregues nada."
   },
   "offermaker": {
     "aiLimitReached": "Atingiu o limite diário de gerações com IA: tente amanhã.",

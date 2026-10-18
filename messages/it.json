@@ -2054,7 +2054,12 @@
     "pricesExtreme": "Sconti enormi ovunque (fino al {max}%): è la vetrina tipica dei negozi falsi.",
     "pricesClosingDown": "«Chiusura totale» con sconti fino al {max}%: un trucco molto usato dai negozi falsi. Controlla bene prima di pagare.",
     "checkPlaceholder": "Testi del sito",
-    "placeholderText": "Nel sito c’è ancora testo finto o di prova (es. «lorem ipsum»): un sito fatto in fretta e mai finito."
+    "placeholderText": "Nel sito c’è ancora testo finto o di prova (es. «lorem ipsum»): un sito fatto in fretta e mai finito.",
+    "checkWebRisk": "Google: siti pericolosi",
+    "webRiskClean": "Google non lo segnala come sito pericoloso.",
+    "webRiskPhishing": "Google lo segnala come sito ingannevole (phishing): serve a rubare password, dati e soldi. Non inserire niente.",
+    "webRiskMalware": "Google lo segnala come sito che diffonde virus: non aprirlo e non scaricare niente.",
+    "webRiskUnwanted": "Google lo segnala perché fa scaricare programmi indesiderati: non scaricare niente."
   },
   "offermaker": {
     "aiLimitReached": "Hai raggiunto il limite giornaliero di generazioni AI: riprova domani.",

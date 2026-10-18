@@ -101,6 +101,7 @@ export async function POST(request: NextRequest) {
       checkAbuseIPDB(domain),
       checkScamLists(domain),
       checkCommunity(domain),
+      checkWebRisk(url, domain),
       checkContentScraping(pagePromise),
       checkLegalPages(pagePromise),
       checkReviews(pagePromise),
@@ -138,7 +139,7 @@ export async function POST(request: NextRequest) {
   // In un elenco di siti truffa (autorità o phishing) o segnalato dalla Rete
   // Anti-Truffa con conferma dello Staff: rosso, qualunque sia il resto. Un
   // sito «sosia» di un marchio noto è rosso anche se il resto sembra in ordine.
-  if (checks.some((c) => (c.id === 'scamList' || c.id === 'community') && c.status === 'risk')) score = Math.min(score, 15)
+  if (checks.some((c) => (c.id === 'scamList' || c.id === 'community' || c.id === 'webRisk') && c.status === 'risk')) score = Math.min(score, 15)
   else if (checks.some((c) => c.id === 'lookalike' && c.status === 'risk')) score = Math.min(score, 30)
 
   let badge: 'green' | 'yellow' | 'red' = 'green'
@@ -222,6 +223,48 @@ async function checkCommunity(domain: string): Promise<SVATCheck | null> {
     detailsKey: 'communityConfirmed',
     detailsInterp: { count: String(reports) },
     source: 'Rete Anti-Truffa KUMANI',
+  }
+}
+
+// Google Web Risk (la versione commerciale di Safe Browsing): phishing, virus
+// e software indesiderato secondo Google. Si controllano l'indirizzo scritto e
+// la homepage del dominio. Senza chiave o se Google non risponde il controllo
+// non compare.
+const WEB_RISK_TYPES = ['SOCIAL_ENGINEERING', 'MALWARE', 'UNWANTED_SOFTWARE'] as const
+
+async function checkWebRisk(url: string, domain: string): Promise<SVATCheck | null> {
+  const key = process.env.GOOGLE_WEB_RISK_API_KEY
+  if (!key) return null
+  const found = new Set<string>()
+  let answered = false
+  for (const uri of [...new Set([url, `https://${domain}/`])]) {
+    const params = new URLSearchParams({ uri, key })
+    for (const type of WEB_RISK_TYPES) params.append('threatTypes', type)
+    try {
+      const res = await fetch(`https://webrisk.googleapis.com/v1/uris:search?${params}`, { signal: AbortSignal.timeout(6000), cache: 'no-store' })
+      if (!res.ok) continue
+      answered = true
+      const data = (await res.json()) as { threat?: { threatTypes?: string[] } }
+      for (const type of data.threat?.threatTypes ?? []) found.add(type)
+    } catch {
+      // Google non raggiungibile: si prova l'altro indirizzo
+    }
+  }
+  if (!answered) return null
+  const source = 'Google Web Risk'
+  const sourceUrl = 'https://transparencyreport.google.com/safe-browsing/search'
+  if (!found.size) return { id: 'webRisk', name: 'checkWebRisk', status: 'ok', points: 5, details: 'Not flagged by Google', detailsKey: 'webRiskClean', source, sourceUrl }
+  // Il pericolo più grave: phishing, poi virus, poi software indesiderato
+  const worst = WEB_RISK_TYPES.find((type) => found.has(type))!
+  return {
+    id: 'webRisk',
+    name: 'checkWebRisk',
+    status: 'risk',
+    points: -60,
+    details: `Flagged by Google: ${[...found].join(', ')}`,
+    detailsKey: worst === 'SOCIAL_ENGINEERING' ? 'webRiskPhishing' : worst === 'MALWARE' ? 'webRiskMalware' : 'webRiskUnwanted',
+    source,
+    sourceUrl,
   }
 }
 

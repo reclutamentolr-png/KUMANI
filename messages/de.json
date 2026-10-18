@@ -2179,7 +2179,12 @@
     "pricesExtreme": "Riesige Rabatte überall (bis zu {max} %): das typische Schaufenster gefälschter Shops.",
     "pricesClosingDown": "„Räumungsverkauf“ mit Rabatten bis zu {max} %: ein beliebter Trick gefälschter Shops. Vor dem Zahlen genau prüfen.",
     "checkPlaceholder": "Texte der Website",
-    "placeholderText": "Auf der Seite steht noch Platzhalter- oder Mustertext (z. B. „Lorem ipsum“): schnell gebaut und nie fertig gemacht."
+    "placeholderText": "Auf der Seite steht noch Platzhalter- oder Mustertext (z. B. „Lorem ipsum“): schnell gebaut und nie fertig gemacht.",
+    "checkWebRisk": "Google: gefährliche Websites",
+    "webRiskClean": "Google stuft die Seite nicht als gefährlich ein.",
+    "webRiskPhishing": "Google meldet die Seite als betrügerisch (Phishing): Sie soll Passwörter, Daten und Geld stehlen. Nichts eingeben.",
+    "webRiskMalware": "Google meldet die Seite als Virenschleuder: nicht öffnen und nichts herunterladen.",
+    "webRiskUnwanted": "Google meldet die Seite wegen unerwünschter Software: nichts herunterladen."
   },
   "offermaker": {
     "aiLimitReached": "Du hast das Tageslimit für KI-Generierungen erreicht – versuch es morgen wieder.",

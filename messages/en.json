@@ -2179,7 +2179,12 @@
     "pricesExtreme": "Huge discounts everywhere (up to {max}%): the typical shop window of fake stores.",
     "pricesClosingDown": "“Closing down” sale with discounts up to {max}%: a trick fake shops use a lot. Check carefully before paying.",
     "checkPlaceholder": "Website text",
-    "placeholderText": "The site still has dummy or sample text (e.g. “lorem ipsum”): built in a hurry and never finished."
+    "placeholderText": "The site still has dummy or sample text (e.g. “lorem ipsum”): built in a hurry and never finished.",
+    "checkWebRisk": "Google: dangerous sites",
+    "webRiskClean": "Google does not flag it as a dangerous site.",
+    "webRiskPhishing": "Google flags it as a deceptive (phishing) site: it’s built to steal passwords, data and money. Don’t enter anything.",
+    "webRiskMalware": "Google flags it as a site that spreads viruses: don’t open it or download anything.",
+    "webRiskUnwanted": "Google flags it for pushing unwanted software: don’t download anything."
   },
   "offermaker": {
     "aiLimitReached": "You’ve reached today’s AI generation limit: try again tomorrow.",

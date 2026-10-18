@@ -2179,7 +2179,12 @@
     "pricesExtreme": "Des remises énormes partout (jusqu’à {max} %) : la vitrine typique des fausses boutiques.",
     "pricesClosingDown": "« Liquidation totale » avec des remises jusqu’à {max} % : une astuce très utilisée par les fausses boutiques. Vérifiez bien avant de payer.",
     "checkPlaceholder": "Textes du site",
-    "placeholderText": "Le site contient encore du texte factice ou d’exemple (ex. « lorem ipsum ») : fait à la hâte et jamais terminé."
+    "placeholderText": "Le site contient encore du texte factice ou d’exemple (ex. « lorem ipsum ») : fait à la hâte et jamais terminé.",
+    "checkWebRisk": "Google : sites dangereux",
+    "webRiskClean": "Google ne le signale pas comme site dangereux.",
+    "webRiskPhishing": "Google le signale comme site trompeur (hameçonnage) : il sert à voler mots de passe, données et argent. Ne saisissez rien.",
+    "webRiskMalware": "Google le signale comme site qui propage des virus : ne l’ouvrez pas et ne téléchargez rien.",
+    "webRiskUnwanted": "Google le signale car il fait télécharger des logiciels indésirables : ne téléchargez rien."
   },
   "offermaker": {
     "aiLimitReached": "Vous avez atteint la limite quotidienne de générations IA : réessayez demain.",

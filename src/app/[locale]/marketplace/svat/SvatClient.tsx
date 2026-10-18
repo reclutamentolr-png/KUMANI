@@ -331,9 +331,9 @@ export default function SvatClient({
           <div ref={resultsRef} className="scroll-mt-[calc(var(--hub-bottom,4rem)+1rem)] space-y-8">
             {/* Avviso della Rete Anti-Truffa (solo se il sito è stato segnalato e confermato) */}
             {result.domain && <CommunityWarning items={[{ kind: 'site', value: result.domain }]} report={{ kind: 'site', value: result.domain }} />}
-            {/* In un elenco di siti truffa (autorità o phishing): avviso in cima, con la fonte */}
+            {/* In un elenco di siti truffa (autorità o phishing) o segnalato da Google: avviso in cima, con la fonte */}
             {(() => {
-              const listed = result.checks.find((c) => c.id === 'scamList' && c.status === 'risk')
+              const listed = result.checks.find((c) => (c.id === 'scamList' || c.id === 'webRisk') && c.status === 'risk')
               if (!listed) return null
               return (
                 <div role="alert" className="rounded-2xl border-2 border-red-300 bg-red-50 p-5 text-red-900 shadow-sm">
