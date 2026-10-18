@@ -455,6 +455,17 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       requiresSubscription: true,
     },
     {
+      // Pagine sotto /convivium: gli invitati rispondono senza account
+      toolName: 'convivium',
+      href: '/convivium',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'PartyPopper',
+      title: t('convivium'),
+      description: t('conviviumDescription'),
+      color: 'gold',
+      category: 'svago',
+    },
+    {
       toolName: 'affinity',
       href: '/marketplace/affinity',
       gradient: 'bg-[var(--ink)]',

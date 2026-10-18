@@ -57,6 +57,9 @@ import {
   Warehouse,
   Wind,
   type LucideIcon,
+  Plane,
+  HeartHandshake,
+  PartyPopper,
 } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { HUB_TABS, hubOf, type ServiceHub } from '@/lib/serviceHubs'
@@ -76,6 +79,8 @@ const HUB_ICON: Record<ServiceHub, LucideIcon> = {
   vetrina: PanelsTopLeft,
   agenda: CalendarClock,
   casaauto: House,
+  viaggi: Plane,
+  amicizie: HeartHandshake,
 }
 
 // Icona di ogni scheda («servizio.scheda»)
@@ -127,6 +132,9 @@ const TAB_ICON: Record<string, LucideIcon> = {
   'casaauto.home': House,
   'casaauto.car': CarFront,
   'casaauto.findo': PackageSearch,
+  'viaggi.trips': Plane,
+  'amicizie.convivium': PartyPopper,
+  'amicizie.affinity': HeartHandshake,
 }
 
 // Barra comune in cima agli strumenti di un servizio unito: a sinistra il

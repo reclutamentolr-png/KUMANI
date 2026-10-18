@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { BadgeCheck, LoaderCircle, Search, Star, X } from 'lucide-react'
 import { Sheet } from '@/components/memolife/MemoLifeForms'
-import { createConvivio, searchSuppliers } from '@/app/actions/convivio'
+import { createConvivio, joinConvivio, searchSuppliers } from '@/app/actions/convivio'
 import { CONVIVIO_CATEGORIES, type SupplierSearchResult } from '@/lib/convivio'
 import CancelButton, { cancelButtonLgClass } from '@/components/ui/CancelButton'
 
@@ -49,6 +49,11 @@ export default function ConvivioCreateForm({
   const [chosen, setChosen] = useState<SupplierSearchResult | null>(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  // Il capocordata aderisce anche lui, con la sua quantità (solo con fornitore
+  // esterno: con un fornitore KUMANI si aderisce quando ha confermato)
+  const [myJoin, setMyJoin] = useState(true)
+  const [myQuantity, setMyQuantity] = useState(1)
+  const canJoinNow = mode === 'leader' && supplierMode === 'external'
   const [{ minDate, maxDate }] = useState(() => ({
     minDate: new Date(Date.now() + 86400000).toISOString().slice(0, 10),
     maxDate: new Date(Date.now() + 59 * 86400000).toISOString().slice(0, 10),
@@ -94,6 +99,7 @@ export default function ConvivioCreateForm({
       pickup: form.pickup,
       supplierId: supplierId ?? null,
     })
+    if (result.id && canJoinNow && myJoin) await joinConvivio(result.id, myQuantity, '', false)
     setBusy(false)
     if (result.id) onCreated(result.id)
     else setError(t(`error_${result.error ?? 'saveError'}`))
@@ -211,6 +217,30 @@ export default function ConvivioCreateForm({
             <input type="date" className={input} value={form.deadline} min={minDate} max={maxDate} required onChange={(e) => setForm({ ...form, deadline: e.target.value })} />
           </div>
         </div>
+        {mode === 'leader' && (
+          <div className="rounded-xl border border-[var(--gold)]/30 bg-[var(--gold)]/[0.06] p-3">
+            {canJoinNow ? (
+              <>
+                <label className="flex items-start gap-2.5 text-sm">
+                  <input type="checkbox" checked={myJoin} onChange={(e) => setMyJoin(e.target.checked)} className="mt-0.5 h-4 w-4 accent-[var(--gold)]" />
+                  <span>
+                    <span className="block font-bold text-[var(--ink)]">{t('leaderJoinCreate')}</span>
+                    <span className="block text-xs text-[var(--muted)]">{t('leaderJoinCreateHint')}</span>
+                  </span>
+                </label>
+                {myJoin && (
+                  <label className="mt-2 flex items-center gap-2 pl-6 text-sm text-gray-700">
+                    {t('leaderJoinQuantity')}
+                    <input type="number" min={1} max={50} className={`${input} w-20 py-1.5`} value={myQuantity} onChange={(e) => setMyQuantity(Math.min(50, Math.max(1, Number(e.target.value) || 1)))} />
+                    <span className="text-xs text-[var(--muted)]">{form.unit || t('units')}</span>
+                  </label>
+                )}
+              </>
+            ) : (
+              <p className="text-xs text-[var(--muted)]">{t('leaderJoinLater')}</p>
+            )}
+          </div>
+        )}
         <div>
           <label className={label}>{t('fieldDescription')}</label>
           <textarea className={input} rows={3} maxLength={2000} value={form.description} placeholder={t('fieldDescriptionPlaceholder')} onChange={(e) => setForm({ ...form, description: e.target.value })} />

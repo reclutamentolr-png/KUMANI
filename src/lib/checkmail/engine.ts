@@ -18,7 +18,7 @@ export type Verdict = {
   level: RiskLevel
   findings: Finding[]
   // Dati riassuntivi (per la spiegazione), mai l'intero contenuto
-  summary: { fromAddress: string | null; fromName: string | null; subject: string | null; linkDomains: string[]; hasHeaders: boolean; attachmentNames: string[] }
+  summary: { fromAddress: string | null; fromName: string | null; subject: string | null; linkDomains: string[]; linkUrls?: string[]; hasHeaders: boolean; attachmentNames: string[] }
   // Estratto del testo (max 6000 caratteri) per la lettura con l'IA: resta in
   // memoria per la sola durata dell'analisi, non va mai salvato
   textSample: string
@@ -663,6 +663,8 @@ export async function analyzeEmail(input: CheckMailInput, options: CheckMailOpti
       fromName,
       subject,
       linkDomains: linkHosts.slice(0, 10),
+      // Indirizzi completi dei link (per Google Web Risk): solo in memoria
+      linkUrls: [...new Set(links.map((l) => l.href).filter((h) => /^https?:\/\//i.test(h)))].slice(0, 10),
       hasHeaders,
       attachmentNames: attachments.map((a) => a.filename ?? '').filter(Boolean).slice(0, 10),
     },

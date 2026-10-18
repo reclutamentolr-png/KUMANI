@@ -18,6 +18,7 @@ const PRIVATE_PAGES = [
   '/prova/:path*',
   '/viaggi/invito/:path*',
   '/convivio/:path+',
+  '/convivium/:path*',
   '/affinity/duo/:path*',
   '/veritas/:path+',
   '/nexus/:path+',

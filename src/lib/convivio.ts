@@ -43,7 +43,7 @@ export type ConvivioDetail = ConvivioCard & {
   my_note: string | null
   my_share_phone: boolean | null
   my_reviews: ('supplier' | 'leader')[]
-  participants: { name: string | null; quantity: number; note: string | null; phone: string | null }[]
+  participants: { name: string | null; quantity: number; note: string | null; phone: string | null; is_leader?: boolean }[]
 }
 
 export type ConvivioPublic = ConvivioCard & { description: string; leader_referral: string | null }

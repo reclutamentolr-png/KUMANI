@@ -5,16 +5,19 @@
 // magazzino, calcolatrici), KUMANI Ufficio (Firma PDF, Firma Email, Hoplà),
 // KUMANI Negozio (Shop, Menu, Kumi Card e OfferMaker, se acceso), Farti conoscere (Link in
 // Bio, Landing Page, Messaggi WhatsApp), KUMANI Agenda (MemoLife, Life
-// Calendar) e Casa e auto (Casa, Garage, Findo). Gli strumenti
+// Calendar), Casa e auto (Casa, Garage, Findo), Viaggi (Travel) e Amicizie
+// (Convivium, Affinity). Gli strumenti
 // restano dove sono (indirizzi, piani, KU Karma, guide e volantini non
 // cambiano): il servizio li raccoglie come schede, con una barra comune in
 // cima, e negli elenchi (Home, Catalogo, Servizi, Dashboard) è una voce sola.
 // Per unirne altri: aggiungere qui il servizio, le sue schede e il gruppo.
 
-export const SERVICE_HUBS = ['controlla', 'proteggi', 'segnala', 'benessere', 'giochi', 'qr', 'spendly', 'lavoro', 'gestione', 'ufficio', 'negozio', 'vetrina', 'agenda', 'casaauto'] as const
+export const SERVICE_HUBS = ['controlla', 'proteggi', 'segnala', 'benessere', 'giochi', 'qr', 'spendly', 'lavoro', 'gestione', 'ufficio', 'negozio', 'vetrina', 'agenda', 'casaauto', 'viaggi', 'amicizie'] as const
 export type ServiceHub = (typeof SERVICE_HUBS)[number]
 
-export type HubTab = { key: string; href: string; tool: string | null }
+// planTool: lo strumento da cui prendere il piano (Free/Base/Pro) quando la
+// scheda non è uno strumento a sé; plan: piano fisso (es. pagine pubbliche)
+export type HubTab = { key: string; href: string; tool: string | null; planTool?: string; plan?: 'free' }
 
 export const HUB_TABS: Record<ServiceHub, HubTab[]> = {
   controlla: [
@@ -33,7 +36,7 @@ export const HUB_TABS: Record<ServiceHub, HubTab[]> = {
     { key: 'network', href: '/marketplace/rete-antitruffa', tool: 'rete-antitruffa' },
     { key: 'manual', href: '/marketplace/antitruffa', tool: 'antitruffa' },
     // «Mi stanno truffando?»: il test, pubblico
-    { key: 'test', href: '/test-truffa', tool: null },
+    { key: 'test', href: '/test-truffa', tool: null, plan: 'free' },
   ],
   benessere: [
     { key: 'sounds', href: '/marketplace/neurobalance', tool: 'neurobalance' },
@@ -56,7 +59,8 @@ export const HUB_TABS: Record<ServiceHub, HubTab[]> = {
   spendly: [
     { key: 'accounts', href: '/marketplace/spendly', tool: 'spendly' },
     { key: 'checkup', href: '/marketplace/fincheck', tool: 'fincheck' },
-    { key: 'shared', href: '/spese-condivise', tool: null },
+    // Creare un gruppo richiede Spendly; chi è invitato entra gratis
+    { key: 'shared', href: '/spese-condivise', tool: null, planTool: 'spendly' },
   ],
   lavoro: [
     { key: 'jobs', href: '/marketplace/trova-lavoro', tool: 'trova-lavoro' },
@@ -95,10 +99,16 @@ export const HUB_TABS: Record<ServiceHub, HubTab[]> = {
     { key: 'car', href: '/marketplace/garage', tool: 'garage' },
     { key: 'findo', href: '/marketplace/findo', tool: 'findo' },
   ],
+  // Per ora un servizio solo ciascuno: qui si aggiungeranno gli altri
+  viaggi: [{ key: 'trips', href: '/viaggi', tool: 'travel' }],
+  amicizie: [
+    { key: 'convivium', href: '/convivium', tool: 'convivium' },
+    { key: 'affinity', href: '/marketplace/affinity', tool: 'affinity' },
+  ],
 }
 
 // Gruppo della pagina Servizi in cui sta ciascun servizio unito
-export const HUB_GROUP: Record<ServiceHub, string> = { controlla: 'security', proteggi: 'security', segnala: 'security', benessere: 'wellness', giochi: 'fun', qr: 'business', spendly: 'money', lavoro: 'work', gestione: 'work', ufficio: 'work', negozio: 'business', vetrina: 'business', agenda: 'money', casaauto: 'money' }
+export const HUB_GROUP: Record<ServiceHub, string> = { controlla: 'security', proteggi: 'security', segnala: 'security', benessere: 'wellness', giochi: 'fun', qr: 'business', spendly: 'money', lavoro: 'work', gestione: 'work', ufficio: 'work', negozio: 'business', vetrina: 'business', agenda: 'money', casaauto: 'money', viaggi: 'money', amicizie: 'fun' }
 
 // Servizio di partenza di ciascuno (la prima scheda)
 export const HUB_HOME: Record<ServiceHub, string> = {
@@ -116,6 +126,8 @@ export const HUB_HOME: Record<ServiceHub, string> = {
   vetrina: '/marketplace/link-in-bio',
   agenda: '/marketplace/memolife',
   casaauto: '/marketplace/casa',
+  viaggi: '/viaggi',
+  amicizie: '/convivium',
 }
 
 // Strumenti raccolti nei servizi uniti
@@ -179,10 +191,13 @@ export const TOOL_HUB: Record<string, ServiceHub> = {
   casa: 'casaauto',
   garage: 'casaauto',
   findo: 'casaauto',
+  travel: 'viaggi',
+  affinity: 'amicizie',
+  convivium: 'amicizie',
 }
 
 // Icone già presenti in lib/marketplaceIcons
-export const HUB_ICON_NAME: Record<ServiceHub, string> = { controlla: 'ScanEye', proteggi: 'ShieldCheck', segnala: 'ShieldAlert', benessere: 'Flower2', giochi: 'Dices', qr: 'QrCode', spendly: 'PiggyBank', lavoro: 'Briefcase', gestione: 'BookUser', ufficio: 'Signature', negozio: 'Store', vetrina: 'PanelsTopLeft', agenda: 'CalendarClock', casaauto: 'House' }
+export const HUB_ICON_NAME: Record<ServiceHub, string> = { controlla: 'ScanEye', proteggi: 'ShieldCheck', segnala: 'ShieldAlert', benessere: 'Flower2', giochi: 'Dices', qr: 'QrCode', spendly: 'PiggyBank', lavoro: 'Briefcase', gestione: 'BookUser', ufficio: 'Signature', negozio: 'Store', vetrina: 'PanelsTopLeft', agenda: 'CalendarClock', casaauto: 'House', viaggi: 'Plane', amicizie: 'HeartHandshake' }
 
 // Pagine aperte a tutti (Catalogo pubblico)
 export const HUB_PUBLIC_HREF: Record<ServiceHub, string> = {
@@ -200,10 +215,12 @@ export const HUB_PUBLIC_HREF: Record<ServiceHub, string> = {
   vetrina: '/strumenti/link-in-bio',
   agenda: '/strumenti/memolife',
   casaauto: '/strumenti/casa',
+  viaggi: '/strumenti/travel',
+  amicizie: '/strumenti/convivium',
 }
 
 // Un rappresentante per servizio (per contare i servizi come la Home)
-export const HUB_REPRESENTATIVE: Record<ServiceHub, string> = { controlla: 'verifica-iban', proteggi: 'scudo-dati', segnala: 'rete-antitruffa', benessere: 'neurobalance', giochi: 'nexus', qr: 'qr-code-pro', spendly: 'spendly', lavoro: 'trova-lavoro', gestione: 'clienti', ufficio: 'firma-pdf', negozio: 'shop', vetrina: 'link-in-bio', agenda: 'memolife', casaauto: 'casa' }
+export const HUB_REPRESENTATIVE: Record<ServiceHub, string> = { controlla: 'verifica-iban', proteggi: 'scudo-dati', segnala: 'rete-antitruffa', benessere: 'neurobalance', giochi: 'nexus', qr: 'qr-code-pro', spendly: 'spendly', lavoro: 'trova-lavoro', gestione: 'clienti', ufficio: 'firma-pdf', negozio: 'shop', vetrina: 'link-in-bio', agenda: 'memolife', casaauto: 'casa', viaggi: 'travel', amicizie: 'convivium' }
 
 // Nome della scheda di uno strumento nel suo servizio («Email», «IBAN»…)
 export function hubTabKey(toolName: string): string | null {

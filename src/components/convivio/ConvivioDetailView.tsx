@@ -292,10 +292,11 @@ export default function ConvivioDetailView({
           </div>
         )}
 
-        {/* Adesione */}
-        {!data.is_leader && !data.is_supplier && (open || data.my_quantity) && (
+        {/* Adesione (anche il capocordata può aderire con la sua quantità; il fornitore no) */}
+        {!data.is_supplier && (open || data.my_quantity) && (
           <div className="rounded-2xl border border-[var(--gold)]/30 bg-white p-5 shadow-sm">
-            <p className="mb-3 font-bold text-[var(--ink)]">{data.my_quantity ? t('yourPledge') : t('joinTitle')}</p>
+            <p className="mb-3 font-bold text-[var(--ink)]">{data.my_quantity ? t('yourPledge') : data.is_leader ? t('leaderJoinTitle') : t('joinTitle')}</p>
+            {data.is_leader && !data.my_quantity && <p className="-mt-2 mb-3 text-sm text-[var(--muted)]">{t('leaderJoinHint')}</p>}
             {open ? (
               <>
                 <div className="flex flex-wrap items-center gap-3">
@@ -455,7 +456,7 @@ export default function ConvivioDetailView({
             <p className="mb-3 font-bold text-[var(--ink)]">{t('reviewTitle')}</p>
             <div className="flex flex-wrap gap-2">
               {(['supplier', 'leader'] as const)
-                .filter((target) => (target === 'supplier' ? data.supplier_kumani : !data.supplier_is_leader))
+                .filter((target) => (target === 'supplier' ? data.supplier_kumani : !data.supplier_is_leader && !data.is_leader))
                 .map((target) =>
                   data.my_reviews.includes(target) ? (
                     <span key={target} className="rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700">
@@ -567,7 +568,8 @@ export default function ConvivioDetailView({
                     <li key={i} className="flex items-center justify-between gap-2 text-sm">
                       <span className="truncate text-gray-800">
                         {p.name ?? '—'}
-                        {p.note && <span className="ml-2 text-xs text-[var(--muted)]">“{p.note}”</span>}
+                        {p.is_leader && <span className="ml-1.5 text-xs font-semibold text-[var(--gold)]">· {t('leaderTag')}</span>}
+                        {p.note &&<span className="ml-2 text-xs text-[var(--muted)]">“{p.note}”</span>}
                         {p.phone && (
                           <a href={`tel:${p.phone}`} className="ml-2 inline-flex items-center gap-0.5 text-xs font-semibold text-[var(--gold)]">
                             <Phone className="h-3 w-3" /> {p.phone}

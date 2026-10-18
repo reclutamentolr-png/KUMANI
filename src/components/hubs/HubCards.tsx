@@ -1,13 +1,13 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { ArrowRight, BookUser, Briefcase, CalendarClock, House, PanelsTopLeft, Store, Dices, Flower2, PiggyBank, QrCode, Signature, Lock, Megaphone, ScanSearch, ShieldCheck, type LucideIcon } from 'lucide-react'
+import { ArrowRight, BookUser, Briefcase, CalendarClock, House, PanelsTopLeft, Store, Dices, Flower2, PiggyBank, QrCode, Signature, Lock, Megaphone, ScanSearch, ShieldCheck, type LucideIcon, Plane, HeartHandshake } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import PlanTag from '@/components/PlanTag'
 import type { ServiceItem } from '@/lib/servicesCatalog'
 import { HUB_HOME, HUB_TABS, type ServiceHub } from '@/lib/serviceHubs'
 
-const HUB_ICON: Record<ServiceHub, LucideIcon> = { controlla: ScanSearch, proteggi: ShieldCheck, segnala: Megaphone, benessere: Flower2, giochi: Dices, qr: QrCode, spendly: PiggyBank, lavoro: Briefcase, gestione: BookUser, ufficio: Signature, negozio: Store, vetrina: PanelsTopLeft, agenda: CalendarClock, casaauto: House }
+const HUB_ICON: Record<ServiceHub, LucideIcon> = { controlla: ScanSearch, proteggi: ShieldCheck, segnala: Megaphone, benessere: Flower2, giochi: Dices, qr: QrCode, spendly: PiggyBank, lavoro: Briefcase, gestione: BookUser, ufficio: Signature, negozio: Store, vetrina: PanelsTopLeft, agenda: CalendarClock, casaauto: House, viaggi: Plane, amicizie: HeartHandshake }
 
 // Pagina Servizi: i servizi uniti di un gruppo (Sicurezza: Controlla,
 // Proteggi, Segnala; Benessere; Giochi) con le loro schede; quelle del piano
@@ -48,7 +48,7 @@ export default function HubCards({ hubs, items }: { hubs: readonly ServiceHub[];
                       {locked && <Lock className="h-3 w-3" aria-label={t('locked')} />}
                       {t(`${hub}.tab_${tab.key}`)}
                     </Link>
-                    <PlanTag plan={tab.tool ? planOf.get(tab.tool) : null} />
+                    <PlanTag plan={tab.plan ?? planOf.get(tab.tool ?? tab.planTool ?? '')} />
                     </span>
                   )
                 })}

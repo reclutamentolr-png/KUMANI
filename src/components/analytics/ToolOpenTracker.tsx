@@ -12,6 +12,7 @@ import { locales } from '../../../i18n'
 // Servizi con la pagina fuori da /marketplace
 const OUTSIDE: Record<string, string> = {
   viaggi: 'travel',
+  convivium: 'convivium',
   events: 'events',
   spotlight: 'spotlight',
   convivio: 'convivio',

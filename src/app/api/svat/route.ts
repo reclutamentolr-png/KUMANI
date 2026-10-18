@@ -3,8 +3,9 @@ import { BRANDS, isOfficial, lookalikeBrand } from '@/lib/checkmail/engine'
 import { safeFetch } from '@/lib/safeFetch'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
-import { findScamDomain, type ScamDomainHit } from '@/lib/scamDomains'
+import { domainCandidates, findScamDomain, type ScamDomainHit } from '@/lib/scamDomains'
 import { siteKeys } from '@/lib/scamNet'
+import { WEB_RISK_SOURCE, WEB_RISK_SOURCE_URL, webRiskLookup, worstThreat } from '@/lib/webRisk'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { fetchWhoisText, parseWhois } from '@/lib/whois'
 import { parseVatInput, prettyVat, registryLookupUrl, verifyVies } from '@/lib/vat'
@@ -102,6 +103,7 @@ export async function POST(request: NextRequest) {
       checkScamLists(domain),
       checkCommunity(domain),
       checkWebRisk(url, domain),
+      checkOfficial(domain),
       checkContentScraping(pagePromise),
       checkLegalPages(pagePromise),
       checkReviews(pagePromise),
@@ -226,42 +228,38 @@ async function checkCommunity(domain: string): Promise<SVATCheck | null> {
   }
 }
 
-// Google Web Risk (la versione commerciale di Safe Browsing): phishing, virus
-// e software indesiderato secondo Google. Si controllano l'indirizzo scritto e
-// la homepage del dominio. Senza chiave o se Google non risponde il controllo
-// non compare.
-const WEB_RISK_TYPES = ['SOCIAL_ENGINEERING', 'MALWARE', 'UNWANTED_SOFTWARE'] as const
+// Siti ufficiali (tabella official_domains, caricata ogni notte): compagnie
+// vigilate dall'IVASS (anche i loro sottodomini) e siti comunicati all'IVASS
+// dagli intermediari iscritti al RUI (solo l'indirizzo esatto: molti sono su
+// piattaforme condivise). Se non è in elenco il controllo non compare.
+async function checkOfficial(domain: string): Promise<SVATCheck | null> {
+  const { data } = await serviceDb().from('official_domains').select('domain, source, name').in('domain', domainCandidates(domain))
+  const company = data?.find((r) => r.source === 'ivass_company')
+  const intermediary = data?.find((r) => r.source === 'ivass_intermediary' && r.domain === domain)
+  const sourceUrl = 'https://www.ivass.it/consumatori/siti-imprese-intermediari/index.html'
+  if (company)
+    return { id: 'official', name: 'checkOfficial', status: 'ok', points: 15, details: `Official site of ${company.name ?? company.domain}, supervised by IVASS`, detailsKey: 'officialIvassCompany', detailsInterp: { name: company.name ?? company.domain }, source: 'IVASS (IT)', sourceUrl }
+  if (intermediary)
+    return { id: 'official', name: 'checkOfficial', status: 'ok', points: 10, details: 'Site declared to IVASS by a registered insurance intermediary', detailsKey: 'officialIvassIntermediary', source: 'IVASS (IT)', sourceUrl }
+  return null
+}
 
+// Google Web Risk: phishing, virus e software indesiderato secondo Google, per
+// l'indirizzo scritto e la homepage del dominio. Senza chiave o se Google non
+// risponde il controllo non compare.
 async function checkWebRisk(url: string, domain: string): Promise<SVATCheck | null> {
-  const key = process.env.GOOGLE_WEB_RISK_API_KEY
-  if (!key) return null
-  const found = new Set<string>()
-  let answered = false
-  for (const uri of [...new Set([url, `https://${domain}/`])]) {
-    const params = new URLSearchParams({ uri, key })
-    for (const type of WEB_RISK_TYPES) params.append('threatTypes', type)
-    try {
-      const res = await fetch(`https://webrisk.googleapis.com/v1/uris:search?${params}`, { signal: AbortSignal.timeout(6000), cache: 'no-store' })
-      if (!res.ok) continue
-      answered = true
-      const data = (await res.json()) as { threat?: { threatTypes?: string[] } }
-      for (const type of data.threat?.threatTypes ?? []) found.add(type)
-    } catch {
-      // Google non raggiungibile: si prova l'altro indirizzo
-    }
-  }
-  if (!answered) return null
-  const source = 'Google Web Risk'
-  const sourceUrl = 'https://transparencyreport.google.com/safe-browsing/search'
-  if (!found.size) return { id: 'webRisk', name: 'checkWebRisk', status: 'ok', points: 5, details: 'Not flagged by Google', detailsKey: 'webRiskClean', source, sourceUrl }
-  // Il pericolo più grave: phishing, poi virus, poi software indesiderato
-  const worst = WEB_RISK_TYPES.find((type) => found.has(type))!
+  const hits = await webRiskLookup([url, `https://${domain}/`])
+  if (!hits) return null
+  const source = WEB_RISK_SOURCE
+  const sourceUrl = WEB_RISK_SOURCE_URL
+  const worst = worstThreat(hits)
+  if (!worst) return { id: 'webRisk', name: 'checkWebRisk', status: 'ok', points: 5, details: 'Not flagged by Google', detailsKey: 'webRiskClean', source, sourceUrl }
   return {
     id: 'webRisk',
     name: 'checkWebRisk',
     status: 'risk',
     points: -60,
-    details: `Flagged by Google: ${[...found].join(', ')}`,
+    details: `Flagged by Google: ${[...new Set(hits.flatMap((h) => h.threats))].join(', ')}`,
     detailsKey: worst === 'SOCIAL_ENGINEERING' ? 'webRiskPhishing' : worst === 'MALWARE' ? 'webRiskMalware' : 'webRiskUnwanted',
     source,
     sourceUrl,

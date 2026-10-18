@@ -31,6 +31,7 @@ const MEMBER_AREAS = [
   '/guida',
   '/events',
   '/viaggi',
+  '/convivium',
   '/pro',
   '/billing',
   '/pass',

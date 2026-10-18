@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { localizedPath, notifyUser, pushDb } from '@/lib/push'
 import { fixedExpenseDueDate, type SpendlyFixedExpense } from '@/lib/spendly'
 import { settleAutoPayments } from '@/lib/spendly-server'
+import { OCCASION_EMOJI, type ConviviumOccasion } from '@/lib/convivium'
 
 // Promemoria giornalieri con le notifiche push (Vercel Cron, vedi vercel.json):
 // - abbonamento senza rinnovo automatico (voucher, Staff) che scade entro 3 giorni;
@@ -11,6 +12,7 @@ import { settleAutoPayments } from '@/lib/spendly-server'
 // - bollette di Spendly non pagate (3 giorni prima e il giorno stesso).
 // - Clienti e Lavori: quanti clienti sentire oggi e quanti lavori consegnati
 //   aspettano il saldo (una volta al giorno, solo con il servizio nel piano).
+// - Convivium: le serate di domani, a chi organizza e agli invitati iscritti.
 // Ogni promemoria parte una volta sola (push_log). Per tutti nel Centro
 // avvisi; sul telefono per chi ha attivato le notifiche.
 
@@ -27,6 +29,10 @@ export async function GET(request: Request) {
   // Tutti gli iscritti: i promemoria restano nel Centro avvisi dell'app e
   // arrivano anche sul telefono a chi ha attivato le notifiche
   const db = pushDb()
+  // Prova della sola parte Convivium: ?only=convivium
+  if (new URL(request.url).searchParams.get('only') === 'convivium') {
+    return NextResponse.json({ convivium: await conviviumReminders(db, Date.now()) })
+  }
   const userIds: string[] = []
   for (let from = 0; ; from += 1000) {
     const { data: page } = await db.from('profiles').select('id').order('id').range(from, from + 999)
@@ -329,5 +335,49 @@ export async function GET(request: Request) {
     clienti++
   }
 
-  return NextResponse.json({ expiry, events, fincheck, garage, lifeCalendar, bills, clienti })
+  const convivium = await conviviumReminders(db, now)
+
+  return NextResponse.json({ expiry, events, fincheck, garage, lifeCalendar, bills, clienti, convivium })
+}
+
+// Convivium: serate nelle prossime 40 ore (cioè domani, col giro delle 10),
+// a chi organizza e agli invitati iscritti che hanno detto «Ci sto» o «Forse»
+async function conviviumReminders(db: ReturnType<typeof pushDb>, now: number): Promise<number> {
+  let sent = 0
+  const { data: evenings } = await db
+    .from('convivium_events')
+    .select('id, owner_id, title, occasion, starts_at, place, invite_code')
+    .is('cancelled_at', null)
+    .is('reminder_sent_at', null)
+    .gt('starts_at', new Date(now).toISOString())
+    .lte('starts_at', new Date(now + 40 * 3_600_000).toISOString())
+    .limit(500)
+  for (const evening of evenings ?? []) {
+    // Prima si segna come inviato: un altro giro non lo rimanda
+    const { data: claimed } = await db.from('convivium_events').update({ reminder_sent_at: new Date().toISOString() }).eq('id', evening.id).is('reminder_sent_at', null).select('id')
+    if (!claimed?.length) continue
+    const { data: guests } = await db.from('convivium_rsvps').select('user_id').eq('event_id', evening.id).in('answer', ['yes', 'maybe']).not('user_id', 'is', null)
+    const startsAt = new Date(evening.starts_at as string)
+    const emoji = OCCASION_EMOJI[evening.occasion as ConviviumOccasion] ?? '🥂'
+    const recipients = [...new Set([evening.owner_id as string, ...(guests ?? []).map((g) => g.user_id as string)])]
+    for (const userId of recipients) {
+      const isOwner = userId === evening.owner_id
+      await notifyUser(
+        userId,
+        'events',
+        (t, locale) => {
+          const when = new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Rome' }).format(startsAt)
+          return {
+            title: t('conviviumRemindTitle', { emoji, title: evening.title as string }),
+            body: evening.place ? t('conviviumRemindBodyPlace', { when, place: evening.place as string }) : t('conviviumRemindBody', { when }),
+            url: localizedPath(locale, isOwner ? `/convivium/${evening.id}` : `/convivium/invito/${evening.invite_code}`),
+            tag: `convivium-${evening.id}`,
+          }
+        },
+        { kind: 'convivium', ref: evening.id as string }
+      )
+      sent++
+    }
+  }
+  return sent
 }

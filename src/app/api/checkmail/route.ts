@@ -3,7 +3,9 @@ import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { awardToolPoint } from '@/lib/toolPoints'
-import { analyzeEmail, networkFindings, withFindings } from '@/lib/checkmail/engine'
+import { analyzeEmail, networkFindings, withFindings, type Finding, type Verdict } from '@/lib/checkmail/engine'
+import { findScamDomain } from '@/lib/scamDomains'
+import { webRiskLookup } from '@/lib/webRisk'
 import { msgToEml } from '@/lib/checkmail/msg'
 import { applyAiAssessment, assessWithAi, type AiAssessment } from '@/lib/checkmail/ai'
 import { MissingApiKeyError } from '@/lib/anthropic'
@@ -27,6 +29,25 @@ const service = () =>
   createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
     auth: { autoRefreshToken: false, persistSession: false },
   })
+
+// Link e mittente segnalati da Google (Web Risk) o negli elenchi di siti
+// truffa (autorità, phishing, virus): un segnale grave basta per il rosso
+async function blocklistFindings(summary: Verdict['summary']): Promise<Finding[]> {
+  const sender = summary.fromAddress?.split('@')[1]?.toLowerCase() ?? ''
+  const links = (summary.linkDomains ?? []).slice(0, 10)
+  const domains = [...new Set([sender, ...links].filter(Boolean))]
+  if (!domains.length) return []
+  const db = service()
+  const [google, listed] = await Promise.all([
+    webRiskLookup([...(summary.linkUrls ?? []).slice(0, 6), ...links.slice(0, 6).map((d) => `https://${d}/`)]),
+    Promise.all(domains.map((d) => findScamDomain(db, d))).then((r) => r.flat()),
+  ])
+  const found: Finding[] = []
+  const flagged = google?.[0]
+  if (flagged) found.push({ key: 'google_flagged', severity: 'high', points: 70, params: { domain: new URL(flagged.uri).hostname } })
+  if (listed[0]) found.push({ key: 'scam_list', severity: 'high', points: 70, params: { domain: listed[0].domain } })
+  return found
+}
 
 function reply(result: CheckMailResponse, status = 200) {
   return NextResponse.json(result, { status })
@@ -83,8 +104,9 @@ export async function POST(request: NextRequest) {
 
     let aiAvailable = true
     const wantsAi = verdict.textSample.length > 20 || !!verdict.summary.subject
-    const [netFindings, ai] = await Promise.all([
+    const [netFindings, listFindings, ai] = await Promise.all([
       networkFindings(verdict.summary).catch(() => []),
+      blocklistFindings(verdict.summary).catch(() => []),
       wantsAi
         ? assessWithAi(verdict, locale).catch((error: unknown) => {
             // Un errore dell'IA non blocca il risultato dei controlli tecnici
@@ -94,7 +116,7 @@ export async function POST(request: NextRequest) {
           })
         : Promise.resolve<AiAssessment | null>(null),
     ])
-    verdict = withFindings(verdict, netFindings)
+    verdict = withFindings(verdict, [...netFindings, ...listFindings])
     if (ai) verdict = applyAiAssessment(verdict, ai)
 
     await awardToolPoint('checkmail')

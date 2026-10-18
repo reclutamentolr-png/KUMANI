@@ -4,6 +4,8 @@ import { createClient } from '@/lib/supabase/server'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { fetchWhoisText, parseWhois } from '@/lib/whois'
+import { findScamDomain } from '@/lib/scamDomains'
+import { webRiskLookup, worstThreat } from '@/lib/webRisk'
 
 interface QRDecodeResult {
   type: 'url' | 'phone' | 'sms' | 'email' | 'vcard' | 'wifi' | 'geo' | 'payment' | 'text'
@@ -419,7 +421,8 @@ async function analyzeURL(url: string): Promise<QRAnalysis['analysis']> {
         headers: { 'User-Agent': 'SVAT-QR-Scanner/1.0' },
         next: { revalidate: 0 },
       })
-      if (res.url !== url) {
+      // «https://sito.it» e «https://sito.it/» sono lo stesso indirizzo
+      if (res.url && res.url !== new URL(url).href) {
         hasRedirect = true
         redirectChain.push({ url, final: false })
         redirectChain.push({ url: res.url, final: true })
@@ -463,6 +466,21 @@ async function analyzeURL(url: string): Promise<QRAnalysis['analysis']> {
     riskScore -= 15
   }
 
+  // Google Web Risk ed elenchi di siti truffa (autorità, phishing, virus), sul
+  // link e sulla destinazione: se è segnalato il semaforo è rosso, qualunque
+  // sia il resto
+  const hosts = [...new Set([hostOf(url), finalHostname].filter(Boolean))]
+  const scamDb = createAdminClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { autoRefreshToken: false, persistSession: false } })
+  const [googleHits, listed] = await Promise.all([
+    webRiskLookup([url, finalUrl]),
+    Promise.all(hosts.map((h) => findScamDomain(scamDb, h))).then((r) => r.flat()),
+  ])
+  const worst = googleHits ? worstThreat(googleHits) : null
+  if (worst) indicators.push({ type: 'risk', key: worst === 'SOCIAL_ENGINEERING' ? 'indicatorGooglePhishing' : worst === 'MALWARE' ? 'indicatorGoogleMalware' : 'indicatorGoogleUnwanted' })
+  else if (googleHits) indicators.push({ type: 'ok', key: 'indicatorGoogleClean' })
+  if (listed.length) indicators.push({ type: 'risk', key: 'indicatorScamList', params: { domain: listed[0].domain } })
+  const blocked = !!worst || listed.length > 0
+
   // Check domain age if available (quick check). Queries the registry's
   // authoritative WHOIS server directly (src/lib/whois.ts) instead of a
   // third-party HTTP proxy.
@@ -488,6 +506,7 @@ async function analyzeURL(url: string): Promise<QRAnalysis['analysis']> {
       }
     }
   } catch {}
+  if (blocked) riskScore = Math.min(riskScore, 15)
 
   // AI-style explanation (kept as an English fallback; the client renders a localized
   // version derived from `badge` — see aiExplanationLowRisk/MediumRisk/HighRisk in qrCheck.*)
@@ -525,16 +544,24 @@ async function analyzeURL(url: string): Promise<QRAnalysis['analysis']> {
   }
 }
 
+function hostOf(value: string): string {
+  try {
+    return new URL(value).hostname.replace(/^www\./, '')
+  } catch {
+    return ''
+  }
+}
+
 function checkBrandImpersonation(hostname: string): { brand: string; category: string } | null {
   const lowerHostname = hostname.toLowerCase()
   const labels = lowerHostname.split('.')
 
   for (const brand of KNOWN_BRANDS) {
+    // Exact match or a genuine subdomain of ANY of the brand's real domains
+    // (e.g. login.paypal.com, amazon.it) — not impersonation. Checked before
+    // the look-alike rules, otherwise amazon.it was flagged against amazon.com.
+    if (brand.domains.some((d) => lowerHostname === d || lowerHostname.endsWith('.' + d))) continue
     for (const brandDomain of brand.domains) {
-      // Exact match or a genuine subdomain of the real domain (e.g.
-      // login.paypal.com) — not impersonation.
-      if (lowerHostname === brandDomain || lowerHostname.endsWith('.' + brandDomain)) continue
-
       const brandName = brandDomain.split('.')[0]
 
       // Classic typosquat: identical brand name, different TLD (paypal.co

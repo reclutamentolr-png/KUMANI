@@ -20,6 +20,9 @@ import { normalizeDomain, type ScamSource } from '@/lib/scamDomains'
 //   (fino al 2023) e i comunicati «L'IVASS ordina l'oscuramento» (PDF) delle
 //   prime due pagine; la domenica (o con ?full=1) tutte, per lo storico.
 // Se una fonte non risponde, le altre si caricano lo stesso.
+// Poi i siti UFFICIALI in official_domains (segnale positivo in Speculum):
+// - IVASS: imprese di assicurazione vigilate e siti degli intermediari
+//   iscritti al RUI (PDF aggiornati ogni settimana). Chi esce dall'elenco esce.
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 300
@@ -34,6 +37,8 @@ const CONSOB_INDEX = 'https://www.consob.it/web/consob/comunicati-stampa'
 const BAFIN_RSS = 'https://www.bafin.de/DE/service/rss/_function/rssnewsfeed.xml?nn=150166'
 const IVASS_INDEX = 'https://www.ivass.it/cyber/siti-abusivi/index.html'
 const IVASS_OLD_LIST = 'https://www.ivass.it/consumatori/proteggi/ELENCO_SITI_WEB_DI_INTERMEDIAZIONE_ASSICURATIVA_IRREGOLARI.pdf'
+const IVASS_COMPANIES = 'https://www.ivass.it/consumatori/siti-imprese-intermediari/LISTA_SITI_COMPAGNIE_VIGILATE_DA_IVASS.pdf'
+const IVASS_INTERMEDIARIES = 'https://www.ivass.it/consumatori/siti-imprese-intermediari/Lista_siti_internet_intermediari.pdf'
 const MONTHS_IT = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre']
 
 const EU_TLDS = new Set(['it', 'fr', 'es', 'de', 'pt', 'eu', 'at', 'be', 'nl', 'lu', 'ch', 'ie', 'pl', 'gr', 'ro', 'cz', 'sk', 'hu', 'si', 'hr', 'bg', 'dk', 'se', 'fi', 'ee', 'lv', 'lt', 'mt', 'cy', 'uk', 'no'])
@@ -168,6 +173,30 @@ async function loadIvass(full: boolean): Promise<Row[]> {
   return [...rows.values()]
 }
 
+type OfficialRow = { domain: string; source: 'ivass_company' | 'ivass_intermediary'; name: string | null; last_seen: string }
+
+// IVASS, siti ufficiali. Compagnie: «A495S  NOME  https://…» (il nome può
+// andare a capo, quindi si legge il testo intero); intermediari: un indirizzo
+// per riga (si saltano le email e i social, che non sono siti loro).
+async function loadIvassOfficial(): Promise<OfficialRow[]> {
+  const rows = new Map<string, OfficialRow>()
+  const text = (await pdfLines(IVASS_COMPANIES)).join(' ')
+  for (const m of text.matchAll(/\b[A-Z]\d{3}[A-Z]\s+(.+?)\s+(https?:\/\/\S+)/g)) {
+    const domain = normalizeDomain(m[2])
+    if (domain && !rows.has(domain)) rows.set(domain, { domain, source: 'ivass_company', name: m[1].replace(/\s+/g, ' ').trim(), last_seen: day() })
+  }
+  for (const line of await pdfLines(IVASS_INTERMEDIARIES)) {
+    for (const token of line.split(/\s+/)) {
+      if (!token.includes('.') || token.includes('@') || /^(aggiornat|lista)/i.test(token)) continue
+      const domain = normalizeDomain(token)
+      // I social in tutte le estensioni e sottodomini (linkedin.it, m.facebook.com…): pagine di chiunque
+      if (!domain || /(^|\.)(whatsapp|linkedin|facebook|fb|instagram|twitter|tiktok|youtube|telegram|threads)\.[a-z]{2,3}(\.[a-z]{2})?$/.test(domain)) continue
+      if (!rows.has(domain)) rows.set(domain, { domain, source: 'ivass_intermediary', name: null, last_seen: day() })
+    }
+  }
+  return [...rows.values()]
+}
+
 async function loadPhishDb(): Promise<Row[]> {
   // Con e senza «www.» diventano lo stesso dominio: una riga sola
   const rows = new Map<string, Row>()
@@ -232,6 +261,28 @@ export async function GET(request: Request) {
       const message = error instanceof Error ? error.message : String(error)
       console.error(`[scam-feeds] ${source} failed:`, message)
       report[source] = `error: ${message.slice(0, 120)}`
+    }
+  }
+  if (!only || only === 'official') {
+    try {
+      const rows = await loadIvassOfficial()
+      report.official = rows.length
+      if (dry) {
+        const companies = rows.filter((r) => r.source === 'ivass_company')
+        report.official = `${companies.length} compagnie, ${rows.length - companies.length} intermediari: ${companies.slice(0, 3).map((r) => `${r.domain} (${r.name})`).join(', ')}`
+      } else if (rows.length > 500 && rows.filter((r) => r.source === 'ivass_company').length >= 30) {
+        // Solo con elenchi letti per intero (altrimenti si cancellerebbero siti buoni)
+        for (let i = 0; i < rows.length; i += 5000) {
+          const { error } = await db.from('official_domains').upsert(rows.slice(i, i + 5000), { onConflict: 'domain,source' })
+          if (error) throw new Error(error.message)
+        }
+        // Chi non è più negli elenchi esce
+        await db.from('official_domains').delete().lt('last_seen', day())
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error)
+      console.error('[scam-feeds] official failed:', message)
+      report.official = `error: ${message.slice(0, 120)}`
     }
   }
   if (dry) return NextResponse.json({ ok: true, dry: true, ...report })

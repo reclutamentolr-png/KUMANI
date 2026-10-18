@@ -56,6 +56,7 @@ const GROUP_OF: Record<string, ServiceGroup> = {
   nexus: 'fun',
   mosaic: 'fun',
   affinity: 'fun',
+  convivium: 'fun',
   veritas: 'fun',
 }
 

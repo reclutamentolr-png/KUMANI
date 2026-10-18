@@ -160,7 +160,7 @@ export default function EventActions({
       )}
 
       {/* Il mio pass */}
-      {!event.is_organizer && registered && event.my_pass && event.status !== 'cancelled' && (
+      {registered && event.my_pass && event.status !== 'cancelled' && (
         <section className="rounded-2xl bg-[var(--ink)] p-5 text-white shadow-sm">
           <div className="flex items-center gap-2 text-[var(--gold-bright)]">
             <Ticket className="h-5 w-5" />
@@ -211,7 +211,7 @@ export default function EventActions({
 
       {/* Partecipa */}
       {/* In lista d'attesa */}
-      {!event.is_organizer && waiting && published && !event.ended && (
+      {waiting && published && !event.ended && (
         <section className="rounded-2xl border border-[var(--gold)]/40 bg-[var(--gold-pale)]/50 p-5 shadow-sm">
           <div className="flex items-center gap-2 text-[var(--ink)]">
             <Hourglass className="h-5 w-5 text-[var(--gold)]" />
@@ -238,7 +238,8 @@ export default function EventActions({
       )}
 
       {/* Partecipa (o mettiti in lista d'attesa se è completo) */}
-      {!event.is_organizer && !registered && !waiting && published && !event.ended && (
+      {/* Anche chi organizza può partecipare: occupa un posto */}
+      {!registered && !waiting && published && !event.ended && (
         <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
           {started ? (
             <p className="text-center text-sm font-semibold text-[var(--muted)]">{t('registrationClosed')}</p>
@@ -256,9 +257,9 @@ export default function EventActions({
           ) : (
             <>
               <button type="button" onClick={join} disabled={busy} className={goldButton}>
-                {busy && <LoaderCircle className="h-4 w-4 animate-spin" />} {t('join')}
+                {busy && <LoaderCircle className="h-4 w-4 animate-spin" />} {event.is_organizer ? t('organizerJoin') : t('join')}
               </button>
-              <p className="mt-2 text-center text-xs text-[var(--muted)]">{t('joinHint')}</p>
+              <p className="mt-2 text-center text-xs text-[var(--muted)]">{event.is_organizer ? t('organizerJoinHint') : t('joinHint')}</p>
             </>
           )}
           {error && <p className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-center text-sm font-semibold text-amber-800">{error}</p>}
