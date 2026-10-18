@@ -7304,6 +7304,16 @@
         "p2d": "Sin que la contraseña salga del móvil.",
         "p3": "Fuera de Google",
         "p3d": "Los pasos para quitar tus datos de la búsqueda."
+      },
+      "convivium": {
+        "sub": "La mesa se abre con un enlace",
+        "tagline": "Aperitivo, pizza o cena: crea la quedada, manda el enlace por WhatsApp y mira cómo se llena la mesa.",
+        "p1": "Un enlace y listo",
+        "p1d": "Los invitados responden sin registrarse.",
+        "p2": "La mesa se llena",
+        "p2d": "Quién va, quién quizá, plazas libres.",
+        "p3": "Precio claro",
+        "p3d": "Por persona o «invito yo», visible desde el principio."
       }
     },
     "includedSurprise": "Para todos, también con la cuenta gratuita",
@@ -8165,6 +8175,21 @@
       "step4Title": "Sigue el estado y la respuesta",
       "step4Text": "El Staff responde y actualiza el estado: nueva, en evaluación, planificada, realizada. Te avisamos cuando una propuesta que apoyas avanza.",
       "step4Tip": "Si tu propuesta se realiza, recibes KU Karma."
+    },
+    "convivium": {
+      "title": "KUMANI Convivium",
+      "summary": "La mesa se abre con un enlace: crea una quedada (aperitivo, pizza, cena…), invita a quien quieras y mira cómo se llena la mesa. Los invitados responden sin registrarse.",
+      "cta": "Abrir Convivium",
+      "step1Title": "Crea la quedada",
+      "step1Text": "Elige la ocasión, escribe un título, el día, la hora y dónde quedáis. Si quieres, indica las plazas, el precio por persona (o «Invito yo») y unas palabras para los invitados. «Yo también voy» ya está marcado: tu nombre será el primero en la mesa.",
+      "step1Tip": "Añade el enlace de Google Maps: así el lugar se puede pulsar.",
+      "step2Title": "Manda el enlace",
+      "step2Text": "Pulsa «Crear y obtener el enlace» y luego «Enviar por WhatsApp»: el mensaje ya está escrito. También puedes copiar el enlace o compartirlo con otras apps.",
+      "step3Title": "Los invitados responden",
+      "step3Text": "Quien abre el enlace ve la quedada, el precio y quién se apunta. Solo escribe su nombre y pulsa «¡Me apunto!», «Quizá» o «No puedo»: sin registro. Puede cambiar de idea cuando quiera desde el mismo enlace.",
+      "step3Tip": "Al final de la invitación aparece la invitación a entrar en KUMANI con tu código.",
+      "step4Title": "Mira cómo se llena la mesa",
+      "step4Text": "En tu quedada ves quién ha respondido y recibes un aviso con cada «Me apunto». El día antes te lo recordamos a ti y a los invitados que están en KUMANI. Desde aquí puedes editarla, cancelarla o eliminarla."
     }
   },
   "deckTexts": {
@@ -13957,6 +13982,9 @@
     "hostTag": "organiza",
     "you": "Tú",
     "youNamed": "{name} (tú)",
-    "error_max": "Contigo en la mesa hacen falta al menos 2 plazas."
+    "error_max": "Contigo en la mesa hacen falta al menos 2 plazas.",
+    "copyMessage": "Copiar mensaje",
+    "copiedMessage": "¡Mensaje copiado!",
+    "broadcastHint": "Para una lista de difusión o un grupo de WhatsApp: pulsa «Copiar mensaje» y pégalo allí. Las listas de difusión solo llegan a quien tiene tu número guardado."
   }
 }

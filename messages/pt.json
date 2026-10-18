@@ -7304,6 +7304,16 @@
         "p2d": "Sem a palavra-passe sair do telemóvel.",
         "p3": "Fora do Google",
         "p3d": "Os passos para retirar os seus dados da pesquisa."
+      },
+      "convivium": {
+        "sub": "A mesa abre-se com um link",
+        "tagline": "Aperitivo, pizza ou jantar: cria a saída, envia o link pelo WhatsApp e vê a mesa a encher.",
+        "p1": "Um link e pronto",
+        "p1d": "Os convidados respondem sem se registar.",
+        "p2": "A mesa enche",
+        "p2d": "Quem vai, quem talvez, lugares livres.",
+        "p3": "Preço claro",
+        "p3d": "Por pessoa ou «pago eu», visível desde logo."
       }
     },
     "includedSurprise": "Para todos, também com a conta gratuita",
@@ -8165,6 +8175,21 @@
       "step4Title": "Acompanhe o estado e a resposta",
       "step4Text": "O Staff responde e atualiza o estado: nova, em avaliação, planeada, concretizada. Recebe uma notificação quando uma proposta que apoia avança.",
       "step4Tip": "Se a sua proposta for concretizada, recebe KU Karma."
+    },
+    "convivium": {
+      "title": "KUMANI Convivium",
+      "summary": "A mesa abre-se com um link: cria uma saída (aperitivo, pizza, jantar…), convida quem quiseres e vê a mesa a encher. Os convidados respondem sem se registar.",
+      "cta": "Abrir o Convivium",
+      "step1Title": "Cria a saída",
+      "step1Text": "Escolhe a ocasião, escreve um título, o dia, a hora e onde se encontram. Se quiseres, indica os lugares, o preço por pessoa (ou «Pago eu») e umas palavras para os convidados. «Também vou» já está marcado: o teu nome será o primeiro à mesa.",
+      "step1Tip": "Junta o link do Google Maps: assim o local fica clicável para todos.",
+      "step2Title": "Envia o link",
+      "step2Text": "Toca em «Criar e obter o link» e depois em «Enviar pelo WhatsApp»: a mensagem já está escrita. Também podes copiar o link ou partilhá-lo com outras apps.",
+      "step3Title": "Os convidados respondem",
+      "step3Text": "Quem abre o link vê a saída, o preço e quem já vai. Escreve só o nome e toca em «Alinho!», «Talvez» ou «Não posso»: sem registo. Pode mudar de ideias quando quiser a partir do mesmo link.",
+      "step3Tip": "No fim do convite aparece o convite para entrar no KUMANI com o teu código.",
+      "step4Title": "Vê a mesa a encher",
+      "step4Text": "Na tua saída vês quem respondeu e recebes um aviso a cada «Alinho». Na véspera lembramos-te a ti e aos convidados que estão no KUMANI. Daqui podes editá-la, cancelá-la ou eliminá-la."
     }
   },
   "deckTexts": {
@@ -13957,6 +13982,9 @@
     "hostTag": "organiza",
     "you": "Tu",
     "youNamed": "{name} (tu)",
-    "error_max": "Contigo à mesa são precisos pelo menos 2 lugares."
+    "error_max": "Contigo à mesa são precisos pelo menos 2 lugares.",
+    "copyMessage": "Copiar mensagem",
+    "copiedMessage": "Mensagem copiada!",
+    "broadcastHint": "Para uma lista de transmissão ou um grupo do WhatsApp: toca em «Copiar mensagem» e cola lá. As listas de transmissão só chegam a quem tem o teu número guardado."
   }
 }

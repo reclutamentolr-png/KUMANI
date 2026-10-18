@@ -7304,6 +7304,16 @@
         "p2d": "Without the password leaving your phone.",
         "p3": "Off Google",
         "p3d": "Steps to remove your data from Search."
+      },
+      "convivium": {
+        "sub": "The table opens with a link",
+        "tagline": "Drinks, pizza or dinner: create the evening, send the link on WhatsApp and watch the table fill up.",
+        "p1": "One link and done",
+        "p1d": "Guests reply without signing up.",
+        "p2": "The table fills up",
+        "p2d": "Who’s in, who’s maybe, seats left.",
+        "p3": "Clear cost",
+        "p3d": "Per person or “my treat”, shown upfront."
       }
     },
     "includedSurprise": "For everyone, free account included",
@@ -8165,6 +8175,21 @@
       "step4Title": "Follow status and reply",
       "step4Text": "The Staff replies and updates the status: new, being evaluated, planned, done. You get a notification when a proposal you support moves forward.",
       "step4Tip": "If your proposal gets built you receive KU Karma."
+    },
+    "convivium": {
+      "title": "KUMANI Convivium",
+      "summary": "The table opens with a link: create an evening (drinks, pizza, dinner…), invite whoever you like and watch the table fill up. Guests reply without signing up.",
+      "cta": "Open Convivium",
+      "step1Title": "Create the evening",
+      "step1Text": "Pick the occasion, write a title, the day and time and where you’re meeting. If you like, set the seats at the table, the cost per person (or “My treat”) and a few words for your guests. “I’m coming too” is already ticked: your name will be first at the table.",
+      "step1Tip": "Add the Google Maps link so the place becomes clickable for everyone.",
+      "step2Title": "Send the link",
+      "step2Text": "Tap “Create and get the link”, then “Send on WhatsApp”: the message is already written. You can also copy the link or share it with other apps.",
+      "step3Title": "Guests reply",
+      "step3Text": "Whoever opens the link sees the evening, the cost and who’s already in. They just write their name and tap “I’m in!”, “Maybe” or “Can’t”: no sign-up. They can change their mind any time from the same link.",
+      "step3Tip": "At the bottom of the invite there’s an invitation to join KUMANI with your code.",
+      "step4Title": "Watch the table fill up",
+      "step4Text": "In your evening you see who replied and get an alert for every “I’m in”. The day before, we remind you and the guests who are KUMANI members. From here you can edit, cancel or delete it."
     }
   },
   "deckTexts": {
@@ -13957,6 +13982,9 @@
     "hostTag": "host",
     "you": "You",
     "youNamed": "{name} (you)",
-    "error_max": "With you at the table you need at least 2 seats."
+    "error_max": "With you at the table you need at least 2 seats.",
+    "copyMessage": "Copy message",
+    "copiedMessage": "Message copied!",
+    "broadcastHint": "For a WhatsApp broadcast list or group: tap “Copy message” and paste it there. Broadcast lists only reach people who have your number saved."
   }
 }

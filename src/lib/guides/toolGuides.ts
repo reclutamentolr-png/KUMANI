@@ -20,6 +20,7 @@ export const TOOL_GUIDES: { path: string; slug: GuideSlug }[] = [
   { path: '/marketplace/timebank', slug: 'timebank' },
   { path: '/marketplace/convivio', slug: 'convivio' },
   { path: '/marketplace/affinity', slug: 'affinity' },
+  { path: '/convivium', slug: 'convivium' },
   { path: '/marketplace/veritas', slug: 'veritas' },
   { path: '/marketplace/kumani-cv', slug: 'kumani-cv' },
   { path: '/marketplace/findo', slug: 'findo' },

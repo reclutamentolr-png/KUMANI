@@ -55,6 +55,7 @@ export const FLYERS: FlyerConfig[] = [
   { tool: 'focus', style: 'phone', category: 'wellness', icon: 'Timer', points: ['SlidersHorizontal', 'Bell', 'ChartColumn'], shot: 'focus-1' },
   { tool: 'mandala', style: 'phone', category: 'wellness', icon: 'Flower2', points: ['Pencil', 'Palette', 'Download'], shot: 'mandala-1' },
   { tool: 'affinity', style: 'phone', category: 'svago', icon: 'Sparkles', points: ['Compass', 'Swords', 'HeartHandshake'], shot: 'affinity-2' },
+  { tool: 'convivium', style: 'phone', category: 'svago', icon: 'PartyPopper', points: ['Send', 'Users', 'Wallet'], shot: 'convivium-invite' },
   { tool: 'mosaic', style: 'phone', category: 'svago', icon: 'Grid3x3', points: ['Users', 'CalendarDays', 'Award'], shot: 'mosaic-1' },
   { tool: 'fabula', style: 'phone', category: 'svago', icon: 'Dices', points: ['Dices', 'PenLine', 'BookOpen'], shot: 'fabula-1' },
   { tool: 'nexus', style: 'phone', category: 'svago', icon: 'Puzzle', points: ['CalendarDays', 'Swords', 'Users'], shot: 'nexus-2' },

@@ -7304,6 +7304,16 @@
         "p2d": "Ohne dass das Passwort das Handy verlässt.",
         "p3": "Raus aus Google",
         "p3d": "Die Schritte, um deine Daten aus der Suche zu entfernen."
+      },
+      "convivium": {
+        "sub": "Der Tisch öffnet sich mit einem Link",
+        "tagline": "Aperitif, Pizza oder Abendessen: Abend erstellen, Link per WhatsApp schicken und zusehen, wie sich der Tisch füllt.",
+        "p1": "Ein Link genügt",
+        "p1d": "Gäste antworten ohne Anmeldung.",
+        "p2": "Der Tisch füllt sich",
+        "p2d": "Wer dabei ist, wer vielleicht, freie Plätze.",
+        "p3": "Klarer Preis",
+        "p3d": "Pro Person oder „ich lade ein“, sofort sichtbar."
       }
     },
     "includedSurprise": "Für alle, auch mit dem kostenlosen Konto",
@@ -8165,6 +8175,21 @@
       "step4Title": "Status und Antwort verfolgen",
       "step4Text": "Das Staff antwortet und aktualisiert den Status: neu, wird geprüft, geplant, umgesetzt. Du wirst benachrichtigt, wenn ein unterstützter Vorschlag vorankommt.",
       "step4Tip": "Wird dein Vorschlag umgesetzt, bekommst du KU Karma."
+    },
+    "convivium": {
+      "title": "KUMANI Convivium",
+      "summary": "Der Tisch öffnet sich mit einem Link: Erstelle einen Abend (Aperitif, Pizza, Abendessen…), lade ein, wen du willst, und sieh zu, wie sich der Tisch füllt. Gäste antworten ohne Anmeldung.",
+      "cta": "Convivium öffnen",
+      "step1Title": "Abend erstellen",
+      "step1Text": "Wähle den Anlass, schreib einen Titel, Tag, Uhrzeit und Treffpunkt. Wenn du willst, gib die Plätze am Tisch, den Preis pro Person (oder „Ich lade ein“) und ein paar Worte für die Gäste an. „Ich bin auch dabei“ ist schon angehakt: Dein Name steht als erster am Tisch.",
+      "step1Tip": "Füge den Google-Maps-Link hinzu, dann ist der Ort für alle anklickbar.",
+      "step2Title": "Link schicken",
+      "step2Text": "Tippe auf „Erstellen und Link holen“ und dann auf „Per WhatsApp senden“: Die Nachricht ist schon geschrieben. Du kannst den Link auch kopieren oder mit anderen Apps teilen.",
+      "step3Title": "Die Gäste antworten",
+      "step3Text": "Wer den Link öffnet, sieht den Abend, den Preis und wer schon dabei ist. Name eintragen und „Bin dabei!“, „Vielleicht“ oder „Kann nicht“ tippen: ohne Anmeldung. Die Antwort lässt sich jederzeit über denselben Link ändern.",
+      "step3Tip": "Unten in der Einladung steht die Einladung zu KUMANI mit deinem Code.",
+      "step4Title": "Sieh zu, wie sich der Tisch füllt",
+      "step4Text": "In deinem Abend siehst du, wer geantwortet hat, und bekommst bei jedem „Bin dabei“ eine Nachricht. Am Tag vorher erinnern wir dich und die Gäste, die bei KUMANI sind. Hier kannst du den Abend bearbeiten, absagen oder löschen."
     }
   },
   "deckTexts": {
@@ -13957,6 +13982,9 @@
     "hostTag": "Gastgeber",
     "you": "Du",
     "youNamed": "{name} (du)",
-    "error_max": "Mit dir am Tisch braucht es mindestens 2 Plätze."
+    "error_max": "Mit dir am Tisch braucht es mindestens 2 Plätze.",
+    "copyMessage": "Nachricht kopieren",
+    "copiedMessage": "Nachricht kopiert!",
+    "broadcastHint": "Für eine WhatsApp-Broadcast-Liste oder -Gruppe: „Nachricht kopieren“ tippen und dort einfügen. Broadcasts erreichen nur, wer deine Nummer gespeichert hat."
   }
 }

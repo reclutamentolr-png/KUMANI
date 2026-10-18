@@ -7304,6 +7304,16 @@
         "p2d": "Senza che la password lasci il telefono.",
         "p3": "Fuori da Google",
         "p3d": "I passi per togliere i tuoi dati dalla ricerca."
+      },
+      "convivium": {
+        "sub": "Il tavolo si apre con un link",
+        "tagline": "Aperitivo, pizza o cena: crea la serata, manda il link su WhatsApp e guarda il tavolo riempirsi.",
+        "p1": "Un link e via",
+        "p1d": "Gli invitati rispondono senza registrarsi.",
+        "p2": "Il tavolo che si riempie",
+        "p2d": "Chi c’è, chi forse, quanti posti restano.",
+        "p3": "Costo chiaro",
+        "p3d": "A testa o «offro io», visibile da subito."
       }
     },
     "includedSurprise": "Per tutti, anche con l’account gratuito",
@@ -8165,6 +8175,21 @@
       "step4Title": "Segui lo stato e la risposta",
       "step4Text": "Lo Staff risponde e aggiorna lo stato: nuova, in valutazione, pianificata, realizzata. Ricevi una notifica quando una proposta che sostieni va avanti.",
       "step4Tip": "Se la tua proposta viene realizzata ricevi KU Karma."
+    },
+    "convivium": {
+      "title": "KUMANI Convivium",
+      "summary": "Il tavolo si apre con un link: crea una serata (aperitivo, pizza, cena…), invita chi vuoi e guarda il tavolo riempirsi. Chi riceve il link risponde senza registrarsi.",
+      "cta": "Apri Convivium",
+      "step1Title": "Crea la serata",
+      "step1Text": "Scegli l’occasione, scrivi un titolo, il giorno e l’ora e dove vi trovate. Se vuoi indica i posti al tavolo, il costo a testa (oppure «Offro io») e due righe per gli invitati. «Partecipo anch’io» è già spuntato: il tuo nome sarà il primo al tavolo.",
+      "step1Tip": "Aggiungi il link di Google Maps: così il posto diventa cliccabile per tutti.",
+      "step2Title": "Manda il link",
+      "step2Text": "Tocca «Crea e prendi il link» e poi «Invia su WhatsApp»: il messaggio è già scritto. Puoi anche copiare il link o mandarlo con altre app.",
+      "step3Title": "Gli invitati rispondono",
+      "step3Text": "Chi apre il link vede la serata, il costo e chi c’è già. Scrive solo il nome e tocca «Ci sto!», «Forse» o «Non posso»: niente registrazione. Può cambiare idea quando vuole dallo stesso link.",
+      "step3Tip": "In fondo all’invito c’è l’invito a entrare in KUMANI con il tuo codice.",
+      "step4Title": "Guarda il tavolo riempirsi",
+      "step4Text": "Nella tua serata vedi chi ha risposto e ricevi un avviso a ogni «Ci sto». Il giorno prima ricordiamo la serata a te e agli invitati iscritti a KUMANI. Da qui puoi modificarla, annullarla o eliminarla."
     }
   },
   "deckTexts": {
@@ -13957,6 +13982,9 @@
     "hostTag": "organizza",
     "you": "Tu",
     "youNamed": "{name} (tu)",
-    "error_max": "Con te al tavolo servono almeno 2 posti."
+    "error_max": "Con te al tavolo servono almeno 2 posti.",
+    "copyMessage": "Copia messaggio",
+    "copiedMessage": "Messaggio copiato!",
+    "broadcastHint": "Per una lista broadcast o un gruppo WhatsApp: tocca «Copia messaggio» e incollalo lì. Nelle liste broadcast arriva solo a chi ha il tuo numero in rubrica."
   }
 }

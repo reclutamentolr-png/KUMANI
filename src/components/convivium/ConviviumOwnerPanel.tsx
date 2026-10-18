@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
-import { Check, Copy, ExternalLink, MessageCircle, Pencil, Share2, Trash2, X } from 'lucide-react'
+import { Check, Copy, ExternalLink, MessageCircle, MessageSquareText, Pencil, Share2, Trash2, X } from 'lucide-react'
 import { useLocalizedRouter as useRouter } from '@/lib/useLocalizedRouter'
 import { deleteConvivium, removeConviviumRsvp, setConviviumCancelled } from '@/app/actions/convivium'
 import ConviviumForm from '@/components/convivium/ConviviumForm'
@@ -20,23 +20,26 @@ export default function ConviviumOwnerPanel({ event, rsvps, hostName, inviteUrl,
   const t = useTranslations('convivium')
   const router = useRouter()
   const [editing, setEditing] = useState(false)
-  const [copied, setCopied] = useState(false)
+  const [copied, setCopied] = useState<'link' | 'message' | null>(null)
   const [pending, start] = useTransition()
   const cancelled = !!event.cancelled_at
   const message = `${shareText} ${inviteUrl}`
 
-  const copy = async () => {
+  // «Copia link» copia solo l'indirizzo; «Copia messaggio» il testo pronto
+  // con il link (per liste broadcast e gruppi WhatsApp)
+  const copy = async (what: 'link' | 'message') => {
+    const text = what === 'link' ? inviteUrl : message
     try {
-      await navigator.clipboard.writeText(inviteUrl)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      await navigator.clipboard.writeText(text)
+      setCopied(what)
+      setTimeout(() => setCopied(null), 2000)
     } catch {
-      window.prompt(t('copy'), inviteUrl)
+      window.prompt(what === 'link' ? t('copy') : t('copyMessage'), text)
     }
   }
   const shareMore = async () => {
     if (navigator.share) await navigator.share({ text: shareText, url: inviteUrl }).catch(() => {})
-    else copy()
+    else copy('link')
   }
   const run = (fn: () => Promise<unknown>) => start(async () => {
     await fn()
@@ -69,8 +72,11 @@ export default function ConviviumOwnerPanel({ event, rsvps, hostName, inviteUrl,
             >
               <MessageCircle className="h-4 w-4" aria-hidden /> {t('whatsapp')}
             </a>
-            <button type="button" onClick={copy} className="flex items-center gap-2 rounded-xl bg-white/10 px-4 py-2.5 text-sm font-bold hover:bg-white/20">
-              {copied ? <Check className="h-4 w-4" aria-hidden /> : <Copy className="h-4 w-4" aria-hidden />} {copied ? t('copied') : t('copy')}
+            <button type="button" onClick={() => copy('link')} className="flex items-center gap-2 rounded-xl bg-white/10 px-4 py-2.5 text-sm font-bold hover:bg-white/20">
+              {copied === 'link' ? <Check className="h-4 w-4" aria-hidden /> : <Copy className="h-4 w-4" aria-hidden />} {copied === 'link' ? t('copied') : t('copy')}
+            </button>
+            <button type="button" onClick={() => copy('message')} className="flex items-center gap-2 rounded-xl bg-white/10 px-4 py-2.5 text-sm font-bold hover:bg-white/20">
+              {copied === 'message' ? <Check className="h-4 w-4" aria-hidden /> : <MessageSquareText className="h-4 w-4" aria-hidden />} {copied === 'message' ? t('copiedMessage') : t('copyMessage')}
             </button>
             <button type="button" onClick={shareMore} className="flex items-center gap-2 rounded-xl bg-white/10 px-4 py-2.5 text-sm font-bold hover:bg-white/20">
               <Share2 className="h-4 w-4" aria-hidden /> {t('shareMore')}
@@ -79,7 +85,8 @@ export default function ConviviumOwnerPanel({ event, rsvps, hostName, inviteUrl,
               <ExternalLink className="h-4 w-4" aria-hidden /> {t('openInvite')}
             </a>
           </div>
-          <p className="mt-4 text-xs text-white/60">{t('reminderNote')}</p>
+          <p className="mt-4 text-xs text-white/60">{t('broadcastHint')}</p>
+          <p className="mt-1.5 text-xs text-white/60">{t('reminderNote')}</p>
         </section>
       )}
 

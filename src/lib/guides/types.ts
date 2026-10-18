@@ -26,6 +26,7 @@ export type GuideSlug =
   | 'timebank'
   | 'convivio'
   | 'affinity'
+  | 'convivium'
   | 'veritas'
   | 'kumani-cv'
   | 'findo'
