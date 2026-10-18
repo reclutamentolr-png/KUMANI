@@ -7,7 +7,7 @@ import { createClient } from '@/lib/supabase/server'
 import { awardToolPoint } from '@/lib/toolPoints'
 import { isToolOnline } from '@/lib/toolOnline'
 import { localizedPath, notifyUser, pushDb } from '@/lib/push'
-import { CONVIVIUM_LIMITS, OCCASION_EMOJI, inviteCodeOk, isOccasion, rsvpCookie, type ConviviumAnswer, type ConviviumOccasion } from '@/lib/convivium'
+import { CONVIVIUM_LIMITS, OCCASION_EMOJI, inviteCodeOk, isOccasion, rsvpCookie, seated, type ConviviumAnswer, type ConviviumOccasion } from '@/lib/convivium'
 
 // KUMANI Convivium: le regole stanno nelle funzioni SQL convivium_* e nelle
 // RLS; qui si controllano i dati e si passano al database.
@@ -172,6 +172,20 @@ export async function answerConvivium(code: string, name: string, answer: Conviv
   const jar = await cookies()
   const token = jar.get(rsvpCookie(normalized))?.value ?? null
   const supabase = await createClient()
+  // Risposta di prima (per sapere se si libera un posto a tavolo pieno)
+  const db = pushDb()
+  const { data: before } = await db.from('convivium_events').select('id, owner_id, title, occasion, max_guests, host_joins, invite_code').eq('invite_code', normalized).maybeSingle()
+  let previous: ConviviumAnswer | null = null
+  if (before) {
+    const { data: me } = await supabase.auth.getUser()
+    // Solo token nel formato che genera il database (il cookie si può modificare)
+    const safeToken = token && /^[0-9a-f]{64}$/.test(token) ? token : null
+    const filters = [safeToken ? `guest_token.eq.${safeToken}` : null, me.user ? `user_id.eq.${me.user.id}` : null].filter(Boolean).join(',')
+    if (filters) {
+      const { data: old } = await db.from('convivium_rsvps').select('answer').eq('event_id', before.id).or(filters).order('updated_at', { ascending: false }).limit(1).maybeSingle()
+      previous = (old?.answer as ConviviumAnswer | undefined) ?? null
+    }
+  }
   const { data, error } = await supabase.rpc('convivium_rsvp', { p_code: normalized, p_name: cleanName, p_answer: answer, p_token: token })
   if (error || !data) return { status: 'error' }
   const result = data as { status: string; token?: string; changed?: boolean; event_id?: string }
@@ -194,6 +208,33 @@ export async function answerConvivium(code: string, name: string, answer: Conviv
         url: localizedPath(locale, `/convivium/${event.id}`),
         tag: `convivium-${event.id}`,
       }))
+    })
+  }
+  // Si è liberato un posto: chi aveva detto «Ci sto» a un tavolo pieno si
+  // ritira. Avviso a chi organizza e agli invitati iscritti che hanno detto
+  // «Forse» (di chi non è iscritto abbiamo solo il nome).
+  if (before?.max_guests && previous === 'yes' && answer !== 'yes') {
+    const event = before
+    after(async () => {
+      const { count } = await db.from('convivium_rsvps').select('id', { count: 'exact', head: true }).eq('event_id', event.id).eq('answer', 'yes')
+      if (seated(count ?? 0, event.host_joins as boolean) !== (event.max_guests as number) - 1) return
+      const emoji = OCCASION_EMOJI[event.occasion as ConviviumOccasion] ?? '🥂'
+      const title = event.title as string
+      await notifyUser(event.owner_id as string, 'messages', (t, locale) => ({
+        title: t('conviviumSeatFreeTitle', { emoji }),
+        body: t('conviviumSeatFreeBody', { name: cleanName, title }),
+        url: localizedPath(locale, `/convivium/${event.id}`),
+        tag: `convivium-${event.id}`,
+      }))
+      const { data: maybes } = await db.from('convivium_rsvps').select('user_id').eq('event_id', event.id).eq('answer', 'maybe').not('user_id', 'is', null)
+      for (const userId of new Set((maybes ?? []).map((m) => m.user_id as string))) {
+        await notifyUser(userId, 'messages', (t, locale) => ({
+          title: t('conviviumSeatFreeTitle', { emoji }),
+          body: t('conviviumSeatFreeGuestBody', { title }),
+          url: localizedPath(locale, `/convivium/invito/${event.invite_code}`),
+          tag: `convivium-${event.id}`,
+        }))
+      }
     })
   }
   revalidatePath('/[locale]/convivium/invito/[code]', 'page')

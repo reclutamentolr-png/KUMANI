@@ -8995,7 +8995,10 @@
     "conviviumAnswerBody": "A répondu à votre invitation pour « {title} ».",
     "conviviumRemindTitle": "{emoji} Rappel : {title}",
     "conviviumRemindBody": "Rendez-vous {when}.",
-    "conviviumRemindBodyPlace": "Rendez-vous {when} · {place}."
+    "conviviumRemindBodyPlace": "Rendez-vous {when} · {place}.",
+    "conviviumSeatFreeTitle": "{emoji} Une place s’est libérée",
+    "conviviumSeatFreeBody": "{name} ne vient plus à « {title} » : ceux qui ont dit « Peut-être » peuvent venir.",
+    "conviviumSeatFreeGuestBody": "Une place s’est libérée à « {title} » : si tu viens, réponds « Je viens ! »."
   },
   "pushInvite": {
     "title": "Activez les notifications",
@@ -13985,6 +13988,7 @@
     "error_max": "Avec vous à table, il faut au moins 2 places.",
     "copyMessage": "Copier le message",
     "copiedMessage": "Message copié !",
-    "broadcastHint": "Pour une liste de diffusion ou un groupe WhatsApp : touchez « Copier le message » et collez-le là. Les listes de diffusion n’atteignent que ceux qui ont enregistré votre numéro."
+    "broadcastHint": "Pour une liste de diffusion ou un groupe WhatsApp : touchez « Copier le message » et collez-le là. Les listes de diffusion n’atteignent que ceux qui ont enregistré votre numéro.",
+    "answerHint": "Pas besoin de vous inscrire : écrivez votre prénom et choisissez."
   }
 }

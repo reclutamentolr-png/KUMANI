@@ -8995,7 +8995,10 @@
     "conviviumAnswerBody": "Replied to your invite for “{title}”.",
     "conviviumRemindTitle": "{emoji} Reminder: {title}",
     "conviviumRemindBody": "See you {when}.",
-    "conviviumRemindBodyPlace": "See you {when} · {place}."
+    "conviviumRemindBodyPlace": "See you {when} · {place}.",
+    "conviviumSeatFreeTitle": "{emoji} A seat has opened up",
+    "conviviumSeatFreeBody": "{name} is no longer coming to “{title}”: anyone who said “Maybe” can join.",
+    "conviviumSeatFreeGuestBody": "A seat has opened up at “{title}”: if you’re in, reply “I’m in!”."
   },
   "pushInvite": {
     "title": "Turn on notifications",
@@ -13985,6 +13988,7 @@
     "error_max": "With you at the table you need at least 2 seats.",
     "copyMessage": "Copy message",
     "copiedMessage": "Message copied!",
-    "broadcastHint": "For a WhatsApp broadcast list or group: tap “Copy message” and paste it there. Broadcast lists only reach people who have your number saved."
+    "broadcastHint": "For a WhatsApp broadcast list or group: tap “Copy message” and paste it there. Broadcast lists only reach people who have your number saved.",
+    "answerHint": "No sign-up needed: write your name and choose."
   }
 }

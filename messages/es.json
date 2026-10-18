@@ -8995,7 +8995,10 @@
     "conviviumAnswerBody": "Ha respondido a tu invitación para «{title}».",
     "conviviumRemindTitle": "{emoji} Recordatorio: {title}",
     "conviviumRemindBody": "Nos vemos {when}.",
-    "conviviumRemindBodyPlace": "Nos vemos {when} · {place}."
+    "conviviumRemindBodyPlace": "Nos vemos {when} · {place}.",
+    "conviviumSeatFreeTitle": "{emoji} Se ha liberado una plaza",
+    "conviviumSeatFreeBody": "{name} ya no va a «{title}»: quien dijo «Quizá» puede entrar.",
+    "conviviumSeatFreeGuestBody": "Se ha liberado una plaza en «{title}»: si te apuntas, responde «¡Me apunto!»."
   },
   "pushInvite": {
     "title": "Activa las notificaciones",
@@ -13985,6 +13988,7 @@
     "error_max": "Contigo en la mesa hacen falta al menos 2 plazas.",
     "copyMessage": "Copiar mensaje",
     "copiedMessage": "¡Mensaje copiado!",
-    "broadcastHint": "Para una lista de difusión o un grupo de WhatsApp: pulsa «Copiar mensaje» y pégalo allí. Las listas de difusión solo llegan a quien tiene tu número guardado."
+    "broadcastHint": "Para una lista de difusión o un grupo de WhatsApp: pulsa «Copiar mensaje» y pégalo allí. Las listas de difusión solo llegan a quien tiene tu número guardado.",
+    "answerHint": "No hace falta registrarse: escribe tu nombre y elige."
   }
 }

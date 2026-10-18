@@ -8995,7 +8995,10 @@
     "conviviumAnswerBody": "Hat auf deine Einladung zu „{title}“ geantwortet.",
     "conviviumRemindTitle": "{emoji} Erinnerung: {title}",
     "conviviumRemindBody": "Wir sehen uns {when}.",
-    "conviviumRemindBodyPlace": "Wir sehen uns {when} · {place}."
+    "conviviumRemindBodyPlace": "Wir sehen uns {when} · {place}.",
+    "conviviumSeatFreeTitle": "{emoji} Ein Platz ist frei geworden",
+    "conviviumSeatFreeBody": "{name} kommt nicht mehr zu „{title}“: Wer „Vielleicht“ gesagt hat, kann nachrücken.",
+    "conviviumSeatFreeGuestBody": "Bei „{title}“ ist ein Platz frei geworden: Wenn du dabei bist, antworte „Bin dabei!“."
   },
   "pushInvite": {
     "title": "Benachrichtigungen aktivieren",
@@ -13985,6 +13988,7 @@
     "error_max": "Mit dir am Tisch braucht es mindestens 2 Plätze.",
     "copyMessage": "Nachricht kopieren",
     "copiedMessage": "Nachricht kopiert!",
-    "broadcastHint": "Für eine WhatsApp-Broadcast-Liste oder -Gruppe: „Nachricht kopieren“ tippen und dort einfügen. Broadcasts erreichen nur, wer deine Nummer gespeichert hat."
+    "broadcastHint": "Für eine WhatsApp-Broadcast-Liste oder -Gruppe: „Nachricht kopieren“ tippen und dort einfügen. Broadcasts erreichen nur, wer deine Nummer gespeichert hat.",
+    "answerHint": "Keine Anmeldung nötig: Namen eintragen und auswählen."
   }
 }

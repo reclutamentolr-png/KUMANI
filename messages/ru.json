@@ -8995,7 +8995,10 @@
     "conviviumAnswerBody": "Ответил(а) на приглашение «{title}».",
     "conviviumRemindTitle": "{emoji} Напоминание: {title}",
     "conviviumRemindBody": "Встречаемся {when}.",
-    "conviviumRemindBodyPlace": "Встречаемся {when} · {place}."
+    "conviviumRemindBodyPlace": "Встречаемся {when} · {place}.",
+    "conviviumSeatFreeTitle": "{emoji} Освободилось место",
+    "conviviumSeatFreeBody": "{name} больше не придёт на «{title}»: кто ответил «Возможно», может присоединиться.",
+    "conviviumSeatFreeGuestBody": "На «{title}» освободилось место: если придёшь, ответь «Приду!»."
   },
   "pushInvite": {
     "title": "Включите уведомления",
@@ -13985,6 +13988,7 @@
     "error_max": "Если ты за столом, нужно минимум 2 места.",
     "copyMessage": "Копировать сообщение",
     "copiedMessage": "Сообщение скопировано!",
-    "broadcastHint": "Для рассылки или группы WhatsApp: нажми «Копировать сообщение» и вставь туда. Рассылка доходит только до тех, у кого сохранён твой номер."
+    "broadcastHint": "Для рассылки или группы WhatsApp: нажми «Копировать сообщение» и вставь туда. Рассылка доходит только до тех, у кого сохранён твой номер.",
+    "answerHint": "Регистрация не нужна: напиши имя и выбери ответ."
   }
 }

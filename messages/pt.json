@@ -8995,7 +8995,10 @@
     "conviviumAnswerBody": "Respondeu ao teu convite para «{title}».",
     "conviviumRemindTitle": "{emoji} Lembrete: {title}",
     "conviviumRemindBody": "Até {when}.",
-    "conviviumRemindBodyPlace": "Até {when} · {place}."
+    "conviviumRemindBodyPlace": "Até {when} · {place}.",
+    "conviviumSeatFreeTitle": "{emoji} Libertou-se um lugar",
+    "conviviumSeatFreeBody": "{name} já não vai a «{title}»: quem disse «Talvez» pode entrar.",
+    "conviviumSeatFreeGuestBody": "Libertou-se um lugar em «{title}»: se alinhas, responde «Alinho!»."
   },
   "pushInvite": {
     "title": "Ative as notificações",
@@ -13985,6 +13988,7 @@
     "error_max": "Contigo à mesa são precisos pelo menos 2 lugares.",
     "copyMessage": "Copiar mensagem",
     "copiedMessage": "Mensagem copiada!",
-    "broadcastHint": "Para uma lista de transmissão ou um grupo do WhatsApp: toca em «Copiar mensagem» e cola lá. As listas de transmissão só chegam a quem tem o teu número guardado."
+    "broadcastHint": "Para uma lista de transmissão ou um grupo do WhatsApp: toca em «Copiar mensagem» e cola lá. As listas de transmissão só chegam a quem tem o teu número guardado.",
+    "answerHint": "Não precisas de te registar: escreve o teu nome e escolhe."
   }
 }

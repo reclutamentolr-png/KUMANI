@@ -8995,7 +8995,10 @@
     "conviviumAnswerBody": "Ha risposto al tuo invito per «{title}».",
     "conviviumRemindTitle": "{emoji} Promemoria: {title}",
     "conviviumRemindBody": "Ci si vede {when}.",
-    "conviviumRemindBodyPlace": "Ci si vede {when} · {place}."
+    "conviviumRemindBodyPlace": "Ci si vede {when} · {place}.",
+    "conviviumSeatFreeTitle": "{emoji} Si è liberato un posto",
+    "conviviumSeatFreeBody": "{name} non viene più a «{title}»: chi ha detto «Forse» può entrare.",
+    "conviviumSeatFreeGuestBody": "Si è liberato un posto a «{title}»: se ci sei, rispondi «Ci sto!»."
   },
   "pushInvite": {
     "title": "Attiva le notifiche",
@@ -13985,6 +13988,7 @@
     "error_max": "Con te al tavolo servono almeno 2 posti.",
     "copyMessage": "Copia messaggio",
     "copiedMessage": "Messaggio copiato!",
-    "broadcastHint": "Per una lista broadcast o un gruppo WhatsApp: tocca «Copia messaggio» e incollalo lì. Nelle liste broadcast arriva solo a chi ha il tuo numero in rubrica."
+    "broadcastHint": "Per una lista broadcast o un gruppo WhatsApp: tocca «Copia messaggio» e incollalo lì. Nelle liste broadcast arriva solo a chi ha il tuo numero in rubrica.",
+    "answerHint": "Non serve registrarti: scrivi il tuo nome e scegli."
   }
 }

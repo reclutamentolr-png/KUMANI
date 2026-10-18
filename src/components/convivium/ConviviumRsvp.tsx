@@ -39,6 +39,8 @@ export default function ConviviumRsvp({ code, initialName, mine, full }: { code:
     <form action={formAction} className="mt-6 text-left">
       <input type="hidden" name="code" value={code} />
       <p className="text-center text-2xl font-extrabold">{t('question')}</p>
+      {/* Al posto della guida: l'invitato deve solo rispondere */}
+      <p className="mt-1 text-center text-sm text-white/70">{t('answerHint')}</p>
       <label className="mt-4 block">
         <span className="mb-1.5 block text-sm font-semibold text-white/80">{t('yourName')}</span>
         <input

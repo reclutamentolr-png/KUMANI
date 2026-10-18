@@ -60,7 +60,12 @@ export const TOOL_GUIDES: { path: string; slug: GuideSlug }[] = [
   { path: '/viaggi', slug: 'travel' },
 ]
 
+// Pagine di chi arriva da un invito (risponde o entra con un link): la guida
+// spiega come CREARE e confonderebbe; lì basta la pagina stessa.
+const GUEST_PAGES = ['/convivium/invito', '/viaggi/invito', '/events/pass']
+
 export function toolGuideFor(barePath: string): GuideSlug | null {
+  if (GUEST_PAGES.some((path) => barePath === path || barePath.startsWith(`${path}/`))) return null
   const match = TOOL_GUIDES.find(({ path }) => barePath === path || barePath.startsWith(`${path}/`))
   return match?.slug ?? null
 }
