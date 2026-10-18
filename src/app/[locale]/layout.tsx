@@ -7,6 +7,8 @@ import ProfileReminder from '@/components/ProfileReminder'
 import ImpersonationBanner from '@/components/ImpersonationBanner'
 import ToolGuideButton from '@/components/ToolGuideButton'
 import AppNav from '@/components/nav/AppNav'
+import AppHeader from '@/components/nav/AppHeader'
+import DesktopAppBar from '@/components/nav/DesktopAppBar'
 import SessionTracker from '@/components/SessionTracker'
 import RecentToolTracker from '@/components/nav/RecentToolTracker'
 import CookieConsent from '@/components/consent/CookieConsent'
@@ -57,6 +59,10 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
       <MaintenanceGate>
         {/* Fascia "stai impersonando": in cima a ogni pagina, solo per lo Staff */}
         <ImpersonationBanner />
+        {/* Dal computer, la barra dell'app anche dentro i servizi */}
+        <DesktopAppBar>
+          <AppHeader inServices />
+        </DesktopAppBar>
         {children}
         {/* "Come si usa" nei servizi che hanno una guida */}
         <ToolGuideButton />

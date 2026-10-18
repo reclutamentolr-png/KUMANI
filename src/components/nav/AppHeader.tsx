@@ -18,12 +18,15 @@ export default async function AppHeader({
   subtitle,
   icon,
   loaded,
+  inServices = false,
 }: {
   title?: string
   subtitle?: string
   icon?: ReactNode
   // Già letti dalla pagina (es. la Home): non si rileggono
   loaded?: { user: User; profile: MyProfile | null; isAdmin: boolean }
+  // Barra ripetuta dentro i servizi (dal computer, vedi DesktopAppBar)
+  inServices?: boolean
 }) {
   const t = await getTranslations('dashboard')
   let session = loaded
@@ -36,7 +39,7 @@ export default async function AppHeader({
   }
 
   return (
-    <header className="border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-[0_8px_30px_rgba(23,23,23,0.18)]">
+    <header {...(inServices ? {} : { 'data-app-header': '' })} className="border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-[0_8px_30px_rgba(23,23,23,0.18)]">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex min-w-0 items-center gap-2.5">
           <Link href="/dashboard" className="min-w-0">

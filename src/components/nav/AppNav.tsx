@@ -69,6 +69,13 @@ export function barePathOf(pathname: string) {
 
 const under = (path: string, area: string) => path === area || path.startsWith(`${area}/`)
 
+// Area riservata dove compaiono il menu in basso e (dal computer) la barra in
+// alto dell'app. Fuori: anteprima di una sorpresa (a schermo intero, come la
+// vede chi la riceve), NEXUS (tastiera del gioco) e Firma PDF (spazio pieno).
+export function inMemberArea(path: string) {
+  return MEMBER_AREAS.some((area) => under(path, area)) && !path.endsWith('/anteprima') && !under(path, '/marketplace/nexus') && !under(path, '/marketplace/firma-pdf')
+}
+
 // Scheda attiva: quella con il prefisso più lungo (/dashboard/rete è Community)
 function activeTab(path: string) {
   let best: { key: string; length: number } | null = null
@@ -96,43 +103,45 @@ export default function AppNav() {
     return () => data.subscription.unsubscribe()
   }, [])
 
-  // iPhone (soprattutto nell'app installata): mentre la pagina carica altri
-  // pezzi durante lo scorrimento, WebKit può spostare il «fondo» su cui è
-  // agganciato il menu, che resta più in alto del bordo visibile. Si confronta il
-  // fondo visibile (visualViewport) con quello della pagina e, se c'è uno
-  // scarto, il menu scende di quanto serve. Senza scarto non cambia nulla; solo
-  // sul telefono (sul computer è un riquadro centrato) e mai verso l'alto
-  // (tastiera aperta).
+  // iPhone, solo nell'app installata (dalla schermata Home): mentre la pagina
+  // carica altri pezzi, WebKit può spostare il «fondo» su cui è agganciato il
+  // menu, che resta più in alto del bordo visibile. Si confronta il fondo
+  // visibile (visualViewport) con quello della pagina e, se c'è uno scarto, il
+  // menu scende di quanto serve. Si corregge solo a scorrimento fermo (mai
+  // durante il movimento, che farebbe tremare le barre) e mai verso l'alto
+  // (tastiera aperta). In Safari niente correzione: la barra degli indirizzi
+  // che si allunga e si accorcia la farebbe saltare, e iOS tiene già fermo il
+  // menu da solo. Android: nessun problema, nessuna correzione.
   const navRef = useRef<HTMLElement>(null)
   useEffect(() => {
     const vv = window.visualViewport
     const iOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
-    if (!member || !vv || !iOS) return
-    let frame = 0
-    const update = () => {
-      cancelAnimationFrame(frame)
-      frame = requestAnimationFrame(() => {
-        const nav = navRef.current
-        if (!nav) return
-        const gap = Math.round(vv.offsetTop + vv.height - window.innerHeight)
-        nav.style.transform = window.innerWidth < 640 && gap > 0 && gap < 160 ? `translate3d(0, ${gap}px, 0)` : ''
-      })
+    const installed = window.matchMedia('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone === true
+    if (!member || !vv || !iOS || !installed) return
+    let timer = 0
+    const fix = () => {
+      const nav = navRef.current
+      if (!nav) return
+      const gap = Math.round(vv.offsetTop + vv.height - window.innerHeight)
+      nav.style.transform = window.innerWidth < 640 && gap > 0 && gap < 160 ? `translate3d(0, ${gap}px, 0)` : ''
     }
-    update()
-    vv.addEventListener('resize', update)
-    vv.addEventListener('scroll', update)
-    window.addEventListener('scroll', update, { passive: true })
+    // Dopo l'ultimo movimento (fine dello scorrimento o del cambio di dimensioni)
+    const settle = () => {
+      window.clearTimeout(timer)
+      timer = window.setTimeout(fix, 160)
+    }
+    fix()
+    vv.addEventListener('resize', settle)
+    window.addEventListener('scroll', settle, { passive: true })
     return () => {
-      cancelAnimationFrame(frame)
-      vv.removeEventListener('resize', update)
-      vv.removeEventListener('scroll', update)
-      window.removeEventListener('scroll', update)
+      window.clearTimeout(timer)
+      vv.removeEventListener('resize', settle)
+      window.removeEventListener('scroll', settle)
     }
   }, [member])
 
   const path = barePathOf(pathname)
-  // Anteprima di una sorpresa: a schermo intero, come la vede chi la riceve
-  if (!member || !MEMBER_AREAS.some((area) => under(path, area)) || path.endsWith('/anteprima') || under(path, '/marketplace/nexus') || under(path, '/marketplace/firma-pdf')) return null
+  if (!member || !inMemberArea(path)) return null
   const current = activeTab(path)
 
   const openProfile = () => {

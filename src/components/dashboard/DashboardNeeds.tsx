@@ -1,11 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { ArrowRight, HandPlatter, Hourglass, Star, Tag, BriefcaseBusiness, CalendarDays, ChevronDown, Gamepad2, Gift, Leaf, Megaphone, PiggyBank, ShieldCheck, Smartphone, Store, Users, type LucideIcon } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import PlanTag from '@/components/PlanTag'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 import type { HomeNeed } from '@/lib/homeNeeds'
+import { revealPanel } from '@/lib/revealPanel'
 
 // Dashboard: «In cosa possiamo darti una mano?» in versione compatta, subito
 // sotto la fascia «Oggi». Risposte brevi, tutte a vista (due per riga sul telefono);
@@ -27,6 +28,72 @@ export default function DashboardNeeds({
   const [active, setActive] = useState<HomeNeed['key'] | null>(null)
   const [hidden, setHidden] = useState(false)
   const need = needs.find((n) => n.key === active) ?? null
+  const root = useRef<HTMLElement>(null)
+  // Telefono: due risposte per riga, i servizi si aprono subito sotto la riga toccata
+  const activeIndex = needs.findIndex((n) => n.key === active)
+  const rowEnd = activeIndex < 0 ? -1 : Math.min(activeIndex - (activeIndex % 2) + 1, needs.length - 1)
+  const choose = (key: HomeNeed['key'] | null) => {
+    setActive(key)
+    if (key) revealPanel(root.current)
+  }
+
+  const answer = (need: HomeNeed) => (
+    <div className="rounded-2xl border border-[var(--gold)]/30 bg-white p-3 shadow-[0_10px_30px_rgba(23,23,23,0.07)] motion-safe:animate-[fadeIn_0.25s_ease-out] sm:p-4">
+      <p className="px-1 text-sm text-gray-700">{need.intro}</p>
+      <ul className={`mt-3 grid gap-2 ${need.items.length > 1 ? 'sm:grid-cols-2' : ''}`}>
+        {need.items.map((item) => {
+          const Icon = marketplaceIconMap[item.iconName] ?? EXTRA_ICON[item.iconName] ?? Smartphone
+          // Servizio unito: tutte le sue schede, ognuna apre il suo strumento
+          if (item.links?.length)
+            return (
+              <li key={item.name} className="sm:col-span-2">
+                <div className="flex h-full items-start gap-3 rounded-xl border border-gray-200 bg-[var(--background)] p-2.5">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--ink)] text-[var(--gold-bright)]">
+                    <Icon className="h-5 w-5" />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block font-bold text-[var(--ink)]">{item.title}</span>
+                    <span className="flex flex-wrap gap-x-1.5 gap-y-2 pt-1.5">
+                      {item.links.map((link) => (
+                        <span key={link.href} className="flex flex-col items-center gap-1">
+                          <Link
+                            href={link.href}
+                            className="inline-flex min-h-9 items-center gap-1 rounded-full border border-[var(--gold)]/40 bg-white px-3 text-xs font-semibold text-[var(--ink)] transition hover:border-[var(--gold)] hover:bg-[var(--gold)]/10"
+                          >
+                            {link.title} <ArrowRight className="h-3 w-3" />
+                          </Link>
+                          <PlanTag plan={link.plan} />
+                        </span>
+                      ))}
+                    </span>
+                  </span>
+                </div>
+              </li>
+            )
+          return (
+            <li key={item.name}>
+              <Link
+                href={item.href}
+                className="group flex h-full items-center gap-3 rounded-xl border border-gray-200 bg-[var(--background)] p-2.5 transition hover:border-[var(--gold)] hover:bg-white"
+              >
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--ink)] text-[var(--gold-bright)]">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block font-bold text-[var(--ink)]">{item.title}</span>
+                  <span className="line-clamp-2 text-xs leading-snug text-gray-600">{item.description}</span>
+                  <PlanTag plan={item.plan} className="mt-1" />
+                </span>
+                <span className="inline-flex shrink-0 items-center gap-0.5 text-sm font-semibold text-[var(--ink)]">
+                  {texts.open} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </Link>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
 
   useEffect(() => {
     try {
@@ -50,7 +117,7 @@ export default function DashboardNeeds({
   }
 
   return (
-    <section aria-labelledby="dash-needs-title">
+    <section ref={root} aria-labelledby="dash-needs-title">
       <div className="flex items-center justify-between gap-3">
         <h2 id="dash-needs-title" className="text-lg font-bold text-[var(--ink)] sm:text-xl">
           {hidden ? (
@@ -71,14 +138,14 @@ export default function DashboardNeeds({
       {!hidden && (
         <>
           <div className="mt-3 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap" role="group" aria-label={texts.title}>
-            {needs.map((n) => {
+            {needs.map((n, i) => {
               const Icon = NEED_ICON[n.icon] ?? Smartphone
               const on = active === n.key
               return (
+                <Fragment key={n.key}>
                 <button
-                  key={n.key}
                   type="button"
-                  onClick={() => setActive(on ? null : n.key)}
+                  onClick={() => choose(on ? null : n.key)}
                   aria-pressed={on}
                   aria-controls="dash-needs-answer"
                   title={n.label}
@@ -91,67 +158,19 @@ export default function DashboardNeeds({
                   </span>
                   {n.short}
                 </button>
+                {need && i === rowEnd && (
+                  <div data-reveal-panel className="col-span-2 sm:hidden">
+                    {answer(need)}
+                  </div>
+                )}
+                </Fragment>
               )
             })}
           </div>
 
           <div id="dash-needs-answer" aria-live="polite" className="mt-3">
             {need ? (
-              <div className="rounded-2xl border border-[var(--gold)]/30 bg-white p-3 shadow-[0_10px_30px_rgba(23,23,23,0.07)] motion-safe:animate-[fadeIn_0.25s_ease-out] sm:p-4">
-                <p className="px-1 text-sm text-gray-700">{need.intro}</p>
-                <ul className={`mt-3 grid gap-2 ${need.items.length > 1 ? 'sm:grid-cols-2' : ''}`}>
-                  {need.items.map((item) => {
-                    const Icon = marketplaceIconMap[item.iconName] ?? EXTRA_ICON[item.iconName] ?? Smartphone
-                    // Servizio unito: tutte le sue schede, ognuna apre il suo strumento
-                    if (item.links?.length)
-                      return (
-                        <li key={item.name} className="sm:col-span-2">
-                          <div className="flex h-full items-start gap-3 rounded-xl border border-gray-200 bg-[var(--background)] p-2.5">
-                            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--ink)] text-[var(--gold-bright)]">
-                              <Icon className="h-5 w-5" />
-                            </span>
-                            <span className="min-w-0 flex-1">
-                              <span className="block font-bold text-[var(--ink)]">{item.title}</span>
-                              <span className="flex flex-wrap gap-x-1.5 gap-y-2 pt-1.5">
-                                {item.links.map((link) => (
-                                  <span key={link.href} className="flex flex-col items-center gap-1">
-                                    <Link
-                                      href={link.href}
-                                      className="inline-flex min-h-9 items-center gap-1 rounded-full border border-[var(--gold)]/40 bg-white px-3 text-xs font-semibold text-[var(--ink)] transition hover:border-[var(--gold)] hover:bg-[var(--gold)]/10"
-                                    >
-                                      {link.title} <ArrowRight className="h-3 w-3" />
-                                    </Link>
-                                    <PlanTag plan={link.plan} />
-                                  </span>
-                                ))}
-                              </span>
-                            </span>
-                          </div>
-                        </li>
-                      )
-                    return (
-                      <li key={item.name}>
-                        <Link
-                          href={item.href}
-                          className="group flex h-full items-center gap-3 rounded-xl border border-gray-200 bg-[var(--background)] p-2.5 transition hover:border-[var(--gold)] hover:bg-white"
-                        >
-                          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--ink)] text-[var(--gold-bright)]">
-                            <Icon className="h-5 w-5" />
-                          </span>
-                          <span className="min-w-0 flex-1">
-                            <span className="block font-bold text-[var(--ink)]">{item.title}</span>
-                            <span className="line-clamp-2 text-xs leading-snug text-gray-600">{item.description}</span>
-                            <PlanTag plan={item.plan} className="mt-1" />
-                          </span>
-                          <span className="inline-flex shrink-0 items-center gap-0.5 text-sm font-semibold text-[var(--ink)]">
-                            {texts.open} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                          </span>
-                        </Link>
-                      </li>
-                    )
-                  })}
-                </ul>
-              </div>
+              <div data-reveal-panel className="hidden sm:block">{answer(need)}</div>
             ) : (
               <p className="text-xs text-[var(--muted)]">{texts.hint}</p>
             )}

@@ -198,7 +198,6 @@ body::before {
   margin-bottom: env(safe-area-inset-bottom);
 }
 
-/*
 /* Home, apertura con i servizi intorno al logo (HeroOrbit): l’anello gira in
    senso orario, ogni scheda al contrario così resta dritta */
 @keyframes home-orbit-spin { to { transform: rotate(360deg); } }
@@ -274,4 +273,10 @@ body::before {
   .coming-soon-dot {
     animation: none;
   }
+}
+
+/* Barra dell'app dentro i servizi (DesktopAppBar): non serve dove la pagina
+   ha già la sua intestazione con la stessa barra */
+body:has([data-app-header]) [data-desktop-appbar] {
+  display: none !important;
 }
