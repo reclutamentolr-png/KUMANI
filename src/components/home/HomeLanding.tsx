@@ -571,7 +571,7 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
               {t('copyright')}
             </div>
           </div>
-          {/* YouTube e Instagram di KUMANI */}
+          {/* YouTube, Instagram e TikTok di KUMANI */}
           <div className="mt-6">
             <SocialLinks label={(name) => t('socialFollow', { name })} />
           </div>
@@ -580,6 +580,8 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
             {' '}
             {t('footerLegalNote2')}
           </p>
+          {/* Chi ha realizzato il sito */}
+          <p className="mt-4 text-center text-xs text-gray-500">{t('builtBy', { name: 'MC TEKNOLOGY' })}</p>
         </div>
       </footer>
     </div>
