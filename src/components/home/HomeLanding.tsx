@@ -3,32 +3,23 @@ import { CANONICAL_ORIGIN } from '@/lib/seo'
 import JsonLd from '@/components/seo/JsonLd'
 import Link from '@/components/LocalizedLink'
 import HomeLoginLink from '@/components/home/HomeLoginLink'
-import Image from 'next/image'
 import { getTranslations } from 'next-intl/server'
 import {
-  Gift,
   Shield,
-  Zap,
   ArrowRight,
-  CheckCircle2,
   Target,
-  Sparkles,
-  Ticket,
-  BadgePercent,
-  Wallet,
-  Gem,
+  Ticket,
   Share2,
-  Trophy,
-  HandPlatter,
-  CalendarDays,
-  Plane,
-  UtensilsCrossed,
-  Coins,
-  PartyPopper,
-  Wrench,
+  Trophy,
+  ShieldAlert,
+  Euro,
   LayoutGrid,
-  Languages,
-  Coffee
+  Clock,
+  HeartHandshake,
+  BadgeCheck,
+  Lock,
+  Sparkles,
+  Coins,
 } from 'lucide-react'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import Logo from '@/components/Logo'
@@ -48,8 +39,11 @@ import HomeCommunity from '@/components/home/HomeCommunity'
 import HomeVideo from '@/components/home/HomeVideo'
 import { getHomeVideo } from '@/lib/homeVideo'
 import HeroLogoVideo from '@/components/home/HeroLogoVideo'
-import HeroSideImage from '@/components/home/HeroSideImage'
-import { HOME_LAYOUT_CONFIG, type HomeLayoutKey } from '@/lib/homeLayouts'
+import HeroOrbit from '@/components/home/HeroOrbit'
+
+const ORBIT_KEYS = ['scamSms', 'spendly', 'deadlines', 'data', 'agenda', 'home', 'scamIban', 'travel', 'breathe', 'crossword', 'events', 'timebank', 'scamSite', 'surprise', 'findo', 'cv', 'scamCall', 'quote', 'menu', 'family'] as const
+import { getHomeKarma } from '@/lib/homeKarma'
+import { DEFAULT_HOME_LAYOUT, HOME_LAYOUT_CONFIG, type HomeLayoutKey } from '@/lib/homeLayouts'
 import { getEnabledLocales } from '@/lib/enabledLocales'
 import { getAppCounts } from '@/lib/appCounts'
 
@@ -58,7 +52,7 @@ import { getAppCounts } from '@/lib/appCounts'
 // (src/app/[locale]/page.tsx, preparata in anticipo e tenuta in memoria) e
 // dall'anteprima degli aspetti nell'Admin (admin/anteprima-home/[layout]).
 export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayoutKey }) {
-  const [t, tg, tr, tcat, errorT, tInstall, tNeeds] = await Promise.all([
+  const [t, tg, tr, tcat, errorT, tInstall, tNeeds, tOrbit] = await Promise.all([
     getTranslations('landingHome'),
     getTranslations('guides'),
     getTranslations('reviews'),
@@ -66,17 +60,19 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
     getTranslations('errorPages'),
     getTranslations('install'),
     getTranslations('homeNeeds'),
+    getTranslations('homeOrbit'),
   ])
-  const L = HOME_LAYOUT_CONFIG[layoutKey]
+  // Schede che girano attorno al logo: soprattutto servizi per i privati, alcune
+  // truffe scoperte (in rosso) e un paio per chi lavora. Le prime quattro sono
+  // anche quelle fisse del telefono.
+  const orbitItems = ORBIT_KEYS.map((k) => ({ title: tOrbit(`${k}Title`), text: tOrbit(`${k}Text`), scam: k.startsWith('scam') }))
+  // Un aspetto che non esiste più (salvato prima) usa quello predefinito
+  const L = HOME_LAYOUT_CONFIG[layoutKey] ?? HOME_LAYOUT_CONFIG[DEFAULT_HOME_LAYOUT]
   // Video della Home (Admin → Aspetto homepage), di solito il tormentone
   const videoId = await getHomeVideo()
   // «In cosa possiamo darti una mano?»: per ogni risposta i servizi giusti
   // Numeri sotto l'apertura: lingue attive, servizi e strumenti accesi (decisi dall'Admin)
-  const [needs, enabledLocales, counts] = await Promise.all([buildHomeNeeds(), getEnabledLocales(), getAppCounts()])
-  // Apertura con testo a sinistra sul computer (foto a lato)
-  const leftHero = L.hero.kind === 'split' || L.hero.kind === 'side'
-  const heroBadgeClass =
-    'rounded-2xl border border-[var(--gold)]/60 bg-[var(--gold)]/15 px-5 py-3 text-lg font-semibold leading-snug text-white shadow-[0_10px_30px_rgba(199,154,59,0.18)] backdrop-blur sm:px-7 sm:py-4 sm:text-xl'
+  const [needs, enabledLocales, counts, karma] = await Promise.all([buildHomeNeeds(), getEnabledLocales(), getAppCounts(), getHomeKarma()])
 
   // Codice referral, riconoscimento pubblico e Kordata (acquisti di gruppo).
   // Niente "struttura a matrice" in evidenza — non deve sembrare un network.
@@ -85,31 +81,9 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
     { icon: Trophy, title: t('communityCard3Title'), desc: t('communityCard3Description') }
   ]
 
-  // L'Ecosistema: come gli strumenti si alimentano a vicenda (solo
-  // collegamenti che esistono davvero; Events è segnato "in arrivo").
-  const synergies = [
-    { icon: CalendarDays, title: t('synergy1Title'), desc: t('synergy1Text'), soon: false },
-    { icon: Plane, title: t('synergy2Title'), desc: t('synergy2Text'), soon: false },
-    { icon: UtensilsCrossed, title: t('synergy3Title'), desc: t('synergy3Text'), soon: false },
-    { icon: HandPlatter, title: t('synergy4Title'), desc: t('synergy4Text'), soon: false },
-    { icon: Coins, title: t('synergy5Title'), desc: t('synergy5Text'), soon: false },
-    { icon: PartyPopper, title: t('synergy6Title'), desc: t('synergy6Text'), soon: false },
-  ]
 
-  const steps = [
-    { step: '1', icon: Zap, title: t('step1Title'), desc: t('step1Description') },
-    { step: '2', icon: Target, title: t('step2Title'), desc: t('step2Description') },
-    { step: '3', icon: Ticket, title: t('step3Title'), desc: t('step3Description') }
-  ]
 
-  const perks = [
-    { icon: BadgePercent, title: t('perk1Title'), desc: t('perk1Description') },
-    { icon: Wallet, title: t('perk2Title'), desc: t('perk2Description') },
-    { icon: Gift, title: t('perk3Title'), desc: t('perk3Description') },
-    { icon: Gem, title: t('perk4Title'), desc: t('perk4Description') }
-  ]
 
-  const benefits = [1, 2, 3, 4, 5, 6, 7, 8].map((n) => t(`benefit${n}`))
 
   // Dati strutturati: chi è KUMANI e il sito
   const ld = [
@@ -150,114 +124,71 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
         </div>
       </header>
 
-      {/* Hero Section — a piena larghezza, senza il carosello degli ultimi
-          iscritti: tutto lo spazio è per il messaggio "non ti serve una
-          promessa, ti serve una mano". */}
-      <section
-        className={`relative overflow-hidden ${L.hero.kind === 'side' ? 'bg-[#0c0d0c]' : L.hero.kind === 'split' ? 'home-light bg-[var(--background)]' : L.hero.variant === 'radial' ? 'bg-[radial-gradient(ellipse_at_70%_0%,#3a2e17_0%,var(--ink)_60%)]' : ''}`}
-      >
-        {L.hero.kind === 'photo' && L.hero.image ? (
-          <>
-            <Image src={L.hero.image} alt="" fill priority sizes="100vw" className="object-cover" />
-            <div aria-hidden className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(15,13,10,0.62)_0%,rgba(15,13,10,0.84)_75%)]" />
-          </>
-        ) : (
-          L.hero.kind === 'classic' && <div className="absolute inset-0 bg-gradient-to-b from-[var(--gold)]/10 via-transparent to-transparent"></div>
-        )}
-        <div
-          className={`relative mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10 lg:pt-12 pb-16 sm:pb-24 lg:pb-28 ${
-            L.hero.kind === 'split'
-              ? 'grid max-w-7xl items-center gap-10 text-center lg:grid-cols-[1.1fr_0.9fr] lg:text-left'
-              : L.hero.kind === 'side'
-                ? 'z-10 max-w-7xl text-center lg:py-28 lg:text-left'
-                : 'max-w-4xl text-center'
-          }`}
-        >
-          <div className={L.hero.kind === 'side' ? 'lg:max-w-[46%]' : undefined}>
-          <p className="text-2xl sm:text-3xl font-bold tracking-[0.3em] text-[var(--gold-bright)] mb-3 sm:mb-4">KUMANI</p>
-          <div className={`flex mb-5 sm:mb-7 ${leftHero ? 'justify-center lg:justify-start' : 'justify-center'}`}>
-            {L.hero.video ? <HeroLogoVideo label="KUMANI" /> : <Logo size={96} priority className="sm:h-28 sm:w-28 h-24 w-24" />}
-          </div>
-          {/* Il manifesto in una frase: ben visibile, non un'etichetta. Nel
-              tema con la foto di lato, sul computer sta in alto a destra
-              sopra le mani (vedi sotto). */}
-          <div className={`mx-auto mb-6 inline-flex max-w-3xl items-center gap-3 sm:mb-8 ${heroBadgeClass} ${L.hero.kind === 'side' ? 'lg:hidden' : ''}`}>
-            <Sparkles className="h-5 w-5 shrink-0 text-[var(--gold-bright)] sm:h-6 sm:w-6" />
-            {t('heroBadge')}
-          </div>
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white mb-5 sm:mb-7 leading-tight break-words">
-            {/* Una riga per pezzo: "Le tue idee," / "le nostre mani." / "Insieme." */}
-            {t('heroTitle')
-              .split(/(?<=,)\s+/)
-              .map((part) => (
-                <span key={part} className="block">
-                  {part}
-                </span>
+      {/* Apertura (bozza): a sinistra la promessa, a destra il logo che gira con
+          i servizi intorno (HeroOrbit, solo dal computer); sul telefono il logo
+          e quattro schede fisse dei servizi per i privati. */}
+      <section className="relative overflow-hidden bg-[radial-gradient(ellipse_at_72%_40%,#3a2e14_0%,#14110b_38%,var(--ink)_70%)]">
+        <div className="relative mx-auto grid max-w-7xl items-center gap-8 px-4 pb-16 pt-8 sm:px-6 sm:pb-20 sm:pt-12 lg:grid-cols-[1fr_1.05fr] lg:gap-6 lg:px-8 lg:py-16">
+          <div className="text-center lg:text-left">
+            <div className="lg:hidden">
+              <HeroLogoVideo label="KUMANI" className="h-40 w-40 sm:h-52 sm:w-52" />
+            </div>
+            <p className="mt-4 text-sm font-bold uppercase tracking-[0.18em] text-[var(--gold-bright)] lg:mt-0">{t('heroOrbitEyebrow')}</p>
+            <h1 className="mt-3 break-words text-4xl font-extrabold leading-[1.05] text-white sm:text-6xl lg:text-7xl">
+              {t('heroOrbitTitle')} <span className="bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] bg-clip-text text-transparent">{t('heroOrbitAccent')}</span>
+            </h1>
+            <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-gray-300 sm:text-xl lg:mx-0">{t('heroOrbitText')}</p>
+            <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start">
+              <Link
+                href="/register"
+                className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-8 py-3.5 text-base font-bold text-[var(--ink)] shadow-xl transition-all hover:brightness-110 sm:text-lg"
+              >
+                {t('heroDoorsCta')}
+                <ArrowRight className="h-5 w-5" />
+              </Link>
+              <Link
+                href="/controlla"
+                className="flex items-center justify-center gap-2 rounded-xl border border-[var(--gold)]/50 bg-white/5 px-7 py-3.5 text-base font-bold text-white transition-all hover:bg-white/10 sm:text-lg"
+              >
+                <ShieldAlert className="h-5 w-5 text-[var(--gold-bright)]" aria-hidden /> {t('heroOrbitCheck')}
+              </Link>
+            </div>
+            <p className="mt-6 text-sm text-gray-400">
+              {[
+                `${counts.tools} ${t('statToolsShort', { count: counts.tools })}`,
+                `${counts.services} ${t('statServicesShort', { count: counts.services })}`,
+                `${enabledLocales.length} ${t('statLanguagesShort', { count: enabledLocales.length })}`,
+                `${t('statWeeklyValue')} ${t('statWeeklyShort')}`,
+              ].join(' · ')}
+            </p>
+            {/* Telefono: quattro schede fisse dei servizi per i privati */}
+            <ul className="mx-auto mt-8 grid max-w-md grid-cols-2 gap-2.5 text-left lg:hidden">
+              {orbitItems.slice(0, 4).map((item) => (
+                <li
+                  key={item.title}
+                  className={`rounded-2xl px-3.5 py-3 ${item.scam ? 'border border-red-400/60 bg-[#2a0f0d] text-[#ffd9d4]' : 'border border-[var(--gold)]/30 bg-[#1f1a11] text-white'}`}
+                >
+                  <p className={`text-sm font-extrabold ${item.scam ? 'text-[#ff8a7a]' : 'text-[var(--gold-bright)]'}`}>{item.title}</p>
+                  <p className="mt-0.5 text-[13px] leading-snug">{item.text}</p>
+                </li>
               ))}
-            <span className="block bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] bg-clip-text text-transparent">{t('heroAccent')}</span>
-          </h1>
-          <p className={`text-lg sm:text-xl text-gray-300 mb-8 sm:mb-10 leading-relaxed max-w-2xl mx-auto ${leftHero ? 'lg:mx-0' : ''}`}>
-            {t('heroDescription')}{' '}
-            <strong className="text-white">{t('heroDescriptionStrong')}</strong>: {t('heroDescriptionEnd')}
-          </p>
-          <div className={`flex flex-col sm:flex-row gap-3 sm:gap-4 mb-10 sm:mb-14 justify-center ${leftHero ? 'lg:justify-start' : ''}`}>
-            <Link
-              href="/register"
-              className="bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] hover:brightness-110 text-[var(--ink)] px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-bold text-base sm:text-lg transition-all shadow-xl hover:shadow-2xl hover:scale-105 flex items-center justify-center gap-2"
-            >
-              {t('heroCta')}
-              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
-            </Link>
-            <HomeLoginLink
-              loginLabel={t('login')}
-              dashboardLabel={errorT('goDashboard')}
-              className="bg-white/5 hover:bg-white/10 backdrop-blur text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-bold text-base sm:text-lg transition-all border border-white/15 flex items-center justify-center"
-            />
+            </ul>
           </div>
-          {/* Numeri: quattro riquadri marcati, icona, numero grande in oro, una parola */}
-          <div className={`grid max-w-2xl grid-cols-2 gap-3 sm:grid-cols-4 ${leftHero ? 'mx-auto lg:mx-0' : 'mx-auto'}`}>
-            {[
-              { Icon: Wrench, value: String(counts.tools), label: t('statToolsShort', { count: counts.tools }) },
-              { Icon: LayoutGrid, value: String(counts.services), label: t('statServicesShort', { count: counts.services }) },
-              { Icon: Languages, value: String(enabledLocales.length), label: t('statLanguagesShort', { count: enabledLocales.length }) },
-              { Icon: Coffee, value: t('statWeeklyValue'), label: t('statWeeklyShort') },
-            ].map(({ Icon, value, label }) => (
-              <div key={label} className="rounded-2xl border border-[var(--gold)]/30 bg-white/[0.04] px-3 py-4 text-center backdrop-blur-sm">
-                <Icon className="mx-auto h-5 w-5 text-[var(--gold-bright)]" aria-hidden />
-                <div className="mt-1.5 whitespace-nowrap bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] bg-clip-text text-3xl font-extrabold leading-tight text-transparent sm:text-4xl">{value}</div>
-                <div className="mt-0.5 text-xs font-semibold uppercase tracking-wider text-gray-400 sm:text-sm">{label}</div>
-              </div>
-            ))}
+          <div className="hidden lg:block">
+            <HeroOrbit items={orbitItems} center={<HeroLogoVideo label="KUMANI" className="h-full w-full" />} />
           </div>
-          </div>
-          {L.hero.kind === 'split' && L.hero.image && (
-            <div className="relative hidden aspect-[4/3] overflow-hidden rounded-[28px] border-[6px] border-white shadow-[0_24px_60px_rgba(23,23,23,0.28)] lg:block">
-              <Image src={L.hero.image} alt="" fill priority sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" />
-            </div>
-          )}
         </div>
-        {L.hero.kind === 'side' && L.hero.image && L.hero.mobileImage && (
-          <HeroSideImage image={L.hero.image} mobileImage={L.hero.mobileImage} position={L.hero.position} />
-        )}
-        {L.hero.kind === 'side' && (
-          <div className="pointer-events-none absolute inset-x-0 top-0 z-10 hidden lg:block">
-            <div className="mx-auto flex max-w-7xl justify-end px-8 pt-12">
-              <div className={`pointer-events-auto flex max-w-xl items-center gap-3 text-left ${heroBadgeClass}`}>
-                <Sparkles className="h-6 w-6 shrink-0 text-[var(--gold-bright)]" />
-                {t('heroBadge')}
-              </div>
-            </div>
-          </div>
-        )}
       </section>
 
       {/* 💬 IN COSA POSSIAMO DARTI UNA MANO? Una domanda semplice che porta ai servizi giusti */}
+      <div id="bisogni" className="scroll-mt-20">
       <HomeSection bg={{ tone: 'light', variant: 'cream' }} className="py-12 sm:py-16">
         <HomeNeeds
           needs={needs}
           texts={{ eyebrow: tNeeds('eyebrow'), title: tNeeds('title'), subtitle: tNeeds('subtitle'), hint: tNeeds('hint'), open: tNeeds('open'), all: tNeeds('all') }}
         />
       </HomeSection>
+      </div>
 
       {/* 🛠️ SEZIONE: IL MARKETPLACE — i servizi nei tre livelli Gratis, Base
           e Pro, con "Dettagli" per l'elenco completo e trasparente. */}
@@ -279,29 +210,6 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
           {/* Tre livelli (Gratis, Base, Pro) con l'elenco completo dei servizi */}
           <p className="-mt-4 mb-10 text-center text-sm text-gray-400 sm:-mt-8 sm:text-base">{t('plansTiersDescription')}</p>
           <HomePlans />
-
-          {/* Come si parlano gli strumenti */}
-          <div className="mt-10 rounded-3xl border border-[var(--gold)]/25 bg-gradient-to-br from-[var(--gold)]/10 via-white/[0.03] to-transparent p-6 sm:p-8">
-            <h3 className="text-xl font-bold text-white sm:text-2xl">{t('synergyTitle')}</h3>
-            <p className="mt-1 text-sm text-gray-300 sm:text-base">{t('synergySubtitle')}</p>
-            <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {synergies.map((item, index) => (
-                <div
-                  key={index}
-                  className={`relative rounded-2xl border p-4 ${item.soon ? 'border-dashed border-[var(--gold)]/50 bg-transparent' : 'border-[var(--gold)]/15 bg-white/[0.04]'}`}
-                >
-                  {item.soon && (
-                    <span className="absolute right-3 top-3 rounded-full bg-[var(--gold)] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[var(--ink)]">
-                      {t('comingSoon')}
-                    </span>
-                  )}
-                  <item.icon className="mb-2 h-6 w-6 text-[var(--gold-bright)]" />
-                  <p className="pr-16 font-bold text-white">{item.title}</p>
-                  <p className="mt-1 text-sm leading-relaxed text-gray-400">{item.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       </HomeSection>
 
@@ -379,143 +287,112 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
       {/* Recensioni verificate di chi ha acquistato */}
       <HomeReviews />
 
-      {/* 🎟️ SEZIONE: PROGRAMMA BONUS & COUPON */}
+      {/* 🎟️ KU KARMA: cosa si guadagna e cosa si prende, con i valori decisi
+          dall'Admin (solo i vantaggi accesi). Sezione chiara: la colonna
+          «Li spendi» è scura per staccare, con colori scritti a mano perché
+          home-light non li schiarisca. */}
       <HomeSection bg={L.bonus} className="py-12 sm:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10 sm:mb-14">
-            <div className="inline-flex items-center gap-2 bg-[var(--gold)]/10 border border-[var(--gold)]/30 px-4 py-1.5 rounded-full text-sm font-medium text-[var(--gold-bright)] mb-4">
-              <Ticket className="w-4 h-4" />
-              {t('bonusEyebrow')}
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-10 text-center sm:mb-12">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--gold)]/40 bg-[var(--gold)]/10 px-4 py-1.5 text-sm font-semibold text-[#7a5b12]">
+              <Coins className="h-4 w-4" aria-hidden /> {t('karmaEyebrow')}
             </div>
-            <h2 className="text-3xl sm:text-5xl font-bold text-white mb-4 break-words">
-              {t('bonusTitle')} <span className="bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] bg-clip-text text-transparent">{t('bonusAccent')}</span>
+            <h2 className="mb-4 break-words text-3xl font-extrabold text-white sm:text-5xl">
+              {t('karmaTitle')} <span className="bg-gradient-to-r from-[#b8891c] to-[var(--gold)] bg-clip-text text-transparent">{t('karmaAccent')}</span>
             </h2>
-            <p className="text-base sm:text-xl text-gray-300 max-w-3xl mx-auto">
-              {t('bonusDescription')}
-            </p>
+            <p className="mx-auto max-w-3xl text-base text-gray-300 sm:text-lg">{t('karmaText')}</p>
           </div>
 
-          {/* Come funziona: 3 step */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8">
-            {steps.map((item, index) => (
-              <div key={index} className="relative bg-white/[0.03] rounded-2xl p-6 border border-[var(--gold)]/15">
-                <div className="absolute -top-4 left-6 w-8 h-8 rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] flex items-center justify-center text-[var(--ink)] font-bold text-sm shadow-lg">
-                  {item.step}
-                </div>
-                <div className="w-11 h-11 rounded-lg bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] flex items-center justify-center mb-4 mt-2">
-                  <item.icon className="w-5 h-5 text-[var(--ink)]" />
-                </div>
-                <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Box trasparenza (importante anche legalmente) */}
-          <div className="bg-white/[0.03] border border-[var(--gold)]/30 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-8">
-            <Shield className="w-8 h-8 text-[var(--gold-bright)] flex-shrink-0" />
-            <p className="text-gray-200 text-sm sm:text-base leading-relaxed">
-              <strong className="text-[var(--gold-bright)]">{t('transparencyLead')}</strong> {t('transparencyRest')}
-            </p>
-          </div>
-
-          {/* Tipologie di vantaggi — tessere compatte */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-            {perks.map((perk, index) => (
-              <div key={index} className="rounded-xl p-4 sm:p-5 border border-[var(--gold)]/15 bg-white/[0.03] hover:border-[var(--gold)]/40 transition-colors">
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] flex items-center justify-center mb-3">
-                  <perk.icon className="w-5 h-5 text-[var(--ink)]" />
-                </div>
-                <h3 className="text-sm font-bold text-white mb-1">{perk.title}</h3>
-                <p className="text-gray-400 text-xs leading-relaxed">{perk.desc}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Banner iniziative esclusive con rimando al regolamento */}
-          <div className="mt-8 bg-white/[0.03] border border-[var(--gold)]/25 rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center gap-6">
-            <div className="flex-1">
-              <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 flex items-center gap-2">
-                <Gem className="w-6 h-6 text-[var(--gold-bright)]" />
-                {t('bannerTitle')}
-              </h3>
-              <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
-                {t('bannerText1')} <strong className="text-white">{t('bannerTextBold')}</strong>{t('bannerText2')}
-              </p>
+          <div className="flex flex-col items-stretch gap-4 lg:flex-row lg:gap-6">
+            <div className="flex-1 rounded-3xl border border-[var(--gold)]/35 bg-white p-6 shadow-[0_18px_40px_-28px_rgba(23,23,23,0.45)] sm:p-8">
+              <h3 className="text-2xl font-extrabold text-[var(--ink)] sm:text-3xl">{t('karmaEarnTitle')}</h3>
+              <ul className="mt-5 divide-y divide-[var(--gold)]/20">
+                {[
+                  { label: t('earnLogin'), value: t('earnPerDay', { n: karma.dailyLogin }) },
+                  { label: t('earnTool'), value: karma.toolMin === karma.toolMax ? t('earnPerDay', { n: karma.toolMin }) : t('earnRange', { min: karma.toolMin, max: karma.toolMax }) },
+                  ...(karma.fincheck ? [{ label: t('earnFincheck'), value: `+${karma.fincheck}` }] : []),
+                  { label: t('earnExtra'), value: t('earnExtraValue') },
+                ].map((row) => (
+                  <li key={row.label} className="flex items-center justify-between gap-4 py-3 text-base sm:text-lg">
+                    <span className="text-[#3d382e]">{row.label}</span>
+                    <b className="shrink-0 text-right text-[#8a6a1a]">{row.value}</b>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <Link
-              href="/terms"
-              className="flex-shrink-0 inline-flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-[var(--gold)]/30 text-white px-5 py-3 rounded-lg font-semibold transition-all text-sm sm:text-base"
-            >
-              {t('bannerCta')}
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+            <div className="flex items-center justify-center" aria-hidden>
+              <span className="flex h-12 w-12 rotate-90 items-center justify-center rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] shadow-lg lg:rotate-0">
+                <ArrowRight className="h-6 w-6" />
+              </span>
+            </div>
+            <div className="flex-1 rounded-3xl bg-[#15120c] p-6 shadow-[0_18px_40px_-24px_rgba(23,23,23,0.7)] sm:p-8">
+              <h3 className="text-2xl font-extrabold text-[#e8c872] sm:text-3xl">{t('karmaSpendTitle')}</h3>
+              <ul className="mt-5 divide-y divide-[#3a2e14]">
+                {[
+                  ...(karma.renewal ? [{ label: t('spendRenewal', { discount: karma.renewal.discount }), value: karma.renewal.cost }] : []),
+                  ...(karma.surprise ? [{ label: t('spendSurprise'), value: karma.surprise }] : []),
+                  { label: t('spendListing'), value: karma.listing },
+                  ...(karma.showcase ? [{ label: t('spendShowcase'), value: karma.showcase }] : []),
+                  ...(karma.theme ? [{ label: t('spendTheme'), value: karma.theme }] : []),
+                ].map((row) => (
+                  <li key={row.label} className="flex items-center justify-between gap-4 py-3 text-base sm:text-lg">
+                    <span className="text-[#f4efe3]">{row.label}</span>
+                    <b className="shrink-0 whitespace-nowrap text-[#e8c872]">{t('karmaAmount', { n: row.value })}</b>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
+
+          <p className="mt-8 text-center text-sm text-gray-300 sm:text-base">
+            {t('karmaFooter')}{' '}
+            <Link href="/terms" className="font-semibold text-[#7a5b12] underline underline-offset-2">
+              {t('karmaRules')}
+            </Link>{' '}
+            · {t('karmaWallet')}
+          </p>
         </div>
       </HomeSection>
 
       {L.bandAfterBonus && <HomeBand band={L.bandAfterBonus} />}
 
-      {/* Benefits Section */}
+      {/* Perché scegliere KUMANI: titolo, poi otto schede uguali in griglia */}
       <HomeSection bg={L.benefits} className="py-12 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            <div>
-              <h2 className="text-2xl sm:text-4xl font-bold text-white mb-4 sm:mb-6 break-words">
-                {t('benefitsTitle')}
-              </h2>
-              <p className="text-base sm:text-xl text-gray-300 mb-6 sm:mb-8">
-                {t('benefitsDescription')}
-              </p>
-              <div className="space-y-3 sm:space-y-4">
-                {benefits.map((benefit, index) => (
-                  <div key={index} className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-[var(--gold-bright)] flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-300 text-sm sm:text-base">{benefit}</span>
-                  </div>
-                ))}
-              </div>
-              <Link
-                href="/register"
-                className="inline-flex items-center gap-2 mt-6 sm:mt-8 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] hover:brightness-110 text-[var(--ink)] px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-bold text-base sm:text-lg transition-all shadow-xl hover:shadow-2xl"
-              >
-                {t('benefitsCta')}
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
-              </Link>
-            </div>
-            <div className="relative">
-              <div className="relative bg-white/[0.03] rounded-3xl p-6 sm:p-8 border border-[var(--gold)]/25">
-                <div className="space-y-4">
-                  <div className="bg-white/5 rounded-xl p-4 flex items-center gap-4">
-                    <div className="w-11 h-11 rounded-lg bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] flex items-center justify-center flex-shrink-0">
-                      <Ticket className="w-5 h-5 text-[var(--ink)]" />
-                    </div>
-                    <div>
-                      <div className="text-white font-bold">{t('sideRow1Title')}</div>
-                      <div className="text-gray-400 text-sm">{t('sideRow1Description')}</div>
-                    </div>
-                  </div>
-                  <div className="bg-white/5 rounded-xl p-4 flex items-center gap-4">
-                    <div className="w-11 h-11 rounded-lg bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] flex items-center justify-center flex-shrink-0">
-                      <Shield className="w-5 h-5 text-[var(--ink)]" />
-                    </div>
-                    <div>
-                      <div className="text-white font-bold">{t('sideRow2Title')}</div>
-                      <div className="text-gray-400 text-sm">{t('sideRow2Description')}</div>
-                    </div>
-                  </div>
-                  <div className="bg-white/5 rounded-xl p-4 flex items-center gap-4">
-                    <div className="w-11 h-11 rounded-lg bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] flex items-center justify-center flex-shrink-0">
-                      <Gem className="w-5 h-5 text-[var(--ink)]" />
-                    </div>
-                    <div>
-                      <div className="text-white font-bold">{t('sideRow3Title')}</div>
-                      <div className="text-gray-400 text-sm">{t('sideRow3Description')}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div className="mb-8 max-w-3xl sm:mb-10">
+            <h2 className="mb-4 break-words text-2xl font-bold text-white sm:mb-5 sm:text-4xl">{t('benefitsTitle')}</h2>
+            <p className="text-base text-gray-300 sm:text-xl">{t('benefitsDescription')}</p>
+          </div>
+          <ul className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+            {[
+              { Icon: ShieldAlert, title: t('why1Title'), text: t('why1Text') },
+              { Icon: Euro, title: t('benefitCard1Title'), text: t('benefitCard1Text') },
+              { Icon: BadgeCheck, title: t('why2Title'), text: t('why2Text') },
+              { Icon: LayoutGrid, title: t('benefitCard2Title'), text: t('benefitCard2Text') },
+              { Icon: Lock, title: t('why3Title'), text: t('why3Text') },
+              { Icon: Clock, title: t('benefitCard7Title'), text: t('benefitCard7Text') },
+              { Icon: Sparkles, title: t('why5Title'), text: t('why5Text') },
+              { Icon: HeartHandshake, title: t('benefitCard8Title'), text: t('benefitCard8Text') },
+            ].map(({ Icon, title, text }) => (
+              <li key={title} className="flex flex-col gap-3 rounded-2xl border border-[var(--gold)]/25 bg-white/[0.04] p-4 sm:p-5">
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)]">
+                  <Icon className="h-5 w-5 text-[var(--ink)]" aria-hidden />
+                </span>
+                <span>
+                  <span className="block text-lg font-bold text-white">{title}</span>
+                  <span className="block text-sm leading-relaxed text-gray-400">{text}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-8 text-center sm:mt-10">
+            <Link
+              href="/register"
+              className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3 text-base font-bold text-[var(--ink)] shadow-xl transition-all hover:shadow-2xl hover:brightness-110 sm:px-8 sm:py-4 sm:text-lg"
+            >
+              {t('benefitsCta')}
+              <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />
+            </Link>
           </div>
         </div>
       </HomeSection>

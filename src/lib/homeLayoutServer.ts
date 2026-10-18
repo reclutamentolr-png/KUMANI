@@ -24,6 +24,6 @@ export const getHomeLayout = unstable_cache(
       return DEFAULT_HOME_LAYOUT
     }
   },
-  ['home-layout'],
+  ['home-layout-v3'],
   { tags: [HOME_LAYOUT_CACHE_TAG], revalidate: 3600 }
 )

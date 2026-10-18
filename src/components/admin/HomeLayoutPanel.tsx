@@ -6,7 +6,7 @@ import { adminGetHomeLayout, adminGetHomeVideo, adminSetHomeLayout, adminSetHome
 import { HOME_LAYOUTS, HOME_LAYOUT_INFO, type HomeLayoutKey } from '@/lib/homeLayouts'
 import { notify } from '@/lib/adminNotify'
 
-// Admin → Aspetto homepage: si sceglie il layout (cambiano solo sfondi, foto e
+// Admin → Aspetto homepage: le versioni salvate della homepage (sfondi, foto e
 // alternanza chiaro/scuro; testi e contenuti restano gli stessi). Ogni
 // layout si può vedere in anteprima prima di attivarlo.
 export default function HomeLayoutPanel() {
@@ -53,9 +53,7 @@ export default function HomeLayoutPanel() {
           <Palette className="h-7 w-7" /> Aspetto della homepage
         </h2>
         <p className="mt-1 max-w-3xl text-gray-600">
-          Scegli come appare la homepage. Cambiano solo colori, foto di sfondo e alternanza chiaro/scuro: testi, piani e servizi restano
-          identici in tutte le lingue, quindi cambiare layout non ha effetti sulla SEO. Con &quot;Anteprima&quot; lo vedi in una nuova
-          scheda prima di attivarlo.
+          Le versioni memorizzate della homepage e la bozza su cui lavoriamo. Quella «In uso» è la Home pubblica; con &quot;Anteprima&quot; vedi una versione in una nuova scheda e con &quot;Usa questo&quot; la rimetti in un attimo.
         </p>
       </div>
 

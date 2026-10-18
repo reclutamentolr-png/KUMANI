@@ -38,9 +38,9 @@ export default async function HomeKumanoDelGiorno() {
   const today = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date())
 
   return (
-    <section className="py-10 sm:py-14 border-t border-[var(--gold)]/10">
+    <section className="bg-[var(--background)] py-10 sm:py-14">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-2xl border border-[var(--gold)]/25 bg-white/[0.03] p-5 sm:p-7">
+        <div className="rounded-2xl border border-[var(--gold)]/40 bg-[var(--ink)] p-5 shadow-[0_24px_50px_-24px_rgba(23,23,23,0.55)] sm:p-7">
           <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
             <span className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-[var(--gold-bright)]">
               <Sun className="w-4 h-4" />

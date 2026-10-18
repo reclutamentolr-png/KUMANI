@@ -19,9 +19,9 @@ export default async function HomeDonations() {
   const eur = (cents: number) => euroFormat(locale, cents)
 
   return (
-    <section className="py-12 sm:py-16">
+    <section className="bg-[var(--background)] py-12 sm:py-16">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="relative grid grid-cols-1 overflow-hidden rounded-3xl border-2 border-[var(--gold)] bg-gradient-to-br from-[#2a2418] via-[var(--ink)] to-[var(--ink)] shadow-[0_24px_60px_rgba(199,154,59,0.25)] lg:grid-cols-[minmax(240px,300px)_1fr]">
+        <div className="relative grid grid-cols-1 overflow-hidden rounded-3xl border-2 border-[var(--gold)] bg-gradient-to-br from-[#2a2418] via-[var(--ink)] to-[var(--ink)] shadow-[0_24px_60px_-20px_rgba(23,23,23,0.45)] lg:grid-cols-[minmax(240px,300px)_1fr]">
           <div aria-hidden className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-[var(--gold)]/20 blur-3xl" />
           {/* Foto: mani che tengono un cuore al sole */}
           <div className="relative h-52 sm:h-64 lg:h-auto">

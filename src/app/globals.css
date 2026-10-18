@@ -198,6 +198,16 @@ body::before {
   margin-bottom: env(safe-area-inset-bottom);
 }
 
+/*
+/* Home, apertura con i servizi intorno al logo (HeroOrbit): l’anello gira in
+   senso orario, ogni scheda al contrario così resta dritta */
+@keyframes home-orbit-spin { to { transform: rotate(360deg); } }
+@keyframes home-orbit-counter { to { transform: rotate(-360deg); } }
+.home-orbit { animation: home-orbit-spin 60s linear infinite; }
+.home-orbit-card { animation: home-orbit-counter 60s linear infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .home-orbit, .home-orbit-card { animation: none; }
+}
 /* Stella del festeggiamento delle qualifiche: gira su se stessa */
 @keyframes star-spin {
   from {

@@ -3,7 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { pageMetadata } from '@/lib/seo'
 import { getAppCounts } from '@/lib/appCounts'
 import { getHomeLayout } from '@/lib/homeLayoutServer'
-import HomeLanding from '@/components/home/HomeLanding'
+import HomeByVersion from '@/components/home/HomeByVersion'
 
 type Props = { params: Promise<{ locale: string }> }
 
@@ -24,5 +24,5 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function LandingPage({ params }: Props) {
   setRequestLocale((await params).locale)
-  return <HomeLanding layoutKey={await getHomeLayout()} />
+  return <HomeByVersion layoutKey={await getHomeLayout()} />
 }

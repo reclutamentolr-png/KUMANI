@@ -46,6 +46,7 @@ export const SECTION_LABELS: Record<string, string> = {
   toolShare: 'Condivisione dei servizi',
   adminMessage: 'Messaggi dello Staff',
   profileLock: 'Profilo e modifiche dei dati',
+  homeOrbit: 'Home: schede che girano attorno al logo',
   realData: 'Iscrizione e profilo: invito a usare i dati veri',
   verifiedBadge: 'Segno «Kumano verificato» e invito in Dashboard',
   scamTest: 'Test «Mi stanno truffando?»',

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import HomeLanding from '@/components/home/HomeLanding'
+import HomeByVersion from '@/components/home/HomeByVersion'
 import { isHomeLayout } from '@/lib/homeLayouts'
 
 // Anteprima di un aspetto della Home (Admin → Aspetto della Home, pulsante
@@ -14,5 +14,5 @@ export const metadata: Metadata = { robots: { index: false, follow: false } }
 export default async function HomeLayoutPreviewPage({ params }: { params: Promise<{ layout: string }> }) {
   const { layout } = await params
   if (!isHomeLayout(layout)) notFound()
-  return <HomeLanding layoutKey={layout} />
+  return <HomeByVersion layoutKey={layout} />
 }

@@ -1,9 +1,9 @@
 // Logo animato dell'apertura (K → stella → K): parte da solo, senza audio,
 // in ripetizione. Il fondo nero del video si fonde con la sezione scura
 // (mix-blend-screen). Con "riduci movimento" attivo resta il fotogramma fermo.
-export default function HeroLogoVideo({ label }: { label: string }) {
+export default function HeroLogoVideo({ label, className = 'h-40 w-40 sm:h-52 sm:w-52' }: { label: string; className?: string }) {
   return (
-    <div className="relative mx-auto h-40 w-40 sm:h-52 sm:w-52">
+    <div className={`relative mx-auto ${className}`}>
       <video
         autoPlay
         muted
