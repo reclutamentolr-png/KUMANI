@@ -2042,7 +2042,19 @@
     "scamListSource": "Fonte: {source}",
     "scamListConsob": "Oscurato dalla Consob il {date}: offriva investimenti o criptovalute senza autorizzazione. Non inviare soldi né dati.",
     "scamListBafin_unauthorised": "Segnalato dall’autorità finanziaria tedesca (BaFin) il {date}: offre servizi finanziari senza autorizzazione.",
-    "scamListBafin_impersonation": "Segnalato dall’autorità finanziaria tedesca (BaFin) il {date}: finta banca o sito che si spaccia per una società vera. Non inviare soldi né dati."
+    "scamListBafin_impersonation": "Segnalato dall’autorità finanziaria tedesca (BaFin) il {date}: finta banca o sito che si spaccia per una società vera. Non inviare soldi né dati.",
+    "scamListIvass": "Oscurato o segnalato dall’IVASS il {date}: vendeva assicurazioni senza autorizzazione. Le polizze di questi siti sono false: non pagare.",
+    "checkCommunity": "Rete Anti-Truffa KUMANI",
+    "communityConfirmed": "Segnalato come truffa dalla community ({count}) e confermato dallo Staff KUMANI. Non pagare e non lasciare dati.",
+    "checkPayments": "Metodi di pagamento",
+    "paymentsRisky": "Come pagamento si vedono solo bonifico, ricariche o criptovalute: se il venditore sparisce, i soldi non tornano. Paga solo con carta o PayPal.",
+    "paymentsMoneyTransfer": "Tra i pagamenti c’è Western Union o MoneyGram: i negozi seri non li usano e i soldi inviati non si recuperano.",
+    "paymentsSafe": "Si può pagare con carta o PayPal: in caso di problemi puoi chiedere il rimborso.",
+    "checkPrices": "Prezzi e sconti",
+    "pricesExtreme": "Sconti enormi ovunque (fino al {max}%): è la vetrina tipica dei negozi falsi.",
+    "pricesClosingDown": "«Chiusura totale» con sconti fino al {max}%: un trucco molto usato dai negozi falsi. Controlla bene prima di pagare.",
+    "checkPlaceholder": "Testi del sito",
+    "placeholderText": "Nel sito c’è ancora testo finto o di prova (es. «lorem ipsum»): un sito fatto in fretta e mai finito."
   },
   "offermaker": {
     "aiLimitReached": "Hai raggiunto il limite giornaliero di generazioni AI: riprova domani.",

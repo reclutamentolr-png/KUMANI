@@ -16,6 +16,9 @@ import { normalizeDomain, type ScamSource } from '@/lib/scamDomains'
 //   domini nel titolo dell'avviso, scritti dalla BaFin come «nome(.)com»).
 //   Di queste due si raccolgono gli avvisi nuovi: lo storico si accumula notte
 //   dopo notte, e restano finché non si tolgono a mano.
+// - IVASS (Italia): siti di assicurazioni abusivi. L'elenco storico in PDF
+//   (fino al 2023) e i comunicati «L'IVASS ordina l'oscuramento» (PDF) delle
+//   prime due pagine; la domenica (o con ?full=1) tutte, per lo storico.
 // Se una fonte non risponde, le altre si caricano lo stesso.
 
 export const dynamic = 'force-dynamic'
@@ -29,6 +32,8 @@ const PHISHDB = 'https://raw.githubusercontent.com/Phishing-Database/Phishing.Da
 const URLHAUS = 'https://urlhaus.abuse.ch/downloads/csv_online/'
 const CONSOB_INDEX = 'https://www.consob.it/web/consob/comunicati-stampa'
 const BAFIN_RSS = 'https://www.bafin.de/DE/service/rss/_function/rssnewsfeed.xml?nn=150166'
+const IVASS_INDEX = 'https://www.ivass.it/cyber/siti-abusivi/index.html'
+const IVASS_OLD_LIST = 'https://www.ivass.it/consumatori/proteggi/ELENCO_SITI_WEB_DI_INTERMEDIAZIONE_ASSICURATIVA_IRREGOLARI.pdf'
 const MONTHS_IT = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre']
 
 const EU_TLDS = new Set(['it', 'fr', 'es', 'de', 'pt', 'eu', 'at', 'be', 'nl', 'lu', 'ch', 'ie', 'pl', 'gr', 'ro', 'cz', 'sk', 'hu', 'si', 'hr', 'bg', 'dk', 'se', 'fi', 'ee', 'lv', 'lt', 'mt', 'cy', 'uk', 'no'])
@@ -111,6 +116,58 @@ async function loadBafin(): Promise<Row[]> {
   return [...rows.values()]
 }
 
+// Righe di testo di un PDF (pdfjs, senza worker)
+async function pdfLines(url: string): Promise<string[]> {
+  const res = await fetch(url, { signal: AbortSignal.timeout(30_000), headers: { 'user-agent': 'KUMANI-scam-feeds/1.0 (+https://kumani.io)' } })
+  if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`)
+  const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs')
+  const doc = await pdfjs.getDocument({ data: new Uint8Array(await res.arrayBuffer()), disableFontFace: true, verbosity: 0 }).promise
+  const lines: string[] = []
+  for (let i = 1; i <= doc.numPages; i++) {
+    let line = ''
+    for (const item of (await (await doc.getPage(i)).getTextContent()).items) {
+      if (!('str' in item)) continue
+      line += item.str + ' '
+      if (item.hasEOL) {
+        lines.push(line.trim())
+        line = ''
+      }
+    }
+    if (line.trim()) lines.push(line.trim())
+  }
+  await doc.cleanup()
+  return lines
+}
+
+// IVASS: nell'elenco storico i domini hanno spazi in mezzo («alfa-broker. it»)
+// e la data del comunicato accanto; nei comunicati nuovi sono le righe che
+// iniziano con «-» («- www.rc.esempio.it e rc.esempio.it»).
+async function loadIvass(full: boolean): Promise<Row[]> {
+  const rows = new Map<string, Row>()
+  const add = (raw: string, listed: string) => {
+    const domain = normalizeDomain(raw.replace(/\s+/g, ''))
+    if (domain && !domain.endsWith('ivass.it') && !rows.has(domain)) rows.set(domain, { domain, source: 'ivass', category: 'insurance', listed_on: listed, last_seen: day(), expires_on: null })
+  }
+  for (const line of await pdfLines(IVASS_OLD_LIST)) {
+    const m = line.match(/^(https?:\/\/\S+(?:\s\S+)?)\s+(\d{2})\/(\d{2})\/(\d{4})/)
+    if (m) add(m[1], `${m[4]}-${m[3]}-${m[2]}`)
+  }
+  const first = await fetchText(IVASS_INDEX, 30_000)
+  const total = Number(first.match(/pagina 1 di (\d+)/i)?.[1] ?? 1)
+  const pages = [first]
+  for (let p = 2; p <= Math.min(total, full ? 30 : 2); p++) pages.push(await fetchText(`${IVASS_INDEX}?page=${p}`, 30_000))
+  for (const html of pages) {
+    for (const m of html.matchAll(/href="(\/media\/comunicati\/documenti\/\d{4}\/ivcs\d+\.pdf)\s*"[\s\S]{0,600}?(\d{1,2}) (gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre) (\d{4})/gi)) {
+      const listed = `${m[4]}-${String(MONTHS_IT.indexOf(m[3].toLowerCase()) + 1).padStart(2, '0')}-${m[2].padStart(2, '0')}`
+      for (const line of await pdfLines(`https://www.ivass.it${m[1]}`)) {
+        if (!/^-\s/.test(line)) continue
+        for (const part of line.replace(/^-\s*/, '').split(/\s+-\s+|\s+e\s+/)) add(part, listed)
+      }
+    }
+  }
+  return [...rows.values()]
+}
+
 async function loadPhishDb(): Promise<Row[]> {
   // Con e senza «www.» diventano lo stesso dominio: una riga sola
   const rows = new Map<string, Row>()
@@ -151,9 +208,20 @@ export async function GET(request: Request) {
     auth: { autoRefreshToken: false, persistSession: false },
   })
   const report: Record<string, number | string> = {}
-  for (const [source, load] of [['amf', loadAmf], ['consob', loadConsob], ['bafin', loadBafin], ['phishdb', loadPhishDb], ['urlhaus', loadUrlhaus]] as const) {
+  const params = new URL(request.url).searchParams
+  // IVASS: tutte le pagine dei comunicati la domenica (o con ?full=1), le prime due le altre notti
+  const full = params.get('full') === '1' || new Date().getUTCDay() === 0
+  // Prova senza salvare: ?dry=1&only=ivass (conteggi e qualche esempio)
+  const dry = params.get('dry') === '1'
+  const only = params.get('only')
+  for (const [source, load] of [['amf', loadAmf], ['consob', loadConsob], ['bafin', loadBafin], ['ivass', () => loadIvass(full)], ['phishdb', loadPhishDb], ['urlhaus', loadUrlhaus]] as const) {
+    if (only && only !== source) continue
     try {
       const rows = await load()
+      if (dry) {
+        report[source] = `${rows.length}: ${rows.slice(0, 3).concat(rows.slice(-3)).map((r) => `${r.domain} ${r.listed_on ?? ''}`).join(', ')}`
+        continue
+      }
       await save(db, rows)
       report[source] = rows.length
       // AMF: chi non è più in elenco esce (lista ufficiale completa)
@@ -166,6 +234,7 @@ export async function GET(request: Request) {
       report[source] = `error: ${message.slice(0, 120)}`
     }
   }
+  if (dry) return NextResponse.json({ ok: true, dry: true, ...report })
   const { error: purgeError } = await db.from('scam_domains').delete().lt('expires_on', day())
   if (purgeError) console.error('[scam-feeds] purge failed:', purgeError.message)
   return NextResponse.json({ ok: true, ...report })

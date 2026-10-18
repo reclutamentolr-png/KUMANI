@@ -31,6 +31,8 @@ const PRIVATE_PAGES = [
 const nextConfig: NextConfig = {
   // Non dire a chi visita con quale tecnologia è fatto il sito
   poweredByHeader: false,
+  // pdfjs legge i PDF anche sul server (cron scam-feeds): non va impacchettato
+  serverExternalPackages: ['pdfjs-dist'],
   allowedDevOrigins: ['192.168.1.133', 'localhost'],
   experimental: {
     // Foto del menu fino a 2MB: margine per l'overhead multipart

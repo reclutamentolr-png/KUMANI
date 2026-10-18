@@ -2167,7 +2167,19 @@
     "scamListSource": "Source : {source}",
     "scamListConsob": "Bloqué par la Consob (Italie) le {date} : proposait des placements ou des crypto-actifs sans autorisation. N’envoyez ni argent ni données.",
     "scamListBafin_unauthorised": "Signalé par l’autorité financière allemande (BaFin) le {date} : propose des services financiers sans autorisation.",
-    "scamListBafin_impersonation": "Signalé par l’autorité financière allemande (BaFin) le {date} : fausse banque ou site usurpant une société réelle. N’envoyez ni argent ni données."
+    "scamListBafin_impersonation": "Signalé par l’autorité financière allemande (BaFin) le {date} : fausse banque ou site usurpant une société réelle. N’envoyez ni argent ni données.",
+    "scamListIvass": "Bloqué ou signalé par l’IVASS (Italie) le {date} : vendait des assurances sans autorisation. Les contrats de ces sites sont faux : ne payez pas.",
+    "checkCommunity": "Réseau Anti-Arnaque KUMANI",
+    "communityConfirmed": "Signalé comme arnaque par la communauté ({count}) et confirmé par le Staff KUMANI. Ne payez pas et ne laissez aucune donnée.",
+    "checkPayments": "Moyens de paiement",
+    "paymentsRisky": "Seuls le virement, les recharges ou les cryptomonnaies sont proposés : si le vendeur disparaît, l’argent ne revient pas. Payez uniquement par carte ou PayPal.",
+    "paymentsMoneyTransfer": "Western Union ou MoneyGram figurent parmi les paiements : les boutiques sérieuses ne les utilisent pas et l’argent envoyé est perdu.",
+    "paymentsSafe": "Paiement par carte ou PayPal possible : en cas de problème, vous pouvez demander un remboursement.",
+    "checkPrices": "Prix et remises",
+    "pricesExtreme": "Des remises énormes partout (jusqu’à {max} %) : la vitrine typique des fausses boutiques.",
+    "pricesClosingDown": "« Liquidation totale » avec des remises jusqu’à {max} % : une astuce très utilisée par les fausses boutiques. Vérifiez bien avant de payer.",
+    "checkPlaceholder": "Textes du site",
+    "placeholderText": "Le site contient encore du texte factice ou d’exemple (ex. « lorem ipsum ») : fait à la hâte et jamais terminé."
   },
   "offermaker": {
     "aiLimitReached": "Vous avez atteint la limite quotidienne de générations IA : réessayez demain.",

@@ -2167,7 +2167,19 @@
     "scamListSource": "Fuente: {source}",
     "scamListConsob": "Bloqueado por la Consob (Italia) el {date}: ofrecía inversiones o criptoactivos sin autorización. No envíes dinero ni datos.",
     "scamListBafin_unauthorised": "Señalado por la autoridad financiera alemana (BaFin) el {date}: ofrece servicios financieros sin autorización.",
-    "scamListBafin_impersonation": "Señalado por la autoridad financiera alemana (BaFin) el {date}: banco falso o sitio que se hace pasar por una empresa real. No envíes dinero ni datos."
+    "scamListBafin_impersonation": "Señalado por la autoridad financiera alemana (BaFin) el {date}: banco falso o sitio que se hace pasar por una empresa real. No envíes dinero ni datos.",
+    "scamListIvass": "Bloqueado o señalado por el IVASS (Italia) el {date}: vendía seguros sin autorización. Las pólizas de estos sitios son falsas: no pagues.",
+    "checkCommunity": "Red Antiestafa KUMANI",
+    "communityConfirmed": "Denunciado como estafa por la comunidad ({count}) y confirmado por el Staff de KUMANI. No pagues ni dejes datos.",
+    "checkPayments": "Métodos de pago",
+    "paymentsRisky": "Como pago solo aparecen transferencia, recargas o criptomonedas: si el vendedor desaparece, el dinero no vuelve. Paga solo con tarjeta o PayPal.",
+    "paymentsMoneyTransfer": "Entre los pagos están Western Union o MoneyGram: las tiendas serias no los usan y el dinero enviado no se recupera.",
+    "paymentsSafe": "Se puede pagar con tarjeta o PayPal: si hay problemas puedes pedir el reembolso.",
+    "checkPrices": "Precios y descuentos",
+    "pricesExtreme": "Descuentos enormes por todas partes (hasta el {max}%): el escaparate típico de las tiendas falsas.",
+    "pricesClosingDown": "«Cierre total» con descuentos de hasta el {max}%: un truco muy usado por las tiendas falsas. Revisa bien antes de pagar.",
+    "checkPlaceholder": "Textos del sitio",
+    "placeholderText": "El sitio todavía tiene texto falso o de prueba (p. ej. «lorem ipsum»): hecho deprisa y nunca terminado."
   },
   "offermaker": {
     "aiLimitReached": "Has alcanzado el límite diario de generaciones con IA: inténtalo mañana.",

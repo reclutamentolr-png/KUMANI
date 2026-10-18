@@ -2167,7 +2167,19 @@
     "scamListSource": "Source: {source}",
     "scamListConsob": "Blocked by Consob (Italy) on {date}: it offered investments or crypto-assets without authorisation. Do not send money or details.",
     "scamListBafin_unauthorised": "Flagged by the German financial authority (BaFin) on {date}: offers financial services without authorisation.",
-    "scamListBafin_impersonation": "Flagged by the German financial authority (BaFin) on {date}: fake bank or a site impersonating a real company. Do not send money or details."
+    "scamListBafin_impersonation": "Flagged by the German financial authority (BaFin) on {date}: fake bank or a site impersonating a real company. Do not send money or details.",
+    "scamListIvass": "Blocked or flagged by IVASS (Italy) on {date}: it sold insurance without authorisation. Policies from these sites are fake: do not pay.",
+    "checkCommunity": "KUMANI Anti-Scam Network",
+    "communityConfirmed": "Reported as a scam by the community ({count}) and confirmed by the KUMANI Staff. Do not pay or share any details.",
+    "checkPayments": "Payment methods",
+    "paymentsRisky": "The only payment options are bank transfer, top-ups or crypto: if the seller disappears, the money won’t come back. Only pay by card or PayPal.",
+    "paymentsMoneyTransfer": "Western Union or MoneyGram are among the payments: genuine shops don’t use them and money sent can’t be recovered.",
+    "paymentsSafe": "You can pay by card or PayPal: if something goes wrong you can ask for a refund.",
+    "checkPrices": "Prices and discounts",
+    "pricesExtreme": "Huge discounts everywhere (up to {max}%): the typical shop window of fake stores.",
+    "pricesClosingDown": "“Closing down” sale with discounts up to {max}%: a trick fake shops use a lot. Check carefully before paying.",
+    "checkPlaceholder": "Website text",
+    "placeholderText": "The site still has dummy or sample text (e.g. “lorem ipsum”): built in a hurry and never finished."
   },
   "offermaker": {
     "aiLimitReached": "You’ve reached today’s AI generation limit: try again tomorrow.",

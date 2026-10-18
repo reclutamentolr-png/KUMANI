@@ -2167,7 +2167,19 @@
     "scamListSource": "Quelle: {source}",
     "scamListConsob": "Am {date} von der Consob (Italien) gesperrt: bot Anlagen oder Kryptowerte ohne Zulassung an. Kein Geld und keine Daten senden.",
     "scamListBafin_unauthorised": "Am {date} von der BaFin gemeldet: bietet Finanzdienstleistungen ohne Erlaubnis an.",
-    "scamListBafin_impersonation": "Am {date} von der BaFin gemeldet: Fake-Bank oder Website, die sich als echtes Unternehmen ausgibt. Kein Geld und keine Daten senden."
+    "scamListBafin_impersonation": "Am {date} von der BaFin gemeldet: Fake-Bank oder Website, die sich als echtes Unternehmen ausgibt. Kein Geld und keine Daten senden.",
+    "scamListIvass": "Am {date} von der IVASS (Italien) gesperrt oder gemeldet: verkaufte Versicherungen ohne Erlaubnis. Policen dieser Seiten sind gefälscht: nicht zahlen.",
+    "checkCommunity": "KUMANI Anti-Betrugs-Netzwerk",
+    "communityConfirmed": "Von der Community als Betrug gemeldet ({count}) und vom KUMANI-Staff bestätigt. Nicht zahlen und keine Daten angeben.",
+    "checkPayments": "Zahlungsmethoden",
+    "paymentsRisky": "Als Zahlung gibt es nur Überweisung, Aufladungen oder Kryptowährungen: Verschwindet der Verkäufer, ist das Geld weg. Zahle nur mit Karte oder PayPal.",
+    "paymentsMoneyTransfer": "Unter den Zahlungen sind Western Union oder MoneyGram: Seriöse Shops nutzen sie nicht, und das Geld ist nicht zurückzuholen.",
+    "paymentsSafe": "Zahlung mit Karte oder PayPal möglich: Bei Problemen kannst du eine Erstattung verlangen.",
+    "checkPrices": "Preise und Rabatte",
+    "pricesExtreme": "Riesige Rabatte überall (bis zu {max} %): das typische Schaufenster gefälschter Shops.",
+    "pricesClosingDown": "„Räumungsverkauf“ mit Rabatten bis zu {max} %: ein beliebter Trick gefälschter Shops. Vor dem Zahlen genau prüfen.",
+    "checkPlaceholder": "Texte der Website",
+    "placeholderText": "Auf der Seite steht noch Platzhalter- oder Mustertext (z. B. „Lorem ipsum“): schnell gebaut und nie fertig gemacht."
   },
   "offermaker": {
     "aiLimitReached": "Du hast das Tageslimit für KI-Generierungen erreicht – versuch es morgen wieder.",

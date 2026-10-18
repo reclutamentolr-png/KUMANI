@@ -4,6 +4,7 @@ import { safeFetch } from '@/lib/safeFetch'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { findScamDomain, type ScamDomainHit } from '@/lib/scamDomains'
+import { siteKeys } from '@/lib/scamNet'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { fetchWhoisText, parseWhois } from '@/lib/whois'
 import { parseVatInput, prettyVat, registryLookupUrl, verifyVies } from '@/lib/vat'
@@ -99,10 +100,14 @@ export async function POST(request: NextRequest) {
       checkSSL(url, domain),
       checkAbuseIPDB(domain),
       checkScamLists(domain),
+      checkCommunity(domain),
       checkContentScraping(pagePromise),
       checkLegalPages(pagePromise),
       checkReviews(pagePromise),
       checkBusinessModel(pagePromise),
+      checkPayments(pagePromise),
+      checkPrices(pagePromise),
+      checkPlaceholder(pagePromise),
     ])
 
     results.forEach((r) => {
@@ -130,8 +135,11 @@ export async function POST(request: NextRequest) {
   }
 
   score = Math.max(0, Math.min(100, score))
-  // In un elenco di siti truffa (autorità o phishing): rosso, qualunque sia il resto
-  if (checks.some((c) => c.id === 'scamList' && c.status === 'risk')) score = Math.min(score, 15)
+  // In un elenco di siti truffa (autorità o phishing) o segnalato dalla Rete
+  // Anti-Truffa con conferma dello Staff: rosso, qualunque sia il resto. Un
+  // sito «sosia» di un marchio noto è rosso anche se il resto sembra in ordine.
+  if (checks.some((c) => (c.id === 'scamList' || c.id === 'community') && c.status === 'risk')) score = Math.min(score, 15)
+  else if (checks.some((c) => c.id === 'lookalike' && c.status === 'risk')) score = Math.min(score, 30)
 
   let badge: 'green' | 'yellow' | 'red' = 'green'
   if (score < 40) badge = 'red'
@@ -159,17 +167,21 @@ export async function POST(request: NextRequest) {
 const SCAM_SOURCES: Record<ScamDomainHit['source'], { source: string; sourceUrl: string; key: string }> = {
   amf: { source: 'AMF – Autorité des marchés financiers (FR)', sourceUrl: 'https://www.amf-france.org/fr/espace-epargnants/proteger-son-epargne/listes-noires-et-mises-en-garde', key: 'scamListAmf' },
   consob: { source: 'Consob (IT)', sourceUrl: 'https://www.consob.it/web/consob/comunicati-stampa', key: 'scamListConsob' },
+  ivass: { source: 'IVASS (IT)', sourceUrl: 'https://www.ivass.it/cyber/siti-abusivi/index.html', key: 'scamListIvass' },
   bafin: { source: 'BaFin (DE)', sourceUrl: 'https://www.bafin.de/DE/Verbraucher/verbraucher_node.html', key: 'scamListBafin' },
   phishdb: { source: 'Phishing.Database', sourceUrl: 'https://github.com/Phishing-Database/Phishing.Database', key: 'scamListPhishing' },
   urlhaus: { source: 'URLhaus – abuse.ch', sourceUrl: 'https://urlhaus.abuse.ch/', key: 'scamListMalware' },
 }
-const SCAM_ORDER: ScamDomainHit['source'][] = ['consob', 'bafin', 'amf', 'phishdb', 'urlhaus']
+const SCAM_ORDER: ScamDomainHit['source'][] = ['consob', 'ivass', 'bafin', 'amf', 'phishdb', 'urlhaus']
 
-async function checkScamLists(domain: string): Promise<SVATCheck | null> {
-  const db = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+function serviceDb() {
+  return createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
     auth: { autoRefreshToken: false, persistSession: false },
   })
-  const hits = await findScamDomain(db, domain)
+}
+
+async function checkScamLists(domain: string): Promise<SVATCheck | null> {
+  const hits = await findScamDomain(serviceDb(), domain)
   const hit = SCAM_ORDER.map((s) => hits.find((h) => h.source === s)).find(Boolean)
   if (!hit) return null
   const info = SCAM_SOURCES[hit.source]
@@ -184,6 +196,32 @@ async function checkScamLists(domain: string): Promise<SVATCheck | null> {
     detailsInterp: { domain: hit.domain, date: hit.listed_on ? hit.listed_on.split('-').reverse().join('/') : '—' },
     source: info.source,
     sourceUrl: info.sourceUrl,
+  }
+}
+
+// Rete Anti-Truffa: sito segnalato dalla community e confermato dallo Staff
+// negli ultimi 12 mesi (come l'avviso rosso sotto il risultato). Senza
+// segnalazioni confermate il controllo non compare.
+async function checkCommunity(domain: string): Promise<SVATCheck | null> {
+  const since = new Date(Date.now() - 365 * 86_400_000).toISOString()
+  const { data } = await serviceDb()
+    .from('scam_targets')
+    .select('confirmed_reports')
+    .eq('kind', 'site')
+    .eq('status', 'confirmed')
+    .gte('last_report_at', since)
+    .in('value_key', siteKeys(domain))
+  if (!data?.length) return null
+  const reports = Math.max(1, ...data.map((t) => t.confirmed_reports ?? 1))
+  return {
+    id: 'community',
+    name: 'checkCommunity',
+    status: 'risk',
+    points: -50,
+    details: `Reported by the KUMANI community (${reports}) and confirmed by the Staff`,
+    detailsKey: 'communityConfirmed',
+    detailsInterp: { count: String(reports) },
+    source: 'Rete Anti-Truffa KUMANI',
   }
 }
 
@@ -946,6 +984,73 @@ async function checkBusinessModel(pagePromise: Promise<FetchedPage | null>): Pro
     detailsInterp: { model },
     source: 'Content analysis',
   }
+}
+
+// Negozio online: carrello o «acquista» nella pagina (in tutte le lingue)
+const SHOP_RE = /carrello|add to cart|aggiungi al|checkout|warenkorb|panier|carrito|carrinho|acquista ora|buy now|shop now/
+
+// 11. Metodi di pagamento: carte e PayPal proteggono chi compra (si può
+// chiedere il rimborso); solo bonifico, ricariche o criptovalute no. Solo per
+// i negozi, e solo se i metodi si vedono già in homepage.
+const SAFE_PAY_RE = /paypal|\bvisa\b|mastercard|maestro|american express|\bamex\b|apple ?pay|google ?pay|klarna|scalapay|satispay|js\.stripe\.com|\bnexi\b|carta di credito|credit card|carte bancaire|tarjeta|kreditkarte|cart[aã]o de cr[eé]dito|contrassegno|cash on delivery|nachnahme|contra reembolso/
+const RISKY_PAY_RE = /bonifico|bank transfer|wire transfer|virement|transferencia bancaria|[üu]berweisung|transfer[eê]ncia|ricarica postepay|ricarica (?:della )?carta|postepay evolution|bitcoin|\bbtc\b|\busdt\b|tether|ethereum|criptovalut|cryptocurrenc|cryptomonnaie|criptomoneda|kryptow[äa]hrung|western union|moneygram/
+const MONEY_TRANSFER_RE = /western union|moneygram/
+
+async function checkPayments(pagePromise: Promise<FetchedPage | null>): Promise<SVATCheck | null> {
+  const page = await pagePromise
+  if (!page || !page.readable) return null
+  const html = page.html.toLowerCase()
+  if (!SHOP_RE.test(html)) return null
+  const text = pageText(html)
+  const safe = SAFE_PAY_RE.test(html)
+  const risky = RISKY_PAY_RE.test(text)
+  if (risky && !safe) {
+    return { id: 'payments', name: 'checkPayments', status: 'risk', points: -20, details: 'Only bank transfer, top-ups or crypto as payment', detailsKey: 'paymentsRisky', source: 'Content analysis' }
+  }
+  if (MONEY_TRANSFER_RE.test(text)) {
+    return { id: 'payments', name: 'checkPayments', status: 'warning', points: -10, details: 'Money transfer services (Western Union, MoneyGram) among payments', detailsKey: 'paymentsMoneyTransfer', source: 'Content analysis' }
+  }
+  if (safe) {
+    return { id: 'payments', name: 'checkPayments', status: 'ok', points: 6, details: 'Card or PayPal payments available', detailsKey: 'paymentsSafe', source: 'Content analysis' }
+  }
+  return null
+}
+
+// 12. Prezzi: sconti enormi ovunque (oltre il 70%) e «chiusura totale» sono
+// la vetrina tipica dei negozi falsi. Senza segnali il controllo non compare.
+const DISCOUNT_RES = [
+  /[-−–]\s?(\d{2})\s?%/g,
+  /(\d{2})\s?%\s?(?:off|di sconto|sconto|rabatt|de descuento|descuento|de réduction|de remise|remise|de desconto|desconto|скидка)/g,
+  /(?:sconto|sconti fino al|off|rabatt|descuento|remise|desconto|скидка)\s?(?:del |fino al |de |bis zu |jusqu'à |até )?(\d{2})\s?%/g,
+]
+const CLOSING_RE = /chiusura (?:totale|attivit[aà]|definitiva|negozio)|svendita totale|liquidazione totale|fuori tutto|closing down|store closing|we are closing|r[äa]umungsverkauf|gesch[äa]ftsaufgabe|liquidation totale|fermeture d[ée]finitive|cierre (?:total|definitivo)|liquidaci[oó]n total|encerramento|закрытие магазина/
+
+async function checkPrices(pagePromise: Promise<FetchedPage | null>): Promise<SVATCheck | null> {
+  const page = await pagePromise
+  if (!page || !page.readable) return null
+  const text = pageText(page.html).toLowerCase()
+  const discounts = DISCOUNT_RES.flatMap((re) => [...text.matchAll(re)].map((m) => Number(m[1]))).filter((n) => n >= 10 && n <= 95)
+  const max = discounts.length ? Math.max(...discounts) : 0
+  const average = discounts.length ? discounts.reduce((a, b) => a + b, 0) / discounts.length : 0
+  if (discounts.filter((n) => n >= 70).length >= 3 && average >= 60) {
+    return { id: 'prices', name: 'checkPrices', status: 'risk', points: -15, details: `Huge discounts everywhere (up to ${max}%)`, detailsKey: 'pricesExtreme', detailsInterp: { max: String(max) }, source: 'Content analysis' }
+  }
+  if (CLOSING_RE.test(text) && max >= 50) {
+    return { id: 'prices', name: 'checkPrices', status: 'warning', points: -10, details: `"Closing down" sale with discounts up to ${max}%`, detailsKey: 'pricesClosingDown', detailsInterp: { max: String(max) }, source: 'Content analysis' }
+  }
+  return null
+}
+
+// 13. Testo finto o di prova (lorem ipsum, pagine d'esempio di WordPress):
+// sito fatto in fretta e mai finito. Senza segnali il controllo non compare.
+const PLACEHOLDER_RE = /lorem ipsum|dolor sit amet|just another wordpress site|un altro sito wordpress|hello world!|ciao mondo!|sample page|pagina di esempio|your company name|il tuo testo qui|add your text here|insert your text|votre texte ici|tu texto aquí|ihr text hier/
+
+async function checkPlaceholder(pagePromise: Promise<FetchedPage | null>): Promise<SVATCheck | null> {
+  const page = await pagePromise
+  if (!page || !page.readable) return null
+  const found = pageText(page.html).toLowerCase().match(PLACEHOLDER_RE)
+  if (!found) return null
+  return { id: 'placeholder', name: 'checkPlaceholder', status: 'warning', points: -10, details: `Placeholder text found: "${found[0]}"`, detailsKey: 'placeholderText', source: 'Content analysis' }
 }
 
 // 5b. DNS – PTR record (reverse DNS) — verifica PTR record per l'IP del dominio
