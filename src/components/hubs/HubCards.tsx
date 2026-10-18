@@ -23,7 +23,7 @@ export default function HubCards({ hubs, items }: { hubs: readonly ServiceHub[];
       {hubs.map((hub) => {
         const Icon = HUB_ICON[hub]
         return (
-          <div key={hub} className="group flex flex-col rounded-2xl border border-[var(--gold)]/35 bg-white p-4 shadow-sm transition-colors hover:border-[var(--gold)] sm:p-5">
+          <div key={hub} className="gold-corner group flex flex-col rounded-2xl border border-[var(--gold)]/35 bg-white p-4 shadow-sm transition-colors hover:border-[var(--gold)] sm:p-5">
             <Link href={HUB_HOME[hub]} className="flex items-center gap-3">
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[var(--ink)] text-[var(--gold-bright)]">
                 <Icon className="h-5 w-5" aria-hidden />

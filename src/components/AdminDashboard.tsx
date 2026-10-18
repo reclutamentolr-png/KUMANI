@@ -64,6 +64,7 @@ import {
   Gauge,
   ShieldAlert,
   Palette,
+  Activity,
   BarChart3,
   Lock,
   ToggleLeft,
@@ -147,6 +148,7 @@ const AdminPasswordReset = dynamic(() => import('@/components/admin/AdminPasswor
 const PassCodesPanel = dynamic(() => import('@/components/admin/PassCodesPanel'), { loading })
 const ToolPassSetting = dynamic(() => import('@/components/admin/ToolPassSetting'), { loading })
 const ReportsPanel = dynamic(() => import('@/components/admin/ReportsPanel'), { loading })
+const RealUsagePanel = dynamic(() => import('@/components/admin/RealUsagePanel'), { loading })
 const MatrixTree = dynamic(() => import('@/components/MatrixTree'), { loading })
 const AdminVouchersPanel = dynamic(() => import('@/components/admin/AdminVouchersPanel'), { loading })
 const AdminFinancialsPanel = dynamic(() => import('@/components/admin/AdminFinancialsPanel'), { loading })
@@ -714,6 +716,7 @@ L'accesso viene registrato.`))) return
   const menuItems = [
   { id: 'platforms', label: 'Piattaforme collegate', Icon: PlugZap, permission: 'stats.read' as Permission, group: 'general' },
   { id: 'overview', label: 'Panoramica', Icon: LayoutDashboard, permission: 'stats.read' as Permission, group: 'general' },
+  { id: 'realUsage', label: 'Uso reale', Icon: Activity, permission: 'stats.read' as Permission, group: 'general' },
   { id: 'security', label: 'Sicurezza', Icon: ShieldAlert, permission: 'settings.read' as Permission, group: 'general' },
   { id: 'financials', label: 'Amministrazione', Icon: PiggyBank, permission: 'stats.read' as Permission, group: 'general' },
   { id: 'costs', label: 'Costi e margini', Icon: Calculator, permission: 'stats.read' as Permission, group: 'general' },
@@ -1825,6 +1828,7 @@ L'accesso viene registrato.`))) return
         {activeSection === 'donations' && <DonationsPanel />}
         {activeSection === 'homeLayout' && <HomeLayoutPanel />}
         {activeSection === 'reports' && <ReportsPanel initialTab={reportTab} />}
+        {activeSection === 'realUsage' && <RealUsagePanel />}
         {activeSection === 'languages' && <LanguagesPanel canWrite={hasPermission(permissions, 'settings.write')} />}
         {activeSection === 'matrix' && renderMatrix()}
         {activeSection === 'marketplace' && renderMarketplace()}

@@ -280,3 +280,38 @@ body::before {
 body:has([data-app-header]) [data-desktop-appbar] {
   display: none !important;
 }
+
+/* Angolo dorato in alto a destra delle schede (servizi uniti in Servizi):
+   un triangolo ritagliato dentro la scheda, così segue la curva dell'angolo */
+.gold-corner {
+  position: relative;
+  overflow: hidden;
+}
+.gold-corner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  background: linear-gradient(225deg, var(--gold-bright) 0%, var(--gold) 70%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+  pointer-events: none;
+  transition: width 0.2s ease, height 0.2s ease;
+}
+.gold-corner:hover::before {
+  width: 3.25rem;
+  height: 3.25rem;
+}
+/* Schede piccole (servizi di «In cosa possiamo darti una mano?», community) */
+.gold-corner-sm::before {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+.gold-corner-sm:hover::before {
+  width: 2.1rem;
+  height: 2.1rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .gold-corner::before { transition: none; }
+}

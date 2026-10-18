@@ -229,3 +229,41 @@ export async function adminReportSessions(days: number): Promise<SessionStats | 
   if (error || !data) return { error: error?.message ?? 'Statistiche non disponibili' }
   return data as SessionStats
 }
+
+// ---------- Uso reale: attivi, ritorno, servizi usati e non, conversione
+export type RealUsage = {
+  today: string
+  days: number
+  data_since: string | null
+  totals: { registered: number; free: number; base: number; pro: number }
+  active: { d1: number; d7: number; d30: number; d90: number; prev7: number; prev30: number; avg_daily30: number }
+  frequency: { one: number; two_three: number; four_nine: number; ten_plus: number }
+  daily: { day: string; active: number; signups: number }[]
+  cohorts: { week: string; signups: number; first_week: number; came_back: number; active_now: number; mature: boolean }[]
+  tools: { tool: string; title: string; enabled: boolean; plan: string; users: number; use_days: number; prev_users: number }[]
+  conversion: { signups90: number; paying_from_signups90: number; avg_days_to_pay: number | null; checkouts_by_month: { month: string; base: number; pro: number }[] }
+}
+
+// Nomi dei servizi fuori dall'elenco del marketplace
+const USAGE_EXTRA_TITLES: Record<string, string> = {
+  events: 'Kumani Events',
+  chat: 'Chat',
+  convivio: 'Kordata',
+  listings: 'Bacheca annunci',
+  spotlight: 'Kumano del Giorno',
+  timebank: 'Banca del Tempo',
+  sorprese: 'Sorprese',
+  travel: 'KUMANI Viaggi',
+  convivium: 'Convivium',
+}
+
+export async function adminRealUsage(days: number): Promise<RealUsage | { error: string }> {
+  if (!(await verifyAdmin('stats.read'))) return { error: 'Non autorizzato' }
+  const period = [7, 30, 90].includes(days) ? days : 30
+  const { data, error } = await db().rpc('admin_real_usage', { p_days: period })
+  if (error || !data) return { error: error?.message ?? 'Statistiche non disponibili' }
+  const tm = await getTranslations({ locale: 'it', namespace: 'marketplace' })
+  const titles = new Map(getMarketplaceTools(tm).map((t) => [t.toolName, t.title]))
+  const result = data as Omit<RealUsage, 'tools'> & { tools: Omit<RealUsage['tools'][number], 'title'>[] }
+  return { ...result, tools: result.tools.map((t) => ({ ...t, title: titles.get(t.tool) ?? USAGE_EXTRA_TITLES[t.tool] ?? t.tool })) }
+}

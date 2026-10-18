@@ -42,7 +42,7 @@ export default function HomeNeeds({
           if (item.links?.length)
             return (
               <li key={item.name}>
-                <div className="flex h-full items-start gap-3 rounded-2xl border border-gray-200 bg-[var(--background)] p-3 sm:flex-col sm:gap-0 sm:p-4">
+                <div className="flex h-full items-start gap-3 gold-corner gold-corner-sm rounded-2xl border border-gray-200 bg-[var(--background)] p-3 sm:flex-col sm:gap-0 sm:p-4">
                   <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--ink)] text-[var(--gold-bright)]">
                     <Icon className="h-5 w-5" />
                   </span>
@@ -68,7 +68,7 @@ export default function HomeNeeds({
             <li key={item.name}>
               <Link
                 href={item.href}
-                className="group flex h-full items-start gap-3 rounded-2xl border border-gray-200 bg-[var(--background)] p-3 transition hover:border-[var(--gold)] hover:bg-white hover:shadow-md sm:flex-col sm:gap-0 sm:p-4"
+                className="group flex h-full items-start gap-3 gold-corner gold-corner-sm rounded-2xl border border-gray-200 bg-[var(--background)] p-3 transition hover:border-[var(--gold)] hover:bg-white hover:shadow-md sm:flex-col sm:gap-0 sm:p-4"
               >
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--ink)] text-[var(--gold-bright)]">
                   <Icon className="h-5 w-5" />

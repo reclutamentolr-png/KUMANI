@@ -33,7 +33,7 @@ export function CommunityBlock({ items }: { items: CommunityItem[] }) {
             <Link
               key={item.toolName}
               href={item.locked ? { pathname: '/billing' } : `${item.href}?from=dashboard`}
-              className="group relative grid grid-cols-[2.25rem_1fr] gap-x-3 rounded-xl sm:flex sm:min-h-[150px] sm:flex-col border border-sky-200 bg-white p-4 transition-all hover:-translate-y-0.5 hover:border-sky-400 hover:shadow-md"
+              className="gold-corner gold-corner-sm group relative grid grid-cols-[2.25rem_1fr] gap-x-3 rounded-xl sm:flex sm:min-h-[150px] sm:flex-col border border-sky-200 bg-white p-4 transition-all hover:-translate-y-0.5 hover:border-sky-400 hover:shadow-md"
             >
               <div className="relative row-span-3 flex h-9 w-9 items-center sm:mb-2 justify-center rounded-lg bg-sky-700 text-white">
                 <Icon className="h-4.5 w-4.5" strokeWidth={1.7} />

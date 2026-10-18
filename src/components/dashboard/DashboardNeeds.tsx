@@ -47,7 +47,7 @@ export default function DashboardNeeds({
           if (item.links?.length)
             return (
               <li key={item.name} className="sm:col-span-2">
-                <div className="flex h-full items-start gap-3 rounded-xl border border-gray-200 bg-[var(--background)] p-2.5">
+                <div className="flex h-full items-start gap-3 gold-corner gold-corner-sm rounded-xl border border-gray-200 bg-[var(--background)] p-2.5">
                   <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--ink)] text-[var(--gold-bright)]">
                     <Icon className="h-5 w-5" />
                   </span>
@@ -74,7 +74,7 @@ export default function DashboardNeeds({
             <li key={item.name}>
               <Link
                 href={item.href}
-                className="group flex h-full items-center gap-3 rounded-xl border border-gray-200 bg-[var(--background)] p-2.5 transition hover:border-[var(--gold)] hover:bg-white"
+                className="group flex h-full items-center gap-3 gold-corner gold-corner-sm rounded-xl border border-gray-200 bg-[var(--background)] p-2.5 transition hover:border-[var(--gold)] hover:bg-white"
               >
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--ink)] text-[var(--gold-bright)]">
                   <Icon className="h-5 w-5" />
