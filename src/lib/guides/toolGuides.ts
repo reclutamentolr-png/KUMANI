@@ -21,6 +21,7 @@ export const TOOL_GUIDES: { path: string; slug: GuideSlug }[] = [
   { path: '/marketplace/convivio', slug: 'convivio' },
   { path: '/marketplace/affinity', slug: 'affinity' },
   { path: '/convivium', slug: 'convivium' },
+  { path: '/calendario-collegato', slug: 'calendario' },
   { path: '/marketplace/veritas', slug: 'veritas' },
   { path: '/marketplace/kumani-cv', slug: 'kumani-cv' },
   { path: '/marketplace/findo', slug: 'findo' },

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
-import { ArrowRight, CalendarDays, ChevronLeft, ChevronRight, LoaderCircle, Plus } from 'lucide-react'
+import { ArrowRight, CalendarDays, ChevronLeft, ChevronRight, LoaderCircle, Plus, CalendarSync } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { getAgendaRange } from '@/app/actions/agenda'
 import { addDays, type AgendaEvent } from '@/lib/agenda'
@@ -236,6 +236,10 @@ export default function UpcomingAgenda({ events, today, sources }: { events: Age
           {list.length > MAX_ROWS ? t('seeAllCount', { count: list.length }) : t('openCalendar')} <ArrowRight className="h-4 w-4" />
         </Link>
       )}
+      {/* Gli impegni KUMANI anche in Google Calendar, iPhone, Outlook */}
+      <Link href="/calendario-collegato" className="mx-auto mt-3 flex w-fit items-center gap-1.5 text-xs font-semibold text-[var(--muted)] underline decoration-[var(--gold)]/50 underline-offset-2 hover:text-[var(--ink)]">
+        <CalendarSync className="h-3.5 w-3.5 text-[var(--gold)]" aria-hidden /> {t('connectCalendar')}
+      </Link>
       </div>
 
       {adding && <QuickAddMenu sources={sources} onClose={() => setAdding(false)} />}

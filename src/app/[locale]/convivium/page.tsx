@@ -3,7 +3,7 @@ import { getLocale, getTranslations } from 'next-intl/server'
 import { ArrowLeft, CalendarDays, HandCoins, MapPin, Wine } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import HubBar from '@/components/hubs/HubBar'
-import ConviviumForm from '@/components/convivium/ConviviumForm'
+import ConviviumNewEvening from '@/components/convivium/ConviviumNewEvening'
 import { SuspendedBanner } from '@/components/ServiceSuspended'
 import { createClient } from '@/lib/supabase/server'
 import { isToolOnline } from '@/lib/toolOnline'
@@ -100,10 +100,16 @@ export default async function ConviviumPage() {
         </div>
 
         <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr]">
-          <section className="rounded-2xl border border-[var(--gold)]/25 bg-white p-5 shadow-sm sm:p-6">
-            <h2 className="mb-4 text-xl font-extrabold text-[var(--ink)]">{t('newEvening')}</h2>
-            {online ? <ConviviumForm /> : <SuspendedBanner />}
-          </section>
+          {/* Aperta solo se non ci sono ancora serate; poi «Crea una nuova serata» */}
+          {online ? (
+            <div>
+              <ConviviumNewEvening startOpen={events.length === 0} />
+            </div>
+          ) : (
+            <section className="rounded-2xl border border-[var(--gold)]/25 bg-white p-5 shadow-sm sm:p-6">
+              <SuspendedBanner />
+            </section>
+          )}
           <section>
             <h2 className="mb-3 text-xl font-extrabold text-[var(--ink)]">{t('myEvenings')}</h2>
             {events.length === 0 && <p className="rounded-2xl border border-dashed border-[var(--gold)]/40 p-5 text-sm text-[var(--muted)]">{t('empty')}</p>}

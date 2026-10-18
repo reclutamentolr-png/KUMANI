@@ -4002,7 +4002,12 @@
     "lifeCalendarHint": "Parece un vencimiento que se renueva: ponlo en Life Calendar, te avisa con antelación y te recuerda también las próximas renovaciones.",
     "lifeCalendarHintCta": "Añadirlo a Life Calendar",
     "openCasa": "Abrir en KUMANI Casa",
-    "peekLabel": "Tu calendario: {n, plural, =0 {nada que hacer hoy} one {# cosa que hacer hoy} other {# cosas que hacer hoy}}"
+    "peekLabel": "Tu calendario: {n, plural, =0 {nada que hacer hoy} one {# cosa que hacer hoy} other {# cosas que hacer hoy}}",
+    "source_convivium": "Convivium",
+    "conviviumHosting": "Convivium · organizas tú",
+    "conviviumMaybe": "Convivium · quizá",
+    "openConvivium": "Abrir",
+    "connectCalendar": "Conectar con Google Calendar, iPhone u Outlook"
   },
   "convivio": {
     "error_suspended": "Servicio suspendido temporalmente. Inténtelo más tarde.",
@@ -8190,6 +8195,20 @@
       "step3Tip": "Al final de la invitación aparece la invitación a entrar en KUMANI con tu código.",
       "step4Title": "Mira cómo se llena la mesa",
       "step4Text": "En tu quedada ves quién ha respondido y recibes un aviso con cada «Me apunto». El día antes te lo recordamos a ti y a los invitados que están en KUMANI. Desde aquí puedes editarla, cancelarla o eliminarla."
+    },
+    "calendario": {
+      "title": "Calendario conectado",
+      "summary": "Tus compromisos de KUMANI en el calendario que ya usas: Google Calendar, iPhone u Outlook.",
+      "cta": "Conectar el calendario",
+      "step1Title": "Abre «Conecta tu calendario»",
+      "step1Text": "En el Dashboard, debajo de la agenda, pulsa «Conectar con Google Calendar, iPhone u Outlook». Ahí está tu enlace personal.",
+      "step2Title": "Añádelo con un toque",
+      "step2Text": "Pulsa «Google Calendar», «iPhone y Mac» u «Outlook» y confirma: el calendario de KUMANI aparece entre tus calendarios.",
+      "step2Tip": "Si el botón no funciona, copia el enlace y pégalo en el calendario («Desde URL» o «Desde Internet»).",
+      "step3Title": "Se actualiza solo",
+      "step3Text": "Quedadas, eventos, viajes, citas, facturas y vencimientos llegan a tu calendario. Los cambios se hacen en KUMANI: Google los recoge cada pocas horas.",
+      "step4Title": "Guarda el enlace para ti",
+      "step4Text": "Quien tenga el enlace ve tus compromisos. Si crees que lo tiene otra persona, pulsa «Regenerar el enlace»: el anterior deja de funcionar."
     }
   },
   "deckTexts": {
@@ -13989,6 +14008,42 @@
     "copyMessage": "Copiar mensaje",
     "copiedMessage": "¡Mensaje copiado!",
     "broadcastHint": "Para una lista de difusión o un grupo de WhatsApp: pulsa «Copiar mensaje» y pégalo allí. Las listas de difusión solo llegan a quien tiene tu número guardado.",
-    "answerHint": "No hace falta registrarse: escribe tu nombre y elige."
+    "answerHint": "No hace falta registrarse: escribe tu nombre y elige.",
+    "createAnother": "Crear una nueva quedada",
+    "createAnotherHint": "Aperitivo, pizza, cena… unos pocos datos y recibes el enlace para enviar."
+  },
+  "calendarFeed": {
+    "title": "Conecta tu calendario",
+    "back": "Dashboard",
+    "intro": "Ve tus compromisos de KUMANI en el calendario que ya usas: Google Calendar, iPhone u Outlook. Lo conectas una vez y se actualiza solo.",
+    "linkTitle": "Tu enlace personal",
+    "linkHint": "Es el calendario con tus compromisos de KUMANI. Usa los botones de abajo o cópialo y pégalo en tu calendario.",
+    "copy": "Copiar enlace",
+    "copied": "¡Copiado!",
+    "lastFetched": "Conectado: un calendario lo leyó por última vez el {when}.",
+    "neverFetched": "Aún no conectado: ningún calendario ha leído el enlace.",
+    "appsTitle": "Añádelo a tu calendario",
+    "google": "Google Calendar",
+    "apple": "iPhone y Mac",
+    "outlook": "Outlook",
+    "googleStepsTitle": "Google Calendar (desde el ordenador)",
+    "googleStep1": "Pulsa «Google Calendar» arriba: se abre Google Calendar con el calendario de KUMANI listo.",
+    "googleStep2": "Confirma con «Añadir». Si no se abre: en Google Calendar ve a «Otros calendarios» → «+» → «Desde URL» y pega el enlace.",
+    "googleStep3": "En el móvil aparece solo en la app Google Calendar (comprueba que «KUMANI» esté activado).",
+    "appleStepsTitle": "iPhone y Mac",
+    "appleStep1": "Desde el iPhone o el Mac pulsa «iPhone y Mac» arriba.",
+    "appleStep2": "Confirma con «Suscribirse» y luego «Añadir»: el calendario se llama KUMANI.",
+    "appleStep3": "Para actualizaciones más frecuentes: Ajustes → Calendario → Cuentas → KUMANI → «Cada hora».",
+    "outlookStepsTitle": "Outlook",
+    "outlookStep1": "Pulsa «Outlook» arriba (Outlook.com o Microsoft 365).",
+    "outlookStep2": "Confirma con «Importar» o «Añadir».",
+    "outlookStep3": "Con Outlook en el ordenador: «Agregar calendario» → «Desde Internet» y pega el enlace.",
+    "infoTitle": "A tener en cuenta",
+    "infoWhat": "Incluye quedadas Convivium, eventos, viajes, citas y recordatorios de MemoLife, facturas de Spendly y vencimientos: del último mes a los próximos seis.",
+    "infoOneWay": "Va de KUMANI a tu calendario: los cambios se hacen en KUMANI.",
+    "infoDelay": "Google actualiza los calendarios conectados cada pocas horas (a veces hasta un día): una novedad puede aparecer algo más tarde.",
+    "infoPrivate": "Quien tenga el enlace ve tus compromisos: no lo compartas. Si crees que lo tiene otra persona, regenéralo.",
+    "rotate": "Regenerar el enlace",
+    "rotateConfirm": "¿Generar un enlace nuevo? El anterior deja de funcionar enseguida: tendrás que conectar de nuevo el calendario."
   }
 }

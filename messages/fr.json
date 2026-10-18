@@ -4002,7 +4002,12 @@
     "lifeCalendarHint": "Cela ressemble à une échéance qui se renouvelle : ajoutez-la à Life Calendar, il vous prévient à l’avance et vous rappelle aussi les prochains renouvellements.",
     "lifeCalendarHintCta": "L’ajouter à Life Calendar",
     "openCasa": "Ouvrir dans KUMANI Casa",
-    "peekLabel": "Votre calendrier : {n, plural, =0 {rien à faire aujourd’hui} one {# chose à faire aujourd’hui} other {# choses à faire aujourd’hui}}"
+    "peekLabel": "Votre calendrier : {n, plural, =0 {rien à faire aujourd’hui} one {# chose à faire aujourd’hui} other {# choses à faire aujourd’hui}}",
+    "source_convivium": "Convivium",
+    "conviviumHosting": "Convivium · vous organisez",
+    "conviviumMaybe": "Convivium · peut-être",
+    "openConvivium": "Ouvrir",
+    "connectCalendar": "Connecter à Google Agenda, iPhone ou Outlook"
   },
   "convivio": {
     "error_suspended": "Service momentanément suspendu. Veuillez réessayer plus tard.",
@@ -8190,6 +8195,20 @@
       "step3Tip": "En bas de l’invitation, il y a l’invitation à rejoindre KUMANI avec votre code.",
       "step4Title": "Regardez la table se remplir",
       "step4Text": "Dans votre soirée vous voyez qui a répondu et recevez une alerte à chaque « Je viens ». La veille, nous vous le rappelons, à vous et aux invités inscrits sur KUMANI. D’ici, vous pouvez la modifier, l’annuler ou la supprimer."
+    },
+    "calendario": {
+      "title": "Agenda connecté",
+      "summary": "Vos engagements KUMANI dans l’agenda que vous utilisez déjà : Google Agenda, iPhone ou Outlook.",
+      "cta": "Connecter l’agenda",
+      "step1Title": "Ouvrez « Connectez votre agenda »",
+      "step1Text": "Dans le tableau de bord, sous l’agenda, touchez « Connecter à Google Agenda, iPhone ou Outlook ». Vous y trouvez votre lien personnel.",
+      "step2Title": "Ajoutez-le en un geste",
+      "step2Text": "Touchez « Google Agenda », « iPhone et Mac » ou « Outlook » et confirmez : l’agenda KUMANI apparaît parmi vos agendas.",
+      "step2Tip": "Si le bouton ne marche pas, copiez le lien et collez-le dans votre agenda (« À partir de l’URL » ou « À partir d’Internet »).",
+      "step3Title": "Il se met à jour tout seul",
+      "step3Text": "Soirées, événements, voyages, rendez-vous, factures et échéances arrivent dans votre agenda. Les modifications se font dans KUMANI : Google les reprend toutes les quelques heures.",
+      "step4Title": "Gardez le lien pour vous",
+      "step4Text": "Qui a le lien voit vos engagements. Si vous pensez que quelqu’un d’autre l’a, touchez « Régénérer le lien » : l’ancien ne fonctionne plus."
     }
   },
   "deckTexts": {
@@ -13989,6 +14008,42 @@
     "copyMessage": "Copier le message",
     "copiedMessage": "Message copié !",
     "broadcastHint": "Pour une liste de diffusion ou un groupe WhatsApp : touchez « Copier le message » et collez-le là. Les listes de diffusion n’atteignent que ceux qui ont enregistré votre numéro.",
-    "answerHint": "Pas besoin de vous inscrire : écrivez votre prénom et choisissez."
+    "answerHint": "Pas besoin de vous inscrire : écrivez votre prénom et choisissez.",
+    "createAnother": "Créer une nouvelle soirée",
+    "createAnotherHint": "Apéro, pizza, dîner… quelques infos et vous recevez le lien à envoyer."
+  },
+  "calendarFeed": {
+    "title": "Connectez votre agenda",
+    "back": "Tableau de bord",
+    "intro": "Voyez vos engagements KUMANI dans l’agenda que vous utilisez déjà : Google Agenda, iPhone ou Outlook. On le connecte une fois, ensuite il se met à jour tout seul.",
+    "linkTitle": "Votre lien personnel",
+    "linkHint": "C’est l’agenda avec vos engagements KUMANI. Utilisez les boutons ci-dessous, ou copiez-le et collez-le dans votre agenda.",
+    "copy": "Copier le lien",
+    "copied": "Copié !",
+    "lastFetched": "Connecté : un agenda l’a lu pour la dernière fois le {when}.",
+    "neverFetched": "Pas encore connecté : aucun agenda n’a encore lu le lien.",
+    "appsTitle": "Ajoutez-le à votre agenda",
+    "google": "Google Agenda",
+    "apple": "iPhone et Mac",
+    "outlook": "Outlook",
+    "googleStepsTitle": "Google Agenda (sur ordinateur)",
+    "googleStep1": "Touchez « Google Agenda » ci-dessus : Google Agenda s’ouvre avec l’agenda KUMANI prêt.",
+    "googleStep2": "Confirmez avec « Ajouter ». Sinon : dans Google Agenda, « Autres agendas » → « + » → « À partir de l’URL » et collez le lien.",
+    "googleStep3": "Sur le téléphone, il apparaît tout seul dans l’appli Google Agenda (vérifiez que « KUMANI » est activé).",
+    "appleStepsTitle": "iPhone et Mac",
+    "appleStep1": "Depuis l’iPhone ou le Mac, touchez « iPhone et Mac » ci-dessus.",
+    "appleStep2": "Confirmez avec « S’abonner » puis « Ajouter » : l’agenda s’appelle KUMANI.",
+    "appleStep3": "Pour des mises à jour plus fréquentes : Réglages → Calendrier → Comptes → KUMANI → « Toutes les heures ».",
+    "outlookStepsTitle": "Outlook",
+    "outlookStep1": "Touchez « Outlook » ci-dessus (Outlook.com ou Microsoft 365).",
+    "outlookStep2": "Confirmez avec « Importer » ou « Ajouter ».",
+    "outlookStep3": "Avec Outlook sur ordinateur : « Ajouter un calendrier » → « À partir d’Internet » et collez le lien.",
+    "infoTitle": "À savoir",
+    "infoWhat": "Il contient les soirées Convivium, les événements, les voyages, les rendez-vous et rappels MemoLife, les factures Spendly et les échéances : du mois dernier aux six prochains.",
+    "infoOneWay": "Il va de KUMANI vers votre agenda : les modifications se font dans KUMANI.",
+    "infoDelay": "Google actualise les agendas connectés toutes les quelques heures (parfois jusqu’à un jour) : une nouveauté peut apparaître un peu plus tard.",
+    "infoPrivate": "Qui a le lien voit vos engagements : ne le partagez pas. Si vous pensez que quelqu’un d’autre l’a, régénérez-le.",
+    "rotate": "Régénérer le lien",
+    "rotateConfirm": "Générer un nouveau lien ? L’ancien cesse aussitôt de fonctionner : il faudra reconnecter votre agenda."
   }
 }

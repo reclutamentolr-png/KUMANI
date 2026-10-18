@@ -27,6 +27,7 @@ export type GuideSlug =
   | 'convivio'
   | 'affinity'
   | 'convivium'
+  | 'calendario'
   | 'veritas'
   | 'kumani-cv'
   | 'findo'

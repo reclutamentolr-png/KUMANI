@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { ArrowRight, CalendarDays, LoaderCircle, Plus, X } from 'lucide-react'
+import { ArrowRight, CalendarDays, LoaderCircle, Plus, X, CalendarSync } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { getAgendaPeek } from '@/app/actions/agenda'
 import { agendaStatus, type AgendaEvent } from '@/lib/agenda'
@@ -205,6 +205,9 @@ export default function AgendaPeekButton() {
                   {t('openCalendar')} <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
+              <Link href="/calendario-collegato" onClick={() => setOpen(false)} className="flex items-center justify-center gap-1.5 pt-1 text-xs font-semibold text-[var(--muted)] underline decoration-[var(--gold)]/50 underline-offset-2 hover:text-[var(--ink)]">
+                <CalendarSync className="h-3.5 w-3.5 text-[var(--gold)]" aria-hidden /> {t('connectCalendar')}
+              </Link>
             </div>
           </div>
         </>

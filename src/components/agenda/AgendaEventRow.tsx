@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { CalendarClock, Check, CheckCircle2, FileBadge, House, LoaderCircle, PartyPopper, Plane, Receipt, RotateCcw, Undo2 } from 'lucide-react'
+import { CalendarClock, Check, CheckCircle2, FileBadge, House, LoaderCircle, Martini, PartyPopper, Plane, Receipt, RotateCcw, Undo2 } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { markBillPaid, setTaskDone, unmarkBillPaid } from '@/app/actions/agenda'
 import { markHandled } from '@/app/actions/lifeCalendar'
@@ -10,7 +10,7 @@ import { agendaStatus, daysBetween, type AgendaEvent } from '@/lib/agenda'
 import { parseAmount } from '@/lib/spendly'
 import { askConfirm } from '@/lib/confirm'
 
-const KIND_ICON = { appointment: CalendarClock, task: CheckCircle2, bill: Receipt, deadline: FileBadge, trip: Plane, event: PartyPopper }
+const KIND_ICON = { appointment: CalendarClock, task: CheckCircle2, bill: Receipt, deadline: FileBadge, trip: Plane, event: PartyPopper, convivium: Martini }
 export const KIND_COLOR = {
   appointment: 'bg-sky-500',
   task: 'bg-violet-500',
@@ -18,6 +18,7 @@ export const KIND_COLOR = {
   deadline: 'bg-rose-500',
   trip: 'bg-teal-500',
   event: 'bg-fuchsia-500',
+  convivium: 'bg-[#b8872b]',
 }
 
 // Una riga dell'agenda unica con l'azione rapida del suo tipo: bolletta →
@@ -85,6 +86,8 @@ export default function AgendaEventRow({
       ? t(event.tripEdge === 'end' ? 'tripReturn' : 'tripDeparture')
       : event.kind === 'event' && event.organizing
         ? t('eventOrganizing')
+        : event.kind === 'convivium'
+          ? t(event.organizing ? 'conviviumHosting' : event.conviviumMaybe ? 'conviviumMaybe' : 'source_convivium')
         : event.casaHomeId
           ? 'KUMANI Casa'
           : t(`source_${event.kind}`),
@@ -154,6 +157,11 @@ export default function AgendaEventRow({
       ) : event.kind === 'event' ? (
         <Link href={`/events/${event.refId}`} className="shrink-0 rounded-lg bg-fuchsia-600 px-2.5 py-1.5 text-xs font-bold text-white hover:bg-fuchsia-700">
           {t('openEvent')}
+        </Link>
+      ) : event.kind === 'convivium' ? (
+        // Chi organizza apre la sua serata, chi è invitato il suo invito
+        <Link href={event.organizing ? `/convivium/${event.refId}` : `/convivium/invito/${event.refId}`} className="shrink-0 rounded-lg bg-[#9c7020] px-2.5 py-1.5 text-xs font-bold text-white hover:bg-[#82601b]">
+          {t('openConvivium')}
         </Link>
       ) : event.kind === 'trip' ? (
         <Link href={`/viaggi/${event.refId}`} className="shrink-0 rounded-lg bg-teal-600 px-2.5 py-1.5 text-xs font-bold text-white hover:bg-teal-700">

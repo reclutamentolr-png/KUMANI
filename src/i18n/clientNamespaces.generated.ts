@@ -13,6 +13,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "businessCard",
   "businessProfile",
   "calcolatrici",
+  "calendarFeed",
   "casa",
   "catalog",
   "chat",

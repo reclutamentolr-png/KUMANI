@@ -3,6 +3,8 @@ import { getTranslations } from 'next-intl/server'
 import { addDays, dateKeyOf, daysBetween, sortAgenda, timeOf, todayKey, type AgendaEvent } from '@/lib/agenda'
 import { fixedExpenseDueDate, paymentKey, periodOf, type SpendlyFixedExpense, type SpendlyFixedPayment } from '@/lib/spendly'
 import { settleAutoPayments } from '@/lib/spendly-server'
+import { pushDb } from '@/lib/push'
+import { OCCASION_EMOJI, type ConviviumOccasion } from '@/lib/convivium'
 
 export type AgendaSources = { memolife: boolean; spendly: boolean; lifeCalendar: boolean }
 
@@ -199,12 +201,14 @@ export async function loadAgenda(supabase: SupabaseClient, userId: string, optio
   )
 
   // KUMANI Travel: partenza e rientro dei viaggi di cui si fa parte (anche
-  // senza abbonamento: le RLS mostrano solo i viaggi dei membri).
+  // senza abbonamento). Filtro esplicito sui membri, non solo le RLS: il
+  // calendario collegato (/api/calendario) legge con la chiave di servizio.
   jobs.push(
     (async () => {
       const { data } = await supabase
         .from('trips')
-        .select('id, title, starts_on, ends_on, cover_emoji')
+        .select('id, title, starts_on, ends_on, cover_emoji, trip_members!inner(user_id)')
+        .eq('trip_members.user_id', userId)
         .not('starts_on', 'is', null)
         .lte('starts_on', to)
         .gte('ends_on', from)
@@ -253,6 +257,45 @@ export async function loadAgenda(supabase: SupabaseClient, userId: string, optio
       for (const row of registrations ?? []) {
         const e = (Array.isArray(row.events) ? row.events[0] : row.events) as { id: string; title: string; starts_at: string; type: string; status: string } | null
         if (e && e.status === 'published') pushEvent(e, false)
+      }
+    })()
+  )
+
+  // KUMANI Convivium: le serate che organizzo e quelle a cui ho detto «Ci sto»
+  // o «Forse» da iscritto (le risposte degli invitati si leggono con la chiave
+  // di servizio, sempre filtrate su questo utente). Le serate annullate no.
+  const pushConvivium = (e: { id: string; title: string; occasion: string; starts_at: string; invite_code: string }, organizing: boolean, maybe = false) => {
+    const instant = new Date(e.starts_at)
+    const date = dateKeyOf(instant)
+    if (date < from || date > to) return
+    if (events.some((existing) => existing.key === `convivium:${e.id}`)) return
+    const emoji = OCCASION_EMOJI[e.occasion as ConviviumOccasion] ?? '🥂'
+    events.push({ key: `convivium:${e.id}`, kind: 'convivium', date, time: timeOf(instant), title: `${emoji} ${e.title}`, amount: null, done: false, refId: organizing ? e.id : e.invite_code, organizing, conviviumMaybe: maybe })
+  }
+  jobs.push(
+    (async () => {
+      const [{ data: hosted }, { data: answers }] = await Promise.all([
+        supabase
+          .from('convivium_events')
+          .select('id, title, occasion, starts_at, invite_code')
+          .eq('owner_id', userId)
+          .is('cancelled_at', null)
+          .gte('starts_at', eventFrom)
+          .lte('starts_at', eventTo),
+        pushDb()
+          .from('convivium_rsvps')
+          .select('answer, convivium_events!inner(id, title, occasion, starts_at, invite_code, cancelled_at)')
+          .eq('user_id', userId)
+          .in('answer', ['yes', 'maybe'])
+          .gte('convivium_events.starts_at', eventFrom)
+          .lte('convivium_events.starts_at', eventTo),
+      ])
+      for (const e of hosted ?? []) pushConvivium(e, true)
+      for (const row of answers ?? []) {
+        const e = (Array.isArray(row.convivium_events) ? row.convivium_events[0] : row.convivium_events) as
+          | { id: string; title: string; occasion: string; starts_at: string; invite_code: string; cancelled_at: string | null }
+          | null
+        if (e && !e.cancelled_at) pushConvivium(e, false, row.answer === 'maybe')
       }
     })()
   )

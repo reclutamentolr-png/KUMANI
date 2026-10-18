@@ -38,7 +38,7 @@ const useHydrated = () => useSyncExternalStore(noop, () => true, () => false)
 
 const field = 'w-full rounded-xl border border-[var(--gold)]/30 bg-white px-3.5 py-2.5 text-[var(--ink)] outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/20'
 
-export default function ConviviumForm({ event, onDone }: { event?: ConviviumEvent; onDone?: () => void }) {
+export default function ConviviumForm({ event, onDone, onCancel }: { event?: ConviviumEvent; onDone?: () => void; onCancel?: () => void }) {
   const t = useTranslations('convivium')
   const router = useRouter()
   const [pending, start] = useTransition()
@@ -191,8 +191,8 @@ export default function ConviviumForm({ event, onDone }: { event?: ConviviumEven
         <button type="submit" disabled={pending || !hydrated} className="rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3 font-bold text-[var(--ink)] shadow disabled:opacity-60">
           {pending ? t('saving') : event ? t('save') : t('create')}
         </button>
-        {event && onDone && (
-          <button type="button" onClick={onDone} className="rounded-xl border border-[var(--gold)]/40 px-5 py-3 font-semibold text-[var(--ink)]">
+        {((event && onDone) || onCancel) && (
+          <button type="button" onClick={onCancel ?? onDone} className="rounded-xl border border-[var(--gold)]/40 px-5 py-3 font-semibold text-[var(--ink)]">
             {t('cancel')}
           </button>
         )}
