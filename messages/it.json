@@ -265,7 +265,8 @@
     "statToolsShort": "{count, plural, one {strumento} other {strumenti}}",
     "statServicesShort": "{count, plural, one {servizio} other {servizi}}",
     "statLanguagesShort": "{count, plural, one {lingua} other {lingue}}",
-    "statWeeklyShort": "a settimana"
+    "statWeeklyShort": "a settimana",
+    "builtBy": "Realizzato da {name}"
   },
   "authRegister": {
     "registerTitle": "Crea il tuo account",
@@ -11679,7 +11680,9 @@
     "reminderEmailLink": "Il link della sorpresa:",
     "error_reminderPast": "Scegli un giorno e un’ora nel futuro.",
     "error_reminderTooFar": "Il promemoria si può impostare al massimo entro un anno.",
-    "error_reminderPhone": "Il numero non sembra corretto: scrivilo con il prefisso, per esempio +39 333 123 4567."
+    "error_reminderPhone": "Il numero non sembra corretto: scrivilo con il prefisso, per esempio +39 333 123 4567.",
+    "reminderNowClose": "Chiudi",
+    "reminderNowDone": "L’ho già inviata"
   },
   "surpriseTpl": {
     "mom_name": "Un massaggio per la mamma",

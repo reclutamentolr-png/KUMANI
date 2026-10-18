@@ -228,7 +228,8 @@
     "statToolsShort": "{count, plural, one {Tool} other {Tools}}",
     "statServicesShort": "{count, plural, one {Dienst} other {Dienste}}",
     "statLanguagesShort": "{count, plural, one {Sprache} other {Sprachen}}",
-    "statWeeklyShort": "pro Woche"
+    "statWeeklyShort": "pro Woche",
+    "builtBy": "Entwickelt von {name}"
   },
   "authRegister": {
     "registerTitle": "Konto erstellen",
@@ -11679,7 +11680,9 @@
     "reminderEmailLink": "Der Link zur Überraschung:",
     "error_reminderPast": "Wähle einen Tag und eine Uhrzeit in der Zukunft.",
     "error_reminderTooFar": "Die Erinnerung lässt sich höchstens ein Jahr im Voraus einstellen.",
-    "error_reminderPhone": "Die Nummer scheint nicht zu stimmen: Schreib sie mit Ländervorwahl, z. B. +49 151 23456789."
+    "error_reminderPhone": "Die Nummer scheint nicht zu stimmen: Schreib sie mit Ländervorwahl, z. B. +49 151 23456789.",
+    "reminderNowClose": "Schließen",
+    "reminderNowDone": "Schon gesendet"
   },
   "surpriseTpl": {
     "mom_name": "Eine Massage für Mama",

@@ -228,7 +228,8 @@
     "statToolsShort": "{count, plural, one {инструмент} few {инструмента} many {инструментов} other {инструмента}}",
     "statServicesShort": "{count, plural, one {сервис} few {сервиса} many {сервисов} other {сервиса}}",
     "statLanguagesShort": "{count, plural, one {язык} few {языка} many {языков} other {языка}}",
-    "statWeeklyShort": "в неделю"
+    "statWeeklyShort": "в неделю",
+    "builtBy": "Разработано {name}"
   },
   "authRegister": {
     "registerTitle": "Создать аккаунт",
@@ -11679,7 +11680,9 @@
     "reminderEmailLink": "Ссылка на сюрприз:",
     "error_reminderPast": "Выбери день и время в будущем.",
     "error_reminderTooFar": "Напоминание можно установить не более чем за год.",
-    "error_reminderPhone": "Номер выглядит неверно: укажи его с кодом страны, например +7 912 345 67 89."
+    "error_reminderPhone": "Номер выглядит неверно: укажи его с кодом страны, например +7 912 345 67 89.",
+    "reminderNowClose": "Закрыть",
+    "reminderNowDone": "Я уже отправил"
   },
   "surpriseTpl": {
     "mom_name": "Массаж для мамы",

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
-import { ArrowLeft, CheckCircle2, HandHeart, Heart, Info, MessageCircle, PartyPopper, Send, Smile, Sparkles } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, HandHeart, Heart, Info, MessageCircle, PartyPopper, Send, Smile, Sparkles, X } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import CheckoutForm from '@/components/billing/CheckoutForm'
 import SurpriseEditor from '@/components/surprise/SurpriseEditor'
@@ -115,10 +115,14 @@ export default async function SurpriseEditPage({
         )}
         {sp.canceled && <p className="mt-4 rounded-xl bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-800">{t('canceled')}</p>}
 
-        {/* Dalla notifica del promemoria: invio su WhatsApp con un tocco */}
-        {sp.invia && row.status === 'active' && url && !row.refunded_at && (
-          <section className="mt-5 rounded-2xl bg-emerald-600 p-5 text-white shadow-lg">
-            <p className="text-lg font-extrabold">{t('reminderNowTitle', { name: row.recipient_name || '—' })}</p>
+        {/* Dalla notifica del promemoria: invio su WhatsApp con un tocco. Si chiude
+            con la X o «L'ho già inviata»; non compare più se chi la riceve ha già aperto il link */}
+        {sp.invia && row.status === 'active' && url && !row.refunded_at && !row.link_opened_at && (
+          <section className="relative mt-5 rounded-2xl bg-emerald-600 p-5 text-white shadow-lg">
+            <Link href={`/sorprese/${row.id}`} aria-label={t('reminderNowClose')} title={t('reminderNowClose')} className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full text-white/80 hover:bg-white/15 hover:text-white">
+              <X className="h-5 w-5" aria-hidden />
+            </Link>
+            <p className="pr-10 text-lg font-extrabold">{t('reminderNowTitle', { name: row.recipient_name || '—' })}</p>
             <p className="mt-1 text-sm text-white/85">{t('reminderNowText')}</p>
             <a
               href={surpriseWhatsAppUrl(t('shareMessage', { name: row.recipient_name || '', url }), row.remind_phone)}
@@ -128,6 +132,9 @@ export default async function SurpriseEditPage({
             >
               <MessageCircle className="h-5 w-5" aria-hidden /> {t('reminderNowCta')}
             </a>
+            <Link href={`/sorprese/${row.id}`} className="mt-2 inline-flex min-h-12 w-full items-center justify-center rounded-xl px-4 font-bold text-white/90 hover:bg-white/10 sm:ml-2 sm:mt-4 sm:w-auto">
+              {t('reminderNowDone')}
+            </Link>
           </section>
         )}
 

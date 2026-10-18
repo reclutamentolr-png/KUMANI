@@ -228,7 +228,8 @@
     "statToolsShort": "{count, plural, one {ferramenta} other {ferramentas}}",
     "statServicesShort": "{count, plural, one {serviço} other {serviços}}",
     "statLanguagesShort": "{count, plural, one {língua} other {línguas}}",
-    "statWeeklyShort": "por semana"
+    "statWeeklyShort": "por semana",
+    "builtBy": "Desenvolvido por {name}"
   },
   "authRegister": {
     "registerTitle": "Crie a sua conta",
@@ -11679,7 +11680,9 @@
     "reminderEmailLink": "O link da surpresa:",
     "error_reminderPast": "Escolhe um dia e uma hora no futuro.",
     "error_reminderTooFar": "O lembrete pode ser definido no máximo com um ano de antecedência.",
-    "error_reminderPhone": "O número não parece correto: escreve-o com o indicativo, por exemplo +351 912 345 678."
+    "error_reminderPhone": "O número não parece correto: escreve-o com o indicativo, por exemplo +351 912 345 678.",
+    "reminderNowClose": "Fechar",
+    "reminderNowDone": "Já a enviei"
   },
   "surpriseTpl": {
     "mom_name": "Uma massagem para a mãe",

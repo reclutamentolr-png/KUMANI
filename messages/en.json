@@ -265,7 +265,8 @@
     "statToolsShort": "{count, plural, one {tool} other {tools}}",
     "statServicesShort": "{count, plural, one {service} other {services}}",
     "statLanguagesShort": "{count, plural, one {language} other {languages}}",
-    "statWeeklyShort": "a week"
+    "statWeeklyShort": "a week",
+    "builtBy": "Made by {name}"
   },
   "authRegister": {
     "registerTitle": "Create your account",
@@ -11679,7 +11680,9 @@
     "reminderEmailLink": "The surprise link:",
     "error_reminderPast": "Choose a day and time in the future.",
     "error_reminderTooFar": "You can set the reminder up to one year ahead.",
-    "error_reminderPhone": "The number doesn’t look right: write it with the country code, for example +44 7700 900123."
+    "error_reminderPhone": "The number doesn’t look right: write it with the country code, for example +44 7700 900123.",
+    "reminderNowClose": "Close",
+    "reminderNowDone": "I’ve already sent it"
   },
   "surpriseTpl": {
     "mom_name": "A massage for Mum",
