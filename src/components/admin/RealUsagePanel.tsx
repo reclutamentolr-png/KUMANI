@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { ArrowDownRight, ArrowUpRight, CalendarCheck, LoaderCircle, Repeat, TrendingUp, UserPlus, Users } from 'lucide-react'
 import { adminRealUsage, type RealUsage } from '@/app/actions/adminReports'
+import LivePresenceBox from './LivePresenceBox'
 
 // Admin → «Uso reale»: quante persone usano davvero KUMANI, quanto spesso
 // tornano, quali servizi si aprono e quali no, quanti diventano paganti. Ogni
@@ -131,6 +132,8 @@ export default function RealUsagePanel() {
         </div>
         {periodPicker}
       </div>
+
+      <LivePresenceBox />
 
       {/* Attivi */}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">

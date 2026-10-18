@@ -267,3 +267,56 @@ export async function adminRealUsage(days: number): Promise<RealUsage | { error:
   const result = data as Omit<RealUsage, 'tools'> & { tools: Omit<RealUsage['tools'][number], 'title'>[] }
   return { ...result, tools: result.tools.map((t) => ({ ...t, title: titles.get(t.tool) ?? USAGE_EXTRA_TITLES[t.tool] ?? t.tool })) }
 }
+
+// «In questo momento»: chi è sul sito adesso (segnale negli ultimi 2 minuti),
+// con il nome leggibile della pagina
+export type LivePresence = {
+  total: number
+  members: number
+  visitors: number
+  mobile: number
+  desktop: number
+  last_hour: number
+  pages: { page: string; label: string; total: number; members: number }[]
+}
+
+const PAGE_LABELS: Record<string, string> = {
+  '/': 'Homepage',
+  '/dashboard': 'Dashboard (Home dei soci)',
+  '/servizi': 'Servizi',
+  '/community': 'Community',
+  '/wallet': 'Wallet',
+  '/login': 'Accesso',
+  '/register': 'Registrazione',
+  '/signup': 'Registrazione',
+  '/pricing': 'Prezzi',
+  '/prezzi': 'Prezzi',
+  '/guida': 'Guide',
+  '/convivium': 'Convivium',
+  '/convivium/invito/:id': 'Invito Convivium (ospite)',
+  '/convivium/:id': 'Convivium – serata',
+  '/viaggi': 'KUMANI Viaggi',
+  '/calendario-collegato': 'Calendario collegato',
+  '/controlla': 'Controlla',
+  '/spese-condivise': 'Spese condivise',
+  '/events': 'Eventi',
+  '/privacy': 'Privacy',
+  '/cookie': 'Cookie',
+  '/termini': 'Termini',
+}
+
+export async function adminLivePresence(): Promise<LivePresence | { error: string }> {
+  if (!(await verifyAdmin('stats.read'))) return { error: 'Non autorizzato' }
+  const { data, error } = await db().rpc('admin_live_presence')
+  if (error || !data) return { error: error?.message ?? 'Dati non disponibili' }
+  const tm = await getTranslations({ locale: 'it', namespace: 'marketplace' })
+  const tools = getMarketplaceTools(tm)
+  const label = (page: string) => {
+    if (PAGE_LABELS[page]) return PAGE_LABELS[page]
+    const tool = tools.find((t) => page === t.href || page.startsWith(`${t.href}/`))
+    if (tool) return page === tool.href ? tool.title : `${tool.title} (${page.slice(tool.href.length + 1)})`
+    return page
+  }
+  const result = data as Omit<LivePresence, 'pages'> & { pages: Omit<LivePresence['pages'][number], 'label'>[] }
+  return { ...result, pages: result.pages.map((p) => ({ ...p, label: label(p.page) })) }
+}
