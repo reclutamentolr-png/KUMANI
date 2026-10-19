@@ -8,11 +8,16 @@ import { homeVideoCover } from '@/lib/homeVideoShared'
 // Video di YouTube nella homepage, leggero: finché non si preme play c'è solo
 // la copertina (nessun lettore, nessun cookie); poi il lettore di
 // youtube-nocookie.com parte da solo.
-export default function HomeVideo({ id, title, playLabel }: { id: string; title: string; playLabel: string }) {
+// vertical: uno Short (9:16), grande quasi quanto lo schermo, con la copertina
+// verticale di YouTube (oar2.jpg; se manca, quella normale)
+export default function HomeVideo({ id, title, playLabel, vertical = false }: { id: string; title: string; playLabel: string; vertical?: boolean }) {
   const [playing, setPlaying] = useState(false)
-  const cover = homeVideoCover(id)
+  const [coverFailed, setCoverFailed] = useState(false)
+  const cover = vertical && !coverFailed ? `https://i.ytimg.com/vi/${id}/oar2.jpg` : homeVideoCover(id)
   return (
-    <div className="relative aspect-video w-full overflow-hidden rounded-3xl border border-[var(--gold)]/40 bg-black shadow-[0_24px_60px_rgba(0,0,0,0.45)]">
+    <div
+      className={`relative w-full overflow-hidden rounded-3xl border border-[var(--gold)]/40 bg-black shadow-[0_24px_60px_rgba(0,0,0,0.45)] ${vertical ? 'mx-auto aspect-[9/16] max-w-[min(100%,calc(78svh*9/16))]' : 'aspect-video'}`}
+    >
       {playing ? (
         <iframe
           src={`https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1`}
@@ -28,7 +33,9 @@ export default function HomeVideo({ id, title, playLabel }: { id: string; title:
           ) : (
             // Anteprima di YouTube (i.ytimg.com, senza cookie): non passa da next/image
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={cover} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+            <img src={cover} alt="" loading="lazy" onError={() => setCoverFailed(true)}
+              // Video non verticale: YouTube manda un'immagine grigia piccolissima al posto dell'errore
+              onLoad={(e) => e.currentTarget.naturalWidth < 200 && setCoverFailed(true)} className="absolute inset-0 h-full w-full object-cover" />
           )}
           <span className="absolute inset-0 bg-black/15 transition-colors group-hover:bg-black/5" />
           <span className="absolute left-1/2 top-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] shadow-[0_0_45px_rgba(233,200,90,0.55)] transition-transform group-hover:scale-110 sm:h-24 sm:w-24">
