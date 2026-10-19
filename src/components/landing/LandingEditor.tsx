@@ -1059,7 +1059,7 @@ function PhotoField({
   const pick = async (file: File | undefined) => {
     if (!file) return
     setBusy(true)
-    const resized = await resizeImageFile(file, square ? 512 : 1600, 0.85, { keepTransparency: square })
+    const resized = await resizeImageFile(file, square ? 512 : 1600, 0.85, { keepTransparency: square, webp: true })
     if (!resized) {
       setBusy(false)
       return onError('photoError')

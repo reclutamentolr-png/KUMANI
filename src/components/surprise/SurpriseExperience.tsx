@@ -312,7 +312,7 @@ function ReplyForm({ token, senderName, accent }: { token: string; senderName: s
     const form = new FormData()
     if (reaction) form.set('reaction', reaction)
     form.set('message', message)
-    if (photo) form.set('photo', (await resizeImageFile(photo, 1600, 0.82)) ?? photo)
+    if (photo) form.set('photo', (await resizeImageFile(photo, 1600, 0.82, { webp: true })) ?? photo)
     const r = await sendSurpriseReply(token, form)
     setState(r.ok ? 'sent' : 'error')
   }

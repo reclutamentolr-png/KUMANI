@@ -2,12 +2,16 @@
 // massimo `maxSide` px, orientamento corretto (foto del telefono), JPEG
 // di buona qualità. Una foto già piccola resta com'è. Con
 // `keepTransparency` i PNG/WebP/GIF restano PNG (loghi con trasparenza).
+// Con `webp` la foto diventa WebP (circa un terzo più leggera a parità di
+// qualità): solo per foto mostrate nel sito, non per quelle che finiscono nei
+// PDF (le librerie dei PDF leggono solo JPEG e PNG). Se il browser non sa
+// creare WebP si torna al JPEG.
 // Se il browser non riesce a leggerla restituisce null.
 export async function resizeImageFile(
   file: File,
   maxSide = 1200,
   quality = 0.82,
-  options: { keepTransparency?: boolean; keepIfUnderBytes?: number } = {}
+  options: { keepTransparency?: boolean; keepIfUnderBytes?: number; webp?: boolean } = {}
 ): Promise<File | null> {
   if (!file.type.startsWith('image/')) return null
   const bitmap =
@@ -38,10 +42,13 @@ export async function resizeImageFile(
   bitmap.close()
 
   const transparent = options.keepTransparency && /^image\/(png|webp|gif)$/.test(file.type)
-  const type = transparent ? 'image/png' : 'image/jpeg'
-  const blob: Blob | null = await new Promise((resolve) => canvas.toBlob(resolve, type, transparent ? undefined : quality))
+  const encode = (type: string): Promise<Blob | null> => new Promise((resolve) => canvas.toBlob(resolve, type, type === 'image/png' ? undefined : quality))
+  let blob = await encode(transparent ? 'image/png' : options.webp ? 'image/webp' : 'image/jpeg')
+  // Browser senza WebP: toBlob restituisce un PNG (pesante) al posto del WebP
+  if (blob && !transparent && options.webp && blob.type !== 'image/webp') blob = await encode('image/jpeg')
   if (!blob) return null
+  const type = blob.type || 'image/jpeg'
   // Se per caso la versione nuova pesa di più (foto già compressa), si tiene l'originale
   if (blob.size >= file.size && longSide <= maxSide) return file
-  return new File([blob], transparent ? 'image.png' : 'photo.jpg', { type })
+  return new File([blob], type === 'image/png' ? 'image.png' : type === 'image/webp' ? 'photo.webp' : 'photo.jpg', { type })
 }

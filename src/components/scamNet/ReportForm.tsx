@@ -18,7 +18,7 @@ export async function uploadEvidence(file: File): Promise<string | null> {
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) return null
-  const small = (await resizeImageFile(file, 1600, 0.72, { keepIfUnderBytes: 200 * 1024 })) ?? file
+  const small = (await resizeImageFile(file, 1600, 0.72, { keepIfUnderBytes: 200 * 1024, webp: true })) ?? file
   const ext = small.type === 'image/png' ? 'png' : small.type === 'image/webp' ? 'webp' : 'jpg'
   const path = `${user.id}/${crypto.randomUUID()}.${ext}`
   const { error } = await supabase.storage.from('scam-evidence').upload(path, small, { contentType: small.type || 'image/jpeg', upsert: false })

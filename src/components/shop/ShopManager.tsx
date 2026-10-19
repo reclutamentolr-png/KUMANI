@@ -39,9 +39,9 @@ const toCents = (v: string) => Math.round(Number(v.replace(',', '.')) * 100)
 const toEuro = (c: number | null | undefined) => (c == null ? '' : (c / 100).toFixed(2).replace(/\.00$/, ''))
 
 async function uploadImage(userId: string, file: File): Promise<string | null> {
-  const image = (await resizeImageFile(file, 1400, 0.82)) ?? file
+  const image = (await resizeImageFile(file, 1400, 0.82, { webp: true })) ?? file
   if (image.size > 5 * 1024 * 1024) return null
-  const path = `${userId}/${crypto.randomUUID()}.${image.type === 'image/png' ? 'png' : 'jpg'}`
+  const path = `${userId}/${crypto.randomUUID()}.${image.type === 'image/png' ? 'png' : image.type === 'image/webp' ? 'webp' : 'jpg'}`
   const { error } = await createClient().storage.from('shop-media').upload(path, image, { contentType: image.type, upsert: false })
   return error ? null : path
 }

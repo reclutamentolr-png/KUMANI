@@ -29,7 +29,7 @@ export default function ConvivioShowcaseBox({ groupId, initial, onPhoto }: { gro
     if (!picked) return
     setBusy('photo')
     setNotice(null)
-    const file = (await resizeImageFile(picked, 1600, 0.82)) ?? picked
+    const file = (await resizeImageFile(picked, 1600, 0.82, { webp: true })) ?? picked
     const form = new FormData()
     form.append('file', file)
     const result = await uploadConvivioPhoto(groupId, form)

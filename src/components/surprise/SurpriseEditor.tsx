@@ -103,8 +103,8 @@ async function uploadMedia(
   const max = SURPRISE_MAX.mediaBytes
   let upload: File = file
   if (type === 'image') {
-    upload = (await resizeImageFile(file, 1600, 0.82)) ?? file
-    if (upload.size > max) upload = (await resizeImageFile(file, 1200, 0.7, { keepIfUnderBytes: 0 })) ?? upload
+    upload = (await resizeImageFile(file, 1600, 0.82, { webp: true })) ?? file
+    if (upload.size > max) upload = (await resizeImageFile(file, 1200, 0.7, { keepIfUnderBytes: 0, webp: true })) ?? upload
   } else if (file.size > COMPRESS_FROM) {
     try {
       onProgress?.(0)
@@ -117,7 +117,7 @@ async function uploadMedia(
   if (upload.size > max) return { error: 'error_tooBig' }
   const ext =
     type === 'image'
-      ? 'jpg'
+      ? upload.type === 'image/webp' ? 'webp' : upload.type === 'image/png' ? 'png' : 'jpg'
       : upload.type === 'video/mp4'
         ? 'mp4'
         : upload.type === 'audio/mp4'

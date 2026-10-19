@@ -202,7 +202,7 @@ export default function MenuBuilder({
     setUploadingPhoto(true)
     setError(null)
     try {
-      const resized = await resizeImageFile(file)
+      const resized = await resizeImageFile(file, 1200, 0.82, { webp: true })
       if (!resized) throw new Error('resize')
       const form = new FormData()
       form.append('file', resized)

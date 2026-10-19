@@ -51,7 +51,7 @@ export default function FindoItemForm(props: Props) {
 
   const handlePhotoSelect = async (picked: File) => {
     // Foto ridotta a 1600 px (buona qualità, circa 10 volte più leggera)
-    const file = (await resizeImageFile(picked, 1600, 0.82)) ?? picked
+    const file = (await resizeImageFile(picked, 1600, 0.82, { webp: true })) ?? picked
     const validationError = validatePhotoFile(file)
     if (validationError) {
       setError(validationError)
