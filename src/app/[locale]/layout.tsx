@@ -11,6 +11,7 @@ import AppHeader from '@/components/nav/AppHeader'
 import DesktopAppBar from '@/components/nav/DesktopAppBar'
 import SessionTracker from '@/components/SessionTracker'
 import PresencePing from '@/components/analytics/PresencePing'
+import DailyKarmaPing from '@/components/DailyKarmaPing'
 import RecentToolTracker from '@/components/nav/RecentToolTracker'
 import CookieConsent from '@/components/consent/CookieConsent'
 import { ConsentProvider } from '@/components/consent/ConsentGate'
@@ -76,6 +77,8 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         <SessionTracker />
         {/* «In questo momento» in Admin → Uso reale */}
         <PresencePing />
+        {/* KU Karma dell'accesso giornaliero anche per chi resta connesso */}
+        <DailyKarmaPing />
         {/* «Porta KUMANI con te»: installare il sito come app (homepage e dashboard) */}
         <InstallAppBanner />
         {/* Banner dei cookie: solo se acceso dall'Admin (lib/consent.ts) */}
