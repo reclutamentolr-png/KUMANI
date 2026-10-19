@@ -736,7 +736,9 @@
     "karmaInfoUseTitle": "What they’re for",
     "karmaInfoUse": "You use them inside KUMANI: to post listings in the Community, unlock special themes and for the other perks you find in the Wallet.",
     "karmaInfoPointsNote": "Not to be confused with KU Points: those arrive when the people you invite activate a subscription and count towards the Kuman Green, Star and Black levels.",
-    "karmaInfoClose": "Close"
+    "karmaInfoClose": "Close",
+    "profileEmailLabel": "Login email",
+    "profileEmailHint": "It’s the address you registered and log in with: it can’t be changed."
   },
   "marketplace": {
     "fabula": "Kumani Fabula",

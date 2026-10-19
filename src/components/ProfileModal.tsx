@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { User, Save, X, CheckCircle2, AlertCircle, Lock, FileEdit, Clock, XCircle } from 'lucide-react'
+import { User, Save, X, CheckCircle2, AlertCircle, Lock, FileEdit, Clock, XCircle, Mail } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
 import RealDataNote from '@/components/profile/RealDataNote'
 import ProfileFieldsGrid, { ConfirmLockBox, MissingFieldsBox, useProfileFieldLabel } from '@/components/profile/ProfileFieldsGrid'
 import ProfileChangeRequestDialog from '@/components/profile/ProfileChangeRequestDialog'
@@ -54,6 +55,14 @@ export default function ProfileModal({ isOpen, onClose, initialData, userId, onC
   const [requestOpen, setRequestOpen] = useState(false)
   const [requestSent, setRequestSent] = useState(false)
   const [cancelling, setCancelling] = useState(false)
+  // Email con cui la persona accede (dalla sessione): non si cambia, ma si vede
+  const [email, setEmail] = useState<string | null>(null)
+  useEffect(() => {
+    if (!isOpen) return
+    createClient()
+      .auth.getSession()
+      .then(({ data }) => setEmail(data.session?.user.email ?? null))
+  }, [isOpen])
 
   // Stato della richiesta di cambio dati, riletto a ogni apertura.
   useEffect(() => {
@@ -152,6 +161,19 @@ export default function ProfileModal({ isOpen, onClose, initialData, userId, onC
               <button onClick={dismissOutcome} className="shrink-0 rounded-lg border border-red-300 bg-white px-3 py-1 text-xs font-bold text-red-800 hover:bg-red-100">
                 {lockT('gotIt')}
               </button>
+            </div>
+          )}
+
+          {email && (
+            <div className="flex items-start gap-3 rounded-xl border border-[var(--gold)]/30 bg-[var(--gold)]/[0.06] px-4 py-3">
+              <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[var(--gold)]" aria-hidden />
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-bold uppercase tracking-wide text-[var(--muted)]">{t('profileEmailLabel')}</p>
+                <p className="mt-0.5 break-all text-sm font-semibold text-[var(--ink)]">{email}</p>
+                <p className="mt-1 flex items-center gap-1 text-xs text-[var(--muted)]">
+                  <Lock className="h-3 w-3 shrink-0" aria-hidden /> {t('profileEmailHint')}
+                </p>
+              </div>
             </div>
           )}
 

@@ -699,7 +699,9 @@
     "karmaInfoUseTitle": "Для чего они",
     "karmaInfoUse": "Они используются внутри KUMANI: чтобы публиковать объявления в Сообществе, открывать особые темы и получать другие преимущества из Wallet.",
     "karmaInfoPointsNote": "Не путайте с KU Points: они начисляются, когда приглашённые вами люди оформляют подписку, и нужны для уровней Kuman Green, Star и Black.",
-    "karmaInfoClose": "Закрыть"
+    "karmaInfoClose": "Закрыть",
+    "profileEmailLabel": "Email для входа",
+    "profileEmailHint": "С этим адресом вы зарегистрировались и входите в аккаунт: его нельзя изменить."
   },
   "marketplace": {
     "fabula": "Kumani Fabula",

@@ -699,7 +699,9 @@
     "karmaInfoUseTitle": "Wofür sie sind",
     "karmaInfoUse": "Du nutzt sie in KUMANI: um Anzeigen in der Community zu veröffentlichen, besondere Designs freizuschalten und für die weiteren Vorteile im Wallet.",
     "karmaInfoPointsNote": "Nicht zu verwechseln mit den KU Points: Diese gibt es, wenn die Personen, die du einlädst, ein Abo aktivieren, und sie zählen für die Stufen Kuman Green, Star und Black.",
-    "karmaInfoClose": "Schließen"
+    "karmaInfoClose": "Schließen",
+    "profileEmailLabel": "Anmelde-E-Mail",
+    "profileEmailHint": "Mit dieser Adresse hast du dich registriert und meldest dich an: Sie kann nicht geändert werden."
   },
   "marketplace": {
     "fabula": "Kumani Fabula",

@@ -699,7 +699,9 @@
     "karmaInfoUseTitle": "Para qué sirven",
     "karmaInfoUse": "Se usan dentro de KUMANI: para publicar anuncios en la Comunidad, desbloquear temas especiales y para las demás ventajas que encuentras en el Wallet.",
     "karmaInfoPointsNote": "No los confundas con los KU Points: esos llegan cuando las personas que invitas activan una suscripción y sirven para los niveles Kuman Green, Star y Black.",
-    "karmaInfoClose": "Cerrar"
+    "karmaInfoClose": "Cerrar",
+    "profileEmailLabel": "Email de acceso",
+    "profileEmailHint": "Es la dirección con la que te registraste y con la que entras: no se puede cambiar."
   },
   "marketplace": {
     "fabula": "Kumani Fabula",
