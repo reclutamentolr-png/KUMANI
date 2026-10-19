@@ -65,20 +65,84 @@ export async function addCvToLinkInBio(publicUrl: string): Promise<'added' | 'ex
   return 'added'
 }
 
-// «Il tuo benessere di oggi»: stato dei tre passi e bonus di KU Karma
-export type WellnessToday = { breath: boolean; focus: boolean; mind: boolean; claimed: boolean; bonus: number; streak: number; awarded?: number }
+// «Il tuo momento di benessere»: passi verificati (+KU Karma fino a 3),
+// umore del giorno, cose belle e pause di un minuto. Le regole stanno nelle
+// funzioni del database (wellness_*).
+export type WellnessToday = {
+  breath: boolean
+  focus: boolean
+  mind: boolean
+  pause: boolean
+  steps: number
+  step_ku: number
+  max_steps: number
+  awarded: number
+  claimable: number
+  mood: number | null
+  mood_note: string | null
+  week: { day: string; mood: number | null }[]
+  gratitude_today: number
+  gratitude_total: number
+  counted: boolean
+  streak: number
+  given?: number
+  error?: string
+}
 
-export async function claimWellnessBonus(): Promise<WellnessToday | null> {
+async function wellnessRpc(name: string, args?: Record<string, unknown>): Promise<WellnessToday | null> {
   const supabase = await createClient()
-  const { data, error } = await supabase.rpc('claim_wellness_path_bonus')
+  const { data, error } = await supabase.rpc(name, args)
   if (error) {
-    console.error('[ecosistema] bonus benessere:', error.message)
+    console.error(`[benessere] ${name}:`, error.message)
     return null
   }
-  const result = data as (WellnessToday & { error?: string }) | null
-  if (!result || result.error) {
+  const result = data as WellnessToday | { error: string } | null
+  if (!result || !('steps' in result)) {
     const { data: state } = await supabase.rpc('wellness_path_today')
-    return (state as WellnessToday | null) ?? null
+    return state ? { ...(state as WellnessToday), error: result?.error } : null
   }
   return result
+}
+
+export async function claimWellnessBonus(): Promise<WellnessToday | null> {
+  return wellnessRpc('claim_wellness_path_bonus')
+}
+
+export async function setWellnessMood(mood: number, note: string): Promise<WellnessToday | null> {
+  if (!Number.isInteger(mood) || mood < 1 || mood > 5) return null
+  return wellnessRpc('wellness_set_mood', { p_mood: mood, p_note: note.slice(0, 280) })
+}
+
+export async function addWellnessGratitude(body: string): Promise<WellnessToday | null> {
+  const text = body.trim().slice(0, 200)
+  if (!text) return null
+  return wellnessRpc('wellness_add_gratitude', { p_body: text })
+}
+
+export type GratitudeNote = { id: string; day: string; body: string }
+
+export async function listWellnessGratitude(): Promise<GratitudeNote[]> {
+  const supabase = await createClient()
+  const { data } = await supabase.from('wellness_gratitude').select('id, day, body').order('created_at', { ascending: false }).limit(200)
+  return (data ?? []) as GratitudeNote[]
+}
+
+export async function deleteWellnessGratitude(id: string): Promise<boolean> {
+  if (!/^[0-9a-f-]{36}$/i.test(id)) return false
+  const supabase = await createClient()
+  const { error } = await supabase.from('wellness_gratitude').delete().eq('id', id)
+  return !error
+}
+
+export async function startWellnessPause(kind: 'stretch' | 'eyes'): Promise<string | null> {
+  if (kind !== 'stretch' && kind !== 'eyes') return null
+  const supabase = await createClient()
+  const { data, error } = await supabase.rpc('wellness_pause_start', { p_kind: kind })
+  if (error) console.error('[benessere] inizio pausa:', error.message)
+  return (data as string | null) ?? null
+}
+
+export async function finishWellnessPause(id: string): Promise<WellnessToday | null> {
+  if (!/^[0-9a-f-]{36}$/i.test(id)) return null
+  return wellnessRpc('wellness_pause_finish', { p_id: id })
 }

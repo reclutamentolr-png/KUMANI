@@ -8,9 +8,9 @@ import {
   Shield,
   ArrowRight,
   Target,
-  Ticket,
+  Ticket,
   Share2,
-  Trophy,
+  Trophy,
   ShieldAlert,
   Euro,
   LayoutGrid,
@@ -137,7 +137,7 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
             <h1 className="mt-3 break-words text-4xl font-extrabold leading-[1.05] text-white sm:text-6xl lg:text-7xl">
               {t('heroOrbitTitle')} <span className="bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] bg-clip-text text-transparent">{t('heroOrbitAccent')}</span>
             </h1>
-            <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-gray-300 sm:text-xl lg:mx-0">{t('heroOrbitText')}</p>
+            <p className="mx-auto mt-5 max-w-xl whitespace-pre-line text-lg leading-relaxed text-gray-300 sm:text-xl lg:mx-0">{t('heroOrbitText')}</p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start">
               <Link
                 href="/register"

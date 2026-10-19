@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { AudioLines, BellRing, Flower2, Headphones, Pause, Play, RotateCcw, Volume2 } from 'lucide-react'
 import NatureControls from '@/components/NatureControls'
@@ -24,6 +26,7 @@ export default function NeurobalancePlayer() {
     volume,
     selectedSpecialSound,
     handlePresetCardClick,
+    choosePreset,
     handleSpecialSoundCardClick,
     handleTrackCardClick,
     togglePlayback,
@@ -33,6 +36,16 @@ export default function NeurobalancePlayer() {
     sessionChosen,
     activeNature,
   } = useNeurobalanceAudio()
+
+  // «Routine della sera» (dalla dashboard, ?sera=1): sessione per dormire
+  // pronta, si spegne da sola alla fine; basta toccare Play
+  const evening = useSearchParams().get('sera') === '1'
+  useEffect(() => {
+    if (!evening) return
+    choosePreset('deep-rest')
+    document.getElementById('nb-player')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [evening])
 
   // All'entrata nulla è preimpostato: il riquadro invita a scegliere.
   // Con un suono della natura acceso mostra i suoi comandi (mixer).

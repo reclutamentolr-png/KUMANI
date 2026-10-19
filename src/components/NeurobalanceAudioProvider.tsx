@@ -41,6 +41,8 @@ interface NeurobalanceAudioValue {
   // Scelta una sessione, una frequenza o un audio registrato (non solo la natura)
   sessionChosen: boolean
   handlePresetCardClick: (preset: Preset) => Promise<void>
+  // Prepara una sessione senza farla partire (es. «Routine della sera»)
+  choosePreset: (id: string) => void
   handleSpecialSoundCardClick: (sound: SpecialSound) => Promise<void>
   handleTrackCardClick: (track: Track) => Promise<void>
   togglePlayback: () => Promise<void>
@@ -263,6 +265,19 @@ export function NeurobalanceAudioProvider({ children }: { children: ReactNode })
     setSelectedSpecialSound(null)
     setSelectedId(preset.id)
     await playWith(preset.carrier, preset.beat, preset.duration * 60)
+  }
+
+  // Sceglie una sessione senza avviarla (il suono parte solo con «Play»,
+  // come chiedono i browser); se qualcosa sta già suonando non si tocca
+  const choosePreset = (id: string) => {
+    const preset = presets.find((p) => p.id === id)
+    if (!preset || isPlaying) return
+    stopTrack()
+    setHasSelection(true)
+    setSessionChosen(true)
+    setSelectedSpecialSound(null)
+    setSelectedId(preset.id)
+    setRemaining(preset.duration * 60)
   }
 
   const handleSpecialSoundCardClick = async (sound: SpecialSound) => {
@@ -513,6 +528,7 @@ export function NeurobalanceAudioProvider({ children }: { children: ReactNode })
         hasSelection,
         sessionChosen,
         handlePresetCardClick,
+        choosePreset,
         handleSpecialSoundCardClick,
         handleTrackCardClick,
         togglePlayback,

@@ -189,7 +189,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     isPro && proTools.length > 0 ? getProAreaStats(supabase, user.id) : Promise.resolve(null),
     // Tutti i servizi con lo stato per l'utente: preferiti, recenti e suggerimento
     getServicesCatalog(supabase, user.id, locale, { access, favorites: favoriteToolNames }),
-    // «Il tuo benessere di oggi»: i tre passi e il bonus
+    // «Il tuo momento di benessere»: passi, umore, cose belle e KU Karma
     wellnessPromise,
     // KU Karma presi oggi (accesso e servizi), accanto ai KU Karma
     getKarmaToday(supabase, user.id).catch(() => null),
