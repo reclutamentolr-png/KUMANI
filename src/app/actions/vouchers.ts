@@ -99,6 +99,8 @@ export async function listMyVouchers(): Promise<MyVoucher[]> {
     .from('subscription_vouchers')
     .select('id, code, status, created_at, redeemed_at, plan, purpose, sale_price_cents, buyer_name, prize_key, created_by')
     .or(`created_by.eq.${user.id},holder_id.eq.${user.id}`)
+    // I codici omaggio creati dallo Staff restano in Admin, non nel suo Wallet
+    .or('purpose.is.null,purpose.neq.promo')
     .order('created_at', { ascending: false })
     .limit(200)
 

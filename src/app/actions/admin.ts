@@ -441,6 +441,8 @@ export async function listVouchers() {
   const { data, error } = await supabaseAdmin
     .from('subscription_vouchers')
     .select('id, code, status, created_at, redeemed_at, created_by, redeemed_by')
+    // I codici omaggio hanno la loro sezione (Codici omaggio)
+    .or('purpose.is.null,purpose.neq.promo')
     .order('created_at', { ascending: false })
     .limit(200)
 

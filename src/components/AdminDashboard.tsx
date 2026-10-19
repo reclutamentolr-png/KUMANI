@@ -151,6 +151,7 @@ const ReportsPanel = dynamic(() => import('@/components/admin/ReportsPanel'), { 
 const RealUsagePanel = dynamic(() => import('@/components/admin/RealUsagePanel'), { loading })
 const MatrixTree = dynamic(() => import('@/components/MatrixTree'), { loading })
 const AdminVouchersPanel = dynamic(() => import('@/components/admin/AdminVouchersPanel'), { loading })
+const PromoCodesPanel = dynamic(() => import('@/components/admin/PromoCodesPanel'), { loading })
 const AdminFinancialsPanel = dynamic(() => import('@/components/admin/AdminFinancialsPanel'), { loading })
 const AdminRewardsPanel = dynamic(() => import('@/components/admin/AdminRewardsPanel'), { loading })
 const AdminMessagesPanel = dynamic(() => import('@/components/admin/AdminMessagesPanel'), { loading })
@@ -745,6 +746,7 @@ L'accesso viene registrato.`))) return
   { id: 'qualified', label: 'Qualificati', Icon: Crown, permission: 'users.read' as Permission, group: 'rewards' },
   { id: 'rewards', label: 'Premi', Icon: Gift, permission: 'rewards.read' as Permission, group: 'rewards' },
   { id: 'vouchers', label: 'Voucher', Icon: BadgeCheck, permission: 'vouchers.read' as Permission, group: 'rewards' },
+  { id: 'promoCodes', label: 'Codici omaggio', Icon: Gift, permission: 'vouchers.read' as Permission, group: 'rewards' },
   { id: 'coupons', label: 'Voucher e coupon', Icon: Ticket, permission: 'coupons.read' as Permission, group: 'rewards' },
   { id: 'listingReports', label: 'Bacheca', Icon: Flag, permission: 'listings.read' as Permission, group: 'community' },
   { id: 'spotlight', label: 'Kumano del Giorno', Icon: Star, permission: 'listings.read' as Permission, group: 'community' },
@@ -1834,6 +1836,7 @@ L'accesso viene registrato.`))) return
         {activeSection === 'marketplace' && renderMarketplace()}
         {activeSection === 'coupons' && renderCoupons()}
         {activeSection === 'vouchers' && <AdminVouchersPanel />}
+        {activeSection === 'promoCodes' && <PromoCodesPanel />}
         {activeSection === 'rewards' && <AdminRewardsPanel loadBadges={loadBadges} />}
         {activeSection === 'messages' && <AdminMessagesPanel />}
         {activeSection === 'financials' && <AdminFinancialsPanel openReport={openReport} />}
