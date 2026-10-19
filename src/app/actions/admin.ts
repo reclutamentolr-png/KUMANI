@@ -18,7 +18,7 @@ import { invalidateListingsCache } from '@/lib/listings-server'
 import { generatePassCode } from '@/lib/toolPasses'
 import { DEFAULT_HOME_LAYOUT, isHomeLayout } from '@/lib/homeLayouts'
 import { HOME_LAYOUT_CACHE_TAG } from '@/lib/homeLayoutServer'
-import { DEFAULT_HOME_VIDEO, HOME_VIDEO_CACHE_TAG, youtubeId } from '@/lib/homeVideo'
+import { DEFAULT_HOME_VIDEO, HOME_VIDEO_CACHE_TAG, HOME_VIDEOS_MAX, parseActiveVideo, parseHomeVideos, youtubeId, type HomeVideoEntry } from '@/lib/homeVideo'
 import { TOOL_PLANS_CACHE_TAG } from '@/lib/freeTools'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { getTranslations } from 'next-intl/server'
@@ -3195,30 +3195,46 @@ export async function adminSetHomeLayout(layout: string) {
   return { success: true }
 }
 
-// Video della homepage (di solito il tormentone): link di YouTube, vuoto = nascosto
-export async function adminGetHomeVideo() {
+// Video della homepage: la libreria dei video di YouTube (titolo, parte in oro
+// e frase) e quello in vetrina; vetrina vuota = riquadro nascosto
+export async function adminGetHomeVideos() {
   const admin = await verifyAdmin('settings.read')
-  if (!admin) return { url: null as string | null }
-  const { data } = await getServiceClient().from('system_settings').select('value').eq('key', 'home_video').maybeSingle()
-  if (!data) return { url: `https://youtu.be/${DEFAULT_HOME_VIDEO}` }
-  let value: unknown = data.value
-  try {
-    value = typeof value === 'string' ? JSON.parse(value) : value
-  } catch {
-    // testo semplice
+  if (!admin) return { active: null as string | null, videos: [] as HomeVideoEntry[] }
+  const { data } = await getServiceClient().from('system_settings').select('key, value').in('key', ['home_video', 'home_videos'])
+  const activeRow = data?.find((row) => row.key === 'home_video')
+  const active = activeRow ? (parseActiveVideo(activeRow.value) ?? '') : DEFAULT_HOME_VIDEO
+  const videos = parseHomeVideos(data?.find((row) => row.key === 'home_videos')?.value)
+  // Il tormentone di partenza e il video in vetrina sono sempre in elenco
+  for (const id of [DEFAULT_HOME_VIDEO, active]) {
+    if (id && !videos.some((video) => video.id === id)) videos.unshift({ id, title: '', accent: '', text: '' })
   }
-  return { url: typeof value === 'string' && value ? `https://youtu.be/${value}` : '' }
+  return { active, videos }
 }
 
-export async function adminSetHomeVideo(url: string) {
+export async function adminSaveHomeVideos(input: { videos: { url: string; title: string; accent: string; text: string }[]; active: string }) {
   const admin = await verifyAdmin('settings.write')
   if (!admin) return { success: false, error: 'Non autorizzato' }
-  const id = url.trim() ? youtubeId(url) : ''
-  if (id === null) return { success: false, error: 'Non è un link di YouTube (es. https://youtu.be/…)' }
-  const { error } = await getServiceClient().from('system_settings').upsert({ key: 'home_video', value: JSON.stringify(id) }, { onConflict: 'key' })
+  const list: HomeVideoEntry[] = []
+  for (const video of input.videos.slice(0, HOME_VIDEOS_MAX)) {
+    const id = youtubeId(video.url)
+    if (!id) return { success: false, error: `Non è un link di YouTube: ${video.url || '(vuoto)'}` }
+    list.push({ id, title: video.title, accent: video.accent, text: video.text })
+  }
+  const videos = parseHomeVideos(list)
+  const active = input.active ? youtubeId(input.active) : ''
+  if (active === null || (active && !videos.some((video) => video.id === active))) return { success: false, error: 'Il video in vetrina non è nell’elenco' }
+  const { error } = await getServiceClient()
+    .from('system_settings')
+    .upsert(
+      [
+        { key: 'home_videos', value: JSON.stringify(videos) },
+        { key: 'home_video', value: JSON.stringify(active) },
+      ],
+      { onConflict: 'key' }
+    )
   if (error) return { success: false, error: error.message }
   updateTag(HOME_VIDEO_CACHE_TAG)
-  return { success: true, url: id ? `https://youtu.be/${id}` : '' }
+  return { success: true, active, videos }
 }
 
 // ---------------------------------------------------------------------------

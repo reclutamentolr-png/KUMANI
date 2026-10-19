@@ -73,7 +73,9 @@ export default async function HomeV2({ layoutKey }: { layoutKey: HomeLayoutKey }
   // Un aspetto che non esiste più (salvato prima) usa quello predefinito
   const L = HOME_LAYOUT_CONFIG[layoutKey] ?? HOME_LAYOUT_CONFIG[DEFAULT_HOME_LAYOUT]
   // Video della Home (Admin → Aspetto homepage), di solito il tormentone
-  const videoId = await getHomeVideo()
+  const video = await getHomeVideo()
+  // Testi del video: quelli scritti in Admin, altrimenti quelli tradotti del tormentone
+  const videoCopy = video?.title ? video : { title: t('videoTitle'), accent: t('videoAccent'), text: t('videoText') }
   // «In cosa possiamo darti una mano?»: per ogni risposta i servizi giusti
   // Numeri sotto l'apertura: lingue attive, servizi e strumenti accesi (decisi dall'Admin)
   const [needs, enabledLocales, counts, karma] = await Promise.all([buildHomeNeeds(), getEnabledLocales(), getAppCounts(), getHomeKarma()])
@@ -224,16 +226,16 @@ export default async function HomeV2({ layoutKey }: { layoutKey: HomeLayoutKey }
       <HomeSection bg={L.community} className="py-12 sm:py-20">
         <HomeCommunity />
         {/* 🎵 Il tormentone da YouTube: il lettore si carica solo al play */}
-        {videoId && (
+        {video && (
           <div className="mx-auto mt-14 max-w-4xl px-4 text-center sm:mt-20 sm:px-6 lg:px-8">
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--gold)]/30 bg-[var(--gold)]/10 px-4 py-1.5 text-sm font-medium text-[var(--gold-bright)]">
               {t('videoEyebrow')}
             </div>
             <h2 className="mb-3 break-words text-3xl font-bold text-white sm:text-5xl">
-              {t('videoTitle')} <span className="whitespace-nowrap bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] bg-clip-text text-transparent">{t('videoAccent')}</span>
+              {videoCopy.title}{videoCopy.accent && ' '}{videoCopy.accent && (<span className="whitespace-nowrap bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] bg-clip-text text-transparent">{videoCopy.accent}</span>)}
             </h2>
-            <p className="mx-auto mb-8 max-w-2xl text-base text-gray-300 sm:text-lg">{t('videoText')}</p>
-            <HomeVideo id={videoId} title={`${t('videoTitle')} ${t('videoAccent')}`} playLabel={t('videoPlay')} />
+            {videoCopy.text ? <p className="mx-auto mb-8 max-w-2xl text-base text-gray-300 sm:text-lg">{videoCopy.text}</p> : <div className="mb-8" />}
+            <HomeVideo id={video.id} title={`${videoCopy.title} ${videoCopy.accent}`.trim()} playLabel={t('videoPlay')} />
           </div>
         )}
       </HomeSection>

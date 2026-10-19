@@ -3,12 +3,14 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { Play } from 'lucide-react'
+import { homeVideoCover } from '@/lib/homeVideoShared'
 
 // Video di YouTube nella homepage, leggero: finché non si preme play c'è solo
 // la copertina (nessun lettore, nessun cookie); poi il lettore di
 // youtube-nocookie.com parte da solo.
 export default function HomeVideo({ id, title, playLabel }: { id: string; title: string; playLabel: string }) {
   const [playing, setPlaying] = useState(false)
+  const cover = homeVideoCover(id)
   return (
     <div className="relative aspect-video w-full overflow-hidden rounded-3xl border border-[var(--gold)]/40 bg-black shadow-[0_24px_60px_rgba(0,0,0,0.45)]">
       {playing ? (
@@ -21,7 +23,13 @@ export default function HomeVideo({ id, title, playLabel }: { id: string; title:
         />
       ) : (
         <button type="button" onClick={() => setPlaying(true)} aria-label={`${playLabel}: ${title}`} className="group absolute inset-0 h-full w-full">
-          <Image src="/home/inno-kumani.webp" alt="" fill sizes="(max-width: 1024px) 100vw, 900px" className="object-cover" />
+          {cover.startsWith('/') ? (
+            <Image src={cover} alt="" fill sizes="(max-width: 1024px) 100vw, 900px" className="object-cover" />
+          ) : (
+            // Anteprima di YouTube (i.ytimg.com, senza cookie): non passa da next/image
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={cover} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+          )}
           <span className="absolute inset-0 bg-black/15 transition-colors group-hover:bg-black/5" />
           <span className="absolute left-1/2 top-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] shadow-[0_0_45px_rgba(233,200,90,0.55)] transition-transform group-hover:scale-110 sm:h-24 sm:w-24">
             <Play className="ml-1 h-9 w-9 fill-[var(--ink)] text-[var(--ink)] sm:h-11 sm:w-11" />
