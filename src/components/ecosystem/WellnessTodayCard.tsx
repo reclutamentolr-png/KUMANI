@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { Angry, AudioWaveform, Brain, Check, Flame, Frown, Gift, Laugh, LoaderCircle, Lock, Meh, Moon, Palette, PersonStanding, Smile, Sparkles, Wind } from 'lucide-react'
+import { Angry, AudioWaveform, Brain, Check, ChevronDown, ChevronUp, Flame, Frown, Gift, Laugh, LoaderCircle, Lock, Meh, Moon, Palette, PersonStanding, Smile, Sparkles, Wind } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { claimWellnessBonus, setWellnessMood, type WellnessToday } from '@/app/actions/ecosystem'
 import WellnessPause from './WellnessPause'
@@ -26,7 +26,34 @@ const MOOD_DOT = ['', 'bg-red-500', 'bg-orange-400', 'bg-amber-400', 'bg-lime-50
 type StepKey = 'breath' | 'focus' | 'mind' | 'pause'
 const ROTATION: StepKey[] = ['pause', 'breath', 'mind', 'focus']
 
+// Chiusa in una riga che si apre (dashboard): si ricorda se la si è lasciata
+// aperta; il link #benessere (es. «Fai la pausa» dei primi passi) la apre
+const OPEN_KEY = 'kumani_wellness_open'
+
 export default function WellnessTodayCard({ initial }: { initial: WellnessToday }) {
+  const [expanded, setExpanded] = useState(false)
+  useEffect(() => {
+    let remembered = false
+    try {
+      remembered = localStorage.getItem(OPEN_KEY) === '1'
+    } catch {
+      // memoria del browser non disponibile
+    }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (remembered || window.location.hash === '#benessere') setExpanded(true)
+    const onHash = () => window.location.hash === '#benessere' && setExpanded(true)
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [])
+  const toggle = (open: boolean) => {
+    setExpanded(open)
+    try {
+      localStorage.setItem(OPEN_KEY, open ? '1' : '0')
+    } catch {
+      // facoltativo
+    }
+  }
+
   const t = useTranslations('ecosystem')
   const locale = useLocale()
   const [state, setState] = useState(initial)
@@ -119,10 +146,33 @@ export default function WellnessTodayCard({ initial }: { initial: WellnessToday 
     return { day: iso, mood: moodByDay.get(iso) ?? null, future: iso > todayIso, isToday: iso === todayIso }
   })
 
+  if (!expanded)
+    return (
+      <section id="benessere" className="scroll-mt-24">
+        <button
+          type="button"
+          onClick={() => toggle(true)}
+          aria-expanded={false}
+          className="flex w-full items-center justify-between gap-3 rounded-2xl border border-teal-200 bg-gradient-to-r from-teal-50 to-white px-4 py-3.5 text-left shadow-sm transition hover:border-teal-400"
+        >
+          <span className="min-w-0">
+            <span className="block font-bold text-[var(--ink)]">{t('wellnessTitle')}</span>
+            <span className="block text-xs font-semibold text-teal-700">
+              {state.steps > 0 ? t('wellnessCollapsedDone', { done: Math.min(state.steps, state.max_steps), max: state.max_steps }) : t('wellnessCollapsedHint')}
+              {state.streak > 0 && <> · {t('wellnessStreak', { count: state.streak })}</>}
+            </span>
+          </span>
+          <ChevronDown className="h-5 w-5 shrink-0 text-teal-700" aria-hidden />
+        </button>
+      </section>
+    )
+
   return (
-    <section className="rounded-2xl border border-teal-200 bg-gradient-to-br from-teal-50 to-white p-5 shadow-sm">
+    <section id="benessere" className="scroll-mt-24 rounded-2xl border border-teal-200 bg-gradient-to-br from-teal-50 to-white p-5 shadow-sm">
       <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-        <h2 className="text-lg font-bold text-[var(--ink)]">{t('wellnessTitle')}</h2>
+        <button type="button" onClick={() => toggle(false)} aria-expanded className="flex items-center gap-1.5 text-left text-lg font-bold text-[var(--ink)]">
+          {t('wellnessTitle')} <ChevronUp className="h-5 w-5 text-teal-700" aria-hidden />
+        </button>
         {state.streak > 0 && (
           <span className="inline-flex items-center gap-1 rounded-full bg-orange-100 px-2.5 py-1 text-xs font-bold text-orange-700">
             <Flame className="h-3.5 w-3.5" /> {t('wellnessStreak', { count: state.streak })}

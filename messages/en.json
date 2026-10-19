@@ -738,7 +738,10 @@
     "karmaInfoPointsNote": "Not to be confused with KU Points: those arrive when the people you invite activate a subscription and count towards the Kuman Green, Star and Black levels.",
     "karmaInfoClose": "Close",
     "profileEmailLabel": "Login email",
-    "profileEmailHint": "It’s the address you registered and log in with: it can’t be changed."
+    "profileEmailHint": "It’s the address you registered and log in with: it can’t be changed.",
+    "comparePlans": "Compare plans",
+    "upgradeToPro": "Upgrade to Pro",
+    "upgradeToProPrice": "Upgrade to Pro {price}"
   },
   "marketplace": {
     "fabula": "Kumani Fabula",
@@ -10315,12 +10318,10 @@
     "communitySubtitle": "Your network, the people and the initiatives of KUMANI",
     "yourServices": "Your services",
     "allServices": "All services",
-    "yourServicesEmpty": "Tap the star on a service in the Services page to always have it here.",
+    "yourServicesEmpty": "Tap «Add a service» to choose the ones you use most: you’ll find them here.",
     "addService": "Add a service",
     "allFavorites": "All favourites ({count})",
     "recentTitle": "Recently used",
-    "suggestionTitle": "You might need this",
-    "suggestionCta": "Try it",
     "interestsEyebrow": "Welcome to KUMANI",
     "interestsTitle": "What are you interested in?",
     "interestsText": "Pick one or more: we will put the right services on your Home. You can change them whenever you like.",
@@ -11045,7 +11046,19 @@
     "wellnessEveningCta": "Get the session ready",
     "wellnessMoodLocked": "Your mood today: {mood}",
     "wellnessMoodCorrectHint": "You can change the face for 2 minutes, in case you tapped the wrong one.",
-    "wellnessMoodLockedHint": "The face stays until tomorrow; you can always change the note."
+    "wellnessMoodLockedHint": "The face stays until tomorrow; you can always change the note.",
+    "wellnessCollapsedDone": "{done} of {max} steps done today",
+    "wellnessCollapsedHint": "One minute for you: tap to open",
+    "checkInfoLabel": "How does it work?",
+    "checkInfoTitle": "How to use this box",
+    "checkInfoClose": "Got it",
+    "checkInfoIntro": "Paste here something you’re not sure about and KUMANI checks it for you. You can paste:",
+    "checkInfoItem1": "a website or a link you received in a message;",
+    "checkInfoItem2": "an email address, a phone number, an IBAN or a VAT number;",
+    "checkInfoItem3": "a whole SMS, WhatsApp message or email, even a long one;",
+    "checkInfoItem4": "for photos, tap «Check a photo».",
+    "checkInfoAfter": "With a single item the right check opens straight away, already filled in. With a whole message you can analyse it all at once or one thing at a time.",
+    "checkInfoTip": "Tip: before paying, clicking a link or giving your details, paste it here. It takes a few seconds."
   },
   "businessProfile": {
     "title": "Business profile",
@@ -13793,7 +13806,9 @@
       "description": "Evenings with friends organised with a single link, and the affinity game to meet people on your wavelength.",
       "tab_affinity": "Affinity",
       "tab_convivium": "Convivium"
-    }
+    },
+    "homeStarOn": "On your Home",
+    "homeStarOff": "Add to Home"
   },
   "comingSoon": {
     "metaTitle": "KUMANI is coming",
@@ -14112,5 +14127,51 @@
     "infoPrivate": "Anyone with the link can see your commitments: don’t share it. If you think someone else has it, regenerate it.",
     "rotate": "Regenerate the link",
     "rotateConfirm": "Generate a new link? The old one stops working immediately: you’ll need to connect your calendar again."
+  },
+  "welcomeHome": {
+    "hello": "Hi,",
+    "helloName": "Hi {name},",
+    "question": "what are you here for?",
+    "questionHint": "Tap what you need, even more than one: we’ll put the right services in «Your services».",
+    "stepsTitle": "Your first 3 steps",
+    "stepsProgress": "{done} of 3",
+    "stepDone": "done",
+    "step1Title": "Choose what you need",
+    "step1Text": "Tap an answer above.",
+    "step2Title": "Try your first service",
+    "step2Text": "Paste a message, link or number you’re not sure about: we tell you in seconds whether it’s a scam. Every service you use gives you +1 KU Karma, the points you get by using KUMANI.",
+    "step2Cta": "Check a message",
+    "step3Title": "A one-minute break or invite a friend",
+    "step3Text": "Your choice: one minute for yourself, or your link to bring someone to KUMANI.",
+    "step3Pause": "Take the break",
+    "step3Invite": "Copy your link",
+    "showFull": "Show the full Home"
+  },
+  "homeView": {
+    "label": "Home view",
+    "lite": "Lite",
+    "full": "Full",
+    "icons": "Icons",
+    "hello": "Hi",
+    "helloName": "Hi {name}",
+    "search": "Search a service",
+    "clear": "Clear search",
+    "karma": "{count} KU Karma",
+    "mostUsed": "Your services",
+    "results": "Results",
+    "noResults": "No service with this name.",
+    "wallet": "Wallet",
+    "documents": "Documents",
+    "add": "Add",
+    "pickerTitle": "Choose your services",
+    "pickerHint": "Tap a service to put it on your Home, tap it again to remove it.",
+    "pickerAdd": "Add",
+    "pickerAdded": "On Home",
+    "pickerDone": "Done",
+    "usedOften": "Used often",
+    "emptyChosen": "Tap «Add» to put the services you use most here.",
+    "addCategory": "Add",
+    "foldersTitle": "Choose your categories",
+    "foldersHint": "They appear at the bottom as folders, with their services inside. Up to {max}."
   }
 }

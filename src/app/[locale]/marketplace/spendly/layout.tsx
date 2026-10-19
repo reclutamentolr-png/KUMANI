@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
+import ToolBackLink from '@/components/ToolBackLink'
 import { redirect } from 'next/navigation'
 import { getTranslations, getLocale } from 'next-intl/server'
-import Link from '@/components/LocalizedLink'
 import SpendlyNav from '@/components/spendly/SpendlyNav'
 import HubBar from '@/components/hubs/HubBar'
 import { ArrowLeft, PiggyBank, Sparkles } from 'lucide-react'
@@ -31,13 +31,7 @@ export default async function SpendlyLayout({ children }: { children: React.Reac
     <div className="min-h-screen bg-[var(--background)]">
       <header className="bg-[var(--ink)] text-white border-b border-[var(--gold)]/25 shadow-lg sticky top-0 z-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center gap-3">
-          <Link
-            href="/servizi"
-            className="flex shrink-0 items-center gap-2 text-white/70 hover:text-[var(--gold-bright)] font-medium transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            {commonT('backToServices')}
-          </Link>
+          <ToolBackLink className="flex shrink-0 items-center gap-2 text-white/70 hover:text-[var(--gold-bright)] font-medium transition-colors" label={<><ArrowLeft className="w-5 h-5" /> {commonT('backToServices')}</>} />
           <h1 className="flex min-w-0 items-center gap-2 text-right text-lg font-semibold leading-tight text-white">
             <PiggyBank className="h-5 w-5 shrink-0 text-[var(--gold-bright)]" />
             {t('title')}

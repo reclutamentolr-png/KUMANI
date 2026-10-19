@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import {
+  Star,
   AtSign,
   BadgeCheck,
   BookOpenCheck,
@@ -62,6 +63,7 @@ import {
   PartyPopper,
 } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
+import { addFavorite, removeFavorite } from '@/app/actions/favorites'
 import { HUB_TABS, hubOf, type ServiceHub } from '@/lib/serviceHubs'
 
 const HUB_ICON: Record<ServiceHub, LucideIcon> = {
@@ -141,7 +143,38 @@ const TAB_ICON: Record<string, LucideIcon> = {
 // servizio con la sua icona, poi le schede come pulsanti con icona (quella
 // aperta in oro). Le schede del piano che non si ha hanno il lucchetto
 // (aprendole si arriva a dove si sbloccano); quelle spente dall'Admin non ci sono.
-export default function HubNav({ locked, hidden = [] }: { locked: string[]; hidden?: string[] }) {
+// Stella «Nella Home» per il servizio aperto: lo mette (o toglie) tra i
+// servizi della Home. Solo con l'accesso (favorites non null).
+function HomeStar({ tool, initial }: { tool: string; initial: boolean }) {
+  const t = useTranslations('serviceHubs')
+  const [on, setOn] = useState(initial)
+  const [busy, setBusy] = useState(false)
+  const toggle = async () => {
+    const next = !on
+    setOn(next)
+    setBusy(true)
+    const result = next ? await addFavorite(tool) : await removeFavorite(tool)
+    setBusy(false)
+    if (!result.success) setOn(!next)
+  }
+  return (
+    <button
+      type="button"
+      onClick={toggle}
+      disabled={busy}
+      aria-pressed={on}
+      title={on ? t('homeStarOn') : t('homeStarOff')}
+      className={`flex min-h-9 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-[13px] font-semibold transition-colors sm:min-h-10 sm:text-sm ${
+        on ? 'border-[var(--gold)] bg-[var(--gold)]/15 text-[var(--gold-bright)]' : 'border-white/20 text-white/80 hover:border-[var(--gold)] hover:text-white'
+      }`}
+    >
+      <Star className="h-4 w-4" fill={on ? 'currentColor' : 'none'} aria-hidden />
+      {on ? t('homeStarOn') : t('homeStarOff')}
+    </button>
+  )
+}
+
+export default function HubNav({ locked, hidden = [], favorites = null }: { locked: string[]; hidden?: string[]; favorites?: string[] | null }) {
   const t = useTranslations('serviceHubs')
   const pathname = usePathname()
   const search = useSearchParams()
@@ -180,6 +213,8 @@ export default function HubNav({ locked, hidden = [] }: { locked: string[]; hidd
   }, [where?.hub])
   if (!where) return null
   const Icon = HUB_ICON[where.hub]
+  // Servizio della scheda aperta (per la stella «Nella Home»)
+  const currentTool = HUB_TABS[where.hub].find((tab) => tab.key === where.tab)?.tool
   return (
     <nav
       ref={bar}
@@ -223,6 +258,12 @@ export default function HubNav({ locked, hidden = [] }: { locked: string[]; hidd
               )
             })}
         </div>
+        {favorites && currentTool && !locked.includes(currentTool) && (
+          <>
+            <span className="hidden h-6 w-px shrink-0 bg-white/15 sm:block" aria-hidden />
+            <HomeStar key={currentTool} tool={currentTool} initial={favorites.includes(currentTool)} />
+          </>
+        )}
       </div>
     </nav>
   )

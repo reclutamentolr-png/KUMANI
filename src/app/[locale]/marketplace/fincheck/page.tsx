@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
+import ToolBackLink from '@/components/ToolBackLink'
 import { getTranslations } from 'next-intl/server'
 import { redirect } from 'next/navigation'
-import Link from '@/components/LocalizedLink'
 import { ArrowLeft, Gauge, Sparkles } from 'lucide-react'
 import FinCheckApp, { type FinCheckResultRow } from '@/components/fincheck/FinCheckApp'
 import { hasActiveSpendlyAccess, settleAutoPayments } from '@/lib/spendly-server'
@@ -97,9 +97,7 @@ export default async function FinCheckPage({ params }: { params: Promise<{ local
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8 gap-3">
-          <Link href="/servizi" className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)] shrink-0">
-            <ArrowLeft className="h-5 w-5" /> {commonT('backToServices')}
-          </Link>
+          <ToolBackLink className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)] shrink-0" label={<><ArrowLeft className="h-5 w-5" /> {commonT('backToServices')}</>} />
           <div className="flex items-center gap-2 min-w-0 text-right leading-tight">
             <Gauge className="h-5 w-5 text-[var(--gold-bright)] shrink-0" />
             <span className="font-semibold tracking-wide">FinCheck</span>

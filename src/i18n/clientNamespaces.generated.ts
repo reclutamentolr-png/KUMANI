@@ -45,6 +45,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "garage",
   "gifts",
   "guides",
+  "homeView",
   "hopla",
   "hub",
   "install",
@@ -120,6 +121,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "voucherWallet",
   "wallet",
   "webinar",
+  "welcomeHome",
   "whatsappPage",
   "withdrawal"
 ]

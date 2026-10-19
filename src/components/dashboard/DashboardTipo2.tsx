@@ -11,6 +11,8 @@ import type { KarmaToday } from '@/lib/karmaToday'
 import NativeShareButton from '@/components/NativeShareButton'
 import QuickCheckBox from '@/components/ecosystem/QuickCheckBox'
 import KarmaInfoButton from './KarmaInfoButton'
+import HomeViewSwitch from './HomeViewSwitch'
+import type { HomeView } from '@/lib/homeView'
 
 // Home: corta. In cima lo stato (KU Karma, abbonamento, codice invito), poi
 // la fascia «Oggi» e «In cosa possiamo darti una mano?», gli inviti, l'Area
@@ -31,9 +33,16 @@ export default async function DashboardTipo2({
   agenda = null,
   needs = null,
   afterStatus = null,
-  afterToday = null,
+  invites = null,
+  proBlock = null,
+  extras = null,
+  welcome = null,
+  welcomeFooter = null,
+  view = 'full',
+  iconHome = null,
   wellness = null,
   karmaToday = null,
+  proPrice,
 }: {
   profile: MyProfile | null
   shareUrl: string
@@ -51,8 +60,22 @@ export default async function DashboardTipo2({
   needs?: React.ReactNode
   // Messaggi da leggere: subito sotto la riga di stato
   afterStatus?: React.ReactNode
-  // Inviti, Area Professionisti e Sorpresa: dopo «Oggi», prima dei servizi
-  afterToday?: React.ReactNode
+  // Inviti (chi ti ha invitato, Kumano verificato, notifiche, recensione)
+  invites?: React.ReactNode
+  // Area Professionisti (Pro) oppure l'invito a provare il Pro
+  proBlock?: React.ReactNode
+  // KUMANI Sorpresa e simili, in fondo
+  extras?: React.ReactNode
+  // Home di benvenuto (nuovi iscritti Gratis): al posto del resto della pagina
+  welcome?: React.ReactNode
+  // «Mostra la Home completa», in fondo alla Home di benvenuto
+  welcomeFooter?: React.ReactNode
+  // Vista della Home: Lite (l'essenziale), Completa o Icone
+  view?: HomeView
+  // Home a icone, già pronta dalla pagina
+  iconHome?: React.ReactNode
+  // Prezzo del Pro già formattato, per «Passa a Pro»
+  proPrice?: string
   // «Il tuo benessere di oggi», già pronto dal server
   wellness?: React.ReactNode
   // KU Karma presi oggi: accesso e servizi usati (getKarmaToday)
@@ -78,12 +101,50 @@ export default async function DashboardTipo2({
     close: t('karmaInfoClose'),
   }
   const planName = subscribed ? (profile?.subscription_plan === 'pro' ? 'Pro' : 'Base') : proTrialDaysLeft !== null ? 'Pro' : null
-  // Da dove arrivano i KU Karma di oggi: «Accesso +1 · Spendly +1 · …»
-  const serviceTitle = new Map(services.map((s) => [s.toolName, s.title]))
-  const karmaSources = (karmaToday?.items ?? []).map((i) => `${i.key === 'daily_login' ? t('karmaTodayLogin') : (serviceTitle.get(i.key) ?? i.key)} +${i.points}`)
+  // Base, Pro o prova Pro in corso
+  const withPlan = subscribed || proTrialDaysLeft !== null
+  const isProPlan = (subscribed && profile?.subscription_plan === 'pro') || proTrialDaysLeft !== null
+  const ctaRow = (
+    <div className={`grid gap-2 ${isProPlan ? 'grid-cols-1' : 'grid-cols-2'}`}>
+      {!withPlan ? (
+        <Link
+          href="/billing"
+          className="flex min-h-11 items-center justify-center gap-1.5 rounded-xl bg-[var(--ink)] px-3 py-2.5 text-center text-sm font-bold text-white hover:bg-[var(--ink-soft)]"
+        >
+          <Crown className="h-4 w-4 shrink-0 text-[var(--gold-bright)]" /> {t('subscribeNow', { price: basePrice })}
+        </Link>
+      ) : (
+        !isProPlan && (
+          <Link
+            href="/pro"
+            className="flex min-h-11 items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-3 py-2.5 text-center text-sm font-bold text-[var(--ink)] hover:brightness-105"
+          >
+            <Crown className="h-4 w-4 shrink-0" /> {proPrice ? t('upgradeToProPrice', { price: proPrice }) : t('upgradeToPro')}
+          </Link>
+        )
+      )}
+      <VoucherActivationButton className="flex min-h-11 w-full items-center justify-center rounded-xl border border-[var(--gold)]/50 bg-white px-3 py-2.5 text-center text-sm font-bold text-[var(--ink)] transition-colors hover:bg-[var(--gold-pale)]" />
+    </div>
+  )
+
+  // Vista a icone: solo le icone (abbonarsi e codice sono nel Wallet e nel profilo)
+  if (view === 'icons')
+    return (
+      <>
+        <HomeViewSwitch key={view} current={view} />
+        {afterStatus}
+        {iconHome}
+      </>
+    )
 
   return (
     <>
+      {/* Lite · Completa · Icone */}
+      <HomeViewSwitch key={view} current={view} />
+
+      {/* In cima: abbonarsi (o passare a Pro) e «Hai un codice?» */}
+      {ctaRow}
+
       {/* Riga di stato compatta: KU Karma, abbonamento e codice invito */}
       <div className="grid grid-cols-3 gap-2 sm:gap-3">
         {/* Scheda non cliccabile: «Cosa sono?» spiega i KU Karma, solo «Vai al Wallet» porta al Wallet */}
@@ -134,7 +195,7 @@ export default async function DashboardTipo2({
           ) : (
             <>
               <span className="mt-1 text-base font-extrabold text-[var(--ink)] sm:text-lg">{hubT('stripFree')}</span>
-              <span className="mt-auto pt-1.5 text-[11px] font-semibold text-[var(--gold)]">{hubT('stripActivate')} →</span>
+              <span className="mt-auto pt-1.5 text-[11px] font-semibold text-[var(--gold)]">{t('comparePlans')} →</span>
             </>
           )}
         </Link>
@@ -151,82 +212,83 @@ export default async function DashboardTipo2({
         </div>
       </div>
 
-      {/* KU Karma di oggi: da dove sono arrivati, oppure come prenderli */}
-      {karmaToday && (
-        <Link
-          href="/wallet"
-          className="flex items-start gap-2 rounded-xl border border-[var(--gold)]/30 bg-[var(--gold)]/[0.06] px-3 py-2 text-xs text-[var(--ink)] hover:border-[var(--gold)] sm:text-sm"
-        >
-          <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-[var(--gold)]" />
-          {karmaToday.total > 0 ? (
-            <span>
-              <strong>{t('karmaTodayTitle', { n: karmaToday.total })}</strong> {karmaSources.join(' · ')}
-            </span>
-          ) : (
-            <span>{t('karmaTodayNone')}</span>
-          )}
-        </Link>
-      )}
-
-      {/* «Qualcosa non ti torna? Incollalo qui»: porta d'ingresso dell'anti-truffa */}
-      <QuickCheckBox title={t('quickCheckTitle')} className="" />
-
-      {/* Senza abbonamento né prova: abbonarsi o usare un voucher */}
-      {!subscribed && proTrialDaysLeft === null && (
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-          <Link
-            href="/billing"
-            className="flex items-center justify-center gap-1.5 rounded-xl bg-[var(--ink)] px-4 py-2.5 text-sm font-bold text-white hover:bg-[var(--ink-soft)]"
-          >
-            <Crown className="h-4 w-4 text-[var(--gold-bright)]" /> {t('subscribeNow', { price: basePrice })}
-          </Link>
-          <VoucherActivationButton />
-        </div>
-      )}
-
       {afterStatus}
 
-      {/* Subito dopo lo stato: oggi e «In cosa possiamo darti una mano?»
-          (una sotto l'altra sul telefono, affiancate sul computer) */}
-      {agenda ? (
-        <div className="grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[minmax(0,28rem)_minmax(0,1fr)] lg:items-start lg:gap-6">
+      {view === 'lite' ? (
+        welcome ? (
+          <>
+            {/* Nuovi iscritti Gratis: una domanda e tre passi, poi i servizi */}
+            {welcome}
+            <HomeServices items={services} favorites={favoriteToolNames} />
+            {wellness}
+            {welcomeFooter}
+          </>
+        ) : (
+          <>
+            {/* Lite: solo l'essenziale */}
+            <QuickCheckBox title={t('quickCheckTitle')} className="" />
+            <HomeServices items={services} favorites={favoriteToolNames} />
+          </>
+        )
+      ) : withPlan ? (
+        <>
+          {/* Con un piano: prima la giornata («Oggi», porta al calendario) */}
           {agenda}
-          {needs}
-        </div>
+          <QuickCheckBox title={t('quickCheckTitle')} className="" />
+          <HomeServices items={services} favorites={favoriteToolNames} />
+          {invites}
+          {proBlock}
+          {wellness}
+          {extras}
+        </>
       ) : (
-        needs
+        <>
+          {/* Gratis: prima il controllo anti-truffa, poi i servizi */}
+          <QuickCheckBox title={t('quickCheckTitle')} className="" />
+          <HomeServices items={services} favorites={favoriteToolNames} />
+          {invites}
+          {agenda ? (
+            <div className="grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[minmax(0,28rem)_minmax(0,1fr)] lg:items-start lg:gap-6">
+              {agenda}
+              {needs}
+            </div>
+          ) : (
+            needs
+          )}
+          {wellness}
+          {proBlock}
+          {extras}
+        </>
       )}
 
-      {afterToday}
+      {view === 'full' && (
+        <>
+          {/* Novità di Affinity Amicizie (solo per chi partecipa) */}
+          <AffinityBadge />
 
-      <HomeServices items={services} favorites={favoriteToolNames} />
-
-      {wellness}
-
-      {/* Novità di Affinity Amicizie (solo per chi partecipa) */}
-      <AffinityBadge />
-
-      {/* Guide e documenti */}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <Link href="/guida" className="group flex items-center justify-between gap-3 rounded-xl border border-[var(--gold)]/35 bg-[var(--gold-pale)] px-5 py-3.5 shadow-sm transition-colors hover:border-[var(--gold)]">
-          <span className="flex items-center gap-3">
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--gold)] text-white">
-              <BookOpen className="h-4.5 w-4.5" />
-            </span>
-            <span className="font-semibold text-[var(--ink)]">{guidesT('dashboardTitle')}</span>
-          </span>
-          <ArrowRight className="h-4 w-4 text-[var(--ink)] transition-transform group-hover:translate-x-1" />
-        </Link>
-        <Link href="/documenti" className="group flex items-center justify-between gap-3 rounded-xl border border-[var(--gold)]/35 bg-[var(--gold-pale)] px-5 py-3.5 shadow-sm transition-colors hover:border-[var(--gold)]">
-          <span className="flex items-center gap-3">
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--gold)] text-white">
-              <FolderOpen className="h-4.5 w-4.5" />
-            </span>
-            <span className="font-semibold text-[var(--ink)]">{docsT('title')}</span>
-          </span>
-          <ArrowRight className="h-4 w-4 text-[var(--ink)] transition-transform group-hover:translate-x-1" />
-        </Link>
-      </div>
+          {/* Guide e documenti */}
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <Link href="/guida" className="group flex items-center justify-between gap-3 rounded-xl border border-[var(--gold)]/35 bg-[var(--gold-pale)] px-5 py-3.5 shadow-sm transition-colors hover:border-[var(--gold)]">
+              <span className="flex items-center gap-3">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--gold)] text-white">
+                  <BookOpen className="h-4.5 w-4.5" />
+                </span>
+                <span className="font-semibold text-[var(--ink)]">{guidesT('dashboardTitle')}</span>
+              </span>
+              <ArrowRight className="h-4 w-4 text-[var(--ink)] transition-transform group-hover:translate-x-1" />
+            </Link>
+            <Link href="/documenti" className="group flex items-center justify-between gap-3 rounded-xl border border-[var(--gold)]/35 bg-[var(--gold-pale)] px-5 py-3.5 shadow-sm transition-colors hover:border-[var(--gold)]">
+              <span className="flex items-center gap-3">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--gold)] text-white">
+                  <FolderOpen className="h-4.5 w-4.5" />
+                </span>
+                <span className="font-semibold text-[var(--ink)]">{docsT('title')}</span>
+              </span>
+              <ArrowRight className="h-4 w-4 text-[var(--ink)] transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
+        </>
+      )}
     </>
   )
 }

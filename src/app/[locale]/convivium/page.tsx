@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation'
+import ToolBackLink from '@/components/ToolBackLink'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { ArrowLeft, CalendarDays, HandCoins, MapPin, Wine } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
@@ -82,9 +83,7 @@ export default async function ConviviumPage() {
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-4">
-          <Link href="/servizi" className="flex shrink-0 items-center gap-2 text-sm font-medium hover:text-[var(--gold-bright)]">
-            <ArrowLeft className="h-5 w-5" /> {commonT('backToServices')}
-          </Link>
+          <ToolBackLink className="flex shrink-0 items-center gap-2 text-sm font-medium hover:text-[var(--gold-bright)]" label={<><ArrowLeft className="h-5 w-5" /> {commonT('backToServices')}</>} />
           <span className="flex min-w-0 items-center gap-2 text-right font-semibold leading-tight">
             <Wine className="h-5 w-5 shrink-0 text-[var(--gold-bright)]" /> {t('title')}
           </span>

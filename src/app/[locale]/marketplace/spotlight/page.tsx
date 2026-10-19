@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import ToolBackLink from '@/components/ToolBackLink'
 import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
@@ -43,9 +44,7 @@ export default async function SpotlightManagePage({ params }: { params: Promise<
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8 gap-3">
-          <Link href="/servizi" className="flex items-center gap-2 text-sm font-medium text-white transition-colors hover:text-[var(--gold-bright)] shrink-0">
-            <ArrowLeft className="h-5 w-5" /> {t('backToServices')}
-          </Link>
+          <ToolBackLink className="flex items-center gap-2 text-sm font-medium text-white transition-colors hover:text-[var(--gold-bright)] shrink-0" label={<><ArrowLeft className="h-5 w-5" /> {t('backToServices')}</>} />
           <div className="flex items-center gap-2 min-w-0 text-right leading-tight">
             <Star className="h-5 w-5 text-[var(--gold-bright)] shrink-0" />
             <span className="font-semibold tracking-wide">{t('title')}</span>

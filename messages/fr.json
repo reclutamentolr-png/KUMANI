@@ -701,7 +701,10 @@
     "karmaInfoPointsNote": "À ne pas confondre avec les KU Points : ceux-ci arrivent quand les personnes que vous invitez activent un abonnement et comptent pour les niveaux Kuman Green, Star et Black.",
     "karmaInfoClose": "Fermer",
     "profileEmailLabel": "E-mail de connexion",
-    "profileEmailHint": "C’est l’adresse utilisée pour l’inscription et la connexion : elle ne peut pas être modifiée."
+    "profileEmailHint": "C’est l’adresse utilisée pour l’inscription et la connexion : elle ne peut pas être modifiée.",
+    "comparePlans": "Comparer les formules",
+    "upgradeToPro": "Passer à Pro",
+    "upgradeToProPrice": "Passer à Pro {price}"
   },
   "marketplace": {
     "fabula": "Kumani Fabula",
@@ -10315,12 +10318,10 @@
     "communitySubtitle": "Votre réseau, les personnes et les initiatives de KUMANI",
     "yourServices": "Vos services",
     "allServices": "Tous les services",
-    "yourServicesEmpty": "Touchez l’étoile d’un service dans la page Services pour l’avoir toujours ici.",
+    "yourServicesEmpty": "Touchez « Ajouter un service » pour choisir ceux que vous utilisez le plus : vous les retrouverez ici.",
     "addService": "Ajouter un service",
     "allFavorites": "Tous les favoris ({count})",
     "recentTitle": "Utilisés récemment",
-    "suggestionTitle": "Cela pourrait vous servir",
-    "suggestionCta": "Essayer",
     "interestsEyebrow": "Bienvenue sur KUMANI",
     "interestsTitle": "Qu’est-ce qui vous intéresse ?",
     "interestsText": "Choisissez une ou plusieurs choses : nous mettons les bons services sur votre Accueil. Vous pourrez les changer quand vous voulez.",
@@ -11045,7 +11046,19 @@
     "wellnessEveningCta": "Préparer la séance",
     "wellnessMoodLocked": "Votre humeur du jour : {mood}",
     "wellnessMoodCorrectHint": "Vous pouvez changer le visage pendant 2 minutes, en cas d’erreur.",
-    "wellnessMoodLockedHint": "Le visage reste jusqu’à demain ; la note peut toujours être modifiée."
+    "wellnessMoodLockedHint": "Le visage reste jusqu’à demain ; la note peut toujours être modifiée.",
+    "wellnessCollapsedDone": "{done} sur {max} pas faits aujourd’hui",
+    "wellnessCollapsedHint": "Une minute pour vous : touchez pour ouvrir",
+    "checkInfoLabel": "Comment ça marche ?",
+    "checkInfoTitle": "Comment utiliser ce champ",
+    "checkInfoClose": "Compris",
+    "checkInfoIntro": "Collez ici quelque chose qui vous paraît suspect et KUMANI le vérifie pour vous. Vous pouvez coller :",
+    "checkInfoItem1": "un site ou un lien reçu dans un message ;",
+    "checkInfoItem2": "une adresse e-mail, un numéro de téléphone, un IBAN ou un numéro de TVA ;",
+    "checkInfoItem3": "un SMS, un message WhatsApp ou un e-mail entier, même long ;",
+    "checkInfoItem4": "pour les photos, touchez « Vérifier une photo ».",
+    "checkInfoAfter": "Avec un seul élément, la bonne vérification s’ouvre tout de suite, déjà remplie. Un message entier peut être analysé d’un coup ou élément par élément.",
+    "checkInfoTip": "Conseil : avant de payer, de cliquer sur un lien ou de donner vos informations, collez-le ici. Cela prend quelques secondes."
   },
   "businessProfile": {
     "title": "Fiche entreprise",
@@ -13793,7 +13806,9 @@
       "description": "Des soirées entre amis organisées avec un lien, et le jeu des affinités pour rencontrer des personnes sur la même longueur d’onde.",
       "tab_affinity": "Affinity",
       "tab_convivium": "Convivium"
-    }
+    },
+    "homeStarOn": "Sur votre accueil",
+    "homeStarOff": "Mettre sur l’accueil"
   },
   "comingSoon": {
     "metaTitle": "KUMANI arrive",
@@ -14112,5 +14127,51 @@
     "infoPrivate": "Qui a le lien voit vos engagements : ne le partagez pas. Si vous pensez que quelqu’un d’autre l’a, régénérez-le.",
     "rotate": "Régénérer le lien",
     "rotateConfirm": "Générer un nouveau lien ? L’ancien cesse aussitôt de fonctionner : il faudra reconnecter votre agenda."
+  },
+  "welcomeHome": {
+    "hello": "Bonjour,",
+    "helloName": "Bonjour {name},",
+    "question": "qu’est-ce qui vous amène ?",
+    "questionHint": "Touchez ce dont vous avez besoin, même plusieurs réponses : nous mettons les bons services dans « Vos services ».",
+    "stepsTitle": "Vos 3 premiers pas",
+    "stepsProgress": "{done} sur 3",
+    "stepDone": "fait",
+    "step1Title": "Choisissez ce dont vous avez besoin",
+    "step1Text": "Touchez une réponse ci-dessus.",
+    "step2Title": "Essayez votre premier service",
+    "step2Text": "Collez un message, un lien ou un numéro qui vous paraît suspect : nous vous disons en quelques secondes s’il s’agit d’une arnaque. Chaque service utilisé vous donne +1 KU Karma, les points reçus en utilisant KUMANI.",
+    "step2Cta": "Vérifier un message",
+    "step3Title": "Une pause d’une minute ou invitez quelqu’un",
+    "step3Text": "À vous de choisir : une minute pour vous, ou votre lien pour faire venir quelqu’un sur KUMANI.",
+    "step3Pause": "Faire la pause",
+    "step3Invite": "Copier votre lien",
+    "showFull": "Afficher l’accueil complet"
+  },
+  "homeView": {
+    "label": "Vue de l’accueil",
+    "lite": "Lite",
+    "full": "Complète",
+    "icons": "Icônes",
+    "hello": "Bonjour",
+    "helloName": "Bonjour {name}",
+    "search": "Chercher un service",
+    "clear": "Effacer la recherche",
+    "karma": "{count} KU Karma",
+    "mostUsed": "Vos services",
+    "results": "Résultats",
+    "noResults": "Aucun service avec ce nom.",
+    "wallet": "Wallet",
+    "documents": "Documents",
+    "add": "Ajouter",
+    "pickerTitle": "Choisissez vos services",
+    "pickerHint": "Touchez un service pour le mettre sur votre accueil, touchez-le à nouveau pour le retirer.",
+    "pickerAdd": "Ajouter",
+    "pickerAdded": "Sur l’accueil",
+    "pickerDone": "Terminé",
+    "usedOften": "Utilisés souvent",
+    "emptyChosen": "Touchez « Ajouter » pour mettre ici les services que vous utilisez le plus.",
+    "addCategory": "Ajouter",
+    "foldersTitle": "Choisissez vos catégories",
+    "foldersHint": "Elles apparaissent en bas sous forme de dossiers, avec leurs services à l’intérieur. {max} au maximum."
   }
 }

@@ -701,7 +701,10 @@
     "karmaInfoPointsNote": "Não confundas com os KU Points: esses chegam quando as pessoas que convidas ativam uma subscrição e contam para os níveis Kuman Green, Star e Black.",
     "karmaInfoClose": "Fechar",
     "profileEmailLabel": "Email de acesso",
-    "profileEmailHint": "É o endereço com que te registaste e com que entras: não pode ser alterado."
+    "profileEmailHint": "É o endereço com que te registaste e com que entras: não pode ser alterado.",
+    "comparePlans": "Comparar planos",
+    "upgradeToPro": "Passar a Pro",
+    "upgradeToProPrice": "Passar a Pro {price}"
   },
   "marketplace": {
     "fabula": "Kumani Fabula",
@@ -10315,12 +10318,10 @@
     "communitySubtitle": "A sua rede, as pessoas e as iniciativas da KUMANI",
     "yourServices": "Os seus serviços",
     "allServices": "Todos os serviços",
-    "yourServicesEmpty": "Toque na estrela de um serviço na página Serviços para tê-lo sempre aqui.",
+    "yourServicesEmpty": "Toca em «Adicionar um serviço» para escolher os que mais usas: encontras-os aqui.",
     "addService": "Adicionar um serviço",
     "allFavorites": "Todos os favoritos ({count})",
     "recentTitle": "Usados recentemente",
-    "suggestionTitle": "Isto pode ser útil",
-    "suggestionCta": "Experimentar",
     "interestsEyebrow": "Bem-vindo à KUMANI",
     "interestsTitle": "O que lhe interessa?",
     "interestsText": "Escolha uma ou mais coisas: colocamos no seu Início os serviços certos. Poderá mudá-los quando quiser.",
@@ -11045,7 +11046,19 @@
     "wellnessEveningCta": "Preparar a sessão",
     "wellnessMoodLocked": "O teu humor de hoje: {mood}",
     "wellnessMoodCorrectHint": "Podes mudar a carinha durante 2 minutos, se tocaste na errada.",
-    "wellnessMoodLockedHint": "A carinha fica até amanhã; a nota podes sempre mudar."
+    "wellnessMoodLockedHint": "A carinha fica até amanhã; a nota podes sempre mudar.",
+    "wellnessCollapsedDone": "{done} de {max} passos feitos hoje",
+    "wellnessCollapsedHint": "Um minuto para ti: toca para abrir",
+    "checkInfoLabel": "Como se usa?",
+    "checkInfoTitle": "Como usar este campo",
+    "checkInfoClose": "Percebi",
+    "checkInfoIntro": "Aqui colas algo que não te convence e o KUMANI verifica por ti. Podes colar:",
+    "checkInfoItem1": "um site ou um link recebido numa mensagem;",
+    "checkInfoItem2": "um email, um número de telefone, um IBAN ou um NIF;",
+    "checkInfoItem3": "um SMS, mensagem de WhatsApp ou email inteiro, mesmo longo;",
+    "checkInfoItem4": "para as fotos toca em «Verificar uma foto».",
+    "checkInfoAfter": "Com um só dado abre logo a verificação certa, já preenchida. Com uma mensagem inteira podes analisá-la toda de uma vez ou uma coisa de cada vez.",
+    "checkInfoTip": "Conselho: antes de pagar, clicar num link ou dar os teus dados, cola aqui. Demora poucos segundos."
   },
   "businessProfile": {
     "title": "Ficha da atividade",
@@ -13793,7 +13806,9 @@
       "description": "Saídas com amigos organizadas com um link, e o jogo das afinidades para conhecer pessoas em sintonia contigo.",
       "tab_affinity": "Affinity",
       "tab_convivium": "Convivium"
-    }
+    },
+    "homeStarOn": "Na tua Home",
+    "homeStarOff": "Pôr na Home"
   },
   "comingSoon": {
     "metaTitle": "O KUMANI está a chegar",
@@ -14112,5 +14127,51 @@
     "infoPrivate": "Quem tem o link vê os teus compromissos: não o partilhes. Se achas que outra pessoa o tem, gera um novo.",
     "rotate": "Gerar novo link",
     "rotateConfirm": "Gerar um novo link? O antigo deixa logo de funcionar: vais ter de ligar o calendário de novo."
+  },
+  "welcomeHome": {
+    "hello": "Olá,",
+    "helloName": "Olá {name},",
+    "question": "o que te traz aqui?",
+    "questionHint": "Toca no que precisas, até mais do que uma resposta: pomos os serviços certos em «Os teus serviços».",
+    "stepsTitle": "Os teus primeiros 3 passos",
+    "stepsProgress": "{done} de 3",
+    "stepDone": "feito",
+    "step1Title": "Escolhe o que precisas",
+    "step1Text": "Toca numa resposta aqui em cima.",
+    "step2Title": "Experimenta o teu primeiro serviço",
+    "step2Text": "Cola uma mensagem, um link ou um número que não te convence: dizemos-te em segundos se é uma burla. Cada serviço que usas dá-te +1 KU Karma, os pontos que recebes ao usar o KUMANI.",
+    "step2Cta": "Verificar uma mensagem",
+    "step3Title": "Uma pausa de um minuto ou convida alguém",
+    "step3Text": "Tu escolhes: um minuto para ti, ou o teu link para trazer alguém para o KUMANI.",
+    "step3Pause": "Fazer a pausa",
+    "step3Invite": "Copiar o teu link",
+    "showFull": "Mostrar a Home completa"
+  },
+  "homeView": {
+    "label": "Vista da Home",
+    "lite": "Lite",
+    "full": "Completa",
+    "icons": "Ícones",
+    "hello": "Olá",
+    "helloName": "Olá {name}",
+    "search": "Procurar um serviço",
+    "clear": "Limpar pesquisa",
+    "karma": "{count} KU Karma",
+    "mostUsed": "Os teus serviços",
+    "results": "Resultados",
+    "noResults": "Nenhum serviço com este nome.",
+    "wallet": "Wallet",
+    "documents": "Documentos",
+    "add": "Adicionar",
+    "pickerTitle": "Escolhe os teus serviços",
+    "pickerHint": "Toca num serviço para o pôr na tua Home, toca de novo para o tirar.",
+    "pickerAdd": "Adicionar",
+    "pickerAdded": "Na Home",
+    "pickerDone": "Feito",
+    "usedOften": "Usados com frequência",
+    "emptyChosen": "Toca em «Adicionar» para pôr aqui os serviços que mais usas.",
+    "addCategory": "Adicionar",
+    "foldersTitle": "Escolhe as tuas categorias",
+    "foldersHint": "Aparecem em baixo como pastas, com os seus serviços dentro. No máximo {max}."
   }
 }

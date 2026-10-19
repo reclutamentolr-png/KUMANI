@@ -26,7 +26,6 @@ import { getLateSponsorStatus } from '@/lib/lateSponsor'
 import DashboardReturnScroll from '@/components/dashboard/DashboardReturnScroll'
 import PendingReceiptClaim from '@/components/receipts/PendingReceiptClaim'
 import DashboardTour from '@/components/dashboard/DashboardTour'
-import InterestsOnboarding from '@/components/dashboard/InterestsOnboarding'
 import LandingMessagesAlert from '@/components/dashboard/LandingMessagesAlert'
 import BachecaMessagesAlert from '@/components/dashboard/BachecaMessagesAlert'
 import ProArea from '@/components/dashboard/ProArea'
@@ -47,6 +46,11 @@ import GiftWelcomeDashboard from '@/components/gifts/GiftWelcomeDashboard'
 import DashboardNeeds from '@/components/dashboard/DashboardNeeds'
 import VerifiedInviteCard from '@/components/verification/VerifiedInviteCard'
 import { buildHomeNeeds } from '@/lib/homeNeedsServer'
+import WelcomeHome, { ShowFullHomeLink } from '@/components/dashboard/WelcomeHome'
+import { getToolUsage, getWelcomeState, VERIFIED_AFTER_LOGINS } from '@/lib/welcomeHome'
+import { resolveHomeFolders, resolveHomeView } from '@/lib/homeView'
+import { SERVICE_HUBS } from '@/lib/serviceHubs'
+import IconHome from '@/components/dashboard/IconHome'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -75,6 +79,8 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   // /dashboard/rete), ma servono anche per i popup qualifiche/rinnovo.
   const networkPromise = getDashboardNetworkData(supabase, user, profilePromise, locale, { tree: false, claims: 'skip' })
   const wellnessPromise = Promise.resolve(supabase.rpc('wellness_path_today').then((r) => r))
+  // KU Karma di oggi: non dipende da niente, parte subito
+  const karmaPromise = getKarmaToday(supabase, user.id).catch(() => null)
   // Se la pagina fallisce prima di attenderle, niente errori non gestiti
   networkPromise.catch(() => {})
   wellnessPromise.catch(() => {})
@@ -174,7 +180,9 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
 
   // 4. Rete (già partita), agenda, prova Pro e dati dell'Area
   //    Professionisti: anche queste insieme.
-  const [network, agendaEvents, trial, stats, catalog, { data: wellnessToday }, karmaToday] = await Promise.all([
+  // Gratis senza prova Pro e senza Pass: può avere la Home di benvenuto
+  const freeOnly = userPlan === 'none' && !(trialEnd > nowMs) && !access.hasPass
+  const [network, agendaEvents, trial, stats, catalog, { data: wellnessToday }, karmaToday, welcomeState] = await Promise.all([
     networkPromise,
     hasAgenda
       ? loadAgenda(supabase, user.id, {
@@ -192,7 +200,15 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     // «Il tuo momento di benessere»: passi, umore, cose belle e KU Karma
     wellnessPromise,
     // KU Karma presi oggi (accesso e servizi), accanto ai KU Karma
-    getKarmaToday(supabase, user.id).catch(() => null),
+    karmaPromise,
+    // Home di benvenuto (primi passi) e accessi (per «Diventa Kumano verificato»)
+    getWelcomeState({
+      userId: user.id,
+      createdAt: profile?.created_at,
+      metadata: user.user_metadata,
+      favoritesCount: favoriteToolNames.length,
+      free: freeOnly,
+    }).catch(() => null),
   ])
   const { newlyAchievedRank } = network
   // «In cosa possiamo darti una mano?»: qui i servizi portano allo strumento
@@ -211,8 +227,42 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     }
   }
 
-  const firstAccess = (user.user_metadata ?? {}) as { tour_seen?: boolean; interests_seen?: boolean }
-  const askInterests = !firstAccess.interests_seen && !firstAccess.tour_seen && favoriteToolNames.length === 0
+  // «Diventa Kumano verificato» dopo 7 accessi: vuol dire che usa KUMANI
+  const showVerified = (welcomeState?.loginDays ?? 0) >= VERIFIED_AFTER_LOGINS
+  const proPrice = formatEur(planPrices.pro)
+
+  // Vista della Home: Lite (i nuovi Gratis partono da qui), Completa o Icone
+  const view = resolveHomeView(user.user_metadata, welcomeState?.newcomer ?? false)
+  let iconHome: React.ReactNode = null
+  if (view === 'icons') {
+    const [usage, hubT] = await Promise.all([getToolUsage(user.id).catch(() => ({})), getTranslations('hub')])
+    // Pallini: impegni di oggi (e scaduti) nell'agenda, bollette da pagare in Spendly
+    const pending = agendaEvents.filter((event) => !event.done && event.date <= agendaToday)
+    const badges: Record<string, number> = {}
+    const bills = pending.filter((event) => event.kind === 'bill').length
+    const others = pending.length - bills
+    if (bills) badges.spendly = bills
+    if (others) badges[agendaSources.memolife ? 'memolife' : 'life-calendar'] = others
+    const subscribedNow = profile?.subscription_status === 'active'
+    const planLabel = subscribedNow
+      ? `${hubT('stripPlan')} ${profile?.subscription_plan === 'pro' ? 'Pro' : 'Base'}`
+      : proTrial
+        ? `${hubT('stripPlan')} Pro`
+        : `${hubT('stripPlan')} ${hubT('stripFree')}`
+    iconHome = (
+      <IconHome
+        firstName={profile?.first_name ?? null}
+        dateLabel={new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date())}
+        karma={profile?.daily_points ?? 0}
+        planLabel={planLabel}
+        items={catalog.items}
+        usage={usage}
+        favorites={favoriteToolNames}
+        badges={badges}
+        folders={resolveHomeFolders(user.user_metadata, SERVICE_HUBS)}
+      />
+    )
+  }
 
   return (
     <div className="min-h-screen bg-[var(--background)]" suppressHydrationWarning>
@@ -279,29 +329,47 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
                   </>
                 )
               }
-              afterToday={
+              proPrice={proPrice}
+              welcome={
+                view === 'lite' && welcomeState?.show ? (
+                  <WelcomeHome
+                    firstName={profile?.first_name ?? null}
+                    needs={needs.map((need) => ({ key: need.key, icon: need.icon, short: need.short }))}
+                    picked={welcomeState.needs}
+                    steps={welcomeState.steps}
+                    shareUrl={shareUrl}
+                  />
+                ) : null
+              }
+              view={view}
+              iconHome={iconHome}
+              welcomeFooter={view === 'lite' && welcomeState?.show ? <ShowFullHomeLink /> : null}
+              invites={
                 <>
                   {/* Iscritto senza codice: può ancora indicare chi l'ha invitato */}
                   {lateSponsor.eligible && lateSponsor.until && <LateSponsorCard until={lateSponsor.until} />}
-                  {/* Invito a diventare «Kumano verificato» (segno accanto al nome) */}
-                  <VerifiedInviteCard />
+                  {/* Invito a diventare «Kumano verificato» (segno accanto al nome), dopo 7 accessi */}
+                  {showVerified && <VerifiedInviteCard />}
                   {/* Invito ad attivare le notifiche push su questo dispositivo */}
                   <PushInviteCard />
                   {/* Invito a recensire chi ha acquistato e non l'ha ancora fatto */}
                   {canReview && <ReviewInviteCard />}
-                  {isPro && proTools.length > 0 ? (
-                    <ProArea tools={proTools} stats={proAreaStats} trial={proTrial} renewsOn={proRenewsOn} favoriteToolNames={favoriteToolNames} />
-                  ) : (
-                    !isPro && proTools.length > 0 && <ProTeaser trialExpired={proTrialExpired} />
-                  )}
-                  {/* KUMANI Sorpresa: regalare un'esperienza (buono o percorso) */}
-                  <SurpriseDashboardCard />
                 </>
               }
+              proBlock={
+                isPro && proTools.length > 0 ? (
+                  <ProArea tools={proTools} stats={proAreaStats} trial={proTrial} renewsOn={proRenewsOn} favoriteToolNames={favoriteToolNames} />
+                ) : (
+                  // Invito al Pro solo a chi è Gratis: chi ha il Base ha già «Passa a Pro» in cima
+                  userPlan === 'none' && proTools.length > 0 && <ProTeaser trialExpired={proTrialExpired} />
+                )
+              }
+              // KUMANI Sorpresa: regalare un'esperienza (buono o percorso)
+              extras={<SurpriseDashboardCard />}
             />
-            {/* Primo accesso: prima "Cosa ti interessa?" (riempie i preferiti),
-                poi il tour (una volta sola; si rivede dal Centro guide) */}
-            {askInterests ? <InterestsOnboarding items={catalog.items} /> : <DashboardTour seen={firstAccess.tour_seen === true} />}
+            {/* Tour di 6 passi: non parte più da solo (al suo posto i «primi
+                3 passi»); si rivede dal Centro guide con ?tour=1 */}
+            <DashboardTour seen />
           </>
         )}
       </main>

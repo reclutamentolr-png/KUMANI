@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { ArrowRight, AtSign, Building2, Camera, Globe, Landmark, MailSearch, Phone, ShieldCheck, type LucideIcon } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
+import InfoDialog from '@/components/InfoDialog'
 import { isWholeMessage, MESSAGE_HANDOFF_KEY, quickCheckFindings, type QuickCheckFinding, type QuickCheckKind } from '@/lib/quickCheck'
 import { defaultLocale } from '../../../i18n'
 
@@ -82,10 +83,26 @@ export default function QuickCheckBox({ title, initialText = '', autoRun = false
 
   return (
     <form onSubmit={submit} className={`${className} rounded-2xl border border-[var(--gold)]/35 bg-white p-4 shadow-sm sm:p-5`} noValidate>
-      <label htmlFor={inputId} className="flex items-center gap-2 text-base font-bold text-[var(--ink)]">
-        <ShieldCheck className="h-5 w-5 text-[var(--gold)]" aria-hidden />
-        {title ?? t('checkBoxTitle')}
-      </label>
+      <div className="flex items-start justify-between gap-3">
+        <label htmlFor={inputId} className="flex items-center gap-2 text-base font-bold text-[var(--ink)]">
+          <ShieldCheck className="h-5 w-5 shrink-0 text-[var(--gold)]" aria-hidden />
+          {title ?? t('checkBoxTitle')}
+        </label>
+        {/* Come si usa il campo: cosa incollare e cosa succede */}
+        <InfoDialog label={t('checkInfoLabel')} title={t('checkInfoTitle')} close={t('checkInfoClose')} className="mt-0.5">
+          <p>{t('checkInfoIntro')}</p>
+          <ul className="space-y-1.5">
+            {(['checkInfoItem1', 'checkInfoItem2', 'checkInfoItem3', 'checkInfoItem4'] as const).map((key) => (
+              <li key={key} className="flex gap-2">
+                <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--gold)]" aria-hidden />
+                <span>{t(key)}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="text-[var(--muted)]">{t('checkInfoAfter')}</p>
+          <p className="rounded-xl bg-[var(--gold)]/[0.08] px-3 py-2.5 text-xs">{t('checkInfoTip')}</p>
+        </InfoDialog>
+      </div>
       <p className="mt-1 text-sm text-[var(--muted)]">{t('checkBoxText')}</p>
       <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-start">
         <textarea

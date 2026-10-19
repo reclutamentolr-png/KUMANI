@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import ToolBackLink from '@/components/ToolBackLink'
 import { redirect } from 'next/navigation'
 import { getTranslations, getLocale } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
@@ -77,13 +78,7 @@ export default async function LifeCalendarPage() {
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center gap-3">
-          <Link
-            href="/servizi"
-            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)] shrink-0"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            {commonT('backToServices')}
-          </Link>
+          <ToolBackLink className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)] shrink-0" label={<><ArrowLeft className="w-5 h-5" /> {commonT('backToServices')}</>} />
           <h1 className="flex items-center gap-2 font-semibold tracking-wide min-w-0 text-right leading-tight">
             <CalendarClock className="h-5 w-5 text-[var(--gold-bright)] shrink-0" />
             {t('title')}

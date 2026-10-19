@@ -1,4 +1,5 @@
 import { SITE_URL } from '@/lib/siteUrl'
+import ToolBackLink from '@/components/ToolBackLink'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslations } from 'next-intl/server'
 import { redirect } from 'next/navigation'
@@ -27,7 +28,7 @@ export default async function MandalaPage({ params }: { params: Promise<{ locale
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8 gap-3">
-          <Link href="/servizi" className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)] shrink-0"><ArrowLeft className="h-5 w-5" /> {commonT('backToServices')}</Link>
+          <ToolBackLink className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)] shrink-0" label={<><ArrowLeft className="h-5 w-5" /> {commonT('backToServices')}</>} />
           <div className="flex items-center gap-2 min-w-0 text-right leading-tight"><Flower2 className="h-5 w-5 text-[var(--gold-bright)] shrink-0" /><span className="font-semibold tracking-wide">Mandala KUMANI</span></div>
         </div>
       </header>

@@ -8,7 +8,8 @@ import { redeemActivationCode } from '@/app/actions/codes'
 
 // "Hai un codice?" in dashboard: un solo campo per voucher abbonamento
 // (KV-/KVA-), codici Pass (PASS-) e regali (GIFT-), riconosciuti dal codice.
-export default function VoucherActivationButton() {
+// className: aspetto del pulsante (in cima alla dashboard, accanto ad «Abbonati»)
+export default function VoucherActivationButton({ className }: { className?: string } = {}) {
   const t = useTranslations('dashboard')
   const tg = useTranslations('gifts')
   const locale = useLocale()
@@ -65,7 +66,7 @@ export default function VoucherActivationButton() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="mt-2 inline-flex w-full items-center justify-center rounded-lg border border-[var(--gold)]/50 bg-white px-4 py-2.5 text-sm font-semibold text-[var(--ink)] transition-colors hover:bg-[var(--gold-pale)]"
+        className={className ?? 'mt-2 inline-flex w-full items-center justify-center rounded-lg border border-[var(--gold)]/50 bg-white px-4 py-2.5 text-sm font-semibold text-[var(--ink)] transition-colors hover:bg-[var(--gold-pale)]'}
       >
         <Ticket className="mr-2 h-4 w-4" />
         {t('activateViaVoucher')}

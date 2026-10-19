@@ -15,6 +15,8 @@ export interface MarketplaceAccessState {
   passPriceCents: (toolName: string) => number | null
   // Scadenza del pass attivo dell'utente per quel servizio
   passExpiresAt: (toolName: string) => string | null
+  // Almeno un Pass di un servizio attivo
+  hasPass: boolean
 }
 
 // Strumenti che si aprono per tutti i registrati anche senza il piano: il
@@ -97,5 +99,5 @@ export async function getMarketplaceAccessState(supabase: SupabaseClient, userId
   }
   const passExpiresAt = (toolName: string) => passes.get(toolName) ?? null
 
-  return { userPlan, trialOnly, isSettingEnabled, isToolEnabled, requiredPlan, disabledReason, passPriceCents, passExpiresAt }
+  return { userPlan, trialOnly, isSettingEnabled, isToolEnabled, requiredPlan, disabledReason, passPriceCents, passExpiresAt, hasPass: passes.size > 0 }
 }

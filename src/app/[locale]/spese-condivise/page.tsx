@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
+import ToolBackLink from '@/components/ToolBackLink'
 import { getTranslations } from 'next-intl/server'
 import { ArrowLeft, Users } from 'lucide-react'
-import Link from '@/components/LocalizedLink'
 import SharedHome from '@/components/spendlyShared/SharedHome'
 import { createClient } from '@/lib/supabase/server'
 import type { SharedGroupSummary } from '@/lib/spendlyShared'
@@ -40,9 +40,7 @@ export default async function SharedExpensesPage({
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 gap-3">
-          <Link href="/servizi" className="flex items-center gap-2 text-sm font-medium hover:text-[var(--gold-bright)] shrink-0">
-            <ArrowLeft className="h-5 w-5" /> {commonT('backToServices')}
-          </Link>
+          <ToolBackLink className="flex items-center gap-2 text-sm font-medium hover:text-[var(--gold-bright)] shrink-0" label={<><ArrowLeft className="h-5 w-5" /> {commonT('backToServices')}</>} />
           <span className="flex items-center gap-2 font-semibold min-w-0 text-right leading-tight">
             <Users className="h-5 w-5 text-[var(--gold-bright)] shrink-0" /> {t('title')}
           </span>

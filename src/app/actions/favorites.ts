@@ -1,5 +1,6 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 
 type ActionResult = { success: true } | { success: false; message: string }
@@ -19,6 +20,8 @@ export async function addFavorite(toolName: string): Promise<ActionResult> {
     return { success: false, message: 'saveError' }
   }
 
+  // La Home (I tuoi servizi, icone) si aggiorna
+  revalidatePath('/dashboard')
   return { success: true }
 }
 
@@ -35,5 +38,7 @@ export async function removeFavorite(toolName: string): Promise<ActionResult> {
     return { success: false, message: 'saveError' }
   }
 
+  // La Home (I tuoi servizi, icone) si aggiorna
+  revalidatePath('/dashboard')
   return { success: true }
 }
