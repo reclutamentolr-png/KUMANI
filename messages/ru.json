@@ -688,7 +688,18 @@
     "karmaTodayBadge": "+{n} сегодня",
     "karmaTodayTitle": "Сегодня вы получили {n} KU Karma:",
     "karmaTodayNone": "Сегодня вы ещё не получили KU Karma: каждый сервис, которым вы пользуетесь, даёт его раз в день.",
-    "quickCheckTitle": "Что-то вызывает сомнения? Вставьте сюда"
+    "quickCheckTitle": "Что-то вызывает сомнения? Вставьте сюда",
+    "karmaInfoButton": "Что это?",
+    "karmaInfoTitle": "Что такое KU Karma?",
+    "karmaInfoIntro": "Это баллы, которые вы получаете, просто пользуясь KUMANI. Это не деньги: их нельзя купить, обменять на евро или передать.",
+    "karmaInfoEarnTitle": "Как их получить",
+    "karmaInfoEarn1": "+1 за каждый день, когда вы заходите в KUMANI.",
+    "karmaInfoEarn2": "+1 за каждый сервис, которым вы пользуетесь, один раз в день на сервис.",
+    "karmaInfoEarn3": "До +3 в день с «Вашей минутой заботы о себе».",
+    "karmaInfoUseTitle": "Для чего они",
+    "karmaInfoUse": "Они используются внутри KUMANI: чтобы публиковать объявления в Сообществе, открывать особые темы и получать другие преимущества из Wallet.",
+    "karmaInfoPointsNote": "Не путайте с KU Points: они начисляются, когда приглашённые вами люди оформляют подписку, и нужны для уровней Kuman Green, Star и Black.",
+    "karmaInfoClose": "Закрыть"
   },
   "marketplace": {
     "fabula": "Kumani Fabula",

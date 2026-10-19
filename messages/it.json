@@ -725,7 +725,18 @@
     "karmaTodayBadge": "+{n} oggi",
     "karmaTodayTitle": "Oggi hai preso {n} KU Karma:",
     "karmaTodayNone": "Oggi non hai ancora preso KU Karma: ogni servizio che usi te ne dà, una volta al giorno.",
-    "quickCheckTitle": "Qualcosa non ti torna? Incollalo qui"
+    "quickCheckTitle": "Qualcosa non ti torna? Incollalo qui",
+    "karmaInfoButton": "Cosa sono?",
+    "karmaInfoTitle": "Cosa sono i KU Karma?",
+    "karmaInfoIntro": "Sono i punti che ricevi semplicemente usando KUMANI. Non sono soldi: non si comprano, non si convertono in euro e non si trasferiscono.",
+    "karmaInfoEarnTitle": "Come si ricevono",
+    "karmaInfoEarn1": "+1 ogni giorno in cui entri in KUMANI.",
+    "karmaInfoEarn2": "+1 per ogni servizio che usi, una volta al giorno per servizio.",
+    "karmaInfoEarn3": "Fino a +3 al giorno con «Il tuo momento di benessere».",
+    "karmaInfoUseTitle": "A cosa servono",
+    "karmaInfoUse": "Si usano dentro KUMANI: per pubblicare annunci nella Community, sbloccare i temi speciali e per gli altri vantaggi che trovi nel Wallet.",
+    "karmaInfoPointsNote": "Da non confondere con i KU Points: quelli arrivano quando le persone che inviti attivano un abbonamento e servono per le qualifiche Kuman Green, Star e Black.",
+    "karmaInfoClose": "Chiudi"
   },
   "marketplace": {
     "fabula": "Kumani Fabula",

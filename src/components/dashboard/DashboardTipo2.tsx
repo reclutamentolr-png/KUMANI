@@ -10,6 +10,7 @@ import type { ServiceItem } from '@/lib/servicesCatalog'
 import type { KarmaToday } from '@/lib/karmaToday'
 import NativeShareButton from '@/components/NativeShareButton'
 import QuickCheckBox from '@/components/ecosystem/QuickCheckBox'
+import KarmaInfoButton from './KarmaInfoButton'
 
 // Home: corta. In cima lo stato (KU Karma, abbonamento, codice invito), poi
 // la fascia «Oggi» e «In cosa possiamo darti una mano?», gli inviti, l'Area
@@ -63,6 +64,20 @@ export default async function DashboardTipo2({
   const hubT = await getTranslations('hub')
   const locale = await getLocale()
   const subscribed = profile?.subscription_status === 'active'
+  // Testi della spiegazione «Cosa sono i KU Karma?»
+  const karmaInfoTexts = {
+    button: t('karmaInfoButton'),
+    title: t('karmaInfoTitle'),
+    intro: t('karmaInfoIntro'),
+    earnTitle: t('karmaInfoEarnTitle'),
+    earn: [t('karmaInfoEarn1'), t('karmaInfoEarn2'), t('karmaInfoEarn3')],
+    useTitle: t('karmaInfoUseTitle'),
+    use: t('karmaInfoUse'),
+    pointsNote: t('karmaInfoPointsNote'),
+    wallet: hubT('stripWallet'),
+    close: t('karmaInfoClose'),
+  }
+  const planName = subscribed ? (profile?.subscription_plan === 'pro' ? 'Pro' : 'Base') : proTrialDaysLeft !== null ? 'Pro' : null
   // Da dove arrivano i KU Karma di oggi: «Accesso +1 · Spendly +1 · …»
   const serviceTitle = new Map(services.map((s) => [s.toolName, s.title]))
   const karmaSources = (karmaToday?.items ?? []).map((i) => `${i.key === 'daily_login' ? t('karmaTodayLogin') : (serviceTitle.get(i.key) ?? i.key)} +${i.points}`)
@@ -71,18 +86,32 @@ export default async function DashboardTipo2({
     <>
       {/* Riga di stato compatta: KU Karma, abbonamento e codice invito */}
       <div className="grid grid-cols-3 gap-2 sm:gap-3">
-        <Link href="/wallet" data-tour="points" className={TILE}>
-          <span className={TILE_LABEL}>
-            <Sparkles className="hidden h-3.5 w-3.5 shrink-0 text-[var(--gold)] sm:block" /> <span className="truncate">{t('kuPointsLabel')}</span>
+        {/* Scheda non cliccabile: «Cosa sono?» spiega i KU Karma, solo «Vai al Wallet» porta al Wallet */}
+        <div data-tour="points" className={TILE}>
+          <span className="flex items-center justify-between gap-1">
+            <span className={`${TILE_LABEL} min-w-0`}>
+              <Sparkles className="hidden h-3.5 w-3.5 shrink-0 text-[var(--gold)] sm:block" /> <span className="truncate">{t('kuPointsLabel')}</span>
+            </span>
+            <KarmaInfoButton variant="text" texts={karmaInfoTexts} />
           </span>
-          <span className="mt-1 text-2xl font-extrabold leading-none text-[var(--ink)] sm:text-3xl">{profile?.daily_points || 0}</span>
+          <span className="mt-1 flex items-center gap-2">
+            <span className="text-2xl font-extrabold leading-none text-[var(--ink)] sm:text-3xl">{profile?.daily_points || 0}</span>
+            <KarmaInfoButton variant="icon" texts={karmaInfoTexts} />
+          </span>
           {!!karmaToday?.total && <span className="mt-1 text-[11px] font-bold text-emerald-700">{t('karmaTodayBadge', { n: karmaToday.total })}</span>}
-          <span className="mt-auto pt-1.5 text-[11px] font-semibold text-[var(--gold)]">{hubT('stripWallet')}</span>
-        </Link>
+          <Link href="/wallet" className="mt-auto inline-flex items-center gap-0.5 self-start pt-1.5 text-[11px] font-semibold text-[var(--gold)] underline-offset-2 hover:text-[var(--ink)] hover:underline">
+            {hubT('stripWallet')} <ArrowRight className="h-3 w-3" />
+          </Link>
+        </div>
 
         <Link href={subscribed ? '/billing' : proTrialDaysLeft !== null ? '/pro' : '/billing'} className={TILE}>
           <span className={TILE_LABEL}>
-            <BadgeCheck className="hidden h-3.5 w-3.5 shrink-0 text-[var(--gold)] sm:block" /> <span className="truncate">{hubT('stripPlan')}</span>
+            <BadgeCheck className="hidden h-3.5 w-3.5 shrink-0 text-[var(--gold)] sm:block" />{' '}
+            <span className="truncate">
+              {hubT('stripPlan')}
+              {/* Tipo di piano accanto al titolo (Base o Pro; in prova è il Pro) */}
+              {planName && <span className="text-[var(--gold)]"> {planName}</span>}
+            </span>
           </span>
           {subscribed ? (
             <>
