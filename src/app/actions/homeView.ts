@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { HOME_VIEW_COOKIE, isHomeView, MAX_HOME_FOLDERS, type HomeView, type ServicesView } from '@/lib/homeView'
 import { SERVICE_HUBS } from '@/lib/serviceHubs'
+import { COMMUNITY_FOLDER } from '@/lib/communityItems'
 
 // Cambia la vista della Home (Lite, Completa, Icone): nel profilo (tutti i
 // dispositivi) e nel cookie che usano i servizi per «‹ Home».
@@ -23,7 +24,8 @@ export async function setHomeView(view: HomeView): Promise<boolean> {
 
 // Categorie nella fascia in basso della Home a icone (cartelle)
 export async function setHomeFolders(hubs: string[]): Promise<boolean> {
-  const clean = [...new Set(hubs)].filter((hub) => (SERVICE_HUBS as readonly string[]).includes(hub)).slice(0, MAX_HOME_FOLDERS)
+  const valid: string[] = [...SERVICE_HUBS, COMMUNITY_FOLDER]
+  const clean = [...new Set(hubs)].filter((hub) => valid.includes(hub)).slice(0, MAX_HOME_FOLDERS)
   const supabase = await createClient()
   const { error } = await supabase.auth.updateUser({ data: { home_folders: clean } })
   if (error) {

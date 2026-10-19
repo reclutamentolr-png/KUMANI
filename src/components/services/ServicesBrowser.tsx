@@ -13,6 +13,8 @@ import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 import { GROUP_STYLE, SERVICE_GROUPS } from '@/lib/serviceGroups'
 import type { ServiceItem } from '@/lib/servicesCatalog'
 import ServicesIcons from './ServicesIcons'
+import { CommunityBlock, type CommunityItem } from '@/components/dashboard/CommunityBlock'
+import { communityAsService } from '@/lib/communityItems'
 import { setServicesView } from '@/app/actions/homeView'
 import { FROM_ICONS_KEY, FROM_SERVICES, type ServicesView } from '@/lib/homeView'
 
@@ -35,7 +37,18 @@ const normalize = (text: string) =>
     .replace(/[̀-ͯ]/g, '')
 
 // initialView: Elenco o Icone (scelta salvata nel profilo, vedi lib/homeView)
-export default function ServicesBrowser({ items, favorites: initialFavorites, initialView = 'list' }: { items: ServiceItem[]; favorites: string[]; initialView?: ServicesView }) {
+// community: sezioni della Community, in fondo (schede nell'Elenco, icone nella vista Icone)
+export default function ServicesBrowser({
+  items,
+  favorites: initialFavorites,
+  initialView = 'list',
+  community = [],
+}: {
+  items: ServiceItem[]
+  favorites: string[]
+  initialView?: ServicesView
+  community?: CommunityItem[]
+}) {
   const t = useTranslations('hub')
   const [view, setView] = useState<ServicesView>(initialView)
   const [, startSaving] = useTransition()
@@ -85,6 +98,17 @@ export default function ServicesBrowser({ items, favorites: initialFavorites, in
   }, [items, query, filter, t])
 
   const hubsView = !query.trim()
+
+  // Community nella vista Icone: con la stessa ricerca e gli stessi filtri
+  const communityIcons = useMemo(() => {
+    const words = normalize(query).split(/\s+/).filter(Boolean)
+    return community.map(communityAsService).filter((item) => {
+      if (filter === 'mine' && !item.open) return false
+      if (filter === 'locked' && item.open) return false
+      const text = normalize(`${item.title} ${item.description}`)
+      return words.every((word) => text.includes(word))
+    })
+  }, [community, query, filter])
 
   const onToggle = (toolName: string, isFavorite: boolean) =>
     setFavorites((list) => (isFavorite ? [toolName, ...list.filter((name) => name !== toolName)] : list.filter((name) => name !== toolName)))
@@ -155,11 +179,11 @@ export default function ServicesBrowser({ items, favorites: initialFavorites, in
         ))}
       </div>
 
-      {groups.length === 0 ? (
+      {groups.length === 0 && (view === 'list' || communityIcons.length === 0) ? (
         <p className="mt-8 rounded-2xl border border-dashed border-[var(--gold)]/40 bg-white px-5 py-8 text-center text-sm text-[var(--muted)]">{t('noResults')}</p>
       ) : view === 'icons' ? (
         <div className="mt-6">
-          <ServicesIcons groups={groups} hubsView={hubsView} allItems={items} favorites={favorites} onFavoritesChange={setFavorites} />
+          <ServicesIcons groups={groups} hubsView={hubsView} allItems={items} favorites={favorites} onFavoritesChange={setFavorites} community={communityIcons} />
         </div>
       ) : (
         <div className="mt-6 space-y-8">
@@ -190,6 +214,8 @@ export default function ServicesBrowser({ items, favorites: initialFavorites, in
           })}
         </div>
       )}
+      {/* Elenco: la Community a schede, in fondo */}
+      {view === 'list' && community.length > 0 && <div className="mt-8"><CommunityBlock items={community} /></div>}
     </div>
   )
 }
@@ -208,7 +234,8 @@ export function ServiceCard({
 }) {
   const t = useTranslations('hub')
   const Icon = marketplaceIconMap[item.iconName] || Smartphone
-  const style = GROUP_STYLE[item.group]
+  // Sezioni della Community: colore proprio
+  const style = item.tone ? { dot: 'bg-sky-600', tile: item.tone } : GROUP_STYLE[item.group]
 
   return (
     <div className={`relative ${item.open ? '' : 'opacity-[0.86]'}`}>

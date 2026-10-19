@@ -4,7 +4,6 @@ import { ArrowRight, BookMarked, Crown } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { createClient } from '@/lib/supabase/server'
 import { getCommunityItems, getServicesCatalog } from '@/lib/servicesCatalog'
-import { CommunityBlock } from '@/components/dashboard/CommunityBlock'
 import { getPlanPrices } from '@/lib/planPrices'
 import AppHeader from '@/components/nav/AppHeader'
 import ServicesBrowser from '@/components/services/ServicesBrowser'
@@ -59,10 +58,8 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
           </span>
           <ArrowRight className="h-4 w-4 shrink-0" />
         </Link>
-        <ServicesBrowser items={items} favorites={favorites} initialView={resolveServicesView(user.user_metadata)} />
+        <ServicesBrowser items={items} favorites={favorites} initialView={resolveServicesView(user.user_metadata)} community={communityItems} />
 
-        {/* In fondo: le sezioni della Community (Bacheca, Kordata, Eventi…) */}
-        {communityItems.length > 0 && <CommunityBlock items={communityItems} />}
 
         {/* Sblocca tutto: solo a chi ha ancora servizi chiusi */}
         {lockedCount > 0 && (

@@ -24,12 +24,14 @@ import {
   Signature,
   Smartphone,
   Store,
+  Users,
   X,
   type LucideIcon,
 } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { setHomeFolders } from '@/app/actions/homeView'
-import { FROM_ICONS_KEY, MAX_HOME_FOLDERS } from '@/lib/homeView'
+import { FROM_ICONS_KEY, MAX_HOME_FOLDERS, shortServiceName } from '@/lib/homeView'
+import { COMMUNITY_FOLDER, COMMUNITY_TONE } from '@/lib/communityItems'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 import { GROUP_STYLE, type ServiceGroup } from '@/lib/serviceGroups'
 import { HUB_GROUP, HUB_ICON_NAME, HUB_TABS, SERVICE_HUBS, type ServiceHub } from '@/lib/serviceHubs'
@@ -59,11 +61,26 @@ const HUB_ICON: Record<string, LucideIcon> = {
 }
 
 export type FolderEntry = { key: string; href: string; label: string; Icon: LucideIcon; locked: boolean }
+// Una cartella: un servizio unito oppure la Community (sue sezioni)
+export type FolderKey = ServiceHub | typeof COMMUNITY_FOLDER
 
-const toneOf = (hub: ServiceHub) => GROUP_STYLE[HUB_GROUP[hub] as ServiceGroup]?.tile ?? 'bg-white text-[var(--ink)]'
+const toneOf = (hub: FolderKey) => (hub === COMMUNITY_FOLDER ? COMMUNITY_TONE : (GROUP_STYLE[HUB_GROUP[hub] as ServiceGroup]?.tile ?? 'bg-white text-[var(--ink)]'))
+const iconOf = (hub: FolderKey): LucideIcon => (hub === COMMUNITY_FOLDER ? Users : (HUB_ICON[HUB_ICON_NAME[hub]] ?? Smartphone))
+
+// Nome della cartella: «KUMANI Benessere» → «Benessere»; la Community col suo nome
+function useFolderTitle() {
+  const t = useTranslations('serviceHubs')
+  const tt = useTranslations('toolTiers')
+  return (hub: FolderKey) => (hub === COMMUNITY_FOLDER ? tt('communityTitle') : t(`${hub}.title`).replace(/^KUMANI\s+/, ''))
+}
 
 // Le schede di una categoria, solo quelle accese (lo strumento c'è nell'elenco)
-export function folderEntries(hub: ServiceHub, items: ServiceItem[], tab: (key: string) => string): FolderEntry[] {
+export function folderEntries(hub: FolderKey, items: ServiceItem[], tab: (key: string) => string): FolderEntry[] {
+  // Community: le sue sezioni (bloccate: si sbloccano col piano)
+  if (hub === COMMUNITY_FOLDER)
+    return items
+      .filter((item) => item.community)
+      .map((item) => ({ key: item.toolName, href: item.open ? item.href : '/billing', label: shortServiceName(item.title), Icon: marketplaceIconMap[item.iconName] ?? Users, locked: !item.open }))
   const byTool = new Map(items.map((item) => [item.toolName, item]))
   const HubIcon = HUB_ICON[HUB_ICON_NAME[hub]] ?? Smartphone
   return HUB_TABS[hub].flatMap((t) => {
@@ -89,12 +106,13 @@ const markFromIcons = () => {
   }
 }
 
-export function FolderTile({ hub, items, onOpen }: { hub: ServiceHub; items: ServiceItem[]; onOpen: () => void }) {
+export function FolderTile({ hub, items, onOpen }: { hub: FolderKey; items: ServiceItem[]; onOpen: () => void }) {
   const t = useTranslations('serviceHubs')
+  const titleOf = useFolderTitle()
   const entries = folderEntries(hub, items, t).slice(0, 4)
   const tone = toneOf(hub)
   return (
-    <button type="button" onClick={onOpen} aria-label={t(`${hub}.title`)} className="group flex min-w-0 flex-col items-center gap-1.5 rounded-2xl p-1 lg:gap-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--gold)]">
+    <button type="button" onClick={onOpen} aria-label={titleOf(hub)} className="group flex min-w-0 flex-col items-center gap-1.5 rounded-2xl p-1 lg:gap-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--gold)]">
       <span className="grid h-14 w-14 grid-cols-2 grid-rows-2 gap-1 rounded-[18px] border border-[var(--gold)]/25 bg-[var(--ink)]/[0.06] p-1.5 shadow-[0_6px_14px_rgba(0,0,0,0.1)] transition-transform group-active:scale-95 sm:h-16 sm:w-16 lg:h-[88px] lg:w-[88px] lg:gap-1.5 lg:rounded-[24px] lg:p-2">
         {entries.map((entry) => (
           <span key={entry.key} className={`flex items-center justify-center rounded-md ${tone}`}>
@@ -102,16 +120,14 @@ export function FolderTile({ hub, items, onOpen }: { hub: ServiceHub; items: Ser
           </span>
         ))}
       </span>
-      <span className="line-clamp-2 w-full hyphens-auto text-center text-[11px] font-semibold leading-tight [overflow-wrap:anywhere] sm:text-xs lg:text-sm">{shortHubName(t(`${hub}.title`))}</span>
+      <span className="line-clamp-2 w-full hyphens-auto text-center text-[11px] font-semibold leading-tight [overflow-wrap:anywhere] sm:text-xs lg:text-sm">{titleOf(hub)}</span>
     </button>
   )
 }
 
-// «KUMANI Benessere» → «Benessere», come sotto le icone del telefono
-const shortHubName = (title: string) => title.replace(/^KUMANI\s+/, '')
-
-export function FolderOverlay({ hub, items, onClose }: { hub: ServiceHub; items: ServiceItem[]; onClose: () => void }) {
+export function FolderOverlay({ hub, items, onClose }: { hub: FolderKey; items: ServiceItem[]; onClose: () => void }) {
   const t = useTranslations('serviceHubs')
+  const titleOf = useFolderTitle()
   const tv = useTranslations('homeView')
   const entries = folderEntries(hub, items, t)
   const tone = toneOf(hub)
@@ -127,7 +143,7 @@ export function FolderOverlay({ hub, items, onClose }: { hub: ServiceHub; items:
       <div className="w-full max-w-sm rounded-[28px] bg-[var(--paper)] p-5 text-[var(--ink)] shadow-2xl" onClick={(e) => e.stopPropagation()}>
         <div className="mb-4 flex items-center justify-between gap-3">
           <h2 id="folder-title" className="text-lg font-extrabold">
-            {shortHubName(t(`${hub}.title`))}
+            {titleOf(hub)}
           </h2>
           <button type="button" onClick={onClose} aria-label={tv('pickerDone')} className="rounded-full p-1.5 text-[var(--muted)] hover:bg-gray-100">
             <X className="h-5 w-5" />
@@ -157,10 +173,11 @@ export function FolderOverlay({ hub, items, onClose }: { hub: ServiceHub; items:
 export function FolderPicker({ items, folders, onClose }: { items: ServiceItem[]; folders: string[]; onClose: () => void }) {
   const t = useTranslations('serviceHubs')
   const tv = useTranslations('homeView')
+  const titleOf = useFolderTitle()
   const router = useRouter()
   const [chosen, setChosen] = useState(folders)
   const [changed, setChanged] = useState(false)
-  const available = useMemo(() => SERVICE_HUBS.filter((hub) => folderEntries(hub, items, t).length > 0), [items, t])
+  const available = useMemo(() => ([...SERVICE_HUBS, COMMUNITY_FOLDER] as FolderKey[]).filter((hub) => folderEntries(hub, items, t).length > 0), [items, t])
 
   const close = () => {
     if (changed) router.refresh()
@@ -193,7 +210,7 @@ export function FolderPicker({ items, folders, onClose }: { items: ServiceItem[]
         <ul className="flex-1 space-y-1.5 overflow-y-auto p-3">
           {available.map((hub) => {
             const on = chosen.includes(hub)
-            const HubIcon = HUB_ICON[HUB_ICON_NAME[hub]] ?? Smartphone
+            const HubIcon = iconOf(hub)
             const names = folderEntries(hub, items, t).map((entry) => entry.label).join(' · ')
             return (
               <li key={hub}>
@@ -207,7 +224,7 @@ export function FolderPicker({ items, folders, onClose }: { items: ServiceItem[]
                     <HubIcon className="h-5 w-5" aria-hidden />
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm font-bold">{shortHubName(t(`${hub}.title`))}</span>
+                    <span className="block truncate text-sm font-bold">{titleOf(hub)}</span>
                     <span className="block truncate text-xs text-[var(--muted)]">{names}</span>
                   </span>
                   <span className={`flex h-8 shrink-0 items-center gap-1 rounded-full px-3 text-xs font-bold ${on ? 'bg-[var(--ink)] text-[var(--gold-bright)]' : 'bg-white text-[var(--ink)] ring-1 ring-[var(--gold)]/40'}`}>

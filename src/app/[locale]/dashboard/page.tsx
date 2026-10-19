@@ -40,7 +40,8 @@ import type { WellnessToday } from '@/app/actions/ecosystem'
 import { addDays, todayKey } from '@/lib/agenda'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { getPlanPrices } from '@/lib/planPrices'
-import { getServicesCatalog } from '@/lib/servicesCatalog'
+import { getCommunityItems, getServicesCatalog } from '@/lib/servicesCatalog'
+import { COMMUNITY_FOLDER, communityAsService } from '@/lib/communityItems'
 import type { MyProfile } from '@/lib/myProfile'
 import GiftWelcomeDashboard from '@/components/gifts/GiftWelcomeDashboard'
 import DashboardNeeds from '@/components/dashboard/DashboardNeeds'
@@ -182,7 +183,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   //    Professionisti: anche queste insieme.
   // Gratis senza prova Pro e senza Pass: può avere la Home di benvenuto
   const freeOnly = userPlan === 'none' && !(trialEnd > nowMs) && !access.hasPass
-  const [network, agendaEvents, trial, stats, catalog, { data: wellnessToday }, karmaToday, welcomeState] = await Promise.all([
+  const [network, agendaEvents, trial, stats, catalog, { data: wellnessToday }, karmaToday, welcomeState, communityItems] = await Promise.all([
     networkPromise,
     hasAgenda
       ? loadAgenda(supabase, user.id, {
@@ -209,7 +210,11 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
       favoritesCount: favoriteToolNames.length,
       free: freeOnly,
     }).catch(() => null),
+    // Sezioni della Community: anche loro come icone e preferiti della Home
+    getCommunityItems(supabase, user.id, access).catch(() => []),
   ])
+  // Servizi per la Home (preferiti, icone, «Aggiungi»): anche la Community
+  const homeItems = [...catalog.items, ...communityItems.map(communityAsService)]
   const { newlyAchievedRank } = network
   // «In cosa possiamo darti una mano?»: qui i servizi portano allo strumento
   const serviceHref = new Map(catalog.items.map((item) => [item.toolName, item.href]))
@@ -255,11 +260,11 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
         dateLabel={new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date())}
         karma={profile?.daily_points ?? 0}
         planLabel={planLabel}
-        items={catalog.items}
+        items={homeItems}
         usage={usage}
         favorites={favoriteToolNames}
         badges={badges}
-        folders={resolveHomeFolders(user.user_metadata, SERVICE_HUBS)}
+        folders={resolveHomeFolders(user.user_metadata, [...SERVICE_HUBS, COMMUNITY_FOLDER])}
       />
     )
   }
@@ -307,7 +312,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
             <DashboardTipo2
               profile={profile}
               shareUrl={shareUrl}
-              services={catalog.items}
+              services={homeItems}
               favoriteToolNames={favoriteToolNames}
               basePrice={basePrice}
               proTrialDaysLeft={proTrial?.daysLeft ?? null}

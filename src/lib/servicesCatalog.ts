@@ -23,6 +23,10 @@ export type ServiceItem = {
   unlock: 'pass' | 'pro' | 'base' | null
   passPrice: string | null
   guide: string | null
+  // Sezioni della Community mostrate come servizi (icone, Home): colore
+  // proprio (azzurro) e niente Pass né pagina pubblica (lib/communityItems)
+  tone?: string
+  community?: boolean
 }
 
 export async function getServicesCatalog(
@@ -69,8 +73,9 @@ export async function getServicesCatalog(
 // Sezioni della Community (Bacheca, Kumano del Giorno, Kordata, Eventi,
 // Banca del Tempo): accese/spente dall'Admin e bloccate dal piano. Gli
 // Eventi si consultano sempre (il piano serve solo per organizzarli).
-export async function getCommunityItems(supabase: SupabaseClient, userId: string): Promise<CommunityItem[]> {
-  const [tm, access] = await Promise.all([getTranslations('marketplace'), getMarketplaceAccessState(supabase, userId)])
+// access: già letto dalla pagina (es. la Home), così non si rilegge
+export async function getCommunityItems(supabase: SupabaseClient, userId: string, loadedAccess?: MarketplaceAccessState): Promise<CommunityItem[]> {
+  const [tm, access] = await Promise.all([getTranslations('marketplace'), loadedAccess ?? getMarketplaceAccessState(supabase, userId)])
   return [
     { toolName: 'community-listings', setting: 'listings', href: '/marketplace/listings', iconName: 'Tag', title: tm('listings'), description: tm('listingsDescription') },
     { toolName: 'community-spotlight', setting: 'spotlight', href: '/marketplace/spotlight', iconName: 'Star', title: tm('kumanoDelGiorno'), description: tm('kumanoDelGiornoDescription') },

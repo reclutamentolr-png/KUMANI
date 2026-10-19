@@ -12,6 +12,7 @@ import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 import { GROUP_STYLE, type ServiceGroup } from '@/lib/serviceGroups'
 import { HUB_GROUP, HUB_TABS, SERVICE_HUBS, TOOL_HUB, type ServiceHub } from '@/lib/serviceHubs'
 import type { ServiceItem } from '@/lib/servicesCatalog'
+import { COMMUNITY_DOT } from '@/lib/communityItems'
 import { defaultLocale } from '../../../i18n'
 
 // Pagina Servizi, vista a icone: le categorie una sotto l'altra con le loro
@@ -86,7 +87,7 @@ function ServiceIcon({
   const body = (
     <>
       <span
-        className={`relative flex h-14 w-14 items-center justify-center rounded-[18px] shadow-[0_6px_14px_rgba(0,0,0,0.12)] transition-transform group-active:scale-95 sm:h-16 sm:w-16 lg:h-[88px] lg:w-[88px] lg:rounded-[24px] ${GROUP_STYLE[item.group].tile} ${item.open ? '' : 'opacity-60'}`}
+        className={`relative flex h-14 w-14 items-center justify-center rounded-[18px] shadow-[0_6px_14px_rgba(0,0,0,0.12)] transition-transform group-active:scale-95 sm:h-16 sm:w-16 lg:h-[88px] lg:w-[88px] lg:rounded-[24px] ${item.tone ?? GROUP_STYLE[item.group].tile} ${item.open ? '' : 'opacity-60'}`}
       >
         <Icon className="h-6 w-6 sm:h-7 sm:w-7 lg:h-9 lg:w-9" aria-hidden />
         {favorite && (
@@ -130,6 +131,7 @@ export default function ServicesIcons({
   allItems,
   favorites,
   onFavoritesChange,
+  community = [],
 }: {
   // Servizi già filtrati (ricerca e filtro), divisi per categoria
   groups: { group: ServiceGroup; items: ServiceItem[] }[]
@@ -139,7 +141,10 @@ export default function ServicesIcons({
   allItems: ServiceItem[]
   favorites: string[]
   onFavoritesChange: (favorites: string[]) => void
+  // Sezioni della Community (già filtrate), come ultima categoria
+  community?: ServiceItem[]
 }) {
+  const tt = useTranslations('toolTiers')
   const t = useTranslations('hub')
   const th = useTranslations('serviceHubs')
   const router = useRouter()
@@ -197,6 +202,21 @@ export default function ServicesIcons({
         )
       })}
 
+      {/* Community: Bacheca, Kumano del Giorno, Kordata, Eventi, Banca del Tempo, Proposte */}
+      {community.length > 0 && (
+        <section aria-labelledby="icons-community">
+          <h2 id="icons-community" className="mb-3 flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--muted)] lg:mb-4 lg:text-sm">
+            <span className={`h-2 w-2 rounded-full ${COMMUNITY_DOT}`} aria-hidden />
+            {tt('communityTitle')}
+          </h2>
+          <div className={grid}>
+            {community.map((item) => (
+              <ServiceIcon key={item.toolName} item={item} favorite={favorites.includes(item.toolName)} {...iconProps} />
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* Cartella aperta: i servizi del servizio unito */}
       {folder && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-5 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="services-folder" onClick={() => setFolder(null)}>
@@ -241,7 +261,7 @@ export default function ServicesIcons({
               {(() => {
                 const Icon = marketplaceIconMap[locked.iconName] ?? Smartphone
                 return (
-                  <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${GROUP_STYLE[locked.group].tile}`}>
+                  <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${locked.tone ?? GROUP_STYLE[locked.group].tile}`}>
                     <Icon className="h-6 w-6" aria-hidden />
                   </span>
                 )
@@ -271,9 +291,11 @@ export default function ServicesIcons({
                 {t('passOnly', { price: locked.passPrice })}
               </Link>
             )}
+            {!locked.community && (
             <a href={`${prefix}/strumenti/${locked.toolName}`} className="flex items-center justify-center gap-1 text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
               {t('learnMore')} <ArrowRight className="h-4 w-4" />
             </a>
+            )}
           </div>
         </div>
       )}

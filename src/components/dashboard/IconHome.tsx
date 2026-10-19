@@ -5,8 +5,7 @@ import { useTranslations } from 'next-intl'
 import { FolderOpen, Plus, Search, Smartphone, Wallet, X, type LucideIcon } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import FavoritesPicker from './FavoritesPicker'
-import { FolderOverlay, FolderPicker, FolderTile } from './HomeFolders'
-import type { ServiceHub } from '@/lib/serviceHubs'
+import { FolderOverlay, FolderPicker, FolderTile, type FolderKey } from './HomeFolders'
 import { FROM_ICONS_KEY, shortServiceName } from '@/lib/homeView'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 import { GROUP_STYLE } from '@/lib/serviceGroups'
@@ -94,7 +93,7 @@ export default function IconHome({
   }
   const [picking, setPicking] = useState(false)
   // Cartella aperta e scelta delle categorie della fascia
-  const [openFolder, setOpenFolder] = useState<ServiceHub | null>(null)
+  const [openFolder, setOpenFolder] = useState<FolderKey | null>(null)
   const [pickingFolders, setPickingFolders] = useState(false)
 
   const toShortcut = (item: ServiceItem): Shortcut => ({
@@ -103,7 +102,7 @@ export default function IconHome({
     label: shortServiceName(item.title),
     full: item.title,
     Icon: marketplaceIconMap[item.iconName] ?? Smartphone,
-    tone: item.open ? GROUP_STYLE[item.group].tile : 'bg-white/80 text-[var(--muted)]',
+    tone: item.open ? (item.tone ?? GROUP_STYLE[item.group].tile) : 'bg-white/80 text-[var(--muted)]',
     badge: badges[item.toolName],
   })
 
@@ -224,7 +223,7 @@ export default function IconHome({
           <AppIcon key={item.key} item={item} />
         ))}
         {folders.map((hub) => (
-          <FolderTile key={hub} hub={hub as ServiceHub} items={items} onOpen={() => setOpenFolder(hub as ServiceHub)} />
+          <FolderTile key={hub} hub={hub as FolderKey} items={items} onOpen={() => setOpenFolder(hub as FolderKey)} />
         ))}
         <AppIcon item={addFolder} />
       </div>

@@ -107,7 +107,7 @@ export default function FavoritesPicker({
                   onClick={() => toggle(item.toolName)}
                   className={`flex w-full items-center gap-3 rounded-2xl border px-3 py-2.5 text-left transition-colors ${on ? 'border-[var(--gold)] bg-[var(--gold-pale)]/60' : 'border-transparent hover:bg-[var(--gold-pale)]/40'}`}
                 >
-                  <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${GROUP_STYLE[item.group].tile}`}>
+                  <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${item.tone ?? GROUP_STYLE[item.group].tile}`}>
                     <Icon className="h-5 w-5" aria-hidden />
                   </span>
                   <span className="min-w-0 flex-1">
