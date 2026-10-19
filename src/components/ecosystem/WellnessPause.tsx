@@ -3,13 +3,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Check, Eye, LoaderCircle, PersonStanding, X } from 'lucide-react'
+import WellnessPauseArt, { type PauseArtKey } from './WellnessPauseArt'
 import { finishWellnessPause, startWellnessPause, type WellnessToday } from '@/app/actions/ecosystem'
 
 // «Pausa di un minuto»: stretching (4 movimenti da 15 secondi) o riposo degli
 // occhi 20-20-20 (3 momenti da 20 secondi), con il cerchio del tempo. Inizio
 // e fine li registra il database: il passo vale solo dopo almeno 55 secondi.
 type Kind = 'stretch' | 'eyes'
-const PLAN: Record<Kind, { steps: string[]; each: number }> = {
+const PLAN: Record<Kind, { steps: PauseArtKey[]; each: number }> = {
   stretch: { steps: ['wellnessStretch1', 'wellnessStretch2', 'wellnessStretch3', 'wellnessStretch4'], each: 15 },
   eyes: { steps: ['wellnessEyes1', 'wellnessEyes2', 'wellnessEyes3'], each: 20 },
 }
@@ -119,26 +120,29 @@ export default function WellnessPause({ onClose, onDone }: { onClose: () => void
 
         {(phase === 'running' || phase === 'saving') && plan && (
           <div className="flex flex-col items-center gap-5 py-2 text-center">
-            <div className="relative h-36 w-36">
-              <svg viewBox="0 0 120 120" className="h-36 w-36 -rotate-90" aria-hidden>
-                <circle cx="60" cy="60" r={radius} fill="none" stroke="#ccfbf1" strokeWidth="8" />
-                <circle
-                  cx="60"
-                  cy="60"
-                  r={radius}
-                  fill="none"
-                  stroke="#0d9488"
-                  strokeWidth="8"
-                  strokeLinecap="round"
-                  strokeDasharray={circumference}
-                  strokeDashoffset={circumference * (1 - elapsed / TOTAL)}
-                  className="transition-[stroke-dashoffset] duration-300"
-                />
-              </svg>
-              <span className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-4xl font-extrabold tabular-nums text-[var(--ink)]">{TOTAL - elapsed}</span>
-                <span className="text-xs text-[var(--muted)]">{t('wellnessPauseSeconds')}</span>
-              </span>
+            {/* Figura animata del movimento, con il tempo che resta */}
+            <div className="relative flex w-full justify-center rounded-2xl bg-teal-50 px-4 py-3">
+              <WellnessPauseArt key={plan.steps[stepIndex]} step={plan.steps[stepIndex]} />
+              <div className="absolute right-2 top-2 h-14 w-14">
+                <svg viewBox="0 0 120 120" className="h-14 w-14 -rotate-90" aria-hidden>
+                  <circle cx="60" cy="60" r={radius} fill="#fff" stroke="#ccfbf1" strokeWidth="10" />
+                  <circle
+                    cx="60"
+                    cy="60"
+                    r={radius}
+                    fill="none"
+                    stroke="#0d9488"
+                    strokeWidth="10"
+                    strokeLinecap="round"
+                    strokeDasharray={circumference}
+                    strokeDashoffset={circumference * (1 - elapsed / TOTAL)}
+                    className="transition-[stroke-dashoffset] duration-300"
+                  />
+                </svg>
+                <span className="absolute inset-0 flex items-center justify-center text-base font-extrabold tabular-nums text-[var(--ink)]" aria-label={`${TOTAL - elapsed} ${t('wellnessPauseSeconds')}`}>
+                  {TOTAL - elapsed}
+                </span>
+              </div>
             </div>
             <div className="min-h-20 space-y-1" aria-live="polite">
               <p className="text-xs font-bold uppercase tracking-wide text-teal-700">

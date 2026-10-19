@@ -11029,7 +11029,10 @@
     "wellnessJarEmpty": "Noch keine Erinnerungen.",
     "wellnessEveningTitle": "Abendroutine",
     "wellnessEveningText": "20 Minuten Klänge zum Einschlafen mit NeuroBalance: Sie schalten sich am Ende von selbst aus.",
-    "wellnessEveningCta": "Sitzung vorbereiten"
+    "wellnessEveningCta": "Sitzung vorbereiten",
+    "wellnessMoodLocked": "Deine Stimmung heute: {mood}",
+    "wellnessMoodCorrectHint": "Du kannst das Gesicht 2 Minuten lang ändern, falls du dich vertippt hast.",
+    "wellnessMoodLockedHint": "Das Gesicht bleibt bis morgen; die Notiz kannst du jederzeit ändern."
   },
   "businessProfile": {
     "title": "Firmenprofil",

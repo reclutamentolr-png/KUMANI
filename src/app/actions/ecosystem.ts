@@ -80,6 +80,7 @@ export type WellnessToday = {
   claimable: number
   mood: number | null
   mood_note: string | null
+  mood_lock_at: string | null
   week: { day: string; mood: number | null }[]
   gratitude_today: number
   gratitude_total: number

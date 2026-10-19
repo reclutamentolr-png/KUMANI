@@ -11029,7 +11029,10 @@
     "wellnessJarEmpty": "No memories yet.",
     "wellnessEveningTitle": "Evening routine",
     "wellnessEveningText": "20 minutes of sleep sounds with NeuroBalance: they switch off by themselves at the end.",
-    "wellnessEveningCta": "Get the session ready"
+    "wellnessEveningCta": "Get the session ready",
+    "wellnessMoodLocked": "Your mood today: {mood}",
+    "wellnessMoodCorrectHint": "You can change the face for 2 minutes, in case you tapped the wrong one.",
+    "wellnessMoodLockedHint": "The face stays until tomorrow; you can always change the note."
   },
   "businessProfile": {
     "title": "Business profile",

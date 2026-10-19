@@ -11029,7 +11029,10 @@
     "wellnessJarEmpty": "Pas encore de souvenirs.",
     "wellnessEveningTitle": "Routine du soir",
     "wellnessEveningText": "20 minutes de sons pour s’endormir avec NeuroBalance : ils s’arrêtent tout seuls à la fin.",
-    "wellnessEveningCta": "Préparer la séance"
+    "wellnessEveningCta": "Préparer la séance",
+    "wellnessMoodLocked": "Votre humeur du jour : {mood}",
+    "wellnessMoodCorrectHint": "Vous pouvez changer le visage pendant 2 minutes, en cas d’erreur.",
+    "wellnessMoodLockedHint": "Le visage reste jusqu’à demain ; la note peut toujours être modifiée."
   },
   "businessProfile": {
     "title": "Fiche entreprise",

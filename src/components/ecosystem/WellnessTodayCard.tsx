@@ -1,8 +1,8 @@
 'use client'
 
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { Angry, AudioWaveform, Brain, Check, Flame, Frown, Gift, Laugh, LoaderCircle, Meh, Moon, Palette, PersonStanding, Smile, Sparkles, Wind } from 'lucide-react'
+import { Angry, AudioWaveform, Brain, Check, Flame, Frown, Gift, Laugh, LoaderCircle, Lock, Meh, Moon, Palette, PersonStanding, Smile, Sparkles, Wind } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { claimWellnessBonus, setWellnessMood, type WellnessToday } from '@/app/actions/ecosystem'
 import WellnessPause from './WellnessPause'
@@ -36,6 +36,23 @@ export default function WellnessTodayCard({ initial }: { initial: WellnessToday 
   const [note, setNote] = useState(initial.mood_note ?? '')
   const [moodSaving, setMoodSaving] = useState(false)
   const [noteSaved, setNoteSaved] = useState(false)
+  // La faccina si corregge solo nei primi 2 minuti, poi resta fissa fino a domani
+  const [moodLocked, setMoodLocked] = useState(false)
+  useEffect(() => {
+    if (!state.mood || !state.mood_lock_at) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setMoodLocked(false)
+      return
+    }
+    const wait = Date.parse(state.mood_lock_at) - Date.now()
+    if (wait <= 0) {
+      setMoodLocked(true)
+      return
+    }
+    setMoodLocked(false)
+    const timer = setTimeout(() => setMoodLocked(true), wait)
+    return () => clearTimeout(timer)
+  }, [state.mood, state.mood_lock_at])
 
   const steps: { key: StepKey; done: boolean; label: string; hint: string; time: string; Icon: typeof Wind; links: { href: string; label: string; Icon: typeof Wind }[] }[] = [
     { key: 'breath', done: state.breath, label: t('wellnessBreath'), hint: t('wellnessBreathHint'), time: t('wellnessTimeBreath'), Icon: Wind, links: [{ href: '/marketplace/oxygen', label: 'Oxygen', Icon: Wind }] },
@@ -119,7 +136,9 @@ export default function WellnessTodayCard({ initial }: { initial: WellnessToday 
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <p className="text-sm font-bold text-[var(--ink)]">{t('wellnessMoodTitle')}</p>
-            <p className="mt-0.5 text-xs text-[var(--muted)]">{t('wellnessMoodHint')}</p>
+            <p className="mt-0.5 text-xs text-[var(--muted)]">
+              {!state.mood ? t('wellnessMoodHint') : moodLocked ? t('wellnessMoodLockedHint') : t('wellnessMoodCorrectHint')}
+            </p>
           </div>
           {/* La settimana: un pallino per giorno */}
           <div className="flex items-end gap-1.5" aria-label={t('wellnessMoodWeek')} role="img">
@@ -144,10 +163,10 @@ export default function WellnessTodayCard({ initial }: { initial: WellnessToday 
                 role="radio"
                 aria-checked={active}
                 aria-label={t(`wellnessMood${value}`)}
-                disabled={moodSaving}
-                onClick={() => chooseMood(value)}
+                disabled={moodSaving || (moodLocked && !active)}
+                onClick={() => !active && !moodLocked && chooseMood(value)}
                 className={`flex min-h-11 min-w-0 flex-col items-center justify-center gap-0.5 rounded-xl border px-0.5 py-2 text-center text-[11px] font-semibold leading-tight transition ${
-                  active ? 'border-teal-500 bg-teal-50 text-[var(--ink)] ring-2 ring-teal-200' : 'border-gray-200 text-[var(--muted)] hover:border-teal-300'
+                  active ? 'border-teal-500 bg-teal-50 text-[var(--ink)] ring-2 ring-teal-200' : moodLocked ? 'border-gray-100 text-[var(--muted)] opacity-40' : 'border-gray-200 text-[var(--muted)] hover:border-teal-300'
                 }`}
               >
                 <Icon className={`h-6 w-6 ${tone}`} strokeWidth={active ? 2.4 : 1.8} />
@@ -157,7 +176,12 @@ export default function WellnessTodayCard({ initial }: { initial: WellnessToday 
             )
           })}
         </div>
-        {state.mood && <p className="mt-1.5 text-center text-xs font-bold text-teal-800 sm:hidden">{t(`wellnessMood${state.mood}`)}</p>}
+        {state.mood && (
+          <p className="mt-1.5 flex items-center justify-center gap-1 text-xs font-bold text-teal-800">
+            {moodLocked && <Lock className="h-3 w-3" aria-hidden />}
+            <span className={moodLocked ? '' : 'sm:hidden'}>{moodLocked ? t('wellnessMoodLocked', { mood: t(`wellnessMood${state.mood}`) }) : t(`wellnessMood${state.mood}`)}</span>
+          </p>
+        )}
         {state.mood && (
           <form
             className="mt-2.5 flex gap-2"

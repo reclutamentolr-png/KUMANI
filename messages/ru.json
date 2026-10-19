@@ -11029,7 +11029,10 @@
     "wellnessJarEmpty": "Пока нет воспоминаний.",
     "wellnessEveningTitle": "Вечерний ритуал",
     "wellnessEveningText": "20 минут звуков для сна в NeuroBalance: в конце они выключатся сами.",
-    "wellnessEveningCta": "Подготовить сеанс"
+    "wellnessEveningCta": "Подготовить сеанс",
+    "wellnessMoodLocked": "Ваше настроение сегодня: {mood}",
+    "wellnessMoodCorrectHint": "Смайлик можно исправить в течение 2 минут, если нажали не тот.",
+    "wellnessMoodLockedHint": "Смайлик останется до завтра; заметку можно менять всегда."
   },
   "businessProfile": {
     "title": "Карточка бизнеса",

@@ -11029,7 +11029,10 @@
     "wellnessJarEmpty": "Ancora nessun ricordo.",
     "wellnessEveningTitle": "Routine della sera",
     "wellnessEveningText": "20 minuti di suoni per addormentarti con NeuroBalance: si spengono da soli alla fine.",
-    "wellnessEveningCta": "Prepara la sessione"
+    "wellnessEveningCta": "Prepara la sessione",
+    "wellnessMoodLocked": "Il tuo umore di oggi: {mood}",
+    "wellnessMoodCorrectHint": "Puoi correggere la faccina per 2 minuti, se l’hai toccata per sbaglio.",
+    "wellnessMoodLockedHint": "La faccina resta questa fino a domani; l’appunto puoi sempre cambiarlo."
   },
   "businessProfile": {
     "title": "Scheda attività",
