@@ -33,18 +33,18 @@ const markFromIcons = () => {
 function AppIcon({ item }: { item: Shortcut }) {
   const body = (
     <>
-      <span className={`flex h-14 w-14 items-center justify-center rounded-[18px] shadow-[0_6px_14px_rgba(0,0,0,0.18)] transition-transform group-active:scale-95 sm:h-16 sm:w-16 ${item.tone}`}>
-        <item.Icon className="h-6 w-6 sm:h-7 sm:w-7" aria-hidden />
+      <span className={`flex h-14 w-14 items-center justify-center rounded-[18px] shadow-[0_6px_14px_rgba(0,0,0,0.18)] transition-transform group-active:scale-95 sm:h-16 sm:w-16 lg:h-[88px] lg:w-[88px] lg:rounded-[24px] ${item.tone}`}>
+        <item.Icon className="h-6 w-6 sm:h-7 sm:w-7 lg:h-9 lg:w-9" aria-hidden />
       </span>
       {!!item.badge && (
         <span className="absolute right-1 top-0 flex h-5 min-w-5 items-center justify-center rounded-full border-2 border-[var(--background)] bg-red-600 px-1 text-[10px] font-bold text-white sm:right-3">
           {item.badge > 9 ? '9+' : item.badge}
         </span>
       )}
-      <span className="line-clamp-2 w-full hyphens-auto text-center text-[11px] font-semibold leading-tight text-inherit [overflow-wrap:anywhere] sm:text-xs">{item.label}</span>
+      <span className="line-clamp-2 w-full hyphens-auto text-center text-[11px] font-semibold leading-tight text-inherit [overflow-wrap:anywhere] sm:text-xs lg:text-sm">{item.label}</span>
     </>
   )
-  const cls = 'group relative flex min-w-0 flex-col items-center gap-1.5 rounded-2xl p-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--gold)]'
+  const cls = 'group relative flex min-w-0 flex-col items-center gap-1.5 rounded-2xl p-1 lg:gap-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--gold)]'
   if (!item.href)
     return (
       <button type="button" onClick={item.onClick} aria-label={item.full ?? item.label} className={cls}>
@@ -183,7 +183,7 @@ export default function IconHome({
             {results.length === 0 ? (
               <p className="text-sm text-white/70">{t('noResults')}</p>
             ) : (
-              <div className="grid grid-cols-4 gap-x-1 gap-y-3 sm:grid-cols-6 lg:grid-cols-8">
+              <div className="grid grid-cols-4 gap-x-1 gap-y-3 sm:grid-cols-6 lg:grid-cols-7">
                 {results.map((item) => (
                   <AppIcon key={item.toolName} item={toShortcut(item)} />
                 ))}
@@ -196,7 +196,7 @@ export default function IconHome({
               <p className="mb-2 text-[11px] font-extrabold uppercase tracking-[0.12em] text-white/70">{t('mostUsed')}</p>
               {/* «Aggiungi» sempre per primo a sinistra, poi i servizi scelti
                   nell'ordine in cui sono stati aggiunti (i nuovi in fondo) */}
-              <div className="grid grid-cols-4 gap-x-1 gap-y-3 sm:grid-cols-6 lg:grid-cols-8">
+              <div className="grid grid-cols-4 gap-x-1 gap-y-3 sm:grid-cols-6 lg:grid-cols-7">
                 <AppIcon item={addService} />
                 {chosen.map((item) => (
                   <AppIcon key={item.toolName} item={toShortcut(item)} />
@@ -207,7 +207,7 @@ export default function IconHome({
             {used.length > 0 && (
               <div>
                 <p className="mb-2 text-[11px] font-extrabold uppercase tracking-[0.12em] text-white/70">{t('usedOften')}</p>
-                <div className="grid grid-cols-4 gap-x-1 gap-y-3 sm:grid-cols-6 lg:grid-cols-8">
+                <div className="grid grid-cols-4 gap-x-1 gap-y-3 sm:grid-cols-6 lg:grid-cols-7">
                   {used.map((item) => (
                     <AppIcon key={item.toolName} item={toShortcut(item)} />
                   ))}

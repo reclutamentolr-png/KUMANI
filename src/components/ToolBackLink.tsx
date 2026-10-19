@@ -4,7 +4,7 @@ import { useSyncExternalStore, type ComponentProps, type ReactNode } from 'react
 import { useTranslations } from 'next-intl'
 import { ChevronLeft } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
-import { FROM_ICONS_KEY, HOME_VIEW_COOKIE } from '@/lib/homeView'
+import { FROM_ICONS_KEY, FROM_SERVICES, HOME_VIEW_COOKIE } from '@/lib/homeView'
 
 // Pulsante «Torna ai servizi» in cima agli strumenti: si torna alla pagina
 // Servizi, da dove si sceglie un altro servizio. Con la Home a icone (cookie
@@ -14,8 +14,11 @@ import { FROM_ICONS_KEY, HOME_VIEW_COOKIE } from '@/lib/homeView'
 const subscribe = () => () => {}
 const readIconsView = () => {
   try {
-    if (document.cookie.split(';').some((c) => c.trim() === `${HOME_VIEW_COOKIE}=icons`)) return true
-    return sessionStorage.getItem(FROM_ICONS_KEY) === '1'
+    // Aperto dalla pagina Servizi: si torna lì
+    const from = sessionStorage.getItem(FROM_ICONS_KEY)
+    if (from === FROM_SERVICES) return false
+    if (from === '1') return true
+    return document.cookie.split(';').some((c) => c.trim() === `${HOME_VIEW_COOKIE}=icons`)
   } catch {
     return false
   }

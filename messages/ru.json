@@ -10347,7 +10347,20 @@
     "menuLanguage": "Язык",
     "carouselPrev": "Назад",
     "carouselNext": "Далее",
-    "carouselGoTo": "Перейти к {name}"
+    "carouselGoTo": "Перейти к {name}",
+    "viewLabel": "Вид сервисов",
+    "viewList": "Список",
+    "viewIcons": "Значки",
+    "inHome": "Уже на главной",
+    "lockedService": "Не входит в ваш тариф",
+    "close": "Закрыть",
+    "folderHint": "Нажмите и удерживайте значок, чтобы добавить его на главную или убрать.",
+    "activatePro": "Включить Pro",
+    "activateBase": "Включить Base",
+    "passOnly": "Только этот сервис: Pass {price}",
+    "learnMore": "Подробнее о сервисе",
+    "addToHome": "На главную",
+    "removeFromHome": "Убрать с главной"
   },
   "garage": {
     "eyebrow": "Автомобили и мотоциклы, свои и в лизинге",

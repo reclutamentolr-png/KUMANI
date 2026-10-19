@@ -3,7 +3,7 @@
 import { cookies } from 'next/headers'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
-import { HOME_VIEW_COOKIE, isHomeView, MAX_HOME_FOLDERS, type HomeView } from '@/lib/homeView'
+import { HOME_VIEW_COOKIE, isHomeView, MAX_HOME_FOLDERS, type HomeView, type ServicesView } from '@/lib/homeView'
 import { SERVICE_HUBS } from '@/lib/serviceHubs'
 
 // Cambia la vista della Home (Lite, Completa, Icone): nel profilo (tutti i
@@ -31,5 +31,18 @@ export async function setHomeFolders(hubs: string[]): Promise<boolean> {
     return false
   }
   revalidatePath('/dashboard')
+  return true
+}
+
+// Vista della pagina Servizi: Elenco o Icone
+export async function setServicesView(view: ServicesView): Promise<boolean> {
+  if (view !== 'list' && view !== 'icons') return false
+  const supabase = await createClient()
+  const { error } = await supabase.auth.updateUser({ data: { services_view: view } })
+  if (error) {
+    console.error('[servizi] vista:', error.message)
+    return false
+  }
+  revalidatePath('/servizi')
   return true
 }

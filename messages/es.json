@@ -10347,7 +10347,20 @@
     "menuLanguage": "Idioma",
     "carouselPrev": "Anterior",
     "carouselNext": "Siguiente",
-    "carouselGoTo": "Ir a {name}"
+    "carouselGoTo": "Ir a {name}",
+    "viewLabel": "Vista de los servicios",
+    "viewList": "Lista",
+    "viewIcons": "Iconos",
+    "inHome": "Ya está en tu Home",
+    "lockedService": "No incluido en tu plan",
+    "close": "Cerrar",
+    "folderHint": "Mantén pulsado un icono para ponerlo en tu Home o quitarlo.",
+    "activatePro": "Activar Pro",
+    "activateBase": "Activar Base",
+    "passOnly": "Solo este servicio: Pass {price}",
+    "learnMore": "Más sobre el servicio",
+    "addToHome": "Poner en la Home",
+    "removeFromHome": "Quitar de la Home"
   },
   "garage": {
     "eyebrow": "Coches y motos, en propiedad y de renting",

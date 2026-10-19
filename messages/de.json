@@ -10347,7 +10347,20 @@
     "menuLanguage": "Sprache",
     "carouselPrev": "Zurück",
     "carouselNext": "Weiter",
-    "carouselGoTo": "Zu {name}"
+    "carouselGoTo": "Zu {name}",
+    "viewLabel": "Ansicht der Dienste",
+    "viewList": "Liste",
+    "viewIcons": "Symbole",
+    "inHome": "Schon auf deiner Startseite",
+    "lockedService": "Nicht in deinem Plan enthalten",
+    "close": "Schließen",
+    "folderHint": "Halte ein Symbol gedrückt, um es zur Startseite hinzuzufügen oder zu entfernen.",
+    "activatePro": "Pro aktivieren",
+    "activateBase": "Base aktivieren",
+    "passOnly": "Nur dieser Dienst: Pass {price}",
+    "learnMore": "Mehr über den Dienst",
+    "addToHome": "Zur Startseite",
+    "removeFromHome": "Von der Startseite entfernen"
   },
   "garage": {
     "eyebrow": "Autos und Motorräder, eigen und geleast",

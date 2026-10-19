@@ -10347,7 +10347,20 @@
     "menuLanguage": "Langue",
     "carouselPrev": "Précédent",
     "carouselNext": "Suivant",
-    "carouselGoTo": "Aller à {name}"
+    "carouselGoTo": "Aller à {name}",
+    "viewLabel": "Vue des services",
+    "viewList": "Liste",
+    "viewIcons": "Icônes",
+    "inHome": "Déjà sur votre accueil",
+    "lockedService": "Non inclus dans votre formule",
+    "close": "Fermer",
+    "folderHint": "Appuyez longuement sur une icône pour l’ajouter à votre accueil ou la retirer.",
+    "activatePro": "Activer Pro",
+    "activateBase": "Activer Base",
+    "passOnly": "Ce service seulement : Pass {price}",
+    "learnMore": "En savoir plus sur le service",
+    "addToHome": "Mettre sur l’accueil",
+    "removeFromHome": "Retirer de l’accueil"
   },
   "garage": {
     "eyebrow": "Voitures et motos, personnelles et en location",

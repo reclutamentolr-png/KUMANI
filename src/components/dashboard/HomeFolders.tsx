@@ -94,15 +94,15 @@ export function FolderTile({ hub, items, onOpen }: { hub: ServiceHub; items: Ser
   const entries = folderEntries(hub, items, t).slice(0, 4)
   const tone = toneOf(hub)
   return (
-    <button type="button" onClick={onOpen} aria-label={t(`${hub}.title`)} className="group flex min-w-0 flex-col items-center gap-1.5 rounded-2xl p-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--gold)]">
-      <span className="grid h-14 w-14 grid-cols-2 gap-1 rounded-[18px] border border-[var(--gold)]/25 bg-[var(--ink)]/[0.06] p-1.5 shadow-[0_6px_14px_rgba(0,0,0,0.1)] transition-transform group-active:scale-95 sm:h-16 sm:w-16">
+    <button type="button" onClick={onOpen} aria-label={t(`${hub}.title`)} className="group flex min-w-0 flex-col items-center gap-1.5 rounded-2xl p-1 lg:gap-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--gold)]">
+      <span className="grid h-14 w-14 grid-cols-2 grid-rows-2 gap-1 rounded-[18px] border border-[var(--gold)]/25 bg-[var(--ink)]/[0.06] p-1.5 shadow-[0_6px_14px_rgba(0,0,0,0.1)] transition-transform group-active:scale-95 sm:h-16 sm:w-16 lg:h-[88px] lg:w-[88px] lg:gap-1.5 lg:rounded-[24px] lg:p-2">
         {entries.map((entry) => (
           <span key={entry.key} className={`flex items-center justify-center rounded-md ${tone}`}>
-            <entry.Icon className="h-3 w-3 sm:h-3.5 sm:w-3.5" aria-hidden />
+            <entry.Icon className="h-3 w-3 sm:h-3.5 sm:w-3.5 lg:h-5 lg:w-5" aria-hidden />
           </span>
         ))}
       </span>
-      <span className="line-clamp-2 w-full hyphens-auto text-center text-[11px] font-semibold leading-tight [overflow-wrap:anywhere] sm:text-xs">{shortHubName(t(`${hub}.title`))}</span>
+      <span className="line-clamp-2 w-full hyphens-auto text-center text-[11px] font-semibold leading-tight [overflow-wrap:anywhere] sm:text-xs lg:text-sm">{shortHubName(t(`${hub}.title`))}</span>
     </button>
   )
 }

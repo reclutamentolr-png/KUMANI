@@ -10347,7 +10347,20 @@
     "menuLanguage": "Idioma",
     "carouselPrev": "Anterior",
     "carouselNext": "Seguinte",
-    "carouselGoTo": "Ir para {name}"
+    "carouselGoTo": "Ir para {name}",
+    "viewLabel": "Vista dos serviços",
+    "viewList": "Lista",
+    "viewIcons": "Ícones",
+    "inHome": "Já está na tua Home",
+    "lockedService": "Não incluído no teu plano",
+    "close": "Fechar",
+    "folderHint": "Mantém um ícone premido para o pôr na Home ou tirar.",
+    "activatePro": "Ativar o Pro",
+    "activateBase": "Ativar o Base",
+    "passOnly": "Só este serviço: Pass {price}",
+    "learnMore": "Saber mais sobre o serviço",
+    "addToHome": "Pôr na Home",
+    "removeFromHome": "Tirar da Home"
   },
   "garage": {
     "eyebrow": "Carros e motas, próprios e em renting",

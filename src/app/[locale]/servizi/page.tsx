@@ -9,6 +9,7 @@ import { getPlanPrices } from '@/lib/planPrices'
 import AppHeader from '@/components/nav/AppHeader'
 import ServicesBrowser from '@/components/services/ServicesBrowser'
 import { getSessionUser, preloadSession } from '@/lib/session'
+import { resolveServicesView } from '@/lib/homeView'
 
 export const dynamic = 'force-dynamic'
 
@@ -58,7 +59,7 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
           </span>
           <ArrowRight className="h-4 w-4 shrink-0" />
         </Link>
-        <ServicesBrowser items={items} favorites={favorites} />
+        <ServicesBrowser items={items} favorites={favorites} initialView={resolveServicesView(user.user_metadata)} />
 
         {/* In fondo: le sezioni della Community (Bacheca, Kordata, Eventi…) */}
         {communityItems.length > 0 && <CommunityBlock items={communityItems} />}

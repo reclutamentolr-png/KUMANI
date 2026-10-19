@@ -10347,7 +10347,20 @@
     "menuLanguage": "Lingua",
     "carouselPrev": "Precedente",
     "carouselNext": "Successivo",
-    "carouselGoTo": "Vai a {name}"
+    "carouselGoTo": "Vai a {name}",
+    "viewLabel": "Vista dei servizi",
+    "viewList": "Elenco",
+    "viewIcons": "Icone",
+    "inHome": "Già nella tua Home",
+    "lockedService": "Non incluso nel tuo piano",
+    "close": "Chiudi",
+    "folderHint": "Tieni premuta un’icona per metterla nella Home o toglierla.",
+    "activatePro": "Attiva il Pro",
+    "activateBase": "Attiva il Base",
+    "passOnly": "Solo questo servizio: Pass {price}",
+    "learnMore": "Scopri di più sul servizio",
+    "addToHome": "Metti nella Home",
+    "removeFromHome": "Togli dalla Home"
   },
   "garage": {
     "eyebrow": "Auto e moto, di proprietà e a noleggio",

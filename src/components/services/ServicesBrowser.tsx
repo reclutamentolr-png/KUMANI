@@ -1,8 +1,8 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
-import { ArrowRight, BookOpen, Lock, Search, Smartphone, X } from 'lucide-react'
+import { ArrowRight, BookOpen, LayoutGrid, List, Lock, Search, Smartphone, X } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import FavoriteStarButton from '@/components/FavoriteStarButton'
 import QuickCheckBox from '@/components/ecosystem/QuickCheckBox'
@@ -12,6 +12,9 @@ import { HUB_GROUP, SERVICE_HUBS, TOOL_HUB } from '@/lib/serviceHubs'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 import { GROUP_STYLE, SERVICE_GROUPS } from '@/lib/serviceGroups'
 import type { ServiceItem } from '@/lib/servicesCatalog'
+import ServicesIcons from './ServicesIcons'
+import { setServicesView } from '@/app/actions/homeView'
+import { FROM_ICONS_KEY, FROM_SERVICES, type ServicesView } from '@/lib/homeView'
 
 type Filter = 'all' | 'mine' | 'locked'
 
@@ -31,8 +34,27 @@ const normalize = (text: string) =>
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')
 
-export default function ServicesBrowser({ items, favorites: initialFavorites }: { items: ServiceItem[]; favorites: string[] }) {
+// initialView: Elenco o Icone (scelta salvata nel profilo, vedi lib/homeView)
+export default function ServicesBrowser({ items, favorites: initialFavorites, initialView = 'list' }: { items: ServiceItem[]; favorites: string[]; initialView?: ServicesView }) {
   const t = useTranslations('hub')
+  const [view, setView] = useState<ServicesView>(initialView)
+  const [, startSaving] = useTransition()
+  const chooseView = (next: ServicesView) => {
+    if (next === view) return
+    setView(next)
+    startSaving(async () => {
+      await setServicesView(next)
+    })
+  }
+  // Un servizio aperto da questa pagina riporta qui («Torna ai servizi»)
+  const markFromServices = (e: React.MouseEvent) => {
+    if (!(e.target as HTMLElement).closest('a')) return
+    try {
+      sessionStorage.setItem(FROM_ICONS_KEY, FROM_SERVICES)
+    } catch {
+      // facoltativo
+    }
+  }
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState<Filter>('all')
   const [favorites, setFavorites] = useState(initialFavorites)
@@ -68,7 +90,30 @@ export default function ServicesBrowser({ items, favorites: initialFavorites }: 
     setFavorites((list) => (isFavorite ? [toolName, ...list.filter((name) => name !== toolName)] : list.filter((name) => name !== toolName)))
 
   return (
-    <div>
+    <div onClickCapture={markFromServices}>
+      {/* Elenco · Icone */}
+      <div role="radiogroup" aria-label={t('viewLabel')} className="mb-3 grid grid-cols-2 gap-1 rounded-xl border border-[var(--gold)]/25 bg-white p-1">
+        {(
+          [
+            { key: 'list', Icon: List, label: t('viewList') },
+            { key: 'icons', Icon: LayoutGrid, label: t('viewIcons') },
+          ] as const
+        ).map(({ key, Icon, label }) => (
+          <button
+            key={key}
+            type="button"
+            role="radio"
+            aria-checked={view === key}
+            onClick={() => chooseView(key)}
+            className={`flex min-h-9 items-center justify-center gap-1.5 rounded-lg px-2 text-sm font-bold transition-colors ${
+              view === key ? 'bg-[var(--ink)] text-[var(--gold-bright)]' : 'text-[var(--muted)] hover:text-[var(--ink)]'
+            }`}
+          >
+            <Icon className="h-4 w-4" aria-hidden /> {label}
+          </button>
+        ))}
+      </div>
+
       {/* Ricerca */}
       <label className="relative block">
         <span className="sr-only">{t('searchPlaceholder')}</span>
@@ -112,6 +157,10 @@ export default function ServicesBrowser({ items, favorites: initialFavorites }: 
 
       {groups.length === 0 ? (
         <p className="mt-8 rounded-2xl border border-dashed border-[var(--gold)]/40 bg-white px-5 py-8 text-center text-sm text-[var(--muted)]">{t('noResults')}</p>
+      ) : view === 'icons' ? (
+        <div className="mt-6">
+          <ServicesIcons groups={groups} hubsView={hubsView} allItems={items} favorites={favorites} onFavoritesChange={setFavorites} />
+        </div>
       ) : (
         <div className="mt-6 space-y-8">
           {groups.map(({ group, items }) => {

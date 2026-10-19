@@ -10347,7 +10347,20 @@
     "menuLanguage": "Language",
     "carouselPrev": "Previous",
     "carouselNext": "Next",
-    "carouselGoTo": "Go to {name}"
+    "carouselGoTo": "Go to {name}",
+    "viewLabel": "Services view",
+    "viewList": "List",
+    "viewIcons": "Icons",
+    "inHome": "Already on your Home",
+    "lockedService": "Not included in your plan",
+    "close": "Close",
+    "folderHint": "Press and hold an icon to add it to your Home or remove it.",
+    "activatePro": "Activate Pro",
+    "activateBase": "Activate Base",
+    "passOnly": "Just this service: Pass {price}",
+    "learnMore": "Learn more about the service",
+    "addToHome": "Add to Home",
+    "removeFromHome": "Remove from Home"
   },
   "garage": {
     "eyebrow": "Cars and motorbikes, owned and leased",
