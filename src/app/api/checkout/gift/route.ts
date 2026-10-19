@@ -8,6 +8,7 @@ import { getStripe, managedPayments, MANAGED_PAYMENTS_ON } from '@/lib/stripe'
 import { parseVatInput } from '@/lib/vat'
 import { getToolPassOffer } from '@/lib/toolPasses'
 import { getPlanPrices } from '@/lib/planPrices'
+import { discounted, getChristmas } from '@/lib/christmas'
 import { GIFT_MAX_QUANTITY, GIFT_MESSAGE_MAX, GIFT_TYPE } from '@/lib/gifts'
 import { giftItemName } from '@/lib/giftsServer'
 import { locales, defaultLocale } from '../../../../../i18n'
@@ -41,12 +42,19 @@ export async function POST(request: Request) {
       .slice(0, GIFT_MESSAGE_MAX)
 
     let unitCents: number
+    let christmasPct = 0
     let tool = ''
     let plan = ''
     if (kind === 'plan' && (value === 'base' || value === 'pro')) {
       const prices = await getPlanPrices()
       unitCents = Math.round((value === 'pro' ? prices.pro : prices.base) * 100)
       plan = value
+      // Offerta di Natale (Admin → Natale): un anno da regalare a prezzo scontato
+      const offer = (await getChristmas()).offer
+      if (offer && offer.giftPct > 0) {
+        unitCents = discounted(unitCents, offer.giftPct)
+        christmasPct = offer.giftPct
+      }
     } else if (kind === 'pass' && value) {
       const offer = await getToolPassOffer(supabase, value)
       if (!offer.enabled) return back('unavailable')
@@ -81,6 +89,7 @@ export async function POST(request: Request) {
       message,
       locale,
       terms_accepted: now,
+      ...(christmasPct ? { christmas_pct: String(christmasPct) } : {}),
       ...(business
         ? { buyer_type: 'business', business_name: business.name, vat_number: business.vat, business_declaration: now }
         : { buyer_type: 'consumer' }),

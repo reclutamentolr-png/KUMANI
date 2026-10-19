@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
-import { ArrowLeft, ArrowRight, CheckCircle2, Gift, Send, Sparkles, UserPlus } from 'lucide-react'
+import { ArrowLeft, ArrowRight, CheckCircle2, Gift, Send, Sparkles, TreePine, UserPlus } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import GiftBuyForm, { type GiftOption } from '@/components/gifts/GiftBuyForm'
 import GiftOrdersList from '@/components/gifts/GiftOrdersList'
@@ -8,6 +8,7 @@ import { getCheckoutTexts } from '@/lib/checkoutTexts'
 import { createClient } from '@/lib/supabase/server'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { getPlanPrices } from '@/lib/planPrices'
+import { discounted, formatOfferDate, getChristmas } from '@/lib/christmas'
 import { SITE_URL } from '@/lib/siteUrl'
 import { getMyGiftOrders } from '@/app/actions/gifts'
 import { confirmGiftSession, giftItemName } from '@/lib/giftsServer'
@@ -39,16 +40,21 @@ export default async function GiftsPage({
   // Ritorno dal pagamento: i codici si creano anche senza webhook
   const confirmed = sp.success && sp.session_id ? await confirmGiftSession(sp.session_id, user.id) : null
 
-  const [prices, { data: passRows }, orders, checkoutTexts] = await Promise.all([
+  const [prices, { data: passRows }, orders, checkoutTexts, christmas, tx] = await Promise.all([
     getPlanPrices(),
     supabase.from('marketplace_settings').select('tool_name, pass_price_cents').eq('pass_enabled', true).neq('is_enabled', false).neq('required_plan', 'free'),
     getMyGiftOrders(),
     getCheckoutTexts(locale),
+    getChristmas(),
+    getTranslations('christmas'),
   ])
+  // Offerta di Natale (Admin → Natale): un anno di Base/Pro da regalare scontato
+  const giftPct = christmas.offer?.giftPct ?? 0
+  const planOption = (cents: number) => (giftPct > 0 ? { priceCents: discounted(cents, giftPct), fullCents: cents } : { priceCents: cents })
   const tools = getMarketplaceTools((key) => tm(key))
   const options: GiftOption[] = [
-    { value: 'plan:base', label: t('itemBase'), priceCents: Math.round(prices.base * 100), group: 'plan' },
-    { value: 'plan:pro', label: t('itemPro'), priceCents: Math.round(prices.pro * 100), group: 'plan' },
+    { value: 'plan:base', label: t('itemBase'), ...planOption(Math.round(prices.base * 100)), group: 'plan' },
+    { value: 'plan:pro', label: t('itemPro'), ...planOption(Math.round(prices.pro * 100)), group: 'plan' },
     ...(passRows ?? [])
       .map((row) => ({ row, info: tools.find((tool) => tool.toolName === row.tool_name) }))
       .filter((entry) => entry.info)
@@ -90,6 +96,18 @@ export default async function GiftsPage({
         )}
         {sp.canceled && <p className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[var(--muted)]">{t('canceled')}</p>}
         {error && <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{t(`error_${error}`)}</p>}
+
+        {giftPct > 0 && christmas.offer && (
+          <p className="flex items-start gap-3 rounded-2xl border border-[var(--gold)]/40 bg-gradient-to-r from-[#5c0c18] to-[var(--ink)] px-4 py-3 text-sm text-white shadow-sm">
+            <TreePine className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" />
+            <span>
+              {tx('giftsNote', {
+                pct: giftPct,
+                date: formatOfferDate(locale, christmas.offer.until),
+              })}
+            </span>
+          </p>
+        )}
 
         {/* Come funziona */}
         <ol className="grid gap-3 sm:grid-cols-3">

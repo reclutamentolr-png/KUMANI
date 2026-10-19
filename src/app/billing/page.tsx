@@ -13,6 +13,7 @@ import CheckoutForm from '@/components/billing/CheckoutForm'
 import { getCheckoutTexts } from '@/lib/checkoutTexts'
 import { computePassCredit } from '@/lib/passCredit'
 import { getPlanPrices } from '@/lib/planPrices'
+import { formatOfferDate, getChristmas } from '@/lib/christmas'
 import WithdrawalRequest from '@/components/billing/WithdrawalRequest'
 import { locales, defaultLocale } from '../../../i18n'
 
@@ -196,6 +197,11 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
   const basePassCredit = !isActive ? await computePassCredit(user.id, 'base') : null
   const basePassCreditCents = basePassCredit ? Math.min(basePassCredit.cents, Math.max(Math.round(basePrice * 100) - 100, 0)) : 0
   const checkoutTexts = await getCheckoutTexts(locale, { priceEuro: basePrice })
+  // Offerta di Natale (Admin → Natale): sconto sul primo anno, applicato al pagamento
+  const christmasOffer = !isActive ? (await getChristmas()).offer : null
+  const baseCents = Math.round(basePrice * 100)
+  const christmasCents = christmasOffer && christmasOffer.planPct > 0 ? Math.min(Math.round((baseCents * christmasOffer.planPct) / 100), Math.max(baseCents - 100 - basePassCreditCents, 0)) : 0
+  const tx = await getTranslations({ locale, namespace: 'christmas' })
   const canRequestWithdrawal = !!withdrawalUntil && withdrawal?.status !== 'pending'
 
   const portalNotice =
@@ -263,6 +269,16 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
         {!isActive && basePassCreditCents > 0 && (
           <p className="mb-4 rounded-xl bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800">
             {tp('passCreditNote', { amount: money(basePassCreditCents) })}
+          </p>
+        )}
+        {!isActive && christmasCents > 0 && christmasOffer && (
+          <p className="mb-4 rounded-xl bg-gradient-to-r from-[#5c0c18] to-[#171717] px-4 py-3 text-sm font-semibold text-white">
+            {tx('billingNote', {
+              pct: christmasOffer.planPct,
+              amount: money(baseCents - basePassCreditCents - christmasCents),
+              full: money(baseCents),
+              date: formatOfferDate(locale, christmasOffer.until),
+            })}
           </p>
         )}
         {!isActive && (

@@ -8,6 +8,7 @@ import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { recordConsent } from '@/lib/withdrawal'
 import { getCheckoutTexts } from '@/lib/checkoutTexts'
 import { getPlanPrices } from '@/lib/planPrices'
+import { getChristmas } from '@/lib/christmas'
 import { computePassCredit } from '@/lib/passCredit'
 import { parseVatInput } from '@/lib/vat'
 import { expireOpenSubscriptionCheckouts } from '@/lib/paymentSafety'
@@ -90,6 +91,14 @@ export async function POST(request: Request) {
       purchaseMeta.pass_credit_cents = String(creditCents)
       purchaseMeta.pass_ids = credit.passIds.join(',').slice(0, 480)
     }
+    // Offerta di Natale (Admin → Natale): sconto sul primo pagamento, nello
+    // stesso coupon del credito dei Pass (Stripe ne accetta uno solo)
+    const offer = (await getChristmas()).offer
+    const christmasCents = offer && offer.planPct > 0 ? Math.min(Math.round((fullCents * offer.planPct) / 100), Math.max(fullCents - 100 - creditCents, 0)) : 0
+    if (christmasCents > 0) {
+      purchaseMeta.christmas_pct = String(offer!.planPct)
+      purchaseMeta.christmas_discount_cents = String(christmasCents)
+    }
 
     let customerId: string | null = null
     if (business) {
@@ -101,14 +110,18 @@ export async function POST(request: Request) {
     }
 
     const coupon =
-      creditCents > 0
+      creditCents + christmasCents > 0
         ? await getStripe().coupons.create({
-            amount_off: creditCents,
+            amount_off: creditCents + christmasCents,
             currency: 'eur',
             duration: 'once',
             max_redemptions: 1,
-            name: 'Credito Pass KUMANI',
-            metadata: { userId: user.id, pass_ids: purchaseMeta.pass_ids },
+            name: creditCents > 0 && christmasCents > 0 ? 'Credito Pass e Natale KUMANI' : creditCents > 0 ? 'Credito Pass KUMANI' : 'Natale KUMANI',
+            metadata: {
+              userId: user.id,
+              ...(creditCents > 0 ? { pass_ids: purchaseMeta.pass_ids } : {}),
+              ...(christmasCents > 0 ? { christmas_pct: purchaseMeta.christmas_pct } : {}),
+            },
           })
         : null
 

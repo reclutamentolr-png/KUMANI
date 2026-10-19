@@ -7,6 +7,10 @@ import LanguageSwitcher from '@/components/LanguageSwitcher'
 import DashboardHeaderActions from '@/components/DashboardHeaderActions'
 import { getSessionIsAdmin, getSessionProfile, getSessionUser } from '@/lib/session'
 import type { MyProfile } from '@/lib/myProfile'
+import Logo from '@/components/Logo'
+import ChristmasGarland from '@/components/christmas/ChristmasGarland'
+import SantaHat from '@/components/christmas/SantaHat'
+import { christmasDecorationsFor } from '@/lib/christmasPreview'
 
 // Intestazione delle pagine principali (Home, Servizi, Community, Wallet,
 // Rete, Documenti, Preferiti, Donazioni): la stessa barra della Home con
@@ -37,12 +41,20 @@ export default async function AppHeader({
     const [profile, isAdmin] = await Promise.all([getSessionProfile(), getSessionIsAdmin(user.id)])
     session = { user, profile, isAdmin }
   }
+  // Natale: ghirlanda sotto la barra e logo col cappello (Admin → Natale)
+  const christmas = await christmasDecorationsFor(session.isAdmin)
 
   return (
-    <header {...(inServices ? {} : { 'data-app-header': '' })} className="border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-[0_8px_30px_rgba(23,23,23,0.18)]">
+    <header {...(inServices ? {} : { 'data-app-header': '' })} className="relative border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-[0_8px_30px_rgba(23,23,23,0.18)]">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex min-w-0 items-center gap-2.5">
-          <Link href="/dashboard" className="min-w-0">
+          <Link href="/dashboard" className="flex min-w-0 items-center gap-2.5">
+            {christmas && (
+              <span className="relative h-8 w-8 shrink-0 sm:h-9 sm:w-9">
+                <Logo size={36} className="h-full w-full" />
+                <SantaHat />
+              </span>
+            )}
             {/* «Home Kumani»: si torna alla Home da ogni pagina */}
             <span className="block truncate text-xl font-bold tracking-tight text-white sm:text-2xl">{t('programTitle')}</span>
           </Link>
@@ -76,6 +88,7 @@ export default async function AppHeader({
           </div>
         </div>
       )}
+      {christmas && <ChristmasGarland />}
     </header>
   )
 }

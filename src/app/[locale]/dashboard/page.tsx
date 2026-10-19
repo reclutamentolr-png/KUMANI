@@ -48,6 +48,7 @@ import DashboardNeeds from '@/components/dashboard/DashboardNeeds'
 import VerifiedInviteCard from '@/components/verification/VerifiedInviteCard'
 import { buildHomeNeeds } from '@/lib/homeNeedsServer'
 import WelcomeHome, { ShowFullHomeLink } from '@/components/dashboard/WelcomeHome'
+import ChristmasOfferBanner from '@/components/christmas/ChristmasOfferBanner'
 import { getToolUsage, getWelcomeState, VERIFIED_AFTER_LOGINS } from '@/lib/welcomeHome'
 import { resolveHomeFolders, resolveHomeView } from '@/lib/homeView'
 import { SERVICE_HUBS } from '@/lib/serviceHubs'
@@ -294,6 +295,8 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
         <DashboardReturnScroll />
         {/* Ricevuta da salvare dopo la registrazione partita dalla ricevuta */}
         <PendingReceiptClaim />
+        {/* Offerta di Natale (Admin → Natale), solo quando è accesa */}
+        <ChristmasOfferBanner subscribed={profile?.subscription_status === 'active'} />
 
         {surpriseReplies.total > 0 && <SurpriseRepliesPopup replies={surpriseReplies.items} total={surpriseReplies.total} />}
         {giftWelcome === true ? (

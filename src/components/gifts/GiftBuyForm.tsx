@@ -5,7 +5,8 @@ import { useLocale, useTranslations } from 'next-intl'
 import { Gift, Minus, Plus } from 'lucide-react'
 import { GIFT_MAX_QUANTITY, GIFT_MESSAGE_MAX } from '@/lib/gifts'
 
-export type GiftOption = { value: string; label: string; priceCents: number; group: 'plan' | 'pass' }
+// fullCents: prezzo pieno quando c'è uno sconto (es. l'offerta di Natale)
+export type GiftOption = { value: string; label: string; priceCents: number; fullCents?: number; group: 'plan' | 'pass' }
 
 type Texts = { asConsumer: string; asBusiness: string; businessName: string; vatNumber: string; vatHint: string; businessDeclaration: string; termsLabel: ReactNode }
 
@@ -69,6 +70,7 @@ export default function GiftBuyForm({ options, initial, texts }: { options: Gift
         {selected && (
           <div className="text-right">
             <span className="block text-xs text-[var(--muted)]">{t('total')}</span>
+            {selected.fullCents && <span className="mr-2 text-sm text-[var(--muted)] line-through">{money(selected.fullCents * quantity)}</span>}
             <span className="text-2xl font-extrabold text-[var(--ink)]">{money(selected.priceCents * quantity)}</span>
           </div>
         )}

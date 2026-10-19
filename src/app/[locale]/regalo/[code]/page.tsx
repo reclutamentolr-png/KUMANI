@@ -4,6 +4,9 @@ import { ArrowUpRight, CalendarClock, CheckCircle2, Gift, Sparkles } from 'lucid
 import Link from '@/components/LocalizedLink'
 import Logo from '@/components/Logo'
 import GiftRedeemButton from '@/components/gifts/GiftRedeemButton'
+import ChristmasGarland from '@/components/christmas/ChristmasGarland'
+import SantaHat from '@/components/christmas/SantaHat'
+import { getChristmas } from '@/lib/christmas'
 import { createClient } from '@/lib/supabase/server'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { giftItemName } from '@/lib/giftsServer'
@@ -26,10 +29,14 @@ export default async function GiftPage({ params }: { params: Promise<{ code: str
   const tm = await getTranslations('marketplace')
   const locale = await getLocale()
   const supabase = await createClient()
-  const [{ data }, { data: auth }] = await Promise.all([
+  const [{ data }, { data: auth }, christmas, tx] = await Promise.all([
     GIFT_CODE_RE.test(code) ? supabase.rpc('gift_code_info', { p_code: code }) : Promise.resolve({ data: { status: 'not_found' } }),
     supabase.auth.getUser(),
+    getChristmas(),
+    getTranslations('christmas'),
   ])
+  // A Natale (Admin → Natale) il regalo diventa un biglietto di Natale
+  const xmas = christmas.decorations
   const info = (data ?? { status: 'not_found' }) as GiftCodeInfo
   const found = info.status !== 'not_found' && info.kind
   const item = found ? await giftItemName(locale, info.kind, info.tool, info.plan) : ''
@@ -42,11 +49,21 @@ export default async function GiftPage({ params }: { params: Promise<{ code: str
     <div className="min-h-screen bg-[var(--ink)] px-4 py-10 text-white">
       <div className="mx-auto max-w-lg">
         <Link href="/" className="mb-8 flex items-center justify-center gap-2">
-          <Logo size={40} className="h-10 w-10" />
+          <span className="relative">
+            <Logo size={40} className="h-10 w-10" />
+            {xmas && <SantaHat />}
+          </span>
           <span className="text-sm font-bold tracking-[0.3em] text-[var(--gold-bright)]">KUMANI</span>
         </Link>
 
-        <div className="relative overflow-hidden rounded-3xl border border-[var(--gold)]/30 bg-white/[0.04] p-6 sm:p-8">
+        <div
+          className={`relative overflow-hidden rounded-3xl border border-[var(--gold)]/30 p-6 sm:p-8 ${xmas ? 'bg-gradient-to-b from-[#5c0c18] to-white/[0.04] pt-10 sm:pt-12' : 'bg-white/[0.04]'}`}
+        >
+          {xmas && (
+            <div aria-hidden className="absolute inset-x-0 top-0 h-0">
+              <ChristmasGarland />
+            </div>
+          )}
           <div aria-hidden className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-[var(--gold)]/15 blur-3xl" />
           <span className="relative mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] shadow-lg">
             <Gift className="h-8 w-8" strokeWidth={1.8} />
@@ -59,6 +76,7 @@ export default async function GiftPage({ params }: { params: Promise<{ code: str
             </>
           ) : (
             <>
+              {xmas && <p className="mt-5 text-center text-xl font-extrabold text-[var(--gold-bright)]">{tx('merry')}</p>}
               <p className="mt-5 text-center text-xs font-semibold uppercase tracking-[0.2em] text-[var(--gold-bright)]">
                 {info.giver_name ? t('fromName', { name: info.giver_name }) : t('fromSomeone')}
               </p>
