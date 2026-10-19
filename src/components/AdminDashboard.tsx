@@ -103,6 +103,8 @@ import {
   Globe2,
   BriefcaseBusiness,
   MessageSquareQuote,
+  TreePine,
+  Clapperboard,
 } from 'lucide-react'
 import { askConfirm } from '@/lib/confirm'
 
@@ -137,6 +139,8 @@ const AgentsPanel = dynamic(() => import('@/components/admin/AgentsPanel'), { lo
 const WithdrawalsPanel = dynamic(() => import('@/components/admin/WithdrawalsPanel'), { loading })
 const DonationsPanel = dynamic(() => import('@/components/admin/DonationsPanel'), { loading })
 const HomeLayoutPanel = dynamic(() => import('@/components/admin/HomeLayoutPanel'), { loading })
+const ChristmasPanel = dynamic(() => import('@/components/admin/ChristmasPanel'), { loading })
+const ServiceVideosPanel = dynamic(() => import('@/components/admin/ServiceVideosPanel'), { loading })
 const PlatformsPanel = dynamic(() => import('@/components/admin/PlatformsPanel'), { loading })
 const EmailSetupPanel = dynamic(() => import('@/components/admin/EmailSetupPanel'), { loading })
 const EmailComposePanel = dynamic(() => import('@/components/admin/EmailComposePanel'), { loading })
@@ -727,6 +731,8 @@ L'accesso viene registrato.`))) return
   { id: 'appLimits', label: 'Limiti e pulizia', Icon: Gauge, permission: 'settings.read' as Permission, group: 'general' },
   { id: 'languages', label: 'Lingue del sito', Icon: Globe2, permission: 'settings.read' as Permission, group: 'general' },
   { id: 'homeLayout', label: 'Aspetto homepage', Icon: Palette, permission: 'settings.read' as Permission, group: 'general' },
+  { id: 'christmas', label: 'Natale', Icon: TreePine, permission: 'settings.read' as Permission, group: 'general' },
+  { id: 'serviceVideos', label: 'Video dei servizi', Icon: Clapperboard, permission: 'settings.read' as Permission, group: 'general' },
   { id: 'donations', label: 'Donazioni', Icon: HeartHandshake, permission: 'settings.read' as Permission, group: 'general' },
   { id: 'users', label: 'Utenti', Icon: Users, permission: 'users.read' as Permission, group: 'users' },
   { id: 'matrix', label: 'Matrice', Icon: GitBranch, permission: 'matrix.read' as Permission, group: 'users' },
@@ -1829,6 +1835,8 @@ L'accesso viene registrato.`))) return
         {activeSection === 'withdrawals' && <WithdrawalsPanel onChanged={loadBadges} />}
         {activeSection === 'donations' && <DonationsPanel />}
         {activeSection === 'homeLayout' && <HomeLayoutPanel />}
+        {activeSection === 'christmas' && <ChristmasPanel />}
+        {activeSection === 'serviceVideos' && <ServiceVideosPanel />}
         {activeSection === 'reports' && <ReportsPanel initialTab={reportTab} />}
         {activeSection === 'realUsage' && <RealUsagePanel />}
         {activeSection === 'languages' && <LanguagesPanel canWrite={hasPermission(permissions, 'settings.write')} />}

@@ -13,6 +13,9 @@ import type { CommunityItem } from '@/components/dashboard/CommunityBlock'
 export type ServiceItem = {
   toolName: string
   title: string
+  // Nome proprio del servizio (es. «Findo»): per i servizi uniti il titolo è
+  // «Casa e auto · Dove l'ho messo», ma la ricerca deve trovarlo anche così
+  name?: string
   description: string
   iconName: string
   href: string
@@ -55,6 +58,7 @@ export async function getServicesCatalog(
         toolName: tool.toolName,
         // Sicurezza: il servizio e la scheda («Speculum · Email»)
         title: TOOL_HUB[tool.toolName] ? `${th(`${TOOL_HUB[tool.toolName]}.title`)} · ${th(`${TOOL_HUB[tool.toolName]}.tab_${hubTabKey(tool.toolName)}`)}` : tool.title,
+        name: tool.title,
         description: tool.description,
         iconName: tool.iconName,
         href: tool.href,

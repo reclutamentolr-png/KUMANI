@@ -14186,5 +14186,30 @@
     "addCategory": "Adicionar",
     "foldersTitle": "Escolhe as tuas categorias",
     "foldersHint": "Aparecem em baixo como pastas, com os seus serviços dentro. No máximo {max}."
+  },
+  "christmas": {
+    "title": "Natal com a KUMANI",
+    "giftLine": "Ofereça um ano de KUMANI com −{pct}%",
+    "selfLine": "Ou ofereça a si mesmo: −{pct}% no primeiro ano",
+    "until": "Oferta válida até {date}",
+    "giftCta": "Oferecer KUMANI",
+    "selfCta": "Para mim",
+    "close": "Ocultar hoje",
+    "giftsNote": "Oferta de Natal: um ano de Base ou Pro para oferecer com −{pct}%, até {date}. O código chega logo: envie-o numa mensagem e quem o abrir encontra um postal de Natal.",
+    "billingNote": "Oferta de Natal: −{pct}% no primeiro ano. Paga {amount} em vez de {full}, até {date}.",
+    "merry": "Feliz Natal!"
+  },
+  "shareVideo": {
+    "sendVideo": "Enviar o vídeo",
+    "sendVideoHint": "Mensagem pronta com o teu convite",
+    "shareService": "Partilhar o serviço",
+    "message": "Vê em poucos segundos o que faz o {tool} na KUMANI 🎬 Se te inscreveres pelo meu link, também me dás uma ajuda:",
+    "metaTitle": "{name} recomenda-te {tool}",
+    "recommendedBy": "Recomendado por {name}",
+    "play": "Ver o vídeo",
+    "registerWith": "Inscreve-te com o convite de {name}",
+    "register": "Inscreve-te na KUMANI",
+    "discover": "Descobre {tool}",
+    "disclosure": "{name} é um Kumano: se te inscreveres com o convite, a KUMANI dá-lhe um reconhecimento. Para ti não muda nada."
   }
 }

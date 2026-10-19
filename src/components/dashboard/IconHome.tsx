@@ -125,7 +125,7 @@ export default function IconHome({
   const results = useMemo(() => {
     const q = query.trim().toLowerCase()
     if (!q) return null
-    return items.filter((item) => item.title.toLowerCase().includes(q) || item.description.toLowerCase().includes(q)).slice(0, 12)
+    return items.filter((item) => item.title.toLowerCase().includes(q) || !!item.name?.toLowerCase().includes(q) || item.description.toLowerCase().includes(q)).slice(0, 12)
   }, [items, query])
 
   const fixed: Shortcut[] = [

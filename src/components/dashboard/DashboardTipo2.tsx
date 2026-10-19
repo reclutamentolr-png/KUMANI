@@ -104,7 +104,10 @@ export default async function DashboardTipo2({
   // Base, Pro o prova Pro in corso
   const withPlan = subscribed || proTrialDaysLeft !== null
   const isProPlan = (subscribed && profile?.subscription_plan === 'pro') || proTrialDaysLeft !== null
-  const ctaRow = (
+  // Pro pagato: niente da comprare né da attivare (voucher e regali dei piani
+  // risultano «già abbonato», i Pass sono inclusi), la riga non serve
+  const paidPro = subscribed && profile?.subscription_plan === 'pro'
+  const ctaRow = paidPro ? null : (
     <div className={`grid gap-2 ${isProPlan ? 'grid-cols-1' : 'grid-cols-2'}`}>
       {!withPlan ? (
         <Link

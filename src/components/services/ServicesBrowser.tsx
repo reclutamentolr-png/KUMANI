@@ -87,7 +87,7 @@ export default function ServicesBrowser({
     const shown = items.filter((item) => {
       if (filter === 'mine' && !item.open) return false
       if (filter === 'locked' && item.open) return false
-      const text = normalize(`${item.title} ${item.description} ${t(`group_${item.group}`)}`)
+      const text = normalize(`${item.title} ${item.name ?? ''} ${item.description} ${t(`group_${item.group}`)}`)
       return words.every((word) => text.includes(word))
     })
     // Nei gruppi prima i servizi che si possono già usare

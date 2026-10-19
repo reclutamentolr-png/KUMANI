@@ -14186,5 +14186,30 @@
     "addCategory": "Add",
     "foldersTitle": "Choose your categories",
     "foldersHint": "They appear at the bottom as folders, with their services inside. Up to {max}."
+  },
+  "christmas": {
+    "title": "Christmas with KUMANI",
+    "giftLine": "Give a year of KUMANI at −{pct}%",
+    "selfLine": "Or treat yourself: −{pct}% on your first year",
+    "until": "Offer valid until {date}",
+    "giftCta": "Give KUMANI",
+    "selfCta": "For me",
+    "close": "Hide for today",
+    "giftsNote": "Christmas offer: a year of Base or Pro to give at −{pct}%, until {date}. The code arrives straight away: send it in a message and whoever opens it finds a Christmas card.",
+    "billingNote": "Christmas offer: −{pct}% on your first year. You pay {amount} instead of {full}, until {date}.",
+    "merry": "Merry Christmas!"
+  },
+  "shareVideo": {
+    "sendVideo": "Send the video",
+    "sendVideoHint": "Ready-made message with your invite",
+    "shareService": "Share the service",
+    "message": "See what {tool} does on KUMANI in a few seconds 🎬 If you sign up from my link, you help me out too:",
+    "metaTitle": "{name} recommends {tool}",
+    "recommendedBy": "{name} recommends it",
+    "play": "Watch the video",
+    "registerWith": "Sign up with {name}’s invite",
+    "register": "Sign up to KUMANI",
+    "discover": "Discover {tool}",
+    "disclosure": "{name} is a Kumano: if you sign up with their invite, KUMANI gives them a reward. Nothing changes for you."
   }
 }

@@ -5,6 +5,7 @@ import GuestTrialBar from '@/components/trials/GuestTrialBar'
 import { getTranslations } from 'next-intl/server'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { guestTrial } from '@/lib/trials'
+import { getServiceVideos } from '@/lib/serviceVideos'
 
 // Layout comune del marketplace: aggiunge il pulsante "Condividi" dentro
 // ogni strumento e, in fondo alla pagina principale di ogni servizio, la
@@ -49,16 +50,19 @@ export default async function MarketplaceLayout({ children }: { children: React.
   }
 
   let referralCode: string | null = null
+  // Servizi con il video ufficiale: dentro il servizio «Invia il video»
+  let videoTools: string[] = []
   if (user) {
-    const { data } = await supabase.rpc('get_my_profile').maybeSingle<{ referral_code: string | null }>()
+    const [{ data }, videos] = await Promise.all([supabase.rpc('get_my_profile').maybeSingle<{ referral_code: string | null }>(), getServiceVideos()])
     referralCode = data?.referral_code ?? null
+    videoTools = Object.keys(videos)
   }
 
   return (
     <>
       {children}
       {user && <RelatedServices />}
-      {user && <ToolShareButton referralCode={referralCode} />}
+      {user && <ToolShareButton referralCode={referralCode} videoTools={videoTools} />}
     </>
   )
 }

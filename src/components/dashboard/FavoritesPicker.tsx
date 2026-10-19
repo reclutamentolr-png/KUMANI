@@ -46,7 +46,7 @@ export default function FavoritesPicker({
     const q = query.trim().toLowerCase()
     return items
       .filter((item) => item.open)
-      .filter((item) => !q || item.title.toLowerCase().includes(q) || item.description.toLowerCase().includes(q))
+      .filter((item) => !q || item.title.toLowerCase().includes(q) || !!item.name?.toLowerCase().includes(q) || item.description.toLowerCase().includes(q))
       .sort((a, b) => Number(chosen.includes(b.toolName)) - Number(chosen.includes(a.toolName)) || a.title.localeCompare(b.title))
   }, [items, query, chosen])
 

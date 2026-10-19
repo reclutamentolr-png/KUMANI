@@ -1,0 +1,162 @@
+import { cache } from "react";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { ArrowRight, UserPlus } from "lucide-react";
+import Link from "@/components/LocalizedLink";
+import Logo from "@/components/Logo";
+import HomeVideo from "@/components/home/HomeVideo";
+import ShareLinkOpened from "@/components/share/ShareLinkOpened";
+import { marketplaceIconMap } from "@/lib/marketplaceIcons";
+import { getShareableTools } from "@/lib/shareableTools";
+import { getServiceVideos } from "@/lib/serviceVideos";
+import { homeVideoCover } from "@/lib/homeVideoShared";
+import { createClient } from "@/lib/supabase/server";
+
+// Dati legati al link e a chi lo ha mandato: sempre calcolata a ogni richiesta
+export const dynamic = "force-dynamic";
+
+type Props = { params: Promise<{ locale: string; slug: string }> };
+
+// Link corto mandato da un Kumano (kumani.io/v/CODICE): il video ufficiale del
+// servizio (da YouTube), chi lo consiglia e l'iscrizione con il suo invito.
+// L'indirizzo resta pulito, ma la pagina dice chiaramente chi consiglia.
+const loadLink = cache(async (slug: string) => {
+  if (!/^[A-Za-z2-9]{6}$/.test(slug)) return null;
+  const supabase = await createClient();
+  const { data } = await supabase
+    .rpc("share_link_info", { p_slug: slug })
+    .maybeSingle<{ tool: string; referral_code: string }>();
+  if (!data) return null;
+  const [{ data: people }, videos] = await Promise.all([
+    supabase.rpc("get_public_profile_by_referral", {
+      p_referral_code: data.referral_code,
+    }),
+    getServiceVideos(),
+  ]);
+  const person = (people as { first_name: string | null }[] | null)?.[0];
+  return {
+    tool: data.tool,
+    code: data.referral_code,
+    name: person?.first_name?.trim() || null,
+    videoId: videos[data.tool] ?? null,
+  };
+});
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale, slug } = await params;
+  setRequestLocale(locale);
+  const link = await loadLink(slug);
+  if (!link) return { robots: { index: false, follow: false } };
+  const [t, tm] = await Promise.all([
+    getTranslations("shareVideo"),
+    getTranslations("marketplace"),
+  ]);
+  const tool = getShareableTools(tm).find(
+    (item) => item.toolName === link.tool,
+  );
+  const title = link.name
+    ? t("metaTitle", { name: link.name, tool: tool?.title ?? "KUMANI" })
+    : `${tool?.title ?? "KUMANI"} · KUMANI`;
+  // Anteprima grande in WhatsApp e social: la copertina del video
+  const image = link.videoId ? homeVideoCover(link.videoId) : undefined;
+  return {
+    title: { absolute: title },
+    description: tool?.description,
+    robots: { index: false, follow: false },
+    openGraph: {
+      title,
+      description: tool?.description,
+      ...(image ? { images: [{ url: image, width: 480, height: 360 }] } : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: tool?.description,
+      ...(image ? { images: [image] } : {}),
+    },
+  };
+}
+
+export default async function ShareVideoPage({ params }: Props) {
+  const { locale, slug } = await params;
+  setRequestLocale(locale);
+  const link = await loadLink(slug);
+  if (!link) notFound();
+  const [t, tm] = await Promise.all([
+    getTranslations("shareVideo"),
+    getTranslations("marketplace"),
+  ]);
+  const tool = getShareableTools(tm).find(
+    (item) => item.toolName === link.tool,
+  );
+  if (!tool) notFound();
+  const Icon = marketplaceIconMap[tool.iconName];
+  const registerHref = `/register?sponsor=${encodeURIComponent(link.code)}`;
+
+  return (
+    <div className="min-h-screen bg-[var(--ink)] px-4 py-8 text-white sm:py-12">
+      <ShareLinkOpened slug={slug} />
+      <div className="mx-auto max-w-2xl">
+        <Link href="/" className="mb-6 flex items-center justify-center gap-2">
+          <Logo size={40} className="h-10 w-10" />
+          <span className="text-sm font-bold tracking-[0.3em] text-[var(--gold-bright)]">
+            KUMANI
+          </span>
+        </Link>
+
+        {link.name && (
+          <p className="mb-3 text-center text-sm font-semibold uppercase tracking-[0.18em] text-[var(--gold-bright)]">
+            {t("recommendedBy", { name: link.name })}
+          </p>
+        )}
+        <h1 className="flex items-center justify-center gap-3 text-center text-3xl font-extrabold sm:text-4xl">
+          {Icon && (
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)]">
+              <Icon className="h-6 w-6 text-[var(--ink)]" />
+            </span>
+          )}
+          {tool.title}
+        </h1>
+        <p className="mx-auto mt-3 max-w-xl text-center leading-relaxed text-gray-300">
+          {tool.description}
+        </p>
+
+        {link.videoId && (
+          <div className="mt-6">
+            <HomeVideo
+              id={link.videoId}
+              title={tool.title}
+              playLabel={t("play")}
+            />
+          </div>
+        )}
+
+        <div className="mx-auto mt-8 max-w-md space-y-3">
+          <Link
+            href={registerHref}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3.5 font-bold text-[var(--ink)] shadow-lg hover:brightness-105"
+          >
+            <UserPlus className="h-5 w-5" />{" "}
+            {link.name ? t("registerWith", { name: link.name }) : t("register")}
+          </Link>
+          {tool.publicPage && (
+            <Link
+              href={`/strumenti/${tool.toolName}?ref=${encodeURIComponent(link.code)}`}
+              className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/20 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10"
+            >
+              {t("discover", { tool: tool.title })}{" "}
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          )}
+          {/* Chiarezza: chi consiglia riceve un riconoscimento se ti iscrivi dal suo invito */}
+          {link.name && (
+            <p className="pt-1 text-center text-xs leading-5 text-white/50">
+              {t("disclosure", { name: link.name })}
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
