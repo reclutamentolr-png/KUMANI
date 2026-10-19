@@ -6,15 +6,21 @@ import ProfileCompleter from '@/components/ProfileCompleter'
 import { getIncompleteProfile } from '@/app/actions/profileReminder'
 import { dismissProfileReminder } from '@/app/actions/profileChanges'
 
-// Promemoria "completa il profilo": popup dopo 15 minuti di permanenza sulla
-// piattaforma (il conteggio continua cambiando pagina). Se l'utente lo chiude
-// senza completare, il database lo registra (profile_reminder_dismissed_at) e
-// dalla pagina successiva la richiesta diventa obbligatoria: una finestra che
-// copre l'app e non si chiude, finché i dati non sono completi (o si esce).
+// Promemoria "completa il profilo":
+// - piano Gratis: per i primi 7 giorni dall'iscrizione niente; dopo, il popup
+//   compare alla prima visita. Se lo si chiude senza completare, il database
+//   lo registra (profile_reminder_dismissed_at) e dalla pagina successiva la
+//   richiesta diventa obbligatoria: una finestra che copre l'app e non si
+//   chiude finché i dati non sono completi (o si esce);
+// - piano Base o Pro attivo (pagato, con un codice o in prova Pro): subito e
+//   obbligatoria, perché i dati servono.
+// Il server dice quale caso (getIncompleteProfile: paid, dueAt).
 const STORAGE_KEY = 'kumani_profile_reminder'
 // Profilo già completo in questa sessione: nessuna nuova richiesta al server.
 const COMPLETE_KEY = 'kumani_profile_complete'
-const DELAY_MS = 15 * 60 * 1000
+// Nei primi 7 giorni (Gratis) si ricontrolla al massimo ogni minuto cambiando
+// pagina: se nel frattempo si attiva un piano, la richiesta parte subito
+const RECHECK_MS = 60 * 1000
 
 // Pagine pubbliche (menù, tessere, pagine condivise): mai il popup.
 const PUBLIC_PREFIXES = ['/m/', '/p/', '/f/', '/strumenti/', '/affinity/duo/', '/veritas/', '/convivio/', '/cv/', '/o/', '/q/', '/ref/', '/viaggi/invito/', '/events/']
@@ -28,31 +34,6 @@ function isExemptPath(pathname: string) {
   if (path === '/') return true
   if (PUBLIC_PREFIXES.some((prefix) => path.startsWith(prefix))) return true
   return EXEMPT_ROUTES.some((route) => path === route || path.startsWith(`${route}/`))
-}
-
-type ReminderState = { next: number }
-
-function readState(): ReminderState {
-  try {
-    const raw = sessionStorage.getItem(STORAGE_KEY)
-    if (raw) {
-      const parsed = JSON.parse(raw) as ReminderState
-      if (typeof parsed.next === 'number') return parsed
-    }
-  } catch {
-    // sessionStorage non disponibile: si riparte da zero.
-  }
-  const fresh = { next: Date.now() + DELAY_MS }
-  writeState(fresh)
-  return fresh
-}
-
-function writeState(state: ReminderState) {
-  try {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state))
-  } catch {
-    // Ignorato.
-  }
 }
 
 function markComplete() {
@@ -90,66 +71,79 @@ export default function ProfileReminder() {
   const [profile, setProfile] = useState<Record<string, unknown> | null>(null)
   // Promemoria già chiuso una volta (dal server): richiesta obbligatoria.
   const [dismissed, setDismissed] = useState(false)
+  // Base o Pro attivo: richiesta subito obbligatoria
+  const [paid, setPaid] = useState(false)
+  // Gratis: da quando chiederlo (7 giorni dopo l'iscrizione)
+  const [dueAt, setDueAt] = useState<number | null>(null)
+  const [due, setDue] = useState(false)
+  const [lastCheck, setLastCheck] = useState(0)
   // Chiuso adesso: il blocco parte dalla prossima pagina visitata.
   const [dismissedOnPath, setDismissedOnPath] = useState<string | null>(null)
   const isExempt = isExemptPath(pathname)
-  const blocking = !!profile && !isExempt && (dismissed || (dismissedOnPath !== null && dismissedOnPath !== pathname))
+  const blocking = !!profile && !isExempt && (paid || (due && (dismissed || (dismissedOnPath !== null && dismissedOnPath !== pathname))))
 
   // Si chiede al server cambiando pagina finché non si sa se il profilo è
-  // completo (così funziona anche subito dopo il login, senza ricaricare):
-  // una volta saputo non si chiede più (completo: segnato nella sessione;
-  // incompleto: resta qui). Senza sessione nessuna richiesta.
+  // completo (così funziona anche subito dopo il login, senza ricaricare).
+  // Completo: segnato nella sessione, non si chiede più. Incompleto ma non
+  // ancora da chiedere (Gratis, primi 7 giorni): si ricontrolla al massimo
+  // ogni minuto, nel caso venga attivato un piano. Senza sessione niente.
   useEffect(() => {
-    if (isExempt || profile) return
+    if (isExempt || paid || due) return
     try {
       if (sessionStorage.getItem(COMPLETE_KEY)) return
     } catch {
       // Ignorato.
     }
     if (!mayBeSignedIn()) return
+    if (profile && Date.now() - lastCheck < RECHECK_MS) return
     let cancelled = false
     getIncompleteProfile()
       .then((result) => {
         if (cancelled) return
+        setLastCheck(Date.now())
         if (result.status === 'incomplete') {
           setProfile(result.profile)
           setDismissed(result.dismissed)
+          setPaid(result.paid)
+          setDueAt(result.dueAt)
         }
-        if (result.status === 'complete') markComplete()
+        if (result.status === 'complete') {
+          setProfile(null)
+          markComplete()
+        }
       })
       .catch(() => {})
     return () => {
       cancelled = true
     }
-  }, [isExempt, profile, pathname])
+    // lastCheck non fa ripartire il controllo: conta solo cambiando pagina
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isExempt, profile, pathname, paid, due])
 
-  // Primo promemoria (non obbligatorio) dopo 15 minuti.
+  // Gratis: la richiesta scatta allo scadere dei 7 giorni (anche a pagina aperta)
   useEffect(() => {
-    if (isExempt || !profile || dismissed || dismissedOnPath !== null || open) return
-    const state = readState()
-    // Allo scadere si ricontrolla: il profilo può essere stato completato nel
-    // frattempo dal menu del profilo.
-    const timer = setTimeout(() => {
-      getIncompleteProfile()
-        .then((result) => {
-          if (result.status === 'incomplete') {
-            setProfile(result.profile)
-            if (result.dismissed) setDismissed(true)
-            else setOpen(true)
-            return
-          }
-          setProfile(null)
-          markComplete()
-        })
-        .catch(() => {})
-    }, Math.max(0, state.next - Date.now()))
+    if (paid || dueAt === null) return
+    const wait = dueAt - Date.now()
+    if (wait <= 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setDue(true)
+      return
+    }
+    if (wait > 2 ** 31 - 1) return
+    const timer = setTimeout(() => setDue(true), wait)
     return () => clearTimeout(timer)
-  }, [isExempt, open, profile, dismissed, dismissedOnPath])
+  }, [paid, dueAt])
+
+  // Primo promemoria (Gratis, dopo 7 giorni): si può chiudere una volta
+  useEffect(() => {
+    if (isExempt || !profile || paid || !due || dismissed || dismissedOnPath !== null || open) return
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setOpen(true)
+  }, [isExempt, open, profile, paid, due, dismissed, dismissedOnPath])
 
   if (!profile || isExempt) return null
 
   const onSaved = () => {
-    writeState({ next: Number.MAX_SAFE_INTEGER })
     setOpen(false)
     setProfile(null)
     markComplete()
@@ -157,7 +151,7 @@ export default function ProfileReminder() {
 
   if (blocking) {
     return (
-      <div role="dialog" aria-modal="true" className="fixed inset-0 z-[80] flex items-end justify-center bg-black/80 backdrop-blur-sm p-0 sm:items-center sm:p-4">
+      <div role="dialog" aria-modal="true" data-profile-required className="fixed inset-0 z-[80] flex items-end justify-center bg-black/80 backdrop-blur-sm p-0 sm:items-center sm:p-4">
         <div className="max-h-[96vh] w-full max-w-2xl overflow-y-auto rounded-t-2xl sm:rounded-2xl bg-white">
           <ProfileCompleter key="blocking" initialData={profile} blocking onSaved={onSaved} />
         </div>

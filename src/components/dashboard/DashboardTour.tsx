@@ -48,6 +48,17 @@ export default function DashboardTour({ seen }: { seen: boolean }) {
     }
   }, [seen])
 
+  // Con il modulo obbligatorio del profilo aperto (piano appena attivato) il
+  // tour aspetta: riparte da solo quando i dati sono stati salvati
+  const [held, setHeld] = useState(false)
+  useEffect(() => {
+    if (!open) return
+    const check = () => setHeld(!!document.querySelector('[data-profile-required]'))
+    check()
+    const timer = window.setInterval(check, 700)
+    return () => window.clearInterval(timer)
+  }, [open])
+
   const step = STEPS[index]
 
   // Posizione dell'elemento illuminato (aggiornata con scroll e rotazione)
@@ -110,7 +121,7 @@ export default function DashboardTour({ seen }: { seen: boolean }) {
   }, [seen])
 
   useEffect(() => {
-    if (!open) return
+    if (!open || held) return
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') close()
       if (event.key === 'ArrowRight') setIndex((i) => Math.min(i + 1, STEPS.length - 1))
@@ -118,9 +129,9 @@ export default function DashboardTour({ seen }: { seen: boolean }) {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [open, close])
+  }, [open, held, close])
 
-  if (!open || typeof document === 'undefined') return null
+  if (!open || held || typeof document === 'undefined') return null
 
   const last = index === STEPS.length - 1
   const vw = window.innerWidth
