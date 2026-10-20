@@ -5,7 +5,8 @@ import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { X, AlertCircle, CheckCircle2 } from 'lucide-react'
 import { updateListingAction } from '@/app/actions/listings'
-import { type Listing, type ListingCategory, CATEGORY_ICONS, CATEGORY_I18N_KEYS, ALL_LISTING_CATEGORIES, isListingCountry } from '@/lib/listings'
+import { type Listing, type ListingCategory, CATEGORY_I18N_KEYS, ALL_LISTING_CATEGORIES, isListingCountry } from '@/lib/listings'
+import ListingPhotoField from '@/components/listings/ListingPhotoField'
 import ListingLocationFields, { type ListingLocationValue } from '@/components/listings/ListingLocationFields'
 
 type Props = {
@@ -114,7 +115,7 @@ export default function EditListingModal({ isOpen, onClose, listing, citiesByCou
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)]"
               >
                 {ALL_LISTING_CATEGORIES.map((cat) => (
-                  <option key={cat} value={cat}>{CATEGORY_ICONS[cat]} {t(CATEGORY_I18N_KEYS[cat])}</option>
+                  <option key={cat} value={cat}>{t(CATEGORY_I18N_KEYS[cat])}</option>
                 ))}
               </select>
             </div>
@@ -144,13 +145,8 @@ export default function EditListingModal({ isOpen, onClose, listing, citiesByCou
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t('listingImageUrl')}</label>
-                <input
-                  type="url"
-                  value={formData.imageUrl}
-                  onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)]"
-                />
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t('listingPhoto')}</label>
+                <ListingPhotoField value={formData.imageUrl} onChange={(url) => setFormData({ ...formData, imageUrl: url })} />
               </div>
             </div>
 

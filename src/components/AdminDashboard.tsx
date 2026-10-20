@@ -14,6 +14,7 @@ import type MatrixTreeComponent from '@/components/MatrixTree'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import AdminUserPicker from '@/components/admin/AdminUserPicker'
 import AdminGiftSubscriptionPanel from '@/components/admin/AdminGiftSubscriptionPanel'
+import ListingsReviewPanel from '@/components/admin/ListingsReviewPanel'
 import {
   adminUpdateProfile,
   adminSetToolEnabled,
@@ -1191,11 +1192,14 @@ L'accesso viene registrato.`))) return
   const renderListingReports = () => {
     return (
       <div className="space-y-6">
+        <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+          <Flag className="w-7 h-7" />
+          Bacheca
+        </h2>
+        {/* Bacheca libera e annunci da controllare prima della pubblicazione */}
+        <ListingsReviewPanel />
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <Flag className="w-7 h-7" />
-            Bacheca — Annunci segnalati
-          </h2>
+          <h3 className="text-lg font-bold text-gray-900">Annunci segnalati</h3>
           <p className="text-gray-600 mt-1">
             Annunci del marketplace segnalati dai Kumani perché non in linea con le regole. Puoi ignorare la
             segnalazione o eliminare direttamente l’annuncio.

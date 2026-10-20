@@ -1035,7 +1035,29 @@
     "reteAntitruffa": "Red Antiestafas",
     "reteAntitruffaDescription": "La comunidad que te protege: denuncia números, webs, IBAN y emails usados para estafar, mira las estafas de la semana y comprueba quién te ha llamado. Gratis para todos.",
     "convivium": "Convivium",
-    "conviviumDescription": "Crea una quedada (aperitivo, pizza, cena…) e invita con un enlace: quien lo recibe responde sin registrarse."
+    "conviviumDescription": "Crea una quedada (aperitivo, pizza, cena…) e invita con un enlace: quien lo recibe responde sin registrarse.",
+    "listingFreeNotice": "Publicación gratuita: el Staff revisa cada anuncio antes de que aparezca en el Tablón.",
+    "listingReviewNotice": "El Staff revisa cada anuncio antes de que aparezca en el Tablón.",
+    "listingFreeShort": "Publicación gratuita",
+    "listingSentTitle": "¡Anuncio enviado!",
+    "listingSentText": "El Staff lo revisa y lo publica en breve: recibirás un aviso en cuanto esté en línea.",
+    "listingStepWhat": "Qué ofreces",
+    "listingStepPhoto": "Precio y foto",
+    "listingPhoto": "Foto",
+    "listingPhotoUpload": "Sube una foto",
+    "listingPhotoHint": "Desde el móvil puedes hacerla o elegirla de la galería",
+    "listingPhotoUploading": "Subiendo…",
+    "listingPhotoChange": "Cambiar foto",
+    "listingPhotoRemove": "Quitar la foto",
+    "listingPhotoError": "Foto no subida: prueba con otra imagen (JPG, PNG o WebP).",
+    "listingPhotoTooMany": "Ya has subido muchas fotos: quita alguna de los anuncios antiguos.",
+    "listingsAllReviewed": "El Staff revisa todos los anuncios",
+    "listingsFreeBadge": "Publicar es gratis",
+    "listingInReview": "En revisión",
+    "listingRejected": "No aprobado",
+    "listingInReviewHint": "El Staff lo está revisando: aparece en el Tablón en cuanto se aprueba.",
+    "listingRejectedHint": "No aprobado: {reason}. Modifícalo y se revisará de nuevo.",
+    "newListingFree": "Nuevo anuncio (gratis)"
   },
   "neurobalance": {
     "tracksLabel": "Audios de relajación",
@@ -9055,7 +9077,11 @@
     "plansOpenTitle": "¡Los planes de KUMANI están abiertos!",
     "plansOpenBody": "Como te prometimos: desde hoy puedes suscribirte a Base o Pro.",
     "giftVoucherTitle": "🎁 ¡Has recibido un regalo de KUMANI!",
-    "giftVoucherBody": "Un año de KUMANI {plan} para ti: abre la tarjeta y actívalo con un toque."
+    "giftVoucherBody": "Un año de KUMANI {plan} para ti: abre la tarjeta y actívalo con un toque.",
+    "listingApprovedTitle": "✅ Tu anuncio está en línea",
+    "listingApprovedBody": "«{title}» ha sido aprobado y es visible en el Tablón.",
+    "listingRejectedTitle": "Tu anuncio no ha sido aprobado",
+    "listingRejectedBody": "«{title}»: {reason}. Puedes modificarlo y se revisará de nuevo."
   },
   "pushInvite": {
     "title": "Activa las notificaciones",

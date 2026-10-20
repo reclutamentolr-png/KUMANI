@@ -14,10 +14,13 @@ export default function ListingLocationFields({
   value,
   onChange,
   citiesByCountry,
+  showTitle = true,
 }: {
   value: ListingLocationValue
   onChange: (value: ListingLocationValue) => void
   citiesByCountry: Record<string, string[]>
+  // Il modulo di pubblicazione ha già il titolo della sezione
+  showTitle?: boolean
 }) {
   const t = useTranslations('marketplace')
   const locale = useLocale()
@@ -26,18 +29,20 @@ export default function ListingLocationFields({
   const countries = [...LISTING_COUNTRIES].sort((a, b) => countryName(a, locale).localeCompare(countryName(b, locale), locale))
 
   return (
-    <div className="rounded-lg border border-gray-200 p-3">
-      <p className="mb-2 flex items-center gap-1.5 text-sm font-medium text-gray-700">
-        <MapPin className="h-4 w-4 text-[var(--gold)]" /> {t('listingWhere')}
-      </p>
+    <div>
+      {showTitle && (
+        <p className="mb-2 flex items-center gap-1.5 text-sm font-bold text-[var(--ink)]">
+          <MapPin className="h-4 w-4 text-[var(--gold)]" /> {t('listingWhere')}
+        </p>
+      )}
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
         <label className="block">
-          <span className="mb-1 block text-xs text-gray-500">{t('listingCountry')} *</span>
+          <span className="mb-1.5 block text-sm font-bold text-[var(--ink)]">{t('listingCountry')} *</span>
           <select
             required
             value={value.countryCode}
             onChange={(e) => onChange({ ...value, countryCode: e.target.value })}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-[var(--gold)]"
+            className="w-full rounded-xl border-2 border-stone-300 bg-white px-4 py-2.5 text-[var(--ink)] placeholder:text-stone-400 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30"
           >
             <option value="" disabled>
               {t('listingCountry')}
@@ -50,7 +55,7 @@ export default function ListingLocationFields({
           </select>
         </label>
         <label className="block">
-          <span className="mb-1 block text-xs text-gray-500">{t('listingCity')}</span>
+          <span className="mb-1.5 block text-sm font-bold text-[var(--ink)]">{t('listingCity')}</span>
           <input
             type="text"
             maxLength={80}
@@ -58,7 +63,7 @@ export default function ListingLocationFields({
             value={value.city}
             onChange={(e) => onChange({ ...value, city: e.target.value })}
             placeholder={t('listingCityPlaceholder')}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-[var(--gold)]"
+            className="w-full rounded-xl border-2 border-stone-300 bg-white px-4 py-2.5 text-[var(--ink)] placeholder:text-stone-400 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30"
           />
           <datalist id={listId}>
             {suggestions.map((city) => (
@@ -67,7 +72,7 @@ export default function ListingLocationFields({
           </datalist>
         </label>
       </div>
-      <label className="mt-3 flex cursor-pointer items-start gap-2 text-sm text-gray-700">
+      <label className="mt-3 flex cursor-pointer items-start gap-2 text-sm font-medium text-[var(--ink)]">
         <input
           type="checkbox"
           checked={value.isRemote}

@@ -1035,7 +1035,29 @@
     "reteAntitruffa": "Réseau Anti-Arnaque",
     "reteAntitruffaDescription": "La communauté qui vous protège : signalez numéros, sites, IBAN et e-mails utilisés pour arnaquer, voyez les arnaques de la semaine et vérifiez qui vous a appelé. Gratuit pour tous.",
     "convivium": "Convivium",
-    "conviviumDescription": "Créez une soirée (apéro, pizza, dîner…) et invitez avec un lien : on répond sans s’inscrire."
+    "conviviumDescription": "Créez une soirée (apéro, pizza, dîner…) et invitez avec un lien : on répond sans s’inscrire.",
+    "listingFreeNotice": "Publication gratuite : chaque annonce est vérifiée par le Staff avant d’apparaître.",
+    "listingReviewNotice": "Chaque annonce est vérifiée par le Staff avant d’apparaître.",
+    "listingFreeShort": "Publication gratuite",
+    "listingSentTitle": "Annonce envoyée !",
+    "listingSentText": "Le Staff la vérifie et la publie rapidement : tu recevras un avis dès qu’elle sera en ligne.",
+    "listingStepWhat": "Ce que tu proposes",
+    "listingStepPhoto": "Prix et photo",
+    "listingPhoto": "Photo",
+    "listingPhotoUpload": "Ajouter une photo",
+    "listingPhotoHint": "Sur ton téléphone, tu peux la prendre ou la choisir dans la galerie",
+    "listingPhotoUploading": "Envoi…",
+    "listingPhotoChange": "Changer la photo",
+    "listingPhotoRemove": "Retirer la photo",
+    "listingPhotoError": "Photo non envoyée : essaie une autre image (JPG, PNG ou WebP).",
+    "listingPhotoTooMany": "Tu as déjà envoyé beaucoup de photos : retires-en des anciennes annonces.",
+    "listingsAllReviewed": "Toutes les annonces sont vérifiées par le Staff",
+    "listingsFreeBadge": "Publier est gratuit",
+    "listingInReview": "En vérification",
+    "listingRejected": "Non approuvée",
+    "listingInReviewHint": "Le Staff la vérifie : elle apparaît dès qu’elle est approuvée.",
+    "listingRejectedHint": "Non approuvée : {reason}. Modifie-la et elle sera revérifiée.",
+    "newListingFree": "Nouvelle annonce (gratuite)"
   },
   "neurobalance": {
     "tracksLabel": "Audios de relaxation",
@@ -9055,7 +9077,11 @@
     "plansOpenTitle": "Les formules KUMANI sont ouvertes !",
     "plansOpenBody": "Comme promis : dès aujourd’hui tu peux t’abonner à Base ou Pro.",
     "giftVoucherTitle": "🎁 Tu as reçu un cadeau de KUMANI !",
-    "giftVoucherBody": "Un an de KUMANI {plan} pour toi : ouvre la carte et active-le en un geste."
+    "giftVoucherBody": "Un an de KUMANI {plan} pour toi : ouvre la carte et active-le en un geste.",
+    "listingApprovedTitle": "✅ Ton annonce est en ligne",
+    "listingApprovedBody": "« {title} » a été approuvée et est visible.",
+    "listingRejectedTitle": "Ton annonce n’a pas été approuvée",
+    "listingRejectedBody": "« {title} » : {reason}. Tu peux la modifier, elle sera revérifiée."
   },
   "pushInvite": {
     "title": "Activez les notifications",

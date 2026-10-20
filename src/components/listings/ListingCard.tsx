@@ -5,7 +5,8 @@ import VerifiedBadge from '@/components/verification/VerifiedBadge'
 import ListingDetailButton from '@/components/ListingDetailButton'
 import ListingImageThumbnail from '@/components/ListingImageThumbnail'
 import ReportListingButton from '@/components/ReportListingButton'
-import { CATEGORY_ICONS, type Listing, type ListingCategory } from '@/lib/listings'
+import { type Listing, type ListingCategory } from '@/lib/listings'
+import ListingCategoryIcon, { ListingCategoryBadge } from '@/components/listings/ListingCategoryIcon'
 
 // Colore di ogni categoria (fascia della scheda senza foto e filtri).
 export const CATEGORY_STYLE: Record<ListingCategory, { band: string; chip: string }> = {
@@ -60,7 +61,7 @@ export default function ListingCard({
           </div>
         ) : (
           <div className={`flex h-28 items-center justify-center bg-gradient-to-br ${style.band}`}>
-            <span className="text-5xl drop-shadow-sm transition-transform duration-300 group-hover:scale-110">{CATEGORY_ICONS[listing.category]}</span>
+            <ListingCategoryBadge category={listing.category} />
           </div>
         )}
         {featured && (
@@ -74,7 +75,7 @@ export default function ListingCard({
         {/* Categoria e prezzo (riquadro nero con scritta oro) */}
         <div className="mb-2 flex items-center justify-between gap-2">
           <span className={`inline-flex min-w-0 items-center gap-1 truncate rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${style.chip}`}>
-            {CATEGORY_ICONS[listing.category]} {categoryLabel}
+            <ListingCategoryIcon category={listing.category} className="h-3.5 w-3.5 shrink-0" /> {categoryLabel}
           </span>
           {listing.price !== null && listing.price !== '' && (
             <span className="shrink-0 rounded-lg bg-[var(--ink)] px-3 py-1 text-base font-bold text-[var(--gold-bright)] shadow-sm">

@@ -1035,7 +1035,29 @@
     "reteAntitruffa": "Rede Antifraude",
     "reteAntitruffaDescription": "A comunidade que o protege: denuncie números, sites, IBAN e emails usados em burlas, veja as burlas da semana e verifique quem lhe ligou. Gratuito para todos.",
     "convivium": "Convivium",
-    "conviviumDescription": "Cria uma saída (aperitivo, pizza, jantar…) e convida com um link: quem o recebe responde sem se registar."
+    "conviviumDescription": "Cria uma saída (aperitivo, pizza, jantar…) e convida com um link: quem o recebe responde sem se registar.",
+    "listingFreeNotice": "Publicação gratuita: cada anúncio é verificado pelo Staff antes de aparecer.",
+    "listingReviewNotice": "Cada anúncio é verificado pelo Staff antes de aparecer.",
+    "listingFreeShort": "Publicação gratuita",
+    "listingSentTitle": "Anúncio enviado!",
+    "listingSentText": "O Staff verifica-o e publica-o em breve: recebes um aviso assim que estiver online.",
+    "listingStepWhat": "O que ofereces",
+    "listingStepPhoto": "Preço e foto",
+    "listingPhoto": "Foto",
+    "listingPhotoUpload": "Carregar uma foto",
+    "listingPhotoHint": "No telemóvel podes tirá-la ou escolhê-la da galeria",
+    "listingPhotoUploading": "A carregar…",
+    "listingPhotoChange": "Mudar foto",
+    "listingPhotoRemove": "Remover foto",
+    "listingPhotoError": "Foto não carregada: tenta outra imagem (JPG, PNG ou WebP).",
+    "listingPhotoTooMany": "Já carregaste muitas fotos: remove algumas de anúncios antigos.",
+    "listingsAllReviewed": "Todos os anúncios são verificados pelo Staff",
+    "listingsFreeBadge": "Publicar é grátis",
+    "listingInReview": "Em verificação",
+    "listingRejected": "Não aprovado",
+    "listingInReviewHint": "O Staff está a verificá-lo: aparece assim que for aprovado.",
+    "listingRejectedHint": "Não aprovado: {reason}. Edita-o e será verificado de novo.",
+    "newListingFree": "Novo anúncio (grátis)"
   },
   "neurobalance": {
     "tracksLabel": "Áudios de relaxamento",
@@ -9055,7 +9077,11 @@
     "plansOpenTitle": "Os planos da KUMANI estão abertos!",
     "plansOpenBody": "Como prometido: a partir de hoje podes subscrever Base ou Pro.",
     "giftVoucherTitle": "🎁 Recebeste um presente da KUMANI!",
-    "giftVoucherBody": "Um ano de KUMANI {plan} para ti: abre o cartão e ativa-o com um toque."
+    "giftVoucherBody": "Um ano de KUMANI {plan} para ti: abre o cartão e ativa-o com um toque.",
+    "listingApprovedTitle": "✅ O teu anúncio está online",
+    "listingApprovedBody": "«{title}» foi aprovado e está visível.",
+    "listingRejectedTitle": "O teu anúncio não foi aprovado",
+    "listingRejectedBody": "«{title}»: {reason}. Podes editá-lo e será verificado de novo."
   },
   "pushInvite": {
     "title": "Ative as notificações",

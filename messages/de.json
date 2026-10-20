@@ -1035,7 +1035,29 @@
     "reteAntitruffa": "Anti-Betrugs-Netz",
     "reteAntitruffaDescription": "Die Community, die dich schützt: Melde Nummern, Websites, IBANs und E-Mails, die für Betrug genutzt werden, sieh dir den Betrug der Woche an und prüfe, wer dich angerufen hat. Kostenlos für alle.",
     "convivium": "Convivium",
-    "conviviumDescription": "Erstelle einen Abend (Aperitif, Pizza, Abendessen…) und lade per Link ein: Gäste antworten ohne Anmeldung."
+    "conviviumDescription": "Erstelle einen Abend (Aperitif, Pizza, Abendessen…) und lade per Link ein: Gäste antworten ohne Anmeldung.",
+    "listingFreeNotice": "Kostenlos veröffentlichen: Jede Anzeige wird vom Staff geprüft, bevor sie erscheint.",
+    "listingReviewNotice": "Jede Anzeige wird vom Staff geprüft, bevor sie erscheint.",
+    "listingFreeShort": "Kostenlos veröffentlichen",
+    "listingSentTitle": "Anzeige gesendet!",
+    "listingSentText": "Das Staff prüft und veröffentlicht sie in Kürze: Du bekommst eine Nachricht, sobald sie online ist.",
+    "listingStepWhat": "Was du anbietest",
+    "listingStepPhoto": "Preis und Foto",
+    "listingPhoto": "Foto",
+    "listingPhotoUpload": "Foto hochladen",
+    "listingPhotoHint": "Am Handy kannst du eins aufnehmen oder aus der Galerie wählen",
+    "listingPhotoUploading": "Wird hochgeladen…",
+    "listingPhotoChange": "Foto ändern",
+    "listingPhotoRemove": "Foto entfernen",
+    "listingPhotoError": "Foto nicht hochgeladen: Versuche ein anderes Bild (JPG, PNG oder WebP).",
+    "listingPhotoTooMany": "Du hast schon viele Fotos hochgeladen: Entferne einige aus alten Anzeigen.",
+    "listingsAllReviewed": "Alle Anzeigen werden vom Staff geprüft",
+    "listingsFreeBadge": "Veröffentlichen ist kostenlos",
+    "listingInReview": "In Prüfung",
+    "listingRejected": "Nicht genehmigt",
+    "listingInReviewHint": "Das Staff prüft sie: Sie erscheint, sobald sie genehmigt ist.",
+    "listingRejectedHint": "Nicht genehmigt: {reason}. Bearbeite sie, dann wird sie erneut geprüft.",
+    "newListingFree": "Neue Anzeige (kostenlos)"
   },
   "neurobalance": {
     "tracksLabel": "Entspannungsaudios",
@@ -9055,7 +9077,11 @@
     "plansOpenTitle": "Die KUMANI-Tarife sind da!",
     "plansOpenBody": "Wie versprochen: Ab heute kannst du Base oder Pro abonnieren.",
     "giftVoucherTitle": "🎁 Du hast ein Geschenk von KUMANI bekommen!",
-    "giftVoucherBody": "Ein Jahr KUMANI {plan} für dich: Öffne die Karte und aktiviere es mit einem Tipp."
+    "giftVoucherBody": "Ein Jahr KUMANI {plan} für dich: Öffne die Karte und aktiviere es mit einem Tipp.",
+    "listingApprovedTitle": "✅ Deine Anzeige ist online",
+    "listingApprovedBody": "„{title}“ wurde genehmigt und ist sichtbar.",
+    "listingRejectedTitle": "Deine Anzeige wurde nicht genehmigt",
+    "listingRejectedBody": "„{title}“: {reason}. Du kannst sie bearbeiten, dann wird sie erneut geprüft."
   },
   "pushInvite": {
     "title": "Benachrichtigungen aktivieren",

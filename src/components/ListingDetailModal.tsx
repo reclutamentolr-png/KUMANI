@@ -3,7 +3,8 @@
 import { useTranslations, useLocale } from 'next-intl'
 import { X, Tag, User, Calendar, Sparkles, MapPin, Globe2 } from 'lucide-react'
 import { countryName } from '@/lib/events'
-import { CATEGORY_ICONS, CATEGORY_I18N_KEYS, type Listing, type ListingCategory } from '@/lib/listings'
+import { CATEGORY_I18N_KEYS, type Listing, type ListingCategory } from '@/lib/listings'
+import ListingCategoryIcon from '@/components/listings/ListingCategoryIcon'
 import ContactListingButton from '@/components/ContactListingButton'
 import VerifiedBadge from '@/components/verification/VerifiedBadge'
 import ReportListingButton from '@/components/ReportListingButton'
@@ -58,7 +59,7 @@ export default function ListingDetailModal({ isOpen, onClose, listing, authorNam
 
           <div className="flex items-center justify-between flex-wrap gap-2">
             <span className="text-xs font-bold bg-gray-100 text-gray-700 px-2 py-1 rounded">
-              {CATEGORY_ICONS[listing.category as ListingCategory]} {t(CATEGORY_I18N_KEYS[listing.category as ListingCategory] || 'catServizi')}
+              <ListingCategoryIcon category={listing.category} /> {t(CATEGORY_I18N_KEYS[listing.category as ListingCategory] || 'catServizi')}
             </span>
             {listing.price != null && listing.price !== '' && (
               <span className="rounded-lg bg-[var(--ink)] px-3 py-1 text-lg font-bold text-[var(--gold-bright)] shadow-sm">

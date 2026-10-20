@@ -119,6 +119,9 @@ export type Listing = {
   country_code?: string | null
   city?: string | null
   is_remote?: boolean | null
+  // Controllo dello Staff: in attesa, pubblicato o non approvato (con il motivo)
+  review_status?: 'pending' | 'approved' | 'rejected' | null
+  review_note?: string | null
   profiles?: { first_name?: string | null; last_name?: string | null } | null
 }
 

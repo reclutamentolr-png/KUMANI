@@ -3,8 +3,9 @@
 import { useId, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { ChevronDown, MapPin, Search, X } from 'lucide-react'
+import ListingCategoryTiles from './ListingCategoryTiles'
 
-type CategoryOption = { value: string; label: string; icon: string; count: number }
+type CategoryOption = { value: string; label: string; count: number }
 type CountryOption = { value: string; label: string }
 
 // Barra di ricerca della Bacheca: cosa (parole libere), categoria e dove
@@ -74,7 +75,7 @@ export default function ListingsFilters({
       role="search"
       className="mb-8 rounded-2xl border border-[var(--gold)]/25 bg-white p-4 shadow-sm sm:p-5"
     >
-      <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr_auto] lg:items-end">
+      <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_auto] lg:items-end">
         {/* Cosa cerchi? */}
         <label className="block md:col-span-2 lg:col-span-1">
           <span className={label}>{labels.what}</span>
@@ -88,22 +89,6 @@ export default function ListingsFilters({
               placeholder={labels.searchPlaceholder}
               className={`${field} pl-10 pr-4 placeholder:text-gray-400`}
             />
-          </span>
-        </label>
-
-        {/* Categoria */}
-        <label className="block">
-          <span className={label}>{labels.category}</span>
-          <span className="relative block">
-            <select value={category} onChange={(e) => go({ category: e.target.value })} className={`${field} appearance-none pl-4 pr-9`}>
-              <option value="">{allCategoriesLabel}</option>
-              {categories.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.icon} {option.label} ({option.count})
-                </option>
-              ))}
-            </select>
-            <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
           </span>
         </label>
 
@@ -164,6 +149,11 @@ export default function ListingsFilters({
           <Search className="h-5 w-5" />
           <span className="lg:hidden">{labels.search}</span>
         </button>
+      </div>
+
+      {/* Categoria: riquadri con icona dorata e nome */}
+      <div className="mt-4 border-t border-stone-200 pt-4">
+        <ListingCategoryTiles options={categories} value={category} onSelect={(value) => go({ category: value })} allLabel={allCategoriesLabel} label={labels.category} />
       </div>
 
       {hasFilters && (

@@ -8,6 +8,7 @@ import { revalidatePath } from 'next/cache'
 import { invalidateListingsCache } from '@/lib/listings-server'
 import { LISTING_COST, cleanListingCity, isListingCountry, type CreateListingData, type UpdateListingData } from '@/lib/listings'
 import { limitError } from '@/lib/appLimits'
+import { getListingsFreeMode } from '@/lib/listingsMode'
 
 // ✅ Service client per bypassare RLS
 const getServiceClient = () =>
@@ -55,19 +56,22 @@ export async function createListingAction(data: CreateListingData) {
   } = await supabase.auth.getUser()
   if (!user) return { success: false, message: 'listingErr_login' }
 
-  // 1+2. Spende atomicamente da daily_points (mai network_points, che è
-  // riservato a voucher e vetrina) — stesso guard "nella WHERE dell'UPDATE"
-  // usato da spend_network_points, evita la race condition del
-  // vecchio pattern read-then-write.
-  const { data: spendResult, error: spendError } = await supabase
-    .rpc('spend_daily_points', { p_amount: LISTING_COST })
-    .single<{ success: boolean; new_daily_points: number }>()
-
-  if (spendError || !spendResult) {
-    return { success: false, message: 'listingErr_points' }
-  }
-  if (!spendResult.success) {
-    return { success: false, message: `Ti servono almeno ${LISTING_COST} punti per pubblicare un annuncio` }
+  // «Bacheca libera» (Admin → Bacheca): niente KU Karma. Altrimenti si
+  // spende atomicamente da daily_points (mai network_points, che è riservato
+  // a voucher e vetrina) — guard "nella WHERE dell'UPDATE", niente race.
+  const free = await getListingsFreeMode()
+  let spendResult: { success: boolean; new_daily_points: number } | null = null
+  if (!free) {
+    const { data, error: spendError } = await supabase
+      .rpc('spend_daily_points', { p_amount: LISTING_COST })
+      .single<{ success: boolean; new_daily_points: number }>()
+    if (spendError || !data) {
+      return { success: false, message: 'listingErr_points' }
+    }
+    if (!data.success) {
+      return { success: false, message: `Ti servono almeno ${LISTING_COST} punti per pubblicare un annuncio` }
+    }
+    spendResult = data
   }
 
   // 3. Crea l'annuncio — con service role: l'inserimento diretto dal
@@ -79,6 +83,8 @@ export async function createListingAction(data: CreateListingData) {
       user_id: user.id,
       ...fields,
       ...location,
+      // Compare solo dopo il controllo dello Staff (Admin → Bacheca)
+      review_status: 'pending',
       expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
     })
     .select()
@@ -87,42 +93,18 @@ export async function createListingAction(data: CreateListingData) {
   if (error) {
     // Rollback punti se fallisce (solo server: refund_points non è più
     // chiamabile dal client, accreditava qualsiasi importo a chiunque).
-    await getServiceClient().rpc('add_daily_points_for', { p_user_id: user.id, p_amount: LISTING_COST })
+    if (spendResult) await getServiceClient().rpc('add_daily_points_for', { p_user_id: user.id, p_amount: LISTING_COST })
     const limit = await limitError(error)
     if (limit) return limit
     return { success: false, message: 'listingErr_create' }
   }
   invalidateListingsCache()
 
-  // Vetrina opzionale scelta in fase di creazione: riusa lo stesso RPC
-  // atomico (feature_listing) di FeatureListingButton, chiamato subito dopo
-  // sull'annuncio appena creato. Se fallisce (es. punti rete insufficienti
-  // per una race condition) l'annuncio resta comunque valido — non si fa
-  // rollback della creazione, si segnala solo l'esito della vetrina a parte.
-  if (data.featureDurationDays) {
-    const { data: featureResult } = await supabase
-      .rpc('feature_listing', { p_listing_id: listing.id, p_duration_days: data.featureDurationDays })
-      .single<{ success: boolean; reason: string | null; featured_until: string | null; new_network_points: number }>()
-
-    if (featureResult?.success) {
-      return {
-        success: true,
-        listing: { ...listing, featured_until: featureResult.featured_until },
-        newPoints: spendResult.new_daily_points,
-        featured: true,
-        newNetworkPoints: featureResult.new_network_points,
-      }
-    }
-    return {
-      success: true,
-      listing,
-      newPoints: spendResult.new_daily_points,
-      featured: false,
-      featureError: featureResult?.reason || 'error',
-    }
-  }
-
-  return { success: true, listing, newPoints: spendResult.new_daily_points }
+  // Avviso allo Staff: c'è un annuncio da controllare (badge della sezione)
+  revalidatePath('/admin')
+  // La vetrina si sceglie dopo, da «I miei annunci», quando l'annuncio è
+  // pubblicato: in revisione i giorni di vetrina andrebbero persi.
+  return { success: true, listing, pending: true, free, newPoints: spendResult?.new_daily_points ?? null }
 }
 
 // Same ownership pattern as republishListingAction: session-derived user,
@@ -331,4 +313,27 @@ export async function deleteConversationAction(
   revalidatePath('/marketplace')
 
   return { success: true, deletedCount }
+}
+// Foto dell'annuncio: il browser la comprime (WebP, lato lungo 1600 px), qui
+// si ricontrollano tipo e peso e la si carica con la chiave di servizio.
+// Al massimo 40 foto per persona (le più vecchie si possono sostituire).
+export async function uploadListingPhoto(formData: FormData): Promise<{ success: true; url: string } | { success: false; message: string }> {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return { success: false, message: 'listingErr_login' }
+  const file = formData.get('file')
+  if (!(file instanceof File)) return { success: false, message: 'listingPhotoError' }
+  const allowed: Record<string, string> = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' }
+  const ext = allowed[file.type]
+  if (!ext || file.size > 2 * 1024 * 1024) return { success: false, message: 'listingPhotoError' }
+
+  const service = getServiceClient()
+  const { data: files } = await service.storage.from('listing-photos').list(user.id, { limit: 100 })
+  if ((files?.length ?? 0) >= 40) return { success: false, message: 'listingPhotoTooMany' }
+  const path = `${user.id}/${crypto.randomUUID()}.${ext}`
+  const { error } = await service.storage.from('listing-photos').upload(path, Buffer.from(await file.arrayBuffer()), { contentType: file.type, upsert: false })
+  if (error) return { success: false, message: 'listingPhotoError' }
+  return { success: true, url: service.storage.from('listing-photos').getPublicUrl(path).data.publicUrl }
 }

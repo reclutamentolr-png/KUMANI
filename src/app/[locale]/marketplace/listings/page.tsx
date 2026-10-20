@@ -4,10 +4,12 @@ import { redirect } from 'next/navigation'
 import Link from '@/components/LocalizedLink'
 import { getTranslations } from 'next-intl/server'
 import { LISTINGS_PAGE_SIZE, getUnreadMessagesCount, getActiveListings, getFeaturedListings, getUserListings, getActiveListingCategoryCounts, getActiveListingById, getListingCitiesByCountry, cleanListingSearch } from '@/lib/listings-server'
-import { CATEGORY_ICONS, CATEGORY_I18N_KEYS, ALL_LISTING_CATEGORIES, LISTING_COUNTRIES, isListingCountry, cleanListingCity, type Listing, type ListingCategory } from '@/lib/listings'
+import ListingCategoryIcon from '@/components/listings/ListingCategoryIcon'
+import { getListingsFreeMode } from '@/lib/listingsMode'
+import { CATEGORY_I18N_KEYS, ALL_LISTING_CATEGORIES, LISTING_COUNTRIES, isListingCountry, cleanListingCity, type Listing, type ListingCategory } from '@/lib/listings'
 import { countryName } from '@/lib/events'
 import { deleteListingAction, republishListingAction } from '@/app/actions/listings'
-import { ArrowLeft, MessageCircle, Plus, Tag, Trash2, Eye, Calendar, RefreshCw, Sparkles, Coins, Info, ChevronDown, Hourglass } from 'lucide-react'
+import { ArrowLeft, MessageCircle, Plus, Tag, Trash2, Eye, Calendar, RefreshCw, Sparkles, Coins, Info, ChevronDown, Hourglass, ShieldCheck } from 'lucide-react'
 import ListingForm from '@/components/ListingForm'
 import ChatModalWrapper from '@/components/ChatModalWrapper'
 import FeatureListingButton from '@/components/FeatureListingButton'
@@ -62,12 +64,13 @@ export default async function ListingsPage({
 
   // Letture indipendenti tutte insieme: profilo, costi della vetrina (anche
   // in KU), annunci dell'utente e stato della Bacheca
-  const [{ data: profile }, { data: showcaseSettings }, { data: kuShowcase }, myListings, online] = await Promise.all([
+  const [{ data: profile }, { data: showcaseSettings }, { data: kuShowcase }, myListings, online, freeMode] = await Promise.all([
     supabase.rpc('get_my_profile').maybeSingle<{ daily_points: number | null; network_points: number | null; first_name: string | null; last_name: string | null; country_code: string | null }>(),
     supabase.from('system_settings').select('key, value').in('key', ['listing_feature_cost_7d', 'listing_feature_cost_15d']),
     supabase.from('ku_features').select('enabled, config').eq('key', 'showcase').maybeSingle(),
     getUserListings(user.id),
     isToolOnline('listings'),
+    getListingsFreeMode(),
   ])
 
   // Dove: di partenza la nazione del profilo; ?country=all per tutti i paesi
@@ -174,6 +177,16 @@ export default async function ListingsPage({
             <div className="max-w-xl">
               <h1 className="text-3xl font-bold sm:text-4xl">{t('listings')}</h1>
               <p className="mt-2 text-white/70">{t('listingsDescription')}</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/40 bg-emerald-500/15 px-3 py-1 text-xs font-bold text-emerald-200">
+                  <ShieldCheck className="h-3.5 w-3.5" /> {t('listingsAllReviewed')}
+                </span>
+                {freeMode && (
+                  <span className="inline-flex items-center rounded-full border border-[var(--gold)]/50 bg-[var(--gold)]/15 px-3 py-1 text-xs font-bold text-[var(--gold-bright)]">
+                    {t('listingsFreeBadge')}
+                  </span>
+                )}
+              </div>
               <div className="mt-5 flex flex-wrap gap-3">
                 <div className="rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-2.5">
                   <p className="text-[11px] uppercase tracking-wider text-white/50">{t('myPoints').replace(':', '')}</p>
@@ -195,7 +208,7 @@ export default async function ListingsPage({
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3.5 font-bold text-[var(--ink)] shadow-lg transition-all hover:brightness-110"
               >
                 <Plus className="h-5 w-5" />
-                {t('newListing')}
+                {freeMode ? t('newListingFree') : t('newListing')}
               </Link>
               {/* Messaggi ricevuti e inviati per gli annunci */}
               <Link
@@ -243,6 +256,7 @@ export default async function ListingsPage({
             featureCost15d={featureCost15d}
             defaultCountry={defaultCountry}
             citiesByCountry={citiesByCountry}
+            freeMode={freeMode}
           />
         )}
 
@@ -251,7 +265,6 @@ export default async function ListingsPage({
           categories={ALL_LISTING_CATEGORIES.map((cat) => ({
             value: cat,
             label: getCategoryLabel(cat),
-            icon: CATEGORY_ICONS[cat],
             count: categoryCounts[cat] ?? 0,
           }))}
           countries={countryOptions}
@@ -302,6 +315,8 @@ export default async function ListingsPage({
                 const featuredUntil = listing.featured_until ? new Date(listing.featured_until) : null
                 const isFeatured = featuredUntil !== null && featuredUntil.getTime() > now
                 const style = CATEGORY_STYLE[listing.category as ListingCategory] ?? CATEGORY_STYLE.servizi
+                // Controllo dello Staff: finché non è approvato non si vede in Bacheca
+                const review = listing.review_status ?? 'approved'
                 return (
                   <div
                     key={listing.id}
@@ -313,9 +328,13 @@ export default async function ListingsPage({
                     <div className="flex flex-1 flex-col p-4">
                       <div className="mb-2 flex items-center justify-between gap-2">
                         <span className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${style.chip}`}>
-                          {CATEGORY_ICONS[listing.category as ListingCategory]} {getCategoryLabel(listing.category as ListingCategory)}
+                          <ListingCategoryIcon category={listing.category} /> {getCategoryLabel(listing.category as ListingCategory)}
                         </span>
-                        {isExpired ? (
+                        {review === 'pending' ? (
+                          <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-800">{t('listingInReview')}</span>
+                        ) : review === 'rejected' ? (
+                          <span className="rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-red-700">{t('listingRejected')}</span>
+                        ) : isExpired ? (
                           <span className="rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-red-600">{t('listingUnpublished')}</span>
                         ) : isFeatured ? (
                           <span className="inline-flex items-center gap-1 rounded-full bg-[var(--ink)] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[var(--gold-bright)]">
@@ -326,6 +345,12 @@ export default async function ListingsPage({
                         )}
                       </div>
                       <h3 className="mb-1 font-bold text-[var(--ink)]">{listing.title}</h3>
+                      {review === 'pending' && <p className="mb-2 rounded-lg bg-amber-50 px-2.5 py-1.5 text-xs text-amber-900">{t('listingInReviewHint')}</p>}
+                      {review === 'rejected' && (
+                        <p className="mb-2 rounded-lg bg-red-50 px-2.5 py-1.5 text-xs text-red-800">
+                          {t('listingRejectedHint', { reason: listing.review_note || '—' })}
+                        </p>
+                      )}
                       <p className="mb-3 line-clamp-2 text-sm text-gray-600">{listing.description}</p>
                       {listing.price && (
                         <p className="mb-2 w-fit rounded-lg bg-[var(--ink)] px-3 py-1 text-base font-bold text-[var(--gold-bright)] shadow-sm">{euro(listing.price)}</p>
@@ -348,7 +373,7 @@ export default async function ListingsPage({
                           {isExpired ? t('expiredOn') : t('expires')}: {new Date(listing.expires_at).toLocaleDateString(locale)}
                         </span>
                         <div className="flex items-center gap-3">
-                          {isExpired && (
+                          {isExpired && review === 'approved' && (
                             <form action={async () => {
                               'use server'
                               await republishListingAction(listing.id)
@@ -369,7 +394,7 @@ export default async function ListingsPage({
                           </form>
                         </div>
                       </div>
-                      {!isExpired && !isFeatured && (
+                      {!isExpired && !isFeatured && review === 'approved' && (
                         <FeatureListingButton listingId={listing.id} cost7d={featureCost7d} cost15d={featureCost15d} kuCosts={kuCosts} />
                       )}
                     </div>
@@ -426,7 +451,7 @@ export default async function ListingsPage({
                 href="/marketplace/listings?showForm=true"
                 className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-5 py-3 font-bold text-[var(--ink)]"
               >
-                <Plus className="h-5 w-5" /> {t('newListing')}
+                <Plus className="h-5 w-5" /> {freeMode ? t('newListingFree') : t('newListing')}
               </Link>
             </div>
           ) : (

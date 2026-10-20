@@ -1072,7 +1072,29 @@
     "reteAntitruffa": "Anti-Scam Network",
     "reteAntitruffaDescription": "The community that protects you: report phone numbers, websites, IBANs and emails used for scams, see the scams of the week and check who called you. Free for everyone.",
     "convivium": "Convivium",
-    "conviviumDescription": "Create an evening (drinks, pizza, dinner…) and invite with a link: guests reply without signing up."
+    "conviviumDescription": "Create an evening (drinks, pizza, dinner…) and invite with a link: guests reply without signing up.",
+    "listingFreeNotice": "Free posting: every listing is checked by the Staff before it appears on the Board.",
+    "listingReviewNotice": "Every listing is checked by the Staff before it appears on the Board.",
+    "listingFreeShort": "Free posting",
+    "listingSentTitle": "Listing sent!",
+    "listingSentText": "The Staff will check and publish it shortly: you’ll get a notice as soon as it’s live.",
+    "listingStepWhat": "What you offer",
+    "listingStepPhoto": "Price and photo",
+    "listingPhoto": "Photo",
+    "listingPhotoUpload": "Upload a photo",
+    "listingPhotoHint": "On your phone you can take one or pick it from the gallery",
+    "listingPhotoUploading": "Uploading…",
+    "listingPhotoChange": "Change photo",
+    "listingPhotoRemove": "Remove photo",
+    "listingPhotoError": "Photo not uploaded: try another image (JPG, PNG or WebP).",
+    "listingPhotoTooMany": "You’ve uploaded many photos already: remove some from old listings.",
+    "listingsAllReviewed": "All listings are checked by the Staff",
+    "listingsFreeBadge": "Posting is free",
+    "listingInReview": "Under review",
+    "listingRejected": "Not approved",
+    "listingInReviewHint": "The Staff is checking it: it appears on the Board once approved.",
+    "listingRejectedHint": "Not approved: {reason}. Edit it and it will be checked again.",
+    "newListingFree": "New listing (free)"
   },
   "neurobalance": {
     "tracksLabel": "Relaxation audio",
@@ -9055,7 +9077,11 @@
     "plansOpenTitle": "KUMANI plans are open!",
     "plansOpenBody": "As promised: from today you can subscribe to Base or Pro.",
     "giftVoucherTitle": "🎁 You received a gift from KUMANI!",
-    "giftVoucherBody": "A year of KUMANI {plan} for you: open the card and activate it with one tap."
+    "giftVoucherBody": "A year of KUMANI {plan} for you: open the card and activate it with one tap.",
+    "listingApprovedTitle": "✅ Your listing is live",
+    "listingApprovedBody": "“{title}” was approved and is visible on the Board.",
+    "listingRejectedTitle": "Your listing was not approved",
+    "listingRejectedBody": "“{title}”: {reason}. You can edit it and it will be checked again."
   },
   "pushInvite": {
     "title": "Turn on notifications",

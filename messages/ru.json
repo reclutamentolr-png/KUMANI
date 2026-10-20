@@ -1035,7 +1035,29 @@
     "reteAntitruffa": "Сеть против мошенников",
     "reteAntitruffaDescription": "Сообщество, которое вас защищает: сообщайте о номерах, сайтах, IBAN и email мошенников, смотрите схемы недели и проверяйте, кто вам звонил. Бесплатно для всех.",
     "convivium": "Convivium",
-    "conviviumDescription": "Создай встречу (аперитив, пицца, ужин…) и пригласи по ссылке: гости отвечают без регистрации."
+    "conviviumDescription": "Создай встречу (аперитив, пицца, ужин…) и пригласи по ссылке: гости отвечают без регистрации.",
+    "listingFreeNotice": "Публикация бесплатна: каждое объявление проверяет Staff перед публикацией.",
+    "listingReviewNotice": "Каждое объявление проверяет Staff перед публикацией.",
+    "listingFreeShort": "Бесплатная публикация",
+    "listingSentTitle": "Объявление отправлено!",
+    "listingSentText": "Staff проверит и опубликует его в ближайшее время: вы получите уведомление.",
+    "listingStepWhat": "Что вы предлагаете",
+    "listingStepPhoto": "Цена и фото",
+    "listingPhoto": "Фото",
+    "listingPhotoUpload": "Загрузить фото",
+    "listingPhotoHint": "На телефоне можно сделать снимок или выбрать из галереи",
+    "listingPhotoUploading": "Загрузка…",
+    "listingPhotoChange": "Сменить фото",
+    "listingPhotoRemove": "Убрать фото",
+    "listingPhotoError": "Фото не загружено: попробуйте другое изображение (JPG, PNG или WebP).",
+    "listingPhotoTooMany": "Вы уже загрузили много фото: удалите часть из старых объявлений.",
+    "listingsAllReviewed": "Все объявления проверяет Staff",
+    "listingsFreeBadge": "Публикация бесплатна",
+    "listingInReview": "На проверке",
+    "listingRejected": "Не одобрено",
+    "listingInReviewHint": "Staff проверяет объявление: оно появится после одобрения.",
+    "listingRejectedHint": "Не одобрено: {reason}. Измените его, и оно будет проверено снова.",
+    "newListingFree": "Новое объявление (бесплатно)"
   },
   "neurobalance": {
     "tracksLabel": "Аудио для расслабления",
@@ -9055,7 +9077,11 @@
     "plansOpenTitle": "Тарифы KUMANI открыты!",
     "plansOpenBody": "Как и обещали: с сегодняшнего дня можно оформить Base или Pro.",
     "giftVoucherTitle": "🎁 Вам подарок от KUMANI!",
-    "giftVoucherBody": "Год KUMANI {plan} для вас: откройте открытку и активируйте одним касанием."
+    "giftVoucherBody": "Год KUMANI {plan} для вас: откройте открытку и активируйте одним касанием.",
+    "listingApprovedTitle": "✅ Ваше объявление опубликовано",
+    "listingApprovedBody": "«{title}» одобрено и видно в разделе объявлений.",
+    "listingRejectedTitle": "Ваше объявление не одобрено",
+    "listingRejectedBody": "«{title}»: {reason}. Вы можете изменить его, и оно будет проверено снова."
   },
   "pushInvite": {
     "title": "Включите уведомления",

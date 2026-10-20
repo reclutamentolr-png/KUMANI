@@ -1,10 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { useTranslations, useLocale } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { createListingAction } from '@/app/actions/listings'
-import { LISTING_COST, type ListingCategory, CATEGORY_ICONS, CATEGORY_I18N_KEYS, ALL_LISTING_CATEGORIES } from '@/lib/listings'
-import { X, AlertCircle, CheckCircle2, Sparkles } from 'lucide-react'
+import { LISTING_COST, type ListingCategory, CATEGORY_I18N_KEYS, ALL_LISTING_CATEGORIES } from '@/lib/listings'
+import ListingPhotoField from '@/components/listings/ListingPhotoField'
+import ListingCategoryTiles from '@/components/listings/ListingCategoryTiles'
+import { X, AlertCircle, CheckCircle2, ShieldCheck } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import ListingLocationFields, { type ListingLocationValue } from '@/components/listings/ListingLocationFields'
 import CancelButton, { cancelButtonClass } from '@/components/ui/CancelButton'
@@ -20,17 +22,16 @@ type Props = {
   // Nazione proposta (quella del profilo) e città già usate, per i suggerimenti
   defaultCountry: string
   citiesByCountry: Record<string, string[]>
+  // «Bacheca libera» (Admin): pubblicare è gratis
+  freeMode?: boolean
 }
 
-export default function ListingForm({ userId, currentPoints, onCloseUrl, networkPoints, featureCost7d, featureCost15d, defaultCountry, citiesByCountry }: Props) {
+export default function ListingForm({ userId, currentPoints, onCloseUrl, defaultCountry, citiesByCountry, freeMode = false }: Props) {
   const t = useTranslations('marketplace')
   const commonT = useTranslations('common')
-  const locale = useLocale()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
-  const [featuredUntil, setFeaturedUntil] = useState<string | null>(null)
-  const [featureError, setFeatureError] = useState(false)
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -39,11 +40,8 @@ export default function ListingForm({ userId, currentPoints, onCloseUrl, network
     imageUrl: '',
   })
   const [location, setLocation] = useState<ListingLocationValue>({ countryCode: defaultCountry, city: '', isRemote: false })
-  const [showcaseDuration, setShowcaseDuration] = useState<7 | 15 | null>(null)
 
-  const canPublish = currentPoints >= LISTING_COST
-  const showcaseCost = showcaseDuration === 7 ? featureCost7d : showcaseDuration === 15 ? featureCost15d : 0
-  const canAffordShowcase = showcaseDuration === null || networkPoints >= showcaseCost
+  const canPublish = freeMode || currentPoints >= LISTING_COST
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -66,15 +64,10 @@ export default function ListingForm({ userId, currentPoints, onCloseUrl, network
       countryCode: location.countryCode,
       city: location.city || undefined,
       isRemote: location.isRemote,
-      featureDurationDays: showcaseDuration || undefined
     })
 
     if (result.success) {
       setSuccess(true)
-      if ('featured' in result) {
-        setFeaturedUntil(result.featured && 'listing' in result ? ((result.listing as { featured_until?: string | null }).featured_until ?? null) : null)
-        setFeatureError(!result.featured)
-      }
     } else {
       setError(limitTextOf(result) ?? (result.message && t.has(result.message) ? t(result.message) : t('publishError')))
     }
@@ -85,17 +78,12 @@ export default function ListingForm({ userId, currentPoints, onCloseUrl, network
     return (
       <div className="bg-green-50 border border-green-200 rounded-2xl p-8 mb-8 text-center">
         <CheckCircle2 className="w-12 h-12 text-green-600 mx-auto mb-3" />
-        <h3 className="text-xl font-bold text-green-900 mb-2">{t('publishSuccess')}</h3>
-        <p className="text-green-700 mb-2">
-          {t('pointsDeducted', { cost: LISTING_COST, remaining: currentPoints - LISTING_COST })}
-        </p>
-        {featuredUntil && (
-          <p className="text-amber-700 mb-2 flex items-center justify-center gap-1">
-            <Sparkles className="w-4 h-4" /> {t('createdAndFeatured', { date: new Date(featuredUntil).toLocaleDateString(locale) })}
+        <h3 className="text-xl font-bold text-green-900 mb-2">{t('listingSentTitle')}</h3>
+        <p className="text-green-700 mb-2">{t('listingSentText')}</p>
+        {!freeMode && (
+          <p className="text-green-700 mb-2">
+            {t('pointsDeducted', { cost: LISTING_COST, remaining: currentPoints - LISTING_COST })}
           </p>
-        )}
-        {featureError && (
-          <p className="text-orange-700 mb-2">{t('createdFeatureFailed')}</p>
         )}
         <Link href={onCloseUrl} className="inline-block bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold mt-2">
           {t('backToMarketplace')}
@@ -105,14 +93,24 @@ export default function ListingForm({ userId, currentPoints, onCloseUrl, network
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-lg p-6 mb-8">
-      <div className="flex justify-between items-center mb-1">
-        <h2 className="text-xl font-bold text-gray-900">{t('publishYourListing')}</h2>
-        <Link href={onCloseUrl} className="text-gray-500 hover:text-gray-700">
-          <X className="w-5 h-5" />
-        </Link>
+    <div className="mb-8 overflow-hidden rounded-3xl border-2 border-[var(--ink)]/15 bg-white shadow-[0_18px_44px_rgba(23,23,23,0.16)]">
+      {/* Intestazione nera e oro */}
+      <div className="bg-[var(--ink)] px-6 py-5 text-white">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h2 className="text-xl font-extrabold sm:text-2xl">{t('publishYourListing')}</h2>
+            <p className="mt-1 text-sm text-white/70">{t('listingValidityNotice')}</p>
+          </div>
+          <Link href={onCloseUrl} aria-label={commonT('close')} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white/70 hover:bg-white/10 hover:text-white">
+            <X className="h-5 w-5" />
+          </Link>
+        </div>
+        {/* Gratis con la Bacheca libera; il controllo dello Staff c'è sempre */}
+        <p className="mt-4 flex items-start gap-2 rounded-xl border border-[var(--gold)]/40 bg-[var(--gold)]/10 px-3 py-2.5 text-sm font-semibold text-[var(--gold-bright)]">
+          <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0" /> {freeMode ? t('listingFreeNotice') : t('listingReviewNotice')}
+        </p>
       </div>
-      <p className="text-xs text-gray-500 mb-6">{t('listingValidityNotice')}</p>
+      <div className="p-6">
 
       {!canPublish && (
         <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-6 flex items-start gap-3">
@@ -128,84 +126,57 @@ export default function ListingForm({ userId, currentPoints, onCloseUrl, network
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-lg text-sm">{error}</div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <p className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.14em] text-[var(--gold)]">
+          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--ink)] text-[11px] text-[var(--gold-bright)]">1</span> {t('listingStepWhat')}
+        </p>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">{t('listingTitle')} *</label>
-          <input type="text" required maxLength={100} value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)]" placeholder={t('listingTitlePlaceholder')} />
+          <label className="mb-1.5 block text-sm font-bold text-[var(--ink)]">{t('listingTitle')} *</label>
+          <input type="text" required maxLength={100} value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} className="w-full rounded-xl border-2 border-stone-300 bg-white px-4 py-2.5 text-[var(--ink)] placeholder:text-stone-400 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30" placeholder={t('listingTitlePlaceholder')} />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">{t('listingCategory')} *</label>
-          <select value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value as ListingCategory })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)]">
-            {ALL_LISTING_CATEGORIES.map((cat) => (
-              <option key={cat} value={cat}>{CATEGORY_ICONS[cat]} {t(CATEGORY_I18N_KEYS[cat])}</option>
-            ))}
-          </select>
-        </div>
+        <ListingCategoryTiles
+          options={ALL_LISTING_CATEGORIES.map((cat) => ({ value: cat, label: t(CATEGORY_I18N_KEYS[cat]) }))}
+          value={formData.category}
+          onSelect={(value) => setFormData({ ...formData, category: value as ListingCategory })}
+          label={`${t('listingCategory')} *`}
+        />
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">{t('listingDescription')} *</label>
-          <textarea required maxLength={1000} rows={4} value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)]" placeholder={t('listingDescPlaceholder')} />
+          <label className="mb-1.5 block text-sm font-bold text-[var(--ink)]">{t('listingDescription')} *</label>
+          <textarea required maxLength={1000} rows={4} value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} className="w-full rounded-xl border-2 border-stone-300 bg-white px-4 py-2.5 text-[var(--ink)] placeholder:text-stone-400 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30" placeholder={t('listingDescPlaceholder')} />
         </div>
 
+        <p className="flex items-center gap-2 border-t border-stone-200 pt-5 text-xs font-extrabold uppercase tracking-[0.14em] text-[var(--gold)]">
+          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--ink)] text-[11px] text-[var(--gold-bright)]">2</span> {t('listingStepPhoto')}
+        </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">{t('listingPrice')}</label>
-            <input type="number" min="0" step="0.01" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)]" placeholder="0.00" />
+            <label className="mb-1.5 block text-sm font-bold text-[var(--ink)]">{t('listingPrice')}</label>
+            <input type="number" min="0" step="0.01" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} className="w-full rounded-xl border-2 border-stone-300 bg-white px-4 py-2.5 text-[var(--ink)] placeholder:text-stone-400 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30" placeholder="0.00" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">{t('listingImageUrl')}</label>
-            <input type="url" value={formData.imageUrl} onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)]" placeholder={t('listingImageUrlPlaceholder')} />
+            <label className="mb-1.5 block text-sm font-bold text-[var(--ink)]">{t('listingPhoto')}</label>
+            <ListingPhotoField value={formData.imageUrl} onChange={(url) => setFormData({ ...formData, imageUrl: url })} />
           </div>
         </div>
 
-        <ListingLocationFields value={location} onChange={setLocation} citiesByCountry={citiesByCountry} />
+        <p className="flex items-center gap-2 border-t border-stone-200 pt-5 text-xs font-extrabold uppercase tracking-[0.14em] text-[var(--gold)]">
+          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--ink)] text-[11px] text-[var(--gold-bright)]">3</span> {t('listingWhere')}
+        </p>
+        <ListingLocationFields value={location} onChange={setLocation} citiesByCountry={citiesByCountry} showTitle={false} />
 
-        <div className="rounded-lg border border-amber-200 bg-amber-50 p-3">
-          <p className="text-xs font-semibold text-amber-900 mb-1 flex items-center gap-1">
-            <Sparkles className="w-3.5 h-3.5" /> {t('showcaseOptional')}
-          </p>
-          <p className="text-xs text-amber-700 mb-2">{t('showcaseAtCreationHint')}</p>
-          <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={() => setShowcaseDuration(null)}
-              className={`rounded-lg text-xs font-bold px-3 py-1.5 border ${showcaseDuration === null ? 'bg-amber-500 text-white border-amber-500' : 'bg-white text-amber-700 border-amber-200'}`}
-            >
-              {t('showcaseNone')}
-            </button>
-            <button
-              type="button"
-              onClick={() => setShowcaseDuration(7)}
-              className={`rounded-lg text-xs font-bold px-3 py-1.5 border ${showcaseDuration === 7 ? 'bg-amber-500 text-white border-amber-500' : 'bg-white text-amber-700 border-amber-200'}`}
-            >
-              {t('showcaseDays', { days: 7 })} · {featureCost7d} {t('networkPointsShort')}
-            </button>
-            <button
-              type="button"
-              onClick={() => setShowcaseDuration(15)}
-              className={`rounded-lg text-xs font-bold px-3 py-1.5 border ${showcaseDuration === 15 ? 'bg-amber-500 text-white border-amber-500' : 'bg-white text-amber-700 border-amber-200'}`}
-            >
-              {t('showcaseDays', { days: 15 })} · {featureCost15d} {t('networkPointsShort')}
-            </button>
-          </div>
-          {!canAffordShowcase && (
-            <p className="text-xs text-red-600 mt-2 flex items-center gap-1">
-              <AlertCircle className="w-3 h-3" /> {t('featureErrorInsufficientPoints')}
-            </p>
-          )}
-        </div>
-
-        <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-          <p className="text-sm text-gray-600">{t('cost')}: <strong className="text-yellow-600">{LISTING_COST} {commonT('points')}</strong> ({t('remaining')}: <strong>{currentPoints - LISTING_COST}</strong> {commonT('points')})</p>
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t-2 border-stone-200 pt-5">
+          {freeMode ? <p className="text-sm font-semibold text-emerald-700">{t('listingFreeShort')}</p> : <p className="text-sm text-gray-600">{t('cost')}: <strong className="text-yellow-600">{LISTING_COST} {commonT('points')}</strong> ({t('remaining')}: <strong>{currentPoints - LISTING_COST}</strong> {commonT('points')})</p>}
           <div className="flex shrink-0 items-center gap-2">
             <CancelButton className={cancelButtonClass} href={onCloseUrl} />
-            <button type="submit" disabled={loading || !canPublish || !canAffordShowcase} className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white px-6 py-2.5 rounded-lg font-bold shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+            <button type="submit" disabled={loading || !canPublish} className="flex min-h-11 items-center gap-2 rounded-xl bg-[var(--ink)] px-6 font-extrabold text-[var(--gold-bright)] shadow-md hover:bg-[var(--ink-soft)] disabled:cursor-not-allowed disabled:opacity-50">
               {loading ? t('publishing') : t('publish')}
             </button>
           </div>
         </div>
       </form>
+      </div>
     </div>
   )
 }
