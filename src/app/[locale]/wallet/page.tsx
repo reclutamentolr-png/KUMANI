@@ -673,6 +673,8 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
             initialVouchers={myVouchers}
             pendingPoints={networkWallet.pendingPoints}
             confirmDays={networkWallet.confirmDays}
+            siteUrl={SITE_URL}
+            firstName={profile.first_name ?? ''}
           />
         </WalletSection>
       </main>

@@ -117,6 +117,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "verifiedBadge",
   "verifoto",
   "veritas",
+  "voucherCard",
   "voucherPrint",
   "voucherReceipt",
   "voucherWallet",

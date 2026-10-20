@@ -5,6 +5,7 @@ const withNextIntl = createNextIntlPlugin('./i18n.ts');
 
 // Percorsi delle pagine pubbliche con dati personali (vedi headers sotto)
 const PRIVATE_PAGES = [
+  '/biglietto/:path*',
   '/cv/:path*',
   '/ref/:path*',
   '/c/:path*',
