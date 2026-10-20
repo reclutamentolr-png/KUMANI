@@ -30,7 +30,7 @@ export default async function EventsMyPage({
 
   // Ritorno dal pagamento delle commissioni: le segniamo pagate subito (il
   // webhook fa lo stesso, questa è la riserva se arriva in ritardo).
-  let notice: 'paid' | 'pending' | 'canceled' | 'error' | 'none' | null = null
+  let notice: 'paid' | 'pending' | 'canceled' | 'error' | 'none' | 'soon' | null = null
   if (query.fee_session && /^cs_[A-Za-z0-9_]+$/.test(query.fee_session)) {
     try {
       notice = (await markEventFeesPaid(query.fee_session, user.id)) ? 'paid' : 'pending'
@@ -38,7 +38,7 @@ export default async function EventsMyPage({
       console.error('[Events] mark fees paid failed:', err instanceof Error ? err.message : err)
       notice = 'pending'
     }
-  } else if (query.fee === 'canceled' || query.fee === 'error' || query.fee === 'none') {
+  } else if (query.fee === 'canceled' || query.fee === 'error' || query.fee === 'none' || query.fee === 'soon') {
     notice = query.fee
   }
 

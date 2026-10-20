@@ -3437,7 +3437,8 @@
     "upgradeError_stripe_error": "Zahlung fehlgeschlagen. Bitte versuche es gleich noch einmal.",
     "upgradeError_consent": "Setze das Häkchen, um die sofortige Aktivierung des Pro-Tarifs zu verlangen.",
     "passCreditNote": "Du hast {amount} Guthaben aus deinen noch aktiven Pässen: Wir ziehen es von der ersten Zahlung ab. Die im Tarif enthaltenen Pässe enden, sobald der Tarif aktiv ist.",
-    "passCreditApplied": "Guthaben aus deinen Pässen bereits abgezogen: {amount}. Die in Pro enthaltenen Pässe enden."
+    "passCreditApplied": "Guthaben aus deinen Pässen bereits abgezogen: {amount}. Die in Pro enthaltenen Pässe enden.",
+    "upgradeError_soon": "Zahlungen bei KUMANI sind ab dem Start der Tarife möglich: bitte versuche es in ein paar Tagen erneut."
   },
   "proArea": {
     "convivioTitle": "Kordata · Gruppenangebote",
@@ -4960,7 +4961,8 @@
     "error_free_declaration": "Für ein kostenloses Event musst du erklären, dass von den Teilnehmenden keine Zahlung verlangt wird.",
     "error_price_paid": "Für ein kostenpflichtiges Event gib einen Preis über 0 € an oder wähle „Kostenloses Event“.",
     "feeFormulaFree": "{participants} Angemeldete × {fee} (kostenloses Event)",
-    "error_invalid_date": "Dieses Datum gibt es im Kalender nicht: Tag und Monat prüfen."
+    "error_invalid_date": "Dieses Datum gibt es im Kalender nicht: Tag und Monat prüfen.",
+    "notice_soon": "Zahlungen bei KUMANI sind ab dem Start der Tarife möglich: bitte versuche es in ein paar Tagen erneut."
   },
   "verification": {
     "title_timebank": "An der Time Bank teilnehmen",
@@ -6563,7 +6565,8 @@
     "walletActivate": "Dienst aktivieren",
     "walletCouponTitle": "{service}-Pass – 1 Jahr",
     "walletCouponHint": "Aktiviere ihn selbst oder verschenke den Code:",
-    "error_terms": "Um fortzufahren, akzeptiere die Nutzungsbedingungen und die Datenschutzerklärung."
+    "error_terms": "Um fortzufahren, akzeptiere die Nutzungsbedingungen und die Datenschutzerklärung.",
+    "error_soon": "Zahlungen bei KUMANI sind ab dem Start der Tarife möglich: bitte versuche es in ein paar Tagen erneut."
   },
   "toolTiers": {
     "intro": "Drei Stufen: Starte mit den kostenlosen Diensten, schalte den Rest mit einem Abo frei oder aktiviere einen einzelnen Dienst mit einem Pass.",
@@ -11526,7 +11529,8 @@
     "error_notFound": "Angebot nicht verfügbar.",
     "error_saveError": "Der Vorgang konnte nicht abgeschlossen werden. Bitte versuche es erneut.",
     "error_vatMissing": "Online-Zahlung ist noch nicht möglich: Der Absender des Angebots muss den MwSt.-Satz angeben.",
-    "linkHintVatMissing": "Der Kunde kann das Angebot lesen und annehmen. Damit er online zahlen kann, das Angebot bearbeiten und den MwSt.-Satz wählen."
+    "linkHintVatMissing": "Der Kunde kann das Angebot lesen und annehmen. Damit er online zahlen kann, das Angebot bearbeiten und den MwSt.-Satz wählen.",
+    "error_soon": "Zahlungen bei KUMANI sind ab dem Start der Tarife möglich: bitte versuche es in ein paar Tagen erneut."
   },
   "shopSeller": {
     "title": "Online-Zahlungen (Stripe)",
@@ -11929,7 +11933,8 @@
     "error_reminderTooFar": "Die Erinnerung lässt sich höchstens ein Jahr im Voraus einstellen.",
     "error_reminderPhone": "Die Nummer scheint nicht zu stimmen: Schreib sie mit Ländervorwahl, z. B. +49 151 23456789.",
     "reminderNowClose": "Schließen",
-    "reminderNowDone": "Schon gesendet"
+    "reminderNowDone": "Schon gesendet",
+    "error_soon": "Zahlungen bei KUMANI sind ab dem Start der Tarife möglich: bitte versuche es in ein paar Tagen erneut."
   },
   "surpriseTpl": {
     "mom_name": "Eine Massage für Mama",
@@ -12179,7 +12184,8 @@
     "orderStatusText_shipped": "Das Paket ist unterwegs.",
     "orderStatusText_delivered": "Danke für deinen Einkauf!",
     "orderStatusText_cancelled": "Die Bestellung wurde storniert und die Zahlung erstattet.",
-    "fieldCountry": "Land"
+    "fieldCountry": "Land",
+    "error_soon": "Zahlungen bei KUMANI sind ab dem Start der Tarife möglich: bitte versuche es in ein paar Tagen erneut."
   },
   "shopPay": {
     "testMode": "Testmodus: Keine Zahlung ist echt",
@@ -14167,14 +14173,20 @@
     "stepDone": "erledigt",
     "step1Title": "Wähle, was du brauchst",
     "step1Text": "Tippe oben auf eine Antwort.",
-    "step2Title": "Probiere deinen ersten Dienst",
-    "step2Text": "Füge eine Nachricht, einen Link oder eine Nummer ein, die dir komisch vorkommt: Wir sagen dir in Sekunden, ob es Betrug ist. Jeder genutzte Dienst bringt dir +1 KU Karma, die Punkte, die du durch die Nutzung von KUMANI bekommst.",
-    "step2Cta": "Nachricht prüfen",
-    "step3Title": "Eine Minute Pause oder lade jemanden ein",
-    "step3Text": "Du entscheidest: eine Minute für dich oder dein Link, um jemanden zu KUMANI zu bringen.",
-    "step3Pause": "Pause machen",
-    "step3Invite": "Deinen Link kopieren",
-    "showFull": "Ganze Startseite zeigen"
+    "step2Title": "Probiere einen kostenlosen Dienst",
+    "step2Text": "Diese nutzt du schon kostenlos, ohne Zeitlimit. Jeder genutzte Dienst bringt dir +1 KU Karma.",
+    "step3Title": "Entdecke KUMANI und hilf auch mit",
+    "step3Text": "Sieh in einer Minute, was du mit KUMANI machen kannst, und schick es einem Freund oder jemandem, der Hilfe braucht: KUMANI ist Hilfe aus vielen Händen 🙌",
+    "showFull": "Ganze Startseite zeigen",
+    "step2All": "Alle Dienste ansehen",
+    "step3Video": "Video ansehen",
+    "step3Share": "KUMANI teilen",
+    "step3ShareText": "Das ist KUMANI: eine App gegen Betrug, für Finanzen, Arbeit und gegenseitige Hilfe. Melde dich kostenlos über meinen Link an:",
+    "doneTitle": "Glückwunsch, du bist startklar! 🎉",
+    "doneTitleName": "Glückwunsch {name}, du bist startklar! 🎉",
+    "doneText": "Du hast deine ersten Schritte bei KUMANI gemacht. Darunter findest du deine Startseite: die gewählten Dienste und den schnellen Nachrichtencheck. Oben kannst du die Ansicht jederzeit wechseln: Lite, Komplett oder Symbole.",
+    "doneCta": "Zu meiner Startseite",
+    "closeVideo": "Video schließen"
   },
   "homeView": {
     "label": "Ansicht der Startseite",

@@ -8,6 +8,7 @@ import { SITE_URL } from '@/lib/siteUrl'
 import { localizedPath, notifyUser } from '@/lib/push'
 import { quoteAmountDueCents, quoteGrossTotal, quoteVatUnknown, type QuotePaymentMode, type QuoteVatMode } from '@/lib/quotes'
 import { recordQuotePayment, retrieveConnectedSession, serviceDb, syncSellerAccount } from '@/lib/shopPayments'
+import { getPlansGate } from '@/lib/plansGate'
 
 // KUMANI Shop, fase 1: il venditore collega il suo conto Stripe (conto
 // Standard di Stripe Connect) e il cliente accetta e paga il preventivo
@@ -182,6 +183,8 @@ export async function acceptPublicQuote(token: string, name: string): Promise<Re
 
 // Accetta e paga: Checkout di Stripe sul conto del venditore
 export async function startQuoteCheckout(token: string, name: string): Promise<Result<{ url: string }>> {
+  // Pagamenti chiusi fino all'apertura dei piani (Admin → Apertura piani)
+  if ((await getPlansGate()).closed) return { success: false, message: 'soon' }
   const quote = await quoteByToken(token)
   if (!quote) return { success: false, message: 'notFound' }
   const who = cleanName(name)

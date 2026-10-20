@@ -16,7 +16,7 @@ import OrganizerReputation from './OrganizerReputation'
 import { LevelBadge } from './EventBadges'
 import { askConfirm } from '@/lib/confirm'
 
-type Notice = 'paid' | 'pending' | 'canceled' | 'error' | 'none' | null
+type Notice = 'paid' | 'pending' | 'canceled' | 'error' | 'none' | 'soon' | null
 type SheetState =
   | { kind: 'setup' }
   | { kind: 'create' }
@@ -114,6 +114,7 @@ export default function OrganizerHome({
     canceled: { text: t('notice_canceled'), tone: 'border-gray-200 bg-white text-gray-700' },
     error: { text: t('notice_error'), tone: 'border-red-200 bg-red-50 text-red-700' },
     none: { text: t('notice_none'), tone: 'border-gray-200 bg-white text-gray-700' },
+    soon: { text: t('notice_soon'), tone: 'border-amber-200 bg-amber-50 text-amber-800' },
   }
 
   return (

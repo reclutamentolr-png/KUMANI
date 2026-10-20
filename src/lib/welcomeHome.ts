@@ -14,7 +14,7 @@ export type WelcomeSteps = {
   picked: boolean
   // 2. Ha aperto almeno un servizio
   tried: boolean
-  // 3. Ha fatto una pausa di un minuto o ha invitato qualcuno
+  // 3. Ha guardato il video di KUMANI o lo ha condiviso (o ha già invitato qualcuno)
   third: boolean
 }
 
@@ -52,10 +52,11 @@ export async function getWelcomeState(input: {
   const steps: WelcomeSteps = {
     picked: needs.length > 0 || input.favoritesCount > 0,
     tried: count(opened) > 0,
-    third: count(pauses) > 0 || count(invited) > 0,
+    third: meta.welcome_third === true || count(pauses) > 0 || count(invited) > 0,
   }
-  const done = steps.picked && steps.tried && steps.third
-  return { show: eligible && !done, newcomer: eligible, steps, needs, loginDays: (logins.data?.days as number | undefined) ?? 0 }
+  // A passi fatti resta il «Complimenti» finché non tocca «Vai alla mia Home»
+  const closed = meta.welcome_closed === true
+  return { show: eligible && !closed, newcomer: eligible, steps, needs, loginDays: (logins.data?.days as number | undefined) ?? 0 }
 }
 
 // Home a icone: giorni di uso per servizio negli ultimi 30 giorni (tool_opens:

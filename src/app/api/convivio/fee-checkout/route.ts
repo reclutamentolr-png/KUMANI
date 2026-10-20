@@ -5,6 +5,7 @@ import { getStripe } from '@/lib/stripe'
 import { SITE_URL } from '@/lib/siteUrl'
 import { MIN_FEE_PAYMENT } from '@/lib/events'
 import type { ConvivioMyFees } from '@/app/actions/convivio'
+import { getPlansGate } from '@/lib/plansGate'
 
 // Kordata: pagamento con carta delle commissioni KUMANI dovute dal fornitore
 // Pro (tutte insieme). I metadati NON contengono "userId": il webhook degli
@@ -23,6 +24,8 @@ export async function POST(request: Request) {
       data: { user },
     } = await supabase.auth.getUser()
     if (!user) return back(`${localePrefix}/login`)
+    // Pagamenti chiusi fino all'apertura dei piani (Admin → Apertura piani)
+    if ((await getPlansGate()).closed) return back(`${supplierPage}?fee=soon`)
 
     const { data } = await supabase.rpc('convivio_my_fees')
     // Al massimo 12 per pagamento: gli id devono stare tutti nei metadati

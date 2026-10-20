@@ -9,19 +9,22 @@ import { getPlanPrices } from '@/lib/planPrices'
 import { computePassCredit, convertCreditedPasses } from '@/lib/passCredit'
 import { getStripe } from '@/lib/stripe'
 import { isBusinessPurchase, recordConsent } from '@/lib/withdrawal'
+import { getPlansGate } from '@/lib/plansGate'
 
 const getServiceClient = () =>
   createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
     auth: { autoRefreshToken: false, persistSession: false },
   })
 
-type UpgradeReason = 'not_logged' | 'not_stripe' | 'unavailable' | 'already_pro' | 'stripe_error' | 'consent'
+type UpgradeReason = 'not_logged' | 'not_stripe' | 'unavailable' | 'already_pro' | 'stripe_error' | 'consent' | 'soon'
 
 // Abbonamento Stripe attivo (Base con carta) da portare a Pro, con i controlli
 // comuni ad anteprima e passaggio.
 async function findUpgradableSubscription(): Promise<
   { ok: true; userId: string; proPrice: string; subscription: Stripe.Subscription; item: Stripe.SubscriptionItem } | { ok: false; reason: UpgradeReason }
 > {
+  // Pagamenti chiusi fino all'apertura dei piani (Admin → Apertura piani)
+  if ((await getPlansGate()).closed) return { ok: false, reason: 'soon' }
   const supabase = await createClient()
   const {
     data: { user },

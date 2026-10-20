@@ -52,3 +52,32 @@ export async function pickWelcomeNeed(key: string): Promise<{ success: boolean; 
 export async function showFullHome(): Promise<boolean> {
   return setHomeView('full')
 }
+
+// Passo 3 della Home di benvenuto: ha guardato il video o condiviso KUMANI
+export async function markWelcomeDiscovered(): Promise<boolean> {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return false
+  if (user.user_metadata?.welcome_third === true) return true
+  const { error } = await supabase.auth.updateUser({ data: { welcome_third: true } })
+  if (error) {
+    console.error('[benvenuto] passo 3:', error.message)
+    return false
+  }
+  // Niente ricarica della pagina: il video che sta guardando resta aperto
+  return true
+}
+
+// «Vai alla mia Home» dopo i primi 3 passi: la Home di benvenuto si chiude
+export async function closeWelcome(): Promise<boolean> {
+  const supabase = await createClient()
+  const { error } = await supabase.auth.updateUser({ data: { welcome_closed: true } })
+  if (error) {
+    console.error('[benvenuto] chiusura:', error.message)
+    return false
+  }
+  revalidatePath('/dashboard')
+  return true
+}

@@ -10,6 +10,7 @@ import { parseVatInput } from '@/lib/vat'
 import { getToolPassOffer, TOOL_PASS_TYPE } from '@/lib/toolPasses'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { locales, defaultLocale } from '../../../../../i18n'
+import { getPlansGate } from '@/lib/plansGate'
 
 // Acquisto del pass di un singolo servizio (1 anno, pagamento una tantum).
 // Stessi controlli del checkout degli abbonamenti: consenso all'avvio
@@ -28,6 +29,8 @@ export async function POST(request: Request) {
       data: { user },
     } = await supabase.auth.getUser()
     if (!user) return NextResponse.redirect(new URL(`${prefix}/login?next=${encodeURIComponent(`/pass/${tool}`)}`, SITE_URL), 303)
+    // Pagamenti chiusi fino all'apertura dei piani (Admin → Apertura piani)
+    if ((await getPlansGate()).closed) return back('soon')
 
     const offer = await getToolPassOffer(supabase, tool)
     if (!offer.enabled) return back('unavailable')

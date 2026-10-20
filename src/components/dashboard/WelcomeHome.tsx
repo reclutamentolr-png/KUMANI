@@ -3,19 +3,26 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { ArrowRight, BriefcaseBusiness, CalendarDays, Check, Gamepad2, Gift, Leaf, LoaderCircle, Megaphone, PersonStanding, PiggyBank, ShieldCheck, Store, Users, type LucideIcon } from 'lucide-react'
+import { ArrowRight, BriefcaseBusiness, CalendarDays, Check, Gamepad2, Gift, Leaf, LoaderCircle, Megaphone, PartyPopper, PiggyBank, Play, ShieldCheck, Smartphone, Store, Users, X, type LucideIcon } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
-import CopyButton from '@/components/CopyButton'
-import { pickWelcomeNeed, showFullHome } from '@/app/actions/welcome'
+import NativeShareButton from '@/components/NativeShareButton'
+import HomeVideo from '@/components/home/HomeVideo'
+import { closeWelcome, markWelcomeDiscovered, pickWelcomeNeed, showFullHome } from '@/app/actions/welcome'
+import { marketplaceIconMap } from '@/lib/marketplaceIcons'
+import { FROM_ICONS_KEY } from '@/lib/homeView'
 import type { WelcomeSteps } from '@/lib/welcomeHome'
 
 // Home di benvenuto (nuovi iscritti Gratis): «Ciao …, per cosa sei qui?» con
 // le risposte di «In cosa possiamo darti una mano?» (la scelta mette i
 // servizi giusti in «I tuoi servizi») e «I tuoi primi 3 passi». In fondo
 // «Mostra la Home completa». Al posto del tour di 6 passi.
+// Passo 2: un servizio gratuito da provare (prima quelli scelti al passo 1).
+// Passo 3: il video di KUMANI e «Condividi KUMANI» con il proprio invito:
+// KUMANI è aiuto a più mani. Si spunta guardando il video o condividendo.
 const NEED_ICON: Record<string, LucideIcon> = { ShieldCheck, CalendarDays, PiggyBank, Store, Megaphone, BriefcaseBusiness, Users, Gamepad2, Leaf, Gift }
 
 export type WelcomeNeed = { key: string; icon: string; short: string }
+export type WelcomeService = { toolName: string; label: string; href: string; iconName: string }
 
 export default function WelcomeHome({
   firstName,
@@ -23,17 +30,29 @@ export default function WelcomeHome({
   picked: initialPicked,
   steps,
   shareUrl,
+  tryServices,
+  videoId,
 }: {
   firstName: string | null
   needs: WelcomeNeed[]
   picked: string[]
   steps: WelcomeSteps
   shareUrl: string
+  tryServices: WelcomeService[]
+  videoId: string | null
 }) {
   const t = useTranslations('welcomeHome')
   const router = useRouter()
   const [picked, setPicked] = useState(initialPicked)
   const [busyKey, setBusyKey] = useState<string | null>(null)
+  const [showVideo, setShowVideo] = useState(false)
+  const [discovered, setDiscovered] = useState(false)
+  // Video guardato o KUMANI condiviso: il passo 3 è fatto
+  const discover = () => {
+    if (discovered || steps.third) return
+    setDiscovered(true)
+    markWelcomeDiscovered().catch(() => {})
+  }
 
   const choose = async (key: string) => {
     setBusyKey(key)
@@ -45,8 +64,34 @@ export default function WelcomeHome({
     }
   }
 
-  const done = { picked: steps.picked || picked.length > 0, tried: steps.tried, third: steps.third }
+  const done = { picked: steps.picked || picked.length > 0, tried: steps.tried, third: steps.third || discovered }
   const count = Number(done.picked) + Number(done.tried) + Number(done.third)
+  // Tutti e tre fatti: «Complimenti» (non mentre guarda il video)
+  const [closing, startClosing] = useTransition()
+  if (count === 3 && !showVideo)
+    return (
+      <section className="rounded-3xl bg-[var(--ink)] p-6 text-white shadow-[0_14px_40px_rgba(23,23,23,0.18)]" aria-labelledby="welcome-done">
+        <p className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.14em] text-[var(--gold-bright)]">
+          <PartyPopper className="h-4 w-4" /> {t('stepsProgress', { done: 3 })}
+        </p>
+        <h2 id="welcome-done" className="mt-2 text-2xl font-extrabold leading-tight">
+          {firstName ? t('doneTitleName', { name: firstName }) : t('doneTitle')}
+        </h2>
+        <p className="mt-2 text-sm leading-6 text-white/80">{t('doneText')}</p>
+        <button
+          type="button"
+          disabled={closing}
+          onClick={() =>
+            startClosing(async () => {
+              if (await closeWelcome()) router.refresh()
+            })
+          }
+          className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-5 text-sm font-extrabold text-[var(--ink)] disabled:opacity-60"
+        >
+          {closing ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />} {t('doneCta')}
+        </button>
+      </section>
+    )
 
   const stepRow = (n: number, isDone: boolean, title: string, text: string, actions?: React.ReactNode) => (
     <li className="grid grid-cols-[1.75rem_minmax(0,1fr)] gap-3">
@@ -116,9 +161,30 @@ export default function WelcomeHome({
             done.tried,
             t('step2Title'),
             t('step2Text'),
-            <Link href="/controlla" className="inline-flex min-h-9 items-center gap-1.5 rounded-lg bg-[var(--ink)] px-3 text-xs font-bold text-white hover:bg-[var(--ink-soft)]">
-              <ShieldCheck className="h-3.5 w-3.5 text-[var(--gold-bright)]" /> {t('step2Cta')}
-            </Link>
+            <>
+              {tryServices.map((service) => {
+                const Icon = marketplaceIconMap[service.iconName] ?? Smartphone
+                return (
+                  <Link
+                    key={service.toolName}
+                    href={service.href}
+                    onClick={() => {
+                      try {
+                        sessionStorage.setItem(FROM_ICONS_KEY, '1')
+                      } catch {
+                        // facoltativo
+                      }
+                    }}
+                    className="inline-flex min-h-9 items-center gap-1.5 rounded-lg bg-[var(--ink)] px-3 text-xs font-bold text-white hover:bg-[var(--ink-soft)]"
+                  >
+                    <Icon className="h-3.5 w-3.5 text-[var(--gold-bright)]" /> {service.label}
+                  </Link>
+                )
+              })}
+              <Link href="/servizi" className="inline-flex min-h-9 items-center gap-1 px-1 text-xs font-bold text-[var(--gold)] hover:text-[var(--ink)]">
+                {t('step2All')} <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </>
           )}
           {stepRow(
             3,
@@ -126,15 +192,34 @@ export default function WelcomeHome({
             t('step3Title'),
             t('step3Text'),
             <>
-              <a href="#benessere" className="inline-flex min-h-9 items-center gap-1.5 rounded-lg bg-teal-600 px-3 text-xs font-bold text-white hover:bg-teal-700">
-                <PersonStanding className="h-3.5 w-3.5" /> {t('step3Pause')}
-              </a>
-              <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--muted)]">
-                {t('step3Invite')} <CopyButton text={shareUrl} variant="light" />
+              {videoId && (
+                <button
+                  type="button"
+                  onClick={() => setShowVideo((v) => !v)}
+                  className="inline-flex min-h-9 items-center gap-1.5 rounded-lg bg-[var(--ink)] px-3 text-xs font-bold text-white hover:bg-[var(--ink-soft)]"
+                >
+                  <Play className="h-3.5 w-3.5 fill-[var(--gold-bright)] text-[var(--gold-bright)]" /> {t('step3Video')}
+                </button>
+              )}
+              <span onClickCapture={discover}>
+                <NativeShareButton url={shareUrl} title="KUMANI" text={t('step3ShareText')} variant="light" label={t('step3Share')} />
               </span>
             </>
           )}
         </ol>
+        {/* Video fuori dai passi: resta aperto anche quando il passo 3 si spunta */}
+        {showVideo && videoId && (
+          <div className="mt-4">
+            <div className="mb-2 flex justify-end">
+              <button type="button" onClick={() => setShowVideo(false)} aria-label={t('closeVideo')} className="rounded-full p-1.5 text-[var(--muted)] hover:bg-black/5 hover:text-[var(--ink)]">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div onClickCapture={discover}>
+              <HomeVideo id={videoId} title="KUMANI" playLabel={t('step3Video')} />
+            </div>
+          </div>
+        )}
       </section>
 
     </div>

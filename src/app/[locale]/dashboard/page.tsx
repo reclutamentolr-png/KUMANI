@@ -50,6 +50,8 @@ import { buildHomeNeeds } from '@/lib/homeNeedsServer'
 import WelcomeHome, { ShowFullHomeLink } from '@/components/dashboard/WelcomeHome'
 import ChristmasOfferBanner from '@/components/christmas/ChristmasOfferBanner'
 import { getToolUsage, getWelcomeState, VERIFIED_AFTER_LOGINS } from '@/lib/welcomeHome'
+import { getHomeVideo } from '@/lib/homeVideo'
+import { shortServiceName } from '@/lib/homeView'
 import { resolveHomeFolders, resolveHomeView } from '@/lib/homeView'
 import { SERVICE_HUBS } from '@/lib/serviceHubs'
 import IconHome from '@/components/dashboard/IconHome'
@@ -241,6 +243,19 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
 
   // Vista della Home: Lite (i nuovi Gratis partono da qui), Completa o Icone
   const view = resolveHomeView(user.user_metadata, welcomeState?.newcomer ?? false)
+  // Home di benvenuto, passo 2: fino a 4 servizi gratuiti da provare, prima
+  // quelli scelti con «Per cosa sei qui?» (sono tra i preferiti), poi una
+  // scelta varia; passo 3: il video della homepage (Admin → Aspetto homepage)
+  const welcomeOn = view === 'lite' && !!welcomeState?.show
+  const freeOpen = homeItems.filter((item) => item.open && item.plan === 'free' && !item.community)
+  const WELCOME_DEFAULTS = ['scudo-dati', 'verifica-iban', 'fincheck', 'oxygen']
+  const welcomeTry = welcomeOn
+    ? [...favoriteToolNames.map((name) => freeOpen.find((item) => item.toolName === name)), ...WELCOME_DEFAULTS.map((name) => freeOpen.find((item) => item.toolName === name)), ...freeOpen]
+        .filter((item, i, all): item is (typeof freeOpen)[number] => !!item && all.findIndex((x) => x?.toolName === item.toolName) === i)
+        .slice(0, 4)
+        .map((item) => ({ toolName: item.toolName, label: shortServiceName(item.title), href: item.href, iconName: item.iconName }))
+    : []
+  const welcomeVideo = welcomeOn ? await getHomeVideo() : null
   let iconHome: React.ReactNode = null
   if (view === 'icons') {
     const [usage, hubT] = await Promise.all([getToolUsage(user.id).catch(() => ({})), getTranslations('hub')])
@@ -355,6 +370,8 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
                     picked={welcomeState.needs}
                     steps={welcomeState.steps}
                     shareUrl={shareUrl}
+                    tryServices={welcomeTry}
+                    videoId={welcomeVideo?.id ?? null}
                   />
                 ) : null
               }

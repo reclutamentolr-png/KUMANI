@@ -12,7 +12,7 @@ import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 import { getPlanPrices } from '@/lib/planPrices'
 import { confirmToolPassSession, getMyToolPasses, getToolPassOffer } from '@/lib/toolPasses'
 
-const ERRORS = ['unavailable', 'already', 'business', 'vat', 'consent', 'terms', 'payment'] as const
+const ERRORS = ['unavailable', 'already', 'business', 'vat', 'consent', 'terms', 'payment', 'soon'] as const
 
 // Pass di un singolo servizio: acquisto con carta (1 anno, pagamento unico),
 // attivazione con codice, oppure abbonamento Base/Pro per avere tutto.

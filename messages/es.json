@@ -3437,7 +3437,8 @@
     "upgradeError_stripe_error": "El pago no se realizó. Inténtalo de nuevo en un momento.",
     "upgradeError_consent": "Marca la casilla para solicitar la activación inmediata del plan Pro.",
     "passCreditNote": "Tienes {amount} de crédito de tus pases todavía activos: lo descontamos del primer pago. Los pases incluidos en el plan terminan cuando se activa el plan.",
-    "passCreditApplied": "Crédito de tus pases ya descontado: {amount}. Los pases incluidos en Pro terminan."
+    "passCreditApplied": "Crédito de tus pases ya descontado: {amount}. Los pases incluidos en Pro terminan.",
+    "upgradeError_soon": "Los pagos en KUMANI se abren con la apertura de los planes: vuelve a intentarlo en unos días."
   },
   "proArea": {
     "convivioTitle": "Kordata · Ofertas de grupo",
@@ -4960,7 +4961,8 @@
     "error_free_declaration": "Para un evento gratuito debes declarar que a los participantes no se les pedirá ningún pago.",
     "error_price_paid": "Para un evento de pago indica un precio mayor de 0 €, o elige «Evento gratuito».",
     "feeFormulaFree": "{participants} inscritos × {fee} (evento gratuito)",
-    "error_invalid_date": "Esta fecha no existe en el calendario: revisa el día y el mes."
+    "error_invalid_date": "Esta fecha no existe en el calendario: revisa el día y el mes.",
+    "notice_soon": "Los pagos en KUMANI se abren con la apertura de los planes: vuelve a intentarlo en unos días."
   },
   "verification": {
     "title_timebank": "Participe en la Time Bank",
@@ -6563,7 +6565,8 @@
     "walletActivate": "Activar el servicio",
     "walletCouponTitle": "Pase {service} – 1 año",
     "walletCouponHint": "Actívalo tú o regala el código:",
-    "error_terms": "Para continuar, acepta los Términos de servicio y la Política de privacidad."
+    "error_terms": "Para continuar, acepta los Términos de servicio y la Política de privacidad.",
+    "error_soon": "Los pagos en KUMANI se abren con la apertura de los planes: vuelve a intentarlo en unos días."
   },
   "toolTiers": {
     "intro": "Tres niveles: empieza por los servicios gratuitos, desbloquea el resto con una suscripción o activa un solo servicio con un Pase.",
@@ -11526,7 +11529,8 @@
     "error_notFound": "Presupuesto no disponible.",
     "error_saveError": "No se ha podido completar la operación. Inténtalo de nuevo.",
     "error_vatMissing": "El pago online aún no está disponible: quien hizo el presupuesto debe indicar el tipo de IVA.",
-    "linkHintVatMissing": "El cliente puede leer y aceptar el presupuesto. Para que pague online, edita el presupuesto y elige el tipo de IVA."
+    "linkHintVatMissing": "El cliente puede leer y aceptar el presupuesto. Para que pague online, edita el presupuesto y elige el tipo de IVA.",
+    "error_soon": "Los pagos en KUMANI se abren con la apertura de los planes: vuelve a intentarlo en unos días."
   },
   "shopSeller": {
     "title": "Pagos en línea (Stripe)",
@@ -11929,7 +11933,8 @@
     "error_reminderTooFar": "El recordatorio se puede programar como máximo con un año de antelación.",
     "error_reminderPhone": "El número no parece correcto: escríbelo con el prefijo, por ejemplo +34 612 345 678.",
     "reminderNowClose": "Cerrar",
-    "reminderNowDone": "Ya la he enviado"
+    "reminderNowDone": "Ya la he enviado",
+    "error_soon": "Los pagos en KUMANI se abren con la apertura de los planes: vuelve a intentarlo en unos días."
   },
   "surpriseTpl": {
     "mom_name": "Un masaje para mamá",
@@ -12179,7 +12184,8 @@
     "orderStatusText_shipped": "El paquete está en camino.",
     "orderStatusText_delivered": "¡Gracias por tu compra!",
     "orderStatusText_cancelled": "El pedido se ha cancelado y el pago se ha reembolsado.",
-    "fieldCountry": "País"
+    "fieldCountry": "País",
+    "error_soon": "Los pagos en KUMANI se abren con la apertura de los planes: vuelve a intentarlo en unos días."
   },
   "shopPay": {
     "testMode": "Modo de prueba: ningún pago es real",
@@ -14167,14 +14173,20 @@
     "stepDone": "hecho",
     "step1Title": "Elige lo que necesitas",
     "step1Text": "Toca una respuesta aquí arriba.",
-    "step2Title": "Prueba tu primer servicio",
-    "step2Text": "Pega un mensaje, un enlace o un número que no te convence: te decimos en segundos si es una estafa. Cada servicio que usas te da +1 KU Karma, los puntos que recibes usando KUMANI.",
-    "step2Cta": "Comprobar un mensaje",
-    "step3Title": "Una pausa de un minuto o invita a alguien",
-    "step3Text": "Tú eliges: un minuto para ti, o tu enlace para traer a alguien a KUMANI.",
-    "step3Pause": "Hacer la pausa",
-    "step3Invite": "Copiar tu enlace",
-    "showFull": "Mostrar la Home completa"
+    "step2Title": "Prueba un servicio gratis",
+    "step2Text": "Estos ya los usas gratis, sin límite de tiempo. Cada servicio que usas te da +1 KU Karma.",
+    "step3Title": "Descubre KUMANI y echa una mano tú también",
+    "step3Text": "Mira en un minuto lo que puedes hacer con KUMANI y luego envíalo a un amigo o a quien necesite ayuda: KUMANI es ayuda de muchas manos 🙌",
+    "showFull": "Mostrar la Home completa",
+    "step2All": "Ver todos los servicios",
+    "step3Video": "Ver el vídeo",
+    "step3Share": "Compartir KUMANI",
+    "step3ShareText": "Te presento KUMANI: una sola app contra las estafas, para las cuentas, el trabajo y echarse una mano. Regístrate gratis con mi enlace:",
+    "doneTitle": "¡Enhorabuena, ya estás listo! 🎉",
+    "doneTitleName": "¡Enhorabuena {name}, ya estás listo! 🎉",
+    "doneText": "Has dado tus primeros pasos en KUMANI. Aquí abajo tienes tu Inicio: los servicios que elegiste y la comprobación rápida de mensajes. Arriba puedes cambiar la vista cuando quieras: Lite, Completa o Iconos.",
+    "doneCta": "Ir a mi Inicio",
+    "closeVideo": "Cerrar el vídeo"
   },
   "homeView": {
     "label": "Vista de la Home",

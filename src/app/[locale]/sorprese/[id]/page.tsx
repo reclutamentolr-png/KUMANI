@@ -23,7 +23,7 @@ import { bonusReason, parseSurprisePlan, planFreeFor, SURPRISE_KINDS, stepIncomp
 export const dynamic = 'force-dynamic'
 export const metadata: Metadata = { robots: { index: false, follow: false } }
 
-const ERRORS = ['notFound', 'alreadyActive', 'incomplete', 'business', 'vat', 'consent', 'terms', 'payment'] as const
+const ERRORS = ['notFound', 'alreadyActive', 'incomplete', 'business', 'vat', 'consent', 'terms', 'payment', 'soon'] as const
 
 export default async function SurpriseEditPage({
   params,

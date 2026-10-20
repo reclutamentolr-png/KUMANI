@@ -13,6 +13,7 @@ import { limitError } from '@/lib/appLimits'
 import { retrieveConnectedSession, serviceDb } from '@/lib/shopPayments'
 import { inventoryStock, loadPublicShop, mapOrder, mapProduct, mapSettings, ORDER_FLOW, recordShopOrderPayment, sendOrderEmail } from '@/lib/shopServer'
 import { EU_COUNTRIES, isValidSlug, SHOP_MAX, shippingCents, shopPath, type OrderStatus, type ShopOrder, type ShopProduct, type ShopSettings } from '@/lib/shop'
+import { getPlansGate } from '@/lib/plansGate'
 
 // KUMANI Shop (fase 2): azioni del venditore (negozio, prodotti, ordini) e
 // del cliente (carrello e pagamento). I prezzi e le disponibilità si
@@ -249,6 +250,8 @@ export type CheckoutInput = {
 }
 
 export async function startShopCheckout(input: CheckoutInput): Promise<Result<{ url: string }>> {
+  // Pagamenti chiusi fino all'apertura dei piani (Admin → Apertura piani)
+  if ((await getPlansGate()).closed) return { success: false, message: 'soon' }
   const ip = clientIp(await headers()) ?? 'x'
   if (tooMany(`shop:${ip}`, 20, 60 * 60_000)) return { success: false, message: 'wait' }
   const shop = await loadPublicShop(String(input.slug ?? ''))

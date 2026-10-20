@@ -17,6 +17,7 @@ export default function NativeShareButton({
   copyFallback = true,
   iconOnly = false,
   className = '',
+  label,
 }: {
   url: string
   title?: string
@@ -26,6 +27,8 @@ export default function NativeShareButton({
   // Solo l'icona (es. la riga di stato della Home)
   iconOnly?: boolean
   className?: string
+  // Scritta al posto di «Condividi» (es. «Condividi KUMANI»), senza la riga sotto
+  label?: string
 }) {
   const t = useTranslations('share')
   const [canShare, setCanShare] = useState(false)
@@ -84,8 +87,8 @@ export default function NativeShareButton({
     >
       {copied ? <Check className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
       <span className="flex flex-col items-start leading-tight">
-        <span>{copied ? t('copied') : canShare ? t('native') : t('copy')}</span>
-        {canShare && !copied && <span className="text-[10px] font-semibold opacity-75">{t('nativeHint')}</span>}
+        <span>{copied ? t('copied') : (label ?? (canShare ? t('native') : t('copy')))}</span>
+        {canShare && !copied && !label && <span className="text-[10px] font-semibold opacity-75">{t('nativeHint')}</span>}
       </span>
     </button>
   )

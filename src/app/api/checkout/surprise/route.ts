@@ -9,6 +9,7 @@ import { parseVatInput } from '@/lib/vat'
 import { SURPRISE_TYPE, isSurpriseKind } from '@/lib/surprise'
 import { getSurprisePrices, surpriseDb } from '@/lib/surpriseServer'
 import { locales, defaultLocale } from '../../../../../i18n'
+import { getPlansGate } from '@/lib/plansGate'
 
 // Pagamento di una sorpresa (una tantum): attiva il link da mandare. Privato:
 // consenso all'attivazione immediata del contenuto digitale (art. 59 lett. o
@@ -28,6 +29,8 @@ export async function POST(request: Request) {
       data: { user },
     } = await supabase.auth.getUser()
     if (!user) return NextResponse.redirect(new URL(`${prefix}/login?next=${encodeURIComponent(`/sorprese/${id}`)}`, SITE_URL), 303)
+    // Pagamenti chiusi fino all'apertura dei piani (Admin → Apertura piani)
+    if ((await getPlansGate()).closed) return back('soon')
 
     const { data: gift } = await supabase.from('surprise_gifts').select('id, kind, status, title, recipient_name').eq('id', id).eq('user_id', user.id).maybeSingle()
     if (!gift) return back('notFound')
