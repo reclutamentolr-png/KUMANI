@@ -749,7 +749,9 @@
     "inviteLinkShort": "Link corto",
     "inviteLinkWithCode": "Link con il codice",
     "subscribeFrom": "Abbonati dal {date}",
-    "subscribeFromVowel": "Abbonati dall’{date}"
+    "subscribeFromVowel": "Abbonati dall’{date}",
+    "legendGifted": "Attivo grazie a un regalo",
+    "giftedHint": "Attivato con un voucher regalo"
   },
   "marketplace": {
     "fabula": "Kumani Fabula",
@@ -6451,7 +6453,9 @@
     "ruleWelcomeCap": "Il Bonus Accoglienza è un benvenuto, non un’entrata: lo ricevi solo per le persone accolte nei tuoi 5 posti diretti, quindi al massimo 5 volte (fino a {maxBase} KU Points con il Base, {maxPro} con il Pro). I premi veri arrivano dalle persone che inviti tu.",
     "printLink": "Stampa cartolina",
     "giftFromKumani": "Regalo di KUMANI per te",
-    "giftOpen": "Apri e attiva"
+    "giftOpen": "Apri e attiva",
+    "groupGifts": "Regali ricevuti",
+    "giftActivated": "Attivato il {date}: ora hai KUMANI {plan}"
   },
   "voucherReceipt": {
     "back": "Torna al Portafoglio",

@@ -712,7 +712,9 @@
     "inviteLinkShort": "Lien court",
     "inviteLinkWithCode": "Lien avec code",
     "subscribeFrom": "Abonne-toi dès le {date}",
-    "subscribeFromVowel": "Abonne-toi dès le {date}"
+    "subscribeFromVowel": "Abonne-toi dès le {date}",
+    "legendGifted": "Actif grâce à un cadeau",
+    "giftedHint": "Activé avec un bon cadeau"
   },
   "marketplace": {
     "fabula": "Kumani Fabula",
@@ -6451,7 +6453,9 @@
     "ruleWelcomeCap": "Le Bonus d’Accueil est un cadeau de bienvenue, pas un revenu : vous ne le recevez que pour les personnes accueillies dans vos 5 places directes, donc 5 fois au maximum (jusqu’à {maxBase} KU Points avec le Base, {maxPro} avec le Pro). Les vraies récompenses viennent des personnes que vous invitez vous-même.",
     "printLink": "Imprimer la carte",
     "giftFromKumani": "Un cadeau de KUMANI pour toi",
-    "giftOpen": "Ouvrir et activer"
+    "giftOpen": "Ouvrir et activer",
+    "groupGifts": "Cadeaux reçus",
+    "giftActivated": "Activé le {date} : tu as maintenant KUMANI {plan}"
   },
   "voucherReceipt": {
     "back": "Retour au Portefeuille",

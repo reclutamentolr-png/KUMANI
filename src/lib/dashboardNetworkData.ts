@@ -60,7 +60,11 @@ export async function getDashboardNetworkData(
   // matrice: chi si registra ma non attiva l'abbonamento resta comunque
   // posizionato nella struttura reale (per lo spillover), ma non è mostrato
   // qui — appare invece nella lista "Non ancora KUMANI".
-  const activeDownlineForTree = downlineData.filter((node) => node.is_active)
+  const activeInTree = downlineData.filter((node) => node.is_active)
+  // Attivi grazie a un voucher regalato: 🎁 sul pallino della stella (letto
+  // con la chiave di servizio: la fonte dell'abbonamento altrui non è leggibile)
+  const giftedIds = await giftedAmong(activeInTree.map((node) => node.user_id))
+  const activeDownlineForTree = activeInTree.map((node) => ({ ...node, gifted: giftedIds.has(node.user_id) }))
 
   // Costruisci il rootNode
   const correctRootId = userNode?.id || downlineData[0]?.parent_id || `root-${user.id}`
@@ -294,4 +298,13 @@ export async function deferNetworkClaims(supabase: SupabaseClient) {
       console.error('[deferNetworkClaims]', error)
     }
   })
+}
+
+// Chi, tra queste persone, ha l'abbonamento attivo grazie a un voucher
+async function giftedAmong(ids: string[]): Promise<Set<string>> {
+  if (!ids.length) return new Set()
+  const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { autoRefreshToken: false, persistSession: false } })
+  const { data } = await db.from('profiles').select('id, subscription_expires_at').in('id', ids.slice(0, 1000)).eq('subscription_status', 'active').eq('subscription_source', 'voucher')
+  const now = Date.now()
+  return new Set((data ?? []).filter((p) => !p.subscription_expires_at || Date.parse(p.subscription_expires_at as string) > now).map((p) => p.id as string))
 }

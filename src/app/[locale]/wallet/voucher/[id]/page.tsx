@@ -31,11 +31,13 @@ export default async function VoucherReceiptPage({ params }: { params: Promise<{
   })
   const { data: voucher } = await service
     .from('subscription_vouchers')
-    .select('id, code, status, plan, purpose, sale_price_cents, buyer_name, sold_at, created_at, cost_cents')
+    .select('id, code, status, plan, purpose, sale_price_cents, buyer_name, sold_at, created_at, cost_cents, prize_key')
     .eq('id', id)
     .or(`created_by.eq.${user.id},holder_id.eq.${user.id}`)
     .maybeSingle()
   if (!voucher || voucher.status === 'revoked') notFound()
+  // Regalo di KUMANI ricevuto: è per sé, niente ricevuta di cessione né stampa
+  if (voucher.prize_key === 'admin_gift') notFound()
 
   const { data: seller } = await supabase.rpc('get_my_profile').maybeSingle<SellerProfile>()
   const sellerAddress = [seller?.address, [seller?.postal_code, seller?.city, seller?.province ? `(${seller.province})` : null].filter(Boolean).join(' ')]

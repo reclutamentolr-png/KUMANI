@@ -3035,12 +3035,18 @@ export async function adminGetUserMatrix(userId: string) {
   const [{ data: nodes }, { data: sponsors }] = ids.length
     ? await Promise.all([
         service.from('matrix_nodes').select('id, path, created_at').in('id', ids),
-        service.from('profiles').select('id, sponsor_id').in('id', userIds),
+        service.from('profiles').select('id, sponsor_id, subscription_status, subscription_source, subscription_expires_at').in('id', userIds),
       ])
     : [{ data: [] }, { data: [] }]
   const byId = new Map((nodes ?? []).map((n) => [n.id as string, n]))
   // Nella stella: invitato da chi gli sta sopra (oro) o arrivato dalla community (azzurro)
   const sponsorOf = new Map((sponsors ?? []).map((p) => [p.id as string, p.sponsor_id as string | null]))
+  // Attivo grazie a un voucher regalato: 🎁 sul pallino
+  const giftedIds = new Set(
+    (sponsors ?? [])
+      .filter((p) => p.subscription_status === 'active' && p.subscription_source === 'voucher' && (!p.subscription_expires_at || Date.parse(p.subscription_expires_at as string) > Date.now()))
+      .map((p) => p.id as string)
+  )
   const userOfNode = new Map<string, string>(rows.map((r) => [r.node_id, r.profile_user_id]))
   if (userNode?.id) userOfNode.set(userNode.id, userId)
   const full = rows
@@ -3051,6 +3057,7 @@ export async function adminGetUserMatrix(userId: string) {
       path: String(byId.get(node_id)?.path ?? ''),
       created_at: byId.get(node_id)?.created_at ?? rest.joined_at,
       sponsored_by_parent: Boolean(rest.parent_id && sponsorOf.get(profile_user_id) === userOfNode.get(rest.parent_id)),
+      gifted: giftedIds.has(profile_user_id),
     }))
     .filter((n) => n.path)
   return { profile, userNode, downline: full as Array<{ id: string; parent_id: string | null; depth: number; [key: string]: unknown }> }

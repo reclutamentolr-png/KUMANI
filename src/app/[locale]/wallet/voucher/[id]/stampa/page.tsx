@@ -25,11 +25,13 @@ export default async function VoucherPrintPage({ params }: { params: Promise<{ l
   })
   const { data: voucher } = await service
     .from('subscription_vouchers')
-    .select('id, code, status, plan')
+    .select('id, code, status, plan, prize_key')
     .eq('id', id)
     .or(`created_by.eq.${user.id},holder_id.eq.${user.id}`)
     .maybeSingle()
   if (!voucher || voucher.status !== 'active') notFound()
+  // Regalo di KUMANI ricevuto: è per sé, niente ricevuta di cessione né stampa
+  if (voucher.prize_key === 'admin_gift') notFound()
 
   const t = await getTranslations('voucherPrint')
   const site = (process.env.NEXT_PUBLIC_SITE_URL || SITE_URL).replace(/\/+$/, '')

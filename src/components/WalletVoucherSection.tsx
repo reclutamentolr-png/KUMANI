@@ -61,10 +61,13 @@ export default function WalletVoucherSection({
   // Voucher raggruppati per premio, in box da aprire: Kuman Green, Star,
   // Black, poi i voucher Black continuo e infine gli altri
   const STAR_CLASS = { green: 'fill-emerald-500 text-emerald-500', gold: 'fill-amber-400 text-amber-400', black: 'fill-gray-900 text-gray-900' } as const
+  // Regalo di KUMANI (Admin → Regala un abbonamento): è per sé, non da cedere
+  const isGift = (v: MyVoucher) => v.prize_key === 'admin_gift'
   const groups = [
+    { key: 'gifts', title: t('groupGifts'), star: null, items: vouchers.filter(isGift) },
     ...ranks.map((r) => ({ key: r.key, title: t('groupPrize', { rank: td(r.labelKey) }), star: STAR_CLASS[r.color], items: vouchers.filter((v) => v.prize_key === r.key) })),
     { key: 'black_plus', title: t('prizeBlackPlus'), star: STAR_CLASS.black, items: vouchers.filter((v) => v.prize_key?.startsWith('black_plus_')) },
-    { key: 'other', title: t('groupOther'), star: null, items: vouchers.filter((v) => !v.prize_key || (!v.prize_key.startsWith('black_plus_') && !ranks.some((r) => r.key === v.prize_key))) },
+    { key: 'other', title: t('groupOther'), star: null, items: vouchers.filter((v) => !isGift(v) && (!v.prize_key || (!v.prize_key.startsWith('black_plus_') && !ranks.some((r) => r.key === v.prize_key)))) },
   ].filter((g) => g.items.length > 0)
 
   const prizeName = (key: string | null) => {
@@ -197,10 +200,10 @@ export default function WalletVoucherSection({
                 const ready = g.items.filter((v) => v.status === 'active').length
                 return (
                   <details key={g.key} className="group rounded-xl border border-[var(--gold)]/40 bg-white/80 shadow-sm">
-                    <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-3 py-2.5 [&::-webkit-details-marker]:hidden">
+                    <summary className="flex cursor-pointer list-none flex-wrap items-center justify-between gap-x-3 gap-y-1 px-3 py-2.5 [&::-webkit-details-marker]:hidden">
                       <span className="flex min-w-0 items-center gap-2 font-bold text-[var(--ink)]">
                         {g.star ? <Star className={`h-5 w-5 shrink-0 ${g.star}`} /> : <Ticket className="h-5 w-5 shrink-0 text-[var(--gold)]" />}
-                        <span className="truncate">{g.title}</span>
+                        <span className="leading-tight">{g.title}</span>
                       </span>
                       <span className="flex shrink-0 items-center gap-2 text-xs text-[var(--muted)]">
                         {t('groupCount', { count: g.items.length })}
@@ -221,7 +224,11 @@ export default function WalletVoucherSection({
                             </div>
                             <span className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide ${statusClass(v.status)}`}>{statusLabel(v.status)}</span>
                           </div>
-                          {v.prize_key === 'admin_gift' && v.status === 'active' ? (
+                          {isGift(v) && v.status !== 'active' ? (
+                            <p className="mt-1 text-xs font-semibold text-emerald-700">
+                              🎁 {v.redeemed_at ? t('giftActivated', { date: new Date(v.redeemed_at).toLocaleDateString(locale), plan }) : t('giftFromKumani')}
+                            </p>
+                          ) : isGift(v) ? (
                             <p className="mt-1 flex flex-wrap items-center gap-x-2 text-xs font-semibold text-[var(--gold)]">
                               🎁 {t('giftFromKumani')}
                               <Link href={`/biglietto/${encodeURIComponent(v.code)}?d=A&p=p2&from=KUMANI${firstName ? `&to=${encodeURIComponent(firstName)}` : ''}`} className="underline underline-offset-2 hover:text-[var(--ink)]">
@@ -233,7 +240,7 @@ export default function WalletVoucherSection({
                           )}
                           <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[var(--muted)]">
                             {v.purpose === 'sale' && <span>{v.sale_price_cents !== null ? t('soldFor', { price: euro(v.sale_price_cents) }) : t('purposeSale')}{v.buyer_name ? ` · ${v.buyer_name}` : ''}</span>}
-                            {v.status === 'active' && (
+                            {v.status === 'active' && !isGift(v) && (
                               <>
                                 <button type="button" onClick={() => handleCopy(v.code)} className="inline-flex items-center gap-1 font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
                                   {copied === v.code ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
@@ -253,7 +260,7 @@ export default function WalletVoucherSection({
                                 </Link>
                               </>
                             )}
-                            {v.status !== 'revoked' && (
+                            {v.status !== 'revoked' && !isGift(v) && (
                               <Link href={`/wallet/voucher/${v.id}`} className="inline-flex items-center gap-1 font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
                                 <Receipt className="h-3.5 w-3.5" /> {t('receiptLink')}
                               </Link>

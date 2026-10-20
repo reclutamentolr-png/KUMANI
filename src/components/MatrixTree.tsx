@@ -28,6 +28,8 @@ type MatrixNode = {
   // Kumani attivi sotto di lui, già contati dal database (get_my_downline_star:
   // la stella riceve solo i primi 5 livelli, non tutta la discendenza)
   active_downline_count?: number | null
+  // Attivo grazie a un voucher (regalo): 🎁 sul pallino, i colori non cambiano
+  gifted?: boolean | null
 }
 
 type MatrixTreeProps = {
@@ -92,6 +94,15 @@ export default function MatrixTree({ rootNode, descendants, receivedIds = [], mo
             : 'border-dashed border-stone-300 bg-stone-100 text-stone-400'
       } ${clickable ? 'group-hover:-translate-y-1 group-focus-visible:ring-4 group-focus-visible:ring-[var(--gold)]/40' : ''}`}>
         {isOccupied ? <UserRound className="h-6 w-6 sm:h-8 sm:w-8" strokeWidth={1.6} /> : <span className="text-xl sm:text-2xl">+</span>}
+        {member?.gifted && (
+          <span
+            title={t('giftedHint')}
+            aria-label={t('giftedHint')}
+            className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full border border-[var(--gold)] bg-white text-[11px] shadow sm:h-7 sm:w-7 sm:text-sm"
+          >
+            🎁
+          </span>
+        )}
         <span className={`absolute -bottom-2 rounded-full border px-1.5 py-0.5 text-[9px] font-bold sm:px-2 sm:text-[10px] ${
           received
             ? 'border-sky-300 bg-sky-50 text-sky-900'
@@ -233,6 +244,9 @@ export default function MatrixTree({ rootNode, descendants, receivedIds = [], mo
         </span>
         <span className="flex items-center gap-1.5">
           <span className="h-3.5 w-3.5 rounded-full border-2 border-sky-400 bg-sky-950" /> {t('legendReceived')}
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span className="text-sm leading-none">🎁</span> {t('legendGifted')}
         </span>
       </div>
       {isOwnStar && mode === 'self' && (

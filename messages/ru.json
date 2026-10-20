@@ -712,7 +712,9 @@
     "inviteLinkShort": "Короткая ссылка",
     "inviteLinkWithCode": "Ссылка с кодом",
     "subscribeFrom": "Подписка с {date}",
-    "subscribeFromVowel": "Подписка с {date}"
+    "subscribeFromVowel": "Подписка с {date}",
+    "legendGifted": "Активен благодаря подарку",
+    "giftedHint": "Активирован подарочным ваучером"
   },
   "marketplace": {
     "fabula": "Kumani Fabula",
@@ -6451,7 +6453,9 @@
     "ruleWelcomeCap": "Бонус приёма — это приветствие, а не доход: он начисляется только за людей, размещённых на ваших 5 прямых местах, то есть не более 5 раз (до {maxBase} KU Points с Base, {maxPro} с Pro). Настоящие награды приносят люди, которых приглашаете вы сами.",
     "printLink": "Распечатать открытку",
     "giftFromKumani": "Подарок от KUMANI для вас",
-    "giftOpen": "Открыть и активировать"
+    "giftOpen": "Открыть и активировать",
+    "groupGifts": "Полученные подарки",
+    "giftActivated": "Активирован {date}: теперь у вас KUMANI {plan}"
   },
   "voucherReceipt": {
     "back": "Назад в кошелёк",
