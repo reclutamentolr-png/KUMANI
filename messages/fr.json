@@ -10827,8 +10827,8 @@
     "learnMoreService": "En savoir plus sur {service}",
     "learnMorePlan": "Découvrir tous les services inclus",
     "redeem_plan_mismatch": "Vous avez déjà une autre offre active : vous pourrez utiliser ce cadeau à son expiration, ou il reste valable pour quelqu’un d’autre.",
-    "plansSoonNote": "Une année de Base ou Pro à offrir sera disponible à partir du {date}, à l’ouverture des formules. En attendant, tu peux offrir le Pass d’un service.",
-    "error_soon": "Les formules à offrir ne sont pas encore ouvertes."
+    "plansSoonNote": "Les cadeaux (une année de Base ou Pro et les Pass des services) seront disponibles à partir du {date}, à l’ouverture des formules.",
+    "error_soon": "Les cadeaux seront disponibles à l’ouverture des formules."
   },
   "relatedServices": {
     "banner": "{tool} vous est utile ? Découvrez les autres services du groupe",
@@ -13868,7 +13868,7 @@
     "howText": "Nous vous montrons 5 fiches avec des situations typiques d’arnaque. Répondez sincèrement : à la fin, vous obtenez votre niveau de risque et quoi faire.",
     "howCards": "{cards} fiches · {questions} questions",
     "howTime": "Environ 2 minutes",
-    "howAnonymous": "Anonyme : les réponses ne sont pas enregistrées",
+    "howAnonymous": "Anonyme : tes réponses restent uniquement sur ton appareil",
     "howPdf": "Vous pouvez enregistrer le résultat en PDF",
     "disclaimer": "Ce test est informatif, ce n’est pas un conseil juridique. Si vous avez déjà perdu de l’argent, contactez tout de suite votre banque et la police.",
     "start": "Commencer le test",
@@ -13950,7 +13950,15 @@
     "staffText": "Écrivez au Staff KUMANI : nous vous aidons à comprendre la situation et les étapes à suivre.",
     "staffCta": "Écrire au Staff",
     "pdfTool": "Test « Suis-je victime d’une arnaque ? »",
-    "retake": "Refaire le test"
+    "retake": "Refaire le test",
+    "howSignup": "Résultat complet gratuit avec l’inscription",
+    "gateTitle": "Ton résultat complet est prêt",
+    "gateText": "Inscris-toi gratuitement pour le voir : aucun frais, aucune carte. Tes réponses restent enregistrées et tu retrouves ton résultat tout de suite.",
+    "gateItem1": "Ce que signifie ton résultat",
+    "gateItem2": "Les conseils pour tes réponses et les outils pour vérifier",
+    "gateItem3": "Le PDF de ton résultat à télécharger",
+    "gateCta": "Inscris-toi gratuitement et vois ton résultat",
+    "gateLogin": "Déjà un compte ? Connecte-toi"
   },
   "homeOrbit": {
     "scamSmsTitle": "Arnaque bloquée",

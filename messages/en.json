@@ -10827,8 +10827,8 @@
     "learnMoreService": "Find out more about {service}",
     "learnMorePlan": "Discover every service included",
     "redeem_plan_mismatch": "You already have a different plan active: you can use this gift when your plan expires, or it stays valid for someone else.",
-    "plansSoonNote": "A year of Base or Pro to give will be available from {date}, when plans open. Meanwhile you can give a service Pass.",
-    "error_soon": "Plans to give are not open yet."
+    "plansSoonNote": "Gifts (a year of Base or Pro and service Passes) can be bought from {date}, when plans open.",
+    "error_soon": "Gifts can be bought once plans open."
   },
   "relatedServices": {
     "banner": "Finding {tool} useful? Discover the other services in",
@@ -13868,7 +13868,7 @@
     "howText": "We show you 5 cards with typical scam situations. Answer honestly: at the end you get your risk level and what to do.",
     "howCards": "{cards} cards · {questions} questions",
     "howTime": "About 2 minutes",
-    "howAnonymous": "Anonymous: your answers are not saved",
+    "howAnonymous": "Anonymous: your answers stay only on your device",
     "howPdf": "You can save the result as a PDF",
     "disclaimer": "This test is for information only, not legal advice. If you have already lost money, contact your bank and the police right away.",
     "start": "Start the test",
@@ -13950,7 +13950,15 @@
     "staffText": "Write to the KUMANI Staff: we’ll help you understand the situation and the steps to take.",
     "staffCta": "Write to the Staff",
     "pdfTool": "“Am I being scammed?” test",
-    "retake": "Take the test again"
+    "retake": "Take the test again",
+    "howSignup": "Full result free when you sign up",
+    "gateTitle": "Your full result is ready",
+    "gateText": "Sign up for free to see it: no cost, no card. Your answers stay saved and you get your result straight away.",
+    "gateItem1": "What your result means",
+    "gateItem2": "Advice for your answers and tools to check",
+    "gateItem3": "Your result as a PDF to download",
+    "gateCta": "Sign up free and see your result",
+    "gateLogin": "Already have an account? Log in"
   },
   "homeOrbit": {
     "scamSmsTitle": "Scam blocked",

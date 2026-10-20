@@ -10827,8 +10827,8 @@
     "learnMoreService": "Descubre más sobre {service}",
     "learnMorePlan": "Descubre todos los servicios incluidos",
     "redeem_plan_mismatch": "Ya tienes otro plan activo: podrás usar este regalo cuando tu plan caduque, o sigue siendo válido para otra persona.",
-    "plansSoonNote": "Un año de Base o Pro para regalar estará disponible desde el {date}, cuando se abran los planes. Mientras tanto puedes regalar el Pase de un servicio.",
-    "error_soon": "Los planes para regalar aún no están abiertos."
+    "plansSoonNote": "Los regalos (un año de Base o Pro y los Pases de los servicios) se podrán comprar desde el {date}, cuando se abran los planes.",
+    "error_soon": "Los regalos se podrán comprar cuando se abran los planes."
   },
   "relatedServices": {
     "banner": "¿Te resulta útil {tool}? Descubre los otros servicios del grupo",
@@ -13868,7 +13868,7 @@
     "howText": "Te mostramos 5 fichas con situaciones típicas de estafa. Responde con sinceridad: al final recibes tu nivel de riesgo y qué hacer.",
     "howCards": "{cards} fichas · {questions} preguntas",
     "howTime": "Unos 2 minutos",
-    "howAnonymous": "Anónimo: las respuestas no se guardan",
+    "howAnonymous": "Anónimo: tus respuestas se quedan solo en tu dispositivo",
     "howPdf": "Puedes guardar el resultado en PDF",
     "disclaimer": "El test es informativo, no un asesoramiento legal. Si ya has perdido dinero, acude enseguida a tu banco y a la policía.",
     "start": "Empezar el test",
@@ -13950,7 +13950,15 @@
     "staffText": "Escribe al Staff de KUMANI: te ayudamos a entender la situación y los pasos a seguir.",
     "staffCta": "Escribir al Staff",
     "pdfTool": "Test «¿Me están estafando?»",
-    "retake": "Repetir el test"
+    "retake": "Repetir el test",
+    "howSignup": "Resultado completo gratis al registrarte",
+    "gateTitle": "Tu resultado completo está listo",
+    "gateText": "Regístrate gratis para verlo: sin coste, sin tarjeta. Tus respuestas quedan guardadas y ves el resultado al instante.",
+    "gateItem1": "Qué significa tu resultado",
+    "gateItem2": "Consejos para tus respuestas y herramientas para comprobar",
+    "gateItem3": "El PDF del resultado para descargar",
+    "gateCta": "Regístrate gratis y ve tu resultado",
+    "gateLogin": "¿Ya tienes cuenta? Inicia sesión"
   },
   "homeOrbit": {
     "scamSmsTitle": "Estafa bloqueada",

@@ -47,7 +47,7 @@ export default async function ScamTestPage() {
         </div>
       </div>
       <div className="mx-auto -mt-8 max-w-3xl px-4">
-        <ScamTest />
+        <ScamTest loggedIn={!!user} />
       </div>
     </div>
   )

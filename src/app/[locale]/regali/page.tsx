@@ -49,7 +49,7 @@ export default async function GiftsPage({
     getChristmas(),
     getTranslations('christmas'),
   ])
-  // Piani non ancora aperti (Admin → Apertura piani): si regalano solo i Pass
+  // Piani non ancora aperti (Admin → Apertura piani): niente regali fino all'apertura
   const gate = await getPlansGate()
   // Offerta di Natale (Admin → Natale): un anno di Base/Pro da regalare scontato
   const giftPct = christmas.offer?.giftPct ?? 0
@@ -152,6 +152,8 @@ export default async function GiftsPage({
           <ArrowRight className="h-5 w-5 shrink-0 text-[var(--gold-bright)]" />
         </Link>
 
+        {/* Piani non ancora aperti: niente acquisto di regali (resta l'elenco di quelli già fatti) */}
+        {!gate.closed && (
         <section className="relative overflow-hidden rounded-2xl border border-[var(--gold)]/45 bg-[var(--paper)] p-6 shadow-sm">
           <div aria-hidden className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-[var(--gold)] via-[var(--gold-bright)] to-[var(--gold)]" />
           <h2 className="mb-4 text-lg font-bold text-[var(--ink)]">{t('buyTitle')}</h2>
@@ -169,6 +171,7 @@ export default async function GiftsPage({
             }}
           />
         </section>
+        )}
 
         <section id="i-miei-regali">
           <h2 className="mb-3 text-lg font-bold text-[var(--ink)]">{t('ordersTitle')}</h2>

@@ -50,6 +50,9 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
   const agentCode = (searchParams.get('agente') || '').trim().toUpperCase().slice(0, 12)
   // "Registrati e scegli Pro" dalla pagina /pro arriva con ?plan=pro.
   const initialProfessional = searchParams.get('plan') === 'pro'
+  // Da dove arriva (es. ?da=test-truffa): resta nell'account per le statistiche
+  // dell'Admin e, finita l'iscrizione, si torna lì (il risultato del test)
+  const signupFrom = searchParams.get('da') === 'test-truffa' ? 'test-truffa' : ''
 
   const [formData, setFormData] = useState({
     first_name: '',
@@ -185,6 +188,7 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
             voucher_code: cleanVoucherCode,
             professional: formData.professional,
             agent_code: agentCode,
+            signup_from: signupFrom,
             // Lingua dell'email con il codice (modello "Confirm signup" di Supabase)
             locale,
             // Consensi dati nel modulo: si copiano nello storico dopo la verifica
@@ -255,6 +259,7 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
       voucher_code?: string
       professional?: boolean
       agent_code?: string
+      signup_from?: string
     }
 
     try {
@@ -310,7 +315,8 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
       setStep('done')
       setTimeout(() => {
         // Caricamento completo: la pagina arriva sempre con la sessione nuova
-        window.location.assign(professional ? `/${locale}/pro?prova=1` : `/${locale}/dashboard`)
+        const from = meta.signup_from || signupFrom
+        window.location.assign(from === 'test-truffa' ? `/${locale}/test-truffa?risultato=1` : professional ? `/${locale}/pro?prova=1` : `/${locale}/dashboard`)
       }, delay)
     } catch (err: unknown) {
       setError(authErrorText(t, err, t('errorCreatingUser')))

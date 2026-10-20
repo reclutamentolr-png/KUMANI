@@ -4,6 +4,7 @@ import { notify } from '@/lib/adminNotify'
 import { useCallback, useEffect, useState } from 'react'
 import { Check, ExternalLink, Eye, LoaderCircle, MessageSquareWarning, ShieldAlert, Undo2, X } from 'lucide-react'
 import { adminScamContestReject, adminScamDecide, adminScamEvidence, adminScamQueue, type AdminScamTarget } from '@/app/actions/scamNet'
+import { adminSignupsFrom } from '@/app/actions/adminSignupSources'
 
 type View = 'pending' | 'confirmed' | 'contests'
 const VIEWS: { id: View; label: string }[] = [
@@ -89,6 +90,7 @@ export default function ScamAdminPanel() {
 
   return (
     <div className="space-y-5">
+      <TestSignups />
       <div>
         <h2 className="flex items-center gap-2 text-2xl font-bold text-gray-900">
           <ShieldAlert className="h-7 w-7" /> Rete Anti-Truffa
@@ -213,6 +215,23 @@ export default function ScamAdminPanel() {
           })}
         </ul>
       )}
+    </div>
+  )
+}
+
+// Quanti si sono iscritti partendo dal test «Mi stanno truffando?» (/test-truffa)
+function TestSignups() {
+  const [stats, setStats] = useState<{ total: number; last30: number; last7: number } | null>(null)
+  useEffect(() => {
+    adminSignupsFrom('test-truffa').then(setStats)
+  }, [])
+  if (!stats) return null
+  return (
+    <div className="rounded-xl border border-gray-200 bg-white p-4 text-sm text-gray-700 shadow-sm">
+      <p className="font-semibold text-gray-900">Iscritti arrivati dal test anti-truffa</p>
+      <p className="mt-1">
+        <span className="text-2xl font-bold text-gray-900">{stats.total}</span> in totale · {stats.last30} negli ultimi 30 giorni · {stats.last7} negli ultimi 7
+      </p>
     </div>
   )
 }

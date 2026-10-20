@@ -10827,8 +10827,8 @@
     "learnMoreService": "Mehr über {service} erfahren",
     "learnMorePlan": "Alle enthaltenen Dienste entdecken",
     "redeem_plan_mismatch": "Du hast schon einen anderen Tarif aktiv: Du kannst dieses Geschenk nutzen, wenn dein Tarif abläuft, oder es bleibt für jemand anderen gültig.",
-    "plansSoonNote": "Ein Jahr Base oder Pro zum Verschenken gibt es ab dem {date}, wenn die Tarife starten. Bis dahin kannst du einen Pass für einen Dienst verschenken.",
-    "error_soon": "Die Tarife zum Verschenken sind noch nicht verfügbar."
+    "plansSoonNote": "Geschenke (ein Jahr Base oder Pro und Pässe für Dienste) gibt es ab dem {date}, wenn die Tarife starten.",
+    "error_soon": "Geschenke gibt es ab dem Start der Tarife."
   },
   "relatedServices": {
     "banner": "Ist {tool} hilfreich? Entdecke die anderen Dienste der Gruppe",
@@ -13868,7 +13868,7 @@
     "howText": "Wir zeigen dir 5 Karten mit typischen Betrugssituationen. Antworte ehrlich: Am Ende erhältst du dein Risiko und was zu tun ist.",
     "howCards": "{cards} Karten · {questions} Fragen",
     "howTime": "Etwa 2 Minuten",
-    "howAnonymous": "Anonym: Deine Antworten werden nicht gespeichert",
+    "howAnonymous": "Anonym: Deine Antworten bleiben nur auf deinem Gerät",
     "howPdf": "Du kannst das Ergebnis als PDF speichern",
     "disclaimer": "Der Test dient nur der Information und ist keine Rechtsberatung. Wenn du bereits Geld verloren hast, wende dich sofort an deine Bank und die Polizei.",
     "start": "Test starten",
@@ -13950,7 +13950,15 @@
     "staffText": "Schreib dem KUMANI-Staff: Wir helfen dir, die Lage zu verstehen und die nächsten Schritte zu gehen.",
     "staffCta": "Dem Staff schreiben",
     "pdfTool": "Test „Werde ich betrogen?“",
-    "retake": "Test wiederholen"
+    "retake": "Test wiederholen",
+    "howSignup": "Vollständiges Ergebnis kostenlos mit Anmeldung",
+    "gateTitle": "Dein vollständiges Ergebnis ist bereit",
+    "gateText": "Melde dich kostenlos an, um es zu sehen: keine Kosten, keine Karte. Deine Antworten bleiben gespeichert und du siehst sofort dein Ergebnis.",
+    "gateItem1": "Was dein Ergebnis bedeutet",
+    "gateItem2": "Tipps zu deinen Antworten und Werkzeuge zum Prüfen",
+    "gateItem3": "Dein Ergebnis als PDF zum Herunterladen",
+    "gateCta": "Kostenlos anmelden und Ergebnis sehen",
+    "gateLogin": "Schon ein Konto? Anmelden"
   },
   "homeOrbit": {
     "scamSmsTitle": "Betrug gestoppt",

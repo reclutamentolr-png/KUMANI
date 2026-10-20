@@ -10827,8 +10827,8 @@
     "learnMoreService": "Saiba mais sobre {service}",
     "learnMorePlan": "Descubra todos os serviços incluídos",
     "redeem_plan_mismatch": "Já tens outro plano ativo: podes usar este presente quando o teu plano expirar, ou continua válido para outra pessoa.",
-    "plansSoonNote": "Um ano de Base ou Pro para oferecer estará disponível a partir de {date}, quando os planos abrirem. Entretanto podes oferecer o Passe de um serviço.",
-    "error_soon": "Os planos para oferecer ainda não estão abertos."
+    "plansSoonNote": "As ofertas (um ano de Base ou Pro e os Passes dos serviços) poderão ser compradas a partir de {date}, quando os planos abrirem.",
+    "error_soon": "As ofertas poderão ser compradas quando os planos abrirem."
   },
   "relatedServices": {
     "banner": "O {tool} é-lhe útil? Descubra os outros serviços do grupo",
@@ -13868,7 +13868,7 @@
     "howText": "Mostramos-te 5 fichas com situações típicas de burla. Responde com sinceridade: no fim recebes o nível de risco e o que fazer.",
     "howCards": "{cards} fichas · {questions} perguntas",
     "howTime": "Cerca de 2 minutos",
-    "howAnonymous": "Anónimo: as respostas não são guardadas",
+    "howAnonymous": "Anónimo: as tuas respostas ficam só no teu dispositivo",
     "howPdf": "Podes guardar o resultado em PDF",
     "disclaimer": "O teste é informativo, não é aconselhamento jurídico. Se já perdeste dinheiro, contacta de imediato o teu banco e a polícia.",
     "start": "Começar o teste",
@@ -13950,7 +13950,15 @@
     "staffText": "Escreve ao Staff da KUMANI: ajudamos-te a perceber a situação e os passos a dar.",
     "staffCta": "Escrever ao Staff",
     "pdfTool": "Teste «Estão a burlar-me?»",
-    "retake": "Repetir o teste"
+    "retake": "Repetir o teste",
+    "howSignup": "Resultado completo grátis com a inscrição",
+    "gateTitle": "O teu resultado completo está pronto",
+    "gateText": "Inscreve-te grátis para o ver: sem custos, sem cartão. As tuas respostas ficam guardadas e vês logo o resultado.",
+    "gateItem1": "O que significa o teu resultado",
+    "gateItem2": "Conselhos para as tuas respostas e ferramentas para verificar",
+    "gateItem3": "O PDF do resultado para descarregar",
+    "gateCta": "Inscreve-te grátis e vê o resultado",
+    "gateLogin": "Já tens conta? Entra"
   },
   "homeOrbit": {
     "scamSmsTitle": "Burla travada",

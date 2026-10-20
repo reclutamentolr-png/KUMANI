@@ -35,6 +35,8 @@ export async function POST(request: Request) {
     const form = await request.formData().catch(() => null)
     // Cosa si regala: "plan:base", "plan:pro" oppure "pass:<servizio>"
     const [kind, value] = String(form?.get('item') ?? '').split(':')
+    // Piani non ancora aperti (Admin → Apertura piani): nessun regalo, né anni di Base/Pro né Pass
+    if ((await getPlansGate()).closed) return back('soon')
     const quantity = Math.floor(Number(form?.get('quantity')))
     if (!Number.isFinite(quantity) || quantity < 1 || quantity > GIFT_MAX_QUANTITY) return back('quantity')
     const message = String(form?.get('message') ?? '')
@@ -47,8 +49,6 @@ export async function POST(request: Request) {
     let tool = ''
     let plan = ''
     if (kind === 'plan' && (value === 'base' || value === 'pro')) {
-      // Piani non ancora aperti (Admin → Apertura piani): niente anno da regalare
-      if ((await getPlansGate()).closed) return back('soon')
       const prices = await getPlanPrices()
       unitCents = Math.round((value === 'pro' ? prices.pro : prices.base) * 100)
       plan = value
