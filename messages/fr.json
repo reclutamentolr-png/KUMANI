@@ -9036,7 +9036,9 @@
     "conviviumRemindBodyPlace": "Rendez-vous {when} · {place}.",
     "conviviumSeatFreeTitle": "{emoji} Une place s’est libérée",
     "conviviumSeatFreeBody": "{name} ne vient plus à « {title} » : ceux qui ont dit « Peut-être » peuvent venir.",
-    "conviviumSeatFreeGuestBody": "Une place s’est libérée à « {title} » : si tu viens, réponds « Je viens ! »."
+    "conviviumSeatFreeGuestBody": "Une place s’est libérée à « {title} » : si tu viens, réponds « Je viens ! ».",
+    "plansOpenTitle": "Les formules KUMANI sont ouvertes !",
+    "plansOpenBody": "Comme promis : dès aujourd’hui tu peux t’abonner à Base ou Pro."
   },
   "pushInvite": {
     "title": "Activez les notifications",
@@ -10824,7 +10826,9 @@
     "shareLearnMore": "Découvre ce que c’est et comment ça marche :",
     "learnMoreService": "En savoir plus sur {service}",
     "learnMorePlan": "Découvrir tous les services inclus",
-    "redeem_plan_mismatch": "Vous avez déjà une autre offre active : vous pourrez utiliser ce cadeau à son expiration, ou il reste valable pour quelqu’un d’autre."
+    "redeem_plan_mismatch": "Vous avez déjà une autre offre active : vous pourrez utiliser ce cadeau à son expiration, ou il reste valable pour quelqu’un d’autre.",
+    "plansSoonNote": "Une année de Base ou Pro à offrir sera disponible à partir du {date}, à l’ouverture des formules. En attendant, tu peux offrir le Pass d’un service.",
+    "error_soon": "Les formules à offrir ne sont pas encore ouvertes."
   },
   "relatedServices": {
     "banner": "{tool} vous est utile ? Découvrez les autres services du groupe",
@@ -10881,7 +10885,8 @@
     "error_not_logged": "Connectez-vous pour activer l’essai.",
     "error_notLoggedIn": "Connectez-vous pour activer l’essai.",
     "error_saveError": "Enregistrement impossible. Réessayez.",
-    "error_error": "Impossible d’activer l’essai. Réessayez."
+    "error_error": "Impossible d’activer l’essai. Réessayez.",
+    "error_soon": "L’essai gratuit de Pro commencera à l’ouverture des formules."
   },
   "ecosystem": {
     "receiptSpendlyTitle": "Noter dans Spendly",
@@ -14277,5 +14282,17 @@
         "sub": "De vingt à soixante-treize ans : KUMANI est simple pour tous."
       }
     }
+  },
+  "plansSoon": {
+    "title": "Les formules ouvrent le {date}",
+    "text": "En attendant, tu peux utiliser KUMANI gratuitement : les services de la formule Free, la communauté et ton lien d’invitation. Touche « Préviens-moi » et nous t’enverrons une notification et un e-mail le jour de l’ouverture.",
+    "notify": "Préviens-moi à l’ouverture",
+    "joined": "C’est noté ! Nous te prévenons le {date} par notification et par e-mail.",
+    "emailSubject": "KUMANI : les formules sont ouvertes !",
+    "emailHello": "Bonjour {name} !",
+    "emailText": "Comme promis : dès aujourd’hui tu peux t’abonner à KUMANI Base ou Pro et utiliser tous les services.",
+    "emailWhy": "Tu reçois cet e-mail parce que tu as demandé à être prévenu de l’ouverture des formules.",
+    "emailCta": "Choisir ma formule",
+    "emailSignature": "L’équipe KUMANI"
   }
 }

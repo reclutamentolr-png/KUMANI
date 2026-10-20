@@ -9036,7 +9036,9 @@
     "conviviumRemindBodyPlace": "See you {when} · {place}.",
     "conviviumSeatFreeTitle": "{emoji} A seat has opened up",
     "conviviumSeatFreeBody": "{name} is no longer coming to “{title}”: anyone who said “Maybe” can join.",
-    "conviviumSeatFreeGuestBody": "A seat has opened up at “{title}”: if you’re in, reply “I’m in!”."
+    "conviviumSeatFreeGuestBody": "A seat has opened up at “{title}”: if you’re in, reply “I’m in!”.",
+    "plansOpenTitle": "KUMANI plans are open!",
+    "plansOpenBody": "As promised: from today you can subscribe to Base or Pro."
   },
   "pushInvite": {
     "title": "Turn on notifications",
@@ -10824,7 +10826,9 @@
     "shareLearnMore": "Find out what it is and how it works:",
     "learnMoreService": "Find out more about {service}",
     "learnMorePlan": "Discover every service included",
-    "redeem_plan_mismatch": "You already have a different plan active: you can use this gift when your plan expires, or it stays valid for someone else."
+    "redeem_plan_mismatch": "You already have a different plan active: you can use this gift when your plan expires, or it stays valid for someone else.",
+    "plansSoonNote": "A year of Base or Pro to give will be available from {date}, when plans open. Meanwhile you can give a service Pass.",
+    "error_soon": "Plans to give are not open yet."
   },
   "relatedServices": {
     "banner": "Finding {tool} useful? Discover the other services in",
@@ -10881,7 +10885,8 @@
     "error_not_logged": "Log in to start the trial.",
     "error_notLoggedIn": "Log in to start the trial.",
     "error_saveError": "Could not save. Please try again.",
-    "error_error": "The trial could not be started. Please try again."
+    "error_error": "The trial could not be started. Please try again.",
+    "error_soon": "The free Pro trial will start when plans open."
   },
   "ecosystem": {
     "receiptSpendlyTitle": "Record it in Spendly",
@@ -14277,5 +14282,17 @@
         "sub": "From twenty to seventy-three: KUMANI is easy for everyone."
       }
     }
+  },
+  "plansSoon": {
+    "title": "Plans open on {date}",
+    "text": "Meanwhile you can use KUMANI for free: the Free plan services, the community and your invite link. Tap “Notify me” and we’ll send you a notification and an email on opening day.",
+    "notify": "Notify me when they open",
+    "joined": "Done! We’ll let you know on {date} with a notification and an email.",
+    "emailSubject": "KUMANI: plans are open!",
+    "emailHello": "Hi {name}!",
+    "emailText": "As promised: from today you can subscribe to KUMANI Base or Pro and use all the services.",
+    "emailWhy": "You are receiving this email because you asked to be notified when plans opened.",
+    "emailCta": "Choose your plan",
+    "emailSignature": "The KUMANI team"
   }
 }

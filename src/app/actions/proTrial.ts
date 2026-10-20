@@ -5,6 +5,7 @@ import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
 import { checkVat, verifyVies } from '@/lib/vat'
 import { verifyTaxCode } from '@/app/actions/verification'
+import { getPlansGate } from '@/lib/plansGate'
 
 // Prova Pro gratuita: solo con Partita IVA valida (formato e cifra di controllo) oppure, per chi lavora
 // senza Partita IVA, con il codice fiscale (coerente con nome, cognome e
@@ -24,6 +25,8 @@ export async function startVerifiedProTrial(input: { type: 'vat' | 'tax_code'; c
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) return { success: false, reason: 'not_logged' }
+  // Piani non ancora aperti (Admin → Apertura piani): niente prova del Pro
+  if ((await getPlansGate()).closed) return { success: false, reason: 'soon' }
 
   let idValue: string
   let viesName: string | null = null

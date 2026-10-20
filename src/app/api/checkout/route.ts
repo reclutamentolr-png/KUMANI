@@ -9,6 +9,7 @@ import { recordConsent } from '@/lib/withdrawal'
 import { getCheckoutTexts } from '@/lib/checkoutTexts'
 import { getPlanPrices } from '@/lib/planPrices'
 import { getChristmas } from '@/lib/christmas'
+import { getPlansGate } from '@/lib/plansGate'
 import { computePassCredit } from '@/lib/passCredit'
 import { parseVatInput } from '@/lib/vat'
 import { expireOpenSubscriptionCheckouts } from '@/lib/paymentSafety'
@@ -27,6 +28,8 @@ export async function POST(request: Request) {
     // Piano scelto: Base (49 €/anno, default) o Pro (149 €/anno, ?plan=pro).
     const plan = new URL(request.url).searchParams.get('plan') === 'pro' ? 'pro' : 'base'
     const priceId = plan === 'pro' ? process.env.STRIPE_PRICE_ID_PRO : process.env.STRIPE_PRICE_ID
+    // Piani non ancora aperti (Admin → Apertura piani): niente pagamento
+    if ((await getPlansGate()).closed) return NextResponse.redirect(new URL(plan === 'pro' ? '/pro' : '/billing', base), 303)
     if (!priceId) {
       return NextResponse.redirect(new URL(plan === 'pro' ? '/pro?error=unavailable' : '/billing?error=true', base), 303)
     }

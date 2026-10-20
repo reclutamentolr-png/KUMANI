@@ -105,6 +105,7 @@ import {
   MessageSquareQuote,
   TreePine,
   Clapperboard,
+  CalendarClock,
 } from 'lucide-react'
 import { askConfirm } from '@/lib/confirm'
 
@@ -141,6 +142,7 @@ const DonationsPanel = dynamic(() => import('@/components/admin/DonationsPanel')
 const HomeLayoutPanel = dynamic(() => import('@/components/admin/HomeLayoutPanel'), { loading })
 const ChristmasPanel = dynamic(() => import('@/components/admin/ChristmasPanel'), { loading })
 const ServiceVideosPanel = dynamic(() => import('@/components/admin/ServiceVideosPanel'), { loading })
+const PlansGatePanel = dynamic(() => import('@/components/admin/PlansGatePanel'), { loading })
 const PlatformsPanel = dynamic(() => import('@/components/admin/PlatformsPanel'), { loading })
 const EmailSetupPanel = dynamic(() => import('@/components/admin/EmailSetupPanel'), { loading })
 const EmailComposePanel = dynamic(() => import('@/components/admin/EmailComposePanel'), { loading })
@@ -733,6 +735,7 @@ L'accesso viene registrato.`))) return
   { id: 'homeLayout', label: 'Aspetto homepage', Icon: Palette, permission: 'settings.read' as Permission, group: 'general' },
   { id: 'christmas', label: 'Natale', Icon: TreePine, permission: 'settings.read' as Permission, group: 'general' },
   { id: 'serviceVideos', label: 'Video dei servizi', Icon: Clapperboard, permission: 'settings.read' as Permission, group: 'general' },
+  { id: 'plansGate', label: 'Apertura piani', Icon: CalendarClock, permission: 'settings.read' as Permission, group: 'general' },
   { id: 'donations', label: 'Donazioni', Icon: HeartHandshake, permission: 'settings.read' as Permission, group: 'general' },
   { id: 'users', label: 'Utenti', Icon: Users, permission: 'users.read' as Permission, group: 'users' },
   { id: 'matrix', label: 'Matrice', Icon: GitBranch, permission: 'matrix.read' as Permission, group: 'users' },
@@ -1837,6 +1840,7 @@ L'accesso viene registrato.`))) return
         {activeSection === 'homeLayout' && <HomeLayoutPanel />}
         {activeSection === 'christmas' && <ChristmasPanel />}
         {activeSection === 'serviceVideos' && <ServiceVideosPanel />}
+        {activeSection === 'plansGate' && <PlansGatePanel />}
         {activeSection === 'reports' && <ReportsPanel initialTab={reportTab} />}
         {activeSection === 'realUsage' && <RealUsagePanel />}
         {activeSection === 'languages' && <LanguagesPanel canWrite={hasPermission(permissions, 'settings.write')} />}

@@ -14,6 +14,8 @@ import { getCheckoutTexts } from '@/lib/checkoutTexts'
 import { computePassCredit } from '@/lib/passCredit'
 import { getPlanPrices } from '@/lib/planPrices'
 import { formatOfferDate, getChristmas } from '@/lib/christmas'
+import PlansComingSoonCard from '@/components/plans/PlansComingSoonCard'
+import { getComingSoon } from '@/lib/plansComingSoon'
 import WithdrawalRequest from '@/components/billing/WithdrawalRequest'
 import { locales, defaultLocale } from '../../../i18n'
 
@@ -202,6 +204,8 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
   const baseCents = Math.round(basePrice * 100)
   const christmasCents = christmasOffer && christmasOffer.planPct > 0 ? Math.min(Math.round((baseCents * christmasOffer.planPct) / 100), Math.max(baseCents - 100 - basePassCreditCents, 0)) : 0
   const tx = await getTranslations({ locale, namespace: 'christmas' })
+  // Piani non ancora aperti (Admin → Apertura piani): al posto del pagamento data e «Avvisami»
+  const comingSoon = !isActive ? await getComingSoon(supabase, user.id, locale) : null
   const canRequestWithdrawal = !!withdrawalUntil && withdrawal?.status !== 'pending'
 
   const portalNotice =
@@ -271,7 +275,8 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
             {tp('passCreditNote', { amount: money(basePassCreditCents) })}
           </p>
         )}
-        {!isActive && christmasCents > 0 && christmasOffer && (
+        {comingSoon && <PlansComingSoonCard plan="base" joined={comingSoon.joined} texts={comingSoon.texts} />}
+        {!comingSoon && !isActive && christmasCents > 0 && christmasOffer && (
           <p className="mb-4 rounded-xl bg-gradient-to-r from-[#5c0c18] to-[#171717] px-4 py-3 text-sm font-semibold text-white">
             {tx('billingNote', {
               pct: christmasOffer.planPct,
@@ -281,7 +286,7 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
             })}
           </p>
         )}
-        {!isActive && (
+        {!isActive && !comingSoon && (
           <CheckoutForm action="/api/checkout" texts={checkoutTexts}>
             <button
               type="submit"

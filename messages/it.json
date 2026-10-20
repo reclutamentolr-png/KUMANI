@@ -9036,7 +9036,9 @@
     "conviviumRemindBodyPlace": "Ci si vede {when} · {place}.",
     "conviviumSeatFreeTitle": "{emoji} Si è liberato un posto",
     "conviviumSeatFreeBody": "{name} non viene più a «{title}»: chi ha detto «Forse» può entrare.",
-    "conviviumSeatFreeGuestBody": "Si è liberato un posto a «{title}»: se ci sei, rispondi «Ci sto!»."
+    "conviviumSeatFreeGuestBody": "Si è liberato un posto a «{title}»: se ci sei, rispondi «Ci sto!».",
+    "plansOpenTitle": "I piani di KUMANI sono aperti!",
+    "plansOpenBody": "Come promesso: da oggi puoi abbonarti a Base o Pro."
   },
   "pushInvite": {
     "title": "Attiva le notifiche",
@@ -10824,7 +10826,9 @@
     "shareLearnMore": "Scopri cos’è e come funziona:",
     "learnMoreService": "Scopri di più su {service}",
     "learnMorePlan": "Scopri tutti i servizi inclusi",
-    "redeem_plan_mismatch": "Hai già un altro piano attivo: questo regalo si può usare quando il tuo piano scade, oppure resta valido per qualcun altro."
+    "redeem_plan_mismatch": "Hai già un altro piano attivo: questo regalo si può usare quando il tuo piano scade, oppure resta valido per qualcun altro.",
+    "plansSoonNote": "Un anno di Base o Pro da regalare sarà disponibile dal {date}, quando si aprono i piani. Intanto puoi regalare il Pass di un servizio.",
+    "error_soon": "I piani da regalare non sono ancora aperti."
   },
   "relatedServices": {
     "banner": "Ti è utile {tool}? Scopri gli altri servizi del gruppo",
@@ -10881,7 +10885,8 @@
     "error_not_logged": "Accedi per attivare la prova.",
     "error_notLoggedIn": "Accedi per attivare la prova.",
     "error_saveError": "Non è stato possibile salvare. Riprova.",
-    "error_error": "Non è stato possibile attivare la prova. Riprova."
+    "error_error": "Non è stato possibile attivare la prova. Riprova.",
+    "error_soon": "La prova gratuita del Pro partirà con l’apertura dei piani."
   },
   "ecosystem": {
     "receiptSpendlyTitle": "Segnala in Spendly",
@@ -14277,5 +14282,17 @@
         "sub": "Dai vent’anni ai settantatré: KUMANI è facile per tutti."
       }
     }
+  },
+  "plansSoon": {
+    "title": "I piani si aprono il {date}",
+    "text": "Intanto puoi usare KUMANI gratis: i servizi del piano Free, la community e il tuo link d’invito. Toccando «Avvisami» ti mandiamo una notifica e un’email il giorno dell’apertura.",
+    "notify": "Avvisami quando si aprono",
+    "joined": "Fatto! Ti avvisiamo il {date}, con una notifica e un’email.",
+    "emailSubject": "KUMANI: i piani sono aperti!",
+    "emailHello": "Ciao {name}!",
+    "emailText": "Come promesso: da oggi puoi abbonarti a KUMANI Base o Pro e usare tutti i servizi.",
+    "emailWhy": "Ricevi questa email perché avevi chiesto di essere avvisato all’apertura dei piani.",
+    "emailCta": "Scegli il tuo piano",
+    "emailSignature": "Il team KUMANI"
   }
 }

@@ -9,6 +9,7 @@ import { parseVatInput } from '@/lib/vat'
 import { getToolPassOffer } from '@/lib/toolPasses'
 import { getPlanPrices } from '@/lib/planPrices'
 import { discounted, getChristmas } from '@/lib/christmas'
+import { getPlansGate } from '@/lib/plansGate'
 import { GIFT_MAX_QUANTITY, GIFT_MESSAGE_MAX, GIFT_TYPE } from '@/lib/gifts'
 import { giftItemName } from '@/lib/giftsServer'
 import { locales, defaultLocale } from '../../../../../i18n'
@@ -46,6 +47,8 @@ export async function POST(request: Request) {
     let tool = ''
     let plan = ''
     if (kind === 'plan' && (value === 'base' || value === 'pro')) {
+      // Piani non ancora aperti (Admin → Apertura piani): niente anno da regalare
+      if ((await getPlansGate()).closed) return back('soon')
       const prices = await getPlanPrices()
       unitCents = Math.round((value === 'pro' ? prices.pro : prices.base) * 100)
       plan = value

@@ -7,6 +7,8 @@ import Link from '@/components/LocalizedLink'
 import Logo from '@/components/Logo'
 import UpgradeToProButton from '@/components/UpgradeToProButton'
 import CheckoutForm from '@/components/billing/CheckoutForm'
+import PlansComingSoonCard from '@/components/plans/PlansComingSoonCard'
+import { getComingSoon } from '@/lib/plansComingSoon'
 import { getCheckoutTexts } from '@/lib/checkoutTexts'
 import { computePassCredit } from '@/lib/passCredit'
 import StartProTrialButton from '@/components/StartProTrialButton'
@@ -69,6 +71,7 @@ export default async function ProPage({
   const {
     data: { user },
   } = await supabase.auth.getUser()
+  const comingSoon = await getComingSoon(supabase, user?.id ?? null, locale)
   let plan: UserPlan = 'none'
   let hasStripeSubscription = false
   let paidPro = false
@@ -197,6 +200,9 @@ export default async function ProPage({
                   )}
                   {!proAvailable ? (
                     <p className="rounded-xl bg-white/5 px-4 py-3 text-sm text-gray-300">{t('proUnavailable')}</p>
+                  ) : comingSoon ? (
+                    // Piani non ancora aperti (Admin → Apertura piani): data e «Avvisami», niente prova
+                    <PlansComingSoonCard plan="pro" joined={comingSoon.joined} texts={comingSoon.texts} tone="dark" />
                   ) : hasStripeSubscription ? (
                     <UpgradeToProButton label={t('ctaUpgrade')} note={t('upgradeNote')} />
                   ) : (
@@ -220,7 +226,7 @@ export default async function ProPage({
                     </CheckoutForm>
                     </>
                   )}
-                  {!trialUsed && plan !== 'pro' && <StartProTrialButton label={t('ctaStartTrial', { days: trialDays })} autoOpen={prova === '1'} />}
+                  {!comingSoon && !trialUsed && plan !== 'pro' && <StartProTrialButton label={t('ctaStartTrial', { days: trialDays })} autoOpen={prova === '1'} />}
                 </div>
               )}
             </div>

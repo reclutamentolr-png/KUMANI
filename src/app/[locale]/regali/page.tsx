@@ -9,12 +9,13 @@ import { createClient } from '@/lib/supabase/server'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { getPlanPrices } from '@/lib/planPrices'
 import { discounted, formatOfferDate, getChristmas } from '@/lib/christmas'
+import { formatOpenDate, getPlansGate } from '@/lib/plansGate'
 import { SITE_URL } from '@/lib/siteUrl'
 import { getMyGiftOrders } from '@/app/actions/gifts'
 import { confirmGiftSession, giftItemName } from '@/lib/giftsServer'
 import { defaultLocale } from '../../../../i18n'
 
-const ERRORS = ['quantity', 'item', 'unavailable', 'business', 'vat', 'terms', 'payment'] as const
+const ERRORS = ['quantity', 'item', 'unavailable', 'business', 'vat', 'terms', 'payment', 'soon'] as const
 
 // Regala KUMANI: codici per un anno di Base/Pro o per il Pass di un servizio,
 // da mandare a chi si vuole; sotto, i regali già comprati con lo stato.
@@ -48,13 +49,20 @@ export default async function GiftsPage({
     getChristmas(),
     getTranslations('christmas'),
   ])
+  // Piani non ancora aperti (Admin → Apertura piani): si regalano solo i Pass
+  const gate = await getPlansGate()
   // Offerta di Natale (Admin → Natale): un anno di Base/Pro da regalare scontato
   const giftPct = christmas.offer?.giftPct ?? 0
   const planOption = (cents: number) => (giftPct > 0 ? { priceCents: discounted(cents, giftPct), fullCents: cents } : { priceCents: cents })
   const tools = getMarketplaceTools((key) => tm(key))
+  const planOptions: GiftOption[] = gate.closed
+    ? []
+    : [
+        { value: 'plan:base', label: t('itemBase'), ...planOption(Math.round(prices.base * 100)), group: 'plan' },
+        { value: 'plan:pro', label: t('itemPro'), ...planOption(Math.round(prices.pro * 100)), group: 'plan' },
+      ]
   const options: GiftOption[] = [
-    { value: 'plan:base', label: t('itemBase'), ...planOption(Math.round(prices.base * 100)), group: 'plan' },
-    { value: 'plan:pro', label: t('itemPro'), ...planOption(Math.round(prices.pro * 100)), group: 'plan' },
+    ...planOptions,
     ...(passRows ?? [])
       .map((row) => ({ row, info: tools.find((tool) => tool.toolName === row.tool_name) }))
       .filter((entry) => entry.info)
@@ -106,6 +114,12 @@ export default async function GiftsPage({
                 date: formatOfferDate(locale, christmas.offer.until),
               })}
             </span>
+          </p>
+        )}
+
+        {gate.closed && (
+          <p className="rounded-2xl border border-[var(--gold)]/40 bg-[var(--gold-pale)] px-4 py-3 text-sm text-[var(--ink)]">
+            {t('plansSoonNote', { date: formatOpenDate(locale, gate.openDate) })}
           </p>
         )}
 

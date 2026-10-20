@@ -9036,7 +9036,9 @@
     "conviviumRemindBodyPlace": "Wir sehen uns {when} · {place}.",
     "conviviumSeatFreeTitle": "{emoji} Ein Platz ist frei geworden",
     "conviviumSeatFreeBody": "{name} kommt nicht mehr zu „{title}“: Wer „Vielleicht“ gesagt hat, kann nachrücken.",
-    "conviviumSeatFreeGuestBody": "Bei „{title}“ ist ein Platz frei geworden: Wenn du dabei bist, antworte „Bin dabei!“."
+    "conviviumSeatFreeGuestBody": "Bei „{title}“ ist ein Platz frei geworden: Wenn du dabei bist, antworte „Bin dabei!“.",
+    "plansOpenTitle": "Die KUMANI-Tarife sind da!",
+    "plansOpenBody": "Wie versprochen: Ab heute kannst du Base oder Pro abonnieren."
   },
   "pushInvite": {
     "title": "Benachrichtigungen aktivieren",
@@ -10824,7 +10826,9 @@
     "shareLearnMore": "Hier erfährst du, was es ist und wie es funktioniert:",
     "learnMoreService": "Mehr über {service} erfahren",
     "learnMorePlan": "Alle enthaltenen Dienste entdecken",
-    "redeem_plan_mismatch": "Du hast schon einen anderen Tarif aktiv: Du kannst dieses Geschenk nutzen, wenn dein Tarif abläuft, oder es bleibt für jemand anderen gültig."
+    "redeem_plan_mismatch": "Du hast schon einen anderen Tarif aktiv: Du kannst dieses Geschenk nutzen, wenn dein Tarif abläuft, oder es bleibt für jemand anderen gültig.",
+    "plansSoonNote": "Ein Jahr Base oder Pro zum Verschenken gibt es ab dem {date}, wenn die Tarife starten. Bis dahin kannst du einen Pass für einen Dienst verschenken.",
+    "error_soon": "Die Tarife zum Verschenken sind noch nicht verfügbar."
   },
   "relatedServices": {
     "banner": "Ist {tool} hilfreich? Entdecke die anderen Dienste der Gruppe",
@@ -10881,7 +10885,8 @@
     "error_not_logged": "Melde dich an, um den Test zu starten.",
     "error_notLoggedIn": "Melde dich an, um den Test zu starten.",
     "error_saveError": "Speichern nicht möglich. Bitte erneut versuchen.",
-    "error_error": "Der Test konnte nicht gestartet werden. Bitte erneut versuchen."
+    "error_error": "Der Test konnte nicht gestartet werden. Bitte erneut versuchen.",
+    "error_soon": "Die kostenlose Pro-Testphase startet mit den Tarifen."
   },
   "ecosystem": {
     "receiptSpendlyTitle": "In Spendly eintragen",
@@ -14277,5 +14282,17 @@
         "sub": "Von zwanzig bis dreiundsiebzig: KUMANI ist für alle einfach."
       }
     }
+  },
+  "plansSoon": {
+    "title": "Die Tarife starten am {date}",
+    "text": "Bis dahin nutzt du KUMANI kostenlos: die Dienste des Free-Tarifs, die Community und deinen Einladungslink. Tippe auf „Benachrichtigen“ und wir schicken dir am Starttag eine Benachrichtigung und eine E-Mail.",
+    "notify": "Benachrichtige mich zum Start",
+    "joined": "Erledigt! Wir melden uns am {date} per Benachrichtigung und E-Mail.",
+    "emailSubject": "KUMANI: Die Tarife sind da!",
+    "emailHello": "Hallo {name}!",
+    "emailText": "Wie versprochen: Ab heute kannst du KUMANI Base oder Pro abonnieren und alle Dienste nutzen.",
+    "emailWhy": "Du erhältst diese E-Mail, weil du beim Start der Tarife benachrichtigt werden wolltest.",
+    "emailCta": "Tarif wählen",
+    "emailSignature": "Dein KUMANI-Team"
   }
 }

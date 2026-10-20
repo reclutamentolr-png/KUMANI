@@ -9036,7 +9036,9 @@
     "conviviumRemindBodyPlace": "Nos vemos {when} · {place}.",
     "conviviumSeatFreeTitle": "{emoji} Se ha liberado una plaza",
     "conviviumSeatFreeBody": "{name} ya no va a «{title}»: quien dijo «Quizá» puede entrar.",
-    "conviviumSeatFreeGuestBody": "Se ha liberado una plaza en «{title}»: si te apuntas, responde «¡Me apunto!»."
+    "conviviumSeatFreeGuestBody": "Se ha liberado una plaza en «{title}»: si te apuntas, responde «¡Me apunto!».",
+    "plansOpenTitle": "¡Los planes de KUMANI están abiertos!",
+    "plansOpenBody": "Como te prometimos: desde hoy puedes suscribirte a Base o Pro."
   },
   "pushInvite": {
     "title": "Activa las notificaciones",
@@ -10824,7 +10826,9 @@
     "shareLearnMore": "Descubre qué es y cómo funciona:",
     "learnMoreService": "Descubre más sobre {service}",
     "learnMorePlan": "Descubre todos los servicios incluidos",
-    "redeem_plan_mismatch": "Ya tienes otro plan activo: podrás usar este regalo cuando tu plan caduque, o sigue siendo válido para otra persona."
+    "redeem_plan_mismatch": "Ya tienes otro plan activo: podrás usar este regalo cuando tu plan caduque, o sigue siendo válido para otra persona.",
+    "plansSoonNote": "Un año de Base o Pro para regalar estará disponible desde el {date}, cuando se abran los planes. Mientras tanto puedes regalar el Pase de un servicio.",
+    "error_soon": "Los planes para regalar aún no están abiertos."
   },
   "relatedServices": {
     "banner": "¿Te resulta útil {tool}? Descubre los otros servicios del grupo",
@@ -10881,7 +10885,8 @@
     "error_not_logged": "Inicia sesión para activar la prueba.",
     "error_notLoggedIn": "Inicia sesión para activar la prueba.",
     "error_saveError": "No se ha podido guardar. Inténtalo de nuevo.",
-    "error_error": "No se ha podido activar la prueba. Inténtalo de nuevo."
+    "error_error": "No se ha podido activar la prueba. Inténtalo de nuevo.",
+    "error_soon": "La prueba gratuita de Pro empezará con la apertura de los planes."
   },
   "ecosystem": {
     "receiptSpendlyTitle": "Anótalo en Spendly",
@@ -14277,5 +14282,17 @@
         "sub": "De los veinte a los setenta y tres: KUMANI es fácil para todos."
       }
     }
+  },
+  "plansSoon": {
+    "title": "Los planes se abren el {date}",
+    "text": "Mientras tanto puedes usar KUMANI gratis: los servicios del plan Free, la comunidad y tu enlace de invitación. Toca «Avísame» y te enviamos una notificación y un email el día de la apertura.",
+    "notify": "Avísame cuando se abran",
+    "joined": "¡Hecho! Te avisamos el {date} con una notificación y un email.",
+    "emailSubject": "KUMANI: ¡los planes están abiertos!",
+    "emailHello": "¡Hola, {name}!",
+    "emailText": "Como te prometimos: desde hoy puedes suscribirte a KUMANI Base o Pro y usar todos los servicios.",
+    "emailWhy": "Recibes este email porque pediste que te avisáramos cuando se abrieran los planes.",
+    "emailCta": "Elige tu plan",
+    "emailSignature": "El equipo de KUMANI"
   }
 }
