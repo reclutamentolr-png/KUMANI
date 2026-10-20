@@ -84,7 +84,13 @@ export default function VoucherCardView({
             </Link>
           </div>
         ) : status === 'used' ? (
-          <p className="rounded-2xl bg-white/[0.06] p-5 font-semibold text-white">{t('used')}</p>
+          <div className="rounded-2xl bg-white/[0.06] p-5">
+            <p className="font-semibold text-white">{t('used')}</p>
+            {/* Riaperto dalla campanella: si torna alla Home (o al sito, senza accesso) */}
+            <Link href={loggedIn ? '/dashboard' : '/'} className="mt-3 inline-flex min-h-11 items-center justify-center rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 font-bold text-[var(--ink)]">
+              {t('goHome')}
+            </Link>
+          </div>
         ) : loggedIn ? (
           <button
             type="button"

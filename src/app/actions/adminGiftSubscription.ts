@@ -55,3 +55,43 @@ export async function adminGiftSubscription(input: {
   revalidatePath('/wallet')
   return { success: true, code: code as string, link: cardLink(SITE_URL, 'it', code as string, options) }
 }
+
+export type AdminGiftRow = {
+  code: string
+  plan: 'base' | 'pro'
+  createdAt: string
+  status: 'active' | 'redeemed' | 'other'
+  redeemedAt: string | null
+  recipient: string
+  email: string | null
+}
+
+// Elenco dei regali fatti dall'Admin (più recenti prima): a chi, piano, stato
+export async function adminListGiftSubscriptions(): Promise<{ gifts: AdminGiftRow[] } | { error: string }> {
+  if (!(await verifyAdmin('coupons.read'))) return { error: 'Non autorizzato' }
+  const db = pushDb()
+  const { data, error } = await db
+    .from('subscription_vouchers')
+    .select('code, plan, status, created_at, redeemed_at, holder_id')
+    .eq('prize_key', 'admin_gift')
+    .order('created_at', { ascending: false })
+    .limit(300)
+  if (error) return { error: error.message }
+  const ids = [...new Set((data ?? []).map((v) => v.holder_id).filter(Boolean))] as string[]
+  const { data: people } = ids.length ? await db.from('profiles').select('id, first_name, last_name, email').in('id', ids) : { data: [] }
+  const byId = new Map((people ?? []).map((p) => [p.id as string, p]))
+  return {
+    gifts: (data ?? []).map((v) => {
+      const p = byId.get(v.holder_id as string)
+      return {
+        code: v.code as string,
+        plan: v.plan === 'pro' ? 'pro' : 'base',
+        createdAt: v.created_at as string,
+        status: v.status === 'active' ? 'active' : v.status === 'redeemed' ? 'redeemed' : 'other',
+        redeemedAt: (v.redeemed_at as string | null) ?? null,
+        recipient: [p?.first_name, p?.last_name].filter(Boolean).join(' ') || '—',
+        email: (p?.email as string | null) ?? null,
+      }
+    }),
+  }
+}
