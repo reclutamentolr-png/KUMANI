@@ -50,18 +50,25 @@ export default async function HomeDonations() {
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--gold-bright)]">{t('pledgeShort')}</p>
                 <p className="mt-1 text-5xl font-extrabold text-white sm:text-6xl">{percentFormat(locale, summary.percent_bp)}</p>
               </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-xl border border-white/10 bg-white/[0.04] p-3 text-center">
-                  <Landmark className="mx-auto h-5 w-5 text-[var(--gold-bright)]" />
-                  <p className="mt-1 text-xl font-bold text-white">{eur(summary.paid_cents)}</p>
-                  <p className="text-[11px] text-white/60">{t('paidLabel')}</p>
+              {/* Cifre solo sopra zero: prima del lancio due «0 €» non dicono niente */}
+              {(summary.paid_cents > 0 || summary.points_cents > 0) && (
+                <div className={`grid gap-3 ${summary.paid_cents > 0 && summary.points_cents > 0 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+                  {summary.paid_cents > 0 && (
+                    <div className="rounded-xl border border-white/10 bg-white/[0.04] p-3 text-center">
+                      <Landmark className="mx-auto h-5 w-5 text-[var(--gold-bright)]" />
+                      <p className="mt-1 text-xl font-bold text-white">{eur(summary.paid_cents)}</p>
+                      <p className="text-[11px] text-white/60">{t('paidLabel')}</p>
+                    </div>
+                  )}
+                  {summary.points_cents > 0 && (
+                    <div className="rounded-xl border border-white/10 bg-white/[0.04] p-3 text-center">
+                      <HandCoins className="mx-auto h-5 w-5 text-[var(--gold-bright)]" />
+                      <p className="mt-1 text-xl font-bold text-white">{eur(summary.points_cents)}</p>
+                      <p className="text-[11px] text-white/60">{t('fromPoints')}</p>
+                    </div>
+                  )}
                 </div>
-                <div className="rounded-xl border border-white/10 bg-white/[0.04] p-3 text-center">
-                  <HandCoins className="mx-auto h-5 w-5 text-[var(--gold-bright)]" />
-                  <p className="mt-1 text-xl font-bold text-white">{eur(summary.points_cents)}</p>
-                  <p className="text-[11px] text-white/60">{t('fromPoints')}</p>
-                </div>
-              </div>
+              )}
               <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] p-3">
                 {active.logo_url ? (
                   // eslint-disable-next-line @next/next/no-img-element

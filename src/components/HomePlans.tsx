@@ -1,5 +1,6 @@
 import { unstable_cache } from 'next/cache'
 import { getLocale, getTranslations } from 'next-intl/server'
+import { formatOpenDate, getPlansGate } from '@/lib/plansGate'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { ArrowRight, Briefcase, Check, Gift, Ticket } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
@@ -33,6 +34,9 @@ const PREVIEW = 6
 // include il precedente, con i servizi reali di ogni piano, più la fascia
 // del Pass per chi vuole un solo servizio.
 export default async function HomePlans() {
+  // Piani non ancora aperti: la prova Pro parte con l'apertura
+  const [gate, gateLocale] = await Promise.all([getPlansGate(), getLocale()])
+  const openDate = gate.closed ? formatOpenDate(gateLocale, gate.openDate) : null
   const [t, marketplaceT, hubsT, locale, prices, rows] = await Promise.all([
     getTranslations('landingHome'),
     getTranslations('marketplace'),
@@ -184,9 +188,9 @@ export default async function HomePlans() {
             href="/register?plan=pro"
             className="mt-3 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3 font-bold text-[var(--ink)] shadow-xl transition-all hover:brightness-110"
           >
-            {t('planProCta')} <ArrowRight className="h-4 w-4" />
+            {openDate ? t('planProCtaSoon') : t('planProCta')} <ArrowRight className="h-4 w-4" />
           </Link>
-          <p className="mt-3 text-center text-xs text-gray-400">{t('planProTrialNote')}</p>
+          <p className="mt-3 text-center text-xs text-gray-400">{openDate ? t('planProTrialNoteSoon', { date: openDate }) : t('planProTrialNote')}</p>
         </div>
       </div>
 

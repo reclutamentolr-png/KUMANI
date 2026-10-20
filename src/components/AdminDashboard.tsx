@@ -293,6 +293,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
 
   const [onlineUsers, setOnlineUsers] = useState(0)
   const [users, setUsers] = useState<AdminUserRow[]>([])
+  const [usersTotal, setUsersTotal] = useState(0)
   const [searchTerm, setSearchTerm] = useState('')
   const [loadingUsers, setLoadingUsers] = useState(false)
 
@@ -346,8 +347,9 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
 
   const loadUsers = async (silent = false) => {
     if (!silent) setLoadingUsers(true)
-    const { users: data } = await adminListUsers()
+    const { users: data, total } = await adminListUsers()
     setUsers(data)
+    setUsersTotal(total)
     setLoadingUsers(false)
   }
 
@@ -589,7 +591,8 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     u.first_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     u.last_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     u.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    u.referral_code?.toLowerCase().includes(searchTerm.toLowerCase())
+    u.referral_code?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    u.sponsor?.name.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   const openManageModal = async (user: AdminUserRow) => {
@@ -832,6 +835,7 @@ L'accesso viene registrato.`))) return
         <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
           <Users className="w-7 h-7" />
           Gestione Utenti
+          {usersTotal > 0 && <span className="rounded-full bg-[var(--gold-pale)] px-3 py-1 text-sm font-bold text-[var(--ink)]">{usersTotal} iscritti</span>}
         </h2>
         <div className="relative w-full sm:w-64">
           <input
@@ -855,7 +859,9 @@ L'accesso viene registrato.`))) return
             <table className="w-full text-left">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
+                  <th className="px-4 py-3 text-xs font-semibold text-gray-500 uppercase">N°</th>
                   <th className="px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Utente</th>
+                  <th className="px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Invitato da</th>
                   <th className="px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Email</th>
                   <th className="px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Codice</th>
                   <th className="px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Stato</th>
@@ -865,9 +871,23 @@ L'accesso viene registrato.`))) return
               <tbody className="divide-y divide-gray-200">
                 {filteredUsers.map((user) => (
                   <tr key={user.id} className={`hover:bg-gray-50 transition-colors ${user.is_blocked ? 'bg-red-50' : ''}`}>
+                    <td className="px-4 py-4 text-sm font-bold tabular-nums text-gray-500">{user.number}</td>
                     <td className="px-6 py-4">
                       <div className="font-medium text-gray-900">{user.first_name} {user.last_name}</div>
+                      <div className="text-xs text-gray-500">
+                        Iscritto il {new Date(user.created_at).toLocaleString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Rome' })}
+                      </div>
                       {user.is_blocked && <span className="text-xs text-red-600 font-semibold flex items-center gap-1"><Lock className="w-3 h-3" /> BLOCCATO</span>}
+                    </td>
+                    <td className="px-6 py-4 text-sm">
+                      {user.sponsor ? (
+                        <>
+                          <div className="font-medium text-gray-900">{user.sponsor.name}</div>
+                          {user.sponsor.code && <div className="font-mono text-xs text-[var(--gold)]">{user.sponsor.code}</div>}
+                        </>
+                      ) : (
+                        <span className="text-gray-400">—</span>
+                      )}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-600">{user.email}</td>
                     <td className="px-6 py-4 text-sm font-mono text-[var(--gold)]">{user.referral_code}</td>

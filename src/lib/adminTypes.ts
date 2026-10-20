@@ -22,6 +22,10 @@ export type AdminUserRow = {
   subscription_status: string | null
   is_blocked: boolean | null
   created_at: string
+  // Numero progressivo di iscrizione (1 = il primo iscritto)
+  number: number
+  // Chi l'ha invitato (null: nessuno)
+  sponsor: { name: string; code: string | null } | null
 }
 
 // adminGetProfile (select '*'): solo i campi usati dal modulo di modifica

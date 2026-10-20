@@ -294,9 +294,9 @@ export default function WelcomeHome({
                   <Play className="h-3.5 w-3.5 fill-[var(--gold-bright)] text-[var(--gold-bright)]" /> {t('step3Video')}
                 </button>
               )}
-              <span onClickCapture={discover}>
-                <NativeShareButton url={shareUrl} title="KUMANI" text={t('step3ShareText')} variant="light" label={t('step3Share')} />
-              </span>
+              {/* Il passo si spunta a condivisione fatta: se sparisse al tocco, il menu
+                  di condivisione o «Link copiato» non si vedrebbero */}
+              <NativeShareButton url={shareUrl} title="KUMANI" text={t('step3ShareText')} variant="light" label={t('step3Share')} onShared={discover} />
             </>
           )}
         </ol>

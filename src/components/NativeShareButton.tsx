@@ -18,6 +18,7 @@ export default function NativeShareButton({
   iconOnly = false,
   className = '',
   label,
+  onShared,
 }: {
   url: string
   title?: string
@@ -29,6 +30,8 @@ export default function NativeShareButton({
   className?: string
   // Scritta al posto di «Condividi» (es. «Condividi KUMANI»), senza la riga sotto
   label?: string
+  // Dopo la condivisione (o dopo «Link copiato», quando la scritta torna normale)
+  onShared?: () => void
 }) {
   const t = useTranslations('share')
   const [canShare, setCanShare] = useState(false)
@@ -44,6 +47,7 @@ export default function NativeShareButton({
     if (canShare) {
       try {
         await navigator.share({ title, text, url })
+        onShared?.()
       } catch {
         // Condivisione annullata
       }
@@ -52,7 +56,10 @@ export default function NativeShareButton({
     try {
       await navigator.clipboard.writeText(text ? `${text} ${url}` : url)
       setCopied(true)
-      window.setTimeout(() => setCopied(false), 2500)
+      window.setTimeout(() => {
+        setCopied(false)
+        onShared?.()
+      }, 2500)
     } catch {
       window.prompt(t('copy'), url)
     }

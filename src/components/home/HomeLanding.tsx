@@ -3,14 +3,16 @@ import { CANONICAL_ORIGIN } from '@/lib/seo'
 import JsonLd from '@/components/seo/JsonLd'
 import Link from '@/components/LocalizedLink'
 import HomeLoginLink from '@/components/home/HomeLoginLink'
-import { getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
+import { formatOpenDate, getPlansGate } from '@/lib/plansGate'
 import {
   Shield,
   ArrowRight,
   Target,
   Ticket,
   Share2,
-  Trophy,
+  CirclePlay,
+  Users,
   ShieldAlert,
   Euro,
   LayoutGrid,
@@ -78,12 +80,15 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
   // «In cosa possiamo darti una mano?»: per ogni risposta i servizi giusti
   // Numeri sotto l'apertura: lingue attive, servizi e strumenti accesi (decisi dall'Admin)
   const [needs, enabledLocales, counts, karma, christmas] = await Promise.all([buildHomeNeeds(), getEnabledLocales(), getAppCounts(), getHomeKarma(), getChristmas()])
+  // Piani non ancora aperti (Admin → Apertura piani): niente prova Pro promessa
+  const [gate, locale] = await Promise.all([getPlansGate(), getLocale()])
+  const openDate = gate.closed ? formatOpenDate(locale, gate.openDate) : null
 
   // Codice referral, riconoscimento pubblico e Kordata (acquisti di gruppo).
   // Niente "struttura a matrice" in evidenza — non deve sembrare un network.
   const communityCards = [
-    { icon: Share2, title: t('communityCard1Title'), desc: t('communityCard1Description') },
-    { icon: Trophy, title: t('communityCard3Title'), desc: t('communityCard3Description') }
+    { icon: CirclePlay, title: t('communityCard1Title'), desc: t('communityCard1Description') },
+    { icon: Users, title: t('communityCard3Title'), desc: t('communityCard3Description') }
   ]
 
 
@@ -167,8 +172,7 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
               {[
                 `${counts.tools} ${t('statToolsShort', { count: counts.tools })}`,
                 `${counts.services} ${t('statServicesShort', { count: counts.services })}`,
-                `${enabledLocales.length} ${t('statLanguagesShort', { count: enabledLocales.length })}`,
-                `${t('statWeeklyValue')} ${t('statWeeklyShort')}`,
+                `${enabledLocales.length} ${t('statLanguagesShort', { count: enabledLocales.length })}`
               ].join(' · ')}
             </p>
             {/* Telefono: quattro schede fisse dei servizi per i privati */}
@@ -381,7 +385,7 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
               { Icon: LayoutGrid, title: t('benefitCard2Title'), text: t('benefitCard2Text') },
               { Icon: Lock, title: t('why3Title'), text: t('why3Text') },
               { Icon: Clock, title: t('benefitCard7Title'), text: t('benefitCard7Text') },
-              { Icon: Sparkles, title: t('why5Title'), text: t('why5Text') },
+              { Icon: Sparkles, title: t('why5Title'), text: openDate ? t('why5TextSoon') : t('why5Text') },
               { Icon: HeartHandshake, title: t('benefitCard8Title'), text: t('benefitCard8Text') },
             ].map(({ Icon, title, text }) => (
               <li key={title} className="flex flex-col gap-3 rounded-2xl border border-[var(--gold)]/25 bg-white/[0.04] p-4 sm:p-5">
@@ -428,7 +432,7 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
             <ArrowRight className="w-4 h-4 sm:w-6 sm:h-6" />
           </Link>
           <p className="text-white/60 mt-4 text-xs sm:text-sm">
-            {t('ctaNote')}
+            {openDate ? t('ctaNoteSoon', { date: openDate }) : t('ctaNote')}
           </p>
         </div>
       </HomeSection>

@@ -1083,18 +1083,41 @@ export async function moderateSpotlightProfile(profileId: string, status: Spotli
 
 // Elenco utenti per il pannello admin (email inclusa): le colonne personali
 // non sono più leggibili dal browser, nemmeno dagli admin.
+// number: posizione in ordine di iscrizione (1 = il primo iscritto), total: iscritti in tutto,
+// sponsor: chi l'ha invitato (nome, cognome e codice)
 export async function adminListUsers() {
   const admin = await verifyAdmin('users.read')
-  if (!admin) return { users: [], error: 'Non autorizzato' }
-  const { data, error } = await getServiceClient()
-    .from('profiles')
-    .select('id, first_name, last_name, email, referral_code, subscription_status, is_blocked, created_at')
-    // Ospiti in prova (codici di prova) esclusi: si cancellano da soli
-    .is('guest_until', null)
-    .order('created_at', { ascending: false })
-    .limit(100)
-  if (error) return { users: [], error: error.message }
-  return { users: data || [], error: null }
+  if (!admin) return { users: [], total: 0, error: 'Non autorizzato' }
+  const service = getServiceClient()
+  const [{ data, error }, { count }] = await Promise.all([
+    service
+      .from('profiles')
+      .select('id, first_name, last_name, email, referral_code, subscription_status, is_blocked, created_at, sponsor_id')
+      // Ospiti in prova (codici di prova) esclusi: si cancellano da soli
+      .is('guest_until', null)
+      .order('created_at', { ascending: false })
+      .limit(1000),
+    service.from('profiles').select('id', { count: 'exact', head: true }).is('guest_until', null),
+  ])
+  if (error) return { users: [], total: 0, error: error.message }
+  const total = count ?? data?.length ?? 0
+  const sponsorIds = [...new Set((data || []).map((user) => user.sponsor_id).filter((id): id is string => !!id))]
+  const { data: sponsors } = sponsorIds.length
+    ? await service.from('profiles').select('id, first_name, last_name, referral_code').in('id', sponsorIds)
+    : { data: [] as { id: string; first_name: string | null; last_name: string | null; referral_code: string | null }[] }
+  const sponsorById = new Map((sponsors ?? []).map((s) => [s.id, s]))
+  return {
+    users: (data || []).map(({ sponsor_id, ...user }, i) => {
+      const s = sponsor_id ? sponsorById.get(sponsor_id) : null
+      return {
+        ...user,
+        number: total - i,
+        sponsor: s ? { name: [s.first_name, s.last_name].filter(Boolean).join(' ') || '—', code: s.referral_code } : null,
+      }
+    }),
+    total,
+    error: null,
+  }
 }
 
 // Profilo completo di un utente per la modifica dal pannello admin.
