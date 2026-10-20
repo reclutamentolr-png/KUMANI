@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { CheckCircle2, LoaderCircle, MapPin, ShieldCheck, XCircle } from 'lucide-react'
-import { adminGetListingsReview, adminReviewListing, adminSetListingsFreeMode, type PendingListing } from '@/app/actions/adminListingsReview'
+import { adminGetListingsReview, adminReviewListing, adminSetListingMaxPhotos, adminSetListingsFreeMode, type PendingListing } from '@/app/actions/adminListingsReview'
 import { askConfirm } from '@/lib/confirm'
 
 // Admin → Bacheca: «Bacheca libera» (pubblicare senza KU Karma) e annunci da
@@ -10,6 +10,7 @@ import { askConfirm } from '@/lib/confirm'
 // Bacheca libera sia senza: il controllo dello Staff c'è sempre.
 export default function ListingsReviewPanel() {
   const [free, setFree] = useState<boolean | null>(null)
+  const [maxPhotos, setMaxPhotos] = useState<number | null>(null)
   const [pending, setPending] = useState<PendingListing[]>([])
   const [busy, setBusy] = useState<string | null>(null)
   const [notes, setNotes] = useState<Record<string, string>>({})
@@ -20,6 +21,7 @@ export default function ListingsReviewPanel() {
     const r = await adminGetListingsReview()
     if ('error' in r) return setError(r.error)
     setFree(r.free)
+    setMaxPhotos(r.maxPhotos)
     setPending(r.pending)
   }, [])
   useEffect(() => {
@@ -71,6 +73,34 @@ export default function ListingsReviewPanel() {
         </button>
       </div>
 
+      {/* Foto per annuncio */}
+      <div className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="font-bold text-gray-900">Foto per annuncio</p>
+          <p className="mt-0.5 text-sm text-gray-600">Quante foto può caricare chi pubblica (gratis). Subito ne permette 6.</p>
+        </div>
+        <div className="flex gap-2">
+          {[3, 6].map((n) => (
+            <button
+              key={n}
+              type="button"
+              disabled={maxPhotos === null || busy === 'photos'}
+              onClick={async () => {
+                setBusy('photos')
+                const r = await adminSetListingMaxPhotos(n)
+                setBusy(null)
+                if (!r.success) return setError(r.error ?? 'Errore')
+                setMaxPhotos(n)
+              }}
+              aria-pressed={maxPhotos === n}
+              className={`min-w-14 rounded-full border-2 px-4 py-2 text-sm font-extrabold disabled:opacity-50 ${maxPhotos === n ? 'border-[var(--ink)] bg-[var(--ink)] text-[var(--gold-bright)]' : 'border-gray-300 text-gray-700 hover:border-[var(--gold)]'}`}
+            >
+              {n}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Da controllare */}
       <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
         <p className="flex items-center gap-2 font-bold text-gray-900">
@@ -85,9 +115,9 @@ export default function ListingsReviewPanel() {
             {pending.map((l) => (
               <li key={l.id} className="rounded-xl border border-gray-200 p-4">
                 <div className="flex gap-4">
-                  {l.imageUrl && (
+                  {l.images[0] && (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={l.imageUrl} alt="" className="h-20 w-20 shrink-0 rounded-lg object-cover" />
+                    <img src={l.images[0]} alt="" className="h-20 w-20 shrink-0 rounded-lg object-cover" />
                   )}
                   <div className="min-w-0 flex-1">
                     <p className="font-bold text-gray-900">{l.title}</p>
@@ -104,6 +134,16 @@ export default function ListingsReviewPanel() {
                       </p>
                     )}
                     <p className="mt-2 whitespace-pre-wrap text-sm text-gray-700">{l.description}</p>
+                    {l.images.length > 1 && (
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {l.images.slice(1).map((src) => (
+                          <a key={src} href={src} target="_blank" rel="noopener noreferrer">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={src} alt="" className="h-14 w-14 rounded-md object-cover" />
+                          </a>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
                 {rejecting === l.id && (

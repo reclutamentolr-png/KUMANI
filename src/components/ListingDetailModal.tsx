@@ -5,6 +5,7 @@ import { X, Tag, User, Calendar, Sparkles, MapPin, Globe2 } from 'lucide-react'
 import { countryName } from '@/lib/events'
 import { CATEGORY_I18N_KEYS, type Listing, type ListingCategory } from '@/lib/listings'
 import ListingCategoryIcon from '@/components/listings/ListingCategoryIcon'
+import ListingGallery from '@/components/listings/ListingGallery'
 import ContactListingButton from '@/components/ContactListingButton'
 import VerifiedBadge from '@/components/verification/VerifiedBadge'
 import ReportListingButton from '@/components/ReportListingButton'
@@ -47,15 +48,8 @@ export default function ListingDetailModal({ isOpen, onClose, listing, authorNam
         </div>
 
         <div className="p-6 space-y-4">
-          {listing.image_url && (
-            // Foto indicata da chi pubblica (indirizzo esterno qualsiasi): <img> semplice
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={listing.image_url}
-              alt={listing.title}
-              className="w-full max-h-80 object-contain rounded-lg bg-gray-50 border border-gray-100"
-            />
-          )}
+          {/* Tutte le foto, da scorrere (la prima è la copertina) */}
+          <ListingGallery images={listing.images?.length ? listing.images : listing.image_url ? [listing.image_url] : []} alt={listing.title} />
 
           <div className="flex items-center justify-between flex-wrap gap-2">
             <span className="text-xs font-bold bg-gray-100 text-gray-700 px-2 py-1 rounded">

@@ -1064,7 +1064,13 @@
     "filterAllRegions": "Alle Regionen",
     "publishListingCta": "Anzeige veröffentlichen",
     "searchListingsCta": "Anzeigen suchen",
-    "closeSearchCta": "Suche schließen"
+    "closeSearchCta": "Suche schließen",
+    "listingPhotos": "Fotos",
+    "listingPhotoAdd": "Hinzufügen",
+    "listingPhotoCover": "Titelbild",
+    "listingPhotoMakeCover": "Als Titelbild",
+    "listingPhotosHint": "{count} von {max} Fotos · das erste ist das Titelbild",
+    "listingPhotosMax": "Du kannst höchstens {max} Fotos hochladen"
   },
   "neurobalance": {
     "tracksLabel": "Entspannungsaudios",
@@ -14359,6 +14365,16 @@
         "gold": "alles für dich.",
         "sub": "Von zwanzig bis dreiundsiebzig: KUMANI ist für alle einfach."
       }
+    },
+    "halloween": {
+      "label": "🎃 Halloween",
+      "eyebrow": "Halloween",
+      "title": "Süßes oder Saures?",
+      "gold": "Das Saure überlass den Betrügern.",
+      "sub": "Mit KUMANI entlarvst du Betrugs-SMS, Links und IBANs, bevor du reinfällst. Kostenlos anmelden.",
+      "p1": "Betrugsnachrichten entlarven",
+      "p2": "Links, IBANs und Nummern prüfen",
+      "p3": "Kostenlos, ohne Karte"
     }
   },
   "plansSoon": {

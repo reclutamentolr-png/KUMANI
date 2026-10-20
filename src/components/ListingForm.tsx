@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { createListingAction } from '@/app/actions/listings'
 import { LISTING_COST, type ListingCategory, CATEGORY_I18N_KEYS, ALL_LISTING_CATEGORIES } from '@/lib/listings'
-import ListingPhotoField from '@/components/listings/ListingPhotoField'
+import ListingPhotosField from '@/components/listings/ListingPhotosField'
 import ListingCategoryTiles from '@/components/listings/ListingCategoryTiles'
 import { X, AlertCircle, CheckCircle2, ShieldCheck } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
@@ -24,9 +24,11 @@ type Props = {
   citiesByCountry: Record<string, string[]>
   // «Bacheca libera» (Admin): pubblicare è gratis
   freeMode?: boolean
+  // Foto per annuncio (Admin → Bacheca)
+  maxPhotos?: number
 }
 
-export default function ListingForm({ userId, currentPoints, onCloseUrl, defaultCountry, citiesByCountry, freeMode = false }: Props) {
+export default function ListingForm({ userId, currentPoints, onCloseUrl, defaultCountry, citiesByCountry, freeMode = false, maxPhotos = 6 }: Props) {
   const t = useTranslations('marketplace')
   const commonT = useTranslations('common')
   const [loading, setLoading] = useState(false)
@@ -37,7 +39,7 @@ export default function ListingForm({ userId, currentPoints, onCloseUrl, default
     description: '',
     category: 'servizi' as ListingCategory,
     price: '',
-    imageUrl: '',
+    images: [] as string[],
   })
   const [location, setLocation] = useState<ListingLocationValue>({ countryCode: defaultCountry, region: '', city: '', isRemote: false })
 
@@ -60,7 +62,7 @@ export default function ListingForm({ userId, currentPoints, onCloseUrl, default
       description: formData.description,
       category: formData.category,
       price: formData.price ? parseFloat(formData.price) : undefined,
-      imageUrl: formData.imageUrl || undefined,
+      images: formData.images,
       countryCode: location.countryCode,
       region: location.region || undefined,
       city: location.city || undefined,
@@ -151,14 +153,14 @@ export default function ListingForm({ userId, currentPoints, onCloseUrl, default
         <p className="flex items-center gap-2 border-t border-stone-200 pt-5 text-xs font-extrabold uppercase tracking-[0.14em] text-[var(--gold)]">
           <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--ink)] text-[11px] text-[var(--gold-bright)]">2</span> {t('listingStepPhoto')}
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4">
           <div>
             <label className="mb-1.5 block text-sm font-bold text-[var(--ink)]">{t('listingPrice')}</label>
             <input type="number" min="0" step="0.01" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} className="w-full rounded-xl border-2 border-stone-300 bg-white px-4 py-2.5 text-[var(--ink)] placeholder:text-stone-400 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30" placeholder="0.00" />
           </div>
           <div>
             <label className="mb-1.5 block text-sm font-bold text-[var(--ink)]">{t('listingPhoto')}</label>
-            <ListingPhotoField value={formData.imageUrl} onChange={(url) => setFormData({ ...formData, imageUrl: url })} />
+            <ListingPhotosField value={formData.images} onChange={(urls) => setFormData((prev) => ({ ...prev, images: urls }))} max={maxPhotos} />
           </div>
         </div>
 

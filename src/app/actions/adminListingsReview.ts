@@ -17,6 +17,7 @@ export type PendingListing = {
   category: string
   price: number | null
   imageUrl: string | null
+  images: string[]
   city: string | null
   region: string | null
   countryCode: string | null
@@ -26,14 +27,15 @@ export type PendingListing = {
   authorEmail: string | null
 }
 
-export async function adminGetListingsReview(): Promise<{ free: boolean; pending: PendingListing[] } | { error: string }> {
+export async function adminGetListingsReview(): Promise<{ free: boolean; maxPhotos: number; pending: PendingListing[] } | { error: string }> {
   if (!(await verifyAdmin('listings.read'))) return { error: 'Non autorizzato' }
   const db = pushDb()
-  const [{ data: setting }, { data: rows }] = await Promise.all([
+  const [{ data: setting }, { data: photosSetting }, { data: rows }] = await Promise.all([
     db.from('system_settings').select('value').eq('key', 'listings_free_mode').maybeSingle(),
+    db.from('system_settings').select('value').eq('key', 'listing_max_photos').maybeSingle(),
     db
       .from('listings')
-      .select('id, title, description, category, price, image_url, city, region, country_code, is_remote, created_at, user_id')
+      .select('id, title, description, category, price, image_url, images, city, region, country_code, is_remote, created_at, user_id')
       .eq('review_status', 'pending')
       .order('created_at', { ascending: true })
       .limit(200),
@@ -43,6 +45,7 @@ export async function adminGetListingsReview(): Promise<{ free: boolean; pending
   const byId = new Map((people ?? []).map((p) => [p.id as string, p]))
   return {
     free: String(setting?.value ?? '').replace(/"/g, '') === 'true',
+    maxPhotos: String(photosSetting?.value ?? '').replace(/"/g, '') === '3' ? 3 : 6,
     pending: (rows ?? []).map((r) => {
       const p = byId.get(r.user_id as string)
       return {
@@ -52,6 +55,7 @@ export async function adminGetListingsReview(): Promise<{ free: boolean; pending
         category: r.category as string,
         price: r.price === null ? null : Number(r.price),
         imageUrl: (r.image_url as string | null) ?? null,
+        images: ((r.images as string[] | null) ?? []).length ? (r.images as string[]) : r.image_url ? [r.image_url as string] : [],
         city: (r.city as string | null) ?? null,
         region: (r.region as string | null) ?? null,
         countryCode: (r.country_code as string | null) ?? null,
@@ -69,6 +73,17 @@ export async function adminSetListingsFreeMode(on: boolean): Promise<{ success: 
   const { error } = await pushDb()
     .from('system_settings')
     .upsert({ key: 'listings_free_mode', value: on ? 'true' : 'false', updated_at: new Date().toISOString() }, { onConflict: 'key' })
+  if (error) return { success: false, error: error.message }
+  updateTag(LISTINGS_MODE_CACHE_TAG)
+  return { success: true }
+}
+
+export async function adminSetListingMaxPhotos(n: number): Promise<{ success: boolean; error?: string }> {
+  if (!(await verifyAdmin('listings.write'))) return { success: false, error: 'Non autorizzato' }
+  if (n !== 3 && n !== 6) return { success: false, error: 'Valore non valido' }
+  const { error } = await pushDb()
+    .from('system_settings')
+    .upsert({ key: 'listing_max_photos', value: String(n), updated_at: new Date().toISOString() }, { onConflict: 'key' })
   if (error) return { success: false, error: error.message }
   updateTag(LISTINGS_MODE_CACHE_TAG)
   return { success: true }

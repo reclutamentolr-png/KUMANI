@@ -1101,7 +1101,13 @@
     "filterAllRegions": "Tutte le regioni",
     "publishListingCta": "Pubblica annuncio",
     "searchListingsCta": "Ricerca annunci",
-    "closeSearchCta": "Chiudi la ricerca"
+    "closeSearchCta": "Chiudi la ricerca",
+    "listingPhotos": "Foto",
+    "listingPhotoAdd": "Aggiungi",
+    "listingPhotoCover": "Copertina",
+    "listingPhotoMakeCover": "Metti come copertina",
+    "listingPhotosHint": "{count} di {max} foto · la prima è la copertina",
+    "listingPhotosMax": "Puoi caricare al massimo {max} foto"
   },
   "neurobalance": {
     "tracksLabel": "Audio di rilassamento",
@@ -14359,6 +14365,16 @@
         "gold": "tutto per te.",
         "sub": "Dai vent’anni ai settantatré: KUMANI è facile per tutti."
       }
+    },
+    "halloween": {
+      "label": "🎃 Halloween",
+      "eyebrow": "Halloween",
+      "title": "Dolcetto o scherzetto?",
+      "gold": "Gli scherzetti lasciali ai truffatori.",
+      "sub": "Con KUMANI smascheri SMS, link e IBAN truffa prima di cascarci. Iscriviti gratis.",
+      "p1": "Smaschera i messaggi truffa",
+      "p2": "Controlla link, IBAN e numeri",
+      "p3": "Gratis, senza carta"
     }
   },
   "plansSoon": {

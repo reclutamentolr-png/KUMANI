@@ -1064,7 +1064,13 @@
     "filterAllRegions": "Todas as regiões",
     "publishListingCta": "Publicar anúncio",
     "searchListingsCta": "Procurar anúncios",
-    "closeSearchCta": "Fechar a pesquisa"
+    "closeSearchCta": "Fechar a pesquisa",
+    "listingPhotos": "Fotos",
+    "listingPhotoAdd": "Adicionar",
+    "listingPhotoCover": "Capa",
+    "listingPhotoMakeCover": "Pôr como capa",
+    "listingPhotosHint": "{count} de {max} fotos · a primeira é a capa",
+    "listingPhotosMax": "Podes carregar no máximo {max} fotos"
   },
   "neurobalance": {
     "tracksLabel": "Áudios de relaxamento",
@@ -14359,6 +14365,16 @@
         "gold": "tudo para ti.",
         "sub": "Dos vinte aos setenta e três: a KUMANI é fácil para todos."
       }
+    },
+    "halloween": {
+      "label": "🎃 Halloween",
+      "eyebrow": "Halloween",
+      "title": "Doçura ou travessura?",
+      "gold": "As travessuras deixa-as aos burlões.",
+      "sub": "Com a KUMANI desmascaras SMS, links e IBAN falsos antes de caíres. Regista-te grátis.",
+      "p1": "Desmascara mensagens de burla",
+      "p2": "Verifica links, IBAN e números",
+      "p3": "Grátis, sem cartão"
     }
   },
   "plansSoon": {

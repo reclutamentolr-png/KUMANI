@@ -1064,7 +1064,13 @@
     "filterAllRegions": "Все регионы",
     "publishListingCta": "Опубликовать объявление",
     "searchListingsCta": "Поиск объявлений",
-    "closeSearchCta": "Закрыть поиск"
+    "closeSearchCta": "Закрыть поиск",
+    "listingPhotos": "Фото",
+    "listingPhotoAdd": "Добавить",
+    "listingPhotoCover": "Обложка",
+    "listingPhotoMakeCover": "Сделать обложкой",
+    "listingPhotosHint": "{count} из {max} фото · первое — обложка",
+    "listingPhotosMax": "Можно загрузить не больше {max} фото"
   },
   "neurobalance": {
     "tracksLabel": "Аудио для расслабления",
@@ -14359,6 +14365,16 @@
         "gold": "всё для тебя.",
         "sub": "От двадцати до семидесяти трёх: KUMANI проста для всех."
       }
+    },
+    "halloween": {
+      "label": "🎃 Хэллоуин",
+      "eyebrow": "Хэллоуин",
+      "title": "Сладость или гадость?",
+      "gold": "Гадости оставьте мошенникам.",
+      "sub": "С KUMANI вы разоблачаете мошеннические SMS, ссылки и IBAN до того, как попадётесь. Регистрация бесплатна.",
+      "p1": "Разоблачайте мошеннические сообщения",
+      "p2": "Проверяйте ссылки, IBAN и номера",
+      "p3": "Бесплатно, без карты"
     }
   },
   "plansSoon": {

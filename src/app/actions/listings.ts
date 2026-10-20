@@ -8,7 +8,7 @@ import { revalidatePath } from 'next/cache'
 import { invalidateListingsCache } from '@/lib/listings-server'
 import { LISTING_COST, cleanListingCity, isListingCountry, type CreateListingData, type UpdateListingData } from '@/lib/listings'
 import { limitError } from '@/lib/appLimits'
-import { getListingsFreeMode } from '@/lib/listingsMode'
+import { getListingMaxPhotos, getListingsFreeMode } from '@/lib/listingsMode'
 import { cleanListingRegion } from '@/lib/listingRegions'
 
 // ✅ Service client per bypassare RLS
@@ -29,22 +29,24 @@ function listingLocation(data: { countryCode?: string; region?: string; city?: s
 
 // Testi, prezzo e immagine ripuliti sul server (i limiti del modulo valgono
 // solo nel browser): titolo 100, descrizione 1000, prezzo ≥ 0, immagine solo https
-function listingFields(data: { title?: string; description?: string; category?: string; price?: number | string | null; imageUrl?: string | null }) {
+function listingFields(data: { title?: string; description?: string; category?: string; price?: number | string | null; imageUrl?: string | null; images?: string[] }, maxPhotos = 6) {
   const title = String(data.title ?? '').trim().slice(0, 100)
   const description = String(data.description ?? '').trim().slice(0, 1000)
   const priceNumber = data.price === null || data.price === undefined || data.price === '' ? null : Number(data.price)
   const price = priceNumber === null ? null : Number.isFinite(priceNumber) && priceNumber >= 0 ? Math.min(priceNumber, 10_000_000) : NaN
-  const imageUrl = String(data.imageUrl ?? '').trim()
-  const image = imageUrl === '' ? null : /^https:\/\/[^\s"'<>]{4,2000}$/i.test(imageUrl) ? imageUrl : undefined
-  if (!title || !description || Number.isNaN(price) || image === undefined) return null
-  return { title, description, category: data.category, price, image_url: image }
+  // Foto: elenco (o la sola imageUrl dei moduli vecchi), solo https, senza doppioni
+  const raw = (data.images?.length ? data.images : data.imageUrl ? [data.imageUrl] : []).map((u) => String(u ?? '').trim()).filter(Boolean)
+  if (raw.some((u) => !/^https:\/\/[^\s"'<>]{4,2000}$/i.test(u))) return null
+  const images = [...new Set(raw)].slice(0, maxPhotos)
+  if (!title || !description || Number.isNaN(price)) return null
+  return { title, description, category: data.category, price, image_url: images[0] ?? null, images }
 }
 
 export async function createListingAction(data: CreateListingData) {
   if (!(await isToolOnline('listings'))) return { success: false, message: 'listingErr_suspended' }
   const location = listingLocation(data)
   if (!location) return { success: false, message: 'listingErr_country' }
-  const fields = listingFields(data)
+  const fields = listingFields(data, await getListingMaxPhotos())
   if (!fields) return { success: false, message: 'listingErr_fields' }
   const supabase = await createClient()
 
@@ -115,7 +117,7 @@ export async function updateListingAction(listingId: string, data: UpdateListing
   if (!(await isToolOnline('listings'))) return { success: false, message: 'listingErr_suspended' }
   const location = listingLocation(data)
   if (!location) return { success: false, message: 'listingErr_country' }
-  const fields = listingFields(data)
+  const fields = listingFields(data, await getListingMaxPhotos())
   if (!fields) return { success: false, message: 'listingErr_fields' }
   const supabase = await createClient()
   const {

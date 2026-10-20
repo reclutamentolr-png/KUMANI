@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import EditListingModal from '@/components/EditListingModal'
 import type { Listing } from '@/lib/listings'
 
-export default function EditListingModalWrapper({ citiesByCountry }: { citiesByCountry: Record<string, string[]> }) {
+export default function EditListingModalWrapper({ citiesByCountry, maxPhotos = 6 }: { citiesByCountry: Record<string, string[]>; maxPhotos?: number }) {
   const [open, setOpen] = useState(false)
   const [listing, setListing] = useState<Listing | null>(null)
 
@@ -19,5 +19,5 @@ export default function EditListingModalWrapper({ citiesByCountry }: { citiesByC
 
   if (!open || !listing) return null
 
-  return <EditListingModal isOpen={open} onClose={() => setOpen(false)} listing={listing} citiesByCountry={citiesByCountry} />
+  return <EditListingModal isOpen={open} onClose={() => setOpen(false)} listing={listing} citiesByCountry={citiesByCountry} maxPhotos={maxPhotos} />
 }

@@ -1064,7 +1064,13 @@
     "filterAllRegions": "Todas las regiones",
     "publishListingCta": "Publicar anuncio",
     "searchListingsCta": "Buscar anuncios",
-    "closeSearchCta": "Cerrar la búsqueda"
+    "closeSearchCta": "Cerrar la búsqueda",
+    "listingPhotos": "Fotos",
+    "listingPhotoAdd": "Añadir",
+    "listingPhotoCover": "Portada",
+    "listingPhotoMakeCover": "Poner como portada",
+    "listingPhotosHint": "{count} de {max} fotos · la primera es la portada",
+    "listingPhotosMax": "Puedes subir como máximo {max} fotos"
   },
   "neurobalance": {
     "tracksLabel": "Audios de relajación",
@@ -14359,6 +14365,16 @@
         "gold": "todo para ti.",
         "sub": "De los veinte a los setenta y tres: KUMANI es fácil para todos."
       }
+    },
+    "halloween": {
+      "label": "🎃 Halloween",
+      "eyebrow": "Halloween",
+      "title": "¿Truco o trato?",
+      "gold": "Los trucos déjaselos a los estafadores.",
+      "sub": "Con KUMANI desenmascaras SMS, enlaces e IBAN falsos antes de caer. Regístrate gratis.",
+      "p1": "Desenmascara los mensajes estafa",
+      "p2": "Comprueba enlaces, IBAN y números",
+      "p3": "Gratis, sin tarjeta"
     }
   },
   "plansSoon": {

@@ -1101,7 +1101,13 @@
     "filterAllRegions": "All regions",
     "publishListingCta": "Post a listing",
     "searchListingsCta": "Search listings",
-    "closeSearchCta": "Close search"
+    "closeSearchCta": "Close search",
+    "listingPhotos": "Photos",
+    "listingPhotoAdd": "Add",
+    "listingPhotoCover": "Cover",
+    "listingPhotoMakeCover": "Make cover",
+    "listingPhotosHint": "{count} of {max} photos · the first is the cover",
+    "listingPhotosMax": "You can upload up to {max} photos"
   },
   "neurobalance": {
     "tracksLabel": "Relaxation audio",
@@ -14359,6 +14365,16 @@
         "gold": "all for you.",
         "sub": "From twenty to seventy-three: KUMANI is easy for everyone."
       }
+    },
+    "halloween": {
+      "label": "🎃 Halloween",
+      "eyebrow": "Halloween",
+      "title": "Trick or treat?",
+      "gold": "Leave the tricks to the scammers.",
+      "sub": "With KUMANI you unmask scam texts, links and IBANs before you fall for them. Join for free.",
+      "p1": "Unmask scam messages",
+      "p2": "Check links, IBANs and numbers",
+      "p3": "Free, no card"
     }
   },
   "plansSoon": {

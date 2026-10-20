@@ -16,3 +16,18 @@ export const getListingsFreeMode = unstable_cache(
   ['listings-free-mode'],
   { tags: [LISTINGS_MODE_CACHE_TAG], revalidate: 600 }
 )
+
+// Foto per annuncio (Admin → Bacheca): 3 o 6
+export const LISTING_PHOTOS_CHOICES = [3, 6] as const
+export const getListingMaxPhotos = unstable_cache(
+  async (): Promise<number> => {
+    const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+      auth: { autoRefreshToken: false, persistSession: false },
+    })
+    const { data } = await db.from('system_settings').select('value').eq('key', 'listing_max_photos').maybeSingle()
+    const n = parseInt(String(data?.value ?? '').replace(/"/g, ''), 10)
+    return (LISTING_PHOTOS_CHOICES as readonly number[]).includes(n) ? n : 6
+  },
+  ['listing-max-photos'],
+  { tags: [LISTINGS_MODE_CACHE_TAG], revalidate: 600 }
+)

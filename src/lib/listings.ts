@@ -41,6 +41,8 @@ export interface CreateListingData {
   category: ListingCategory
   price?: number
   imageUrl?: string
+  // Foto (la prima è la copertina); se mancano vale imageUrl
+  images?: string[]
   countryCode?: string
   region?: string
   city?: string
@@ -54,6 +56,7 @@ export interface UpdateListingData {
   category: ListingCategory
   price?: number
   imageUrl?: string
+  images?: string[]
   countryCode?: string
   region?: string
   city?: string
@@ -114,6 +117,7 @@ export type Listing = {
   description: string
   price: number | string | null
   image_url: string | null
+  images?: string[] | null
   created_at: string
   expires_at: string
   featured_until?: string | null

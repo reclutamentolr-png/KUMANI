@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { X, AlertCircle, CheckCircle2 } from 'lucide-react'
 import { updateListingAction } from '@/app/actions/listings'
 import { type Listing, type ListingCategory, CATEGORY_I18N_KEYS, ALL_LISTING_CATEGORIES, isListingCountry } from '@/lib/listings'
-import ListingPhotoField from '@/components/listings/ListingPhotoField'
+import ListingPhotosField from '@/components/listings/ListingPhotosField'
 import ListingLocationFields, { type ListingLocationValue } from '@/components/listings/ListingLocationFields'
 
 type Props = {
@@ -14,9 +14,11 @@ type Props = {
   onClose: () => void
   listing: Listing
   citiesByCountry: Record<string, string[]>
+  // Foto per annuncio (Admin → Bacheca)
+  maxPhotos?: number
 }
 
-export default function EditListingModal({ isOpen, onClose, listing, citiesByCountry }: Props) {
+export default function EditListingModal({ isOpen, onClose, listing, citiesByCountry, maxPhotos = 6 }: Props) {
   const t = useTranslations('marketplace')
   const commonT = useTranslations('common')
   const router = useRouter()
@@ -26,7 +28,7 @@ export default function EditListingModal({ isOpen, onClose, listing, citiesByCou
     description: listing?.description || '',
     category: (listing?.category || 'servizi') as ListingCategory,
     price: listing?.price != null ? String(listing.price) : '',
-    imageUrl: listing?.image_url || '',
+    images: listing?.images?.length ? listing.images : listing?.image_url ? [listing.image_url] : [],
   })
   const [location, setLocation] = useState<ListingLocationValue>({
     countryCode: isListingCountry(listing?.country_code) ? listing.country_code : '',
@@ -50,7 +52,7 @@ export default function EditListingModal({ isOpen, onClose, listing, citiesByCou
       description: formData.description,
       category: formData.category,
       price: formData.price ? parseFloat(formData.price) : undefined,
-      imageUrl: formData.imageUrl || undefined,
+      images: formData.images,
       countryCode: location.countryCode,
       region: location.region || undefined,
       city: location.city || undefined,
@@ -148,7 +150,7 @@ export default function EditListingModal({ isOpen, onClose, listing, citiesByCou
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">{t('listingPhoto')}</label>
-                <ListingPhotoField value={formData.imageUrl} onChange={(url) => setFormData({ ...formData, imageUrl: url })} />
+                <ListingPhotosField value={formData.images} onChange={(urls) => setFormData((prev) => ({ ...prev, images: urls }))} max={maxPhotos} />
               </div>
             </div>
 

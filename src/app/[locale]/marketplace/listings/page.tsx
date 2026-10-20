@@ -5,7 +5,7 @@ import Link from '@/components/LocalizedLink'
 import { getTranslations } from 'next-intl/server'
 import { LISTINGS_PAGE_SIZE, getUnreadMessagesCount, getActiveListings, getFeaturedListings, getUserListings, getActiveListingCategoryCounts, getActiveListingById, getListingCitiesByCountry, cleanListingSearch } from '@/lib/listings-server'
 import ListingCategoryIcon from '@/components/listings/ListingCategoryIcon'
-import { getListingsFreeMode } from '@/lib/listingsMode'
+import { getListingMaxPhotos, getListingsFreeMode } from '@/lib/listingsMode'
 import { cleanListingRegion, regionsOf } from '@/lib/listingRegions'
 import { CATEGORY_I18N_KEYS, ALL_LISTING_CATEGORIES, LISTING_COUNTRIES, isListingCountry, cleanListingCity, type Listing, type ListingCategory } from '@/lib/listings'
 import { countryName } from '@/lib/events'
@@ -65,13 +65,14 @@ export default async function ListingsPage({
 
   // Letture indipendenti tutte insieme: profilo, costi della vetrina (anche
   // in KU), annunci dell'utente e stato della Bacheca
-  const [{ data: profile }, { data: showcaseSettings }, { data: kuShowcase }, myListings, online, freeMode] = await Promise.all([
+  const [{ data: profile }, { data: showcaseSettings }, { data: kuShowcase }, myListings, online, freeMode, maxPhotos] = await Promise.all([
     supabase.rpc('get_my_profile').maybeSingle<{ daily_points: number | null; network_points: number | null; first_name: string | null; last_name: string | null; country_code: string | null }>(),
     supabase.from('system_settings').select('key, value').in('key', ['listing_feature_cost_7d', 'listing_feature_cost_15d']),
     supabase.from('ku_features').select('enabled, config').eq('key', 'showcase').maybeSingle(),
     getUserListings(user.id),
     isToolOnline('listings'),
     getListingsFreeMode(),
+    getListingMaxPhotos(),
   ])
 
   // Dove: di partenza la nazione del profilo; ?country=all per tutti i paesi
@@ -273,6 +274,7 @@ export default async function ListingsPage({
             defaultCountry={defaultCountry}
             citiesByCountry={citiesByCountry}
             freeMode={freeMode}
+            maxPhotos={maxPhotos}
           />
         )}
 
@@ -523,7 +525,7 @@ export default async function ListingsPage({
             : undefined
         }
       />
-      <EditListingModalWrapper citiesByCountry={citiesByCountry} />
+      <EditListingModalWrapper citiesByCountry={citiesByCountry} maxPhotos={maxPhotos} />
     </div>
   )
 }

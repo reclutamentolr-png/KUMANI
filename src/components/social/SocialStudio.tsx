@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Download, LoaderCircle, Share2, Sparkles } from 'lucide-react'
+import { Candy, Download, Ghost, LoaderCircle, MoonStar, Share2, Sparkles, type LucideIcon } from 'lucide-react'
 import SocialCanvas, { SOCIAL_SIZE, type SocialFormat } from './SocialCanvas'
 import { ICONS } from '@/components/flyers/FlyerCanvas'
 
@@ -20,6 +20,8 @@ export type SocialItem = {
   gold: string
   sub: string
   points: { icon: string; text: string }[]
+  // Tema stagionale della tela
+  theme?: 'halloween'
 }
 
 type Texts = {
@@ -38,7 +40,8 @@ type Texts = {
   shareText: string
 }
 
-const iconOf = (name: string) => ICONS[name] ?? Sparkles
+const EXTRA_ICONS: Record<string, LucideIcon> = { Ghost, Candy, MoonStar }
+const iconOf = (name: string) => ICONS[name] ?? EXTRA_ICONS[name] ?? Sparkles
 
 export default function SocialStudio({ items, inviteUrl, texts }: { items: SocialItem[]; inviteUrl: string | null; texts: Texts }) {
   const [id, setId] = useState(items[0]?.id ?? '')
@@ -52,7 +55,7 @@ export default function SocialStudio({ items, inviteUrl, texts }: { items: Socia
 
   const item = items.find((i) => i.id === id) ?? items[0]
   const content = useMemo(
-    () => ({ Icon: iconOf(item.icon), eyebrow: item.eyebrow, title: item.title, gold: item.gold, sub: item.sub, points: item.points.map((p) => ({ Icon: iconOf(p.icon), text: p.text })) }),
+    () => ({ Icon: iconOf(item.icon), eyebrow: item.eyebrow, title: item.title, gold: item.gold, sub: item.sub, points: item.points.map((p) => ({ Icon: iconOf(p.icon), text: p.text })), theme: item.theme }),
     [item]
   )
   const footer = withLink && inviteUrl ? inviteUrl.replace(/^https?:\/\//, '') : 'kumani.io'

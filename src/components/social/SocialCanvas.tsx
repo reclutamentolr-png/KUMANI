@@ -21,6 +21,8 @@ export type SocialContent = {
   gold: string
   sub: string
   points: { Icon: LucideIcon; text: string }[]
+  // Tema stagionale: 'halloween' = notte viola e arancio, luna e pipistrelli
+  theme?: 'halloween'
 }
 
 const GOLD = '#d4af37'
@@ -33,6 +35,14 @@ const SocialCanvas = forwardRef<HTMLDivElement, { format: SocialFormat; content:
 ) {
   const story = format === 'story'
   const { w, h } = SOCIAL_SIZE[format]
+  const hw = c.theme === 'halloween'
+  const ORANGE_TEXT = { background: 'linear-gradient(180deg,#ffd27a 0%,#ff8a1f 55%,#d9480f 100%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' } as const
+  // Pipistrello stilizzato (posizione in %, misura in px)
+  const bat = (left: number, top: number, size: number, rot: number) => (
+    <svg key={`${left}-${top}`} viewBox="0 0 64 32" width={size} height={size / 2} style={{ position: 'absolute', left: `${left}%`, top: `${top}%`, transform: `rotate(${rot}deg)`, opacity: 0.85 }}>
+      <path fill="#0b0a08" d="M32 10c2-4 4-6 4-6s0 4 2 6c4-3 10-4 14-2-2 1-3 4-2 7 3-1 7 0 10 3-5 0-9 2-12 6-2-3-6-4-9-3-2 1-4 4-7 7-3-3-5-6-7-7-3-1-7 0-9 3-3-4-7-6-12-6 3-3 7-4 10-3 1-3 0-6-2-7 4-2 10-1 14 2 2-2 2-6 2-6s2 2 4 6z" />
+    </svg>
+  )
   return (
     <div
       ref={ref}
@@ -44,7 +54,9 @@ const SocialCanvas = forwardRef<HTMLDivElement, { format: SocialFormat; content:
         height: h,
         overflow: 'hidden',
         color: '#fff',
-        background: 'radial-gradient(ellipse at 50% 18%, rgba(212,175,55,0.22) 0%, transparent 55%), radial-gradient(ellipse at 50% 100%, rgba(212,175,55,0.16) 0%, transparent 50%), #0b0a08',
+        background: hw
+          ? 'radial-gradient(circle at 78% 16%, #ffcf6b 0%, #ff8a1f 9%, rgba(255,120,30,0.35) 17%, transparent 30%), radial-gradient(ellipse at 50% 110%, rgba(255,110,20,0.35) 0%, transparent 55%), linear-gradient(180deg,#1b0b2e 0%,#2a0f3d 45%,#0b0a08 100%)'
+          : 'radial-gradient(ellipse at 50% 18%, rgba(212,175,55,0.22) 0%, transparent 55%), radial-gradient(ellipse at 50% 100%, rgba(212,175,55,0.16) 0%, transparent 50%), #0b0a08',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -52,8 +64,9 @@ const SocialCanvas = forwardRef<HTMLDivElement, { format: SocialFormat; content:
         padding: story ? '150px 90px 130px' : '70px 80px 60px',
       }}
     >
-      {/* Cornice oro sottile */}
-      <div style={{ position: 'absolute', inset: 28, border: '2px solid rgba(212,175,55,0.45)', borderRadius: 36, pointerEvents: 'none' }} />
+      {/* Cornice sottile (arancio ad Halloween) */}
+      <div style={{ position: 'absolute', inset: 28, border: `2px solid ${hw ? 'rgba(255,138,31,0.55)' : 'rgba(212,175,55,0.45)'}`, borderRadius: 36, pointerEvents: 'none' }} />
+      {hw && [bat(8, story ? 9 : 12, story ? 120 : 96, -12), bat(70, story ? 22 : 30, story ? 90 : 70, 10), bat(story ? 14 : 6, story ? 30 : 24, story ? 70 : 54, 6)]}
 
       {/* Logo */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
@@ -74,8 +87,8 @@ const SocialCanvas = forwardRef<HTMLDivElement, { format: SocialFormat; content:
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: 'linear-gradient(180deg,#f6dd8a,#c39327)',
-            boxShadow: '0 0 60px rgba(212,175,55,0.45)',
+            background: hw ? 'linear-gradient(180deg,#ffd27a,#ff7a1a)' : 'linear-gradient(180deg,#f6dd8a,#c39327)',
+            boxShadow: hw ? '0 0 70px rgba(255,122,26,0.6)' : '0 0 60px rgba(212,175,55,0.45)',
           }}
         >
           <c.Icon size={story ? 74 : 56} color="#171717" strokeWidth={1.9} />
@@ -96,7 +109,7 @@ const SocialCanvas = forwardRef<HTMLDivElement, { format: SocialFormat; content:
           {c.eyebrow}
         </div>
         <div style={{ marginTop: story ? 40 : 26, fontSize: story ? 96 : 74, fontWeight: 900, lineHeight: 1.04, letterSpacing: '-0.02em' }}>{c.title}</div>
-        {c.gold && <div style={{ marginTop: 8, fontSize: story ? 96 : 74, fontWeight: 900, lineHeight: 1.04, letterSpacing: '-0.02em', ...GOLD_TEXT }}>{c.gold}</div>}
+        {c.gold && <div style={{ marginTop: 8, fontSize: story ? (hw ? 84 : 96) : hw ? 62 : 74, fontWeight: 900, lineHeight: 1.04, letterSpacing: '-0.02em', ...(hw ? ORANGE_TEXT : GOLD_TEXT) }}>{c.gold}</div>}
         {c.sub && (
           <div style={{ marginTop: story ? 40 : 24, fontSize: story ? 42 : 32, lineHeight: 1.3, color: 'rgba(255,255,255,0.82)', maxWidth: story ? 860 : 860 }}>{c.sub}</div>
         )}
@@ -114,13 +127,13 @@ const SocialCanvas = forwardRef<HTMLDivElement, { format: SocialFormat; content:
                   padding: story ? '22px 30px' : '20px 14px',
                   borderRadius: 24,
                   background: 'rgba(255,255,255,0.06)',
-                  border: '1.5px solid rgba(212,175,55,0.35)',
+                  border: `1.5px solid ${hw ? 'rgba(255,138,31,0.5)' : 'rgba(212,175,55,0.35)'}`,
                   textAlign: story ? 'left' : 'center',
                   boxSizing: 'border-box',
                   minWidth: 0,
                 }}
               >
-                <p.Icon size={story ? 46 : 36} color={GOLD} strokeWidth={1.8} style={{ flexShrink: 0 }} />
+                <p.Icon size={story ? 46 : 36} color={hw ? '#ff9a3c' : GOLD} strokeWidth={1.8} style={{ flexShrink: 0 }} />
                 <span style={{ fontSize: story ? 36 : 24, fontWeight: 700, lineHeight: 1.2 }}>{p.text}</span>
               </div>
             ))}
@@ -133,7 +146,7 @@ const SocialCanvas = forwardRef<HTMLDivElement, { format: SocialFormat; content:
         style={{
           padding: story ? '22px 54px' : '16px 42px',
           borderRadius: 999,
-          background: 'linear-gradient(90deg,#d4af37,#f1d78a)',
+          background: hw ? 'linear-gradient(90deg,#ff7a1a,#ffc15e)' : 'linear-gradient(90deg,#d4af37,#f1d78a)',
           color: '#171717',
           fontSize: story ? 44 : 34,
           fontWeight: 800,

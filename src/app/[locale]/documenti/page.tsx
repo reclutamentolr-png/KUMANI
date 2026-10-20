@@ -171,7 +171,30 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
       ['tempo', 'Clock'],
       ['unaPerTutti', 'Users'],
     ]
+    // Halloween: in cima dal 10 ottobre al 2 novembre (ora di Roma)
+    const md = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Rome', month: '2-digit', day: '2-digit' }).format(new Date())
+    const halloween = md >= '10-10' && md <= '11-02'
     const items: SocialItem[] = [
+      ...(halloween
+        ? [
+            {
+              id: 'halloween',
+              group: 'general' as const,
+              label: ts('halloween.label'),
+              icon: 'Ghost',
+              eyebrow: ts('halloween.eyebrow'),
+              title: ts('halloween.title'),
+              gold: ts('halloween.gold'),
+              sub: ts('halloween.sub'),
+              points: [
+                { icon: 'Ghost', text: ts('halloween.p1') },
+                { icon: 'ShieldCheck', text: ts('halloween.p2') },
+                { icon: 'Candy', text: ts('halloween.p3') },
+              ],
+              theme: 'halloween' as const,
+            },
+          ]
+        : []),
       ...GENERAL.map(([key, icon]) => ({
         id: `g-${key}`,
         group: 'general' as const,
