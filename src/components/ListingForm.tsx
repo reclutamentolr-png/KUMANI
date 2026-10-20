@@ -39,7 +39,7 @@ export default function ListingForm({ userId, currentPoints, onCloseUrl, default
     price: '',
     imageUrl: '',
   })
-  const [location, setLocation] = useState<ListingLocationValue>({ countryCode: defaultCountry, city: '', isRemote: false })
+  const [location, setLocation] = useState<ListingLocationValue>({ countryCode: defaultCountry, region: '', city: '', isRemote: false })
 
   const canPublish = freeMode || currentPoints >= LISTING_COST
 
@@ -62,6 +62,7 @@ export default function ListingForm({ userId, currentPoints, onCloseUrl, default
       price: formData.price ? parseFloat(formData.price) : undefined,
       imageUrl: formData.imageUrl || undefined,
       countryCode: location.countryCode,
+      region: location.region || undefined,
       city: location.city || undefined,
       isRemote: location.isRemote,
     })

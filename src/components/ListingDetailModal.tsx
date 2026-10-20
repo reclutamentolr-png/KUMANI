@@ -70,12 +70,12 @@ export default function ListingDetailModal({ isOpen, onClose, listing, authorNam
 
           <p className="text-sm text-gray-700 whitespace-pre-wrap">{listing.description}</p>
 
-          {(listing.city || listing.country_code || listing.is_remote) && (
+          {(listing.city || listing.region || listing.country_code || listing.is_remote) && (
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm font-medium text-gray-700">
-              {(listing.city || listing.country_code) && (
+              {(listing.city || listing.region || listing.country_code) && (
                 <span className="flex items-center gap-1.5">
                   <MapPin className="h-4 w-4 text-[var(--gold)]" />
-                  {[listing.city, countryName(listing.country_code ?? null, locale)].filter(Boolean).join(', ')}
+                  {[listing.city, listing.region, countryName(listing.country_code ?? null, locale)].filter(Boolean).join(', ')}
                 </span>
               )}
               {listing.is_remote && (

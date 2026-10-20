@@ -24,7 +24,7 @@ function termFilter(term: ListingSearchTerm) {
 
 // Ricerca: parole, nazione (codice ISO) e città. Con una città si vedono
 // anche gli annunci "anche online / a distanza" della stessa nazione.
-export type ListingSearch = { terms?: ListingSearchTerm[]; country?: string; city?: string }
+export type ListingSearch = { terms?: ListingSearchTerm[]; country?: string; region?: string; city?: string }
 
 // Filtri "oppure" separati si sommano come condizioni "e" (una per parola)
 function applySearch<Q extends { or: (filters: string) => Q; eq: (column: string, value: string) => Q }>(
@@ -33,6 +33,7 @@ function applySearch<Q extends { or: (filters: string) => Q; eq: (column: string
 ) {
   for (const term of search?.terms ?? []) query = query.or(termFilter(term))
   if (search?.country) query = query.eq('country_code', search.country)
+  if (search?.region) query = query.or(`region.eq."${search.region}",is_remote.eq.true`)
   if (search?.city) query = query.or(`city.ilike."${search.city}",is_remote.eq.true`)
   return query
 }
@@ -134,7 +135,7 @@ async function countByCategory(supabase: SupabaseClient, search?: ListingSearch)
 }
 
 const cachedCategoryCounts = unstable_cache(
-  async (country: string, city: string) => countByCategory(serviceClient(), { country: country || undefined, city: city || undefined }),
+  async (country: string, region: string, city: string) => countByCategory(serviceClient(), { country: country || undefined, region: region || undefined, city: city || undefined }),
   ['listing-category-counts'],
   { revalidate: 3600, tags: [LISTINGS_CACHE_TAG] }
 )
@@ -143,7 +144,7 @@ const cachedCategoryCounts = unstable_cache(
 export async function getActiveListingCategoryCounts(search?: ListingSearch) {
   // Senza parole cercate (il caso più comune) il conteggio è uguale per
   // tutti: dalla memoria. Con le parole si calcola al momento.
-  if (!search?.terms?.length) return cachedCategoryCounts(search?.country ?? '', search?.city ?? '')
+  if (!search?.terms?.length) return cachedCategoryCounts(search?.country ?? '', search?.region ?? '', search?.city ?? '')
   return countByCategory(await createClient(), search)
 }
 

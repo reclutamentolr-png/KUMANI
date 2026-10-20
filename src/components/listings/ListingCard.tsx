@@ -87,12 +87,12 @@ export default function ListingCard({
         <p className="mb-4 line-clamp-3 flex-1 text-sm leading-6 text-gray-600">{listing.description}</p>
 
         {/* Località: città e nazione, e "anche online" */}
-        {(listing.city || listing.country_code || listing.is_remote) && (
+        {(listing.city || listing.region || listing.country_code || listing.is_remote) && (
           <div className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-medium text-gray-600">
-            {(listing.city || listing.country_code) && (
+            {(listing.city || listing.region || listing.country_code) && (
               <span className="flex items-center gap-1">
                 <MapPin className="h-3.5 w-3.5 text-[var(--gold)]" />
-                {[listing.city, countryName(listing.country_code ?? null, locale)].filter(Boolean).join(', ')}
+                {[listing.city, listing.region, countryName(listing.country_code ?? null, locale)].filter(Boolean).join(', ')}
               </span>
             )}
             {listing.is_remote && (

@@ -9,6 +9,7 @@ import { invalidateListingsCache } from '@/lib/listings-server'
 import { LISTING_COST, cleanListingCity, isListingCountry, type CreateListingData, type UpdateListingData } from '@/lib/listings'
 import { limitError } from '@/lib/appLimits'
 import { getListingsFreeMode } from '@/lib/listingsMode'
+import { cleanListingRegion } from '@/lib/listingRegions'
 
 // ✅ Service client per bypassare RLS
 const getServiceClient = () =>
@@ -20,10 +21,10 @@ const getServiceClient = () =>
 
 // Località dell'annuncio: nazione obbligatoria (dall'elenco), città facoltativa.
 // I contatti (email/telefono) non si salvano più: si contatta dalla chat.
-function listingLocation(data: { countryCode?: string; city?: string; isRemote?: boolean }) {
+function listingLocation(data: { countryCode?: string; region?: string; city?: string; isRemote?: boolean }) {
   const countryCode = (data.countryCode ?? '').toUpperCase()
   if (!isListingCountry(countryCode)) return null
-  return { country_code: countryCode, city: cleanListingCity(data.city), is_remote: Boolean(data.isRemote) }
+  return { country_code: countryCode, region: cleanListingRegion(countryCode, data.region), city: cleanListingCity(data.city), is_remote: Boolean(data.isRemote) }
 }
 
 // Testi, prezzo e immagine ripuliti sul server (i limiti del modulo valgono

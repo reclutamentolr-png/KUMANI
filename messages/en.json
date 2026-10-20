@@ -1094,7 +1094,14 @@
     "listingRejected": "Not approved",
     "listingInReviewHint": "The Staff is checking it: it appears on the Board once approved.",
     "listingRejectedHint": "Not approved: {reason}. Edit it and it will be checked again.",
-    "newListingFree": "New listing (free)"
+    "newListingFree": "New listing (free)",
+    "listingRegion": "Region",
+    "listingRegionChoose": "Choose the region",
+    "listingRegionPlaceholder": "Region (optional)",
+    "filterAllRegions": "All regions",
+    "publishListingCta": "Post a listing",
+    "searchListingsCta": "Search listings",
+    "closeSearchCta": "Close search"
   },
   "neurobalance": {
     "tracksLabel": "Relaxation audio",

@@ -1057,7 +1057,14 @@
     "listingRejected": "Nicht genehmigt",
     "listingInReviewHint": "Das Staff prüft sie: Sie erscheint, sobald sie genehmigt ist.",
     "listingRejectedHint": "Nicht genehmigt: {reason}. Bearbeite sie, dann wird sie erneut geprüft.",
-    "newListingFree": "Neue Anzeige (kostenlos)"
+    "newListingFree": "Neue Anzeige (kostenlos)",
+    "listingRegion": "Region",
+    "listingRegionChoose": "Region wählen",
+    "listingRegionPlaceholder": "Region (optional)",
+    "filterAllRegions": "Alle Regionen",
+    "publishListingCta": "Anzeige veröffentlichen",
+    "searchListingsCta": "Anzeigen suchen",
+    "closeSearchCta": "Suche schließen"
   },
   "neurobalance": {
     "tracksLabel": "Entspannungsaudios",

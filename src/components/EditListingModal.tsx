@@ -30,6 +30,7 @@ export default function EditListingModal({ isOpen, onClose, listing, citiesByCou
   })
   const [location, setLocation] = useState<ListingLocationValue>({
     countryCode: isListingCountry(listing?.country_code) ? listing.country_code : '',
+    region: listing?.region || '',
     city: listing?.city || '',
     isRemote: Boolean(listing?.is_remote),
   })
@@ -51,6 +52,7 @@ export default function EditListingModal({ isOpen, onClose, listing, citiesByCou
       price: formData.price ? parseFloat(formData.price) : undefined,
       imageUrl: formData.imageUrl || undefined,
       countryCode: location.countryCode,
+      region: location.region || undefined,
       city: location.city || undefined,
       isRemote: location.isRemote,
     })

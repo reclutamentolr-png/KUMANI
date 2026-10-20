@@ -18,6 +18,7 @@ export type PendingListing = {
   price: number | null
   imageUrl: string | null
   city: string | null
+  region: string | null
   countryCode: string | null
   isRemote: boolean
   createdAt: string
@@ -32,7 +33,7 @@ export async function adminGetListingsReview(): Promise<{ free: boolean; pending
     db.from('system_settings').select('value').eq('key', 'listings_free_mode').maybeSingle(),
     db
       .from('listings')
-      .select('id, title, description, category, price, image_url, city, country_code, is_remote, created_at, user_id')
+      .select('id, title, description, category, price, image_url, city, region, country_code, is_remote, created_at, user_id')
       .eq('review_status', 'pending')
       .order('created_at', { ascending: true })
       .limit(200),
@@ -52,6 +53,7 @@ export async function adminGetListingsReview(): Promise<{ free: boolean; pending
         price: r.price === null ? null : Number(r.price),
         imageUrl: (r.image_url as string | null) ?? null,
         city: (r.city as string | null) ?? null,
+        region: (r.region as string | null) ?? null,
         countryCode: (r.country_code as string | null) ?? null,
         isRemote: Boolean(r.is_remote),
         createdAt: r.created_at as string,

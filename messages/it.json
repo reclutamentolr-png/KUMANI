@@ -1094,7 +1094,14 @@
     "listingRejected": "Non approvato",
     "listingInReviewHint": "Lo Staff lo sta controllando: compare in Bacheca appena è approvato.",
     "listingRejectedHint": "Non approvato: {reason}. Modificalo e verrà ricontrollato.",
-    "newListingFree": "Nuovo annuncio (gratis)"
+    "newListingFree": "Nuovo annuncio (gratis)",
+    "listingRegion": "Regione",
+    "listingRegionChoose": "Scegli la regione",
+    "listingRegionPlaceholder": "Regione (facoltativa)",
+    "filterAllRegions": "Tutte le regioni",
+    "publishListingCta": "Pubblica annuncio",
+    "searchListingsCta": "Ricerca annunci",
+    "closeSearchCta": "Chiudi la ricerca"
   },
   "neurobalance": {
     "tracksLabel": "Audio di rilassamento",

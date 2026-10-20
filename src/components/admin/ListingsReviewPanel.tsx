@@ -97,9 +97,9 @@ export default function ListingsReviewPanel() {
                       {l.price !== null ? ` · ${l.price.toLocaleString('it-IT', { style: 'currency', currency: 'EUR' })}` : ''} ·{' '}
                       {new Date(l.createdAt).toLocaleString('it-IT', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Rome' })}
                     </p>
-                    {(l.city || l.countryCode) && (
+                    {(l.city || l.region || l.countryCode) && (
                       <p className="mt-0.5 flex items-center gap-1 text-xs text-gray-500">
-                        <MapPin className="h-3 w-3" /> {[l.city, l.countryCode].filter(Boolean).join(', ')}
+                        <MapPin className="h-3 w-3" /> {[l.city, l.region, l.countryCode].filter(Boolean).join(', ')}
                         {l.isRemote ? ' · anche online' : ''}
                       </p>
                     )}

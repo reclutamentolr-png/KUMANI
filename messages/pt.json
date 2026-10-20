@@ -1057,7 +1057,14 @@
     "listingRejected": "Não aprovado",
     "listingInReviewHint": "O Staff está a verificá-lo: aparece assim que for aprovado.",
     "listingRejectedHint": "Não aprovado: {reason}. Edita-o e será verificado de novo.",
-    "newListingFree": "Novo anúncio (grátis)"
+    "newListingFree": "Novo anúncio (grátis)",
+    "listingRegion": "Região",
+    "listingRegionChoose": "Escolhe a região",
+    "listingRegionPlaceholder": "Região (opcional)",
+    "filterAllRegions": "Todas as regiões",
+    "publishListingCta": "Publicar anúncio",
+    "searchListingsCta": "Procurar anúncios",
+    "closeSearchCta": "Fechar a pesquisa"
   },
   "neurobalance": {
     "tracksLabel": "Áudios de relaxamento",

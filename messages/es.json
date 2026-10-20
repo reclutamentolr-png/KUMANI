@@ -1057,7 +1057,14 @@
     "listingRejected": "No aprobado",
     "listingInReviewHint": "El Staff lo está revisando: aparece en el Tablón en cuanto se aprueba.",
     "listingRejectedHint": "No aprobado: {reason}. Modifícalo y se revisará de nuevo.",
-    "newListingFree": "Nuevo anuncio (gratis)"
+    "newListingFree": "Nuevo anuncio (gratis)",
+    "listingRegion": "Región",
+    "listingRegionChoose": "Elige la región",
+    "listingRegionPlaceholder": "Región (opcional)",
+    "filterAllRegions": "Todas las regiones",
+    "publishListingCta": "Publicar anuncio",
+    "searchListingsCta": "Buscar anuncios",
+    "closeSearchCta": "Cerrar la búsqueda"
   },
   "neurobalance": {
     "tracksLabel": "Audios de relajación",

@@ -22,6 +22,8 @@ export default function ListingsFilters({
   query,
   country,
   city,
+  region,
+  regionsByCountry,
   hasFilters,
   labels,
 }: {
@@ -35,8 +37,11 @@ export default function ListingsFilters({
   // Codice della nazione, oppure 'all' per tutti i paesi
   country: string
   city: string
+  // Regione scelta e regioni dei paesi che hanno l'elenco
+  region: string
+  regionsByCountry: Record<string, string[]>
   hasFilters: boolean
-  labels: { what: string; searchPlaceholder: string; category: string; where: string; cityPlaceholder: string; search: string; clear: string }
+  labels: { what: string; searchPlaceholder: string; category: string; where: string; cityPlaceholder: string; allRegions: string; search: string; clear: string }
 }) {
   const router = useRouter()
   const pathname = usePathname()
@@ -44,17 +49,20 @@ export default function ListingsFilters({
   const [text, setText] = useState(query)
   const [cityText, setCityText] = useState(city)
 
-  const go = (next: { category?: string; country?: string; q?: string; city?: string }) => {
+  const regions = regionsByCountry[country] ?? []
+  const go = (next: { category?: string; country?: string; region?: string; q?: string; city?: string }) => {
     const params = new URLSearchParams()
     const values = {
       q: (next.q ?? text).trim(),
       category: next.category ?? category,
       country: next.country ?? country,
+      region: next.region ?? region,
       city: (next.city ?? cityText).trim(),
     }
     if (values.q) params.set('q', values.q)
     if (values.category) params.set('category', values.category)
     params.set('country', values.country || 'all')
+    if (values.region && values.country !== 'all') params.set('region', values.region)
     if (values.city) params.set('city', values.city)
     router.push(`${pathname}?${params.toString()}`)
   }
@@ -75,7 +83,7 @@ export default function ListingsFilters({
       role="search"
       className="mb-8 rounded-2xl border border-[var(--gold)]/25 bg-white p-4 shadow-sm sm:p-5"
     >
-      <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_auto] lg:items-end">
+      <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr_auto] lg:items-end">
         {/* Cosa cerchi? */}
         <label className="block md:col-span-2 lg:col-span-1">
           <span className={label}>{labels.what}</span>
@@ -100,7 +108,7 @@ export default function ListingsFilters({
               value={country}
               onChange={(e) => {
                 setCityText('')
-                go({ country: e.target.value, city: '' })
+                go({ country: e.target.value, region: '', city: '' })
               }}
               className={`${field} appearance-none pl-4 pr-9`}
             >
@@ -108,6 +116,30 @@ export default function ListingsFilters({
               {countries.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
+                </option>
+              ))}
+            </select>
+            <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
+          </span>
+        </label>
+
+        {/* Dove: regione (solo per i paesi con l'elenco) */}
+        <label className="block">
+          <span className={`${label} hidden lg:block lg:invisible`} aria-hidden="true">
+            {labels.where}
+          </span>
+          <span className="relative block">
+            <select
+              value={region}
+              disabled={!regions.length}
+              onChange={(e) => go({ region: e.target.value })}
+              aria-label={labels.allRegions}
+              className={`${field} appearance-none pl-4 pr-9 disabled:opacity-50`}
+            >
+              <option value="">{labels.allRegions}</option>
+              {regions.map((r) => (
+                <option key={r} value={r}>
+                  {r}
                 </option>
               ))}
             </select>

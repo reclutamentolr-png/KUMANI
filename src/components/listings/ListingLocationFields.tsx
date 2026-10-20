@@ -4,9 +4,10 @@ import { useId } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { Globe2, MapPin } from 'lucide-react'
 import { LISTING_COUNTRIES } from '@/lib/listings'
+import { regionsOf } from '@/lib/listingRegions'
 import { countryName } from '@/lib/events'
 
-export type ListingLocationValue = { countryCode: string; city: string; isRemote: boolean }
+export type ListingLocationValue = { countryCode: string; region: string; city: string; isRemote: boolean }
 
 // Località dell'annuncio (pubblicazione e modifica): nazione, città con i
 // suggerimenti delle città già usate in quella nazione, e "anche online".
@@ -26,6 +27,7 @@ export default function ListingLocationFields({
   const locale = useLocale()
   const listId = useId()
   const suggestions = citiesByCountry[value.countryCode] ?? []
+  const regions = regionsOf(value.countryCode)
   const countries = [...LISTING_COUNTRIES].sort((a, b) => countryName(a, locale).localeCompare(countryName(b, locale), locale))
 
   return (
@@ -41,7 +43,7 @@ export default function ListingLocationFields({
           <select
             required
             value={value.countryCode}
-            onChange={(e) => onChange({ ...value, countryCode: e.target.value })}
+            onChange={(e) => onChange({ ...value, countryCode: e.target.value, region: '' })}
             className="w-full rounded-xl border-2 border-stone-300 bg-white px-4 py-2.5 text-[var(--ink)] placeholder:text-stone-400 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30"
           >
             <option value="" disabled>
@@ -54,7 +56,34 @@ export default function ListingLocationFields({
             ))}
           </select>
         </label>
+        {/* Regione: elenco per i paesi principali, libera per gli altri */}
         <label className="block">
+          <span className="mb-1.5 block text-sm font-bold text-[var(--ink)]">{t('listingRegion')}</span>
+          {regions.length ? (
+            <select
+              value={value.region}
+              onChange={(e) => onChange({ ...value, region: e.target.value })}
+              className="w-full rounded-xl border-2 border-stone-300 bg-white px-4 py-2.5 text-[var(--ink)] focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30"
+            >
+              <option value="">{t('listingRegionChoose')}</option>
+              {regions.map((r) => (
+                <option key={r} value={r}>
+                  {r}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <input
+              type="text"
+              maxLength={60}
+              value={value.region}
+              onChange={(e) => onChange({ ...value, region: e.target.value })}
+              placeholder={t('listingRegionPlaceholder')}
+              className="w-full rounded-xl border-2 border-stone-300 bg-white px-4 py-2.5 text-[var(--ink)] placeholder:text-stone-400 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30"
+            />
+          )}
+        </label>
+        <label className="block md:col-span-2">
           <span className="mb-1.5 block text-sm font-bold text-[var(--ink)]">{t('listingCity')}</span>
           <input
             type="text"

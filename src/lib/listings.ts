@@ -42,6 +42,7 @@ export interface CreateListingData {
   price?: number
   imageUrl?: string
   countryCode?: string
+  region?: string
   city?: string
   isRemote?: boolean
   featureDurationDays?: 7 | 15
@@ -54,6 +55,7 @@ export interface UpdateListingData {
   price?: number
   imageUrl?: string
   countryCode?: string
+  region?: string
   city?: string
   isRemote?: boolean
 }
@@ -117,6 +119,7 @@ export type Listing = {
   featured_until?: string | null
   is_active?: boolean
   country_code?: string | null
+  region?: string | null
   city?: string | null
   is_remote?: boolean | null
   // Controllo dello Staff: in attesa, pubblicato o non approvato (con il motivo)

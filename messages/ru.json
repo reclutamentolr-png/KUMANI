@@ -1057,7 +1057,14 @@
     "listingRejected": "Не одобрено",
     "listingInReviewHint": "Staff проверяет объявление: оно появится после одобрения.",
     "listingRejectedHint": "Не одобрено: {reason}. Измените его, и оно будет проверено снова.",
-    "newListingFree": "Новое объявление (бесплатно)"
+    "newListingFree": "Новое объявление (бесплатно)",
+    "listingRegion": "Регион",
+    "listingRegionChoose": "Выберите регион",
+    "listingRegionPlaceholder": "Регион (необязательно)",
+    "filterAllRegions": "Все регионы",
+    "publishListingCta": "Опубликовать объявление",
+    "searchListingsCta": "Поиск объявлений",
+    "closeSearchCta": "Закрыть поиск"
   },
   "neurobalance": {
     "tracksLabel": "Аудио для расслабления",

@@ -6,10 +6,11 @@ import { getTranslations } from 'next-intl/server'
 import { LISTINGS_PAGE_SIZE, getUnreadMessagesCount, getActiveListings, getFeaturedListings, getUserListings, getActiveListingCategoryCounts, getActiveListingById, getListingCitiesByCountry, cleanListingSearch } from '@/lib/listings-server'
 import ListingCategoryIcon from '@/components/listings/ListingCategoryIcon'
 import { getListingsFreeMode } from '@/lib/listingsMode'
+import { cleanListingRegion, regionsOf } from '@/lib/listingRegions'
 import { CATEGORY_I18N_KEYS, ALL_LISTING_CATEGORIES, LISTING_COUNTRIES, isListingCountry, cleanListingCity, type Listing, type ListingCategory } from '@/lib/listings'
 import { countryName } from '@/lib/events'
 import { deleteListingAction, republishListingAction } from '@/app/actions/listings'
-import { ArrowLeft, MessageCircle, Plus, Tag, Trash2, Eye, Calendar, RefreshCw, Sparkles, Coins, Info, ChevronDown, Hourglass, ShieldCheck } from 'lucide-react'
+import { ArrowLeft, MessageCircle, Plus, Tag, Trash2, Eye, Calendar, RefreshCw, Sparkles, Coins, Info, ChevronDown, Hourglass, ShieldCheck, Search } from 'lucide-react'
 import ListingForm from '@/components/ListingForm'
 import ChatModalWrapper from '@/components/ChatModalWrapper'
 import FeatureListingButton from '@/components/FeatureListingButton'
@@ -40,10 +41,10 @@ export default async function ListingsPage({
   searchParams
 }: {
   params: Promise<{ locale: string }>
-  searchParams: Promise<{ category?: string; showForm?: string; q?: string; listing?: string; country?: string; city?: string; page?: string }>
+  searchParams: Promise<{ category?: string; showForm?: string; q?: string; listing?: string; country?: string; region?: string; city?: string; page?: string; search?: string }>
 }) {
   const { locale } = await params
-  const { category: rawCategory, showForm, q: rawQuery, listing: sharedListingId, country: rawCountry, city: rawCity, page: rawPage } = await searchParams
+  const { category: rawCategory, showForm, q: rawQuery, listing: sharedListingId, country: rawCountry, region: rawRegion, city: rawCity, page: rawPage, search: rawSearch } = await searchParams
   // Pagina degli annunci (30 per volta invece di tutti insieme)
   const page = Math.min(Math.max(parseInt(rawPage ?? '1', 10) || 1, 1), 1000)
   const t = await getTranslations('marketplace')
@@ -79,6 +80,10 @@ export default async function ListingsPage({
   const requestedCountry = (rawCountry ?? '').toUpperCase()
   const country = requestedCountry === 'ALL' ? '' : isListingCountry(requestedCountry) ? requestedCountry : rawCountry ? '' : defaultCountry
   const city = cleanListingCity(rawCity) ?? ''
+  // Pannello di ricerca: si apre con «Ricerca annunci» o se c'è già una ricerca
+  const showSearch = rawSearch === '1' || Boolean(rawCategory || rawQuery || rawCountry || rawRegion || rawCity)
+  // Regione: solo dall'elenco della nazione scelta
+  const region = country && regionsOf(country).length ? (cleanListingRegion(country, rawRegion) ?? '') : ''
 
   // Una condizione per parola (max 5); ogni parola trova anche le categorie
   // per nome (es. "animali")
@@ -95,6 +100,7 @@ export default async function ListingsPage({
         categories: ALL_LISTING_CATEGORIES.filter((cat) => getCategoryLabel(cat).toLowerCase().includes(word.toLowerCase())),
       })),
     country: country || undefined,
+    region: region || undefined,
     city: city || undefined,
   }
 
@@ -143,6 +149,7 @@ export default async function ListingsPage({
     if (category) params.set('category', category)
     if (query) params.set('q', query)
     if (rawCountry) params.set('country', rawCountry)
+    if (region) params.set('region', region)
     if (city) params.set('city', city)
     if (target > 1) params.set('page', String(target))
     const qs = params.toString()
@@ -187,6 +194,7 @@ export default async function ListingsPage({
                   </span>
                 )}
               </div>
+              {!freeMode && (
               <div className="mt-5 flex flex-wrap gap-3">
                 <div className="rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-2.5">
                   <p className="text-[11px] uppercase tracking-wider text-white/50">{t('myPoints').replace(':', '')}</p>
@@ -201,19 +209,27 @@ export default async function ListingsPage({
                   </p>
                 </div>
               </div>
+              )}
             </div>
-            <div className="flex flex-wrap gap-3 self-start lg:self-center">
+            <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap lg:self-center">
               <Link
                 href="/marketplace/listings?showForm=true"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3.5 font-bold text-[var(--ink)] shadow-lg transition-all hover:brightness-110"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] w-full px-6 py-3.5 sm:w-auto font-bold text-[var(--ink)] shadow-lg transition-all hover:brightness-110"
               >
                 <Plus className="h-5 w-5" />
-                {freeMode ? t('newListingFree') : t('newListing')}
+                {t('publishListingCta')}
+              </Link>
+              <Link
+                href={showSearch ? '/marketplace/listings' : '/marketplace/listings?search=1#cerca'}
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--gold)]/60 w-full px-6 py-3.5 sm:w-auto font-bold text-[var(--gold-bright)] transition-all hover:bg-white/10"
+              >
+                <Search className="h-5 w-5" />
+                {showSearch ? t('closeSearchCta') : t('searchListingsCta')}
               </Link>
               {/* Messaggi ricevuti e inviati per gli annunci */}
               <Link
                 href="/marketplace/chat"
-                className="relative inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 px-6 py-3.5 font-bold text-white transition-all hover:bg-white/10"
+                className="relative inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 w-full px-6 py-3.5 sm:w-auto font-bold text-white transition-all hover:bg-white/10"
               >
                 <MessageCircle className="h-5 w-5 text-[var(--gold-bright)]" />
                 {t('listingsMyMessages')}
@@ -233,7 +249,7 @@ export default async function ListingsPage({
             </summary>
             <ul className="mt-3 space-y-2">
               <li className="flex gap-2">
-                <Coins className="mt-0.5 h-4 w-4 shrink-0 text-[var(--gold-bright)]" /> {t('listingCostDesc')}
+                <Coins className="mt-0.5 h-4 w-4 shrink-0 text-[var(--gold-bright)]" /> {freeMode ? t('listingFreeNotice') : t('listingCostDesc')}
               </li>
               <li className="flex gap-2">
                 <Calendar className="mt-0.5 h-4 w-4 shrink-0 text-[var(--gold-bright)]" /> {t('listingValidityNotice')}
@@ -260,7 +276,10 @@ export default async function ListingsPage({
           />
         )}
 
-        {/* Ricerca: cosa, categoria e dove (nazione + città) */}
+        {/* Ricerca: cosa, categoria e dove (nazione, regione, città). Si apre
+            con «Ricerca annunci»; sotto restano sempre gli annunci */}
+        {showSearch && (
+        <div id="cerca" className="scroll-mt-24">
         <ListingsFilters
           categories={ALL_LISTING_CATEGORIES.map((cat) => ({
             value: cat,
@@ -275,17 +294,22 @@ export default async function ListingsPage({
           query={query}
           country={country || 'all'}
           city={city}
-          hasFilters={Boolean(category || query || city || country)}
+          region={region}
+          regionsByCountry={Object.fromEntries(LISTING_COUNTRIES.filter((c) => regionsOf(c).length).map((c) => [c, [...regionsOf(c)]]))}
+          hasFilters={Boolean(category || query || city || country || region)}
           labels={{
             what: t('searchWhat'),
             searchPlaceholder: t('searchListingsPlaceholder'),
             category: t('filterCategory'),
             where: t('filterWhere'),
             cityPlaceholder: t('filterCityPlaceholder'),
+            allRegions: t('filterAllRegions'),
             search: t('searchListings'),
             clear: t('clearFilters'),
           }}
         />
+        </div>
+        )}
 
         {/* Ecosistema: per i servizi e l'aiuto in casa c'è anche la Banca del tempo (ore, non soldi) */}
         {(category === 'servizi' || category === 'colf_badanti') && (
@@ -432,7 +456,7 @@ export default async function ListingsPage({
         <section>
           <h2 className="mb-4 text-lg font-bold text-[var(--ink)]">{t('allListings', { count: totalActiveListings })}</h2>
 
-          {allListings.length === 0 && featuredListings.length === 0 && (category || query || country || city) ? (
+          {allListings.length === 0 && featuredListings.length === 0 && (category || query || country || region || city) ? (
             <div className="rounded-3xl border-2 border-dashed border-[var(--gold)]/40 bg-white/70 p-10 text-center">
               <h3 className="mb-2 text-lg font-bold text-[var(--ink)]">{t('noListingsFound')}</h3>
               <p className="mb-5 text-gray-500">{t('noListingsFoundHint')}</p>
@@ -451,7 +475,7 @@ export default async function ListingsPage({
                 href="/marketplace/listings?showForm=true"
                 className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-5 py-3 font-bold text-[var(--ink)]"
               >
-                <Plus className="h-5 w-5" /> {freeMode ? t('newListingFree') : t('newListing')}
+                <Plus className="h-5 w-5" /> {t('publishListingCta')}
               </Link>
             </div>
           ) : (
