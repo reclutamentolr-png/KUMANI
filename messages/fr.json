@@ -704,7 +704,9 @@
     "profileEmailHint": "C’est l’adresse utilisée pour l’inscription et la connexion : elle ne peut pas être modifiée.",
     "comparePlans": "Comparer les formules",
     "upgradeToPro": "Passer à Pro",
-    "upgradeToProPrice": "Passer à Pro {price}"
+    "upgradeToProPrice": "Passer à Pro {price}",
+    "inviteLinkShort": "Lien court",
+    "inviteLinkWithCode": "Lien avec code"
   },
   "marketplace": {
     "fabula": "Kumani Fabula",
@@ -6789,7 +6791,8 @@
     "pptxVariants": "Lite : la présentation courte. Full : en plus, tous les services un par un.",
     "docsCount": "{count, plural, one {# document} other {# documents}}",
     "kind_home_doc": "Documents du logement",
-    "kind_vehicle_doc": "Documents des véhicules"
+    "kind_vehicle_doc": "Documents des véhicules",
+    "tabSocial": "Réseaux"
   },
   "flyers": {
     "cta": "Inscrivez-vous gratuitement sur",
@@ -14185,7 +14188,8 @@
     "emptyChosen": "Touchez « Ajouter » pour mettre ici les services que vous utilisez le plus.",
     "addCategory": "Ajouter",
     "foldersTitle": "Choisissez vos catégories",
-    "foldersHint": "Elles apparaissent en bas sous forme de dossiers, avec leurs services à l’intérieur. {max} au maximum."
+    "foldersHint": "Elles apparaissent en bas sous forme de dossiers, avec leurs services à l’intérieur. {max} au maximum.",
+    "calendar": "Calendrier"
   },
   "christmas": {
     "title": "Noël avec KUMANI",
@@ -14211,5 +14215,67 @@
     "register": "S’inscrire à KUMANI",
     "discover": "Découvrir {tool}",
     "disclosure": "{name} est un Kumano : si tu t’inscris avec son invitation, KUMANI lui accorde une récompense. Pour toi, rien ne change."
+  },
+  "socialImages": {
+    "title": "Images pour les réseaux sociaux",
+    "intro": "Des images prêtes avec le logo KUMANI pour Instagram, Facebook, TikTok ou le statut WhatsApp. Ton lien d’invitation est en bas : qui l’ouvre s’inscrit avec toi.",
+    "cardText": "Posts et stories avec le logo KUMANI, les services et ton lien d’invitation.",
+    "choose": "Choisis l’image",
+    "groupGeneral": "Phrases KUMANI",
+    "groupServices": "Les services",
+    "format": "Format :",
+    "post": "Post (carré)",
+    "story": "Story (vertical)",
+    "withLink": "Écrire mon lien d’invitation en bas",
+    "noLink": "En bas : kumani.io.",
+    "download": "Télécharger l’image",
+    "share": "Partager",
+    "generating": "Préparation…",
+    "error": "Impossible de préparer l’image. Réessaie.",
+    "shareText": "Découvre KUMANI, la Communauté qui s’entraide :",
+    "general": {
+      "community": {
+        "label": "La Communauté",
+        "eyebrow": "La Communauté",
+        "title": "On se donne",
+        "gold": "un coup de main.",
+        "sub": "Des services utiles au quotidien et des gens qui s’entraident. Une seule app."
+      },
+      "antitruffa": {
+        "label": "Anti-arnaque",
+        "eyebrow": "Anti-arnaque",
+        "title": "Avant de cliquer,",
+        "gold": "vérifie.",
+        "sub": "Sites, e-mails, photos, IBAN et numéros : sache en quelques secondes si c’est une arnaque."
+      },
+      "tuttoTorna": {
+        "label": "Tout s’arrange",
+        "eyebrow": "Avec KUMANI",
+        "title": "Tout",
+        "gold": "s’arrange.",
+        "sub": "Les comptes en fin de mois, les échéances en ordre, une minute pour respirer."
+      },
+      "tuVivi": {
+        "label": "Toi, vis",
+        "eyebrow": "KUMANI",
+        "title": "Toi, vis.",
+        "gold": "KUMANI s’occupe du reste.",
+        "sub": "Arnaques, échéances, comptes et clients : tout dans une seule app."
+      },
+      "tempo": {
+        "label": "Ton temps compte",
+        "eyebrow": "Banque du Temps",
+        "title": "Ton temps",
+        "gold": "compte.",
+        "sub": "Aide quelqu’un pendant une heure et reçois une heure quand tu en as besoin."
+      },
+      "unaPerTutti": {
+        "label": "Une pour tous",
+        "eyebrow": "Pour toute la famille",
+        "title": "Une pour tous,",
+        "gold": "tout pour toi.",
+        "sub": "De vingt à soixante-treize ans : KUMANI est simple pour tous."
+      }
+    }
   }
 }

@@ -23,7 +23,7 @@ const COMPLETE_KEY = 'kumani_profile_complete'
 const RECHECK_MS = 60 * 1000
 
 // Pagine pubbliche (menù, tessere, pagine condivise): mai il popup.
-const PUBLIC_PREFIXES = ['/m/', '/p/', '/f/', '/strumenti/', '/affinity/duo/', '/veritas/', '/convivio/', '/cv/', '/o/', '/q/', '/ref/', '/viaggi/invito/', '/events/']
+const PUBLIC_PREFIXES = ['/m/', '/p/', '/f/', '/strumenti/', '/affinity/duo/', '/veritas/', '/convivio/', '/cv/', '/o/', '/q/', '/ref/', '/i/', '/v/', '/viaggi/invito/', '/events/']
 // Accesso, regole e contatti: sempre raggiungibili, anche col blocco.
 // Pannello Admin: lo Staff deve poter lavorare comunque.
 const EXEMPT_ROUTES = ['/login', '/register', '/forgot-password', '/reset-password', '/auth', '/terms', '/privacy', '/contact', '/chi-siamo', '/admin', '/events']

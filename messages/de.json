@@ -704,7 +704,9 @@
     "profileEmailHint": "Mit dieser Adresse hast du dich registriert und meldest dich an: Sie kann nicht geändert werden.",
     "comparePlans": "Pläne vergleichen",
     "upgradeToPro": "Zu Pro wechseln",
-    "upgradeToProPrice": "Zu Pro wechseln {price}"
+    "upgradeToProPrice": "Zu Pro wechseln {price}",
+    "inviteLinkShort": "Kurzer Link",
+    "inviteLinkWithCode": "Link mit Code"
   },
   "marketplace": {
     "fabula": "Kumani Fabula",
@@ -6789,7 +6791,8 @@
     "pptxVariants": "Lite: die kurze Präsentation. Full: zusätzlich alle Dienste, einer nach dem anderen.",
     "docsCount": "{count, plural, one {# Dokument} other {# Dokumente}}",
     "kind_home_doc": "Unterlagen zur Wohnung",
-    "kind_vehicle_doc": "Fahrzeugunterlagen"
+    "kind_vehicle_doc": "Fahrzeugunterlagen",
+    "tabSocial": "Social Media"
   },
   "flyers": {
     "cta": "Kostenlos registrieren auf",
@@ -14185,7 +14188,8 @@
     "emptyChosen": "Tippe auf «Hinzufügen», um deine meistgenutzten Dienste hierher zu legen.",
     "addCategory": "Hinzufügen",
     "foldersTitle": "Wähle deine Kategorien",
-    "foldersHint": "Sie erscheinen unten als Ordner, mit ihren Diensten darin. Höchstens {max}."
+    "foldersHint": "Sie erscheinen unten als Ordner, mit ihren Diensten darin. Höchstens {max}.",
+    "calendar": "Kalender"
   },
   "christmas": {
     "title": "Weihnachten mit KUMANI",
@@ -14211,5 +14215,67 @@
     "register": "Bei KUMANI anmelden",
     "discover": "{tool} entdecken",
     "disclosure": "{name} ist ein Kumano: Wenn du dich über die Einladung anmeldest, erhält {name} eine Anerkennung von KUMANI. Für dich ändert sich nichts."
+  },
+  "socialImages": {
+    "title": "Bilder für Social Media",
+    "intro": "Fertige Bilder mit dem KUMANI-Logo für Instagram, Facebook, TikTok oder den WhatsApp-Status. Unten steht dein Einladungslink: Wer ihn öffnet, meldet sich über dich an.",
+    "cardText": "Posts und Stories mit dem KUMANI-Logo, den Diensten und deinem Einladungslink.",
+    "choose": "Bild auswählen",
+    "groupGeneral": "KUMANI-Sätze",
+    "groupServices": "Die Dienste",
+    "format": "Format:",
+    "post": "Post (quadratisch)",
+    "story": "Story (hochkant)",
+    "withLink": "Meinen Einladungslink unten anzeigen",
+    "noLink": "Unten steht kumani.io.",
+    "download": "Bild herunterladen",
+    "share": "Teilen",
+    "generating": "Wird erstellt…",
+    "error": "Das Bild konnte nicht erstellt werden. Bitte erneut versuchen.",
+    "shareText": "Entdecke KUMANI, die Community, die einander hilft:",
+    "general": {
+      "community": {
+        "label": "Die Community",
+        "eyebrow": "Die Community",
+        "title": "Wir helfen",
+        "gold": "einander.",
+        "sub": "Nützliche Dienste für jeden Tag und Menschen, die sich helfen. Eine App."
+      },
+      "antitruffa": {
+        "label": "Anti-Betrug",
+        "eyebrow": "Anti-Betrug",
+        "title": "Vor dem Klick:",
+        "gold": "prüfen.",
+        "sub": "Websites, E-Mails, Fotos, IBANs und Nummern: in Sekunden Betrug erkennen."
+      },
+      "tuttoTorna": {
+        "label": "Alles passt",
+        "eyebrow": "Mit KUMANI",
+        "title": "Alles",
+        "gold": "passt.",
+        "sub": "Die Finanzen am Monatsende, Fristen im Griff, eine Minute zum Durchatmen."
+      },
+      "tuVivi": {
+        "label": "Du lebst",
+        "eyebrow": "KUMANI",
+        "title": "Du lebst.",
+        "gold": "Um den Rest kümmert sich KUMANI.",
+        "sub": "Betrug, Fristen, Finanzen und Kunden: alles in einer App."
+      },
+      "tempo": {
+        "label": "Deine Zeit zählt",
+        "eyebrow": "Zeitbank",
+        "title": "Deine Zeit",
+        "gold": "zählt.",
+        "sub": "Hilf jemandem eine Stunde und bekomm eine Stunde, wenn du sie brauchst."
+      },
+      "unaPerTutti": {
+        "label": "Eine für alle",
+        "eyebrow": "Für die ganze Familie",
+        "title": "Eine für alle,",
+        "gold": "alles für dich.",
+        "sub": "Von zwanzig bis dreiundsiebzig: KUMANI ist für alle einfach."
+      }
+    }
   }
 }

@@ -53,6 +53,7 @@ import { getToolUsage, getWelcomeState, VERIFIED_AFTER_LOGINS } from '@/lib/welc
 import { resolveHomeFolders, resolveHomeView } from '@/lib/homeView'
 import { SERVICE_HUBS } from '@/lib/serviceHubs'
 import IconHome from '@/components/dashboard/IconHome'
+import { getInviteUrl } from '@/lib/shareLinksServer'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -126,7 +127,8 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   }
 
   // 6. URL di condivisione
-  const shareUrl = `${SITE_URL}/${locale}/ref/${profile?.referral_code}`
+  // Link d'invito corto (kumani.io/i/CODICE), sempre lo stesso per il Kumano
+  const shareUrl = await getInviteUrl(user.id, `${SITE_URL}/${locale}/ref/${profile?.referral_code}`)
 
   // Prezzo del piano Base come lo addebita Stripe (lo stesso del pagamento),
   // per il pulsante "Abbonati ora"
@@ -266,6 +268,13 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
         favorites={favoriteToolNames}
         badges={badges}
         folders={resolveHomeFolders(user.user_metadata, [...SERVICE_HUBS, COMMUNITY_FOLDER])}
+        // Calendario sempre visibile dopo «Aggiungi»: il giorno di oggi (ora
+        // italiana, come la fascia «Oggi») e l'agenda che la persona può aprire
+        calendar={{
+          day: Number(agendaToday.slice(8, 10)),
+          weekday: new Intl.DateTimeFormat(locale, { weekday: 'short', timeZone: 'UTC' }).format(new Date(`${agendaToday}T12:00:00Z`)).replace('.', ''),
+          href: agendaSources.memolife ? '/marketplace/memolife' : agendaSources.lifeCalendar ? '/marketplace/life-calendar' : '/marketplace/memolife',
+        }}
       />
     )
   }

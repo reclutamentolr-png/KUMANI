@@ -8,6 +8,7 @@ import Link from '@/components/LocalizedLink'
 import { ArrowLeft, ArrowRight, Flower2, Share2, Sparkles, Waves } from 'lucide-react'
 import { toolMetadata } from '@/lib/toolMetadata'
 import HubBar from '@/components/hubs/HubBar'
+import { getInviteUrl } from '@/lib/shareLinksServer'
 
 // Nome del servizio nella scheda del browser
 export const generateMetadata = toolMetadata('mandala')
@@ -22,7 +23,7 @@ export default async function MandalaPage({ params }: { params: Promise<{ locale
 
   const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<{ referral_code: string | null }>()
   const baseUrl = SITE_URL
-  const referralUrl = profile?.referral_code ? `${baseUrl}/${locale}/ref/${profile.referral_code}` : `${baseUrl}/${locale}`
+  const referralUrl = profile?.referral_code && user ? await getInviteUrl(user.id, `${baseUrl}/${locale}/ref/${profile.referral_code}`) : `${baseUrl}/${locale}`
 
   return (
     <div className="min-h-screen bg-[var(--background)]">

@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { toolMetadata } from '@/lib/toolMetadata'
 import HubBar from '@/components/hubs/HubBar'
+import { getInviteUrl } from '@/lib/shareLinksServer'
 
 // Nome del servizio nella scheda del browser
 export const generateMetadata = toolMetadata('qr-generator')
@@ -37,8 +38,8 @@ export default async function QRGeneratorPage({ params }: { params: Promise<{ lo
 
   const baseUrl = SITE_URL
   
-  // ✅ URL CORRETTO: include la lingua dinamica (es. /it/ref/CODICE)
-  const referralUrl = `${baseUrl}/${locale}/ref/${profile.referral_code}`
+  // Link d'invito corto (kumani.io/i/CODICE): QR più semplice da inquadrare
+  const referralUrl = await getInviteUrl(user.id, `${baseUrl}/${locale}/ref/${profile.referral_code}`)
 
   return (
     <div className="min-h-screen bg-[var(--background)]">

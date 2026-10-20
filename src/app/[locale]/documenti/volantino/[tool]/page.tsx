@@ -9,6 +9,7 @@ import { SITE_URL } from '@/lib/siteUrl'
 import { getFlyer } from '@/lib/flyers'
 import { getFlyerHubNames, getFlyerPlan, getFlyerTitles, listPublishedFlyers } from '@/lib/flyersData'
 import FlyerView from '@/components/flyers/FlyerView'
+import { getInviteUrl } from '@/lib/shareLinksServer'
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('flyers')
@@ -42,7 +43,8 @@ export default async function FlyerPage({ params }: { params: Promise<{ tool: st
   const code = profile?.referral_code
   // Link di invito come quello della dashboard, sempre sul dominio pubblico
   const site = /localhost|127\.0\.0\.1/.test(SITE_URL) ? 'https://kumani.io' : SITE_URL
-  const inviteUrl = code ? `${site}/${locale}/ref/${encodeURIComponent(code)}` : null
+  // Link d'invito corto (kumani.io/i/CODICE), sempre lo stesso per il Kumano
+  const inviteUrl = code && user ? await getInviteUrl(user.id, `${site}/${locale}/ref/${encodeURIComponent(code)}`) : null
 
   return (
     <div className="min-h-screen bg-[var(--background)]">

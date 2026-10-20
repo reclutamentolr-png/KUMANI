@@ -14,6 +14,7 @@ import {
 import WhatsAppTemplates from '@/components/WhatsAppTemplates'
 import { toolMetadata } from '@/lib/toolMetadata'
 import HubBar from '@/components/hubs/HubBar'
+import { getInviteUrl } from '@/lib/shareLinksServer'
 
 // Nome del servizio nella scheda del browser
 export const generateMetadata = toolMetadata('whatsapp-messages')
@@ -35,8 +36,8 @@ export default async function WhatsAppPage({ params }: { params: Promise<{ local
 
   const baseUrl = SITE_URL
   
-  // ✅ URL CORRETTO: include la lingua dinamica (es. /it/ref/CODICE)
-  const referralUrl = `${baseUrl}/${locale}/ref/${profile.referral_code}`
+  // Link d'invito corto (kumani.io/i/CODICE), sempre lo stesso per il Kumano
+  const referralUrl = await getInviteUrl(user.id, `${baseUrl}/${locale}/ref/${profile.referral_code}`)
 
   return (
     <div className="min-h-screen bg-[var(--background)]">

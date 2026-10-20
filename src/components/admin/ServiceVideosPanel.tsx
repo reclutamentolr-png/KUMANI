@@ -42,8 +42,11 @@ export default function ServiceVideosPanel() {
   const q = query.trim().toLowerCase()
   const shown = tools.filter((tool) => !q || tool.title.toLowerCase().includes(q) || tool.toolName.includes(q))
   const withVideo = tools.filter((tool) => links[tool.toolName]?.trim()).length
-  const totalOpens = Object.values(stats.byTool).reduce((sum, s) => sum + s.opens, 0)
-  const totalLinks = Object.values(stats.byTool).reduce((sum, s) => sum + s.links, 0)
+  // I link d'invito corti (kumani.io/i/…) stanno nella stessa tabella: contati a parte
+  const videoStats = Object.entries(stats.byTool).filter(([tool]) => tool !== 'invito').map(([, s]) => s)
+  const totalOpens = videoStats.reduce((sum, s) => sum + s.opens, 0)
+  const totalLinks = videoStats.reduce((sum, s) => sum + s.links, 0)
+  const invites = stats.byTool.invito ?? { links: 0, opens: 0 }
 
   return (
     <div className="max-w-4xl space-y-6">
@@ -58,11 +61,12 @@ export default function ServiceVideosPanel() {
         </p>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {[
           { label: 'Servizi con il video', value: `${withVideo} / ${tools.length}` },
-          { label: 'Link corti creati', value: totalLinks },
-          { label: 'Aperture dei link', value: totalOpens },
+          { label: 'Link dei video creati', value: totalLinks },
+          { label: 'Aperture dei video', value: totalOpens },
+          { label: 'Inviti corti aperti', value: `${invites.opens} (${invites.links} link)` },
         ].map((box) => (
           <div key={box.label} className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
             <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">{box.label}</p>
@@ -73,7 +77,7 @@ export default function ServiceVideosPanel() {
 
       {stats.top.length > 0 && (
         <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-          <h3 className="font-semibold text-gray-900">Chi fa aprire più video</h3>
+          <h3 className="font-semibold text-gray-900">Chi fa aprire più link (video e inviti)</h3>
           <ol className="mt-3 divide-y divide-gray-100 text-sm">
             {stats.top.map((person, i) => (
               <li key={`${person.name}-${i}`} className="flex items-center justify-between gap-3 py-2">

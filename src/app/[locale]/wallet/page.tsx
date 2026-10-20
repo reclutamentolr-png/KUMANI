@@ -46,6 +46,7 @@ import { EVENT_TYPE_EMOJI, formatEventDate } from '@/lib/events'
 import AppHeader from '@/components/nav/AppHeader'
 import { effectiveStamps } from '@/lib/fidelity'
 import { getSessionProfile, getSessionUser, preloadSession } from '@/lib/session'
+import { getInviteUrl } from '@/lib/shareLinksServer'
 
 const RANK_ICONS = { Star, Sparkles, Crown }
 
@@ -213,7 +214,8 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
   const planName = plan === 'pro' ? (onProTrial ? t('planProTrial') : t('planPro')) : plan === 'base' ? t('planBase') : null
 
   const baseUrl = SITE_URL
-  const referralUrl = `${baseUrl}/${locale}/ref/${profile.referral_code}`
+  // Link d'invito corto (kumani.io/i/CODICE), sempre lo stesso per il Kumano
+  const referralUrl = await getInviteUrl(user.id, `${baseUrl}/${locale}/ref/${profile.referral_code}`)
   const memberSince = new Date(profile.created_at).toLocaleDateString(locale, {
     day: 'numeric',
     month: 'long',

@@ -30,7 +30,10 @@ import { createClient } from '@/lib/supabase/server'
 import { listKumaniDocuments, listPersonalDocuments } from '@/lib/documentsData'
 import { getFlyerHubNames, getFlyerTitles, listPublishedFlyers } from '@/lib/flyersData'
 import { SERVICE_HUBS, TOOL_HUB } from '@/lib/serviceHubs'
-import { FLYERS } from '@/lib/flyers'
+import { FLYERS, flyerKey } from '@/lib/flyers'
+import SocialStudio, { type SocialItem } from '@/components/social/SocialStudio'
+import { getInviteUrl } from '@/lib/shareLinksServer'
+import { SITE_URL } from '@/lib/siteUrl'
 import { DOC_LOCALES, pickLocalized, type DocLocale, type KumaniDocFile, type PersonalDocKind } from '@/lib/documents'
 import AppHeader from '@/components/nav/AppHeader'
 import { getSessionUser, preloadSession } from '@/lib/session'
@@ -82,6 +85,8 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
     getSessionUser(),
   ])
   const personal = tab === 'personali'
+  // Terza scheda: immagini per i social con il logo KUMANI
+  const social = tab === 'social'
   if (!user) redirect(`/${locale}/login`)
 
   const languageName = (code: string) => {
@@ -116,7 +121,7 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
     )
   }
 
-  const body = personal ? await personalTab() : await kumaniTab()
+  const body = social ? await socialTab() : personal ? await personalTab() : await kumaniTab()
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -127,11 +132,14 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
         <p className="mt-2 text-[var(--muted)]">{t('subtitle')}</p>
 
         <nav className="mt-6 flex gap-1 rounded-2xl border border-[var(--gold)]/30 bg-white p-1 shadow-sm">
-          <Link href="/documenti" className={tabClass(!personal)}>
+          <Link href="/documenti" className={tabClass(!personal && !social)}>
             {t('tabKumani')}
           </Link>
           <Link href="/documenti?tab=personali" className={tabClass(personal)}>
             {t('tabPersonal')}
+          </Link>
+          <Link href="/documenti?tab=social" className={tabClass(social)}>
+            {t('tabSocial')}
           </Link>
         </nav>
 
@@ -139,6 +147,85 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
       </main>
     </div>
   )
+
+  // Immagini per i social: frasi di KUMANI e un'immagine per ogni servizio con
+  // il volantino attivo (testi dei volantini), create nel browser con il link
+  // d'invito corto del Kumano in basso
+  async function socialTab() {
+    const [ts, tf, published, titles, hubNames, { data: profile }] = await Promise.all([
+      getTranslations('socialImages'),
+      getTranslations('flyers'),
+      listPublishedFlyers(supabase),
+      getFlyerTitles(),
+      getFlyerHubNames(),
+      supabase.rpc('get_my_profile').maybeSingle<{ referral_code: string | null }>(),
+    ])
+    const site = /localhost|127\.0\.0\.1/.test(SITE_URL) ? 'https://kumani.io' : SITE_URL
+    const code = profile?.referral_code
+    const inviteUrl = code ? await getInviteUrl(user!.id, `${site}/${locale}/ref/${encodeURIComponent(code)}`) : null
+    const GENERAL: [string, string][] = [
+      ['community', 'HeartHandshake'],
+      ['antitruffa', 'ShieldCheck'],
+      ['tuttoTorna', 'Repeat'],
+      ['tuVivi', 'Sparkles'],
+      ['tempo', 'Clock'],
+      ['unaPerTutti', 'Users'],
+    ]
+    const items: SocialItem[] = [
+      ...GENERAL.map(([key, icon]) => ({
+        id: `g-${key}`,
+        group: 'general' as const,
+        label: ts(`general.${key}.label`),
+        icon,
+        eyebrow: ts(`general.${key}.eyebrow`),
+        title: ts(`general.${key}.title`),
+        gold: ts(`general.${key}.gold`),
+        sub: ts(`general.${key}.sub`),
+        points: [],
+      })),
+      ...FLYERS.filter((f) => published.has(f.tool))
+        .map((f) => {
+          const k = flyerKey(f.tool)
+          const name = titles[f.tool] ?? f.tool
+          return {
+            id: f.tool,
+            group: 'services' as const,
+            label: name,
+            icon: f.icon,
+            eyebrow: hubNames[f.tool] ?? tf(`cat_${f.category}`),
+            title: name,
+            gold: tf(`tools.${k}.sub`),
+            sub: '',
+            points: f.points.map((icon, i) => ({ icon, text: tf(`tools.${k}.p${i + 1}`) })),
+          }
+        })
+        .sort((a, b) => a.label.localeCompare(b.label, locale)),
+    ]
+    return (
+      <section className="mt-6 space-y-5">
+        <p className="text-sm text-[var(--muted)]">{ts('intro')}</p>
+        <SocialStudio
+          items={items}
+          inviteUrl={inviteUrl}
+          texts={{
+            choose: ts('choose'),
+            groupGeneral: ts('groupGeneral'),
+            groupServices: ts('groupServices'),
+            format: ts('format'),
+            post: ts('post'),
+            story: ts('story'),
+            withLink: ts('withLink'),
+            noLink: ts('noLink'),
+            download: ts('download'),
+            share: ts('share'),
+            generating: ts('generating'),
+            error: ts('error'),
+            shareText: ts('shareText'),
+          }}
+        />
+      </section>
+    )
+  }
 
   async function kumaniTab() {
     const [docs, published, flyerTitles, flyerHubs, catalog, catalogT, flyersT] = await Promise.all([

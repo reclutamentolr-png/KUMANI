@@ -17,6 +17,8 @@ import type { ServiceItem } from '@/lib/servicesCatalog'
 // aperti da qui «‹ Home» riporta a questa schermata (ToolBackLink).
 // «Usati spesso»: quanti servizi (oltre a quelli scelti a mano)
 const MAX_USED = 8
+// Strumenti dell'agenda: il loro pallino va sul calendario fisso
+const CALENDAR_TOOLS = new Set(['memolife', 'life-calendar'])
 
 type Shortcut = { key: string; href?: string; onClick?: () => void; label: string; full?: string; Icon: LucideIcon; tone: string; badge?: number }
 
@@ -57,6 +59,31 @@ function AppIcon({ item }: { item: Shortcut }) {
   )
 }
 
+// Calendario fisso dopo «Aggiungi», come l'icona del telefono: in alto il giorno
+// della settimana in rosso, sotto il numero di oggi. Apre l'agenda.
+function CalendarTile({ day, weekday, href, label, badge }: { day: number; weekday: string; href: string; label: string; badge?: number }) {
+  return (
+    <Link
+      href={href}
+      onClick={markFromIcons}
+      aria-label={`${label}: ${weekday} ${day}`}
+      title={label}
+      className="group relative flex min-w-0 flex-col items-center gap-1.5 rounded-2xl p-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--gold)] lg:gap-2"
+    >
+      <span className="flex h-14 w-14 flex-col overflow-hidden rounded-[18px] bg-white text-center shadow-[0_6px_14px_rgba(0,0,0,0.18)] transition-transform group-active:scale-95 sm:h-16 sm:w-16 lg:h-[88px] lg:w-[88px] lg:rounded-[24px]">
+        <span className="bg-red-600 py-0.5 text-[9px] font-extrabold uppercase leading-tight tracking-wide text-white sm:text-[10px] lg:py-1 lg:text-xs">{weekday}</span>
+        <span className="flex flex-1 items-center justify-center text-2xl font-extrabold leading-none text-[var(--ink)] sm:text-[28px] lg:text-4xl">{day}</span>
+      </span>
+      {!!badge && (
+        <span className="absolute right-1 top-0 flex h-5 min-w-5 items-center justify-center rounded-full border-2 border-[var(--background)] bg-red-600 px-1 text-[10px] font-bold text-white sm:right-3">
+          {badge > 9 ? '9+' : badge}
+        </span>
+      )}
+      <span className="line-clamp-2 w-full text-center text-[11px] font-semibold leading-tight text-inherit sm:text-xs lg:text-sm">{label}</span>
+    </Link>
+  )
+}
+
 export default function IconHome({
   firstName,
   dateLabel,
@@ -67,6 +94,7 @@ export default function IconHome({
   favorites,
   badges,
   folders,
+  calendar,
 }: {
   firstName: string | null
   dateLabel: string
@@ -81,6 +109,8 @@ export default function IconHome({
   badges: Record<string, number>
   // Categorie (servizi uniti) nella fascia in basso, come cartelle
   folders: string[]
+  // Giorno di oggi e agenda da aprire (calendario dopo «Aggiungi»)
+  calendar: { day: number; weekday: string; href: string }
 }) {
   const t = useTranslations('homeView')
   const [query, setQuery] = useState('')
@@ -103,7 +133,8 @@ export default function IconHome({
     full: item.title,
     Icon: marketplaceIconMap[item.iconName] ?? Smartphone,
     tone: item.open ? (item.tone ?? GROUP_STYLE[item.group].tile) : 'bg-white/80 text-[var(--muted)]',
-    badge: badges[item.toolName],
+    // Il pallino dell'agenda è sul calendario fisso: non si ripete sull'icona
+    badge: CALENDAR_TOOLS.has(item.toolName) ? undefined : badges[item.toolName],
   })
 
   // «I tuoi servizi»: tutti quelli scelti a mano (preferiti), nell'ordine in
@@ -197,6 +228,7 @@ export default function IconHome({
                   nell'ordine in cui sono stati aggiunti (i nuovi in fondo) */}
               <div className="grid grid-cols-4 gap-x-1 gap-y-3 sm:grid-cols-6 lg:grid-cols-7">
                 <AppIcon item={addService} />
+                <CalendarTile {...calendar} label={t('calendar')} badge={badges.memolife ?? badges['life-calendar']} />
                 {chosen.map((item) => (
                   <AppIcon key={item.toolName} item={toShortcut(item)} />
                 ))}

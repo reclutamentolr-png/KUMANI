@@ -704,7 +704,9 @@
     "profileEmailHint": "Es la dirección con la que te registraste y con la que entras: no se puede cambiar.",
     "comparePlans": "Comparar planes",
     "upgradeToPro": "Pasar a Pro",
-    "upgradeToProPrice": "Pasar a Pro {price}"
+    "upgradeToProPrice": "Pasar a Pro {price}",
+    "inviteLinkShort": "Enlace corto",
+    "inviteLinkWithCode": "Enlace con código"
   },
   "marketplace": {
     "fabula": "Kumani Fabula",
@@ -6789,7 +6791,8 @@
     "pptxVariants": "Lite: la presentación breve. Full: además, todos los servicios uno a uno.",
     "docsCount": "{count, plural, one {# documento} other {# documentos}}",
     "kind_home_doc": "Documentos de la vivienda",
-    "kind_vehicle_doc": "Documentos de los vehículos"
+    "kind_vehicle_doc": "Documentos de los vehículos",
+    "tabSocial": "Redes"
   },
   "flyers": {
     "cta": "Regístrate gratis en",
@@ -14185,7 +14188,8 @@
     "emptyChosen": "Toca «Añadir» para poner aquí los servicios que más usas.",
     "addCategory": "Añadir",
     "foldersTitle": "Elige tus categorías",
-    "foldersHint": "Aparecen abajo como carpetas, con sus servicios dentro. Como máximo {max}."
+    "foldersHint": "Aparecen abajo como carpetas, con sus servicios dentro. Como máximo {max}.",
+    "calendar": "Calendario"
   },
   "christmas": {
     "title": "Navidad con KUMANI",
@@ -14211,5 +14215,67 @@
     "register": "Regístrate en KUMANI",
     "discover": "Descubre {tool}",
     "disclosure": "{name} es un Kumano: si te registras con su invitación, KUMANI le da un reconocimiento. Para ti no cambia nada."
+  },
+  "socialImages": {
+    "title": "Imágenes para redes sociales",
+    "intro": "Imágenes listas con el logo de KUMANI para Instagram, Facebook, TikTok o los estados de WhatsApp. Abajo está tu enlace de invitación: quien lo abre se registra contigo.",
+    "cardText": "Posts e historias con el logo de KUMANI, los servicios y tu enlace de invitación.",
+    "choose": "Elige la imagen",
+    "groupGeneral": "Frases de KUMANI",
+    "groupServices": "Los servicios",
+    "format": "Formato:",
+    "post": "Post (cuadrado)",
+    "story": "Historia (vertical)",
+    "withLink": "Escribir abajo mi enlace de invitación",
+    "noLink": "Abajo aparece kumani.io.",
+    "download": "Descargar imagen",
+    "share": "Compartir",
+    "generating": "Preparando…",
+    "error": "No se pudo preparar la imagen. Inténtalo de nuevo.",
+    "shareText": "Descubre KUMANI, la Comunidad que se echa una mano:",
+    "general": {
+      "community": {
+        "label": "La Comunidad",
+        "eyebrow": "La Comunidad",
+        "title": "Nos echamos",
+        "gold": "una mano.",
+        "sub": "Servicios útiles para cada día y personas que se ayudan. Una sola app."
+      },
+      "antitruffa": {
+        "label": "Antiestafas",
+        "eyebrow": "Antiestafas",
+        "title": "Antes de hacer clic,",
+        "gold": "comprueba.",
+        "sub": "Webs, emails, fotos, IBAN y números: descubre en segundos si es una estafa."
+      },
+      "tuttoTorna": {
+        "label": "Todo cuadra",
+        "eyebrow": "Con KUMANI",
+        "title": "Todo",
+        "gold": "cuadra.",
+        "sub": "Las cuentas a fin de mes, los vencimientos en orden, un minuto para respirar."
+      },
+      "tuVivi": {
+        "label": "Tú vive",
+        "eyebrow": "KUMANI",
+        "title": "Tú vive.",
+        "gold": "Del resto se encarga KUMANI.",
+        "sub": "Estafas, vencimientos, cuentas y clientes: todo en una app."
+      },
+      "tempo": {
+        "label": "Tu tiempo vale",
+        "eyebrow": "Banco de Tiempo",
+        "title": "Tu tiempo",
+        "gold": "vale.",
+        "sub": "Ayudas a alguien una hora y recibes una hora cuando la necesites."
+      },
+      "unaPerTutti": {
+        "label": "Una para todos",
+        "eyebrow": "Para toda la familia",
+        "title": "Una para todos,",
+        "gold": "todo para ti.",
+        "sub": "De los veinte a los setenta y tres: KUMANI es fácil para todos."
+      }
+    }
   }
 }

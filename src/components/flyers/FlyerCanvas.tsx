@@ -23,7 +23,7 @@ import type { FlyerConfig } from '@/lib/flyers'
 const inter = localFont({ src: '../../fonts/Inter.woff2', weight: '100 900' })
 const playfair = localFont({ src: '../../fonts/PlayfairDisplay.woff2', weight: '400 900' })
 
-const ICONS: Record<string, LucideIcon> = {
+export const ICONS: Record<string, LucideIcon> = {
   AudioWaveform, Award, BadgeCheck, Bell, BellRing, BookOpen, BookUser, Bookmark, BriefcaseBusiness, Building2, Calculator, CalendarCheck, CalendarClock,
   CalendarDays, Camera, Car, ChartColumn, ChartLine, Circle, CircleCheck, ClipboardList, ClipboardPaste, Clock, Coins, Compass, Dices, Download, Ear, Eye,
   EyeOff, FileDown, FileSpreadsheet, FileText, Flower2, FolderOpen, Gauge, Gift, Globe, GraduationCap, Grid3x3, HandHelping, Handshake,

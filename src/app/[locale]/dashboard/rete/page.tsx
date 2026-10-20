@@ -3,7 +3,6 @@ import { getAppCounts } from '@/lib/appCounts'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
-import CopyButton from '@/components/CopyButton'
 import MatrixTree from '@/components/MatrixTree'
 import SpilloverExplainer from '@/components/SpilloverExplainer'
 import RankBadge from '@/components/RankBadge'
@@ -14,10 +13,11 @@ import { rankProgress } from '@/lib/ranks'
 import RankRequirements from '@/components/RankRequirements'
 import { getMemberPasses } from '@/lib/memberPasses'
 import { defaultLocale } from '../../../../../i18n'
-import { TreePine, Star, Sparkles, Crown, Trophy, PartyPopper, UserPlus, CheckCircle2, Shuffle, Network, MessageCircle, Gift, Users } from 'lucide-react'
-import NativeShareButton from '@/components/NativeShareButton'
+import { TreePine, Star, Sparkles, Crown, Trophy, PartyPopper, UserPlus, CheckCircle2, Shuffle, Network, Gift, Users } from 'lucide-react'
+import InviteShareBox from '@/components/network/InviteShareBox'
 import AppHeader from '@/components/nav/AppHeader'
 import { getSessionProfile, getSessionUser, preloadSession } from '@/lib/session'
+import { getInviteUrl } from '@/lib/shareLinksServer'
 
 // Schede "Prossimi obiettivi": aspetto di ciascuna qualifica (soglie e testi dalle qualifiche della rete)
 const GOALS = [
@@ -66,7 +66,10 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
     achievements: achievementRows,
   } = network
 
-  const shareUrl = `${SITE_URL}/${locale}/ref/${profile?.referral_code}`
+  // Due link d'invito a scelta: corto (kumani.io/i/CODICE, sempre lo stesso
+  // per il Kumano) o con il codice invito in vista
+  const longUrl = `${SITE_URL}/${locale}/ref/${profile?.referral_code}`
+  const shareUrl = await getInviteUrl(user.id, longUrl)
   // Chi non ha ancora un piano ma usa un servizio con il Pass (anche regalato
   // da te): si vede nell'elenco, con un messaggio per scoprire gli altri servizi
   const passes = await getMemberPasses(pendingKumani.map((person) => person.id), user.id)
@@ -124,30 +127,11 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
               </div>
               {currentRank && <RankBadge rank={currentRank} />}
             </div>
-            <div className="relative mt-5 flex gap-2">
-              <input
-                readOnly
-                value={shareUrl}
-                aria-label={t('yourReferralCode')}
-                className="min-w-0 flex-1 rounded-lg border border-[var(--gold)]/35 bg-white/10 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/60"
-              />
-              <CopyButton text={shareUrl} />
-            </div>
-            <a
-              href={`https://wa.me/?text=${encodeURIComponent(t('inviteShareMessage', { link: shareUrl, ...appCounts }))}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="relative mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-4 py-2.5 text-sm font-bold text-[var(--ink)] hover:brightness-110"
-            >
-              <MessageCircle className="h-4 w-4" /> {t('inviteShareWhatsapp')}
-            </a>
-            <NativeShareButton
-              url={shareUrl}
-              title="KUMANI"
-              text={t('inviteShareMessage', { link: '', ...appCounts }).trim()}
-              variant="glass"
-              copyFallback={false}
-              className="relative mt-2 w-full"
+            <InviteShareBox
+              links={{ short: shareUrl, code: longUrl }}
+              messages={{ short: t('inviteShareMessage', { link: shareUrl, ...appCounts }), code: t('inviteShareMessage', { link: longUrl, ...appCounts }) }}
+              shareText={t('inviteShareMessage', { link: '', ...appCounts }).trim()}
+              texts={{ short: t('inviteLinkShort'), code: t('inviteLinkWithCode'), label: t('yourReferralCode'), whatsapp: t('inviteShareWhatsapp') }}
             />
           </div>
         </div>
