@@ -747,7 +747,9 @@
     "upgradeToPro": "Upgrade to Pro",
     "upgradeToProPrice": "Upgrade to Pro {price}",
     "inviteLinkShort": "Short link",
-    "inviteLinkWithCode": "Link with code"
+    "inviteLinkWithCode": "Link with code",
+    "subscribeFrom": "Subscribe from {date}",
+    "subscribeFromVowel": "Subscribe from {date}"
   },
   "marketplace": {
     "fabula": "Kumani Fabula",

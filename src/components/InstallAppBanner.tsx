@@ -76,8 +76,10 @@ export default function InstallAppBanner() {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- il tipo di dispositivo si conosce solo nel browser
     setIsIOS(ios)
     const auto = AUTO_PATHS.test(pathname) && !read(INSTALLED_KEY) && !snoozed()
+    let gotPrompt = false
     const onPrompt = (e: Event) => {
       // Si tiene l'evento anche se il banner è rimandato: serve per «Installa l'app»
+      gotPrompt = true
       e.preventDefault()
       setDeferred(e as BeforeInstallPromptEvent)
       if (auto) setTimeout(() => setVisible(true), 1500)
@@ -95,8 +97,13 @@ export default function InstallAppBanner() {
     window.addEventListener('appinstalled', onInstalled)
     window.addEventListener(SHOW_INSTALL_EVENT, onShow)
     const timer = ios && auto ? setTimeout(() => setVisible(true), 1500) : undefined
+    // Telefoni Android con browser che non avvisano dell'installazione (es.
+    // Firefox): il banner compare lo stesso e «Aggiungi» spiega il menu
+    const android = /android/i.test(navigator.userAgent)
+    const menuTimer = !ios && android && auto ? setTimeout(() => !gotPrompt && setVisible(true), 4000) : undefined
     return () => {
       if (timer) clearTimeout(timer)
+      if (menuTimer) clearTimeout(menuTimer)
       window.removeEventListener('beforeinstallprompt', onPrompt)
       window.removeEventListener('appinstalled', onInstalled)
       window.removeEventListener(SHOW_INSTALL_EVENT, onShow)

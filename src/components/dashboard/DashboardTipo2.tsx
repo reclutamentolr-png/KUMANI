@@ -1,4 +1,5 @@
 import { getLocale, getTranslations } from 'next-intl/server'
+import { getPlansGate } from '@/lib/plansGate'
 import Link from '@/components/LocalizedLink'
 import { ArrowRight, CheckCircle2, Crown, Hourglass, Sparkles, BadgeCheck, Gift, BookOpen, FolderOpen } from 'lucide-react'
 import CopyButton from '@/components/CopyButton'
@@ -86,6 +87,12 @@ export default async function DashboardTipo2({
   const docsT = await getTranslations('documents')
   const hubT = await getTranslations('hub')
   const locale = await getLocale()
+  // Piani non ancora aperti: «Abbonati dal 15 novembre» al posto di «Abbonati ora»
+  const gate = await getPlansGate()
+  const gateDay = gate.closed ? new Date(gate.openDate + 'T00:00:00Z') : null
+  const gateDate = gateDay ? new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', timeZone: 'UTC' }).format(gateDay) : null
+  // In italiano «dall'8» e «dall'11»
+  const gateVowel = !!gateDay && locale === 'it' && [8, 11].includes(gateDay.getUTCDate())
   const subscribed = profile?.subscription_status === 'active'
   // Testi della spiegazione «Cosa sono i KU Karma?»
   const karmaInfoTexts = {
@@ -114,7 +121,7 @@ export default async function DashboardTipo2({
           href="/billing"
           className="flex min-h-11 items-center justify-center gap-1.5 rounded-xl bg-[var(--ink)] px-3 py-2.5 text-center text-sm font-bold text-white hover:bg-[var(--ink-soft)]"
         >
-          <Crown className="h-4 w-4 shrink-0 text-[var(--gold-bright)]" /> {t('subscribeNow', { price: basePrice })}
+          <Crown className="h-4 w-4 shrink-0 text-[var(--gold-bright)]" /> {gateDate ? t(gateVowel ? 'subscribeFromVowel' : 'subscribeFrom', { date: gateDate }) : t('subscribeNow', { price: basePrice })}
         </Link>
       ) : (
         !isProPlan && (
@@ -144,6 +151,10 @@ export default async function DashboardTipo2({
     <>
       {/* Lite · Completa · Icone */}
       <HomeViewSwitch key={view} current={view} />
+
+      {/* Nuovi iscritti: «Per cosa sei qui?» e i primi passi subito in cima,
+          prima di abbonamento e riga di stato (sul telefono si vede appena entrati) */}
+      {view === 'lite' && welcome}
 
       {/* In cima: abbonarsi (o passare a Pro) e «Hai un codice?» */}
       {ctaRow}
@@ -220,8 +231,7 @@ export default async function DashboardTipo2({
       {view === 'lite' ? (
         welcome ? (
           <>
-            {/* Nuovi iscritti Gratis: una domanda e tre passi, poi i servizi */}
-            {welcome}
+            {/* Nuovi iscritti Gratis: domanda e tre passi sono già in cima, qui i servizi */}
             <HomeServices items={services} favorites={favoriteToolNames} />
             {wellness}
             {welcomeFooter}
