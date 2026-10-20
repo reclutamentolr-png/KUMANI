@@ -53,29 +53,44 @@ export default async function DonationsPage() {
           <p className="rounded-2xl border border-dashed border-[var(--gold)]/50 bg-[var(--gold-pale)]/50 p-8 text-center text-[var(--ink)]">{t('comingSoon')}</p>
         ) : (
           <>
-            {/* Contatore */}
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-              <div className="rounded-2xl border-2 border-[var(--gold)] bg-gradient-to-br from-[#2a2418] to-[var(--ink)] p-6 text-center text-white shadow-lg sm:col-span-1">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--gold-bright)]">{t('pledgeShort')}</p>
-                <p className="mt-1 text-4xl font-extrabold">{percentFormat(locale, summary.percent_bp)}</p>
-              </div>
-              <div className="rounded-2xl border border-[var(--gold)]/30 bg-white p-6 text-center shadow-sm">
-                <Landmark className="mx-auto h-6 w-6 text-[var(--gold)]" />
-                <p className="mt-1 text-3xl font-bold text-[var(--ink)]">{eur(summary.paid_cents)}</p>
-                <p className="text-xs text-[var(--muted)]">{t('paidLabel')}</p>
-              </div>
-              <div className="rounded-2xl border border-[var(--gold)]/30 bg-white p-6 text-center shadow-sm">
-                <Users className="mx-auto h-6 w-6 text-[var(--gold)]" />
-                <p className="mt-1 text-3xl font-bold text-[var(--ink)]">{summary.donors}</p>
-                <p className="text-xs text-[var(--muted)]">{t('donorsLabel')}</p>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 gap-4 text-center text-sm">
-              <p className="rounded-xl bg-white p-3 shadow-sm">
-                <span className="block font-bold text-[var(--ink)]">{eur(summary.points_cents)}</span>
-                <span className="text-[var(--muted)]">{t('fromPoints')}</span>
+            {/* Il 5% in grande, con il contributo dei Kumani (KU Points). Le cifre
+                compaiono solo sopra zero: il maturato dagli abbonamenti non si mostra,
+                si vede solo quanto è stato davvero versato (Admin → Donazioni) */}
+            <div className="rounded-3xl border-2 border-[var(--gold)] bg-gradient-to-br from-[#2a2418] to-[var(--ink)] p-8 text-center text-white shadow-lg sm:p-10">
+              <p className="text-xs font-bold uppercase tracking-[0.25em] text-[var(--gold-bright)]">{t('pledgeShort')}</p>
+              <p className="mt-2 text-7xl font-extrabold leading-none text-[var(--gold-bright)] sm:text-8xl">{percentFormat(locale, summary.percent_bp)}</p>
+              <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-white/85 sm:text-lg">
+                {t('pledgeLine', { percent: percentFormat(locale, summary.percent_bp), association: active.name })}
               </p>
+              <Link href="/wallet" className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3 font-bold text-[var(--ink)] shadow hover:brightness-110">
+                <HeartHandshake className="h-5 w-5" /> {t('donateCta')}
+              </Link>
             </div>
+            {(summary.paid_cents > 0 || summary.points_cents > 0) && (
+              <div className={`grid grid-cols-1 gap-4 ${[summary.paid_cents > 0, summary.points_cents > 0].filter(Boolean).length === 2 ? 'sm:grid-cols-3' : 'sm:grid-cols-2'}`}>
+                {summary.paid_cents > 0 && (
+                  <div className="rounded-2xl border border-[var(--gold)]/30 bg-white p-6 text-center shadow-sm">
+                    <Landmark className="mx-auto h-6 w-6 text-[var(--gold)]" />
+                    <p className="mt-1 text-3xl font-bold text-[var(--ink)]">{eur(summary.paid_cents)}</p>
+                    <p className="text-xs text-[var(--muted)]">{t('paidLabel')}</p>
+                  </div>
+                )}
+                {summary.points_cents > 0 && (
+                  <>
+                    <div className="rounded-2xl border border-[var(--gold)]/30 bg-white p-6 text-center shadow-sm">
+                      <HandCoins className="mx-auto h-6 w-6 text-[var(--gold)]" />
+                      <p className="mt-1 text-3xl font-bold text-[var(--ink)]">{eur(summary.points_cents)}</p>
+                      <p className="text-xs text-[var(--muted)]">{t('fromPoints')}</p>
+                    </div>
+                    <div className="rounded-2xl border border-[var(--gold)]/30 bg-white p-6 text-center shadow-sm">
+                      <Users className="mx-auto h-6 w-6 text-[var(--gold)]" />
+                      <p className="mt-1 text-3xl font-bold text-[var(--ink)]">{summary.donors}</p>
+                      <p className="text-xs text-[var(--muted)]">{t('donorsLabel')}</p>
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
 
             {/* Associazione */}
             <section className="rounded-2xl border border-[var(--gold)]/30 bg-white p-6 shadow-sm">
