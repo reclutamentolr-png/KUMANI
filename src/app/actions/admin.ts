@@ -1092,7 +1092,7 @@ export async function adminListUsers() {
   const [{ data, error }, { count }] = await Promise.all([
     service
       .from('profiles')
-      .select('id, first_name, last_name, email, referral_code, subscription_status, is_blocked, created_at, sponsor_id')
+      .select('id, first_name, last_name, email, referral_code, subscription_status, is_blocked, created_at, sponsor_id, last_seen')
       // Ospiti in prova (codici di prova) esclusi: si cancellano da soli
       .is('guest_until', null)
       .order('created_at', { ascending: false })
@@ -1106,12 +1106,14 @@ export async function adminListUsers() {
     ? await service.from('profiles').select('id, first_name, last_name, referral_code').in('id', sponsorIds)
     : { data: [] as { id: string; first_name: string | null; last_name: string | null; referral_code: string | null }[] }
   const sponsorById = new Map((sponsors ?? []).map((s) => [s.id, s]))
+  const onlineSince = Date.now() - 15 * 60 * 1000
   return {
     users: (data || []).map(({ sponsor_id, ...user }, i) => {
       const s = sponsor_id ? sponsorById.get(sponsor_id) : null
       return {
         ...user,
         number: total - i,
+        online: !!user.last_seen && Date.parse(user.last_seen) > onlineSince,
         sponsor: s ? { name: [s.first_name, s.last_name].filter(Boolean).join(' ') || '—', code: s.referral_code } : null,
       }
     }),

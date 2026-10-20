@@ -582,7 +582,12 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
       const interval = setInterval(loadOnlineUsers, 30000)
       return () => clearInterval(interval)
     }
-    else if (activeSection === 'users') loadUsers()
+    else if (activeSection === 'users') {
+      loadUsers()
+      // Pallini online: si aggiornano da soli ogni minuto, senza «Caricamento»
+      const interval = setInterval(() => loadUsers(true), 60000)
+      return () => clearInterval(interval)
+    }
     else if (activeSection === 'marketplace') loadMarketplaceData()
     else if (activeSection === 'coupons') loadCouponsData()
     else if (activeSection === 'listingReports') loadListingReportsData()
@@ -887,7 +892,17 @@ L'accesso viene registrato.`))) return
                     <td className="px-3 py-3 text-sm font-bold tabular-nums text-gray-500">{user.number}</td>
                     {/* Nome, email e data di iscrizione insieme: la tabella non sborda */}
                     <td className="px-4 py-3 min-w-[14rem]">
-                      <div className="font-medium text-gray-900">{user.first_name} {user.last_name}</div>
+                      {(() => {
+                        const online = user.online
+                        const seen = user.last_seen ? new Date(user.last_seen).toLocaleString('it-IT', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Rome' }) : null
+                        const label = online ? 'Online ora' : seen ? `Non in linea · ultima attività ${seen}` : 'Non in linea · mai entrato'
+                        return (
+                          <div className="flex items-center gap-2 font-medium text-gray-900">
+                            <span title={label} aria-label={label} className={`h-2.5 w-2.5 shrink-0 rounded-full ${online ? 'bg-emerald-500 ring-2 ring-emerald-200' : 'bg-gray-300'}`} />
+                            {user.first_name} {user.last_name}
+                          </div>
+                        )
+                      })()}
                       <div className="break-all text-sm text-gray-600">{user.email}</div>
                       <div className="text-xs text-gray-500">
                         Iscritto il {new Date(user.created_at).toLocaleString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Rome' })}

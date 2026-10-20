@@ -22,6 +22,10 @@ export type AdminUserRow = {
   subscription_status: string | null
   is_blocked: boolean | null
   created_at: string
+  // Ultima attività (aggiornata ogni 5 minuti con il sito aperto)
+  last_seen: string | null
+  // Online: attività negli ultimi 15 minuti (come il contatore della Panoramica)
+  online: boolean
   // Numero progressivo di iscrizione (1 = il primo iscritto)
   number: number
   // Chi l'ha invitato (null: nessuno)
