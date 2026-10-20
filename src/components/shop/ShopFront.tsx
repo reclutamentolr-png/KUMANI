@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { LoaderCircle, Minus, Package, Plus, ShoppingBag, Store, Trash2, X } from 'lucide-react'
 import { startShopCheckout } from '@/app/actions/shopStore'
+import PlansComingSoonCard from '@/components/plans/PlansComingSoonCard'
+import type { PaymentsSoon } from '@/lib/plansComingSoon'
 import { EU_COUNTRIES, formatCents, shippingCents, type ShopProduct, type ShopSettings } from '@/lib/shop'
 
 // Vetrina pubblica del negozio: prodotti, carrello (resta nel browser) e
@@ -14,7 +16,7 @@ type Cart = Record<string, number>
 const cartKey = (slug: string) => `kumani_cart_${slug}`
 const input = 'w-full rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-[15px] text-[var(--ink)] outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/25'
 
-export default function ShopFront({ settings, products, sellerName }: { settings: ShopSettings; products: Product[]; sellerName: string }) {
+export default function ShopFront({ settings, products, sellerName, paymentsSoon = null }: { settings: ShopSettings; products: Product[]; sellerName: string; paymentsSoon?: PaymentsSoon }) {
   const t = useTranslations('shopPublic')
   const locale = useLocale()
   const [cart, setCart] = useState<Cart>({})
@@ -86,6 +88,11 @@ export default function ShopFront({ settings, products, sellerName }: { settings
 
   return (
     <>
+      {paymentsSoon && (
+        <div className="mb-4">
+          <PlansComingSoonCard texts={paymentsSoon} />
+        </div>
+      )}
       {!products.length ? (
         <p className="flex flex-col items-center gap-2 rounded-2xl bg-white px-4 py-12 text-center text-gray-500">
           <Store className="h-8 w-8 text-gray-300" /> {t('noProducts')}
@@ -295,9 +302,13 @@ export default function ShopFront({ settings, products, sellerName }: { settings
                   <button type="button" onClick={() => setStep('cart')} className="min-h-12 cursor-pointer rounded-xl border border-gray-300 px-4 font-semibold">
                     {t('back')}
                   </button>
+                  {paymentsSoon ? (
+                    <p className="flex flex-1 items-center rounded-xl bg-[var(--gold-pale)] px-3 py-2 text-sm font-bold text-[var(--ink)]">{paymentsSoon.title}</p>
+                  ) : (
                   <button type="button" onClick={pay} disabled={busy || shipping == null} className="inline-flex min-h-12 flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] font-bold text-[var(--ink)] shadow disabled:opacity-60">
                     {busy && <LoaderCircle className="h-4 w-4 animate-spin" />} {t('pay', { amount: money(total) })}
                   </button>
+                  )}
                 </div>
                 <p className="text-center text-xs text-gray-500">{t('payNote', { seller: sellerName })}</p>
               </div>

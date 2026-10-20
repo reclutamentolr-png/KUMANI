@@ -4,11 +4,12 @@ import { useState, useTransition } from 'react'
 import { BellRing, CalendarClock, CheckCircle2 } from 'lucide-react'
 import { joinPlanWaitlist } from '@/app/actions/plansWaitlist'
 
-type Texts = { title: string; text: string; notify: string; joined: string }
+// Senza notify (pagine pubbliche) il pulsante «Avvisami» non c'è
+type Texts = { title: string; text: string; notify?: string; joined?: string }
 
 // Al posto di «Abbonati» finché i piani non sono aperti (lib/plansGate):
 // la data di apertura e «Avvisami» (notifica ed email il giorno dell'apertura)
-export default function PlansComingSoonCard({ plan, joined: initial, texts, tone = 'light' }: { plan: 'base' | 'pro'; joined: boolean; texts: Texts; tone?: 'light' | 'dark' }) {
+export default function PlansComingSoonCard({ plan = 'base', joined: initial = false, texts, tone = 'light' }: { plan?: 'base' | 'pro'; joined?: boolean; texts: Texts; tone?: 'light' | 'dark' }) {
   const [joined, setJoined] = useState(initial)
   const [pending, start] = useTransition()
   const dark = tone === 'dark'
@@ -22,7 +23,7 @@ export default function PlansComingSoonCard({ plan, joined: initial, texts, tone
         <p className="mt-4 flex items-start gap-2 rounded-xl bg-emerald-50 px-3 py-2.5 text-sm font-semibold text-emerald-800">
           <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" /> {texts.joined}
         </p>
-      ) : (
+      ) : texts.notify ? (
         <button
           type="button"
           disabled={pending}
@@ -31,7 +32,7 @@ export default function PlansComingSoonCard({ plan, joined: initial, texts, tone
         >
           <BellRing className="h-5 w-5" /> {texts.notify}
         </button>
-      )}
+      ) : null}
     </div>
   )
 }

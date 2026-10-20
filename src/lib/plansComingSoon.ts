@@ -17,3 +17,15 @@ export async function getComingSoon(supabase: SupabaseClient, userId: string | n
     texts: { title: t('title', { date }), text: t('text'), notify: t('notify'), joined: t('joined', { date }) },
   }
 }
+
+// Pagine pubbliche (negozio, preventivo): solo la data, senza «Avvisami»
+// perché chi paga può non avere un account KUMANI. null a pagamenti aperti.
+export async function getPaymentsSoon(locale: string) {
+  const gate = await getPlansGate()
+  if (!gate.closed) return null
+  const t = await getTranslations({ locale, namespace: 'plansSoon' })
+  return { title: t('publicTitle', { date: formatOpenDate(locale, gate.openDate) }), text: t('publicText') }
+}
+
+export type PaymentsSoon = Awaited<ReturnType<typeof getPaymentsSoon>>
+export type ComingSoon = Awaited<ReturnType<typeof getComingSoon>>

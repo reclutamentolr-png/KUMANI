@@ -14167,12 +14167,12 @@
     "hello": "Hallo,",
     "helloName": "Hallo {name},",
     "question": "wofür bist du hier?",
-    "questionHint": "Tippe an, was du brauchst, auch mehrere Antworten: Wir legen die passenden Dienste in «Deine Dienste».",
+    "questionHint": "Tippe auf einen Punkt, um die Dienste zu sehen: Mit dem «i» erfährst du, wofür sie sind, mit «Hinzufügen» landen sie in «Deine Dienste». Lass dir Zeit.",
     "stepsTitle": "Deine ersten 3 Schritte",
     "stepsProgress": "{done} von 3",
     "stepDone": "erledigt",
     "step1Title": "Wähle, was du brauchst",
-    "step1Text": "Tippe oben auf eine Antwort.",
+    "step1Text": "Öffne oben einen Punkt und füge die Dienste hinzu, die du brauchst.",
     "step2Title": "Probiere einen kostenlosen Dienst",
     "step2Text": "Diese nutzt du schon kostenlos, ohne Zeitlimit. Jeder genutzte Dienst bringt dir +1 KU Karma.",
     "step3Title": "Entdecke KUMANI und hilf auch mit",
@@ -14186,7 +14186,18 @@
     "doneTitleName": "Glückwunsch {name}, du bist startklar! 🎉",
     "doneText": "Du hast deine ersten Schritte bei KUMANI gemacht. Darunter findest du deine Startseite: die gewählten Dienste und den schnellen Nachrichtencheck. Oben kannst du die Ansicht jederzeit wechseln: Lite, Komplett oder Symbole.",
     "doneCta": "Zu meiner Startseite",
-    "closeVideo": "Video schließen"
+    "closeVideo": "Video schließen",
+    "add": "Hinzufügen",
+    "added": "Hinzugefügt",
+    "info": "Was ist {service}",
+    "planFree": "Gratis",
+    "planBase": "Base",
+    "planPro": "Pro",
+    "infoOpen": "Du nutzt ihn schon kostenlos.",
+    "infoBase": "Im Base-Tarif enthalten: jetzt hinzufügen, er wird mit dem Tarif freigeschaltet.",
+    "infoPro": "Im Pro-Tarif enthalten: jetzt hinzufügen, er wird mit dem Tarif freigeschaltet.",
+    "tryNow": "Jetzt ausprobieren",
+    "panelHint": "Füge so viele hinzu, wie du willst, und entferne sie jederzeit: Du findest sie unten in «Deine Dienste»."
   },
   "homeView": {
     "label": "Ansicht der Startseite",
@@ -14313,6 +14324,8 @@
     "emailText": "Wie versprochen: Ab heute kannst du KUMANI Base oder Pro abonnieren und alle Dienste nutzen.",
     "emailWhy": "Du erhältst diese E-Mail, weil du beim Start der Tarife benachrichtigt werden wolltest.",
     "emailCta": "Tarif wählen",
-    "emailSignature": "Dein KUMANI-Team"
+    "emailSignature": "Dein KUMANI-Team",
+    "publicTitle": "Online-Zahlungen auf KUMANI starten am {date}",
+    "publicText": "Bis dahin ist keine Online-Zahlung möglich: Bitte versuche es ab diesem Tag erneut."
   }
 }

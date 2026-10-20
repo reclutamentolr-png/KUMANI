@@ -10830,7 +10830,7 @@
     "learnMoreService": "Scopri di più su {service}",
     "learnMorePlan": "Scopri tutti i servizi inclusi",
     "redeem_plan_mismatch": "Hai già un altro piano attivo: questo regalo si può usare quando il tuo piano scade, oppure resta valido per qualcun altro.",
-    "plansSoonNote": "I regali (un anno di Base o Pro e i Pass dei servizi) si potranno comprare dal {date}, quando si aprono i piani.",
+    "plansSoonNote": "I regali (un anno di Base o Pro e i Pass dei servizi) si potranno comprare da {date}, quando si aprono i pagamenti.",
     "error_soon": "I regali si potranno comprare dall’apertura dei piani."
   },
   "relatedServices": {
@@ -14167,12 +14167,12 @@
     "hello": "Ciao,",
     "helloName": "Ciao {name},",
     "question": "per cosa sei qui?",
-    "questionHint": "Tocca quello che ti serve, anche più di una risposta: mettiamo i servizi giusti in «I tuoi servizi».",
+    "questionHint": "Tocca una voce per vedere i servizi: con la «i» leggi a cosa servono, con «Aggiungi» li metti in «I tuoi servizi». Prenditi il tempo che ti serve.",
     "stepsTitle": "I tuoi primi 3 passi",
     "stepsProgress": "{done} di 3",
     "stepDone": "fatto",
     "step1Title": "Scegli cosa ti serve",
-    "step1Text": "Tocca una risposta qui sopra.",
+    "step1Text": "Apri una voce qui sopra e aggiungi i servizi che ti servono.",
     "step2Title": "Prova un servizio gratis",
     "step2Text": "Questi li usi già gratis, senza limiti di tempo. Ogni servizio che usi ti dà +1 KU Karma.",
     "step3Title": "Scopri KUMANI e dai una mano anche tu",
@@ -14186,7 +14186,18 @@
     "doneTitleName": "Complimenti {name}, sei pronto! 🎉",
     "doneText": "Hai fatto i primi passi in KUMANI. Qui sotto trovi la tua Home: i servizi che hai scelto e il controllo veloce dei messaggi. In alto puoi cambiare vista quando vuoi: Lite, Completa o Icone.",
     "doneCta": "Vai alla mia Home",
-    "closeVideo": "Chiudi il video"
+    "closeVideo": "Chiudi il video",
+    "add": "Aggiungi",
+    "added": "Aggiunto",
+    "info": "Cos’è {service}",
+    "planFree": "Gratis",
+    "planBase": "Base",
+    "planPro": "Pro",
+    "infoOpen": "Lo usi già gratis.",
+    "infoBase": "Incluso nel piano Base: lo aggiungi ora e si sblocca con il piano.",
+    "infoPro": "Incluso nel piano Pro: lo aggiungi ora e si sblocca con il piano.",
+    "tryNow": "Provalo ora",
+    "panelHint": "Puoi aggiungerne quanti vuoi e toglierli quando vuoi: li ritrovi in «I tuoi servizi», qui sotto."
   },
   "homeView": {
     "label": "Vista della Home",
@@ -14304,15 +14315,17 @@
     }
   },
   "plansSoon": {
-    "title": "I piani si aprono il {date}",
-    "text": "Intanto puoi usare KUMANI gratis: i servizi del piano Free, la community e il tuo link d’invito. Toccando «Avvisami» ti mandiamo una notifica e un’email il giorno dell’apertura.",
+    "title": "I pagamenti si aprono {date}",
+    "text": "Fino ad allora usi KUMANI gratis: i servizi del piano Free, la community e il tuo link d’invito. Abbonamenti, Pass e regali si potranno acquistare da quel giorno. Tocca «Avvisami» e ti mandiamo una notifica e un’email.",
     "notify": "Avvisami quando si aprono",
-    "joined": "Fatto! Ti avvisiamo il {date}, con una notifica e un’email.",
+    "joined": "Fatto! Ti avvisiamo {date}, con una notifica e un’email.",
     "emailSubject": "KUMANI: i piani sono aperti!",
     "emailHello": "Ciao {name}!",
     "emailText": "Come promesso: da oggi puoi abbonarti a KUMANI Base o Pro e usare tutti i servizi.",
     "emailWhy": "Ricevi questa email perché avevi chiesto di essere avvisato all’apertura dei piani.",
     "emailCta": "Scegli il tuo piano",
-    "emailSignature": "Il team KUMANI"
+    "emailSignature": "Il team KUMANI",
+    "publicTitle": "I pagamenti online su KUMANI si aprono {date}",
+    "publicText": "Fino ad allora non si può pagare online: riprova da quel giorno."
   }
 }

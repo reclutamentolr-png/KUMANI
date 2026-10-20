@@ -228,9 +228,9 @@ export default async function DashboardTipo2({
           </>
         ) : (
           <>
-            {/* Lite: solo l'essenziale */}
-            <QuickCheckBox title={t('quickCheckTitle')} className="" />
+            {/* Lite: solo l'essenziale, prima i servizi scelti */}
             <HomeServices items={services} favorites={favoriteToolNames} />
+            <QuickCheckBox title={t('quickCheckTitle')} className="" />
           </>
         )
       ) : withPlan ? (

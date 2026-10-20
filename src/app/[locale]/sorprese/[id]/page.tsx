@@ -4,6 +4,8 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { ArrowLeft, CheckCircle2, HandHeart, Heart, Info, MessageCircle, PartyPopper, Send, Smile, Sparkles, X } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import CheckoutForm from '@/components/billing/CheckoutForm'
+import PlansComingSoonCard from '@/components/plans/PlansComingSoonCard'
+import { getComingSoon } from '@/lib/plansComingSoon'
 import SurpriseEditor from '@/components/surprise/SurpriseEditor'
 import SurpriseShare from '@/components/surprise/SurpriseShare'
 import SurpriseReminder from '@/components/surprise/SurpriseReminder'
@@ -43,6 +45,8 @@ export default async function SurpriseEditPage({
   } = await supabase.auth.getUser()
   if (!user) redirect(`${prefix}/login?next=/sorprese/${id}`)
   if (!/^[0-9a-f-]{36}$/i.test(id)) notFound()
+  // Pagamenti chiusi fino all'apertura dei piani (Admin → Apertura piani)
+  const comingSoon = await getComingSoon(supabase, user.id, locale)
 
   // Ritorno dal pagamento: attivazione anche se il webhook non è ancora arrivato
   if (sp.paid && sp.session_id) await confirmSurpriseSession(sp.session_id, user.id)
@@ -223,6 +227,10 @@ export default async function SurpriseEditPage({
                   {planWhat ? `${t('planOrPay')} ` : ''}
                   {t('payFor', { kind: t(`kind_${row.kind}`) })} <strong className="text-lg text-[var(--ink)]">{money(prices[row.kind])}</strong>
                 </p>
+                {comingSoon ? (
+                  <PlansComingSoonCard joined={comingSoon.joined} texts={comingSoon.texts} />
+                ) : (
+                <>
                 <CheckoutForm action={`/api/checkout/surprise?id=${row.id}`} texts={checkoutTexts}>
                   <button
                     type="submit"
@@ -232,6 +240,8 @@ export default async function SurpriseEditPage({
                   </button>
                 </CheckoutForm>
                 <p className="mt-2 text-xs text-gray-500">{t('saveBeforePay')}</p>
+                </>
+                )}
                 {points && <SurprisePointsPay giftId={row.id} costs={points.costs} balances={points.balances} />}
               </div>
             )}

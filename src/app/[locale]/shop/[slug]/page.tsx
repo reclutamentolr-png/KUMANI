@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { Mail, MapPin, Phone } from 'lucide-react'
 import ShopFront from '@/components/shop/ShopFront'
 import { loadPublicShop, releaseShopReservation } from '@/lib/shopServer'
+import { getPaymentsSoon } from '@/lib/plansComingSoon'
 
 // Negozio pubblico del professionista (KUMANI Shop): si compra anche senza
 // essere iscritti. Il venditore è chi gestisce il negozio; KUMANI fornisce
@@ -54,7 +55,7 @@ export default async function PublicShopPage({ params, searchParams }: { params:
       </header>
       <main className="mx-auto max-w-4xl px-4 py-6">
         {cancelled && <p className="mb-4 rounded-xl bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-800">{t('cancelled')}</p>}
-        <ShopFront settings={settings} products={shop.products} sellerName={seller.name} />
+        <ShopFront settings={settings} products={shop.products} sellerName={seller.name} paymentsSoon={await getPaymentsSoon(locale)} />
         <footer className="mt-10 space-y-1 border-t border-[var(--gold)]/20 pt-5 text-sm text-gray-600">
           <p className="font-semibold text-[var(--ink)]">
             {t('soldBy', { seller: seller.name })}

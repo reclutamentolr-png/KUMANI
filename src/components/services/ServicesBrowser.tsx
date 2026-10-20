@@ -236,6 +236,10 @@ export function ServiceCard({
   const Icon = marketplaceIconMap[item.iconName] || Smartphone
   // Sezioni della Community: colore proprio
   const style = item.tone ? { dot: 'bg-sky-600', tile: item.tone } : GROUP_STYLE[item.group]
+  // Servizi uniti («KUMANI Benessere · Concentrazione»): nella Home prima il
+  // nome del servizio, sotto piccolo il gruppo
+  const [hubName, toolTitle] = item.title.includes(' · ') ? item.title.split(' · ', 2) : [null, item.title]
+  const compactNote = [hubName, item.open ? null : item.plan === 'pro' ? t('includedPro') : t('includedBase')].filter(Boolean).join(' · ')
 
   return (
     <div className={`relative ${item.open ? '' : 'opacity-[0.86]'}`}>
@@ -254,7 +258,8 @@ export function ServiceCard({
           )}
         </span>
         <span className={`flex min-w-0 flex-1 flex-col ${compact ? '' : 'pr-7'}`}>
-          <span className="truncate font-bold text-[var(--ink)]">{item.title}</span>
+          <span className="truncate font-bold text-[var(--ink)]">{compact ? toolTitle : item.title}</span>
+          {compact && compactNote && <span className="truncate text-xs text-[var(--muted)]">{compactNote}</span>}
           {!compact && <PlanTag plan={item.plan} className="mt-1" />}
           {!compact && <span className="mt-0.5 line-clamp-2 text-xs leading-5 text-[var(--muted)]">{item.description}</span>}
           {!compact && (

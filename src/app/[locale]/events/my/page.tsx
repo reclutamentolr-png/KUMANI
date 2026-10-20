@@ -9,6 +9,7 @@ import { createClient } from '@/lib/supabase/server'
 import { SuspendedBanner } from '@/components/ServiceSuspended'
 import { isToolOnline } from '@/lib/toolOnline'
 import { getMyBusinessProfile } from '@/lib/businessProfile-server'
+import { getComingSoon } from '@/lib/plansComingSoon'
 
 // KUMANI Events: area personale. Organizzatore (verifica, commissioni, i miei
 // eventi, iscritti e check-in) e partecipante (i miei pass).
@@ -42,12 +43,13 @@ export default async function EventsMyPage({
     notice = query.fee
   }
 
-  const [status, organized, passes, fees, businessProfile] = await Promise.all([
+  const [status, organized, passes, fees, businessProfile, comingSoon] = await Promise.all([
     getOrganizerStatus(),
     listMyOrganized(),
     listMyPasses(),
     listMyFees(),
     getMyBusinessProfile(supabase, user.id),
+    getComingSoon(supabase, user.id, locale),
   ])
 
   const online = await isToolOnline('events')
@@ -79,6 +81,7 @@ export default async function EventsMyPage({
           notice={notice}
           openEventId={typeof query.event === 'string' ? query.event : null}
           businessProfile={businessProfile}
+          comingSoon={comingSoon}
         />
       </main>
     </div>

@@ -47,6 +47,7 @@ import GiftWelcomeDashboard from '@/components/gifts/GiftWelcomeDashboard'
 import DashboardNeeds from '@/components/dashboard/DashboardNeeds'
 import VerifiedInviteCard from '@/components/verification/VerifiedInviteCard'
 import { buildHomeNeeds } from '@/lib/homeNeedsServer'
+import { HOME_NEEDS } from '@/lib/homeNeeds'
 import WelcomeHome, { ShowFullHomeLink } from '@/components/dashboard/WelcomeHome'
 import ChristmasOfferBanner from '@/components/christmas/ChristmasOfferBanner'
 import { getToolUsage, getWelcomeState, VERIFIED_AFTER_LOGINS } from '@/lib/welcomeHome'
@@ -366,8 +367,21 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
                 view === 'lite' && welcomeState?.show ? (
                   <WelcomeHome
                     firstName={profile?.first_name ?? null}
-                    needs={needs.map((need) => ({ key: need.key, icon: need.icon, short: need.short }))}
+                    needs={needs
+                      .map((need) => ({
+                        key: need.key,
+                        icon: need.icon,
+                        short: need.short,
+                        intro: need.intro,
+                        // Tutti i servizi della voce, uno per uno (anche quelli dei servizi uniti)
+                        services: [...new Set((HOME_NEEDS.find((n) => n.key === need.key)?.items ?? []) as readonly string[])]
+                          .map((name) => homeItems.find((item) => item.toolName === name))
+                          .filter((item) => !!item)
+                          .map((item) => ({ toolName: item.toolName, title: item.title, description: item.description, iconName: item.iconName, href: item.href, plan: item.plan, open: item.open })),
+                      }))
+                      .filter((need) => need.services.length > 0)}
                     picked={welcomeState.needs}
+                    favorites={favoriteToolNames}
                     steps={welcomeState.steps}
                     shareUrl={shareUrl}
                     tryServices={welcomeTry}

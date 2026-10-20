@@ -8,6 +8,7 @@ import { markConvivioFeesPaid } from '@/lib/eventFees'
 import { createClient } from '@/lib/supabase/server'
 import { SuspendedBanner } from '@/components/ServiceSuspended'
 import { isToolOnline } from '@/lib/toolOnline'
+import { getComingSoon } from '@/lib/plansComingSoon'
 
 // Convivio → Area fornitore (professionisti Pro)
 export default async function ConvivioSupplierPage({
@@ -40,12 +41,13 @@ export default async function ConvivioSupplierPage({
     feeNotice = query.fee
   }
 
-  const [info, orders, fees, { data: profile }] = await Promise.all([
+  const [info, orders, fees, { data: profile }, comingSoon] = await Promise.all([
     getMySupplier(),
     listConvivi('supplier'),
     getMyConvivioFees(),
     // Paese del profilo: proposto come paese della partita IVA
     supabase.from('profiles').select('country_code').eq('id', user.id).maybeSingle(),
+    getComingSoon(supabase, user.id, locale),
   ])
 
   const online = await isToolOnline('convivio')
@@ -80,6 +82,7 @@ export default async function ConvivioSupplierPage({
         <SupplierArea
           info={info ?? { is_pro: false, supplier: null, prefill: null }} userId={user.id} orders={orders} fees={fees} feeNotice={feeNotice}
           profileCountry={(profile?.country_code as string | null) ?? null}
+          comingSoon={comingSoon}
         />
       </main>
     </div>

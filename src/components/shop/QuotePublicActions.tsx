@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { BadgeCheck, CircleCheck, CreditCard, Info, LoaderCircle, Lock } from 'lucide-react'
 import { acceptPublicQuote, startQuoteCheckout } from '@/app/actions/shop'
+import PlansComingSoonCard from '@/components/plans/PlansComingSoonCard'
+import type { PaymentsSoon } from '@/lib/plansComingSoon'
 
 // Pagina pubblica del preventivo: il cliente accetta (e, se il venditore
 // lo prevede, paga online il totale o l'acconto con Stripe).
@@ -22,6 +24,7 @@ export default function QuotePublicActions({
   paidAmount,
   paidAt,
   cancelled,
+  paymentsSoon = null,
 }: {
   token: string
   sellerName: string
@@ -36,6 +39,7 @@ export default function QuotePublicActions({
   paidAmount: number | null
   paidAt: string | null
   cancelled: boolean
+  paymentsSoon?: PaymentsSoon
 }) {
   const t = useTranslations('quotePublic')
   const locale = useLocale()
@@ -80,6 +84,9 @@ export default function QuotePublicActions({
       </div>
     )
   }
+
+  // Pagamenti online non ancora aperti: solo la data
+  if (pay && paymentsSoon) return <PlansComingSoonCard texts={paymentsSoon} />
 
   const submit = async () => {
     setError(null)

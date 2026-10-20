@@ -12,6 +12,8 @@ import { prettyVat, VAT_COUNTRIES_EU, VAT_COUNTRIES_OTHER, vatExample } from '@/
 import ConvivioCardItem from './ConvivioCardItem'
 import ConvivioCreateForm from './ConvivioCreateForm'
 import CancelButton, { cancelButtonClass } from '@/components/ui/CancelButton'
+import PlansComingSoonCard from '@/components/plans/PlansComingSoonCard'
+import type { ComingSoon } from '@/lib/plansComingSoon'
 
 const input = 'w-full rounded-xl border border-[var(--gold)]/30 px-3 py-2.5 text-[15px] focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30'
 const label = 'mb-1 block text-sm font-semibold text-gray-700'
@@ -34,6 +36,7 @@ export default function SupplierArea({
   fees,
   feeNotice = null,
   profileCountry = null,
+  comingSoon = null,
 }: {
   info: MySupplierInfo
   userId: string
@@ -41,6 +44,7 @@ export default function SupplierArea({
   fees?: ConvivioMyFees
   feeNotice?: SupplierFeeNotice
   profileCountry?: string | null
+  comingSoon?: ComingSoon
 }) {
   const t = useTranslations('convivio')
   const locale = useLocale()
@@ -352,7 +356,11 @@ export default function SupplierArea({
                   ))}
                 </ul>
               )}
-              {feesBlock ? (
+              {feesBlock && comingSoon ? (
+                <div className="mt-4">
+                  <PlansComingSoonCard joined={comingSoon.joined} texts={comingSoon.texts} />
+                </div>
+              ) : feesBlock ? (
                 <form method="POST" action={`/api/convivio/fee-checkout?locale=${locale}`} className="mt-4">
                   <button type="submit" className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--ink)] px-5 py-3 font-bold text-white sm:w-auto">
                     <CreditCard className="h-4 w-4" /> {t('feePay', { amount: money(dueTotal) })}

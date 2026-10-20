@@ -14167,12 +14167,12 @@
     "hello": "Bonjour,",
     "helloName": "Bonjour {name},",
     "question": "qu’est-ce qui vous amène ?",
-    "questionHint": "Touchez ce dont vous avez besoin, même plusieurs réponses : nous mettons les bons services dans « Vos services ».",
+    "questionHint": "Touche un choix pour voir ses services : le «i» t’explique à quoi ils servent, «Ajouter» les met dans «Tes services». Prends tout ton temps.",
     "stepsTitle": "Vos 3 premiers pas",
     "stepsProgress": "{done} sur 3",
     "stepDone": "fait",
     "step1Title": "Choisissez ce dont vous avez besoin",
-    "step1Text": "Touchez une réponse ci-dessus.",
+    "step1Text": "Ouvre un choix ci-dessus et ajoute les services dont tu as besoin.",
     "step2Title": "Essaie un service gratuit",
     "step2Text": "Tu les utilises déjà gratuitement, sans limite de temps. Chaque service utilisé te rapporte +1 KU Karma.",
     "step3Title": "Découvre KUMANI et donne un coup de main toi aussi",
@@ -14186,7 +14186,18 @@
     "doneTitleName": "Bravo {name}, tu es prêt ! 🎉",
     "doneText": "Tu as fait tes premiers pas dans KUMANI. Ci-dessous, ton Accueil : les services choisis et la vérification rapide des messages. En haut, tu peux changer de vue quand tu veux : Lite, Complète ou Icônes.",
     "doneCta": "Aller à mon Accueil",
-    "closeVideo": "Fermer la vidéo"
+    "closeVideo": "Fermer la vidéo",
+    "add": "Ajouter",
+    "added": "Ajouté",
+    "info": "Qu’est-ce que {service}",
+    "planFree": "Gratuit",
+    "planBase": "Base",
+    "planPro": "Pro",
+    "infoOpen": "Tu l’utilises déjà gratuitement.",
+    "infoBase": "Inclus dans la formule Base : ajoute-le maintenant, il se débloque avec la formule.",
+    "infoPro": "Inclus dans la formule Pro : ajoute-le maintenant, il se débloque avec la formule.",
+    "tryNow": "Essaie-le",
+    "panelHint": "Ajoutes-en autant que tu veux et retire-les quand tu veux : tu les retrouves dans «Tes services», ci-dessous."
   },
   "homeView": {
     "label": "Vue de l’accueil",
@@ -14313,6 +14324,8 @@
     "emailText": "Comme promis : dès aujourd’hui tu peux t’abonner à KUMANI Base ou Pro et utiliser tous les services.",
     "emailWhy": "Tu reçois cet e-mail parce que tu as demandé à être prévenu de l’ouverture des formules.",
     "emailCta": "Choisir ma formule",
-    "emailSignature": "L’équipe KUMANI"
+    "emailSignature": "L’équipe KUMANI",
+    "publicTitle": "Les paiements en ligne sur KUMANI ouvrent le {date}",
+    "publicText": "D’ici là, le paiement en ligne n’est pas disponible : réessaie à partir de ce jour."
   }
 }

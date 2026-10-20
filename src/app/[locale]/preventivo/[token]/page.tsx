@@ -8,6 +8,7 @@ import Logo from '@/components/Logo'
 import QuoteSheet from '@/components/quotes/QuoteSheet'
 import QuotePdfButton from '@/components/QuotePdfButton'
 import QuotePublicActions from '@/components/shop/QuotePublicActions'
+import { getPaymentsSoon } from '@/lib/plansComingSoon'
 import { confirmQuotePayment } from '@/app/actions/shop'
 import { quoteAmountDueCents, quoteGrossTotal, quoteVatUnknown, type QuotePaymentMode, type QuoteVatMode } from '@/lib/quotes'
 import type { IssuerForPdf, QuoteForPdf } from '@/lib/quotePdf'
@@ -38,8 +39,8 @@ type PublicQuote = {
   can_charge: boolean
 }
 
-export default async function PublicQuotePage({ params, searchParams }: { params: Promise<{ token: string }>; searchParams: Promise<{ paid?: string; cancelled?: string }> }) {
-  const [{ token }, { paid, cancelled }] = await Promise.all([params, searchParams])
+export default async function PublicQuotePage({ params, searchParams }: { params: Promise<{ locale: string; token: string }>; searchParams: Promise<{ paid?: string; cancelled?: string }> }) {
+  const [{ locale, token }, { paid, cancelled }] = await Promise.all([params, searchParams])
   const t = await getTranslations('quotePublic')
   // Ritorno dal pagamento: si conferma prima di leggere il preventivo
   if (paid) await confirmQuotePayment(token, paid)
@@ -107,6 +108,7 @@ export default async function PublicQuotePage({ params, searchParams }: { params
           paidAmount={quote.paid_amount !== null ? Number(quote.paid_amount) : null}
           paidAt={quote.paid_at}
           cancelled={!!cancelled}
+          paymentsSoon={await getPaymentsSoon(locale)}
         />
         <div className="flex flex-wrap items-center gap-3">
           <QuotePdfButton quote={quote as unknown as QuoteForPdf} issuer={issuer} logoUrl={logoUrl} />

@@ -14167,12 +14167,12 @@
     "hello": "Hi,",
     "helloName": "Hi {name},",
     "question": "what are you here for?",
-    "questionHint": "Tap what you need, even more than one: we’ll put the right services in «Your services».",
+    "questionHint": "Tap an item to see its services: the «i» tells you what each one does, «Add» puts it in «Your services». Take all the time you need.",
     "stepsTitle": "Your first 3 steps",
     "stepsProgress": "{done} of 3",
     "stepDone": "done",
     "step1Title": "Choose what you need",
-    "step1Text": "Tap an answer above.",
+    "step1Text": "Open an item above and add the services you need.",
     "step2Title": "Try a free service",
     "step2Text": "These are already free for you, with no time limit. Every service you use gives you +1 KU Karma.",
     "step3Title": "Discover KUMANI and lend a hand too",
@@ -14186,7 +14186,18 @@
     "doneTitleName": "Well done {name}, you’re all set! 🎉",
     "doneText": "You’ve taken your first steps in KUMANI. Below is your Home: the services you chose and the quick message check. At the top you can switch view whenever you like: Lite, Full or Icons.",
     "doneCta": "Go to my Home",
-    "closeVideo": "Close the video"
+    "closeVideo": "Close the video",
+    "add": "Add",
+    "added": "Added",
+    "info": "What is {service}",
+    "planFree": "Free",
+    "planBase": "Base",
+    "planPro": "Pro",
+    "infoOpen": "You can already use it for free.",
+    "infoBase": "Included in the Base plan: add it now, it unlocks with the plan.",
+    "infoPro": "Included in the Pro plan: add it now, it unlocks with the plan.",
+    "tryNow": "Try it now",
+    "panelHint": "Add as many as you like and remove them whenever you want: you’ll find them in «Your services» below."
   },
   "homeView": {
     "label": "Home view",
@@ -14313,6 +14324,8 @@
     "emailText": "As promised: from today you can subscribe to KUMANI Base or Pro and use all the services.",
     "emailWhy": "You are receiving this email because you asked to be notified when plans opened.",
     "emailCta": "Choose your plan",
-    "emailSignature": "The KUMANI team"
+    "emailSignature": "The KUMANI team",
+    "publicTitle": "Online payments on KUMANI open on {date}",
+    "publicText": "Until then online payment isn’t available: please try again from that day."
   }
 }

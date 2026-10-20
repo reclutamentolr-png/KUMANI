@@ -15,6 +15,8 @@ import EventAttendees from './EventAttendees'
 import OrganizerReputation from './OrganizerReputation'
 import { LevelBadge } from './EventBadges'
 import { askConfirm } from '@/lib/confirm'
+import PlansComingSoonCard from '@/components/plans/PlansComingSoonCard'
+import type { ComingSoon } from '@/lib/plansComingSoon'
 
 type Notice = 'paid' | 'pending' | 'canceled' | 'error' | 'none' | 'soon' | null
 type SheetState =
@@ -40,6 +42,7 @@ export default function OrganizerHome({
   notice,
   openEventId,
   businessProfile = null,
+  comingSoon = null,
 }: {
   status: OrganizerStatus | null
   organized: OrganizedEvent[]
@@ -48,6 +51,7 @@ export default function OrganizerHome({
   notice: Notice
   openEventId: string | null
   businessProfile?: BusinessProfile | null
+  comingSoon?: ComingSoon
 }) {
   const t = useTranslations('eventsOrganizer')
   const locale = useLocale()
@@ -226,7 +230,11 @@ export default function OrganizerHome({
                 </li>
               ))}
             </ul>
-            {feesBlock ? (
+            {feesBlock && comingSoon ? (
+              <div className="mt-4">
+                <PlansComingSoonCard joined={comingSoon.joined} texts={comingSoon.texts} />
+              </div>
+            ) : feesBlock ? (
               <form method="POST" action={`/api/events/fee-checkout?locale=${locale}`} className="mt-4">
                 <button type="submit" className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--ink)] px-5 py-3 font-bold text-white sm:w-auto">
                   <CreditCard className="h-4 w-4" /> {t('payFees', { amount: money(dueTotal) })}

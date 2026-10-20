@@ -4,6 +4,8 @@ import { ArrowLeft, BookOpen, CheckCircle2, Crown, Gift, Sparkles, Ticket } from
 import { toolGuideFor } from '@/lib/guides/toolGuides'
 import Link from '@/components/LocalizedLink'
 import CheckoutForm from '@/components/billing/CheckoutForm'
+import PlansComingSoonCard from '@/components/plans/PlansComingSoonCard'
+import { getComingSoon } from '@/lib/plansComingSoon'
 import { getCheckoutTexts } from '@/lib/checkoutTexts'
 import PassCodeForm from '@/components/pass/PassCodeForm'
 import { createClient } from '@/lib/supabase/server'
@@ -30,6 +32,8 @@ export default async function ToolPassPage({
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) redirect(`/${locale}/login?next=${encodeURIComponent(`/pass/${tool}`)}`)
+  // Pagamenti chiusi fino all'apertura dei piani (Admin → Apertura piani)
+  const comingSoon = await getComingSoon(supabase, user.id, locale)
 
   const marketplaceT = await getTranslations('marketplace')
   const tg = await getTranslations('guides')
@@ -129,6 +133,12 @@ export default async function ToolPassPage({
                   </li>
                 ))}
               </ul>
+              {comingSoon ? (
+                <div className="mt-5">
+                  <PlansComingSoonCard plan="base" joined={comingSoon.joined} texts={comingSoon.texts} />
+                </div>
+              ) : (
+              <>
               <div className="mt-5">
                 <CheckoutForm
                   action={`/api/checkout/pass?tool=${encodeURIComponent(tool)}`}
@@ -146,6 +156,8 @@ export default async function ToolPassPage({
               <Link href={`/regali?tool=${encodeURIComponent(tool)}`} className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--ink)] underline decoration-[var(--gold)] underline-offset-4 hover:text-[var(--gold)]">
                 <Gift className="h-4 w-4 text-[var(--gold)]" /> {tg2('passLink', { service: info.title })}
               </Link>
+              </>
+              )}
             </section>
           ) : (
             !passExpiry && <p className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[var(--muted)]">{t('notForSale')}</p>
