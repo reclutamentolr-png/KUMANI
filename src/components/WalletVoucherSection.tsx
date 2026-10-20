@@ -221,7 +221,16 @@ export default function WalletVoucherSection({
                             </div>
                             <span className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide ${statusClass(v.status)}`}>{statusLabel(v.status)}</span>
                           </div>
-                          {v.personal && v.status === 'active' && <p className="mt-1 text-xs font-semibold text-[var(--gold)]">{t('personalProHint')}</p>}
+                          {v.prize_key === 'admin_gift' && v.status === 'active' ? (
+                            <p className="mt-1 flex flex-wrap items-center gap-x-2 text-xs font-semibold text-[var(--gold)]">
+                              🎁 {t('giftFromKumani')}
+                              <Link href={`/biglietto/${encodeURIComponent(v.code)}?d=A&p=p2&from=KUMANI${firstName ? `&to=${encodeURIComponent(firstName)}` : ''}`} className="underline underline-offset-2 hover:text-[var(--ink)]">
+                                {t('giftOpen')}
+                              </Link>
+                            </p>
+                          ) : (
+                            v.personal && v.status === 'active' && <p className="mt-1 text-xs font-semibold text-[var(--gold)]">{t('personalProHint')}</p>
+                          )}
                           <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[var(--muted)]">
                             {v.purpose === 'sale' && <span>{v.sale_price_cents !== null ? t('soldFor', { price: euro(v.sale_price_cents) }) : t('purposeSale')}{v.buyer_name ? ` · ${v.buyer_name}` : ''}</span>}
                             {v.status === 'active' && (

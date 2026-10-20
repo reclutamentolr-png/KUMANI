@@ -6449,7 +6449,9 @@
     "groupOther": "Другие ваучеры",
     "groupCount": "{count, plural, one {# ваучер} few {# ваучера} many {# ваучеров} other {# ваучера}}",
     "ruleWelcomeCap": "Бонус приёма — это приветствие, а не доход: он начисляется только за людей, размещённых на ваших 5 прямых местах, то есть не более 5 раз (до {maxBase} KU Points с Base, {maxPro} с Pro). Настоящие награды приносят люди, которых приглашаете вы сами.",
-    "printLink": "Распечатать открытку"
+    "printLink": "Распечатать открытку",
+    "giftFromKumani": "Подарок от KUMANI для вас",
+    "giftOpen": "Открыть и активировать"
   },
   "voucherReceipt": {
     "back": "Назад в кошелёк",
@@ -9047,7 +9049,9 @@
     "conviviumSeatFreeBody": "{name} больше не придёт на «{title}»: кто ответил «Возможно», может присоединиться.",
     "conviviumSeatFreeGuestBody": "На «{title}» освободилось место: если придёшь, ответь «Приду!».",
     "plansOpenTitle": "Тарифы KUMANI открыты!",
-    "plansOpenBody": "Как и обещали: с сегодняшнего дня можно оформить Base или Pro."
+    "plansOpenBody": "Как и обещали: с сегодняшнего дня можно оформить Base или Pro.",
+    "giftVoucherTitle": "🎁 Вам подарок от KUMANI!",
+    "giftVoucherBody": "Год KUMANI {plan} для вас: откройте открытку и активируйте одним касанием."
   },
   "pushInvite": {
     "title": "Включите уведомления",

@@ -13,6 +13,7 @@ import { hasPermission, Permission } from '@/lib/admin-permissions'
 import type MatrixTreeComponent from '@/components/MatrixTree'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import AdminUserPicker from '@/components/admin/AdminUserPicker'
+import AdminGiftSubscriptionPanel from '@/components/admin/AdminGiftSubscriptionPanel'
 import {
   adminUpdateProfile,
   adminSetToolEnabled,
@@ -1562,6 +1563,8 @@ L'accesso viene registrato.`))) return
 
     return (
       <div className="space-y-6">
+        {/* Un anno di Base o Pro in regalo a un Kumano, con il biglietto */}
+        <AdminGiftSubscriptionPanel />
         <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
           <h3 className="font-bold text-gray-900">Nuovo coupon</h3>
           {couponError && (

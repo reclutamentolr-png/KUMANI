@@ -6449,7 +6449,9 @@
     "groupOther": "Other vouchers",
     "groupCount": "{count, plural, one {# voucher} other {# vouchers}}",
     "ruleWelcomeCap": "The Welcome Bonus is a welcome, not an income: you only get it for people placed in your 5 direct spots, so at most 5 times (up to {maxBase} KU Points with Base, {maxPro} with Pro). The real rewards come from the people you invite yourself.",
-    "printLink": "Print card"
+    "printLink": "Print card",
+    "giftFromKumani": "A gift from KUMANI for you",
+    "giftOpen": "Open and activate"
   },
   "voucherReceipt": {
     "back": "Back to Wallet",
@@ -9047,7 +9049,9 @@
     "conviviumSeatFreeBody": "{name} is no longer coming to “{title}”: anyone who said “Maybe” can join.",
     "conviviumSeatFreeGuestBody": "A seat has opened up at “{title}”: if you’re in, reply “I’m in!”.",
     "plansOpenTitle": "KUMANI plans are open!",
-    "plansOpenBody": "As promised: from today you can subscribe to Base or Pro."
+    "plansOpenBody": "As promised: from today you can subscribe to Base or Pro.",
+    "giftVoucherTitle": "🎁 You received a gift from KUMANI!",
+    "giftVoucherBody": "A year of KUMANI {plan} for you: open the card and activate it with one tap."
   },
   "pushInvite": {
     "title": "Turn on notifications",

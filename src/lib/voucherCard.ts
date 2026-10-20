@@ -19,13 +19,18 @@ const clean = (value: string | null | undefined, max: number) =>
 
 export const CARD_CODE_RE = /^[A-Z0-9-]{6,30}$/
 
-export function cardLink(siteUrl: string, locale: string, code: string, o: CardOptions): string {
+// Percorso del biglietto, senza sito né lingua: /biglietto/CODICE?d=…
+export function cardPath(code: string, o: CardOptions): string {
   const q = new URLSearchParams({ d: o.design, p: o.phrase === 'custom' ? 'c' : o.phrase })
   if (o.phrase === 'custom' && clean(o.custom, CARD_CUSTOM_MAX)) q.set('t', clean(o.custom, CARD_CUSTOM_MAX))
   if (clean(o.to, CARD_NAME_MAX)) q.set('to', clean(o.to, CARD_NAME_MAX))
   if (clean(o.from, CARD_NAME_MAX)) q.set('from', clean(o.from, CARD_NAME_MAX))
+  return `/biglietto/${encodeURIComponent(code)}?${q.toString()}`
+}
+
+export function cardLink(siteUrl: string, locale: string, code: string, o: CardOptions): string {
   const prefix = locale === 'it' ? '' : `/${locale}`
-  return `${siteUrl.replace(/\/+$/, '')}${prefix}/biglietto/${encodeURIComponent(code)}?${q.toString()}`
+  return `${siteUrl.replace(/\/+$/, '')}${prefix}${cardPath(code, o)}`
 }
 
 export function readCardOptions(sp: Record<string, string | string[] | undefined>): CardOptions {

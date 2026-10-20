@@ -6449,7 +6449,9 @@
     "groupOther": "Altri voucher",
     "groupCount": "{count, plural, one {# voucher} other {# voucher}}",
     "ruleWelcomeCap": "Il Bonus Accoglienza è un benvenuto, non un’entrata: lo ricevi solo per le persone accolte nei tuoi 5 posti diretti, quindi al massimo 5 volte (fino a {maxBase} KU Points con il Base, {maxPro} con il Pro). I premi veri arrivano dalle persone che inviti tu.",
-    "printLink": "Stampa cartolina"
+    "printLink": "Stampa cartolina",
+    "giftFromKumani": "Regalo di KUMANI per te",
+    "giftOpen": "Apri e attiva"
   },
   "voucherReceipt": {
     "back": "Torna al Portafoglio",
@@ -9047,7 +9049,9 @@
     "conviviumSeatFreeBody": "{name} non viene più a «{title}»: chi ha detto «Forse» può entrare.",
     "conviviumSeatFreeGuestBody": "Si è liberato un posto a «{title}»: se ci sei, rispondi «Ci sto!».",
     "plansOpenTitle": "I piani di KUMANI sono aperti!",
-    "plansOpenBody": "Come promesso: da oggi puoi abbonarti a Base o Pro."
+    "plansOpenBody": "Come promesso: da oggi puoi abbonarti a Base o Pro.",
+    "giftVoucherTitle": "🎁 Hai ricevuto un regalo da KUMANI!",
+    "giftVoucherBody": "Un anno di KUMANI {plan} per te: apri il biglietto e attivalo con un tocco."
   },
   "pushInvite": {
     "title": "Attiva le notifiche",

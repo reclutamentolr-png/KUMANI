@@ -6449,7 +6449,9 @@
     "groupOther": "Weitere Gutscheine",
     "groupCount": "{count, plural, one {# Gutschein} other {# Gutscheine}}",
     "ruleWelcomeCap": "Der Willkommensbonus ist ein Willkommen, kein Einkommen: Du bekommst ihn nur für Personen, die auf deinen 5 direkten Plätzen landen, also höchstens 5-mal (bis zu {maxBase} KU Points mit Base, {maxPro} mit Pro). Die echten Belohnungen kommen von den Personen, die du selbst einlädst.",
-    "printLink": "Karte drucken"
+    "printLink": "Karte drucken",
+    "giftFromKumani": "Ein Geschenk von KUMANI für dich",
+    "giftOpen": "Öffnen und aktivieren"
   },
   "voucherReceipt": {
     "back": "Zurück zur Brieftasche",
@@ -9047,7 +9049,9 @@
     "conviviumSeatFreeBody": "{name} kommt nicht mehr zu „{title}“: Wer „Vielleicht“ gesagt hat, kann nachrücken.",
     "conviviumSeatFreeGuestBody": "Bei „{title}“ ist ein Platz frei geworden: Wenn du dabei bist, antworte „Bin dabei!“.",
     "plansOpenTitle": "Die KUMANI-Tarife sind da!",
-    "plansOpenBody": "Wie versprochen: Ab heute kannst du Base oder Pro abonnieren."
+    "plansOpenBody": "Wie versprochen: Ab heute kannst du Base oder Pro abonnieren.",
+    "giftVoucherTitle": "🎁 Du hast ein Geschenk von KUMANI bekommen!",
+    "giftVoucherBody": "Ein Jahr KUMANI {plan} für dich: Öffne die Karte und aktiviere es mit einem Tipp."
   },
   "pushInvite": {
     "title": "Benachrichtigungen aktivieren",
