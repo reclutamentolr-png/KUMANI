@@ -65,7 +65,9 @@ const nextConfig: NextConfig = {
         source: '/:path*',
         headers: [
           { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
-          { key: 'Content-Security-Policy', value: "frame-ancestors 'self'" },
+          // niente plugin (object) e niente <base> verso altri siti
+          { key: 'Content-Security-Policy', value: "frame-ancestors 'self'; object-src 'none'; base-uri 'self'" },
+          { key: 'Cross-Origin-Opener-Policy', value: 'same-origin-allow-popups' },
           { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
@@ -78,6 +80,12 @@ const nextConfig: NextConfig = {
         // pagine pubbliche preparate in anticipo, che non leggono l'indirizzo.
         source: '/:path*',
         missing: [{ type: 'host', value: '(?:www\\.)?kumani\\.io' }],
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
+      },
+      // Admin, accesso e API: mai nei motori di ricerca. Non sono elencate in
+      // robots.txt (lì sarebbero una mappa per chi cerca dove attaccare)
+      {
+        source: '/:locale(it|en|fr|es|pt|de|ru)?/:area(admin|auth|api)/:path*',
         headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
       },
       // Pagine con dati personali (CV, link di invito e Link in Bio, ricevute,

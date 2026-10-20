@@ -71,7 +71,6 @@ import {
   ToggleRight,
   X,
   Save,
-  Eye,
   Pencil,
   UserCog,
   Ticket,
@@ -106,6 +105,9 @@ import {
   TreePine,
   Clapperboard,
   CalendarClock,
+  ChevronLeft,
+  ChevronRight,
+  LockOpen,
 } from 'lucide-react'
 import { askConfirm } from '@/lib/confirm'
 
@@ -295,6 +297,9 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
   const [users, setUsers] = useState<AdminUserRow[]>([])
   const [usersTotal, setUsersTotal] = useState(0)
   const [searchTerm, setSearchTerm] = useState('')
+  // Gestione Utenti: pagine da 20/50/100
+  const [usersPage, setUsersPage] = useState(0)
+  const [usersPageSize, setUsersPageSize] = useState(20)
   const [loadingUsers, setLoadingUsers] = useState(false)
 
   const [selectedUser, setSelectedUser] = useState<AdminUserRow | null>(null)
@@ -829,7 +834,13 @@ L'accesso viene registrato.`))) return
 
   const renderOverview = () => <AdminOverviewPanel userName={userName} onlineUsers={onlineUsers} />
 
-  const renderUsers = () => (
+  const renderUsers = () => {
+    // Pagina corrente (la ricerca riparte dalla prima pagina)
+    const pages = Math.max(1, Math.ceil(filteredUsers.length / usersPageSize))
+    const page = Math.min(usersPage, pages - 1)
+    const pageUsers = filteredUsers.slice(page * usersPageSize, (page + 1) * usersPageSize)
+    const iconBtn = 'inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white transition-colors hover:border-[var(--gold)] hover:bg-[var(--gold-pale)] disabled:opacity-50'
+    return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
@@ -837,49 +848,53 @@ L'accesso viene registrato.`))) return
           Gestione Utenti
           {usersTotal > 0 && <span className="rounded-full bg-[var(--gold-pale)] px-3 py-1 text-sm font-bold text-[var(--ink)]">{usersTotal} iscritti</span>}
         </h2>
-        <div className="relative w-full sm:w-64">
+        <div className="relative w-full sm:w-72">
           <input
             type="text"
-            placeholder="Cerca per nome, email o codice..."
+            placeholder="Cerca per nome, email, codice o invitante..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => {
+              setSearchTerm(e.target.value)
+              setUsersPage(0)
+            }}
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--gold)]"
           />
           <Users className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
         </div>
       </div>
-      
+
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         {loadingUsers ? (
           <div className="p-8 text-center text-gray-500">Caricamento...</div>
         ) : filteredUsers.length === 0 ? (
           <div className="p-8 text-center text-gray-500">Nessun utente trovato.</div>
         ) : (
+          <>
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
-                  <th className="px-4 py-3 text-xs font-semibold text-gray-500 uppercase">N°</th>
-                  <th className="px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Utente</th>
-                  <th className="px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Invitato da</th>
-                  <th className="px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Email</th>
-                  <th className="px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Codice</th>
-                  <th className="px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Stato</th>
-                  <th className="px-6 py-3 text-xs font-semibold text-gray-500 uppercase text-right">Azioni</th>
+                  <th className="px-3 py-3 text-xs font-semibold text-gray-500 uppercase">N°</th>
+                  <th className="px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Utente</th>
+                  <th className="px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Invitato da</th>
+                  <th className="px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Codice e stato</th>
+                  <th className="px-4 py-3 text-xs font-semibold text-gray-500 uppercase text-right">Azioni</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {filteredUsers.map((user) => (
-                  <tr key={user.id} className={`hover:bg-gray-50 transition-colors ${user.is_blocked ? 'bg-red-50' : ''}`}>
-                    <td className="px-4 py-4 text-sm font-bold tabular-nums text-gray-500">{user.number}</td>
-                    <td className="px-6 py-4">
+                {pageUsers.map((user) => (
+                  <tr key={user.id} className={`align-top hover:bg-gray-50 transition-colors ${user.is_blocked ? 'bg-red-50' : ''}`}>
+                    <td className="px-3 py-3 text-sm font-bold tabular-nums text-gray-500">{user.number}</td>
+                    {/* Nome, email e data di iscrizione insieme: la tabella non sborda */}
+                    <td className="px-4 py-3 min-w-[14rem]">
                       <div className="font-medium text-gray-900">{user.first_name} {user.last_name}</div>
+                      <div className="break-all text-sm text-gray-600">{user.email}</div>
                       <div className="text-xs text-gray-500">
                         Iscritto il {new Date(user.created_at).toLocaleString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Rome' })}
                       </div>
                       {user.is_blocked && <span className="text-xs text-red-600 font-semibold flex items-center gap-1"><Lock className="w-3 h-3" /> BLOCCATO</span>}
                     </td>
-                    <td className="px-6 py-4 text-sm">
+                    <td className="px-4 py-3 text-sm">
                       {user.sponsor ? (
                         <>
                           <div className="font-medium text-gray-900">{user.sponsor.name}</div>
@@ -889,39 +904,75 @@ L'accesso viene registrato.`))) return
                         <span className="text-gray-400">—</span>
                       )}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{user.email}</td>
-                    <td className="px-6 py-4 text-sm font-mono text-[var(--gold)]">{user.referral_code}</td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                    <td className="px-4 py-3">
+                      <div className="font-mono text-sm text-[var(--gold)]">{user.referral_code}</div>
+                      <span className={`mt-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                         user.subscription_status === 'active' && !user.is_blocked ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
                       }`}>
                         {user.is_blocked ? 'Bloccato' : (user.subscription_status === 'active' ? 'Attivo' : 'Free')}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-right space-x-3">
-                      <button onClick={() => openProfileEdit(user)} className="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center gap-1">
-                        <Pencil className="w-4 h-4" /> Modifica
-                      </button>
-                      <button onClick={() => handleImpersonate(user)} disabled={impersonatingId === user.id} className="text-[var(--gold)] hover:text-[var(--ink)] text-sm font-medium inline-flex items-center gap-1 disabled:opacity-50">
-                        <UserCog className="w-4 h-4" /> {impersonatingId === user.id ? '...' : 'Impersonifica'}
-                      </button>
-                      <button onClick={() => viewUserMatrix(user)} className="text-[var(--gold)] hover:text-[var(--ink)] text-sm font-medium inline-flex items-center gap-1">
-                        <Eye className="w-4 h-4" /> Matrice
-                      </button>
-                      <button onClick={() => handleToggleBlock(user)} className={`text-sm font-medium inline-flex items-center gap-1 ${user.is_blocked ? 'text-green-600' : 'text-red-600'}`}>
-                        {user.is_blocked ? <><Lock className="w-4 h-4" /> Sblocca</> : <><Lock className="w-4 h-4" /> Blocca</>}
-                      </button>
-                      <button onClick={() => openManageModal(user)} className="text-[var(--gold)] hover:text-[var(--ink)] text-sm font-medium">Gestisci</button>
+                    {/* Azioni come icone (il nome compare passandoci sopra) */}
+                    <td className="px-4 py-3">
+                      <div className="flex justify-end gap-1.5">
+                        <button type="button" onClick={() => openManageModal(user)} title="Gestisci" aria-label={`Gestisci ${user.first_name ?? ''}`} className={`${iconBtn} text-[var(--ink)]`}>
+                          <Settings className="w-4 h-4" />
+                        </button>
+                        <button type="button" onClick={() => openProfileEdit(user)} title="Modifica profilo" aria-label="Modifica profilo" className={`${iconBtn} text-blue-600`}>
+                          <Pencil className="w-4 h-4" />
+                        </button>
+                        <button type="button" onClick={() => handleImpersonate(user)} disabled={impersonatingId === user.id} title="Impersonifica" aria-label="Impersonifica" className={`${iconBtn} text-[var(--gold)]`}>
+                          <UserCog className="w-4 h-4" />
+                        </button>
+                        <button type="button" onClick={() => viewUserMatrix(user)} title="Matrice" aria-label="Matrice" className={`${iconBtn} text-[var(--gold)]`}>
+                          <GitBranch className="w-4 h-4" />
+                        </button>
+                        <button type="button" onClick={() => handleToggleBlock(user)} title={user.is_blocked ? 'Sblocca' : 'Blocca'} aria-label={user.is_blocked ? 'Sblocca' : 'Blocca'} className={`${iconBtn} ${user.is_blocked ? 'text-green-600' : 'text-red-600'}`}>
+                          {user.is_blocked ? <LockOpen className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+          {/* Pagine */}
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-gray-200 bg-gray-50 px-4 py-3 text-sm">
+            <span className="text-gray-600">
+              {page * usersPageSize + 1}–{Math.min((page + 1) * usersPageSize, filteredUsers.length)} di {filteredUsers.length}
+            </span>
+            <div className="flex items-center gap-2">
+              <label className="flex items-center gap-1.5 text-gray-600">
+                Per pagina
+                <select
+                  value={usersPageSize}
+                  onChange={(e) => {
+                    setUsersPageSize(Number(e.target.value))
+                    setUsersPage(0)
+                  }}
+                  className="rounded-lg border border-gray-300 bg-white px-2 py-1"
+                >
+                  {[20, 50, 100].map((n) => (
+                    <option key={n} value={n}>{n}</option>
+                  ))}
+                </select>
+              </label>
+              <button type="button" onClick={() => setUsersPage(page - 1)} disabled={page === 0} aria-label="Pagina precedente" className={`${iconBtn} text-gray-700`}>
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <span className="tabular-nums text-gray-700">{page + 1} / {pages}</span>
+              <button type="button" onClick={() => setUsersPage(page + 1)} disabled={page >= pages - 1} aria-label="Pagina successiva" className={`${iconBtn} text-gray-700`}>
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+          </>
         )}
       </div>
     </div>
-  )
+    )
+  }
 
   const renderMatrix = () => (
     <div className="space-y-6">
