@@ -65,7 +65,8 @@ export default function WalletDonations({
       <div className="relative overflow-hidden rounded-2xl bg-[var(--ink)] text-white shadow-[0_14px_34px_rgba(23,23,23,0.25)]">
         <Image src="/home/donation-heart.webp" alt="" fill sizes="(min-width: 768px) 700px, 100vw" className="object-cover opacity-35" />
         <div className="absolute inset-0 bg-gradient-to-r from-[var(--ink)] via-[var(--ink)]/85 to-[var(--ink)]/40" />
-        <div className="relative flex items-start gap-4 p-5 sm:p-6">
+        <div className="relative flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:p-6">
+          <div className="flex min-w-0 flex-1 items-center gap-4">
           {active.logo_url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={active.logo_url} alt="" className="h-14 w-14 shrink-0 rounded-xl bg-white object-contain p-1.5" />
@@ -74,25 +75,30 @@ export default function WalletDonations({
               <HeartHandshake className="h-7 w-7 text-[var(--gold)]" />
             </span>
           )}
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <p className="text-lg font-extrabold leading-tight">{active.name}</p>
             {active.mission && <p className="mt-1 text-sm text-white/80">{active.mission}</p>}
-            <div className="mt-3 flex flex-wrap gap-2">
-              <span className="rounded-full bg-[var(--gold)]/25 px-3 py-1 text-xs font-bold text-[var(--gold-bright)]">{t('pledgeChip', { percent: percentFormat(locale, summary.percent_bp) })}</span>
-            </div>
+          </div>
+          </div>
+          {/* Il 5% in grande: sul telefono sotto il nome, sul computer a destra */}
+          <div className="flex shrink-0 items-baseline gap-2 sm:block sm:text-center">
+            <p className="text-4xl font-extrabold leading-none text-[var(--gold-bright)] sm:text-5xl">{percentFormat(locale, summary.percent_bp)}</p>
+            <p className="text-[11px] font-bold uppercase leading-tight tracking-wide text-white/70 sm:mt-1 sm:max-w-[7rem]">{t('pledgeShort')}</p>
           </div>
         </div>
       </div>
 
-      {/* Le cifre, in evidenza */}
-      <div className="grid grid-cols-2 gap-3">
-        <div className="rounded-2xl border border-[var(--gold)]/25 bg-white p-4">
-          <p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-[var(--muted)]">
-            <HeartHandshake className="h-3.5 w-3.5 text-[var(--gold)]" /> {t('paidLabel')}
-          </p>
-          <p className="mt-1 text-3xl font-extrabold text-[var(--ink)]">{eur(summary.paid_cents)}</p>
-          <p className="text-xs text-[var(--muted)]">{t('paidHint')}</p>
-        </div>
+      {/* Le cifre: il versato solo sopra zero (il maturato dagli abbonamenti non si mostra) */}
+      <div className={`grid gap-3 ${summary.paid_cents > 0 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+        {summary.paid_cents > 0 && (
+          <div className="rounded-2xl border border-[var(--gold)]/25 bg-white p-4">
+            <p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-[var(--muted)]">
+              <HeartHandshake className="h-3.5 w-3.5 text-[var(--gold)]" /> {t('paidLabel')}
+            </p>
+            <p className="mt-1 text-3xl font-extrabold text-[var(--ink)]">{eur(summary.paid_cents)}</p>
+            <p className="text-xs text-[var(--muted)]">{t('paidHint')}</p>
+          </div>
+        )}
         <div className="rounded-2xl bg-[var(--ink)] p-4 text-white">
           <p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-white/60">
             <User className="h-3.5 w-3.5 text-[var(--gold-bright)]" /> {t('yourImpactLabel')}
