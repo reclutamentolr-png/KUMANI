@@ -154,10 +154,12 @@ export default function ListingForm({ userId, currentPoints, onCloseUrl, default
           <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--ink)] text-[11px] text-[var(--gold-bright)]">2</span> {t('listingStepPhoto')}
         </p>
         <div className="grid grid-cols-1 gap-4">
+          {formData.category !== 'regalo' && formData.category !== 'baratto' && (
           <div>
             <label className="mb-1.5 block text-sm font-bold text-[var(--ink)]">{t('listingPrice')}</label>
             <input type="number" min="0" step="0.01" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} className="w-full rounded-xl border-2 border-stone-300 bg-white px-4 py-2.5 text-[var(--ink)] placeholder:text-stone-400 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30" placeholder="0.00" />
           </div>
+          )}
           <div>
             <label className="mb-1.5 block text-sm font-bold text-[var(--ink)]">{t('listingPhoto')}</label>
             <ListingPhotosField value={formData.images} onChange={(urls) => setFormData((prev) => ({ ...prev, images: urls }))} max={maxPhotos} />

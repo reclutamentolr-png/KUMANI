@@ -6,6 +6,7 @@ import { getTranslations } from 'next-intl/server'
 import { LISTINGS_PAGE_SIZE, getUnreadMessagesCount, getActiveListings, getFeaturedListings, getUserListings, getActiveListingCategoryCounts, getActiveListingById, getListingCitiesByCountry, cleanListingSearch } from '@/lib/listings-server'
 import ListingCategoryIcon from '@/components/listings/ListingCategoryIcon'
 import { getListingMaxPhotos, getListingsFreeMode } from '@/lib/listingsMode'
+import { ListingAlertsList, SaveListingAlertButton } from '@/components/listings/ListingAlerts'
 import { cleanListingRegion, regionsOf } from '@/lib/listingRegions'
 import { CATEGORY_I18N_KEYS, ALL_LISTING_CATEGORIES, LISTING_COUNTRIES, isListingCountry, cleanListingCity, type Listing, type ListingCategory } from '@/lib/listings'
 import { countryName } from '@/lib/events'
@@ -65,7 +66,7 @@ export default async function ListingsPage({
 
   // Letture indipendenti tutte insieme: profilo, costi della vetrina (anche
   // in KU), annunci dell'utente e stato della Bacheca
-  const [{ data: profile }, { data: showcaseSettings }, { data: kuShowcase }, myListings, online, freeMode, maxPhotos] = await Promise.all([
+  const [{ data: profile }, { data: showcaseSettings }, { data: kuShowcase }, myListings, online, freeMode, maxPhotos, { data: myAlerts }] = await Promise.all([
     supabase.rpc('get_my_profile').maybeSingle<{ daily_points: number | null; network_points: number | null; first_name: string | null; last_name: string | null; country_code: string | null }>(),
     supabase.from('system_settings').select('key, value').in('key', ['listing_feature_cost_7d', 'listing_feature_cost_15d']),
     supabase.from('ku_features').select('enabled, config').eq('key', 'showcase').maybeSingle(),
@@ -73,6 +74,7 @@ export default async function ListingsPage({
     isToolOnline('listings'),
     getListingsFreeMode(),
     getListingMaxPhotos(),
+    supabase.from('listing_alerts').select('id, query, category, country_code, region, city').eq('user_id', user.id).order('created_at', { ascending: false }),
   ])
 
   // Dove: di partenza la nazione del profilo; ?country=all per tutti i paesi
@@ -156,7 +158,7 @@ export default async function ListingsPage({
     const qs = params.toString()
     return `/marketplace/listings${qs ? `?${qs}` : ''}`
   }
-  const cardLabels = { showcase: t('showcaseBadge'), mine: t('myListing'), view: t('viewListing'), remote: t('listingRemoteShort') }
+  const cardLabels = { showcase: t('showcaseBadge'), mine: t('myListing'), view: t('viewListing'), remote: t('listingRemoteShort') , free: t('listingFreeTag') }
   const euro = (value: number | string) =>
     new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2 }).format(Number(value))
 
@@ -309,6 +311,26 @@ export default async function ListingsPage({
             search: t('searchListings'),
             clear: t('clearFilters'),
           }}
+        />
+        {/* Ricerca in corso: «Avvisami quando esce» */}
+        {Boolean(category || query || city || region || rawCountry) && (
+          <div className="-mt-5 mb-6 flex flex-wrap items-center gap-2 rounded-2xl border border-[var(--gold)]/30 bg-[var(--gold-pale)]/40 px-4 py-3">
+            <p className="text-sm font-semibold text-[var(--ink)]">{t('listingAlertPrompt')}</p>
+            <SaveListingAlertButton search={{ q: query, category: category ?? '', country: country || '', region, city }} />
+          </div>
+        )}
+        <ListingAlertsList
+          alerts={(myAlerts ?? []).map((a) => ({
+            id: a.id as string,
+            label:
+              [
+                a.query ? `«${a.query}»` : null,
+                a.category ? getCategoryLabel(a.category as ListingCategory) : null,
+                a.city || a.region || (a.country_code ? countryName(a.country_code as string, locale) : null),
+              ]
+                .filter(Boolean)
+                .join(' · ') || t('allCategories', { count: '' }),
+          }))}
         />
         </div>
         )}

@@ -33,6 +33,9 @@ export type ListingCategory =
   | 'animali'
   | 'impresa'
   | 'servizi'
+  // Gratis (nessun prezzo) e baratto: lo spirito «ciò che dai, ricevi»
+  | 'regalo'
+  | 'baratto'
 
 export interface CreateListingData {
   userId: string
@@ -74,7 +77,9 @@ export const CATEGORY_ICONS: Record<ListingCategory, string> = {
   agricoltura: '🌱',
   animali: '🐾',
   impresa: '🏢',
-  servizi: '🔧'
+  servizi: '🔧',
+  regalo: '🎁',
+  baratto: '🔄'
 }
 
 // Translation key (marketplace namespace) for each category, used wherever
@@ -90,10 +95,14 @@ export const CATEGORY_I18N_KEYS: Record<ListingCategory, string> = {
   agricoltura: 'catAgricoltura',
   animali: 'catAnimali',
   impresa: 'catImpresa',
-  servizi: 'catServizi'
+  servizi: 'catServizi',
+  regalo: 'catRegalo',
+  baratto: 'catBaratto'
 }
 
 export const ALL_LISTING_CATEGORIES: ListingCategory[] = [
+  'regalo',
+  'baratto',
   'veicoli',
   'immobili',
   'elettronica',

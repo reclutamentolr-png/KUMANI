@@ -5,6 +5,9 @@ import { verifyAdmin } from '@/lib/verifyAdmin'
 import { localizedPath, notifyUser, pushDb } from '@/lib/push'
 import { LISTINGS_MODE_CACHE_TAG } from '@/lib/listingsMode'
 import { invalidateListingsCache } from '@/lib/listings-server'
+import { after } from 'next/server'
+import { scanListingText, type ListingScanFlag } from '@/lib/listingScan'
+import { notifyListingAlerts } from '@/lib/listingAlerts'
 
 // Admin → Bacheca: interruttore «Bacheca libera» (pubblicare gratis) e
 // controllo degli annunci prima che compaiano (approva / non approvare con
@@ -25,6 +28,8 @@ export type PendingListing = {
   createdAt: string
   author: string
   authorEmail: string | null
+  // Controllo antitruffa del testo: link e IBAN (segnalati o da verificare)
+  flags: ListingScanFlag[]
 }
 
 export async function adminGetListingsReview(): Promise<{ free: boolean; maxPhotos: number; pending: PendingListing[] } | { error: string }> {
@@ -43,6 +48,7 @@ export async function adminGetListingsReview(): Promise<{ free: boolean; maxPhot
   const ids = [...new Set((rows ?? []).map((r) => r.user_id as string))]
   const { data: people } = ids.length ? await db.from('profiles').select('id, first_name, last_name, email').in('id', ids) : { data: [] }
   const byId = new Map((people ?? []).map((p) => [p.id as string, p]))
+  const flagsById = new Map(await Promise.all((rows ?? []).map(async (r) => [r.id as string, await scanListingText(db, `${r.title}\n${r.description}`)] as const)))
   return {
     free: String(setting?.value ?? '').replace(/"/g, '') === 'true',
     maxPhotos: String(photosSetting?.value ?? '').replace(/"/g, '') === '3' ? 3 : 6,
@@ -63,6 +69,7 @@ export async function adminGetListingsReview(): Promise<{ free: boolean; maxPhot
         createdAt: r.created_at as string,
         author: [p?.first_name, p?.last_name].filter(Boolean).join(' ') || '—',
         authorEmail: (p?.email as string | null) ?? null,
+        flags: flagsById.get(r.id as string) ?? [],
       }
     }),
   }
@@ -108,11 +115,13 @@ export async function adminReviewListing(id: string, approve: boolean, note: str
     })
     .eq('id', id)
     .eq('review_status', 'pending')
-    .select('id, title, user_id')
+    .select('id, title, description, user_id, category, country_code, region, city, is_remote')
     .maybeSingle()
   if (error) return { success: false, error: error.message }
   if (!listing) return { success: false, error: 'Annuncio già controllato o cancellato' }
   invalidateListingsCache()
+  // Pubblicato: avviso a chi aveva salvato una ricerca adatta
+  if (approve) after(() => notifyListingAlerts(listing as Parameters<typeof notifyListingAlerts>[0]).catch((e) => console.error('[bacheca] avvisi ricerche:', e)))
   await notifyUser(
     listing.user_id as string,
     'alerts',

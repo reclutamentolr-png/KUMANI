@@ -1107,7 +1107,23 @@
     "listingPhotoCover": "Copertina",
     "listingPhotoMakeCover": "Metti come copertina",
     "listingPhotosHint": "{count} di {max} foto · la prima è la copertina",
-    "listingPhotosMax": "Puoi caricare al massimo {max} foto"
+    "listingPhotosMax": "Puoi caricare al massimo {max} foto",
+    "catRegalo": "Te lo regalo",
+    "catBaratto": "Scambio / baratto",
+    "listingFreeTag": "Gratis",
+    "trustReviewed": "Annuncio controllato dallo Staff KUMANI",
+    "trustTips": "Per comprare sicuro: incontratevi in un luogo pubblico, controlla l’oggetto prima di pagare e non mandare mai anticipi a chi non conosci.",
+    "trustIban": "Nell’annuncio c’è un IBAN: controllalo con KUMANI prima di pagare",
+    "trustLink": "Nell’annuncio c’è un link: controllalo con KUMANI prima di aprirlo",
+    "listingAlertPrompt": "Non trovi quello che cerchi?",
+    "listingAlertSave": "Avvisami quando esce",
+    "listingAlertSaved": "Ricerca salvata",
+    "listingAlertError": "Ricerca non salvata, riprova",
+    "listingAlertLimit": "Hai già 10 ricerche salvate: togline una",
+    "listingAlertEmpty": "Scegli almeno una parola, una categoria o un luogo",
+    "listingAlertsTitle": "Le tue ricerche salvate",
+    "listingAlertsHint": "Ti avvisiamo quando esce un annuncio adatto.",
+    "listingAlertDelete": "Togli la ricerca"
   },
   "neurobalance": {
     "tracksLabel": "Audio di rilassamento",
@@ -9094,7 +9110,9 @@
     "listingApprovedTitle": "✅ Il tuo annuncio è online",
     "listingApprovedBody": "«{title}» è stato approvato ed è visibile in Bacheca.",
     "listingRejectedTitle": "Il tuo annuncio non è stato approvato",
-    "listingRejectedBody": "«{title}»: {reason}. Puoi modificarlo e verrà ricontrollato."
+    "listingRejectedBody": "«{title}»: {reason}. Puoi modificarlo e verrà ricontrollato.",
+    "listingAlertTitle": "🔔 È uscito un annuncio per te",
+    "listingAlertBody": "«{title}» corrisponde a una tua ricerca salvata in Bacheca."
   },
   "pushInvite": {
     "title": "Attiva le notifiche",

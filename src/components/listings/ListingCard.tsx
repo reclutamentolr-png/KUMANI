@@ -21,6 +21,8 @@ export const CATEGORY_STYLE: Record<ListingCategory, { band: string; chip: strin
   animali: { band: 'from-orange-500 to-orange-700', chip: 'bg-orange-50 text-orange-800 border-orange-200' },
   impresa: { band: 'from-violet-500 to-violet-700', chip: 'bg-violet-50 text-violet-800 border-violet-200' },
   servizi: { band: 'from-[#c79a3b] to-[#a67c26]', chip: 'bg-[var(--gold-pale)] text-[var(--ink)] border-[var(--gold)]/40' },
+  regalo: { band: 'from-rose-500 to-red-600', chip: 'bg-rose-50 text-rose-800 border-rose-200' },
+  baratto: { band: 'from-cyan-500 to-cyan-700', chip: 'bg-cyan-50 text-cyan-800 border-cyan-200' },
 }
 
 
@@ -38,7 +40,7 @@ export default function ListingCard({
   currentUserId: string
   categoryLabel: string
   featured?: boolean
-  labels: { showcase: string; mine: string; view: string; remote: string }
+  labels: { showcase: string; mine: string; view: string; remote: string; free: string }
   locale: string
 }) {
   const style = CATEGORY_STYLE[listing.category] ?? CATEGORY_STYLE.servizi
@@ -77,7 +79,9 @@ export default function ListingCard({
           <span className={`inline-flex min-w-0 items-center gap-1 truncate rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${style.chip}`}>
             <ListingCategoryIcon category={listing.category} className="h-3.5 w-3.5 shrink-0" /> {categoryLabel}
           </span>
-          {listing.price !== null && listing.price !== '' && (
+          {listing.category === 'regalo' ? (
+            <span className="shrink-0 rounded-lg bg-rose-600 px-3 py-1 text-sm font-extrabold uppercase text-white shadow-sm">{labels.free}</span>
+          ) : listing.price !== null && listing.price !== '' && (
             <span className="shrink-0 rounded-lg bg-[var(--ink)] px-3 py-1 text-base font-bold text-[var(--gold-bright)] shadow-sm">
               {new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2 }).format(Number(listing.price))}
             </span>

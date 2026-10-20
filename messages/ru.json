@@ -1070,7 +1070,23 @@
     "listingPhotoCover": "Обложка",
     "listingPhotoMakeCover": "Сделать обложкой",
     "listingPhotosHint": "{count} из {max} фото · первое — обложка",
-    "listingPhotosMax": "Можно загрузить не больше {max} фото"
+    "listingPhotosMax": "Можно загрузить не больше {max} фото",
+    "catRegalo": "Отдам даром",
+    "catBaratto": "Обмен",
+    "listingFreeTag": "Бесплатно",
+    "trustReviewed": "Объявление проверено Staff KUMANI",
+    "trustTips": "Покупайте безопасно: встречайтесь в людном месте, проверяйте вещь до оплаты и никогда не отправляйте предоплату незнакомцам.",
+    "trustIban": "В объявлении есть IBAN: проверьте его в KUMANI перед оплатой",
+    "trustLink": "В объявлении есть ссылка: проверьте её в KUMANI перед открытием",
+    "listingAlertPrompt": "Не нашли то, что искали?",
+    "listingAlertSave": "Сообщить, когда появится",
+    "listingAlertSaved": "Поиск сохранён",
+    "listingAlertError": "Поиск не сохранён, попробуйте ещё раз",
+    "listingAlertLimit": "У вас уже 10 сохранённых поисков: удалите один",
+    "listingAlertEmpty": "Выберите хотя бы слово, категорию или место",
+    "listingAlertsTitle": "Ваши сохранённые поиски",
+    "listingAlertsHint": "Мы сообщим, когда появится подходящее объявление.",
+    "listingAlertDelete": "Удалить поиск"
   },
   "neurobalance": {
     "tracksLabel": "Аудио для расслабления",
@@ -9094,7 +9110,9 @@
     "listingApprovedTitle": "✅ Ваше объявление опубликовано",
     "listingApprovedBody": "«{title}» одобрено и видно в разделе объявлений.",
     "listingRejectedTitle": "Ваше объявление не одобрено",
-    "listingRejectedBody": "«{title}»: {reason}. Вы можете изменить его, и оно будет проверено снова."
+    "listingRejectedBody": "«{title}»: {reason}. Вы можете изменить его, и оно будет проверено снова.",
+    "listingAlertTitle": "🔔 Появилось объявление для вас",
+    "listingAlertBody": "«{title}» подходит под один из ваших сохранённых поисков."
   },
   "pushInvite": {
     "title": "Включите уведомления",

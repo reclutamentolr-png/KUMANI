@@ -1,4 +1,4 @@
-import { Bike, Building2, Car, HandHeart, House, PawPrint, Shirt, Smartphone, Sofa, Sprout, Wrench, type LucideIcon } from 'lucide-react'
+import { ArrowLeftRight, Bike, Building2, Car, Gift, HandHeart, House, PawPrint, Shirt, Smartphone, Sofa, Sprout, Wrench, type LucideIcon } from 'lucide-react'
 import type { ListingCategory } from '@/lib/listings'
 
 // Icone delle categorie della Bacheca nello stile KUMANI (linee al posto
@@ -16,6 +16,8 @@ export const LISTING_CATEGORY_ICON: Record<ListingCategory, LucideIcon> = {
   animali: PawPrint,
   impresa: Building2,
   servizi: Wrench,
+  regalo: Gift,
+  baratto: ArrowLeftRight,
 }
 
 export default function ListingCategoryIcon({ category, className = 'h-3.5 w-3.5' }: { category: string; className?: string }) {

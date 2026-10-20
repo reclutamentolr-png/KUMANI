@@ -1070,7 +1070,23 @@
     "listingPhotoCover": "Couverture",
     "listingPhotoMakeCover": "Mettre en couverture",
     "listingPhotosHint": "{count} sur {max} photos · la première est la couverture",
-    "listingPhotosMax": "Tu peux ajouter au maximum {max} photos"
+    "listingPhotosMax": "Tu peux ajouter au maximum {max} photos",
+    "catRegalo": "À donner",
+    "catBaratto": "Échange / troc",
+    "listingFreeTag": "Gratuit",
+    "trustReviewed": "Annonce vérifiée par le Staff KUMANI",
+    "trustTips": "Acheter en sécurité : retrouvez-vous dans un lieu public, vérifie l’objet avant de payer et n’envoie jamais d’acompte à un inconnu.",
+    "trustIban": "L’annonce contient un IBAN : vérifie-le avec KUMANI avant de payer",
+    "trustLink": "L’annonce contient un lien : vérifie-le avec KUMANI avant de l’ouvrir",
+    "listingAlertPrompt": "Tu ne trouves pas ce que tu cherches ?",
+    "listingAlertSave": "Préviens-moi",
+    "listingAlertSaved": "Recherche enregistrée",
+    "listingAlertError": "Recherche non enregistrée, réessaie",
+    "listingAlertLimit": "Tu as déjà 10 recherches enregistrées : retires-en une",
+    "listingAlertEmpty": "Choisis au moins un mot, une catégorie ou un lieu",
+    "listingAlertsTitle": "Tes recherches enregistrées",
+    "listingAlertsHint": "On te prévient dès qu’une annonce correspondante paraît.",
+    "listingAlertDelete": "Retirer la recherche"
   },
   "neurobalance": {
     "tracksLabel": "Audios de relaxation",
@@ -9094,7 +9110,9 @@
     "listingApprovedTitle": "✅ Ton annonce est en ligne",
     "listingApprovedBody": "« {title} » a été approuvée et est visible.",
     "listingRejectedTitle": "Ton annonce n’a pas été approuvée",
-    "listingRejectedBody": "« {title} » : {reason}. Tu peux la modifier, elle sera revérifiée."
+    "listingRejectedBody": "« {title} » : {reason}. Tu peux la modifier, elle sera revérifiée.",
+    "listingAlertTitle": "🔔 Une annonce pour toi est parue",
+    "listingAlertBody": "« {title} » correspond à une de tes recherches enregistrées."
   },
   "pushInvite": {
     "title": "Activez les notifications",

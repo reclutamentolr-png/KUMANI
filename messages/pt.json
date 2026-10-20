@@ -1070,7 +1070,23 @@
     "listingPhotoCover": "Capa",
     "listingPhotoMakeCover": "Pôr como capa",
     "listingPhotosHint": "{count} de {max} fotos · a primeira é a capa",
-    "listingPhotosMax": "Podes carregar no máximo {max} fotos"
+    "listingPhotosMax": "Podes carregar no máximo {max} fotos",
+    "catRegalo": "Ofereço",
+    "catBaratto": "Troca",
+    "listingFreeTag": "Grátis",
+    "trustReviewed": "Anúncio verificado pelo Staff KUMANI",
+    "trustTips": "Compra seguro: encontrem-se num local público, verifica o artigo antes de pagar e nunca envies adiantamentos a desconhecidos.",
+    "trustIban": "O anúncio contém um IBAN: verifica-o com a KUMANI antes de pagar",
+    "trustLink": "O anúncio contém um link: verifica-o com a KUMANI antes de o abrir",
+    "listingAlertPrompt": "Não encontras o que procuras?",
+    "listingAlertSave": "Avisa-me quando sair",
+    "listingAlertSaved": "Pesquisa guardada",
+    "listingAlertError": "Pesquisa não guardada, tenta de novo",
+    "listingAlertLimit": "Já tens 10 pesquisas guardadas: remove uma",
+    "listingAlertEmpty": "Escolhe pelo menos uma palavra, uma categoria ou um local",
+    "listingAlertsTitle": "As tuas pesquisas guardadas",
+    "listingAlertsHint": "Avisamos-te quando sair um anúncio adequado.",
+    "listingAlertDelete": "Remover pesquisa"
   },
   "neurobalance": {
     "tracksLabel": "Áudios de relaxamento",
@@ -9094,7 +9110,9 @@
     "listingApprovedTitle": "✅ O teu anúncio está online",
     "listingApprovedBody": "«{title}» foi aprovado e está visível.",
     "listingRejectedTitle": "O teu anúncio não foi aprovado",
-    "listingRejectedBody": "«{title}»: {reason}. Podes editá-lo e será verificado de novo."
+    "listingRejectedBody": "«{title}»: {reason}. Podes editá-lo e será verificado de novo.",
+    "listingAlertTitle": "🔔 Saiu um anúncio para ti",
+    "listingAlertBody": "«{title}» corresponde a uma das tuas pesquisas guardadas."
   },
   "pushInvite": {
     "title": "Ative as notificações",

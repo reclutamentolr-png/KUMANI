@@ -1070,7 +1070,23 @@
     "listingPhotoCover": "Titelbild",
     "listingPhotoMakeCover": "Als Titelbild",
     "listingPhotosHint": "{count} von {max} Fotos · das erste ist das Titelbild",
-    "listingPhotosMax": "Du kannst höchstens {max} Fotos hochladen"
+    "listingPhotosMax": "Du kannst höchstens {max} Fotos hochladen",
+    "catRegalo": "Zu verschenken",
+    "catBaratto": "Tausch",
+    "listingFreeTag": "Gratis",
+    "trustReviewed": "Anzeige vom KUMANI-Staff geprüft",
+    "trustTips": "Sicher kaufen: Trefft euch an einem öffentlichen Ort, prüfe die Ware vor dem Bezahlen und schicke Fremden nie Vorauszahlungen.",
+    "trustIban": "Die Anzeige enthält eine IBAN: Prüfe sie mit KUMANI, bevor du zahlst",
+    "trustLink": "Die Anzeige enthält einen Link: Prüfe ihn mit KUMANI, bevor du ihn öffnest",
+    "listingAlertPrompt": "Nicht gefunden, was du suchst?",
+    "listingAlertSave": "Benachrichtige mich",
+    "listingAlertSaved": "Suche gespeichert",
+    "listingAlertError": "Suche nicht gespeichert, nochmal versuchen",
+    "listingAlertLimit": "Du hast schon 10 gespeicherte Suchen: Entferne eine",
+    "listingAlertEmpty": "Wähle mindestens ein Wort, eine Kategorie oder einen Ort",
+    "listingAlertsTitle": "Deine gespeicherten Suchen",
+    "listingAlertsHint": "Wir melden uns, wenn eine passende Anzeige erscheint.",
+    "listingAlertDelete": "Suche entfernen"
   },
   "neurobalance": {
     "tracksLabel": "Entspannungsaudios",
@@ -9094,7 +9110,9 @@
     "listingApprovedTitle": "✅ Deine Anzeige ist online",
     "listingApprovedBody": "„{title}“ wurde genehmigt und ist sichtbar.",
     "listingRejectedTitle": "Deine Anzeige wurde nicht genehmigt",
-    "listingRejectedBody": "„{title}“: {reason}. Du kannst sie bearbeiten, dann wird sie erneut geprüft."
+    "listingRejectedBody": "„{title}“: {reason}. Du kannst sie bearbeiten, dann wird sie erneut geprüft.",
+    "listingAlertTitle": "🔔 Eine Anzeige für dich ist da",
+    "listingAlertBody": "„{title}“ passt zu einer deiner gespeicherten Suchen."
   },
   "pushInvite": {
     "title": "Benachrichtigungen aktivieren",

@@ -1070,7 +1070,23 @@
     "listingPhotoCover": "Portada",
     "listingPhotoMakeCover": "Poner como portada",
     "listingPhotosHint": "{count} de {max} fotos · la primera es la portada",
-    "listingPhotosMax": "Puedes subir como máximo {max} fotos"
+    "listingPhotosMax": "Puedes subir como máximo {max} fotos",
+    "catRegalo": "Te lo regalo",
+    "catBaratto": "Intercambio / trueque",
+    "listingFreeTag": "Gratis",
+    "trustReviewed": "Anuncio revisado por el Staff de KUMANI",
+    "trustTips": "Compra seguro: quedad en un lugar público, revisa el artículo antes de pagar y nunca envíes anticipos a desconocidos.",
+    "trustIban": "El anuncio contiene un IBAN: compruébalo con KUMANI antes de pagar",
+    "trustLink": "El anuncio contiene un enlace: compruébalo con KUMANI antes de abrirlo",
+    "listingAlertPrompt": "¿No encuentras lo que buscas?",
+    "listingAlertSave": "Avísame cuando salga",
+    "listingAlertSaved": "Búsqueda guardada",
+    "listingAlertError": "Búsqueda no guardada, inténtalo de nuevo",
+    "listingAlertLimit": "Ya tienes 10 búsquedas guardadas: quita una",
+    "listingAlertEmpty": "Elige al menos una palabra, una categoría o un lugar",
+    "listingAlertsTitle": "Tus búsquedas guardadas",
+    "listingAlertsHint": "Te avisamos cuando salga un anuncio que encaje.",
+    "listingAlertDelete": "Quitar búsqueda"
   },
   "neurobalance": {
     "tracksLabel": "Audios de relajación",
@@ -9094,7 +9110,9 @@
     "listingApprovedTitle": "✅ Tu anuncio está en línea",
     "listingApprovedBody": "«{title}» ha sido aprobado y es visible en el Tablón.",
     "listingRejectedTitle": "Tu anuncio no ha sido aprobado",
-    "listingRejectedBody": "«{title}»: {reason}. Puedes modificarlo y se revisará de nuevo."
+    "listingRejectedBody": "«{title}»: {reason}. Puedes modificarlo y se revisará de nuevo.",
+    "listingAlertTitle": "🔔 Ha salido un anuncio para ti",
+    "listingAlertBody": "«{title}» encaja con una de tus búsquedas guardadas."
   },
   "pushInvite": {
     "title": "Activa las notificaciones",

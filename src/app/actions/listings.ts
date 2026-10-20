@@ -6,7 +6,7 @@ import { isToolOnline } from '@/lib/toolOnline'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { revalidatePath } from 'next/cache'
 import { invalidateListingsCache } from '@/lib/listings-server'
-import { LISTING_COST, cleanListingCity, isListingCountry, type CreateListingData, type UpdateListingData } from '@/lib/listings'
+import { ALL_LISTING_CATEGORIES, LISTING_COST, cleanListingCity, isListingCountry, type CreateListingData, type UpdateListingData } from '@/lib/listings'
 import { limitError } from '@/lib/appLimits'
 import { getListingMaxPhotos, getListingsFreeMode } from '@/lib/listingsMode'
 import { cleanListingRegion } from '@/lib/listingRegions'
@@ -39,7 +39,9 @@ function listingFields(data: { title?: string; description?: string; category?: 
   if (raw.some((u) => !/^https:\/\/[^\s"'<>]{4,2000}$/i.test(u))) return null
   const images = [...new Set(raw)].slice(0, maxPhotos)
   if (!title || !description || Number.isNaN(price)) return null
-  return { title, description, category: data.category, price, image_url: images[0] ?? null, images }
+  // Regalo e scambio non hanno prezzo
+  const noPrice = data.category === 'regalo' || data.category === 'baratto'
+  return { title, description, category: data.category, price: noPrice ? null : price, image_url: images[0] ?? null, images }
 }
 
 export async function createListingAction(data: CreateListingData) {
@@ -339,4 +341,40 @@ export async function uploadListingPhoto(formData: FormData): Promise<{ success:
   const { error } = await service.storage.from('listing-photos').upload(path, Buffer.from(await file.arrayBuffer()), { contentType: file.type, upsert: false })
   if (error) return { success: false, message: 'listingPhotoError' }
   return { success: true, url: service.storage.from('listing-photos').getPublicUrl(path).data.publicUrl }
+}
+
+// «Avvisami quando esce»: salva la ricerca della Bacheca (parole, categoria,
+// nazione, regione, città). L'avviso parte quando lo Staff approva un
+// annuncio adatto (lib/listingAlerts). Al massimo 10 ricerche per persona.
+export async function saveListingAlert(input: { q?: string; category?: string; country?: string; region?: string; city?: string }): Promise<{ success: boolean; message?: string }> {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return { success: false, message: 'listingErr_login' }
+  const country = (input.country ?? '').toUpperCase()
+  const row = {
+    user_id: user.id,
+    query: (input.q ?? '').replace(/[,()*%\:"'`]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 80) || null,
+    category: (ALL_LISTING_CATEGORIES as string[]).includes(input.category ?? '') ? input.category! : null,
+    country_code: isListingCountry(country) ? country : null,
+    region: isListingCountry(country) ? cleanListingRegion(country, input.region) : null,
+    city: cleanListingCity(input.city),
+  }
+  if (!row.query && !row.category && !row.country_code && !row.city) return { success: false, message: 'listingAlertEmpty' }
+  const { error } = await supabase.from('listing_alerts').insert(row)
+  if (error) return { success: false, message: /listing_alerts_limit/.test(error.message) ? 'listingAlertLimit' : 'listingAlertError' }
+  revalidatePath('/marketplace/listings')
+  return { success: true }
+}
+
+export async function deleteListingAlert(id: string): Promise<{ success: boolean }> {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user || !/^[0-9a-f-]{36}$/i.test(id)) return { success: false }
+  const { error } = await supabase.from('listing_alerts').delete().eq('id', id).eq('user_id', user.id)
+  revalidatePath('/marketplace/listings')
+  return { success: !error }
 }

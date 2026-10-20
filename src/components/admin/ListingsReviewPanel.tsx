@@ -133,6 +133,22 @@ export default function ListingsReviewPanel() {
                         {l.isRemote ? ' · anche online' : ''}
                       </p>
                     )}
+                    {/* Controllo antitruffa del testo */}
+                    {l.flags.length > 0 && (
+                      <ul className="mt-2 space-y-1">
+                        {l.flags.map((f, i) => (
+                          <li
+                            key={i}
+                            className={`rounded-lg px-2.5 py-1.5 text-xs font-semibold ${f.kind === 'scam_link' || f.kind === 'scam_iban' ? 'bg-red-100 text-red-800' : 'bg-amber-50 text-amber-900'}`}
+                          >
+                            {f.kind === 'scam_link' && `⛔ Link negli elenchi truffa (${f.source}): ${f.value}`}
+                            {f.kind === 'scam_iban' && `⛔ IBAN segnalato dalla Rete antitruffa (${f.reports}): ${f.value}`}
+                            {f.kind === 'link' && `🔗 Contiene un link: ${f.value} (non risulta negli elenchi truffa)`}
+                            {f.kind === 'iban' && `🏦 Contiene un IBAN: ${f.value} (non segnalato)`}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                     <p className="mt-2 whitespace-pre-wrap text-sm text-gray-700">{l.description}</p>
                     {l.images.length > 1 && (
                       <div className="mt-2 flex flex-wrap gap-1.5">

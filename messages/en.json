@@ -1107,7 +1107,23 @@
     "listingPhotoCover": "Cover",
     "listingPhotoMakeCover": "Make cover",
     "listingPhotosHint": "{count} of {max} photos · the first is the cover",
-    "listingPhotosMax": "You can upload up to {max} photos"
+    "listingPhotosMax": "You can upload up to {max} photos",
+    "catRegalo": "Free to a good home",
+    "catBaratto": "Swap / barter",
+    "listingFreeTag": "Free",
+    "trustReviewed": "Listing checked by the KUMANI Staff",
+    "trustTips": "Buy safely: meet in a public place, check the item before paying and never send advance payments to strangers.",
+    "trustIban": "This listing contains an IBAN: check it with KUMANI before paying",
+    "trustLink": "This listing contains a link: check it with KUMANI before opening it",
+    "listingAlertPrompt": "Can’t find what you’re looking for?",
+    "listingAlertSave": "Notify me when it appears",
+    "listingAlertSaved": "Search saved",
+    "listingAlertError": "Search not saved, try again",
+    "listingAlertLimit": "You already have 10 saved searches: remove one",
+    "listingAlertEmpty": "Choose at least a word, a category or a place",
+    "listingAlertsTitle": "Your saved searches",
+    "listingAlertsHint": "We’ll let you know when a matching listing appears.",
+    "listingAlertDelete": "Remove search"
   },
   "neurobalance": {
     "tracksLabel": "Relaxation audio",
@@ -9094,7 +9110,9 @@
     "listingApprovedTitle": "✅ Your listing is live",
     "listingApprovedBody": "“{title}” was approved and is visible on the Board.",
     "listingRejectedTitle": "Your listing was not approved",
-    "listingRejectedBody": "“{title}”: {reason}. You can edit it and it will be checked again."
+    "listingRejectedBody": "“{title}”: {reason}. You can edit it and it will be checked again.",
+    "listingAlertTitle": "🔔 A listing for you is out",
+    "listingAlertBody": "“{title}” matches one of your saved searches."
   },
   "pushInvite": {
     "title": "Turn on notifications",
