@@ -6,6 +6,7 @@ import type { NextFetchEvent } from 'next/server';
 import { readProxySettings, type ProxySettings } from './lib/enabledLocalesCore';
 import { PRELAUNCH_HIDDEN, PREVIEW_COOKIE, PREVIEW_COOKIE_MAX_AGE, previewToken } from './lib/prelaunch';
 import { blockedIps, clientIp, PROBE_PATH, recordSecurityEvent } from './lib/securityCore';
+import { isBlockedAgent } from './lib/aiBots';
 import { locales, defaultLocale } from '../i18n';
 
 const intlMiddleware = createMiddleware({
@@ -119,6 +120,11 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
   const ip = clientIp(request.headers);
   if (ip && (await blockedIps()).has(ip)) {
     return new NextResponse('Accesso bloccato / Access blocked', { status: 403 });
+  }
+  // Robot che addestrano le AI e programmi che copiano il sito (lib/aiBots):
+  // accesso negato. Motori di ricerca e anteprime dei link restano liberi.
+  if (isBlockedAgent(request.headers.get('user-agent'))) {
+    return new NextResponse('Accesso negato / Access denied', { status: 403 });
   }
   if (PROBE_PATH.test(request.nextUrl.pathname)) {
     event.waitUntil(

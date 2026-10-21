@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl'
 import { ArrowRight, Clock, Plus, Star } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { ServiceCard } from '@/components/services/ServicesBrowser'
-import { readRecentTools } from '@/lib/recentTools'
+import { currentUserId, readRecentTools } from '@/lib/recentTools'
 import type { ServiceItem } from '@/lib/servicesCatalog'
 import FavoritesPicker from './FavoritesPicker'
 
@@ -30,8 +30,8 @@ export default function HomeServices({ items, favorites }: { items: ServiceItem[
   }
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setRecent(readRecentTools())
+    // Solo i servizi di questo account (non di chi ha usato prima lo stesso browser)
+    void currentUserId().then((userId) => setRecent(readRecentTools(userId)))
   }, [])
 
   const byName = new Map(items.map((item) => [item.toolName, item]))

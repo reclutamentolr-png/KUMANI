@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { CANONICAL_ORIGIN, isIndexableHost } from '@/lib/seo'
+import { AI_TRAINING_ROBOTS } from '@/lib/aiBots'
 
 // Le aree private (dashboard, strumenti) non vanno indicizzate. Admin, accesso
 // e API non sono elencati qui (sarebbero una mappa per chi cerca dove
@@ -13,11 +14,16 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
   const privateAreas = ['/dashboard', '/marketplace', '/wallet', '/billing', '/rewards', '/viaggi', '/events/my', '/events/pass', '/documenti', '/servizi', '/community', '/o/', '/q/']
   const locales = ['en', 'fr', 'es', 'pt', 'de', 'ru']
   return {
-    rules: {
-      userAgent: '*',
-      allow: '/',
-      disallow: [...privateAreas, ...locales.flatMap((l) => privateAreas.map((p) => `/${l}${p}`))],
-    },
+    rules: [
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: [...privateAreas, ...locales.flatMap((l) => privateAreas.map((p) => `/${l}${p}`))],
+      },
+      // Robot che raccolgono contenuti per addestrare le AI: niente (lib/aiBots).
+      // Motori di ricerca e assistenti che citano KUMANI seguono la regola sopra.
+      { userAgent: AI_TRAINING_ROBOTS, disallow: '/' },
+    ],
     sitemap: `${CANONICAL_ORIGIN}/sitemap.xml`,
   }
 }
