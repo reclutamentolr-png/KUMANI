@@ -9112,7 +9112,9 @@
     "listingRejectedTitle": "Ton annonce n’a pas été approuvée",
     "listingRejectedBody": "« {title} » : {reason}. Tu peux la modifier, elle sera revérifiée.",
     "listingAlertTitle": "🔔 Une annonce pour toi est parue",
-    "listingAlertBody": "« {title} » correspond à une de tes recherches enregistrées."
+    "listingAlertBody": "« {title} » correspond à une de tes recherches enregistrées.",
+    "founderTitle": "🚀 Tu fais partie des 50 premiers utilisateurs (n°{n}) !",
+    "founderBody": "Remise de 100 % appliquée : ta formule Base est active 12 mois, sans renouvellement automatique."
   },
   "pushInvite": {
     "title": "Activez les notifications",
@@ -14438,5 +14440,15 @@
     "used": "Ce bon a déjà été activé. 🎉",
     "selfError": "C’est toi qui as créé ce bon : envoie-le à la personne à qui tu veux l’offrir.",
     "error": "Activation impossible, réessaie dans un instant."
+  },
+  "founders": {
+    "bannerTitle": "Lancement Beta : sois parmi les {limit} premiers utilisateurs ! 🚀",
+    "bannerText": "Pour fêter le lancement, remise commerciale de 100 % sur la formule Base pour les {limit} premiers inscrits : 0 € au lieu de 49 € pendant un an. Pas de tirage au sort : l’ordre d’inscription fait foi.",
+    "bannerLeft": "Plus que {left} places",
+    "bannerCta": "S’inscrire",
+    "dashTitle": "🚀 Tu fais partie des 50 premiers utilisateurs (n°{n})",
+    "dashText": "Remise de 100 % appliquée : ta formule Base est active 12 mois et ne se renouvelle pas automatiquement.",
+    "dashTerms": "Conditions de l’offre de lancement",
+    "bannerYear": "pendant un an"
   }
 }

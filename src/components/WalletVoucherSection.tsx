@@ -55,7 +55,8 @@ export default function WalletVoucherSection({
   const [busy, setBusy] = useState(false)
   const [redeemCode, setRedeemCode] = useState('')
   const [redeemMessage, setRedeemMessage] = useState<{ ok: boolean; text: string } | null>(null)
-  const vouchers = initialVouchers
+  // Lo sconto di lancio (prize_key founder) è il piano già attivo, non un voucher
+  const vouchers = initialVouchers.filter((v) => v.prize_key !== 'founder')
   const available = vouchers.filter((v) => v.status === 'active').length
 
   // Voucher raggruppati per premio, in box da aprire: Kuman Green, Star,

@@ -37,7 +37,7 @@ export default async function VoucherReceiptPage({ params }: { params: Promise<{
     .maybeSingle()
   if (!voucher || voucher.status === 'revoked') notFound()
   // Regalo di KUMANI ricevuto: è per sé, niente ricevuta di cessione né stampa
-  if (voucher.prize_key === 'admin_gift') notFound()
+  if (voucher.prize_key === 'admin_gift' || voucher.prize_key === 'founder') notFound()
 
   const { data: seller } = await supabase.rpc('get_my_profile').maybeSingle<SellerProfile>()
   const sellerAddress = [seller?.address, [seller?.postal_code, seller?.city, seller?.province ? `(${seller.province})` : null].filter(Boolean).join(' ')]

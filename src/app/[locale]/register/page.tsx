@@ -4,6 +4,7 @@ import Link from '@/components/LocalizedLink'
 import { getTranslations } from 'next-intl/server'
 import { headers } from 'next/headers'
 import RegisterForm from '@/components/RegisterForm'
+import FoundersBanner from '@/components/founders/FoundersBanner'
 import MaintenanceGate from '@/components/MaintenanceGate'
 import Logo from '@/components/Logo'
 import { isSignupOpen } from '@/lib/signupOpen'
@@ -43,6 +44,7 @@ export default async function RegisterPage() {
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="relative border border-[var(--gold)]/35 bg-[var(--paper)] px-4 py-8 shadow-[0_20px_55px_rgba(23,23,23,0.14)] sm:rounded-lg sm:px-10">
+            {open && <FoundersBanner variant="card" cta={false} />}
             {open ? (
               <RegisterForm detectedCountry={detectedCountry} />
             ) : (

@@ -4,6 +4,7 @@ import JsonLd from '@/components/seo/JsonLd'
 import Link from '@/components/LocalizedLink'
 import HomeLoginLink from '@/components/home/HomeLoginLink'
 import { getLocale, getTranslations } from 'next-intl/server'
+import FoundersBanner from '@/components/founders/FoundersBanner'
 import { formatOpenDate, getPlansGate } from '@/lib/plansGate'
 import {
   Shield,
@@ -424,6 +425,10 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
           <p className="text-base sm:text-xl text-white/80 mb-6 sm:mb-8">
             {t('ctaDescription')}
           </p>
+          {/* Lancio Beta anche accanto all'ultimo pulsante */}
+          <div className="mx-auto max-w-xl text-left">
+            <FoundersBanner variant="card" cta={false} />
+          </div>
           <Link
             href="/register"
             className="inline-flex items-center gap-2 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] hover:brightness-110 text-[var(--ink)] px-6 sm:px-10 py-3 sm:py-5 rounded-lg font-bold text-base sm:text-xl transition-all shadow-2xl hover:scale-105"

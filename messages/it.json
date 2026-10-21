@@ -9112,7 +9112,9 @@
     "listingRejectedTitle": "Il tuo annuncio non è stato approvato",
     "listingRejectedBody": "«{title}»: {reason}. Puoi modificarlo e verrà ricontrollato.",
     "listingAlertTitle": "🔔 È uscito un annuncio per te",
-    "listingAlertBody": "«{title}» corrisponde a una tua ricerca salvata in Bacheca."
+    "listingAlertBody": "«{title}» corrisponde a una tua ricerca salvata in Bacheca.",
+    "founderTitle": "🚀 Sei tra i primi 50 utenti (n°{n})!",
+    "founderBody": "Sconto del 100% applicato: il tuo Piano Base è attivo per 12 mesi, senza rinnovo automatico."
   },
   "pushInvite": {
     "title": "Attiva le notifiche",
@@ -14438,5 +14440,15 @@
     "used": "Questo voucher è già stato attivato. 🎉",
     "selfError": "Questo voucher l’hai creato tu: mandalo a chi vuoi regalarlo.",
     "error": "Non è stato possibile attivarlo, riprova tra poco."
+  },
+  "founders": {
+    "bannerTitle": "Lancio Beta: entra tra i primi {limit} utenti! 🚀",
+    "bannerText": "Per festeggiare il lancio, sconto commerciale del 100% sul Piano Base per i primi {limit} iscritti: paghi 0 € anziché 49 € per un anno. Nessun sorteggio, nessuna estrazione: vale l’ordine di iscrizione.",
+    "bannerLeft": "Restano {left} posti",
+    "bannerCta": "Iscriviti",
+    "dashTitle": "🚀 Sei tra i primi 50 utenti (n°{n})",
+    "dashText": "Sconto del 100% applicato: il tuo Piano Base è attivo per 12 mesi e non si rinnova in automatico.",
+    "dashTerms": "Condizioni della promozione di lancio",
+    "bannerYear": "per un anno"
   }
 }

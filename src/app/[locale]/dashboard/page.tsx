@@ -57,6 +57,9 @@ import { resolveHomeFolders, resolveHomeView } from '@/lib/homeView'
 import { SERVICE_HUBS } from '@/lib/serviceHubs'
 import IconHome from '@/components/dashboard/IconHome'
 import { getInviteUrl } from '@/lib/shareLinksServer'
+import { after } from 'next/server'
+import FounderCard from '@/components/founders/FounderCard'
+import { grantFounderIfEligible } from '@/lib/founders'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -230,6 +233,8 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   ])
   // Bonus della rete: dopo aver mostrato la pagina
   await deferNetworkClaims(supabase)
+  // Kumani Fondatori: un posto (e il Base in regalo) a chi ne ha diritto
+  after(() => grantFounderIfEligible(user.id).catch((e) => console.error('[fondatori]', e)))
   proTrial = trial
   if (stats) {
     proAreaStats = stats
@@ -354,13 +359,17 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
                 />
               }
               afterStatus={
-                (unreadMessagesCount > 0 || (landingUnread ?? 0) > 0) && (
+                <>
+                  {/* Promozione di lancio: «Sei tra i primi 50» */}
+                  <FounderCard userId={user.id} />
+                {(unreadMessagesCount > 0 || (landingUnread ?? 0) > 0) && (
                   <>
                     {/* Messaggi non letti dalla Bacheca e dalla Landing */}
                     {unreadMessagesCount > 0 && <BachecaMessagesAlert initialCount={unreadMessagesCount} />}
                     {(landingUnread ?? 0) > 0 && <LandingMessagesAlert count={landingUnread ?? 0} />}
                   </>
-                )
+                )}
+                </>
               }
               proPrice={proPrice}
               welcome={

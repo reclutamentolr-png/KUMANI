@@ -4,6 +4,7 @@ import { pageMetadata } from '@/lib/seo'
 import { getAppCounts } from '@/lib/appCounts'
 import { getHomeLayout } from '@/lib/homeLayoutServer'
 import HomeByVersion from '@/components/home/HomeByVersion'
+import FoundersBanner from '@/components/founders/FoundersBanner'
 
 type Props = { params: Promise<{ locale: string }> }
 
@@ -24,5 +25,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function LandingPage({ params }: Props) {
   setRequestLocale((await params).locale)
-  return <HomeByVersion layoutKey={await getHomeLayout()} />
+  return (
+    <>
+      {/* «Sei tra i primi 50? KUMANI ti regala un anno di Base» */}
+      <FoundersBanner />
+      <HomeByVersion layoutKey={await getHomeLayout()} />
+    </>
+  )
 }

@@ -9112,7 +9112,9 @@
     "listingRejectedTitle": "Your listing was not approved",
     "listingRejectedBody": "“{title}”: {reason}. You can edit it and it will be checked again.",
     "listingAlertTitle": "🔔 A listing for you is out",
-    "listingAlertBody": "“{title}” matches one of your saved searches."
+    "listingAlertBody": "“{title}” matches one of your saved searches.",
+    "founderTitle": "🚀 You’re one of the first 50 users (no.{n})!",
+    "founderBody": "100% discount applied: your Base Plan is active for 12 months, no automatic renewal."
   },
   "pushInvite": {
     "title": "Turn on notifications",
@@ -14438,5 +14440,15 @@
     "used": "This voucher has already been activated. 🎉",
     "selfError": "You created this voucher: send it to the person you want to give it to.",
     "error": "It could not be activated, please try again shortly."
+  },
+  "founders": {
+    "bannerTitle": "Beta launch: be one of the first {limit} users! 🚀",
+    "bannerText": "To celebrate the launch, a 100% commercial discount on the Base Plan for the first {limit} sign-ups: pay €0 instead of €49 for a year. No draw, no lottery: sign-up order applies.",
+    "bannerLeft": "{left} spots left",
+    "bannerCta": "Sign up",
+    "dashTitle": "🚀 You’re one of the first 50 users (no.{n})",
+    "dashText": "100% discount applied: your Base Plan is active for 12 months and does not renew automatically.",
+    "dashTerms": "Launch promotion terms",
+    "bannerYear": "for a year"
   }
 }

@@ -9112,7 +9112,9 @@
     "listingRejectedTitle": "Tu anuncio no ha sido aprobado",
     "listingRejectedBody": "«{title}»: {reason}. Puedes modificarlo y se revisará de nuevo.",
     "listingAlertTitle": "🔔 Ha salido un anuncio para ti",
-    "listingAlertBody": "«{title}» encaja con una de tus búsquedas guardadas."
+    "listingAlertBody": "«{title}» encaja con una de tus búsquedas guardadas.",
+    "founderTitle": "🚀 ¡Estás entre los primeros 50 usuarios (n.º {n})!",
+    "founderBody": "Descuento del 100% aplicado: tu Plan Base está activo 12 meses, sin renovación automática."
   },
   "pushInvite": {
     "title": "Activa las notificaciones",
@@ -14438,5 +14440,15 @@
     "used": "Este vale ya ha sido activado. 🎉",
     "selfError": "Este vale lo creaste tú: envíalo a quien quieras regalárselo.",
     "error": "No se ha podido activar, inténtalo de nuevo en un momento."
+  },
+  "founders": {
+    "bannerTitle": "Lanzamiento Beta: ¡entra entre los primeros {limit} usuarios! 🚀",
+    "bannerText": "Para celebrar el lanzamiento, descuento comercial del 100% en el Plan Base para los primeros {limit} registrados: pagas 0 € en lugar de 49 € durante un año. Sin sorteos: vale el orden de registro.",
+    "bannerLeft": "Quedan {left} plazas",
+    "bannerCta": "Regístrate",
+    "dashTitle": "🚀 Estás entre los primeros 50 usuarios (n.º {n})",
+    "dashText": "Descuento del 100% aplicado: tu Plan Base está activo 12 meses y no se renueva automáticamente.",
+    "dashTerms": "Condiciones de la promoción de lanzamiento",
+    "bannerYear": "durante un año"
   }
 }

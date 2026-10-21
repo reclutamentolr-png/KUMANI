@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: LocaleProps): Promise<Metadat
   return pageMetadata('/terms', { title: t('termsTitle'), description: t('termsDescription') })
 }
 
-const LAST_UPDATE = '11 ottobre 2026'
+const LAST_UPDATE = '21 ottobre 2026'
 
 export default async function TermsPage({ params }: LocaleProps) {
   setRequestLocale((await params).locale)
@@ -67,6 +67,7 @@ export default async function TermsPage({ params }: LocaleProps) {
             <li><a href="#sez-1" className="hover:underline">1. Oggetto e ambito di applicazione</a></li>
             <li><a href="#sez-2" className="hover:underline">2. Registrazione e account</a></li>
             <li><a href="#sez-3" className="hover:underline">3. Abbonamento e corrispettivi</a></li>
+            <li><a href="#promo-lancio" className="hover:underline">3-bis. Promozione di lancio (Early Bird Discount)</a></li>
             <li><a href="#sez-4" className="hover:underline">4. Servizi dell&apos;Ecosistema KUMANI</a></li>
             <li><a href="#sez-5" className="hover:underline">5. Bacheca annunci e contenuti degli utenti</a></li>
             <li><a href="#sez-6" className="hover:underline">6. KU Karma e KU Points</a></li>
@@ -140,6 +141,43 @@ export default async function TermsPage({ params }: LocaleProps) {
                 contenuti degli strumenti non più inclusi. Le pagine pubbliche collegate (ad esempio Link in bio e CV) non sono più
                 visibili ai visitatori finché il piano non viene rinnovato; le Ricevute Digitali, che sono condivise con un&apos;altra
                 parte, restano consultabili online per 12 mesi dalla scadenza del piano.
+              </p>
+            </div>
+          </section>
+
+          {/* 3-bis: promozione di lancio */}
+          <section id="promo-lancio" className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 scroll-mt-24">
+            <h2 className="text-xl font-bold text-gray-900 mb-3">3-bis. Termini della Promozione di Lancio (&ldquo;Early Bird Discount&rdquo;)</h2>
+            <div className="text-gray-600 space-y-3 text-sm sm:text-base leading-relaxed">
+              <p>
+                <strong>Oggetto della promozione.</strong> La presente iniziativa consiste in uno sconto commerciale sulla tariffa di abbonamento al
+                servizio KUMANI, riservato esclusivamente ai primi 50 (cinquanta) utenti che registreranno un account sulla piattaforma.
+              </p>
+              <p>
+                <strong>Condizioni dello sconto.</strong> Ai primi 50 utenti registrati in ordine cronologico verrà applicato uno sconto pari al
+                100% sul valore del Piano Base (valore nominale di listino: 49,00 €), azzerando il costo del servizio per 12 (dodici) mesi dalla
+                data di attivazione. Lo sconto si applica automaticamente al completamento dell&apos;iscrizione; non sono richiesti dati di
+                pagamento. Per utilizzare i servizi del Piano Base l&apos;utente deve completare il proprio profilo con dati reali
+                (nome, cognome, data di nascita, telefono, indirizzo completo e professione): fino ad allora l&apos;accesso ai servizi
+                resta sospeso.
+              </p>
+              <p>
+                <strong>Al termine dei 12 mesi.</strong> L&apos;abbonamento promozionale non si rinnova automaticamente e non comporta alcun
+                addebito: alla scadenza l&apos;utente torna al piano gratuito e resta libero di sottoscrivere, se lo desidera, un abbonamento
+                alla tariffa di listino in vigore.
+              </p>
+              <p>
+                <strong>Esclusione dall&apos;ambito dei concorsi e operazioni a premi.</strong> Si specifica che la presente iniziativa non
+                costituisce una manifestazione a premio ai sensi del D.P.R. 430/2001. Trattasi esclusivamente di una riduzione di prezzo e di una
+                differenziazione tariffaria per motivi promozionali e di lancio commerciale applicata sui propri servizi, come consentito
+                dall&apos;art. 6, comma 1, lett. c) del D.P.R. 430/2001. Nessun sorteggio, nessuna estrazione: si applica una tariffa promozionale
+                di lancio basata sull&apos;ordine cronologico di registrazione fino a esaurimento dei 50 posti disponibili.
+              </p>
+              <p>
+                <strong>Limiti.</strong> Esauriti i 50 posti promozionali disponibili, la piattaforma applicherà automaticamente la tariffa
+                standard di listino di 49,00 € per i successivi iscritti. Lo sconto non è convertibile in denaro, non è trasferibile e non dà
+                diritto a rimborsi. Sono esclusi gli account dello staff, gli account di servizio della piattaforma, gli agenti e gli utenti che
+                hanno già un abbonamento attivo al momento dell&apos;applicazione dello sconto.
               </p>
             </div>
           </section>

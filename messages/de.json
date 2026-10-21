@@ -9112,7 +9112,9 @@
     "listingRejectedTitle": "Deine Anzeige wurde nicht genehmigt",
     "listingRejectedBody": "„{title}“: {reason}. Du kannst sie bearbeiten, dann wird sie erneut geprüft.",
     "listingAlertTitle": "🔔 Eine Anzeige für dich ist da",
-    "listingAlertBody": "„{title}“ passt zu einer deiner gespeicherten Suchen."
+    "listingAlertBody": "„{title}“ passt zu einer deiner gespeicherten Suchen.",
+    "founderTitle": "🚀 Du bist unter den ersten 50 Nutzern (Nr. {n})!",
+    "founderBody": "100 % Rabatt angewendet: Dein Base-Tarif ist 12 Monate aktiv, ohne automatische Verlängerung."
   },
   "pushInvite": {
     "title": "Benachrichtigungen aktivieren",
@@ -14438,5 +14440,15 @@
     "used": "Dieser Gutschein wurde bereits aktiviert. 🎉",
     "selfError": "Diesen Gutschein hast du erstellt: Schick ihn der Person, der du ihn schenken willst.",
     "error": "Aktivierung nicht möglich, bitte gleich nochmal versuchen."
+  },
+  "founders": {
+    "bannerTitle": "Beta-Start: Sei unter den ersten {limit} Nutzern! 🚀",
+    "bannerText": "Zum Start 100 % Rabatt auf den Base-Tarif für die ersten {limit} Anmeldungen: 0 € statt 49 € für ein Jahr. Keine Verlosung: Es zählt die Reihenfolge der Anmeldung.",
+    "bannerLeft": "Noch {left} Plätze",
+    "bannerCta": "Anmelden",
+    "dashTitle": "🚀 Du bist unter den ersten 50 Nutzern (Nr. {n})",
+    "dashText": "100 % Rabatt angewendet: Dein Base-Tarif ist 12 Monate aktiv und verlängert sich nicht automatisch.",
+    "dashTerms": "Bedingungen der Startaktion",
+    "bannerYear": "für ein Jahr"
   }
 }

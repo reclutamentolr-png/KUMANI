@@ -9112,7 +9112,9 @@
     "listingRejectedTitle": "O teu anúncio não foi aprovado",
     "listingRejectedBody": "«{title}»: {reason}. Podes editá-lo e será verificado de novo.",
     "listingAlertTitle": "🔔 Saiu um anúncio para ti",
-    "listingAlertBody": "«{title}» corresponde a uma das tuas pesquisas guardadas."
+    "listingAlertBody": "«{title}» corresponde a uma das tuas pesquisas guardadas.",
+    "founderTitle": "🚀 Estás entre os primeiros 50 utilizadores (n.º {n})!",
+    "founderBody": "Desconto de 100% aplicado: o teu Plano Base está ativo 12 meses, sem renovação automática."
   },
   "pushInvite": {
     "title": "Ative as notificações",
@@ -14438,5 +14440,15 @@
     "used": "Este voucher já foi ativado. 🎉",
     "selfError": "Foste tu que criaste este voucher: envia-o a quem o queres oferecer.",
     "error": "Não foi possível ativar, tenta novamente daqui a pouco."
+  },
+  "founders": {
+    "bannerTitle": "Lançamento Beta: entra entre os primeiros {limit} utilizadores! 🚀",
+    "bannerText": "Para celebrar o lançamento, desconto comercial de 100% no Plano Base para os primeiros {limit} registos: pagas 0 € em vez de 49 € durante um ano. Sem sorteios: vale a ordem de registo.",
+    "bannerLeft": "Restam {left} lugares",
+    "bannerCta": "Regista-te",
+    "dashTitle": "🚀 Estás entre os primeiros 50 utilizadores (n.º {n})",
+    "dashText": "Desconto de 100% aplicado: o teu Plano Base está ativo 12 meses e não se renova automaticamente.",
+    "dashTerms": "Condições da promoção de lançamento",
+    "bannerYear": "durante um ano"
   }
 }

@@ -1,5 +1,6 @@
 import { unstable_cache } from 'next/cache'
 import { getLocale, getTranslations } from 'next-intl/server'
+import FoundersBanner from '@/components/founders/FoundersBanner'
 import { formatOpenDate, getPlansGate } from '@/lib/plansGate'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { ArrowRight, Briefcase, Check, Gift, Ticket } from 'lucide-react'
@@ -113,6 +114,10 @@ export default async function HomePlans() {
 
   return (
     <>
+      {/* Lancio Beta: sconto del 100% sul Base per i primi 50, sopra le schede dei piani */}
+      <div className="mx-auto mb-6 max-w-3xl">
+        <FoundersBanner variant="card" />
+      </div>
       <div className="grid grid-cols-1 gap-5 md:grid-cols-3 sm:gap-6">
         {/* Gratis */}
         <div className="flex flex-col rounded-3xl border border-[var(--gold)]/20 bg-white/[0.03] p-6 sm:p-7">

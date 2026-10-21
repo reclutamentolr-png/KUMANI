@@ -15,6 +15,7 @@ import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import AdminUserPicker from '@/components/admin/AdminUserPicker'
 import AdminGiftSubscriptionPanel from '@/components/admin/AdminGiftSubscriptionPanel'
 import ListingsReviewPanel from '@/components/admin/ListingsReviewPanel'
+import FoundersPanel from '@/components/admin/FoundersPanel'
 import {
   adminUpdateProfile,
   adminSetToolEnabled,
@@ -340,7 +341,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
   const [voucherBatches, setVoucherBatches] = useState<AdminVoucherBatch[]>([])
   const [batchForm, setBatchForm] = useState<{ businessName: string; quantity: string; priceEur: string; invoiceRef: string; notes: string; plan: 'base' | 'pro' }>({ businessName: '', quantity: '10', priceEur: '400', invoiceRef: '', notes: '', plan: 'base' })
   const [creatingBatch, setCreatingBatch] = useState(false)
-  const [couponArea, setCouponArea] = useState<'merchant' | 'community' | 'pass' | 'gifts' | 'trials'>('merchant')
+  const [couponArea, setCouponArea] = useState<'merchant' | 'community' | 'pass' | 'gifts' | 'trials' | 'founders'>('merchant')
 
   const loadOnlineUsers = async () => {
     try {
@@ -1540,6 +1541,7 @@ L'accesso viene registrato.`))) return
           ['pass', '🎟️ Pass servizio'],
           ['gifts', '🎁 Regali'],
           ['trials', '⏱️ Codici prova'],
+          ['founders', '🏅 Fondatori'],
         ] as const).map(([key, label]) => (
           <button
             key={key}
@@ -1553,7 +1555,7 @@ L'accesso viene registrato.`))) return
           </button>
         ))}
       </div>
-      {couponArea === 'merchant' ? renderMerchantCoupons() : couponArea === 'pass' ? <PassCodesPanel /> : couponArea === 'gifts' ? <GiftOrdersPanel /> : couponArea === 'trials' ? <TrialCodesManager admin siteUrl={SITE_URL} /> : renderCommunityCoupons()}
+      {couponArea === 'merchant' ? renderMerchantCoupons() : couponArea === 'pass' ? <PassCodesPanel /> : couponArea === 'gifts' ? <GiftOrdersPanel /> : couponArea === 'trials' ? <TrialCodesManager admin siteUrl={SITE_URL} /> : couponArea === 'founders' ? <FoundersPanel /> : renderCommunityCoupons()}
     </div>
   )
 

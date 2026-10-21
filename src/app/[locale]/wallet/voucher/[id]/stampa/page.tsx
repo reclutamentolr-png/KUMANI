@@ -31,7 +31,7 @@ export default async function VoucherPrintPage({ params }: { params: Promise<{ l
     .maybeSingle()
   if (!voucher || voucher.status !== 'active') notFound()
   // Regalo di KUMANI ricevuto: è per sé, niente ricevuta di cessione né stampa
-  if (voucher.prize_key === 'admin_gift') notFound()
+  if (voucher.prize_key === 'admin_gift' || voucher.prize_key === 'founder') notFound()
 
   const t = await getTranslations('voucherPrint')
   const site = (process.env.NEXT_PUBLIC_SITE_URL || SITE_URL).replace(/\/+$/, '')
