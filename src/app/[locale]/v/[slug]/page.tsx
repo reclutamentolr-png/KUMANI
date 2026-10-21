@@ -63,7 +63,7 @@ export default async function ShareVideoPage({ params }: Props) {
   const tool = getShareableTools(tm).find((item) => item.toolName === link.tool)
   if (!tool) notFound()
   const Icon = marketplaceIconMap[tool.iconName]
-  const registerHref = `/register?sponsor=${encodeURIComponent(link.code)}`
+  const registerHref = `/register?invito=${encodeURIComponent(link.code)}`
 
   return (
     <div className="min-h-screen bg-[var(--ink)] px-3 py-4 text-white sm:px-4 sm:py-8">

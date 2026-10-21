@@ -102,7 +102,7 @@ export default async function ConvivioPublicPage({
               ) : (
                 <>
                   <Link
-                    href={sponsor ? `/register?sponsor=${encodeURIComponent(sponsor)}` : '/register'}
+                    href={sponsor ? `/register?invito=${encodeURIComponent(sponsor)}` : '/register'}
                     className="mt-6 flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3.5 font-bold text-[var(--ink)]"
                   >
                     {t('registerToJoin')}

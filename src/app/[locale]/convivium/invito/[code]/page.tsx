@@ -161,7 +161,7 @@ export default async function ConviviumInvitePage({ params }: { params: Promise<
             <p className="text-lg font-extrabold">{t('ctaTitle')}</p>
             <p className="mt-2 text-sm text-white/75">{t('ctaText')}</p>
             <Link
-              href={sponsor ? `/register?sponsor=${encodeURIComponent(sponsor)}` : '/register'}
+              href={sponsor ? `/register?invito=${encodeURIComponent(sponsor)}` : '/register'}
               className="mt-4 flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3.5 font-bold text-[var(--ink)]"
             >
               {t('ctaButton')}

@@ -83,7 +83,7 @@ export default function ToolShareActions({ variant, toolName, toolTitle, toolHre
   if (state.loading) return null
 
   const { inviter, member } = state.viewer
-  const registerHref = inviter ? `/register?sponsor=${encodeURIComponent(inviter.referralCode)}` : '/register'
+  const registerHref = inviter ? `/register?invito=${encodeURIComponent(inviter.referralCode)}` : '/register'
   const money = (eur: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2, minimumFractionDigits: 0 }).format(eur)
 
   const memberActions = member && !off && (

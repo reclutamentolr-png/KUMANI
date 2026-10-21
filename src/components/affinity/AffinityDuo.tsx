@@ -148,7 +148,7 @@ export default function AffinityDuo({ owner, isLoggedIn }: { owner: Owner; isLog
         )
       ) : (
         <Link
-          href={owner.referralCode ? `/register?sponsor=${encodeURIComponent(owner.referralCode)}` : '/register'}
+          href={owner.referralCode ? `/register?invito=${encodeURIComponent(owner.referralCode)}` : '/register'}
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3.5 font-bold text-[var(--ink)]"
         >
           {t('duoRegisterCta')} <ArrowRight className="h-5 w-5" />

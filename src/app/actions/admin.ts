@@ -1092,7 +1092,7 @@ export async function adminListUsers() {
   const [{ data, error }, { count }] = await Promise.all([
     service
       .from('profiles')
-      .select('id, first_name, last_name, email, referral_code, subscription_status, is_blocked, created_at, sponsor_id, last_seen')
+      .select('id, first_name, last_name, email, referral_code, subscription_status, subscription_plan, is_blocked, created_at, sponsor_id, last_seen')
       // Ospiti in prova (codici di prova) esclusi: si cancellano da soli
       .is('guest_until', null)
       .order('created_at', { ascending: false })
@@ -1106,6 +1106,9 @@ export async function adminListUsers() {
     ? await service.from('profiles').select('id, first_name, last_name, referral_code').in('id', sponsorIds)
     : { data: [] as { id: string; first_name: string | null; last_name: string | null; referral_code: string | null }[] }
   const sponsorById = new Map((sponsors ?? []).map((s) => [s.id, s]))
+  // Primi 50 della promozione di lancio (solo quelli che contano nei posti)
+  const { data: founders } = await service.from('founder_members').select('user_id').eq('counted', true)
+  const founderIds = new Set((founders ?? []).map((f) => f.user_id as string))
   const onlineSince = Date.now() - 15 * 60 * 1000
   return {
     users: (data || []).map(({ sponsor_id, ...user }, i) => {
@@ -1114,6 +1117,7 @@ export async function adminListUsers() {
         ...user,
         number: total - i,
         online: !!user.last_seen && Date.parse(user.last_seen) > onlineSince,
+        founder: founderIds.has(user.id),
         sponsor: s ? { name: [s.first_name, s.last_name].filter(Boolean).join(' ') || '—', code: s.referral_code } : null,
       }
     }),

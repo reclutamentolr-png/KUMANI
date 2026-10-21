@@ -611,7 +611,7 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
               <p className="font-extrabold text-[var(--gold-bright)]">{t('duel_guestCtaTitle')}</p>
               <p className="text-sm text-white/80">{t('duel_guestCtaText')}</p>
               <Link
-                href={state.hostReferral ? `/register?sponsor=${encodeURIComponent(state.hostReferral)}` : '/register'}
+                href={state.hostReferral ? `/register?invito=${encodeURIComponent(state.hostReferral)}` : '/register'}
                 className="flex min-h-12 items-center justify-center rounded-xl bg-[var(--gold-bright)] px-4 font-extrabold text-[var(--ink)]"
               >
                 {t('duel_guestCta')}

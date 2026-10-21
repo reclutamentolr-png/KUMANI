@@ -136,7 +136,7 @@ export default function EventActions({
       <section className="rounded-2xl bg-[var(--ink)] p-5 text-center text-white shadow-sm">
         <p className="text-sm leading-6 text-white/75">{t('guestPitch')}</p>
         {published && !event.ended && (
-          <Link href={sponsor ? `/register?sponsor=${encodeURIComponent(sponsor)}` : '/register'} className={`${goldButton} mt-4`}>
+          <Link href={sponsor ? `/register?invito=${encodeURIComponent(sponsor)}` : '/register'} className={`${goldButton} mt-4`}>
             {t('registerToJoin')}
           </Link>
         )}

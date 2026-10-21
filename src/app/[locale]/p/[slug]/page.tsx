@@ -87,7 +87,7 @@ export default async function PublicLandingPage({ params }: Props) {
         lang={page.content_locale}
         menuUrl={page.menu_token ? `/m/${page.menu_token}` : null}
         shopUrl={shopSlug ? `${page.content_locale === 'it' ? '' : `/${page.content_locale}`}/shop/${shopSlug}` : null}
-        createHref={page.referral_code ? `/register?sponsor=${encodeURIComponent(page.referral_code)}` : '/register'}
+        createHref={page.referral_code ? `/register?invito=${encodeURIComponent(page.referral_code)}` : '/register'}
         reportSlot={<ReportLandingButton slug={page.slug} locale={page.content_locale} />}
         contactFormSlot={
           <LandingContactForm

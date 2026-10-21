@@ -43,7 +43,7 @@ export default async function GiftPage({ params }: { params: Promise<{ code: str
   const tool = info.kind === 'pass' ? getMarketplaceTools((key) => tm(key)).find((entry) => entry.toolName === info.tool) : undefined
   const openHref = info.kind === 'pass' && tool ? tool.href : '/dashboard'
   const date = (iso?: string) => (iso ? new Date(iso).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' }) : '')
-  const registerHref = `/register?gift=${encodeURIComponent(code)}${info.giver_referral ? `&sponsor=${encodeURIComponent(info.giver_referral)}` : ''}`
+  const registerHref = `/register?gift=${encodeURIComponent(code)}${info.giver_referral ? `&invito=${encodeURIComponent(info.giver_referral)}` : ''}`
 
   return (
     <div className="min-h-screen bg-[var(--ink)] px-4 py-10 text-white">

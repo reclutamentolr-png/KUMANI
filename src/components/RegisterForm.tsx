@@ -32,8 +32,8 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
   // Verifica anti-robot (Cloudflare Turnstile) per le chiamate a Supabase Auth
   const captcha = useTurnstile()
 
-  // ✅ Legge sia 'sponsor' che 'ref' dall'URL
-  const initialReferralCode = searchParams.get('sponsor') || searchParams.get('ref') || ''
+  // Codice di chi invita: 'invito' (link attuali), 'sponsor' e 'ref' (link vecchi già condivisi)
+  const initialReferralCode = searchParams.get('invito') || searchParams.get('sponsor') || searchParams.get('ref') || ''
   // Coupon di attivazione (es. dal QR del cartoncino di un negozio).
   const initialVoucherCode = (searchParams.get('voucher') || '').toUpperCase()
   // Regalo ricevuto (link /regalo/CODICE): si attiva a iscrizione completata

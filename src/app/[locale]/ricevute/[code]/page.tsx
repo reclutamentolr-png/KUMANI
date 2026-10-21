@@ -91,7 +91,7 @@ export default async function DigitalReceiptPublicPage({
         .eq('id', owner.user_id)
         .maybeSingle<{ referral_code: string | null; is_admin: boolean; guest_until: string | null }>()
       if (issuerProfile?.referral_code && !issuerProfile.is_admin && !issuerProfile.guest_until) {
-        signupHref = `/register?sponsor=${encodeURIComponent(issuerProfile.referral_code)}`
+        signupHref = `/register?invito=${encodeURIComponent(issuerProfile.referral_code)}`
       }
     }
   }

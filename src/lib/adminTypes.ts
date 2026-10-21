@@ -20,6 +20,7 @@ export type AdminUserRow = {
   email: string | null
   referral_code: string | null
   subscription_status: string | null
+  subscription_plan: string | null
   is_blocked: boolean | null
   created_at: string
   // Ultima attività (aggiornata ogni 5 minuti con il sito aperto)
@@ -28,6 +29,8 @@ export type AdminUserRow = {
   online: boolean
   // Numero progressivo di iscrizione (1 = il primo iscritto)
   number: number
+  // Tra i primi 50 della promozione di lancio
+  founder: boolean
   // Chi l'ha invitato (null: nessuno)
   sponsor: { name: string; code: string | null } | null
 }

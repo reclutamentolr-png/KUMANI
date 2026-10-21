@@ -929,6 +929,17 @@ L'accesso viene registrato.`))) return
                       }`}>
                         {user.is_blocked ? 'Bloccato' : (user.subscription_status === 'active' ? 'Attivo' : 'Free')}
                       </span>
+                      {/* Piano e «F» per i primi 50 della promozione di lancio */}
+                      {user.subscription_status === 'active' && !user.is_blocked && (
+                        <span className={`ml-1 mt-1 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-bold ${user.subscription_plan === 'pro' ? 'bg-[var(--ink)] text-[var(--gold-bright)]' : 'bg-blue-100 text-blue-800'}`}>
+                          {user.subscription_plan === 'pro' ? 'Pro' : 'Base'}
+                        </span>
+                      )}
+                      {user.founder && (
+                        <span title="Tra i primi 50 (promozione di lancio)" aria-label="Tra i primi 50 (promozione di lancio)" className="ml-1 mt-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] text-[11px] font-extrabold text-[var(--ink)]">
+                          F
+                        </span>
+                      )}
                     </td>
                     {/* Azioni come icone (il nome compare passandoci sopra) */}
                     <td className="px-4 py-3">

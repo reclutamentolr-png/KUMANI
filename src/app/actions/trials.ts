@@ -320,6 +320,6 @@ export async function trialSignupHref(): Promise<string> {
     service.from('profiles').select('referral_code, is_admin').eq('id', row.created_by).maybeSingle<{ referral_code: string | null; is_admin: boolean }>(),
   ])
   if (agent?.code) return `/register?agente=${encodeURIComponent(agent.code)}`
-  if (p?.referral_code && !p.is_admin) return `/register?sponsor=${encodeURIComponent(p.referral_code)}`
+  if (p?.referral_code && !p.is_admin) return `/register?invito=${encodeURIComponent(p.referral_code)}`
   return '/register'
 }

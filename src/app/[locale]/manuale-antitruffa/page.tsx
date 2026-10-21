@@ -61,7 +61,7 @@ export default async function ManualePreviewPage({ searchParams }: Props) {
     shareCode = me?.referral_code ?? shareCode
   }
   const shareUrl = guideShareUrl(locale, shareCode)
-  const registerHref = inviter ? `/register?sponsor=${encodeURIComponent(inviter.referral_code)}` : '/register'
+  const registerHref = inviter ? `/register?invito=${encodeURIComponent(inviter.referral_code)}` : '/register'
   const scamCount = g.chapters.reduce((n, c) => n + c.scams.length, 0)
 
   // Prezzi veri dei piani (da Stripe, con copia di riserva), nel formato

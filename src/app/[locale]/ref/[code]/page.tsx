@@ -45,7 +45,7 @@ export default async function ReferralPage({ params }: { params: Promise<{ code:
     )
   }
 
-  const registerUrl = `/register?sponsor=${encodeURIComponent(inviter.referral_code)}`
+  const registerUrl = `/register?invito=${encodeURIComponent(inviter.referral_code)}`
   const inviterName = inviter.first_name.trim()
 
   return (

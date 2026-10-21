@@ -458,7 +458,7 @@ export default function VeritasRoom({
           )}
           {!isLoggedIn && (
             <Link
-              href={game.host_referral ? `/register?sponsor=${encodeURIComponent(game.host_referral)}` : '/register'}
+              href={game.host_referral ? `/register?invito=${encodeURIComponent(game.host_referral)}` : '/register'}
               className="block rounded-xl bg-white/10 px-4 py-3 text-sm font-semibold text-[var(--gold-bright)]"
             >
               {t('registerCta')}
