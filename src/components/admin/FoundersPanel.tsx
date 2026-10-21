@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { Award, LoaderCircle } from 'lucide-react'
-import { adminGetFounders, adminGrantFoundersExisting, adminSetFounders, type AdminFounder } from '@/app/actions/adminFounders'
+import { adminGetFounders, adminGrantFoundersExisting, adminHideFoundersSoldOut, adminSetFounders, type AdminFounder, type AdminSoldOut } from '@/app/actions/adminFounders'
 import { askConfirm } from '@/lib/confirm'
 
 // Admin → Voucher e coupon → Fondatori: la promozione «primi 50» (accesa,
@@ -11,6 +11,7 @@ export default function FoundersPanel() {
   const [enabled, setEnabled] = useState(false)
   const [limit, setLimit] = useState(50)
   const [founders, setFounders] = useState<AdminFounder[] | null>(null)
+  const [soldOut, setSoldOut] = useState<AdminSoldOut | null>(null)
   const [busy, setBusy] = useState<string | null>(null)
   const [msg, setMsg] = useState<string | null>(null)
 
@@ -19,6 +20,7 @@ export default function FoundersPanel() {
     if ('error' in r) return setMsg(r.error)
     setEnabled(r.enabled)
     setLimit(r.limit)
+    setSoldOut(r.soldOut)
     setFounders(r.founders)
   }, [])
   useEffect(() => {
@@ -37,6 +39,17 @@ export default function FoundersPanel() {
     setEnabled(nextEnabled)
     setMsg('Salvato')
   }
+
+  const toggleSoldOutBanner = async () => {
+    if (!soldOut) return
+    setBusy('soldout')
+    const r = await adminHideFoundersSoldOut(!soldOut.hidden)
+    setBusy(null)
+    setMsg(r.success ? (soldOut.hidden ? 'Banner «esauriti» di nuovo visibile' : 'Banner «esauriti» nascosto') : (r.error ?? 'Errore'))
+    load()
+  }
+
+  const fmt = (iso: string) => new Date(iso).toLocaleString('it-IT', { timeZone: 'Europe/Rome', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })
 
   const grantExisting = async () => {
     if (!(await askConfirm('Includere nei posti gli iscritti attuali senza abbonamento attivo, in ordine di iscrizione? Il loro Piano Base si attiva subito per 12 mesi. Chi è già attivo (es. i Pro regalati) resta fuori e resta com’è.'))) return
@@ -79,6 +92,22 @@ export default function FoundersPanel() {
             {enabled ? 'Accesa' : 'Spenta'} · {counted}/{limit} posti presi
           </span>
         </div>
+        {soldOut && (
+          <div className="mt-4 rounded-lg border border-[var(--gold)]/40 bg-white/70 p-3 text-sm text-gray-700">
+            🎉 <strong>Posti esauriti</strong> il {fmt(soldOut.fullAt)}
+            {soldOut.hours !== null && <> (in {soldOut.hours <= 24 ? `${soldOut.hours} ore` : `${Math.ceil(soldOut.hours / 24)} giorni`})</>}. Il banner «esauriti» resta fino al{' '}
+            {fmt(soldOut.bannerUntil)}
+            {soldOut.hidden && <strong> (ora nascosto)</strong>}.
+            <button
+              type="button"
+              disabled={busy !== null}
+              onClick={toggleSoldOutBanner}
+              className="ml-2 min-h-9 rounded-lg border border-gray-300 bg-white px-3 text-xs font-semibold text-gray-700 disabled:opacity-50"
+            >
+              {soldOut.hidden ? 'Mostra il banner' : 'Nascondi il banner'}
+            </button>
+          </div>
+        )}
         <div className="mt-4 border-t border-[var(--gold)]/30 pt-4">
           <p className="text-sm text-gray-700">
             <strong>Iscritti attuali</strong>: chi non ha un abbonamento attivo entra nei {limit} posti in ordine di iscrizione (prima dei nuovi), con il

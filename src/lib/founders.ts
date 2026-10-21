@@ -10,18 +10,33 @@ export const FOUNDERS_CACHE_TAG = 'founders'
 
 const setting = (rows: { key: string; value: string }[] | null, key: string) => String(rows?.find((r) => r.key === key)?.value ?? '').replace(/"/g, '')
 
-export type FoundersStatus = { enabled: boolean; limit: number; taken: number; left: number }
+// soldOut: posti finiti da meno di 48 ore → banner «esauriti in N ore»
+// (hours = dall'accensione all'ultimo posto, arrotondato per eccesso)
+export type FoundersStatus = { enabled: boolean; limit: number; taken: number; left: number; soldOut: { hours: number } | null }
+
+export const SOLD_OUT_BANNER_MS = 48 * 60 * 60 * 1000
+
+// Ore dall'accensione all'ultimo posto (minimo 1); null se mancano le date
+export function soldOutHours(startedAt: string, fullAt: string): number | null {
+  const ms = Date.parse(fullAt) - Date.parse(startedAt)
+  return Number.isFinite(ms) ? Math.max(1, Math.ceil(ms / 3_600_000)) : null
+}
 
 export const getFoundersStatus = unstable_cache(
   async (): Promise<FoundersStatus> => {
     const db = pushDb()
     const [{ data: rows }, { count }] = await Promise.all([
-      db.from('system_settings').select('key, value').in('key', ['founders_enabled', 'founders_limit']),
+      db.from('system_settings').select('key, value').in('key', ['founders_enabled', 'founders_limit', 'founders_started_at', 'founders_full_at', 'founders_soldout_hidden']),
       db.from('founder_members').select('user_id', { count: 'exact', head: true }).eq('counted', true),
     ])
     const limit = parseInt(setting(rows, 'founders_limit'), 10) || 50
     const taken = count ?? 0
-    return { enabled: setting(rows, 'founders_enabled') === 'true' && taken < limit, limit, taken, left: Math.max(0, limit - taken) }
+    const on = setting(rows, 'founders_enabled') === 'true'
+    const fullAt = setting(rows, 'founders_full_at')
+    const hours = on && taken >= limit && fullAt && setting(rows, 'founders_soldout_hidden') !== 'true' && Date.now() - Date.parse(fullAt) < SOLD_OUT_BANNER_MS
+      ? soldOutHours(setting(rows, 'founders_started_at'), fullAt)
+      : null
+    return { enabled: on && taken < limit, limit, taken, left: Math.max(0, limit - taken), soldOut: hours ? { hours } : null }
   },
   ['founders-status'],
   { tags: [FOUNDERS_CACHE_TAG], revalidate: 300 }

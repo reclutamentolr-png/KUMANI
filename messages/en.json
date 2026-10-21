@@ -14449,6 +14449,12 @@
     "dashTitle": "🚀 You’re one of the first 50 users (no.{n})",
     "dashText": "100% discount applied: your Base Plan is active for 12 months and does not renew automatically.",
     "dashTerms": "Launch promotion terms",
-    "bannerYear": "for a year"
+    "bannerYear": "for a year",
+    "soldTitle": "Beta launch: all {limit} spots were taken in {duration}. Thank you! 🎉",
+    "soldHours": "{n, plural, one {# hour} other {# hours}}",
+    "soldDays": "{n, plural, one {# day} other {# days}}",
+    "soldText": "You can sign up for free right now: plans open on {date}.",
+    "soldTextOpen": "You can sign up for free and choose your plan whenever you like.",
+    "soldCta": "Sign up for free"
   }
 }

@@ -231,6 +231,19 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
   const toolTitles = useMemo(() => new Map(getMarketplaceTools(tm).map((tool) => [tool.toolName, tool.title])), [tm])
   const toolTitle = (name: string) => toolTitles.get(name) ?? name.replace(/-/g, ' ').replace(/^./, (c) => c.toUpperCase())
 
+  // Ricaricando senza ?section= nell'indirizzo (app installata, telefono,
+  // redirect che perde la query) si torna comunque all'ultima sezione aperta.
+  // Prima del salvataggio qui sotto, che altrimenti la sovrascriverebbe
+  useEffect(() => {
+    if (initialSection) return
+    try {
+      const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined
+      const saved = sessionStorage.getItem('admin-section')
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- ripristino una volta al caricamento
+      if (nav?.type === 'reload' && saved && saved !== 'overview') setActiveSection(saved)
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- solo al primo caricamento
+  }, [])
   // Riflette la sezione attiva nell'URL (senza navigazione né reload), così
   // aggiornando la pagina si resta nella stessa voce del menu.
   useEffect(() => {
@@ -238,6 +251,9 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     if (activeSection === 'overview') url.searchParams.delete('section')
     else url.searchParams.set('section', activeSection)
     window.history.replaceState(window.history.state, '', url)
+    try {
+      sessionStorage.setItem('admin-section', activeSection)
+    } catch {}
   }, [activeSection])
   const supabase = createClient()
 

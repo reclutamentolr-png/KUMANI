@@ -14449,6 +14449,12 @@
     "dashTitle": "🚀 Tu fais partie des 50 premiers utilisateurs (n°{n})",
     "dashText": "Remise de 100 % appliquée : ta formule Base est active 12 mois et ne se renouvelle pas automatiquement.",
     "dashTerms": "Conditions de l’offre de lancement",
-    "bannerYear": "pendant un an"
+    "bannerYear": "pendant un an",
+    "soldTitle": "Lancement Bêta : les {limit} places sont parties en {duration}. Merci ! 🎉",
+    "soldHours": "{n, plural, one {# heure} other {# heures}}",
+    "soldDays": "{n, plural, one {# jour} other {# jours}}",
+    "soldText": "Tu peux t’inscrire gratuitement dès maintenant : les formules ouvrent le {date}.",
+    "soldTextOpen": "Tu peux t’inscrire gratuitement et choisir ta formule quand tu veux.",
+    "soldCta": "Inscris-toi gratuitement"
   }
 }

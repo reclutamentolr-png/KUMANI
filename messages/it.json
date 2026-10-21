@@ -14449,6 +14449,12 @@
     "dashTitle": "🚀 Sei tra i primi 50 utenti (n°{n})",
     "dashText": "Sconto del 100% applicato: il tuo Piano Base è attivo per 12 mesi e non si rinnova in automatico.",
     "dashTerms": "Condizioni della promozione di lancio",
-    "bannerYear": "per un anno"
+    "bannerYear": "per un anno",
+    "soldTitle": "Lancio Beta: i {limit} posti sono esauriti in {duration}. Grazie! 🎉",
+    "soldHours": "{n, plural, one {# ora} other {# ore}}",
+    "soldDays": "{n, plural, one {# giorno} other {# giorni}}",
+    "soldText": "Puoi iscriverti gratis già adesso: i piani si aprono {date}.",
+    "soldTextOpen": "Puoi iscriverti gratis e scegliere il tuo piano quando vuoi.",
+    "soldCta": "Iscriviti gratis"
   }
 }

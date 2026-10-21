@@ -14449,6 +14449,12 @@
     "dashTitle": "🚀 Estás entre os primeiros 50 utilizadores (n.º {n})",
     "dashText": "Desconto de 100% aplicado: o teu Plano Base está ativo 12 meses e não se renova automaticamente.",
     "dashTerms": "Condições da promoção de lançamento",
-    "bannerYear": "durante um ano"
+    "bannerYear": "durante um ano",
+    "soldTitle": "Lançamento Beta: as {limit} vagas esgotaram em {duration}. Obrigado! 🎉",
+    "soldHours": "{n, plural, one {# hora} other {# horas}}",
+    "soldDays": "{n, plural, one {# dia} other {# dias}}",
+    "soldText": "Já podes registar-te gratuitamente: os planos abrem a {date}.",
+    "soldTextOpen": "Podes registar-te gratuitamente e escolher o teu plano quando quiseres.",
+    "soldCta": "Regista-te grátis"
   }
 }

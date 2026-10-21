@@ -14449,6 +14449,12 @@
     "dashTitle": "🚀 Du bist unter den ersten 50 Nutzern (Nr. {n})",
     "dashText": "100 % Rabatt angewendet: Dein Base-Tarif ist 12 Monate aktiv und verlängert sich nicht automatisch.",
     "dashTerms": "Bedingungen der Startaktion",
-    "bannerYear": "für ein Jahr"
+    "bannerYear": "für ein Jahr",
+    "soldTitle": "Beta-Start: Alle {limit} Plätze waren in {duration} vergeben. Danke! 🎉",
+    "soldHours": "{n, plural, one {# Stunde} other {# Stunden}}",
+    "soldDays": "{n, plural, one {# Tag} other {# Tagen}}",
+    "soldText": "Du kannst dich schon jetzt kostenlos registrieren: Die Pläne starten am {date}.",
+    "soldTextOpen": "Du kannst dich kostenlos registrieren und deinen Plan wählen, wann du möchtest.",
+    "soldCta": "Kostenlos registrieren"
   }
 }
