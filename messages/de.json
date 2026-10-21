@@ -14271,7 +14271,7 @@
   "welcomeHome": {
     "hello": "Hallo,",
     "helloName": "Hallo {name},",
-    "question": "wofür bist du hier?",
+    "question": "wähle, was dich am meisten interessiert",
     "questionHint": "Tippe auf einen Punkt, um die Dienste zu sehen: Mit dem «i» erfährst du, wofür sie sind, mit «Hinzufügen» landen sie in «Deine Dienste». Lass dir Zeit.",
     "stepsTitle": "Deine ersten 3 Schritte",
     "stepsProgress": "{done} von 3",
@@ -14302,7 +14302,16 @@
     "infoBase": "Im Base-Tarif enthalten: jetzt hinzufügen, er wird mit dem Tarif freigeschaltet.",
     "infoPro": "Im Pro-Tarif enthalten: jetzt hinzufügen, er wird mit dem Tarif freigeschaltet.",
     "tryNow": "Jetzt ausprobieren",
-    "panelHint": "Füge so viele hinzu, wie du willst, und entferne sie jederzeit: Du findest sie unten in «Deine Dienste»."
+    "panelHint": "Füge so viele hinzu, wie du willst, und entferne sie jederzeit: Du findest sie unten in «Deine Dienste».",
+    "quickTitle": "Starte hier",
+    "quickHint": "Sofort nutzbare Dienste: antippen und ausprobieren.",
+    "quick_community_listings": "Pinnwand",
+    "quick_convivium": "Convivium",
+    "quick_antitruffa": "Anti-Betrugs-Handbuch",
+    "quick_scudo_dati": "Deine Daten",
+    "quick_fincheck": "Check-up",
+    "quick_oxygen": "Atmen",
+    "quick_fabula": "Fabula"
   },
   "homeView": {
     "label": "Ansicht der Startseite",

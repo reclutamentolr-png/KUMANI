@@ -14271,7 +14271,7 @@
   "welcomeHome": {
     "hello": "Ciao,",
     "helloName": "Ciao {name},",
-    "question": "per cosa sei qui?",
+    "question": "scegli cosa ti interessa di più",
     "questionHint": "Tocca una voce per vedere i servizi: con la «i» leggi a cosa servono, con «Aggiungi» li metti in «I tuoi servizi». Prenditi il tempo che ti serve.",
     "stepsTitle": "I tuoi primi 3 passi",
     "stepsProgress": "{done} di 3",
@@ -14302,7 +14302,16 @@
     "infoBase": "Incluso nel piano Base: lo aggiungi ora e si sblocca con il piano.",
     "infoPro": "Incluso nel piano Pro: lo aggiungi ora e si sblocca con il piano.",
     "tryNow": "Provalo ora",
-    "panelHint": "Puoi aggiungerne quanti vuoi e toglierli quando vuoi: li ritrovi in «I tuoi servizi», qui sotto."
+    "panelHint": "Puoi aggiungerne quanti vuoi e toglierli quando vuoi: li ritrovi in «I tuoi servizi», qui sotto.",
+    "quickTitle": "Inizia da qui",
+    "quickHint": "Servizi pronti da usare: tocca e prova.",
+    "quick_community_listings": "Bacheca",
+    "quick_convivium": "Convivium",
+    "quick_antitruffa": "Manuale Anti-Truffa",
+    "quick_scudo_dati": "I tuoi dati",
+    "quick_fincheck": "Check-up",
+    "quick_oxygen": "Respira",
+    "quick_fabula": "Fabula"
   },
   "homeView": {
     "label": "Vista della Home",

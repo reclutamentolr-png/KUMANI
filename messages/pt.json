@@ -14271,7 +14271,7 @@
   "welcomeHome": {
     "hello": "Olá,",
     "helloName": "Olá {name},",
-    "question": "o que te traz aqui?",
+    "question": "escolhe o que mais te interessa",
     "questionHint": "Toca numa opção para ver os serviços: com o «i» lês para que servem, com «Adicionar» ficam em «Os teus serviços». Leva o tempo que precisares.",
     "stepsTitle": "Os teus primeiros 3 passos",
     "stepsProgress": "{done} de 3",
@@ -14302,7 +14302,16 @@
     "infoBase": "Incluído no plano Base: adiciona-o agora, desbloqueia com o plano.",
     "infoPro": "Incluído no plano Pro: adiciona-o agora, desbloqueia com o plano.",
     "tryNow": "Experimenta agora",
-    "panelHint": "Adiciona quantos quiseres e retira-os quando quiseres: encontras-os em «Os teus serviços», aqui em baixo."
+    "panelHint": "Adiciona quantos quiseres e retira-os quando quiseres: encontras-os em «Os teus serviços», aqui em baixo.",
+    "quickTitle": "Começa aqui",
+    "quickHint": "Serviços prontos a usar: toca e experimenta.",
+    "quick_community_listings": "Anúncios",
+    "quick_convivium": "Convivium",
+    "quick_antitruffa": "Manual antiburla",
+    "quick_scudo_dati": "Os teus dados",
+    "quick_fincheck": "Check-up",
+    "quick_oxygen": "Respira",
+    "quick_fabula": "Fabula"
   },
   "homeView": {
     "label": "Vista da Home",
