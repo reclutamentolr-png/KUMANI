@@ -68,7 +68,10 @@ export default function CancelButton({
     const sameSite = typeof document !== 'undefined' && document.referrer.startsWith(window.location.origin)
     if (sameSite && window.history.length > 1) router.back()
     else if (fallbackHref) router.push(locale === defaultLocale ? fallbackHref : `/${locale}${fallbackHref}`)
-    else router.back()
+    // Pagina aperta direttamente (notifica, link, preferiti): senza una
+    // schermata precedente router.back() non farebbe nulla, si torna alla Home
+    else if (window.history.length > 1) router.back()
+    else router.push(locale === defaultLocale ? '/dashboard' : `/${locale}/dashboard`)
   }
 
   const click = async () => {

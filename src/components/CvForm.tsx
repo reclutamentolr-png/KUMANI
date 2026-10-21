@@ -442,7 +442,8 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
       <div className="flex gap-3">
       <button
         type="button"
-        onClick={() => router.back()}
+        // Aperto direttamente (senza pagina precedente): si torna ai CV
+        onClick={() => (window.history.length > 1 ? router.back() : router.push('/marketplace/kumani-cv'))}
         className="px-6 py-3 rounded-xl font-semibold text-sm border border-[var(--gold)]/40 bg-white text-[var(--ink)] hover:bg-[var(--gold-pale)] transition-all"
       >
         {t('cancelAction')}

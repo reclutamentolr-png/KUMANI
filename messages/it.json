@@ -34,7 +34,10 @@
     "publicOfflineQrText": "Chi lo ha creato lo ha disattivato o cancellato, oppure il servizio non è più attivo sul suo account. Se il QR è tuo, entra in KUMANI e controllalo in QR Code PRO.",
     "toolPausedTitle": "Servizio momentaneamente sospeso",
     "toolPausedNamed": "{name} è momentaneamente sospeso",
-    "toolPausedText": "Lo Staff lo ha messo in pausa per lavori o aggiornamenti. I tuoi dati restano salvati e il servizio tornerà disponibile appena possibile."
+    "toolPausedText": "Lo Staff lo ha messo in pausa per lavori o aggiornamenti. I tuoi dati restano salvati e il servizio tornerà disponibile appena possibile.",
+    "day": "Giorno",
+    "month": "Mese",
+    "year": "Anno"
   },
   "landingHome": {
     "statLanguagesLabel": "lingue: KUMANI parla la tua",

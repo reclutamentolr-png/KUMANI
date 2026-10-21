@@ -1,4 +1,6 @@
+import { Suspense } from 'react'
 import InstallAppBanner from '@/components/InstallAppBanner'
+import NavigationProgress from '@/components/nav/NavigationProgress'
 import type { Metadata, Viewport } from 'next'
 import { setRequestLocale } from 'next-intl/server'
 import AppShell from '@/components/AppShell'
@@ -59,6 +61,10 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     <AppShell locale={locale}>
       <ConsentProvider config={consentConfig}>
       <MaintenanceGate>
+        {/* Barra dorata in alto appena si tocca un link: il clic è arrivato */}
+        <Suspense fallback={null}>
+          <NavigationProgress />
+        </Suspense>
         {/* Fascia "stai impersonando": in cima a ogni pagina, solo per lo Staff */}
         <ImpersonationBanner />
         {/* Dal computer, la barra dell'app anche dentro i servizi */}

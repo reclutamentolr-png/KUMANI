@@ -1635,7 +1635,10 @@
     "publicOfflineQrText": "Quem o criou desativou-o ou apagou-o, ou o serviço já não está ativo na sua conta. Se o QR é seu, entre na KUMANI e verifique-o em QR Code PRO.",
     "toolPausedTitle": "Serviço suspenso temporariamente",
     "toolPausedNamed": "{name} está suspenso temporariamente",
-    "toolPausedText": "O Staff colocou-o em pausa para trabalhos ou atualizações. Os seus dados continuam guardados e o serviço voltará assim que possível."
+    "toolPausedText": "O Staff colocou-o em pausa para trabalhos ou atualizações. Os seus dados continuam guardados e o serviço voltará assim que possível.",
+    "day": "Dia",
+    "month": "Mês",
+    "year": "Ano"
   },
   "magazzino": {
     "deleteForever": "Eliminar definitivamente",

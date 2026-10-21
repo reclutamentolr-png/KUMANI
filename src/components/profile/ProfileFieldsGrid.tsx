@@ -11,6 +11,7 @@ import {
   type LockableProfileField,
   type ProfileFormValues,
 } from '@/lib/profileFields'
+import BirthDateSelect from '@/components/ui/BirthDateSelect'
 
 const FIELD_ICONS: Record<FormProfileField, LucideIcon> = {
   first_name: User,
@@ -60,14 +61,20 @@ export default function ProfileFieldsGrid({ values, onChange, locked = false, mi
         const isMissing = !locked && missing.includes(field)
         const required = !locked && REQUIRED.has(field)
         return (
-          <div key={field} className={field === 'address' ? 'col-span-2 sm:col-span-3' : undefined}>
+          <div key={field} className={field === 'address' ? 'col-span-2 sm:col-span-3' : field === 'date_of_birth' ? 'col-span-2 sm:col-span-1' : undefined}>
             <label className="block text-xs font-medium text-gray-700 mb-1 flex items-center gap-1">
               <Icon className="w-3.5 h-3.5" /> {label(field)}
               {required && <span className="text-red-500">*</span>}
             </label>
+            {field === 'date_of_birth' ? (
+              // Giorno · Mese · Anno: rotelle su iPhone, elenco su Android (il calendario era scomodo)
+              <div className="relative" title={locked ? lockT('lockedField') : undefined}>
+                <BirthDateSelect value={values[field]} onChange={(v) => onChange?.(field, v)} disabled={locked} invalid={isMissing} />
+              </div>
+            ) : (
             <div className="relative">
               <input
-                type={field === 'date_of_birth' ? 'date' : field === 'phone' ? 'tel' : 'text'}
+                type={field === 'phone' ? 'tel' : 'text'}
                 value={values[field]}
                 onChange={(e) => onChange?.(field, e.target.value)}
                 disabled={locked}
@@ -80,6 +87,7 @@ export default function ProfileFieldsGrid({ values, onChange, locked = false, mi
               />
               {locked && <Lock className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />}
             </div>
+            )}
           </div>
         )
       })}
