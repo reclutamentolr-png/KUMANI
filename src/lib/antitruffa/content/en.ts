@@ -313,6 +313,14 @@ const en: GuideContent = {
           flags: [`Winning competitions you never entered`, `Small fees to pay before you get the prize`],
           todo: [`If you didn't enter, you didn't win`, `Never pay fees to receive a prize`],
         },
+        {
+          id: `abbonamenti-trappola`,
+          title: `Subscription traps: the $1 "trial"`,
+          how: `A website promises to reveal "who owns this number", find a person, an IQ test, a horoscope or an AI service: to see the result you only need a $1 trial. In the small print, the trial turns into a subscription of $15-30 a week or $50-80 a month, charged automatically to your card until you cancel.`,
+          example: { kind: `ad`, from: `Sponsored`, text: `Find out who's calling you! Name, address and social profiles. Try it for just $1 🔎` },
+          flags: [`A tiny trial price and the real price only in small print`, `"Recent searches" and reviews with stock names and photos`, `Different prices on the home page and on the pricing page`, `They promise anyone's name, address or profiles`],
+          todo: [`Before paying, look for "renewal" or "subscription" in the terms`, `If you have already paid, cancel straight away and keep the confirmation email`, `If the charges continue, ask your bank to block and reverse them`, `For trials, use a prepaid or virtual card with little credit`],
+        },
       ],
     },
     {

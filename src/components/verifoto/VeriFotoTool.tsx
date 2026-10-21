@@ -1,15 +1,16 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useTranslations } from 'next-intl'
-import { AlertTriangle, CheckCircle2, ExternalLink, ImageUp, Info, LoaderCircle, Pencil, ScanEye, ShieldAlert, Sparkles } from 'lucide-react'
+import { useLocale, useTranslations } from 'next-intl'
+import { AlertTriangle, CalendarClock, CheckCircle2, ExternalLink, ImageUp, Info, LoaderCircle, MapPin, Pencil, ScanEye, ShieldAlert, Sparkles } from 'lucide-react'
 import { RISK_HIGH, RISK_LOW, buildClues, verdictOf, type CameraInfo, type Clue, type DetectorResult, type ProvenanceScan } from '@/lib/verifoto'
 import { detectorCopy, errorLevelMap, readCamera, scanProvenance } from '@/lib/verifotoBrowser'
 
 const MAX_FILE = 15 * 1024 * 1024
 const ACCEPTED = /^image\/(jpeg|png|webp)$/
 
-type Analysis = { scan: ProvenanceScan; camera: CameraInfo; ela: string | null }
+// checkedAt: momento dell'analisi (per l'età della foto)
+type Analysis = { scan: ProvenanceScan; camera: CameraInfo; ela: string | null; checkedAt: number }
 
 // VeriFoto: la foto resta sul dispositivo per i controlli di base; solo con
 // il consenso dell'utente una copia ridotta va al rilevatore AI esterno.
@@ -23,6 +24,7 @@ export default function VeriFotoTool({
   quotaAvailable: boolean
 }) {
   const t = useTranslations('verifoto')
+  const locale = useLocale()
   const inputRef = useRef<HTMLInputElement>(null)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -61,7 +63,7 @@ export default function VeriFotoTool({
     try {
       const [buffer, camera, ela] = await Promise.all([file.arrayBuffer(), readCamera(file), errorLevelMap(url)])
       const scan = scanProvenance(buffer, camera.software)
-      setAnalysis({ scan, camera, ela })
+      setAnalysis({ scan, camera, ela, checkedAt: Date.now() })
     } catch {
       setError(t('invalidFile'))
     } finally {
@@ -115,6 +117,13 @@ export default function VeriFotoTool({
     ) : (
       <Info className="h-4 w-4 text-[var(--muted)]" />
     )
+
+  // Dove e quando: posizione GPS e data di scatto salvate nella foto
+  const gps = analysis?.camera.gps ?? null
+  const takenDate = analysis?.camera.takenAt ? new Date(analysis.camera.takenAt) : null
+  const takenValid = takenDate && !Number.isNaN(takenDate.getTime()) ? takenDate : null
+  const ageDays = takenValid ? Math.floor(((analysis?.checkedAt ?? 0) - takenValid.getTime()) / 86_400_000) : null
+  const mapUrl = gps ? `https://www.openstreetmap.org/?mlat=${gps.lat.toFixed(5)}&mlon=${gps.lon.toFixed(5)}#map=15/${gps.lat.toFixed(5)}/${gps.lon.toFixed(5)}` : null
 
   const detectorMessage =
     detector && detector.status !== 'ok' ? t(`detector_${detector.status}`) : null
@@ -247,6 +256,44 @@ export default function VeriFotoTool({
               </ul>
             </div>
 
+            {/* Dove e quando è stata scattata (dati nella foto, letti sul dispositivo) */}
+            <div className="rounded-2xl border border-[var(--gold)]/25 bg-white p-5 shadow-sm">
+              <p className="font-bold text-[var(--ink)]">{t('placeTitle')}</p>
+              <ul className="mt-3 space-y-3 text-sm">
+                <li className="flex gap-3">
+                  <MapPin className={`mt-0.5 h-4 w-4 shrink-0 ${gps ? 'text-[var(--gold)]' : 'text-[var(--muted)]'}`} />
+                  <div className="min-w-0">
+                    {gps && mapUrl ? (
+                      <>
+                        <p className="text-[var(--ink)]">{t('placeGps', { lat: gps.lat.toFixed(4), lon: gps.lon.toFixed(4) })}</p>
+                        <a href={mapUrl} target="_blank" rel="noopener noreferrer" className="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-[var(--gold)] underline underline-offset-2">
+                          {t('placeOpenMap')} <ExternalLink className="h-3.5 w-3.5" />
+                        </a>
+                      </>
+                    ) : (
+                      <p className="text-[var(--muted)]">{t('placeNoGps')}</p>
+                    )}
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <CalendarClock className={`mt-0.5 h-4 w-4 shrink-0 ${takenValid ? 'text-[var(--gold)]' : 'text-[var(--muted)]'}`} />
+                  <div className="min-w-0">
+                    {takenValid && ageDays !== null ? (
+                      <p className="text-[var(--ink)]">
+                        {t('placeTaken', { date: takenValid.toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' }) })}{' '}
+                        <span className="text-[var(--muted)]">
+                          ({ageDays >= 365 ? t('placeAgeYears', { n: Math.floor(ageDays / 365) }) : ageDays >= 31 ? t('placeAgeMonths', { n: Math.floor(ageDays / 30) }) : t('placeAgeRecent')})
+                        </span>
+                      </p>
+                    ) : (
+                      <p className="text-[var(--muted)]">{t('placeNoDate')}</p>
+                    )}
+                  </div>
+                </li>
+              </ul>
+              {(gps || takenValid) && <p className="mt-3 rounded-lg bg-[var(--gold-pale)]/60 px-3 py-2 text-xs leading-5 text-gray-700">{t('placeTip')}</p>}
+            </div>
+
             {/* Rilevatore AI esterno */}
             <div className="rounded-2xl border border-[var(--gold)]/25 bg-white p-5 shadow-sm">
               <p className="flex items-center gap-2 font-bold text-[var(--ink)]">
@@ -291,6 +338,7 @@ export default function VeriFotoTool({
                 {[
                   ['https://lens.google.com/', t('openLens')],
                   ['https://tineye.com/', t('openTineye')],
+                  ['https://yandex.com/images/', t('openYandex')],
                 ].map(([href, label]) => (
                   <a
                     key={href}

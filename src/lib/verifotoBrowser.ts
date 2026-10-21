@@ -1,6 +1,6 @@
 // VeriFoto: controlli fatti nel browser dell'utente (la foto non viene
 // caricata da nessuna parte): Content Credentials / metadati, dati della
-// fotocamera, mappa dei ritocchi (Error Level Analysis).
+// fotocamera, posizione GPS e data di scatto, mappa dei ritocchi (Error Level Analysis).
 import type { CameraInfo, ProvenanceScan } from '@/lib/verifoto'
 import { aiGeneratorName } from '@/lib/verifoto'
 
@@ -98,15 +98,19 @@ export async function readCamera(file: File): Promise<CameraInfo & { software: s
     })
     const str = (v: unknown) => (typeof v === 'string' && v.trim() ? v.trim().slice(0, 80) : null)
     const taken = data?.DateTimeOriginal
+    // Posizione GPS: resta nel browser (si mostra solo a chi controlla la foto)
+    const gps = await exifr.gps(file).catch(() => null)
+    const valid = (v: unknown, max: number) => typeof v === 'number' && Number.isFinite(v) && Math.abs(v) <= max
     return {
       make: str(data?.Make),
       model: str(data?.Model),
       takenAt: taken instanceof Date ? taken.toISOString() : str(taken),
       exposure: data?.ExposureTime != null || data?.FNumber != null || data?.ISO != null,
       software: str(data?.Software),
+      gps: gps && valid(gps.latitude, 90) && valid(gps.longitude, 180) && !(gps.latitude === 0 && gps.longitude === 0) ? { lat: gps.latitude, lon: gps.longitude } : null,
     }
   } catch {
-    return { make: null, model: null, takenAt: null, exposure: false, software: null }
+    return { make: null, model: null, takenAt: null, exposure: false, software: null, gps: null }
   }
 }
 

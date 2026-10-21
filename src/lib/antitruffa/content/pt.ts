@@ -313,6 +313,14 @@ const pt: GuideContent = {
           flags: [`Prémios de concursos em que não participou`, `Pequenos custos a pagar para receber o prémio`],
           todo: [`Se não participou, não ganhou`, `Nunca pague custos para receber um prémio`],
         },
+        {
+          id: `abbonamenti-trappola`,
+          title: `Subscrições armadilha: o "teste" de 1 €`,
+          how: `Um site promete descobrir "de quem é este número", encontrar uma pessoa, um teste de QI, um horóscopo ou um serviço de inteligência artificial: para ver o resultado basta um teste de 1 €. Nas condições, em letra pequena, o teste passa a ser uma subscrição de 15-30 € por semana ou 50-80 € por mês, cobrada automaticamente no cartão até cancelares.`,
+          example: { kind: `ad`, from: `Patrocinado`, text: `Descobre já quem te liga! Nome, morada e perfis sociais. Experimenta por apenas 1 € 🔎` },
+          flags: [`Preço de teste baixíssimo e preço real só em letra pequena`, `"Pesquisas recentes" e avaliações com nomes e fotos de banco de imagens`, `Preços diferentes na página inicial e na página de preços`, `Prometem o nome, a morada ou os perfis de qualquer pessoa`],
+          todo: [`Antes de pagar, procura "renovação" ou "subscrição" nas condições`, `Se já pagaste, cancela logo e guarda o email de confirmação`, `Se as cobranças continuarem, pede ao banco para as bloquear e devolver`, `Para testes, usa um cartão pré-pago ou virtual com pouco saldo`],
+        },
       ],
     },
     {

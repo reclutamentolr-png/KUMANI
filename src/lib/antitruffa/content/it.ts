@@ -318,6 +318,14 @@ const it: GuideContent = {
           flags: [`Vincite di concorsi a cui non hai partecipato`, `Piccole spese da pagare per ricevere il premio`],
           todo: [`Se non hai partecipato, non hai vinto`, `Non pagare mai spese per ricevere un premio`],
         },
+        {
+          id: `abbonamenti-trappola`,
+          title: `Abbonamenti trappola: la "prova" da 1 €`,
+          how: `Un sito promette di scoprire "di chi è questo numero", di trovare una persona, un test del QI, un oroscopo o un servizio di intelligenza artificiale: per vedere il risultato basta una prova da 1 €. Nelle condizioni, scritte in piccolo, la prova diventa un abbonamento da 15-30 € a settimana o 50-80 € al mese, addebitato in automatico sulla carta finché non disdici.`,
+          example: { kind: `ad`, from: `Sponsorizzato`, text: `Scopri subito chi ti chiama! Nome, indirizzo e profili social. Prova a solo 1 € 🔎` },
+          flags: [`Prezzo di prova bassissimo e prezzo vero solo in piccolo`, `"Ricerche recenti" e recensioni con nomi e foto di repertorio`, `Prezzi diversi tra la pagina principale e quella dei prezzi`, `Promettono nome, indirizzo o profili di chiunque`],
+          todo: [`Prima di pagare cerca "rinnovo" o "abbonamento" nelle condizioni`, `Se hai già pagato, disdici subito e conserva l'email di conferma`, `Se gli addebiti continuano, chiedi alla banca di bloccarli e di stornarli`, `Per le prove usa una carta prepagata o virtuale con poco credito`],
+        },
       ],
     },
     {

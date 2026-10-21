@@ -312,6 +312,14 @@ const de: GuideContent = {
           flags: [`Gewinne bei Wettbewerben, an denen du nie teilgenommen hast`, `Kleine Gebühren, um den Gewinn zu erhalten`],
           todo: [`Wenn du nicht mitgemacht hast, hast du nicht gewonnen`, `Zahl nie Gebühren, um einen Gewinn zu erhalten`],
         },
+        {
+          id: `abbonamenti-trappola`,
+          title: `Abo-Fallen: die „Testphase“ für 1 €`,
+          how: `Eine Website verspricht herauszufinden, „wem diese Nummer gehört“, eine Person zu finden, einen IQ-Test, ein Horoskop oder einen KI-Dienst: Um das Ergebnis zu sehen, reicht eine Testphase für 1 €. Im Kleingedruckten wird daraus ein Abo für 15-30 € pro Woche oder 50-80 € pro Monat, das automatisch von der Karte abgebucht wird, bis du kündigst.`,
+          example: { kind: `ad`, from: `Gesponsert`, text: `Finde sofort heraus, wer dich anruft! Name, Adresse und Social-Media-Profile. Teste es für nur 1 € 🔎` },
+          flags: [`Winziger Testpreis, der echte Preis nur im Kleingedruckten`, `„Letzte Suchen“ und Bewertungen mit Namen und Fotos aus Bilddatenbanken`, `Unterschiedliche Preise auf der Startseite und der Preisseite`, `Sie versprechen Name, Adresse oder Profile von jedem`],
+          todo: [`Suche vor dem Bezahlen in den Bedingungen nach „Verlängerung“ oder „Abo“`, `Hast du schon bezahlt, kündige sofort und bewahre die Bestätigungs-E-Mail auf`, `Gehen die Abbuchungen weiter, lass sie von deiner Bank sperren und zurückbuchen`, `Nutze für Testphasen eine Prepaid- oder virtuelle Karte mit wenig Guthaben`],
+        },
       ],
     },
     {

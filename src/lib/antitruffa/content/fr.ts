@@ -313,6 +313,14 @@ const fr: GuideContent = {
           flags: [`Vous gagnez un jeu auquel vous n'avez pas participé`, `De petits frais à payer pour recevoir le cadeau`],
           todo: [`Si vous n'avez pas joué, vous n'avez pas gagné`, `Ne payez jamais de frais pour recevoir un cadeau`],
         },
+        {
+          id: `abbonamenti-trappola`,
+          title: `Abonnements piégés : l’« essai » à 1 €`,
+          how: `Un site promet de découvrir « à qui appartient ce numéro », de retrouver une personne, un test de QI, un horoscope ou un service d’intelligence artificielle : pour voir le résultat, il suffit d’un essai à 1 €. Dans les conditions, écrites en petit, l’essai devient un abonnement de 15-30 € par semaine ou 50-80 € par mois, prélevé automatiquement sur la carte jusqu’à ce que tu résilies.`,
+          example: { kind: `ad`, from: `Sponsorisé`, text: `Découvre tout de suite qui t’appelle ! Nom, adresse et profils sociaux. Essai à seulement 1 € 🔎` },
+          flags: [`Prix d’essai minuscule et vrai prix seulement en petit`, `« Recherches récentes » et avis avec des noms et photos de banques d’images`, `Prix différents entre la page d’accueil et la page des tarifs`, `Ils promettent le nom, l’adresse ou les profils de n’importe qui`],
+          todo: [`Avant de payer, cherche « renouvellement » ou « abonnement » dans les conditions`, `Si tu as déjà payé, résilie tout de suite et garde l’email de confirmation`, `Si les prélèvements continuent, demande à ta banque de les bloquer et de les rembourser`, `Pour les essais, utilise une carte prépayée ou virtuelle avec peu de crédit`],
+        },
       ],
     },
     {

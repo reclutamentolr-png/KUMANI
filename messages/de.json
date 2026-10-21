@@ -2035,7 +2035,18 @@
     "manualText": "Laden Sie dasselbe Foto bei Google Lens oder TinEye hoch: Gibt es es schon anderswo (vielleicht anders oder älter), kann es gestohlen oder verändert sein.",
     "openLens": "Google Lens öffnen",
     "openTineye": "TinEye öffnen",
-    "disclaimer": "VeriFoto liefert Hinweise, keine Gewissheiten: Keine automatische Prüfung erkennt 100 % der KI- oder retuschierten Bilder, und komprimierte oder gefilterte Fotos können unsichere Ergebnisse liefern. Es ist kein Gutachten."
+    "disclaimer": "VeriFoto liefert Hinweise, keine Gewissheiten: Keine automatische Prüfung erkennt 100 % der KI- oder retuschierten Bilder, und komprimierte oder gefilterte Fotos können unsichere Ergebnisse liefern. Es ist kein Gutachten.",
+    "placeTitle": "Wo und wann es aufgenommen wurde",
+    "placeGps": "Das Foto enthält einen GPS-Standort: {lat}, {lon}.",
+    "placeOpenMap": "Punkt auf der Karte ansehen",
+    "placeNoGps": "Kein GPS-Standort im Foto: Das ist normal bei Fotos aus sozialen Netzwerken, WhatsApp oder Screenshots.",
+    "placeTaken": "Aufgenommen am {date}",
+    "placeAgeYears": "{n, plural, one {vor # Jahr} other {vor # Jahren}}",
+    "placeAgeMonths": "{n, plural, one {vor # Monat} other {vor # Monaten}}",
+    "placeAgeRecent": "im letzten Monat",
+    "placeNoDate": "Kein Aufnahmedatum im Foto.",
+    "placeTip": "Vergleiche es mit dem, was man dir gesagt hat: Wenn das Haus „in Rimini“ ist, das Foto aber woanders aufgenommen wurde, oder das Foto „von heute“ Jahre alt ist, ist das ein Warnsignal. Die Fotodaten bleiben auf deinem Gerät; die Karte öffnet sich nur, wenn du sie antippst.",
+    "openYandex": "Yandex Bilder öffnen"
   },
   "svat": {
     "backToMarketplace": "Zurück zum Ökosystem",

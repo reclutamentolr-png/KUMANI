@@ -313,6 +313,14 @@ const es: GuideContent = {
           flags: [`Premios de sorteos en los que no has participado`, `Pequeños gastos a pagar para recibir el premio`],
           todo: [`Si no has participado, no has ganado`, `No pagues nunca gastos para recibir un premio`],
         },
+        {
+          id: `abbonamenti-trappola`,
+          title: `Suscripciones trampa: la "prueba" de 1 €`,
+          how: `Una web promete descubrir "de quién es este número", encontrar a una persona, un test de CI, un horóscopo o un servicio de inteligencia artificial: para ver el resultado basta una prueba de 1 €. En las condiciones, en letra pequeña, la prueba se convierte en una suscripción de 15-30 € a la semana o 50-80 € al mes, cargada automáticamente en la tarjeta hasta que la canceles.`,
+          example: { kind: `ad`, from: `Patrocinado`, text: `¡Descubre ya quién te llama! Nombre, dirección y perfiles sociales. Pruébalo por solo 1 € 🔎` },
+          flags: [`Precio de prueba bajísimo y precio real solo en letra pequeña`, `"Búsquedas recientes" y reseñas con nombres y fotos de archivo`, `Precios distintos en la página principal y en la de precios`, `Prometen el nombre, la dirección o los perfiles de cualquiera`],
+          todo: [`Antes de pagar, busca "renovación" o "suscripción" en las condiciones`, `Si ya has pagado, cancela enseguida y guarda el email de confirmación`, `Si los cargos continúan, pide a tu banco que los bloquee y los devuelva`, `Para las pruebas, usa una tarjeta prepago o virtual con poco saldo`],
+        },
       ],
     },
     {

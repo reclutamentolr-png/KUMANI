@@ -2035,7 +2035,18 @@
     "manualText": "Carregue a mesma foto no Google Lens ou TinEye: se já existir noutro sítio (talvez diferente ou mais antiga), pode ser roubada ou alterada.",
     "openLens": "Abrir Google Lens",
     "openTineye": "Abrir TinEye",
-    "disclaimer": "O VeriFoto fornece indícios, não certezas: nenhuma verificação automática deteta 100% das imagens de IA ou retocadas, e fotos comprimidas ou com filtros podem dar resultados incertos. Não constitui uma perícia."
+    "disclaimer": "O VeriFoto fornece indícios, não certezas: nenhuma verificação automática deteta 100% das imagens de IA ou retocadas, e fotos comprimidas ou com filtros podem dar resultados incertos. Não constitui uma perícia.",
+    "placeTitle": "Onde e quando foi tirada",
+    "placeGps": "A foto contém uma localização GPS: {lat}, {lon}.",
+    "placeOpenMap": "Ver o ponto no mapa",
+    "placeNoGps": "Sem localização GPS na foto: é normal em fotos de redes sociais, WhatsApp ou capturas de ecrã.",
+    "placeTaken": "Tirada a {date}",
+    "placeAgeYears": "{n, plural, one {há # ano} other {há # anos}}",
+    "placeAgeMonths": "{n, plural, one {há # mês} other {há # meses}}",
+    "placeAgeRecent": "no último mês",
+    "placeNoDate": "Sem data de captura na foto.",
+    "placeTip": "Compara com o que te disseram: se a casa «fica em Rimini» mas a foto foi tirada noutro sítio, ou a foto «de hoje» tem anos, é um sinal de alarme. Os dados da foto ficam no teu dispositivo; o mapa só abre se lhe tocares.",
+    "openYandex": "Abrir Yandex Imagens"
   },
   "svat": {
     "backToMarketplace": "Voltar ao Ecossistema",

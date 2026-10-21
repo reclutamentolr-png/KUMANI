@@ -2035,7 +2035,18 @@
     "manualText": "Importez la même photo sur Google Lens ou TinEye : si elle existe déjà ailleurs (peut-être différente ou plus ancienne), elle peut être volée ou modifiée.",
     "openLens": "Ouvrir Google Lens",
     "openTineye": "Ouvrir TinEye",
-    "disclaimer": "VeriFoto fournit des indices, pas des certitudes : aucun contrôle automatique ne détecte 100 % des images IA ou retouchées, et les photos compressées ou filtrées peuvent donner des résultats incertains. Ce n’est pas une expertise."
+    "disclaimer": "VeriFoto fournit des indices, pas des certitudes : aucun contrôle automatique ne détecte 100 % des images IA ou retouchées, et les photos compressées ou filtrées peuvent donner des résultats incertains. Ce n’est pas une expertise.",
+    "placeTitle": "Où et quand elle a été prise",
+    "placeGps": "La photo contient une position GPS : {lat}, {lon}.",
+    "placeOpenMap": "Voir le point sur la carte",
+    "placeNoGps": "Aucune position GPS dans la photo : c’est normal pour les photos venant des réseaux sociaux, de WhatsApp ou de captures d’écran.",
+    "placeTaken": "Prise le {date}",
+    "placeAgeYears": "{n, plural, one {il y a # an} other {il y a # ans}}",
+    "placeAgeMonths": "{n, plural, one {il y a # mois} other {il y a # mois}}",
+    "placeAgeRecent": "au cours du dernier mois",
+    "placeNoDate": "Aucune date de prise de vue dans la photo.",
+    "placeTip": "Compare avec ce qu’on t’a dit : si la maison « est à Rimini » mais que la photo a été prise ailleurs, ou si la photo « d’aujourd’hui » date de plusieurs années, c’est un signal d’alarme. Les données de la photo restent sur ton appareil ; la carte ne s’ouvre que si tu la touches.",
+    "openYandex": "Ouvrir Yandex Images"
   },
   "svat": {
     "backToMarketplace": "Retour à l’Écosystème",

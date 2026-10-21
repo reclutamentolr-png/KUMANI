@@ -35,6 +35,8 @@ export type CameraInfo = {
   model: string | null
   takenAt: string | null
   exposure: boolean
+  // Posizione GPS salvata nella foto (letta solo sul dispositivo, mai inviata)
+  gps: { lat: number; lon: number } | null
 }
 
 export type DetectorResult =
