@@ -9114,7 +9114,11 @@
     "listingAlertTitle": "🔔 Появилось объявление для вас",
     "listingAlertBody": "«{title}» подходит под один из ваших сохранённых поисков.",
     "founderTitle": "🚀 Вы среди первых 50 пользователей (№{n})!",
-    "founderBody": "Скидка 100% применена: ваш тариф Base активен 12 месяцев, без автопродления."
+    "founderBody": "Скидка 100% применена: ваш тариф Base активен 12 месяцев, без автопродления.",
+    "adminSignupTitle": "🆕 Новая регистрация в KUMANI",
+    "adminSignupTitleFounder": "🚀 Новая регистрация: № {n} из первых 50",
+    "adminSignupBodyInvited": "{name} зарегистрировался по приглашению {inviter}.",
+    "adminSignupBodyDirect": "{name} зарегистрировался без приглашения."
   },
   "pushInvite": {
     "title": "Включите уведомления",

@@ -72,6 +72,39 @@ export async function markNotificationsRead(ids?: string[]): Promise<{ success: 
 
 // Appena completata l'iscrizione: avviso a chi ha invitato («si è iscritto
 // con il tuo invito»). Una volta sola per iscritto; mai all'account KUMANI.
+// Admin che hanno acceso «Avvisami a ogni nuova iscrizione» (Panoramica):
+// nome e cognome, chi ha invitato, posto tra i primi 50. Mai bloccante.
+async function notifyAdminsOfSignup(userId: string, profile: { first_name?: unknown; last_name?: unknown } | null, sponsorId: string | null) {
+  try {
+    const db = pushDb()
+    const [{ data: setting }, { data: inviter }, { data: founder }] = await Promise.all([
+      db.from('system_settings').select('value').eq('key', 'signup_alert_admins').maybeSingle(),
+      sponsorId ? db.from('profiles').select('first_name, last_name').eq('id', sponsorId).maybeSingle() : Promise.resolve({ data: null }),
+      db.from('founder_members').select('number').eq('user_id', userId).eq('counted', true).maybeSingle(),
+    ])
+    const admins = String(setting?.value ?? '').replace(/"/g, '').split(',').map((s) => s.trim()).filter((id) => id && id !== userId)
+    if (!admins.length) return
+    const fullName = (p: { first_name?: unknown; last_name?: unknown } | null) => [p?.first_name, p?.last_name].filter(Boolean).join(' ').trim() || '—'
+    const name = fullName(profile)
+    const n = (founder?.number as number | null | undefined) ?? null
+    for (const adminId of admins) {
+      await notifyUser(
+        adminId,
+        'staff',
+        (t) => ({
+          title: n ? t('adminSignupTitleFounder', { n }) : t('adminSignupTitle'),
+          body: inviter ? t('adminSignupBodyInvited', { name, inviter: fullName(inviter) }) : t('adminSignupBodyDirect', { name }),
+          url: '/admin?section=users',
+          tag: `admin-signup-${userId}`,
+        }),
+        { kind: 'admin_signup', ref: userId }
+      )
+    }
+  } catch (error) {
+    console.error('[avvisi] avviso iscrizione agli admin non inviato:', error instanceof Error ? error.message : error)
+  }
+}
+
 export async function notifyInviterOfSignup(): Promise<void> {
   try {
     const supabase = await createClient()
@@ -81,11 +114,12 @@ export async function notifyInviterOfSignup(): Promise<void> {
     if (!user) return
     const db = pushDb()
     const [{ data: profile }, { data: house }] = await Promise.all([
-      db.from('profiles').select('sponsor_id, first_name').eq('id', user.id).maybeSingle(),
+      db.from('profiles').select('sponsor_id, first_name, last_name').eq('id', user.id).maybeSingle(),
       db.from('system_settings').select('value').eq('key', 'house_account_id').maybeSingle(),
     ])
     const sponsor = profile?.sponsor_id as string | null | undefined
     const houseId = String(house?.value ?? '').replace(/"/g, '')
+    await notifyAdminsOfSignup(user.id, profile, sponsor && sponsor !== houseId && sponsor !== user.id ? sponsor : null)
     if (!sponsor || sponsor === houseId || sponsor === user.id) return
     const name = (profile?.first_name as string | null)?.trim() || '—'
     await notifyUser(

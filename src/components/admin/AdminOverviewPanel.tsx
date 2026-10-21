@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Activity, Crown, Gift, Lock, RefreshCw, Sparkles, Ticket, User, Users } from 'lucide-react'
 import { adminOverview, type AdminOverview, type OverviewTool, type PaidPeriod } from '@/app/actions/adminOverview'
+import SignupAlertsToggle from '@/components/admin/SignupAlertsToggle'
 
 // Admin → Panoramica: tre sezioni a riquadri quadrati.
 // Utenti (Free, Base, Pro, online ora, bloccati) · Servizi più usati per
@@ -144,6 +145,8 @@ export default function AdminOverviewPanel({ userName, onlineUsers }: { userName
           <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} /> Aggiorna
         </button>
       </div>
+
+      <SignupAlertsToggle />
 
       <Section title="Utenti" hint={u ? `${u.total} registrati in tutto` : undefined}>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">

@@ -9114,7 +9114,11 @@
     "listingAlertTitle": "🔔 Saiu um anúncio para ti",
     "listingAlertBody": "«{title}» corresponde a uma das tuas pesquisas guardadas.",
     "founderTitle": "🚀 Estás entre os primeiros 50 utilizadores (n.º {n})!",
-    "founderBody": "Desconto de 100% aplicado: o teu Plano Base está ativo 12 meses, sem renovação automática."
+    "founderBody": "Desconto de 100% aplicado: o teu Plano Base está ativo 12 meses, sem renovação automática.",
+    "adminSignupTitle": "🆕 Novo registo na KUMANI",
+    "adminSignupTitleFounder": "🚀 Novo registo: n.º {n} dos primeiros 50",
+    "adminSignupBodyInvited": "{name} registou-se com o convite de {inviter}.",
+    "adminSignupBodyDirect": "{name} registou-se sem convite."
   },
   "pushInvite": {
     "title": "Ative as notificações",
