@@ -1,9 +1,9 @@
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 
-// «Home di benvenuto» della dashboard: per chi è appena entrato con il piano
-// Gratis, una domanda («per cosa sei qui?») e tre passi, poi la Home completa.
-// Si mostra nella vista Lite finché non fa i tre passi e per 7 giorni
-// dall'iscrizione (la vista di partenza dei nuovi iscritti è Lite).
+// «Home di benvenuto» della dashboard: per chi è appena entrato, con qualsiasi
+// piano (anche i primi 50 con il Base), «scegli cosa ti interessa di più» e
+// «Inizia da qui». Si mostra nella vista Lite per 7 giorni dall'iscrizione
+// (la vista di partenza dei nuovi iscritti è Lite).
 // Qui anche gli accessi (giorni diversi con l'accesso), che servono per
 // mostrare «Diventa Kumano verificato» dopo 7 accessi.
 const WELCOME_DAYS = 7
@@ -31,7 +31,7 @@ export async function getWelcomeState(input: {
   createdAt: string | null | undefined
   metadata: Record<string, unknown> | null | undefined
   favoritesCount: number
-  // Gratis, senza prova Pro e senza Pass
+  // Da mostrare a questa persona (oggi: tutti i nuovi iscritti, qualunque piano)
   free: boolean
 }): Promise<WelcomeState> {
   const db = service()

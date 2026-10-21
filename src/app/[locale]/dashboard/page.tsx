@@ -57,6 +57,7 @@ import IconHome from '@/components/dashboard/IconHome'
 import { getInviteUrl } from '@/lib/shareLinksServer'
 import { after } from 'next/server'
 import { canSeeSolve } from '@/lib/solve/server'
+import SolveEntryCard from '@/components/solve/SolveEntryCard'
 import FounderCard from '@/components/founders/FounderCard'
 import { grantFounderIfEligible } from '@/lib/founders'
 
@@ -189,8 +190,6 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
 
   // 4. Rete (già partita), agenda, prova Pro e dati dell'Area
   //    Professionisti: anche queste insieme.
-  // Gratis senza prova Pro e senza Pass: può avere la Home di benvenuto
-  const freeOnly = userPlan === 'none' && !(trialEnd > nowMs) && !access.hasPass
   const [network, agendaEvents, trial, stats, catalog, { data: wellnessToday }, karmaToday, welcomeState, communityItems] = await Promise.all([
     networkPromise,
     hasAgenda
@@ -216,7 +215,8 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
       createdAt: profile?.created_at,
       metadata: user.user_metadata,
       favoritesCount: favoriteToolNames.length,
-      free: freeOnly,
+      // Tutti i nuovi iscritti, qualunque piano: anche i primi 50 con il Base
+      free: true,
     }).catch(() => null),
     // Sezioni della Community: anche loro come icone e preferiti della Home
     getCommunityItems(supabase, user.id, access).catch(() => []),
@@ -394,6 +394,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
               view={view}
               iconHome={iconHome}
               welcomeFooter={view === 'lite' && welcomeState?.show ? <ShowFullHomeLink /> : null}
+              solveEntry={<SolveEntryCard />}
               invites={
                 <>
                   {/* Iscritto senza codice: può ancora indicare chi l'ha invitato */}

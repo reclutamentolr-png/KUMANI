@@ -61,7 +61,7 @@ export default function ProfileFieldsGrid({ values, onChange, locked = false, mi
         const isMissing = !locked && missing.includes(field)
         const required = !locked && REQUIRED.has(field)
         return (
-          <div key={field} className={field === 'address' ? 'col-span-2 sm:col-span-3' : field === 'date_of_birth' ? 'col-span-2 sm:col-span-1' : undefined}>
+          <div key={field} className={field === 'address' ? 'col-span-2 sm:col-span-3' : field === 'date_of_birth' ? 'col-span-2' : undefined}>
             <label className="block text-xs font-medium text-gray-700 mb-1 flex items-center gap-1">
               <Icon className="w-3.5 h-3.5" /> {label(field)}
               {required && <span className="text-red-500">*</span>}

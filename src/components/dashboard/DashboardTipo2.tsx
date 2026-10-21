@@ -39,6 +39,7 @@ export default async function DashboardTipo2({
   extras = null,
   welcome = null,
   welcomeFooter = null,
+  solveEntry = null,
   view = 'full',
   iconHome = null,
   wellness = null,
@@ -71,6 +72,8 @@ export default async function DashboardTipo2({
   welcome?: React.ReactNode
   // «Mostra la Home completa», in fondo alla Home di benvenuto
   welcomeFooter?: React.ReactNode
+  // «Hai un problema? Risolviamolo insieme» (KUMANI Risolvi), nella Lite
+  solveEntry?: React.ReactNode
   // Vista della Home: Lite (l'essenziale), Completa o Icone
   view?: HomeView
   // Home a icone, già pronta dalla pagina
@@ -241,6 +244,7 @@ export default async function DashboardTipo2({
             {/* Lite: solo l'essenziale, prima i servizi scelti */}
             <HomeServices items={services} favorites={favoriteToolNames} />
             <QuickCheckBox title={t('quickCheckTitle')} className="" />
+            {solveEntry}
           </>
         )
       ) : withPlan ? (
