@@ -7,6 +7,7 @@ import { getCommunityItems, getServicesCatalog } from '@/lib/servicesCatalog'
 import { getPlanPrices } from '@/lib/planPrices'
 import AppHeader from '@/components/nav/AppHeader'
 import ServicesBrowser from '@/components/services/ServicesBrowser'
+import SolveEntryCard from '@/components/solve/SolveEntryCard'
 import { getSessionUser, preloadSession } from '@/lib/session'
 import { resolveServicesView } from '@/lib/homeView'
 
@@ -48,6 +49,8 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
       <AppHeader />
       <main className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
         <h1 className="sr-only">{t('servicesTitle')}</h1>
+        {/* KUMANI Risolvi: guide passo passo per i problemi di tutti i giorni */}
+        <SolveEntryCard />
         {/* Il catalogo: come funziona ogni servizio, per categorie (anche in PDF) */}
         <Link
           href="/catalogo"

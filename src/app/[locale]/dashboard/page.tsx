@@ -56,6 +56,7 @@ import { SERVICE_HUBS } from '@/lib/serviceHubs'
 import IconHome from '@/components/dashboard/IconHome'
 import { getInviteUrl } from '@/lib/shareLinksServer'
 import { after } from 'next/server'
+import { canSeeSolve } from '@/lib/solve/server'
 import FounderCard from '@/components/founders/FounderCard'
 import { grantFounderIfEligible } from '@/lib/founders'
 
@@ -386,6 +387,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
                     picked={welcomeState.needs}
                     favorites={favoriteToolNames}
                     quick={welcomeQuick}
+                    solve={welcomeOn && (await canSeeSolve())}
                   />
                 ) : null
               }

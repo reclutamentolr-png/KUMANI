@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { ArrowRight, BriefcaseBusiness, CalendarDays, Check, ChevronDown, Gamepad2, Gift, Info, Leaf, LoaderCircle, Lock, Megaphone, PiggyBank, Plus, ShieldCheck, Smartphone, Store, Users, type LucideIcon } from 'lucide-react'
+import { ArrowRight, BriefcaseBusiness, CalendarDays, Check, ChevronDown, Gamepad2, Gift, Info, Leaf, LifeBuoy, LoaderCircle, Lock, Megaphone, PiggyBank, Plus, ShieldCheck, Smartphone, Store, Users, type LucideIcon } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { showFullHome, toggleWelcomeService } from '@/app/actions/welcome'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
@@ -26,14 +26,18 @@ export default function WelcomeHome({
   needs,
   favorites: initialFavorites,
   quick,
+  solve = false,
 }: {
   firstName: string | null
   needs: WelcomeNeed[]
   picked: string[]
   favorites: string[]
   quick: WelcomeQuick[]
+  // KUMANI Risolvi visibile: riquadro «Hai un problema?»
+  solve?: boolean
 }) {
   const t = useTranslations('welcomeHome')
+  const ts = useTranslations('solve')
   const router = useRouter()
   const [favorites, setFavorites] = useState(() => new Set(initialFavorites))
   const [openNeed, setOpenNeed] = useState<string | null>(null)
@@ -167,6 +171,23 @@ export default function WelcomeHome({
           </div>
         )}
       </section>
+
+      {/* KUMANI Risolvi: guide passo passo per i problemi di tutti i giorni */}
+      {solve && (
+        <Link
+          href="/risolvi"
+          className="flex items-center gap-4 rounded-2xl border border-[var(--gold)]/40 bg-gradient-to-br from-[#2a2418] to-[var(--ink)] p-4 text-white shadow-sm transition-colors hover:border-[var(--gold)]"
+        >
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)]">
+            <LifeBuoy className="h-6 w-6" />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block font-extrabold text-[var(--gold-bright)]">{ts('entryTitle')}</span>
+            <span className="block text-sm text-white/75">{ts('entryText')}</span>
+          </span>
+          <ArrowRight className="h-5 w-5 shrink-0 text-[var(--gold-bright)]" />
+        </Link>
+      )}
 
       {/* Inizia da qui: servizi pronti da provare, in riquadri quadrati */}
       {quick.length > 0 && (
