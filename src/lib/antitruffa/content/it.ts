@@ -263,6 +263,14 @@ const it: GuideContent = {
           vignette: `blackmail`,
         },
         {
+          id: `link-spia`,
+          title: `Il link spia: "guarda questa foto"`,
+          how: `Ti arriva un link a una foto, un video, un pacco o un profilo. Aprendolo non succede nulla di strano, ma chi l'ha creato (con servizi come Grabify o IPLogger) riceve il tuo indirizzo IP, la zona in cui ti trovi, il telefono e il browser che usi. Serve a capire dove sei, a rendere credibili i ricatti ("so dove abiti") o a preparare una truffa su misura.`,
+          example: { kind: `chat`, from: `Sconosciuto`, text: `Ahah ma sei tu in questa foto?? 😂 guarda: [link]` },
+          flags: [`Link da sconosciuti o da profili appena creati`, `Indirizzi strani che imitano Discord, YouTube o Spotify`, `Insistenza perché tu apra il link subito`],
+          todo: [`Non aprire i link di chi non conosci: incollali prima nel controllo di KUMANI`, `Se l'hai aperto, niente panico: vedono solo la zona approssimativa, non il tuo indirizzo di casa`, `Non rispondere ai ricatti "so dove abiti" e segnala il profilo`],
+        },
+        {
           id: `lavoro`,
           title: `Lavori facili da casa e "like" pagati`,
           how: `Un messaggio su WhatsApp o Telegram offre 50-300 € al giorno per mettere "mi piace" o scrivere recensioni. I primi pagamenti arrivano davvero, per guadagnare la tua fiducia. Poi entri in un gruppo dove devi versare soldi per "sbloccare compiti premium". Un'indagine di Venezia nel 2026 ha scoperto circa 500.000 € sottratti così.`,

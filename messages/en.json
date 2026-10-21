@@ -2282,7 +2282,10 @@
     "webRiskUnwanted": "Google flags it for pushing unwanted software: don’t download anything.",
     "checkOfficial": "IVASS official lists",
     "officialIvassCompany": "Official site of {name}, an insurance company supervised by IVASS (Italy).",
-    "officialIvassIntermediary": "Site declared to IVASS (Italy) by a registered insurance intermediary."
+    "officialIvassIntermediary": "Site declared to IVASS (Italy) by a registered insurance intermediary.",
+    "checkIpLogger": "Spy link (IP logger)",
+    "ipLoggerDetected": "{domain} is a spy link: whoever opens it gives its creator their IP address, approximate area and device. Do not open or forward it.",
+    "ipLoggerAlertTitle": "Warning: this is a spy link"
   },
   "offermaker": {
     "aiLimitReached": "You’ve reached today’s AI generation limit: try again tomorrow.",
@@ -5628,7 +5631,8 @@
     "dossierSubject": "Email analysed",
     "dossierLink": "Link to: {domain}",
     "f_google_flagged": "Google flags the link to {domain} as a dangerous site (phishing or viruses).",
-    "f_scam_list": "{domain} is on a list of scam sites (authorities or phishing)."
+    "f_scam_list": "{domain} is on a list of scam sites (authorities or phishing).",
+    "f_link_ip_logger": "It contains a spy link ({domain}): if you open it, the sender sees your IP address, your area and your device. Do not open it."
   },
   "oxygen": {
     "title": "OXYGEN",
@@ -6021,7 +6025,17 @@
     "photosTipsBefore": "Before posting, remove hidden data such as location from your photos with",
     "photosTipsMiddle": "; if you receive a photo and want to know whether it’s real or AI-generated, check it with",
     "photosTipsAfter": ".",
-    "photosNote": "Google Lens and TinEye are free external services: you upload the photo to their site yourself. KUMANI does not receive or analyse your photos."
+    "photosNote": "Google Lens and TinEye are free external services: you upload the photo to their site yourself. KUMANI does not receive or analyse your photos.",
+    "seeTitle": "What a website sees about you",
+    "seeIntro": "When you open a link, the website on the other side sees some information about you. It is what the \"spy links\" sent by strangers collect. See what they would see.",
+    "seeButton": "Show me what it sees",
+    "seeIp": "IP address",
+    "seePlace": "Approximate area",
+    "seeDevice": "Device",
+    "seeLanguage": "Language and time zone",
+    "seeUnknown": "Not available",
+    "seeExplain": "The area comes from your provider’s network: it usually shows your city or a nearby one, not your home address. Blackmailers who say \"I know where you live\" often have only this. To give it to no one: don’t open links from strangers and check them first with KUMANI.",
+    "seePrivacy": "Only you can see this data: KUMANI does not save it."
   },
   "firmaEmail": {
     "badge": "Marketing PRO",

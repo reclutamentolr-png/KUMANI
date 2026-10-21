@@ -10,6 +10,7 @@ import BreachResult from '@/components/scudoDati/BreachResult'
 import PasswordCheck from '@/components/scudoDati/PasswordCheck'
 import GoogleRemovalGuide from '@/components/scudoDati/GoogleRemovalGuide'
 import PhotoSearchGuide from '@/components/scudoDati/PhotoSearchGuide'
+import WhatSitesSee from '@/components/scudoDati/WhatSitesSee'
 
 // SCUDO DATI: la propria email (gratis), un'altra email (KU Karma) e la
 // password (solo nel browser).
@@ -136,6 +137,9 @@ export default function ScudoDatiTool({ maskedEmail, cost, initialBalance }: { m
 
       {/* 3. La tua password */}
       <PasswordCheck />
+
+      {/* Cosa vede di te un sito o un link spia (solo i propri dati) */}
+      <WhatSitesSee />
 
       {/* Guida: togliere i propri dati dai risultati di Google */}
       <GoogleRemovalGuide />

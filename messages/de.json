@@ -2282,7 +2282,10 @@
     "webRiskUnwanted": "Google meldet die Seite wegen unerwünschter Software: nichts herunterladen.",
     "checkOfficial": "Offizielle IVASS-Listen",
     "officialIvassCompany": "Offizielle Seite von {name}, einer von der IVASS (Italien) beaufsichtigten Versicherung.",
-    "officialIvassIntermediary": "Von einem eingetragenen Versicherungsvermittler bei der IVASS (Italien) gemeldete Seite."
+    "officialIvassIntermediary": "Von einem eingetragenen Versicherungsvermittler bei der IVASS (Italien) gemeldete Seite.",
+    "checkIpLogger": "Spionage-Link (IP-Logger)",
+    "ipLoggerDetected": "{domain} ist ein Spionage-Link: Wer ihn öffnet, gibt dem Ersteller seine IP-Adresse, die ungefähre Gegend und das Gerät preis. Nicht öffnen und nicht weiterleiten.",
+    "ipLoggerAlertTitle": "Achtung: Das ist ein Spionage-Link"
   },
   "offermaker": {
     "aiLimitReached": "Du hast das Tageslimit für KI-Generierungen erreicht – versuch es morgen wieder.",
@@ -5628,7 +5631,8 @@
     "dossierSubject": "Analysierte E-Mail",
     "dossierLink": "Link zu: {domain}",
     "f_google_flagged": "Google meldet den Link zu {domain} als gefährlich (Phishing oder Viren).",
-    "f_scam_list": "{domain} steht auf einer Liste von Betrugsseiten (Behörden oder Phishing)."
+    "f_scam_list": "{domain} steht auf einer Liste von Betrugsseiten (Behörden oder Phishing).",
+    "f_link_ip_logger": "Enthält einen Spionage-Link ({domain}): Wenn du ihn öffnest, sieht der Absender deine IP-Adresse, deine Gegend und dein Gerät. Öffne ihn nicht."
   },
   "oxygen": {
     "title": "OXYGEN",
@@ -6021,7 +6025,17 @@
     "photosTipsBefore": "Entferne vor dem Posten versteckte Daten wie den Standort aus deinen Fotos mit",
     "photosTipsMiddle": "; wenn du ein Foto bekommst und wissen willst, ob es echt oder mit KI erzeugt ist, prüfe es mit",
     "photosTipsAfter": ".",
-    "photosNote": "Google Lens und TinEye sind kostenlose externe Dienste: Du lädst das Foto selbst auf deren Seite hoch. KUMANI empfängt und analysiert deine Fotos nicht."
+    "photosNote": "Google Lens und TinEye sind kostenlose externe Dienste: Du lädst das Foto selbst auf deren Seite hoch. KUMANI empfängt und analysiert deine Fotos nicht.",
+    "seeTitle": "Was eine Website über dich sieht",
+    "seeIntro": "Wenn du einen Link öffnest, sieht die Website auf der anderen Seite einige Informationen über dich. Genau das sammeln „Spionage-Links“ von Unbekannten. Sieh dir an, was sie sehen würden.",
+    "seeButton": "Zeig mir, was sie sieht",
+    "seeIp": "IP-Adresse",
+    "seePlace": "Ungefähre Gegend",
+    "seeDevice": "Gerät",
+    "seeLanguage": "Sprache und Zeitzone",
+    "seeUnknown": "Nicht verfügbar",
+    "seeExplain": "Die Gegend stammt aus dem Netz deines Anbieters: meist deine Stadt oder eine Stadt in der Nähe, nicht deine Wohnadresse. Erpresser, die sagen „Ich weiß, wo du wohnst“, haben oft nur das. Damit es niemand bekommt: Öffne keine Links von Unbekannten und prüfe sie vorher mit KUMANI.",
+    "seePrivacy": "Diese Daten siehst nur du: KUMANI speichert sie nicht."
   },
   "firmaEmail": {
     "badge": "Marketing PRO",

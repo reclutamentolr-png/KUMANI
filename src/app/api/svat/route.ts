@@ -7,6 +7,7 @@ import { domainCandidates, findScamDomain, type ScamDomainHit } from '@/lib/scam
 import { siteKeys } from '@/lib/scamNet'
 import { WEB_RISK_SOURCE, WEB_RISK_SOURCE_URL, webRiskLookup, worstThreat } from '@/lib/webRisk'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
+import { isIpLoggerHost } from '@/lib/checkmail/engine'
 import { fetchWhoisText, parseWhois } from '@/lib/whois'
 import { parseVatInput, prettyVat, registryLookupUrl, verifyVies } from '@/lib/vat'
 
@@ -75,6 +76,28 @@ export async function POST(request: NextRequest) {
     } catch {
       return NextResponse.json({ error: 'invalidUrl' }, { status: 400 })
     }
+  }
+
+  // Link spia (IP logger): rosso subito. Il link non si apre nemmeno dal
+  // server, così chi l'ha creato non riceve nulla.
+  if (isURL && isIpLoggerHost(domain)) {
+    const spy: SVATCheck = {
+      id: 'ipLogger',
+      name: 'checkIpLogger',
+      status: 'risk',
+      points: -80,
+      details: `${domain} is an IP logger: opening the link reveals your IP address, approximate location and device`,
+      detailsKey: 'ipLoggerDetected',
+      detailsInterp: { domain },
+    }
+    return NextResponse.json({
+      input,
+      domain,
+      score: 5,
+      badge: 'red',
+      checks: [spy],
+      summary: { totalChecks: 1, okCount: 0, warningCount: 0, riskCount: 1, checkCount: 0 },
+    })
   }
 
   if (isURL) {

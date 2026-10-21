@@ -333,12 +333,12 @@ export default function SvatClient({
             {result.domain && <CommunityWarning items={[{ kind: 'site', value: result.domain }]} report={{ kind: 'site', value: result.domain }} />}
             {/* In un elenco di siti truffa (autorità o phishing) o segnalato da Google: avviso in cima, con la fonte */}
             {(() => {
-              const listed = result.checks.find((c) => (c.id === 'scamList' || c.id === 'webRisk') && c.status === 'risk')
+              const listed = result.checks.find((c) => (c.id === 'scamList' || c.id === 'webRisk' || c.id === 'ipLogger') && c.status === 'risk')
               if (!listed) return null
               return (
                 <div role="alert" className="rounded-2xl border-2 border-red-300 bg-red-50 p-5 text-red-900 shadow-sm">
                   <p className="flex items-center gap-2 text-lg font-extrabold">
-                    <ShieldAlert className="h-6 w-6 shrink-0 text-red-600" aria-hidden /> {t('scamListAlertTitle')}
+                    <ShieldAlert className="h-6 w-6 shrink-0 text-red-600" aria-hidden /> {listed.id === 'ipLogger' ? t('ipLoggerAlertTitle') : t('scamListAlertTitle')}
                   </p>
                   <p className="mt-2 text-sm leading-relaxed">{detailText(listed)}</p>
                   {listed.sourceUrl && (
@@ -430,7 +430,8 @@ export default function SvatClient({
               </div>
             )}
 
-            {!isCompany && (
+            {/* Link spia: il link non si apre, quindi niente sezioni sul sito */}
+            {!isCompany && !result.checks.some((c) => c.id === 'ipLogger') && (
             <>
             {/* Results Grid */}
             <div className="grid md:grid-cols-2 gap-8">
@@ -672,7 +673,7 @@ export default function SvatClient({
             )}
 
             {/* Summary */}
-            {!isCompany && (
+            {!isCompany && !result.checks.some((c) => c.id === 'ipLogger') && (
             <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6">
               <h3 className="text-lg font-semibold text-[var(--ink)] mb-4">{t('websiteSection')}</h3>
               <p className="text-sm text-[var(--muted)]">

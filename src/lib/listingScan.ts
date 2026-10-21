@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { findScamDomain, normalizeDomain } from '@/lib/scamDomains'
 import { normalizeScamIban } from '@/lib/scamNet'
+import { isIpLoggerHost } from '@/lib/checkmail/engine'
 
 // Controllo antitruffa del testo di un annuncio (per lo Staff, prima di
 // approvarlo): i link vengono cercati negli elenchi ufficiali dei siti truffa
@@ -9,6 +10,7 @@ import { normalizeScamIban } from '@/lib/scamNet'
 
 export type ListingScanFlag =
   | { kind: 'scam_link'; value: string; source: string }
+  | { kind: 'spy_link'; value: string }
   | { kind: 'scam_iban'; value: string; reports: number }
   | { kind: 'link'; value: string }
   | { kind: 'iban'; value: string }
@@ -25,6 +27,10 @@ export async function scanListingText(db: SupabaseClient, text: string): Promise
     if (!domain || seen.has(domain)) continue
     seen.add(domain)
     if (domain === 'kumani.io' || domain.endsWith('.kumani.io')) continue
+    if (isIpLoggerHost(domain)) {
+      flags.push({ kind: 'spy_link', value: domain })
+      continue
+    }
     const hits = await findScamDomain(db, domain)
     flags.push(hits.length ? { kind: 'scam_link', value: domain, source: hits[0].source } : { kind: 'link', value: domain })
     if (seen.size > 10) break

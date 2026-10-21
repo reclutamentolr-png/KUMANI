@@ -89,6 +89,50 @@ const CLICK_TRACKERS = new Set([
   'substack.com', 'beehiiv.com', 'convertkit-mail.com', 'ck.page', 'getresponse.com', 'gr-cdn.com', 'aweber.com', 'flodesk.com',
 ])
 
+// «Link spia» (IP logger): chi apre il link consegna a chi l'ha creato
+// indirizzo IP, zona approssimativa, dispositivo e browser. Domini noti di
+// Grabify, IPLogger e servizi simili, spesso mascherati da Discord, YouTube,
+// Spotify o siti di foto. Usato da CheckMail, SVAT e dal controllo degli
+// annunci: il link non viene mai aperto, basta il nome del dominio.
+
+const IP_LOGGER_RAW = [
+  // Grabify
+  'grabify.link', 'grabify.org', 'bmwforum.co', 'leancoding.co', 'spottyfly.com', 'stopify.co', 'yoütu.be', 'discörd.com',
+  'minecräft.com', 'disçordapp.com', 'freegiftcards.co', 'särahah.eu', 'särahah.pl', 'xda-developers.us', 'quickmessage.us',
+  'fortnight.space', 'fortnitechat.site', 'youshouldclick.us', 'joinmy.site', 'crabrave.pw', 'lovebird.guru', 'trulove.guru',
+  'dateing.club', 'otherhalf.life', 'shrekis.life', 'datasig.io', 'datauth.io', 'headshot.monster', 'gaming-at-my.best',
+  'progaming.monster', 'yourmy.monster', 'screenshare.host', 'imageshare.best', 'screenshot.best', 'gamingfun.me',
+  'catsnthing.com', 'catsnthings.fun', 'mypic.icu', 'curiouscat.club', 'partpicker.shop', 'sportshub.bar', 'locations.quest',
+  'ps3cfw.com',
+  // IPLogger
+  'iplogger.org', 'iplogger.com', 'iplogger.ru', 'iplogger.co', 'iplogger.info', '2no.co', 'yip.su', 'iplis.ru', 'ed.tc',
+  'bc.ax', 'maper.info', 'wl.gl', 'ipgrabber.ru', 'ipgraber.ru',
+  // Altri
+  'blasze.com', 'blasze.tk',
+]
+
+// Nomi con lettere accentate (es. discörd.com) nella forma che usa il browser (xn--…)
+const toAscii = (domain: string) => {
+  try {
+    return new URL(`http://${domain}`).hostname
+  } catch {
+    return domain
+  }
+}
+
+export const IP_LOGGER_DOMAINS: ReadonlySet<string> = new Set(IP_LOGGER_RAW.map(toAscii))
+
+// Il dominio (o un suo sottodominio) è un servizio di link spia
+export function isIpLoggerHost(host: string | null | undefined): boolean {
+  if (!host) return false
+  let h = toAscii(host.trim().toLowerCase().replace(/^www\./, '').replace(/\.+$/, ''))
+  while (h.includes('.')) {
+    if (IP_LOGGER_DOMAINS.has(h)) return true
+    h = h.slice(h.indexOf('.') + 1)
+  }
+  return false
+}
+
 const SHORTENERS = new Set(['flowto.it', 'x.gd', 'v.gd', 'u.to', 'cutt.us', 'short.io', 'shorturl.asia', 'bit.do', 'bit.ly', 'tinyurl.com', 't.ly', 'is.gd', 'cutt.ly', 'ow.ly', 'rebrand.ly', 'shorturl.at', 's.id', 'rb.gy', 'tiny.cc', 'buff.ly', 't.co', 'lnkd.in', 'goo.gl', 'qrco.de'])
 const RISKY_TLDS = new Set(['top', 'xyz', 'icu', 'click', 'link', 'cfd', 'sbs', 'rest', 'monster', 'quest', 'zip', 'mov', 'buzz', 'cyou', 'shop', 'online', 'site', 'live', 'support', 'lat', 'bond'])
 const DANGEROUS_EXT = new Set(['exe', 'scr', 'js', 'jse', 'vbs', 'vbe', 'bat', 'cmd', 'com', 'pif', 'iso', 'img', 'lnk', 'hta', 'docm', 'xlsm', 'pptm', 'jar', 'msi', 'ps1', 'wsf', 'reg', 'cab', 'apk', 'svg'])
@@ -589,6 +633,8 @@ export async function analyzeEmail(input: CheckMailInput, options: CheckMailOpti
   }
   if (mismatches.size > 0) add('link_text_mismatch', 'high', 25, { example: [...mismatches][0] })
   if (linkHosts.some((h) => /^\d{1,3}(\.\d{1,3}){3}$/.test(h))) add('link_ip', 'high', 25)
+  const spy = linkHosts.find((h) => isIpLoggerHost(h))
+  if (spy) add('link_ip_logger', 'high', 60, { domain: spy })
   const shorteners = linkHosts.filter((h) => SHORTENERS.has(registrableDomain(h)))
   if (shorteners.length > 0) add('link_shortener', 'medium', 10, { domain: shorteners[0] })
   const risky = linkHosts.filter((h) => RISKY_TLDS.has(h.split('.').pop() ?? ''))

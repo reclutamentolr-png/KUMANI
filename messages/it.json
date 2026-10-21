@@ -2157,7 +2157,10 @@
     "webRiskUnwanted": "Google lo segnala perché fa scaricare programmi indesiderati: non scaricare niente.",
     "checkOfficial": "Elenchi ufficiali IVASS",
     "officialIvassCompany": "Sito ufficiale di {name}, compagnia di assicurazione vigilata dall’IVASS.",
-    "officialIvassIntermediary": "Sito comunicato all’IVASS da un intermediario assicurativo iscritto al RUI."
+    "officialIvassIntermediary": "Sito comunicato all’IVASS da un intermediario assicurativo iscritto al RUI.",
+    "checkIpLogger": "Link spia (IP logger)",
+    "ipLoggerDetected": "{domain} è un link spia: chi lo apre consegna a chi l’ha creato il proprio indirizzo IP, la zona approssimativa e il dispositivo. Non aprirlo e non inoltrarlo.",
+    "ipLoggerAlertTitle": "Attenzione: è un link spia"
   },
   "offermaker": {
     "aiLimitReached": "Hai raggiunto il limite giornaliero di generazioni AI: riprova domani.",
@@ -5628,7 +5631,8 @@
     "dossierSubject": "Email analizzata",
     "dossierLink": "Link verso: {domain}",
     "f_google_flagged": "Google segnala il link a {domain} come sito pericoloso (phishing o virus).",
-    "f_scam_list": "Il sito {domain} è in un elenco di siti truffa (autorità o phishing)."
+    "f_scam_list": "Il sito {domain} è in un elenco di siti truffa (autorità o phishing).",
+    "f_link_ip_logger": "Contiene un link spia ({domain}): se lo apri, chi l’ha mandato vede il tuo indirizzo IP, la tua zona e il tuo dispositivo. Non aprirlo."
   },
   "oxygen": {
     "title": "OXYGEN",
@@ -6021,7 +6025,17 @@
     "photosTipsBefore": "Prima di pubblicare, togli dalle foto i dati nascosti come la posizione con",
     "photosTipsMiddle": "; se ricevi una foto e vuoi capire se è vera o creata con l’intelligenza artificiale, controllala con",
     "photosTipsAfter": ".",
-    "photosNote": "Google Lens e TinEye sono servizi esterni gratuiti: la foto la carichi tu sul loro sito. KUMANI non riceve né analizza le tue foto."
+    "photosNote": "Google Lens e TinEye sono servizi esterni gratuiti: la foto la carichi tu sul loro sito. KUMANI non riceve né analizza le tue foto.",
+    "seeTitle": "Cosa vede un sito di te",
+    "seeIntro": "Quando apri un link, il sito dall’altra parte vede alcune informazioni su di te. È quello che raccolgono i «link spia» mandati da sconosciuti. Guarda cosa vedrebbero.",
+    "seeButton": "Mostrami cosa vede",
+    "seeIp": "Indirizzo IP",
+    "seePlace": "Zona approssimativa",
+    "seeDevice": "Dispositivo",
+    "seeLanguage": "Lingua e fuso orario",
+    "seeUnknown": "Non disponibile",
+    "seeExplain": "La zona viene dalla rete del tuo operatore: di solito indica la città o una città vicina, non il tuo indirizzo di casa. Chi ti ricatta dicendo «so dove abiti» spesso ha solo questo. Per non darlo a nessuno: non aprire link di sconosciuti e controllali prima con KUMANI.",
+    "seePrivacy": "Questi dati li vedi solo tu: KUMANI non li salva."
   },
   "firmaEmail": {
     "badge": "Marketing PRO",

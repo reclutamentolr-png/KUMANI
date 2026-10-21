@@ -258,6 +258,14 @@ const en: GuideContent = {
           vignette: `blackmail`,
         },
         {
+          id: `link-spia`,
+          title: `The spy link: "look at this photo"`,
+          how: `You receive a link to a photo, a video, a parcel or a profile. Opening it seems harmless, but whoever created it (with services like Grabify or IPLogger) gets your IP address, the area you are in, and the phone and browser you use. It is used to find out where you are, to make blackmail believable ("I know where you live") or to prepare a tailor-made scam.`,
+          example: { kind: `chat`, from: `Stranger`, text: `Haha is that you in this photo?? 😂 look: [link]` },
+          flags: [`Links from strangers or brand-new profiles`, `Odd addresses imitating Discord, YouTube or Spotify`, `Pressure to open the link right away`],
+          todo: [`Don't open links from people you don't know: paste them into the KUMANI check first`, `If you opened it, don't panic: they only see your approximate area, not your home address`, `Don't answer "I know where you live" blackmail and report the profile`],
+        },
+        {
           id: `lavoro`,
           title: `Easy jobs from home and paid "likes"`,
           how: `A message on WhatsApp or Telegram offers £50 to £300 a day for "liking" videos or writing reviews. The first payments really do arrive, to win your trust. Then you're added to a group where you must pay money to "unlock premium tasks", and you never see it again.`,

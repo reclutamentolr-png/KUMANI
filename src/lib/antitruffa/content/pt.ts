@@ -258,6 +258,14 @@ const pt: GuideContent = {
           vignette: `blackmail`,
         },
         {
+          id: `link-spia`,
+          title: `O link espião: "olha esta foto"`,
+          how: `Recebes um link para uma foto, um vídeo, uma encomenda ou um perfil. Ao abri-lo não acontece nada de estranho, mas quem o criou (com serviços como Grabify ou IPLogger) recebe o teu endereço IP, a zona onde estás, o telemóvel e o navegador que usas. Serve para saber onde estás, para tornar credível uma chantagem ("sei onde moras") ou para preparar uma burla à medida.`,
+          example: { kind: `chat`, from: `Desconhecido`, text: `Ahah és tu nesta foto?? 😂 olha: [link]` },
+          flags: [`Links de desconhecidos ou de perfis acabados de criar`, `Endereços estranhos que imitam Discord, YouTube ou Spotify`, `Insistência para abrires o link já`],
+          todo: [`Não abras links de desconhecidos: cola-os primeiro na verificação da KUMANI`, `Se o abriste, calma: só veem a tua zona aproximada, não a tua morada`, `Não respondas a chantagens do tipo "sei onde moras" e denuncia o perfil`],
+        },
+        {
           id: `lavoro`,
           title: `Trabalhos fáceis a partir de casa e "gostos" pagos`,
           how: `Uma mensagem no WhatsApp ou no Telegram oferece 50 a 300 € por dia para pôr "gosto" em vídeos ou escrever avaliações. Os primeiros pagamentos chegam mesmo, para ganhar a sua confiança. Depois entra num grupo onde tem de pagar para "desbloquear tarefas premium" e o dinheiro nunca mais volta.`,

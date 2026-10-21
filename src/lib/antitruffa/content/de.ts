@@ -257,6 +257,14 @@ const de: GuideContent = {
           vignette: `blackmail`,
         },
         {
+          id: `link-spia`,
+          title: `Der Spionage-Link: „Schau dir dieses Foto an“`,
+          how: `Du bekommst einen Link zu einem Foto, einem Video, einem Paket oder einem Profil. Beim Öffnen passiert scheinbar nichts, aber wer ihn erstellt hat (mit Diensten wie Grabify oder IPLogger), erhält deine IP-Adresse, die Gegend, in der du bist, sowie dein Handy und deinen Browser. So erfährt er, wo du bist, macht Erpressungen glaubwürdig („Ich weiß, wo du wohnst“) oder bereitet einen maßgeschneiderten Betrug vor.`,
+          example: { kind: `chat`, from: `Unbekannt`, text: `Haha bist du das auf diesem Foto?? 😂 schau: [Link]` },
+          flags: [`Links von Unbekannten oder brandneuen Profilen`, `Seltsame Adressen, die Discord, YouTube oder Spotify nachahmen`, `Druck, den Link sofort zu öffnen`],
+          todo: [`Öffne keine Links von Unbekannten: füge sie zuerst in den KUMANI-Check ein`, `Wenn du ihn geöffnet hast, keine Panik: Sie sehen nur die ungefähre Gegend, nicht deine Wohnadresse`, `Antworte nicht auf Erpressungen wie „Ich weiß, wo du wohnst“ und melde das Profil`],
+        },
+        {
           id: `lavoro`,
           title: `Leichte Jobs von zu Hause und bezahlte "Likes"`,
           how: `Eine Nachricht auf WhatsApp oder Telegram bietet 50 bis 300 € am Tag für "Likes" oder Bewertungen. Die ersten Zahlungen kommen wirklich, um dein Vertrauen zu gewinnen. Dann landest du in einer Gruppe, in der du Geld einzahlen musst, um "Premium-Aufgaben freizuschalten".`,

@@ -258,6 +258,14 @@ const fr: GuideContent = {
           vignette: `blackmail`,
         },
         {
+          id: `link-spia`,
+          title: `Le lien espion : « regarde cette photo »`,
+          how: `Tu reçois un lien vers une photo, une vidéo, un colis ou un profil. En l’ouvrant, rien d’étrange ne se passe, mais celui qui l’a créé (avec des services comme Grabify ou IPLogger) reçoit ton adresse IP, la zone où tu te trouves, ton téléphone et ton navigateur. Cela sert à savoir où tu es, à rendre crédible un chantage (« je sais où tu habites ») ou à préparer une arnaque sur mesure.`,
+          example: { kind: `chat`, from: `Inconnu`, text: `Haha c’est toi sur cette photo ?? 😂 regarde : [lien]` },
+          flags: [`Liens d’inconnus ou de profils tout juste créés`, `Adresses bizarres qui imitent Discord, YouTube ou Spotify`, `Insistance pour que tu ouvres le lien tout de suite`],
+          todo: [`N’ouvre pas les liens d’inconnus : colle-les d’abord dans le contrôle de KUMANI`, `Si tu l’as ouvert, pas de panique : ils voient seulement ta zone approximative, pas ton adresse`, `Ne réponds pas aux chantages « je sais où tu habites » et signale le profil`],
+        },
+        {
           id: `lavoro`,
           title: `Travail facile à domicile et « likes » payés`,
           how: `Un message sur WhatsApp ou Telegram propose de 50 à 300 € par jour pour mettre des « j'aime » ou écrire des avis. Les premiers paiements arrivent vraiment, pour gagner votre confiance. Puis vous entrez dans un groupe où il faut verser de l'argent pour « débloquer des missions premium ». Les pertes peuvent vite devenir très importantes.`,
