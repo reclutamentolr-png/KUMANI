@@ -15,9 +15,9 @@ export const estimateSeconds = (text: string) => Math.round((countWords(text) / 
 
 export const formatDuration = (seconds: number) => `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`
 
-// Velocità di scorrimento (1–10) in pixel al secondo, a testo di 40px:
-// 4 ≈ ritmo di lettura normale. Con il testo più grande scorre in proporzione.
-export const speedToPxPerSecond = (speed: number, fontSize: number) => (12 + speed * 9) * (fontSize / 40)
+// Velocità di scorrimento (1–50) in pixel al secondo, a testo di 40px:
+// 20 ≈ ritmo di lettura normale. Con il testo più grande scorre in proporzione.
+export const speedToPxPerSecond = (speed: number, fontSize: number) => (4 + speed * 1.8) * (fontSize / 40)
 
 // Formato del video registrato: il primo che il browser sa creare
 // (Safari e Chrome recenti: MP4; altrimenti WebM)
