@@ -2288,7 +2288,17 @@
     "officialIvassIntermediary": "Site déclaré à l’IVASS (Italie) par un intermédiaire d’assurance inscrit.",
     "checkIpLogger": "Lien espion (IP logger)",
     "ipLoggerDetected": "{domain} est un lien espion : qui l’ouvre donne à son créateur son adresse IP, sa zone approximative et son appareil. Ne l’ouvre pas et ne le transfère pas.",
-    "ipLoggerAlertTitle": "Attention : c’est un lien espion"
+    "ipLoggerAlertTitle": "Attention : c’est un lien espion",
+    "youngDomain": "Domaine récent : enregistré il y a {days} jours. Beaucoup de sites frauduleux ne restent en ligne que quelques semaines ou mois : vérifie bien avant de payer ou de laisser tes données.",
+    "reportSite": "Signaler ce site au Réseau anti-arnaque",
+    "reportSiteHint": "Le Staff le vérifie : si c’est une arnaque, tous ceux qui le cherchent seront avertis.",
+    "checkScamPattern": "Schémas d’arnaque connus",
+    "scamPatternAlertTitle": "Attention : il a les signes typiques d’une arnaque",
+    "scamPatternRecoveryAuthority": "Il promet de récupérer ou débloquer des fonds et des cryptos et se dit autorisé ou certifié par la CONSOB ou la Banca d’Italia, qui n’autorisent pas ce genre de sites. C’est l’arnaque de la « récupération de fonds » : ne paie rien et ne laisse pas tes données.",
+    "scamPatternRecovery": "Il promet de récupérer ou débloquer des fonds et des cryptos, avec d’autres signes de risque (domaine récent ou contact seulement par Telegram). C’est le schéma de l’arnaque de la « récupération de fonds » : ne paie rien et ne laisse pas tes données.",
+    "scamPatternAuthority": "Il se dit autorisé ou certifié par la CONSOB, la Banca d’Italia ou l’IVASS, mais c’est un site récent ou créé avec un outil automatique. Les autorités ne « certifient » pas de sites : vérifie leurs registres officiels.",
+    "scamPatternTopic": "Il parle de récupérer ou débloquer des fonds et des cryptos : le thème de l’arnaque de la « récupération de fonds ». Si on te demande de l’argent ou des données pour récupérer ce que tu as perdu, c’est presque toujours une arnaque.",
+    "scamPatternLoan": "Il promet des prêts même aux personnes « sur liste noire » ou mauvais payeurs, avec des taux aidés « pour tous » ou des subventions publiques, sur un site récent. C’est l’arnaque du « prêt facile » : tôt ou tard on te demande des frais ou un dépôt et le prêt n’arrive jamais. Ne paie jamais rien d’avance."
   },
   "offermaker": {
     "aiLimitReached": "Vous avez atteint la limite quotidienne de générations IA : réessayez demain.",

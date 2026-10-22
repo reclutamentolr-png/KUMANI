@@ -504,3 +504,39 @@ export async function adminScamContestReject(contestId: string): Promise<boolean
   const { error } = await db().from('scam_contests').update({ status: 'rejected' }).eq('id', contestId)
   return !error
 }
+
+// Admin → Rete Anti-Truffa: lo Staff inserisce direttamente un dato (sito,
+// telefono, IBAN…) che sa con certezza essere una truffa. Nasce una
+// segnalazione dello Staff (senza KU Karma) confermata subito: da quel momento
+// chi lo controlla in Speculum vede l'avviso rosso.
+export async function adminAddConfirmedScam(input: { kind: string; value: string; category: string; description: string }): Promise<{ success: boolean; error?: string; display?: string }> {
+  const admin = await verifyAdmin('listings.write')
+  if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!(SCAM_KINDS as readonly string[]).includes(input.kind)) return { success: false, error: 'Tipo non valido' }
+  if (!(SCAM_CATEGORIES as readonly string[]).includes(input.category)) return { success: false, error: 'Categoria non valida' }
+  const target = normalize(input.kind as ScamKind, String(input.value ?? ''))
+  if (!target) return { success: false, error: 'Valore non valido: controlla di averlo scritto bene' }
+  const description = String(input.description ?? '').trim().slice(0, SCAM_DESCRIPTION_MAX)
+  if (description.length < 10) return { success: false, error: 'Scrivi una descrizione di almeno 10 caratteri: la vedono gli utenti nell’avviso' }
+  const service = db()
+
+  let { data: row } = await service.from('scam_targets').select('id').eq('kind', target.kind).eq('value_key', target.key).maybeSingle()
+  if (!row) {
+    const { data: created } = await service
+      .from('scam_targets')
+      .insert({ kind: target.kind, value_key: target.key, display: target.display, category: input.category })
+      .select('id')
+      .single()
+    row = created ?? (await service.from('scam_targets').select('id').eq('kind', target.kind).eq('value_key', target.key).maybeSingle()).data
+  }
+  if (!row) return { success: false, error: 'Salvataggio non riuscito' }
+
+  // Segnalazione dello Staff: già «premiata», così non dà KU Karma a chi la inserisce
+  const { error } = await service
+    .from('scam_reports')
+    .insert({ target_id: row.id, user_id: admin.id, category: input.category, description, status: 'pending', rewarded: true })
+  if (error && error.code !== '23505') return { success: false, error: error.message }
+  await service.from('scam_targets').update({ last_report_at: new Date().toISOString() }).eq('id', row.id)
+  const decided = await adminScamDecide(row.id, 'confirm', 'Inserita dallo Staff come truffa certa')
+  return decided.success ? { success: true, display: target.display } : { success: false, error: decided.error }
+}

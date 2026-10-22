@@ -2288,7 +2288,17 @@
     "officialIvassIntermediary": "Sitio comunicado al IVASS (Italia) por un intermediario de seguros registrado.",
     "checkIpLogger": "Enlace espía (IP logger)",
     "ipLoggerDetected": "{domain} es un enlace espía: quien lo abre entrega a su creador su dirección IP, su zona aproximada y su dispositivo. No lo abras ni lo reenvíes.",
-    "ipLoggerAlertTitle": "Atención: es un enlace espía"
+    "ipLoggerAlertTitle": "Atención: es un enlace espía",
+    "youngDomain": "Dominio reciente: registrado hace {days} días. Muchos sitios fraudulentos solo están en línea unas semanas o meses: comprueba bien antes de pagar o dejar datos.",
+    "reportSite": "Denunciar este sitio a la Red Antiestafas",
+    "reportSiteHint": "El Staff lo revisa: si es una estafa, se avisará a todos los que lo busquen.",
+    "checkScamPattern": "Esquemas de estafa conocidos",
+    "scamPatternAlertTitle": "Atención: tiene las señales típicas de una estafa",
+    "scamPatternRecoveryAuthority": "Promete recuperar o desbloquear fondos y criptomonedas y dice estar autorizado o certificado por la CONSOB o la Banca d’Italia, que no autorizan sitios así. Es la estafa de la «recuperación de fondos»: no pagues nada ni dejes tus datos.",
+    "scamPatternRecovery": "Promete recuperar o desbloquear fondos y criptomonedas, con otras señales de riesgo (dominio reciente o contacto solo por Telegram). Es el esquema de la estafa de la «recuperación de fondos»: no pagues nada ni dejes tus datos.",
+    "scamPatternAuthority": "Dice estar autorizado o certificado por la CONSOB, la Banca d’Italia o el IVASS, pero es un sitio reciente o hecho con un creador automático. Las autoridades no «certifican» sitios: comprueba sus registros oficiales.",
+    "scamPatternTopic": "Habla de recuperar o desbloquear fondos y criptomonedas: el tema de la estafa de la «recuperación de fondos». Si te piden dinero o datos para recuperar lo perdido, casi siempre es una estafa.",
+    "scamPatternLoan": "Promete préstamos incluso a quien está en «lista negra» o es moroso, con tipos subvencionados «para todos» o ayudas públicas, en un sitio reciente. Es la estafa del «préstamo fácil»: tarde o temprano te piden una comisión o un depósito y el préstamo nunca llega. No pagues nada por adelantado."
   },
   "offermaker": {
     "aiLimitReached": "Has alcanzado el límite diario de generaciones con IA: inténtalo mañana.",

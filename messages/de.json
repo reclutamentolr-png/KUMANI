@@ -2288,7 +2288,17 @@
     "officialIvassIntermediary": "Von einem eingetragenen Versicherungsvermittler bei der IVASS (Italien) gemeldete Seite.",
     "checkIpLogger": "Spionage-Link (IP-Logger)",
     "ipLoggerDetected": "{domain} ist ein Spionage-Link: Wer ihn öffnet, gibt dem Ersteller seine IP-Adresse, die ungefähre Gegend und das Gerät preis. Nicht öffnen und nicht weiterleiten.",
-    "ipLoggerAlertTitle": "Achtung: Das ist ein Spionage-Link"
+    "ipLoggerAlertTitle": "Achtung: Das ist ein Spionage-Link",
+    "youngDomain": "Junge Domain: vor {days} Tagen registriert. Viele Betrugsseiten sind nur wenige Wochen oder Monate online: Prüfe genau, bevor du bezahlst oder Daten angibst.",
+    "reportSite": "Diese Seite dem Anti-Betrugs-Netzwerk melden",
+    "reportSiteHint": "Das Staff prüft sie: Ist es Betrug, wird jeder gewarnt, der sie sucht.",
+    "checkScamPattern": "Bekannte Betrugsmuster",
+    "scamPatternAlertTitle": "Achtung: typische Anzeichen eines Betrugs",
+    "scamPatternRecoveryAuthority": "Verspricht, Gelder und Kryptowährungen zurückzuholen oder freizuschalten, und gibt sich als von der CONSOB oder der Banca d’Italia zugelassen aus, die solche Seiten nicht zulassen. Das ist der „Rückholungs“-Betrug: nichts zahlen, keine Daten angeben.",
+    "scamPatternRecovery": "Verspricht, Gelder und Kryptowährungen zurückzuholen oder freizuschalten, mit weiteren Risikozeichen (junge Domain oder nur Telegram-Kontakt). Das ist das Muster des „Rückholungs“-Betrugs: nichts zahlen, keine Daten angeben.",
+    "scamPatternAuthority": "Gibt sich als von CONSOB, Banca d’Italia oder IVASS zugelassen aus, ist aber eine junge oder automatisch erstellte Seite. Behörden „zertifizieren“ keine Seiten: prüfe ihre offiziellen Register.",
+    "scamPatternTopic": "Es geht um das Zurückholen oder Freischalten von Geldern und Kryptowährungen: das Thema des „Rückholungs“-Betrugs. Wenn man Geld oder Daten verlangt, um Verlorenes zurückzuholen, ist es fast immer Betrug.",
+    "scamPatternLoan": "Verspricht Kredite auch für Personen auf der „schwarzen Liste“ oder mit schlechter Bonität, mit vergünstigten Zinsen „für alle“ oder staatlichen Zuschüssen, auf einer jungen Seite. Das ist der „Leichtkredit“-Betrug: Früher oder später verlangt man eine Gebühr oder Kaution und der Kredit kommt nie. Zahle nie etwas im Voraus."
   },
   "offermaker": {
     "aiLimitReached": "Du hast das Tageslimit für KI-Generierungen erreicht – versuch es morgen wieder.",

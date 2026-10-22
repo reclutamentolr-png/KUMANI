@@ -62,6 +62,13 @@ export const BRANDS: { name: string; words: string[]; acronyms?: string[]; domai
   { name: 'SDA', words: ['sda express', 'sda corriere'], domains: ['sda.it'] },
   { name: 'Agenzia delle Entrate', words: ['agenzia delle entrate', 'agenziaentrate'], domains: ['agenziaentrate.it', 'agenziaentrate.gov.it', 'pec.agenziaentrate.it'] },
   { name: 'INPS', words: ['inps'], domains: ['inps.it', 'postacert.inps.gov.it'] },
+  // Autorità di vigilanza e forze dell'ordine: imitate nelle truffe d'investimento e nei finti avvisi
+  { name: 'CONSOB', words: ['consob'], domains: ['consob.it'] },
+  { name: 'Banca d’Italia', words: ['banca d italia', 'bancaditalia'], domains: ['bancaditalia.it'] },
+  { name: 'IVASS', words: ['ivass'], domains: ['ivass.it'] },
+  { name: 'Polizia di Stato', words: ['polizia di stato', 'poliziadistato', 'polizia postale'], domains: ['poliziadistato.it', 'commissariatodips.it'] },
+  { name: 'Guardia di Finanza', words: ['guardia di finanza', 'guardiadifinanza'], domains: ['gdf.gov.it', 'gdf.it'] },
+  { name: 'Carabinieri', words: ['carabinieri'], domains: ['carabinieri.it'] },
   { name: 'Aruba', words: ['aruba'], domains: ['aruba.it', 'staff.aruba.it', 'arubapec.it'] },
   { name: 'Enel', words: ['enel'], domains: ['enel.it', 'enel.com'] },
   { name: 'TIM', words: ['telecom italia', 'tim spa', 'mytim'], acronyms: ['TIM'], domains: ['tim.it', 'telecomitalia.it'] },

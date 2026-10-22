@@ -2288,7 +2288,17 @@
     "officialIvassIntermediary": "Site declared to IVASS (Italy) by a registered insurance intermediary.",
     "checkIpLogger": "Spy link (IP logger)",
     "ipLoggerDetected": "{domain} is a spy link: whoever opens it gives its creator their IP address, approximate area and device. Do not open or forward it.",
-    "ipLoggerAlertTitle": "Warning: this is a spy link"
+    "ipLoggerAlertTitle": "Warning: this is a spy link",
+    "youngDomain": "Young domain: registered {days} days ago. Many scam sites stay online only a few weeks or months: check carefully before paying or leaving data.",
+    "reportSite": "Report this site to the Anti-Scam Network",
+    "reportSiteHint": "The Staff checks it: if it is a scam, everyone who looks it up will be warned.",
+    "checkScamPattern": "Known scam patterns",
+    "scamPatternAlertTitle": "Warning: it has the typical signs of a scam",
+    "scamPatternRecoveryAuthority": "It promises to recover or unlock funds and crypto and claims to be authorised or certified by CONSOB or the Bank of Italy, which do not authorise sites like this. It is the “fund recovery” scam: do not pay anything or leave your data.",
+    "scamPatternRecovery": "It promises to recover or unlock funds and crypto, with other risk signs (young domain or Telegram-only contacts). It is the “fund recovery” scam pattern: do not pay anything or leave your data.",
+    "scamPatternAuthority": "It claims to be authorised or certified by CONSOB, the Bank of Italy or IVASS, but it is a young site or built with an automatic builder. Authorities do not “certify” sites: check their official registers.",
+    "scamPatternTopic": "It talks about recovering or unlocking funds and crypto: the theme of the “fund recovery” scam. If they ask for money or data to recover what you lost, it is almost always a scam.",
+    "scamPatternLoan": "It promises loans even to people “blacklisted” or with bad credit, with subsidised rates “for everyone” or public grants, on a young site. It is the “easy loan” scam: sooner or later they ask for a fee or deposit and the loan never arrives. Never pay anything in advance."
   },
   "offermaker": {
     "aiLimitReached": "You’ve reached today’s AI generation limit: try again tomorrow.",

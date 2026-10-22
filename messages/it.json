@@ -2163,7 +2163,17 @@
     "officialIvassIntermediary": "Sito comunicato all’IVASS da un intermediario assicurativo iscritto al RUI.",
     "checkIpLogger": "Link spia (IP logger)",
     "ipLoggerDetected": "{domain} è un link spia: chi lo apre consegna a chi l’ha creato il proprio indirizzo IP, la zona approssimativa e il dispositivo. Non aprirlo e non inoltrarlo.",
-    "ipLoggerAlertTitle": "Attenzione: è un link spia"
+    "ipLoggerAlertTitle": "Attenzione: è un link spia",
+    "youngDomain": "Dominio giovane: registrato {days} giorni fa. Molti siti truffa restano online solo poche settimane o mesi: controlla bene prima di pagare o lasciare dati.",
+    "reportSite": "Segnala questo sito alla Rete Anti-Truffa",
+    "reportSiteHint": "Lo Staff lo controlla: se è una truffa, avvisa tutti quelli che lo cercano.",
+    "checkScamPattern": "Schemi di truffa noti",
+    "scamPatternAlertTitle": "Attenzione: ha i segni tipici di una truffa",
+    "scamPatternRecoveryAuthority": "Promette di recuperare o sbloccare fondi e criptovalute e si dichiara autorizzato o certificato dalla CONSOB o dalla Banca d’Italia, che non autorizzano siti di questo tipo. È la truffa del «recupero fondi»: non pagare nulla e non lasciare dati.",
+    "scamPatternRecovery": "Promette di recuperare o sbloccare fondi e criptovalute, con altri segnali di rischio (dominio giovane o contatti solo via Telegram). È lo schema della truffa del «recupero fondi»: non pagare nulla e non lasciare dati.",
+    "scamPatternAuthority": "Si dichiara autorizzato o certificato dalla CONSOB, dalla Banca d’Italia o dall’IVASS, ma è un sito giovane o fatto con un costruttore automatico. Le autorità non «certificano» siti: verifica sui loro elenchi ufficiali.",
+    "scamPatternTopic": "Parla di recupero o sblocco di fondi e criptovalute: è il tema della truffa del «recupero fondi». Se ti chiedono soldi o dati per recuperare quanto perso, è quasi sempre una truffa.",
+    "scamPatternLoan": "Promette prestiti anche a chi è in «lista nera» o è cattivo pagatore, con tassi agevolati «per tutti» o sovvenzioni pubbliche, su un sito giovane. È la truffa del «prestito facile»: prima o poi ti chiedono una commissione o un deposito e il prestito non arriva mai. Non pagare nulla in anticipo."
   },
   "offermaker": {
     "aiLimitReached": "Hai raggiunto il limite giornaliero di generazioni AI: riprova domani.",

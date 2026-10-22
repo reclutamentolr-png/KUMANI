@@ -134,6 +134,7 @@ export async function POST(request: NextRequest) {
       checkPayments(pagePromise),
       checkPrices(pagePromise),
       checkPlaceholder(pagePromise),
+      checkScamPatterns(pagePromise, domain, whoisTextPromise),
     ])
 
     results.forEach((r) => {
@@ -164,7 +165,7 @@ export async function POST(request: NextRequest) {
   // In un elenco di siti truffa (autorità o phishing) o segnalato dalla Rete
   // Anti-Truffa con conferma dello Staff: rosso, qualunque sia il resto. Un
   // sito «sosia» di un marchio noto è rosso anche se il resto sembra in ordine.
-  if (checks.some((c) => (c.id === 'scamList' || c.id === 'community' || c.id === 'webRisk') && c.status === 'risk')) score = Math.min(score, 15)
+  if (checks.some((c) => (c.id === 'scamList' || c.id === 'community' || c.id === 'webRisk' || c.id === 'scamPattern') && c.status === 'risk')) score = Math.min(score, 15)
   else if (checks.some((c) => c.id === 'lookalike' && c.status === 'risk')) score = Math.min(score, 30)
 
   let badge: 'green' | 'yellow' | 'red' = 'green'
@@ -392,6 +393,21 @@ async function checkDomainAge(domain: string, whoisTextPromise: Promise<string |
       }
     }
 
+    // Meno di 6 mesi: molti siti truffa vivono poche settimane o mesi
+    if (diffDays < 183) {
+      return {
+        id: 'domainAge',
+        name: 'checkDomainAge',
+        status: 'warning',
+        points: -12,
+        details: `Young domain: registered ${diffDays} days ago`,
+        detailsKey: 'youngDomain',
+        detailsInterp: { days: String(diffDays) },
+        source: 'WHOIS',
+        sourceUrl: `https://who.is/whois/${domain}`,
+      }
+    }
+
     const years = Math.floor(diffDays / 365)
     const days = diffDays % 365
 
@@ -399,7 +415,8 @@ async function checkDomainAge(domain: string, whoisTextPromise: Promise<string |
       id: 'domainAge',
       name: 'checkDomainAge',
       status: 'ok',
-      points: 12,
+      // Meno di un anno: pochi punti; da un anno in su il dominio ha una storia
+      points: years > 0 ? 12 : 4,
       details: `Domain registered ${years} year(s), ${days} day(s) ago`,
       detailsKey: years > 0 ? 'domainAgeYears' : 'domainAgeDays',
       detailsInterp: years > 0
@@ -719,7 +736,7 @@ async function checkSSL(url: string, domain: string): Promise<SVATCheck | null> 
             id: 'ssl',
             name: 'checkSSL',
             status: 'ok',
-            points: 15,
+            points: 5, // un certificato valido oggi ce l’hanno anche i siti truffa
             details: certDetails,
             detailsKey: 'sslValid',
             detailsInterp: { issuer: certDetails.split(' | ')[1]?.replace('Issuer: ', '') || 'unknown' },
@@ -829,6 +846,37 @@ interface FetchedPage {
   // programmi o costruiscono la pagina in JavaScript: senza testo non si può
   // giudicare (prima finivano «possibile truffa», es. Amazon 41).
   readable: boolean
+  // Siti costruiti in JavaScript (es. Hostinger Horizons): l'HTML è vuoto e il
+  // testo sta nel file principale dello stesso sito. Letto solo se la pagina
+  // non ha testo, al massimo 2 file da 3 MB.
+  scriptText?: string
+}
+
+// Testo dei file JavaScript del sito stesso (stesso dominio), per i siti che
+// si costruiscono nel browser
+async function fetchOwnScripts(html: string, pageUrl: string): Promise<string> {
+  const origin = new URL(pageUrl).origin
+  const srcs = [...html.matchAll(/<script\b[^>]*\bsrc=["']([^"']+\.js)["']/gi)]
+    .map((m) => {
+      try {
+        return new URL(m[1], pageUrl)
+      } catch {
+        return null
+      }
+    })
+    .filter((u): u is URL => !!u && u.origin === origin)
+    .slice(0, 2)
+  const parts = await Promise.all(
+    srcs.map(async (u) => {
+      try {
+        const res = await safeFetch(u.toString(), { cache: 'no-store', signal: AbortSignal.timeout(8000) })
+        return res.ok ? (await res.text()).slice(0, 3_000_000) : ''
+      } catch {
+        return ''
+      }
+    })
+  )
+  return parts.join('\n')
 }
 
 function pageText(html: string) {
@@ -856,10 +904,81 @@ async function fetchPageHtml(url: string): Promise<FetchedPage | null> {
     // Basta l'inizio della pagina (niente pagine giganti in memoria)
     const html = (await res.text()).slice(0, 2_000_000)
     const ok = res.status >= 200 && res.status < 300
-    return { html, status: res.status, readable: ok && pageText(html).length >= 200 }
+    const readable = ok && pageText(html).length >= 200
+    const scriptText = ok && !readable ? await fetchOwnScripts(html, res.url || url).catch(() => '') : undefined
+    return { html, status: res.status, readable, scriptText }
   } catch {
     return null
   }
+}
+
+// Schemi di truffa noti, imparati da casi reali segnalati (itaconsob.it,
+// agenziadirecupero.it, ottobre 2026): la truffa del «recupero fondi» in
+// criptovalute con finte autorizzazioni della CONSOB. Rosso quando il tema è
+// accompagnato da altri segnali (finta autorizzazione, solo Telegram, dominio
+// giovane); il tema da solo è un avviso, perché anche chi mette in guardia ne
+// parla. Il «recupero crediti» (attività legale) non conta.
+const RECOVERY_RE =
+  /(fondi|criptovalut[ea]|bitcoin|crypto|wallet|portafogl[io])[^.\n"<]{0,30}bloccat|sblocc\w*[^.\n"<]{0,30}(fondi|criptovalut|bitcoin|crypto|wallet|portafogl)|recuper\w*[^.\n"<]{0,25}(fondi|criptovalut|bitcoin|crypto|investiment|somme perse|soldi persi)|(funds?|crypto)\s+recovery|recover\w*\s+(your\s+)?(funds|crypto|bitcoin)/i
+const AUTHORITY_CLAIM_RE =
+  /(autorizzat|certificat|regolamentat|approvat|riconosciut|vigilat|accreditat)\w*[^.\n"<]{0,45}(consob|banca d.italia|bankitalia|ivass)|(consob|banca d.italia|ivass)[^.\n"<]{0,45}(autorizzat|certificat|ente certificatore|regolamentat|accreditat)/i
+const TELEGRAM_RE = /tg:\/\/resolve|\/\/t\.me\//i
+const BUILDER_RE = /<meta[^>]+name=["']generator["'][^>]+content=["'](hostinger horizons|lovable|bolt|framer|wix|webflow)/i
+const AUTHORITY_DOMAINS = ['consob.it', 'bancaditalia.it', 'ivass.it']
+// Truffa del «prestito facile» (anticipo di commissioni), da velorafinanza.com:
+// prestiti a chi è in «lista nera» o «cattivo pagatore», con tassi
+// «sovvenzionati» per tutti e risposta in pochi minuti. I prestiti con
+// cessione del quinto ai protestati esistono davvero: per il rosso serve anche
+// un dominio giovane o la promessa di sovvenzioni pubbliche.
+const LOAN_RE = /prestit|credit[oi]\b|finanziament|mutu[oi]\b/i
+const BAD_CREDIT_RE = /lista nera|cattiv\w* pagator|protestat|storic\w* creditizi\w* negativ|marcatori di rischio|segnalat\w*[^.\n"<]{0,15}(crif|centrale rischi)/i
+const SUBSIDY_RE = /sovvenzion|fondi sociali europei|fondo sociale|aiut\w* di stato|tass\w*[^.\n"<]{0,20}sovvenzionat|per tutti i cittadini/i
+const FAST_RE = /(risposta|approvazion\w*|erogazion\w*|versament\w*|fondi)[^.\n"<]{0,25}(in |entro )?\d+\s*(min|minuti|ore)\b|(stesso|medesimo) giorno/i
+
+async function checkScamPatterns(pagePromise: Promise<FetchedPage | null>, domain: string, whoisTextPromise: Promise<string | null>): Promise<SVATCheck | null> {
+  const page = await pagePromise
+  if (!page) return null
+  if (AUTHORITY_DOMAINS.some((d) => domain === d || domain.endsWith(`.${d}`))) return null
+  const text = `${domain} ${pageText(page.html)} ${page.html.match(/<title[^>]*>([^<]*)/i)?.[1] ?? ''} ${page.html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']*)/i)?.[1] ?? ''} ${page.scriptText ?? ''}`
+  const recovery = RECOVERY_RE.test(text)
+  const authority = AUTHORITY_CLAIM_RE.test(text)
+  const telegram = TELEGRAM_RE.test(text)
+  const builder = BUILDER_RE.test(page.html)
+  let young = false
+  try {
+    const whois = await whoisTextPromise
+    const created = whois ? parseWhois(whois).creationDate : null
+    young = !!created && Date.now() - new Date(created).getTime() < 365 * 86_400_000
+  } catch {
+    young = false
+  }
+  const loan = LOAN_RE.test(text)
+  const badCredit = loan && BAD_CREDIT_RE.test(text)
+  const subsidy = loan && SUBSIDY_RE.test(text)
+  const fast = FAST_RE.test(text)
+  // Indizi deboli, mai decisivi da soli: testi scritti con l'AI (molti «—») e
+  // trattino nel nome del dominio (es. consob-italia)
+  const aiText = (text.match(/\u2014/g) ?? []).length >= 6
+  const hyphen = domain.split('.')[0].includes('-')
+  const signals = [recovery && 'recovery', authority && 'authority', telegram && 'telegram', young && 'young', builder && 'builder', badCredit && 'badCredit', subsidy && 'subsidy', fast && 'fast', aiText && 'aiText', hyphen && 'hyphen']
+    .filter(Boolean)
+    .join(',')
+  if (recovery && (authority || telegram || young)) {
+    return { id: 'scamPattern', name: 'checkScamPattern', status: 'risk', points: -60, details: `Recovery-scam pattern (${signals})`, detailsKey: authority ? 'scamPatternRecoveryAuthority' : 'scamPatternRecovery' }
+  }
+  if (authority && (young || builder)) {
+    return { id: 'scamPattern', name: 'checkScamPattern', status: 'risk', points: -50, details: `Fake authority endorsement (${signals})`, detailsKey: 'scamPatternAuthority' }
+  }
+  if (badCredit && (young || subsidy)) {
+    return { id: 'scamPattern', name: 'checkScamPattern', status: 'risk', points: -60, details: `Easy-loan scam pattern (${signals})`, detailsKey: 'scamPatternLoan' }
+  }
+  if (loan && subsidy && young && (fast || aiText || hyphen)) {
+    return { id: 'scamPattern', name: 'checkScamPattern', status: 'risk', points: -50, details: `Easy-loan scam pattern (${signals})`, detailsKey: 'scamPatternLoan' }
+  }
+  if (recovery) {
+    return { id: 'scamPattern', name: 'checkScamPattern', status: 'warning', points: -15, details: `Recovery-scam topic (${signals})`, detailsKey: 'scamPatternTopic' }
+  }
+  return null
 }
 
 // 7. Scraping contenuto pagina

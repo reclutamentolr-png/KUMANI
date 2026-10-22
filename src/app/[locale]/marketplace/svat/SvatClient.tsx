@@ -25,6 +25,8 @@ import {
 } from 'lucide-react'
 import QRCheckScanner from '@/components/QRCheckScanner'
 import CommunityWarning from '@/components/scamNet/CommunityWarning'
+import Link from '@/components/LocalizedLink'
+import { reportHref } from '@/lib/scamNet'
 import DossierButton, { type Dossier } from '@/components/scamNet/DossierButton'
 
 interface SVATCheck {
@@ -333,12 +335,12 @@ export default function SvatClient({
             {result.domain && <CommunityWarning items={[{ kind: 'site', value: result.domain }]} report={{ kind: 'site', value: result.domain }} />}
             {/* In un elenco di siti truffa (autorità o phishing) o segnalato da Google: avviso in cima, con la fonte */}
             {(() => {
-              const listed = result.checks.find((c) => (c.id === 'scamList' || c.id === 'webRisk' || c.id === 'ipLogger') && c.status === 'risk')
+              const listed = result.checks.find((c) => (c.id === 'scamList' || c.id === 'webRisk' || c.id === 'ipLogger' || c.id === 'scamPattern') && c.status === 'risk')
               if (!listed) return null
               return (
                 <div role="alert" className="rounded-2xl border-2 border-red-300 bg-red-50 p-5 text-red-900 shadow-sm">
                   <p className="flex items-center gap-2 text-lg font-extrabold">
-                    <ShieldAlert className="h-6 w-6 shrink-0 text-red-600" aria-hidden /> {listed.id === 'ipLogger' ? t('ipLoggerAlertTitle') : t('scamListAlertTitle')}
+                    <ShieldAlert className="h-6 w-6 shrink-0 text-red-600" aria-hidden /> {listed.id === 'ipLogger' ? t('ipLoggerAlertTitle') : listed.id === 'scamPattern' ? t('scamPatternAlertTitle') : t('scamListAlertTitle')}
                   </p>
                   <p className="mt-2 text-sm leading-relaxed">{detailText(listed)}</p>
                   {listed.sourceUrl && (
@@ -365,6 +367,22 @@ export default function SvatClient({
               <p className="text-[var(--muted)]">
                 {t('scoreTitle')}: {result.score}/100 — {result.badge === 'green' ? t('badgeGreen') : result.badge === 'yellow' ? t('badgeYellow') : t('badgeRed')}
               </p>
+              {/* Segnala il sito alla Rete Anti-Truffa: modulo già compilato; in evidenza se il risultato è rosso */}
+              {result.domain && !isCompany && (
+                <div className="mt-5">
+                  <Link
+                    href={reportHref('site', result.domain)}
+                    className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-5 text-sm font-bold ${
+                      result.badge === 'red'
+                        ? 'bg-[#A12A2A] text-white shadow-md hover:brightness-110'
+                        : 'border border-[var(--ink)]/20 bg-white text-[var(--ink)] hover:bg-[var(--gold-pale)]'
+                    }`}
+                  >
+                    <ShieldAlert className="h-4 w-4" aria-hidden /> {t('reportSite')}
+                  </Link>
+                  <p className="mt-2 text-xs text-[var(--muted)]">{t('reportSiteHint')}</p>
+                </div>
+              )}
             </div>
 
             {/* Summary */}
@@ -450,7 +468,7 @@ export default function SvatClient({
                           <StatusIcon status={c.status} />
                           <div>
                             <p className="font-medium text-[var(--ink)]">{t(c.name)}</p>
-                            <p className="text-sm text-[var(--muted)] mt-1 break-words">{c.details}</p>
+                            <p className="text-sm text-[var(--muted)] mt-1 break-words">{detailText(c)}</p>
                             {c.source && (
                               <p className="text-xs text-[var(--muted)] mt-1">
                                 {c.sourceUrl ? (
@@ -492,7 +510,7 @@ export default function SvatClient({
                           <StatusIcon status={c.status} />
                           <div>
                             <p className="font-medium text-[var(--ink)]">{t(c.name)}</p>
-                            <p className="text-sm text-[var(--muted)] mt-1 break-words">{c.details}</p>
+                            <p className="text-sm text-[var(--muted)] mt-1 break-words">{detailText(c)}</p>
                             {c.source && (
                               <p className="text-xs text-[var(--muted)] mt-1">
                                 {c.sourceUrl ? (
@@ -537,7 +555,7 @@ export default function SvatClient({
                           <StatusIcon status={c.status} />
                           <div>
                             <p className="font-medium text-[var(--ink)]">{t(c.name)}</p>
-                            <p className="text-sm text-[var(--muted)] mt-1 break-words">{c.details}</p>
+                            <p className="text-sm text-[var(--muted)] mt-1 break-words">{detailText(c)}</p>
                             {c.source && <p className="text-xs text-[var(--muted)] mt-1">{c.source}</p>}
                           </div>
                         </div>
@@ -569,7 +587,7 @@ export default function SvatClient({
                           <StatusIcon status={c.status} />
                           <div>
                             <p className="font-medium text-[var(--ink)]">{t(c.name)}</p>
-                            <p className="text-sm text-[var(--muted)] mt-1 break-words">{c.details}</p>
+                            <p className="text-sm text-[var(--muted)] mt-1 break-words">{detailText(c)}</p>
                             {c.source && <p className="text-xs text-[var(--muted)] mt-1">{c.source}</p>}
                           </div>
                         </div>
@@ -601,7 +619,7 @@ export default function SvatClient({
                           <StatusIcon status={c.status} />
                           <div>
                             <p className="font-medium text-[var(--ink)]">{t(c.name)}</p>
-                            <p className="text-sm text-[var(--muted)] mt-1 break-words">{c.details}</p>
+                            <p className="text-sm text-[var(--muted)] mt-1 break-words">{detailText(c)}</p>
                             {c.source && <p className="text-xs text-[var(--muted)] mt-1">{c.source}</p>}
                           </div>
                         </div>
@@ -633,7 +651,7 @@ export default function SvatClient({
                           <StatusIcon status={c.status} />
                           <div>
                             <p className="font-medium text-[var(--ink)]">{t(c.name)}</p>
-                            <p className="text-sm text-[var(--muted)] mt-1 break-words">{c.details}</p>
+                            <p className="text-sm text-[var(--muted)] mt-1 break-words">{detailText(c)}</p>
                             {c.source && <p className="text-xs text-[var(--muted)] mt-1">{c.source}</p>}
                           </div>
                         </div>

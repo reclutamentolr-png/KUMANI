@@ -2288,7 +2288,17 @@
     "officialIvassIntermediary": "Site comunicado ao IVASS (Itália) por um mediador de seguros registado.",
     "checkIpLogger": "Link espião (IP logger)",
     "ipLoggerDetected": "{domain} é um link espião: quem o abre entrega a quem o criou o seu endereço IP, a zona aproximada e o dispositivo. Não o abras nem o reencaminhes.",
-    "ipLoggerAlertTitle": "Atenção: é um link espião"
+    "ipLoggerAlertTitle": "Atenção: é um link espião",
+    "youngDomain": "Domínio recente: registado há {days} dias. Muitos sites de burla ficam online só algumas semanas ou meses: verifica bem antes de pagar ou deixar dados.",
+    "reportSite": "Denunciar este site à Rede Antiburla",
+    "reportSiteHint": "O Staff verifica-o: se for burla, avisa todos os que o procurarem.",
+    "checkScamPattern": "Esquemas de burla conhecidos",
+    "scamPatternAlertTitle": "Atenção: tem os sinais típicos de uma burla",
+    "scamPatternRecoveryAuthority": "Promete recuperar ou desbloquear fundos e criptomoedas e diz-se autorizado ou certificado pela CONSOB ou pela Banca d’Italia, que não autorizam sites deste tipo. É a burla da «recuperação de fundos»: não pagues nada nem deixes os teus dados.",
+    "scamPatternRecovery": "Promete recuperar ou desbloquear fundos e criptomoedas, com outros sinais de risco (domínio recente ou contacto só por Telegram). É o esquema da burla da «recuperação de fundos»: não pagues nada nem deixes os teus dados.",
+    "scamPatternAuthority": "Diz-se autorizado ou certificado pela CONSOB, pela Banca d’Italia ou pelo IVASS, mas é um site recente ou feito com um criador automático. As autoridades não «certificam» sites: verifica os registos oficiais.",
+    "scamPatternTopic": "Fala de recuperar ou desbloquear fundos e criptomoedas: o tema da burla da «recuperação de fundos». Se te pedem dinheiro ou dados para recuperar o que perdeste, é quase sempre burla.",
+    "scamPatternLoan": "Promete empréstimos até a quem está na «lista negra» ou é mau pagador, com taxas bonificadas «para todos» ou apoios públicos, num site recente. É a burla do «empréstimo fácil»: mais cedo ou mais tarde pedem uma comissão ou um depósito e o empréstimo nunca chega. Não pagues nada adiantado."
   },
   "offermaker": {
     "aiLimitReached": "Atingiu o limite diário de gerações com IA: tente amanhã.",

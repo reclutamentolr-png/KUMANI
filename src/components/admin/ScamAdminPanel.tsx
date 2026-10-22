@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Check, ExternalLink, Eye, LoaderCircle, MessageSquareWarning, ShieldAlert, Undo2, X } from 'lucide-react'
 import { adminScamContestReject, adminScamDecide, adminScamEvidence, adminScamQueue, type AdminScamTarget } from '@/app/actions/scamNet'
 import { adminSignupsFrom } from '@/app/actions/adminSignupSources'
+import ScamDirectAdd from '@/components/admin/ScamDirectAdd'
 
 type View = 'pending' | 'confirmed' | 'contests'
 const VIEWS: { id: View; label: string }[] = [
@@ -100,6 +101,8 @@ export default function ScamAdminPanel() {
           dato vede l’avviso e chi ha segnalato riceve i KU Karma. Le prove si cancellano da sole dopo la decisione. Mai nomi di persone private.
         </p>
       </div>
+      {/* Inserimento diretto dello Staff: truffe certe, avviso subito in Speculum */}
+      <ScamDirectAdd onAdded={() => (view === 'confirmed' ? load(view) : setView('confirmed'))} />
       <div className="flex flex-wrap gap-2">
         {VIEWS.map((v) => (
           <button key={v.id} type="button" onClick={() => setView(v.id)} className={`min-h-10 rounded-full px-4 text-sm font-semibold ${view === v.id ? 'bg-gray-900 text-white' : 'border border-gray-300 bg-white text-gray-800 hover:bg-gray-50'}`}>
