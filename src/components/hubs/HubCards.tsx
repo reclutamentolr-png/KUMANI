@@ -6,6 +6,10 @@ import Link from '@/components/LocalizedLink'
 import PlanTag from '@/components/PlanTag'
 import type { ServiceItem } from '@/lib/servicesCatalog'
 import { HUB_HOME, HUB_TABS, type ServiceHub } from '@/lib/serviceHubs'
+import type { RequiredPlan } from '@/lib/plans'
+
+// Schede in ordine di pacchetto: prima Free, poi Base, poi Pro
+const PLAN_RANK: Record<RequiredPlan, number> = { free: 0, base: 1, pro: 2 }
 
 const HUB_ICON: Record<ServiceHub, LucideIcon> = { controlla: ScanSearch, proteggi: ShieldCheck, segnala: Megaphone, benessere: Flower2, giochi: Dices, qr: QrCode, spendly: PiggyBank, lavoro: Briefcase, gestione: BookUser, ufficio: Signature, negozio: Store, vetrina: PanelsTopLeft, agenda: CalendarClock, casaauto: House, viaggi: Plane, amicizie: HeartHandshake }
 
@@ -37,7 +41,9 @@ export default function HubCards({ hubs, items }: { hubs: readonly ServiceHub[];
             <span className="mt-3 flex flex-wrap gap-x-1.5 gap-y-2">
               {HUB_TABS[hub]
                 .filter((tab) => tab.key !== 'all' && (!tab.tool || openOf.has(tab.tool)))
-                .map((tab) => {
+                .map((tab) => ({ tab, plan: tab.plan ?? planOf.get(tab.tool ?? tab.planTool ?? '') }))
+                .sort((a, b) => (a.plan ? PLAN_RANK[a.plan] : 0) - (b.plan ? PLAN_RANK[b.plan] : 0))
+                .map(({ tab, plan }) => {
                   const locked = !!tab.tool && openOf.get(tab.tool) === false
                   return (
                     <span key={tab.key} className="flex flex-col items-center gap-1">
@@ -48,7 +54,7 @@ export default function HubCards({ hubs, items }: { hubs: readonly ServiceHub[];
                       {locked && <Lock className="h-3 w-3" aria-label={t('locked')} />}
                       {t(`${hub}.tab_${tab.key}`)}
                     </Link>
-                    <PlanTag plan={tab.plan ?? planOf.get(tab.tool ?? tab.planTool ?? '')} />
+                    <PlanTag plan={plan} />
                     </span>
                   )
                 })}

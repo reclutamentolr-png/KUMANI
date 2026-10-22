@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { ArrowRight, Lock, Smartphone, Star, X } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
+import PlanTag from '@/components/PlanTag'
 import { addFavorite, removeFavorite } from '@/app/actions/favorites'
 import { FolderTile, folderEntries } from '@/components/dashboard/HomeFolders'
 import { FROM_ICONS_KEY, FROM_SERVICES, shortServiceName } from '@/lib/homeView'
@@ -13,6 +14,7 @@ import { GROUP_STYLE, type ServiceGroup } from '@/lib/serviceGroups'
 import { HUB_GROUP, HUB_TABS, SERVICE_HUBS, TOOL_HUB, type ServiceHub } from '@/lib/serviceHubs'
 import type { ServiceItem } from '@/lib/servicesCatalog'
 import { COMMUNITY_DOT } from '@/lib/communityItems'
+import type { RequiredPlan } from '@/lib/plans'
 import { defaultLocale } from '../../../i18n'
 
 // Pagina Servizi, vista a icone: le categorie una sotto l'altra con le loro
@@ -21,6 +23,10 @@ import { defaultLocale } from '../../../i18n'
 // destro dal computer): «Metti nella Home» / «Togli dalla Home». Lucchetto:
 // toccando si apre il riquadro con cosa fa il servizio e come si sblocca.
 const LONG_PRESS_MS = 500
+// Nelle cartelle le schede vanno in ordine di pacchetto: Free, Base, Pro
+const PLAN_RANK: Record<RequiredPlan, number> = { free: 0, base: 1, pro: 2 }
+// Icona nella cartella aperta: stessa misura per tutte, anche sul computer
+const FOLDER_TILE = 'h-14 w-14 rounded-[18px] sm:h-16 sm:w-16'
 
 const markFromServices = () => {
   try {
@@ -71,12 +77,15 @@ function usePress(onLong: () => void) {
 function ServiceIcon({
   item,
   label,
+  plan,
   favorite,
   onLocked,
   onActions,
 }: {
   item: ServiceItem
   label?: string
+  // Nella cartella: il pacchetto scritto sotto il nome
+  plan?: RequiredPlan | null
   favorite: boolean
   onLocked: (item: ServiceItem) => void
   onActions: (item: ServiceItem) => void
@@ -87,9 +96,9 @@ function ServiceIcon({
   const body = (
     <>
       <span
-        className={`relative flex h-14 w-14 items-center justify-center rounded-[18px] shadow-[0_6px_14px_rgba(0,0,0,0.12)] transition-transform group-active:scale-95 sm:h-16 sm:w-16 lg:h-[88px] lg:w-[88px] lg:rounded-[24px] ${item.tone ?? GROUP_STYLE[item.group].tile} ${item.open ? '' : 'opacity-60'}`}
+        className={`relative flex items-center justify-center shadow-[0_6px_14px_rgba(0,0,0,0.12)] transition-transform group-active:scale-95 ${plan !== undefined ? FOLDER_TILE : 'h-14 w-14 rounded-[18px] sm:h-16 sm:w-16 lg:h-[88px] lg:w-[88px] lg:rounded-[24px]'} ${item.tone ?? GROUP_STYLE[item.group].tile} ${item.open ? '' : 'opacity-60'}`}
       >
-        <Icon className="h-6 w-6 sm:h-7 sm:w-7 lg:h-9 lg:w-9" aria-hidden />
+        <Icon className={plan !== undefined ? 'h-6 w-6 sm:h-7 sm:w-7' : 'h-6 w-6 sm:h-7 sm:w-7 lg:h-9 lg:w-9'} aria-hidden />
         {favorite && (
           <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full border-2 border-[var(--background)] bg-[var(--gold)] text-[var(--ink)]">
             <Star className="h-2.5 w-2.5" fill="currentColor" aria-label={t('inHome')} />
@@ -104,6 +113,7 @@ function ServiceIcon({
       <span className="line-clamp-2 w-full hyphens-auto text-center text-[11px] font-semibold leading-tight text-[var(--ink)] [overflow-wrap:anywhere] sm:text-xs lg:text-sm">
         {label ?? shortServiceName(item.title)}
       </span>
+      {plan && <PlanTag plan={plan} className="-mt-1" />}
     </>
   )
   const cls = 'group relative flex min-w-0 select-none flex-col items-center gap-1.5 rounded-2xl p-1 lg:gap-2 [-webkit-touch-callout:none] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--gold)]'
@@ -231,20 +241,24 @@ export default function ServicesIcons({
             </div>
             <p className="mb-4 text-xs text-[var(--muted)]">{t('folderHint')}</p>
             <div className="grid grid-cols-3 gap-x-2 gap-y-4 sm:grid-cols-4">
-              {HUB_TABS[folder].map((tab) => {
+              {HUB_TABS[folder]
+                .map((tab) => ({ tab, plan: tab.plan ?? byTool.get(tab.tool ?? tab.planTool ?? '')?.plan ?? null }))
+                .sort((a, b) => (a.plan ? PLAN_RANK[a.plan] : 0) - (b.plan ? PLAN_RANK[b.plan] : 0))
+                .map(({ tab, plan }) => {
                 const item = tab.tool ? byTool.get(tab.tool) : undefined
                 const label = th(`${folder}.tab_${tab.key}`)
-                if (item) return <ServiceIcon key={tab.key} item={item} label={label} favorite={favorites.includes(item.toolName)} {...iconProps} />
+                if (item) return <ServiceIcon key={tab.key} item={item} label={label} plan={plan} favorite={favorites.includes(item.toolName)} {...iconProps} />
                 if (tab.tool) return null
                 // Scheda che non è uno strumento a sé (es. «Tutto in uno»)
                 const entry = folderEntries(folder, allItems, th).find((e) => e.key === tab.key)
                 if (!entry) return null
                 return (
-                  <Link key={tab.key} href={tab.href} onClick={markFromServices} className="group flex min-w-0 flex-col items-center gap-1.5 rounded-2xl p-1">
-                    <span className={`flex h-14 w-14 items-center justify-center rounded-[18px] shadow-[0_6px_14px_rgba(0,0,0,0.12)] ${GROUP_STYLE[HUB_GROUP[folder] as ServiceGroup].tile}`}>
-                      <entry.Icon className="h-6 w-6" aria-hidden />
+                  <Link key={tab.key} href={tab.href} onClick={markFromServices} className="group flex min-w-0 flex-col items-center gap-1.5 rounded-2xl p-1 lg:gap-2">
+                    <span className={`flex items-center justify-center shadow-[0_6px_14px_rgba(0,0,0,0.12)] ${FOLDER_TILE} ${GROUP_STYLE[HUB_GROUP[folder] as ServiceGroup].tile}`}>
+                      <entry.Icon className="h-6 w-6 sm:h-7 sm:w-7" aria-hidden />
                     </span>
-                    <span className="line-clamp-2 w-full text-center text-[11px] font-semibold leading-tight">{label}</span>
+                    <span className="line-clamp-2 w-full text-center text-[11px] font-semibold leading-tight sm:text-xs lg:text-sm">{label}</span>
+                    {plan && <PlanTag plan={plan} className="-mt-1" />}
                   </Link>
                 )
               })}
