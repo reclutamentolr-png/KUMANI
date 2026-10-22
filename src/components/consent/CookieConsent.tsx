@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Cookie, X } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
-import { needsConsent, OPEN_PREFERENCES_EVENT, readConsent, writeConsent, type ConsentCategory, type ConsentChoices } from '@/lib/consent'
+import { needsConsent, OPEN_PREFERENCES_EVENT, readConsent, saveConsentOnServer, writeConsent, type ConsentCategory, type ConsentChoices } from '@/lib/consent'
 import { useConsentConfig } from '@/components/consent/ConsentGate'
 
 // Banner dei cookie (vedi lib/consent.ts), acceso da Admin → Impostazioni.
@@ -24,6 +24,18 @@ export default function CookieConsent() {
     const state = readConsent()
     // eslint-disable-next-line react-hooks/set-state-in-effect -- il cookie si legge solo nel browser
     if (needsConsent(state, config)) setOpen(true)
+    // Scelta già fatta: una volta per sessione la si fa riscrivere dal server,
+    // così chi l'aveva salvata prima non se la vede cancellare da Safari
+    else if (state) {
+      try {
+        if (!sessionStorage.getItem('kumani_consent_sync')) {
+          sessionStorage.setItem('kumani_consent_sync', '1')
+          saveConsentOnServer(state)
+        }
+      } catch {
+        // facoltativo
+      }
+    }
     const reopen = () => {
       setChoices(readConsent()?.choices ?? {})
       setDetailed(true)

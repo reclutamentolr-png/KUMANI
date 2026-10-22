@@ -84,7 +84,19 @@ export function writeConsent(choices: ConsentChoices, active: ConsentCategory[])
   const secure = location.protocol === 'https:' ? '; Secure' : ''
   document.cookie = `${CONSENT_COOKIE}=${encodeURIComponent(JSON.stringify(state))}; path=/; max-age=${CONSENT_MAX_AGE}; SameSite=Lax${secure}`
   window.dispatchEvent(new CustomEvent(CONSENT_CHANGED_EVENT, { detail: state }))
+  // La stessa scelta riscritta dal server, perché Safari non la cancelli dopo
+  // 7 giorni (vedi app/api/consent). Se non riesce resta quella della pagina.
+  saveConsentOnServer(state)
   return state
+}
+
+export function saveConsentOnServer(state: ConsentState) {
+  fetch('/api/consent', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ value: encodeURIComponent(JSON.stringify(state)) }),
+    keepalive: true,
+  }).catch(() => {})
 }
 
 export function hasConsent(category: ConsentCategory, config: ConsentConfig, state: ConsentState | null = readConsent()): boolean {
