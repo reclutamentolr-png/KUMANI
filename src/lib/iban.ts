@@ -255,3 +255,21 @@ export function contextSignals(context: PaymentContext, ibanCountry: string, hom
       return [{ key: 'otherTip', level: 'info' }]
   }
 }
+
+/**
+ * Banche online estere molto usate (conto aperto in pochi minuti dall'app):
+ * normali per tante persone, ma frequenti anche nelle truffe. Il codice della
+ * banca sta in una posizione fissa dell'IBAN di ogni paese (verificati su
+ * fonti pubbliche, ottobre 2026).
+ */
+const ONLINE_BANKS: { country: string; from: number; code: string; name: string }[] = [
+  { country: 'LT', from: 4, code: '32500', name: 'Revolut Bank UAB' },
+  { country: 'LT', from: 4, code: '35000', name: 'Paysera LT' },
+  { country: 'BE', from: 4, code: '967', name: 'Wise Europe' },
+  { country: 'DE', from: 4, code: '10011001', name: 'N26 Bank' },
+]
+
+export function onlineBankOf(normalized: string): { name: string; country: string } | null {
+  const hit = ONLINE_BANKS.find((b) => normalized.startsWith(b.country) && normalized.slice(b.from, b.from + b.code.length) === b.code)
+  return hit ? { name: hit.name, country: hit.country } : null
+}

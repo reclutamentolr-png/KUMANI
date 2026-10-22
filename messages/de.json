@@ -5912,7 +5912,18 @@
     "checkmailLink": "CheckMail",
     "checkmailLinkText": "Hast du die IBAN in einer verdächtigen E-Mail bekommen? Prüfe sie hier.",
     "dossierTool": "IBAN-Prüfung",
-    "dossierAdvice": "Eine richtig geschriebene IBAN garantiert nicht, dass der Empfänger ehrlich ist: Eine Echtzeitüberweisung lässt sich nicht rückgängig machen."
+    "dossierAdvice": "Eine richtig geschriebene IBAN garantiert nicht, dass der Empfänger ehrlich ist: Eine Echtzeitüberweisung lässt sich nicht rückgängig machen.",
+    "bankLoading": "Bank wird im Register der Banca d’Italia gesucht…",
+    "bankTitle": "Bank",
+    "branchTitle": "Filiale",
+    "bankKind_ip": "Zahlungsinstitut: meist ein Online-Konto",
+    "bankKind_imel": "E-Geld-Institut: meist ein Online-Konto oder eine Prepaid-Karte",
+    "bankKind_poste": "BancoPosta- oder Postepay-Konto der Poste Italiane",
+    "bankNotFound": "ABI-Code nicht im Register der Banca d’Italia: Frag vor dem Bezahlen nach.",
+    "branchNotFound": "Filiale nicht im Register gefunden (vielleicht ein Online-Konto oder eine geschlossene Filiale).",
+    "bankSource": "Quelle: öffentliches Register der Banca d’Italia, Stand 21. Oktober 2026. Für Bank und Filiale verwenden wir nur den ABI- und CAB-Code.",
+    "onlineBankTitle": "Ausländische Online-Bank: {name}",
+    "onlineBankText": "Ein Konto, das man in wenigen Minuten per App eröffnet: Viele nutzen es ganz normal, es wird aber auch oft für Betrug genutzt. Wenn sich der Zahlungsempfänger als italienisches Unternehmen oder Geschäft ausgibt, frag vor dem Bezahlen nach."
   },
   "scudoDati": {
     "badge": "Sicherheit · Kostenlos",

@@ -25,6 +25,7 @@ import {
   countryFlag,
   countryName,
   validateIban,
+  onlineBankOf,
   type IbanIssue,
   type IbanResult,
   type PaymentContext,
@@ -32,6 +33,7 @@ import {
 } from '@/lib/iban'
 import CommunityWarning from '@/components/scamNet/CommunityWarning'
 import DossierButton, { type Dossier, type DossierStatus } from '@/components/scamNet/DossierButton'
+import IbanBankInfo from '@/components/verificaIban/IbanBankInfo'
 
 // VERIFICA IBAN: controllo tutto nel browser (formato, lunghezza per paese,
 // checksum mod 97). Nessuna chiamata di rete, niente viene salvato; l'unica
@@ -248,6 +250,14 @@ export default function IbanChecker({ initialIban = '' }: { initialIban?: string
               </div>
             </div>
 
+            {/* Banca online estera: normale per tanti, ma frequente nelle truffe */}
+            {result.valid && onlineBankOf(result.normalized) && (
+              <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5 text-amber-950">
+                <p className="font-bold">{t('onlineBankTitle', { name: onlineBankOf(result.normalized)!.name })}</p>
+                <p className="mt-1 text-sm leading-6">{t('onlineBankText')}</p>
+              </div>
+            )}
+
             {/* Parti dell'IBAN italiano o sammarinese */}
             {result.valid && result.italian && (
               <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
@@ -255,6 +265,8 @@ export default function IbanChecker({ initialIban = '' }: { initialIban?: string
                   <Landmark className="h-5 w-5 text-[var(--gold)]" aria-hidden />
                   {t('italianTitle')}
                 </h3>
+                {/* Banca e sportello dal registro della Banca d'Italia (solo IBAN italiani) */}
+                {result.country === 'IT' && <IbanBankInfo key={result.italian.abi + result.italian.cab} abi={result.italian.abi} cab={result.italian.cab} />}
                 <dl className="grid gap-3 sm:grid-cols-2">
                   {(
                     [

@@ -5912,7 +5912,18 @@
     "checkmailLink": "CheckMail",
     "checkmailLinkText": "Hai ricevuto l’IBAN in un’email sospetta? Controllala qui.",
     "dossierTool": "Verifica IBAN",
-    "dossierAdvice": "Un IBAN scritto bene non garantisce che chi lo riceve sia onesto: un bonifico istantaneo non si può annullare."
+    "dossierAdvice": "Un IBAN scritto bene non garantisce che chi lo riceve sia onesto: un bonifico istantaneo non si può annullare.",
+    "bankLoading": "Cerco la banca nel registro della Banca d’Italia…",
+    "bankTitle": "Banca",
+    "branchTitle": "Sportello",
+    "bankKind_ip": "Istituto di pagamento: di solito un conto online",
+    "bankKind_imel": "Istituto di moneta elettronica: di solito un conto online o una carta prepagata",
+    "bankKind_poste": "Conto BancoPosta o Postepay di Poste Italiane",
+    "bankNotFound": "Codice ABI non presente nel registro della Banca d’Italia: chiedi spiegazioni prima di pagare.",
+    "branchNotFound": "Sportello non trovato nel registro (può essere un conto online o uno sportello chiuso).",
+    "bankSource": "Fonte: registro pubblico degli intermediari della Banca d’Italia, aggiornato al 21 ottobre 2026. Per trovare banca e sportello usiamo solo i codici ABI e CAB.",
+    "onlineBankTitle": "Banca online estera: {name}",
+    "onlineBankText": "È un conto che si apre in pochi minuti dall’app: lo usano tante persone in modo normale, ma è anche molto usato nelle truffe. Se chi ti chiede il pagamento dice di essere un’azienda o un negozio italiano, chiedi spiegazioni prima di pagare."
   },
   "scudoDati": {
     "badge": "Sicurezza · Gratis",

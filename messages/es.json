@@ -5912,7 +5912,18 @@
     "checkmailLink": "CheckMail",
     "checkmailLinkText": "¿Te llegó el IBAN en un correo sospechoso? Compruébalo aquí.",
     "dossierTool": "Verificar IBAN",
-    "dossierAdvice": "Un IBAN bien escrito no garantiza que quien lo recibe sea honesto: una transferencia inmediata no se puede anular."
+    "dossierAdvice": "Un IBAN bien escrito no garantiza que quien lo recibe sea honesto: una transferencia inmediata no se puede anular.",
+    "bankLoading": "Buscando el banco en el registro de la Banca d’Italia…",
+    "bankTitle": "Banco",
+    "branchTitle": "Sucursal",
+    "bankKind_ip": "Entidad de pago: normalmente una cuenta online",
+    "bankKind_imel": "Entidad de dinero electrónico: normalmente una cuenta online o una tarjeta prepago",
+    "bankKind_poste": "Cuenta BancoPosta o Postepay de Poste Italiane",
+    "bankNotFound": "Código ABI no presente en el registro de la Banca d’Italia: pide explicaciones antes de pagar.",
+    "branchNotFound": "Sucursal no encontrada en el registro (puede ser una cuenta online o una sucursal cerrada).",
+    "bankSource": "Fuente: registro público de intermediarios de la Banca d’Italia, actualizado al 21 de octubre de 2026. Para encontrar el banco y la sucursal solo usamos los códigos ABI y CAB.",
+    "onlineBankTitle": "Banco online extranjero: {name}",
+    "onlineBankText": "Es una cuenta que se abre en minutos desde una app: mucha gente la usa con normalidad, pero también se usa mucho en estafas. Si quien pide el pago dice ser una empresa o tienda italiana, pide explicaciones antes de pagar."
   },
   "scudoDati": {
     "badge": "Seguridad · Gratis",

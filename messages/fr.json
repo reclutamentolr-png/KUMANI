@@ -5912,7 +5912,18 @@
     "checkmailLink": "CheckMail",
     "checkmailLinkText": "Tu as reçu l’IBAN dans un e-mail suspect ? Vérifie-le ici.",
     "dossierTool": "Vérifier l’IBAN",
-    "dossierAdvice": "Un IBAN bien écrit ne garantit pas que le destinataire est honnête : un virement instantané ne peut pas être annulé."
+    "dossierAdvice": "Un IBAN bien écrit ne garantit pas que le destinataire est honnête : un virement instantané ne peut pas être annulé.",
+    "bankLoading": "Recherche de la banque dans le registre de la Banca d’Italia…",
+    "bankTitle": "Banque",
+    "branchTitle": "Agence",
+    "bankKind_ip": "Établissement de paiement : en général un compte en ligne",
+    "bankKind_imel": "Établissement de monnaie électronique : en général un compte en ligne ou une carte prépayée",
+    "bankKind_poste": "Compte BancoPosta ou Postepay de Poste Italiane",
+    "bankNotFound": "Code ABI absent du registre de la Banca d’Italia : demande des explications avant de payer.",
+    "branchNotFound": "Agence introuvable dans le registre (compte en ligne ou agence fermée).",
+    "bankSource": "Source : registre public des intermédiaires de la Banca d’Italia, mis à jour le 21 octobre 2026. Pour trouver la banque et l’agence, nous utilisons seulement les codes ABI et CAB.",
+    "onlineBankTitle": "Banque en ligne étrangère : {name}",
+    "onlineBankText": "C’est un compte qu’on ouvre en quelques minutes depuis une application : beaucoup l’utilisent normalement, mais il est aussi très utilisé dans les arnaques. Si la personne qui demande le paiement dit être une entreprise ou un magasin italien, demande des explications avant de payer."
   },
   "scudoDati": {
     "badge": "Sécurité · Gratuit",

@@ -5912,7 +5912,18 @@
     "checkmailLink": "CheckMail",
     "checkmailLinkText": "Did you get the IBAN in a suspicious email? Check it here.",
     "dossierTool": "IBAN Check",
-    "dossierAdvice": "A correctly written IBAN doesn’t guarantee the recipient is honest: an instant transfer can’t be undone."
+    "dossierAdvice": "A correctly written IBAN doesn’t guarantee the recipient is honest: an instant transfer can’t be undone.",
+    "bankLoading": "Looking up the bank in the Bank of Italy register…",
+    "bankTitle": "Bank",
+    "branchTitle": "Branch",
+    "bankKind_ip": "Payment institution: usually an online account",
+    "bankKind_imel": "Electronic money institution: usually an online account or a prepaid card",
+    "bankKind_poste": "Poste Italiane BancoPosta or Postepay account",
+    "bankNotFound": "ABI code not found in the Bank of Italy register: ask for an explanation before paying.",
+    "branchNotFound": "Branch not found in the register (it may be an online account or a closed branch).",
+    "bankSource": "Source: Bank of Italy public register of intermediaries, updated 21 October 2026. To find the bank and branch we only use the ABI and CAB codes.",
+    "onlineBankTitle": "Foreign online bank: {name}",
+    "onlineBankText": "It is an account that can be opened in minutes from an app: many people use it normally, but it is also widely used in scams. If whoever asks for the payment says they are an Italian company or shop, ask for an explanation before paying."
   },
   "scudoDati": {
     "badge": "Security · Free",
