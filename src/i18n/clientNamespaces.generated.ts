@@ -58,6 +58,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "landingPublic",
   "lateSponsor",
   "lifeCalendar",
+  "lumen",
   "magazzino",
   "maintenanceScreen",
   "mandala",

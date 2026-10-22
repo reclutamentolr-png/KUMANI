@@ -105,11 +105,13 @@ export default function SpendlyDashboard({
 
       <div className="rounded-2xl border border-[var(--gold)]/20 bg-[var(--paper)] p-5 mb-6">
         <h3 className="text-sm font-bold text-[var(--ink)] mb-2">{t('balanceTrend')}</h3>
-        <BalanceAreaChart data={cumulativeBalance} />
+        <BalanceAreaChart
+          data={cumulativeBalance}
+          highlightMonth={year === Number(todayKey().slice(0, 4)) ? Number(todayKey().slice(5, 7)) : 12}
+        />
       </div>
 
       <div className="rounded-2xl border border-[var(--gold)]/20 bg-[var(--paper)] p-5 mb-6">
-        <h3 className="text-sm font-bold text-[var(--ink)] mb-2">{t('incomeVsExpenses')}</h3>
         <IncomeExpenseBarChart data={monthly.map((m) => ({ month: m.month, income: m.income, expenses: m.fixedExpenses + m.variableExpenses }))} />
       </div>
 
