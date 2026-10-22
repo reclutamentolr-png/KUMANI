@@ -2,9 +2,10 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { Clapperboard, FilePlus2, LoaderCircle, Play, Trash2 } from 'lucide-react'
+import { Clapperboard, FilePlus2, LoaderCircle, Play, Sparkles, Trash2 } from 'lucide-react'
 import { deleteLumenScript, saveLumenScript } from '@/app/actions/lumen'
 import { countWords, estimateSeconds, formatDuration, LUMEN_BODY_MAX, LUMEN_TITLE_MAX, type LumenScript } from '@/lib/lumen'
+import LumenAiDialog from './LumenAiDialog'
 import LumenPrompter from './LumenPrompter'
 
 type SaveState = 'idle' | 'saving' | 'saved' | 'error'
@@ -22,6 +23,7 @@ export default function LumenApp({ initialScripts }: { initialScripts: LumenScri
   const [saveState, setSaveState] = useState<SaveState>('idle')
   const [error, setError] = useState<string | null>(null)
   const [prompter, setPrompter] = useState(false)
+  const [aiOpen, setAiOpen] = useState(false)
   // Evita due creazioni dello stesso copione se si scrive mentre si salva
   const saving = useRef<Promise<unknown> | null>(null)
   const idRef = useRef(currentId)
@@ -102,6 +104,16 @@ export default function LumenApp({ initialScripts }: { initialScripts: LumenScri
           className="flex min-h-10 w-full items-center justify-center gap-2 rounded-xl bg-[var(--ink)] px-3 text-sm font-bold text-[var(--gold-bright)] hover:bg-[var(--ink-soft)]"
         >
           <FilePlus2 className="h-4 w-4" /> {t('newScript')}
+        </button>
+        <button
+          type="button"
+          onClick={async () => {
+            await flush()
+            setAiOpen(true)
+          }}
+          className="mt-2 flex min-h-10 w-full items-center justify-center gap-2 rounded-xl border border-[var(--gold)]/50 bg-[var(--gold)]/10 px-3 text-sm font-bold text-[var(--ink)] hover:bg-[var(--gold)]/20"
+        >
+          <Sparkles className="h-4 w-4 text-[var(--gold)]" /> {t('aiOpen')}
         </button>
         <p className="mb-1 mt-3 px-1 text-xs font-bold uppercase tracking-wider text-[var(--muted)]">{t('myScripts')}</p>
         {scripts.length === 0 ? (
@@ -191,6 +203,22 @@ export default function LumenApp({ initialScripts }: { initialScripts: LumenScri
         </div>
       </section>
 
+      {aiOpen && (
+        <LumenAiDialog
+          onClose={() => setAiOpen(false)}
+          onCreated={(script) => {
+            setAiOpen(false)
+            setScripts((list) => [script, ...list.filter((x) => x.id !== script.id)])
+            idRef.current = script.id
+            setCurrentId(script.id)
+            setTitle(script.title)
+            setBody(script.body)
+            setDirty(false)
+            setSaveState('saved')
+            setError(null)
+          }}
+        />
+      )}
       {prompter && <LumenPrompter title={title} text={body} onClose={() => setPrompter(false)} />}
     </div>
   )

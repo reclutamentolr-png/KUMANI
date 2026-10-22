@@ -41,3 +41,16 @@ export const safeFileName = (title: string) =>
     .replace(/^-|-$/g, '')
     .slice(0, 40)
     .toLowerCase() || 'lumen'
+
+// «Scrivi con l'AI»: le scelte del modulo (durata in secondi, tono, obiettivo)
+export const LUMEN_AI_DURATIONS = [15, 30, 60, 90] as const
+export const LUMEN_AI_TONES = ['friendly', 'professional', 'energetic', 'calm'] as const
+export const LUMEN_AI_GOALS = ['present', 'offer', 'tips', 'story'] as const
+export type LumenAiRequest = {
+  topic: string
+  audience: string
+  cta: string
+  seconds: (typeof LUMEN_AI_DURATIONS)[number]
+  tone: (typeof LUMEN_AI_TONES)[number]
+  goal: (typeof LUMEN_AI_GOALS)[number]
+}
