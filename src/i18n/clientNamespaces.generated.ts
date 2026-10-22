@@ -123,6 +123,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "voucherPrint",
   "voucherReceipt",
   "voucherWallet",
+  "vox",
   "wallet",
   "webinar",
   "welcomeHome",

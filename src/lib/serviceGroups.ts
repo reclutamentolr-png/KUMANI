@@ -38,6 +38,7 @@ const GROUP_OF: Record<string, ServiceGroup> = {
   // La tua attività e farti conoscere
   'landing-page': 'business',
   lumen: 'business',
+  vox: 'business',
   shop: 'business',
   menu: 'business',
   fidelity: 'business',
