@@ -48,6 +48,7 @@ const PAID_TOOLS = [
   'clienti',
   'hopla',
   'firma-pdf',
+  'lumen',
   'documento-sicuro',
   'firma-email',
   'calcolatrici',

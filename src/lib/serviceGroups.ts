@@ -37,6 +37,7 @@ const GROUP_OF: Record<string, ServiceGroup> = {
   'firma-email': 'work',
   // La tua attività e farti conoscere
   'landing-page': 'business',
+  lumen: 'business',
   shop: 'business',
   menu: 'business',
   fidelity: 'business',

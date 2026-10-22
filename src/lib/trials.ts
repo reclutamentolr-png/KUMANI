@@ -2,7 +2,7 @@
 // provabili, durate e limiti. Usato dal server e dai componenti.
 
 export const TRIAL_TOOLS = {
-  pro: ['fidelity', 'digital-receipt', 'preventivi', 'magazzino', 'calcolatrici', 'landing-page', 'menu'],
+  pro: ['fidelity', 'digital-receipt', 'preventivi', 'magazzino', 'calcolatrici', 'landing-page', 'menu', 'lumen'],
   base: ['link-in-bio', 'memolife', 'life-calendar', 'garage', 'casa', 'findo', 'spendly', 'kumani-cv'],
 } as const
 

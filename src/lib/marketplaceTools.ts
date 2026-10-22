@@ -433,6 +433,17 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       requiresSubscription: true,
     },
     {
+      toolName: 'lumen',
+      href: '/marketplace/lumen',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'Clapperboard',
+      title: t('lumen'),
+      description: t('lumenDescription'),
+      color: 'gold',
+      category: 'marketing',
+      requiresSubscription: true,
+    },
+    {
       toolName: 'landing-page',
       href: '/marketplace/landing-page',
       gradient: 'bg-[var(--ink)]',
