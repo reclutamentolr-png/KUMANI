@@ -3,7 +3,7 @@
 import AdminGlobalSearch from '@/components/admin/AdminGlobalSearch'
 import dynamic from 'next/dynamic'
 import { notify } from '@/lib/adminNotify'
-import { SITE_URL } from '@/lib/siteUrl'
+import { PUBLIC_SITE_URL, SITE_URL } from '@/lib/siteUrl'
 import AdminPanelLoading from '@/components/admin/AdminPanelLoading'
 import AdminToaster from '@/components/admin/AdminToaster'
 import { useState, useEffect, useMemo, type ComponentProps } from 'react'
@@ -112,6 +112,7 @@ import {
   ChevronRight,
   LockOpen,
 } from 'lucide-react'
+import CopyButton from '@/components/CopyButton'
 import { askConfirm } from '@/lib/confirm'
 
 // Ogni sezione dell'Admin si scarica solo quando la si apre
@@ -939,7 +940,11 @@ L'accesso viene registrato.`))) return
                       )}
                     </td>
                     <td className="px-4 py-3">
-                      <div className="font-mono text-sm text-[var(--gold)]">{user.referral_code}</div>
+                      {/* Codice invito con il pulsante che copia il link d'invito completo */}
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-mono text-sm text-[var(--gold)]">{user.referral_code}</span>
+                        {user.referral_code && <CopyButton text={`${PUBLIC_SITE_URL}/ref/${user.referral_code}`} variant="light" />}
+                      </div>
                       <span className={`mt-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                         user.subscription_status === 'active' && !user.is_blocked ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
                       }`}>
