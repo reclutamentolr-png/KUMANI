@@ -7467,6 +7467,17 @@
         "p2d": "Quem vai, quem talvez, lugares livres.",
         "p3": "Preço claro",
         "p3d": "Por pessoa ou «pago eu», visível desde logo."
+      },
+      "lumen": {
+        "sub": "O guião nos olhos, a luz na voz",
+        "tagline": "Grava Reels, TikToks, Shorts e vídeos de empresa a olhar diretamente para a câmara: o texto desliza e tu pareces natural.",
+        "p1": "O texto desliza por ti",
+        "p1d": "Perto da câmara, à velocidade que escolhes.",
+        "p2": "Gravas com o telemóvel",
+        "p2d": "9:16 ou 16:9, pronto para as redes.",
+        "p3": "O vídeo é teu",
+        "p3d": "Gravado no telemóvel, sem o carregar.",
+        "note": "«Não decores. Ilumina.»"
       }
     },
     "includedSurprise": "Para todos, também com a conta gratuita",
@@ -8357,6 +8368,25 @@
       "step3Text": "Saídas, eventos, viagens, compromissos, faturas e prazos chegam ao teu calendário. As alterações fazem-se no KUMANI: o Google recolhe-as a cada poucas horas.",
       "step4Title": "Guarda o link para ti",
       "step4Text": "Quem tem o link vê os teus compromissos. Se achas que outra pessoa o tem, toca em «Gerar novo link»: o antigo deixa de funcionar."
+    },
+    "lumen": {
+      "title": "KUMANI LUMEN",
+      "summary": "Grava os teus vídeos a olhar diretamente para a câmara: o guião desliza no ecrã e tu falas com naturalidade.",
+      "cta": "Abrir LUMEN",
+      "step1Title": "Escreve o guião",
+      "step1Text": "Toca em «Novo guião», dá-lhe um título e escreve o que queres dizer. Guarda-se sozinho e por baixo vês as palavras e a duração estimada, para saberes se cabe num Reel.",
+      "step1Tip": "Frases curtas, uma ideia por linha: em vídeo soam mais naturais.",
+      "step2Title": "Inicia o LUMEN",
+      "step2Text": "Toca em «Iniciar LUMEN»: abre-se a câmara frontal em ecrã inteiro. Na primeira vez o telemóvel pede autorização para a câmara e o microfone.",
+      "step2Tip": "Põe o telemóvel à altura dos olhos, de preferência num suporte.",
+      "step3Title": "Lê a olhar para a câmara",
+      "step3Text": "Toca em ▶: depois da contagem 3-2-1 o texto desliza em cima, perto da objetiva. Segue a linha marcada pela seta dourada: quem vê o vídeo vê-te a falar para a câmara.",
+      "step3Tip": "Toca no texto para pausar; parado, move-o com o dedo.",
+      "step4Title": "Ajusta a velocidade e o texto",
+      "step4Text": "Com − e + mudas a velocidade, mesmo enquanto o texto desliza; com os dois A tornas o texto mais pequeno ou maior. Em cima escolhes o formato: 9:16 para Reels, TikTok e Shorts, 16:9 para o YouTube.",
+      "step5Title": "Grava e descarrega o vídeo",
+      "step5Text": "Toca no botão vermelho: contagem decrescente e começa a gravação com o texto. Quando acabares toca no quadrado: vês o vídeo, descarregas ou partilhas logo.",
+      "step5Tip": "O vídeo fica no teu telemóvel: a KUMANI não o carrega nem o vê."
     }
   },
   "deckTexts": {

@@ -7467,6 +7467,17 @@
         "p2d": "Qui vient, qui peut-être, places restantes.",
         "p3": "Prix clair",
         "p3d": "Par personne ou « j’offre », visible tout de suite."
+      },
+      "lumen": {
+        "sub": "Le texte dans les yeux, la lumière dans la voix",
+        "tagline": "Enregistre Reels, TikTok, Shorts et vidéos d’entreprise en regardant droit dans la caméra : le texte défile, tu as l’air naturel.",
+        "p1": "Le texte défile pour toi",
+        "p1d": "Près de la caméra, à la vitesse que tu choisis.",
+        "p2": "Tu enregistres au téléphone",
+        "p2d": "9:16 ou 16:9, prêt pour les réseaux.",
+        "p3": "Ta vidéo reste à toi",
+        "p3d": "Enregistrée sur le téléphone, jamais envoyée.",
+        "note": "« Ne mémorise pas. Illumine. »"
       }
     },
     "includedSurprise": "Pour tous, même avec le compte gratuit",
@@ -8357,6 +8368,25 @@
       "step3Text": "Soirées, événements, voyages, rendez-vous, factures et échéances arrivent dans votre agenda. Les modifications se font dans KUMANI : Google les reprend toutes les quelques heures.",
       "step4Title": "Gardez le lien pour vous",
       "step4Text": "Qui a le lien voit vos engagements. Si vous pensez que quelqu’un d’autre l’a, touchez « Régénérer le lien » : l’ancien ne fonctionne plus."
+    },
+    "lumen": {
+      "title": "KUMANI LUMEN",
+      "summary": "Enregistre tes vidéos en regardant droit dans la caméra : le texte défile à l’écran et tu parles naturellement.",
+      "cta": "Ouvrir LUMEN",
+      "step1Title": "Écris le script",
+      "step1Text": "Touche « Nouveau script », donne un titre et écris ce que tu veux dire. Il s’enregistre tout seul et en dessous tu vois les mots et la durée estimée, pour savoir s’il tient dans un Reel.",
+      "step1Tip": "Des phrases courtes, une idée par ligne : en vidéo, c’est plus naturel.",
+      "step2Title": "Lance LUMEN",
+      "step2Text": "Touche « Lancer LUMEN » : la caméra frontale s’ouvre en plein écran. La première fois, le téléphone demande l’autorisation pour la caméra et le micro.",
+      "step2Tip": "Tiens le téléphone à hauteur des yeux, idéalement sur un support.",
+      "step3Title": "Lis en regardant la caméra",
+      "step3Text": "Touche ▶ : après le compte à rebours 3-2-1, le texte défile en haut, près de l’objectif. Suis la ligne indiquée par la flèche dorée : on te voit parler droit dans la caméra.",
+      "step3Tip": "Touche le texte pour mettre en pause ; à l’arrêt, déplace-le avec le doigt.",
+      "step4Title": "Règle la vitesse et le texte",
+      "step4Text": "Avec − et + tu changes la vitesse, même pendant le défilement ; avec les deux A tu réduis ou agrandis le texte. En haut, choisis le format : 9:16 pour Reels, TikTok et Shorts, 16:9 pour YouTube.",
+      "step5Title": "Enregistre et télécharge la vidéo",
+      "step5Text": "Touche le bouton rouge : compte à rebours, puis l’enregistrement démarre avec le texte. Quand tu as fini, touche le carré : regarde la vidéo, télécharge-la ou partage-la tout de suite.",
+      "step5Tip": "La vidéo reste sur ton téléphone : KUMANI ne la télécharge pas et ne la voit pas."
     }
   },
   "deckTexts": {

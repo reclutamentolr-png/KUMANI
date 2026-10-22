@@ -7467,6 +7467,17 @@
         "p2d": "Who’s in, who’s maybe, seats left.",
         "p3": "Clear cost",
         "p3d": "Per person or “my treat”, shown upfront."
+      },
+      "lumen": {
+        "sub": "The script in your eyes, the light in your voice",
+        "tagline": "Record Reels, TikToks, Shorts and business videos looking straight into the camera: the text scrolls on screen, you look natural.",
+        "p1": "The text scrolls for you",
+        "p1d": "Close to the camera, at the speed you choose.",
+        "p2": "Record on your phone",
+        "p2d": "9:16 or 16:9, ready for social media.",
+        "p3": "Your video stays yours",
+        "p3d": "Recorded on your phone, never uploaded.",
+        "note": "“Don’t memorise. Illuminate.”"
       }
     },
     "includedSurprise": "For everyone, free account included",
@@ -8357,6 +8368,25 @@
       "step3Text": "Evenings, events, trips, appointments, bills and deadlines reach your calendar. Changes are made in KUMANI: Google picks them up every few hours.",
       "step4Title": "Keep the link to yourself",
       "step4Text": "Anyone with the link can see your commitments. If you think someone else has it, tap “Regenerate the link”: the old one stops working."
+    },
+    "lumen": {
+      "title": "KUMANI LUMEN",
+      "summary": "Record your videos looking straight into the camera: the script scrolls on screen and you speak naturally.",
+      "cta": "Open LUMEN",
+      "step1Title": "Write the script",
+      "step1Text": "Tap “New script”, give it a title and write what you want to say. It saves automatically and below you see the words and estimated length, so you know if it fits a Reel.",
+      "step1Tip": "Short sentences, one idea per line: they sound more natural on video.",
+      "step2Title": "Start LUMEN",
+      "step2Text": "Tap “Start LUMEN”: the front camera opens full screen. The first time, your phone asks for camera and microphone permission.",
+      "step2Tip": "Hold the phone at eye level, ideally on a stand.",
+      "step3Title": "Read looking into the camera",
+      "step3Text": "Tap ▶: after the 3-2-1 countdown the text scrolls at the top, close to the lens. Follow the line marked by the gold arrow: viewers see you talking straight into the camera.",
+      "step3Tip": "Tap the text to pause; when paused, move it with your finger.",
+      "step4Title": "Adjust speed and text",
+      "step4Text": "Use − and + to change the speed, even while the text is scrolling; the two A buttons make the text smaller or bigger. At the top choose the format: 9:16 for Reels, TikTok and Shorts, 16:9 for YouTube.",
+      "step5Title": "Record and download the video",
+      "step5Text": "Tap the red button: countdown, then recording starts together with the text. When you’re done tap the square: watch the video, download it or share it right away.",
+      "step5Tip": "The video stays on your phone: KUMANI doesn’t upload or see it."
     }
   },
   "deckTexts": {

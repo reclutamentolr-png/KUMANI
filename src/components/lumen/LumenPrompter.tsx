@@ -407,6 +407,9 @@ export default function LumenPrompter({ title, text, onClose }: { title: string;
       {/* Video registrato: guarda, scarica, condividi o rifai */}
       {result && (
         <div className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-4 bg-black/90 p-5">
+          <button type="button" onClick={close} aria-label={t('close')} className={`absolute left-3 top-[max(env(safe-area-inset-top),0.75rem)] ${round}`}>
+            <X className="h-5 w-5" />
+          </button>
           <p className="text-lg font-extrabold">{t('resultTitle')}</p>
           <video src={result.url} controls playsInline className="max-h-[55vh] max-w-full rounded-2xl bg-black" />
           <div className="flex w-full max-w-sm flex-col gap-2">

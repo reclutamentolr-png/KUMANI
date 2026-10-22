@@ -41,6 +41,7 @@ export const TOOL_GUIDES: { path: string; slug: GuideSlug }[] = [
   { path: '/marketplace/clienti', slug: 'clienti' },
   { path: '/marketplace/hopla', slug: 'hopla' },
   { path: '/marketplace/firma-pdf', slug: 'firma-pdf' },
+  { path: '/marketplace/lumen', slug: 'lumen' },
   { path: '/marketplace/rete-antitruffa', slug: 'rete-antitruffa' },
   { path: '/marketplace/scudo-dati', slug: 'scudo-dati' },
   { path: '/marketplace/trova-lavoro', slug: 'trova-lavoro' },

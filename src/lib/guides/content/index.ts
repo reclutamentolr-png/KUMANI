@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server'
 import type { GuideCategory, GuideSlug, GuidesContent, GuideStep } from '@/lib/guides/types'
 import { GUIDE_CATEGORIES, GUIDE_STRUCTURE } from '@/lib/guides/structure'
+import { getDisabledTools } from '@/lib/freeTools'
 
 // Guide aperte a tutti (homepage, accesso, registrazione, Google): le altre
 // mostrano l'app dall'interno e sono per chi ha già fatto l'accesso.
@@ -9,14 +10,16 @@ export const PUBLIC_GUIDES: GuideSlug[] = ['registrazione', 'accesso']
 // Testi delle guide dai file delle lingue (namespace "guideTexts"), con le
 // correzioni dei traduttori già applicate. Letti "raw": niente segnaposto.
 export async function getGuidesContent(locale: string): Promise<GuidesContent> {
-  const t = await getTranslations({ locale, namespace: 'guideTexts' })
+  const [t, disabled] = await Promise.all([getTranslations({ locale, namespace: 'guideTexts' }), getDisabledTools()])
   const text = (key: string) => String(t.raw(key) ?? '')
 
   const categories = Object.fromEntries(
     GUIDE_CATEGORIES.map((c) => [c, { title: text(`categories.${c}.title`), text: text(`categories.${c}.text`) }]),
   ) as Record<GuideCategory, { title: string; text: string }>
 
-  const guides = GUIDE_STRUCTURE.map((g) => {
+  // Le guide dei servizi spenti dall'Admin non si vedono (es. un servizio
+  // pronto ma non ancora annunciato)
+  const guides = GUIDE_STRUCTURE.filter((g) => !disabled.includes(g.slug)).map((g) => {
     const k = g.slug.replace(/-/g, '_')
     const steps: GuideStep[] = Array.from({ length: g.steps }, (_, i) => {
       const n = i + 1

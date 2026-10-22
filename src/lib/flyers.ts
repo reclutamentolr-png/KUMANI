@@ -31,6 +31,7 @@ export const FLYERS: FlyerConfig[] = [
   { tool: 'magazzino', style: 'photo', category: 'pro', icon: 'Package', points: ['ScanBarcode', 'BellRing', 'FileSpreadsheet'], photo: '/flyers/photos/magazzino.webp' },
   { tool: 'qr-code-pro', style: 'photo', category: 'pro', icon: 'QrCode', points: ['RefreshCw', 'ChartColumn', 'Store'], photo: '/flyers/photos/qr-code-pro.webp' },
   { tool: 'firma-email', style: 'photo', category: 'pro', icon: 'Mail', points: ['ClipboardPaste', 'Palette', 'IdCard'], photo: '/flyers/photos/firma-email.webp' },
+  { tool: 'lumen', style: 'photo', category: 'pro', icon: 'Camera', points: ['SlidersHorizontal', 'Smartphone', 'ShieldCheck'], photo: '/flyers/photos/lumen.webp' },
   { tool: 'calcolatrici', style: 'photo', category: 'pro', icon: 'Calculator', points: ['Percent', 'Tag', 'Smartphone'], photo: '/flyers/photos/calcolatrici.webp' },
 
   // Telefono con la schermata del servizio

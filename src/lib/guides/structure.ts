@@ -58,6 +58,7 @@ export const GUIDE_STRUCTURE: GuideStructure[] = [
   { slug: 'brand', category: 'pro', minutes: 3, steps: 4, href: '/scheda-attivita/colori' },
   { slug: 'qr-code-pro', category: 'pro', minutes: 2, steps: 3, href: '/marketplace/qr-code-pro' },
   { slug: 'firma-email', category: 'pro', minutes: 3, steps: 5, href: '/marketplace/firma-email' },
+  { slug: 'lumen', category: 'pro', minutes: 3, steps: 5, href: '/marketplace/lumen' },
   { slug: 'calcolatrici', category: 'pro', minutes: 2, steps: 4, href: '/marketplace/calcolatrici' },
   { slug: 'focus', category: 'wellness', minutes: 2, steps: 3, href: '/marketplace/focus' },
   { slug: 'mandala', category: 'wellness', minutes: 2, steps: 3, href: '/marketplace/mandala' },

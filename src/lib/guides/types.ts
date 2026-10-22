@@ -53,6 +53,7 @@ export type GuideSlug =
   | 'svat'
   | 'hopla'
   | 'firma-pdf'
+  | 'lumen'
   | 'rete-antitruffa'
   | 'scudo-dati'
   | 'trova-lavoro'
