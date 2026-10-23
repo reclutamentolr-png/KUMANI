@@ -27,6 +27,7 @@ export const MY_DATA_SERVICES: MyDataService[] = [
   { key: 'clienti', tool: 'clienti', tables: [t('job_files'), t('job_costs'), t('job_time_entries'), t('client_payments'), t('client_jobs')], buckets: ['job-files'] },
   { key: 'magazzino', tool: 'magazzino', tables: [t('inventory_movements', 'owner_id'), t('inventory_products', 'owner_id'), t('inventory_categories', 'owner_id')], buckets: [] },
   { key: 'aureya', tool: 'aureya', tables: [t('aureya_test_results')], buckets: [] },
+  { key: 'cronobioma', tool: 'cronobioma', tables: [t('cronobioma_sleep_logs', 'owner_id'), t('cronobioma_profiles', 'owner_id')], buckets: [] },
 ]
 
 export const myDataService = (key: string) => MY_DATA_SERVICES.find((s) => s.key === key) ?? null

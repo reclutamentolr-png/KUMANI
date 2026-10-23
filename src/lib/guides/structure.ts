@@ -50,6 +50,7 @@ export const GUIDE_STRUCTURE: GuideStructure[] = [
   { slug: 'firma-pdf', category: 'organize', minutes: 2, steps: 5, href: '/marketplace/firma-pdf' },
   { slug: 'menu', category: 'pro', minutes: 3, steps: 4, href: '/marketplace/menu' },
   { slug: 'shop', category: 'pro', minutes: 4, steps: 5, href: '/marketplace/shop' },
+  { slug: 'offermaker', category: 'pro', minutes: 3, steps: 5, href: '/marketplace/offermaker' },
   { slug: 'landing-page', category: 'pro', minutes: 4, steps: 5, href: '/marketplace/landing-page' },
   { slug: 'fidelity', category: 'pro', minutes: 3, steps: 5, href: '/marketplace/fidelity' },
   { slug: 'preventivi', category: 'pro', minutes: 3, steps: 5, href: '/marketplace/preventivi' },
@@ -75,5 +76,6 @@ export const GUIDE_STRUCTURE: GuideStructure[] = [
   { slug: 'nexus', category: 'wellness', minutes: 3, steps: 5, href: '/marketplace/nexus' },
   { slug: 'neurobalance', category: 'wellness', minutes: 2, steps: 3, href: '/marketplace/neurobalance' },
   { slug: 'aureya', category: 'wellness', minutes: 3, steps: 4, href: '/marketplace/aureya' },
+  { slug: 'cronobioma', category: 'wellness', minutes: 4, steps: 5, href: '/marketplace/cronobioma' },
   { slug: 'travel', category: 'wellness', minutes: 2, steps: 2, href: '/viaggi' },
 ]

@@ -44,6 +44,7 @@ export const HUB_TABS: Record<ServiceHub, HubTab[]> = {
     { key: 'focus', href: '/marketplace/focus', tool: 'focus' },
     { key: 'mandala', href: '/marketplace/mandala', tool: 'mandala' },
     { key: 'senses', href: '/marketplace/aureya', tool: 'aureya' },
+    { key: 'rhythm', href: '/marketplace/cronobioma', tool: 'cronobioma' },
   ],
   giochi: [
     { key: 'crossword', href: '/marketplace/nexus', tool: 'nexus' },
@@ -172,6 +173,7 @@ export const TOOL_HUB: Record<string, ServiceHub> = {
   focus: 'benessere',
   mandala: 'benessere',
   aureya: 'benessere',
+  cronobioma: 'benessere',
   nexus: 'giochi',
   veritas: 'giochi',
   fabula: 'giochi',

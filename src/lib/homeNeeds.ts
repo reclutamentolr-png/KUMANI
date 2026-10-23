@@ -20,7 +20,7 @@ export const HOME_NEEDS = [
   { key: 'community', icon: 'HeartHandshake', items: ['listings', 'convivio', 'events', 'timebank', 'proposte', 'spotlight'] },
   { key: 'games', icon: 'Gamepad2', items: ['nexus', 'veritas', 'fabula', 'mosaic'] },
   // Salute e benessere (la chiave resta «relax»: è già salvata nelle scelte degli iscritti)
-  { key: 'relax', icon: 'HeartPulse', items: ['aureya', 'neurobalance', 'oxygen'] },
+  { key: 'relax', icon: 'HeartPulse', items: ['aureya', 'cronobioma', 'neurobalance', 'oxygen'] },
   { key: 'unwind', icon: 'Leaf', items: ['focus', 'mandala'] },
   { key: 'gift', icon: 'Gift', items: ['sorprese'] },
 ] as const

@@ -34,6 +34,7 @@ export const TOOL_GUIDES: { path: string; slug: GuideSlug }[] = [
   { path: '/marketplace/fincheck', slug: 'fincheck' },
   { path: '/marketplace/menu', slug: 'menu' },
   { path: '/marketplace/shop', slug: 'shop' },
+  { path: '/marketplace/offermaker', slug: 'offermaker' },
   { path: '/marketplace/landing-page', slug: 'landing-page' },
   { path: '/marketplace/fidelity', slug: 'fidelity' },
   { path: '/marketplace/preventivi', slug: 'preventivi' },
@@ -66,6 +67,7 @@ export const TOOL_GUIDES: { path: string; slug: GuideSlug }[] = [
   { path: '/marketplace/nexus', slug: 'nexus' },
   { path: '/marketplace/neurobalance', slug: 'neurobalance' },
   { path: '/marketplace/aureya', slug: 'aureya' },
+  { path: '/marketplace/cronobioma', slug: 'cronobioma' },
   { path: '/viaggi', slug: 'travel' },
 ]
 

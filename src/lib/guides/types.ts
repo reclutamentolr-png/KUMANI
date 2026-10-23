@@ -41,6 +41,7 @@ export type GuideSlug =
   // Servizi Pro
   | 'menu'
   | 'shop'
+  | 'offermaker'
   | 'landing-page'
   | 'fidelity'
   | 'preventivi'
@@ -73,6 +74,7 @@ export type GuideSlug =
   | 'nexus'
   | 'neurobalance'
   | 'aureya'
+  | 'cronobioma'
   | 'travel'
 
 export type GuideStep = {

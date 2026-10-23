@@ -1,6 +1,7 @@
 'use server'
 
-import { getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
+import { isLandingLocale, LANDING_LOCALE_NAMES } from '@/lib/landing'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { getAnthropicClient, MissingApiKeyError } from '@/lib/anthropic'
@@ -78,7 +79,33 @@ function clampAnswers(answers: OfferFormAnswers): OfferFormAnswers {
   }
 }
 
-function buildGenerationPrompt(answers: OfferFormAnswers): string {
+// A volte l'AI infila i campi successivi dentro un testo, con pezzi di
+// codice («</description> <parameter name="ctaLabel">Prenota ora»): si
+// rimettono al loro posto e si tolgono i resti, così non finiscono sulla
+// pagina che vedono i clienti
+const LEAK = /<\/?[a-zA-Z_:]*parameter\b[^>]*>|<\/[a-zA-Z_]+>/
+const LEAKED_FIELD = /<[a-zA-Z_:]*parameter name="([a-zA-Z]+)">([\s\S]*?)(?=<\/[a-zA-Z_:]*parameter>|<[a-zA-Z_:]*parameter |$)/g
+function repairDraft(input: Record<string, unknown>): Partial<GeneratedCampaignDraft> {
+  const out: Record<string, string> = {}
+  const put = (key: string, value: string) => {
+    const clean = value.replace(/<\/?[a-zA-Z_:]+[^>]*>/g, ' ').replace(/[ \t]{2,}/g, ' ').trim()
+    if (clean && !out[key]) out[key] = clean
+  }
+  for (const [key, value] of Object.entries(input ?? {})) {
+    if (typeof value !== 'string') continue
+    if (!LEAK.test(value)) {
+      put(key, value)
+      continue
+    }
+    const first = value.search(LEAK)
+    put(key, value.slice(0, first))
+    for (const m of value.matchAll(LEAKED_FIELD)) put(m[1], m[2])
+  }
+  return out as Partial<GeneratedCampaignDraft>
+}
+
+// language: la lingua di chi usa il servizio (prima i testi uscivano sempre in italiano)
+function buildGenerationPrompt(answers: OfferFormAnswers, language: string): string {
   const objectiveLabels: Record<string, string> = {
     call: 'telefonate',
     whatsapp: 'messaggi WhatsApp',
@@ -97,7 +124,7 @@ function buildGenerationPrompt(answers: OfferFormAnswers): string {
     energetic: 'energico',
   }
 
-  return `Sei un copywriter esperto in marketing locale per piccole imprese e liberi professionisti italiani.
+  return `Sei un copywriter esperto in marketing locale per piccole imprese e liberi professionisti.
 Crea il contenuto di una campagna promozionale a partire da queste informazioni:
 
 Cosa offre: ${answers.whatOffer}
@@ -112,7 +139,7 @@ Genera: un titolo campagna breve (per uso interno), una headline accattivante pe
 un riassunto dell'offerta in una frase, una descrizione di 2-3 frasi, un'etichetta per il pulsante
 di call-to-action (max 4 parole, in maiuscolo), e tre varianti di messaggio WhatsApp da inviare a
 potenziali clienti: una "soft" (leggera, informale), una "direct" (diretta, con urgenza) e una
-"followup" (per ricontattare chi non ha risposto). Scrivi tutto in italiano, nello stile richiesto.`
+"followup" (per ricontattare chi non ha risposto). Scrivi tutto in ${language}, nello stile richiesto, anche se le informazioni qui sopra sono in un'altra lingua.`
 }
 
 export async function generateOfferDraft(
@@ -134,6 +161,7 @@ export async function generateOfferDraft(
   }
 
   const answers = clampAnswers(rawAnswers)
+  const locale = await getLocale()
 
   // Limite giornaliero: contato solo dopo aver verificato che la chiave API
   // esista (una chiave mancante non deve consumare la quota), prima della chiamata.
@@ -183,7 +211,7 @@ export async function generateOfferDraft(
         },
       ],
       tool_choice: { type: 'tool', name: 'emit_offer_campaign' },
-      messages: [{ role: 'user', content: buildGenerationPrompt(answers) }],
+      messages: [{ role: 'user', content: buildGenerationPrompt(answers, LANDING_LOCALE_NAMES[isLandingLocale(locale) ? locale : 'it']) }],
     })
 
     const toolUse = message.content.find(
@@ -195,7 +223,7 @@ export async function generateOfferDraft(
       return { success: false, message: 'generateError' }
     }
 
-    const raw = toolUse.input as Partial<GeneratedCampaignDraft>
+    const raw = repairDraft(toolUse.input as Record<string, unknown>)
     const text = (field: keyof GeneratedCampaignDraft) => (typeof raw[field] === 'string' ? raw[field]!.trim() : '')
     // Indispensabili: senza questi non c'è un'offerta da mostrare
     const essential: Array<keyof GeneratedCampaignDraft> = ['headline', 'description', 'whatsappMessageDirect']
@@ -249,6 +277,8 @@ export async function publishOfferCampaign(
       .insert({
         user_id: gate.userId,
         code,
+        // Lingua dei testi (prima restava sempre «it»)
+        locale: await getLocale(),
         status: 'published',
         what_offer: answers.whatOffer,
         target_audience: answers.targetAudience,

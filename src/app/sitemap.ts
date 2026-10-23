@@ -39,6 +39,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     ...PAGES.map((page) => entry(page, page === '' ? 1 : 0.6, page === '' ? 'weekly' : 'monthly')),
+    // Il test pubblico di CRONOBIOMA, solo con il servizio acceso
+    ...(off.has('cronobioma') ? [] : [entry('/cronobioma', 0.7, 'monthly')]),
     // Data dell'ultima modifica dall'Admin (es. servizio riacceso): Google rilegge la pagina
     ...tools.map((tool) => entry(`/strumenti/${tool.toolName}`, 0.7, 'monthly', updated.get(tool.toolName))),
     ...PUBLIC_GUIDES.map((slug) => entry(`/guida/${slug}`, 0.5)),

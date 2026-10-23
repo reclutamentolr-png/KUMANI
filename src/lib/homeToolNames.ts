@@ -5,7 +5,7 @@ export const HOME_TOOL_NAMES = [
   'qr-generator', 'link-in-bio', 'whatsapp-messages', 'qr-code-pro', 'fidelity', 'offermaker', 'menu', 'landing-page', 'shop', 'lumen', 'vox', 'captio', 'diarium', 'imago', 'forma', 'tutela',
   'svat', 'verifoto', 'checkmail', 'antitruffa', 'rete-antitruffa', 'verifica-iban', 'scudo-dati', 'documento-sicuro', 'firma-email', 'calcolatrici', 'focus',
   'memolife', 'life-calendar', 'garage', 'casa', 'findo', 'digital-receipt', 'spendly', 'fincheck', 'travel',
-  'mandala', 'oxygen', 'neurobalance', 'aureya',
+  'mandala', 'oxygen', 'neurobalance', 'aureya', 'cronobioma',
   'preventivi', 'clienti', 'hopla', 'firma-pdf', 'magazzino', 'kumani-cv', 'trova-lavoro',
   'affinity', 'veritas', 'mosaic', 'fabula', 'nexus',
   'listings', 'spotlight', 'convivio', 'events', 'timebank',

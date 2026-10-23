@@ -3,7 +3,7 @@
 import { forwardRef, type CSSProperties } from 'react'
 import localFont from 'next/font/local'
 import {
-  AudioWaveform, Award, BadgeCheck, Bell, BellRing, BookOpen, BookUser, Bookmark, BriefcaseBusiness, Building2, Calculator, CalendarCheck, CalendarClock,
+  AudioWaveform, SunMoon, Award, BadgeCheck, Bell, BellRing, BookOpen, BookUser, Bookmark, BriefcaseBusiness, Building2, Calculator, CalendarCheck, CalendarClock,
   CalendarDays, Camera, Car, ChartColumn, ChartLine, Circle, CircleCheck, ClipboardList, ClipboardPaste, Clock, Coins, Compass, Dices, Download, Ear, Eye,
   EyeOff, FileDown, FileSpreadsheet, FileText, Flower2, FolderOpen, Gauge, Gift, Globe, GraduationCap, Grid3x3, HandHelping, Handshake,
   HeartHandshake, House, IdCard, Image as ImageIcon, KeyRound, Landmark, Languages, Laugh, Lightbulb, Link, ListChecks, Mail, MailWarning,
@@ -24,7 +24,7 @@ const inter = localFont({ src: '../../fonts/Inter.woff2', weight: '100 900' })
 const playfair = localFont({ src: '../../fonts/PlayfairDisplay.woff2', weight: '400 900' })
 
 export const ICONS: Record<string, LucideIcon> = {
-  AudioWaveform, Award, BadgeCheck, Bell, BellRing, BookOpen, BookUser, Bookmark, BriefcaseBusiness, Building2, Calculator, CalendarCheck, CalendarClock,
+  AudioWaveform, SunMoon, Award, BadgeCheck, Bell, BellRing, BookOpen, BookUser, Bookmark, BriefcaseBusiness, Building2, Calculator, CalendarCheck, CalendarClock,
   CalendarDays, Camera, Car, ChartColumn, ChartLine, Circle, CircleCheck, ClipboardList, ClipboardPaste, Clock, Coins, Compass, Dices, Download, Ear, Eye,
   EyeOff, FileDown, FileSpreadsheet, FileText, Flower2, FolderOpen, Gauge, Gift, Globe, GraduationCap, Grid3x3, HandHelping, Handshake,
   HeartHandshake, House, IdCard, Image: ImageIcon, KeyRound, Landmark, Languages, Laugh, Lightbulb, Link, ListChecks, Mail, MailWarning,

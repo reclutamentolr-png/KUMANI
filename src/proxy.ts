@@ -34,6 +34,7 @@ const PAID_TOOLS = [
   'findo',
   'digital-receipt',
   'aureya',
+  'cronobioma',
   'spendly',
   'fidelity',
   'menu',

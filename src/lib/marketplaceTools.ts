@@ -334,6 +334,17 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       requiresSubscription: true,
     },
     {
+      toolName: 'cronobioma',
+      href: '/marketplace/cronobioma',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'SunMoon',
+      title: t('cronobioma'),
+      description: t('cronobiomaDescription'),
+      color: 'gold',
+      category: 'wellness',
+      requiresSubscription: true,
+    },
+    {
       toolName: 'preventivi',
       href: '/marketplace/preventivi',
       gradient: 'bg-[var(--ink)]',

@@ -59,6 +59,7 @@ const GROUP_OF: Record<string, ServiceGroup> = {
   neurobalance: 'wellness',
   mandala: 'wellness',
   aureya: 'wellness',
+  cronobioma: 'wellness',
   // Svago
   fabula: 'fun',
   nexus: 'fun',

@@ -76,6 +76,7 @@ export const SECTION_LABELS: Record<string, string> = {
   spotlight: 'Kumano del Giorno',
   spotlightHome: 'Kumano del Giorno (homepage)',
   aureya: 'Aureya',
+  cronobioma: 'KUMANI CRONOBIOMA',
   magazzino: 'Magazzino PRO',
   clienti: 'Clienti e Lavori',
   hopla: 'Hoplà',

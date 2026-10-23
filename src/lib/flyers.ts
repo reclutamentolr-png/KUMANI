@@ -21,6 +21,7 @@ export type FlyerConfig = {
 export const FLYERS: FlyerConfig[] = [
   // Pro: foto
   { tool: 'landing-page', style: 'phone', category: 'pro', icon: 'Store', points: ['Sparkles', 'Palette', 'MessageCircle'], shot: 'landing-page-5' },
+  { tool: 'offermaker', style: 'phone', category: 'pro', icon: 'Sparkles', points: ['Globe', 'QrCode', 'MessageCircle'], shot: 'offermaker-4' },
   { tool: 'menu', style: 'photo', category: 'pro', icon: 'Utensils', points: ['QrCode', 'Languages', 'Wheat'], photo: '/flyers/photos/menu.webp' },
   { tool: 'fidelity', style: 'photo', category: 'pro', icon: 'Stamp', points: ['Smartphone', 'Gift', 'Repeat'], photo: '/flyers/photos/fidelity.webp' },
   { tool: 'preventivi', style: 'photo', category: 'pro', icon: 'FileText', points: ['Smartphone', 'FileDown', 'Send'], photo: '/flyers/photos/preventivi.webp' },
@@ -74,6 +75,7 @@ export const FLYERS: FlyerConfig[] = [
   { tool: 'memolife', style: 'photo', category: 'personal', icon: 'CalendarDays', points: ['CalendarDays', 'Bell', 'NotebookPen'], photo: '/flyers/photos/planner-agenda.webp' },
   { tool: 'life-calendar', style: 'light', category: 'personal', icon: 'CalendarClock', points: ['RefreshCw', 'Bell', 'Car'] },
   { tool: 'aureya', style: 'light', category: 'wellness', icon: 'Ear', points: ['Ear', 'Eye', 'ChartLine'] },
+  { tool: 'cronobioma', style: 'phone', category: 'wellness', icon: 'SunMoon', points: ['Clock', 'BookOpen', 'Plane'], shot: 'cronobioma-3' },
   { tool: 'oxygen', style: 'light', category: 'wellness', icon: 'Wind', points: ['Timer', 'Circle', 'Moon'] },
   { tool: 'antitruffa', style: 'light', category: 'security', icon: 'BookOpen', points: ['MessageSquareWarning', 'Timer', 'Share2'] },
   { tool: 'whatsapp-messages', style: 'light', category: 'marketing', icon: 'MessageCircle', points: ['PenLine', 'Send', 'Lightbulb'] },
