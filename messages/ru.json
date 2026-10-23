@@ -15152,7 +15152,10 @@
     "default_tip_badge": "Совет",
     "default_tip_title": "Как сохранить цветы дольше",
     "default_tip_subtitle": "Обрежьте стебли по диагонали и меняйте воду каждые два дня.",
-    "default_tip_note": ""
+    "default_tip_note": "",
+    "colorPrimary": "Основной цвет",
+    "colorSecondary": "Дополнительный цвет",
+    "colorsHint": "Основной цвет — это фон, дополнительный выделяет надписи и детали."
   },
   "forma": {
     "badge": "Обрезка и адаптация видео · Тариф Pro",

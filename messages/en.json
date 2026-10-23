@@ -15152,7 +15152,10 @@
     "default_tip_badge": "Tip",
     "default_tip_title": "How to make your flowers last longer",
     "default_tip_subtitle": "Cut the stems diagonally and change the water every two days.",
-    "default_tip_note": ""
+    "default_tip_note": "",
+    "colorPrimary": "Primary colour",
+    "colorSecondary": "Secondary colour",
+    "colorsHint": "The primary is the background, the secondary colours highlighted text and details."
   },
   "forma": {
     "badge": "Trim and resize videos · Pro Plan",

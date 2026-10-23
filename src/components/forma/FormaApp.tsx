@@ -142,7 +142,13 @@ export default function FormaApp() {
       dest.stream.getAudioTracks().forEach((track) => stream.addTrack(track))
     } else v.muted = true
     const chunks: Blob[] = []
-    const rec = new MediaRecorder(stream, { mimeType: type.mimeType, videoBitsPerSecond: 8_000_000 })
+    // Qualità in proporzione a quella del video caricato (e ai pixel del nuovo
+    // formato): il browser comprime meno bene dell'originale, quindi un po' di
+    // più, ma senza arrivare al doppio del peso
+    const sourceBps = file && v.duration > 0 ? (file.size * 8) / v.duration : 4_000_000
+    const pixels = v.videoWidth && v.videoHeight ? (W * H) / (v.videoWidth * v.videoHeight) : 1
+    const videoBitsPerSecond = Math.round(Math.min(8_000_000, Math.max(2_500_000, sourceBps * pixels * 1.6)))
+    const rec = new MediaRecorder(stream, { mimeType: type.mimeType, videoBitsPerSecond, audioBitsPerSecond: 128_000 })
     rec.ondataavailable = (e) => e.data.size > 0 && chunks.push(e.data)
     let stopped = false
     let frame = 0

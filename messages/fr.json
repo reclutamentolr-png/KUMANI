@@ -15152,7 +15152,10 @@
     "default_tip_badge": "Conseil",
     "default_tip_title": "Comment faire durer tes fleurs plus longtemps",
     "default_tip_subtitle": "Coupe les tiges en diagonale et change l'eau tous les deux jours.",
-    "default_tip_note": ""
+    "default_tip_note": "",
+    "colorPrimary": "Couleur principale",
+    "colorSecondary": "Couleur secondaire",
+    "colorsHint": "La principale est le fond, la secondaire colore les textes mis en avant et les détails."
   },
   "forma": {
     "badge": "Coupe et adapte tes vidéos · Plan Pro",

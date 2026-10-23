@@ -15152,7 +15152,10 @@
     "default_tip_badge": "Consiglio",
     "default_tip_title": "Come far durare di più i tuoi fiori",
     "default_tip_subtitle": "Taglia gli steli in diagonale e cambia l’acqua ogni due giorni.",
-    "default_tip_note": ""
+    "default_tip_note": "",
+    "colorPrimary": "Colore primario",
+    "colorSecondary": "Colore secondario",
+    "colorsHint": "Il primario è lo sfondo, il secondario colora le scritte in evidenza e i dettagli."
   },
   "forma": {
     "badge": "Taglia e adatta video · Piano Pro",

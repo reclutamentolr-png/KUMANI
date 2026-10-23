@@ -15152,7 +15152,10 @@
     "default_tip_badge": "Tipp",
     "default_tip_title": "So halten deine Blumen länger",
     "default_tip_subtitle": "Schneide die Stiele schräg an und wechsle alle zwei Tage das Wasser.",
-    "default_tip_note": ""
+    "default_tip_note": "",
+    "colorPrimary": "Hauptfarbe",
+    "colorSecondary": "Zweitfarbe",
+    "colorsHint": "Die Hauptfarbe ist der Hintergrund, die Zweitfarbe färbt hervorgehobene Texte und Details."
   },
   "forma": {
     "badge": "Video schneiden und anpassen · Pro-Plan",

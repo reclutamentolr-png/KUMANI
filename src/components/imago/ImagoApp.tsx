@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useMemo } from 'react'
 import localFont from 'next/font/local'
 import { useTranslations } from 'next-intl'
 import { Download, ImagePlus, Share2, X } from 'lucide-react'
 import { imagoDone } from '@/app/actions/imago'
-import { drawImago, IMAGO_FIELDS, IMAGO_FORMATS, IMAGO_PRESETS, IMAGO_TEMPLATES, type ImagoFormat, type ImagoPalette, type ImagoTemplate, type ImagoTexts } from '@/lib/imago'
+import { drawImago, onColor, IMAGO_FIELDS, IMAGO_FORMATS, IMAGO_PRESETS, IMAGO_TEMPLATES, type ImagoFormat, type ImagoPalette, type ImagoTemplate, type ImagoTexts } from '@/lib/imago'
 
 // Caratteri dentro il progetto, come i volantini: la tela li usa anche offline
 const inter = localFont({ src: '../../fonts/Inter.woff2', weight: '100 900' })
@@ -45,7 +45,23 @@ export default function ImagoApp({ brandName, contact, logoUrl, hours, brandPale
   const [result, setResult] = useState<{ url: string; blob: Blob } | null>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [W, H] = IMAGO_FORMATS[format]
-  const palette = paletteKey === 'brand' && brandPalette ? brandPalette : IMAGO_PRESETS[paletteKey] ?? IMAGO_PRESETS.kumani
+  // Colori scelti a mano: primario (sfondo) e secondario (scritte in evidenza e dettagli)
+  const [custom, setCustom] = useState<{ bg: string; accent: string } | null>(null)
+  const palette: ImagoPalette = useMemo(
+    () =>
+      paletteKey === 'custom' && custom
+        ? { bg: custom.bg, fg: onColor(custom.bg), accent: custom.accent }
+        : paletteKey === 'brand' && brandPalette
+          ? brandPalette
+          : IMAGO_PRESETS[paletteKey] ?? IMAGO_PRESETS.kumani,
+    [paletteKey, custom, brandPalette]
+  )
+  // Si parte dai colori in uso, così si ritocca solo quello che serve
+  const setColor = (field: 'bg' | 'accent', value: string) => {
+    setCustom({ bg: palette.bg, accent: palette.accent, [field]: value })
+    setPaletteKey('custom')
+    setResult(null)
+  }
 
   useEffect(() => {
     if (!logoUrl) return
@@ -206,6 +222,23 @@ export default function ImagoApp({ brandName, contact, logoUrl, hours, brandPale
               </button>
             ))}
           </div>
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            {(['bg', 'accent'] as const).map((field) => (
+              <label
+                key={field}
+                className={`flex min-h-11 cursor-pointer items-center gap-2 rounded-xl border-2 px-2 text-sm font-semibold text-[var(--ink)] ${paletteKey === 'custom' ? 'border-[var(--ink)]' : 'border-gray-200'}`}
+              >
+                <input
+                  type="color"
+                  value={palette[field]}
+                  onChange={(e) => setColor(field, e.target.value)}
+                  className="h-8 w-8 shrink-0 cursor-pointer rounded-full border-0 bg-transparent p-0"
+                />
+                {t(field === 'bg' ? 'colorPrimary' : 'colorSecondary')}
+              </label>
+            ))}
+          </div>
+          <p className="mt-1 text-xs text-[var(--muted)]">{t('colorsHint')}</p>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <label className="block text-sm font-semibold text-[var(--ink)]">
               {t('brandName')}

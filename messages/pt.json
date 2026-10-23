@@ -15152,7 +15152,10 @@
     "default_tip_badge": "Dica",
     "default_tip_title": "Como fazer as tuas flores durarem mais",
     "default_tip_subtitle": "Corta os caules na diagonal e muda a água a cada dois dias.",
-    "default_tip_note": ""
+    "default_tip_note": "",
+    "colorPrimary": "Cor principal",
+    "colorSecondary": "Cor secundária",
+    "colorsHint": "A principal é o fundo, a secundária dá cor aos textos em destaque e aos detalhes."
   },
   "forma": {
     "badge": "Cortar e adaptar vídeos · Plano Pro",
