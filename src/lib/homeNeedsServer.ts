@@ -13,6 +13,7 @@ const COMMUNITY: Record<string, { titleKey: string; href: string; iconName: stri
   convivio: { titleKey: 'convivio', href: '/marketplace/convivio', iconName: 'HandPlatter' },
   timebank: { titleKey: 'timebank', href: '/marketplace/timebank', iconName: 'Hourglass' },
   spotlight: { titleKey: 'kumanoDelGiorno', href: '/marketplace/spotlight', iconName: 'Star' },
+  proposte: { titleKey: 'proposte', href: '/community/proposte', iconName: 'Lightbulb' },
 }
 
 export async function buildHomeNeeds(hrefFor: (toolName: string) => string = (name) => `/strumenti/${name}`): Promise<HomeNeed[]> {

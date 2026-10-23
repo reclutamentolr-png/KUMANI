@@ -6,6 +6,7 @@ import CopyButton from '@/components/CopyButton'
 import VoucherActivationButton from '@/components/VoucherActivationButton'
 import AffinityBadge from './AffinityBadge'
 import HomeServices from './HomeServices'
+import type { CommunityItem } from './CommunityBlock'
 import type { MyProfile } from '@/lib/myProfile'
 import type { ServiceItem } from '@/lib/servicesCatalog'
 import type { KarmaToday } from '@/lib/karmaToday'
@@ -28,6 +29,7 @@ export default async function DashboardTipo2({
   profile,
   shareUrl,
   services,
+  community = [],
   favoriteToolNames,
   basePrice,
   proTrialDaysLeft = null,
@@ -50,6 +52,8 @@ export default async function DashboardTipo2({
   shareUrl: string
   // Tutti i servizi accesi, con lo stato per l'utente (getServicesCatalog)
   services: ServiceItem[]
+  // Vista Lite: la sezione Community dopo «Usati di recente»
+  community?: CommunityItem[]
   favoriteToolNames: string[]
   // Prezzo del piano Plus già formattato (es. "49 €")
   basePrice: string
@@ -235,14 +239,14 @@ export default async function DashboardTipo2({
         welcome ? (
           <>
             {/* Nuovi iscritti Gratis: domanda e tre passi sono già in cima, qui i servizi */}
-            <HomeServices items={services} favorites={favoriteToolNames} />
+            <HomeServices items={services} favorites={favoriteToolNames} community={community} />
             {wellness}
             {welcomeFooter}
           </>
         ) : (
           <>
             {/* Lite: solo l'essenziale, prima i servizi scelti */}
-            <HomeServices items={services} favorites={favoriteToolNames} />
+            <HomeServices items={services} favorites={favoriteToolNames} community={community} />
             <QuickCheckBox title={t('quickCheckTitle')} className="" />
             {solveEntry}
           </>

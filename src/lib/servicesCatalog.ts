@@ -91,4 +91,8 @@ export async function getCommunityItems(supabase: SupabaseClient, userId: string
     .filter((item) => access.isSettingEnabled(item.setting))
     // Eventi: consultarli è sempre gratis
     .map(({ setting, ...item }) => ({ ...item, locked: setting !== 'events' && !access.isToolEnabled(setting), plan: setting === 'events' ? 'free' : access.requiredPlan(setting) }))
+    // In ordine di piano: prima Gratis, poi Plus, poi Pro
+    .sort((a, b) => PLAN_ORDER[a.plan] - PLAN_ORDER[b.plan])
 }
+
+const PLAN_ORDER = { free: 0, base: 1, pro: 2 } as const

@@ -48,7 +48,7 @@ export function CommunityBlock({ items }: { items: CommunityItem[] }) {
               <p className="mt-0.5 line-clamp-2 flex-1 text-xs sm:line-clamp-3 leading-5 text-[var(--muted)]">{item.description}</p>
               <div className="mt-2">
                 {item.locked ? (
-                  <span className="rounded-full bg-[var(--gold-pale)] px-2 py-0.5 text-[11px] font-bold text-[var(--ink)]">{t('includedBase')}</span>
+                  <span className="inline-block whitespace-nowrap rounded-full bg-[var(--gold-pale)] px-2 py-0.5 text-[11px] font-bold text-[var(--ink)]">{t('includedBase')}</span>
                 ) : (
                   <span className="inline-flex items-center gap-1 rounded-full bg-sky-50 px-2 py-0.5 text-[11px] font-bold text-sky-800">
                     {t('open')} <ArrowRight className="h-3 w-3" />

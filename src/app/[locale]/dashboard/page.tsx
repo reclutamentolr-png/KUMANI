@@ -47,7 +47,8 @@ import GiftWelcomeDashboard from '@/components/gifts/GiftWelcomeDashboard'
 import DashboardNeeds from '@/components/dashboard/DashboardNeeds'
 import VerifiedInviteCard from '@/components/verification/VerifiedInviteCard'
 import { buildHomeNeeds } from '@/lib/homeNeedsServer'
-import { HOME_NEEDS } from '@/lib/homeNeeds'
+import { HOME_NEEDS, homeNeedToolName } from '@/lib/homeNeeds'
+import type { ServiceItem } from '@/lib/servicesCatalog'
 import WelcomeHome, { ShowFullHomeLink } from '@/components/dashboard/WelcomeHome'
 import ChristmasOfferBanner from '@/components/christmas/ChristmasOfferBanner'
 import { getToolUsage, getWelcomeState, VERIFIED_AFTER_LOGINS } from '@/lib/welcomeHome'
@@ -222,7 +223,10 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     getCommunityItems(supabase, user.id, access).catch(() => []),
   ])
   // Servizi per la Home (preferiti, icone, «Aggiungi»): anche la Community
-  const homeItems = [...catalog.items, ...communityItems.map(communityAsService)]
+  // KUMANI Sorpresa: non è nel Marketplace, ma si può mettere in «I tuoi servizi» (voce «Fare un regalo»)
+  const surpriseT = await getTranslations('surprise')
+  const surpriseItem: ServiceItem = { toolName: 'sorprese', title: `KUMANI ${surpriseT('title')}`, description: surpriseT('intro'), iconName: 'Gift', href: '/sorprese', group: 'fun', open: true, plan: 'free', unlock: null, passPrice: null, guide: null }
+  const homeItems = [...catalog.items, ...communityItems.map(communityAsService), surpriseItem]
   const { newlyAchievedRank } = network
   // «In cosa possiamo darti una mano?»: qui i servizi portano allo strumento
   const serviceHref = new Map(catalog.items.map((item) => [item.toolName, item.href]))
@@ -335,6 +339,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
               profile={profile}
               shareUrl={shareUrl}
               services={homeItems}
+              community={communityItems}
               favoriteToolNames={favoriteToolNames}
               basePrice={basePrice}
               proTrialDaysLeft={proTrial?.daysLeft ?? null}
@@ -372,7 +377,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
                         short: need.short,
                         intro: need.intro,
                         // Tutti i servizi della voce, uno per uno (anche quelli dei servizi uniti)
-                        services: [...new Set((HOME_NEEDS.find((n) => n.key === need.key)?.items ?? []) as readonly string[])]
+                        services: [...new Set(((HOME_NEEDS.find((n) => n.key === need.key)?.items ?? []) as readonly string[]).map(homeNeedToolName))]
                           .map((name) => homeItems.find((item) => item.toolName === name))
                           .filter((item) => !!item)
                           .map((item) => ({ toolName: item.toolName, title: item.title, description: item.description, iconName: item.iconName, href: item.href, plan: item.plan, open: item.open })),

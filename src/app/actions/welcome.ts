@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
-import { HOME_NEEDS } from '@/lib/homeNeeds'
+import { HOME_NEEDS, homeNeedToolName } from '@/lib/homeNeeds'
 import { setHomeView } from '@/app/actions/homeView'
 
 // Home di benvenuto (dashboard): «Per cosa sei qui?» e «Mostra la Home completa».
@@ -12,7 +12,7 @@ import { setHomeView } from '@/app/actions/homeView'
 // La voce finisce tra le risposte (needs) al primo servizio aggiunto.
 export async function toggleWelcomeService(needKey: string, toolName: string, add: boolean): Promise<boolean> {
   const need = HOME_NEEDS.find((n) => n.key === needKey)
-  if (!need || !(need.items as readonly string[]).includes(toolName)) return false
+  if (!need || !(need.items as readonly string[]).map(homeNeedToolName).includes(toolName)) return false
   const supabase = await createClient()
   const {
     data: { user },

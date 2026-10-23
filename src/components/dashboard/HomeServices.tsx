@@ -8,14 +8,16 @@ import { ServiceCard } from '@/components/services/ServicesBrowser'
 import { currentUserId, readRecentTools } from '@/lib/recentTools'
 import type { ServiceItem } from '@/lib/servicesCatalog'
 import FavoritesPicker from './FavoritesPicker'
+import { CommunityBlock, type CommunityItem } from './CommunityBlock'
 
 // Tutti quelli scelti (fino a questo numero), nell'ordine in cui sono stati aggiunti
 const MAX_FAVORITES = 24
 const MAX_RECENT = 4
 
 // Home: i servizi preferiti (la stella) e quelli usati di recente in questo
-// browser. Tutto il resto è nella pagina Servizi.
-export default function HomeServices({ items, favorites }: { items: ServiceItem[]; favorites: string[] }) {
+// browser. Tutto il resto è nella pagina Servizi. community: vista Lite, la
+// sezione Community subito dopo «Usati di recente».
+export default function HomeServices({ items, favorites, community = [] }: { items: ServiceItem[]; favorites: string[]; community?: CommunityItem[] }) {
   const t = useTranslations('hub')
   // Memoria del browser: solo dopo il primo disegno
   const [recent, setRecent] = useState<string[] | null>(null)
@@ -88,6 +90,8 @@ export default function HomeServices({ items, favorites }: { items: ServiceItem[
           </div>
         </section>
       )}
+
+      {community.length > 0 && <CommunityBlock items={community} />}
 
       {picking && <FavoritesPicker items={items} favorites={favs} onChange={setFavs} onClose={() => setPicking(false)} />}
     </div>

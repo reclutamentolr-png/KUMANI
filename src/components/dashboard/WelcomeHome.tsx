@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { ArrowRight, BriefcaseBusiness, CalendarDays, Clapperboard, Check, ChevronDown, Gamepad2, Gift, Info, Leaf, LifeBuoy, LoaderCircle, Lock, Megaphone, PiggyBank, Plus, ShieldCheck, Smartphone, Store, Users, type LucideIcon } from 'lucide-react'
+import { ArrowRight, BriefcaseBusiness, CalendarDays, Check, Clapperboard, ChevronDown, Gamepad2, Gift, HeartHandshake, HeartPulse, Plane, Info, Leaf, LifeBuoy, LoaderCircle, Lock, Megaphone, PiggyBank, Plus, ShieldCheck, Smartphone, Store, Users, X, type LucideIcon } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { showFullHome, toggleWelcomeService } from '@/app/actions/welcome'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
@@ -14,7 +14,7 @@ import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 // legge a cosa servono, con «Aggiungi» finiscono in «I tuoi servizi». Sotto,
 // «Inizia da qui»: servizi pronti da provare in riquadri quadrati. In fondo
 // «Mostra la Home completa».
-const NEED_ICON: Record<string, LucideIcon> = { ShieldCheck, CalendarDays, PiggyBank, Store, Megaphone, Clapperboard, BriefcaseBusiness, Users, Gamepad2, Leaf, Gift }
+const NEED_ICON: Record<string, LucideIcon> = { ShieldCheck, CalendarDays, PiggyBank, Store, Megaphone, Clapperboard, HeartHandshake, HeartPulse, Plane, BriefcaseBusiness, Users, Gamepad2, Leaf, Gift }
 
 const PLAN_RANK = { free: 0, base: 1, pro: 2 } as const
 
@@ -140,13 +140,13 @@ export default function WelcomeHome({
                         disabled={busyKey !== null}
                         onClick={() => toggle(activeNeed.key, service.toolName)}
                         aria-pressed={isOn}
-                        aria-label={`${isOn ? t('added') : t('add')}: ${toolTitle}`}
+                        aria-label={`${isOn ? t('remove') : t('add')}: ${toolTitle}`}
                         className={`inline-flex min-h-9 shrink-0 items-center gap-1 rounded-lg px-3 text-xs font-extrabold disabled:opacity-60 ${
                           isOn ? 'bg-emerald-600 text-white' : 'bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)]'
                         }`}
                       >
-                        {busyKey === service.toolName ? <LoaderCircle className="h-3.5 w-3.5 animate-spin" /> : isOn ? <Check className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5" />}
-                        <span className="hidden sm:inline">{isOn ? t('added') : t('add')}</span>
+                        {busyKey === service.toolName ? <LoaderCircle className="h-3.5 w-3.5 animate-spin" /> : isOn ? <X className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5" />}
+                        <span className="hidden sm:inline">{isOn ? t('remove') : t('add')}</span>
                       </button>
                     </div>
                     {showInfo && (
