@@ -251,12 +251,6 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   // Home di benvenuto: «Inizia da qui», servizi pronti da provare in riquadri
   // quadrati (Bacheca, Convivium, Manuale, I tuoi dati, Check-up, Respira, Fabula)
   const welcomeOn = view === 'lite' && !!welcomeState?.show
-  const WELCOME_QUICK = ['community-listings', 'convivium', 'antitruffa', 'scudo-dati', 'fincheck', 'oxygen', 'fabula']
-  const welcomeQuick = welcomeOn
-    ? WELCOME_QUICK.map((name) => homeItems.find((item) => item.toolName === name))
-        .filter((item) => !!item)
-        .map((item) => ({ toolName: item.toolName, href: item.href, iconName: item.iconName, open: item.open }))
-    : []
   let iconHome: React.ReactNode = null
   if (view === 'icons') {
     const [usage, hubT] = await Promise.all([getToolUsage(user.id).catch(() => ({})), getTranslations('hub')])
@@ -386,7 +380,6 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
                       .filter((need) => need.services.length > 0)}
                     picked={welcomeState.needs}
                     favorites={favoriteToolNames}
-                    quick={welcomeQuick}
                     solve={welcomeOn && (await canSeeSolve())}
                   />
                 ) : null

@@ -1,9 +1,8 @@
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 
-// «Home di benvenuto» della dashboard: per chi è appena entrato, con qualsiasi
-// piano (anche i primi 50 con il Plus), «scegli cosa ti interessa di più» e
-// «Inizia da qui». Si mostra nella vista Lite per 7 giorni dall'iscrizione
-// (la vista di partenza dei nuovi iscritti è Lite).
+// «Home di benvenuto» della dashboard: «scegli cosa ti interessa di più»,
+// sempre nella vista Lite, con qualsiasi piano (Gratis, Plus, Pro). I primi 7
+// giorni dall'iscrizione decidono solo la vista di partenza (Lite).
 // Qui anche gli accessi (giorni diversi con l'accesso), che servono per
 // mostrare «Diventa Kumano verificato» dopo 7 accessi.
 const WELCOME_DAYS = 7
@@ -54,9 +53,7 @@ export async function getWelcomeState(input: {
     tried: count(opened) > 0,
     third: meta.welcome_third === true || count(pauses) > 0 || count(invited) > 0,
   }
-  // A passi fatti resta il «Complimenti» finché non tocca «Vai alla mia Home»
-  const closed = meta.welcome_closed === true
-  return { show: eligible && !closed, newcomer: eligible, steps, needs, loginDays: (logins.data?.days as number | undefined) ?? 0 }
+  return { show: true, newcomer: eligible, steps, needs, loginDays: (logins.data?.days as number | undefined) ?? 0 }
 }
 
 // Home a icone: giorni di uso per servizio negli ultimi 30 giorni (tool_opens:

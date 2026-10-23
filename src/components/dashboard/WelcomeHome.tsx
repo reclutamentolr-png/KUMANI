@@ -7,7 +7,6 @@ import { ArrowRight, BriefcaseBusiness, CalendarDays, Clapperboard, Check, Chevr
 import Link from '@/components/LocalizedLink'
 import { showFullHome, toggleWelcomeService } from '@/app/actions/welcome'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
-import { FROM_ICONS_KEY } from '@/lib/homeView'
 
 // Home di benvenuto (nuovi iscritti Gratis): «Ciao …, scegli cosa ti
 // interessa di più» con le voci di «In cosa possiamo darti una mano?». Ogni
@@ -21,20 +20,17 @@ const PLAN_RANK = { free: 0, base: 1, pro: 2 } as const
 
 export type WelcomeNeedService = { toolName: string; title: string; description: string; iconName: string; href: string; plan: 'free' | 'base' | 'pro'; open: boolean }
 export type WelcomeNeed = { key: string; icon: string; short: string; intro: string; services: WelcomeNeedService[] }
-export type WelcomeQuick = { toolName: string; href: string; iconName: string; open: boolean }
 
 export default function WelcomeHome({
   firstName,
   needs,
   favorites: initialFavorites,
-  quick,
   solve = false,
 }: {
   firstName: string | null
   needs: WelcomeNeed[]
   picked: string[]
   favorites: string[]
-  quick: WelcomeQuick[]
   // KUMANI Risolvi visibile: riquadro «Hai un problema?»
   solve?: boolean
 }) {
@@ -192,40 +188,6 @@ export default function WelcomeHome({
         </Link>
       )}
 
-      {/* Inizia da qui: servizi pronti da provare, in riquadri quadrati */}
-      {quick.length > 0 && (
-        <section className="rounded-2xl border border-[var(--gold)]/30 bg-white p-5 shadow-sm" aria-labelledby="welcome-quick">
-          <h2 id="welcome-quick" className="text-lg font-bold text-[var(--ink)]">
-            {t('quickTitle')}
-          </h2>
-          <p className="mt-0.5 text-sm text-[var(--muted)]">{t('quickHint')}</p>
-          <div className="mt-4 grid grid-cols-3 gap-2.5 sm:grid-cols-4 lg:grid-cols-7">
-            {quick.map((service) => {
-              const Icon = marketplaceIconMap[service.iconName] ?? Smartphone
-              return (
-                <Link
-                  key={service.toolName}
-                  href={service.href}
-                  onClick={() => {
-                    try {
-                      sessionStorage.setItem(FROM_ICONS_KEY, '1')
-                    } catch {
-                      // facoltativo
-                    }
-                  }}
-                  className="group relative flex aspect-square flex-col items-center justify-center gap-2 rounded-2xl border border-[var(--gold)]/30 bg-gradient-to-br from-[#2a2418] to-[var(--ink)] p-2 text-center shadow-sm transition-transform hover:-translate-y-0.5 hover:border-[var(--gold)]"
-                >
-                  {!service.open && <Lock className="absolute right-2 top-2 h-3.5 w-3.5 text-[var(--gold-bright)]/80" aria-hidden />}
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] shadow-md">
-                    <Icon className="h-6 w-6" />
-                  </span>
-                  <span className="text-[12px] font-bold leading-tight text-white">{t(`quick_${service.toolName.replace(/-/g, '_')}`)}</span>
-                </Link>
-              )
-            })}
-          </div>
-        </section>
-      )}
     </div>
   )
 }
