@@ -19,3 +19,4 @@ Downloaded at 2000 px width on 2026-10-03.
 | job-search.webp | Young man smiling at a laptop with a coffee | Mikhail Nilov | https://www.pexels.com/photo/man-in-white-crew-neck-t-shirt-using-a-silver-laptop-6969626/ | Pexels License |
 | community-help.webp | Two neighbours gardening together | Centre for Ageing Better | https://www.pexels.com/photo/women-planting-plants-on-the-garden-7849457/ | Pexels License |
 | lumen.webp | Woman recording herself with a smartphone and a ring light (KUMANI LUMEN) | Ivan S | https://www.pexels.com/photo/a-woman-recording-herself-with-a-smartphone-7676400/ | Pexels License |
+| vox.webp | Woman talking in front of a smartphone on a tripod in a home office (KUMANI VOX) | Antoni Shkraba | https://www.pexels.com/photo/woman-talking-in-front-of-smartphone-on-tripod-6266988/ | Pexels License |
