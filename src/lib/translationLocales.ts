@@ -83,6 +83,7 @@ export const SECTION_LABELS: Record<string, string> = {
   firmaPdf: 'Firma PDF',
   lumen: 'KUMANI LUMEN',
   vox: 'KUMANI VOX',
+  captio: 'KUMANI CAPTIO',
   scamNet: 'Rete Anti-Truffa',
   proposals: 'Proposte della community',
   shop: 'KUMANI Shop',

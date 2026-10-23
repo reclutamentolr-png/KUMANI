@@ -50,6 +50,7 @@ const PAID_TOOLS = [
   'firma-pdf',
   'lumen',
   'vox',
+  'captio',
   'documento-sicuro',
   'firma-email',
   'calcolatrici',

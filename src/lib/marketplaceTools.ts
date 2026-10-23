@@ -444,6 +444,17 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       requiresSubscription: true,
     },
     {
+      toolName: 'captio',
+      href: '/marketplace/captio',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'Hash',
+      title: t('captio'),
+      description: t('captioDescription'),
+      color: 'gold',
+      category: 'marketing',
+      requiresSubscription: true,
+    },
+    {
       toolName: 'vox',
       href: '/marketplace/vox',
       gradient: 'bg-[var(--ink)]',

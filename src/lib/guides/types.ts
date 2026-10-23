@@ -55,6 +55,7 @@ export type GuideSlug =
   | 'firma-pdf'
   | 'lumen'
   | 'vox'
+  | 'captio'
   | 'rete-antitruffa'
   | 'scudo-dati'
   | 'trova-lavoro'

@@ -39,6 +39,7 @@ const GROUP_OF: Record<string, ServiceGroup> = {
   'landing-page': 'business',
   lumen: 'business',
   vox: 'business',
+  captio: 'business',
   shop: 'business',
   menu: 'business',
   fidelity: 'business',
