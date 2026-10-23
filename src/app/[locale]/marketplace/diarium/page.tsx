@@ -5,7 +5,7 @@ import HubBar from '@/components/hubs/HubBar'
 import DiariumApp from '@/components/diarium/DiariumApp'
 import { listDiariumPlans } from '@/app/actions/diarium'
 import { toolMetadata } from '@/lib/toolMetadata'
-import { getDisabledTools } from '@/lib/freeTools'
+import { getHiddenTools } from '@/lib/freeTools'
 
 // Nome del servizio nella scheda del browser
 export const generateMetadata = toolMetadata('diarium')
@@ -16,7 +16,7 @@ export default async function DiariumPage() {
   const t = await getTranslations('diarium')
   const tm = await getTranslations('marketplace')
   const tc = await getTranslations('common')
-  const [plans, disabled] = await Promise.all([listDiariumPlans(), getDisabledTools()])
+  const [plans, disabled] = await Promise.all([listDiariumPlans(), getHiddenTools()])
 
   return (
     <div className="min-h-screen bg-[var(--background)]">

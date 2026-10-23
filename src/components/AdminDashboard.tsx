@@ -18,7 +18,7 @@ import ListingsReviewPanel from '@/components/admin/ListingsReviewPanel'
 import FoundersPanel from '@/components/admin/FoundersPanel'
 import {
   adminUpdateProfile,
-  adminSetToolEnabled,
+  adminSetToolState,
   adminSetUserRole,
   adminGetUserRole,
   impersonateUser,
@@ -70,8 +70,6 @@ import {
   Activity,
   BarChart3,
   Lock,
-  ToggleLeft,
-  ToggleRight,
   X,
   Save,
   Pencil,
@@ -581,9 +579,9 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
     setSavingTool(null)
   }
 
-  const toggleToolEnabled = async (toolName: string, currentStatus: boolean) => {
+  const setToolState = async (toolName: string, state: 'on' | 'off' | 'staff') => {
     setSavingTool(toolName)
-    const result = await adminSetToolEnabled(toolName, !currentStatus)
+    const result = await adminSetToolState(toolName, state)
     if (result.success) {
       await loadMarketplaceData()
     } else {
@@ -1113,7 +1111,8 @@ L'accesso viene registrato.`))) return
           <p className="text-gray-600 mt-1">
             Abilita o disabilita gli strumenti e scegli per ognuno il piano richiesto: <strong>Gratis</strong> (tutti gli
             iscritti), <strong>Plus</strong> (abbonamento 49 €/anno) o <strong>Pro</strong> (149 €/anno, include il Plus).
-            La scelta vale subito ovunque, anche per gli strumenti che verranno aggiunti.
+            La scelta vale subito ovunque, anche per gli strumenti che verranno aggiunti. Con <strong>Solo Staff</strong> lo
+            strumento resta nascosto agli iscritti, mentre tu e lo Staff lo usate per provarlo prima di accenderlo.
           </p>
         </div>
 
@@ -1146,25 +1145,44 @@ L'accesso viene registrato.`))) return
             {isOpen && (
             <div className="grid grid-cols-1 gap-4 border-t border-gray-100 bg-gray-50/60 p-4 md:grid-cols-2">
               {group.tools.map((tool) => (
-                <div key={tool.tool_name} id={`tool-${tool.tool_name}`} className={`bg-white p-6 rounded-xl border shadow-sm scroll-mt-24 ${!tool.is_enabled ? 'opacity-60 bg-gray-50' : ''} ${focusTool === tool.tool_name ? 'ring-4 ring-[var(--gold)]/60' : ''}`}>
+                <div key={tool.tool_name} id={`tool-${tool.tool_name}`} className={`bg-white p-6 rounded-xl border shadow-sm scroll-mt-24 ${!tool.is_enabled && !tool.staff_preview ? 'opacity-60 bg-gray-50' : ''} ${focusTool === tool.tool_name ? 'ring-4 ring-[var(--gold)]/60' : ''}`}>
                   <div className="flex items-start justify-between mb-4">
                     <div>
                       <h3 className="text-lg font-bold text-gray-900">{toolTitle(tool.tool_name)}</h3>
                       <p className="font-mono text-xs text-gray-400">{tool.tool_name}</p>
                       <p className="text-sm text-gray-500 mt-1">{tool.description || 'Strumento del marketplace'}</p>
                     </div>
-                    <button
-                      onClick={() => toggleToolEnabled(tool.tool_name, tool.is_enabled)}
-                      disabled={savingTool === tool.tool_name}
-                      className="focus:outline-none"
-                    >
-                      {tool.is_enabled ? (
-                        <ToggleRight className="w-14 h-8 text-green-500" />
-                      ) : (
-                        <ToggleLeft className="w-14 h-8 text-gray-400" />
-                      )}
-                    </button>
                   </div>
+                  <div className="mb-4 flex flex-wrap items-center gap-2">
+                    <span className="text-xs text-gray-500 uppercase">Stato</span>
+                    <div className="flex rounded-lg border border-gray-200 overflow-hidden">
+                      {([['on', 'Acceso'], ['staff', 'Solo Staff'], ['off', 'Spento']] as const).map(([state, label]) => {
+                        const active = (tool.is_enabled ? 'on' : tool.staff_preview ? 'staff' : 'off') === state
+                        return (
+                          <button
+                            key={state}
+                            type="button"
+                            onClick={() => !active && setToolState(tool.tool_name, state)}
+                            disabled={savingTool === tool.tool_name}
+                            className={`px-3 py-1 text-xs font-semibold ${
+                              active
+                                ? state === 'on'
+                                  ? 'bg-green-600 text-white'
+                                  : state === 'staff'
+                                    ? 'bg-[#7c3aed] text-white'
+                                    : 'bg-gray-700 text-white'
+                                : 'bg-white text-gray-600 hover:bg-gray-100'
+                            }`}
+                          >
+                            {label}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                  {!tool.is_enabled && tool.staff_preview && (
+                    <p className="mb-4 rounded-lg bg-violet-50 px-3 py-2 text-xs text-violet-800">Gli iscritti non lo vedono: tu e lo Staff lo aprite e lo provate normalmente.</p>
+                  )}
                   <div className="mb-4 flex items-center gap-2">
                     <span className="text-xs text-gray-500 uppercase">Piano richiesto</span>
                     <div className="flex rounded-lg border border-gray-200 overflow-hidden">
@@ -1204,8 +1222,8 @@ L'accesso viene registrato.`))) return
                       <div className="text-xs text-gray-500 uppercase">Utilizzi Totali</div>
                       <div className="text-2xl font-bold text-[var(--gold)]">{tool.usage_count}</div>
                     </div>
-                    <div className={`px-3 py-1 rounded-full text-xs font-semibold ${tool.is_enabled ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                      {tool.is_enabled ? 'ATTIVO' : 'DISATTIVO'}
+                    <div className={`px-3 py-1 rounded-full text-xs font-semibold ${tool.is_enabled ? 'bg-green-100 text-green-700' : tool.staff_preview ? 'bg-violet-100 text-violet-700' : 'bg-red-100 text-red-700'}`}>
+                      {tool.is_enabled ? 'ATTIVO' : tool.staff_preview ? 'SOLO STAFF' : 'DISATTIVO'}
                     </div>
                   </div>
                   {savingTool === tool.tool_name && (

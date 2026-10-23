@@ -3,7 +3,7 @@ import HubNav from '@/components/hubs/HubNav'
 import { createClient } from '@/lib/supabase/server'
 import { getMarketplaceAccessState } from '@/lib/marketplaceAccess'
 import { HUB_TOOLS } from '@/lib/serviceHubs'
-import { getDisabledTools } from '@/lib/freeTools'
+import { getHiddenTools } from '@/lib/freeTools'
 import { getFavoriteToolNames } from '@/lib/favorites'
 
 // Barra dei servizi uniti (vedi lib/serviceHubs) con i lucchetti
@@ -14,7 +14,7 @@ export default async function HubBar() {
     data: { user },
   } = await supabase.auth.getUser()
   // Spenti dall'Admin: la scheda non si mostra; fuori dal piano: lucchetto
-  const hidden = (await getDisabledTools()).filter((tool) => HUB_TOOLS.has(tool))
+  const hidden = (await getHiddenTools()).filter((tool) => HUB_TOOLS.has(tool))
   let locked: string[] = []
   // Servizi già nella Home (stella «Nella Home» del servizio aperto)
   let favorites: string[] | null = null

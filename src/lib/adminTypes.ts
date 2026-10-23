@@ -75,6 +75,8 @@ export type AdminProfileForm = Partial<{
 export type MarketplaceToolRow = {
   tool_name: string
   is_enabled: boolean
+  // «Solo Staff»: spento per gli iscritti, aperto allo Staff (20270423100000_staff_preview.sql)
+  staff_preview?: boolean | null
   required_plan: 'free' | 'base' | 'pro' | null
   description: string | null
   // Pass del singolo servizio (20261210100000_tool_passes.sql)

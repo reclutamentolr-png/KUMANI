@@ -9,7 +9,8 @@ export const PUBLIC_GUIDES: GuideSlug[] = ['registrazione', 'accesso']
 
 // Testi delle guide dai file delle lingue (namespace "guideTexts"), con le
 // correzioni dei traduttori già applicate. Letti "raw": niente segnaposto.
-export async function getGuidesContent(locale: string): Promise<GuidesContent> {
+// visible: servizi spenti da mostrare comunque (lo Staff in anteprima).
+export async function getGuidesContent(locale: string, visible: string[] = []): Promise<GuidesContent> {
   const [t, disabled] = await Promise.all([getTranslations({ locale, namespace: 'guideTexts' }), getDisabledTools()])
   const text = (key: string) => String(t.raw(key) ?? '')
 
@@ -19,7 +20,7 @@ export async function getGuidesContent(locale: string): Promise<GuidesContent> {
 
   // Le guide dei servizi spenti dall'Admin non si vedono (es. un servizio
   // pronto ma non ancora annunciato)
-  const guides = GUIDE_STRUCTURE.filter((g) => !disabled.includes(g.slug)).map((g) => {
+  const guides = GUIDE_STRUCTURE.filter((g) => !disabled.includes(g.slug) || visible.includes(g.slug)).map((g) => {
     const k = g.slug.replace(/-/g, '_')
     const steps: GuideStep[] = Array.from({ length: g.steps }, (_, i) => {
       const n = i + 1

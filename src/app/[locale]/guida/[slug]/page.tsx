@@ -11,7 +11,7 @@ import { createClient } from '@/lib/supabase/server'
 import { getGuidesContent, guideShot, PUBLIC_GUIDES } from '@/lib/guides/content'
 import type { GuideSlug } from '@/lib/guides/types'
 import { HUB_TABS, hubOf } from '@/lib/serviceHubs'
-import { getDisabledTools } from '@/lib/freeTools'
+import { getHiddenTools, getStaffPreviewTools } from '@/lib/freeTools'
 
 // Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
 // richiesta, mai preparata in anticipo né tenuta in memoria
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const locale = await getLocale()
   const t = await getTranslations('guides')
-  const guide = (await getGuidesContent(locale)).guides.find((g) => g.slug === slug)
+  const guide = (await getGuidesContent(locale, await getStaffPreviewTools())).guides.find((g) => g.slug === slug)
   if (!guide) return { title: t('metaTitle') }
   return pageMetadata(`/guida/${guide.slug}`, {
     title: { absolute: `${guide.title} · ${t('linkLabel')} KUMANI` },
@@ -50,7 +50,8 @@ export default async function GuidePage({ params, searchParams }: Props) {
   const isPublic = PUBLIC_GUIDES.includes(slug as GuideSlug)
   if (!user && !isPublic) redirect(`/${locale}/login?next=${encodeURIComponent(`/guida/${slug}`)}`)
   // Senza accesso si scorre solo tra le guide pubbliche
-  const all = (await getGuidesContent(locale)).guides
+  // Lo Staff vede anche le guide dei servizi «Solo Staff»
+  const all = (await getGuidesContent(locale, await getStaffPreviewTools())).guides
   const guides = user ? all : all.filter((g) => PUBLIC_GUIDES.includes(g.slug))
   const index = guides.findIndex((g) => g.slug === slug)
   if (index < 0) notFound()
@@ -63,7 +64,7 @@ export default async function GuidePage({ params, searchParams }: Props) {
   const where = hubOf(guide.cta.href, '')
   let hubNote: { hub: string; tabs: string } | null = null
   if (where) {
-    const [tHubs, disabled] = await Promise.all([getTranslations('serviceHubs'), getDisabledTools()])
+    const [tHubs, disabled] = await Promise.all([getTranslations('serviceHubs'), getHiddenTools()])
     const others = HUB_TABS[where.hub]
       .filter((tab) => tab.key !== where.tab && (!tab.tool || !disabled.includes(tab.tool)))
       .map((tab) => tHubs(`${where.hub}.tab_${tab.key}`))

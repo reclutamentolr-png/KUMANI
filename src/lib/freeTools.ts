@@ -1,6 +1,8 @@
+import { cache } from 'react'
 import { unstable_cache } from 'next/cache'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { LEGACY_PAID_TOOLS, type RequiredPlan } from '@/lib/plans'
+import { getSessionIsAdmin, getSessionUser } from '@/lib/session'
 
 // Servizi gratuiti (piano richiesto "free", deciso dall'Admin in
 // marketplace_settings): vengono mostrati per primi in ogni categoria.
@@ -8,21 +10,23 @@ import { LEGACY_PAID_TOOLS, type RequiredPlan } from '@/lib/plans'
 // e tenuto in memoria un'ora (svuotata quando l'Admin cambia un piano).
 export const TOOL_PLANS_CACHE_TAG = 'tool-plans'
 export type ToolPlans = Record<string, string>
-type ToolSettings = { plans: ToolPlans; disabled: string[] }
+// preview: spenti per gli iscritti ma aperti allo Staff («Solo Staff»)
+type ToolSettings = { plans: ToolPlans; disabled: string[]; preview: string[] }
 
 const fetchToolPlans = unstable_cache(
   async (): Promise<ToolSettings> => {
     const service = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
       auth: { autoRefreshToken: false, persistSession: false },
     })
-    const { data, error } = await service.from('marketplace_settings').select('tool_name, required_plan, is_enabled')
-    if (error || !data) return { plans: {}, disabled: [] }
+    const { data, error } = await service.from('marketplace_settings').select('tool_name, required_plan, is_enabled, staff_preview')
+    if (error || !data) return { plans: {}, disabled: [], preview: [] }
     return {
       plans: Object.fromEntries(data.map((row) => [row.tool_name as string, (row.required_plan as string) ?? ''])),
       disabled: data.filter((row) => row.is_enabled === false).map((row) => row.tool_name as string),
+      preview: data.filter((row) => row.is_enabled === false && row.staff_preview === true).map((row) => row.tool_name as string),
     }
   },
-  ['tool-settings'],
+  ['tool-settings-preview'],
   { revalidate: 3600, tags: [TOOL_PLANS_CACHE_TAG] }
 )
 
@@ -59,6 +63,27 @@ export async function getDisabledTools(): Promise<string[]> {
   } catch {
     return []
   }
+}
+
+// Servizi «Solo Staff» per chi guarda: tutti per lo Staff, nessuno per gli
+// iscritti. Legge la sessione: solo nelle pagine dinamiche.
+export const getStaffPreviewTools = cache(async (): Promise<string[]> => {
+  try {
+    const preview = (await fetchToolPlans()).preview ?? []
+    if (!preview.length) return []
+    const user = await getSessionUser()
+    if (!user || !(await getSessionIsAdmin(user.id))) return []
+    return preview
+  } catch {
+    return []
+  }
+})
+
+// Spenti per chi guarda: come getDisabledTools, ma lo Staff vede anche quelli
+// in anteprima. Solo nelle pagine dinamiche (legge la sessione).
+export async function getHiddenTools(): Promise<string[]> {
+  const [disabled, preview] = await Promise.all([getDisabledTools(), getStaffPreviewTools()])
+  return disabled.filter((tool) => !preview.includes(tool))
 }
 
 // Quanti tra i servizi indicati sono accesi (spenti dall'Admin = esclusi):

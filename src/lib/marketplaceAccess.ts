@@ -1,5 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { LEGACY_PAID_TOOLS, planCovers, type RequiredPlan, type UserPlan } from '@/lib/plans'
+import { getStaffPreviewTools } from '@/lib/freeTools'
 
 export type ToolDisabledReason = 'offline' | 'subscription' | 'pro'
 
@@ -36,11 +37,13 @@ type SettingRow = { tool_name: string; is_enabled: boolean; required_plan?: Requ
 export async function getMarketplaceAccessState(supabase: SupabaseClient, userId: string): Promise<MarketplaceAccessState> {
   // Impostazioni, piano e prova Pro: tre letture indipendenti, insieme
   // (più i pass dei singoli servizi già attivati)
-  const [withPass, planResult, trialResult, passResult] = await Promise.all([
+  // (più i servizi «Solo Staff», aperti se chi guarda è dello Staff)
+  const [withPass, planResult, trialResult, passResult, preview] = await Promise.all([
     supabase.from('marketplace_settings').select('tool_name, is_enabled, required_plan, pass_enabled, pass_price_cents'),
     supabase.rpc('my_plan'),
     supabase.rpc('my_trial_only'),
     supabase.rpc('my_tool_passes'),
+    getStaffPreviewTools(),
   ])
   let settings: SettingRow[] = []
   // Migrazione dei pass non ancora applicata: si legge senza le loro colonne
@@ -78,12 +81,13 @@ export async function getMarketplaceAccessState(supabase: SupabaseClient, userId
       : []
   )
 
-  const isSettingEnabled = (toolName: string) => byTool.get(toolName)?.is_enabled !== false
+  const isSettingEnabled = (toolName: string) => byTool.get(toolName)?.is_enabled !== false || preview.includes(toolName)
   const requiredPlan = (toolName: string): RequiredPlan =>
     byTool.get(toolName)?.required_plan ?? (LEGACY_PAID_TOOLS.includes(toolName) ? 'base' : 'free')
   const isToolEnabled = (toolName: string) =>
     isSettingEnabled(toolName) &&
     (OPEN_TO_ALL_MEMBERS.includes(toolName) ||
+      preview.includes(toolName) ||
       (planCovers(userPlan, requiredPlan(toolName)) && !(trialOnly && requiredPlan(toolName) === 'base')) ||
       passes.has(toolName))
   const disabledReason = (toolName: string): ToolDisabledReason | undefined => {

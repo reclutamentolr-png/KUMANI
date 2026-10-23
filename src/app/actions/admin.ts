@@ -194,12 +194,17 @@ function refreshToolPages() {
   revalidatePath('/[locale]/strumenti/[tool]', 'page')
 }
 
-export async function adminSetToolEnabled(toolName: string, enabled: boolean) {
+// Tre posizioni: acceso, spento, «Solo Staff» (spento per gli iscritti ma
+// aperto ad amministratori e Staff, per provarlo prima di annunciarlo)
+export type ToolState = 'on' | 'off' | 'staff'
+
+export async function adminSetToolState(toolName: string, state: ToolState) {
   const admin = await verifyAdmin('marketplace.write')
   if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!['on', 'off', 'staff'].includes(state)) return { success: false, error: 'Stato non valido' }
   const { error } = await getServiceClient()
     .from('marketplace_settings')
-    .update({ is_enabled: enabled, updated_at: new Date().toISOString() })
+    .update({ is_enabled: state === 'on', staff_preview: state === 'staff', updated_at: new Date().toISOString() })
     .eq('tool_name', toolName)
   if (error) return { success: false, error: error.message }
   refreshToolPages()
