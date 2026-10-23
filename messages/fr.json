@@ -14177,7 +14177,7 @@
       "short": "Emploi",
       "tagline": "Ton CV et les bonnes offres",
       "description": "Cherche des offres d’emploi près de chez toi et crée le CV à envoyer, avec sa page à partager.",
-      "tab_jobs": "Offres",
+      "tab_jobs": "Chercher un emploi",
       "tab_cv": "Ton CV"
     },
     "gestione": {
@@ -14208,7 +14208,7 @@
       "tab_shop": "Boutique en ligne",
       "tab_menu": "Menu",
       "tab_card": "Kumi Card",
-      "tab_offers": "Offres"
+      "tab_offers": "Campagnes"
     },
     "vetrina": {
       "title": "Te faire connaître",

@@ -14177,7 +14177,7 @@
       "short": "Jobs",
       "tagline": "Dein Lebenslauf und die passenden Jobs",
       "description": "Finde Stellenangebote in deiner Nähe und erstelle den Lebenslauf zum Versenden, mit eigener Seite zum Teilen.",
-      "tab_jobs": "Stellen",
+      "tab_jobs": "Jobsuche",
       "tab_cv": "Dein Lebenslauf"
     },
     "gestione": {
@@ -14208,7 +14208,7 @@
       "tab_shop": "Online-Shop",
       "tab_menu": "Speisekarte",
       "tab_card": "Kumi Card",
-      "tab_offers": "Angebote"
+      "tab_offers": "Kampagnen"
     },
     "vetrina": {
       "title": "Bekannt werden",

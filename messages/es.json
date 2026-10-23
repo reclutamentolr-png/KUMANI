@@ -14177,7 +14177,7 @@
       "short": "Empleo",
       "tagline": "Tu CV y las ofertas adecuadas",
       "description": "Busca ofertas de trabajo cerca de ti y crea el CV para enviar, con su página para compartir.",
-      "tab_jobs": "Ofertas",
+      "tab_jobs": "Buscar trabajo",
       "tab_cv": "Tu CV"
     },
     "gestione": {
@@ -14208,7 +14208,7 @@
       "tab_shop": "Tienda online",
       "tab_menu": "Carta",
       "tab_card": "Kumi Card",
-      "tab_offers": "Ofertas"
+      "tab_offers": "Campañas"
     },
     "vetrina": {
       "title": "Date a conocer",

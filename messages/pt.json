@@ -14177,7 +14177,7 @@
       "short": "Emprego",
       "tagline": "O teu CV e as ofertas certas",
       "description": "Procura ofertas de emprego perto de ti e cria o CV para enviar, com a sua página para partilhar.",
-      "tab_jobs": "Ofertas",
+      "tab_jobs": "Procurar emprego",
       "tab_cv": "O teu CV"
     },
     "gestione": {
@@ -14208,7 +14208,7 @@
       "tab_shop": "Loja online",
       "tab_menu": "Menu",
       "tab_card": "Kumi Card",
-      "tab_offers": "Ofertas"
+      "tab_offers": "Campanhas"
     },
     "vetrina": {
       "title": "Dá-te a conhecer",

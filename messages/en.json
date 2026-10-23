@@ -14177,7 +14177,7 @@
       "short": "Jobs",
       "tagline": "Your CV and the right jobs",
       "description": "Find job offers near you and create the CV to send, with its own page to share.",
-      "tab_jobs": "Job offers",
+      "tab_jobs": "Find a job",
       "tab_cv": "Your CV"
     },
     "gestione": {
@@ -14208,7 +14208,7 @@
       "tab_shop": "Online shop",
       "tab_menu": "Menu",
       "tab_card": "Kumi Card",
-      "tab_offers": "Offers"
+      "tab_offers": "Campaigns"
     },
     "vetrina": {
       "title": "Get known",
