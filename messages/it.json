@@ -5675,6 +5675,8 @@
     "f_auth_dkim_fail": "La firma digitale del mittente non è valida (DKIM fallito per {domain}): l'email potrebbe essere falsificata.",
     "f_auth_ok": "Autenticazione del mittente superata (SPF {spf}, DKIM {dkim}, DMARC {dmarc}): conferma il dominio di invio, non che l'email sia affidabile.",
     "f_no_headers": "Senza le intestazioni tecniche l'analisi è parziale: per un controllo completo carica il file o incolla il sorgente.",
+    "f_forwarded": "È un'email inoltrata: controllo il mittente originale ({sender}), non chi te l'ha girata.",
+    "f_forwarded_unknown": "È un'email inoltrata ma non trovo il mittente originale: per un controllo completo incolla anche la riga «Da:» del messaggio originale.",
     "f_sender_missing": "Il mittente non ha un indirizzo email: le comunicazioni vere lo hanno sempre.",
     "f_brand_from_freemail": "Dice di essere {brand} ma scrive da un indirizzo gratuito ({domain}).",
     "f_brand_domain_mismatch": "Dice di essere {brand} ma il dominio del mittente ({domain}) non è tra quelli ufficiali.",

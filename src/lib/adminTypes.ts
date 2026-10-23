@@ -85,7 +85,7 @@ export type MarketplaceToolRow = {
   pass_ku_points?: number | null
 }
 
-export type MarketplaceToolUsage = MarketplaceToolRow & { usage_count: number }
+export type MarketplaceToolUsage = MarketplaceToolRow & { usage_users: number; usage_days: number }
 
 // listCoupons
 export type AdminCouponRow = {

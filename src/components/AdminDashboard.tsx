@@ -39,6 +39,7 @@ import {
   type StaffUserHit,
   adminGetUserMatrix,
 } from '@/app/actions/admin'
+import { adminToolUsageTotals } from '@/app/actions/adminOverview'
 import type {
   AdminUserRow,
   AdminProfileDetail,
@@ -63,6 +64,7 @@ import {
   Users,
   GitBranch,
   ShoppingBag,
+  ExternalLink,
   Settings,
   Gauge,
   ShieldAlert,
@@ -182,6 +184,20 @@ const TOOL_GROUPS = [
 ] as const
 const PLATFORM_SWITCHES_COMMUNITY = new Set(['listings', 'chat', 'spotlight', 'convivio', 'events', 'timebank'])
 const TOOL_CATEGORY: Map<string, string> = new Map(getMarketplaceTools((key) => key).map((tool) => [tool.toolName, tool.category]))
+// Pagina di ogni servizio, per provarlo dall'Admin: quelli del Marketplace
+// hanno già il loro indirizzo, le sezioni della piattaforma sono qui.
+const PLATFORM_HREFS: Record<string, string> = {
+  listings: '/marketplace/listings',
+  chat: '/marketplace/chat',
+  spotlight: '/spotlight',
+  convivio: '/marketplace/convivio',
+  events: '/events',
+  timebank: '/marketplace/timebank',
+  proposte: '/community/proposte',
+  webinar: '/marketplace/webinar',
+}
+const TOOL_HREF: Map<string, string> = new Map(getMarketplaceTools((key) => key).map((tool) => [tool.toolName, tool.href]))
+const toolHref = (toolName: string) => TOOL_HREF.get(toolName) ?? PLATFORM_HREFS[toolName]
 function toolCategoryOf(toolName: string): string {
   if (TOOL_CATEGORY.has(toolName)) return TOOL_CATEGORY.get(toolName)!
   if (PLATFORM_SWITCHES_COMMUNITY.has(toolName)) return 'community'
@@ -433,18 +449,16 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
   }
 
   const loadMarketplaceData = async () => {
-    const { data: tools } = await supabase.from('marketplace_settings').select('*').order('tool_name')
-    const toolsList = tools || []
-
-    const { data: usageRaw } = await supabase.from('marketplace_usage').select('tool_name')
-    const usageCount: Record<string, number> = {}
-    usageRaw?.forEach((u: { tool_name: string }) => {
-      usageCount[u.tool_name] = (usageCount[u.tool_name] || 0) + 1
-    })
+    // Uso reale: aperture e uso con KU Karma (come in Panoramica)
+    const [{ data: tools }, usage] = await Promise.all([
+      supabase.from('marketplace_settings').select('*').order('tool_name'),
+      adminToolUsageTotals(),
+    ])
     setMarketplaceUsage(
-      toolsList.map(t => ({
+      (tools || []).map(t => ({
         ...t,
-        usage_count: usageCount[t.tool_name] || 0
+        usage_users: usage[t.tool_name]?.users ?? 0,
+        usage_days: usage[t.tool_name]?.useDays ?? 0,
       }))
     )
   }
@@ -1152,6 +1166,17 @@ L'accesso viene registrato.`))) return
                       <p className="font-mono text-xs text-gray-400">{tool.tool_name}</p>
                       <p className="text-sm text-gray-500 mt-1">{tool.description || 'Strumento del marketplace'}</p>
                     </div>
+                    {toolHref(tool.tool_name) && (
+                      <a
+                        href={`/${locale}${toolHref(tool.tool_name)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="Apri il servizio in una nuova scheda"
+                        className="inline-flex shrink-0 items-center gap-1 rounded-full bg-sky-50 px-3 py-1 text-xs font-bold text-sky-800 hover:bg-sky-100"
+                      >
+                        Prova <ExternalLink className="h-3 w-3" />
+                      </a>
+                    )}
                   </div>
                   <div className="mb-4 flex flex-wrap items-center gap-2">
                     <span className="text-xs text-gray-500 uppercase">Stato</span>
@@ -1218,9 +1243,15 @@ L'accesso viene registrato.`))) return
                     />
                   )}
                   <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                    <div>
-                      <div className="text-xs text-gray-500 uppercase">Utilizzi Totali</div>
-                      <div className="text-2xl font-bold text-[var(--gold)]">{tool.usage_count}</div>
+                    <div className="flex gap-6">
+                      <div title="Persone diverse che l'hanno aperto o usato">
+                        <div className="text-xs text-gray-500 uppercase">Persone</div>
+                        <div className="text-2xl font-bold text-[var(--gold)]">{tool.usage_users}</div>
+                      </div>
+                      <div title="Somma dei giorni in cui ogni persona l'ha usato">
+                        <div className="text-xs text-gray-500 uppercase">Giorni d&apos;uso</div>
+                        <div className="text-2xl font-bold text-[var(--gold)]">{tool.usage_days}</div>
+                      </div>
                     </div>
                     <div className={`px-3 py-1 rounded-full text-xs font-semibold ${tool.is_enabled ? 'bg-green-100 text-green-700' : tool.staff_preview ? 'bg-violet-100 text-violet-700' : 'bg-red-100 text-red-700'}`}>
                       {tool.is_enabled ? 'ATTIVO' : tool.staff_preview ? 'SOLO STAFF' : 'DISATTIVO'}

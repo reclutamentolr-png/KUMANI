@@ -158,3 +158,18 @@ export async function adminOverview(): Promise<AdminOverview | null> {
     },
   }
 }
+
+// Admin → Strumenti e interruttori: per ogni servizio quante persone diverse
+// l'hanno usato e i giorni d'uso complessivi (aperture + uso con KU Karma),
+// su tutto lo storico conservato (le aperture si tengono 400 giorni).
+export type ToolUsageTotals = Record<string, { users: number; useDays: number }>
+export async function adminToolUsageTotals(): Promise<ToolUsageTotals> {
+  const admin = await verifyAdmin('marketplace.read')
+  if (!admin) return {}
+  const { data } = await db().rpc('admin_tool_usage', { p_days: 100000 })
+  const out: ToolUsageTotals = {}
+  for (const u of (data ?? []) as { tool_name: string; users: number; use_days: number }[]) {
+    out[u.tool_name] = { users: Number(u.users), useDays: Number(u.use_days) }
+  }
+  return out
+}

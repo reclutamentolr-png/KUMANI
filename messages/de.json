@@ -5675,6 +5675,8 @@
     "f_auth_dkim_fail": "Die digitale Signatur des Absenders ist ungültig (DKIM fehlgeschlagen für {domain}): Die E-Mail könnte gefälscht sein.",
     "f_auth_ok": "Absender-Authentifizierung bestanden (SPF {spf}, DKIM {dkim}, DMARC {dmarc}): Sie bestätigt die Versanddomain, nicht dass die E-Mail vertrauenswürdig ist.",
     "f_no_headers": "Ohne die technischen Kopfzeilen ist die Prüfung unvollständig: Lade die Datei hoch oder füge den Quelltext ein.",
+    "f_forwarded": "Das ist eine weitergeleitete E-Mail: Ich prüfe den ursprünglichen Absender ({sender}), nicht die Person, die sie weitergeleitet hat.",
+    "f_forwarded_unknown": "Das ist eine weitergeleitete E-Mail, aber ich finde den ursprünglichen Absender nicht: Für eine vollständige Prüfung füge auch die Zeile «Von:» der Originalnachricht ein.",
     "f_sender_missing": "Der Absender hat keine E-Mail-Adresse: Echte Nachrichten haben immer eine.",
     "f_brand_from_freemail": "Gibt sich als {brand} aus, schreibt aber von einer kostenlosen Adresse ({domain}).",
     "f_brand_domain_mismatch": "Gibt sich als {brand} aus, aber die Absenderdomain ({domain}) ist keine offizielle.",

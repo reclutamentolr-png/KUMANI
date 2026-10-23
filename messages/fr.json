@@ -5675,6 +5675,8 @@
     "f_auth_dkim_fail": "La signature numérique de l'expéditeur n'est pas valide (DKIM en échec pour {domain}) : l'e-mail pourrait être falsifié.",
     "f_auth_ok": "Authentification de l'expéditeur réussie (SPF {spf}, DKIM {dkim}, DMARC {dmarc}) : elle confirme le domaine d'envoi, pas que l'e-mail soit fiable.",
     "f_no_headers": "Sans les en-têtes techniques, l'analyse est partielle : importez le fichier ou collez la source pour un contrôle complet.",
+    "f_forwarded": "C'est un e-mail transféré : je vérifie l'expéditeur d'origine ({sender}), pas la personne qui l'a transféré.",
+    "f_forwarded_unknown": "C'est un e-mail transféré mais je ne trouve pas l'expéditeur d'origine : pour un contrôle complet, colle aussi la ligne « De : » du message d'origine.",
     "f_sender_missing": "L'expéditeur n'a pas d'adresse e-mail : les vrais messages en ont toujours une.",
     "f_brand_from_freemail": "Il prétend être {brand} mais écrit depuis une adresse gratuite ({domain}).",
     "f_brand_domain_mismatch": "Il prétend être {brand} mais le domaine de l'expéditeur ({domain}) n'est pas officiel.",

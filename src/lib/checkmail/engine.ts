@@ -521,6 +521,39 @@ export function scoreFindings(findings: Finding[]): { score: number; level: Risk
   return { score, level: score >= 60 ? 'high' : score >= 30 ? 'medium' : 'low' }
 }
 
+// ─── Email inoltrate ─────────────────────────────────────────────────────
+// Oggetto con "Fwd:", "I:", "TR:", "WG:"... e righe che i programmi di posta
+// mettono prima del messaggio inoltrato, in 7 lingue
+const FWD_SUBJECT = /^\s*(?:(?:fwd?|fw|i|inoltr[oa]|tr|wg|rv|enc|vs|reenv|пер|пересл)\s*:\s*)+/i
+const FWD_MARKERS = [
+  'forwarded message', 'original message', 'begin forwarded message', 'messaggio inoltrato', 'messaggio originale',
+  'message transfere', 'message d origine', 'mensaje reenviado', 'mensaje original', 'mensagem encaminhada', 'mensagem original',
+  'weitergeleitete nachricht', 'ursprungliche nachricht', 'пересылаемое сообщение', 'исходное сообщение',
+].map(phraseRegex)
+// "Da: Revolut <no-reply@revolut.com>", "From: x@y.com", "Von: ... [mailto:x@y]"
+const FWD_FROM = /(?:^|[\s*])(?:from|da|von|de|от|van)\s*:\s*\**\s*(?:"?([^"<>\n\r[\]@]{0,80}?)"?\s*)?(?:<|\[mailto:)?\s*([^\s<>"[\]():;,]+@[^\s<>"[\]():;,]+\.[a-z]{2,})/i
+const FWD_WORDS = ['forward', 'original', 'inoltrat', 'transf', 'reenviado', 'encaminhada', 'weitergeleitet', 'ursprüngliche', 'пересыла', 'исходное']
+const FWD_SUBJECT_LINE = /(?:^|\n)\s*\**\s*(?:subject|oggetto|betreff|objet|asunto|assunto|тема)\s*:\s*\**\s*([^\n\r]{1,300})/i
+
+function detectForward(subject: string | null, body: string): { from: string | null; name: string | null; subject: string | null } | null {
+  const plain = body.slice(0, 20_000)
+  const hay = normalize(plain)
+  const marked = FWD_MARKERS.some((re) => re.test(hay))
+  if (!marked && !FWD_SUBJECT.test(subject ?? '')) return null
+  // Il mittente originale si cerca dopo la riga «messaggio inoltrato» (o
+  // dall'inizio, se l'oggetto dice Fwd: ma la riga manca)
+  const lower = plain.toLowerCase()
+  const found = marked ? FWD_WORDS.map((w) => lower.indexOf(w)).filter((i) => i >= 0) : []
+  const markerAt = found.length ? Math.min(...found) : 0
+  const after = plain.slice(markerAt)
+  const from = after.match(FWD_FROM)
+  return {
+    from: from?.[2]?.toLowerCase().replace(/[.>]+$/, '') ?? null,
+    name: from?.[1]?.trim() || null,
+    subject: after.match(FWD_SUBJECT_LINE)?.[1]?.replace(/\*+/g, '').trim() ?? null,
+  }
+}
+
 // ─── Analisi ─────────────────────────────────────────────────────────────
 export async function analyzeEmail(input: CheckMailInput, options: CheckMailOptions = {}): Promise<Verdict> {
   const findings: Finding[] = []
@@ -580,10 +613,28 @@ export async function analyzeEmail(input: CheckMailInput, options: CheckMailOpti
     if (!angle && fromName && fromName.toLowerCase() === fromAddress) fromName = null
   }
 
-  const fromDomain = domainOf(fromAddress)
   // Intestazioni presenti ma mittente senza indirizzo ("Servizio Hosting <>")
   if (hasHeaders && !fromAddress) add('sender_missing', 'medium', 20)
   const bodyText = [text ?? '', html ? htmlToText(html) : ''].join(' ')
+
+  // Email inoltrata (un familiare la gira per farla controllare): chi la
+  // inoltra non è il mittente da giudicare. Si usano il mittente e l'oggetto
+  // originali scritti nel testo; se mancano, si salta il controllo sul marchio.
+  const forward = detectForward(subject, text ?? bodyText)
+  if (forward) {
+    if (forward.from) add('forwarded', 'info', 0, { sender: forward.from })
+    else add('forwarded_unknown', 'info', 0)
+    if (forward.from) {
+      fromAddress = forward.from
+      fromName = forward.name
+      replyTo = null
+    } else {
+      fromAddress = null
+      fromName = null
+    }
+    subject = forward.subject ?? subject?.replace(FWD_SUBJECT, '').trim() ?? null
+  }
+  const fromDomain = domainOf(fromAddress)
   const links = extractLinks(html, text)
   const linkHosts = [...new Set(links.map((l) => l.host))]
 

@@ -5675,6 +5675,8 @@
     "f_auth_dkim_fail": "La firma digital del remitente no es válida (DKIM fallido para {domain}): el correo podría estar falsificado.",
     "f_auth_ok": "Autenticación del remitente superada (SPF {spf}, DKIM {dkim}, DMARC {dmarc}): confirma el dominio de envío, no que el correo sea fiable.",
     "f_no_headers": "Sin los encabezados técnicos el análisis es parcial: sube el archivo o pega el código fuente para un control completo.",
+    "f_forwarded": "Es un correo reenviado: compruebo el remitente original ({sender}), no a quien te lo reenvió.",
+    "f_forwarded_unknown": "Es un correo reenviado pero no encuentro el remitente original: para un control completo, pega también la línea «De:» del mensaje original.",
     "f_sender_missing": "El remitente no tiene dirección de correo: los mensajes reales siempre la tienen.",
     "f_brand_from_freemail": "Dice ser {brand} pero escribe desde una dirección gratuita ({domain}).",
     "f_brand_domain_mismatch": "Dice ser {brand} pero el dominio del remitente ({domain}) no es oficial.",

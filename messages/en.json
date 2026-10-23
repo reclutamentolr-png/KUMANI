@@ -5675,6 +5675,8 @@
     "f_auth_dkim_fail": "The sender's digital signature is invalid (DKIM failed for {domain}): the email may be forged.",
     "f_auth_ok": "Sender authentication passed (SPF {spf}, DKIM {dkim}, DMARC {dmarc}): it confirms the sending domain, not that the email is trustworthy.",
     "f_no_headers": "Without the technical headers the check is partial: upload the file or paste the source for a full check.",
+    "f_forwarded": "This is a forwarded email: I check the original sender ({sender}), not the person who forwarded it.",
+    "f_forwarded_unknown": "This is a forwarded email but I can't find the original sender: for a full check, also paste the original message's «From:» line.",
     "f_sender_missing": "The sender has no email address: genuine messages always have one.",
     "f_brand_from_freemail": "It claims to be {brand} but writes from a free email address ({domain}).",
     "f_brand_domain_mismatch": "It claims to be {brand} but the sender's domain ({domain}) is not an official one.",
