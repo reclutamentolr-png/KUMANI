@@ -454,7 +454,8 @@
     "pwStrength_weak": "Schwach",
     "pwStrength_medium": "Mittel",
     "pwStrength_strong": "Stark",
-    "pwStrengthHint": "länger, mit Großbuchstaben, Zahlen und Sonderzeichen ist sicherer"
+    "pwStrengthHint": "länger, mit Großbuchstaben, Zahlen und Sonderzeichen ist sicherer",
+    "pwnedPasswordError": "Dieses Passwort taucht in Listen gestohlener Passwörter auf und ist daher nicht sicher: Bitte wähle ein anderes. Vermeide gängige Wörter mit Zahlen oder Zeichen am Ende (wie „Test123@“): besser drei zufällige Wörter, z. B. „tisch-mond-maerz“."
   },
   "dashboard": {
     "receivedLabel": "Aus der Community",
@@ -7480,6 +7481,17 @@
         "p3": "Dein Video bleibt bei dir",
         "p3d": "Auf dem Handy aufgenommen, nie hochgeladen.",
         "note": "„Nicht auswendig lernen. Erleuchten.“"
+      },
+      "vox": {
+        "sub": "Deine Stimme, auch ohne Ton",
+        "tagline": "Die meisten Videos werden ohne Ton angesehen: VOX schreibt die Untertitel selbst, du korrigierst sie und lädst das Video für Social Media herunter.",
+        "p1": "Automatische Untertitel",
+        "p1d": "Deine Stimme wird zu Text, Wort für Wort.",
+        "p2": "Der Reels-Look",
+        "p2d": "Das gesprochene Wort leuchtet, drei Stile.",
+        "p3": "Dein Video bleibt bei dir",
+        "p3d": "Alles auf dem Handy, nie hochgeladen.",
+        "note": "„Lass dich lesen, nicht nur hören.“"
       }
     },
     "includedSurprise": "Für alle, auch mit dem kostenlosen Konto",
@@ -8389,6 +8401,24 @@
       "step5Title": "Aufnehmen und Video herunterladen",
       "step5Text": "Tippe auf den roten Knopf: Countdown, dann startet die Aufnahme zusammen mit dem Text. Am Ende tippst du auf das Quadrat: Video ansehen, herunterladen oder sofort teilen.",
       "step5Tip": "Das Video bleibt auf deinem Handy: KUMANI lädt es nicht hoch und sieht es nicht."
+    },
+    "vox": {
+      "title": "KUMANI VOX",
+      "summary": "Automatische Untertitel für deine Videos: Deine Stimme wird auf dem Handy zu Text, du wählst den Stil und lädst das fertige Video herunter.",
+      "cta": "VOX öffnen",
+      "step1Title": "Video auswählen",
+      "step1Text": "Tippe auf „Video auswählen“ und nimm ein Video aus der Galerie, bis zu 3 Minuten (zum Beispiel eines aus LUMEN). Wähle die Sprache des Videos und die Transkription: „Genau“ macht weniger Fehler, „Schnell“ ist leichter.",
+      "step1Tip": "Beim ersten Mal lädt das Handy das KI-Modell (77 oder 250 MB): am besten im WLAN. Danach bleibt es auf dem Handy.",
+      "step2Title": "Untertitel erstellen",
+      "step2Text": "Tippe auf „Untertitel erstellen“: VOX hört sich das Video an und schreibt jedes Wort mit seiner Zeit. Lass die Seite offen, bis es fertig ist.",
+      "step2Tip": "Video und Stimme bleiben auf deinem Gerät: KUMANI lädt sie nicht hoch und sieht sie nicht.",
+      "step3Title": "Stil wählen",
+      "step3Text": "„Wort für Wort“ färbt das gesprochene Wort, wie in Reels; „Klassisch“ und „Kasten“ zeigen den ganzen Satz. Wähle Größe, Position, Farbe und Großbuchstaben: Die Vorschau im Video aktualisiert sich sofort.",
+      "step4Title": "Text korrigieren",
+      "step4Text": "Lies die Zeilen und korrigiere falsche Wörter, etwa Namen. Tippe links auf die Zeit, um die Stelle im Video zu hören.",
+      "step5Title": "Video herunterladen",
+      "step5Text": "Tippe auf „Video mit Untertiteln erstellen“: Das Video wird einmal abgespielt und die Untertitel kommen ins Bild. Dann lädst du es herunter oder teilst es sofort. Für YouTube oder einen Videoeditor lade auch die .srt-Datei herunter.",
+      "step5Tip": "Lass den Bildschirm an, während das Video entsteht: Es dauert so lange wie das Video."
     }
   },
   "deckTexts": {

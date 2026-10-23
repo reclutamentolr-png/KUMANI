@@ -454,7 +454,8 @@
     "pwStrength_weak": "Faible",
     "pwStrength_medium": "Moyen",
     "pwStrength_strong": "Fort",
-    "pwStrengthHint": "plus long, avec majuscules, chiffres et symboles, c’est plus sûr"
+    "pwStrengthHint": "plus long, avec majuscules, chiffres et symboles, c’est plus sûr",
+    "pwnedPasswordError": "Ce mot de passe figure dans des listes de mots de passe volés sur internet, il n’est donc pas sûr : choisis-en un autre. Évite les mots courants suivis de chiffres ou de symboles (comme « Essai123@ ») : mieux vaut trois mots au hasard, par exemple « table-lune-mars »."
   },
   "dashboard": {
     "receivedLabel": "De la Communauté",
@@ -7480,6 +7481,17 @@
         "p3": "Ta vidéo reste à toi",
         "p3d": "Enregistrée sur le téléphone, jamais envoyée.",
         "note": "« Ne mémorise pas. Illumine. »"
+      },
+      "vox": {
+        "sub": "Ta voix, même sans le son",
+        "tagline": "La plupart des vidéos se regardent sans le son : VOX écrit les sous-titres pour toi, tu les corriges et tu télécharges la vidéo prête pour les réseaux.",
+        "p1": "Sous-titres automatiques",
+        "p1d": "Ta voix devient texte, mot par mot.",
+        "p2": "Le style des Reels",
+        "p2d": "Le mot prononcé s’allume, trois styles.",
+        "p3": "Ta vidéo reste à toi",
+        "p3d": "Tout sur le téléphone, jamais envoyé.",
+        "note": "« Fais-toi lire, pas seulement écouter. »"
       }
     },
     "includedSurprise": "Pour tous, même avec le compte gratuit",
@@ -8389,6 +8401,24 @@
       "step5Title": "Enregistre et télécharge la vidéo",
       "step5Text": "Touche le bouton rouge : compte à rebours, puis l’enregistrement démarre avec le texte. Quand tu as fini, touche le carré : regarde la vidéo, télécharge-la ou partage-la tout de suite.",
       "step5Tip": "La vidéo reste sur ton téléphone : KUMANI ne la télécharge pas et ne la voit pas."
+    },
+    "vox": {
+      "title": "KUMANI VOX",
+      "summary": "Sous-titres automatiques pour tes vidéos : ta voix devient texte sur ton téléphone, tu choisis le style et tu télécharges la vidéo prête à publier.",
+      "cta": "Ouvrir VOX",
+      "step1Title": "Choisis la vidéo",
+      "step1Text": "Touche « Choisir la vidéo » et prends une vidéo de ta galerie, jusqu’à 3 minutes (par exemple celle enregistrée avec LUMEN). Indique la langue de la vidéo et la transcription : « Précise » fait moins d’erreurs, « Rapide » est plus légère.",
+      "step1Tip": "La première fois, le téléphone télécharge le modèle IA (77 ou 250 Mo) : mieux en Wi-Fi. Ensuite il reste sur le téléphone.",
+      "step2Title": "Crée les sous-titres",
+      "step2Text": "Touche « Créer les sous-titres » : VOX écoute la vidéo et écrit chaque mot avec son minutage. Garde la page ouverte jusqu’à la fin.",
+      "step2Tip": "La vidéo et la voix restent sur ton appareil : KUMANI ne les envoie pas et ne les voit pas.",
+      "step3Title": "Choisis le style",
+      "step3Text": "« Mot par mot » colore le mot que tu prononces, comme dans les Reels ; « Classique » et « Encadré » montrent la phrase entière. Choisis taille, position, couleur et majuscules : l’aperçu sur la vidéo se met à jour tout de suite.",
+      "step4Title": "Corrige le texte",
+      "step4Text": "Relis les lignes et corrige les mots erronés, comme les noms. Touche l’horaire à gauche pour entendre ce passage de la vidéo.",
+      "step5Title": "Télécharge la vidéo",
+      "step5Text": "Touche « Créer la vidéo sous-titrée » : la vidéo est lue une fois et les sous-titres s’y incrustent. Ensuite tu la télécharges ou tu la partages tout de suite. Pour YouTube ou un éditeur vidéo, télécharge aussi le fichier .srt.",
+      "step5Tip": "Garde l’écran allumé pendant la création : cela prend la durée de la vidéo."
     }
   },
   "deckTexts": {

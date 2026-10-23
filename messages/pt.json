@@ -454,7 +454,8 @@
     "pwStrength_weak": "Fraca",
     "pwStrength_medium": "Média",
     "pwStrength_strong": "Forte",
-    "pwStrengthHint": "mais longa, com maiúsculas, números e símbolos é mais segura"
+    "pwStrengthHint": "mais longa, com maiúsculas, números e símbolos é mais segura",
+    "pwnedPasswordError": "Esta palavra-passe aparece em listas de palavras-passe roubadas na internet, por isso não é segura: escolhe outra. Evita palavras comuns com números ou símbolos no fim (como «Teste123@»): melhor três palavras ao acaso juntas, por exemplo «mesa-lua-marco»."
   },
   "dashboard": {
     "receivedLabel": "Da Comunidade",
@@ -7480,6 +7481,17 @@
         "p3": "O vídeo é teu",
         "p3d": "Gravado no telemóvel, sem o carregar.",
         "note": "«Não decores. Ilumina.»"
+      },
+      "vox": {
+        "sub": "A tua voz, mesmo sem som",
+        "tagline": "A maioria dos vídeos é vista sem som: o VOX escreve as legendas por ti, tu corriges e descarregas o vídeo pronto para as redes.",
+        "p1": "Legendas automáticas",
+        "p1d": "A tua voz vira texto, palavra a palavra.",
+        "p2": "O estilo dos Reels",
+        "p2d": "A palavra dita acende-se, três estilos.",
+        "p3": "O vídeo é teu",
+        "p3d": "Tudo no telemóvel, sem o carregar.",
+        "note": "«Faz-te ler, não só ouvir.»"
       }
     },
     "includedSurprise": "Para todos, também com a conta gratuita",
@@ -8389,6 +8401,24 @@
       "step5Title": "Grava e descarrega o vídeo",
       "step5Text": "Toca no botão vermelho: contagem decrescente e começa a gravação com o texto. Quando acabares toca no quadrado: vês o vídeo, descarregas ou partilhas logo.",
       "step5Tip": "O vídeo fica no teu telemóvel: a KUMANI não o carrega nem o vê."
+    },
+    "vox": {
+      "title": "KUMANI VOX",
+      "summary": "Legendas automáticas para os teus vídeos: a tua voz vira texto no telemóvel, escolhes o estilo e descarregas o vídeo pronto a publicar.",
+      "cta": "Abrir VOX",
+      "step1Title": "Escolhe o vídeo",
+      "step1Text": "Toca em «Escolher o vídeo» e escolhe um da galeria, até 3 minutos (por exemplo, o gravado com o LUMEN). Indica a língua do vídeo e a transcrição: «Precisa» erra menos, «Rápida» é mais leve.",
+      "step1Tip": "Da primeira vez o telemóvel descarrega o modelo de IA (77 ou 250 MB): melhor com Wi-Fi. Depois fica no telemóvel.",
+      "step2Title": "Cria as legendas",
+      "step2Text": "Toca em «Criar legendas»: o VOX ouve o vídeo e escreve cada palavra com o seu tempo. Mantém a página aberta até acabar.",
+      "step2Tip": "O vídeo e a voz ficam no teu dispositivo: a KUMANI não os carrega nem os vê.",
+      "step3Title": "Escolhe o estilo",
+      "step3Text": "«Palavra a palavra» colore a palavra que dizes, como nos Reels; «Clássico» e «Caixa» mostram a frase inteira. Escolhe tamanho, posição, cor e maiúsculas: a pré-visualização atualiza-se logo.",
+      "step4Title": "Corrige o texto",
+      "step4Text": "Relê as linhas e corrige as palavras erradas, como os nomes. Toca na hora à esquerda para ouvir esse momento do vídeo.",
+      "step5Title": "Descarrega o vídeo",
+      "step5Text": "Toca em «Criar o vídeo com legendas»: o vídeo é reproduzido uma vez e as legendas ficam dentro. Depois descarregas ou partilhas logo. Se usas o YouTube ou um editor de vídeo, descarrega também o ficheiro .srt.",
+      "step5Tip": "Mantém o ecrã ligado enquanto o vídeo é criado: demora o mesmo que o vídeo."
     }
   },
   "deckTexts": {

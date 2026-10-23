@@ -494,7 +494,8 @@
     "pwStrength_weak": "Weak",
     "pwStrength_medium": "Medium",
     "pwStrength_strong": "Strong",
-    "pwStrengthHint": "longer, with capitals, numbers and symbols is safer"
+    "pwStrengthHint": "longer, with capitals, numbers and symbols is safer",
+    "pwnedPasswordError": "This password appears in lists of passwords stolen online in the past, so it isn’t safe: please choose another one. Avoid common words with numbers or symbols at the end (like “Test123@”): three random words joined together work better, e.g. “table-moon-march”."
   },
   "dashboard": {
     "receivedLabel": "From the Community",
@@ -7480,6 +7481,17 @@
         "p3": "Your video stays yours",
         "p3d": "Recorded on your phone, never uploaded.",
         "note": "“Don’t memorise. Illuminate.”"
+      },
+      "vox": {
+        "sub": "Your voice, even with the sound off",
+        "tagline": "Most videos are watched without sound: VOX writes the subtitles for you, you correct them and download a video ready for social media.",
+        "p1": "Automatic subtitles",
+        "p1d": "Your voice becomes text, word by word.",
+        "p2": "The Reels look",
+        "p2d": "The spoken word lights up, three styles.",
+        "p3": "Your video stays yours",
+        "p3d": "All on your phone, never uploaded.",
+        "note": "“Be read, not just heard.”"
       }
     },
     "includedSurprise": "For everyone, free account included",
@@ -8389,6 +8401,24 @@
       "step5Title": "Record and download the video",
       "step5Text": "Tap the red button: countdown, then recording starts together with the text. When you’re done tap the square: watch the video, download it or share it right away.",
       "step5Tip": "The video stays on your phone: KUMANI doesn’t upload or see it."
+    },
+    "vox": {
+      "title": "KUMANI VOX",
+      "summary": "Automatic subtitles for your videos: your voice becomes text on your phone, you pick the style and download a video ready to post.",
+      "cta": "Open VOX",
+      "step1Title": "Choose the video",
+      "step1Text": "Tap “Choose the video” and pick one from your gallery, up to 3 minutes (for example one recorded with LUMEN). Set the video language and the transcription: “Accurate” makes fewer mistakes, “Fast” is lighter.",
+      "step1Tip": "The first time your phone downloads the AI model (77 or 250 MB): better on Wi-Fi. Then it stays on your phone.",
+      "step2Title": "Create the subtitles",
+      "step2Text": "Tap “Create subtitles”: VOX listens to the video and writes every word with its timing. Keep the page open until it finishes.",
+      "step2Tip": "Video and voice stay on your device: KUMANI doesn’t upload or see them.",
+      "step3Title": "Choose the style",
+      "step3Text": "“Word by word” colours the word you’re saying, like in Reels; “Classic” and “Box” show the whole sentence. Choose size, position, colour and all caps: the preview on the video updates right away.",
+      "step4Title": "Correct the text",
+      "step4Text": "Reread the lines and fix any wrong words, such as names. Tap the time on the left to hear that moment of the video.",
+      "step5Title": "Download the video",
+      "step5Text": "Tap “Create the video with subtitles”: the video plays once and the captions are burned in. Then download it or share it right away. If you use YouTube or a video editor, download the .srt file too.",
+      "step5Tip": "Keep the screen on while the video is created: it takes as long as the video."
     }
   },
   "deckTexts": {

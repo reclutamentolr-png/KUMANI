@@ -29,7 +29,11 @@ const BY_TEXT: [RegExp, string][] = [
 
 export function authErrorKey(error: unknown): string | null {
   if (!error || typeof error !== 'object') return null
-  const { code, message, name } = error as { code?: string; message?: string; name?: string }
+  const { code, message, name, reasons } = error as { code?: string; message?: string; name?: string; reasons?: string[] }
+  // Password lunga abbastanza ma presente negli elenchi di password rubate
+  // (controllo «Have I Been Pwned» di Supabase): va detto chiaramente, non
+  // «usa almeno 8 caratteri»
+  if (code === 'weak_password' && reasons?.includes('pwned') && !reasons.includes('length')) return 'pwnedPasswordError'
   if (code && BY_CODE[code]) return BY_CODE[code]
   if (message) {
     for (const [pattern, key] of BY_TEXT) if (pattern.test(message)) return key

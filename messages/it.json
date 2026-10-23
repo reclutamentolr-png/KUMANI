@@ -494,7 +494,8 @@
     "pwStrength_weak": "Debole",
     "pwStrength_medium": "Media",
     "pwStrength_strong": "Forte",
-    "pwStrengthHint": "più lunga, con maiuscole, numeri e simboli è più sicura"
+    "pwStrengthHint": "più lunga, con maiuscole, numeri e simboli è più sicura",
+    "pwnedPasswordError": "Questa password risulta tra quelle rubate in passato su internet, quindi non è sicura: scegline un’altra. Evita parole comuni con numeri o simboli in fondo (come «Prova123@»): meglio tre parole a caso unite, per esempio «tavolo-luna-marzo»."
   },
   "dashboard": {
     "receivedLabel": "Dalla Community",
@@ -7480,6 +7481,17 @@
         "p3": "Il video resta tuo",
         "p3d": "Si registra sul telefono, senza caricarlo.",
         "note": "«Non memorizzare. Illumina.»"
+      },
+      "vox": {
+        "sub": "La tua voce, anche senza audio",
+        "tagline": "La maggior parte dei video si guarda senza audio: VOX scrive i sottotitoli da solo, tu li correggi e scarichi il video pronto per i social.",
+        "p1": "Sottotitoli in automatico",
+        "p1d": "La voce diventa testo, parola per parola.",
+        "p2": "Lo stile dei Reel",
+        "p2d": "La parola detta si colora, tre stili a scelta.",
+        "p3": "Il video resta tuo",
+        "p3d": "Tutto nel telefono, senza caricarlo.",
+        "note": "«Fatti leggere, non solo ascoltare.»"
       }
     },
     "includedSurprise": "Per tutti, anche con l’account gratuito",
@@ -8389,6 +8401,24 @@
       "step5Title": "Registra e scarica il video",
       "step5Text": "Tocca il pulsante rosso: conto alla rovescia, poi parte la registrazione insieme al testo. Quando hai finito tocca il quadrato: riguardi il video, lo scarichi o lo condividi subito.",
       "step5Tip": "Il video resta sul tuo telefono: KUMANI non lo carica e non lo vede."
+    },
+    "vox": {
+      "title": "KUMANI VOX",
+      "summary": "Sottotitoli automatici per i tuoi video: la voce diventa testo nel telefono, scegli lo stile e scarichi il video pronto da pubblicare.",
+      "cta": "Apri VOX",
+      "step1Title": "Scegli il video",
+      "step1Text": "Tocca «Scegli il video» e prendi un video dalla galleria, fino a 3 minuti (per esempio quello registrato con LUMEN). Indica la lingua del video e la trascrizione: «Precisa» sbaglia meno, «Veloce» è più leggera.",
+      "step1Tip": "La prima volta il telefono scarica il modello AI (77 o 250 MB): meglio con il Wi-Fi. Poi resta nel telefono.",
+      "step2Title": "Crea i sottotitoli",
+      "step2Text": "Tocca «Crea i sottotitoli»: VOX ascolta il video e scrive ogni parola con il suo tempo. Tieni aperta la pagina finché finisce.",
+      "step2Tip": "Video e voce restano sul tuo dispositivo: KUMANI non li carica e non li vede.",
+      "step3Title": "Scegli lo stile",
+      "step3Text": "«Parola per parola» colora la parola che stai dicendo, come nei Reel; «Classico» e «Riquadro» mostrano la frase intera. Scegli grandezza, posizione, colore e se scrivere tutto maiuscolo: l’anteprima sul video si aggiorna subito.",
+      "step4Title": "Correggi il testo",
+      "step4Text": "Rileggi le righe e correggi le parole sbagliate, come i nomi. Tocca l’orario a sinistra per sentire quel punto del video.",
+      "step5Title": "Scarica il video",
+      "step5Text": "Tocca «Crea il video con i sottotitoli»: il video viene riprodotto una volta e le scritte finiscono dentro. Poi lo scarichi o lo condividi subito. Se usi YouTube o un editor video, scarica anche il file .srt.",
+      "step5Tip": "Tieni lo schermo acceso mentre crea il video: ci vuole quanto dura il video."
     }
   },
   "deckTexts": {
