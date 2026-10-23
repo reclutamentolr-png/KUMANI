@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { ArrowRight, BriefcaseBusiness, CalendarDays, Check, ChevronDown, Gamepad2, Gift, Info, Leaf, LifeBuoy, LoaderCircle, Lock, Megaphone, PiggyBank, Plus, ShieldCheck, Smartphone, Store, Users, type LucideIcon } from 'lucide-react'
+import { ArrowRight, BriefcaseBusiness, CalendarDays, Clapperboard, Check, ChevronDown, Gamepad2, Gift, Info, Leaf, LifeBuoy, LoaderCircle, Lock, Megaphone, PiggyBank, Plus, ShieldCheck, Smartphone, Store, Users, type LucideIcon } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { showFullHome, toggleWelcomeService } from '@/app/actions/welcome'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
@@ -15,7 +15,7 @@ import { FROM_ICONS_KEY } from '@/lib/homeView'
 // legge a cosa servono, con «Aggiungi» finiscono in «I tuoi servizi». Sotto,
 // «Inizia da qui»: servizi pronti da provare in riquadri quadrati. In fondo
 // «Mostra la Home completa».
-const NEED_ICON: Record<string, LucideIcon> = { ShieldCheck, CalendarDays, PiggyBank, Store, Megaphone, BriefcaseBusiness, Users, Gamepad2, Leaf, Gift }
+const NEED_ICON: Record<string, LucideIcon> = { ShieldCheck, CalendarDays, PiggyBank, Store, Megaphone, Clapperboard, BriefcaseBusiness, Users, Gamepad2, Leaf, Gift }
 
 const PLAN_RANK = { free: 0, base: 1, pro: 2 } as const
 
@@ -135,9 +135,9 @@ export default function WelcomeHome({
                         onClick={() => setInfoOf(showInfo ? null : service.toolName)}
                         aria-expanded={showInfo}
                         aria-label={t('info', { service: toolTitle })}
-                        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border ${showInfo ? 'border-[var(--gold)] bg-[var(--gold)] text-[var(--ink)]' : 'border-white/25 text-white/80 hover:border-[var(--gold)]'}`}
+                        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-400 text-[var(--ink)] hover:bg-emerald-300 ${showInfo ? 'ring-2 ring-white ring-offset-2 ring-offset-[var(--ink)]' : ''}`}
                       >
-                        <Info className="h-4 w-4" />
+                        <Info className="h-5 w-5" strokeWidth={2.5} />
                       </button>
                       <button
                         type="button"

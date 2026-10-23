@@ -12660,7 +12660,10 @@
     "need_games": "Quiero jugar con mis amigos",
     "short_games": "Juegos",
     "intro_promote": "Códigos QR, link en bio, mensajes de WhatsApp listos y una firma de email profesional: para que te encuentren y te recuerden.",
-    "intro_games": "El crucigrama del día, desafíos con amigos, historias con dados y una obra colectiva: juegos para hacer juntos."
+    "intro_games": "El crucigrama del día, desafíos con amigos, historias con dados y una obra colectiva: juegos para hacer juntos.",
+    "need_social": "Quiero empezar en redes sociales",
+    "short_social": "Redes sociales",
+    "intro_social": "Textos y hashtags, guiones para leer ante la cámara, subtítulos, calendario de publicaciones, fotos y la seguridad de tu perfil: todo para empezar en redes."
   },
   "nexus": {
     "back": "Volver a Ocio",

@@ -12660,7 +12660,10 @@
     "need_games": "Ich will mit Freunden spielen",
     "short_games": "Spiele",
     "intro_promote": "QR-Codes, Link in Bio, fertige WhatsApp-Nachrichten und eine professionelle E-Mail-Signatur: damit man dich findet und sich an dich erinnert.",
-    "intro_games": "Das Kreuzworträtsel des Tages, Herausforderungen mit Freunden, Würfelgeschichten und ein Gemeinschaftswerk: Spiele für gemeinsam."
+    "intro_games": "Das Kreuzworträtsel des Tages, Herausforderungen mit Freunden, Würfelgeschichten und ein Gemeinschaftswerk: Spiele für gemeinsam.",
+    "need_social": "Ich möchte mit Social Media starten",
+    "short_social": "Social Media",
+    "intro_social": "Bildunterschriften und Hashtags, Skripte zum Ablesen vor der Kamera, Untertitel, ein Post-Kalender, Fotos und die Sicherheit deines Profils: alles für den Start in Social Media."
   },
   "nexus": {
     "back": "Zurück zu Freizeit",

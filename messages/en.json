@@ -12660,7 +12660,10 @@
     "need_games": "I want to play with friends",
     "short_games": "Games",
     "intro_promote": "QR codes, link in bio, ready-made WhatsApp messages and a professional email signature: to be found and remembered.",
-    "intro_games": "The daily crossword, challenges with friends, dice stories and a collective artwork: games to play together."
+    "intro_games": "The daily crossword, challenges with friends, dice stories and a collective artwork: games to play together.",
+    "need_social": "I want to get started on social media",
+    "short_social": "Social media",
+    "intro_social": "Captions and hashtags, scripts to read on camera, subtitles, a post calendar, photos and your profile’s security: everything to get started on social media."
   },
   "nexus": {
     "back": "Back to Fun",

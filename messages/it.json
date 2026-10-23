@@ -12660,7 +12660,10 @@
     "need_games": "Voglio giocare con gli amici",
     "short_games": "Giochi",
     "intro_promote": "QR code, link in bio, messaggi WhatsApp pronti e una firma email professionale: per farti trovare e ricordare.",
-    "intro_games": "Il cruciverba del giorno, sfide con gli amici, storie con i dadi e un’opera collettiva: giochi da fare insieme."
+    "intro_games": "Il cruciverba del giorno, sfide con gli amici, storie con i dadi e un’opera collettiva: giochi da fare insieme.",
+    "need_social": "Voglio iniziare sui social",
+    "short_social": "Social",
+    "intro_social": "Didascalie e hashtag, copioni da leggere in video, sottotitoli, calendario dei post, foto e la sicurezza del tuo profilo: tutto per iniziare sui social."
   },
   "nexus": {
     "back": "Torna a Svago",

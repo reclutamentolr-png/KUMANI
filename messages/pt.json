@@ -12660,7 +12660,10 @@
     "need_games": "Quero jogar com os amigos",
     "short_games": "Jogos",
     "intro_promote": "Códigos QR, link na bio, mensagens de WhatsApp prontas e uma assinatura de email profissional: para te encontrarem e se lembrarem de ti.",
-    "intro_games": "As palavras cruzadas do dia, desafios com amigos, histórias com dados e uma obra coletiva: jogos para fazer em conjunto."
+    "intro_games": "As palavras cruzadas do dia, desafios com amigos, histórias com dados e uma obra coletiva: jogos para fazer em conjunto.",
+    "need_social": "Quero começar nas redes sociais",
+    "short_social": "Redes sociais",
+    "intro_social": "Legendas e hashtags, guiões para ler em vídeo, legendas no vídeo, calendário de publicações, fotos e a segurança do teu perfil: tudo para começar nas redes."
   },
   "nexus": {
     "back": "Voltar a Lazer",

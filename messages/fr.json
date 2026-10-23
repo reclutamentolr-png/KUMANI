@@ -12660,7 +12660,10 @@
     "need_games": "Je veux jouer avec mes amis",
     "short_games": "Jeux",
     "intro_promote": "QR codes, lien en bio, messages WhatsApp prêts et une signature email professionnelle : pour qu’on vous trouve et se souvienne de vous.",
-    "intro_games": "Les mots croisés du jour, des défis entre amis, des histoires avec des dés et une œuvre collective : des jeux à faire ensemble."
+    "intro_games": "Les mots croisés du jour, des défis entre amis, des histoires avec des dés et une œuvre collective : des jeux à faire ensemble.",
+    "need_social": "Je veux me lancer sur les réseaux sociaux",
+    "short_social": "Réseaux sociaux",
+    "intro_social": "Légendes et hashtags, scripts à lire face caméra, sous-titres, calendrier des publications, photos et sécurité de ton profil : tout pour te lancer sur les réseaux."
   },
   "nexus": {
     "back": "Retour à Loisirs",
