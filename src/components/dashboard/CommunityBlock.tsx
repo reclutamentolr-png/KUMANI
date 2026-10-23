@@ -43,7 +43,7 @@ export function CommunityBlock({ items }: { items: CommunityItem[] }) {
                   </span>
                 )}
               </div>
-              <p className="text-sm font-bold text-[var(--ink)] group-hover:text-sky-700">{item.title}</p>
+              <p className={`justify-self-start self-start rounded-full px-3 py-1 text-sm font-bold sm:self-start ${item.locked ? "bg-gray-100 text-gray-600" : "bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] shadow-sm group-hover:brightness-105"}`}>{item.title}</p>
               <PlanTag plan={item.plan} className="mt-1" />
               <p className="mt-0.5 line-clamp-2 flex-1 text-xs sm:line-clamp-3 leading-5 text-[var(--muted)]">{item.description}</p>
               <div className="mt-2">

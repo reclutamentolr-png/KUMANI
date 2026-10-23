@@ -257,6 +257,8 @@ export default async function DashboardTipo2({
           {agenda}
           <QuickCheckBox title={t('quickCheckTitle')} className="" />
           <HomeServices items={services} favorites={favoriteToolNames} />
+          {/* «In cosa possiamo darti una mano?»: anche con un piano, dopo i propri servizi */}
+          {needs}
           {invites}
           {proBlock}
           {wellness}

@@ -58,7 +58,7 @@ export default function DashboardNeeds({
                         <span key={link.href} className="flex flex-col items-center gap-1">
                           <Link
                             href={link.href}
-                            className="inline-flex min-h-9 items-center gap-1 rounded-full border border-[var(--gold)]/40 bg-white px-3 text-xs font-semibold text-[var(--ink)] transition hover:border-[var(--gold)] hover:bg-[var(--gold)]/10"
+                            className="inline-flex min-h-9 items-center gap-1 rounded-full bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-3 text-xs font-bold text-[var(--ink)] shadow-sm transition hover:brightness-105"
                           >
                             {link.title} <ArrowRight className="h-3 w-3" />
                           </Link>
@@ -150,10 +150,10 @@ export default function DashboardNeeds({
                   aria-controls="dash-needs-answer"
                   title={n.label}
                   className={`flex min-h-11 min-w-0 cursor-pointer items-center gap-1.5 rounded-full border-[1.5px] py-1.5 pl-1.5 pr-3 text-left text-[13px] font-semibold leading-tight sm:gap-2 sm:pr-3.5 sm:text-sm text-[var(--ink)] transition ${
-                    on ? 'border-[var(--ink)] bg-[var(--gold-pale)] shadow-md' : 'border-[var(--gold)]/35 bg-white hover:border-[var(--gold)]'
+                    on ? 'border-[var(--ink)] bg-[var(--ink)] !text-[var(--gold-bright)] shadow-md' : 'border-transparent bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] shadow-sm hover:brightness-105'
                   }`}
                 >
-                  <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${on ? 'bg-[var(--ink)] text-[var(--gold-bright)]' : 'bg-[var(--gold-pale)] text-[var(--ink)]'}`}>
+                  <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${on ? 'bg-[var(--gold)] text-[var(--ink)]' : 'bg-white/45 text-[var(--ink)]'}`}>
                     <Icon className="h-4 w-4" />
                   </span>
                   {n.short}

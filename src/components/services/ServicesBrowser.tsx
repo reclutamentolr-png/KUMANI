@@ -265,7 +265,7 @@ export function ServiceCard({
           {!compact && (
             <span className="mt-2 flex flex-wrap items-center gap-1.5">
               {item.open ? (
-                <span className="inline-flex items-center gap-1 rounded-full bg-[var(--ink)] px-2.5 py-1 text-[11px] font-bold text-white">
+                <span className="inline-flex items-center gap-1 rounded-full bg-sky-50 px-2 py-0.5 text-[11px] font-bold text-sky-800">
                   {t('open')} <ArrowRight className="h-3 w-3" />
                 </span>
               ) : (

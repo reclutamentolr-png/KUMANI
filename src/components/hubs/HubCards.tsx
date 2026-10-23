@@ -49,7 +49,7 @@ export default function HubCards({ hubs, items }: { hubs: readonly ServiceHub[];
                     <span key={tab.key} className="flex flex-col items-center gap-1">
                     <Link
                       href={tab.href}
-                      className={`inline-flex min-h-8 items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold transition-colors ${locked ? 'bg-gray-100 text-gray-500 hover:bg-gray-200' : 'bg-[var(--gold)]/10 text-[var(--ink)] hover:bg-[var(--gold)]/25'}`}
+                      className={`inline-flex min-h-8 items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold transition-colors ${locked ? 'bg-gray-100 text-gray-500 hover:bg-gray-200' : 'bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] font-bold text-[var(--ink)] shadow-sm hover:brightness-105'}`}
                     >
                       {locked && <Lock className="h-3 w-3" aria-label={t('locked')} />}
                       {t(`${hub}.tab_${tab.key}`)}
@@ -59,8 +59,8 @@ export default function HubCards({ hubs, items }: { hubs: readonly ServiceHub[];
                   )
                 })}
             </span>
-            <Link href={HUB_HOME[hub]} className="mt-4 flex items-center gap-1 self-start text-sm font-bold text-[var(--ink)]">
-              {t('open')} <ArrowRight className="h-4 w-4 text-[var(--gold)] transition-transform group-hover:translate-x-0.5" />
+            <Link href={HUB_HOME[hub]} className="mt-4 inline-flex items-center gap-1 self-start rounded-full bg-sky-50 px-2 py-0.5 text-[11px] font-bold text-sky-800 hover:bg-sky-100">
+              {t('open')} <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
             </Link>
           </div>
         )
