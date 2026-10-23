@@ -61,7 +61,12 @@ export default function OfferMakerReview(props: Props) {
           setError(result.message)
           return
         }
+        // Salvato: il messaggio, poi si torna all'elenco delle campagne
         setSaved(true)
+        setTimeout(() => {
+          router.push('/marketplace/offermaker/campaigns')
+          router.refresh()
+        }, 1500)
       }
     } finally {
       setSaving(false)
@@ -105,9 +110,12 @@ export default function OfferMakerReview(props: Props) {
       {saved && (
         <div className="bg-green-50 border border-green-200 rounded-xl p-4 flex items-center gap-2 text-green-800 text-sm">
           <CheckCircle className="w-5 h-5 shrink-0" />
-          {t('publishSuccess')}
+          {t('saveSuccess')}
         </div>
       )}
+
+      {/* Solo per chi crea la campagna: la pagina pubblica non lo mostra */}
+      <p className="text-xs text-[var(--muted)]">{t('disclaimer')}</p>
 
       <div className="flex items-center gap-3">
         {props.mode === 'create' && (
@@ -122,7 +130,7 @@ export default function OfferMakerReview(props: Props) {
         {props.mode !== 'create' && <CancelButton className={cancelButtonLgClass} fallbackHref="/marketplace/offermaker" />}
         <button
           onClick={handleSubmit}
-          disabled={saving}
+          disabled={saving || saved}
           className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] rounded-xl font-bold shadow-md hover:brightness-105 transition-all disabled:opacity-50"
         >
           {saving ? (

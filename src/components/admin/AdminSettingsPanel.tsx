@@ -63,6 +63,7 @@ export default function AdminSettingsPanel() {
     listing_feature_cost_7d: 20,
     listing_feature_cost_15d: 35,
     menu_ai_daily_runs: 5,
+    offermaker_ai_daily_runs: 3,
     surprise_price_voucher_cents: 290,
     surprise_price_journey3_cents: 990,
     surprise_price_journey7_cents: 1590,
@@ -625,6 +626,18 @@ export default function AdminSettingsPanel() {
               className={`max-w-xs ${INPUT}`}
             />
             <p className="text-xs text-gray-500 mt-1">Ogni traduzione ha un piccolo costo sulla chiave AI del progetto.</p>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Offerte create con OfferMaker AI al giorno (per persona)</label>
+            <input
+              type="number"
+              min="0"
+              max="100"
+              value={systemSettings.offermaker_ai_daily_runs ?? 3}
+              onChange={(e) => setSystemSettings({ ...systemSettings, offermaker_ai_daily_runs: Math.max(0, parseInt(e.target.value, 10) || 0) })}
+              className={`max-w-xs ${INPUT}`}
+            />
+            <p className="text-xs text-gray-500 mt-1">Ogni «Crea la mia offerta» conta una volta, anche se poi non viene pubblicata.</p>
           </div>
           <div>
             <p className="block text-sm font-medium text-gray-700 mb-1">VeriFoto: rilevatore AI (Sightengine, quota gratuita)</p>

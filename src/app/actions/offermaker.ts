@@ -1,5 +1,6 @@
 'use server'
 
+import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { getAnthropicClient, MissingApiKeyError } from '@/lib/anthropic'
@@ -38,9 +39,30 @@ async function requireActiveOfferMakerSubscription(): Promise<
 }
 
 // Limite giornaliero di generazioni AI per utente (tabella offermaker_ai_usage,
-// stessa forma di menu_ai_usage) e lunghezza massima di ogni risposta.
-const OFFERMAKER_AI_DAILY_RUNS = 10
+// stessa forma di menu_ai_usage): Admin → Impostazioni, 3 se manca.
+// Lunghezza massima di ogni risposta.
+const OFFERMAKER_AI_DEFAULT_RUNS = 3
 const MAX_ANSWER_LENGTH = 500
+
+const serviceDb = () =>
+  createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  })
+
+async function dailyLimit(): Promise<number> {
+  const { data } = await serviceDb().from('system_settings').select('value').eq('key', 'offermaker_ai_daily_runs').maybeSingle()
+  const n = Number(String(data?.value ?? OFFERMAKER_AI_DEFAULT_RUNS).replace(/"/g, ''))
+  return Number.isFinite(n) && n >= 0 ? n : OFFERMAKER_AI_DEFAULT_RUNS
+}
+
+// Offerte con l'AI che restano oggi (stesso giorno UTC di ai_quota_take)
+export async function offerMakerAiLeft(): Promise<ActionResult<{ left: number; limit: number }>> {
+  const gate = await requireActiveOfferMakerSubscription()
+  if (!gate.ok) return { success: false, message: gate.message }
+  const limit = await dailyLimit()
+  const { data } = await serviceDb().from('offermaker_ai_usage').select('runs').eq('owner_id', gate.userId).eq('used_on', new Date().toISOString().slice(0, 10)).maybeSingle()
+  return { success: true, data: { left: Math.max(0, limit - Number(data?.runs ?? 0)), limit } }
+}
 
 function clampAnswers(answers: OfferFormAnswers): OfferFormAnswers {
   const clip = (v: unknown) => (typeof v === 'string' ? v.slice(0, MAX_ANSWER_LENGTH) : '')
@@ -117,10 +139,7 @@ export async function generateOfferDraft(
   // esista (una chiave mancante non deve consumare la quota), prima della chiamata.
   // Contatore atomico nel database (l'utente non può azzerarlo né superarlo
   // con richieste in parallelo)
-  const service = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
-    auth: { autoRefreshToken: false, persistSession: false },
-  })
-  const { data: taken, error: usageError } = await service.rpc('ai_quota_take', { p_kind: 'offermaker', p_user: gate.userId, p_limit: OFFERMAKER_AI_DAILY_RUNS })
+  const { data: taken, error: usageError } = await serviceDb().rpc('ai_quota_take', { p_kind: 'offermaker', p_user: gate.userId, p_limit: await dailyLimit() })
   if (usageError) {
     console.error('[OfferMaker] usage update failed:', usageError)
     return { success: false, message: 'generateError' }
@@ -172,27 +191,36 @@ export async function generateOfferDraft(
     )
 
     if (!toolUse) {
+      console.error('[OfferMaker] nessuna risposta strutturata, stop_reason:', message.stop_reason)
       return { success: false, message: 'generateError' }
     }
 
-    const draft = toolUse.input as Partial<GeneratedCampaignDraft>
-    const requiredFields: Array<keyof GeneratedCampaignDraft> = [
-      'campaignTitle',
-      'headline',
-      'offerSummary',
-      'description',
-      'ctaLabel',
-      'whatsappMessageSoft',
-      'whatsappMessageDirect',
-      'whatsappMessageFollowup',
-    ]
-    const isComplete = requiredFields.every((field) => typeof draft[field] === 'string' && draft[field]!.trim().length > 0)
-
-    if (!isComplete) {
+    const raw = toolUse.input as Partial<GeneratedCampaignDraft>
+    const text = (field: keyof GeneratedCampaignDraft) => (typeof raw[field] === 'string' ? raw[field]!.trim() : '')
+    // Indispensabili: senza questi non c'è un'offerta da mostrare
+    const essential: Array<keyof GeneratedCampaignDraft> = ['headline', 'description', 'whatsappMessageDirect']
+    const missing = essential.filter((field) => !text(field))
+    if (missing.length) {
+      console.error('[OfferMaker] risposta incompleta, stop_reason:', message.stop_reason, 'campi:', missing)
       return { success: false, message: 'generateError' }
     }
+    // Gli altri campi a volte arrivano vuoti (soprattutto il testo del
+    // pulsante): si completano invece di scartare tutta l'offerta
+    const t = await getTranslations('offermaker')
+    const draft: GeneratedCampaignDraft = {
+      campaignTitle: text('campaignTitle') || text('headline'),
+      headline: text('headline'),
+      offerSummary: text('offerSummary') || text('headline'),
+      description: text('description'),
+      ctaLabel: text('ctaLabel') || t('ctaFallback'),
+      whatsappMessageSoft: text('whatsappMessageSoft') || text('whatsappMessageDirect'),
+      whatsappMessageDirect: text('whatsappMessageDirect'),
+      whatsappMessageFollowup: text('whatsappMessageFollowup') || text('whatsappMessageDirect'),
+    }
+    const filled = (Object.keys(draft) as Array<keyof GeneratedCampaignDraft>).filter((field) => !text(field))
+    if (filled.length) console.warn('[OfferMaker] campi completati in automatico:', filled)
 
-    return { success: true, data: draft as GeneratedCampaignDraft }
+    return { success: true, data: draft }
   } catch (err: unknown) {
     console.error('[OfferMaker] generateOfferDraft failed:', err)
     const status = (err as { status?: number })?.status

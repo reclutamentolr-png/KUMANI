@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
-import { getTranslations } from 'next-intl/server'
-import { MessageCircle, CheckCircle2, ShieldCheck } from 'lucide-react'
+import { MessageCircle, ShieldCheck } from 'lucide-react'
+import { whatsappDigits } from '@/lib/clienti'
 
 // Dati personali, legati a un codice o che cambiano: sempre calcolata a ogni
 // richiesta, mai preparata in anticipo né tenuta in memoria
@@ -26,8 +26,6 @@ export default async function OfferLandingPage({
   params: Promise<{ code: string }>
 }) {
   const { code } = await params
-  const t = await getTranslations('offermaker')
-
   const supabase = await createClient()
   const { data, error } = await supabase
     .rpc('get_offer_campaign_by_code', { p_code: code })
@@ -38,8 +36,10 @@ export default async function OfferLandingPage({
   }
 
   const campaign = data
-  const whatsappDigits = campaign.contact_whatsapp.replace(/[^\d+]/g, '').replace(/^\+/, '')
-  const whatsappHref = `https://wa.me/${whatsappDigits}?text=${encodeURIComponent(campaign.whatsapp_message_direct)}`
+  // Numero completo per wa.me: senza prefisso (es. 328…) si aggiunge il +39,
+  // altrimenti WhatsApp leggerebbe «32» come il Belgio
+  const whatsappNumber = whatsappDigits(campaign.contact_whatsapp) ?? ''
+  const whatsappHref = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(campaign.whatsapp_message_direct)}`
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-purple-50">
@@ -69,10 +69,6 @@ export default async function OfferLandingPage({
           </a>
         </div>
 
-        <div className="mt-12 flex items-center justify-center gap-2 text-xs text-gray-400">
-          <CheckCircle2 className="w-4 h-4" />
-          {t('disclaimer')}
-        </div>
       </main>
     </div>
   )

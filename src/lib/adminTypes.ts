@@ -241,6 +241,7 @@ export type AdminSystemSettings = {
   listing_feature_cost_7d: number
   listing_feature_cost_15d: number
   menu_ai_daily_runs: number
+  offermaker_ai_daily_runs: number
   surprise_price_voucher_cents: number
   surprise_price_journey3_cents: number
   surprise_price_journey7_cents: number

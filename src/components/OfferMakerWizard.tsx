@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { LoaderCircle, Sparkles, XCircle } from 'lucide-react'
-import { generateOfferDraft } from '@/app/actions/offermaker'
+import { generateOfferDraft, offerMakerAiLeft } from '@/app/actions/offermaker'
 import OfferMakerReview from '@/components/OfferMakerReview'
 import BusinessProfileImport from '@/components/businessProfile/BusinessProfileImport'
 import { businessFullAddress, type BusinessProfile } from '@/lib/businessProfile'
@@ -81,11 +81,19 @@ export default function OfferMakerWizard({ initialWhatsapp, businessProfile = nu
     handleGenerate()
   }
 
+  // Offerte con l'AI che restano oggi: ben visibili, così non si sprecano
+  const [quota, setQuota] = useState<{ left: number; limit: number } | null>(null)
+  const loadQuota = () => offerMakerAiLeft().then((r) => r.success && setQuota(r.data)).catch(() => {})
+  useEffect(() => {
+    void loadQuota()
+  }, [])
+
   const handleGenerate = async () => {
     setGenerating(true)
     setError(null)
     try {
       const result = await generateOfferDraft(answers)
+      void loadQuota()
       if (!result.success) {
         setError(result.message)
         return
@@ -109,6 +117,17 @@ export default function OfferMakerWizard({ initialWhatsapp, businessProfile = nu
 
   return (
     <div className="bg-white rounded-2xl shadow-[0_14px_40px_rgba(23,23,23,0.08)] border border-[var(--gold)]/25 p-6 sm:p-8">
+      {quota && (
+        <div
+          className={`mb-6 flex items-start gap-3 rounded-xl border-2 p-4 ${quota.left === 0 ? 'border-red-200 bg-red-50 text-red-800' : 'border-[var(--gold)]/50 bg-[var(--gold-pale)] text-[var(--ink)]'}`}
+        >
+          <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-[var(--gold)]" />
+          <div>
+            <p className="text-base font-extrabold">{quota.left === 0 ? t('quotaNone') : t('quotaLeft', { left: quota.left, limit: quota.limit })}</p>
+            <p className="mt-0.5 text-sm">{t('quotaHint')}</p>
+          </div>
+        </div>
+      )}
       <BusinessProfileImport profile={businessProfile} onImport={importBusinessProfile} className="mb-6" />
       <div className="flex items-center gap-2 mb-6">
         {Array.from({ length: TOTAL_STEPS }, (_, i) => i + 1).map((s) => (
@@ -262,7 +281,7 @@ export default function OfferMakerWizard({ initialWhatsapp, businessProfile = nu
         )}
         <button
           onClick={handleNext}
-          disabled={!canAdvance || generating}
+          disabled={!canAdvance || generating || (step === TOTAL_STEPS && quota?.left === 0)}
           className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] rounded-xl font-bold shadow-md hover:brightness-105 transition-all disabled:opacity-50"
         >
           {generating ? (

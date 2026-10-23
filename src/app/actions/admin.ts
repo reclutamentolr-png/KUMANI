@@ -105,7 +105,7 @@ const GENERAL_SETTINGS_KEYS = new Set([
   'maintenance_mode', 'maintenance_message', 'prelaunch_mode', 'prelaunch_key', 'matrix_slot_bonus_points', 'matrix_spillover_bonus_points',
   'welcome_bonus_base', 'welcome_bonus_pro', 'welcome_bonus_from_direct',
   'activity_thanks_points', 'pro_invite_extra_points', 'pro_trial_days', 'affinity_intros_per_week',
-  'listing_feature_cost_7d', 'listing_feature_cost_15d', 'menu_ai_daily_runs',
+  'listing_feature_cost_7d', 'listing_feature_cost_15d', 'menu_ai_daily_runs', 'offermaker_ai_daily_runs',
   'surprise_price_voucher_cents', 'surprise_price_journey3_cents', 'surprise_price_journey7_cents',
   'surprise_karma_voucher', 'surprise_karma_journey3', 'surprise_karma_journey7', 'surprise_kupoints_voucher', 'surprise_kupoints_journey3', 'surprise_kupoints_journey7',
   'surprise_plan_base_voucher', 'surprise_plan_base_voucher_months', 'surprise_plan_base_journey3', 'surprise_plan_base_journey3_months', 'surprise_plan_base_journey7', 'surprise_plan_base_journey7_months', 'surprise_plan_pro_voucher', 'surprise_plan_pro_voucher_months', 'surprise_plan_pro_journey3', 'surprise_plan_pro_journey3_months', 'surprise_plan_pro_journey7', 'surprise_plan_pro_journey7_months', 'surprise_bonus_renewal', 'surprise_bonus_feste',
