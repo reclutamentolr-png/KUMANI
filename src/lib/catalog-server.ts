@@ -1,4 +1,5 @@
 import { unstable_cache } from 'next/cache'
+import { TOOL_PLANS_CACHE_TAG } from '@/lib/freeTools'
 import { getMessages, getTranslations } from 'next-intl/server'
 import { createClient } from '@supabase/supabase-js'
 import { collapseByHub, HUB_ICON_NAME, HUB_PUBLIC_HREF, HUB_REPRESENTATIVE, hubTabKey, TOOL_HUB } from '@/lib/serviceHubs'
@@ -44,7 +45,8 @@ const fetchSettings = unstable_cache(
     return (data ?? []) as Setting[]
   },
   ['catalog-settings'],
-  { revalidate: 600 }
+  // Come le impostazioni dei servizi (lib/freeTools): un minuto, svuotata dall'Admin
+  { revalidate: 60, tags: [TOOL_PLANS_CACHE_TAG] }
 )
 
 // Sezioni della Community (non sono nell'elenco dei servizi del Marketplace)

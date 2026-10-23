@@ -8530,7 +8530,7 @@
       "step2Text": "Ogni modello parte con un esempio: cambialo con i tuoi testi. L’anteprima si aggiorna mentre scrivi.",
       "step2Tip": "Poche parole: sui social si legge di corsa.",
       "step3Title": "Foto e colori",
-      "step3Text": "Aggiungi se vuoi una foto di sfondo e scegli i colori: «I tuoi colori» sono quelli della Scheda attività. In alto il nome, in basso i contatti.",
+      "step3Text": "Aggiungi se vuoi una foto di sfondo e scegli i colori: «I tuoi colori» sono quelli della Scheda attività. Con «Colore primario» (lo sfondo) e «Colore secondario» (scritte in evidenza e dettagli) puoi scegliere qualsiasi colore.",
       "step4Title": "Logo e contatti",
       "step4Text": "Se nella Scheda attività hai caricato il logo, IMAGO lo mette in alto da solo. Controlla nome e contatti in basso (telefono, sito o profilo).",
       "step5Title": "Scarica o condividi",
@@ -8565,6 +8565,23 @@
       "step4Text": "Leggi le truffe più diffuse sui social: finto supporto, spunta blu a pagamento, profili clone, codice WhatsApp, finte collaborazioni.",
       "step5Title": "Se ti rubano l’account",
       "step5Text": "Segui i 4 passi: pagina ufficiale di recupero, cambio password, avviso ai contatti, segnalazione. Da qui apri anche Speculum e la Rete Anti-Truffa."
+    },
+    "shop": {
+      "title": "KUMANI Shop",
+      "summary": "Il tuo negozio online: prodotti, pagamento con carta, ritiro o spedizione e ordini.",
+      "cta": "Apri KUMANI Shop",
+      "step1Title": "Prima di aprire",
+      "step1Text": "Nella scheda «Pagamenti» completa la Scheda attività (nome, Partita IVA, indirizzo ed email, che i clienti vedono prima di pagare) e collega il tuo conto Stripe: i soldi delle vendite arrivano lì.",
+      "step1Tip": "Senza questi due passi il negozio non si può aprire.",
+      "step2Title": "Il tuo negozio",
+      "step2Text": "Nella scheda «Il negozio» scegli il nome, l’indirizzo del link, una descrizione e la foto di copertina. In alto trovi il link da copiare e i pulsanti per aprire o chiudere il negozio.",
+      "step3Title": "Consegna e condizioni",
+      "step3Text": "Scegli se il cliente passa a ritirare, se spedisci o tutte e due: per la spedizione indichi il costo e da quale importo è gratis. Poi controlla le condizioni di vendita, recesso e resi che abbiamo preparato e tocca «Salva».",
+      "step3Tip": "Fai controllare le condizioni dal tuo consulente prima di aprire.",
+      "step4Title": "I prodotti",
+      "step4Text": "Nella scheda «Prodotti» tocca «Aggiungi un prodotto»: nome, prezzo, foto, descrizione e disponibilità. Puoi anche prendere i prodotti dal Magazzino: la disponibilità scende da sola a ogni vendita.",
+      "step5Title": "Gli ordini",
+      "step5Text": "Ogni vendita arriva nella scheda «Ordini» con il nome del cliente, cosa ha comprato e se ritira o va spedita. Segnala «Pronto per il ritiro» quando è pronto; se annulli un ordine, il rimborso al cliente parte da solo."
     }
   },
   "deckTexts": {

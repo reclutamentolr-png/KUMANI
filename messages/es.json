@@ -8530,7 +8530,7 @@
       "step2Text": "Cada plantilla empieza con un ejemplo: cámbialo por tus textos. La vista previa se actualiza mientras escribes.",
       "step2Tip": "Pocas palabras: en redes sociales se lee rápido.",
       "step3Title": "Foto y colores",
-      "step3Text": "Añade si quieres una foto de fondo y elige los colores: «Tus colores» son los de tu Ficha de negocio. Arriba el nombre, abajo los contactos.",
+      "step3Text": "Añade si quieres una foto de fondo y elige los colores: «Tus colores» son los de tu Ficha de negocio. Con «Color principal» (el fondo) y «Color secundario» (textos destacados y detalles) puedes elegir el color que quieras.",
       "step4Title": "Logo y contactos",
       "step4Text": "Si en la Ficha de negocio has subido el logo, IMAGO lo coloca arriba automáticamente. Comprueba el nombre y los contactos abajo (teléfono, web o perfil).",
       "step5Title": "Descarga o comparte",
@@ -8565,6 +8565,23 @@
       "step4Text": "Lee las estafas más comunes en redes sociales: falso soporte, check azul de pago, perfiles clonados, código de WhatsApp, falsas colaboraciones.",
       "step5Title": "Si te roban la cuenta",
       "step5Text": "Sigue los 4 pasos: página oficial de recuperación, cambio de contraseña, aviso a los contactos, denuncia. Desde aquí también puedes abrir Speculum y la Red Antiestafas."
+    },
+    "shop": {
+      "title": "KUMANI Shop",
+      "summary": "Tu tienda online: productos, pago con tarjeta, recogida o envío y pedidos.",
+      "cta": "Abrir KUMANI Shop",
+      "step1Title": "Antes de abrir",
+      "step1Text": "En la pestaña «Pagos» completa la Ficha de actividad (nombre, NIF/IVA, dirección y email, que los clientes ven antes de pagar) y conecta tu cuenta de Stripe: ahí llega el dinero de las ventas.",
+      "step1Tip": "Sin estos dos pasos la tienda no se puede abrir.",
+      "step2Title": "Tu tienda",
+      "step2Text": "En la pestaña «La tienda» elige el nombre, la dirección del enlace, una descripción y la foto de portada. Arriba encuentras el enlace para copiar y los botones para abrir o cerrar la tienda.",
+      "step3Title": "Entrega y condiciones",
+      "step3Text": "Elige si el cliente pasa a recoger, si envías o las dos cosas: para el envío indicas el coste y a partir de qué importe es gratis. Luego revisa las condiciones de venta, desistimiento y devoluciones que te hemos preparado y toca «Guardar».",
+      "step3Tip": "Haz que tu asesor revise las condiciones antes de abrir.",
+      "step4Title": "Los productos",
+      "step4Text": "En la pestaña «Productos» toca «Añadir un producto»: nombre, precio, foto, descripción y disponibilidad. También puedes tomar los productos del Almacén: la disponibilidad baja sola con cada venta.",
+      "step5Title": "Los pedidos",
+      "step5Text": "Cada venta llega a la pestaña «Pedidos» con el nombre del cliente, lo que ha comprado y si recoge o hay que enviarlo. Márcalo «Listo para recoger» cuando lo esté; si cancelas un pedido, el reembolso al cliente sale solo."
     }
   },
   "deckTexts": {

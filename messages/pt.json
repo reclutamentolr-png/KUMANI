@@ -8530,7 +8530,7 @@
       "step2Text": "Cada modelo começa com um exemplo: substitui pelos teus textos. A pré-visualização atualiza-se enquanto escreves.",
       "step2Tip": "Poucas palavras: nas redes sociais lê-se à pressa.",
       "step3Title": "Foto e cores",
-      "step3Text": "Acrescenta, se quiseres, uma foto de fundo e escolhe as cores: «As tuas cores» são as da Ficha de negócio. Em cima o nome, em baixo os contactos.",
+      "step3Text": "Acrescenta, se quiseres, uma foto de fundo e escolhe as cores: «As tuas cores» são as da Ficha de negócio. Com «Cor principal» (o fundo) e «Cor secundária» (textos em destaque e detalhes) podes escolher a cor que quiseres.",
       "step4Title": "Logótipo e contactos",
       "step4Text": "Se carregaste o logótipo na Ficha de negócio, o IMAGO coloca-o em cima automaticamente. Verifica o nome e os contactos em baixo (telefone, site ou perfil).",
       "step5Title": "Descarregar ou partilhar",
@@ -8565,6 +8565,23 @@
       "step4Text": "Lê as burlas mais comuns nas redes sociais: falso suporte, visto azul pago, perfis clonados, código do WhatsApp, falsas colaborações.",
       "step5Title": "Se te roubarem a conta",
       "step5Text": "Segue os 4 passos: página oficial de recuperação, mudança de password, aviso aos contactos, denúncia. Daqui também podes abrir o Speculum e a Rede Antifraude."
+    },
+    "shop": {
+      "title": "KUMANI Shop",
+      "summary": "A tua loja online: produtos, pagamento com cartão, levantamento ou envio e encomendas.",
+      "cta": "Abrir KUMANI Shop",
+      "step1Title": "Antes de abrir",
+      "step1Text": "No separador «Pagamentos» completa a Ficha da atividade (nome, NIF, morada e email, que os clientes veem antes de pagar) e liga a tua conta Stripe: é lá que chega o dinheiro das vendas.",
+      "step1Tip": "Sem estes dois passos a loja não pode abrir.",
+      "step2Title": "A tua loja",
+      "step2Text": "No separador «A loja» escolhe o nome, o endereço do link, uma descrição e a foto de capa. Em cima encontras o link para copiar e os botões para abrir ou fechar a loja.",
+      "step3Title": "Entrega e condições",
+      "step3Text": "Escolhe se o cliente passa a levantar, se envias ou as duas coisas: para o envio indicas o custo e a partir de que valor é grátis. Depois revê as condições de venda, livre resolução e devoluções que preparámos e toca em «Guardar».",
+      "step3Tip": "Pede ao teu consultor que reveja as condições antes de abrir.",
+      "step4Title": "Os produtos",
+      "step4Text": "No separador «Produtos» toca em «Adicionar um produto»: nome, preço, foto, descrição e disponibilidade. Também podes usar os produtos do Armazém: a disponibilidade desce sozinha a cada venda.",
+      "step5Title": "As encomendas",
+      "step5Text": "Cada venda chega ao separador «Encomendas» com o nome do cliente, o que comprou e se levanta ou é para enviar. Marca «Pronta para levantamento» quando estiver pronta; se cancelares uma encomenda, o reembolso ao cliente é feito sozinho."
     }
   },
   "deckTexts": {

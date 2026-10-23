@@ -8530,7 +8530,7 @@
       "step2Text": "Chaque modèle part avec un exemple : remplace-le par tes textes. L'aperçu se met à jour pendant que tu écris.",
       "step2Tip": "Peu de mots : sur les réseaux sociaux on lit vite.",
       "step3Title": "Photo et couleurs",
-      "step3Text": "Ajoute si tu veux une photo de fond et choisis les couleurs : « Tes couleurs » sont celles de ta Fiche activité. En haut le nom, en bas les contacts.",
+      "step3Text": "Ajoute si tu veux une photo de fond et choisis les couleurs : « Tes couleurs » sont celles de ta Fiche activité. Avec « Couleur principale » (le fond) et « Couleur secondaire » (textes mis en avant et détails), tu peux choisir n’importe quelle couleur.",
       "step4Title": "Logo et contacts",
       "step4Text": "Si tu as téléversé le logo dans ta Fiche activité, IMAGO le place en haut tout seul. Vérifie le nom et les contacts en bas (téléphone, site ou profil).",
       "step5Title": "Télécharge ou partage",
@@ -8565,6 +8565,23 @@
       "step4Text": "Lis les arnaques les plus répandues sur les réseaux sociaux : faux support, badge bleu payant, profils clones, code WhatsApp, fausses collaborations.",
       "step5Title": "Si on te vole ton compte",
       "step5Text": "Suis les 4 étapes : page officielle de récupération, changement de mot de passe, alerte aux contacts, signalement. D'ici tu peux aussi ouvrir Speculum et le Réseau anti-arnaque."
+    },
+    "shop": {
+      "title": "KUMANI Shop",
+      "summary": "Ta boutique en ligne : produits, paiement par carte, retrait ou livraison et commandes.",
+      "cta": "Ouvrir KUMANI Shop",
+      "step1Title": "Avant d’ouvrir",
+      "step1Text": "Dans l’onglet « Paiements », complète ta Fiche entreprise (nom, numéro de TVA, adresse et e-mail, que les clients voient avant de payer) et connecte ton compte Stripe : c’est là qu’arrive l’argent des ventes.",
+      "step1Tip": "Sans ces deux étapes, la boutique ne peut pas ouvrir.",
+      "step2Title": "Ta boutique",
+      "step2Text": "Dans l’onglet « La boutique », choisis le nom, l’adresse du lien, une description et la photo de couverture. En haut, tu trouves le lien à copier et les boutons pour ouvrir ou fermer la boutique.",
+      "step3Title": "Livraison et conditions",
+      "step3Text": "Choisis si le client passe retirer, si tu expédies ou les deux : pour l’expédition, indique le coût et le montant à partir duquel elle est gratuite. Puis vérifie les conditions de vente, de rétractation et de retour que nous avons préparées et touche « Enregistrer ».",
+      "step3Tip": "Fais vérifier les conditions par ton conseiller avant d’ouvrir.",
+      "step4Title": "Les produits",
+      "step4Text": "Dans l’onglet « Produits », touche « Ajouter un produit » : nom, prix, photo, description et disponibilité. Tu peux aussi reprendre les produits de ton Stock : la disponibilité baisse toute seule à chaque vente.",
+      "step5Title": "Les commandes",
+      "step5Text": "Chaque vente arrive dans l’onglet « Commandes » avec le nom du client, ce qu’il a acheté et s’il retire ou s’il faut expédier. Marque-la « Prête pour le retrait » quand elle l’est ; si tu annules une commande, le remboursement du client part tout seul."
     }
   },
   "deckTexts": {

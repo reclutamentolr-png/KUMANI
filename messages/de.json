@@ -8530,7 +8530,7 @@
       "step2Text": "Jede Vorlage startet mit einem Beispiel: ersetze es durch deine eigenen Texte. Die Vorschau aktualisiert sich, während du schreibst.",
       "step2Tip": "Wenig Text: auf Social Media liest man schnell.",
       "step3Title": "Foto und Farben",
-      "step3Text": "Füge, wenn du willst, ein Hintergrundfoto hinzu und wähle die Farben: „Deine Farben“ sind die aus deinem Unternehmensprofil. Oben der Name, unten die Kontakte.",
+      "step3Text": "Füge, wenn du willst, ein Hintergrundfoto hinzu und wähle die Farben: „Deine Farben“ sind die aus deinem Unternehmensprofil. Mit „Hauptfarbe“ (Hintergrund) und „Zweitfarbe“ (hervorgehobene Texte und Details) wählst du jede Farbe, die du möchtest.",
       "step4Title": "Logo und Kontakte",
       "step4Text": "Wenn du in deinem Unternehmensprofil das Logo hochgeladen hast, setzt IMAGO es automatisch oben ein. Überprüfe Name und Kontakte unten (Telefon, Website oder Profil).",
       "step5Title": "Herunterladen oder teilen",
@@ -8565,6 +8565,23 @@
       "step4Text": "Lies über die häufigsten Betrugsmaschen auf Social Media: falscher Support, kostenpflichtiges blaues Häkchen, Klon-Profile, WhatsApp-Code, falsche Kooperationen.",
       "step5Title": "Wenn dir dein Account gestohlen wird",
       "step5Text": "Folge den 4 Schritten: offizielle Wiederherstellungsseite, Passwortänderung, Benachrichtigung der Kontakte, Meldung. Von hier aus öffnest du auch Speculum und das Anti-Betrugs-Netzwerk."
+    },
+    "shop": {
+      "title": "KUMANI Shop",
+      "summary": "Dein Onlineshop: Produkte, Kartenzahlung, Abholung oder Versand und Bestellungen.",
+      "cta": "KUMANI Shop öffnen",
+      "step1Title": "Bevor du öffnest",
+      "step1Text": "Vervollständige im Tab „Zahlungen“ dein Firmenprofil (Name, USt-IdNr., Adresse und E-Mail, die Kunden vor dem Bezahlen sehen) und verbinde dein Stripe-Konto: Dorthin fließt das Geld aus deinen Verkäufen.",
+      "step1Tip": "Ohne diese beiden Schritte kann der Shop nicht öffnen.",
+      "step2Title": "Dein Shop",
+      "step2Text": "Wähle im Tab „Der Shop“ den Namen, die Linkadresse, eine Beschreibung und das Titelbild. Oben findest du den Link zum Kopieren und die Schaltflächen zum Öffnen oder Schließen des Shops.",
+      "step3Title": "Lieferung und Bedingungen",
+      "step3Text": "Wähle, ob Kunden abholen, ob du versendest oder beides: Für den Versand gibst du die Kosten an und ab welchem Betrag er kostenlos ist. Prüfe dann die vorbereiteten Verkaufs-, Widerrufs- und Rückgabebedingungen und tippe auf „Speichern“.",
+      "step3Tip": "Lass die Bedingungen vor dem Öffnen von deinem Berater prüfen.",
+      "step4Title": "Die Produkte",
+      "step4Text": "Tippe im Tab „Produkte“ auf „Produkt hinzufügen“: Name, Preis, Foto, Beschreibung und Verfügbarkeit. Du kannst Produkte auch aus dem Lager übernehmen: Der Bestand sinkt bei jedem Verkauf von selbst.",
+      "step5Title": "Die Bestellungen",
+      "step5Text": "Jeder Verkauf landet im Tab „Bestellungen“ mit dem Namen des Kunden, was er gekauft hat und ob er abholt oder versendet werden muss. Markiere sie als „Abholbereit“, wenn sie fertig ist; stornierst du eine Bestellung, startet die Rückerstattung automatisch."
     }
   },
   "deckTexts": {

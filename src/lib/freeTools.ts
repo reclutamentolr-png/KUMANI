@@ -7,7 +7,7 @@ import { getSessionIsAdmin, getSessionUser } from '@/lib/session'
 // Servizi gratuiti (piano richiesto "free", deciso dall'Admin in
 // marketplace_settings): vengono mostrati per primi in ogni categoria.
 // Letto con la chiave di servizio (le pagine pubbliche non hanno sessione)
-// e tenuto in memoria un'ora (svuotata quando l'Admin cambia un piano).
+// e tenuto in memoria un minuto (svuotata anche quando l'Admin cambia un piano).
 export const TOOL_PLANS_CACHE_TAG = 'tool-plans'
 export type ToolPlans = Record<string, string>
 // preview: spenti per gli iscritti ma aperti allo Staff («Solo Staff»)
@@ -27,7 +27,9 @@ const fetchToolPlans = unstable_cache(
     }
   },
   ['tool-settings-preview'],
-  { revalidate: 3600, tags: [TOOL_PLANS_CACHE_TAG] }
+  // Un minuto al massimo: sul sito pubblicato lo svuotamento a ogni cambio
+  // dall'Admin non sempre arriva, e un servizio spento restava visibile per un'ora
+  { revalidate: 60, tags: [TOOL_PLANS_CACHE_TAG] }
 )
 
 // Nomi dei servizi gratuiti tra quelli indicati. Stessa regola di

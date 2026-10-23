@@ -8530,7 +8530,7 @@
       "step2Text": "Every template starts with an example: swap it for your own text. The preview updates as you type.",
       "step2Tip": "Keep it short: people skim-read on social media.",
       "step3Title": "Photo and colours",
-      "step3Text": "Add a background photo if you like, and choose your colours: “Your colours” are the ones from your Business Profile. Name at the top, contact details at the bottom.",
+      "step3Text": "Add a background photo if you like, and choose your colours: “Your colours” are the ones from your Business Profile. With “Primary colour” (the background) and “Secondary colour” (highlighted text and details) you can pick any colour you want.",
       "step4Title": "Logo and contacts",
       "step4Text": "If you've uploaded your logo in your Business Profile, IMAGO will add it at the top automatically. Check the name and contact details at the bottom (phone, website or profile).",
       "step5Title": "Download or share",
@@ -8565,6 +8565,23 @@
       "step4Text": "Read up on the most common scams on social media: fake support, paid blue ticks, cloned profiles, WhatsApp codes, fake collaborations.",
       "step5Title": "If your account gets stolen",
       "step5Text": "Follow the 4 steps: official recovery page, password change, warning your contacts, reporting it. From here you can also open Speculum and the Anti-Scam Network."
+    },
+    "shop": {
+      "title": "KUMANI Shop",
+      "summary": "Your online shop: products, card payments, pickup or shipping, and orders.",
+      "cta": "Open KUMANI Shop",
+      "step1Title": "Before you open",
+      "step1Text": "In the «Payments» tab, complete your Business profile (name, VAT number, address and email, which customers see before paying) and connect your Stripe account: that’s where your sales money arrives.",
+      "step1Tip": "The shop can’t open until both steps are done.",
+      "step2Title": "Your shop",
+      "step2Text": "In the «Shop» tab, choose the name, the link address, a description and the cover photo. At the top you’ll find the link to copy and the buttons to open or close the shop.",
+      "step3Title": "Delivery and terms",
+      "step3Text": "Choose whether customers pick up, you ship, or both: for shipping, set the cost and the amount above which it’s free. Then check the terms of sale, withdrawal and returns we’ve prepared and tap «Save».",
+      "step3Tip": "Have your adviser check the terms before you open.",
+      "step4Title": "Products",
+      "step4Text": "In the «Products» tab, tap «Add a product»: name, price, photo, description and availability. You can also take products from your Inventory: stock goes down by itself with every sale.",
+      "step5Title": "Orders",
+      "step5Text": "Every sale lands in the «Orders» tab with the customer’s name, what they bought and whether they pick up or need shipping. Mark it «Ready for pickup» when it’s ready; if you cancel an order, the customer’s refund starts automatically."
     }
   },
   "deckTexts": {

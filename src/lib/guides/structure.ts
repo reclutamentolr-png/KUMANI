@@ -49,6 +49,7 @@ export const GUIDE_STRUCTURE: GuideStructure[] = [
   { slug: 'hopla', category: 'organize', minutes: 2, steps: 5, href: '/marketplace/hopla' },
   { slug: 'firma-pdf', category: 'organize', minutes: 2, steps: 5, href: '/marketplace/firma-pdf' },
   { slug: 'menu', category: 'pro', minutes: 3, steps: 4, href: '/marketplace/menu' },
+  { slug: 'shop', category: 'pro', minutes: 4, steps: 5, href: '/marketplace/shop' },
   { slug: 'landing-page', category: 'pro', minutes: 4, steps: 5, href: '/marketplace/landing-page' },
   { slug: 'fidelity', category: 'pro', minutes: 3, steps: 5, href: '/marketplace/fidelity' },
   { slug: 'preventivi', category: 'pro', minutes: 3, steps: 5, href: '/marketplace/preventivi' },

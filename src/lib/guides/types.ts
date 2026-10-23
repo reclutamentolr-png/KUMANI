@@ -40,6 +40,7 @@ export type GuideSlug =
   | 'fincheck'
   // Servizi Pro
   | 'menu'
+  | 'shop'
   | 'landing-page'
   | 'fidelity'
   | 'preventivi'
