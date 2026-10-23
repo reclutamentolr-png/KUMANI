@@ -60,7 +60,7 @@ export default function ReviewWriter({
                 {option.purchaseLabel
                   ? option.purchaseLabel === 'pass'
                     ? t('verifiedPass', { service: subjectNames[option.subject] })
-                    : t('verifiedPlan', { plan: option.purchaseLabel === 'pro' ? 'Pro' : 'Base' })
+                    : t('verifiedPlan', { plan: option.purchaseLabel === 'pro' ? 'Pro' : 'Plus' })
                   : t('noLongerEligible')}
               </span>
             </span>

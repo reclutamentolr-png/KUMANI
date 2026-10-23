@@ -130,7 +130,7 @@ export default VoucherPrintCard
 
 type Ctx = Props & { m: (mm: number) => number }
 
-const planTag = (plan: 'base' | 'pro') => (plan === 'pro' ? 'PRO' : 'BASE')
+const planTag = (plan: 'base' | 'pro') => (plan === 'pro' ? 'PRO' : 'PLUS')
 
 function Logo({ size }: { size: number }) {
   // eslint-disable-next-line @next/next/no-img-element

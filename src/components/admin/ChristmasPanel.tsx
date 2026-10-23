@@ -116,7 +116,7 @@ export default function ChristmasPanel() {
         </label>
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
           <label className="text-sm text-gray-700">
-            <span className="mb-1 block font-semibold">Sconto sui regali (un anno di Base o Pro)</span>
+            <span className="mb-1 block font-semibold">Sconto sui regali (un anno di Plus o Pro)</span>
             <span className="flex items-center gap-2">
               <input type="number" min={0} max={CHRISTMAS_MAX_PCT} value={settings.giftPct} onChange={(e) => set({ giftPct: Number(e.target.value) })} className={`${input} w-24`} />%
             </span>
@@ -139,7 +139,7 @@ export default function ChristmasPanel() {
         <ul className="mt-4 list-disc space-y-1 pl-5 text-xs text-gray-600">
           <li>Massimo {CHRISTMAS_MAX_PCT}%. Con 0% quella parte dell&apos;offerta non si mostra.</li>
           <li>Regali: il prezzo scontato si vede in «Regali» e si paga così; chi riceve il codice ha lo stesso anno completo.</li>
-          <li>Abbonamento: lo sconto vale una volta sola, sul primo anno (Base o Pro), e si somma all&apos;eventuale credito dei Pass. Il rinnovo è a prezzo pieno.</li>
+          <li>Abbonamento: lo sconto vale una volta sola, sul primo anno (Plus o Pro), e si somma all&apos;eventuale credito dei Pass. Il rinnovo è a prezzo pieno.</li>
           <li>Con l&apos;offerta attiva, in cima alla Home compare il riquadro «Natale con KUMANI» (chiudibile per un giorno).</li>
         </ul>
       </section>

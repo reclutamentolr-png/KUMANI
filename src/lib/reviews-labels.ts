@@ -12,7 +12,7 @@ export async function getReviewTexts(locale: string) {
   const verified = (review: Pick<PublicReview, 'purchase_label' | 'subject'>) =>
     review.purchase_label === 'pass'
       ? t('verifiedPass', { service: subjectName(review.subject) })
-      : t('verifiedPlan', { plan: review.purchase_label === 'pro' ? 'Pro' : 'Base' })
+      : t('verifiedPlan', { plan: review.purchase_label === 'pro' ? 'Pro' : 'Plus' })
   const date = (iso: string) => new Date(iso).toLocaleDateString(locale, { month: 'long', year: 'numeric' })
   return { t, subjectName, verified, date, knownSubject: (subject: string) => subject === 'kumani' || names.has(subject) }
 }

@@ -1,4 +1,4 @@
-// Biglietto digitale di un voucher Base o Pro (/biglietto/CODICE): grafica,
+// Biglietto digitale di un voucher Plus o Pro (/biglietto/CODICE): grafica,
 // frase, «per» e «da» viaggiano nel link (chi ha il link ha già il codice,
 // quindi non c'è niente da proteggere); qui si leggono e si ripuliscono.
 

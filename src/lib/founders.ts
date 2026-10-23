@@ -2,8 +2,8 @@ import { revalidateTag, unstable_cache } from 'next/cache'
 import { localizedPath, notifyUser, pushDb } from '@/lib/push'
 
 // Promozione di lancio «Early Bird»: sconto commerciale del 100% sul Piano
-// Base per 12 mesi ai primi 50 utenti in ordine cronologico di registrazione
-// (art. 6 c.1 lett. c DPR 430/2001). Il posto e l'attivazione del Base li fa
+// Plus per 12 mesi ai primi 50 utenti in ordine cronologico di registrazione
+// (art. 6 c.1 lett. c DPR 430/2001). Il posto e l'attivazione del Plus li fa
 // il database all'iscrizione (founders_on_signup); qui il contatore e
 // l'avviso alla persona (una volta sola).
 export const FOUNDERS_CACHE_TAG = 'founders'
@@ -76,7 +76,7 @@ export async function grantFounderIfEligible(userId: string) {
 }
 
 // Admin: gli iscritti di prima senza abbonamento attivo entrano nei 50 in
-// ordine di iscrizione (il Base si attiva subito) e ricevono l'avviso.
+// ordine di iscrizione (il Plus si attiva subito) e ricevono l'avviso.
 export async function includeExistingFounders(): Promise<{ included: number }> {
   const db = pushDb()
   const { data: included } = await db.rpc('founders_include_existing')

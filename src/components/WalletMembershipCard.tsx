@@ -10,7 +10,7 @@ type Props = {
   memberId: string | null
   memberSince: string
   planLabel: string
-  // Tipo di abbonamento attivo (Base, Pro, Pro in prova), mostrato in verde
+  // Tipo di abbonamento attivo (Plus, Pro, Pro in prova), mostrato in verde
   planName?: string | null
   rankLabel: string | null
   // Scadenza dell'abbonamento attivo (già formattata), se c'è

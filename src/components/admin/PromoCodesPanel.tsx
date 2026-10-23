@@ -15,7 +15,7 @@ import { createPromoCodes, listPromoCodes, revokePromoCode, updatePromoCode, typ
 
 const SITE = PUBLIC_SITE_URL.replace(/\/+$/, '')
 const linkOf = (code: string) => `${SITE}/register?voucher=${encodeURIComponent(code)}`
-const planLabel = (plan: string) => (plan === 'pro' ? 'Pro' : 'Base')
+const planLabel = (plan: string) => (plan === 'pro' ? 'Pro' : 'Plus')
 const when = (iso: string) => new Intl.DateTimeFormat('it-IT', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date(iso))
 const dayOf = (iso: string) => new Intl.DateTimeFormat('it-IT', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(iso))
 

@@ -7,7 +7,7 @@ import ScaledVoucherFront from './ScaledVoucherFront'
 import { CARD_CUSTOM_MAX, CARD_DESIGNS, CARD_NAME_MAX, CARD_PHRASES, cardLink, type CardOptions } from '@/lib/voucherCard'
 import type { VoucherPrintTexts } from '@/components/voucherPrint/VoucherPrintCard'
 
-// «Biglietto» di un voucher Base o Pro (Wallet dei Kumani e Admin): grafica,
+// «Biglietto» di un voucher Plus o Pro (Wallet dei Kumani e Admin): grafica,
 // frase, «per» e «da», poi il link da mandare (WhatsApp o copia) e
 // l'immagine del biglietto. Chi apre il link vede il biglietto e attiva il
 // voucher con un tocco (/biglietto/CODICE).
@@ -33,7 +33,7 @@ export default function VoucherCardShare({
   const [busy, setBusy] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
 
-  const planName = plan === 'pro' ? 'Pro' : 'Base'
+  const planName = plan === 'pro' ? 'Pro' : 'Plus'
   const link = cardLink(siteUrl, locale, code, o)
   const phrase = o.phrase === 'custom' ? o.custom.trim() || tp('customPlaceholder') : tp(`phrases.${o.phrase}`)
   const texts: VoucherPrintTexts = {

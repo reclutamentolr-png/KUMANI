@@ -136,7 +136,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   // Link d'invito corto (kumani.io/i/CODICE), sempre lo stesso per il Kumano
   const shareUrl = await getInviteUrl(user.id, `${SITE_URL}/${locale}/ref/${profile?.referral_code}`)
 
-  // Prezzo del piano Base come lo addebita Stripe (lo stesso del pagamento),
+  // Prezzo del piano Plus come lo addebita Stripe (lo stesso del pagamento),
   // per il pulsante "Abbonati ora"
   const formatEur = (value: number) =>
     new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2, minimumFractionDigits: 0 }).format(value)
@@ -215,7 +215,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
       createdAt: profile?.created_at,
       metadata: user.user_metadata,
       favoritesCount: favoriteToolNames.length,
-      // Tutti i nuovi iscritti, qualunque piano: anche i primi 50 con il Base
+      // Tutti i nuovi iscritti, qualunque piano: anche i primi 50 con il Plus
       free: true,
     }).catch(() => null),
     // Sezioni della Community: anche loro come icone e preferiti della Home
@@ -232,7 +232,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   ])
   // Bonus della rete: dopo aver mostrato la pagina
   await deferNetworkClaims(supabase)
-  // Kumani Fondatori: un posto (e il Base in regalo) a chi ne ha diritto
+  // Kumani Fondatori: un posto (e il Plus in regalo) a chi ne ha diritto
   after(() => grantFounderIfEligible(user.id).catch((e) => console.error('[fondatori]', e)))
   proTrial = trial
   if (stats) {
@@ -269,7 +269,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     if (others) badges[agendaSources.memolife ? 'memolife' : 'life-calendar'] = others
     const subscribedNow = profile?.subscription_status === 'active'
     const planLabel = subscribedNow
-      ? `${hubT('stripPlan')} ${profile?.subscription_plan === 'pro' ? 'Pro' : 'Base'}`
+      ? `${hubT('stripPlan')} ${profile?.subscription_plan === 'pro' ? 'Pro' : 'Plus'}`
       : proTrial
         ? `${hubT('stripPlan')} Pro`
         : `${hubT('stripPlan')} ${hubT('stripFree')}`
@@ -411,7 +411,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
                 isPro && proTools.length > 0 ? (
                   <ProArea tools={proTools} stats={proAreaStats} trial={proTrial} renewsOn={proRenewsOn} favoriteToolNames={favoriteToolNames} />
                 ) : (
-                  // Invito al Pro solo a chi è Gratis: chi ha il Base ha già «Passa a Pro» in cima
+                  // Invito al Pro solo a chi è Gratis: chi ha il Plus ha già «Passa a Pro» in cima
                   userPlan === 'none' && proTools.length > 0 && <ProTeaser trialExpired={proTrialExpired} />
                 )
               }

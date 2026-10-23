@@ -1450,7 +1450,7 @@ export async function getVoucherBatchCodes(batchId: string) {
   return { batch, codes: codes || [] }
 }
 
-// Piano richiesto da uno strumento (Gratis / Base / Pro): vale subito per
+// Piano richiesto da uno strumento (Gratis / Plus / Pro): vale subito per
 // schede, dashboard, middleware e server (can_use_tool legge questo valore).
 export async function updateToolPlan(toolName: string, plan: 'free' | 'base' | 'pro') {
   const admin = await verifyAdmin('marketplace.write')

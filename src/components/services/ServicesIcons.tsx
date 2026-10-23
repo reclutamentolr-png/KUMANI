@@ -23,7 +23,7 @@ import { defaultLocale } from '../../../i18n'
 // destro dal computer): «Metti nella Home» / «Togli dalla Home». Lucchetto:
 // toccando si apre il riquadro con cosa fa il servizio e come si sblocca.
 const LONG_PRESS_MS = 500
-// Nelle cartelle le schede vanno in ordine di pacchetto: Free, Base, Pro
+// Nelle cartelle le schede vanno in ordine di pacchetto: Free, Plus, Pro
 const PLAN_RANK: Record<RequiredPlan, number> = { free: 0, base: 1, pro: 2 }
 // Icona nella cartella aperta: stessa misura per tutte, anche sul computer
 const FOLDER_TILE = 'h-14 w-14 rounded-[18px] sm:h-16 sm:w-16'

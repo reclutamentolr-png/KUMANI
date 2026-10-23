@@ -59,7 +59,7 @@ export default function PlansGatePanel() {
           <CalendarClock className="h-7 w-7 text-[var(--gold)]" /> Apertura piani
         </h2>
         <p className="mt-1 text-gray-600">
-          Prima del lancio KUMANI si usa gratis. Con «Piani in arrivo» acceso, «Abbonati», «Passa a Pro» e l&apos;anno di Base o Pro da regalare
+          Prima del lancio KUMANI si usa gratis. Con «Piani in arrivo» acceso, «Abbonati», «Passa a Pro» e l&apos;anno di Plus o Pro da regalare
           mostrano la data di apertura e il pulsante «Avvisami» al posto del pagamento. Il giorno della data i piani si aprono da soli e la
           mattina parte l&apos;avviso a chi è in lista. Anche la prova gratuita del Pro parte solo dall’apertura. Pass dei singoli servizi e KUMANI Sorpresa restano acquistabili.
         </p>
@@ -104,7 +104,7 @@ export default function PlansGatePanel() {
         <div className="mt-3 grid gap-3 sm:grid-cols-4">
           {[
             { label: 'In lista', value: waitlist.total },
-            { label: 'Volevano Base', value: waitlist.base },
+            { label: 'Volevano Plus', value: waitlist.base },
             { label: 'Volevano Pro', value: waitlist.pro },
             { label: 'Già avvisati', value: waitlist.notified },
           ].map((box) => (

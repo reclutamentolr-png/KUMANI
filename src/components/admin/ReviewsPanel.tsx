@@ -23,7 +23,7 @@ const TABS: { id: ReviewStatus; label: string }[] = [
   { id: 'rejected', label: 'Rifiutate' },
 ]
 
-const LABEL: Record<string, string> = { base: 'Abbonato Base', pro: 'Abbonato Pro', pass: 'Pass del servizio' }
+const LABEL: Record<string, string> = { base: 'Abbonato Plus', pro: 'Abbonato Pro', pass: 'Pass del servizio' }
 
 // Admin → Recensioni: approvazione delle recensioni di chi ha acquistato.
 export default function ReviewsPanel() {
@@ -68,7 +68,7 @@ export default function ReviewsPanel() {
           <MessageSquareQuote className="h-6 w-6 text-[var(--gold)]" /> Recensioni
         </h2>
         <p className="mt-1 text-sm text-gray-600">
-          Le scrive solo chi ha acquistato (abbonamento Base/Pro o Pass, da almeno 7 giorni). Pubblica anche quelle negative: rifiuta solo per uno dei
+          Le scrive solo chi ha acquistato (abbonamento Plus/Pro o Pass, da almeno 7 giorni). Pubblica anche quelle negative: rifiuta solo per uno dei
           motivi elencati, che l’autore riceve con una notifica e può correggere.
         </p>
       </div>

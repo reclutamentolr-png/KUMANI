@@ -223,7 +223,7 @@ export function surpriseWhatsAppUrl(text: string, phone?: string | null) {
   return `https://wa.me/${digits.length >= 6 ? digits : ''}?text=${encodeURIComponent(text)}`
 }
 
-// Sorprese incluse nel piano Base o Pro (funzione my_surprise_plan del database):
+// Sorprese incluse nel piano Plus o Pro (funzione my_surprise_plan del database):
 // quota per tipo che si ricarica ogni «months» mesi e regali disponibili adesso
 // (rinnovo dell'abbonamento o festa in corso, sempre un percorso di 3 giorni).
 export type SurpriseQuota = { total: number; used: number; left: number; months: 1 | 3 | 12; since: string }

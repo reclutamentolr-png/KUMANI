@@ -12,7 +12,7 @@ import type { VoucherPrintTexts } from '@/components/voucherPrint/VoucherPrintCa
 import { askConfirm } from '@/lib/confirm'
 
 // Admin → Voucher e coupon → Coupon per la community: «Regala un
-// abbonamento» a un Kumano scelto. Un anno di Base o Pro, con il biglietto:
+// abbonamento» a un Kumano scelto. Un anno di Plus o Pro, con il biglietto:
 // il Kumano riceve l'avviso (campanella e telefono), lo trova nel Wallet e lo
 // attiva dal biglietto con un tocco.
 export default function AdminGiftSubscriptionPanel() {
@@ -52,7 +52,7 @@ export default function AdminGiftSubscriptionPanel() {
   const send = async () => {
     if (!person) return setError('Scegli a chi regalarlo')
     const who = [person.first_name, person.last_name].filter(Boolean).join(' ') || person.email || 'questo utente'
-    if (!(await askConfirm(`Regalare un anno di KUMANI ${plan === 'pro' ? 'Pro' : 'Base'} a ${who}? Riceverà subito l’avviso con il biglietto.`))) return
+    if (!(await askConfirm(`Regalare un anno di KUMANI ${plan === 'pro' ? 'Pro' : 'Plus'} a ${who}? Riceverà subito l’avviso con il biglietto.`))) return
     setBusy(true)
     setError(null)
     setResult(null)
@@ -72,7 +72,7 @@ export default function AdminGiftSubscriptionPanel() {
         <Gift className="h-5 w-5 text-[var(--gold)]" /> Regala un abbonamento
       </h3>
       <p className="mt-1 text-sm text-gray-600">
-        Un anno di KUMANI Base o Pro a un Kumano scelto, con il biglietto. Riceve subito l’avviso (campanella e notifica sul telefono), lo trova nel
+        Un anno di KUMANI Plus o Pro a un Kumano scelto, con il biglietto. Riceve subito l’avviso (campanella e notifica sul telefono), lo trova nel
         Wallet e lo attiva dal biglietto con un tocco. Parte dall’account KUMANI.
       </p>
 
@@ -93,7 +93,7 @@ export default function AdminGiftSubscriptionPanel() {
             <p className="mb-2 text-sm font-medium text-gray-700">Piano</p>
             <div className="flex gap-2">
               <button type="button" onClick={() => setPlan('base')} aria-pressed={plan === 'base'} className={chip(plan === 'base')}>
-                Base · 1 anno
+                Plus · 1 anno
               </button>
               <button type="button" onClick={() => setPlan('pro')} aria-pressed={plan === 'pro'} className={chip(plan === 'pro')}>
                 Pro · 1 anno
@@ -161,7 +161,7 @@ export default function AdminGiftSubscriptionPanel() {
           </p>
           <div className="mt-2 flex flex-wrap gap-2">
             <a
-              href={`https://wa.me/?text=${encodeURIComponent(`🎁 ${name ? `${name}, h` : 'H'}o un regalo per te: un anno di KUMANI ${plan === 'pro' ? 'Pro' : 'Base'}! Aprilo qui: ${result.link}`)}`}
+              href={`https://wa.me/?text=${encodeURIComponent(`🎁 ${name ? `${name}, h` : 'H'}o un regalo per te: un anno di KUMANI ${plan === 'pro' ? 'Pro' : 'Plus'}! Aprilo qui: ${result.link}`)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-2 font-semibold text-white"
@@ -216,7 +216,7 @@ export default function AdminGiftSubscriptionPanel() {
                       <div className="font-medium text-gray-900">{g.recipient}</div>
                       {g.email && <div className="text-xs text-gray-500">{g.email}</div>}
                     </td>
-                    <td className="py-2 pr-3 font-semibold">{g.plan === 'pro' ? 'Pro' : 'Base'}</td>
+                    <td className="py-2 pr-3 font-semibold">{g.plan === 'pro' ? 'Pro' : 'Plus'}</td>
                     <td className="py-2 pr-3 text-gray-600">{new Date(g.createdAt).toLocaleString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Rome' })}</td>
                     <td className="py-2 pr-3">
                       {g.status === 'redeemed' ? (

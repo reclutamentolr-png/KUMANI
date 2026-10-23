@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import HubBar from '@/components/hubs/HubBar'
 
-// Kumani Garage: accesso (piano Base o Pass) e intestazione comuni a tutte
+// Kumani Garage: accesso (piano Plus o Pass) e intestazione comuni a tutte
 // le pagine del servizio.
 export default async function GarageLayout({ children }: { children: React.ReactNode }) {
   const locale = await getLocale()

@@ -17,7 +17,7 @@ import { defaultLocale } from '../../../../i18n'
 
 const ERRORS = ['quantity', 'item', 'unavailable', 'business', 'vat', 'terms', 'payment', 'soon'] as const
 
-// Regala KUMANI: codici per un anno di Base/Pro o per il Pass di un servizio,
+// Regala KUMANI: codici per un anno di Plus/Pro o per il Pass di un servizio,
 // da mandare a chi si vuole; sotto, i regali già comprati con lo stato.
 export default async function GiftsPage({
   params,
@@ -51,7 +51,7 @@ export default async function GiftsPage({
   ])
   // Piani non ancora aperti (Admin → Apertura piani): niente regali fino all'apertura
   const gate = await getPlansGate()
-  // Offerta di Natale (Admin → Natale): un anno di Base/Pro da regalare scontato
+  // Offerta di Natale (Admin → Natale): un anno di Plus/Pro da regalare scontato
   const giftPct = christmas.offer?.giftPct ?? 0
   const planOption = (cents: number) => (giftPct > 0 ? { priceCents: discounted(cents, giftPct), fullCents: cents } : { priceCents: cents })
   const tools = getMarketplaceTools((key) => tm(key))

@@ -17,7 +17,7 @@ import {
   type TrialDuration,
 } from '@/lib/trials'
 
-// Codici di prova dei servizi: creazione (Kumani Base/Pro, agenti, Admin),
+// Codici di prova dei servizi: creazione (Kumani Plus/Pro, agenti, Admin),
 // elenco, cancellazione e attivazione da parte dell'ospite (/prova/CODICE).
 
 const db = () =>
@@ -78,7 +78,7 @@ function newTrialCode() {
   return `PR-${part()}-${part()}`
 }
 
-// Chi può creare codici: Admin, agenti, Kumani con abbonamento Base o Pro attivo (non gli ospiti)
+// Chi può creare codici: Admin, agenti, Kumani con abbonamento Plus o Pro attivo (non gli ospiti)
 async function creator(): Promise<{ id: string; admin: boolean } | null> {
   const supabase = await createClient()
   const {

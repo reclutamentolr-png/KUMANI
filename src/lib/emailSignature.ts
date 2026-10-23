@@ -20,7 +20,7 @@ export const SOCIAL_NAMES: Record<SocialKey, string> = {
   x: 'X',
 }
 
-// Base per chi scrive solo il nome utente (es. "@mario" invece del link)
+// Plus per chi scrive solo il nome utente (es. "@mario" invece del link)
 const SOCIAL_BASE: Record<SocialKey, string> = {
   facebook: 'https://www.facebook.com/',
   instagram: 'https://www.instagram.com/',

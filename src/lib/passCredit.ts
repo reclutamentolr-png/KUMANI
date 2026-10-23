@@ -1,7 +1,7 @@
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { TOOL_PASS_DAYS } from '@/lib/toolPasses'
 
-// Credito dei Pass quando si passa a un piano (Base o Pro): la parte non
+// Credito dei Pass quando si passa a un piano (Plus o Pro): la parte non
 // ancora usata dei Pass pagati per servizi inclusi nel nuovo piano viene
 // scalata dal primo pagamento, e quei Pass terminano (il piano li sostituisce).
 

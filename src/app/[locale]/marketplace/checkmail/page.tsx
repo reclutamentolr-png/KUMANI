@@ -9,7 +9,7 @@ import HubBar from '@/components/hubs/HubBar'
 // Nome del servizio nella scheda del browser
 export const generateMetadata = toolMetadata('checkmail')
 
-// KUMANI CheckMail (Sicurezza e Verifica, piano Base): la pagina è protetta
+// KUMANI CheckMail (Sicurezza e Verifica, piano Plus): la pagina è protetta
 // dal proxy come gli altri strumenti; qui solo le analisi rimaste oggi.
 export default async function CheckMailPage({
   searchParams,

@@ -5,11 +5,11 @@ export interface RankDefinition {
   icon: 'Star' | 'Sparkles' | 'Crown'
   // Colore della stella del festeggiamento
   color: 'green' | 'gold' | 'black'
-  // Requisiti: attivazioni Base/Pro pagate delle persone invitate e KU
+  // Requisiti: attivazioni Plus/Pro pagate delle persone invitate e KU
   // Points guadagnati in totale (compresi quelli ricevuti dalla struttura)
   activations: number
   points: number
-  // Voucher Base di premio
+  // Voucher Plus di premio
   vouchers: number
 }
 

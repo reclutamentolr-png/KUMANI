@@ -9,7 +9,7 @@ export type NetworkWallet = {
   pendingPoints: number
   confirmedPoints: number
   confirmDays: number
-  // Attivazioni Base/Pro pagate e confermate delle persone invitate (contano
+  // Attivazioni Plus/Pro pagate e confermate delle persone invitate (contano
   // per le qualifiche) e quelle ancora in conferma
   activations: number
   pendingActivations: number
@@ -17,7 +17,7 @@ export type NetworkWallet = {
   blackPlusEvery: number
   voucherValueBaseEur: number
   voucherValueProEur: number
-  // Punti assegnati: attivazione Base/Pro, passaggio a Pro, parte a chi accoglie
+  // Punti assegnati: attivazione Plus/Pro, passaggio a Pro, parte a chi accoglie
   pointsRules: { base: number; pro: number; upgrade: number; welcomeBase: number; welcomePro: number; welcomeFrom: number }
   ranks: RankDefinition[]
 }

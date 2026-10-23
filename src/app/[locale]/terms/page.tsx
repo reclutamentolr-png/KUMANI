@@ -123,7 +123,7 @@ export default async function TermsPage({ params }: LocaleProps) {
             <div className="text-gray-600 space-y-3 text-sm sm:text-base leading-relaxed">
               <p>
                 L&apos;accesso all&apos;Ecosistema KUMANI e ai suoi strumenti è offerto in abbonamento ai prezzi pubblicati sulla Piattaforma
-                (attualmente piano Base 49€/anno e piano Pro 149€/anno). Il piano Pro include gli strumenti del piano Base; alcuni strumenti
+                (attualmente piano Plus 49€/anno e piano Pro 149€/anno). Il piano Pro include gli strumenti del piano Plus; alcuni strumenti
                 sono gratuiti per tutti gli iscritti. Il periodo di prova gratuito del piano Pro, quando offerto, dà accesso ai soli strumenti
                 Pro e gratuiti e non si rinnova in automatico. Non sono previsti costi nascosti né corrispettivi ulteriori per le funzionalità incluse.
               </p>
@@ -155,9 +155,9 @@ export default async function TermsPage({ params }: LocaleProps) {
               </p>
               <p>
                 <strong>Condizioni dello sconto.</strong> Ai primi 50 utenti registrati in ordine cronologico verrà applicato uno sconto pari al
-                100% sul valore del Piano Base (valore nominale di listino: 49,00 €), azzerando il costo del servizio per 12 (dodici) mesi dalla
+                100% sul valore del Piano Plus (valore nominale di listino: 49,00 €), azzerando il costo del servizio per 12 (dodici) mesi dalla
                 data di attivazione. Lo sconto si applica automaticamente al completamento dell&apos;iscrizione; non sono richiesti dati di
-                pagamento. Per utilizzare i servizi del Piano Base l&apos;utente deve completare il proprio profilo con dati reali
+                pagamento. Per utilizzare i servizi del Piano Plus l&apos;utente deve completare il proprio profilo con dati reali
                 (nome, cognome, data di nascita, telefono, indirizzo completo e professione): fino ad allora l&apos;accesso ai servizi
                 resta sospeso.
               </p>
@@ -343,7 +343,7 @@ export default async function TermsPage({ params }: LocaleProps) {
               </p>
               <p>
                 <strong className="text-gray-900">KU Points.</strong> L&apos;utente riceve KU Points quando una persona che ha
-                invitato direttamente attiva un abbonamento pagato con carta (Base o Pro), passa dal piano Base al piano Pro (in
+                invitato direttamente attiva un abbonamento pagato con carta (Plus o Pro), passa dal piano Plus al piano Pro (in
                 proporzione a quanto pagato) o acquista un pass, e con il Bonus Accoglienza. Il Bonus Accoglienza è riconosciuto quando
                 uno dei posti diretti della propria matrice viene occupato da una persona invitata da un altro utente (spillover) che
                 attiva l&apos;abbonamento con carta: a partire dall&apos;attivazione indicata dalla Piattaforma (attualmente la sesta
@@ -355,7 +355,7 @@ export default async function TermsPage({ params }: LocaleProps) {
               </p>
               <p>
                 I KU Points si usano per mettere in vetrina gli annunci e per le donazioni all&apos;associazione sostenuta da KUMANI.
-                Le qualifiche Kuman Green, Kuman Star e Kuman Black si raggiungono con un numero minimo di attivazioni Base o Pro
+                Le qualifiche Kuman Green, Kuman Star e Kuman Black si raggiungono con un numero minimo di attivazioni Plus o Pro
                 pagate con carta dalle persone invitate direttamente e un numero minimo di KU Points guadagnati in totale (requisiti
                 indicati nell&apos;area personale); al raggiungimento danno i voucher premio descritti nella sezione 7.8.
               </p>
@@ -418,7 +418,7 @@ export default async function TermsPage({ params }: LocaleProps) {
               </p>
               <p>
                 <strong className="text-gray-900">7.8 Voucher.</strong> Al raggiungimento di una qualifica l&apos;utente riceve nell&apos;area
-                personale voucher che attivano un abbonamento KUMANI Base per un anno a una persona nuova (il numero di voucher per
+                personale voucher che attivano un abbonamento KUMANI Plus per un anno a una persona nuova (il numero di voucher per
                 ogni qualifica è indicato nell&apos;area personale); con Kuman Black riceve anche un voucher Pro di un anno utilizzabile per
                 sé e, dopo Kuman Black, un voucher ogni numero di nuove attivazioni indicato dalla Piattaforma. Chi ha generato un
                 voucher non può utilizzarlo per sé, salvo il voucher Pro personale. Le attivazioni fatte con un voucher non danno KU
@@ -437,7 +437,7 @@ export default async function TermsPage({ params }: LocaleProps) {
                 attivati singolarmente per un anno, senza abbonamento, con un pagamento unico o con un codice pass. Il pass non si
                 rinnova automaticamente. Al primo acquisto del pass di un servizio, chi ha invitato l&apos;utente può ricevere i KU Points
                 indicati dalla Piattaforma per quel servizio; in caso di rimborso vengono tolti. Se l&apos;utente attiva in seguito un
-                abbonamento Base o Pro che include servizi per cui ha un pass pagato ancora attivo, la parte del pass non ancora
+                abbonamento Plus o Pro che include servizi per cui ha un pass pagato ancora attivo, la parte del pass non ancora
                 utilizzata (calcolata in proporzione ai giorni che restano) viene scalata dal primo pagamento dell&apos;abbonamento e quei
                 pass terminano, sostituiti dall&apos;abbonamento; i KU Points dell&apos;attivazione sono calcolati in proporzione
                 all&apos;importo effettivamente pagato. Per l&apos;acquisto del pass valgono le stesse regole di recesso e di rimborso degli
@@ -513,7 +513,7 @@ export default async function TermsPage({ params }: LocaleProps) {
             <div className="text-gray-600 space-y-3 text-sm sm:text-base leading-relaxed">
               <p>
                 <strong>Diritto di recesso dall&apos;abbonamento.</strong> L&apos;utente consumatore può recedere dall&apos;abbonamento a
-                pagamento (Base o Pro, compreso il passaggio da Base a Pro) entro 14 giorni da ciascun pagamento, senza indicarne il motivo,
+                pagamento (Plus o Pro, compreso il passaggio da Plus a Pro) entro 14 giorni da ciascun pagamento, senza indicarne il motivo,
                 dalla pagina <em>Abbonamento</em> dell&apos;area personale (&ldquo;Esercita il diritto di recesso&rdquo;) oppure con
                 qualsiasi dichiarazione esplicita inviata tramite la pagina Contatti. Il rimborso avviene entro 14 giorni dalla richiesta, con
                 lo stesso mezzo di pagamento utilizzato, e l&apos;abbonamento viene chiuso al momento del rimborso.

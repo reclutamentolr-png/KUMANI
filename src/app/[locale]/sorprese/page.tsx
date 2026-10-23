@@ -51,7 +51,7 @@ export default async function SurprisesPage({ params }: { params: Promise<{ loca
       : Promise.resolve({ data: null }),
     // Ringraziamenti ricevuti (le regole del database mostrano solo i propri)
     user ? supabase.from('surprise_replies').select('gift_id, read_at') : Promise.resolve({ data: null }),
-    // Sorprese incluse nel piano Base o Pro
+    // Sorprese incluse nel piano Plus o Pro
     user ? supabase.rpc('my_surprise_plan') : Promise.resolve({ data: null }),
   ])
   const plan = parseSurprisePlan(planRaw)

@@ -31,7 +31,7 @@ export const fetchToolRows = unstable_cache(
 
 const PREVIEW = 6
 
-// Homepage: scegli come usare KUMANI. Tre livelli (Gratis, Base, Pro), ognuno
+// Homepage: scegli come usare KUMANI. Tre livelli (Gratis, Plus, Pro), ognuno
 // include il precedente, con i servizi reali di ogni piano, più la fascia
 // del Pass per chi vuole un solo servizio.
 export default async function HomePlans() {
@@ -105,7 +105,7 @@ export default async function HomePlans() {
     </ul>
   )
 
-  // KUMANI Sorpresa: sorprese incluse e regali (rinnovo e feste) per Base e Pro
+  // KUMANI Sorpresa: sorprese incluse e regali (rinnovo e feste) per Plus e Pro
   const surprises = (text: string) => (
     <p className="mt-3 flex items-start gap-2 rounded-xl border border-[var(--gold)]/40 bg-[var(--gold)]/10 px-3 py-2 text-sm font-semibold text-white">
       <Gift className="mt-0.5 h-4 w-4 shrink-0 text-[var(--gold-bright)]" /> {text}
@@ -114,7 +114,7 @@ export default async function HomePlans() {
 
   return (
     <>
-      {/* Lancio Beta: sconto del 100% sul Base per i primi 50, sopra le schede dei piani */}
+      {/* Lancio Beta: sconto del 100% sul Plus per i primi 50, sopra le schede dei piani */}
       <div className="mx-auto mb-6 max-w-3xl">
         <FoundersBanner variant="card" />
       </div>
@@ -138,7 +138,7 @@ export default async function HomePlans() {
           </Link>
         </div>
 
-        {/* Base */}
+        {/* Plus */}
         <div className="relative flex flex-col rounded-3xl border-2 border-[var(--gold)]/70 bg-[var(--gold)]/[0.08] p-6 sm:p-7">
           <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-white px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider text-[var(--ink)] shadow">
             {t('planRecommended')}

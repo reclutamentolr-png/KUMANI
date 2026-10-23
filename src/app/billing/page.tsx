@@ -79,7 +79,7 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
 
       const paidPlan = session.metadata?.plan === 'pro' ? 'pro' : 'base'
       const currentlyActive = isActiveSubscription(profile)
-      // Mai declassare un profilo Pro a Base (es. vecchia sessione Base).
+      // Mai declassare un profilo Pro a Plus (es. vecchia sessione Plus).
       const newPlan = currentlyActive && profile?.subscription_plan === 'pro' ? 'pro' : paidPlan
       const alreadyActive = currentlyActive && (profile?.subscription_plan ?? 'base') === newPlan
 
@@ -195,7 +195,7 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
   const tg = await getTranslations({ locale, namespace: 'gifts' })
   const money = (cents: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(cents / 100)
   const basePrice = (await getPlanPrices()).base
-  // Credito dei Pass già pagati per servizi del Base (scalato dal primo pagamento)
+  // Credito dei Pass già pagati per servizi del Plus (scalato dal primo pagamento)
   const basePassCredit = !isActive ? await computePassCredit(user.id, 'base') : null
   const basePassCreditCents = basePassCredit ? Math.min(basePassCredit.cents, Math.max(Math.round(basePrice * 100) - 100, 0)) : 0
   const checkoutTexts = await getCheckoutTexts(locale, { priceEuro: basePrice })

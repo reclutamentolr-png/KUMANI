@@ -51,10 +51,10 @@ export default async function DashboardTipo2({
   // Tutti i servizi accesi, con lo stato per l'utente (getServicesCatalog)
   services: ServiceItem[]
   favoriteToolNames: string[]
-  // Prezzo del piano Base già formattato (es. "49 €")
+  // Prezzo del piano Plus già formattato (es. "49 €")
   basePrice: string
   // Prova Pro in corso: il riquadro dell'abbonamento propone Pro come
-  // scelta principale e il Base come alternativa.
+  // scelta principale e il Plus come alternativa.
   proTrialDaysLeft?: number | null
   // Fascia «Oggi» (agenda unica), già pronta dal server
   agenda?: React.ReactNode
@@ -110,8 +110,8 @@ export default async function DashboardTipo2({
     wallet: hubT('stripWallet'),
     close: t('karmaInfoClose'),
   }
-  const planName = subscribed ? (profile?.subscription_plan === 'pro' ? 'Pro' : 'Base') : proTrialDaysLeft !== null ? 'Pro' : null
-  // Base, Pro o prova Pro in corso
+  const planName = subscribed ? (profile?.subscription_plan === 'pro' ? 'Pro' : 'Plus') : proTrialDaysLeft !== null ? 'Pro' : null
+  // Plus, Pro o prova Pro in corso
   const withPlan = subscribed || proTrialDaysLeft !== null
   const isProPlan = (subscribed && profile?.subscription_plan === 'pro') || proTrialDaysLeft !== null
   // Pro pagato: niente da comprare né da attivare (voucher e regali dei piani
@@ -187,7 +187,7 @@ export default async function DashboardTipo2({
             <BadgeCheck className="hidden h-3.5 w-3.5 shrink-0 text-[var(--gold)] sm:block" />{' '}
             <span className="truncate">
               {hubT('stripPlan')}
-              {/* Tipo di piano accanto al titolo (Base o Pro; in prova è il Pro) */}
+              {/* Tipo di piano accanto al titolo (Plus o Pro; in prova è il Pro) */}
               {planName && <span className="text-[var(--gold)]"> {planName}</span>}
             </span>
           </span>

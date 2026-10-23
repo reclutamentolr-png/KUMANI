@@ -7,7 +7,7 @@ import { SITE_URL } from '@/lib/siteUrl'
 import { CARD_CUSTOM_MAX, CARD_DESIGNS, CARD_NAME_MAX, CARD_PHRASES, cardLink, cardPath, type CardOptions } from '@/lib/voucherCard'
 
 // Admin → Voucher e coupon → Coupon per la community → «Regala un
-// abbonamento»: un voucher Base o Pro intestato a un Kumano, che parte
+// abbonamento»: un voucher Plus o Pro intestato a un Kumano, che parte
 // dall'account KUMANI (create_prize_voucher, come i premi delle qualifiche).
 // Il Kumano lo trova nel Wallet e riceve un avviso (campanella e telefono)
 // che apre il biglietto, da dove lo attiva con un tocco.
@@ -40,7 +40,7 @@ export async function adminGiftSubscription(input: {
     to: (person.first_name ?? '').slice(0, CARD_NAME_MAX),
     from: (input.from || 'KUMANI').slice(0, CARD_NAME_MAX),
   }
-  const planName = plan === 'pro' ? 'Pro' : 'Base'
+  const planName = plan === 'pro' ? 'Pro' : 'Plus'
   await notifyUser(
     person.id,
     'alerts',

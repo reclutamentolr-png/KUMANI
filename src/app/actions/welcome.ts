@@ -7,7 +7,7 @@ import { setHomeView } from '@/app/actions/homeView'
 
 // Home di benvenuto (dashboard): «Per cosa sei qui?» e «Mostra la Home completa».
 
-// «Per cosa sei qui?»: ogni voce si apre con i suoi servizi (Gratis, Base e
+// «Per cosa sei qui?»: ogni voce si apre con i suoi servizi (Gratis, Plus e
 // Pro) e la persona aggiunge a «I tuoi servizi» quelli che vuole, uno per uno.
 // La voce finisce tra le risposte (needs) al primo servizio aggiunto.
 export async function toggleWelcomeService(needKey: string, toolName: string, add: boolean): Promise<boolean> {

@@ -9,7 +9,7 @@ import { FORM_PROFILE_FIELDS, missingProfileFields, type LockableProfileField } 
 // "dismissed": il promemoria è già stato chiuso una volta senza completare,
 // da ora la richiesta è obbligatoria.
 // Quando chiederlo:
-// - piano Base o Pro attivo (pagato, con un codice o in prova Pro) oppure
+// - piano Plus o Pro attivo (pagato, con un codice o in prova Pro) oppure
 //   un Pass di un servizio attivo (comprato, con un codice o regalato; non le
 //   prove gratuite): subito, e la richiesta è obbligatoria («paid»), servono
 //   i dati reali;

@@ -15,7 +15,7 @@ import { giftItemName } from '@/lib/giftsServer'
 import { locales, defaultLocale } from '../../../../../i18n'
 
 // Acquisto di regali (pagamento una tantum): 1–10 codici per il Pass di un
-// servizio o per un anno di Base/Pro. Il servizio non parte con il pagamento
+// servizio o per un anno di Plus/Pro. Il servizio non parte con il pagamento
 // ma quando chi riceve attiva il codice: al privato niente consenso
 // all'avvio immediato (il recesso vale per i codici non attivati); per
 // l'azienda P.IVA e dichiarazione B2B. Termini e Privacy per tutti.
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     const form = await request.formData().catch(() => null)
     // Cosa si regala: "plan:base", "plan:pro" oppure "pass:<servizio>"
     const [kind, value] = String(form?.get('item') ?? '').split(':')
-    // Piani non ancora aperti (Admin → Apertura piani): nessun regalo, né anni di Base/Pro né Pass
+    // Piani non ancora aperti (Admin → Apertura piani): nessun regalo, né anni di Plus/Pro né Pass
     if ((await getPlansGate()).closed) return back('soon')
     const quantity = Math.floor(Number(form?.get('quantity')))
     if (!Number.isFinite(quantity) || quantity < 1 || quantity > GIFT_MAX_QUANTITY) return back('quantity')

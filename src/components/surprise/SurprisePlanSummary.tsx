@@ -3,7 +3,7 @@ import { Crown, Gift } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { bonusReason, SURPRISE_KINDS, type SurprisePlanStatus } from '@/lib/surprise'
 
-// Sorprese incluse nel piano: per chi ha Base o Pro quante ne restano per tipo
+// Sorprese incluse nel piano: per chi ha Plus o Pro quante ne restano per tipo
 // e i regali del momento; per chi non ha un piano, cosa otterrebbe.
 export const BONUS_KEY: Record<string, string> = {
   rinnovo: 'bonus_renewal',

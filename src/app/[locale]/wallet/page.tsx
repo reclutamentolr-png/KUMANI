@@ -646,7 +646,7 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
           </WalletSection>
         )}
 
-        {/* Regali: codici per Base/Pro o per il Pass di un servizio */}
+        {/* Regali: codici per Plus/Pro o per il Pass di un servizio */}
         <WalletSection icon={<Gift className="h-5 w-5 text-[var(--gold)]" />} title={tg('walletTitle')}>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm leading-6 text-[var(--muted)]">{tg('walletText')}</p>

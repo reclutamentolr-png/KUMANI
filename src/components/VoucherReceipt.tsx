@@ -30,7 +30,7 @@ export default function VoucherReceipt({
   const priceValid = priceCents === null || (Number.isFinite(priceCents) && priceCents >= 0 && (voucher.maxCents === null || priceCents <= voucher.maxCents))
   const euro = (cents: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(cents / 100)
   const date = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(voucher.soldAt))
-  const planName = voucher.plan === 'pro' ? 'KUMANI Pro' : 'KUMANI Base'
+  const planName = voucher.plan === 'pro' ? 'KUMANI Pro' : 'KUMANI Plus'
 
   const save = async () => {
     if (!priceValid) return

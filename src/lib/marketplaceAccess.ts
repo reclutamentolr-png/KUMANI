@@ -5,7 +5,7 @@ export type ToolDisabledReason = 'offline' | 'subscription' | 'pro'
 
 export interface MarketplaceAccessState {
   userPlan: UserPlan
-  // Solo prova Pro, senza abbonamento pagato: aperti Pro e Free, non il Base
+  // Solo prova Pro, senza abbonamento pagato: aperti Pro e Free, non il Plus
   trialOnly: boolean
   isSettingEnabled: (toolName: string) => boolean
   isToolEnabled: (toolName: string) => boolean
@@ -57,7 +57,7 @@ export async function getMarketplaceAccessState(supabase: SupabaseClient, userId
   if (!planResult.error && typeof planResult.data === 'string') {
     userPlan = planResult.data as UserPlan
   } else {
-    // Migrazione dei piani non ancora applicata: abbonamento attivo = Base.
+    // Migrazione dei piani non ancora applicata: abbonamento attivo = Plus.
     const { data: profile } = await supabase
       .from('profiles')
       .select('subscription_status, subscription_expires_at')
@@ -67,7 +67,7 @@ export async function getMarketplaceAccessState(supabase: SupabaseClient, userId
     if (profile?.subscription_status === 'active' && (expires === null || expires > new Date().getTime())) userPlan = 'base'
   }
 
-  // Prova Pro gratuita: apre gli strumenti Pro, non quelli del piano Base
+  // Prova Pro gratuita: apre gli strumenti Pro, non quelli del piano Plus
   // (stessa regola di tool_access nel database).
   let trialOnly = false
   if (!trialResult.error) trialOnly = trialResult.data === true

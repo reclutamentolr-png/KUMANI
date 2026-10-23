@@ -52,11 +52,11 @@ export default function FoundersPanel() {
   const fmt = (iso: string) => new Date(iso).toLocaleString('it-IT', { timeZone: 'Europe/Rome', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })
 
   const grantExisting = async () => {
-    if (!(await askConfirm('Includere nei posti gli iscritti attuali senza abbonamento attivo, in ordine di iscrizione? Il loro Piano Base si attiva subito per 12 mesi. Chi è già attivo (es. i Pro regalati) resta fuori e resta com’è.'))) return
+    if (!(await askConfirm('Includere nei posti gli iscritti attuali senza abbonamento attivo, in ordine di iscrizione? Il loro Piano Plus si attiva subito per 12 mesi. Chi è già attivo (es. i Pro regalati) resta fuori e resta com’è.'))) return
     setBusy('grant')
     const r = await adminGrantFoundersExisting()
     setBusy(null)
-    setMsg(r.success ? `Fatto: ${r.included} iscritti inclusi nei posti, Base attivato e avviso inviato.` : (r.error ?? 'Errore'))
+    setMsg(r.success ? `Fatto: ${r.included} iscritti inclusi nei posti, Plus attivato e avviso inviato.` : (r.error ?? 'Errore'))
     load()
   }
 
@@ -67,8 +67,8 @@ export default function FoundersPanel() {
           <Award className="h-5 w-5 text-[var(--gold)]" /> Promozione di lancio (Early Bird)
         </h3>
         <p className="mt-1 text-sm text-gray-600">
-          Sconto commerciale del 100% sul Piano Base per 12 mesi ai primi utenti in ordine cronologico di registrazione (art. 6 c.1 lett. c DPR
-          430/2001). Si applica da solo al completamento dell&apos;iscrizione, il Base si attiva subito e non si rinnova in automatico. In homepage
+          Sconto commerciale del 100% sul Piano Plus per 12 mesi ai primi utenti in ordine cronologico di registrazione (art. 6 c.1 lett. c DPR
+          430/2001). Si applica da solo al completamento dell&apos;iscrizione, il Plus si attiva subito e non si rinnova in automatico. In homepage
           e nella registrazione compare il contatore; le condizioni sono nei Termini (sezione «Promozione di lancio»). Staff, account KUMANI,
           agenti e chi ha già un abbonamento non contano.
         </p>
@@ -111,7 +111,7 @@ export default function FoundersPanel() {
         <div className="mt-4 border-t border-[var(--gold)]/30 pt-4">
           <p className="text-sm text-gray-700">
             <strong>Iscritti attuali</strong>: chi non ha un abbonamento attivo entra nei {limit} posti in ordine di iscrizione (prima dei nuovi), con il
-            Base attivo subito. Chi è già attivo (per esempio i Pro che hai regalato) resta fuori. Premilo prima di accendere la promozione; si può
+            Plus attivo subito. Chi è già attivo (per esempio i Pro che hai regalato) resta fuori. Premilo prima di accendere la promozione; si può
             ripremere senza doppioni.
           </p>
           <button
@@ -142,7 +142,7 @@ export default function FoundersPanel() {
                   <th className="py-2 pr-3">N°</th>
                   <th className="py-2 pr-3">Chi</th>
                   <th className="py-2 pr-3">Dal</th>
-                  <th className="py-2">Piano Base</th>
+                  <th className="py-2">Piano Plus</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">

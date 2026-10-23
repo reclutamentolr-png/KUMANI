@@ -75,7 +75,7 @@ const DESCRIPTIONS: Record<KuFeatureKey, { title: string; icon: typeof Coins; pa
     paragraphs: [
       'COSA FA — I KU Karma si convertono in KU Points, che servono per la vetrina annunci e per le donazioni all’associazione.',
       "COME FUNZIONA — Tasso: \"KU Karma per 1 KU Point\" (es. 20 KU Karma = 1 KU Point). Tetto: massimo \"KU Points al mese\" per utente (mese solare, ora italiana). Oltre il tetto la conversione viene rifiutata fino al mese successivo.",
-      "ATTENZIONE — Un'attivazione Base vale 10 KU Points: con 20 KU Karma = 1 KU Point e tetto 5 KU Points/mese, un utente molto attivo ottiene al massimo 60 KU Points l'anno. Tenere il tetto basso. I punti convertiti non contano per le qualifiche Kuman Green/Star/Black. Anche i KU Karma accreditati a mano dall'admin diventano convertibili.",
+      "ATTENZIONE — Un'attivazione Plus vale 10 KU Points: con 20 KU Karma = 1 KU Point e tetto 5 KU Points/mese, un utente molto attivo ottiene al massimo 60 KU Points l'anno. Tenere il tetto basso. I punti convertiti non contano per le qualifiche Kuman Green/Star/Black. Anche i KU Karma accreditati a mano dall'admin diventano convertibili.",
       "DOVE LO VEDE L'UTENTE — Portafoglio → \"Usa i tuoi KU Karma\" → Converti in KU Points, con il tetto residuo del mese.",
       'COSTO PER KUMANI — Indiretto: abbonamenti o premi riscattati con i KU Points ottenuti.',
     ],

@@ -6,7 +6,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import { Crown, LoaderCircle } from 'lucide-react'
 import { previewUpgradeToPro, upgradeToPro } from '@/app/actions/plans'
 
-// "Passa a Pro" per chi ha già un abbonamento Base con carta: prima mostra
+// "Passa a Pro" per chi ha già un abbonamento Plus con carta: prima mostra
 // l'importo esatto che Stripe addebiterà (la differenza), poi chiede conferma.
 export default function UpgradeToProButton({ label, note }: { label: string; note: string }) {
   const t = useTranslations('plans')

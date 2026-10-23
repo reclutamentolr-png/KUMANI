@@ -258,7 +258,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       requiresSubscription: true,
     },
     {
-      // Test gratuito; il check-up del bilancio usa i dati di Spendly (Base)
+      // Test gratuito; il check-up del bilancio usa i dati di Spendly (Plus)
       toolName: 'fincheck',
       href: '/marketplace/fincheck',
       gradient: 'bg-[var(--ink)]',

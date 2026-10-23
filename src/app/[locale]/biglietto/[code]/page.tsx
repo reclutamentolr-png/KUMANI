@@ -13,7 +13,7 @@ import { CARD_CODE_RE, readCardOptions } from '@/lib/voucherCard'
 export const dynamic = 'force-dynamic'
 export const metadata: Metadata = { robots: { index: false, follow: false } }
 
-// Biglietto di un voucher Base o Pro (link mandato da chi lo regala): la
+// Biglietto di un voucher Plus o Pro (link mandato da chi lo regala): la
 // grafica scelta, la frase, «per» e «da» (nel link) e l'attivazione. Lo stato
 // del voucher si legge sul server: al browser arrivano solo piano e stato.
 export default async function VoucherCardPage({

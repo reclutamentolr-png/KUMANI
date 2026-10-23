@@ -1,7 +1,7 @@
 // Natale su KUMANI (Admin → Natale), parte usata anche nel browser:
 // - decorazioni (ghirlanda sotto la barra nera, cappello sul logo): «auto»
 //   dal 1° dicembre al 6 gennaio, oppure sempre accese o spente;
-// - offerta: sconto sui regali (un anno di Base/Pro da regalare) e sul primo
+// - offerta: sconto sui regali (un anno di Plus/Pro da regalare) e sul primo
 //   anno di chi si abbona, tra le date scelte. Spenta finché l'Admin non la
 //   accende. Si salva in system_settings.christmas.
 export type ChristmasMode = 'auto' | 'on' | 'off'

@@ -9,7 +9,7 @@ import HubBar from '@/components/hubs/HubBar'
 // Nome del servizio nella scheda del browser
 export const generateMetadata = toolMetadata('verifoto')
 
-// VeriFoto (Sicurezza e Verifica, piano Base): la pagina è protetta dal proxy
+// VeriFoto (Sicurezza e Verifica, piano Plus): la pagina è protetta dal proxy
 // come gli altri strumenti; qui solo lo stato del rilevatore per l'utente.
 export default async function VeriFotoPage() {
   const t = await getTranslations('verifoto')

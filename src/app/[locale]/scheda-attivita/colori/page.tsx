@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return { title: t('title') }
 }
 
-// «I colori del tuo brand» (Scheda attività, piani Base e Pro)
+// «I colori del tuo brand» (Scheda attività, piani Plus e Pro)
 export default async function BrandColorsPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   const user = await getSessionUser()

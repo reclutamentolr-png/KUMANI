@@ -1,7 +1,7 @@
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 
 // «Home di benvenuto» della dashboard: per chi è appena entrato, con qualsiasi
-// piano (anche i primi 50 con il Base), «scegli cosa ti interessa di più» e
+// piano (anche i primi 50 con il Plus), «scegli cosa ti interessa di più» e
 // «Inizia da qui». Si mostra nella vista Lite per 7 giorni dall'iscrizione
 // (la vista di partenza dei nuovi iscritti è Lite).
 // Qui anche gli accessi (giorni diversi con l'accesso), che servono per

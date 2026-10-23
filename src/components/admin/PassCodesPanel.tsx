@@ -73,7 +73,7 @@ export default function PassCodesPanel() {
           <p className="mt-1 text-sm text-gray-600">
             Un codice pass attiva <strong>un solo servizio per un anno</strong>, senza abbonamento. Chi lo riceve lo inserisce nella pagina
             del servizio (o lo attiva dal Wallet se gliel&apos;hai assegnato) e può anche regalarlo. Il pass non dà KU Points a chi ha
-            invitato e non cambia il prezzo di Base e Pro. Il prezzo e la vendita con carta si impostano su ogni servizio in Marketplace.
+            invitato e non cambia il prezzo di Plus e Pro. Il prezzo e la vendita con carta si impostano su ogni servizio in Marketplace.
           </p>
         </div>
 

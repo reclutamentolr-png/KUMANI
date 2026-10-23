@@ -44,7 +44,7 @@ export async function getFlyerPlan(supabase: SupabaseClient, tool: string): Prom
   return {
     plan,
     planPrice: plan === 'pro' ? prices.pro : plan === 'base' ? prices.base : 0,
-    // "Vendibile da solo" (Admin): il Pass compare per i servizi Base e Pro
+    // "Vendibile da solo" (Admin): il Pass compare per i servizi Plus e Pro
     passPrice: plan !== 'free' && offer.enabled ? offer.priceCents / 100 : null,
   }
 }

@@ -8,7 +8,7 @@ import HubBar from '@/components/hubs/HubBar'
 // Nome del servizio nella scheda del browser
 export const generateMetadata = toolMetadata('documento-sicuro')
 
-// DOCUMENTO SICURO (Sicurezza, piano Base): filigrana, zone oscurate e
+// DOCUMENTO SICURO (Sicurezza, piano Plus): filigrana, zone oscurate e
 // rimozione dei dati nascosti prima di inviare la foto di un documento.
 // La pagina è protetta dal proxy; la foto non lascia mai il browser.
 export default async function DocumentoSicuroPage() {

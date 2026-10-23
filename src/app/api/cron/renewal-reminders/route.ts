@@ -56,7 +56,7 @@ export async function GET(request: Request) {
 
       const locale = sub.metadata?.locale && locales.includes(sub.metadata.locale) ? sub.metadata.locale : defaultLocale
       const t = await getTranslations({ locale, namespace: 'renewalEmail' })
-      const plan = p.subscription_plan === 'pro' ? 'KUMANI Pro' : 'KUMANI Base'
+      const plan = p.subscription_plan === 'pro' ? 'KUMANI Pro' : 'KUMANI Plus'
       const date = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Rome' }).format(renewsAt)
       const amount = new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(p.subscription_plan === 'pro' ? prices.pro : prices.base)
       const billingUrl = `${SITE_URL}/billing`

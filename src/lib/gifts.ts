@@ -1,5 +1,5 @@
 // Regali: codici GIFT-XXXX-XXXX comprati con carta per il Pass di un servizio
-// o per un anno di KUMANI Base/Pro, da mandare a chi si vuole (link
+// o per un anno di KUMANI Plus/Pro, da mandare a chi si vuole (link
 // /regalo/CODICE). Regole nelle funzioni SQL *gift* (migration gifts).
 
 export const GIFT_TYPE = 'gift'
@@ -57,6 +57,6 @@ export const normalizeGiftCode = (code: string) => code.trim().toUpperCase()
 export const giftPath = (code: string) => `/regalo/${encodeURIComponent(code)}`
 
 // Pagina pubblica che spiega cosa si regala (visibile senza account): la
-// presentazione del servizio per un Pass, il catalogo dei servizi per Base/Pro
+// presentazione del servizio per un Pass, il catalogo dei servizi per Plus/Pro
 export const giftInfoPath = (kind: GiftKind | null | undefined, tool: string | null | undefined) =>
   kind === 'pass' && tool ? `/strumenti/${encodeURIComponent(tool)}` : '/catalogo'

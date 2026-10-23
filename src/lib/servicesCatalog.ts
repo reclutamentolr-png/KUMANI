@@ -22,7 +22,7 @@ export type ServiceItem = {
   group: ServiceGroup
   open: boolean
   plan: 'free' | 'base' | 'pro'
-  // Bloccato: dove si sblocca (Pass del singolo servizio, Pro o Base)
+  // Bloccato: dove si sblocca (Pass del singolo servizio, Pro o Plus)
   unlock: 'pass' | 'pro' | 'base' | null
   passPrice: string | null
   guide: string | null

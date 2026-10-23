@@ -21,7 +21,7 @@ import { FROM_ICONS_KEY, FROM_SERVICES, type ServicesView } from '@/lib/homeView
 type Filter = 'all' | 'mine' | 'locked'
 
 // Dove porta una scheda: dentro il servizio se si può usare, altrimenti dove
-// si sblocca (Pass del singolo servizio, Pro o Base)
+// si sblocca (Pass del singolo servizio, Pro o Plus)
 export function serviceHref(item: ServiceItem) {
   if (item.open) return `${item.href}?from=dashboard`
   if (item.unlock === 'pass') return `/pass/${item.toolName}`

@@ -91,7 +91,7 @@ export default function AdminFinancialsPanel({ openReport }: { openReport: (tab:
           </h2>
           <p className="text-gray-600 mt-1">
             Dati veri: incassi, rimborsi e commissioni dal registro di Stripe, il resto dal database. Voucher e punti non
-            sono uscite di cassa ma servizi dati senza incasso, valutati a prezzo di listino (Base {f.prices.base} €, Pro{' '}
+            sono uscite di cassa ma servizi dati senza incasso, valutati a prezzo di listino (Plus {f.prices.base} €, Pro{' '}
             {f.prices.pro} €). Importi IVA inclusa salvo dove indicato.
           </p>
           {f.testMode && (
@@ -162,15 +162,15 @@ export default function AdminFinancialsPanel({ openReport }: { openReport: (tab:
           </Card>
 
           <Card title="Abbonamenti pagati con carta" subtitle="Fatture Stripe pagate, per tipo (IVA inclusa)">
-            <Row label="Nuovi Base" value={eur(subs.base.cents)} hint={`${subs.base.count} pagamenti`} />
+            <Row label="Nuovi Plus" value={eur(subs.base.cents)} hint={`${subs.base.count} pagamenti`} />
             <Row label="Nuovi Pro" value={eur(subs.pro.cents)} hint={`${subs.pro.count} pagamenti`} />
-            <Row label="Passaggi da Base a Pro" value={eur(subs.upgrade.cents)} hint={`${subs.upgrade.count} pagamenti (solo la differenza)`} />
+            <Row label="Passaggi da Plus a Pro" value={eur(subs.upgrade.cents)} hint={`${subs.upgrade.count} pagamenti (solo la differenza)`} />
             <Row label="Rinnovi" value={eur(subs.renewal.cents)} hint={`${subs.renewal.count} pagamenti`} />
             <Row label="Totale abbonamenti" value={eur(f.subscriptionsCents)} strong />
           </Card>
 
           <Card title="Abbonati attivi oggi" subtitle="Per origine dell'abbonamento">
-            <Row label="Base pagati con carta" value={String(f.active.stripeBase)} />
+            <Row label="Plus pagati con carta" value={String(f.active.stripeBase)} />
             <Row label="Pro pagati con carta" value={String(f.active.stripePro)} />
             <Row label="Attivati con voucher" value={String(f.active.voucher)} />
             <Row label="Attivati dallo Staff" value={String(f.active.admin)} />
@@ -212,7 +212,7 @@ export default function AdminFinancialsPanel({ openReport }: { openReport: (tab:
           </Card>
 
           <Card detail="points" title="KU Points" subtitle="Assegnati dal nuovo sistema e ancora da spendere">
-            <Row label="Attivazioni Base" value={`${f.pointsAwarded.activation_base} punti`} />
+            <Row label="Attivazioni Plus" value={`${f.pointsAwarded.activation_base} punti`} />
             <Row label="Attivazioni Pro" value={`${f.pointsAwarded.activation_pro} punti`} />
             <Row label="Passaggi a Pro" value={`${f.pointsAwarded.upgrade_pro} punti`} />
             <Row label="Pass dei singoli servizi" value={`${f.pointsAwarded.tool_pass} punti`} />

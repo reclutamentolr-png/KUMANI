@@ -79,7 +79,7 @@ export default function SolvePlayer({
     setSaving('idle')
   }
 
-  const planLabel = (plan: 'free' | 'base' | 'pro') => (plan === 'pro' ? 'Pro' : plan === 'base' ? 'Base' : t('free'))
+  const planLabel = (plan: 'free' | 'base' | 'pro') => (plan === 'pro' ? 'Pro' : plan === 'base' ? 'Plus' : t('free'))
   const linkButton = (link: SolveLink, primary = false) => {
     const external = /^https?:\/\//.test(link.href)
     const a = link.tool ? access[link.tool] : undefined

@@ -78,8 +78,8 @@ export async function recordAgentCommission(invoice: InvoiceLike): Promise<void>
       ? Math.round(invoice.total_excluding_tax * (gross / Math.max(invoice.total ?? gross, 1)))
       : Math.round(gross / (1 + (await vatRate()) / 100))
   const pct = Number(kind === 'first' ? agent.commission_first_pct : agent.commission_renewal_pct)
-  // Piano venduto: la riga con l'importo più alto. Nel passaggio Base → Pro
-  // la prima riga è lo storno (negativo) del Base, la vendita è quella Pro.
+  // Piano venduto: la riga con l'importo più alto. Nel passaggio Plus → Pro
+  // la prima riga è lo storno (negativo) del Plus, la vendita è quella Pro.
   const lines = invoice.lines?.data ?? []
   const mainLine = lines.reduce<(typeof lines)[number] | undefined>((best, line) => (!best || line.amount > best.amount ? line : best), undefined)
   const priceId = mainLine?.pricing?.price_details?.price ?? (mainLine as { price?: { id?: string } } | undefined)?.price?.id

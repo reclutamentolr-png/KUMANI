@@ -5,7 +5,7 @@ import { getStripe } from '@/lib/stripe'
 
 // Pass servizio: un solo servizio per un anno, senza abbonamento.
 // Il pass non dà KU Points a chi ha invitato (il pagamento non è una fattura
-// di abbonamento) e non cambia il prezzo di Base/Pro.
+// di abbonamento) e non cambia il prezzo di Plus/Pro.
 
 export const TOOL_PASS_DAYS = 365
 export const TOOL_PASS_TYPE = 'tool_pass'

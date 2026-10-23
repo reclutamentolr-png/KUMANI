@@ -187,7 +187,7 @@ export default function RealUsagePanel() {
         </Section>
 
         {/* Piani e conversione */}
-        <Section icon={UserPlus} title="Piani e conversione" hint="Chi paga oggi e quanti nuovi iscritti diventano Base o Pro.">
+        <Section icon={UserPlus} title="Piani e conversione" hint="Chi paga oggi e quanti nuovi iscritti diventano Plus o Pro.">
           <div className="grid grid-cols-3 gap-2 text-center">
             {(['free', 'base', 'pro'] as const).map((p) => (
               <div key={p} className="rounded-xl bg-gray-50 p-3">
@@ -215,7 +215,7 @@ export default function RealUsagePanel() {
                   <li key={m.month} className="flex justify-between">
                     <span className="capitalize text-gray-700">{monthLabel(m.month)}</span>
                     <span>
-                      <span className={PLAN_STYLE.base}>Base {m.base}</span> · <span className={PLAN_STYLE.pro}>Pro {m.pro}</span>
+                      <span className={PLAN_STYLE.base}>Plus {m.base}</span> · <span className={PLAN_STYLE.pro}>Pro {m.pro}</span>
                     </span>
                   </li>
                 ))}

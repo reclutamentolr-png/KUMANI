@@ -8,7 +8,7 @@ import { locales } from '../../i18n'
 
 // Punti Rete per le attivazioni pagate con carta (webhook invoice.paid):
 // allo sponsor diretto del cliente, una volta per fattura, con i valori
-// delle impostazioni (Base 49, Pro 122, passaggio a Pro 60). Rinnovi e
+// delle impostazioni (Plus 49, Pro 122, passaggio a Pro 60). Rinnovi e
 // voucher non danno punti; un rimborso li toglie (charge.refunded).
 
 const db = () =>
@@ -16,7 +16,7 @@ const db = () =>
     auth: { autoRefreshToken: false, persistSession: false },
   })
 
-// Piano della riga principale (nel passaggio a Pro la prima è lo storno del Base)
+// Piano della riga principale (nel passaggio a Pro la prima è lo storno del Plus)
 export function isProInvoice(invoice: Stripe.Invoice): boolean {
   const main = invoice.lines?.data?.reduce<(typeof invoice.lines.data)[number] | undefined>(
     (best, line) => (!best || line.amount > best.amount ? line : best),

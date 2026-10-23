@@ -17,7 +17,7 @@ type Props = {
   rankKey: string
   labelKey: string
   color: keyof typeof STAR
-  // Voucher Base ricevuti in premio (già nel Wallet)
+  // Voucher Plus ricevuti in premio (già nel Wallet)
   vouchers: number
   // Dopo Kuman Black: 1 voucher ogni N nuove attivazioni
   blackPlusEvery?: number

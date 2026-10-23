@@ -205,7 +205,7 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
       </HomeSection>
       </div>
 
-      {/* 🛠️ SEZIONE: IL MARKETPLACE — i servizi nei tre livelli Gratis, Base
+      {/* 🛠️ SEZIONE: IL MARKETPLACE — i servizi nei tre livelli Gratis, Plus
           e Pro, con "Dettagli" per l'elenco completo e trasparente. */}
       <HomeSection bg={L.marketplace} className="py-12 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -222,7 +222,7 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
             </p>
           </div>
 
-          {/* Tre livelli (Gratis, Base, Pro) con l'elenco completo dei servizi */}
+          {/* Tre livelli (Gratis, Plus, Pro) con l'elenco completo dei servizi */}
           <p className="-mt-4 mb-10 text-center text-sm text-gray-400 sm:-mt-8 sm:text-base">{t('plansTiersDescription')}</p>
           <HomePlans />
         </div>

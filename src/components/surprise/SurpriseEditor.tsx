@@ -510,7 +510,7 @@ export default function SurpriseEditor({
   steps: SurpriseStepRow[]
   mediaUrls: Record<string, string>
   prices: Record<SurpriseKind, number>
-  // Sorprese incluse nel piano Base o Pro ancora disponibili, per tipo (quota + regali)
+  // Sorprese incluse nel piano Plus o Pro ancora disponibili, per tipo (quota + regali)
   freeLeft?: Partial<Record<SurpriseKind, number>>
 }) {
   const t = useTranslations('surprise')

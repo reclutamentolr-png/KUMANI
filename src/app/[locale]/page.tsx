@@ -27,7 +27,7 @@ export default async function LandingPage({ params }: Props) {
   setRequestLocale((await params).locale)
   return (
     <>
-      {/* «Sei tra i primi 50? KUMANI ti regala un anno di Base» */}
+      {/* «Sei tra i primi 50? KUMANI ti regala un anno di Plus» */}
       <FoundersBanner />
       <HomeByVersion layoutKey={await getHomeLayout()} />
     </>

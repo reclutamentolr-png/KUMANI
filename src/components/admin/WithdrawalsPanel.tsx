@@ -149,7 +149,7 @@ export default function WithdrawalsPanel({ onChanged }: { onChanged?: () => void
                     <p className="text-base font-bold text-gray-900">{fullName(item.user)}</p>
                     <p className="text-xs text-gray-500">{item.user?.email ?? '— (account non più presente)'}</p>
                     <p className="mt-1 text-xs text-gray-500">
-                      Piano {item.user?.subscription_plan === 'pro' ? 'Pro' : 'Base'} · pagato {euro(item.amount_cents)} negli ultimi 14 giorni
+                      Piano {item.user?.subscription_plan === 'pro' ? 'Pro' : 'Plus'} · pagato {euro(item.amount_cents)} negli ultimi 14 giorni
                     </p>
                   </div>
                   <div className="text-right text-xs text-gray-500">

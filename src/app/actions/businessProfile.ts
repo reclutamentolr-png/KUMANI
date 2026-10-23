@@ -3,7 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { BUSINESS_SOCIALS, type BusinessProfile } from '@/lib/businessProfile'
 
-// Salva la «Scheda attività» (Base o Pro: lo controllano le regole del
+// Salva la «Scheda attività» (Plus o Pro: lo controllano le regole del
 // database su quote_issuer_profiles)
 export async function saveBusinessProfile(
   form: Omit<BusinessProfile, 'logoUrl'>,

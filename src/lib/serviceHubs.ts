@@ -15,7 +15,7 @@
 export const SERVICE_HUBS = ['controlla', 'proteggi', 'segnala', 'benessere', 'giochi', 'qr', 'spendly', 'lavoro', 'gestione', 'ufficio', 'negozio', 'vetrina', 'social', 'agenda', 'casaauto', 'viaggi', 'amicizie'] as const
 export type ServiceHub = (typeof SERVICE_HUBS)[number]
 
-// planTool: lo strumento da cui prendere il piano (Free/Base/Pro) quando la
+// planTool: lo strumento da cui prendere il piano (Free/Plus/Pro) quando la
 // scheda non è uno strumento a sé; plan: piano fisso (es. pagine pubbliche)
 export type HubTab = { key: string; href: string; tool: string | null; planTool?: string; plan?: 'free' }
 

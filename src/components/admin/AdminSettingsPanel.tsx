@@ -209,7 +209,7 @@ export default function AdminSettingsPanel() {
             </p>
             {planPrices ? (
               <div className="flex flex-wrap gap-3 text-sm">
-                <span className="rounded-lg bg-gray-100 px-3 py-2 text-sm font-semibold text-gray-800">Base: {planPrices.base} € / anno</span>
+                <span className="rounded-lg bg-gray-100 px-3 py-2 text-sm font-semibold text-gray-800">Plus: {planPrices.base} € / anno</span>
                 <span className="rounded-lg bg-gray-100 px-3 py-2 text-sm font-semibold text-gray-800">Pro: {planPrices.pro} € / anno</span>
                 {planPrices.source !== 'stripe' && (
                   <span className="rounded-lg bg-amber-50 px-3 py-2 text-amber-800">Stripe non raggiungibile: valori di riserva salvati</span>
@@ -308,15 +308,15 @@ export default function AdminSettingsPanel() {
             </label>
             <p className="text-xs text-gray-500 mb-3">
               Punti assegnati <strong>solo allo sponsor diretto</strong> quando un suo invitato paga con carta: primo
-              abbonamento Base o Pro, oppure passaggio da Base a Pro (in proporzione a quanto pagato). Voucher e rinnovi
+              abbonamento Plus o Pro, oppure passaggio da Plus a Pro (in proporzione a quanto pagato). Voucher e rinnovi
               non danno punti; un rimborso li toglie. <strong>Bonus Accoglienza:</strong> dal N° invitato attivato in poi,
               una parte dei punti dello sponsor passa a chi accoglie la persona nella propria stella (un altro Kumano):
-              Base 10 → 9 allo sponsor + 1; Pro 120 → 110 + 10. Nel passaggio a Pro di una persona accolta, la stessa
+              Plus 10 → 9 allo sponsor + 1; Pro 120 → 110 + 10. Nel passaggio a Pro di una persona accolta, la stessa
               proporzione (101 + 9). Non è un costo in più per KUMANI: lo cede lo sponsor.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-3xl">
               <label className="block max-w-xs">
-                <span className="mb-1 block text-xs font-medium text-gray-600">Attivazione Base</span>
+                <span className="mb-1 block text-xs font-medium text-gray-600">Attivazione Plus</span>
                 <input
                   type="number"
                   min="0"
@@ -359,7 +359,7 @@ export default function AdminSettingsPanel() {
                 />
               </label>
               <label className="block max-w-xs">
-                <span className="mb-1 block text-xs font-medium text-gray-600">Punti ceduti per un Base</span>
+                <span className="mb-1 block text-xs font-medium text-gray-600">Punti ceduti per un Plus</span>
                 <input
                   type="number"
                   min="0"
@@ -381,7 +381,7 @@ export default function AdminSettingsPanel() {
             </div>
             <p className="mt-2 text-xs text-gray-500">
               Esempio con i valori attuali: dal {systemSettings.welcome_bonus_from_direct ?? 6}° invitato lo sponsor riceve{' '}
-              {(systemSettings.network_points_activation_base ?? 10) - (systemSettings.welcome_bonus_base ?? 1)} punti per un Base e{' '}
+              {(systemSettings.network_points_activation_base ?? 10) - (systemSettings.welcome_bonus_base ?? 1)} punti per un Plus e{' '}
               {(systemSettings.network_points_activation_pro ?? 120) - (systemSettings.welcome_bonus_pro ?? 10)} per un Pro; chi accoglie riceve{' '}
               {systemSettings.welcome_bonus_base ?? 1} e {systemSettings.welcome_bonus_pro ?? 10}.
             </p>
@@ -392,10 +392,10 @@ export default function AdminSettingsPanel() {
               Qualifiche e voucher premio
             </label>
             <p className="text-xs text-gray-500 mb-3">
-              Una qualifica si raggiunge con <strong>entrambi</strong> i requisiti: attivazioni Base/Pro pagate con carta
+              Una qualifica si raggiunge con <strong>entrambi</strong> i requisiti: attivazioni Plus/Pro pagate con carta
               delle persone invitate (i Pass e le attivazioni con voucher non contano) e KU Points guadagnati in totale
               (compresi quelli ricevuti dalla struttura e dai Pass). Al raggiungimento arrivano da soli nel Wallet i voucher
-              Base di premio; con Kuman Black anche un voucher Pro di un anno per sé. Se un rimborso fa perdere i requisiti,
+              Plus di premio; con Kuman Black anche un voucher Pro di un anno per sé. Se un rimborso fa perdere i requisiti,
               i voucher premio non ancora usati vengono annullati.
             </p>
             <div className="space-y-2 max-w-2xl">
@@ -433,7 +433,7 @@ export default function AdminSettingsPanel() {
             </label>
             <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl">
               <label className="block max-w-xs">
-                <span className="mb-1 block text-xs font-medium text-gray-600">Valore voucher Base (€)</span>
+                <span className="mb-1 block text-xs font-medium text-gray-600">Valore voucher Plus (€)</span>
                 <input
                   type="number"
                   min="0"
@@ -566,7 +566,7 @@ export default function AdminSettingsPanel() {
                   const months = `${key}_months` as const
                   return (
                     <div key={key} className="text-xs text-gray-600">
-                      {name} · {plan === 'pro' ? 'Pro' : 'Base'}
+                      {name} · {plan === 'pro' ? 'Pro' : 'Plus'}
                       <div className="mt-1 flex gap-2">
                         <input
                           type="number"
@@ -612,7 +612,7 @@ export default function AdminSettingsPanel() {
                 </label>
               ))}
             </div>
-            <p className="text-xs text-gray-500 mt-1">Chi ha Base o Pro attiva gratis queste sorprese; finite quelle paga con la carta o con i punti. Le quote ripartono a inizio mese, trimestre o anno (ora di Roma). 0 = nessuna inclusa per quel tipo. Si usa prima il regalo della festa, poi la quota, poi il regalo del rinnovo.</p>
+            <p className="text-xs text-gray-500 mt-1">Chi ha Plus o Pro attiva gratis queste sorprese; finite quelle paga con la carta o con i punti. Le quote ripartono a inizio mese, trimestre o anno (ora di Roma). 0 = nessuna inclusa per quel tipo. Si usa prima il regalo della festa, poi la quota, poi il regalo del rinnovo.</p>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Traduzioni AI del Menù al giorno (per ristorante)</label>

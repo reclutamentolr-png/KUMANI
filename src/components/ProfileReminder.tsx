@@ -12,7 +12,7 @@ import { dismissProfileReminder } from '@/app/actions/profileChanges'
 //   lo registra (profile_reminder_dismissed_at) e dalla pagina successiva la
 //   richiesta diventa obbligatoria: una finestra che copre l'app e non si
 //   chiude finché i dati non sono completi (o si esce);
-// - piano Base o Pro attivo (pagato, con un codice o in prova Pro): subito e
+// - piano Plus o Pro attivo (pagato, con un codice o in prova Pro): subito e
 //   obbligatoria, perché i dati servono.
 // Il server dice quale caso (getIncompleteProfile: paid, dueAt).
 const STORAGE_KEY = 'kumani_profile_reminder'
@@ -71,7 +71,7 @@ export default function ProfileReminder() {
   const [profile, setProfile] = useState<Record<string, unknown> | null>(null)
   // Promemoria già chiuso una volta (dal server): richiesta obbligatoria.
   const [dismissed, setDismissed] = useState(false)
-  // Base o Pro attivo: richiesta subito obbligatoria
+  // Plus o Pro attivo: richiesta subito obbligatoria
   const [paid, setPaid] = useState(false)
   // Gratis: da quando chiederlo (7 giorni dopo l'iscrizione)
   const [dueAt, setDueAt] = useState<number | null>(null)

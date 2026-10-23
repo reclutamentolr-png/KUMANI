@@ -54,7 +54,7 @@ export async function getProposal(id: string): Promise<Proposal | null> {
   return data ? normalize(data as Record<string, unknown>) : null
 }
 
-// Chi può proporre: Base o Pro (o Staff); quante proposte fatte questa settimana
+// Chi può proporre: Plus o Pro (o Staff); quante proposte fatte questa settimana
 export async function proposeAccess(): Promise<{ canPropose: boolean; reason: 'plan' | 'week' | null }> {
   const supabase = await createClient()
   const {

@@ -30,7 +30,7 @@ export default async function VoucherBatchPrintPage({ params }: { params: Promis
         <div className="mb-6 mt-2">
           <h1 className="text-2xl font-bold text-[var(--ink)]">Stampa voucher · {batch.business_name}</h1>
           <p className="text-sm text-[var(--muted)]">
-            Piano {batch.plan === 'pro' ? 'Pro' : 'Base'} · {available.length} voucher disponibili da stampare su {codes.length}
+            Piano {batch.plan === 'pro' ? 'Pro' : 'Plus'} · {available.length} voucher disponibili da stampare su {codes.length}
           </p>
         </div>
         <VoucherPrintStudio codes={available} plan={batch.plan === 'pro' ? 'pro' : 'base'} siteUrl={site} fileBase={fileBase} offeredByDefault={batch.business_name} admin />

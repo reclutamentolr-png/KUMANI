@@ -494,7 +494,7 @@ export default function AdminDashboard({ permissions, userName, locale, initialS
 
   const handleCreateBatch = async () => {
     const quantity = parseInt(batchForm.quantity, 10) || 0
-    if (!(await askConfirm(`Generare ${quantity} coupon ${batchForm.plan === 'pro' ? 'PRO' : 'Base'} di attivazione per "${batchForm.businessName}"?`))) return
+    if (!(await askConfirm(`Generare ${quantity} coupon ${batchForm.plan === 'pro' ? 'PRO' : 'Plus'} di attivazione per "${batchForm.businessName}"?`))) return
     setCreatingBatch(true)
     const result = await createVoucherBatch({
       businessName: batchForm.businessName,
@@ -953,7 +953,7 @@ L'accesso viene registrato.`))) return
                       {/* Piano e «F» per i primi 50 della promozione di lancio */}
                       {user.subscription_status === 'active' && !user.is_blocked && (
                         <span className={`ml-1 mt-1 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-bold ${user.subscription_plan === 'pro' ? 'bg-[var(--ink)] text-[var(--gold-bright)]' : 'bg-blue-100 text-blue-800'}`}>
-                          {user.subscription_plan === 'pro' ? 'Pro' : 'Base'}
+                          {user.subscription_plan === 'pro' ? 'Pro' : 'Plus'}
                         </span>
                       )}
                       {user.founder && (
@@ -1112,7 +1112,7 @@ L'accesso viene registrato.`))) return
           </h2>
           <p className="text-gray-600 mt-1">
             Abilita o disabilita gli strumenti e scegli per ognuno il piano richiesto: <strong>Gratis</strong> (tutti gli
-            iscritti), <strong>Base</strong> (abbonamento 49 €/anno) o <strong>Pro</strong> (149 €/anno, include il Base).
+            iscritti), <strong>Plus</strong> (abbonamento 49 €/anno) o <strong>Pro</strong> (149 €/anno, include il Plus).
             La scelta vale subito ovunque, anche per gli strumenti che verranno aggiunti.
           </p>
         </div>
@@ -1184,7 +1184,7 @@ L'accesso viene registrato.`))) return
                                 : 'bg-white text-gray-600 hover:bg-gray-100'
                             }`}
                           >
-                            {plan === 'free' ? 'Gratis' : plan === 'base' ? 'Base' : 'Pro'}
+                            {plan === 'free' ? 'Gratis' : plan === 'base' ? 'Plus' : 'Pro'}
                           </button>
                         )
                       })}
@@ -1432,8 +1432,8 @@ L'accesso viene registrato.`))) return
           propri clienti. Ogni codice attiva 1 anno di abbonamento, vale una sola volta e si può inserire già in
           registrazione: il QR stampato sul cartoncino apre la registrazione con il codice compilato. Gli abbonamenti
           attivati con voucher non si rinnovano da soli e non generano KU Points a chi invita.
-          Scegli il piano del lotto: <strong>Base</strong> oppure <strong>Pro</strong> (per negozi e professionisti:
-          attiva 1 anno di Pro, che include anche il Base).
+          Scegli il piano del lotto: <strong>Plus</strong> oppure <strong>Pro</strong> (per negozi e professionisti:
+          attiva 1 anno di Pro, che include anche il Plus).
         </p>
       </div>
       <div className="flex items-center gap-2">
@@ -1452,7 +1452,7 @@ L'accesso viene registrato.`))) return
                   : 'bg-white text-gray-600 hover:bg-gray-100'
               }`}
             >
-              {plan === 'pro' ? 'Pro' : 'Base'}
+              {plan === 'pro' ? 'Pro' : 'Plus'}
             </button>
           ))}
         </div>
@@ -1528,7 +1528,7 @@ L'accesso viene registrato.`))) return
                     {b.plan === 'pro' ? (
                       <span className="rounded-full bg-[var(--ink)] px-2 py-0.5 text-[10px] font-bold text-[var(--gold-bright)]">PRO</span>
                     ) : (
-                      <span className="text-xs text-gray-600">Base</span>
+                      <span className="text-xs text-gray-600">Plus</span>
                     )}
                   </td>
                   <td className="py-2 pr-3 text-gray-700">{b.redeemed}/{b.quantity}</td>
@@ -1601,7 +1601,7 @@ L'accesso viene registrato.`))) return
 
     return (
       <div className="space-y-6">
-        {/* Un anno di Base o Pro in regalo a un Kumano, con il biglietto */}
+        {/* Un anno di Plus o Pro in regalo a un Kumano, con il biglietto */}
         <AdminGiftSubscriptionPanel />
         <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
           <h3 className="font-bold text-gray-900">Nuovo coupon</h3>
@@ -1822,10 +1822,10 @@ L'accesso viene registrato.`))) return
                 onChange={(e) => setProfileForm({ ...profileForm, subscription_plan: e.target.value })}
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--gold)]"
               >
-                <option value="base">Base</option>
+                <option value="base">Plus</option>
                 <option value="pro">Pro</option>
               </select>
-              <p className="text-xs text-gray-400 mt-1">Vale quando l&apos;abbonamento è attivo (strumenti Base o anche Pro)</p>
+              <p className="text-xs text-gray-400 mt-1">Vale quando l&apos;abbonamento è attivo (strumenti Plus o anche Pro)</p>
             </div>
             <div><label className="block text-sm font-medium text-gray-700 mb-1">Scadenza abbonamento</label>
               <input

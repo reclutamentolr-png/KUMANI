@@ -17,7 +17,7 @@ import { confirmToolPassSession, getMyToolPasses, getToolPassOffer } from '@/lib
 const ERRORS = ['unavailable', 'already', 'business', 'vat', 'consent', 'terms', 'payment', 'soon'] as const
 
 // Pass di un singolo servizio: acquisto con carta (1 anno, pagamento unico),
-// attivazione con codice, oppure abbonamento Base/Pro per avere tutto.
+// attivazione con codice, oppure abbonamento Plus/Pro per avere tutto.
 export default async function ToolPassPage({
   params,
   searchParams,

@@ -21,7 +21,7 @@ export function isActiveSubscription(profile: SubscriptionProfile | null | undef
  * Gate used by premium marketplace tools that must re-check access server-side
  * (not just hide the marketplace card). The real rule lives in the database:
  * can_use_tool() checks the admin on/off toggle and whether the user's plan
- * (Base/Pro, trial included) covers the plan the admin requires for the tool.
+ * (Plus/Pro, trial included) covers the plan the admin requires for the tool.
  * Must be called with the user's session client (it uses auth.uid()).
  */
 export async function hasActiveToolAccess(
@@ -35,7 +35,7 @@ export async function hasActiveToolAccess(
   if (!error && data) return data.allowed
 
   // Controllo non riuscito (errore momentaneo del database): meglio negare
-  // e far riprovare che aprire uno strumento Pro a chi ha il Base.
+  // e far riprovare che aprire uno strumento Pro a chi ha il Plus.
   console.error(`[subscriptionGate] can_use_tool(${toolName}) failed for ${userId}:`, error?.message ?? 'no data')
   return false
 }

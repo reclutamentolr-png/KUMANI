@@ -12,7 +12,7 @@ import { isGuestUser } from '@/lib/trials'
 export const dynamic = 'force-dynamic'
 export const metadata: Metadata = { robots: { index: false, follow: false } }
 
-// Codici di prova dei servizi per Kumani (Base o Pro) e agenti: si crea un
+// Codici di prova dei servizi per Kumani (Plus o Pro) e agenti: si crea un
 // codice per un servizio e una durata e lo si manda a chi vuole provarlo
 // senza registrarsi.
 export default async function TrialCodesPage({ params }: { params: Promise<{ locale: string }> }) {

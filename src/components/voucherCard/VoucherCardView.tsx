@@ -34,7 +34,7 @@ export default function VoucherCardView({
 }) {
   const t = useTranslations('voucherCard')
   const locale = useLocale()
-  const planName = plan === 'pro' ? 'Pro' : 'Base'
+  const planName = plan === 'pro' ? 'Pro' : 'Plus'
   const [busy, setBusy] = useState(false)
   const [done, setDone] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)

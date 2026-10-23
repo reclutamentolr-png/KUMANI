@@ -9,7 +9,7 @@ import { MAX_ACTIVE_TRIAL_CODES, TRIAL_DURATIONS, TRIAL_TOOLS } from '@/lib/tria
 import { askConfirm } from '@/lib/confirm'
 
 // Codici di prova dei servizi: crea, manda (WhatsApp o link) e cancella.
-// Usato dai Kumani (Base/Pro), dagli agenti e in Admin (tutti i codici).
+// Usato dai Kumani (Plus/Pro), dagli agenti e in Admin (tutti i codici).
 
 const buildWhatsAppHref = (message: string) => `https://wa.me/?text=${encodeURIComponent(message)}`
 

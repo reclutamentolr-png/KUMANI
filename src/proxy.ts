@@ -20,7 +20,7 @@ const READ_ONLY_WHEN_OFF = ['convivio', 'listings', 'chat', 'timebank', 'mosaic'
 
 // Strumenti a pagamento: se il controllo del piano (can_use_tool) non riesce
 // per un errore momentaneo, l'accesso viene negato (meglio "riprova" che
-// aprire uno strumento Pro a chi ha il Base). La regola vera è nel database.
+// aprire uno strumento Pro a chi ha il Plus). La regola vera è nel database.
 const PAID_TOOLS = [
   'link-in-bio',
   'memolife',

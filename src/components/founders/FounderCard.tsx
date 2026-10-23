@@ -4,7 +4,7 @@ import Link from '@/components/LocalizedLink'
 import { pushDb } from '@/lib/push'
 
 // Home: «Sei tra i primi 50 (n°X)» con lo sconto del 100% applicato al
-// Piano Base per 12 mesi e il collegamento alle condizioni della promozione.
+// Piano Plus per 12 mesi e il collegamento alle condizioni della promozione.
 export default async function FounderCard({ userId }: { userId: string }) {
   const db = pushDb()
   const { data: f } = await db.from('founder_members').select('number').eq('user_id', userId).maybeSingle()

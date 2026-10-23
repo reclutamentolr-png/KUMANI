@@ -10,7 +10,7 @@ const euro = (cents: number) => new Intl.NumberFormat('it-IT', { style: 'currenc
 const day = (iso: string) => new Date(iso).toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' })
 
 // Admin → Voucher e coupon → Regali: regali comprati dagli utenti (Pass di un
-// servizio o un anno di Base/Pro), con lo stato di ogni codice. Il rimborso
+// servizio o un anno di Plus/Pro), con lo stato di ogni codice. Il rimborso
 // si fa da Stripe: i codici non ancora attivati si annullano da soli.
 export default function GiftOrdersPanel() {
   const marketplaceT = useTranslations('marketplace')
@@ -37,7 +37,7 @@ export default function GiftOrdersPanel() {
     const p = people[id]
     return p ? `${`${p.first_name ?? ''} ${p.last_name ?? ''}`.trim() || '—'}${p.email ? ` (${p.email})` : ''}` : 'account cancellato'
   }
-  const item = (o: AdminGiftOrder) => (o.kind === 'plan' ? `Un anno di KUMANI ${o.plan === 'pro' ? 'Pro' : 'Base'}` : `Pass ${toolNames.get(o.tool ?? '') ?? o.tool}`)
+  const item = (o: AdminGiftOrder) => (o.kind === 'plan' ? `Un anno di KUMANI ${o.plan === 'pro' ? 'Pro' : 'Plus'}` : `Pass ${toolNames.get(o.tool ?? '') ?? o.tool}`)
   const codeState = (c: AdminGiftCode, o: AdminGiftOrder) =>
     c.revoked_at || o.refunded_at
       ? { text: 'annullato', cls: 'bg-red-50 text-red-700' }
@@ -59,7 +59,7 @@ export default function GiftOrdersPanel() {
   return (
     <div className="space-y-4">
       <p className="text-sm text-gray-600">
-        Regali comprati dagli utenti dalla pagina «Regala KUMANI»: ogni codice attiva per un anno il Pass di un servizio oppure KUMANI Base o Pro, per chi lo
+        Regali comprati dagli utenti dalla pagina «Regala KUMANI»: ogni codice attiva per un anno il Pass di un servizio oppure KUMANI Plus o Pro, per chi lo
         riceve. Si attivano entro un anno dall&apos;acquisto; chi compra non può usare i propri. Nessun KU Point sui regali. Per un rimborso usa Stripe: i
         codici non ancora attivati si annullano automaticamente.
       </p>

@@ -5,7 +5,7 @@ import { BRAND_SERVICES, brandColors, cleanPalette, type BrandFollow, type Brand
 
 // «I colori del tuo brand»: si salvano nella Scheda attività
 // (quote_issuer_profiles). I servizi che seguono il brand li prende il
-// database (brand_sync); il piano (Base o Pro) lo controllano le sue regole.
+// database (brand_sync); il piano (Plus o Pro) lo controllano le sue regole.
 
 export type BrandState = { palette: BrandPalette | null; follow: BrandFollow; logoUrl: string | null }
 

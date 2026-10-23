@@ -6,7 +6,7 @@ import { pushDb } from '@/lib/push'
 import { FOUNDERS_CACHE_TAG, SOLD_OUT_BANNER_MS, includeExistingFounders, soldOutHours } from '@/lib/founders'
 
 // Admin → Voucher e coupon → Fondatori: promozione accesa/spenta, posti,
-// elenco dei Fondatori e regalo del Base agli iscritti di prima.
+// elenco dei Fondatori e regalo del Plus agli iscritti di prima.
 
 export type AdminFounder = { number: number | null; counted: boolean; name: string; email: string | null; joinedAt: string; voucher: 'active' | 'redeemed' | 'none' }
 

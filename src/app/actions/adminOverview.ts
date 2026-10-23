@@ -7,7 +7,7 @@ import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { getStripe } from '@/lib/stripe'
 
 // Admin → Panoramica: utenti per piano, servizi più usati per fascia
-// (Gratis / Base / Pro), abbonamenti pagati oggi / in settimana / nel mese
+// (Gratis / Plus / Pro), abbonamenti pagati oggi / in settimana / nel mese
 // e attivazioni con voucher. Solo lettura.
 
 const db = () =>
@@ -137,7 +137,7 @@ export async function adminOverview(): Promise<AdminOverview | null> {
     paid.error = true
   }
 
-  // ---- Voucher: abbonamenti (voucher + regali di Base/Pro) e servizi singoli (codici Pass + regali di Pass)
+  // ---- Voucher: abbonamenti (voucher + regali di Plus/Pro) e servizi singoli (codici Pass + regali di Pass)
   const [vRedeemed, vActive, giftPlanRedeemed, giftPlanOpen, passFromCodes, passCodesOpen, giftPassOpen] = await Promise.all([
     count(service.from('subscription_vouchers').select('id', { count: 'exact', head: true }).eq('status', 'redeemed')),
     count(service.from('subscription_vouchers').select('id', { count: 'exact', head: true }).eq('status', 'active')),

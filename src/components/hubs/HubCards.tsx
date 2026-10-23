@@ -8,7 +8,7 @@ import type { ServiceItem } from '@/lib/servicesCatalog'
 import { HUB_HOME, HUB_TABS, type ServiceHub } from '@/lib/serviceHubs'
 import type { RequiredPlan } from '@/lib/plans'
 
-// Schede in ordine di pacchetto: prima Free, poi Base, poi Pro
+// Schede in ordine di pacchetto: prima Free, poi Plus, poi Pro
 const PLAN_RANK: Record<RequiredPlan, number> = { free: 0, base: 1, pro: 2 }
 
 const HUB_ICON: Record<ServiceHub, LucideIcon> = { controlla: ScanSearch, proteggi: ShieldCheck, segnala: Megaphone, benessere: Flower2, giochi: Dices, qr: QrCode, spendly: PiggyBank, lavoro: Briefcase, gestione: BookUser, ufficio: Signature, negozio: Store, vetrina: PanelsTopLeft, social: Share2, agenda: CalendarClock, casaauto: House, viaggi: Plane, amicizie: HeartHandshake }

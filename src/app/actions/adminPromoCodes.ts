@@ -4,7 +4,7 @@ import { randomBytes } from 'crypto'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { verifyAdmin } from '@/lib/verifyAdmin'
 
-// Admin → «Codici omaggio»: abbonamenti di un anno (Base o Pro) regalati
+// Admin → «Codici omaggio»: abbonamenti di un anno (Plus o Pro) regalati
 // dallo Staff per promuovere KUMANI. Sono voucher KVA- come quelli di
 // «Voucher» (stessa attivazione, una sola volta), con purpose = 'promo', il
 // nome di chi li riceve e una campagna facoltativa.

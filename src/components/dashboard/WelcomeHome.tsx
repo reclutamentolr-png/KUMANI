@@ -11,7 +11,7 @@ import { FROM_ICONS_KEY } from '@/lib/homeView'
 
 // Home di benvenuto (nuovi iscritti Gratis): «Ciao …, scegli cosa ti
 // interessa di più» con le voci di «In cosa possiamo darti una mano?». Ogni
-// voce si apre con tutti i suoi servizi (Gratis, Base e Pro): con la «i» si
+// voce si apre con tutti i suoi servizi (Gratis, Plus e Pro): con la «i» si
 // legge a cosa servono, con «Aggiungi» finiscono in «I tuoi servizi». Sotto,
 // «Inizia da qui»: servizi pronti da provare in riquadri quadrati. In fondo
 // «Mostra la Home completa».
@@ -109,7 +109,7 @@ export default function WelcomeHome({
           <div id="welcome-need-panel" className="mt-4 rounded-2xl border border-[var(--gold)]/30 bg-white/[0.04] p-4">
             <p className="text-sm leading-6 text-white/80">{activeNeed.intro}</p>
             <ul className="mt-3 divide-y divide-white/10">
-              {/* In ordine di pacchetto: prima Free, poi Base, poi Pro */}
+              {/* In ordine di pacchetto: prima Free, poi Plus, poi Pro */}
               {[...activeNeed.services].sort((a, b) => PLAN_RANK[a.plan] - PLAN_RANK[b.plan]).map((service) => {
                 const Icon = marketplaceIconMap[service.iconName] ?? Smartphone
                 const isOn = favorites.has(service.toolName)

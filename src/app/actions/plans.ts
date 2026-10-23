@@ -18,7 +18,7 @@ const getServiceClient = () =>
 
 type UpgradeReason = 'not_logged' | 'not_stripe' | 'unavailable' | 'already_pro' | 'stripe_error' | 'consent' | 'soon'
 
-// Abbonamento Stripe attivo (Base con carta) da portare a Pro, con i controlli
+// Abbonamento Stripe attivo (Plus con carta) da portare a Pro, con i controlli
 // comuni ad anteprima e passaggio.
 async function findUpgradableSubscription(): Promise<
   { ok: true; userId: string; proPrice: string; subscription: Stripe.Subscription; item: Stripe.SubscriptionItem } | { ok: false; reason: UpgradeReason }
@@ -106,7 +106,7 @@ export async function previewUpgradeToPro(): Promise<
   }
 }
 
-// Passaggio da Base a Pro per chi paga già con carta: si cambia il prezzo
+// Passaggio da Plus a Pro per chi paga già con carta: si cambia il prezzo
 // dell'abbonamento Stripe esistente e Stripe addebita subito solo la
 // differenza per il periodo che resta (niente secondo abbonamento).
 // Chi non ha un abbonamento con carta passa dal checkout (?plan=pro).

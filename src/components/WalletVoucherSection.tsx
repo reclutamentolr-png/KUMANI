@@ -214,7 +214,7 @@ export default function WalletVoucherSection({
                     </summary>
                     <div className="space-y-2 border-t border-[var(--gold)]/20 px-3 py-3">
                     {g.items.map((v) => {
-                      const plan = v.plan === 'pro' ? 'Pro' : 'Base'
+                      const plan = v.plan === 'pro' ? 'Pro' : 'Plus'
                       return (
                         <div key={v.id} className="rounded-lg border border-gray-200 bg-white px-3 py-2">
                           <div className="flex flex-wrap items-center justify-between gap-2">

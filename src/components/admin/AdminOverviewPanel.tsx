@@ -7,8 +7,8 @@ import SignupAlertsToggle from '@/components/admin/SignupAlertsToggle'
 import SolveToggle from '@/components/admin/SolveToggle'
 
 // Admin → Panoramica: tre sezioni a riquadri quadrati.
-// Utenti (Free, Base, Pro, online ora, bloccati) · Servizi più usati per
-// fascia (Gratis, Base, Pro) · Abbonamenti pagati (oggi, settimana, mese) e
+// Utenti (Free, Plus, Pro, online ora, bloccati) · Servizi più usati per
+// fascia (Gratis, Plus, Pro) · Abbonamenti pagati (oggi, settimana, mese) e
 // attivazioni con voucher.
 
 const eur = (cents: number) => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(cents / 100)
@@ -153,7 +153,7 @@ export default function AdminOverviewPanel({ userName, onlineUsers }: { userName
       <Section title="Utenti" hint={u ? `${u.total} registrati in tutto` : undefined}>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
           <Tile label="Free" icon={<User className="h-3.5 w-3.5" />} value={u ? u.free : dash} sub={u && u.proTrial > 0 ? `di cui ${u.proTrial} in prova Pro` : 'Senza abbonamento'} />
-          <Tile tone="gold" label="Base" icon={<Users className="h-3.5 w-3.5" />} value={u ? u.base : dash} sub="Abbonamento Base attivo" />
+          <Tile tone="gold" label="Plus" icon={<Users className="h-3.5 w-3.5" />} value={u ? u.base : dash} sub="Abbonamento Plus attivo" />
           <Tile tone="ink" label="Pro" icon={<Crown className="h-3.5 w-3.5" />} value={u ? u.pro : dash} sub="Abbonamento Pro attivo" />
           <Tile tone="green" pulse label="Online ora" icon={<Activity className="h-3.5 w-3.5" />} value={onlineUsers} sub="Ultimi 15 minuti" />
           <Tile tone="red" label="Bloccati" icon={<Lock className="h-3.5 w-3.5" />} value={u ? u.blocked : dash} sub="Account bloccati" />
@@ -164,7 +164,7 @@ export default function AdminOverviewPanel({ userName, onlineUsers }: { userName
         {data ? (
           <div className="space-y-5">
             <ToolBand label="Gratis" tools={data.tools.free} tone="default" days={data.tools.days} />
-            <ToolBand label="Base" tools={data.tools.base} tone="gold" days={data.tools.days} />
+            <ToolBand label="Plus" tools={data.tools.base} tone="gold" days={data.tools.days} />
             <ToolBand label="Pro" tools={data.tools.pro} tone="ink" days={data.tools.days} />
           </div>
         ) : (
@@ -172,7 +172,7 @@ export default function AdminOverviewPanel({ userName, onlineUsers }: { userName
         )}
       </Section>
 
-      <Section title="Abbonamenti / Attivazioni" hint="Pagati: abbonamenti Base e Pro, passaggi a Pro e rinnovi pagati con Stripe (orario italiano)">
+      <Section title="Abbonamenti / Attivazioni" hint="Pagati: abbonamenti Plus e Pro, passaggi a Pro e rinnovi pagati con Stripe (orario italiano)">
         {data ? (
           <div className="space-y-5">
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
@@ -188,7 +188,7 @@ export default function AdminOverviewPanel({ userName, onlineUsers }: { userName
                 value={data.vouchers.plans.redeemed}
                 sub={
                   <>
-                    attivati (voucher e regali Base/Pro)
+                    attivati (voucher e regali Plus/Pro)
                     <br />
                     {data.vouchers.plans.available} ancora da usare
                   </>

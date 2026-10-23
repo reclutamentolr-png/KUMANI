@@ -8,7 +8,7 @@ import HubBar from '@/components/hubs/HubBar'
 // Nome del servizio nella scheda del browser
 export const generateMetadata = toolMetadata('hopla')
 
-// HOPLÀ (piano Base e Pro): foto e video dal telefono al PC, direttamente.
+// HOPLÀ (piano Plus e Pro): foto e video dal telefono al PC, direttamente.
 // La pagina è protetta dal proxy come gli altri strumenti; i file passano
 // da dispositivo a dispositivo e non vengono mai salvati sui server.
 export default async function HoplaPage() {

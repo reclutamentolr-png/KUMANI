@@ -1,6 +1,6 @@
 // Servizi raggruppati per BISOGNO (pagina Servizi e domanda del primo
 // accesso), non per prezzo: chi entra cerca "mi serve qualcosa contro le
-// truffe", non "cosa c'è nel Base". Ogni servizio sta in un solo gruppo.
+// truffe", non "cosa c'è nel Plus". Ogni servizio sta in un solo gruppo.
 
 export const SERVICE_GROUPS = ['security', 'money', 'work', 'business', 'social', 'wellness', 'fun'] as const
 export type ServiceGroup = (typeof SERVICE_GROUPS)[number]

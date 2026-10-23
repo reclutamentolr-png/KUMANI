@@ -6,7 +6,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import { Crown, LoaderCircle, Sparkles } from 'lucide-react'
 import { claimSurpriseWithPlan } from '@/app/actions/surprise'
 
-// Attivare la sorpresa con una di quelle incluse nel piano Base o Pro.
+// Attivare la sorpresa con una di quelle incluse nel piano Plus o Pro.
 // «what» spiega quale si usa (regalo della festa, quota del periodo o regalo
 // del rinnovo, nello stesso ordine del database). Prima si conferma.
 export default function SurprisePlanClaim({ giftId, what }: { giftId: string; what: string }) {

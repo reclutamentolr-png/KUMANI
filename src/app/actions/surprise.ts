@@ -273,7 +273,7 @@ export async function paySurpriseWithPoints(giftId: string, currency: 'karma' | 
   return data.success ? { success: true, id: giftId } : { success: false, message: data.reason ?? 'payment' }
 }
 
-// Sorpresa inclusa nel piano Base o Pro (quota del periodo o regalo di rinnovo e
+// Sorpresa inclusa nel piano Plus o Pro (quota del periodo o regalo di rinnovo e
 // feste): il database sceglie quale usare e attiva subito la sorpresa.
 export async function claimSurpriseWithPlan(giftId: string): Promise<Result> {
   const g = await me()

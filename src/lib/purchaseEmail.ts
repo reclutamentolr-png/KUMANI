@@ -42,13 +42,13 @@ export async function sendPurchaseConfirmation(raw: Stripe.Invoice): Promise<voi
   const date = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Rome' })
   const money = new Intl.NumberFormat(locale, { style: 'currency', currency: (invoice.currency ?? 'eur').toUpperCase() })
 
-  // Riga principale (nel passaggio a Pro la prima è lo storno del Base)
+  // Riga principale (nel passaggio a Pro la prima è lo storno del Plus)
   const main = invoice.lines.data.reduce<(typeof invoice.lines.data)[number] | undefined>(
     (best, line) => (!best || line.amount > best.amount ? line : best),
     undefined
   )
   const priceId = main?.pricing?.price_details?.price ?? (main as { price?: { id?: string } } | undefined)?.price?.id
-  const plan = priceId && priceId === process.env.STRIPE_PRICE_ID_PRO ? 'KUMANI Pro' : 'KUMANI Base'
+  const plan = priceId && priceId === process.env.STRIPE_PRICE_ID_PRO ? 'KUMANI Pro' : 'KUMANI Plus'
   const paidAt = (invoice.status_transitions?.paid_at ?? invoice.created) * 1000
   const validUntil = main?.period?.end ? main.period.end * 1000 : null
 

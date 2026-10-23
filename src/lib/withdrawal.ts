@@ -42,7 +42,7 @@ export async function withdrawableInvoices(subscriptionId: string, now = Math.fl
       const invoice = raw as InvoiceLike
       const paidAt = invoice.status_transitions?.paid_at ?? invoice.created
       // Periodo pagato: quello della riga principale (nel passaggio a Pro la
-      // prima riga è lo storno del Base)
+      // prima riga è lo storno del Plus)
       const main = invoice.lines.data.reduce<(typeof invoice.lines.data)[number] | undefined>(
         (best, line) => (!best || line.amount > best.amount ? line : best),
         undefined

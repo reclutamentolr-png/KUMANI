@@ -5,7 +5,7 @@ import { getFoundersStatus } from '@/lib/founders'
 import { formatOpenDate, getPlansGate } from '@/lib/plansGate'
 
 // «Lancio Beta: entra tra i primi 50 utenti»: sconto commerciale del 100% sul
-// Piano Base. Fascia dorata in cima alla homepage e riquadro grande (sopra i
+// Piano Plus. Fascia dorata in cima alla homepage e riquadro grande (sopra i
 // piani, in fondo alla homepage e nella registrazione), con i posti rimasti.
 // Finiti i posti diventa «esauriti in N ore. Grazie!» per 48 ore, poi
 // sparisce; sparisce anche con la promozione spenta (Admin).

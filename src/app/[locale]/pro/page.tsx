@@ -25,7 +25,7 @@ export const dynamic = 'force-dynamic'
 
 // Pagina "KUMANI Pro": strumenti del piano Pro (decisi dall'admin in
 // Admin → Marketplace), prezzo e pulsante adatto alla situazione:
-// non iscritto → registrazione; Base con carta → passaggio a Pro (Stripe
+// non iscritto → registrazione; Plus con carta → passaggio a Pro (Stripe
 // calcola la differenza); altrimenti → checkout Pro.
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('plans')

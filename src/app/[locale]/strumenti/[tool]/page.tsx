@@ -78,7 +78,7 @@ export default async function ToolSharePage({ params }: Props) {
   const tool = getMarketplaceTools(tm).find((item) => item.toolName === toolName)
   if (!tool) notFound()
 
-  // Piano richiesto dallo strumento (deciso dall'admin): Gratis / Base / Pro.
+  // Piano richiesto dallo strumento (deciso dall'admin): Gratis / Plus / Pro.
   const setting = await toolSetting(tool.toolName)
   const off = setting?.is_enabled === false
   const requiredPlan = ((setting?.required_plan as string | undefined) ?? (tool.requiresSubscription ? 'base' : 'free')) as 'free' | 'base' | 'pro'
@@ -109,7 +109,7 @@ export default async function ToolSharePage({ params }: Props) {
       '@type': 'Offer',
       price: requiredPlan === 'free' ? 0 : requiredPlan === 'pro' ? prices.pro : prices.base,
       priceCurrency: 'EUR',
-      ...(requiredPlan === 'free' ? {} : { description: requiredPlan === 'pro' ? 'KUMANI Pro' : 'KUMANI Base' }),
+      ...(requiredPlan === 'free' ? {} : { description: requiredPlan === 'pro' ? 'KUMANI Pro' : 'KUMANI Plus' }),
     },
   }
 

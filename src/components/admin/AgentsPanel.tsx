@@ -548,7 +548,7 @@ function CredentialsBox({ credentials, onClose }: { credentials: Credentials; on
 type Payout = { id: string; paidOn: string; amountCents: number; reference: string | null }
 
 const KIND_LABELS: Record<AdminCommission['kind'], string> = { first: 'Prima vendita', renewal: 'Rinnovo', adjustment: 'Rettifica' }
-const PLAN_LABELS: Record<string, string> = { base: 'Base', pro: 'Pro' }
+const PLAN_LABELS: Record<string, string> = { base: 'Plus', pro: 'Pro' }
 
 function stateText(c: AdminCommission) {
   if (c.state === 'pending') return `in maturazione fino al ${day(c.maturesAt)}`

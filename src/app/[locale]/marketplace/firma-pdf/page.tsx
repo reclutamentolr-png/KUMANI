@@ -14,7 +14,7 @@ const marck = Marck_Script({ subsets: ['latin', 'cyrillic'], weight: '400', disp
 // Nome del servizio nella scheda del browser
 export const generateMetadata = toolMetadata('firma-pdf')
 
-// FIRMA PDF (piano Base e Pro): il PDF si apre e si firma nel browser.
+// FIRMA PDF (piano Plus e Pro): il PDF si apre e si firma nel browser.
 // La pagina è protetta dal proxy come gli altri strumenti; il documento
 // non viene mai caricato sui server.
 export default async function FirmaPdfPage() {

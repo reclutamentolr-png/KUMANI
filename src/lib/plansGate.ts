@@ -3,7 +3,7 @@ import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { romeDate } from '@/lib/christmasShared'
 
 // «Piani in arrivo» (Admin → Apertura piani): prima del lancio dei piani a
-// pagamento si usa KUMANI gratis; chi prova ad abbonarsi (Base, Pro o un anno
+// pagamento si usa KUMANI gratis; chi prova ad abbonarsi (Plus, Pro o un anno
 // da regalare) vede la data di apertura e può chiedere «Avvisami». Il giorno
 // della data i piani si aprono da soli e parte l'avviso (cron plans-open).
 // Anche la prova gratuita del Pro parte solo dall'apertura; Pass dei singoli
