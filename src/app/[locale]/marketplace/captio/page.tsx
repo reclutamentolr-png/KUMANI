@@ -10,7 +10,9 @@ export const generateMetadata = toolMetadata('captio')
 
 // KUMANI CAPTIO (piano Pro): didascalie e hashtag con l'AI. La pagina è
 // protetta dal proxy come gli altri strumenti.
-export default async function CaptioPage() {
+export default async function CaptioPage({ searchParams }: { searchParams: Promise<{ d?: string; n?: string }> }) {
+  // Arrivando da DIARIUM: descrizione e social del post già inseriti
+  const { d, n } = await searchParams
   const t = await getTranslations('captio')
   const tm = await getTranslations('marketplace')
   const tc = await getTranslations('common')
@@ -52,7 +54,7 @@ export default async function CaptioPage() {
           </div>
         </div>
 
-        <CaptioApp />
+        <CaptioApp initialDescription={typeof d === 'string' ? d.slice(0, 1000) : ''} initialNetwork={n} />
       </main>
     </div>
   )

@@ -26,6 +26,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "convivium",
   "cookieConsent",
   "dashboard",
+  "diarium",
   "digitalReceipt",
   "documentoSicuro",
   "documents",

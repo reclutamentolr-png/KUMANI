@@ -43,11 +43,14 @@ async function shrinkImage(file: File): Promise<{ base64: string; preview: strin
 
 // KUMANI CAPTIO: descrivi il post (e, se vuoi, aggiungi la foto), scegli
 // social, tono e obiettivo: tre didascalie diverse e gli hashtag da copiare.
-export default function CaptioApp() {
+export default function CaptioApp({ initialDescription = '', initialNetwork }: { initialDescription?: string; initialNetwork?: string }) {
   const t = useTranslations('captio')
   const locale = useLocale()
-  const [prefs, setPrefs] = useState<Prefs>(readPrefs)
-  const [description, setDescription] = useState('')
+  const [prefs, setPrefs] = useState<Prefs>(() => {
+    const p = readPrefs()
+    return CAPTIO_NETWORKS.includes(initialNetwork as Prefs['network']) ? { ...p, network: initialNetwork as Prefs['network'] } : p
+  })
+  const [description, setDescription] = useState(initialDescription)
   const [cta, setCta] = useState('')
   const [image, setImage] = useState<{ base64: string; preview: string } | null>(null)
   const [busy, setBusy] = useState(false)

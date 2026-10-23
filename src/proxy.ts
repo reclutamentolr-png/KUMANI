@@ -51,6 +51,7 @@ const PAID_TOOLS = [
   'lumen',
   'vox',
   'captio',
+  'diarium',
   'documento-sicuro',
   'firma-email',
   'calcolatrici',

@@ -13,7 +13,9 @@ export const generateMetadata = toolMetadata('lumen')
 // KUMANI LUMEN (piano Pro): teleprompter. La pagina è protetta dal proxy come
 // gli altri strumenti; i copioni arrivano dal database (solo i propri), il
 // video resta nel telefono.
-export default async function LumenPage() {
+export default async function LumenPage({ searchParams }: { searchParams: Promise<{ topic?: string }> }) {
+  // Arrivando da DIARIUM: «Scrivi con l'AI» già aperto sull'argomento del post
+  const { topic } = await searchParams
   const t = await getTranslations('lumen')
   const tm = await getTranslations('marketplace')
   const tc = await getTranslations('common')
@@ -57,7 +59,7 @@ export default async function LumenPage() {
           </div>
         </div>
 
-        <LumenApp initialScripts={(data ?? []) as LumenScript[]} />
+        <LumenApp initialScripts={(data ?? []) as LumenScript[]} initialTopic={typeof topic === 'string' ? topic.slice(0, 600) : ''} />
       </main>
     </div>
   )

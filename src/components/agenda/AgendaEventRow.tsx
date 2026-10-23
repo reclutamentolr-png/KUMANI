@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { CalendarClock, Check, CheckCircle2, FileBadge, House, LoaderCircle, Martini, PartyPopper, Plane, Receipt, RotateCcw, Undo2 } from 'lucide-react'
+import { CalendarClock, Check, CheckCircle2, FileBadge, House, LoaderCircle, Martini, Megaphone, PartyPopper, Plane, Receipt, RotateCcw, Undo2 } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { markBillPaid, setTaskDone, unmarkBillPaid } from '@/app/actions/agenda'
 import { markHandled } from '@/app/actions/lifeCalendar'
@@ -10,7 +10,7 @@ import { agendaStatus, daysBetween, type AgendaEvent } from '@/lib/agenda'
 import { parseAmount } from '@/lib/spendly'
 import { askConfirm } from '@/lib/confirm'
 
-const KIND_ICON = { appointment: CalendarClock, task: CheckCircle2, bill: Receipt, deadline: FileBadge, trip: Plane, event: PartyPopper, convivium: Martini }
+const KIND_ICON = { appointment: CalendarClock, task: CheckCircle2, bill: Receipt, deadline: FileBadge, trip: Plane, event: PartyPopper, convivium: Martini, post: Megaphone }
 export const KIND_COLOR = {
   appointment: 'bg-sky-500',
   task: 'bg-violet-500',
@@ -19,6 +19,7 @@ export const KIND_COLOR = {
   trip: 'bg-teal-500',
   event: 'bg-fuchsia-500',
   convivium: 'bg-[#b8872b]',
+  post: 'bg-pink-500',
 }
 
 // Una riga dell'agenda unica con l'azione rapida del suo tipo: bolletta →
@@ -162,6 +163,10 @@ export default function AgendaEventRow({
         // Chi organizza apre la sua serata, chi è invitato il suo invito
         <Link href={event.organizing ? `/convivium/${event.refId}` : `/convivium/invito/${event.refId}`} className="shrink-0 rounded-lg bg-[#9c7020] px-2.5 py-1.5 text-xs font-bold text-white hover:bg-[#82601b]">
           {t('openConvivium')}
+        </Link>
+      ) : event.kind === 'post' ? (
+        <Link href="/marketplace/diarium" className="shrink-0 rounded-lg bg-pink-600 px-2.5 py-1.5 text-xs font-bold text-white hover:bg-pink-700">
+          {t('openPost')}
         </Link>
       ) : event.kind === 'trip' ? (
         <Link href={`/viaggi/${event.refId}`} className="shrink-0 rounded-lg bg-teal-600 px-2.5 py-1.5 text-xs font-bold text-white hover:bg-teal-700">

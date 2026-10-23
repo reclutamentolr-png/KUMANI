@@ -444,6 +444,17 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       requiresSubscription: true,
     },
     {
+      toolName: 'diarium',
+      href: '/marketplace/diarium',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'CalendarDays',
+      title: t('diarium'),
+      description: t('diariumDescription'),
+      color: 'gold',
+      category: 'marketing',
+      requiresSubscription: true,
+    },
+    {
       toolName: 'captio',
       href: '/marketplace/captio',
       gradient: 'bg-[var(--ink)]',

@@ -1133,7 +1133,9 @@
     "vox": "KUMANI VOX",
     "voxDescription": "Automatic subtitles for your videos: your voice becomes text on your phone, you pick the style and download the video with captions.",
     "captio": "KUMANI CAPTIO",
-    "captioDescription": "Captions and hashtags ready for Instagram, Facebook, TikTok and LinkedIn: describe the post, choose the tone and copy."
+    "captioDescription": "Captions and hashtags ready for Instagram, Facebook, TikTok and LinkedIn: describe the post, choose the tone and copy.",
+    "diarium": "KUMANI DIARIUM",
+    "diariumDescription": "Your post calendar: 30 days of ready ideas for social media, with reminders in your Agenda."
   },
   "neurobalance": {
     "tracksLabel": "Relaxation audio",
@@ -4131,7 +4133,9 @@
     "conviviumHosting": "Convivium · you’re hosting",
     "conviviumMaybe": "Convivium · maybe",
     "openConvivium": "Open",
-    "connectCalendar": "Connect to Google Calendar, iPhone or Outlook"
+    "connectCalendar": "Connect to Google Calendar, iPhone or Outlook",
+    "source_post": "Post to publish",
+    "openPost": "Open"
   },
   "convivio": {
     "error_suspended": "Service temporarily suspended. Please try again later.",
@@ -7505,6 +7509,17 @@
         "p3": "For every network",
         "p3d": "Instagram, Facebook, TikTok and LinkedIn.",
         "note": "“The right words capture.”"
+      },
+      "diarium": {
+        "sub": "No more “what do I post today?”",
+        "tagline": "Describe your business: DIARIUM prepares 30 days of posts with idea, network and first line, and reminds you in your Agenda.",
+        "p1": "30 days of ideas",
+        "p1d": "Day, network, format and first line.",
+        "p2": "Tailored to you",
+        "p2d": "Your business, your area, your pace.",
+        "p3": "In your Agenda",
+        "p3d": "Every post on the right day, to tick off.",
+        "note": "“One idea a day, effortlessly.”"
       }
     },
     "includedSurprise": "For everyone, free account included",
@@ -8448,6 +8463,22 @@
       "step4Text": "Hashtags are split into general, your sector and your area. Tap the ones you don’t like to remove them: only active ones are copied.",
       "step5Title": "Copy and post",
       "step5Text": "Tap “Copy with hashtags” under the option you prefer, open the network and paste. Always reread before posting."
+    },
+    "diarium": {
+      "title": "KUMANI DIARIUM",
+      "summary": "30 days of ready posts: what to publish, where and how, with reminders in your Agenda.",
+      "cta": "Open DIARIUM",
+      "step1Title": "Describe your business",
+      "step1Text": "Write what you do, your area, when you want to start and what you want to highlight. The more precise you are, the more tailored the ideas.",
+      "step2Title": "Networks, pace and tone",
+      "step2Text": "Choose the networks (even more than one), how many posts a week you can manage and the tone. DIARIUM remembers them for next time.",
+      "step2Tip": "Better a few good posts: 3 a week are enough to start.",
+      "step3Title": "Prepare the calendar",
+      "step3Text": "Tap “Prepare the calendar”: in about half a minute you get 30 days of posts, split by week, with day, network, format (post, reel, story, carousel), idea and first line.",
+      "step4Title": "Write the post in a moment",
+      "step4Text": "Under each post tap “Write the caption” to open CAPTIO with everything ready; for reels tap “Script with LUMEN” and record looking into the camera.",
+      "step5Title": "Tick off the posts",
+      "step5Text": "When you publish, tick the post: the bar shows how many you’ve done. Posts to do also appear in your Agenda, on the right day."
     }
   },
   "deckTexts": {
@@ -14028,13 +14059,14 @@
       "title": "Get known",
       "short": "Get known",
       "tagline": "Your online showcase",
-      "description": "Link in Bio, your business page, WhatsApp messages, LUMEN to record, VOX for subtitles and CAPTIO for captions and hashtags.",
+      "description": "Link in Bio, your business page, WhatsApp messages, LUMEN to record, VOX for subtitles, CAPTIO for captions and hashtags and DIARIUM to know what to post.",
       "tab_bio": "Link in Bio",
       "tab_landing": "Landing Page",
       "tab_whatsapp": "WhatsApp messages",
       "tab_lumen": "LUMEN",
       "tab_vox": "VOX",
-      "tab_captio": "CAPTIO"
+      "tab_captio": "CAPTIO",
+      "tab_diarium": "DIARIUM"
     },
     "agenda": {
       "title": "KUMANI Agenda",
@@ -14874,5 +14906,60 @@
     "error_aiError": "I couldn’t write the captions. Please try again shortly.",
     "error_subscriptionRequired": "CAPTIO is included in the Pro plan.",
     "error_notLoggedIn": "Sign in again to continue."
+  },
+  "diarium": {
+    "badge": "Post calendar · Pro plan",
+    "heroTitle": "No more “what do I post today?”.",
+    "heroText": "Describe your business: DIARIUM prepares 30 days of posts with day, network, format, idea and first line. You find them in your Agenda and write them in a moment with CAPTIO and LUMEN.",
+    "motto": "“One idea a day, effortlessly.”",
+    "formTitle": "Prepare your calendar",
+    "business": "Your business",
+    "businessPlaceholder": "e.g. Florist in Bra: bouquets, plants, wedding decorations",
+    "place": "City or area (optional)",
+    "placePlaceholder": "e.g. Bra, Langhe and Roero",
+    "startDate": "Starting from",
+    "focus": "What do you want to highlight? (optional)",
+    "focusPlaceholder": "e.g. autumn bouquets, delivery service, flower arranging classes",
+    "networks": "Which networks?",
+    "perWeek": "How many posts a week?",
+    "perWeekValue": "{n} a week",
+    "tone": "Tone",
+    "tone_friendly": "Friendly",
+    "tone_professional": "Professional",
+    "tone_energetic": "Energetic",
+    "tone_ironic": "Witty",
+    "generate": "Prepare the calendar",
+    "writing": "Preparing the calendar…",
+    "writingHint": "It takes about half a minute: keep the page open.",
+    "newPlan": "New calendar",
+    "backToPlan": "Back to the calendar",
+    "choosePlan": "Choose the calendar",
+    "period": "From {from} to {to}",
+    "progress": "{done} of {total} posts done",
+    "agendaNote": "Posts also appear in your Agenda, on the right day.",
+    "week": "Week {n}",
+    "today": "Today",
+    "markDone": "Done",
+    "format_post": "Post",
+    "format_reel": "Reel",
+    "format_story": "Story",
+    "format_carousel": "Carousel",
+    "writeCaption": "Write the caption",
+    "writeScript": "Script with LUMEN",
+    "delete": "Delete the calendar",
+    "deleteConfirm": "Delete this calendar and all its posts?",
+    "error_missingBusiness": "Write something about your business.",
+    "error_missingNetwork": "Choose at least one network.",
+    "error_aiUnavailable": "AI writing isn’t available right now.",
+    "error_aiLimitReached": "You’ve prepared all the calendars possible today: try again tomorrow.",
+    "error_aiError": "I couldn’t prepare the calendar. Please try again shortly.",
+    "error_limitReached": "You already have 12 calendars: delete one to create another.",
+    "error_saveError": "I couldn’t save the calendar. Please try again.",
+    "error_subscriptionRequired": "DIARIUM is included in the Pro plan.",
+    "error_notLoggedIn": "Sign in again to continue.",
+    "network_instagram": "Instagram",
+    "network_facebook": "Facebook",
+    "network_tiktok": "TikTok",
+    "network_linkedin": "LinkedIn"
   }
 }

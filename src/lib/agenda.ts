@@ -6,7 +6,7 @@
 
 export const AGENDA_TIMEZONE = 'Europe/Rome'
 
-export type AgendaKind = 'appointment' | 'task' | 'bill' | 'deadline' | 'trip' | 'event' | 'convivium'
+export type AgendaKind = 'appointment' | 'task' | 'bill' | 'deadline' | 'trip' | 'event' | 'convivium' | 'post'
 
 export type AgendaEvent = {
   key: string
@@ -86,7 +86,7 @@ export function romeToInstant(date: string, time: string): string {
 }
 
 export function sortAgenda(events: AgendaEvent[]): AgendaEvent[] {
-  const order: Record<AgendaKind, number> = { trip: -1, bill: 0, deadline: 1, task: 2, appointment: 3, event: 3, convivium: 3 }
+  const order: Record<AgendaKind, number> = { trip: -1, bill: 0, deadline: 1, task: 2, appointment: 3, event: 3, convivium: 3, post: 4 }
   return [...events].sort(
     (a, b) => a.date.localeCompare(b.date) || (a.time ?? '').localeCompare(b.time ?? '') || order[a.kind] - order[b.kind]
   )

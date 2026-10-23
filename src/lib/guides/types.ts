@@ -56,6 +56,7 @@ export type GuideSlug =
   | 'lumen'
   | 'vox'
   | 'captio'
+  | 'diarium'
   | 'rete-antitruffa'
   | 'scudo-dati'
   | 'trova-lavoro'

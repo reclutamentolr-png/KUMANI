@@ -5,6 +5,7 @@ import { fixedExpenseDueDate, paymentKey, periodOf, type SpendlyFixedExpense, ty
 import { settleAutoPayments } from '@/lib/spendly-server'
 import { pushDb } from '@/lib/push'
 import { OCCASION_EMOJI, type ConviviumOccasion } from '@/lib/convivium'
+import { FORMAT_EMOJI, type DiariumFormat } from '@/lib/diarium'
 
 export type AgendaSources = { memolife: boolean; spendly: boolean; lifeCalendar: boolean }
 
@@ -296,6 +297,24 @@ export async function loadAgenda(supabase: SupabaseClient, userId: string, optio
           | { id: string; title: string; occasion: string; starts_at: string; invite_code: string; cancelled_at: string | null }
           | null
         if (e && !e.cancelled_at) pushConvivium(e, false, row.answer === 'maybe')
+      }
+    })()
+  )
+
+  // KUMANI DIARIUM: i post del calendario nel loro giorno (titolo con social
+  // e formato); quelli fatti solo nel calendario completo
+  jobs.push(
+    (async () => {
+      const { data } = await supabase
+        .from('diarium_posts')
+        .select('id, post_date, network, format, title, done')
+        .eq('owner_id', userId)
+        .gte('post_date', from)
+        .lte('post_date', to)
+      for (const p of data ?? []) {
+        if (p.done && !options.includeDone) continue
+        const emoji = FORMAT_EMOJI[p.format as DiariumFormat] ?? '🖼️'
+        events.push({ key: `post:${p.id}`, kind: 'post', date: p.post_date, time: null, title: `${emoji} ${p.title}`, amount: null, done: p.done, refId: p.id, note: p.network })
       }
     })()
   )

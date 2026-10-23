@@ -10,7 +10,7 @@ export const HOME_NEEDS = [
   { key: 'organize', icon: 'CalendarDays', items: ['life-calendar', 'memolife', 'focus', 'travel', 'findo', 'hopla'] },
   { key: 'money', icon: 'PiggyBank', items: ['spendly', 'fincheck', 'casa', 'garage', 'digital-receipt'] },
   { key: 'business', icon: 'Store', items: ['landing-page', 'shop', 'menu', 'fidelity', 'offermaker', 'clienti', 'listings'] },
-  { key: 'promote', icon: 'Megaphone', items: ['qr-generator', 'qr-code-pro', 'link-in-bio', 'whatsapp-messages', 'lumen', 'vox', 'captio', 'firma-email', 'spotlight'] },
+  { key: 'promote', icon: 'Megaphone', items: ['qr-generator', 'qr-code-pro', 'link-in-bio', 'whatsapp-messages', 'lumen', 'vox', 'captio', 'diarium', 'firma-email', 'spotlight'] },
   { key: 'work', icon: 'BriefcaseBusiness', items: ['trova-lavoro', 'kumani-cv', 'preventivi', 'clienti', 'firma-pdf', 'magazzino', 'calcolatrici'] },
   { key: 'people', icon: 'Users', items: ['convivium', 'affinity', 'events', 'timebank', 'convivio'] },
   { key: 'games', icon: 'Gamepad2', items: ['nexus', 'veritas', 'fabula', 'mosaic'] },

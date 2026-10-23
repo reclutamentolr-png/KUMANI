@@ -9,10 +9,10 @@ import { LUMEN_AI_DURATIONS, LUMEN_AI_GOALS, LUMEN_AI_TONES, type LumenAiRequest
 // «Scrivi con l'AI»: di cosa vuoi parlare, a chi, quanto deve durare, tono,
 // obiettivo e invito finale. Il copione arriva già salvato e si apre
 // nell'editor, pronto da leggere con LUMEN.
-export default function LumenAiDialog({ onClose, onCreated }: { onClose: () => void; onCreated: (script: LumenScript) => void }) {
+export default function LumenAiDialog({ onClose, onCreated, initialTopic = '' }: { onClose: () => void; onCreated: (script: LumenScript) => void; initialTopic?: string }) {
   const t = useTranslations('lumen')
   const locale = useLocale()
-  const [form, setForm] = useState<LumenAiRequest>({ topic: '', audience: '', cta: '', seconds: 30, tone: 'friendly', goal: 'present' })
+  const [form, setForm] = useState<LumenAiRequest>({ topic: initialTopic, audience: '', cta: '', seconds: 30, tone: 'friendly', goal: 'present' })
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const set = (patch: Partial<LumenAiRequest>) => setForm((f) => ({ ...f, ...patch }))

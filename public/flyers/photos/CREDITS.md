@@ -21,3 +21,4 @@ Downloaded at 2000 px width on 2026-10-03.
 | lumen.webp | Woman recording herself with a smartphone and a ring light (KUMANI LUMEN) | Ivan S | https://www.pexels.com/photo/a-woman-recording-herself-with-a-smartphone-7676400/ | Pexels License |
 | vox.webp | Woman talking in front of a smartphone on a tripod in a home office (KUMANI VOX) | Antoni Shkraba | https://www.pexels.com/photo/woman-talking-in-front-of-smartphone-on-tripod-6266988/ | Pexels License |
 | captio.webp | Shop owner photographing her mugs with a smartphone for a social post (KUMANI CAPTIO) | RDNE Stock project | https://www.pexels.com/photo/a-woman-taking-photo-of-a-mug-7309317/ | Pexels License |
+| diarium.webp | Woman preparing a content plan calendar on a laptop (KUMANI DIARIUM) | MART PRODUCTION | https://www.pexels.com/photo/a-woman-making-a-content-plan-using-a-laptop-7679449/ | Pexels License |

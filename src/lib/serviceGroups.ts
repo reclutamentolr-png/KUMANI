@@ -40,6 +40,7 @@ const GROUP_OF: Record<string, ServiceGroup> = {
   lumen: 'business',
   vox: 'business',
   captio: 'business',
+  diarium: 'business',
   shop: 'business',
   menu: 'business',
   fidelity: 'business',

@@ -12,7 +12,7 @@ type SaveState = 'idle' | 'saving' | 'saved' | 'error'
 
 // KUMANI LUMEN: elenco dei copioni, editor con salvataggio automatico e
 // durata stimata; «Avvia LUMEN» apre il teleprompter a tutto schermo.
-export default function LumenApp({ initialScripts }: { initialScripts: LumenScript[] }) {
+export default function LumenApp({ initialScripts, initialTopic = '' }: { initialScripts: LumenScript[]; initialTopic?: string }) {
   const t = useTranslations('lumen')
   const locale = useLocale()
   const [scripts, setScripts] = useState(initialScripts)
@@ -23,7 +23,7 @@ export default function LumenApp({ initialScripts }: { initialScripts: LumenScri
   const [saveState, setSaveState] = useState<SaveState>('idle')
   const [error, setError] = useState<string | null>(null)
   const [prompter, setPrompter] = useState(false)
-  const [aiOpen, setAiOpen] = useState(false)
+  const [aiOpen, setAiOpen] = useState(!!initialTopic)
   // Evita due creazioni dello stesso copione se si scrive mentre si salva
   const saving = useRef<Promise<unknown> | null>(null)
   const idRef = useRef(currentId)
@@ -205,6 +205,7 @@ export default function LumenApp({ initialScripts }: { initialScripts: LumenScri
 
       {aiOpen && (
         <LumenAiDialog
+          initialTopic={initialTopic}
           onClose={() => setAiOpen(false)}
           onCreated={(script) => {
             setAiOpen(false)

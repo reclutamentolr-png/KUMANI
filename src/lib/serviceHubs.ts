@@ -92,6 +92,7 @@ export const HUB_TABS: Record<ServiceHub, HubTab[]> = {
     { key: 'lumen', href: '/marketplace/lumen', tool: 'lumen' },
     { key: 'vox', href: '/marketplace/vox', tool: 'vox' },
     { key: 'captio', href: '/marketplace/captio', tool: 'captio' },
+    { key: 'diarium', href: '/marketplace/diarium', tool: 'diarium' },
   ],
   agenda: [
     { key: 'agenda', href: '/marketplace/memolife', tool: 'memolife' },
@@ -192,6 +193,7 @@ export const TOOL_HUB: Record<string, ServiceHub> = {
   lumen: 'vetrina',
   vox: 'vetrina',
   captio: 'vetrina',
+  diarium: 'vetrina',
   memolife: 'agenda',
   'life-calendar': 'agenda',
   casa: 'casaauto',
