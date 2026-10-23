@@ -14884,7 +14884,14 @@
     "error_aiMissingTopic": "Scrivi qualche parola in più su cosa vuoi parlare.",
     "error_aiUnavailable": "La scrittura con l’AI non è disponibile in questo momento.",
     "error_aiLimitReached": "Per oggi hai usato tutti i copioni con l’AI: riprova domani.",
-    "error_aiError": "Non sono riuscito a scrivere il copione. Riprova tra poco."
+    "error_aiError": "Non sono riuscito a scrivere il copione. Riprova tra poco.",
+    "edit": "Modifica",
+    "aiEditTitle": "Modifica il copione con l’AI",
+    "aiEditIntro": "Ecco le scelte usate per questo copione: cambia quello che vuoi e tocca «Aggiorna il copione».",
+    "aiUpdate": "Aggiorna il copione",
+    "aiEditNote": "Il nuovo testo sostituisce quello attuale, anche le modifiche fatte a mano. Conta come un copione con l’AI.",
+    "aiLeft": "Oggi puoi ancora creare o aggiornare {left, plural, one {# copione} other {# copioni}} con l’AI (su {limit}).",
+    "aiNoneLeft": "Per oggi hai usato tutti i {limit} copioni con l’AI: riprova domani."
   },
   "vox": {
     "badge": "Sottotitoli automatici · Piano Pro",

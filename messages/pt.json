@@ -14884,7 +14884,14 @@
     "error_aiMissingTopic": "Escreve mais algumas palavras sobre o que queres falar.",
     "error_aiUnavailable": "A escrita com IA não está disponível neste momento.",
     "error_aiLimitReached": "Hoje já usaste todos os guiões com IA: tenta amanhã.",
-    "error_aiError": "Não consegui escrever o guião. Tenta novamente daqui a pouco."
+    "error_aiError": "Não consegui escrever o guião. Tenta novamente daqui a pouco.",
+    "edit": "Editar",
+    "aiEditTitle": "Editar o guião com a IA",
+    "aiEditIntro": "Estas são as escolhas usadas para este guião: muda o que quiseres e toca em «Atualizar o guião».",
+    "aiUpdate": "Atualizar o guião",
+    "aiEditNote": "O novo texto substitui o atual, incluindo as alterações feitas à mão. Conta como um guião com a IA.",
+    "aiLeft": "Hoje ainda podes criar ou atualizar {left, plural, one {# guião} other {# guiões}} com a IA (de {limit}).",
+    "aiNoneLeft": "Hoje já usaste os {limit} guiões com a IA: tenta amanhã."
   },
   "vox": {
     "badge": "Legendas automáticas · Plano Pro",

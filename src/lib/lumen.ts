@@ -1,6 +1,7 @@
 // KUMANI LUMEN: costanti e calcoli condivisi tra pagina e azioni.
 
-export type LumenScript = { id: string; title: string; body: string; updated_at: string }
+// ai_settings: le scelte usate per crearlo con l'AI (null se scritto a mano)
+export type LumenScript = { id: string; title: string; body: string; updated_at: string; ai_settings?: LumenAiRequest | null }
 
 export const LUMEN_TITLE_MAX = 80
 export const LUMEN_BODY_MAX = 20000

@@ -14884,7 +14884,14 @@
     "error_aiMissingTopic": "Écris quelques mots de plus sur ce dont tu veux parler.",
     "error_aiUnavailable": "L’écriture avec l’IA n’est pas disponible pour le moment.",
     "error_aiLimitReached": "Tu as utilisé tous tes scripts IA pour aujourd’hui : réessaie demain.",
-    "error_aiError": "Impossible d’écrire le script. Réessaie dans un instant."
+    "error_aiError": "Impossible d’écrire le script. Réessaie dans un instant.",
+    "edit": "Modifier",
+    "aiEditTitle": "Modifier le script avec l’IA",
+    "aiEditIntro": "Voici les choix utilisés pour ce script : change ce que tu veux et touche « Mettre à jour le script ».",
+    "aiUpdate": "Mettre à jour le script",
+    "aiEditNote": "Le nouveau texte remplace l’actuel, y compris tes modifications à la main. Cela compte comme un script avec l’IA.",
+    "aiLeft": "Aujourd’hui, tu peux encore créer ou mettre à jour {left, plural, one {# script} other {# scripts}} avec l’IA (sur {limit}).",
+    "aiNoneLeft": "Tu as utilisé les {limit} scripts avec l’IA du jour : réessaie demain."
   },
   "vox": {
     "badge": "Sous-titres automatiques · Plan Pro",

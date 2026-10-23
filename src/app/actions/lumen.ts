@@ -7,7 +7,7 @@ import { getAnthropicClient, MissingApiKeyError } from '@/lib/anthropic'
 import { isGuestRequest } from '@/lib/guestServer'
 import { isLandingLocale, LANDING_LOCALE_NAMES } from '@/lib/landing'
 import { ANTHROPIC_MODEL } from '@/lib/offermaker'
-import { takeSocialAiQuota } from '@/lib/socialAi'
+import { socialAiLeft, takeSocialAiQuota } from '@/lib/socialAi'
 import { LUMEN_AI_DURATIONS, LUMEN_AI_GOALS, LUMEN_AI_TONES, LUMEN_BODY_MAX, LUMEN_TITLE_MAX, type LumenAiRequest, type LumenScript } from '@/lib/lumen'
 
 // KUMANI LUMEN: qui solo i copioni (tabella lumen_scripts, visibili a chi li
@@ -27,7 +27,7 @@ async function gate(): Promise<{ ok: true; supabase: Supabase; userId: string } 
   return { ok: true, supabase, userId: user.id }
 }
 
-const COLUMNS = 'id, title, body, updated_at'
+const COLUMNS = 'id, title, body, updated_at, ai_settings'
 
 export async function listLumenScripts(): Promise<ActionResult<LumenScript[]>> {
   const g = await gate()
@@ -77,9 +77,17 @@ const GOAL_TEXT: Record<LumenAiRequest['goal'], string> = {
   story: 'tell a short true-to-life story or experience related to the topic',
 }
 
+// Copioni con l'AI che restano oggi (e il limite giornaliero)
+export async function lumenAiLeft(): Promise<ActionResult<{ left: number; limit: number }>> {
+  const g = await gate()
+  if (!g.ok) return { success: false, message: g.message }
+  return { success: true, data: await socialAiLeft('lumen', g.userId) }
+}
+
 // «Scrivi con l'AI»: un copione parlato per Reel, TikTok e Shorts, da
-// leggere con LUMEN. Si salva come nuovo copione (quello aperto non cambia).
-export async function generateLumenScript(input: LumenAiRequest, locale: string): Promise<ActionResult<LumenScript>> {
+// leggere con LUMEN. Si salva come nuovo copione; con replaceId («Modifica»)
+// riscrive quel copione con le nuove scelte. Ogni volta conta nella quota.
+export async function generateLumenScript(input: LumenAiRequest, locale: string, replaceId?: string): Promise<ActionResult<LumenScript>> {
   const g = await gate()
   if (!g.ok) return { success: false, message: g.message }
   if (await isGuestRequest()) return { success: false, message: 'aiUnavailable' }
@@ -149,11 +157,10 @@ Rules:
     const raw = block.input as { title?: unknown; body?: unknown }
     const body = clip(raw.body, LUMEN_BODY_MAX)
     if (!body) return { success: false, message: 'aiError' }
-    const { data, error } = await g.supabase
-      .from('lumen_scripts')
-      .insert({ title: clip(raw.title, LUMEN_TITLE_MAX), body })
-      .select(COLUMNS)
-      .single()
+    const row = { title: clip(raw.title, LUMEN_TITLE_MAX), body, ai_settings: { topic, audience, cta, seconds, tone, goal } }
+    const { data, error } = replaceId
+      ? await g.supabase.from('lumen_scripts').update(row).eq('id', replaceId).select(COLUMNS).single()
+      : await g.supabase.from('lumen_scripts').insert(row).select(COLUMNS).single()
     if (error) return { success: false, message: error.message.includes('lumen_limit') ? 'limitReached' : 'saveError' }
     return { success: true, data: data as LumenScript }
   } catch (err) {

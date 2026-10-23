@@ -14884,7 +14884,14 @@
     "error_aiMissingTopic": "Write a few more words about what you want to talk about.",
     "error_aiUnavailable": "AI writing isn’t available right now.",
     "error_aiLimitReached": "You’ve used all your AI scripts for today: try again tomorrow.",
-    "error_aiError": "I couldn’t write the script. Please try again shortly."
+    "error_aiError": "I couldn’t write the script. Please try again shortly.",
+    "edit": "Edit",
+    "aiEditTitle": "Edit the script with AI",
+    "aiEditIntro": "These are the choices used for this script: change what you like and tap “Update the script”.",
+    "aiUpdate": "Update the script",
+    "aiEditNote": "The new text replaces the current one, including any changes you made by hand. It counts as one AI script.",
+    "aiLeft": "Today you can still create or update {left, plural, one {# script} other {# scripts}} with AI (out of {limit}).",
+    "aiNoneLeft": "You have used all {limit} AI scripts for today: try again tomorrow."
   },
   "vox": {
     "badge": "Automatic subtitles · Pro plan",

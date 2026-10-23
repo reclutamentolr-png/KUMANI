@@ -11,11 +11,23 @@ const service = () =>
     auth: { autoRefreshToken: false, persistSession: false },
   })
 
+async function dailyLimit(kind: SocialAiKind): Promise<number> {
+  const { data: row } = await service().from('system_settings').select('value').eq('key', `${kind}_ai_daily_runs`).maybeSingle()
+  return Number(String(row?.value ?? '10').replace(/"/g, '')) || 10
+}
+
+// Quanti utilizzi restano oggi (stesso giorno UTC di ai_quota_take)
+export async function socialAiLeft(kind: SocialAiKind, userId: string): Promise<{ left: number; limit: number }> {
+  const limit = await dailyLimit(kind)
+  const today = new Date().toISOString().slice(0, 10)
+  const { data } = await service().from('social_ai_usage').select('runs').eq('kind', kind).eq('owner_id', userId).eq('used_on', today).maybeSingle()
+  return { left: Math.max(0, limit - Number(data?.runs ?? 0)), limit }
+}
+
 // Prende un utilizzo dalla quota di oggi; false se il limite è raggiunto
 export async function takeSocialAiQuota(kind: SocialAiKind, userId: string): Promise<boolean> {
   const db = service()
-  const { data: row } = await db.from('system_settings').select('value').eq('key', `${kind}_ai_daily_runs`).maybeSingle()
-  const limit = Number(String(row?.value ?? '10').replace(/"/g, '')) || 10
+  const limit = await dailyLimit(kind)
   const { data: taken } = await db.rpc('ai_quota_take', { p_kind: kind, p_user: userId, p_limit: limit })
   if (taken === null || taken === undefined) {
     await logAiLimit(userId, kind)

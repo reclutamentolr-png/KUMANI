@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { Clapperboard, FilePlus2, LoaderCircle, Play, Sparkles, Trash2 } from 'lucide-react'
+import { Clapperboard, FilePlus2, LoaderCircle, Pencil, Play, Sparkles, Trash2 } from 'lucide-react'
 import { deleteLumenScript, saveLumenScript } from '@/app/actions/lumen'
-import { countWords, estimateSeconds, formatDuration, LUMEN_BODY_MAX, LUMEN_TITLE_MAX, type LumenScript } from '@/lib/lumen'
+import { countWords, estimateSeconds, formatDuration, LUMEN_BODY_MAX, LUMEN_TITLE_MAX, type LumenAiRequest, type LumenScript } from '@/lib/lumen'
 import LumenAiDialog from './LumenAiDialog'
 import LumenPrompter from './LumenPrompter'
 
@@ -24,6 +24,9 @@ export default function LumenApp({ initialScripts, initialTopic = '' }: { initia
   const [error, setError] = useState<string | null>(null)
   const [prompter, setPrompter] = useState(false)
   const [aiOpen, setAiOpen] = useState(!!initialTopic)
+  // Scelte AI del copione aperto (se creato con l'AI): «Modifica» le riapre
+  const [aiSettings, setAiSettings] = useState<LumenAiRequest | null>(initialScripts[0]?.ai_settings ?? null)
+  const [aiEdit, setAiEdit] = useState(false)
   // Evita due creazioni dello stesso copione se si scrive mentre si salva
   const saving = useRef<Promise<unknown> | null>(null)
   const idRef = useRef(currentId)
@@ -71,6 +74,7 @@ export default function LumenApp({ initialScripts, initialTopic = '' }: { initia
     setCurrentId(script?.id ?? null)
     setTitle(script?.title ?? '')
     setBody(script?.body ?? '')
+    setAiSettings(script?.ai_settings ?? null)
     setSaveState('idle')
     setError(null)
   }
@@ -184,6 +188,18 @@ export default function LumenApp({ initialScripts, initialTopic = '' }: { initia
           >
             <Play className="h-5 w-5" fill="currentColor" /> {t('start')}
           </button>
+          {currentId && aiSettings && (
+            <button
+              type="button"
+              onClick={async () => {
+                await flush()
+                setAiEdit(true)
+              }}
+              className="inline-flex min-h-12 items-center gap-2 rounded-xl border border-[var(--gold)]/50 bg-[var(--gold)]/10 px-4 text-sm font-bold text-[var(--ink)] hover:bg-[var(--gold)]/20"
+            >
+              <Pencil className="h-4 w-4 text-[var(--gold)]" /> {t('edit')}
+            </button>
+          )}
           {currentId && (
             <button type="button" onClick={remove} className="inline-flex min-h-12 items-center gap-2 rounded-xl border border-gray-200 px-4 text-sm font-semibold text-gray-600 hover:border-red-300 hover:text-red-700">
               <Trash2 className="h-4 w-4" /> {t('delete')}
@@ -203,12 +219,19 @@ export default function LumenApp({ initialScripts, initialTopic = '' }: { initia
         </div>
       </section>
 
-      {aiOpen && (
+      {(aiOpen || aiEdit) && (
         <LumenAiDialog
           initialTopic={initialTopic}
-          onClose={() => setAiOpen(false)}
+          initial={aiEdit ? aiSettings : null}
+          replaceId={aiEdit ? (currentId ?? undefined) : undefined}
+          onClose={() => {
+            setAiOpen(false)
+            setAiEdit(false)
+          }}
           onCreated={(script) => {
             setAiOpen(false)
+            setAiEdit(false)
+            setAiSettings(script.ai_settings ?? null)
             setScripts((list) => [script, ...list.filter((x) => x.id !== script.id)])
             idRef.current = script.id
             setCurrentId(script.id)

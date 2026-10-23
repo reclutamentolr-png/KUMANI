@@ -14884,7 +14884,14 @@
     "error_aiMissingTopic": "Schreib ein paar Worte mehr darüber, worüber du sprechen willst.",
     "error_aiUnavailable": "Schreiben mit KI ist gerade nicht verfügbar.",
     "error_aiLimitReached": "Du hast heute alle KI-Skripte verwendet: Versuch es morgen wieder.",
-    "error_aiError": "Das Skript konnte nicht geschrieben werden. Versuch es gleich noch einmal."
+    "error_aiError": "Das Skript konnte nicht geschrieben werden. Versuch es gleich noch einmal.",
+    "edit": "Bearbeiten",
+    "aiEditTitle": "Skript mit KI bearbeiten",
+    "aiEditIntro": "Das sind die Einstellungen dieses Skripts: Ändere, was du möchtest, und tippe auf „Skript aktualisieren“.",
+    "aiUpdate": "Skript aktualisieren",
+    "aiEditNote": "Der neue Text ersetzt den aktuellen, auch deine Änderungen von Hand. Es zählt als ein KI-Skript.",
+    "aiLeft": "Heute kannst du noch {left, plural, one {# Skript} other {# Skripte}} mit KI erstellen oder aktualisieren (von {limit}).",
+    "aiNoneLeft": "Du hast heute alle {limit} KI-Skripte genutzt: Versuch es morgen wieder."
   },
   "vox": {
     "badge": "Automatische Untertitel · Pro-Plan",

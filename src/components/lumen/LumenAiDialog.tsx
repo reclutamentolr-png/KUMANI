@@ -1,18 +1,37 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { LoaderCircle, Sparkles, X } from 'lucide-react'
-import { generateLumenScript } from '@/app/actions/lumen'
+import { generateLumenScript, lumenAiLeft } from '@/app/actions/lumen'
 import { LUMEN_AI_DURATIONS, LUMEN_AI_GOALS, LUMEN_AI_TONES, type LumenAiRequest, type LumenScript } from '@/lib/lumen'
 
 // «Scrivi con l'AI»: di cosa vuoi parlare, a chi, quanto deve durare, tono,
 // obiettivo e invito finale. Il copione arriva già salvato e si apre
-// nell'editor, pronto da leggere con LUMEN.
-export default function LumenAiDialog({ onClose, onCreated, initialTopic = '' }: { onClose: () => void; onCreated: (script: LumenScript) => void; initialTopic?: string }) {
+// nell'editor, pronto da leggere con LUMEN. Con «Modifica» (replaceId) si
+// riapre con le scelte di quel copione e «Aggiorna» lo riscrive.
+export default function LumenAiDialog({
+  onClose,
+  onCreated,
+  initialTopic = '',
+  initial,
+  replaceId,
+}: {
+  onClose: () => void
+  onCreated: (script: LumenScript) => void
+  initialTopic?: string
+  initial?: LumenAiRequest | null
+  replaceId?: string
+}) {
   const t = useTranslations('lumen')
   const locale = useLocale()
-  const [form, setForm] = useState<LumenAiRequest>({ topic: initialTopic, audience: '', cta: '', seconds: 30, tone: 'friendly', goal: 'present' })
+  const [form, setForm] = useState<LumenAiRequest>({ topic: initialTopic, audience: '', cta: '', seconds: 30, tone: 'friendly', goal: 'present', ...initial })
+  const editing = !!replaceId
+  // Copioni con l'AI che restano oggi
+  const [quota, setQuota] = useState<{ left: number; limit: number } | null>(null)
+  useEffect(() => {
+    lumenAiLeft().then((r) => r.success && setQuota(r.data)).catch(() => {})
+  }, [])
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const set = (patch: Partial<LumenAiRequest>) => setForm((f) => ({ ...f, ...patch }))
@@ -20,8 +39,9 @@ export default function LumenAiDialog({ onClose, onCreated, initialTopic = '' }:
   const submit = async () => {
     setBusy(true)
     setError(null)
-    const r = await generateLumenScript(form, locale)
+    const r = await generateLumenScript(form, locale, replaceId)
     setBusy(false)
+    lumenAiLeft().then((q) => q.success && setQuota(q.data)).catch(() => {})
     if (!r.success) return setError(t(`error_${r.message}` as 'error_aiError'))
     onCreated(r.data)
   }
@@ -35,9 +55,9 @@ export default function LumenAiDialog({ onClose, onCreated, initialTopic = '' }:
         <div className="flex items-start justify-between gap-3">
           <div>
             <h2 id="lumen-ai-title" className="flex items-center gap-2 text-lg font-extrabold text-[var(--ink)]">
-              <Sparkles className="h-5 w-5 text-[var(--gold)]" /> {t('aiTitle')}
+              <Sparkles className="h-5 w-5 text-[var(--gold)]" /> {editing ? t('aiEditTitle') : t('aiTitle')}
             </h2>
-            <p className="mt-1 text-sm text-[var(--muted)]">{t('aiIntro')}</p>
+            <p className="mt-1 text-sm text-[var(--muted)]">{editing ? t('aiEditIntro') : t('aiIntro')}</p>
           </div>
           <button type="button" onClick={onClose} disabled={busy} aria-label={t('close')} className="rounded-full p-1.5 text-[var(--muted)] hover:bg-gray-100">
             <X className="h-5 w-5" />
@@ -90,13 +110,18 @@ export default function LumenAiDialog({ onClose, onCreated, initialTopic = '' }:
         <button
           type="button"
           onClick={submit}
-          disabled={busy || form.topic.trim().length < 5}
+          disabled={busy || form.topic.trim().length < 5 || quota?.left === 0}
           className="mt-5 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[var(--ink)] px-4 text-base font-extrabold text-[var(--gold-bright)] hover:bg-[var(--ink-soft)] disabled:opacity-50"
         >
           {busy ? <LoaderCircle className="h-5 w-5 animate-spin" /> : <Sparkles className="h-5 w-5" />}
-          {busy ? t('aiWriting') : t('aiGenerate')}
+          {busy ? t('aiWriting') : editing ? t('aiUpdate') : t('aiGenerate')}
         </button>
-        <p className="mt-2 text-center text-xs text-[var(--muted)]">{t('aiNote')}</p>
+        {quota && (
+          <p className={`mt-2 text-center text-xs font-semibold ${quota.left === 0 ? 'text-red-700' : 'text-[var(--ink)]'}`}>
+            {quota.left === 0 ? t('aiNoneLeft', { limit: quota.limit }) : t('aiLeft', { left: quota.left, limit: quota.limit })}
+          </p>
+        )}
+        <p className="mt-1 text-center text-xs text-[var(--muted)]">{editing ? t('aiEditNote') : t('aiNote')}</p>
       </div>
     </div>
   )

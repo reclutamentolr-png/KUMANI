@@ -14884,7 +14884,14 @@
     "error_aiMissingTopic": "Escribe algunas palabras más sobre lo que quieres contar.",
     "error_aiUnavailable": "La escritura con IA no está disponible en este momento.",
     "error_aiLimitReached": "Hoy ya has usado todos los guiones con IA: vuelve a intentarlo mañana.",
-    "error_aiError": "No he podido escribir el guion. Inténtalo de nuevo en un momento."
+    "error_aiError": "No he podido escribir el guion. Inténtalo de nuevo en un momento.",
+    "edit": "Editar",
+    "aiEditTitle": "Editar el guion con la IA",
+    "aiEditIntro": "Estas son las opciones usadas para este guion: cambia lo que quieras y toca «Actualizar el guion».",
+    "aiUpdate": "Actualizar el guion",
+    "aiEditNote": "El nuevo texto sustituye al actual, también los cambios hechos a mano. Cuenta como un guion con la IA.",
+    "aiLeft": "Hoy todavía puedes crear o actualizar {left, plural, one {# guion} other {# guiones}} con la IA (de {limit}).",
+    "aiNoneLeft": "Hoy ya has usado los {limit} guiones con la IA: inténtalo mañana."
   },
   "vox": {
     "badge": "Subtítulos automáticos · Plan Pro",
