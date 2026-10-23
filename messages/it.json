@@ -9388,7 +9388,9 @@
     "adminSignupTitle": "🆕 Nuova iscrizione su KUMANI",
     "adminSignupTitleFounder": "🚀 Nuova iscrizione: n° {n} dei primi 50",
     "adminSignupBodyInvited": "{name} si è iscritto con l’invito di {inviter}.",
-    "adminSignupBodyDirect": "{name} si è iscritto senza invito."
+    "adminSignupBodyDirect": "{name} si è iscritto senza invito.",
+    "adminListingTitle": "📋 Nuovo annuncio da approvare",
+    "adminListingBody": "{name} ha pubblicato «{title}» in Bacheca: approvalo o rifiutalo."
   },
   "pushInvite": {
     "title": "Attiva le notifiche",
@@ -10715,7 +10717,9 @@
     "passOnly": "Solo questo servizio: Pass {price}",
     "learnMore": "Scopri di più sul servizio",
     "addToHome": "Metti nella Home",
-    "removeFromHome": "Togli dalla Home"
+    "removeFromHome": "Togli dalla Home",
+    "group_social": "Social",
+    "interest_social": "Iniziare sui social"
   },
   "garage": {
     "eyebrow": "Auto e moto, di proprietà e a noleggio",
@@ -14144,17 +14148,10 @@
       "title": "Farti conoscere",
       "short": "Farti conoscere",
       "tagline": "La tua vetrina online",
-      "description": "Il kit per i social: Link in Bio, pagina della tua attività, messaggi WhatsApp, video con LUMEN, VOX e FORMA, testi con CAPTIO, calendario con DIARIUM, grafiche con IMAGO e la sicurezza con TUTELA.",
+      "description": "Il tuo Link in Bio, la pagina della tua attività e i messaggi WhatsApp pronti per invitare e presentarti.",
       "tab_bio": "Link in Bio",
       "tab_landing": "Landing Page",
-      "tab_whatsapp": "Messaggi WhatsApp",
-      "tab_lumen": "LUMEN",
-      "tab_vox": "VOX",
-      "tab_captio": "CAPTIO",
-      "tab_diarium": "DIARIUM",
-      "tab_imago": "IMAGO",
-      "tab_forma": "FORMA",
-      "tab_tutela": "TUTELA"
+      "tab_whatsapp": "Messaggi WhatsApp"
     },
     "agenda": {
       "title": "KUMANI Agenda",
@@ -14189,7 +14186,20 @@
       "tab_convivium": "Convivium"
     },
     "homeStarOn": "Nella Home",
-    "homeStarOff": "Metti nella Home"
+    "homeStarOff": "Metti nella Home",
+    "social": {
+      "title": "KUMANI Social",
+      "short": "Social",
+      "tagline": "Il kit per chi inizia sui social",
+      "description": "Video con LUMEN, VOX e FORMA, testi con CAPTIO, calendario con DIARIUM, grafiche con IMAGO e la sicurezza del profilo con TUTELA.",
+      "tab_lumen": "LUMEN",
+      "tab_vox": "VOX",
+      "tab_captio": "CAPTIO",
+      "tab_diarium": "DIARIUM",
+      "tab_imago": "IMAGO",
+      "tab_forma": "FORMA",
+      "tab_tutela": "TUTELA"
+    }
   },
   "comingSoon": {
     "metaTitle": "KUMANI sta arrivando",

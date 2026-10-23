@@ -9388,7 +9388,9 @@
     "adminSignupTitle": "🆕 Новая регистрация в KUMANI",
     "adminSignupTitleFounder": "🚀 Новая регистрация: № {n} из первых 50",
     "adminSignupBodyInvited": "{name} зарегистрировался по приглашению {inviter}.",
-    "adminSignupBodyDirect": "{name} зарегистрировался без приглашения."
+    "adminSignupBodyDirect": "{name} зарегистрировался без приглашения.",
+    "adminListingTitle": "📋 Новое объявление на проверку",
+    "adminListingBody": "{name} опубликовал(а) «{title}» на Доске: одобрите или отклоните."
   },
   "pushInvite": {
     "title": "Включите уведомления",
@@ -10715,7 +10717,9 @@
     "passOnly": "Только этот сервис: Pass {price}",
     "learnMore": "Подробнее о сервисе",
     "addToHome": "На главную",
-    "removeFromHome": "Убрать с главной"
+    "removeFromHome": "Убрать с главной",
+    "group_social": "Соцсети",
+    "interest_social": "Начать в соцсетях"
   },
   "garage": {
     "eyebrow": "Автомобили и мотоциклы, свои и в лизинге",
@@ -14144,17 +14148,10 @@
       "title": "Заявите о себе",
       "short": "Заявите о себе",
       "tagline": "Ваша онлайн-витрина",
-      "description": "Набор инструментов для соцсетей: ссылка в профиле, страница вашего бизнеса, сообщения в WhatsApp, видео с LUMEN, VOX и FORMA, тексты с CAPTIO, календарь с DIARIUM, графика с IMAGO и безопасность с TUTELA.",
+      "description": "Ваш Link in Bio, страница вашего бизнеса и готовые сообщения WhatsApp, чтобы приглашать и представляться.",
       "tab_bio": "Link in Bio",
       "tab_landing": "Лендинг",
-      "tab_whatsapp": "Сообщения WhatsApp",
-      "tab_lumen": "LUMEN",
-      "tab_vox": "VOX",
-      "tab_captio": "CAPTIO",
-      "tab_diarium": "DIARIUM",
-      "tab_imago": "IMAGO",
-      "tab_forma": "FORMA",
-      "tab_tutela": "TUTELA"
+      "tab_whatsapp": "Сообщения WhatsApp"
     },
     "agenda": {
       "title": "KUMANI Ежедневник",
@@ -14189,7 +14186,20 @@
       "tab_convivium": "Convivium"
     },
     "homeStarOn": "На главной",
-    "homeStarOff": "На главную"
+    "homeStarOff": "На главную",
+    "social": {
+      "title": "KUMANI Social",
+      "short": "Social",
+      "tagline": "Набор для старта в соцсетях",
+      "description": "Видео с LUMEN, VOX и FORMA, тексты с CAPTIO, календарь с DIARIUM, графика с IMAGO и безопасность профиля с TUTELA.",
+      "tab_lumen": "LUMEN",
+      "tab_vox": "VOX",
+      "tab_captio": "CAPTIO",
+      "tab_diarium": "DIARIUM",
+      "tab_imago": "IMAGO",
+      "tab_forma": "FORMA",
+      "tab_tutela": "TUTELA"
+    }
   },
   "comingSoon": {
     "metaTitle": "KUMANI скоро появится",

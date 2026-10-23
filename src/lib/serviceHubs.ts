@@ -12,7 +12,7 @@
 // cima, e negli elenchi (Home, Catalogo, Servizi, Dashboard) è una voce sola.
 // Per unirne altri: aggiungere qui il servizio, le sue schede e il gruppo.
 
-export const SERVICE_HUBS = ['controlla', 'proteggi', 'segnala', 'benessere', 'giochi', 'qr', 'spendly', 'lavoro', 'gestione', 'ufficio', 'negozio', 'vetrina', 'agenda', 'casaauto', 'viaggi', 'amicizie'] as const
+export const SERVICE_HUBS = ['controlla', 'proteggi', 'segnala', 'benessere', 'giochi', 'qr', 'spendly', 'lavoro', 'gestione', 'ufficio', 'negozio', 'vetrina', 'social', 'agenda', 'casaauto', 'viaggi', 'amicizie'] as const
 export type ServiceHub = (typeof SERVICE_HUBS)[number]
 
 // planTool: lo strumento da cui prendere il piano (Free/Base/Pro) quando la
@@ -89,13 +89,16 @@ export const HUB_TABS: Record<ServiceHub, HubTab[]> = {
     { key: 'bio', href: '/marketplace/link-in-bio', tool: 'link-in-bio' },
     { key: 'landing', href: '/marketplace/landing-page', tool: 'landing-page' },
     { key: 'whatsapp', href: '/marketplace/whatsapp-messages', tool: 'whatsapp-messages' },
+  ],
+  // Il kit per chi inizia sui social
+  social: [
+    { key: 'tutela', href: '/marketplace/tutela', tool: 'tutela' },
+    { key: 'captio', href: '/marketplace/captio', tool: 'captio' },
     { key: 'lumen', href: '/marketplace/lumen', tool: 'lumen' },
     { key: 'vox', href: '/marketplace/vox', tool: 'vox' },
-    { key: 'captio', href: '/marketplace/captio', tool: 'captio' },
     { key: 'diarium', href: '/marketplace/diarium', tool: 'diarium' },
     { key: 'imago', href: '/marketplace/imago', tool: 'imago' },
     { key: 'forma', href: '/marketplace/forma', tool: 'forma' },
-    { key: 'tutela', href: '/marketplace/tutela', tool: 'tutela' },
   ],
   agenda: [
     { key: 'agenda', href: '/marketplace/memolife', tool: 'memolife' },
@@ -115,7 +118,7 @@ export const HUB_TABS: Record<ServiceHub, HubTab[]> = {
 }
 
 // Gruppo della pagina Servizi in cui sta ciascun servizio unito
-export const HUB_GROUP: Record<ServiceHub, string> = { controlla: 'security', proteggi: 'security', segnala: 'security', benessere: 'wellness', giochi: 'fun', qr: 'business', spendly: 'money', lavoro: 'work', gestione: 'work', ufficio: 'work', negozio: 'business', vetrina: 'business', agenda: 'money', casaauto: 'money', viaggi: 'money', amicizie: 'fun' }
+export const HUB_GROUP: Record<ServiceHub, string> = { controlla: 'security', proteggi: 'security', segnala: 'security', benessere: 'wellness', giochi: 'fun', qr: 'business', spendly: 'money', lavoro: 'work', gestione: 'work', ufficio: 'work', negozio: 'business', vetrina: 'business', social: 'social', agenda: 'money', casaauto: 'money', viaggi: 'money', amicizie: 'fun' }
 
 // Servizio di partenza di ciascuno (la prima scheda)
 export const HUB_HOME: Record<ServiceHub, string> = {
@@ -131,6 +134,7 @@ export const HUB_HOME: Record<ServiceHub, string> = {
   ufficio: '/marketplace/firma-pdf',
   negozio: '/marketplace/shop',
   vetrina: '/marketplace/link-in-bio',
+  social: '/marketplace/tutela',
   agenda: '/marketplace/memolife',
   casaauto: '/marketplace/casa',
   viaggi: '/viaggi',
@@ -193,13 +197,13 @@ export const TOOL_HUB: Record<string, ServiceHub> = {
   'link-in-bio': 'vetrina',
   'landing-page': 'vetrina',
   'whatsapp-messages': 'vetrina',
-  lumen: 'vetrina',
-  vox: 'vetrina',
-  captio: 'vetrina',
-  diarium: 'vetrina',
-  imago: 'vetrina',
-  forma: 'vetrina',
-  tutela: 'vetrina',
+  lumen: 'social',
+  vox: 'social',
+  captio: 'social',
+  diarium: 'social',
+  imago: 'social',
+  forma: 'social',
+  tutela: 'social',
   memolife: 'agenda',
   'life-calendar': 'agenda',
   casa: 'casaauto',
@@ -211,7 +215,7 @@ export const TOOL_HUB: Record<string, ServiceHub> = {
 }
 
 // Icone già presenti in lib/marketplaceIcons
-export const HUB_ICON_NAME: Record<ServiceHub, string> = { controlla: 'ScanEye', proteggi: 'ShieldCheck', segnala: 'ShieldAlert', benessere: 'Flower2', giochi: 'Dices', qr: 'QrCode', spendly: 'PiggyBank', lavoro: 'Briefcase', gestione: 'BookUser', ufficio: 'Signature', negozio: 'Store', vetrina: 'PanelsTopLeft', agenda: 'CalendarClock', casaauto: 'House', viaggi: 'Plane', amicizie: 'HeartHandshake' }
+export const HUB_ICON_NAME: Record<ServiceHub, string> = { controlla: 'ScanEye', proteggi: 'ShieldCheck', segnala: 'ShieldAlert', benessere: 'Flower2', giochi: 'Dices', qr: 'QrCode', spendly: 'PiggyBank', lavoro: 'Briefcase', gestione: 'BookUser', ufficio: 'Signature', negozio: 'Store', vetrina: 'PanelsTopLeft', social: 'Share2', agenda: 'CalendarClock', casaauto: 'House', viaggi: 'Plane', amicizie: 'HeartHandshake' }
 
 // Pagine aperte a tutti (Catalogo pubblico)
 export const HUB_PUBLIC_HREF: Record<ServiceHub, string> = {
@@ -227,6 +231,7 @@ export const HUB_PUBLIC_HREF: Record<ServiceHub, string> = {
   ufficio: '/strumenti/firma-pdf',
   negozio: '/strumenti/shop',
   vetrina: '/strumenti/link-in-bio',
+  social: '/strumenti/tutela',
   agenda: '/strumenti/memolife',
   casaauto: '/strumenti/casa',
   viaggi: '/strumenti/travel',
@@ -234,7 +239,7 @@ export const HUB_PUBLIC_HREF: Record<ServiceHub, string> = {
 }
 
 // Un rappresentante per servizio (per contare i servizi come la Home)
-export const HUB_REPRESENTATIVE: Record<ServiceHub, string> = { controlla: 'verifica-iban', proteggi: 'scudo-dati', segnala: 'rete-antitruffa', benessere: 'neurobalance', giochi: 'nexus', qr: 'qr-code-pro', spendly: 'spendly', lavoro: 'trova-lavoro', gestione: 'clienti', ufficio: 'firma-pdf', negozio: 'shop', vetrina: 'link-in-bio', agenda: 'memolife', casaauto: 'casa', viaggi: 'travel', amicizie: 'convivium' }
+export const HUB_REPRESENTATIVE: Record<ServiceHub, string> = { controlla: 'verifica-iban', proteggi: 'scudo-dati', segnala: 'rete-antitruffa', benessere: 'neurobalance', giochi: 'nexus', qr: 'qr-code-pro', spendly: 'spendly', lavoro: 'trova-lavoro', gestione: 'clienti', ufficio: 'firma-pdf', negozio: 'shop', vetrina: 'link-in-bio', social: 'tutela', agenda: 'memolife', casaauto: 'casa', viaggi: 'travel', amicizie: 'convivium' }
 
 // Nome della scheda di uno strumento nel suo servizio («Email», «IBAN»…)
 export function hubTabKey(toolName: string): string | null {

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import { getTranslations } from 'next-intl/server'
-import { Briefcase, Dices, Flower2, PiggyBank, ShieldCheck, Store, Users, type LucideIcon } from 'lucide-react'
+import { Briefcase, Dices, Flower2, PiggyBank, Share2, ShieldCheck, Store, Users, type LucideIcon } from 'lucide-react'
 import { SERVICE_GROUPS, type ServiceGroup } from '@/lib/serviceGroups'
 
 // «KUMANI sta arrivando»: la pagina che il proxy mostra a chi non è iscritto
@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 // Le categorie della pagina Servizi, con la loro icona, più la Community:
 // chi aspetta il lancio vede già cosa troverà
-const GROUP_ICON: Record<ServiceGroup, LucideIcon> = { security: ShieldCheck, money: PiggyBank, work: Briefcase, business: Store, wellness: Flower2, fun: Dices }
+const GROUP_ICON: Record<ServiceGroup, LucideIcon> = { security: ShieldCheck, money: PiggyBank, work: Briefcase, business: Store, social: Share2, wellness: Flower2, fun: Dices }
 
 export default async function ComingSoonPage() {
   const [t, th] = await Promise.all([getTranslations('comingSoon'), getTranslations('hub')])

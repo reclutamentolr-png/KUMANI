@@ -17,6 +17,8 @@ import { FROM_ICONS_KEY } from '@/lib/homeView'
 // «Mostra la Home completa».
 const NEED_ICON: Record<string, LucideIcon> = { ShieldCheck, CalendarDays, PiggyBank, Store, Megaphone, BriefcaseBusiness, Users, Gamepad2, Leaf, Gift }
 
+const PLAN_RANK = { free: 0, base: 1, pro: 2 } as const
+
 export type WelcomeNeedService = { toolName: string; title: string; description: string; iconName: string; href: string; plan: 'free' | 'base' | 'pro'; open: boolean }
 export type WelcomeNeed = { key: string; icon: string; short: string; intro: string; services: WelcomeNeedService[] }
 export type WelcomeQuick = { toolName: string; href: string; iconName: string; open: boolean }
@@ -107,7 +109,8 @@ export default function WelcomeHome({
           <div id="welcome-need-panel" className="mt-4 rounded-2xl border border-[var(--gold)]/30 bg-white/[0.04] p-4">
             <p className="text-sm leading-6 text-white/80">{activeNeed.intro}</p>
             <ul className="mt-3 divide-y divide-white/10">
-              {activeNeed.services.map((service) => {
+              {/* In ordine di pacchetto: prima Free, poi Base, poi Pro */}
+              {[...activeNeed.services].sort((a, b) => PLAN_RANK[a.plan] - PLAN_RANK[b.plan]).map((service) => {
                 const Icon = marketplaceIconMap[service.iconName] ?? Smartphone
                 const isOn = favorites.has(service.toolName)
                 const showInfo = infoOf === service.toolName

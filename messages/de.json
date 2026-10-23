@@ -9388,7 +9388,9 @@
     "adminSignupTitle": "🆕 Neue Registrierung bei KUMANI",
     "adminSignupTitleFounder": "🚀 Neue Registrierung: Nr. {n} der ersten 50",
     "adminSignupBodyInvited": "{name} hat sich mit der Einladung von {inviter} registriert.",
-    "adminSignupBodyDirect": "{name} hat sich ohne Einladung registriert."
+    "adminSignupBodyDirect": "{name} hat sich ohne Einladung registriert.",
+    "adminListingTitle": "📋 Neue Anzeige zu prüfen",
+    "adminListingBody": "{name} hat „{title}“ an der Pinnwand veröffentlicht: genehmigen oder ablehnen."
   },
   "pushInvite": {
     "title": "Benachrichtigungen aktivieren",
@@ -10715,7 +10717,9 @@
     "passOnly": "Nur dieser Dienst: Pass {price}",
     "learnMore": "Mehr über den Dienst",
     "addToHome": "Zur Startseite",
-    "removeFromHome": "Von der Startseite entfernen"
+    "removeFromHome": "Von der Startseite entfernen",
+    "group_social": "Social",
+    "interest_social": "Mit Social Media starten"
   },
   "garage": {
     "eyebrow": "Autos und Motorräder, eigen und geleast",
@@ -14144,17 +14148,10 @@
       "title": "Bekannt werden",
       "short": "Bekannt werden",
       "tagline": "Dein Online-Schaufenster",
-      "description": "Das Social-Media-Kit: Link in Bio, Seite für dein Unternehmen, WhatsApp-Nachrichten, Videos mit LUMEN, VOX und FORMA, Texte mit CAPTIO, Kalender mit DIARIUM, Grafiken mit IMAGO und Sicherheit mit TUTELA.",
+      "description": "Dein Link in Bio, die Seite deines Unternehmens und WhatsApp-Nachrichten zum Einladen und Vorstellen.",
       "tab_bio": "Link in Bio",
       "tab_landing": "Landingpage",
-      "tab_whatsapp": "WhatsApp-Nachrichten",
-      "tab_lumen": "LUMEN",
-      "tab_vox": "VOX",
-      "tab_captio": "CAPTIO",
-      "tab_diarium": "DIARIUM",
-      "tab_imago": "IMAGO",
-      "tab_forma": "FORMA",
-      "tab_tutela": "TUTELA"
+      "tab_whatsapp": "WhatsApp-Nachrichten"
     },
     "agenda": {
       "title": "KUMANI Agenda",
@@ -14189,7 +14186,20 @@
       "tab_convivium": "Convivium"
     },
     "homeStarOn": "Auf der Startseite",
-    "homeStarOff": "Zur Startseite"
+    "homeStarOff": "Zur Startseite",
+    "social": {
+      "title": "KUMANI Social",
+      "short": "Social",
+      "tagline": "Das Set für den Start in Social Media",
+      "description": "Videos mit LUMEN, VOX und FORMA, Texte mit CAPTIO, Kalender mit DIARIUM, Grafiken mit IMAGO und Profilsicherheit mit TUTELA.",
+      "tab_lumen": "LUMEN",
+      "tab_vox": "VOX",
+      "tab_captio": "CAPTIO",
+      "tab_diarium": "DIARIUM",
+      "tab_imago": "IMAGO",
+      "tab_forma": "FORMA",
+      "tab_tutela": "TUTELA"
+    }
   },
   "comingSoon": {
     "metaTitle": "KUMANI kommt bald",

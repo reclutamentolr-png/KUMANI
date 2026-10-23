@@ -9388,7 +9388,9 @@
     "adminSignupTitle": "🆕 New KUMANI sign-up",
     "adminSignupTitleFounder": "🚀 New sign-up: no. {n} of the first 50",
     "adminSignupBodyInvited": "{name} signed up with {inviter}’s invite.",
-    "adminSignupBodyDirect": "{name} signed up without an invite."
+    "adminSignupBodyDirect": "{name} signed up without an invite.",
+    "adminListingTitle": "📋 New listing to review",
+    "adminListingBody": "{name} posted “{title}” on the Board: approve or reject it."
   },
   "pushInvite": {
     "title": "Turn on notifications",
@@ -10715,7 +10717,9 @@
     "passOnly": "Just this service: Pass {price}",
     "learnMore": "Learn more about the service",
     "addToHome": "Add to Home",
-    "removeFromHome": "Remove from Home"
+    "removeFromHome": "Remove from Home",
+    "group_social": "Social",
+    "interest_social": "Getting started on social media"
   },
   "garage": {
     "eyebrow": "Cars and motorbikes, owned and leased",
@@ -14144,17 +14148,10 @@
       "title": "Get known",
       "short": "Get known",
       "tagline": "Your online showcase",
-      "description": "The kit for social media: Link in Bio, your business page, WhatsApp messages, videos with LUMEN, VOX and FORMA, text with CAPTIO, a calendar with DIARIUM, graphics with IMAGO and security with TUTELA.",
+      "description": "Your Link in Bio, your business page and WhatsApp messages ready to invite people and introduce yourself.",
       "tab_bio": "Link in Bio",
       "tab_landing": "Landing Page",
-      "tab_whatsapp": "WhatsApp messages",
-      "tab_lumen": "LUMEN",
-      "tab_vox": "VOX",
-      "tab_captio": "CAPTIO",
-      "tab_diarium": "DIARIUM",
-      "tab_imago": "IMAGO",
-      "tab_forma": "FORMA",
-      "tab_tutela": "TUTELA"
+      "tab_whatsapp": "WhatsApp messages"
     },
     "agenda": {
       "title": "KUMANI Agenda",
@@ -14189,7 +14186,20 @@
       "tab_convivium": "Convivium"
     },
     "homeStarOn": "On your Home",
-    "homeStarOff": "Add to Home"
+    "homeStarOff": "Add to Home",
+    "social": {
+      "title": "KUMANI Social",
+      "short": "Social",
+      "tagline": "The kit for social media beginners",
+      "description": "Videos with LUMEN, VOX and FORMA, texts with CAPTIO, a calendar with DIARIUM, graphics with IMAGO and profile security with TUTELA.",
+      "tab_lumen": "LUMEN",
+      "tab_vox": "VOX",
+      "tab_captio": "CAPTIO",
+      "tab_diarium": "DIARIUM",
+      "tab_imago": "IMAGO",
+      "tab_forma": "FORMA",
+      "tab_tutela": "TUTELA"
+    }
   },
   "comingSoon": {
     "metaTitle": "KUMANI is coming",

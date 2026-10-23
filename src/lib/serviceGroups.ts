@@ -2,7 +2,7 @@
 // accesso), non per prezzo: chi entra cerca "mi serve qualcosa contro le
 // truffe", non "cosa c'è nel Base". Ogni servizio sta in un solo gruppo.
 
-export const SERVICE_GROUPS = ['security', 'money', 'work', 'business', 'wellness', 'fun'] as const
+export const SERVICE_GROUPS = ['security', 'money', 'work', 'business', 'social', 'wellness', 'fun'] as const
 export type ServiceGroup = (typeof SERVICE_GROUPS)[number]
 
 const GROUP_OF: Record<string, ServiceGroup> = {
@@ -37,13 +37,14 @@ const GROUP_OF: Record<string, ServiceGroup> = {
   'firma-email': 'work',
   // La tua attività e farti conoscere
   'landing-page': 'business',
-  lumen: 'business',
-  vox: 'business',
-  captio: 'business',
-  diarium: 'business',
-  imago: 'business',
-  forma: 'business',
-  tutela: 'business',
+  // Social: il kit per chi inizia sui social
+  lumen: 'social',
+  vox: 'social',
+  captio: 'social',
+  diarium: 'social',
+  imago: 'social',
+  forma: 'social',
+  tutela: 'social',
   shop: 'business',
   menu: 'business',
   fidelity: 'business',
@@ -76,6 +77,7 @@ export const STARTER_SERVICES: Record<ServiceGroup, string[]> = {
   money: ['spendly', 'fincheck', 'memolife'],
   work: ['trova-lavoro', 'kumani-cv', 'preventivi'],
   business: ['landing-page', 'qr-generator', 'whatsapp-messages', 'link-in-bio'],
+  social: ['tutela', 'captio', 'lumen', 'diarium'],
   wellness: ['oxygen', 'focus', 'neurobalance'],
   fun: ['nexus', 'fabula', 'mosaic', 'veritas'],
 }
@@ -86,6 +88,7 @@ export const GROUP_STYLE: Record<ServiceGroup, { dot: string; tile: string }> = 
   money: { dot: 'bg-[#2f6b45]', tile: 'bg-[#e4f1e8] text-[#2f6b45]' },
   work: { dot: 'bg-[#2b4f9a]', tile: 'bg-[#e6ecf8] text-[#2b4f9a]' },
   business: { dot: 'bg-[#8a6d1f]', tile: 'bg-[#f5e8bd] text-[#6b5414]' },
+  social: { dot: 'bg-[#c0266d]', tile: 'bg-[#fde4ef] text-[#b0215f]' },
   wellness: { dot: 'bg-[#0f766e]', tile: 'bg-[#dff3f1] text-[#0f766e]' },
   fun: { dot: 'bg-[#7c3aed]', tile: 'bg-[#efe7fd] text-[#6d28d9]' },
 }

@@ -9388,7 +9388,9 @@
     "adminSignupTitle": "🆕 Novo registo na KUMANI",
     "adminSignupTitleFounder": "🚀 Novo registo: n.º {n} dos primeiros 50",
     "adminSignupBodyInvited": "{name} registou-se com o convite de {inviter}.",
-    "adminSignupBodyDirect": "{name} registou-se sem convite."
+    "adminSignupBodyDirect": "{name} registou-se sem convite.",
+    "adminListingTitle": "📋 Novo anúncio para aprovar",
+    "adminListingBody": "{name} publicou «{title}» no Mural: aprova-o ou recusa-o."
   },
   "pushInvite": {
     "title": "Ative as notificações",
@@ -10715,7 +10717,9 @@
     "passOnly": "Só este serviço: Pass {price}",
     "learnMore": "Saber mais sobre o serviço",
     "addToHome": "Pôr na Home",
-    "removeFromHome": "Tirar da Home"
+    "removeFromHome": "Tirar da Home",
+    "group_social": "Social",
+    "interest_social": "Começar nas redes sociais"
   },
   "garage": {
     "eyebrow": "Carros e motas, próprios e em renting",
@@ -14144,17 +14148,10 @@
       "title": "Dá-te a conhecer",
       "short": "Dá-te a conhecer",
       "tagline": "A tua montra online",
-      "description": "O kit para as redes sociais: Link na Bio, página do teu negócio, mensagens de WhatsApp, vídeos com LUMEN, VOX e FORMA, textos com CAPTIO, calendário com DIARIUM, grafismos com IMAGO e a segurança com TUTELA.",
+      "description": "O teu Link in Bio, a página do teu negócio e mensagens de WhatsApp prontas para convidar e apresentar-te.",
       "tab_bio": "Link in Bio",
       "tab_landing": "Landing Page",
-      "tab_whatsapp": "Mensagens WhatsApp",
-      "tab_lumen": "LUMEN",
-      "tab_vox": "VOX",
-      "tab_captio": "CAPTIO",
-      "tab_diarium": "DIARIUM",
-      "tab_imago": "IMAGO",
-      "tab_forma": "FORMA",
-      "tab_tutela": "TUTELA"
+      "tab_whatsapp": "Mensagens WhatsApp"
     },
     "agenda": {
       "title": "KUMANI Agenda",
@@ -14189,7 +14186,20 @@
       "tab_convivium": "Convivium"
     },
     "homeStarOn": "Na tua Home",
-    "homeStarOff": "Pôr na Home"
+    "homeStarOff": "Pôr na Home",
+    "social": {
+      "title": "KUMANI Social",
+      "short": "Social",
+      "tagline": "O kit para começar nas redes",
+      "description": "Vídeos com LUMEN, VOX e FORMA, textos com CAPTIO, calendário com DIARIUM, imagens com IMAGO e segurança do perfil com TUTELA.",
+      "tab_lumen": "LUMEN",
+      "tab_vox": "VOX",
+      "tab_captio": "CAPTIO",
+      "tab_diarium": "DIARIUM",
+      "tab_imago": "IMAGO",
+      "tab_forma": "FORMA",
+      "tab_tutela": "TUTELA"
+    }
   },
   "comingSoon": {
     "metaTitle": "O KUMANI está a chegar",

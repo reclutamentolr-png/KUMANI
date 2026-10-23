@@ -8,6 +8,7 @@ import { revalidatePath } from 'next/cache'
 import { invalidateListingsCache } from '@/lib/listings-server'
 import { ALL_LISTING_CATEGORIES, LISTING_COST, cleanListingCity, isListingCountry, type CreateListingData, type UpdateListingData } from '@/lib/listings'
 import { limitError } from '@/lib/appLimits'
+import { notifyStaffOfListing } from '@/lib/staffAlerts'
 import { getListingMaxPhotos, getListingsFreeMode } from '@/lib/listingsMode'
 import { cleanListingRegion } from '@/lib/listingRegions'
 
@@ -105,8 +106,10 @@ export async function createListingAction(data: CreateListingData) {
   }
   invalidateListingsCache()
 
-  // Avviso allo Staff: c'è un annuncio da controllare (badge della sezione)
+  // Avviso allo Staff: c'è un annuncio da controllare (badge della sezione,
+  // Centro avvisi e notifica sul telefono per approvarlo o rifiutarlo)
   revalidatePath('/admin')
+  await notifyStaffOfListing(listing, user.id)
   // La vetrina si sceglie dopo, da «I miei annunci», quando l'annuncio è
   // pubblicato: in revisione i giorni di vetrina andrebbero persi.
   return { success: true, listing, pending: true, free, newPoints: spendResult?.new_daily_points ?? null }
