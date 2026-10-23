@@ -6,11 +6,11 @@
 import type { RequiredPlan } from '@/lib/plans'
 
 export const HOME_NEEDS = [
-  { key: 'scams', icon: 'ShieldCheck', items: ['rete-antitruffa', 'antitruffa', 'checkmail', 'verifica-iban', 'svat', 'verifoto', 'scudo-dati', 'documento-sicuro'] },
+  { key: 'scams', icon: 'ShieldCheck', items: ['rete-antitruffa', 'antitruffa', 'checkmail', 'verifica-iban', 'svat', 'verifoto', 'scudo-dati', 'documento-sicuro', 'tutela'] },
   { key: 'organize', icon: 'CalendarDays', items: ['life-calendar', 'memolife', 'focus', 'travel', 'findo', 'hopla'] },
   { key: 'money', icon: 'PiggyBank', items: ['spendly', 'fincheck', 'casa', 'garage', 'digital-receipt'] },
   { key: 'business', icon: 'Store', items: ['landing-page', 'shop', 'menu', 'fidelity', 'offermaker', 'clienti', 'listings'] },
-  { key: 'promote', icon: 'Megaphone', items: ['qr-generator', 'qr-code-pro', 'link-in-bio', 'whatsapp-messages', 'lumen', 'vox', 'captio', 'diarium', 'firma-email', 'spotlight'] },
+  { key: 'promote', icon: 'Megaphone', items: ['qr-generator', 'qr-code-pro', 'link-in-bio', 'whatsapp-messages', 'lumen', 'vox', 'captio', 'diarium', 'imago', 'forma', 'firma-email', 'spotlight'] },
   { key: 'work', icon: 'BriefcaseBusiness', items: ['trova-lavoro', 'kumani-cv', 'preventivi', 'clienti', 'firma-pdf', 'magazzino', 'calcolatrici'] },
   { key: 'people', icon: 'Users', items: ['convivium', 'affinity', 'events', 'timebank', 'convivio'] },
   { key: 'games', icon: 'Gamepad2', items: ['nexus', 'veritas', 'fabula', 'mosaic'] },

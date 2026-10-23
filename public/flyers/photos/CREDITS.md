@@ -22,3 +22,6 @@ Downloaded at 2000 px width on 2026-10-03.
 | vox.webp | Woman talking in front of a smartphone on a tripod in a home office (KUMANI VOX) | Antoni Shkraba | https://www.pexels.com/photo/woman-talking-in-front-of-smartphone-on-tripod-6266988/ | Pexels License |
 | captio.webp | Shop owner photographing her mugs with a smartphone for a social post (KUMANI CAPTIO) | RDNE Stock project | https://www.pexels.com/photo/a-woman-taking-photo-of-a-mug-7309317/ | Pexels License |
 | diarium.webp | Woman preparing a content plan calendar on a laptop (KUMANI DIARIUM) | MART PRODUCTION | https://www.pexels.com/photo/a-woman-making-a-content-plan-using-a-laptop-7679449/ | Pexels License |
+| imago.webp | Two florists designing on a tablet in their flower shop (KUMANI IMAGO) | Amina Filkins | https://www.pexels.com/photo/young-multiracial-women-with-tablet-in-floral-shop-5410112/ | Pexels License |
+| forma.webp | Man filming himself with a smartphone on a tripod (KUMANI FORMA) | Ron Lach | https://www.pexels.com/photo/man-filming-himself-using-a-smartphone-8360497/ | Pexels License |
+| tutela.webp | Smartphone locked with a chain and a padlock (KUMANI TUTELA) | Towfiqu barbhuiya | https://www.pexels.com/photo/close-up-of-a-smart-phone-with-a-lock-11391947/ | Pexels License |

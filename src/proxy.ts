@@ -52,6 +52,8 @@ const PAID_TOOLS = [
   'vox',
   'captio',
   'diarium',
+  'imago',
+  'forma',
   'documento-sicuro',
   'firma-email',
   'calcolatrici',

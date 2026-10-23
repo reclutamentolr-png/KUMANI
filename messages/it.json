@@ -1135,7 +1135,13 @@
     "captio": "KUMANI CAPTIO",
     "captioDescription": "Didascalie e hashtag pronti per Instagram, Facebook, TikTok e LinkedIn: descrivi il post, scegli il tono e copi.",
     "diarium": "KUMANI DIARIUM",
-    "diariumDescription": "Il calendario dei tuoi post: 30 giorni di idee pronte per i social, con promemoria nell’Agenda."
+    "diariumDescription": "Il calendario dei tuoi post: 30 giorni di idee pronte per i social, con promemoria nell’Agenda.",
+    "imago": "KUMANI IMAGO",
+    "imagoDescription": "Grafiche per post e storie con i tuoi colori e il tuo logo: offerte, novità, eventi, orari, avvisi. Pronte in un minuto.",
+    "forma": "KUMANI FORMA",
+    "formaDescription": "Taglia inizio e fine dei video e adattali a Reel, TikTok, post quadrati o YouTube, tutto nel telefono.",
+    "tutela": "KUMANI TUTELA",
+    "tutelaDescription": "Social sicuri: i controlli da fare sul tuo profilo, le truffe da riconoscere e cosa fare se ti rubano l’account. Gratis."
   },
   "neurobalance": {
     "tracksLabel": "Audio di rilassamento",
@@ -7520,6 +7526,39 @@
         "p3": "Nell’Agenda",
         "p3d": "Ogni post nel giorno giusto, da spuntare.",
         "note": "«Un’idea al giorno, senza fatica.»"
+      },
+      "imago": {
+        "sub": "La tua grafica, pronta in un minuto",
+        "tagline": "Offerte, novità, eventi, orari e avvisi con i tuoi colori e il tuo logo: scegli il modello, scrivi due righe e scarica.",
+        "p1": "Sette modelli",
+        "p1d": "Offerta, novità, evento, orari e altri.",
+        "p2": "Con il tuo brand",
+        "p2d": "Colori e logo della tua Scheda attività.",
+        "p3": "Post e storie",
+        "p3d": "Formati 4:5, 1:1 e 9:16 pronti.",
+        "note": "«Un’immagine vale più di mille parole.»"
+      },
+      "forma": {
+        "sub": "Un video, tutti i formati",
+        "tagline": "Taglia inizio e fine e adatta il video a Reel, TikTok, post o YouTube, tutto nel telefono.",
+        "p1": "Taglio facile",
+        "p1d": "Tieni solo il tratto che serve.",
+        "p2": "Ogni formato",
+        "p2d": "9:16, 1:1, 4:5 e 16:9.",
+        "p3": "Il video resta tuo",
+        "p3d": "Tutto nel telefono, senza caricarlo.",
+        "note": "«La forma giusta per ogni social.»"
+      },
+      "tutela": {
+        "sub": "Il tuo profilo, al sicuro",
+        "tagline": "I controlli da fare una volta sola, le truffe dei social da riconoscere e cosa fare se ti rubano l’account. Gratis per tutti.",
+        "p1": "Controlli guidati",
+        "p1d": "Verifica in due passaggi, password, privacy.",
+        "p2": "Truffe smascherate",
+        "p2d": "Finto supporto, profili clone, codici.",
+        "p3": "Se succede",
+        "p3d": "I 4 passi per riprendersi l’account.",
+        "note": "«Prevenire è meglio che recuperare.»"
       }
     },
     "includedSurprise": "Per tutti, anche con l’account gratuito",
@@ -8479,6 +8518,52 @@
       "step4Text": "Sotto ogni post tocca «Scrivi la didascalia» per aprire CAPTIO con tutto già pronto; per i reel tocca «Copione con LUMEN» e registri guardando in camera.",
       "step5Title": "Segna i post fatti",
       "step5Text": "Quando pubblichi, spunta il post: la barra mostra quanti ne hai fatti. I post da fare compaiono anche nell’Agenda, nel giorno giusto."
+    },
+    "imago": {
+      "title": "KUMANI IMAGO",
+      "summary": "Grafiche per post e storie con i tuoi colori e il tuo logo, pronte in un minuto.",
+      "cta": "Apri IMAGO",
+      "step1Title": "Scegli il modello e il formato",
+      "step1Text": "Tocca cosa vuoi comunicare (offerta, novità, evento, frase, orari, avviso o consiglio) e il formato: post 4:5, quadrato o storia 9:16.",
+      "step2Title": "Scrivi i testi",
+      "step2Text": "Ogni modello parte con un esempio: cambialo con i tuoi testi. L’anteprima si aggiorna mentre scrivi.",
+      "step2Tip": "Poche parole: sui social si legge di corsa.",
+      "step3Title": "Foto e colori",
+      "step3Text": "Aggiungi se vuoi una foto di sfondo e scegli i colori: «I tuoi colori» sono quelli della Scheda attività. In alto il nome, in basso i contatti.",
+      "step4Title": "Logo e contatti",
+      "step4Text": "Se nella Scheda attività hai caricato il logo, IMAGO lo mette in alto da solo. Controlla nome e contatti in basso (telefono, sito o profilo).",
+      "step5Title": "Scarica o condividi",
+      "step5Text": "Tocca «Crea l’immagine», poi scaricala o condividila subito su Instagram, Facebook o WhatsApp."
+    },
+    "forma": {
+      "title": "KUMANI FORMA",
+      "summary": "Taglia i video e adattali a ogni social, tutto nel telefono.",
+      "cta": "Apri FORMA",
+      "step1Title": "Scegli il video",
+      "step1Text": "Tocca «Scegli il video» e prendilo dalla galleria. Resta sul tuo dispositivo: non viene caricato.",
+      "step2Title": "Taglia inizio e fine",
+      "step2Text": "Sposta i cursori «Inizio» e «Fine» per tenere solo il tratto che ti serve. Con ▶ rivedi il tratto scelto.",
+      "step3Title": "Scegli il formato",
+      "step3Text": "Reel e TikTok (9:16), quadrato (1:1), post verticale (4:5) o YouTube (16:9). L’anteprima mostra subito come verrà.",
+      "step4Title": "Riempi o adatta",
+      "step4Text": "«Riempi» ritaglia il video: con il cursore scegli cosa tenere al centro. «Adatta» lo mostra intero con lo stesso video sfocato dietro. Puoi anche togliere l’audio.",
+      "step5Title": "Crea e scarica",
+      "step5Text": "Tocca «Crea il video»: il tratto viene riprodotto una volta e poi lo scarichi o lo condividi. Tieni lo schermo acceso fino alla fine."
+    },
+    "tutela": {
+      "title": "KUMANI TUTELA",
+      "summary": "I controlli per un profilo social sicuro, le truffe da riconoscere e cosa fare se ti rubano l’account.",
+      "cta": "Apri TUTELA",
+      "step1Title": "Guarda il tuo punteggio",
+      "step1Text": "In alto vedi quanto è protetto il tuo profilo: sale ogni volta che spunti un controllo fatto.",
+      "step2Title": "Fai i controlli di base",
+      "step2Text": "Tocca un controllo per leggere dove si fa nelle impostazioni (verifica in due passaggi, password, recupero, accessi, codici di riserva) e spuntalo quando hai fatto.",
+      "step3Title": "Proteggi la tua privacy",
+      "step3Text": "Decidi cosa mostrare e a chi: profilo privato, tag, posizione, foto dei bambini, dati personali.",
+      "step4Title": "Riconosci le truffe",
+      "step4Text": "Leggi le truffe più diffuse sui social: finto supporto, spunta blu a pagamento, profili clone, codice WhatsApp, finte collaborazioni.",
+      "step5Title": "Se ti rubano l’account",
+      "step5Text": "Segui i 4 passi: pagina ufficiale di recupero, cambio password, avviso ai contatti, segnalazione. Da qui apri anche Speculum e la Rete Anti-Truffa."
     }
   },
   "deckTexts": {
@@ -14059,14 +14144,17 @@
       "title": "Farti conoscere",
       "short": "Farti conoscere",
       "tagline": "La tua vetrina online",
-      "description": "Link in Bio, pagina della tua attività, messaggi WhatsApp, LUMEN per registrare, VOX per i sottotitoli, CAPTIO per didascalie e hashtag e DIARIUM per sapere cosa pubblicare.",
+      "description": "Il kit per i social: Link in Bio, pagina della tua attività, messaggi WhatsApp, video con LUMEN, VOX e FORMA, testi con CAPTIO, calendario con DIARIUM, grafiche con IMAGO e la sicurezza con TUTELA.",
       "tab_bio": "Link in Bio",
       "tab_landing": "Landing Page",
       "tab_whatsapp": "Messaggi WhatsApp",
       "tab_lumen": "LUMEN",
       "tab_vox": "VOX",
       "tab_captio": "CAPTIO",
-      "tab_diarium": "DIARIUM"
+      "tab_diarium": "DIARIUM",
+      "tab_imago": "IMAGO",
+      "tab_forma": "FORMA",
+      "tab_tutela": "TUTELA"
     },
     "agenda": {
       "title": "KUMANI Agenda",
@@ -14961,5 +15049,209 @@
     "network_facebook": "Facebook",
     "network_tiktok": "TikTok",
     "network_linkedin": "LinkedIn"
+  },
+  "imago": {
+    "badge": "Grafiche per i social · Piano Pro",
+    "heroTitle": "La tua grafica, pronta in un minuto.",
+    "heroText": "Scegli un modello, scrivi due righe, aggiungi una foto se vuoi: IMAGO usa i colori e il logo della tua Scheda attività. Scarichi l’immagine per post o storie.",
+    "motto": "«Un’immagine vale più di mille parole.»",
+    "template": "Che cosa vuoi comunicare?",
+    "template_offer": "Offerta",
+    "template_news": "Novità",
+    "template_event": "Evento",
+    "template_quote": "Frase",
+    "template_hours": "Orari",
+    "template_notice": "Avviso",
+    "template_tip": "Consiglio",
+    "format": "Formato",
+    "format_post": "Post 4:5",
+    "format_square": "Quadrato 1:1",
+    "format_story": "Storia 9:16",
+    "textsTitle": "Testi",
+    "field_badge": "Etichetta",
+    "field_highlight": "In grande (prezzo o sconto)",
+    "field_title": "Titolo",
+    "field_subtitle": "Testo",
+    "field_detail": "Data, ora e luogo (una per riga)",
+    "field_hours": "Orari (una riga per giorno, es. Lun–Ven: 9–19)",
+    "field_note": "Nota in piccolo",
+    "lookTitle": "Foto e colori",
+    "photoAdd": "Aggiungi una foto di sfondo (facoltativo)",
+    "photoRemove": "Togli la foto",
+    "photoNote": "La foto resta sul tuo dispositivo.",
+    "colors": "Colori",
+    "brandColors": "I tuoi colori",
+    "brandName": "Nome in alto",
+    "contact": "Contatti in basso",
+    "contactPlaceholder": "es. 333 1234567 · @tuonegozio",
+    "showLogo": "Mostra il logo",
+    "profileHint": "Aggiungi logo e colori nella Scheda attività: IMAGO li userà da solo.",
+    "preview": "Anteprima della grafica",
+    "create": "Crea l’immagine",
+    "download": "Scarica l’immagine",
+    "share": "Condividi",
+    "privacy": "L’immagine si crea sul tuo dispositivo.",
+    "default_offer_badge": "Offerta",
+    "default_offer_highlight": "-20%",
+    "default_offer_title": "Su tutta la nuova collezione",
+    "default_offer_subtitle": "Passa a trovarci o scrivici per prenotare.",
+    "default_offer_note": "Valida fino a domenica",
+    "default_news_badge": "Novità",
+    "default_news_title": "È arrivato il nuovo menu d’autunno",
+    "default_news_subtitle": "Piatti di stagione con prodotti del territorio.",
+    "default_news_note": "",
+    "default_event_badge": "Evento",
+    "default_event_title": "Serata di degustazione",
+    "default_event_detail": "Venerdì 7 novembre\nOre 20:30\nIn negozio",
+    "default_event_subtitle": "Posti limitati: prenota il tuo.",
+    "default_event_note": "",
+    "default_quote_badge": "",
+    "default_quote_title": "Le cose fatte bene richiedono tempo, passione e mani esperte.",
+    "default_quote_subtitle": "— La nostra filosofia",
+    "default_quote_note": "",
+    "default_hours_badge": "",
+    "default_hours_title": "I nostri orari",
+    "default_hours_detail": "Lun–Ven: 9:00–19:00\nSabato: 9:00–13:00\nDomenica: chiuso",
+    "default_hours_subtitle": "",
+    "default_hours_note": "Ti aspettiamo!",
+    "default_notice_badge": "Avviso",
+    "default_notice_title": "Chiusi per ferie",
+    "default_notice_subtitle": "Dal 10 al 20 agosto. Ci rivediamo il 21!",
+    "default_notice_note": "",
+    "default_tip_badge": "Consiglio",
+    "default_tip_title": "Come far durare di più i tuoi fiori",
+    "default_tip_subtitle": "Taglia gli steli in diagonale e cambia l’acqua ogni due giorni.",
+    "default_tip_note": ""
+  },
+  "forma": {
+    "badge": "Taglia e adatta video · Piano Pro",
+    "heroTitle": "Un video, tutti i formati.",
+    "heroText": "Togli l’inizio e la fine che non servono e adatta il video a Reel e TikTok (9:16), post quadrati, post verticali o YouTube. Tutto nel telefono: il video non viene caricato.",
+    "motto": "«La forma giusta per ogni social.»",
+    "chooseVideo": "Scegli il video",
+    "changeVideo": "Cambia video",
+    "chooseHint": "Fino a {minutes} minuti. Il video resta sul tuo dispositivo.",
+    "tooLong": "Il video è lungo: si può tenere un tratto di massimo {minutes} minuti.",
+    "preview": "Anteprima nel formato scelto",
+    "play": "Riproduci",
+    "pause": "Pausa",
+    "trim": "Tratto da tenere: {from} → {to} ({length})",
+    "start": "Inizio",
+    "end": "Fine",
+    "format": "Formato",
+    "format_vertical": "Reel / TikTok 9:16",
+    "format_square": "Quadrato 1:1",
+    "format_portrait": "Post 4:5",
+    "format_landscape": "YouTube 16:9",
+    "fit": "Come riempire",
+    "fit_fill": "Riempi (ritaglia)",
+    "fit_fit": "Adatta (sfondo sfocato)",
+    "focus": "Cosa tenere al centro (sinistra ↔ destra)",
+    "mute": "Togli l’audio",
+    "export": "Crea il video",
+    "exportHint": "Il tratto viene riprodotto una volta: ci vuole quanto dura.",
+    "exporting": "Creo il video… {pct}%",
+    "exportingHint": "Tieni aperta la pagina e lo schermo acceso fino alla fine.",
+    "cancel": "Annulla",
+    "readyTitle": "Il tuo video è pronto",
+    "download": "Scarica il video",
+    "share": "Condividi",
+    "errorExport": "Questo browser non riesce a creare il video: prova con Chrome o Safari aggiornati.",
+    "privacy": "Il video resta sul tuo dispositivo: KUMANI non lo carica e non lo vede."
+  },
+  "tutela": {
+    "badge": "Social sicuri · Gratis per tutti",
+    "heroTitle": "Il tuo profilo, al sicuro.",
+    "heroText": "Pochi controlli da fare una volta sola, le truffe che girano sui social e cosa fare subito se ti rubano l’account.",
+    "motto": "«Prevenire è meglio che recuperare.»",
+    "score": "Il tuo profilo è protetto al {pct}%",
+    "scoreHint": "Spunta i controlli che hai fatto: tocca un titolo per vedere come si fa.",
+    "scoreDone": "Ottimo: hai fatto tutti i controlli. Ripassali ogni tanto!",
+    "markDone": "Fatto",
+    "section_basics": "Le basi",
+    "section_basics_text": "Cinque minuti che ti evitano la maggior parte dei furti di account.",
+    "section_privacy": "La tua privacy",
+    "section_privacy_text": "Cosa mostri, a chi e come evitare di dare troppe informazioni.",
+    "section_scams": "Le truffe da riconoscere",
+    "section_scams_text": "Le più diffuse sui social: se le riconosci, non ci caschi.",
+    "items": {
+      "twofa": {
+        "title": "Attiva la verifica in due passaggi",
+        "text": "Oltre alla password serve un codice: così, anche se qualcuno scopre la password, non entra.\nInstagram e Facebook: Impostazioni → Centro gestione account → Password e sicurezza → Autenticazione a due fattori.\nTikTok: Impostazioni → Sicurezza → Verifica in due passaggi.\nMeglio un’app di autenticazione o l’SMS che niente."
+      },
+      "password": {
+        "title": "Usa una password diversa per ogni social",
+        "text": "Se una password viene rubata altrove, i truffatori la provano anche sui social. Usane una lunga e diversa per ogni account, per esempio tre parole a caso unite. Un gestore di password (anche quello del telefono) le ricorda per te."
+      },
+      "recovery": {
+        "title": "Controlla email e numero di recupero",
+        "text": "Se perdi l’accesso, il social ti manda il codice lì. Verifica che email e numero di telefono siano i tuoi e aggiornati, e che la password dell’email sia sicura: chi ha la tua email può riprendersi tutto."
+      },
+      "sessions": {
+        "title": "Guarda da dove sei collegato",
+        "text": "In Password e sicurezza → Dove hai eseguito l’accesso trovi i dispositivi collegati. Se ne vedi uno che non conosci, esci da quel dispositivo e cambia la password."
+      },
+      "backup": {
+        "title": "Salva i codici di riserva",
+        "text": "Quando attivi la verifica in due passaggi il social ti dà alcuni codici di riserva: salvali in un posto sicuro (non nelle foto del telefono). Servono se perdi il telefono."
+      },
+      "private": {
+        "title": "Profilo privato, se è personale",
+        "text": "Se il profilo è solo per amici e famiglia, rendilo privato: così vede i tuoi contenuti solo chi accetti. Per un’attività serve pubblico, ma separa il profilo personale da quello di lavoro."
+      },
+      "tags": {
+        "title": "Decidi chi può taggarti e scriverti",
+        "text": "Nelle impostazioni della privacy scegli chi può taggarti, menzionarti e mandarti messaggi. Limitare a chi segui riduce molto spam e truffe."
+      },
+      "location": {
+        "title": "Non pubblicare dove sei in tempo reale",
+        "text": "Pubblica le foto delle vacanze quando sei tornato e togli la posizione dalle storie: dire a tutti che casa è vuota non è una buona idea."
+      },
+      "kids": {
+        "title": "Attenzione alle foto dei bambini",
+        "text": "Evita foto dei bambini con divisa della scuola, nome o luoghi riconoscibili. Se le condividi, fallo solo con un gruppo ristretto (es. Amici più stretti)."
+      },
+      "personal": {
+        "title": "Non lasciare dati che servono ai truffatori",
+        "text": "Data di nascita completa, indirizzo, numero di telefono e nome del primo animale sono spesso le risposte alle domande di sicurezza. Toglili dal profilo o rendili visibili solo a te."
+      },
+      "fakeSupport": {
+        "title": "«Il tuo account verrà disattivato»",
+        "text": "Messaggi o email che sembrano di Meta, Instagram o TikTok e ti chiedono di cliccare un link entro 24 ore: è phishing. I social non ti scrivono in chat per chiederti la password. Controlla solo dalle impostazioni dell’app (Email da Instagram / Avvisi)."
+      },
+      "blueTick": {
+        "title": "La «spunta blu» a pagamento",
+        "text": "Chi ti offre la verifica del profilo in cambio di soldi o della password è un truffatore. La verifica si chiede solo dall’app ufficiale (es. Meta Verified)."
+      },
+      "clone": {
+        "title": "Il profilo clone di un amico",
+        "text": "Un profilo con la foto e il nome di un amico ti chiede soldi, una ricarica o un favore urgente. Spesso il vero amico ti segue già. Chiamalo al telefono prima di fare qualsiasi cosa."
+      },
+      "whatsappCode": {
+        "title": "«Mi giri il codice che ti è arrivato?»",
+        "text": "Un contatto (spesso con l’account già rubato) ti chiede un codice di 6 cifre arrivato per SMS: è il codice per prendersi il tuo WhatsApp o il tuo profilo. Non darlo mai, a nessuno."
+      },
+      "collab": {
+        "title": "Finte collaborazioni e lavori da casa",
+        "text": "Marchi famosi che ti propongono una collaborazione, o lavoretti pagati per mettere like, che poi chiedono una «quota d’ingresso» o i dati della carta. Le collaborazioni vere non ti chiedono soldi."
+      },
+      "giveaway": {
+        "title": "Concorsi e premi falsi",
+        "text": "«Hai vinto! Paga solo la spedizione»: è una truffa per rubarti i dati della carta. Controlla che il profilo che organizza sia quello ufficiale (spunta, anni di post, tanti follower veri)."
+      },
+      "videoLink": {
+        "title": "«Sei tu in questo video?»",
+        "text": "Un messaggio, a volte da un amico, con un link e «sei tu?»: porta a una finta pagina di accesso che ruba la password. Non cliccare e avvisa l’amico che il suo profilo è stato violato."
+      }
+    },
+    "hackedTitle": "Se ti hanno rubato l’account",
+    "hacked1": "Usa subito la pagina ufficiale di recupero del social (qui sotto) e cerca l’email del social che segnala il cambio: spesso ha il link «Non sono stato io».",
+    "hacked2": "Cambia la password della tua email e di tutti gli account con la stessa password.",
+    "hacked3": "Avvisa amici e clienti da un altro canale: non devono mandare soldi né codici a chi scrive dal tuo profilo.",
+    "hacked4": "Segnala nella Rete Anti-Truffa di KUMANI e, se ci sono soldi di mezzo, denuncia alla Polizia Postale.",
+    "police": "Polizia Postale",
+    "toolsTitle": "Hai un dubbio su un link, un sito o un numero?",
+    "toolSpeculum": "Controllalo con Speculum",
+    "toolRete": "Cerca nella Rete Anti-Truffa"
   }
 }
