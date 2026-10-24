@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { verifyAdmin } from '@/lib/verifyAdmin'
+import { selfRewardRefused, verifyAdmin } from '@/lib/verifyAdmin'
 import { localizedPath, notifyUser, pushDb } from '@/lib/push'
 import { SITE_URL } from '@/lib/siteUrl'
 import { CARD_CUSTOM_MAX, CARD_DESIGNS, CARD_NAME_MAX, CARD_PHRASES, cardLink, cardPath, type CardOptions } from '@/lib/voucherCard'
@@ -22,6 +22,7 @@ export async function adminGiftSubscription(input: {
   const admin = await verifyAdmin('coupons.write')
   if (!admin) return { success: false, error: 'Non autorizzato' }
   if (!/^[0-9a-f-]{36}$/i.test(input.userId)) return { success: false, error: 'Scegli a chi regalarlo' }
+  if (await selfRewardRefused(admin.id, input.userId)) return { success: false, error: 'Solo un amministratore completo può farsi un regalo da solo' }
   const plan = input.plan === 'pro' ? 'pro' : 'base'
   const db = pushDb()
 

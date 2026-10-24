@@ -72,6 +72,7 @@ export default async function SurprisesPage({ params }: { params: Promise<{ loca
       day: 'numeric',
       month: 'short',
       year: 'numeric',
+      timeZone: 'Europe/Rome',
     })
 
   return (

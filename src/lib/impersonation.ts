@@ -5,11 +5,41 @@
 // restavano anche per chi usava il browser dopo.
 const RESTORE_KEY = 'kumani_impersonation_restore'
 const ADMIN_NAME_KEY = 'kumani_impersonation_admin'
+// Sigillo della scheda: i link di accesso valgono solo nella scheda che li ha chiesti
+const NONCE_KEY = 'kumani_impersonation_nonce'
 const LEGACY_KEYS = ['impersonation_restore', 'impersonatingAdmin']
 
 function clearLegacy() {
   try {
     for (const key of LEGACY_KEYS) localStorage.removeItem(key)
+  } catch {
+    // memoria del browser non disponibile
+  }
+}
+
+// Prima di chiedere i link: crea e salva il sigillo di questa scheda
+export function newImpersonationNonce(): string {
+  const nonce = crypto.randomUUID()
+  try {
+    sessionStorage.setItem(NONCE_KEY, nonce)
+  } catch {
+    // memoria del browser non disponibile: il rientro verrà rifiutato
+  }
+  return nonce
+}
+
+export function checkImpersonationNonce(nonce: string | null): boolean {
+  try {
+    const saved = sessionStorage.getItem(NONCE_KEY)
+    return !!nonce && !!saved && saved === nonce
+  } catch {
+    return false
+  }
+}
+
+export function clearImpersonationNonce() {
+  try {
+    sessionStorage.removeItem(NONCE_KEY)
   } catch {
     // memoria del browser non disponibile
   }

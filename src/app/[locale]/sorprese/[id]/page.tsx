@@ -67,7 +67,8 @@ export default async function SurpriseEditPage({
   const prices = await getSurprisePrices()
   const row = gift as SurpriseRow
   const money = (cents: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(cents / 100)
-  const when = (iso: string) => new Date(iso).toLocaleString(locale, { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })
+  // Ora italiana: la pagina si crea sul server (Vercel), che è in UTC
+  const when = (iso: string) => new Date(iso).toLocaleString(locale, { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Rome' })
   const error = ERRORS.find((e) => e === sp.error)
   const ready = !!row.title.trim() && !!row.recipient_name.trim()
   // Tappe da completare (avviso, non blocca il pagamento)

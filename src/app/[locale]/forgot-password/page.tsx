@@ -11,6 +11,7 @@ import { Mail, Lock, AlertCircle, Loader2, CheckCircle, ShieldCheck } from 'luci
 import MaintenanceGate from '@/components/MaintenanceGate'
 import Logo from '@/components/Logo'
 import { authErrorText } from '@/lib/authErrors'
+import { resetPasswordAfterRecovery } from '@/app/actions/password'
 import TurnstileWidget, { useTurnstile } from '@/components/auth/TurnstileWidget'
 import PasswordStrength from '@/components/PasswordStrength'
 
@@ -98,10 +99,12 @@ export default function ForgotPasswordPage() {
       setCodeVerified(true)
     }
 
-    const { error: updateError } = await supabase.auth.updateUser({ password })
+    // Sul server: controlla che la sessione sia quella del recupero, poi
+    // chiude gli altri dispositivi e manda l'avviso del cambio password
+    const result = await resetPasswordAfterRecovery(password, locale)
 
-    if (updateError) {
-      setError(authErrorText(t, updateError, t('genericAuthError')))
+    if (!result.success) {
+      setError(result.code === 'too_short' ? t('passwordTooShort') : result.code === 'not_recovery' ? t('invalidVerificationCode') : authErrorText(t, result.error, t('genericAuthError')))
       setLoading(false)
       return
     }

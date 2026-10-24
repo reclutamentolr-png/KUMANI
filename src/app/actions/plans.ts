@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 import type Stripe from 'stripe'
 import { getLocale } from 'next-intl/server'
 import { getPlanPrices } from '@/lib/planPrices'
-import { computePassCredit, convertCreditedPasses } from '@/lib/passCredit'
+import { claimCreditedPasses, computePassCredit, finishClaimedPasses, releaseCreditedPasses } from '@/lib/passCredit'
 import { getStripe } from '@/lib/stripe'
 import { isBusinessPurchase, recordConsent } from '@/lib/withdrawal'
 import { getPlansGate } from '@/lib/plansGate'
@@ -61,6 +61,9 @@ async function findUpgradableSubscription(): Promise<
   }
   const item = subscription?.items.data[0]
   if (!subscription || !item) return { ok: false, reason: 'not_stripe' }
+  // Abbonamento già al prezzo Pro (es. un passaggio appena fatto in un'altra
+  // scheda, prima che il profilo sia aggiornato): niente secondo passaggio
+  if (item.price?.id === proPrice) return { ok: false, reason: 'already_pro' }
   return { ok: true, userId: user.id, proPrice, subscription, item }
 }
 
@@ -129,16 +132,21 @@ export async function upgradeToPro(prorationDate?: number, immediateStart = fals
     // lo usa per la fattura del passaggio (l'eventuale resto per i rinnovi).
     // Se il passaggio non va a buon fine il credito viene tolto.
     const customerId = typeof subscription.customer === 'string' ? subscription.customer : subscription.customer.id
-    const credit = await computePassCredit(userId, 'pro')
-    if (credit.cents > 0) {
-      await getStripe().customers.createBalanceTransaction(customerId, { amount: -credit.cents, currency: 'eur', description: 'Credito Pass KUMANI' })
-    }
+    // I Pass si prenotano prima di accreditare: con due richieste insieme il
+    // credito va solo a quella che li ha prenotati (mai due volte).
+    const credit = await claimCreditedPasses(userId, await computePassCredit(userId, 'pro'))
     const undoCredit = async () => {
       if (credit.cents > 0) {
         await getStripe()
           .customers.createBalanceTransaction(customerId, { amount: credit.cents, currency: 'eur', description: 'Credito Pass KUMANI annullato' })
           .catch((err) => console.error('⚠️ Credito Pass non annullato:', err))
       }
+      await releaseCreditedPasses(userId, credit.passIds)
+    }
+    // Da qui un errore libera i Pass (e toglie il credito, se già messo)
+    undoCreditOnError = async () => releaseCreditedPasses(userId, credit.passIds)
+    if (credit.cents > 0) {
+      await getStripe().customers.createBalanceTransaction(customerId, { amount: -credit.cents, currency: 'eur', description: 'Credito Pass KUMANI' })
     }
 
     undoCreditOnError = undoCredit
@@ -168,7 +176,7 @@ export async function upgradeToPro(prorationDate?: number, immediateStart = fals
     }
     // Passaggio pagato: il credito resta usato e i Pass scalati terminano
     undoCreditOnError = null
-    await convertCreditedPasses(userId, credit.passIds)
+    await finishClaimedPasses(userId, credit.passIds)
 
     // Il webhook customer.subscription.updated fa lo stesso: qui si aggiorna
     // subito per non far aspettare l'utente.

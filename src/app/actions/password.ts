@@ -111,6 +111,55 @@ export async function changeMyPassword(
   return { success: true }
 }
 
+// Nuova password dopo il codice o il link di recupero (Password dimenticata,
+// link dello Staff). Vale solo per una sessione appena aperta con il recupero
+// (codice o link di «recupero»): chi trova un account già aperto non può
+// cambiare la password senza conoscere quella attuale (per quello c'è il
+// profilo, con changeMyPassword). Poi fuori gli altri dispositivi e avviso.
+const RECOVERY_METHODS = ['recovery']
+const RECOVERY_WINDOW_S = 60 * 60
+
+async function recoverySession() {
+  const supabase = await createClient()
+  const { data } = await supabase.auth.getClaims()
+  const claims = data?.claims as { sub?: string; email?: string; amr?: { method?: string; timestamp?: number }[] } | undefined
+  if (!claims?.sub) return null
+  const now = Math.floor(Date.now() / 1000)
+  const recent = (claims.amr ?? []).some((entry) => RECOVERY_METHODS.includes(entry.method ?? '') && now - (entry.timestamp ?? 0) < RECOVERY_WINDOW_S)
+  return recent ? { supabase, userId: claims.sub, email: claims.email ?? null } : null
+}
+
+export async function canResetPassword(): Promise<boolean> {
+  return !!(await recoverySession())
+}
+
+export type ResetPasswordResult =
+  | { success: true }
+  | { success: false; code: 'not_recovery' | 'too_short' | 'too_long' | 'auth_error'; error?: { code?: string; message?: string; name?: string; reasons?: string[] } }
+
+export async function resetPasswordAfterRecovery(next: string, locale: string): Promise<ResetPasswordResult> {
+  if (typeof next !== 'string' || next.length < 8) return { success: false, code: 'too_short' }
+  if (next.length > MAX_LENGTH) return { success: false, code: 'too_long' }
+  const session = await recoverySession()
+  if (!session) return { success: false, code: 'not_recovery' }
+
+  const { error } = await session.supabase.auth.updateUser({ password: next })
+  if (error) {
+    const { code, message, name } = error
+    const reasons = (error as { reasons?: string[] }).reasons
+    return { success: false, code: 'auth_error', error: { code, message, name, reasons } }
+  }
+  await session.supabase.auth.signOut({ scope: 'others' }).catch(() => {})
+  if (session.email) {
+    const { data: profile } = await serviceClient().from('profiles').select('first_name').eq('id', session.userId).maybeSingle()
+    const lang = locales.includes(locale) ? locale : defaultLocale
+    await sendPasswordChangedEmail(session.email, profile?.first_name ?? null, lang).catch((err) =>
+      console.error('[nuova password] avviso non inviato:', err)
+    )
+  }
+  return { success: true }
+}
+
 // Email dello Staff con il codice (e il link) per scegliere una nuova password.
 // Il link porta a /reset-password?token_hash=…&type=recovery: la pagina lo
 // verifica con verifyOtp e apre il modulo della nuova password.

@@ -1,42 +1,54 @@
 'use client'
 
-import { useEffect, useState, Suspense } from 'react'
+import { useEffect, useRef, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useLocale } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
-import { endImpersonation } from '@/lib/impersonation'
+import { checkImpersonationNonce, clearImpersonationNonce, endImpersonation } from '@/lib/impersonation'
 
 // Rientro dai link di accesso dell'impersonificazione (entrata nell'account
-// di un utente, o ?restore=1 per tornare admin). Le chiavi di accesso
-// arrivano nell'hash dell'indirizzo (#access_token=...): si tolgono subito,
-// così non restano nella cronologia né sullo schermo.
+// di un utente, o ?restore=1 per tornare admin). Il link porta il codice
+// monouso (?th=) e il sigillo della scheda (?n=): l'accesso si fa solo se il
+// sigillo coincide con quello salvato da questa scheda quando l'admin ha
+// chiesto i link. Chiavi di accesso nell'hash (#access_token=...) non si
+// accettano più: chiunque poteva costruirle e far entrare un utente in un
+// altro account. L'indirizzo si ripulisce subito.
 function ImpersonateCallbackContent() {
   const searchParams = useSearchParams()
   const locale = useLocale()
   const [error, setError] = useState<string | null>(null)
+  // Il codice è monouso: una seconda esecuzione dell'effetto lo troverebbe già usato
+  const started = useRef(false)
 
   useEffect(() => {
+    if (started.current) return
+    started.current = true
     const run = async () => {
       const isRestore = searchParams.get('restore') === '1'
 
-      const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''))
-      const accessToken = hashParams.get('access_token')
-      const refreshToken = hashParams.get('refresh_token')
-      window.history.replaceState(null, '', window.location.pathname + window.location.search)
+      const tokenHash = searchParams.get('th')
+      const nonce = searchParams.get('n')
+      window.history.replaceState(null, '', window.location.pathname)
 
-      if (accessToken && refreshToken) {
-        const { error: sessionError } = await createClient().auth.setSession({
-          access_token: accessToken,
-          refresh_token: refreshToken,
-        })
-        if (sessionError) {
-          setError(sessionError.message)
-          return
-        }
+      if (!tokenHash || !checkImpersonationNonce(nonce)) {
+        setError('Link non valido per questa scheda. Riprova dal pannello Admin.')
+        return
+      }
+
+      const { error: verifyError } = await createClient().auth.verifyOtp({
+        token_hash: tokenHash,
+        type: 'magiclink',
+      })
+      if (verifyError) {
+        setError(verifyError.message)
+        return
       }
 
       // Di nuovo admin: l'impersonificazione è finita, nessun dato resta
-      if (isRestore) endImpersonation()
+      if (isRestore) {
+        endImpersonation()
+        clearImpersonationNonce()
+      }
 
       window.location.replace(isRestore ? `/${locale}/admin` : `/${locale}/dashboard`)
     }

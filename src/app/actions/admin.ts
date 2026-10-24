@@ -8,6 +8,7 @@ import { clientIp, logSecurityEvent } from '@/lib/security'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { createHash, randomBytes } from 'crypto'
 import type { Permission } from '@/lib/admin-permissions'
+import { isFullAdmin, selfRewardRefused } from '@/lib/verifyAdmin'
 import { generateShortCode } from '@/lib/shortLink'
 import { getStripe } from '@/lib/stripe'
 import { revalidatePath, updateTag } from 'next/cache'
@@ -73,20 +74,6 @@ async function verifyAdmin(requiredPermission?: Permission) {
   if (rawPermissions.includes('*') || rawPermissions.includes(requiredPermission)) return user
 
   return null
-}
-
-// Admin "pieno": profiles.is_admin oppure un ruolo con il permesso '*'.
-// Solo loro possono nominare altri admin o impersonare un admin.
-async function isFullAdmin(userId: string) {
-  const supabaseAdmin = getServiceClient()
-  const [{ data: profile }, { data: adminRecord }] = await Promise.all([
-    supabaseAdmin.from('profiles').select('is_admin').eq('id', userId).maybeSingle(),
-    supabaseAdmin.from('admin_users').select('admin_roles(permissions)').eq('user_id', userId).maybeSingle(),
-  ])
-  if (profile?.is_admin) return true
-  const roles = adminRecord?.admin_roles as { permissions?: string[] } | { permissions?: string[] }[] | null | undefined
-  const permissions = Array.isArray(roles) ? (roles[0]?.permissions ?? []) : (roles?.permissions ?? [])
-  return permissions.includes('*')
 }
 
 // Colonne del profilo modificabili dal pannello admin: tutto il resto
@@ -253,13 +240,16 @@ export async function adminUpdateProfile(userId: string, profileData: Record<str
     const { data: current } = await supabaseAdmin.from('profiles').select('deleted_at').eq('id', userId).maybeSingle()
     if (current?.deleted_at) return { success: false, error: 'Account cancellato: non si può sbloccare' }
   }
-  // Blocco, abbonamento e punti di un amministratore completo o di sé
-  // stessi: solo un amministratore completo
+  // Blocco, abbonamento e punti di un membro dello Staff (anche admin
+  // completo solo per ruolo '*') o di sé stessi: solo un amministratore completo
   const sensitive = Object.keys(profileData).some((key) => key !== 'is_admin')
   if (sensitive && !(await isFullAdmin(admin.id))) {
-    const { data: target } = await supabaseAdmin.from('profiles').select('is_admin').eq('id', userId).maybeSingle()
-    if (target?.is_admin || userId === admin.id) {
-      return { success: false, error: 'Solo un amministratore completo può modificare un amministratore o il proprio account' }
+    const [{ data: target }, { data: targetStaff }] = await Promise.all([
+      supabaseAdmin.from('profiles').select('is_admin').eq('id', userId).maybeSingle(),
+      supabaseAdmin.from('admin_users').select('user_id').eq('user_id', userId).maybeSingle(),
+    ])
+    if (target?.is_admin || targetStaff || userId === admin.id) {
+      return { success: false, error: 'Solo un amministratore completo può modificare un membro dello Staff o il proprio account' }
     }
   }
   if ('is_admin' in profileData) {
@@ -293,10 +283,15 @@ export async function adminUpdateProfile(userId: string, profileData: Record<str
   return { success: true }
 }
 
-// ✅ GENERA DUE LINK: uno per l'utente target, uno di ripristino per l'admin
-export async function impersonateUser(userId: string) {
+// ✅ GENERA DUE LINK: uno per l'utente target, uno di ripristino per l'admin.
+// I link portano il codice monouso (token_hash) e il "sigillo" della scheda
+// dell'admin (nonce, creato nel browser e tenuto in sessionStorage): la
+// pagina di rientro accetta l'accesso solo se il sigillo coincide, così un
+// link costruito da altri non può far entrare un utente in un altro account.
+export async function impersonateUser(userId: string, nonce: string) {
   const admin = await verifyAdmin('users.write')
   if (!admin) return { success: false, error: 'Non autorizzato' }
+  if (!/^[A-Za-z0-9-]{32,64}$/.test(nonce)) return { success: false, error: 'Richiesta non valida' }
 
   if (userId === admin.id) return { success: false, error: 'Sei già in questo account' }
 
@@ -330,11 +325,8 @@ export async function impersonateUser(userId: string) {
   const { data: targetLink, error: e1 } = await supabaseAdmin.auth.admin.generateLink({
     type: 'magiclink',
     email: userData.user.email,
-    options: {
-      redirectTo: `${base}/it/auth/impersonate-callback`
-    }
   })
-  if (e1) return { success: false, error: e1.message }
+  if (e1 || !targetLink.properties?.hashed_token) return { success: false, error: e1?.message || 'Link non generato' }
 
   // Link 2: ripristino sessione admin — sempre per l'admin della sessione
   // verificata (admin.id), MAI per un id passato dal client, altrimenti un
@@ -342,11 +334,11 @@ export async function impersonateUser(userId: string) {
   const { data: adminLink, error: e2 } = await supabaseAdmin.auth.admin.generateLink({
     type: 'magiclink',
     email: admin.email!,
-    options: {
-      redirectTo: `${base}/it/auth/impersonate-callback?restore=1`
-    }
   })
-  if (e2) return { success: false, error: e2.message }
+  if (e2 || !adminLink.properties?.hashed_token) return { success: false, error: e2?.message || 'Link non generato' }
+
+  const callback = (hash: string, restore: boolean) =>
+    `${base}/it/auth/impersonate-callback?th=${encodeURIComponent(hash)}&n=${encodeURIComponent(nonce)}${restore ? '&restore=1' : ''}`
 
   // Registro obbligatorio: senza traccia (chi, in quale account, quando)
   // l'accesso non si concede.
@@ -358,8 +350,8 @@ export async function impersonateUser(userId: string) {
 
   return {
     success: true,
-    targetUrl: targetLink.properties.action_link,
-    adminRestoreUrl: adminLink.properties.action_link
+    targetUrl: callback(targetLink.properties.hashed_token, false),
+    adminRestoreUrl: callback(adminLink.properties.hashed_token, true)
   }
 }
 
@@ -381,6 +373,7 @@ export async function createCoupon(input: {
   if (!input.userId || !input.title.trim()) {
     return { success: false, error: 'Utente e titolo sono obbligatori' }
   }
+  if (await selfRewardRefused(admin.id, input.userId)) return { success: false, error: 'Solo un amministratore completo può farsi un regalo da solo' }
 
   const supabaseAdmin = getServiceClient()
 
@@ -542,6 +535,7 @@ export async function creditDailyPoints(userId: string, amount: number) {
   if (!userId || !Number.isInteger(amount) || amount <= 0) {
     return { success: false, error: 'Seleziona un utente e un numero di punti valido (> 0).' }
   }
+  if (await selfRewardRefused(admin.id, userId)) return { success: false, error: 'Solo un amministratore completo può farsi un regalo da solo' }
 
   const supabaseAdmin = getServiceClient()
   const { data: profile, error: fetchError } = await supabaseAdmin
@@ -3137,6 +3131,7 @@ async function toolTitle(tool: string) {
 export async function adminCreatePassCodes(input: { tool: string; quantity: number; label: string; userId?: string | null }) {
   const admin = await verifyAdmin('coupons.write')
   if (!admin) return { success: false, error: 'Non autorizzato', codes: [] as string[] }
+  if (await selfRewardRefused(admin.id, input.userId)) return { success: false, error: 'Solo un amministratore completo può farsi un regalo da solo', codes: [] as string[] }
   const db = getServiceClient()
   const { data: setting } = await db.from('marketplace_settings').select('tool_name').eq('tool_name', input.tool).maybeSingle()
   if (!setting) return { success: false, error: 'Servizio non valido.', codes: [] as string[] }

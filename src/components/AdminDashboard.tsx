@@ -52,7 +52,7 @@ import type {
 } from '@/lib/adminTypes'
 import { SPOTLIGHT_HOME_MIN_POOL } from '@/lib/spotlight'
 import type { ReportTab } from '@/components/admin/ReportsPanel'
-import { startImpersonation } from '@/lib/impersonation'
+import { newImpersonationNonce, startImpersonation } from '@/lib/impersonation'
 import {
   LayoutDashboard,
   PlugZap,
@@ -746,7 +746,8 @@ L'accesso viene registrato.`))) return
 
     setImpersonatingId(user.id)
     try {
-      const result = await impersonateUser(user.id)
+      // Sigillo di questa scheda: i link valgono solo qui
+      const result = await impersonateUser(user.id, newImpersonationNonce())
 
       if (result.success && result.targetUrl && result.adminRestoreUrl) {
         // Link per tornare admin e nome, solo nella memoria di questa scheda

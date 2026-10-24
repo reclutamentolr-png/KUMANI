@@ -12,6 +12,7 @@ import MaintenanceGate from '@/components/MaintenanceGate'
 import Logo from '@/components/Logo'
 import { authErrorText } from '@/lib/authErrors'
 import PasswordStrength from '@/components/PasswordStrength'
+import { canResetPassword, resetPasswordAfterRecovery } from '@/app/actions/password'
 
 // Fallback per chi arriva cliccando il link nell'email di reset (il client
 // Supabase imposta la sessione automaticamente leggendo il token dall'URL;
@@ -22,6 +23,9 @@ import PasswordStrength from '@/components/PasswordStrength'
 // ancora configurati), il link resta l'unico modo con cui il codice arriva
 // davvero all'utente. Chi apre questa pagina senza sessione (link scaduto o
 // visita diretta) viene rimandato a /forgot-password per ricominciare.
+// Il modulo si apre solo con una sessione di recupero appena aperta: un
+// account già collegato da tempo non basta (la password si cambia dal
+// profilo, con quella attuale).
 const verifications: Record<string, Promise<boolean>> = {}
 
 export default function ResetPasswordPage() {
@@ -58,8 +62,7 @@ export default function ResetPasswordPage() {
           return
         }
       }
-      const { data: { session } } = await supabase.auth.getSession()
-      if (session?.user) {
+      if (await canResetPassword()) {
         setHasSession(true)
         setCheckingSession(false)
       } else {
@@ -83,10 +86,14 @@ export default function ResetPasswordPage() {
     setLoading(true)
     setError(null)
 
-    const { error: updateError } = await supabase.auth.updateUser({ password })
+    const result = await resetPasswordAfterRecovery(password, locale)
 
-    if (updateError) {
-      setError(authErrorText(t, updateError, t('genericAuthError')))
+    if (!result.success) {
+      if (result.code === 'not_recovery') {
+        router.replace(`/${locale}/forgot-password`)
+        return
+      }
+      setError(result.code === 'too_short' ? t('passwordTooShort') : authErrorText(t, result.error, t('genericAuthError')))
       setLoading(false)
       return
     }

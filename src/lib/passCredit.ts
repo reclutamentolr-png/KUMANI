@@ -13,7 +13,8 @@ const service = () =>
 const PLAN_RANK: Record<string, number> = { free: 0, base: 1, pro: 2 }
 const DAY_MS = 86_400_000
 
-export type PassCredit = { cents: number; passIds: string[]; tools: string[] }
+// values: credito di ogni Pass (per id), serve a ricalcolare il totale dei Pass prenotati
+export type PassCredit = { cents: number; passIds: string[]; tools: string[]; values: Record<string, number> }
 
 export async function computePassCredit(userId: string, plan: 'base' | 'pro'): Promise<PassCredit> {
   const db = service()
@@ -27,13 +28,14 @@ export async function computePassCredit(userId: string, plan: 'base' | 'pro'): P
     .is('converted_at', null)
     .gt('amount_cents', 0)
     .gt('expires_at', new Date(now).toISOString())
-  if (!passes?.length) return { cents: 0, passIds: [], tools: [] }
+  if (!passes?.length) return { cents: 0, passIds: [], tools: [], values: {} }
 
   const { data: settings } = await db.from('marketplace_settings').select('tool_name, required_plan').in('tool_name', [...new Set(passes.map((p) => p.tool as string))])
   const required = new Map((settings ?? []).map((s) => [s.tool_name as string, (s.required_plan as string) ?? 'base']))
 
   let cents = 0
   const passIds: string[] = []
+  const values: Record<string, number> = {}
   const tools = new Set<string>()
   for (const p of passes) {
     // Solo i servizi che il nuovo piano include
@@ -46,9 +48,42 @@ export async function computePassCredit(userId: string, plan: 'base' | 'pro'): P
     if (value <= 0) continue
     cents += value
     passIds.push(p.id as string)
+    values[p.id as string] = value
     tools.add(p.tool as string)
   }
-  return { cents, passIds, tools: [...tools] }
+  return { cents, passIds, tools: [...tools], values }
+}
+
+// Passaggio di piano con il credito sul saldo Stripe: i Pass si prenotano
+// (converted_at) PRIMA di accreditare, in un solo aggiornamento. Due richieste
+// quasi contemporanee non possono prenotare lo stesso Pass, quindi il credito
+// si dà una volta sola. Torna il credito dei soli Pass prenotati da questa richiesta.
+export async function claimCreditedPasses(userId: string, credit: PassCredit): Promise<{ cents: number; passIds: string[] }> {
+  if (!credit.passIds.length) return { cents: 0, passIds: [] }
+  const { data, error } = await service()
+    .from('tool_passes')
+    .update({ converted_at: new Date().toISOString() })
+    .eq('user_id', userId)
+    .in('id', credit.passIds)
+    .is('converted_at', null)
+    .select('id')
+  if (error) throw new Error('Pass non prenotati: ' + error.message)
+  const passIds = (data ?? []).map((row) => row.id as string)
+  return { cents: passIds.reduce((sum, id) => sum + (credit.values[id] ?? 0), 0), passIds }
+}
+
+// Passaggio non riuscito: i Pass prenotati tornano disponibili
+export async function releaseCreditedPasses(userId: string, passIds: string[]): Promise<void> {
+  if (!passIds.length) return
+  const { error } = await service().from('tool_passes').update({ converted_at: null }).eq('user_id', userId).in('id', passIds)
+  if (error) console.error('⚠️ Pass prenotati non liberati:', error.message)
+}
+
+// Passaggio pagato: i Pass prenotati terminano ora
+export async function finishClaimedPasses(userId: string, passIds: string[]): Promise<void> {
+  if (!passIds.length) return
+  const { error } = await service().from('tool_passes').update({ expires_at: new Date().toISOString() }).eq('user_id', userId).in('id', passIds)
+  if (error) console.error('⚠️ Pass non chiusi dopo il passaggio al piano:', error.message)
 }
 
 // Piano attivato con il credito: i Pass usati per lo sconto terminano ora
