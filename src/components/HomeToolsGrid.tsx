@@ -175,6 +175,7 @@ export default function HomeToolsGrid({ freeToolNames = [] }: { freeToolNames?: 
     { name: 'mosaic', icon: Grid3x3, title: tc('mosaic'), desc: tc('mosaicDescription'), category: 'svago' },
     { name: 'fabula', icon: Dices, title: tc('fabula'), desc: tc('fabulaDescription'), category: 'svago' },
     { name: 'nexus', icon: Puzzle, title: tc('nexus'), desc: tc('nexusDescription'), category: 'svago' },
+    { name: 'angolo-bambini', icon: Palette, title: tc('angoloBambini'), desc: tc('angoloBambiniDescription'), category: 'svago' },
     { name: 'listings', icon: Tag, title: t('toolListingsTitle'), desc: t('toolListingsDescription'), category: 'community' },
     { name: 'spotlight', icon: Star, title: tc('kumanoDelGiorno'), desc: tc('kumanoDelGiornoDescription'), category: 'community' },
     { name: 'convivio', icon: HandPlatter, title: tc('convivio'), desc: tc('convivioDescription'), category: 'community' },

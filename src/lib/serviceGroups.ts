@@ -68,6 +68,7 @@ const GROUP_OF: Record<string, ServiceGroup> = {
   affinity: 'fun',
   convivium: 'fun',
   veritas: 'fun',
+  'angolo-bambini': 'fun',
 }
 
 export const serviceGroupOf = (toolName: string): ServiceGroup => GROUP_OF[toolName] ?? 'business'

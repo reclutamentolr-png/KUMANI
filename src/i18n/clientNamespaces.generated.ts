@@ -55,6 +55,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "imago",
   "install",
   "jobs",
+  "kids",
   "kordataShowcase",
   "kuRewards",
   "kumaniCv",

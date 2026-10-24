@@ -18,7 +18,7 @@ export const HOME_NEEDS = [
   { key: 'people', icon: 'Users', items: ['convivium', 'affinity', 'events', 'timebank', 'convivio'] },
   // Le sezioni della Community, da aggiungere a «I tuoi servizi» come gli altri
   { key: 'community', icon: 'HeartHandshake', items: ['listings', 'convivio', 'events', 'timebank', 'proposte', 'spotlight'] },
-  { key: 'games', icon: 'Gamepad2', items: ['nexus', 'veritas', 'fabula', 'mosaic'] },
+  { key: 'games', icon: 'Gamepad2', items: ['nexus', 'veritas', 'fabula', 'mosaic', 'angolo-bambini'] },
   // Salute e benessere (la chiave resta «relax»: è già salvata nelle scelte degli iscritti)
   { key: 'relax', icon: 'HeartPulse', items: ['aureya', 'cronobioma', 'neurobalance', 'oxygen'] },
   { key: 'unwind', icon: 'Leaf', items: ['focus', 'mandala'] },

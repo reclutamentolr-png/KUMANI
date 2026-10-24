@@ -8,6 +8,7 @@ import { PRELAUNCH_HIDDEN, PREVIEW_COOKIE, PREVIEW_COOKIE_MAX_AGE, previewToken 
 import { blockedIps, clientIp, PROBE_PATH, recordSecurityEvent } from './lib/securityCore';
 import { isBlockedAgent } from './lib/aiBots';
 import { locales, defaultLocale } from '../i18n';
+import { KIDS_LOCK_ALLOWED, KIDS_LOCK_COOKIE, KIDS_PATH } from './lib/kids/lock';
 
 const intlMiddleware = createMiddleware({
   locales,
@@ -59,6 +60,7 @@ const PAID_TOOLS = [
   'documento-sicuro',
   'firma-email',
   'calcolatrici',
+  'angolo-bambini',
 ];
 
 // Pagine consentite agli agenti venditori e servizi della community esclusi
@@ -305,6 +307,19 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
       if (!toolPath.test(barePath) && !/^\/(prova|auth|terms|privacy|maintenance)(\/|$)/.test(barePath)) {
         return NextResponse.redirect(new URL(`${localePrefix}/app/${tool}`, request.url));
       }
+    }
+  }
+
+  // Angolo Bambini con il blocco del genitore attivo (cookie del gioco con l'id
+  // di questo account): ogni pagina riporta al gioco finché il genitore non
+  // esce con il suo codice. Solo aprendo le pagine, non le azioni del server.
+  if (user && request.cookies.get(KIDS_LOCK_COOKIE)?.value === user.id && request.method === 'GET' && !request.headers.has('next-action')) {
+    const segments = request.nextUrl.pathname.split('/').filter(Boolean);
+    const hasLocale = !!segments[0] && locales.includes(segments[0]);
+    const localePrefix = hasLocale ? `/${segments[0]}` : '';
+    const barePath = '/' + (hasLocale ? segments.slice(1) : segments).join('/');
+    if (!KIDS_LOCK_ALLOWED.test(barePath)) {
+      return NextResponse.redirect(new URL(`${localePrefix}${KIDS_PATH}`, request.url));
     }
   }
 

@@ -614,5 +614,16 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       color: 'gold',
       category: 'svago',
     },
+    {
+      toolName: 'angolo-bambini',
+      href: '/app/angolo-bambini',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'Palette',
+      title: t('angoloBambini'),
+      description: t('angoloBambiniDescription'),
+      color: 'gold',
+      category: 'svago',
+      requiresSubscription: true,
+    },
   ]
 }
