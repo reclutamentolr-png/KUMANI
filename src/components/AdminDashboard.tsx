@@ -12,6 +12,7 @@ import { createClient } from '@/lib/supabase/client'
 import { hasPermission, Permission } from '@/lib/admin-permissions'
 import type MatrixTreeComponent from '@/components/MatrixTree'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
+import { serviceGroupOf } from '@/lib/serviceGroups'
 import AdminUserPicker from '@/components/admin/AdminUserPicker'
 import AdminGiftSubscriptionPanel from '@/components/admin/AdminGiftSubscriptionPanel'
 import ListingsReviewPanel from '@/components/admin/ListingsReviewPanel'
@@ -170,21 +171,24 @@ const AdminMessagesPanel = dynamic(() => import('@/components/admin/AdminMessage
 const AdminSettingsPanel = dynamic(() => import('@/components/admin/AdminSettingsPanel'), { loading })
 const CookieConsentSettings = dynamic(() => import('@/components/admin/CookieConsentSettings'), { loading })
 
-// Strumenti e interruttori raggruppati come nel Marketplace. Le sezioni della
-// piattaforma che non sono strumenti vanno in Community; il resto in "Altro".
+// Strumenti e interruttori raggruppati come nella pagina Servizi degli
+// iscritti (src/lib/serviceGroups.ts: Social, Soldi e organizzazione, La tua
+// attività, Bambini…). Le sezioni della piattaforma che non sono strumenti
+// vanno in Community; il resto in "Altro".
 const TOOL_GROUPS = [
-  { id: 'marketing', label: 'Marketing' },
-  { id: 'security', label: 'Sicurezza e Verifica' },
-  { id: 'personal', label: 'Organizzazione Personale' },
+  { id: 'security', label: 'Proteggerti dalle truffe' },
+  { id: 'money', label: 'Soldi e organizzazione' },
+  { id: 'work', label: 'Lavoro' },
+  { id: 'business', label: 'La tua attività' },
+  { id: 'social', label: 'Social' },
   { id: 'wellness', label: 'Benessere' },
-  { id: 'lavoro', label: 'Lavoro' },
-  { id: 'svago', label: 'Svago' },
-  { id: 'bambini', label: 'Bambini' },
+  { id: 'fun', label: 'Svago' },
+  { id: 'kids', label: 'Bambini' },
   { id: 'community', label: 'Community' },
   { id: 'other', label: 'Altro' },
 ] as const
 const PLATFORM_SWITCHES_COMMUNITY = new Set(['listings', 'chat', 'spotlight', 'convivio', 'events', 'timebank'])
-const TOOL_CATEGORY: Map<string, string> = new Map(getMarketplaceTools((key) => key).map((tool) => [tool.toolName, tool.category]))
+const TOOL_CATEGORY: Map<string, string> = new Map(getMarketplaceTools((key) => key).map((tool) => [tool.toolName, serviceGroupOf(tool.toolName)]))
 // Pagina di ogni servizio, per provarlo dall'Admin: quelli del Marketplace
 // hanno già il loro indirizzo, le sezioni della piattaforma sono qui.
 const PLATFORM_HREFS: Record<string, string> = {
@@ -1912,7 +1916,7 @@ L'accesso viene registrato.`))) return
       sections={availableMenuItems.map((item) => ({ id: item.id, label: item.label }))}
       tools={
         availableMenuItems.some((item) => item.id === 'marketplace')
-          ? getMarketplaceTools(tm).map((tool) => ({ name: tool.toolName, title: tool.title, group: TOOL_GROUPS.find((g) => g.id === tool.category)?.label ?? '' }))
+          ? getMarketplaceTools(tm).map((tool) => ({ name: tool.toolName, title: tool.title, group: TOOL_GROUPS.find((g) => g.id === toolCategoryOf(tool.toolName))?.label ?? '' }))
           : []
       }
       onTool={(name) => {
