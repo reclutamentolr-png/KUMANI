@@ -150,7 +150,7 @@ export default function TempusBooking(props: {
               </div>
               {selectedDay && (
                 <>
-                  <p className="mt-4 font-bold capitalize text-[var(--ink)]">{dayLabel(selectedDay.date, locale, { weekday: 'long', day: 'numeric', month: 'long' })}</p>
+                  <p className="mt-4 font-bold first-letter:uppercase text-[var(--ink)]">{dayLabel(selectedDay.date, locale, { weekday: 'long', day: 'numeric', month: 'long' })}</p>
                   <div className="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-5">
                     {selectedDay.slots.map((s) => (
                       <button key={s.startsAt} type="button" onClick={() => setSlot(s)} className="min-h-12 rounded-xl border-2 border-gray-200 bg-white font-bold text-[var(--ink)] hover:border-[var(--gold)] hover:bg-[var(--gold)]/10">
@@ -222,7 +222,7 @@ function CustomerForm(props: {
         <ArrowLeft className="h-4 w-4" /> {t('changeTime')}
       </button>
       <h2 className="text-lg font-extrabold text-[var(--ink)]">{t('stepDetails')}</h2>
-      <p className="mt-1 rounded-xl bg-[var(--gold-pale)] px-3 py-2 font-bold capitalize text-[var(--ink)]">{formatWhen(props.slot.startsAt, props.timezone, props.locale)}</p>
+      <p className="mt-1 rounded-xl bg-[var(--gold-pale)] px-3 py-2 font-bold first-letter:uppercase text-[var(--ink)]">{formatWhen(props.slot.startsAt, props.timezone, props.locale)}</p>
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
         <label className={label}>
           {t('yourName')}
@@ -282,7 +282,7 @@ function BookingDone({ done, businessName, address, timezone, cancelLimitHours, 
       <CheckCircle2 className="mx-auto h-14 w-14 text-green-600" />
       <h2 className="mt-3 text-2xl font-extrabold text-[var(--ink)]">{t('doneTitle')}</h2>
       <p className="mt-2 text-[var(--muted)]">{t('doneText', { business: businessName })}</p>
-      <p className="mx-auto mt-4 max-w-md rounded-2xl bg-[var(--gold-pale)] px-4 py-3 font-bold capitalize text-[var(--ink)]">
+      <p className="mx-auto mt-4 max-w-md rounded-2xl bg-[var(--gold-pale)] px-4 py-3 font-bold first-letter:uppercase text-[var(--ink)]">
         {done.serviceName}
         <br />
         {formatWhen(done.startsAt, timezone, locale)}

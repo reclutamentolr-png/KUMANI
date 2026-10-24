@@ -39,7 +39,7 @@ export default async function TempusManagePage({ params }: Props) {
         <CalendarCheck className="mx-auto h-12 w-12 text-[var(--gold)]" />
         <p className="mt-3 text-xs font-bold uppercase tracking-wider text-[var(--gold)]">{t('manageKicker')}</p>
         <h1 className="mt-1 text-2xl font-extrabold text-[var(--ink)]">{name}</h1>
-        <p className="mt-4 rounded-2xl bg-[var(--gold-pale)] px-4 py-3 font-bold capitalize text-[var(--ink)]">
+        <p className="mt-4 rounded-2xl bg-[var(--gold-pale)] px-4 py-3 font-bold first-letter:uppercase text-[var(--ink)]">
           {b.service_name as string}
           <br />
           {formatWhen(startsAt, tz, locale)}

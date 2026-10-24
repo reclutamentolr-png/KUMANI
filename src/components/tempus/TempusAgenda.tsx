@@ -86,7 +86,7 @@ export default function TempusAgenda({
       {days.map(({ date, items }) => (
         <section key={date} className={`${card} ${date === today ? 'ring-2 ring-[var(--gold)]' : ''}`}>
           <div className="flex items-center justify-between gap-3">
-            <h3 className="font-extrabold capitalize text-[var(--ink)]">
+            <h3 className="font-extrabold first-letter:uppercase text-[var(--ink)]">
               {dayLabel(date, locale, { weekday: 'long', day: 'numeric', month: 'long' })}
               {date === today && <span className="ml-2 rounded-full bg-[var(--gold)]/20 px-2 py-0.5 text-xs font-bold normal-case">{t('today')}</span>}
             </h3>

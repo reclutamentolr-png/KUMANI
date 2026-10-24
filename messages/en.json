@@ -8679,6 +8679,23 @@
       "step4Text": "Every morning note when you went to bed, when you woke up and how you slept. The chart shows how regular your times are and you get a practical tip.",
       "step5Title": "Shifts, travel and reminders",
       "step5Text": "In Shifts you find the plan for night work or changing hours, in Travel how to adapt to a new time zone. With Reminders you add the daily alerts to your phone’s calendar."
+    },
+    "tempus": {
+      "title": "KUMANI TEMPUS",
+      "summary": "Online bookings: your page where clients pick a service and a time, and your diary with all your appointments.",
+      "cta": "Open TEMPUS",
+      "step1Title": "Your services",
+      "step1Text": "Choose the address of your page, then add the services people can book: name, duration and, if you like, the price. The duration is used to work out the free times. Use the arrows to change the order and the eye to hide a service from the page.",
+      "step1Tip": "The logo, address and phone number on the page come from your Business profile.",
+      "step2Title": "Hours and rules",
+      "step2Text": "Tick your opening days and add up to 3 time slots per day. Below, choose how often to offer a time, the break after each appointment, the minimum notice, how far ahead people can book and until when they can cancel online. At the bottom, add holidays and closing days.",
+      "step3Title": "Publish and share",
+      "step3Text": "In the «Your page» tab, tap «Publish the page». Copy the link, send it on WhatsApp or download the QR code for your shop window or counter. Before publishing you can look at the preview.",
+      "step3Tip": "Put the link in your Instagram bio, on your Landing Page and at the end of your messages.",
+      "step4Title": "Clients book",
+      "step4Text": "On your page, clients pick the service, the day and a free time and leave their name, phone and email. No sign-up needed. They get a confirmation, a reminder the evening before and a link to cancel.",
+      "step5Title": "Your diary",
+      "step5Text": "Every new booking reaches you by email, in the bell and on your phone. The diary shows the week: call or message on WhatsApp with one tap, add a note, cancel (the client gets an email) or mark a no-show. With «Add» you enter appointments taken over the phone."
     }
   },
   "deckTexts": {

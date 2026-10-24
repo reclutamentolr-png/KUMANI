@@ -97,7 +97,7 @@ export default function TempusServices({ settings, services, onChange }: { setti
                 </li>
               ) : (
                 <li key={s.id} className={`flex flex-wrap items-center gap-3 rounded-2xl border px-4 py-3 ${s.active ? 'border-[var(--gold)]/30 bg-[var(--paper)]' : 'border-gray-200 bg-gray-50 opacity-70'}`}>
-                  <div className="min-w-0 flex-1">
+                  <div className="min-w-0 basis-full sm:basis-0 sm:flex-1">
                     <p className="font-bold text-[var(--ink)]">{s.name}</p>
                     <p className="text-sm text-[var(--muted)]">
                       {formatDuration(s.duration_min)}
@@ -105,7 +105,7 @@ export default function TempusServices({ settings, services, onChange }: { setti
                       {!s.active ? ` · ${t('hidden')}` : ''}
                     </p>
                   </div>
-                  <div className="flex gap-1">
+                  <div className="-ml-2 flex gap-1 sm:ml-0">
                     <button type="button" onClick={() => move(i, -1)} disabled={i === 0} className="rounded-lg p-2 text-gray-500 hover:bg-white disabled:opacity-30" aria-label={t('moveUp')}>
                       <ArrowUp className="h-4 w-4" />
                     </button>

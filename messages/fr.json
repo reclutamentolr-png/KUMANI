@@ -8679,6 +8679,23 @@
       "step4Text": "Chaque matin, note à quelle heure tu t’es couché, quand tu t’es réveillé et comment tu as dormi. Le graphique montre la régularité de tes horaires et tu reçois un conseil pratique.",
       "step5Title": "Horaires, voyages et rappels",
       "step5Text": "Dans Horaires tu trouves le plan pour le travail de nuit ou en horaires décalés, dans Voyages comment t’adapter au fuseau horaire. Avec Rappels tu ajoutes à l’agenda de ton téléphone les alertes de chaque jour."
+    },
+    "tempus": {
+      "title": "KUMANI TEMPUS",
+      "summary": "Réservations en ligne : ta page où les clients choisissent la prestation et l’horaire, et ton agenda avec tous les rendez-vous.",
+      "cta": "Ouvrir TEMPUS",
+      "step1Title": "Tes prestations",
+      "step1Text": "Choisis l’adresse de ta page, puis ajoute les prestations réservables : nom, durée et, si tu veux, le prix. La durée sert à calculer les créneaux libres. Avec les flèches tu changes l’ordre, avec l’œil tu caches une prestation de la page.",
+      "step1Tip": "Le logo, l’adresse et le téléphone de la page viennent de ta Fiche entreprise.",
+      "step2Title": "Horaires et règles",
+      "step2Text": "Coche tes jours d’ouverture et jusqu’à 3 plages par jour. En dessous, choisis tous les combien proposer un créneau, la pause après chaque rendez-vous, le délai minimum, jusqu’à quand on peut réserver et annuler en ligne. En bas, ajoute congés et jours de fermeture.",
+      "step3Title": "Publie et partage",
+      "step3Text": "Dans l’onglet « Ta page », touche « Publier la page ». Copie le lien, envoie-le sur WhatsApp ou télécharge le QR code pour ta vitrine ou ton comptoir. Avant de publier, tu peux voir l’aperçu.",
+      "step3Tip": "Mets le lien dans ta bio Instagram, sur ta Landing Page et à la fin de tes messages.",
+      "step4Title": "Le client réserve",
+      "step4Text": "Sur ta page, le client choisit la prestation, le jour et un créneau libre, puis laisse son nom, son téléphone et son e-mail. Pas besoin de s’inscrire. Il reçoit la confirmation, un rappel la veille au soir et le lien pour annuler.",
+      "step5Title": "Ton agenda",
+      "step5Text": "Chaque nouvelle réservation t’arrive par e-mail, dans la cloche et sur ton téléphone. L’agenda montre la semaine : appelle ou écris sur WhatsApp d’un geste, ajoute une note, annule (le client reçoit un e-mail) ou indique une absence. Avec « Ajouter » tu saisis les rendez-vous pris par téléphone."
     }
   },
   "deckTexts": {

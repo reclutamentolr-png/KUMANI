@@ -8679,6 +8679,23 @@
       "step4Text": "Notiere jeden Morgen, wann du ins Bett gegangen und aufgewacht bist und wie du geschlafen hast. Das Diagramm zeigt, wie regelmäßig deine Zeiten sind, und du bekommst einen praktischen Tipp.",
       "step5Title": "Schichten, Reisen und Erinnerungen",
       "step5Text": "Unter Schichten findest du den Plan für Nachtarbeit oder wechselnde Zeiten, unter Reisen, wie du dich an eine Zeitzone gewöhnst. Mit Erinnerungen fügst du die täglichen Hinweise dem Kalender deines Handys hinzu."
+    },
+    "tempus": {
+      "title": "KUMANI TEMPUS",
+      "summary": "Online-Buchungen: deine Seite, auf der Kunden Leistung und Uhrzeit wählen, und dein Kalender mit allen Terminen.",
+      "cta": "TEMPUS öffnen",
+      "step1Title": "Deine Leistungen",
+      "step1Text": "Wähle die Adresse deiner Seite und füge die buchbaren Leistungen hinzu: Name, Dauer und, wenn du willst, den Preis. Aus der Dauer werden die freien Zeiten berechnet. Mit den Pfeilen änderst du die Reihenfolge, mit dem Auge blendest du eine Leistung auf der Seite aus.",
+      "step1Tip": "Logo, Adresse und Telefonnummer der Seite kommen aus deinem Geschäftsprofil.",
+      "step2Title": "Zeiten und Regeln",
+      "step2Text": "Hake deine Öffnungstage an und lege bis zu 3 Zeitfenster pro Tag fest. Darunter wählst du, wie oft eine Uhrzeit angeboten wird, die Pause nach jedem Termin, die Mindestvorlaufzeit, wie weit im Voraus gebucht und bis wann online storniert werden kann. Ganz unten trägst du Urlaub und Schließtage ein.",
+      "step3Title": "Veröffentlichen und teilen",
+      "step3Text": "Tippe im Tab «Deine Seite» auf «Seite veröffentlichen». Kopiere den Link, schicke ihn per WhatsApp oder lade den QR-Code für Schaufenster oder Theke herunter. Vor dem Veröffentlichen siehst du eine Vorschau.",
+      "step3Tip": "Setz den Link in deine Instagram-Bio, auf deine Landing Page und ans Ende deiner Nachrichten.",
+      "step4Title": "Der Kunde bucht",
+      "step4Text": "Auf deiner Seite wählt der Kunde Leistung, Tag und eine freie Uhrzeit und gibt Name, Telefon und E-Mail an. Eine Anmeldung ist nicht nötig. Er bekommt die Bestätigung, eine Erinnerung am Vorabend und den Link zum Stornieren.",
+      "step5Title": "Dein Kalender",
+      "step5Text": "Jede neue Buchung erreicht dich per E-Mail, in der Glocke und auf dem Handy. Im Kalender siehst du die Woche: mit einem Tipp anrufen oder per WhatsApp schreiben, eine Notiz hinzufügen, stornieren (der Kunde bekommt eine E-Mail) oder ein Nichterscheinen markieren. Mit «Hinzufügen» trägst du telefonisch vereinbarte Termine ein."
     }
   },
   "deckTexts": {

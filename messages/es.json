@@ -8679,6 +8679,23 @@
       "step4Text": "Cada mañana anota a qué hora te acostaste, cuándo te despertaste y cómo dormiste. El gráfico muestra la regularidad de tus horarios y recibes un consejo práctico.",
       "step5Title": "Turnos, viajes y recordatorios",
       "step5Text": "En Turnos encuentras el plan para el trabajo de noche o con horarios cambiantes, en Viajes cómo adaptarte al huso horario. Con Recordatorios añades al calendario del móvil los avisos de cada día."
+    },
+    "tempus": {
+      "title": "KUMANI TEMPUS",
+      "summary": "Reservas online: tu página donde los clientes eligen servicio y hora, y tu agenda con todas las citas.",
+      "cta": "Abrir TEMPUS",
+      "step1Title": "Tus servicios",
+      "step1Text": "Elige la dirección de tu página y añade los servicios que se pueden reservar: nombre, duración y, si quieres, el precio. La duración sirve para calcular las horas libres. Con las flechas cambias el orden y con el ojo ocultas un servicio de la página.",
+      "step1Tip": "El logo, la dirección y el teléfono de la página vienen de tu Ficha de actividad.",
+      "step2Title": "Horarios y reglas",
+      "step2Text": "Marca los días de apertura y hasta 3 franjas por día. Debajo elige cada cuánto ofrecer una hora, la pausa después de cada cita, la antelación mínima, hasta cuándo se puede reservar y cancelar online. Al final añade vacaciones y días de cierre.",
+      "step3Title": "Publica y comparte",
+      "step3Text": "En la pestaña «Tu página» toca «Publicar la página». Copia el enlace, envíalo por WhatsApp o descarga el QR para el escaparate o el mostrador. Antes de publicar puedes ver la vista previa.",
+      "step3Tip": "Pon el enlace en tu bio de Instagram, en tu Landing Page y al final de tus mensajes.",
+      "step4Title": "El cliente reserva",
+      "step4Text": "En tu página el cliente elige el servicio, el día y una hora libre y deja su nombre, teléfono y email. No necesita registrarse. Recibe la confirmación, un recordatorio la tarde anterior y el enlace para cancelar.",
+      "step5Title": "Tu agenda",
+      "step5Text": "Cada nueva reserva te llega por email, en la campana y al móvil. En la agenda ves la semana: llama o escribe por WhatsApp con un toque, añade una nota, cancela (el cliente recibe un email) o marca a quien no se presentó. Con «Añadir» registras las citas tomadas por teléfono."
     }
   },
   "deckTexts": {

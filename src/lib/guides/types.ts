@@ -75,6 +75,7 @@ export type GuideSlug =
   | 'neurobalance'
   | 'aureya'
   | 'cronobioma'
+  | 'tempus'
   | 'travel'
 
 export type GuideStep = {

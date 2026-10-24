@@ -8679,6 +8679,23 @@
       "step4Text": "Ogni mattina annota a che ora sei andato a letto, quando ti sei svegliato e come hai dormito. Il grafico mostra la regolarità degli orari e ricevi un consiglio pratico.",
       "step5Title": "Turni, viaggi e promemoria",
       "step5Text": "Nei Turni trovi il piano per il lavoro di notte o a orari diversi, nei Viaggi come adattarti al fuso orario. Con i Promemoria aggiungi al calendario del telefono gli avvisi di ogni giorno."
+    },
+    "tempus": {
+      "title": "KUMANI TEMPUS",
+      "summary": "Prenotazioni online: la tua pagina dove i clienti scelgono servizio e orario, e l’agenda con tutti gli appuntamenti.",
+      "cta": "Apri TEMPUS",
+      "step1Title": "I tuoi servizi",
+      "step1Text": "Scegli l’indirizzo della tua pagina, poi aggiungi i servizi che si possono prenotare: nome, durata e, se vuoi, il prezzo. La durata serve a calcolare gli orari liberi. Con le frecce cambi l’ordine, con l’occhio nascondi un servizio dalla pagina.",
+      "step1Tip": "Logo, indirizzo e telefono della pagina arrivano dalla tua Scheda attività.",
+      "step2Title": "Orari e regole",
+      "step2Text": "Segna i giorni di apertura e fino a 3 fasce al giorno. Sotto scegli ogni quanto proporre un orario, la pausa dopo ogni appuntamento, il preavviso minimo, fin quando si può prenotare e fino a quando si può disdire online. In fondo aggiungi ferie e giorni di chiusura.",
+      "step3Title": "Pubblica e condividi",
+      "step3Text": "Nella scheda «La tua pagina» tocca «Pubblica la pagina». Copia il link, mandalo su WhatsApp o scarica il QR da mettere in vetrina o sul bancone. Prima di pubblicare puoi guardare l’anteprima.",
+      "step3Tip": "Metti il link nella bio di Instagram, nella Landing Page e nella firma dei messaggi.",
+      "step4Title": "Il cliente prenota",
+      "step4Text": "Dalla pagina il cliente sceglie il servizio, il giorno e l’ora tra quelli liberi e lascia nome, telefono ed email. Non serve iscriversi. Riceve la conferma, il promemoria la sera prima e il link per disdire.",
+      "step5Title": "La tua agenda",
+      "step5Text": "Ogni nuova prenotazione ti arriva per email, nella campanella e sul telefono. Nell’agenda vedi la settimana: chiami o scrivi su WhatsApp con un tocco, aggiungi una nota, annulli (il cliente riceve un’email) o segni chi non si è presentato. Con «Aggiungi» inserisci gli appuntamenti presi al telefono."
     }
   },
   "deckTexts": {

@@ -77,5 +77,6 @@ export const GUIDE_STRUCTURE: GuideStructure[] = [
   { slug: 'neurobalance', category: 'wellness', minutes: 2, steps: 3, href: '/marketplace/neurobalance' },
   { slug: 'aureya', category: 'wellness', minutes: 3, steps: 4, href: '/marketplace/aureya' },
   { slug: 'cronobioma', category: 'wellness', minutes: 4, steps: 5, href: '/marketplace/cronobioma' },
+  { slug: 'tempus', category: 'pro', minutes: 4, steps: 5, href: '/marketplace/tempus' },
   { slug: 'travel', category: 'wellness', minutes: 2, steps: 2, href: '/viaggi' },
 ]

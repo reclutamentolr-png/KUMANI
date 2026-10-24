@@ -68,6 +68,7 @@ export const TOOL_GUIDES: { path: string; slug: GuideSlug }[] = [
   { path: '/marketplace/neurobalance', slug: 'neurobalance' },
   { path: '/marketplace/aureya', slug: 'aureya' },
   { path: '/marketplace/cronobioma', slug: 'cronobioma' },
+  { path: '/marketplace/tempus', slug: 'tempus' },
   { path: '/viaggi', slug: 'travel' },
 ]
 

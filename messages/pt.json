@@ -8679,6 +8679,23 @@
       "step4Text": "Todas as manhãs regista a que horas te deitaste, quando acordaste e como dormiste. O gráfico mostra a regularidade dos teus horários e recebes um conselho prático.",
       "step5Title": "Turnos, viagens e lembretes",
       "step5Text": "Em Turnos encontras o plano para o trabalho noturno ou com horários variáveis, em Viagens como te adaptares ao fuso horário. Com Lembretes juntas ao calendário do telemóvel os avisos de cada dia."
+    },
+    "tempus": {
+      "title": "KUMANI TEMPUS",
+      "summary": "Marcações online: a sua página onde os clientes escolhem o serviço e a hora, e a agenda com todas as marcações.",
+      "cta": "Abrir TEMPUS",
+      "step1Title": "Os seus serviços",
+      "step1Text": "Escolha o endereço da sua página e adicione os serviços que se podem marcar: nome, duração e, se quiser, o preço. A duração serve para calcular as horas livres. Com as setas muda a ordem e com o olho esconde um serviço da página.",
+      "step1Tip": "O logótipo, a morada e o telefone da página vêm da sua Ficha da atividade.",
+      "step2Title": "Horários e regras",
+      "step2Text": "Assinale os dias de abertura e até 3 períodos por dia. Em baixo escolha de quanto em quanto tempo propor uma hora, a pausa depois de cada marcação, a antecedência mínima, até quando se pode marcar e desmarcar online. No fim adicione férias e dias de fecho.",
+      "step3Title": "Publique e partilhe",
+      "step3Text": "No separador «A sua página» toque em «Publicar a página». Copie a ligação, envie-a por WhatsApp ou descarregue o QR para a montra ou o balcão. Antes de publicar pode ver a pré-visualização.",
+      "step3Tip": "Ponha a ligação na bio do Instagram, na sua Landing Page e no fim das suas mensagens.",
+      "step4Title": "O cliente marca",
+      "step4Text": "Na sua página o cliente escolhe o serviço, o dia e uma hora livre e deixa o nome, o telefone e o email. Não precisa de se registar. Recebe a confirmação, um lembrete na véspera à noite e a ligação para desmarcar.",
+      "step5Title": "A sua agenda",
+      "step5Text": "Cada nova marcação chega-lhe por email, no sino e no telemóvel. Na agenda vê a semana: ligue ou escreva no WhatsApp com um toque, adicione uma nota, cancele (o cliente recebe um email) ou assinale quem faltou. Com «Adicionar» regista as marcações feitas por telefone."
     }
   },
   "deckTexts": {
