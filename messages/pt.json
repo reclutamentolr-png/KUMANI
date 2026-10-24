@@ -5741,7 +5741,9 @@
     "f_link_ip_logger": "Contém um link espião ({domain}): se o abrires, quem o enviou vê o teu endereço IP, a tua zona e o teu dispositivo. Não o abras.",
     "f_phishing_page": "Página de acesso falsa: pede código de utilizador e palavra-passe fazendo-se passar por {brand}, mas o site é {domain} e não pertence a {brand} (o site verdadeiro é {official}). É phishing, serve para roubar o acesso à tua conta. Não introduzas nada; se já o fizeste, muda já a palavra-passe e avisa {brand}.",
     "f_phishing_page_card": "Página de pagamento falsa: pede os dados do cartão fazendo-se passar por {brand}, mas o site é {domain} e não pertence a {brand} (o site verdadeiro é {official}). É phishing, serve para roubar o cartão. Não introduzas nada; se já o fizeste, bloqueia já o cartão ligando ao teu banco.",
-    "f_link_redirects": "Um link leva a outro site: de {from} chega a {to}. É aí que irias realmente parar."
+    "f_link_redirects": "Um link leva a outro site: de {from} chega a {to}. É aí que irias realmente parar.",
+    "aiSkipped_clearScam": "Não foi preciso ler o texto: os controlos técnicos já encontraram sinais graves de burla.",
+    "aiSkipped_clearSafe": "Não foi preciso ler o texto: o remetente está verificado (assinaturas SPF/DKIM) e não há sinais suspeitos."
   },
   "oxygen": {
     "title": "OXYGEN",

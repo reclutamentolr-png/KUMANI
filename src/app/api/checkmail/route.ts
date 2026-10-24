@@ -10,7 +10,7 @@ import { webRiskLookup } from '@/lib/webRisk'
 import { msgToEml } from '@/lib/checkmail/msg'
 import { applyAiAssessment, assessWithAi, type AiAssessment } from '@/lib/checkmail/ai'
 import { MissingApiKeyError } from '@/lib/anthropic'
-import type { CheckMailResponse } from '@/lib/checkmail/types'
+import type { AiSkip, CheckMailResponse } from '@/lib/checkmail/types'
 
 // KUMANI CheckMail: analisi di un'email sospetta (file .eml/.msg, sorgente
 // incollato, oppure mittente + testo dal telefono). L'email è analizzata in
@@ -141,13 +141,14 @@ export async function POST(request: NextRequest) {
   const leftToday = reserved.left_today ?? 0
 
   try {
-    // Controlli locali (veloci), poi rete e IA in parallelo
+    // Prima i controlli tecnici (locali, rete, link); poi l'IA, ma solo nei
+    // casi incerti: se i controlli hanno già trovato una truffa evidente, o il
+    // mittente è verificato e non c'è nulla di sospetto, leggere il testo non
+    // cambia il risultato e costa (src/lib/aiModels.ts)
     let verdict = await analyzeEmail(hasRaw ? { raw } : { text, sender, subject }, { network: false })
-
-    let aiAvailable = true
-    const wantsAi = verdict.textSample.length > 20 || !!verdict.summary.subject
+    const hasText = verdict.textSample.length > 20 || !!verdict.summary.subject
     // I controlli di rete valgono anche per i siti d'arrivo dei link
-    const linkChecks = inspectEmailLinks(verdict.summary)
+    const linkFindings = await inspectEmailLinks(verdict.summary)
       .catch(() => [] as LinkInspection[])
       .then(async (inspected) => {
         const finals = inspected.filter((i) => i.redirected)
@@ -159,18 +160,20 @@ export async function POST(request: NextRequest) {
         const [net, list] = await Promise.all([networkFindings(summary).catch(() => []), blocklistFindings(summary).catch(() => [])])
         return [...inspectionFindings(inspected), ...net, ...list]
       })
-    const [linkFindings, ai] = await Promise.all([
-      linkChecks,
-      wantsAi
-        ? assessWithAi(verdict, locale).catch((error: unknown) => {
-            // Un errore dell'IA non blocca il risultato dei controlli tecnici
-            aiAvailable = false
-            if (!(error instanceof MissingApiKeyError)) console.error('[checkmail] AI error:', error instanceof Error ? error.message : 'unknown')
-            return null
-          })
-        : Promise.resolve<AiAssessment | null>(null),
-    ])
     verdict = withFindings(verdict, linkFindings)
+
+    const verifiedClean = verdict.summary.hasHeaders && verdict.findings.some((f) => f.key === 'auth_ok') && verdict.score === 0
+    const aiSkipped: AiSkip | null = !hasText ? 'noText' : verdict.level === 'high' ? 'clearScam' : verifiedClean ? 'clearSafe' : null
+    let aiAvailable = true
+    let ai: AiAssessment | null = null
+    if (!aiSkipped) {
+      ai = await assessWithAi(verdict, locale).catch((error: unknown) => {
+        // Un errore dell'IA non blocca il risultato dei controlli tecnici
+        aiAvailable = false
+        if (!(error instanceof MissingApiKeyError)) console.error('[checkmail] AI error:', error instanceof Error ? error.message : 'unknown')
+        return null
+      })
+    }
     if (ai) verdict = applyAiAssessment(verdict, ai)
 
     await awardToolPoint('checkmail')
@@ -181,6 +184,7 @@ export async function POST(request: NextRequest) {
       findings: verdict.findings,
       ai,
       aiAvailable,
+      aiSkipped,
       hasHeaders: verdict.summary.hasHeaders,
       leftToday,
       community: { sender: verdict.summary.fromAddress ?? null, domains: (verdict.summary.linkDomains ?? []).slice(0, 10) },

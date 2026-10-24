@@ -5741,7 +5741,9 @@
     "f_link_ip_logger": "Enthält einen Spionage-Link ({domain}): Wenn du ihn öffnest, sieht der Absender deine IP-Adresse, deine Gegend und dein Gerät. Öffne ihn nicht.",
     "f_phishing_page": "Gefälschte Anmeldeseite: Sie fragt nach Benutzerkennung und Passwort und gibt sich als {brand} aus, aber die Seite ist {domain} und gehört nicht zu {brand} (die echte Seite ist {official}). Das ist Phishing, um den Zugang zu deinem Konto zu stehlen. Gib nichts ein; falls schon geschehen, ändere sofort dein Passwort und informiere {brand}.",
     "f_phishing_page_card": "Gefälschte Zahlungsseite: Sie fragt nach Kartendaten und gibt sich als {brand} aus, aber die Seite ist {domain} und gehört nicht zu {brand} (die echte Seite ist {official}). Das ist Phishing, um deine Karte zu stehlen. Gib nichts ein; falls schon geschehen, lass die Karte sofort bei deiner Bank sperren.",
-    "f_link_redirects": "Ein Link führt auf eine andere Seite: von {from} nach {to}. Dort würdest du tatsächlich landen."
+    "f_link_redirects": "Ein Link führt auf eine andere Seite: von {from} nach {to}. Dort würdest du tatsächlich landen.",
+    "aiSkipped_clearScam": "Das Lesen des Textes war nicht nötig: Die technischen Prüfungen haben bereits ernste Betrugsanzeichen gefunden.",
+    "aiSkipped_clearSafe": "Das Lesen des Textes war nicht nötig: Der Absender ist verifiziert (SPF/DKIM-Signaturen) und es gibt keine verdächtigen Anzeichen."
   },
   "oxygen": {
     "title": "OXYGEN",

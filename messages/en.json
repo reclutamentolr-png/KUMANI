@@ -5741,7 +5741,9 @@
     "f_link_ip_logger": "It contains a spy link ({domain}): if you open it, the sender sees your IP address, your area and your device. Do not open it.",
     "f_phishing_page": "Fake login page: it asks for your user code and password while posing as {brand}, but the site is {domain} and does not belong to {brand} (the real site is {official}). This is phishing, meant to steal access to your account. Do not enter anything; if you already did, change your password right away and contact {brand}.",
     "f_phishing_page_card": "Fake payment page: it asks for your card details while posing as {brand}, but the site is {domain} and does not belong to {brand} (the real site is {official}). This is phishing, meant to steal your card. Do not enter anything; if you already did, block your card right away by calling your bank.",
-    "f_link_redirects": "A link goes to another site: from {from} it lands on {to}. That is where you would actually end up."
+    "f_link_redirects": "A link goes to another site: from {from} it lands on {to}. That is where you would actually end up.",
+    "aiSkipped_clearScam": "Reading the text wasn't needed: the technical checks already found serious signs of a scam.",
+    "aiSkipped_clearSafe": "Reading the text wasn't needed: the sender is verified (SPF/DKIM signatures) and there are no suspicious signs."
   },
   "oxygen": {
     "title": "OXYGEN",

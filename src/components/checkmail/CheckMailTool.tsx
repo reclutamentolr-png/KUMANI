@@ -307,6 +307,8 @@ export function CheckMailResult({ result, onNew }: { result: OkResult; onNew: ()
               </ul>
             )}
           </>
+        ) : result.aiSkipped && result.aiSkipped !== 'noText' ? (
+          <p className="text-sm text-gray-600">{t(`aiSkipped_${result.aiSkipped}`)}</p>
         ) : (
           <p className="text-sm text-gray-600">{t('aiUnavailable')}</p>
         )}
