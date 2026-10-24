@@ -1,6 +1,7 @@
 'use server'
 
-import { headers } from 'next/headers'
+import { createHmac, timingSafeEqual } from 'crypto'
+import { cookies, headers } from 'next/headers'
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
@@ -15,7 +16,7 @@ import { locales, defaultLocale } from '../../../i18n'
 // reimpostarla inviato dallo Staff. Lo Staff non vede né sceglie mai la
 // password: la sceglie sempre il Kumano.
 
-const MIN_LENGTH = 6
+const MIN_LENGTH = 8
 const MAX_LENGTH = 72
 
 const anonClient = () =>
@@ -28,9 +29,19 @@ const serviceClient = () =>
     auth: { autoRefreshToken: false, persistSession: false },
   })
 
+// Errore di Supabase Auth da tradurre nella pagina (src/lib/authErrors.ts):
+// password debole, rubata, uguale alla precedente…
+export type AuthErrorInfo = { code?: string; message?: string; name?: string; reasons?: string[] }
+
+const authErrorInfo = (error: unknown): AuthErrorInfo => {
+  const { code, message, name, reasons } = error as AuthErrorInfo
+  return { code, message, name, reasons }
+}
+
 export type ChangePasswordResult = {
   success: boolean
-  code?: 'auth' | 'too_short' | 'too_long' | 'same' | 'wrong_current' | 'rate_limit' | 'captcha' | 'error'
+  code?: 'auth' | 'too_short' | 'too_long' | 'same' | 'wrong_current' | 'rate_limit' | 'captcha' | 'auth_error' | 'error'
+  error?: AuthErrorInfo
 }
 
 // Avviso via email: se non è stato il Kumano a cambiarla, se ne accorge subito
@@ -86,6 +97,13 @@ export async function changeMyPassword(
     const rateLimited = signInError.status === 429 || /rate limit/i.test(signInError.message)
     if (rateLimited) return { success: false, code: 'rate_limit' }
     if (signInError.code === 'captcha_failed' || /captcha/i.test(signInError.message)) return { success: false, code: 'captcha' }
+    // Solo «credenziali errate» è una password attuale sbagliata: un problema
+    // temporaneo di Supabase non va detto all'utente né registrato come sospetto
+    const wrong = signInError.code === 'invalid_credentials' || /invalid login credentials/i.test(signInError.message)
+    if (!wrong) {
+      console.error('[cambio password] controllo non riuscito:', signInError.code ?? signInError.message)
+      return { success: false, code: 'error' }
+    }
     // Password attuale sbagliata più volte: account forse in mano ad altri
     const h = await headers()
     await logSecurityEvent({ kind: 'password_check_failed', userId: user.id, ip: clientIp(h), userAgent: h.get('user-agent') })
@@ -93,10 +111,12 @@ export async function changeMyPassword(
   }
   await check.auth.signOut({ scope: 'local' }).catch(() => {})
 
+  // Supabase può rifiutare la nuova password (troppo debole, tra quelle rubate
+  // su internet…): il motivo va mostrato, non un «riprova tra poco»
   const { error } = await serviceClient().auth.admin.updateUserById(user.id, { password: next })
   if (error) {
-    console.error('[cambio password]', error.message)
-    return { success: false, code: 'error' }
+    console.error('[cambio password]', error.code ?? error.message)
+    return { success: false, code: 'auth_error', error: authErrorInfo(error) }
   }
 
   // Fuori tutti gli altri dispositivi (anche un eventuale intruso), resta
@@ -112,12 +132,36 @@ export async function changeMyPassword(
 }
 
 // Nuova password dopo il codice o il link di recupero (Password dimenticata,
-// link dello Staff). Vale solo per una sessione appena aperta con il recupero
-// (codice o link di «recupero»): chi trova un account già aperto non può
+// link dello Staff). Vale solo per una sessione appena aperta con il recupero:
+// chi trova un account già aperto (o lo Staff che entra «come utente») non può
 // cambiare la password senza conoscere quella attuale (per quello c'è il
 // profilo, con changeMyPassword). Poi fuori gli altri dispositivi e avviso.
+//
+// Due prove di recupero valgono:
+// - il link dell'email «Password dimenticata» (?code=…): Supabase scrive
+//   «recovery» nella sessione;
+// - il codice a 6 cifre o il link dello Staff (?token_hash=…), verificati qui
+//   sul server con verifyRecoveryCode. Supabase li registra come «otp», come
+//   ogni altro codice (anche l'accesso dello Staff come utente): il server
+//   lascia quindi un contrassegno firmato, non leggibile dal browser, valido
+//   15 minuti e solo per quell'utente.
 const RECOVERY_METHODS = ['recovery']
 const RECOVERY_WINDOW_S = 60 * 60
+const RECOVERY_COOKIE = 'kumani_recovery'
+const RECOVERY_COOKIE_S = 15 * 60
+
+const recoverySignature = (userId: string, expires: number) =>
+  createHmac('sha256', process.env.SUPABASE_SERVICE_ROLE_KEY!).update(`password-recovery:${userId}:${expires}`).digest('base64url')
+
+async function hasRecoveryMark(userId: string) {
+  const value = (await cookies()).get(RECOVERY_COOKIE)?.value
+  const [id, exp, signature] = value?.split('.') ?? []
+  const expires = Number(exp)
+  if (id !== userId || !signature || !Number.isFinite(expires) || expires < Math.floor(Date.now() / 1000)) return false
+  const expected = Buffer.from(recoverySignature(userId, expires))
+  const given = Buffer.from(signature)
+  return expected.length === given.length && timingSafeEqual(expected, given)
+}
 
 async function recoverySession() {
   const supabase = await createClient()
@@ -126,7 +170,33 @@ async function recoverySession() {
   if (!claims?.sub) return null
   const now = Math.floor(Date.now() / 1000)
   const recent = (claims.amr ?? []).some((entry) => RECOVERY_METHODS.includes(entry.method ?? '') && now - (entry.timestamp ?? 0) < RECOVERY_WINDOW_S)
-  return recent ? { supabase, userId: claims.sub, email: claims.email ?? null } : null
+  return recent || (await hasRecoveryMark(claims.sub)) ? { supabase, userId: claims.sub, email: claims.email ?? null } : null
+}
+
+export type VerifyRecoveryResult = { success: true } | { success: false; code: 'invalid_code' | 'rate_limit' }
+
+// Verifica del codice di recupero (email + 6 cifre) o del link dello Staff
+// (token_hash): apre la sessione e lascia il contrassegno del recupero
+export async function verifyRecoveryCode(input: { email: string; token: string } | { tokenHash: string }): Promise<VerifyRecoveryResult> {
+  const supabase = await createClient()
+  const { data, error } =
+    'tokenHash' in input
+      ? await supabase.auth.verifyOtp({ token_hash: String(input.tokenHash), type: 'recovery' })
+      : await supabase.auth.verifyOtp({ email: String(input.email).trim(), token: String(input.token).trim(), type: 'recovery' })
+  if (error || !data.user) {
+    const rateLimited = error?.status === 429 || /rate limit/i.test(error?.message ?? '')
+    return { success: false, code: rateLimited ? 'rate_limit' : 'invalid_code' }
+  }
+  const expires = Math.floor(Date.now() / 1000) + RECOVERY_COOKIE_S
+  const cookieStore = await cookies()
+  cookieStore.set(RECOVERY_COOKIE, `${data.user.id}.${expires}.${recoverySignature(data.user.id, expires)}`, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+    maxAge: RECOVERY_COOKIE_S,
+  })
+  return { success: true }
 }
 
 export async function canResetPassword(): Promise<boolean> {
@@ -135,7 +205,7 @@ export async function canResetPassword(): Promise<boolean> {
 
 export type ResetPasswordResult =
   | { success: true }
-  | { success: false; code: 'not_recovery' | 'too_short' | 'too_long' | 'auth_error'; error?: { code?: string; message?: string; name?: string; reasons?: string[] } }
+  | { success: false; code: 'not_recovery' | 'too_short' | 'too_long' | 'auth_error'; error?: AuthErrorInfo }
 
 export async function resetPasswordAfterRecovery(next: string, locale: string): Promise<ResetPasswordResult> {
   if (typeof next !== 'string' || next.length < 8) return { success: false, code: 'too_short' }
@@ -144,11 +214,10 @@ export async function resetPasswordAfterRecovery(next: string, locale: string): 
   if (!session) return { success: false, code: 'not_recovery' }
 
   const { error } = await session.supabase.auth.updateUser({ password: next })
-  if (error) {
-    const { code, message, name } = error
-    const reasons = (error as { reasons?: string[] }).reasons
-    return { success: false, code: 'auth_error', error: { code, message, name, reasons } }
-  }
+  if (error) return { success: false, code: 'auth_error', error: authErrorInfo(error) }
+  // Il recupero vale per un solo cambio
+  const cookieStore = await cookies()
+  cookieStore.delete(RECOVERY_COOKIE)
   await session.supabase.auth.signOut({ scope: 'others' }).catch(() => {})
   if (session.email) {
     const { data: profile } = await serviceClient().from('profiles').select('first_name').eq('id', session.userId).maybeSingle()

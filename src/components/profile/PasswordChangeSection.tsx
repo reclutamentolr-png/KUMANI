@@ -6,11 +6,13 @@ import { AlertCircle, CheckCircle2, Eye, EyeOff, KeyRound } from 'lucide-react'
 import { changeMyPassword } from '@/app/actions/password'
 import TurnstileWidget, { TURNSTILE_ENABLED, useTurnstile } from '@/components/auth/TurnstileWidget'
 import PasswordStrength from '@/components/PasswordStrength'
+import { authErrorText } from '@/lib/authErrors'
 
 // Nel profilo: cambio password con la password attuale (chi l'ha dimenticata
 // usa "Password dimenticata" dalla pagina di accesso).
 export default function PasswordChangeSection() {
   const t = useTranslations('passwordChange')
+  const tAuth = useTranslations('auth')
   const locale = useLocale()
   const [open, setOpen] = useState(false)
   const [current, setCurrent] = useState('')
@@ -63,6 +65,8 @@ export default function PasswordChangeSection() {
         rate_limit: t('errorRateLimit'),
         captcha: t('errorCaptcha'),
       }
+      // Password rifiutata da Supabase (debole, tra quelle rubate…): il motivo vero
+      if (res.code === 'auth_error') return setError(authErrorText(tAuth, res.error, t('errorGeneric')))
       setError(messages[res.code ?? ''] ?? t('errorGeneric'))
     } catch {
       setError(t('errorGeneric'))

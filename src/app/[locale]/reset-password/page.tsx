@@ -12,7 +12,7 @@ import MaintenanceGate from '@/components/MaintenanceGate'
 import Logo from '@/components/Logo'
 import { authErrorText } from '@/lib/authErrors'
 import PasswordStrength from '@/components/PasswordStrength'
-import { canResetPassword, resetPasswordAfterRecovery } from '@/app/actions/password'
+import { canResetPassword, resetPasswordAfterRecovery, verifyRecoveryCode } from '@/app/actions/password'
 
 // Fallback per chi arriva cliccando il link nell'email di reset (il client
 // Supabase imposta la sessione automaticamente leggendo il token dall'URL;
@@ -52,9 +52,10 @@ export default function ResetPasswordPage() {
       if (tokenHash && params.get('type') === 'recovery') {
         // Una sola verifica anche se l'effetto parte due volte (React Strict Mode):
         // il codice vale una volta sola
-        verifications[tokenHash] ??= supabase.auth
-          .verifyOtp({ token_hash: tokenHash, type: 'recovery' })
-          .then(({ error }) => !error)
+        // Sul server, che lascia il contrassegno del recupero (src/app/actions/password.ts)
+        verifications[tokenHash] ??= verifyRecoveryCode({ tokenHash })
+          .then((result) => result.success)
+          .catch(() => false)
         const verified = await verifications[tokenHash]
         window.history.replaceState(null, '', window.location.pathname)
         if (!verified) {

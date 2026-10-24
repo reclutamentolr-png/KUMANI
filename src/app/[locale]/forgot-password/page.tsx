@@ -11,7 +11,7 @@ import { Mail, Lock, AlertCircle, Loader2, CheckCircle, ShieldCheck } from 'luci
 import MaintenanceGate from '@/components/MaintenanceGate'
 import Logo from '@/components/Logo'
 import { authErrorText } from '@/lib/authErrors'
-import { resetPasswordAfterRecovery } from '@/app/actions/password'
+import { resetPasswordAfterRecovery, verifyRecoveryCode } from '@/app/actions/password'
 import TurnstileWidget, { useTurnstile } from '@/components/auth/TurnstileWidget'
 import PasswordStrength from '@/components/PasswordStrength'
 
@@ -73,6 +73,7 @@ export default function ForgotPasswordPage() {
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (loading) return
     if (password !== confirmPassword) {
       setError(t('passwordsDoNotMatch'))
       return
@@ -86,13 +87,11 @@ export default function ForgotPasswordPage() {
     setError(null)
 
     if (!codeVerified) {
-      const { error: verifyError } = await supabase.auth.verifyOtp({
-        email: email.trim(),
-        token: code.trim(),
-        type: 'recovery',
-      })
-      if (verifyError) {
-        setError(t('invalidVerificationCode'))
+      // Verifica sul server: oltre ad aprire la sessione lascia il contrassegno
+      // del recupero, senza il quale il cambio password viene rifiutato
+      const verified = await verifyRecoveryCode({ email, token: code }).catch(() => null)
+      if (!verified?.success) {
+        setError(verified?.code === 'rate_limit' ? t('tooManyRequestsError') : t('invalidVerificationCode'))
         setLoading(false)
         return
       }
@@ -104,6 +103,8 @@ export default function ForgotPasswordPage() {
     const result = await resetPasswordAfterRecovery(password, locale)
 
     if (!result.success) {
+      // Recupero scaduto (oltre 15 minuti): serve un codice nuovo
+      if (result.code === 'not_recovery') setCodeVerified(false)
       setError(result.code === 'too_short' ? t('passwordTooShort') : result.code === 'not_recovery' ? t('invalidVerificationCode') : authErrorText(t, result.error, t('genericAuthError')))
       setLoading(false)
       return
