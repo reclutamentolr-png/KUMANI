@@ -7,8 +7,8 @@ import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { getAnthropicClient, MissingApiKeyError } from '@/lib/anthropic'
 import { hasActiveOfferMakerAccess } from '@/lib/offermaker-server'
 import { awardToolPoint } from '@/lib/toolPoints'
+import { AI_MODELS } from '@/lib/aiModels'
 import {
-  ANTHROPIC_MODEL,
   generateCampaignCode,
   type GeneratedCampaignDraft,
   type OfferFormAnswers,
@@ -179,8 +179,9 @@ export async function generateOfferDraft(
 
   try {
     const message = await client.messages.create({
-      model: ANTHROPIC_MODEL,
-      max_tokens: 2048,
+      model: AI_MODELS.offermaker.model,
+      max_tokens: 2700,
+      output_config: { effort: AI_MODELS.offermaker.effort },
       tools: [
         {
           name: 'emit_offer_campaign',
@@ -296,7 +297,7 @@ export async function publishOfferCampaign(
         whatsapp_message_soft: draft.whatsappMessageSoft,
         whatsapp_message_direct: draft.whatsappMessageDirect,
         whatsapp_message_followup: draft.whatsappMessageFollowup,
-        ai_model: ANTHROPIC_MODEL,
+        ai_model: AI_MODELS.offermaker.model,
         ai_generated_at: new Date().toISOString(),
         published_at: new Date().toISOString(),
       })

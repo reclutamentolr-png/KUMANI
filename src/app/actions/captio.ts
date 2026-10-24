@@ -6,7 +6,7 @@ import { awardToolPoint } from '@/lib/toolPoints'
 import { getAnthropicClient, MissingApiKeyError } from '@/lib/anthropic'
 import { isGuestRequest } from '@/lib/guestServer'
 import { isLandingLocale, LANDING_LOCALE_NAMES } from '@/lib/landing'
-import { ANTHROPIC_MODEL } from '@/lib/offermaker'
+import { AI_MODELS } from '@/lib/aiModels'
 import { takeSocialAiQuota } from '@/lib/socialAi'
 import { CAPTIO_GOALS, CAPTIO_HASHTAG_COUNT, CAPTIO_IMAGE_MAX_BYTES, CAPTIO_LENGTHS, CAPTIO_NETWORKS, CAPTIO_TONES, type CaptioRequest, type CaptioResult } from '@/lib/captio'
 
@@ -96,8 +96,9 @@ Rules:
 
   try {
     const message = await getAnthropicClient().messages.create({
-      model: ANTHROPIC_MODEL,
-      max_tokens: 2000,
+      model: AI_MODELS.captio.model,
+      max_tokens: 2600,
+      output_config: { effort: AI_MODELS.captio.effort },
       tools: [
         {
           name: 'emit_captions',

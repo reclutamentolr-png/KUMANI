@@ -8,7 +8,7 @@ import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
 import { isGuestRequest } from '@/lib/guestServer'
 import { getAnthropicClient, MissingApiKeyError } from '@/lib/anthropic'
-import { ANTHROPIC_MODEL } from '@/lib/offermaker'
+import { AI_MODELS } from '@/lib/aiModels'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { awardToolPoint } from '@/lib/toolPoints'
 import { localizedPath, notifyUser } from '@/lib/push'
@@ -212,8 +212,9 @@ export async function generateLandingDraft(
   const titled = { type: 'object', properties: { title: { type: 'string' }, text: { type: 'string' } }, required: ['title', 'text'] }
   try {
     const message = await getAnthropicClient().messages.create({
-      model: ANTHROPIC_MODEL,
-      max_tokens: 3000,
+      model: AI_MODELS.landing.model,
+      max_tokens: 4000,
+      output_config: { effort: AI_MODELS.landing.effort },
       tools: [
         {
           name: 'emit_landing',

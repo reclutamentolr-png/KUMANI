@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 import { isGuestRequest } from '@/lib/guestServer'
 import { isMenuTemplate, type MenuTemplate } from '@/lib/menuThemes'
 import { getAnthropicClient, MissingApiKeyError } from '@/lib/anthropic'
-import { ANTHROPIC_MODEL } from '@/lib/offermaker'
+import { AI_MODELS } from '@/lib/aiModels'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { awardToolPoint } from '@/lib/toolPoints'
 import { loadMenuData } from '@/lib/menu-server'
@@ -288,8 +288,9 @@ type TranslationEntry = { key: string; kind: 'category' | 'description' | 'dish 
 async function translateChunk(entries: TranslationEntry[], source: MenuLocale): Promise<Map<string, LocalizedText>> {
   const client = getAnthropicClient()
   const message = await client.messages.create({
-    model: ANTHROPIC_MODEL,
-    max_tokens: 8000,
+    model: AI_MODELS.menu.model,
+    max_tokens: 10000,
+    output_config: { effort: AI_MODELS.menu.effort },
     tools: [
       {
         name: 'emit_translations',

@@ -6,7 +6,7 @@ import { awardToolPoint } from '@/lib/toolPoints'
 import { getAnthropicClient, MissingApiKeyError } from '@/lib/anthropic'
 import { isGuestRequest } from '@/lib/guestServer'
 import { isLandingLocale, LANDING_LOCALE_NAMES } from '@/lib/landing'
-import { ANTHROPIC_MODEL } from '@/lib/offermaker'
+import { AI_MODELS } from '@/lib/aiModels'
 import { takeSocialAiQuota } from '@/lib/socialAi'
 import { addDays, todayKey } from '@/lib/agenda'
 import { DIARIUM_DAYS, DIARIUM_FORMATS, DIARIUM_NETWORKS, DIARIUM_PER_WEEK, DIARIUM_TONES, type DiariumPlan, type DiariumPost, type DiariumRequest } from '@/lib/diarium'
@@ -102,8 +102,9 @@ export async function generateDiariumPlan(input: DiariumRequest, locale: string)
 
   try {
     const message = await getAnthropicClient().messages.create({
-      model: ANTHROPIC_MODEL,
-      max_tokens: 8000,
+      model: AI_MODELS.diarium.model,
+      max_tokens: 10000,
+      output_config: { effort: AI_MODELS.diarium.effort },
       tools: [
         {
           name: 'emit_plan',

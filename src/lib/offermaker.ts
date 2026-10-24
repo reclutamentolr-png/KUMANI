@@ -1,4 +1,3 @@
-export const ANTHROPIC_MODEL = 'claude-sonnet-5'
 
 export const OBJECTIVES = [
   'call',

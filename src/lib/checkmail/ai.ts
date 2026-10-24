@@ -3,7 +3,7 @@
 // tecnici non vedono. Riceve solo mittente, oggetto, un estratto del testo e i
 // segnali tecnici già trovati; nulla viene salvato.
 import { getAnthropicClient } from '@/lib/anthropic'
-import { ANTHROPIC_MODEL } from '@/lib/offermaker'
+import { AI_MODELS } from '@/lib/aiModels'
 import { scoreFindings, type Verdict } from '@/lib/checkmail/engine'
 
 export const AI_CATEGORIES = ['phishing', 'investment', 'invoice', 'romance', 'extortion', 'spam', 'legit', 'uncertain'] as const
@@ -29,8 +29,9 @@ export async function assessWithAi(verdict: Verdict, locale: string): Promise<Ai
   }
   const message = await client.messages.create(
     {
-    model: ANTHROPIC_MODEL,
-    max_tokens: 800,
+    model: AI_MODELS.checkmail.model,
+    max_tokens: 1000,
+    output_config: { effort: AI_MODELS.checkmail.effort },
     tools: [
       {
         name: 'emit_assessment',

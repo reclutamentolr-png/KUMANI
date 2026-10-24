@@ -6,7 +6,7 @@ import { awardToolPoint } from '@/lib/toolPoints'
 import { getAnthropicClient, MissingApiKeyError } from '@/lib/anthropic'
 import { isGuestRequest } from '@/lib/guestServer'
 import { isLandingLocale, LANDING_LOCALE_NAMES } from '@/lib/landing'
-import { ANTHROPIC_MODEL } from '@/lib/offermaker'
+import { AI_MODELS } from '@/lib/aiModels'
 import { socialAiLeft, takeSocialAiQuota } from '@/lib/socialAi'
 import { LUMEN_AI_DURATIONS, LUMEN_AI_GOALS, LUMEN_AI_TONES, LUMEN_BODY_MAX, LUMEN_TITLE_MAX, type LumenAiRequest, type LumenScript } from '@/lib/lumen'
 
@@ -115,8 +115,9 @@ export async function generateLumenScript(input: LumenAiRequest, locale: string,
   const maxWords = Math.round(words * 1.1)
   try {
     const message = await getAnthropicClient().messages.create({
-      model: ANTHROPIC_MODEL,
-      max_tokens: 1500,
+      model: AI_MODELS.lumen.model,
+      max_tokens: 2000,
+      output_config: { effort: AI_MODELS.lumen.effort },
       tools: [
         {
           name: 'emit_script',
