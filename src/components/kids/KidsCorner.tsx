@@ -3,19 +3,31 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
-import { FileDown, Image as ImageIcon, Pencil, Plus, Printer, Settings, ShieldCheck, Trash2, X } from 'lucide-react'
+import { ArrowLeft, BookImage, Brush, FileDown, Image as ImageIcon, Lock, MessageCircle, MessageCircleOff, Music, Palette, Pencil, Plus, Printer, Settings, ShieldCheck, Sparkles, Star, Trash2, Volume2, VolumeX, X } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { drawingById } from '@/lib/kids/catalog'
 import { addToAlbum, clearChildAlbum, listAlbum, removeFromAlbum, type AlbumItem } from '@/lib/kids/album'
-import { drawingPdf, drawingPng, safeFileName, shareOrDownload, standaloneSvg } from '@/lib/kids/export'
+import { drawingPdf, drawingPng, framePng, safeFileName, shareOrDownload, standaloneSvg } from '@/lib/kids/export'
 import { AVATAR_COLORS, checkPin, clearKidsLock, emptyStore, loadStore, makePin, newId, saveStore, setKidsLock, type KidProfile, type KidsStore } from '@/lib/kids/storage'
 import ColoringGame from './ColoringGame'
+import CreatureGame from './CreatureGame'
+import FreeDrawGame from './FreeDrawGame'
+import MusicGame from './MusicGame'
+import { KidsIconButton } from './ColorStage'
+import type { KidsActions, ShareTarget } from './actions'
 import PinPad from './PinPad'
 import ProfileForm from './ProfileForm'
 
-type Phase = 'loading' | 'welcome' | 'pinCreate' | 'pinConfirm' | 'firstChild' | 'children' | 'childForm' | 'game'
+type Phase = 'loading' | 'welcome' | 'pinCreate' | 'pinConfirm' | 'firstChild' | 'children' | 'childForm' | 'menu' | 'game'
 type Gate = { purpose: 'exit' | 'share' | 'manage'; then: () => void } | null
-type ShareTarget = { drawingId: string; fills: Record<string, string>; createdAt: number; png?: Blob } | null
+// I 4 giochi dell'Angolo Bambini
+const GAMES = [
+  { id: 'colora', icon: Palette, tone: 'bg-[#FFE3D6]' },
+  { id: 'crea', icon: Sparkles, tone: 'bg-[#E4F1E8]' },
+  { id: 'musica', icon: Music, tone: 'bg-[#E6ECF8]' },
+  { id: 'disegno', icon: Brush, tone: 'bg-[#EFE7FD]' },
+] as const
+type GameId = (typeof GAMES)[number]['id']
 
 // Ora solo nei gestori degli eventi (mai durante il disegno della pagina)
 const now = () => Date.now()
@@ -36,7 +48,8 @@ export default function KidsCorner({ userId }: { userId: string }) {
   const [waitUntil, setWaitUntil] = useState(0)
   const [forgot, setForgot] = useState(false)
   const [editing, setEditing] = useState<KidProfile | null>(null)
-  const [share, setShare] = useState<ShareTarget>(null)
+  const [share, setShare] = useState<ShareTarget | null>(null)
+  const [game, setGame] = useState<GameId | null>(null)
   const [album, setAlbum] = useState<AlbumItem[] | null>(null)
   const [albumUrls, setAlbumUrls] = useState<Record<string, string>>({})
   const [toast, setToast] = useState<string | null>(null)
@@ -47,7 +60,7 @@ export default function KidsCorner({ userId }: { userId: string }) {
     const s = loadStore(userId)
     // eslint-disable-next-line react-hooks/set-state-in-effect -- dati del telefono, letti dopo il primo disegno della pagina
     setStore(s)
-    setPhase(!s.pin ? 'welcome' : s.profiles.length === 0 ? 'firstChild' : s.activeId && s.profiles.some((p) => p.id === s.activeId) ? 'game' : 'children')
+    setPhase(!s.pin ? 'welcome' : s.profiles.length === 0 ? 'firstChild' : s.activeId && s.profiles.some((p) => p.id === s.activeId) ? 'menu' : 'children')
   }, [userId])
 
   const commit = useCallback(
@@ -151,55 +164,32 @@ export default function KidsCorner({ userId }: { userId: string }) {
   }
 
   // ── Album e condivisione ──────────────────────────────────────────────
-  const childLabel = (p: KidProfile) => t('albumCaption', { name: p.name })
   const dateLabel = (ms: number) => new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric' }).format(ms)
+  const caption = (title: string) => [active ? t('albumCaption', { name: active.name }) : title, `${title} · ${dateLabel(now())} · KUMANI`] as const
 
-  const makePng = async (profile: KidProfile, drawingId: string, fills: Record<string, string>, createdAt: number, blank = false) => {
-    const d = drawingById(drawingId)
-    if (!d) throw new Error('drawing')
-    const svg = standaloneSvg(d.svg, fills, blank)
-    return blank
-      ? drawingPng(svg, t(`drawings.${drawingId}`), t('printCaption'))
-      : drawingPng(svg, childLabel(profile), `${t(`drawings.${drawingId}`)} · ${dateLabel(createdAt)} · KUMANI`)
-  }
-
-  const saveFinished = async (drawingId: string, fills: Record<string, string>) => {
-    if (!active) return
-    try {
-      const createdAt = now()
-      const png = await makePng(active, drawingId, fills, createdAt)
-      if (await addToAlbum({ id: newId(), owner: userId, profileId: active.id, drawingId, createdAt, png })) setToast(t('savedToAlbum'))
-    } catch {
-      // l'album è un di più: il gioco continua
-    }
-  }
-
-  const openShare = (drawingId: string, fills: Record<string, string>, png?: Blob, createdAt = now()) => {
-    askParent('share', async () => {
-      const target: ShareTarget = { drawingId, fills, createdAt, png }
-      setShare(target)
-      if (!png && active) {
-        try {
-          const made = await makePng(active, drawingId, fills, createdAt)
-          setShare((s) => (s && s.drawingId === drawingId ? { ...s, png: made } : s))
-        } catch {
-          setToast(t('exportError'))
-        }
-      }
-    })
+  const actions: KidsActions = {
+    askParent: (purpose, then) => askParent(purpose, then),
+    makePng: (svg, title) => drawingPng(svg, ...caption(title)),
+    makeCanvasPng: (canvas, title) => framePng(canvas, ...caption(title)),
+    saveToAlbum: async ({ drawingId, png }) => {
+      if (!active) return
+      if (await addToAlbum({ id: newId(), owner: userId, profileId: active.id, drawingId, createdAt: now(), png })) setToast(t('savedToAlbum'))
+    },
+    openShare: (target) => askParent('share', () => setShare(target)),
+    toast: (message) => setToast(message),
   }
 
   const doShare = async (kind: 'image' | 'pdf' | 'blank') => {
     if (!share || !active) return
     try {
-      const name = safeFileName(`${active.name}-${t(`drawings.${share.drawingId}`)}`)
-      if (kind === 'image' && share.png) {
+      const name = safeFileName(`${active.name}-${share.title}`)
+      if (kind === 'image') {
         await shareOrDownload(share.png, `${name}.png`, t('shareText', { name: active.name }))
-      } else if (kind === 'pdf' && share.png) {
+      } else if (kind === 'pdf') {
         await shareOrDownload(await drawingPdf(share.png), `${name}.pdf`, t('shareText', { name: active.name }))
-      } else if (kind === 'blank') {
-        const png = await makePng(active, share.drawingId, {}, share.createdAt, true)
-        await shareOrDownload(await drawingPdf(png), `${safeFileName(t(`drawings.${share.drawingId}`))}-da-colorare.pdf`, t(`drawings.${share.drawingId}`))
+      } else if (share.blankSvg) {
+        const png = await drawingPng(share.blankSvg, share.title, t('printCaption'))
+        await shareOrDownload(await drawingPdf(png), `${safeFileName(share.title)}-da-colorare.pdf`, share.title)
       }
     } catch {
       setToast(t('exportError'))
@@ -235,7 +225,7 @@ export default function KidsCorner({ userId }: { userId: string }) {
       current: null,
     }
     commit({ ...store, profiles: [...store.profiles, profile], activeId: profile.id })
-    setPhase('game')
+    setPhase('menu')
   }
 
   const deleteChild = async () => {
@@ -325,7 +315,7 @@ export default function KidsCorner({ userId }: { userId: string }) {
               type="button"
               onClick={() => {
                 commit({ ...store, activeId: p.id })
-                setPhase('game')
+                setPhase('menu')
                 goFullscreen()
               }}
               className="grid justify-items-center gap-2 rounded-3xl border-[3px] border-[#2B2D52] bg-white p-4 shadow-[4px_4px_0_#2B2D52]"
@@ -360,24 +350,76 @@ export default function KidsCorner({ userId }: { userId: string }) {
         )}
       </div>
     )
-  } else if (phase === 'game' && active) {
+  } else if ((phase === 'menu' || phase === 'game') && active) {
+    const inGame = phase === 'game' && game
+    const props = { profile: active, sound: store.sound, onProfileChange: updateProfile, actions }
     screen = (
-      <ColoringGame
-        key={active.id}
-        profile={active}
-        sound={store.sound}
-        voice={store.voice}
-        onToggleSound={() => commit({ ...store, sound: !store.sound })}
-        onToggleVoice={() => commit({ ...store, voice: !store.voice })}
-        onProfileChange={updateProfile}
-        actions={{
-          askParent: (purpose, then) => askParent(purpose, then),
-          openAlbum: () => void openAlbum(),
-          openShare: (drawingId, fills) => openShare(drawingId, fills),
-          switchChild: () => setPhase('children'),
-          saveFinished: (drawingId, fills) => void saveFinished(drawingId, fills),
-        }}
-      />
+      <div className="flex min-h-0 flex-1 flex-col gap-3">
+        {/* Barra in alto: giochi, bambino, stelle, album, suoni, voce, lucchetto */}
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          {inGame ? (
+            <KidsIconButton small label={t('backToGames')} onClick={() => (setGame(null), setPhase('menu'))}>
+              <ArrowLeft className="h-6 w-6" />
+            </KidsIconButton>
+          ) : null}
+          <button type="button" onClick={() => setPhase('children')} className="flex min-w-0 shrink items-center gap-2 rounded-full border-[3px] border-[#2B2D52] bg-white p-1 font-extrabold text-[#2B2D52] sm:pr-3">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-lg text-white" style={{ background: active.color }}>
+              {active.name.charAt(0).toUpperCase()}
+            </span>
+            <span className="hidden truncate sm:inline">{active.name}</span>
+          </button>
+          <span className="flex shrink-0 items-center gap-1 rounded-full bg-[#FFC93C] px-2.5 py-1.5 font-extrabold text-[#2B2D52]" aria-label={t('starsLabel', { count: active.stars })}>
+            <Star className="h-5 w-5 fill-current" aria-hidden /> {active.stars}
+          </span>
+          <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
+            <KidsIconButton small label={t('album')} onClick={() => void openAlbum()}>
+              <BookImage className="h-6 w-6" />
+            </KidsIconButton>
+            <KidsIconButton small label={store.sound ? t('soundOff') : t('soundOn')} onClick={() => commit({ ...store, sound: !store.sound })}>
+              {store.sound ? <Volume2 className="h-6 w-6" /> : <VolumeX className="h-6 w-6" />}
+            </KidsIconButton>
+            <KidsIconButton small label={store.voice ? t('voiceOff') : t('voiceOn')} onClick={() => commit({ ...store, voice: !store.voice })}>
+              {store.voice ? <MessageCircle className="h-6 w-6" /> : <MessageCircleOff className="h-6 w-6" />}
+            </KidsIconButton>
+            <KidsIconButton small label={t('exit')} onClick={() => askParent('exit', () => {})}>
+              <Lock className="h-6 w-6" />
+            </KidsIconButton>
+          </div>
+        </div>
+
+        {!inGame ? (
+          <div className="grid gap-4">
+            <h2 className="text-center text-3xl font-extrabold text-[#2B2D52]">{t('menuTitle', { name: active.name })}</h2>
+            <div className="grid grid-cols-2 gap-4">
+              {GAMES.map(({ id, icon: Icon, tone }) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => {
+                    setGame(id)
+                    setPhase('game')
+                  }}
+                  className={`grid min-h-40 content-center justify-items-center gap-2 rounded-3xl border-[3px] border-[#2B2D52] p-4 text-center shadow-[4px_4px_0_#2B2D52] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none ${tone}`}
+                >
+                  <span className="flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-[#2B2D52] bg-white">
+                    <Icon className="h-9 w-9 text-[#2B2D52]" aria-hidden />
+                  </span>
+                  <span className="text-xl font-extrabold leading-tight text-[#2B2D52]">{t(`games.${id}.title`)}</span>
+                  <span className="text-sm font-bold leading-snug text-[#61648A]">{t(`games.${id}.text`)}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : game === 'colora' ? (
+          <ColoringGame key={active.id} {...props} voice={store.voice} />
+        ) : game === 'crea' ? (
+          <CreatureGame key={active.id} {...props} voice={store.voice} />
+        ) : game === 'musica' ? (
+          <MusicGame key={active.id} {...props} />
+        ) : (
+          <FreeDrawGame key={active.id} {...props} />
+        )}
+      </div>
     )
   }
 
@@ -425,9 +467,9 @@ export default function KidsCorner({ userId }: { userId: string }) {
               <button type="button" onClick={() => setShare(null)} aria-label={t('close')} className="rounded-xl p-2"><X className="h-6 w-6" /></button>
             </div>
             <p className="text-sm text-[#61648A]">{t('shareHint')}</p>
-            <SheetButton disabled={!share.png} onClick={() => void doShare('image')} icon={<ImageIcon className="h-6 w-6" />} title={t('shareImage')} text={t('shareImageText')} />
-            <SheetButton disabled={!share.png} onClick={() => void doShare('pdf')} icon={<FileDown className="h-6 w-6" />} title={t('sharePdf')} text={t('sharePdfText')} />
-            <SheetButton onClick={() => void doShare('blank')} icon={<Printer className="h-6 w-6" />} title={t('shareBlank')} text={t('shareBlankText')} />
+            <SheetButton onClick={() => void doShare('image')} icon={<ImageIcon className="h-6 w-6" />} title={t('shareImage')} text={t('shareImageText')} />
+            <SheetButton onClick={() => void doShare('pdf')} icon={<FileDown className="h-6 w-6" />} title={t('sharePdf')} text={t('sharePdfText')} />
+            {share.blankSvg && <SheetButton onClick={() => void doShare('blank')} icon={<Printer className="h-6 w-6" />} title={t('shareBlank')} text={t('shareBlankText')} />}
           </div>
         </div>
       )}
@@ -450,7 +492,14 @@ export default function KidsCorner({ userId }: { userId: string }) {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={albumUrls[item.id]} alt={t(`drawings.${item.drawingId}`)} className="block w-full" />
                   <div className="flex gap-1 p-1">
-                    <button type="button" onClick={() => openShare(item.drawingId, {}, item.png, item.createdAt)} className="flex-1 rounded-xl bg-[#FFC93C] py-2 text-sm font-extrabold">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const d = drawingById(item.drawingId)
+                        actions.openShare({ drawingId: item.drawingId, title: t(`drawings.${item.drawingId}`), png: item.png, blankSvg: d ? standaloneSvg(d.svg, {}, true) : undefined })
+                      }}
+                      className="flex-1 rounded-xl bg-[#FFC93C] py-2 text-sm font-extrabold"
+                    >
                       {t('saveShare')}
                     </button>
                     <button

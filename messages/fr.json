@@ -1139,7 +1139,9 @@
     "cronobioma": "KUMANI CRONOBIOMA",
     "cronobiomaDescription": "Ton horloge interne : chronotype, journée idéale, journal du sommeil, horaires décalés et fuseau horaire.",
     "angoloBambini": "Coin des enfants",
-    "angoloBambiniDescription": "Des dessins à colorier qui prennent vie et appellent l'enfant par son prénom. Avec un code parent, sans publicité."
+    "angoloBambiniDescription": "Quatre jeux créatifs : colorier des dessins qui prennent vie, inventer des animaux, faire de la musique avec les couleurs et dessiner avec des pinceaux magiques. Avec un code parent, sans publicité.",
+    "categoryBambini": "Enfants",
+    "categoryBambiniDesc": "Des jeux créatifs pour les petits, protégés par un code parent : sans publicité et sans données sur le serveur."
   },
   "neurobalance": {
     "tracksLabel": "Audios de relaxation",
@@ -10875,7 +10877,9 @@
     "addToHome": "Mettre sur l’accueil",
     "removeFromHome": "Retirer de l’accueil",
     "group_social": "Social",
-    "interest_social": "Débuter sur les réseaux sociaux"
+    "interest_social": "Débuter sur les réseaux sociaux",
+    "group_kids": "Enfants",
+    "interest_kids": "Faire jouer les enfants"
   },
   "garage": {
     "eyebrow": "Voitures et motos, personnelles et en location",
@@ -16025,7 +16029,9 @@
       "trenino": "Petit train",
       "mongolfiera": "Montgolfière",
       "dinosauro": "Dinosaure",
-      "pinguino": "Pingouin"
+      "pinguino": "Pingouin",
+      "creatura": "Ma créature",
+      "disegno": "Dessin libre"
     },
     "parts": {
       "acqua": "Eau",
@@ -16145,7 +16151,17 @@
       "vulcano": "Volcan",
       "zampaDx": "Pattes",
       "zampaSx": "Pattes",
-      "zoccoli": "Sabots"
+      "zoccoli": "Sabots",
+      "visore": "Écran",
+      "antenne": "Antennes",
+      "piume": "Plumes",
+      "bottoni": "Boutons",
+      "maniSx": "Main",
+      "maniDx": "Main",
+      "ruote": "Roues",
+      "suole": "Semelles",
+      "punteCoda": "Pointes de la queue",
+      "macchieAli": "Taches des ailes"
     },
     "praiseVoice": "Bravo, tu as colorié ton dessin ! {gender, select, girl {Tu es super douée !} other {Tu es super doué !}}",
     "moveVoice": {
@@ -16154,6 +16170,164 @@
       "salta": "Hop ! Hop ! Hop !",
       "nanna": "Bonne nuit…"
     },
-    "voiceTip": "Une voix plus naturelle : la voix qui lit les phrases est celle du téléphone. Pour la rendre plus humaine, téléchargez une voix « Améliorée » ou « Premium » (iPhone : Réglages › Accessibilité › Contenu énoncé › Voix) ou installez « Services de reconnaissance vocale de Google » (Android)."
+    "voiceTip": "Une voix plus naturelle : la voix qui lit les phrases est celle du téléphone. Pour la rendre plus humaine, téléchargez une voix « Améliorée » ou « Premium » (iPhone : Réglages › Accessibilité › Contenu énoncé › Voix) ou installez « Services de reconnaissance vocale de Google » (Android).",
+    "backToGames": "Retour aux jeux",
+    "menuTitle": "À quoi on joue, {name} ?",
+    "games": {
+      "colora": {
+        "title": "Colorie et anime",
+        "text": "Colorie le dessin et regarde-le prendre vie"
+      },
+      "crea": {
+        "title": "Crée ton animal",
+        "text": "Tête, corps, queue et ailes : invente ta créature"
+      },
+      "musica": {
+        "title": "La musique des couleurs",
+        "text": "Chaque couleur est une note : peins une chanson"
+      },
+      "disegno": {
+        "title": "Dessin libre",
+        "text": "Pinceaux magiques, étoiles, tampons et miroir"
+      }
+    },
+    "creatureName": "Elle s’appelle {name}",
+    "creatureNewName": "Un autre nom",
+    "creatureReady": "Quelle jolie créature ! Maintenant, colorions-la",
+    "creatureParts": "Parties de la créature",
+    "creatureNone": "Rien",
+    "creatureRandom": "Surprise",
+    "creatureDone": "Fini ! On colorie",
+    "creatureChangeParts": "Changer les parties",
+    "creatureNew": "Nouvelle créature",
+    "creaturePraise": "Bravo {name} ! Voici {creature}, la créature que tu as inventée !",
+    "creaturePraiseVoice": "Quelle jolie créature ! C’est toi qui l’as inventée !",
+    "creatureNames": "Pompon|Biscotte|Zigzag|Frimousse|Cornichon|Gribouille|Bulle|Pépite|Choupette|Trottinette|Galipette|Patapouf|Croquette|Myrtille|Paillette|Tourbillon|Caramel|Bidule|Ribambelle|Clafoutis|Brindille|Pistache|Noisette|Confetti",
+    "creature": {
+      "slots": {
+        "testa": "Tête",
+        "sopra": "Oreilles et cornes",
+        "corpo": "Corps",
+        "braccia": "Bras",
+        "piedi": "Pieds",
+        "coda": "Queue",
+        "ali": "Ailes"
+      },
+      "parts": {
+        "testa": {
+          "orso": "Ours",
+          "gatto": "Chat",
+          "uccello": "Oiseau",
+          "drago": "Dragon",
+          "scimmia": "Singe",
+          "robot": "Robot"
+        },
+        "sopra": {
+          "orecchieTonde": "Oreilles rondes",
+          "orecchieGatto": "Oreilles de chat",
+          "orecchieConiglio": "Oreilles de lapin",
+          "corno": "Corne magique",
+          "cornaDrago": "Cornes de dragon",
+          "criniera": "Crinière",
+          "antenne": "Antennes"
+        },
+        "corpo": {
+          "tondo": "Rond",
+          "macchie": "Tacheté",
+          "strisce": "Rayé",
+          "piume": "À plumes",
+          "robot": "Robot",
+          "drago": "Dragon"
+        },
+        "braccia": {
+          "zampeOrso": "Pattes d’ours",
+          "artigli": "Griffes",
+          "alette": "Petites ailes",
+          "tentacoli": "Tentacules",
+          "robot": "Bras de robot",
+          "scimmia": "Bras de singe"
+        },
+        "piedi": {
+          "zampeOrso": "Pattes",
+          "zoccoli": "Sabots",
+          "uccello": "Pattes d’oiseau",
+          "stivali": "Bottines",
+          "ruote": "Roues",
+          "pinne": "Palmes"
+        },
+        "coda": {
+          "gatto": "Queue de chat",
+          "leone": "Queue de lion",
+          "drago": "Queue de dragon",
+          "pesce": "Queue de poisson",
+          "volpe": "Queue de renard",
+          "pavone": "Queue de paon"
+        },
+        "ali": {
+          "uccello": "Ailes d’oiseau",
+          "farfalla": "Ailes de papillon",
+          "drago": "Ailes de dragon",
+          "fata": "Ailes de fée",
+          "angelo": "Ailes d’ange"
+        }
+      }
+    },
+    "musicTrack": "Les fleurs de la chanson",
+    "musicPause": "Fleur {n} : silence",
+    "musicNote": "Fleur {n} : {color}",
+    "musicSpeed": "Vitesse",
+    "tempo": {
+      "0": "Lent",
+      "1": "Normal",
+      "2": "Rapide"
+    },
+    "musicPlay": "Joue",
+    "musicStop": "Stop",
+    "musicRandom": "Surprise",
+    "musicClear": "Tout effacer",
+    "musicSave": "Enregistrer la chanson",
+    "musicMySongs": "Mes chansons",
+    "musicNoSongs": "Tes chansons enregistrées arrivent ici. Colorie les fleurs et appuie sur la disquette pour en garder une !",
+    "musicDelete": "Supprimer la chanson",
+    "musicEmpty": "Colorie au moins une fleur pour faire une chanson !",
+    "musicSaved": "Chanson enregistrée ! Tu gagnes une étoile",
+    "musicSongName": "Chanson {n} de {name}",
+    "instruments": {
+      "xilofono": "Xylophone",
+      "flauto": "Flûte",
+      "campanelle": "Clochettes",
+      "robot": "Robot"
+    },
+    "drawTools": "Pinceaux magiques",
+    "drawTool": {
+      "pennello": "Pinceau",
+      "arcobaleno": "Arc-en-ciel",
+      "stelline": "Petites étoiles",
+      "timbro": "Tampons",
+      "gomma": "Gomme",
+      "sfondo": "Colorier le fond"
+    },
+    "drawMirror": {
+      "0": "Miroir désactivé",
+      "1": "Miroir : 2 copies",
+      "2": "Miroir : 4 copies"
+    },
+    "drawStamps": "Tampons",
+    "stamps": {
+      "cuore": "Cœur",
+      "stella": "Étoile",
+      "fiore": "Fleur",
+      "sole": "Soleil",
+      "faccina": "Smiley"
+    },
+    "drawSize": "Taille",
+    "drawSizes": {
+      "0": "Fin",
+      "1": "Moyen",
+      "2": "Épais"
+    },
+    "drawNew": "Nouvelle feuille",
+    "drawDone": "Fini ! Dans l’album",
+    "drawEmpty": "La feuille est encore blanche : dessine quelque chose !"
   }
 }

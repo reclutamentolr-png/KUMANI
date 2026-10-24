@@ -179,6 +179,7 @@ const TOOL_GROUPS = [
   { id: 'wellness', label: 'Benessere' },
   { id: 'lavoro', label: 'Lavoro' },
   { id: 'svago', label: 'Svago' },
+  { id: 'bambini', label: 'Bambini' },
   { id: 'community', label: 'Community' },
   { id: 'other', label: 'Altro' },
 ] as const

@@ -92,3 +92,26 @@ export function speak(text: string, locale: string) {
     // voce non disponibile: restano le scritte
   }
 }
+
+// «La musica dei colori»: una nota con il timbro di uno strumento
+export const INSTRUMENTS = ['xilofono', 'flauto', 'campanelle', 'robot'] as const
+export type Instrument = (typeof INSTRUMENTS)[number]
+
+export function playNote(index: number, instrument: Instrument) {
+  const a = audio()
+  if (!a) return
+  const t = a.currentTime
+  const freq = NOTES[((index % NOTES.length) + NOTES.length) % NOTES.length] * (instrument === 'campanelle' ? 2 : 1)
+  const shape = { xilofono: ['triangle', 0.16, 0.01, 0.4], flauto: ['sine', 0.18, 0.06, 0.55], campanelle: ['sine', 0.12, 0.005, 0.9], robot: ['square', 0.05, 0.01, 0.22] } as const
+  const [type, volume, attack, length] = shape[instrument]
+  const osc = a.createOscillator()
+  const gain = a.createGain()
+  osc.type = type
+  osc.frequency.value = freq
+  gain.gain.setValueAtTime(0.0001, t)
+  gain.gain.exponentialRampToValueAtTime(volume, t + attack)
+  gain.gain.exponentialRampToValueAtTime(0.0001, t + length)
+  osc.connect(gain).connect(a.destination)
+  osc.start(t)
+  osc.stop(t + length + 0.05)
+}

@@ -1139,7 +1139,9 @@
     "cronobioma": "KUMANI CRONOBIOMA",
     "cronobiomaDescription": "Deine innere Uhr: Chronotyp, idealer Tag, Schlaftagebuch, Schichtarbeit und Zeitzonen.",
     "angoloBambini": "Kinderecke",
-    "angoloBambiniDescription": "Ausmalbilder, die lebendig werden und das Kind beim Namen rufen. Mit Eltern-Code, ohne Werbung."
+    "angoloBambiniDescription": "Vier kreative Spiele: Bilder ausmalen, die lebendig werden, Tiere erfinden, mit Farben Musik machen und mit Zauberpinseln malen. Mit Eltern-Code, ohne Werbung.",
+    "categoryBambini": "Kinder",
+    "categoryBambiniDesc": "Kreative Spiele für die Kleinen, geschützt durch einen Eltern-Code: ohne Werbung und ohne Daten auf dem Server."
   },
   "neurobalance": {
     "tracksLabel": "Entspannungsaudios",
@@ -10875,7 +10877,9 @@
     "addToHome": "Zur Startseite",
     "removeFromHome": "Von der Startseite entfernen",
     "group_social": "Social",
-    "interest_social": "Mit Social Media starten"
+    "interest_social": "Mit Social Media starten",
+    "group_kids": "Kinder",
+    "interest_kids": "Die Kinder spielen lassen"
   },
   "garage": {
     "eyebrow": "Autos und Motorräder, eigen und geleast",
@@ -16025,7 +16029,9 @@
       "trenino": "Kleine Eisenbahn",
       "mongolfiera": "Heißluftballon",
       "dinosauro": "Dinosaurier",
-      "pinguino": "Pinguin"
+      "pinguino": "Pinguin",
+      "creatura": "Mein Wesen",
+      "disegno": "Freies Bild"
     },
     "parts": {
       "acqua": "Wasser",
@@ -16145,7 +16151,17 @@
       "vulcano": "Vulkan",
       "zampaDx": "Beine",
       "zampaSx": "Beine",
-      "zoccoli": "Hufe"
+      "zoccoli": "Hufe",
+      "visore": "Bildschirm",
+      "antenne": "Fühler",
+      "piume": "Federn",
+      "bottoni": "Knöpfe",
+      "maniSx": "Hand",
+      "maniDx": "Hand",
+      "ruote": "Räder",
+      "suole": "Sohlen",
+      "punteCoda": "Schwanzzacken",
+      "macchieAli": "Flügelpunkte"
     },
     "praiseVoice": "Toll gemacht, du hast dein Bild ausgemalt! Du bist großartig!",
     "moveVoice": {
@@ -16154,6 +16170,164 @@
       "salta": "Hopp! Hopp! Hopp!",
       "nanna": "Gute Nacht…"
     },
-    "voiceTip": "Natürlichere Stimme: Die Stimme, die die Sätze vorliest, ist die des Handys. Damit sie menschlicher klingt, lade eine „Erweiterte“ oder „Premium“-Stimme herunter (iPhone: Einstellungen › Bedienungshilfen › Gesprochene Inhalte › Stimmen) oder installiere „Sprachdienste von Google“ (Android)."
+    "voiceTip": "Natürlichere Stimme: Die Stimme, die die Sätze vorliest, ist die des Handys. Damit sie menschlicher klingt, lade eine „Erweiterte“ oder „Premium“-Stimme herunter (iPhone: Einstellungen › Bedienungshilfen › Gesprochene Inhalte › Stimmen) oder installiere „Sprachdienste von Google“ (Android).",
+    "backToGames": "Zurück zu den Spielen",
+    "menuTitle": "Was spielen wir, {name}?",
+    "games": {
+      "colora": {
+        "title": "Ausmalen und beleben",
+        "text": "Male das Bild aus und sieh, wie es lebendig wird"
+      },
+      "crea": {
+        "title": "Erfinde dein Tier",
+        "text": "Kopf, Körper, Schwanz und Flügel: erfinde dein eigenes Wesen"
+      },
+      "musica": {
+        "title": "Die Musik der Farben",
+        "text": "Jede Farbe ist ein Ton: male ein Lied"
+      },
+      "disegno": {
+        "title": "Freies Malen",
+        "text": "Zauberpinsel, Sternchen, Stempel und Spiegel"
+      }
+    },
+    "creatureName": "Es heißt {name}",
+    "creatureNewName": "Ein anderer Name",
+    "creatureReady": "Was für ein schönes Wesen! Jetzt malen wir es aus",
+    "creatureParts": "Teile des Wesens",
+    "creatureNone": "Nichts",
+    "creatureRandom": "Überraschung",
+    "creatureDone": "Fertig! Ausmalen",
+    "creatureChangeParts": "Teile ändern",
+    "creatureNew": "Neues Wesen",
+    "creaturePraise": "Toll, {name}! Das ist {creature}, das Wesen, das du erfunden hast!",
+    "creaturePraiseVoice": "Was für ein schönes Wesen! Du hast es erfunden!",
+    "creatureNames": "Puschel|Keks|Zickzack|Blubber|Funki|Kitzel|Gummibär|Schräubchen|Flausch|Muffin|Pirouette|Krakel|Pfeffer|Mandarine|Konfetti|Wirbel|Murmel|Strudel|Brezel|Sommersprosse|Hüpfer|Locke|Knopf|Sternchen",
+    "creature": {
+      "slots": {
+        "testa": "Kopf",
+        "sopra": "Ohren und Hörner",
+        "corpo": "Körper",
+        "braccia": "Arme",
+        "piedi": "Füße",
+        "coda": "Schwanz",
+        "ali": "Flügel"
+      },
+      "parts": {
+        "testa": {
+          "orso": "Bär",
+          "gatto": "Katze",
+          "uccello": "Vogel",
+          "drago": "Drache",
+          "scimmia": "Affe",
+          "robot": "Roboter"
+        },
+        "sopra": {
+          "orecchieTonde": "Runde Ohren",
+          "orecchieGatto": "Katzenohren",
+          "orecchieConiglio": "Hasenohren",
+          "corno": "Zauberhorn",
+          "cornaDrago": "Drachenhörner",
+          "criniera": "Mähne",
+          "antenne": "Fühler"
+        },
+        "corpo": {
+          "tondo": "Rund",
+          "macchie": "Gefleckt",
+          "strisce": "Gestreift",
+          "piume": "Gefiedert",
+          "robot": "Roboter",
+          "drago": "Drache"
+        },
+        "braccia": {
+          "zampeOrso": "Bärentatzen",
+          "artigli": "Krallen",
+          "alette": "Flossen",
+          "tentacoli": "Tentakel",
+          "robot": "Roboterarme",
+          "scimmia": "Affenarme"
+        },
+        "piedi": {
+          "zampeOrso": "Pfoten",
+          "zoccoli": "Hufe",
+          "uccello": "Vogelfüße",
+          "stivali": "Stiefelchen",
+          "ruote": "Räder",
+          "pinne": "Schwimmflossen"
+        },
+        "coda": {
+          "gatto": "Katzenschwanz",
+          "leone": "Löwenschwanz",
+          "drago": "Drachenschwanz",
+          "pesce": "Fischschwanz",
+          "volpe": "Fuchsschwanz",
+          "pavone": "Pfauenschwanz"
+        },
+        "ali": {
+          "uccello": "Vogelflügel",
+          "farfalla": "Schmetterlingsflügel",
+          "drago": "Drachenflügel",
+          "fata": "Feenflügel",
+          "angelo": "Engelsflügel"
+        }
+      }
+    },
+    "musicTrack": "Die Liedblumen",
+    "musicPause": "Blume {n}: Pause",
+    "musicNote": "Blume {n}: {color}",
+    "musicSpeed": "Tempo",
+    "tempo": {
+      "0": "Langsam",
+      "1": "Normal",
+      "2": "Schnell"
+    },
+    "musicPlay": "Spielen",
+    "musicStop": "Stopp",
+    "musicRandom": "Überraschung",
+    "musicClear": "Alles löschen",
+    "musicSave": "Lied speichern",
+    "musicMySongs": "Meine Lieder",
+    "musicNoSongs": "Hier erscheinen deine gespeicherten Lieder. Male die Blumen aus und drücke auf die Diskette!",
+    "musicDelete": "Lied löschen",
+    "musicEmpty": "Male mindestens eine Blume aus, um ein Lied zu machen!",
+    "musicSaved": "Lied gespeichert! Du hast einen Stern gewonnen",
+    "musicSongName": "{name}s Lied {n}",
+    "instruments": {
+      "xilofono": "Xylofon",
+      "flauto": "Flöte",
+      "campanelle": "Glöckchen",
+      "robot": "Roboter"
+    },
+    "drawTools": "Zauberpinsel",
+    "drawTool": {
+      "pennello": "Pinsel",
+      "arcobaleno": "Regenbogen",
+      "stelline": "Sternchen",
+      "timbro": "Stempel",
+      "gomma": "Radiergummi",
+      "sfondo": "Hintergrund färben"
+    },
+    "drawMirror": {
+      "0": "Spiegel aus",
+      "1": "Spiegel: 2 Kopien",
+      "2": "Spiegel: 4 Kopien"
+    },
+    "drawStamps": "Stempel",
+    "stamps": {
+      "cuore": "Herz",
+      "stella": "Stern",
+      "fiore": "Blume",
+      "sole": "Sonne",
+      "faccina": "Smiley"
+    },
+    "drawSize": "Größe",
+    "drawSizes": {
+      "0": "Dünn",
+      "1": "Mittel",
+      "2": "Dick"
+    },
+    "drawNew": "Neues Blatt",
+    "drawDone": "Fertig! Ins Album",
+    "drawEmpty": "Das Blatt ist noch leer: Male etwas!"
   }
 }

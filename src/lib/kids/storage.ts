@@ -1,10 +1,18 @@
 import { KIDS_LOCK_COOKIE } from './lock'
 import type { ChildGender } from './catalog'
+import type { CreatureSelection } from './creature'
 
 // Angolo Bambini: tutto resta nel telefono (localStorage, per account). Nome,
 // età e disegni dei bambini non vanno mai al server di KUMANI.
 
 export type CurrentDrawing = { drawingId: string; fills: Record<string, string>; awake: boolean; mission?: { part: string; color: string } | null }
+
+// «Crea il tuo animale»: pezzi scelti, colori e nome della creatura
+export type CreatureState = CurrentDrawing & { sel: CreatureSelection; name: string; step: 'build' | 'color' }
+
+// «La musica dei colori»: una canzone è una fila di note (indice del colore
+// o null per la pausa), con strumento e velocità
+export type Song = { id: string; name: string; notes: (number | null)[]; instrument: string; tempo: number; createdAt: number }
 
 export type KidProfile = {
   id: string
@@ -16,6 +24,11 @@ export type KidProfile = {
   done: string[]
   recent: string[]
   current: CurrentDrawing | null
+  creature?: CreatureState | null
+  creatures?: number
+  songs?: Song[]
+  // «Disegno libero»: i tratti del foglio in corso (vedi FreeDrawGame)
+  sketch?: unknown[]
 }
 
 export type KidsStore = {

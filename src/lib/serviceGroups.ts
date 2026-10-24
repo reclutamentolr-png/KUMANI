@@ -2,7 +2,7 @@
 // accesso), non per prezzo: chi entra cerca "mi serve qualcosa contro le
 // truffe", non "cosa c'è nel Plus". Ogni servizio sta in un solo gruppo.
 
-export const SERVICE_GROUPS = ['security', 'money', 'work', 'business', 'social', 'wellness', 'fun'] as const
+export const SERVICE_GROUPS = ['security', 'money', 'work', 'business', 'social', 'wellness', 'fun', 'kids'] as const
 export type ServiceGroup = (typeof SERVICE_GROUPS)[number]
 
 const GROUP_OF: Record<string, ServiceGroup> = {
@@ -68,7 +68,8 @@ const GROUP_OF: Record<string, ServiceGroup> = {
   affinity: 'fun',
   convivium: 'fun',
   veritas: 'fun',
-  'angolo-bambini': 'fun',
+  // Bambini
+  'angolo-bambini': 'kids',
 }
 
 export const serviceGroupOf = (toolName: string): ServiceGroup => GROUP_OF[toolName] ?? 'business'
@@ -83,6 +84,7 @@ export const STARTER_SERVICES: Record<ServiceGroup, string[]> = {
   social: ['tutela', 'captio', 'lumen', 'diarium'],
   wellness: ['oxygen', 'focus', 'neurobalance'],
   fun: ['nexus', 'fabula', 'mosaic', 'veritas'],
+  kids: ['angolo-bambini'],
 }
 
 // Colori dei gruppi (pallino e icone delle schede)
@@ -94,4 +96,5 @@ export const GROUP_STYLE: Record<ServiceGroup, { dot: string; tile: string }> = 
   social: { dot: 'bg-[#c0266d]', tile: 'bg-[#fde4ef] text-[#b0215f]' },
   wellness: { dot: 'bg-[#0f766e]', tile: 'bg-[#dff3f1] text-[#0f766e]' },
   fun: { dot: 'bg-[#7c3aed]', tile: 'bg-[#efe7fd] text-[#6d28d9]' },
+  kids: { dot: 'bg-[#e85d2a]', tile: 'bg-[#ffe8dc] text-[#c2410c]' },
 }

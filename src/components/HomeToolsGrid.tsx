@@ -69,7 +69,7 @@ import {
   ShieldAlert,
 } from 'lucide-react'
 
-type Category = 'marketing' | 'security' | 'personal' | 'wellness' | 'lavoro' | 'svago' | 'community'
+type Category = 'marketing' | 'security' | 'personal' | 'wellness' | 'lavoro' | 'svago' | 'bambini' | 'community'
 
 type Tool = {
   // Nome interno (vedi src/lib/homeToolNames.ts)
@@ -80,7 +80,7 @@ type Tool = {
   category: Category
 }
 
-const CATEGORY_ORDER: Category[] = ['marketing', 'security', 'personal', 'wellness', 'lavoro', 'svago', 'community']
+const CATEGORY_ORDER: Category[] = ['marketing', 'security', 'personal', 'wellness', 'lavoro', 'svago', 'bambini', 'community']
 
 const CATEGORY_ICON: Record<Category, LucideIcon> = {
   marketing: Megaphone,
@@ -89,6 +89,7 @@ const CATEGORY_ICON: Record<Category, LucideIcon> = {
   wellness: Waves,
   lavoro: Briefcase,
   svago: VenetianMask,
+  bambini: Palette,
   community: Tag,
 }
 
@@ -175,7 +176,7 @@ export default function HomeToolsGrid({ freeToolNames = [] }: { freeToolNames?: 
     { name: 'mosaic', icon: Grid3x3, title: tc('mosaic'), desc: tc('mosaicDescription'), category: 'svago' },
     { name: 'fabula', icon: Dices, title: tc('fabula'), desc: tc('fabulaDescription'), category: 'svago' },
     { name: 'nexus', icon: Puzzle, title: tc('nexus'), desc: tc('nexusDescription'), category: 'svago' },
-    { name: 'angolo-bambini', icon: Palette, title: tc('angoloBambini'), desc: tc('angoloBambiniDescription'), category: 'svago' },
+    { name: 'angolo-bambini', icon: Palette, title: tc('angoloBambini'), desc: tc('angoloBambiniDescription'), category: 'bambini' },
     { name: 'listings', icon: Tag, title: t('toolListingsTitle'), desc: t('toolListingsDescription'), category: 'community' },
     { name: 'spotlight', icon: Star, title: tc('kumanoDelGiorno'), desc: tc('kumanoDelGiornoDescription'), category: 'community' },
     { name: 'convivio', icon: HandPlatter, title: tc('convivio'), desc: tc('convivioDescription'), category: 'community' },
@@ -190,6 +191,7 @@ export default function HomeToolsGrid({ freeToolNames = [] }: { freeToolNames?: 
     wellness: tc('categoryWellness'),
     lavoro: tc('categoryLavoro'),
     svago: tc('categorySvago'),
+    bambini: tc('categoryBambini'),
     community: tc('categoryCommunity'),
   }
 

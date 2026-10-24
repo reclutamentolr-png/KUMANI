@@ -1,4 +1,4 @@
-export const MARKETPLACE_CATEGORIES = ['marketing', 'security', 'personal', 'wellness', 'lavoro', 'svago', 'community'] as const
+export const MARKETPLACE_CATEGORIES = ['marketing', 'security', 'personal', 'wellness', 'lavoro', 'svago', 'bambini', 'community'] as const
 export type MarketplaceCategory = (typeof MARKETPLACE_CATEGORIES)[number]
 
 export interface MarketplaceTool {
@@ -622,7 +622,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       title: t('angoloBambini'),
       description: t('angoloBambiniDescription'),
       color: 'gold',
-      category: 'svago',
+      category: 'bambini',
       requiresSubscription: true,
     },
   ]

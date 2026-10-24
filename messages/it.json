@@ -1179,7 +1179,9 @@
     "cronobioma": "KUMANI CRONOBIOMA",
     "cronobiomaDescription": "Il tuo orologio interno: cronotipo, giornata ideale, diario del sonno, turni e fuso orario.",
     "angoloBambini": "Angolo Bambini",
-    "angoloBambiniDescription": "Disegni da colorare che prendono vita e chiamano il bambino per nome. Con il codice del genitore, senza pubblicità."
+    "angoloBambiniDescription": "Quattro giochi creativi: colorare disegni che prendono vita, inventare animali, fare musica con i colori e disegnare con pennelli magici. Con il codice del genitore, senza pubblicità.",
+    "categoryBambini": "Bambini",
+    "categoryBambiniDesc": "Giochi creativi per i più piccoli, protetti dal codice del genitore: niente pubblicità e niente dati sul server."
   },
   "neurobalance": {
     "tracksLabel": "Audio di rilassamento",
@@ -10875,7 +10877,9 @@
     "addToHome": "Metti nella Home",
     "removeFromHome": "Togli dalla Home",
     "group_social": "Social",
-    "interest_social": "Iniziare sui social"
+    "interest_social": "Iniziare sui social",
+    "group_kids": "Bambini",
+    "interest_kids": "Far giocare i bambini"
   },
   "garage": {
     "eyebrow": "Auto e moto, di proprietà e a noleggio",
@@ -16025,7 +16029,9 @@
       "trenino": "Trenino",
       "mongolfiera": "Mongolfiera",
       "dinosauro": "Dinosauro",
-      "pinguino": "Pinguino"
+      "pinguino": "Pinguino",
+      "creatura": "La mia creatura",
+      "disegno": "Disegno libero"
     },
     "parts": {
       "acqua": "Acqua",
@@ -16145,7 +16151,17 @@
       "vulcano": "Vulcano",
       "zampaDx": "Zampe",
       "zampaSx": "Zampe",
-      "zoccoli": "Zoccoli"
+      "zoccoli": "Zoccoli",
+      "visore": "Schermo",
+      "antenne": "Antenne",
+      "piume": "Piume",
+      "bottoni": "Bottoni",
+      "maniSx": "Mano",
+      "maniDx": "Mano",
+      "ruote": "Ruote",
+      "suole": "Suole",
+      "punteCoda": "Punte della coda",
+      "macchieAli": "Macchie delle ali"
     },
     "praiseVoice": "Complimenti, hai colorato il tuo disegno! {gender, select, girl {Sei bravissima!} other {Sei bravissimo!}}",
     "moveVoice": {
@@ -16154,6 +16170,164 @@
       "salta": "Hop! Hop! Hop!",
       "nanna": "Buonanotte…"
     },
-    "voiceTip": "Voce più naturale: la voce che legge le frasi è quella del telefono. Per renderla più umana scarica una voce «Avanzata» o «Premium» (iPhone: Impostazioni › Accessibilità › Contenuto letto › Voci) o installa «Servizi di sintesi vocale di Google» (Android)."
+    "voiceTip": "Voce più naturale: la voce che legge le frasi è quella del telefono. Per renderla più umana scarica una voce «Avanzata» o «Premium» (iPhone: Impostazioni › Accessibilità › Contenuto letto › Voci) o installa «Servizi di sintesi vocale di Google» (Android).",
+    "backToGames": "Torna ai giochi",
+    "menuTitle": "A cosa giochiamo, {name}?",
+    "games": {
+      "colora": {
+        "title": "Colora e Anima",
+        "text": "Colora il disegno e lo vedrai prendere vita"
+      },
+      "crea": {
+        "title": "Crea il tuo animale",
+        "text": "Testa, corpo, coda e ali: inventa una creatura tutta tua"
+      },
+      "musica": {
+        "title": "La musica dei colori",
+        "text": "Ogni colore è una nota: dipingi una canzone"
+      },
+      "disegno": {
+        "title": "Disegno libero",
+        "text": "Pennelli magici, stelline, timbri e specchio"
+      }
+    },
+    "creatureName": "Si chiama {name}",
+    "creatureNewName": "Un altro nome",
+    "creatureReady": "Che bella creatura! Ora coloriamola",
+    "creatureParts": "Pezzi della creatura",
+    "creatureNone": "Niente",
+    "creatureRandom": "A sorpresa",
+    "creatureDone": "Fatto! Coloriamo",
+    "creatureChangeParts": "Cambia pezzi",
+    "creatureNew": "Nuova creatura",
+    "creaturePraise": "Complimenti {name}! Ecco {creature}, la creatura che hai inventato tu!",
+    "creaturePraiseVoice": "Che bella creatura! L’hai inventata tu!",
+    "creatureNames": "Pallino|Zuccotto|Brillo|Fiocchetto|Saltarello|Biscotto|Ciuffetto|Gommolo|Frullo|Tappetto|Zigzag|Bombolo|Pispola|Coriandolo|Spruzzo|Ruzzola|Lampo|Mirtillo|Nuvolino|Ghiribizzo|Polpetta|Tiramolla|Scintilla|Pasticcio",
+    "creature": {
+      "slots": {
+        "testa": "Testa",
+        "sopra": "Orecchie e corna",
+        "corpo": "Corpo",
+        "braccia": "Braccia",
+        "piedi": "Piedi",
+        "coda": "Coda",
+        "ali": "Ali"
+      },
+      "parts": {
+        "testa": {
+          "orso": "Orso",
+          "gatto": "Gatto",
+          "uccello": "Uccello",
+          "drago": "Drago",
+          "scimmia": "Scimmia",
+          "robot": "Robot"
+        },
+        "sopra": {
+          "orecchieTonde": "Orecchie tonde",
+          "orecchieGatto": "Orecchie da gatto",
+          "orecchieConiglio": "Orecchie da coniglio",
+          "corno": "Corno magico",
+          "cornaDrago": "Corna da drago",
+          "criniera": "Criniera",
+          "antenne": "Antenne"
+        },
+        "corpo": {
+          "tondo": "Tondo",
+          "macchie": "A macchie",
+          "strisce": "A strisce",
+          "piume": "Piumato",
+          "robot": "Robot",
+          "drago": "Drago"
+        },
+        "braccia": {
+          "zampeOrso": "Zampe da orso",
+          "artigli": "Artigli",
+          "alette": "Alette",
+          "tentacoli": "Tentacoli",
+          "robot": "Braccia robot",
+          "scimmia": "Braccia da scimmia"
+        },
+        "piedi": {
+          "zampeOrso": "Zampe",
+          "zoccoli": "Zoccoli",
+          "uccello": "Zampette",
+          "stivali": "Stivaletti",
+          "ruote": "Ruote",
+          "pinne": "Pinne"
+        },
+        "coda": {
+          "gatto": "Coda da gatto",
+          "leone": "Coda da leone",
+          "drago": "Coda da drago",
+          "pesce": "Coda da pesce",
+          "volpe": "Coda da volpe",
+          "pavone": "Coda da pavone"
+        },
+        "ali": {
+          "uccello": "Ali d’uccello",
+          "farfalla": "Ali di farfalla",
+          "drago": "Ali da drago",
+          "fata": "Ali di fata",
+          "angelo": "Ali d’angelo"
+        }
+      }
+    },
+    "musicTrack": "I fiori della canzone",
+    "musicPause": "Fiore {n}: pausa",
+    "musicNote": "Fiore {n}: {color}",
+    "musicSpeed": "Velocità",
+    "tempo": {
+      "0": "Piano",
+      "1": "Normale",
+      "2": "Veloce"
+    },
+    "musicPlay": "Suona",
+    "musicStop": "Ferma",
+    "musicRandom": "A sorpresa",
+    "musicClear": "Cancella tutto",
+    "musicSave": "Salva la canzone",
+    "musicMySongs": "Le mie canzoni",
+    "musicNoSongs": "Qui trovi le canzoni che salvi. Colora i fiori e premi il disco per salvarne una!",
+    "musicDelete": "Cancella la canzone",
+    "musicEmpty": "Colora almeno un fiore per fare una canzone!",
+    "musicSaved": "Canzone salvata! Hai vinto una stella",
+    "musicSongName": "Canzone {n} di {name}",
+    "instruments": {
+      "xilofono": "Xilofono",
+      "flauto": "Flauto",
+      "campanelle": "Campanelle",
+      "robot": "Robot"
+    },
+    "drawTools": "Pennelli magici",
+    "drawTool": {
+      "pennello": "Pennello",
+      "arcobaleno": "Arcobaleno",
+      "stelline": "Stelline",
+      "timbro": "Timbri",
+      "gomma": "Gomma",
+      "sfondo": "Colora lo sfondo"
+    },
+    "drawMirror": {
+      "0": "Specchio spento",
+      "1": "Specchio: 2 copie",
+      "2": "Specchio: 4 copie"
+    },
+    "drawStamps": "Timbri",
+    "stamps": {
+      "cuore": "Cuore",
+      "stella": "Stella",
+      "fiore": "Fiore",
+      "sole": "Sole",
+      "faccina": "Faccina"
+    },
+    "drawSize": "Grandezza",
+    "drawSizes": {
+      "0": "Sottile",
+      "1": "Media",
+      "2": "Grossa"
+    },
+    "drawNew": "Nuovo foglio",
+    "drawDone": "Fatto! Nell’album",
+    "drawEmpty": "Il foglio è ancora bianco: disegna qualcosa!"
   }
 }

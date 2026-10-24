@@ -5,5 +5,5 @@
 -- accende.
 
 insert into public.marketplace_settings (tool_name, is_enabled, staff_preview, required_plan, description)
-values ('angolo-bambini', false, true, 'base', 'Angolo Bambini – colorare e animare i disegni (19 figure), con il codice del genitore; tutto resta nel telefono')
+values ('angolo-bambini', false, true, 'base', 'Angolo Bambini – 4 giochi: Colora e Anima (19 disegni), Crea il tuo animale, La musica dei colori, Disegno libero; codice del genitore, tutto resta nel telefono')
 on conflict (tool_name) do nothing;

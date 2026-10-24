@@ -38,7 +38,12 @@ function loadImage(svg: string): Promise<HTMLImageElement> {
 
 // Immagine del disegno con la firma del bambino sotto
 export async function drawingPng(svg: string, caption: string, subcaption: string): Promise<Blob> {
-  const img = await loadImage(svg)
+  return framePng(await loadImage(svg), caption, subcaption)
+}
+
+// Stessa cornice per un disegno fatto a mano libera (canvas)
+export async function framePng(source: CanvasImageSource, caption: string, subcaption: string): Promise<Blob> {
+  const img = source
   const canvas = document.createElement('canvas')
   canvas.width = W
   canvas.height = H + FOOT

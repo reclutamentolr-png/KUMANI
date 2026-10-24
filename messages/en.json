@@ -1179,7 +1179,9 @@
     "cronobioma": "KUMANI CRONOBIOMA",
     "cronobiomaDescription": "Your body clock: chronotype, ideal day, sleep diary, shifts and time zones.",
     "angoloBambini": "Kids Corner",
-    "angoloBambiniDescription": "Drawings to colour that come to life and call your child by name. With a parent code, no ads."
+    "angoloBambiniDescription": "Four creative games: colour drawings that come to life, invent animals, make music with colours and draw with magic brushes. With a parent code, no ads.",
+    "categoryBambini": "Kids",
+    "categoryBambiniDesc": "Creative games for little ones, protected by a parent code: no ads and no data on the server."
   },
   "neurobalance": {
     "tracksLabel": "Relaxation audio",
@@ -10875,7 +10877,9 @@
     "addToHome": "Add to Home",
     "removeFromHome": "Remove from Home",
     "group_social": "Social",
-    "interest_social": "Getting started on social media"
+    "interest_social": "Getting started on social media",
+    "group_kids": "Kids",
+    "interest_kids": "Let the kids play"
   },
   "garage": {
     "eyebrow": "Cars and motorbikes, owned and leased",
@@ -16025,7 +16029,9 @@
       "trenino": "Little train",
       "mongolfiera": "Hot-air balloon",
       "dinosauro": "Dinosaur",
-      "pinguino": "Penguin"
+      "pinguino": "Penguin",
+      "creatura": "My creature",
+      "disegno": "Free drawing"
     },
     "parts": {
       "acqua": "Water",
@@ -16145,7 +16151,17 @@
       "vulcano": "Volcano",
       "zampaDx": "Legs",
       "zampaSx": "Legs",
-      "zoccoli": "Hooves"
+      "zoccoli": "Hooves",
+      "visore": "Screen",
+      "antenne": "Antennae",
+      "piume": "Feathers",
+      "bottoni": "Buttons",
+      "maniSx": "Hand",
+      "maniDx": "Hand",
+      "ruote": "Wheels",
+      "suole": "Soles",
+      "punteCoda": "Tail spikes",
+      "macchieAli": "Wing spots"
     },
     "praiseVoice": "Well done, you coloured your drawing! You are brilliant!",
     "moveVoice": {
@@ -16154,6 +16170,164 @@
       "salta": "Hop! Hop! Hop!",
       "nanna": "Good night…"
     },
-    "voiceTip": "A more natural voice: the voice reading the sentences is your phone's. To make it sound more human, download an \"Enhanced\" or \"Premium\" voice (iPhone: Settings › Accessibility › Spoken Content › Voices) or install \"Speech Services by Google\" (Android)."
+    "voiceTip": "A more natural voice: the voice reading the sentences is your phone's. To make it sound more human, download an \"Enhanced\" or \"Premium\" voice (iPhone: Settings › Accessibility › Spoken Content › Voices) or install \"Speech Services by Google\" (Android).",
+    "backToGames": "Back to games",
+    "menuTitle": "What shall we play, {name}?",
+    "games": {
+      "colora": {
+        "title": "Colour and Animate",
+        "text": "Colour the drawing and watch it come to life"
+      },
+      "crea": {
+        "title": "Create your animal",
+        "text": "Head, body, tail and wings: invent your very own creature"
+      },
+      "musica": {
+        "title": "The music of colours",
+        "text": "Every colour is a note: paint a song"
+      },
+      "disegno": {
+        "title": "Free drawing",
+        "text": "Magic brushes, stars, stamps and mirror"
+      }
+    },
+    "creatureName": "Its name is {name}",
+    "creatureNewName": "Another name",
+    "creatureReady": "What a lovely creature! Now let’s colour it",
+    "creatureParts": "Creature parts",
+    "creatureNone": "None",
+    "creatureRandom": "Surprise me",
+    "creatureDone": "Done! Let’s colour",
+    "creatureChangeParts": "Change parts",
+    "creatureNew": "New creature",
+    "creaturePraise": "Well done {name}! Meet {creature}, the creature you invented!",
+    "creaturePraiseVoice": "What a lovely creature! You invented it!",
+    "creatureNames": "Fluffy|Bubbles|Pickle|Biscuit|Zigzag|Noodle|Sprinkles|Wobble|Pudding|Twinkle|Muffin|Doodle|Pebble|Squiggle|Jellybean|Cupcake|Sparky|Tumble|Pip|Waffles|Popcorn|Ziggy|Button|Sunny",
+    "creature": {
+      "slots": {
+        "testa": "Head",
+        "sopra": "Ears and horns",
+        "corpo": "Body",
+        "braccia": "Arms",
+        "piedi": "Feet",
+        "coda": "Tail",
+        "ali": "Wings"
+      },
+      "parts": {
+        "testa": {
+          "orso": "Bear",
+          "gatto": "Cat",
+          "uccello": "Bird",
+          "drago": "Dragon",
+          "scimmia": "Monkey",
+          "robot": "Robot"
+        },
+        "sopra": {
+          "orecchieTonde": "Round ears",
+          "orecchieGatto": "Cat ears",
+          "orecchieConiglio": "Bunny ears",
+          "corno": "Magic horn",
+          "cornaDrago": "Dragon horns",
+          "criniera": "Mane",
+          "antenne": "Antennae"
+        },
+        "corpo": {
+          "tondo": "Round",
+          "macchie": "Spotted",
+          "strisce": "Striped",
+          "piume": "Feathery",
+          "robot": "Robot",
+          "drago": "Dragon"
+        },
+        "braccia": {
+          "zampeOrso": "Bear paws",
+          "artigli": "Claws",
+          "alette": "Flippers",
+          "tentacoli": "Tentacles",
+          "robot": "Robot arms",
+          "scimmia": "Monkey arms"
+        },
+        "piedi": {
+          "zampeOrso": "Paws",
+          "zoccoli": "Hooves",
+          "uccello": "Bird feet",
+          "stivali": "Boots",
+          "ruote": "Wheels",
+          "pinne": "Flippers"
+        },
+        "coda": {
+          "gatto": "Cat tail",
+          "leone": "Lion tail",
+          "drago": "Dragon tail",
+          "pesce": "Fish tail",
+          "volpe": "Fox tail",
+          "pavone": "Peacock tail"
+        },
+        "ali": {
+          "uccello": "Bird wings",
+          "farfalla": "Butterfly wings",
+          "drago": "Dragon wings",
+          "fata": "Fairy wings",
+          "angelo": "Angel wings"
+        }
+      }
+    },
+    "musicTrack": "The song flowers",
+    "musicPause": "Flower {n}: rest",
+    "musicNote": "Flower {n}: {color}",
+    "musicSpeed": "Speed",
+    "tempo": {
+      "0": "Slow",
+      "1": "Normal",
+      "2": "Fast"
+    },
+    "musicPlay": "Play",
+    "musicStop": "Stop",
+    "musicRandom": "Surprise me",
+    "musicClear": "Clear all",
+    "musicSave": "Save the song",
+    "musicMySongs": "My songs",
+    "musicNoSongs": "Your saved songs appear here. Colour the flowers and press the disk to save one!",
+    "musicDelete": "Delete the song",
+    "musicEmpty": "Colour at least one flower to make a song!",
+    "musicSaved": "Song saved! You won a star",
+    "musicSongName": "{name}’s song {n}",
+    "instruments": {
+      "xilofono": "Xylophone",
+      "flauto": "Flute",
+      "campanelle": "Bells",
+      "robot": "Robot"
+    },
+    "drawTools": "Magic brushes",
+    "drawTool": {
+      "pennello": "Brush",
+      "arcobaleno": "Rainbow",
+      "stelline": "Little stars",
+      "timbro": "Stamps",
+      "gomma": "Eraser",
+      "sfondo": "Colour the background"
+    },
+    "drawMirror": {
+      "0": "Mirror off",
+      "1": "Mirror: 2 copies",
+      "2": "Mirror: 4 copies"
+    },
+    "drawStamps": "Stamps",
+    "stamps": {
+      "cuore": "Heart",
+      "stella": "Star",
+      "fiore": "Flower",
+      "sole": "Sun",
+      "faccina": "Smiley"
+    },
+    "drawSize": "Size",
+    "drawSizes": {
+      "0": "Thin",
+      "1": "Medium",
+      "2": "Thick"
+    },
+    "drawNew": "New sheet",
+    "drawDone": "Done! To the album",
+    "drawEmpty": "The sheet is still blank: draw something!"
   }
 }
