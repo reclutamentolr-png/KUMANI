@@ -16146,6 +16146,14 @@
       "zampaDx": "Patas",
       "zampaSx": "Patas",
       "zoccoli": "Cascos"
-    }
+    },
+    "praiseVoice": "¡Enhorabuena, has coloreado tu dibujo! ¡Eres genial!",
+    "moveVoice": {
+      "saluta": "¡Hola!",
+      "balla": "¡Bailemos juntos!",
+      "salta": "¡Hop! ¡Hop! ¡Hop!",
+      "nanna": "Buenas noches…"
+    },
+    "voiceTip": "Una voz más natural: la voz que lee las frases es la del teléfono. Para que suene más humana, descarga una voz «Mejorada» o «Premium» (iPhone: Ajustes › Accesibilidad › Contenido leído › Voces) o instala «Servicios de voz de Google» (Android)."
   }
 }

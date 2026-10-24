@@ -260,6 +260,7 @@ export default function KidsCorner({ userId }: { userId: string }) {
           <li className="flex gap-3"><ShieldCheck className="h-6 w-6 shrink-0 text-[#2F9E5B]" aria-hidden /> {t('welcomeShare')}</li>
         </ul>
         <p className="rounded-2xl bg-[#FFF3C4] p-3 text-sm">{t('welcomeTip')}</p>
+        <p className="rounded-2xl bg-white p-3 text-sm">{t('voiceTip')}</p>
         <button type="button" onClick={() => setPhase('pinCreate')} className="min-h-14 rounded-2xl border-[3px] border-[#2B2D52] bg-[#FF6A3D] text-xl font-extrabold text-white shadow-[3px_3px_0_#2B2D52]">
           {t('createPin')}
         </button>

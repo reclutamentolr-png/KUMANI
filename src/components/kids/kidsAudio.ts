@@ -37,15 +37,55 @@ export function melody(notes = [0, 2, 4, 7], gap = 130) {
 
 const VOICE_LANG: Record<string, string> = { it: 'it-IT', en: 'en-GB', fr: 'fr-FR', es: 'es-ES', pt: 'pt-PT', de: 'de-DE', ru: 'ru-RU' }
 
+// La voce più naturale tra quelle del telefono: prima le voci «neurali»
+// (Edge «Natural», Google, iPhone «Avanzata/Premium»), poi le altre della
+// lingua giusta. Le voci arrivano dopo l'apertura della pagina: si ricalcola
+// quando il browser le annuncia.
+const BETTER = [
+  [/natural|neural/i, 60],
+  [/premium/i, 55],
+  [/enhanced|avanzat|migliorat|améliorée|mejorada|melhorada|erweitert|улучшен/i, 50],
+  [/online/i, 30],
+  [/google/i, 25],
+] as const
+let cached: { lang: string; voice: SpeechSynthesisVoice | null } | null = null
+
+function bestVoice(lang: string) {
+  if (cached?.lang === lang && cached.voice) return cached.voice
+  const all = speechSynthesis.getVoices()
+  const base = lang.slice(0, 2).toLowerCase()
+  const same = all.filter((v) => v.lang.toLowerCase().replace('_', '-').startsWith(base))
+  let best: SpeechSynthesisVoice | null = null
+  let bestScore = -1
+  for (const v of same) {
+    let score = v.lang.toLowerCase().replace('_', '-') === lang.toLowerCase() ? 5 : 0
+    for (const [re, points] of BETTER) if (re.test(v.name)) score += points
+    // Voci di riserva molto robotiche (es. eSpeak) in fondo
+    if (/espeak|compact/i.test(v.name)) score -= 40
+    if (score > bestScore) {
+      best = v
+      bestScore = score
+    }
+  }
+  cached = { lang, voice: best }
+  return best
+}
+
+if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+  speechSynthesis.addEventListener?.('voiceschanged', () => (cached = null))
+}
+
 export function speak(text: string, locale: string) {
   try {
     if (!('speechSynthesis' in window)) return
     const u = new SpeechSynthesisUtterance(text)
     u.lang = VOICE_LANG[locale] ?? 'it-IT'
-    const voice = speechSynthesis.getVoices().find((v) => v.lang.toLowerCase().startsWith(u.lang.slice(0, 2).toLowerCase()))
+    const voice = bestVoice(u.lang)
     if (voice) u.voice = voice
-    u.rate = 0.95
-    u.pitch = 1.15
+    // Un po' più lenta e appena più acuta: più vicina a chi parla ai bambini,
+    // senza l'effetto «cartone» che rende la voce ancora più finta
+    u.rate = 0.92
+    u.pitch = 1.08
     speechSynthesis.cancel()
     speechSynthesis.speak(u)
   } catch {

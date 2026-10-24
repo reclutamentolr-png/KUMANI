@@ -16146,6 +16146,14 @@
       "zampaDx": "Legs",
       "zampaSx": "Legs",
       "zoccoli": "Hooves"
-    }
+    },
+    "praiseVoice": "Well done, you coloured your drawing! You are brilliant!",
+    "moveVoice": {
+      "saluta": "Hello!",
+      "balla": "Let's dance together!",
+      "salta": "Hop! Hop! Hop!",
+      "nanna": "Good night…"
+    },
+    "voiceTip": "A more natural voice: the voice reading the sentences is your phone's. To make it sound more human, download an \"Enhanced\" or \"Premium\" voice (iPhone: Settings › Accessibility › Spoken Content › Voices) or install \"Speech Services by Google\" (Android)."
   }
 }

@@ -16146,6 +16146,14 @@
       "zampaDx": "Zampe",
       "zampaSx": "Zampe",
       "zoccoli": "Zoccoli"
-    }
+    },
+    "praiseVoice": "Complimenti, hai colorato il tuo disegno! {gender, select, girl {Sei bravissima!} other {Sei bravissimo!}}",
+    "moveVoice": {
+      "saluta": "Ciao!",
+      "balla": "Balliamo insieme!",
+      "salta": "Hop! Hop! Hop!",
+      "nanna": "Buonanotte…"
+    },
+    "voiceTip": "Voce più naturale: la voce che legge le frasi è quella del telefono. Per renderla più umana scarica una voce «Avanzata» o «Premium» (iPhone: Impostazioni › Accessibilità › Contenuto letto › Voci) o installa «Servizi di sintesi vocale di Google» (Android)."
   }
 }

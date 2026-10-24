@@ -202,9 +202,9 @@ export default function ColoringGame({
         sparkle()
         hop()
         if (sound) melody([0, 2, 4, 7, 11], 120)
-        const text = praise()
-        showBubble(text)
-        say(text)
+        // Il nome si legge nel fumetto; la voce dice la frase senza nome
+        showBubble(praise())
+        say(t('praiseVoice', { gender: profile.gender }))
       }, 250)
       actions.saveFinished(drawing.id, nextFills)
     }
@@ -238,9 +238,8 @@ export default function ColoringGame({
   const setMove = (m: Move) => {
     setMode(m)
     beep(['saluta', 'balla', 'salta', 'nanna'].indexOf(m) * 3, 0.1)
-    const line = t(`moveSay.${m}`, { name: profile.name })
-    showBubble(line)
-    say(line)
+    showBubble(t(`moveSay.${m}`, { name: profile.name }))
+    say(t(`moveVoice.${m}`))
   }
 
   const svgClass = `kids-svg block h-full w-full ${awake ? `alive mode-${mode}` : 'asleep'}`

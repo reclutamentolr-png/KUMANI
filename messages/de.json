@@ -16146,6 +16146,14 @@
       "zampaDx": "Beine",
       "zampaSx": "Beine",
       "zoccoli": "Hufe"
-    }
+    },
+    "praiseVoice": "Toll gemacht, du hast dein Bild ausgemalt! Du bist großartig!",
+    "moveVoice": {
+      "saluta": "Hallo!",
+      "balla": "Lass uns tanzen!",
+      "salta": "Hopp! Hopp! Hopp!",
+      "nanna": "Gute Nacht…"
+    },
+    "voiceTip": "Natürlichere Stimme: Die Stimme, die die Sätze vorliest, ist die des Handys. Damit sie menschlicher klingt, lade eine „Erweiterte“ oder „Premium“-Stimme herunter (iPhone: Einstellungen › Bedienungshilfen › Gesprochene Inhalte › Stimmen) oder installiere „Sprachdienste von Google“ (Android)."
   }
 }
