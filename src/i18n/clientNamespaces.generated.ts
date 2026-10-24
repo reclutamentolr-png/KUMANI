@@ -112,6 +112,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "surpriseTpl",
   "svat",
   "tempus",
+  "textShield",
   "timebank",
   "toolMember",
   "toolPass",

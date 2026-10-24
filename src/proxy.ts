@@ -58,6 +58,7 @@ const PAID_TOOLS = [
   'imago',
   'forma',
   'documento-sicuro',
+  'testo-protetto',
   'firma-email',
   'calcolatrici',
   'angolo-bambini',

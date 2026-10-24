@@ -70,6 +70,7 @@ import {
   Plane,
   HeartHandshake,
   PartyPopper,
+  ScanText,
 } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { addFavorite, removeFavorite } from '@/app/actions/favorites'
@@ -105,6 +106,7 @@ const TAB_ICON: Record<string, LucideIcon> = {
   'controlla.phone': PhoneCall,
   'proteggi.data': ShieldUser,
   'proteggi.documents': FileLock2,
+  'proteggi.text': ScanText,
   'segnala.network': Users,
   'segnala.manual': BookOpenCheck,
   'segnala.test': ShieldQuestion,

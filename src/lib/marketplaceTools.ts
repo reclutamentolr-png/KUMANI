@@ -181,6 +181,17 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       requiresSubscription: true,
     },
     {
+      toolName: 'testo-protetto',
+      href: '/app/testo-protetto',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'ScanText',
+      title: t('testoProtetto'),
+      description: t('testoProtettoDescription'),
+      color: 'gold',
+      category: 'security',
+      requiresSubscription: true,
+    },
+    {
       toolName: 'memolife',
       href: '/app/memolife',
       gradient: 'bg-[var(--ink)]',

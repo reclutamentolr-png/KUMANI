@@ -13,6 +13,7 @@ const GROUP_OF: Record<string, ServiceGroup> = {
   checkmail: 'security',
   verifoto: 'security',
   'documento-sicuro': 'security',
+  'testo-protetto': 'security',
   antitruffa: 'security',
   'rete-antitruffa': 'security',
   // Soldi e organizzazione

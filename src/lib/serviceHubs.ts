@@ -31,6 +31,7 @@ export const HUB_TABS: Record<ServiceHub, HubTab[]> = {
   proteggi: [
     { key: 'data', href: '/app/scudo-dati', tool: 'scudo-dati' },
     { key: 'documents', href: '/app/documento-sicuro', tool: 'documento-sicuro' },
+    { key: 'text', href: '/app/testo-protetto', tool: 'testo-protetto' },
   ],
   segnala: [
     { key: 'network', href: '/app/rete-antitruffa', tool: 'rete-antitruffa' },
@@ -167,6 +168,7 @@ export const TOOL_HUB: Record<string, ServiceHub> = {
   'verifica-iban': 'controlla',
   'scudo-dati': 'proteggi',
   'documento-sicuro': 'proteggi',
+  'testo-protetto': 'proteggi',
   'rete-antitruffa': 'segnala',
   antitruffa: 'segnala',
   neurobalance: 'benessere',
