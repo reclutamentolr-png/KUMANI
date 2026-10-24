@@ -138,7 +138,7 @@ export default function ConvivioFeesPanel({ locale, canReadSettings = true }: { 
                     <span className="flex items-center gap-1.5">
                       {fee.group?.title ?? '—'}
                       {fee.group && (
-                        <a href={`/${locale}/marketplace/convivio/${fee.group.id}`} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gray-700">
+                        <a href={`/${locale}/app/convivio/${fee.group.id}`} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gray-700">
                           <ExternalLink className="h-3.5 w-3.5" />
                         </a>
                       )}

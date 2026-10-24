@@ -9,7 +9,7 @@ import { createClient } from '@/lib/supabase/server'
 import { SuspendedBanner } from '@/components/ServiceSuspended'
 import { isToolOnline } from '@/lib/toolOnline'
 
-// KUMANI Travel: i miei viaggi. Fuori da /marketplace di proposito: chi è
+// KUMANI Travel: i miei viaggi. Fuori da /app di proposito: chi è
 // stato invitato entra anche senza abbonamento; solo creare un viaggio
 // richiede il piano (controllato da trip_create).
 export default async function TravelPage({

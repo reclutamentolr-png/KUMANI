@@ -20,7 +20,7 @@ export default function CvActions({ id }: { id: string }) {
     setDeleting(true)
     const result = await deleteCv(id)
     if (result.success) {
-      router.push(`/marketplace/kumani-cv${fromDashboardSuffix}`)
+      router.push(`/app/kumani-cv${fromDashboardSuffix}`)
     } else {
       alert(t(result.message))
       setDeleting(false)
@@ -30,7 +30,7 @@ export default function CvActions({ id }: { id: string }) {
   return (
     <div className="flex flex-wrap items-center gap-3">
       <Link
-        href={`/marketplace/kumani-cv/${id}/edit${fromDashboardSuffix}`}
+        href={`/app/kumani-cv/${id}/edit${fromDashboardSuffix}`}
         className="flex items-center gap-2 px-5 py-3 rounded-xl font-medium text-sm border border-[var(--gold)]/40 bg-white text-[var(--ink)] hover:bg-[var(--gold-pale)] transition-all"
       >
         <Pencil className="w-4 h-4" />

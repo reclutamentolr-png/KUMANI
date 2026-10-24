@@ -10,7 +10,7 @@ import { getHomeKumano, isSpotlightOnline } from '@/lib/spotlightHome'
 // Nessun dato di sessione qui dentro (la card è uguale per tutti ed è
 // cachata con tag, vedi lib/spotlightHome.ts): per questo la micro-CTA
 // "racconta la tua storia" è mostrata a tutti e porta a
-// /marketplace/spotlight, che rimanda al login chi non è iscritto.
+// /app/spotlight, che rimanda al login chi non è iscritto.
 export default async function HomeKumanoDelGiorno() {
   const t = await getTranslations('spotlightHome')
   const locale = await getLocale()
@@ -80,7 +80,7 @@ export default async function HomeKumanoDelGiorno() {
             <Link href="/spotlight" className="text-sm text-gray-400 hover:text-white transition-colors">
               {t('archive')}
             </Link>
-            <Link href="/marketplace/spotlight" className="text-sm text-gray-400 hover:text-white transition-colors sm:ml-auto">
+            <Link href="/app/spotlight" className="text-sm text-gray-400 hover:text-white transition-colors sm:ml-auto">
               {t('tellYourStory')}
             </Link>
           </div>

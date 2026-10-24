@@ -61,7 +61,7 @@ export default function FindoDashboard({ items }: { items: Item[] }) {
             {t('favoritesOnly')}
           </button>
           <Link
-            href="/marketplace/findo/locations"
+            href="/app/findo/locations"
             className="flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium border-2 border-[var(--gold)]/40 bg-white text-[var(--ink)] hover:border-[var(--gold)] hover:bg-[var(--gold-pale)] transition-all"
           >
             <MapPin className="w-4 h-4 text-[var(--gold)]" />
@@ -84,7 +84,7 @@ export default function FindoDashboard({ items }: { items: Item[] }) {
       </div>
 
       <Link
-        href="/marketplace/findo/new"
+        href="/app/findo/new"
         data-fab className="fixed bottom-6 right-6 z-10 flex items-center gap-2 px-6 py-4 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] rounded-full font-bold shadow-lg hover:brightness-105 hover:shadow-xl hover:-translate-y-0.5 transition-all"
       >
         <PlusCircle className="w-5 h-5" />

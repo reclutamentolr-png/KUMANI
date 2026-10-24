@@ -17,7 +17,7 @@ export default function LifeCalendarDeleteButton({ id }: { id: string }) {
     setDeleting(true)
     const result = await deleteItem(id)
     if (result.success) {
-      router.push('/marketplace/life-calendar')
+      router.push('/app/life-calendar')
     } else {
       alert(t(result.message))
       setDeleting(false)

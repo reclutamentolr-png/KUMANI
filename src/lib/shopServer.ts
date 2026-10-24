@@ -184,7 +184,7 @@ export async function recordShopOrderPayment(session: Stripe.Checkout.Session, a
       body: short
         ? t('shopOrderShortBody', { name: order.customerName, amount: formatCents(order.totalCents, locale), missing: short })
         : t('shopOrderBody', { name: order.customerName, amount: formatCents(order.totalCents, locale) }),
-      url: localizedPath(locale, '/marketplace/shop?tab=orders'),
+      url: localizedPath(locale, '/app/shop?tab=orders'),
       tag: `shop-order-${order.id}`,
     }),
     { kind: 'shop_order', ref: order.id }

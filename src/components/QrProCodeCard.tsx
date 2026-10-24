@@ -67,7 +67,7 @@ export default function QrProCodeCard({ qrCode }: { qrCode: QrCode }) {
 
       <div className="flex items-center gap-2 shrink-0">
         <Link
-          href={`/marketplace/qr-code-pro/${qrCode.id}`}
+          href={`/app/qr-code-pro/${qrCode.id}`}
           className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium bg-[var(--ink)] text-white hover:bg-[var(--ink-soft)] transition-all"
         >
           <Pencil className="w-4 h-4" />

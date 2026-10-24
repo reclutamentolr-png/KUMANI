@@ -45,7 +45,7 @@ function LiveBadge({ initial }: { initial: Badge }) {
 
   return (
     <Link
-      href="/marketplace/affinity"
+      href="/app/affinity"
       className="group flex items-center justify-between gap-3 rounded-xl border border-[var(--gold)]/40 bg-white px-5 py-4 shadow-sm transition-colors hover:border-[var(--gold)]"
     >
       <div className="flex items-center gap-3">

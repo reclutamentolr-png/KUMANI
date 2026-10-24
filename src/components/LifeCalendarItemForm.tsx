@@ -113,7 +113,7 @@ export default function LifeCalendarItemForm(props: Props) {
           setSaving(false)
           return
         }
-        router.push('/marketplace/life-calendar')
+        router.push('/app/life-calendar')
       } else {
         const result = await updateItem(props.id, form)
         if (!result.success) {
@@ -121,7 +121,7 @@ export default function LifeCalendarItemForm(props: Props) {
           setSaving(false)
           return
         }
-        router.push('/marketplace/life-calendar')
+        router.push('/app/life-calendar')
       }
       // Riuscito: il pulsante resta bloccato mentre si cambia pagina (niente doppioni)
     } catch {
@@ -293,7 +293,7 @@ export default function LifeCalendarItemForm(props: Props) {
       )}
 
       <div className="flex gap-2">
-        <CancelButton className={cancelButtonLgClass} fallbackHref="/marketplace/life-calendar" />
+        <CancelButton className={cancelButtonLgClass} fallbackHref="/app/life-calendar" />
         <button
           onClick={handleSubmit}
           disabled={!isValid || saving}

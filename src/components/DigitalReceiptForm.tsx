@@ -139,7 +139,7 @@ export default function DigitalReceiptForm({
         setSaving(false)
         return
       }
-      router.push(`/marketplace/digital-receipt/${result.data.id}`)
+      router.push(`/app/digital-receipt/${result.data.id}`)
       // Riuscito: il pulsante resta bloccato mentre si cambia pagina (niente doppioni)
     } catch {
       setError('saveError')
@@ -358,7 +358,7 @@ export default function DigitalReceiptForm({
       )}
 
       <div className="flex gap-2">
-        <CancelButton className={cancelButtonLgClass} fallbackHref="/marketplace/digital-receipt" />
+        <CancelButton className={cancelButtonLgClass} fallbackHref="/app/digital-receipt" />
         <button
           onClick={handleSubmit}
           disabled={!isValid || saving || uploadingPhoto}

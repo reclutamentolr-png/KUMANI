@@ -162,7 +162,7 @@ export default function UtilitiesPanel({
                         <b>{f.eur(bill.amount)}</b> · {ts(FREQUENCY_KEY[bill.frequency] ?? 'frequencyMonthly')}
                         {bill.next_due && <span className="text-[var(--muted)]"> · {t('nextBill', { date: f.date(bill.next_due) })}</span>}
                       </span>
-                      <Link href="/marketplace/spendly/bollette" className="text-xs font-bold text-[var(--gold)] hover:text-[var(--ink)]">
+                      <Link href="/app/spendly/bollette" className="text-xs font-bold text-[var(--gold)] hover:text-[var(--ink)]">
                         {t('openInSpendly')}
                       </Link>
                       <BillSharing bill={bill} groups={sharedGroups} shared={sharedBills.filter((s) => s.billId === bill.id)} run={run} isPending={isPending} />

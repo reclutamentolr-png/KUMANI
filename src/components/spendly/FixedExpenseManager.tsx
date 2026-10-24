@@ -282,7 +282,7 @@ export default function FixedExpenseManager({
         <div>
           <h2 className="text-2xl font-bold text-[var(--ink)]">{t('fixedExpensesPageTitle')}</h2>
           <p className="text-sm text-[var(--muted)]">{t('fixedExpensesPageDescription')}</p>
-          <Link href="/marketplace/spendly/bollette" className="mt-1 inline-block text-xs font-semibold text-[var(--gold)] hover:underline">
+          <Link href="/app/spendly/bollette" className="mt-1 inline-block text-xs font-semibold text-[var(--gold)] hover:underline">
             {t('billsMovedHint')}
           </Link>
         </div>

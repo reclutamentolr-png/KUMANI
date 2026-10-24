@@ -19,7 +19,7 @@ export default async function LandingMessagesAlert({ count }: { count: number })
         <p className="mt-1 text-sm text-white/75">{t('alertText')}</p>
       </div>
       <Link
-        href="/marketplace/landing-page?tab=messages"
+        href="/app/landing-page?tab=messages"
         className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-4 py-2.5 text-sm font-bold text-[var(--ink)] transition hover:brightness-110"
       >
         {t('alertCta')}

@@ -120,7 +120,7 @@ export async function GET(request: Request) {
       await notifyUser(
         userId,
         'expiry',
-        (t, locale) => ({ title: t('fincheckTitle'), body: t('fincheckBody'), url: localizedPath(locale, '/marketplace/fincheck'), tag: 'fincheck' }),
+        (t, locale) => ({ title: t('fincheckTitle'), body: t('fincheckBody'), url: localizedPath(locale, '/app/fincheck'), tag: 'fincheck' }),
         { kind: 'fincheck', ref: row.id }
       )
       fincheck++
@@ -153,7 +153,7 @@ export async function GET(request: Request) {
             days,
             date: new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', timeZone: 'UTC' }).format(new Date(`${row.due_date}T12:00:00Z`)),
           }),
-          url: localizedPath(locale, `/marketplace/garage/${row.vehicle_id}`),
+          url: localizedPath(locale, `/app/garage/${row.vehicle_id}`),
           tag: `garage-${row.id}`,
         }),
         { kind: 'garage_deadline', ref: `${row.id}:${row.due_date}:${days}` }
@@ -189,7 +189,7 @@ export async function GET(request: Request) {
         (t, locale) => ({
           title: t('garageKmTitle', { car: rental.name as string }),
           body: t('garageKmBody'),
-          url: localizedPath(locale, `/marketplace/garage/${rental.id}`),
+          url: localizedPath(locale, `/app/garage/${rental.id}`),
           tag: `garage-km-${rental.id}`,
         }),
         { kind: 'garage_km', ref: `${rental.id}:${today.slice(0, 7)}` }
@@ -226,7 +226,7 @@ export async function GET(request: Request) {
             days,
             date: new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', timeZone: 'UTC' }).format(new Date(`${item.due_date}T12:00:00Z`)),
           }),
-          url: localizedPath(locale, homeId ? `/marketplace/casa/${homeId}` : '/marketplace/life-calendar'),
+          url: localizedPath(locale, homeId ? `/app/casa/${homeId}` : '/app/life-calendar'),
           tag: `life-${item.id}`,
         }),
         { kind: 'life_deadline', ref: `${item.id}:${item.due_date}:${days}` }
@@ -271,7 +271,7 @@ export async function GET(request: Request) {
               amount: new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(Number(expense.amount)),
               days,
             }),
-            url: localizedPath(locale, '/marketplace/spendly/bollette'),
+            url: localizedPath(locale, '/app/spendly/bollette'),
             tag: `bill-${expense.id}`,
           }),
           { kind: 'spendly_bill', ref: `${expense.id}:${due}:${days}` }
@@ -327,7 +327,7 @@ export async function GET(request: Request) {
       (t, locale) => ({
         title: t('clientiTitle'),
         body: [counts.steps ? t('clientiSteps', { count: counts.steps }) : null, counts.collect ? t('clientiCollect', { count: counts.collect }) : null].filter(Boolean).join(' · '),
-        url: localizedPath(locale, '/marketplace/clienti'),
+        url: localizedPath(locale, '/app/clienti'),
         tag: 'clienti-today',
       }),
       { kind: 'clienti_today', ref: today }

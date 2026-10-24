@@ -60,7 +60,7 @@ export default async function AppHeader({
           </Link>
           {/* Stella oro: i servizi preferiti */}
           <Link
-            href="/marketplace/preferiti?from=dashboard"
+            href="/app/preferiti?from=dashboard"
             aria-label={t('goToFavorites')}
             title={t('goToFavorites')}
             className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[var(--gold-bright)] transition-transform hover:scale-110"

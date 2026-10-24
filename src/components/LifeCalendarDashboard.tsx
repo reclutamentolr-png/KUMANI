@@ -185,7 +185,7 @@ export default function LifeCalendarDashboard({
             <ul className="mt-3 divide-y divide-[var(--gold)]/15">
               {archived.map((item) => (
                 <li key={item.id}>
-                  <Link href={`/marketplace/life-calendar/${item.id}`} className="flex items-center justify-between gap-3 py-2.5 text-sm hover:text-[var(--gold)]">
+                  <Link href={`/app/life-calendar/${item.id}`} className="flex items-center justify-between gap-3 py-2.5 text-sm hover:text-[var(--gold)]">
                     <span className="truncate text-[var(--ink)]">{item.title}</span>
                     <span className="shrink-0 text-xs text-[var(--muted)]">
                       {t(`category_${item.category}`)} · {new Date(`${item.due_date}T12:00:00Z`).toLocaleDateString('it-IT')}
@@ -199,7 +199,7 @@ export default function LifeCalendarDashboard({
       )}
 
       <Link
-        href="/marketplace/life-calendar/new"
+        href="/app/life-calendar/new"
         data-fab className="fixed bottom-6 right-6 z-10 flex items-center gap-2 px-6 py-4 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] rounded-full font-bold shadow-lg hover:brightness-105 hover:shadow-xl hover:-translate-y-0.5 transition-all"
       >
         <PlusCircle className="w-5 h-5" />

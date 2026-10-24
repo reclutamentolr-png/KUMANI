@@ -231,7 +231,7 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
                                   ? te('chatSafetyIbanValid', { country: countryName(safety.iban.country ?? '', locale) })
                                   : te('chatSafetyIbanInvalid')
                               }
-                              href={`/marketplace/verifica-iban?iban=${encodeURIComponent(safety.iban.normalized)}`}
+                              href={`/app/verifica-iban?iban=${encodeURIComponent(safety.iban.normalized)}`}
                               action={te('chatSafetyCheck')}
                             />
                           )}
@@ -240,7 +240,7 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
                               tone="info"
                               icon={Mail}
                               label={te('chatSafetyEmail')}
-                              href={`/marketplace/checkmail?sender=${encodeURIComponent(safety.email)}`}
+                              href={`/app/checkmail?sender=${encodeURIComponent(safety.email)}`}
                               action={te('chatSafetyCheck')}
                             />
                           )}
@@ -249,7 +249,7 @@ export default function ChatModal({ isOpen, onClose, listing, currentUserId, rec
                               tone="info"
                               icon={Link2}
                               label={te('chatSafetyLink')}
-                              href={`/marketplace/svat?url=${encodeURIComponent(safety.url)}`}
+                              href={`/app/svat?url=${encodeURIComponent(safety.url)}`}
                               action={te('chatSafetyCheck')}
                             />
                           )}

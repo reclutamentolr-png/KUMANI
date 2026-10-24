@@ -14,10 +14,10 @@ import { locales } from '../../../i18n'
 const EVERY_MS = 45_000
 const ID_KEY = 'kumani_presence_id'
 
-// Sezioni il cui sotto-percorso è una pagina fissa (es. /marketplace/svat);
+// Sezioni il cui sotto-percorso è una pagina fissa (es. /app/svat);
 // altrove il pezzo dopo è un codice o un nome e diventa «:id»
 const KEEP_CHILD = new Set([
-  'marketplace', 'strumenti', 'guida', 'community', 'dashboard', 'convivium', 'viaggi', 'documenti', 'scheda-attivita', 'events',
+  'app', 'marketplace', 'strumenti', 'guida', 'community', 'dashboard', 'convivium', 'viaggi', 'documenti', 'scheda-attivita', 'events',
   'catalogo', 'servizi', 'wallet', 'billing', 'pro', 'pass', 'sorprese', 'spese-condivise', 'calendario-collegato', 'controlla', 'test-truffa',
 ])
 

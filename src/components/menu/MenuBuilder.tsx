@@ -109,7 +109,7 @@ export default function MenuBuilder({
   const lang = menu?.default_locale ?? 'it'
   const languages = menu?.languages ?? ['it']
   const publicUrl = menu ? `${siteUrl}/m/${menu.token}` : ''
-  const menuBasePath = `/${locale}/marketplace/menu`
+  const menuBasePath = `/${locale}/app/menu`
 
   // Primo avvio (menu non ancora creato): si parte dai dati della Scheda attività
   const fromProfile = !initial.menu && businessProfile ? businessProfile : null

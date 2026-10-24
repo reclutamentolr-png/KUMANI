@@ -46,6 +46,18 @@ const nextConfig: NextConfig = {
   // esistono su KUMANI. Il proxy non vede i percorsi con il punto, quindi
   // passano da qui: si registra il tentativo (Admin → Sicurezza) e si
   // risponde «non trovato».
+  // I servizi stavano sotto /marketplace, ora sotto /app: i vecchi link (QR,
+  // messaggi, notifiche, Google) portano per sempre al nuovo indirizzo.
+  // Vale prima del proxy; la parte ?… dell'indirizzo resta.
+  async redirects() {
+    const locale = ':locale(it|fr|en|es|pt|de|ru)';
+    return [
+      { source: '/marketplace', destination: '/app', permanent: true },
+      { source: '/marketplace/:path*', destination: '/app/:path*', permanent: true },
+      { source: `/${locale}/marketplace`, destination: '/:locale/app', permanent: true },
+      { source: `/${locale}/marketplace/:path*`, destination: '/:locale/app/:path*', permanent: true },
+    ];
+  },
   async rewrites() {
     return {
       beforeFiles: [

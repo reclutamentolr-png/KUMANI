@@ -110,5 +110,5 @@ export function publicDisplay(kind: ScamKind, display: string): string {
 
 // Collegamento per segnalare dal risultato di un altro controllo
 export function reportHref(kind: ScamKind, value: string): string {
-  return `/marketplace/rete-antitruffa?tab=segnala&kind=${kind}&value=${encodeURIComponent(value)}`
+  return `/app/rete-antitruffa?tab=segnala&kind=${kind}&value=${encodeURIComponent(value)}`
 }

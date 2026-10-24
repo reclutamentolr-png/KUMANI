@@ -133,7 +133,7 @@ export default function AppliancesPanel({
                 </div>
                 {a.findo_location_id && placeById.has(a.findo_location_id) && (
                   <Link
-                    href="/marketplace/findo"
+                    href="/app/findo"
                     title={t('findoOpen')}
                     className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-[var(--ink)] hover:text-[var(--gold)]"
                   >
@@ -257,7 +257,7 @@ export default function AppliancesPanel({
                 ) : (
                   <p className="rounded-xl bg-[var(--paper)] px-3 py-2 text-sm text-[var(--muted)]">
                     {t('findoEmpty')}{' '}
-                    <Link href="/marketplace/findo/locations" className="font-bold text-[var(--gold)] hover:text-[var(--ink)]">
+                    <Link href="/app/findo/locations" className="font-bold text-[var(--gold)] hover:text-[var(--ink)]">
                       {t('findoCreate')}
                     </Link>
                   </p>

@@ -490,7 +490,7 @@ export async function adminScamDecide(targetId: string, decision: 'confirm' | 'd
       (t, locale) => ({
         title: t(`scam${kind}Title`),
         body: t(`scam${kind}Body`, { value, ku: r.rewarded_ku, note: note?.trim() || '' }),
-        url: localizedPath(locale, '/marketplace/rete-antitruffa?tab=mie'),
+        url: localizedPath(locale, '/app/rete-antitruffa?tab=mie'),
         tag: `scam-${r.report_id}`,
       }),
       { kind: `scam_${decision}`, ref: r.report_id }

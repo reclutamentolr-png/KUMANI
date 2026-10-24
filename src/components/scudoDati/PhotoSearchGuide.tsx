@@ -67,13 +67,13 @@ export default function PhotoSearchGuide() {
         </div>
         <div className="mt-4 flex flex-wrap gap-2 sm:pl-16">
           <Link
-            href="/marketplace/documento-sicuro"
+            href="/app/documento-sicuro"
             className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-4 py-2.5 text-sm font-extrabold text-[var(--ink)] shadow hover:brightness-105"
           >
             <FileLock2 className="h-4 w-4" /> Documento Sicuro
           </Link>
           <Link
-            href="/marketplace/verifoto"
+            href="/app/verifoto"
             className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-4 py-2.5 text-sm font-extrabold text-[var(--ink)] shadow hover:brightness-105"
           >
             <ScanSearch className="h-4 w-4" /> VeriFoto

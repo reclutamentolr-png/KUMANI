@@ -72,7 +72,7 @@ export default function HomeServices({ items, favorites, community = [] }: { ite
           </button>
         </div>
         {favoriteItems.length > MAX_FAVORITES && (
-          <Link href="/marketplace/preferiti?from=dashboard" className="mt-2 inline-flex items-center gap-1 text-sm font-bold text-[var(--gold)] hover:text-[var(--ink)]">
+          <Link href="/app/preferiti?from=dashboard" className="mt-2 inline-flex items-center gap-1 text-sm font-bold text-[var(--gold)] hover:text-[var(--ink)]">
             {t('allFavorites', { count: favoriteItems.length })} <ArrowRight className="h-4 w-4" />
           </Link>
         )}

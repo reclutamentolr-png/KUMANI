@@ -165,7 +165,7 @@ export default function KuRewardsSection({ data }: { data: KuWalletData }) {
             <p className="mt-1 text-sm text-[var(--muted)]">
               {t('showcaseText', { cost7: showcase.cost_7d, cost15: showcase.cost_15d })}
             </p>
-            <Link href="/marketplace/listings" className="mt-3 inline-block text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
+            <Link href="/app/listings" className="mt-3 inline-block text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
               {t('showcaseCta')}
             </Link>
           </div>

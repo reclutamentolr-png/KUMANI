@@ -39,7 +39,7 @@ export default function ConvivioCardItem({ card, now }: { card: ConvivioCard; no
 
   return (
     <Link
-      href={`/marketplace/convivio/${card.id}`}
+      href={`/app/convivio/${card.id}`}
       className="group flex flex-col rounded-2xl border border-[var(--gold)]/25 bg-white p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:border-[var(--gold)]/60 hover:shadow-md"
     >
       <div className="mb-2 flex items-start justify-between gap-2">

@@ -38,14 +38,14 @@ export default function BachecaMessagesAlert({ initialCount }: { initialCount: n
           <p className="mt-1 text-sm leading-6 text-white/75">{t('bachecaAlertText')}</p>
           <div className="mt-4 flex flex-wrap gap-2">
             <Link
-              href="/marketplace/chat"
+              href="/app/chat"
               className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-4 py-2.5 text-sm font-bold text-[var(--ink)] transition hover:brightness-110"
             >
               <MessageCircle className="h-4 w-4" />
               {t('bachecaAlertRead')}
             </Link>
             <Link
-              href="/marketplace/listings"
+              href="/app/listings"
               className="inline-flex items-center gap-2 rounded-xl border border-white/20 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
             >
               <Tag className="h-4 w-4" />

@@ -92,12 +92,12 @@ export default function CronobiomaPublic({
               <Link href={registerHref} className="flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-[var(--ink)] px-5 font-extrabold text-[var(--gold-bright)] hover:bg-[var(--ink-soft)]">
                 {t('ctaRegister')} <ArrowRight className="h-4 w-4" />
               </Link>
-              <Link href={`/login?next=${encodeURIComponent('/marketplace/cronobioma')}`} className="flex min-h-12 items-center justify-center rounded-xl border border-[var(--gold)]/50 bg-white px-5 font-bold text-[var(--ink)]">
+              <Link href={`/login?next=${encodeURIComponent('/app/cronobioma')}`} className="flex min-h-12 items-center justify-center rounded-xl border border-[var(--gold)]/50 bg-white px-5 font-bold text-[var(--ink)]">
                 {t('ctaLogin')}
               </Link>
             </>
           ) : access === 'plus' ? (
-            <Link href="/marketplace/cronobioma" className="flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-[var(--ink)] px-5 font-extrabold text-[var(--gold-bright)] hover:bg-[var(--ink-soft)]">
+            <Link href="/app/cronobioma" className="flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-[var(--ink)] px-5 font-extrabold text-[var(--gold-bright)] hover:bg-[var(--ink-soft)]">
               {t('ctaOpen')} <ArrowRight className="h-4 w-4" />
             </Link>
           ) : (

@@ -63,7 +63,7 @@ export default function ReceiptSpendlyBox({
         </button>
       ) : status === 'added' ? (
         <Link
-          href={kind === 'income' ? '/marketplace/spendly/entrate' : '/marketplace/spendly/spese-variabili'}
+          href={kind === 'income' ? '/app/spendly/entrate' : '/app/spendly/spese-variabili'}
           className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-emerald-300 bg-white px-4 py-2.5 text-sm font-bold text-emerald-700 hover:bg-emerald-50"
         >
           <Check className="h-4 w-4" /> {t('receiptSpendlyOpen')}

@@ -49,7 +49,7 @@ export default function CvCard({ cv, fromDashboardSuffix = '' }: { cv: Cv; fromD
       </div>
 
       <Link
-        href={`/marketplace/kumani-cv/${cv.id}${fromDashboardSuffix}`}
+        href={`/app/kumani-cv/${cv.id}${fromDashboardSuffix}`}
         className="px-3 py-2 rounded-lg text-sm font-medium border border-[var(--gold)]/40 bg-white text-[var(--ink)] hover:bg-[var(--gold-pale)] transition-all shrink-0"
       >
         {t('details')}

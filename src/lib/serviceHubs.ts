@@ -22,100 +22,100 @@ export type HubTab = { key: string; href: string; tool: string | null; planTool?
 export const HUB_TABS: Record<ServiceHub, HubTab[]> = {
   controlla: [
     { key: 'all', href: '/controlla', tool: null },
-    { key: 'site', href: '/marketplace/svat', tool: 'svat' },
-    { key: 'email', href: '/marketplace/checkmail', tool: 'checkmail' },
-    { key: 'photo', href: '/marketplace/verifoto', tool: 'verifoto' },
-    { key: 'iban', href: '/marketplace/verifica-iban', tool: 'verifica-iban' },
-    { key: 'phone', href: '/marketplace/rete-antitruffa?tab=numero', tool: 'rete-antitruffa' },
+    { key: 'site', href: '/app/svat', tool: 'svat' },
+    { key: 'email', href: '/app/checkmail', tool: 'checkmail' },
+    { key: 'photo', href: '/app/verifoto', tool: 'verifoto' },
+    { key: 'iban', href: '/app/verifica-iban', tool: 'verifica-iban' },
+    { key: 'phone', href: '/app/rete-antitruffa?tab=numero', tool: 'rete-antitruffa' },
   ],
   proteggi: [
-    { key: 'data', href: '/marketplace/scudo-dati', tool: 'scudo-dati' },
-    { key: 'documents', href: '/marketplace/documento-sicuro', tool: 'documento-sicuro' },
+    { key: 'data', href: '/app/scudo-dati', tool: 'scudo-dati' },
+    { key: 'documents', href: '/app/documento-sicuro', tool: 'documento-sicuro' },
   ],
   segnala: [
-    { key: 'network', href: '/marketplace/rete-antitruffa', tool: 'rete-antitruffa' },
-    { key: 'manual', href: '/marketplace/antitruffa', tool: 'antitruffa' },
+    { key: 'network', href: '/app/rete-antitruffa', tool: 'rete-antitruffa' },
+    { key: 'manual', href: '/app/antitruffa', tool: 'antitruffa' },
     // «Mi stanno truffando?»: il test, pubblico
     { key: 'test', href: '/test-truffa', tool: null, plan: 'free' },
   ],
   benessere: [
-    { key: 'sounds', href: '/marketplace/neurobalance', tool: 'neurobalance' },
-    { key: 'breathe', href: '/marketplace/oxygen', tool: 'oxygen' },
-    { key: 'focus', href: '/marketplace/focus', tool: 'focus' },
-    { key: 'mandala', href: '/marketplace/mandala', tool: 'mandala' },
-    { key: 'senses', href: '/marketplace/aureya', tool: 'aureya' },
-    { key: 'rhythm', href: '/marketplace/cronobioma', tool: 'cronobioma' },
+    { key: 'sounds', href: '/app/neurobalance', tool: 'neurobalance' },
+    { key: 'breathe', href: '/app/oxygen', tool: 'oxygen' },
+    { key: 'focus', href: '/app/focus', tool: 'focus' },
+    { key: 'mandala', href: '/app/mandala', tool: 'mandala' },
+    { key: 'senses', href: '/app/aureya', tool: 'aureya' },
+    { key: 'rhythm', href: '/app/cronobioma', tool: 'cronobioma' },
   ],
   giochi: [
-    { key: 'crossword', href: '/marketplace/nexus', tool: 'nexus' },
-    { key: 'veritas', href: '/marketplace/veritas', tool: 'veritas' },
-    { key: 'fabula', href: '/marketplace/fabula', tool: 'fabula' },
-    { key: 'mosaic', href: '/marketplace/mosaic', tool: 'mosaic' },
+    { key: 'crossword', href: '/app/nexus', tool: 'nexus' },
+    { key: 'veritas', href: '/app/veritas', tool: 'veritas' },
+    { key: 'fabula', href: '/app/fabula', tool: 'fabula' },
+    { key: 'mosaic', href: '/app/mosaic', tool: 'mosaic' },
   ],
   qr: [
-    { key: 'invite', href: '/marketplace/qr-generator', tool: 'qr-generator' },
-    { key: 'pro', href: '/marketplace/qr-code-pro', tool: 'qr-code-pro' },
+    { key: 'invite', href: '/app/qr-generator', tool: 'qr-generator' },
+    { key: 'pro', href: '/app/qr-code-pro', tool: 'qr-code-pro' },
   ],
   // Le Spese condivise non sono uno strumento a sé (aperte anche agli invitati)
   spendly: [
-    { key: 'accounts', href: '/marketplace/spendly', tool: 'spendly' },
-    { key: 'checkup', href: '/marketplace/fincheck', tool: 'fincheck' },
+    { key: 'accounts', href: '/app/spendly', tool: 'spendly' },
+    { key: 'checkup', href: '/app/fincheck', tool: 'fincheck' },
     // Creare un gruppo richiede Spendly; chi è invitato entra gratis
     { key: 'shared', href: '/spese-condivise', tool: null, planTool: 'spendly' },
   ],
   lavoro: [
-    { key: 'jobs', href: '/marketplace/trova-lavoro', tool: 'trova-lavoro' },
-    { key: 'cv', href: '/marketplace/kumani-cv', tool: 'kumani-cv' },
+    { key: 'jobs', href: '/app/trova-lavoro', tool: 'trova-lavoro' },
+    { key: 'cv', href: '/app/kumani-cv', tool: 'kumani-cv' },
   ],
   // Già collegati: preventivo accettato → lavoro → pagamento → ricevuta
   gestione: [
-    { key: 'clients', href: '/marketplace/clienti', tool: 'clienti' },
-    { key: 'tempus', href: '/marketplace/tempus', tool: 'tempus' },
-    { key: 'quotes', href: '/marketplace/preventivi', tool: 'preventivi' },
-    { key: 'receipts', href: '/marketplace/digital-receipt', tool: 'digital-receipt' },
-    { key: 'warehouse', href: '/marketplace/magazzino', tool: 'magazzino' },
-    { key: 'calculators', href: '/marketplace/calcolatrici', tool: 'calcolatrici' },
+    { key: 'clients', href: '/app/clienti', tool: 'clienti' },
+    { key: 'tempus', href: '/app/tempus', tool: 'tempus' },
+    { key: 'quotes', href: '/app/preventivi', tool: 'preventivi' },
+    { key: 'receipts', href: '/app/digital-receipt', tool: 'digital-receipt' },
+    { key: 'warehouse', href: '/app/magazzino', tool: 'magazzino' },
+    { key: 'calculators', href: '/app/calcolatrici', tool: 'calcolatrici' },
   ],
   ufficio: [
-    { key: 'pdf', href: '/marketplace/firma-pdf', tool: 'firma-pdf' },
-    { key: 'email', href: '/marketplace/firma-email', tool: 'firma-email' },
-    { key: 'hopla', href: '/marketplace/hopla', tool: 'hopla' },
+    { key: 'pdf', href: '/app/firma-pdf', tool: 'firma-pdf' },
+    { key: 'email', href: '/app/firma-email', tool: 'firma-email' },
+    { key: 'hopla', href: '/app/hopla', tool: 'hopla' },
   ],
   negozio: [
-    { key: 'shop', href: '/marketplace/shop', tool: 'shop' },
-    { key: 'menu', href: '/marketplace/menu', tool: 'menu' },
-    { key: 'card', href: '/marketplace/fidelity', tool: 'fidelity' },
-    { key: 'offers', href: '/marketplace/offermaker', tool: 'offermaker' },
+    { key: 'shop', href: '/app/shop', tool: 'shop' },
+    { key: 'menu', href: '/app/menu', tool: 'menu' },
+    { key: 'card', href: '/app/fidelity', tool: 'fidelity' },
+    { key: 'offers', href: '/app/offermaker', tool: 'offermaker' },
   ],
   vetrina: [
-    { key: 'bio', href: '/marketplace/link-in-bio', tool: 'link-in-bio' },
-    { key: 'landing', href: '/marketplace/landing-page', tool: 'landing-page' },
-    { key: 'whatsapp', href: '/marketplace/whatsapp-messages', tool: 'whatsapp-messages' },
+    { key: 'bio', href: '/app/link-in-bio', tool: 'link-in-bio' },
+    { key: 'landing', href: '/app/landing-page', tool: 'landing-page' },
+    { key: 'whatsapp', href: '/app/whatsapp-messages', tool: 'whatsapp-messages' },
   ],
   // Il kit per chi inizia sui social
   social: [
-    { key: 'tutela', href: '/marketplace/tutela', tool: 'tutela' },
-    { key: 'captio', href: '/marketplace/captio', tool: 'captio' },
-    { key: 'lumen', href: '/marketplace/lumen', tool: 'lumen' },
-    { key: 'vox', href: '/marketplace/vox', tool: 'vox' },
-    { key: 'diarium', href: '/marketplace/diarium', tool: 'diarium' },
-    { key: 'imago', href: '/marketplace/imago', tool: 'imago' },
-    { key: 'forma', href: '/marketplace/forma', tool: 'forma' },
+    { key: 'tutela', href: '/app/tutela', tool: 'tutela' },
+    { key: 'captio', href: '/app/captio', tool: 'captio' },
+    { key: 'lumen', href: '/app/lumen', tool: 'lumen' },
+    { key: 'vox', href: '/app/vox', tool: 'vox' },
+    { key: 'diarium', href: '/app/diarium', tool: 'diarium' },
+    { key: 'imago', href: '/app/imago', tool: 'imago' },
+    { key: 'forma', href: '/app/forma', tool: 'forma' },
   ],
   agenda: [
-    { key: 'agenda', href: '/marketplace/memolife', tool: 'memolife' },
-    { key: 'deadlines', href: '/marketplace/life-calendar', tool: 'life-calendar' },
+    { key: 'agenda', href: '/app/memolife', tool: 'memolife' },
+    { key: 'deadlines', href: '/app/life-calendar', tool: 'life-calendar' },
   ],
   casaauto: [
-    { key: 'home', href: '/marketplace/casa', tool: 'casa' },
-    { key: 'car', href: '/marketplace/garage', tool: 'garage' },
-    { key: 'findo', href: '/marketplace/findo', tool: 'findo' },
+    { key: 'home', href: '/app/casa', tool: 'casa' },
+    { key: 'car', href: '/app/garage', tool: 'garage' },
+    { key: 'findo', href: '/app/findo', tool: 'findo' },
   ],
   // Per ora un servizio solo ciascuno: qui si aggiungeranno gli altri
   viaggi: [{ key: 'trips', href: '/viaggi', tool: 'travel' }],
   amicizie: [
     { key: 'convivium', href: '/convivium', tool: 'convivium' },
-    { key: 'affinity', href: '/marketplace/affinity', tool: 'affinity' },
+    { key: 'affinity', href: '/app/affinity', tool: 'affinity' },
   ],
 }
 
@@ -125,20 +125,20 @@ export const HUB_GROUP: Record<ServiceHub, string> = { controlla: 'security', pr
 // Servizio di partenza di ciascuno (la prima scheda)
 export const HUB_HOME: Record<ServiceHub, string> = {
   controlla: '/controlla',
-  proteggi: '/marketplace/scudo-dati',
-  segnala: '/marketplace/rete-antitruffa',
-  benessere: '/marketplace/neurobalance',
-  giochi: '/marketplace/nexus',
-  qr: '/marketplace/qr-generator',
-  spendly: '/marketplace/spendly',
-  lavoro: '/marketplace/trova-lavoro',
-  gestione: '/marketplace/clienti',
-  ufficio: '/marketplace/firma-pdf',
-  negozio: '/marketplace/shop',
-  vetrina: '/marketplace/link-in-bio',
-  social: '/marketplace/tutela',
-  agenda: '/marketplace/memolife',
-  casaauto: '/marketplace/casa',
+  proteggi: '/app/scudo-dati',
+  segnala: '/app/rete-antitruffa',
+  benessere: '/app/neurobalance',
+  giochi: '/app/nexus',
+  qr: '/app/qr-generator',
+  spendly: '/app/spendly',
+  lavoro: '/app/trova-lavoro',
+  gestione: '/app/clienti',
+  ufficio: '/app/firma-pdf',
+  negozio: '/app/shop',
+  vetrina: '/app/link-in-bio',
+  social: '/app/tutela',
+  agenda: '/app/memolife',
+  casaauto: '/app/casa',
   viaggi: '/viaggi',
   amicizie: '/convivium',
 }
@@ -152,7 +152,7 @@ export function hubOf(path: string, search: string): { hub: ServiceHub; tab: str
   const bare = path.replace(/^\/(it|en|fr|es|pt|de|ru)(?=\/|$)/, '') || '/'
   if (bare === '/controlla') return { hub: 'controlla', tab: 'all' }
   if (/\/(print|tent)$/.test(bare)) return null
-  if (bare.startsWith('/marketplace/rete-antitruffa')) return new URLSearchParams(search).get('tab') === 'numero' ? { hub: 'controlla', tab: 'phone' } : { hub: 'segnala', tab: 'network' }
+  if (bare.startsWith('/app/rete-antitruffa')) return new URLSearchParams(search).get('tab') === 'numero' ? { hub: 'controlla', tab: 'phone' } : { hub: 'segnala', tab: 'network' }
   for (const hub of SERVICE_HUBS)
     for (const tab of HUB_TABS[hub]) if ((tab.tool || tab.key !== 'all') && bare.startsWith(tab.href.split('?')[0])) return { hub, tab: tab.key }
   return null

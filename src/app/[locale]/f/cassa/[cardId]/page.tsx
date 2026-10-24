@@ -8,7 +8,7 @@ import { getFidelityServiceClient, hasCassaAccess } from '@/lib/fidelity-server'
 // richiesta, mai preparata in anticipo né tenuta in memoria
 export const dynamic = 'force-dynamic'
 
-// Modalità cassa della Kumi Card. Fuori da /marketplace di proposito: deve
+// Modalità cassa della Kumi Card. Fuori da /app di proposito: deve
 // funzionare anche sul tablet del negozio senza account, sbloccato con il
 // PIN. Il titolare loggato entra direttamente.
 export default async function FidelityCassaPage({ params }: { params: Promise<{ cardId: string }> }) {

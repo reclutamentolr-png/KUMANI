@@ -19,7 +19,7 @@ export const dynamic = 'force-dynamic'
 
 type Props = { params: Promise<{ slug: string }>; searchParams: Promise<{ from?: string }> }
 
-// Solo percorsi interni (mai altri siti): /marketplace/…, /events, /viaggi…
+// Solo percorsi interni (mai altri siti): /app/…, /events, /viaggi…
 const safeFrom = (from?: string) => (from && /^\/(?!\/)[A-Za-z0-9/_\-]*$/.test(from) ? from : null)
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

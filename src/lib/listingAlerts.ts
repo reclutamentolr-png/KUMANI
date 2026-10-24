@@ -48,7 +48,7 @@ export async function notifyListingAlerts(listing: ApprovedListing) {
       (t, locale) => ({
         title: t('listingAlertTitle'),
         body: t('listingAlertBody', { title: listing.title }),
-        url: localizedPath(locale, `/marketplace/listings?listing=${listing.id}`),
+        url: localizedPath(locale, `/app/listings?listing=${listing.id}`),
         tag: `listing-alert-${listing.id}`,
       }),
       { kind: 'listing_alert', ref: listing.id }

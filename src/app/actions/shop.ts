@@ -77,7 +77,7 @@ export async function startStripeOnboarding(acceptTerms: boolean, returnTo: 'pro
     }
     const locale = await getLocale()
     // Ritorno dove si è partiti: Scheda attività o KUMANI Shop → Pagamenti
-    const back = `${SITE_URL}${localizedPath(locale, returnTo === 'shop' ? '/marketplace/shop' : '/scheda-attivita')}`
+    const back = `${SITE_URL}${localizedPath(locale, returnTo === 'shop' ? '/app/shop' : '/scheda-attivita')}`
     const query = returnTo === 'shop' ? '?tab=payments&stripe=' : '?stripe='
     const link = await stripe.accountLinks.create({
       account: row.stripe_account_id as string,
@@ -173,7 +173,7 @@ export async function acceptPublicQuote(token: string, name: string): Promise<Re
     (t, locale) => ({
       title: t('quoteAcceptedTitle', { number: quote.quote_number }),
       body: t('quoteAcceptedBody', { name: who }),
-      url: localizedPath(locale, `/marketplace/preventivi/${quote.id}`),
+      url: localizedPath(locale, `/app/preventivi/${quote.id}`),
       tag: `quote-accepted-${quote.id}`,
     }),
     { kind: 'quote_accepted', ref: quote.id }

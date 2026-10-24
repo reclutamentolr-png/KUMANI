@@ -20,7 +20,7 @@ export default function QuoteActions({ id }: { id: string }) {
   const handleDuplicate = async () => {
     setDuplicating(true)
     const result = await duplicateQuote(id)
-    if (result.success) router.push(`/marketplace/preventivi/${result.data.id}/edit${fromDashboardSuffix}`)
+    if (result.success) router.push(`/app/preventivi/${result.data.id}/edit${fromDashboardSuffix}`)
     else {
       alert(t(result.message))
       setDuplicating(false)
@@ -32,7 +32,7 @@ export default function QuoteActions({ id }: { id: string }) {
     setDeleting(true)
     const result = await deleteQuote(id)
     if (result.success) {
-      router.push(`/marketplace/preventivi${fromDashboardSuffix}`)
+      router.push(`/app/preventivi${fromDashboardSuffix}`)
     } else {
       alert(t(result.message))
       setDeleting(false)
@@ -42,7 +42,7 @@ export default function QuoteActions({ id }: { id: string }) {
   return (
     <div className="flex flex-wrap items-center gap-3">
       <Link
-        href={`/marketplace/preventivi/${id}/edit${fromDashboardSuffix}`}
+        href={`/app/preventivi/${id}/edit${fromDashboardSuffix}`}
         className="flex items-center gap-2 px-5 py-3 rounded-xl font-medium text-sm border border-[var(--gold)]/40 bg-white text-[var(--ink)] hover:bg-[var(--gold-pale)] transition-all"
       >
         <Pencil className="w-4 h-4" />

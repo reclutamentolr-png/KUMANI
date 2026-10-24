@@ -115,14 +115,14 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
           setError(result.message)
           return
         }
-        router.push(`/marketplace/kumani-cv/${result.data.id}${fromDashboardSuffix}`)
+        router.push(`/app/kumani-cv/${result.data.id}${fromDashboardSuffix}`)
       } else {
         const result = await updateCv(cvId!, cleaned, photoPath)
         if (!result.success) {
           setError(result.message)
           return
         }
-        router.push(`/marketplace/kumani-cv/${cvId}${fromDashboardSuffix}`)
+        router.push(`/app/kumani-cv/${cvId}${fromDashboardSuffix}`)
       }
     } finally {
       setSaving(false)
@@ -443,7 +443,7 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
       <button
         type="button"
         // Aperto direttamente (senza pagina precedente): si torna ai CV
-        onClick={() => (window.history.length > 1 ? router.back() : router.push('/marketplace/kumani-cv'))}
+        onClick={() => (window.history.length > 1 ? router.back() : router.push('/app/kumani-cv'))}
         className="px-6 py-3 rounded-xl font-semibold text-sm border border-[var(--gold)]/40 bg-white text-[var(--ink)] hover:bg-[var(--gold-pale)] transition-all"
       >
         {t('cancelAction')}

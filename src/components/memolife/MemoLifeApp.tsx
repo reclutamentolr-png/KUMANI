@@ -471,12 +471,12 @@ export default function MemoLifeApp({
             ))}
             <div className="grid grid-cols-2 gap-2 pt-1">
               {sources.spendly && (
-                <Link href="/marketplace/spendly/bollette?new=1" className="flex items-center gap-2 rounded-xl border border-dashed border-amber-300 p-3 text-sm font-semibold text-amber-800 hover:bg-amber-50">
+                <Link href="/app/spendly/bollette?new=1" className="flex items-center gap-2 rounded-xl border border-dashed border-amber-300 p-3 text-sm font-semibold text-amber-800 hover:bg-amber-50">
                   <Receipt className="h-4 w-4" /> {t('add_bill')} <ExternalLink className="ml-auto h-3.5 w-3.5" />
                 </Link>
               )}
               {sources.lifeCalendar && (
-                <Link href="/marketplace/life-calendar/new" className="flex items-center gap-2 rounded-xl border border-dashed border-rose-300 p-3 text-sm font-semibold text-rose-800 hover:bg-rose-50">
+                <Link href="/app/life-calendar/new" className="flex items-center gap-2 rounded-xl border border-dashed border-rose-300 p-3 text-sm font-semibold text-rose-800 hover:bg-rose-50">
                   <FileBadge className="h-4 w-4" /> {t('add_deadline')} <ExternalLink className="ml-auto h-3.5 w-3.5" />
                 </Link>
               )}

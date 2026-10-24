@@ -125,14 +125,14 @@ export default function QrProForm(props: Props) {
         }
         // Back to the list, not the new code's own detail page — creating
         // should close this view, not open another one.
-        router.push('/marketplace/qr-code-pro')
+        router.push('/app/qr-code-pro')
       } else {
         const result = await updateQrCode(props.id, form)
         if (!result.success) {
           setError(result.message)
           return
         }
-        router.push(`/marketplace/qr-code-pro/${props.id}`)
+        router.push(`/app/qr-code-pro/${props.id}`)
       }
     } finally {
       setSaving(false)
@@ -264,7 +264,7 @@ export default function QrProForm(props: Props) {
       )}
 
       <div className="flex gap-2">
-        <CancelButton className={cancelButtonLgClass} fallbackHref="/marketplace/qr-code-pro" />
+        <CancelButton className={cancelButtonLgClass} fallbackHref="/app/qr-code-pro" />
         <button
           onClick={handleSubmit}
           disabled={!isValid || saving}

@@ -94,7 +94,7 @@ export default async function ConvivioPublicPage({
             {open ? (
               auth.user ? (
                 <Link
-                  href={`/marketplace/convivio/${card.id}`}
+                  href={`/app/convivio/${card.id}`}
                   className="mt-6 flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3.5 font-bold text-[var(--ink)]"
                 >
                   {t('joinButton')}

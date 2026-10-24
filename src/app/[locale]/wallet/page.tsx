@@ -372,7 +372,7 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
                 <p className="mt-1 text-4xl font-bold text-[var(--ink)]">{profile.daily_points || 0}</p>
                 <p className="mt-1 text-xs leading-5 text-[var(--muted)]">{t('pointsDisclaimer')}</p>
                 <Link
-                  href="/marketplace/listings"
+                  href="/app/listings"
                   className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]"
                 >
                   {t('pointsCta')} <ArrowRight className="h-4 w-4" />
@@ -551,7 +551,7 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
             </div>
           )}
           <Link
-            href="/marketplace/digital-receipt"
+            href="/app/digital-receipt"
             className="inline-flex items-center gap-1 text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]"
           >
             {t('receiptsCta')} <ArrowRight className="h-4 w-4" />

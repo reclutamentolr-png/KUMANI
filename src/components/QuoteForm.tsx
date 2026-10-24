@@ -159,7 +159,7 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
   // modifiche non salvate chiede prima conferma
   const cancel = async () => {
     if (dirty && !(await askConfirm(t('cancelConfirm')))) return
-    router.push(mode === 'edit' && quoteId ? `/marketplace/preventivi/${quoteId}${fromDashboardSuffix}` : `/marketplace/preventivi${fromDashboardSuffix}`)
+    router.push(mode === 'edit' && quoteId ? `/app/preventivi/${quoteId}${fromDashboardSuffix}` : `/app/preventivi${fromDashboardSuffix}`)
   }
 
   useEffect(() => {
@@ -262,14 +262,14 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
           setError(result.message)
           return
         }
-        router.push(`/marketplace/preventivi/${result.data.id}${fromDashboardSuffix}`)
+        router.push(`/app/preventivi/${result.data.id}${fromDashboardSuffix}`)
       } else {
         const result = await updateQuote(quoteId!, cleanedForm)
         if (!result.success) {
           setError(result.message)
           return
         }
-        router.push(`/marketplace/preventivi/${quoteId}${fromDashboardSuffix}`)
+        router.push(`/app/preventivi/${quoteId}${fromDashboardSuffix}`)
       }
     } finally {
       setSaving(false)
@@ -294,7 +294,7 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
           </div>
         </div>
         <Link
-          href="/scheda-attivita?from=/marketplace/preventivi"
+          href="/scheda-attivita?from=/app/preventivi"
           className="flex items-center gap-1.5 text-sm font-medium text-[var(--gold)] hover:underline"
         >
           <Pencil className="w-3.5 h-3.5" />
@@ -813,7 +813,7 @@ export default function QuoteForm({ issuer, logoUrl, mode, quoteId, initialData,
               )}
             </div>
           ) : (
-            <Link href="/scheda-attivita?from=/marketplace/preventivi" className="text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
+            <Link href="/scheda-attivita?from=/app/preventivi" className="text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
               {t('onlinePaymentConnect')}
             </Link>
           )}

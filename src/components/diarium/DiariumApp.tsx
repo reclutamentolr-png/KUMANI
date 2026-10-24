@@ -236,7 +236,7 @@ export default function DiariumApp({ initialPlans, captioOn = true, lumenOn = tr
                           <div className="mt-3 flex flex-wrap gap-2">
                             {captioOn && (
                             <Link
-                              href={`/marketplace/captio?d=${encodeURIComponent(brief)}&n=${p.network}`}
+                              href={`/app/captio?d=${encodeURIComponent(brief)}&n=${p.network}`}
                               className="inline-flex min-h-9 items-center gap-1.5 rounded-lg bg-[var(--ink)] px-3 text-xs font-bold text-[var(--gold-bright)] hover:bg-[var(--ink-soft)]"
                             >
                               <Hash className="h-3.5 w-3.5" /> {t('writeCaption')}
@@ -244,7 +244,7 @@ export default function DiariumApp({ initialPlans, captioOn = true, lumenOn = tr
                             )}
                             {lumenOn && p.format === 'reel' && (
                               <Link
-                                href={`/marketplace/lumen?topic=${encodeURIComponent(`${brief} ${p.hook}`)}`}
+                                href={`/app/lumen?topic=${encodeURIComponent(`${brief} ${p.hook}`)}`}
                                 className="inline-flex min-h-9 items-center gap-1.5 rounded-lg border border-[var(--gold)]/50 px-3 text-xs font-bold text-[var(--ink)] hover:bg-[var(--gold)]/10"
                               >
                                 <Captions className="h-3.5 w-3.5 text-[var(--gold)]" /> {t('writeScript')}

@@ -52,11 +52,11 @@ export async function listPersonalDocuments(supabase: SupabaseClient, userId: st
 
   const docs: PersonalDoc[] = []
   for (const q of quotes.data ?? [])
-    docs.push({ kind: 'quote', id: q.id, title: `#${q.quote_number}`, subtitle: q.client_name || null, date: q.created_at, href: `/marketplace/preventivi/${q.id}` })
+    docs.push({ kind: 'quote', id: q.id, title: `#${q.quote_number}`, subtitle: q.client_name || null, date: q.created_at, href: `/app/preventivi/${q.id}` })
   for (const r of receipts.data ?? [])
-    docs.push({ kind: 'receipt', id: r.id, title: r.object_name || '', subtitle: r.recipient_name || null, date: r.created_at, href: `/marketplace/digital-receipt/${r.id}` })
+    docs.push({ kind: 'receipt', id: r.id, title: r.object_name || '', subtitle: r.recipient_name || null, date: r.created_at, href: `/app/digital-receipt/${r.id}` })
   for (const c of cvs.data ?? [])
-    docs.push({ kind: 'cv', id: c.id, title: c.title || c.full_name || '', subtitle: c.title && c.full_name ? c.full_name : null, date: c.created_at, href: `/marketplace/kumani-cv/${c.id}` })
+    docs.push({ kind: 'cv', id: c.id, title: c.title || c.full_name || '', subtitle: c.title && c.full_name ? c.full_name : null, date: c.created_at, href: `/app/kumani-cv/${c.id}` })
   for (const c of coupons.data ?? [])
     docs.push({ kind: 'coupon', id: c.id, title: c.title || c.code, subtitle: c.code, date: c.created_at, href: '/wallet' })
   for (const e of events.data ?? []) {
@@ -72,14 +72,14 @@ export async function listPersonalDocuments(supabase: SupabaseClient, userId: st
 
   for (const d of homeDocs.data ?? []) {
     const home = (Array.isArray(d.home) ? d.home[0] : d.home) as { name?: string } | null
-    docs.push({ kind: 'home_doc', id: d.id, title: d.title, subtitle: home?.name || null, date: d.created_at, href: `/marketplace/casa/${d.home_id}?tab=documents` })
+    docs.push({ kind: 'home_doc', id: d.id, title: d.title, subtitle: home?.name || null, date: d.created_at, href: `/app/casa/${d.home_id}?tab=documents` })
   }
 
   if (vehicleDocs.data?.length) {
     const tg = await getTranslations('garage')
     for (const d of vehicleDocs.data) {
       const vehicle = (Array.isArray(d.vehicle) ? d.vehicle[0] : d.vehicle) as { name?: string } | null
-      docs.push({ kind: 'vehicle_doc', id: d.id, title: tg(`doc_${d.kind}`), subtitle: vehicle?.name || null, date: d.created_at, href: `/marketplace/garage/${d.vehicle_id}` })
+      docs.push({ kind: 'vehicle_doc', id: d.id, title: tg(`doc_${d.kind}`), subtitle: vehicle?.name || null, date: d.created_at, href: `/app/garage/${d.vehicle_id}` })
     }
   }
 

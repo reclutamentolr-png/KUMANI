@@ -91,7 +91,7 @@ export default function Payments({
                 <span className="font-extrabold text-[#1d6b34]">{formatEur(r.amount, locale)}</span>
                 {r.payment?.receipt_id ? (
                   <Link
-                    href={`/marketplace/digital-receipt/${r.payment.receipt_id}`}
+                    href={`/app/digital-receipt/${r.payment.receipt_id}`}
                     aria-label={t('receipt.open')}
                     title={t('receipt.open')}
                     className="flex h-10 w-10 items-center justify-center rounded-full text-[#1d6b34] hover:bg-[#e7f4ea]"
@@ -100,7 +100,7 @@ export default function Payments({
                   </Link>
                 ) : r.payment && canReceipt ? (
                   <Link
-                    href={`/marketplace/digital-receipt/new?fromPayment=${r.payment.id}`}
+                    href={`/app/digital-receipt/new?fromPayment=${r.payment.id}`}
                     aria-label={t('receipt.make')}
                     title={t('receipt.make')}
                     className="flex h-10 w-10 items-center justify-center rounded-full text-[var(--muted)] hover:bg-[var(--gold-pale)] hover:text-[var(--ink)]"

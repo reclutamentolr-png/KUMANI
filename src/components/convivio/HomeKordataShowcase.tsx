@@ -37,7 +37,7 @@ export default async function HomeKordataShowcase() {
             <h2 className="mt-2 text-2xl sm:text-3xl font-bold text-white">{t('title')}</h2>
             <p className="mt-1 max-w-2xl text-sm sm:text-base text-gray-400">{t('subtitle')}</p>
           </div>
-          <Link href="/marketplace/convivio" className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--gold-bright)] hover:text-white transition-colors">
+          <Link href="/app/convivio" className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--gold-bright)] hover:text-white transition-colors">
             {t('seeAll')}
             <ArrowRight className="w-4 h-4" />
           </Link>

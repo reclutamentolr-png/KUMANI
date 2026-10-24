@@ -345,7 +345,7 @@ export default function FinCheckApp({
             <p className="flex items-start gap-3 text-sm text-[var(--ink)]">
               <PiggyBank className="mt-0.5 h-5 w-5 shrink-0 text-[var(--gold)]" /> {t('checkupNoData')}
             </p>
-            <Link href="/marketplace/spendly" className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[var(--ink)] px-4 py-2 text-sm font-bold text-[var(--gold-bright)]">
+            <Link href="/app/spendly" className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[var(--ink)] px-4 py-2 text-sm font-bold text-[var(--gold-bright)]">
               {t('checkupNoDataCta')} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>

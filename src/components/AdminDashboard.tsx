@@ -187,14 +187,14 @@ const TOOL_CATEGORY: Map<string, string> = new Map(getMarketplaceTools((key) => 
 // Pagina di ogni servizio, per provarlo dall'Admin: quelli del Marketplace
 // hanno già il loro indirizzo, le sezioni della piattaforma sono qui.
 const PLATFORM_HREFS: Record<string, string> = {
-  listings: '/marketplace/listings',
-  chat: '/marketplace/chat',
+  listings: '/app/listings',
+  chat: '/app/chat',
   spotlight: '/spotlight',
-  convivio: '/marketplace/convivio',
+  convivio: '/app/convivio',
   events: '/events',
-  timebank: '/marketplace/timebank',
+  timebank: '/app/timebank',
   proposte: '/community/proposte',
-  webinar: '/marketplace/webinar',
+  webinar: '/app/webinar',
 }
 const TOOL_HREF: Map<string, string> = new Map(getMarketplaceTools((key) => key).map((tool) => [tool.toolName, tool.href]))
 const toolHref = (toolName: string) => TOOL_HREF.get(toolName) ?? PLATFORM_HREFS[toolName]

@@ -79,7 +79,7 @@ export default function LifeCalendarItemCard({ item }: { item: Item }) {
           <h3 className="font-semibold text-[var(--ink)] truncate">{item.title}</h3>
           {item.casa_home_id && (
             <Link
-              href={`/marketplace/casa/${item.casa_home_id}`}
+              href={`/app/casa/${item.casa_home_id}`}
               title={t('openInCasa')}
               className="mt-1 inline-flex max-w-full items-center gap-1 rounded-full bg-[var(--ink)] px-2 py-0.5 text-[11px] font-bold text-[var(--gold-bright)] hover:brightness-125"
             >
@@ -124,7 +124,7 @@ export default function LifeCalendarItemCard({ item }: { item: Item }) {
           {isRecurring ? t('markHandled') : t('markCompleted')}
         </button>
         <Link
-          href={`/marketplace/life-calendar/${item.id}`}
+          href={`/app/life-calendar/${item.id}`}
           className="px-3 py-2 rounded-lg text-sm font-medium border border-[var(--gold)]/40 bg-white text-[var(--ink)] hover:bg-[var(--gold-pale)] transition-all"
         >
           {t('details')}

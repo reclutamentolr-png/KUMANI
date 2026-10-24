@@ -398,7 +398,7 @@ export default function IbanChecker({ initialIban = '' }: { initialIban?: string
 
       <div className="grid gap-3 sm:grid-cols-2">
         <Link
-          href="/marketplace/antitruffa"
+          href="/app/antitruffa"
           className="flex items-start gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition-colors hover:border-[var(--gold)]"
         >
           <BookOpen className="mt-0.5 h-5 w-5 shrink-0 text-[var(--gold)]" aria-hidden />
@@ -408,7 +408,7 @@ export default function IbanChecker({ initialIban = '' }: { initialIban?: string
           </span>
         </Link>
         <Link
-          href="/marketplace/checkmail"
+          href="/app/checkmail"
           className="flex items-start gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition-colors hover:border-[var(--gold)]"
         >
           <MailSearch className="mt-0.5 h-5 w-5 shrink-0 text-[var(--gold)]" aria-hidden />

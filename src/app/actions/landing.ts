@@ -370,7 +370,7 @@ export async function sendLandingMessage(input: {
   await notifyUser(row.owner_id as string, 'messages', (t, locale) => ({
     title: t('landingMessageTitle'),
     body: t('landingMessageBody', { name }),
-    url: localizedPath(locale, '/marketplace/landing-page?tab=messages'),
+    url: localizedPath(locale, '/app/landing-page?tab=messages'),
     tag: 'landing-message',
   }))
   return { success: true }

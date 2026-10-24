@@ -573,7 +573,7 @@ export default function JobSearch({
 
       {/* CV e fonte */}
       <div className="grid gap-3 sm:grid-cols-2">
-        <Link href="/marketplace/kumani-cv" className="flex items-center gap-3 rounded-2xl border border-[var(--gold)]/30 bg-[var(--gold-pale)] p-4 transition hover:border-[var(--gold)]">
+        <Link href="/app/kumani-cv" className="flex items-center gap-3 rounded-2xl border border-[var(--gold)]/30 bg-[var(--gold-pale)] p-4 transition hover:border-[var(--gold)]">
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--ink)] text-[var(--gold-bright)]">
             <FileUser className="h-5 w-5" />
           </span>

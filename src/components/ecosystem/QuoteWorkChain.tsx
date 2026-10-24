@@ -103,7 +103,7 @@ export default function QuoteWorkChain({
             </div>
           </div>
           <Link
-            href={`/marketplace/digital-receipt/new?fromQuote=${quoteId}`}
+            href={`/app/digital-receipt/new?fromQuote=${quoteId}`}
             className="inline-flex items-center justify-center gap-2 self-start rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-4 py-2.5 text-sm font-bold text-[var(--ink)] hover:brightness-105"
           >
             <FileCheck2 className="h-4 w-4" />

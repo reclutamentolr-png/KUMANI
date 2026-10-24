@@ -11,7 +11,7 @@ import { AI_TRAINING_ROBOTS } from '@/lib/aiBots'
 // Fuori dal dominio definitivo (anteprime Vercel, localhost) niente di niente.
 export default async function robots(): Promise<MetadataRoute.Robots> {
   if (!(await isIndexableHost())) return { rules: { userAgent: '*', disallow: '/' } }
-  const privateAreas = ['/dashboard', '/marketplace', '/wallet', '/billing', '/rewards', '/viaggi', '/events/my', '/events/pass', '/documenti', '/servizi', '/community', '/risolvi', '/o/', '/q/']
+  const privateAreas = ['/dashboard', '/app', '/wallet', '/billing', '/rewards', '/viaggi', '/events/my', '/events/pass', '/documenti', '/servizi', '/community', '/risolvi', '/o/', '/q/']
   const locales = ['en', 'fr', 'es', 'pt', 'de', 'ru']
   return {
     rules: [

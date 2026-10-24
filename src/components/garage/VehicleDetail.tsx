@@ -105,7 +105,7 @@ export default function VehicleDetail({
 
   const remove = async () => {
     if (!(await askConfirm(t('deleteVehicleConfirm', { name: vehicle.name })))) return
-    run(() => deleteVehicle(vehicle.id), () => router.push(`${prefix}/marketplace/garage`))
+    run(() => deleteVehicle(vehicle.id), () => router.push(`${prefix}/app/garage`))
   }
 
   return (
@@ -121,7 +121,7 @@ export default function VehicleDetail({
           </div>
           <div className="flex shrink-0 gap-1">
             <Link
-              href={`/marketplace/garage/${vehicle.id}/edit`}
+              href={`/app/garage/${vehicle.id}/edit`}
               aria-label={t('edit')}
               title={t('edit')}
               className="rounded-lg p-2 text-[var(--muted)] hover:bg-[var(--gold-pale)] hover:text-[var(--ink)]"

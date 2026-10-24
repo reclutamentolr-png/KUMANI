@@ -129,13 +129,13 @@ export default function ClienteCard({
       setError(t('errors.saveError'))
       return
     }
-    router.push('/marketplace/clienti')
+    router.push('/app/clienti')
   }
 
   const newJob = async (form: JobFormData) => {
     const result = await createJob(client.id, form)
     if (!result.success) return limitTextOf(result) ?? t(`errors.${['titleRequired', 'amountInvalid'].includes(result.message) ? result.message : 'saveError'}`)
-    router.push(`/marketplace/clienti/lavoro/${result.data.id}`)
+    router.push(`/app/clienti/lavoro/${result.data.id}`)
     return null
   }
   const jobPrice = (j: ClientJob) => j.amount ?? quotes.find((q) => q.id === j.quote_id)?.gross ?? null
@@ -242,7 +242,7 @@ export default function ClienteCard({
               const done = j.checklist.filter((i) => i.done).length
               return (
                 <li key={j.id}>
-                  <Link href={`/marketplace/clienti/lavoro/${j.id}`} className="flex items-center justify-between gap-3 py-3 hover:text-[#8a6a1f]">
+                  <Link href={`/app/clienti/lavoro/${j.id}`} className="flex items-center justify-between gap-3 py-3 hover:text-[#8a6a1f]">
                     <span className="min-w-0">
                       <span className="block break-words font-bold text-[var(--ink)]">{j.title}</span>
                       <span className="block text-sm text-[var(--muted)]">
@@ -352,7 +352,7 @@ export default function ClienteCard({
           <h3 className="text-base font-extrabold text-[var(--ink)]">{t('quotesTitle')}</h3>
           {canQuote && (
             <Link
-              href={`/marketplace/preventivi/new?client=${client.id}`}
+              href={`/app/preventivi/new?client=${client.id}`}
               className="inline-flex min-h-10 items-center gap-1.5 rounded-full bg-[var(--gold-bright)] px-4 text-sm font-bold text-[var(--ink)] hover:opacity-90"
             >
               <FilePlus2 className="h-4 w-4" aria-hidden="true" />
@@ -366,7 +366,7 @@ export default function ClienteCard({
           <ul className="mt-2 divide-y divide-[var(--gold)]/15">
             {quotes.map((q) => (
               <li key={q.id}>
-                <Link href={`/marketplace/preventivi/${q.id}`} className="flex items-center justify-between gap-3 py-3 hover:text-[#8a6a1f]">
+                <Link href={`/app/preventivi/${q.id}`} className="flex items-center justify-between gap-3 py-3 hover:text-[#8a6a1f]">
                   <span className="min-w-0">
                     <span className="block break-words font-bold text-[var(--ink)]">
                       {t('quoteNumber', { number: q.quote_number })}
@@ -399,7 +399,7 @@ export default function ClienteCard({
           <ul className="mt-2 divide-y divide-[var(--gold)]/15">
             {orders.map((o) => (
               <li key={o.id}>
-                <Link href="/marketplace/shop?tab=orders" className="flex items-center justify-between gap-3 py-3 hover:text-[#8a6a1f]">
+                <Link href="/app/shop?tab=orders" className="flex items-center justify-between gap-3 py-3 hover:text-[#8a6a1f]">
                   <span className="min-w-0">
                     <span className="block font-bold text-[var(--ink)]">{t('extras.orderNumber', { number: o.number })}</span>
                     <span className="block text-sm text-[var(--muted)]">

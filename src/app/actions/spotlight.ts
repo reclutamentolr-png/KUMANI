@@ -19,7 +19,7 @@ export interface SpotlightFormData {
 // Ogni cambio che può togliere qualcuno dalla home (revoca, eliminazione,
 // modifica che rimette in moderazione) buca subito la cache della landing.
 function revalidateSpotlight() {
-  revalidatePath('/marketplace/spotlight')
+  revalidatePath('/app/spotlight')
   revalidatePath('/spotlight')
   updateTag(SPOTLIGHT_HOME_CACHE_TAG)
 }

@@ -79,7 +79,7 @@ export default function VehicleFormView({ vehicle, spendlyAvailable }: { vehicle
         return
       }
       const id = vehicle ? vehicle.id : (result.data as { id: string }).id
-      router.push(`${prefix}/marketplace/garage/${id}`)
+      router.push(`${prefix}/app/garage/${id}`)
       router.refresh()
     })
   }
@@ -228,7 +228,7 @@ export default function VehicleFormView({ vehicle, spendlyAvailable }: { vehicle
       {error && <p className="rounded-xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">{error}</p>}
 
       <div className="flex gap-2">
-        <CancelButton className={cancelButtonLgClass} fallbackHref="/marketplace/garage" />
+        <CancelButton className={cancelButtonLgClass} fallbackHref="/app/garage" />
         <button
           type="submit"
           disabled={isPending}

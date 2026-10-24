@@ -24,7 +24,7 @@ export function toolMetadata(dir: string) {
       return { title: t(extra[1]) }
     }
     const t = await getTranslations({ locale, namespace: 'marketplace' })
-    const tool = getMarketplaceTools((key) => t(key)).find((x) => x.href === `/marketplace/${dir}` || x.toolName === dir)
+    const tool = getMarketplaceTools((key) => t(key)).find((x) => x.href === `/app/${dir}` || x.toolName === dir)
     return tool ? { title: tool.title } : {}
   }
 }

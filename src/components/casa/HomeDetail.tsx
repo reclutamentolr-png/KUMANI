@@ -75,7 +75,7 @@ export default function HomeDetail({
       setDeleting(false)
       return
     }
-    router.push(`${prefix}/marketplace/casa`)
+    router.push(`${prefix}/app/casa`)
     router.refresh()
   }
 
@@ -102,7 +102,7 @@ export default function HomeDetail({
             )}
           </div>
           <div className="flex shrink-0 gap-1">
-            <Link href={`/marketplace/casa/${home.id}/edit`} aria-label={t('editHome')} className="rounded-lg p-2 text-white/80 hover:bg-white/10 hover:text-white">
+            <Link href={`/app/casa/${home.id}/edit`} aria-label={t('editHome')} className="rounded-lg p-2 text-white/80 hover:bg-white/10 hover:text-white">
               <Pencil className="h-5 w-5" />
             </Link>
             <button type="button" onClick={remove} disabled={deleting} aria-label={t('deleteHome')} className="rounded-lg p-2 text-white/80 hover:bg-red-500/20 hover:text-red-200 disabled:opacity-50">

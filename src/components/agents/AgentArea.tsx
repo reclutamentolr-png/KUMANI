@@ -610,7 +610,7 @@ export default function AgentArea({ overview }: { overview: AgentOverview }) {
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <LocalizedLink
-              href="/marketplace/preferiti"
+              href="/app/preferiti"
               className="inline-flex items-center gap-2 rounded-lg bg-[var(--gold)] px-3 py-2 text-sm font-semibold text-[var(--ink)] hover:bg-[var(--gold-bright)]"
             >
               <Store className="h-4 w-4" />

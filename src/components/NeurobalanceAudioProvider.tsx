@@ -64,7 +64,7 @@ export function useNeurobalanceAudio() {
 // Monta una sola volta nel layout root (sopravvive quindi a ogni
 // navigazione client-side, Neurobalance -> Mandala compreso): prima questo
 // stato/motore audio viveva dentro NeurobalancePlayer e NatureMixer, quindi
-// smontava (e zittiva l'audio) ogni volta che si lasciava /marketplace/
+// smontava (e zittiva l'audio) ogni volta che si lasciava /app/
 // neurobalance. Spostandolo qui la sessione resta attiva ovunque nell'app,
 // controllabile dal mini player fluttuante (FloatingAudioPlayer).
 export function NeurobalanceAudioProvider({ children }: { children: ReactNode }) {

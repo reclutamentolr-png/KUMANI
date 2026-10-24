@@ -82,7 +82,7 @@ export default function WellnessTodayCard({ initial }: { initial: WellnessToday 
   }, [state.mood, state.mood_lock_at])
 
   const steps: { key: StepKey; done: boolean; label: string; hint: string; time: string; Icon: typeof Wind; links: { href: string; label: string; Icon: typeof Wind }[] }[] = [
-    { key: 'breath', done: state.breath, label: t('wellnessBreath'), hint: t('wellnessBreathHint'), time: t('wellnessTimeBreath'), Icon: Wind, links: [{ href: '/marketplace/oxygen', label: 'Oxygen', Icon: Wind }] },
+    { key: 'breath', done: state.breath, label: t('wellnessBreath'), hint: t('wellnessBreathHint'), time: t('wellnessTimeBreath'), Icon: Wind, links: [{ href: '/app/oxygen', label: 'Oxygen', Icon: Wind }] },
     { key: 'pause', done: state.pause, label: t('wellnessPause'), hint: t('wellnessPauseHint'), time: t('wellnessTimePause'), Icon: PersonStanding, links: [] },
     {
       key: 'mind',
@@ -92,11 +92,11 @@ export default function WellnessTodayCard({ initial }: { initial: WellnessToday 
       time: t('wellnessTimeMind'),
       Icon: Palette,
       links: [
-        { href: '/marketplace/mandala', label: 'Mandala', Icon: Palette },
-        { href: '/marketplace/neurobalance', label: 'NeuroBalance', Icon: AudioWaveform },
+        { href: '/app/mandala', label: 'Mandala', Icon: Palette },
+        { href: '/app/neurobalance', label: 'NeuroBalance', Icon: AudioWaveform },
       ],
     },
-    { key: 'focus', done: state.focus, label: t('wellnessFocus'), hint: t('wellnessFocusHint'), time: t('wellnessTimeFocus'), Icon: Brain, links: [{ href: '/marketplace/focus', label: 'Focus', Icon: Brain }] },
+    { key: 'focus', done: state.focus, label: t('wellnessFocus'), hint: t('wellnessFocusHint'), time: t('wellnessTimeFocus'), Icon: Brain, links: [{ href: '/app/focus', label: 'Focus', Icon: Brain }] },
   ]
 
   // Il consigliato di oggi: la rotazione parte da un passo diverso ogni giorno
@@ -352,7 +352,7 @@ export default function WellnessTodayCard({ initial }: { initial: WellnessToday 
           </p>
           <p className="text-xs leading-snug text-white/70">{t('wellnessEveningText')}</p>
           <Link
-            href="/marketplace/neurobalance?sera=1"
+            href="/app/neurobalance?sera=1"
             className="mt-auto inline-flex min-h-10 items-center justify-center gap-1.5 self-start rounded-lg bg-[var(--gold)] px-3.5 text-sm font-bold text-[var(--ink)] hover:bg-[var(--gold-bright)]"
           >
             <AudioWaveform className="h-4 w-4" /> {t('wellnessEveningCta')}

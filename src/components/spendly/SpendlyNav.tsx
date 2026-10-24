@@ -6,12 +6,12 @@ import { useTranslations } from 'next-intl'
 import { LayoutDashboard, TrendingUp, Repeat, Wallet, Gauge, Receipt } from 'lucide-react'
 
 const TABS = [
-  { href: '/marketplace/spendly', icon: LayoutDashboard, key: 'navDashboard' },
-  { href: '/marketplace/spendly/entrate', icon: TrendingUp, key: 'navIncome' },
-  { href: '/marketplace/spendly/bollette', icon: Receipt, key: 'navBills' },
-  { href: '/marketplace/spendly/spese-fisse', icon: Repeat, key: 'navFixedExpenses' },
-  { href: '/marketplace/spendly/spese-variabili', icon: Wallet, key: 'navVariableExpenses' },
-  { href: '/marketplace/spendly/capienza', icon: Gauge, key: 'navCapacity' },
+  { href: '/app/spendly', icon: LayoutDashboard, key: 'navDashboard' },
+  { href: '/app/spendly/entrate', icon: TrendingUp, key: 'navIncome' },
+  { href: '/app/spendly/bollette', icon: Receipt, key: 'navBills' },
+  { href: '/app/spendly/spese-fisse', icon: Repeat, key: 'navFixedExpenses' },
+  { href: '/app/spendly/spese-variabili', icon: Wallet, key: 'navVariableExpenses' },
+  { href: '/app/spendly/capienza', icon: Gauge, key: 'navCapacity' },
 ] as const
 
 // Tab interne di Spendly (Dashboard/Entrate/Spese Fisse/Spese
@@ -26,7 +26,7 @@ export default function SpendlyNav() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex gap-1">
         {TABS.map((tab) => {
           // pathname porta il prefisso di lingua per le lingue non
-          // predefinite (/en/marketplace/...) — confrontiamo sul suffisso
+          // predefinite (/en/app/...) — confrontiamo sul suffisso
           // invece che sull'uguaglianza esatta.
           const isActive = pathname === tab.href || pathname.endsWith(tab.href)
           return (

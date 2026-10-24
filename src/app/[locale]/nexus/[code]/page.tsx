@@ -22,7 +22,7 @@ export default async function NexusChallengePage({ params }: { params: Promise<{
     <div className="min-h-screen bg-[var(--background)]">
       <header className="sticky top-0 z-20 border-b border-[var(--gold)]/25 bg-[var(--ink)] text-white shadow-lg">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-3">
-          <Link href={loggedIn ? '/marketplace/nexus' : '/'} className="flex min-h-11 items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)] shrink-0">
+          <Link href={loggedIn ? '/app/nexus' : '/'} className="flex min-h-11 items-center gap-2 text-sm font-medium transition-colors hover:text-[var(--gold-bright)] shrink-0">
             <ArrowLeft className="h-5 w-5" /> {loggedIn ? t('duel_back') : 'KUMANI'}
           </Link>
           <h1 className="flex items-center gap-2 font-semibold tracking-wide min-w-0 text-right leading-tight">
@@ -36,7 +36,7 @@ export default async function NexusChallengePage({ params }: { params: Promise<{
           <p className="rounded-2xl border border-gray-200 bg-white p-6 text-sm text-[var(--muted)]">
             {state.error === 'notFound' ? t('duel_notFound') : state.error === 'cancelled' ? t('duel_cancelledTitle') : state.error === 'full' ? t('duel_full') : t('error_load')}
           </p>
-          <Link href={loggedIn ? '/marketplace/nexus' : '/'} className="mt-4 inline-flex min-h-11 items-center font-semibold text-[var(--ink)] underline">
+          <Link href={loggedIn ? '/app/nexus' : '/'} className="mt-4 inline-flex min-h-11 items-center font-semibold text-[var(--ink)] underline">
             {loggedIn ? t('duel_backToDaily') : t('duel_toHome')}
           </Link>
         </div>

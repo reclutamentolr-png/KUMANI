@@ -67,7 +67,7 @@ export default function TodaySection({ data, owedTotal }: { data: TodayData; owe
               const late = daysBetween(s.due)
               return (
                 <li key={s.id} className="flex flex-wrap items-center gap-2 py-3">
-                  <Link href={`/marketplace/clienti/${s.id}`} className="min-w-0 flex-1 basis-48">
+                  <Link href={`/app/clienti/${s.id}`} className="min-w-0 flex-1 basis-48">
                     <span className="block break-words font-bold text-[var(--ink)]">{s.name}</span>
                     <span className="block break-words text-sm text-[var(--muted)]">
                       {s.step}
@@ -109,7 +109,7 @@ export default function TodaySection({ data, owedTotal }: { data: TodayData; owe
               const tone = x.days >= 30 ? 'text-red-700' : x.days >= 7 ? 'text-[#8a6a1f]' : 'text-[var(--muted)]'
               return (
                 <li key={x.id} className="flex flex-wrap items-center gap-2 py-3">
-                  <Link href={`/marketplace/clienti/lavoro/${x.id}`} className="min-w-0 flex-1 basis-48">
+                  <Link href={`/app/clienti/lavoro/${x.id}`} className="min-w-0 flex-1 basis-48">
                     <span className="block break-words font-bold text-[var(--ink)]">
                       {x.clientName} · {formatEur(x.left, locale)}
                     </span>
@@ -136,14 +136,14 @@ export default function TodaySection({ data, owedTotal }: { data: TodayData; owe
           <ul className="mt-2 space-y-2">
             {data.agenda.map((a) => (
               <li key={`${a.id}-${a.kind}`}>
-                <Link href={`/marketplace/clienti/lavoro/${a.id}`} className="block text-sm text-[var(--ink)] hover:text-[#8a6a1f]">
+                <Link href={`/app/clienti/lavoro/${a.id}`} className="block text-sm text-[var(--ink)] hover:text-[#8a6a1f]">
                   <b>{a.kind === 'start' ? t('today.starts') : t('today.delivery')}</b> · {a.title} · {a.clientName}
                 </Link>
               </li>
             ))}
             {data.lateDue.map((a) => (
               <li key={`late-${a.id}`}>
-                <Link href={`/marketplace/clienti/lavoro/${a.id}`} className="block text-sm text-[var(--ink)] hover:text-[#8a6a1f]">
+                <Link href={`/app/clienti/lavoro/${a.id}`} className="block text-sm text-[var(--ink)] hover:text-[#8a6a1f]">
                   <b className="text-red-700">{t('today.deliveryLate', { days: daysBetween(a.due) })}</b> · {a.title} · {a.clientName}
                 </Link>
               </li>

@@ -5,7 +5,7 @@ import type { SolveGuide } from './types'
 // `reviewedAt`. Indicazioni generali con fonti ufficiali: niente consulenza
 // legale, fiscale o tecnica su misura.
 
-const MANUALE = { label: 'Leggi il Manuale Anti-Truffa', href: '/marketplace/antitruffa', tool: 'antitruffa' }
+const MANUALE = { label: 'Leggi il Manuale Anti-Truffa', href: '/app/antitruffa', tool: 'antitruffa' }
 
 export const SOLVE_GUIDES_IT: SolveGuide[] = [
   {
@@ -69,7 +69,7 @@ export const SOLVE_GUIDES_IT: SolveGuide[] = [
         id: 'iban',
         title: 'C’è un IBAN? Verificalo prima di pagare',
         body: 'Se il messaggio chiede un bonifico, controlla l’IBAN: paese della banca, scrittura corretta e segnalazioni della community.',
-        link: { label: 'Verifica IBAN', href: '/marketplace/verifica-iban', tool: 'verifica-iban' },
+        link: { label: 'Verifica IBAN', href: '/app/verifica-iban', tool: 'verifica-iban' },
       },
       {
         id: 'richiama-tu',
@@ -81,16 +81,16 @@ export const SOLVE_GUIDES_IT: SolveGuide[] = [
         id: 'segnala',
         title: 'Segnalalo alla community',
         body: 'Numero, sito, IBAN o email: una segnalazione protegge anche gli altri iscritti.',
-        link: { label: 'Rete Anti-Truffa', href: '/marketplace/rete-antitruffa', tool: 'rete-antitruffa' },
+        link: { label: 'Rete Anti-Truffa', href: '/app/rete-antitruffa', tool: 'rete-antitruffa' },
       },
       { id: 'screenshot', title: 'Fai uno screenshot, poi elimina il messaggio', body: 'Lo screenshot serve se devi fare denuncia o reclamo alla banca.' },
     ],
     finish: { question: 'Problema risolto?', ifNo: [MANUALE, { label: 'Polizia Postale – Commissariato online', href: 'https://www.commissariatodips.it' }] },
     services: [
-      { label: 'Verifica IBAN', href: '/marketplace/verifica-iban', tool: 'verifica-iban' },
-      { label: 'Rete Anti-Truffa', href: '/marketplace/rete-antitruffa', tool: 'rete-antitruffa' },
-      { label: 'CheckMail', href: '/marketplace/checkmail', tool: 'checkmail' },
-      { label: 'SVAT – controllo siti', href: '/marketplace/svat', tool: 'svat' },
+      { label: 'Verifica IBAN', href: '/app/verifica-iban', tool: 'verifica-iban' },
+      { label: 'Rete Anti-Truffa', href: '/app/rete-antitruffa', tool: 'rete-antitruffa' },
+      { label: 'CheckMail', href: '/app/checkmail', tool: 'checkmail' },
+      { label: 'SVAT – controllo siti', href: '/app/svat', tool: 'svat' },
     ],
     sources: [
       { label: 'Polizia Postale – Commissariato di PS online', url: 'https://www.commissariatodips.it' },
@@ -148,13 +148,13 @@ export const SOLVE_GUIDES_IT: SolveGuide[] = [
         id: 'email',
         title: 'Controlla la tua email',
         body: 'Scopri in quali fughe di dati è comparsa e quali dati sono usciti (password, telefono, indirizzo…).',
-        link: { label: 'Scudo Dati', href: '/marketplace/scudo-dati', tool: 'scudo-dati' },
+        link: { label: 'Scudo Dati', href: '/app/scudo-dati', tool: 'scudo-dati' },
       },
       {
         id: 'password',
         title: 'Controlla se la tua password è già circolata',
         body: 'In Scudo Dati, «La tua password»: il controllo avviene sul tuo telefono e la password non viene inviata.',
-        link: { label: 'Scudo Dati', href: '/marketplace/scudo-dati', tool: 'scudo-dati' },
+        link: { label: 'Scudo Dati', href: '/app/scudo-dati', tool: 'scudo-dati' },
       },
       { id: 'importanti', title: 'Cambia subito le password importanti', body: 'Parti dall’email (con l’email si recupera tutto il resto) e dalla banca.' },
       {
@@ -180,11 +180,11 @@ export const SOLVE_GUIDES_IT: SolveGuide[] = [
         title: 'Togli telefono e indirizzo dai risultati di Google',
         body: 'In Scudo Dati trovi come chiedere a Google di togliere i tuoi dati personali dalle ricerche.',
         showIf: { q: 'motivo', anyOf: ['messaggi'] },
-        link: { label: 'Scudo Dati', href: '/marketplace/scudo-dati', tool: 'scudo-dati' },
+        link: { label: 'Scudo Dati', href: '/app/scudo-dati', tool: 'scudo-dati' },
       },
     ],
     finish: { question: 'Account al sicuro?', ifNo: [MANUALE, { label: 'Garante per la protezione dei dati personali', href: 'https://www.garanteprivacy.it' }] },
-    services: [{ label: 'Scudo Dati', href: '/marketplace/scudo-dati', tool: 'scudo-dati' }],
+    services: [{ label: 'Scudo Dati', href: '/app/scudo-dati', tool: 'scudo-dati' }],
     sources: [
       { label: 'Garante per la protezione dei dati personali', url: 'https://www.garanteprivacy.it' },
       { label: 'CERT-AgID', url: 'https://cert-agid.gov.it' },
@@ -259,14 +259,14 @@ export const SOLVE_GUIDES_IT: SolveGuide[] = [
         id: 'filigrana',
         title: 'Aggiungi una filigrana con scopo e data',
         body: 'Esempio: «Solo per contratto affitto via Roma – 21/10/2026». Se la foto finisce altrove, non è riutilizzabile. Oscura i dati che non servono.',
-        link: { label: 'Documento Sicuro', href: '/marketplace/documento-sicuro', tool: 'documento-sicuro' },
+        link: { label: 'Documento Sicuro', href: '/app/documento-sicuro', tool: 'documento-sicuro' },
       },
       { id: 'canale-sicuro', title: 'Usa un canale sicuro e poi cancella', body: 'Meglio l’area riservata o la PEC dell’ente che la chat. Dopo l’invio, cancella la foto dalla chat se possibile.' },
     ],
     finish: { question: 'Hai mandato il documento in sicurezza?', ifNo: [MANUALE, { label: 'Polizia Postale – Commissariato online', href: 'https://www.commissariatodips.it' }] },
     services: [
-      { label: 'Documento Sicuro', href: '/marketplace/documento-sicuro', tool: 'documento-sicuro' },
-      { label: 'Manuale Anti-Truffa', href: '/marketplace/antitruffa', tool: 'antitruffa' },
+      { label: 'Documento Sicuro', href: '/app/documento-sicuro', tool: 'documento-sicuro' },
+      { label: 'Manuale Anti-Truffa', href: '/app/antitruffa', tool: 'antitruffa' },
     ],
     sources: [
       { label: 'Polizia Postale – Commissariato di PS online', url: 'https://www.commissariatodips.it' },
@@ -324,14 +324,14 @@ export const SOLVE_GUIDES_IT: SolveGuide[] = [
         title: 'Verifica l’IBAN prima del bonifico',
         body: 'L’intestatario del conto deve essere il venditore. Controlla l’IBAN e le segnalazioni della community.',
         showIf: { q: 'ruolo', anyOf: ['compro'] },
-        link: { label: 'Verifica IBAN', href: '/marketplace/verifica-iban', tool: 'verifica-iban' },
+        link: { label: 'Verifica IBAN', href: '/app/verifica-iban', tool: 'verifica-iban' },
       },
       {
         id: 'annuncio',
         title: 'Pubblica l’annuncio senza dati sensibili',
         body: 'Niente targa leggibile nelle foto, niente documenti. Puoi pubblicarlo anche in Bacheca KUMANI, controllata dallo Staff.',
         showIf: { q: 'ruolo', anyOf: ['vendo'] },
-        link: { label: 'Bacheca', href: '/marketplace/listings', tool: 'listings' },
+        link: { label: 'Bacheca', href: '/app/listings', tool: 'listings' },
       },
       {
         id: 'acquirenti-strani',
@@ -374,14 +374,14 @@ export const SOLVE_GUIDES_IT: SolveGuide[] = [
         title: 'Segna subito le scadenze della nuova auto',
         body: 'Bollo, assicurazione e revisione con i promemoria.',
         showIf: { q: 'ruolo', anyOf: ['compro'] },
-        link: { label: 'Garage', href: '/marketplace/garage', tool: 'garage' },
+        link: { label: 'Garage', href: '/app/garage', tool: 'garage' },
       },
     ],
-    finish: { question: 'Tutto fatto in sicurezza?', ifNo: [MANUALE, { label: 'Rete Anti-Truffa', href: '/marketplace/rete-antitruffa', tool: 'rete-antitruffa' }] },
+    finish: { question: 'Tutto fatto in sicurezza?', ifNo: [MANUALE, { label: 'Rete Anti-Truffa', href: '/app/rete-antitruffa', tool: 'rete-antitruffa' }] },
     services: [
-      { label: 'Verifica IBAN', href: '/marketplace/verifica-iban', tool: 'verifica-iban' },
-      { label: 'Bacheca', href: '/marketplace/listings', tool: 'listings' },
-      { label: 'Garage', href: '/marketplace/garage', tool: 'garage' },
+      { label: 'Verifica IBAN', href: '/app/verifica-iban', tool: 'verifica-iban' },
+      { label: 'Bacheca', href: '/app/listings', tool: 'listings' },
+      { label: 'Garage', href: '/app/garage', tool: 'garage' },
     ],
     sources: [
       { label: 'ACI – Pubblico Registro Automobilistico', url: 'https://www.aci.it' },
@@ -468,14 +468,14 @@ export const SOLVE_GUIDES_IT: SolveGuide[] = [
         id: 'tieni-traccia',
         title: 'Tieni traccia delle bollette',
         body: 'Segna importi e scadenze: così noti subito una bolletta fuori dal normale.',
-        link: { label: 'Casa – utenze e bollette', href: '/marketplace/casa', tool: 'casa' },
+        link: { label: 'Casa – utenze e bollette', href: '/app/casa', tool: 'casa' },
       },
     ],
-    finish: { question: 'Hai capito da dove arriva l’importo?', ifNo: [{ label: 'Sportello per il consumatore – ARERA', href: 'https://www.sportelloperilconsumatore.it' }, { label: 'Check-up dei conti', href: '/marketplace/fincheck', tool: 'fincheck' }] },
+    finish: { question: 'Hai capito da dove arriva l’importo?', ifNo: [{ label: 'Sportello per il consumatore – ARERA', href: 'https://www.sportelloperilconsumatore.it' }, { label: 'Check-up dei conti', href: '/app/fincheck', tool: 'fincheck' }] },
     services: [
-      { label: 'Casa – utenze e bollette', href: '/marketplace/casa', tool: 'casa' },
-      { label: 'Spendly', href: '/marketplace/spendly', tool: 'spendly' },
-      { label: 'Check-up dei conti', href: '/marketplace/fincheck', tool: 'fincheck' },
+      { label: 'Casa – utenze e bollette', href: '/app/casa', tool: 'casa' },
+      { label: 'Spendly', href: '/app/spendly', tool: 'spendly' },
+      { label: 'Check-up dei conti', href: '/app/fincheck', tool: 'fincheck' },
     ],
     sources: [
       { label: 'ARERA – Autorità di Regolazione per Energia Reti e Ambiente', url: 'https://www.arera.it' },
@@ -543,13 +543,13 @@ export const SOLVE_GUIDES_IT: SolveGuide[] = [
         id: 'promemoria',
         title: 'Metti tutto in Garage con i promemoria',
         body: 'Inserisci il veicolo e le date: KUMANI ti avvisa prima di ogni scadenza.',
-        link: { label: 'Garage', href: '/marketplace/garage', tool: 'garage' },
+        link: { label: 'Garage', href: '/app/garage', tool: 'garage' },
       },
     ],
     finish: { question: 'Hai segnato tutte le scadenze?', ifNo: [{ label: 'Portale dell’Automobilista', href: 'https://www.ilportaledellautomobilista.it' }, { label: 'ACI', href: 'https://www.aci.it' }] },
     services: [
-      { label: 'Garage', href: '/marketplace/garage', tool: 'garage' },
-      { label: 'MemoLife – agenda', href: '/marketplace/memolife', tool: 'memolife' },
+      { label: 'Garage', href: '/app/garage', tool: 'garage' },
+      { label: 'MemoLife – agenda', href: '/app/memolife', tool: 'memolife' },
     ],
     sources: [
       { label: 'Portale dell’Automobilista (Ministero delle Infrastrutture e dei Trasporti)', url: 'https://www.ilportaledellautomobilista.it' },

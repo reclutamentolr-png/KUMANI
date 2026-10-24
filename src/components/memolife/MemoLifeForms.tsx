@@ -148,7 +148,7 @@ export function TaskForm({ draft, onDone, lifeCalendar }: { draft: TaskDraft; on
               <FileBadge className="mt-0.5 h-4 w-4 shrink-0" /> {t('lifeCalendarHint')}
             </p>
             <Link
-              href={`/marketplace/life-calendar/new?title=${encodeURIComponent(form.title.trim())}&category=${deadline}${form.dueDate ? `&due=${form.dueDate}` : ''}`}
+              href={`/app/life-calendar/new?title=${encodeURIComponent(form.title.trim())}&category=${deadline}${form.dueDate ? `&due=${form.dueDate}` : ''}`}
               className="mt-2 inline-flex items-center gap-1 font-semibold text-rose-800 hover:text-rose-950"
             >
               {t('lifeCalendarHintCta')} <ArrowRight className="h-4 w-4" />

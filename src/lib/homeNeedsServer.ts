@@ -9,10 +9,10 @@ import { collapseByHub, HUB_HOME, HUB_ICON_NAME, HUB_PUBLIC_HREF, HUB_REPRESENTA
 // risposta i servizi giusti. hrefFor sceglie dove porta un servizio (Home
 // pubblica: la sua pagina /strumenti; dashboard: lo strumento).
 const COMMUNITY: Record<string, { titleKey: string; href: string; iconName: string }> = {
-  listings: { titleKey: 'listings', href: '/marketplace/listings', iconName: 'Tag' },
-  convivio: { titleKey: 'convivio', href: '/marketplace/convivio', iconName: 'HandPlatter' },
-  timebank: { titleKey: 'timebank', href: '/marketplace/timebank', iconName: 'Hourglass' },
-  spotlight: { titleKey: 'kumanoDelGiorno', href: '/marketplace/spotlight', iconName: 'Star' },
+  listings: { titleKey: 'listings', href: '/app/listings', iconName: 'Tag' },
+  convivio: { titleKey: 'convivio', href: '/app/convivio', iconName: 'HandPlatter' },
+  timebank: { titleKey: 'timebank', href: '/app/timebank', iconName: 'Hourglass' },
+  spotlight: { titleKey: 'kumanoDelGiorno', href: '/app/spotlight', iconName: 'Star' },
   proposte: { titleKey: 'proposte', href: '/community/proposte', iconName: 'Lightbulb' },
 }
 

@@ -6,11 +6,11 @@ import { getMarketplaceTools } from '@/lib/marketplaceTools'
 export type ShareableTool = { toolName: string; title: string; description: string; iconName: string; href: string; publicPage: boolean }
 
 const COMMUNITY = [
-  { toolName: 'listings', titleKey: 'listings', iconName: 'Tag', href: '/marketplace/listings' },
-  { toolName: 'convivio', titleKey: 'convivio', iconName: 'HandPlatter', href: '/marketplace/convivio' },
+  { toolName: 'listings', titleKey: 'listings', iconName: 'Tag', href: '/app/listings' },
+  { toolName: 'convivio', titleKey: 'convivio', iconName: 'HandPlatter', href: '/app/convivio' },
   { toolName: 'events', titleKey: 'events', iconName: 'PartyPopper', href: '/events' },
-  { toolName: 'timebank', titleKey: 'timebank', iconName: 'Hourglass', href: '/marketplace/timebank' },
-  { toolName: 'spotlight', titleKey: 'kumanoDelGiorno', iconName: 'Star', href: '/marketplace/spotlight' },
+  { toolName: 'timebank', titleKey: 'timebank', iconName: 'Hourglass', href: '/app/timebank' },
+  { toolName: 'spotlight', titleKey: 'kumanoDelGiorno', iconName: 'Star', href: '/app/spotlight' },
 ]
 
 // t: testi del namespace «marketplace»

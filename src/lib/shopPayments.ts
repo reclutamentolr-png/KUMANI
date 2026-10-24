@@ -32,7 +32,7 @@ export async function syncSellerAccount(account: Stripe.Account) {
     await notifyUser(before.user_id as string, 'messages', (t, locale) => ({
       title: t(now ? 'shopPaymentsActiveTitle' : 'shopPaymentsPausedTitle'),
       body: t(now ? 'shopPaymentsActiveBody' : 'shopPaymentsPausedBody'),
-      url: localizedPath(locale, '/marketplace/shop?tab=payments'),
+      url: localizedPath(locale, '/app/shop?tab=payments'),
       tag: `stripe-${account.id}`,
     }))
   }
@@ -95,7 +95,7 @@ export async function recordQuotePayment(session: Stripe.Checkout.Session, accou
         client: (quote.client_name as string) || '',
         amount: new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(amount),
       }),
-      url: localizedPath(locale, `/marketplace/preventivi/${quote.id}`),
+      url: localizedPath(locale, `/app/preventivi/${quote.id}`),
       tag: `quote-paid-${quote.id}`,
     }),
     { kind: 'quote_paid', ref: quote.id as string }
@@ -122,7 +122,7 @@ async function refundDuplicateQuotePayment(
     (t, locale) => ({
       title: t('quoteDuplicateTitle', { number: quote.quote_number as number }),
       body: t('quoteDuplicateBody', { amount: new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(amountCents / 100) }),
-      url: localizedPath(locale, `/marketplace/preventivi/${quote.id}`),
+      url: localizedPath(locale, `/app/preventivi/${quote.id}`),
       tag: `quote-dup-${paymentIntent}`,
     }),
     { kind: 'quote_duplicate', ref: paymentIntent }

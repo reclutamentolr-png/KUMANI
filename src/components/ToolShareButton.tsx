@@ -31,7 +31,7 @@ export default function ToolShareButton({ referralCode, videoTools }: { referral
 
   const segments = pathname.split('/').filter(Boolean)
   if (segments[0] && locales.includes(segments[0])) segments.shift()
-  const tool = segments[0] === 'marketplace' ? getShareableTools(tm).find((item) => item.toolName === segments[1] && (item.publicPage || videoTools.includes(item.toolName))) : undefined
+  const tool = segments[0] === 'app' ? getShareableTools(tm).find((item) => item.toolName === segments[1] && (item.publicPage || videoTools.includes(item.toolName))) : undefined
   const hasVideo = !!tool && !!referralCode && videoTools.includes(tool.toolName)
 
   const toolName = tool?.toolName

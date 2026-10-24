@@ -23,7 +23,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
   return [
     {
       toolName: 'qr-generator',
-      href: '/marketplace/qr-generator',
+      href: '/app/qr-generator',
       gradient: 'bg-[var(--ink)]',
       iconName: 'Smartphone',
       title: t('qrGenerator'),
@@ -33,7 +33,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'fidelity',
-      href: '/marketplace/fidelity',
+      href: '/app/fidelity',
       gradient: 'bg-[var(--ink)]',
       iconName: 'Stamp',
       title: t('fidelity'),
@@ -44,7 +44,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'whatsapp-messages',
-      href: '/marketplace/whatsapp-messages',
+      href: '/app/whatsapp-messages',
       gradient: 'bg-[var(--ink)]',
       iconName: 'MessageCircle',
       title: t('whatsappMessages'),
@@ -54,7 +54,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'firma-email',
-      href: '/marketplace/firma-email',
+      href: '/app/firma-email',
       gradient: 'bg-[var(--ink)]',
       iconName: 'Signature',
       title: t('firmaEmail'),
@@ -65,7 +65,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'link-in-bio',
-      href: '/marketplace/link-in-bio',
+      href: '/app/link-in-bio',
       gradient: 'bg-[var(--ink)]',
       iconName: 'Link2',
       title: t('linkInBio'),
@@ -76,7 +76,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'offermaker',
-      href: '/marketplace/offermaker',
+      href: '/app/offermaker',
       gradient: 'bg-[var(--ink)]',
       iconName: 'Wand2',
       title: t('offermaker'),
@@ -87,7 +87,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'qr-code-pro',
-      href: '/marketplace/qr-code-pro',
+      href: '/app/qr-code-pro',
       gradient: 'bg-[var(--ink)]',
       iconName: 'QrCode',
       title: t('qrCodePro'),
@@ -98,7 +98,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'svat',
-      href: '/marketplace/svat',
+      href: '/app/svat',
       gradient: 'bg-[var(--ink)]',
       iconName: 'ShieldCheck',
       title: t('svat'),
@@ -109,7 +109,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'verifoto',
-      href: '/marketplace/verifoto',
+      href: '/app/verifoto',
       gradient: 'bg-[var(--ink)]',
       iconName: 'ScanEye',
       title: t('verifoto'),
@@ -120,7 +120,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'checkmail',
-      href: '/marketplace/checkmail',
+      href: '/app/checkmail',
       gradient: 'bg-[var(--ink)]',
       iconName: 'MailSearch',
       title: t('checkmail'),
@@ -131,7 +131,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'antitruffa',
-      href: '/marketplace/antitruffa',
+      href: '/app/antitruffa',
       gradient: 'bg-[var(--ink)]',
       iconName: 'BookOpenCheck',
       title: t('antitruffa'),
@@ -141,7 +141,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'verifica-iban',
-      href: '/marketplace/verifica-iban',
+      href: '/app/verifica-iban',
       gradient: 'bg-[var(--ink)]',
       iconName: 'Landmark',
       title: t('verificaIban'),
@@ -151,7 +151,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'rete-antitruffa',
-      href: '/marketplace/rete-antitruffa',
+      href: '/app/rete-antitruffa',
       gradient: 'bg-[var(--ink)]',
       iconName: 'ShieldAlert',
       title: t('reteAntitruffa'),
@@ -161,7 +161,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'scudo-dati',
-      href: '/marketplace/scudo-dati',
+      href: '/app/scudo-dati',
       gradient: 'bg-[var(--ink)]',
       iconName: 'ShieldUser',
       title: t('scudoDati'),
@@ -171,7 +171,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'documento-sicuro',
-      href: '/marketplace/documento-sicuro',
+      href: '/app/documento-sicuro',
       gradient: 'bg-[var(--ink)]',
       iconName: 'FileLock2',
       title: t('documentoSicuro'),
@@ -182,7 +182,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'memolife',
-      href: '/marketplace/memolife',
+      href: '/app/memolife',
       gradient: 'bg-[var(--ink)]',
       iconName: 'Brain',
       title: t('memolife'),
@@ -193,7 +193,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'life-calendar',
-      href: '/marketplace/life-calendar',
+      href: '/app/life-calendar',
       gradient: 'bg-[var(--ink)]',
       iconName: 'CalendarClock',
       title: t('lifeCalendar'),
@@ -204,7 +204,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'garage',
-      href: '/marketplace/garage',
+      href: '/app/garage',
       gradient: 'bg-[var(--ink)]',
       iconName: 'CarFront',
       title: t('garage'),
@@ -215,7 +215,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'casa',
-      href: '/marketplace/casa',
+      href: '/app/casa',
       gradient: 'bg-[var(--ink)]',
       iconName: 'House',
       title: t('casa'),
@@ -226,7 +226,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'findo',
-      href: '/marketplace/findo',
+      href: '/app/findo',
       gradient: 'bg-[var(--ink)]',
       iconName: 'PackageSearch',
       title: t('findo'),
@@ -237,7 +237,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'digital-receipt',
-      href: '/marketplace/digital-receipt',
+      href: '/app/digital-receipt',
       gradient: 'bg-[var(--ink)]',
       iconName: 'FileCheck2',
       title: t('digitalReceipt'),
@@ -248,7 +248,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'spendly',
-      href: '/marketplace/spendly',
+      href: '/app/spendly',
       gradient: 'bg-[var(--ink)]',
       iconName: 'PiggyBank',
       title: t('spendly'),
@@ -260,7 +260,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     {
       // Test gratuito; il check-up del bilancio usa i dati di Spendly (Plus)
       toolName: 'fincheck',
-      href: '/marketplace/fincheck',
+      href: '/app/fincheck',
       gradient: 'bg-[var(--ink)]',
       iconName: 'Gauge',
       title: t('fincheck'),
@@ -269,7 +269,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       category: 'personal',
     },
     {
-      // Pagine sotto /viaggi (non /marketplace): gli invitati entrano anche
+      // Pagine sotto /viaggi (non /app): gli invitati entrano anche
       // senza abbonamento, il piano serve solo per creare un viaggio.
       toolName: 'travel',
       href: '/viaggi',
@@ -283,7 +283,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'mandala',
-      href: '/marketplace/mandala',
+      href: '/app/mandala',
       gradient: 'bg-[var(--ink)]',
       iconName: 'Flower2',
       title: t('mandala'),
@@ -293,7 +293,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'oxygen',
-      href: '/marketplace/oxygen',
+      href: '/app/oxygen',
       gradient: 'bg-[var(--ink)]',
       iconName: 'Wind',
       title: t('oxygen'),
@@ -303,7 +303,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'focus',
-      href: '/marketplace/focus',
+      href: '/app/focus',
       gradient: 'bg-[var(--ink)]',
       iconName: 'Timer',
       title: t('focus'),
@@ -313,7 +313,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'neurobalance',
-      href: '/marketplace/neurobalance',
+      href: '/app/neurobalance',
       gradient: 'bg-[var(--ink)]',
       iconName: 'Waves',
       title: t('neurobalance'),
@@ -324,7 +324,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'aureya',
-      href: '/marketplace/aureya',
+      href: '/app/aureya',
       gradient: 'bg-[var(--ink)]',
       iconName: 'Stethoscope',
       title: t('aureya'),
@@ -335,7 +335,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'cronobioma',
-      href: '/marketplace/cronobioma',
+      href: '/app/cronobioma',
       gradient: 'bg-[var(--ink)]',
       iconName: 'SunMoon',
       title: t('cronobioma'),
@@ -346,7 +346,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'preventivi',
-      href: '/marketplace/preventivi',
+      href: '/app/preventivi',
       gradient: 'bg-[var(--ink)]',
       iconName: 'FileSpreadsheet',
       title: t('preventivi'),
@@ -357,7 +357,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'clienti',
-      href: '/marketplace/clienti',
+      href: '/app/clienti',
       gradient: 'bg-[var(--ink)]',
       iconName: 'BookUser',
       title: t('clienti'),
@@ -368,7 +368,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'tempus',
-      href: '/marketplace/tempus',
+      href: '/app/tempus',
       gradient: 'bg-[var(--ink)]',
       iconName: 'CalendarCheck',
       title: t('tempus'),
@@ -379,7 +379,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'hopla',
-      href: '/marketplace/hopla',
+      href: '/app/hopla',
       gradient: 'bg-[var(--ink)]',
       iconName: 'MonitorSmartphone',
       title: t('hopla'),
@@ -390,7 +390,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'firma-pdf',
-      href: '/marketplace/firma-pdf',
+      href: '/app/firma-pdf',
       gradient: 'bg-[var(--ink)]',
       iconName: 'Signature',
       title: t('firmaPdf'),
@@ -401,7 +401,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'magazzino',
-      href: '/marketplace/magazzino',
+      href: '/app/magazzino',
       gradient: 'bg-[var(--ink)]',
       iconName: 'Warehouse',
       title: t('magazzino'),
@@ -412,7 +412,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'calcolatrici',
-      href: '/marketplace/calcolatrici',
+      href: '/app/calcolatrici',
       gradient: 'bg-[var(--ink)]',
       iconName: 'Calculator',
       title: t('calcolatrici'),
@@ -423,7 +423,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'trova-lavoro',
-      href: '/marketplace/trova-lavoro',
+      href: '/app/trova-lavoro',
       gradient: 'bg-[var(--ink)]',
       iconName: 'BriefcaseBusiness',
       title: t('trovaLavoro'),
@@ -434,7 +434,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'kumani-cv',
-      href: '/marketplace/kumani-cv',
+      href: '/app/kumani-cv',
       gradient: 'bg-[var(--ink)]',
       iconName: 'FileUser',
       title: t('kumaniCv'),
@@ -445,7 +445,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'shop',
-      href: '/marketplace/shop',
+      href: '/app/shop',
       gradient: 'bg-[var(--ink)]',
       iconName: 'Store',
       title: t('shop'),
@@ -456,7 +456,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'lumen',
-      href: '/marketplace/lumen',
+      href: '/app/lumen',
       gradient: 'bg-[var(--ink)]',
       iconName: 'Clapperboard',
       title: t('lumen'),
@@ -467,7 +467,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'imago',
-      href: '/marketplace/imago',
+      href: '/app/imago',
       gradient: 'bg-[var(--ink)]',
       iconName: 'Palette',
       title: t('imago'),
@@ -478,7 +478,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'forma',
-      href: '/marketplace/forma',
+      href: '/app/forma',
       gradient: 'bg-[var(--ink)]',
       iconName: 'Crop',
       title: t('forma'),
@@ -489,7 +489,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'tutela',
-      href: '/marketplace/tutela',
+      href: '/app/tutela',
       gradient: 'bg-[var(--ink)]',
       iconName: 'ShieldCheck',
       title: t('tutela'),
@@ -500,7 +500,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'diarium',
-      href: '/marketplace/diarium',
+      href: '/app/diarium',
       gradient: 'bg-[var(--ink)]',
       iconName: 'CalendarDays',
       title: t('diarium'),
@@ -511,7 +511,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'captio',
-      href: '/marketplace/captio',
+      href: '/app/captio',
       gradient: 'bg-[var(--ink)]',
       iconName: 'Hash',
       title: t('captio'),
@@ -522,7 +522,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'vox',
-      href: '/marketplace/vox',
+      href: '/app/vox',
       gradient: 'bg-[var(--ink)]',
       iconName: 'Captions',
       title: t('vox'),
@@ -533,7 +533,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'landing-page',
-      href: '/marketplace/landing-page',
+      href: '/app/landing-page',
       gradient: 'bg-[var(--ink)]',
       iconName: 'PanelsTopLeft',
       title: t('landingPage'),
@@ -544,7 +544,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'menu',
-      href: '/marketplace/menu',
+      href: '/app/menu',
       gradient: 'bg-[var(--ink)]',
       iconName: 'UtensilsCrossed',
       title: t('menu'),
@@ -566,7 +566,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'affinity',
-      href: '/marketplace/affinity',
+      href: '/app/affinity',
       gradient: 'bg-[var(--ink)]',
       iconName: 'HeartHandshake',
       title: t('affinity'),
@@ -576,7 +576,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'veritas',
-      href: '/marketplace/veritas',
+      href: '/app/veritas',
       gradient: 'bg-[var(--ink)]',
       iconName: 'VenetianMask',
       title: t('veritas'),
@@ -586,7 +586,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'mosaic',
-      href: '/marketplace/mosaic',
+      href: '/app/mosaic',
       gradient: 'bg-[var(--ink)]',
       iconName: 'Grid3x3',
       title: t('mosaic'),
@@ -596,7 +596,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'fabula',
-      href: '/marketplace/fabula',
+      href: '/app/fabula',
       gradient: 'bg-[var(--ink)]',
       iconName: 'Dices',
       title: t('fabula'),
@@ -606,7 +606,7 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
     },
     {
       toolName: 'nexus',
-      href: '/marketplace/nexus',
+      href: '/app/nexus',
       gradient: 'bg-[var(--ink)]',
       iconName: 'Puzzle',
       title: t('nexus'),

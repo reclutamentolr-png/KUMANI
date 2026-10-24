@@ -227,7 +227,7 @@ function QuoteButton({ quote }: { quote: QuoteLine }) {
   const params = new URLSearchParams({ line: quote.description, price: quote.price.toFixed(2) })
   return (
     <LocalizedLink
-      href={`/marketplace/preventivi/new?${params.toString()}`}
+      href={`/app/preventivi/new?${params.toString()}`}
       className="mt-2.5 flex w-full items-center justify-center gap-2 rounded-xl border border-white/20 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:border-[var(--gold-bright)] hover:text-[var(--gold-bright)]"
     >
       <FileText className="h-4 w-4" />

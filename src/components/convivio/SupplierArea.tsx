@@ -335,7 +335,7 @@ export default function SupplierArea({
                   {feeList.map((fee) => (
                     <li key={fee.id} className="flex flex-wrap items-center justify-between gap-2 py-2.5 text-sm">
                       <div className="min-w-0">
-                        <Link href={`/marketplace/convivio/${fee.group_id}`} className="font-semibold text-[var(--ink)] hover:underline">
+                        <Link href={`/app/convivio/${fee.group_id}`} className="font-semibold text-[var(--ink)] hover:underline">
                           {fee.title}
                         </Link>
                         <p className="text-xs text-[var(--muted)]">
@@ -395,7 +395,7 @@ export default function SupplierArea({
           ownName={supplier.business_name}
           ownCategory={supplier.category}
           onClose={() => setCreating(false)}
-          onCreated={(id) => router.push(`/${locale}/marketplace/convivio/${id}`)}
+          onCreated={(id) => router.push(`/${locale}/app/convivio/${id}`)}
         />
       )}
     </div>

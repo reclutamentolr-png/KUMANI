@@ -173,7 +173,7 @@ function CassaPanel({ card }: { card: CardInfo }) {
 
   const exitCassa = async () => {
     await lockFidelityCassa(card.id)
-    router.push('/marketplace/fidelity')
+    router.push('/app/fidelity')
     router.refresh()
   }
 

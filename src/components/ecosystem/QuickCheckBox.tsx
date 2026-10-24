@@ -73,7 +73,7 @@ export default function QuickCheckBox({ title, initialText = '', autoRun = false
     } catch {
       // memoria non disponibile: CheckMail si apre vuoto
     }
-    router.push(`${prefix}/marketplace/checkmail`)
+    router.push(`${prefix}/app/checkmail`)
   }
 
   function submit(event: FormEvent<HTMLFormElement>) {
@@ -138,7 +138,7 @@ export default function QuickCheckBox({ title, initialText = '', autoRun = false
           {t('checkBoxButton')}
         </button>
       </div>
-      <Link href="/marketplace/verifoto" className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
+      <Link href="/app/verifoto" className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
         <Camera className="h-4 w-4" aria-hidden /> {t('checkBoxPhoto')}
       </Link>
       <div aria-live="polite">

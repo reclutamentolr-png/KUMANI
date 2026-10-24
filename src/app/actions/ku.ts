@@ -19,7 +19,7 @@ type KuResult = { success: boolean; reason: string | null }
 const refreshKuPages = () => {
   revalidatePath('/wallet')
   revalidatePath('/dashboard')
-  revalidatePath('/marketplace/listings')
+  revalidatePath('/app/listings')
 }
 
 // 1. Vetrina annunci pagata in KU Karma
@@ -45,7 +45,7 @@ export async function buyKuUnlock(unlockKey: string): Promise<KuResult> {
   if (error || !data) return { success: false, reason: 'error' }
   if (data.success) {
     refreshKuPages()
-    revalidatePath('/marketplace/link-in-bio')
+    revalidatePath('/app/link-in-bio')
   }
   return { success: data.success, reason: data.reason }
 }

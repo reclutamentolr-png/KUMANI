@@ -139,7 +139,7 @@ export default async function ProArea({
         })}
         {/* Convivio: offerte di gruppo e richieste dei capocordata */}
         <Link
-          href="/marketplace/convivio/fornitore"
+          href="/app/convivio/fornitore"
           className="group flex items-start gap-3 rounded-xl border border-white/10 bg-white/[0.04] p-4 transition-colors hover:border-[var(--gold)]/60 hover:bg-white/[0.07]"
         >
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)]">

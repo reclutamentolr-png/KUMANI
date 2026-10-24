@@ -21,7 +21,7 @@ export default function ToolGuideButton() {
   const slug = toolGuideFor(barePath)
   if (!slug) return null
   // NEXUS: sul telefono in basso c'è la tastiera del gioco (la guida è in alto nella pagina)
-  const keyboard = barePath.startsWith('/marketplace/nexus')
+  const keyboard = barePath.startsWith('/app/nexus')
 
   return (
     <Link

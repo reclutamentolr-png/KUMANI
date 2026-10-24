@@ -23,7 +23,7 @@ export async function saveAffinityMap(map: AffinityMap, archetype: AffinityArche
       .update({ map: cleanMap, archetype, updated_at: new Date().toISOString() })
       .eq('user_id', user.id)
     if (error) return { success: false }
-    revalidatePath('/marketplace/affinity')
+    revalidatePath('/app/affinity')
     return { success: true, duoCode: existing.duo_code }
   }
 
@@ -33,7 +33,7 @@ export async function saveAffinityMap(map: AffinityMap, archetype: AffinityArche
     .select('duo_code')
     .single()
   if (error || !created) return { success: false }
-  revalidatePath('/marketplace/affinity')
+  revalidatePath('/app/affinity')
   return { success: true, duoCode: created.duo_code }
 }
 
@@ -45,6 +45,6 @@ export async function deleteAffinityMap(): Promise<{ success: boolean }> {
   } = await supabase.auth.getUser()
   if (!user) return { success: false }
   const { error } = await supabase.from('affinity_profiles').delete().eq('user_id', user.id)
-  revalidatePath('/marketplace/affinity')
+  revalidatePath('/app/affinity')
   return { success: !error }
 }

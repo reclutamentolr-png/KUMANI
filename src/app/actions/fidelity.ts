@@ -122,7 +122,7 @@ export async function saveFidelityCard(
   }
 
   await awardToolPoint('fidelity')
-  revalidatePath('/marketplace/fidelity')
+  revalidatePath('/app/fidelity')
   return { success: true }
 }
 
@@ -310,7 +310,7 @@ export async function applyFidelityToMember(
   const row = (data as { status: FidelityStatus; stamps_count: number; stamps_needed: number; next_stamp_at: string | null }[] | null)?.[0]
   if (error || !row) return { success: false, message: 'notFound' }
 
-  revalidatePath('/marketplace/fidelity')
+  revalidatePath('/app/fidelity')
   return {
     success: true,
     status: row.status,
@@ -467,6 +467,6 @@ export async function deleteFidelityCard(): Promise<{ success: boolean }> {
 
   const { error } = await getFidelityServiceClient().from('fidelity_cards').delete().eq('owner_id', user.id)
   if (error) return { success: false }
-  revalidatePath('/marketplace/fidelity')
+  revalidatePath('/app/fidelity')
   return { success: true }
 }

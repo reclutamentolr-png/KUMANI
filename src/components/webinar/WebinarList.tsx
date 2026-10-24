@@ -52,7 +52,7 @@ export default function WebinarList({ items }: { items: WebinarListItem[] }) {
       setError(res.error === 'title' ? t('errorTitle') : res.error === 'date' ? t('errorDate') : res.error === 'too_many' ? t('errorTooMany') : t('errorGeneric'))
       return
     }
-    router.push(`${locale === 'it' ? '' : `/${locale}`}/marketplace/webinar/${res.id}`)
+    router.push(`${locale === 'it' ? '' : `/${locale}`}/app/webinar/${res.id}`)
   }
 
   const remove = async (item: WebinarListItem) => {
@@ -150,7 +150,7 @@ export default function WebinarList({ items }: { items: WebinarListItem[] }) {
                 <div className="mt-3 flex flex-wrap gap-2">
                   {item.status !== 'ended' && (
                     <Link
-                      href={`/marketplace/webinar/${item.id}`}
+                      href={`/app/webinar/${item.id}`}
                       className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[var(--ink)] px-4 text-sm font-bold text-[var(--gold-bright)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--gold)]"
                     >
                       <Radio className="h-4 w-4" aria-hidden />

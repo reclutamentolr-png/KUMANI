@@ -135,7 +135,7 @@ export default function ClientJobView({
       setError(t('errors.saveError'))
       return
     }
-    router.push(`/marketplace/clienti/${client.id}`)
+    router.push(`/app/clienti/${client.id}`)
   }
 
   const doneCount = job.checklist.filter((i) => i.done).length
@@ -153,7 +153,7 @@ export default function ClientJobView({
       <div>
         <h2 className="break-words text-3xl font-bold text-[var(--ink)]">{job.title}</h2>
         <p className="mt-1 text-sm text-[var(--muted)]">
-          <Link href={`/marketplace/clienti/${client.id}`} className="font-semibold text-[#8a6a1f] underline-offset-2 hover:underline">
+          <Link href={`/app/clienti/${client.id}`} className="font-semibold text-[#8a6a1f] underline-offset-2 hover:underline">
             {client.name}
           </Link>
           {subtitle ? ` · ${subtitle}` : ''}

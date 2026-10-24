@@ -99,7 +99,7 @@ export default function GoogleRemovalGuide() {
         </span>
         <p className="min-w-0 flex-1 text-sm font-semibold leading-6 sm:text-base">{t('googleTips')}</p>
         <Link
-          href="/marketplace/checkmail"
+          href="/app/checkmail"
           className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-4 py-2.5 text-sm font-extrabold text-[var(--ink)] shadow hover:brightness-105"
         >
           <MailCheck className="h-4 w-4" /> CheckMail

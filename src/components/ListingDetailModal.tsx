@@ -75,7 +75,7 @@ export default function ListingDetailModal({ isOpen, onClose, listing, authorNam
             </p>
             {!isOwn && <p className="text-xs leading-5 text-emerald-800">{t('trustTips')}</p>}
             {!isOwn && safety.iban && (
-              <Link href={`/marketplace/verifica-iban?iban=${encodeURIComponent(safety.iban.normalized)}`} className="flex items-center gap-1.5 rounded-lg bg-amber-100 px-2.5 py-1.5 text-xs font-semibold text-amber-900">
+              <Link href={`/app/verifica-iban?iban=${encodeURIComponent(safety.iban.normalized)}`} className="flex items-center gap-1.5 rounded-lg bg-amber-100 px-2.5 py-1.5 text-xs font-semibold text-amber-900">
                 <ShieldAlert className="h-3.5 w-3.5 shrink-0" /> {t('trustIban')}
               </Link>
             )}

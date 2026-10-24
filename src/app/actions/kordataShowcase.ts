@@ -162,7 +162,7 @@ export async function moderateShowcase(
       userId,
       'staff',
       (t, locale) => {
-        const url = localizedPath(locale, `/marketplace/convivio/${groupId}`)
+        const url = localizedPath(locale, `/app/convivio/${groupId}`)
         if (action === 'approve') return { title: t('showcaseApprovedTitle'), body: t('showcaseApprovedBody', { title: data.title as string }), url, tag: `showcase-${groupId}` }
         const why = t(`showcaseReason_${reason}`)
         return action === 'reject'

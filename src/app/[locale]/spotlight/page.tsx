@@ -52,7 +52,7 @@ export default async function SpotlightPage() {
   const today = new Date().toISOString().slice(0, 10)
 
   // get_todays_kumano() ritorna sempre un singolo oggetto, non un array —
-  // vedi lib/spotlight.ts e il cast analogo in marketplace/spotlight/page.tsx.
+  // vedi lib/spotlight.ts e il cast analogo in app/spotlight/page.tsx.
   const [{ data: todaysKumanoRaw }, { data: archiveRows }] = await Promise.all([
     supabase.rpc('get_todays_kumano'),
     supabase
@@ -115,7 +115,7 @@ export default async function SpotlightPage() {
         <div className="mt-8 rounded-2xl border border-[var(--gold)]/25 bg-gradient-to-r from-[var(--ink)] to-[var(--ink-soft)] p-6 text-center text-white">
           <p className="text-lg font-bold">{t('ctaJoin')}</p>
           <Link
-            href="/marketplace/spotlight"
+            href="/app/spotlight"
             className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-5 py-2.5 text-sm font-bold text-[var(--ink)]"
           >
             {t('ctaJoinButton')}

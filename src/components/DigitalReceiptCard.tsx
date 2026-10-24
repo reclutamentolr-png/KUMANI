@@ -69,7 +69,7 @@ export default function DigitalReceiptCard({ receipt }: { receipt: Receipt }) {
       </div>
 
       <Link
-        href={`/marketplace/digital-receipt/${receipt.id}`}
+        href={`/app/digital-receipt/${receipt.id}`}
         className="px-3 py-2 rounded-lg text-sm font-medium border border-[var(--gold)]/40 bg-white text-[var(--ink)] hover:bg-[var(--gold-pale)] transition-all shrink-0"
       >
         {t('details')}

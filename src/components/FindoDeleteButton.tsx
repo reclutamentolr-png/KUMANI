@@ -17,7 +17,7 @@ export default function FindoDeleteButton({ id }: { id: string }) {
     setDeleting(true)
     const result = await deleteItem(id)
     if (result.success) {
-      router.push('/marketplace/findo')
+      router.push('/app/findo')
     } else {
       alert(t(result.message))
       setDeleting(false)

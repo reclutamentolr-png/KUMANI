@@ -33,7 +33,7 @@ export default function HomeFormView({ home }: { home?: CasaHome }) {
         return
       }
       const id = home ? home.id : (result.data as { id: string }).id
-      router.push(`${prefix}/marketplace/casa/${id}`)
+      router.push(`${prefix}/app/casa/${id}`)
       router.refresh()
     })
   }
@@ -77,7 +77,7 @@ export default function HomeFormView({ home }: { home?: CasaHome }) {
       </div>
       {error && <p className="text-sm text-red-600">{error}</p>}
       <div className="flex gap-2">
-        <CancelButton className={cancelButtonLgClass} fallbackHref={home ? `/marketplace/casa/${home.id}` : '/marketplace/casa'} />
+        <CancelButton className={cancelButtonLgClass} fallbackHref={home ? `/app/casa/${home.id}` : '/app/casa'} />
         <button type="submit" disabled={isPending} className={`${primaryBtn} flex-1 sm:flex-none`}>
           {isPending && <LoaderCircle className="h-4 w-4 animate-spin" />} {home ? t('saveChanges') : t('createHome')}
         </button>

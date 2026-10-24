@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     const locale = new URL(request.url).searchParams.get('locale') ?? 'it'
     return /^(en|fr|es|pt|de|ru)$/.test(locale) ? `/${locale}` : ''
   })()
-  const supplierPage = `${localePrefix}/marketplace/convivio/fornitore`
+  const supplierPage = `${localePrefix}/app/convivio/fornitore`
   try {
     const supabase = await createClient()
     const {

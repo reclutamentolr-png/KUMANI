@@ -104,7 +104,7 @@ export default function AgendaPeekButton() {
   const todayEvents = events.filter((e) => e.date === today)
   const next = events.filter((e) => e.date > today)
   const count = overdue.length + todayEvents.filter((e) => !e.done).length
-  const calendarHref = sources.memolife ? '/marketplace/memolife' : sources.lifeCalendar ? '/marketplace/life-calendar' : '/dashboard'
+  const calendarHref = sources.memolife ? '/app/memolife' : sources.lifeCalendar ? '/app/life-calendar' : '/dashboard'
   const dateLabel = (key: string, long: boolean) =>
     new Date(`${key}T12:00:00Z`).toLocaleDateString(locale, { weekday: long ? 'long' : 'short', day: 'numeric', ...(long ? { month: 'long' } : {}), timeZone: 'UTC' })
 

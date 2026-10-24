@@ -325,7 +325,7 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
     const exitLobby = state.status === 'waiting'
     await run(() => leaveNexusDuel(state.code, token), () => t('error_save'))
     // Dalla sala d'attesa (sfida annullata o uscita): si torna a NEXUS
-    if (exitLobby) router.push(state.loggedIn ? `${prefix}/marketplace/nexus` : `${prefix}/`)
+    if (exitLobby) router.push(state.loggedIn ? `${prefix}/app/nexus` : `${prefix}/`)
   }
   const rematch = async () => {
     setBusy(true)
@@ -370,7 +370,7 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
         <h2 className="text-2xl font-extrabold text-[var(--ink)]">{t('duel_cancelledTitle')}</h2>
         <p className="text-base text-gray-600">{t('duel_cancelledText', { name: host?.name ?? '' })}</p>
         <Link
-          href={state.loggedIn ? '/marketplace/nexus' : '/'}
+          href={state.loggedIn ? '/app/nexus' : '/'}
           className="flex min-h-12 w-full items-center justify-center rounded-2xl bg-[var(--ink)] px-4 font-extrabold text-[var(--gold-bright)]"
         >
           {state.loggedIn ? t('duel_backToDaily') : t('duel_toHome')}
@@ -622,7 +622,7 @@ export default function NexusDuel({ initial }: { initial: NexusDuelState }) {
             <button type="button" onClick={rematch} disabled={busy} className="flex min-h-12 flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl bg-[var(--gold-bright)] px-4 font-extrabold text-[var(--ink)] disabled:opacity-60">
               {busy ? <LoaderCircle className="h-5 w-5 animate-spin" /> : <Swords className="h-5 w-5" />} {t('duel_rematch')}
             </button>
-            <Link href="/marketplace/nexus" className="flex min-h-12 flex-1 items-center justify-center rounded-xl border border-white/30 px-4 font-bold text-white hover:bg-white/10">
+            <Link href="/app/nexus" className="flex min-h-12 flex-1 items-center justify-center rounded-xl border border-white/30 px-4 font-bold text-white hover:bg-white/10">
               {t('duel_backToDaily')}
             </Link>
           </div>

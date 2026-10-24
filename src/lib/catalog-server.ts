@@ -51,11 +51,11 @@ const fetchSettings = unstable_cache(
 
 // Sezioni della Community (non sono nell'elenco dei servizi del Marketplace)
 const COMMUNITY = [
-  { toolName: 'listings', href: '/marketplace/listings', iconName: 'Tag', titleKey: 'listings' },
-  { toolName: 'convivio', href: '/marketplace/convivio', iconName: 'HandPlatter', titleKey: 'convivio' },
+  { toolName: 'listings', href: '/app/listings', iconName: 'Tag', titleKey: 'listings' },
+  { toolName: 'convivio', href: '/app/convivio', iconName: 'HandPlatter', titleKey: 'convivio' },
   { toolName: 'events', href: '/events', iconName: 'PartyPopper', titleKey: 'events' },
-  { toolName: 'timebank', href: '/marketplace/timebank', iconName: 'Hourglass', titleKey: 'timebank' },
-  { toolName: 'spotlight', href: '/marketplace/spotlight', iconName: 'Star', titleKey: 'kumanoDelGiorno' },
+  { toolName: 'timebank', href: '/app/timebank', iconName: 'Hourglass', titleKey: 'timebank' },
+  { toolName: 'spotlight', href: '/app/spotlight', iconName: 'Star', titleKey: 'kumanoDelGiorno' },
 ]
 
 // Tutti gli strumenti (ognuno conta): per «N strumenti in M servizi»

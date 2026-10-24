@@ -104,7 +104,7 @@ export default function BreachResult({ result, own }: { result: ScudoResult; own
           <li>{t('tipManager')}</li>
         </ul>
         <Link
-          href="/marketplace/checkmail"
+          href="/app/checkmail"
           className="mt-4 inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2 text-sm font-semibold text-amber-950 ring-1 ring-amber-200 hover:bg-amber-100"
         >
           <MailSearch className="h-4 w-4" aria-hidden />

@@ -110,7 +110,7 @@ export default function AgendaEventRow({
       </span>
       {event.casaHomeId ? (
         // Scadenza di KUMANI Casa: il titolo apre la casa
-        <Link href={`/marketplace/casa/${event.casaHomeId}`} title={t('openCasa')} className="group min-w-0 flex-1 text-left">
+        <Link href={`/app/casa/${event.casaHomeId}`} title={t('openCasa')} className="group min-w-0 flex-1 text-left">
           <p className="truncate text-sm font-semibold text-[var(--ink)] group-hover:text-[var(--gold)]">{event.title}</p>
           <p className={`truncate text-xs ${status === 'overdue' ? 'font-semibold text-red-600' : 'text-[var(--muted)]'}`}>{details.join(' · ')}</p>
         </Link>
@@ -142,7 +142,7 @@ export default function AgendaEventRow({
         </button>
       ) : event.kind === 'deadline' && event.garageVehicleId ? (
         <Link
-          href={`/marketplace/garage/${event.garageVehicleId}`}
+          href={`/app/garage/${event.garageVehicleId}`}
           className="flex shrink-0 items-center gap-1 rounded-lg bg-rose-600 px-2.5 py-1.5 text-xs font-bold text-white hover:bg-rose-700"
         >
           {t('openGarage')}
@@ -165,7 +165,7 @@ export default function AgendaEventRow({
           {t('openConvivium')}
         </Link>
       ) : event.kind === 'post' ? (
-        <Link href="/marketplace/diarium" className="shrink-0 rounded-lg bg-pink-600 px-2.5 py-1.5 text-xs font-bold text-white hover:bg-pink-700">
+        <Link href="/app/diarium" className="shrink-0 rounded-lg bg-pink-600 px-2.5 py-1.5 text-xs font-bold text-white hover:bg-pink-700">
           {t('openPost')}
         </Link>
       ) : event.kind === 'trip' ? (

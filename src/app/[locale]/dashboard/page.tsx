@@ -287,7 +287,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
         calendar={{
           day: Number(agendaToday.slice(8, 10)),
           weekday: new Intl.DateTimeFormat(locale, { weekday: 'short', timeZone: 'UTC' }).format(new Date(`${agendaToday}T12:00:00Z`)).replace('.', ''),
-          href: agendaSources.memolife ? '/marketplace/memolife' : agendaSources.lifeCalendar ? '/marketplace/life-calendar' : '/marketplace/memolife',
+          href: agendaSources.memolife ? '/app/memolife' : agendaSources.lifeCalendar ? '/app/life-calendar' : '/app/memolife',
         }}
       />
     )

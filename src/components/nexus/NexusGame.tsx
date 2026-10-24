@@ -366,7 +366,7 @@ export default function NexusGame({ status }: { status: NexusStatus }) {
     const res = await startNexus(puzzle.day, puzzle.locale).catch(() => null)
     setBusy(false)
     if (res && 'locale' in res && res.locale !== puzzle.locale) {
-      router.replace(`${uiLocale === 'it' ? '' : `/${uiLocale}`}/marketplace/nexus?lang=${res.locale}`)
+      router.replace(`${uiLocale === 'it' ? '' : `/${uiLocale}`}/app/nexus?lang=${res.locale}`)
       return
     }
     setStarted(true)

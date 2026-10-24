@@ -13,15 +13,15 @@ const pathFor = (kind: QuickCheckKind, value: string): string => {
   const v = encodeURIComponent(value)
   switch (kind) {
     case 'iban':
-      return `/marketplace/verifica-iban?iban=${v}`
+      return `/app/verifica-iban?iban=${v}`
     case 'email':
-      return `/marketplace/checkmail?sender=${v}`
+      return `/app/checkmail?sender=${v}`
     case 'vat':
-      return `/marketplace/svat?vat=${v}`
+      return `/app/svat?vat=${v}`
     case 'phone':
-      return `/marketplace/rete-antitruffa?tab=numero&n=${v}`
+      return `/app/rete-antitruffa?tab=numero&n=${v}`
     case 'site':
-      return `/marketplace/svat?url=${v}`
+      return `/app/svat?url=${v}`
   }
 }
 

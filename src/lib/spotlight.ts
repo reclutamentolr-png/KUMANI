@@ -1,5 +1,5 @@
 // Kumano del Giorno — tipi condivisi tra server actions, pagina di gestione
-// (/marketplace/spotlight) e vetrina pubblica (/spotlight).
+// (/app/spotlight) e vetrina pubblica (/spotlight).
 
 export interface SpotlightProfile {
   id: string

@@ -18,7 +18,7 @@ export default function ListingShareButtons({ listingId, title }: { listingId: s
   useEffect(() => {
     queueMicrotask(() => {
       // Sempre la Bacheca (l'italiano è senza prefisso nell'indirizzo)
-      setUrl(`${window.location.origin}${locale === 'it' ? '' : `/${locale}`}/marketplace/listings?listing=${listingId}`)
+      setUrl(`${window.location.origin}${locale === 'it' ? '' : `/${locale}`}/app/listings?listing=${listingId}`)
       setCanNativeShare(typeof navigator !== 'undefined' && typeof navigator.share === 'function')
     })
   }, [listingId, locale])

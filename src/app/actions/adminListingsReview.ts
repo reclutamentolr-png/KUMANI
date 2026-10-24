@@ -128,7 +128,7 @@ export async function adminReviewListing(id: string, approve: boolean, note: str
     (t, locale) => ({
       title: t(approve ? 'listingApprovedTitle' : 'listingRejectedTitle'),
       body: approve ? t('listingApprovedBody', { title: listing.title as string }) : t('listingRejectedBody', { title: listing.title as string, reason }),
-      url: localizedPath(locale, '/marketplace/listings'),
+      url: localizedPath(locale, '/app/listings'),
       tag: `listing-review-${listing.id}`,
     })
   )

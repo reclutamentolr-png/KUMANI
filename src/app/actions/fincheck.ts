@@ -19,7 +19,7 @@ export async function saveFinCheck(answers: number[]): Promise<{ success: boolea
     return { success: false, code: /too_fast/.test(error.message) ? 'too_fast' : 'error' }
   }
   const row = (Array.isArray(data) ? data[0] : data) as { ku_awarded?: number } | null
-  revalidatePath('/[locale]/marketplace/fincheck', 'page')
+  revalidatePath('/[locale]/app/fincheck', 'page')
   return { success: true, ku: row?.ku_awarded ?? 0 }
 }
 

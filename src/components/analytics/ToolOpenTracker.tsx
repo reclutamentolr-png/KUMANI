@@ -9,7 +9,7 @@ import { locales } from '../../../i18n'
 // browser) per i «servizi più usati» di Admin → Panoramica. Nessun dato su
 // cosa si fa dentro il servizio.
 
-// Servizi con la pagina fuori da /marketplace
+// Servizi con la pagina fuori da /app
 const OUTSIDE: Record<string, string> = {
   viaggi: 'travel',
   convivium: 'convivium',
@@ -24,7 +24,7 @@ const NOT_TOOLS = new Set(['category', 'preferiti'])
 export function toolFromPath(pathname: string): string | null {
   const segments = pathname.split('/').filter(Boolean)
   if (segments[0] && locales.includes(segments[0])) segments.shift()
-  if (segments[0] === 'marketplace') return segments[1] && !NOT_TOOLS.has(segments[1]) ? segments[1] : null
+  if (segments[0] === 'app') return segments[1] && !NOT_TOOLS.has(segments[1]) ? segments[1] : null
   return OUTSIDE[segments[0] ?? ''] ?? null
 }
 

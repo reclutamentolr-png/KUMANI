@@ -62,8 +62,8 @@ const PAID_TOOLS = [
 ];
 
 // Pagine consentite agli agenti venditori e servizi della community esclusi
-const AGENT_ALLOWED = /^\/(agente|codici-prova|marketplace|login|auth|forgot-password|reset-password|maintenance)(\/|$)/;
-const AGENT_BLOCKED_TOOLS = /^\/marketplace\/(listings|chat|convivio|timebank|affinity|spotlight|mosaic|fabula|veritas)(\/|$)/;
+const AGENT_ALLOWED = /^\/(agente|codici-prova|app|login|auth|forgot-password|reset-password|maintenance)(\/|$)/;
+const AGENT_BLOCKED_TOOLS = /^\/app\/(listings|chat|convivio|timebank|affinity|spotlight|mosaic|fabula|veritas)(\/|$)/;
 
 // Pagine consentite ai traduttori (tutto il resto riporta all'Area Traduttori)
 const TRANSLATOR_ALLOWED = /^\/(traduzioni|login|auth|forgot-password|reset-password|maintenance)(\/|$)/;
@@ -71,14 +71,14 @@ const TRANSLATOR_ALLOWED = /^\/(traduzioni|login|auth|forgot-password|reset-pass
 // Pagine sempre raggiungibili durante la manutenzione (accesso dello Staff).
 const MAINTENANCE_EXEMPT = /^\/(admin|auth|login|forgot-password|reset-password|maintenance)(\/|$)/;
 
-// Extracts the tool name from a path like /marketplace/memolife/new or
-// /en/marketplace/memolife/new, after stripping an optional locale prefix.
+// Extracts the tool name from a path like /app/memolife/new or
+// /en/app/memolife/new, after stripping an optional locale prefix.
 function extractToolName(pathname: string): string | null {
   const segments = pathname.split('/').filter(Boolean);
   if (segments[0] && locales.includes(segments[0])) {
     segments.shift();
   }
-  if (segments[0] === 'marketplace' && segments[1]) {
+  if (segments[0] === 'app' && segments[1]) {
     return segments[1];
   }
   return null;
@@ -301,9 +301,9 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
         return NextResponse.redirect(new URL(`${localePrefix}/prova/fine`, request.url));
       }
     } else {
-      const toolPath = new RegExp(`^/marketplace/${tool.replace(/[^a-z0-9-]/g, '')}(/|$)`);
+      const toolPath = new RegExp(`^/app/${tool.replace(/[^a-z0-9-]/g, '')}(/|$)`);
       if (!toolPath.test(barePath) && !/^\/(prova|auth|terms|privacy|maintenance)(\/|$)/.test(barePath)) {
-        return NextResponse.redirect(new URL(`${localePrefix}/marketplace/${tool}`, request.url));
+        return NextResponse.redirect(new URL(`${localePrefix}/app/${tool}`, request.url));
       }
     }
   }

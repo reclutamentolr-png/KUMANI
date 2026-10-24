@@ -58,7 +58,7 @@ export default function ConvivioHome({
         <div className="flex flex-wrap gap-2">
         {isPro && (
           <Link
-            href="/marketplace/convivio/fornitore"
+            href="/app/convivio/fornitore"
             className="flex items-center justify-center gap-2 rounded-xl border-2 border-[var(--gold)] px-4 py-2 font-bold text-[var(--ink)] hover:bg-[var(--gold-pale)]"
           >
             <Store className="h-5 w-5" /> {t('supplierArea')}
@@ -112,7 +112,7 @@ export default function ConvivioHome({
         <ConvivioCreateForm
           mode="leader"
           onClose={() => setSheet(null)}
-          onCreated={(id) => router.push(`/${locale}/marketplace/convivio/${id}`)}
+          onCreated={(id) => router.push(`/${locale}/app/convivio/${id}`)}
         />
       )}
     </div>

@@ -36,7 +36,7 @@ export default function DigitalReceiptActions({
     setDeleting(true)
     const result = await deleteReceipt(id)
     if (result.success) {
-      router.push('/marketplace/digital-receipt')
+      router.push('/app/digital-receipt')
     } else {
       alert(t(result.message))
       setDeleting(false)

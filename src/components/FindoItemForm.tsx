@@ -119,7 +119,7 @@ export default function FindoItemForm(props: Props) {
           return
         }
       }
-      router.push('/marketplace/findo')
+      router.push('/app/findo')
     } finally {
       setSaving(false)
     }
@@ -217,7 +217,7 @@ export default function FindoItemForm(props: Props) {
               {t('quickAddLocation')}
             </button>
             <Link
-              href="/marketplace/findo/locations"
+              href="/app/findo/locations"
               className="flex items-center gap-1 text-sm font-medium text-[var(--muted)] hover:text-[var(--ink)] hover:underline"
             >
               <MapPin className="w-4 h-4" />
@@ -257,7 +257,7 @@ export default function FindoItemForm(props: Props) {
       )}
 
       <div className="flex gap-2">
-        <CancelButton className={cancelButtonLgClass} fallbackHref="/marketplace/findo" />
+        <CancelButton className={cancelButtonLgClass} fallbackHref="/app/findo" />
         <button
           onClick={handleSubmit}
           disabled={!isValid || saving || uploadingPhoto}

@@ -15,7 +15,7 @@ export default function CvToBioButton({ publicUrl }: { publicUrl: string }) {
     return (
       <span className="inline-flex flex-wrap items-center gap-2 text-sm font-semibold text-emerald-700">
         <Check className="h-4 w-4" /> {t(state === 'added' ? 'cvToBioDone' : 'cvToBioExists')}
-        <Link href="/marketplace/link-in-bio" className="text-[var(--gold)] underline hover:text-[var(--ink)]">
+        <Link href="/app/link-in-bio" className="text-[var(--gold)] underline hover:text-[var(--ink)]">
           {t('cvToBioOpen')}
         </Link>
       </span>

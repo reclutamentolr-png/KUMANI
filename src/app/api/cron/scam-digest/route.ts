@@ -34,7 +34,7 @@ export async function GET(request: Request) {
       (t, locale) => ({
         title: t('scamDigestTitle'),
         body: t('scamDigestBody', { count: total, top: top.map(([c]) => t(`scamCategory_${c}`)).join(', ') }),
-        url: localizedPath(locale, '/marketplace/rete-antitruffa'),
+        url: localizedPath(locale, '/app/rete-antitruffa'),
         tag: 'scam-digest',
       }),
       { kind: 'scam_digest', ref: week }

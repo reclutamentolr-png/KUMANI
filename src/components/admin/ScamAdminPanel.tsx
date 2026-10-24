@@ -32,9 +32,9 @@ const when = (iso: string) => new Intl.DateTimeFormat('it-IT', { dateStyle: 'med
 const btn = 'inline-flex min-h-10 items-center gap-1.5 rounded-lg px-3 text-sm font-semibold disabled:opacity-50'
 
 function checkLink(row: AdminScamTarget): string | null {
-  if (row.kind === 'site') return `/marketplace/svat?url=${encodeURIComponent(row.value)}`
-  if (row.kind === 'iban') return `/marketplace/verifica-iban?iban=${encodeURIComponent(row.value)}`
-  if (row.kind === 'email') return `/marketplace/checkmail?sender=${encodeURIComponent(row.value)}`
+  if (row.kind === 'site') return `/app/svat?url=${encodeURIComponent(row.value)}`
+  if (row.kind === 'iban') return `/app/verifica-iban?iban=${encodeURIComponent(row.value)}`
+  if (row.kind === 'email') return `/app/checkmail?sender=${encodeURIComponent(row.value)}`
   return null
 }
 

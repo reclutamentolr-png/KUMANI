@@ -8,7 +8,7 @@ import type { SharedGroupSummary } from '@/lib/spendlyShared'
 import HubBar from '@/components/hubs/HubBar'
 
 // Spendly · Spese condivise: i miei gruppi (casa, coppia, coinquilini).
-// Fuori da /marketplace di proposito, come Travel: chi viene invitato entra
+// Fuori da /app di proposito, come Travel: chi viene invitato entra
 // anche senza abbonamento; solo creare un gruppo richiede Spendly.
 export const dynamic = 'force-dynamic'
 

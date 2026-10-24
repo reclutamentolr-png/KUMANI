@@ -27,7 +27,7 @@ export default function RelatedServices() {
 
   const segments = pathname.split('/').filter(Boolean)
   if (segments[0] && locales.includes(segments[0])) segments.shift()
-  const tool = segments[0] === 'marketplace' && segments.length === 2 ? getMarketplaceTools(tm).find((item) => item.toolName === segments[1]) : undefined
+  const tool = segments[0] === 'app' && segments.length === 2 ? getMarketplaceTools(tm).find((item) => item.toolName === segments[1]) : undefined
   if (!tool) return null
   const group = serviceGroupOf(tool.toolName)
 

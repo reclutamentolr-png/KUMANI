@@ -543,7 +543,7 @@ export default function DocumentoSicuroTool() {
           ))}
         </ul>
         <Link
-          href="/marketplace/antitruffa"
+          href="/app/antitruffa"
           className="mt-4 inline-flex items-center gap-2 rounded-xl border border-[var(--gold)]/50 px-4 py-2.5 text-sm font-semibold text-[var(--gold-bright)] transition-colors hover:bg-[var(--gold)]/15"
         >
           {t('antitruffaLink')}

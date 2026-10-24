@@ -46,7 +46,7 @@ export default async function KumanoDelGiornoPreview() {
       )}
 
       <Link
-        href="/marketplace/spotlight"
+        href="/app/spotlight"
         className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]"
       >
         {t('ctaJoinButton')}

@@ -45,14 +45,14 @@ function urlOf(e: AgendaEvent): string {
         : e.kind === 'trip'
           ? `/viaggi/${e.refId}`
           : e.garageVehicleId
-            ? `/marketplace/garage/${e.garageVehicleId}`
+            ? `/app/garage/${e.garageVehicleId}`
             : e.casaHomeId
-              ? `/marketplace/casa/${e.casaHomeId}`
+              ? `/app/casa/${e.casaHomeId}`
               : e.kind === 'bill'
-                ? '/marketplace/spendly'
+                ? '/app/spendly'
                 : e.kind === 'deadline'
-                  ? '/marketplace/life-calendar'
-                  : '/marketplace/memolife'
+                  ? '/app/life-calendar'
+                  : '/app/memolife'
   return SITE_URL + path
 }
 

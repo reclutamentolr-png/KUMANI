@@ -54,7 +54,7 @@ export default function OfferMakerReview(props: Props) {
           setError(result.message)
           return
         }
-        router.push(`/marketplace/offermaker/campaigns/${result.data.id}`)
+        router.push(`/app/offermaker/campaigns/${result.data.id}`)
       } else {
         const result = await updateOfferCampaign(props.campaignId, draft)
         if (!result.success) {
@@ -64,7 +64,7 @@ export default function OfferMakerReview(props: Props) {
         // Salvato: il messaggio, poi si torna all'elenco delle campagne
         setSaved(true)
         setTimeout(() => {
-          router.push('/marketplace/offermaker/campaigns')
+          router.push('/app/offermaker/campaigns')
           router.refresh()
         }, 1500)
       }
@@ -127,7 +127,7 @@ export default function OfferMakerReview(props: Props) {
             {t('back')}
           </button>
         )}
-        {props.mode !== 'create' && <CancelButton className={cancelButtonLgClass} fallbackHref="/marketplace/offermaker" />}
+        {props.mode !== 'create' && <CancelButton className={cancelButtonLgClass} fallbackHref="/app/offermaker" />}
         <button
           onClick={handleSubmit}
           disabled={saving || saved}

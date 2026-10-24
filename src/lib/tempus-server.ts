@@ -200,7 +200,7 @@ export async function emailOwner(ownerId: string, ownerLocale: string, kind: 'ne
     ...(contact ? [`${t('contact')}: ${contact}`] : []),
     ...(kind === 'new' && b.customer_note ? [`${t('note')}: ${b.customer_note}`] : []),
   ]
-  const url = `${SITE_URL}${localizedPath(ownerLocale, '/marketplace/tempus')}`
+  const url = `${SITE_URL}${localizedPath(ownerLocale, '/app/tempus')}`
   await sendEmail({
     to,
     subject: kind === 'new' ? t('ownerNewSubject', { name: b.customer_name, when }) : t('ownerCancelledSubject', { name: b.customer_name, when }),

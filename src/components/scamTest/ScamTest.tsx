@@ -138,8 +138,8 @@ export default function ScamTest({ loggedIn }: { loggedIn: boolean }) {
   const LevelIcon = style.Icon
   const tools = [
     { href: '/controlla', icon: ScanSearch, key: 'toolCheck' },
-    { href: '/marketplace/rete-antitruffa?tab=segnala', icon: Flag, key: 'toolReport' },
-    ...(r.dataGiven ? [{ href: '/marketplace/scudo-dati', icon: ShieldUser, key: 'toolData' }] : []),
+    { href: '/app/rete-antitruffa?tab=segnala', icon: Flag, key: 'toolReport' },
+    ...(r.dataGiven ? [{ href: '/app/scudo-dati', icon: ShieldUser, key: 'toolData' }] : []),
     { href: '/manuale-antitruffa', icon: BookOpenCheck, key: 'toolManual' },
   ]
   return (

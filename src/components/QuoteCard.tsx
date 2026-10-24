@@ -101,7 +101,7 @@ export default function QuoteCard({ quote, fromDashboardSuffix = '' }: { quote: 
   const clone = async () => {
     setCloning(true)
     const result = await duplicateQuote(quote.id)
-    if (result.success) router.push(`/marketplace/preventivi/${result.data.id}/edit${fromDashboardSuffix}`)
+    if (result.success) router.push(`/app/preventivi/${result.data.id}/edit${fromDashboardSuffix}`)
     else {
       alert(t(result.message))
       setCloning(false)
@@ -136,7 +136,7 @@ export default function QuoteCard({ quote, fromDashboardSuffix = '' }: { quote: 
       </div>
 
       <div className="flex shrink-0 items-center gap-1.5">
-        <Link href={`/marketplace/preventivi/${quote.id}/edit${fromDashboardSuffix}`} className={iconButton} title={t('editQuote')} aria-label={t('editQuote')}>
+        <Link href={`/app/preventivi/${quote.id}/edit${fromDashboardSuffix}`} className={iconButton} title={t('editQuote')} aria-label={t('editQuote')}>
           <Pencil className="h-4 w-4" />
         </Link>
         <button type="button" onClick={clone} disabled={cloning} className={iconButton} title={t('duplicateQuote')} aria-label={t('duplicateQuote')}>
@@ -149,7 +149,7 @@ export default function QuoteCard({ quote, fromDashboardSuffix = '' }: { quote: 
           {busy === 'share' ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Share2 className="h-4 w-4" />}
         </button>
         <Link
-          href={`/marketplace/preventivi/${quote.id}${fromDashboardSuffix}`}
+          href={`/app/preventivi/${quote.id}${fromDashboardSuffix}`}
           className="px-3 py-2 rounded-lg text-sm font-medium border border-[var(--gold)]/40 bg-white text-[var(--ink)] hover:bg-[var(--gold-pale)] transition-all"
         >
           {t('details')}

@@ -438,7 +438,7 @@ export async function bookTempus(input: {
       notifyUser(ownerId, 'messages', (t, loc) => ({
         title: t('tempusNewTitle'),
         body: t('tempusNewBody', { name, service: service.name, when: when(loc) }),
-        url: localizedPath(loc, '/marketplace/tempus'),
+        url: localizedPath(loc, '/app/tempus'),
         tag: `tempus-${row.id}`,
       })),
     ])
@@ -463,7 +463,7 @@ export async function cancelTempusByToken(token: string): Promise<{ success: tru
     notifyUser(row.owner_id, 'messages', (t, loc) => ({
       title: t('tempusCancelledTitle'),
       body: t('tempusCancelledBody', { name: row.customer_name, when: formatWhen(row.starts_at, tz, loc, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) }),
-      url: localizedPath(loc, '/marketplace/tempus'),
+      url: localizedPath(loc, '/app/tempus'),
       tag: `tempus-cancel-${row.id}`,
     })),
   ])

@@ -30,7 +30,7 @@ export default function IbanInlineCheck({ text }: { text: string }) {
         <span className="text-red-700">{t('ibanInlineInvalid')}</span>
       )}
       <Link
-        href={`/marketplace/verifica-iban?iban=${encodeURIComponent(result.normalized)}`}
+        href={`/app/verifica-iban?iban=${encodeURIComponent(result.normalized)}`}
         className="font-semibold text-[var(--gold)] underline hover:text-[var(--ink)]"
       >
         {t('ibanInlineCheck')}

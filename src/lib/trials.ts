@@ -23,9 +23,9 @@ export const MAX_ACTIVE_TRIAL_CODES = 10
 // Giorni entro cui il codice va attivato
 export const TRIAL_ACTIVATE_DAYS = 7
 
-// Indirizzo della pagina del servizio (Travel e Kordata stanno fuori da /marketplace)
+// Indirizzo della pagina del servizio (Travel e Kordata stanno fuori da /app)
 export function trialToolPath(tool: string): string {
-  return `/marketplace/${tool}`
+  return `/app/${tool}`
 }
 
 type MaybeUser = { app_metadata?: Record<string, unknown> | null } | null | undefined

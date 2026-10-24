@@ -83,7 +83,7 @@ export default function FindoItemCard({ item }: { item: Item }) {
           <Star className={`w-4 h-4 ${item.is_favorite ? 'fill-[var(--gold)] text-[var(--gold)]' : 'text-[var(--gold)]/40'}`} />
         </button>
         <Link
-          href={`/marketplace/findo/${item.id}`}
+          href={`/app/findo/${item.id}`}
           className="px-3 py-2 rounded-lg text-sm font-medium border border-[var(--gold)]/40 bg-white text-[var(--ink)] hover:bg-[var(--gold-pale)] transition-all"
         >
           {t('details')}

@@ -81,7 +81,7 @@ export default async function ManualePreviewPage({ searchParams }: Props) {
   const cta = user ? (
     <div>
       <Link
-        href="/marketplace/antitruffa"
+        href="/app/antitruffa"
         className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-4 text-base font-extrabold text-[var(--ink)] shadow-lg"
       >
         <BookOpenCheck className="h-5 w-5" />

@@ -119,10 +119,10 @@ export default function TutelaApp() {
       <section className="rounded-2xl border border-[var(--gold)]/25 bg-white p-4 sm:p-5">
         <p className="font-bold text-[var(--ink)]">{t('toolsTitle')}</p>
         <div className="mt-3 grid gap-2 sm:grid-cols-2">
-          <Link href="/marketplace/svat" className="rounded-xl bg-[var(--ink)] px-4 py-3 text-sm font-bold text-[var(--gold-bright)] hover:bg-[var(--ink-soft)]">
+          <Link href="/app/svat" className="rounded-xl bg-[var(--ink)] px-4 py-3 text-sm font-bold text-[var(--gold-bright)] hover:bg-[var(--ink-soft)]">
             {t('toolSpeculum')}
           </Link>
-          <Link href="/marketplace/rete-antitruffa" className="rounded-xl border border-[var(--gold)]/50 px-4 py-3 text-sm font-bold text-[var(--ink)] hover:bg-[var(--gold)]/10">
+          <Link href="/app/rete-antitruffa" className="rounded-xl border border-[var(--gold)]/50 px-4 py-3 text-sm font-bold text-[var(--ink)] hover:bg-[var(--gold)]/10">
             {t('toolRete')}
           </Link>
         </div>

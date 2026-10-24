@@ -24,7 +24,7 @@ const MEMBER_AREAS = [
   '/regali',
   '/sorprese',
   '/documenti',
-  '/marketplace',
+  '/app',
   '/donazioni',
   '/recensioni',
   '/catalogo',
@@ -46,12 +46,12 @@ const MEMBER_AREAS = [
 
 const TABS = [
   { key: 'home', href: '/dashboard', Icon: House, match: ['/dashboard'] },
-  { key: 'services', href: '/servizi', Icon: LayoutGrid, match: ['/servizi', '/marketplace'] },
+  { key: 'services', href: '/servizi', Icon: LayoutGrid, match: ['/servizi', '/app'] },
   {
     key: 'community',
     href: '/community',
     Icon: Users,
-    match: ['/community', '/dashboard/rete', '/donazioni', '/events', '/convivio', '/spotlight', '/marketplace/listings', '/marketplace/chat', '/marketplace/spotlight', '/marketplace/convivio', '/marketplace/timebank'],
+    match: ['/community', '/dashboard/rete', '/donazioni', '/events', '/convivio', '/spotlight', '/app/listings', '/app/chat', '/app/spotlight', '/app/convivio', '/app/timebank'],
   },
   { key: 'wallet', href: '/wallet', Icon: Wallet, match: ['/wallet', '/regali', '/sorprese'] },
 ] as const
@@ -73,7 +73,7 @@ const under = (path: string, area: string) => path === area || path.startsWith(`
 // alto dell'app. Fuori: anteprima di una sorpresa (a schermo intero, come la
 // vede chi la riceve), NEXUS (tastiera del gioco) e Firma PDF (spazio pieno).
 export function inMemberArea(path: string) {
-  return MEMBER_AREAS.some((area) => under(path, area)) && !path.endsWith('/anteprima') && !under(path, '/marketplace/nexus') && !under(path, '/marketplace/firma-pdf')
+  return MEMBER_AREAS.some((area) => under(path, area)) && !path.endsWith('/anteprima') && !under(path, '/app/nexus') && !under(path, '/app/firma-pdf')
 }
 
 // Scheda attiva: quella con il prefisso più lungo (/dashboard/rete è Community)

@@ -69,7 +69,7 @@ export default function OfferMakerCampaignCard({ campaign }: { campaign: Campaig
 
       <div className="flex flex-wrap items-center gap-2 shrink-0">
         <Link
-          href={`/marketplace/offermaker/campaigns/${campaign.id}`}
+          href={`/app/offermaker/campaigns/${campaign.id}`}
           className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium bg-[var(--ink)] text-white hover:bg-[var(--ink-soft)] transition-all"
         >
           <Pencil className="w-4 h-4" />

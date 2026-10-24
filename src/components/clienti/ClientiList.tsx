@@ -47,7 +47,7 @@ export default function ClientiList({ clients, running, today }: { clients: Clie
   const create = async (form: typeof EMPTY_CLIENT_FORM) => {
     const result = await createClientRecord(form)
     if (!result.success) return limitTextOf(result) ?? t(`errors.${result.message === 'duplicateName' || result.message === 'nameRequired' ? result.message : 'saveError'}`)
-    router.push(`/marketplace/clienti/${result.data.id}`)
+    router.push(`/app/clienti/${result.data.id}`)
     return null
   }
 
@@ -125,7 +125,7 @@ export default function ClientiList({ clients, running, today }: { clients: Clie
             return (
               <li key={c.id}>
                 <Link
-                  href={`/marketplace/clienti/${c.id}`}
+                  href={`/app/clienti/${c.id}`}
                   className="flex h-full flex-col gap-1.5 rounded-2xl border border-[var(--gold)]/25 bg-white p-4 transition-colors hover:border-[var(--gold)]"
                 >
                   <span className="flex items-baseline justify-between gap-3">
@@ -165,7 +165,7 @@ function RunningBand({ running }: { running: NonNullable<RunningTimer> }) {
   }, [])
   return (
     <Link
-      href={`/marketplace/clienti/lavoro/${running.jobId}`}
+      href={`/app/clienti/lavoro/${running.jobId}`}
       className="flex items-center justify-between gap-3 rounded-2xl bg-[var(--ink)] px-4 py-3 text-white shadow-lg"
     >
       <span className="flex min-w-0 items-center gap-3">

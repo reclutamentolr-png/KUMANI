@@ -317,8 +317,8 @@ export async function deleteConversationAction(
   const deletedCount = deletedMessages?.length || 0
 
   // STEP 3: Invalida la cache di Next.js
-  revalidatePath('/marketplace/chat')
-  revalidatePath('/marketplace')
+  revalidatePath('/app/chat')
+  revalidatePath('/app')
 
   return { success: true, deletedCount }
 }
@@ -367,7 +367,7 @@ export async function saveListingAlert(input: { q?: string; category?: string; c
   if (!row.query && !row.category && !row.country_code && !row.city) return { success: false, message: 'listingAlertEmpty' }
   const { error } = await supabase.from('listing_alerts').insert(row)
   if (error) return { success: false, message: /listing_alerts_limit/.test(error.message) ? 'listingAlertLimit' : 'listingAlertError' }
-  revalidatePath('/marketplace/listings')
+  revalidatePath('/app/listings')
   return { success: true }
 }
 
@@ -378,6 +378,6 @@ export async function deleteListingAlert(id: string): Promise<{ success: boolean
   } = await supabase.auth.getUser()
   if (!user || !/^[0-9a-f-]{36}$/i.test(id)) return { success: false }
   const { error } = await supabase.from('listing_alerts').delete().eq('id', id).eq('user_id', user.id)
-  revalidatePath('/marketplace/listings')
+  revalidatePath('/app/listings')
   return { success: !error }
 }

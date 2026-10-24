@@ -480,7 +480,7 @@ export default function FocusTimer() {
           <div className="mx-auto mt-2 max-w-md rounded-2xl border border-white/10 bg-white/5 p-4 text-center">
             <p className="text-sm leading-6 text-white/80">{t(view.phase === 'long' ? 'longBreakHint' : 'breakHint')}</p>
             <Link
-              href="/marketplace/oxygen"
+              href="/app/oxygen"
               className="mt-3 inline-flex items-center gap-2 rounded-xl bg-white/10 px-4 py-2 text-sm font-semibold text-[var(--gold-bright)] hover:bg-white/20"
             >
               <Wind className="h-4 w-4" /> {t('oxygenLink')}

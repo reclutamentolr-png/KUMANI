@@ -230,7 +230,7 @@ export default function UpcomingAgenda({ events, today, sources }: { events: Age
 
       {sources.memolife && (
         <Link
-          href="/marketplace/memolife"
+          href="/app/memolife"
           className="mx-auto mt-4 flex w-fit items-center justify-center gap-1.5 rounded-lg border border-[var(--gold)] px-4 py-2 text-sm font-bold text-[var(--ink)] transition-colors hover:bg-[var(--gold)] hover:text-white"
         >
           {list.length > MAX_ROWS ? t('seeAllCount', { count: list.length }) : t('openCalendar')} <ArrowRight className="h-4 w-4" />

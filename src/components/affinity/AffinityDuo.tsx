@@ -128,7 +128,7 @@ export default function AffinityDuo({ owner, isLoggedIn }: { owner: Owner; isLog
       {isLoggedIn ? (
         saveState === 'saved' ? (
           <Link
-            href="/marketplace/affinity"
+            href="/app/affinity"
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3.5 font-bold text-[var(--ink)]"
           >
             <Check className="h-5 w-5" /> {t('duoSaved')} <ArrowRight className="h-5 w-5" />
