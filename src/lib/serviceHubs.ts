@@ -70,6 +70,7 @@ export const HUB_TABS: Record<ServiceHub, HubTab[]> = {
   // Già collegati: preventivo accettato → lavoro → pagamento → ricevuta
   gestione: [
     { key: 'clients', href: '/marketplace/clienti', tool: 'clienti' },
+    { key: 'tempus', href: '/marketplace/tempus', tool: 'tempus' },
     { key: 'quotes', href: '/marketplace/preventivi', tool: 'preventivi' },
     { key: 'receipts', href: '/marketplace/digital-receipt', tool: 'digital-receipt' },
     { key: 'warehouse', href: '/marketplace/magazzino', tool: 'magazzino' },
@@ -185,6 +186,7 @@ export const TOOL_HUB: Record<string, ServiceHub> = {
   'trova-lavoro': 'lavoro',
   'kumani-cv': 'lavoro',
   clienti: 'gestione',
+  tempus: 'gestione',
   preventivi: 'gestione',
   'digital-receipt': 'gestione',
   magazzino: 'gestione',

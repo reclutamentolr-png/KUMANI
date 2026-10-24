@@ -10,7 +10,7 @@ export const HOME_NEEDS = [
   { key: 'organize', icon: 'CalendarDays', items: ['life-calendar', 'memolife', 'findo', 'hopla'] },
   { key: 'trips', icon: 'Plane', items: ['travel', 'convivium', 'events'] },
   { key: 'money', icon: 'PiggyBank', items: ['spendly', 'fincheck', 'casa', 'garage', 'digital-receipt'] },
-  { key: 'business', icon: 'Store', items: ['landing-page', 'shop', 'menu', 'fidelity', 'offermaker', 'clienti', 'listings'] },
+  { key: 'business', icon: 'Store', items: ['landing-page', 'tempus', 'shop', 'menu', 'fidelity', 'offermaker', 'clienti', 'listings'] },
   { key: 'promote', icon: 'Megaphone', items: ['qr-generator', 'qr-code-pro', 'link-in-bio', 'whatsapp-messages', 'firma-email', 'spotlight'] },
   // KUMANI Social: il kit per chi inizia sui social (stessi servizi del servizio unito)
   { key: 'social', icon: 'Clapperboard', items: ['tutela', 'captio', 'lumen', 'vox', 'diarium', 'imago', 'forma'] },

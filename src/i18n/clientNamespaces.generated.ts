@@ -110,6 +110,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "surprise",
   "surpriseTpl",
   "svat",
+  "tempus",
   "timebank",
   "toolMember",
   "toolPass",

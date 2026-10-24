@@ -367,6 +367,17 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       requiresSubscription: true,
     },
     {
+      toolName: 'tempus',
+      href: '/marketplace/tempus',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'CalendarCheck',
+      title: t('tempus'),
+      description: t('tempusDescription'),
+      color: 'gold',
+      category: 'lavoro',
+      requiresSubscription: true,
+    },
+    {
       toolName: 'hopla',
       href: '/marketplace/hopla',
       gradient: 'bg-[var(--ink)]',

@@ -79,6 +79,7 @@ export const SECTION_LABELS: Record<string, string> = {
   cronobioma: 'KUMANI CRONOBIOMA',
   magazzino: 'Magazzino PRO',
   clienti: 'Clienti e Lavori',
+  tempus: 'KUMANI TEMPUS',
   hopla: 'Hoplà',
   webinar: 'KUMANI Webinar',
   firmaPdf: 'Firma PDF',
