@@ -18,13 +18,14 @@ import trenino from './drawings/trenino'
 import mongolfiera from './drawings/mongolfiera'
 import dinosauro from './drawings/dinosauro'
 import pinguino from './drawings/pinguino'
+import kumi from './drawings/kumi'
 
 // Tutti i disegni dell'Angolo Bambini (per aggiungerne uno: il file in
 // drawings/, l'import qui, il nome in messages → kids.drawings e i nomi delle
 // parti nuove in kids.parts)
 export const DRAWINGS: Drawing[] = [
   orsetto, coniglietto, pulcino, gattino, cagnolino, elefante, leone, gufo, farfalla, pesciolino,
-  tartaruga, balena, unicorno, macchinina, razzo, trenino, mongolfiera, dinosauro, pinguino,
+  tartaruga, balena, unicorno, macchinina, razzo, trenino, mongolfiera, dinosauro, pinguino, kumi,
 ]
 
 export const drawingById = (id: string) => DRAWINGS.find((d) => d.id === id) ?? null

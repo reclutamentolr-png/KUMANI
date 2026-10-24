@@ -133,6 +133,9 @@ export default function MusicGame({
   const songs = profile.songs ?? []
   const saveSong = () => {
     if (notes.every((n) => n === null)) return actions.toast(t('musicEmpty'))
+    // Canzone uguale a una già salvata: niente doppione e niente stella in più
+    const same = (song: Song) => song.instrument === instrument && song.tempo === tempo && song.notes.every((n, i) => n === notes[i])
+    if (songs.some(same)) return actions.toast(t('musicSaved'))
     const song: Song = { id: newId(), name: t('musicSongName', { name: profile.name, n: songs.length + 1 }), notes, instrument, tempo, createdAt: now() }
     onProfileChange({ ...profile, songs: [song, ...songs].slice(0, MAX_SONGS), stars: profile.stars + 1 })
     if (sound) melody([0, 2, 4, 7], 110)

@@ -8,6 +8,7 @@ import { KIDS_SVG_CSS, applyPivots, type Move } from '@/lib/kids/moves'
 import type { Drawing } from '@/lib/kids/types'
 import type { CurrentDrawing, KidProfile } from '@/lib/kids/storage'
 import { melody, speak, tone } from './kidsAudio'
+import Kumi from './Kumi'
 
 // Foglio da colorare e animare, usato da «Colora e Anima» e da «Crea il tuo
 // animale»: tocchi per colorare, missioni, risveglio con i complimenti,
@@ -53,7 +54,7 @@ export default function ColorStage({
   const [eraser, setEraser] = useState(false)
   const [mode, setMode] = useState<Move>('saluta')
   const [undo, setUndo] = useState<{ key: string; list: { part: string; prev: string | null }[] }>({ key: '', list: [] })
-  const [bubble, setBubble] = useState<{ text: string; key: number } | null>(null)
+  const [bubble, setBubble] = useState<{ text: string; key: number; cheer?: boolean } | null>(null)
   const [hint, setHint] = useState<{ text: string; color: string; x: number; y: number; key: number } | null>(null)
   const fills = state.fills
   const awake = state.awake
@@ -123,7 +124,8 @@ export default function ColorStage({
     setTimeout(() => fig.classList.remove('waking'), 750)
   }
 
-  const showBubble = (text: string) => setBubble({ text, key: now() })
+  // Con cheer KUMI arriva ballando a fare i complimenti
+  const showBubble = (text: string, cheer = false) => setBubble({ text, key: now(), cheer })
   useEffect(() => {
     if (!bubble) return
     const timer = setTimeout(() => setBubble(null), 5000)
@@ -186,7 +188,7 @@ export default function ColorStage({
         if (sound) melody([0, 2, 4, 7, 11], 120)
         // Il nome si legge nel fumetto; la voce dice la frase senza nome
         const p = praise()
-        showBubble(p.text)
+        showBubble(p.text, true)
         say(p.voice)
       }, 250)
       onFinished(nextFills)
@@ -240,15 +242,20 @@ export default function ColorStage({
       <div ref={stageRef} className="relative mx-auto aspect-[400/440] w-full max-w-[min(100%,calc((100dvh-330px)*0.909))] min-h-[220px] overflow-hidden rounded-[22px] border-[3px] border-[#2B2D52] bg-white shadow-[5px_5px_0_#2B2D52]">
         <svg ref={svgRef} viewBox="0 0 400 440" className={svgClass} onClick={onTap} role="img" aria-label={t(`drawings.${drawing.id}`)} />
         {hint && hint.text && (
-          <span key={hint.key} className="kids-hint pointer-events-none absolute -translate-x-1/2 -translate-y-[130%] whitespace-nowrap rounded-xl bg-[#2B2D52] px-3 py-1 text-sm font-extrabold text-white" style={{ left: hint.x, top: hint.y }}>
+          <span key={`hint-${hint.key}`} className="kids-hint pointer-events-none absolute -translate-x-1/2 -translate-y-[130%] whitespace-nowrap rounded-xl bg-[#2B2D52] px-3 py-1 text-sm font-extrabold text-white" style={{ left: hint.x, top: hint.y }}>
             <span className="mr-1 inline-block h-3 w-3 rounded-full border-2 border-white align-[-1px]" style={{ background: hint.color }} />
             {hint.text}
           </span>
         )}
         {bubble && (
-          <div key={bubble.key} className="kids-bubble absolute inset-x-3 top-3 rounded-2xl border-[3px] border-[#2B2D52] bg-white px-3 py-2 text-center text-base font-extrabold leading-snug text-[#2B2D52] shadow-[3px_3px_0_#2B2D52] sm:px-4 sm:py-3 sm:text-lg" role="status">
+          <div key={`bubble-${bubble.key}`} className="kids-bubble absolute inset-x-3 top-3 rounded-2xl border-[3px] border-[#2B2D52] bg-white px-3 py-2 text-center text-base font-extrabold leading-snug text-[#2B2D52] shadow-[3px_3px_0_#2B2D52] sm:px-4 sm:py-3 sm:text-lg" role="status">
             {bubble.text}
           </div>
+        )}
+        {bubble?.cheer && (
+          <span key={`kumi-${bubble.key}`} className="kids-kumi pointer-events-none absolute bottom-1 left-1 w-[22%] min-w-16 max-w-28">
+            <Kumi move="dance" className="block h-auto w-full" />
+          </span>
         )}
         {!awake && <p className="pointer-events-none absolute inset-x-0 bottom-2 text-center text-xs font-bold text-[#2B2D52]/70">{t('partsLeft', { count: missing })}</p>}
       </div>
@@ -307,6 +314,8 @@ export default function ColorStage({
       <style>{`
         .kids-hint { animation: kidsHint 1.3s ease forwards; }
         .kids-bubble { animation: kidsBubble .35s ease; }
+        .kids-kumi { animation: kidsKumi .5s cubic-bezier(.3,1.5,.6,1); }
+        @keyframes kidsKumi { from { opacity: 0; transform: translateY(60%) scale(.6); } to { opacity: 1; transform: none; } }
         @keyframes kidsHint { 0% { opacity: 0; margin-top: 8px; } 15% { opacity: 1; margin-top: 0; } 75% { opacity: 1; } 100% { opacity: 0; margin-top: -10px; } }
         @keyframes kidsBubble { from { opacity: 0; transform: translateY(-8px) scale(.95); } to { opacity: 1; transform: none; } }
       `}</style>

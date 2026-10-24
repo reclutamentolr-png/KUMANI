@@ -17,6 +17,7 @@ import { formatOfferDate, getChristmas } from '@/lib/christmas'
 import PlansComingSoonCard from '@/components/plans/PlansComingSoonCard'
 import { getComingSoon } from '@/lib/plansComingSoon'
 import WithdrawalRequest from '@/components/billing/WithdrawalRequest'
+import { KIDS_LOCK_COOKIE, KIDS_PATH } from '@/lib/kids/lock'
 import { locales, defaultLocale } from '../../../i18n'
 
 type BillingPageProps = {
@@ -47,6 +48,10 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
   const cookieLocale = (await cookies()).get('NEXT_LOCALE')?.value
   const locale = cookieLocale && locales.includes(cookieLocale) ? cookieLocale : defaultLocale
   const t = await getTranslations({ locale, namespace: 'billingPage' })
+
+  // Angolo Bambini con il blocco del genitore attivo: il proxy non passa da
+  // /billing, quindi il controllo si fa qui (niente abbonamenti o recessi)
+  if ((await cookies()).get(KIDS_LOCK_COOKIE)?.value === user.id) redirect(`/${locale}${KIDS_PATH}`)
 
   const { success, session_id, canceled, error: checkoutError, portal, renewal } = await searchParams
 

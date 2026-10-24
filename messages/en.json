@@ -16036,7 +16036,8 @@
       "dinosauro": "Dinosaur",
       "pinguino": "Penguin",
       "creatura": "My creature",
-      "disegno": "Free drawing"
+      "disegno": "Free drawing",
+      "kumi": "KUMI"
     },
     "parts": {
       "acqua": "Water",
@@ -16166,7 +16167,10 @@
       "ruote": "Wheels",
       "suole": "Soles",
       "punteCoda": "Tail spikes",
-      "macchieAli": "Wing spots"
+      "macchieAli": "Wing spots",
+      "tentacoli": "Tentacles",
+      "ventose": "Suckers",
+      "corona": "Crown"
     },
     "praiseVoice": "Well done, you coloured your drawing! You are brilliant!",
     "moveVoice": {
@@ -16333,7 +16337,12 @@
     },
     "drawNew": "New sheet",
     "drawDone": "Done! To the album",
-    "drawEmpty": "The sheet is still blank: draw something!"
+    "drawEmpty": "The sheet is still blank: draw something!",
+    "kumi": {
+      "tips": "Hi! I'm KUMI, the octopus with a crown.|Tap a game and let's have fun together!|I have five tentacles: four for the games and one to hug you!|Every finished drawing earns you a star!|Did you know? You can color me too!",
+      "bye": "Bye bye, see you soon!",
+      "alt": "KUMI, the octopus with a crown"
+    }
   },
   "textShield": {
     "badge": "Before using AI",

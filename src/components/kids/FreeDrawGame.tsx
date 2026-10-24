@@ -283,6 +283,9 @@ export default function FreeDrawGame({
     if (op) setOps((o) => [...o, op])
   }
 
+  // Ultimo disegno salvato nell'album (stesso elenco di tratti = già salvato)
+  const savedOps = useRef<Op[] | null>(null)
+
   const undo = () => setOps((o) => o.slice(0, -1))
   const fresh = () => {
     if (!ops.length) return
@@ -293,10 +296,13 @@ export default function FreeDrawGame({
   const finish = async (share: boolean) => {
     const canvas = canvasRef.current
     if (!canvas || !ops.length) return actions.toast(t('drawEmpty'))
+    // Stesso disegno già messo nell'album: niente copia doppia e niente stella in più
+    if (!share && savedOps.current === ops) return actions.toast(t('savedToAlbum'))
     try {
       const png = await actions.makeCanvasPng(canvas, t('drawings.disegno'))
       if (share) actions.openShare({ drawingId: 'disegno', title: t('drawings.disegno'), png })
       else {
+        savedOps.current = ops
         await actions.saveToAlbum({ drawingId: 'disegno', png })
         onProfileChange({ ...profile, stars: profile.stars + 1, sketch: ops })
         if (sound) melody([0, 2, 4, 7, 11], 110)

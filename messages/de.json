@@ -16036,7 +16036,8 @@
       "dinosauro": "Dinosaurier",
       "pinguino": "Pinguin",
       "creatura": "Mein Wesen",
-      "disegno": "Freies Bild"
+      "disegno": "Freies Bild",
+      "kumi": "KUMI"
     },
     "parts": {
       "acqua": "Wasser",
@@ -16166,7 +16167,10 @@
       "ruote": "Räder",
       "suole": "Sohlen",
       "punteCoda": "Schwanzzacken",
-      "macchieAli": "Flügelpunkte"
+      "macchieAli": "Flügelpunkte",
+      "tentacoli": "Fangarme",
+      "ventose": "Saugnäpfe",
+      "corona": "Krone"
     },
     "praiseVoice": "Toll gemacht, du hast dein Bild ausgemalt! Du bist großartig!",
     "moveVoice": {
@@ -16333,7 +16337,12 @@
     },
     "drawNew": "Neues Blatt",
     "drawDone": "Fertig! Ins Album",
-    "drawEmpty": "Das Blatt ist noch leer: Male etwas!"
+    "drawEmpty": "Das Blatt ist noch leer: Male etwas!",
+    "kumi": {
+      "tips": "Hallo! Ich bin KUMI, der Krake mit der Krone.|Tippe auf ein Spiel und lass uns zusammen Spaß haben!|Ich habe fünf Arme: vier für die Spiele und einen, um dich zu umarmen!|Jedes fertige Bild bringt dir einen Stern!|Weißt du was? Du kannst mich auch ausmalen!",
+      "bye": "Tschüss, bis bald!",
+      "alt": "KUMI, der Krake mit der Krone"
+    }
   },
   "textShield": {
     "badge": "Bevor du KI nutzt",

@@ -14,6 +14,9 @@ import CreatureGame from './CreatureGame'
 import FreeDrawGame from './FreeDrawGame'
 import MusicGame from './MusicGame'
 import { KidsIconButton } from './ColorStage'
+import Kumi from './Kumi'
+import { speak } from './kidsAudio'
+import KumiGuide from './KumiGuide'
 import type { KidsActions, ShareTarget } from './actions'
 import PinPad from './PinPad'
 import ProfileForm from './ProfileForm'
@@ -53,6 +56,7 @@ export default function KidsCorner({ userId }: { userId: string }) {
   const [album, setAlbum] = useState<AlbumItem[] | null>(null)
   const [albumUrls, setAlbumUrls] = useState<Record<string, string>>({})
   const [toast, setToast] = useState<string | null>(null)
+  const [bye, setBye] = useState(false)
   const parentUntil = useRef(0)
 
   // Avvio: dati dal telefono
@@ -151,7 +155,10 @@ export default function KidsCorner({ userId }: { userId: string }) {
     } catch {
       // niente
     }
-    router.replace(`/${locale}/app`)
+    // KUMI saluta e va a dormire, poi si torna a KUMANI
+    setBye(true)
+    if (store.voice) speak(t('kumi.bye'), locale)
+    setTimeout(() => router.replace(`/${locale}/app`), 1400)
   }
 
   // Codice dimenticato: si esce da KUMANI; il genitore rientra con la sua
@@ -242,6 +249,7 @@ export default function KidsCorner({ userId }: { userId: string }) {
   if (phase === 'welcome') {
     screen = (
       <div className="mx-auto grid max-w-lg gap-5 text-[#2B2D52]">
+        <Kumi move="wave" label={t('kumi.alt')} className="mx-auto block h-auto w-28" />
         <h1 className="text-center text-3xl font-extrabold">{t('title')}</h1>
         <p className="text-center text-lg">{t('welcomeText')}</p>
         <ul className="grid gap-3 rounded-2xl border-[3px] border-[#2B2D52] bg-white p-4 text-base">
@@ -307,6 +315,7 @@ export default function KidsCorner({ userId }: { userId: string }) {
   } else if (phase === 'children') {
     screen = (
       <div className="mx-auto grid w-full max-w-lg gap-5">
+        <Kumi move="wave" className="mx-auto block h-auto w-24" />
         <h2 className="text-center text-3xl font-extrabold text-[#2B2D52]">{t('whoPlays')}</h2>
         <div className="grid grid-cols-2 gap-4">
           {store.profiles.map((p) => (
@@ -389,6 +398,7 @@ export default function KidsCorner({ userId }: { userId: string }) {
 
         {!inGame ? (
           <div className="grid gap-4">
+            <KumiGuide sound={store.sound} voice={store.voice} />
             <h2 className="text-center text-3xl font-extrabold text-[#2B2D52]">{t('menuTitle', { name: active.name })}</h2>
             <div className="grid grid-cols-2 gap-4">
               {GAMES.map(({ id, icon: Icon, tone }) => (
@@ -424,7 +434,14 @@ export default function KidsCorner({ userId }: { userId: string }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[2147483000] flex flex-col overflow-y-auto bg-[#F3F7FB] text-[#2B2D52]" style={{ backgroundImage: 'radial-gradient(#D9E3EE 1.4px, transparent 1.4px)', backgroundSize: '22px 22px', paddingTop: 'max(12px, env(safe-area-inset-top))', paddingBottom: 'max(12px, env(safe-area-inset-bottom))', paddingLeft: 'max(12px, env(safe-area-inset-left))', paddingRight: 'max(12px, env(safe-area-inset-right))' }}>
+    // Pressione lunga e tasto destro spenti: il menu del browser sulle
+    // immagini («Salva», «Condividi», «Apri in una nuova scheda») porterebbe
+    // fuori senza il codice del genitore
+    <div
+      onContextMenu={(e) => e.preventDefault()}
+      onDragStart={(e) => e.preventDefault()}
+      className="fixed inset-0 z-[2147483000] flex flex-col overflow-y-auto bg-[#F3F7FB] text-[#2B2D52] [-webkit-touch-callout:none]"
+      style={{ backgroundImage: 'radial-gradient(#D9E3EE 1.4px, transparent 1.4px)', backgroundSize: '22px 22px', paddingTop: 'max(12px, env(safe-area-inset-top))', paddingBottom: 'max(12px, env(safe-area-inset-bottom))', paddingLeft: 'max(12px, env(safe-area-inset-left))', paddingRight: 'max(12px, env(safe-area-inset-right))' }}>
       <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center">{screen}</div>
 
       {/* Codice del genitore */}
@@ -524,8 +541,18 @@ export default function KidsCorner({ userId }: { userId: string }) {
       )}
 
       {toast && (
-        <div className="fixed inset-x-0 bottom-6 z-30 mx-auto w-fit max-w-[90%] rounded-2xl bg-[#2B2D52] px-5 py-3 text-center font-bold text-white shadow-lg" role="status">
+        <div className="fixed inset-x-0 bottom-6 z-30 mx-auto flex w-fit max-w-[90%] items-center gap-2 rounded-2xl bg-[#2B2D52] py-2 pl-2 pr-5 text-left font-bold text-white shadow-lg" role="status">
+          <span className="w-11 shrink-0 rounded-xl bg-[#FFF6DA] p-0.5">
+            <Kumi move="jump" className="block h-auto w-full" />
+          </span>
           {toast}
+        </div>
+      )}
+
+      {bye && (
+        <div className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-4 bg-[#F3F7FB] p-6 text-center" role="status">
+          <Kumi move="sleep" mood="happy" className="block h-auto w-40" />
+          <p className="text-2xl font-extrabold text-[#2B2D52]">{t('kumi.bye')}</p>
         </div>
       )}
     </div>

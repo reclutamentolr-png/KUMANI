@@ -16036,7 +16036,8 @@
       "dinosauro": "Dinosaure",
       "pinguino": "Pingouin",
       "creatura": "Ma créature",
-      "disegno": "Dessin libre"
+      "disegno": "Dessin libre",
+      "kumi": "KUMI"
     },
     "parts": {
       "acqua": "Eau",
@@ -16166,7 +16167,10 @@
       "ruote": "Roues",
       "suole": "Semelles",
       "punteCoda": "Pointes de la queue",
-      "macchieAli": "Taches des ailes"
+      "macchieAli": "Taches des ailes",
+      "tentacoli": "Tentacules",
+      "ventose": "Ventouses",
+      "corona": "Couronne"
     },
     "praiseVoice": "Bravo, tu as colorié ton dessin ! {gender, select, girl {Tu es super douée !} other {Tu es super doué !}}",
     "moveVoice": {
@@ -16333,7 +16337,12 @@
     },
     "drawNew": "Nouvelle feuille",
     "drawDone": "Fini ! Dans l’album",
-    "drawEmpty": "La feuille est encore blanche : dessine quelque chose !"
+    "drawEmpty": "La feuille est encore blanche : dessine quelque chose !",
+    "kumi": {
+      "tips": "Coucou ! Je suis KUMI, le poulpe à la couronne.|Touche un jeu et amusons-nous ensemble !|J'ai cinq tentacules : quatre pour les jeux et un pour te faire un câlin !|Chaque dessin terminé te fait gagner une étoile !|Tu sais quoi ? Tu peux me colorier aussi !",
+      "bye": "Au revoir, à bientôt !",
+      "alt": "KUMI, le poulpe à la couronne"
+    }
   },
   "textShield": {
     "badge": "Avant d'utiliser l'IA",

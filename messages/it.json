@@ -16036,7 +16036,8 @@
       "dinosauro": "Dinosauro",
       "pinguino": "Pinguino",
       "creatura": "La mia creatura",
-      "disegno": "Disegno libero"
+      "disegno": "Disegno libero",
+      "kumi": "KUMI"
     },
     "parts": {
       "acqua": "Acqua",
@@ -16166,7 +16167,10 @@
       "ruote": "Ruote",
       "suole": "Suole",
       "punteCoda": "Punte della coda",
-      "macchieAli": "Macchie delle ali"
+      "macchieAli": "Macchie delle ali",
+      "tentacoli": "Tentacoli",
+      "ventose": "Ventose",
+      "corona": "Corona"
     },
     "praiseVoice": "Complimenti, hai colorato il tuo disegno! {gender, select, girl {Sei bravissima!} other {Sei bravissimo!}}",
     "moveVoice": {
@@ -16333,7 +16337,12 @@
     },
     "drawNew": "Nuovo foglio",
     "drawDone": "Fatto! Nell’album",
-    "drawEmpty": "Il foglio è ancora bianco: disegna qualcosa!"
+    "drawEmpty": "Il foglio è ancora bianco: disegna qualcosa!",
+    "kumi": {
+      "tips": "Ciao! Sono KUMI, il polpo con la corona.|Tocca un gioco e divertiamoci insieme!|Ho cinque tentacoli: quattro per i giochi e uno per abbracciarti!|Ogni disegno finito ti regala una stella!|Lo sapevi? Puoi colorare anche me!",
+      "bye": "Ciao ciao, a presto!",
+      "alt": "KUMI, il polpo con la corona"
+    }
   },
   "textShield": {
     "badge": "Prima di usare l'IA",

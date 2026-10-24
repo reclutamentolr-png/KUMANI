@@ -16036,7 +16036,8 @@
       "dinosauro": "Dinossauro",
       "pinguino": "Pinguim",
       "creatura": "A minha criatura",
-      "disegno": "Desenho livre"
+      "disegno": "Desenho livre",
+      "kumi": "KUMI"
     },
     "parts": {
       "acqua": "Água",
@@ -16166,7 +16167,10 @@
       "ruote": "Rodas",
       "suole": "Solas",
       "punteCoda": "Espinhos da cauda",
-      "macchieAli": "Manchas das asas"
+      "macchieAli": "Manchas das asas",
+      "tentacoli": "Tentáculos",
+      "ventose": "Ventosas",
+      "corona": "Coroa"
     },
     "praiseVoice": "Parabéns, pintaste o teu desenho! És espetacular!",
     "moveVoice": {
@@ -16333,7 +16337,12 @@
     },
     "drawNew": "Folha nova",
     "drawDone": "Pronto! Para o álbum",
-    "drawEmpty": "A folha ainda está em branco: desenha alguma coisa!"
+    "drawEmpty": "A folha ainda está em branco: desenha alguma coisa!",
+    "kumi": {
+      "tips": "Olá! Eu sou o KUMI, o polvo com coroa.|Toca num jogo e vamos divertir-nos juntos!|Tenho cinco tentáculos: quatro para os jogos e um para te abraçar!|Cada desenho terminado dá-te uma estrela!|Sabias? Também me podes pintar!",
+      "bye": "Adeus, até breve!",
+      "alt": "KUMI, o polvo com coroa"
+    }
   },
   "textShield": {
     "badge": "Antes de usar a IA",
