@@ -7693,6 +7693,10 @@
       "pro": {
         "title": "Servizi Pro",
         "text": "Gli strumenti per chi lavora con i clienti: menù, tessera fedeltà, preventivi, ricevute e altro."
+      },
+      "kids": {
+        "title": "Bambini",
+        "text": "I giochi creativi dell’Angolo Bambini, con KUMI come guida e il codice del genitore."
       }
     },
     "registrazione": {
@@ -8722,6 +8726,34 @@
       "step4Text": "Dalla pagina il cliente sceglie il servizio, il giorno e l’ora tra quelli liberi e lascia nome, telefono ed email. Non serve iscriversi. Riceve la conferma, il promemoria la sera prima e il link per disdire.",
       "step5Title": "La tua agenda",
       "step5Text": "Ogni nuova prenotazione ti arriva per email, nella campanella e sul telefono. Nell’agenda vedi la settimana: chiami o scrivi su WhatsApp con un tocco, aggiungi una nota, annulli (il cliente riceve un’email) o segni chi non si è presentato. Con «Aggiungi» inserisci gli appuntamenti presi al telefono."
+    },
+    "angolo_bambini": {
+      "title": "Angolo Bambini",
+      "summary": "I giochi creativi per i bambini, con KUMI come guida: colorano, inventano animali, suonano e disegnano in un’area chiusa dal codice del genitore. Senza IA, e nulla lascia il telefono.",
+      "cta": "Apri l’Angolo Bambini",
+      "step1Title": "Il codice del genitore",
+      "step1Text": "La prima volta scegli un codice di 4 cifre. Da quel momento l’Angolo Bambini resta chiuso: il bambino non può tornare al resto di KUMANI, cambiare pagina o condividere i disegni senza il codice. Il codice resta solo nel telefono.",
+      "step1Tip": "Se dimentichi il codice esci da KUMANI e rientri con la tua password: ne crei uno nuovo, e bambini e disegni restano.",
+      "step2Title": "Chi gioca",
+      "step2Text": "Aggiungi ogni bambino con nome, bambino o bambina ed età. L’età decide quanti dettagli hanno i disegni e quanti colori ci sono. Nome, età e disegni restano solo in questo telefono: non arrivano a KUMANI né a nessun altro.",
+      "step2Tip": "Per aggiungere, cambiare o cancellare un bambino serve il codice.",
+      "step3Title": "KUMI e i quattro giochi",
+      "step3Text": "KUMI, il polpo con la corona, accoglie il bambino e a ogni tocco gli dà un consiglio, anche a voce. Sotto ci sono i quattro giochi. In alto le stelle vinte, l’album, i suoni, la voce e il lucchetto per uscire.",
+      "step4Title": "Colora e Anima",
+      "step4Text": "Il bambino tocca un colore e poi una parte del disegno. Quando la figura è tutta colorata si sveglia e KUMI arriva ballando a fare i complimenti, chiamandolo per nome. Poi la figura saluta, balla, salta o va a nanna. Dai 5 anni ci sono anche le missioni («colora la pancia di rosso») che regalano stelle.",
+      "step4Tip": "Ci sono 20 disegni, KUMI compreso: «Nuovo disegno» ne sceglie uno adatto all’età, la griglia li mostra tutti.",
+      "step5Title": "Crea il tuo animale",
+      "step5Text": "Si sceglie un pezzo alla volta: testa, orecchie o corna, corpo, braccia, piedi, coda e ali. La creatura riceve un nome buffo, poi si colora e prende vita come gli altri disegni.",
+      "step6Title": "La musica dei colori",
+      "step6Text": "Ogni colore è una nota: il bambino colora i fiori della fila, preme «Suona» e il suo personaggio balla sulla melodia. Può cambiare strumento e velocità e salvare fino a 12 canzoni.",
+      "step6Tip": "Le note sono scelte in modo che qualunque combinazione suoni bene.",
+      "step7Title": "Disegno libero",
+      "step7Text": "Un foglio bianco con i pennelli magici: arcobaleno, stelline, timbri, gomma e sfondo. Con lo specchio ogni tratto si ripete dall’altra parte. «Fatto! Nell’album» mette il disegno nell’album.",
+      "step8Title": "Album, stampa e WhatsApp",
+      "step8Text": "I disegni finiti vanno nell’album di ogni bambino. Per salvarli nel telefono, mandarli su WhatsApp o stampare il PDF serve il codice del genitore. Si può stampare anche lo stesso disegno senza colori, da colorare con i pastelli veri.",
+      "step9Title": "Uscire e bloccare il telefono",
+      "step9Text": "Per tornare a KUMANI tocca il lucchetto in alto e inserisci il codice: KUMI saluta e si esce. Anche il tasto «indietro» resta dentro il gioco.",
+      "step9Tip": "Per bloccare davvero il telefono su KUMANI usa «Accesso guidato» su iPhone (Impostazioni › Accessibilità) o «Blocco app» su Android (Impostazioni › Sicurezza): il bambino non può uscire neanche con il tasto Home."
     }
   },
   "deckTexts": {

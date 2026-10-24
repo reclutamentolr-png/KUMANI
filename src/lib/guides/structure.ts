@@ -6,7 +6,7 @@ import type { GuideCategory, GuideSlug } from '@/lib/guides/types'
 
 export type GuideStructure = { slug: GuideSlug; category: GuideCategory; minutes: number; steps: number; href: string }
 
-export const GUIDE_CATEGORIES: GuideCategory[] = ['start', 'promote', 'wallet', 'promoteTools', 'security', 'community', 'organize', 'pro', 'wellness']
+export const GUIDE_CATEGORIES: GuideCategory[] = ['start', 'promote', 'wallet', 'promoteTools', 'security', 'community', 'organize', 'pro', 'wellness', 'kids']
 
 export const GUIDE_STRUCTURE: GuideStructure[] = [
   { slug: 'registrazione', category: 'start', minutes: 3, steps: 4, href: '/register' },
@@ -79,4 +79,5 @@ export const GUIDE_STRUCTURE: GuideStructure[] = [
   { slug: 'cronobioma', category: 'wellness', minutes: 4, steps: 5, href: '/app/cronobioma' },
   { slug: 'tempus', category: 'pro', minutes: 4, steps: 5, href: '/app/tempus' },
   { slug: 'travel', category: 'wellness', minutes: 2, steps: 2, href: '/viaggi' },
+  { slug: 'angolo-bambini', category: 'kids', minutes: 5, steps: 9, href: '/app/angolo-bambini' },
 ]

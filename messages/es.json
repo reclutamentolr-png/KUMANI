@@ -7693,6 +7693,10 @@
       "pro": {
         "title": "Servicios Pro",
         "text": "Las herramientas para quien trabaja con clientes: carta, tarjeta de fidelidad, presupuestos, recibos y más."
+      },
+      "kids": {
+        "title": "Niños",
+        "text": "Los juegos creativos del Rincón de los niños, con KUMI como guía y el código del adulto."
       }
     },
     "registrazione": {
@@ -8722,6 +8726,34 @@
       "step4Text": "En tu página el cliente elige el servicio, el día y una hora libre y deja su nombre, teléfono y email. No necesita registrarse. Recibe la confirmación, un recordatorio la tarde anterior y el enlace para cancelar.",
       "step5Title": "Tu agenda",
       "step5Text": "Cada nueva reserva te llega por email, en la campana y al móvil. En la agenda ves la semana: llama o escribe por WhatsApp con un toque, añade una nota, cancela (el cliente recibe un email) o marca a quien no se presentó. Con «Añadir» registras las citas tomadas por teléfono."
+    },
+    "angolo_bambini": {
+      "title": "Rincón de los niños",
+      "summary": "Juegos creativos para niños, con KUMI como guía: colorean, inventan animales, hacen música y dibujan en un espacio cerrado con el código del adulto. Sin IA, y nada sale del teléfono.",
+      "cta": "Abrir el Rincón de los niños",
+      "step1Title": "El código del adulto",
+      "step1Text": "La primera vez eliges un código de 4 cifras. Desde entonces el Rincón de los niños queda cerrado: el niño no puede volver al resto de KUMANI, cambiar de página ni compartir los dibujos sin el código. El código se queda solo en el teléfono.",
+      "step1Tip": "Si olvidas el código, sal de KUMANI y vuelve a entrar con tu contraseña: creas uno nuevo y los niños y los dibujos se conservan.",
+      "step2Title": "Quién juega",
+      "step2Text": "Añade a cada niño con su nombre, niño o niña, y su edad. La edad decide cuántos detalles tienen los dibujos y cuántos colores hay. Nombre, edad y dibujos se quedan solo en este teléfono: no llegan a KUMANI ni a nadie más.",
+      "step2Tip": "Para añadir, cambiar o borrar a un niño hace falta el código.",
+      "step3Title": "KUMI y los cuatro juegos",
+      "step3Text": "KUMI, el pulpo con corona, recibe al niño y a cada toque le da un consejo, también en voz alta. Debajo están los cuatro juegos. Arriba: las estrellas ganadas, el álbum, los sonidos, la voz y el candado para salir.",
+      "step4Title": "Colorea y anima",
+      "step4Text": "El niño toca un color y luego una parte del dibujo. Cuando la figura está toda coloreada se despierta y KUMI llega bailando a felicitarlo por su nombre. Luego la figura saluda, baila, salta o se va a dormir. Desde los 5 años también hay misiones («colorea la barriga de rojo») que dan estrellas.",
+      "step4Tip": "Hay 20 dibujos, KUMI incluido: «Nuevo dibujo» elige uno adecuado a la edad y la cuadrícula los muestra todos.",
+      "step5Title": "Crea tu animal",
+      "step5Text": "Se elige una pieza cada vez: cabeza, orejas o cuernos, cuerpo, brazos, pies, cola y alas. La criatura recibe un nombre divertido, luego se colorea y cobra vida como los demás dibujos.",
+      "step6Title": "La música de los colores",
+      "step6Text": "Cada color es una nota: el niño colorea las flores de la fila, pulsa «Toca» y su personaje baila con la melodía. Puede cambiar de instrumento y de velocidad y guardar hasta 12 canciones.",
+      "step6Tip": "Las notas están elegidas para que cualquier combinación suene bien.",
+      "step7Title": "Dibujo libre",
+      "step7Text": "Una hoja en blanco con pinceles mágicos: arcoíris, estrellitas, sellos, goma y fondo. Con el espejo cada trazo se repite al otro lado. «¡Listo! Al álbum» guarda el dibujo en el álbum.",
+      "step8Title": "Álbum, impresión y WhatsApp",
+      "step8Text": "Los dibujos terminados van al álbum de cada niño. Para guardarlos en el teléfono, enviarlos por WhatsApp o imprimir el PDF hace falta el código del adulto. También se puede imprimir el mismo dibujo sin colores, para colorearlo con lápices de verdad.",
+      "step9Title": "Salir y bloquear el teléfono",
+      "step9Text": "Para volver a KUMANI toca el candado de arriba e introduce el código: KUMI se despide y se sale. El botón «atrás» también se queda dentro del juego.",
+      "step9Tip": "Para bloquear de verdad el teléfono en KUMANI usa «Acceso guiado» en iPhone (Ajustes › Accesibilidad) o «Fijar aplicaciones» en Android (Ajustes › Seguridad): el niño no puede salir ni con el botón de inicio."
     }
   },
   "deckTexts": {

@@ -7693,6 +7693,10 @@
       "pro": {
         "title": "Pro-Dienste",
         "text": "Die Werkzeuge für alle, die mit Kunden arbeiten: Speisekarte, Treuekarte, Angebote, Quittungen und mehr."
+      },
+      "kids": {
+        "title": "Kinder",
+        "text": "Die kreativen Spiele der Kinderecke, mit KUMI als Begleiter und dem Eltern-Code."
       }
     },
     "registrazione": {
@@ -8722,6 +8726,34 @@
       "step4Text": "Auf deiner Seite wählt der Kunde Leistung, Tag und eine freie Uhrzeit und gibt Name, Telefon und E-Mail an. Eine Anmeldung ist nicht nötig. Er bekommt die Bestätigung, eine Erinnerung am Vorabend und den Link zum Stornieren.",
       "step5Title": "Dein Kalender",
       "step5Text": "Jede neue Buchung erreicht dich per E-Mail, in der Glocke und auf dem Handy. Im Kalender siehst du die Woche: mit einem Tipp anrufen oder per WhatsApp schreiben, eine Notiz hinzufügen, stornieren (der Kunde bekommt eine E-Mail) oder ein Nichterscheinen markieren. Mit «Hinzufügen» trägst du telefonisch vereinbarte Termine ein."
+    },
+    "angolo_bambini": {
+      "title": "Kinderecke",
+      "summary": "Kreative Spiele für Kinder, mit KUMI als Begleiter: Sie malen aus, erfinden Tiere, machen Musik und zeichnen in einem Bereich, der mit dem Eltern-Code gesperrt ist. Ohne KI, und nichts verlässt das Handy.",
+      "cta": "Kinderecke öffnen",
+      "step1Title": "Der Eltern-Code",
+      "step1Text": "Beim ersten Mal wählen Sie einen 4-stelligen Code. Ab dann bleibt die Kinderecke gesperrt: Ihr Kind kann ohne den Code nicht zum Rest von KUMANI zurück, die Seite wechseln oder Bilder teilen. Der Code bleibt nur auf dem Handy.",
+      "step1Tip": "Wenn Sie den Code vergessen, melden Sie sich bei KUMANI ab und mit Ihrem Passwort wieder an: Sie legen einen neuen fest, Kinder und Bilder bleiben erhalten.",
+      "step2Title": "Wer spielt",
+      "step2Text": "Legen Sie jedes Kind mit Namen, Junge oder Mädchen und Alter an. Das Alter bestimmt, wie detailliert die Bilder sind und wie viele Farben es gibt. Name, Alter und Bilder bleiben nur auf diesem Handy: Sie erreichen weder KUMANI noch sonst jemanden.",
+      "step2Tip": "Zum Hinzufügen, Ändern oder Löschen eines Kindes braucht man den Code.",
+      "step3Title": "KUMI und die vier Spiele",
+      "step3Text": "KUMI, der Krake mit der Krone, begrüßt Ihr Kind und gibt bei jedem Tippen einen neuen Tipp, auch laut vorgelesen. Darunter stehen die vier Spiele. Oben: gewonnene Sterne, das Album, Töne, Stimme und das Schloss zum Verlassen.",
+      "step4Title": "Ausmalen und beleben",
+      "step4Text": "Ihr Kind tippt auf eine Farbe und dann auf einen Teil des Bildes. Ist die Figur ganz ausgemalt, wacht sie auf, und KUMI tanzt herein und lobt Ihr Kind mit Namen. Danach winkt die Figur, tanzt, springt oder schläft. Ab 5 Jahren gibt es auch Aufgaben („Male den Bauch rot an“), die Sterne bringen.",
+      "step4Tip": "Es gibt 20 Bilder, KUMI inklusive: „Neues Bild“ wählt eines passend zum Alter, das Raster zeigt alle.",
+      "step5Title": "Erfinde dein Tier",
+      "step5Text": "Man wählt ein Teil nach dem anderen: Kopf, Ohren oder Hörner, Körper, Arme, Füße, Schwanz und Flügel. Das Wesen bekommt einen lustigen Namen, wird ausgemalt und erwacht wie die anderen Bilder zum Leben.",
+      "step6Title": "Die Musik der Farben",
+      "step6Text": "Jede Farbe ist ein Ton: Ihr Kind malt die Blumen der Reihe aus, drückt auf „Spielen“, und seine Figur tanzt zur Melodie. Instrument und Tempo lassen sich ändern, bis zu 12 Lieder können gespeichert werden.",
+      "step6Tip": "Die Töne sind so gewählt, dass jede Kombination gut klingt.",
+      "step7Title": "Freies Malen",
+      "step7Text": "Ein leeres Blatt mit Zauberpinseln: Regenbogen, Sternchen, Stempel, Radierer und Hintergrund. Mit dem Spiegel wiederholt sich jeder Strich auf der anderen Seite. „Fertig! Ins Album“ legt das Bild ins Album.",
+      "step8Title": "Album, Drucken und WhatsApp",
+      "step8Text": "Fertige Bilder kommen in das Album jedes Kindes. Zum Speichern auf dem Handy, Senden per WhatsApp oder Drucken als PDF braucht man den Eltern-Code. Man kann dasselbe Bild auch ohne Farben drucken, zum Ausmalen mit echten Stiften.",
+      "step9Title": "Verlassen und Handy sperren",
+      "step9Text": "Um zu KUMANI zurückzukehren, tippen Sie oben auf das Schloss und geben den Code ein: KUMI winkt zum Abschied, und Sie sind draußen. Auch die „Zurück“-Taste bleibt im Spiel.",
+      "step9Tip": "Um das Handy wirklich auf KUMANI zu sperren, nutzen Sie „Geführter Zugriff“ auf dem iPhone (Einstellungen › Bedienungshilfen) oder „App-Fixierung“ auf Android (Einstellungen › Sicherheit): Ihr Kind kann nicht einmal mit der Home-Taste hinaus."
     }
   },
   "deckTexts": {

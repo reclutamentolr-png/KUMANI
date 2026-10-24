@@ -70,6 +70,7 @@ export const TOOL_GUIDES: { path: string; slug: GuideSlug }[] = [
   { path: '/app/cronobioma', slug: 'cronobioma' },
   { path: '/app/tempus', slug: 'tempus' },
   { path: '/viaggi', slug: 'travel' },
+  { path: '/app/angolo-bambini', slug: 'angolo-bambini' },
 ]
 
 // Pagine di chi arriva da un invito (risponde o entra con un link): la guida
