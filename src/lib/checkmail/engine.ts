@@ -388,6 +388,8 @@ function extractLinks(html: string | undefined, text: string | undefined): Link[
   }
   const plain = text ?? ''
   for (const match of plain.matchAll(/https?:\/\/[^\s<>"')\]]+/gi)) push(match[0], '')
+  // «www.sito.it/…» scritto senza https:// (testo copiato dal telefono)
+  for (const match of plain.matchAll(/(?<![\w/.@-])www\.[^\s<>"')\]]+/gi)) push(`https://${match[0]}`, '')
   // Senza doppioni
   const seen = new Set<string>()
   return links.filter((l) => (seen.has(l.href + '|' + l.text) ? false : (seen.add(l.href + '|' + l.text), true)))

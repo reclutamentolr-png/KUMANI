@@ -139,10 +139,12 @@ export default function ListingsReviewPanel() {
                         {l.flags.map((f, i) => (
                           <li
                             key={i}
-                            className={`rounded-lg px-2.5 py-1.5 text-xs font-semibold ${f.kind === 'scam_link' || f.kind === 'scam_iban' || f.kind === 'spy_link' ? 'bg-red-100 text-red-800' : 'bg-amber-50 text-amber-900'}`}
+                            className={`rounded-lg px-2.5 py-1.5 text-xs font-semibold ${f.kind === 'scam_link' || f.kind === 'scam_iban' || f.kind === 'spy_link' || f.kind === 'phish_link' ? 'bg-red-100 text-red-800' : 'bg-amber-50 text-amber-900'}`}
                           >
                             {f.kind === 'spy_link' && `🕵️ Link spia (registra IP e posizione di chi lo apre): ${f.value}`}
                             {f.kind === 'scam_link' && `⛔ Link negli elenchi truffa (${f.source}): ${f.value}`}
+                            {f.kind === 'phish_link' && `🎣 Link a una finta pagina di accesso ${f.brand}: ${f.value} → ${f.landing}`}
+                            {f.kind === 'redirect_link' && `↪️ Link che porta su un altro sito: ${f.value} → ${f.landing} (non risulta negli elenchi truffa)`}
                             {f.kind === 'scam_iban' && `⛔ IBAN segnalato dalla Rete antitruffa (${f.reports}): ${f.value}`}
                             {f.kind === 'link' && `🔗 Contiene un link: ${f.value} (non risulta negli elenchi truffa)`}
                             {f.kind === 'iban' && `🏦 Contiene un IBAN: ${f.value} (non segnalato)`}

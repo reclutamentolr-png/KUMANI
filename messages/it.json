@@ -2121,6 +2121,8 @@
       "typePayment": "Richiesta Pagamento",
       "typeText": "Testo Puro",
       "redirectTo": "Reindirizza a",
+      "redirectFrom": "Link che hai controllato",
+      "redirectDest": "Dove arrivi davvero",
       "noRedirects": "Nessun redirect",
       "multipleRedirects": "{count} redirect rilevati",
       "impersonation": "Possibile Impersonificazione",
@@ -2173,7 +2175,14 @@
       "indicatorGoogleMalware": "Google segnala questo link come sito che diffonde virus: non aprirlo.",
       "indicatorGoogleUnwanted": "Google segnala questo link perché fa scaricare programmi indesiderati.",
       "indicatorGoogleClean": "Google non segnala questo link come pericoloso",
-      "indicatorScamList": "Il sito {domain} è in un elenco di siti truffa (autorità o phishing): non aprirlo."
+      "indicatorScamList": "Il sito {domain} è in un elenco di siti truffa (autorità o phishing): non aprirlo.",
+      "phishingAlertTitle": "Attenzione: è una finta pagina per rubare i dati",
+      "landingTitle": "Dove porta davvero questo QR",
+      "indicatorRedirectOtherSite": "Il link non resta su {from}: porta su un altro sito, {to}. I controlli sono fatti sul sito d’arrivo.",
+      "indicatorPhishingPage": "Finta pagina di accesso: chiede codice utente e password presentandosi come {brand}, ma il sito è {domain} e non appartiene a {brand} (il sito vero è {official}). È phishing: serve a rubare l’accesso al conto. Non inserire nulla e, se l’hai già fatto, cambia subito la password e avvisa {brand}.",
+      "indicatorPhishingCard": "Finta pagina di pagamento: chiede i dati della carta presentandosi come {brand}, ma il sito è {domain} e non appartiene a {brand} (il sito vero è {official}). È phishing: serve a rubare la carta. Non inserire nulla e, se l’hai già fatto, blocca subito la carta chiamando la tua banca.",
+      "indicatorCommunityConfirmed": "Segnalato come truffa dalla community ({count}) e confermato dallo Staff KUMANI: non aprirlo.",
+      "indicatorIpLogger": "{domain} è un link spia: chi lo apre consegna indirizzo IP, zona e dispositivo. Non aprirlo."
     },
     "checkLookalike": "Somiglianza a siti noti",
     "lookalikeRisk": "Attenzione: somiglia a {brand} ma non è un suo sito ufficiale (il sito vero è {official}). È il trucco più usato per rubare dati e soldi.",
@@ -2224,7 +2233,13 @@
     "scamPatternRecovery": "Promette di recuperare o sbloccare fondi e criptovalute, con altri segnali di rischio (dominio giovane o contatti solo via Telegram). È lo schema della truffa del «recupero fondi»: non pagare nulla e non lasciare dati.",
     "scamPatternAuthority": "Si dichiara autorizzato o certificato dalla CONSOB, dalla Banca d’Italia o dall’IVASS, ma è un sito giovane o fatto con un costruttore automatico. Le autorità non «certificano» siti: verifica sui loro elenchi ufficiali.",
     "scamPatternTopic": "Parla di recupero o sblocco di fondi e criptovalute: è il tema della truffa del «recupero fondi». Se ti chiedono soldi o dati per recuperare quanto perso, è quasi sempre una truffa.",
-    "scamPatternLoan": "Promette prestiti anche a chi è in «lista nera» o è cattivo pagatore, con tassi agevolati «per tutti» o sovvenzioni pubbliche, su un sito giovane. È la truffa del «prestito facile»: prima o poi ti chiedono una commissione o un deposito e il prestito non arriva mai. Non pagare nulla in anticipo."
+    "scamPatternLoan": "Promette prestiti anche a chi è in «lista nera» o è cattivo pagatore, con tassi agevolati «per tutti» o sovvenzioni pubbliche, su un sito giovane. È la truffa del «prestito facile»: prima o poi ti chiedono una commissione o un deposito e il prestito non arriva mai. Non pagare nulla in anticipo.",
+    "scamPatternPhishing": "Finta pagina di accesso: chiede codice utente e password presentandosi come {brand}, ma il sito è {domain} e non appartiene a {brand} (il sito vero è {official}). È phishing: serve a rubare l’accesso al conto. Non inserire nulla e, se l’hai già fatto, cambia subito la password e avvisa {brand}.",
+    "checkRedirect": "Dove porta davvero il link",
+    "redirectTo": "Il link non resta su {from}: ti porta su {to}. I controlli qui sotto sono fatti sul sito di arrivo, quello dove finiresti davvero.",
+    "redirectFrom": "Link che hai controllato",
+    "redirectDest": "Dove arrivi davvero",
+    "scamPatternPhishingCard": "Finta pagina di pagamento: chiede i dati della carta presentandosi come {brand}, ma il sito è {domain} e non appartiene a {brand} (il sito vero è {official}). È phishing: serve a rubare la carta. Non inserire nulla e, se l’hai già fatto, blocca subito la carta chiamando la tua banca."
   },
   "offermaker": {
     "aiLimitReached": "Hai raggiunto il limite giornaliero di generazioni AI: riprova domani.",
@@ -5717,7 +5732,10 @@
     "dossierLink": "Link verso: {domain}",
     "f_google_flagged": "Google segnala il link a {domain} come sito pericoloso (phishing o virus).",
     "f_scam_list": "Il sito {domain} è in un elenco di siti truffa (autorità o phishing).",
-    "f_link_ip_logger": "Contiene un link spia ({domain}): se lo apri, chi l’ha mandato vede il tuo indirizzo IP, la tua zona e il tuo dispositivo. Non aprirlo."
+    "f_link_ip_logger": "Contiene un link spia ({domain}): se lo apri, chi l’ha mandato vede il tuo indirizzo IP, la tua zona e il tuo dispositivo. Non aprirlo.",
+    "f_phishing_page": "Finta pagina di accesso: chiede codice utente e password presentandosi come {brand}, ma il sito è {domain} e non appartiene a {brand} (il sito vero è {official}). È phishing: serve a rubare l’accesso al conto. Non inserire nulla e, se l’hai già fatto, cambia subito la password e avvisa {brand}.",
+    "f_phishing_page_card": "Finta pagina di pagamento: chiede i dati della carta presentandosi come {brand}, ma il sito è {domain} e non appartiene a {brand} (il sito vero è {official}). È phishing: serve a rubare la carta. Non inserire nulla e, se l’hai già fatto, blocca subito la carta chiamando la tua banca.",
+    "f_link_redirects": "Un link porta su un altro sito: da {from} arriva a {to}. È lì che finiresti davvero."
   },
   "oxygen": {
     "title": "OXYGEN",

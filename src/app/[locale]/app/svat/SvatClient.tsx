@@ -22,6 +22,7 @@ import {
   XCircle,
   Clock,
   QrCode,
+  ArrowDown,
 } from 'lucide-react'
 import QRCheckScanner from '@/components/QRCheckScanner'
 import CommunityWarning from '@/components/scamNet/CommunityWarning'
@@ -338,16 +339,36 @@ export default function SvatClient({
               const listed = result.checks.find((c) => (c.id === 'scamList' || c.id === 'webRisk' || c.id === 'ipLogger' || c.id === 'scamPattern') && c.status === 'risk')
               if (!listed) return null
               return (
-                <div role="alert" className="rounded-2xl border-2 border-red-300 bg-red-50 p-5 text-red-900 shadow-sm">
-                  <p className="flex items-center gap-2 text-lg font-extrabold">
-                    <ShieldAlert className="h-6 w-6 shrink-0 text-red-600" aria-hidden /> {listed.id === 'ipLogger' ? t('ipLoggerAlertTitle') : listed.id === 'scamPattern' ? t('scamPatternAlertTitle') : t('scamListAlertTitle')}
+                <div role="alert" className="rounded-2xl border-2 border-red-400 bg-red-50 p-5 text-red-900 shadow-md sm:p-6">
+                  <p className="flex items-center gap-2 text-xl font-extrabold sm:text-2xl">
+                    <ShieldAlert className="h-7 w-7 shrink-0 text-red-600" aria-hidden /> {listed.id === 'ipLogger' ? t('ipLoggerAlertTitle') : listed.id === 'scamPattern' ? t('scamPatternAlertTitle') : t('scamListAlertTitle')}
                   </p>
-                  <p className="mt-2 text-sm leading-relaxed">{detailText(listed)}</p>
+                  <p className="mt-3 break-words text-base font-medium leading-relaxed sm:text-lg">{detailText(listed)}</p>
                   {listed.sourceUrl && (
                     <a href={listed.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-red-800 underline">
                       {t('scamListSource', { source: listed.source ?? '' })} <ExternalLink className="h-3 w-3" />
                     </a>
                   )}
+                </div>
+              )
+            })()}
+            {/* Il link porta su un altro sito: partenza e arrivo ben visibili, perché i controlli sono sul sito d'arrivo */}
+            {(() => {
+              const redirect = result.checks.find((c) => c.id === 'redirect' && c.detailsInterp?.from && c.detailsInterp?.to)
+              if (!redirect?.detailsInterp) return null
+              return (
+                <div className="rounded-2xl border-2 border-amber-400 bg-amber-50 p-5 text-amber-950 shadow-md sm:p-6">
+                  <p className="flex items-center gap-2 text-xl font-extrabold sm:text-2xl">
+                    <AlertTriangle className="h-7 w-7 shrink-0 text-amber-600" aria-hidden /> {t(redirect.name)}
+                  </p>
+                  <div className="mt-4 space-y-2">
+                    <p className="text-xs font-bold uppercase tracking-wide text-amber-800">{t('redirectFrom')}</p>
+                    <p className="break-all rounded-xl border border-amber-200 bg-white/70 px-4 py-2 font-mono text-sm text-amber-900">{redirect.detailsInterp.from}</p>
+                    <ArrowDown className="mx-auto h-6 w-6 text-amber-600" aria-hidden />
+                    <p className="text-xs font-bold uppercase tracking-wide text-amber-800">{t('redirectDest')}</p>
+                    <p className="break-all rounded-xl border-2 border-amber-500 bg-white px-4 py-3 font-mono text-base font-bold text-[var(--ink)] sm:text-lg">{redirect.detailsInterp.to}</p>
+                  </div>
+                  <p className="mt-4 text-base leading-relaxed">{detailText(redirect)}</p>
                 </div>
               )
             })()}
@@ -677,15 +698,30 @@ export default function SvatClient({
             <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6">
               <h3 className="text-lg font-semibold text-[var(--ink)] mb-4">{t('allChecks')}</h3>
               <div className="space-y-3">
-                {result.checks.map((c) => (
-                  <div key={c.id} className="flex flex-col gap-1 p-3 rounded-xl border border-[var(--gold)]/15 hover:bg-[var(--gold-pale)]/40 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
-                    <div className="flex items-center gap-3">
-                      <StatusIcon status={c.status} />
-                      <span className="font-medium text-[var(--ink)]">{t(c.name)}</span>
+                {result.checks.map((c) => {
+                  // I due controlli che l'utente deve capire subito: in evidenza anche qui
+                  const key = (c.id === 'scamPattern' && c.status === 'risk') || c.id === 'redirect'
+                  if (key) {
+                    return (
+                      <div key={c.id} className={`rounded-xl border-2 p-4 ${c.id === 'redirect' ? 'border-amber-400 bg-amber-50' : 'border-red-400 bg-red-50'}`}>
+                        <div className="flex items-center gap-3">
+                          <StatusIcon status={c.id === 'redirect' ? 'warning' : c.status} />
+                          <span className="font-bold text-[var(--ink)]">{t(c.name)}</span>
+                        </div>
+                        <p className={`mt-2 break-words text-sm font-medium leading-relaxed sm:text-base ${c.id === 'redirect' ? 'text-amber-950' : 'text-red-900'}`}>{detailText(c)}</p>
+                      </div>
+                    )
+                  }
+                  return (
+                    <div key={c.id} className="flex flex-col gap-1 p-3 rounded-xl border border-[var(--gold)]/15 hover:bg-[var(--gold-pale)]/40 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+                      <div className="flex items-center gap-3">
+                        <StatusIcon status={c.status} />
+                        <span className="font-medium text-[var(--ink)]">{t(c.name)}</span>
+                      </div>
+                      <span className="text-sm text-[var(--muted)] break-words sm:text-right">{detailText(c)}</span>
                     </div>
-                    <span className="text-sm text-[var(--muted)] break-words sm:text-right">{detailText(c)}</span>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             </div>
             )}

@@ -10,6 +10,7 @@ import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { isIpLoggerHost } from '@/lib/checkmail/engine'
 import { fetchWhoisText, parseWhois } from '@/lib/whois'
 import { parseVatInput, prettyVat, registryLookupUrl, verifyVies } from '@/lib/vat'
+import { asksPassword, inPageRedirect, phishingBrand, sameOwner } from '@/lib/linkInspect'
 
 interface SVATCheck {
   id: string
@@ -108,8 +109,36 @@ export async function POST(request: NextRequest) {
     // number of requests hitting the target site, lowering the odds that a
     // WAF/rate-limiter blocks some of them (which used to cost legitimate,
     // well-protected sites points for no fraud-related reason).
+    // Il link si segue fino in fondo prima dei controlli: un dominio vecchio e
+    // pulito (spesso violato) o un servizio di link brevi può rinviare a una
+    // pagina truffa su un altro sito (giuseppebello.com → flowcode.com → finta
+    // pagina di accesso Fineco, ottobre 2026). Si giudica il sito d'arrivo;
+    // quello di partenza resta controllato negli elenchi truffa.
+    const page = await fetchPageHtml(url)
+    const pagePromise = Promise.resolve(page)
+    let startDomain: string | null = null
+    if (page?.finalUrl) {
+      try {
+        const finalDomain = new URL(page.finalUrl).hostname.toLowerCase().replace(/^www\./, '')
+        if (!sameOwner(finalDomain, domain)) {
+          startDomain = domain
+          url = page.finalUrl
+          domain = finalDomain
+          checks.push({
+            id: 'redirect',
+            name: 'checkRedirect',
+            status: 'check',
+            points: 0,
+            details: `${startDomain} redirects to ${domain}`,
+            detailsKey: 'redirectTo',
+            detailsInterp: { from: startDomain, to: domain },
+          })
+        }
+      } catch {
+        startDomain = null
+      }
+    }
     const whoisTextPromise = fetchWhoisText(domain)
-    const pagePromise = fetchPageHtml(url)
 
     // Run all checks in parallel
     const results = await Promise.allSettled([
@@ -135,6 +164,8 @@ export async function POST(request: NextRequest) {
       checkPrices(pagePromise),
       checkPlaceholder(pagePromise),
       checkScamPatterns(pagePromise, domain, whoisTextPromise),
+      startDomain ? checkScamLists(startDomain) : Promise.resolve(null),
+      startDomain ? checkCommunity(startDomain) : Promise.resolve(null),
     ])
 
     results.forEach((r) => {
@@ -850,6 +881,8 @@ interface FetchedPage {
   // testo sta nel file principale dello stesso sito. Letto solo se la pagina
   // non ha testo, al massimo 2 file da 3 MB.
   scriptText?: string
+  // Indirizzo d'arrivo dopo i rinvii (redirect)
+  finalUrl?: string
 }
 
 // Testo dei file JavaScript del sito stesso (stesso dominio), per i siti che
@@ -891,22 +924,33 @@ function pageText(html: string) {
 
 async function fetchPageHtml(url: string): Promise<FetchedPage | null> {
   try {
-    const res = await safeFetch(url, {
-      headers: {
-        'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 SVAT-Checker/1.0',
-        Accept:
-          'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.5',
-      },
-      cache: 'no-store',
-    })
-    // Basta l'inizio della pagina (niente pagine giganti in memoria)
-    const html = (await res.text()).slice(0, 2_000_000)
+    let current = url
+    let res: Response | null = null
+    let html = ''
+    // Anche i rinvii scritti nella pagina (meta refresh, JavaScript), come un browser
+    for (let hop = 0; hop < 3; hop++) {
+      res = await safeFetch(current, {
+        headers: {
+          'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 SVAT-Checker/1.0',
+          Accept:
+            'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+          'Accept-Language': 'en-US,en;q=0.5',
+        },
+        cache: 'no-store',
+      })
+      current = res.url || current
+      // Basta l'inizio della pagina (niente pagine giganti in memoria)
+      html = (await res.text()).slice(0, 2_000_000)
+      const next = res.ok ? inPageRedirect(html, current) : null
+      if (!next || next === current) break
+      current = next
+    }
+    if (!res) return null
     const ok = res.status >= 200 && res.status < 300
     const readable = ok && pageText(html).length >= 200
-    const scriptText = ok && !readable ? await fetchOwnScripts(html, res.url || url).catch(() => '') : undefined
-    return { html, status: res.status, readable, scriptText }
+    const scriptText = ok && !readable ? await fetchOwnScripts(html, current).catch(() => '') : undefined
+    return { html, status: res.status, readable, scriptText, finalUrl: current }
   } catch {
     return null
   }
@@ -963,6 +1007,12 @@ async function checkScamPatterns(pagePromise: Promise<FetchedPage | null>, domai
   const signals = [recovery && 'recovery', authority && 'authority', telegram && 'telegram', young && 'young', builder && 'builder', badCredit && 'badCredit', subsidy && 'subsidy', fast && 'fast', aiText && 'aiText', hyphen && 'hyphen']
     .filter(Boolean)
     .join(',')
+  // Finta pagina di accesso o di pagamento (src/lib/linkInspect.ts)
+  const phished = page.status >= 200 && page.status < 300 ? phishingBrand(page.html, domain) : null
+  if (phished) {
+    const official = phished.domains[0]
+    return { id: 'scamPattern', name: 'checkScamPattern', status: 'risk', points: -70, details: `Fake ${phished.name} login page (${signals})`, detailsKey: asksPassword(page.html) ? 'scamPatternPhishing' : 'scamPatternPhishingCard', detailsInterp: { brand: phished.name, domain, official } }
+  }
   if (recovery && (authority || telegram || young)) {
     return { id: 'scamPattern', name: 'checkScamPattern', status: 'risk', points: -60, details: `Recovery-scam pattern (${signals})`, detailsKey: authority ? 'scamPatternRecoveryAuthority' : 'scamPatternRecovery' }
   }

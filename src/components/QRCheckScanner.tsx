@@ -18,6 +18,8 @@ import {
   XCircle,
   Users,
   RefreshCw,
+  ShieldAlert,
+  ArrowDown,
 } from 'lucide-react'
 
 interface QRIndicator {
@@ -35,6 +37,8 @@ interface QRAnalysis {
     badge: 'green' | 'yellow' | 'red'
     indicators: QRIndicator[]
     redirectChain?: Array<{ url: string; final: boolean }>
+    landing?: { from: string; to: string }
+    phishing?: { brand: string; domain: string; official: string; card: boolean }
     recommendations: string[]
     aiExplanation: string
   }
@@ -339,6 +343,38 @@ export default function QRCheckScanner() {
             <p className="text-xs text-[var(--muted)] mb-1">{t('destination')}</p>
             <p className="font-medium text-[var(--ink)] break-all">{getDestination(result)}</p>
           </div>
+
+          {/* Finta pagina di accesso: avviso in evidenza, è la cosa da capire subito */}
+          {result.analysis.phishing && (
+            <div role="alert" className="rounded-2xl border-2 border-red-400 bg-red-50 p-5 text-red-900 shadow-md">
+              <p className="flex items-center gap-2 text-lg font-extrabold sm:text-xl">
+                <ShieldAlert className="h-6 w-6 shrink-0 text-red-600" aria-hidden /> {t('phishingAlertTitle')}
+              </p>
+              <p className="mt-2 break-words text-base font-medium leading-relaxed">
+                {t(result.analysis.phishing.card ? 'indicatorPhishingCard' : 'indicatorPhishingPage', {
+                  brand: result.analysis.phishing.brand,
+                  domain: result.analysis.phishing.domain,
+                  official: result.analysis.phishing.official,
+                })}
+              </p>
+            </div>
+          )}
+
+          {/* Il link porta su un altro sito: partenza e arrivo ben visibili */}
+          {result.analysis.landing && (
+            <div className="rounded-2xl border-2 border-amber-400 bg-amber-50 p-5 text-amber-950 shadow-md">
+              <p className="flex items-center gap-2 text-lg font-extrabold sm:text-xl">
+                <AlertTriangle className="h-6 w-6 shrink-0 text-amber-600" aria-hidden /> {t('landingTitle')}
+              </p>
+              <div className="mt-3 space-y-2">
+                <p className="text-xs font-bold uppercase tracking-wide text-amber-800">{t('redirectFrom')}</p>
+                <p className="break-all rounded-xl border border-amber-200 bg-white/70 px-4 py-2 font-mono text-sm">{result.analysis.landing.from}</p>
+                <ArrowDown className="mx-auto h-6 w-6 text-amber-600" aria-hidden />
+                <p className="text-xs font-bold uppercase tracking-wide text-amber-800">{t('redirectDest')}</p>
+                <p className="break-all rounded-xl border-2 border-amber-500 bg-white px-4 py-3 font-mono text-base font-bold text-[var(--ink)]">{result.analysis.landing.to}</p>
+              </div>
+            </div>
+          )}
 
           <p className="text-sm text-[var(--muted)]">{t(aiExplanationKey)}</p>
 

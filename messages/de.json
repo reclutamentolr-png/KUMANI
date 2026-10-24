@@ -2257,6 +2257,8 @@
       "typePayment": "Zahlungsaufforderung",
       "typeText": "Reiner Text",
       "redirectTo": "Leitet weiter zu",
+      "redirectFrom": "Geprüfter Link",
+      "redirectDest": "Wo du wirklich landest",
       "noRedirects": "Keine Weiterleitungen",
       "multipleRedirects": "{count} Weiterleitung(en) erkannt",
       "impersonation": "Mögliche Identitätsfälschung",
@@ -2309,7 +2311,14 @@
       "indicatorGoogleMalware": "Google meldet diesen Link als Virenschleuder: nicht öffnen.",
       "indicatorGoogleUnwanted": "Google meldet diesen Link wegen unerwünschter Software.",
       "indicatorGoogleClean": "Google stuft diesen Link nicht als gefährlich ein",
-      "indicatorScamList": "{domain} steht auf einer Liste von Betrugsseiten (Behörden oder Phishing): nicht öffnen."
+      "indicatorScamList": "{domain} steht auf einer Liste von Betrugsseiten (Behörden oder Phishing): nicht öffnen.",
+      "phishingAlertTitle": "Achtung: gefälschte Seite zum Datendiebstahl",
+      "landingTitle": "Wohin dieser QR-Code wirklich führt",
+      "indicatorRedirectOtherSite": "Der Link bleibt nicht auf {from}: Er führt zu einer anderen Seite, {to}. Geprüft wird die Zielseite.",
+      "indicatorPhishingPage": "Gefälschte Anmeldeseite: Sie fragt nach Benutzerkennung und Passwort und gibt sich als {brand} aus, aber die Seite ist {domain} und gehört nicht zu {brand} (die echte Seite ist {official}). Das ist Phishing, um den Zugang zu deinem Konto zu stehlen. Gib nichts ein; falls schon geschehen, ändere sofort dein Passwort und informiere {brand}.",
+      "indicatorPhishingCard": "Gefälschte Zahlungsseite: Sie fragt nach Kartendaten und gibt sich als {brand} aus, aber die Seite ist {domain} und gehört nicht zu {brand} (die echte Seite ist {official}). Das ist Phishing, um deine Karte zu stehlen. Gib nichts ein; falls schon geschehen, lass die Karte sofort bei deiner Bank sperren.",
+      "indicatorCommunityConfirmed": "Von der Community als Betrug gemeldet ({count}) und vom KUMANI-Staff bestätigt: nicht öffnen.",
+      "indicatorIpLogger": "{domain} ist ein Spionage-Link: Wer ihn öffnet, verrät IP-Adresse, Region und Gerät. Nicht öffnen."
     },
     "securitySection": "Sicherheit & Schutz",
     "checkLookalike": "Ähnlichkeit mit bekannten Seiten",
@@ -2361,7 +2370,13 @@
     "scamPatternRecovery": "Verspricht, Gelder und Kryptowährungen zurückzuholen oder freizuschalten, mit weiteren Risikozeichen (junge Domain oder nur Telegram-Kontakt). Das ist das Muster des „Rückholungs“-Betrugs: nichts zahlen, keine Daten angeben.",
     "scamPatternAuthority": "Gibt sich als von CONSOB, Banca d’Italia oder IVASS zugelassen aus, ist aber eine junge oder automatisch erstellte Seite. Behörden „zertifizieren“ keine Seiten: prüfe ihre offiziellen Register.",
     "scamPatternTopic": "Es geht um das Zurückholen oder Freischalten von Geldern und Kryptowährungen: das Thema des „Rückholungs“-Betrugs. Wenn man Geld oder Daten verlangt, um Verlorenes zurückzuholen, ist es fast immer Betrug.",
-    "scamPatternLoan": "Verspricht Kredite auch für Personen auf der „schwarzen Liste“ oder mit schlechter Bonität, mit vergünstigten Zinsen „für alle“ oder staatlichen Zuschüssen, auf einer jungen Seite. Das ist der „Leichtkredit“-Betrug: Früher oder später verlangt man eine Gebühr oder Kaution und der Kredit kommt nie. Zahle nie etwas im Voraus."
+    "scamPatternLoan": "Verspricht Kredite auch für Personen auf der „schwarzen Liste“ oder mit schlechter Bonität, mit vergünstigten Zinsen „für alle“ oder staatlichen Zuschüssen, auf einer jungen Seite. Das ist der „Leichtkredit“-Betrug: Früher oder später verlangt man eine Gebühr oder Kaution und der Kredit kommt nie. Zahle nie etwas im Voraus.",
+    "scamPatternPhishing": "Gefälschte Anmeldeseite: Sie fragt nach Benutzerkennung und Passwort und gibt sich als {brand} aus, aber die Seite ist {domain} und gehört nicht zu {brand} (die echte Seite ist {official}). Das ist Phishing, um den Zugang zu deinem Konto zu stehlen. Gib nichts ein; falls schon geschehen, ändere sofort dein Passwort und informiere {brand}.",
+    "checkRedirect": "Wohin der Link wirklich führt",
+    "redirectTo": "Der Link bleibt nicht auf {from}: Er führt zu {to}. Die Prüfungen unten beziehen sich auf die Zielseite, auf der du tatsächlich landen würdest.",
+    "redirectFrom": "Geprüfter Link",
+    "redirectDest": "Wo du wirklich landest",
+    "scamPatternPhishingCard": "Gefälschte Zahlungsseite: Sie fragt nach Kartendaten und gibt sich als {brand} aus, aber die Seite ist {domain} und gehört nicht zu {brand} (die echte Seite ist {official}). Das ist Phishing, um deine Karte zu stehlen. Gib nichts ein; falls schon geschehen, lass die Karte sofort bei deiner Bank sperren."
   },
   "offermaker": {
     "aiLimitReached": "Du hast das Tageslimit für KI-Generierungen erreicht – versuch es morgen wieder.",
@@ -5717,7 +5732,10 @@
     "dossierLink": "Link zu: {domain}",
     "f_google_flagged": "Google meldet den Link zu {domain} als gefährlich (Phishing oder Viren).",
     "f_scam_list": "{domain} steht auf einer Liste von Betrugsseiten (Behörden oder Phishing).",
-    "f_link_ip_logger": "Enthält einen Spionage-Link ({domain}): Wenn du ihn öffnest, sieht der Absender deine IP-Adresse, deine Gegend und dein Gerät. Öffne ihn nicht."
+    "f_link_ip_logger": "Enthält einen Spionage-Link ({domain}): Wenn du ihn öffnest, sieht der Absender deine IP-Adresse, deine Gegend und dein Gerät. Öffne ihn nicht.",
+    "f_phishing_page": "Gefälschte Anmeldeseite: Sie fragt nach Benutzerkennung und Passwort und gibt sich als {brand} aus, aber die Seite ist {domain} und gehört nicht zu {brand} (die echte Seite ist {official}). Das ist Phishing, um den Zugang zu deinem Konto zu stehlen. Gib nichts ein; falls schon geschehen, ändere sofort dein Passwort und informiere {brand}.",
+    "f_phishing_page_card": "Gefälschte Zahlungsseite: Sie fragt nach Kartendaten und gibt sich als {brand} aus, aber die Seite ist {domain} und gehört nicht zu {brand} (die echte Seite ist {official}). Das ist Phishing, um deine Karte zu stehlen. Gib nichts ein; falls schon geschehen, lass die Karte sofort bei deiner Bank sperren.",
+    "f_link_redirects": "Ein Link führt auf eine andere Seite: von {from} nach {to}. Dort würdest du tatsächlich landen."
   },
   "oxygen": {
     "title": "OXYGEN",

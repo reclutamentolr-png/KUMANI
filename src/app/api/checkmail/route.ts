@@ -3,7 +3,8 @@ import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { awardToolPoint } from '@/lib/toolPoints'
-import { analyzeEmail, networkFindings, withFindings, type Finding, type Verdict } from '@/lib/checkmail/engine'
+import { BRANDS, analyzeEmail, isOfficial, networkFindings, withFindings, type Finding, type Verdict } from '@/lib/checkmail/engine'
+import { asksPassword, inspectLink, type LinkInspection } from '@/lib/linkInspect'
 import { findScamDomain } from '@/lib/scamDomains'
 import { webRiskLookup } from '@/lib/webRisk'
 import { msgToEml } from '@/lib/checkmail/msg'
@@ -46,6 +47,47 @@ async function blocklistFindings(summary: Verdict['summary']): Promise<Finding[]
   const flagged = google?.[0]
   if (flagged) found.push({ key: 'google_flagged', severity: 'high', points: 70, params: { domain: new URL(flagged.uri).hostname } })
   if (listed[0]) found.push({ key: 'scam_list', severity: 'high', points: 70, params: { domain: listed[0].domain } })
+  return found
+}
+
+// I link dell'email si aprono dal server come farebbe chi la riceve: si
+// seguono i rinvii fino al sito d'arrivo e si guarda la pagina. Un link a un
+// dominio pulito può portare a una finta pagina di accesso su un altro sito
+// (caso giuseppebello.com → finta Fineco, ottobre 2026). Mai i siti ufficiali
+// dei marchi né i link per cancellarsi (aprirli potrebbe cancellare davvero).
+const UNSUBSCRIBE_RE = /unsubscrib|opt-?out|disiscri|cancella(?:zione)?[-_]?iscri|desinscri|abmelden|darse-de-baja|preferences|preferenze/i
+const MAX_INSPECTED = 4
+
+async function inspectEmailLinks(summary: Verdict['summary']): Promise<LinkInspection[]> {
+  const urls = (summary.linkUrls ?? [])
+    .filter((u) => !UNSUBSCRIBE_RE.test(u))
+    .filter((u) => {
+      const host = new URL(u).hostname.toLowerCase()
+      return !BRANDS.some((b) => isOfficial(host, b))
+    })
+  // Un link per sito (il primo), al massimo 4
+  const seen = new Set<string>()
+  const picked = urls.filter((u) => {
+    const host = new URL(u).hostname.toLowerCase()
+    return seen.has(host) ? false : (seen.add(host), true)
+  }).slice(0, MAX_INSPECTED)
+  const results = await Promise.all(picked.map((u) => inspectLink(u, 10_000).catch(() => null)))
+  return results.filter((r): r is LinkInspection => !!r)
+}
+
+function inspectionFindings(inspected: LinkInspection[]): Finding[] {
+  const found: Finding[] = []
+  const phish = inspected.find((i) => i.phishingBrand)
+  if (phish?.phishingBrand) {
+    found.push({
+      key: asksPassword(phish.html) ? 'phishing_page' : 'phishing_page_card',
+      severity: 'high',
+      points: 80,
+      params: { brand: phish.phishingBrand.name, domain: phish.finalDomain, official: phish.phishingBrand.domains[0] },
+    })
+  }
+  const moved = inspected.find((i) => i.redirected)
+  if (moved) found.push({ key: 'link_redirects', severity: 'medium', points: 10, params: { from: moved.startDomain, to: moved.finalDomain } })
   return found
 }
 
@@ -104,9 +146,21 @@ export async function POST(request: NextRequest) {
 
     let aiAvailable = true
     const wantsAi = verdict.textSample.length > 20 || !!verdict.summary.subject
-    const [netFindings, listFindings, ai] = await Promise.all([
-      networkFindings(verdict.summary).catch(() => []),
-      blocklistFindings(verdict.summary).catch(() => []),
+    // I controlli di rete valgono anche per i siti d'arrivo dei link
+    const linkChecks = inspectEmailLinks(verdict.summary)
+      .catch(() => [] as LinkInspection[])
+      .then(async (inspected) => {
+        const finals = inspected.filter((i) => i.redirected)
+        const summary: Verdict['summary'] = {
+          ...verdict.summary,
+          linkDomains: [...new Set([...finals.map((i) => i.finalDomain), ...verdict.summary.linkDomains])].slice(0, 10),
+          linkUrls: [...new Set([...finals.map((i) => i.finalUrl), ...(verdict.summary.linkUrls ?? [])])].slice(0, 10),
+        }
+        const [net, list] = await Promise.all([networkFindings(summary).catch(() => []), blocklistFindings(summary).catch(() => [])])
+        return [...inspectionFindings(inspected), ...net, ...list]
+      })
+    const [linkFindings, ai] = await Promise.all([
+      linkChecks,
       wantsAi
         ? assessWithAi(verdict, locale).catch((error: unknown) => {
             // Un errore dell'IA non blocca il risultato dei controlli tecnici
@@ -116,7 +170,7 @@ export async function POST(request: NextRequest) {
           })
         : Promise.resolve<AiAssessment | null>(null),
     ])
-    verdict = withFindings(verdict, [...netFindings, ...listFindings])
+    verdict = withFindings(verdict, linkFindings)
     if (ai) verdict = applyAiAssessment(verdict, ai)
 
     await awardToolPoint('checkmail')

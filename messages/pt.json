@@ -2257,6 +2257,8 @@
       "typePayment": "Pedido de Pagamento",
       "typeText": "Texto Simples",
       "redirectTo": "Redireciona para",
+      "redirectFrom": "Link que verificaste",
+      "redirectDest": "Onde chegas realmente",
       "noRedirects": "Sem redirecionamentos",
       "multipleRedirects": "{count} redirecionamento(s) detetado(s)",
       "impersonation": "Possível Personificação",
@@ -2309,7 +2311,14 @@
       "indicatorGoogleMalware": "O Google assinala este link como site que espalha vírus: não o abras.",
       "indicatorGoogleUnwanted": "O Google assinala este link porque faz descarregar programas indesejados.",
       "indicatorGoogleClean": "O Google não assinala este link como perigoso",
-      "indicatorScamList": "{domain} está numa lista de sites de burla (autoridades ou phishing): não o abras."
+      "indicatorScamList": "{domain} está numa lista de sites de burla (autoridades ou phishing): não o abras.",
+      "phishingAlertTitle": "Atenção: é uma página falsa para roubar dados",
+      "landingTitle": "Para onde leva realmente este QR",
+      "indicatorRedirectOtherSite": "O link não fica em {from}: leva a outro site, {to}. Os controlos são feitos no site de chegada.",
+      "indicatorPhishingPage": "Página de acesso falsa: pede código de utilizador e palavra-passe fazendo-se passar por {brand}, mas o site é {domain} e não pertence a {brand} (o site verdadeiro é {official}). É phishing, serve para roubar o acesso à tua conta. Não introduzas nada; se já o fizeste, muda já a palavra-passe e avisa {brand}.",
+      "indicatorPhishingCard": "Página de pagamento falsa: pede os dados do cartão fazendo-se passar por {brand}, mas o site é {domain} e não pertence a {brand} (o site verdadeiro é {official}). É phishing, serve para roubar o cartão. Não introduzas nada; se já o fizeste, bloqueia já o cartão ligando ao teu banco.",
+      "indicatorCommunityConfirmed": "Denunciado como burla pela comunidade ({count}) e confirmado pelo Staff KUMANI: não o abras.",
+      "indicatorIpLogger": "{domain} é um link espião: abri-lo revela o teu IP, a tua zona e o dispositivo. Não o abras."
     },
     "securitySection": "Segurança e Proteção",
     "checkLookalike": "Semelhança com sites conhecidos",
@@ -2361,7 +2370,13 @@
     "scamPatternRecovery": "Promete recuperar ou desbloquear fundos e criptomoedas, com outros sinais de risco (domínio recente ou contacto só por Telegram). É o esquema da burla da «recuperação de fundos»: não pagues nada nem deixes os teus dados.",
     "scamPatternAuthority": "Diz-se autorizado ou certificado pela CONSOB, pela Banca d’Italia ou pelo IVASS, mas é um site recente ou feito com um criador automático. As autoridades não «certificam» sites: verifica os registos oficiais.",
     "scamPatternTopic": "Fala de recuperar ou desbloquear fundos e criptomoedas: o tema da burla da «recuperação de fundos». Se te pedem dinheiro ou dados para recuperar o que perdeste, é quase sempre burla.",
-    "scamPatternLoan": "Promete empréstimos até a quem está na «lista negra» ou é mau pagador, com taxas bonificadas «para todos» ou apoios públicos, num site recente. É a burla do «empréstimo fácil»: mais cedo ou mais tarde pedem uma comissão ou um depósito e o empréstimo nunca chega. Não pagues nada adiantado."
+    "scamPatternLoan": "Promete empréstimos até a quem está na «lista negra» ou é mau pagador, com taxas bonificadas «para todos» ou apoios públicos, num site recente. É a burla do «empréstimo fácil»: mais cedo ou mais tarde pedem uma comissão ou um depósito e o empréstimo nunca chega. Não pagues nada adiantado.",
+    "scamPatternPhishing": "Página de acesso falsa: pede código de utilizador e palavra-passe fazendo-se passar por {brand}, mas o site é {domain} e não pertence a {brand} (o site verdadeiro é {official}). É phishing, serve para roubar o acesso à tua conta. Não introduzas nada; se já o fizeste, muda já a palavra-passe e avisa {brand}.",
+    "checkRedirect": "Para onde o link leva realmente",
+    "redirectTo": "O link não fica em {from}: leva-te para {to}. Os controlos abaixo são feitos no site de chegada, onde irias realmente parar.",
+    "redirectFrom": "Link que verificaste",
+    "redirectDest": "Onde chegas realmente",
+    "scamPatternPhishingCard": "Página de pagamento falsa: pede os dados do cartão fazendo-se passar por {brand}, mas o site é {domain} e não pertence a {brand} (o site verdadeiro é {official}). É phishing, serve para roubar o cartão. Não introduzas nada; se já o fizeste, bloqueia já o cartão ligando ao teu banco."
   },
   "offermaker": {
     "aiLimitReached": "Atingiu o limite diário de gerações com IA: tente amanhã.",
@@ -5717,7 +5732,10 @@
     "dossierLink": "Link para: {domain}",
     "f_google_flagged": "O Google assinala o link para {domain} como site perigoso (phishing ou vírus).",
     "f_scam_list": "{domain} está numa lista de sites de burla (autoridades ou phishing).",
-    "f_link_ip_logger": "Contém um link espião ({domain}): se o abrires, quem o enviou vê o teu endereço IP, a tua zona e o teu dispositivo. Não o abras."
+    "f_link_ip_logger": "Contém um link espião ({domain}): se o abrires, quem o enviou vê o teu endereço IP, a tua zona e o teu dispositivo. Não o abras.",
+    "f_phishing_page": "Página de acesso falsa: pede código de utilizador e palavra-passe fazendo-se passar por {brand}, mas o site é {domain} e não pertence a {brand} (o site verdadeiro é {official}). É phishing, serve para roubar o acesso à tua conta. Não introduzas nada; se já o fizeste, muda já a palavra-passe e avisa {brand}.",
+    "f_phishing_page_card": "Página de pagamento falsa: pede os dados do cartão fazendo-se passar por {brand}, mas o site é {domain} e não pertence a {brand} (o site verdadeiro é {official}). É phishing, serve para roubar o cartão. Não introduzas nada; se já o fizeste, bloqueia já o cartão ligando ao teu banco.",
+    "f_link_redirects": "Um link leva a outro site: de {from} chega a {to}. É aí que irias realmente parar."
   },
   "oxygen": {
     "title": "OXYGEN",

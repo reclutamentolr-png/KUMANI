@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { safeFetch } from '@/lib/safeFetch'
 import { createClient } from '@/lib/supabase/server'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { fetchWhoisText, parseWhois } from '@/lib/whois'
 import { findScamDomain } from '@/lib/scamDomains'
 import { webRiskLookup, worstThreat } from '@/lib/webRisk'
+import { isIpLoggerHost, lookalikeBrand } from '@/lib/checkmail/engine'
+import { asksPassword, inspectLink } from '@/lib/linkInspect'
+import { siteKeys } from '@/lib/scamNet'
 
 interface QRDecodeResult {
   type: 'url' | 'phone' | 'sms' | 'email' | 'vcard' | 'wifi' | 'geo' | 'payment' | 'text'
@@ -22,6 +24,10 @@ interface QRAnalysis {
     badge: 'green' | 'yellow' | 'red'
     indicators: Array<{ type: 'ok' | 'warning' | 'risk'; key: string; params?: Record<string, string> }>
     redirectChain?: Array<{ url: string; statusCode?: number; final: boolean }>
+    // Il link porta su un altro sito: partenza e arrivo, da mostrare in evidenza
+    landing?: { from: string; to: string }
+    // Finta pagina di accesso o di pagamento sul sito d'arrivo
+    phishing?: { brand: string; domain: string; official: string; card: boolean }
     recommendations: string[]
     aiExplanation: string
   }
@@ -367,68 +373,41 @@ async function analyzeURL(url: string): Promise<QRAnalysis['analysis']> {
     }
   }
 
+  // Link spia (IP logger): rosso subito, senza aprirlo
+  if (isIpLoggerHost(urlObj.hostname.replace(/^www\./, ''))) {
+    indicators.push({ type: 'risk', key: 'indicatorIpLogger', params: { domain: urlObj.hostname } })
+    return { riskScore: 5, badge: 'red', indicators, recommendations: ['recommendation3'], aiExplanation: 'This QR leads to an IP logger.' }
+  }
+
   // Check for URL shorteners
   const shortenerDomain = urlObj.hostname.replace(/^www\./, '')
   if (SHORTENER_DOMAINS.includes(shortenerDomain)) {
     indicators.push({ type: 'warning', key: 'indicatorShortener', params: { domain: shortenerDomain } })
     riskScore -= 5
+  }
 
-    // Attempt to resolve redirect chain
-    try {
-      const res = await safeFetch(url, {
-        method: 'HEAD',
-        redirect: 'manual',
-        headers: { 'User-Agent': 'SVAT-QR-Scanner/1.0' },
-        next: { revalidate: 0 },
-      })
-
-      const location = res.headers.get('location')
-      if (location) {
-        hasRedirect = true
-        redirectChain.push({ url, final: false })
-
-        let current = location
-        for (let i = 0; i < 5; i++) {
-          redirectChain.push({ url: current, final: false })
-          try {
-            const redirectRes = await safeFetch(current, {
-              method: 'HEAD',
-              redirect: 'manual',
-              headers: { 'User-Agent': 'SVAT-QR-Scanner/1.0' },
-              next: { revalidate: 0 },
-            })
-            const nextLocation = redirectRes.headers.get('location')
-            if (!nextLocation) {
-              redirectChain[redirectChain.length - 1].final = true
-              finalUrl = current
-              break
-            }
-            current = new URL(nextLocation, current).toString()
-          } catch {
-            break
-          }
-        }
-      }
-    } catch {
-      indicators.push({ type: 'warning', key: 'indicatorRedirectFailed' })
-    }
+  // Il link si apre come farebbe il telefono (richiesta vera, non «HEAD», che
+  // molte pagine truffa ignorano), seguendo i rinvii anche scritti nella
+  // pagina, fino al sito d'arrivo (src/lib/linkInspect.ts)
+  const inspected = await inspectLink(url).catch(() => null)
+  let landing: { from: string; to: string } | undefined
+  let phishing: QRAnalysis['analysis']['phishing']
+  if (!inspected) {
+    indicators.push({ type: 'warning', key: 'indicatorRedirectFailed' })
   } else {
-    // For direct URLs, follow redirects once to check
-    try {
-      const res = await safeFetch(url, {
-        method: 'HEAD',
-        redirect: 'follow',
-        headers: { 'User-Agent': 'SVAT-QR-Scanner/1.0' },
-        next: { revalidate: 0 },
-      })
-      // «https://sito.it» e «https://sito.it/» sono lo stesso indirizzo
-      if (res.url && res.url !== new URL(url).href) {
-        hasRedirect = true
-        redirectChain.push({ url, final: false })
-        redirectChain.push({ url: res.url, final: true })
-        finalUrl = res.url
-      }
-    } catch {}
+    if (inspected.finalUrl !== urlObj.href) {
+      hasRedirect = true
+      redirectChain.push({ url, final: false }, { url: inspected.finalUrl, final: true })
+      finalUrl = inspected.finalUrl
+    }
+    if (inspected.redirected) {
+      landing = { from: inspected.startDomain, to: inspected.finalDomain }
+      indicators.push({ type: 'warning', key: 'indicatorRedirectOtherSite', params: landing })
+    }
+    if (inspected.phishingBrand) {
+      phishing = { brand: inspected.phishingBrand.name, domain: inspected.finalDomain, official: inspected.phishingBrand.domains[0], card: !asksPassword(inspected.html) }
+      indicators.push({ type: 'risk', key: phishing.card ? 'indicatorPhishingCard' : 'indicatorPhishingPage', params: { brand: phishing.brand, domain: phishing.domain, official: phishing.official } })
+    }
   }
 
   if (hasRedirect) {
@@ -456,7 +435,9 @@ async function analyzeURL(url: string): Promise<QRAnalysis['analysis']> {
     }
   })()
 
-  const impersonationCheck = checkBrandImpersonation(finalHostname)
+  // Elenco ridotto qui sotto + elenco completo dei marchi condiviso con CheckMail e SVAT
+  const shared = finalHostname ? lookalikeBrand(finalHostname) : null
+  const impersonationCheck = checkBrandImpersonation(finalHostname) ?? (shared ? { brand: shared.name, category: 'Brand' } : null)
   if (impersonationCheck) {
     indicators.push({
       type: 'risk',
@@ -471,15 +452,26 @@ async function analyzeURL(url: string): Promise<QRAnalysis['analysis']> {
   // sia il resto
   const hosts = [...new Set([hostOf(url), finalHostname].filter(Boolean))]
   const scamDb = createAdminClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { autoRefreshToken: false, persistSession: false } })
-  const [googleHits, listed] = await Promise.all([
+  const since = new Date(Date.now() - 365 * 86_400_000).toISOString()
+  const [googleHits, listed, community] = await Promise.all([
     webRiskLookup([url, finalUrl]),
     Promise.all(hosts.map((h) => findScamDomain(scamDb, h))).then((r) => r.flat()),
+    // Rete Anti-Truffa: siti segnalati e confermati dallo Staff
+    scamDb
+      .from('scam_targets')
+      .select('confirmed_reports')
+      .eq('kind', 'site')
+      .eq('status', 'confirmed')
+      .gte('last_report_at', since)
+      .in('value_key', hosts.flatMap((h) => siteKeys(h)))
+      .then(({ data }) => data ?? [], () => []),
   ])
   const worst = googleHits ? worstThreat(googleHits) : null
   if (worst) indicators.push({ type: 'risk', key: worst === 'SOCIAL_ENGINEERING' ? 'indicatorGooglePhishing' : worst === 'MALWARE' ? 'indicatorGoogleMalware' : 'indicatorGoogleUnwanted' })
   else if (googleHits) indicators.push({ type: 'ok', key: 'indicatorGoogleClean' })
   if (listed.length) indicators.push({ type: 'risk', key: 'indicatorScamList', params: { domain: listed[0].domain } })
-  const blocked = !!worst || listed.length > 0
+  if (community.length) indicators.push({ type: 'risk', key: 'indicatorCommunityConfirmed', params: { count: String(Math.max(1, ...community.map((c) => c.confirmed_reports ?? 1))) } })
+  const blocked = !!worst || listed.length > 0 || community.length > 0 || !!phishing
 
   // Check domain age if available (quick check). Queries the registry's
   // authoritative WHOIS server directly (src/lib/whois.ts) instead of a
@@ -529,7 +521,7 @@ async function analyzeURL(url: string): Promise<QRAnalysis['analysis']> {
   }
 
   const recommendations: string[] = []
-  if (!url.startsWith('https://')) recommendations.push('recommendation3')
+  if (!url.startsWith('https://') || phishing) recommendations.push('recommendation3')
   if (impersonationCheck) recommendations.push('recommendation2')
   if (hasRedirect) recommendations.push('recommendation4')
   if (!recommendations.length) recommendations.push('recommendation1')
@@ -539,6 +531,8 @@ async function analyzeURL(url: string): Promise<QRAnalysis['analysis']> {
     badge: riskScore >= 80 ? 'green' : riskScore >= 40 ? 'yellow' : 'red',
     indicators,
     redirectChain,
+    landing,
+    phishing,
     recommendations,
     aiExplanation,
   }

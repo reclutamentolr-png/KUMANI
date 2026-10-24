@@ -2257,6 +2257,8 @@
       "typePayment": "Payment Request",
       "typeText": "Plain Text",
       "redirectTo": "Redirects to",
+      "redirectFrom": "Link you checked",
+      "redirectDest": "Where you actually land",
       "noRedirects": "No redirects",
       "multipleRedirects": "{count} redirect(s) detected",
       "impersonation": "Possible Impersonation",
@@ -2309,7 +2311,14 @@
       "indicatorGoogleMalware": "Google flags this link as a site that spreads viruses: don’t open it.",
       "indicatorGoogleUnwanted": "Google flags this link for pushing unwanted software.",
       "indicatorGoogleClean": "Google does not flag this link as dangerous",
-      "indicatorScamList": "{domain} is on a list of scam sites (authorities or phishing): don’t open it."
+      "indicatorScamList": "{domain} is on a list of scam sites (authorities or phishing): don’t open it.",
+      "phishingAlertTitle": "Warning: this is a fake page to steal your data",
+      "landingTitle": "Where this QR really goes",
+      "indicatorRedirectOtherSite": "The link does not stay on {from}: it goes to another site, {to}. The checks are run on the destination site.",
+      "indicatorPhishingPage": "Fake login page: it asks for your user code and password while posing as {brand}, but the site is {domain} and does not belong to {brand} (the real site is {official}). This is phishing, meant to steal access to your account. Do not enter anything; if you already did, change your password right away and contact {brand}.",
+      "indicatorPhishingCard": "Fake payment page: it asks for your card details while posing as {brand}, but the site is {domain} and does not belong to {brand} (the real site is {official}). This is phishing, meant to steal your card. Do not enter anything; if you already did, block your card right away by calling your bank.",
+      "indicatorCommunityConfirmed": "Reported as a scam by the community ({count}) and confirmed by KUMANI Staff: do not open it.",
+      "indicatorIpLogger": "{domain} is a spy link: opening it reveals your IP address, area and device. Do not open it."
     },
     "securitySection": "Security & Protection",
     "checkLookalike": "Similarity to known sites",
@@ -2361,7 +2370,13 @@
     "scamPatternRecovery": "It promises to recover or unlock funds and crypto, with other risk signs (young domain or Telegram-only contacts). It is the “fund recovery” scam pattern: do not pay anything or leave your data.",
     "scamPatternAuthority": "It claims to be authorised or certified by CONSOB, the Bank of Italy or IVASS, but it is a young site or built with an automatic builder. Authorities do not “certify” sites: check their official registers.",
     "scamPatternTopic": "It talks about recovering or unlocking funds and crypto: the theme of the “fund recovery” scam. If they ask for money or data to recover what you lost, it is almost always a scam.",
-    "scamPatternLoan": "It promises loans even to people “blacklisted” or with bad credit, with subsidised rates “for everyone” or public grants, on a young site. It is the “easy loan” scam: sooner or later they ask for a fee or deposit and the loan never arrives. Never pay anything in advance."
+    "scamPatternLoan": "It promises loans even to people “blacklisted” or with bad credit, with subsidised rates “for everyone” or public grants, on a young site. It is the “easy loan” scam: sooner or later they ask for a fee or deposit and the loan never arrives. Never pay anything in advance.",
+    "scamPatternPhishing": "Fake login page: it asks for your user code and password while posing as {brand}, but the site is {domain} and does not belong to {brand} (the real site is {official}). This is phishing, meant to steal access to your account. Do not enter anything; if you already did, change your password right away and contact {brand}.",
+    "checkRedirect": "Where the link really goes",
+    "redirectTo": "The link does not stay on {from}: it takes you to {to}. The checks below are run on the destination site, where you would actually end up.",
+    "redirectFrom": "Link you checked",
+    "redirectDest": "Where you actually land",
+    "scamPatternPhishingCard": "Fake payment page: it asks for your card details while posing as {brand}, but the site is {domain} and does not belong to {brand} (the real site is {official}). This is phishing, meant to steal your card. Do not enter anything; if you already did, block your card right away by calling your bank."
   },
   "offermaker": {
     "aiLimitReached": "You’ve reached today’s AI generation limit: try again tomorrow.",
@@ -5717,7 +5732,10 @@
     "dossierLink": "Link to: {domain}",
     "f_google_flagged": "Google flags the link to {domain} as a dangerous site (phishing or viruses).",
     "f_scam_list": "{domain} is on a list of scam sites (authorities or phishing).",
-    "f_link_ip_logger": "It contains a spy link ({domain}): if you open it, the sender sees your IP address, your area and your device. Do not open it."
+    "f_link_ip_logger": "It contains a spy link ({domain}): if you open it, the sender sees your IP address, your area and your device. Do not open it.",
+    "f_phishing_page": "Fake login page: it asks for your user code and password while posing as {brand}, but the site is {domain} and does not belong to {brand} (the real site is {official}). This is phishing, meant to steal access to your account. Do not enter anything; if you already did, change your password right away and contact {brand}.",
+    "f_phishing_page_card": "Fake payment page: it asks for your card details while posing as {brand}, but the site is {domain} and does not belong to {brand} (the real site is {official}). This is phishing, meant to steal your card. Do not enter anything; if you already did, block your card right away by calling your bank.",
+    "f_link_redirects": "A link goes to another site: from {from} it lands on {to}. That is where you would actually end up."
   },
   "oxygen": {
     "title": "OXYGEN",
