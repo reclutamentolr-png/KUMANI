@@ -51,6 +51,8 @@ const PAID_TOOLS = [
   'clienti',
   'hopla',
   'firma-pdf',
+  'scanner',
+  'fototessera',
   'lumen',
   'vox',
   'captio',

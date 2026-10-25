@@ -2,7 +2,7 @@
 // schede. Sicurezza: Controlla (Speculum), Proteggi (Scudo Dati), Segnala
 // (Rete Anti-Truffa); poi KUMANI Benessere, KUMANI Giochi, QR Code, Spendly,
 // KUMANI Lavoro (CV e offerte), Gestione attività (clienti, preventivi, ricevute,
-// magazzino, calcolatrici), KUMANI Ufficio (Firma PDF, Firma Email, Hoplà),
+// magazzino, calcolatrici), KUMANI Ufficio (Firma PDF, Scanner e PDF, Firma Email, Hoplà),
 // KUMANI Negozio (Shop, Menu, Kumi Card e OfferMaker, se acceso), Farti conoscere (Link in
 // Bio, Landing Page, Messaggi WhatsApp), KUMANI Agenda (MemoLife, Life
 // Calendar), Casa e auto (Casa, Garage, Findo), Viaggi (Travel) e Amicizie
@@ -79,6 +79,7 @@ export const HUB_TABS: Record<ServiceHub, HubTab[]> = {
   ],
   ufficio: [
     { key: 'pdf', href: '/app/firma-pdf', tool: 'firma-pdf' },
+    { key: 'scanner', href: '/app/scanner', tool: 'scanner' },
     { key: 'email', href: '/app/firma-email', tool: 'firma-email' },
     { key: 'hopla', href: '/app/hopla', tool: 'hopla' },
   ],
@@ -194,6 +195,7 @@ export const TOOL_HUB: Record<string, ServiceHub> = {
   magazzino: 'gestione',
   calcolatrici: 'gestione',
   'firma-pdf': 'ufficio',
+  scanner: 'ufficio',
   'firma-email': 'ufficio',
   hopla: 'ufficio',
   shop: 'negozio',

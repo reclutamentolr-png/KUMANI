@@ -71,6 +71,7 @@ import {
   HeartHandshake,
   PartyPopper,
   ScanText,
+  ScanLine,
 } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { addFavorite, removeFavorite } from '@/app/actions/favorites'
@@ -134,6 +135,7 @@ const TAB_ICON: Record<string, LucideIcon> = {
   'gestione.warehouse': Warehouse,
   'gestione.calculators': Calculator,
   'ufficio.pdf': Signature,
+  'ufficio.scanner': ScanLine,
   'ufficio.email': AtSign,
   'ufficio.hopla': MonitorSmartphone,
   'negozio.shop': ShoppingBag,

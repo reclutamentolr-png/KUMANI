@@ -85,6 +85,8 @@ export const SECTION_LABELS: Record<string, string> = {
   hopla: 'Hoplà',
   webinar: 'KUMANI Webinar',
   firmaPdf: 'Firma PDF',
+  scanner: 'Scanner e PDF',
+  fototessera: 'Fototessera',
   lumen: 'KUMANI LUMEN',
   vox: 'KUMANI VOX',
   captio: 'KUMANI CAPTIO',

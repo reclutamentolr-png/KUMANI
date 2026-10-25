@@ -7,14 +7,14 @@ import type { RequiredPlan } from '@/lib/plans'
 
 export const HOME_NEEDS = [
   { key: 'scams', icon: 'ShieldCheck', items: ['rete-antitruffa', 'antitruffa', 'checkmail', 'verifica-iban', 'svat', 'verifoto', 'scudo-dati', 'documento-sicuro', 'testo-protetto', 'tutela'] },
-  { key: 'organize', icon: 'CalendarDays', items: ['life-calendar', 'memolife', 'findo', 'hopla'] },
+  { key: 'organize', icon: 'CalendarDays', items: ['life-calendar', 'fototessera', 'memolife', 'findo', 'hopla'] },
   { key: 'trips', icon: 'Plane', items: ['travel', 'convivium', 'events'] },
   { key: 'money', icon: 'PiggyBank', items: ['spendly', 'fincheck', 'casa', 'garage', 'digital-receipt'] },
   { key: 'business', icon: 'Store', items: ['landing-page', 'tempus', 'shop', 'menu', 'fidelity', 'offermaker', 'clienti', 'listings'] },
   { key: 'promote', icon: 'Megaphone', items: ['qr-generator', 'qr-code-pro', 'link-in-bio', 'whatsapp-messages', 'firma-email', 'spotlight'] },
   // KUMANI Social: il kit per chi inizia sui social (stessi servizi del servizio unito)
   { key: 'social', icon: 'Clapperboard', items: ['tutela', 'captio', 'lumen', 'vox', 'diarium', 'imago', 'forma'] },
-  { key: 'work', icon: 'BriefcaseBusiness', items: ['trova-lavoro', 'kumani-cv', 'preventivi', 'clienti', 'firma-pdf', 'magazzino', 'calcolatrici'] },
+  { key: 'work', icon: 'BriefcaseBusiness', items: ['trova-lavoro', 'kumani-cv', 'preventivi', 'clienti', 'firma-pdf', 'scanner', 'magazzino', 'calcolatrici'] },
   { key: 'people', icon: 'Users', items: ['convivium', 'affinity', 'events', 'timebank', 'convivio'] },
   // Le sezioni della Community, da aggiungere a «I tuoi servizi» come gli altri
   { key: 'community', icon: 'HeartHandshake', items: ['listings', 'convivio', 'events', 'timebank', 'proposte', 'spotlight'] },
