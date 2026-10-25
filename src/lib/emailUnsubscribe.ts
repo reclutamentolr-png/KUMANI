@@ -7,9 +7,10 @@ import { PUBLIC_SITE_URL } from '@/lib/siteUrl'
 
 const sign = (userId: string) => createHmac('sha256', process.env.SUPABASE_SERVICE_ROLE_KEY!).update(`email-unsub:${userId}`).digest('base64url')
 
-export function unsubscribeUrl(userId: string, communicationId?: string) {
+export function unsubscribeUrl(userId: string, communicationId?: string, locale?: string) {
   const params = new URLSearchParams({ u: userId, t: sign(userId) })
   if (communicationId) params.set('c', communicationId)
+  if (locale) params.set('l', locale)
   return `${PUBLIC_SITE_URL}/api/email/unsubscribe?${params.toString()}`
 }
 

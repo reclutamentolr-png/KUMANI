@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import { useLocale } from 'next-intl'
 import type { Session } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/client'
 import { readImpersonation } from '@/lib/impersonation'
@@ -12,6 +13,31 @@ import { readImpersonation } from '@/lib/impersonation'
 const EVERY_MS = 60 * 1000
 
 export default function SessionTracker() {
+  const locale = useLocale()
+
+  // Lingua in cui la persona usa KUMANI: serve per mandarle le comunicazioni
+  // nella sua lingua. Si salva solo se è cambiata (ricordata nel browser).
+  useEffect(() => {
+    const KEY = 'kumani-locale-saved'
+    const supabase = createClient()
+    supabase.auth.getSession().then(({ data }) => {
+      if (!data.session || readImpersonation()) return
+      try {
+        if (localStorage.getItem(KEY) === `${data.session.user.id}:${locale}`) return
+      } catch {
+        // memoria del browser non disponibile: si salva lo stesso
+      }
+      void supabase.rpc('set_my_locale', { p_locale: locale }).then(({ error }) => {
+        if (error) return
+        try {
+          localStorage.setItem(KEY, `${data.session!.user.id}:${locale}`)
+        } catch {
+          // niente
+        }
+      })
+    })
+  }, [locale])
+
   useEffect(() => {
     const supabase = createClient()
     let token: string | null = null

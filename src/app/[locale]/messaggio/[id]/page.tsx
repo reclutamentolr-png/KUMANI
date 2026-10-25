@@ -6,6 +6,7 @@ import { createClient as createServiceClient } from '@supabase/supabase-js'
 import AppHeader from '@/components/nav/AppHeader'
 import Link from '@/components/LocalizedLink'
 import { getSessionUser, preloadSession } from '@/lib/session'
+import { isHeading, personalize, textsFor } from '@/lib/communications'
 
 export const dynamic = 'force-dynamic'
 
@@ -29,16 +30,17 @@ export default async function MessagePage({ params }: { params: Promise<{ id: st
   if (!user) redirect(`/${locale}/login?next=${encodeURIComponent(`/messaggio/${id}`)}`)
   if (!/^[0-9a-f-]{36}$/i.test(id)) notFound()
   const s = db()
-  const { data: c } = await s.from('staff_communications').select('id, push_title, push_body, email_subject, email_body, push_sent_at, email_sent_at').eq('id', id).maybeSingle()
+  const { data: c } = await s.from('staff_communications').select('id, push_title, push_body, email_subject, email_preheader, email_body, translations, push_sent_at, email_sent_at').eq('id', id).maybeSingle()
   if (!c || (!c.push_sent_at && !c.email_sent_at)) notFound()
   const { data: me } = await s.from('profiles').select('first_name').eq('id', user.id).maybeSingle()
   await s.from('user_notifications').update({ read_at: new Date().toISOString() }).eq('user_id', user.id).eq('kind', `communication:${id}`).is('read_at', null)
 
   const raw = (me?.first_name ?? '').trim().split(/\s+/)[0] ?? ''
   const name = raw ? raw.charAt(0).toUpperCase() + raw.slice(1).toLowerCase() : ''
-  const personalize = (text: string) => text.replace(/[ \t]?\{nome\}/g, name ? ` ${name}` : '')
-  const title = personalize(c.email_subject || c.push_title || '')
-  const body = personalize(c.email_body || c.push_body || '')
+  // Nella lingua della pagina (traduzione, poi inglese, poi italiano)
+  const tx = textsFor(c, locale)
+  const title = personalize(tx.email_subject || tx.push_title || '', name)
+  const body = personalize(tx.email_body || tx.push_body || '', name)
   const sentAt = new Date(c.push_sent_at ?? c.email_sent_at).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' })
 
   return (
@@ -58,9 +60,7 @@ export default async function MessagePage({ params }: { params: Promise<{ id: st
               .map((para, i) => (
                 <p key={i}>
                   {para.split('\n').map((line, k) => {
-                    // Titoletto: riga corta in MAIUSCOLO, anche con una nota tra parentesi
-                    const caps = line.replace(/\s*\([^)]*\)\s*$/, '')
-                    const heading = line.length < 80 && caps.length > 3 && caps === caps.toUpperCase() && /[A-ZÀ-Ý]/.test(caps)
+                    const heading = isHeading(line)
                     return (
                       <span key={k}>
                         {k > 0 && <br />}

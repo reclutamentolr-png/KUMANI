@@ -15,6 +15,7 @@ import {
   type CommunicationRow,
   type UnsubscribeRow,
 } from '@/app/actions/adminCommunications'
+import { COMM_LOCALES, type CommLocale } from '@/lib/communications'
 
 // Admin → Comunicazioni: messaggi a tutti gli iscritti già pronti (notifica
 // push e/o email). «Da inviare» finché un canale non è partito; «Inviati» con
@@ -34,6 +35,8 @@ export default function CommunicationsPanel() {
   const [busy, setBusy] = useState<string | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
   const [open, setOpen] = useState<string | null>(null)
+  // Lingua dell'anteprima e della prova
+  const [lang, setLang] = useState<CommLocale>('it')
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -77,14 +80,14 @@ export default function CommunicationsPanel() {
 
   const test = async (c: CommunicationRow) => {
     setBusy(c.id + 'test')
-    const r = await adminTestCommunicationEmail(c.id)
+    const r = await adminTestCommunicationEmail(c.id, lang)
     setBusy(null)
     notify(r.success ? `Prova inviata a ${r.to}` : 'Errore: ' + r.error)
   }
 
   const showPreview = async (c: CommunicationRow) => {
     setBusy(c.id + 'preview')
-    const r = await adminPreviewCommunicationEmail(c.id)
+    const r = await adminPreviewCommunicationEmail(c.id, lang)
     setBusy(null)
     if (r.html) setPreview(r.html)
     else notify('Errore: ' + r.error)
@@ -109,6 +112,13 @@ export default function CommunicationsPanel() {
               Preparata il {when(c.created_at)}
               {c.note ? ` · ${c.note}` : ''}
             </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-1" title="Lingue pronte: chi usa una lingua mancante la riceve in inglese (se c'è), altrimenti in italiano">
+            {COMM_LOCALES.map((l) => (
+              <span key={l} className={`rounded px-1.5 py-0.5 text-[10px] font-bold uppercase ${c.ready?.includes(l) ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-400 line-through'}`}>
+                {l}
+              </span>
+            ))}
           </div>
           <button type="button" onClick={() => setOpen(isOpen ? null : c.id)} className="text-xs font-semibold text-[var(--gold)] hover:underline">
             {isOpen ? 'Chiudi il testo' : 'Leggi il testo'}
@@ -155,7 +165,7 @@ export default function CommunicationsPanel() {
                 {c.email_sent_at ? (
                   <p className="flex w-full items-center gap-1 text-xs font-semibold text-emerald-700">
                     <CheckCircle2 className="h-3.5 w-3.5" /> Inviata il {when(c.email_sent_at)}
-                    {c.email_result ? ` · ${c.email_result.sent ?? 0} iscritti${c.email_result.failed ? `, ${c.email_result.failed} non partite` : ''}${c.email_result.excluded ? `, ${c.email_result.excluded} esclusi` : ''}` : ''}
+                    {c.email_result ? ` · ${c.email_result.sent ?? 0} iscritti${c.email_result.failed ? `, ${c.email_result.failed} non partite` : ''}${c.email_result.excluded ? `, ${c.email_result.excluded} esclusi` : ''}${c.email_result.byLocale ? ` · ${Object.entries(c.email_result.byLocale).map(([l, n]) => `${l.toUpperCase()} ${n}`).join(', ')}` : ''}` : ''}
                   </p>
                 ) : (
                   <button type="button" disabled={!!busy} onClick={() => sendEmail(c)} className={`${btn} bg-gray-900 text-white hover:bg-gray-700`}>
@@ -181,6 +191,16 @@ export default function CommunicationsPanel() {
             {counts.emailExcluded ? ` (${counts.emailExcluded} non vogliono email)` : ''} · notifiche a {counts.pushPeople} persone con le notifiche attive.
           </p>
         </div>
+        <label className="flex items-center gap-2 text-xs font-semibold text-gray-700">
+          Lingua di anteprima e prova
+          <select value={lang} onChange={(e) => setLang(e.target.value as CommLocale)} className="rounded-lg border border-gray-300 px-2 py-1.5 text-xs uppercase">
+            {COMM_LOCALES.map((l) => (
+              <option key={l} value={l}>
+                {l}
+              </option>
+            ))}
+          </select>
+        </label>
         <button type="button" onClick={load} className={`${btn} border border-gray-300 text-gray-700 hover:bg-gray-50`}>
           <RefreshCw className="h-3.5 w-3.5" /> Aggiorna
         </button>
