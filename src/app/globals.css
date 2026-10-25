@@ -47,6 +47,16 @@ body:has([data-app-nav]) .tool-guide-fab {
 body:has([data-app-nav]):has([data-fab]) .tool-guide-fab {
   bottom: calc(9.75rem + env(safe-area-inset-bottom));
 }
+/* «Recensisci» in basso a sinistra: sopra «Condividi» quando c'è */
+body:has(.tool-share-fab) .tool-review-fab {
+  bottom: 4.5rem;
+}
+body:has([data-app-nav]) .tool-review-fab {
+  bottom: calc(5.25rem + env(safe-area-inset-bottom));
+}
+body:has([data-app-nav]):has(.tool-share-fab) .tool-review-fab {
+  bottom: calc(8.75rem + env(safe-area-inset-bottom));
+}
 /* iPhone: la barra in un proprio livello grafico, così Safari non la sposta
    mentre la pagina scorre o la barra degli indirizzi si allunga/accorcia; e
    niente "rimbalzo" della pagina che la trascinava con sé */

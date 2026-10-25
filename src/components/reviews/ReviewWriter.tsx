@@ -58,7 +58,9 @@ export default function ReviewWriter({
               <span className="block font-bold text-[var(--ink)]">{subjectNames[option.subject]}</span>
               <span className="text-xs text-[var(--muted)]">
                 {option.purchaseLabel
-                  ? option.purchaseLabel === 'pass'
+                  ? option.purchaseLabel === 'gift'
+                    ? t('verifiedGift')
+                    : option.purchaseLabel === 'pass'
                     ? t('verifiedPass', { service: subjectNames[option.subject] })
                     : t('verifiedPlan', { plan: option.purchaseLabel === 'pro' ? 'Pro' : 'Plus' })
                   : t('noLongerEligible')}

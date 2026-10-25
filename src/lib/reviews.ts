@@ -3,7 +3,8 @@
 export const REJECT_REASONS = ['offensive', 'personal_data', 'advertising', 'off_topic', 'not_genuine', 'other'] as const
 export type RejectReason = (typeof REJECT_REASONS)[number]
 
-export type PurchaseLabel = 'base' | 'pro' | 'pass'
+// 'gift': abbonamento da un codice regalato dallo Staff (licenza omaggio)
+export type PurchaseLabel = 'base' | 'pro' | 'pass' | 'gift'
 export type ReviewStatus = 'pending' | 'approved' | 'rejected'
 
 export type PublicReview = {

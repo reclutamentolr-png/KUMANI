@@ -23,7 +23,7 @@ const TABS: { id: ReviewStatus; label: string }[] = [
   { id: 'rejected', label: 'Rifiutate' },
 ]
 
-const LABEL: Record<string, string> = { base: 'Abbonato Plus', pro: 'Abbonato Pro', pass: 'Pass del servizio' }
+const LABEL: Record<string, string> = { base: 'Abbonato Plus', pro: 'Abbonato Pro', pass: 'Pass del servizio', gift: 'Licenza omaggio' }
 
 // Admin → Recensioni: approvazione delle recensioni di chi ha acquistato.
 export default function ReviewsPanel() {
