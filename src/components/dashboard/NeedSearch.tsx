@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
+import dynamic from 'next/dynamic'
 import { useLocale, useTranslations } from 'next-intl'
 import { ArrowRight, BookOpen, Lightbulb, LoaderCircle, Mic, MicOff, Search, Sparkles, X } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
@@ -18,6 +19,11 @@ export type NeedItem = { toolName: string; title: string; name?: string; descrip
 
 type Recognition = { lang: string; interimResults: boolean; maxAlternatives: number; start: () => void; stop: () => void; onresult: ((e: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null; onend: (() => void) | null; onerror: (() => void) | null }
 
+// KUMI accanto alla ricerca: caricata dopo il resto della pagina (pochi KB)
+const Kumi = dynamic(() => import('@/components/kids/Kumi'), { ssr: false, loading: () => null })
+// Benvenuto di KUMI alla prima visita (una volta per telefono)
+const WELCOME_KEY = 'kumani_kumi_welcome'
+
 const SPEECH_LANG: Record<string, string> = { it: 'it-IT', en: 'en-GB', fr: 'fr-FR', es: 'es-ES', pt: 'pt-PT', de: 'de-DE', ru: 'ru-RU' }
 
 export default function NeedSearch({ items }: { items: NeedItem[] }) {
@@ -28,6 +34,9 @@ export default function NeedSearch({ items }: { items: NeedItem[] }) {
   const [listening, setListening] = useState(false)
   const [canSpeak, setCanSpeak] = useState(false)
   const recognition = useRef<Recognition | null>(null)
+  const input = useRef<HTMLInputElement | null>(null)
+  const [welcome, setWelcome] = useState(false)
+  const [cheer, setCheer] = useState(false)
   const logged = useRef(new Set<string>())
   // Ricerca approfondita: per quale testo, stato e risultati
   const [deep, setDeep] = useState<{ q: string; status: 'loading' | 'done'; hits: NeedHit[]; ai: boolean } | null>(null)
@@ -108,11 +117,47 @@ export default function NeedSearch({ items }: { items: NeedItem[] }) {
   const searching = !!active && weak && (!deepFor || deepFor.status === 'loading')
   const showNone = active && !hits.length && !!deepFor && deepFor.status === 'done'
 
+  useEffect(() => {
+    try {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- si sa solo nel browser
+      if (!localStorage.getItem(WELCOME_KEY)) setWelcome(true)
+    } catch {}
+  }, [])
+  const closeWelcome = (tryIt: boolean) => {
+    setWelcome(false)
+    try {
+      localStorage.setItem(WELCOME_KEY, '1')
+    } catch {}
+    if (tryIt) {
+      input.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      input.current?.focus({ preventScroll: true })
+    }
+  }
+
+  // KUMI saluta per un attimo quando trova i servizi
+  const found = hits.length > 0
+  useEffect(() => {
+    if (!found) return
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- breve animazione
+    setCheer(true)
+    const timer = setTimeout(() => setCheer(false), 2400)
+    return () => clearTimeout(timer)
+  }, [found, query])
+  const kumiSays = searching ? t('kumiThinking') : found ? t('kumiFound') : showNone ? t('kumiNone') : t('kumiHello')
+
   return (
     <section className="rounded-3xl border border-[var(--gold)]/30 bg-white p-4 shadow-[0_12px_30px_rgba(23,23,23,0.06)] sm:p-5" aria-labelledby="need-search-title">
-      <h2 id="need-search-title" className="flex items-center gap-2 text-lg font-extrabold text-[var(--ink)]">
-        <Sparkles className="h-5 w-5 text-[var(--gold)]" /> {t('title')}
-      </h2>
+      <div className="flex items-center gap-3">
+        <Kumi mood={searching ? 'o' : showNone ? 'w' : 'happy'} move={cheer ? 'wave' : 'idle'} className="h-14 w-14 shrink-0 sm:h-16 sm:w-16" />
+        <div className="min-w-0">
+          <h2 id="need-search-title" className="text-lg font-extrabold text-[var(--ink)]">
+            {t('title')}
+          </h2>
+          <p className="text-sm text-[var(--muted)]" aria-live="polite">
+            {kumiSays}
+          </p>
+        </div>
+      </div>
       <form
         className="mt-3 flex items-center gap-2"
         onSubmit={(e) => {
@@ -124,6 +169,7 @@ export default function NeedSearch({ items }: { items: NeedItem[] }) {
           <span className="sr-only">{t('title')}</span>
           <Search className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[var(--muted)]" />
           <input
+            ref={input}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onBlur={() => setSubmitted(query)}
@@ -199,6 +245,26 @@ export default function NeedSearch({ items }: { items: NeedItem[] }) {
             <Link href="/community/proposte/nuova" className="inline-flex items-center gap-1 text-[var(--muted)] hover:text-[var(--ink)]">
               <Lightbulb className="h-4 w-4" /> {t('suggest')}
             </Link>
+          </div>
+        </div>
+      )}
+
+      {welcome && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-4 sm:items-center" role="dialog" aria-modal="true" aria-labelledby="kumi-welcome-title" onClick={() => closeWelcome(false)}>
+          <div className="w-full max-w-sm rounded-3xl bg-white p-6 text-center shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <Kumi move="wave" deco className="mx-auto h-40 w-40" />
+            <h2 id="kumi-welcome-title" className="mt-2 text-xl font-extrabold text-[var(--ink)]">
+              {t('welcomeTitle')}
+            </h2>
+            <p className="mt-2 text-sm text-[var(--muted)]">{t('welcomeBody')}</p>
+            <div className="mt-5 flex flex-col gap-2">
+              <button type="button" onClick={() => closeWelcome(true)} className="rounded-2xl bg-[var(--ink)] px-4 py-3 font-bold text-[var(--gold-bright)]">
+                {t('welcomeTry')}
+              </button>
+              <button type="button" onClick={() => closeWelcome(false)} className="rounded-2xl px-4 py-2 text-sm font-semibold text-[var(--muted)] hover:text-[var(--ink)]">
+                {t('welcomeClose')}
+              </button>
+            </div>
           </div>
         </div>
       )}

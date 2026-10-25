@@ -16628,6 +16628,14 @@
     "noneHint": "Prova con altre parole, guarda tutti i servizi oppure proponici l’idea: ci aiuta a creare i prossimi.",
     "allServices": "Tutti i servizi",
     "suggest": "Proponi un’idea",
-    "searchingDeep": "Cerco meglio dentro i servizi…"
+    "searchingDeep": "Cerco meglio dentro i servizi…",
+    "kumiHello": "Ciao, sono KUMI! Dimmi cosa ti serve e ti porto al servizio giusto.",
+    "kumiThinking": "Ci penso un attimo…",
+    "kumiFound": "Trovato! Ecco cosa può aiutarti.",
+    "kumiNone": "Questa non la so ancora… prova con altre parole.",
+    "welcomeTitle": "Ciao, sono KUMI!",
+    "welcomeBody": "Sono la mascotte di KUMANI. Scrivimi o dimmi a voce cosa ti serve, con parole tue, e ti porto subito al servizio giusto.",
+    "welcomeTry": "Proviamo",
+    "welcomeClose": "Più tardi"
   }
 }
