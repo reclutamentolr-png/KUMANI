@@ -16606,5 +16606,21 @@
     "retake": "Repetir",
     "use": "Usar esta foto",
     "preview": "Foto recién hecha"
+  },
+  "needSearch": {
+    "title": "Escribe lo que necesitas",
+    "placeholder": "Ej. me ha llegado un SMS raro, tengo que firmar un contrato…",
+    "listening": "Te escucho…",
+    "speak": "Hablar",
+    "stopListening": "Dejar de escuchar",
+    "clear": "Borrar",
+    "resultsTitle": "Esto te puede ayudar",
+    "because": "Útil para: «{words}»",
+    "open": "Abrir",
+    "howTo": "Cómo se usa",
+    "none": "No hemos encontrado un servicio para «{q}».",
+    "noneHint": "Prueba con otras palabras, mira todos los servicios o propónnos la idea: nos ayuda a crear los próximos.",
+    "allServices": "Todos los servicios",
+    "suggest": "Proponer una idea"
   }
 }

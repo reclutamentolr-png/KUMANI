@@ -14,6 +14,7 @@ import NativeShareButton from '@/components/NativeShareButton'
 import QuickCheckBox from '@/components/ecosystem/QuickCheckBox'
 import KarmaInfoButton from './KarmaInfoButton'
 import HomeViewSwitch from './HomeViewSwitch'
+import NeedSearch from './NeedSearch'
 import type { HomeView } from '@/lib/homeView'
 
 // Home: corta. In cima lo stato (KU Karma, abbonamento, codice invito), poi
@@ -234,6 +235,9 @@ export default async function DashboardTipo2({
       </div>
 
       {afterStatus}
+
+      {/* «Scrivi cosa ti serve»: il bisogno con parole proprie → i servizi giusti */}
+      <NeedSearch items={services.map((s) => ({ toolName: s.toolName, title: s.title, name: s.name, description: s.description, href: s.href, iconName: s.iconName, guide: s.guide }))} />
 
       {view === 'lite' ? (
         welcome ? (

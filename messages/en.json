@@ -16606,5 +16606,21 @@
     "retake": "Retake",
     "use": "Use this photo",
     "preview": "Photo just taken"
+  },
+  "needSearch": {
+    "title": "Tell us what you need",
+    "placeholder": "E.g. I got a strange text, I need to sign a contract…",
+    "listening": "Listening…",
+    "speak": "Speak",
+    "stopListening": "Stop listening",
+    "clear": "Clear",
+    "resultsTitle": "Here’s what can help",
+    "because": "Good for: “{words}”",
+    "open": "Open",
+    "howTo": "How to use it",
+    "none": "We couldn’t find a service for “{q}”.",
+    "noneHint": "Try other words, browse all services or suggest the idea: it helps us build the next ones.",
+    "allServices": "All services",
+    "suggest": "Suggest an idea"
   }
 }

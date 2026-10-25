@@ -16606,5 +16606,21 @@
     "retake": "Neu aufnehmen",
     "use": "Dieses Foto verwenden",
     "preview": "Gerade aufgenommenes Foto"
+  },
+  "needSearch": {
+    "title": "Schreib, was du brauchst",
+    "placeholder": "Z. B. ich habe eine seltsame SMS bekommen, ich muss einen Vertrag unterschreiben…",
+    "listening": "Ich höre zu…",
+    "speak": "Sprechen",
+    "stopListening": "Zuhören beenden",
+    "clear": "Löschen",
+    "resultsTitle": "Das kann dir helfen",
+    "because": "Passt zu: „{words}“",
+    "open": "Öffnen",
+    "howTo": "So geht’s",
+    "none": "Kein Dienst für „{q}“ gefunden.",
+    "noneHint": "Versuch es mit anderen Worten, sieh dir alle Dienste an oder schlag uns die Idee vor: so entstehen die nächsten.",
+    "allServices": "Alle Dienste",
+    "suggest": "Idee vorschlagen"
   }
 }

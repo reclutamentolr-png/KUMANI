@@ -1,0 +1,360 @@
+// «Scrivi cosa ti serve»: come le persone descrivono un bisogno, con parole
+// loro, per ogni servizio. Si aggiungono a nome e descrizione del servizio
+// (già tradotti). Una frase = parole che, trovate insieme, indicano quel
+// servizio; più la frase è precisa, più conta. Italiano e inglese completi,
+// le altre lingue con le parole chiave principali. Per migliorarle: Admin →
+// «Ricerche senza risultato».
+
+type Lang = 'it' | 'en' | 'fr' | 'es' | 'pt' | 'de' | 'ru'
+export type ToolPhrases = Partial<Record<Lang, string[]>>
+
+export const NEED_PHRASES: Record<string, ToolPhrases> = {
+  // ---------------- Sicurezza ----------------
+  svat: {
+    it: ['sito truffa', 'sito affidabile', 'negozio online sicuro', 'comprare online', 'sito sicuro', 'controllare un sito', 'azienda seria', 'link strano', 'e-commerce affidabile', 'sito falso', 'acquisto online'],
+    en: ['scam website', 'is this site safe', 'online shop safe', 'fake website', 'check a website', 'buy online', 'trustworthy company'],
+    fr: ['site arnaque', 'site fiable', 'acheter en ligne'],
+    es: ['web estafa', 'sitio fiable', 'comprar online'],
+    pt: ['site golpe', 'site confiável', 'comprar online'],
+    de: ['betrug webseite', 'seriöser shop', 'online kaufen'],
+    ru: ['мошеннический сайт', 'надежный сайт', 'купить онлайн'],
+  },
+  checkmail: {
+    it: ['email sospetta', 'mail truffa', 'email strana', 'phishing', 'mail della banca', 'allegato sospetto', 'mi è arrivata una mail', 'email falsa', 'posta strana'],
+    en: ['suspicious email', 'phishing email', 'scam email', 'fake bank email', 'strange attachment'],
+    fr: ['email suspect', 'hameçonnage', 'faux email'],
+    es: ['correo sospechoso', 'email falso', 'phishing'],
+    pt: ['email suspeito', 'email falso', 'phishing'],
+    de: ['verdächtige email', 'phishing', 'gefälschte mail'],
+    ru: ['подозрительное письмо', 'фишинг'],
+  },
+  verifoto: {
+    it: ['foto falsa', 'foto finta', 'foto ritoccata', 'immagine ai', 'foto generata', 'profilo falso', 'foto intelligenza artificiale', 'foto vera'],
+    en: ['fake photo', 'ai image', 'edited photo', 'is this photo real', 'fake profile picture'],
+    fr: ['photo fausse', 'image ia'],
+    es: ['foto falsa', 'imagen ia'],
+    pt: ['foto falsa', 'imagem ia'],
+    de: ['gefälschtes foto', 'ki bild'],
+    ru: ['фейковое фото', 'фото ии'],
+  },
+  'verifica-iban': {
+    it: ['bonifico', 'iban', 'fare un bonifico', 'pagare un privato', 'conto corrente', 'iban sicuro', 'mi chiedono un bonifico', 'controllare iban'],
+    en: ['bank transfer', 'iban', 'check iban', 'pay a stranger', 'wire money'],
+    fr: ['virement', 'iban'],
+    es: ['transferencia', 'iban'],
+    pt: ['transferência', 'iban'],
+    de: ['überweisung', 'iban prüfen'],
+    ru: ['банковский перевод', 'iban'],
+  },
+  'rete-antitruffa': {
+    it: ['sms strano', 'numero sconosciuto', 'telefonata strana', 'chiamata truffa', 'segnalare una truffa', 'mi hanno truffato', 'numero truffa', 'pacco in giacenza', 'messaggio whatsapp strano', 'mi chiedono soldi', 'finto corriere'],
+    en: ['strange sms', 'unknown number', 'scam call', 'report a scam', 'i was scammed', 'parcel text', 'whatsapp scam'],
+    fr: ['sms étrange', 'appel arnaque', 'signaler arnaque'],
+    es: ['sms raro', 'llamada estafa', 'denunciar estafa'],
+    pt: ['sms estranho', 'chamada golpe', 'denunciar golpe'],
+    de: ['seltsame sms', 'betrugsanruf', 'betrug melden'],
+    ru: ['странное смс', 'мошеннический звонок'],
+  },
+  antitruffa: {
+    it: ['come difendersi dalle truffe', 'truffe online', 'truffa', 'raggiro', 'imparare a riconoscere le truffe', 'truffe agli anziani', 'consigli contro le truffe'],
+    en: ['how to avoid scams', 'online scams', 'scam guide', 'fraud'],
+    fr: ['arnaques', 'escroquerie'],
+    es: ['estafas', 'fraude'],
+    pt: ['golpes', 'fraude'],
+    de: ['betrug', 'abzocke'],
+    ru: ['мошенничество'],
+  },
+  'scudo-dati': {
+    it: ['password rubata', 'dati rubati', 'email violata', 'account hackerato', 'fuga di dati', 'i miei dati online', 'password sicura'],
+    en: ['data breach', 'stolen password', 'hacked account', 'leaked email'],
+    fr: ['fuite de données', 'mot de passe volé'],
+    es: ['filtración de datos', 'contraseña robada'],
+    pt: ['vazamento de dados', 'senha roubada'],
+    de: ['datenleck', 'passwort gestohlen'],
+    ru: ['утечка данных', 'украли пароль'],
+  },
+  'documento-sicuro': {
+    it: ['mandare foto documento', 'foto carta identità', 'inviare documento', 'filigrana', 'oscurare dati', 'copia documento sicura'],
+    en: ['send id photo', 'watermark document', 'hide personal data', 'copy of id'],
+    fr: ['photo pièce identité', 'filigrane'],
+    es: ['foto dni', 'marca de agua'],
+    pt: ['foto documento', 'marca d’água'],
+    de: ['ausweis foto senden', 'wasserzeichen'],
+    ru: ['фото паспорта', 'водяной знак'],
+  },
+  'testo-protetto': {
+    it: ['chatgpt dati personali', 'usare intelligenza artificiale', 'anonimizzare testo', 'togliere nomi', 'privacy ia'],
+    en: ['chatgpt personal data', 'anonymize text', 'remove names'],
+  },
+  tutela: {
+    it: ['profilo social sicuro', 'account instagram rubato', 'facebook hackerato', 'proteggere social'],
+    en: ['social account hacked', 'secure instagram', 'protect social media'],
+  },
+  // ---------------- Soldi e organizzazione ----------------
+  spendly: {
+    it: ['spese', 'quanto spendo', 'budget', 'risparmiare', 'entrate e uscite', 'bilancio familiare', 'conti di casa', 'spese mensili', 'gestire i soldi'],
+    en: ['expenses', 'budget', 'how much i spend', 'save money', 'household budget', 'track spending'],
+    fr: ['dépenses', 'budget'],
+    es: ['gastos', 'presupuesto'],
+    pt: ['despesas', 'orçamento'],
+    de: ['ausgaben', 'budget'],
+    ru: ['расходы', 'бюджет'],
+  },
+  fincheck: {
+    it: ['educazione finanziaria', 'far quadrare i conti', 'check up soldi', 'debiti'],
+    en: ['financial literacy', 'money check up', 'debts'],
+  },
+  memolife: {
+    it: ['agenda', 'appuntamento', 'promemoria', 'ricordami', 'calendario', 'non dimenticare', 'note', 'rubrica', 'impegni'],
+    en: ['agenda', 'appointment', 'reminder', 'remind me', 'calendar', 'notes', 'contacts'],
+    fr: ['agenda', 'rendez-vous', 'rappel'],
+    es: ['agenda', 'cita', 'recordatorio'],
+    pt: ['agenda', 'compromisso', 'lembrete'],
+    de: ['kalender', 'termin', 'erinnerung'],
+    ru: ['календарь', 'напоминание'],
+  },
+  'life-calendar': {
+    it: ['scadenza', 'carta identità scaduta', 'rinnovo patente', 'scadenza passaporto', 'scadenze documenti', 'rinnovare', 'contratto in scadenza', 'abbonamenti'],
+    en: ['expiry date', 'renew passport', 'driving licence renewal', 'document deadlines', 'subscriptions'],
+    fr: ['échéance', 'renouveler'],
+    es: ['vencimiento', 'renovar'],
+    pt: ['vencimento', 'renovar'],
+    de: ['ablaufdatum', 'verlängern'],
+    ru: ['срок действия', 'продлить'],
+  },
+  fototessera: {
+    it: ['fototessera', 'foto tessera', 'foto passaporto', 'foto carta identità', 'foto patente', 'foto per documenti', 'foto 35x45', 'permesso di soggiorno foto'],
+    en: ['passport photo', 'id photo', 'photo for documents', '35x45'],
+    fr: ['photo identité', 'photo passeport'],
+    es: ['foto carnet', 'foto pasaporte'],
+    pt: ['foto passe', 'foto passaporte'],
+    de: ['passbild', 'passfoto'],
+    ru: ['фото на документы', 'фото на паспорт'],
+  },
+  garage: {
+    it: ['auto', 'macchina', 'bollo', 'assicurazione auto', 'revisione', 'tagliando', 'moto', 'noleggio lungo termine', 'chilometri'],
+    en: ['car', 'car insurance', 'mot', 'car service', 'motorbike', 'car tax'],
+    fr: ['voiture', 'assurance auto'],
+    es: ['coche', 'seguro coche'],
+    pt: ['carro', 'seguro auto'],
+    de: ['auto', 'kfz versicherung'],
+    ru: ['машина', 'страховка'],
+  },
+  casa: {
+    it: ['casa', 'bollette', 'manutenzione', 'caldaia', 'elettrodomestici', 'garanzia', 'utenze', 'condominio'],
+    en: ['home', 'bills', 'maintenance', 'boiler', 'appliances', 'warranty'],
+    fr: ['maison', 'factures'],
+    es: ['casa', 'facturas'],
+    pt: ['casa', 'contas'],
+    de: ['haus', 'rechnungen'],
+    ru: ['дом', 'счета'],
+  },
+  findo: {
+    it: ['dove ho messo', 'non trovo', 'ritrovare oggetti', 'inventario', 'dove l’ho messo', 'perdo le cose'],
+    en: ['where did i put', 'cant find', 'find my things', 'inventory'],
+    fr: ['où j’ai mis'],
+    es: ['dónde lo puse'],
+    pt: ['onde coloquei'],
+    de: ['wo habe ich'],
+    ru: ['куда я положил'],
+  },
+  hopla: {
+    it: ['foto dal telefono al computer', 'trasferire foto', 'passare video al pc', 'senza cavo', 'spostare file'],
+    en: ['phone to computer', 'transfer photos', 'send video to pc', 'without cable'],
+    fr: ['photos vers ordinateur'],
+    es: ['fotos al ordenador'],
+    pt: ['fotos para o computador'],
+    de: ['fotos auf pc'],
+    ru: ['фото на компьютер'],
+  },
+  travel: {
+    it: ['viaggio', 'vacanza', 'gita', 'viaggio di gruppo', 'itinerario', 'valigia'],
+    en: ['trip', 'holiday', 'group travel', 'itinerary'],
+    fr: ['voyage'],
+    es: ['viaje'],
+    pt: ['viagem'],
+    de: ['reise'],
+    ru: ['поездка'],
+  },
+  // ---------------- Lavoro e ufficio ----------------
+  'firma-pdf': {
+    it: ['firmare un pdf', 'firmare un contratto', 'firma documento', 'firmare dal telefono', 'firma digitale', 'compilare pdf'],
+    en: ['sign a pdf', 'sign a contract', 'sign document', 'e-signature'],
+    fr: ['signer pdf', 'signer contrat'],
+    es: ['firmar pdf', 'firmar contrato'],
+    pt: ['assinar pdf', 'assinar contrato'],
+    de: ['pdf unterschreiben', 'vertrag unterschreiben'],
+    ru: ['подписать pdf', 'подписать договор'],
+  },
+  scanner: {
+    it: ['scansionare', 'scanner', 'scansione documento', 'foto di un foglio', 'unire pdf', 'dividere pdf', 'pdf troppo pesante', 'comprimere pdf', 'trasformare foto in pdf', 'ruotare pdf'],
+    en: ['scan document', 'scanner', 'merge pdf', 'split pdf', 'compress pdf', 'photo to pdf'],
+    fr: ['scanner document', 'fusionner pdf', 'compresser pdf'],
+    es: ['escanear documento', 'unir pdf', 'comprimir pdf'],
+    pt: ['digitalizar documento', 'juntar pdf', 'comprimir pdf'],
+    de: ['dokument scannen', 'pdf zusammenfügen', 'pdf verkleinern'],
+    ru: ['сканировать документ', 'объединить pdf'],
+  },
+  'firma-email': {
+    it: ['firma email', 'firma per la posta', 'firma outlook', 'firma gmail'],
+    en: ['email signature', 'gmail signature'],
+  },
+  'trova-lavoro': {
+    it: ['cerco lavoro', 'offerte di lavoro', 'trovare lavoro', 'annunci di lavoro', 'colloquio'],
+    en: ['job search', 'find a job', 'job offers', 'looking for work'],
+    fr: ['chercher emploi', 'offres d’emploi'],
+    es: ['buscar trabajo', 'ofertas de empleo'],
+    pt: ['procurar emprego', 'vagas'],
+    de: ['job suchen', 'stellenangebote'],
+    ru: ['найти работу', 'вакансии'],
+  },
+  'kumani-cv': {
+    it: ['curriculum', 'cv', 'fare il curriculum', 'curriculum vitae', 'candidatura'],
+    en: ['resume', 'cv', 'write my cv'],
+    fr: ['cv'],
+    es: ['currículum'],
+    pt: ['currículo'],
+    de: ['lebenslauf'],
+    ru: ['резюме'],
+  },
+  preventivi: {
+    it: ['preventivo', 'fare un preventivo', 'offerta al cliente', 'stima dei costi'],
+    en: ['quote', 'estimate', 'quotation'],
+    fr: ['devis'],
+    es: ['presupuesto cliente'],
+    pt: ['orçamento cliente'],
+    de: ['angebot erstellen', 'kostenvoranschlag'],
+    ru: ['смета'],
+  },
+  clienti: {
+    it: ['clienti', 'gestire clienti', 'chi mi deve soldi', 'lavori da fare', 'crm'],
+    en: ['clients', 'customers', 'crm', 'who owes me'],
+  },
+  tempus: {
+    it: ['prenotazioni online', 'appuntamenti clienti', 'agenda parrucchiere', 'prenotare', 'orari disponibili'],
+    en: ['online booking', 'client appointments', 'booking page'],
+  },
+  'digital-receipt': {
+    it: ['ricevuta', 'consegna', 'prestito', 'ricevuta di consegna', 'prova di consegna'],
+    en: ['receipt', 'delivery proof', 'lending'],
+  },
+  magazzino: {
+    it: ['magazzino', 'giacenze', 'inventario prodotti', 'codice a barre', 'scorte'],
+    en: ['stock', 'inventory', 'warehouse', 'barcode'],
+  },
+  calcolatrici: {
+    it: ['calcolare iva', 'scorporo iva', 'ritenuta d’acconto', 'sconto', 'calcolatrice'],
+    en: ['vat calculator', 'discount calculator'],
+  },
+  // ---------------- La tua attività ----------------
+  shop: {
+    it: ['negozio online', 'vendere online', 'e-commerce', 'vendere prodotti'],
+    en: ['online shop', 'sell online', 'ecommerce'],
+  },
+  menu: {
+    it: ['menù', 'menu ristorante', 'menu con qr', 'menu digitale', 'bar', 'pizzeria'],
+    en: ['restaurant menu', 'qr menu', 'digital menu'],
+  },
+  fidelity: {
+    it: ['tessera fedeltà', 'carta fedeltà', 'timbri', 'fidelizzare clienti', 'raccolta punti'],
+    en: ['loyalty card', 'stamp card', 'reward customers'],
+  },
+  'landing-page': {
+    it: ['sito internet', 'sito vetrina', 'pagina web', 'farmi un sito', 'sito per la mia attività'],
+    en: ['website', 'landing page', 'business website'],
+  },
+  'link-in-bio': {
+    it: ['link in bio', 'linktree', 'tutti i miei social', 'link instagram'],
+    en: ['link in bio', 'linktree'],
+  },
+  'qr-code-pro': {
+    it: ['qr dinamico', 'qr tracciabile', 'cambiare destinazione qr', 'statistiche qr'],
+    en: ['dynamic qr', 'trackable qr'],
+  },
+  'qr-generator': {
+    it: ['qr code', 'creare un qr', 'codice qr'],
+    en: ['qr code', 'make a qr'],
+  },
+  offermaker: {
+    it: ['offerta', 'promozione', 'volantino offerta'],
+    en: ['offer', 'promotion'],
+  },
+  'whatsapp-messages': {
+    it: ['messaggio whatsapp', 'invitare amici', 'messaggi pronti'],
+    en: ['whatsapp message', 'invite friends'],
+  },
+  // ---------------- Social ----------------
+  imago: {
+    it: ['grafica per instagram', 'post social', 'storia instagram', 'immagine per facebook'],
+    en: ['instagram graphic', 'social post image'],
+  },
+  forma: {
+    it: ['tagliare video', 'video per reel', 'adattare video tiktok', 'formato reel'],
+    en: ['trim video', 'reel format'],
+  },
+  vox: {
+    it: ['sottotitoli', 'sottotitolare video', 'trascrivere video'],
+    en: ['subtitles', 'captions video'],
+  },
+  lumen: {
+    it: ['gobbo', 'teleprompter', 'leggere mentre registro'],
+    en: ['teleprompter'],
+  },
+  captio: {
+    it: ['didascalia', 'hashtag', 'testo per il post'],
+    en: ['caption', 'hashtags'],
+  },
+  diarium: {
+    it: ['idee per post', 'calendario editoriale', 'cosa pubblicare'],
+    en: ['content calendar', 'post ideas'],
+  },
+  // ---------------- Benessere ----------------
+  oxygen: {
+    it: ['ansia', 'respirare', 'respirazione', 'calmarmi', 'stress', 'agitato'],
+    en: ['anxiety', 'breathing', 'calm down', 'stress'],
+    fr: ['anxiété', 'respiration'],
+    es: ['ansiedad', 'respiración'],
+    pt: ['ansiedade', 'respiração'],
+    de: ['angst', 'atmen'],
+    ru: ['тревога', 'дыхание'],
+  },
+  neurobalance: {
+    it: ['dormire', 'non riesco a dormire', 'insonnia', 'rilassarmi', 'suoni rilassanti', 'meditazione', 'musica per dormire'],
+    en: ['sleep', 'cant sleep', 'insomnia', 'relax', 'relaxing sounds', 'meditation'],
+    fr: ['dormir', 'insomnie'],
+    es: ['dormir', 'insomnio'],
+    pt: ['dormir', 'insônia'],
+    de: ['schlafen', 'schlaflos'],
+    ru: ['сон', 'бессонница'],
+  },
+  focus: {
+    it: ['concentrarmi', 'studiare', 'pomodoro', 'concentrazione', 'distrazioni'],
+    en: ['focus', 'study', 'pomodoro', 'concentrate'],
+  },
+  mandala: {
+    it: ['disegnare per rilassarmi', 'mandala', 'colorare'],
+    en: ['mandala', 'drawing to relax'],
+  },
+  aureya: {
+    it: ['udito', 'test vista', 'sento poco', 'vista', 'test udito'],
+    en: ['hearing test', 'eye test', 'vision'],
+  },
+  cronobioma: {
+    it: ['sonno', 'turni di notte', 'jet lag', 'fuso orario', 'cronotipo', 'ritmo sonno'],
+    en: ['sleep rhythm', 'night shifts', 'jet lag', 'chronotype'],
+  },
+  // ---------------- Svago e famiglia ----------------
+  'angolo-bambini': {
+    it: ['bambini', 'giochi per bambini', 'colorare', 'far giocare mio figlio', 'disegni da colorare'],
+    en: ['kids', 'games for children', 'colouring'],
+  },
+  nexus: { it: ['cruciverba', 'parole crociate'], en: ['crossword'] },
+  veritas: { it: ['gioco di gruppo', 'gioco con amici', 'serata giochi'], en: ['party game', 'group game'] },
+  fabula: { it: ['storia', 'inventare una storia', 'dadi'], en: ['story dice'] },
+  mosaic: { it: ['opera collettiva', 'mosaico'], en: ['mosaic'] },
+  convivium: { it: ['cena con amici', 'aperitivo', 'organizzare una serata', 'invitare amici', 'pizza con amici'], en: ['dinner with friends', 'organize a night out'] },
+  affinity: { it: ['affinità', 'compatibilità', 'coppia', 'personalità'], en: ['compatibility', 'personality test'] },
+  listings: { it: ['vendere', 'annuncio', 'comprare usato', 'bacheca', 'offro servizi'], en: ['sell', 'listing', 'classified ad'] },
+  timebank: { it: ['banca del tempo', 'scambio di favori', 'aiuto tra vicini'], en: ['time bank', 'exchange favours'] },
+  events: { it: ['eventi', 'evento', 'cosa fare', 'serata'], en: ['events', 'what to do'] },
+}
