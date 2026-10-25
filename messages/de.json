@@ -16539,13 +16539,13 @@
     "privacyNote": "Das Foto bleibt auf diesem Gerät: KUMANI verarbeitet es im Browser und lädt es nicht hoch.",
     "tipsTitle": "Für ein Foto, das die Prüfung besteht",
     "tip1": "Lass dich von einer anderen Person fotografieren, aus etwa 1,5 Metern, mit dem Handy auf Augenhöhe.",
-    "tip2": "Stell dich vor eine helle Wand, mit Licht von vorne und ohne Schatten im Gesicht.",
+    "tip2": "Nutze einen weißen oder sehr hellen, einfarbigen Hintergrund (eine Wand oder ein weißes Laken), einen halben Meter hinter den Schultern: Kopf- und Haarkonturen werden viel sauberer. Licht von vorne, keine Schatten im Gesicht.",
     "tip3": "Schau gerade aufs Handy, Mund geschlossen, neutraler Ausdruck, Augen offen.",
     "tip4": "Keine Mütze, keine Sonnenbrille, keine Haare über den Augen. Eine Brille ist in Ordnung, wenn sie nicht spiegelt.",
     "tip5": "Nimm auch die Schultern mit aufs Bild: den Rest erledigt KUMANI.",
     "take": "Foto aufnehmen",
     "choose": "Foto wählen",
-    "loading": "Gesichtserkennung wird vorbereitet… (beim ersten Mal etwa 18 MB)",
+    "loading": "Gesichtserkennung wird vorbereitet… (beim ersten Mal etwa 40 MB)",
     "analyzing": "Gesicht wird gesucht…",
     "errLoad": "Die Gesichtserkennung wurde nicht geladen. Prüfe die Verbindung und versuche es erneut.",
     "errRead": "Das Foto lässt sich nicht öffnen. Versuche ein anderes.",
@@ -16584,7 +16584,9 @@
     "share": "Teilen",
     "shareTitle": "Passbild",
     "newPhoto": "Anderes Foto",
-    "sheetHint": "Druck den Bogen im Format 10×15 cm ohne Rand (im Fotogeschäft oder am Automaten) und schneide entlang der grauen Linien."
+    "sheetHint": "Druck den Bogen im Format 10×15 cm ohne Rand (im Fotogeschäft oder am Automaten) und schneide entlang der grauen Linien.",
+    "matting": "Kopf und Haare werden freigestellt…",
+    "warn_background": "Der Hintergrund ist dunkel oder farbig: vor einer weißen oder hellen Wand werden die Haarkonturen sauberer."
   },
   "camera": {
     "title": "Kamera",

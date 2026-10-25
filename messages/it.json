@@ -16539,13 +16539,13 @@
     "privacyNote": "La foto resta su questo dispositivo: KUMANI la elabora nel browser e non la carica sui server.",
     "tipsTitle": "Per una foto che passa il controllo",
     "tip1": "Fatti fotografare da un’altra persona, a circa 1,5 metri, con il telefono all’altezza degli occhi.",
-    "tip2": "Mettiti davanti a una parete chiara, con la luce davanti a te e senza ombre sul viso.",
+    "tip2": "Usa uno sfondo bianco o molto chiaro e uniforme (una parete o un lenzuolo bianco), a mezzo metro dalle spalle: i contorni di testa e capelli vengono molto più puliti. Luce davanti a te, senza ombre sul viso.",
     "tip3": "Guarda dritto verso il telefono, bocca chiusa, espressione neutra, occhi aperti.",
     "tip4": "Niente cappelli, occhiali da sole o capelli sugli occhi. Gli occhiali da vista vanno bene se non riflettono.",
     "tip5": "Inquadra anche le spalle: al resto pensa KUMANI.",
     "take": "Scatta una foto",
     "choose": "Scegli una foto",
-    "loading": "Preparo il riconoscimento del viso… (la prima volta scarica circa 18 MB)",
+    "loading": "Preparo il riconoscimento del viso… (la prima volta scarica circa 40 MB)",
     "analyzing": "Cerco il viso nella foto…",
     "errLoad": "Il riconoscimento del viso non si è caricato. Controlla la connessione e riprova.",
     "errRead": "La foto non si apre. Prova con un’altra foto.",
@@ -16584,7 +16584,9 @@
     "share": "Condividi",
     "shareTitle": "Fototessera",
     "newPhoto": "Un’altra foto",
-    "sheetHint": "Stampa il foglio in formato 10×15 cm senza bordi (al fotografo o al chiosco del supermercato) e ritaglia lungo le linee grigie."
+    "sheetHint": "Stampa il foglio in formato 10×15 cm senza bordi (al fotografo o al chiosco del supermercato) e ritaglia lungo le linee grigie.",
+    "matting": "Scontorno testa e capelli…",
+    "warn_background": "Lo sfondo è scuro o colorato: con una parete bianca o chiara i contorni dei capelli vengono più puliti."
   },
   "camera": {
     "title": "Fotocamera",

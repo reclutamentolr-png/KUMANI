@@ -1,11 +1,15 @@
 // FOTOTESSERA: viso e sagoma trovati nel telefono con MediaPipe (Google,
-// licenza Apache-2.0). Libreria e modelli si scaricano al primo uso dal CDN
-// e poi restano nella cache del browser; la foto non lascia il dispositivo.
+// licenza Apache-2.0); contorni di testa e capelli con MODNet (scontorno dei
+// ritratti, Apache-2.0) tramite Transformers.js. Librerie e modelli si
+// scaricano al primo uso dal CDN e poi restano nella cache del browser; la
+// foto non lascia il dispositivo.
 import type { FacePoints, Point } from './geometry'
 
 const LIB = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.35'
 const FACE_MODEL = 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task'
 const SEG_MODEL = 'https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_segmenter/float16/latest/selfie_segmenter.tflite'
+const TRANSFORMERS = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.1'
+const MATTE_MODEL = 'Xenova/modnet'
 
 type Landmark = { x: number; y: number }
 type MpMask = { width: number; height: number; getAsFloat32Array: () => Float32Array }
@@ -42,7 +46,7 @@ export function loadVision(): Promise<Tools> {
 // Sagoma della persona: probabilità 0–1 per ogni punto (mw×mh)
 export type PersonMask = { data: Float32Array; w: number; h: number }
 
-export type Warning = 'blur' | 'dark' | 'bright' | 'shadow' | 'turned' | 'eyes' | 'mouth'
+export type Warning = 'blur' | 'dark' | 'bright' | 'shadow' | 'turned' | 'eyes' | 'mouth' | 'background'
 
 export type Analysis =
   | { ok: false; reason: 'noFace' | 'manyFaces' }
@@ -253,4 +257,117 @@ export function cutout(source: HTMLCanvasElement, mask: PersonMask): HTMLCanvasE
   ctx.drawImage(alpha, 0, 0, source.width, source.height)
   ctx.globalCompositeOperation = 'source-over'
   return out
+}
+
+// --- Scontorno fine con MODNet ---------------------------------------------
+
+type RawImageLike = { width: number; height: number; channels: number; data: Uint8ClampedArray | Uint8Array }
+type Matter = (img: unknown) => Promise<RawImageLike | RawImageLike[]>
+let matter: Promise<{ run: Matter; fromCanvas: (c: HTMLCanvasElement) => unknown }> | null = null
+
+export function loadMatte() {
+  if (!matter) {
+    matter = (async () => {
+      const lib = await import(/* webpackIgnore: true */ /* turbopackIgnore: true */ TRANSFORMERS)
+      lib.env.allowLocalModels = false
+      const run = (await lib.pipeline('background-removal', MATTE_MODEL, { dtype: 'fp16', device: 'wasm' })) as Matter
+      return { run, fromCanvas: (c: HTMLCanvasElement) => lib.RawImage.fromCanvas(c) }
+    })()
+    matter.catch(() => {
+      matter = null
+    })
+  }
+  return matter
+}
+
+// Trasparenza (0–1) di ogni punto della foto: 1 = persona, 0 = sfondo
+export async function matte(source: HTMLCanvasElement): Promise<Float32Array | null> {
+  try {
+    const m = await loadMatte()
+    const res = await m.run(await m.fromCanvas(source))
+    const r = Array.isArray(res) ? res[0] : res
+    const W = source.width
+    const H = source.height
+    const alpha = new Float32Array(W * H)
+    const ch = r.channels
+    for (let y = 0; y < H; y++)
+      for (let x = 0; x < W; x++) {
+        const sx = Math.min(r.width - 1, Math.floor((x * r.width) / W))
+        const sy = Math.min(r.height - 1, Math.floor((y * r.height) / H))
+        const v = r.data[(sy * r.width + sx) * ch + (ch - 1)] / 255
+        // Bordo un po' più deciso: niente velo intorno alla testa
+        alpha[y * W + x] = Math.min(1, Math.max(0, (v - 0.06) / 0.88))
+      }
+    return alpha
+  } catch (e) {
+    console.error('[fototessera] scontorno:', e)
+    return null
+  }
+}
+
+// Persona ritagliata con i colori del bordo ripuliti: dove i capelli sono
+// semitrasparenti si toglie il colore dello sfondo (niente alone colorato).
+// Colore della persona F da I = αF + (1−α)B, con B lo sfondo vicino stimato.
+export function cutoutMatte(source: HTMLCanvasElement, alpha: Float32Array): HTMLCanvasElement {
+  const W = source.width
+  const H = source.height
+  const ctx = source.getContext('2d')!
+  const px = ctx.getImageData(0, 0, W, H).data
+  const r = Math.max(6, Math.round(Math.max(W, H) / 60))
+  const wgt = new Float32Array(W * H)
+  const ch = [new Float32Array(W * H), new Float32Array(W * H), new Float32Array(W * H)]
+  for (let i = 0; i < W * H; i++) {
+    const b = 1 - alpha[i]
+    const w = b * b
+    wgt[i] = w
+    ch[0][i] = px[i * 4] * w
+    ch[1][i] = px[i * 4 + 1] * w
+    ch[2][i] = px[i * 4 + 2] * w
+  }
+  const bw = boxBlur(wgt, W, H, r)
+  const bc = ch.map((c) => boxBlur(c, W, H, r))
+  const out = document.createElement('canvas')
+  out.width = W
+  out.height = H
+  const octx = out.getContext('2d')!
+  const img = octx.createImageData(W, H)
+  const d = img.data
+  for (let i = 0; i < W * H; i++) {
+    const a = alpha[i]
+    d[i * 4 + 3] = Math.round(a * 255)
+    if (a <= 0.004) continue
+    for (let c = 0; c < 3; c++) {
+      const I = px[i * 4 + c]
+      if (a >= 0.97 || bw[i] < 1e-3) {
+        d[i * 4 + c] = I
+        continue
+      }
+      const B = bc[c][i] / bw[i]
+      const F = (I - (1 - a) * B) / Math.max(a, 0.12)
+      d[i * 4 + c] = Math.max(0, Math.min(255, F))
+    }
+  }
+  octx.putImageData(img, 0, 0)
+  return out
+}
+
+// Sfondo scuro o colorato (dove alpha ≈ 0): consiglio di rifarla su parete chiara
+export function busyBackground(source: HTMLCanvasElement, alpha: Float32Array): boolean {
+  const W = source.width
+  const H = source.height
+  const px = source.getContext('2d')!.getImageData(0, 0, W, H).data
+  let n = 0
+  let lum = 0
+  let sat = 0
+  for (let i = 0; i < W * H; i += 7) {
+    if (alpha[i] > 0.05) continue
+    const R = px[i * 4]
+    const G = px[i * 4 + 1]
+    const B = px[i * 4 + 2]
+    lum += 0.299 * R + 0.587 * G + 0.114 * B
+    sat += Math.max(R, G, B) - Math.min(R, G, B)
+    n++
+  }
+  if (n < 500) return false
+  return lum / n < 160 || sat / n > 45
 }

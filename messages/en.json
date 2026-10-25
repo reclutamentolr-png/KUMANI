@@ -16539,13 +16539,13 @@
     "privacyNote": "The photo stays on this device: KUMANI processes it in the browser and never uploads it.",
     "tipsTitle": "For a photo that passes the check",
     "tip1": "Have someone else take the photo, about 1.5 metres away, with the phone at eye level.",
-    "tip2": "Stand in front of a light wall, with the light in front of you and no shadows on your face.",
+    "tip2": "Use a white or very light, plain background (a wall or a white sheet), half a metre behind your shoulders: the edges of head and hair come out much cleaner. Light in front of you, no shadows on the face.",
     "tip3": "Look straight at the phone, mouth closed, neutral expression, eyes open.",
     "tip4": "No hats, sunglasses or hair over the eyes. Glasses are fine if they don’t reflect.",
     "tip5": "Include your shoulders: KUMANI takes care of the rest.",
     "take": "Take a photo",
     "choose": "Pick a photo",
-    "loading": "Getting face detection ready… (the first time it downloads about 18 MB)",
+    "loading": "Getting face detection ready… (the first time it downloads about 40 MB)",
     "analyzing": "Looking for the face…",
     "errLoad": "Face detection didn’t load. Check your connection and try again.",
     "errRead": "The photo can’t be opened. Try another one.",
@@ -16584,7 +16584,9 @@
     "share": "Share",
     "shareTitle": "ID photo",
     "newPhoto": "Another photo",
-    "sheetHint": "Print the sheet at 10×15 cm (4×6 in) without borders, at a photo shop or kiosk, and cut along the grey lines."
+    "sheetHint": "Print the sheet at 10×15 cm (4×6 in) without borders, at a photo shop or kiosk, and cut along the grey lines.",
+    "matting": "Cutting out head and hair…",
+    "warn_background": "The background is dark or colourful: with a white or light wall the hair edges come out cleaner."
   },
   "camera": {
     "title": "Camera",

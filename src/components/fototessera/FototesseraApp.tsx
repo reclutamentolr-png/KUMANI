@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl'
 import { Camera, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Download, Grid3x3, ImageUp, LoaderCircle, RotateCcw, RotateCw, Share2, ShieldCheck, TriangleAlert, Undo2, CircleCheck } from 'lucide-react'
 import { fototesseraDone } from '@/app/actions/fototessera'
 import { DEFAULT_ADJUST, HEAD_MM, PHOTO_DPI, PHOTO_MM, PHOTO_PX, PHOTO_PX_PER_MM, SHEET, fitFace, headLines, placement, setJpegDpi, sheetSlots, type Adjust, type Fit } from '@/lib/fototessera/geometry'
-import { analyze, cutout, loadVision, type Warning } from '@/lib/fototessera/vision'
+import { analyze, busyBackground, cutout, cutoutMatte, loadMatte, loadVision, matte, type Warning } from '@/lib/fototessera/vision'
 import CameraDialog, { needsCameraDialog } from '@/components/camera/CameraDialog'
 
 // FOTOTESSERA (piano Plus): dalla foto del telefono alla fototessera 35×45 mm
@@ -19,7 +19,7 @@ const btn = 'inline-flex items-center justify-center gap-2 rounded-2xl px-4 py-3
 const small = 'flex h-11 w-11 items-center justify-center rounded-xl border border-[var(--gold)]/30 bg-white text-[var(--ink)] hover:border-[var(--gold)]'
 
 type Ready = { source: HTMLCanvasElement; cut: HTMLCanvasElement | null; fit: Fit; tilt: number; warnings: Warning[] }
-type Phase = { kind: 'start' } | { kind: 'busy'; step: 'loading' | 'analyzing' } | { kind: 'error'; key: string } | { kind: 'ready' }
+type Phase = { kind: 'start' } | { kind: 'busy'; step: 'loading' | 'analyzing' | 'matting' } | { kind: 'error'; key: string } | { kind: 'ready' }
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
 
@@ -139,6 +139,8 @@ export default function FototesseraApp() {
     if (!file) return
     setPhase({ kind: 'busy', step: 'loading' })
     try {
+      // Scontorno fine in parallelo: se non si carica resta quello di MediaPipe
+      void loadMatte().catch(() => {})
       await loadVision()
     } catch (e) {
       console.error('[fototessera] modelli:', e)
@@ -161,9 +163,14 @@ export default function FototesseraApp() {
       const result = await analyze(source)
       if (!result.ok) return setPhase({ kind: 'error', key: result.reason === 'noFace' ? 'errNoFace' : 'errManyFaces' })
       const fit = fitFace(result.face)
-      setReady({ source, cut: result.mask ? cutout(source, result.mask) : null, fit, tilt: result.tilt, warnings: result.warnings })
+      setPhase({ kind: 'busy', step: 'matting' })
+      const alpha = await matte(source)
+      const warnings = [...result.warnings]
+      if (alpha && busyBackground(source, alpha)) warnings.push('background')
+      const cut = alpha ? cutoutMatte(source, alpha) : result.mask ? cutout(source, result.mask) : null
+      setReady({ source, cut, fit, tilt: result.tilt, warnings })
       setAdj(DEFAULT_ADJUST)
-      setWhite(!!result.mask)
+      setWhite(!!cut)
       setPhase({ kind: 'ready' })
     } catch (e) {
       console.error('[fototessera] analisi:', e)

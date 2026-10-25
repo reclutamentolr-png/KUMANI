@@ -16539,13 +16539,13 @@
     "privacyNote": "La photo reste sur cet appareil : KUMANI la traite dans le navigateur et ne l’envoie pas sur ses serveurs.",
     "tipsTitle": "Pour une photo qui passe le contrôle",
     "tip1": "Faites-vous photographier par une autre personne, à environ 1,5 mètre, téléphone à hauteur des yeux.",
-    "tip2": "Placez-vous devant un mur clair, la lumière devant vous et sans ombre sur le visage.",
+    "tip2": "Utilisez un fond blanc ou très clair et uni (un mur ou un drap blanc), à un demi-mètre derrière les épaules : les contours de la tête et des cheveux seront bien plus nets. Lumière devant vous, sans ombre sur le visage.",
     "tip3": "Regardez droit vers le téléphone, bouche fermée, expression neutre, yeux ouverts.",
     "tip4": "Pas de chapeau, de lunettes de soleil ni de cheveux sur les yeux. Les lunettes de vue vont si elles ne reflètent pas.",
     "tip5": "Cadrez aussi les épaules : KUMANI s’occupe du reste.",
     "take": "Prendre une photo",
     "choose": "Choisir une photo",
-    "loading": "Préparation de la détection du visage… (la première fois, environ 18 Mo)",
+    "loading": "Préparation de la détection du visage… (la première fois, environ 40 Mo)",
     "analyzing": "Recherche du visage…",
     "errLoad": "La détection du visage ne s’est pas chargée. Vérifiez la connexion et réessayez.",
     "errRead": "La photo ne s’ouvre pas. Essayez-en une autre.",
@@ -16584,7 +16584,9 @@
     "share": "Partager",
     "shareTitle": "Photo d’identité",
     "newPhoto": "Une autre photo",
-    "sheetHint": "Imprimez la planche au format 10×15 cm sans bordure (chez le photographe ou à une borne) et découpez le long des lignes grises."
+    "sheetHint": "Imprimez la planche au format 10×15 cm sans bordure (chez le photographe ou à une borne) et découpez le long des lignes grises.",
+    "matting": "Détourage de la tête et des cheveux…",
+    "warn_background": "Le fond est sombre ou coloré : devant un mur blanc ou clair, les contours des cheveux seront plus nets."
   },
   "camera": {
     "title": "Appareil photo",

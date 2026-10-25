@@ -16539,13 +16539,13 @@
     "privacyNote": "La foto se queda en este dispositivo: KUMANI la procesa en el navegador y no la sube a sus servidores.",
     "tipsTitle": "Para una foto que pase el control",
     "tip1": "Pide a otra persona que te haga la foto, a unos 1,5 metros, con el móvil a la altura de los ojos.",
-    "tip2": "Ponte delante de una pared clara, con la luz delante y sin sombras en la cara.",
+    "tip2": "Usa un fondo blanco o muy claro y liso (una pared o una sábana blanca), a medio metro de los hombros: los contornos de la cabeza y el pelo salen mucho más limpios. Luz delante, sin sombras en la cara.",
     "tip3": "Mira recto al móvil, boca cerrada, expresión neutra, ojos abiertos.",
     "tip4": "Sin gorra, gafas de sol ni pelo sobre los ojos. Las gafas graduadas valen si no reflejan.",
     "tip5": "Encuadra también los hombros: del resto se encarga KUMANI.",
     "take": "Hacer una foto",
     "choose": "Elegir una foto",
-    "loading": "Preparando el reconocimiento facial… (la primera vez descarga unos 18 MB)",
+    "loading": "Preparando el reconocimiento facial… (la primera vez descarga unos 40 MB)",
     "analyzing": "Buscando la cara…",
     "errLoad": "El reconocimiento facial no se ha cargado. Revisa la conexión y vuelve a intentarlo.",
     "errRead": "La foto no se abre. Prueba con otra.",
@@ -16584,7 +16584,9 @@
     "share": "Compartir",
     "shareTitle": "Foto carné",
     "newPhoto": "Otra foto",
-    "sheetHint": "Imprime la hoja en tamaño 10×15 cm sin bordes (en una tienda de fotos o un quiosco) y recorta por las líneas grises."
+    "sheetHint": "Imprime la hoja en tamaño 10×15 cm sin bordes (en una tienda de fotos o un quiosco) y recorta por las líneas grises.",
+    "matting": "Recortando cabeza y pelo…",
+    "warn_background": "El fondo es oscuro o de color: con una pared blanca o clara los contornos del pelo salen más limpios."
   },
   "camera": {
     "title": "Cámara",

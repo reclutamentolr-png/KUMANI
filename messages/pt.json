@@ -16539,13 +16539,13 @@
     "privacyNote": "A foto fica neste dispositivo: a KUMANI processa-a no navegador e não a envia para os servidores.",
     "tipsTitle": "Para uma foto que passe na verificação",
     "tip1": "Peça a outra pessoa que tire a foto, a cerca de 1,5 metros, com o telemóvel à altura dos olhos.",
-    "tip2": "Fique à frente de uma parede clara, com a luz à sua frente e sem sombras no rosto.",
+    "tip2": "Use um fundo branco ou muito claro e liso (uma parede ou um lençol branco), a meio metro dos ombros: os contornos da cabeça e do cabelo ficam muito mais limpos. Luz à sua frente, sem sombras no rosto.",
     "tip3": "Olhe direito para o telemóvel, boca fechada, expressão neutra, olhos abertos.",
     "tip4": "Sem chapéu, óculos de sol ou cabelo sobre os olhos. Os óculos graduados servem se não refletirem.",
     "tip5": "Enquadre também os ombros: a KUMANI trata do resto.",
     "take": "Tirar uma foto",
     "choose": "Escolher uma foto",
-    "loading": "A preparar o reconhecimento do rosto… (da primeira vez transfere cerca de 18 MB)",
+    "loading": "A preparar o reconhecimento do rosto… (da primeira vez transfere cerca de 40 MB)",
     "analyzing": "À procura do rosto…",
     "errLoad": "O reconhecimento do rosto não carregou. Verifique a ligação e tente de novo.",
     "errRead": "A foto não abre. Experimente outra.",
@@ -16584,7 +16584,9 @@
     "share": "Partilhar",
     "shareTitle": "Fotografia tipo passe",
     "newPhoto": "Outra foto",
-    "sheetHint": "Imprima a folha no formato 10×15 cm sem margens (numa loja de fotografia ou quiosque) e recorte pelas linhas cinzentas."
+    "sheetHint": "Imprima a folha no formato 10×15 cm sem margens (numa loja de fotografia ou quiosque) e recorte pelas linhas cinzentas.",
+    "matting": "A recortar cabeça e cabelo…",
+    "warn_background": "O fundo é escuro ou colorido: com uma parede branca ou clara os contornos do cabelo ficam mais limpos."
   },
   "camera": {
     "title": "Câmara",
