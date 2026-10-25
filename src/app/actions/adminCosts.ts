@@ -179,7 +179,9 @@ export async function adminCostsSummary() {
   const agents = fin ? fin.agentCommissions.pending + fin.agentCommissions.matured + fin.agentCommissions.paid : 0
   const donations = fin ? fin.donations.subscriptionCents + fin.donations.pointsCents : 0
   const operating = revenueNet - fixedAccrued - variableTotal - agents - donations
-  const structure = fin ? fin.giftedServicesCents : 0
+  // Le licenze omaggio del lancio stanno a parte (mancato guadagno)
+  const launch = fin?.launchGifts ?? { count: 0, cents: 0 }
+  const structure = fin ? Math.max(fin.giftedServicesCents - launch.cents, 0) : 0
 
   return {
     available: Boolean(fin),
@@ -199,6 +201,7 @@ export async function adminCostsSummary() {
     operating,
     structure,
     afterStructure: operating - structure,
+    launch,
     commitments: {
       vouchersUnused: fin?.kumanoVouchers.activeCents ?? 0,
       voucherCredit: fin?.voucherCreditCents ?? 0,

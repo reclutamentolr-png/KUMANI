@@ -196,6 +196,17 @@ export default function CostsPanel() {
           <Row label="Margine operativo" value={eur(s.operating)} strong negative={s.operating < 0} />
           <Row label="Costo di struttura: voucher usati" value={`− ${eur(s.structure)}`} hint="Servizi dati senza incasso, a prezzo di listino (non è un'uscita di cassa)" negative={s.structure > 0} />
           <Row label="Margine dopo la struttura" value={eur(s.afterStructure)} strong negative={s.afterStructure < 0} />
+          {s.launch.count > 0 && (
+            <div className="mt-3 rounded-lg border border-sky-200 bg-sky-50 p-3">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-sm font-semibold text-sky-900">Lancio di KUMANI: licenze omaggio</p>
+                  <p className="text-xs text-sky-800">{s.launch.count} abbonamenti regalati a prezzo di listino. Mancato guadagno, fuori dai conteggi qui sopra.</p>
+                </div>
+                <p className="whitespace-nowrap text-sm font-semibold text-sky-900">{eur(s.launch.cents)}</p>
+              </div>
+            </div>
+          )}
           {!s.available && <p className="mt-2 text-xs text-amber-700">Incassi non disponibili in questo momento (Stripe non raggiungibile): sono mostrati solo i costi.</p>}
         </div>
 
