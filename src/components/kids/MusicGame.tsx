@@ -53,6 +53,8 @@ export default function MusicGame({
   const [playing, setPlaying] = useState(false)
   const [step, setStep] = useState(-1)
   const [list, setList] = useState(false)
+  // Canzone da cancellare: prima si chiede «Sei sicuro?»
+  const [asking, setAsking] = useState<string | null>(null)
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const dancerRef = useRef<SVGSVGElement>(null)
 
@@ -274,14 +276,28 @@ export default function MusicGame({
                     </span>
                     <span className="truncate font-extrabold text-[#2B2D52]">{song.name}</span>
                   </button>
-                  <button
-                    type="button"
-                    aria-label={t('musicDelete')}
-                    onClick={() => onProfileChange({ ...profile, songs: songs.filter((s) => s.id !== song.id) })}
-                    className="rounded-xl p-2 text-red-700"
-                  >
-                    <Trash2 className="h-5 w-5" />
-                  </button>
+                  {asking === song.id ? (
+                    <span className="flex shrink-0 items-center gap-1.5" role="group" aria-label={t('musicDeleteAsk')}>
+                      <span className="text-sm font-extrabold text-[#2B2D52]">{t('musicDeleteAsk')}</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setAsking(null)
+                          onProfileChange({ ...profile, songs: songs.filter((s) => s.id !== song.id) })
+                        }}
+                        className="rounded-xl border-[3px] border-[#2B2D52] bg-[#E8473B] px-3 py-1.5 text-sm font-extrabold text-white"
+                      >
+                        {t('musicDeleteYes')}
+                      </button>
+                      <button type="button" onClick={() => setAsking(null)} className="rounded-xl border-[3px] border-[#2B2D52] bg-white px-3 py-1.5 text-sm font-extrabold text-[#2B2D52]">
+                        {t('musicDeleteNo')}
+                      </button>
+                    </span>
+                  ) : (
+                    <button type="button" aria-label={t('musicDelete')} onClick={() => setAsking(song.id)} className="rounded-xl p-2 text-red-700">
+                      <Trash2 className="h-5 w-5" />
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
