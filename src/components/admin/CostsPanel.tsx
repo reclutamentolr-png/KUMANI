@@ -171,7 +171,11 @@ export default function CostsPanel() {
       {/* Numeri principali */}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {[
-          { label: 'Costi fissi al mese', value: eur(s.monthlyRun), hint: `${eur(s.yearlyRun)} all'anno` },
+          {
+            label: 'Costo medio mensile',
+            value: eur(s.monthlyRun),
+            hint: `${eur(s.monthlyOnly)} mensili + ${eur(s.yearlyOnly)} annuali ÷ 12 · ${eur(s.yearlyRun)} all'anno`,
+          },
           { label: 'Spese variabili del mese', value: eur(s.variableThisMonth), hint: `${eur(s.variableTotal)} in tutto` },
           { label: 'Margine operativo', value: eur(s.operating), hint: s.forfettario ? 'Dall\'inizio, IVA compresa' : 'Dall\'inizio, IVA esclusa', danger: s.operating < 0 },
           { label: 'Costo di struttura (voucher usati)', value: eur(s.structure), hint: 'Servizi dati con i KU Points' },

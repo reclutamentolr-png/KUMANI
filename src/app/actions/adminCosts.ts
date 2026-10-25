@@ -163,6 +163,9 @@ export async function adminCostsSummary() {
 
   const fixedAccrued = list.costs.reduce((sum, c) => sum + accrued(c, day), 0)
   const active = list.costs.filter((c) => isActiveOn(c, day))
+  // Costo medio mensile: i mensili più la dodicesima parte degli annuali
+  const monthlyOnly = active.reduce((sum, c) => sum + (c.frequency === 'monthly' ? c.amount_cents : 0), 0)
+  const yearlyOnly = active.reduce((sum, c) => sum + (c.frequency === 'yearly' ? c.amount_cents : 0), 0)
   const monthlyRun = active.reduce((sum, c) => sum + (c.frequency === 'monthly' ? c.amount_cents : c.frequency === 'yearly' ? Math.round(c.amount_cents / 12) : 0), 0)
   const yearlyRun = active.reduce((sum, c) => sum + (c.frequency === 'monthly' ? c.amount_cents * 12 : c.frequency === 'yearly' ? c.amount_cents : 0), 0)
   // Tutte le spese (l'elenco mostrato è limitato alle più recenti)
@@ -193,6 +196,8 @@ export async function adminCostsSummary() {
     stripeFees: fin?.stripe.fees ?? 0,
     fixedAccrued,
     monthlyRun,
+    monthlyOnly,
+    yearlyOnly,
     yearlyRun,
     variableTotal,
     variableThisMonth,
