@@ -154,6 +154,7 @@ const PlatformsPanel = dynamic(() => import('@/components/admin/PlatformsPanel')
 const EmailSetupPanel = dynamic(() => import('@/components/admin/EmailSetupPanel'), { loading })
 const EmailComposePanel = dynamic(() => import('@/components/admin/EmailComposePanel'), { loading })
 const PushPanel = dynamic(() => import('@/components/admin/PushPanel'), { loading })
+const CommunicationsPanel = dynamic(() => import('@/components/admin/CommunicationsPanel'), { loading })
 const CostsPanel = dynamic(() => import('@/components/admin/CostsPanel'), { loading })
 const DocumentsAdminPanel = dynamic(() => import('@/components/admin/DocumentsAdminPanel'), { loading })
 const AdminLateSponsor = dynamic(() => import('@/components/admin/AdminLateSponsor'), { loading })
@@ -796,6 +797,7 @@ L'accesso viene registrato.`))) return
   { id: 'withdrawals', label: 'Recessi', Icon: Undo2, permission: 'users.write' as Permission, group: 'users' },
   { id: 'translators', label: 'Traduttori', Icon: Languages, permission: 'users.write' as Permission, group: 'users' },
   { id: 'agents', label: 'Agenti', Icon: BriefcaseBusiness, permission: 'users.write' as Permission, group: 'users' },
+  { id: 'communications', label: 'Comunicazioni', Icon: Megaphone, permission: 'messages.read' as Permission, group: 'comms' },
   { id: 'messages', label: 'Messaggi agli utenti', Icon: MessageSquare, permission: 'messages.read' as Permission, group: 'comms' },
   { id: 'contactMessages', label: 'Messaggi dal sito', Icon: Inbox, permission: 'support.read' as Permission, group: 'comms' },
   { id: 'emailSetup', label: 'Gestione Email', Icon: Mail, permission: 'settings.read' as Permission, group: 'comms' },
@@ -2062,6 +2064,7 @@ L'accesso viene registrato.`))) return
         {activeSection === 'emailSetup' && <EmailSetupPanel />}
         {activeSection === 'emailSend' && <EmailComposePanel />}
         {activeSection === 'push' && <PushPanel />}
+        {activeSection === 'communications' && <CommunicationsPanel />}
         {activeSection === 'documents' && <DocumentsAdminPanel />}
         {activeSection === 'settings' && (
           <>
