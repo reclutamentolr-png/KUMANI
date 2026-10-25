@@ -906,10 +906,12 @@ export async function getAdminFinancialSummary() {
   }
 
   // 9. Donazioni: maturate (abbonamenti e punti donati, al netto dei
-  // rimborsi) e già versate alle associazioni
+  // rimborsi) e già versate alle associazioni, dalla data di partenza delle
+  // statistiche (quelle dei pagamenti di prova non contano)
+  const sinceDay = statsSince ? new Date(statsSince * 1000).toISOString() : '1970-01-01'
   const [{ data: donationRows }, { data: donationPayouts }] = await Promise.all([
-    db.from('donation_entries').select('source, amount_cents, reversed_at'),
-    db.from('donation_payouts').select('amount_cents'),
+    db.from('donation_entries').select('source, amount_cents, reversed_at').gte('created_at', sinceDay),
+    db.from('donation_payouts').select('amount_cents').gte('created_at', sinceDay),
   ])
   const donations = { subscriptionCents: 0, pointsCents: 0, paidCents: 0 }
   for (const row of donationRows ?? []) {

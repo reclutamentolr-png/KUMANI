@@ -3,7 +3,7 @@
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { verifyAdmin } from '@/lib/verifyAdmin'
 import { getAdminFinancialSummary } from '@/app/actions/admin'
-import { COST_CATEGORIES, isFreePlan, type CostCategory, type CostFrequency, type CostStatus } from '@/lib/platformCosts'
+import { COST_CATEGORIES, FORFETTARIO, isFreePlan, type CostCategory, type CostFrequency, type CostStatus } from '@/lib/platformCosts'
 import { expiringCards, upcomingRenewals } from '@/lib/cardExpiry'
 
 // Admin → Costi e margini: costi fissi (mensili, annuali, una tantum), spese
@@ -175,7 +175,7 @@ export async function adminCostsSummary() {
   const f = await getAdminFinancialSummary().catch(() => null)
   const fin = f && 'success' in f && f.success ? f : null
 
-  const revenueNet = fin ? fin.taxable : 0
+  const revenueNet = fin ? (FORFETTARIO ? fin.cashIn : fin.taxable) : 0
   const agents = fin ? fin.agentCommissions.pending + fin.agentCommissions.matured + fin.agentCommissions.paid : 0
   const donations = fin ? fin.donations.subscriptionCents + fin.donations.pointsCents : 0
   const operating = revenueNet - fixedAccrued - variableTotal - agents - donations
@@ -185,6 +185,7 @@ export async function adminCostsSummary() {
     available: Boolean(fin),
     testMode: fin?.testMode ?? false,
     vatRate: fin?.vatRate ?? 22,
+    forfettario: FORFETTARIO,
     cashIn: fin?.cashIn ?? 0,
     revenueNet,
     stripeFees: fin?.stripe.fees ?? 0,

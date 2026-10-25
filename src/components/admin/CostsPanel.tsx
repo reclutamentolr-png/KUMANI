@@ -173,7 +173,7 @@ export default function CostsPanel() {
         {[
           { label: 'Costi fissi al mese', value: eur(s.monthlyRun), hint: `${eur(s.yearlyRun)} all'anno` },
           { label: 'Spese variabili del mese', value: eur(s.variableThisMonth), hint: `${eur(s.variableTotal)} in tutto` },
-          { label: 'Margine operativo', value: eur(s.operating), hint: 'Dall\'inizio, IVA esclusa', danger: s.operating < 0 },
+          { label: 'Margine operativo', value: eur(s.operating), hint: s.forfettario ? 'Dall\'inizio, IVA compresa' : 'Dall\'inizio, IVA esclusa', danger: s.operating < 0 },
           { label: 'Costo di struttura (voucher usati)', value: eur(s.structure), hint: 'Servizi dati con i KU Points' },
         ].map((k) => (
           <div key={k.label} className="rounded-xl border border-gray-200 bg-white p-4">
@@ -187,8 +187,8 @@ export default function CostsPanel() {
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="rounded-xl border border-gray-200 bg-white p-5">
           <h3 className="font-bold text-gray-900">Conto economico (dall&apos;inizio)</h3>
-          <p className="mb-2 text-xs text-gray-500">Importi IVA esclusa sugli incassi. Le commissioni Stripe sono già tolte dagli incassi.</p>
-          <Row label="Incassi netti" value={eur(s.revenueNet)} hint={`${eur(s.cashIn)} IVA ${s.vatRate}% inclusa · commissioni Stripe ${eur(s.stripeFees)}`} />
+          <p className="mb-2 text-xs text-gray-500">{s.forfettario ? 'Regime forfettario: incassi e costi IVA compresa.' : 'Importi IVA esclusa sugli incassi.'} Le commissioni Stripe sono già tolte dagli incassi.</p>
+          <Row label="Incassi netti" value={eur(s.revenueNet)} hint={s.forfettario ? `Commissioni Stripe ${eur(s.stripeFees)}` : `${eur(s.cashIn)} IVA ${s.vatRate}% inclusa · commissioni Stripe ${eur(s.stripeFees)}`} />
           <Row label="Costi fissi maturati" value={`− ${eur(s.fixedAccrued)}`} negative={s.fixedAccrued > 0} />
           <Row label="Spese variabili" value={`− ${eur(s.variableTotal)}`} negative={s.variableTotal > 0} />
           <Row label="Provvigioni agenti" value={`− ${eur(s.agents)}`} hint="Pagate e da pagare" negative={s.agents > 0} />
@@ -326,7 +326,7 @@ export default function CostsPanel() {
               In attesa di attivazione (non conta nei totali finché non lo attivi)
             </label>
             <div><label className="mb-1 block text-sm font-medium text-gray-700">Note</label><input className={input} value={costDraft.notes} onChange={(e) => setCostDraft({ ...costDraft, notes: e.target.value })} /></div>
-            <p className="text-xs text-gray-500">Importo IVA inclusa se il fornitore la applica. Per i servizi in dollari usa il cambio della fattura. Con la scadenza della carta ricevi un avviso dal mese prima.</p>
+            <p className="text-xs text-gray-500">Importo IVA compresa, come lo paghi. Per i servizi in dollari usa il cambio della fattura. Con la scadenza della carta ricevi un avviso dal mese prima.</p>
             <div className="flex justify-end gap-2"><button type="button" onClick={() => setCostDraft(null)} className="rounded-lg bg-gray-100 px-4 py-2 text-sm">Annulla</button><button type="button" disabled={saving} onClick={saveCost} className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50">{saving ? 'Salvataggio…' : 'Salva'}</button></div>
           </div>
         </div>

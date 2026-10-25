@@ -5,6 +5,11 @@ export type CostCategory = (typeof COST_CATEGORIES)[number]
 export type CostFrequency = 'monthly' | 'yearly' | 'one_off'
 export type CostStatus = 'active' | 'pending'
 
+// Regime forfettario: niente IVA da versare sulle vendite, quindi in Costi e
+// margini incassi e costi si contano IVA compresa. Se cambia il regime,
+// mettere false: gli incassi tornano IVA esclusa.
+export const FORFETTARIO = true
+
 // Importo a 0 con «gratuito» nelle note: piano free, non da compilare
 export const isFreePlan = (c: { amount_cents: number; notes: string | null }) => c.amount_cents === 0 && /gratuit/i.test(c.notes ?? '')
 
