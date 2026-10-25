@@ -21,11 +21,14 @@ export default function ReviewWriter({
   subjectNames,
   initialSubject,
   locale,
+  single = false,
 }: {
   options: MyReviewOption[]
   subjectNames: Record<string, string>
   initialSubject: string | null
   locale: string
+  // Un servizio solo (dal pulsante «Recensisci»): modulo già aperto, senza chiuderlo
+  single?: boolean
 }) {
   const t = useTranslations('reviews')
   const [open, setOpen] = useState<string | null>(
@@ -50,9 +53,9 @@ export default function ReviewWriter({
         <div key={option.subject} className="rounded-2xl border border-[var(--gold)]/30 bg-white shadow-sm">
           <button
             type="button"
-            onClick={() => setOpen(open === option.subject ? null : option.subject)}
+            onClick={() => !single && setOpen(open === option.subject ? null : option.subject)}
             className="flex w-full items-center justify-between gap-3 px-5 py-4 text-left"
-            aria-expanded={open === option.subject}
+            aria-expanded={single ? undefined : open === option.subject}
           >
             <span className="min-w-0">
               <span className="block font-bold text-[var(--ink)]">{subjectNames[option.subject]}</span>
