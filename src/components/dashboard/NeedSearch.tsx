@@ -14,7 +14,7 @@ import { deepNeedSearch, logNeedMiss } from '@/app/actions/needSearch'
 // dopo un attimo la ricerca approfondita sul server (guide, volantini e,
 // se serve, l'IA). Le richieste senza risultato vanno nell'Admin (solo il testo).
 
-export type NeedItem = { toolName: string; title: string; name?: string; description: string; href: string; iconName: string; guide: string | null }
+export type NeedItem = { toolName: string; title: string; name?: string; description: string; href: string; iconName: string; guide: string | null; group?: string; groupLabel?: string }
 
 type Recognition = { lang: string; interimResults: boolean; maxAlternatives: number; start: () => void; stop: () => void; onresult: ((e: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null; onend: (() => void) | null; onerror: (() => void) | null }
 
@@ -37,7 +37,7 @@ export default function NeedSearch({ items }: { items: NeedItem[] }) {
     const seen = new Set<string>()
     return items.filter((i) => (seen.has(i.toolName) ? false : (seen.add(i.toolName), true)))
   }, [items])
-  const index = useMemo(() => buildIndex(unique.map((i) => ({ id: i.toolName, title: i.title, name: i.name, description: i.description })), locale), [unique, locale])
+  const index = useMemo(() => buildIndex(unique.map((i) => ({ id: i.toolName, title: i.title, name: i.name, description: i.description, group: i.group, groupLabel: i.groupLabel })), locale), [unique, locale])
   const byId = useMemo(() => new Map(unique.map((i) => [i.toolName, i])), [unique])
 
   // Risultati mentre si scrive (da 3 lettere)
@@ -60,7 +60,7 @@ export default function NeedSearch({ items }: { items: NeedItem[] }) {
     if (q.length < 3 || !weak || (deep && deep.q === q)) return
     const timer = setTimeout(() => {
       setDeep({ q, status: 'loading', hits: [], ai: false })
-      deepNeedSearch(q, locale, unique.map((i) => ({ id: i.toolName, title: i.title, description: i.description, href: i.href })))
+      deepNeedSearch(q, locale, unique.map((i) => ({ id: i.toolName, title: i.title, description: i.description, href: i.href, group: i.group, groupLabel: i.groupLabel })))
         .then((r) => setDeep((d) => (d && d.q === q ? { q, status: 'done', hits: r.hits, ai: r.source === 'ai' } : d)))
         .catch(() => setDeep((d) => (d && d.q === q ? { q, status: 'done', hits: [], ai: false } : d)))
     }, submitted.trim() === q ? 0 : 900)

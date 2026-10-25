@@ -147,7 +147,11 @@ export default async function DashboardTipo2({
 
   // «Scrivi cosa ti serve»: in ogni vista subito sotto «Lite · Completa · Icone»
   // (e sopra «Scegli cosa ti interessa di più» per i nuovi iscritti)
-  const needSearch = <NeedSearch items={services.map((s) => ({ toolName: s.toolName, title: s.title, name: s.name, description: s.description, href: s.href, iconName: s.iconName, guide: s.guide }))} />
+  const needSearch = (
+    <NeedSearch
+      items={services.map((s) => ({ toolName: s.toolName, title: s.title, name: s.name, description: s.description, href: s.href, iconName: s.iconName, guide: s.guide, group: s.group, groupLabel: s.group ? hubT(`group_${s.group}`) : undefined }))}
+    />
+  )
 
   // Vista a icone: solo le icone (abbonarsi e codice sono nel Wallet e nel profilo)
   if (view === 'icons')

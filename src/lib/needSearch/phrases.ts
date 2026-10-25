@@ -358,3 +358,81 @@ export const NEED_PHRASES: Record<string, ToolPhrases> = {
   timebank: { it: ['banca del tempo', 'scambio di favori', 'aiuto tra vicini'], en: ['time bank', 'exchange favours'] },
   events: { it: ['eventi', 'evento', 'cosa fare', 'serata'], en: ['events', 'what to do'] },
 }
+
+// Parole generiche di un'area intera (gruppo della pagina Servizi): scrivendo
+// «salute» o «soldi» compaiono i servizi di quell'area. Si aggiungono al nome
+// del gruppo, già tradotto.
+export const GROUP_WORDS: Record<string, Partial<Record<Lang, string[]>>> = {
+  security: {
+    it: ['sicurezza', 'truffe', 'truffa', 'protezione', 'proteggermi', 'privacy', 'frode', 'hacker', 'virus'],
+    en: ['security', 'scams', 'scam', 'protection', 'privacy', 'fraud', 'hacker'],
+    fr: ['sécurité', 'arnaques', 'protection', 'fraude'],
+    es: ['seguridad', 'estafas', 'protección', 'fraude'],
+    pt: ['segurança', 'golpes', 'proteção', 'fraude'],
+    de: ['sicherheit', 'betrug', 'schutz', 'datenschutz'],
+    ru: ['безопасность', 'мошенничество', 'защита'],
+  },
+  money: {
+    it: ['soldi', 'denaro', 'finanze', 'organizzazione', 'organizzarmi', 'famiglia', 'casa', 'documenti', 'scadenze', 'risparmio'],
+    en: ['money', 'finance', 'organization', 'organise', 'family', 'home', 'documents', 'deadlines', 'savings'],
+    fr: ['argent', 'finances', 'organisation', 'famille', 'maison', 'documents'],
+    es: ['dinero', 'finanzas', 'organización', 'familia', 'casa', 'documentos'],
+    pt: ['dinheiro', 'finanças', 'organização', 'família', 'casa', 'documentos'],
+    de: ['geld', 'finanzen', 'organisation', 'familie', 'haushalt', 'dokumente'],
+    ru: ['деньги', 'финансы', 'организация', 'семья', 'дом', 'документы'],
+  },
+  work: {
+    it: ['lavoro', 'ufficio', 'professione', 'partita iva', 'freelance', 'carriera', 'pratiche'],
+    en: ['work', 'office', 'job', 'freelance', 'career', 'paperwork'],
+    fr: ['travail', 'bureau', 'emploi', 'carrière'],
+    es: ['trabajo', 'oficina', 'empleo', 'carrera'],
+    pt: ['trabalho', 'escritório', 'emprego', 'carreira'],
+    de: ['arbeit', 'büro', 'beruf', 'karriere'],
+    ru: ['работа', 'офис', 'карьера'],
+  },
+  business: {
+    it: ['attività', 'negozio', 'azienda', 'impresa', 'clienti', 'vendere', 'marketing', 'commerciante', 'ristorante', 'pubblicità'],
+    en: ['business', 'shop', 'company', 'customers', 'sell', 'marketing', 'restaurant', 'advertising'],
+    fr: ['entreprise', 'commerce', 'boutique', 'clients', 'vendre'],
+    es: ['negocio', 'tienda', 'empresa', 'clientes', 'vender'],
+    pt: ['negócio', 'loja', 'empresa', 'clientes', 'vender'],
+    de: ['geschäft', 'laden', 'firma', 'kunden', 'verkaufen'],
+    ru: ['бизнес', 'магазин', 'клиенты', 'продажи'],
+  },
+  wellness: {
+    it: ['salute', 'benessere', 'stress', 'ansia', 'sonno', 'relax', 'mente', 'corpo', 'stare bene', 'meditazione', 'calma'],
+    en: ['health', 'wellness', 'wellbeing', 'stress', 'anxiety', 'sleep', 'relax', 'mind', 'body', 'meditation'],
+    fr: ['santé', 'bien-être', 'stress', 'sommeil', 'détente'],
+    es: ['salud', 'bienestar', 'estrés', 'sueño', 'relajación'],
+    pt: ['saúde', 'bem-estar', 'stress', 'sono', 'relaxar'],
+    de: ['gesundheit', 'wohlbefinden', 'stress', 'schlaf', 'entspannung'],
+    ru: ['здоровье', 'стресс', 'сон', 'отдых'],
+  },
+  social: {
+    it: ['social', 'instagram', 'facebook', 'tiktok', 'video', 'reel', 'contenuti', 'post'],
+    en: ['social media', 'instagram', 'facebook', 'tiktok', 'video', 'reels', 'content'],
+    fr: ['réseaux sociaux', 'vidéo'],
+    es: ['redes sociales', 'vídeo'],
+    pt: ['redes sociais', 'vídeo'],
+    de: ['soziale medien', 'video'],
+    ru: ['соцсети', 'видео'],
+  },
+  fun: {
+    it: ['giochi', 'gioco', 'svago', 'divertimento', 'amici', 'tempo libero', 'annoio', 'serata'],
+    en: ['games', 'game', 'fun', 'friends', 'free time', 'bored'],
+    fr: ['jeux', 'loisirs', 'amis'],
+    es: ['juegos', 'ocio', 'amigos'],
+    pt: ['jogos', 'lazer', 'amigos'],
+    de: ['spiele', 'freizeit', 'freunde'],
+    ru: ['игры', 'досуг', 'друзья'],
+  },
+  kids: {
+    it: ['bambini', 'bambino', 'figli', 'figlio', 'figlia', 'famiglia', 'piccoli'],
+    en: ['kids', 'children', 'child', 'son', 'daughter', 'family'],
+    fr: ['enfants', 'famille'],
+    es: ['niños', 'hijos', 'familia'],
+    pt: ['crianças', 'filhos', 'família'],
+    de: ['kinder', 'familie'],
+    ru: ['дети', 'семья'],
+  },
+}

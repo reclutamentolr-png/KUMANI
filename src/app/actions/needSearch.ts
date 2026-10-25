@@ -67,7 +67,7 @@ export async function adminNeedMisses(): Promise<{ rows: NeedMissRow[]; total: n
 // giornaliero per persona (need_ai_daily_runs).
 // ---------------------------------------------------------------------------
 
-export type DeepDoc = { id: string; title: string; description: string; href: string }
+export type DeepDoc = { id: string; title: string; description: string; href: string; group?: string; groupLabel?: string }
 export type DeepResult = { hits: NeedHit[]; source: 'texts' | 'ai' | 'none'; limited?: boolean }
 
 const LANG_NAME: Record<string, string> = { it: 'Italian', en: 'English', fr: 'French', es: 'Spanish', pt: 'European Portuguese', de: 'German', ru: 'Russian' }
@@ -88,7 +88,7 @@ export async function deepNeedSearch(query: string, locale: string, docs: DeepDo
   const list = docs
     .slice(0, 120)
     .filter((d) => d && typeof d.id === 'string' && /^[a-z0-9-]{2,40}$/.test(d.id))
-    .map((d) => ({ id: d.id, title: String(d.title ?? '').slice(0, 120), description: String(d.description ?? '').slice(0, 400), href: String(d.href ?? '') }))
+    .map((d) => ({ id: d.id, title: String(d.title ?? '').slice(0, 120), description: String(d.description ?? '').slice(0, 400), href: String(d.href ?? ''), group: String(d.group ?? '').slice(0, 20), groupLabel: String(d.groupLabel ?? '').slice(0, 60) }))
 
   // 1. Dentro i servizi: guide e volantini nella lingua della persona
   const [guides, flyers] = await Promise.all([getTranslations({ locale: lang, namespace: 'guideTexts' }), getTranslations({ locale: lang, namespace: 'flyers' })])
@@ -106,7 +106,7 @@ export async function deepNeedSearch(query: string, locale: string, docs: DeepDo
     } catch {
       // servizio senza volantino
     }
-    return { id: d.id, title: d.title, description: d.description, extra }
+    return { id: d.id, title: d.title, description: d.description, extra, group: d.group, groupLabel: d.groupLabel }
   })
   const local = searchNeeds(buildIndex(texts, lang), q)
   // Guide e volantini bastano solo se la corrispondenza è sicura; altrimenti decide l'IA
