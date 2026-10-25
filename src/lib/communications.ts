@@ -11,22 +11,39 @@ export type CommWithTexts = CommTexts & { translations?: Partial<Record<CommLoca
 
 export const isCommLocale = (l: unknown): l is CommLocale => typeof l === 'string' && (COMM_LOCALES as readonly string[]).includes(l)
 
-// Testi per una lingua, campo per campo: lingua → inglese → italiano
+// Testi per una lingua: notifica ed email si scelgono ciascuna per conto suo
+// (lingua → inglese → italiano), così un'email non mescola due lingue.
+// locale = lingua del corpo dell'email (o della notifica se l'email non c'è).
 export function textsFor(c: CommWithTexts, locale: string | null | undefined): CommTexts & { locale: CommLocale } {
   const base: CommTexts = { push_title: c.push_title, push_body: c.push_body, email_subject: c.email_subject, email_preheader: c.email_preheader, email_body: c.email_body }
   if (!isCommLocale(locale) || locale === 'it') return { ...base, locale: 'it' }
   const own = c.translations?.[locale]
   const en = c.translations?.en
-  const pick = <K extends keyof CommTexts>(k: K) => own?.[k] || en?.[k] || base[k]
-  const used: CommLocale = own ? locale : en ? 'en' : 'it'
-  return { push_title: pick('push_title'), push_body: pick('push_body'), email_subject: pick('email_subject'), email_preheader: pick('email_preheader'), email_body: pick('email_body'), locale: used }
+  // La lingua usata per un canale: quella che ha il testo principale di quel canale
+  const pickFor = (key: 'push_body' | 'email_body'): { tx: Partial<CommTexts>; l: CommLocale } =>
+    own?.[key] ? { tx: own, l: locale } : en?.[key] ? { tx: en, l: 'en' } : { tx: base, l: 'it' }
+  const push = pickFor('push_body')
+  const email = pickFor('email_body')
+  return {
+    push_title: push.tx.push_title || base.push_title,
+    push_body: push.tx.push_body || base.push_body,
+    email_subject: email.tx.email_subject || base.email_subject,
+    email_preheader: email.tx.email_preheader || base.email_preheader,
+    email_body: email.tx.email_body || base.email_body,
+    locale: c.email_body ? email.l : push.l,
+  }
 }
 
-// Lingue pronte (l'italiano c'è sempre)
-export const readyLocales = (c: CommWithTexts): CommLocale[] => COMM_LOCALES.filter((l) => l === 'it' || !!c.translations?.[l]?.email_body || !!c.translations?.[l]?.push_body)
+// Lingue pronte: per ogni canale previsto c'è il testo tradotto (l'italiano c'è sempre)
+export const readyLocales = (c: CommWithTexts): CommLocale[] =>
+  COMM_LOCALES.filter((l) => {
+    if (l === 'it') return true
+    const tr = c.translations?.[l]
+    return !!tr && (!c.email_body || !!tr.email_body) && (!c.push_body || !!tr.push_body)
+  })
 
 // «Ciao {nome},» → «Ciao Marco,» o «Ciao,» se il nome manca
-export const personalize = (text: string, name: string) => text.replace(/[ \t]?\{nome\}/g, name ? ` ${name}` : '')
+export const personalize = (text: string, name: string) => text.replace(/[ \t]?\{nome\}/g, () => (name ? ` ${name}` : ''))
 
 // Titoletto: riga corta in MAIUSCOLO, anche con una nota tra parentesi («ANDROID (con Chrome)»)
 export function isHeading(line: string) {

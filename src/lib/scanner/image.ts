@@ -20,7 +20,7 @@ export const canvasOf = (w: number, h: number) => {
 }
 
 export async function loadImage(file: Blob, maxSide = SOURCE_MAX): Promise<HTMLCanvasElement> {
-  const bitmap = await createImageBitmap(file)
+  const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' })
   const k = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height))
   const c = canvasOf(bitmap.width * k, bitmap.height * k)
   const ctx = c.getContext('2d')!

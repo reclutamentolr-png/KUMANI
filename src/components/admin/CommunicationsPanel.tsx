@@ -54,7 +54,8 @@ export default function CommunicationsPanel() {
   }, [load])
 
   // Da inviare: almeno un canale previsto non è ancora partito
-  const pending = (c: CommunicationRow) => (!!c.push_title && !c.push_sent_at) || (!!c.email_subject && !c.email_sent_at)
+  const missing = (c: CommunicationRow) => c.email_result?.pending ?? 0
+  const pending = (c: CommunicationRow) => (!!c.push_title && !c.push_sent_at) || (!!c.email_subject && (!c.email_sent_at || missing(c) > 0))
   const todo = items.filter(pending)
   const sent = items.filter((c) => c.push_sent_at || c.email_sent_at)
 
@@ -69,12 +70,16 @@ export default function CommunicationsPanel() {
   }
 
   const sendEmail = async (c: CommunicationRow) => {
-    if (!(await askConfirm(`Inviare l’email «${c.email_subject}» a ${counts.emailPeople} iscritti? ${counts.emailExcluded ? `${counts.emailExcluded} hanno scelto di non riceverle e saranno esclusi. ` : ''}Non si può annullare.`, { tone: 'warning' }))) return
+    const again = !!c.email_sent_at
+    const question = again
+      ? `Inviare l’email «${c.email_subject}» agli iscritti che non l’hanno ancora ricevuta (circa ${missing(c)})? Chi l’ha già ricevuta non la riceve di nuovo.`
+      : `Inviare l’email «${c.email_subject}» a ${counts.emailPeople} iscritti? ${counts.emailExcluded ? `${counts.emailExcluded} hanno scelto di non riceverle e saranno esclusi. ` : ''}Se si supera il limite di Resend di oggi, le restanti si mandano domani con «Invia ai mancanti». Non si può annullare.`
+    if (!(await askConfirm(question, { tone: 'warning' }))) return
     setBusy(c.id + 'email')
     const r = await adminSendCommunicationEmail(c.id)
     setBusy(null)
     if (!r.success) return notify('Errore: ' + r.error)
-    notify(`Email inviata a ${r.sent} iscritti${r.failed ? `, ${r.failed} non partite` : ''}`)
+    notify(`Email inviata a ${r.sent} iscritti${r.pending ? `: ne mancano ${r.pending}, mandale con «Invia ai mancanti» (domani se è finito il limite di Resend)` : ''}`)
     load()
   }
 
@@ -162,10 +167,15 @@ export default function CommunicationsPanel() {
                 <button type="button" disabled={!!busy} onClick={() => test(c)} className={`${btn} border border-gray-300 text-gray-700 hover:bg-white`}>
                   {busy === c.id + 'test' ? <LoaderCircle className="h-3.5 w-3.5 animate-spin" /> : <Mail className="h-3.5 w-3.5" />} Mandami una prova
                 </button>
+                {c.email_sent_at && missing(c) > 0 && (
+                  <button type="button" disabled={!!busy} onClick={() => sendEmail(c)} className={`${btn} bg-amber-600 text-white hover:bg-amber-700`}>
+                    {busy === c.id + 'email' ? <LoaderCircle className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />} Invia ai mancanti ({missing(c)})
+                  </button>
+                )}
                 {c.email_sent_at ? (
                   <p className="flex w-full items-center gap-1 text-xs font-semibold text-emerald-700">
                     <CheckCircle2 className="h-3.5 w-3.5" /> Inviata il {when(c.email_sent_at)}
-                    {c.email_result ? ` · ${c.email_result.sent ?? 0} iscritti${c.email_result.failed ? `, ${c.email_result.failed} non partite` : ''}${c.email_result.excluded ? `, ${c.email_result.excluded} esclusi` : ''}${c.email_result.byLocale ? ` · ${Object.entries(c.email_result.byLocale).map(([l, n]) => `${l.toUpperCase()} ${n}`).join(', ')}` : ''}` : ''}
+                    {c.email_result ? ` · ${c.email_result.sent ?? 0} di ${c.email_result.recipients ?? 0} iscritti${missing(c) ? `, ne mancano ${missing(c)}` : ''}${c.email_result.excluded ? `, ${c.email_result.excluded} esclusi` : ''}${c.email_result.byLocale ? ` · ${Object.entries(c.email_result.byLocale).map(([l, n]) => `${l.toUpperCase()} ${n}`).join(', ')}` : ''}` : ''}
                   </p>
                 ) : (
                   <button type="button" disabled={!!busy} onClick={() => sendEmail(c)} className={`${btn} bg-gray-900 text-white hover:bg-gray-700`}>

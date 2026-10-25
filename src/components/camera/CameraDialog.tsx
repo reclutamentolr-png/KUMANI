@@ -82,6 +82,13 @@ export default function CameraDialog({
     };
   }, [mode]);
 
+  // Esc chiude la fotocamera
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onClose])
+
   const shoot = () => {
     const video = videoRef.current;
     if (!video || !video.videoWidth) return;

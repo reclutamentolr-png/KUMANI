@@ -94,7 +94,7 @@ export default function FototesseraApp() {
     try {
       const probe = new File([new Uint8Array([255, 216])], 'a.jpg', { type: 'image/jpeg' })
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setCanShare(typeof navigator.canShare === 'function' && navigator.canShare({ files: [probe] }) && /Android|iPhone|iPad/i.test(navigator.userAgent))
+      setCanShare(typeof navigator.canShare === 'function' && navigator.canShare({ files: [probe] }) && (/Android|iPhone|iPad/i.test(navigator.userAgent) || navigator.maxTouchPoints > 1))
     } catch {
       setCanShare(false)
     }
@@ -149,7 +149,7 @@ export default function FototesseraApp() {
     setPhase({ kind: 'busy', step: 'analyzing' })
     let source: HTMLCanvasElement
     try {
-      const bitmap = await createImageBitmap(file)
+      const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' })
       const k = Math.min(1, MAX_SIDE / Math.max(bitmap.width, bitmap.height))
       source = document.createElement('canvas')
       source.width = Math.round(bitmap.width * k)
@@ -164,7 +164,8 @@ export default function FototesseraApp() {
       if (!result.ok) return setPhase({ kind: 'error', key: result.reason === 'noFace' ? 'errNoFace' : 'errManyFaces' })
       const fit = fitFace(result.face)
       setPhase({ kind: 'busy', step: 'matting' })
-      const alpha = await matte(source)
+      // Scontorno fine al massimo 40 secondi (rete lenta): poi si usa quello di MediaPipe
+      const alpha = await Promise.race([matte(source), new Promise<null>((r) => setTimeout(() => r(null), 40_000))])
       const warnings = [...result.warnings]
       if (alpha && busyBackground(source, alpha)) warnings.push('background')
       const cut = alpha ? cutoutMatte(source, alpha) : result.mask ? cutout(source, result.mask) : null
@@ -233,8 +234,12 @@ export default function FototesseraApp() {
     try {
       await navigator.share({ files: [new File([blob], 'fototessera-35x45.jpg', { type: 'image/jpeg' })], title: t('shareTitle') })
       void fototesseraDone()
-    } catch {
-      // condivisione annullata
+    } catch (e) {
+      // Se il telefono rifiuta la condivisione (troppo tempo dal tocco) si scarica il file
+      if ((e as Error)?.name === 'NotAllowedError') {
+        save(blob, 'fototessera-35x45.jpg')
+        void fototesseraDone()
+      }
     }
   }
 

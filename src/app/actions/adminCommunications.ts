@@ -2,7 +2,8 @@
 
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { verifyAdmin } from '@/lib/verifyAdmin'
-import { escapeHtml, sendEmail, sendEmailBatch, type SendEmailInput } from '@/lib/email'
+import { escapeHtml, sendEmail, sendEmailChunk, type SendEmailInput } from '@/lib/email'
+import { getEmailUsage } from '@/lib/emailUsage'
 import { unsubscribeUrl } from '@/lib/emailUnsubscribe'
 import { KUMANI_MAILBOXES } from '@/lib/contactInfo'
 import { PUBLIC_SITE_URL } from '@/lib/siteUrl'
@@ -37,7 +38,7 @@ export type CommunicationRow = {
   push_sent_at: string | null
   push_result: { recipients?: number; sent?: number; failed?: number; inbox?: number } | null
   email_sent_at: string | null
-  email_result: { recipients?: number; sent?: number; failed?: number; excluded?: number; byLocale?: Record<string, number> } | null
+  email_result: { recipients?: number; sent?: number; failed?: number; excluded?: number; pending?: number; stopped?: string; byLocale?: Record<string, number> } | null
   translations: Partial<Record<CommLocale, Record<string, string>>> | null
   // Lingue pronte (calcolate)
   ready?: CommLocale[]
@@ -55,10 +56,17 @@ async function emailAudience(): Promise<{ people: Person[]; excluded: number }> 
     100000,
   )
   if (error) throw new Error('profiles')
-  const { data: off } = await s.from('email_unsubscribes').select('user_id')
-  const offSet = new Set((off ?? []).map((r) => r.user_id as string))
+  // Chi non vuole email: se l'elenco non si legge, l'invio si ferma (mai email a chi si è disiscritto)
+  const { data: off, error: offError } = await fetchAllRows<{ user_id: string }>((from, to) => s.from('email_unsubscribes').select('user_id').order('user_id').range(from, to), 100000)
+  if (offError) throw new Error('unsubscribes')
+  const offSet = new Set(off.map((r) => r.user_id))
   const valid = rows.filter((p) => p.email && /@/.test(p.email) && !p.deleted_at && !p.is_blocked)
-  const people = valid.filter((p) => !offSet.has(p.id)).map((p) => ({ id: p.id, email: p.email!.trim().toLowerCase(), first_name: p.first_name, locale: p.locale }))
+  // Un'email sola per indirizzo, anche se due account lo condividono
+  const seen = new Set<string>()
+  const people = valid
+    .filter((p) => !offSet.has(p.id))
+    .map((p) => ({ id: p.id, email: p.email!.trim().toLowerCase(), first_name: p.first_name, locale: p.locale }))
+    .filter((p) => (seen.has(p.email) ? false : (seen.add(p.email), true)))
   return { people, excluded: valid.length - people.length }
 }
 
@@ -130,14 +138,14 @@ export async function adminListCommunications(): Promise<{ items: CommunicationR
   if (!(await verifyAdmin('messages.read'))) return { items: [], emailPeople: 0, emailExcluded: 0, pushPeople: 0, error: 'Non autorizzato' }
   const s = db()
   try {
-    const [{ data, error }, audience, { data: subs }] = await Promise.all([
+    const [{ data, error }, audience, subs] = await Promise.all([
       s.from('staff_communications').select('*').order('created_at', { ascending: false }).limit(200),
       emailAudience(),
-      s.from('push_subscriptions').select('user_id'),
+      fetchAllRows<{ user_id: string }>((from, to) => s.from('push_subscriptions').select('user_id, id').order('id').range(from, to), 100000),
     ])
     if (error) return { items: [], emailPeople: 0, emailExcluded: 0, pushPeople: 0, error: error.message }
     const items = ((data ?? []) as CommunicationRow[]).map((c) => ({ ...c, ready: readyLocales(c) }))
-    return { items, emailPeople: audience.people.length, emailExcluded: audience.excluded, pushPeople: new Set((subs ?? []).map((r) => r.user_id)).size }
+    return { items, emailPeople: audience.people.length, emailExcluded: audience.excluded, pushPeople: new Set(subs.data.map((r) => r.user_id)).size }
   } catch {
     return { items: [], emailPeople: 0, emailExcluded: 0, pushPeople: 0, error: 'Lettura non riuscita: riprova.' }
   }
@@ -154,9 +162,11 @@ export async function adminSendCommunicationPush(id: string): Promise<{ success:
   // Segnata subito come inviata: un secondo clic non la rimanda
   const { data: claimed } = await s.from('staff_communications').update({ push_sent_at: new Date().toISOString(), sent_by: admin.id }).eq('id', id).is('push_sent_at', null).select('id')
   if (!claimed?.length) return { success: false, error: 'Notifica già inviata' }
+  // Prima la campanella di tutti (non si duplica se si riprova), poi le notifiche sul telefono
+  const inbox = await addToInbox(c)
   // Una notifica per lingua dei dispositivi; toccandola si apre il messaggio completo
-  const { data: subs } = await s.from('push_subscriptions').select('locale')
-  const present = new Set((subs ?? []).map((x) => x.locale as string))
+  const { data: subs } = await fetchAllRows<{ locale: string }>((from, to) => s.from('push_subscriptions').select('locale, id').order('id').range(from, to), 100000)
+  const present = new Set(subs.map((x) => x.locale))
   let recipients = 0
   let sent = 0
   let failed = 0
@@ -177,8 +187,6 @@ export async function adminSendCommunicationPush(id: string): Promise<{ success:
     await s.from('staff_communications').update({ push_sent_at: null }).eq('id', id)
     return { success: false, error: firstError }
   }
-  // Anche nel Centro avvisi (campanella) di tutti gli iscritti, con o senza notifiche sul telefono
-  const inbox = await addToInbox(c)
   const result = { recipients, sent, failed, inbox }
   await s.from('staff_communications').update({ push_result: result }).eq('id', id)
   return { success: true, recipients, sent }
@@ -198,8 +206,12 @@ async function addToInbox(c: CommunicationRow): Promise<number> {
       return [l, { title: tx.push_title ?? c.push_title, body: tx.push_body ?? c.push_body, url: messageUrl(c) }]
     }),
   )
-  const users = rows.filter((p) => !p.deleted_at && !p.is_blocked).map((p) => ({ user_id: p.id, category: 'staff', kind: `communication:${c.id}`, texts }))
-  let added = 0
+  // Chi ce l'ha già (un invio ripetuto) non la riceve due volte
+  const kind = `communication:${c.id}`
+  const { data: already } = await fetchAllRows<{ user_id: string }>((from, to) => s.from('user_notifications').select('user_id, id').eq('kind', kind).order('id').range(from, to), 100000)
+  const has = new Set(already.map((r) => r.user_id))
+  const users = rows.filter((p) => !p.deleted_at && !p.is_blocked && !has.has(p.id)).map((p) => ({ user_id: p.id, category: 'staff', kind, texts }))
+  let added = has.size
   for (let i = 0; i < users.length; i += 500) {
     const { error: e } = await s.from('user_notifications').insert(users.slice(i, i + 500))
     if (!e) added += Math.min(500, users.length - i)
@@ -208,33 +220,91 @@ async function addToInbox(c: CommunicationRow): Promise<number> {
   return added
 }
 
-export async function adminSendCommunicationEmail(id: string): Promise<{ success: boolean; error?: string; sent?: number; failed?: number }> {
+// Invio dell'email a tutti, ripetibile: chi l'ha già ricevuta è nel registro
+// (staff_communication_deliveries) e non la riceve di nuovo. Si manda solo
+// quanto permette il limite di Resend di oggi; il resto con «Invia ai mancanti».
+export async function adminSendCommunicationEmail(id: string): Promise<{ success: boolean; error?: string; sent?: number; pending?: number }> {
   const admin = await verifyAdmin('messages.write')
   if (!admin) return { success: false, error: 'Non autorizzato' }
   const s = db()
   const { data: c } = await s.from('staff_communications').select('*').eq('id', id).maybeSingle<CommunicationRow>()
   if (!c) return { success: false, error: 'Comunicazione non trovata' }
-  if (c.email_sent_at) return { success: false, error: 'Email già inviata' }
   if (!c.email_subject || !c.email_body) return { success: false, error: 'Questa comunicazione non ha l’email' }
-  let audience: Awaited<ReturnType<typeof emailAudience>>
+  // Un invio alla volta (il blocco scade da solo dopo 15 minuti)
+  const lockLimit = new Date(Date.now() - 15 * 60_000).toISOString()
+  const { data: locked } = await s
+    .from('staff_communications')
+    .update({ email_lock_at: new Date().toISOString() })
+    .eq('id', id)
+    .or(`email_lock_at.is.null,email_lock_at.lt.${lockLimit}`)
+    .select('id')
+  if (!locked?.length) return { success: false, error: 'Invio già in corso: aspetta qualche minuto e aggiorna.' }
+  const started = Date.now()
   try {
-    audience = await emailAudience()
-  } catch {
-    return { success: false, error: 'Lettura degli iscritti non riuscita: invio annullato, riprova.' }
+    let audience: Awaited<ReturnType<typeof emailAudience>>
+    try {
+      audience = await emailAudience()
+    } catch {
+      return { success: false, error: 'Lettura degli iscritti non riuscita: invio annullato, riprova.' }
+    }
+    const { data: done, error: doneError } = await fetchAllRows<{ user_id: string }>(
+      (from, to) => s.from('staff_communication_deliveries').select('user_id').eq('communication_id', id).order('user_id').range(from, to),
+      100000,
+    )
+    if (doneError) return { success: false, error: 'Lettura del registro non riuscita: invio annullato, riprova.' }
+    const delivered = new Set(done.map((r) => r.user_id))
+    const pending = audience.people.filter((p) => !delivered.has(p.id))
+    if (!pending.length) return { success: false, error: 'L’email è già arrivata a tutti gli iscritti.' }
+    // Quante ne permette ancora il piano di Resend, oggi e questo mese
+    const usage = await getEmailUsage()
+    const room = usage ? Math.max(0, Math.min(usage.dayLimit - usage.today, usage.monthLimit - usage.month)) : pending.length
+    if (room === 0)
+      return { success: false, error: `Limite gratuito di Resend raggiunto (oggi ${usage?.today}/${usage?.dayLimit}, mese ${usage?.month}/${usage?.monthLimit}): riprova domani con «Invia ai mancanti».` }
+    const targets = pending.slice(0, room)
+    let sentNow = 0
+    let stopped: string | undefined
+    const byLocale: Record<string, number> = { ...(c.email_result?.byLocale ?? {}) }
+    for (let i = 0; i < targets.length; i += 100) {
+      // Margine sul tempo massimo della richiesta: il resto si manda dopo
+      if (Date.now() - started > 90_000) {
+        stopped = 'time'
+        break
+      }
+      const chunk = targets.slice(i, i + 100)
+      const emails = chunk.map((p) => buildEmail(c, p))
+      const r = await sendEmailChunk(emails, `comm-${id}-${chunk[0].id}-${chunk.length}`)
+      if (!r.ok) {
+        stopped = r.error ?? 'error'
+        break
+      }
+      const { error: logError } = await s
+        .from('staff_communication_deliveries')
+        .upsert(
+          chunk.map((p) => ({ communication_id: id, user_id: p.id })),
+          { onConflict: 'communication_id,user_id', ignoreDuplicates: true },
+        )
+      if (logError) console.error('[comunicazioni] registro invii:', logError.message)
+      sentNow += chunk.length
+      for (const e of emails) byLocale[e.locale] = (byLocale[e.locale] ?? 0) + 1
+    }
+    if (pending.length > targets.length && !stopped) stopped = 'quota'
+    const total = delivered.size + sentNow
+    const missing = Math.max(0, audience.people.length - total)
+    await s
+      .from('staff_communications')
+      .update({
+        ...(sentNow > 0 && !c.email_sent_at ? { email_sent_at: new Date().toISOString(), sent_by: admin.id } : {}),
+        email_result: { recipients: audience.people.length, sent: total, pending: missing, excluded: audience.excluded, byLocale, ...(stopped ? { stopped } : {}) },
+      })
+      .eq('id', id)
+    if (sentNow === 0) {
+      const why = stopped === 'quota' ? 'limite di Resend raggiunto' : stopped === 'not_configured' ? 'email non configurate (Resend)' : 'nessuna email è partita'
+      return { success: false, error: `Invio non riuscito: ${why}. Riprova più tardi.` }
+    }
+    return { success: true, sent: sentNow, pending: missing }
+  } finally {
+    await s.from('staff_communications').update({ email_lock_at: null }).eq('id', id)
   }
-  if (!audience.people.length) return { success: false, error: 'Nessun iscritto da raggiungere' }
-  const { data: claimed } = await s.from('staff_communications').update({ email_sent_at: new Date().toISOString(), sent_by: admin.id }).eq('id', id).is('email_sent_at', null).select('id')
-  if (!claimed?.length) return { success: false, error: 'Email già inviata' }
-  const emails = audience.people.map((p) => buildEmail(c, p))
-  const byLocale: Record<string, number> = {}
-  for (const e of emails) byLocale[e.locale] = (byLocale[e.locale] ?? 0) + 1
-  const r = await sendEmailBatch(emails)
-  if (r.sent === 0) {
-    await s.from('staff_communications').update({ email_sent_at: null }).eq('id', id)
-    return { success: false, error: r.error === 'not_configured' ? 'Email non configurate (Resend).' : 'Invio non riuscito: nessuna email è partita, riprova.' }
-  }
-  await s.from('staff_communications').update({ email_result: { recipients: audience.people.length, sent: r.sent, failed: r.failed, excluded: audience.excluded, byLocale } }).eq('id', id)
-  return { success: true, sent: r.sent, failed: r.failed }
 }
 
 // Prova: la stessa email solo a chi sta usando l'Admin (non conta come invio)

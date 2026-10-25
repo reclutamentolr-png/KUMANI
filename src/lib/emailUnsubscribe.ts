@@ -5,7 +5,10 @@ import { PUBLIC_SITE_URL } from '@/lib/siteUrl'
 // iscritti: firmato con la chiave del server, così funziona senza accedere
 // e nessuno può disiscrivere un'altra persona cambiando l'indirizzo.
 
-const sign = (userId: string) => createHmac('sha256', process.env.SUPABASE_SERVICE_ROLE_KEY!).update(`email-unsub:${userId}`).digest('base64url')
+// Chiave propria (EMAIL_UNSUB_SECRET) se c'è: così cambiare la chiave del
+// database non rende inutili i link già spediti
+const secret = () => process.env.EMAIL_UNSUB_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY!
+const sign = (userId: string) => createHmac('sha256', secret()).update(`email-unsub:${userId}`).digest('base64url')
 
 export function unsubscribeUrl(userId: string, communicationId?: string, locale?: string) {
   const params = new URLSearchParams({ u: userId, t: sign(userId) })

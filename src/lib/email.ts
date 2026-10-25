@@ -72,51 +72,57 @@ export async function sendEmail(input: SendEmailInput): Promise<{ sent: boolean;
   }
 }
 
-// Fino a 100 email diverse in una chiamata sola (API batch di Resend): per le
-// comunicazioni a tutti gli iscritti, una per persona (nessuno vede gli altri)
-export async function sendEmailBatch(items: SendEmailInput[]): Promise<{ sent: number; failed: number; error?: string }> {
+// Fino a 100 email diverse in una chiamata sola (API batch di Resend), tutte
+// o nessuna: per le comunicazioni a tutti gli iscritti, una per persona
+// (nessuno vede gli altri). La stessa chiave (idempotencyKey) non rimanda due
+// volte lo stesso blocco; se Resend chiede di rallentare (429) si riprova.
+export async function sendEmailChunk(items: SendEmailInput[], idempotencyKey: string): Promise<{ ok: boolean; error?: string }> {
   const apiKey = process.env.RESEND_API_KEY
   const defaultFrom = process.env.EMAIL_FROM
+  if (items.length === 0) return { ok: true }
+  if (items.length > 100) return { ok: false, error: 'too_many' }
   // Basta la chiave: il mittente predefinito serve solo per le email che non ne hanno uno
-  if (!apiKey || items.some((e) => !e.from && !defaultFrom)) return { sent: 0, failed: items.length, error: 'not_configured' }
-  let sent = 0
-  let failed = 0
-  let lastError: string | undefined
-  for (let i = 0; i < items.length; i += 100) {
-    const chunk = items.slice(i, i + 100)
+  if (!apiKey || items.some((e) => !e.from && !defaultFrom)) return { ok: false, error: 'not_configured' }
+  const body = JSON.stringify(
+    items.map((e) => ({
+      from: e.from ?? defaultFrom,
+      to: [e.to],
+      subject: e.subject,
+      html: e.html,
+      text: e.text,
+      ...(e.replyTo ? { reply_to: e.replyTo } : {}),
+      ...(e.headers ? { headers: e.headers } : {}),
+    })),
+  )
+  let lastError = 'network'
+  for (let attempt = 0; attempt < 3; attempt++) {
     try {
       const res = await fetch('https://api.resend.com/emails/batch', {
         method: 'POST',
-        headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify(
-          chunk.map((e) => ({
-            from: e.from ?? defaultFrom,
-            to: [e.to],
-            subject: e.subject,
-            html: e.html,
-            text: e.text,
-            ...(e.replyTo ? { reply_to: e.replyTo } : {}),
-            ...(e.headers ? { headers: e.headers } : {}),
-          })),
-        ),
+        headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json', 'Idempotency-Key': idempotencyKey },
+        body,
         signal: AbortSignal.timeout(30_000),
       })
-      if (!res.ok) {
-        const body = await res.text().catch(() => '')
-        console.error(`❌ Resend batch ${res.status}:`, body.slice(0, 300))
-        failed += chunk.length
-        lastError = `resend_${res.status}`
+      if (res.ok) {
+        await recordUsage(items.length)
+        return { ok: true }
+      }
+      const text = await res.text().catch(() => '')
+      console.error(`❌ Resend batch ${res.status}:`, text.slice(0, 300))
+      lastError = /daily|quota|monthly/i.test(text) ? 'quota' : `resend_${res.status}`
+      // Troppe richieste o errore momentaneo: si aspetta e si riprova (non se è finita la quota)
+      if ((res.status === 429 && lastError !== 'quota') || res.status >= 500) {
+        const wait = Math.min(5, Number(res.headers.get('retry-after')) || attempt + 1)
+        await new Promise((r) => setTimeout(r, wait * 1000))
         continue
       }
-      sent += chunk.length
+      return { ok: false, error: lastError }
     } catch (err) {
       console.error('❌ Errore invio email (batch):', err instanceof Error ? err.message : err)
-      failed += chunk.length
       lastError = 'network'
     }
   }
-  await recordUsage(sent)
-  return { sent, failed, error: lastError }
+  return { ok: false, error: lastError }
 }
 
 export function escapeHtml(value: string): string {

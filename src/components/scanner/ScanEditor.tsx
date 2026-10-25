@@ -86,13 +86,43 @@ export default function ScanEditor({ file, initial, queued, onDone, onCancel }: 
     setQuad((q) => (q ? (q.map((v, k) => (k === i ? p : v)) as Quad) : q))
   }
 
+  // Esc chiude (o torna agli angoli)
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return
+      if (stage === 'filter') setStage('crop')
+      else onCancel()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [stage, onCancel])
+
+  // Su iPhone la memoria delle tele è poca: si liberano appena non servono
+  useEffect(
+    () => () => {
+      if (source) source.width = source.height = 0
+    },
+    [source],
+  )
+  useEffect(
+    () => () => {
+      if (flat) flat.width = flat.height = 0
+    },
+    [flat],
+  )
+
   const goFilter = async () => {
     if (!source || !quad) return
     setBusy(true)
     await next()
-    setFlat(warp(source, quad, 1100))
-    setStage('filter')
-    setBusy(false)
+    try {
+      setFlat(warp(source, quad, 1100))
+      setStage('filter')
+    } catch {
+      setError(true)
+    } finally {
+      setBusy(false)
+    }
   }
 
   const save = async () => {
@@ -100,9 +130,15 @@ export default function ScanEditor({ file, initial, queued, onDone, onCancel }: 
     setBusy(true)
     await next()
     try {
-      const page = rotate90(applyFilter(warp(source, quad, PAGE_MAX), filter), turns)
+      const flatFull = warp(source, quad, PAGE_MAX)
+      const filtered = applyFilter(flatFull, filter)
+      flatFull.width = flatFull.height = 0
+      const page = rotate90(filtered, turns)
+      if (page !== filtered) filtered.width = filtered.height = 0
       const jpeg = await toBlob(page, filter === 'bw' ? 0.8 : 0.85)
-      onDone({ jpeg, w: page.width, h: page.height, thumb: thumbnail(page), edit: { quad, filter, turns } })
+      const result = { jpeg, w: page.width, h: page.height, thumb: thumbnail(page), edit: { quad, filter, turns } }
+      page.width = page.height = 0
+      onDone(result)
     } catch {
       setError(true)
       setBusy(false)
@@ -114,7 +150,7 @@ export default function ScanEditor({ file, initial, queued, onDone, onCancel }: 
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-[var(--ink)] text-white" role="dialog" aria-modal="true" aria-label={t('editorTitle')}>
       <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-3">
-        <button type="button" onClick={stage === 'filter' ? () => setStage('crop') : onCancel} className="flex items-center gap-2 text-sm font-semibold hover:text-[var(--gold-bright)]">
+        <button type="button" onClick={stage === 'filter' ? () => (setError(false), setStage('crop')) : onCancel} className="flex items-center gap-2 text-sm font-semibold hover:text-[var(--gold-bright)]">
           {stage === 'filter' ? <ArrowLeft className="h-5 w-5" /> : <X className="h-5 w-5" />}
           {stage === 'filter' ? t('back') : t('cancel')}
         </button>

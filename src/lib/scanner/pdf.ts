@@ -9,6 +9,7 @@ export const PDF_MAX_BYTES = 60 * 1024 * 1024
 const A4 = { w: 595.28, h: 841.89 }
 
 export type PdfJsPage = {
+  getOperatorList: () => Promise<{ fnArray: number[] }>
   getViewport: (o: { scale: number; rotation?: number }) => { width: number; height: number }
   render: (o: { canvasContext: CanvasRenderingContext2D; viewport: unknown; canvas: HTMLCanvasElement }) => { promise: Promise<void> }
   rotate: number
@@ -20,7 +21,20 @@ export type PdfJsDoc = { numPages: number; getPage: (n: number) => Promise<PdfJs
 export type ImagePage = { id: string; kind: 'image'; jpeg: Blob; w: number; h: number; thumb: string; origin?: { file: Blob; edit: { quad: { x: number; y: number }[]; filter: string; turns: number } } }
 export type PdfPage = { id: string; kind: 'pdf'; source: string; index: number; turns: number; thumb: string; w: number; h: number }
 export type Page = ImagePage | PdfPage
-export type SourcePdf = { id: string; name: string; bytes: ArrayBuffer; js: PdfJsDoc }
+// locked: PDF con restrizioni (si apre ma pdf-lib non può copiarne le pagine): pagine salvate come immagini
+export type SourcePdf = { id: string; name: string; bytes: ArrayBuffer; js: PdfJsDoc; locked?: boolean }
+
+// La pagina contiene immagini? (scansioni e foto: solo queste conviene alleggerire)
+async function pageHasImages(doc: PdfJsDoc, index: number): Promise<boolean> {
+  try {
+    const { OPS } = await import('pdfjs-dist')
+    const ops = new Set<number>([OPS.paintImageXObject, OPS.paintInlineImageXObject, OPS.paintImageXObjectRepeat].filter((n) => typeof n === 'number'))
+    const list = await (await doc.getPage(index + 1)).getOperatorList()
+    return list.fnArray.some((fn) => ops.has(fn))
+  } catch {
+    return false
+  }
+}
 
 export async function openPdfJs(bytes: ArrayBuffer): Promise<PdfJsDoc> {
   const pdfjs = await import('pdfjs-dist')
@@ -48,7 +62,7 @@ export async function renderPdfPage(doc: PdfJsDoc, index: number, turns: number,
 const jpegOf = (c: HTMLCanvasElement, q: number) => new Promise<Blob>((resolve, reject) => c.toBlob((b) => (b ? resolve(b) : reject(new Error('toBlob'))), 'image/jpeg', q))
 
 async function shrink(jpeg: Blob, maxSide: number, q: number): Promise<{ bytes: ArrayBuffer; w: number; h: number }> {
-  const bitmap = await createImageBitmap(jpeg)
+  const bitmap = await createImageBitmap(jpeg, { imageOrientation: 'from-image' })
   const k = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height))
   const c = document.createElement('canvas')
   c.width = Math.round(bitmap.width * k)
@@ -87,11 +101,14 @@ export async function buildPdf(pages: Page[], sources: Map<string, SourcePdf>, o
     } else {
       const src = sources.get(p.source)
       if (!src) continue
-      // Pesante = oltre 150 KB a pagina in media (di solito pagine scansionate)
-      if (opts.light && src.bytes.byteLength / src.js.numPages > 150 * 1024) {
+      // Come immagine: i PDF con restrizioni (sempre) e, nella versione leggera,
+      // le pagine con immagini di un PDF pesante (oltre 150 KB a pagina in media)
+      const asImage = src.locked || (opts.light && src.bytes.byteLength / src.js.numPages > 150 * 1024 && (await pageHasImages(src.js, p.index)))
+      if (asImage) {
         // Pagina ridisegnata come immagine leggera, con la sua misura in punti
-        const canvas = await renderPdfPage(src.js, p.index, p.turns, 1300)
-        const img = await out.embedJpg(await (await jpegOf(canvas, 0.55)).arrayBuffer())
+        const canvas = await renderPdfPage(src.js, p.index, p.turns, opts.light ? 1300 : 2000)
+        const img = await out.embedJpg(await (await jpegOf(canvas, opts.light ? 0.55 : 0.85)).arrayBuffer())
+        canvas.width = canvas.height = 0
         const pageObj = await src.js.getPage(p.index + 1)
         const vp = pageObj.getViewport({ scale: 1, rotation: (pageObj.rotate + p.turns * 90) % 360 })
         const page = out.addPage([vp.width, vp.height])
