@@ -14,8 +14,8 @@ import {
   type PlatformCost,
   type PlatformExpense,
 } from '@/app/actions/adminCosts'
-import { COST_CATEGORIES, COST_CATEGORY_LABEL, FREQUENCY_LABEL, type CostCategory, type CostFrequency, type CostStatus } from '@/lib/platformCosts'
-import { cardAlertFrom, expiryLabel } from '@/lib/cardExpiry'
+import { COST_CATEGORIES, COST_CATEGORY_LABEL, FREQUENCY_LABEL, isFreePlan, type CostCategory, type CostFrequency, type CostStatus } from '@/lib/platformCosts'
+import { cardAlertFrom, dayLabel, expiryLabel } from '@/lib/cardExpiry'
 import { notify } from '@/lib/adminNotify'
 import { askConfirm } from '@/lib/confirm'
 
@@ -32,6 +32,14 @@ const toCents = (text: string) => {
 }
 const toText = (cents: number) => (cents / 100).toFixed(2).replace('.', ',')
 const today = () => new Date().toISOString().slice(0, 10)
+// Prossimo anniversario della data di inizio (dopo oggi)
+const nextRenewal = (start: string) => {
+  const now = today()
+  let y = Number(start.slice(0, 4))
+  let date = start
+  while (date <= now) date = `${++y}${start.slice(4, 10)}`
+  return date
+}
 
 function Row({ label, value, hint, strong, negative }: { label: string; value: string; hint?: string; strong?: boolean; negative?: boolean }) {
   return (
@@ -222,6 +230,8 @@ export default function CostsPanel() {
                 const pending = cost.status === 'pending'
                 // Un periodo vecchio di un abbonamento già ripreso non si può riprendere di nuovo
                 const resumed = ended && costs.some((o) => o.id !== cost.id && o.name === cost.name && o.start_date > (cost.end_date ?? '') && (!o.end_date || o.end_date > today()))
+                // Prossimo rinnovo dei costi annuali (l'avviso parte un mese prima)
+                const renewal = cost.frequency === 'yearly' && !ended && !pending ? nextRenewal(cost.start_date) : null
                 const cardSoon = Boolean(cost.card_expiry && !ended && !pending && today() >= cardAlertFrom(cost.card_expiry))
                 return (
                   <tr key={cost.id} className={ended || pending ? 'text-gray-400' : ''}>
@@ -235,9 +245,11 @@ export default function CostsPanel() {
                     </td>
                     <td className="py-2 pr-3">{COST_CATEGORY_LABEL[cost.category]}</td>
                     <td className="py-2 pr-3">{FREQUENCY_LABEL[cost.frequency]}</td>
-                    <td className="py-2 pr-3 text-right font-semibold">{cost.amount_cents === 0 && !pending ? <span className="rounded bg-amber-100 px-1.5 py-0.5 text-xs text-amber-800">Da compilare</span> : eur(cost.amount_cents)}</td>
+                    <td className="py-2 pr-3 text-right font-semibold">{isFreePlan(cost) ? <span className="rounded bg-emerald-100 px-1.5 py-0.5 text-xs text-emerald-800">Gratuito</span> : cost.amount_cents === 0 && !pending ? <span className="rounded bg-amber-100 px-1.5 py-0.5 text-xs text-amber-800">Da compilare</span> : eur(cost.amount_cents)}</td>
                     <td className="py-2 pr-3 text-right">{cost.frequency === 'one_off' ? '—' : eur(cost.frequency === 'yearly' ? Math.round(cost.amount_cents / 12) : cost.amount_cents)}</td>
-                    <td className="py-2 pr-3 text-xs">{new Date(cost.start_date).toLocaleDateString('it-IT')}{cost.end_date ? ` → ${new Date(cost.end_date).toLocaleDateString('it-IT')}` : ''}</td>
+                    <td className="py-2 pr-3 text-xs">{new Date(cost.start_date).toLocaleDateString('it-IT')}{cost.end_date ? ` → ${new Date(cost.end_date).toLocaleDateString('it-IT')}` : ''}
+                      {renewal && <span className="block text-gray-500">Rinnovo {dayLabel(renewal)}</span>}
+                    </td>
                     <td className="whitespace-nowrap py-2 pr-3 text-xs">
                       {cost.payment_card ? (
                         <span className={`inline-flex items-center gap-1 ${cardSoon ? 'rounded bg-amber-100 px-1.5 py-0.5 font-semibold text-amber-800' : ''}`} title={cardSoon ? 'Carta in scadenza: aggiornala nel servizio' : undefined}>

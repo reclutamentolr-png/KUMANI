@@ -9494,6 +9494,8 @@
     "quoteAcceptedTitle": "Angebot Nr. {number} angenommen",
     "quoteAcceptedBody": "Angenommen von {name}.",
     "securityAlertTitle": "KUMANI · Sicherheitswarnung",
+    "renewalTitle": "KUMANI · Verlängerung steht an",
+    "renewalBody": "{name} verlängert sich am {date}: prüfe Karte und Preis unter Kosten und Margen.",
     "cardExpiryTitle": "KUMANI · Karte läuft ab",
     "cardExpiryBody": "Die Karte {card} läuft {expiry} ab: aktualisiere sie bei {services}, damit die Abos weiterlaufen.",
     "securityDigestBody": "{count, plural, one {# neue Sicherheitswarnung zum Prüfen unter Admin → Sicherheit.} other {# neue Sicherheitswarnungen zum Prüfen unter Admin → Sicherheit.}}",

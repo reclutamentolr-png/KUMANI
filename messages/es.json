@@ -9494,6 +9494,8 @@
     "quoteAcceptedTitle": "Presupuesto n.º {number} aceptado",
     "quoteAcceptedBody": "Aceptado por {name}.",
     "securityAlertTitle": "KUMANI · Aviso de seguridad",
+    "renewalTitle": "KUMANI · Renovación próxima",
+    "renewalBody": "{name} se renueva el {date}: revisa la tarjeta y el precio en Costes y márgenes.",
     "cardExpiryTitle": "KUMANI · Tarjeta a punto de caducar",
     "cardExpiryBody": "La tarjeta {card} caduca en {expiry}: actualízala en {services} para no perder las suscripciones.",
     "securityDigestBody": "{count, plural, one {# nuevo aviso de seguridad para revisar en Admin → Seguridad.} other {# nuevos avisos de seguridad para revisar en Admin → Seguridad.}}",

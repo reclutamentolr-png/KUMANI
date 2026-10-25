@@ -1,23 +1,33 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { CreditCard } from 'lucide-react'
-import { adminExpiringCards } from '@/app/actions/adminCosts'
-import { expiryLabel, type ExpiringCard } from '@/lib/cardExpiry'
+import { CalendarClock, CreditCard } from 'lucide-react'
+import { adminDeadlines } from '@/app/actions/adminCosts'
+import { dayLabel, expiryLabel, type ExpiringCard, type Renewal } from '@/lib/cardExpiry'
 
 // In cima all'Admin: compare dal mese prima della scadenza di una carta usata
 // per pagare i costi fissi (Admin → Costi e margini), con i servizi in cui
-// aggiornarla per non perdere gli abbonamenti.
+// aggiornarla per non perdere gli abbonamenti, e dal mese prima di un rinnovo
+// annuale (dominio…).
 export default function CardExpiryAlert({ onOpen }: { onOpen?: () => void }) {
   const [cards, setCards] = useState<ExpiringCard[]>([])
+  const [renewals, setRenewals] = useState<Renewal[]>([])
 
   useEffect(() => {
-    adminExpiringCards()
-      .then(setCards)
+    adminDeadlines()
+      .then((d) => {
+        setCards(d.cards)
+        setRenewals(d.renewals)
+      })
       .catch(() => {})
   }, [])
 
-  if (!cards.length) return null
+  const open = onOpen && (
+    <button type="button" onClick={onOpen} className="shrink-0 rounded-lg bg-white px-3 py-1.5 text-xs font-semibold shadow-sm hover:underline">
+      Apri Costi e margini
+    </button>
+  )
+  if (!cards.length && !renewals.length) return null
   return (
     <>
       {cards.map((c) => (
@@ -29,11 +39,19 @@ export default function CardExpiryAlert({ onOpen }: { onOpen?: () => void }) {
             </p>
             <p>Aggiorna la carta in: {c.services.join(', ')}. Poi cambia la scadenza in Costi e margini e l’avviso sparisce.</p>
           </div>
-          {onOpen && (
-            <button type="button" onClick={onOpen} className="shrink-0 rounded-lg bg-white px-3 py-1.5 text-xs font-semibold shadow-sm hover:underline">
-              Apri Costi e margini
-            </button>
-          )}
+          {open}
+        </div>
+      ))}
+      {renewals.map((r) => (
+        <div key={`${r.name}-${r.date}`} className="flex flex-wrap items-start gap-3 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-amber-900" role="alert">
+          <CalendarClock className="mt-0.5 h-5 w-5 shrink-0" />
+          <div className="min-w-0 flex-1 text-sm">
+            <p className="font-bold">Rinnovo il {dayLabel(r.date)}: {r.name}</p>
+            <p>
+              {r.provider ? `Su ${r.provider}. ` : ''}Controlla che il rinnovo automatico sia attivo e la carta valida. Se il prezzo cambia, aggiornalo in Costi e margini.
+            </p>
+          </div>
+          {open}
         </div>
       ))}
     </>

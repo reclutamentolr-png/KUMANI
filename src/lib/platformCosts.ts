@@ -5,6 +5,9 @@ export type CostCategory = (typeof COST_CATEGORIES)[number]
 export type CostFrequency = 'monthly' | 'yearly' | 'one_off'
 export type CostStatus = 'active' | 'pending'
 
+// Importo a 0 con «gratuito» nelle note: piano free, non da compilare
+export const isFreePlan = (c: { amount_cents: number; notes: string | null }) => c.amount_cents === 0 && /gratuit/i.test(c.notes ?? '')
+
 export const COST_CATEGORY_LABEL: Record<CostCategory, string> = {
   hosting: 'Hosting',
   database: 'Database',

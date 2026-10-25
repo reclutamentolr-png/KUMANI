@@ -3,8 +3,8 @@
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { verifyAdmin } from '@/lib/verifyAdmin'
 import { getAdminFinancialSummary } from '@/app/actions/admin'
-import { COST_CATEGORIES, type CostCategory, type CostFrequency, type CostStatus } from '@/lib/platformCosts'
-import { expiringCards } from '@/lib/cardExpiry'
+import { COST_CATEGORIES, isFreePlan, type CostCategory, type CostFrequency, type CostStatus } from '@/lib/platformCosts'
+import { expiringCards, upcomingRenewals } from '@/lib/cardExpiry'
 
 // Admin → Costi e margini: costi fissi (mensili, annuali, una tantum), spese
 // variabili registrate a mano e i costi calcolati in automatico (commissioni
@@ -169,7 +169,7 @@ export async function adminCostsSummary() {
   const { data: allExpenses } = await db().from('platform_expenses').select('amount_cents')
   const variableTotal = (allExpenses ?? []).reduce((sum, e) => sum + (e.amount_cents as number), 0)
   const variableThisMonth = list.expenses.filter((e) => e.spent_on.startsWith(thisMonth)).reduce((sum, e) => sum + e.amount_cents, 0)
-  const toComplete = list.costs.filter((c) => c.amount_cents === 0 && c.status !== 'pending').length
+  const toComplete = list.costs.filter((c) => c.amount_cents === 0 && c.status !== 'pending' && !isFreePlan(c)).length
 
   // Incassi e costi automatici dall'Amministrazione (Stripe, voucher, punti…)
   const f = await getAdminFinancialSummary().catch(() => null)
@@ -210,9 +210,10 @@ export async function adminCostsSummary() {
   }
 }
 
-// Carte che scadono entro il mese prossimo (avviso in cima all'Admin)
-export async function adminExpiringCards() {
-  if (!(await verifyAdmin('stats.read'))) return []
-  const { data } = await db().from('platform_costs').select('name, provider, payment_card, card_expiry, status, end_date').not('card_expiry', 'is', null)
-  return expiringCards(data ?? [], today())
+// Scadenze del mese prossimo (avviso in cima all'Admin): carte di pagamento
+// e rinnovi annuali (dominio…)
+export async function adminDeadlines() {
+  if (!(await verifyAdmin('stats.read'))) return { cards: [], renewals: [] }
+  const { data } = await db().from('platform_costs').select('name, provider, payment_card, card_expiry, status, end_date, frequency, start_date, amount_cents')
+  return { cards: expiringCards(data ?? [], today()), renewals: upcomingRenewals(data ?? [], today()) }
 }

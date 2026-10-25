@@ -41,3 +41,30 @@ export function expiringCards(costs: CardCost[], today: string): ExpiringCard[] 
   }
   return [...groups.values()].sort((a, b) => a.expiry.localeCompare(b.expiry))
 }
+
+// Rinnovi annuali (dominio, licenze…): la data di rinnovo è l'anniversario
+// della data di inizio; l'avviso parte un mese prima.
+export type RenewalCost = { name: string; provider: string | null; frequency: string; start_date: string; status: string; end_date: string | null; amount_cents: number }
+export type Renewal = { name: string; provider: string | null; date: string; amount_cents: number }
+
+const shiftDay = (day: string, months: number) => {
+  const [y, m, d] = day.split('-').map(Number)
+  const last = new Date(Date.UTC(y, m - 1 + months + 1, 0)).getUTCDate()
+  return new Date(Date.UTC(y, m - 1 + months, Math.min(d, last))).toISOString().slice(0, 10)
+}
+
+export function upcomingRenewals(costs: RenewalCost[], today: string): Renewal[] {
+  const out: Renewal[] = []
+  for (const c of costs) {
+    if (c.frequency !== 'yearly' || c.status !== 'active') continue
+    if (c.end_date && c.end_date < today) continue
+    let date = c.start_date.slice(0, 10)
+    while (date < today) date = shiftDay(date, 12)
+    if (date === c.start_date.slice(0, 10)) continue
+    if (today >= shiftDay(date, -1)) out.push({ name: c.name, provider: c.provider, date, amount_cents: c.amount_cents })
+  }
+  return out.sort((a, b) => a.date.localeCompare(b.date))
+}
+
+// «02/10/2027»
+export const dayLabel = (day: string) => `${day.slice(8, 10)}/${day.slice(5, 7)}/${day.slice(0, 4)}`
