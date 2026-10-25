@@ -9496,6 +9496,8 @@
     "securityAlertTitle": "KUMANI · Avviso di sicurezza",
     "renewalTitle": "KUMANI · Rinnovo in arrivo",
     "renewalBody": "{name} si rinnova il {date}: controlla carta e prezzo in Costi e margini.",
+    "chargeTitle": "KUMANI · Addebito tra una settimana",
+    "chargeBody": "Il {date} addebito di {total} sulla carta {card} ({services}): controlla che ci sia disponibilità.",
     "cardExpiryTitle": "KUMANI · Carta in scadenza",
     "cardExpiryBody": "La carta {card} scade a {expiry}: aggiornala in {services} per non perdere gli abbonamenti.",
     "securityDigestBody": "{count, plural, one {# nuovo avviso di sicurezza da controllare in Admin → Sicurezza.} other {# nuovi avvisi di sicurezza da controllare in Admin → Sicurezza.}}",

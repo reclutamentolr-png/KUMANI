@@ -9496,6 +9496,8 @@
     "securityAlertTitle": "KUMANI · Security alert",
     "renewalTitle": "KUMANI · Renewal coming up",
     "renewalBody": "{name} renews on {date}: check the card and price in Costs and margins.",
+    "chargeTitle": "KUMANI · Charge in one week",
+    "chargeBody": "On {date} {total} will be charged to the {card} card ({services}): check the available balance.",
     "cardExpiryTitle": "KUMANI · Card expiring",
     "cardExpiryBody": "The {card} card expires {expiry}: update it in {services} to keep the subscriptions.",
     "securityDigestBody": "{count, plural, one {# new security alert to check in Admin → Security.} other {# new security alerts to check in Admin → Security.}}",

@@ -68,3 +68,31 @@ export function upcomingRenewals(costs: RenewalCost[], today: string): Renewal[]
 
 // «02/10/2027»
 export const dayLabel = (day: string) => `${day.slice(8, 10)}/${day.slice(5, 7)}/${day.slice(0, 4)}`
+
+// Addebiti in arrivo sulle carte (mensili e annuali): avviso una settimana
+// prima per controllare che sulla carta ci sia disponibilità. Il giorno di
+// addebito è quello della data di inizio (ogni mese o ogni anno).
+export type ChargeCost = RenewalCost & { payment_card: string | null }
+export type Charge = { card: string; date: string; items: { name: string; amount_cents: number }[]; total_cents: number }
+
+export const CHARGE_NOTICE_DAYS = 7
+
+export function upcomingCharges(costs: ChargeCost[], today: string, days = CHARGE_NOTICE_DAYS): Charge[] {
+  const limit = new Date(Date.parse(`${today}T00:00:00Z`) + days * 86_400_000).toISOString().slice(0, 10)
+  const groups = new Map<string, Charge>()
+  for (const c of costs) {
+    if (!c.payment_card || c.status !== 'active' || c.amount_cents <= 0) continue
+    if (c.frequency !== 'monthly' && c.frequency !== 'yearly') continue
+    const start = c.start_date.slice(0, 10)
+    let date = start
+    for (let n = 1; date <= today; n++) date = shiftDay(start, n * (c.frequency === 'yearly' ? 12 : 1))
+    if (date > limit || (c.end_date && c.end_date < date)) continue
+    const card = c.payment_card.trim()
+    const key = `${card.toLowerCase()}|${date}`
+    const group = groups.get(key) ?? { card, date, items: [], total_cents: 0 }
+    group.items.push({ name: c.provider || c.name, amount_cents: c.amount_cents })
+    group.total_cents += c.amount_cents
+    groups.set(key, group)
+  }
+  return [...groups.values()].sort((a, b) => a.date.localeCompare(b.date))
+}
