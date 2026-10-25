@@ -861,13 +861,11 @@ export async function getAdminFinancialSummary() {
 
   // 6. Voucher: creati dai Kumani col credito (valore = costo registrato),
   // omaggio dello Staff (KVA-, senza lotto) e dei lotti negozi
-  const { data: vouchers } = await db.from('subscription_vouchers').select('code, status, plan, cost_cents, batch_id, campaign')
+  const { data: vouchers } = await db.from('subscription_vouchers').select('code, status, plan, cost_cents, batch_id')
   const listPrice = (plan: string | null) => Math.round((plan === 'pro' ? prices.pro : prices.base) * 100)
   const kumano = { activeCount: 0, activeCents: 0, redeemedCount: 0, redeemedCents: 0 }
   const staffGifts = { redeemedCount: 0, redeemedCents: 0 }
   const shopRedeemed = { count: 0 }
-  // Licenze omaggio del lancio (le prime 50): mancato guadagno, non un costo
-  const launchGifts = { count: 0, cents: 0 }
   for (const v of vouchers ?? []) {
     if (v.status === 'revoked') continue
     if (v.batch_id) {
@@ -879,10 +877,6 @@ export async function getAdminFinancialSummary() {
       }
     } else {
       const value = v.cost_cents ?? listPrice(v.plan)
-      if (v.status === 'redeemed' && v.campaign === 'launch_discount') {
-        launchGifts.count += 1
-        launchGifts.cents += value
-      }
       if (v.status === 'redeemed') {
         kumano.redeemedCount += 1
         kumano.redeemedCents += value
@@ -977,7 +971,6 @@ export async function getAdminFinancialSummary() {
     cashIn,
     taxable,
     giftedServicesCents,
-    launchGifts,
     outstandingCents,
     networkSharePercent,
   }

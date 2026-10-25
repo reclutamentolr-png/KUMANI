@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { AlertTriangle, CreditCard, LoaderCircle, Pause, Pencil, Play, Plus, RefreshCw, Trash2, X } from 'lucide-react'
+import { AlertTriangle, CreditCard, Gift, LoaderCircle, Pause, Pencil, Play, Plus, RefreshCw, Trash2, X } from 'lucide-react'
 import {
   adminCostsSummary,
   adminDeleteCost,
@@ -11,6 +11,7 @@ import {
   adminResumeCost,
   adminSaveCost,
   adminSaveExpense,
+  type GiftedSubscription,
   type PlatformCost,
   type PlatformExpense,
 } from '@/app/actions/adminCosts'
@@ -49,6 +50,76 @@ function Row({ label, value, hint, strong, negative }: { label: string; value: s
         {hint && <p className="text-xs text-gray-500">{hint}</p>}
       </div>
       <p className={`whitespace-nowrap text-sm ${strong ? 'font-bold' : 'font-medium'} ${negative ? 'text-red-700' : 'text-gray-900'}`}>{value}</p>
+    </div>
+  )
+}
+
+const PLAN_LABEL = { base: 'Plus', pro: 'Pro' } as const
+
+// Abbonamenti regalati (lancio e Staff): non sono costi, solo il valore a
+// listino di quanto è stato dato, con chi l'ha ricevuto
+function GiftedPanel({ gifts }: { gifts: GiftedSubscription[] }) {
+  const [kind, setKind] = useState<'all' | 'launch' | 'staff'>('staff')
+  const [plan, setPlan] = useState<'all' | 'base' | 'pro'>('all')
+  const [open, setOpen] = useState(false)
+  if (!gifts.length) return null
+  const sum = (list: GiftedSubscription[]) => list.reduce((t, g) => t + g.cents, 0)
+  const groups = [
+    { key: 'launch' as const, label: 'Lancio di KUMANI', list: gifts.filter((g) => g.kind === 'launch') },
+    { key: 'staff' as const, label: 'Regalati dallo Staff', list: gifts.filter((g) => g.kind === 'staff') },
+  ]
+  const shown = gifts.filter((g) => (kind === 'all' || g.kind === kind) && (plan === 'all' || g.plan === plan))
+  const chip = (active: boolean) => `rounded-full px-3 py-1 text-xs font-semibold ${active ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`
+  return (
+    <div className="rounded-xl border border-sky-200 bg-white p-5">
+      <h3 className="flex items-center gap-2 font-bold text-gray-900"><Gift className="h-4 w-4 text-sky-600" /> Abbonamenti regalati</h3>
+      <p className="mb-3 text-xs text-gray-500">Non sono costi: nessuna uscita di cassa, solo il valore a prezzo di listino di quanto è stato regalato (mancato guadagno). Fuori dal conto economico.</p>
+      <div className="grid gap-3 sm:grid-cols-2">
+        {groups.map((g) => (
+          <div key={g.key} className="rounded-lg border border-sky-100 bg-sky-50 p-3">
+            <p className="text-sm font-semibold text-sky-900">{g.label}</p>
+            <p className="text-xl font-bold text-sky-900">{eur(sum(g.list))}</p>
+            <p className="text-xs text-sky-800">
+              {g.list.length} {g.list.length === 1 ? 'abbonamento' : 'abbonamenti'} · Plus {g.list.filter((x) => x.plan === 'base').length} ({eur(sum(g.list.filter((x) => x.plan === 'base')))}) · Pro {g.list.filter((x) => x.plan === 'pro').length} ({eur(sum(g.list.filter((x) => x.plan === 'pro')))})
+            </p>
+          </div>
+        ))}
+      </div>
+      <button type="button" onClick={() => setOpen(!open)} className="mt-3 text-sm font-semibold text-sky-700 hover:underline">
+        {open ? 'Nascondi elenco' : 'Vedi a chi sono stati regalati'}
+      </button>
+      {open && (
+        <div className="mt-3">
+          <div className="mb-3 flex flex-wrap gap-2">
+            {([['staff', 'Staff'], ['launch', 'Lancio'], ['all', 'Tutti']] as const).map(([k, l]) => <button key={k} type="button" onClick={() => setKind(k)} className={chip(kind === k)}>{l}</button>)}
+            <span className="mx-1 border-l border-gray-200" />
+            {([['all', 'Plus e Pro'], ['base', 'Plus'], ['pro', 'Pro']] as const).map(([k, l]) => <button key={k} type="button" onClick={() => setPlan(k)} className={chip(plan === k)}>{l}</button>)}
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="text-left text-xs uppercase text-gray-500">
+                <tr><th className="py-2 pr-3">A chi</th><th className="py-2 pr-3">Piano</th><th className="py-2 pr-3">Tipo</th><th className="py-2 pr-3">Usato il</th><th className="py-2 pr-3">Codice</th><th className="py-2 text-right">Valore</th></tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {shown.map((g) => (
+                  <tr key={g.code}>
+                    <td className="py-2 pr-3 font-semibold">{g.name}</td>
+                    <td className="py-2 pr-3">{PLAN_LABEL[g.plan]}</td>
+                    <td className="py-2 pr-3 text-xs">{g.kind === 'launch' ? 'Lancio' : 'Staff'}</td>
+                    <td className="py-2 pr-3 text-xs">{g.redeemed_at ? new Date(g.redeemed_at).toLocaleDateString('it-IT') : '—'}</td>
+                    <td className="py-2 pr-3 font-mono text-xs text-gray-500">{g.code}</td>
+                    <td className="py-2 text-right font-semibold">{eur(g.cents)}</td>
+                  </tr>
+                ))}
+                {shown.length === 0 && <tr><td colSpan={6} className="py-4 text-center text-gray-500">Nessun abbonamento con questi filtri.</td></tr>}
+              </tbody>
+              {shown.length > 0 && (
+                <tfoot><tr className="border-t border-gray-200"><td colSpan={5} className="py-2 pr-3 text-right text-xs text-gray-500">Totale ({shown.length})</td><td className="py-2 text-right font-bold">{eur(sum(shown))}</td></tr></tfoot>
+              )}
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -178,7 +249,7 @@ export default function CostsPanel() {
           },
           { label: 'Spese variabili del mese', value: eur(s.variableThisMonth), hint: `${eur(s.variableTotal)} in tutto` },
           { label: 'Margine operativo', value: eur(s.operating), hint: s.forfettario ? 'Dall\'inizio, IVA compresa' : 'Dall\'inizio, IVA esclusa', danger: s.operating < 0 },
-          { label: 'Costo di struttura (voucher usati)', value: eur(s.structure), hint: 'Servizi dati con i KU Points' },
+          { label: 'Abbonamenti regalati', value: eur(s.gifts.reduce((t, g) => t + g.cents, 0)), hint: `${s.gifts.length} tra lancio e Staff · non sono costi` },
         ].map((k) => (
           <div key={k.label} className="rounded-xl border border-gray-200 bg-white p-4">
             <p className="text-xs text-gray-500">{k.label}</p>
@@ -198,18 +269,12 @@ export default function CostsPanel() {
           <Row label="Provvigioni agenti" value={`− ${eur(s.agents)}`} hint="Pagate e da pagare" negative={s.agents > 0} />
           <Row label="Donazioni maturate" value={`− ${eur(s.donations)}`} hint="Abbonamenti e KU Points donati" negative={s.donations > 0} />
           <Row label="Margine operativo" value={eur(s.operating)} strong negative={s.operating < 0} />
-          <Row label="Costo di struttura: voucher usati" value={`− ${eur(s.structure)}`} hint="Servizi dati senza incasso, a prezzo di listino (non è un'uscita di cassa)" negative={s.structure > 0} />
-          <Row label="Margine dopo la struttura" value={eur(s.afterStructure)} strong negative={s.afterStructure < 0} />
-          {s.launch.count > 0 && (
-            <div className="mt-3 rounded-lg border border-sky-200 bg-sky-50 p-3">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="text-sm font-semibold text-sky-900">Lancio di KUMANI: licenze omaggio</p>
-                  <p className="text-xs text-sky-800">{s.launch.count} abbonamenti regalati a prezzo di listino. Mancato guadagno, fuori dai conteggi qui sopra.</p>
-                </div>
-                <p className="whitespace-nowrap text-sm font-semibold text-sky-900">{eur(s.launch.cents)}</p>
-              </div>
-            </div>
+          {/* Solo i voucher creati dai Kumani col credito: i regali stanno a parte */}
+          {s.structure > 0 && (
+            <>
+              <Row label="Costo di struttura: voucher usati" value={`− ${eur(s.structure)}`} hint="Voucher creati dai Kumani con il credito, a prezzo di listino (non è un'uscita di cassa)" negative />
+              <Row label="Margine dopo la struttura" value={eur(s.afterStructure)} strong negative={s.afterStructure < 0} />
+            </>
           )}
           {!s.available && <p className="mt-2 text-xs text-amber-700">Incassi non disponibili in questo momento (Stripe non raggiungibile): sono mostrati solo i costi.</p>}
         </div>
@@ -225,6 +290,8 @@ export default function CostsPanel() {
           <Row label="Totale impegni (massimo)" value={eur(c.pointsMax + c.vouchersUnused + c.voucherCredit + c.agentsDue + c.donationsDue)} strong />
         </div>
       </div>
+
+      <GiftedPanel gifts={s.gifts} />
 
       {/* Costi fissi */}
       <div className="rounded-xl border border-gray-200 bg-white p-5">

@@ -3,6 +3,7 @@
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { verifyAdmin } from '@/lib/verifyAdmin'
 import { getAdminFinancialSummary } from '@/app/actions/admin'
+import { getPlanPrices } from '@/lib/planPrices'
 import { COST_CATEGORIES, FORFETTARIO, isFreePlan, type CostCategory, type CostFrequency, type CostStatus } from '@/lib/platformCosts'
 import { expiringCards, upcomingRenewals } from '@/lib/cardExpiry'
 
@@ -40,6 +41,35 @@ export type PlatformExpense = {
   amount_cents: number
   spent_on: string
   notes: string | null
+}
+
+// Abbonamenti regalati e già usati: licenze omaggio del lancio e regali dello
+// Staff. Non sono costi (nessuna uscita di cassa): stanno a parte, con chi li
+// ha ricevuti e il valore a prezzo di listino.
+export type GiftedSubscription = { code: string; plan: 'base' | 'pro'; cents: number; kind: 'launch' | 'staff'; name: string; redeemed_at: string | null }
+
+async function giftedSubscriptions(): Promise<GiftedSubscription[]> {
+  const [{ data }, prices] = await Promise.all([
+    db().from('subscription_vouchers').select('code, plan, cost_cents, campaign, recipient_name, redeemed_by, redeemed_at').eq('status', 'redeemed').is('batch_id', null),
+    getPlanPrices(),
+  ])
+  const rows = (data ?? []).filter((v) => v.campaign === 'launch_discount' || v.campaign === 'admin_gift' || String(v.code).startsWith('KVA-'))
+  const ids = [...new Set(rows.map((v) => v.redeemed_by).filter(Boolean))] as string[]
+  const { data: people } = ids.length ? await db().from('profiles').select('id, first_name, last_name, username').in('id', ids) : { data: [] }
+  const nameOf = new Map((people ?? []).map((p) => [p.id as string, [p.first_name, p.last_name].filter(Boolean).join(' ') || (p.username as string) || '']))
+  return rows
+    .map((v) => {
+      const plan = v.plan === 'pro' ? 'pro' : 'base'
+      return {
+        code: v.code as string,
+        plan,
+        cents: (v.cost_cents as number | null) ?? Math.round((plan === 'pro' ? prices.pro : prices.base) * 100),
+        kind: v.campaign === 'launch_discount' ? 'launch' : 'staff',
+        name: nameOf.get(v.redeemed_by as string) || (v.recipient_name as string) || '—',
+        redeemed_at: v.redeemed_at as string | null,
+      } satisfies GiftedSubscription
+    })
+    .sort((a, b) => String(b.redeemed_at).localeCompare(String(a.redeemed_at)))
 }
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/
@@ -182,9 +212,10 @@ export async function adminCostsSummary() {
   const agents = fin ? fin.agentCommissions.pending + fin.agentCommissions.matured + fin.agentCommissions.paid : 0
   const donations = fin ? fin.donations.subscriptionCents + fin.donations.pointsCents : 0
   const operating = revenueNet - fixedAccrued - variableTotal - agents - donations
-  // Le licenze omaggio del lancio stanno a parte (mancato guadagno)
-  const launch = fin?.launchGifts ?? { count: 0, cents: 0 }
-  const structure = fin ? Math.max(fin.giftedServicesCents - launch.cents, 0) : 0
+  // Abbonamenti regalati (lancio e Staff): a parte, non sono costi
+  const gifts = await giftedSubscriptions()
+  const giftsCents = gifts.reduce((sum, g) => sum + g.cents, 0)
+  const structure = fin ? Math.max(fin.giftedServicesCents - giftsCents, 0) : 0
 
   return {
     available: Boolean(fin),
@@ -206,7 +237,7 @@ export async function adminCostsSummary() {
     operating,
     structure,
     afterStructure: operating - structure,
-    launch,
+    gifts,
     commitments: {
       vouchersUnused: fin?.kumanoVouchers.activeCents ?? 0,
       voucherCredit: fin?.voucherCreditCents ?? 0,
