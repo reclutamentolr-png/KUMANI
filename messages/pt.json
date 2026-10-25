@@ -16586,7 +16586,8 @@
     "newPhoto": "Outra foto",
     "sheetHint": "Imprima a folha no formato 10×15 cm sem margens (numa loja de fotografia ou quiosque) e recorte pelas linhas cinzentas.",
     "matting": "A recortar cabeça e cabelo…",
-    "warn_background": "O fundo é escuro ou colorido: com uma parede branca ou clara os contornos do cabelo ficam mais limpos."
+    "warn_background": "O fundo é escuro ou colorido: com uma parede branca ou clara os contornos do cabelo ficam mais limpos.",
+    "discard": "Descartar esta foto"
   },
   "camera": {
     "title": "Câmara",
@@ -16595,6 +16596,9 @@
     "switch": "Mudar de câmara",
     "starting": "A ligar a câmara…",
     "errDenied": "A permissão da câmara foi recusada. Autorize-a no ícone ao lado do endereço do site, ou cancele e escolha uma foto do computador.",
-    "errNone": "Não encontramos uma câmara neste dispositivo. Cancele e escolha uma foto do computador."
+    "errNone": "Não encontramos uma câmara neste dispositivo. Cancele e escolha uma foto do computador.",
+    "retake": "Repetir",
+    "use": "Usar esta foto",
+    "preview": "Foto acabada de tirar"
   }
 }

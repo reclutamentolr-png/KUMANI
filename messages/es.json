@@ -16586,7 +16586,8 @@
     "newPhoto": "Otra foto",
     "sheetHint": "Imprime la hoja en tamaño 10×15 cm sin bordes (en una tienda de fotos o un quiosco) y recorta por las líneas grises.",
     "matting": "Recortando cabeza y pelo…",
-    "warn_background": "El fondo es oscuro o de color: con una pared blanca o clara los contornos del pelo salen más limpios."
+    "warn_background": "El fondo es oscuro o de color: con una pared blanca o clara los contornos del pelo salen más limpios.",
+    "discard": "Descartar esta foto"
   },
   "camera": {
     "title": "Cámara",
@@ -16595,6 +16596,9 @@
     "switch": "Cambiar cámara",
     "starting": "Encendiendo la cámara…",
     "errDenied": "Se ha denegado el permiso de la cámara. Permítelo desde el icono junto a la dirección del sitio, o cancela y elige una foto del ordenador.",
-    "errNone": "No encontramos ninguna cámara en este dispositivo. Cancela y elige una foto del ordenador."
+    "errNone": "No encontramos ninguna cámara en este dispositivo. Cancela y elige una foto del ordenador.",
+    "retake": "Repetir",
+    "use": "Usar esta foto",
+    "preview": "Foto recién hecha"
   }
 }

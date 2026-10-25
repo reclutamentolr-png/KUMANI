@@ -16586,7 +16586,8 @@
     "newPhoto": "Un’altra foto",
     "sheetHint": "Stampa il foglio in formato 10×15 cm senza bordi (al fotografo o al chiosco del supermercato) e ritaglia lungo le linee grigie.",
     "matting": "Scontorno testa e capelli…",
-    "warn_background": "Lo sfondo è scuro o colorato: con una parete bianca o chiara i contorni dei capelli vengono più puliti."
+    "warn_background": "Lo sfondo è scuro o colorato: con una parete bianca o chiara i contorni dei capelli vengono più puliti.",
+    "discard": "Annulla questa foto"
   },
   "camera": {
     "title": "Fotocamera",
@@ -16595,6 +16596,9 @@
     "switch": "Cambia fotocamera",
     "starting": "Accendo la fotocamera…",
     "errDenied": "Il permesso per la fotocamera è stato negato. Consentilo dall’icona accanto all’indirizzo del sito, oppure annulla e scegli una foto dal computer.",
-    "errNone": "Non troviamo una fotocamera su questo dispositivo. Annulla e scegli una foto dal computer."
+    "errNone": "Non troviamo una fotocamera su questo dispositivo. Annulla e scegli una foto dal computer.",
+    "retake": "Rifai",
+    "use": "Usa questa foto",
+    "preview": "Foto appena scattata"
   }
 }

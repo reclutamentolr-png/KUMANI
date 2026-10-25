@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { Camera, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Download, Grid3x3, ImageUp, LoaderCircle, RotateCcw, RotateCw, Share2, ShieldCheck, TriangleAlert, Undo2, CircleCheck } from 'lucide-react'
+import { Camera, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Download, Grid3x3, ImageUp, LoaderCircle, RotateCcw, RotateCw, Share2, ShieldCheck, TriangleAlert, Undo2, CircleCheck, X } from 'lucide-react'
 import { fototesseraDone } from '@/app/actions/fototessera'
 import { DEFAULT_ADJUST, HEAD_MM, PHOTO_DPI, PHOTO_MM, PHOTO_PX, PHOTO_PX_PER_MM, SHEET, fitFace, headLines, placement, setJpegDpi, sheetSlots, type Adjust, type Fit } from '@/lib/fototessera/geometry'
 import { analyze, busyBackground, cutout, cutoutMatte, loadMatte, loadVision, matte, type Warning } from '@/lib/fototessera/vision'
@@ -310,6 +310,9 @@ export default function FototesseraApp() {
         <div className={`${card} flex flex-col items-center`}>
           <canvas ref={previewRef} className="rounded-sm border border-gray-300 shadow-sm" style={{ width: PHOTO_MM.w * PREVIEW_PX_PER_MM, height: PHOTO_MM.h * PREVIEW_PX_PER_MM }} aria-label={t('previewLabel')} role="img" />
           <p className="mt-2 text-xs text-[var(--muted)]">{t('size')}</p>
+          <button type="button" onClick={reset} className="mt-3 inline-flex items-center gap-2 rounded-xl border border-red-200 px-4 py-2 text-sm font-semibold text-red-700 hover:bg-red-50">
+            <X className="h-4 w-4" /> {t('discard')}
+          </button>
           <label className="mt-2 flex items-center gap-2 text-sm text-[var(--ink)]">
             <input type="checkbox" checked={guides} onChange={(e) => setGuides(e.target.checked)} className="h-4 w-4 accent-[var(--gold)]" />
             {t('guides')}

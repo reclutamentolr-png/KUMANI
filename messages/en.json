@@ -16586,7 +16586,8 @@
     "newPhoto": "Another photo",
     "sheetHint": "Print the sheet at 10×15 cm (4×6 in) without borders, at a photo shop or kiosk, and cut along the grey lines.",
     "matting": "Cutting out head and hair…",
-    "warn_background": "The background is dark or colourful: with a white or light wall the hair edges come out cleaner."
+    "warn_background": "The background is dark or colourful: with a white or light wall the hair edges come out cleaner.",
+    "discard": "Discard this photo"
   },
   "camera": {
     "title": "Camera",
@@ -16595,6 +16596,9 @@
     "switch": "Switch camera",
     "starting": "Turning on the camera…",
     "errDenied": "Camera permission was denied. Allow it from the icon next to the site address, or cancel and pick a photo from your computer.",
-    "errNone": "We can’t find a camera on this device. Cancel and pick a photo from your computer."
+    "errNone": "We can’t find a camera on this device. Cancel and pick a photo from your computer.",
+    "retake": "Retake",
+    "use": "Use this photo",
+    "preview": "Photo just taken"
   }
 }

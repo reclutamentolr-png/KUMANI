@@ -16586,7 +16586,8 @@
     "newPhoto": "Anderes Foto",
     "sheetHint": "Druck den Bogen im Format 10×15 cm ohne Rand (im Fotogeschäft oder am Automaten) und schneide entlang der grauen Linien.",
     "matting": "Kopf und Haare werden freigestellt…",
-    "warn_background": "Der Hintergrund ist dunkel oder farbig: vor einer weißen oder hellen Wand werden die Haarkonturen sauberer."
+    "warn_background": "Der Hintergrund ist dunkel oder farbig: vor einer weißen oder hellen Wand werden die Haarkonturen sauberer.",
+    "discard": "Dieses Foto verwerfen"
   },
   "camera": {
     "title": "Kamera",
@@ -16595,6 +16596,9 @@
     "switch": "Kamera wechseln",
     "starting": "Kamera wird eingeschaltet…",
     "errDenied": "Der Kamerazugriff wurde verweigert. Erlaube ihn über das Symbol neben der Adresse oder brich ab und wähle ein Foto vom Computer.",
-    "errNone": "Auf diesem Gerät wurde keine Kamera gefunden. Brich ab und wähle ein Foto vom Computer."
+    "errNone": "Auf diesem Gerät wurde keine Kamera gefunden. Brich ab und wähle ein Foto vom Computer.",
+    "retake": "Neu aufnehmen",
+    "use": "Dieses Foto verwenden",
+    "preview": "Gerade aufgenommenes Foto"
   }
 }

@@ -16586,7 +16586,8 @@
     "newPhoto": "Une autre photo",
     "sheetHint": "Imprimez la planche au format 10×15 cm sans bordure (chez le photographe ou à une borne) et découpez le long des lignes grises.",
     "matting": "Détourage de la tête et des cheveux…",
-    "warn_background": "Le fond est sombre ou coloré : devant un mur blanc ou clair, les contours des cheveux seront plus nets."
+    "warn_background": "Le fond est sombre ou coloré : devant un mur blanc ou clair, les contours des cheveux seront plus nets.",
+    "discard": "Annuler cette photo"
   },
   "camera": {
     "title": "Appareil photo",
@@ -16595,6 +16596,9 @@
     "switch": "Changer de caméra",
     "starting": "Allumage de la caméra…",
     "errDenied": "L’accès à la caméra a été refusé. Autorisez-le depuis l’icône à côté de l’adresse du site, ou annulez et choisissez une photo sur l’ordinateur.",
-    "errNone": "Aucune caméra trouvée sur cet appareil. Annulez et choisissez une photo sur l’ordinateur."
+    "errNone": "Aucune caméra trouvée sur cet appareil. Annulez et choisissez une photo sur l’ordinateur.",
+    "retake": "Reprendre",
+    "use": "Utiliser cette photo",
+    "preview": "Photo qui vient d’être prise"
   }
 }
