@@ -155,6 +155,7 @@ const EmailSetupPanel = dynamic(() => import('@/components/admin/EmailSetupPanel
 const EmailComposePanel = dynamic(() => import('@/components/admin/EmailComposePanel'), { loading })
 const PushPanel = dynamic(() => import('@/components/admin/PushPanel'), { loading })
 const CommunicationsPanel = dynamic(() => import('@/components/admin/CommunicationsPanel'), { loading })
+const EmailQuotaAlert = dynamic(() => import('@/components/admin/EmailQuotaAlert'), { loading: () => null })
 const CostsPanel = dynamic(() => import('@/components/admin/CostsPanel'), { loading })
 const DocumentsAdminPanel = dynamic(() => import('@/components/admin/DocumentsAdminPanel'), { loading })
 const AdminLateSponsor = dynamic(() => import('@/components/admin/AdminLateSponsor'), { loading })
@@ -2012,6 +2013,8 @@ L'accesso viene registrato.`))) return
       </div>
 
       <div className="lg:col-span-3 space-y-6">
+        {/* Avviso al 90% delle email gratuite di Resend */}
+        {hasPermission(permissions, 'messages.read' as Permission) && <EmailQuotaAlert />}
         {activeSection === 'platforms' && <PlatformsPanel />}
         {activeSection === 'overview' && renderOverview()}
         {activeSection === 'users' && renderUsers()}

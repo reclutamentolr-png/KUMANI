@@ -1,5 +1,6 @@
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { SITE_URL } from '@/lib/siteUrl'
+import { getEmailUsage } from '@/lib/emailUsage'
 
 // Admin → Piattaforme collegate: stato e consumi di Supabase, Resend,
 // Vercel, Cloudflare e Stripe, letti dalle loro API con le chiavi del
@@ -198,7 +199,15 @@ async function resendReport(): Promise<PlatformReport> {
       if (worst !== 'ok' && status === 'ok') status = worst
       if (pages >= 60) notes.push('Conteggio fermato a 6.000 email: per il totale esatto guarda il pannello Resend.')
     } else {
-      notes.push('Il conteggio delle email del mese non è disponibile con questa chiave: guardalo nel pannello Resend.')
+      // La chiave può solo inviare: si usa il conteggio di KUMANI (email_usage)
+      const own = await getEmailUsage()
+      if (own) {
+        items.unshift({ label: 'Email inviate questo mese (contate da KUMANI)', value: `${num(own.month)} di ${num(own.monthLimit)}`, percent: own.monthPct })
+        items.splice(1, 0, { label: 'Oggi', value: `${num(own.today)} di ${num(own.dayLimit)}`, percent: own.dayPct })
+        const worst = level([own.monthPct, own.dayPct])
+        if (worst !== 'ok' && status === 'ok') status = worst
+        notes.push('La chiave di Resend può solo inviare: le email le conta KUMANI, senza quelle di accesso di Supabase.')
+      } else notes.push('Il conteggio delle email del mese non è disponibile con questa chiave: guardalo nel pannello Resend.')
     }
   } catch {
     notes.push('Conteggio delle email non riuscito.')

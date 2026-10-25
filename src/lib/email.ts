@@ -5,6 +5,19 @@
 //   es. "KUMANI <noreply@kumani.io>"
 // Se mancano, l'email non parte (log) e il resto continua a funzionare.
 
+import { createClient as createServiceClient } from '@supabase/supabase-js'
+
+// Conteggio delle email partite (email_usage): l'Admin avvisa al 90% dei
+// limiti del piano gratuito di Resend. Non blocca mai l'invio.
+async function recordUsage(n: number) {
+  if (n <= 0 || !process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) return
+  try {
+    await createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, { auth: { autoRefreshToken: false, persistSession: false } }).rpc('email_usage_add', { p_n: n })
+  } catch {
+    // il conteggio è facoltativo
+  }
+}
+
 export type SendEmailInput = {
   to: string
   subject: string
@@ -51,6 +64,7 @@ export async function sendEmail(input: SendEmailInput): Promise<{ sent: boolean;
       return { sent: false, error: `resend_${res.status}` }
     }
     const data = (await res.json().catch(() => null)) as { id?: string } | null
+    await recordUsage(1)
     return { sent: true, id: data?.id }
   } catch (err) {
     console.error('❌ Errore invio email con Resend:', err instanceof Error ? err.message : err)
@@ -101,6 +115,7 @@ export async function sendEmailBatch(items: SendEmailInput[]): Promise<{ sent: n
       lastError = 'network'
     }
   }
+  await recordUsage(sent)
   return { sent, failed, error: lastError }
 }
 
