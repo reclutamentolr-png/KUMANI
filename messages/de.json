@@ -14379,9 +14379,10 @@
       "title": "KUMANI Agenda",
       "short": "Agenda",
       "tagline": "Termine, Erinnerungen und Fristen",
-      "description": "Dein Kalender für jeden Tag mit Erinnerungen, Notizen und Kontakten sowie Fristen für Dokumente und Verlängerungen mit Vorab-Hinweisen.",
+      "description": "Dein Kalender für jeden Tag mit Erinnerungen, Notizen und Kontakten, Fristen für Dokumente und Verlängerungen mit rechtzeitigen Hinweisen und das Passbild für die Erneuerung.",
       "tab_agenda": "Agenda",
-      "tab_deadlines": "Fristen"
+      "tab_deadlines": "Fristen",
+      "tab_photo": "Passbild"
     },
     "casaauto": {
       "title": "Haus & Auto",
@@ -16584,5 +16585,14 @@
     "shareTitle": "Passbild",
     "newPhoto": "Anderes Foto",
     "sheetHint": "Druck den Bogen im Format 10×15 cm ohne Rand (im Fotogeschäft oder am Automaten) und schneide entlang der grauen Linien."
+  },
+  "camera": {
+    "title": "Kamera",
+    "cancel": "Abbrechen",
+    "shoot": "Auslösen",
+    "switch": "Kamera wechseln",
+    "starting": "Kamera wird eingeschaltet…",
+    "errDenied": "Der Kamerazugriff wurde verweigert. Erlaube ihn über das Symbol neben der Adresse oder brich ab und wähle ein Foto vom Computer.",
+    "errNone": "Auf diesem Gerät wurde keine Kamera gefunden. Brich ab und wähle ein Foto vom Computer."
   }
 }

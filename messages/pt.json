@@ -14379,9 +14379,10 @@
       "title": "KUMANI Agenda",
       "short": "Agenda",
       "tagline": "Compromissos, lembretes e prazos",
-      "description": "A tua agenda de todos os dias com lembretes, notas e contactos, e os prazos de documentos e renovações com avisos antecipados.",
+      "description": "A sua agenda do dia a dia com lembretes, notas e contactos, os prazos de documentos e renovações com avisos antecipados e a fotografia tipo passe para os renovar.",
       "tab_agenda": "Agenda",
-      "tab_deadlines": "Prazos"
+      "tab_deadlines": "Prazos",
+      "tab_photo": "Fotografia tipo passe"
     },
     "casaauto": {
       "title": "Casa e carro",
@@ -16584,5 +16585,14 @@
     "shareTitle": "Fotografia tipo passe",
     "newPhoto": "Outra foto",
     "sheetHint": "Imprima a folha no formato 10×15 cm sem margens (numa loja de fotografia ou quiosque) e recorte pelas linhas cinzentas."
+  },
+  "camera": {
+    "title": "Câmara",
+    "cancel": "Cancelar",
+    "shoot": "Tirar a foto",
+    "switch": "Mudar de câmara",
+    "starting": "A ligar a câmara…",
+    "errDenied": "A permissão da câmara foi recusada. Autorize-a no ícone ao lado do endereço do site, ou cancele e escolha uma foto do computador.",
+    "errNone": "Não encontramos uma câmara neste dispositivo. Cancele e escolha uma foto do computador."
   }
 }

@@ -72,6 +72,7 @@ import {
   PartyPopper,
   ScanText,
   ScanLine,
+  ScanFace,
 } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { addFavorite, removeFavorite } from '@/app/actions/favorites'
@@ -154,6 +155,7 @@ const TAB_ICON: Record<string, LucideIcon> = {
   'social.forma': Crop,
   'agenda.agenda': CalendarDays,
   'agenda.deadlines': CalendarClock,
+  'agenda.photo': ScanFace,
   'casaauto.home': House,
   'casaauto.car': CarFront,
   'casaauto.findo': PackageSearch,

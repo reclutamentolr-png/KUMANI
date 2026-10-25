@@ -14379,9 +14379,10 @@
       "title": "KUMANI Agenda",
       "short": "Agenda",
       "tagline": "Rendez-vous, rappels et échéances",
-      "description": "Ton agenda de tous les jours avec rappels, notes et contacts, et les échéances des documents et renouvellements avec des alertes à l’avance.",
+      "description": "Votre agenda de tous les jours avec rappels, notes et contacts, les échéances des documents et renouvellements avec alertes à l’avance, et la photo d’identité pour les renouveler.",
       "tab_agenda": "Agenda",
-      "tab_deadlines": "Échéances"
+      "tab_deadlines": "Échéances",
+      "tab_photo": "Photo d’identité"
     },
     "casaauto": {
       "title": "Maison et voiture",
@@ -16584,5 +16585,14 @@
     "shareTitle": "Photo d’identité",
     "newPhoto": "Une autre photo",
     "sheetHint": "Imprimez la planche au format 10×15 cm sans bordure (chez le photographe ou à une borne) et découpez le long des lignes grises."
+  },
+  "camera": {
+    "title": "Appareil photo",
+    "cancel": "Annuler",
+    "shoot": "Prendre la photo",
+    "switch": "Changer de caméra",
+    "starting": "Allumage de la caméra…",
+    "errDenied": "L’accès à la caméra a été refusé. Autorisez-le depuis l’icône à côté de l’adresse du site, ou annulez et choisissez une photo sur l’ordinateur.",
+    "errNone": "Aucune caméra trouvée sur cet appareil. Annulez et choisissez une photo sur l’ordinateur."
   }
 }

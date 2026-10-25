@@ -6,6 +6,7 @@ import { Camera, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Download, Gr
 import { fototesseraDone } from '@/app/actions/fototessera'
 import { DEFAULT_ADJUST, HEAD_MM, PHOTO_DPI, PHOTO_MM, PHOTO_PX, PHOTO_PX_PER_MM, SHEET, fitFace, headLines, placement, setJpegDpi, sheetSlots, type Adjust, type Fit } from '@/lib/fototessera/geometry'
 import { analyze, cutout, loadVision, type Warning } from '@/lib/fototessera/vision'
+import CameraDialog, { needsCameraDialog } from '@/components/camera/CameraDialog'
 
 // FOTOTESSERA (piano Plus): dalla foto del telefono alla fototessera 35×45 mm
 // con sfondo bianco, testa della misura giusta e foglio 10×15 da stampare.
@@ -84,6 +85,7 @@ export default function FototesseraApp() {
   const [guides, setGuides] = useState(true)
   const [canShare, setCanShare] = useState(false)
   const [busySave, setBusySave] = useState(false)
+  const [camera, setCamera] = useState(false)
   const previewRef = useRef<HTMLCanvasElement>(null)
   const takeRef = useRef<HTMLInputElement>(null)
   const pickRef = useRef<HTMLInputElement>(null)
@@ -235,8 +237,19 @@ export default function FototesseraApp() {
     setPhase({ kind: 'start' })
   }
 
+  const takePhoto = () => (needsCameraDialog() ? setCamera(true) : takeRef.current?.click())
+
   const fileInputs = (
     <>
+      {camera && (
+        <CameraDialog
+          onClose={() => setCamera(false)}
+          onPhoto={(file) => {
+            setCamera(false)
+            void openFile(file)
+          }}
+        />
+      )}
       <input ref={takeRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => void openFile(e.target.files?.[0]).finally(() => (e.target.value = ''))} />
       <input ref={pickRef} type="file" accept="image/*" className="hidden" onChange={(e) => void openFile(e.target.files?.[0]).finally(() => (e.target.value = ''))} />
     </>
@@ -258,7 +271,7 @@ export default function FototesseraApp() {
             ))}
           </ul>
           <div className="mt-5 flex flex-wrap gap-3">
-            <button type="button" disabled={busy} onClick={() => takeRef.current?.click()} className={`${btn} bg-[var(--ink)] text-white hover:bg-[var(--ink-soft)]`}>
+            <button type="button" disabled={busy} onClick={takePhoto} className={`${btn} bg-[var(--ink)] text-white hover:bg-[var(--ink-soft)]`}>
               <Camera className="h-5 w-5" /> {t('take')}
             </button>
             <button type="button" disabled={busy} onClick={() => pickRef.current?.click()} className={`${btn} border border-[var(--gold)]/40 bg-white text-[var(--ink)] hover:border-[var(--gold)]`}>

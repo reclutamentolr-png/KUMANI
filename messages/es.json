@@ -14379,9 +14379,10 @@
       "title": "KUMANI Agenda",
       "short": "Agenda",
       "tagline": "Citas, recordatorios y vencimientos",
-      "description": "Tu agenda de cada día con recordatorios, notas y contactos, y los vencimientos de documentos y renovaciones con avisos previos.",
+      "description": "Tu agenda de cada día con recordatorios, notas y contactos, los vencimientos de documentos y renovaciones con avisos anticipados y la foto carné para renovarlos.",
       "tab_agenda": "Agenda",
-      "tab_deadlines": "Vencimientos"
+      "tab_deadlines": "Vencimientos",
+      "tab_photo": "Foto carné"
     },
     "casaauto": {
       "title": "Casa y coche",
@@ -16584,5 +16585,14 @@
     "shareTitle": "Foto carné",
     "newPhoto": "Otra foto",
     "sheetHint": "Imprime la hoja en tamaño 10×15 cm sin bordes (en una tienda de fotos o un quiosco) y recorta por las líneas grises."
+  },
+  "camera": {
+    "title": "Cámara",
+    "cancel": "Cancelar",
+    "shoot": "Hacer la foto",
+    "switch": "Cambiar cámara",
+    "starting": "Encendiendo la cámara…",
+    "errDenied": "Se ha denegado el permiso de la cámara. Permítelo desde el icono junto a la dirección del sitio, o cancela y elige una foto del ordenador.",
+    "errNone": "No encontramos ninguna cámara en este dispositivo. Cancela y elige una foto del ordenador."
   }
 }

@@ -8,6 +8,7 @@ import { askConfirm } from '@/lib/confirm'
 import { canvasOf, rotate90, thumbnail, toBlob } from '@/lib/scanner/image'
 import { MAX_PAGES, PDF_MAX_BYTES, buildPdf, newId, openPdfJs, renderPdfPage, type Page, type SourcePdf } from '@/lib/scanner/pdf'
 import ScanEditor, { type EditResult, type EditState } from './ScanEditor'
+import CameraDialog, { needsCameraDialog } from '@/components/camera/CameraDialog'
 
 // SCANNER E PDF (piano Pro): fotografa i documenti e mettili in un PDF con le
 // pagine di altri PDF; poi riordina, ruota, togli, scegli le pagine e
@@ -46,6 +47,7 @@ export default function ScannerApp() {
   const [busy, setBusy] = useState<{ kind: 'pdf' | 'export'; done?: number; total?: number } | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [canShare, setCanShare] = useState(false)
+  const [camera, setCamera] = useState(false)
   const sources = useRef(new Map<string, SourcePdf>())
   const cameraRef = useRef<HTMLInputElement>(null)
   const photosRef = useRef<HTMLInputElement>(null)
@@ -75,7 +77,7 @@ export default function ScannerApp() {
 
   const room = MAX_PAGES - pages.length
 
-  const addPhotos = (files: FileList | null) => {
+  const addPhotos = (files: FileList | File[] | null) => {
     setError(null)
     const list = Array.from(files ?? []).filter((f) => f.type.startsWith('image/') || /\.(jpe?g|png|heic|heif|webp)$/i.test(f.name))
     if (!list.length) return
@@ -204,6 +206,16 @@ export default function ScannerApp() {
 
   const inputs = (
     <>
+      {camera && (
+        <CameraDialog
+          facing="environment"
+          onClose={() => setCamera(false)}
+          onPhoto={(file) => {
+            setCamera(false)
+            addPhotos([file])
+          }}
+        />
+      )}
       <input ref={cameraRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => (addPhotos(e.target.files), (e.target.value = ''))} />
       <input ref={photosRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => (addPhotos(e.target.files), (e.target.value = ''))} />
       <input ref={pdfRef} type="file" accept="application/pdf,.pdf" multiple className="hidden" onChange={(e) => void addPdfs(e.target.files).finally(() => (e.target.value = ''))} />
@@ -212,7 +224,7 @@ export default function ScannerApp() {
 
   const addButtons = (
     <div className="flex flex-wrap gap-3">
-      <button type="button" disabled={!!busy || room <= 0} onClick={() => cameraRef.current?.click()} className={`${btn} bg-[var(--ink)] text-white hover:bg-[var(--ink-soft)]`}>
+      <button type="button" disabled={!!busy || room <= 0} onClick={() => (needsCameraDialog() ? setCamera(true) : cameraRef.current?.click())} className={`${btn} bg-[var(--ink)] text-white hover:bg-[var(--ink-soft)]`}>
         <Camera className="h-5 w-5" /> {t('scan')}
       </button>
       <button type="button" disabled={!!busy || room <= 0} onClick={() => photosRef.current?.click()} className={`${btn} border border-[var(--gold)]/40 bg-white text-[var(--ink)] hover:border-[var(--gold)]`}>

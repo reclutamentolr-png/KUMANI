@@ -14379,9 +14379,10 @@
       "title": "KUMANI Agenda",
       "short": "Agenda",
       "tagline": "Appuntamenti, promemoria e scadenze",
-      "description": "La tua agenda di ogni giorno con promemoria, note e rubrica, e le scadenze di documenti e rinnovi con gli avvisi in anticipo.",
+      "description": "La tua agenda di ogni giorno con promemoria, note e rubrica, le scadenze di documenti e rinnovi con gli avvisi in anticipo e la fototessera per rinnovarli.",
       "tab_agenda": "Agenda",
-      "tab_deadlines": "Scadenze"
+      "tab_deadlines": "Scadenze",
+      "tab_photo": "Fototessera"
     },
     "casaauto": {
       "title": "Casa e auto",
@@ -16584,5 +16585,14 @@
     "shareTitle": "Fototessera",
     "newPhoto": "Un’altra foto",
     "sheetHint": "Stampa il foglio in formato 10×15 cm senza bordi (al fotografo o al chiosco del supermercato) e ritaglia lungo le linee grigie."
+  },
+  "camera": {
+    "title": "Fotocamera",
+    "cancel": "Annulla",
+    "shoot": "Scatta",
+    "switch": "Cambia fotocamera",
+    "starting": "Accendo la fotocamera…",
+    "errDenied": "Il permesso per la fotocamera è stato negato. Consentilo dall’icona accanto all’indirizzo del sito, oppure annulla e scegli una foto dal computer.",
+    "errNone": "Non troviamo una fotocamera su questo dispositivo. Annulla e scegli una foto dal computer."
   }
 }

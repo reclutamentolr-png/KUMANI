@@ -5,7 +5,7 @@
 // magazzino, calcolatrici), KUMANI Ufficio (Firma PDF, Scanner e PDF, Firma Email, Hoplà),
 // KUMANI Negozio (Shop, Menu, Kumi Card e OfferMaker, se acceso), Farti conoscere (Link in
 // Bio, Landing Page, Messaggi WhatsApp), KUMANI Agenda (MemoLife, Life
-// Calendar), Casa e auto (Casa, Garage, Findo), Viaggi (Travel) e Amicizie
+// Calendar, Fototessera), Casa e auto (Casa, Garage, Findo), Viaggi (Travel) e Amicizie
 // (Convivium, Affinity). Gli strumenti
 // restano dove sono (indirizzi, piani, KU Karma, guide e volantini non
 // cambiano): il servizio li raccoglie come schede, con una barra comune in
@@ -107,6 +107,8 @@ export const HUB_TABS: Record<ServiceHub, HubTab[]> = {
   agenda: [
     { key: 'agenda', href: '/app/memolife', tool: 'memolife' },
     { key: 'deadlines', href: '/app/life-calendar', tool: 'life-calendar' },
+    // Documento in scadenza → la foto per rinnovarlo
+    { key: 'photo', href: '/app/fototessera', tool: 'fototessera' },
   ],
   casaauto: [
     { key: 'home', href: '/app/casa', tool: 'casa' },
@@ -214,6 +216,7 @@ export const TOOL_HUB: Record<string, ServiceHub> = {
   tutela: 'social',
   memolife: 'agenda',
   'life-calendar': 'agenda',
+  fototessera: 'agenda',
   casa: 'casaauto',
   garage: 'casaauto',
   findo: 'casaauto',

@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server'
 import { ArrowLeft, ScanFace } from 'lucide-react'
 import ToolBackLink from '@/components/ToolBackLink'
 import FototesseraApp from '@/components/fototessera/FototesseraApp'
+import HubBar from '@/components/hubs/HubBar'
 import { toolMetadata } from '@/lib/toolMetadata'
 
 // Nome del servizio nella scheda del browser
@@ -33,6 +34,7 @@ export default async function FototesseraPage() {
           </h1>
         </div>
       </header>
+      <HubBar />
 
       <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
         <div className="relative mb-8 overflow-hidden rounded-3xl bg-[var(--ink)] p-6 text-white shadow-[0_14px_40px_rgba(23,23,23,0.25)] sm:p-8">
