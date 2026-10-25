@@ -145,11 +145,16 @@ export default async function DashboardTipo2({
     </div>
   )
 
+  // «Scrivi cosa ti serve»: in ogni vista subito sotto «Lite · Completa · Icone»
+  // (e sopra «Scegli cosa ti interessa di più» per i nuovi iscritti)
+  const needSearch = <NeedSearch items={services.map((s) => ({ toolName: s.toolName, title: s.title, name: s.name, description: s.description, href: s.href, iconName: s.iconName, guide: s.guide }))} />
+
   // Vista a icone: solo le icone (abbonarsi e codice sono nel Wallet e nel profilo)
   if (view === 'icons')
     return (
       <>
         <HomeViewSwitch key={view} current={view} />
+        {needSearch}
         {afterStatus}
         {iconHome}
       </>
@@ -159,6 +164,8 @@ export default async function DashboardTipo2({
     <>
       {/* Lite · Completa · Icone */}
       <HomeViewSwitch key={view} current={view} />
+
+      {needSearch}
 
       {/* Nuovi iscritti: «Per cosa sei qui?» e i primi passi subito in cima,
           prima di abbonamento e riga di stato (sul telefono si vede appena entrati) */}
@@ -235,9 +242,6 @@ export default async function DashboardTipo2({
       </div>
 
       {afterStatus}
-
-      {/* «Scrivi cosa ti serve»: il bisogno con parole proprie → i servizi giusti */}
-      <NeedSearch items={services.map((s) => ({ toolName: s.toolName, title: s.title, name: s.name, description: s.description, href: s.href, iconName: s.iconName, guide: s.guide }))} />
 
       {view === 'lite' ? (
         welcome ? (
