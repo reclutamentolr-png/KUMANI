@@ -1,7 +1,9 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
+import { usePathname } from 'next/navigation'
 import { useLocale } from 'next-intl'
+import { toolFromPath } from '@/components/analytics/ToolOpenTracker'
 import type { Session } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/client'
 import { readImpersonation } from '@/lib/impersonation'
@@ -9,11 +11,19 @@ import { readImpersonation } from '@/lib/impersonation'
 // Sessioni d'uso per il «Tempo medio per sessione» dell'Admin: un segnale
 // leggero al minuto, solo con la pagina in primo piano, più uno quando si
 // esce dalla pagina. Il database raggruppa i segnali in sessioni (30 minuti
-// senza attività chiudono la sessione) e non conta lo Staff.
+// senza attività chiudono la sessione) e non conta lo Staff. Ogni segnale dice
+// anche quale servizio era aperto dal segnale prima: così si conta il tempo
+// passato in ogni servizio (Admin → Attività del giorno).
 const EVERY_MS = 60 * 1000
 
 export default function SessionTracker() {
   const locale = useLocale()
+  const pathname = usePathname()
+  // Servizio della pagina aperta adesso e di quella del segnale precedente
+  const currentTool = useRef<string | null>(null)
+  useEffect(() => {
+    currentTool.current = toolFromPath(pathname)
+  }, [pathname])
 
   // Lingua in cui la persona usa KUMANI: serve per mandarle le comunicazioni
   // nella sua lingua. Si salva solo se è cambiata (ricordata nel browser).
@@ -43,6 +53,13 @@ export default function SessionTracker() {
     let token: string | null = null
     let member = false
     let lastPing = 0
+    // Il tempo dall'ultimo segnale va al servizio aperto in quel momento
+    let lastTool: string | null = null
+    const toolSince = () => {
+      const tool = lastTool
+      lastTool = currentTool.current
+      return tool
+    }
     let timer: ReturnType<typeof setInterval> | null = null
     const device = () =>
       (window.matchMedia('(pointer: coarse)').matches && window.innerWidth < 1024) || /Android|iPhone|iPod|Mobile/i.test(navigator.userAgent) ? 'mobile' : 'desktop'
@@ -51,7 +68,7 @@ export default function SessionTracker() {
       if (!member || document.visibilityState !== 'visible' || readImpersonation()) return
       if (Date.now() - lastPing < 20_000) return
       lastPing = Date.now()
-      void supabase.rpc('session_ping', { p_device: device() }).then(() => {})
+      void supabase.rpc('session_ping', { p_device: device(), p_tool: toolSince() }).then(() => {})
     }
 
     // Uscendo dalla pagina: ultimo segnale che arriva anche se la pagina si chiude
@@ -64,7 +81,7 @@ export default function SessionTracker() {
           method: 'POST',
           keepalive: true,
           headers: { apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ p_device: device() }),
+          body: JSON.stringify({ p_device: device(), p_tool: toolSince() }),
         }).catch(() => {})
       } catch {
         // il segnale finale è facoltativo

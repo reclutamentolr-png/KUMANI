@@ -167,6 +167,7 @@ const PassCodesPanel = dynamic(() => import('@/components/admin/PassCodesPanel')
 const ToolPassSetting = dynamic(() => import('@/components/admin/ToolPassSetting'), { loading })
 const ReportsPanel = dynamic(() => import('@/components/admin/ReportsPanel'), { loading })
 const RealUsagePanel = dynamic(() => import('@/components/admin/RealUsagePanel'), { loading })
+const ActivityPanel = dynamic(() => import('@/components/admin/ActivityPanel'), { loading })
 const MatrixTree = dynamic(() => import('@/components/MatrixTree'), { loading })
 const AdminVouchersPanel = dynamic(() => import('@/components/admin/AdminVouchersPanel'), { loading })
 const PromoCodesPanel = dynamic(() => import('@/components/admin/PromoCodesPanel'), { loading })
@@ -780,6 +781,7 @@ L'accesso viene registrato.`))) return
   { id: 'platforms', label: 'Piattaforme collegate', Icon: PlugZap, permission: 'stats.read' as Permission, group: 'general' },
   { id: 'overview', label: 'Panoramica', Icon: LayoutDashboard, permission: 'stats.read' as Permission, group: 'general' },
   { id: 'realUsage', label: 'Uso reale', Icon: Activity, permission: 'stats.read' as Permission, group: 'general' },
+  { id: 'activity', label: 'Attività del giorno', Icon: CalendarDays, permission: 'stats.read' as Permission, group: 'general' },
   { id: 'security', label: 'Sicurezza', Icon: ShieldAlert, permission: 'settings.read' as Permission, group: 'general' },
   { id: 'financials', label: 'Amministrazione', Icon: PiggyBank, permission: 'stats.read' as Permission, group: 'general' },
   { id: 'costs', label: 'Costi e margini', Icon: Calculator, permission: 'stats.read' as Permission, group: 'general' },
@@ -2036,6 +2038,7 @@ L'accesso viene registrato.`))) return
         {activeSection === 'plansGate' && <PlansGatePanel />}
         {activeSection === 'reports' && <ReportsPanel initialTab={reportTab} />}
         {activeSection === 'realUsage' && <RealUsagePanel />}
+        {activeSection === 'activity' && <ActivityPanel />}
         {activeSection === 'languages' && <LanguagesPanel canWrite={hasPermission(permissions, 'settings.write')} />}
         {activeSection === 'matrix' && renderMatrix()}
         {activeSection === 'marketplace' && renderMarketplace()}
