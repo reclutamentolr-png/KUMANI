@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { Activity, Crown, Gift, Lock, RefreshCw, Sparkles, Ticket, User, Users } from 'lucide-react'
 import { adminOverview, type AdminOverview, type OverviewTool, type PaidPeriod } from '@/app/actions/adminOverview'
 import SignupAlertsToggle from '@/components/admin/SignupAlertsToggle'
+import EmailUsageCard from '@/components/admin/EmailUsageCard'
 import SolveToggle from '@/components/admin/SolveToggle'
 
 // Admin → Panoramica: tre sezioni a riquadri quadrati.
@@ -146,6 +147,9 @@ export default function AdminOverviewPanel({ userName, onlineUsers }: { userName
           <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} /> Aggiorna
         </button>
       </div>
+
+      {/* Email di Resend: oggi e nel mese, sempre in vista */}
+      <EmailUsageCard />
 
       <SignupAlertsToggle />
       <SolveToggle />
