@@ -8741,14 +8741,14 @@
       "step3Text": "KUMI, the octopus with a crown, welcomes your child and gives a new tip at every tap, also out loud. Below are the four games. At the top: stars won, the album, sounds, voice and the padlock to leave.",
       "step4Title": "Colour and Animate",
       "step4Text": "Your child taps a colour and then a part of the drawing. When the figure is fully coloured it wakes up and KUMI dances in to praise your child by name. Then the figure waves, dances, jumps or goes to sleep. From age 5 there are also missions (“colour the tummy red”) that earn stars.",
-      "step4Tip": "There are 20 drawings, KUMI included: “New drawing” picks one that suits the age, the grid shows them all.",
+      "step4Tip": "There are 20 drawings, KUMI included: “New drawing” picks one that suits the age, the grid shows them all. “Clean” removes all the colours to start again.",
       "step5Title": "Create your animal",
       "step5Text": "Pick one piece at a time: head, ears or horns, body, arms, feet, tail and wings. The creature gets a funny name, then it is coloured and comes to life like the other drawings.",
       "step6Title": "The music of colours",
-      "step6Text": "Every colour is a note: your child colours the flowers in the row, presses “Play” and their character dances to the tune. They can change instrument and speed and save up to 12 songs.",
+      "step6Text": "Each colour is a note: the child colours the flowers one after another, presses “Play” and their character dances to the tune. They can change instrument and speed, save up to 12 songs and delete them on their own.",
       "step6Tip": "The notes are chosen so that any combination sounds good.",
       "step7Title": "Free drawing",
-      "step7Text": "A blank sheet with magic brushes: rainbow, sparkles, stamps, eraser and background. With the mirror every stroke is repeated on the other side. “Done! To the album” puts the drawing in the album.",
+      "step7Text": "A blank sheet with magic brushes: rainbow, sparkles, stamps, eraser and background. With the mirror every stroke is repeated on the other side. “Done! To the album” puts the drawing in the album. “Clean” empties the sheet, and “Undo” brings it back.",
       "step8Title": "Album, printing and WhatsApp",
       "step8Text": "Finished drawings go into each child’s album. Saving them on the phone, sending them on WhatsApp or printing the PDF needs the parent code. You can also print the same drawing without colours, to colour with real crayons.",
       "step9Title": "Leaving and locking the phone",
@@ -15996,6 +15996,7 @@
     "colorsLabel": "Crayons",
     "eraser": "Eraser",
     "undo": "Undo",
+    "clean": "Clean",
     "newDrawing": "New drawing",
     "saveShare": "Save and send",
     "soundOn": "Turn sounds on",
@@ -16314,7 +16315,7 @@
       }
     },
     "musicTrack": "The song flowers",
-    "musicPause": "Flower {n}: rest",
+    "musicPause": "Flower {n}: empty",
     "musicNote": "Flower {n}: {color}",
     "musicSpeed": "Speed",
     "tempo": {
@@ -16336,8 +16337,7 @@
     "instruments": {
       "xilofono": "Xylophone",
       "flauto": "Flute",
-      "campanelle": "Bells",
-      "robot": "Robot"
+      "campanelle": "Bells"
     },
     "drawTools": "Magic brushes",
     "drawTool": {

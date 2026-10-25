@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { Brush, Eraser, FilePlus2, FlipHorizontal2, PaintBucket, Rainbow, Share2, Sparkles, Stamp, Undo2, Check } from 'lucide-react'
+import { Broom, Brush, Eraser, FlipHorizontal2, PaintBucket, Rainbow, Share2, Sparkles, Stamp, Undo2, Check } from 'lucide-react'
 import { ERASER, paletteFor } from '@/lib/kids/catalog'
 import type { KidProfile } from '@/lib/kids/storage'
 import { KidsButton, KidsIconButton } from './ColorStage'
@@ -189,6 +189,8 @@ export default function FreeDrawGame({
   const palette = useMemo(() => paletteFor(Math.max(profile.age, 5)), [profile.age])
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [ops, setOps] = useState<Op[]>(() => (Array.isArray(profile.sketch) ? (profile.sketch as Op[]) : []))
+  // «Pulisci» svuota il foglio; finché non si disegna di nuovo «Annulla» lo riporta indietro
+  const [cleared, setCleared] = useState<Op[] | null>(null)
   const [tool, setTool] = useState<Tool>('pennello')
   const [colorIndex, setColorIndex] = useState(0)
   const [size, setSize] = useState(1)
@@ -225,6 +227,7 @@ export default function FreeDrawGame({
     const ctx = canvasRef.current?.getContext('2d')
     if (!ctx) return
     e.currentTarget.setPointerCapture(e.pointerId)
+    setCleared(null)
     const [x, y] = point(e)
     if (tool === 'sfondo') {
       // Lo sfondo va sotto a tutto (uno solo)
@@ -286,9 +289,17 @@ export default function FreeDrawGame({
   // Ultimo disegno salvato nell'album (stesso elenco di tratti = già salvato)
   const savedOps = useRef<Op[] | null>(null)
 
-  const undo = () => setOps((o) => o.slice(0, -1))
+  const undo = () => {
+    if (!ops.length && cleared) {
+      setOps(cleared)
+      setCleared(null)
+      return
+    }
+    setOps((o) => o.slice(0, -1))
+  }
   const fresh = () => {
     if (!ops.length) return
+    setCleared(ops)
     setOps([])
     if (sound) melody([7, 4, 0], 90)
   }
@@ -397,11 +408,11 @@ export default function FreeDrawGame({
 
       {/* Azioni */}
       <div className="flex flex-wrap items-center justify-center gap-2">
-        <KidsButton onClick={undo} disabled={!ops.length}>
+        <KidsButton onClick={undo} disabled={!ops.length && !cleared}>
           <Undo2 className="h-5 w-5" /> {t('undo')}
         </KidsButton>
-        <KidsButton onClick={fresh} label={t('drawNew')} disabled={!ops.length}>
-          <FilePlus2 className="h-5 w-5" />
+        <KidsButton onClick={fresh} disabled={!ops.length}>
+          <Broom className="h-5 w-5" /> {t('clean')}
         </KidsButton>
         <KidsButton onClick={() => void finish(false)} accent>
           <Check className="h-5 w-5" /> {t('drawDone')}

@@ -8741,14 +8741,14 @@
       "step3Text": "O KUMI, o polvo com coroa, recebe a criança e a cada toque dá-lhe um conselho, também em voz alta. Por baixo estão os quatro jogos. Em cima: as estrelas ganhas, o álbum, os sons, a voz e o cadeado para sair.",
       "step4Title": "Pinta e anima",
       "step4Text": "A criança toca numa cor e depois numa parte do desenho. Quando a figura está toda pintada acorda, e o KUMI chega a dançar para lhe dar os parabéns pelo nome. Depois a figura acena, dança, salta ou vai dormir. A partir dos 5 anos há também missões («pinta a barriga de vermelho») que dão estrelas.",
-      "step4Tip": "Há 20 desenhos, incluindo o KUMI: «Novo desenho» escolhe um adequado à idade, a grelha mostra-os todos.",
+      "step4Tip": "Há 20 desenhos, incluindo o KUMI: «Novo desenho» escolhe um adequado à idade, a grelha mostra-os todos. «Limpar» tira todas as cores para recomeçar.",
       "step5Title": "Cria o teu animal",
       "step5Text": "Escolhe-se uma peça de cada vez: cabeça, orelhas ou chifres, corpo, braços, pés, cauda e asas. A criatura recebe um nome engraçado, depois pinta-se e ganha vida como os outros desenhos.",
       "step6Title": "A música das cores",
-      "step6Text": "Cada cor é uma nota: a criança pinta as flores da fila, carrega em «Toca» e a sua personagem dança ao som da melodia. Pode mudar de instrumento e de velocidade e guardar até 12 canções.",
+      "step6Text": "Cada cor é uma nota: a criança pinta as flores uma após a outra, carrega em «Tocar» e a sua personagem dança ao som da melodia. Pode mudar de instrumento e de velocidade, guardar até 12 canções e apagá-las sozinha.",
       "step6Tip": "As notas foram escolhidas para que qualquer combinação soe bem.",
       "step7Title": "Desenho livre",
-      "step7Text": "Uma folha em branco com pincéis mágicos: arco-íris, estrelinhas, carimbos, borracha e fundo. Com o espelho cada traço repete-se do outro lado. «Pronto! Para o álbum» guarda o desenho no álbum.",
+      "step7Text": "Uma folha em branco com pincéis mágicos: arco-íris, estrelinhas, carimbos, borracha e fundo. Com o espelho cada traço repete-se do outro lado. «Pronto! Para o álbum» guarda o desenho no álbum. «Limpar» esvazia a folha e «Anular» recupera-a.",
       "step8Title": "Álbum, impressão e WhatsApp",
       "step8Text": "Os desenhos terminados vão para o álbum de cada criança. Para os guardar no telemóvel, enviar pelo WhatsApp ou imprimir o PDF é preciso o código dos pais. Também se pode imprimir o mesmo desenho sem cores, para pintar com lápis a sério.",
       "step9Title": "Sair e bloquear o telemóvel",
@@ -15996,6 +15996,7 @@
     "colorsLabel": "Lápis de cor",
     "eraser": "Borracha",
     "undo": "Anular",
+    "clean": "Limpar",
     "newDrawing": "Novo desenho",
     "saveShare": "Guardar e enviar",
     "soundOn": "Ligar os sons",
@@ -16314,7 +16315,7 @@
       }
     },
     "musicTrack": "As flores da canção",
-    "musicPause": "Flor {n}: pausa",
+    "musicPause": "Flor {n}: vazia",
     "musicNote": "Flor {n}: {color}",
     "musicSpeed": "Velocidade",
     "tempo": {
@@ -16336,8 +16337,7 @@
     "instruments": {
       "xilofono": "Xilofone",
       "flauto": "Flauta",
-      "campanelle": "Sininhos",
-      "robot": "Robô"
+      "campanelle": "Sininhos"
     },
     "drawTools": "Pincéis mágicos",
     "drawTool": {

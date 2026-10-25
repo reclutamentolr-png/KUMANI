@@ -8741,14 +8741,14 @@
       "step3Text": "KUMI, le poulpe à la couronne, accueille l’enfant et lui donne un conseil à chaque toucher, aussi à voix haute. En dessous, les quatre jeux. En haut : les étoiles gagnées, l’album, les sons, la voix et le cadenas pour sortir.",
       "step4Title": "Colorie et anime",
       "step4Text": "L’enfant touche une couleur puis une partie du dessin. Quand la figure est entièrement coloriée, elle se réveille et KUMI arrive en dansant pour féliciter l’enfant par son prénom. Ensuite la figure fait coucou, danse, saute ou fait dodo. Dès 5 ans, il y a aussi des missions (« colorie le ventre en rouge ») qui font gagner des étoiles.",
-      "step4Tip": "Il y a 20 dessins, KUMI compris : « Nouveau dessin » en choisit un adapté à l’âge, la grille les montre tous.",
+      "step4Tip": "Il y a 20 dessins, KUMI compris : « Nouveau dessin » en choisit un adapté à l’âge, la grille les montre tous. « Effacer » enlève toutes les couleurs pour recommencer.",
       "step5Title": "Crée ton animal",
       "step5Text": "On choisit une pièce à la fois : tête, oreilles ou cornes, corps, bras, pieds, queue et ailes. La créature reçoit un nom rigolo, puis on la colorie et elle prend vie comme les autres dessins.",
       "step6Title": "La musique des couleurs",
-      "step6Text": "Chaque couleur est une note : l’enfant colorie les fleurs de la rangée, appuie sur « Joue » et son personnage danse sur la mélodie. Il peut changer d’instrument et de vitesse et enregistrer jusqu’à 12 chansons.",
+      "step6Text": "Chaque couleur est une note : l’enfant colorie les fleurs l’une après l’autre, appuie sur « Jouer » et son personnage danse sur la mélodie. Il peut changer d’instrument et de vitesse, enregistrer jusqu’à 12 chansons et les supprimer tout seul.",
       "step6Tip": "Les notes sont choisies pour que toutes les combinaisons sonnent bien.",
       "step7Title": "Dessin libre",
-      "step7Text": "Une feuille blanche avec des pinceaux magiques : arc-en-ciel, étoiles, tampons, gomme et fond. Avec le miroir, chaque trait se répète de l’autre côté. « Fini ! Dans l’album » range le dessin dans l’album.",
+      "step7Text": "Une feuille blanche avec des pinceaux magiques : arc-en-ciel, étoiles, tampons, gomme et fond. Avec le miroir, chaque trait se répète de l’autre côté. « Fini ! Dans l’album » range le dessin dans l’album. « Effacer » vide la feuille, et « Annuler » la fait revenir.",
       "step8Title": "Album, impression et WhatsApp",
       "step8Text": "Les dessins terminés vont dans l’album de chaque enfant. Pour les enregistrer sur le téléphone, les envoyer sur WhatsApp ou imprimer le PDF, il faut le code parent. On peut aussi imprimer le même dessin sans couleurs, à colorier avec de vrais crayons.",
       "step9Title": "Sortir et bloquer le téléphone",
@@ -15996,6 +15996,7 @@
     "colorsLabel": "Crayons",
     "eraser": "Gomme",
     "undo": "Annuler",
+    "clean": "Effacer",
     "newDrawing": "Nouveau dessin",
     "saveShare": "Enregistrer et envoyer",
     "soundOn": "Activer les sons",
@@ -16314,7 +16315,7 @@
       }
     },
     "musicTrack": "Les fleurs de la chanson",
-    "musicPause": "Fleur {n} : silence",
+    "musicPause": "Fleur {n} : vide",
     "musicNote": "Fleur {n} : {color}",
     "musicSpeed": "Vitesse",
     "tempo": {
@@ -16336,8 +16337,7 @@
     "instruments": {
       "xilofono": "Xylophone",
       "flauto": "Flûte",
-      "campanelle": "Clochettes",
-      "robot": "Robot"
+      "campanelle": "Clochettes"
     },
     "drawTools": "Pinceaux magiques",
     "drawTool": {

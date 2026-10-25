@@ -8741,14 +8741,14 @@
       "step3Text": "KUMI, der Krake mit der Krone, begrüßt Ihr Kind und gibt bei jedem Tippen einen neuen Tipp, auch laut vorgelesen. Darunter stehen die vier Spiele. Oben: gewonnene Sterne, das Album, Töne, Stimme und das Schloss zum Verlassen.",
       "step4Title": "Ausmalen und beleben",
       "step4Text": "Ihr Kind tippt auf eine Farbe und dann auf einen Teil des Bildes. Ist die Figur ganz ausgemalt, wacht sie auf, und KUMI tanzt herein und lobt Ihr Kind mit Namen. Danach winkt die Figur, tanzt, springt oder schläft. Ab 5 Jahren gibt es auch Aufgaben („Male den Bauch rot an“), die Sterne bringen.",
-      "step4Tip": "Es gibt 20 Bilder, KUMI inklusive: „Neues Bild“ wählt eines passend zum Alter, das Raster zeigt alle.",
+      "step4Tip": "Es gibt 20 Bilder, KUMI inklusive: „Neues Bild“ wählt eines passend zum Alter, das Raster zeigt alle. „Löschen“ entfernt alle Farben, um neu anzufangen.",
       "step5Title": "Erfinde dein Tier",
       "step5Text": "Man wählt ein Teil nach dem anderen: Kopf, Ohren oder Hörner, Körper, Arme, Füße, Schwanz und Flügel. Das Wesen bekommt einen lustigen Namen, wird ausgemalt und erwacht wie die anderen Bilder zum Leben.",
       "step6Title": "Die Musik der Farben",
-      "step6Text": "Jede Farbe ist ein Ton: Ihr Kind malt die Blumen der Reihe aus, drückt auf „Spielen“, und seine Figur tanzt zur Melodie. Instrument und Tempo lassen sich ändern, bis zu 12 Lieder können gespeichert werden.",
+      "step6Text": "Jede Farbe ist ein Ton: Das Kind malt die Blumen eine nach der anderen aus, drückt „Spielen“ und seine Figur tanzt zur Melodie. Es kann Instrument und Tempo ändern, bis zu 12 Lieder speichern und sie selbst löschen.",
       "step6Tip": "Die Töne sind so gewählt, dass jede Kombination gut klingt.",
       "step7Title": "Freies Malen",
-      "step7Text": "Ein leeres Blatt mit Zauberpinseln: Regenbogen, Sternchen, Stempel, Radierer und Hintergrund. Mit dem Spiegel wiederholt sich jeder Strich auf der anderen Seite. „Fertig! Ins Album“ legt das Bild ins Album.",
+      "step7Text": "Ein leeres Blatt mit Zauberpinseln: Regenbogen, Sternchen, Stempel, Radierer und Hintergrund. Mit dem Spiegel wiederholt sich jeder Strich auf der anderen Seite. „Fertig! Ins Album“ legt das Bild ins Album. „Löschen“ leert das Blatt, „Rückgängig“ holt es zurück.",
       "step8Title": "Album, Drucken und WhatsApp",
       "step8Text": "Fertige Bilder kommen in das Album jedes Kindes. Zum Speichern auf dem Handy, Senden per WhatsApp oder Drucken als PDF braucht man den Eltern-Code. Man kann dasselbe Bild auch ohne Farben drucken, zum Ausmalen mit echten Stiften.",
       "step9Title": "Verlassen und Handy sperren",
@@ -15996,6 +15996,7 @@
     "colorsLabel": "Buntstifte",
     "eraser": "Radiergummi",
     "undo": "Rückgängig",
+    "clean": "Löschen",
     "newDrawing": "Neues Bild",
     "saveShare": "Speichern und senden",
     "soundOn": "Töne an",
@@ -16314,7 +16315,7 @@
       }
     },
     "musicTrack": "Die Liedblumen",
-    "musicPause": "Blume {n}: Pause",
+    "musicPause": "Blume {n}: leer",
     "musicNote": "Blume {n}: {color}",
     "musicSpeed": "Tempo",
     "tempo": {
@@ -16336,8 +16337,7 @@
     "instruments": {
       "xilofono": "Xylofon",
       "flauto": "Flöte",
-      "campanelle": "Glöckchen",
-      "robot": "Roboter"
+      "campanelle": "Glöckchen"
     },
     "drawTools": "Zauberpinsel",
     "drawTool": {

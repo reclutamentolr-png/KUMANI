@@ -8741,14 +8741,14 @@
       "step3Text": "KUMI, il polpo con la corona, accoglie il bambino e a ogni tocco gli dà un consiglio, anche a voce. Sotto ci sono i quattro giochi. In alto le stelle vinte, l’album, i suoni, la voce e il lucchetto per uscire.",
       "step4Title": "Colora e Anima",
       "step4Text": "Il bambino tocca un colore e poi una parte del disegno. Quando la figura è tutta colorata si sveglia e KUMI arriva ballando a fare i complimenti, chiamandolo per nome. Poi la figura saluta, balla, salta o va a nanna. Dai 5 anni ci sono anche le missioni («colora la pancia di rosso») che regalano stelle.",
-      "step4Tip": "Ci sono 20 disegni, KUMI compreso: «Nuovo disegno» ne sceglie uno adatto all’età, la griglia li mostra tutti.",
+      "step4Tip": "Ci sono 20 disegni, KUMI compreso: «Nuovo disegno» ne sceglie uno adatto all’età, la griglia li mostra tutti. «Pulisci» toglie tutti i colori per ricominciare.",
       "step5Title": "Crea il tuo animale",
       "step5Text": "Si sceglie un pezzo alla volta: testa, orecchie o corna, corpo, braccia, piedi, coda e ali. La creatura riceve un nome buffo, poi si colora e prende vita come gli altri disegni.",
       "step6Title": "La musica dei colori",
-      "step6Text": "Ogni colore è una nota: il bambino colora i fiori della fila, preme «Suona» e il suo personaggio balla sulla melodia. Può cambiare strumento e velocità e salvare fino a 12 canzoni.",
+      "step6Text": "Ogni colore è una nota: il bambino colora i fiori uno dopo l’altro, preme «Suona» e il suo personaggio balla sulla melodia. Può cambiare strumento e velocità, salvare fino a 12 canzoni e cancellarle da solo.",
       "step6Tip": "Le note sono scelte in modo che qualunque combinazione suoni bene.",
       "step7Title": "Disegno libero",
-      "step7Text": "Un foglio bianco con i pennelli magici: arcobaleno, stelline, timbri, gomma e sfondo. Con lo specchio ogni tratto si ripete dall’altra parte. «Fatto! Nell’album» mette il disegno nell’album.",
+      "step7Text": "Un foglio bianco con i pennelli magici: arcobaleno, stelline, timbri, gomma e sfondo. Con lo specchio ogni tratto si ripete dall’altra parte. «Fatto! Nell’album» mette il disegno nell’album. «Pulisci» svuota il foglio, e «Annulla» lo riporta indietro.",
       "step8Title": "Album, stampa e WhatsApp",
       "step8Text": "I disegni finiti vanno nell’album di ogni bambino. Per salvarli nel telefono, mandarli su WhatsApp o stampare il PDF serve il codice del genitore. Si può stampare anche lo stesso disegno senza colori, da colorare con i pastelli veri.",
       "step9Title": "Uscire e bloccare il telefono",
@@ -15996,6 +15996,7 @@
     "colorsLabel": "Pastelli",
     "eraser": "Gomma",
     "undo": "Annulla",
+    "clean": "Pulisci",
     "newDrawing": "Nuovo disegno",
     "saveShare": "Salva e invia",
     "soundOn": "Accendi i suoni",
@@ -16314,7 +16315,7 @@
       }
     },
     "musicTrack": "I fiori della canzone",
-    "musicPause": "Fiore {n}: pausa",
+    "musicPause": "Fiore {n}: vuoto",
     "musicNote": "Fiore {n}: {color}",
     "musicSpeed": "Velocità",
     "tempo": {
@@ -16336,8 +16337,7 @@
     "instruments": {
       "xilofono": "Xilofono",
       "flauto": "Flauto",
-      "campanelle": "Campanelle",
-      "robot": "Robot"
+      "campanelle": "Campanelle"
     },
     "drawTools": "Pennelli magici",
     "drawTool": {

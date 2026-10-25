@@ -8741,14 +8741,14 @@
       "step3Text": "KUMI, el pulpo con corona, recibe al niño y a cada toque le da un consejo, también en voz alta. Debajo están los cuatro juegos. Arriba: las estrellas ganadas, el álbum, los sonidos, la voz y el candado para salir.",
       "step4Title": "Colorea y anima",
       "step4Text": "El niño toca un color y luego una parte del dibujo. Cuando la figura está toda coloreada se despierta y KUMI llega bailando a felicitarlo por su nombre. Luego la figura saluda, baila, salta o se va a dormir. Desde los 5 años también hay misiones («colorea la barriga de rojo») que dan estrellas.",
-      "step4Tip": "Hay 20 dibujos, KUMI incluido: «Nuevo dibujo» elige uno adecuado a la edad y la cuadrícula los muestra todos.",
+      "step4Tip": "Hay 20 dibujos, KUMI incluido: «Nuevo dibujo» elige uno adecuado a la edad y la cuadrícula los muestra todos. «Limpiar» quita todos los colores para empezar de nuevo.",
       "step5Title": "Crea tu animal",
       "step5Text": "Se elige una pieza cada vez: cabeza, orejas o cuernos, cuerpo, brazos, pies, cola y alas. La criatura recibe un nombre divertido, luego se colorea y cobra vida como los demás dibujos.",
       "step6Title": "La música de los colores",
-      "step6Text": "Cada color es una nota: el niño colorea las flores de la fila, pulsa «Toca» y su personaje baila con la melodía. Puede cambiar de instrumento y de velocidad y guardar hasta 12 canciones.",
+      "step6Text": "Cada color es una nota: el niño colorea las flores una tras otra, pulsa «Tocar» y su personaje baila con la melodía. Puede cambiar instrumento y velocidad, guardar hasta 12 canciones y borrarlas él solo.",
       "step6Tip": "Las notas están elegidas para que cualquier combinación suene bien.",
       "step7Title": "Dibujo libre",
-      "step7Text": "Una hoja en blanco con pinceles mágicos: arcoíris, estrellitas, sellos, goma y fondo. Con el espejo cada trazo se repite al otro lado. «¡Listo! Al álbum» guarda el dibujo en el álbum.",
+      "step7Text": "Una hoja en blanco con pinceles mágicos: arcoíris, estrellitas, sellos, goma y fondo. Con el espejo cada trazo se repite al otro lado. «¡Listo! Al álbum» guarda el dibujo en el álbum. «Limpiar» vacía la hoja y «Deshacer» la recupera.",
       "step8Title": "Álbum, impresión y WhatsApp",
       "step8Text": "Los dibujos terminados van al álbum de cada niño. Para guardarlos en el teléfono, enviarlos por WhatsApp o imprimir el PDF hace falta el código del adulto. También se puede imprimir el mismo dibujo sin colores, para colorearlo con lápices de verdad.",
       "step9Title": "Salir y bloquear el teléfono",
@@ -15996,6 +15996,7 @@
     "colorsLabel": "Lápices",
     "eraser": "Goma",
     "undo": "Deshacer",
+    "clean": "Limpiar",
     "newDrawing": "Nuevo dibujo",
     "saveShare": "Guardar y enviar",
     "soundOn": "Activar sonidos",
@@ -16314,7 +16315,7 @@
       }
     },
     "musicTrack": "Las flores de la canción",
-    "musicPause": "Flor {n}: silencio",
+    "musicPause": "Flor {n}: vacía",
     "musicNote": "Flor {n}: {color}",
     "musicSpeed": "Velocidad",
     "tempo": {
@@ -16336,8 +16337,7 @@
     "instruments": {
       "xilofono": "Xilófono",
       "flauto": "Flauta",
-      "campanelle": "Campanitas",
-      "robot": "Robot"
+      "campanelle": "Campanitas"
     },
     "drawTools": "Pinceles mágicos",
     "drawTool": {

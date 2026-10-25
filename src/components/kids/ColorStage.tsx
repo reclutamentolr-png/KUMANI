@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { ArrowUp, Eraser, Hand, Moon, Music, Star, Undo2 } from 'lucide-react'
+import { ArrowUp, Broom, Eraser, Hand, Moon, Music, Star, Undo2 } from 'lucide-react'
 import { ERASER, paletteFor } from '@/lib/kids/catalog'
 import { KIDS_SVG_CSS, applyPivots, type Move } from '@/lib/kids/moves'
 import type { Drawing } from '@/lib/kids/types'
@@ -53,7 +53,8 @@ export default function ColorStage({
   const [colorIndex, setColorIndex] = useState(0)
   const [eraser, setEraser] = useState(false)
   const [mode, setMode] = useState<Move>('saluta')
-  const [undo, setUndo] = useState<{ key: string; list: { part: string; prev: string | null }[] }>({ key: '', list: [] })
+  // Ogni passo annullabile: un pezzo colorato oppure «Pulisci» (tutti i colori di prima)
+  const [undo, setUndo] = useState<{ key: string; list: ({ part: string; prev: string | null } | { all: Record<string, string> })[] }>({ key: '', list: [] })
   const [bubble, setBubble] = useState<{ text: string; key: number; cheer?: boolean } | null>(null)
   const [hint, setHint] = useState<{ text: string; color: string; x: number; y: number; key: number } | null>(null)
   const fills = state.fills
@@ -200,10 +201,21 @@ export default function ColorStage({
     const last = undoList[undoList.length - 1]
     if (!last) return
     setUndo({ key: drawing.svg, list: undoList.slice(0, -1) })
+    if ('all' in last) return onState({ fills: last.all, awake: drawing.figure.every((p) => last.all[p]) })
     const nextFills = { ...fills }
     if (last.prev) nextFills[last.part] = last.prev
     else delete nextFills[last.part]
     onState({ fills: nextFills })
+  }
+
+  // «Pulisci»: foglio di nuovo bianco e figura che torna a dormire («Annulla» lo riporta indietro)
+  const clearAll = () => {
+    if (!Object.keys(fills).length) return
+    setUndo({ key: drawing.svg, list: [...undoList.slice(-49), { all: fills }] })
+    setBubble(null)
+    setMode('saluta')
+    if (sound) melody([7, 4, 0], 90)
+    onState({ fills: {}, awake: false })
   }
 
   const setMove = (m: Move) => {
@@ -307,6 +319,9 @@ export default function ColorStage({
       <div className="flex flex-wrap items-center justify-center gap-2">
         <KidsButton onClick={undoLast} disabled={!undoList.length}>
           <Undo2 className="h-5 w-5" /> {t('undo')}
+        </KidsButton>
+        <KidsButton onClick={clearAll} disabled={!Object.keys(fills).length}>
+          <Broom className="h-5 w-5" /> {t('clean')}
         </KidsButton>
         {children}
       </div>

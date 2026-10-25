@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { Bell, Bot, Dices, Eraser, Gauge, ListMusic, Play, Save, Square, Trash2, Wind } from 'lucide-react'
+import { Bell, Dices, Eraser, Gauge, ListMusic, Play, Save, Square, Trash2, Wind } from 'lucide-react'
 import { PALETTE, drawingById } from '@/lib/kids/catalog'
 import { assembleCreature } from '@/lib/kids/creature'
 import { KIDS_SVG_CSS, applyPivots } from '@/lib/kids/moves'
@@ -13,8 +13,9 @@ import type { KidsActions } from './actions'
 
 // «La musica dei colori»: ogni pastello è una nota. Il bambino colora i fiori
 // della fila, preme «Suona» e il suo personaggio balla sulla melodia che ha
-// «dipinto». Le note sono di una scala pentatonica: qualunque combinazione
-// suona bene. Le canzoni restano nel telefono.
+// «dipinto». I fiori si colorano in fila, senza buchi, e «Suona» suona solo
+// quelli colorati. Le note sono di una scala pentatonica: qualunque
+// combinazione suona bene. Le canzoni restano nel telefono.
 
 const rand = () => Math.random()
 const now = () => Date.now()
@@ -24,9 +25,14 @@ const NOTE_COLORS = ['red', 'orange', 'yellow', 'green', 'lightBlue', 'blue', 'p
 const STEPS = 12
 const TEMPOS = [560, 400, 270]
 const MAX_SONGS = 12
-const INSTRUMENT_ICON: Record<Instrument, typeof Bell> = { xilofono: ListMusic, flauto: Wind, campanelle: Bell, robot: Bot }
+const INSTRUMENT_ICON: Record<Instrument, typeof Bell> = { xilofono: ListMusic, flauto: Wind, campanelle: Bell }
 
 const emptySong = (): (number | null)[] => Array(STEPS).fill(null)
+// Note in fila dall'inizio, poi i fiori vuoti (anche per le canzoni salvate con le pause)
+const compact = (notes: (number | null)[]) => {
+  const filled = notes.filter((n): n is number => n !== null && n !== undefined).slice(0, STEPS)
+  return [...filled, ...Array<null>(STEPS - filled.length).fill(null)]
+}
 
 export default function MusicGame({
   profile,
@@ -86,19 +92,21 @@ export default function MusicGame({
     fig.classList.add('waking')
   }
 
+  // Fiori colorati (sempre all'inizio della fila): «Suona» si ferma all'ultimo
+  const filled = notes.findIndex((n) => n === null)
+  const length = filled === -1 ? STEPS : filled
+
   const play = () => {
     if (playing) return stop()
+    if (!length) return actions.toast(t('musicEmpty'))
     setPlaying(true)
     let i = 0
     const tick = () => {
       setStep(i)
-      const n = notes[i]
-      if (n !== null && n !== undefined) {
-        if (sound) playNote(n, instrument)
-        hop()
-      }
+      if (sound) playNote(notes[i]!, instrument)
+      hop()
       i += 1
-      if (i >= STEPS) {
+      if (i >= length) {
         timer.current = setTimeout(() => {
           stop()
           if (sound) melody([0, 4, 7], 110)
@@ -111,19 +119,25 @@ export default function MusicGame({
   }
 
   const tapStep = (i: number) => {
+    // Stesso colore di nuovo (o gomma): il fiore si svuota e quelli dopo scorrono indietro
+    if (color === null || notes[i] === color) {
+      if (notes[i] === null) return
+      setNotes(compact(notes.map((n, k) => (k === i ? null : n))))
+      return
+    }
+    // Un fiore vuoto si colora sempre al primo posto libero: niente buchi nella fila
+    const at = notes[i] === null ? length : i
     const next = [...notes]
-    // Stesso colore di nuovo (o gomma): il fiore torna vuoto, cioè una pausa
-    next[i] = color === null || notes[i] === color ? null : color
+    next[at] = color
     setNotes(next)
-    if (next[i] !== null && sound) playNote(next[i]!, instrument)
+    if (sound) playNote(color, instrument)
   }
 
   const randomSong = () => {
     stop()
-    // Melodia a caso che «cammina» tra note vicine, con qualche pausa
+    // Melodia a caso che «cammina» tra note vicine
     let n = Math.floor(rand() * 4)
-    const song = Array.from({ length: STEPS }, (_, i) => {
-      if (i % 4 === 3 && rand() < 0.4) return null
+    const song = Array.from({ length: STEPS }, () => {
       n = Math.max(0, Math.min(7, n + Math.round(rand() * 4 - 2)))
       return n
     })
@@ -132,7 +146,7 @@ export default function MusicGame({
 
   const songs = profile.songs ?? []
   const saveSong = () => {
-    if (notes.every((n) => n === null)) return actions.toast(t('musicEmpty'))
+    if (!length) return actions.toast(t('musicEmpty'))
     // Canzone uguale a una già salvata: niente doppione e niente stella in più
     const same = (song: Song) => song.instrument === instrument && song.tempo === tempo && song.notes.every((n, i) => n === notes[i])
     if (songs.some(same)) return actions.toast(t('musicSaved'))
@@ -143,7 +157,7 @@ export default function MusicGame({
   }
   const loadSong = (song: Song) => {
     stop()
-    setNotes([...song.notes, ...emptySong()].slice(0, STEPS))
+    setNotes(compact(song.notes))
     setInstrument((INSTRUMENTS as readonly string[]).includes(song.instrument) ? (song.instrument as Instrument) : 'xilofono')
     setTempo(song.tempo)
     setList(false)
@@ -166,7 +180,7 @@ export default function MusicGame({
             type="button"
             onClick={() => tapStep(i)}
             aria-label={n === null ? t('musicPause', { n: i + 1 }) : t('musicNote', { n: i + 1, color: t(`colors.${NOTE_COLORS[n].key}`) })}
-            className={`relative aspect-square rounded-full border-[3px] transition-transform ${step === i ? 'scale-110 border-[#FF6A3D] ring-4 ring-[#FFC93C]' : 'border-[#2B2D52]'} ${n === null ? 'border-dashed bg-white' : ''}`}
+            className={`relative aspect-square rounded-full border-[3px] transition-transform ${step === i ? 'scale-110 border-[#FF6A3D] ring-4 ring-[#FFC93C]' : i === length && !playing ? 'animate-pulse border-[#FF6A3D]' : 'border-[#2B2D52]'} ${n === null ? 'border-dashed bg-white' : ''}`}
             style={n === null ? undefined : { background: NOTE_COLORS[n].hex }}
           >
             <span className="absolute inset-x-0 -bottom-5 text-center text-[10px] font-bold text-[#61648A]">{i + 1}</span>
@@ -254,7 +268,7 @@ export default function MusicGame({
                 <div key={song.id} className="flex items-center gap-2 rounded-2xl border-[3px] border-[#2B2D52] bg-white p-2">
                   <button type="button" onClick={() => loadSong(song)} className="flex min-w-0 flex-1 items-center gap-2 text-left">
                     <span className="flex shrink-0 gap-0.5">
-                      {song.notes.map((n, i) => (
+                      {compact(song.notes).map((n, i) => (
                         <span key={i} className="h-4 w-2.5 rounded-sm border border-[#2B2D52]/40" style={{ background: n === null ? '#fff' : NOTE_COLORS[n]?.hex }} />
                       ))}
                     </span>
@@ -263,7 +277,7 @@ export default function MusicGame({
                   <button
                     type="button"
                     aria-label={t('musicDelete')}
-                    onClick={() => actions.askParent('manage', () => onProfileChange({ ...profile, songs: songs.filter((s) => s.id !== song.id) }))}
+                    onClick={() => onProfileChange({ ...profile, songs: songs.filter((s) => s.id !== song.id) })}
                     className="rounded-xl p-2 text-red-700"
                   >
                     <Trash2 className="h-5 w-5" />
