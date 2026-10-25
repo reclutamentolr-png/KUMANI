@@ -16621,6 +16621,7 @@
     "none": "No hemos encontrado un servicio para «{q}».",
     "noneHint": "Prueba con otras palabras, mira todos los servicios o propónnos la idea: nos ayuda a crear los próximos.",
     "allServices": "Todos los servicios",
-    "suggest": "Proponer una idea"
+    "suggest": "Proponer una idea",
+    "searchingDeep": "Busco mejor dentro de los servicios…"
   }
 }

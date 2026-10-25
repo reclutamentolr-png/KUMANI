@@ -2,16 +2,17 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { ArrowRight, BookOpen, Lightbulb, Mic, MicOff, Search, Sparkles, X } from 'lucide-react'
+import { ArrowRight, BookOpen, Lightbulb, LoaderCircle, Mic, MicOff, Search, Sparkles, X } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
-import { buildIndex, searchNeeds } from '@/lib/needSearch/engine'
-import { logNeedMiss } from '@/app/actions/needSearch'
+import { buildIndex, isWeak, searchNeeds, type NeedHit } from '@/lib/needSearch/engine'
+import { deepNeedSearch, logNeedMiss } from '@/app/actions/needSearch'
 
 // «Scrivi cosa ti serve» in cima alla Home: la persona descrive il bisogno
 // con parole sue (o a voce) e riceve i 2–3 servizi giusti, ciascuno con il
-// motivo e la guida. Tutto nel browser; le richieste senza risultato vanno
-// nell'Admin (solo il testo) per migliorare la ricerca.
+// motivo e la guida. Prima la ricerca veloce nel browser; se trova poco,
+// dopo un attimo la ricerca approfondita sul server (guide, volantini e,
+// se serve, l'IA). Le richieste senza risultato vanno nell'Admin (solo il testo).
 
 export type NeedItem = { toolName: string; title: string; name?: string; description: string; href: string; iconName: string; guide: string | null }
 
@@ -28,6 +29,8 @@ export default function NeedSearch({ items }: { items: NeedItem[] }) {
   const [canSpeak, setCanSpeak] = useState(false)
   const recognition = useRef<Recognition | null>(null)
   const logged = useRef(new Set<string>())
+  // Ricerca approfondita: per quale testo, stato e risultati
+  const [deep, setDeep] = useState<{ q: string; status: 'loading' | 'done'; hits: NeedHit[]; ai: boolean } | null>(null)
 
   // Un servizio per strumento (i servizi uniti compaiono una volta per scheda)
   const unique = useMemo(() => {
@@ -39,7 +42,30 @@ export default function NeedSearch({ items }: { items: NeedItem[] }) {
 
   // Risultati mentre si scrive (da 3 lettere)
   const active = query.trim().length >= 3 ? query : ''
-  const hits = useMemo(() => (active ? searchNeeds(index, active) : []), [index, active])
+  const quick = useMemo(() => (active ? searchNeeds(index, active) : []), [index, active])
+  // Ricerca veloce debole, vuota o non sicura su una frase: dopo un attimo di pausa si cerca meglio
+  const weak = active ? isWeak(active, quick) : false
+  const deepFor = deep && deep.q === query.trim() ? deep : null
+  const hits = useMemo(() => {
+    // Ricerca veloce non sicura: niente risultati sbagliati per un attimo, si aspetta quella approfondita
+    if (!deepFor || deepFor.status !== 'done') return weak ? [] : quick
+    // L'IA ha interpretato la richiesta: decide lei; le guide si aggiungono alla veloce
+    if (deepFor.ai && deepFor.hits.length) return deepFor.hits
+    const extra = deepFor.hits.filter((h) => !quick.some((x) => x.id === h.id))
+    return (quick.length ? [...quick, ...extra] : deepFor.hits).slice(0, 3)
+  }, [quick, deepFor, weak])
+
+  useEffect(() => {
+    const q = query.trim()
+    if (q.length < 3 || !weak || (deep && deep.q === q)) return
+    const timer = setTimeout(() => {
+      setDeep({ q, status: 'loading', hits: [], ai: false })
+      deepNeedSearch(q, locale, unique.map((i) => ({ id: i.toolName, title: i.title, description: i.description, href: i.href })))
+        .then((r) => setDeep((d) => (d && d.q === q ? { q, status: 'done', hits: r.hits, ai: r.source === 'ai' } : d)))
+        .catch(() => setDeep((d) => (d && d.q === q ? { q, status: 'done', hits: [], ai: false } : d)))
+    }, submitted.trim() === q ? 0 : 900)
+    return () => clearTimeout(timer)
+  }, [query, submitted, weak, deep, locale, unique])
 
   useEffect(() => {
     const w = window as unknown as { SpeechRecognition?: new () => Recognition; webkitSpeechRecognition?: new () => Recognition }
@@ -48,13 +74,13 @@ export default function NeedSearch({ items }: { items: NeedItem[] }) {
     return () => recognition.current?.stop()
   }, [])
 
-  // Nessun risultato su una richiesta confermata: va nell'elenco dello Staff (una volta)
+  // Nessun risultato anche dopo la ricerca approfondita: va nell'elenco dello Staff (una volta)
   useEffect(() => {
-    const q = submitted.trim()
-    if (q.length < 3 || hits.length || q !== query.trim() || logged.current.has(q.toLowerCase())) return
+    const q = query.trim()
+    if (q.length < 3 || hits.length || !deepFor || deepFor.status !== 'done' || logged.current.has(q.toLowerCase())) return
     logged.current.add(q.toLowerCase())
     void logNeedMiss(q, locale)
-  }, [submitted, hits.length, query, locale])
+  }, [hits.length, query, locale, deepFor])
 
   const speak = () => {
     if (listening) return recognition.current?.stop()
@@ -79,7 +105,8 @@ export default function NeedSearch({ items }: { items: NeedItem[] }) {
     r.start()
   }
 
-  const showNone = active && !hits.length && submitted.trim() === query.trim()
+  const searching = !!active && weak && (!deepFor || deepFor.status === 'loading')
+  const showNone = active && !hits.length && !!deepFor && deepFor.status === 'done'
 
   return (
     <section className="rounded-3xl border border-[var(--gold)]/30 bg-white p-4 shadow-[0_12px_30px_rgba(23,23,23,0.06)] sm:p-5" aria-labelledby="need-search-title">
@@ -137,7 +164,7 @@ export default function NeedSearch({ items }: { items: NeedItem[] }) {
                       <span className="mt-0.5 line-clamp-2 block text-xs text-[var(--muted)]">{item.description}</span>
                     </span>
                   </Link>
-                  {h.reason && <p className="mt-2 text-xs text-[var(--ink)]/70">{t('because', { words: h.reason })}</p>}
+                  {h.note ? <p className="mt-2 text-xs text-[var(--ink)]/80">{h.note}</p> : h.reason && <p className="mt-2 text-xs text-[var(--ink)]/70">{t('because', { words: h.reason })}</p>}
                   <div className="mt-auto flex flex-wrap items-center gap-3 pt-2 text-sm font-semibold">
                     <Link href={item.href} className="inline-flex items-center gap-1 text-[var(--gold)] hover:text-[var(--ink)]">
                       {t('open')} <ArrowRight className="h-4 w-4" />
@@ -153,6 +180,12 @@ export default function NeedSearch({ items }: { items: NeedItem[] }) {
             })}
           </ul>
         </div>
+      )}
+
+      {searching && (
+        <p className="mt-3 flex items-center gap-2 text-sm text-[var(--muted)]" role="status">
+          <LoaderCircle className="h-4 w-4 animate-spin" /> {t('searchingDeep')}
+        </p>
       )}
 
       {showNone && (

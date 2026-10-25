@@ -6,8 +6,11 @@
 
 import { NEED_PHRASES } from './phrases'
 
-export type NeedDoc = { id: string; title: string; name?: string; description: string }
-export type NeedHit = { id: string; score: number; reason: string | null }
+// extra: testi «dentro» il servizio (guida «Come si usa», volantino), letti sul server
+export type NeedDoc = { id: string; title: string; name?: string; description: string; extra?: string }
+// note: spiegazione scritta dall'IA (solo nella ricerca approfondita)
+// strong: trovata una frase intera di almeno due parole (corrispondenza sicura)
+export type NeedHit = { id: string; score: number; reason: string | null; note?: string; strong?: boolean }
 
 const STOP = new Set(
   (
@@ -49,7 +52,8 @@ export const tokens = (text: string) =>
 function close(a: string, b: string) {
   if (a === b) return true
   const min = Math.min(a.length, b.length)
-  if (min >= 4 && (a.startsWith(b) || b.startsWith(a))) return true
+  // Una parola che comincia come l'altra conta solo se sono quasi uguali (mand ≠ mandala)
+  if (min >= 5 && min / Math.max(a.length, b.length) >= 0.7 && (a.startsWith(b) || b.startsWith(a))) return true
   if (min < 5) return false
   const max = min >= 8 ? 2 : 1
   if (Math.abs(a.length - b.length) > max) return false
@@ -69,11 +73,12 @@ function close(a: string, b: string) {
   return prev[b.length] <= max
 }
 
-type Indexed = { id: string; phrases: { text: string; tokens: string[] }[]; title: string[]; desc: string[] }
+type Indexed = { id: string; phrases: { text: string; tokens: string[] }[]; title: string[]; desc: string[]; extra: string[] }
 
 export function buildIndex(docs: NeedDoc[], locale: string): Indexed[] {
   return docs.map((d) => {
-    const own = NEED_PHRASES[d.id] ?? {}
+    // Le sezioni della Community in Home si chiamano «community-…»
+    const own = NEED_PHRASES[d.id] ?? NEED_PHRASES[d.id.replace(/^community-/, '')] ?? {}
     // Lingua della pagina, più inglese (molte parole sono internazionali) e italiano
     const list = [...(own[locale as keyof typeof own] ?? []), ...(locale !== 'en' ? (own.en ?? []) : []), ...(locale !== 'it' ? (own.it ?? []) : [])]
     return {
@@ -81,8 +86,17 @@ export function buildIndex(docs: NeedDoc[], locale: string): Indexed[] {
       phrases: list.map((text) => ({ text, tokens: tokens(text) })).filter((p) => p.tokens.length),
       title: [...new Set(tokens(`${d.title} ${d.name ?? ''}`))],
       desc: [...new Set(tokens(d.description))],
+      extra: d.extra ? [...new Set(tokens(d.extra))] : [],
     }
   })
+}
+
+// Ricerca da approfondire: niente trovato, poco sicuro su una o due parole,
+// oppure una frase intera senza una corrispondenza sicura
+export function isWeak(query: string, hits: NeedHit[]) {
+  if (!hits.length) return true
+  if (tokens(query).length <= 2) return hits[0].score < 6
+  return hits[0].score < 8 || !hits[0].strong
 }
 
 export function searchNeeds(index: Indexed[], query: string, limit = 3): NeedHit[] {
@@ -94,6 +108,7 @@ export function searchNeeds(index: Indexed[], query: string, limit = 3): NeedHit
     let score = 0
     let reason: string | null = null
     let best = 0
+    let strong = false
     for (const p of doc.phrases) {
       const matched = p.tokens.filter((t) => q.some((w) => close(w, t))).length
       if (matched === p.tokens.length) {
@@ -102,15 +117,20 @@ export function searchNeeds(index: Indexed[], query: string, limit = 3): NeedHit
         if (gain > best) {
           best = gain
           reason = p.text
+          strong = p.tokens.length >= 2
         }
       } else if (matched > 0 && p.tokens.length > 1) best = Math.max(best, 1.5 * matched)
     }
     score += best
+    let extraHits = 0
     for (const w of q) {
       if (has(doc.title, w)) score += 3
       else if (has(doc.desc, w)) score += 1
+      else if (doc.extra.length && has(doc.extra, w)) extraHits++
     }
-    if (score >= 3) hits.push({ id: doc.id, score, reason })
+    // Dentro la guida e il volantino: conta se ci sono più parole della richiesta
+    if (extraHits) score += extraHits * (extraHits / q.length >= 0.5 ? 1.5 : 0.7)
+    if (score >= 3) hits.push({ id: doc.id, score, reason, strong })
   }
   hits.sort((a, b) => b.score - a.score)
   // Solo risultati vicini al migliore (niente proposte deboli)

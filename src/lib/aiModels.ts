@@ -10,7 +10,7 @@
 // forzato (tool_choice) Haiku 5.5 non ragiona comunque: l'effort regola il
 // resto della risposta.
 
-type AiService = 'checkmail' | 'menu' | 'captio' | 'lumen' | 'diarium' | 'landing' | 'offermaker'
+type AiService = 'checkmail' | 'menu' | 'captio' | 'lumen' | 'diarium' | 'landing' | 'offermaker' | 'need'
 
 export const AI_MODELS: Record<AiService, { model: string; effort: 'low' | 'medium' | 'high' }> = {
   checkmail: { model: 'claude-haiku-5-5', effort: 'low' },
@@ -20,4 +20,6 @@ export const AI_MODELS: Record<AiService, { model: string; effort: 'low' | 'medi
   diarium: { model: 'claude-haiku-5-5', effort: 'medium' },
   landing: { model: 'claude-haiku-5-5', effort: 'medium' },
   offermaker: { model: 'claude-haiku-5-5', effort: 'medium' },
+  // «Scrivi cosa ti serve»: scegliere 0–3 servizi da un elenco
+  need: { model: 'claude-haiku-5-5', effort: 'low' },
 }
