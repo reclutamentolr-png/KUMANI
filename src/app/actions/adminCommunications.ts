@@ -76,7 +76,9 @@ function toHtml(c: CommunicationRow, body: string, unsubUrl: string, preheader: 
         .split('\n')
         .map((line) => {
           const safe = escapeHtml(line).replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" style="color:#b8860b">$1</a>')
-          const heading = line.length > 3 && line === line.toUpperCase() && /[A-ZÀ-Ý]/.test(line)
+          // Titoletto: riga corta in MAIUSCOLO, anche con una nota tra parentesi («ANDROID (con Chrome)»)
+          const caps = line.replace(/\s*\([^)]*\)\s*$/, '')
+          const heading = line.length < 80 && caps.length > 3 && caps === caps.toUpperCase() && /[A-ZÀ-Ý]/.test(caps)
           return heading ? `<b style="color:#8a6a1f;letter-spacing:.5px">${safe}</b>` : safe
         })
         .join('<br>'),
