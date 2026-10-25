@@ -122,7 +122,10 @@ export async function deepNeedSearch(query: string, locale: string, docs: DeepDo
     if (hits.length) return { hits, source: 'ai' }
   }
   const limitRow = await s.from('system_settings').select('value').eq('key', 'need_ai_daily_runs').maybeSingle()
-  const limit = Number(String(limitRow.data?.value ?? '30').replace(/"/g, '')) || 30
+  // 0 = IA spenta (restano la ricerca veloce e quella nelle guide)
+  const rawLimit = Number(String(limitRow.data?.value ?? '30').replace(/"/g, ''))
+  const limit = Number.isFinite(rawLimit) && rawLimit >= 0 ? rawLimit : 30
+  if (limit === 0) return { hits: local, source: local.length ? 'texts' : 'none' }
   const { data: taken, error: quotaError } = await s.rpc('ai_quota_take', { p_kind: 'need', p_user: user.id, p_limit: limit })
   if (quotaError || taken === null || taken === undefined) return { hits: local, source: local.length ? 'texts' : 'none', limited: !quotaError }
 
