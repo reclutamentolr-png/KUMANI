@@ -12548,7 +12548,10 @@
     "loadMore": "Cargar más",
     "close": "Cerrar",
     "unread": "Sin leer",
-    "keepNote": "Los avisos se quedan aquí durante 90 días."
+    "keepNote": "Los avisos se quedan aquí durante 90 días.",
+    "messageTitle": "Mensaje de KUMANI",
+    "messageBack": "Volver a los avisos",
+    "messageFrom": "Del equipo KUMANI · {date}"
   },
   "shop": {
     "title": "KUMANI Shop",

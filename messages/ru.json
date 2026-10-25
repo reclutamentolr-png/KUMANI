@@ -12548,7 +12548,10 @@
     "loadMore": "Показать ещё",
     "close": "Закрыть",
     "unread": "Не прочитано",
-    "keepNote": "Уведомления хранятся здесь 90 дней."
+    "keepNote": "Уведомления хранятся здесь 90 дней.",
+    "messageTitle": "Сообщение от KUMANI",
+    "messageBack": "Назад к уведомлениям",
+    "messageFrom": "От команды KUMANI · {date}"
   },
   "shop": {
     "title": "KUMANI Shop",

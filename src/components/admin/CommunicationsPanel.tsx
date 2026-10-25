@@ -123,7 +123,7 @@ export default function CommunicationsPanel() {
               </p>
               <p className="mt-1 text-sm font-semibold text-gray-900">{c.push_title}</p>
               <p className="text-sm text-gray-700">{c.push_body}</p>
-              <p className="mt-1 text-xs text-gray-500">Apre: {c.push_url || '/dashboard'}</p>
+              <p className="mt-1 text-xs text-gray-500">Toccandola si apre il messaggio completo (anche dalla campanella)</p>
               <div className="mt-2">
                 {c.push_sent_at ? (
                   <p className="flex items-center gap-1 text-xs font-semibold text-emerald-700">

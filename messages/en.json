@@ -12548,7 +12548,10 @@
     "loadMore": "Load more",
     "close": "Close",
     "unread": "Unread",
-    "keepNote": "Notifications stay here for 90 days."
+    "keepNote": "Notifications stay here for 90 days.",
+    "messageTitle": "Message from KUMANI",
+    "messageBack": "Back to notifications",
+    "messageFrom": "From the KUMANI team · {date}"
   },
   "shop": {
     "title": "KUMANI Shop",

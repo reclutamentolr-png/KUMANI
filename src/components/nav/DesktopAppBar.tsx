@@ -11,7 +11,7 @@ import { barePathOf, inMemberArea } from '@/components/nav/AppNav'
 // [data-app-header]) e per gli ospiti in prova (data-guest-hide).
 // Pagine che hanno già la barra (AppHeader): qui non si monta una seconda
 // volta (eviterebbe anche due finestre «Profilo» aperte insieme)
-const OWN_HEADER = ['/dashboard', '/servizi', '/community', '/wallet', '/documenti', '/avvisi', '/catalogo', '/donazioni', '/recensioni', '/scheda-attivita', '/app/preferiti']
+const OWN_HEADER = ['/dashboard', '/servizi', '/community', '/wallet', '/documenti', '/avvisi', '/messaggio', '/catalogo', '/donazioni', '/recensioni', '/scheda-attivita', '/app/preferiti']
 
 export default function DesktopAppBar({ children }: { children: ReactNode }) {
   const path = barePathOf(usePathname())

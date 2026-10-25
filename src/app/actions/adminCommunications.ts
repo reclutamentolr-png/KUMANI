@@ -57,6 +57,9 @@ async function emailAudience(): Promise<{ people: Person[]; excluded: number }> 
   return { people, excluded: valid.length - people.length }
 }
 
+// Pagina del messaggio completo (src/app/[locale]/messaggio/[id])
+const messageUrl = (c: { id: string }) => `/messaggio/${c.id}`
+
 const firstName = (n: string | null) => {
   const v = (n ?? '').trim().split(/\s+/)[0] ?? ''
   return v ? v.charAt(0).toUpperCase() + v.slice(1).toLowerCase() : ''
@@ -141,7 +144,8 @@ export async function adminSendCommunicationPush(id: string): Promise<{ success:
   // Segnata subito come inviata: un secondo clic non la rimanda
   const { data: claimed } = await s.from('staff_communications').update({ push_sent_at: new Date().toISOString(), sent_by: admin.id }).eq('id', id).is('push_sent_at', null).select('id')
   if (!claimed?.length) return { success: false, error: 'Notifica già inviata' }
-  const r = await adminSendPushCampaign({ title: c.push_title, body: c.push_body, url: c.push_url ?? '/dashboard', audience: 'all', locale: 'all' })
+  // Toccando la notifica si apre il messaggio completo
+  const r = await adminSendPushCampaign({ title: c.push_title, body: c.push_body, url: messageUrl(c), audience: 'all', locale: 'all' })
   if (!r.success) {
     await s.from('staff_communications').update({ push_sent_at: null }).eq('id', id)
     return { success: false, error: r.error }
@@ -161,7 +165,7 @@ async function addToInbox(c: CommunicationRow): Promise<number> {
     100000,
   )
   if (error) return 0
-  const texts = { it: { title: c.push_title, body: c.push_body, url: c.push_url ?? '/dashboard' } }
+  const texts = { it: { title: c.push_title, body: c.push_body, url: messageUrl(c) } }
   const users = rows.filter((p) => !p.deleted_at && !p.is_blocked).map((p) => ({ user_id: p.id, category: 'staff', kind: `communication:${c.id}`, texts }))
   let added = 0
   for (let i = 0; i < users.length; i += 500) {
