@@ -9494,6 +9494,8 @@
     "quoteAcceptedTitle": "Предложение № {number} принято",
     "quoteAcceptedBody": "Принял(а): {name}.",
     "securityAlertTitle": "KUMANI · Предупреждение безопасности",
+    "cardExpiryTitle": "KUMANI · Срок карты истекает",
+    "cardExpiryBody": "Срок карты {card} истекает {expiry}: обновите её в {services}, чтобы не потерять подписки.",
     "securityDigestBody": "{count, plural, one {# новое предупреждение безопасности: проверьте в Admin → Безопасность.} few {# новых предупреждения безопасности: проверьте в Admin → Безопасность.} many {# новых предупреждений безопасности: проверьте в Admin → Безопасность.} other {# новых предупреждения безопасности: проверьте в Admin → Безопасность.}}",
     "surpriseOpenedTitle": "🎁 Сюрприз просмотрен!",
     "surpriseOpenedBody": "{name} только что открыл(а) подарок и увидел(а) ваш сюрприз.",

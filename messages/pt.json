@@ -9494,6 +9494,8 @@
     "quoteAcceptedTitle": "Orçamento n.º {number} aceite",
     "quoteAcceptedBody": "Aceite por {name}.",
     "securityAlertTitle": "KUMANI · Alerta de segurança",
+    "cardExpiryTitle": "KUMANI · Cartão a expirar",
+    "cardExpiryBody": "O cartão {card} expira em {expiry}: atualize-o em {services} para não perder as assinaturas.",
     "securityDigestBody": "{count, plural, one {# novo alerta de segurança para verificar em Admin → Segurança.} other {# novos alertas de segurança para verificar em Admin → Segurança.}}",
     "surpriseOpenedTitle": "🎁 Surpresa vista!",
     "surpriseOpenedBody": "{name} acabou de abrir o presente e ver a sua surpresa.",

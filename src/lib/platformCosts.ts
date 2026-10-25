@@ -3,6 +3,7 @@
 export const COST_CATEGORIES = ['hosting', 'database', 'email', 'dominio', 'proxy', 'ai', 'software', 'consulenze', 'marketing', 'banca', 'altro'] as const
 export type CostCategory = (typeof COST_CATEGORIES)[number]
 export type CostFrequency = 'monthly' | 'yearly' | 'one_off'
+export type CostStatus = 'active' | 'pending'
 
 export const COST_CATEGORY_LABEL: Record<CostCategory, string> = {
   hosting: 'Hosting',

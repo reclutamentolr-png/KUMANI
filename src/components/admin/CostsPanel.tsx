@@ -1,18 +1,21 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { AlertTriangle, LoaderCircle, Pencil, Plus, RefreshCw, Trash2, X } from 'lucide-react'
+import { AlertTriangle, CreditCard, LoaderCircle, Pause, Pencil, Play, Plus, RefreshCw, Trash2, X } from 'lucide-react'
 import {
   adminCostsSummary,
   adminDeleteCost,
   adminDeleteExpense,
   adminListCosts,
+  adminPauseCost,
+  adminResumeCost,
   adminSaveCost,
   adminSaveExpense,
   type PlatformCost,
   type PlatformExpense,
 } from '@/app/actions/adminCosts'
-import { COST_CATEGORIES, COST_CATEGORY_LABEL, FREQUENCY_LABEL, type CostCategory, type CostFrequency } from '@/lib/platformCosts'
+import { COST_CATEGORIES, COST_CATEGORY_LABEL, FREQUENCY_LABEL, type CostCategory, type CostFrequency, type CostStatus } from '@/lib/platformCosts'
+import { cardAlertFrom, expiryLabel } from '@/lib/cardExpiry'
 import { notify } from '@/lib/adminNotify'
 import { askConfirm } from '@/lib/confirm'
 
@@ -42,7 +45,21 @@ function Row({ label, value, hint, strong, negative }: { label: string; value: s
   )
 }
 
-type CostDraft = { id?: string; name: string; provider: string; category: CostCategory; amount: string; frequency: CostFrequency; start_date: string; end_date: string; notes: string }
+type CostDraft = {
+  id?: string
+  name: string
+  provider: string
+  category: CostCategory
+  amount: string
+  frequency: CostFrequency
+  start_date: string
+  end_date: string
+  notes: string
+  payment_card: string
+  // «AAAA-MM» (campo mese)
+  card_expiry: string
+  status: CostStatus
+}
 type ExpenseDraft = { id?: string; description: string; category: CostCategory; amount: string; spent_on: string; notes: string }
 
 export default function CostsPanel() {
@@ -77,7 +94,7 @@ export default function CostsPanel() {
     const cents = toCents(costDraft.amount || '0')
     if (Number.isNaN(cents)) return notify('Importo non valido.')
     setSaving(true)
-    const r = await adminSaveCost({ ...costDraft, amount_cents: cents, end_date: costDraft.end_date || null })
+    const r = await adminSaveCost({ ...costDraft, amount_cents: cents, end_date: costDraft.end_date || null, card_expiry: costDraft.card_expiry || null })
     setSaving(false)
     if (!r.success) return notify(r.error ?? 'Salvataggio non riuscito.')
     setCostDraft(null)
@@ -95,6 +112,15 @@ export default function CostsPanel() {
     if (!r.success) return notify(r.error ?? 'Salvataggio non riuscito.')
     setExpenseDraft(null)
     notify('Spesa salvata.', 'success')
+    reload()
+  }
+
+  const togglePause = async (cost: PlatformCost, ended: boolean) => {
+    const ask = ended ? `Riprendere "${cost.name}" da oggi?` : `Sospendere "${cost.name}" da oggi? Non verrà più contato finché non lo riprendi.`
+    if (!(await askConfirm(ask))) return
+    const r = ended ? await adminResumeCost(cost.id) : await adminPauseCost(cost.id)
+    if (!r.success) return notify(r.error ?? 'Operazione non riuscita.')
+    notify(ended ? 'Abbonamento ripreso.' : 'Abbonamento sospeso.', 'success')
     reload()
   }
 
@@ -181,37 +207,60 @@ export default function CostsPanel() {
       <div className="rounded-xl border border-gray-200 bg-white p-5">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <h3 className="font-bold text-gray-900">Costi fissi</h3>
-          <button type="button" onClick={() => setCostDraft({ name: '', provider: '', category: 'altro', amount: '', frequency: 'monthly', start_date: today(), end_date: '', notes: '' })} className="inline-flex items-center gap-1.5 rounded-lg bg-gray-900 px-3 py-2 text-sm font-semibold text-white">
+          <button type="button" onClick={() => setCostDraft({ name: '', provider: '', category: 'altro', amount: '', frequency: 'monthly', start_date: today(), end_date: '', notes: '', payment_card: '', card_expiry: '', status: 'active' })} className="inline-flex items-center gap-1.5 rounded-lg bg-gray-900 px-3 py-2 text-sm font-semibold text-white">
             <Plus className="h-4 w-4" /> Nuovo costo
           </button>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="text-left text-xs uppercase text-gray-500">
-              <tr><th className="py-2 pr-3">Costo</th><th className="py-2 pr-3">Categoria</th><th className="py-2 pr-3">Frequenza</th><th className="py-2 pr-3 text-right">Importo</th><th className="py-2 pr-3 text-right">Al mese</th><th className="py-2 pr-3">Dal / al</th><th /></tr>
+              <tr><th className="py-2 pr-3">Costo</th><th className="py-2 pr-3">Categoria</th><th className="py-2 pr-3">Frequenza</th><th className="py-2 pr-3 text-right">Importo</th><th className="py-2 pr-3 text-right">Al mese</th><th className="py-2 pr-3">Dal / al</th><th className="py-2 pr-3">Carta</th><th /></tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {costs.map((cost) => {
-                const ended = Boolean(cost.end_date && cost.end_date < today())
+                const ended = Boolean(cost.end_date && cost.end_date <= today())
+                const pending = cost.status === 'pending'
+                // Un periodo vecchio di un abbonamento già ripreso non si può riprendere di nuovo
+                const resumed = ended && costs.some((o) => o.id !== cost.id && o.name === cost.name && o.start_date > (cost.end_date ?? '') && (!o.end_date || o.end_date > today()))
+                const cardSoon = Boolean(cost.card_expiry && !ended && !pending && today() >= cardAlertFrom(cost.card_expiry))
                 return (
-                  <tr key={cost.id} className={ended ? 'text-gray-400' : ''}>
+                  <tr key={cost.id} className={ended || pending ? 'text-gray-400' : ''}>
                     <td className="py-2 pr-3">
-                      <p className="font-semibold">{cost.name}</p>
+                      <p className="font-semibold">
+                        {cost.name}
+                        {pending && <span className="ml-2 rounded bg-sky-100 px-1.5 py-0.5 text-xs font-medium text-sky-800">In attesa di attivazione</span>}
+                        {ended && !resumed && cost.frequency !== 'one_off' && <span className="ml-2 rounded bg-gray-100 px-1.5 py-0.5 text-xs font-medium text-gray-600">Sospeso</span>}
+                      </p>
                       <p className="text-xs text-gray-500">{[cost.provider, cost.notes].filter(Boolean).join(' · ')}</p>
                     </td>
                     <td className="py-2 pr-3">{COST_CATEGORY_LABEL[cost.category]}</td>
                     <td className="py-2 pr-3">{FREQUENCY_LABEL[cost.frequency]}</td>
-                    <td className="py-2 pr-3 text-right font-semibold">{cost.amount_cents === 0 ? <span className="rounded bg-amber-100 px-1.5 py-0.5 text-xs text-amber-800">Da compilare</span> : eur(cost.amount_cents)}</td>
+                    <td className="py-2 pr-3 text-right font-semibold">{cost.amount_cents === 0 && !pending ? <span className="rounded bg-amber-100 px-1.5 py-0.5 text-xs text-amber-800">Da compilare</span> : eur(cost.amount_cents)}</td>
                     <td className="py-2 pr-3 text-right">{cost.frequency === 'one_off' ? '—' : eur(cost.frequency === 'yearly' ? Math.round(cost.amount_cents / 12) : cost.amount_cents)}</td>
                     <td className="py-2 pr-3 text-xs">{new Date(cost.start_date).toLocaleDateString('it-IT')}{cost.end_date ? ` → ${new Date(cost.end_date).toLocaleDateString('it-IT')}` : ''}</td>
+                    <td className="whitespace-nowrap py-2 pr-3 text-xs">
+                      {cost.payment_card ? (
+                        <span className={`inline-flex items-center gap-1 ${cardSoon ? 'rounded bg-amber-100 px-1.5 py-0.5 font-semibold text-amber-800' : ''}`} title={cardSoon ? 'Carta in scadenza: aggiornala nel servizio' : undefined}>
+                          <CreditCard className="h-3.5 w-3.5" /> {cost.payment_card}
+                          {cost.card_expiry ? ` · ${expiryLabel(cost.card_expiry)}` : ''}
+                        </span>
+                      ) : (
+                        '—'
+                      )}
+                    </td>
                     <td className="whitespace-nowrap py-2 text-right">
-                      <button type="button" onClick={() => setCostDraft({ id: cost.id, name: cost.name, provider: cost.provider ?? '', category: cost.category, amount: toText(cost.amount_cents), frequency: cost.frequency, start_date: cost.start_date, end_date: cost.end_date ?? '', notes: cost.notes ?? '' })} className="p-1 text-gray-500 hover:text-gray-900" title="Modifica"><Pencil className="h-4 w-4" /></button>
+                      {cost.frequency !== 'one_off' && !pending && !resumed && (
+                        <button type="button" onClick={() => togglePause(cost, ended)} className="p-1 text-gray-500 hover:text-gray-900" title={ended ? 'Riprendi abbonamento' : 'Sospendi abbonamento'}>
+                          {ended ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
+                        </button>
+                      )}
+                      <button type="button" onClick={() => setCostDraft({ id: cost.id, name: cost.name, provider: cost.provider ?? '', category: cost.category, amount: toText(cost.amount_cents), frequency: cost.frequency, start_date: cost.start_date, end_date: cost.end_date ?? '', notes: cost.notes ?? '', payment_card: cost.payment_card ?? '', card_expiry: cost.card_expiry?.slice(0, 7) ?? '', status: cost.status })} className="p-1 text-gray-500 hover:text-gray-900" title="Modifica"><Pencil className="h-4 w-4" /></button>
                       <button type="button" onClick={() => removeCost(cost)} className="p-1 text-gray-400 hover:text-red-600" title="Elimina"><Trash2 className="h-4 w-4" /></button>
                     </td>
                   </tr>
                 )
               })}
-              {costs.length === 0 && <tr><td colSpan={7} className="py-4 text-center text-gray-500">Nessun costo fisso.</td></tr>}
+              {costs.length === 0 && <tr><td colSpan={8} className="py-4 text-center text-gray-500">Nessun costo fisso.</td></tr>}
             </tbody>
           </table>
         </div>
@@ -257,9 +306,15 @@ export default function CostsPanel() {
               <div><label className="mb-1 block text-sm font-medium text-gray-700">Frequenza</label><select className={input} value={costDraft.frequency} onChange={(e) => setCostDraft({ ...costDraft, frequency: e.target.value as CostFrequency })}>{(['monthly', 'yearly', 'one_off'] as const).map((k) => <option key={k} value={k}>{FREQUENCY_LABEL[k]}</option>)}</select></div>
               <div><label className="mb-1 block text-sm font-medium text-gray-700">Dal</label><input type="date" className={input} value={costDraft.start_date} onChange={(e) => setCostDraft({ ...costDraft, start_date: e.target.value })} /></div>
               <div><label className="mb-1 block text-sm font-medium text-gray-700">Al (se terminato)</label><input type="date" className={input} value={costDraft.end_date} onChange={(e) => setCostDraft({ ...costDraft, end_date: e.target.value })} /></div>
+              <div><label className="mb-1 block text-sm font-medium text-gray-700">Carta di pagamento</label><input className={input} value={costDraft.payment_card} onChange={(e) => setCostDraft({ ...costDraft, payment_card: e.target.value })} placeholder="Es. Fineco" /></div>
+              <div><label className="mb-1 block text-sm font-medium text-gray-700">Scadenza carta (mese)</label><input type="month" className={input} value={costDraft.card_expiry} onChange={(e) => setCostDraft({ ...costDraft, card_expiry: e.target.value })} /></div>
             </div>
+            <label className="flex items-center gap-2 text-sm text-gray-700">
+              <input type="checkbox" checked={costDraft.status === 'pending'} onChange={(e) => setCostDraft({ ...costDraft, status: e.target.checked ? 'pending' : 'active' })} />
+              In attesa di attivazione (non conta nei totali finché non lo attivi)
+            </label>
             <div><label className="mb-1 block text-sm font-medium text-gray-700">Note</label><input className={input} value={costDraft.notes} onChange={(e) => setCostDraft({ ...costDraft, notes: e.target.value })} /></div>
-            <p className="text-xs text-gray-500">Importo IVA inclusa se il fornitore la applica. Per i servizi in dollari usa il cambio della fattura.</p>
+            <p className="text-xs text-gray-500">Importo IVA inclusa se il fornitore la applica. Per i servizi in dollari usa il cambio della fattura. Con la scadenza della carta ricevi un avviso dal mese prima.</p>
             <div className="flex justify-end gap-2"><button type="button" onClick={() => setCostDraft(null)} className="rounded-lg bg-gray-100 px-4 py-2 text-sm">Annulla</button><button type="button" disabled={saving} onClick={saveCost} className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50">{saving ? 'Salvataggio…' : 'Salva'}</button></div>
           </div>
         </div>

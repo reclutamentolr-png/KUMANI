@@ -9494,6 +9494,8 @@
     "quoteAcceptedTitle": "Devis n° {number} accepté",
     "quoteAcceptedBody": "Accepté par {name}.",
     "securityAlertTitle": "KUMANI · Alerte de sécurité",
+    "cardExpiryTitle": "KUMANI · Carte bientôt expirée",
+    "cardExpiryBody": "La carte {card} expire en {expiry} : mettez-la à jour dans {services} pour garder les abonnements.",
     "securityDigestBody": "{count, plural, one {# nouvelle alerte de sécurité à vérifier dans Admin → Sécurité.} other {# nouvelles alertes de sécurité à vérifier dans Admin → Sécurité.}}",
     "surpriseOpenedTitle": "🎁 Surprise vue !",
     "surpriseOpenedBody": "{name} vient d’ouvrir le cadeau et de voir votre surprise.",

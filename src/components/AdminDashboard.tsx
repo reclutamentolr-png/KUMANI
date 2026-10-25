@@ -158,6 +158,7 @@ const PushPanel = dynamic(() => import('@/components/admin/PushPanel'), { loadin
 const CommunicationsPanel = dynamic(() => import('@/components/admin/CommunicationsPanel'), { loading })
 const NeedMissesPanel = dynamic(() => import('@/components/admin/NeedMissesPanel'), { loading })
 const EmailQuotaAlert = dynamic(() => import('@/components/admin/EmailQuotaAlert'), { loading: () => null })
+const CardExpiryAlert = dynamic(() => import('@/components/admin/CardExpiryAlert'), { loading: () => null })
 const CostsPanel = dynamic(() => import('@/components/admin/CostsPanel'), { loading })
 const DocumentsAdminPanel = dynamic(() => import('@/components/admin/DocumentsAdminPanel'), { loading })
 const AdminLateSponsor = dynamic(() => import('@/components/admin/AdminLateSponsor'), { loading })
@@ -2018,6 +2019,8 @@ L'accesso viene registrato.`))) return
       <div className="lg:col-span-3 space-y-6">
         {/* Avviso al 90% delle email gratuite di Resend */}
         {hasPermission(permissions, 'messages.read' as Permission) && <EmailQuotaAlert />}
+        {/* Carte di pagamento dei costi fissi in scadenza (dal mese prima) */}
+        {hasPermission(permissions, 'stats.read' as Permission) && activeSection !== 'costs' && <CardExpiryAlert onOpen={() => setActiveSection('costs')} />}
         {activeSection === 'platforms' && <PlatformsPanel />}
         {activeSection === 'overview' && renderOverview()}
         {activeSection === 'users' && renderUsers()}

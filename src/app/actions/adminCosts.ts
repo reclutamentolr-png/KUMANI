@@ -3,7 +3,8 @@
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { verifyAdmin } from '@/lib/verifyAdmin'
 import { getAdminFinancialSummary } from '@/app/actions/admin'
-import { COST_CATEGORIES, type CostCategory, type CostFrequency } from '@/lib/platformCosts'
+import { COST_CATEGORIES, type CostCategory, type CostFrequency, type CostStatus } from '@/lib/platformCosts'
+import { expiringCards } from '@/lib/cardExpiry'
 
 // Admin → Costi e margini: costi fissi (mensili, annuali, una tantum), spese
 // variabili registrate a mano e i costi calcolati in automatico (commissioni
@@ -25,6 +26,11 @@ export type PlatformCost = {
   start_date: string
   end_date: string | null
   notes: string | null
+  // Carta usata (es. «Fineco») e mese di scadenza (primo giorno del mese)
+  payment_card: string | null
+  card_expiry: string | null
+  // pending: deciso ma non ancora attivato, fuori dai totali
+  status: CostStatus
 }
 
 export type PlatformExpense = {
@@ -41,7 +47,7 @@ const today = () => new Date().toISOString().slice(0, 10)
 
 // Mesi (o anni) iniziati tra la data di inizio e oggi (o la fine)
 function accrued(cost: PlatformCost, until: string) {
-  if (cost.start_date > until) return 0
+  if (cost.status === 'pending' || cost.start_date > until) return 0
   const end = cost.end_date && cost.end_date < until ? cost.end_date : until
   const [y1, m1] = cost.start_date.split('-').map(Number)
   const [y2, m2] = end.split('-').map(Number)
@@ -51,12 +57,12 @@ function accrued(cost: PlatformCost, until: string) {
   return cost.amount_cents * months
 }
 
-const isActiveOn = (cost: PlatformCost, day: string) => cost.start_date <= day && (!cost.end_date || cost.end_date >= day)
+const isActiveOn = (cost: PlatformCost, day: string) => cost.status !== 'pending' && cost.start_date <= day && (!cost.end_date || cost.end_date >= day)
 
 export async function adminListCosts() {
   if (!(await verifyAdmin('stats.read'))) return null
   const [{ data: costs }, { data: expenses }] = await Promise.all([
-    db().from('platform_costs').select('id, name, provider, category, amount_cents, frequency, start_date, end_date, notes').order('created_at'),
+    db().from('platform_costs').select('id, name, provider, category, amount_cents, frequency, start_date, end_date, notes, payment_card, card_expiry, status').order('created_at'),
     db().from('platform_expenses').select('id, description, category, amount_cents, spent_on, notes').order('spent_on', { ascending: false }).limit(300),
   ])
   return { costs: (costs ?? []) as PlatformCost[], expenses: (expenses ?? []) as PlatformExpense[] }
@@ -75,6 +81,9 @@ export async function adminSaveCost(input: Partial<PlatformCost> & { name: strin
     start_date: input.start_date && DATE_RE.test(input.start_date) ? input.start_date : today(),
     end_date: input.end_date && DATE_RE.test(input.end_date) ? input.end_date : null,
     notes: input.notes?.trim().slice(0, 300) || null,
+    payment_card: input.payment_card?.trim().slice(0, 40) || null,
+    card_expiry: input.card_expiry && /^\d{4}-\d{2}/.test(input.card_expiry) ? `${input.card_expiry.slice(0, 7)}-01` : null,
+    status: input.status === 'pending' ? 'pending' : 'active',
     updated_at: new Date().toISOString(),
   }
   if (row.end_date && row.end_date < row.start_date) return { success: false, error: 'La data di fine è prima di quella di inizio.' }
@@ -82,6 +91,35 @@ export async function adminSaveCost(input: Partial<PlatformCost> & { name: strin
   const { error } = await query
   if (error) return { success: false, error: error.message }
   return { success: true }
+}
+
+// Abbonamenti usati solo in alcuni mesi (es. Suno): «Sospendi» mette la fine
+// a oggi; «Riprendi» toglie la fine se si riprende nello stesso mese, se no
+// crea un nuovo periodo da oggi (il vecchio resta come storico, così i mesi
+// sospesi non vengono contati).
+export async function adminPauseCost(id: string) {
+  if (!(await verifyAdmin('settings.write'))) return { success: false, error: 'Non autorizzato.' }
+  const day = today()
+  const { data: cost } = await db().from('platform_costs').select('start_date').eq('id', id).maybeSingle()
+  if (!cost) return { success: false, error: 'Costo non trovato.' }
+  const { error } = await db().from('platform_costs').update({ end_date: cost.start_date > day ? cost.start_date : day, updated_at: new Date().toISOString() }).eq('id', id)
+  return error ? { success: false, error: error.message } : { success: true }
+}
+
+export async function adminResumeCost(id: string) {
+  if (!(await verifyAdmin('settings.write'))) return { success: false, error: 'Non autorizzato.' }
+  const day = today()
+  const { data: cost } = await db()
+    .from('platform_costs')
+    .select('name, provider, category, amount_cents, frequency, start_date, end_date, notes, payment_card, card_expiry')
+    .eq('id', id)
+    .maybeSingle()
+  if (!cost) return { success: false, error: 'Costo non trovato.' }
+  const sameMonth = !cost.end_date || cost.end_date.slice(0, 7) === day.slice(0, 7)
+  const { error } = sameMonth
+    ? await db().from('platform_costs').update({ end_date: null, updated_at: new Date().toISOString() }).eq('id', id)
+    : await db().from('platform_costs').insert({ ...cost, start_date: day, end_date: null, status: 'active' })
+  return error ? { success: false, error: error.message } : { success: true }
 }
 
 export async function adminDeleteCost(id: string) {
@@ -131,7 +169,7 @@ export async function adminCostsSummary() {
   const { data: allExpenses } = await db().from('platform_expenses').select('amount_cents')
   const variableTotal = (allExpenses ?? []).reduce((sum, e) => sum + (e.amount_cents as number), 0)
   const variableThisMonth = list.expenses.filter((e) => e.spent_on.startsWith(thisMonth)).reduce((sum, e) => sum + e.amount_cents, 0)
-  const toComplete = list.costs.filter((c) => c.amount_cents === 0).length
+  const toComplete = list.costs.filter((c) => c.amount_cents === 0 && c.status !== 'pending').length
 
   // Incassi e costi automatici dall'Amministrazione (Stripe, voucher, punti…)
   const f = await getAdminFinancialSummary().catch(() => null)
@@ -170,4 +208,11 @@ export async function adminCostsSummary() {
     },
     toComplete,
   }
+}
+
+// Carte che scadono entro il mese prossimo (avviso in cima all'Admin)
+export async function adminExpiringCards() {
+  if (!(await verifyAdmin('stats.read'))) return []
+  const { data } = await db().from('platform_costs').select('name, provider, payment_card, card_expiry, status, end_date').not('card_expiry', 'is', null)
+  return expiringCards(data ?? [], today())
 }

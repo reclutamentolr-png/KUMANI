@@ -9494,6 +9494,8 @@
     "quoteAcceptedTitle": "Preventivo n. {number} accettato",
     "quoteAcceptedBody": "Accettato da {name}.",
     "securityAlertTitle": "KUMANI · Avviso di sicurezza",
+    "cardExpiryTitle": "KUMANI · Carta in scadenza",
+    "cardExpiryBody": "La carta {card} scade a {expiry}: aggiornala in {services} per non perdere gli abbonamenti.",
     "securityDigestBody": "{count, plural, one {# nuovo avviso di sicurezza da controllare in Admin → Sicurezza.} other {# nuovi avvisi di sicurezza da controllare in Admin → Sicurezza.}}",
     "surpriseOpenedTitle": "🎁 Sorpresa vista!",
     "surpriseOpenedBody": "{name} ha appena aperto il regalo e visto la tua sorpresa.",

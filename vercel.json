@@ -34,6 +34,10 @@
     {
       "path": "/api/cron/tempus-reminders",
       "schedule": "0 16 * * *"
+    },
+    {
+      "path": "/api/cron/card-expiry",
+      "schedule": "30 8 * * *"
     }
   ]
 }
