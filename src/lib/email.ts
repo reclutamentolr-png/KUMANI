@@ -63,7 +63,8 @@ export async function sendEmail(input: SendEmailInput): Promise<{ sent: boolean;
 export async function sendEmailBatch(items: SendEmailInput[]): Promise<{ sent: number; failed: number; error?: string }> {
   const apiKey = process.env.RESEND_API_KEY
   const defaultFrom = process.env.EMAIL_FROM
-  if (!apiKey || !defaultFrom) return { sent: 0, failed: items.length, error: 'not_configured' }
+  // Basta la chiave: il mittente predefinito serve solo per le email che non ne hanno uno
+  if (!apiKey || items.some((e) => !e.from && !defaultFrom)) return { sent: 0, failed: items.length, error: 'not_configured' }
   let sent = 0
   let failed = 0
   let lastError: string | undefined

@@ -128,7 +128,7 @@ export default function CommunicationsPanel() {
                 {c.push_sent_at ? (
                   <p className="flex items-center gap-1 text-xs font-semibold text-emerald-700">
                     <CheckCircle2 className="h-3.5 w-3.5" /> Inviata il {when(c.push_sent_at)}
-                    {c.push_result ? ` · ${c.push_result.recipients ?? 0} persone, ${c.push_result.sent ?? 0} dispositivi` : ''}
+                    {c.push_result ? ` · sul telefono a ${c.push_result.recipients ?? 0} persone (${c.push_result.sent ?? 0} dispositivi)${c.push_result.inbox ? `, nella campanella di ${c.push_result.inbox}` : ''}` : ''}
                   </p>
                 ) : (
                   <button type="button" disabled={!!busy} onClick={() => sendPush(c)} className={`${btn} bg-gray-900 text-white hover:bg-gray-700`}>

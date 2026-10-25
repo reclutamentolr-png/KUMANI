@@ -33,7 +33,7 @@ export type CommunicationRow = {
   note: string | null
   created_at: string
   push_sent_at: string | null
-  push_result: { recipients?: number; sent?: number; failed?: number } | null
+  push_result: { recipients?: number; sent?: number; failed?: number; inbox?: number } | null
   email_sent_at: string | null
   email_result: { recipients?: number; sent?: number; failed?: number; excluded?: number } | null
 }
@@ -146,9 +146,30 @@ export async function adminSendCommunicationPush(id: string): Promise<{ success:
     await s.from('staff_communications').update({ push_sent_at: null }).eq('id', id)
     return { success: false, error: r.error }
   }
-  const result = { recipients: r.recipients, sent: r.sent, failed: r.failed }
+  // Anche nel Centro avvisi (campanella) di tutti gli iscritti, con o senza notifiche sul telefono
+  const inbox = await addToInbox(c)
+  const result = { recipients: r.recipients, sent: r.sent, failed: r.failed, inbox }
   await s.from('staff_communications').update({ push_result: result }).eq('id', id)
   return { success: true, recipients: r.recipients, sent: r.sent }
+}
+
+// Avviso nella campanella di ogni account attivo (testo in italiano per tutte le lingue)
+async function addToInbox(c: CommunicationRow): Promise<number> {
+  const s = db()
+  const { data: rows, error } = await fetchAllRows<{ id: string; is_blocked: boolean | null; deleted_at: string | null }>(
+    (from, to) => s.from('profiles').select('id, is_blocked, deleted_at').order('id').range(from, to),
+    100000,
+  )
+  if (error) return 0
+  const texts = { it: { title: c.push_title, body: c.push_body, url: c.push_url ?? '/dashboard' } }
+  const users = rows.filter((p) => !p.deleted_at && !p.is_blocked).map((p) => ({ user_id: p.id, category: 'staff', kind: `communication:${c.id}`, texts }))
+  let added = 0
+  for (let i = 0; i < users.length; i += 500) {
+    const { error: e } = await s.from('user_notifications').insert(users.slice(i, i + 500))
+    if (!e) added += Math.min(500, users.length - i)
+    else console.error('[comunicazioni] campanella:', e.message)
+  }
+  return added
 }
 
 export async function adminSendCommunicationEmail(id: string): Promise<{ success: boolean; error?: string; sent?: number; failed?: number }> {
