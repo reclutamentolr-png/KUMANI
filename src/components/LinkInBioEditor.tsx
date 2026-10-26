@@ -195,12 +195,18 @@ export default function LinkInBioEditor({
     setJustSaved(false)
     try {
       const result = await saveLinkInBio(bioText, links, theme, isPro ? mode : 'personal', subtitle)
-      if (!result.success) throw new Error('save failed')
+      if (!result.success) {
+        // Motivo preciso quando c'è, altrimenti il messaggio generico
+        const code = 'message' in result && result.message ? `bioErr_${result.message}` : ''
+        alert(code && t.has(code) ? t(code) : t('saveError'))
+        return
+      }
       setJustSaved(true)
       setTimeout(() => setJustSaved(false), 3000)
     } catch (error) {
+      // Di solito la pagina è di una versione precedente del sito: va ricaricata
       console.error('Save error:', error)
-      alert(t('saveError'))
+      alert(t('bioErr_reload'))
     } finally {
       setSaving(false)
     }

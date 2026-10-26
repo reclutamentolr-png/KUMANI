@@ -21,15 +21,20 @@ export async function saveLinkInBio(bioText: string, links: LinkItem[], theme: B
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return { success: false }
+  if (!user) return { success: false, message: 'auth' }
+  // Ogni rifiuto finisce nei registri con il motivo (prima non si vedeva)
+  const refuse = (message: string, detail?: string) => {
+    console.error('[LinkInBio] salvataggio rifiutato:', message, user.id, detail ?? '')
+    return { success: false as const, message }
+  }
 
   // Gating del piano: stessa regola degli altri strumenti (can_use_tool)
   if (!(await hasActiveToolAccess(supabase, user.id, 'link-in-bio'))) {
-    return { success: false, message: 'subscriptionRequired' }
+    return refuse('subscriptionRequired')
   }
 
   // Solo temi esistenti
-  if (!Object.prototype.hasOwnProperty.call(BIO_THEMES, theme)) return { success: false }
+  if (!Object.prototype.hasOwnProperty.call(BIO_THEMES, theme)) return refuse('theme', String(theme))
 
   if (PREMIUM_BIO_THEME_KEYS.includes(theme)) {
     const { data: unlock } = await supabase
@@ -39,7 +44,7 @@ export async function saveLinkInBio(bioText: string, links: LinkItem[], theme: B
       .in('unlock_key', [linkInBioThemeUnlockKey(theme), KU_UNLOCK_LINKINBIO_THEMES])
       .limit(1)
       .maybeSingle()
-    if (!unlock) return { success: false, locked: true }
+    if (!unlock) return { ...refuse('locked', theme), locked: true }
   }
 
   // Al massimo 30 link, testi accorciati, solo i campi previsti (anche il
@@ -73,7 +78,7 @@ export async function saveLinkInBio(bioText: string, links: LinkItem[], theme: B
     { onConflict: 'user_id' }
   )
 
-  if (error) return { success: false }
+  if (error) return refuse('saveError', `${error.code} ${error.message}`)
 
   await awardToolPoint('link-in-bio')
   return { success: true }
