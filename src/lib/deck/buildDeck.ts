@@ -634,7 +634,10 @@ export async function buildDeck(
   // 0b. Il secondo problema: un'app a pagamento per ogni cosa
   if (S.hook2) {
     const s = pres.addSlide({ masterName: 'KUMANI scuro', sectionTitle: priceSec })
-    titled(s, S.hook2.title, S.hook2.sub)
+    // Titolo lungo (in alcune lingue): più piccolo, così resta su una riga
+    const long = String(S.hook2.title).length > 54
+    Tx(s, S.hook2.title, { x: 0.6, y: 0.42, w: 12.1, h: 0.8, fontFace: 'Cambria', fontSize: fs(long ? 25 : 32), bold: true, color: C.background1, valign: 'middle' })
+    Tx(s, S.hook2.sub, { x: 0.6, y: 1.18, w: 12.1, h: 0.45, fontSize: fs(long ? 14 : 16), color: C.accent2, valign: 'top' })
     const all = (S.hook2.rows as string[][]).map((r, i) => ({ r, annual: Number(S.hook2.annual?.[i] ?? 0) }))
     const rows = keep(all, S.hook2.tools)
     const step = Math.min(0.78, 3.6 / Math.max(rows.length, 1))

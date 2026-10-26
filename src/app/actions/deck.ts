@@ -8,7 +8,7 @@ import { getSurprisePrices } from '@/lib/surpriseServer'
 import type { DeckCatalogGroup, DeckPlan, DeckVariant } from '@/lib/deck/types'
 
 // Testi con i numeri dei servizi (plurali ICU della lingua)
-const COUNTED_KEYS = ['hook3.title', 'hook3.notes', 's5.stats.2.1', 's6.title', 's6.sub', 's6.notes', 's5.stats.1.1', 's5.stats.1.2', 's5.stats.1.3', 's5.notes', 's8.plans.1.5', 's8.plans.2.5', 's8.plans.3.5', 's8.notes', 's17.steps.1.2', 'full.sub', 'full.introNotes']
+const COUNTED_KEYS = ['hook3.title', 'hook3.notes', 's5.stats.2.1', 's5.stats.2.2', 's6.title', 's6.sub', 's6.notes', 's5.stats.1.1', 's5.stats.1.2', 's5.stats.1.3', 's5.notes', 's8.plans.1.5', 's8.plans.2.5', 's8.plans.3.5', 's8.notes', 's17.steps.1.2', 'full.sub', 'full.introNotes']
 
 // La chiave c'è nei testi di questa lingua? (le slide nuove arrivano prima in italiano)
 function hasPath(obj: Record<string, unknown>, path: string) {

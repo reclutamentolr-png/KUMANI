@@ -8798,7 +8798,7 @@
       "title": "Des mains qui vous donnent un coup de main.",
       "sub": "Vos idées, nos mains. Ensemble.",
       "foot": "Présentation du projet · kumani.io",
-      "notes": "Bienvenue. KUMANI est un écosystème d’outils numériques utiles au quotidien, pour les indépendants mais aussi pour les particuliers et les familles. Dans cette présentation, nous verrons ce que c’est, ce qu’il propose, combien il coûte, et comment fonctionnent les points et les dons."
+      "notes": "Voici KUMANI : des mains qui vous donnent un coup de main. Un écosystème d’outils numériques utiles au quotidien, pour les particuliers, les familles et les indépendants. Voyons ce que c’est, ce qu’il offre, comment fonctionnent les points et les dons et, à la fin, combien il coûte."
     },
     "s2": {
       "title": "La signification du nom",
@@ -8858,7 +8858,7 @@
         },
         "4": {
           "1": "Un prix honnête, pour toujours :",
-          "2": "49 € par an Plus, 149 € par an Pro."
+          "2": "le même pour tous et écrit clairement."
         },
         "5": {
           "1": "D’abord des personnes, puis des pros :",
@@ -8872,35 +8872,35 @@
       "notes": "Le manifeste est notre carte d’identité. Nous ne promettons pas de gains : nous fournissons des outils. Le prix est public et le même pour tous."
     },
     "s5": {
-      "title": "L’Écosystème KUMANI en quatre chiffres",
-      "sub": "Un seul compte, des outils qui se parlent.",
+      "title": "KUMANI en quatre chiffres",
+      "sub": "Un seul compte, des services qui communiquent entre eux.",
       "stats": {
         "1": {
           "1": "{total}",
           "2": "{total, plural, one {service} other {services}}",
-          "3": "{free, plural, one {# gratuit} other {# gratuits}} · {base} avec Plus · {pro} avec Pro"
+          "3": "{free, plural, one {# gratuit} other {# gratuits}} pour tous, les autres avec Plus et Pro"
         },
         "2": {
+          "1": "{areas}",
+          "2": "domaines",
+          "3": "de la sécurité au travail, de la maison au bien-être"
+        },
+        "3": {
           "1": "7",
           "2": "langues",
           "3": "italien, anglais, français, espagnol, portugais, allemand, russe"
         },
-        "3": {
-          "1": "49 €",
-          "2": "par an avec Plus",
-          "3": "moins de 1 € par semaine"
-        },
         "4": {
-          "1": "15",
-          "2": "jours d’essai Pro",
-          "3": "gratuits, sans carte bancaire"
+          "1": "1",
+          "2": "compte",
+          "3": "sur téléphone, tablette et ordinateur"
         }
       },
-      "notes": "{total, plural, one {# service} other {# services}} : {free, plural, one {# gratuit} other {# gratuits}} pour toute personne inscrite, {base} de plus avec l’offre Plus, {pro} de plus avec l’offre Pro. Le tout en sept langues. L’offre Plus coûte 49 euros par an, moins d’un euro par semaine. L’offre Pro s’essaie gratuitement pendant quinze jours."
+      "notes": "{total, plural, one {# service} other {# services}} dans {areas} domaines, {free, plural, one {# gratuit} other {# gratuits}} pour qui s’inscrit. Le tout en sept langues, avec un seul compte sur téléphone, tablette et ordinateur. Les prix, nous les verrons à la fin, après avoir tout vu."
     },
     "s6": {
-      "title": "Six domaines, un seul compte",
-      "sub": "Quelques exemples des services inclus.",
+      "title": "Tout ce qu’il vous faut, en {areas} domaines",
+      "sub": "{total, plural, one {# service} other {# services}} avec un seul compte. Voici quelques noms pour chaque domaine.",
       "areas": {
         "1": {
           "1": "Se faire connaître",
@@ -8927,11 +8927,12 @@
           "2": "Annonces, Kordata, Time Bank, Events, Affinity, {hub_giochi}"
         }
       },
-      "notes": "Les services sont répartis en six domaines : se faire connaître, se protéger des arnaques, s’organiser, bien-être, travail, communauté et loisirs. Un seul compte donne accès à tout."
+      "notes": "Les services sont regroupés par besoin, en {areas} domaines : {total} au total. Quelques exemples pour chaque domaine ; à la fin, nous les verrons tous, un par un.",
+      "count": "{count, plural, one {# service} other {# services}}"
     },
     "s7": {
-      "title": "Des outils qui se parlent",
-      "sub": "Pas des outils séparés : chacun nourrit les autres.",
+      "title": "Un écosystème : les domaines communiquent",
+      "sub": "Ce que vous faites dans un service arrive là où il faut, sans rien recopier.",
       "nodes": {
         "1": {
           "1": "Un agenda pour tout",
@@ -8958,7 +8959,77 @@
           "2": "un seul choix, tous vos services"
         }
       },
-      "notes": "La force de KUMANI, c’est que les outils se parlent. L’agenda réunit rendez-vous, factures et échéances. Les voyages arrivent dans le calendrier. Le menu du restaurant mène à la Kumi Card. Un devis accepté devient un chantier dans {name_gestione}, jusqu’à l’encaissement. Les couleurs de la marque se choisissent une fois et tous les services les utilisent. Et chaque outil utilisé fait grandir les KU Karma du wallet."
+      "notes": "La force de KUMANI, c’est que les domaines communiquent. Un reçu numérique devient une dépense dans Spendly. Le CV s’ajoute au Link in Bio d’un geste. Si une annonce contient un IBAN, on le vérifie avant de payer. Les offres d’emploi passent par le contrôle anti-arnaque. Le logo et les couleurs de la fiche entreprise se retrouvent dans les devis et la signature e-mail. La Kumi Card arrive dans le Wallet, et le bien-être fait aussi grandir les KU Karma.",
+      "center": "Un seul compte",
+      "links": {
+        "1": {
+          "1": "Reçus numériques → Spendly",
+          "2": "le reçu devient une dépense dans vos comptes"
+        },
+        "2": {
+          "1": "KUMANI CV → Link in Bio",
+          "2": "le lien de votre CV en un geste"
+        },
+        "3": {
+          "1": "Annonces → Vérification IBAN",
+          "2": "Un IBAN dans l’annonce ? Vérifiez-le avant de payer"
+        },
+        "4": {
+          "1": "Trouver un emploi → Anti-arnaque",
+          "2": "les offres passent par le contrôle anti-arnaque"
+        },
+        "5": {
+          "1": "Fiche entreprise → Devis et Signature e-mail",
+          "2": "logo et couleurs choisis une seule fois"
+        },
+        "6": {
+          "1": "Kumi Card → Wallet",
+          "2": "la carte de fidélité dans le portefeuille KUMANI"
+        },
+        "7": {
+          "1": "Bien-être → KU Karma",
+          "2": "pas, pauses et respiration font grandir les points"
+        }
+      },
+      "linkGroups": {
+        "1": {
+          "1": "work",
+          "2": "money"
+        },
+        "2": {
+          "1": "work",
+          "2": "business"
+        },
+        "3": {
+          "1": "community",
+          "2": "security"
+        },
+        "4": {
+          "1": "work",
+          "2": "security"
+        },
+        "5": {
+          "1": "business",
+          "2": "work"
+        },
+        "6": {
+          "1": "business",
+          "2": "community"
+        },
+        "7": {
+          "1": "wellness",
+          "2": "community"
+        }
+      },
+      "linkTools": {
+        "1": "digital-receipt",
+        "2": "kumani-cv",
+        "3": "verifica-iban",
+        "4": "trova-lavoro",
+        "5": "preventivi",
+        "6": "fidelity",
+        "7": "oxygen"
+      }
     },
     "s8": {
       "title": "Trois offres, un prix honnête",
@@ -8999,7 +9070,7 @@
       "rows": {
         "1": {
           "1": "KUMANI Menu",
-          "2": "Menu avec QR à table, en plusieurs langues, toujours à jour"
+          "2": "Menu avec QR à table, en plusieurs langues"
         },
         "2": {
           "1": "Kumi Card",
@@ -9010,19 +9081,37 @@
           "2": "Avec votre logo, en PDF, par e-mail ou WhatsApp"
         },
         "4": {
+          "1": "KUMANI Shop",
+          "2": "La boutique en ligne avec paiement et commandes"
+        },
+        "5": {
+          "1": "Link in Bio en entreprise",
+          "2": "Nom, logo et liens de votre activité"
+        },
+        "6": {
           "1": "Reçus numériques",
           "2": "Livraisons et acomptes confirmés par le client"
         },
-        "5": {
+        "7": {
           "1": "{tabname_gestione_warehouse}",
           "2": "Stocks et codes-barres depuis le téléphone"
         },
-        "6": {
+        "8": {
           "1": "QR Code PRO",
           "2": "Changez la destination et comptez les scans"
         }
       },
-      "notes": "Pour les professionnels, la formule Pro ajoute des outils concrets : le menu avec QR à table, la carte de fidélité numérique, devis et reçus en quelques gestes, {name_gestione} pour suivre clients, chantiers et encaissements, le stock et les QR traçables. En plus, l’Espace Professionnels et la possibilité de devenir fournisseur des Kordata."
+      "notes": "Pour les professionnels, le forfait Pro ajoute des outils concrets : le menu avec QR à table, la carte de fidélité numérique, devis et reçus en quelques gestes, la boutique en ligne, la page Link in Bio avec le nom et le logo de l’activité, {name_gestione} pour suivre clients, chantiers et encaissements, l’entrepôt et les QR traçables.",
+      "tools": {
+        "1": "menu",
+        "2": "fidelity",
+        "3": "preventivi",
+        "4": "shop",
+        "5": "link-in-bio",
+        "6": "digital-receipt",
+        "7": "magazzino",
+        "8": "qr-code-pro"
+      }
     },
     "s10": {
       "title": "Mieux protégés contre les arnaques",
@@ -9061,7 +9150,7 @@
       "rows": {
         "1": {
           "1": "Annonces",
-          "2": "Services et produits entre Kumani"
+          "2": "Donner, troquer, vendre : annonces contrôlées"
         },
         "2": {
           "1": "Kordata",
@@ -9076,15 +9165,33 @@
           "2": "On se retrouve en vrai, avec un pass QR"
         },
         "5": {
+          "1": "Propositions",
+          "2": "Les idées des membres, votées par la communauté"
+        },
+        "6": {
+          "1": "Kumano du Jour",
+          "2": "Chaque jour, l’histoire d’un membre"
+        },
+        "7": {
           "1": "Affinity",
           "2": "Votre archétype et vos affinités avec vos amis"
         },
-        "6": {
+        "8": {
           "1": "Jeux",
-          "2": "Veritas, Mosaic, Fabula et Nexus à faire ensemble"
+          "2": "Veritas, Mosaic, Fabula et Nexus à jouer ensemble"
         }
       },
-      "notes": "KUMANI, ce n’est pas que des outils : c’est une communauté. Annonces, achats groupés avec la Kordata, Time Bank pour échanger de l’aide, événements en vrai et jeux entre amis. Avec les Propositions de la communauté, les membres proposent et soutiennent des idées pour améliorer KUMANI, et le Staff répond."
+      "notes": "KUMANI, ce ne sont pas que des outils : c’est une communauté. Annonces contrôlées par le Staff, achats groupés avec la Kordata, Time Bank pour échanger de l’aide, événements en vrai, Propositions où les membres suggèrent et votent les idées pour améliorer KUMANI, le Kumano du Jour qui raconte l’histoire d’un membre, et des jeux à faire entre amis.",
+      "tools": {
+        "1": "listings",
+        "2": "convivio",
+        "3": "timebank",
+        "4": "events",
+        "5": "proposte",
+        "6": "spotlight",
+        "7": "affinity",
+        "8": ""
+      }
     },
     "s12": {
       "title": "Deux types de points, des règles publiques",
@@ -9218,7 +9325,9 @@
     "s18": {
       "title": "Le premier pas vous appartient.\nLe reste, nous le ferons ensemble.",
       "contacts": "kumani.io  ·  support@kumani.io",
-      "notes": "Merci. Le premier pas vous appartient : l’inscription est gratuite sur kumani.io. Pour toute question : support@kumani.io."
+      "notes": "Le premier pas est le vôtre, et il ne coûte rien : l’inscription est gratuite sur kumani.io, et Pro s’essaie quinze jours sans carte. Scannez le QR maintenant : en une minute vous y êtes. Pour toute question : support@kumani.io.",
+      "cta": "Inscrivez-vous gratuitement aujourd’hui · Essayez Pro 15 jours gratuits",
+      "qr": "Scannez et commencez"
     },
     "landing": {
       "title": "Votre Landing Page",
@@ -9296,14 +9405,14 @@
     "full": {
       "section": "Tous les services",
       "title": "Tous les services KUMANI",
-      "sub": "{total, plural, one {# service} other {# services}} avec {tools} outils, classés par besoin.",
+      "sub": "{total, plural, one {# service} other {# services}}, regroupés par besoin : les voici tous, un par un.",
       "legend": "La pastille de couleur indique l’offre qui inclut le service.",
       "count": "{count, plural, one {# service} other {# services}}",
       "groupSub": "{count, plural, one {# service} other {# services}} · Tous les services KUMANI",
       "community": "Communauté",
       "chatName": "Messages",
       "chatDesc": "Écrivez en privé aux autres Kumani : les messages s’effacent automatiquement après 30 jours.",
-      "introNotes": "Voyons maintenant tous les services KUMANI, un par un, classés par besoin : {total} au total. Sur chaque fiche, une pastille de couleur indique l’offre : vert Gratuit, or Plus, foncé Pro.",
+      "introNotes": "Voyons maintenant tous les services KUMANI, un par un, regroupés par besoin : {total} au total. Sur chaque fiche, une pastille de couleur indique le forfait : vert Gratuit, or Plus, foncé Pro.",
       "notes": "{group} : {count, plural, one {# service} other {# services}}. {names}. Pour chacun, il suffit de dire à quoi il sert et pour qui ; la pastille indique l’offre qui l’inclut.",
       "foot": "Présentation complète, avec tous les services · kumani.io",
       "docTitle": "KUMANI — Présentation complète avec tous les services"
@@ -9331,6 +9440,138 @@
       },
       "badge": "Pour tous · à partir de {price} la surprise · aussi avec KU Karma ou KU Points",
       "notes": "KUMANI Surprise est ouverte à tous, même à ceux qui ont le compte gratuit. On la crée et on l’essaie gratuitement ; on ne paie que pour activer le lien à envoyer, par carte ou avec les points : les KU Karma gagnés en utilisant KUMANI ou les KU Points confirmés. La personne ouvre le cadeau sur son téléphone sans s’inscrire et peut remercier : la réponse arrive dans le tableau de bord de celui qui l’a créée."
+    },
+    "secPrice": "Concurrence et prix",
+    "hook1": {
+      "eyebrow": "ITALIE, 2025",
+      "big": "269 millions d’euros",
+      "text": "volés en ligne aux Italiens en une seule année.\nPlus de 700 000 € chaque jour.",
+      "source": "Source : Police postale italienne, rapport annuel 2025 · 27 085 cas d’arnaques et de fraudes en ligne",
+      "notes": "Commençons par un chiffre. En 2025, selon la Police postale italienne, plus de 269 millions d’euros ont été volés en ligne aux Italiens : plus de 700 000 euros par jour, dans plus de 27 000 cas. Faux SMS de la banque, faux conseillers, faux sites, faux investissements. Cela n’arrive pas qu’aux autres : cela arrive à nos parents, à nos amis, à nous."
+    },
+    "hook2": {
+      "title": "La réalité aujourd’hui : vous payez une appli pour chaque chose.",
+      "sub": "Pour vous protéger et vous organiser : prix catalogue d’applis parmi les plus téléchargées (App Store Italie, octobre 2026).",
+      "rows": [
+        [
+          "CamScanner",
+          "jusqu’à 69,99 € par an",
+          "Scanner et PDF"
+        ],
+        [
+          "Calm ou Headspace",
+          "jusqu’à 69,99 € par an",
+          "OXYGEN et Neurobalance"
+        ],
+        [
+          "Cozi, agenda familial",
+          "jusqu’à 89,99 € par an",
+          "MemoLife"
+        ],
+        [
+          "Timesheet, heures de travail",
+          "jusqu’à 113,99 € par an",
+          "Clients et Chantiers"
+        ],
+        [
+          "Applis photo d’identité",
+          "jusqu’à 23,49 € par photo",
+          "Photo d’identité"
+        ]
+      ],
+      "total": "Rien que ces {count} applis : jusqu’à {total} par an.",
+      "answer": "Avec KUMANI Pro, tout en un : 149 € par an.",
+      "notes": "Maintenant que vous avez vu ce qu’il y a dans KUMANI, regardons la concurrence. Pour chaque besoin il existe une appli différente, et presque toutes sont payantes. Ce sont de vrais prix catalogue d’applis parmi les plus téléchargées : en additionnant seulement celles-ci, on arrive à des centaines d’euros par an, avec beaucoup de mots de passe et d’abonnements à retenir.",
+      "tools": [
+        "scanner",
+        "oxygen",
+        "memolife",
+        "clienti",
+        "fototessera"
+      ],
+      "annual": [
+        "69.99",
+        "69.99",
+        "89.99",
+        "113.99",
+        "0"
+      ]
+    },
+    "hook3": {
+      "title": "Un seul compte. {tools} outils.",
+      "cards": [
+        [
+          "0 €",
+          "Protection anti-arnaque",
+          "Vérification IBAN, Réseau Anti-Arnaque et Guide : gratuits pour tous, pour toujours."
+        ],
+        [
+          "49 €",
+          "par an avec Plus",
+          "Agenda, dépenses, maison, voiture, voyages, documents : pour les particuliers et les familles."
+        ],
+        [
+          "149 €",
+          "par an avec Pro",
+          "Tout le Plus et les outils pour ceux qui travaillent avec des clients. 15 jours gratuits."
+        ]
+      ],
+      "notes": "Avec KUMANI, tout cela tient dans un seul compte : {tools} outils qui communiquent entre eux. La protection contre les arnaques est gratuite pour tous. Avec 49 euros par an, moins d’un euro par semaine, on organise toute la vie de la maison. Avec 149 euros, on a aussi tout ce qu’il faut pour travailler."
+    },
+    "kumi": {
+      "title": "Écrivez ce qu’il vous faut. KUMI vous y emmène.",
+      "sub": "Aucun menu à apprendre : on écrit avec ses propres mots, même à la voix.",
+      "search": "Écrivez ce qu’il vous faut…",
+      "examples": [
+        [
+          "« Je dois faire un virement à un inconnu »",
+          "Vérification IBAN"
+        ],
+        [
+          "« J’ai reçu un SMS bizarre »",
+          "Réseau Anti-Arnaque"
+        ],
+        [
+          "« Quand expire ma carte d’identité ? »",
+          "Life Calendar"
+        ],
+        [
+          "« Je n’arrive pas à dormir »",
+          "Neurobalance"
+        ]
+      ],
+      "badge": "Sur l’accueil, gratuit pour tous · KUMI est la mascotte de KUMANI",
+      "notes": "Avec autant de services, la bonne question n’est pas « quelle appli j’ouvre ? » mais « de quoi ai-je besoin ? ». Sur l’accueil, il y a un champ : on écrit son besoin avec ses propres mots, même à la voix, et KUMI, notre mascotte, emmène tout de suite vers le bon service. Pas besoin d’apprendre de menus.",
+      "tools": [
+        "verifica-iban",
+        "rete-antitruffa",
+        "life-calendar",
+        "neurobalance"
+      ]
+    },
+    "app": {
+      "title": "Une appli sur le téléphone, sans store",
+      "sub": "Elle s’ouvre dans le navigateur et s’installe en un geste.",
+      "rows": [
+        [
+          "Sur l’écran d’accueil",
+          "Un geste et KUMANI est parmi les applis du téléphone : pas d’App Store, pas de mises à jour à télécharger."
+        ],
+        [
+          "Des notifications utiles",
+          "Échéances, messages, nouvelles arnaques confirmées par la communauté : elles arrivent sur le téléphone."
+        ],
+        [
+          "Partout, avec un compte",
+          "Téléphone, tablette et ordinateur : on reprend là où on s’était arrêté."
+        ],
+        [
+          "Dans votre langue",
+          "Site, guides et e-mails en 7 langues."
+        ]
+      ],
+      "badge": "Gratuit à installer · fonctionne sur Android, iPhone et ordinateur",
+      "notes": "KUMANI ne se télécharge pas depuis un store : il s’ouvre dans le navigateur et, d’un geste, s’ajoute à l’écran d’accueil comme une appli. Les mises à jour arrivent toutes seules. Les notifications préviennent des échéances, des messages et des nouvelles arnaques confirmées par la communauté. Le même compte fonctionne sur téléphone, tablette et ordinateur."
     }
   },
   "privacyPage": {
