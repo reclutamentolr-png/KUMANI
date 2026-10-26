@@ -9594,7 +9594,10 @@
     "adminSignupBodyInvited": "{name} si è iscritto con l’invito di {inviter}.",
     "adminSignupBodyDirect": "{name} si è iscritto senza invito.",
     "adminListingTitle": "📋 Nuovo annuncio da approvare",
-    "adminListingBody": "{name} ha pubblicato «{title}» in Bacheca: approvalo o rifiutalo."
+    "adminListingBody": "{name} ha pubblicato «{title}» in Bacheca: approvalo o rifiutalo.",
+    "adminScamTitle": "🚨 Nuova segnalazione anti-truffa",
+    "adminScamBody": "{name} ha segnalato {value}: controllala e confermala.",
+    "adminScamBodyKnown": "{name} ha segnalato {value}, già confermato come truffa."
   },
   "pushInvite": {
     "title": "Attiva le notifiche",

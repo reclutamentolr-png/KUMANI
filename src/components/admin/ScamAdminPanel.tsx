@@ -145,9 +145,12 @@ export default function ScamAdminPanel() {
                 <ul className="space-y-2">
                   {row.reports.map((r) => (
                     <li key={r.id} className="rounded-lg bg-gray-50 p-3 text-sm">
+                      <p className="text-sm text-gray-800">
+                        Segnalato da <span className="font-bold">{r.reporter}</span>
+                        {r.city ? ` (${r.city})` : ''}
+                      </p>
                       <p className="text-xs text-gray-500">
-                        {CATEGORY[r.category] ?? r.category} · {r.reporter}
-                        {r.city ? ` (${r.city})` : ''} · {when(r.createdAt)} · {r.status}
+                        {CATEGORY[r.category] ?? r.category} · {when(r.createdAt)} · {r.status}
                       </p>
                       {r.description && <p className="mt-1 whitespace-pre-line text-gray-800">{r.description}</p>}
                       {r.hasEvidence && (

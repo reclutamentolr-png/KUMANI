@@ -9594,7 +9594,10 @@
     "adminSignupBodyInvited": "{name} s’est inscrit avec l’invitation de {inviter}.",
     "adminSignupBodyDirect": "{name} s’est inscrit sans invitation.",
     "adminListingTitle": "📋 Nouvelle annonce à valider",
-    "adminListingBody": "{name} a publié « {title} » sur le Tableau : approuve-la ou refuse-la."
+    "adminListingBody": "{name} a publié « {title} » sur le Tableau : approuve-la ou refuse-la.",
+    "adminScamTitle": "🚨 Nouveau signalement d’arnaque",
+    "adminScamBody": "{name} a signalé {value} : vérifie-le et confirme-le.",
+    "adminScamBodyKnown": "{name} a signalé {value}, déjà confirmé comme arnaque."
   },
   "pushInvite": {
     "title": "Activez les notifications",

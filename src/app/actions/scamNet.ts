@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import { verifyAdmin } from '@/lib/verifyAdmin'
 import { localizedPath, notifyUser } from '@/lib/push'
 import { appLimitValue } from '@/lib/appLimits'
+import { notifyAdminsOfScamReport } from '@/lib/staffAlerts'
 import {
   SCAM_CATEGORIES,
   SCAM_CONTEST_MAX,
@@ -126,6 +127,7 @@ export async function submitScamReport(input: { kind: string; value: string; cat
   }
   await service.from('scam_targets').update({ last_report_at: new Date().toISOString() }).eq('id', row.id)
   await service.rpc('scam_target_refresh', { p_target: row.id })
+  await notifyAdminsOfScamReport({ id: report.id, value: target.display, confirmed: confirmedTarget }, user.id)
   return { success: true, data: { status: confirmedTarget ? 'confirmed' : 'pending', id: report.id } }
 }
 

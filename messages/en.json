@@ -9594,7 +9594,10 @@
     "adminSignupBodyInvited": "{name} signed up with {inviter}’s invite.",
     "adminSignupBodyDirect": "{name} signed up without an invite.",
     "adminListingTitle": "📋 New listing to review",
-    "adminListingBody": "{name} posted “{title}” on the Board: approve or reject it."
+    "adminListingBody": "{name} posted “{title}” on the Board: approve or reject it.",
+    "adminScamTitle": "🚨 New scam report",
+    "adminScamBody": "{name} reported {value}: check and confirm it.",
+    "adminScamBodyKnown": "{name} reported {value}, already confirmed as a scam."
   },
   "pushInvite": {
     "title": "Turn on notifications",

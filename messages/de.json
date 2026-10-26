@@ -9594,7 +9594,10 @@
     "adminSignupBodyInvited": "{name} hat sich mit der Einladung von {inviter} registriert.",
     "adminSignupBodyDirect": "{name} hat sich ohne Einladung registriert.",
     "adminListingTitle": "📋 Neue Anzeige zu prüfen",
-    "adminListingBody": "{name} hat „{title}“ an der Pinnwand veröffentlicht: genehmigen oder ablehnen."
+    "adminListingBody": "{name} hat „{title}“ an der Pinnwand veröffentlicht: genehmigen oder ablehnen.",
+    "adminScamTitle": "🚨 Neue Betrugsmeldung",
+    "adminScamBody": "{name} hat {value} gemeldet: prüfen und bestätigen.",
+    "adminScamBodyKnown": "{name} hat {value} gemeldet, bereits als Betrug bestätigt."
   },
   "pushInvite": {
     "title": "Benachrichtigungen aktivieren",

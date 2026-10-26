@@ -9594,7 +9594,10 @@
     "adminSignupBodyInvited": "{name} зарегистрировался по приглашению {inviter}.",
     "adminSignupBodyDirect": "{name} зарегистрировался без приглашения.",
     "adminListingTitle": "📋 Новое объявление на проверку",
-    "adminListingBody": "{name} опубликовал(а) «{title}» на Доске: одобрите или отклоните."
+    "adminListingBody": "{name} опубликовал(а) «{title}» на Доске: одобрите или отклоните.",
+    "adminScamTitle": "🚨 Новое сообщение о мошенничестве",
+    "adminScamBody": "{name} сообщил(а) о {value}: проверьте и подтвердите.",
+    "adminScamBodyKnown": "{name} сообщил(а) о {value}, уже подтверждено как мошенничество."
   },
   "pushInvite": {
     "title": "Включите уведомления",

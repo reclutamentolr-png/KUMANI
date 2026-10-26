@@ -9594,7 +9594,10 @@
     "adminSignupBodyInvited": "{name} registou-se com o convite de {inviter}.",
     "adminSignupBodyDirect": "{name} registou-se sem convite.",
     "adminListingTitle": "📋 Novo anúncio para aprovar",
-    "adminListingBody": "{name} publicou «{title}» no Mural: aprova-o ou recusa-o."
+    "adminListingBody": "{name} publicou «{title}» no Mural: aprova-o ou recusa-o.",
+    "adminScamTitle": "🚨 Nova denúncia de burla",
+    "adminScamBody": "{name} denunciou {value}: verifica-a e confirma-a.",
+    "adminScamBodyKnown": "{name} denunciou {value}, já confirmado como burla."
   },
   "pushInvite": {
     "title": "Ative as notificações",

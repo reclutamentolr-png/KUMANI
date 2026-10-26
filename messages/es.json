@@ -9594,7 +9594,10 @@
     "adminSignupBodyInvited": "{name} se ha registrado con la invitación de {inviter}.",
     "adminSignupBodyDirect": "{name} se ha registrado sin invitación.",
     "adminListingTitle": "📋 Nuevo anuncio por revisar",
-    "adminListingBody": "{name} ha publicado «{title}» en el Tablón: apruébalo o recházalo."
+    "adminListingBody": "{name} ha publicado «{title}» en el Tablón: apruébalo o recházalo.",
+    "adminScamTitle": "🚨 Nueva denuncia de estafa",
+    "adminScamBody": "{name} ha denunciado {value}: revísala y confírmala.",
+    "adminScamBodyKnown": "{name} ha denunciado {value}, ya confirmado como estafa."
   },
   "pushInvite": {
     "title": "Activa las notificaciones",
