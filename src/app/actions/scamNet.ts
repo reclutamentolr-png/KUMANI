@@ -183,7 +183,7 @@ export async function scamLookup(items: { kind: string; value: string }[]): Prom
     const values = [...new Set(keys.filter((k) => k.kind === kind).map((k) => k.key))]
     const { data } = await service
       .from('scam_targets')
-      .select('id, kind, value_key, display, category, confirmed_reports, last_report_at')
+      .select('id, kind, value_key, display, category, confirmed_reports, last_report_at, public_story')
       .eq('kind', kind)
       .eq('status', 'confirmed')
       .gte('last_report_at', since)
@@ -193,7 +193,7 @@ export async function scamLookup(items: { kind: string; value: string }[]): Prom
       seen.add(t.id)
       const { data: reports } = await service
         .from('scam_reports')
-        .select('description, created_at, category, user_id')
+        .select('category')
         .eq('target_id', t.id)
         .eq('status', 'confirmed')
         .order('created_at', { ascending: false })
@@ -201,17 +201,14 @@ export async function scamLookup(items: { kind: string; value: string }[]): Prom
       const counts = new Map<string, number>()
       for (const r of reports ?? []) counts.set(r.category, (counts.get(r.category) ?? 0) + 1)
       const top = [...counts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? t.category
-      const withText = (reports ?? []).filter((r) => r.description).slice(0, 3)
-      const ids = withText.map((r) => r.user_id).filter(Boolean) as string[]
-      const { data: people } = ids.length ? await service.from('profiles').select('id, city').in('id', ids) : { data: [] }
-      const city = new Map((people ?? []).map((p) => [p.id, (p.city as string | null) ?? null]))
       found.push({
         kind: t.kind as ScamKind,
         value: t.display,
         reports: Math.max(t.confirmed_reports, 1),
         category: (top as ScamCategory) ?? null,
         lastReportAt: t.last_report_at,
-        quotes: withText.map((r) => ({ text: r.description as string, city: r.user_id ? (city.get(r.user_id) ?? null) : null, at: r.created_at })),
+        // Solo il racconto approvato dallo Staff: mai chi ha segnalato né la sua città
+        quotes: t.public_story ? [{ text: t.public_story as string, city: null, at: t.last_report_at }] : [],
         targetId: t.id,
       })
     }
@@ -237,7 +234,7 @@ export type ScamAlerts = {
   hits7: number
   reporters7: number
   categories: { category: ScamCategory; count: number; prev: number; kinds: ScamKind[] }[]
-  recent: { kind: ScamKind; value: string; category: ScamCategory | null; reports: number; at: string }[]
+  recent: { kind: ScamKind; value: string; category: ScamCategory | null; reports: number; at: string; story: string | null }[]
   alertsOn: boolean
 }
 
@@ -252,7 +249,7 @@ export async function scamAlerts(): Promise<ScamAlerts | null> {
     service.from('scam_hits').select('id', { count: 'exact', head: true }).gte('created_at', week),
     service
       .from('scam_targets')
-      .select('kind, value_key, display, category, confirmed_reports, last_report_at')
+      .select('kind, value_key, display, category, confirmed_reports, last_report_at, public_story')
       .eq('status', 'confirmed')
       .gte('last_report_at', new Date(Date.now() - VALIDITY_MS).toISOString())
       .order('last_report_at', { ascending: false })
@@ -288,6 +285,7 @@ export async function scamAlerts(): Promise<ScamAlerts | null> {
       category: (t.category as ScamCategory) ?? null,
       reports: Math.max(t.confirmed_reports, 1),
       at: t.last_report_at,
+      story: (t.public_story as string | null) ?? null,
     })),
     alertsOn: pref?.alerts === true,
   }
@@ -392,6 +390,7 @@ export type AdminScamTarget = {
   hits: number
   lastReportAt: string
   staffNote: string | null
+  publicStory: string | null
   phone: PhoneInfo | null
   reports: { id: string; category: string; description: string | null; status: string; createdAt: string; reporter: string; city: string | null; hasEvidence: boolean; staffNote: string | null }[]
   contests: { id: string; message: string; createdAt: string; status: string; who: string }[]
@@ -435,6 +434,7 @@ export async function adminScamQueue(view: 'pending' | 'confirmed' | 'contests')
       hits: hitCount.get(t.id) ?? 0,
       lastReportAt: t.last_report_at,
       staffNote: t.staff_note,
+      publicStory: t.public_story ?? null,
       phone: t.kind === 'phone' ? phoneInfo(t.value_key) : null,
       reports: (reports ?? [])
         .filter((r) => r.target_id === t.id)
@@ -465,7 +465,7 @@ export async function adminScamEvidence(reportId: string): Promise<string | null
   return signed?.signedUrl ?? null
 }
 
-export async function adminScamDecide(targetId: string, decision: 'confirm' | 'dismiss' | 'needs_info' | 'remove', note: string | null): Promise<{ success: boolean; error?: string }> {
+export async function adminScamDecide(targetId: string, decision: 'confirm' | 'dismiss' | 'needs_info' | 'remove', note: string | null, story?: string | null): Promise<{ success: boolean; error?: string }> {
   if (!(await verifyAdmin('listings.write'))) return { success: false, error: 'Non autorizzato' }
   if (!UUID_RE.test(targetId) || !['confirm', 'dismiss', 'needs_info', 'remove'].includes(decision)) return { success: false, error: 'Dati non validi' }
   const service = db()
@@ -482,6 +482,8 @@ export async function adminScamDecide(targetId: string, decision: 'confirm' | 'd
     return { success: true }
   }
   await service.rpc('scam_target_refresh', { p_target: targetId })
+  // Racconto per la community: lo scrive o lo approva lo Staff alla conferma
+  if (decision === 'confirm' && story !== undefined) await service.from('scam_targets').update({ public_story: cleanStory(story) }).eq('id', targetId)
   const value = shownValue(target.kind, target.display, target.value_key)
   const kind = decision === 'confirm' ? 'Confirmed' : decision === 'dismiss' ? 'Dismissed' : 'NeedsInfo'
   for (const r of rows) {
@@ -499,6 +501,15 @@ export async function adminScamDecide(targetId: string, decision: 'confirm' | 'd
     )
   }
   return { success: true }
+}
+
+const cleanStory = (story: string | null) => String(story ?? '').trim().slice(0, SCAM_DESCRIPTION_MAX) || null
+
+// Admin: cambia il racconto visibile a tutti di un avviso già confermato
+export async function adminScamSetStory(targetId: string, story: string | null): Promise<boolean> {
+  if (!(await verifyAdmin('listings.write')) || !UUID_RE.test(targetId)) return false
+  const { error } = await db().from('scam_targets').update({ public_story: cleanStory(story) }).eq('id', targetId).eq('status', 'confirmed')
+  return !error
 }
 
 export async function adminScamContestReject(contestId: string): Promise<boolean> {
@@ -539,6 +550,6 @@ export async function adminAddConfirmedScam(input: { kind: string; value: string
     .insert({ target_id: row.id, user_id: admin.id, category: input.category, description, status: 'pending', rewarded: true })
   if (error && error.code !== '23505') return { success: false, error: error.message }
   await service.from('scam_targets').update({ last_report_at: new Date().toISOString() }).eq('id', row.id)
-  const decided = await adminScamDecide(row.id, 'confirm', 'Inserita dallo Staff come truffa certa')
+  const decided = await adminScamDecide(row.id, 'confirm', 'Inserita dallo Staff come truffa certa', description)
   return decided.success ? { success: true, display: target.display } : { success: false, error: decided.error }
 }

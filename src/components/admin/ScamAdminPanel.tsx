@@ -3,7 +3,7 @@
 import { notify } from '@/lib/adminNotify'
 import { useCallback, useEffect, useState } from 'react'
 import { Check, ExternalLink, Eye, LoaderCircle, MessageSquareWarning, ShieldAlert, Undo2, X } from 'lucide-react'
-import { adminScamContestReject, adminScamDecide, adminScamEvidence, adminScamQueue, type AdminScamTarget } from '@/app/actions/scamNet'
+import { adminScamContestReject, adminScamDecide, adminScamEvidence, adminScamQueue, adminScamSetStory, type AdminScamTarget } from '@/app/actions/scamNet'
 import { adminSignupsFrom } from '@/app/actions/adminSignupSources'
 import ScamDirectAdd from '@/components/admin/ScamDirectAdd'
 
@@ -46,6 +46,9 @@ export default function ScamAdminPanel() {
   const [error, setError] = useState<string | null>(null)
   const [working, setWorking] = useState<string | null>(null)
   const [note, setNote] = useState<Record<string, string>>({})
+  // Racconto per la community: già compilato con l'ultima segnalazione, si corregge prima di pubblicare
+  const [story, setStory] = useState<Record<string, string>>({})
+  const storyOf = (row: AdminScamTarget) => story[row.id] ?? row.publicStory ?? row.reports.find((r) => r.description)?.description ?? ''
 
   const load = useCallback(async (current: View) => {
     setRows(null)
@@ -59,9 +62,17 @@ export default function ScamAdminPanel() {
     load(view)
   }, [load, view])
 
+  const saveStory = async (row: AdminScamTarget) => {
+    setWorking(row.id)
+    const ok = await adminScamSetStory(row.id, storyOf(row))
+    setWorking(null)
+    notify(ok ? '✅ Testo per la community salvato' : 'Errore: testo non salvato')
+    if (ok) load(view)
+  }
+
   const decide = async (row: AdminScamTarget, decision: 'confirm' | 'dismiss' | 'needs_info' | 'remove') => {
     setWorking(row.id)
-    const result = await adminScamDecide(row.id, decision, note[row.id] ?? null)
+    const result = await adminScamDecide(row.id, decision, note[row.id] ?? null, decision === 'confirm' && row.status !== 'confirmed' ? storyOf(row) : undefined)
     setWorking(null)
     if (!result.success) return notify('Errore: ' + (result.error ?? ''))
     notify(
@@ -185,6 +196,16 @@ export default function ScamAdminPanel() {
                         </div>
                       ))}
                   </div>
+                )}
+                <label className="block text-sm font-medium text-gray-700">
+                  Testo per la community (lo leggono tutti gli iscritti, senza nome né città)
+                  <textarea rows={4} maxLength={600} value={storyOf(row)} onChange={(e) => setStory((p) => ({ ...p, [row.id]: e.target.value }))} className="mt-1 block w-full rounded-lg border border-amber-300 bg-amber-50/40 p-2 text-sm" placeholder="Racconta in breve com'è fatta la truffa. Vuoto = nessun racconto." />
+                  <span className="mt-1 block text-xs font-normal text-gray-500">Togli nomi, IBAN o dati personali di chi ha segnalato. {row.status === 'confirmed' ? 'Per cambiarlo tocca «Salva testo».' : 'Si pubblica con «Conferma e pubblica».'}</span>
+                </label>
+                {row.status === 'confirmed' && (
+                  <button type="button" disabled={busy} onClick={() => saveStory(row)} className={`${btn} border border-amber-300 bg-white text-amber-800`}>
+                    <Check className="h-4 w-4" /> Salva testo
+                  </button>
                 )}
                 <label className="block text-sm font-medium text-gray-700">
                   Nota per chi ha segnalato (per richiesta di prove o rifiuto)

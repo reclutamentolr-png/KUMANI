@@ -13903,6 +13903,8 @@
       "new": "nouvelle",
       "reportsCount": "{count, plural, one {# signalement} other {# signalements}}",
       "recentTitle": "Dernières alertes confirmées",
+      "storyMore": "Lire ce qui s’est passé",
+      "storyLess": "Fermer",
       "maskedNote": "Numéros et IBAN sont en partie masqués : pour savoir si un numéro est signalé, utilisez « Qui m’a appelé ? ».",
       "weeklyTitle": "Les arnaques de la semaine",
       "weeklyText": "Chaque lundi une notification avec les arnaques les plus signalées. Vous pouvez la couper quand vous voulez."

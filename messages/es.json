@@ -13903,6 +13903,8 @@
       "new": "nueva",
       "reportsCount": "{count, plural, one {# denuncia} other {# denuncias}}",
       "recentTitle": "Últimos avisos confirmados",
+      "storyMore": "Lee qué pasó",
+      "storyLess": "Cerrar",
       "maskedNote": "Números e IBAN están en parte ocultos: para saber si un número está denunciado usa «¿Quién me ha llamado?».",
       "weeklyTitle": "Las estafas de la semana",
       "weeklyText": "Cada lunes una notificación con las estafas más denunciadas. Puedes desactivarla cuando quieras."

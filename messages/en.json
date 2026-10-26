@@ -13903,6 +13903,8 @@
       "new": "new",
       "reportsCount": "{count, plural, one {# report} other {# reports}}",
       "recentTitle": "Latest confirmed warnings",
+      "storyMore": "Read what happened",
+      "storyLess": "Close",
       "maskedNote": "Numbers and IBANs are partly hidden: to see whether a number has been reported, use “Who called me?”.",
       "weeklyTitle": "Scams of the week",
       "weeklyText": "Every Monday a notification with the most reported scams. You can turn it off whenever you like."

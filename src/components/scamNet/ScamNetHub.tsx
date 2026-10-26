@@ -31,6 +31,7 @@ function AlertsTab({ onReport }: { onReport: () => void }) {
   const ago = useTimeAgoShort()
   const [data, setData] = useState<ScamAlerts | null>(null)
   const [saving, setSaving] = useState(false)
+  const [openStory, setOpenStory] = useState<number | null>(null)
   useEffect(() => {
     scamAlerts().then(setData)
   }, [])
@@ -86,18 +87,28 @@ function AlertsTab({ onReport }: { onReport: () => void }) {
           <h2 className="text-lg font-extrabold text-[var(--ink)]">{t('alerts.recentTitle')}</h2>
           <ul className={`${card} divide-y divide-[var(--gold)]/15 p-0`}>
             {data.recent.map((r, i) => (
-              <li key={i} className="flex items-center justify-between gap-3 px-4 py-3">
-                <span className="min-w-0">
-                  <span className="block text-xs font-bold text-[var(--muted)]">
-                    {t(`kinds.${r.kind}`)}
-                    {r.category ? ` · ${t(`categories.${r.category}`)}` : ''}
+              <li key={i} className="px-4 py-3">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="min-w-0">
+                    <span className="block text-xs font-bold text-[var(--muted)]">
+                      {t(`kinds.${r.kind}`)}
+                      {r.category ? ` · ${t(`categories.${r.category}`)}` : ''}
+                    </span>
+                    <span className="block truncate font-bold text-[var(--ink)]">{r.value}</span>
                   </span>
-                  <span className="block truncate font-bold text-[var(--ink)]">{r.value}</span>
-                </span>
-                <span className="shrink-0 text-right text-xs text-[var(--muted)]">
-                  <span className="block font-extrabold text-[#A12A2A]">{t('alerts.reportsCount', { count: r.reports })}</span>
-                  {ago(r.at)}
-                </span>
+                  <span className="shrink-0 text-right text-xs text-[var(--muted)]">
+                    <span className="block font-extrabold text-[#A12A2A]">{t('alerts.reportsCount', { count: r.reports })}</span>
+                    {ago(r.at)}
+                  </span>
+                </div>
+                {r.story && (
+                  <div className="mt-2 rounded-xl bg-[#FBEDEA] p-3 text-sm text-[var(--ink)]">
+                    <p className={`whitespace-pre-line ${openStory === i ? '' : 'line-clamp-2'}`}>{r.story}</p>
+                    <button type="button" onClick={() => setOpenStory(openStory === i ? null : i)} className="mt-1 text-xs font-bold text-[#A12A2A] hover:underline" aria-expanded={openStory === i}>
+                      {openStory === i ? t('alerts.storyLess') : t('alerts.storyMore')}
+                    </button>
+                  </div>
+                )}
               </li>
             ))}
           </ul>

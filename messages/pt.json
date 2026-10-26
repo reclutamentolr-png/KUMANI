@@ -13903,6 +13903,8 @@
       "new": "nova",
       "reportsCount": "{count, plural, one {# denúncia} other {# denúncias}}",
       "recentTitle": "Últimos avisos confirmados",
+      "storyMore": "Lê o que aconteceu",
+      "storyLess": "Fechar",
       "maskedNote": "Números e IBAN estão em parte ocultos: para saber se um número foi denunciado use «Quem me ligou?».",
       "weeklyTitle": "As burlas da semana",
       "weeklyText": "Todas as segundas-feiras uma notificação com as burlas mais denunciadas. Pode desligá-la quando quiser."
