@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { Hand, Loader2, LogOut, Maximize, Mic, MicOff, Video, VideoOff, Volume2, VolumeX } from 'lucide-react'
+import { Hand, Loader2, LogOut, Maximize, Mic, Minimize, MicOff, Video, VideoOff, Volume2, VolumeX } from 'lucide-react'
 import {
   joinWebinar,
   viewerAnswer,
@@ -484,7 +484,19 @@ export default function WebinarViewer({
     }
   }, [])
 
+  // Schermo intero: si entra e si esce con lo stesso pulsante (dentro
+  // l'immagine c'è «Riduci», perché fuori non si vede più nulla)
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  useEffect(() => {
+    const onChange = () => setIsFullscreen(!!document.fullscreenElement)
+    document.addEventListener('fullscreenchange', onChange)
+    return () => document.removeEventListener('fullscreenchange', onChange)
+  }, [])
   const fullscreen = () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {})
+      return
+    }
     const stage = stageRef.current as (HTMLDivElement & { webkitRequestFullscreen?: () => void }) | null
     const video = mainRef.current as (HTMLVideoElement & { webkitEnterFullscreen?: () => void }) | null
     if (stage?.requestFullscreen) stage.requestFullscreen().catch(() => video?.webkitEnterFullscreen?.())
@@ -503,7 +515,7 @@ export default function WebinarViewer({
     const token = tokenRef.current
     if (!token) return t('errorGeneric')
     const res = await viewerSend(code, token, body)
-    if ('error' in res) return res.error === 'too_fast' ? t('errorTooFast') : t('errorGeneric')
+    if ('error' in res) return res.error === 'too_fast' ? t('errorTooFast') : res.error === 'chat_closed' ? t('chatClosedNote') : t('errorGeneric')
     poll()
     return null
   }
@@ -659,6 +671,16 @@ export default function WebinarViewer({
             {t('reconnecting')}
           </div>
         )}
+        {isFullscreen && (
+          <button
+            type="button"
+            onClick={fullscreen}
+            className="absolute right-3 top-3 z-[2] inline-flex min-h-11 items-center gap-2 rounded-full bg-black/70 px-4 text-sm font-bold text-white"
+          >
+            <Minimize className="h-5 w-5" aria-hidden />
+            {t('exitFullscreen')}
+          </button>
+        )}
         {needsTap && live && (
           <button
             type="button"
@@ -761,7 +783,8 @@ export default function WebinarViewer({
           hiddenIds={state?.hiddenIds ?? []}
           onSend={sendMessage}
           title={t('chatTitle')}
-          placeholder={t('chatViewerPlaceholder')}
+          disabled={state?.chatOpen === false}
+          placeholder={state?.chatOpen === false ? t('chatClosedNote') : t('chatViewerPlaceholder')}
         />
       </div>
     </div>

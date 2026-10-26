@@ -14397,7 +14397,11 @@
     "closeStudio": "Chiudi la regia",
     "closeStudioTitle": "Chiudere la regia?",
     "closeStudioConfirm": "La diretta finisce per tutti e il webinar non si potrà riaprire.",
-    "closeStudioYes": "Termina e chiudi"
+    "closeStudioYes": "Termina e chiudi",
+    "chatOpenForViewers": "Chat aperta a chi guarda",
+    "chatClosedForViewers": "Chat chiusa a chi guarda",
+    "chatClosedNote": "La chat è chiusa da chi presenta.",
+    "exitFullscreen": "Riduci"
   },
   "spendlyShared": {
     "title": "Spese condivise",

@@ -14397,7 +14397,11 @@
     "closeStudio": "Close the control room",
     "closeStudioTitle": "Close the control room?",
     "closeStudioConfirm": "The live session ends for everyone and the webinar cannot be reopened.",
-    "closeStudioYes": "End and close"
+    "closeStudioYes": "End and close",
+    "chatOpenForViewers": "Chat open to viewers",
+    "chatClosedForViewers": "Chat closed to viewers",
+    "chatClosedNote": "The chat has been closed by the presenter.",
+    "exitFullscreen": "Exit full screen"
   },
   "spendlyShared": {
     "title": "Shared expenses",

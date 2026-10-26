@@ -54,6 +54,7 @@ type WebinarRow = {
   speaker_session: string | null
   speaker_track: string | null
   speaker_video_track: string | null
+  chat_open: boolean
   started_at: string | null
 }
 
@@ -68,7 +69,7 @@ type ViewerRow = {
 }
 
 const WEBINAR_COLUMNS =
-  'id, host_id, code, channel_key, title, starts_at, seats, status, host_session, host_tracks, host_seen_at, host_paused, cam_on, screen_on, speaker_id, speaker_session, speaker_track, speaker_video_track, started_at'
+  'id, host_id, code, channel_key, title, starts_at, seats, status, host_session, host_tracks, host_seen_at, host_paused, cam_on, screen_on, speaker_id, speaker_session, speaker_track, speaker_video_track, chat_open, started_at'
 
 const hashToken = (token: string) => createHash('sha256').update(token).digest('hex')
 const cleanText = (value: unknown, max: number) =>
@@ -150,6 +151,7 @@ async function liveState(w: WebinarRow): Promise<LiveState> {
     hostAway: w.status === 'live' && (w.host_paused || Date.now() - seen > HOST_AWAY_MS),
     camOn: w.cam_on,
     screenOn: w.screen_on,
+    chatOpen: w.chat_open !== false,
     speaker: speaker && w.status === 'live' ? { id: speaker.id, name: speaker.name, session: w.speaker_session, track: w.speaker_track, videoTrack: w.speaker_video_track } : null,
     viewers: count ?? 0,
     hiddenIds: (hidden ?? []).map((m) => m.id as number),
@@ -340,6 +342,15 @@ export async function hostModerate(id: string, action: { ban?: string; hide?: nu
   if (typeof action.hide === 'number') {
     await db.from('webinar_messages').update({ hidden: true }).eq('id', action.hide).eq('webinar_id', id)
   }
+  await ping(host.webinar.channel_key, 'state')
+  return { success: true }
+}
+
+// Apre o chiude la chat a chi guarda (i messaggi già scritti restano)
+export async function hostSetChat(id: string, open: boolean): Promise<{ success: true } | Fail> {
+  const host = await hostOf(id)
+  if ('error' in host) return host
+  await serviceClient().from('webinars').update({ chat_open: !!open }).eq('id', id)
   await ping(host.webinar.channel_key, 'state')
   return { success: true }
 }
@@ -539,6 +550,7 @@ export async function viewerSend(code: string, token: string, body: string): Pro
   if ('error' in found) return found
   const { webinar, viewer } = found
   if (webinar.status === 'ended') return { error: 'ended' }
+  if (webinar.chat_open === false) return { error: 'chat_closed' }
   const text = cleanText(body, WEBINAR_MESSAGE_MAX)
   if (!text) return { error: 'empty' }
   if (viewer.last_message_at && Date.now() - new Date(viewer.last_message_at).getTime() < WEBINAR_MESSAGE_GAP_MS) return { error: 'too_fast' }

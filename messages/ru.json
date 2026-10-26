@@ -14397,7 +14397,11 @@
     "closeStudio": "Закрыть режиссёрскую",
     "closeStudioTitle": "Закрыть режиссёрскую?",
     "closeStudioConfirm": "Эфир закончится для всех, и вебинар нельзя будет открыть снова.",
-    "closeStudioYes": "Завершить и закрыть"
+    "closeStudioYes": "Завершить и закрыть",
+    "chatOpenForViewers": "Чат открыт для зрителей",
+    "chatClosedForViewers": "Чат закрыт для зрителей",
+    "chatClosedNote": "Ведущий закрыл чат.",
+    "exitFullscreen": "Свернуть"
   },
   "spendlyShared": {
     "title": "Общие расходы",

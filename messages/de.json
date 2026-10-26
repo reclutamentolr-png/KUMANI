@@ -14397,7 +14397,11 @@
     "closeStudio": "Regie schließen",
     "closeStudioTitle": "Regie schließen?",
     "closeStudioConfirm": "Das Live endet für alle und das Webinar kann nicht wieder geöffnet werden.",
-    "closeStudioYes": "Beenden und schließen"
+    "closeStudioYes": "Beenden und schließen",
+    "chatOpenForViewers": "Chat für Zuschauer offen",
+    "chatClosedForViewers": "Chat für Zuschauer geschlossen",
+    "chatClosedNote": "Der Chat wurde von der vortragenden Person geschlossen.",
+    "exitFullscreen": "Verkleinern"
   },
   "spendlyShared": {
     "title": "Geteilte Ausgaben",

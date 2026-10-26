@@ -25,6 +25,8 @@ export type LiveState = {
   hostAway: boolean
   camOn: boolean
   screenOn: boolean
+  // Chat aperta a chi guarda (chi presenta la può chiudere)
+  chatOpen: boolean
   // track: la voce; videoTrack: la videocamera, se l'ha accesa
   speaker: { id: string; name: string; session: string | null; track: string | null; videoTrack: string | null } | null
   viewers: number

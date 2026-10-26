@@ -8,6 +8,8 @@ import {
   Eye,
   Hand,
   Loader2,
+  MessageSquare,
+  MessageSquareOff,
   Mic,
   MicOff,
   MonitorUp,
@@ -28,6 +30,7 @@ import {
   hostEnd,
   hostIce,
   hostModerate,
+  hostSetChat,
   hostPublish,
   hostPull,
   hostSendMessage,
@@ -566,6 +569,7 @@ export default function WebinarStudio({
   const clock = `${String(Math.floor(elapsed / 60)).padStart(2, '0')}:${String(elapsed % 60).padStart(2, '0')}`
   const hands = viewers.filter((v) => v.hand && !v.speaking)
   const speaking = viewers.find((v) => v.speaking)
+  const chatOpen = state?.chatOpen !== false
   const shareText = encodeURIComponent(`${webinar.title}\n${link}`)
 
   if (phase === 'ended') {
@@ -788,6 +792,26 @@ export default function WebinarStudio({
               ))}
             </ul>
           </details>
+
+          {/* Chat di chi guarda: aperta o chiusa */}
+          <button
+            type="button"
+            role="switch"
+            aria-checked={chatOpen}
+            onClick={async () => {
+              await hostSetChat(webinar.id, !chatOpen)
+              beat()
+            }}
+            className="flex min-h-11 items-center justify-between gap-3 rounded-2xl border border-[var(--gold)]/30 bg-[var(--paper)] px-4 text-sm font-bold"
+          >
+            <span className="flex items-center gap-2">
+              {chatOpen ? <MessageSquare className="h-4 w-4" aria-hidden /> : <MessageSquareOff className="h-4 w-4" aria-hidden />}
+              {chatOpen ? t('chatOpenForViewers') : t('chatClosedForViewers')}
+            </span>
+            <span className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${chatOpen ? 'bg-emerald-600' : 'bg-gray-400'}`} aria-hidden>
+              <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${chatOpen ? 'left-[22px]' : 'left-0.5'}`} />
+            </span>
+          </button>
 
           <WebinarChat
             messages={messages}

@@ -14397,7 +14397,11 @@
     "closeStudio": "Cerrar la sala de control",
     "closeStudioTitle": "¿Cerrar la sala de control?",
     "closeStudioConfirm": "El directo termina para todos y el webinar no se podrá volver a abrir.",
-    "closeStudioYes": "Terminar y cerrar"
+    "closeStudioYes": "Terminar y cerrar",
+    "chatOpenForViewers": "Chat abierto a quien mira",
+    "chatClosedForViewers": "Chat cerrado a quien mira",
+    "chatClosedNote": "Quien presenta ha cerrado el chat.",
+    "exitFullscreen": "Reducir"
   },
   "spendlyShared": {
     "title": "Gastos compartidos",

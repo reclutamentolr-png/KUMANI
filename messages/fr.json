@@ -14397,7 +14397,11 @@
     "closeStudio": "Fermer la régie",
     "closeStudioTitle": "Fermer la régie ?",
     "closeStudioConfirm": "Le direct se termine pour tous et le webinaire ne pourra pas être rouvert.",
-    "closeStudioYes": "Terminer et fermer"
+    "closeStudioYes": "Terminer et fermer",
+    "chatOpenForViewers": "Chat ouvert aux spectateurs",
+    "chatClosedForViewers": "Chat fermé aux spectateurs",
+    "chatClosedNote": "Le chat a été fermé par la personne qui présente.",
+    "exitFullscreen": "Réduire"
   },
   "spendlyShared": {
     "title": "Dépenses partagées",
