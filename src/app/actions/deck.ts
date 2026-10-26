@@ -8,7 +8,17 @@ import { getSurprisePrices } from '@/lib/surpriseServer'
 import type { DeckCatalogGroup, DeckPlan, DeckVariant } from '@/lib/deck/types'
 
 // Testi con i numeri dei servizi (plurali ICU della lingua)
-const COUNTED_KEYS = ['s5.stats.1.1', 's5.stats.1.2', 's5.stats.1.3', 's5.notes', 's8.plans.1.5', 's8.plans.2.5', 's8.plans.3.5', 's8.notes', 's17.steps.1.2', 'full.sub', 'full.introNotes']
+const COUNTED_KEYS = ['hook3.title', 'hook3.notes', 's5.stats.1.1', 's5.stats.1.2', 's5.stats.1.3', 's5.notes', 's8.plans.1.5', 's8.plans.2.5', 's8.plans.3.5', 's8.notes', 's17.steps.1.2', 'full.sub', 'full.introNotes']
+
+// La chiave c'è nei testi di questa lingua? (le slide nuove arrivano prima in italiano)
+function hasPath(obj: Record<string, unknown>, path: string) {
+  let node: unknown = obj
+  for (const k of path.split('.')) {
+    if (!node || typeof node !== 'object' || !(k in (node as Record<string, unknown>))) return false
+    node = (node as Record<string, unknown>)[k]
+  }
+  return true
+}
 
 function setPath(obj: Record<string, unknown>, path: string, value: string) {
   const keys = path.split('.')
@@ -30,6 +40,7 @@ export async function getDeckTexts(
   landingPassEur?: number | null
   donationPercentBp?: number | null
   catalog?: DeckCatalogGroup[]
+  enabledTools?: string[]
   error?: string
 }> {
   const supabase = await createClient()
@@ -65,7 +76,7 @@ export async function getDeckTexts(
   const enabled = new Map(on.map((r) => [r.tool_name, r.required_plan ?? 'free']))
   const { services, counts } = deckServices(enabled, (key) => tm(key), { name: td('full.chatName'), description: td('full.chatDesc') }, (key) => tsh(key))
   const texts = structuredClone(messages.deckTexts) as Record<string, unknown>
-  for (const key of COUNTED_KEYS) setPath(texts, key, td(key, { ...counts, price: '{price}' }))
+  for (const key of COUNTED_KEYS) if (hasPath(texts, key)) setPath(texts, key, td(key, { ...counts, price: '{price}' }))
   // Nomi dei servizi uniti ({name_…}, {hub_…}, {tab_…}) come nella barra dell'app
   const fillAll = (node: Record<string, unknown>) => {
     for (const [key, value] of Object.entries(node)) {
@@ -91,5 +102,6 @@ export async function getDeckTexts(
         })
       : undefined
 
-  return { texts, minPassEur, landingPassEur, donationPercentBp, catalog }
+  // Servizi accesi: le righe delle slide legate a un servizio spento non compaiono
+  return { texts, minPassEur, landingPassEur, donationPercentBp, catalog, enabledTools: [...enabled.keys()] }
 }

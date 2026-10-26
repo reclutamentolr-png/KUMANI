@@ -39,7 +39,7 @@ export default function DeckDownloadButton({
       const res = await getDeckTexts(locale, variant)
       if (!res.texts) throw new Error(res.error ?? 'texts')
       const { buildDeck } = await import('@/lib/deck/buildDeck')
-      const blob = await buildDeck(res.texts, locale, res.minPassEur ?? 10, res.landingPassEur ?? null, res.donationPercentBp ?? null, variant, res.catalog ?? [])
+      const blob = await buildDeck(res.texts, locale, res.minPassEur ?? 10, res.landingPassEur ?? null, res.donationPercentBp ?? null, variant, res.catalog ?? [], res.enabledTools ?? null)
       const a = document.createElement('a')
       a.href = URL.createObjectURL(blob)
       a.download = `${FILE[locale] ?? 'KUMANI_Presentation'}_${variant === 'full' ? 'Full' : 'Lite'}_${locale.toUpperCase()}.pptx`

@@ -8798,7 +8798,7 @@
       "title": "Mani che ti danno una mano.",
       "sub": "Le tue idee, le nostre mani. Insieme.",
       "foot": "Presentazione del progetto · kumani.io",
-      "notes": "Benvenuti. KUMANI è un ecosistema di strumenti digitali utili ogni giorno, per chi lavora in proprio ma anche per privati e famiglie. In questa presentazione vediamo cos’è, cosa offre, quanto costa, come funzionano i punti e le donazioni."
+      "notes": "Ecco KUMANI: mani che ti danno una mano. Un ecosistema di strumenti digitali utili ogni giorno, per privati, famiglie e chi lavora in proprio. Vediamo cos’è, cosa offre, quanto costa, come funzionano i punti e le donazioni."
     },
     "s2": {
       "title": "Il significato del nome",
@@ -8999,7 +8999,7 @@
       "rows": {
         "1": {
           "1": "KUMANI Menu",
-          "2": "Menù con QR al tavolo, in più lingue, sempre aggiornato"
+          "2": "Menù con QR al tavolo, in più lingue"
         },
         "2": {
           "1": "Kumi Card",
@@ -9010,19 +9010,37 @@
           "2": "Con il tuo logo, in PDF, via email o WhatsApp"
         },
         "4": {
+          "1": "KUMANI Shop",
+          "2": "Il negozio online con pagamento e ordini"
+        },
+        "5": {
+          "1": "Link in Bio come azienda",
+          "2": "Nome, logo e link della tua attività"
+        },
+        "6": {
           "1": "Ricevute Digitali",
           "2": "Consegne e acconti confermati dal cliente"
         },
-        "5": {
+        "7": {
           "1": "{tabname_gestione_warehouse}",
           "2": "Giacenze e codici a barre dal telefono"
         },
-        "6": {
+        "8": {
           "1": "QR Code PRO",
           "2": "Cambi destinazione e conti le scansioni"
         }
       },
-      "notes": "Per i professionisti il piano Pro aggiunge strumenti concreti: il menù con QR al tavolo, la tessera fedeltà digitale, preventivi e ricevute in pochi tocchi, {name_gestione} per seguire clienti, lavori e incassi, il magazzino e i QR tracciabili. In più l’Area Professionisti e la possibilità di diventare fornitori delle Kordate."
+      "notes": "Per i professionisti il piano Pro aggiunge strumenti concreti: il menù con QR al tavolo, la tessera fedeltà digitale, preventivi e ricevute in pochi tocchi, il negozio online, la pagina Link in Bio con il nome e il logo dell’attività, {name_gestione} per seguire clienti, lavori e incassi, il magazzino e i QR tracciabili.",
+      "tools": {
+        "1": "menu",
+        "2": "fidelity",
+        "3": "preventivi",
+        "4": "shop",
+        "5": "link-in-bio",
+        "6": "digital-receipt",
+        "7": "magazzino",
+        "8": "qr-code-pro"
+      }
     },
     "s10": {
       "title": "Più sicuri contro le truffe online",
@@ -9061,7 +9079,7 @@
       "rows": {
         "1": {
           "1": "Bacheca Annunci",
-          "2": "Servizi e prodotti tra Kumani"
+          "2": "Regala, baratta, vendi: annunci controllati"
         },
         "2": {
           "1": "Kordata",
@@ -9076,15 +9094,33 @@
           "2": "Ci si incontra dal vivo, con pass QR"
         },
         "5": {
+          "1": "Proposte",
+          "2": "Le idee degli iscritti, votate dalla community"
+        },
+        "6": {
+          "1": "Kumano del Giorno",
+          "2": "Ogni giorno la storia di un iscritto"
+        },
+        "7": {
           "1": "Affinity",
           "2": "Il tuo archetipo e le affinità con gli amici"
         },
-        "6": {
+        "8": {
           "1": "Giochi",
           "2": "Veritas, Mosaic, Fabula e Nexus da fare insieme"
         }
       },
-      "notes": "KUMANI non è solo strumenti: è una community. Bacheca annunci, acquisti di gruppo con la Kordata, Banca del Tempo per scambiarsi aiuto, eventi dal vivo e giochi da fare con gli amici. Con le Proposte della community gli iscritti suggeriscono e sostengono le idee per migliorare KUMANI, e lo Staff risponde."
+      "notes": "KUMANI non è solo strumenti: è una community. Bacheca annunci controllati dallo Staff, acquisti di gruppo con la Kordata, Banca del Tempo per scambiarsi aiuto, eventi dal vivo, le Proposte con cui gli iscritti suggeriscono e votano le idee per migliorare KUMANI, il Kumano del Giorno che racconta la storia di un iscritto, e giochi da fare con gli amici.",
+      "tools": {
+        "1": "listings",
+        "2": "convivio",
+        "3": "timebank",
+        "4": "events",
+        "5": "proposte",
+        "6": "spotlight",
+        "7": "affinity",
+        "8": ""
+      }
     },
     "s12": {
       "title": "Due tipi di punti, regole pubbliche",
@@ -9218,7 +9254,9 @@
     "s18": {
       "title": "Il primo passo è tuo.\nIl resto lo facciamo insieme.",
       "contacts": "kumani.io  ·  support@kumani.io",
-      "notes": "Grazie. Il primo passo è vostro: registrarsi è gratis su kumani.io. Per qualsiasi domanda: support@kumani.io."
+      "notes": "Il primo passo è vostro, e costa zero: registrarsi è gratis su kumani.io, e il Pro si prova quindici giorni senza carta. Inquadrate il QR adesso: in un minuto siete dentro. Per qualsiasi domanda: support@kumani.io.",
+      "cta": "Registrati gratis oggi · Prova il Pro 15 giorni gratis",
+      "qr": "Inquadra e inizia"
     },
     "landing": {
       "title": "La tua Landing Page",
@@ -9331,6 +9369,137 @@
       },
       "badge": "Per tutti · da {price} a sorpresa · anche con KU Karma o KU Points",
       "notes": "KUMANI Sorpresa è aperta a tutti, anche a chi ha l’account gratuito. Si crea e si prova gratis; si paga solo per attivare il link da mandare, con la carta oppure con i punti: i KU Karma guadagnati usando KUMANI o i KU Points confermati. Chi riceve apre il regalo dal telefono senza iscriversi e può ringraziare: la risposta arriva nella dashboard di chi l’ha creata."
+    },
+    "hook1": {
+      "eyebrow": "ITALIA, 2025",
+      "big": "269 milioni di euro",
+      "text": "rubati online agli italiani in un solo anno.\nPiù di 700.000 € ogni giorno.",
+      "source": "Fonte: Polizia Postale, Report annuale 2025 · 27.085 casi di truffa e frode online",
+      "notes": "Partiamo da un numero. Nel 2025, secondo la Polizia Postale, agli italiani sono stati rubati online più di 269 milioni di euro: più di 700.000 euro al giorno, in oltre 27.000 casi. SMS della finta banca, finti operatori, siti falsi, investimenti truccati. Non succede solo agli altri: succede ai nostri genitori, ai nostri amici, a noi."
+    },
+    "hook2": {
+      "title": "E poi paghi un’app per ogni cosa.",
+      "sub": "Per difenderti e organizzarti: prezzi di listino di app tra le più scaricate (App Store Italia, ottobre 2026).",
+      "rows": {
+        "1": {
+          "1": "CamScanner",
+          "2": "fino a 69,99 € l’anno",
+          "3": "Scanner e PDF"
+        },
+        "2": {
+          "1": "Calm o Headspace",
+          "2": "fino a 69,99 € l’anno",
+          "3": "Oxygen e Neurobalance"
+        },
+        "3": {
+          "1": "Cozi, agenda di famiglia",
+          "2": "fino a 89,99 € l’anno",
+          "3": "MemoLife"
+        },
+        "4": {
+          "1": "Timesheet, ore di lavoro",
+          "2": "fino a 113,99 € l’anno",
+          "3": "Clienti e Lavori"
+        },
+        "5": {
+          "1": "App per fototessere",
+          "2": "fino a 23,49 € a foto",
+          "3": "Fototessera"
+        }
+      },
+      "tools": {
+        "1": "scanner",
+        "2": "oxygen",
+        "3": "memolife",
+        "4": "clienti",
+        "5": "fototessera"
+      },
+      "annual": {
+        "1": "69.99",
+        "2": "69.99",
+        "3": "89.99",
+        "4": "113.99",
+        "5": "0"
+      },
+      "total": "Solo queste {count} app: fino a {total} l’anno.",
+      "answer": "Con KUMANI Pro, tutto in uno: 149 € l’anno.",
+      "notes": "Il secondo problema: per ogni bisogno c’è un’app diversa, e quasi tutte si pagano. Questi sono prezzi veri, di listino, di app tra le più scaricate. Sommate solo queste e si arriva a centinaia di euro l’anno, con dieci password e dieci abbonamenti da ricordare. E quando serve, non ci si ricorda nemmeno quale app aprire."
+    },
+    "hook3": {
+      "title": "Un solo account. {tools} strumenti.\nDa 0 €.",
+      "cards": {
+        "1": {
+          "1": "0 €",
+          "2": "Protezione anti-truffa",
+          "3": "Verifica IBAN, Rete Anti-Truffa e Manuale: gratis per tutti, per sempre."
+        },
+        "2": {
+          "1": "49 €",
+          "2": "l’anno con Plus",
+          "3": "Agenda, spese, casa, auto, viaggi, documenti: per privati e famiglie."
+        },
+        "3": {
+          "1": "149 €",
+          "2": "l’anno con Pro",
+          "3": "Tutto il Plus e gli strumenti per chi lavora con i clienti. 15 giorni gratis."
+        }
+      },
+      "notes": "La risposta è KUMANI: un solo account, {tools} strumenti che si parlano tra loro. La protezione contro le truffe è gratis per tutti. Con 49 euro l’anno, meno di un euro a settimana, si organizza tutta la vita di casa. Con 149 euro c’è anche tutto quello che serve per lavorare. Adesso vediamo chi siamo e perché lo facciamo."
+    },
+    "kumi": {
+      "title": "Scrivi cosa ti serve. KUMI ti porta lì.",
+      "sub": "Nessun menu da imparare: si scrive con parole proprie, anche a voce.",
+      "search": "Scrivi cosa ti serve…",
+      "examples": {
+        "1": {
+          "1": "«Devo fare un bonifico a uno sconosciuto»",
+          "2": "Verifica IBAN"
+        },
+        "2": {
+          "1": "«Mi è arrivato un SMS strano»",
+          "2": "Rete Anti-Truffa"
+        },
+        "3": {
+          "1": "«Quando scade la mia carta d’identità?»",
+          "2": "Life Calendar"
+        },
+        "4": {
+          "1": "«Non riesco a dormire»",
+          "2": "Neurobalance"
+        }
+      },
+      "tools": {
+        "1": "verifica-iban",
+        "2": "rete-antitruffa",
+        "3": "life-calendar",
+        "4": "neurobalance"
+      },
+      "badge": "Nella Home, gratis per tutti · KUMI è la mascotte di KUMANI",
+      "notes": "Con tanti servizi, la domanda giusta non è «quale app apro?» ma «cosa mi serve?». Nella Home c’è un campo: si scrive il bisogno con parole proprie, anche a voce, e KUMI, la nostra mascotte, porta subito al servizio giusto. Chi non è pratico di tecnologia non deve imparare nessun menu."
+    },
+    "app": {
+      "title": "Un’app sul telefono, senza store",
+      "sub": "Si apre dal browser e si installa in un tocco.",
+      "rows": {
+        "1": {
+          "1": "Sulla schermata Home",
+          "2": "Un tocco e KUMANI è tra le app del telefono: niente App Store, niente aggiornamenti da scaricare."
+        },
+        "2": {
+          "1": "Notifiche che servono",
+          "2": "Scadenze, messaggi, nuove truffe confermate dalla community: arrivano sul telefono."
+        },
+        "3": {
+          "1": "Ovunque, con un account",
+          "2": "Telefono, tablet e computer: si riprende da dove si era rimasti."
+        },
+        "4": {
+          "1": "Nella tua lingua",
+          "2": "Sito, guide ed email in 7 lingue."
+        }
+      },
+      "badge": "Gratis da installare · funziona su Android, iPhone e computer",
+      "notes": "KUMANI non si scarica da uno store: si apre dal browser e con un tocco si aggiunge alla schermata Home, come un’app. Gli aggiornamenti arrivano da soli. Le notifiche avvisano di scadenze, messaggi e nuove truffe confermate dalla community. Lo stesso account funziona su telefono, tablet e computer."
     }
   },
   "privacyPage": {

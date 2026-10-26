@@ -2,6 +2,7 @@
 
 import PptxGenJS from 'pptxgenjs'
 import JSZip from 'jszip'
+import QRCode from 'qrcode'
 import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import * as Lucide from 'lucide-react'
@@ -10,6 +11,9 @@ import type { DeckCatalogGroup, DeckPlan, DeckVariant } from '@/lib/deck/types'
 // Presentazione KUMANI creata nel browser al momento del download: testi
 // ufficiali (namespace "deckTexts", correggibili dall'Area Traduttori),
 // 19 slide con transizioni, animazioni d'entrata e note per chi presenta.
+// Apertura d'urto (truffe, troppe app, la risposta) prima della copertina, se
+// la lingua ha già quei testi. Le righe legate a un servizio («tools») si
+// mostrano solo se il servizio è acceso dall'Admin.
 // Versione Full: in più, dopo la Sicurezza, tutti i servizi uno per uno
 // (una slide per gruppo, come la pagina Servizi) con il bollino del piano.
 
@@ -71,9 +75,13 @@ export async function buildDeck(
   landingPassEur: number | null = null,
   donationPercentBp: number | null = null,
   variant: DeckVariant = 'lite',
-  catalog: DeckCatalogGroup[] = []
+  catalog: DeckCatalogGroup[] = [],
+  enabledTools: string[] | null = null
 ): Promise<Blob> {
   const S: T = arrays(rawTexts)
+  // Righe di una slide che compaiono solo con il loro servizio acceso
+  const on = enabledTools ? new Set(enabledTools) : null
+  const keep = <R,>(rows: R[], tools?: string[]) => rows.filter((_, i) => !on || !tools?.[i] || on.has(tools[i]))
   const full = variant === 'full' && catalog.length > 0
   // {price} = Pass più economico, con il formato di prezzo della lingua
   const price = new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', minimumFractionDigits: minPassEur % 1 ? 2 : 0 }).format(minPassEur)
@@ -138,8 +146,60 @@ export async function buildDeck(
   }
   const sec: string[] = S.sec
 
-  // 1. Copertina
   pres.addSection({ title: sec[0] })
+
+  // 0a. Il colpo: quanto si perde con le truffe online
+  if (S.hook1) {
+    const s = pres.addSlide({ masterName: 'KUMANI copertina', sectionTitle: sec[0] })
+    Tx(s, S.hook1.eyebrow, { x: 0.9, y: 1.35, w: 11.5, h: 0.45, fontSize: 16, bold: true, charSpacing: 6, color: C.accent1, objectName: 'a1-eye' })
+    Tx(s, S.hook1.big, { x: 0.9, y: 1.95, w: 11.6, h: 1.7, fontFace: 'Cambria', fontSize: fs(80), bold: true, color: C.accent2, valign: 'middle', objectName: 'a2-big' })
+    Tx(s, S.hook1.text, { x: 0.9, y: 3.85, w: 11.0, h: 1.4, fontSize: fs(28), color: C.background1, valign: 'top', objectName: 'a3-testo' })
+    s.addShape(pres.ShapeType.rect, { x: 0.9, y: 5.75, w: 1.2, h: 0.06, fill: { color: HEX.red }, line: { type: 'none' }, objectName: 'a4-riga' } as any)
+    Tx(s, S.hook1.source, { x: 0.9, y: 5.95, w: 11.0, h: 0.45, fontSize: 12, italic: true, color: C.accent4, objectName: 'a4-fonte' })
+    s.addNotes(S.hook1.notes)
+  }
+
+  // 0b. Il secondo problema: un'app a pagamento per ogni cosa
+  if (S.hook2) {
+    const s = pres.addSlide({ masterName: 'KUMANI scuro', sectionTitle: sec[0] })
+    titled(s, S.hook2.title, S.hook2.sub)
+    const all = (S.hook2.rows as string[][]).map((r, i) => ({ r, annual: Number(S.hook2.annual?.[i] ?? 0) }))
+    const rows = keep(all, S.hook2.tools)
+    const step = Math.min(0.78, 3.6 / Math.max(rows.length, 1))
+    for (let i = 0; i < rows.length; i++) {
+      const [app, price, ours] = rows[i].r, y = 1.95 + i * step, h = step - 0.12
+      card(s, 0.6, y, 12.1, h, `a${i + 1}-card${i}`, C.text2)
+      Tx(s, app, { x: 0.85, y, w: 4.2, h, fontSize: fs(17), bold: true, color: C.background1, valign: 'middle', objectName: `a${i + 1}-app${i}` })
+      Tx(s, price, { x: 5.0, y, w: 3.2, h, fontSize: fs(16), bold: true, color: 'FF8A7A', valign: 'middle', objectName: `a${i + 1}-p${i}` })
+      s.addImage({ data: await icon('ArrowRight', HEX.gold), x: 8.3, y: y + h / 2 - 0.17, w: 0.34, h: 0.34, objectName: `a${i + 1}-fr${i}` } as any)
+      Tx(s, ours, { x: 8.85, y, w: 3.7, h, fontSize: fs(16), bold: true, color: C.accent2, valign: 'middle', objectName: `a${i + 1}-k${i}` })
+    }
+    const yearly = rows.filter((x) => x.annual > 0)
+    const total = new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(Math.floor(yearly.reduce((t, x) => t + x.annual, 0)))
+    const n = rows.length + 1, ty = 1.95 + rows.length * step + 0.4
+    Tx(s, String(S.hook2.total).replace('{count}', String(yearly.length)).replace('{total}', total), { x: 0.6, y: ty, w: 12.1, h: 0.6, fontSize: fs(26), bold: true, color: C.background1, objectName: `a${n}-totale` })
+    card(s, 0.6, ty + 0.8, 12.1, 0.85, `a${n + 1}-rispcard`, C.accent1)
+    Tx(s, S.hook2.answer, { x: 0.9, y: ty + 0.8, w: 11.6, h: 0.85, fontSize: fs(26), bold: true, color: C.text1, valign: 'middle', objectName: `a${n + 1}-risposta` })
+    s.addNotes(S.hook2.notes)
+  }
+
+  // 0c. La risposta: un account, tutti gli strumenti, prezzi chiari
+  if (S.hook3) {
+    const s = pres.addSlide({ masterName: 'KUMANI scuro', sectionTitle: sec[0] })
+    s.addImage({ path: LOGO, x: 0.6, y: 0.55, w: 1.0, h: 1.0, objectName: 'a1-logo' } as any)
+    Tx(s, S.hook3.title, { x: 1.85, y: 0.45, w: 10.9, h: 1.3, fontFace: 'Cambria', fontSize: fs(38), bold: true, color: C.background1, valign: 'middle', objectName: 'a1-titolo' })
+    const w = 3.85, gap = 0.27, y = 2.35, h = 3.2
+    for (let i = 0; i < 3; i++) {
+      const x = 0.6 + i * (w + gap), [big, head, body] = S.hook3.cards[i], hi = i === 2
+      card(s, x, y, w, h, `a${i + 2}-card${i}`, hi ? C.accent1 : C.text2)
+      Tx(s, big, { x: x + 0.3, y: y + 0.3, w: w - 0.6, h: 1.25, fontFace: 'Cambria', fontSize: 60, bold: true, color: hi ? C.text1 : C.accent2, valign: 'middle', objectName: `a${i + 2}-big${i}` })
+      Tx(s, head, { x: x + 0.3, y: y + 1.6, w: w - 0.6, h: 0.5, fontSize: fs(19), bold: true, color: hi ? C.text1 : C.background1, objectName: `a${i + 2}-h${i}` })
+      Tx(s, body, { x: x + 0.3, y: y + 2.15, w: w - 0.6, h: 1.6, fontSize: fs(15), color: hi ? C.text1 : C.accent3, valign: 'top', objectName: `a${i + 2}-d${i}` })
+    }
+    s.addNotes(S.hook3.notes)
+  }
+
+  // 1. Copertina
   {
     const s = pres.addSlide({ masterName: 'KUMANI copertina', sectionTitle: sec[0] })
     s.addImage({ path: `${IMG}/circle.jpg`, x: 7.0, y: 0, w: 6.333, h: 7.5, objectName: 'a1-foto' } as any)
@@ -255,6 +315,52 @@ export async function buildDeck(
     s.addNotes(S.s7.notes)
   }
 
+  // 7b. «Scrivi cosa ti serve»: KUMI porta al servizio giusto
+  if (S.kumi) {
+    const s = pres.addSlide({ masterName: 'KUMANI chiaro', sectionTitle: sec[2] })
+    titled(s, S.kumi.title, S.kumi.sub)
+    s.addImage({ path: `${IMG}/kumi.png`, x: 9.45, y: 1.75, w: 3.25, h: 3.58, objectName: 'a1-kumi' } as any)
+    // Il campo di ricerca della Home
+    s.addShape(pres.ShapeType.roundRect, { x: 0.6, y: 1.95, w: 8.4, h: 0.72, rectRadius: 0.36, fill: { color: C.background1 }, line: { color: HEX.gold, width: 1.5 }, shadow: SH(), objectName: 'a2-campo' } as any)
+    s.addImage({ data: await icon('Search', HEX.gold), x: 0.85, y: 2.11, w: 0.4, h: 0.4, objectName: 'a2-lente' } as any)
+    Tx(s, S.kumi.search, { x: 1.4, y: 1.95, w: 7.3, h: 0.72, fontSize: fs(17), italic: true, color: C.accent4, valign: 'middle', objectName: 'a2-scrivi' })
+    const rows = keep(S.kumi.examples as string[][], S.kumi.tools)
+    for (let i = 0; i < rows.length; i++) {
+      const y = 2.95 + i * 0.8
+      card(s, 0.6, y, 8.4, 0.66, `a${i + 3}-card${i}`)
+      Tx(s, rows[i][0], { x: 0.85, y, w: 4.9, h: 0.66, fontSize: fs(15), italic: true, color: C.text1, valign: 'middle', objectName: `a${i + 3}-q${i}` })
+      s.addImage({ data: await icon('ArrowRight', HEX.gold), x: 5.8, y: y + 0.16, w: 0.34, h: 0.34, objectName: `a${i + 3}-fr${i}` } as any)
+      Tx(s, rows[i][1], { x: 6.3, y, w: 2.55, h: 0.66, fontSize: fs(15), bold: true, color: C.accent1, valign: 'middle', objectName: `a${i + 3}-s${i}` })
+    }
+    card(s, 0.6, 6.25, 12.1, 0.55, `a${rows.length + 3}-badge`, C.accent3)
+    Tx(s, S.kumi.badge, { x: 0.85, y: 6.27, w: 11.6, h: 0.5, fontSize: fs(15), bold: true, color: C.text1, valign: 'middle', objectName: `a${rows.length + 3}-badgetx` })
+    s.addNotes(S.kumi.notes)
+  }
+
+  // 7c. Un'app sul telefono, senza store
+  if (S.app) {
+    const s = pres.addSlide({ masterName: 'KUMANI scuro', sectionTitle: sec[2] })
+    titled(s, S.app.title, S.app.sub)
+    const ics = ['Smartphone', 'BellRing', 'MonitorSmartphone', 'Languages']
+    for (let i = 0; i < 4; i++) {
+      const y = 1.95 + i * 1.08
+      await circleIcon(s, ics[i], 0.6, y, 0.72, C.accent1, HEX.ink, `a${i + 2}-ic${i}`)
+      Tx(s, [
+        { text: S.app.rows[i][0], options: { bold: true, color: C.background1, fontSize: fs(18), breakLine: true } },
+        { text: S.app.rows[i][1], options: { color: C.accent3, fontSize: fs(14) } },
+      ], { x: 1.55, y: y - 0.08, w: 6.6, h: 1.0, valign: 'top', objectName: `a${i + 2}-tx${i}` })
+    }
+    card(s, 0.6, 6.25, 7.55, 0.55, 'a6-badge', C.accent1)
+    Tx(s, S.app.badge, { x: 0.8, y: 6.27, w: 7.2, h: 0.5, fontSize: fs(15), bold: true, color: C.text1, valign: 'middle', objectName: 'a6-badgetx' })
+    // Telefono con l'icona di KUMANI sulla schermata Home
+    s.addShape(pres.ShapeType.roundRect, { x: 9.05, y: 1.45, w: 3.15, h: 5.2, rectRadius: 0.3, fill: { color: '000000' }, line: { color: HEX.gold, width: 1.5 }, shadow: SH(), objectName: 'a1-tel' } as any)
+    s.addShape(pres.ShapeType.roundRect, { x: 9.3, y: 1.6, w: 2.65, h: 4.9, rectRadius: 0.18, fill: { color: C.text2 }, line: { type: 'none' }, objectName: 'a1-schermo' } as any)
+    s.addShape(pres.ShapeType.roundRect, { x: 10.17, y: 3.15, w: 0.9, h: 0.9, rectRadius: 0.2, fill: { color: C.text1 }, line: { color: HEX.gold, width: 1 }, objectName: 'a1-icona' } as any)
+    s.addImage({ path: LOGO, x: 10.25, y: 3.23, w: 0.74, h: 0.74, objectName: 'a1-iconalogo' } as any)
+    Tx(s, 'KUMANI', { x: 9.3, y: 4.1, w: 2.65, h: 0.35, fontSize: 12, bold: true, align: 'center', color: C.background1, objectName: 'a1-nome' })
+    s.addNotes(S.app.notes)
+  }
+
   // 8. Piani
   pres.addSection({ title: sec[3] })
   {
@@ -285,12 +391,15 @@ export async function buildDeck(
     s.addImage({ path: `${IMG}/cafe.jpg`, x: 0, y: 0, w: 5.0, h: 7.5, objectName: 'a1-foto' } as any)
     Tx(s, S.s9.title, { x: 5.6, y: 0.42, w: 7.2, h: 0.8, fontFace: 'Cambria', fontSize: fs(30), bold: true, color: C.text1, valign: 'middle' })
     Tx(s, S.s9.sub, { x: 5.6, y: 1.18, w: 7.2, h: 0.45, fontSize: fs(16), color: C.accent4 })
-    const ics = ['Utensils', 'Stamp', 'FileText', 'Receipt', 'Package', 'QrCode']
-    for (let i = 0; i < 6; i++) {
-      const x = 5.6 + (i % 2) * 3.6, y = 1.95 + Math.floor(i / 2) * 1.5
-      await circleIcon(s, ics[i], x, y, 0.7, C.text1, HEX.goldBright, `a${i + 2}-ic${i}`)
-      Tx(s, S.s9.rows[i][0], { x: x + 0.85, y: y - 0.02, w: 2.65, h: 0.4, fontSize: fs(17), bold: true, color: C.text1, objectName: `a${i + 2}-t${i}` })
-      Tx(s, S.s9.rows[i][1], { x: x + 0.85, y: y + 0.38, w: 2.65, h: 0.95, fontSize: fs(14), color: C.accent4, valign: 'top', objectName: `a${i + 2}-d${i}` })
+    // Icone nell'ordine dei testi (6 righe nelle lingue non ancora aggiornate)
+    const icsAll = S.s9.rows.length > 6 ? ['Utensils', 'Stamp', 'FileText', 'Store', 'Link2', 'Receipt', 'Package', 'QrCode'] : ['Utensils', 'Stamp', 'FileText', 'Receipt', 'Package', 'QrCode']
+    const rows = keep((S.s9.rows as string[][]).map((r, i) => ({ r, ic: icsAll[i] ?? 'Sparkles' })), S.s9.tools)
+    const step = Math.min(1.5, 4.95 / Math.max(Math.ceil(rows.length / 2), 1))
+    for (let i = 0; i < rows.length; i++) {
+      const x = 5.6 + (i % 2) * 3.6, y = 1.95 + Math.floor(i / 2) * step
+      await circleIcon(s, rows[i].ic, x, y, 0.7, C.text1, HEX.goldBright, `a${i + 2}-ic${i}`)
+      Tx(s, rows[i].r[0], { x: x + 0.85, y: y - 0.02, w: 2.65, h: 0.4, fontSize: fs(16), bold: true, color: C.text1, objectName: `a${i + 2}-t${i}` })
+      Tx(s, rows[i].r[1], { x: x + 0.85, y: y + 0.36, w: 2.65, h: step - 0.45, fontSize: fs(13), color: C.accent4, valign: 'top', objectName: `a${i + 2}-d${i}` })
     }
     s.addNotes(S.s9.notes)
   }
@@ -437,12 +546,14 @@ export async function buildDeck(
     s.addImage({ path: `${IMG}/toast.jpg`, x: 0, y: 0, w: 5.0, h: 7.5, objectName: 'a1-foto' } as any)
     Tx(s, S.s11.title, { x: 5.6, y: 0.42, w: 7.2, h: 0.8, fontFace: 'Cambria', fontSize: fs(30), bold: true, color: C.text1, valign: 'middle' })
     Tx(s, S.s11.sub, { x: 5.6, y: 1.18, w: 7.2, h: 0.45, fontSize: fs(16), italic: true, color: C.accent1 })
-    const ics = ['ClipboardList', 'ShoppingBasket', 'Clock', 'Ticket', 'Sparkles', 'Dices']
-    for (let i = 0; i < 6; i++) {
-      const x = 5.6 + (i % 2) * 3.6, y = 1.95 + Math.floor(i / 2) * 1.5
-      await circleIcon(s, ics[i], x, y, 0.7, C.accent3, HEX.gold, `a${i + 2}-ic${i}`)
-      Tx(s, S.s11.rows[i][0], { x: x + 0.85, y: y - 0.02, w: 2.65, h: 0.4, fontSize: fs(17), bold: true, color: C.text1, objectName: `a${i + 2}-t${i}` })
-      Tx(s, S.s11.rows[i][1], { x: x + 0.85, y: y + 0.38, w: 2.65, h: 0.95, fontSize: fs(14), color: C.accent4, valign: 'top', objectName: `a${i + 2}-d${i}` })
+    const icsAll = S.s11.rows.length > 6 ? ['ClipboardList', 'ShoppingBasket', 'Clock', 'Ticket', 'Lightbulb', 'Star', 'Sparkles', 'Dices'] : ['ClipboardList', 'ShoppingBasket', 'Clock', 'Ticket', 'Sparkles', 'Dices']
+    const rows = keep((S.s11.rows as string[][]).map((r, i) => ({ r, ic: icsAll[i] ?? 'Sparkles' })), S.s11.tools)
+    const step = Math.min(1.5, 4.95 / Math.max(Math.ceil(rows.length / 2), 1))
+    for (let i = 0; i < rows.length; i++) {
+      const x = 5.6 + (i % 2) * 3.6, y = 1.95 + Math.floor(i / 2) * step
+      await circleIcon(s, rows[i].ic, x, y, 0.7, C.accent3, HEX.gold, `a${i + 2}-ic${i}`)
+      Tx(s, rows[i].r[0], { x: x + 0.85, y: y - 0.02, w: 2.65, h: 0.4, fontSize: fs(16), bold: true, color: C.text1, objectName: `a${i + 2}-t${i}` })
+      Tx(s, rows[i].r[1], { x: x + 0.85, y: y + 0.36, w: 2.65, h: step - 0.45, fontSize: fs(13), color: C.accent4, valign: 'top', objectName: `a${i + 2}-d${i}` })
     }
     s.addNotes(S.s11.notes)
   }
@@ -593,9 +704,21 @@ export async function buildDeck(
     const s = pres.addSlide({ masterName: 'KUMANI copertina', sectionTitle: sec[6] })
     s.addImage({ path: `${IMG}/walk-together.jpg`, x: 0, y: 0, w: 13.333, h: 7.5, objectName: 'a1-foto' } as any)
     s.addShape(pres.ShapeType.rect, { x: 0, y: 0, w: 13.333, h: 7.5, fill: { color: C.text1, transparency: 35 }, line: { type: 'none' }, objectName: 'a1-velo' } as any)
-    s.addImage({ path: LOGO, x: 5.82, y: 0.9, w: 1.7, h: 1.7, objectName: 'a2-logo' } as any)
-    Tx(s, S.s18.title, { x: 1.0, y: 2.85, w: 11.33, h: 1.9, fontFace: 'Cambria', fontSize: fs(44), bold: true, align: 'center', color: C.background1, valign: 'middle', objectName: 'a3-titolo' })
-    Tx(s, S.s18.contacts, { x: 1.2, y: 5.05, w: 10.93, h: 0.6, fontSize: 22, align: 'center', color: C.accent2, objectName: 'a4-contatti' })
+    s.addImage({ path: LOGO, x: S.s18.cta ? 1.0 : 5.82, y: 0.9, w: 1.7, h: 1.7, objectName: 'a2-logo' } as any)
+    if (!S.s18.cta) Tx(s, S.s18.title, { x: 1.0, y: 2.85, w: 11.33, h: 1.9, fontFace: 'Cambria', fontSize: fs(44), bold: true, align: 'center', color: C.background1, valign: 'middle', objectName: 'a3-titolo' })
+    if (S.s18.cta) {
+      // Invito all'azione e QR verso kumani.io
+      Tx(s, S.s18.title, { x: 1.0, y: 2.7, w: 8.2, h: 1.9, fontFace: 'Cambria', fontSize: fs(40), bold: true, color: C.background1, valign: 'middle', objectName: 'a3-titolo2' })
+      card(s, 1.0, 4.75, 8.2, 0.75, 'a4-cta', C.accent1)
+      Tx(s, S.s18.cta, { x: 1.2, y: 4.75, w: 7.8, h: 0.75, fontSize: fs(20), bold: true, color: C.text1, valign: 'middle', objectName: 'a4-ctatx' })
+      Tx(s, S.s18.contacts, { x: 1.0, y: 5.7, w: 8.2, h: 0.5, fontSize: 20, color: C.accent2, objectName: 'a5-contatti' })
+      const qr = await QRCode.toDataURL(`https://kumani.io/${locale}`, { margin: 1, width: 600, color: { dark: '#171717', light: '#FFFFFF' } })
+      card(s, 9.85, 2.75, 2.6, 3.05, 'a6-qrcard', C.background1)
+      s.addImage({ data: 'image/png;base64,' + qr.split(',')[1], x: 10.05, y: 2.95, w: 2.2, h: 2.2, objectName: 'a6-qr' } as any)
+      Tx(s, S.s18.qr, { x: 9.85, y: 5.22, w: 2.6, h: 0.45, fontSize: 14, bold: true, align: 'center', color: C.text1, objectName: 'a6-qrtx' })
+    } else {
+      Tx(s, S.s18.contacts, { x: 1.2, y: 5.05, w: 10.93, h: 0.6, fontSize: 22, align: 'center', color: C.accent2, objectName: 'a4-contatti' })
+    }
     s.addNotes(S.s18.notes)
   }
 
