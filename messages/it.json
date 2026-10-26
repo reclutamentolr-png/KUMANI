@@ -13170,7 +13170,13 @@
     "intro_trips": "Viaggi di gruppo con itinerario e checklist, serate da organizzare con un link e gli eventi della community.",
     "need_unwind": "Ho bisogno di staccare",
     "short_unwind": "Staccare",
-    "intro_unwind": "Concentrazione a intervalli e mandala da colorare: per staccare la testa e ritrovare la calma."
+    "intro_unwind": "Concentrazione a intervalli e mandala da colorare: per staccare la testa e ritrovare la calma.",
+    "need_documents": "Devo sbrigare documenti e pratiche",
+    "short_documents": "Documenti e pratiche",
+    "intro_documents": "Scansionare un foglio, firmare un PDF, fare la fototessera, mandare un documento in sicurezza e tenere le ricevute: le pratiche di tutti i giorni dal telefono.",
+    "need_family": "Ho bambini e una famiglia da organizzare",
+    "short_family": "Bambini e famiglia",
+    "intro_family": "Un angolo sicuro per i più piccoli, l’agenda degli impegni di famiglia, la casa sotto controllo e gli oggetti da ritrovare."
   },
   "nexus": {
     "back": "Torna a Svago",

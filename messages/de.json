@@ -13170,7 +13170,13 @@
     "intro_trips": "Gruppenreisen mit Reiseplan und Checkliste, Abende, die du mit einem Link organisierst, und die Events der Community.",
     "need_unwind": "Ich muss abschalten",
     "short_unwind": "Abschalten",
-    "intro_unwind": "Konzentration in Intervallen und Mandalas zum Ausmalen: um den Kopf frei zu bekommen und zur Ruhe zu kommen."
+    "intro_unwind": "Konzentration in Intervallen und Mandalas zum Ausmalen: um den Kopf frei zu bekommen und zur Ruhe zu kommen.",
+    "need_documents": "Ich muss Dokumente und Formalitäten erledigen",
+    "short_documents": "Dokumente und Formalitäten",
+    "intro_documents": "Ein Blatt scannen, ein PDF unterschreiben, ein Passfoto machen, ein Dokument sicher senden und Belege aufbewahren: der Papierkram des Alltags vom Handy aus.",
+    "need_family": "Ich habe Kinder und eine Familie zu organisieren",
+    "short_family": "Kinder und Familie",
+    "intro_family": "Eine sichere Ecke für die Kleinen, der Familienkalender, das Zuhause im Griff und Dinge, die man wiederfinden muss."
   },
   "nexus": {
     "back": "Zurück zu Freizeit",

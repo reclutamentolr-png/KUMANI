@@ -22,7 +22,8 @@ export async function buildHomeNeeds(hrefFor: (toolName: string) => string = (na
   const toolsByName = new Map(marketTools.map((tool) => [tool.toolName, tool]))
   // Community: il piano della sezione; Eventi e Sorprese si guardano gratis
   const planOf = { ...(await getToolPlanOf([...marketTools.map((tool) => tool.toolName), ...Object.keys(COMMUNITY)])), events: 'free', sorprese: 'free' } as Record<string, RequiredPlan>
-  return HOME_NEEDS.map((need) => ({
+  // «Bambini e famiglia» compare quando l'Angolo Bambini è acceso
+  return HOME_NEEDS.filter((need) => need.key !== 'family' || !disabled.includes('angolo-bambini')).map((need) => ({
     key: need.key,
     icon: need.icon,
     label: tNeeds(`need_${need.key}`),

@@ -13170,7 +13170,13 @@
     "intro_trips": "Voyages en groupe avec itinéraire et checklist, soirées à organiser avec un lien et les événements de la communauté.",
     "need_unwind": "J’ai besoin de décompresser",
     "short_unwind": "Décompresser",
-    "intro_unwind": "Concentration par intervalles et mandalas à colorier : pour se vider la tête et retrouver le calme."
+    "intro_unwind": "Concentration par intervalles et mandalas à colorier : pour se vider la tête et retrouver le calme.",
+    "need_documents": "Je dois gérer des documents et des démarches",
+    "short_documents": "Documents et démarches",
+    "intro_documents": "Scanner une feuille, signer un PDF, faire une photo d’identité, envoyer un document en sécurité et garder tes reçus : les démarches du quotidien depuis ton téléphone.",
+    "need_family": "J’ai des enfants et une famille à organiser",
+    "short_family": "Enfants et famille",
+    "intro_family": "Un coin sûr pour les petits, l’agenda de la famille, la maison sous contrôle et les objets à retrouver."
   },
   "nexus": {
     "back": "Retour à Loisirs",

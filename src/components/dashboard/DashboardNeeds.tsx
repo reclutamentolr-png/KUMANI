@@ -1,7 +1,7 @@
 'use client'
 
 import { Fragment, useEffect, useRef, useState } from 'react'
-import { ArrowRight, HandPlatter, Hourglass, Star, Tag, BriefcaseBusiness, CalendarDays, Clapperboard, ChevronDown, Gamepad2, Gift, HeartHandshake, HeartPulse, Plane, Leaf, Megaphone, PiggyBank, ShieldCheck, Smartphone, Store, Users, type LucideIcon } from 'lucide-react'
+import { Baby, FileText, ArrowRight, HandPlatter, Hourglass, Star, Tag, BriefcaseBusiness, CalendarDays, Clapperboard, ChevronDown, Gamepad2, Gift, HeartHandshake, HeartPulse, Plane, Leaf, Megaphone, PiggyBank, ShieldCheck, Smartphone, Store, Users, type LucideIcon } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import PlanTag from '@/components/PlanTag'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
@@ -14,7 +14,7 @@ import { revealPanel } from '@/lib/revealPanel'
 // chiudere (resta una riga sola, che la riapre) e la scelta si ricorda su
 // questo dispositivo.
 
-const NEED_ICON: Record<string, LucideIcon> = { ShieldCheck, CalendarDays, PiggyBank, Store, Megaphone, Clapperboard, HeartHandshake, HeartPulse, Plane, BriefcaseBusiness, Users, Gamepad2, Leaf, Gift }
+const NEED_ICON: Record<string, LucideIcon> = { Baby, FileText, ShieldCheck, CalendarDays, PiggyBank, Store, Megaphone, Clapperboard, HeartHandshake, HeartPulse, Plane, BriefcaseBusiness, Users, Gamepad2, Leaf, Gift }
 const EXTRA_ICON: Record<string, LucideIcon> = { Gift, Users, Tag, HandPlatter, Hourglass, Star }
 const HIDDEN_KEY = 'kumani_dash_needs_hidden'
 

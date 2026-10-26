@@ -10,6 +10,8 @@ export const HOME_NEEDS = [
   { key: 'organize', icon: 'CalendarDays', items: ['life-calendar', 'fototessera', 'memolife', 'findo', 'hopla'] },
   { key: 'trips', icon: 'Plane', items: ['travel', 'convivium', 'events'] },
   { key: 'money', icon: 'PiggyBank', items: ['spendly', 'fincheck', 'casa', 'garage', 'digital-receipt'] },
+  // Documenti e pratiche: firmare, scansionare, fototessera, mandare documenti in sicurezza
+  { key: 'documents', icon: 'FileText', items: ['scanner', 'firma-pdf', 'fototessera', 'documento-sicuro', 'testo-protetto', 'digital-receipt'] },
   { key: 'business', icon: 'Store', items: ['landing-page', 'tempus', 'shop', 'menu', 'fidelity', 'offermaker', 'clienti', 'listings'] },
   { key: 'promote', icon: 'Megaphone', items: ['qr-generator', 'qr-code-pro', 'link-in-bio', 'whatsapp-messages', 'firma-email', 'spotlight'] },
   // KUMANI Social: il kit per chi inizia sui social (stessi servizi del servizio unito)
@@ -19,6 +21,8 @@ export const HOME_NEEDS = [
   // Le sezioni della Community, da aggiungere a «I tuoi servizi» come gli altri
   { key: 'community', icon: 'HeartHandshake', items: ['listings', 'convivio', 'events', 'timebank', 'proposte', 'spotlight'] },
   { key: 'games', icon: 'Gamepad2', items: ['nexus', 'veritas', 'fabula', 'mosaic', 'angolo-bambini'] },
+  // Bambini e famiglia: si vede solo con l'Angolo Bambini acceso (homeNeedsServer)
+  { key: 'family', icon: 'Baby', items: ['angolo-bambini', 'life-calendar', 'casa', 'findo'] },
   // Salute e benessere (la chiave resta «relax»: è già salvata nelle scelte degli iscritti)
   { key: 'relax', icon: 'HeartPulse', items: ['aureya', 'cronobioma', 'neurobalance', 'oxygen'] },
   { key: 'unwind', icon: 'Leaf', items: ['focus', 'mandala'] },

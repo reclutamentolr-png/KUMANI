@@ -13170,7 +13170,13 @@
     "intro_trips": "Viajes en grupo con itinerario y checklist, veladas que organizar con un enlace y los eventos de la comunidad.",
     "need_unwind": "Necesito desconectar",
     "short_unwind": "Desconectar",
-    "intro_unwind": "Concentración por intervalos y mandalas para colorear: para despejar la mente y recuperar la calma."
+    "intro_unwind": "Concentración por intervalos y mandalas para colorear: para despejar la mente y recuperar la calma.",
+    "need_documents": "Tengo que resolver documentos y trámites",
+    "short_documents": "Documentos y trámites",
+    "intro_documents": "Escanear una hoja, firmar un PDF, hacer la foto de carné, enviar un documento de forma segura y guardar los recibos: los trámites de cada día desde el móvil.",
+    "need_family": "Tengo niños y una familia que organizar",
+    "short_family": "Niños y familia",
+    "intro_family": "Un rincón seguro para los pequeños, la agenda de la familia, la casa bajo control y los objetos que hay que encontrar."
   },
   "nexus": {
     "back": "Volver a Ocio",

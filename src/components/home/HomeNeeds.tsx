@@ -1,7 +1,7 @@
 'use client'
 
 import { Fragment, useRef, useState } from 'react'
-import { ArrowRight, HandPlatter, Hourglass, Star, Tag, BriefcaseBusiness, CalendarDays, Clapperboard, Gamepad2, Gift, HeartHandshake, HeartPulse, Plane, Leaf, Megaphone, PiggyBank, ShieldCheck, Smartphone, Store, Users, type LucideIcon } from 'lucide-react'
+import { Baby, FileText, ArrowRight, HandPlatter, Hourglass, Star, Tag, BriefcaseBusiness, CalendarDays, Clapperboard, Gamepad2, Gift, HeartHandshake, HeartPulse, Plane, Leaf, Megaphone, PiggyBank, ShieldCheck, Smartphone, Store, Users, type LucideIcon } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 import type { HomeNeed } from '@/lib/homeNeeds'
@@ -11,7 +11,7 @@ import { revealPanel } from '@/lib/revealPanel'
 // compaiono i servizi giusti, ognuno con la sua pagina: una porta d'ingresso
 // più semplice della griglia di tutti i servizi.
 
-const NEED_ICON: Record<string, LucideIcon> = { ShieldCheck, CalendarDays, PiggyBank, Store, Megaphone, Clapperboard, HeartHandshake, HeartPulse, Plane, BriefcaseBusiness, Users, Gamepad2, Leaf, Gift }
+const NEED_ICON: Record<string, LucideIcon> = { Baby, FileText, ShieldCheck, CalendarDays, PiggyBank, Store, Megaphone, Clapperboard, HeartHandshake, HeartPulse, Plane, BriefcaseBusiness, Users, Gamepad2, Leaf, Gift }
 const EXTRA_ICON: Record<string, LucideIcon> = { Gift, Users, Tag, HandPlatter, Hourglass, Star }
 
 export default function HomeNeeds({

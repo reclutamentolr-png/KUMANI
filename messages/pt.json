@@ -13170,7 +13170,13 @@
     "intro_trips": "Viagens em grupo com itinerário e checklist, serões para organizar com um link e os eventos da comunidade.",
     "need_unwind": "Preciso de desligar",
     "short_unwind": "Desligar",
-    "intro_unwind": "Concentração por intervalos e mandalas para colorir: para desanuviar a cabeça e reencontrar a calma."
+    "intro_unwind": "Concentração por intervalos e mandalas para colorir: para desanuviar a cabeça e reencontrar a calma.",
+    "need_documents": "Tenho documentos e burocracias para tratar",
+    "short_documents": "Documentos e burocracias",
+    "intro_documents": "Digitalizar uma folha, assinar um PDF, tirar a fotografia tipo passe, enviar um documento em segurança e guardar os recibos: as burocracias do dia a dia no telemóvel.",
+    "need_family": "Tenho filhos e uma família para organizar",
+    "short_family": "Crianças e família",
+    "intro_family": "Um cantinho seguro para os mais pequenos, a agenda da família, a casa sob controlo e os objetos a encontrar."
   },
   "nexus": {
     "back": "Voltar a Lazer",

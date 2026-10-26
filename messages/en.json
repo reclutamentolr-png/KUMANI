@@ -13170,7 +13170,13 @@
     "intro_trips": "Group trips with itinerary and checklist, evenings to organise with a link and the community’s events.",
     "need_unwind": "I need to unwind",
     "short_unwind": "Unwind",
-    "intro_unwind": "Focus in short sessions and mandalas to colour: to clear your head and find your calm again."
+    "intro_unwind": "Focus in short sessions and mandalas to colour: to clear your head and find your calm again.",
+    "need_documents": "I need to deal with documents and paperwork",
+    "short_documents": "Documents and paperwork",
+    "intro_documents": "Scan a sheet, sign a PDF, take an ID photo, send a document safely and keep your receipts: everyday paperwork from your phone.",
+    "need_family": "I have kids and a family to organise",
+    "short_family": "Kids and family",
+    "intro_family": "A safe corner for the little ones, the family schedule, your home under control and things to find again."
   },
   "nexus": {
     "back": "Back to Fun",
