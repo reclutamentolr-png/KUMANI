@@ -21,6 +21,7 @@ import ShareButton from '@/components/ShareButton'
 import { getTranslations } from 'next-intl/server'
 import { resolveBioTheme, brandBioVars } from '@/lib/linkInBioThemes'
 import BioThemeScene from '@/components/BioThemeScene'
+import LogoCircle from '@/components/LogoCircle'
 import { normalizeLinkUrl } from '@/lib/linkUtils'
 import PublicPageOffline from '@/components/PublicPageOffline'
 
@@ -172,8 +173,7 @@ export default async function LinkInBioPublicPage({ params }: { params: Promise<
           {/* Avatar */}
           <div className="flex flex-col items-center text-center mb-8">
             {business?.logoUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element -- logo della Scheda attività (storage pubblico)
-              <img src={business.logoUrl} alt={business.name} className={`mb-4 h-28 w-28 rounded-full object-cover shadow-xl ${theme.avatarBg}`} />
+              <LogoCircle src={business.logoUrl} alt={business.name} className="mb-4 h-28 w-28 shadow-xl" />
             ) : (
               <div className={`w-28 h-28 rounded-full ${theme.avatarBg} ${theme.avatarText} flex items-center justify-center text-5xl font-bold shadow-xl mb-4`}>
                 {(shownName || 'U').charAt(0).toUpperCase()}

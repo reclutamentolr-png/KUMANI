@@ -12,6 +12,7 @@ import { KU_UNLOCK_LINKINBIO_THEMES, linkInBioThemeUnlockKey } from '@/lib/ku'
 import { buyKuUnlock } from '@/app/actions/ku'
 import Link from '@/components/LocalizedLink'
 import BioThemeScene from '@/components/BioThemeScene'
+import LogoCircle from '@/components/LogoCircle'
 import BusinessProfileImport from '@/components/businessProfile/BusinessProfileImport'
 import { businessWebsiteUrl, type BusinessProfile } from '@/lib/businessProfile'
 import { Plus, Trash2, Save, Link as LinkIcon, Check, ExternalLink, Globe, Mail, Phone, MessageCircle, Lock, Loader2, Eye, Sparkles, X, User, Building2, GripVertical, ChevronUp, ChevronDown } from 'lucide-react'
@@ -573,8 +574,7 @@ export default function LinkInBioEditor({
           )}
           <div className={`relative rounded-3xl p-6 ${previewStyle.cardBg}`}>
             {shownLogo ? (
-              // eslint-disable-next-line @next/next/no-img-element -- logo della Scheda attività (storage pubblico)
-              <img src={shownLogo} alt="" className={`mx-auto mb-3 h-20 w-20 rounded-full object-cover shadow-lg ${previewStyle.avatarBg}`} />
+              <LogoCircle src={shownLogo} alt="" className="mx-auto mb-3 h-20 w-20 shadow-lg" />
             ) : (
               <div className={`w-20 h-20 rounded-full ${previewStyle.avatarBg} ${previewStyle.avatarText} flex items-center justify-center mx-auto mb-3 text-3xl font-bold shadow-lg`}>
                 {(shownName || firstName || 'U').charAt(0).toUpperCase()}
