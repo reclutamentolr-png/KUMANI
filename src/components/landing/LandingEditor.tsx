@@ -906,8 +906,8 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
           </Field>
         </Card>
 
-        {/* Salva: sempre a portata di mano */}
-        <div className="sticky bottom-3 z-10 flex flex-wrap items-center gap-3 rounded-2xl border border-gray-200 bg-white/95 p-3 shadow-lg backdrop-blur">
+        {/* Salva: sempre a portata di mano, sopra il menu in basso */}
+        <div className="sticky bottom-[calc(env(safe-area-inset-bottom)+5rem)] z-10 flex flex-wrap items-center gap-3 rounded-2xl border border-gray-200 bg-white/95 p-3 shadow-lg backdrop-blur sm:bottom-24">
           <button
             type="button"
             onClick={save}
