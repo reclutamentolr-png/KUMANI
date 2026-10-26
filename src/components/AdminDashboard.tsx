@@ -14,6 +14,7 @@ import type MatrixTreeComponent from '@/components/MatrixTree'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { serviceGroupOf } from '@/lib/serviceGroups'
 import AdminUserPicker from '@/components/admin/AdminUserPicker'
+import ToolTestersPanel from '@/components/admin/ToolTestersPanel'
 import AdminGiftSubscriptionPanel from '@/components/admin/AdminGiftSubscriptionPanel'
 import ListingsReviewPanel from '@/components/admin/ListingsReviewPanel'
 import FoundersPanel from '@/components/admin/FoundersPanel'
@@ -1221,7 +1222,10 @@ L'accesso viene registrato.`))) return
                     </div>
                   </div>
                   {!tool.is_enabled && tool.staff_preview && (
-                    <p className="mb-4 rounded-lg bg-violet-50 px-3 py-2 text-xs text-violet-800">Gli iscritti non lo vedono: tu e lo Staff lo aprite e lo provate normalmente.</p>
+                    <>
+                      <p className="mb-2 rounded-lg bg-violet-50 px-3 py-2 text-xs text-violet-800">Gli iscritti non lo vedono: tu, lo Staff e i tester qui sotto lo aprite e lo provate normalmente.</p>
+                      <ToolTestersPanel toolName={tool.tool_name} />
+                    </>
                   )}
                   <div className="mb-4 flex items-center gap-2">
                     <span className="text-xs text-gray-500 uppercase">Piano richiesto</span>

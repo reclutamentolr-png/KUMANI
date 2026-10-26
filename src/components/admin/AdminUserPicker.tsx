@@ -13,7 +13,7 @@ export default function AdminUserPicker({
   onSelect,
   placeholder = 'Cerca per nome, cognome, codice o email…',
 }: {
-  scope: 'matrix' | 'coupons'
+  scope: 'matrix' | 'coupons' | 'testers'
   selected: StaffUserHit | null
   onSelect: (user: StaffUserHit | null) => void
   placeholder?: string

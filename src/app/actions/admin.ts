@@ -2998,8 +2998,8 @@ export async function adminRemoveFabulaWord(word: string) {
 // rossi" trova Mario Rossi. Al massimo 20 risultati.
 export type StaffUserHit = { id: string; first_name: string | null; last_name: string | null; referral_code: string | null; email: string | null }
 
-export async function adminSearchUsers(query: string, scope: 'matrix' | 'coupons'): Promise<{ users: StaffUserHit[] }> {
-  const admin = await verifyAdmin(scope === 'matrix' ? 'matrix.read' : 'coupons.read')
+export async function adminSearchUsers(query: string, scope: 'matrix' | 'coupons' | 'testers'): Promise<{ users: StaffUserHit[] }> {
+  const admin = await verifyAdmin(scope === 'matrix' ? 'matrix.read' : scope === 'testers' ? 'marketplace.write' : 'coupons.read')
   if (!admin) return { users: [] }
   const words = query
     .replace(/[,()*%\\:"'`]/g, ' ')

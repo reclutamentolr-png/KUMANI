@@ -1210,7 +1210,8 @@
     "bioVisitPersonal": "Open the personal page",
     "bioVisitBusiness": "Open the business page",
     "bioErr_businessPro": "The business page is included in the Pro plan.",
-    "bioModeTwoPages": "Two pages, two links: the personal one with your name, the business one with the name, logo and city from your business profile."
+    "bioModeTwoPages": "Two pages, two links: the personal one with your name, the business one with the name, logo and city from your business profile.",
+    "testerPreviewBanner": "Preview: not yet visible to all members"
   },
   "neurobalance": {
     "tracksLabel": "Relaxation audio",
@@ -9861,7 +9862,9 @@
     "adminListingBody": "{name} posted “{title}” on the Board: approve or reject it.",
     "adminScamTitle": "🚨 New scam report",
     "adminScamBody": "{name} reported {value}: check and confirm it.",
-    "adminScamBodyKnown": "{name} reported {value}, already confirmed as a scam."
+    "adminScamBodyKnown": "{name} reported {value}, already confirmed as a scam.",
+    "testerTitle": "🧪 You’re a KUMANI tester",
+    "testerBody": "You can try {tool} in preview, before it reaches everyone. Open it from the link and tell us what you think."
   },
   "pushInvite": {
     "title": "Turn on notifications",

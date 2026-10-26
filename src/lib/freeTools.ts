@@ -67,15 +67,21 @@ export async function getDisabledTools(): Promise<string[]> {
   }
 }
 
-// Servizi «Solo Staff» per chi guarda: tutti per lo Staff, nessuno per gli
-// iscritti. Legge la sessione: solo nelle pagine dinamiche.
+// Servizi «Solo Staff» per chi guarda: tutti per lo Staff, quelli di cui è
+// tester per un iscritto scelto dall'Admin, nessuno per gli altri. Legge la
+// sessione: solo nelle pagine dinamiche.
 export const getStaffPreviewTools = cache(async (): Promise<string[]> => {
   try {
     const preview = (await fetchToolPlans()).preview ?? []
     if (!preview.length) return []
     const user = await getSessionUser()
-    if (!user || !(await getSessionIsAdmin(user.id))) return []
-    return preview
+    if (!user) return []
+    if (await getSessionIsAdmin(user.id)) return preview
+    const service = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+      auth: { autoRefreshToken: false, persistSession: false },
+    })
+    const { data } = await service.from('tool_testers').select('tool_name').eq('user_id', user.id).in('tool_name', preview)
+    return (data ?? []).map((row) => row.tool_name as string)
   } catch {
     return []
   }

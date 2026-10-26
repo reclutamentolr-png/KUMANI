@@ -1170,7 +1170,8 @@
     "bioVisitPersonal": "Abrir la página personal",
     "bioVisitBusiness": "Abrir la página de empresa",
     "bioErr_businessPro": "La página de empresa está incluida en el plan Pro.",
-    "bioModeTwoPages": "Dos páginas, dos enlaces: la personal con tu nombre, la de empresa con el nombre, el logo y la ciudad de la ficha del negocio."
+    "bioModeTwoPages": "Dos páginas, dos enlaces: la personal con tu nombre, la de empresa con el nombre, el logo y la ciudad de la ficha del negocio.",
+    "testerPreviewBanner": "Vista previa: aún no visible para todos los miembros"
   },
   "neurobalance": {
     "tracksLabel": "Audios de relajación",
@@ -9861,7 +9862,9 @@
     "adminListingBody": "{name} ha publicado «{title}» en el Tablón: apruébalo o recházalo.",
     "adminScamTitle": "🚨 Nueva denuncia de estafa",
     "adminScamBody": "{name} ha denunciado {value}: revísala y confírmala.",
-    "adminScamBodyKnown": "{name} ha denunciado {value}, ya confirmado como estafa."
+    "adminScamBodyKnown": "{name} ha denunciado {value}, ya confirmado como estafa.",
+    "testerTitle": "🧪 Eres tester de KUMANI",
+    "testerBody": "Puedes probar {tool} en avance, antes de que llegue a todos. Ábrelo desde el enlace y dinos qué te parece."
   },
   "pushInvite": {
     "title": "Activa las notificaciones",

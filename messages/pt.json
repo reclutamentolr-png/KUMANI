@@ -1170,7 +1170,8 @@
     "bioVisitPersonal": "Abrir a página pessoal",
     "bioVisitBusiness": "Abrir a página da empresa",
     "bioErr_businessPro": "A página da empresa está incluída no plano Pro.",
-    "bioModeTwoPages": "Duas páginas, dois links: a pessoal com o seu nome, a da empresa com o nome, o logótipo e a cidade da ficha da atividade."
+    "bioModeTwoPages": "Duas páginas, dois links: a pessoal com o seu nome, a da empresa com o nome, o logótipo e a cidade da ficha da atividade.",
+    "testerPreviewBanner": "Antevisão: ainda não visível para todos os membros"
   },
   "neurobalance": {
     "tracksLabel": "Áudios de relaxamento",
@@ -9861,7 +9862,9 @@
     "adminListingBody": "{name} publicou «{title}» no Mural: aprova-o ou recusa-o.",
     "adminScamTitle": "🚨 Nova denúncia de burla",
     "adminScamBody": "{name} denunciou {value}: verifica-a e confirma-a.",
-    "adminScamBodyKnown": "{name} denunciou {value}, já confirmado como burla."
+    "adminScamBodyKnown": "{name} denunciou {value}, já confirmado como burla.",
+    "testerTitle": "🧪 És tester do KUMANI",
+    "testerBody": "Podes experimentar {tool} em antevisão, antes de chegar a todos. Abre-o pelo link e diz-nos o que achas."
   },
   "pushInvite": {
     "title": "Ative as notificações",

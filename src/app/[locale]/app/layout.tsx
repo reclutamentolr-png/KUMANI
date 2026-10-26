@@ -8,6 +8,7 @@ import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { guestTrial } from '@/lib/trials'
 import { getServiceVideos } from '@/lib/serviceVideos'
 import { getStaffPreviewTools } from '@/lib/freeTools'
+import { getSessionIsAdmin } from '@/lib/session'
 import StaffPreviewBanner from '@/components/StaffPreviewBanner'
 import { getMyReviewOptions } from '@/app/actions/reviews'
 
@@ -73,7 +74,8 @@ export default async function MarketplaceLayout({ children }: { children: React.
     if (previewTools.length) {
       const tm = await getTranslations('marketplace')
       const hrefs = getMarketplaceTools(tm).filter((tool) => previewTools.includes(tool.toolName)).map((tool) => tool.href)
-      preview = { hrefs, label: tm('staffPreviewBanner') }
+      // Staff: «Anteprima Staff»; tester scelto dall'Admin: «Anteprima»
+      preview = { hrefs, label: tm((await getSessionIsAdmin(user.id)) ? 'staffPreviewBanner' : 'testerPreviewBanner') }
     }
   }
 
