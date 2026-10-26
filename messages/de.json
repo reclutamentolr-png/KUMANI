@@ -94,7 +94,7 @@
     "planProFeature3": "Treuekarten, Angebote, digitale Belege und OfferMaker AI",
     "planProFeature4": "Profi-Bereich mit Statistiken und Angeboten für Kordata-Gruppen",
     "planProCta": "Pro 15 Tage kostenlos testen",
-    "planProTrialNote": "Für den Test ist keine Karte nötig: Wähle bei der Anmeldung „Ich bin Profi“.",
+    "planProTrialNote": "Für den Test ist keine Karte nötig: Starte ihn nach der Anmeldung auf der Pro-Seite.",
     "login": "Anmelden",
     "startNow": "Jetzt starten",
     "heroTitle": "Deine Ideen, unsere Hände.",
@@ -7713,7 +7713,7 @@
       "step2Text": "Trage Vorname, Nachname, E-Mail und ein Passwort mit mindestens 8 Zeichen ein und wähle dann dein Land und deine Stadt.",
       "step2Tip": "Nutze eine E-Mail-Adresse, die du oft liest: Dort kommt der Code zur Aktivierung des Kontos an.",
       "step3Title": "Einladungscode und Voucher (optional)",
-      "step3Text": "Hat dich ein Kumano eingeladen, gib seinen Einladungscode ein. Hast du einen KUMANI-Voucher erhalten, trage ihn im Feld „Aktivierungs-Vouchercode“ ein: Dein Abo wird sofort aktiviert. Hast du ein Geschäft, eine Praxis oder ein Unternehmen, setze das Häkchen bei „Ich bin selbstständig / Profi“. Tippe dann auf „Konto erstellen“.",
+      "step3Text": "Hat dich ein Kumano eingeladen, gib seinen Einladungscode ein. Hast du einen KUMANI-Voucher erhalten, trage ihn im Feld „Aktivierungs-Vouchercode“ ein: Dein Abo wird sofort aktiviert. Tippe dann auf „Konto erstellen“.",
       "step4Title": "Bestätige deine E-Mail",
       "step4Text": "Wir schicken dir einen Code per E-Mail. Gib ihn im Feld „Bestätigungscode“ ein und tippe auf „Bestätigen und Konto aktivieren“. Fertig: Du bist dabei!",
       "step4Tip": "Keine E-Mail gefunden? Schau im Spam-Ordner nach oder tippe auf „Code erneut senden“."

@@ -94,7 +94,7 @@
     "planProFeature3": "Cartes de fidélité, devis, reçus numériques et OfferMaker AI",
     "planProFeature4": "Espace Pro avec statistiques et offres aux groupes Kordata",
     "planProCta": "Essayez Pro gratuitement 15 jours",
-    "planProTrialNote": "Aucune carte requise pour l’essai : choisissez « Je suis un professionnel » à l’inscription.",
+    "planProTrialNote": "Aucune carte requise pour l’essai : activez-le depuis la page Pro après l’inscription.",
     "login": "Se connecter",
     "startNow": "Commencer",
     "heroTitle": "Vos idées, nos mains.",
@@ -7713,7 +7713,7 @@
       "step2Text": "Saisissez votre prénom, votre nom, votre e-mail et un mot de passe d’au moins 8 caractères, puis choisissez votre pays et votre ville.",
       "step2Tip": "Utilisez un e-mail que vous consultez souvent : c’est là qu’arrive le code pour activer votre compte.",
       "step3Title": "Code d’invitation et voucher (facultatifs)",
-      "step3Text": "Si un Kumano vous a invité, saisissez son code d’invitation. Si vous avez reçu un voucher KUMANI, saisissez-le dans le champ « Code voucher d’activation » : votre abonnement est activé tout de suite. Si vous avez un commerce, un cabinet ou une activité, cochez « Je suis un professionnel ». Touchez ensuite « Créez votre compte ».",
+      "step3Text": "Si un Kumano vous a invité, saisissez son code d’invitation. Si vous avez reçu un voucher KUMANI, saisissez-le dans le champ « Code voucher d’activation » : votre abonnement est activé tout de suite. Touchez ensuite « Créez votre compte ».",
       "step4Title": "Vérifiez votre e-mail",
       "step4Text": "Nous vous envoyons un code par e-mail. Saisissez-le dans le champ « Code de vérification » et touchez « Vérifier et activer le compte ». C’est fait : vous êtes inscrit !",
       "step4Tip": "Vous ne trouvez pas l’e-mail ? Regardez dans les spams ou touchez « Renvoyer le code »."

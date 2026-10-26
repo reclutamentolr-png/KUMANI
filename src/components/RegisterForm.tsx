@@ -9,7 +9,7 @@ import { useSearchParams } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl' // ✅ Aggiungilo qui
 import Link from 'next/link'
 import { europeanCountries } from '@/lib/european-countries'
-import { User, Mail, Lock, MapPin, AlertCircle, Loader2, Home, ShieldCheck, CheckCircle, Briefcase, Info, Gift } from 'lucide-react'
+import { User, Mail, Lock, MapPin, AlertCircle, Loader2, Home, ShieldCheck, CheckCircle, Info, Gift } from 'lucide-react'
 import Logo from '@/components/Logo'
 import { authErrorText } from '@/lib/authErrors'
 import { checkActivationCode, giftGiverReferral, redeemActivationCode } from '@/app/actions/codes'
@@ -49,7 +49,9 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
   // Link di un Agente venditore (?agente=AG-XXXXXX): il cliente resta suo
   // (conta solo all'iscrizione; il codice lo verifica il server)
   const agentCode = (searchParams.get('agente') || '').trim().toUpperCase().slice(0, 12)
-  // "Registrati e scegli Pro" dalla pagina /pro arriva con ?plan=pro.
+  // "Registrati e scegli Pro" dalla pagina /pro arriva con ?plan=pro: dopo
+  // l'iscrizione si torna lì per la prova. Nel modulo non c'è più la casella
+  // «Sono un professionista», così i privati non la spuntano per sbaglio.
   const initialProfessional = searchParams.get('plan') === 'pro'
   // Da dove arriva (es. ?da=test-truffa): resta nell'account per le statistiche
   // dell'Admin e, finita l'iscrizione, si torna lì (il risultato del test)
@@ -466,27 +468,6 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
             />
             <p className="text-xs text-gray-500 mt-1">{t('referralRequired')}</p>
           </div>
-
-          <label
-            htmlFor="professional"
-            className={`flex cursor-pointer items-start gap-3 rounded-lg border p-3 transition-colors ${
-              formData.professional ? 'border-[var(--gold)] bg-[var(--gold-pale)]/40' : 'border-stone-300 hover:border-[var(--gold)]/60'
-            }`}
-          >
-            <input
-              id="professional"
-              type="checkbox"
-              checked={formData.professional}
-              onChange={(e) => setFormData({ ...formData, professional: e.target.checked })}
-              className="mt-1 h-4 w-4 accent-[var(--gold)]"
-            />
-            <span>
-              <span className="flex items-center gap-1.5 text-sm font-semibold text-[var(--ink)]">
-                <Briefcase className="h-4 w-4 text-[var(--gold)]" /> {t('professionalLabel')}
-              </span>
-              <span className="mt-0.5 block text-xs text-gray-500">{t('professionalHint')}</span>
-            </span>
-          </label>
 
           <div>
             <label htmlFor="voucher_code" className="block text-sm font-medium text-gray-700 mb-1">

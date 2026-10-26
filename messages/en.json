@@ -134,7 +134,7 @@
     "planProFeature3": "Loyalty cards, quotes, digital receipts and OfferMaker AI",
     "planProFeature4": "Professional Area with stats and offers to Kordata groups",
     "planProCta": "Try Pro free for 15 days",
-    "planProTrialNote": "No card needed for the trial: choose \"I am a professional\" when you sign up.",
+    "planProTrialNote": "No card needed for the trial: start it from the Pro page after you sign up.",
     "login": "Log in",
     "startNow": "Get Started",
     "heroBadge": "Not a company selling dreams: a community lending a hand to professionals, individuals and families.",
@@ -7713,7 +7713,7 @@
       "step2Text": "Enter your first name, last name, email and a password of at least 8 characters, then choose your country and your city.",
       "step2Tip": "Use an email you check often: that’s where the code to activate your account arrives.",
       "step3Title": "Invite code and voucher (optional)",
-      "step3Text": "If a Kumano invited you, enter their invite code. If you received a KUMANI voucher, enter it in the “Activation voucher code” field: your subscription is activated right away. If you have a shop, a practice or a business, tick “I’m a professional”. Then tap “Create your account”.",
+      "step3Text": "If a Kumano invited you, enter their invite code. If you received a KUMANI voucher, enter it in the “Activation voucher code” field: your subscription is activated right away. Then tap “Create your account”.",
       "step4Title": "Verify your email",
       "step4Text": "We send you a code by email. Enter it in the “Verification code” field and tap “Verify and activate account”. Done: you’re in!",
       "step4Tip": "Can’t find the email? Check your spam folder or tap “Resend code”."

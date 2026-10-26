@@ -94,7 +94,7 @@
     "planProFeature3": "Cartões de fidelidade, orçamentos, recibos digitais e OfferMaker AI",
     "planProFeature4": "Área Profissional com estatísticas e ofertas às Kordatas",
     "planProCta": "Experimente Pro grátis por 15 dias",
-    "planProTrialNote": "Não é preciso cartão para o teste: escolha «Sou um profissional» no registo.",
+    "planProTrialNote": "Não é preciso cartão para o teste: ative-o na página Pro depois do registo.",
     "login": "Entrar",
     "startNow": "Começar agora",
     "heroTitle": "As suas ideias, as nossas mãos.",
@@ -7713,7 +7713,7 @@
       "step2Text": "Escreva nome, apelido, email e uma palavra-passe com pelo menos 8 caracteres; depois escolha o seu país e a sua cidade.",
       "step2Tip": "Use um email que consulte com frequência: é para lá que vai o código para ativar a conta.",
       "step3Title": "Código de convite e voucher (opcionais)",
-      "step3Text": "Se um Kumano o convidou, escreva o código de convite dele. Se recebeu um voucher KUMANI, introduza-o no campo «Código de voucher de ativação»: a sua subscrição fica ativa de imediato. Se tem uma loja, um consultório ou um negócio, assinale «Sou profissional». Depois toque em «Crie a sua conta».",
+      "step3Text": "Se um Kumano o convidou, escreva o código de convite dele. Se recebeu um voucher KUMANI, introduza-o no campo «Código de voucher de ativação»: a sua subscrição fica ativa de imediato. Depois toque em «Crie a sua conta».",
       "step4Title": "Verifique o seu email",
       "step4Text": "Enviamos-lhe um código por email. Escreva-o no campo «Código de verificação» e toque em «Verificar e ativar conta». Pronto: já está dentro!",
       "step4Tip": "Não encontra o email? Veja na pasta de spam ou toque em «Reenviar código»."
