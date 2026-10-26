@@ -6,6 +6,8 @@
 export const MOVES = ['saluta', 'balla', 'salta', 'nanna'] as const
 export type Move = (typeof MOVES)[number]
 
+// I disegni si muovono anche con «Riduci movimento» del telefono: il
+// movimento è il gioco stesso (parte solo quando il bambino lo chiede)
 export const KIDS_SVG_CSS = `
 .kids-svg { -webkit-tap-highlight-color: transparent; user-select: none; }
 .kids-svg .f { fill: #FFFFFF; stroke: #2B2D52; stroke-width: 4; stroke-linejoin: round; stroke-linecap: round; cursor: pointer; transition: fill .25s ease; }
@@ -87,9 +89,6 @@ export const KIDS_SVG_CSS = `
 @keyframes kbreathe { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(1.01, 1.02); } }
 @keyframes kwake { 0% { transform: scale(1); } 35% { transform: scale(1.08, 0.92); } 65% { transform: scale(0.96, 1.06) translateY(-14px); } 100% { transform: scale(1); } }
 @keyframes kspark { 0% { opacity: 0; transform: scale(0.2); } 30% { opacity: 1; transform: scale(1.2); } 100% { opacity: 0; transform: scale(0.6) translateY(-30px); } }
-@media (prefers-reduced-motion: reduce) {
-  .kids-svg * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
-}
 `
 
 // Applica i perni (data-o="x y") come transform-origin, in coordinate del disegno

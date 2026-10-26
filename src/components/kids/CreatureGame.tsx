@@ -171,8 +171,10 @@ export default function CreatureGame({
     <div className="flex min-h-0 flex-1 flex-col gap-3">
       <style>{KIDS_SVG_CSS}</style>
       {nameChip}
-      <div className="relative mx-auto aspect-[400/440] w-full max-w-[min(100%,calc((100dvh-420px)*0.909))] min-h-[200px] overflow-hidden rounded-[22px] border-[3px] border-[#2B2D52] bg-white shadow-[5px_5px_0_#2B2D52]">
-        <PreviewSvg svg={drawing.svg} />
+      <div className="flex min-h-[140px] flex-1 items-center justify-center [container-type:size]">
+        <div className="relative mx-auto aspect-[400/440] w-[min(calc(100cqw-6px),calc((100cqh-6px)*0.909))] overflow-hidden rounded-[22px] border-[3px] border-[#2B2D52] bg-white shadow-[5px_5px_0_#2B2D52]">
+          <PreviewSvg svg={drawing.svg} />
+        </div>
       </div>
 
       <div className="flex gap-2 overflow-x-auto pb-1" role="tablist" aria-label={t('creatureParts')}>

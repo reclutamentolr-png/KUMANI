@@ -15,7 +15,7 @@ import FreeDrawGame from './FreeDrawGame'
 import MusicGame from './MusicGame'
 import { KidsIconButton } from './ColorStage'
 import Kumi from './Kumi'
-import { speak } from './kidsAudio'
+import { speak, unlockAudio } from './kidsAudio'
 import KumiGuide from './KumiGuide'
 import type { KidsActions, ShareTarget } from './actions'
 import PinPad from './PinPad'
@@ -74,6 +74,18 @@ export default function KidsCorner({ userId }: { userId: string }) {
     },
     [userId]
   )
+
+  // iPhone: suoni e voce si sbloccano al primo tocco (poi i gesti non servono più)
+  useEffect(() => {
+    const unlock = () => {
+      if (!unlockAudio()) return
+      for (const type of ['touchend', 'pointerdown', 'click'] as const) document.removeEventListener(type, unlock, true)
+    }
+    for (const type of ['touchend', 'pointerdown', 'click'] as const) document.addEventListener(type, unlock, true)
+    return () => {
+      for (const type of ['touchend', 'pointerdown', 'click'] as const) document.removeEventListener(type, unlock, true)
+    }
+  }, [])
 
   // Blocco attivo appena c'è il codice: KUMANI riporta qui finché il
   // genitore non esce con il codice; il tasto «indietro» resta nel gioco
@@ -397,10 +409,12 @@ export default function KidsCorner({ userId }: { userId: string }) {
         </div>
 
         {!inGame ? (
-          <div className="grid gap-4">
+          // Menu: tutto nello schermo anche sui telefoni bassi (le schede si
+          // dividono lo spazio che resta; la descrizione solo se c'è posto)
+          <div className="flex min-h-0 flex-1 flex-col gap-3">
             <KumiGuide sound={store.sound} voice={store.voice} />
-            <h2 className="text-center text-3xl font-extrabold text-[#2B2D52]">{t('menuTitle', { name: active.name })}</h2>
-            <div className="grid grid-cols-2 gap-4">
+            <h2 className="text-center text-2xl font-extrabold leading-tight text-[#2B2D52] [@media(min-height:760px)]:text-3xl">{t('menuTitle', { name: active.name })}</h2>
+            <div className="grid min-h-0 flex-1 grid-cols-2 grid-rows-2 gap-3 [@media(min-height:760px)]:gap-4">
               {GAMES.map(({ id, icon: Icon, tone }) => (
                 <button
                   key={id}
@@ -409,13 +423,13 @@ export default function KidsCorner({ userId }: { userId: string }) {
                     setGame(id)
                     setPhase('game')
                   }}
-                  className={`grid min-h-40 content-center justify-items-center gap-2 rounded-3xl border-[3px] border-[#2B2D52] p-4 text-center shadow-[4px_4px_0_#2B2D52] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none ${tone}`}
+                  className={`grid min-h-0 content-center justify-items-center gap-1.5 overflow-hidden rounded-3xl border-[3px] border-[#2B2D52] p-3 text-center shadow-[4px_4px_0_#2B2D52] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none [@media(min-height:760px)]:gap-2 [@media(min-height:760px)]:p-4 ${tone}`}
                 >
-                  <span className="flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-[#2B2D52] bg-white">
-                    <Icon className="h-9 w-9 text-[#2B2D52]" aria-hidden />
+                  <span className="flex h-12 w-12 items-center justify-center rounded-full border-[3px] border-[#2B2D52] bg-white [@media(min-height:760px)]:h-16 [@media(min-height:760px)]:w-16">
+                    <Icon className="h-7 w-7 text-[#2B2D52] [@media(min-height:760px)]:h-9 [@media(min-height:760px)]:w-9" aria-hidden />
                   </span>
-                  <span className="text-xl font-extrabold leading-tight text-[#2B2D52]">{t(`games.${id}.title`)}</span>
-                  <span className="text-sm font-bold leading-snug text-[#61648A]">{t(`games.${id}.text`)}</span>
+                  <span className="text-lg font-extrabold leading-tight text-[#2B2D52] [@media(min-height:760px)]:text-xl">{t(`games.${id}.title`)}</span>
+                  <span className="hidden text-sm font-bold leading-snug text-[#61648A] [@media(min-height:860px)]:block">{t(`games.${id}.text`)}</span>
                 </button>
               ))}
             </div>
@@ -442,7 +456,9 @@ export default function KidsCorner({ userId }: { userId: string }) {
       onDragStart={(e) => e.preventDefault()}
       className="fixed inset-0 z-[2147483000] flex flex-col overflow-y-auto bg-[#F3F7FB] text-[#2B2D52] [-webkit-touch-callout:none]"
       style={{ backgroundImage: 'radial-gradient(#D9E3EE 1.4px, transparent 1.4px)', backgroundSize: '22px 22px', paddingTop: 'max(12px, env(safe-area-inset-top))', paddingBottom: 'max(12px, env(safe-area-inset-bottom))', paddingLeft: 'max(12px, env(safe-area-inset-left))', paddingRight: 'max(12px, env(safe-area-inset-right))' }}>
-      <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center">{screen}</div>
+      {/* Nei giochi tutto sta nello schermo (l'area di gioco si adatta allo
+          spazio che resta); nelle altre schermate si scorre se serve */}
+      <div className={`mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center ${phase === 'game' || phase === 'menu' ? 'min-h-0' : ''}`}>{screen}</div>
 
       {/* Codice del genitore */}
       {gate && (

@@ -7,12 +7,42 @@ let ctx: AudioContext | null = null
 
 function audio() {
   try {
+    // iPhone: senza «playback» i suoni restano muti con il telefono in
+    // silenzioso (Safari 17 e successivi; prima la proprietà non c'è)
+    const session = (navigator as unknown as { audioSession?: { type: string } }).audioSession
+    if (session && session.type !== 'playback') session.type = 'playback'
     ctx = ctx ?? new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)()
-    if (ctx.state === 'suspended') void ctx.resume()
+    if (ctx.state === 'suspended' || (ctx.state as string) === 'interrupted') void ctx.resume()
     return ctx
   } catch {
     return null
   }
+}
+
+// iPhone: suoni e voce partono solo se il primo è avviato da un tocco. Al
+// primo tocco nell'Angolo Bambini si «sbloccano» con un suono muto e una frase
+// vuota, così anche le frasi di KUMI dette dopo (con un ritardo) si sentono.
+let unlocked = false
+export function unlockAudio() {
+  const a = audio()
+  if (a) {
+    const buffer = a.createBuffer(1, 1, 22050)
+    const source = a.createBufferSource()
+    source.buffer = buffer
+    source.connect(a.destination)
+    source.start(0)
+  }
+  if (!unlocked && 'speechSynthesis' in window) {
+    try {
+      const u = new SpeechSynthesisUtterance(' ')
+      u.volume = 0
+      speechSynthesis.speak(u)
+    } catch {
+      // voce non disponibile
+    }
+  }
+  unlocked = !!a && a.state === 'running'
+  return unlocked
 }
 
 export function tone(index: number, volume = 0.12, length = 0.35) {
@@ -86,7 +116,11 @@ export function speak(text: string, locale: string) {
     // senza l'effetto «cartone» che rende la voce ancora più finta
     u.rate = 0.92
     u.pitch = 1.08
-    speechSynthesis.cancel()
+    // Safari: «cancel» subito prima di «speak» a volte cancella anche la
+    // frase nuova, quindi solo se c'è davvero qualcosa da interrompere
+    if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel()
+    // iPhone: la voce a volte resta «in pausa» dopo un'interruzione
+    if (speechSynthesis.paused) speechSynthesis.resume()
     speechSynthesis.speak(u)
   } catch {
     // voce non disponibile: restano le scritte

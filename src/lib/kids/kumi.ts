@@ -77,5 +77,5 @@ export const KUMI_CSS = `
 @keyframes kumiArmL { from { transform: rotate(10deg); } to { transform: rotate(-22deg); } }
 @keyframes kumiArmR { from { transform: rotate(-10deg); } to { transform: rotate(22deg); } }
 @keyframes kumiJump { 0%, 100% { transform: translateY(0) scale(1.05, .94); } 20% { transform: translateY(0) scale(.96, 1.05); } 50% { transform: translateY(-60px); } 80% { transform: translateY(0); } }
-@media (prefers-reduced-motion: reduce) { .kumi-svg * { animation: none !important; } }
+@media (prefers-reduced-motion: reduce) { .kumi-svg .k-kumi, .kumi-svg .k-armL, .kumi-svg .k-armR, .kumi-svg .k-t2, .kumi-svg .k-t3, .kumi-svg .k-t5 { animation-duration: 3.6s !important; } }
 `
