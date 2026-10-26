@@ -275,50 +275,45 @@ export async function buildDeck(
     const s = pres.addSlide({ masterName: 'KUMANI scuro', sectionTitle: sec[2] })
     titled(s, S.s7.title, S.s7.sub)
     const cx = 3.55, cy = 4.4, r = 2.05, d = 0.82
-    // Ordine nel cerchio: le aree collegate stanno vicine (le linee non passano dal centro)
-    const RING = ['security', 'work', 'money', 'kids', 'social', 'fun', 'wellness', 'community', 'business']
-    const ring = [...catalog].sort((a, b) => (RING.indexOf(a.key) + 99) % 99 - (RING.indexOf(b.key) + 99) % 99)
+    // Le aree in cerchio: ogni collegamento passa da KUMANI, al centro
+    const ring = catalog
     const pos = new Map(ring.map((g, i) => {
       const a = -Math.PI / 2 + (i * 2 * Math.PI) / ring.length
       return [g.key, [cx + r * Math.cos(a), cy + r * Math.sin(a)] as [number, number]]
     }))
     const all = (S.s7.links as string[][]).map((row, i) => ({ row, groups: S.s7.linkGroups[i] as string[], tool: S.s7.linkTools?.[i] as string | undefined }))
     const links = all.filter((l) => pos.has(l.groups[0]) && pos.has(l.groups[1]) && (!on || !l.tool || on.has(l.tool)))
-    // Linee tra le aree con il numero del collegamento a metà
-    links.forEach((l, i) => {
-      const [x1, y1] = pos.get(l.groups[0])!, [x2, y2] = pos.get(l.groups[1])!
-      line(s, x1, y1, x2, y2, { color: HEX.gold, width: 1.5 }, `a${i + 3}-ln${i}`)
+    // Raggi: ogni area è collegata al centro
+    ring.forEach((g, k) => {
+      const [x, y] = pos.get(g.key)!
+      line(s, cx, cy, x, y, { color: HEX.gold, width: 1.5, dashType: 'dash' }, `a2-raggio${k}`)
     })
-    s.addShape(pres.ShapeType.ellipse, { x: cx - 0.75, y: cy - 0.75, w: 1.5, h: 1.5, fill: { color: C.accent1 }, line: { type: 'none' }, objectName: 'a1-centro' } as any)
-    s.addImage({ path: LOGO, x: cx - 0.55, y: cy - 0.55, w: 1.1, h: 1.1, objectName: 'a1-logo' } as any)
+    s.addShape(pres.ShapeType.ellipse, { x: cx - 0.62, y: cy - 0.62, w: 1.24, h: 1.24, fill: { color: C.accent1 }, line: { type: 'none' }, objectName: 'a1-centro' } as any)
+    s.addImage({ path: LOGO, x: cx - 0.47, y: cy - 0.47, w: 0.94, h: 0.94, objectName: 'a1-logo' } as any)
     let k = 0
     for (const g of ring) {
       const [x, y] = pos.get(g.key)!, hex = GROUP_HEX[g.key] ?? HEX.gold
       await circleIcon(s, GROUP_ICON[g.key] ?? 'Sparkles', x - d / 2, y - d / 2, d, hex, HEX.white, `a2-area${k}`)
       const below = y >= cy - 0.1
       Tx(s, g.label, { x: x - 1.0, y: below ? y + d / 2 + 0.02 : y - d / 2 - 0.4, w: 2.0, h: 0.38, fontSize: fs(11), bold: true, align: 'center', color: C.background1, valign: below ? 'top' : 'bottom', objectName: `a2-lab${k}` })
+      // Sul raggio, i numeri dei collegamenti di quest'area (vedi elenco a destra)
+      const nums = links.map((l, i) => (l.groups.includes(g.key) ? String(i + 1) : '')).filter(Boolean)
+      if (nums.length) {
+        const mx = cx + (x - cx) * 0.6, my = cy + (y - cy) * 0.6, pw = 0.2 + nums.length * 0.24
+        s.addShape(pres.ShapeType.roundRect, { x: mx - pw / 2, y: my - 0.16, w: pw, h: 0.32, rectRadius: 0.16, fill: { color: C.accent2 }, line: { color: C.text1, width: 1 }, objectName: `a3-num${k}` } as any)
+        Tx(s, nums.join(' · '), { x: mx - pw / 2, y: my - 0.16, w: pw, h: 0.32, fontSize: 10, bold: true, align: 'center', valign: 'middle', color: C.text1, objectName: `a3-numtx${k}` })
+      }
       k++
     }
-    // Due collegamenti sulla stessa linea: numeri a un terzo e a due terzi
-    const seen = new Map<string, number>()
+    // Elenco a destra: ogni collegamento con il suo numero
     links.forEach((l, i) => {
-      // Sempre dalla stessa estremità, anche se i collegamenti vanno in versi opposti
-      const [ga, gb] = [...l.groups].sort()
-      const [x1, y1] = pos.get(ga)!, [x2, y2] = pos.get(gb)!
-      const pair = `${ga}-${gb}`, nth = seen.get(pair) ?? 0
-      seen.set(pair, nth + 1)
-      const t = nth === 0 ? (links.filter((o) => [...o.groups].sort().join('-') === pair).length > 1 ? 0.35 : 0.5) : 0.65
-      const mx = x1 + (x2 - x1) * t, my = y1 + (y2 - y1) * t
-      s.addShape(pres.ShapeType.ellipse, { x: mx - 0.18, y: my - 0.18, w: 0.36, h: 0.36, fill: { color: C.accent2 }, line: { color: C.text1, width: 1 }, objectName: `a${i + 3}-n${i}` } as any)
-      Tx(s, String(i + 1), { x: mx - 0.18, y: my - 0.18, w: 0.36, h: 0.36, fontSize: 11, bold: true, align: 'center', valign: 'middle', color: C.text1, objectName: `a${i + 3}-nt${i}` })
-      // Elenco a destra con lo stesso numero
       const ly = 1.9 + i * Math.min(0.68, 4.9 / Math.max(links.length, 1))
-      s.addShape(pres.ShapeType.ellipse, { x: 7.0, y: ly + 0.04, w: 0.36, h: 0.36, fill: { color: C.accent2 }, line: { type: 'none' }, objectName: `a${i + 3}-ln${i}b` } as any)
-      Tx(s, String(i + 1), { x: 7.0, y: ly + 0.04, w: 0.36, h: 0.36, fontSize: 11, bold: true, align: 'center', valign: 'middle', color: C.text1, objectName: `a${i + 3}-lnt${i}` })
+      s.addShape(pres.ShapeType.ellipse, { x: 7.0, y: ly + 0.04, w: 0.36, h: 0.36, fill: { color: C.accent2 }, line: { type: 'none' }, objectName: `a${i + 4}-n${i}` } as any)
+      Tx(s, String(i + 1), { x: 7.0, y: ly + 0.04, w: 0.36, h: 0.36, fontSize: 11, bold: true, align: 'center', valign: 'middle', color: C.text1, objectName: `a${i + 4}-nt${i}` })
       Tx(s, [
         { text: l.row[0], options: { bold: true, color: C.background1, fontSize: fs(14), breakLine: true } },
         { text: l.row[1], options: { color: C.accent3, fontSize: fs(12) } },
-      ], { x: 7.5, y: ly - 0.04, w: 5.3, h: 0.66, valign: 'top', objectName: `a${i + 3}-tx${i}` })
+      ], { x: 7.5, y: ly - 0.04, w: 5.3, h: 0.66, valign: 'top', objectName: `a${i + 4}-tx${i}` })
     })
     s.addNotes(S.s7.notes)
   } else {
