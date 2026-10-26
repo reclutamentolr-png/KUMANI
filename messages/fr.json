@@ -14392,7 +14392,8 @@
     "turnOnMicCam": "Micro et caméra",
     "camTurnOn": "Activer la vidéo",
     "camTurnOff": "Couper la vidéo",
-    "you": "Toi"
+    "you": "Toi",
+    "exitPage": "Quitter"
   },
   "spendlyShared": {
     "title": "Dépenses partagées",

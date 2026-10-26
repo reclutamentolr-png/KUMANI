@@ -14392,7 +14392,8 @@
     "turnOnMicCam": "Микрофон и камера",
     "camTurnOn": "Включить видео",
     "camTurnOff": "Выключить видео",
-    "you": "Ты"
+    "you": "Ты",
+    "exitPage": "Выйти"
   },
   "spendlyShared": {
     "title": "Общие расходы",

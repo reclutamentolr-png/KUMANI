@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { X } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
 import Logo from '@/components/Logo'
@@ -41,6 +42,14 @@ export default async function WebinarGuestPage({ params }: { params: Promise<{ l
       <header className="mx-auto flex max-w-3xl items-center gap-3 px-4 pt-5">
         <Logo size={34} className="h-[34px] w-[34px]" />
         <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--gold-bright)]">{t('name')}</p>
+        {/* Uscita sempre a portata: chi è iscritto torna alla sua Home, gli altri al sito */}
+        <Link
+          href={user ? '/dashboard' : '/'}
+          className="ml-auto inline-flex min-h-10 items-center gap-1.5 rounded-full border border-white/25 px-3 text-sm font-bold text-white hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--gold)]"
+        >
+          <X className="h-4 w-4" aria-hidden />
+          {t('exitPage')}
+        </Link>
       </header>
       <main className="mx-auto max-w-3xl px-4 pb-10 pt-5">
         {w.status !== 'live' && (

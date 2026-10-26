@@ -14392,7 +14392,8 @@
     "turnOnMicCam": "Microphone and camera",
     "camTurnOn": "Video on",
     "camTurnOff": "Video off",
-    "you": "You"
+    "you": "You",
+    "exitPage": "Exit"
   },
   "spendlyShared": {
     "title": "Shared expenses",

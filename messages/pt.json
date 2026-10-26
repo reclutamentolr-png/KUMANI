@@ -14392,7 +14392,8 @@
     "turnOnMicCam": "Microfone e câmara",
     "camTurnOn": "Ligar vídeo",
     "camTurnOff": "Desligar vídeo",
-    "you": "Tu"
+    "you": "Tu",
+    "exitPage": "Sair"
   },
   "spendlyShared": {
     "title": "Despesas partilhadas",

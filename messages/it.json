@@ -14392,7 +14392,8 @@
     "turnOnMicCam": "Microfono e videocamera",
     "camTurnOn": "Accendi video",
     "camTurnOff": "Spegni video",
-    "you": "Tu"
+    "you": "Tu",
+    "exitPage": "Esci"
   },
   "spendlyShared": {
     "title": "Spese condivise",

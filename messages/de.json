@@ -14392,7 +14392,8 @@
     "turnOnMicCam": "Mikrofon und Kamera",
     "camTurnOn": "Video an",
     "camTurnOff": "Video aus",
-    "you": "Du"
+    "you": "Du",
+    "exitPage": "Verlassen"
   },
   "spendlyShared": {
     "title": "Geteilte Ausgaben",
