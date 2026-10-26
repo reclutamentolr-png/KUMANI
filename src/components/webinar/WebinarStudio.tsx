@@ -37,6 +37,7 @@ import { HOST_BEAT_MS, trackKind, type LiveState, type WebinarMessage, type Webi
 import { askConfirm } from '@/lib/confirm'
 import WebinarChat from '@/components/webinar/WebinarChat'
 import WebinarInvites from '@/components/webinar/WebinarInvites'
+import WebinarName from '@/components/webinar/WebinarName'
 import { acceptOffer, initials, makeOffer, makePeer, useCanShareScreen, useMounted, useWakeLock, useWebinarChannel } from '@/components/webinar/rtc'
 
 type Phase = 'setup' | 'starting' | 'live' | 'ended'
@@ -734,7 +735,7 @@ export default function WebinarStudio({
             <div className="flex items-center gap-3 rounded-2xl border border-emerald-400/50 bg-emerald-50 p-3">
               <Volume2 className="h-5 w-5 text-emerald-700" aria-hidden />
               <p className="flex-1 text-sm">
-                <strong>{speaking.name}</strong> {t('isSpeaking')}
+                <WebinarName name={speaking.name} kumano={speaking.kumano} /> {t('isSpeaking')}
               </p>
               <button
                 type="button"
@@ -749,7 +750,7 @@ export default function WebinarStudio({
             <div key={v.id} className="flex items-center gap-3 rounded-2xl border border-[var(--gold)]/50 bg-[var(--gold-pale)] p-3">
               <Hand className="h-5 w-5 text-[#7a5a14]" aria-hidden />
               <p className="flex-1 text-sm">
-                <strong>{v.name}</strong> {t('raisedHand')}
+                <WebinarName name={v.name} kumano={v.kumano} /> {t('raisedHand')}
               </p>
               <button
                 type="button"
@@ -771,7 +772,9 @@ export default function WebinarStudio({
               {viewers.length === 0 && <li className="px-2 py-1 text-sm text-[var(--muted)]">{t('nobodyYet')}</li>}
               {viewers.map((v) => (
                 <li key={v.id} className="flex items-center gap-2 rounded-xl px-2 py-1 text-sm hover:bg-[var(--gold-pale)]">
-                  <span className="min-w-0 flex-1 truncate">{v.name}</span>
+                  <span className="min-w-0 flex-1">
+                    <WebinarName name={v.name} kumano={v.kumano} />
+                  </span>
                   <button
                     type="button"
                     onClick={() => ban(v)}

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { EyeOff, Loader2, Send } from 'lucide-react'
 import { WEBINAR_MESSAGE_MAX, type WebinarMessage } from '@/lib/webinar'
+import WebinarName from '@/components/webinar/WebinarName'
 
 // Chat del webinar: domande di chi guarda, risposte di chi presenta
 export default function WebinarChat({
@@ -69,9 +70,9 @@ export default function WebinarChat({
         {visible.map((m) => (
           <li key={m.id} className={`group flex items-start gap-2 text-sm leading-snug ${m.isHost ? 'rounded-xl bg-[var(--gold)]/12 px-2.5 py-2' : ''}`}>
             <p className="min-w-0 flex-1 break-words">
-              <strong className="mr-1.5 text-[var(--gold-bright)]">
-                {m.name}
-                {m.isHost && <span className="ml-1 font-semibold text-white/60">· {t('hostTag')}</span>}
+              <strong className="mr-1.5">
+                <WebinarName name={m.name} kumano={m.kumano} />
+                {m.isHost && <span className="ml-1 text-xs font-semibold text-white/60">· {t('hostTag')}</span>}
               </strong>
               {m.body}
             </p>

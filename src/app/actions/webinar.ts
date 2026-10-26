@@ -159,12 +159,15 @@ async function liveState(w: WebinarRow): Promise<LiveState> {
 async function messagesAfter(webinarId: string, afterId: number): Promise<WebinarMessage[]> {
   let query = serviceClient()
     .from('webinar_messages')
-    .select('id, name, body, is_host, created_at')
+    .select('id, name, body, is_host, created_at, viewer:webinar_viewers(user_id)')
     .eq('webinar_id', webinarId)
     .eq('hidden', false)
   query = afterId > 0 ? query.gt('id', afterId).order('id', { ascending: true }).limit(100) : query.order('id', { ascending: false }).limit(50)
   const { data } = await query
-  const rows = (data ?? []).map((m) => ({ id: m.id as number, name: m.name as string, body: m.body as string, isHost: m.is_host as boolean, at: m.created_at as string }))
+  const rows = (data ?? []).map((m) => {
+    const viewer = (Array.isArray(m.viewer) ? m.viewer[0] : m.viewer) as { user_id: string | null } | null
+    return { id: m.id as number, name: m.name as string, body: m.body as string, isHost: m.is_host as boolean, kumano: !!m.is_host || !!viewer?.user_id, at: m.created_at as string }
+  })
   return afterId > 0 ? rows : rows.reverse()
 }
 
@@ -284,7 +287,7 @@ export async function hostBeat(
     messagesAfter(id, Math.max(0, Number(afterId) || 0)),
     serviceClient()
       .from('webinar_viewers')
-      .select('id, name, hand_raised_at')
+      .select('id, name, hand_raised_at, user_id')
       .eq('webinar_id', id)
       .eq('banned', false)
       .gte('last_seen', since)
@@ -294,7 +297,7 @@ export async function hostBeat(
   return {
     state,
     messages,
-    viewers: (viewers ?? []).map((v) => ({ id: v.id as string, name: v.name as string, hand: !!v.hand_raised_at, speaking: v.id === w.speaker_id })),
+    viewers: (viewers ?? []).map((v) => ({ id: v.id as string, name: v.name as string, hand: !!v.hand_raised_at, speaking: v.id === w.speaker_id, kumano: !!v.user_id })),
   }
 }
 
@@ -445,7 +448,11 @@ export async function joinWebinar(
   const userId = await currentUserId()
   let viewerId = existing?.id as string | undefined
   if (viewerId) {
-    await db.from('webinar_viewers').update({ name: cleanName, last_seen: new Date().toISOString() }).eq('id', viewerId)
+    // Chi rientra collegato al suo account diventa Kumano (nome su sfondo oro)
+    await db
+      .from('webinar_viewers')
+      .update({ name: cleanName, last_seen: new Date().toISOString(), ...(userId ? { user_id: userId } : {}) })
+      .eq('id', viewerId)
   } else {
     const { data, error } = await db
       .from('webinar_viewers')

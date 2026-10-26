@@ -31,9 +31,10 @@ export type LiveState = {
   hiddenIds: number[]
 }
 
-export type WebinarMessage = { id: number; name: string; body: string; isHost: boolean; at: string }
+// kumano: scritto da un Kumano (con il suo account) o da chi presenta; altrimenti da un invitato col link
+export type WebinarMessage = { id: number; name: string; body: string; isHost: boolean; kumano: boolean; at: string }
 
-export type WebinarViewerRow = { id: string; name: string; hand: boolean; speaking: boolean }
+export type WebinarViewerRow = { id: string; name: string; hand: boolean; speaking: boolean; kumano: boolean }
 
 export const webinarChannel = (key: string) => `webinar:${key}`
 
