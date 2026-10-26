@@ -986,9 +986,9 @@
     "goToDashboard": "Aller au Dashboard",
     "editPage": "Modifiez votre page",
     "bioThemeLabel": "Couleur de la page",
-    "bioModeLabel": "Cette page est pour",
-    "bioModePersonal": "Particulier",
-    "bioModeBusiness": "Entreprise",
+    "bioModeLabel": "Quelle page voulez-vous modifier ?",
+    "bioModePersonal": "Page personnelle",
+    "bioModeBusiness": "Page entreprise",
     "bioModeBusinessHint": "Nom, logo et ville repris de la fiche entreprise.",
     "bioModeBusinessEmpty": "Pour une page d’entreprise, ajoutez le nom de l’activité dans la fiche entreprise.",
     "bioModeBusinessFill": "Remplir la fiche",
@@ -1164,7 +1164,13 @@
     "scanner": "Scanner et PDF",
     "scannerDescription": "Photographiez vos documents et transformez-les en PDF nets et droits. Fusionnez, séparez, pivotez, réorganisez et allégez vos PDF. Tout sur votre appareil.",
     "fototessera": "Photo d’identité",
-    "fototesseraDescription": "La photo d’identité 35×45 mm depuis le téléphone : fond blanc, tête à la bonne taille et planche 10×15 à imprimer. Pour carte d’identité, passeport, permis de conduire et titre de séjour."
+    "fototesseraDescription": "La photo d’identité 35×45 mm depuis le téléphone : fond blanc, tête à la bonne taille et planche 10×15 à imprimer. Pour carte d’identité, passeport, permis de conduire et titre de séjour.",
+    "bioLinkPersonal": "Lien de la page personnelle",
+    "bioLinkBusiness": "Lien de la page entreprise",
+    "bioVisitPersonal": "Ouvrir la page personnelle",
+    "bioVisitBusiness": "Ouvrir la page entreprise",
+    "bioErr_businessPro": "La page entreprise est incluse dans le forfait Pro.",
+    "bioModeTwoPages": "Deux pages, deux liens : la page personnelle avec votre nom, celle de l’entreprise avec le nom, le logo et la ville de la fiche entreprise."
   },
   "neurobalance": {
     "tracksLabel": "Audios de relaxation",

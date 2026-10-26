@@ -986,9 +986,9 @@
     "goToDashboard": "Ir para a Dashboard",
     "editPage": "Edite a sua Página",
     "bioThemeLabel": "Cor da página",
-    "bioModeLabel": "Esta página é de",
-    "bioModePersonal": "Particular",
-    "bioModeBusiness": "Empresa",
+    "bioModeLabel": "Que página quer editar?",
+    "bioModePersonal": "Página pessoal",
+    "bioModeBusiness": "Página da empresa",
     "bioModeBusinessHint": "Nome, logótipo e cidade retirados da ficha da atividade.",
     "bioModeBusinessEmpty": "Para a página como empresa, adicione o nome da atividade na ficha da atividade.",
     "bioModeBusinessFill": "Preencher a ficha",
@@ -1164,7 +1164,13 @@
     "scanner": "Digitalizador e PDF",
     "scannerDescription": "Fotografe documentos e transforme-os em PDF limpos e direitos. Junte, divida, rode, reordene e reduza PDF. Tudo no seu dispositivo.",
     "fototessera": "Fotografia tipo passe",
-    "fototesseraDescription": "A fotografia 35×45 mm a partir do telemóvel: fundo branco, cabeça no tamanho certo e folha 10×15 para imprimir. Para cartão de cidadão, passaporte, carta de condução e autorização de residência."
+    "fototesseraDescription": "A fotografia 35×45 mm a partir do telemóvel: fundo branco, cabeça no tamanho certo e folha 10×15 para imprimir. Para cartão de cidadão, passaporte, carta de condução e autorização de residência.",
+    "bioLinkPersonal": "Link da página pessoal",
+    "bioLinkBusiness": "Link da página da empresa",
+    "bioVisitPersonal": "Abrir a página pessoal",
+    "bioVisitBusiness": "Abrir a página da empresa",
+    "bioErr_businessPro": "A página da empresa está incluída no plano Pro.",
+    "bioModeTwoPages": "Duas páginas, dois links: a pessoal com o seu nome, a da empresa com o nome, o logótipo e a cidade da ficha da atividade."
   },
   "neurobalance": {
     "tracksLabel": "Áudios de relaxamento",

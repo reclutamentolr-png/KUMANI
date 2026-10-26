@@ -1054,9 +1054,9 @@
     "goToDashboard": "Vai alla Dashboard",
     "editPage": "Modifica la tua Pagina",
     "bioThemeLabel": "Colore della pagina",
-    "bioModeLabel": "La pagina è di",
-    "bioModePersonal": "Privato",
-    "bioModeBusiness": "Azienda",
+    "bioModeLabel": "Quale pagina vuoi modificare?",
+    "bioModePersonal": "Pagina privata",
+    "bioModeBusiness": "Pagina azienda",
     "bioModeBusinessHint": "Nome, logo e città presi dalla Scheda attività.",
     "bioModeBusinessEmpty": "Per la pagina come azienda serve il nome dell’attività nella Scheda attività.",
     "bioModeBusinessFill": "Compila la Scheda",
@@ -1204,7 +1204,13 @@
     "scanner": "Scanner e PDF",
     "scannerDescription": "Fotografa i documenti e trasformali in PDF puliti e dritti. Unisci, dividi, ruota, riordina e alleggerisci i PDF. Tutto sul tuo dispositivo.",
     "fototessera": "Fototessera",
-    "fototesseraDescription": "La fototessera 35×45 mm dal telefono: sfondo bianco, testa della misura giusta e foglio 10×15 da stampare. Per carta d’identità, passaporto, patente e permesso di soggiorno."
+    "fototesseraDescription": "La fototessera 35×45 mm dal telefono: sfondo bianco, testa della misura giusta e foglio 10×15 da stampare. Per carta d’identità, passaporto, patente e permesso di soggiorno.",
+    "bioLinkPersonal": "Link della pagina privata",
+    "bioLinkBusiness": "Link della pagina azienda",
+    "bioVisitPersonal": "Apri la pagina privata",
+    "bioVisitBusiness": "Apri la pagina azienda",
+    "bioErr_businessPro": "La pagina azienda è inclusa nel piano Pro.",
+    "bioModeTwoPages": "Due pagine, due link: la privata con il tuo nome, quella dell’azienda con nome, logo e città della Scheda attività."
   },
   "neurobalance": {
     "tracksLabel": "Audio di rilassamento",

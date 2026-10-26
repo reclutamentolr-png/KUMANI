@@ -1051,9 +1051,9 @@
     "goToDashboard": "Go to Dashboard",
     "editPage": "Edit your Page",
     "bioThemeLabel": "Page color",
-    "bioModeLabel": "This page is for",
-    "bioModePersonal": "Private person",
-    "bioModeBusiness": "Business",
+    "bioModeLabel": "Which page do you want to edit?",
+    "bioModePersonal": "Personal page",
+    "bioModeBusiness": "Business page",
     "bioModeBusinessHint": "Name, logo and city taken from your business profile.",
     "bioModeBusinessEmpty": "To use the page as a business, add your business name to your business profile.",
     "bioModeBusinessFill": "Fill in the profile",
@@ -1204,7 +1204,13 @@
     "scanner": "Scanner & PDF",
     "scannerDescription": "Photograph documents and turn them into clean, straight PDFs. Merge, split, rotate, reorder and compress PDFs. All on your device.",
     "fototessera": "ID Photo",
-    "fototesseraDescription": "A 35×45 mm ID photo from your phone: white background, the right head size and a 10×15 sheet to print. For identity cards, passports, driving licences and residence permits."
+    "fototesseraDescription": "A 35×45 mm ID photo from your phone: white background, the right head size and a 10×15 sheet to print. For identity cards, passports, driving licences and residence permits.",
+    "bioLinkPersonal": "Personal page link",
+    "bioLinkBusiness": "Business page link",
+    "bioVisitPersonal": "Open the personal page",
+    "bioVisitBusiness": "Open the business page",
+    "bioErr_businessPro": "The business page is included in the Pro plan.",
+    "bioModeTwoPages": "Two pages, two links: the personal one with your name, the business one with the name, logo and city from your business profile."
   },
   "neurobalance": {
     "tracksLabel": "Relaxation audio",

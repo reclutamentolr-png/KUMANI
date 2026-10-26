@@ -986,9 +986,9 @@
     "goToDashboard": "Zum Dashboard",
     "editPage": "Bearbeite deine Seite",
     "bioThemeLabel": "Seitenfarbe",
-    "bioModeLabel": "Diese Seite ist für",
-    "bioModePersonal": "Privatperson",
-    "bioModeBusiness": "Unternehmen",
+    "bioModeLabel": "Welche Seite möchtest du bearbeiten?",
+    "bioModePersonal": "Private Seite",
+    "bioModeBusiness": "Unternehmensseite",
     "bioModeBusinessHint": "Name, Logo und Stadt aus deinem Firmenprofil.",
     "bioModeBusinessEmpty": "Für eine Unternehmensseite trage den Firmennamen im Firmenprofil ein.",
     "bioModeBusinessFill": "Profil ausfüllen",
@@ -1164,7 +1164,13 @@
     "scanner": "Scanner & PDF",
     "scannerDescription": "Fotografiere Dokumente und mach daraus saubere, gerade PDFs. PDFs zusammenfügen, teilen, drehen, sortieren und verkleinern. Alles auf deinem Gerät.",
     "fototessera": "Passbild",
-    "fototesseraDescription": "Das Passbild 35×45 mm vom Handy: weißer Hintergrund, richtige Kopfgröße und ein 10×15-Bogen zum Drucken. Für Personalausweis, Reisepass, Führerschein und Aufenthaltstitel."
+    "fototesseraDescription": "Das Passbild 35×45 mm vom Handy: weißer Hintergrund, richtige Kopfgröße und ein 10×15-Bogen zum Drucken. Für Personalausweis, Reisepass, Führerschein und Aufenthaltstitel.",
+    "bioLinkPersonal": "Link der privaten Seite",
+    "bioLinkBusiness": "Link der Unternehmensseite",
+    "bioVisitPersonal": "Private Seite öffnen",
+    "bioVisitBusiness": "Unternehmensseite öffnen",
+    "bioErr_businessPro": "Die Unternehmensseite ist im Pro-Plan enthalten.",
+    "bioModeTwoPages": "Zwei Seiten, zwei Links: die private mit deinem Namen, die Unternehmensseite mit Name, Logo und Stadt aus dem Firmenprofil."
   },
   "neurobalance": {
     "tracksLabel": "Entspannungsaudios",

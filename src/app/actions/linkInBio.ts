@@ -61,8 +61,9 @@ export async function saveLinkInBio(bioText: string, links: LinkItem[], theme: B
     .slice(0, 30)
     .map((l) => ({ ...l, url: normalizeLinkUrl(l.icon, l.url) }))
 
-  // «Azienda» solo con il Pro (la Scheda attività è del Pro)
-  const cleanMode: BioMode = mode === 'business' && (await bioPlanIsPro(user.id)) ? 'business' : 'personal'
+  // Pagina «azienda» solo con il Pro (la Scheda attività è del Pro)
+  const cleanMode: BioMode = mode === 'business' ? 'business' : 'personal'
+  if (cleanMode === 'business' && !(await bioPlanIsPro(user.id))) return refuse('businessPro')
 
   const { error } = await supabase.from('link_in_bio').upsert(
     {
@@ -75,7 +76,7 @@ export async function saveLinkInBio(bioText: string, links: LinkItem[], theme: B
       theme,
       updated_at: new Date().toISOString(),
     },
-    { onConflict: 'user_id' }
+    { onConflict: 'user_id,mode' }
   )
 
   if (error) return refuse('saveError', `${error.code} ${error.message}`)

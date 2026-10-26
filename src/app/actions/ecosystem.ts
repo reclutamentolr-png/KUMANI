@@ -48,7 +48,7 @@ export async function addCvToLinkInBio(publicUrl: string): Promise<'added' | 'ex
   } = await supabase.auth.getUser()
   if (!user || !/^https?:\/\/[^\s]+\/cv\/[A-Za-z0-9_-]{4,64}$/.test(publicUrl)) return 'error'
   if (!(await hasActiveToolAccess(supabase, user.id, 'link-in-bio'))) return 'no_access'
-  const { data: row } = await supabase.from('link_in_bio').select('links, theme, bio_text').eq('user_id', user.id).maybeSingle()
+  const { data: row } = await supabase.from('link_in_bio').select('links, theme, bio_text').eq('user_id', user.id).eq('mode', 'personal').maybeSingle()
   const raw = row?.links
   const links: { id?: string; title: string; url: string; icon: string; enabled?: boolean }[] = Array.isArray(raw) ? raw : typeof raw === 'string' ? JSON.parse(raw || '[]') : []
   const code = publicUrl.split('/cv/')[1]
@@ -57,7 +57,7 @@ export async function addCvToLinkInBio(publicUrl: string): Promise<'added' | 'ex
   links.push({ id: crypto.randomUUID(), title: t('cvToBioLinkTitle'), url: publicUrl, icon: 'default', enabled: true })
   const { error } = await supabase
     .from('link_in_bio')
-    .upsert({ user_id: user.id, links: JSON.stringify(links), bio_text: row?.bio_text ?? '', theme: row?.theme ?? undefined, updated_at: new Date().toISOString() }, { onConflict: 'user_id' })
+    .upsert({ user_id: user.id, mode: 'personal', links: JSON.stringify(links), bio_text: row?.bio_text ?? '', theme: row?.theme ?? undefined, updated_at: new Date().toISOString() }, { onConflict: 'user_id,mode' })
   if (error) {
     console.error('[ecosistema] CV → Link in bio:', error.message)
     return 'error'

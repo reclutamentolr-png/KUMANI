@@ -87,14 +87,27 @@ export default function LinkInBioEditor({
   // salvato, così l'utente lo vede prima di spendere i KU Karma.
   const [previewTheme, setPreviewTheme] = useState<BioThemeKey | null>(null)
   const previewRef = useRef<HTMLDivElement>(null)
+  const firstLoad = useRef(true)
 
+  // Pagina da modificare: «privato» o, nel Pro, «azienda» (ognuna con i suoi dati)
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true)
       const { data } = await supabase
         .from('link_in_bio')
         .select('bio_text, links, theme, mode, subtitle')
         .eq('user_id', userId)
-        .single()
+        .eq('mode', mode)
+        .maybeSingle()
+      // Prima apertura nel Pro senza pagina privata ma con quella azienda
+      // (salvata prima delle due pagine): si apre quella, non una pagina vuota
+      if (firstLoad.current) {
+        firstLoad.current = false
+        if (!data && mode === 'personal' && isPro) {
+          const { count } = await supabase.from('link_in_bio').select('id', { count: 'exact', head: true }).eq('user_id', userId).eq('mode', 'business')
+          if (count) return setMode('business')
+        }
+      }
 
       const themeKeys = PREMIUM_BIO_THEME_KEYS.map(linkInBioThemeUnlockKey)
       const [{ data: purchases }, { data: feature }, { data: unlocks }, { data: me }] = await Promise.all([
@@ -115,9 +128,13 @@ export default function LinkInBioEditor({
       )
       setKuBalance(me?.daily_points ?? 0)
 
+      // Pagina mai salvata: si parte vuoti (con il tema del brand se lo segue)
+      setBioText('')
+      setSubtitle(null)
+      setLinks([])
+      setTheme(brand && followBrand ? 'brand' : DEFAULT_BIO_THEME)
       if (data) {
         setBioText(data.bio_text || '')
-        setMode(data.mode === 'business' ? 'business' : 'personal')
         setSubtitle(typeof data.subtitle === 'string' ? data.subtitle : null)
         try {
           // Tollerante: links può essere una stringa JSON o già un array (jsonb)
@@ -137,7 +154,7 @@ export default function LinkInBioEditor({
       setLoading(false)
     }
     fetchData()
-  }, [userId, supabase, brand])
+  }, [userId, supabase, brand, followBrand, mode, isPro])
 
   const addLink = () => {
     setLinks([
@@ -270,6 +287,7 @@ export default function LinkInBioEditor({
                 </button>
               ))}
             </div>
+            <p className="mt-2 text-xs text-[var(--muted)]">{t('bioModeTwoPages')}</p>
             {mode === 'business' && (
               <p className="mt-2 text-xs text-[var(--muted)]">
                 {businessProfile?.companyName.trim() ? (

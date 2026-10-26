@@ -75,6 +75,13 @@ export default async function LinkInBioPage({ params }: { params: Promise<{ loca
   const baseUrl = SITE_URL
   
   const bioUrl = `${baseUrl}/${locale}/ref/${profile.referral_code}/bio`
+  // Pro: due pagine con due indirizzi; Plus: solo la pagina privata
+  const pages = isPro
+    ? [
+        { key: 'personal', url: bioUrl, label: t('bioLinkPersonal'), visit: t('bioVisitPersonal') },
+        { key: 'business', url: `${bioUrl}/azienda`, label: t('bioLinkBusiness'), visit: t('bioVisitBusiness') },
+      ]
+    : [{ key: 'personal', url: bioUrl, label: `${t('linkInBio')} (${t('savePrompt')})`, visit: t('visitBio') }]
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -118,33 +125,41 @@ export default async function LinkInBioPage({ params }: { params: Promise<{ loca
             e dopo il salvataggio — niente più mockup statico scollegato). */}
         <LinkInBioEditor userId={user.id} firstName={profile.first_name} lastName={profile.last_name} occupation={profile.occupation ?? ''} businessProfile={businessProfile} isPro={isPro} brand={brand} followBrand={(brandRow?.brand_follow as Record<string, unknown> | null)?.bio === true} />
 
-        {/* URL della Bio con pulsante copia */}
-        <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 mb-8">
-          <label className="block text-sm font-semibold text-[var(--ink)] mb-2">
-            {t('linkInBio')} ({t('savePrompt')})
-          </label>
-          <div className="flex flex-col sm:flex-row gap-2">
-            <input
-              type="text"
-              readOnly
-              value={bioUrl}
-              className="min-w-0 flex-1 bg-[var(--paper)] border border-[var(--gold)]/25 rounded-lg px-4 py-3 text-sm font-mono text-[var(--ink)] focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30"
-            />
-            <CopyLinkButton url={bioUrl} colorClassName="bg-[var(--ink)] hover:bg-[var(--ink-soft)] text-white" />
-          </div>
+        {/* Indirizzi delle pagine con pulsante copia: nel Pro due pagine
+            (privato e azienda), nel Plus solo quella privata */}
+        <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 mb-8 space-y-5">
+          {pages.map((page) => (
+            <div key={page.key}>
+              <label className="block text-sm font-semibold text-[var(--ink)] mb-2">{page.label}</label>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <input
+                  type="text"
+                  readOnly
+                  value={page.url}
+                  className="min-w-0 flex-1 bg-[var(--paper)] border border-[var(--gold)]/25 rounded-lg px-4 py-3 text-sm font-mono text-[var(--ink)] focus:outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/30"
+                />
+                <CopyLinkButton url={page.url} colorClassName="bg-[var(--ink)] hover:bg-[var(--ink-soft)] text-white" />
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Call to Action */}
         <div className="mt-10 text-center">
-          <a
-            href={bioUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
-          >
-            <ExternalLink className="w-5 h-5" />
-            {t('visitBio')}
-          </a>
+          <div className="flex flex-wrap justify-center gap-3">
+            {pages.map((page) => (
+              <a
+                key={page.key}
+                href={page.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
+              >
+                <ExternalLink className="w-5 h-5" />
+                {page.visit}
+              </a>
+            ))}
+          </div>
           <p className="text-sm text-[var(--muted)] mt-3">{t('savePrompt')}</p>
         </div>
         {/* Ecosistema: il passo successivo, se il servizio non è ancora incluso */}

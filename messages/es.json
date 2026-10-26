@@ -986,9 +986,9 @@
     "goToDashboard": "Ir al Panel",
     "editPage": "Edita tu página",
     "bioThemeLabel": "Color de la página",
-    "bioModeLabel": "Esta página es de",
-    "bioModePersonal": "Particular",
-    "bioModeBusiness": "Empresa",
+    "bioModeLabel": "¿Qué página quieres editar?",
+    "bioModePersonal": "Página personal",
+    "bioModeBusiness": "Página de empresa",
     "bioModeBusinessHint": "Nombre, logo y ciudad tomados de la ficha del negocio.",
     "bioModeBusinessEmpty": "Para la página como empresa añade el nombre del negocio en la ficha del negocio.",
     "bioModeBusinessFill": "Rellenar la ficha",
@@ -1164,7 +1164,13 @@
     "scanner": "Escáner y PDF",
     "scannerDescription": "Fotografía documentos y conviértelos en PDF limpios y rectos. Une, divide, gira, ordena y aligera PDF. Todo en tu dispositivo.",
     "fototessera": "Foto carné",
-    "fototesseraDescription": "La foto carné de 35×45 mm desde el móvil: fondo blanco, cabeza del tamaño correcto y hoja 10×15 para imprimir. Para DNI, pasaporte, carné de conducir y permiso de residencia."
+    "fototesseraDescription": "La foto carné de 35×45 mm desde el móvil: fondo blanco, cabeza del tamaño correcto y hoja 10×15 para imprimir. Para DNI, pasaporte, carné de conducir y permiso de residencia.",
+    "bioLinkPersonal": "Enlace de la página personal",
+    "bioLinkBusiness": "Enlace de la página de empresa",
+    "bioVisitPersonal": "Abrir la página personal",
+    "bioVisitBusiness": "Abrir la página de empresa",
+    "bioErr_businessPro": "La página de empresa está incluida en el plan Pro.",
+    "bioModeTwoPages": "Dos páginas, dos enlaces: la personal con tu nombre, la de empresa con el nombre, el logo y la ciudad de la ficha del negocio."
   },
   "neurobalance": {
     "tracksLabel": "Audios de relajación",
