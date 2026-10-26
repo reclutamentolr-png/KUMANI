@@ -14393,7 +14393,11 @@
     "camTurnOn": "Accendi video",
     "camTurnOff": "Spegni video",
     "you": "Tu",
-    "exitPage": "Esci"
+    "exitPage": "Esci",
+    "closeStudio": "Chiudi la regia",
+    "closeStudioTitle": "Chiudere la regia?",
+    "closeStudioConfirm": "La diretta finisce per tutti e il webinar non si potrà riaprire.",
+    "closeStudioYes": "Termina e chiudi"
   },
   "spendlyShared": {
     "title": "Spese condivise",

@@ -14393,7 +14393,11 @@
     "camTurnOn": "Activer la vidéo",
     "camTurnOff": "Couper la vidéo",
     "you": "Toi",
-    "exitPage": "Quitter"
+    "exitPage": "Quitter",
+    "closeStudio": "Fermer la régie",
+    "closeStudioTitle": "Fermer la régie ?",
+    "closeStudioConfirm": "Le direct se termine pour tous et le webinaire ne pourra pas être rouvert.",
+    "closeStudioYes": "Terminer et fermer"
   },
   "spendlyShared": {
     "title": "Dépenses partagées",

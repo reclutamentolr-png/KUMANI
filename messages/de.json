@@ -14393,7 +14393,11 @@
     "camTurnOn": "Video an",
     "camTurnOff": "Video aus",
     "you": "Du",
-    "exitPage": "Verlassen"
+    "exitPage": "Verlassen",
+    "closeStudio": "Regie schließen",
+    "closeStudioTitle": "Regie schließen?",
+    "closeStudioConfirm": "Das Live endet für alle und das Webinar kann nicht wieder geöffnet werden.",
+    "closeStudioYes": "Beenden und schließen"
   },
   "spendlyShared": {
     "title": "Geteilte Ausgaben",

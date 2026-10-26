@@ -14393,7 +14393,11 @@
     "camTurnOn": "Video on",
     "camTurnOff": "Video off",
     "you": "You",
-    "exitPage": "Exit"
+    "exitPage": "Exit",
+    "closeStudio": "Close the control room",
+    "closeStudioTitle": "Close the control room?",
+    "closeStudioConfirm": "The live session ends for everyone and the webinar cannot be reopened.",
+    "closeStudioYes": "End and close"
   },
   "spendlyShared": {
     "title": "Shared expenses",

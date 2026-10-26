@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
+import { useRouter } from 'next/navigation'
 import {
   Copy,
   Eye,
@@ -19,6 +20,7 @@ import {
   Video,
   VideoOff,
   Volume2,
+  X,
 } from 'lucide-react'
 import {
   hostAnswer,
@@ -412,9 +414,8 @@ export default function WebinarStudio({
     beat()
   }
 
-  const end = async () => {
-    if (!(await askConfirm(t('endConfirm'), { title: t('endTitle'), confirmLabel: t('endYes'), cancelLabel: t('endNo'), tone: 'warning' }))) return
-    await hostEnd(webinar.id)
+  // Spegne videocamera, microfono, schermo e collegamenti
+  const stopAll = () => {
     closePeer()
     listenRef.current?.pc.close()
     listenRef.current = null
@@ -423,7 +424,25 @@ export default function WebinarStudio({
     screenRef.current?.stop()
     idleRef.current.video?.stop()
     idleRef.current.screen?.stop()
+  }
+
+  const end = async () => {
+    if (!(await askConfirm(t('endConfirm'), { title: t('endTitle'), confirmLabel: t('endYes'), cancelLabel: t('endNo'), tone: 'warning' }))) return
+    await hostEnd(webinar.id)
+    stopAll()
     setPhase('ended')
+  }
+
+  // «Chiudi la regia»: in diretta prima la si termina per tutti (con conferma),
+  // poi si spegne tutto e si torna all'elenco dei webinar
+  const router = useRouter()
+  const closeStudio = async () => {
+    if (phase === 'live') {
+      if (!(await askConfirm(t('closeStudioConfirm'), { title: t('closeStudioTitle'), confirmLabel: t('closeStudioYes'), cancelLabel: t('endNo'), tone: 'warning' }))) return
+      await hostEnd(webinar.id)
+    }
+    stopAll()
+    router.push(`${locale === 'it' ? '' : `/${locale}`}/app/webinar`)
   }
 
   // Tornando sulla pagina: videocamera e microfono possono essere stati
@@ -554,6 +573,14 @@ export default function WebinarStudio({
         <Square className="mx-auto h-10 w-10 text-[var(--gold-bright)]" aria-hidden />
         <h2 className="mt-3 text-2xl font-extrabold">{t('endedTitle')}</h2>
         <p className="mt-2 text-white/70">{t('endedHostText')}</p>
+        <button
+          type="button"
+          onClick={closeStudio}
+          className="mt-5 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[var(--gold-bright)] px-6 font-bold text-[var(--ink)]"
+        >
+          <X className="h-5 w-5" aria-hidden />
+          {t('closeStudio')}
+        </button>
       </div>
     )
   }
@@ -662,6 +689,14 @@ export default function WebinarStudio({
             </div>
           )}
           {!screenAllowed && mediaReady && <p className="text-xs text-[var(--muted)]">{t('screenOnlyPc')}</p>}
+          <button
+            type="button"
+            onClick={closeStudio}
+            className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-[var(--ink)]/25 bg-white px-4 text-sm font-bold text-[var(--ink)] hover:bg-[var(--paper)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--gold)]"
+          >
+            <X className="h-4 w-4" aria-hidden />
+            {t('closeStudio')}
+          </button>
           {phase !== 'live' && <p className="rounded-2xl bg-[var(--gold-pale)] p-3 text-sm font-medium text-[var(--ink)]">{t('stayOnPage')}</p>}
 
           {/* Kumani invitati: avviso sul telefono con il link */}

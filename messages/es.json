@@ -14393,7 +14393,11 @@
     "camTurnOn": "Activar vídeo",
     "camTurnOff": "Apagar vídeo",
     "you": "Tú",
-    "exitPage": "Salir"
+    "exitPage": "Salir",
+    "closeStudio": "Cerrar la sala de control",
+    "closeStudioTitle": "¿Cerrar la sala de control?",
+    "closeStudioConfirm": "El directo termina para todos y el webinar no se podrá volver a abrir.",
+    "closeStudioYes": "Terminar y cerrar"
   },
   "spendlyShared": {
     "title": "Gastos compartidos",

@@ -14393,7 +14393,11 @@
     "camTurnOn": "Включить видео",
     "camTurnOff": "Выключить видео",
     "you": "Ты",
-    "exitPage": "Выйти"
+    "exitPage": "Выйти",
+    "closeStudio": "Закрыть режиссёрскую",
+    "closeStudioTitle": "Закрыть режиссёрскую?",
+    "closeStudioConfirm": "Эфир закончится для всех, и вебинар нельзя будет открыть снова.",
+    "closeStudioYes": "Завершить и закрыть"
   },
   "spendlyShared": {
     "title": "Общие расходы",

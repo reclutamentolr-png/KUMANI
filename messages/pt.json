@@ -14393,7 +14393,11 @@
     "camTurnOn": "Ligar vídeo",
     "camTurnOff": "Desligar vídeo",
     "you": "Tu",
-    "exitPage": "Sair"
+    "exitPage": "Sair",
+    "closeStudio": "Fechar a régie",
+    "closeStudioTitle": "Fechar a régie?",
+    "closeStudioConfirm": "O direto termina para todos e o webinar não poderá ser reaberto.",
+    "closeStudioYes": "Terminar e fechar"
   },
   "spendlyShared": {
     "title": "Despesas partilhadas",
