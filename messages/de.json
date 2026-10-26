@@ -10596,6 +10596,8 @@
     "suspendedText": "Das Staff hat die Seite gesperrt ({reason}). Schreib an support@kumani.io, wenn du Fragen hast.",
     "publish": "Seite veröffentlichen",
     "publishHint": "Sobald sie veröffentlicht ist, kann jeder mit dem Link sie sehen und Google kann sie finden. Denk ans Speichern.",
+    "publishPending": "Tippe unten auf „Speichern“, um die Seite online zu stellen: Bis du speicherst, bleibt sie ein Entwurf.",
+    "unpublishPending": "Tippe auf „Speichern“, um die Seite offline zu nehmen.",
     "yourLink": "Deine Adresse",
     "copy": "Kopieren",
     "copied": "Kopiert!",

@@ -10596,6 +10596,8 @@
     "suspendedText": "O Staff suspendeu a página ({reason}). Escreva para support@kumani.io para mais esclarecimentos.",
     "publish": "Publicar a página",
     "publishHint": "Quando está publicada, quem tem a ligação pode vê-la e o Google pode encontrá-la. Lembre-se de guardar.",
+    "publishPending": "Toca em «Guardar» no fim para pôr a página online: enquanto não guardares, continua um rascunho.",
+    "unpublishPending": "Toca em «Guardar» para tirar a página da internet.",
     "yourLink": "O seu endereço",
     "copy": "Copiar",
     "copied": "Copiado!",

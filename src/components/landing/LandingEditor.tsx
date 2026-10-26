@@ -117,6 +117,8 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
   const [slug, setSlug] = useState(initial.slug)
   const [savedSlug, setSavedSlug] = useState(initial.exists ? initial.slug : '')
   const [isPublished, setIsPublished] = useState(initial.isPublished)
+  // Stato davvero salvato: «Pubblicata» solo dopo «Salva», non appena si spunta la casella
+  const [savedPublished, setSavedPublished] = useState(initial.isPublished)
   const [searchVisible, setSearchVisible] = useState(initial.searchVisible)
   const [template, setTemplate] = useState<LandingTemplate>(initial.template)
   const [accent, setAccent] = useState(initial.accent)
@@ -227,6 +229,7 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
     }
     setC(r.content)
     setSavedSlug(slug)
+    setSavedPublished(isPublished)
     setSlugStatus('idle')
     setDirty(false)
     try {
@@ -321,7 +324,7 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
     })
 
   const labels = labelsByLocale[contentLocale]
-  const status = initial.suspended ? 'suspended' : isPublished && savedSlug ? 'published' : 'draft'
+  const status = initial.suspended ? 'suspended' : savedPublished && savedSlug ? 'published' : 'draft'
 
   // L'anteprima segue la scrittura con un attimo di ritardo: i campi restano
   // fluidi anche con pagine lunghe e tante foto
@@ -552,6 +555,11 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
               {t('publish')}
             </label>
           </div>
+          {!initial.suspended && isPublished !== savedPublished && (
+            <p className="mt-3 rounded-xl bg-amber-400/15 p-3 text-sm font-semibold text-amber-200" role="status">
+              {t(isPublished ? 'publishPending' : 'unpublishPending')}
+            </p>
+          )}
           {initial.suspended && <p className="mt-3 rounded-xl bg-red-500/15 p-3 text-sm text-red-100">{t('suspendedText', { reason: initial.suspendedReason || '—' })}</p>}
           <p className="mt-3 text-xs text-white/60">{t('publishHint')}</p>
           {/* Motori di ricerca: spento di partenza, lo sceglie il titolare */}

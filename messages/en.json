@@ -10596,6 +10596,8 @@
     "suspendedText": "The Staff has suspended the page ({reason}). Write to support@kumani.io for more information.",
     "publish": "Publish the page",
     "publishHint": "Once published, anyone with the link can see it and Google can find it. Remember to save.",
+    "publishPending": "Tap “Save” at the bottom to put the page online: until you save, it stays a draft.",
+    "unpublishPending": "Tap “Save” to take the page offline.",
     "yourLink": "Your address",
     "copy": "Copy",
     "copied": "Copied!",
