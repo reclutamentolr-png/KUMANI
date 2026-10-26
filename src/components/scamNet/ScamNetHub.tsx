@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { BellRing, Flag, ImagePlus, LoaderCircle, MessageCircle, PhoneCall, Plus, ShieldAlert, ShieldCheck, TrendingUp, UserRound, Globe, ExternalLink } from 'lucide-react'
 import { addScamEvidence, checkPhone, myScamReports, scamAlerts, setScamAlerts, type MyScamReport, type ScamAlerts, type ScamMatch } from '@/app/actions/scamNet'
@@ -24,6 +24,35 @@ const loadingRow = (label: string) => (
   </p>
 )
 
+// Racconto in 2 righe: «Mostra tutto il testo» compare solo se il testo è
+// davvero tagliato sullo schermo
+function StoryText({ text, more, less }: { text: string; more: string; less: string }) {
+  const ref = useRef<HTMLParagraphElement>(null)
+  const [open, setOpen] = useState(false)
+  const [cut, setCut] = useState(false)
+  useEffect(() => {
+    const el = ref.current
+    if (!el || open) return
+    const check = () => setCut(el.scrollHeight > el.clientHeight + 1)
+    check()
+    const observer = new ResizeObserver(check)
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [open, text])
+  return (
+    <>
+      <p ref={ref} className={`mt-1.5 whitespace-pre-line border-l-2 border-[#A12A2A]/40 pl-3 italic ${open ? '' : 'line-clamp-2'}`}>
+        {text}
+      </p>
+      {(cut || open) && (
+        <button type="button" onClick={() => setOpen(!open)} className="mt-1 text-xs font-bold text-[#A12A2A] hover:underline" aria-expanded={open}>
+          {open ? less : more}
+        </button>
+      )}
+    </>
+  )
+}
+
 // ---------- Allerta della community ----------
 function AlertsTab({ onReport }: { onReport: () => void }) {
   const t = useTranslations('scamNet')
@@ -31,7 +60,6 @@ function AlertsTab({ onReport }: { onReport: () => void }) {
   const ago = useTimeAgoShort()
   const [data, setData] = useState<ScamAlerts | null>(null)
   const [saving, setSaving] = useState(false)
-  const [openStory, setOpenStory] = useState<number | null>(null)
   useEffect(() => {
     scamAlerts().then(setData)
   }, [])
@@ -107,13 +135,7 @@ function AlertsTab({ onReport }: { onReport: () => void }) {
                     <p className="flex items-center gap-1.5 text-xs font-extrabold text-[#A12A2A]">
                       <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" /> {t('alerts.storyBy')}
                     </p>
-                    <p className={`mt-1.5 whitespace-pre-line border-l-2 border-[#A12A2A]/40 pl-3 italic ${openStory === i ? '' : 'line-clamp-2'}`}>{r.story}</p>
-                    {/* Il pulsante serve solo se il testo non sta in 2 righe */}
-                    {(r.story.length > 110 || r.story.includes('\n')) && (
-                      <button type="button" onClick={() => setOpenStory(openStory === i ? null : i)} className="mt-1 text-xs font-bold text-[#A12A2A] hover:underline" aria-expanded={openStory === i}>
-                        {openStory === i ? t('alerts.storyLess') : t('alerts.storyMore')}
-                      </button>
-                    )}
+                    <StoryText text={r.story} more={t('alerts.storyMore')} less={t('alerts.storyLess')} />
                   </div>
                 )}
               </li>
