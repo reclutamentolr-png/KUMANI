@@ -68,7 +68,8 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
     referral_code: initialReferralCode,
     voucher_code: initialCode,
     professional: initialProfessional,
-    // Termini e Privacy (obbligatorio) e consenso marketing (facoltativo)
+    // Termini e Privacy (obbligatorio). Il consenso marketing non si chiede
+    // più all'iscrizione: si dà dal profilo (resta false)
     accept_terms: false,
     marketing: false,
   })
@@ -507,17 +508,6 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
                 ),
               })}
             </span>
-          </label>
-
-          <label htmlFor="marketing" className="flex cursor-pointer items-start gap-3 text-sm text-gray-700">
-            <input
-              id="marketing"
-              type="checkbox"
-              checked={formData.marketing}
-              onChange={(e) => setFormData({ ...formData, marketing: e.target.checked })}
-              className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--gold)]"
-            />
-            <span>{t('marketingConsent')}</span>
           </label>
 
           <TurnstileWidget captcha={captcha} />
