@@ -2,14 +2,16 @@
 
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { Database, Download, LoaderCircle, Trash2 } from 'lucide-react'
+import { ChevronDown, Database, Download, LoaderCircle, Trash2 } from 'lucide-react'
 import { deleteMyData, exportMyData, listMyData, type MyDataSummary } from '@/app/actions/myData'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { askConfirm } from '@/lib/confirm'
 
 // «I miei dati nei servizi»: per ogni servizio con dati salvati, quante voci
 // ci sono, «Scarica» (copia in un file) e «Cancella tutto». Funziona anche
-// senza piano attivo: i dati restano sempre di chi li ha creati.
+// senza piano attivo: i dati restano sempre di chi li ha creati. Chiusa
+// all'apertura del Profilo (con molti servizi l'elenco è lungo): si apre a
+// richiesta e solo allora si leggono i dati.
 export default function MyDataSection({ isOpen }: { isOpen: boolean }) {
   const t = useTranslations('myData')
   const tm = useTranslations('marketplace')
@@ -17,9 +19,10 @@ export default function MyDataSection({ isOpen }: { isOpen: boolean }) {
   const [busy, setBusy] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [reload, setReload] = useState(0)
+  const [expanded, setExpanded] = useState(false)
 
   useEffect(() => {
-    if (!isOpen) return
+    if (!isOpen || !expanded) return
     let cancelled = false
     listMyData()
       .then((list) => {
@@ -31,7 +34,7 @@ export default function MyDataSection({ isOpen }: { isOpen: boolean }) {
     return () => {
       cancelled = true
     }
-  }, [isOpen, reload])
+  }, [isOpen, expanded, reload])
 
   const tools = getMarketplaceTools((key) => tm(key))
   const nameOf = (tool: string) => tools.find((x) => x.toolName === tool)?.title ?? tool
@@ -73,11 +76,17 @@ export default function MyDataSection({ isOpen }: { isOpen: boolean }) {
 
   return (
     <div>
-      <p className="flex items-center gap-1.5 text-sm font-semibold text-[var(--ink)]">
-        <Database className="h-4 w-4 text-[var(--gold)]" /> {t('title')}
-      </p>
+      <button
+        type="button"
+        onClick={() => setExpanded((open) => !open)}
+        aria-expanded={expanded}
+        className="flex w-full items-center gap-1.5 text-left text-sm font-semibold text-[var(--ink)]"
+      >
+        <Database className="h-4 w-4 text-[var(--gold)]" /> <span className="flex-1">{t('title')}</span>
+        <ChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${expanded ? 'rotate-180' : ''}`} />
+      </button>
       <p className="mt-0.5 text-xs text-gray-500">{t('intro')}</p>
-      {items === null ? (
+      {!expanded ? null : items === null ? (
         <LoaderCircle className="mt-3 h-5 w-5 animate-spin text-gray-400" />
       ) : items.length === 0 ? (
         <p className="mt-3 text-sm text-gray-500">{t('empty')}</p>
@@ -112,8 +121,8 @@ export default function MyDataSection({ isOpen }: { isOpen: boolean }) {
           ))}
         </ul>
       )}
-      {error && <p className="mt-2 text-sm font-semibold text-red-600">{error}</p>}
-      <p className="mt-2 text-xs text-gray-500">{t('note')}</p>
+      {expanded && error && <p className="mt-2 text-sm font-semibold text-red-600">{error}</p>}
+      {expanded && <p className="mt-2 text-xs text-gray-500">{t('note')}</p>}
     </div>
   )
 }

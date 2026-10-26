@@ -87,6 +87,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "preventivi",
   "proTrial",
   "profileLock",
+  "profilePhoto",
   "proposals",
   "pushInvite",
   "pushSettings",

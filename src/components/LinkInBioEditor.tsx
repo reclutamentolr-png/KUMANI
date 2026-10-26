@@ -48,6 +48,7 @@ export default function LinkInBioEditor({
   occupation = '',
   isPro = false,
   siteUrl = '',
+  photoUrl = null,
   brand = null,
   followBrand = false,
 }: {
@@ -55,6 +56,8 @@ export default function LinkInBioEditor({
   isPro?: boolean
   // Indirizzo del sito, per mostrare kumani.io/bio/<nome>
   siteUrl?: string
+  // Foto del profilo: nella pagina «privato» al posto dell'iniziale, se scelta
+  photoUrl?: string | null
   // Professione del profilo: riga sotto il nome finché non se ne scrive un'altra
   occupation?: string
   // «I colori del tuo brand» (Scheda attività): tema «brand» se ci sono
@@ -72,6 +75,7 @@ export default function LinkInBioEditor({
   const [mode, setMode] = useState<BioMode>('personal')
   // Riga sotto il nome: null = mai scritta (professione o città della Scheda)
   const [subtitle, setSubtitle] = useState<string | null>(null)
+  const [showPhoto, setShowPhoto] = useState(false)
   const [links, setLinks] = useState<LinkItem[]>([])
   // Pagina nuova che segue il brand: parte dal tema «brand»
   const [theme, setTheme] = useState<BioThemeKey>(brand && followBrand ? 'brand' : DEFAULT_BIO_THEME)
@@ -111,7 +115,7 @@ export default function LinkInBioEditor({
       setLoading(true)
       const { data } = await supabase
         .from('link_in_bio')
-        .select('bio_text, links, theme, mode, subtitle, slug')
+        .select('bio_text, links, theme, mode, subtitle, slug, show_photo')
         .eq('user_id', userId)
         .eq('mode', mode)
         .maybeSingle()
@@ -147,6 +151,7 @@ export default function LinkInBioEditor({
       // Pagina mai salvata: si parte vuoti (con il tema del brand se lo segue)
       setBioText('')
       setSubtitle(null)
+      setShowPhoto(data?.show_photo === true)
       setLinks([])
       setTheme(brand && followBrand ? 'brand' : DEFAULT_BIO_THEME)
       const ownSlug = typeof data?.slug === 'string' ? data.slug : ''
@@ -255,7 +260,7 @@ export default function LinkInBioEditor({
     setSaving(true)
     setJustSaved(false)
     try {
-      const result = await saveLinkInBio(bioText, links, theme, isPro ? mode : 'personal', subtitle, slug)
+      const result = await saveLinkInBio(bioText, links, theme, isPro ? mode : 'personal', subtitle, slug, showPhoto)
       if (!result.success) {
         // Motivo preciso quando c'è, altrimenti il messaggio generico
         const code = 'message' in result && result.message ? `bioErr_${result.message}` : ''
@@ -299,6 +304,8 @@ export default function LinkInBioEditor({
   const asBusiness = isPro && mode === 'business' && !!businessProfile?.companyName.trim()
   const shownName = asBusiness ? businessProfile!.companyName.trim() : displayName
   const shownLogo = asBusiness ? businessProfile!.logoUrl : null
+  // Pagina «privato»: la foto del profilo, se scelta
+  const shownPhoto = !asBusiness && (mode === 'personal' || !isPro) && showPhoto ? photoUrl : null
   // Riga sotto il nome: quella scritta, altrimenti città (azienda) o professione
   const shownSubtitle = subtitle ?? (asBusiness ? businessProfile!.city.trim() : occupation.trim())
 
@@ -377,6 +384,28 @@ export default function LinkInBioEditor({
         </div>
 
         <BusinessProfileImport profile={businessProfile} onImport={importProfile} className="mb-6" />
+
+        {/* Pagina «privato»: foto del profilo al posto dell'iniziale */}
+        {(mode === 'personal' || !isPro) && (
+          <div className="mb-6 rounded-xl border border-[var(--gold)]/30 p-3">
+            <label className={`flex items-center gap-3 text-sm font-semibold text-[var(--ink)] ${photoUrl ? 'cursor-pointer' : 'opacity-60'}`}>
+              <input type="checkbox" className="h-4 w-4 accent-[var(--gold)]" disabled={!photoUrl} checked={!!photoUrl && showPhoto} onChange={(e) => setShowPhoto(e.target.checked)} />
+              {photoUrl && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={photoUrl} alt="" className="h-9 w-9 rounded-full object-cover" />
+              )}
+              <span className="flex-1">{t('bioShowPhoto')}</span>
+            </label>
+            {!photoUrl && (
+              <p className="mt-1 text-xs text-[var(--muted)]">
+                {t('bioShowPhotoNone')}{' '}
+                <Link href="/dashboard?profilo=1" className="font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
+                  {t('bioShowPhotoAdd')}
+                </Link>
+              </p>
+            )}
+          </div>
+        )}
 
         {/* Riga sotto il nome: si cambia o si cancella */}
         <div className="mb-6">
@@ -662,7 +691,10 @@ export default function LinkInBioEditor({
             </span>
           )}
           <div className={`relative rounded-3xl p-6 ${previewStyle.cardBg}`}>
-            {shownLogo ? (
+            {shownPhoto ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={shownPhoto} alt="" className="mx-auto mb-3 h-20 w-20 rounded-full object-cover shadow-lg" />
+            ) : shownLogo ? (
               <LogoCircle src={shownLogo} alt="" className="mx-auto mb-3 h-20 w-20 shadow-lg" />
             ) : (
               <div className={`w-20 h-20 rounded-full ${previewStyle.avatarBg} ${previewStyle.avatarText} flex items-center justify-center mx-auto mb-3 text-3xl font-bold shadow-lg`}>

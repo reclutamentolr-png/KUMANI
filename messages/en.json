@@ -1220,7 +1220,10 @@
     "bioErr_slugInvalid": "Invalid name: use 3 to 40 lowercase letters, numbers and hyphens.",
     "bioErr_slugReserved": "This name is reserved: choose another one.",
     "bioErr_slugTaken": "This name is already taken: choose another one.",
-    "bioErr_slugOtherPage": "Your other page (personal or business) already uses this name: choose another one."
+    "bioErr_slugOtherPage": "Your other page (personal or business) already uses this name: choose another one.",
+    "bioShowPhoto": "Show my profile photo",
+    "bioShowPhotoNone": "You don’t have a profile photo yet.",
+    "bioShowPhotoAdd": "Add it from your Profile"
   },
   "neurobalance": {
     "tracksLabel": "Relaxation audio",
@@ -17013,5 +17016,14 @@
     "welcomeBody": "I'm the KUMANI mascot. Type or say what you need, in your own words, and I'll take you straight to the right service.",
     "welcomeTry": "Let's try",
     "welcomeClose": "Later"
+  },
+  "profilePhoto": {
+    "title": "Profile photo",
+    "hint": "It replaces the initial of your name at the top. You can also show it on your Link in Bio.",
+    "add": "Add photo",
+    "change": "Change photo",
+    "remove": "Remove",
+    "error": "Photo not uploaded: try another image (JPG or PNG).",
+    "alt": "Your profile photo"
   }
 }

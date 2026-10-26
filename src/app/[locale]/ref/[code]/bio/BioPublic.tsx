@@ -24,6 +24,7 @@ import BioThemeScene from '@/components/BioThemeScene'
 import LogoCircle from '@/components/LogoCircle'
 import { normalizeLinkUrl } from '@/lib/linkUtils'
 import PublicPageOffline from '@/components/PublicPageOffline'
+import { profilePhotoUrl } from '@/lib/profilePhoto'
 
 // Pagina pubblica di Link in Bio. Indirizzo con il nome scelto:
 // /bio/<nome>. Indirizzi con il codice (di prima, sempre validi; con un nome
@@ -41,7 +42,7 @@ const serviceDb = () =>
 // Riga della pagina richiesta. Senza pagina «privato» l'indirizzo /bio mostra
 // la pagina «azienda» (chi l'aveva salvata così prima delle due pagine)
 async function bioRow(service: ServiceDb, userId: string, mode: BioPageMode) {
-  const cols = 'mode, bio_text, links, theme, brand_colors, subtitle, slug'
+  const cols = 'mode, bio_text, links, theme, brand_colors, subtitle, slug, show_photo'
   const { data } = await service.from('link_in_bio').select(cols).eq('user_id', userId).eq('mode', mode).maybeSingle()
   if (data || mode === 'business') return data
   return (await service.from('link_in_bio').select(cols).eq('user_id', userId).eq('mode', 'business').maybeSingle()).data
@@ -125,7 +126,8 @@ export async function BioPublic({ code, mode }: { code: string; mode: BioPageMod
       email,
       phone,
       country_code,
-      occupation
+      occupation,
+      avatar_path
     `)
     .eq('referral_code', code)
     .single()
@@ -163,6 +165,9 @@ export async function BioPublic({ code, mode }: { code: string; mode: BioPageMod
   } catch {
     links = []
   }
+
+  // Pagina «privato»: foto del profilo, se il titolare l'ha scelta
+  const photoUrl = !business && linkInBio?.mode !== 'business' && linkInBio?.show_photo === true ? profilePhotoUrl(profile.avatar_path) : null
 
   // Come azienda (Pro): nome, logo e città della Scheda attività
   const shownName = business ? business.name : [profile.first_name, profile.last_name].filter(Boolean).join(' ')
@@ -205,7 +210,10 @@ export async function BioPublic({ code, mode }: { code: string; mode: BioPageMod
 
           {/* Avatar */}
           <div className="flex flex-col items-center text-center mb-8">
-            {business?.logoUrl ? (
+            {photoUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={photoUrl} alt={shownName} className="mb-4 h-28 w-28 rounded-full object-cover shadow-xl" />
+            ) : business?.logoUrl ? (
               <LogoCircle src={business.logoUrl} alt={business.name} className="mb-4 h-28 w-28 shadow-xl" />
             ) : (
               <div className={`w-28 h-28 rounded-full ${theme.avatarBg} ${theme.avatarText} flex items-center justify-center text-5xl font-bold shadow-xl mb-4`}>

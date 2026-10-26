@@ -25,6 +25,7 @@ import { getMyChangeRequest } from '@/app/actions/profileChanges'
 import { OPEN_PROFILE_EVENT } from '@/components/nav/AppNav'
 import type { User as AuthUser } from '@supabase/supabase-js'
 import type { MyProfile } from '@/lib/myProfile'
+import { profilePhotoUrl } from '@/lib/profilePhoto'
 
 type DashboardHeaderActionsProps = {
   user: AuthUser
@@ -77,6 +78,15 @@ export default function DashboardHeaderActions({ user, profile, isAdmin }: Dashb
   }, [profileIncomplete])
   
   const userInitial = profile?.first_name?.charAt(0) || user?.email?.charAt(0) || 'U'
+  // Foto del profilo al posto dell'iniziale (cambiata dal Profilo: si vede subito)
+  const [photoPath, setPhotoPath] = useState<string | null>(typeof profile?.avatar_path === 'string' ? profile.avatar_path : null)
+  const photoUrl = profilePhotoUrl(photoPath)
+  const avatarFace = photoUrl ? (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={photoUrl} alt="" className="h-full w-full rounded-full object-cover" />
+  ) : (
+    userInitial.toUpperCase()
+  )
 
   const logoutAction = async () => {
     // L'agenda in memoria della scheda non resta a chi entra dopo
@@ -129,7 +139,7 @@ export default function DashboardHeaderActions({ user, profile, isAdmin }: Dashb
               className={menuItem}
             >
               <span className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--gold)] text-sm font-bold text-white">
-                {userInitial.toUpperCase()}
+                {avatarFace}
                 {statusDot && <span className={`absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full border-2 border-[var(--ink)] ${statusDot}`} />}
               </span>
               <span className="min-w-0 flex-1">
@@ -184,7 +194,7 @@ export default function DashboardHeaderActions({ user, profile, isAdmin }: Dashb
           title={profileIncomplete ? t('completeProfileShort') : unseenOutcome ? lockT('outcomeDot') : t('editProfileTitle')}
         >
           <div className="relative w-8 h-8 rounded-full bg-[var(--gold)] flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:shadow-md transition-shadow">
-            {userInitial.toUpperCase()}
+            {avatarFace}
             {profileIncomplete && (
               <span className="absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full border-2 border-[var(--ink)] bg-amber-500" />
             )}
@@ -256,6 +266,8 @@ export default function DashboardHeaderActions({ user, profile, isAdmin }: Dashb
         initialData={profile}
         userId={user.id}
         onChangeRequestUpdate={setChangeState}
+        photoPath={photoPath}
+        onPhotoChange={setPhotoPath}
       />
     </>
   )

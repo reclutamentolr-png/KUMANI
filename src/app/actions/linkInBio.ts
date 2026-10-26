@@ -20,7 +20,8 @@ type LinkItem = {
 
 // slug: nome dell'indirizzo kumani.io/bio/<nome>; vuoto = nessun nome (resta
 // il link con il codice), undefined = non si cambia
-export async function saveLinkInBio(bioText: string, links: LinkItem[], theme: BioThemeKey, mode: BioMode = 'personal', subtitle: string | null = null, slug?: string | null) {
+// showPhoto: foto del profilo nella pagina «privato» (undefined = non si cambia)
+export async function saveLinkInBio(bioText: string, links: LinkItem[], theme: BioThemeKey, mode: BioMode = 'personal', subtitle: string | null = null, slug?: string | null, showPhoto?: boolean) {
   const supabase = await createClient()
   const {
     data: { user },
@@ -86,6 +87,7 @@ export async function saveLinkInBio(bioText: string, links: LinkItem[], theme: B
       links: JSON.stringify(cleanLinks),
       theme,
       ...(cleanSlug === undefined ? {} : { slug: cleanSlug }),
+      ...(showPhoto === undefined ? {} : { show_photo: showPhoto === true && cleanMode === 'personal' }),
       updated_at: new Date().toISOString(),
     },
     { onConflict: 'user_id,mode' }

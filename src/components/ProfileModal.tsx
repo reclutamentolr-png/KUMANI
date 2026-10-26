@@ -9,6 +9,7 @@ import ProfileFieldsGrid, { ConfirmLockBox, MissingFieldsBox, useProfileFieldLab
 import ProfileChangeRequestDialog from '@/components/profile/ProfileChangeRequestDialog'
 import AccountDeletionSection from '@/components/profile/AccountDeletionSection'
 import MyDataSection from '@/components/profile/MyDataSection'
+import ProfilePhotoSection from '@/components/profile/ProfilePhotoSection'
 import PasswordChangeSection from '@/components/profile/PasswordChangeSection'
 import PushSettingsSection from '@/components/profile/PushSettingsSection'
 import MarketingConsentSection from '@/components/profile/MarketingConsentSection'
@@ -30,6 +31,9 @@ type ProfileModalProps = {
   userId: string
   // Aggiorna chi apre la modale (es. pallino sull'avatar) quando cambia lo stato della richiesta.
   onChangeRequestUpdate?: (state: ProfileChangeState) => void
+  // Foto del profilo: quella attuale e chi la mostra in alto (si aggiorna subito)
+  photoPath?: string | null
+  onPhotoChange?: (path: string | null) => void
 }
 
 function displayValue(value: unknown) {
@@ -37,7 +41,7 @@ function displayValue(value: unknown) {
   return String(value)
 }
 
-export default function ProfileModal({ isOpen, onClose, initialData, userId, onChangeRequestUpdate }: ProfileModalProps) {
+export default function ProfileModal({ isOpen, onClose, initialData, userId, onChangeRequestUpdate, photoPath = null, onPhotoChange }: ProfileModalProps) {
   const t = useTranslations('dashboard')
   const commonT = useTranslations('common')
   const lockT = useTranslations('profileLock')
@@ -163,6 +167,12 @@ export default function ProfileModal({ isOpen, onClose, initialData, userId, onC
               </button>
             </div>
           )}
+
+          <ProfilePhotoSection
+            path={photoPath}
+            initial={String(initialData?.first_name ?? email ?? 'U').charAt(0).toUpperCase()}
+            onChange={(path) => onPhotoChange?.(path)}
+          />
 
           {email && (
             <div className="flex items-start gap-3 rounded-xl border border-[var(--gold)]/30 bg-[var(--gold)]/[0.06] px-4 py-3">

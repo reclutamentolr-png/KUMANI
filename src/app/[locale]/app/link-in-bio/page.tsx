@@ -10,6 +10,7 @@ import CopyLinkButton from '@/components/CopyLinkButton'
 import { getMyBusinessProfile } from '@/lib/businessProfile-server'
 import { bioPlanIsPro } from '@/lib/bioPlan'
 import { cleanPalette, type BrandColors } from '@/lib/brand'
+import { profilePhotoUrl } from '@/lib/profilePhoto'
 import {
   Link2,
   ArrowLeft,
@@ -32,7 +33,7 @@ export default async function LinkInBioPage({ params }: { params: Promise<{ loca
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<{ id: string; referral_code: string; first_name: string; last_name: string; occupation?: string | null }>()
+  const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<{ id: string; referral_code: string; first_name: string; last_name: string; occupation?: string | null; avatar_path?: string | null }>()
 
   if (!profile) redirect('/dashboard')
 
@@ -127,7 +128,7 @@ export default async function LinkInBioPage({ params }: { params: Promise<{ loca
         {/* Editor reale + anteprima live (la stessa istanza di stato guida
             entrambi i pannelli, quindi resta sincronizzata mentre si scrive
             e dopo il salvataggio — niente più mockup statico scollegato). */}
-        <LinkInBioEditor userId={user.id} firstName={profile.first_name} lastName={profile.last_name} occupation={profile.occupation ?? ''} businessProfile={businessProfile} isPro={isPro} siteUrl={baseUrl} brand={brand} followBrand={(brandRow?.brand_follow as Record<string, unknown> | null)?.bio === true} />
+        <LinkInBioEditor userId={user.id} firstName={profile.first_name} lastName={profile.last_name} occupation={profile.occupation ?? ''} businessProfile={businessProfile} isPro={isPro} siteUrl={baseUrl} photoUrl={profilePhotoUrl(profile.avatar_path)} brand={brand} followBrand={(brandRow?.brand_follow as Record<string, unknown> | null)?.bio === true} />
 
         {/* Indirizzi delle pagine con pulsante copia: nel Pro due pagine
             (privato e azienda), nel Plus solo quella privata */}

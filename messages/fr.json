@@ -1180,7 +1180,10 @@
     "bioErr_slugInvalid": "Nom non valide : utilise de 3 à 40 lettres minuscules, chiffres et tirets.",
     "bioErr_slugReserved": "Ce nom est réservé : choisis-en un autre.",
     "bioErr_slugTaken": "Ce nom est déjà utilisé : choisis-en un autre.",
-    "bioErr_slugOtherPage": "Ton autre page (personnelle ou entreprise) utilise déjà ce nom : choisis-en un autre."
+    "bioErr_slugOtherPage": "Ton autre page (personnelle ou entreprise) utilise déjà ce nom : choisis-en un autre.",
+    "bioShowPhoto": "Afficher ma photo de profil",
+    "bioShowPhotoNone": "Tu n’as pas encore de photo de profil.",
+    "bioShowPhotoAdd": "Ajoute-la depuis ton Profil"
   },
   "neurobalance": {
     "tracksLabel": "Audios de relaxation",
@@ -17013,5 +17016,14 @@
     "welcomeBody": "Je suis la mascotte de KUMANI. Écris ou dis-moi ce qu'il te faut, avec tes mots, et je t'emmène tout de suite au bon service.",
     "welcomeTry": "Essayons",
     "welcomeClose": "Plus tard"
+  },
+  "profilePhoto": {
+    "title": "Photo de profil",
+    "hint": "Elle remplace l’initiale de ton nom en haut. Tu peux aussi l’afficher sur ton Link in Bio.",
+    "add": "Ajouter une photo",
+    "change": "Changer la photo",
+    "remove": "Retirer",
+    "error": "Photo non chargée : essaie avec une autre image (JPG ou PNG).",
+    "alt": "Ta photo de profil"
   }
 }
