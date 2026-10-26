@@ -64,7 +64,8 @@ async function getJson(url: string, headers: Record<string, string>) {
 
 // ---------------- Supabase ----------------
 
-// Limiti dei piani (supabase.com/pricing): il piano si imposta con SUPABASE_PLAN
+// Limiti dei piani (supabase.com/pricing): KUMANI è sul Pro; SUPABASE_PLAN=free
+// solo se si tornasse al piano gratuito
 const SUPABASE_PLANS = {
   free: { label: 'Free', db: 500 * 1024 ** 2, storage: 1024 ** 3, mau: 50_000 },
   pro: { label: 'Pro', db: 8 * 1024 ** 3, storage: 100 * 1024 ** 3, mau: 100_000 },
@@ -81,7 +82,7 @@ async function supabaseReport(): Promise<PlatformReport> {
   }
   if (!url || !key) return { ...base, status: 'not_configured', summary: 'Chiavi mancanti', items: [], missing: ['NEXT_PUBLIC_SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY'] }
 
-  const plan = SUPABASE_PLANS[(process.env.SUPABASE_PLAN === 'pro' ? 'pro' : 'free') as keyof typeof SUPABASE_PLANS]
+  const plan = SUPABASE_PLANS[(process.env.SUPABASE_PLAN === 'free' ? 'free' : 'pro') as keyof typeof SUPABASE_PLANS]
   const client = createServiceClient(url, key, { auth: { autoRefreshToken: false, persistSession: false } })
   try {
     const { value, ms } = await timed(() => client.rpc('admin_platform_db_stats'))
@@ -120,7 +121,6 @@ async function supabaseReport(): Promise<PlatformReport> {
         { label: 'Tabelle più grandi', value: s.tables.slice(0, 4).map((t) => `${t.name} ${bytes(t.bytes)}`).join(' · ') },
         ...(s.storage.length ? [{ label: 'Spazio per cartella', value: s.storage.slice(0, 4).map((b) => `${b.bucket} ${bytes(b.bytes)} (${num(b.files)} file)`).join(' · ') }] : []),
       ],
-      notes: process.env.SUPABASE_PLAN ? undefined : ['Limiti del piano Free. Se passi a Pro imposta SUPABASE_PLAN=pro.'],
     }
   } catch (error) {
     return { ...base, status: 'error', summary: 'Database non raggiungibile', items: [{ label: 'Errore', value: String(error).slice(0, 160) }] }
