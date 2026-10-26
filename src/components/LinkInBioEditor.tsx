@@ -14,7 +14,7 @@ import Link from '@/components/LocalizedLink'
 import BioThemeScene from '@/components/BioThemeScene'
 import BusinessProfileImport from '@/components/businessProfile/BusinessProfileImport'
 import { businessWebsiteUrl, type BusinessProfile } from '@/lib/businessProfile'
-import { Plus, Trash2, Save, Link as LinkIcon, Check, ExternalLink, Globe, Mail, Phone, MessageCircle, Lock, Loader2, Eye, Sparkles, X, User, Building2 } from 'lucide-react'
+import { Plus, Trash2, Save, Link as LinkIcon, Check, ExternalLink, Globe, Mail, Phone, MessageCircle, Lock, Loader2, Eye, Sparkles, X, User, Building2, GripVertical, ChevronUp, ChevronDown } from 'lucide-react'
 
 type LinkItem = {
   id: string
@@ -147,6 +147,24 @@ export default function LinkInBioEditor({
 
   const updateLink = (id: string, field: keyof LinkItem, value: string) => {
     setLinks(links.map(l => l.id === id ? { ...l, [field]: value } : l))
+  }
+
+  // Ordine dei link: si trascinano dalla maniglia (dito o mouse) o con le
+  // frecce; l'anteprima segue subito
+  const [dragId, setDragId] = useState<string | null>(null)
+  const moveLink = (id: string, to: number) =>
+    setLinks((prev) => {
+      const from = prev.findIndex((l) => l.id === id)
+      if (from < 0 || to < 0 || to >= prev.length || from === to) return prev
+      const next = [...prev]
+      const [item] = next.splice(from, 1)
+      next.splice(to, 0, item)
+      return next
+    })
+  const dragOver = (id: string, x: number, y: number) => {
+    if (dragId !== id) return
+    const over = (document.elementFromPoint(x, y)?.closest('[data-link-id]') as HTMLElement | null)?.dataset.linkId
+    if (over && over !== id) moveLink(id, links.findIndex((l) => l.id === over))
   }
 
   const removeLink = (id: string) => {
@@ -413,12 +431,56 @@ export default function LinkInBioEditor({
           </div>
 
           <div className="space-y-3">
-            {links.map((link) => (
-              <div key={link.id} className="flex gap-2 items-start bg-[var(--paper)] p-3 rounded-lg border border-[var(--gold)]/20">
+            {links.map((link, index) => (
+              <div
+                key={link.id}
+                data-link-id={link.id}
+                className={`flex gap-2 items-start bg-[var(--paper)] p-3 rounded-lg border transition-shadow ${dragId === link.id ? 'border-[var(--gold)] shadow-lg' : 'border-[var(--gold)]/20'}`}
+              >
+                {/* Spostare il link: maniglia da trascinare e frecce */}
+                <div className="flex shrink-0 flex-col items-center gap-0.5">
+                  <button
+                    type="button"
+                    onClick={() => moveLink(link.id, index - 1)}
+                    disabled={index === 0}
+                    className="rounded p-1 text-[var(--muted)] hover:bg-[var(--gold)]/10 hover:text-[var(--ink)] disabled:opacity-25"
+                    title={t('linkMoveUp')}
+                    aria-label={t('linkMoveUp')}
+                  >
+                    <ChevronUp className="h-4 w-4" />
+                  </button>
+                  <span
+                    role="button"
+                    tabIndex={-1}
+                    title={t('linkDrag')}
+                    aria-label={t('linkDrag')}
+                    className={`touch-none rounded p-1 text-[var(--gold)] ${dragId === link.id ? 'cursor-grabbing bg-[var(--gold)]/15' : 'cursor-grab hover:bg-[var(--gold)]/10'}`}
+                    onPointerDown={(e) => {
+                      e.currentTarget.setPointerCapture(e.pointerId)
+                      setDragId(link.id)
+                    }}
+                    onPointerMove={(e) => dragOver(link.id, e.clientX, e.clientY)}
+                    onPointerUp={() => setDragId(null)}
+                    onPointerCancel={() => setDragId(null)}
+                  >
+                    <GripVertical className="h-4 w-4" />
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => moveLink(link.id, index + 1)}
+                    disabled={index === links.length - 1}
+                    className="rounded p-1 text-[var(--muted)] hover:bg-[var(--gold)]/10 hover:text-[var(--ink)] disabled:opacity-25"
+                    title={t('linkMoveDown')}
+                    aria-label={t('linkMoveDown')}
+                  >
+                    <ChevronDown className="h-4 w-4" />
+                  </button>
+                </div>
+
                 <select
                   value={link.icon}
                   onChange={(e) => updateLink(link.id, 'icon', e.target.value)}
-                  className="w-36 shrink-0 p-2 border border-[var(--gold)]/30 rounded-lg bg-white text-sm focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30"
+                  className="w-28 shrink-0 p-2 border border-[var(--gold)]/30 rounded-lg bg-white text-sm sm:w-36 focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30"
                 >
                   <option value="default">🔗 {t('link')}</option>
                   <option value="website">🌍 {t('website')}</option>
@@ -506,7 +568,7 @@ export default function LinkInBioEditor({
           <div className={`relative rounded-3xl p-6 ${previewStyle.cardBg}`}>
             {shownLogo ? (
               // eslint-disable-next-line @next/next/no-img-element -- logo della Scheda attività (storage pubblico)
-              <img src={shownLogo} alt="" className="mx-auto mb-3 h-20 w-20 rounded-full bg-white object-contain p-1.5 shadow-lg" />
+              <img src={shownLogo} alt="" className={`mx-auto mb-3 h-20 w-20 rounded-full object-cover shadow-lg ${previewStyle.avatarBg}`} />
             ) : (
               <div className={`w-20 h-20 rounded-full ${previewStyle.avatarBg} ${previewStyle.avatarText} flex items-center justify-center mx-auto mb-3 text-3xl font-bold shadow-lg`}>
                 {(shownName || firstName || 'U').charAt(0).toUpperCase()}
