@@ -9876,7 +9876,11 @@
     "adminScamBody": "{name} reported {value}: check and confirm it.",
     "adminScamBodyKnown": "{name} reported {value}, already confirmed as a scam.",
     "testerTitle": "🧪 You’re a KUMANI tester",
-    "testerBody": "You can try {tool} in preview, before it reaches everyone. Open it from the link and tell us what you think."
+    "testerBody": "You can try {tool} in preview, before it reaches everyone. Open it from the link and tell us what you think.",
+    "webinarInviteTitle": "📹 {host} invites you to a live session",
+    "webinarInviteBody": "“{title}” · {when}. Tap to join when it starts.",
+    "webinarLiveTitle": "🔴 {host} is live",
+    "webinarLiveBody": "“{title}” has started: tap to join."
   },
   "pushInvite": {
     "title": "Turn on notifications",
@@ -14336,7 +14340,7 @@
     "waitingAuto": "The page starts by itself when it begins.",
     "yourName": "What’s your name?",
     "nameHint": "{host} and people in the chat will see it.",
-    "ruleNoCamera": "No camera: you watch and listen",
+    "ruleNoCamera": "Your camera stays off: you watch and listen (it turns on only if you are given the floor and you choose so)",
     "ruleChat": "You can ask questions in the chat or raise your hand",
     "ruleNoInstall": "Nothing to install, this link is all you need",
     "joinLive": "Join the live",
@@ -14348,7 +14352,7 @@
     "tapForSound": "Tap to hear",
     "withHost": "with {host}",
     "connectedCount": "connected: {count}",
-    "youMaySpeak": "You have the floor: turn on your microphone to speak to everyone.",
+    "youMaySpeak": "You have the floor: turn on microphone and camera, or just the microphone, to speak to everyone.",
     "youAreSpeaking": "Everyone can hear you.",
     "turnOnMic": "Turn on the microphone",
     "doneSpeaking": "I’m done",
@@ -14374,7 +14378,21 @@
     "errorNoMic": "The browser doesn’t allow using the microphone. Check the site permissions.",
     "errorNotConfigured": "The video service is not active yet.",
     "errorEnded": "This webinar has already ended.",
-    "errorTooFast": "Wait a moment before the next message."
+    "errorTooFast": "Wait a moment before the next message.",
+    "kumaniInviteTitle": "Invite Kumani",
+    "kumaniInviteHint": "Search by name or code: they get a notice on their phone and in the bell with the link, and another one when you go live.",
+    "kumaniInviteSearch": "First name, last name or code",
+    "kumaniInvited": "Invited",
+    "kumaniInviteButton": "Invite",
+    "kumaniInviteNone": "No Kumano found.",
+    "kumaniInvitedCount": "{count, plural, one {# Kumano invited} other {# Kumani invited}}",
+    "kumaniInviteRemove": "Remove {name} from the guests",
+    "inviteTooMany": "You have reached the maximum of 200 guests.",
+    "errorNoCamSpeak": "Camera not available: you speak with your voice only.",
+    "turnOnMicCam": "Microphone and camera",
+    "camTurnOn": "Video on",
+    "camTurnOff": "Video off",
+    "you": "You"
   },
   "spendlyShared": {
     "title": "Shared expenses",

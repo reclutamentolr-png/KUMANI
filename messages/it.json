@@ -9876,7 +9876,11 @@
     "adminScamBody": "{name} ha segnalato {value}: controllala e confermala.",
     "adminScamBodyKnown": "{name} ha segnalato {value}, già confermato come truffa.",
     "testerTitle": "🧪 Sei tra i tester di KUMANI",
-    "testerBody": "Puoi provare in anteprima {tool}, prima che arrivi a tutti. Aprilo dal link e dicci cosa ne pensi."
+    "testerBody": "Puoi provare in anteprima {tool}, prima che arrivi a tutti. Aprilo dal link e dicci cosa ne pensi.",
+    "webinarInviteTitle": "📹 {host} ti invita a una diretta",
+    "webinarInviteBody": "«{title}» · {when}. Tocca per entrare quando inizia.",
+    "webinarLiveTitle": "🔴 {host} è in diretta",
+    "webinarLiveBody": "«{title}» è iniziata: tocca per entrare."
   },
   "pushInvite": {
     "title": "Attiva le notifiche",
@@ -14336,7 +14340,7 @@
     "waitingAuto": "La pagina parte da sola quando inizia.",
     "yourName": "Come ti chiami?",
     "nameHint": "Lo vedranno {host} e chi scrive in chat.",
-    "ruleNoCamera": "Nessuna videocamera: guardi e ascolti",
+    "ruleNoCamera": "La tua videocamera resta spenta: guardi e ascolti (si accende solo se ti danno la parola e lo scegli tu)",
     "ruleChat": "Puoi fare domande in chat o alzare la mano",
     "ruleNoInstall": "Niente da installare, basta questo link",
     "joinLive": "Entra nella diretta",
@@ -14348,7 +14352,7 @@
     "tapForSound": "Tocca per sentire",
     "withHost": "con {host}",
     "connectedCount": "collegati: {count}",
-    "youMaySpeak": "Hai la parola: accendi il microfono per parlare a tutti.",
+    "youMaySpeak": "Hai la parola: accendi microfono e videocamera, o solo il microfono, per parlare a tutti.",
     "youAreSpeaking": "Tutti ti sentono.",
     "turnOnMic": "Accendi il microfono",
     "doneSpeaking": "Ho finito",
@@ -14374,7 +14378,21 @@
     "errorNoMic": "Il browser non permette di usare il microfono. Controlla i permessi del sito.",
     "errorNotConfigured": "Il servizio video non è ancora attivo.",
     "errorEnded": "Questo webinar è già finito.",
-    "errorTooFast": "Aspetta un attimo prima del prossimo messaggio."
+    "errorTooFast": "Aspetta un attimo prima del prossimo messaggio.",
+    "kumaniInviteTitle": "Invita i Kumani",
+    "kumaniInviteHint": "Cerca per nome o codice: ricevono l’avviso sul telefono e nella campanella con il link, e un altro quando vai in diretta.",
+    "kumaniInviteSearch": "Nome, cognome o codice",
+    "kumaniInvited": "Invitato",
+    "kumaniInviteButton": "Invita",
+    "kumaniInviteNone": "Nessun Kumano trovato.",
+    "kumaniInvitedCount": "{count, plural, one {# Kumano invitato} other {# Kumani invitati}}",
+    "kumaniInviteRemove": "Togli {name} dagli invitati",
+    "inviteTooMany": "Hai raggiunto il massimo di 200 invitati.",
+    "errorNoCamSpeak": "Videocamera non disponibile: parli solo con la voce.",
+    "turnOnMicCam": "Microfono e videocamera",
+    "camTurnOn": "Accendi video",
+    "camTurnOff": "Spegni video",
+    "you": "Tu"
   },
   "spendlyShared": {
     "title": "Spese condivise",

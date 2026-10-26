@@ -25,7 +25,8 @@ export type LiveState = {
   hostAway: boolean
   camOn: boolean
   screenOn: boolean
-  speaker: { id: string; name: string; session: string | null; track: string | null } | null
+  // track: la voce; videoTrack: la videocamera, se l'ha accesa
+  speaker: { id: string; name: string; session: string | null; track: string | null; videoTrack: string | null } | null
   viewers: number
   hiddenIds: number[]
 }
@@ -36,8 +37,9 @@ export type WebinarViewerRow = { id: string; name: string; hand: boolean; speaki
 
 export const webinarChannel = (key: string) => `webinar:${key}`
 
-// Nome della traccia → tipo (le tracce si chiamano «audio-…», «video-…», «screen-…», «voice-…»)
-export function trackKind(name: string): HostTrackKind | 'voice' | null {
+// Nome della traccia → tipo (le tracce si chiamano «audio-…», «video-…»,
+// «screen-…»; quelle di chi ha la parola «voice-…» e «face-…»)
+export function trackKind(name: string): HostTrackKind | 'voice' | 'face' | null {
   const kind = name.split('-')[0]
-  return kind === 'audio' || kind === 'video' || kind === 'screen' || kind === 'voice' ? kind : null
+  return kind === 'audio' || kind === 'video' || kind === 'screen' || kind === 'voice' || kind === 'face' ? kind : null
 }

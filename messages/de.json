@@ -9876,7 +9876,11 @@
     "adminScamBody": "{name} hat {value} gemeldet: prüfen und bestätigen.",
     "adminScamBodyKnown": "{name} hat {value} gemeldet, bereits als Betrug bestätigt.",
     "testerTitle": "🧪 Du bist KUMANI-Tester",
-    "testerBody": "Du kannst {tool} vorab testen, bevor es für alle kommt. Öffne es über den Link und sag uns deine Meinung."
+    "testerBody": "Du kannst {tool} vorab testen, bevor es für alle kommt. Öffne es über den Link und sag uns deine Meinung.",
+    "webinarInviteTitle": "📹 {host} lädt dich zu einem Live ein",
+    "webinarInviteBody": "„{title}“ · {when}. Tippe, um beizutreten, wenn es beginnt.",
+    "webinarLiveTitle": "🔴 {host} ist live",
+    "webinarLiveBody": "„{title}“ hat begonnen: tippe, um beizutreten."
   },
   "pushInvite": {
     "title": "Benachrichtigungen aktivieren",
@@ -14336,7 +14340,7 @@
     "waitingAuto": "Die Seite startet von selbst, wenn es beginnt.",
     "yourName": "Wie heißt du?",
     "nameHint": "{host} und die Personen im Chat sehen ihn.",
-    "ruleNoCamera": "Keine Kamera: du schaust und hörst zu",
+    "ruleNoCamera": "Deine Kamera bleibt aus: Du schaust und hörst zu (sie geht nur an, wenn du das Wort bekommst und es willst)",
     "ruleChat": "Du kannst im Chat Fragen stellen oder dich melden",
     "ruleNoInstall": "Nichts zu installieren, dieser Link genügt",
     "joinLive": "Der Live-Sendung beitreten",
@@ -14348,7 +14352,7 @@
     "tapForSound": "Tippen zum Hören",
     "withHost": "mit {host}",
     "connectedCount": "verbunden: {count}",
-    "youMaySpeak": "Du hast das Wort: schalte das Mikrofon ein, um zu allen zu sprechen.",
+    "youMaySpeak": "Du hast das Wort: Schalte Mikrofon und Kamera oder nur das Mikrofon ein, um zu allen zu sprechen.",
     "youAreSpeaking": "Alle hören dich.",
     "turnOnMic": "Mikrofon einschalten",
     "doneSpeaking": "Ich bin fertig",
@@ -14374,7 +14378,21 @@
     "errorNoMic": "Der Browser erlaubt das Mikrofon nicht. Prüfe die Berechtigungen der Website.",
     "errorNotConfigured": "Der Videodienst ist noch nicht aktiv.",
     "errorEnded": "Dieses Webinar ist bereits beendet.",
-    "errorTooFast": "Warte kurz vor der nächsten Nachricht."
+    "errorTooFast": "Warte kurz vor der nächsten Nachricht.",
+    "kumaniInviteTitle": "Kumani einladen",
+    "kumaniInviteHint": "Suche nach Name oder Code: Sie erhalten eine Nachricht auf dem Handy und in der Glocke mit dem Link und eine weitere, wenn du live gehst.",
+    "kumaniInviteSearch": "Vorname, Nachname oder Code",
+    "kumaniInvited": "Eingeladen",
+    "kumaniInviteButton": "Einladen",
+    "kumaniInviteNone": "Kein Kumano gefunden.",
+    "kumaniInvitedCount": "{count, plural, one {# Kumano eingeladen} other {# Kumani eingeladen}}",
+    "kumaniInviteRemove": "{name} von den Gästen entfernen",
+    "inviteTooMany": "Du hast das Maximum von 200 Gästen erreicht.",
+    "errorNoCamSpeak": "Kamera nicht verfügbar: Du sprichst nur mit der Stimme.",
+    "turnOnMicCam": "Mikrofon und Kamera",
+    "camTurnOn": "Video an",
+    "camTurnOff": "Video aus",
+    "you": "Du"
   },
   "spendlyShared": {
     "title": "Geteilte Ausgaben",

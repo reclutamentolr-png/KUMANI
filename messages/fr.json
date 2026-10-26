@@ -9876,7 +9876,11 @@
     "adminScamBody": "{name} a signalé {value} : vérifie-le et confirme-le.",
     "adminScamBodyKnown": "{name} a signalé {value}, déjà confirmé comme arnaque.",
     "testerTitle": "🧪 Vous êtes testeur KUMANI",
-    "testerBody": "Vous pouvez essayer {tool} en avant-première, avant tout le monde. Ouvrez-le depuis le lien et dites-nous ce que vous en pensez."
+    "testerBody": "Vous pouvez essayer {tool} en avant-première, avant tout le monde. Ouvrez-le depuis le lien et dites-nous ce que vous en pensez.",
+    "webinarInviteTitle": "📹 {host} t’invite à un direct",
+    "webinarInviteBody": "« {title} » · {when}. Touche pour entrer quand il commence.",
+    "webinarLiveTitle": "🔴 {host} est en direct",
+    "webinarLiveBody": "« {title} » a commencé : touche pour entrer."
   },
   "pushInvite": {
     "title": "Activez les notifications",
@@ -14336,7 +14340,7 @@
     "waitingAuto": "La page démarre toute seule au début.",
     "yourName": "Comment tu t’appelles ?",
     "nameHint": "{host} et les personnes du chat le verront.",
-    "ruleNoCamera": "Pas de caméra : tu regardes et tu écoutes",
+    "ruleNoCamera": "Ta caméra reste éteinte : tu regardes et tu écoutes (elle ne s’allume que si on te donne la parole et que tu le choisis)",
     "ruleChat": "Tu peux poser des questions dans le chat ou lever la main",
     "ruleNoInstall": "Rien à installer, ce lien suffit",
     "joinLive": "Rejoindre le direct",
@@ -14348,7 +14352,7 @@
     "tapForSound": "Touche pour entendre",
     "withHost": "avec {host}",
     "connectedCount": "connectés : {count}",
-    "youMaySpeak": "Tu as la parole : allume ton micro pour parler à tout le monde.",
+    "youMaySpeak": "Tu as la parole : active micro et caméra, ou seulement le micro, pour parler à tous.",
     "youAreSpeaking": "Tout le monde t’entend.",
     "turnOnMic": "Allumer le micro",
     "doneSpeaking": "J’ai fini",
@@ -14374,7 +14378,21 @@
     "errorNoMic": "Le navigateur n’autorise pas le micro. Vérifie les autorisations du site.",
     "errorNotConfigured": "Le service vidéo n’est pas encore actif.",
     "errorEnded": "Ce webinar est déjà terminé.",
-    "errorTooFast": "Attends un instant avant le prochain message."
+    "errorTooFast": "Attends un instant avant le prochain message.",
+    "kumaniInviteTitle": "Inviter des Kumani",
+    "kumaniInviteHint": "Cherche par nom ou code : ils reçoivent un avis sur leur téléphone et dans la cloche avec le lien, puis un autre quand tu passes en direct.",
+    "kumaniInviteSearch": "Prénom, nom ou code",
+    "kumaniInvited": "Invité",
+    "kumaniInviteButton": "Inviter",
+    "kumaniInviteNone": "Aucun Kumano trouvé.",
+    "kumaniInvitedCount": "{count, plural, one {# Kumano invité} other {# Kumani invités}}",
+    "kumaniInviteRemove": "Retirer {name} des invités",
+    "inviteTooMany": "Tu as atteint le maximum de 200 invités.",
+    "errorNoCamSpeak": "Caméra indisponible : tu parles seulement avec la voix.",
+    "turnOnMicCam": "Micro et caméra",
+    "camTurnOn": "Activer la vidéo",
+    "camTurnOff": "Couper la vidéo",
+    "you": "Toi"
   },
   "spendlyShared": {
     "title": "Dépenses partagées",

@@ -31,9 +31,10 @@ import {
   hostSendMessage,
   hostSetSpeaker,
 } from '@/app/actions/webinar'
-import { HOST_BEAT_MS, type LiveState, type WebinarMessage, type WebinarStatus, type WebinarViewerRow } from '@/lib/webinar'
+import { HOST_BEAT_MS, trackKind, type LiveState, type WebinarMessage, type WebinarStatus, type WebinarViewerRow } from '@/lib/webinar'
 import { askConfirm } from '@/lib/confirm'
 import WebinarChat from '@/components/webinar/WebinarChat'
+import WebinarInvites from '@/components/webinar/WebinarInvites'
 import { acceptOffer, initials, makeOffer, makePeer, useCanShareScreen, useMounted, useWakeLock, useWebinarChannel } from '@/components/webinar/rtc'
 
 type Phase = 'setup' | 'starting' | 'live' | 'ended'
@@ -116,6 +117,8 @@ export default function WebinarStudio({
   const previewRef = useRef<HTMLVideoElement>(null)
   const pipRef = useRef<HTMLVideoElement>(null)
   const speakerAudioRef = useRef<HTMLAudioElement>(null)
+  // Videocamera di chi ha la parola (riquadro sull'anteprima)
+  const speakerVideoRef = useRef<HTMLVideoElement>(null)
   const listenRef = useRef<{ pc: RTCPeerConnection; track: string } | null>(null)
   const repairTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   // Ora d'inizio del controllo in corso (0 = nessuno): uno rimasto appeso
@@ -463,32 +466,38 @@ export default function WebinarStudio({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [beat, refreshPreview, t])
 
-  // Chi ha la parola: si ascolta la sua voce
+  // Chi ha la parola: si ascolta la sua voce e si vede la sua videocamera
   const speakerTrack = state?.speaker?.track ?? null
+  const speakerVideoTrack = state?.speaker?.videoTrack ?? null
   useEffect(() => {
     if (phase !== 'live') return
+    const key = `${speakerTrack ?? ''}|${speakerVideoTrack ?? ''}`
     const current = listenRef.current
-    if (current && current.track === speakerTrack) return
+    if (current && current.track === key) return
     current?.pc.close()
     listenRef.current = null
     if (speakerAudioRef.current) speakerAudioRef.current.srcObject = null
+    if (speakerVideoRef.current) speakerVideoRef.current.srcObject = null
     if (!speakerTrack || !iceRef.current) return
     const pc = makePeer(iceRef.current)
-    listenRef.current = { pc, track: speakerTrack }
+    listenRef.current = { pc, track: key }
+    const midToName = new Map<string, string>()
     pc.ontrack = (e) => {
-      const audio = speakerAudioRef.current
-      if (audio) {
-        audio.srcObject = new MediaStream([e.track])
-        audio.play().catch(() => {})
+      const isFace = trackKind(midToName.get(e.transceiver.mid ?? '') ?? '') === 'face' || e.track.kind === 'video'
+      const el = isFace ? speakerVideoRef.current : speakerAudioRef.current
+      if (el) {
+        el.srcObject = new MediaStream([e.track])
+        el.play().catch(() => {})
       }
     }
     ;(async () => {
-      const res = await hostPull(webinar.id, null, speakerTrack)
+      const res = await hostPull(webinar.id, null, speakerVideoTrack ? [speakerTrack, speakerVideoTrack] : [speakerTrack])
       if ('error' in res || listenRef.current?.pc !== pc) return
+      for (const tr of res.tracks) midToName.set(tr.mid, tr.trackName)
       const answer = await acceptOffer(pc, res.offer)
       await hostAnswer(webinar.id, res.sessionId, answer)
     })().catch(() => {})
-  }, [phase, speakerTrack, webinar.id])
+  }, [phase, speakerTrack, speakerVideoTrack, webinar.id])
 
   // Chiusura della pagina: si spegne tutto
   useEffect(() => {
@@ -602,6 +611,11 @@ export default function WebinarStudio({
             {phase === 'live' && (
               <span className="absolute bottom-3 left-3 rounded-full bg-black/55 px-3 py-1 text-xs font-bold text-white">{micOn ? t('youAreLive') : t('micMutedNote')}</span>
             )}
+            {/* Chi ha la parola con la videocamera */}
+            <div className={`absolute left-3 top-3 w-24 overflow-hidden rounded-xl border-2 border-emerald-400 bg-black sm:w-32 ${phase === 'live' && speakerVideoTrack ? '' : 'hidden'}`}>
+              <video ref={speakerVideoRef} autoPlay playsInline muted className="aspect-[3/4] w-full object-cover" />
+              <span className="absolute inset-x-0 bottom-0 truncate bg-black/60 px-1.5 py-0.5 text-center text-[11px] font-bold text-white">{speaking?.name}</span>
+            </div>
           </div>
 
           {!mediaReady ? (
@@ -649,6 +663,9 @@ export default function WebinarStudio({
           )}
           {!screenAllowed && mediaReady && <p className="text-xs text-[var(--muted)]">{t('screenOnlyPc')}</p>}
           {phase !== 'live' && <p className="rounded-2xl bg-[var(--gold-pale)] p-3 text-sm font-medium text-[var(--ink)]">{t('stayOnPage')}</p>}
+
+          {/* Kumani invitati: avviso sul telefono con il link */}
+          <WebinarInvites webinarId={webinar.id} />
 
           {/* Invito */}
           <div className="rounded-2xl border border-[var(--gold)]/30 bg-[var(--paper)] p-4">

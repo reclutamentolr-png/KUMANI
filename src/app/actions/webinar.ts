@@ -3,6 +3,7 @@
 import { createHash, randomBytes } from 'node:crypto'
 import { createClient } from '@/lib/supabase/server'
 import { serviceClient } from '@/lib/translationOverrides'
+import { localizedPath, notifyUser } from '@/lib/push'
 import {
   iceServers,
   newSession,
@@ -52,6 +53,7 @@ type WebinarRow = {
   speaker_id: string | null
   speaker_session: string | null
   speaker_track: string | null
+  speaker_video_track: string | null
   started_at: string | null
 }
 
@@ -66,7 +68,7 @@ type ViewerRow = {
 }
 
 const WEBINAR_COLUMNS =
-  'id, host_id, code, channel_key, title, starts_at, seats, status, host_session, host_tracks, host_seen_at, host_paused, cam_on, screen_on, speaker_id, speaker_session, speaker_track, started_at'
+  'id, host_id, code, channel_key, title, starts_at, seats, status, host_session, host_tracks, host_seen_at, host_paused, cam_on, screen_on, speaker_id, speaker_session, speaker_track, speaker_video_track, started_at'
 
 const hashToken = (token: string) => createHash('sha256').update(token).digest('hex')
 const cleanText = (value: unknown, max: number) =>
@@ -148,7 +150,7 @@ async function liveState(w: WebinarRow): Promise<LiveState> {
     hostAway: w.status === 'live' && (w.host_paused || Date.now() - seen > HOST_AWAY_MS),
     camOn: w.cam_on,
     screenOn: w.screen_on,
-    speaker: speaker && w.status === 'live' ? { id: speaker.id, name: speaker.name, session: w.speaker_session, track: w.speaker_track } : null,
+    speaker: speaker && w.status === 'live' ? { id: speaker.id, name: speaker.name, session: w.speaker_session, track: w.speaker_track, videoTrack: w.speaker_video_track } : null,
     viewers: count ?? 0,
     hiddenIds: (hidden ?? []).map((m) => m.id as number),
   }
@@ -251,6 +253,8 @@ export async function hostPublish(
       })
       .eq('id', id)
     await ping(w.channel_key, 'state')
+    // Prima volta in diretta: «è iniziata» agli invitati
+    if (!w.started_at) await notifyInvited(w)
     return { answer: res.sessionDescription }
   } catch {
     return { error: 'realtime' }
@@ -347,26 +351,29 @@ export async function hostSetSpeaker(id: string, viewerId: string | null): Promi
     if (!viewer || viewer.banned) return { error: 'not_found' }
     await db.from('webinar_viewers').update({ hand_raised_at: null }).eq('id', viewerId)
   }
-  await db.from('webinars').update({ speaker_id: viewerId, speaker_session: null, speaker_track: null }).eq('id', id)
+  await db.from('webinars').update({ speaker_id: viewerId, speaker_session: null, speaker_track: null, speaker_video_track: null }).eq('id', id)
   await ping(host.webinar.channel_key, 'state')
   return { success: true }
 }
 
-// Chi presenta ascolta chi ha la parola (sessione di ascolto tenuta dal browser)
+// Chi presenta ascolta (e vede, se ha la videocamera) chi ha la parola
+// (sessione di ascolto tenuta dal browser)
 export async function hostPull(
   id: string,
   sessionId: string | null,
-  trackName: string
+  trackNames: string | string[]
 ): Promise<{ sessionId: string; offer: SessionDescription; tracks: { mid: string; trackName: string }[] } | Fail> {
   const host = await hostOf(id)
   if ('error' in host) return host
   const w = host.webinar
-  if (!w.speaker_session || w.speaker_track !== trackName) return { error: 'not_found' }
+  const speakerSession = w.speaker_session
+  const names = (Array.isArray(trackNames) ? trackNames : [trackNames]).filter((n) => !!n && (n === w.speaker_track || n === w.speaker_video_track))
+  if (!speakerSession || names.length === 0) return { error: 'not_found' }
   try {
     const session = typeof sessionId === 'string' && /^[0-9a-f]{20,64}$/i.test(sessionId) ? sessionId : await newSession()
-    const res = await pullTracks(session, [{ location: 'remote', sessionId: w.speaker_session, trackName }])
+    const res = await pullTracks(session, names.map((trackName) => ({ location: 'remote' as const, sessionId: speakerSession, trackName })))
     if (!res.sessionDescription) return { error: 'realtime' }
-    return { sessionId: session, offer: res.sessionDescription, tracks: (res.tracks ?? []).filter((t) => t.mid).map((t) => ({ mid: t.mid!, trackName: t.trackName ?? trackName })) }
+    return { sessionId: session, offer: res.sessionDescription, tracks: (res.tracks ?? []).filter((t) => t.mid && !t.errorCode).map((t) => ({ mid: t.mid!, trackName: t.trackName ?? '' })) }
   } catch {
     return { error: 'realtime' }
   }
@@ -480,9 +487,10 @@ export async function viewerPull(
   if (w.status !== 'live' || !w.host_session) return { error: 'not_live' }
   const hostNames = Object.values(w.host_tracks ?? {})
   const wanted: { location: 'remote'; sessionId: string; trackName: string }[] = []
-  for (const name of Array.isArray(trackNames) ? trackNames.slice(0, 4) : []) {
+  for (const name of Array.isArray(trackNames) ? trackNames.slice(0, 5) : []) {
     if (hostNames.includes(name)) wanted.push({ location: 'remote', sessionId: w.host_session, trackName: name })
-    else if (w.speaker_session && name === w.speaker_track && w.speaker_id !== viewer.id) wanted.push({ location: 'remote', sessionId: w.speaker_session, trackName: name })
+    else if (w.speaker_session && (name === w.speaker_track || (!!w.speaker_video_track && name === w.speaker_video_track)) && w.speaker_id !== viewer.id)
+      wanted.push({ location: 'remote', sessionId: w.speaker_session, trackName: name })
   }
   if (wanted.length === 0) return { error: 'invalid' }
   try {
@@ -545,19 +553,36 @@ export async function viewerHand(code: string, token: string, up: boolean): Prom
   return { success: true }
 }
 
-// Chi ha avuto la parola accende il microfono: la sua voce va a tutti
-export async function viewerSpeak(code: string, token: string, offer: SessionDescription, mid: string): Promise<{ answer: SessionDescription } | Fail> {
+// Chi ha avuto la parola accende il microfono (e, se vuole, la videocamera):
+// voce e immagine vanno a tutti
+export async function viewerSpeak(
+  code: string,
+  token: string,
+  offer: SessionDescription,
+  mid: string,
+  videoMid?: string | null
+): Promise<{ answer: SessionDescription } | Fail> {
   const found = await viewerOf(code, token)
   if ('error' in found) return found
   const { webinar: w, viewer } = found
   if (w.status !== 'live' || w.speaker_id !== viewer.id) return { error: 'not_allowed' }
   if (!isSdp(offer) || typeof mid !== 'string' || !mid) return { error: 'invalid' }
+  if (videoMid != null && (typeof videoMid !== 'string' || !videoMid || videoMid === mid)) return { error: 'invalid' }
   try {
     const sessionId = await newSession()
-    const trackName = `voice-${randomBytes(4).toString('hex')}`
-    const res = await pushTracks(sessionId, offer, [{ location: 'local', mid, trackName }])
+    const suffix = randomBytes(4).toString('hex')
+    const trackName = `voice-${suffix}`
+    const videoName = videoMid ? `face-${suffix}` : null
+    const res = await pushTracks(sessionId, offer, [
+      { location: 'local', mid, trackName },
+      ...(videoMid && videoName ? [{ location: 'local' as const, mid: videoMid, trackName: videoName }] : []),
+    ])
     if (!res.sessionDescription) return { error: 'realtime' }
-    await serviceClient().from('webinars').update({ speaker_session: sessionId, speaker_track: trackName }).eq('id', w.id).eq('speaker_id', viewer.id)
+    await serviceClient()
+      .from('webinars')
+      .update({ speaker_session: sessionId, speaker_track: trackName, speaker_video_track: videoName })
+      .eq('id', w.id)
+      .eq('speaker_id', viewer.id)
     await ping(w.channel_key, 'state')
     return { answer: res.sessionDescription }
   } catch {
@@ -571,7 +596,86 @@ export async function viewerStopSpeak(code: string, token: string): Promise<{ su
   const { webinar: w, viewer } = found
   if (w.speaker_id !== viewer.id) return { success: true }
   // La sessione della voce si chiude da sola quando il browser chiude il collegamento
-  await serviceClient().from('webinars').update({ speaker_id: null, speaker_session: null, speaker_track: null }).eq('id', w.id)
+  await serviceClient().from('webinars').update({ speaker_id: null, speaker_session: null, speaker_track: null, speaker_video_track: null }).eq('id', w.id)
   await ping(w.channel_key, 'state')
   return { success: true }
+}
+
+// ── Invitare i Kumani ──────────────────────────────────────────────────
+
+export type WebinarInvitee = { id: string; name: string }
+
+const fullName = (p: { first_name?: unknown; last_name?: unknown } | null | undefined) =>
+  [p?.first_name, p?.last_name].filter((x) => typeof x === 'string' && x.trim()).join(' ') || '—'
+
+// Kumani da invitare: per nome, cognome o codice invito (solo chi organizza)
+export async function searchWebinarInvitees(id: string, query: string): Promise<WebinarInvitee[] | Fail> {
+  const host = await hostOf(id)
+  if ('error' in host) return host
+  const q = cleanText(query, 60).replace(/[%,()*\\.:]/g, ' ').trim()
+  if (q.length < 2) return []
+  const words = q.split(/\s+/).filter(Boolean).slice(0, 3)
+  let request = serviceClient().from('profiles').select('id, first_name, last_name').is('deleted_at', null).neq('id', host.userId).limit(8)
+  // Ogni parola nel nome, nel cognome o nel codice invito
+  for (const word of words) request = request.or(`first_name.ilike.%${word}%,last_name.ilike.%${word}%,referral_code.ilike.${word}%`)
+  const { data } = await request
+  return (data ?? []).map((p) => ({ id: p.id as string, name: fullName(p) }))
+}
+
+export async function listWebinarInvites(id: string): Promise<WebinarInvitee[] | Fail> {
+  const host = await hostOf(id)
+  if ('error' in host) return host
+  const db = serviceClient()
+  const { data: rows } = await db.from('webinar_invites').select('user_id').eq('webinar_id', id).order('invited_at')
+  const ids = (rows ?? []).map((r) => r.user_id as string)
+  if (!ids.length) return []
+  const { data: people } = await db.from('profiles').select('id, first_name, last_name').in('id', ids)
+  const byId = new Map((people ?? []).map((p) => [p.id as string, p]))
+  return ids.map((uid) => ({ id: uid, name: fullName(byId.get(uid)) }))
+}
+
+// Invita un Kumano: avviso sul telefono e nella campanella con il link (se la
+// diretta è già partita, direttamente «è iniziata, entra ora»)
+export async function inviteToWebinar(id: string, userId: string): Promise<{ success: true } | Fail> {
+  const host = await hostOf(id)
+  if ('error' in host) return host
+  if (host.webinar.status === 'ended') return { error: 'ended' }
+  if (typeof userId !== 'string' || !/^[0-9a-f-]{36}$/.test(userId) || userId === host.userId) return { error: 'invalid' }
+  const db = serviceClient()
+  const { count } = await db.from('webinar_invites').select('user_id', { count: 'exact', head: true }).eq('webinar_id', id)
+  if ((count ?? 0) >= 200) return { error: 'too_many' }
+  const { error } = await db.from('webinar_invites').upsert({ webinar_id: id, user_id: userId }, { onConflict: 'webinar_id,user_id', ignoreDuplicates: true })
+  if (error) return { error: error.code === '23503' ? 'invalid' : 'save_failed' }
+  await notifyInvitee(host.webinar, userId, host.webinar.status === 'live' ? 'live' : 'invite')
+  return { success: true }
+}
+
+export async function removeWebinarInvite(id: string, userId: string): Promise<{ success: true } | Fail> {
+  const host = await hostOf(id)
+  if ('error' in host) return host
+  await serviceClient().from('webinar_invites').delete().eq('webinar_id', id).eq('user_id', userId)
+  return { success: true }
+}
+
+// Avviso a un invitato: l'invito (con giorno e ora) o «è iniziata, entra ora».
+// Ognuno dei due arriva una volta sola per webinar.
+async function notifyInvitee(w: WebinarRow, userId: string, kind: 'invite' | 'live') {
+  const { data: host } = await serviceClient().from('profiles').select('first_name, last_name').eq('id', w.host_id).maybeSingle()
+  const hostName = fullName(host)
+  await notifyUser(
+    userId,
+    'events',
+    (t, locale) => {
+      const url = localizedPath(locale, `/webinar/${w.code}`)
+      if (kind === 'live') return { title: t('webinarLiveTitle', { host: hostName }), body: t('webinarLiveBody', { title: w.title }), url, tag: `webinar-${w.code}` }
+      const when = new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Rome' }).format(new Date(w.starts_at))
+      return { title: t('webinarInviteTitle', { host: hostName }), body: t('webinarInviteBody', { title: w.title, when }), url, tag: `webinar-${w.code}` }
+    },
+    { kind: kind === 'live' ? 'webinar_live' : 'webinar_invite', ref: w.code }
+  )
+}
+
+async function notifyInvited(w: WebinarRow) {
+  const { data: rows } = await serviceClient().from('webinar_invites').select('user_id').eq('webinar_id', w.id).limit(200)
+  await Promise.all((rows ?? []).map((r) => notifyInvitee(w, r.user_id as string, 'live')))
 }

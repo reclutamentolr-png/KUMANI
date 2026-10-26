@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { Hand, Loader2, LogOut, Maximize, Mic, MicOff, Volume2, VolumeX } from 'lucide-react'
+import { Hand, Loader2, LogOut, Maximize, Mic, MicOff, Video, VideoOff, Volume2, VolumeX } from 'lucide-react'
 import {
   joinWebinar,
   viewerAnswer,
@@ -85,14 +85,18 @@ export default function WebinarViewer({
   const pollBusy = useRef(0)
   // Avviso arrivato mentre un controllo era già in corso: se ne fa un altro subito dopo
   const pollAgain = useRef(false)
-  const speakRef = useRef<{ pc: RTCPeerConnection; track: MediaStreamTrack } | null>(null)
+  // Chi ha la parola: collegamento, voce e (se accesa) videocamera
+  const speakRef = useRef<{ pc: RTCPeerConnection; tracks: MediaStreamTrack[]; video: MediaStreamTrack | null } | null>(null)
+  const [selfVideo, setSelfVideo] = useState<MediaStream | null>(null)
 
   const stageRef = useRef<HTMLDivElement>(null)
   const mainRef = useRef<HTMLVideoElement>(null)
   const pipRef = useRef<HTMLVideoElement>(null)
   const hostAudioRef = useRef<HTMLAudioElement>(null)
   const voiceAudioRef = useRef<HTMLAudioElement>(null)
-  const tracksRef = useRef<{ video?: MediaStreamTrack; screen?: MediaStreamTrack }>({})
+  // Videocamera di chi ha la parola (riquadro in basso a sinistra)
+  const faceRef = useRef<HTMLVideoElement>(null)
+  const tracksRef = useRef<{ video?: MediaStreamTrack; screen?: MediaStreamTrack; face?: MediaStreamTrack }>({})
 
   // ── Video e audio della diretta ─────────────────────────────────────
   const play = (el: HTMLMediaElement | null) => {
@@ -124,6 +128,7 @@ export default function WebinarViewer({
     tracksRef.current = {}
     if (hostAudioRef.current) hostAudioRef.current.srcObject = null
     if (voiceAudioRef.current) voiceAudioRef.current.srcObject = null
+    if (faceRef.current) faceRef.current.srcObject = null
     showVideo()
   }, [showVideo])
 
@@ -151,7 +156,13 @@ export default function WebinarViewer({
     }
     // Videocamera e schermo solo quando trasmettono: una traccia senza immagini
     // fa aspettare Cloudflare diversi secondi prima di rispondere
-    const wanted = [s.tracks.audio, s.camOn ? s.tracks.video : undefined, s.screenOn ? s.tracks.screen : undefined, s.speaker?.track ?? undefined].filter(
+    const wanted = [
+      s.tracks.audio,
+      s.camOn ? s.tracks.video : undefined,
+      s.screenOn ? s.tracks.screen : undefined,
+      s.speaker?.track ?? undefined,
+      s.speaker?.videoTrack ?? undefined,
+    ].filter(
       (x): x is string => !!x
     )
     const missing = wanted.filter((n) => !pulledRef.current.has(n))
@@ -175,6 +186,10 @@ export default function WebinarViewer({
           } else if (kind === 'video' || kind === 'screen') {
             tracksRef.current[kind] = e.track
             showVideo()
+          } else if (kind === 'face' && faceRef.current) {
+            tracksRef.current.face = e.track
+            faceRef.current.srcObject = new MediaStream([e.track])
+            play(faceRef.current)
           }
         }
         pc.onconnectionstatechange = () => {
@@ -395,22 +410,36 @@ export default function WebinarViewer({
     if ('error' in res) setHand(!next)
   }
 
-  const startSpeaking = async () => {
+  // withVideo: anche la videocamera (se non si apre, si parla solo con la voce)
+  const startSpeaking = async (withVideo: boolean) => {
     const token = tokenRef.current
     if (!token || speakRef.current) return
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } })
+      const audioWanted = { echoCancellation: true, noiseSuppression: true }
+      let stream: MediaStream
+      try {
+        stream = await navigator.mediaDevices.getUserMedia(
+          withVideo ? { audio: audioWanted, video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } } } : { audio: audioWanted }
+        )
+      } catch (e) {
+        if (!withVideo) throw e
+        stream = await navigator.mediaDevices.getUserMedia({ audio: audioWanted })
+        setError(t('errorNoCamSpeak'))
+      }
       const track = stream.getAudioTracks()[0]
+      const video = stream.getVideoTracks()[0] ?? null
       const pc = makePeer(iceRef.current)
       const transceiver = pc.addTransceiver(track, { direction: 'sendonly' })
-      speakRef.current = { pc, track }
+      const videoTransceiver = video ? pc.addTransceiver(video, { direction: 'sendonly' }) : null
+      speakRef.current = { pc, tracks: stream.getTracks(), video }
       const offer = await makeOffer(pc)
-      const res = await viewerSpeak(code, token, offer, transceiver.mid ?? '')
+      const res = await viewerSpeak(code, token, offer, transceiver.mid ?? '', videoTransceiver?.mid ?? null)
       if ('error' in res) {
         stopSpeaking(false)
         return
       }
       await pc.setRemoteDescription(res.answer)
+      setSelfVideo(video ? new MediaStream([video]) : null)
       setSpeakingOn(true)
     } catch {
       stopSpeaking(false)
@@ -418,11 +447,22 @@ export default function WebinarViewer({
     }
   }
 
+  // Videocamera accesa o spenta mentre si parla (la voce continua)
+  const [selfCamOff, setSelfCamOff] = useState(false)
+  const toggleSelfCam = () => {
+    const video = speakRef.current?.video
+    if (!video) return
+    video.enabled = !video.enabled
+    setSelfCamOff(!video.enabled)
+  }
+
   function stopSpeaking(tellServer: boolean) {
     const current = speakRef.current
     speakRef.current = null
-    current?.track.stop()
+    current?.tracks.forEach((track) => track.stop())
     current?.pc.close()
+    setSelfVideo(null)
+    setSelfCamOff(false)
     setSpeakingOn(false)
     if (tellServer && tokenRef.current) viewerStopSpeak(code, tokenRef.current).then(() => poll())
   }
@@ -440,7 +480,7 @@ export default function WebinarViewer({
     return () => {
       pcRef.current?.close()
       speakRef.current?.pc.close()
-      speakRef.current?.track.stop()
+      speakRef.current?.tracks.forEach((track) => track.stop())
     }
   }, [])
 
@@ -456,6 +496,7 @@ export default function WebinarViewer({
     play(hostAudioRef.current)
     play(voiceAudioRef.current)
     play(mainRef.current)
+    play(faceRef.current)
   }
 
   const sendMessage = async (body: string) => {
@@ -555,6 +596,8 @@ export default function WebinarViewer({
   // Dentro il webinar
   const live = state?.status === 'live'
   const showMain = live && (state?.screenOn || state?.camOn)
+  // Riquadro di chi ha la parola: la propria videocamera o quella dell'altro
+  const showFace = live && (!!selfVideo || (!mayspeak && !!state?.speaker?.videoTrack))
   return (
     <div className="space-y-3">
       <audio ref={hostAudioRef} autoPlay className="hidden" />
@@ -569,6 +612,22 @@ export default function WebinarViewer({
           muted
           className={`absolute bottom-3 right-3 aspect-[3/4] w-20 rounded-xl border-2 border-[var(--gold-bright)] object-cover sm:w-28 ${live && state?.screenOn && state?.camOn ? '' : 'hidden'}`}
         />
+        {/* Chi ha la parola con la videocamera: riquadro in basso a sinistra */}
+        <div className={`absolute bottom-3 left-3 z-[1] w-24 overflow-hidden rounded-xl border-2 border-emerald-400 bg-black sm:w-32 ${showFace ? '' : 'hidden'}`}>
+          <video ref={faceRef} autoPlay playsInline muted className={`aspect-[3/4] w-full object-cover ${selfVideo ? 'hidden' : ''}`} />
+          {selfVideo && (
+            <video
+              ref={(el) => {
+                if (el && el.srcObject !== selfVideo) el.srcObject = selfVideo
+              }}
+              autoPlay
+              playsInline
+              muted
+              className={`aspect-[3/4] w-full -scale-x-100 object-cover ${selfCamOff ? 'opacity-0' : ''}`}
+            />
+          )}
+          <span className="absolute inset-x-0 bottom-0 truncate bg-black/60 px-1.5 py-0.5 text-center text-[11px] font-bold text-white">{selfVideo ? t('you') : state?.speaker?.name}</span>
+        </div>
         {!showMain && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-4 text-center text-white/75">
             {live ? (
@@ -625,15 +684,29 @@ export default function WebinarViewer({
           <Volume2 className="h-5 w-5 text-emerald-300" aria-hidden />
           <p className="min-w-0 flex-1 text-sm font-semibold">{speakingOn ? t('youAreSpeaking') : t('youMaySpeak')}</p>
           {speakingOn ? (
-            <button type="button" onClick={() => stopSpeaking(true)} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-4 text-sm font-bold text-[var(--ink)]">
-              <MicOff className="h-4 w-4" aria-hidden />
-              {t('doneSpeaking')}
-            </button>
+            <>
+              {selfVideo && (
+                <button type="button" onClick={toggleSelfCam} aria-pressed={selfCamOff} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-white/15 px-4 text-sm font-bold text-white">
+                  {selfCamOff ? <VideoOff className="h-4 w-4" aria-hidden /> : <Video className="h-4 w-4" aria-hidden />}
+                  {selfCamOff ? t('camTurnOn') : t('camTurnOff')}
+                </button>
+              )}
+              <button type="button" onClick={() => stopSpeaking(true)} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-4 text-sm font-bold text-[var(--ink)]">
+                <MicOff className="h-4 w-4" aria-hidden />
+                {t('doneSpeaking')}
+              </button>
+            </>
           ) : (
-            <button type="button" onClick={startSpeaking} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-emerald-400 px-4 text-sm font-extrabold text-[var(--ink)]">
-              <Mic className="h-4 w-4" aria-hidden />
-              {t('turnOnMic')}
-            </button>
+            <>
+              <button type="button" onClick={() => startSpeaking(true)} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-emerald-400 px-4 text-sm font-extrabold text-[var(--ink)]">
+                <Video className="h-4 w-4" aria-hidden />
+                {t('turnOnMicCam')}
+              </button>
+              <button type="button" onClick={() => startSpeaking(false)} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-white/15 px-4 text-sm font-bold text-white">
+                <Mic className="h-4 w-4" aria-hidden />
+                {t('turnOnMic')}
+              </button>
+            </>
           )}
         </div>
       )}
