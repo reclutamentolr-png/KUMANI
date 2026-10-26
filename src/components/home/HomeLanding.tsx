@@ -46,8 +46,9 @@ import ChristmasGarland from '@/components/christmas/ChristmasGarland'
 import SantaHat from '@/components/christmas/SantaHat'
 import HeroLogoVideo from '@/components/home/HeroLogoVideo'
 import HeroOrbit from '@/components/home/HeroOrbit'
+import { orbitEntries } from '@/lib/homeOrbit'
+import { getDisabledTools } from '@/lib/freeTools'
 
-const ORBIT_KEYS = ['scamSms', 'spendly', 'deadlines', 'data', 'agenda', 'home', 'scamIban', 'travel', 'breathe', 'crossword', 'events', 'timebank', 'scamSite', 'surprise', 'findo', 'cv', 'scamCall', 'quote', 'menu', 'family'] as const
 import { getHomeKarma } from '@/lib/homeKarma'
 import { DEFAULT_HOME_LAYOUT, HOME_LAYOUT_CONFIG, type HomeLayoutKey } from '@/lib/homeLayouts'
 import { getEnabledLocales } from '@/lib/enabledLocales'
@@ -68,10 +69,10 @@ export default async function HomeLanding({ layoutKey }: { layoutKey: HomeLayout
     getTranslations('homeNeeds'),
     getTranslations('homeOrbit'),
   ])
-  // Schede che girano attorno al logo: soprattutto servizi per i privati, alcune
-  // truffe scoperte (in rosso) e un paio per chi lavora. Le prime quattro sono
+  // Schede che girano attorno al logo: un esempio per ogni servizio acceso, di
+  // tutte le categorie a turno (vedi lib/homeOrbit). Le prime quattro sono
   // anche quelle fisse del telefono.
-  const orbitItems = ORBIT_KEYS.map((k) => ({ title: tOrbit(`${k}Title`), text: tOrbit(`${k}Text`), scam: k.startsWith('scam') }))
+  const orbitItems = orbitEntries(await getDisabledTools()).map((e) => ({ title: tOrbit(`${e.key}Title`), text: tOrbit(`${e.key}Text`), scam: e.key.startsWith('scam') }))
   // Un aspetto che non esiste più (salvato prima) usa quello predefinito
   const L = HOME_LAYOUT_CONFIG[layoutKey] ?? HOME_LAYOUT_CONFIG[DEFAULT_HOME_LAYOUT]
   // Video della Home (Admin → Aspetto homepage), di solito il tormentone

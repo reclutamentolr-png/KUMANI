@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 
 // Apertura «il logo e i servizi intorno»: sul computer sei schede girano
 // piano in senso orario attorno al logo (un giro al minuto) e ogni pochi
-// secondi una cambia con un altro servizio o una truffa scoperta, a caso, così
-// passano tutti. Si ferma col mouse sopra e con «riduci movimento». Sul
+// secondi una cambia con la scheda successiva dell'elenco (le categorie sono
+// già alternate), così passano tutte prima di ricominciare. Si ferma col mouse sopra e con «riduci movimento». Sul
 // telefono non c'è (vedi HomeLanding: logo e schede fisse).
 export type OrbitItem = { title: string; text: string; scam?: boolean }
 
@@ -15,6 +15,8 @@ const RADIUS = 40 // % del riquadro
 export default function HeroOrbit({ items, center }: { items: OrbitItem[]; center: ReactNode }) {
   const [shown, setShown] = useState<number[]>(() => items.slice(0, SLOTS).map((_, i) => i))
   const [fading, setFading] = useState<number | null>(null)
+  // Prossima scheda da far entrare
+  const nextItem = useRef(SLOTS)
 
   useEffect(() => {
     if (items.length <= SLOTS) return
@@ -25,9 +27,11 @@ export default function HeroOrbit({ items, center }: { items: OrbitItem[]; cente
       setFading(slot)
       timeout = setTimeout(() => {
         setShown((current) => {
-          const free = items.map((_, i) => i).filter((i) => !current.includes(i))
+          let pick = nextItem.current % items.length
+          while (current.includes(pick)) pick = (pick + 1) % items.length
+          nextItem.current = pick + 1
           const next = [...current]
-          next[slot] = free[Math.floor(Math.random() * free.length)]
+          next[slot] = pick
           return next
         })
         setFading(null)
