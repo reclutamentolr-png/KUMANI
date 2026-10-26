@@ -32,7 +32,7 @@ export default async function LinkInBioPage({ params }: { params: Promise<{ loca
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<{ id: string; referral_code: string; first_name: string; last_name: string }>()
+  const { data: profile } = await supabase.rpc('get_my_profile').maybeSingle<{ id: string; referral_code: string; first_name: string; last_name: string; occupation?: string | null }>()
 
   if (!profile) redirect('/dashboard')
 
@@ -116,7 +116,7 @@ export default async function LinkInBioPage({ params }: { params: Promise<{ loca
         {/* Editor reale + anteprima live (la stessa istanza di stato guida
             entrambi i pannelli, quindi resta sincronizzata mentre si scrive
             e dopo il salvataggio — niente più mockup statico scollegato). */}
-        <LinkInBioEditor userId={user.id} firstName={profile.first_name} lastName={profile.last_name} businessProfile={businessProfile} isPro={isPro} brand={brand} followBrand={(brandRow?.brand_follow as Record<string, unknown> | null)?.bio === true} />
+        <LinkInBioEditor userId={user.id} firstName={profile.first_name} lastName={profile.last_name} occupation={profile.occupation ?? ''} businessProfile={businessProfile} isPro={isPro} brand={brand} followBrand={(brandRow?.brand_follow as Record<string, unknown> | null)?.bio === true} />
 
         {/* URL della Bio con pulsante copia */}
         <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 mb-8">

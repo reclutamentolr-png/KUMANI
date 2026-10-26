@@ -16,7 +16,7 @@ type LinkItem = {
   enabled: boolean
 }
 
-export async function saveLinkInBio(bioText: string, links: LinkItem[], theme: BioThemeKey, mode: BioMode = 'personal') {
+export async function saveLinkInBio(bioText: string, links: LinkItem[], theme: BioThemeKey, mode: BioMode = 'personal', subtitle: string | null = null) {
   const supabase = await createClient()
   const {
     data: { user },
@@ -63,6 +63,8 @@ export async function saveLinkInBio(bioText: string, links: LinkItem[], theme: B
     {
       user_id: user.id,
       mode: cleanMode,
+      // Riga sotto il nome: vuota = nessuna riga, null = professione o città
+      subtitle: subtitle === null ? null : String(subtitle).trim().slice(0, 120),
       bio_text: String(bioText ?? '').slice(0, 500),
       links: JSON.stringify(cleanLinks),
       theme,

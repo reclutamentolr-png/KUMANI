@@ -54,10 +54,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   })
   const { data: profile } = await service.from('profiles').select('id, first_name, last_name, occupation').eq('referral_code', code).maybeSingle()
   if (!profile) return { title: { absolute: 'KUMANI' } }
-  const [{ data: bio }, business] = await Promise.all([service.from('link_in_bio').select('bio_text').eq('user_id', profile.id).maybeSingle(), bioBusiness(service, profile.id)])
+  const [{ data: bio }, business] = await Promise.all([service.from('link_in_bio').select('bio_text, subtitle').eq('user_id', profile.id).maybeSingle(), bioBusiness(service, profile.id)])
   const t = await getTranslations({ locale, namespace: 'bioPublic' })
   const name = business?.name || [profile.first_name, profile.last_name].filter(Boolean).join(' ') || 'KUMANI'
-  const subtitle = business ? business.city : profile.occupation
+  // Riga sotto il nome scritta nella bio, altrimenti città (azienda) o professione
+  const subtitle = typeof bio?.subtitle === 'string' ? bio.subtitle : business ? business.city : profile.occupation
   const description = (bio?.bio_text || subtitle || t('fallbackBio')).slice(0, 200)
   const title = subtitle ? `${name} · ${subtitle}` : name
   return {
@@ -109,7 +110,7 @@ export default async function LinkInBioPublicPage({ params }: { params: Promise<
   // solo la riga di questo profilo.
   const { data: linkInBio } = await service
     .from('link_in_bio')
-    .select('bio_text, links, theme, brand_colors')
+    .select('bio_text, links, theme, brand_colors, subtitle')
     .eq('user_id', profile.id)
     .maybeSingle()
 
@@ -130,7 +131,9 @@ export default async function LinkInBioPublicPage({ params }: { params: Promise<
   // Come azienda (Pro): nome, logo e città della Scheda attività
   const business = await bioBusiness(service, profile.id)
   const shownName = business ? business.name : [profile.first_name, profile.last_name].filter(Boolean).join(' ')
-  const subtitle = business ? business.city : profile.occupation
+  // Riga sotto il nome scritta nella bio (vuota = nessuna), altrimenti città
+  // (azienda) o professione del profilo
+  const subtitle = typeof linkInBio?.subtitle === 'string' ? linkInBio.subtitle : business ? business.city : profile.occupation
 
   const baseUrl = SITE_URL
   // Si condivide questa pagina (la bio), non quella di iscrizione
@@ -183,7 +186,7 @@ export default async function LinkInBioPublicPage({ params }: { params: Promise<
             {linkInBio?.bio_text ? (
               <p className={`text-sm leading-relaxed ${theme.secondaryText}`}>{linkInBio.bio_text}</p>
             ) : (
-              !subtitle && <p className={`text-sm ${theme.secondaryText}`}>{t('fallbackBio')}</p>
+              !subtitle && !business && <p className={`text-sm ${theme.secondaryText}`}>{t('fallbackBio')}</p>
             )}
           </div>
 

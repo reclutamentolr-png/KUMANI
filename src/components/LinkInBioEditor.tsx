@@ -43,12 +43,15 @@ export default function LinkInBioEditor({
   firstName,
   lastName,
   businessProfile = null,
+  occupation = '',
   isPro = false,
   brand = null,
   followBrand = false,
 }: {
   // Pro: si può scegliere «Azienda» (nome, logo e città dalla Scheda attività)
   isPro?: boolean
+  // Professione del profilo: riga sotto il nome finché non se ne scrive un'altra
+  occupation?: string
   // «I colori del tuo brand» (Scheda attività): tema «brand» se ci sono
   brand?: BrandColors | null
   followBrand?: boolean
@@ -62,6 +65,8 @@ export default function LinkInBioEditor({
   const supabase = createClient()
   const [bioText, setBioText] = useState('')
   const [mode, setMode] = useState<BioMode>('personal')
+  // Riga sotto il nome: null = mai scritta (professione o città della Scheda)
+  const [subtitle, setSubtitle] = useState<string | null>(null)
   const [links, setLinks] = useState<LinkItem[]>([])
   // Pagina nuova che segue il brand: parte dal tema «brand»
   const [theme, setTheme] = useState<BioThemeKey>(brand && followBrand ? 'brand' : DEFAULT_BIO_THEME)
@@ -86,7 +91,7 @@ export default function LinkInBioEditor({
     const fetchData = async () => {
       const { data } = await supabase
         .from('link_in_bio')
-        .select('bio_text, links, theme, mode')
+        .select('bio_text, links, theme, mode, subtitle')
         .eq('user_id', userId)
         .single()
 
@@ -112,6 +117,7 @@ export default function LinkInBioEditor({
       if (data) {
         setBioText(data.bio_text || '')
         setMode(data.mode === 'business' ? 'business' : 'personal')
+        setSubtitle(typeof data.subtitle === 'string' ? data.subtitle : null)
         try {
           // Tollerante: links può essere una stringa JSON o già un array (jsonb)
           const raw: unknown = typeof data.links === 'string' ? JSON.parse(data.links) : data.links
@@ -170,7 +176,7 @@ export default function LinkInBioEditor({
     setSaving(true)
     setJustSaved(false)
     try {
-      const result = await saveLinkInBio(bioText, links, theme, isPro ? mode : 'personal')
+      const result = await saveLinkInBio(bioText, links, theme, isPro ? mode : 'personal', subtitle)
       if (!result.success) throw new Error('save failed')
       setJustSaved(true)
       setTimeout(() => setJustSaved(false), 3000)
@@ -203,6 +209,8 @@ export default function LinkInBioEditor({
   const asBusiness = isPro && mode === 'business' && !!businessProfile?.companyName.trim()
   const shownName = asBusiness ? businessProfile!.companyName.trim() : displayName
   const shownLogo = asBusiness ? businessProfile!.logoUrl : null
+  // Riga sotto il nome: quella scritta, altrimenti città (azienda) o professione
+  const shownSubtitle = subtitle ?? (asBusiness ? businessProfile!.city.trim() : occupation.trim())
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 items-start">
@@ -255,6 +263,21 @@ export default function LinkInBioEditor({
         )}
 
         <BusinessProfileImport profile={businessProfile} onImport={importProfile} className="mb-6" />
+
+        {/* Riga sotto il nome: si cambia o si cancella */}
+        <div className="mb-6">
+          <label className="block text-sm font-semibold text-[var(--ink)] mb-2" htmlFor="bio-subtitle">{t('bioSubtitleLabel')}</label>
+          <input
+            id="bio-subtitle"
+            type="text"
+            maxLength={120}
+            value={shownSubtitle}
+            onChange={(e) => setSubtitle(e.target.value)}
+            placeholder={t('bioSubtitlePlaceholder')}
+            className="w-full p-3 border border-[var(--gold)]/30 rounded-lg focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30"
+          />
+          <p className="mt-1 text-xs text-[var(--muted)]">{t('bioSubtitleHint')}</p>
+        </div>
 
         {/* Bio Text */}
         <div className="mb-6">
@@ -490,10 +513,9 @@ export default function LinkInBioEditor({
               </div>
             )}
             <h3 className={`text-xl font-bold mb-1 ${previewStyle.nameText}`}>{shownName || t('networkMarketer')}</h3>
-            {asBusiness && businessProfile?.city.trim() && <p className={`-mt-0.5 mb-1 text-xs ${previewStyle.secondaryText}`}>{businessProfile.city.trim()}</p>}
-            <p className={`text-sm mb-4 ${previewStyle.secondaryText}`}>
-              {bioText || t('networkMarketer')}
-            </p>
+            {shownSubtitle.trim() && <p className={`-mt-0.5 mb-1 text-xs ${previewStyle.secondaryText}`}>{shownSubtitle.trim()}</p>}
+            {/* Solo il testo scritto: niente frase di riempimento che sembra salvata */}
+            {bioText.trim() ? <p className={`text-sm mb-4 whitespace-pre-line ${previewStyle.secondaryText}`}>{bioText}</p> : <div className="mb-4" />}
 
             <div className="space-y-2">
               {links.filter((l) => l.enabled !== false && l.title).length === 0 ? (

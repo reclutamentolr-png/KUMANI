@@ -3,4 +3,8 @@
 -- Solo per il piano Pro (la Scheda attività è del Pro): se il piano non è più
 -- Pro la pagina torna a mostrare la persona. La tabella dà già a
 -- authenticated i permessi di scrittura su tutte le colonne.
+-- subtitle: la riga sotto il nome, scritta nell'editor. Null = mai scritta:
+-- si mostra la professione del profilo (privato) o la città (azienda); vuota
+-- = nessuna riga.
 alter table public.link_in_bio add column if not exists mode text not null default 'personal' check (mode in ('personal', 'business'));
+alter table public.link_in_bio add column if not exists subtitle text check (subtitle is null or char_length(subtitle) <= 120);
