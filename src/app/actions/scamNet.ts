@@ -24,7 +24,7 @@ import {
   type ScamKind,
   type ScamTargetKey,
 } from '@/lib/scamNet'
-import { maskedPhone, normalizePhone, phoneInfo, type PhoneInfo } from '@/lib/scamNetPhone'
+import { normalizePhone, phoneInfo, type PhoneInfo } from '@/lib/scamNetPhone'
 
 // RETE ANTI-TRUFFA: tutto passa dal server con la chiave di servizio; le
 // tabelle non hanno regole di lettura per gli utenti. Chi segnala resta
@@ -70,8 +70,9 @@ function normalize(kind: ScamKind, value: string): ScamTargetKey | null {
 }
 
 // Dato come lo vedono gli altri: numeri e IBAN in parte nascosti
+// I numeri confermati come truffa si vedono interi (sono dei truffatori); gli
+// IBAN restano in parte nascosti
 function shownValue(kind: string, display: string, key: string): string {
-  if (kind === 'phone') return maskedPhone(display, key)
   if (kind === 'iban') return maskIban(key)
   return display
 }
