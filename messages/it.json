@@ -8858,7 +8858,7 @@
         },
         "4": {
           "1": "Prezzo onesto, per sempre:",
-          "2": "49 € l’anno Plus, 149 € l’anno Pro."
+          "2": "uguale per tutti e scritto chiaro."
         },
         "5": {
           "1": "Prima persone, poi professionisti:",
@@ -8872,35 +8872,35 @@
       "notes": "Il manifesto è la nostra carta d’identità. Non promettiamo guadagni: mettiamo a disposizione strumenti. Il prezzo è pubblico e uguale per tutti."
     },
     "s5": {
-      "title": "L’Ecosistema KUMANI in quattro numeri",
-      "sub": "Un solo account, strumenti che si parlano tra loro.",
+      "title": "KUMANI in quattro numeri",
+      "sub": "Un solo account, servizi che si parlano tra loro.",
       "stats": {
         "1": {
           "1": "{total}",
           "2": "{total, plural, one {servizio} other {servizi}}",
-          "3": "{free, plural, one {# gratuito} other {# gratuiti}} · {base} con Plus · {pro} con Pro"
+          "3": "{free, plural, one {# gratuito} other {# gratuiti}} per tutti, gli altri con Plus e Pro"
         },
         "2": {
+          "1": "{areas}",
+          "2": "aree",
+          "3": "dalla sicurezza al lavoro, dalla casa al benessere"
+        },
+        "3": {
           "1": "7",
           "2": "lingue",
           "3": "italiano, inglese, francese, spagnolo, portoghese, tedesco, russo"
         },
-        "3": {
-          "1": "49 €",
-          "2": "all’anno con Plus",
-          "3": "meno di 1 € a settimana"
-        },
         "4": {
-          "1": "15",
-          "2": "giorni di prova Pro",
-          "3": "gratis, senza carta di credito"
+          "1": "1",
+          "2": "account",
+          "3": "su telefono, tablet e computer"
         }
       },
-      "notes": "{total, plural, one {# servizio} other {# servizi}}: {free, plural, one {# gratuito} other {# gratuiti}} per chi si registra, {base} in più con il piano Plus, {pro} in più con il piano Pro. Tutto in sette lingue. Il piano Plus costa 49 euro l’anno, meno di un euro a settimana. Il Pro si prova gratis per quindici giorni."
+      "notes": "{total, plural, one {# servizio} other {# servizi}} in {areas} aree, {free, plural, one {# gratuito} other {# gratuiti}} per chi si registra. Tutto in sette lingue, con un solo account su telefono, tablet e computer. I prezzi li vediamo alla fine, dopo aver visto tutto."
     },
     "s6": {
-      "title": "Sei aree, un solo account",
-      "sub": "Alcuni esempi dei servizi inclusi.",
+      "title": "Tutto quello che ti serve, in {areas} aree",
+      "sub": "{total, plural, one {# servizio} other {# servizi}} con un solo account. Ecco alcuni nomi per ogni area.",
       "areas": {
         "1": {
           "1": "Farsi conoscere",
@@ -8927,11 +8927,12 @@
           "2": "Bacheca, Kordata, Banca del Tempo, Events, Affinity, {hub_giochi}"
         }
       },
-      "notes": "I servizi sono divisi in sei aree: farsi conoscere, sicurezza contro le truffe, organizzazione personale, benessere, lavoro, community e svago. Si entra con un solo account."
+      "notes": "I servizi sono divisi per bisogno, in {areas} aree: {total} in tutto. Per ogni area alcuni esempi; nella parte finale li vediamo tutti, uno per uno.",
+      "count": "{count, plural, one {# servizio} other {# servizi}}"
     },
     "s7": {
-      "title": "Strumenti che si parlano",
-      "sub": "Non strumenti separati: ognuno alimenta gli altri.",
+      "title": "Un ecosistema: le aree si parlano",
+      "sub": "Quello che fai in un servizio arriva dove serve, senza ricopiare niente.",
       "nodes": {
         "1": {
           "1": "Un’agenda per tutto",
@@ -8958,7 +8959,77 @@
           "2": "una scelta, tutti i tuoi servizi"
         }
       },
-      "notes": "La forza di KUMANI è che gli strumenti si parlano. L’agenda raccoglie appuntamenti, bollette e scadenze. I viaggi finiscono nel calendario. Il menù del ristorante porta alla Kumi Card. Un preventivo accettato diventa un lavoro in {name_gestione}, fino all’incasso. I colori del brand si scelgono una volta e li usano tutti i servizi. E ogni strumento usato fa crescere i KU Karma nel wallet."
+      "notes": "La forza di KUMANI è che le aree si parlano. Una ricevuta digitale diventa una spesa in Spendly. Il CV si aggiunge al Link in Bio con un tocco. Se in un annuncio della Bacheca c’è un IBAN, lo si controlla prima di pagare. Le offerte di lavoro passano dal controllo anti-truffa. Logo e colori della Scheda attività finiscono nei preventivi e nella firma email. La Kumi Card arriva nel Wallet, e anche il benessere fa crescere i KU Karma.",
+      "links": {
+        "1": {
+          "1": "Ricevute Digitali → Spendly",
+          "2": "la ricevuta diventa una spesa nei tuoi conti"
+        },
+        "2": {
+          "1": "KUMANI CV → Link in Bio",
+          "2": "il link del tuo CV in un tocco"
+        },
+        "3": {
+          "1": "Bacheca → Verifica IBAN",
+          "2": "IBAN nell’annuncio? Lo controlli prima di pagare"
+        },
+        "4": {
+          "1": "Trova Lavoro → Anti-truffa",
+          "2": "le offerte passano dal controllo anti-truffa"
+        },
+        "5": {
+          "1": "Scheda attività → Preventivi e Firma email",
+          "2": "logo e colori scelti una volta sola"
+        },
+        "6": {
+          "1": "Kumi Card → Wallet",
+          "2": "la tessera fedeltà nel portafoglio KUMANI"
+        },
+        "7": {
+          "1": "Benessere → KU Karma",
+          "2": "passi, pause e respiro fanno crescere i punti"
+        }
+      },
+      "linkGroups": {
+        "1": {
+          "1": "work",
+          "2": "money"
+        },
+        "2": {
+          "1": "work",
+          "2": "business"
+        },
+        "3": {
+          "1": "community",
+          "2": "security"
+        },
+        "4": {
+          "1": "work",
+          "2": "security"
+        },
+        "5": {
+          "1": "business",
+          "2": "work"
+        },
+        "6": {
+          "1": "business",
+          "2": "community"
+        },
+        "7": {
+          "1": "wellness",
+          "2": "community"
+        }
+      },
+      "linkTools": {
+        "1": "digital-receipt",
+        "2": "kumani-cv",
+        "3": "verifica-iban",
+        "4": "trova-lavoro",
+        "5": "preventivi",
+        "6": "fidelity",
+        "7": "oxygen"
+      },
+      "center": "Un solo account"
     },
     "s8": {
       "title": "Tre piani, un prezzo onesto",
@@ -9334,7 +9405,7 @@
     "full": {
       "section": "Tutti i servizi",
       "title": "Tutti i servizi KUMANI",
-      "sub": "{total, plural, one {# servizio} other {# servizi}} con {tools} strumenti, divisi per bisogno.",
+      "sub": "{total, plural, one {# servizio} other {# servizi}}, divisi per bisogno: eccoli tutti, uno per uno.",
       "legend": "Il bollino colorato indica il piano che include il servizio.",
       "count": "{count, plural, one {# servizio} other {# servizi}}",
       "groupSub": "{count, plural, one {# servizio} other {# servizi}} · Tutti i servizi KUMANI",
@@ -9378,7 +9449,7 @@
       "notes": "Partiamo da un numero. Nel 2025, secondo la Polizia Postale, agli italiani sono stati rubati online più di 269 milioni di euro: più di 700.000 euro al giorno, in oltre 27.000 casi. SMS della finta banca, finti operatori, siti falsi, investimenti truccati. Non succede solo agli altri: succede ai nostri genitori, ai nostri amici, a noi."
     },
     "hook2": {
-      "title": "E poi paghi un’app per ogni cosa.",
+      "title": "La realtà oggi è questa: paghi un’app per ogni cosa.",
       "sub": "Per difenderti e organizzarti: prezzi di listino di app tra le più scaricate (App Store Italia, ottobre 2026).",
       "rows": {
         "1": {
@@ -9423,10 +9494,10 @@
       },
       "total": "Solo queste {count} app: fino a {total} l’anno.",
       "answer": "Con KUMANI Pro, tutto in uno: 149 € l’anno.",
-      "notes": "Il secondo problema: per ogni bisogno c’è un’app diversa, e quasi tutte si pagano. Questi sono prezzi veri, di listino, di app tra le più scaricate. Sommate solo queste e si arriva a centinaia di euro l’anno, con dieci password e dieci abbonamenti da ricordare. E quando serve, non ci si ricorda nemmeno quale app aprire."
+      "notes": "Ora che avete visto cosa c’è dentro KUMANI, guardiamo la concorrenza. Per ogni bisogno c’è un’app diversa, e quasi tutte si pagano. Questi sono prezzi veri, di listino, di app tra le più scaricate: sommate solo queste e si arriva a centinaia di euro l’anno, con tante password e tanti abbonamenti da ricordare."
     },
     "hook3": {
-      "title": "Un solo account. {tools} strumenti.\nDa 0 €.",
+      "title": "Un solo account. {tools} strumenti.",
       "cards": {
         "1": {
           "1": "0 €",
@@ -9444,7 +9515,7 @@
           "3": "Tutto il Plus e gli strumenti per chi lavora con i clienti. 15 giorni gratis."
         }
       },
-      "notes": "La risposta è KUMANI: un solo account, {tools} strumenti che si parlano tra loro. La protezione contro le truffe è gratis per tutti. Con 49 euro l’anno, meno di un euro a settimana, si organizza tutta la vita di casa. Con 149 euro c’è anche tutto quello che serve per lavorare. Adesso vediamo chi siamo e perché lo facciamo."
+      "notes": "Con KUMANI tutto questo sta in un solo account: {tools} strumenti che si parlano tra loro. La protezione contro le truffe è gratis per tutti. Con 49 euro l’anno, meno di un euro a settimana, si organizza la vita di casa. Con 149 euro c’è anche tutto quello che serve per lavorare."
     },
     "kumi": {
       "title": "Scrivi cosa ti serve. KUMI ti porta lì.",
@@ -9500,7 +9571,8 @@
       },
       "badge": "Gratis da installare · funziona su Android, iPhone e computer",
       "notes": "KUMANI non si scarica da uno store: si apre dal browser e con un tocco si aggiunge alla schermata Home, come un’app. Gli aggiornamenti arrivano da soli. Le notifiche avvisano di scadenze, messaggi e nuove truffe confermate dalla community. Lo stesso account funziona su telefono, tablet e computer."
-    }
+    },
+    "secPrice": "Concorrenza e prezzi"
   },
   "privacyPage": {
     "metaTitle": "Informativa Privacy",

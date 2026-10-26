@@ -8,7 +8,7 @@ import { getSurprisePrices } from '@/lib/surpriseServer'
 import type { DeckCatalogGroup, DeckPlan, DeckVariant } from '@/lib/deck/types'
 
 // Testi con i numeri dei servizi (plurali ICU della lingua)
-const COUNTED_KEYS = ['hook3.title', 'hook3.notes', 's5.stats.1.1', 's5.stats.1.2', 's5.stats.1.3', 's5.notes', 's8.plans.1.5', 's8.plans.2.5', 's8.plans.3.5', 's8.notes', 's17.steps.1.2', 'full.sub', 'full.introNotes']
+const COUNTED_KEYS = ['hook3.title', 'hook3.notes', 's5.stats.2.1', 's6.title', 's6.sub', 's6.notes', 's5.stats.1.1', 's5.stats.1.2', 's5.stats.1.3', 's5.notes', 's8.plans.1.5', 's8.plans.2.5', 's8.plans.3.5', 's8.notes', 's17.steps.1.2', 'full.sub', 'full.introNotes']
 
 // La chiave c'è nei testi di questa lingua? (le slide nuove arrivano prima in italiano)
 function hasPath(obj: Record<string, unknown>, path: string) {
@@ -30,9 +30,11 @@ function setPath(obj: Record<string, unknown>, path: string, value: string) {
 // Testi della presentazione in una lingua (con le correzioni dei traduttori),
 // per crearla nel browser al momento del download. Solo per gli iscritti.
 // Il numero dei servizi viene dai servizi accesi (marketplace_settings); la
-// versione Full riceve anche tutti i servizi per gruppo, nella lingua.
+// i servizi per gruppo, nella lingua, servono a entrambe le versioni (aree ed
+// ecosistema); solo la Full li mostra uno per uno.
 export async function getDeckTexts(
   locale: string,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- la versione la sceglie il browser
   variant: DeckVariant = 'lite'
 ): Promise<{
   texts?: unknown
@@ -74,9 +76,18 @@ export async function getDeckTexts(
   // Servizi accesi e quanti sono per piano: i numeri vanno nei testi ({price}
   // resta, lo riempie il browser con il prezzo formattato)
   const enabled = new Map(on.map((r) => [r.tool_name, r.required_plan ?? 'free']))
-  const { services, counts } = deckServices(enabled, (key) => tm(key), { name: td('full.chatName'), description: td('full.chatDesc') }, (key) => tsh(key))
   const texts = structuredClone(messages.deckTexts) as Record<string, unknown>
-  for (const key of COUNTED_KEYS) if (hasPath(texts, key)) setPath(texts, key, td(key, { ...counts, price: '{price}' }))
+  // Lingue con la presentazione aggiornata: ogni strumento è un servizio a sé
+  // (così si vede quanti sono) e le aree si compilano dai servizi accesi
+  const perTool = hasPath(texts, 's7.links')
+  const { services, counts } = deckServices(enabled, (key) => tm(key), { name: td('full.chatName'), description: td('full.chatDesc') }, (key) => tsh(key), !perTool)
+  const catalog = deckCatalog(services, {
+    label: (group) => (group === 'community' ? td('full.community') : th(`group_${group}`)),
+    count: (n) => td('full.count', { count: n }),
+    sub: (n) => td('full.groupSub', { count: n }),
+    notes: (label, n, names) => td('full.notes', { group: label, count: n, names }),
+  })
+  for (const key of COUNTED_KEYS) if (hasPath(texts, key)) setPath(texts, key, td(key, { ...counts, areas: catalog.length, price: '{price}' }))
   // Nomi dei servizi uniti ({name_…}, {hub_…}, {tab_…}) come nella barra dell'app
   const fillAll = (node: Record<string, unknown>) => {
     for (const [key, value] of Object.entries(node)) {
@@ -92,15 +103,6 @@ export async function getDeckTexts(
     surprise.badge = surprise.badge.replace('{price}', new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(cents / 100))
   }
 
-  const catalog =
-    variant === 'full'
-      ? deckCatalog(services, {
-          label: (group) => (group === 'community' ? td('full.community') : th(`group_${group}`)),
-          count: (n) => td('full.count', { count: n }),
-          sub: (n) => td('full.groupSub', { count: n }),
-          notes: (label, n, names) => td('full.notes', { group: label, count: n, names }),
-        })
-      : undefined
 
   // Servizi accesi: le righe delle slide legate a un servizio spento non compaiono
   return { texts, minPassEur, landingPassEur, donationPercentBp, catalog, enabledTools: [...enabled.keys()] }

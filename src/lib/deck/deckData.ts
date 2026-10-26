@@ -51,7 +51,9 @@ export function deckServices(
   enabled: Map<string, DeckPlan>,
   tm: (key: string) => string,
   chat: { name: string; description: string },
-  tsh: (key: string) => string
+  tsh: (key: string) => string,
+  // false: ogni strumento è un servizio a sé (presentazione aggiornata)
+  collapse = true
 ) {
   const tools: DeckService[] = getMarketplaceTools(tm)
     .filter((tool) => enabled.has(tool.toolName))
@@ -64,7 +66,7 @@ export function deckServices(
     plan: enabled.get(c.tool)!,
     iconName: c.icon,
   }))
-  const services: DeckService[] = [
+  const services: DeckService[] = !collapse ? [...tools, ...community] : [
     ...collapseByHub(tools, (hub, members) => ({
       toolName: `hub-${hub}`,
       group: members[0].group,

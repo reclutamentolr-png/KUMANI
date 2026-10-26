@@ -28,9 +28,9 @@ const THEME_COLORS: Record<string, string> = {
 const HEX = { ink: '171717', gold: 'C79A3B', goldBright: 'E7C56A', white: 'FFFFFF', red: 'B5452F', sky: '5BA4D6' }
 const SCALE: Record<string, number> = { it: 1, en: 1, fr: 0.94, es: 0.96, pt: 0.96, de: 0.92, ru: 0.92 }
 // Gruppi di servizi (stessi colori della pagina Servizi) e bollini dei piani
-const GROUP_HEX: Record<string, string> = { security: 'B5452F', money: '2F6B45', work: '2B4F9A', business: '8A6D1F', wellness: '0F766E', fun: '7C3AED', community: 'C79A3B' }
-const GROUP_TILE: Record<string, string> = { security: 'FDE7E3', money: 'E4F1E8', work: 'E6ECF8', business: 'F5E8BD', wellness: 'DFF3F1', fun: 'EFE7FD', community: 'F5E8BD' }
-const GROUP_ICON: Record<string, string> = { security: 'ShieldCheck', money: 'Wallet', work: 'BriefcaseBusiness', business: 'Store', wellness: 'Leaf', fun: 'Dices', community: 'Users' }
+const GROUP_HEX: Record<string, string> = { social: 'C2185B', kids: 'E08A1E', security: 'B5452F', money: '2F6B45', work: '2B4F9A', business: '8A6D1F', wellness: '0F766E', fun: '7C3AED', community: 'C79A3B' }
+const GROUP_TILE: Record<string, string> = { social: 'FCE4EF', kids: 'FDEFD9', security: 'FDE7E3', money: 'E4F1E8', work: 'E6ECF8', business: 'F5E8BD', wellness: 'DFF3F1', fun: 'EFE7FD', community: 'F5E8BD' }
+const GROUP_ICON: Record<string, string> = { social: 'Megaphone', kids: 'Baby', security: 'ShieldCheck', money: 'Wallet', work: 'BriefcaseBusiness', business: 'Store', wellness: 'Leaf', fun: 'Dices', community: 'Users' }
 const PLAN_BADGE: Record<DeckPlan, { fill: string; text: string }> = { free: { fill: '3E7C59', text: 'FFFFFF' }, base: { fill: 'C79A3B', text: '171717' }, pro: { fill: '171717', text: 'E7C56A' } }
 // Servizi per slide (griglia 2 × 4): oltre, il gruppo si divide in più slide
 const PER_SLIDE = 8
@@ -159,46 +159,6 @@ export async function buildDeck(
     s.addNotes(S.hook1.notes)
   }
 
-  // 0b. Il secondo problema: un'app a pagamento per ogni cosa
-  if (S.hook2) {
-    const s = pres.addSlide({ masterName: 'KUMANI scuro', sectionTitle: sec[0] })
-    titled(s, S.hook2.title, S.hook2.sub)
-    const all = (S.hook2.rows as string[][]).map((r, i) => ({ r, annual: Number(S.hook2.annual?.[i] ?? 0) }))
-    const rows = keep(all, S.hook2.tools)
-    const step = Math.min(0.78, 3.6 / Math.max(rows.length, 1))
-    for (let i = 0; i < rows.length; i++) {
-      const [app, price, ours] = rows[i].r, y = 1.95 + i * step, h = step - 0.12
-      card(s, 0.6, y, 12.1, h, `a${i + 1}-card${i}`, C.text2)
-      Tx(s, app, { x: 0.85, y, w: 4.2, h, fontSize: fs(17), bold: true, color: C.background1, valign: 'middle', objectName: `a${i + 1}-app${i}` })
-      Tx(s, price, { x: 5.0, y, w: 3.2, h, fontSize: fs(16), bold: true, color: 'FF8A7A', valign: 'middle', objectName: `a${i + 1}-p${i}` })
-      s.addImage({ data: await icon('ArrowRight', HEX.gold), x: 8.3, y: y + h / 2 - 0.17, w: 0.34, h: 0.34, objectName: `a${i + 1}-fr${i}` } as any)
-      Tx(s, ours, { x: 8.85, y, w: 3.7, h, fontSize: fs(16), bold: true, color: C.accent2, valign: 'middle', objectName: `a${i + 1}-k${i}` })
-    }
-    const yearly = rows.filter((x) => x.annual > 0)
-    const total = new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(Math.floor(yearly.reduce((t, x) => t + x.annual, 0)))
-    const n = rows.length + 1, ty = 1.95 + rows.length * step + 0.4
-    Tx(s, String(S.hook2.total).replace('{count}', String(yearly.length)).replace('{total}', total), { x: 0.6, y: ty, w: 12.1, h: 0.6, fontSize: fs(26), bold: true, color: C.background1, objectName: `a${n}-totale` })
-    card(s, 0.6, ty + 0.8, 12.1, 0.85, `a${n + 1}-rispcard`, C.accent1)
-    Tx(s, S.hook2.answer, { x: 0.9, y: ty + 0.8, w: 11.6, h: 0.85, fontSize: fs(26), bold: true, color: C.text1, valign: 'middle', objectName: `a${n + 1}-risposta` })
-    s.addNotes(S.hook2.notes)
-  }
-
-  // 0c. La risposta: un account, tutti gli strumenti, prezzi chiari
-  if (S.hook3) {
-    const s = pres.addSlide({ masterName: 'KUMANI scuro', sectionTitle: sec[0] })
-    s.addImage({ path: LOGO, x: 0.6, y: 0.55, w: 1.0, h: 1.0, objectName: 'a1-logo' } as any)
-    Tx(s, S.hook3.title, { x: 1.85, y: 0.45, w: 10.9, h: 1.3, fontFace: 'Cambria', fontSize: fs(38), bold: true, color: C.background1, valign: 'middle', objectName: 'a1-titolo' })
-    const w = 3.85, gap = 0.27, y = 2.35, h = 3.2
-    for (let i = 0; i < 3; i++) {
-      const x = 0.6 + i * (w + gap), [big, head, body] = S.hook3.cards[i], hi = i === 2
-      card(s, x, y, w, h, `a${i + 2}-card${i}`, hi ? C.accent1 : C.text2)
-      Tx(s, big, { x: x + 0.3, y: y + 0.3, w: w - 0.6, h: 1.25, fontFace: 'Cambria', fontSize: 60, bold: true, color: hi ? C.text1 : C.accent2, valign: 'middle', objectName: `a${i + 2}-big${i}` })
-      Tx(s, head, { x: x + 0.3, y: y + 1.6, w: w - 0.6, h: 0.5, fontSize: fs(19), bold: true, color: hi ? C.text1 : C.background1, objectName: `a${i + 2}-h${i}` })
-      Tx(s, body, { x: x + 0.3, y: y + 2.15, w: w - 0.6, h: 1.6, fontSize: fs(15), color: hi ? C.text1 : C.accent3, valign: 'top', objectName: `a${i + 2}-d${i}` })
-    }
-    s.addNotes(S.hook3.notes)
-  }
-
   // 1. Copertina
   {
     const s = pres.addSlide({ masterName: 'KUMANI copertina', sectionTitle: sec[0] })
@@ -276,8 +236,26 @@ export async function buildDeck(
     s.addNotes(S.s5.notes)
   }
 
-  // 6. Sei aree
-  {
+  // 6. Le aree: tutte, con quanti servizi e alcuni nomi (servizi accesi)
+  if (S.s7.links && catalog.length) {
+    const s = pres.addSlide({ masterName: 'KUMANI chiaro', sectionTitle: sec[2] })
+    titled(s, S.s6.title, S.s6.sub)
+    const cols = catalog.length > 6 ? 4 : 3, rowsN = Math.ceil(catalog.length / cols)
+    const gx = 0.25, gy = 0.25, w = (12.1 - gx * (cols - 1)) / cols, h = Math.min(2.3, (4.85 - gy * (rowsN - 1)) / rowsN)
+    for (let i = 0; i < catalog.length; i++) {
+      const g = catalog[i], x = 0.6 + (i % cols) * (w + gx), y = 1.85 + Math.floor(i / cols) * (h + gy), hex = GROUP_HEX[g.key] ?? HEX.gold
+      card(s, x, y, w, h, `a${i + 1}-card${i}`)
+      await circleIcon(s, GROUP_ICON[g.key] ?? 'Sparkles', x + 0.22, y + 0.22, 0.62, hex, HEX.white, `a${i + 1}-ic${i}`)
+      Tx(s, [
+        { text: g.label, options: { bold: true, color: C.text1, fontSize: fs(16), breakLine: true } },
+        { text: g.count, options: { bold: true, color: hex, fontSize: fs(13) } },
+      ], { x: x + 0.95, y: y + 0.16, w: w - 1.1, h: 0.75, valign: 'middle', objectName: `a${i + 1}-t${i}` })
+      const names = g.items.map((it) => it.name)
+      const shown = rowsN > 1 ? 6 : 8
+      Tx(s, names.slice(0, shown).join(' · ') + (names.length > shown ? ' …' : ''), { x: x + 0.22, y: y + 0.98, w: w - 0.4, h: h - 1.08, fontSize: fs(12), color: C.accent4, valign: 'top', objectName: `a${i + 1}-d${i}` })
+    }
+    s.addNotes(S.s6.notes)
+  } else {
     const s = pres.addSlide({ masterName: 'KUMANI chiaro', sectionTitle: sec[2] })
     titled(s, S.s6.title, S.s6.sub)
     const ics = ['Megaphone', 'ShieldCheck', 'CalendarDays', 'Leaf', 'BriefcaseBusiness', 'Users']
@@ -292,8 +270,58 @@ export async function buildDeck(
     s.addNotes(S.s6.notes)
   }
 
-  // 7. Strumenti che si parlano
-  {
+  // 7. Ecosistema: le aree in cerchio, collegate dai passaggi veri tra servizi
+  if (S.s7.links && catalog.length) {
+    const s = pres.addSlide({ masterName: 'KUMANI scuro', sectionTitle: sec[2] })
+    titled(s, S.s7.title, S.s7.sub)
+    const cx = 3.55, cy = 4.4, r = 2.05, d = 0.82
+    // Ordine nel cerchio: le aree collegate stanno vicine (le linee non passano dal centro)
+    const RING = ['security', 'work', 'money', 'kids', 'social', 'fun', 'wellness', 'community', 'business']
+    const ring = [...catalog].sort((a, b) => (RING.indexOf(a.key) + 99) % 99 - (RING.indexOf(b.key) + 99) % 99)
+    const pos = new Map(ring.map((g, i) => {
+      const a = -Math.PI / 2 + (i * 2 * Math.PI) / ring.length
+      return [g.key, [cx + r * Math.cos(a), cy + r * Math.sin(a)] as [number, number]]
+    }))
+    const all = (S.s7.links as string[][]).map((row, i) => ({ row, groups: S.s7.linkGroups[i] as string[], tool: S.s7.linkTools?.[i] as string | undefined }))
+    const links = all.filter((l) => pos.has(l.groups[0]) && pos.has(l.groups[1]) && (!on || !l.tool || on.has(l.tool)))
+    // Linee tra le aree con il numero del collegamento a metà
+    links.forEach((l, i) => {
+      const [x1, y1] = pos.get(l.groups[0])!, [x2, y2] = pos.get(l.groups[1])!
+      line(s, x1, y1, x2, y2, { color: HEX.gold, width: 1.5 }, `a${i + 3}-ln${i}`)
+    })
+    s.addShape(pres.ShapeType.ellipse, { x: cx - 0.75, y: cy - 0.75, w: 1.5, h: 1.5, fill: { color: C.accent1 }, line: { type: 'none' }, objectName: 'a1-centro' } as any)
+    s.addImage({ path: LOGO, x: cx - 0.55, y: cy - 0.55, w: 1.1, h: 1.1, objectName: 'a1-logo' } as any)
+    let k = 0
+    for (const g of ring) {
+      const [x, y] = pos.get(g.key)!, hex = GROUP_HEX[g.key] ?? HEX.gold
+      await circleIcon(s, GROUP_ICON[g.key] ?? 'Sparkles', x - d / 2, y - d / 2, d, hex, HEX.white, `a2-area${k}`)
+      const below = y >= cy - 0.1
+      Tx(s, g.label, { x: x - 1.0, y: below ? y + d / 2 + 0.02 : y - d / 2 - 0.4, w: 2.0, h: 0.38, fontSize: fs(11), bold: true, align: 'center', color: C.background1, valign: below ? 'top' : 'bottom', objectName: `a2-lab${k}` })
+      k++
+    }
+    // Due collegamenti sulla stessa linea: numeri a un terzo e a due terzi
+    const seen = new Map<string, number>()
+    links.forEach((l, i) => {
+      // Sempre dalla stessa estremità, anche se i collegamenti vanno in versi opposti
+      const [ga, gb] = [...l.groups].sort()
+      const [x1, y1] = pos.get(ga)!, [x2, y2] = pos.get(gb)!
+      const pair = `${ga}-${gb}`, nth = seen.get(pair) ?? 0
+      seen.set(pair, nth + 1)
+      const t = nth === 0 ? (links.filter((o) => [...o.groups].sort().join('-') === pair).length > 1 ? 0.35 : 0.5) : 0.65
+      const mx = x1 + (x2 - x1) * t, my = y1 + (y2 - y1) * t
+      s.addShape(pres.ShapeType.ellipse, { x: mx - 0.18, y: my - 0.18, w: 0.36, h: 0.36, fill: { color: C.accent2 }, line: { color: C.text1, width: 1 }, objectName: `a${i + 3}-n${i}` } as any)
+      Tx(s, String(i + 1), { x: mx - 0.18, y: my - 0.18, w: 0.36, h: 0.36, fontSize: 11, bold: true, align: 'center', valign: 'middle', color: C.text1, objectName: `a${i + 3}-nt${i}` })
+      // Elenco a destra con lo stesso numero
+      const ly = 1.9 + i * Math.min(0.68, 4.9 / Math.max(links.length, 1))
+      s.addShape(pres.ShapeType.ellipse, { x: 7.0, y: ly + 0.04, w: 0.36, h: 0.36, fill: { color: C.accent2 }, line: { type: 'none' }, objectName: `a${i + 3}-ln${i}b` } as any)
+      Tx(s, String(i + 1), { x: 7.0, y: ly + 0.04, w: 0.36, h: 0.36, fontSize: 11, bold: true, align: 'center', valign: 'middle', color: C.text1, objectName: `a${i + 3}-lnt${i}` })
+      Tx(s, [
+        { text: l.row[0], options: { bold: true, color: C.background1, fontSize: fs(14), breakLine: true } },
+        { text: l.row[1], options: { color: C.accent3, fontSize: fs(12) } },
+      ], { x: 7.5, y: ly - 0.04, w: 5.3, h: 0.66, valign: 'top', objectName: `a${i + 3}-tx${i}` })
+    })
+    s.addNotes(S.s7.notes)
+  } else {
     const s = pres.addSlide({ masterName: 'KUMANI scuro', sectionTitle: sec[2] })
     titled(s, S.s7.title, S.s7.sub)
     const cx = 6.67, cy = 4.3
@@ -361,30 +389,7 @@ export async function buildDeck(
     s.addNotes(S.app.notes)
   }
 
-  // 8. Piani
   pres.addSection({ title: sec[3] })
-  {
-    const s = pres.addSlide({ masterName: 'KUMANI chiaro', sectionTitle: sec[3] })
-    titled(s, S.s8.title, S.s8.sub)
-    const w = 3.8, gap = 0.35, y = 1.85, h = 3.95
-    for (let i = 0; i < 3; i++) {
-      const x = 0.6 + i * (w + gap), d = i === 2, [n, p, per, who, inc, ex] = S.s8.plans[i]
-      card(s, x, y, w, h, `a${i + 1}-card${i}`, d ? C.text1 : C.background1)
-      Tx(s, n, { x: x + 0.3, y: y + 0.28, w: w - 0.6, h: 0.45, fontSize: fs(20), bold: true, color: d ? C.accent2 : C.accent1, objectName: `a${i + 1}-n${i}` })
-      Tx(s, [
-        { text: p, options: { fontFace: 'Cambria', fontSize: 44, bold: true, color: d ? C.background1 : C.text1 } },
-        { text: '  ' + per, options: { fontSize: fs(15), color: d ? C.accent3 : C.accent4 } },
-      ], { x: x + 0.3, y: y + 0.75, w: w - 0.6, h: 0.85, valign: 'middle', objectName: `a${i + 1}-p${i}` })
-      Tx(s, who, { x: x + 0.3, y: y + 1.65, w: w - 0.6, h: 0.55, fontSize: fs(14), italic: true, color: d ? C.accent3 : C.accent4, valign: 'top', objectName: `a${i + 1}-w${i}` })
-      Tx(s, inc, { x: x + 0.3, y: y + 2.22, w: w - 0.6, h: 0.42, fontSize: fs(15), bold: true, color: d ? C.background1 : C.text1, objectName: `a${i + 1}-i${i}` })
-      Tx(s, ex, { x: x + 0.3, y: y + 2.68, w: w - 0.6, h: 1.2, fontSize: fs(13), color: d ? C.accent3 : C.accent4, valign: 'top', objectName: `a${i + 1}-e${i}` })
-    }
-    card(s, 0.6, 6.0, 12.1, 0.62, 'a4-pass', C.accent3)
-    s.addImage({ data: await icon('Ticket', HEX.ink), x: 0.85, y: 6.11, w: 0.4, h: 0.4, objectName: 'a4-passic' } as any)
-    Tx(s, [{ text: S.s8.passBold, options: { bold: true } }, { text: S.s8.passText }], { x: 1.45, y: 6.05, w: 11.0, h: 0.52, fontSize: fs(15), color: C.text1, valign: 'middle', objectName: 'a4-passtx' })
-    s.addNotes(S.s8.notes)
-  }
-
   // 9. Professionisti
   {
     const s = pres.addSlide({ masterName: 'KUMANI chiaro', sectionTitle: sec[3] })
@@ -626,6 +631,72 @@ export async function buildDeck(
       Tx(s, S.s13.rows[i][1], { x: x + 0.95, y: y + 0.4, w: 5.2, h: 0.95, fontSize: fs(14), color: C.accent4, valign: 'top', objectName: `a${9 + i}-d${i}` })
     }
     s.addNotes(S.s13.notes)
+  }
+
+  // Concorrenza e prezzi: dopo aver mostrato tutto quello che c'è
+  const priceSec: string = S.secPrice ?? sec[3]
+  pres.addSection({ title: priceSec })
+  // 0b. Il secondo problema: un'app a pagamento per ogni cosa
+  if (S.hook2) {
+    const s = pres.addSlide({ masterName: 'KUMANI scuro', sectionTitle: priceSec })
+    titled(s, S.hook2.title, S.hook2.sub)
+    const all = (S.hook2.rows as string[][]).map((r, i) => ({ r, annual: Number(S.hook2.annual?.[i] ?? 0) }))
+    const rows = keep(all, S.hook2.tools)
+    const step = Math.min(0.78, 3.6 / Math.max(rows.length, 1))
+    for (let i = 0; i < rows.length; i++) {
+      const [app, price, ours] = rows[i].r, y = 1.95 + i * step, h = step - 0.12
+      card(s, 0.6, y, 12.1, h, `a${i + 1}-card${i}`, C.text2)
+      Tx(s, app, { x: 0.85, y, w: 4.2, h, fontSize: fs(17), bold: true, color: C.background1, valign: 'middle', objectName: `a${i + 1}-app${i}` })
+      Tx(s, price, { x: 5.0, y, w: 3.2, h, fontSize: fs(16), bold: true, color: 'FF8A7A', valign: 'middle', objectName: `a${i + 1}-p${i}` })
+      s.addImage({ data: await icon('ArrowRight', HEX.gold), x: 8.3, y: y + h / 2 - 0.17, w: 0.34, h: 0.34, objectName: `a${i + 1}-fr${i}` } as any)
+      Tx(s, ours, { x: 8.85, y, w: 3.7, h, fontSize: fs(16), bold: true, color: C.accent2, valign: 'middle', objectName: `a${i + 1}-k${i}` })
+    }
+    const yearly = rows.filter((x) => x.annual > 0)
+    const total = new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(Math.floor(yearly.reduce((t, x) => t + x.annual, 0)))
+    const n = rows.length + 1, ty = 1.95 + rows.length * step + 0.4
+    Tx(s, String(S.hook2.total).replace('{count}', String(yearly.length)).replace('{total}', total), { x: 0.6, y: ty, w: 12.1, h: 0.6, fontSize: fs(26), bold: true, color: C.background1, objectName: `a${n}-totale` })
+    card(s, 0.6, ty + 0.8, 12.1, 0.85, `a${n + 1}-rispcard`, C.accent1)
+    Tx(s, S.hook2.answer, { x: 0.9, y: ty + 0.8, w: 11.6, h: 0.85, fontSize: fs(26), bold: true, color: C.text1, valign: 'middle', objectName: `a${n + 1}-risposta` })
+    s.addNotes(S.hook2.notes)
+  }
+
+  // 0c. La risposta: un account, tutti gli strumenti, prezzi chiari
+  if (S.hook3) {
+    const s = pres.addSlide({ masterName: 'KUMANI scuro', sectionTitle: priceSec })
+    s.addImage({ path: LOGO, x: 0.6, y: 0.55, w: 1.0, h: 1.0, objectName: 'a1-logo' } as any)
+    Tx(s, S.hook3.title, { x: 1.85, y: 0.45, w: 10.9, h: 1.3, fontFace: 'Cambria', fontSize: fs(38), bold: true, color: C.background1, valign: 'middle', objectName: 'a1-titolo' })
+    const w = 3.85, gap = 0.27, y = 2.35, h = 3.2
+    for (let i = 0; i < 3; i++) {
+      const x = 0.6 + i * (w + gap), [big, head, body] = S.hook3.cards[i], hi = i === 2
+      card(s, x, y, w, h, `a${i + 2}-card${i}`, hi ? C.accent1 : C.text2)
+      Tx(s, big, { x: x + 0.3, y: y + 0.3, w: w - 0.6, h: 1.25, fontFace: 'Cambria', fontSize: 60, bold: true, color: hi ? C.text1 : C.accent2, valign: 'middle', objectName: `a${i + 2}-big${i}` })
+      Tx(s, head, { x: x + 0.3, y: y + 1.6, w: w - 0.6, h: 0.5, fontSize: fs(19), bold: true, color: hi ? C.text1 : C.background1, objectName: `a${i + 2}-h${i}` })
+      Tx(s, body, { x: x + 0.3, y: y + 2.15, w: w - 0.6, h: 1.6, fontSize: fs(15), color: hi ? C.text1 : C.accent3, valign: 'top', objectName: `a${i + 2}-d${i}` })
+    }
+    s.addNotes(S.hook3.notes)
+  }
+
+  // 8. Piani
+  {
+    const s = pres.addSlide({ masterName: 'KUMANI chiaro', sectionTitle: priceSec })
+    titled(s, S.s8.title, S.s8.sub)
+    const w = 3.8, gap = 0.35, y = 1.85, h = 3.95
+    for (let i = 0; i < 3; i++) {
+      const x = 0.6 + i * (w + gap), d = i === 2, [n, p, per, who, inc, ex] = S.s8.plans[i]
+      card(s, x, y, w, h, `a${i + 1}-card${i}`, d ? C.text1 : C.background1)
+      Tx(s, n, { x: x + 0.3, y: y + 0.28, w: w - 0.6, h: 0.45, fontSize: fs(20), bold: true, color: d ? C.accent2 : C.accent1, objectName: `a${i + 1}-n${i}` })
+      Tx(s, [
+        { text: p, options: { fontFace: 'Cambria', fontSize: 44, bold: true, color: d ? C.background1 : C.text1 } },
+        { text: '  ' + per, options: { fontSize: fs(15), color: d ? C.accent3 : C.accent4 } },
+      ], { x: x + 0.3, y: y + 0.75, w: w - 0.6, h: 0.85, valign: 'middle', objectName: `a${i + 1}-p${i}` })
+      Tx(s, who, { x: x + 0.3, y: y + 1.65, w: w - 0.6, h: 0.55, fontSize: fs(14), italic: true, color: d ? C.accent3 : C.accent4, valign: 'top', objectName: `a${i + 1}-w${i}` })
+      Tx(s, inc, { x: x + 0.3, y: y + 2.22, w: w - 0.6, h: 0.42, fontSize: fs(15), bold: true, color: d ? C.background1 : C.text1, objectName: `a${i + 1}-i${i}` })
+      Tx(s, ex, { x: x + 0.3, y: y + 2.68, w: w - 0.6, h: 1.2, fontSize: fs(13), color: d ? C.accent3 : C.accent4, valign: 'top', objectName: `a${i + 1}-e${i}` })
+    }
+    card(s, 0.6, 6.0, 12.1, 0.62, 'a4-pass', C.accent3)
+    s.addImage({ data: await icon('Ticket', HEX.ink), x: 0.85, y: 6.11, w: 0.4, h: 0.4, objectName: 'a4-passic' } as any)
+    Tx(s, [{ text: S.s8.passBold, options: { bold: true } }, { text: S.s8.passText }], { x: 1.45, y: 6.05, w: 11.0, h: 0.52, fontSize: fs(15), color: C.text1, valign: 'middle', objectName: 'a4-passtx' })
+    s.addNotes(S.s8.notes)
   }
 
   // 14. Donazioni: apertura
