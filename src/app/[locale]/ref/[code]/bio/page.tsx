@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { SITE_URL } from '@/lib/siteUrl'
-import { createClient as createServiceClient } from '@supabase/supabase-js'
+import { createClient as createServiceClient, type SupabaseClient } from '@supabase/supabase-js'
 import { notFound } from 'next/navigation' // ✅ IMPORT AGGIUNTO PER RISOLVERE TS2304
 import {
   Link2,
@@ -28,6 +28,23 @@ import PublicPageOffline from '@/components/PublicPageOffline'
 // richiesta, mai preparata in anticipo né tenuta in memoria
 export const dynamic = 'force-dynamic'
 
+type ServiceDb = SupabaseClient
+
+// Pagina «come azienda» (solo con il Pro): nome, logo e città della Scheda
+// attività. Null = si mostra la persona.
+async function bioBusiness(service: ServiceDb, userId: string): Promise<{ name: string; city: string; logoUrl: string | null } | null> {
+  const { data: bio } = await service.from('link_in_bio').select('mode').eq('user_id', userId).maybeSingle()
+  if (bio?.mode !== 'business') return null
+  const [{ data: plan }, { data: card }] = await Promise.all([
+    service.rpc('plan_of', { p_user_id: userId }),
+    service.from('quote_issuer_profiles').select('company_name, city, logo_path').eq('user_id', userId).maybeSingle(),
+  ])
+  const name = String(card?.company_name ?? '').trim()
+  if (plan !== 'pro' || !name) return null
+  const logoUrl = card?.logo_path ? service.storage.from('quote-logos-v2').getPublicUrl(card.logo_path as string).data.publicUrl : null
+  return { name, city: String(card?.city ?? '').trim(), logoUrl }
+}
+
 // Titolo e anteprima propri (WhatsApp, social, scheda del browser): nome,
 // professione e presentazione di chi ha la pagina
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; code: string }> }): Promise<Metadata> {
@@ -37,11 +54,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   })
   const { data: profile } = await service.from('profiles').select('id, first_name, last_name, occupation').eq('referral_code', code).maybeSingle()
   if (!profile) return { title: { absolute: 'KUMANI' } }
-  const { data: bio } = await service.from('link_in_bio').select('bio_text').eq('user_id', profile.id).maybeSingle()
+  const [{ data: bio }, business] = await Promise.all([service.from('link_in_bio').select('bio_text').eq('user_id', profile.id).maybeSingle(), bioBusiness(service, profile.id)])
   const t = await getTranslations({ locale, namespace: 'bioPublic' })
-  const name = [profile.first_name, profile.last_name].filter(Boolean).join(' ') || 'KUMANI'
-  const description = (bio?.bio_text || profile.occupation || t('fallbackBio')).slice(0, 200)
-  const title = profile.occupation ? `${name} · ${profile.occupation}` : name
+  const name = business?.name || [profile.first_name, profile.last_name].filter(Boolean).join(' ') || 'KUMANI'
+  const subtitle = business ? business.city : profile.occupation
+  const description = (bio?.bio_text || subtitle || t('fallbackBio')).slice(0, 200)
+  const title = subtitle ? `${name} · ${subtitle}` : name
   return {
     title: { absolute: `${title} · KUMANI` },
     description,
@@ -109,6 +127,11 @@ export default async function LinkInBioPublicPage({ params }: { params: Promise<
     links = []
   }
 
+  // Come azienda (Pro): nome, logo e città della Scheda attività
+  const business = await bioBusiness(service, profile.id)
+  const shownName = business ? business.name : [profile.first_name, profile.last_name].filter(Boolean).join(' ')
+  const subtitle = business ? business.city : profile.occupation
+
   const baseUrl = SITE_URL
   // Si condivide questa pagina (la bio), non quella di iscrizione
   const profileUrl = `${baseUrl}/ref/${code}/bio`
@@ -145,19 +168,22 @@ export default async function LinkInBioPublicPage({ params }: { params: Promise<
 
           {/* Avatar */}
           <div className="flex flex-col items-center text-center mb-8">
-            <div className={`w-28 h-28 rounded-full ${theme.avatarBg} ${theme.avatarText} flex items-center justify-center text-5xl font-bold shadow-xl mb-4`}>
-              {(profile.first_name || 'U').charAt(0).toUpperCase()}
-            </div>
-            <h1 className={`text-3xl font-bold mb-2 ${theme.nameText}`}>
-              {profile.first_name} {profile.last_name}
-            </h1>
-            {profile.occupation && (
-              <p className={`text-sm mb-2 ${theme.secondaryText}`}>{profile.occupation}</p>
+            {business?.logoUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element -- logo della Scheda attività (storage pubblico)
+              <img src={business.logoUrl} alt={business.name} className="mb-4 h-28 w-28 rounded-full bg-white object-contain p-2 shadow-xl" />
+            ) : (
+              <div className={`w-28 h-28 rounded-full ${theme.avatarBg} ${theme.avatarText} flex items-center justify-center text-5xl font-bold shadow-xl mb-4`}>
+                {(shownName || 'U').charAt(0).toUpperCase()}
+              </div>
+            )}
+            <h1 className={`text-3xl font-bold mb-2 ${theme.nameText}`}>{shownName}</h1>
+            {subtitle && (
+              <p className={`text-sm mb-2 ${theme.secondaryText}`}>{subtitle}</p>
             )}
             {linkInBio?.bio_text ? (
               <p className={`text-sm leading-relaxed ${theme.secondaryText}`}>{linkInBio.bio_text}</p>
             ) : (
-              !profile.occupation && <p className={`text-sm ${theme.secondaryText}`}>{t('fallbackBio')}</p>
+              !subtitle && <p className={`text-sm ${theme.secondaryText}`}>{t('fallbackBio')}</p>
             )}
           </div>
 

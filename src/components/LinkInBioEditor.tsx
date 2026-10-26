@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
 import type { BrandColors } from '@/lib/brand'
 import { saveLinkInBio } from '@/app/actions/linkInBio'
+import type { BioMode } from '@/lib/bioPlan'
 import { normalizeLinkUrl, displayLinkValue } from '@/lib/linkUtils'
 import { BIO_THEMES, ALL_BIO_THEME_KEYS, DEFAULT_BIO_THEME, PREMIUM_BIO_THEME_KEYS, resolveBioTheme, brandBioVars, type BioThemeKey } from '@/lib/linkInBioThemes'
 import { KU_UNLOCK_LINKINBIO_THEMES, linkInBioThemeUnlockKey } from '@/lib/ku'
@@ -13,7 +14,7 @@ import Link from '@/components/LocalizedLink'
 import BioThemeScene from '@/components/BioThemeScene'
 import BusinessProfileImport from '@/components/businessProfile/BusinessProfileImport'
 import { businessWebsiteUrl, type BusinessProfile } from '@/lib/businessProfile'
-import { Plus, Trash2, Save, Link as LinkIcon, Check, ExternalLink, Globe, Mail, Phone, MessageCircle, Lock, Loader2, Eye, Sparkles, X } from 'lucide-react'
+import { Plus, Trash2, Save, Link as LinkIcon, Check, ExternalLink, Globe, Mail, Phone, MessageCircle, Lock, Loader2, Eye, Sparkles, X, User, Building2 } from 'lucide-react'
 
 type LinkItem = {
   id: string
@@ -42,9 +43,12 @@ export default function LinkInBioEditor({
   firstName,
   lastName,
   businessProfile = null,
+  isPro = false,
   brand = null,
   followBrand = false,
 }: {
+  // Pro: si può scegliere «Azienda» (nome, logo e città dalla Scheda attività)
+  isPro?: boolean
   // «I colori del tuo brand» (Scheda attività): tema «brand» se ci sono
   brand?: BrandColors | null
   followBrand?: boolean
@@ -57,6 +61,7 @@ export default function LinkInBioEditor({
   const tb = useTranslations('brand')
   const supabase = createClient()
   const [bioText, setBioText] = useState('')
+  const [mode, setMode] = useState<BioMode>('personal')
   const [links, setLinks] = useState<LinkItem[]>([])
   // Pagina nuova che segue il brand: parte dal tema «brand»
   const [theme, setTheme] = useState<BioThemeKey>(brand && followBrand ? 'brand' : DEFAULT_BIO_THEME)
@@ -81,7 +86,7 @@ export default function LinkInBioEditor({
     const fetchData = async () => {
       const { data } = await supabase
         .from('link_in_bio')
-        .select('bio_text, links, theme')
+        .select('bio_text, links, theme, mode')
         .eq('user_id', userId)
         .single()
 
@@ -106,6 +111,7 @@ export default function LinkInBioEditor({
 
       if (data) {
         setBioText(data.bio_text || '')
+        setMode(data.mode === 'business' ? 'business' : 'personal')
         try {
           // Tollerante: links può essere una stringa JSON o già un array (jsonb)
           const raw: unknown = typeof data.links === 'string' ? JSON.parse(data.links) : data.links
@@ -164,7 +170,7 @@ export default function LinkInBioEditor({
     setSaving(true)
     setJustSaved(false)
     try {
-      const result = await saveLinkInBio(bioText, links, theme)
+      const result = await saveLinkInBio(bioText, links, theme, isPro ? mode : 'personal')
       if (!result.success) throw new Error('save failed')
       setJustSaved(true)
       setTimeout(() => setJustSaved(false), 3000)
@@ -193,6 +199,10 @@ export default function LinkInBioEditor({
     if (window.innerWidth < 1024) previewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
   const displayName = [firstName, lastName].filter(Boolean).join(' ')
+  // Come azienda: nome e logo della Scheda attività (senza nome resta la persona)
+  const asBusiness = isPro && mode === 'business' && !!businessProfile?.companyName.trim()
+  const shownName = asBusiness ? businessProfile!.companyName.trim() : displayName
+  const shownLogo = asBusiness ? businessProfile!.logoUrl : null
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 items-start">
@@ -201,6 +211,48 @@ export default function LinkInBioEditor({
           <LinkIcon className="w-5 h-5 text-[var(--gold)]" />
           {t('editPage')}
         </h3>
+
+        {/* Privato o azienda: solo nel Pro, che ha la Scheda attività */}
+        {isPro && (
+          <div className="mb-6">
+            <p className="mb-2 text-sm font-semibold text-[var(--ink)]">{t('bioModeLabel')}</p>
+            <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label={t('bioModeLabel')}>
+              {(
+                [
+                  ['personal', User, t('bioModePersonal')],
+                  ['business', Building2, t('bioModeBusiness')],
+                ] as const
+              ).map(([key, Icon, label]) => (
+                <button
+                  key={key}
+                  type="button"
+                  role="radio"
+                  aria-checked={mode === key}
+                  onClick={() => setMode(key)}
+                  className={`flex items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-semibold transition-colors ${
+                    mode === key ? 'border-[var(--gold)] bg-[var(--ink)] text-[var(--gold-bright)]' : 'border-[var(--gold)]/30 bg-white text-[var(--ink)] hover:border-[var(--gold)]'
+                  }`}
+                >
+                  <Icon className="h-4 w-4" /> {label}
+                </button>
+              ))}
+            </div>
+            {mode === 'business' && (
+              <p className="mt-2 text-xs text-[var(--muted)]">
+                {businessProfile?.companyName.trim() ? (
+                  t('bioModeBusinessHint')
+                ) : (
+                  <>
+                    {t('bioModeBusinessEmpty')}{' '}
+                    <Link href="/scheda-attivita?from=%2Fapp%2Flink-in-bio" className="font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
+                      {t('bioModeBusinessFill')}
+                    </Link>
+                  </>
+                )}
+              </p>
+            )}
+          </div>
+        )}
 
         <BusinessProfileImport profile={businessProfile} onImport={importProfile} className="mb-6" />
 
@@ -429,10 +481,16 @@ export default function LinkInBioEditor({
             </span>
           )}
           <div className={`relative rounded-3xl p-6 ${previewStyle.cardBg}`}>
-            <div className={`w-20 h-20 rounded-full ${previewStyle.avatarBg} ${previewStyle.avatarText} flex items-center justify-center mx-auto mb-3 text-3xl font-bold shadow-lg`}>
-              {(firstName || 'U').charAt(0).toUpperCase()}
-            </div>
-            <h3 className={`text-xl font-bold mb-1 ${previewStyle.nameText}`}>{displayName || t('networkMarketer')}</h3>
+            {shownLogo ? (
+              // eslint-disable-next-line @next/next/no-img-element -- logo della Scheda attività (storage pubblico)
+              <img src={shownLogo} alt="" className="mx-auto mb-3 h-20 w-20 rounded-full bg-white object-contain p-1.5 shadow-lg" />
+            ) : (
+              <div className={`w-20 h-20 rounded-full ${previewStyle.avatarBg} ${previewStyle.avatarText} flex items-center justify-center mx-auto mb-3 text-3xl font-bold shadow-lg`}>
+                {(shownName || firstName || 'U').charAt(0).toUpperCase()}
+              </div>
+            )}
+            <h3 className={`text-xl font-bold mb-1 ${previewStyle.nameText}`}>{shownName || t('networkMarketer')}</h3>
+            {asBusiness && businessProfile?.city.trim() && <p className={`-mt-0.5 mb-1 text-xs ${previewStyle.secondaryText}`}>{businessProfile.city.trim()}</p>}
             <p className={`text-sm mb-4 ${previewStyle.secondaryText}`}>
               {bioText || t('networkMarketer')}
             </p>

@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { bioPlanIsPro, type BioMode } from '@/lib/bioPlan'
 import { awardToolPoint } from '@/lib/toolPoints'
 import { normalizeLinkUrl } from '@/lib/linkUtils'
 import { BIO_THEMES, PREMIUM_BIO_THEME_KEYS, type BioThemeKey } from '@/lib/linkInBioThemes'
@@ -15,7 +16,7 @@ type LinkItem = {
   enabled: boolean
 }
 
-export async function saveLinkInBio(bioText: string, links: LinkItem[], theme: BioThemeKey) {
+export async function saveLinkInBio(bioText: string, links: LinkItem[], theme: BioThemeKey, mode: BioMode = 'personal') {
   const supabase = await createClient()
   const {
     data: { user },
@@ -55,9 +56,13 @@ export async function saveLinkInBio(bioText: string, links: LinkItem[], theme: B
     .slice(0, 30)
     .map((l) => ({ ...l, url: normalizeLinkUrl(l.icon, l.url) }))
 
+  // «Azienda» solo con il Pro (la Scheda attività è del Pro)
+  const cleanMode: BioMode = mode === 'business' && (await bioPlanIsPro(user.id)) ? 'business' : 'personal'
+
   const { error } = await supabase.from('link_in_bio').upsert(
     {
       user_id: user.id,
+      mode: cleanMode,
       bio_text: String(bioText ?? '').slice(0, 500),
       links: JSON.stringify(cleanLinks),
       theme,
