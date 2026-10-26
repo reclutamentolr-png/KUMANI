@@ -114,7 +114,9 @@ import {
   ChevronLeft,
   ChevronRight,
   LockOpen,
+  Video,
 } from 'lucide-react'
+import WebinarAdminPanel from '@/components/admin/WebinarAdminPanel'
 import CopyButton from '@/components/CopyButton'
 import { askConfirm } from '@/lib/confirm'
 
@@ -811,6 +813,7 @@ L'accesso viene registrato.`))) return
   { id: 'emailSetup', label: 'Gestione Email', Icon: Mail, permission: 'settings.read' as Permission, group: 'comms' },
   { id: 'emailSend', label: 'Invio Email', Icon: Send, permission: 'support.write' as Permission, group: 'comms' },
   { id: 'push', label: 'Notifiche push', Icon: BellRing, permission: 'messages.read' as Permission, group: 'comms' },
+  { id: 'webinar', label: 'Webinar', Icon: Video, permission: 'messages.read' as Permission, group: 'comms' },
   { id: 'documents', label: 'Documenti KUMANI', Icon: FileText, permission: 'settings.read' as Permission, group: 'comms' },
   { id: 'kuManagement', label: 'Gestione KU', Icon: Coins, permission: 'settings.read' as Permission, group: 'rewards' },
   { id: 'qualified', label: 'Qualificati', Icon: Crown, permission: 'users.read' as Permission, group: 'rewards' },
@@ -2080,6 +2083,7 @@ L'accesso viene registrato.`))) return
         {activeSection === 'emailSetup' && <EmailSetupPanel />}
         {activeSection === 'emailSend' && <EmailComposePanel />}
         {activeSection === 'push' && <PushPanel />}
+        {activeSection === 'webinar' && <WebinarAdminPanel />}
         {activeSection === 'communications' && <CommunicationsPanel />}
         {activeSection === 'needMisses' && <NeedMissesPanel />}
         {activeSection === 'documents' && <DocumentsAdminPanel />}
