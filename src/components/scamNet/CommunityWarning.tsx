@@ -52,8 +52,8 @@ export function MatchCard({ match }: { match: ScamMatch }) {
         <ul className="space-y-2">
           {match.quotes.map((q, i) => (
             <li key={i} className="rounded-xl bg-white/10 p-3 text-sm">
-              <p className="leading-snug">«{q.text}»</p>
-              <p className="mt-1 text-xs text-[#FFD9D3]">{q.city ? t('warning.quoteCity', { city: q.city, when: ago(q.at) }) : t('warning.quote', { when: ago(q.at) })}</p>
+              <p className="text-xs font-bold text-[#FFD9D3]">{q.city ? t('warning.quoteCity', { city: q.city, when: ago(q.at) }) : t('warning.quote', { when: ago(q.at) })}</p>
+              <p className="mt-1 whitespace-pre-line border-l-2 border-white/40 pl-3 italic leading-snug">{q.text}</p>
             </li>
           ))}
         </ul>

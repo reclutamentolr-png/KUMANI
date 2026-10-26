@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { BellRing, Flag, ImagePlus, LoaderCircle, PhoneCall, Plus, ShieldAlert, ShieldCheck, TrendingUp, UserRound, Globe, ExternalLink } from 'lucide-react'
+import { BellRing, Flag, ImagePlus, LoaderCircle, MessageCircle, PhoneCall, Plus, ShieldAlert, ShieldCheck, TrendingUp, UserRound, Globe, ExternalLink } from 'lucide-react'
 import { addScamEvidence, checkPhone, myScamReports, scamAlerts, setScamAlerts, type MyScamReport, type ScamAlerts, type ScamMatch } from '@/app/actions/scamNet'
 import type { PhoneInfo } from '@/lib/scamNetPhone'
 import { GUARDIAN_LEVELS, type GuardianLevel, type ScamKind } from '@/lib/scamNet'
@@ -103,7 +103,11 @@ function AlertsTab({ onReport }: { onReport: () => void }) {
                 </div>
                 {r.story && (
                   <div className="mt-2 rounded-xl bg-[#FBEDEA] p-3 text-sm text-[var(--ink)]">
-                    <p className={`whitespace-pre-line ${openStory === i ? '' : 'line-clamp-2'}`}>{r.story}</p>
+                    {/* Racconto di chi ha segnalato, separato dal dato: non deve sembrare parte del messaggio truffa */}
+                    <p className="flex items-center gap-1.5 text-xs font-extrabold text-[#A12A2A]">
+                      <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" /> {t('alerts.storyBy')}
+                    </p>
+                    <p className={`mt-1.5 whitespace-pre-line border-l-2 border-[#A12A2A]/40 pl-3 italic ${openStory === i ? '' : 'line-clamp-2'}`}>{r.story}</p>
                     <button type="button" onClick={() => setOpenStory(openStory === i ? null : i)} className="mt-1 text-xs font-bold text-[#A12A2A] hover:underline" aria-expanded={openStory === i}>
                       {openStory === i ? t('alerts.storyLess') : t('alerts.storyMore')}
                     </button>
