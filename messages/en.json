@@ -13904,8 +13904,8 @@
       "reportsCount": "{count, plural, one {# report} other {# reports}}",
       "recentTitle": "Latest confirmed warnings",
       "storyBy": "What a Kumano told us",
-      "storyMore": "Read what happened",
-      "storyLess": "Close",
+      "storyMore": "Show full text",
+      "storyLess": "Show less",
       "maskedNote": "IBANs are partly hidden. To check whether a number that called you has been reported, use “Who called me?”.",
       "weeklyTitle": "Scams of the week",
       "weeklyText": "Every Monday a notification with the most reported scams. You can turn it off whenever you like."

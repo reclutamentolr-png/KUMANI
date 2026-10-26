@@ -108,9 +108,12 @@ function AlertsTab({ onReport }: { onReport: () => void }) {
                       <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" /> {t('alerts.storyBy')}
                     </p>
                     <p className={`mt-1.5 whitespace-pre-line border-l-2 border-[#A12A2A]/40 pl-3 italic ${openStory === i ? '' : 'line-clamp-2'}`}>{r.story}</p>
-                    <button type="button" onClick={() => setOpenStory(openStory === i ? null : i)} className="mt-1 text-xs font-bold text-[#A12A2A] hover:underline" aria-expanded={openStory === i}>
-                      {openStory === i ? t('alerts.storyLess') : t('alerts.storyMore')}
-                    </button>
+                    {/* Il pulsante serve solo se il testo non sta in 2 righe */}
+                    {(r.story.length > 110 || r.story.includes('\n')) && (
+                      <button type="button" onClick={() => setOpenStory(openStory === i ? null : i)} className="mt-1 text-xs font-bold text-[#A12A2A] hover:underline" aria-expanded={openStory === i}>
+                        {openStory === i ? t('alerts.storyLess') : t('alerts.storyMore')}
+                      </button>
+                    )}
                   </div>
                 )}
               </li>

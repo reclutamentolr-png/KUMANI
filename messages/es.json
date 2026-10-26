@@ -13904,8 +13904,8 @@
       "reportsCount": "{count, plural, one {# denuncia} other {# denuncias}}",
       "recentTitle": "Últimos avisos confirmados",
       "storyBy": "Lo que contó un Kumano",
-      "storyMore": "Lee qué pasó",
-      "storyLess": "Cerrar",
+      "storyMore": "Mostrar todo el texto",
+      "storyLess": "Mostrar menos",
       "maskedNote": "Los IBAN están en parte ocultos. Para saber si un número que te ha llamado está denunciado usa «¿Quién me ha llamado?».",
       "weeklyTitle": "Las estafas de la semana",
       "weeklyText": "Cada lunes una notificación con las estafas más denunciadas. Puedes desactivarla cuando quieras."

@@ -13904,8 +13904,8 @@
       "reportsCount": "{count, plural, one {# denúncia} other {# denúncias}}",
       "recentTitle": "Últimos avisos confirmados",
       "storyBy": "O relato de um Kumano",
-      "storyMore": "Lê o que aconteceu",
-      "storyLess": "Fechar",
+      "storyMore": "Mostrar o texto completo",
+      "storyLess": "Mostrar menos",
       "maskedNote": "Os IBAN estão em parte ocultos. Para saber se um número que te ligou foi denunciado use «Quem me ligou?».",
       "weeklyTitle": "As burlas da semana",
       "weeklyText": "Todas as segundas-feiras uma notificação com as burlas mais denunciadas. Pode desligá-la quando quiser."

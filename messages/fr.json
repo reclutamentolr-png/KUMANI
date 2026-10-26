@@ -13904,8 +13904,8 @@
       "reportsCount": "{count, plural, one {# signalement} other {# signalements}}",
       "recentTitle": "Dernières alertes confirmées",
       "storyBy": "Le récit d’un Kumano",
-      "storyMore": "Lire ce qui s’est passé",
-      "storyLess": "Fermer",
+      "storyMore": "Afficher tout le texte",
+      "storyLess": "Afficher moins",
       "maskedNote": "Les IBAN sont en partie masqués. Pour savoir si un numéro qui vous a appelé est signalé, utilisez « Qui m’a appelé ? ».",
       "weeklyTitle": "Les arnaques de la semaine",
       "weeklyText": "Chaque lundi une notification avec les arnaques les plus signalées. Vous pouvez la couper quand vous voulez."

@@ -13904,8 +13904,8 @@
       "reportsCount": "{count, plural, one {# Meldung} other {# Meldungen}}",
       "recentTitle": "Zuletzt bestätigte Warnungen",
       "storyBy": "Was ein Kumano erzählt",
-      "storyMore": "Lies, was passiert ist",
-      "storyLess": "Schließen",
+      "storyMore": "Ganzen Text anzeigen",
+      "storyLess": "Weniger anzeigen",
       "maskedNote": "IBANs sind teilweise verdeckt. Ob eine Nummer, die dich angerufen hat, gemeldet ist, siehst du unter «Wer hat mich angerufen?».",
       "weeklyTitle": "Betrug der Woche",
       "weeklyText": "Jeden Montag eine Benachrichtigung mit den am häufigsten gemeldeten Maschen. Du kannst sie jederzeit ausschalten."
