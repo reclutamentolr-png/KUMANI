@@ -162,6 +162,15 @@ export default function WebinarStudio({
   }, [])
 
   // ── Segnale di vita, chat e chi è collegato ──────────────────────────
+  // Immagini che stanno ancora passando (condivisione dello schermo o
+  // videocamera): sul computer continuano anche passando a un'altra finestra,
+  // quindi chi guarda non deve leggere «si è allontanato». Sul telefono, in
+  // secondo piano, le tracce si fermano (muted o finite).
+  const mediaFlowing = () => {
+    const flowing = (track: MediaStreamTrack | null | undefined) => !!track && track.readyState === 'live' && !track.muted && track.enabled
+    return (flagsRef.current.screenOn && flowing(screenRef.current)) || (flagsRef.current.camOn && flowing(camRef.current))
+  }
+
   const beat = useCallback(async () => {
     if (beatBusy.current && Date.now() - beatBusy.current < 12_000) {
       beatAgain.current = true
@@ -171,7 +180,7 @@ export default function WebinarStudio({
     try {
       const res = await hostBeat(
         webinar.id,
-        { paused: document.visibilityState !== 'visible', camOn: flagsRef.current.camOn, screenOn: flagsRef.current.screenOn },
+        { paused: document.visibilityState !== 'visible' && !mediaFlowing(), camOn: flagsRef.current.camOn, screenOn: flagsRef.current.screenOn },
         lastIdRef.current
       )
       if ('error' in res) return
