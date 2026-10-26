@@ -8,6 +8,7 @@ import type { KidProfile } from '@/lib/kids/storage'
 import { KidsButton, KidsIconButton } from './ColorStage'
 import { melody, tone } from './kidsAudio'
 import type { KidsActions } from './actions'
+import KidChip from './KidChip'
 
 // «Disegno libero con pennelli magici»: si disegna a dito su un foglio bianco
 // con pennello, arcobaleno, stelline, timbri e gomma, anche a specchio (2 o 4
@@ -335,24 +336,27 @@ export default function FreeDrawGame({
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-3">
       <div className="flex min-h-[140px] flex-1 items-center justify-center [container-type:size]">
-        <div className="relative mx-auto aspect-[400/440] w-[min(calc(100cqw-6px),calc((100cqh-6px)*0.909))] overflow-hidden rounded-[22px] border-[3px] border-[#2B2D52] bg-white shadow-[5px_5px_0_#2B2D52]">
-          <canvas
-            ref={canvasRef}
-            width={W}
-            height={H}
-            onPointerDown={down}
-            onPointerMove={move}
-            onPointerUp={up}
-            onPointerCancel={up}
-            className="block h-full w-full touch-none"
-            aria-label={t('drawings.disegno')}
-          />
-          {mirror > 0 && (
-            <div className="pointer-events-none absolute inset-0" aria-hidden>
-              <div className="absolute inset-y-0 left-1/2 border-l-2 border-dashed border-[#2B2D52]/20" />
-              {mirror === 2 && <div className="absolute inset-x-0 top-1/2 border-t-2 border-dashed border-[#2B2D52]/20" />}
-            </div>
-          )}
+        <div className="relative">
+          <KidChip />
+          <div className="relative mx-auto aspect-[400/440] w-[min(calc(100cqw-104px),calc((100cqh-6px)*0.909))] overflow-hidden rounded-[22px] border-[3px] border-[#2B2D52] bg-white shadow-[5px_5px_0_#2B2D52]">
+            <canvas
+              ref={canvasRef}
+              width={W}
+              height={H}
+              onPointerDown={down}
+              onPointerMove={move}
+              onPointerUp={up}
+              onPointerCancel={up}
+              className="block h-full w-full touch-none"
+              aria-label={t('drawings.disegno')}
+            />
+            {mirror > 0 && (
+              <div className="pointer-events-none absolute inset-0" aria-hidden>
+                <div className="absolute inset-y-0 left-1/2 border-l-2 border-dashed border-[#2B2D52]/20" />
+                {mirror === 2 && <div className="absolute inset-x-0 top-1/2 border-t-2 border-dashed border-[#2B2D52]/20" />}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

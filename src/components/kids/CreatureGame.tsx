@@ -11,6 +11,7 @@ import type { CreatureState, CurrentDrawing, KidProfile } from '@/lib/kids/stora
 import ColorStage, { KidsButton } from './ColorStage'
 import { melody, speak, tone } from './kidsAudio'
 import type { KidsActions } from './actions'
+import KidChip from './KidChip'
 
 // «Crea il tuo animale»: si sceglie un pezzo per volta (testa, orecchie o
 // corna, corpo, braccia, piedi, coda, ali), poi si colora la creatura, che si
@@ -172,8 +173,11 @@ export default function CreatureGame({
       <style>{KIDS_SVG_CSS}</style>
       {nameChip}
       <div className="flex min-h-[140px] flex-1 items-center justify-center [container-type:size]">
-        <div className="relative mx-auto aspect-[400/440] w-[min(calc(100cqw-6px),calc((100cqh-6px)*0.909))] overflow-hidden rounded-[22px] border-[3px] border-[#2B2D52] bg-white shadow-[5px_5px_0_#2B2D52]">
-          <PreviewSvg svg={drawing.svg} />
+        <div className="relative">
+          <KidChip />
+          <div className="relative mx-auto aspect-[400/440] w-[min(calc(100cqw-104px),calc((100cqh-6px)*0.909))] overflow-hidden rounded-[22px] border-[3px] border-[#2B2D52] bg-white shadow-[5px_5px_0_#2B2D52]">
+            <PreviewSvg svg={drawing.svg} />
+          </div>
         </div>
       </div>
 

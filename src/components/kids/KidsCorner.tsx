@@ -16,6 +16,7 @@ import MusicGame from './MusicGame'
 import { KidsIconButton } from './ColorStage'
 import Kumi from './Kumi'
 import { speak, unlockAudio } from './kidsAudio'
+import { KidChipContext } from './KidChip'
 import KumiGuide from './KumiGuide'
 import type { KidsActions, ShareTarget } from './actions'
 import PinPad from './PinPad'
@@ -383,12 +384,16 @@ export default function KidsCorner({ userId }: { userId: string }) {
               <ArrowLeft className="h-6 w-6" />
             </KidsIconButton>
           ) : null}
-          <button type="button" onClick={() => setPhase('children')} className="flex min-w-0 shrink items-center gap-2 rounded-full border-[3px] border-[#2B2D52] bg-white p-1 font-extrabold text-[#2B2D52] sm:pr-3">
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-lg text-white" style={{ background: active.color }}>
-              {active.name.charAt(0).toUpperCase()}
-            </span>
-            <span className="hidden truncate sm:inline">{active.name}</span>
-          </button>
+          {/* Bambino: in alto nel menu; nei giochi in basso a sinistra,
+              accanto al foglio (KidChip) */}
+          {!inGame && (
+            <button type="button" onClick={() => setPhase('children')} className="flex min-w-0 shrink items-center gap-2 rounded-full border-[3px] border-[#2B2D52] bg-white p-1 font-extrabold text-[#2B2D52] sm:pr-3">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-lg text-white" style={{ background: active.color }}>
+                {active.name.charAt(0).toUpperCase()}
+              </span>
+              <span className="hidden truncate sm:inline">{active.name}</span>
+            </button>
+          )}
           <span className="flex shrink-0 items-center gap-1 rounded-full bg-[#FFC93C] px-2.5 py-1.5 font-extrabold text-[#2B2D52]" aria-label={t('starsLabel', { count: active.stars })}>
             <Star className="h-5 w-5 fill-current" aria-hidden /> {active.stars}
           </span>
@@ -434,14 +439,19 @@ export default function KidsCorner({ userId }: { userId: string }) {
               ))}
             </div>
           </div>
-        ) : game === 'colora' ? (
-          <ColoringGame key={active.id} {...props} voice={store.voice} />
-        ) : game === 'crea' ? (
-          <CreatureGame key={active.id} {...props} voice={store.voice} />
-        ) : game === 'musica' ? (
-          <MusicGame key={active.id} {...props} />
-        ) : (
-          <FreeDrawGame key={active.id} {...props} />
+        ) : null}
+        {inGame && (
+          <KidChipContext.Provider value={{ name: active.name, color: active.color, onClick: () => setPhase('children') }}>
+            {game === 'colora' ? (
+              <ColoringGame key={active.id} {...props} voice={store.voice} />
+            ) : game === 'crea' ? (
+              <CreatureGame key={active.id} {...props} voice={store.voice} />
+            ) : game === 'musica' ? (
+              <MusicGame key={active.id} {...props} />
+            ) : (
+              <FreeDrawGame key={active.id} {...props} />
+            )}
+          </KidChipContext.Provider>
         )}
       </div>
     )

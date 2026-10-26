@@ -9,6 +9,7 @@ import type { Drawing } from '@/lib/kids/types'
 import type { CurrentDrawing, KidProfile } from '@/lib/kids/storage'
 import { melody, speak, tone } from './kidsAudio'
 import Kumi from './Kumi'
+import KidChip from './KidChip'
 
 // Foglio da colorare e animare, usato da «Colora e Anima» e da «Crea il tuo
 // animale»: tocchi per colorare, missioni, risveglio con i complimenti,
@@ -252,25 +253,28 @@ export default function ColorStage({
 
       {/* Foglio da colorare */}
       <div className="flex min-h-[140px] flex-1 items-center justify-center [container-type:size]">
-        <div ref={stageRef} className="relative mx-auto aspect-[400/440] w-[min(calc(100cqw-6px),calc((100cqh-6px)*0.909))] overflow-hidden rounded-[22px] border-[3px] border-[#2B2D52] bg-white shadow-[5px_5px_0_#2B2D52]">
-          <svg ref={svgRef} viewBox="0 0 400 440" className={svgClass} onClick={onTap} role="img" aria-label={t(`drawings.${drawing.id}`)} />
-          {hint && hint.text && (
-            <span key={`hint-${hint.key}`} className="kids-hint pointer-events-none absolute -translate-x-1/2 -translate-y-[130%] whitespace-nowrap rounded-xl bg-[#2B2D52] px-3 py-1 text-sm font-extrabold text-white" style={{ left: hint.x, top: hint.y }}>
-              <span className="mr-1 inline-block h-3 w-3 rounded-full border-2 border-white align-[-1px]" style={{ background: hint.color }} />
-              {hint.text}
-            </span>
-          )}
-          {bubble && (
-            <div key={`bubble-${bubble.key}`} className="kids-bubble absolute inset-x-3 top-3 rounded-2xl border-[3px] border-[#2B2D52] bg-white px-3 py-2 text-center text-base font-extrabold leading-snug text-[#2B2D52] shadow-[3px_3px_0_#2B2D52] sm:px-4 sm:py-3 sm:text-lg" role="status">
-              {bubble.text}
-            </div>
-          )}
-          {bubble?.cheer && (
-            <span key={`kumi-${bubble.key}`} className="kids-kumi pointer-events-none absolute bottom-1 left-1 w-[22%] min-w-16 max-w-28">
-              <Kumi move="dance" className="block h-auto w-full" />
-            </span>
-          )}
-          {!awake && <p className="pointer-events-none absolute inset-x-0 bottom-2 text-center text-xs font-bold text-[#2B2D52]/70">{t('partsLeft', { count: missing })}</p>}
+        <div className="relative">
+          <KidChip />
+          <div ref={stageRef} className="relative mx-auto aspect-[400/440] w-[min(calc(100cqw-104px),calc((100cqh-6px)*0.909))] overflow-hidden rounded-[22px] border-[3px] border-[#2B2D52] bg-white shadow-[5px_5px_0_#2B2D52]">
+            <svg ref={svgRef} viewBox="0 0 400 440" className={svgClass} onClick={onTap} role="img" aria-label={t(`drawings.${drawing.id}`)} />
+            {hint && hint.text && (
+              <span key={`hint-${hint.key}`} className="kids-hint pointer-events-none absolute -translate-x-1/2 -translate-y-[130%] whitespace-nowrap rounded-xl bg-[#2B2D52] px-3 py-1 text-sm font-extrabold text-white" style={{ left: hint.x, top: hint.y }}>
+                <span className="mr-1 inline-block h-3 w-3 rounded-full border-2 border-white align-[-1px]" style={{ background: hint.color }} />
+                {hint.text}
+              </span>
+            )}
+            {bubble && (
+              <div key={`bubble-${bubble.key}`} className="kids-bubble absolute inset-x-3 top-3 rounded-2xl border-[3px] border-[#2B2D52] bg-white px-3 py-2 text-center text-base font-extrabold leading-snug text-[#2B2D52] shadow-[3px_3px_0_#2B2D52] sm:px-4 sm:py-3 sm:text-lg" role="status">
+                {bubble.text}
+              </div>
+            )}
+            {bubble?.cheer && (
+              <span key={`kumi-${bubble.key}`} className="kids-kumi pointer-events-none absolute bottom-1 left-1 w-[22%] min-w-16 max-w-28">
+                <Kumi move="dance" className="block h-auto w-full" />
+              </span>
+            )}
+            {!awake && <p className="pointer-events-none absolute inset-x-0 bottom-2 text-center text-xs font-bold text-[#2B2D52]/70">{t('partsLeft', { count: missing })}</p>}
+          </div>
         </div>
       </div>
 

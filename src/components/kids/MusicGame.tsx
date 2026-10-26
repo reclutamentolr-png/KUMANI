@@ -10,6 +10,7 @@ import { newId, type KidProfile, type Song } from '@/lib/kids/storage'
 import { KidsButton, KidsIconButton } from './ColorStage'
 import { INSTRUMENTS, melody, playNote, type Instrument } from './kidsAudio'
 import type { KidsActions } from './actions'
+import KidChip from './KidChip'
 
 // «La musica dei colori»: ogni pastello è una nota. Il bambino colora i fiori
 // della fila, preme «Suona» e il suo personaggio balla sulla melodia che ha
@@ -171,8 +172,11 @@ export default function MusicGame({
 
       {/* Chi balla */}
       <div className="flex min-h-[140px] flex-1 items-center justify-center [container-type:size]">
-        <div className="relative mx-auto aspect-[400/440] w-[min(70cqw,calc((100cqh-6px)*0.909))] overflow-hidden rounded-[22px] border-[3px] border-[#2B2D52] bg-white shadow-[5px_5px_0_#2B2D52]">
-          <svg ref={dancerRef} viewBox="0 0 400 440" className={`kids-svg pointer-events-none block h-full w-full alive ${playing ? 'mode-balla' : 'mode-saluta'}`} aria-hidden />
+        <div className="relative">
+          <KidChip />
+          <div className="relative mx-auto aspect-[400/440] w-[min(70cqw,calc(100cqw-104px),calc((100cqh-6px)*0.909))] overflow-hidden rounded-[22px] border-[3px] border-[#2B2D52] bg-white shadow-[5px_5px_0_#2B2D52]">
+            <svg ref={dancerRef} viewBox="0 0 400 440" className={`kids-svg pointer-events-none block h-full w-full alive ${playing ? 'mode-balla' : 'mode-saluta'}`} aria-hidden />
+          </div>
         </div>
       </div>
 
