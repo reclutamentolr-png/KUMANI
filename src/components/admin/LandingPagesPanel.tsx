@@ -19,7 +19,7 @@ const REASONS: Record<string, string> = {
 }
 
 // Admin → Landing Page: segnalazioni dei visitatori e sospensione delle
-// pagine. Una pagina sospesa sparisce subito da kumani.io/p/… e da Google.
+// pagine. Una pagina sospesa sparisce subito da kumani.io/page/… e da Google.
 export default function LandingPagesPanel() {
   const [pages, setPages] = useState<PageRow[] | null>(null)
   const [reports, setReports] = useState<Report[]>([])
@@ -43,10 +43,10 @@ export default function LandingPagesPanel() {
   const suspend = async (ownerId: string, slug: string, on: boolean) => {
     let reason = ''
     if (on) {
-      const answer = prompt(`Sospendere kumani.io/p/${slug}? Scrivi il motivo (lo vede il titolare):`)
+      const answer = prompt(`Sospendere kumani.io/page/${slug}? Scrivi il motivo (lo vede il titolare):`)
       if (answer === null) return
       reason = answer
-    } else if (!(await askConfirm(`Riattivare kumani.io/p/${slug}?`))) return
+    } else if (!(await askConfirm(`Riattivare kumani.io/page/${slug}?`))) return
     setWorking(ownerId)
     const result = await setLandingSuspended(ownerId, on, reason)
     setWorking(null)
@@ -63,8 +63,8 @@ export default function LandingPagesPanel() {
   }
 
   const pageLink = (slug: string) => (
-    <a href={`/p/${slug}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 font-mono text-sm text-blue-700 hover:underline">
-      /p/{slug} <ExternalLink className="h-3.5 w-3.5" />
+    <a href={`/page/${slug}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 font-mono text-sm text-blue-700 hover:underline">
+      /page/{slug} <ExternalLink className="h-3.5 w-3.5" />
     </a>
   )
 

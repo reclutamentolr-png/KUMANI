@@ -137,7 +137,7 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
   const [device, setDevice] = useState<'phone' | 'desktop'>('phone')
   const [localDraft, setLocalDraft] = useState<LocalDraft | null>(null)
 
-  const publicUrl = `${siteUrl.replace(/\/$/, '')}/p/${savedSlug || slug}`
+  const publicUrl = `${siteUrl.replace(/\/$/, '')}/page/${savedSlug || slug}`
   const err = (code: string) => (t.has(`err_${code}`) ? t(`err_${code}`) : t('err_saveError'))
 
   // Ogni modifica segna la pagina come "da salvare"
@@ -644,7 +644,7 @@ export default function LandingEditor({ initial, siteUrl, labelsByLocale, formLa
         <Card title={t('sectionAddress')}>
           <Field title={t('slugLabel')} hint={t('slugHint')}>
             <div className="flex items-stretch overflow-hidden rounded-xl border border-gray-300 focus-within:border-[var(--gold)] focus-within:ring-2 focus-within:ring-[var(--gold)]/30">
-              <span className="flex items-center bg-gray-100 px-3 text-sm text-gray-500">kumani.io/p/</span>
+              <span className="flex items-center bg-gray-100 px-3 text-sm text-gray-500">kumani.io/page/</span>
               <input className="min-w-0 flex-1 px-3 py-2.5 text-gray-900 focus:outline-none" value={slug} onChange={(e) => onSlugChange(e.target.value)} autoCapitalize="none" spellCheck={false} />
             </div>
           </Field>

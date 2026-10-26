@@ -1171,7 +1171,16 @@
     "bioVisitBusiness": "Ouvrir la page entreprise",
     "bioErr_businessPro": "La page entreprise est incluse dans le forfait Pro.",
     "bioModeTwoPages": "Deux pages, deux liens : la page personnelle avec votre nom, celle de l’entreprise avec le nom, le logo et la ville de la fiche entreprise.",
-    "testerPreviewBanner": "Avant-première : pas encore visible pour tous les membres"
+    "testerPreviewBanner": "Avant-première : pas encore visible pour tous les membres",
+    "bioSlugLabel": "Le nom de ton lien",
+    "bioSlugPlaceholder": "ton-nom",
+    "bioSlugSuggested": "Nom proposé : tu peux le changer avant d’enregistrer.",
+    "bioSlugFree": "Nom disponible",
+    "bioSlugHint": "Lettres minuscules, chiffres et tirets, de 3 à 40 caractères. Le nom n’est qu’à toi : personne d’autre ne peut l’utiliser. Le lien avec ton code continue de fonctionner et mène ici.",
+    "bioErr_slugInvalid": "Nom non valide : utilise de 3 à 40 lettres minuscules, chiffres et tirets.",
+    "bioErr_slugReserved": "Ce nom est réservé : choisis-en un autre.",
+    "bioErr_slugTaken": "Ce nom est déjà utilisé : choisis-en un autre.",
+    "bioErr_slugOtherPage": "Ton autre page (personnelle ou entreprise) utilise déjà ce nom : choisis-en un autre."
   },
   "neurobalance": {
     "tracksLabel": "Audios de relaxation",
@@ -8330,7 +8339,7 @@
       "step1Text": "Ouvrez « Rédiger les textes avec l’IA » et répondez aux questions : ce que vous faites, où, pour qui et quels services vous proposez. Touchez « Rédiger le brouillon » : l’IA prépare la présentation, les services, la partie à propos, la méthode et la description pour Google.",
       "step1Tip": "L’IA utilise uniquement ce que vous écrivez : relisez toujours le brouillon avant de publier.",
       "step2Title": "Adresse, style et couleurs",
-      "step2Text": "Dans « Adresse et langue », choisissez l’adresse de la page (kumani.io/p/…) et la langue dans laquelle vous écrivez. Dans « Style », choisissez entre Sombre élégant, Clair et Coloré, ainsi que la couleur principale.",
+      "step2Text": "Dans « Adresse et langue », choisissez l’adresse de la page (kumani.io/page/…) et la langue dans laquelle vous écrivez. Dans « Style », choisissez entre Sombre élégant, Clair et Coloré, ainsi que la couleur principale.",
       "step3Title": "Présentation et blocs",
       "step3Text": "Dans « Présentation », indiquez le nom, le titre, la photo, le logo et le bouton principal (WhatsApp, appel, e-mail ou lien). Dans « Blocs de la page », affichez ceux dont vous avez besoin, remplissez-les et changez leur ordre avec les flèches.",
       "step3Tip": "Dans les Témoignages, publiez uniquement des phrases authentiques de vrais clients, avec leur accord.",
@@ -9348,7 +9357,7 @@
         },
         "4": {
           "1": "Visible et facile à partager",
-          "2": "Adresse kumani.io/p/…, fiche prête pour Google, QR et bouton Partager."
+          "2": "Adresse kumani.io/page/…, fiche prête pour Google, QR et bouton Partager."
         }
       },
       "badgePro": "Incluse dans l’offre Pro",
@@ -10727,7 +10736,7 @@
       "title": "Créer un site vitrine pour votre activité en quelques minutes · Landing Page",
       "description": "Créez le site vitrine de votre activité : présentation, services, coordonnées et WhatsApp, textes rédigés avec l’IA, couleurs au choix et QR à partager.",
       "heading": "Comment créer un site vitrine sans savoir coder",
-      "intro": "Un indépendant ou un petit commerce a besoin d’une page claire à montrer à ses clients : qui vous êtes, ce que vous faites, comment vous contacter. Avec Landing Page, vous la créez depuis votre téléphone en quelques minutes, sur une adresse bien à vous (kumani.io/p/…), aux couleurs de votre choix et avec des textes préparés par l’IA à partir de vos réponses.",
+      "intro": "Un indépendant ou un petit commerce a besoin d’une page claire à montrer à ses clients : qui vous êtes, ce que vous faites, comment vous contacter. Avec Landing Page, vous la créez depuis votre téléphone en quelques minutes, sur une adresse bien à vous (kumani.io/page/…), aux couleurs de votre choix et avec des textes préparés par l’IA à partir de vos réponses.",
       "points": [
         "Textes de présentation, services et méthode rédigés avec l’IA, toujours modifiables",
         "Trois modèles et la couleur principale que vous préférez",
@@ -10737,7 +10746,7 @@
       "faq": [
         {
           "q": "Faut-il savoir coder ou avoir un nom de domaine ?",
-          "a": "Non. Vous remplissez les blocs depuis votre téléphone ou votre ordinateur et la page est publiée sur kumani.io/p/ suivi de l’adresse que vous choisissez."
+          "a": "Non. Vous remplissez les blocs depuis votre téléphone ou votre ordinateur et la page est publiée sur kumani.io/page/ suivi de l’adresse que vous choisissez."
         },
         {
           "q": "La page apparaît-elle sur Google ?",

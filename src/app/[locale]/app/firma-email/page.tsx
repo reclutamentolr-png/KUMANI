@@ -41,7 +41,9 @@ export default async function FirmaEmailPage() {
     phone: text(me?.phone),
   }
   const code = text(me?.referral_code)
-  const cardUrl = code ? `${SITE_URL}/${locale}/ref/${encodeURIComponent(code)}/bio` : null
+  // Link in Bio: l'indirizzo con il nome scelto, se c'è (pagina privata)
+  const { data: bioName } = user ? await supabase.from('link_in_bio').select('slug').eq('user_id', user.id).eq('mode', 'personal').maybeSingle() : { data: null }
+  const cardUrl = bioName?.slug ? `${SITE_URL}/bio/${bioName.slug}` : code ? `${SITE_URL}/${locale}/ref/${encodeURIComponent(code)}/bio` : null
 
   return (
     <div className="min-h-screen bg-[var(--background)]">

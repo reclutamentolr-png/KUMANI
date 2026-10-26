@@ -286,14 +286,26 @@ export function heroBackground(style: LandingContent['style']): string | null {
 }
 
 // ---------------------------------------------------------------------------
-// Indirizzo della pagina: kumani.io/p/<slug>
+// Indirizzo della pagina: kumani.io/page/<slug>
 // ---------------------------------------------------------------------------
 
 export const SLUG_RE = /^[a-z0-9](?:[a-z0-9-]{1,38}[a-z0-9])$/
+// Nomi che non si possono scegliere (Landing Page e Link in Bio): pagine del
+// sito, nomi dei nostri servizi e chi si potrebbe fingere (noi, enti, banche)
 const RESERVED = new Set([
   'admin', 'api', 'app', 'kumani', 'staff', 'support', 'supporto', 'help', 'aiuto', 'info', 'privacy', 'termini', 'terms',
   'login', 'register', 'dashboard', 'pro', 'base', 'official', 'ufficiale', 'test', 'demo', 'www', 'mail', 'polizia', 'banca',
+  'kumi', 'ku', 'ku-karma', 'karma', 'bio', 'page', 'pagina', 'shop', 'negozio', 'servizi', 'bacheca', 'plus',
+  'team', 'moderatore', 'moderatori', 'amministrazione', 'amministratore', 'direzione', 'sicurezza', 'security', 'verifica',
+  'verificato', 'verified', 'antitruffa', 'anti-truffa', 'rete-anti-truffa', 'assistenza', 'helpdesk', 'contatti', 'contact',
+  'pagamenti', 'payments', 'billing', 'rimborsi', 'abbonamento', 'abbonamenti', 'premi', 'rewards', 'donazioni', 'wallet',
+  'carabinieri', 'guardia-di-finanza', 'gdf', 'questura', 'prefettura', 'poste', 'poste-italiane', 'inps', 'inail',
+  'agenzia-entrate', 'agenzia-delle-entrate', 'governo', 'ministero', 'comune', 'consob', 'bancaditalia', 'banca-d-italia',
+  'svat', 'veritas', 'memolife', 'neurobalance', 'aureya', 'cronobioma', 'tempus', 'convivio', 'convivium', 'nexus', 'hopla',
+  'spendly', 'fidelity', 'findo', 'spotlight', 'verifoto', 'checkmail', 'lumen', 'vox', 'captio', 'diarium', 'imago', 'fabula',
 ])
+// Parole vietate anche dentro un nome (es. «kumani-ufficiale», «staff-mario»)
+const RESERVED_PARTS = ['kumani', 'kumano', 'staff', 'admin', 'official', 'ufficial', 'assistenza', 'support', 'moderat', 'antitruffa']
 
 export function slugify(text: string): string {
   return text
@@ -308,7 +320,7 @@ export function slugify(text: string): string {
 
 export function slugProblem(slug: string): 'slugInvalid' | 'slugReserved' | null {
   if (!SLUG_RE.test(slug) || slug.includes('--')) return 'slugInvalid'
-  if (RESERVED.has(slug) || slug.startsWith('kumani')) return 'slugReserved'
+  if (RESERVED.has(slug) || RESERVED_PARTS.some((part) => slug.includes(part))) return 'slugReserved'
   return null
 }
 

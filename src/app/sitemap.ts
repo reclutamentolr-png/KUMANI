@@ -46,7 +46,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...PUBLIC_GUIDES.map((slug) => entry(`/guida/${slug}`, 0.5)),
     ...(events ?? []).map((e) => entry(`/events/${e.id}`, 0.5, 'weekly', e.updated_at as string | undefined)),
     ...((landings as { slug: string; updated_at: string }[] | null) ?? []).map((l) => ({
-      url: `${SITE_URL}/p/${l.slug}`,
+      url: `${SITE_URL}/page/${l.slug}`,
       lastModified: l.updated_at,
       changeFrequency: 'weekly' as const,
       priority: 0.4,

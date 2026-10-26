@@ -56,6 +56,10 @@ const nextConfig: NextConfig = {
       { source: '/marketplace/:path*', destination: '/app/:path*', permanent: true },
       { source: `/${locale}/marketplace`, destination: '/:locale/app', permanent: true },
       { source: `/${locale}/marketplace/:path*`, destination: '/:locale/app/:path*', permanent: true },
+      // Landing Page: da kumani.io/p/<nome> a kumani.io/page/<nome> (i link
+      // già condivisi continuano a funzionare)
+      { source: '/p/:path*', destination: '/page/:path*', permanent: true },
+      { source: `/${locale}/p/:path*`, destination: '/:locale/page/:path*', permanent: true },
     ];
   },
   async rewrites() {

@@ -1171,7 +1171,16 @@
     "bioVisitBusiness": "Unternehmensseite öffnen",
     "bioErr_businessPro": "Die Unternehmensseite ist im Pro-Plan enthalten.",
     "bioModeTwoPages": "Zwei Seiten, zwei Links: die private mit deinem Namen, die Unternehmensseite mit Name, Logo und Stadt aus dem Firmenprofil.",
-    "testerPreviewBanner": "Vorschau: noch nicht für alle Mitglieder sichtbar"
+    "testerPreviewBanner": "Vorschau: noch nicht für alle Mitglieder sichtbar",
+    "bioSlugLabel": "Der Name deines Links",
+    "bioSlugPlaceholder": "dein-name",
+    "bioSlugSuggested": "Vorgeschlagener Name: Du kannst ihn vor dem Speichern ändern.",
+    "bioSlugFree": "Name verfügbar",
+    "bioSlugHint": "Kleinbuchstaben, Zahlen und Bindestriche, 3 bis 40 Zeichen. Der Name gehört nur dir: niemand sonst kann ihn verwenden. Der Link mit deinem Code funktioniert weiter und führt hierher.",
+    "bioErr_slugInvalid": "Ungültiger Name: Verwende 3 bis 40 Kleinbuchstaben, Zahlen und Bindestriche.",
+    "bioErr_slugReserved": "Dieser Name ist reserviert: Wähle einen anderen.",
+    "bioErr_slugTaken": "Dieser Name ist schon vergeben: Wähle einen anderen.",
+    "bioErr_slugOtherPage": "Deine andere Seite (privat oder Unternehmen) nutzt diesen Namen schon: Wähle einen anderen."
   },
   "neurobalance": {
     "tracksLabel": "Entspannungsaudios",
@@ -8330,7 +8339,7 @@
       "step1Text": "Öffne „Texte mit KI schreiben“ und beantworte die Fragen: was du machst, wo, für wen und welche Leistungen du anbietest. Tippe auf „Entwurf schreiben“: Die KI erstellt Vorstellung, Leistungen, Über mich, Arbeitsweise und die Beschreibung für Google.",
       "step1Tip": "Die KI nutzt nur, was du schreibst: Lies den Entwurf vor dem Veröffentlichen immer noch einmal durch.",
       "step2Title": "Adresse, Stil und Farben",
-      "step2Text": "Unter „Adresse und Sprache“ wählst du die Adresse der Seite (kumani.io/p/…) und die Sprache, in der du schreibst. Unter „Stil“ wählst du zwischen Elegant dunkel, Hell und Farbig sowie die Hauptfarbe.",
+      "step2Text": "Unter „Adresse und Sprache“ wählst du die Adresse der Seite (kumani.io/page/…) und die Sprache, in der du schreibst. Unter „Stil“ wählst du zwischen Elegant dunkel, Hell und Farbig sowie die Hauptfarbe.",
       "step3Title": "Vorstellung und Blöcke",
       "step3Text": "Unter „Vorstellung“ trägst du Name, Titel, Foto, Logo und den Hauptbutton ein (WhatsApp, Anruf, E-Mail oder Link). Unter „Blöcke der Seite“ blendest du die Blöcke ein, die du brauchst, füllst sie aus und änderst die Reihenfolge mit den Pfeilen.",
       "step3Tip": "Veröffentliche bei den Kundenstimmen nur echte Aussagen echter Kunden, mit deren Einverständnis.",
@@ -9348,7 +9357,7 @@
         },
         "4": {
           "1": "Auffindbar und teilbar",
-          "2": "Adresse kumani.io/p/…, Google-fertiger Eintrag, QR-Code und Teilen-Button."
+          "2": "Adresse kumani.io/page/…, Google-fertiger Eintrag, QR-Code und Teilen-Button."
         }
       },
       "badgePro": "Im Pro-Tarif enthalten",
@@ -10727,7 +10736,7 @@
       "title": "Website für Selbstständige erstellen – in wenigen Minuten · Landing Page",
       "description": "Erstelle eine Website für dein Unternehmen: Vorstellung, Leistungen, Kontakt und WhatsApp, Texte mit KI, Farben nach Wahl und QR-Code zum Teilen.",
       "heading": "Wie erstelle ich eine eigene Website ohne Programmierkenntnisse?",
-      "intro": "Selbstständige und kleine Läden brauchen eine klare Seite für ihre Kunden: wer du bist, was du machst, wie man dich erreicht. Mit Landing Page erstellst du sie in wenigen Minuten am Handy, unter deiner eigenen Adresse (kumani.io/p/…), in deinen Farben und mit Texten, die die KI aus deinen Antworten vorbereitet.",
+      "intro": "Selbstständige und kleine Läden brauchen eine klare Seite für ihre Kunden: wer du bist, was du machst, wie man dich erreicht. Mit Landing Page erstellst du sie in wenigen Minuten am Handy, unter deiner eigenen Adresse (kumani.io/page/…), in deinen Farben und mit Texten, die die KI aus deinen Antworten vorbereitet.",
       "points": [
         "Texte für Vorstellung, Leistungen und Arbeitsweise mit KI geschrieben, jederzeit änderbar",
         "Drei Vorlagen und die Hauptfarbe deiner Wahl",
@@ -10737,7 +10746,7 @@
       "faq": [
         {
           "q": "Muss ich programmieren können oder eine eigene Domain haben?",
-          "a": "Nein. Du füllst die Blöcke am Handy oder Computer aus und die Seite wird unter kumani.io/p/ und der von dir gewählten Adresse veröffentlicht."
+          "a": "Nein. Du füllst die Blöcke am Handy oder Computer aus und die Seite wird unter kumani.io/page/ und der von dir gewählten Adresse veröffentlicht."
         },
         {
           "q": "Ist die Seite bei Google zu finden?",

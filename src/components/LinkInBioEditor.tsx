@@ -4,7 +4,8 @@ import { useState, useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
 import type { BrandColors } from '@/lib/brand'
-import { saveLinkInBio } from '@/app/actions/linkInBio'
+import { checkBioSlug, saveLinkInBio, suggestBioSlug } from '@/app/actions/linkInBio'
+import { useRouter } from 'next/navigation'
 import type { BioMode } from '@/lib/bioPlan'
 import { normalizeLinkUrl, displayLinkValue } from '@/lib/linkUtils'
 import { BIO_THEMES, ALL_BIO_THEME_KEYS, DEFAULT_BIO_THEME, PREMIUM_BIO_THEME_KEYS, resolveBioTheme, brandBioVars, type BioThemeKey } from '@/lib/linkInBioThemes'
@@ -46,11 +47,14 @@ export default function LinkInBioEditor({
   businessProfile = null,
   occupation = '',
   isPro = false,
+  siteUrl = '',
   brand = null,
   followBrand = false,
 }: {
   // Pro: si può scegliere «Azienda» (nome, logo e città dalla Scheda attività)
   isPro?: boolean
+  // Indirizzo del sito, per mostrare kumani.io/bio/<nome>
+  siteUrl?: string
   // Professione del profilo: riga sotto il nome finché non se ne scrive un'altra
   occupation?: string
   // «I colori del tuo brand» (Scheda attività): tema «brand» se ci sono
@@ -88,6 +92,18 @@ export default function LinkInBioEditor({
   const [previewTheme, setPreviewTheme] = useState<BioThemeKey | null>(null)
   const previewRef = useRef<HTMLDivElement>(null)
   const firstLoad = useRef(true)
+  const router = useRouter()
+  // Nome dell'indirizzo kumani.io/bio/<nome>: salvato, scritto e controllo
+  // (libero, già preso…). Pagina senza nome: si propone un nome libero
+  const [slug, setSlug] = useState('')
+  const [savedSlug, setSavedSlug] = useState('')
+  const [slugSuggested, setSlugSuggested] = useState(false)
+  const [slugStatus, setSlugStatus] = useState<'idle' | 'checking' | 'ok' | string>('idle')
+  const slugTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const modeRef = useRef(mode)
+  useEffect(() => {
+    modeRef.current = mode
+  }, [mode])
 
   // Pagina da modificare: «privato» o, nel Pro, «azienda» (ognuna con i suoi dati)
   useEffect(() => {
@@ -95,7 +111,7 @@ export default function LinkInBioEditor({
       setLoading(true)
       const { data } = await supabase
         .from('link_in_bio')
-        .select('bio_text, links, theme, mode, subtitle')
+        .select('bio_text, links, theme, mode, subtitle, slug')
         .eq('user_id', userId)
         .eq('mode', mode)
         .maybeSingle()
@@ -133,6 +149,20 @@ export default function LinkInBioEditor({
       setSubtitle(null)
       setLinks([])
       setTheme(brand && followBrand ? 'brand' : DEFAULT_BIO_THEME)
+      const ownSlug = typeof data?.slug === 'string' ? data.slug : ''
+      setSlug(ownSlug)
+      setSavedSlug(ownSlug)
+      setSlugStatus('idle')
+      setSlugSuggested(false)
+      if (!ownSlug) {
+        const forMode = mode
+        suggestBioSlug(isPro ? mode : 'personal').then((name) => {
+          // Nel frattempo si è passati all'altra pagina: proposta non più valida
+          if (!name || modeRef.current !== forMode) return
+          setSlug((current) => current || name)
+          setSlugSuggested(true)
+        })
+      }
       if (data) {
         setBioText(data.bio_text || '')
         setSubtitle(typeof data.subtitle === 'string' ? data.subtitle : null)
@@ -155,6 +185,19 @@ export default function LinkInBioEditor({
     }
     fetchData()
   }, [userId, supabase, brand, followBrand, mode, isPro])
+
+  const onSlugChange = (value: string) => {
+    const next = value.toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40)
+    setSlug(next)
+    setSlugSuggested(false)
+    if (slugTimer.current) clearTimeout(slugTimer.current)
+    if (!next || next === savedSlug) return setSlugStatus('idle')
+    setSlugStatus('checking')
+    slugTimer.current = setTimeout(async () => {
+      const result = await checkBioSlug(next, isPro ? mode : 'personal')
+      setSlugStatus(result.ok ? 'ok' : (result.message ?? 'slugInvalid'))
+    }, 400)
+  }
 
   const addLink = () => {
     setLinks([
@@ -212,7 +255,7 @@ export default function LinkInBioEditor({
     setSaving(true)
     setJustSaved(false)
     try {
-      const result = await saveLinkInBio(bioText, links, theme, isPro ? mode : 'personal', subtitle)
+      const result = await saveLinkInBio(bioText, links, theme, isPro ? mode : 'personal', subtitle, slug)
       if (!result.success) {
         // Motivo preciso quando c'è, altrimenti il messaggio generico
         const code = 'message' in result && result.message ? `bioErr_${result.message}` : ''
@@ -220,6 +263,11 @@ export default function LinkInBioEditor({
         return
       }
       setJustSaved(true)
+      setSavedSlug(slug)
+      setSlugSuggested(false)
+      setSlugStatus('idle')
+      // Indirizzi delle pagine qui sotto aggiornati con il nome
+      router.refresh()
       setTimeout(() => setJustSaved(false), 3000)
     } catch (error) {
       // Di solito la pagina è di una versione precedente del sito: va ricaricata
@@ -304,6 +352,29 @@ export default function LinkInBioEditor({
             )}
           </div>
         )}
+
+        {/* Nome dell'indirizzo: kumani.io/bio/<nome> */}
+        <div className="mb-6">
+          <label className="block text-sm font-semibold text-[var(--ink)] mb-2" htmlFor="bio-slug">{t('bioSlugLabel')}</label>
+          <div className="flex overflow-hidden rounded-lg border border-[var(--gold)]/30 focus-within:border-[var(--gold)] focus-within:ring-2 focus-within:ring-[var(--gold)]/30">
+            <span className="flex items-center bg-[var(--paper)] px-3 text-sm text-[var(--muted)]">{siteUrl.replace(/^https?:\/\//, '').replace(/\/$/, '')}/bio/</span>
+            <input
+              id="bio-slug"
+              type="text"
+              value={slug}
+              onChange={(e) => onSlugChange(e.target.value)}
+              placeholder={t('bioSlugPlaceholder')}
+              autoCapitalize="none"
+              spellCheck={false}
+              className="min-w-0 flex-1 p-3 focus:outline-none"
+            />
+          </div>
+          {slugSuggested && slug && <p className="mt-1 text-xs font-semibold text-[var(--gold)]">{t('bioSlugSuggested')}</p>}
+          {slugStatus === 'checking' && <p className="mt-1 text-xs text-[var(--muted)]">…</p>}
+          {slugStatus === 'ok' && <p className="mt-1 flex items-center gap-1 text-xs text-emerald-700"><Check className="h-3.5 w-3.5" /> {t('bioSlugFree')}</p>}
+          {slugStatus !== 'idle' && slugStatus !== 'checking' && slugStatus !== 'ok' && <p className="mt-1 text-xs text-red-600">{t.has(`bioErr_${slugStatus}`) ? t(`bioErr_${slugStatus}`) : t('bioErr_slugInvalid')}</p>}
+          <p className="mt-1 text-xs text-[var(--muted)]">{t('bioSlugHint')}</p>
+        </div>
 
         <BusinessProfileImport profile={businessProfile} onImport={importProfile} className="mb-6" />
 

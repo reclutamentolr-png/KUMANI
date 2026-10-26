@@ -18,7 +18,7 @@ type Props = { params: Promise<{ slug: string }> }
 
 const OG_LOCALE: Record<string, string> = { it: 'it_IT', en: 'en_GB', fr: 'fr_FR', es: 'es_ES', pt: 'pt_PT', de: 'de_DE', ru: 'ru_RU' }
 
-// Landing Page pubblica di un utente Pro: kumani.io/p/<indirizzo>.
+// Landing Page pubblica di un utente Pro: kumani.io/page/<indirizzo>.
 // Una sola lingua (quella scelta dal titolare) e indirizzo canonico senza
 // prefisso di lingua.
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { hero, seo } = page.content
   const title = [hero.name, hero.title].filter(Boolean).join(' · ') || 'KUMANI'
   const description = seo.description || hero.subtitle || hero.text.slice(0, 160)
-  const url = `${CANONICAL_ORIGIN}/p/${page.slug}`
+  const url = `${CANONICAL_ORIGIN}/page/${page.slug}`
   return {
     title: { absolute: title },
     description,
@@ -48,7 +48,7 @@ export default async function PublicLandingPage({ params }: Props) {
   const [labels, formLabels] = await Promise.all([getLandingLabels(page.content_locale), getLandingFormLabels(page.content_locale)])
   // Negozio aperto del titolare (KUMANI Shop): pulsante «Visita il negozio»
   const shopSlug = await openShopSlugForLanding(page.slug)
-  const url = `${CANONICAL_ORIGIN}/p/${page.slug}`
+  const url = `${CANONICAL_ORIGIN}/page/${page.slug}`
 
   // Dati per Google: attività locale con contatti e social (niente stelle:
   // le testimonianze le scrive il titolare)

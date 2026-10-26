@@ -25,8 +25,10 @@ import LogoCircle from '@/components/LogoCircle'
 import { normalizeLinkUrl } from '@/lib/linkUtils'
 import PublicPageOffline from '@/components/PublicPageOffline'
 
-// Pagina pubblica di Link in Bio, usata da due indirizzi: /ref/<codice>/bio
-// (pagina «privato») e /ref/<codice>/bio/azienda (pagina «azienda», solo Pro).
+// Pagina pubblica di Link in Bio. Indirizzo con il nome scelto:
+// /bio/<nome>. Indirizzi con il codice (di prima, sempre validi; con un nome
+// portano a /bio/<nome>): /ref/<codice>/bio (pagina «privato») e
+// /ref/<codice>/bio/azienda (pagina «azienda», solo Pro).
 
 type ServiceDb = SupabaseClient
 export type BioPageMode = 'personal' | 'business'
@@ -39,10 +41,36 @@ const serviceDb = () =>
 // Riga della pagina richiesta. Senza pagina «privato» l'indirizzo /bio mostra
 // la pagina «azienda» (chi l'aveva salvata così prima delle due pagine)
 async function bioRow(service: ServiceDb, userId: string, mode: BioPageMode) {
-  const cols = 'mode, bio_text, links, theme, brand_colors, subtitle'
+  const cols = 'mode, bio_text, links, theme, brand_colors, subtitle, slug'
   const { data } = await service.from('link_in_bio').select(cols).eq('user_id', userId).eq('mode', mode).maybeSingle()
   if (data || mode === 'business') return data
   return (await service.from('link_in_bio').select(cols).eq('user_id', userId).eq('mode', 'business').maybeSingle()).data
+}
+
+// Indirizzo da condividere: quello con il nome, se c'è
+function bioPageUrl(code: string, mode: BioPageMode, slug: unknown) {
+  return typeof slug === 'string' && slug ? `${SITE_URL}/bio/${slug}` : `${SITE_URL}/ref/${code}/bio${mode === 'business' ? '/azienda' : ''}`
+}
+
+// /bio/<nome>: di chi è e quale pagina (privato o azienda). Null = nessuno
+export async function bioBySlug(slug: string): Promise<{ code: string; mode: BioPageMode } | null> {
+  if (!/^[a-z0-9-]{3,40}$/.test(slug)) return null
+  const service = serviceDb()
+  const { data: row } = await service.from('link_in_bio').select('user_id, mode').eq('slug', slug).maybeSingle()
+  if (!row) return null
+  const { data: profile } = await service.from('profiles').select('referral_code').eq('id', row.user_id).maybeSingle()
+  if (!profile?.referral_code) return null
+  return { code: profile.referral_code as string, mode: row.mode === 'business' ? 'business' : 'personal' }
+}
+
+// Indirizzo con il codice di una pagina che ha un nome: dove portarlo
+// (/bio/<nome>), altrimenti null e si mostra lì
+export async function bioSlugFor(code: string, mode: BioPageMode): Promise<string | null> {
+  const service = serviceDb()
+  const { data: profile } = await service.from('profiles').select('id').eq('referral_code', code).maybeSingle()
+  if (!profile) return null
+  const row = await bioRow(service, profile.id, mode)
+  return typeof row?.slug === 'string' && row.slug ? row.slug : null
 }
 
 // Pagina «azienda» (solo con il Pro): nome, logo e città della Scheda
@@ -76,7 +104,8 @@ export async function bioMetadata(locale: string, code: string, mode: BioPageMod
   return {
     title: { absolute: `${title} · KUMANI` },
     description,
-    openGraph: { title, description, type: 'profile', siteName: 'KUMANI', url: `${SITE_URL}/ref/${code}/bio${mode === 'business' ? '/azienda' : ''}` },
+    alternates: { canonical: bioPageUrl(code, mode, bio?.slug) },
+    openGraph: { title, description, type: 'profile', siteName: 'KUMANI', url: bioPageUrl(code, mode, bio?.slug) },
     twitter: { card: 'summary', title, description },
   }
 }
@@ -141,9 +170,8 @@ export async function BioPublic({ code, mode }: { code: string; mode: BioPageMod
   // (azienda) o professione del profilo
   const subtitle = typeof linkInBio?.subtitle === 'string' ? linkInBio.subtitle : business ? business.city : profile.occupation
 
-  const baseUrl = SITE_URL
   // Si condivide questa pagina (la bio), non quella di iscrizione
-  const profileUrl = `${baseUrl}/ref/${code}/bio${mode === 'business' ? '/azienda' : ''}`
+  const profileUrl = bioPageUrl(code, mode, linkInBio?.slug)
   const t = await getTranslations('bioPublic')
   // Tema «brand»: i colori della Scheda attività (se mancano, il tema di partenza)
   const brandVars = linkInBio?.theme === 'brand' ? brandBioVars(linkInBio?.brand_colors) : undefined

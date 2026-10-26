@@ -1211,7 +1211,16 @@
     "bioVisitBusiness": "Apri la pagina azienda",
     "bioErr_businessPro": "La pagina azienda è inclusa nel piano Pro.",
     "bioModeTwoPages": "Due pagine, due link: la privata con il tuo nome, quella dell’azienda con nome, logo e città della Scheda attività.",
-    "testerPreviewBanner": "Anteprima: non ancora visibile a tutti gli iscritti"
+    "testerPreviewBanner": "Anteprima: non ancora visibile a tutti gli iscritti",
+    "bioSlugLabel": "Il nome del tuo link",
+    "bioSlugPlaceholder": "il-tuo-nome",
+    "bioSlugSuggested": "Nome proposto: puoi cambiarlo prima di salvare.",
+    "bioSlugFree": "Nome libero",
+    "bioSlugHint": "Lettere minuscole, numeri e trattini, da 3 a 40 caratteri. Il nome è solo tuo: nessun altro può usarlo. Il link con il codice continua a funzionare e porta qui.",
+    "bioErr_slugInvalid": "Nome non valido: usa da 3 a 40 lettere minuscole, numeri e trattini.",
+    "bioErr_slugReserved": "Questo nome è riservato: scegline un altro.",
+    "bioErr_slugTaken": "Questo nome è già usato: scegline un altro.",
+    "bioErr_slugOtherPage": "Questo nome lo usa già la tua altra pagina (privato o azienda): scegline un altro."
   },
   "neurobalance": {
     "tracksLabel": "Audio di rilassamento",
@@ -8330,7 +8339,7 @@
       "step1Text": "Apri «Scrivi i testi con l’AI» e rispondi alle domande: cosa fai, dove, per chi e quali servizi offri. Tocca «Scrivi la bozza»: l’AI prepara presentazione, servizi, chi sono, metodo e descrizione per Google.",
       "step1Tip": "L’AI usa solo quello che scrivi: rileggi sempre la bozza prima di pubblicare.",
       "step2Title": "Indirizzo, stile e colori",
-      "step2Text": "In «Indirizzo e lingua» scegli l’indirizzo della pagina (kumani.io/p/…) e la lingua in cui scrivi. In «Stile» scegli tra Elegante scuro, Chiaro e Colorato, e il colore principale.",
+      "step2Text": "In «Indirizzo e lingua» scegli l’indirizzo della pagina (kumani.io/page/…) e la lingua in cui scrivi. In «Stile» scegli tra Elegante scuro, Chiaro e Colorato, e il colore principale.",
       "step3Title": "Presentazione e blocchi",
       "step3Text": "In «Presentazione» metti nome, titolo, foto, logo e il pulsante principale (WhatsApp, chiamata, email o link). In «Blocchi della pagina» rendi visibili quelli che ti servono, compilali e cambia l’ordine con le frecce.",
       "step3Tip": "Nelle Testimonianze pubblica solo frasi vere di clienti reali, con il loro consenso.",
@@ -9348,7 +9357,7 @@
         },
         "4": {
           "1": "Trovabile e da condividere",
-          "2": "Indirizzo kumani.io/p/…, scheda pronta per Google, QR e pulsante Condividi."
+          "2": "Indirizzo kumani.io/page/…, scheda pronta per Google, QR e pulsante Condividi."
         }
       },
       "badgePro": "Inclusa nel piano Pro",
@@ -10727,7 +10736,7 @@
       "title": "Creare un sito vetrina per la tua attività in pochi minuti · Landing Page",
       "description": "Crea la landing page della tua attività: presentazione, servizi, contatti e WhatsApp, testi scritti con l’AI, colori a scelta e QR da condividere.",
       "heading": "Come creare un sito vetrina senza saper programmare",
-      "intro": "Un professionista o un piccolo negozio ha bisogno di una pagina chiara da mostrare ai clienti: chi sei, cosa fai, come contattarti. Con Landing Page la crei dal telefono in pochi minuti, su un indirizzo tutto tuo (kumani.io/p/…), con i colori che scegli e i testi preparati dall’AI a partire dalle tue risposte.",
+      "intro": "Un professionista o un piccolo negozio ha bisogno di una pagina chiara da mostrare ai clienti: chi sei, cosa fai, come contattarti. Con Landing Page la crei dal telefono in pochi minuti, su un indirizzo tutto tuo (kumani.io/page/…), con i colori che scegli e i testi preparati dall’AI a partire dalle tue risposte.",
       "points": [
         "Testi di presentazione, servizi e metodo scritti con l’AI, sempre modificabili",
         "Tre modelli e il colore principale che preferisci",
@@ -10737,7 +10746,7 @@
       "faq": [
         {
           "q": "Serve saper programmare o avere un dominio?",
-          "a": "No. Compili i blocchi dal telefono o dal computer e la pagina è pubblicata su kumani.io/p/ seguito dall’indirizzo che scegli."
+          "a": "No. Compili i blocchi dal telefono o dal computer e la pagina è pubblicata su kumani.io/page/ seguito dall’indirizzo che scegli."
         },
         {
           "q": "La pagina si trova su Google?",

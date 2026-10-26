@@ -1171,7 +1171,16 @@
     "bioVisitBusiness": "Abrir a página da empresa",
     "bioErr_businessPro": "A página da empresa está incluída no plano Pro.",
     "bioModeTwoPages": "Duas páginas, dois links: a pessoal com o seu nome, a da empresa com o nome, o logótipo e a cidade da ficha da atividade.",
-    "testerPreviewBanner": "Antevisão: ainda não visível para todos os membros"
+    "testerPreviewBanner": "Antevisão: ainda não visível para todos os membros",
+    "bioSlugLabel": "O nome do teu link",
+    "bioSlugPlaceholder": "o-teu-nome",
+    "bioSlugSuggested": "Nome sugerido: podes mudá-lo antes de guardar.",
+    "bioSlugFree": "Nome disponível",
+    "bioSlugHint": "Letras minúsculas, números e hífenes, de 3 a 40 caracteres. O nome é só teu: mais ninguém o pode usar. O link com o teu código continua a funcionar e leva aqui.",
+    "bioErr_slugInvalid": "Nome inválido: usa de 3 a 40 letras minúsculas, números e hífenes.",
+    "bioErr_slugReserved": "Este nome está reservado: escolhe outro.",
+    "bioErr_slugTaken": "Este nome já está a ser usado: escolhe outro.",
+    "bioErr_slugOtherPage": "A tua outra página (pessoal ou empresa) já usa este nome: escolhe outro."
   },
   "neurobalance": {
     "tracksLabel": "Áudios de relaxamento",
@@ -8330,7 +8339,7 @@
       "step1Text": "Abra «Escreva os textos com IA» e responda às perguntas: o que faz, onde, para quem e que serviços oferece. Toque em «Escrever o rascunho»: a IA prepara a apresentação, os serviços, a secção sobre mim, o método e a descrição para o Google.",
       "step1Tip": "A IA usa apenas o que escreve: releia sempre o rascunho antes de publicar.",
       "step2Title": "Endereço, estilo e cores",
-      "step2Text": "Em «Endereço e língua» escolha o endereço da página (kumani.io/p/…) e a língua em que escreve. Em «Estilo» escolha entre Escuro elegante, Claro e Colorido, e a cor principal.",
+      "step2Text": "Em «Endereço e língua» escolha o endereço da página (kumani.io/page/…) e a língua em que escreve. Em «Estilo» escolha entre Escuro elegante, Claro e Colorido, e a cor principal.",
       "step3Title": "Apresentação e blocos",
       "step3Text": "Em «Apresentação» indique o nome, o título, a foto, o logótipo e o botão principal (WhatsApp, chamada, email ou link). Em «Blocos da página» torne visíveis os que precisa, preencha-os e mude a ordem com as setas.",
       "step3Tip": "Nos Testemunhos publique apenas frases verdadeiras de clientes reais, com o consentimento deles.",
@@ -9348,7 +9357,7 @@
         },
         "4": {
           "1": "Fácil de encontrar e partilhar",
-          "2": "Endereço kumani.io/p/…, ficha pronta para o Google, QR e botão Partilhar."
+          "2": "Endereço kumani.io/page/…, ficha pronta para o Google, QR e botão Partilhar."
         }
       },
       "badgePro": "Incluída no plano Pro",
@@ -10727,7 +10736,7 @@
       "title": "Criar um site para o seu negócio em poucos minutos · Landing Page",
       "description": "Crie o site do seu negócio: apresentação, serviços, contactos e WhatsApp, textos escritos com IA, cores à escolha e um QR para partilhar.",
       "heading": "Como criar um site para o seu negócio sem saber programar",
-      "intro": "Um profissional ou uma pequena loja precisa de uma página clara para mostrar aos clientes: quem é, o que faz, como contactá-lo. Com a Landing Page cria-a no telemóvel em poucos minutos, num endereço só seu (kumani.io/p/…), com as cores que escolher e os textos preparados pela IA a partir das suas respostas.",
+      "intro": "Um profissional ou uma pequena loja precisa de uma página clara para mostrar aos clientes: quem é, o que faz, como contactá-lo. Com a Landing Page cria-a no telemóvel em poucos minutos, num endereço só seu (kumani.io/page/…), com as cores que escolher e os textos preparados pela IA a partir das suas respostas.",
       "points": [
         "Textos de apresentação, serviços e método escritos com IA, sempre editáveis",
         "Três modelos e a cor principal que preferir",
@@ -10737,7 +10746,7 @@
       "faq": [
         {
           "q": "É preciso saber programar ou ter um domínio?",
-          "a": "Não. Preenche os blocos no telemóvel ou no computador e a página é publicada em kumani.io/p/ seguido do endereço que escolher."
+          "a": "Não. Preenche os blocos no telemóvel ou no computador e a página é publicada em kumani.io/page/ seguido do endereço que escolher."
         },
         {
           "q": "A página aparece no Google?",

@@ -14,6 +14,6 @@ export default async function Image({ params }: { params: Promise<{ slug: string
     eyebrow: contacts.city || undefined,
     title: hero.name || hero.title || 'KUMANI',
     subtitle: hero.name && hero.title ? hero.title : hero.subtitle || undefined,
-    footer: `kumani.io/p/${page.slug}`,
+    footer: `kumani.io/page/${page.slug}`,
   })
 }

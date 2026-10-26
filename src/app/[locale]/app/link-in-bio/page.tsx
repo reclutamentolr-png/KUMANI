@@ -75,13 +75,17 @@ export default async function LinkInBioPage({ params }: { params: Promise<{ loca
   const baseUrl = SITE_URL
   
   const bioUrl = `${baseUrl}/${locale}/ref/${profile.referral_code}/bio`
+  // Pagine con un nome scelto: kumani.io/bio/<nome>, altrimenti il link con il codice
+  const { data: named } = await supabase.from('link_in_bio').select('mode, slug').eq('user_id', user.id).not('slug', 'is', null)
+  const nameOf = (mode: string) => (named ?? []).find((row) => row.mode === mode)?.slug as string | undefined
+  const urlOf = (mode: string, fallback: string) => (nameOf(mode) ? `${baseUrl}/bio/${nameOf(mode)}` : fallback)
   // Pro: due pagine con due indirizzi; Plus: solo la pagina privata
   const pages = isPro
     ? [
-        { key: 'personal', url: bioUrl, label: t('bioLinkPersonal'), visit: t('bioVisitPersonal') },
-        { key: 'business', url: `${bioUrl}/azienda`, label: t('bioLinkBusiness'), visit: t('bioVisitBusiness') },
+        { key: 'personal', url: urlOf('personal', bioUrl), label: t('bioLinkPersonal'), visit: t('bioVisitPersonal') },
+        { key: 'business', url: urlOf('business', `${bioUrl}/azienda`), label: t('bioLinkBusiness'), visit: t('bioVisitBusiness') },
       ]
-    : [{ key: 'personal', url: bioUrl, label: `${t('linkInBio')} (${t('savePrompt')})`, visit: t('visitBio') }]
+    : [{ key: 'personal', url: urlOf('personal', bioUrl), label: `${t('linkInBio')} (${t('savePrompt')})`, visit: t('visitBio') }]
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -123,7 +127,7 @@ export default async function LinkInBioPage({ params }: { params: Promise<{ loca
         {/* Editor reale + anteprima live (la stessa istanza di stato guida
             entrambi i pannelli, quindi resta sincronizzata mentre si scrive
             e dopo il salvataggio — niente più mockup statico scollegato). */}
-        <LinkInBioEditor userId={user.id} firstName={profile.first_name} lastName={profile.last_name} occupation={profile.occupation ?? ''} businessProfile={businessProfile} isPro={isPro} brand={brand} followBrand={(brandRow?.brand_follow as Record<string, unknown> | null)?.bio === true} />
+        <LinkInBioEditor userId={user.id} firstName={profile.first_name} lastName={profile.last_name} occupation={profile.occupation ?? ''} businessProfile={businessProfile} isPro={isPro} siteUrl={baseUrl} brand={brand} followBrand={(brandRow?.brand_follow as Record<string, unknown> | null)?.bio === true} />
 
         {/* Indirizzi delle pagine con pulsante copia: nel Pro due pagine
             (privato e azienda), nel Plus solo quella privata */}

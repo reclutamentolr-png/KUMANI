@@ -12,6 +12,7 @@ import { AI_MODELS } from '@/lib/aiModels'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { awardToolPoint } from '@/lib/toolPoints'
 import { localizedPath, notifyUser } from '@/lib/push'
+import { nameUsedByOthers } from '@/lib/publicNames'
 import {
   cleanLandingContent,
   isLandingLocale,
@@ -58,6 +59,8 @@ export async function saveLanding(input: LandingSaveInput): Promise<{ success: t
   const slug = String(input.slug ?? '').trim().toLowerCase()
   const problem = slugProblem(slug)
   if (problem) return { success: false, message: problem }
+  // Nome già scelto da un altro per il suo Link in Bio
+  if (await nameUsedByOthers(slug, g.userId)) return { success: false, message: 'slugTaken' }
   const content = cleanLandingContent(input.content, g.userId)
   if (input.isPublished && !content.hero.name) return { success: false, message: 'nameRequired' }
   const accent = /^#[0-9a-f]{6}$/i.test(input.accent) ? input.accent.toLowerCase() : '#c79a3b'
@@ -105,8 +108,7 @@ export async function checkLandingSlug(slugInput: string): Promise<{ ok: boolean
   const slug = slugInput.trim().toLowerCase()
   const problem = slugProblem(slug)
   if (problem) return { ok: false, message: problem }
-  const { data } = await getServiceClient().from('landing_pages').select('owner_id').eq('slug', slug).maybeSingle()
-  if (data && data.owner_id !== g.userId) return { ok: false, message: 'slugTaken' }
+  if (await nameUsedByOthers(slug, g.userId)) return { ok: false, message: 'slugTaken' }
   return { ok: true }
 }
 
