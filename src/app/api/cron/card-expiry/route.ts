@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { notifyUser } from '@/lib/push'
+import { fullAdminIds } from '@/lib/staffAlerts'
 import { dayLabel, expiringCards, expiryLabel, upcomingCharges, upcomingRenewals } from '@/lib/cardExpiry'
 
 // Carte dei costi fissi in scadenza (Vercel Cron, vedi vercel.json): agli admin
@@ -27,12 +28,12 @@ export async function GET(request: Request) {
   const charges = upcomingCharges(costs ?? [], day)
   if (!cards.length && !renewals.length && !charges.length) return NextResponse.json({ ok: true, cards: 0, renewals: 0, charges: 0 })
 
-  const { data: admins } = await db.from('profiles').select('id').eq('is_admin', true)
+  const admins = await fullAdminIds()
   for (const c of cards) {
     const ref = `${c.card.toLowerCase()}|${c.expiry}|${c.lastMonth ? 'last' : 'first'}`
-    for (const admin of admins ?? []) {
+    for (const adminId of admins) {
       await notifyUser(
-        admin.id as string,
+        adminId,
         'staff',
         (t) => ({
           title: t('cardExpiryTitle'),
@@ -45,9 +46,9 @@ export async function GET(request: Request) {
     }
   }
   for (const r of renewals) {
-    for (const admin of admins ?? []) {
+    for (const adminId of admins) {
       await notifyUser(
-        admin.id as string,
+        adminId,
         'staff',
         (t) => ({ title: t('renewalTitle'), body: t('renewalBody', { name: r.name, date: dayLabel(r.date) }), url: '/admin?section=costs', tag: `renewal-${r.date}` }),
         { kind: 'cost_renewal', ref: `${r.name}|${r.date}` }
@@ -56,9 +57,9 @@ export async function GET(request: Request) {
   }
   const eur = (cents: number) => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(cents / 100)
   for (const c of charges) {
-    for (const admin of admins ?? []) {
+    for (const adminId of admins) {
       await notifyUser(
-        admin.id as string,
+        adminId,
         'staff',
         (t) => ({
           title: t('chargeTitle'),

@@ -18,6 +18,24 @@ async function staffIds(permission: string): Promise<string[]> {
   return [...ids]
 }
 
+// Amministratori completi: profilo segnato come admin oppure ruolo con tutti
+// i permessi (super_admin). Ricevono gli avvisi riservati (costi, pagamenti,
+// sicurezza, segnalazioni anti-truffa).
+export async function fullAdminIds(): Promise<string[]> {
+  const db = pushDb()
+  const [{ data: admins }, { data: staff }] = await Promise.all([
+    db.from('profiles').select('id').eq('is_admin', true),
+    db.from('admin_users').select('user_id, admin_roles(permissions)'),
+  ])
+  const ids = new Set<string>((admins ?? []).map((a) => a.id as string))
+  for (const row of staff ?? []) {
+    const roles = row.admin_roles as { permissions?: string[] } | { permissions?: string[] }[] | null
+    const perms = Array.isArray(roles) ? (roles[0]?.permissions ?? []) : (roles?.permissions ?? [])
+    if (perms.includes('*')) ids.add(row.user_id as string)
+  }
+  return [...ids]
+}
+
 // Nuovo annuncio in Bacheca da approvare o rifiutare. Mai bloccante.
 export async function notifyStaffOfListing(listing: { id: string; title?: string | null }, authorId: string) {
   try {
@@ -44,23 +62,20 @@ export async function notifyStaffOfListing(listing: { id: string; title?: string
   }
 }
 
-// Nuova segnalazione nella Rete Anti-Truffa: solo agli amministratori (non ai
-// ruoli dello Staff), con nome e città di chi segnala, per controllarla subito.
+// Nuova segnalazione nella Rete Anti-Truffa: solo agli amministratori completi
+// (non agli altri ruoli dello Staff), con nome e città di chi segnala, per controllarla subito.
 // Mai bloccante.
 export async function notifyAdminsOfScamReport(report: { id: string; value: string; confirmed: boolean }, reporterId: string) {
   try {
     const db = pushDb()
-    const [{ data: admins }, { data: reporter }] = await Promise.all([
-      db.from('profiles').select('id').eq('is_admin', true),
-      db.from('profiles').select('first_name, last_name, city').eq('id', reporterId).maybeSingle(),
-    ])
+    const [admins, { data: reporter }] = await Promise.all([fullAdminIds(), db.from('profiles').select('first_name, last_name, city').eq('id', reporterId).maybeSingle()])
     const name = [reporter?.first_name, reporter?.last_name].filter(Boolean).join(' ').trim() || '—'
     const who = reporter?.city ? `${name} (${reporter.city})` : name
     const value = report.value.slice(0, 80)
-    for (const admin of admins ?? []) {
-      if (admin.id === reporterId) continue
+    for (const adminId of admins) {
+      if (adminId === reporterId) continue
       await notifyUser(
-        admin.id as string,
+        adminId,
         'staff',
         (t) => ({
           title: t('adminScamTitle'),

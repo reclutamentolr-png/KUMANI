@@ -1,5 +1,6 @@
 import { notifyUser } from '@/lib/push'
 import { recordSecurityEvent, securityDb, type SecurityEventInput } from '@/lib/securityCore'
+import { fullAdminIds } from '@/lib/staffAlerts'
 
 export { clientIp } from '@/lib/securityCore'
 
@@ -18,12 +19,6 @@ export async function logSecurityEvent(event: SecurityEventInput): Promise<void>
   } catch (error) {
     console.error('[security] notifica non inviata:', error)
   }
-}
-
-// Admin completi (profiles.is_admin): ricevono le notifiche di sicurezza
-async function fullAdminIds(): Promise<string[]> {
-  const { data } = await securityDb().from('profiles').select('id').eq('is_admin', true)
-  return (data ?? []).map((r) => r.id as string)
 }
 
 export async function notifyAdminsOfAlerts(alerts: { alert_id: string; title: string }[]): Promise<void> {

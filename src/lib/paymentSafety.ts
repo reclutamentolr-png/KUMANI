@@ -2,18 +2,16 @@ import type Stripe from 'stripe'
 import { getStripe } from '@/lib/stripe'
 import { localizedPath, notifyUser } from '@/lib/push'
 import { serviceDb } from '@/lib/shopPayments'
+import { fullAdminIds } from '@/lib/staffAlerts'
 
 // Protezioni dei pagamenti: contestazioni (chargeback) e abbonamenti pagati
-// due volte. Gli avvisi vanno agli admin (profiles.is_admin) o al venditore.
+// due volte. Gli avvisi vanno agli admin completi o al venditore.
 
 const LIVE: Stripe.Subscription.Status[] = ['active', 'trialing', 'past_due']
 const money = (cents: number, currency: string, locale: string) =>
   new Intl.NumberFormat(locale, { style: 'currency', currency: currency.toUpperCase() }).format(cents / 100)
 
-async function adminIds(): Promise<string[]> {
-  const { data } = await serviceDb().from('profiles').select('id').eq('is_admin', true)
-  return (data ?? []).map((r) => r.id as string)
-}
+const adminIds = fullAdminIds
 
 // --- Contestazioni ---
 
