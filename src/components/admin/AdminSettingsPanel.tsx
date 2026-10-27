@@ -42,14 +42,14 @@ export default function AdminSettingsPanel() {
     prelaunch_key: '',
     matrix_slot_bonus_points: 0,
     matrix_spillover_bonus_points: 0,
-    welcome_bonus_base: 1,
-    welcome_bonus_pro: 10,
+    welcome_bonus_base: 2,
+    welcome_bonus_pro: 15,
     welcome_bonus_from_direct: 6,
     activity_thanks_points: 0,
     pro_invite_extra_points: 0,
-    network_points_activation_base: 10,
-    network_points_activation_pro: 120,
-    network_points_upgrade_pro: 110,
+    network_points_activation_base: 12,
+    network_points_activation_pro: 144,
+    network_points_upgrade_pro: 120,
     qualifications: [
       { key: 'rising_star', activations: 6, points: 60, vouchers: 1 },
       { key: 'shining_star', activations: 36, points: 360, vouchers: 6 },
@@ -321,7 +321,7 @@ export default function AdminSettingsPanel() {
                 <input
                   type="number"
                   min="0"
-                  value={systemSettings.network_points_activation_base ?? 10}
+                  value={systemSettings.network_points_activation_base ?? 12}
                   onChange={(e) => setSystemSettings({ ...systemSettings, network_points_activation_base: parseInt(e.target.value, 10) || 0 })}
                   className={INPUT}
                 />
@@ -331,7 +331,7 @@ export default function AdminSettingsPanel() {
                 <input
                   type="number"
                   min="0"
-                  value={systemSettings.network_points_activation_pro ?? 120}
+                  value={systemSettings.network_points_activation_pro ?? 144}
                   onChange={(e) => setSystemSettings({ ...systemSettings, network_points_activation_pro: parseInt(e.target.value, 10) || 0 })}
                   className={INPUT}
                 />
@@ -341,7 +341,7 @@ export default function AdminSettingsPanel() {
                 <input
                   type="number"
                   min="0"
-                  value={systemSettings.network_points_upgrade_pro ?? 110}
+                  value={systemSettings.network_points_upgrade_pro ?? 120}
                   onChange={(e) => setSystemSettings({ ...systemSettings, network_points_upgrade_pro: parseInt(e.target.value, 10) || 0 })}
                   className={INPUT}
                 />
@@ -354,7 +354,7 @@ export default function AdminSettingsPanel() {
                 <input
                   type="number"
                   min="0"
-                  value={systemSettings.welcome_bonus_base ?? 1}
+                  value={systemSettings.welcome_bonus_base ?? 2}
                   onChange={(e) => setSystemSettings({ ...systemSettings, welcome_bonus_base: parseInt(e.target.value, 10) || 0 })}
                   className={INPUT}
                 />
@@ -364,7 +364,7 @@ export default function AdminSettingsPanel() {
                 <input
                   type="number"
                   min="0"
-                  value={systemSettings.welcome_bonus_pro ?? 10}
+                  value={systemSettings.welcome_bonus_pro ?? 15}
                   onChange={(e) => setSystemSettings({ ...systemSettings, welcome_bonus_pro: parseInt(e.target.value, 10) || 0 })}
                   className={INPUT}
                 />
@@ -372,9 +372,9 @@ export default function AdminSettingsPanel() {
             </div>
             <p className="mt-2 text-xs text-gray-500">
               Esempio con i valori attuali: se la persona è accolta da un altro Kumano lo sponsor riceve{' '}
-              {(systemSettings.network_points_activation_base ?? 10) - (systemSettings.welcome_bonus_base ?? 1)} punti per un Plus e{' '}
-              {(systemSettings.network_points_activation_pro ?? 120) - (systemSettings.welcome_bonus_pro ?? 10)} per un Pro; chi accoglie riceve{' '}
-              {systemSettings.welcome_bonus_base ?? 1} e {systemSettings.welcome_bonus_pro ?? 10}.
+              {(systemSettings.network_points_activation_base ?? 12) - (systemSettings.welcome_bonus_base ?? 2)} punti per un Plus e{' '}
+              {(systemSettings.network_points_activation_pro ?? 144) - (systemSettings.welcome_bonus_pro ?? 15)} per un Pro; chi accoglie riceve{' '}
+              {systemSettings.welcome_bonus_base ?? 2} e {systemSettings.welcome_bonus_pro ?? 15}.
             </p>
           </div>
           <div>

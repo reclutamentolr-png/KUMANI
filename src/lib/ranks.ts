@@ -20,9 +20,9 @@ export interface RankDefinition {
 export type QualificationRule = { key: string; activations: number; points: number; vouchers: number }
 
 export const DEFAULT_QUALIFICATIONS: QualificationRule[] = [
-  { key: 'rising_star', activations: 6, points: 60, vouchers: 1 },
-  { key: 'shining_star', activations: 36, points: 360, vouchers: 6 },
-  { key: 'diamond_star', activations: 108, points: 1080, vouchers: 18 },
+  { key: 'rising_star', activations: 6, points: 72, vouchers: 1 },
+  { key: 'shining_star', activations: 36, points: 432, vouchers: 6 },
+  { key: 'diamond_star', activations: 108, points: 1296, vouchers: 18 },
 ]
 
 const RANK_SHAPES: Omit<RankDefinition, 'activations' | 'points' | 'vouchers'>[] = [
