@@ -80,7 +80,7 @@ export default function PushPanel() {
       notify(r.error ?? 'Invio non riuscito.')
       return
     }
-    notify(audience === 'user' ? `Inviata a ${personName} (${r.sent} dispositivi${r.failed ? `, ${r.failed} non raggiunti` : ''}).` : `Inviata a ${r.recipients} persone (${r.sent} dispositivi${r.failed ? `, ${r.failed} non raggiunti` : ''}).`, 'success')
+    notify(audience === 'user' ? `Inviata a ${personName} (${r.sent} dispositivi${r.failed ? `, ${r.failed} non raggiunti` : ''}).` : `Inviata a ${r.recipients} persone (${r.sent} dispositivi${r.failed ? `, ${r.failed} non raggiunti` : ''})${r.inbox ? ` e nella campanella di ${r.inbox} account` : ''}.`, 'success')
     setTitle('')
     setBody('')
     load()
@@ -157,7 +157,7 @@ export default function PushPanel() {
             )}
           </div>
         )}
-        <p className="text-xs text-gray-500">Il testo parte così come lo scrivi: per un avviso in più lingue, invialo una volta per ogni lingua.</p>
+        <p className="text-xs text-gray-500">Il testo parte così come lo scrivi: per un avviso in più lingue, invialo una volta per ogni lingua. La notifica resta anche nella campanella dell’app (senza lingua scelta: in quella di tutti gli account del pubblico scelto, anche di chi non ha attivato le notifiche).</p>
         <div>
           <label className="mb-1 block text-sm font-medium text-gray-700">Titolo <span className="text-gray-400">({title.length}/80)</span></label>
           <input value={title} maxLength={80} onChange={(e) => setTitle(e.target.value)} className="w-full rounded-lg border border-gray-300 p-2 text-sm" placeholder="Es. Nuovo servizio disponibile" />

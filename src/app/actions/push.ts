@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { verifyAdmin } from '@/lib/verifyAdmin'
 import { fetchAllRows } from '@/lib/fetchAllRows'
 import { DEFAULT_REMIND_TIME, REMIND_TIME_CHOICES } from '@/lib/agenda'
+import { locales } from '../../../i18n'
 import {
   PUSH_CATEGORIES,
   localizedPath,
@@ -184,6 +185,45 @@ export async function adminPushUserStatus(userId: string) {
 const isActive = (p: { subscription_status: string | null; subscription_expires_at: string | null }) =>
   p.subscription_status === 'active' && (!p.subscription_expires_at || new Date(p.subscription_expires_at).getTime() > Date.now())
 
+// Notifica dello Staff anche nella campanella dell'app, così resta da
+// rileggere e la vede anche chi non ha attivato le notifiche sul telefono.
+// Senza lingua scelta: tutti gli account del pubblico scelto; con una lingua:
+// chi ha un dispositivo in quella lingua (degli altri non la conosciamo).
+async function addCampaignToInbox(
+  campaignId: string,
+  msg: { title: string; body: string; url: string },
+  audience: PushAudience,
+  locale: string | null,
+  targetUserId: string | null,
+  deviceUsers: string[]
+): Promise<number> {
+  const db = pushDb()
+  let userIds: string[]
+  if (targetUserId) userIds = [targetUserId]
+  else if (locale) userIds = deviceUsers
+  else {
+    const { data: profiles, error } = await fetchAllRows<{ id: string; is_blocked: boolean | null; deleted_at: string | null; subscription_status: string | null; subscription_expires_at: string | null }>(
+      (from, to) => db.from('profiles').select('id, is_blocked, deleted_at, subscription_status, subscription_expires_at').order('id').range(from, to),
+      100000
+    )
+    if (error) return 0
+    userIds = profiles
+      .filter((p) => !p.deleted_at && !p.is_blocked)
+      .filter((p) => (audience === 'active' ? isActive(p) : audience === 'inactive' ? !isActive(p) : true))
+      .map((p) => p.id)
+  }
+  const texts = Object.fromEntries(locales.map((l) => [l, { title: msg.title, body: msg.body, url: localizedPath(l, msg.url) }]))
+  const kind = `push_campaign:${campaignId}`
+  const rows = [...new Set(userIds)].map((user_id) => ({ user_id, category: 'staff', kind, texts }))
+  let added = 0
+  for (let i = 0; i < rows.length; i += 500) {
+    const { error } = await db.from('user_notifications').insert(rows.slice(i, i + 500))
+    if (error) console.error('[push] campanella:', error.message)
+    else added += Math.min(500, rows.length - i)
+  }
+  return added
+}
+
 export async function adminSendPushCampaign(input: { title: string; body: string; url: string; audience: PushAudience; locale: string; userId?: string }) {
   const admin = await verifyAdmin('messages.write')
   if (!admin) return { success: false, error: 'Non autorizzato.' }
@@ -236,8 +276,11 @@ export async function adminSendPushCampaign(input: { title: string; body: string
     body,
     url: localizedPath(pushLocale(row.locale), url),
   }))
-  await db
+  const { data: campaign } = await db
     .from('push_campaigns')
     .insert({ title, body, url, audience, locale, recipients, sent, failed, created_by: admin.id, target_user_id: targetUserId })
-  return { success: true, recipients, sent, failed }
+    .select('id')
+    .single()
+  const inbox = campaign ? await addCampaignToInbox(campaign.id as string, { title, body, url }, audience, locale, targetUserId, [...new Set(rows.map((r) => r.user_id))]) : 0
+  return { success: true, recipients, sent, failed, inbox }
 }
