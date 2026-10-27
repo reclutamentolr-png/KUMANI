@@ -1,3 +1,4 @@
+import SiteHomeButton from '@/components/nav/SiteHomeButton'
 import { getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
 import Logo from '@/components/Logo'
@@ -39,9 +40,12 @@ export default async function FidelityWalletPage() {
   return (
     <div className="min-h-screen bg-[var(--ink)] px-4 py-8">
       <div className="mx-auto max-w-md">
-        <div className="mb-6 flex items-center justify-center gap-2 text-white">
-          <Wallet className="h-6 w-6 text-[var(--gold-bright)]" />
-          <h1 className="text-xl font-bold">{t('walletTitle')}</h1>
+        <div className="mb-6 flex items-center justify-between gap-3 text-white">
+          <h1 className="flex items-center gap-2 text-xl font-bold">
+            <Wallet className="h-6 w-6 text-[var(--gold-bright)]" />
+            {t('walletTitle')}
+          </h1>
+          <SiteHomeButton />
         </div>
 
         {cards.length === 0 ? (

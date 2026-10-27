@@ -3,6 +3,7 @@ import { getLocale, getTranslations } from 'next-intl/server'
 import { ArrowUpRight, CalendarClock, CheckCircle2, Gift, Sparkles } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import Logo from '@/components/Logo'
+import SiteHomeButton from '@/components/nav/SiteHomeButton'
 import GiftRedeemButton from '@/components/gifts/GiftRedeemButton'
 import ChristmasGarland from '@/components/christmas/ChristmasGarland'
 import SantaHat from '@/components/christmas/SantaHat'
@@ -48,13 +49,16 @@ export default async function GiftPage({ params }: { params: Promise<{ code: str
   return (
     <div className="min-h-screen bg-[var(--ink)] px-4 py-10 text-white">
       <div className="mx-auto max-w-lg">
-        <Link href="/" className="mb-8 flex items-center justify-center gap-2">
-          <span className="relative">
-            <Logo size={40} className="h-10 w-10" />
-            {xmas && <SantaHat />}
-          </span>
-          <span className="text-sm font-bold tracking-[0.3em] text-[var(--gold-bright)]">KUMANI</span>
-        </Link>
+        <div className="mb-8 flex items-center justify-between gap-3">
+          <Link href="/" className="flex items-center gap-2">
+            <span className="relative">
+              <Logo size={40} className="h-10 w-10" />
+              {xmas && <SantaHat />}
+            </span>
+            <span className="text-sm font-bold tracking-[0.3em] text-[var(--gold-bright)]">KUMANI</span>
+          </Link>
+          <SiteHomeButton />
+        </div>
 
         <div
           className={`relative overflow-hidden rounded-3xl border border-[var(--gold)]/30 p-6 sm:p-8 ${xmas ? 'bg-gradient-to-b from-[#5c0c18] to-white/[0.04] pt-10 sm:pt-12' : 'bg-white/[0.04]'}`}

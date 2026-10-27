@@ -5,6 +5,7 @@ import HomeToolsGridServer from '@/components/HomeToolsGridServer'
 import { getPlanPrices } from '@/lib/planPrices'
 import Link from '@/components/LocalizedLink'
 import Logo from '@/components/Logo'
+import SiteHomeButton from '@/components/nav/SiteHomeButton'
 import Vignette from '@/components/antitruffa/Vignette'
 import GuideShareButtons from '@/components/antitruffa/GuideShareButtons'
 import { getGuideContent } from '@/lib/antitruffa/content'
@@ -110,10 +111,13 @@ export default async function ManualePreviewPage({ searchParams }: Props) {
     <div className="min-h-screen bg-[var(--background)]">
       <div className="bg-[var(--ink)] px-4 pb-10 pt-8 text-white">
         <div className="mx-auto max-w-3xl">
-          <Link href="/" className="mb-8 flex items-center justify-center gap-2">
-            <Logo size={40} className="h-10 w-10" />
-            <span className="text-sm font-bold tracking-[0.3em] text-[var(--gold-bright)]">KUMANI</span>
-          </Link>
+          <div className="mb-8 flex items-center justify-between gap-3">
+            <Link href="/" className="flex items-center gap-2">
+              <Logo size={40} className="h-10 w-10" />
+              <span className="text-sm font-bold tracking-[0.3em] text-[var(--gold-bright)]">KUMANI</span>
+            </Link>
+            <SiteHomeButton />
+          </div>
 
           {inviter ? (
             <p className="mb-4 flex items-center justify-center gap-2 text-center text-sm font-semibold text-[var(--gold-bright)]">

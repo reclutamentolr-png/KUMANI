@@ -1,3 +1,4 @@
+import SiteHomeButton from '@/components/nav/SiteHomeButton'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
@@ -49,7 +50,8 @@ export default async function ReferralPage({ params }: { params: Promise<{ code:
   const inviterName = inviter.first_name.trim()
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-purple-50 p-4">
+    <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-purple-50 p-4">
+      <SiteHomeButton tone="light" className="absolute right-4 top-[max(1rem,env(safe-area-inset-top))]" />
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center border border-indigo-100">
         <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
           <span className="text-4xl">{FLAGS[inviter.country_code] ?? '🌍'}</span>

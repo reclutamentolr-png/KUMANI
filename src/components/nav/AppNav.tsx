@@ -18,6 +18,17 @@ const MEMBER_AREAS = [
   '/servizi',
   '/controlla',
   '/test-truffa',
+  // Pagine pubbliche di KUMANI: chi ha fatto l'accesso non perde il suo menu
+  '/carte',
+  '/strumenti',
+  '/manuale-antitruffa',
+  '/v',
+  '/regalo',
+  '/biglietto',
+  // Pagine da iscritti con la loro barra in alto, senza il menu in basso
+  '/avvisi',
+  '/messaggio',
+  '/scheda-attivita',
   '/spese-condivise',
   '/community',
   '/wallet',

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
 import Logo from '@/components/Logo'
+import SiteHomeButton from '@/components/nav/SiteHomeButton'
 import HoplaSender from '@/components/hopla/HoplaSender'
 import { HOPLA_ID_RE } from '@/lib/hopla'
 
@@ -30,6 +31,7 @@ export default async function HoplaPhonePage({ params }: { params: Promise<{ id:
             <p className="text-xl font-extrabold tracking-wide text-[var(--gold-bright)]">Hoplà</p>
             <p className="text-sm text-white/75">{t('phoneTitle')}</p>
           </div>
+          <SiteHomeButton className="ml-auto" />
         </div>
       </header>
       <main className="mx-auto max-w-md px-4 py-6">

@@ -12,6 +12,7 @@ import { CheckCircle2, ChevronDown, Sparkles } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import ToolReviews from '@/components/reviews/ToolReviews'
 import Logo from '@/components/Logo'
+import SiteHomeButton from '@/components/nav/SiteHomeButton'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
@@ -123,10 +124,13 @@ export default async function ToolSharePage({ params }: Props) {
         }
       />
       <div className="mx-auto max-w-lg">
-        <Link href="/" className="mb-8 flex items-center justify-center gap-2">
-          <Logo size={44} className="h-11 w-11" />
-          <span className="text-lg font-bold tracking-[0.3em] text-[var(--gold-bright)]">KUMANI</span>
-        </Link>
+        <div className="mb-8 flex items-center justify-between gap-3">
+          <Link href="/" className="flex items-center gap-2">
+            <Logo size={44} className="h-11 w-11" />
+            <span className="text-lg font-bold tracking-[0.3em] text-[var(--gold-bright)]">KUMANI</span>
+          </Link>
+          <SiteHomeButton />
+        </div>
 
         <div className="rounded-3xl border border-[var(--gold)]/25 bg-white/[0.04] p-6 text-center sm:p-8">
           <p className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-[var(--gold)]/30 bg-[var(--gold)]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.15em] text-[var(--gold-bright)]">

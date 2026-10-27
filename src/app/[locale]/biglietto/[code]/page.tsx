@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import Link from '@/components/LocalizedLink'
 import Logo from '@/components/Logo'
+import SiteHomeButton from '@/components/nav/SiteHomeButton'
 import VoucherCardView from '@/components/voucherCard/VoucherCardView'
 import { createClient } from '@/lib/supabase/server'
 import { CARD_CODE_RE, readCardOptions } from '@/lib/voucherCard'
@@ -50,10 +51,11 @@ export default async function VoucherCardPage({
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_50%_20%,#1f1b13_0%,#0b0b0b_65%)] px-4 pb-16 pt-6">
-      <header className="mx-auto mb-6 flex max-w-md justify-center">
+      <header className="mx-auto mb-6 flex max-w-md items-center justify-between gap-3">
         <Link href="/" aria-label="KUMANI">
           <Logo size={56} />
         </Link>
+        <SiteHomeButton />
       </header>
       <VoucherCardView
         code={code}

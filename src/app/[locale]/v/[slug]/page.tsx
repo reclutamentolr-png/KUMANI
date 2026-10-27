@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { ArrowRight, UserPlus } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import Logo from '@/components/Logo'
+import SiteHomeButton from '@/components/nav/SiteHomeButton'
 import HomeVideo from '@/components/home/HomeVideo'
 import ShareLinkOpened from '@/components/share/ShareLinkOpened'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
@@ -75,7 +76,8 @@ export default async function ShareVideoPage({ params }: Props) {
             <Logo size={32} className="h-8 w-8" />
             <span className="hidden text-xs font-bold tracking-[0.3em] text-[var(--gold-bright)] sm:inline">KUMANI</span>
           </Link>
-          {link.name && <p className="truncate text-right text-xs font-semibold uppercase tracking-[0.14em] text-[var(--gold-bright)]">{t('recommendedBy', { name: link.name })}</p>}
+          {link.name && <p className="min-w-0 flex-1 truncate text-right text-xs font-semibold uppercase tracking-[0.14em] text-[var(--gold-bright)]">{t('recommendedBy', { name: link.name })}</p>}
+          <SiteHomeButton />
         </div>
         <h1 className="mt-3 flex items-center justify-center gap-2.5 text-center text-2xl font-extrabold sm:text-4xl">
           {Icon && (
