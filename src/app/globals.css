@@ -331,3 +331,29 @@ body:has([data-app-header]) [data-desktop-appbar] {
 @media (prefers-reduced-motion: reduce) {
   .gold-corner::before { transition: none; }
 }
+
+/* iPhone (Safari): i campi data e ora hanno una larghezza minima tutta loro e
+   uscivano dalla colonna (es. Data e Ora affiancate in MemoLife). Ora si
+   adattano allo spazio che hanno; il valore resta allineato a sinistra come
+   negli altri campi e il campo vuoto non si schiaccia. Le tendine (select)
+   non sono toccate: i nomi delle voci restano interi. */
+@layer base {
+  input[type='date'],
+  input[type='time'],
+  input[type='datetime-local'],
+  input[type='month'],
+  input[type='week'] {
+    min-width: 0;
+    max-width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  input[type='date']::-webkit-date-and-time-value,
+  input[type='time']::-webkit-date-and-time-value,
+  input[type='datetime-local']::-webkit-date-and-time-value,
+  input[type='month']::-webkit-date-and-time-value,
+  input[type='week']::-webkit-date-and-time-value {
+    text-align: left;
+    min-height: 1.5em;
+  }
+}

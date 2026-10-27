@@ -124,7 +124,8 @@ export default function TravelExpenseForm({
           ))}
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-3">
+      {/* Sul telefono uno sotto l'altro: i nomi nella tendina restano interi */}
+      <div className="grid gap-3 sm:grid-cols-2">
         <div>
           <label className={label}>{t('expensePaidBy')}</label>
           <select className={input} value={form.paidBy} onChange={(e) => set('paidBy', e.target.value)}>
