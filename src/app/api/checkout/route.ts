@@ -25,7 +25,7 @@ export async function POST(request: Request) {
       return NextResponse.redirect(new URL('/register', base), 303)
     }
 
-    // Piano scelto: Plus (49 €/anno, default) o Pro (149 €/anno, ?plan=pro).
+    // Piano scelto: Plus (59 €/anno, default) o Pro (169 €/anno, ?plan=pro).
     const plan = new URL(request.url).searchParams.get('plan') === 'pro' ? 'pro' : 'base'
     const priceId = plan === 'pro' ? process.env.STRIPE_PRICE_ID_PRO : process.env.STRIPE_PRICE_ID
     // Piani non ancora aperti (Admin → Apertura piani): niente pagamento

@@ -130,7 +130,7 @@ export default function DonationsPanel() {
           </label>
         </div>
         <p className="text-xs text-gray-500">
-          Esempio: con il 5% un Plus da 49 € dona 2,45 € e un Pro da 149 € dona 7,45 € (si calcola su quanto incassato davvero,
+          Esempio: con il 5% un Plus da 59 € dona 2,95 € e un Pro da 169 € dona 8,45 € (si calcola su quanto incassato davvero,
           sconti compresi). La nuova percentuale vale per i pagamenti da quel momento. Riferimento per i punti: un&apos;attivazione
           Plus ne dà 10 a chi ha invitato, un Pro 120. 0 al valore del punto = donazione di punti spenta.
         </p>

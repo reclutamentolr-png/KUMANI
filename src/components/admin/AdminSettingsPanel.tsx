@@ -56,8 +56,8 @@ export default function AdminSettingsPanel() {
       { key: 'diamond_star', activations: 108, points: 1080, vouchers: 18 },
     ],
     black_plus_every: 6,
-    voucher_value_base_eur: 49,
-    voucher_value_pro_eur: 149,
+    voucher_value_base_eur: 59,
+    voucher_value_pro_eur: 169,
     pro_trial_days: 15,
     affinity_intros_per_week: 3,
     listing_feature_cost_7d: 20,
@@ -428,7 +428,7 @@ export default function AdminSettingsPanel() {
                 <input
                   type="number"
                   min="0"
-                  value={systemSettings.voucher_value_base_eur ?? 49}
+                  value={systemSettings.voucher_value_base_eur ?? 59}
                   onChange={(e) => setSystemSettings({ ...systemSettings, voucher_value_base_eur: parseInt(e.target.value, 10) || 0 })}
                   className={INPUT}
                 />
@@ -438,7 +438,7 @@ export default function AdminSettingsPanel() {
                 <input
                   type="number"
                   min="0"
-                  value={systemSettings.voucher_value_pro_eur ?? 149}
+                  value={systemSettings.voucher_value_pro_eur ?? 169}
                   onChange={(e) => setSystemSettings({ ...systemSettings, voucher_value_pro_eur: parseInt(e.target.value, 10) || 0 })}
                   className={INPUT}
                 />
@@ -540,7 +540,7 @@ export default function AdminSettingsPanel() {
                 </label>
               ))}
             </div>
-            <p className="text-xs text-gray-500 mt-1">In alternativa alla carta, chi crea la sorpresa può pagarla con i KU Karma oppure con i KU Points confermati (mai quelli ancora in conferma). 0 = non si può pagare con quei punti. Riferimento: 294 KU Points = voucher da 49 €; 300 KU Karma = 5 € di sconto sul rinnovo.</p>
+            <p className="text-xs text-gray-500 mt-1">In alternativa alla carta, chi crea la sorpresa può pagarla con i KU Karma oppure con i KU Points confermati (mai quelli ancora in conferma). 0 = non si può pagare con quei punti. Riferimento: 294 KU Points = voucher da 59 € (un anno di Plus); 300 KU Karma = 5 € di sconto sul rinnovo.</p>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">KUMANI Sorpresa: incluse nei piani</label>

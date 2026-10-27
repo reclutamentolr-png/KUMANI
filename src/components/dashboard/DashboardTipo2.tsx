@@ -56,7 +56,7 @@ export default async function DashboardTipo2({
   // Vista Lite: la sezione Community dopo «Usati di recente»
   community?: CommunityItem[]
   favoriteToolNames: string[]
-  // Prezzo del piano Plus già formattato (es. "49 €")
+  // Prezzo del piano Plus già formattato (es. "59 €")
   basePrice: string
   // Prova Pro in corso: il riquadro dell'abbonamento propone Pro come
   // scelta principale e il Plus come alternativa.

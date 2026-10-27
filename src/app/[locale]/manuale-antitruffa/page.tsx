@@ -66,7 +66,7 @@ export default async function ManualePreviewPage({ searchParams }: Props) {
   const scamCount = g.chapters.reduce((n, c) => n + c.scams.length, 0)
 
   // Prezzi veri dei piani (da Stripe, con copia di riserva), nel formato
-  // della lingua: 49 € in italiano, €49 in inglese...
+  // della lingua: 59 € in italiano, €59 in inglese...
   const prices = await getPlanPrices()
   const euro = (value: number) =>
     new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: Number.isInteger(value) ? 0 : 2 }).format(value)

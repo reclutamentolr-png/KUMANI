@@ -1,7 +1,7 @@
 {
   "landingHome": {
     "statLanguagesLabel": "Sprachen: KUMANI spricht deine",
-    "statWeeklyValue": "< 1 €",
+    "statWeeklyValue": "~1 €",
     "statWeeklyLabel": "pro Woche mit Plus: weniger als ein Kaffee",
     "statServicesLabel": "aktive Services",
     "proInfoBadge": "Im Pro-Tarif enthalten",
@@ -105,7 +105,7 @@
     "featuresDescription": "Professionelle Tools, eine transparente Rangliste und außergewöhnliche Preise",
     "featureOneTitle": "Wettbewerbsfähiges Rankingsystem",
     "featureOneDescription": "Eine öffentliche Rangliste, die zeigt, wie aktiv deine Community von Profis ist: transparent und überprüfbar, ohne jede Vergütung in Geld für die Position — nur Anerkennung.",
-    "featureTwoTitle": "Komplettes Ökosystem (49 €/Jahr)",
+    "featureTwoTitle": "Komplettes Ökosystem (59 €/Jahr)",
     "featureTwoDescription": "QR-Codes, Link in Bio, WhatsApp-Vorlagen, MemoLife AI und vieles mehr.",
     "featureThreeTitle": "Preise und Boni für die Besten",
     "featureThreeDescription": "Dein echter Einsatz hilft dir aufzusteigen und um Preise zu kämpfen.",
@@ -114,10 +114,10 @@
     "featureFiveTitle": "Transparentes und sicheres Ranking",
     "featureFiveDescription": "Geschützte Daten und eine öffentliche, überprüfbare Rangliste.",
     "featureSixTitle": "In 30 Sekunden starten",
-    "featureSixDescription": "Registriere dich, tritt dem KUMANI-Ökosystem bei und nutze sofort die Tools. Keine versteckten Kosten: ab 49 € im Jahr, alles inklusive.",
+    "featureSixDescription": "Registriere dich, tritt dem KUMANI-Ökosystem bei und nutze sofort die Tools. Keine versteckten Kosten: ab 59 € im Jahr, alles inklusive.",
     "benefitsTitle": "Warum KUMANI wählen?",
     "benefitsDescription": "Wir verkaufen keine Träume: Wir geben dir die richtigen Tools in die Hand. Deine tägliche Aktivität wird zu konkreten, geregelten Vorteilen.",
-    "benefit1": "Das ganze KUMANI-Ökosystem ab 49 €/Jahr",
+    "benefit1": "Das ganze KUMANI-Ökosystem ab 59 €/Jahr",
     "benefit2": "Enthaltene Tools: MemoLife-Kalender, Spendly, QR-Codes, Link in Bio, WhatsApp, Gruppenspiele und vieles mehr",
     "benefit3": "KU Karma nur für die Nutzung der Dienste unseres Ökosystems",
     "benefit4": "Boni und Coupons, die du mit deiner täglichen Aktivität freischaltest",
@@ -129,7 +129,7 @@
     "ctaTitle": "Der erste Schritt gehört dir. Den Rest schaffen wir zusammen.",
     "ctaDescription": "Tritt dem KUMANI-Ökosystem bei, nutze die Tools jeden Tag und lass jede Aktion zu Boni, Coupons und Zugang zu exklusiven Aktionen werden.",
     "ctaButton": "KUMANI beitreten, sofort loslegen",
-    "ctaNote": "✓ Plus 49 €/Jahr ✓ Pro 149 €/Jahr mit 15 Gratistagen ✓ KU Karma nur durch Nutzung der Dienste",
+    "ctaNote": "✓ Plus 59 €/Jahr ✓ Pro 169 €/Jahr mit 15 Gratistagen ✓ KU Karma nur durch Nutzung der Dienste",
     "terms": "Bedingungen und Regeln",
     "contact": "Kontakt",
     "copyright": "© 2026 KUMANI. Alle Rechte vorbehalten.",
@@ -232,7 +232,7 @@
     "builtBy": "Entwickelt von {name}",
     "heroDoorsTitle": "Eine helfende Hand,",
     "heroDoorsAccent": "wenn du sie brauchst.",
-    "heroDoorsText": "Schützt dich vor Betrug und macht dein Leben einfacher. Eine App, unter 1 € pro Woche, mit echten Menschen, die sich helfen.",
+    "heroDoorsText": "Schützt dich vor Betrug und macht dein Leben einfacher. Eine App, unter 5 € im Monat, mit echten Menschen, die sich helfen.",
     "heroDoorsAsk": "Womit möchtest du anfangen?",
     "door1Title": "Ich habe eine seltsame Nachricht bekommen",
     "door1Text": "In 10 Sekunden wissen, ob es Betrug ist",
@@ -274,7 +274,7 @@
     "why5Title": "Ohne Risiko testen",
     "why5Text": "Kostenlos starten, ohne Kreditkarte. Pro kannst du 15 Tage testen.",
     "benefitCard1Title": "Ein ehrlicher Preis",
-    "benefitCard1Text": "Das ganze Ökosystem ab 49 € im Jahr: unter 1 € pro Woche.",
+    "benefitCard1Text": "Das ganze Ökosystem ab 59 € im Jahr: unter 5 € im Monat.",
     "benefitCard2Title": "Viele Werkzeuge, eine App",
     "benefitCard2Text": "Kalender, Spendly, QR-Code, Link in Bio, WhatsApp, Gruppenspiele und vieles mehr.",
     "benefitCard7Title": "Wann und wo du willst",
@@ -284,12 +284,12 @@
     "heroOrbitEyebrow": "Die Community, die sich hilft",
     "heroOrbitTitle": "Eine App",
     "heroOrbitAccent": "statt vieler.",
-    "heroOrbitText": "Schützt dich vor Betrug und macht dein Leben einfacher: Geld, Fristen, Zuhause, Arbeit und Community an einem Ort.\nUnter 1 € pro Woche.",
+    "heroOrbitText": "Schützt dich vor Betrug und macht dein Leben einfacher: Geld, Fristen, Zuhause, Arbeit und Community an einem Ort.\nUnter 5 € im Monat.",
     "heroOrbitCheck": "Betrug? Jetzt prüfen",
     "planProCtaSoon": "Den Pro-Tarif entdecken",
     "planProTrialNoteSoon": "Der Pro-Tarif und der 15-tägige Gratistest starten am {date}.",
     "why5TextSoon": "Kostenlos starten, ohne Kreditkarte, und sofort nutzen.",
-    "ctaNoteSoon": "✓ Kostenlose Anmeldung ✓ Plus 49 €/Jahr und Pro 149 €/Jahr ab {date} ✓ KU Karma nur durch Nutzung der Dienste"
+    "ctaNoteSoon": "✓ Kostenlose Anmeldung ✓ Plus 59 €/Jahr und Pro 169 €/Jahr ab {date} ✓ KU Karma nur durch Nutzung der Dienste"
   },
   "authRegister": {
     "registerTitle": "Konto erstellen",
@@ -352,7 +352,7 @@
     "template1Message": "Hallo! 👋 Ich wollte dir KUMANI zeigen, eine App, die ich nutze und die dir bestimmt auch hilft.\n\nDrin sind viele Tools für den Alltag: Du prüfst, ob eine IBAN oder eine Nummer verdächtig ist, verfolgst die aktuellen Betrugsmaschen, entspannst dich mit Atemübungen und Mandalas zum Ausmalen, spielst mit Freunden und findest eine Community, in der man sich hilft.\n\nDu meldest dich in einer Minute kostenlos an, ohne Karte, und entscheidest selbst, was du nutzt.\n\nHier ist der Link: {url}\nSag mir dann, was du davon hältst! 😊",
     "template2Title": "Professioneller Ansatz",
     "template2Tone": "Formell",
-    "template2Message": "Guten Tag,\n\nich möchte Ihnen KUMANI vorstellen, eine italienische Plattform, die praktische Tools für Arbeit und Alltag in einem einzigen Konto bündelt.\n\nDazu gehören Prüfungen gegen Online-Betrug (IBANs, Telefonnummern und mit dem Plus-Tarif auch Websites und E-Mails), die Organisation von Fristen und Dokumenten sowie für Unternehmen Dienste wie eine Landingpage, Angebote, Quittungen und Kundenverwaltung.\n\nDie Anmeldung ist kostenlos; die Tarife Plus (49 € pro Jahr) und Pro (149 € pro Jahr) bieten weitere Dienste.\n\nAlle Informationen finden Sie hier: {url}\nFür Fragen stehe ich Ihnen gern zur Verfügung.\nMit freundlichen Grüßen",
+    "template2Message": "Guten Tag,\n\nich möchte Ihnen KUMANI vorstellen, eine italienische Plattform, die praktische Tools für Arbeit und Alltag in einem einzigen Konto bündelt.\n\nDazu gehören Prüfungen gegen Online-Betrug (IBANs, Telefonnummern und mit dem Plus-Tarif auch Websites und E-Mails), die Organisation von Fristen und Dokumenten sowie für Unternehmen Dienste wie eine Landingpage, Angebote, Quittungen und Kundenverwaltung.\n\nDie Anmeldung ist kostenlos; die Tarife Plus (59 € pro Jahr) und Pro (169 € pro Jahr) bieten weitere Dienste.\n\nAlle Informationen finden Sie hier: {url}\nFür Fragen stehe ich Ihnen gern zur Verfügung.\nMit freundlichen Grüßen",
     "template3Title": "Persönliche Erfahrung",
     "template3Tone": "Persönlich",
     "template3Message": "Hey! Ich erzähl dir was 😊\n\nIch nutze KUMANI seit einiger Zeit und es macht mir das Leben leichter: Vor einer Überweisung prüfe ich die IBAN, bei einem seltsamen Anruf schaue ich, ob andere ihn gemeldet haben, und ich vergesse keine Fristen mehr.\n\n[Schreib hier in einer Zeile, wofür du sie nutzt]\n\nEs ist keine dieser Apps voller Werbung: Es sind praktische Tools, mit einer Community, in der man sich hilft.\n\nWenn du sie ausprobieren willst, die Anmeldung ist kostenlos: {url}\nWenn du Hilfe beim Start brauchst, ruf mich an!",
@@ -384,11 +384,11 @@
     "template7Title": "Für alle mit tausend Fristen",
     "template7Tone": "Organisation",
     "template7Desc": "Für alle, die Kfz-Steuer, Rechnungen und Termine vergessen.",
-    "template7Message": "Hallo! Du hast immer tausend Dinge im Kopf, deshalb empfehle ich dir KUMANI 📅\n\nMit dem Plus-Tarif hast du alles an einem Ort:\n🚗 Kfz-Steuer, Versicherung und TÜV\n🏠 Rechnungen, Wartungen und Verträge fürs Zuhause\n📄 Personalausweis, Führerschein und ablaufende Dokumente, mit Erinnerungen\n💶 die Ausgaben jedes Monats, damit du entspannter ans Monatsende kommst\n🗓️ ein Kalender mit Terminen und Notizen\n\nPlus kostet 49 € pro Jahr, weniger als einen Euro pro Woche, und bis dahin meldest du dich kostenlos an und probierst die kostenlosen Dienste aus.\n\nHier ist der Link: {url}",
+    "template7Message": "Hallo! Du hast immer tausend Dinge im Kopf, deshalb empfehle ich dir KUMANI 📅\n\nMit dem Plus-Tarif hast du alles an einem Ort:\n🚗 Kfz-Steuer, Versicherung und TÜV\n🏠 Rechnungen, Wartungen und Verträge fürs Zuhause\n📄 Personalausweis, Führerschein und ablaufende Dokumente, mit Erinnerungen\n💶 die Ausgaben jedes Monats, damit du entspannter ans Monatsende kommst\n🗓️ ein Kalender mit Terminen und Notizen\n\nPlus kostet 59 € pro Jahr, weniger als 5 Euro im Monat, und bis dahin meldest du dich kostenlos an und probierst die kostenlosen Dienste aus.\n\nHier ist der Link: {url}",
     "template8Title": "Für Selbstständige",
     "template8Tone": "Unternehmen",
     "template8Desc": "Für Handwerker, Läden, Restaurants und Freiberufler.",
-    "template8Message": "Hallo! Da du ein Unternehmen hast, möchte ich dir KUMANI zeigen 💼\n\nMit dem Pro-Tarif hast du die Tools, um gefunden zu werden und besser zu arbeiten:\n🌐 eine Landingpage, damit man dich online findet\n🧾 Angebote und Quittungen, fertig zum Versenden an Kunden\n👥 deine Kundenliste mit den anstehenden Aufträgen\n🍽️ die digitale Speisekarte mit QR-Code, für Lokale\n🛍️ einen Onlineshop und eine Treuekarte\n\nPro kostet 149 € pro Jahr und lässt sich 15 Tage kostenlos testen.\n\nSchau mal hier: {url}\nWenn du willst, zeige ich dir, wie ich es nutze.",
+    "template8Message": "Hallo! Da du ein Unternehmen hast, möchte ich dir KUMANI zeigen 💼\n\nMit dem Pro-Tarif hast du die Tools, um gefunden zu werden und besser zu arbeiten:\n🌐 eine Landingpage, damit man dich online findet\n🧾 Angebote und Quittungen, fertig zum Versenden an Kunden\n👥 deine Kundenliste mit den anstehenden Aufträgen\n🍽️ die digitale Speisekarte mit QR-Code, für Lokale\n🛍️ einen Onlineshop und eine Treuekarte\n\nPro kostet 169 € pro Jahr und lässt sich 15 Tage kostenlos testen.\n\nSchau mal hier: {url}\nWenn du willst, zeige ich dir, wie ich es nutze.",
     "template9Title": "Um Leute kennenzulernen",
     "template9Tone": "Community",
     "template9Desc": "Für alle, die Gesellschaft, Hilfe oder Gelegenheiten in der Nähe suchen.",
@@ -3322,7 +3322,7 @@
     "story2Text1": "Hinter KUMANI steht ein Leben, das dem Helfen gewidmet war: Seit den 90er-Jahren, als die Technik begann, alles zu verändern, ging es darum, Menschen und Unternehmen bei IT-Problemen aller Art zur Seite zu stehen.",
     "story2Text2": "Und jedes Mal kam man zur selben Erkenntnis: Menschen brauchen keine Versprechen, sie brauchen einfache Werkzeuge und jemanden, der sie leicht bedienbar macht. KUMANI ist genau diese Hand, vervielfacht: alle Werkzeuge, die wir gesammelt haben, an einem Ort, im Dienst aller, die arbeiten.",
     "story3Title": "Das Versprechen",
-    "story3Text": "So wurde KUMANI geboren: kein Unternehmen, das Träume verkauft, sondern eine Community, die Hände leiht. Ein einziger Ort, alle Werkzeuge. Ein ehrlicher Preis: 49 € im Jahr für alle mit dem Plus-Tarif, 149 € im Jahr für Profis mit dem Pro-Tarif. Öffentliche Regeln, echte Vorteile, keine Trugbilder. Denn bevor wir Profis sind, sind wir Menschen. Und Menschen tun außergewöhnliche Dinge ganz allein, wenn sie die richtigen Hände haben.",
+    "story3Text": "So wurde KUMANI geboren: kein Unternehmen, das Träume verkauft, sondern eine Community, die Hände leiht. Ein einziger Ort, alle Werkzeuge. Ein ehrlicher Preis: 59 € im Jahr für alle mit dem Plus-Tarif, 169 € im Jahr für Profis mit dem Pro-Tarif. Öffentliche Regeln, echte Vorteile, keine Trugbilder. Denn bevor wir Profis sind, sind wir Menschen. Und Menschen tun außergewöhnliche Dinge ganz allein, wenn sie die richtigen Hände haben.",
     "manifestoTitle": "Das Kumani-Manifest",
     "manifesto1Strong": "Wir verkaufen keine Träume:",
     "manifesto1Rest": "wir leihen Hände.",
@@ -3331,13 +3331,13 @@
     "manifesto3Strong": "Wir bauen keine Pyramiden:",
     "manifesto3Rest": "wir bauen Werkbänke.",
     "manifesto4Strong": "Ein ehrlicher Preis, für immer:",
-    "manifesto4Rest": "49 € im Jahr der Plus-Tarif, 149 € im Jahr der Pro-Tarif für Profis.",
+    "manifesto4Rest": "59 € im Jahr der Plus-Tarif, 169 € im Jahr der Pro-Tarif für Profis.",
     "manifesto5Strong": "Erst Menschen, dann Profis:",
     "manifesto5Rest": "deshalb bringen wir dir auch das Atmen bei.",
     "manifesto6Strong": "Transparenz als Unterschrift:",
     "manifesto6Rest": "öffentliche Regeln, echte Vorteile, keine Tricks.",
     "closingTitle": "Kumani. Hände, die dir eine Hand reichen.",
-    "closingSubtitle": "Öffentliche Regeln, echte Vorteile, ein ehrlicher Preis für immer: 49 € im Jahr mit Plus, 149 € im Jahr mit Pro.",
+    "closingSubtitle": "Öffentliche Regeln, echte Vorteile, ein ehrlicher Preis für immer: 59 € im Jahr mit Plus, 169 € im Jahr mit Pro.",
     "closingCta": "Bei Kumani mitmachen",
     "footerTagline": "Hände, die dir eine Hand reichen."
   },
@@ -3602,7 +3602,7 @@
     "ctaDiscover": "Alle KUMANI-Tools entdecken",
     "includedPaid": "Im KUMANI-Abo enthalten, zusammen mit allen anderen Tools.",
     "includedFree": "Kostenlos für alle, die bei KUMANI registriert sind.",
-    "includedPro": "Im KUMANI Pro-Tarif enthalten (149 €/Jahr, mit 15 Tagen Testphase).",
+    "includedPro": "Im KUMANI Pro-Tarif enthalten (169 €/Jahr, mit 15 Tagen Testphase).",
     "unavailable": "Dieser Dienst ist vorübergehend nicht verfügbar und bald wieder da. In der Zwischenzeit kannst du alle anderen KUMANI-Dienste entdecken."
   },
   "kuRewards": {
@@ -5379,7 +5379,7 @@
     "faq1Q": "Ich kann mich nicht in mein Konto einloggen: Was kann ich tun?",
     "faq1A": "Prüf, ob du dieselbe E-Mail verwendest, mit der du dich registriert hast. Wenn du dein Passwort vergessen hast, nutze „Passwort vergessen?“ auf der Anmeldeseite: Wir schicken dir einen Link, um ein neues zu erstellen (schau auch im Spam-Ordner nach). Wenn du immer noch nicht reinkommst, schreib uns über das Formular oben und wähle „Support und Hilfe“.",
     "faq2Q": "Was kosten die Abos Plus und Pro?",
-    "faq2A": "Das Plus-Abo kostet 49 € pro Jahr, Pro 149 € pro Jahr. Pro schaltet alle Tools und erweiterten Funktionen frei, und du kannst es 15 Tage lang kostenlos testen, bevor du dich entscheidest.",
+    "faq2A": "Das Plus-Abo kostet 59 € pro Jahr, Pro 169 € pro Jahr. Pro schaltet alle Tools und erweiterten Funktionen frei, und du kannst es 15 Tage lang kostenlos testen, bevor du dich entscheidest.",
     "faq3Q": "Wie funktionieren Verlängerung und Kündigung?",
     "faq3A": "Das Abo läuft ein Jahr. Vor Ablauf erinnern wir dich an die Verlängerung, damit du in Ruhe entscheiden kannst. Du kannst jederzeit im Abo-Bereich deines Profils kündigen: Du bleibst bis zum Ende des bereits bezahlten Zeitraums aktiv.",
     "faq4Q": "Was sind KU Karma und KU Points?",
@@ -9099,7 +9099,7 @@
         },
         "2": {
           "1": "Plus",
-          "2": "49 €",
+          "2": "59 €",
           "3": "im Jahr",
           "4": "Für Privatpersonen und Familien",
           "5": "Alles aus Kostenlos + {base, plural, one {# Dienst} other {# Dienste}}",
@@ -9107,7 +9107,7 @@
         },
         "3": {
           "1": "Pro",
-          "2": "149 €",
+          "2": "169 €",
           "3": "im Jahr",
           "4": "Für alle, die mit Kunden arbeiten",
           "5": "Alles aus Plus + {pro, plural, one {# Pro-Dienst} other {# Pro-Dienste}}",
@@ -9116,7 +9116,7 @@
       },
       "passBold": "Nur ein Dienst nötig? ",
       "passText": "Aktiviere ihn mit einem Jahrespass ab {price}: einmalige Zahlung, kein Abo.",
-      "notes": "Man meldet sich kostenlos an und hat sofort {free, plural, one {# Dienst} other {# Dienste}}. Der Plus-Tarif, 49 Euro im Jahr, ist für Privatpersonen und Familien. Der Pro-Tarif, 149 Euro im Jahr, ist für alle, die mit Kunden arbeiten, und lässt sich fünfzehn Tage kostenlos testen. Wer nur einen Dienst braucht, kann einen Jahrespass ab {price} aktivieren."
+      "notes": "Man meldet sich kostenlos an und hat sofort {free, plural, one {# Dienst} other {# Dienste}}. Der Plus-Tarif, 59 Euro im Jahr, ist für Privatpersonen und Familien. Der Pro-Tarif, 169 Euro im Jahr, ist für alle, die mit Kunden arbeiten, und lässt sich fünfzehn Tage kostenlos testen. Wer nur einen Dienst braucht, kann einen Jahrespass ab {price} aktivieren."
     },
     "s9": {
       "title": "Die Werkzeuge für dein Geschäft",
@@ -9534,7 +9534,7 @@
         ]
       ],
       "total": "Allein diese {count} Apps: bis zu {total} im Jahr.",
-      "answer": "Mit KUMANI Pro, alles in einem: 149 € im Jahr.",
+      "answer": "Mit KUMANI Pro, alles in einem: 169 € im Jahr.",
       "notes": "Jetzt, wo ihr gesehen habt, was in KUMANI steckt, schauen wir uns die Konkurrenz an. Für jedes Bedürfnis gibt es eine andere App, und fast alle kosten Geld. Das sind echte Listenpreise einiger der meistgeladenen Apps: Allein diese ergeben Hunderte Euro im Jahr, mit vielen Passwörtern und Abos, an die man denken muss.",
       "tools": [
         "scanner",
@@ -9560,17 +9560,17 @@
           "IBAN-Prüfung, Anti-Betrugs-Netz und Ratgeber: kostenlos für alle, für immer."
         ],
         [
-          "49 €",
+          "59 €",
           "im Jahr mit Plus",
           "Kalender, Ausgaben, Haus, Auto, Reisen, Dokumente: für Privatpersonen und Familien."
         ],
         [
-          "149 €",
+          "169 €",
           "im Jahr mit Pro",
           "Alles aus Plus und die Werkzeuge für alle, die mit Kunden arbeiten. 15 Tage kostenlos."
         ]
       ],
-      "notes": "Mit KUMANI steckt all das in einem Konto: {tools} Werkzeuge, die miteinander sprechen. Der Schutz vor Betrug ist für alle kostenlos. Mit 49 Euro im Jahr, weniger als ein Euro pro Woche, organisiert man den ganzen Haushalt. Mit 149 Euro gibt es auch alles, was man zum Arbeiten braucht."
+      "notes": "Mit KUMANI steckt all das in einem Konto: {tools} Werkzeuge, die miteinander sprechen. Der Schutz vor Betrug ist für alle kostenlos. Mit 59 Euro im Jahr, weniger als 5 Euro im Monat, organisiert man den ganzen Haushalt. Mit 169 Euro gibt es auch alles, was man zum Arbeiten braucht."
     },
     "kumi": {
       "title": "Schreib, was du brauchst. KUMI bringt dich hin.",
@@ -15489,7 +15489,7 @@
   },
   "founders": {
     "bannerTitle": "Beta-Start: Sei unter den ersten {limit} Nutzern! 🚀",
-    "bannerText": "Zum Start 100 % Rabatt auf den Plus-Tarif für die ersten {limit} Anmeldungen: 0 € statt 49 € für ein Jahr. Keine Verlosung: Es zählt die Reihenfolge der Anmeldung.",
+    "bannerText": "Zum Start 100 % Rabatt auf den Plus-Tarif für die ersten {limit} Anmeldungen: 0 € statt 59 € für ein Jahr. Keine Verlosung: Es zählt die Reihenfolge der Anmeldung.",
     "bannerLeft": "Noch {left} Plätze",
     "bannerCta": "Anmelden",
     "dashTitle": "🚀 Du bist unter den ersten 50 Nutzern (Nr. {n})",

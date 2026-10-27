@@ -1149,7 +1149,7 @@ L'accesso viene registrato.`))) return
           </h2>
           <p className="text-gray-600 mt-1">
             Abilita o disabilita gli strumenti e scegli per ognuno il piano richiesto: <strong>Gratis</strong> (tutti gli
-            iscritti), <strong>Plus</strong> (abbonamento 49 €/anno) o <strong>Pro</strong> (149 €/anno, include il Plus).
+            iscritti), <strong>Plus</strong> (abbonamento 59 €/anno) o <strong>Pro</strong> (169 €/anno, include il Plus).
             La scelta vale subito ovunque, anche per gli strumenti che verranno aggiunti. Con <strong>Solo Staff</strong> lo
             strumento resta nascosto agli iscritti, mentre tu e lo Staff lo usate per provarlo prima di accenderlo.
           </p>

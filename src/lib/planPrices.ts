@@ -34,8 +34,8 @@ const fetchPlanPrices = unstable_cache(
     const [base, pro] = await Promise.all([priceFromStripe(process.env.STRIPE_PRICE_ID), priceFromStripe(process.env.STRIPE_PRICE_ID_PRO)])
     if (base !== null && pro !== null) return { base, pro, source: 'stripe' }
     return {
-      base: base ?? (await priceFromSettings('subscription_price_eur', 49)),
-      pro: pro ?? (await priceFromSettings('pro_price_eur', 149)),
+      base: base ?? (await priceFromSettings('subscription_price_eur', 59)),
+      pro: pro ?? (await priceFromSettings('pro_price_eur', 169)),
       source: 'settings',
     }
   },

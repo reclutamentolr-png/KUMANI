@@ -125,7 +125,7 @@ export default async function TermsPage({ params }: LocaleProps) {
             <div className="text-gray-600 space-y-3 text-sm sm:text-base leading-relaxed">
               <p>
                 L&apos;accesso all&apos;Ecosistema KUMANI e ai suoi strumenti è offerto in abbonamento ai prezzi pubblicati sulla Piattaforma
-                (attualmente piano Plus 49€/anno e piano Pro 149€/anno). Il piano Pro include gli strumenti del piano Plus; alcuni strumenti
+                (attualmente piano Plus 59€/anno e piano Pro 169€/anno). Il piano Pro include gli strumenti del piano Plus; alcuni strumenti
                 sono gratuiti per tutti gli iscritti. Il periodo di prova gratuito del piano Pro, quando offerto, dà accesso ai soli strumenti
                 Pro e gratuiti e non si rinnova in automatico. Non sono previsti costi nascosti né corrispettivi ulteriori per le funzionalità incluse.
               </p>
@@ -157,7 +157,7 @@ export default async function TermsPage({ params }: LocaleProps) {
               </p>
               <p>
                 <strong>Condizioni dello sconto.</strong> Ai primi 50 utenti registrati in ordine cronologico verrà applicato uno sconto pari al
-                100% sul valore del Piano Plus (valore nominale di listino: 49,00 €), azzerando il costo del servizio per 12 (dodici) mesi dalla
+                100% sul valore del Piano Plus (valore nominale di listino: 59,00 €), azzerando il costo del servizio per 12 (dodici) mesi dalla
                 data di attivazione. Lo sconto si applica automaticamente al completamento dell&apos;iscrizione; non sono richiesti dati di
                 pagamento. Per utilizzare i servizi del Piano Plus l&apos;utente deve completare il proprio profilo con dati reali
                 (nome, cognome, data di nascita, telefono, indirizzo completo e professione): fino ad allora l&apos;accesso ai servizi
@@ -177,7 +177,7 @@ export default async function TermsPage({ params }: LocaleProps) {
               </p>
               <p>
                 <strong>Limiti.</strong> Esauriti i 50 posti promozionali disponibili, la piattaforma applicherà automaticamente la tariffa
-                standard di listino di 49,00 € per i successivi iscritti. Lo sconto non è convertibile in denaro, non è trasferibile e non dà
+                standard di listino di 59,00 € per i successivi iscritti. Lo sconto non è convertibile in denaro, non è trasferibile e non dà
                 diritto a rimborsi. Sono esclusi gli account dello staff, gli account di servizio della piattaforma, gli agenti e gli utenti che
                 hanno già un abbonamento attivo al momento dell&apos;applicazione dello sconto.
               </p>

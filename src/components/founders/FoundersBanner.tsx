@@ -22,10 +22,10 @@ export default async function FoundersBanner({ variant = 'bar', cta = true }: { 
           <Rocket className="h-7 w-7 sm:h-8 sm:w-8" />
         </span>
         <p className="relative mt-4 text-xl font-extrabold leading-tight text-[var(--gold-bright)] sm:text-3xl">{t('bannerTitle', { limit: status.limit })}</p>
-        {/* Il prezzo: 0 € anziché 49 € per un anno */}
+        {/* Il prezzo: 0 € anziché 59 € per un anno */}
         <p className="relative mt-4 flex items-baseline justify-center gap-3">
           <span className="text-5xl font-extrabold text-white sm:text-6xl">0 €</span>
-          <span className="text-2xl font-bold text-white/50 line-through sm:text-3xl">49 €</span>
+          <span className="text-2xl font-bold text-white/50 line-through sm:text-3xl">59 €</span>
           <span className="text-base font-semibold text-white/75">{t('bannerYear')}</span>
         </p>
         <p className="relative mx-auto mt-4 max-w-xl text-base leading-7 text-white/85 sm:text-lg">{t('bannerText', { limit: status.limit })}</p>

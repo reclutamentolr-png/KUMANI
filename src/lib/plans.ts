@@ -1,4 +1,4 @@
-// Piani KUMANI: Plus (49 €/anno) e Pro (149 €/anno, include il Plus).
+// Piani KUMANI: Plus (59 €/anno) e Pro (169 €/anno, include il Plus).
 // Il piano richiesto da ogni strumento lo decide l'admin
 // (marketplace_settings.required_plan); il controllo vero è can_use_tool()
 // nel database — questi helper servono all'interfaccia.

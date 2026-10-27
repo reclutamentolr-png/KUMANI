@@ -46,7 +46,7 @@
   },
   "landingHome": {
     "statLanguagesLabel": "languages: KUMANI speaks yours",
-    "statWeeklyValue": "< €1",
+    "statWeeklyValue": "~€1",
     "statWeeklyLabel": "a week with Plus: less than a coffee",
     "statServicesLabel": "active services",
     "proInfoBadge": "Included in the Pro plan",
@@ -212,8 +212,8 @@
     "featuresDescription": "Professional tools, a transparent activity ranking and a clear, regulated rewards program",
     "featureOneTitle": "Transparent activity ranking",
     "featureOneDescription": "A public ranking that shows how active your Community of professionals is: transparent and verifiable, with no monetary compensation tied to your position — recognition only.",
-    "featureTwoTitle": "Full Ecosystem (€49/year)",
-    "featureTwoDescription": "Dynamic QR Codes, Link in Bio, WhatsApp templates, MemoLife and community listings. A complete ecosystem of tools for just €49 a year.",
+    "featureTwoTitle": "Full Ecosystem (€59/year)",
+    "featureTwoDescription": "Dynamic QR Codes, Link in Bio, WhatsApp templates, MemoLife and community listings. A complete ecosystem of tools for just €59 a year.",
     "featureThreeTitle": "Bonus & Coupon Program",
     "featureThreeDescription": "The KU Karma you earn with your activity turns into discount coupons, bonuses and included services: concrete rewards, not promises.",
     "featureFourTitle": "Your global showcase",
@@ -221,10 +221,10 @@
     "featureFiveTitle": "Clear, public rules",
     "featureFiveDescription": "Protected data, a verifiable ranking and public rules for every initiative. Full transparency on how rewards are earned.",
     "featureSixTitle": "Up and running in 30 seconds",
-    "featureSixDescription": "Sign up, join the KUMANI Ecosystem and start using the tools right away. No hidden costs: from €49 a year, all included.",
+    "featureSixDescription": "Sign up, join the KUMANI Ecosystem and start using the tools right away. No hidden costs: from €59 a year, all included.",
     "benefitsTitle": "Why choose KUMANI?",
     "benefitsDescription": "We don't sell dreams: we put the right tools in your hands. Your daily activity turns into concrete, regulated rewards.",
-    "benefit1": "The whole KUMANI Ecosystem from €49/year",
+    "benefit1": "The whole KUMANI Ecosystem from €59/year",
     "benefit2": "Tools included: MemoLife agenda, Spendly, QR codes, Link in Bio, WhatsApp, group games and much more",
     "benefit3": "KU Karma tied only to using the services of our Ecosystem",
     "benefit4": "Bonuses and coupons unlocked through your daily activity",
@@ -242,7 +242,7 @@
     "ctaTitle": "The first step is yours. We’ll take the rest together.",
     "ctaDescription": "Join the KUMANI Ecosystem, use the tools every day and let every action turn into bonuses, coupons and access to exclusive initiatives.",
     "ctaButton": "Join KUMANI, start now",
-    "ctaNote": "✓ Plus €49/year ✓ Pro €149/year with 15 free days ✓ KU Karma only from using the services",
+    "ctaNote": "✓ Plus €59/year ✓ Pro €169/year with 15 free days ✓ KU Karma only from using the services",
     "terms": "Terms & Rules",
     "contact": "Contact",
     "copyright": "© 2026 KUMANI. All rights reserved.",
@@ -277,7 +277,7 @@
     "builtBy": "Made by {name}",
     "heroDoorsTitle": "A helping hand,",
     "heroDoorsAccent": "when you need it.",
-    "heroDoorsText": "It protects you from scams and makes life simpler. One app, under €1 a week, with real people who help each other.",
+    "heroDoorsText": "It protects you from scams and makes life simpler. One app, under €5 a month, with real people who help each other.",
     "heroDoorsAsk": "Where do you want to start?",
     "door1Title": "I got a strange message",
     "door1Text": "Find out in 10 seconds if it’s a scam",
@@ -319,7 +319,7 @@
     "why5Title": "Try it risk-free",
     "why5Text": "Start for free, no credit card. Pro comes with a 15-day trial.",
     "benefitCard1Title": "An honest price",
-    "benefitCard1Text": "The whole Ecosystem from €49 a year: under €1 a week.",
+    "benefitCard1Text": "The whole Ecosystem from €59 a year: under €5 a month.",
     "benefitCard2Title": "Many tools, one app",
     "benefitCard2Text": "Agenda, Spendly, QR Code, Link in Bio, WhatsApp, group games and much more.",
     "benefitCard7Title": "When and where you like",
@@ -329,12 +329,12 @@
     "heroOrbitEyebrow": "The Community that lends a hand",
     "heroOrbitTitle": "One app",
     "heroOrbitAccent": "instead of many.",
-    "heroOrbitText": "It protects you from scams and makes life simpler: money, deadlines, home, work and community in one place.\nUnder €1 a week.",
+    "heroOrbitText": "It protects you from scams and makes life simpler: money, deadlines, home, work and community in one place.\nUnder €5 a month.",
     "heroOrbitCheck": "Is it a scam? Check",
     "planProCtaSoon": "Discover the Pro plan",
     "planProTrialNoteSoon": "The Pro plan and the 15-day free trial open on {date}.",
     "why5TextSoon": "Start for free, no credit card, and use it right away.",
-    "ctaNoteSoon": "✓ Free sign-up ✓ Plus €49/year and Pro €149/year from {date} ✓ KU Karma only from using the services"
+    "ctaNoteSoon": "✓ Free sign-up ✓ Plus €59/year and Pro €169/year from {date} ✓ KU Karma only from using the services"
   },
   "authRegister": {
     "registerTitle": "Create your account",
@@ -397,7 +397,7 @@
     "template1Message": "Hi! 👋 I wanted to tell you about KUMANI, an app I’m using that I think could be useful for you too.\n\nIt has lots of everyday tools: check whether an IBAN or a phone number is suspicious, follow the latest scams, relax with breathing exercises and mandalas to colour, play with friends and find a community of people who help each other.\n\nYou sign up for free in a minute, no card needed, and choose what to use.\n\nHere’s the link: {url}\nLet me know what you think! 😊",
     "template2Title": "Professional approach",
     "template2Tone": "Formal",
-    "template2Message": "Good morning,\n\nI’d like to introduce KUMANI, an Italian platform that brings together practical tools for work and everyday life in a single account.\n\nThese include online scam checks (IBANs, phone numbers and, with the Plus plan, websites and emails), organising deadlines and documents and, for businesses, services such as a landing page, quotes, receipts and client management.\n\nSigning up is free; the Plus (€49 a year) and Pro (€149 a year) plans add more services.\n\nYou can find all the details here: {url}\nI’m happy to answer any questions.\nKind regards",
+    "template2Message": "Good morning,\n\nI’d like to introduce KUMANI, an Italian platform that brings together practical tools for work and everyday life in a single account.\n\nThese include online scam checks (IBANs, phone numbers and, with the Plus plan, websites and emails), organising deadlines and documents and, for businesses, services such as a landing page, quotes, receipts and client management.\n\nSigning up is free; the Plus (€59 a year) and Pro (€169 a year) plans add more services.\n\nYou can find all the details here: {url}\nI’m happy to answer any questions.\nKind regards",
     "template3Title": "Personal experience",
     "template3Tone": "Personal",
     "template3Message": "Hey! Let me tell you something 😊\n\nI’ve been using KUMANI for a while and it’s making my life easier: before a bank transfer I check the IBAN, when a strange call comes in I see if others have reported it, and I’ve stopped forgetting deadlines.\n\n[Write here in one line what you use it for]\n\nIt’s not one of those apps full of ads: they’re practical tools, and there’s a community of people who help each other.\n\nIf you want to try it, signing up is free: {url}\nIf you need a hand getting started, call me!",
@@ -429,11 +429,11 @@
     "template7Title": "For people with a thousand deadlines",
     "template7Tone": "Organisation",
     "template7Desc": "For anyone who forgets car tax, bills and appointments.",
-    "template7Message": "Hi! Since you always have a thousand things to remember, I recommend KUMANI 📅\n\nWith the Plus plan everything is in one place:\n🚗 car tax, insurance and MOT\n🏠 bills, maintenance and utilities at home\n📄 ID card, driving licence and expiring documents, with reminders\n💶 monthly spending, so you get to the end of the month more relaxed\n🗓️ a diary with appointments and notes\n\nPlus costs €49 a year, less than a euro a week, and meanwhile you can sign up for free and try the free services.\n\nHere’s the link: {url}",
+    "template7Message": "Hi! Since you always have a thousand things to remember, I recommend KUMANI 📅\n\nWith the Plus plan everything is in one place:\n🚗 car tax, insurance and MOT\n🏠 bills, maintenance and utilities at home\n📄 ID card, driving licence and expiring documents, with reminders\n💶 monthly spending, so you get to the end of the month more relaxed\n🗓️ a diary with appointments and notes\n\nPlus costs €59 a year, less than €5 a month, and meanwhile you can sign up for free and try the free services.\n\nHere’s the link: {url}",
     "template8Title": "For business owners",
     "template8Tone": "Business",
     "template8Desc": "For tradespeople, shops, restaurants and freelancers.",
-    "template8Message": "Hi! Since you run a business, I want to tell you about KUMANI 💼\n\nWith the Pro plan you get the tools to be found and work better:\n🌐 a landing page so people find you online\n🧾 quotes and receipts ready to send to clients\n👥 your client list with the jobs to do\n🍽️ a digital menu with a QR code, for venues\n🛍️ an online shop and a loyalty card\n\nPro costs €149 a year and you can try it free for 15 days.\n\nTake a look here: {url}\nIf you like, I’ll show you how I use it.",
+    "template8Message": "Hi! Since you run a business, I want to tell you about KUMANI 💼\n\nWith the Pro plan you get the tools to be found and work better:\n🌐 a landing page so people find you online\n🧾 quotes and receipts ready to send to clients\n👥 your client list with the jobs to do\n🍽️ a digital menu with a QR code, for venues\n🛍️ an online shop and a loyalty card\n\nPro costs €169 a year and you can try it free for 15 days.\n\nTake a look here: {url}\nIf you like, I’ll show you how I use it.",
     "template9Title": "To meet people",
     "template9Tone": "Community",
     "template9Desc": "For people looking for company, help or opportunities nearby.",
@@ -3322,7 +3322,7 @@
     "story2Text1": "The founder of KUMANI has spent a lifetime lending a hand. Since the 1990s, when technology was starting to change everything, they have helped people and businesses solve all kinds of IT problems.",
     "story2Text2": "And every time it came down to the same discovery: people don't need promises, they need simple tools and someone who makes them easy to use. KUMANI is that same hand, multiplied: all the tools we have gathered, in one place, at the service of people who work.",
     "story3Title": "The promise",
-    "story3Text": "That's how KUMANI was born: not a company that sells dreams, but a community that lends hands. One place, every tool. An honest price: €49 a year for everyone with the Plus plan, €149 a year for professionals with the Pro plan. Public rules, real benefits, zero mirages. Because before being professionals, we're human. And humans, when they have the right hands, do extraordinary things on their own.",
+    "story3Text": "That's how KUMANI was born: not a company that sells dreams, but a community that lends hands. One place, every tool. An honest price: €59 a year for everyone with the Plus plan, €169 a year for professionals with the Pro plan. Public rules, real benefits, zero mirages. Because before being professionals, we're human. And humans, when they have the right hands, do extraordinary things on their own.",
     "manifestoTitle": "The Kumani Manifesto",
     "manifesto1Strong": "We don't sell dreams:",
     "manifesto1Rest": "we lend hands.",
@@ -3331,13 +3331,13 @@
     "manifesto3Strong": "We don't build pyramids:",
     "manifesto3Rest": "we build workbenches.",
     "manifesto4Strong": "An honest price, forever:",
-    "manifesto4Rest": "€49 a year for the Plus plan, €149 a year for the Pro plan for professionals.",
+    "manifesto4Rest": "€59 a year for the Plus plan, €169 a year for the Pro plan for professionals.",
     "manifesto5Strong": "People first, professionals second:",
     "manifesto5Rest": "that's why we also teach you to breathe.",
     "manifesto6Strong": "Transparency as our signature:",
     "manifesto6Rest": "public rules, real benefits, no tricks.",
     "closingTitle": "Kumani. Hands that lend you a hand.",
-    "closingSubtitle": "Public rules, real benefits, an honest price forever: €49 a year with Plus, €149 a year with Pro.",
+    "closingSubtitle": "Public rules, real benefits, an honest price forever: €59 a year with Plus, €169 a year with Pro.",
     "closingCta": "Join Kumani",
     "footerTagline": "Hands that lend you a hand."
   },
@@ -3602,7 +3602,7 @@
     "ctaDiscover": "Discover all KUMANI tools",
     "includedPaid": "Included in the KUMANI subscription, together with all the other tools.",
     "includedFree": "Free for everyone signed up to KUMANI.",
-    "includedPro": "Included in the KUMANI Pro plan (€149/year, with a 15-day trial).",
+    "includedPro": "Included in the KUMANI Pro plan (€169/year, with a 15-day trial).",
     "unavailable": "This service is temporarily unavailable and will be back soon. In the meantime, you can discover all the other KUMANI services."
   },
   "kuRewards": {
@@ -5379,7 +5379,7 @@
     "faq1Q": "I can't log in to my account: what can I do?",
     "faq1A": "Make sure you're using the same email you signed up with. If you can't remember your password, use \"Forgotten your password?\" on the login page: we'll send you a link to create a new one (check your spam folder too). If you still can't get in, write to us using the form above and choose \"Support and assistance\".",
     "faq2Q": "How much do the Plus and Pro subscriptions cost?",
-    "faq2A": "The Plus subscription costs €49 a year, Pro €149 a year. Pro unlocks all the tools and advanced features, and you can try it free for 15 days before deciding.",
+    "faq2A": "The Plus subscription costs €59 a year, Pro €169 a year. Pro unlocks all the tools and advanced features, and you can try it free for 15 days before deciding.",
     "faq3Q": "How do renewal and cancellation work?",
     "faq3A": "The subscription lasts one year. Before it expires we'll remind you about renewal, so you can decide at your own pace. You can cancel whenever you like from the subscription section of your profile: you stay active until the end of the period you've already paid for.",
     "faq4Q": "What are KU Karma and KU Points?",
@@ -9099,7 +9099,7 @@
         },
         "2": {
           "1": "Plus",
-          "2": "€49",
+          "2": "€59",
           "3": "a year",
           "4": "For individuals and families",
           "5": "Everything in Free + {base, plural, one {# service} other {# services}}",
@@ -9107,7 +9107,7 @@
         },
         "3": {
           "1": "Pro",
-          "2": "€149",
+          "2": "€169",
           "3": "a year",
           "4": "For those who work with clients",
           "5": "Everything in Plus + {pro, plural, one {# Pro service} other {# Pro services}}",
@@ -9116,7 +9116,7 @@
       },
       "passBold": "Need just one service? ",
       "passText": "Activate it with a yearly Pass from {price}: one-off payment, no subscription.",
-      "notes": "You sign up for free and get {free, plural, one {# service} other {# services}} straight away. The Plus plan, 49 euros a year, is for individuals and families. The Pro plan, 149 euros a year, is for those who work with clients and can be tried free for fifteen days. Anyone who needs just one service can buy a yearly Pass, from {price}."
+      "notes": "You sign up for free and get {free, plural, one {# service} other {# services}} straight away. The Plus plan, 59 euros a year, is for individuals and families. The Pro plan, 169 euros a year, is for those who work with clients and can be tried free for fifteen days. Anyone who needs just one service can buy a yearly Pass, from {price}."
     },
     "s9": {
       "title": "The tools for your business",
@@ -9534,7 +9534,7 @@
         ]
       ],
       "total": "Just these {count} apps: up to {total} a year.",
-      "answer": "With KUMANI Pro, all in one: €149 a year.",
+      "answer": "With KUMANI Pro, all in one: €169 a year.",
       "notes": "Now that you have seen what is inside KUMANI, let’s look at the competition. For every need there is a different app, and almost all of them are paid. These are real list prices of some of the most downloaded apps: add up just these and you reach hundreds of euros a year, with many passwords and subscriptions to remember.",
       "tools": [
         "scanner",
@@ -9560,17 +9560,17 @@
           "IBAN Check, Anti-Scam Network and Guide: free for everyone, forever."
         ],
         [
-          "€49",
+          "€59",
           "a year with Plus",
           "Diary, expenses, home, car, travel, documents: for individuals and families."
         ],
         [
-          "€149",
+          "€169",
           "a year with Pro",
           "Everything in Plus plus the tools for people who work with clients. 15 days free."
         ]
       ],
-      "notes": "With KUMANI all of this is in one account: {tools} tools that talk to each other. Scam protection is free for everyone. With 49 euros a year, less than one euro a week, you organise your home life. With 149 euros you also get everything you need for work."
+      "notes": "With KUMANI all of this is in one account: {tools} tools that talk to each other. Scam protection is free for everyone. With 59 euros a year, less than five euros a month, you organise your home life. With 169 euros you also get everything you need for work."
     },
     "kumi": {
       "title": "Write what you need. KUMI takes you there.",
@@ -15489,7 +15489,7 @@
   },
   "founders": {
     "bannerTitle": "Beta launch: be one of the first {limit} users! 🚀",
-    "bannerText": "To celebrate the launch, a 100% commercial discount on the Plus Plan for the first {limit} sign-ups: pay €0 instead of €49 for a year. No draw, no lottery: sign-up order applies.",
+    "bannerText": "To celebrate the launch, a 100% commercial discount on the Plus Plan for the first {limit} sign-ups: pay €0 instead of €59 for a year. No draw, no lottery: sign-up order applies.",
     "bannerLeft": "{left} spots left",
     "bannerCta": "Sign up",
     "dashTitle": "🚀 You’re one of the first 50 users (no.{n})",
