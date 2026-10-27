@@ -5950,7 +5950,10 @@
     "closing": "Entra anche tu nella community: il primo passo è gratuito.",
     "stickyCta": "Iscriviti gratis",
     "rulesLocked": "La spiegazione di ogni regola, con esempi, è nel manuale completo.",
-    "memberNote": "Stai vedendo la pagina da iscritto: chi riceve il tuo link vede il pulsante «Iscriviti gratis»."
+    "memberNote": "Stai vedendo la pagina da iscritto: chi riceve il tuo link vede il pulsante «Iscriviti gratis».",
+    "downloadPdf": "Scarica il PDF",
+    "printPdf": "Stampa",
+    "printPreparing": "Preparo la stampa…"
   },
   "chat": {
     "someone": "Utente",

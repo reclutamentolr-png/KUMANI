@@ -36,6 +36,11 @@ const nextConfig: NextConfig = {
   // pdfjs legge i PDF anche sul server (cron scam-feeds): non va impacchettato
   serverExternalPackages: ['pdfjs-dist'],
   allowedDevOrigins: ['192.168.1.133', 'localhost'],
+  // PDF del Manuale Antitruffa (scripts/manual-pdf.mjs): fuori da public, li
+  // consegna /api/antitruffa/manuale contando i download
+  outputFileTracingIncludes: {
+    '/api/antitruffa/manuale': ['./private/manuale/**'],
+  },
   experimental: {
     // Foto del menu fino a 2MB: margine per l'overhead multipart
     serverActions: {

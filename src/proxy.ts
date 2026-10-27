@@ -466,12 +466,13 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
 }
 
 export const config = {
-  // Ignora: api, short link /o/* e /q/*, /billing (pagina non localizzata,
+  // Ignora: api, short link /o/* e /q/*, /manuale-stampa (il manuale
+  // impaginato per il PDF, solo in sviluppo), /billing (pagina non localizzata,
   // fuori da [locale] — senza questa esclusione next-intl la riscrive come
   // /it/billing, che non esiste, causando 404 anche sulla pagina di
   // successo pagamento Stripe), _next, favicon.ico e file con estensioni di
   // immagini/asset
   matcher: [
-    '/((?!api|o/|q/|billing|_next/static|_next/image|favicon.ico|.*\\..*).*)'
+    '/((?!api|o/|q/|billing|manuale-stampa|_next/static|_next/image|favicon.ico|.*\\..*).*)'
   ]
 };

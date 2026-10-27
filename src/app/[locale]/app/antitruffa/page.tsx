@@ -21,7 +21,7 @@ import {
 import ToolBackLink from '@/components/ToolBackLink'
 import Link from '@/components/LocalizedLink'
 import Vignette from '@/components/antitruffa/Vignette'
-import PrintGuideButton from '@/components/antitruffa/PrintGuideButton'
+import GuideDownloadButtons from '@/components/antitruffa/GuideDownloadButtons'
 import GuideShareButtons from '@/components/antitruffa/GuideShareButtons'
 import { guideShareUrl } from '@/lib/antitruffa/shareUrl'
 import { createClient } from '@/lib/supabase/server'
@@ -36,13 +36,14 @@ export const generateMetadata = toolMetadata('antitruffa')
 // Manuale "Come difendersi dalle truffe online" (Sicurezza e Verifica,
 // gratis per tutti i Kumani). Contenuti statici per lingua in
 // src/lib/antitruffa/content; la pagina è protetta dal proxy come gli
-// altri strumenti. Il pulsante di stampa apre tutte le schede e usa la
-// stampa del browser ("Salva come PDF" per scaricarlo).
+// altri strumenti. «Scarica il PDF» e «Stampa» usano il manuale impaginato
+// (scripts/manual-pdf.mjs), consegnato e contato da /api/antitruffa/manuale.
 export default async function AntitruffaPage() {
   const locale = await getLocale()
   const g = await getGuideContent(locale)
   const tm = await getTranslations('marketplace')
   const tc = await getTranslations('common')
+  const ta = await getTranslations('antitruffa')
 
   // Il link da condividere porta il codice invito di chi legge
   const supabase = await createClient()
@@ -95,7 +96,7 @@ export default async function AntitruffaPage() {
               <Gift className="mt-0.5 h-5 w-5 shrink-0 text-[var(--gold-bright)]" />
               <span>{g.giftNote}</span>
             </div>
-            <PrintGuideButton label={g.ui.print} />
+            <GuideDownloadButtons lang={locale} download={ta('downloadPdf')} print={ta('printPdf')} preparing={ta('printPreparing')} />
           </div>
         </section>
 

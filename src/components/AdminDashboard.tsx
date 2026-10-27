@@ -117,6 +117,7 @@ import {
   LockOpen,
   Video,
   MessagesSquare,
+  BookOpenCheck,
 } from 'lucide-react'
 import WebinarAdminPanel from '@/components/admin/WebinarAdminPanel'
 import CopyButton from '@/components/CopyButton'
@@ -164,6 +165,7 @@ const PushPanel = dynamic(() => import('@/components/admin/PushPanel'), { loadin
 const CommunicationsPanel = dynamic(() => import('@/components/admin/CommunicationsPanel'), { loading })
 const NeedMissesPanel = dynamic(() => import('@/components/admin/NeedMissesPanel'), { loading })
 const KumiChatPanel = dynamic(() => import('@/components/admin/KumiChatPanel'), { loading })
+const GuideDownloadsPanel = dynamic(() => import('@/components/admin/GuideDownloadsPanel'), { loading })
 const EmailQuotaAlert = dynamic(() => import('@/components/admin/EmailQuotaAlert'), { loading: () => null })
 const CardExpiryAlert = dynamic(() => import('@/components/admin/CardExpiryAlert'), { loading: () => null })
 const CostsPanel = dynamic(() => import('@/components/admin/CostsPanel'), { loading })
@@ -795,6 +797,7 @@ L'accesso viene registrato.`))) return
   { id: 'reports', label: 'Statistiche e classifiche', Icon: BarChart3, permission: 'stats.read' as Permission, group: 'general' },
   { id: 'needMisses', label: 'Ricerche senza risultato', Icon: Search, permission: 'stats.read' as Permission, group: 'general' },
   { id: 'kumiChat', label: 'Chiedi a KUMI', Icon: MessagesSquare, permission: 'stats.read' as Permission, group: 'general' },
+  { id: 'guideDownloads', label: 'Manuale Antitruffa', Icon: BookOpenCheck, permission: 'stats.read' as Permission, group: 'general' },
   { id: 'marketplace', label: 'Strumenti e interruttori', Icon: ShoppingBag, permission: 'marketplace.read' as Permission, group: 'general' },
   { id: 'settings', label: 'Impostazioni', Icon: Settings, permission: 'settings.read' as Permission, group: 'general' },
   { id: 'appLimits', label: 'Limiti e pulizia', Icon: Gauge, permission: 'settings.read' as Permission, group: 'general' },
@@ -2094,6 +2097,7 @@ L'accesso viene registrato.`))) return
         {activeSection === 'communications' && <CommunicationsPanel />}
         {activeSection === 'needMisses' && <NeedMissesPanel />}
         {activeSection === 'kumiChat' && <KumiChatPanel />}
+        {activeSection === 'guideDownloads' && <GuideDownloadsPanel />}
         {activeSection === 'documents' && <DocumentsAdminPanel />}
         {activeSection === 'settings' && (
           <>
