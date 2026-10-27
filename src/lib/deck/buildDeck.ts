@@ -601,19 +601,12 @@ export async function buildDeck(
   {
     const s = pres.addSlide({ masterName: 'KUMANI chiaro', sectionTitle: sec[4] })
     titled(s, S.s13.title, S.s13.sub)
-    const cx = 3.4, cy = 4.25, r = 1.75
-    for (let i = 0; i < 5; i++) {
-      const a = -Math.PI / 2 + (i * 2 * Math.PI) / 5
-      line(s, cx, cy, cx + r * Math.cos(a), cy + r * Math.sin(a), { color: HEX.gold, width: 1.5 }, `a2-ln${i}`)
-    }
-    for (let i = 0; i < 5; i++) {
-      const a = -Math.PI / 2 + (i * 2 * Math.PI) / 5
-      const px = cx + r * Math.cos(a), py = cy + r * Math.sin(a)
-      s.addShape(pres.ShapeType.ellipse, { x: px - 0.42, y: py - 0.42, w: 0.84, h: 0.84, fill: { color: i === 3 ? HEX.sky : HEX.gold }, line: { color: HEX.white, width: 2 }, objectName: `a${3 + i}-p${i}` } as any)
-      s.addImage({ data: await icon('User', HEX.white), x: px - 0.22, y: py - 0.22, w: 0.44, h: 0.44, objectName: `a${3 + i}-pi${i}` } as any)
-    }
-    s.addShape(pres.ShapeType.ellipse, { x: cx - 0.6, y: cy - 0.6, w: 1.2, h: 1.2, fill: { color: C.text1 }, line: { type: 'none' }, objectName: 'a1-tu' } as any)
-    Tx(s, S.s13.you, { x: cx - 0.6, y: cy - 0.3, w: 1.2, h: 0.6, fontSize: 18, bold: true, align: 'center', valign: 'middle', color: C.accent2, objectName: 'a1-tutx' })
+    // I tuoi Kumani: il polpo KUMI (la testa sei tu) con i 5 tentacoli, come
+    // nella pagina della rete (immagine public/deck/rete-polpo.png)
+    const cx = 3.4, ph = 4.25, pw = ph * (1044 / 1149)
+    s.addImage({ path: `${IMG}/rete-polpo.png`, x: cx - pw / 2, y: 2.0, w: pw, h: ph, objectName: 'a2-polpo' } as any)
+    s.addShape(pres.ShapeType.roundRect, { x: cx + 0.75, y: 2.02, w: 0.8, h: 0.4, rectRadius: 0.2, fill: { color: C.text1 }, line: { type: 'none' }, objectName: 'a1-tu' } as any)
+    Tx(s, S.s13.you, { x: cx + 0.75, y: 2.02, w: 0.8, h: 0.4, fontSize: 14, bold: true, align: 'center', valign: 'middle', color: C.accent2, objectName: 'a1-tutx' })
     s.addShape(pres.ShapeType.ellipse, { x: 0.9, y: 6.45, w: 0.22, h: 0.22, fill: { color: HEX.gold }, line: { type: 'none' }, objectName: 'a8-l1' } as any)
     Tx(s, S.s13.legendMine, { x: 1.2, y: 6.38, w: 2.1, h: 0.36, fontSize: 12, color: C.accent4, valign: 'middle', objectName: 'a8-l1t' })
     s.addShape(pres.ShapeType.ellipse, { x: 3.35, y: 6.45, w: 0.22, h: 0.22, fill: { color: HEX.sky }, line: { type: 'none' }, objectName: 'a8-l2' } as any)

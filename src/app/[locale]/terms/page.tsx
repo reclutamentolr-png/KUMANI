@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: LocaleProps): Promise<Metadat
   return pageMetadata('/terms', { title: t('termsTitle'), description: t('termsDescription') })
 }
 
-const LAST_UPDATE = '21 ottobre 2026'
+const LAST_UPDATE = '27 ottobre 2026'
 
 export default async function TermsPage({ params }: LocaleProps) {
   setRequestLocale((await params).locale)
@@ -344,11 +344,12 @@ export default async function TermsPage({ params }: LocaleProps) {
               <p>
                 <strong className="text-gray-900">KU Points.</strong> L&apos;utente riceve KU Points quando una persona che ha
                 invitato direttamente attiva un abbonamento pagato con carta (Plus o Pro), passa dal piano Plus al piano Pro (in
-                proporzione a quanto pagato) o acquista un pass, e con il Bonus Accoglienza. Il Bonus Accoglienza è riconosciuto quando
-                uno dei posti diretti della propria matrice viene occupato da una persona invitata da un altro utente (spillover) che
-                attiva l&apos;abbonamento con carta: a partire dall&apos;attivazione indicata dalla Piattaforma (attualmente la sesta
-                persona invitata da quell&apos;utente), una parte dei KU Points dell&apos;attivazione non va a chi ha invitato ma a chi
-                accoglie la persona nella propria matrice. Le quantità sono stabilite dalla Piattaforma e indicate nell&apos;area personale. I KU
+                proporzione a quanto pagato) o acquista un pass, e con il Bonus Accoglienza. Una persona invitata prende il suo posto
+                nella rete («I tuoi Kumani») solo quando attiva l&apos;abbonamento: fino ad allora non occupa alcun posto. Il Bonus
+                Accoglienza è riconosciuto quando uno dei cinque posti diretti dell&apos;utente viene occupato da una persona invitata
+                da un altro utente (spillover, oppure posto indicato da chi ha invitato) che attiva l&apos;abbonamento con carta: una
+                parte dei KU Points dell&apos;attivazione non va a chi ha invitato ma a chi accoglie la persona tra i propri Kumani.
+                Le quantità sono stabilite dalla Piattaforma e indicate nell&apos;area personale. I KU
                 Points diventano definitivi 15 giorni dopo il pagamento che li ha generati (il tempo per l&apos;eventuale recesso): fino ad
                 allora sono visibili ma non contano per le qualifiche e non si possono utilizzare. Le attivazioni tramite voucher e i rinnovi non danno KU Points; in caso di rimborso del
                 pagamento i punti collegati vengono tolti.

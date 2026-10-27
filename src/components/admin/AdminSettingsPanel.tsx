@@ -310,8 +310,8 @@ export default function AdminSettingsPanel() {
             <p className="text-xs text-gray-500 mb-3">
               Punti assegnati <strong>solo allo sponsor diretto</strong> quando un suo invitato paga con carta: primo
               abbonamento Plus o Pro, oppure passaggio da Plus a Pro (in proporzione a quanto pagato). Voucher e rinnovi
-              non danno punti; un rimborso li toglie. <strong>Bonus Accoglienza:</strong> dal N° invitato attivato in poi,
-              una parte dei punti dello sponsor passa a chi accoglie la persona nella propria stella (un altro Kumano):
+              non danno punti; un rimborso li toglie. <strong>Bonus Accoglienza:</strong> quando la persona viene accolta
+              tra i Kumani di un altro Kumano (Spillover o posto prenotato), una parte dei punti dello sponsor passa a lui:
               Plus 10 → 9 allo sponsor + 1; Pro 120 → 110 + 10. Nel passaggio a Pro di una persona accolta, la stessa
               proporzione (101 + 9). Non è un costo in più per KUMANI: lo cede lo sponsor.
             </p>
@@ -348,17 +348,7 @@ export default function AdminSettingsPanel() {
               </label>
             </div>
             <p className="mt-5 mb-2 text-sm font-semibold text-gray-800">Bonus Accoglienza (ceduto dallo sponsor)</p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl">
-              <label className="block max-w-xs">
-                <span className="mb-1 block text-xs font-medium text-gray-600">Dal N° invitato attivato</span>
-                <input
-                  type="number"
-                  min="1"
-                  value={systemSettings.welcome_bonus_from_direct ?? 6}
-                  onChange={(e) => setSystemSettings({ ...systemSettings, welcome_bonus_from_direct: parseInt(e.target.value, 10) || 1 })}
-                  className={INPUT}
-                />
-              </label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl">
               <label className="block max-w-xs">
                 <span className="mb-1 block text-xs font-medium text-gray-600">Punti ceduti per un Plus</span>
                 <input
@@ -381,7 +371,7 @@ export default function AdminSettingsPanel() {
               </label>
             </div>
             <p className="mt-2 text-xs text-gray-500">
-              Esempio con i valori attuali: dal {systemSettings.welcome_bonus_from_direct ?? 6}° invitato lo sponsor riceve{' '}
+              Esempio con i valori attuali: se la persona è accolta da un altro Kumano lo sponsor riceve{' '}
               {(systemSettings.network_points_activation_base ?? 10) - (systemSettings.welcome_bonus_base ?? 1)} punti per un Plus e{' '}
               {(systemSettings.network_points_activation_pro ?? 120) - (systemSettings.welcome_bonus_pro ?? 10)} per un Pro; chi accoglie riceve{' '}
               {systemSettings.welcome_bonus_base ?? 1} e {systemSettings.welcome_bonus_pro ?? 10}.

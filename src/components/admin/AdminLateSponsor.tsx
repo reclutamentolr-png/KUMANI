@@ -24,12 +24,12 @@ export default function AdminLateSponsor({ userId }: { userId: string }) {
   const run = async () => {
     const clean = code.trim().toUpperCase()
     if (!clean) return
-    if (!(await askConfirm(`Spostare questa persona nella stella del Kumano con codice ${clean}? Si può fare una sola volta.`))) return
+    if (!(await askConfirm(`Spostare questa persona tra i Kumani del Kumano con codice ${clean}? Si può fare una sola volta.`))) return
     setBusy(true)
     const r = await adminAssignLateSponsor(userId, clean)
     setBusy(false)
     if (r.success) {
-      notify(`Fatto: ora è nella stella di ${r.sponsorName ?? clean}. Eventuali KU Points dell’attivazione sono stati assegnati.`, 'success')
+      notify(`Fatto: ora è tra i Kumani di ${r.sponsorName ?? clean}. Eventuali KU Points dell’attivazione sono stati assegnati.`, 'success')
       setCode('')
     } else notify(ERRORS[r.code] ?? 'Operazione non riuscita.')
   }
