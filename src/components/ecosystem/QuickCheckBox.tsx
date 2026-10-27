@@ -3,10 +3,10 @@
 import { useEffect, useId, useRef, useState, type FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
-import { ArrowRight, AtSign, Building2, Camera, Globe, Landmark, MailSearch, Phone, ShieldCheck, type LucideIcon } from 'lucide-react'
+import { ArrowRight, AtSign, Building2, Camera, Globe, Landmark, MailSearch, Phone, QrCode, ShieldCheck, type LucideIcon } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import InfoDialog from '@/components/InfoDialog'
-import { isWholeMessage, MESSAGE_HANDOFF_KEY, quickCheckFindings, type QuickCheckFinding, type QuickCheckKind } from '@/lib/quickCheck'
+import { isWholeMessage, MESSAGE_HANDOFF_KEY, QR_CHECK_PATH, quickCheckFindings, wantsQrCheck, type QuickCheckFinding, type QuickCheckKind } from '@/lib/quickCheck'
 import { defaultLocale } from '../../../i18n'
 
 export { quickCheckTarget } from '@/lib/quickCheck'
@@ -17,7 +17,8 @@ const KIND_ICON: Record<QuickCheckKind, LucideIcon> = { site: Globe, email: AtSi
 // email, partita IVA, sito, telefono) o per un messaggio intero (SMS,
 // WhatsApp, email). Un valore solo → si apre subito lo strumento giusto già
 // compilato; un messaggio intero → prima «Analizza tutto il messaggio» (CheckMail
-// con il testo già incollato), poi le singole cose trovate. Per le foto: VeriFoto.
+// con il testo già incollato), poi le singole cose trovate. Per le foto: VeriFoto;
+// chi scrive «qr code» va al Controllo QR di SVAT.
 // Nella pagina Servizi (gruppo Sicurezza), in Dashboard e nella pagina /controlla
 // (dove arrivano anche i contenuti condivisi dal telefono).
 export default function QuickCheckBox({ title, initialText = '', autoRun = false, className = 'mb-4' }: { title?: string; initialText?: string; autoRun?: boolean; className?: string }) {
@@ -45,6 +46,10 @@ export default function QuickCheckBox({ title, initialText = '', autoRun = false
     }
     setMessage(false)
     if (found.length === 0) {
+      if (wantsQrCheck(text)) {
+        router.push(`${prefix}${QR_CHECK_PATH}`)
+        return
+      }
       setFindings(null)
       setUnknown(true)
       return
@@ -138,9 +143,14 @@ export default function QuickCheckBox({ title, initialText = '', autoRun = false
           {t('checkBoxButton')}
         </button>
       </div>
-      <Link href="/app/verifoto" className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
-        <Camera className="h-4 w-4" aria-hidden /> {t('checkBoxPhoto')}
-      </Link>
+      <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1">
+        <Link href="/app/verifoto" className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
+          <Camera className="h-4 w-4" aria-hidden /> {t('checkBoxPhoto')}
+        </Link>
+        <Link href={QR_CHECK_PATH} className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
+          <QrCode className="h-4 w-4" aria-hidden /> {t('checkBoxQr')}
+        </Link>
+      </div>
       <div aria-live="polite">
         {unknown && <p className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-900">{t('checkBoxUnknown')}</p>}
         {message && (

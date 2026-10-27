@@ -141,7 +141,7 @@ export function isIpLoggerHost(host: string | null | undefined): boolean {
 }
 
 const SHORTENERS = new Set(['flowto.it', 'x.gd', 'v.gd', 'u.to', 'cutt.us', 'short.io', 'shorturl.asia', 'bit.do', 'bit.ly', 'tinyurl.com', 't.ly', 'is.gd', 'cutt.ly', 'ow.ly', 'rebrand.ly', 'shorturl.at', 's.id', 'rb.gy', 'tiny.cc', 'buff.ly', 't.co', 'lnkd.in', 'goo.gl', 'qrco.de'])
-const RISKY_TLDS = new Set(['top', 'xyz', 'icu', 'click', 'link', 'cfd', 'sbs', 'rest', 'monster', 'quest', 'zip', 'mov', 'buzz', 'cyou', 'shop', 'online', 'site', 'live', 'support', 'lat', 'bond'])
+export const RISKY_TLDS = new Set(['top', 'xyz', 'icu', 'click', 'link', 'cfd', 'sbs', 'rest', 'monster', 'quest', 'zip', 'mov', 'buzz', 'cyou', 'shop', 'online', 'site', 'live', 'support', 'lat', 'bond'])
 const DANGEROUS_EXT = new Set(['exe', 'scr', 'js', 'jse', 'vbs', 'vbe', 'bat', 'cmd', 'com', 'pif', 'iso', 'img', 'lnk', 'hta', 'docm', 'xlsm', 'pptm', 'jar', 'msi', 'ps1', 'wsf', 'reg', 'cab', 'apk', 'svg'])
 const ARCHIVE_EXT = new Set(['zip', 'rar', '7z', 'gz', 'tar', 'ace', 'arj'])
 // Parole comuni simili a nomi di marchi ("cloud" e "icloud"): non sono imitazioni

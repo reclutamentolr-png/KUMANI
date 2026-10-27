@@ -310,7 +310,8 @@ const fr: GuideContent = {
           title: `Les QR codes piégés (quishing)`,
           how: `Sur les horodateurs, des escrocs collent des autocollants avec un QR code « payez votre stationnement » qui mène à un faux site. Le même piège apparaît sur de faux avis de contravention sous l'essuie-glace, des avis de colis et des e-mails qui demandent de « scanner pour vérifier votre compte ».`,
           flags: [`Un autocollant collé par-dessus le QR code d'origine`, `Après le scan, une adresse bizarre`],
-          todo: [`Payez le stationnement avec l'application officielle de la ville ou du gestionnaire`, `Vérifiez toujours l'adresse qui s'ouvre après le scan`],
+          todo: [`Payez le stationnement avec l'application officielle de la ville ou du gestionnaire`, `Vérifiez toujours l'adresse qui s'ouvre après le scan`, `En cas de doute, vérifiez le QR avec KUMANI avant de l'ouvrir`],
+          tool: { label: `Vérifier un QR code`, href: `/app/svat?tab=qr` },
           vignette: `qr`,
         },
         {

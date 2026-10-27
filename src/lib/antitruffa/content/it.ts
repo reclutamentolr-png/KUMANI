@@ -315,7 +315,8 @@ const it: GuideContent = {
           title: `I QR code truccati (quishing)`,
           how: `Sui parcometri vengono incollati adesivi con un QR "paga la sosta" che porta a un sito falso. Lo stesso trucco compare su finte multe sotto il tergicristallo, avvisi di pacchi ed email che chiedono di "scansionare per verificare il conto".`,
           flags: [`Adesivi incollati sopra il QR originale`, `Dopo la scansione, un indirizzo strano`],
-          todo: [`Paga la sosta dall'app ufficiale del Comune o del gestore`, `Controlla sempre l'indirizzo che si apre dopo la scansione`],
+          todo: [`Paga la sosta dall'app ufficiale del Comune o del gestore`, `Controlla sempre l'indirizzo che si apre dopo la scansione`, `Nel dubbio, controlla il QR con KUMANI prima di aprirlo`],
+          tool: { label: `Controlla un QR code`, href: `/app/svat?tab=qr` },
           vignette: `qr`,
         },
         {

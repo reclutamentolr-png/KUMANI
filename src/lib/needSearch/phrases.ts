@@ -11,8 +11,8 @@ export type ToolPhrases = Partial<Record<Lang, string[]>>
 export const NEED_PHRASES: Record<string, ToolPhrases> = {
   // ---------------- Sicurezza ----------------
   svat: {
-    it: ['sito truffa', 'sito affidabile', 'negozio online sicuro', 'comprare online', 'sito sicuro', 'controllare un sito', 'azienda seria', 'link strano', 'e-commerce affidabile', 'sito falso', 'acquisto online'],
-    en: ['scam website', 'is this site safe', 'online shop safe', 'fake website', 'check a website', 'buy online', 'trustworthy company'],
+    it: ['sito truffa', 'sito affidabile', 'negozio online sicuro', 'comprare online', 'sito sicuro', 'controllare un sito', 'azienda seria', 'link strano', 'e-commerce affidabile', 'sito falso', 'acquisto online', 'controllare un qr code', 'qr code truffa', 'qr falso', 'qr parcheggio', 'scansionare un qr'],
+    en: ['scam website', 'is this site safe', 'online shop safe', 'fake website', 'check a website', 'buy online', 'trustworthy company', 'check a qr code', 'fake qr code', 'qr code scam'],
     fr: ['site arnaque', 'site fiable', 'acheter en ligne'],
     es: ['web estafa', 'sitio fiable', 'comprar online'],
     pt: ['site golpe', 'site confiável', 'comprar online'],

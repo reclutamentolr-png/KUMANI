@@ -21,8 +21,13 @@ import {
   Users,
   RefreshCw,
   ShieldAlert,
+  ShieldCheck,
   ArrowDown,
+  ChevronDown,
+  Lock,
+  LockOpen,
 } from 'lucide-react'
+import { askConfirm } from '@/lib/confirm'
 
 interface QRIndicator {
   type: 'ok' | 'warning' | 'risk'
@@ -41,6 +46,7 @@ interface QRAnalysis {
     redirectChain?: Array<{ url: string; final: boolean }>
     landing?: { from: string; to: string }
     phishing?: { brand: string; domain: string; official: string; card: boolean }
+    site?: { host: string; https: boolean; exists: boolean }
     recommendations: string[]
     aiExplanation: string
   }
@@ -90,9 +96,38 @@ function getDestination(result: QRAnalysis): string {
 }
 
 function IndicatorIcon({ type }: { type: 'ok' | 'warning' | 'risk' }) {
-  if (type === 'ok') return <CheckCircle className="h-4 w-4 text-green-500 shrink-0" />
-  if (type === 'warning') return <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0" />
-  return <XCircle className="h-4 w-4 text-red-500 shrink-0" />
+  if (type === 'ok') return <CheckCircle className="mt-0.5 h-5 w-5 text-green-600 shrink-0" />
+  if (type === 'warning') return <AlertTriangle className="mt-0.5 h-5 w-5 text-amber-600 shrink-0" />
+  return <XCircle className="mt-0.5 h-5 w-5 text-red-600 shrink-0" />
+}
+
+// Colori del verdetto
+const TONES = {
+  red: { band: 'bg-red-600', soft: 'bg-red-50', border: 'border-red-300', text: 'text-red-800' },
+  yellow: { band: 'bg-amber-500', soft: 'bg-amber-50', border: 'border-amber-300', text: 'text-amber-900' },
+  green: { band: 'bg-green-600', soft: 'bg-green-50', border: 'border-green-300', text: 'text-green-900' },
+} as const
+
+// Un gruppo di segnali (pericolo o da tenere d'occhio), uno per riga, ben leggibili sul telefono
+function IndicatorGroup({ title, items, t, tone }: { title: string; items: QRIndicator[]; t: ReturnType<typeof useTranslations>; tone: 'risk' | 'warning' }) {
+  const box = tone === 'risk' ? 'border-red-200 bg-red-50' : 'border-amber-200 bg-amber-50'
+  const head = tone === 'risk' ? 'text-red-700' : 'text-amber-800'
+  return (
+    <div>
+      <p className={`mb-2 text-sm font-extrabold uppercase tracking-wide ${head}`}>
+        {title} ({items.length})
+      </p>
+      <ul className="space-y-2">
+        {items.map((ind, i) => (
+          <li key={i} className={`flex items-start gap-3 rounded-xl border p-3 text-[15px] leading-snug text-[var(--ink)] ${box}`}>
+            <IndicatorIcon type={ind.type} />
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            <span className="min-w-0 break-words">{t(ind.key as any, ind.params as any)}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
 }
 
 export default function QRCheckScanner() {
@@ -246,21 +281,9 @@ export default function QRCheckScanner() {
 
   const riskLevelKey =
     result?.analysis.badge === 'green' ? 'riskLow' : result?.analysis.badge === 'yellow' ? 'riskMedium' : 'riskHigh'
-  const aiExplanationKey =
-    result?.analysis.badge === 'green'
-      ? 'aiExplanationLowRisk'
-      : result?.analysis.badge === 'yellow'
-        ? 'aiExplanationMediumRisk'
-        : 'aiExplanationHighRisk'
-  const riskColor =
-    result?.analysis.badge === 'green'
-      ? 'text-green-600 bg-green-100'
-      : result?.analysis.badge === 'yellow'
-        ? 'text-amber-700 bg-amber-100'
-        : 'text-red-600 bg-red-100'
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8">
+    <div className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-4 sm:p-8">
       <div className="flex items-center gap-2 mb-1">
         <QrCode className="w-5 h-5 text-[var(--gold)]" />
         <h3 className="text-lg font-semibold text-[var(--ink)]">{t('title')}</h3>
@@ -333,149 +356,235 @@ export default function QRCheckScanner() {
         </div>
       )}
 
-      {result && !analyzing && (
-        <div className="space-y-5">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">
-              {t(TYPE_LABEL_KEY[result.type])}
-            </span>
-            <span className={`px-3 py-1 rounded-full text-xs font-bold ${riskColor}`}>{t(riskLevelKey)}</span>
-          </div>
-
-          <div className="bg-[var(--gold-pale)]/60 border border-[var(--gold)]/20 rounded-xl p-4">
-            <p className="text-xs text-[var(--muted)] mb-1">{t('destination')}</p>
-            <p className="font-medium text-[var(--ink)] break-all">{getDestination(result)}</p>
-          </div>
-
-          {/* Finta pagina di accesso: avviso in evidenza, è la cosa da capire subito */}
-          {result.analysis.phishing && (
-            <div role="alert" className="rounded-2xl border-2 border-red-400 bg-red-50 p-5 text-red-900 shadow-md">
-              <p className="flex items-center gap-2 text-lg font-extrabold sm:text-xl">
-                <ShieldAlert className="h-6 w-6 shrink-0 text-red-600" aria-hidden /> {t('phishingAlertTitle')}
-              </p>
-              <p className="mt-2 break-words text-base font-medium leading-relaxed">
-                {t(result.analysis.phishing.card ? 'indicatorPhishingCard' : 'indicatorPhishingPage', {
-                  brand: result.analysis.phishing.brand,
-                  domain: result.analysis.phishing.domain,
-                  official: result.analysis.phishing.official,
-                })}
-              </p>
-            </div>
-          )}
-
-          {/* Il link porta su un altro sito: partenza e arrivo ben visibili */}
-          {result.analysis.landing && (
-            <div className="rounded-2xl border-2 border-amber-400 bg-amber-50 p-5 text-amber-950 shadow-md">
-              <p className="flex items-center gap-2 text-lg font-extrabold sm:text-xl">
-                <AlertTriangle className="h-6 w-6 shrink-0 text-amber-600" aria-hidden /> {t('landingTitle')}
-              </p>
-              <div className="mt-3 space-y-2">
-                <p className="text-xs font-bold uppercase tracking-wide text-amber-800">{t('redirectFrom')}</p>
-                <p className="break-all rounded-xl border border-amber-200 bg-white/70 px-4 py-2 font-mono text-sm">{result.analysis.landing.from}</p>
-                <ArrowDown className="mx-auto h-6 w-6 text-amber-600" aria-hidden />
-                <p className="text-xs font-bold uppercase tracking-wide text-amber-800">{t('redirectDest')}</p>
-                <p className="break-all rounded-xl border-2 border-amber-500 bg-white px-4 py-3 font-mono text-base font-bold text-[var(--ink)]">{result.analysis.landing.to}</p>
+      {result && !analyzing && (() => {
+        const badge = result.analysis.badge
+        const tone = TONES[badge]
+        const VerdictIcon = badge === 'green' ? ShieldCheck : badge === 'yellow' ? AlertTriangle : ShieldAlert
+        const risks = result.analysis.indicators.filter((i) => i.type === 'risk')
+        const warnings = result.analysis.indicators.filter((i) => i.type === 'warning')
+        const oks = result.analysis.indicators.filter((i) => i.type === 'ok')
+        const score = Math.max(0, Math.min(100, Math.round(result.analysis.riskScore)))
+        const site = result.analysis.site
+        return (
+          <div className="space-y-4 sm:space-y-5">
+            {/* Il verdetto, grande e colorato: la prima cosa da capire */}
+            <div role={badge === 'red' ? 'alert' : undefined} className={`overflow-hidden rounded-2xl border-2 shadow-md ${tone.border} ${tone.soft}`}>
+              <div className={`flex items-center gap-3 px-4 py-4 text-white sm:px-6 sm:py-5 ${tone.band}`}>
+                <VerdictIcon className={`h-11 w-11 shrink-0 sm:h-12 sm:w-12 ${badge === 'red' ? 'motion-safe:animate-pulse' : ''}`} aria-hidden />
+                <div className="min-w-0">
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-white/85">{t(riskLevelKey)}</p>
+                  <p className="text-xl font-extrabold leading-tight sm:text-2xl">{t(`verdictTitle_${badge}`)}</p>
+                </div>
               </div>
-            </div>
-          )}
-
-          <p className="text-sm text-[var(--muted)]">{t(aiExplanationKey)}</p>
-
-          {result.analysis.redirectChain && result.analysis.redirectChain.length > 0 && (
-            <div>
-              <p className="text-xs font-semibold text-[var(--muted)] uppercase tracking-wide mb-2">{t('redirect')}</p>
-              <div className="space-y-1">
-                {result.analysis.redirectChain.map((hop, i) => (
-                  <p key={i} className="text-sm text-[var(--muted)] break-all">
-                    {i > 0 && `${t('redirectTo')} → `}
-                    {hop.url}
-                  </p>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {result.analysis.indicators.length > 0 && (
-            <div>
-              <p className="text-xs font-semibold text-[var(--muted)] uppercase tracking-wide mb-2">
-                {t('riskIndicators')}
-              </p>
-              <div className="space-y-2">
-                {result.analysis.indicators.map((ind, i) => (
-                  <div key={i} className="flex items-start gap-2 text-sm text-[var(--ink)]">
-                    <IndicatorIcon type={ind.type} />
-                    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                    <span>{t(ind.key as any, ind.params as any)}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {result.analysis.recommendations.length > 0 && (
-            <div className="bg-[var(--gold-pale)] border border-[var(--gold)]/30 rounded-xl p-4 space-y-1">
-              {result.analysis.recommendations.map((rec, i) => (
-                <p key={i} className="text-sm text-[var(--ink)]">
-                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                  • {t(rec as any)}
+              <div className="space-y-4 p-4 sm:p-6">
+                <p className={`text-base font-medium leading-relaxed ${tone.text}`}>
+                  {t(`verdictText_${badge}`, { risk: risks.length, warning: warnings.length })}
                 </p>
-              ))}
-            </div>
-          )}
-
-          {/* Avviso della Rete Anti-Truffa (link, numero o email del QR) */}
-          <CommunityWarning items={[{ kind: 'qr', value: result.raw }]} />
-          <ScamCardCaptured card={result.scamCard} />
-
-          {result.communitySignals && result.communitySignals.totalReports > 0 && (
-            <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-              <div className="flex items-center gap-2 text-red-700 font-medium text-sm mb-1">
-                <Users className="w-4 h-4" />
-                {t('communityReport')}
+                {/* Livello di sicurezza 0-100 */}
+                <div>
+                  <div className="flex items-baseline justify-between text-sm">
+                    <span className="font-semibold text-[var(--ink)]">{t('safetyScore')}</span>
+                    <span className={`text-lg font-extrabold ${tone.text}`}>{score}/100</span>
+                  </div>
+                  <div className="mt-1.5 h-3 overflow-hidden rounded-full bg-white/80 ring-1 ring-black/5">
+                    <div className={`h-full rounded-full ${tone.band}`} style={{ width: `${Math.max(score, 4)}%` }} />
+                  </div>
+                </div>
+                {/* Quanti segnali, per tipo */}
+                <div className="grid grid-cols-3 gap-2 text-center">
+                  <div className="rounded-xl bg-white px-2 py-2.5 ring-1 ring-red-200">
+                    <p className="text-2xl font-extrabold text-red-600">{risks.length}</p>
+                    <p className="text-[11px] font-semibold leading-tight text-red-800 sm:text-xs">{t('countRisk')}</p>
+                  </div>
+                  <div className="rounded-xl bg-white px-2 py-2.5 ring-1 ring-amber-200">
+                    <p className="text-2xl font-extrabold text-amber-600">{warnings.length}</p>
+                    <p className="text-[11px] font-semibold leading-tight text-amber-800 sm:text-xs">{t('countWarning')}</p>
+                  </div>
+                  <div className="rounded-xl bg-white px-2 py-2.5 ring-1 ring-green-200">
+                    <p className="text-2xl font-extrabold text-green-600">{oks.length}</p>
+                    <p className="text-[11px] font-semibold leading-tight text-green-800 sm:text-xs">{t('countOk')}</p>
+                  </div>
+                </div>
               </div>
-              <p className="text-sm text-red-700">
-                {t('communityReports', { count: result.communitySignals.totalReports })}
-              </p>
             </div>
-          )}
 
-          <div className="flex flex-wrap items-center gap-3 pt-2">
-            {result.type === 'url' && (
-              <a
-                href={getDestination(result)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-sm transition-all ${
-                  result.analysis.badge === 'red'
-                    ? 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-                    : 'bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] text-[var(--ink)] font-bold shadow-md hover:brightness-105'
-                }`}
-              >
-                <ExternalLink className="w-4 h-4" />
-                {result.analysis.badge === 'red' ? t('openAnyway') : t('visitSite')}
-              </a>
+            {/* Dove porta il QR: il nome del sito in grande */}
+            <div className="rounded-2xl border border-[var(--gold)]/25 bg-[var(--gold-pale)]/60 p-4 sm:p-5">
+              <p className="text-xs font-bold uppercase tracking-wide text-[var(--muted)]">
+                {t(TYPE_LABEL_KEY[result.type])} · {t('destination')}
+              </p>
+              {site ? (
+                <>
+                  <p className="mt-1.5 break-all font-mono text-xl font-extrabold text-[var(--ink)] sm:text-2xl">{site.host}</p>
+                  <div className="mt-2.5 flex flex-wrap gap-2">
+                    <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold ${site.https ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-700'}`}>
+                      {site.https ? <Lock className="h-3.5 w-3.5" aria-hidden /> : <LockOpen className="h-3.5 w-3.5" aria-hidden />}
+                      {t(site.https ? 'httpsYes' : 'httpsNo')}
+                    </span>
+                    {!site.exists && (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-red-100 px-2.5 py-1 text-xs font-bold text-red-700">
+                        <XCircle className="h-3.5 w-3.5" aria-hidden /> {t('siteMissing')}
+                      </span>
+                    )}
+                  </div>
+                  <p className="mt-3 text-xs text-[var(--muted)]">{t('fullLink')}</p>
+                  <p className="break-all font-mono text-sm text-[var(--ink)]">{getDestination(result)}</p>
+                </>
+              ) : (
+                <p className="mt-1.5 break-all text-lg font-bold text-[var(--ink)]">{getDestination(result)}</p>
+              )}
+            </div>
+
+            {/* Finta pagina di accesso: avviso in evidenza */}
+            {result.analysis.phishing && (
+              <div role="alert" className="rounded-2xl border-2 border-red-400 bg-red-50 p-4 text-red-900 shadow-md sm:p-5">
+                <p className="flex items-center gap-2 text-lg font-extrabold sm:text-xl">
+                  <ShieldAlert className="h-6 w-6 shrink-0 text-red-600" aria-hidden /> {t('phishingAlertTitle')}
+                </p>
+                <p className="mt-2 break-words text-base font-medium leading-relaxed">
+                  {t(result.analysis.phishing.card ? 'indicatorPhishingCard' : 'indicatorPhishingPage', {
+                    brand: result.analysis.phishing.brand,
+                    domain: result.analysis.phishing.domain,
+                    official: result.analysis.phishing.official,
+                  })}
+                </p>
+              </div>
             )}
 
-            <Link
-              href={reportHref('qr', result.raw)}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-sm bg-white border border-[var(--gold)]/40 text-[var(--ink)] hover:border-[var(--gold)] transition-all"
-            >
-              <Flag className="w-4 h-4" />
-              {t('reportIssue')}
-            </Link>
+            {/* Il link porta su un altro sito: partenza e arrivo ben visibili */}
+            {result.analysis.landing && (
+              <div className="rounded-2xl border-2 border-amber-400 bg-amber-50 p-4 text-amber-950 shadow-md sm:p-5">
+                <p className="flex items-center gap-2 text-lg font-extrabold sm:text-xl">
+                  <AlertTriangle className="h-6 w-6 shrink-0 text-amber-600" aria-hidden /> {t('landingTitle')}
+                </p>
+                <div className="mt-3 space-y-2">
+                  <p className="text-xs font-bold uppercase tracking-wide text-amber-800">{t('redirectFrom')}</p>
+                  <p className="break-all rounded-xl border border-amber-200 bg-white/70 px-4 py-2 font-mono text-sm">{result.analysis.landing.from}</p>
+                  <ArrowDown className="mx-auto h-6 w-6 text-amber-600" aria-hidden />
+                  <p className="text-xs font-bold uppercase tracking-wide text-amber-800">{t('redirectDest')}</p>
+                  <p className="break-all rounded-xl border-2 border-amber-500 bg-white px-4 py-3 font-mono text-base font-bold text-[var(--ink)]">{result.analysis.landing.to}</p>
+                </div>
+              </div>
+            )}
 
-            <button
-              onClick={reset}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-sm bg-[var(--ink)] text-white hover:bg-[var(--ink-soft)] transition-all"
-            >
-              <RefreshCw className="w-4 h-4" />
-              {t('uploadImage')}
-            </button>
+            {/* Segnali di pericolo e da tenere d'occhio, uno per riga */}
+            {risks.length > 0 && <IndicatorGroup title={t('groupRisk')} items={risks} t={t} tone="risk" />}
+            {warnings.length > 0 && <IndicatorGroup title={t('groupWarning')} items={warnings} t={t} tone="warning" />}
+
+            {result.analysis.redirectChain && result.analysis.redirectChain.length > 0 && (
+              <div>
+                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--muted)]">{t('redirect')}</p>
+                <div className="space-y-1">
+                  {result.analysis.redirectChain.map((hop, i) => (
+                    <p key={i} className="break-all text-sm text-[var(--muted)]">
+                      {i > 0 && `${t('redirectTo')} → `}
+                      {hop.url}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Cosa fare adesso: passi numerati */}
+            {result.analysis.recommendations.length > 0 && (
+              <div className={`rounded-2xl p-4 sm:p-5 ${badge === 'red' ? 'bg-[var(--ink)] text-white' : 'border border-[var(--gold)]/30 bg-[var(--gold-pale)] text-[var(--ink)]'}`}>
+                <p className="text-base font-extrabold">{t('whatToDo')}</p>
+                <ol className="mt-3 space-y-2.5">
+                  {result.analysis.recommendations.map((rec, i) => (
+                    <li key={rec} className="flex gap-3 text-[15px] leading-snug">
+                      <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-extrabold ${badge === 'red' ? 'bg-[var(--gold-bright)] text-[var(--ink)]' : 'bg-[var(--ink)] text-white'}`}>
+                        {i + 1}
+                      </span>
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                      <span>{t(rec as any)}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
+
+            {/* Avviso della Rete Anti-Truffa (link, numero o email del QR) */}
+            <CommunityWarning items={[{ kind: 'qr', value: result.raw }]} />
+            <ScamCardCaptured card={result.scamCard} />
+
+            {result.communitySignals && result.communitySignals.totalReports > 0 && (
+              <div className="rounded-xl border border-red-200 bg-red-50 p-4">
+                <div className="mb-1 flex items-center gap-2 text-sm font-medium text-red-700">
+                  <Users className="h-4 w-4" />
+                  {t('communityReport')}
+                </div>
+                <p className="text-sm text-red-700">{t('communityReports', { count: result.communitySignals.totalReports })}</p>
+              </div>
+            )}
+
+            {/* Le cose a posto: chiuse, per non distrarre dal pericolo */}
+            {oks.length > 0 && (
+              <details className="group rounded-2xl border border-green-200 bg-green-50/60 p-4">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-2 text-sm font-bold text-green-800">
+                  <span className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4" aria-hidden /> {t('groupOk')} ({oks.length})
+                  </span>
+                  <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" aria-hidden />
+                </summary>
+                <ul className="mt-3 space-y-2">
+                  {oks.map((ind, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-[var(--ink)]">
+                      <IndicatorIcon type="ok" />
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                      <span>{t(ind.key as any, ind.params as any)}</span>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            )}
+
+            {/* Azioni: a tutta larghezza sul telefono */}
+            <div className="grid grid-cols-1 gap-2 pt-1 sm:grid-cols-2">
+              <Link
+                href={reportHref('qr', result.raw)}
+                className={`flex min-h-12 items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold transition-all ${
+                  badge === 'red' ? 'bg-red-600 text-white shadow-md hover:bg-red-700' : 'border border-[var(--gold)]/40 bg-white text-[var(--ink)] hover:border-[var(--gold)]'
+                }`}
+              >
+                <Flag className="h-4 w-4" />
+                {t('reportIssue')}
+              </Link>
+              <button
+                onClick={reset}
+                className="flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[var(--ink)] px-4 py-3 text-sm font-bold text-white transition-all hover:bg-[var(--ink-soft)]"
+              >
+                <RefreshCw className="h-4 w-4" />
+                {t('scanAnother')}
+              </button>
+              {result.type === 'url' && badge !== 'red' && (
+                <a
+                  href={getDestination(result)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex min-h-12 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-4 py-3 text-sm font-bold text-[var(--ink)] shadow-md hover:brightness-105 sm:col-span-2"
+                >
+                  <ExternalLink className="h-4 w-4" />
+                  {t('visitSite')}
+                </a>
+              )}
+            </div>
+            {/* QR pericoloso: aprirlo resta possibile, ma piccolo e con conferma */}
+            {result.type === 'url' && badge === 'red' && (
+              <button
+                type="button"
+                onClick={async () => {
+                  if (await askConfirm(t('openAnywayConfirm'))) window.open(getDestination(result), '_blank', 'noopener,noreferrer')
+                }}
+                className="mx-auto block text-xs text-[var(--muted)] underline hover:text-[var(--ink)]"
+              >
+                {t('openAnyway')}
+              </button>
+            )}
+
+            <p className="pt-1 text-center text-xs text-[var(--muted)]">{t('disclaimer')}</p>
           </div>
-
-          <p className="text-xs text-[var(--muted)] text-center pt-2">{t('disclaimer')}</p>
-        </div>
-      )}
+        )
+      })()}
     </div>
   )
 }

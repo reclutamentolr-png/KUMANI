@@ -100,6 +100,15 @@ export default async function ScamCardPublicPage({ params, searchParams }: { par
             <p className="mt-4 text-[var(--ink)]">
               <b>{t('move')}</b> {card.move}
             </p>
+            {card.tool && (
+              <Link
+                href={card.tool.href}
+                className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-2xl bg-[var(--ink)] px-5 py-2.5 text-sm font-bold text-white hover:bg-black"
+              >
+                <QrCode className="h-4 w-4 text-[var(--gold-bright)]" aria-hidden />
+                {card.tool.label}
+              </Link>
+            )}
           </section>
         </div>
 

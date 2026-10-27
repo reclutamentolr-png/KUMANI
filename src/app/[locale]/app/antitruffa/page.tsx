@@ -357,6 +357,15 @@ function ScamCard({ scam, ui }: { scam: Scam; ui: GuideContent['ui'] }) {
                 </li>
               ))}
             </ul>
+            {scam.tool ? (
+              <Link
+                href={scam.tool.href}
+                className="mt-3 inline-flex min-h-10 items-center gap-1.5 rounded-xl bg-[var(--ink)] px-4 py-2 text-sm font-semibold text-white hover:bg-black print:hidden"
+              >
+                <ShieldCheck className="h-4 w-4 text-[var(--gold-bright)]" aria-hidden />
+                {scam.tool.label}
+              </Link>
+            ) : null}
           </div>
         </div>
         {scam.ai ? (

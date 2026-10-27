@@ -17,6 +17,8 @@ export type ScamCard = {
   move: string
   signs: [string, string, string]
   defense: string
+  // Facoltativo: lo strumento di KUMANI che aiuta con questa truffa
+  tool?: { label: string; href: string }
   // 5 domande: ogni volta se ne fanno 3, scelte dal server (quiz.ts)
   quiz: ScamQuestion[]
 }
@@ -296,7 +298,8 @@ export const SCAM_CARDS: ScamCard[] = [
     bait: 'Un adesivo con QR sopra quello vero, sul parcometro o su un volantino.',
     move: 'Guarda se il QR è un adesivo appiccicato sopra.',
     signs: ['Adesivo sopra il QR originale', 'Il sito chiede subito la carta', 'L’indirizzo non è quello del gestore'],
-    defense: 'Paga dall’app ufficiale del parcheggio o alla cassa. Nel dubbio, non inquadrare.',
+    defense: 'Paga dall’app ufficiale del parcheggio o alla cassa. Nel dubbio, controlla il QR con KUMANI.',
+    tool: { label: 'Controlla un QR code', href: '/app/svat?tab=qr' },
     quiz: [
       { q: 'Sul parcometro il QR sembra un adesivo messo sopra quello vero. Cosa fai?', options: ['Inquadro lo stesso', 'Pago dall’app ufficiale o alla cassa', 'Lo stacco e inquadro quello sotto'], correct: 1 },
       { q: 'Il sito del QR chiede subito la carta e l’indirizzo è strano. È…', options: ['Sospetto', 'Normale', 'Più sicuro'], correct: 0 },

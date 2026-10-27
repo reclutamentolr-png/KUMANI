@@ -61,10 +61,13 @@ export default async function HomePlans() {
   }
   // Servizi di un piano, con descrizione e argomento (per "Dettagli")
   // Servizi uniti come una voce sola: «Speculum · Sito e P.IVA, Email, Foto»…
+  // In «Dettagli» la Sicurezza viene per prima e il Marketing per ultimo
+  const categoryRank = (category: MarketplaceCategory) => (category === 'security' ? 0 : category === 'marketing' ? 2 : 1)
   const detailsOf = (plan: string): PlanDetailsTool[] =>
     collapseByHub(
     tools
       .filter((tool) => planOf(tool.toolName) === plan)
+      .sort((a, b) => categoryRank(a.category) - categoryRank(b.category))
       .map((tool) => {
         const row = byName.get(tool.toolName)
         return {

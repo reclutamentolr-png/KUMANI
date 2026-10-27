@@ -21,6 +21,8 @@ export type Scam = {
   // Facoltativo: come l'intelligenza artificiale rende la truffa più credibile
   ai?: string
   vignette?: VignetteId
+  // Facoltativo: lo strumento di KUMANI che aiuta con questa truffa
+  tool?: { label: string; href: string }
 }
 
 export type Chapter = {

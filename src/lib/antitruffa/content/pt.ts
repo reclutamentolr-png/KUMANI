@@ -310,7 +310,8 @@ const pt: GuideContent = {
           title: `Os códigos QR adulterados (quishing)`,
           how: `Nos parquímetros são colados autocolantes com um QR "pague o estacionamento" que leva a um site falso. O mesmo truque aparece em falsas multas no para-brisas, avisos de encomendas e emails que pedem para "digitalizar para verificar a conta".`,
           flags: [`Autocolantes colados por cima do QR original`, `Depois de ler o código, abre um endereço estranho`],
-          todo: [`Pague o estacionamento pela app oficial da câmara municipal ou da empresa gestora`, `Verifique sempre o endereço que se abre depois de ler o código`],
+          todo: [`Pague o estacionamento pela app oficial da câmara municipal ou da empresa gestora`, `Verifique sempre o endereço que se abre depois de ler o código`, `Na dúvida, verifique o QR com a KUMANI antes de o abrir`],
+          tool: { label: `Verificar um código QR`, href: `/app/svat?tab=qr` },
           vignette: `qr`,
         },
         {

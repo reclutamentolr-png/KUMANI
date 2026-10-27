@@ -310,7 +310,8 @@ const en: GuideContent = {
           title: `Tampered QR codes (quishing)`,
           how: `Stickers with a "pay for parking" QR code are stuck onto parking machines and lead to a fake website. The same trick appears on fake fines tucked under your windscreen wiper, parcel notices and emails asking you to "scan to verify your account".`,
           flags: [`Stickers placed over the original QR code`, `A strange web address after scanning`],
-          todo: [`Pay for parking through the council's or the operator's official app`, `Always check the address that opens after you scan`],
+          todo: [`Pay for parking through the council's or the operator's official app`, `Always check the address that opens after you scan`, `If in doubt, check the QR with KUMANI before opening it`],
+          tool: { label: `Check a QR code`, href: `/app/svat?tab=qr` },
           vignette: `qr`,
         },
         {

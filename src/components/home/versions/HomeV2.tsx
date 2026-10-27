@@ -460,15 +460,6 @@ export default async function HomeV2({ layoutKey }: { layoutKey: HomeLayoutKey }
               <Link href="/contact" className="hover:text-[var(--gold-bright)] transition-colors">{t('contact')}</Link>
               <InstallAppLink className="cursor-pointer hover:text-[var(--gold-bright)] transition-colors">{tInstall('menuLink')}</InstallAppLink>
             </div>
-            <div className="text-gray-400 text-xs sm:text-sm text-center">
-              {t('copyright')}
-              {CONTACT_INFO.company.name && (
-                <span className="mt-1 block text-[11px] text-gray-500 sm:text-xs">
-                  {CONTACT_INFO.company.name}
-                  {CONTACT_INFO.company.vatNumber && ` · P.IVA ${CONTACT_INFO.company.vatNumber}`}
-                </span>
-              )}
-            </div>
           </div>
           {/* YouTube, Instagram e TikTok di KUMANI */}
           <div className="mt-6">
@@ -479,8 +470,12 @@ export default async function HomeV2({ layoutKey }: { layoutKey: HomeLayoutKey }
             {' '}
             {t('footerLegalNote2')}
           </p>
-          {/* Chi ha realizzato il sito */}
-          <p className="mt-4 text-center text-xs text-gray-500">{t('builtBy', { name: 'MC TEKNOLOGY' })}</p>
+          {/* Diritti e dati del gestore, in fondo alla pagina */}
+          <p className="mt-6 border-t border-white/5 pt-4 text-center text-xs text-gray-500">
+            {t('copyright')}
+            {CONTACT_INFO.company.name && ` · ${CONTACT_INFO.company.name}`}
+            {CONTACT_INFO.company.vatNumber && ` · P.IVA ${CONTACT_INFO.company.vatNumber}`}
+          </p>
         </div>
       </footer>
     </div>

@@ -90,10 +90,12 @@ function BadgeColor({ badge }: { badge: 'green' | 'yellow' | 'red' }) {
 }
 
 // Precompilazione da link (?vat= o ?url=, es. dalla chat o dal box «Controlla»):
-// solo il campo, il controllo parte col click perché chiama servizi esterni
-function prefillFromParams(params: { [key: string]: string | string[] | undefined }): { tab: 'website' | 'vat'; value: string } {
+// solo il campo, il controllo parte col click perché chiama servizi esterni.
+// ?tab=qr apre direttamente il Controllo QR
+function prefillFromParams(params: { [key: string]: string | string[] | undefined }): { tab: 'website' | 'vat' | 'qr'; value: string } {
   const clean = (v: string | string[] | undefined) =>
     (typeof v === 'string' ? v : '').replace(/[\x00-\x1f\x7f<>"`]/g, '').trim().slice(0, 200)
+  if (params.tab === 'qr') return { tab: 'qr', value: '' }
   const vat = clean(params.vat)
   if (vat) return { tab: 'vat', value: vat }
   return { tab: 'website', value: clean(params.url) }

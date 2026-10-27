@@ -309,7 +309,8 @@ const de: GuideContent = {
           title: `Manipulierte QR-Codes (Quishing)`,
           how: `Auf Parkscheinautomaten und Ladesäulen werden Aufkleber mit einem QR-Code "Parken bezahlen" geklebt, der zu einer falschen Seite führt. Derselbe Trick steckt in falschen Strafzetteln unter dem Scheibenwischer, Paket-Benachrichtigungen und E-Mails, in denen du "zur Kontoprüfung scannen" sollst.`,
           flags: [`Aufkleber über dem Original-QR-Code`, `Nach dem Scannen öffnet sich eine seltsame Adresse`],
-          todo: [`Bezahl das Parken über die offizielle App der Stadt oder des Betreibers`, `Prüf immer die Adresse, die sich nach dem Scannen öffnet`],
+          todo: [`Bezahl das Parken über die offizielle App der Stadt oder des Betreibers`, `Prüf immer die Adresse, die sich nach dem Scannen öffnet`, `Im Zweifel prüf den QR-Code mit KUMANI, bevor du ihn öffnest`],
+          tool: { label: `Einen QR-Code prüfen`, href: `/app/svat?tab=qr` },
           vignette: `qr`,
         },
         {

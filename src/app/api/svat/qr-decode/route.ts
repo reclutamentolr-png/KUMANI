@@ -1,3 +1,4 @@
+import { lookup } from 'node:dns/promises'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
@@ -5,7 +6,7 @@ import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { fetchWhoisText, parseWhois } from '@/lib/whois'
 import { findScamDomain } from '@/lib/scamDomains'
 import { webRiskLookup, worstThreat } from '@/lib/webRisk'
-import { isIpLoggerHost, lookalikeBrand } from '@/lib/checkmail/engine'
+import { isIpLoggerHost, lookalikeBrand, RISKY_TLDS } from '@/lib/checkmail/engine'
 import { asksPassword, inspectLink } from '@/lib/linkInspect'
 import { siteKeys } from '@/lib/scamNet'
 import { captureScamCard, type CapturedCard } from '@/lib/scamCards/capture'
@@ -29,6 +30,8 @@ interface QRAnalysis {
     landing?: { from: string; to: string }
     // Finta pagina di accesso o di pagamento sul sito d'arrivo
     phishing?: { brand: string; domain: string; official: string; card: boolean }
+    // Il sito del link, per mostrarlo in grande: nome, protezione, se esiste
+    site?: { host: string; https: boolean; exists: boolean }
     recommendations: string[]
     aiExplanation: string
   }
@@ -60,6 +63,28 @@ const KNOWN_BRANDS: Array<{ name: string; domains: string[]; category: string }>
   { name: 'McDonald', domains: ['mcdonalds.com', 'mcdonalds.it'], category: 'Food' },
   { name: 'Netflix', domains: ['netflix.com', 'netflix.it'], category: 'Entertainment' },
 ]
+
+// Parole di Comuni, multe, soste, tributi e pagamenti nel nome del sito: il
+// trucco dei QR falsi su parcometri e finte multe (quishing)
+const AUTHORITY_WORDS_RE = /(comun[ei]|multa|multe|sosta|parchegg|parcomet|pedagg|autostrad|telepass|inps|agenziaentrate|agenzia-entrate|tribut|bollo|polizia|carabinier|ztl|pagopa|pagamento|pagaparch|rimbors)/
+
+// Siti ufficiali italiani: .gov.it e i Comuni (comune.nome.it, comune.nome.pr.it)
+const isPublicOfficial = (host: string) => host.endsWith('.gov.it') || /^comune\.[a-z0-9-]+\.(?:[a-z]{2}\.)?it$/.test(host) || host === 'pagopa.gov.it'
+
+// Parametri di un pagamento già pronto nel link (importo, targa, carta…)
+const PAYMENT_PARAM_RE = /(^|[^a-z])(importo|amount|targa|plate|pagamento|payment|checkout|iban|carta|card|pay)([^a-z]|$)/i
+
+// Il nome del sito esiste davvero? Un sito che non risponde nemmeno al nome è
+// spesso un sito truffa già chiuso o mai acceso (3 secondi al massimo)
+async function siteExists(host: string): Promise<boolean | null> {
+  try {
+    await Promise.race([lookup(host), new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 3000))])
+    return true
+  } catch (err) {
+    const code = (err as NodeJS.ErrnoException)?.code
+    return code === 'ENOTFOUND' || code === 'ENODATA' ? false : null
+  }
+}
 
 const SHORTENER_DOMAINS = [
   'bit.ly', 'tinyurl.com', 'tinyurl.it', 't.co', 'goo.gl', 'ow.ly', 'buff.ly',
@@ -389,14 +414,41 @@ async function analyzeURL(url: string): Promise<QRAnalysis['analysis']> {
     riskScore -= 5
   }
 
+  // Il sito esiste? Estensione da truffa? Si spaccia per un ente o un pagamento?
+  const host = urlObj.hostname.toLowerCase().replace(/^www\./, '')
+  const exists = await siteExists(host)
+  if (exists === false) {
+    indicators.push({ type: 'risk', key: 'indicatorNoSite', params: { domain: host } })
+    riskScore -= 25
+  }
+  const tld = host.split('.').pop() ?? ''
+  if (RISKY_TLDS.has(tld)) {
+    indicators.push({ type: 'risk', key: 'indicatorRiskyTld', params: { tld: `.${tld}` } })
+    riskScore -= 10
+  }
+  const fakeAuthority = AUTHORITY_WORDS_RE.test(host.replace(/\./g, '-')) && !isPublicOfficial(host) && !lookalikeBrand(host)
+  // Un'azienda vera di parcheggi può avere «parcheggio» nel nome: è un
+  // pericolo solo insieme ad altri segnali (sito inesistente, estensione da
+  // truffa, niente https)
+  if (fakeAuthority) {
+    const strong = exists === false || RISKY_TLDS.has(tld) || urlObj.protocol !== 'https:'
+    indicators.push({ type: strong ? 'risk' : 'warning', key: 'indicatorFakeAuthority', params: { domain: host } })
+    riskScore -= strong ? 15 : 5
+  }
+  const paymentLink = PAYMENT_PARAM_RE.test(`${urlObj.pathname} ${[...urlObj.searchParams.keys()].join(' ')}`)
+  if (paymentLink) {
+    indicators.push({ type: 'warning', key: 'indicatorPaymentLink' })
+    riskScore -= 5
+  }
+
   // Il link si apre come farebbe il telefono (richiesta vera, non «HEAD», che
   // molte pagine truffa ignorano), seguendo i rinvii anche scritti nella
   // pagina, fino al sito d'arrivo (src/lib/linkInspect.ts)
-  const inspected = await inspectLink(url).catch(() => null)
+  const inspected = exists === false ? null : await inspectLink(url).catch(() => null)
   let landing: { from: string; to: string } | undefined
   let phishing: QRAnalysis['analysis']['phishing']
   if (!inspected) {
-    indicators.push({ type: 'warning', key: 'indicatorRedirectFailed' })
+    if (exists !== false) indicators.push({ type: 'warning', key: 'indicatorRedirectFailed' })
   } else {
     if (inspected.finalUrl !== urlObj.href) {
       hasRedirect = true
@@ -480,7 +532,7 @@ async function analyzeURL(url: string): Promise<QRAnalysis['analysis']> {
   // authoritative WHOIS server directly (src/lib/whois.ts) instead of a
   // third-party HTTP proxy.
   try {
-    const whoisData = await fetchWhoisText(finalHostname)
+    const whoisData = exists === false ? null : await fetchWhoisText(finalHostname)
     if (whoisData) {
       const { creationDate } = parseWhois(whoisData)
       if (creationDate) {
@@ -524,9 +576,13 @@ async function analyzeURL(url: string): Promise<QRAnalysis['analysis']> {
   }
 
   const recommendations: string[] = []
+  const danger = riskScore < 40
+  if (danger) recommendations.push('recDontOpen')
+  if (fakeAuthority || paymentLink) recommendations.push('recOfficialPay')
   if (!url.startsWith('https://') || phishing) recommendations.push('recommendation3')
   if (impersonationCheck) recommendations.push('recommendation2')
   if (hasRedirect) recommendations.push('recommendation4')
+  if (danger) recommendations.push('recIfPaid', 'recReportQr')
   if (!recommendations.length) recommendations.push('recommendation1')
 
   return {
@@ -536,6 +592,7 @@ async function analyzeURL(url: string): Promise<QRAnalysis['analysis']> {
     redirectChain,
     landing,
     phishing,
+    site: { host, https: url.startsWith('https://'), exists: exists !== false },
     recommendations,
     aiExplanation,
   }

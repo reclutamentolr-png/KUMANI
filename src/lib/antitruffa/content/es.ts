@@ -310,7 +310,8 @@ const es: GuideContent = {
           title: `Los códigos QR trucados (quishing)`,
           how: `En los parquímetros pegan pegatinas con un QR de "paga el aparcamiento" que lleva a una web falsa. El mismo truco aparece en falsas multas bajo el limpiaparabrisas, avisos de paquetes y correos que te piden "escanear para verificar la cuenta".`,
           flags: [`Pegatinas encima del QR original`, `Tras escanear, una dirección rara`],
-          todo: [`Paga el aparcamiento desde la app oficial de tu ayuntamiento o del operador`, `Mira siempre la dirección que se abre tras escanear`],
+          todo: [`Paga el aparcamiento desde la app oficial de tu ayuntamiento o del operador`, `Mira siempre la dirección que se abre tras escanear`, `Si tienes dudas, comprueba el QR con KUMANI antes de abrirlo`],
+          tool: { label: `Comprobar un código QR`, href: `/app/svat?tab=qr` },
           vignette: `qr`,
         },
         {

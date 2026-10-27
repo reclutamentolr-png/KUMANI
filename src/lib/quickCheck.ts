@@ -25,6 +25,17 @@ const pathFor = (kind: QuickCheckKind, value: string): string => {
   }
 }
 
+// Il Controllo QR di SVAT (fotocamera o foto del QR)
+export const QR_CHECK_PATH = '/app/svat?tab=qr'
+
+// Chi scrive «qr», «qrcode», «controllo qr code», «codice QR»… (frase breve,
+// senza un link o altro da controllare) vuole controllare un QR code
+export function wantsQrCheck(raw: string): boolean {
+  const text = raw.trim().toLowerCase()
+  if (!text || text.length > 80) return false
+  return /(^|[^a-z0-9])qr(\s?-?\s?code|s)?([^a-z0-9]|$)/.test(text) || /\bqrcode\b/.test(text)
+}
+
 // Un valore solo (campo breve): lo strumento giusto, oppure null
 export function quickCheckTarget(raw: string): string | null {
   const one = classifyOne(raw)
