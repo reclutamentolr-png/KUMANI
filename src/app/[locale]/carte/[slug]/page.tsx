@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
-import { ArrowLeft, QrCode, ShieldCheck } from 'lucide-react'
+import { ArrowLeft, Home, QrCode, ShieldCheck } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import Logo from '@/components/Logo'
 import ScamCardView from '@/components/scamCards/ScamCardView'
@@ -43,9 +43,17 @@ export default async function ScamCardPublicPage({ params, searchParams }: { par
           <Link href="/" aria-label="KUMANI">
             <Logo size={34} className="h-[34px] w-[34px]" />
           </Link>
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--gold-bright)]">{t('deckName')}</p>
-          <Link href={`/carte${incoming ? `?invito=${incoming}` : ''}`} className="ml-auto inline-flex min-h-10 items-center gap-1.5 rounded-full border border-white/25 px-3 text-sm font-bold hover:bg-white/10">
+          <p className="min-w-0 text-xs font-bold uppercase tracking-[0.18em] text-[var(--gold-bright)]">{t('deckName')}</p>
+          <Link href={`/carte${incoming ? `?invito=${incoming}` : ''}`} className="ml-auto inline-flex min-h-10 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-white/25 px-3 text-sm font-bold hover:bg-white/10">
             <ArrowLeft className="h-4 w-4" aria-hidden /> {t('allCardsLink')}
+          </Link>
+          <Link
+            href={access.userId ? '/dashboard' : '/'}
+            aria-label={access.userId ? t('backDashboard') : t('backHome')}
+            title={access.userId ? t('backDashboard') : t('backHome')}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/25 hover:bg-white/10"
+          >
+            <Home className="h-4 w-4" aria-hidden />
           </Link>
         </div>
       </header>

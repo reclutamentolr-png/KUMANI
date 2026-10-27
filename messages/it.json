@@ -37,7 +37,9 @@
     "toolPausedText": "Lo Staff lo ha messo in pausa per lavori o aggiornamenti. I tuoi dati restano salvati e il servizio tornerà disponibile appena possibile.",
     "day": "Giorno",
     "month": "Mese",
-    "year": "Anno"
+    "year": "Anno",
+    "siteBackHome": "Torna alla home",
+    "siteMyHome": "La mia Home"
   },
   "landingHome": {
     "statLanguagesLabel": "lingue: KUMANI parla la tua",
@@ -17197,6 +17199,25 @@
     "deckTitle": "Hai in mano la carta stampata?",
     "deckMember": "Rispondi alle sue 3 domande e mettila nel tuo album di KUMANI.",
     "deckGuest": "Qui sotto trovi la carta sempre aggiornata. Con KUMANI la metti nel tuo album e controlli le truffe prima di cadere nella trappola.",
-    "deckMemberButton": "Mettila nell’album"
+    "deckMemberButton": "Mettila nell’album",
+    "howTitle": "Come funzionano",
+    "indexCardsTitle": "Le 20 carte",
+    "howReadTitle": "1. Leggi la carta",
+    "howReadText": "Ogni carta è una truffa vera: l’esca come arriva davvero, i 3 segnali per riconoscerla e cosa fare subito.",
+    "howQuizTitle": "2. Rispondi a 3 domande",
+    "howQuizText": "Rispondi giusto e la carta entra nel tuo album. Se sbagli, la rileggi e riprovi il giorno dopo.",
+    "howCaptureTitle": "3. Catturala dal vivo",
+    "howCaptureText": "Quando SVAT, CheckMail, il controllo dei QR o la Rete Anti-Truffa fermano una truffa vera, la sua carta arriva con la cornice verde.",
+    "howShareTitle": "4. Avvisa chi ami",
+    "howShareText": "Con «Avvisa qualcuno» mandi la carta su WhatsApp: si legge anche senza KUMANI. Genitori e nonni sono i più presi di mira.",
+    "howPlans": "Leggere e condividere le carte è gratis per tutti. L’album, le domande e la cattura sono nei piani Plus e Pro.",
+    "walletEmpty": "Nessuna carta ancora: leggile e rispondi alle 3 domande per iniziare la collezione.",
+    "walletOpen": "Vai all’album",
+    "dailyRule": "Una carta al giorno: con le domande o catturata da un controllo, ne arriva una sola ogni giorno.",
+    "dailyDone": "Carta di oggi: «{name}». La prossima carta puoi prenderla da domani.",
+    "dailyLimit": "Oggi hai già preso una carta: questa puoi prenderla da domani.",
+    "capturedLimited": "È la truffa «{name}»: l’hai fermata! Oggi però hai già preso una carta, quindi questa la potrai catturare da domani.",
+    "backHome": "Torna alla home",
+    "backDashboard": "La mia Home"
   }
 }

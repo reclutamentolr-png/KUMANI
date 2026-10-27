@@ -1,6 +1,9 @@
 import { SITE_URL } from '@/lib/siteUrl'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import ScamCardView from '@/components/scamCards/ScamCardView'
+import { GREEN_SHIELD_CAPTURES, SCAM_CARDS, SHIELDS } from '@/lib/scamCards/cards'
+import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
 import {
@@ -22,6 +25,8 @@ import {
   HeartHandshake,
   Stamp,
   ChevronRight,
+  Layers,
+  Shield,
 } from 'lucide-react'
 import { getCurrentRank, rankProgress } from '@/lib/ranks'
 import { rankMissingText } from '@/components/RankRequirements'
@@ -166,6 +171,15 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
     supabase.rpc('my_fidelity_cards'),
     supabase.rpc('my_received_receipts', { p_limit: 5 }),
   ])
+  // Carte Antitruffa: le carte prese e gli scudi (con le Carte nel piano o
+  // con almeno una carta già presa)
+  const [{ data: scamCardRows }, scamCardsAccess, tsc] = await Promise.all([
+    supabase.from('scam_cards').select('card_no, rarity, obtained_at').eq('user_id', user.id).order('obtained_at', { ascending: false }),
+    hasActiveToolAccess(supabase, user.id, 'carte-antitruffa'),
+    getTranslations('scamCards'),
+  ])
+  const myScamCards = (scamCardRows ?? []) as { card_no: number; rarity: string; obtained_at: string }[]
+  const scamCaptured = myScamCards.filter((c) => c.rarity === 'catturata').length
   if (!profile || !kuWalletData) redirect(`/${locale}/dashboard`)
 
   const fidelityList = (fidelityCards ?? []) as FidelityWalletCard[]
@@ -359,6 +373,45 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
             </ul>
           )}
         </WalletSection>
+
+        {/* Carte Antitruffa: quante, gli scudi e le ultime prese */}
+        {(scamCardsAccess || myScamCards.length > 0) && (
+          <WalletSection icon={<Layers className="h-5 w-5 text-[var(--gold)]" />} title={tsc('deckName')}>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-2xl font-extrabold tabular-nums text-[var(--ink)]">{tsc('count', { count: myScamCards.length, total: SCAM_CARDS.length })}</span>
+              {SHIELDS.filter((sh) => myScamCards.length >= sh.cards).map((sh) => (
+                <span key={sh.key} className="inline-flex items-center gap-1 rounded-full border border-[var(--gold)]/50 bg-[var(--gold-pale)] px-2.5 py-1 text-xs font-bold text-[var(--ink)]">
+                  <Shield className="h-3.5 w-3.5" aria-hidden /> {tsc(`shield_${sh.key}`)}
+                </span>
+              ))}
+              {scamCaptured >= GREEN_SHIELD_CAPTURES && (
+                <span className="inline-flex items-center gap-1 rounded-full border border-emerald-300 bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-800">
+                  <Shield className="h-3.5 w-3.5" aria-hidden /> {tsc('shield_green')}
+                </span>
+              )}
+            </div>
+            {myScamCards.length === 0 ? (
+              <p className="mt-3 text-sm text-[var(--muted)]">{tsc('walletEmpty')}</p>
+            ) : (
+              <ul className="mt-4 flex gap-3 overflow-x-auto pb-1">
+                {myScamCards.slice(0, 6).map((row) => {
+                  const card = SCAM_CARDS.find((c) => c.no === row.card_no)
+                  if (!card) return null
+                  return (
+                    <li key={row.card_no} className="shrink-0">
+                      <Link href={`/app/carte-antitruffa?carta=${card.no}`} aria-label={card.name} className="block rounded-[8px]">
+                        <ScamCardView card={card} width={96} rarity={row.rarity} uid={`w${card.no}`} />
+                      </Link>
+                    </li>
+                  )
+                })}
+              </ul>
+            )}
+            <Link href="/app/carte-antitruffa" className="mt-4 inline-flex items-center gap-1.5 text-sm font-bold text-[var(--ink)] hover:underline">
+              {tsc('walletOpen')} <ArrowRight className="h-4 w-4" />
+            </Link>
+          </WalletSection>
+        )}
 
         <div className="space-y-6">
           {/* Punti: KU Karma (uso quotidiano) e KU Points (inviti),

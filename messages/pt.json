@@ -1749,7 +1749,9 @@
     "toolPausedText": "O Staff colocou-o em pausa para trabalhos ou atualizações. Os seus dados continuam guardados e o serviço voltará assim que possível.",
     "day": "Dia",
     "month": "Mês",
-    "year": "Ano"
+    "year": "Ano",
+    "siteBackHome": "Voltar ao início",
+    "siteMyHome": "O meu início"
   },
   "magazzino": {
     "deleteForever": "Eliminar definitivamente",
@@ -17197,6 +17199,25 @@
     "deckTitle": "Tens na mão a carta impressa?",
     "deckMember": "Responde às 3 perguntas e põe-na no teu álbum do KUMANI.",
     "deckGuest": "Aqui em baixo está a carta sempre atualizada. Com o KUMANI pões-na no teu álbum e verificas as burlas antes de caíres na armadilha.",
-    "deckMemberButton": "Pôr no álbum"
+    "deckMemberButton": "Pôr no álbum",
+    "howTitle": "Como funcionam",
+    "indexCardsTitle": "As 20 cartas",
+    "howReadTitle": "1. Lê a carta",
+    "howReadText": "Cada carta é uma burla verdadeira: o isco como chega, os 3 sinais para a reconhecer e o que fazer logo.",
+    "howQuizTitle": "2. Responde a 3 perguntas",
+    "howQuizText": "Responde certo e a carta entra no teu álbum. Se errares, relê-a e tenta no dia seguinte.",
+    "howCaptureTitle": "3. Captura-a ao vivo",
+    "howCaptureText": "Quando o SVAT, o CheckMail, o controlo de QR ou a Rede Antiburla travam uma burla verdadeira, a carta chega com a moldura verde.",
+    "howShareTitle": "4. Avisa quem amas",
+    "howShareText": "Com «Avisar alguém» envias a carta pelo WhatsApp: lê-se mesmo sem KUMANI. Pais e avós são os mais visados.",
+    "howPlans": "Ler e partilhar as cartas é grátis para todos. O álbum, as perguntas e a captura estão nos planos Plus e Pro.",
+    "walletEmpty": "Ainda não tens cartas: lê-as e responde às 3 perguntas para começar a coleção.",
+    "walletOpen": "Ir para o álbum",
+    "dailyRule": "Uma carta por dia: com as perguntas ou capturada por um controlo, só chega uma por dia.",
+    "dailyDone": "Carta de hoje: «{name}». A próxima podes conquistá-la a partir de amanhã.",
+    "dailyLimit": "Hoje já conquistaste uma carta: esta podes conquistá-la a partir de amanhã.",
+    "capturedLimited": "É a burla «{name}»: travaste-a! Mas hoje já conquistaste uma carta, por isso esta podes capturá-la a partir de amanhã.",
+    "backHome": "Voltar ao início",
+    "backDashboard": "O meu início"
   }
 }

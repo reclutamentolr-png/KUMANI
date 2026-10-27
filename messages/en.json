@@ -37,7 +37,9 @@
     "toolPausedText": "The Staff has paused it for maintenance or updates. Your data stays saved and the service will be back as soon as possible.",
     "day": "Day",
     "month": "Month",
-    "year": "Year"
+    "year": "Year",
+    "siteBackHome": "Back to home",
+    "siteMyHome": "My Home"
   },
   "landingHome": {
     "statLanguagesLabel": "languages: KUMANI speaks yours",
@@ -17197,6 +17199,25 @@
     "deckTitle": "Holding the printed card?",
     "deckMember": "Answer its 3 questions and add it to your KUMANI album.",
     "deckGuest": "Below is the always up-to-date card. With KUMANI you add it to your album and check scams before falling for them.",
-    "deckMemberButton": "Add it to the album"
+    "deckMemberButton": "Add it to the album",
+    "howTitle": "How they work",
+    "indexCardsTitle": "The 20 cards",
+    "howReadTitle": "1. Read the card",
+    "howReadText": "Each card is a real scam: the bait as it really arrives, 3 signs to spot it and what to do right away.",
+    "howQuizTitle": "2. Answer 3 questions",
+    "howQuizText": "Answer correctly and the card joins your album. If you get one wrong, read it again and retry the next day.",
+    "howCaptureTitle": "3. Capture it live",
+    "howCaptureText": "When SVAT, CheckMail, the QR check or the Anti-Scam Network stop a real scam, its card arrives with the green frame.",
+    "howShareTitle": "4. Warn the people you love",
+    "howShareText": "With “Warn someone” you send the card on WhatsApp: it can be read even without KUMANI. Parents and grandparents are targeted the most.",
+    "howPlans": "Reading and sharing the cards is free for everyone. The album, the questions and capturing are in the Plus and Pro plans.",
+    "walletEmpty": "No cards yet: read them and answer the 3 questions to start your collection.",
+    "walletOpen": "Go to the album",
+    "dailyRule": "One card a day: whether through the questions or captured by a check, only one arrives each day.",
+    "dailyDone": "Today’s card: “{name}”. You can take the next card from tomorrow.",
+    "dailyLimit": "You already took a card today: you can take this one from tomorrow.",
+    "capturedLimited": "This is the “{name}” scam: you stopped it! But you already took a card today, so you can capture this one from tomorrow.",
+    "backHome": "Back to home",
+    "backDashboard": "My Home"
   }
 }

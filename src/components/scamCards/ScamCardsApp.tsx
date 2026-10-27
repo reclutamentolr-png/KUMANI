@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { CalendarClock, Check, LoaderCircle, Rainbow, RotateCcw, Shield, Sparkles, X } from 'lucide-react'
-import { claimScamCard, type ScamCardOwned } from '@/app/actions/scamCards'
+import { claimScamCard, startScamQuiz, type ScamCardOwned } from '@/app/actions/scamCards'
 import { GREEN_SHIELD_CAPTURES, SCAM_CARDS, SHIELDS, type ScamCard } from '@/lib/scamCards/cards'
 import ScamCardView from './ScamCardView'
 import ShareCardButton from './ShareCardButton'
@@ -35,6 +35,7 @@ export default function ScamCardsApp({
   inviteCode,
   firstName,
   openCard,
+  gainedToday: initialGained,
 }: {
   initialOwned: ScamCardOwned[]
   initialFailedToday: number[]
@@ -44,6 +45,8 @@ export default function ScamCardsApp({
   firstName: string | null
   // Carta da aprire subito (QR del mazzo stampato: /app/carte-antitruffa?carta=N)
   openCard?: number | null
+  // Carta arrivata oggi (una al giorno): le altre da domani
+  gainedToday: number | null
 }) {
   const t = useTranslations('scamCards')
   const locale = useLocale()
@@ -54,6 +57,8 @@ export default function ScamCardsApp({
       : null
   const [owned, setOwned] = useState(() => new Map(initialOwned.map((c) => [c.no, c])))
   const [failedToday, setFailedToday] = useState(() => new Set(initialFailedToday))
+  const [gainedToday, setGainedToday] = useState<number | null>(initialGained)
+  const gainedCard = SCAM_CARDS.find((c) => c.no === gainedToday) ?? null
   const [filter, setFilter] = useState<Filter>('all')
   const [open, setOpen] = useState<ScamCard | null>(() => SCAM_CARDS.find((c) => c.no === openCard) ?? null)
 
@@ -119,6 +124,9 @@ export default function ScamCardsApp({
       )}
 
       <p className="max-w-2xl text-sm text-[var(--muted)]">{t('howTo')}</p>
+      <p className={`max-w-2xl rounded-2xl p-3 text-sm ${gainedCard ? 'bg-amber-50 font-semibold text-amber-900' : 'bg-white text-[var(--muted)]'}`}>
+        {gainedCard ? t('dailyDone', { name: gainedCard.name }) : t('dailyRule')}
+      </p>
       <p className="max-w-2xl rounded-2xl border border-emerald-300 bg-emerald-50 p-3 text-sm text-emerald-900">{t('captureHowTo')}</p>
 
       <div className="flex flex-wrap gap-2" role="group" aria-label={t('filterAria')}>
@@ -176,10 +184,14 @@ export default function ScamCardsApp({
           mine={owned.get(open.no) ?? null}
           finder={finderOf(owned.get(open.no))}
           ofTheMonth={open.no === monthCard}
+          dailyDone={gainedToday !== null}
           inviteCode={inviteCode}
           failedToday={failedToday.has(open.no)}
           onClose={() => setOpen(null)}
-          onTaken={(c) => setOwned((prev) => new Map(prev).set(c.no, c))}
+          onTaken={(c) => {
+            setOwned((prev) => new Map(prev).set(c.no, c))
+            setGainedToday(c.no)
+          }}
           onFailed={(no) => setFailedToday((prev) => new Set(prev).add(no))}
         />
       )}
@@ -187,13 +199,15 @@ export default function ScamCardsApp({
   )
 }
 
-type Step = { kind: 'read' } | { kind: 'quiz'; index: number; answers: number[]; picked: number | null } | { kind: 'saving' } | { kind: 'won' } | { kind: 'lost'; wrong: number } | { kind: 'error' }
+// questions: le posizioni (tra le 5 della carta) delle 3 domande di oggi
+type Step = { kind: 'read' } | { kind: 'daily' } | { kind: 'starting' } | { kind: 'quiz'; questions: number[]; index: number; answers: number[]; picked: number | null } | { kind: 'saving' } | { kind: 'won' } | { kind: 'lost'; wrong: number } | { kind: 'error' }
 
 function CardSheet({
   card,
   mine,
   finder,
   ofTheMonth,
+  dailyDone,
   inviteCode,
   failedToday,
   onClose,
@@ -204,6 +218,7 @@ function CardSheet({
   mine: ScamCardOwned | null
   finder: string | null
   ofTheMonth: boolean
+  dailyDone: boolean
   inviteCode: string | null
   failedToday: boolean
   onClose: () => void
@@ -231,13 +246,22 @@ function CardSheet({
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose])
 
-  const finish = async (answers: number[]) => {
-    const wrong = card.quiz.filter((q, i) => answers[i] !== q.correct).length
+  const begin = async () => {
+    setStep({ kind: 'starting' })
+    const res = await startScamQuiz(card.no)
+    if (res.success) setStep({ kind: 'quiz', questions: res.questions, index: 0, answers: [], picked: null })
+    else setStep({ kind: 'error' })
+  }
+
+  const finish = async (questions: number[], answers: number[]) => {
+    const wrong = questions.filter((qi, i) => answers[i] !== card.quiz[qi].correct).length
     setStep({ kind: 'saving' })
     const res = await claimScamCard(card.no, answers)
     if (res.success) {
       onTaken(res.card)
       setStep({ kind: 'won' })
+    } else if (res.message === 'dailyLimit') {
+      setStep({ kind: 'daily' })
     } else if (res.message === 'wrong' || res.message === 'tryTomorrow') {
       onFailed(card.no)
       setStep({ kind: 'lost', wrong: Math.max(1, wrong) })
@@ -245,8 +269,8 @@ function CardSheet({
   }
 
   const quiz = step.kind === 'quiz' ? step : null
-  const question = quiz ? card.quiz[quiz.index] : null
-  const order = useMemo(() => (quiz ? shuffled(card.no, quiz.index) : []), [card.no, quiz])
+  const question = quiz ? card.quiz[quiz.questions[quiz.index]] : null
+  const order = useMemo(() => (quiz ? shuffled(card.no, quiz.questions[quiz.index]) : []), [card.no, quiz])
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 sm:items-center sm:p-4" onClick={onClose}>
@@ -281,6 +305,10 @@ function CardSheet({
               <Check className="h-5 w-5 shrink-0" aria-hidden />{' '}
               {mine.rarity === 'rara' ? t('rareMine') : mine.rarity === 'mese' ? t('monthMine') : mine.rarity === 'catturata' ? t('capturedMine') : t('alreadyMine')}
             </p>
+          ) : dailyDone ? (
+            <p className="mt-4 flex items-center justify-center gap-2 rounded-2xl bg-amber-50 p-3 text-center text-sm font-bold text-amber-900">
+              <CalendarClock className="h-5 w-5 shrink-0" aria-hidden /> {t('dailyLimit')}
+            </p>
           ) : failedToday ? (
             <p className="mt-4 flex items-center justify-center gap-2 rounded-2xl bg-amber-50 p-3 text-center text-sm font-bold text-amber-900">
               <CalendarClock className="h-5 w-5 shrink-0" aria-hidden /> {t('tryTomorrow')}
@@ -288,7 +316,7 @@ function CardSheet({
           ) : (
             <button
               type="button"
-              onClick={() => setStep({ kind: 'quiz', index: 0, answers: [], picked: null })}
+              onClick={begin}
               className="mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[var(--ink)] px-5 font-bold text-[var(--gold-bright)]"
             >
               <Sparkles className="h-5 w-5" aria-hidden /> {mine ? t('takeMonth') : t('takeCard')}
@@ -299,7 +327,7 @@ function CardSheet({
 
         {quiz && question && (
           <div className="space-y-4">
-            <p className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--muted)]">{t('questionOf', { n: quiz.index + 1, total: card.quiz.length })}</p>
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--muted)]">{t('questionOf', { n: quiz.index + 1, total: quiz.questions.length })}</p>
             <h3 className="text-lg font-extrabold leading-snug text-[var(--ink)]">{question.q}</h3>
             <div className="space-y-2">
               {order.map((optionIndex) => {
@@ -338,21 +366,26 @@ function CardSheet({
                   type="button"
                   onClick={() => {
                     const answers = [...quiz.answers, quiz.picked!]
-                    if (quiz.index + 1 < card.quiz.length) setStep({ kind: 'quiz', index: quiz.index + 1, answers, picked: null })
-                    else finish(answers)
+                    if (quiz.index + 1 < quiz.questions.length) setStep({ ...quiz, index: quiz.index + 1, answers, picked: null })
+                    else finish(quiz.questions, answers)
                   }}
                   className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[var(--ink)] px-5 font-bold text-[var(--gold-bright)]"
                 >
-                  {quiz.index + 1 < card.quiz.length ? t('next') : t('finish')}
+                  {quiz.index + 1 < quiz.questions.length ? t('next') : t('finish')}
                 </button>
               </div>
             )}
           </div>
         )}
 
-        {step.kind === 'saving' && (
+        {(step.kind === 'saving' || step.kind === 'starting') && (
           <p className="mt-4 flex items-center justify-center gap-2 text-sm font-bold text-[var(--muted)]">
             <LoaderCircle className="h-5 w-5 animate-spin" aria-hidden /> {t('saving')}
+          </p>
+        )}
+        {step.kind === 'daily' && (
+          <p className="mt-4 rounded-2xl bg-amber-50 p-3 text-center text-sm font-bold text-amber-900" role="status">
+            {t('dailyLimit')}
           </p>
         )}
         {step.kind === 'won' && (

@@ -1749,7 +1749,9 @@
     "toolPausedText": "El Staff lo ha pausado por trabajos o actualizaciones. Tus datos siguen guardados y el servicio volverá en cuanto sea posible.",
     "day": "Día",
     "month": "Mes",
-    "year": "Año"
+    "year": "Año",
+    "siteBackHome": "Volver al inicio",
+    "siteMyHome": "Mi inicio"
   },
   "magazzino": {
     "deleteForever": "Eliminar definitivamente",
@@ -17197,6 +17199,25 @@
     "deckTitle": "¿Tienes en la mano la carta impresa?",
     "deckMember": "Responde a sus 3 preguntas y llévala a tu álbum de KUMANI.",
     "deckGuest": "Aquí abajo tienes la carta siempre actualizada. Con KUMANI la guardas en tu álbum y compruebas las estafas antes de caer en la trampa.",
-    "deckMemberButton": "Llevarla al álbum"
+    "deckMemberButton": "Llevarla al álbum",
+    "howTitle": "Cómo funcionan",
+    "indexCardsTitle": "Las 20 cartas",
+    "howReadTitle": "1. Lee la carta",
+    "howReadText": "Cada carta es una estafa real: el cebo tal como llega, las 3 señales para reconocerla y qué hacer enseguida.",
+    "howQuizTitle": "2. Responde a 3 preguntas",
+    "howQuizText": "Responde bien y la carta entra en tu álbum. Si fallas, vuelve a leerla e inténtalo al día siguiente.",
+    "howCaptureTitle": "3. Captúrala en directo",
+    "howCaptureText": "Cuando SVAT, CheckMail, el control de QR o la Red Antiestafa paran una estafa real, su carta llega con el marco verde.",
+    "howShareTitle": "4. Avisa a quien quieres",
+    "howShareText": "Con «Avisar a alguien» envías la carta por WhatsApp: se lee incluso sin KUMANI. Padres y abuelos son los más atacados.",
+    "howPlans": "Leer y compartir las cartas es gratis para todos. El álbum, las preguntas y la captura están en los planes Plus y Pro.",
+    "walletEmpty": "Aún no tienes cartas: léelas y responde a las 3 preguntas para empezar la colección.",
+    "walletOpen": "Ir al álbum",
+    "dailyRule": "Una carta al día: con las preguntas o capturada por un control, solo llega una cada día.",
+    "dailyDone": "Carta de hoy: «{name}». La siguiente la puedes conseguir desde mañana.",
+    "dailyLimit": "Hoy ya has conseguido una carta: esta la puedes conseguir desde mañana.",
+    "capturedLimited": "Es la estafa «{name}»: ¡la has parado! Pero hoy ya has conseguido una carta, así que esta la podrás capturar desde mañana.",
+    "backHome": "Volver al inicio",
+    "backDashboard": "Mi inicio"
   }
 }

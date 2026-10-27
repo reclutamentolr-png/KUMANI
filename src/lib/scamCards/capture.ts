@@ -5,6 +5,7 @@ import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { SCAM_CARDS } from '@/lib/scamCards/cards'
 import { matchScamCard } from '@/lib/scamCards/match'
 import type { ScamCategory } from '@/lib/scamNet'
+import { todayKey } from '@/lib/agenda'
 
 // CARTE ANTITRUFFA – Passo 2: la «cattura». Quando un controllo ferma una
 // truffa vera, la carta di quella truffa entra nell'album con la cornice
@@ -13,8 +14,23 @@ import type { ScamCategory } from '@/lib/scamNet'
 
 export type CaptureSource = 'svat' | 'qr' | 'checkmail' | 'community'
 
-// Carta catturata da mostrare sotto il risultato del controllo
-export type CapturedCard = { no: number; name: string; isNew: boolean }
+// Carta catturata da mostrare sotto il risultato del controllo.
+// limited: era da catturare, ma oggi la persona ha già preso una carta
+export type CapturedCard = { no: number; name: string; isNew: boolean; limited?: boolean }
+
+type Db = ReturnType<typeof serviceClient>
+
+// Una carta al giorno (giorno di Roma), con le domande o catturata: prende il
+// posto di oggi; false se oggi una carta è già arrivata
+export async function takeDailySlot(db: Db, userId: string, cardNo: number, source: 'quiz' | CaptureSource): Promise<boolean> {
+  const { error } = await db.from('scam_card_gains').insert({ user_id: userId, day: todayKey(), card_no: cardNo, source })
+  return !error
+}
+
+// Il posto di oggi torna libero se la carta poi non si è potuta salvare
+export async function releaseDailySlot(db: Db, userId: string) {
+  await db.from('scam_card_gains').delete().eq('user_id', userId).eq('day', todayKey())
+}
 
 // Tipo di truffa della Rete Anti-Truffa → carta
 const CATEGORY_CARD: Partial<Record<ScamCategory, number>> = {
@@ -60,11 +76,15 @@ export async function captureScamCard(userId: string, no: number | null, source:
     const db = serviceClient()
     const now = new Date().toISOString()
     const { data: existing } = await db.from('scam_cards').select('rarity').eq('user_id', userId).eq('card_no', card.no).maybeSingle()
+    // Già catturata (o rara, o del mese): niente da cambiare, non conta
+    if (existing && existing.rarity !== 'oro') return { no: card.no, name: card.name, isNew: false }
+    // Una carta al giorno: oggi ne è già arrivata una
+    if (!(await takeDailySlot(db, userId, card.no, source))) return { no: card.no, name: card.name, isNew: false, limited: true }
     let isNew = false
     if (!existing) {
       const { error } = await db.from('scam_cards').insert({ user_id: userId, card_no: card.no, rarity: 'catturata', captured_from: source, captured_at: now })
       isNew = !error
-    } else if (existing.rarity === 'oro') {
+    } else {
       // Presa con le domande: ora anche catturata davvero (solo se è ancora oro)
       const { data } = await db
         .from('scam_cards')
@@ -75,6 +95,7 @@ export async function captureScamCard(userId: string, no: number | null, source:
         .select('card_no')
       isNew = !!data?.length
     }
+    if (!isNew) await releaseDailySlot(db, userId)
     return { no: card.no, name: card.name, isNew }
   } catch {
     // La cattura non deve mai far fallire il controllo

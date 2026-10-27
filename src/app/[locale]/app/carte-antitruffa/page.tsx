@@ -20,7 +20,7 @@ export default async function CarteAntitruffaPage({ searchParams }: { searchPara
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  const [{ data: rows }, { data: fails }, { data: month }, { data: me }, t, tm, tc] = await Promise.all([
+  const [{ data: rows }, { data: fails }, { data: month }, { data: me }, { data: gain }, t, tm, tc] = await Promise.all([
     user ? supabase.from('scam_cards').select('card_no, rarity, obtained_at, rare_at').eq('user_id', user.id) : Promise.resolve({ data: [] }),
     // Carte sbagliate oggi: si riprovano domani
     user ? supabase.from('scam_card_fails').select('card_no').eq('user_id', user.id).eq('failed_on', todayKey()) : Promise.resolve({ data: [] }),
@@ -28,6 +28,8 @@ export default async function CarteAntitruffaPage({ searchParams }: { searchPara
     supabase.from('scam_card_month').select('card_no').eq('month', monthKey(todayKey())).maybeSingle(),
     // Codice d'invito per «Avvisa qualcuno» e nome per le carte rare
     supabase.rpc('get_my_profile').maybeSingle<{ referral_code: string | null; first_name: string | null }>(),
+    // Carta di oggi (una al giorno, con le domande o catturata)
+    user ? supabase.from('scam_card_gains').select('card_no').eq('user_id', user.id).eq('day', todayKey()).maybeSingle() : Promise.resolve({ data: null }),
     getTranslations('scamCards'),
     getTranslations('marketplace'),
     getTranslations('common'),
@@ -68,6 +70,7 @@ export default async function CarteAntitruffaPage({ searchParams }: { searchPara
           inviteCode={me?.referral_code ?? null}
           firstName={me?.first_name ?? null}
           openCard={Number(carta) || null}
+          gainedToday={(gain?.card_no as number | undefined) ?? null}
         />
       </main>
     </div>

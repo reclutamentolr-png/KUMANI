@@ -1749,7 +1749,9 @@
     "toolPausedText": "Das Staff hat ihn für Arbeiten oder Updates pausiert. Deine Daten bleiben gespeichert und der Dienst ist so bald wie möglich wieder verfügbar.",
     "day": "Tag",
     "month": "Monat",
-    "year": "Jahr"
+    "year": "Jahr",
+    "siteBackHome": "Zur Startseite",
+    "siteMyHome": "Meine Startseite"
   },
   "magazzino": {
     "deleteForever": "Endgültig löschen",
@@ -17197,6 +17199,25 @@
     "deckTitle": "Hast du die gedruckte Karte in der Hand?",
     "deckMember": "Beantworte ihre 3 Fragen und lege sie in dein KUMANI-Album.",
     "deckGuest": "Unten siehst du die immer aktuelle Karte. Mit KUMANI legst du sie in dein Album und prüfst Betrug, bevor du in die Falle tappst.",
-    "deckMemberButton": "Ins Album legen"
+    "deckMemberButton": "Ins Album legen",
+    "howTitle": "So funktionieren sie",
+    "indexCardsTitle": "Die 20 Karten",
+    "howReadTitle": "1. Lies die Karte",
+    "howReadText": "Jede Karte ist ein echter Betrug: der Köder, wie er wirklich ankommt, 3 Erkennungszeichen und was sofort zu tun ist.",
+    "howQuizTitle": "2. Beantworte 3 Fragen",
+    "howQuizText": "Richtig beantwortet, und die Karte kommt in dein Album. Bei einem Fehler lies sie noch einmal und versuch es am nächsten Tag.",
+    "howCaptureTitle": "3. Fang sie live",
+    "howCaptureText": "Wenn SVAT, CheckMail, die QR-Prüfung oder das Anti-Betrugs-Netz einen echten Betrug stoppen, kommt seine Karte mit grünem Rahmen.",
+    "howShareTitle": "4. Warne deine Liebsten",
+    "howShareText": "Mit „Jemanden warnen“ schickst du die Karte per WhatsApp: Sie ist auch ohne KUMANI lesbar. Eltern und Großeltern sind am häufigsten betroffen.",
+    "howPlans": "Karten lesen und teilen ist für alle kostenlos. Album, Fragen und Fangen gibt es in den Plänen Plus und Pro.",
+    "walletEmpty": "Noch keine Karten: Lies sie und beantworte die 3 Fragen, um deine Sammlung zu beginnen.",
+    "walletOpen": "Zum Album",
+    "dailyRule": "Eine Karte pro Tag: ob mit den Fragen oder durch eine Prüfung gefangen, es kommt nur eine pro Tag.",
+    "dailyDone": "Karte von heute: „{name}“. Die nächste kannst du ab morgen holen.",
+    "dailyLimit": "Du hast heute schon eine Karte geholt: diese kannst du ab morgen holen.",
+    "capturedLimited": "Das ist die Masche „{name}“: Du hast sie gestoppt! Du hast heute aber schon eine Karte geholt, diese kannst du ab morgen fangen.",
+    "backHome": "Zur Startseite",
+    "backDashboard": "Meine Startseite"
   }
 }

@@ -1749,7 +1749,9 @@
     "toolPausedText": "Le Staff l'a mis en pause pour des travaux ou des mises à jour. Vos données restent enregistrées et le service reviendra dès que possible.",
     "day": "Jour",
     "month": "Mois",
-    "year": "Année"
+    "year": "Année",
+    "siteBackHome": "Retour à l’accueil",
+    "siteMyHome": "Mon accueil"
   },
   "magazzino": {
     "deleteForever": "Supprimer définitivement",
@@ -17197,6 +17199,25 @@
     "deckTitle": "Tu as la carte imprimée en main ?",
     "deckMember": "Réponds à ses 3 questions et mets-la dans ton album KUMANI.",
     "deckGuest": "Ci-dessous, la carte toujours à jour. Avec KUMANI tu la mets dans ton album et tu vérifies les arnaques avant de tomber dans le piège.",
-    "deckMemberButton": "La mettre dans l’album"
+    "deckMemberButton": "La mettre dans l’album",
+    "howTitle": "Comment ça marche",
+    "indexCardsTitle": "Les 20 cartes",
+    "howReadTitle": "1. Lis la carte",
+    "howReadText": "Chaque carte est une vraie arnaque : l’appât tel qu’il arrive, les 3 signes pour la reconnaître et quoi faire tout de suite.",
+    "howQuizTitle": "2. Réponds à 3 questions",
+    "howQuizText": "Réponds juste et la carte entre dans ton album. Si tu te trompes, relis-la et réessaie le lendemain.",
+    "howCaptureTitle": "3. Capture-la en vrai",
+    "howCaptureText": "Quand SVAT, CheckMail, le contrôle des QR ou le Réseau anti-arnaque arrêtent une vraie arnaque, sa carte arrive avec le cadre vert.",
+    "howShareTitle": "4. Préviens ceux que tu aimes",
+    "howShareText": "Avec « Prévenir quelqu’un » tu envoies la carte sur WhatsApp : elle se lit même sans KUMANI. Parents et grands-parents sont les plus visés.",
+    "howPlans": "Lire et partager les cartes est gratuit pour tous. L’album, les questions et la capture sont dans les forfaits Plus et Pro.",
+    "walletEmpty": "Aucune carte pour l’instant : lis-les et réponds aux 3 questions pour commencer ta collection.",
+    "walletOpen": "Aller à l’album",
+    "dailyRule": "Une carte par jour : avec les questions ou capturée par un contrôle, une seule arrive chaque jour.",
+    "dailyDone": "Carte du jour : « {name} ». Tu pourras prendre la suivante dès demain.",
+    "dailyLimit": "Tu as déjà pris une carte aujourd’hui : tu pourras prendre celle-ci dès demain.",
+    "capturedLimited": "C’est l’arnaque « {name} » : tu l’as arrêtée ! Mais tu as déjà pris une carte aujourd’hui, tu pourras capturer celle-ci dès demain.",
+    "backHome": "Retour à l’accueil",
+    "backDashboard": "Mon accueil"
   }
 }
