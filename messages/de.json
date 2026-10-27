@@ -4243,7 +4243,19 @@
     "openConvivium": "Öffnen",
     "connectCalendar": "Mit Google Kalender, iPhone oder Outlook verbinden",
     "source_post": "Post zu veröffentlichen",
-    "openPost": "Öffnen"
+    "openPost": "Öffnen",
+    "remindLabel": "Erinnere mich",
+    "remind_15": "15 Minuten vorher",
+    "remind_30": "30 Minuten vorher",
+    "remind_60": "1 Stunde vorher",
+    "remind_120": "2 Stunden vorher",
+    "remind_1440": "Am Vortag",
+    "remindNote": "Erinnerungen kommen aufs Handy, wenn du die Benachrichtigungen im Profil aktiviert hast, und bleiben in der Glocke.",
+    "taskRemind_0": "Am selben Tag",
+    "taskRemind_1": "Am Vortag",
+    "taskRemindTime": "Uhrzeit der Erinnerung (optional)",
+    "taskRemindTimeHint": "Ohne Uhrzeit kommt die Erinnerung zur im Profil gewählten Erinnerungszeit (standardmäßig 9:00).",
+    "taskRemindNeedsDate": "Gib ein Datum ein, um eine Erinnerung zu erhalten."
   },
   "convivio": {
     "error_suspended": "Dienst vorübergehend ausgesetzt. Bitte versuchen Sie es später erneut.",
@@ -9686,7 +9698,7 @@
     "cat_network": "Dein Netzwerk",
     "cat_network_hint": "Wenn ein von dir eingeladener Kumano KUMANI aktiviert und du KU Points erhältst.",
     "cat_expiry": "Fristen",
-    "cat_expiry_hint": "Einige Tage bevor ein Abo ohne automatische Verlängerung abläuft.",
+    "cat_expiry_hint": "Fristen, Rechnungen, Termine und Erinnerungen, so früh wie du willst.",
     "cat_events": "Events",
     "cat_events_hint": "Am Tag vor einem Event, für das du angemeldet bist.",
     "cat_staff": "Mitteilungen von KUMANI",
@@ -9698,7 +9710,9 @@
     "cat_messages": "Nachrichten",
     "cat_messages_hint": "Wenn dir jemand über deine Landing Page schreibt.",
     "cat_alerts": "Betrug der Woche",
-    "cat_alerts_hint": "Jeden Montag die von der Community am häufigsten gemeldeten Maschen"
+    "cat_alerts_hint": "Jeden Montag die von der Community am häufigsten gemeldeten Maschen",
+    "remindTimeLabel": "Uhrzeit der Erinnerungen",
+    "remindTimeHint": "Fristen, Rechnungen und Erinnerungen ohne Uhrzeit kommen zu dieser Zeit."
   },
   "pushNotifications": {
     "testTitle": "Benachrichtigungen aktiv",
@@ -9880,7 +9894,15 @@
     "webinarInviteTitle": "📹 {host} lädt dich zu einem Live ein",
     "webinarInviteBody": "„{title}“ · {when}. Tippe, um beizutreten, wenn es beginnt.",
     "webinarLiveTitle": "🔴 {host} ist live",
-    "webinarLiveBody": "„{title}“ hat begonnen: tippe, um beizutreten."
+    "webinarLiveBody": "„{title}“ hat begonnen: tippe, um beizutreten.",
+    "appointmentTitle": "📅 {what}",
+    "appointmentToday": "Heute um {time}.",
+    "appointmentTomorrow": "Morgen um {time}.",
+    "taskTitle": "✅ Erinnerung",
+    "taskToday": "{what}: ist für heute.",
+    "taskTodayAt": "{what}: ist für heute, um {time}.",
+    "taskTomorrow": "{what}: ist für morgen.",
+    "taskTomorrowAt": "{what}: ist für morgen, um {time}."
   },
   "pushInvite": {
     "title": "Benachrichtigungen aktivieren",
@@ -14401,7 +14423,14 @@
     "chatOpenForViewers": "Chat für Zuschauer offen",
     "chatClosedForViewers": "Chat für Zuschauer geschlossen",
     "chatClosedNote": "Der Chat wurde von der vortragenden Person geschlossen.",
-    "exitFullscreen": "Verkleinern"
+    "exitFullscreen": "Verkleinern",
+    "openMicOn": "Mikrofon und Video für alle offen",
+    "openMicOff": "Mikrofon und Video für alle: aus (man bittet um das Wort)",
+    "openMicViewer": "Die vortragende Person hat Mikrofon und Video für alle geöffnet: Du kannst sprechen, wann du willst, ohne die Hand zu heben.",
+    "talkingNow": "Es sprechen: {names}",
+    "muteAria": "Mikrofon von {name} ausschalten",
+    "muteTitle": "Mikrofon ausschalten",
+    "errorTooManyVoices": "Es sprechen schon 12 Personen: versuche es gleich noch einmal oder hebe die Hand."
   },
   "spendlyShared": {
     "title": "Geteilte Ausgaben",

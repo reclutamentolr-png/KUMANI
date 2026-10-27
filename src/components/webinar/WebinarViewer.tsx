@@ -13,7 +13,7 @@ import {
   viewerSpeak,
   viewerStopSpeak,
 } from '@/app/actions/webinar'
-import { trackKind, VIEWER_POLL_MS, WEBINAR_NAME_MAX, type LiveState, type WebinarMessage, type WebinarStatus } from '@/lib/webinar'
+import { trackKind, VIEWER_POLL_MS, voiceOwner, voiceTrackNames, WEBINAR_NAME_MAX, type LiveState, type WebinarMessage, type WebinarStatus } from '@/lib/webinar'
 import WebinarChat from '@/components/webinar/WebinarChat'
 import { acceptOffer, initials, makeOffer, makePeer, useMounted, useWakeLock, useWebinarChannel } from '@/components/webinar/rtc'
 
@@ -65,6 +65,8 @@ export default function WebinarViewer({
   const [messages, setMessages] = useState<WebinarMessage[]>([])
   const [hand, setHand] = useState(false)
   const [mayspeak, setMayspeak] = useState(false)
+  // Microfono acceso con il microfono aperto a tutti (secondo il server)
+  const [myVoice, setMyVoice] = useState(false)
   const [speakingOn, setSpeakingOn] = useState(false)
   const [needsTap, setNeedsTap] = useState(false)
   const [connecting, setConnecting] = useState(false)
@@ -72,6 +74,8 @@ export default function WebinarViewer({
   const mounted = useMounted()
 
   const tokenRef = useRef<string | null>(null)
+  // Chi sono in questo webinar: le proprie voce e videocamera non si ricevono
+  const myIdRef = useRef<string | null>(null)
   const iceRef = useRef<RTCIceServer[]>([])
   const lastIdRef = useRef(0)
   const pcRef = useRef<RTCPeerConnection | null>(null)
@@ -86,17 +90,18 @@ export default function WebinarViewer({
   // Avviso arrivato mentre un controllo era già in corso: se ne fa un altro subito dopo
   const pollAgain = useRef(false)
   // Chi ha la parola: collegamento, voce e (se accesa) videocamera
-  const speakRef = useRef<{ pc: RTCPeerConnection; tracks: MediaStreamTrack[]; video: MediaStreamTrack | null } | null>(null)
+  const speakRef = useRef<{ pc: RTCPeerConnection; tracks: MediaStreamTrack[]; video: MediaStreamTrack | null; at: number } | null>(null)
   const [selfVideo, setSelfVideo] = useState<MediaStream | null>(null)
+  // Videocamere di chi parla (chi ha la parola e chi parla con il microfono aperto)
+  const [faces, setFaces] = useState<{ name: string; stream: MediaStream }[]>([])
+  // Voci di chi parla: un altoparlante per ognuno
+  const voicesRef = useRef(new Map<string, HTMLAudioElement>())
 
   const stageRef = useRef<HTMLDivElement>(null)
   const mainRef = useRef<HTMLVideoElement>(null)
   const pipRef = useRef<HTMLVideoElement>(null)
   const hostAudioRef = useRef<HTMLAudioElement>(null)
-  const voiceAudioRef = useRef<HTMLAudioElement>(null)
-  // Videocamera di chi ha la parola (riquadro in basso a sinistra)
-  const faceRef = useRef<HTMLVideoElement>(null)
-  const tracksRef = useRef<{ video?: MediaStreamTrack; screen?: MediaStreamTrack; face?: MediaStreamTrack }>({})
+  const tracksRef = useRef<{ video?: MediaStreamTrack; screen?: MediaStreamTrack }>({})
 
   // ── Video e audio della diretta ─────────────────────────────────────
   const play = (el: HTMLMediaElement | null) => {
@@ -127,8 +132,12 @@ export default function WebinarViewer({
     midToName.current.clear()
     tracksRef.current = {}
     if (hostAudioRef.current) hostAudioRef.current.srcObject = null
-    if (voiceAudioRef.current) voiceAudioRef.current.srcObject = null
-    if (faceRef.current) faceRef.current.srcObject = null
+    for (const el of voicesRef.current.values()) {
+      el.srcObject = null
+      el.remove()
+    }
+    voicesRef.current.clear()
+    setFaces([])
     showVideo()
   }, [showVideo])
 
@@ -156,19 +165,19 @@ export default function WebinarViewer({
     }
     // Videocamera e schermo solo quando trasmettono: una traccia senza immagini
     // fa aspettare Cloudflare diversi secondi prima di rispondere
-    const wanted = [
-      s.tracks.audio,
-      s.camOn ? s.tracks.video : undefined,
-      s.screenOn ? s.tracks.screen : undefined,
-      s.speaker?.track ?? undefined,
-      s.speaker?.videoTrack ?? undefined,
-    ].filter(
+    // Le proprie voce e videocamera non si ricevono: il server le rifiuterebbe
+    // e la richiesta si ripeterebbe all'infinito («Riconnessione…» fisso)
+    const wanted = [s.tracks.audio, s.camOn ? s.tracks.video : undefined, s.screenOn ? s.tracks.screen : undefined, ...voiceTrackNames(s, myIdRef.current)].filter(
       (x): x is string => !!x
     )
-    const missing = wanted.filter((n) => !pulledRef.current.has(n))
-    if (missing.length === 0) return
+    const allMissing = wanted.filter((n) => !pulledRef.current.has(n))
+    if (allMissing.length === 0) return
+    // Al massimo 12 alla volta: le altre al giro dopo
+    const missing = allMissing.slice(0, 12)
+    if (allMissing.length > missing.length) pendingRef.current = true
     syncingRef.current = true
-    setConnecting(true)
+    // Aggiungere una traccia a un collegamento già attivo non è una riconnessione
+    if (!pcRef.current || pcRef.current.connectionState !== 'connected') setConnecting(true)
     try {
       if (!pcRef.current) {
         fresh = true
@@ -180,16 +189,22 @@ export default function WebinarViewer({
           if (kind === 'audio' && hostAudioRef.current) {
             hostAudioRef.current.srcObject = new MediaStream([e.track])
             play(hostAudioRef.current)
-          } else if (kind === 'voice' && voiceAudioRef.current) {
-            voiceAudioRef.current.srcObject = new MediaStream([e.track])
-            play(voiceAudioRef.current)
+          } else if (kind === 'voice') {
+            let el = voicesRef.current.get(trackName)
+            if (!el) {
+              el = document.createElement('audio')
+              el.autoplay = true
+              voicesRef.current.set(trackName, el)
+              document.body.appendChild(el)
+            }
+            el.srcObject = new MediaStream([e.track])
+            play(el)
           } else if (kind === 'video' || kind === 'screen') {
             tracksRef.current[kind] = e.track
             showVideo()
-          } else if (kind === 'face' && faceRef.current) {
-            tracksRef.current.face = e.track
-            faceRef.current.srcObject = new MediaStream([e.track])
-            play(faceRef.current)
+          } else if (kind === 'face') {
+            const stream = new MediaStream([e.track])
+            setFaces((list) => [...list.filter((f) => f.name !== trackName), { name: trackName, stream }])
           }
         }
         pc.onconnectionstatechange = () => {
@@ -223,6 +238,7 @@ export default function WebinarViewer({
       repair(2000)
     } finally {
       syncingRef.current = false
+      if (pcRef.current?.connectionState === 'connected') setConnecting(false)
       if (pendingRef.current) {
         pendingRef.current = false
         syncTracks()
@@ -302,6 +318,7 @@ export default function WebinarViewer({
       }
       setHand(res.me.hand)
       setMayspeak(res.me.speaking)
+      setMyVoice(res.me.voice)
       applyState(res.state)
     } catch {
       // Rete assente: si riprova al giro successivo
@@ -365,6 +382,7 @@ export default function WebinarViewer({
           return
         }
         tokenRef.current = res.token
+        myIdRef.current = res.viewerId
         iceRef.current = res.ice
         writeSaved(code, { token: res.token, name: joinName })
         setChannelKey(res.channelKey)
@@ -419,7 +437,7 @@ export default function WebinarViewer({
       let stream: MediaStream
       try {
         stream = await navigator.mediaDevices.getUserMedia(
-          withVideo ? { audio: audioWanted, video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } } } : { audio: audioWanted }
+          withVideo ? { audio: audioWanted, video: mayspeak ? { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } } : { facingMode: 'user', width: { ideal: 320 }, height: { ideal: 240 }, frameRate: { ideal: 15 } } } : { audio: audioWanted }
         )
       } catch (e) {
         if (!withVideo) throw e
@@ -431,11 +449,12 @@ export default function WebinarViewer({
       const pc = makePeer(iceRef.current)
       const transceiver = pc.addTransceiver(track, { direction: 'sendonly' })
       const videoTransceiver = video ? pc.addTransceiver(video, { direction: 'sendonly' }) : null
-      speakRef.current = { pc, tracks: stream.getTracks(), video }
+      speakRef.current = { pc, tracks: stream.getTracks(), video, at: Date.now() }
       const offer = await makeOffer(pc)
       const res = await viewerSpeak(code, token, offer, transceiver.mid ?? '', videoTransceiver?.mid ?? null)
       if ('error' in res) {
         stopSpeaking(false)
+        if (res.error === 'too_many_voices') setError(t('errorTooManyVoices'))
         return
       }
       await pc.setRemoteDescription(res.answer)
@@ -467,20 +486,27 @@ export default function WebinarViewer({
     if (tellServer && tokenRef.current) viewerStopSpeak(code, tokenRef.current).then(() => poll())
   }
 
-  // La parola tolta da chi presenta: microfono spento
+  // La parola tolta, il microfono aperto a tutti richiuso o il proprio
+  // microfono spento da chi presenta: si chiude il microfono qui
+  const openMic = !!state?.openMic && state.status === 'live'
+  const canSpeak = mayspeak || openMic
   useEffect(() => {
-    if (!mayspeak && speakRef.current) {
-      // Il cambio arriva dal server: si chiude il microfono qui
-      stopSpeaking(false)
-    }
+    const current = speakRef.current
+    if (!current) return
+    // Appena acceso il server può non saperlo ancora: si aspetta qualche secondo
+    const mutedByHost = !mayspeak && openMic && !myVoice && Date.now() - current.at > 8000
+    if (!canSpeak || mutedByHost) stopSpeaking(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mayspeak])
+  }, [mayspeak, openMic, myVoice, canSpeak])
 
   useEffect(() => {
+    const voices = voicesRef.current
     return () => {
       pcRef.current?.close()
       speakRef.current?.pc.close()
       speakRef.current?.tracks.forEach((track) => track.stop())
+      for (const el of voices.values()) el.remove()
+      voices.clear()
     }
   }, [])
 
@@ -506,9 +532,8 @@ export default function WebinarViewer({
   const unmute = () => {
     setNeedsTap(false)
     play(hostAudioRef.current)
-    play(voiceAudioRef.current)
+    for (const el of voicesRef.current.values()) play(el)
     play(mainRef.current)
-    play(faceRef.current)
   }
 
   const sendMessage = async (body: string) => {
@@ -608,12 +633,12 @@ export default function WebinarViewer({
   // Dentro il webinar
   const live = state?.status === 'live'
   const showMain = live && (state?.screenOn || state?.camOn)
-  // Riquadro di chi ha la parola: la propria videocamera o quella dell'altro
-  const showFace = live && (!!selfVideo || (!mayspeak && !!state?.speaker?.videoTrack))
+  // Riquadri di chi parla: la propria videocamera e quelle che arrivano adesso
+  const liveFaces = live && state ? faces.filter((f) => voiceTrackNames(state, myIdRef.current).includes(f.name)) : []
+  const talkingNames = (state?.voices ?? []).filter((v) => v.id !== myIdRef.current).map((v) => v.name)
   return (
     <div className="space-y-3">
       <audio ref={hostAudioRef} autoPlay className="hidden" />
-      <audio ref={voiceAudioRef} autoPlay className="hidden" />
 
       <div ref={stageRef} className="relative -mx-4 aspect-video overflow-hidden bg-[#2a2620] sm:mx-0 sm:rounded-3xl">
         <video ref={mainRef} autoPlay playsInline muted className={`h-full w-full ${state?.screenOn ? 'object-contain' : 'object-cover'} ${showMain ? '' : 'hidden'}`} />
@@ -624,22 +649,42 @@ export default function WebinarViewer({
           muted
           className={`absolute bottom-3 right-3 aspect-[3/4] w-20 rounded-xl border-2 border-[var(--gold-bright)] object-cover sm:w-28 ${live && state?.screenOn && state?.camOn ? '' : 'hidden'}`}
         />
-        {/* Chi ha la parola con la videocamera: riquadro in basso a sinistra */}
-        <div className={`absolute bottom-3 left-3 z-[1] w-24 overflow-hidden rounded-xl border-2 border-emerald-400 bg-black sm:w-32 ${showFace ? '' : 'hidden'}`}>
-          <video ref={faceRef} autoPlay playsInline muted className={`aspect-[3/4] w-full object-cover ${selfVideo ? 'hidden' : ''}`} />
-          {selfVideo && (
-            <video
-              ref={(el) => {
-                if (el && el.srcObject !== selfVideo) el.srcObject = selfVideo
-              }}
-              autoPlay
-              playsInline
-              muted
-              className={`aspect-[3/4] w-full -scale-x-100 object-cover ${selfCamOff ? 'opacity-0' : ''}`}
-            />
-          )}
-          <span className="absolute inset-x-0 bottom-0 truncate bg-black/60 px-1.5 py-0.5 text-center text-[11px] font-bold text-white">{selfVideo ? t('you') : state?.speaker?.name}</span>
-        </div>
+        {/* Chi parla con la videocamera: riquadri in basso a sinistra */}
+        {live && (selfVideo || liveFaces.length > 0) && (
+          <div className="absolute bottom-3 left-3 z-[1] flex max-w-[calc(100%-7rem)] gap-1.5 overflow-x-auto">
+            {selfVideo && (
+              <div className="relative w-16 shrink-0 overflow-hidden rounded-xl border-2 border-emerald-400 bg-black sm:w-24">
+                <video
+                  ref={(el) => {
+                    if (el && el.srcObject !== selfVideo) el.srcObject = selfVideo
+                  }}
+                  autoPlay
+                  playsInline
+                  muted
+                  className={`aspect-[3/4] w-full -scale-x-100 object-cover ${selfCamOff ? 'opacity-0' : ''}`}
+                />
+                <span className="absolute inset-x-0 bottom-0 truncate bg-black/60 px-1 py-0.5 text-center text-[10px] font-bold text-white">{t('you')}</span>
+              </div>
+            )}
+            {liveFaces.map((f) => (
+              <div key={f.name} className="relative w-16 shrink-0 overflow-hidden rounded-xl border-2 border-emerald-400 bg-black sm:w-24">
+                <video
+                  ref={(el) => {
+                    if (el && el.srcObject !== f.stream) {
+                      el.srcObject = f.stream
+                      el.play().catch(() => {})
+                    }
+                  }}
+                  autoPlay
+                  playsInline
+                  muted
+                  className="aspect-[3/4] w-full object-cover"
+                />
+                <span className="absolute inset-x-0 bottom-0 truncate bg-black/60 px-1 py-0.5 text-center text-[10px] font-bold text-white">{voiceOwner(state, f.name)}</span>
+              </div>
+            ))}
+          </div>
+        )}
         {!showMain && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-4 text-center text-white/75">
             {live ? (
@@ -701,10 +746,10 @@ export default function WebinarViewer({
         </p>
       </div>
 
-      {mayspeak && (
+      {canSpeak && (
         <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-emerald-400/60 bg-emerald-500/15 p-3">
           <Volume2 className="h-5 w-5 text-emerald-300" aria-hidden />
-          <p className="min-w-0 flex-1 text-sm font-semibold">{speakingOn ? t('youAreSpeaking') : t('youMaySpeak')}</p>
+          <p className="min-w-0 flex-1 text-sm font-semibold">{speakingOn ? t('youAreSpeaking') : mayspeak ? t('youMaySpeak') : t('openMicViewer')}</p>
           {speakingOn ? (
             <>
               {selfVideo && (
@@ -736,6 +781,12 @@ export default function WebinarViewer({
         <p className="text-sm text-emerald-300">
           <Volume2 className="mr-1 inline h-4 w-4" aria-hidden />
           {t('someoneSpeaking', { name: state.speaker.name })}
+        </p>
+      )}
+      {talkingNames.length > 0 && (
+        <p className="text-sm text-emerald-300">
+          <Mic className="mr-1 inline h-4 w-4" aria-hidden />
+          {t('talkingNow', { names: talkingNames.join(', ') })}
         </p>
       )}
       {error && (

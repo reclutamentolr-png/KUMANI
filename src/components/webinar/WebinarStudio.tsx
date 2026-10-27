@@ -12,6 +12,7 @@ import {
   MessageSquareOff,
   Mic,
   MicOff,
+  MicVocal,
   MonitorUp,
   MonitorX,
   Radio,
@@ -31,12 +32,13 @@ import {
   hostIce,
   hostModerate,
   hostSetChat,
+  hostSetOpenMic,
   hostPublish,
   hostPull,
   hostSendMessage,
   hostSetSpeaker,
 } from '@/app/actions/webinar'
-import { HOST_BEAT_MS, trackKind, type LiveState, type WebinarMessage, type WebinarStatus, type WebinarViewerRow } from '@/lib/webinar'
+import { HOST_BEAT_MS, trackKind, voiceOwner, voiceTrackNames, type LiveState, type WebinarMessage, type WebinarStatus, type WebinarViewerRow } from '@/lib/webinar'
 import { askConfirm } from '@/lib/confirm'
 import WebinarChat from '@/components/webinar/WebinarChat'
 import WebinarInvites from '@/components/webinar/WebinarInvites'
@@ -122,9 +124,9 @@ export default function WebinarStudio({
   const phaseRef = useRef<Phase>(phase)
   const previewRef = useRef<HTMLVideoElement>(null)
   const pipRef = useRef<HTMLVideoElement>(null)
-  const speakerAudioRef = useRef<HTMLAudioElement>(null)
-  // Videocamera di chi ha la parola (riquadro sull'anteprima)
-  const speakerVideoRef = useRef<HTMLVideoElement>(null)
+  // Voci di chi parla (un altoparlante per ognuno) e le loro videocamere
+  const voicesRef = useRef(new Map<string, HTMLAudioElement>())
+  const [faces, setFaces] = useState<{ name: string; stream: MediaStream }[]>([])
   const listenRef = useRef<{ pc: RTCPeerConnection; track: string } | null>(null)
   const repairTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   // Ora d'inizio del controllo in corso (0 = nessuno): uno rimasto appeso
@@ -432,6 +434,8 @@ export default function WebinarStudio({
     closePeer()
     listenRef.current?.pc.close()
     listenRef.current = null
+    for (const el of voicesRef.current.values()) el.remove()
+    voicesRef.current.clear()
     micRef.current?.stop()
     camRef.current?.stop()
     screenRef.current?.stop()
@@ -498,44 +502,56 @@ export default function WebinarStudio({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [beat, refreshPreview, t])
 
-  // Chi ha la parola: si ascolta la sua voce e si vede la sua videocamera
-  const speakerTrack = state?.speaker?.track ?? null
-  const speakerVideoTrack = state?.speaker?.videoTrack ?? null
+  // Chi parla (con la parola o con il microfono aperto a tutti): si ascolta
+  // la sua voce e si vede la sua videocamera. Il collegamento si rifà quando
+  // cambia chi parla.
+  const listenKey = state ? voiceTrackNames(state, null).join('|') : ''
   useEffect(() => {
     if (phase !== 'live') return
-    const key = `${speakerTrack ?? ''}|${speakerVideoTrack ?? ''}`
     const current = listenRef.current
-    if (current && current.track === key) return
+    if (current && current.track === listenKey) return
     current?.pc.close()
     listenRef.current = null
-    if (speakerAudioRef.current) speakerAudioRef.current.srcObject = null
-    if (speakerVideoRef.current) speakerVideoRef.current.srcObject = null
-    if (!speakerTrack || !iceRef.current) return
+    for (const el of voicesRef.current.values()) el.remove()
+    voicesRef.current.clear()
+    setFaces([])
+    const names = listenKey ? listenKey.split('|') : []
+    if (names.length === 0 || !iceRef.current) return
     const pc = makePeer(iceRef.current)
-    listenRef.current = { pc, track: key }
+    listenRef.current = { pc, track: listenKey }
     const midToName = new Map<string, string>()
     pc.ontrack = (e) => {
-      const isFace = trackKind(midToName.get(e.transceiver.mid ?? '') ?? '') === 'face' || e.track.kind === 'video'
-      const el = isFace ? speakerVideoRef.current : speakerAudioRef.current
-      if (el) {
-        el.srcObject = new MediaStream([e.track])
-        el.play().catch(() => {})
+      const name = midToName.get(e.transceiver.mid ?? '') ?? ''
+      if (trackKind(name) === 'face' || e.track.kind === 'video') {
+        const stream = new MediaStream([e.track])
+        setFaces((list) => [...list.filter((f) => f.name !== name), { name, stream }])
+        return
       }
+      const el = document.createElement('audio')
+      el.autoplay = true
+      el.srcObject = new MediaStream([e.track])
+      voicesRef.current.get(name)?.remove()
+      voicesRef.current.set(name, el)
+      document.body.appendChild(el)
+      el.play().catch(() => {})
     }
     ;(async () => {
-      const res = await hostPull(webinar.id, null, speakerVideoTrack ? [speakerTrack, speakerVideoTrack] : [speakerTrack])
+      const res = await hostPull(webinar.id, null, names)
       if ('error' in res || listenRef.current?.pc !== pc) return
       for (const tr of res.tracks) midToName.set(tr.mid, tr.trackName)
       const answer = await acceptOffer(pc, res.offer)
       await hostAnswer(webinar.id, res.sessionId, answer)
     })().catch(() => {})
-  }, [phase, speakerTrack, speakerVideoTrack, webinar.id])
+  }, [phase, listenKey, webinar.id])
 
   // Chiusura della pagina: si spegne tutto
   useEffect(() => {
     // Stesso oggetto per tutta la vita della pagina (cambiano solo i campi)
     const idleTracks = idleRef.current
+    const voices = voicesRef.current
     return () => {
+      for (const el of voices.values()) el.remove()
+      voices.clear()
       pcRef.current?.close()
       listenRef.current?.pc.close()
       micRef.current?.stop()
@@ -569,6 +585,12 @@ export default function WebinarStudio({
     beat()
   }
 
+  // Spegne il microfono di chi parla con il microfono aperto
+  const muteVoice = async (viewer: WebinarViewerRow) => {
+    await hostModerate(webinar.id, { mute: viewer.id })
+    beat()
+  }
+
   const giveVoice = async (viewerId: string | null) => {
     await hostSetSpeaker(webinar.id, viewerId)
     beat()
@@ -579,6 +601,7 @@ export default function WebinarStudio({
   const hands = viewers.filter((v) => v.hand && !v.speaking)
   const speaking = viewers.find((v) => v.speaking)
   const chatOpen = state?.chatOpen !== false
+  const openMic = !!state?.openMic
   const shareText = encodeURIComponent(`${webinar.title}\n${link}`)
 
   if (phase === 'ended') {
@@ -601,8 +624,6 @@ export default function WebinarStudio({
 
   return (
     <div className="space-y-4">
-      <audio ref={speakerAudioRef} autoPlay className="hidden" />
-
       {/* Barra di stato */}
       <div className="flex flex-wrap items-center gap-3 rounded-2xl bg-[var(--ink)] px-4 py-3 text-white">
         {phase === 'live' ? (
@@ -652,11 +673,28 @@ export default function WebinarStudio({
             {phase === 'live' && (
               <span className="absolute bottom-3 left-3 rounded-full bg-black/55 px-3 py-1 text-xs font-bold text-white">{micOn ? t('youAreLive') : t('micMutedNote')}</span>
             )}
-            {/* Chi ha la parola con la videocamera */}
-            <div className={`absolute left-3 top-3 w-24 overflow-hidden rounded-xl border-2 border-emerald-400 bg-black sm:w-32 ${phase === 'live' && speakerVideoTrack ? '' : 'hidden'}`}>
-              <video ref={speakerVideoRef} autoPlay playsInline muted className="aspect-[3/4] w-full object-cover" />
-              <span className="absolute inset-x-0 bottom-0 truncate bg-black/60 px-1.5 py-0.5 text-center text-[11px] font-bold text-white">{speaking?.name}</span>
-            </div>
+            {/* Chi parla con la videocamera */}
+            {phase === 'live' && faces.length > 0 && (
+              <div className="absolute left-3 top-3 flex max-w-[calc(100%-1.5rem)] gap-1.5 overflow-x-auto">
+                {faces.map((f) => (
+                  <div key={f.name} className="relative w-16 shrink-0 overflow-hidden rounded-xl border-2 border-emerald-400 bg-black sm:w-24">
+                    <video
+                      ref={(el) => {
+                        if (el && el.srcObject !== f.stream) {
+                          el.srcObject = f.stream
+                          el.play().catch(() => {})
+                        }
+                      }}
+                      autoPlay
+                      playsInline
+                      muted
+                      className="aspect-[3/4] w-full object-cover"
+                    />
+                    <span className="absolute inset-x-0 bottom-0 truncate bg-black/60 px-1 py-0.5 text-center text-[10px] font-bold text-white">{voiceOwner(state, f.name)}</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {!mediaReady ? (
@@ -788,6 +826,17 @@ export default function WebinarStudio({
                   <span className="min-w-0 flex-1">
                     <WebinarName name={v.name} kumano={v.kumano} />
                   </span>
+                  {v.talking && (
+                    <button
+                      type="button"
+                      onClick={() => muteVoice(v)}
+                      aria-label={t('muteAria', { name: v.name })}
+                      title={t('muteTitle')}
+                      className="rounded-full p-2 text-emerald-700 hover:bg-red-50 hover:text-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--gold)]"
+                    >
+                      <Mic className="h-4 w-4" aria-hidden />
+                    </button>
+                  )}
                   <button
                     type="button"
                     onClick={() => ban(v)}
@@ -801,6 +850,27 @@ export default function WebinarStudio({
               ))}
             </ul>
           </details>
+
+          {/* Microfono e video aperti a tutti: nessuno deve chiedere la parola */}
+          <button
+            type="button"
+            role="switch"
+            aria-checked={openMic}
+            disabled={phase !== 'live'}
+            onClick={async () => {
+              await hostSetOpenMic(webinar.id, !openMic)
+              beat()
+            }}
+            className="flex min-h-11 items-center justify-between gap-3 rounded-2xl border border-[var(--gold)]/30 bg-[var(--paper)] px-4 text-left text-sm font-bold disabled:opacity-50"
+          >
+            <span className="flex items-center gap-2">
+              <MicVocal className="h-4 w-4 shrink-0" aria-hidden />
+              {openMic ? t('openMicOn') : t('openMicOff')}
+            </span>
+            <span className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${openMic ? 'bg-emerald-600' : 'bg-gray-400'}`} aria-hidden>
+              <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${openMic ? 'left-[22px]' : 'left-0.5'}`} />
+            </span>
+          </button>
 
           {/* Chat di chi guarda: aperta o chiusa */}
           <button

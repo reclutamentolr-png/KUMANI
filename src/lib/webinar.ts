@@ -29,6 +29,10 @@ export type LiveState = {
   chatOpen: boolean
   // track: la voce; videoTrack: la videocamera, se l'ha accesa
   speaker: { id: string; name: string; session: string | null; track: string | null; videoTrack: string | null } | null
+  // Microfono e video aperti a tutti: chi vuole parla senza alzare la mano
+  openMic: boolean
+  // Chi sta parlando con il microfono aperto a tutti
+  voices: WebinarVoice[]
   viewers: number
   hiddenIds: number[]
 }
@@ -36,7 +40,36 @@ export type LiveState = {
 // kumano: scritto da un Kumano (con il suo account) o da chi presenta; altrimenti da un invitato col link
 export type WebinarMessage = { id: number; name: string; body: string; isHost: boolean; kumano: boolean; at: string }
 
-export type WebinarViewerRow = { id: string; name: string; hand: boolean; speaking: boolean; kumano: boolean }
+export type WebinarVoice = { id: string; name: string; track: string; videoTrack: string | null }
+
+// talking: parla con il microfono aperto a tutti
+export type WebinarViewerRow = { id: string; name: string; hand: boolean; speaking: boolean; talking: boolean; kumano: boolean }
+
+// Massimo di persone che parlano insieme con il microfono aperto a tutti
+export const WEBINAR_MAX_VOICES = 12
+
+// Tracce che si possono ricevere: chi presenta, chi ha la parola, chi parla
+// con il microfono aperto (escluso sé stessi)
+export function voiceTrackNames(s: LiveState, selfId: string | null): string[] {
+  const names: string[] = []
+  if (s.speaker && s.speaker.id !== selfId) {
+    if (s.speaker.track) names.push(s.speaker.track)
+    if (s.speaker.videoTrack) names.push(s.speaker.videoTrack)
+  }
+  for (const v of s.voices) {
+    if (v.id === selfId) continue
+    names.push(v.track)
+    if (v.videoTrack) names.push(v.videoTrack)
+  }
+  return names
+}
+
+// Nome di chi trasmette una traccia «voice-…» o «face-…»
+export function voiceOwner(s: LiveState | null, trackName: string): string | null {
+  if (!s) return null
+  if (s.speaker && (s.speaker.track === trackName || s.speaker.videoTrack === trackName)) return s.speaker.name
+  return s.voices.find((v) => v.track === trackName || v.videoTrack === trackName)?.name ?? null
+}
 
 export const webinarChannel = (key: string) => `webinar:${key}`
 

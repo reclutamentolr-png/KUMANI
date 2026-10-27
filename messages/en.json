@@ -4243,7 +4243,19 @@
     "openConvivium": "Open",
     "connectCalendar": "Connect to Google Calendar, iPhone or Outlook",
     "source_post": "Post to publish",
-    "openPost": "Open"
+    "openPost": "Open",
+    "remindLabel": "Remind me",
+    "remind_15": "15 minutes before",
+    "remind_30": "30 minutes before",
+    "remind_60": "1 hour before",
+    "remind_120": "2 hours before",
+    "remind_1440": "The day before",
+    "remindNote": "Reminders reach your phone if you turned on notifications in your profile, and stay in the bell.",
+    "taskRemind_0": "On the day",
+    "taskRemind_1": "The day before",
+    "taskRemindTime": "Reminder time (optional)",
+    "taskRemindTimeHint": "Without a time, the reminder arrives at the reminder time chosen in your profile (9:00 by default).",
+    "taskRemindNeedsDate": "Add a date to get a reminder."
   },
   "convivio": {
     "error_suspended": "Service temporarily suspended. Please try again later.",
@@ -9686,7 +9698,7 @@
     "cat_network": "Your network",
     "cat_network_hint": "When a Kumano you invited activates KUMANI and you get KU Points.",
     "cat_expiry": "Expiry dates",
-    "cat_expiry_hint": "A few days before a subscription without automatic renewal expires.",
+    "cat_expiry_hint": "Deadlines, bills, appointments and reminders, as early as you choose.",
     "cat_events": "Events",
     "cat_events_hint": "The day before an event you signed up for.",
     "cat_staff": "KUMANI announcements",
@@ -9698,7 +9710,9 @@
     "cat_messages": "Messages",
     "cat_messages_hint": "When someone writes to you from your Landing Page.",
     "cat_alerts": "Scams of the week",
-    "cat_alerts_hint": "Every Monday the scams most reported by the community"
+    "cat_alerts_hint": "Every Monday the scams most reported by the community",
+    "remindTimeLabel": "Reminder time",
+    "remindTimeHint": "Deadlines, bills and reminders without a time arrive at this time."
   },
   "pushNotifications": {
     "testTitle": "Notifications on",
@@ -9880,7 +9894,15 @@
     "webinarInviteTitle": "📹 {host} invites you to a live session",
     "webinarInviteBody": "“{title}” · {when}. Tap to join when it starts.",
     "webinarLiveTitle": "🔴 {host} is live",
-    "webinarLiveBody": "“{title}” has started: tap to join."
+    "webinarLiveBody": "“{title}” has started: tap to join.",
+    "appointmentTitle": "📅 {what}",
+    "appointmentToday": "Today at {time}.",
+    "appointmentTomorrow": "Tomorrow at {time}.",
+    "taskTitle": "✅ Reminder",
+    "taskToday": "{what}: it’s for today.",
+    "taskTodayAt": "{what}: it’s for today, at {time}.",
+    "taskTomorrow": "{what}: it’s for tomorrow.",
+    "taskTomorrowAt": "{what}: it’s for tomorrow, at {time}."
   },
   "pushInvite": {
     "title": "Turn on notifications",
@@ -14401,7 +14423,14 @@
     "chatOpenForViewers": "Chat open to viewers",
     "chatClosedForViewers": "Chat closed to viewers",
     "chatClosedNote": "The chat has been closed by the presenter.",
-    "exitFullscreen": "Exit full screen"
+    "exitFullscreen": "Exit full screen",
+    "openMicOn": "Microphone and video open to everyone",
+    "openMicOff": "Microphone and video for everyone: off (people ask to speak)",
+    "openMicViewer": "The presenter has opened microphone and video to everyone: you can speak whenever you like, without raising your hand.",
+    "talkingNow": "Speaking now: {names}",
+    "muteAria": "Turn off {name}'s microphone",
+    "muteTitle": "Turn off the microphone",
+    "errorTooManyVoices": "12 people are already speaking: try again shortly or raise your hand."
   },
   "spendlyShared": {
     "title": "Shared expenses",

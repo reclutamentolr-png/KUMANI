@@ -4243,7 +4243,19 @@
     "openConvivium": "Открыть",
     "connectCalendar": "Подключить к Google Календарю, iPhone или Outlook",
     "source_post": "Пост к публикации",
-    "openPost": "Открыть"
+    "openPost": "Открыть",
+    "remindLabel": "Напомнить",
+    "remind_15": "За 15 минут",
+    "remind_30": "За 30 минут",
+    "remind_60": "За 1 час",
+    "remind_120": "За 2 часа",
+    "remind_1440": "За день",
+    "remindNote": "Напоминания приходят на телефон, если в профиле включены уведомления, и остаются в колокольчике.",
+    "taskRemind_0": "В тот же день",
+    "taskRemind_1": "За день",
+    "taskRemindTime": "Время напоминания (необязательно)",
+    "taskRemindTimeHint": "Без времени напоминание придёт во время, выбранное в профиле (по умолчанию 9:00).",
+    "taskRemindNeedsDate": "Укажи дату, чтобы получить напоминание."
   },
   "convivio": {
     "error_suspended": "Сервис временно приостановлен. Повторите попытку позже.",
@@ -9686,7 +9698,7 @@
     "cat_network": "Ваша сеть",
     "cat_network_hint": "Когда приглашённый вами Kumano активирует KUMANI и вы получаете KU Points.",
     "cat_expiry": "Сроки",
-    "cat_expiry_hint": "За несколько дней до окончания подписки без автопродления.",
+    "cat_expiry_hint": "Сроки, счета, встречи и напоминания — заранее, как ты выберешь.",
     "cat_events": "События",
     "cat_events_hint": "За день до события, на которое вы записаны.",
     "cat_staff": "Объявления KUMANI",
@@ -9698,7 +9710,9 @@
     "cat_messages": "Сообщения",
     "cat_messages_hint": "Когда кто-то пишет вам с вашей Landing Page.",
     "cat_alerts": "Мошенничество недели",
-    "cat_alerts_hint": "Каждый понедельник схемы, о которых чаще всего сообщает сообщество"
+    "cat_alerts_hint": "Каждый понедельник схемы, о которых чаще всего сообщает сообщество",
+    "remindTimeLabel": "Время напоминаний",
+    "remindTimeHint": "Сроки, счета и напоминания без времени приходят в это время."
   },
   "pushNotifications": {
     "testTitle": "Уведомления включены",
@@ -9880,7 +9894,15 @@
     "webinarInviteTitle": "📹 {host} приглашает тебя на эфир",
     "webinarInviteBody": "«{title}» · {when}. Нажми, чтобы войти, когда начнётся.",
     "webinarLiveTitle": "🔴 {host} в эфире",
-    "webinarLiveBody": "«{title}» начался: нажми, чтобы войти."
+    "webinarLiveBody": "«{title}» начался: нажми, чтобы войти.",
+    "appointmentTitle": "📅 {what}",
+    "appointmentToday": "Сегодня в {time}.",
+    "appointmentTomorrow": "Завтра в {time}.",
+    "taskTitle": "✅ Напоминание",
+    "taskToday": "{what}: на сегодня.",
+    "taskTodayAt": "{what}: на сегодня, в {time}.",
+    "taskTomorrow": "{what}: на завтра.",
+    "taskTomorrowAt": "{what}: на завтра, в {time}."
   },
   "pushInvite": {
     "title": "Включите уведомления",
@@ -14401,7 +14423,14 @@
     "chatOpenForViewers": "Чат открыт для зрителей",
     "chatClosedForViewers": "Чат закрыт для зрителей",
     "chatClosedNote": "Ведущий закрыл чат.",
-    "exitFullscreen": "Свернуть"
+    "exitFullscreen": "Свернуть",
+    "openMicOn": "Микрофон и видео открыты для всех",
+    "openMicOff": "Микрофон и видео для всех: выключено (слово просят)",
+    "openMicViewer": "Ведущий открыл микрофон и видео для всех: можешь говорить когда хочешь, не поднимая руку.",
+    "talkingNow": "Сейчас говорят: {names}",
+    "muteAria": "Выключить микрофон у {name}",
+    "muteTitle": "Выключить микрофон",
+    "errorTooManyVoices": "Уже говорят 12 человек: попробуй чуть позже или подними руку."
   },
   "spendlyShared": {
     "title": "Общие расходы",

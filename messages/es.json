@@ -4243,7 +4243,19 @@
     "openConvivium": "Abrir",
     "connectCalendar": "Conectar con Google Calendar, iPhone u Outlook",
     "source_post": "Publicación pendiente",
-    "openPost": "Abrir"
+    "openPost": "Abrir",
+    "remindLabel": "Avísame",
+    "remind_15": "15 minutos antes",
+    "remind_30": "30 minutos antes",
+    "remind_60": "1 hora antes",
+    "remind_120": "2 horas antes",
+    "remind_1440": "El día antes",
+    "remindNote": "Los avisos llegan al móvil si has activado las notificaciones en tu perfil, y quedan en la campana.",
+    "taskRemind_0": "El mismo día",
+    "taskRemind_1": "El día antes",
+    "taskRemindTime": "Hora del aviso (opcional)",
+    "taskRemindTimeHint": "Sin hora, el aviso llega a la hora de avisos elegida en tu perfil (las 9:00 por defecto).",
+    "taskRemindNeedsDate": "Pon una fecha para recibir el aviso."
   },
   "convivio": {
     "error_suspended": "Servicio suspendido temporalmente. Inténtelo más tarde.",
@@ -9686,7 +9698,7 @@
     "cat_network": "Tu red",
     "cat_network_hint": "Cuando un Kumano que invitaste activa KUMANI y recibes KU Points.",
     "cat_expiry": "Vencimientos",
-    "cat_expiry_hint": "Unos días antes de que venza una suscripción sin renovación automática.",
+    "cat_expiry_hint": "Vencimientos, facturas, citas y recordatorios, con la antelación que elijas.",
     "cat_events": "Eventos",
     "cat_events_hint": "El día antes de un evento al que te inscribiste.",
     "cat_staff": "Avisos de KUMANI",
@@ -9698,7 +9710,9 @@
     "cat_messages": "Mensajes",
     "cat_messages_hint": "Cuando alguien te escribe desde tu Landing Page.",
     "cat_alerts": "Estafas de la semana",
-    "cat_alerts_hint": "Cada lunes las estafas más denunciadas por la comunidad"
+    "cat_alerts_hint": "Cada lunes las estafas más denunciadas por la comunidad",
+    "remindTimeLabel": "Hora de los avisos",
+    "remindTimeHint": "Vencimientos, facturas y recordatorios sin hora llegan a esta hora."
   },
   "pushNotifications": {
     "testTitle": "Notificaciones activadas",
@@ -9880,7 +9894,15 @@
     "webinarInviteTitle": "📹 {host} te invita a un directo",
     "webinarInviteBody": "«{title}» · {when}. Toca para entrar cuando empiece.",
     "webinarLiveTitle": "🔴 {host} está en directo",
-    "webinarLiveBody": "«{title}» ha empezado: toca para entrar."
+    "webinarLiveBody": "«{title}» ha empezado: toca para entrar.",
+    "appointmentTitle": "📅 {what}",
+    "appointmentToday": "Hoy a las {time}.",
+    "appointmentTomorrow": "Mañana a las {time}.",
+    "taskTitle": "✅ Recordatorio",
+    "taskToday": "{what}: es para hoy.",
+    "taskTodayAt": "{what}: es para hoy, a las {time}.",
+    "taskTomorrow": "{what}: es para mañana.",
+    "taskTomorrowAt": "{what}: es para mañana, a las {time}."
   },
   "pushInvite": {
     "title": "Activa las notificaciones",
@@ -14401,7 +14423,14 @@
     "chatOpenForViewers": "Chat abierto a quien mira",
     "chatClosedForViewers": "Chat cerrado a quien mira",
     "chatClosedNote": "Quien presenta ha cerrado el chat.",
-    "exitFullscreen": "Reducir"
+    "exitFullscreen": "Reducir",
+    "openMicOn": "Micrófono y vídeo abiertos a todos",
+    "openMicOff": "Micrófono y vídeo para todos: desactivado (se pide la palabra)",
+    "openMicViewer": "Quien presenta ha abierto el micrófono y el vídeo a todos: puedes hablar cuando quieras, sin levantar la mano.",
+    "talkingNow": "Están hablando: {names}",
+    "muteAria": "Apagar el micrófono de {name}",
+    "muteTitle": "Apagar el micrófono",
+    "errorTooManyVoices": "Ya están hablando 12 personas: inténtalo de nuevo en un momento o levanta la mano."
   },
   "spendlyShared": {
     "title": "Gastos compartidos",

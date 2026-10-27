@@ -17,6 +17,7 @@ import {
   HOST_AWAY_MS,
   VIEWER_ACTIVE_MS,
   WEBINAR_CODE_RE,
+  WEBINAR_MAX_VOICES,
   WEBINAR_MESSAGE_GAP_MS,
   WEBINAR_MESSAGE_MAX,
   WEBINAR_NAME_MAX,
@@ -55,6 +56,7 @@ type WebinarRow = {
   speaker_track: string | null
   speaker_video_track: string | null
   chat_open: boolean
+  open_mic: boolean
   started_at: string | null
 }
 
@@ -66,10 +68,11 @@ type ViewerRow = {
   hand_raised_at: string | null
   last_message_at: string | null
   banned: boolean
+  voice_track: string | null
 }
 
 const WEBINAR_COLUMNS =
-  'id, host_id, code, channel_key, title, starts_at, seats, status, host_session, host_tracks, host_seen_at, host_paused, cam_on, screen_on, speaker_id, speaker_session, speaker_track, speaker_video_track, chat_open, started_at'
+  'id, host_id, code, channel_key, title, starts_at, seats, status, host_session, host_tracks, host_seen_at, host_paused, cam_on, screen_on, speaker_id, speaker_session, speaker_track, speaker_video_track, chat_open, open_mic, started_at'
 
 const hashToken = (token: string) => createHash('sha256').update(token).digest('hex')
 const cleanText = (value: unknown, max: number) =>
@@ -138,10 +141,22 @@ async function hostOf(id: string): Promise<{ userId: string; webinar: WebinarRow
 async function liveState(w: WebinarRow): Promise<LiveState> {
   const db = serviceClient()
   const since = new Date(Date.now() - VIEWER_ACTIVE_MS).toISOString()
-  const [{ count }, { data: speaker }, { data: hidden }] = await Promise.all([
+  const openMic = w.status === 'live' && w.open_mic
+  const [{ count }, { data: speaker }, { data: hidden }, { data: voices }] = await Promise.all([
     db.from('webinar_viewers').select('id', { count: 'exact', head: true }).eq('webinar_id', w.id).eq('banned', false).gte('last_seen', since),
     w.speaker_id ? db.from('webinar_viewers').select('id, name').eq('id', w.speaker_id).maybeSingle() : Promise.resolve({ data: null }),
     db.from('webinar_messages').select('id').eq('webinar_id', w.id).eq('hidden', true).order('id', { ascending: false }).limit(100),
+    openMic
+      ? db
+          .from('webinar_viewers')
+          .select('id, name, voice_track, voice_video_track')
+          .eq('webinar_id', w.id)
+          .eq('banned', false)
+          .gte('last_seen', since)
+          .not('voice_track', 'is', null)
+          .order('joined_at', { ascending: true })
+          .limit(WEBINAR_MAX_VOICES)
+      : Promise.resolve({ data: null }),
   ])
   const seen = w.host_seen_at ? new Date(w.host_seen_at).getTime() : 0
   return {
@@ -153,6 +168,8 @@ async function liveState(w: WebinarRow): Promise<LiveState> {
     screenOn: w.screen_on,
     chatOpen: w.chat_open !== false,
     speaker: speaker && w.status === 'live' ? { id: speaker.id, name: speaker.name, session: w.speaker_session, track: w.speaker_track, videoTrack: w.speaker_video_track } : null,
+    openMic,
+    voices: (voices ?? []).map((v) => ({ id: v.id as string, name: v.name as string, track: v.voice_track as string, videoTrack: (v.voice_video_track as string | null) ?? null })),
     viewers: count ?? 0,
     hiddenIds: (hidden ?? []).map((m) => m.id as number),
   }
@@ -289,7 +306,7 @@ export async function hostBeat(
     messagesAfter(id, Math.max(0, Number(afterId) || 0)),
     serviceClient()
       .from('webinar_viewers')
-      .select('id, name, hand_raised_at, user_id')
+      .select('id, name, hand_raised_at, user_id, voice_track')
       .eq('webinar_id', id)
       .eq('banned', false)
       .gte('last_seen', since)
@@ -299,7 +316,7 @@ export async function hostBeat(
   return {
     state,
     messages,
-    viewers: (viewers ?? []).map((v) => ({ id: v.id as string, name: v.name as string, hand: !!v.hand_raised_at, speaking: v.id === w.speaker_id, kumano: !!v.user_id })),
+    viewers: (viewers ?? []).map((v) => ({ id: v.id as string, name: v.name as string, hand: !!v.hand_raised_at, speaking: v.id === w.speaker_id, talking: w.open_mic && !!v.voice_track, kumano: !!v.user_id })),
   }
 }
 
@@ -308,8 +325,9 @@ export async function hostEnd(id: string): Promise<{ success: true } | Fail> {
   if ('error' in host) return host
   await serviceClient()
     .from('webinars')
-    .update({ status: 'ended', ended_at: new Date().toISOString(), host_session: null, host_tracks: {}, speaker_id: null, speaker_session: null, speaker_track: null })
+    .update({ status: 'ended', ended_at: new Date().toISOString(), host_session: null, host_tracks: {}, speaker_id: null, speaker_session: null, speaker_track: null, speaker_video_track: null, open_mic: false })
     .eq('id', id)
+  await clearVoices(id)
   await ping(host.webinar.channel_key, 'state')
   return { success: true }
 }
@@ -328,15 +346,22 @@ export async function hostSendMessage(id: string, body: string): Promise<{ succe
 }
 
 // Moderazione: togliere qualcuno dal webinar o nascondere un messaggio
-export async function hostModerate(id: string, action: { ban?: string; hide?: number }): Promise<{ success: true } | Fail> {
+export async function hostModerate(id: string, action: { ban?: string; hide?: number; mute?: string }): Promise<{ success: true } | Fail> {
   const host = await hostOf(id)
   if ('error' in host) return host
   const db = serviceClient()
   if (typeof action.ban === 'string') {
-    await db.from('webinar_viewers').update({ banned: true, hand_raised_at: null }).eq('id', action.ban).eq('webinar_id', id)
+    await db.from('webinar_viewers').update({ banned: true, hand_raised_at: null, ...NO_VOICE }).eq('id', action.ban).eq('webinar_id', id)
     await db.from('webinar_messages').update({ hidden: true }).eq('viewer_id', action.ban).eq('webinar_id', id)
     if (host.webinar.speaker_id === action.ban) {
-      await db.from('webinars').update({ speaker_id: null, speaker_session: null, speaker_track: null }).eq('id', id)
+      await db.from('webinars').update({ speaker_id: null, speaker_session: null, speaker_track: null, speaker_video_track: null }).eq('id', id)
+    }
+  }
+  // Spegne il microfono (e la videocamera) di chi parla: potrà riaccenderlo
+  if (typeof action.mute === 'string') {
+    await db.from('webinar_viewers').update(NO_VOICE).eq('id', action.mute).eq('webinar_id', id)
+    if (host.webinar.speaker_id === action.mute) {
+      await db.from('webinars').update({ speaker_id: null, speaker_session: null, speaker_track: null, speaker_video_track: null }).eq('id', id)
     }
   }
   if (typeof action.hide === 'number') {
@@ -351,6 +376,23 @@ export async function hostSetChat(id: string, open: boolean): Promise<{ success:
   const host = await hostOf(id)
   if ('error' in host) return host
   await serviceClient().from('webinars').update({ chat_open: !!open }).eq('id', id)
+  await ping(host.webinar.channel_key, 'state')
+  return { success: true }
+}
+
+const NO_VOICE = { voice_session: null, voice_track: null, voice_video_track: null }
+
+async function clearVoices(webinarId: string) {
+  await serviceClient().from('webinar_viewers').update(NO_VOICE).eq('webinar_id', webinarId).not('voice_track', 'is', null)
+}
+
+// Microfono e video aperti a tutti (chi vuole parla senza alzare la mano) o
+// di nuovo solo su richiesta: chiudendo, i microfoni aperti si spengono
+export async function hostSetOpenMic(id: string, open: boolean): Promise<{ success: true } | Fail> {
+  const host = await hostOf(id)
+  if ('error' in host) return host
+  await serviceClient().from('webinars').update({ open_mic: !!open }).eq('id', id)
+  if (!open) await clearVoices(id)
   await ping(host.webinar.channel_key, 'state')
   return { success: true }
 }
@@ -380,12 +422,15 @@ export async function hostPull(
   const host = await hostOf(id)
   if ('error' in host) return host
   const w = host.webinar
-  const speakerSession = w.speaker_session
-  const names = (Array.isArray(trackNames) ? trackNames : [trackNames]).filter((n) => !!n && (n === w.speaker_track || n === w.speaker_video_track))
-  if (!speakerSession || names.length === 0) return { error: 'not_found' }
+  const sources = await voiceSources(w, null)
+  const wanted = (Array.isArray(trackNames) ? trackNames : [trackNames])
+    .slice(0, 2 * WEBINAR_MAX_VOICES + 2)
+    .filter((n) => typeof n === 'string' && sources.has(n))
+    .map((trackName) => ({ location: 'remote' as const, sessionId: sources.get(trackName)!, trackName }))
+  if (wanted.length === 0) return { error: 'not_found' }
   try {
     const session = typeof sessionId === 'string' && /^[0-9a-f]{20,64}$/i.test(sessionId) ? sessionId : await newSession()
-    const res = await pullTracks(session, names.map((trackName) => ({ location: 'remote' as const, sessionId: speakerSession, trackName })))
+    const res = await pullTracks(session, wanted)
     if (!res.sessionDescription) return { error: 'realtime' }
     return { sessionId: session, offer: res.sessionDescription, tracks: (res.tracks ?? []).filter((t) => t.mid && !t.errorCode).map((t) => ({ mid: t.mid!, trackName: t.trackName ?? '' })) }
   } catch {
@@ -405,6 +450,32 @@ export async function hostAnswer(id: string, sessionId: string, answer: SessionD
   }
 }
 
+// Voci che si possono ricevere (nome traccia → sessione di Cloudflare): chi
+// ha la parola e chi parla con il microfono aperto, escluso chi chiede
+async function voiceSources(w: WebinarRow, selfId: string | null): Promise<Map<string, string>> {
+  const map = new Map<string, string>()
+  if (w.status !== 'live') return map
+  if (w.speaker_session && w.speaker_id !== selfId) {
+    if (w.speaker_track) map.set(w.speaker_track, w.speaker_session)
+    if (w.speaker_video_track) map.set(w.speaker_video_track, w.speaker_session)
+  }
+  if (w.open_mic) {
+    const { data } = await serviceClient()
+      .from('webinar_viewers')
+      .select('id, voice_session, voice_track, voice_video_track')
+      .eq('webinar_id', w.id)
+      .eq('banned', false)
+      .not('voice_track', 'is', null)
+      .limit(WEBINAR_MAX_VOICES * 2)
+    for (const v of data ?? []) {
+      if (v.id === selfId || !v.voice_session) continue
+      if (v.voice_track) map.set(v.voice_track as string, v.voice_session as string)
+      if (v.voice_video_track) map.set(v.voice_video_track as string, v.voice_session as string)
+    }
+  }
+  return map
+}
+
 // ── Guardare ───────────────────────────────────────────────────────────
 
 async function webinarByCode(code: string): Promise<WebinarRow | null> {
@@ -419,7 +490,7 @@ async function viewerOf(code: string, token: string): Promise<{ webinar: Webinar
   if (typeof token !== 'string' || token.length < 20 || token.length > 100) return { error: 'not_joined' }
   const { data: viewer } = await serviceClient()
     .from('webinar_viewers')
-    .select('id, webinar_id, name, session_id, hand_raised_at, last_message_at, banned')
+    .select('id, webinar_id, name, session_id, hand_raised_at, last_message_at, banned, voice_track')
     .eq('webinar_id', webinar.id)
     .eq('token_hash', hashToken(token))
     .maybeSingle<ViewerRow>()
@@ -483,13 +554,13 @@ export async function viewerPoll(
   code: string,
   token: string,
   afterId: number
-): Promise<{ state: LiveState; messages: WebinarMessage[]; me: { hand: boolean; speaking: boolean } } | Fail> {
+): Promise<{ state: LiveState; messages: WebinarMessage[]; me: { hand: boolean; speaking: boolean; voice: boolean } } | Fail> {
   const found = await viewerOf(code, token)
   if ('error' in found) return found
   const { webinar, viewer } = found
   await serviceClient().from('webinar_viewers').update({ last_seen: new Date().toISOString() }).eq('id', viewer.id)
   const [state, messages] = await Promise.all([liveState(webinar), messagesAfter(webinar.id, Math.max(0, Number(afterId) || 0))])
-  return { state, messages, me: { hand: !!viewer.hand_raised_at, speaking: webinar.speaker_id === viewer.id } }
+  return { state, messages, me: { hand: !!viewer.hand_raised_at, speaking: webinar.speaker_id === viewer.id, voice: webinar.open_mic && !!viewer.voice_track } }
 }
 
 // Riceve le tracce della diretta: chi presenta e chi ha la parola
@@ -504,11 +575,11 @@ export async function viewerPull(
   const { webinar: w, viewer } = found
   if (w.status !== 'live' || !w.host_session) return { error: 'not_live' }
   const hostNames = Object.values(w.host_tracks ?? {})
+  const voices = await voiceSources(w, viewer.id)
   const wanted: { location: 'remote'; sessionId: string; trackName: string }[] = []
-  for (const name of Array.isArray(trackNames) ? trackNames.slice(0, 5) : []) {
+  for (const name of Array.isArray(trackNames) ? trackNames.slice(0, 12) : []) {
     if (hostNames.includes(name)) wanted.push({ location: 'remote', sessionId: w.host_session, trackName: name })
-    else if (w.speaker_session && (name === w.speaker_track || (!!w.speaker_video_track && name === w.speaker_video_track)) && w.speaker_id !== viewer.id)
-      wanted.push({ location: 'remote', sessionId: w.speaker_session, trackName: name })
+    else if (voices.has(name)) wanted.push({ location: 'remote', sessionId: voices.get(name)!, trackName: name })
   }
   if (wanted.length === 0) return { error: 'invalid' }
   try {
@@ -584,8 +655,18 @@ export async function viewerSpeak(
   const found = await viewerOf(code, token)
   if ('error' in found) return found
   const { webinar: w, viewer } = found
-  if (w.status !== 'live' || w.speaker_id !== viewer.id) return { error: 'not_allowed' }
+  const floor = w.speaker_id === viewer.id
+  if (w.status !== 'live' || (!floor && !w.open_mic)) return { error: 'not_allowed' }
   if (!isSdp(offer) || typeof mid !== 'string' || !mid) return { error: 'invalid' }
+  if (!floor && !viewer.voice_track) {
+    const { count } = await serviceClient()
+      .from('webinar_viewers')
+      .select('id', { count: 'exact', head: true })
+      .eq('webinar_id', w.id)
+      .not('voice_track', 'is', null)
+      .gte('last_seen', new Date(Date.now() - VIEWER_ACTIVE_MS).toISOString())
+    if ((count ?? 0) >= WEBINAR_MAX_VOICES) return { error: 'too_many_voices' }
+  }
   if (videoMid != null && (typeof videoMid !== 'string' || !videoMid || videoMid === mid)) return { error: 'invalid' }
   try {
     const sessionId = await newSession()
@@ -597,11 +678,15 @@ export async function viewerSpeak(
       ...(videoMid && videoName ? [{ location: 'local' as const, mid: videoMid, trackName: videoName }] : []),
     ])
     if (!res.sessionDescription) return { error: 'realtime' }
-    await serviceClient()
-      .from('webinars')
-      .update({ speaker_session: sessionId, speaker_track: trackName, speaker_video_track: videoName })
-      .eq('id', w.id)
-      .eq('speaker_id', viewer.id)
+    if (floor) {
+      await serviceClient()
+        .from('webinars')
+        .update({ speaker_session: sessionId, speaker_track: trackName, speaker_video_track: videoName })
+        .eq('id', w.id)
+        .eq('speaker_id', viewer.id)
+    } else {
+      await serviceClient().from('webinar_viewers').update({ voice_session: sessionId, voice_track: trackName, voice_video_track: videoName }).eq('id', viewer.id)
+    }
     await ping(w.channel_key, 'state')
     return { answer: res.sessionDescription }
   } catch {
@@ -613,9 +698,11 @@ export async function viewerStopSpeak(code: string, token: string): Promise<{ su
   const found = await viewerOf(code, token)
   if ('error' in found) return found
   const { webinar: w, viewer } = found
-  if (w.speaker_id !== viewer.id) return { success: true }
+  if (w.speaker_id !== viewer.id && !viewer.voice_track) return { success: true }
   // La sessione della voce si chiude da sola quando il browser chiude il collegamento
-  await serviceClient().from('webinars').update({ speaker_id: null, speaker_session: null, speaker_track: null, speaker_video_track: null }).eq('id', w.id)
+  if (w.speaker_id === viewer.id)
+    await serviceClient().from('webinars').update({ speaker_id: null, speaker_session: null, speaker_track: null, speaker_video_track: null }).eq('id', w.id)
+  if (viewer.voice_track) await serviceClient().from('webinar_viewers').update(NO_VOICE).eq('id', viewer.id)
   await ping(w.channel_key, 'state')
   return { success: true }
 }

@@ -4243,7 +4243,19 @@
     "openConvivium": "Apri",
     "connectCalendar": "Collega a Google Calendar, iPhone o Outlook",
     "source_post": "Post da pubblicare",
-    "openPost": "Apri"
+    "openPost": "Apri",
+    "remindLabel": "Avvisami",
+    "remind_15": "15 minuti prima",
+    "remind_30": "30 minuti prima",
+    "remind_60": "1 ora prima",
+    "remind_120": "2 ore prima",
+    "remind_1440": "Il giorno prima",
+    "remindNote": "Gli avvisi arrivano sul telefono se hai attivato le notifiche nel profilo, e restano nella campanella.",
+    "taskRemind_0": "Il giorno stesso",
+    "taskRemind_1": "Il giorno prima",
+    "taskRemindTime": "Ora dell’avviso (facoltativa)",
+    "taskRemindTimeHint": "Senza ora l’avviso arriva all’ora degli avvisi scelta nel profilo (di base le 9:00).",
+    "taskRemindNeedsDate": "Metti una data per ricevere l’avviso."
   },
   "convivio": {
     "error_suspended": "Servizio momentaneamente sospeso. Riprova più tardi.",
@@ -9686,7 +9698,7 @@
     "cat_network": "La tua rete",
     "cat_network_hint": "Quando un Kumano che hai invitato attiva KUMANI e ricevi i KU Points.",
     "cat_expiry": "Scadenze",
-    "cat_expiry_hint": "Qualche giorno prima che scada un abbonamento senza rinnovo automatico.",
+    "cat_expiry_hint": "Scadenze, bollette, appuntamenti e promemoria, con l’anticipo che scegli.",
     "cat_events": "Eventi",
     "cat_events_hint": "Il giorno prima di un evento a cui sei iscritto.",
     "cat_staff": "Avvisi di KUMANI",
@@ -9698,7 +9710,9 @@
     "cat_messages": "Messaggi",
     "cat_messages_hint": "Quando qualcuno ti scrive dalla tua Landing Page.",
     "cat_alerts": "Truffe della settimana",
-    "cat_alerts_hint": "Ogni lunedì le truffe più segnalate dalla community"
+    "cat_alerts_hint": "Ogni lunedì le truffe più segnalate dalla community",
+    "remindTimeLabel": "Ora degli avvisi",
+    "remindTimeHint": "Scadenze, bollette e promemoria senza ora arrivano a quest’ora."
   },
   "pushNotifications": {
     "testTitle": "Notifiche attive",
@@ -9880,7 +9894,15 @@
     "webinarInviteTitle": "📹 {host} ti invita a una diretta",
     "webinarInviteBody": "«{title}» · {when}. Tocca per entrare quando inizia.",
     "webinarLiveTitle": "🔴 {host} è in diretta",
-    "webinarLiveBody": "«{title}» è iniziata: tocca per entrare."
+    "webinarLiveBody": "«{title}» è iniziata: tocca per entrare.",
+    "appointmentTitle": "📅 {what}",
+    "appointmentToday": "Oggi alle {time}.",
+    "appointmentTomorrow": "Domani alle {time}.",
+    "taskTitle": "✅ Promemoria",
+    "taskToday": "{what}: è per oggi.",
+    "taskTodayAt": "{what}: è per oggi, alle {time}.",
+    "taskTomorrow": "{what}: è per domani.",
+    "taskTomorrowAt": "{what}: è per domani, alle {time}."
   },
   "pushInvite": {
     "title": "Attiva le notifiche",
@@ -14401,7 +14423,14 @@
     "chatOpenForViewers": "Chat aperta a chi guarda",
     "chatClosedForViewers": "Chat chiusa a chi guarda",
     "chatClosedNote": "La chat è chiusa da chi presenta.",
-    "exitFullscreen": "Riduci"
+    "exitFullscreen": "Riduci",
+    "openMicOn": "Microfono e video aperti a tutti",
+    "openMicOff": "Microfono e video a tutti: spento (si chiede la parola)",
+    "openMicViewer": "Chi presenta ha aperto microfono e video a tutti: puoi parlare quando vuoi, senza alzare la mano.",
+    "talkingNow": "Stanno parlando: {names}",
+    "muteAria": "Spegni il microfono di {name}",
+    "muteTitle": "Spegni il microfono",
+    "errorTooManyVoices": "Stanno già parlando in 12: riprova tra poco o alza la mano."
   },
   "spendlyShared": {
     "title": "Spese condivise",
