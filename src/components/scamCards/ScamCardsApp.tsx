@@ -34,6 +34,7 @@ export default function ScamCardsApp({
   monthCard,
   inviteCode,
   firstName,
+  openCard,
 }: {
   initialOwned: ScamCardOwned[]
   initialFailedToday: number[]
@@ -41,6 +42,8 @@ export default function ScamCardsApp({
   monthCard: number | null
   inviteCode: string | null
   firstName: string | null
+  // Carta da aprire subito (QR del mazzo stampato: /app/carte-antitruffa?carta=N)
+  openCard?: number | null
 }) {
   const t = useTranslations('scamCards')
   const locale = useLocale()
@@ -52,7 +55,7 @@ export default function ScamCardsApp({
   const [owned, setOwned] = useState(() => new Map(initialOwned.map((c) => [c.no, c])))
   const [failedToday, setFailedToday] = useState(() => new Set(initialFailedToday))
   const [filter, setFilter] = useState<Filter>('all')
-  const [open, setOpen] = useState<ScamCard | null>(null)
+  const [open, setOpen] = useState<ScamCard | null>(() => SCAM_CARDS.find((c) => c.no === openCard) ?? null)
 
   const count = owned.size
   // Truffe fermate davvero con un controllo (cornice verde)

@@ -17193,6 +17193,10 @@
     "monthDone": "Conquistada com a moldura arco-íris: parabéns!",
     "monthLabel": "Do mês",
     "monthMine": "Carta do mês: conquistada a tempo, com a moldura arco-íris.",
-    "takeMonth": "Moldura arco-íris: repete as 3 perguntas"
+    "takeMonth": "Moldura arco-íris: repete as 3 perguntas",
+    "deckTitle": "Tens na mão a carta impressa?",
+    "deckMember": "Responde às 3 perguntas e põe-na no teu álbum do KUMANI.",
+    "deckGuest": "Aqui em baixo está a carta sempre atualizada. Com o KUMANI pões-na no teu álbum e verificas as burlas antes de caíres na armadilha.",
+    "deckMemberButton": "Pôr no álbum"
   }
 }

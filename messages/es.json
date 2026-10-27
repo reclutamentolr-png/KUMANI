@@ -17193,6 +17193,10 @@
     "monthDone": "Conseguida con el marco arcoíris: ¡enhorabuena!",
     "monthLabel": "Del mes",
     "monthMine": "Carta del mes: conseguida a tiempo, con el marco arcoíris.",
-    "takeMonth": "Marco arcoíris: repite las 3 preguntas"
+    "takeMonth": "Marco arcoíris: repite las 3 preguntas",
+    "deckTitle": "¿Tienes en la mano la carta impresa?",
+    "deckMember": "Responde a sus 3 preguntas y llévala a tu álbum de KUMANI.",
+    "deckGuest": "Aquí abajo tienes la carta siempre actualizada. Con KUMANI la guardas en tu álbum y compruebas las estafas antes de caer en la trampa.",
+    "deckMemberButton": "Llevarla al álbum"
   }
 }

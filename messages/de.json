@@ -17193,6 +17193,10 @@
     "monthDone": "Mit Regenbogenrahmen geholt: super!",
     "monthLabel": "Des Monats",
     "monthMine": "Karte des Monats: rechtzeitig geholt, mit Regenbogenrahmen.",
-    "takeMonth": "Regenbogenrahmen: beantworte die 3 Fragen erneut"
+    "takeMonth": "Regenbogenrahmen: beantworte die 3 Fragen erneut",
+    "deckTitle": "Hast du die gedruckte Karte in der Hand?",
+    "deckMember": "Beantworte ihre 3 Fragen und lege sie in dein KUMANI-Album.",
+    "deckGuest": "Unten siehst du die immer aktuelle Karte. Mit KUMANI legst du sie in dein Album und prüfst Betrug, bevor du in die Falle tappst.",
+    "deckMemberButton": "Ins Album legen"
   }
 }

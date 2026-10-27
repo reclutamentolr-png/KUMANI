@@ -17193,6 +17193,10 @@
     "monthDone": "Collected with the rainbow frame: well done!",
     "monthLabel": "Of the month",
     "monthMine": "Card of the month: collected in time, with the rainbow frame.",
-    "takeMonth": "Rainbow frame: answer the 3 questions again"
+    "takeMonth": "Rainbow frame: answer the 3 questions again",
+    "deckTitle": "Holding the printed card?",
+    "deckMember": "Answer its 3 questions and add it to your KUMANI album.",
+    "deckGuest": "Below is the always up-to-date card. With KUMANI you add it to your album and check scams before falling for them.",
+    "deckMemberButton": "Add it to the album"
   }
 }

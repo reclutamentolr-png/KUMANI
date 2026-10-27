@@ -17193,6 +17193,10 @@
     "monthDone": "Prise avec le cadre arc-en-ciel : bravo !",
     "monthLabel": "Du mois",
     "monthMine": "Carte du mois : prise à temps, avec le cadre arc-en-ciel.",
-    "takeMonth": "Cadre arc-en-ciel : refais les 3 questions"
+    "takeMonth": "Cadre arc-en-ciel : refais les 3 questions",
+    "deckTitle": "Tu as la carte imprimée en main ?",
+    "deckMember": "Réponds à ses 3 questions et mets-la dans ton album KUMANI.",
+    "deckGuest": "Ci-dessous, la carte toujours à jour. Avec KUMANI tu la mets dans ton album et tu vérifies les arnaques avant de tomber dans le piège.",
+    "deckMemberButton": "La mettre dans l’album"
   }
 }

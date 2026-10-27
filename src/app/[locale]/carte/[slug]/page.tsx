@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
-import { ArrowLeft, ShieldCheck } from 'lucide-react'
+import { ArrowLeft, QrCode, ShieldCheck } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import Logo from '@/components/Logo'
 import ScamCardView from '@/components/scamCards/ScamCardView'
@@ -26,8 +26,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   )
 }
 
-export default async function ScamCardPublicPage({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: Promise<{ invito?: string }> }) {
-  const [{ slug }, { invito }] = await Promise.all([params, searchParams])
+export default async function ScamCardPublicPage({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: Promise<{ invito?: string; mazzo?: string }> }) {
+  const [{ slug }, { invito, mazzo }] = await Promise.all([params, searchParams])
   const card = cardBySlug(slug)
   if (!card) notFound()
   const access = await scamCardsPublic()
@@ -51,6 +51,22 @@ export default async function ScamCardPublicPage({ params, searchParams }: { par
       </header>
 
       <main className="mx-auto max-w-4xl px-4 py-8 sm:py-12">
+        {/* Arrivati dal QR della carta stampata */}
+        {mazzo && (
+          <section className="mb-6 flex flex-wrap items-center gap-4 rounded-3xl border-2 border-[var(--gold)] bg-[var(--gold-pale)] p-5">
+            <QrCode className="h-9 w-9 shrink-0 text-[var(--ink)]" aria-hidden />
+            <div className="min-w-0 flex-1">
+              <h2 className="text-lg font-extrabold text-[var(--ink)]">{t('deckTitle')}</h2>
+              <p className="text-sm text-[var(--ink)]">{access.userId ? t('deckMember') : t('deckGuest')}</p>
+            </div>
+            <Link
+              href={access.userId ? `/app/carte-antitruffa?carta=${card.no}` : registerHref}
+              className="inline-flex min-h-12 items-center justify-center rounded-full bg-[var(--ink)] px-5 font-bold text-[var(--gold-bright)]"
+            >
+              {access.userId ? t('deckMemberButton') : t('ctaGuestButton')}
+            </Link>
+          </section>
+        )}
         <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--gold)]">{t('publicEyebrow', { animal: card.animal })}</p>
         <h1 className="mt-1 text-3xl font-extrabold text-[var(--ink)] sm:text-4xl">{card.name}</h1>
 

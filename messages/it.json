@@ -17193,6 +17193,10 @@
     "monthDone": "Presa con la cornice arcobaleno: complimenti!",
     "monthLabel": "Del mese",
     "monthMine": "Carta del mese: presa in tempo, con la cornice arcobaleno.",
-    "takeMonth": "Cornice arcobaleno: rifai le 3 domande"
+    "takeMonth": "Cornice arcobaleno: rifai le 3 domande",
+    "deckTitle": "Hai in mano la carta stampata?",
+    "deckMember": "Rispondi alle sue 3 domande e mettila nel tuo album di KUMANI.",
+    "deckGuest": "Qui sotto trovi la carta sempre aggiornata. Con KUMANI la metti nel tuo album e controlli le truffe prima di cadere nella trappola.",
+    "deckMemberButton": "Mettila nell’album"
   }
 }

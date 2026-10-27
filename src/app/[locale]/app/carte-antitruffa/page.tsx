@@ -14,7 +14,8 @@ export const generateMetadata = toolMetadata('carte-antitruffa')
 // CARTE ANTITRUFFA (piani Plus e Pro): album di 20 carte, una per truffa.
 // La pagina è protetta dal proxy; le carte prese si leggono con le regole
 // del database (ognuno vede solo le sue).
-export default async function CarteAntitruffaPage() {
+export default async function CarteAntitruffaPage({ searchParams }: { searchParams: Promise<{ carta?: string }> }) {
+  const { carta } = await searchParams
   const supabase = await createClient()
   const {
     data: { user },
@@ -66,6 +67,7 @@ export default async function CarteAntitruffaPage() {
           monthCard={(month?.card_no as number | undefined) ?? null}
           inviteCode={me?.referral_code ?? null}
           firstName={me?.first_name ?? null}
+          openCard={Number(carta) || null}
         />
       </main>
     </div>
