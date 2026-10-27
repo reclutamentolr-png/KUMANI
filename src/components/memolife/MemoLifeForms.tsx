@@ -11,7 +11,9 @@ import CancelButton, { SheetCloseContext } from '@/components/ui/CancelButton'
 import { limitTextOf } from '@/lib/limitText'
 import { APPOINTMENT_REMIND_CHOICES, TASK_REMIND_DAYS } from '@/lib/agenda'
 
-// Moduli di MemoLife in una finestra (dal basso su telefono). Salvano con le
+// Moduli di MemoLife in una finestra (dal basso su telefono). Il cursore va
+// nel primo campo solo per le cose nuove: aprendo un elemento per guardarlo
+// su iPhone non si apre la tastiera. Salvano con le
 // azioni del server; "onDone" ricarica i dati.
 
 type Result = { success: true } | { success: false; message: string }
@@ -131,7 +133,7 @@ export function AppointmentForm({ draft, onDone }: { draft: AppointmentDraft; on
     >
       <div>
         <label className={label}>{t('fieldTitle')}</label>
-        <input className={input} value={form.title} maxLength={200} required autoFocus placeholder={t('appointmentPlaceholder')} onChange={(e) => setForm({ ...form, title: e.target.value })} />
+        <input className={input} value={form.title} maxLength={200} required autoFocus={!form.id} placeholder={t('appointmentPlaceholder')} onChange={(e) => setForm({ ...form, title: e.target.value })} />
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>
@@ -172,7 +174,7 @@ export function TaskForm({ draft, onDone, lifeCalendar }: { draft: TaskDraft; on
     >
       <div>
         <label className={label}>{t('fieldTitle')}</label>
-        <input className={input} value={form.title} maxLength={200} required autoFocus placeholder={t('taskPlaceholder')} onChange={(e) => setForm({ ...form, title: e.target.value })} />
+        <input className={input} value={form.title} maxLength={200} required autoFocus={!form.id} placeholder={t('taskPlaceholder')} onChange={(e) => setForm({ ...form, title: e.target.value })} />
         {deadline && (
           <div className="mt-2 rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm text-rose-900">
             <p className="flex items-start gap-2">
@@ -241,7 +243,7 @@ export function NoteForm({ draft, onDone }: { draft: NoteDraft; onDone: () => vo
       className="space-y-4"
     >
       <input className={input} value={form.title} maxLength={200} placeholder={t('noteTitlePlaceholder')} onChange={(e) => setForm({ ...form, title: e.target.value })} />
-      <textarea className={`${input} min-h-40`} rows={7} value={form.content} maxLength={10000} required autoFocus placeholder={t('noteContentPlaceholder')} onChange={(e) => setForm({ ...form, content: e.target.value })} />
+      <textarea className={`${input} min-h-40`} rows={7} value={form.content} maxLength={10000} required autoFocus={!form.id} placeholder={t('noteContentPlaceholder')} onChange={(e) => setForm({ ...form, content: e.target.value })} />
       <Actions busy={busy} error={error} deleteConfirm={t('deleteConfirm')} onDelete={form.id ? () => run(() => deleteNote(form.id!)) : undefined} />
     </form>
   )
@@ -263,7 +265,7 @@ export function ContactForm({ draft, onDone }: { draft: ContactDraft; onDone: ()
     >
       <div>
         <label className={label}>{t('fieldName')}</label>
-        <input className={input} value={form.name} maxLength={120} required autoFocus onChange={(e) => setForm({ ...form, name: e.target.value })} />
+        <input className={input} value={form.name} maxLength={120} required autoFocus={!form.id} onChange={(e) => setForm({ ...form, name: e.target.value })} />
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>

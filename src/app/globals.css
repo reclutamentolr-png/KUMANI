@@ -357,3 +357,15 @@ body:has([data-app-header]) [data-desktop-appbar] {
     min-height: 1.5em;
   }
 }
+
+/* iPhone e iPad (Safari): toccando un campo con il testo sotto i 16 px la
+   pagina si ingrandisce da sola e resta ingrandita anche dopo, così le barre
+   nere in alto e in basso si muovono con lo scorrimento. Sui dispositivi
+   Apple i campi di scrittura hanno sempre almeno 16 px. */
+@supports (-webkit-touch-callout: none) {
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']):not([type='file']),
+  select,
+  textarea {
+    font-size: max(16px, 1em) !important;
+  }
+}
