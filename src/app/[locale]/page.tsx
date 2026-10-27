@@ -5,7 +5,6 @@ import { getAppCounts } from '@/lib/appCounts'
 import { getHomeLayout } from '@/lib/homeLayoutServer'
 import HomeByVersion from '@/components/home/HomeByVersion'
 import FoundersBanner from '@/components/founders/FoundersBanner'
-import KumiChat from '@/components/kumiChat/KumiChat'
 
 type Props = { params: Promise<{ locale: string }> }
 
@@ -31,8 +30,6 @@ export default async function LandingPage({ params }: Props) {
       {/* «Sei tra i primi 50? KUMANI ti regala un anno di Plus» */}
       <FoundersBanner />
       <HomeByVersion layoutKey={await getHomeLayout()} />
-      {/* Chiedi a KUMI: per chi visita KUMANI la prima volta (decide il server) */}
-      <KumiChat />
     </>
   )
 }

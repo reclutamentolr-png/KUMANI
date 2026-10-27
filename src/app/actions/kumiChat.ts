@@ -50,17 +50,20 @@ async function readSettings(): Promise<KumiSettings> {
   }
 }
 
-// Chi può usare la chat adesso: visitatori (accesa), Staff (sempre, tranne spenta)
-async function audience(settings: KumiSettings): Promise<'visitor' | 'staff' | null> {
-  if (settings.mode === 'off') return null
+// Chi può usare la chat adesso: visitatori (accesa), Staff (sempre, tranne
+// spenta). 'member': iscritto entrato, la chat non serve più
+async function audience(settings: KumiSettings): Promise<'visitor' | 'staff' | 'member' | null> {
   const supabase = await createClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return settings.mode === 'on' ? 'visitor' : null
-  // admin_is_staff si chiama solo con la chiave di servizio
-  const { data: staff } = await db().rpc('admin_is_staff', { p_uid: user.id })
-  return staff ? 'staff' : null
+  if (user) {
+    // admin_is_staff si chiama solo con la chiave di servizio
+    const { data: staff } = await db().rpc('admin_is_staff', { p_uid: user.id })
+    if (!staff) return 'member'
+    return settings.mode === 'off' ? null : 'staff'
+  }
+  return settings.mode === 'on' ? 'visitor' : null
 }
 
 const secret = () => process.env.KUMI_CHAT_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY || ''
@@ -77,15 +80,24 @@ async function visitorKey(create: boolean): Promise<string | null> {
   return fingerprint('v', id)
 }
 
-export type KumiStatus = { visible: boolean; remaining: number; limit: number; staffPreview: boolean }
+// member: la persona è iscritta ed è entrata (la conversazione salvata nel
+// browser si cancella); staff: lo Staff la vede solo nelle pagine pubbliche
+export type KumiStatus = { visible: boolean; remaining: number; limit: number; staffPreview: boolean; staff: boolean; member: boolean }
 
 export async function kumiChatStatus(): Promise<KumiStatus> {
   const settings = await readSettings()
   const who = await audience(settings)
-  if (!who) return { visible: false, remaining: 0, limit: 0, staffPreview: false }
+  if (who !== 'visitor' && who !== 'staff') return { visible: false, remaining: 0, limit: 0, staffPreview: false, staff: false, member: who === 'member' }
   const key = await visitorKey(false)
   const used = key ? (((await db().rpc('kumi_chat_used', { p_visitor: key })).data as number | null) ?? 0) : 0
-  return { visible: true, remaining: Math.max(0, settings.visitorDaily - used), limit: settings.visitorDaily, staffPreview: who === 'staff' && settings.mode === 'staff' }
+  return {
+    visible: true,
+    remaining: Math.max(0, settings.visitorDaily - used),
+    limit: settings.visitorDaily,
+    staffPreview: who === 'staff' && settings.mode === 'staff',
+    staff: who === 'staff',
+    member: false,
+  }
 }
 
 // Dati personali tolti prima di salvare la domanda o mandarla all'IA (i nomi
@@ -110,7 +122,7 @@ type Result = { answer: string; answered: boolean; links: KumiLink[] }
 export async function askKumi(question: string, locale: string, history: KumiTurn[] = []): Promise<KumiAnswer> {
   const settings = await readSettings()
   const who = await audience(settings)
-  if (!who) return { ok: false, error: 'off' }
+  if (who !== 'visitor' && who !== 'staff') return { ok: false, error: 'off' }
   const lang = LOCALES.includes(locale) ? locale : 'it'
   const raw = String(question ?? '').replace(/\s+/g, ' ').trim().slice(0, 300)
   if (raw.length < 2) return { ok: false, error: 'empty' }

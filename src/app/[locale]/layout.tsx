@@ -10,6 +10,7 @@ import ImpersonationBanner from '@/components/ImpersonationBanner'
 import ToolGuideButton from '@/components/ToolGuideButton'
 import AppNav from '@/components/nav/AppNav'
 import UpdateWatcher from '@/components/UpdateWatcher'
+import KumiChat from '@/components/kumiChat/KumiChat'
 import AppHeader from '@/components/nav/AppHeader'
 import DesktopAppBar from '@/components/nav/DesktopAppBar'
 import SessionTracker from '@/components/SessionTracker'
@@ -90,6 +91,8 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         <UpdateWatcher version={process.env.VERCEL_DEPLOYMENT_ID || process.env.VERCEL_GIT_COMMIT_SHA || 'dev'} />
         {/* «Porta KUMANI con te»: installare il sito come app (homepage e dashboard) */}
         <InstallAppBanner />
+        {/* Chiedi a KUMI: per chi visita KUMANI, in tutte le pagine finché non entra con il suo account */}
+        <KumiChat />
         {/* Banner dei cookie: solo se acceso dall'Admin (lib/consent.ts) */}
         <CookieConsent />
       </MaintenanceGate>

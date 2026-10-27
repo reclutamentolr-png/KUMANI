@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { Send, ThumbsDown, ThumbsUp, X } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
@@ -8,9 +9,17 @@ import Kumi from '@/components/kids/Kumi'
 import { askKumi, kumiChatStatus, rateKumi, type KumiStatus } from '@/app/actions/kumiChat'
 import type { KumiLink } from '@/lib/kumiChat/knowledge'
 
-// Chiedi a KUMI (home): KUMI in basso a destra risponde a chi visita KUMANI
-// la prima volta. Si vede solo se l'Admin l'ha accesa (o allo Staff in prova);
-// la decisione è del server (kumiChatStatus), la pagina resta uguale per tutti.
+// Chiedi a KUMI: KUMI in basso a destra risponde a chi visita KUMANI la prima
+// volta, in tutte le pagine pubbliche, finché non si iscrive ed entra. La
+// conversazione resta nel browser (7 giorni), anche cambiando pagina o
+// chiudendo il sito, e si cancella quando la persona entra con il suo account.
+// Si vede solo se l'Admin l'ha accesa (o allo Staff in prova): decide il server.
+
+// Pagine da iscritti: lo Staff non vede KUMI mentre lavora
+const STAFF_HIDDEN = ['/admin', '/dashboard', '/app', '/wallet', '/community', '/documenti', '/messaggio', '/avvisi', '/agente', '/traduzioni']
+const LOCALE_RE = /^\/(it|en|fr|es|pt|de|ru)(?=\/|$)/
+const STORE_KEY = 'kumani:kumi-chat'
+const STORE_DAYS = 7
 
 type Msg =
   | { from: 'kumi'; text: string; id?: string; links?: KumiLink[]; answered?: boolean; rated?: 1 | -1 }
@@ -18,6 +27,25 @@ type Msg =
 
 const CHIPS = ['chip1', 'chip2', 'chip3', 'chip4', 'chip5'] as const
 const HINT_KEY = 'kumani:kumi-chat:hint'
+
+function readStore(): { msgs: Msg[]; open: boolean } | null {
+  try {
+    const raw = localStorage.getItem(STORE_KEY)
+    if (!raw) return null
+    const v = JSON.parse(raw) as { msgs?: Msg[]; open?: boolean; at?: number }
+    if (!Array.isArray(v.msgs) || !v.at || Date.now() - v.at > STORE_DAYS * 86_400_000) return null
+    return { msgs: v.msgs.slice(-40), open: !!v.open }
+  } catch {
+    return null
+  }
+}
+const clearStore = () => {
+  try {
+    localStorage.removeItem(STORE_KEY)
+  } catch {
+    // memoria del browser non disponibile
+  }
+}
 
 export default function KumiChat() {
   const t = useTranslations('kumiChat')
@@ -29,16 +57,48 @@ export default function KumiChat() {
   const [text, setText] = useState('')
   const [busy, setBusy] = useState(false)
   const endRef = useRef<HTMLDivElement>(null)
+  const restored = useRef(false)
+  const pathname = usePathname()
+  const path = pathname.replace(LOCALE_RE, '') || '/'
 
+  // Si ricontrolla a ogni cambio di pagina finché la chat è per un visitatore:
+  // appena la persona entra con il suo account, KUMI sparisce
+  const checkAgain = !status || (status.visible && !status.staff)
   useEffect(() => {
+    if (!checkAgain) return
     let alive = true
     kumiChatStatus()
-      .then((s) => alive && setStatus(s))
+      .then((s) => {
+        if (!alive) return
+        if (s.member) clearStore()
+        setStatus(s)
+      })
       .catch(() => {})
     return () => {
       alive = false
     }
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [path])
+
+  // Conversazione ritrovata (cambio di pagina con ricarica, sito riaperto)
+  useEffect(() => {
+    if (!status?.visible || restored.current) return
+    restored.current = true
+    const saved = readStore()
+    if (!saved) return
+    // Dati del browser: si leggono solo dopo il primo disegno
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMsgs(saved.msgs)
+    setOpen(saved.open)
+  }, [status?.visible])
+  useEffect(() => {
+    if (!restored.current) return
+    try {
+      if (msgs.length) localStorage.setItem(STORE_KEY, JSON.stringify({ msgs: msgs.slice(-40), open, at: Date.now() }))
+    } catch {
+      // memoria del browser non disponibile
+    }
+  }, [msgs, open])
 
   // Nuvoletta «Hai una domanda?» dopo qualche secondo, una volta per visita
   useEffect(() => {
@@ -59,6 +119,8 @@ export default function KumiChat() {
   }, [msgs, busy])
 
   if (!status?.visible) return null
+  // Lo Staff non vede KUMI nelle pagine in cui lavora
+  if (status.staff && STAFF_HIDDEN.some((a) => path === a || path.startsWith(`${a}/`))) return null
 
   const dismissHint = () => {
     setHint(false)
