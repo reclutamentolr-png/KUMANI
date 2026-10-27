@@ -43,7 +43,9 @@ export type WebinarMessage = { id: number; name: string; body: string; isHost: b
 export type WebinarVoice = { id: string; name: string; track: string; videoTrack: string | null }
 
 // talking: parla con il microfono aperto a tutti
-export type WebinarViewerRow = { id: string; name: string; hand: boolean; speaking: boolean; talking: boolean; kumano: boolean }
+// camBlocked: videocamera spenta da chi presenta; flagged: la sua connessione
+// è stata segnalata in un altro webinar
+export type WebinarViewerRow = { id: string; name: string; hand: boolean; speaking: boolean; talking: boolean; kumano: boolean; camBlocked: boolean; flagged: boolean }
 
 // Massimo di persone che parlano insieme con il microfono aperto a tutti
 export const WEBINAR_MAX_VOICES = 12

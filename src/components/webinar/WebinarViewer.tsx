@@ -67,6 +67,8 @@ export default function WebinarViewer({
   const [mayspeak, setMayspeak] = useState(false)
   // Microfono acceso con il microfono aperto a tutti (secondo il server)
   const [myVoice, setMyVoice] = useState(false)
+  // Videocamera spenta da chi presenta: si parla solo con la voce
+  const [camBlocked, setCamBlocked] = useState(false)
   const [speakingOn, setSpeakingOn] = useState(false)
   const [needsTap, setNeedsTap] = useState(false)
   const [connecting, setConnecting] = useState(false)
@@ -319,6 +321,7 @@ export default function WebinarViewer({
       setHand(res.me.hand)
       setMayspeak(res.me.speaking)
       setMyVoice(res.me.voice)
+      setCamBlocked(res.me.camBlocked)
       applyState(res.state)
     } catch {
       // Rete assente: si riprova al giro successivo
@@ -455,6 +458,7 @@ export default function WebinarViewer({
       if ('error' in res) {
         stopSpeaking(false)
         if (res.error === 'too_many_voices') setError(t('errorTooManyVoices'))
+        else if (res.error === 'cam_blocked') setError(t('camBlockedNote'))
         return
       }
       await pc.setRemoteDescription(res.answer)
@@ -498,6 +502,16 @@ export default function WebinarViewer({
     if (!canSpeak || mutedByHost) stopSpeaking(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mayspeak, openMic, myVoice, canSpeak])
+
+  // Chi presenta ha spento la videocamera: si spegne qui, la voce continua
+  useEffect(() => {
+    const video = speakRef.current?.video
+    if (!camBlocked || !video) return
+    video.stop()
+    speakRef.current!.video = null
+    // Il cambio arriva dal server: si toglie l'anteprima della propria videocamera
+    setSelfVideo(null)
+  }, [camBlocked])
 
   useEffect(() => {
     const voices = voicesRef.current
@@ -649,42 +663,6 @@ export default function WebinarViewer({
           muted
           className={`absolute bottom-3 right-3 aspect-[3/4] w-20 rounded-xl border-2 border-[var(--gold-bright)] object-cover sm:w-28 ${live && state?.screenOn && state?.camOn ? '' : 'hidden'}`}
         />
-        {/* Chi parla con la videocamera: riquadri in basso a sinistra */}
-        {live && (selfVideo || liveFaces.length > 0) && (
-          <div className="absolute bottom-3 left-3 z-[1] flex max-w-[calc(100%-7rem)] gap-1.5 overflow-x-auto">
-            {selfVideo && (
-              <div className="relative w-16 shrink-0 overflow-hidden rounded-xl border-2 border-emerald-400 bg-black sm:w-24">
-                <video
-                  ref={(el) => {
-                    if (el && el.srcObject !== selfVideo) el.srcObject = selfVideo
-                  }}
-                  autoPlay
-                  playsInline
-                  muted
-                  className={`aspect-[3/4] w-full -scale-x-100 object-cover ${selfCamOff ? 'opacity-0' : ''}`}
-                />
-                <span className="absolute inset-x-0 bottom-0 truncate bg-black/60 px-1 py-0.5 text-center text-[10px] font-bold text-white">{t('you')}</span>
-              </div>
-            )}
-            {liveFaces.map((f) => (
-              <div key={f.name} className="relative w-16 shrink-0 overflow-hidden rounded-xl border-2 border-emerald-400 bg-black sm:w-24">
-                <video
-                  ref={(el) => {
-                    if (el && el.srcObject !== f.stream) {
-                      el.srcObject = f.stream
-                      el.play().catch(() => {})
-                    }
-                  }}
-                  autoPlay
-                  playsInline
-                  muted
-                  className="aspect-[3/4] w-full object-cover"
-                />
-                <span className="absolute inset-x-0 bottom-0 truncate bg-black/60 px-1 py-0.5 text-center text-[10px] font-bold text-white">{voiceOwner(state, f.name)}</span>
-              </div>
-            ))}
-          </div>
-        )}
         {!showMain && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-4 text-center text-white/75">
             {live ? (
@@ -752,6 +730,7 @@ export default function WebinarViewer({
           <p className="min-w-0 flex-1 text-sm font-semibold">{speakingOn ? t('youAreSpeaking') : mayspeak ? t('youMaySpeak') : t('openMicViewer')}</p>
           {speakingOn ? (
             <>
+              {camBlocked && <span className="text-xs font-semibold text-amber-200">{t('camBlockedNote')}</span>}
               {selfVideo && (
                 <button type="button" onClick={toggleSelfCam} aria-pressed={selfCamOff} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-white/15 px-4 text-sm font-bold text-white">
                   {selfCamOff ? <VideoOff className="h-4 w-4" aria-hidden /> : <Video className="h-4 w-4" aria-hidden />}
@@ -765,10 +744,12 @@ export default function WebinarViewer({
             </>
           ) : (
             <>
-              <button type="button" onClick={() => startSpeaking(true)} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-emerald-400 px-4 text-sm font-extrabold text-[var(--ink)]">
-                <Video className="h-4 w-4" aria-hidden />
-                {t('turnOnMicCam')}
-              </button>
+              {!camBlocked && (
+                <button type="button" onClick={() => startSpeaking(true)} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-emerald-400 px-4 text-sm font-extrabold text-[var(--ink)]">
+                  <Video className="h-4 w-4" aria-hidden />
+                  {t('turnOnMicCam')}
+                </button>
+              )}
               <button type="button" onClick={() => startSpeaking(false)} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-white/15 px-4 text-sm font-bold text-white">
                 <Mic className="h-4 w-4" aria-hidden />
                 {t('turnOnMic')}
@@ -828,15 +809,53 @@ export default function WebinarViewer({
         </button>
       </div>
 
-      <div className="flex h-[360px]">
-        <WebinarChat
-          messages={messages}
-          hiddenIds={state?.hiddenIds ?? []}
-          onSend={sendMessage}
-          title={t('chatTitle')}
-          disabled={state?.chatOpen === false}
-          placeholder={state?.chatOpen === false ? t('chatClosedNote') : t('chatViewerPlaceholder')}
-        />
+      <div className="flex flex-col gap-3 sm:flex-row">
+        {/* Chi parla con la videocamera: fuori dall'immagine, accanto alla chat */}
+        {live && (selfVideo || liveFaces.length > 0) && (
+          <div className="flex gap-2 overflow-x-auto sm:order-2 sm:max-h-[360px] sm:w-32 sm:shrink-0 sm:flex-col sm:overflow-y-auto sm:overflow-x-hidden">
+            {selfVideo && (
+              <div className="relative w-24 shrink-0 overflow-hidden rounded-xl border-2 border-emerald-400 bg-black sm:w-full">
+                <video
+                  ref={(el) => {
+                    if (el && el.srcObject !== selfVideo) el.srcObject = selfVideo
+                  }}
+                  autoPlay
+                  playsInline
+                  muted
+                  className={`aspect-[3/4] w-full -scale-x-100 object-cover ${selfCamOff ? 'opacity-0' : ''}`}
+                />
+                <span className="absolute inset-x-0 bottom-0 truncate bg-black/60 px-1 py-0.5 text-center text-[10px] font-bold text-white">{t('you')}</span>
+              </div>
+            )}
+            {liveFaces.map((f) => (
+              <div key={f.name} className="relative w-24 shrink-0 overflow-hidden rounded-xl border-2 border-emerald-400 bg-black sm:w-full">
+                <video
+                  ref={(el) => {
+                    if (el && el.srcObject !== f.stream) {
+                      el.srcObject = f.stream
+                      el.play().catch(() => {})
+                    }
+                  }}
+                  autoPlay
+                  playsInline
+                  muted
+                  className="aspect-[3/4] w-full object-cover"
+                />
+                <span className="absolute inset-x-0 bottom-0 truncate bg-black/60 px-1 py-0.5 text-center text-[10px] font-bold text-white">{voiceOwner(state, f.name)}</span>
+              </div>
+            ))}
+          </div>
+        )}
+        <div className="flex h-[360px] min-w-0 flex-1">
+          <WebinarChat
+            messages={messages}
+            hiddenIds={state?.hiddenIds ?? []}
+            onSend={sendMessage}
+            title={t('chatTitle')}
+            disabled={state?.chatOpen === false}
+            placeholder={state?.chatOpen === false ? t('chatClosedNote') : t('chatViewerPlaceholder')}
+          />
+        </div>
       </div>
     </div>
   )

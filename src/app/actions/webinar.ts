@@ -1,6 +1,8 @@
 'use server'
 
 import { createHash, randomBytes } from 'node:crypto'
+import { headers } from 'next/headers'
+import { clientIp } from '@/lib/securityCore'
 import { createClient } from '@/lib/supabase/server'
 import { serviceClient } from '@/lib/translationOverrides'
 import { localizedPath, notifyUser } from '@/lib/push'
@@ -69,12 +71,23 @@ type ViewerRow = {
   last_message_at: string | null
   banned: boolean
   voice_track: string | null
+  cam_blocked: boolean
 }
 
 const WEBINAR_COLUMNS =
   'id, host_id, code, channel_key, title, starts_at, seats, status, host_session, host_tracks, host_seen_at, host_paused, cam_on, screen_on, speaker_id, speaker_session, speaker_track, speaker_video_track, chat_open, open_mic, started_at'
 
 const hashToken = (token: string) => createHash('sha256').update(token).digest('hex')
+
+// Impronta della connessione di chi entra: cifrata con un segreto del server,
+// non si può risalire all'indirizzo, serve solo a riconoscere chi è stato
+// segnalato se rientra in un altro webinar
+async function connectionHash(): Promise<string | null> {
+  const ip = clientIp(await headers())
+  if (!ip) return null
+  const secret = process.env.WEBINAR_IP_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+  return createHash('sha256').update(`webinar:${secret}:${ip}`).digest('hex')
+}
 const cleanText = (value: unknown, max: number) =>
   typeof value === 'string' ? value.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '').trim().slice(0, max) : ''
 const isSdp = (d: unknown): d is SessionDescription =>
@@ -306,17 +319,27 @@ export async function hostBeat(
     messagesAfter(id, Math.max(0, Number(afterId) || 0)),
     serviceClient()
       .from('webinar_viewers')
-      .select('id, name, hand_raised_at, user_id, voice_track')
+      .select('id, name, hand_raised_at, user_id, voice_track, cam_blocked, ip_hash')
       .eq('webinar_id', id)
       .eq('banned', false)
       .gte('last_seen', since)
       .order('joined_at', { ascending: true })
       .limit(500),
   ])
+  const flagged = await flaggedHashes(id, (viewers ?? []).map((v) => v.ip_hash as string | null))
   return {
     state,
     messages,
-    viewers: (viewers ?? []).map((v) => ({ id: v.id as string, name: v.name as string, hand: !!v.hand_raised_at, speaking: v.id === w.speaker_id, talking: w.open_mic && !!v.voice_track, kumano: !!v.user_id })),
+    viewers: (viewers ?? []).map((v) => ({
+      id: v.id as string,
+      name: v.name as string,
+      hand: !!v.hand_raised_at,
+      speaking: v.id === w.speaker_id,
+      talking: w.open_mic && !!v.voice_track,
+      kumano: !!v.user_id,
+      camBlocked: !!v.cam_blocked,
+      flagged: !!v.ip_hash && flagged.has(v.ip_hash as string),
+    })),
   }
 }
 
@@ -346,16 +369,34 @@ export async function hostSendMessage(id: string, body: string): Promise<{ succe
 }
 
 // Moderazione: togliere qualcuno dal webinar o nascondere un messaggio
-export async function hostModerate(id: string, action: { ban?: string; hide?: number; mute?: string }): Promise<{ success: true } | Fail> {
+export async function hostModerate(
+  id: string,
+  action: { ban?: string; report?: boolean; hide?: number; mute?: string; cam?: string; camOff?: boolean }
+): Promise<{ success: true } | Fail> {
   const host = await hostOf(id)
   if ('error' in host) return host
   const db = serviceClient()
   if (typeof action.ban === 'string') {
+    // Segnalazione: l'impronta della connessione resta per gli altri webinar
+    if (action.report) {
+      const { data: target } = await db.from('webinar_viewers').select('name, ip_hash').eq('id', action.ban).eq('webinar_id', id).maybeSingle()
+      if (target?.ip_hash) await db.from('webinar_flags').insert({ ip_hash: target.ip_hash, webinar_id: id, name: target.name })
+    }
     await db.from('webinar_viewers').update({ banned: true, hand_raised_at: null, ...NO_VOICE }).eq('id', action.ban).eq('webinar_id', id)
     await db.from('webinar_messages').update({ hidden: true }).eq('viewer_id', action.ban).eq('webinar_id', id)
     if (host.webinar.speaker_id === action.ban) {
       await db.from('webinars').update({ speaker_id: null, speaker_session: null, speaker_track: null, speaker_video_track: null }).eq('id', id)
     }
+  }
+  // Videocamera spenta da chi presenta (la voce continua); si può riaccendere
+  if (typeof action.cam === 'string') {
+    const off = action.camOff !== false
+    await db
+      .from('webinar_viewers')
+      .update({ cam_blocked: off, ...(off ? { voice_video_track: null } : {}) })
+      .eq('id', action.cam)
+      .eq('webinar_id', id)
+    if (off && host.webinar.speaker_id === action.cam) await db.from('webinars').update({ speaker_video_track: null }).eq('id', id)
   }
   // Spegne il microfono (e la videocamera) di chi parla: potrà riaccenderlo
   if (typeof action.mute === 'string') {
@@ -490,7 +531,7 @@ async function viewerOf(code: string, token: string): Promise<{ webinar: Webinar
   if (typeof token !== 'string' || token.length < 20 || token.length > 100) return { error: 'not_joined' }
   const { data: viewer } = await serviceClient()
     .from('webinar_viewers')
-    .select('id, webinar_id, name, session_id, hand_raised_at, last_message_at, banned, voice_track')
+    .select('id, webinar_id, name, session_id, hand_raised_at, last_message_at, banned, voice_track, cam_blocked')
     .eq('webinar_id', webinar.id)
     .eq('token_hash', hashToken(token))
     .maybeSingle<ViewerRow>()
@@ -528,22 +569,24 @@ export async function joinWebinar(
   if ((count ?? 0) >= webinar.seats) return { error: 'full' }
 
   const userId = await currentUserId()
+  const ipHash = await connectionHash()
   let viewerId = existing?.id as string | undefined
   if (viewerId) {
     // Chi rientra collegato al suo account diventa Kumano (nome su sfondo oro)
     await db
       .from('webinar_viewers')
-      .update({ name: cleanName, last_seen: new Date().toISOString(), ...(userId ? { user_id: userId } : {}) })
+      .update({ name: cleanName, last_seen: new Date().toISOString(), ...(userId ? { user_id: userId } : {}), ...(ipHash ? { ip_hash: ipHash } : {}) })
       .eq('id', viewerId)
   } else {
     const { data, error } = await db
       .from('webinar_viewers')
-      .insert({ webinar_id: webinar.id, token_hash: tokenHash, name: cleanName, user_id: userId })
+      .insert({ webinar_id: webinar.id, token_hash: tokenHash, name: cleanName, user_id: userId, ip_hash: ipHash })
       .select('id')
       .single()
     if (error || !data) return { error: 'save_failed' }
     viewerId = data.id as string
   }
+  if (ipHash) await warnIfFlagged(webinar, viewerId, cleanName, ipHash)
   const [state, ice] = await Promise.all([liveState(webinar), realtimeConfigured() ? iceServers() : Promise.resolve([])])
   await ping(webinar.channel_key, 'state')
   return { token: secret, viewerId, channelKey: webinar.channel_key, ice, state }
@@ -554,13 +597,13 @@ export async function viewerPoll(
   code: string,
   token: string,
   afterId: number
-): Promise<{ state: LiveState; messages: WebinarMessage[]; me: { hand: boolean; speaking: boolean; voice: boolean } } | Fail> {
+): Promise<{ state: LiveState; messages: WebinarMessage[]; me: { hand: boolean; speaking: boolean; voice: boolean; camBlocked: boolean } } | Fail> {
   const found = await viewerOf(code, token)
   if ('error' in found) return found
   const { webinar, viewer } = found
   await serviceClient().from('webinar_viewers').update({ last_seen: new Date().toISOString() }).eq('id', viewer.id)
   const [state, messages] = await Promise.all([liveState(webinar), messagesAfter(webinar.id, Math.max(0, Number(afterId) || 0))])
-  return { state, messages, me: { hand: !!viewer.hand_raised_at, speaking: webinar.speaker_id === viewer.id, voice: webinar.open_mic && !!viewer.voice_track } }
+  return { state, messages, me: { hand: !!viewer.hand_raised_at, speaking: webinar.speaker_id === viewer.id, voice: webinar.open_mic && !!viewer.voice_track, camBlocked: viewer.cam_blocked } }
 }
 
 // Riceve le tracce della diretta: chi presenta e chi ha la parola
@@ -668,6 +711,7 @@ export async function viewerSpeak(
     if ((count ?? 0) >= WEBINAR_MAX_VOICES) return { error: 'too_many_voices' }
   }
   if (videoMid != null && (typeof videoMid !== 'string' || !videoMid || videoMid === mid)) return { error: 'invalid' }
+  if (videoMid != null && viewer.cam_blocked) return { error: 'cam_blocked' }
   try {
     const sessionId = await newSession()
     const suffix = randomBytes(4).toString('hex')
@@ -705,6 +749,33 @@ export async function viewerStopSpeak(code: string, token: string): Promise<{ su
   if (viewer.voice_track) await serviceClient().from('webinar_viewers').update(NO_VOICE).eq('id', viewer.id)
   await ping(w.channel_key, 'state')
   return { success: true }
+}
+
+// ── Segnalazioni ───────────────────────────────────────────────────────
+
+// Impronte di connessione segnalate in altri webinar (non in questo)
+async function flaggedHashes(webinarId: string, hashes: (string | null)[]): Promise<Set<string>> {
+  const list = [...new Set(hashes.filter((h): h is string => !!h))]
+  if (!list.length) return new Set()
+  const { data } = await serviceClient().from('webinar_flags').select('ip_hash, webinar_id').in('ip_hash', list.slice(0, 200))
+  return new Set((data ?? []).filter((f) => f.webinar_id !== webinarId).map((f) => f.ip_hash as string))
+}
+
+// Chi entra con una connessione segnalata altrove: avviso a chi presenta
+// (una volta per persona e webinar)
+async function warnIfFlagged(w: WebinarRow, viewerId: string, name: string, ipHash: string) {
+  if ((await flaggedHashes(w.id, [ipHash])).size === 0) return
+  await notifyUser(
+    w.host_id,
+    'events',
+    (t, locale) => ({
+      title: t('webinarFlaggedTitle'),
+      body: t('webinarFlaggedBody', { name, title: w.title }),
+      url: localizedPath(locale, `/app/webinar/${w.id}`),
+      tag: `webinar-flag-${viewerId}`,
+    }),
+    { kind: 'webinar_flagged', ref: `${w.id}:${viewerId}` }
+  )
 }
 
 // ── Invitare i Kumani ──────────────────────────────────────────────────

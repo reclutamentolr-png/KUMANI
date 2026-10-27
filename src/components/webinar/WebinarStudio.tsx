@@ -8,6 +8,9 @@ import {
   Eye,
   Hand,
   Loader2,
+  Maximize,
+  Minimize,
+  TriangleAlert,
   MessageSquare,
   MessageSquareOff,
   Mic,
@@ -579,10 +582,31 @@ export default function WebinarStudio({
     return null
   }
 
+  // Togliere dal webinar e, se si vuole, segnalare: se la stessa connessione
+  // entra in un altro webinar, chi presenta viene avvisato
   const ban = async (viewer: WebinarViewerRow) => {
     if (!(await askConfirm(t('banConfirm', { name: viewer.name }), { title: t('banTitle'), confirmLabel: t('banYes'), cancelLabel: t('endNo'), tone: 'warning' }))) return
-    await hostModerate(webinar.id, { ban: viewer.id })
+    const report = await askConfirm(t('reportConfirm', { name: viewer.name }), { title: t('reportTitle'), confirmLabel: t('reportYes'), cancelLabel: t('reportNo'), tone: 'warning' })
+    await hostModerate(webinar.id, { ban: viewer.id, report })
     beat()
+  }
+
+  const toggleViewerCam = async (viewer: WebinarViewerRow) => {
+    await hostModerate(webinar.id, { cam: viewer.id, camOff: !viewer.camBlocked })
+    beat()
+  }
+
+  // Regia a schermo intero (computer): anteprima, persone e chat in una vista
+  const studioRef = useRef<HTMLDivElement>(null)
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  useEffect(() => {
+    const onChange = () => setIsFullscreen(document.fullscreenElement === studioRef.current && !!studioRef.current)
+    document.addEventListener('fullscreenchange', onChange)
+    return () => document.removeEventListener('fullscreenchange', onChange)
+  }, [])
+  const toggleFullscreen = () => {
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {})
+    else studioRef.current?.requestFullscreen?.().catch(() => {})
   }
 
   // Spegne il microfono di chi parla con il microfono aperto
@@ -623,7 +647,7 @@ export default function WebinarStudio({
   }
 
   return (
-    <div className="space-y-4">
+    <div ref={studioRef} className={`space-y-4 ${isFullscreen ? 'overflow-y-auto bg-[var(--background)] p-4' : ''}`}>
       {/* Barra di stato */}
       <div className="flex flex-wrap items-center gap-3 rounded-2xl bg-[var(--ink)] px-4 py-3 text-white">
         {phase === 'live' ? (
@@ -644,6 +668,14 @@ export default function WebinarStudio({
           <Eye className="h-4 w-4" aria-hidden />
           {state?.viewers ?? 0} / {webinar.seats}
         </span>
+        <button
+          type="button"
+          onClick={toggleFullscreen}
+          className="hidden min-h-9 items-center gap-1.5 rounded-full bg-white/10 px-3 text-xs font-bold text-white hover:bg-white/20 sm:inline-flex"
+        >
+          {isFullscreen ? <Minimize className="h-4 w-4" aria-hidden /> : <Maximize className="h-4 w-4" aria-hidden />}
+          {isFullscreen ? t('studioExitFullscreen') : t('studioFullscreen')}
+        </button>
       </div>
 
       {error && (
@@ -672,28 +704,6 @@ export default function WebinarStudio({
             />
             {phase === 'live' && (
               <span className="absolute bottom-3 left-3 rounded-full bg-black/55 px-3 py-1 text-xs font-bold text-white">{micOn ? t('youAreLive') : t('micMutedNote')}</span>
-            )}
-            {/* Chi parla con la videocamera */}
-            {phase === 'live' && faces.length > 0 && (
-              <div className="absolute left-3 top-3 flex max-w-[calc(100%-1.5rem)] gap-1.5 overflow-x-auto">
-                {faces.map((f) => (
-                  <div key={f.name} className="relative w-16 shrink-0 overflow-hidden rounded-xl border-2 border-emerald-400 bg-black sm:w-24">
-                    <video
-                      ref={(el) => {
-                        if (el && el.srcObject !== f.stream) {
-                          el.srcObject = f.stream
-                          el.play().catch(() => {})
-                        }
-                      }}
-                      autoPlay
-                      playsInline
-                      muted
-                      className="aspect-[3/4] w-full object-cover"
-                    />
-                    <span className="absolute inset-x-0 bottom-0 truncate bg-black/60 px-1 py-0.5 text-center text-[10px] font-bold text-white">{voiceOwner(state, f.name)}</span>
-                  </div>
-                ))}
-              </div>
             )}
           </div>
 
@@ -780,8 +790,29 @@ export default function WebinarStudio({
           </div>
         </div>
 
-        {/* Persone, mani alzate e chat */}
-        <div className="flex min-h-[420px] flex-col gap-3 lg:h-[640px]">
+        {/* Persone, mani alzate, videocamere di chi parla e chat */}
+        <div className={`flex min-h-[420px] flex-col gap-3 ${isFullscreen ? 'lg:h-[calc(100vh-7rem)]' : 'lg:h-[640px]'}`}>
+          {phase === 'live' && faces.length > 0 && (
+            <div className="grid shrink-0 grid-cols-3 gap-2">
+              {faces.map((f) => (
+                <div key={f.name} className="relative overflow-hidden rounded-xl border-2 border-emerald-400 bg-black">
+                  <video
+                    ref={(el) => {
+                      if (el && el.srcObject !== f.stream) {
+                        el.srcObject = f.stream
+                        el.play().catch(() => {})
+                      }
+                    }}
+                    autoPlay
+                    playsInline
+                    muted
+                    className="aspect-[3/4] w-full object-cover"
+                  />
+                  <span className="absolute inset-x-0 bottom-0 truncate bg-black/60 px-1 py-0.5 text-center text-[10px] font-bold text-white">{voiceOwner(state, f.name)}</span>
+                </div>
+              ))}
+            </div>
+          )}
           {speaking && (
             <div className="flex items-center gap-3 rounded-2xl border border-emerald-400/50 bg-emerald-50 p-3">
               <Volume2 className="h-5 w-5 text-emerald-700" aria-hidden />
@@ -825,7 +856,23 @@ export default function WebinarStudio({
                 <li key={v.id} className="flex items-center gap-2 rounded-xl px-2 py-1 text-sm hover:bg-[var(--gold-pale)]">
                   <span className="min-w-0 flex-1">
                     <WebinarName name={v.name} kumano={v.kumano} />
+                    {v.flagged && (
+                      <span className="ml-1.5 inline-flex items-center gap-1 rounded-full bg-red-100 px-2 py-0.5 text-[11px] font-bold text-red-800" title={t('flaggedHint')}>
+                        <TriangleAlert className="h-3 w-3" aria-hidden /> {t('flagged')}
+                      </span>
+                    )}
                   </span>
+                  {(v.talking || v.speaking || v.camBlocked) && (
+                    <button
+                      type="button"
+                      onClick={() => toggleViewerCam(v)}
+                      aria-label={v.camBlocked ? t('camAllowAria', { name: v.name }) : t('camOffAria', { name: v.name })}
+                      title={v.camBlocked ? t('camAllowTitle') : t('camOffTitle')}
+                      className={`rounded-full p-2 hover:bg-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--gold)] ${v.camBlocked ? 'text-red-700' : 'text-emerald-700 hover:text-red-700'}`}
+                    >
+                      {v.camBlocked ? <VideoOff className="h-4 w-4" aria-hidden /> : <Video className="h-4 w-4" aria-hidden />}
+                    </button>
+                  )}
                   {v.talking && (
                     <button
                       type="button"
