@@ -1751,7 +1751,10 @@
     "month": "Месяц",
     "year": "Год",
     "siteBackHome": "На главную",
-    "siteMyHome": "Моя главная"
+    "siteMyHome": "Моя главная",
+    "updateReady": "Доступно обновление KUMANI.",
+    "updateNow": "Обновить",
+    "updateLater": "Позже"
   },
   "magazzino": {
     "deleteForever": "Удалить навсегда",

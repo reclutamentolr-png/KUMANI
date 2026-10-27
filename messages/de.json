@@ -1751,7 +1751,10 @@
     "month": "Monat",
     "year": "Jahr",
     "siteBackHome": "Zur Startseite",
-    "siteMyHome": "Meine Startseite"
+    "siteMyHome": "Meine Startseite",
+    "updateReady": "Ein KUMANI-Update ist verfügbar.",
+    "updateNow": "Aktualisieren",
+    "updateLater": "Später"
   },
   "magazzino": {
     "deleteForever": "Endgültig löschen",

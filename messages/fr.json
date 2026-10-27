@@ -1751,7 +1751,10 @@
     "month": "Mois",
     "year": "Année",
     "siteBackHome": "Retour à l’accueil",
-    "siteMyHome": "Mon accueil"
+    "siteMyHome": "Mon accueil",
+    "updateReady": "Une mise à jour de KUMANI est disponible.",
+    "updateNow": "Mettre à jour",
+    "updateLater": "Plus tard"
   },
   "magazzino": {
     "deleteForever": "Supprimer définitivement",

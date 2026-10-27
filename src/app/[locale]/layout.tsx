@@ -9,6 +9,7 @@ import ProfileReminder from '@/components/ProfileReminder'
 import ImpersonationBanner from '@/components/ImpersonationBanner'
 import ToolGuideButton from '@/components/ToolGuideButton'
 import AppNav from '@/components/nav/AppNav'
+import UpdateWatcher from '@/components/UpdateWatcher'
 import AppHeader from '@/components/nav/AppHeader'
 import DesktopAppBar from '@/components/nav/DesktopAppBar'
 import SessionTracker from '@/components/SessionTracker'
@@ -85,6 +86,8 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         <PresencePing />
         {/* KU Karma dell'accesso giornaliero anche per chi resta connesso */}
         <DailyKarmaPing />
+        {/* Aggiornamenti senza chiudere l'app: versione di questa pagina (Vercel) */}
+        <UpdateWatcher version={process.env.VERCEL_DEPLOYMENT_ID || process.env.VERCEL_GIT_COMMIT_SHA || 'dev'} />
         {/* «Porta KUMANI con te»: installare il sito come app (homepage e dashboard) */}
         <InstallAppBanner />
         {/* Banner dei cookie: solo se acceso dall'Admin (lib/consent.ts) */}

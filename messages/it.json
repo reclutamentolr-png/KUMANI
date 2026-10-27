@@ -39,7 +39,10 @@
     "month": "Mese",
     "year": "Anno",
     "siteBackHome": "Torna alla home",
-    "siteMyHome": "La mia Home"
+    "siteMyHome": "La mia Home",
+    "updateReady": "È disponibile un aggiornamento di KUMANI.",
+    "updateNow": "Aggiorna",
+    "updateLater": "Più tardi"
   },
   "landingHome": {
     "statLanguagesLabel": "lingue: KUMANI parla la tua",
