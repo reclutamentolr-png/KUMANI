@@ -29,7 +29,7 @@ export default async function WebinarStudioPage({ params }: { params: Promise<{ 
 
   const db = serviceClient()
   const [{ data: w }, { data: profile }] = await Promise.all([
-    db.from('webinars').select('id, host_id, code, title, starts_at, status, channel_key, seats').eq('id', id).maybeSingle(),
+    db.from('webinars').select('id, host_id, code, title, starts_at, status, channel_key, seats, host_title').eq('id', id).maybeSingle(),
     db.from('profiles').select('first_name, last_name').eq('id', user.id).maybeSingle(),
   ])
   if (!w || w.host_id !== user.id) notFound()
@@ -54,6 +54,7 @@ export default async function WebinarStudioPage({ params }: { params: Promise<{ 
         <WebinarStudio
           webinar={{ id: w.id, code: w.code, title: w.title, startsAt: w.starts_at, status: w.status, channelKey: w.channel_key, seats: w.seats }}
           hostName={hostName}
+          hostTitle={(w.host_title as string | null) ?? ''}
         />
       </main>
     </div>

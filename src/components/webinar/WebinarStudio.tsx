@@ -35,6 +35,7 @@ import {
   hostIce,
   hostModerate,
   hostSetChat,
+  hostSetTitle,
   hostSetOpenMic,
   hostPublish,
   hostPull,
@@ -46,6 +47,7 @@ import { askConfirm } from '@/lib/confirm'
 import WebinarChat from '@/components/webinar/WebinarChat'
 import WebinarInvites from '@/components/webinar/WebinarInvites'
 import WebinarName from '@/components/webinar/WebinarName'
+import WebinarPrompter from '@/components/webinar/WebinarPrompter'
 import { acceptOffer, initials, makeOffer, makePeer, useCanShareScreen, useMounted, useWakeLock, useWebinarChannel } from '@/components/webinar/rtc'
 
 type Phase = 'setup' | 'starting' | 'live' | 'ended'
@@ -93,9 +95,12 @@ const ctrl =
 export default function WebinarStudio({
   webinar,
   hostName,
+  hostTitle: initialTitle,
 }: {
   webinar: { id: string; code: string; title: string; startsAt: string; status: WebinarStatus; channelKey: string; seats: number }
   hostName: string
+  // Ruolo accanto al nome (es. «Founder KUMANI»)
+  hostTitle: string
 }) {
   const t = useTranslations('webinar')
   const locale = useLocale()
@@ -110,6 +115,8 @@ export default function WebinarStudio({
   const [viewers, setViewers] = useState<WebinarViewerRow[]>([])
   const [messages, setMessages] = useState<WebinarMessage[]>([])
   const [copied, setCopied] = useState(false)
+  const [hostTitle, setHostTitle] = useState(initialTitle)
+  const [titleSaved, setTitleSaved] = useState(false)
   const [startedAt, setStartedAt] = useState<number | null>(null)
   const [now, setNow] = useState(() => Date.now())
   const screenAllowed = useCanShareScreen()
@@ -686,6 +693,8 @@ export default function WebinarStudio({
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="space-y-3">
+          {/* Gobbo: il testo da dire, visibile solo a chi presenta */}
+          <WebinarPrompter webinarId={webinar.id} />
           {/* Anteprima */}
           <div className="relative aspect-video overflow-hidden rounded-3xl bg-[#2a2620]">
             <video ref={previewRef} autoPlay playsInline muted className={`h-full w-full ${screenOn ? 'object-contain' : 'object-cover'} ${!camOn && !screenOn ? 'hidden' : ''}`} />
@@ -760,6 +769,37 @@ export default function WebinarStudio({
             {t('closeStudio')}
           </button>
           {phase !== 'live' && <p className="rounded-2xl bg-[var(--gold-pale)] p-3 text-sm font-medium text-[var(--ink)]">{t('stayOnPage')}</p>}
+
+          {/* Ruolo accanto al nome: pagina dell'invito, chat e avvisi */}
+          <div className="rounded-2xl border border-[var(--gold)]/30 bg-[var(--paper)] p-4">
+            <label htmlFor="host-title" className="text-sm font-bold">
+              {t('hostTitleLabel')}
+            </label>
+            <div className="mt-2 flex gap-2">
+              <input
+                id="host-title"
+                value={hostTitle}
+                maxLength={60}
+                onChange={(e) => {
+                  setHostTitle(e.target.value)
+                  setTitleSaved(false)
+                }}
+                onBlur={async () => {
+                  const res = await hostSetTitle(webinar.id, hostTitle)
+                  if ('success' in res) {
+                    setHostTitle(res.title ?? '')
+                    setTitleSaved(true)
+                  }
+                }}
+                placeholder={t('hostTitlePlaceholder')}
+                className="min-h-11 min-w-0 flex-1 rounded-xl border border-gray-300 bg-white px-3 text-sm focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30"
+              />
+            </div>
+            <p className="mt-1.5 text-xs text-[var(--muted)]">
+              {titleSaved ? '✓ ' : ''}
+              {t('hostTitlePreview', { name: hostTitle.trim() ? `${hostName} · ${hostTitle.trim()}` : hostName })}
+            </p>
+          </div>
 
           {/* Kumani invitati: avviso sul telefono con il link */}
           <WebinarInvites webinarId={webinar.id} />

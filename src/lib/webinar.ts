@@ -75,6 +75,10 @@ export function voiceOwner(s: LiveState | null, trackName: string): string | nul
 
 export const webinarChannel = (key: string) => `webinar:${key}`
 
+// Nome di chi presenta con il suo ruolo: «Marco Calogero · Founder KUMANI»
+export const hostLabel = (name: string, title?: string | null) => (title?.trim() ? `${name} · ${title.trim()}` : name)
+export const WEBINAR_HOST_TITLE_MAX = 60
+
 // Nome della traccia → tipo (le tracce si chiamano «audio-…», «video-…»,
 // «screen-…»; quelle di chi ha la parola «voice-…» e «face-…»)
 export function trackKind(name: string): HostTrackKind | 'voice' | 'face' | null {

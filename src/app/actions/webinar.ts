@@ -19,6 +19,8 @@ import {
   HOST_AWAY_MS,
   VIEWER_ACTIVE_MS,
   WEBINAR_CODE_RE,
+  WEBINAR_HOST_TITLE_MAX,
+  hostLabel,
   WEBINAR_MAX_VOICES,
   WEBINAR_MESSAGE_GAP_MS,
   WEBINAR_MESSAGE_MAX,
@@ -59,6 +61,7 @@ type WebinarRow = {
   speaker_video_track: string | null
   chat_open: boolean
   open_mic: boolean
+  host_title: string | null
   started_at: string | null
 }
 
@@ -75,7 +78,7 @@ type ViewerRow = {
 }
 
 const WEBINAR_COLUMNS =
-  'id, host_id, code, channel_key, title, starts_at, seats, status, host_session, host_tracks, host_seen_at, host_paused, cam_on, screen_on, speaker_id, speaker_session, speaker_track, speaker_video_track, chat_open, open_mic, started_at'
+  'id, host_id, code, channel_key, title, starts_at, seats, status, host_session, host_tracks, host_seen_at, host_paused, cam_on, screen_on, speaker_id, speaker_session, speaker_track, speaker_video_track, chat_open, open_mic, host_title, started_at'
 
 const hashToken = (token: string) => createHash('sha256').update(token).digest('hex')
 
@@ -219,10 +222,12 @@ export async function createWebinar(input: { title: string; description?: string
   const db = serviceClient()
   const { count } = await db.from('webinars').select('id', { count: 'exact', head: true }).eq('host_id', userId).neq('status', 'ended')
   if ((count ?? 0) >= 20) return { error: 'too_many' }
+  // Il ruolo accanto al nome riparte da quello dell'ultimo webinar
+  const { data: last } = await db.from('webinars').select('host_title').eq('host_id', userId).not('host_title', 'is', null).order('created_at', { ascending: false }).limit(1).maybeSingle()
   for (let attempt = 0; attempt < 3; attempt++) {
     const { data, error } = await db
       .from('webinars')
-      .insert({ host_id: userId, code: randomCode(), title, description, starts_at: starts.toISOString(), seats: WEBINAR_SEATS })
+      .insert({ host_id: userId, code: randomCode(), title, description, starts_at: starts.toISOString(), seats: WEBINAR_SEATS, host_title: last?.host_title ?? null })
       .select('id')
       .single()
     if (!error && data) return { id: data.id as string }
@@ -362,7 +367,8 @@ export async function hostSendMessage(id: string, body: string): Promise<{ succe
   if (!text) return { error: 'empty' }
   const db = serviceClient()
   const { data: profile } = await db.from('profiles').select('first_name, last_name').eq('id', host.userId).maybeSingle()
-  const name = cleanText([profile?.first_name, profile?.last_name].filter(Boolean).join(' '), WEBINAR_NAME_MAX) || 'Host'
+  const baseName = cleanText([profile?.first_name, profile?.last_name].filter(Boolean).join(' '), WEBINAR_NAME_MAX) || 'Host'
+  const name = hostLabel(baseName, host.webinar.host_title).slice(0, WEBINAR_NAME_MAX + WEBINAR_HOST_TITLE_MAX + 3)
   await db.from('webinar_messages').insert({ webinar_id: id, is_host: true, name, body: text })
   await ping(host.webinar.channel_key, 'chat')
   return { success: true }
@@ -410,6 +416,15 @@ export async function hostModerate(
   }
   await ping(host.webinar.channel_key, 'state')
   return { success: true }
+}
+
+// Il ruolo di chi presenta accanto al nome (vuoto = solo il nome)
+export async function hostSetTitle(id: string, title: string): Promise<{ success: true; title: string | null } | Fail> {
+  const host = await hostOf(id)
+  if ('error' in host) return host
+  const clean = cleanText(title, WEBINAR_HOST_TITLE_MAX) || null
+  await serviceClient().from('webinars').update({ host_title: clean }).eq('id', id)
+  return { success: true, title: clean }
 }
 
 // Apre o chiude la chat a chi guarda (i messaggi già scritti restano)
@@ -838,7 +853,7 @@ export async function removeWebinarInvite(id: string, userId: string): Promise<{
 // Ognuno dei due arriva una volta sola per webinar.
 async function notifyInvitee(w: WebinarRow, userId: string, kind: 'invite' | 'live') {
   const { data: host } = await serviceClient().from('profiles').select('first_name, last_name').eq('id', w.host_id).maybeSingle()
-  const hostName = fullName(host)
+  const hostName = hostLabel(fullName(host), w.host_title)
   await notifyUser(
     userId,
     'events',

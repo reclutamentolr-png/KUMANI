@@ -7,7 +7,7 @@ import Logo from '@/components/Logo'
 import WebinarViewer from '@/components/webinar/WebinarViewer'
 import { createClient } from '@/lib/supabase/server'
 import { serviceClient } from '@/lib/translationOverrides'
-import { WEBINAR_CODE_RE } from '@/lib/webinar'
+import { WEBINAR_CODE_RE, hostLabel } from '@/lib/webinar'
 
 // Pagina del link d'invito: si entra anche senza account, scrivendo il nome.
 // Il codice nel link è la chiave; mai su Google (PRIVATE_PAGES).
@@ -23,7 +23,7 @@ export default async function WebinarGuestPage({ params }: { params: Promise<{ l
   const { locale, code } = await params
   if (!WEBINAR_CODE_RE.test(code)) notFound()
   const db = serviceClient()
-  const { data: w } = await db.from('webinars').select('code, title, description, starts_at, status, host_id').eq('code', code).maybeSingle()
+  const { data: w } = await db.from('webinars').select('code, title, description, starts_at, status, host_id, host_title').eq('code', code).maybeSingle()
   if (!w) notFound()
   const supabase = await createClient()
   const {
@@ -34,7 +34,7 @@ export default async function WebinarGuestPage({ params }: { params: Promise<{ l
     user ? db.from('profiles').select('first_name').eq('id', user.id).maybeSingle() : Promise.resolve({ data: null }),
   ])
   const t = await getTranslations('webinar')
-  const hostName = [host?.first_name, host?.last_name].filter(Boolean).join(' ') || 'KUMANI'
+  const hostName = hostLabel([host?.first_name, host?.last_name].filter(Boolean).join(' ') || 'KUMANI', w.host_title as string | null)
   const when = new Date(w.starts_at).toLocaleString(locale, { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Rome' })
 
   return (
