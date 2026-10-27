@@ -15492,6 +15492,48 @@
       "p1": "Les arnaques du moment",
       "p2": "Vérifie IBAN et numéros",
       "p3": "Inscription gratuite"
+    },
+    "halloweenManual": {
+      "a": {
+        "label": "🎃 Manuel anti-arnaque · Le livre le plus effrayant",
+        "eyebrow": "Halloween · Manuel anti-arnaque",
+        "title": "Le livre le plus effrayant…",
+        "gold": "…pour les arnaqueurs.",
+        "sub": "Le manuel anti-arnaque de KUMANI : des exemples réels et quoi faire tout de suite. Gratuit pour les inscrits, l’inscription est gratuite.",
+        "p1": "Exemples réels",
+        "p2": "À télécharger en PDF",
+        "p3": "Gratuit pour les inscrits"
+      },
+      "b": {
+        "label": "🎃 Manuel anti-arnaque · Une friandise pour vous",
+        "eyebrow": "Halloween",
+        "title": "Une friandise pour vous,",
+        "gold": "un sort aux arnaqueurs.",
+        "sub": "La friandise, c’est le manuel anti-arnaque : téléchargez-le gratuitement et apprenez à repérer les arnaques avant de tomber dans le piège.",
+        "p1": "Le manuel gratuit",
+        "p2": "PDF à imprimer",
+        "p3": "Un sort aux arnaqueurs"
+      },
+      "c": {
+        "label": "🎃 Manuel anti-arnaque · Les vrais monstres",
+        "eyebrow": "Halloween",
+        "title": "Les vrais monstres ne frappent pas.",
+        "gold": "Ils vous écrivent.",
+        "sub": "« Coucou maman, j’ai changé de numéro… ». Démasquez-les avec le manuel anti-arnaque : gratuit pour les inscrits KUMANI.",
+        "p1": "Faux messages",
+        "p2": "Appels frauduleux",
+        "p3": "Le manuel gratuit"
+      },
+      "d": {
+        "label": "🎃 Manuel anti-arnaque · Les arnaques se déguisent",
+        "eyebrow": "Halloween",
+        "title": "Les arnaques aussi",
+        "gold": "se déguisent.",
+        "sub": "En banque, en livreur, en enfant en difficulté. Arrachez-leur le masque avec le manuel anti-arnaque : gratuit pour les inscrits.",
+        "p1": "Fausse banque",
+        "p2": "Faux livreur",
+        "p3": "Le manuel gratuit"
+      }
     }
   },
   "plansSoon": {

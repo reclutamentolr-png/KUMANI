@@ -15492,6 +15492,48 @@
       "p1": "Le truffe del momento",
       "p2": "Controlla IBAN e numeri",
       "p3": "Iscrizione gratuita"
+    },
+    "halloweenManual": {
+      "a": {
+        "label": "🎃 Manuale Antitruffa · Il libro più spaventoso",
+        "eyebrow": "Halloween · Manuale Antitruffa",
+        "title": "Il libro più spaventoso…",
+        "gold": "…per i truffatori.",
+        "sub": "Il Manuale Antitruffa di KUMANI: esempi veri e cosa fare subito. Gratis per gli iscritti, l’iscrizione è gratuita.",
+        "p1": "Esempi veri",
+        "p2": "Scaricalo in PDF",
+        "p3": "Gratis per gli iscritti"
+      },
+      "b": {
+        "label": "🎃 Manuale Antitruffa · Dolcetto per te",
+        "eyebrow": "Halloween",
+        "title": "Dolcetto per te,",
+        "gold": "scherzetto ai truffatori.",
+        "sub": "Il dolcetto è il Manuale Antitruffa: scaricalo gratis e impara a riconoscere le truffe prima di cascarci.",
+        "p1": "Il manuale gratis",
+        "p2": "In PDF da stampare",
+        "p3": "Scherzetto ai truffatori"
+      },
+      "c": {
+        "label": "🎃 Manuale Antitruffa · I mostri veri",
+        "eyebrow": "Halloween",
+        "title": "I mostri veri non bussano.",
+        "gold": "Ti scrivono.",
+        "sub": "«Ciao mamma, ho cambiato numero…». Smascherali con il Manuale Antitruffa: gratis per gli iscritti a KUMANI.",
+        "p1": "Messaggi falsi",
+        "p2": "Chiamate truffa",
+        "p3": "Il manuale gratis"
+      },
+      "d": {
+        "label": "🎃 Manuale Antitruffa · Le truffe si travestono",
+        "eyebrow": "Halloween",
+        "title": "Anche le truffe",
+        "gold": "si travestono.",
+        "sub": "Da banca, da corriere, da figlio in difficoltà. Togli loro la maschera con il Manuale Antitruffa: gratis per gli iscritti.",
+        "p1": "Finta banca",
+        "p2": "Finto corriere",
+        "p3": "Il manuale gratis"
+      }
     }
   },
   "plansSoon": {

@@ -15492,6 +15492,48 @@
       "p1": "Las estafas del momento",
       "p2": "Comprueba IBAN y números",
       "p3": "Registro gratuito"
+    },
+    "halloweenManual": {
+      "a": {
+        "label": "🎃 Manual Antiestafa · El libro más aterrador",
+        "eyebrow": "Halloween · Manual Antiestafa",
+        "title": "El libro más aterrador…",
+        "gold": "…para los estafadores.",
+        "sub": "El Manual Antiestafa de KUMANI: ejemplos reales y qué hacer enseguida. Gratis para los registrados; registrarse es gratis.",
+        "p1": "Ejemplos reales",
+        "p2": "Descárgalo en PDF",
+        "p3": "Gratis para los registrados"
+      },
+      "b": {
+        "label": "🎃 Manual Antiestafa · Un dulce para ti",
+        "eyebrow": "Halloween",
+        "title": "Un dulce para ti,",
+        "gold": "un susto para los estafadores.",
+        "sub": "El dulce es el Manual Antiestafa: descárgalo gratis y aprende a reconocer las estafas antes de caer en ellas.",
+        "p1": "El manual gratis",
+        "p2": "PDF para imprimir",
+        "p3": "Un susto para los estafadores"
+      },
+      "c": {
+        "label": "🎃 Manual Antiestafa · Los monstruos de verdad",
+        "eyebrow": "Halloween",
+        "title": "Los monstruos de verdad no llaman a la puerta.",
+        "gold": "Te escriben.",
+        "sub": "«Hola mamá, he cambiado de número…». Desenmascáralos con el Manual Antiestafa: gratis para los registrados en KUMANI.",
+        "p1": "Mensajes falsos",
+        "p2": "Llamadas trampa",
+        "p3": "El manual gratis"
+      },
+      "d": {
+        "label": "🎃 Manual Antiestafa · Las estafas se disfrazan",
+        "eyebrow": "Halloween",
+        "title": "También las estafas",
+        "gold": "se disfrazan.",
+        "sub": "De banco, de mensajero, de hijo en apuros. Quítales la máscara con el Manual Antiestafa: gratis para los registrados.",
+        "p1": "Banco falso",
+        "p2": "Mensajero falso",
+        "p3": "El manual gratis"
+      }
     }
   },
   "plansSoon": {

@@ -171,6 +171,13 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
       ['tempo', 'Clock'],
       ['unaPerTutti', 'Users'],
     ]
+    // Manuale Antitruffa ad Halloween: versione, icona e icone dei tre riquadri
+    const HALLOWEEN_MANUAL: [string, string, string[]][] = [
+      ['a', 'BookOpen', ['ShieldCheck', 'Download', 'Gift']],
+      ['b', 'Candy', ['Candy', 'Download', 'Ghost']],
+      ['c', 'Ghost', ['MessageSquareWarning', 'Smartphone', 'BookOpen']],
+      ['d', 'VenetianMask', ['VenetianMask', 'Package', 'BookOpen']],
+    ]
     // Halloween: in cima dal 10 ottobre al 2 novembre (ora di Roma)
     const md = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Rome', month: '2-digit', day: '2-digit' }).format(new Date())
     const halloween = md >= '10-10' && md <= '11-02'
@@ -193,6 +200,19 @@ export default async function DocumentsPage({ searchParams }: { searchParams: Pr
               ],
               theme: 'halloween' as const,
             },
+            // Manuale Antitruffa in 4 versioni di Halloween
+            ...HALLOWEEN_MANUAL.map(([v, icon, points]) => ({
+              id: `halloween-manual-${v}`,
+              group: 'general' as const,
+              label: ts(`halloweenManual.${v}.label`),
+              icon,
+              eyebrow: ts(`halloweenManual.${v}.eyebrow`),
+              title: ts(`halloweenManual.${v}.title`),
+              gold: ts(`halloweenManual.${v}.gold`),
+              sub: ts(`halloweenManual.${v}.sub`),
+              points: points.map((pIcon, i) => ({ icon: pIcon, text: ts(`halloweenManual.${v}.p${i + 1}`) })),
+              theme: 'halloween' as const,
+            })),
           ]
         : []),
       ...GENERAL.map(([key, icon]) => ({

@@ -15492,6 +15492,48 @@
       "p1": "As burlas do momento",
       "p2": "Verifica IBAN e números",
       "p3": "Registo grátis"
+    },
+    "halloweenManual": {
+      "a": {
+        "label": "🎃 Manual Antiburla · O livro mais assustador",
+        "eyebrow": "Halloween · Manual Antiburla",
+        "title": "O livro mais assustador…",
+        "gold": "…para os burlões.",
+        "sub": "O Manual Antiburla da KUMANI: exemplos reais e o que fazer logo. Grátis para os inscritos; a inscrição é grátis.",
+        "p1": "Exemplos reais",
+        "p2": "Descarregue em PDF",
+        "p3": "Grátis para os inscritos"
+      },
+      "b": {
+        "label": "🎃 Manual Antiburla · Um doce para si",
+        "eyebrow": "Halloween",
+        "title": "Um doce para si,",
+        "gold": "uma partida aos burlões.",
+        "sub": "O doce é o Manual Antiburla: descarregue-o grátis e aprenda a reconhecer as burlas antes de cair nelas.",
+        "p1": "O manual grátis",
+        "p2": "PDF para imprimir",
+        "p3": "Uma partida aos burlões"
+      },
+      "c": {
+        "label": "🎃 Manual Antiburla · Os monstros verdadeiros",
+        "eyebrow": "Halloween",
+        "title": "Os monstros verdadeiros não batem à porta.",
+        "gold": "Escrevem-lhe.",
+        "sub": "«Olá mãe, mudei de número…». Desmascare-os com o Manual Antiburla: grátis para os inscritos na KUMANI.",
+        "p1": "Mensagens falsas",
+        "p2": "Chamadas burla",
+        "p3": "O manual grátis"
+      },
+      "d": {
+        "label": "🎃 Manual Antiburla · As burlas disfarçam-se",
+        "eyebrow": "Halloween",
+        "title": "Também as burlas",
+        "gold": "se disfarçam.",
+        "sub": "De banco, de estafeta, de filho em apuros. Tire-lhes a máscara com o Manual Antiburla: grátis para os inscritos.",
+        "p1": "Banco falso",
+        "p2": "Estafeta falso",
+        "p3": "O manual grátis"
+      }
     }
   },
   "plansSoon": {

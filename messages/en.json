@@ -15492,6 +15492,48 @@
       "p1": "The latest scams",
       "p2": "Check IBANs and numbers",
       "p3": "Free sign-up"
+    },
+    "halloweenManual": {
+      "a": {
+        "label": "🎃 Anti-Scam Manual · The scariest book",
+        "eyebrow": "Halloween · Anti-Scam Manual",
+        "title": "The scariest book…",
+        "gold": "…for scammers.",
+        "sub": "KUMANI’s Anti-Scam Manual: real examples and what to do right away. Free for members, and joining is free.",
+        "p1": "Real examples",
+        "p2": "Download the PDF",
+        "p3": "Free for members"
+      },
+      "b": {
+        "label": "🎃 Anti-Scam Manual · A treat for you",
+        "eyebrow": "Halloween",
+        "title": "A treat for you,",
+        "gold": "a trick for scammers.",
+        "sub": "The treat is the Anti-Scam Manual: download it for free and learn to spot scams before you fall for them.",
+        "p1": "The free manual",
+        "p2": "Printable PDF",
+        "p3": "A trick for scammers"
+      },
+      "c": {
+        "label": "🎃 Anti-Scam Manual · Real monsters",
+        "eyebrow": "Halloween",
+        "title": "Real monsters don’t knock.",
+        "gold": "They text you.",
+        "sub": "“Hi Mum, I’ve changed my number…”. Unmask them with the Anti-Scam Manual: free for KUMANI members.",
+        "p1": "Fake messages",
+        "p2": "Scam calls",
+        "p3": "The free manual"
+      },
+      "d": {
+        "label": "🎃 Anti-Scam Manual · Scams in disguise",
+        "eyebrow": "Halloween",
+        "title": "Scams wear",
+        "gold": "costumes too.",
+        "sub": "Posing as your bank, a courier, a child in trouble. Pull off their mask with the Anti-Scam Manual: free for members.",
+        "p1": "Fake bank",
+        "p2": "Fake courier",
+        "p3": "The free manual"
+      }
     }
   },
   "plansSoon": {

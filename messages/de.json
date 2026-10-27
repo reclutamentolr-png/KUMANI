@@ -15492,6 +15492,48 @@
       "p1": "Aktuelle Betrugsmaschen",
       "p2": "IBANs und Nummern prüfen",
       "p3": "Kostenlose Anmeldung"
+    },
+    "halloweenManual": {
+      "a": {
+        "label": "🎃 Anti-Betrugs-Handbuch · Das gruseligste Buch",
+        "eyebrow": "Halloween · Anti-Betrugs-Handbuch",
+        "title": "Das gruseligste Buch…",
+        "gold": "…für Betrüger.",
+        "sub": "Das Anti-Betrugs-Handbuch von KUMANI: echte Beispiele und was sofort zu tun ist. Gratis für Mitglieder, die Anmeldung ist kostenlos.",
+        "p1": "Echte Beispiele",
+        "p2": "Als PDF herunterladen",
+        "p3": "Gratis für Mitglieder"
+      },
+      "b": {
+        "label": "🎃 Anti-Betrugs-Handbuch · Süßes für dich",
+        "eyebrow": "Halloween",
+        "title": "Süßes für dich,",
+        "gold": "Saures für Betrüger.",
+        "sub": "Das Süße ist das Anti-Betrugs-Handbuch: Lade es kostenlos herunter und erkenne Betrug, bevor du darauf hereinfällst.",
+        "p1": "Das Handbuch gratis",
+        "p2": "PDF zum Ausdrucken",
+        "p3": "Saures für Betrüger"
+      },
+      "c": {
+        "label": "🎃 Anti-Betrugs-Handbuch · Echte Monster",
+        "eyebrow": "Halloween",
+        "title": "Echte Monster klopfen nicht.",
+        "gold": "Sie schreiben dir.",
+        "sub": "„Hallo Mama, ich habe eine neue Nummer…“. Entlarve sie mit dem Anti-Betrugs-Handbuch: gratis für KUMANI-Mitglieder.",
+        "p1": "Falsche Nachrichten",
+        "p2": "Betrugsanrufe",
+        "p3": "Das Handbuch gratis"
+      },
+      "d": {
+        "label": "🎃 Anti-Betrugs-Handbuch · Betrug verkleidet sich",
+        "eyebrow": "Halloween",
+        "title": "Auch Betrug",
+        "gold": "verkleidet sich.",
+        "sub": "Als Bank, als Paketbote, als Kind in Not. Reiß ihm die Maske ab – mit dem Anti-Betrugs-Handbuch: gratis für Mitglieder.",
+        "p1": "Falsche Bank",
+        "p2": "Falscher Paketbote",
+        "p3": "Das Handbuch gratis"
+      }
     }
   },
   "plansSoon": {

@@ -12,7 +12,7 @@ import { useDuration } from './ChronoResult'
 // test. La disegna il browser (niente file sul server) e diventa un PNG.
 const inter = localFont({ src: '../../fonts/Inter.woff2', weight: '100 900' })
 const playfair = localFont({ src: '../../fonts/PlayfairDisplay.woff2', weight: '400 900' })
-const GOLD_TEXT = { background: 'linear-gradient(180deg,#f6dd8a 0%,#d4af37 55%,#a87f22 100%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' } as const
+const GOLD_TEXT = { backgroundImage: 'linear-gradient(180deg,#f6dd8a 0%,#d4af37 55%,#a87f22 100%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' } as const
 
 type Format = 'post' | 'story'
 const SIZE: Record<Format, { w: number; h: number }> = { post: { w: 1080, h: 1350 }, story: { w: 1080, h: 1920 } }

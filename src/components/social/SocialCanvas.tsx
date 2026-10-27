@@ -27,7 +27,9 @@ export type SocialContent = {
 
 const GOLD = '#d4af37'
 const GOLD2 = '#f1d78a'
-const GOLD_TEXT = { background: 'linear-gradient(180deg,#f6dd8a 0%,#d4af37 55%,#a87f22 100%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' } as const
+// Scritte sfumate: backgroundImage e non background, che passando da
+// un'immagine all'altra azzerava il ritaglio sulle lettere (rettangolo pieno)
+const GOLD_TEXT = { backgroundImage: 'linear-gradient(180deg,#f6dd8a 0%,#d4af37 55%,#a87f22 100%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' } as const
 
 const SocialCanvas = forwardRef<HTMLDivElement, { format: SocialFormat; content: SocialContent; footer: string; logoUrl: string }>(function SocialCanvas(
   { format, content: c, footer, logoUrl },
@@ -36,7 +38,7 @@ const SocialCanvas = forwardRef<HTMLDivElement, { format: SocialFormat; content:
   const story = format === 'story'
   const { w, h } = SOCIAL_SIZE[format]
   const hw = c.theme === 'halloween'
-  const ORANGE_TEXT = { background: 'linear-gradient(180deg,#ffd27a 0%,#ff8a1f 55%,#d9480f 100%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' } as const
+  const ORANGE_TEXT = { backgroundImage: 'linear-gradient(180deg,#ffd27a 0%,#ff8a1f 55%,#d9480f 100%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' } as const
   // Pipistrello stilizzato (posizione in %, misura in px)
   const bat = (left: number, top: number, size: number, rot: number) => (
     <svg key={`${left}-${top}`} viewBox="0 0 64 32" width={size} height={size / 2} style={{ position: 'absolute', left: `${left}%`, top: `${top}%`, transform: `rotate(${rot}deg)`, opacity: 0.85 }}>
