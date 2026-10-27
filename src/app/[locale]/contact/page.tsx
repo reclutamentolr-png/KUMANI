@@ -111,13 +111,15 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
   const faqs = Array.from({ length: FAQ_COUNT }, (_, i) => ({ q: t(`faq${i + 1}Q`), a: t(`faq${i + 1}A`) }))
 
   const company = CONTACT_INFO.company
+  // Solo i dati già pubblicati (la sede legale per ora no)
   const companyRows = [
     { label: t('companyName'), value: company.name },
     { label: t('companyAddress'), value: company.address },
     { label: t('companyVat'), value: company.vatNumber },
     { label: t('companyPec'), value: company.pec },
-  ]
-  const hasCompanyData = companyRows.some((row) => !!row.value)
+    { label: t('companyEmail'), value: company.email },
+  ].filter((row) => !!row.value)
+  const hasCompanyData = companyRows.length > 0
 
   const ld = {
     '@context': 'https://schema.org',

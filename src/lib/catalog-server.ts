@@ -82,12 +82,13 @@ function firstSentence(text: string): string {
 
 export async function getCatalog(locale: string): Promise<Catalog> {
   const [messages, tm, th, tc, ts, tsh, settings, prices, surprisePrices] = await Promise.all([
-    getMessages() as Promise<Record<string, unknown>>,
-    getTranslations('marketplace'),
-    getTranslations('hub'),
-    getTranslations('catalog'),
-    getTranslations('surprise'),
-    getTranslations('serviceHubs'),
+    // Lingua esplicita: getCatalog si usa anche fuori dalle pagine (Chiedi a KUMI)
+    getMessages({ locale }) as Promise<Record<string, unknown>>,
+    getTranslations({ locale, namespace: 'marketplace' }),
+    getTranslations({ locale, namespace: 'hub' }),
+    getTranslations({ locale, namespace: 'catalog' }),
+    getTranslations({ locale, namespace: 'surprise' }),
+    getTranslations({ locale, namespace: 'serviceHubs' }),
     fetchSettings(),
     getPlanPrices(),
     getSurprisePrices(),

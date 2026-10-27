@@ -61,6 +61,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "kordataShowcase",
   "kuRewards",
   "kumaniCv",
+  "kumiChat",
   "landingEditor",
   "landingHome",
   "landingPublic",

@@ -1,4 +1,5 @@
 import Link from '@/components/LocalizedLink'
+import { CONTACT_INFO } from '@/lib/contactInfo'
 import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { pageMetadata } from '@/lib/seo'
@@ -89,7 +90,8 @@ export default async function TermsPage({ params }: LocaleProps) {
             <div className="text-gray-600 space-y-3 text-sm sm:text-base leading-relaxed">
               <p>
                 I presenti Termini di Servizio (di seguito, i &ldquo;Termini&rdquo;) disciplinano l&apos;accesso e l&apos;utilizzo della
-                piattaforma Kumani (di seguito, &ldquo;Kumani&rdquo; o la &ldquo;Piattaforma&rdquo;),
+                piattaforma Kumani (di seguito, &ldquo;Kumani&rdquo; o la &ldquo;Piattaforma&rdquo;), gestita da {CONTACT_INFO.company.name},
+                P.IVA {CONTACT_INFO.company.vatNumber} (di seguito, il &ldquo;Gestore&rdquo;),
                 compresi l&apos;Ecosistema KUMANI (l&apos;insieme degli strumenti digitali offerti dalla Piattaforma, collegati tra loro), gli strumenti in esso inclusi e il Programma Vantaggi descritto all&apos;articolo 7.
               </p>
               <p>
@@ -589,8 +591,10 @@ export default async function TermsPage({ params }: LocaleProps) {
           <section id="sez-14" className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 scroll-mt-24">
             <h2 className="text-xl font-bold text-gray-900 mb-3">14. Contatti</h2>
             <p className="text-gray-600 text-sm sm:text-base leading-relaxed mb-4">
-              Per qualsiasi domanda su questi Termini o sul Programma Vantaggi è possibile contattare il gestore della Piattaforma
-              attraverso la pagina{' '}
+              Per qualsiasi domanda su questi Termini o sul Programma Vantaggi è possibile contattare il Gestore della Piattaforma
+              ({CONTACT_INFO.company.name}, P.IVA {CONTACT_INFO.company.vatNumber}) scrivendo a{' '}
+              <a href={`mailto:${CONTACT_INFO.company.email}`} className="text-indigo-600 font-semibold hover:underline">{CONTACT_INFO.company.email}</a>{' '}
+              oppure attraverso la pagina{' '}
               <Link href="/contact" className="text-indigo-600 font-semibold hover:underline">Contatti</Link>.
             </p>
             <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4 flex gap-3">

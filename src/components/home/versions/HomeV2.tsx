@@ -6,6 +6,7 @@ import { CookiePreferencesLink } from '@/components/consent/ConsentGate'
 import { CANONICAL_ORIGIN } from '@/lib/seo'
 import JsonLd from '@/components/seo/JsonLd'
 import Link from '@/components/LocalizedLink'
+import { CONTACT_INFO } from '@/lib/contactInfo'
 import HomeLoginLink from '@/components/home/HomeLoginLink'
 import { getLocale, getTranslations } from 'next-intl/server'
 import FoundersBanner from '@/components/founders/FoundersBanner'
@@ -461,6 +462,12 @@ export default async function HomeV2({ layoutKey }: { layoutKey: HomeLayoutKey }
             </div>
             <div className="text-gray-400 text-xs sm:text-sm text-center">
               {t('copyright')}
+              {CONTACT_INFO.company.name && (
+                <span className="mt-1 block text-[11px] text-gray-500 sm:text-xs">
+                  {CONTACT_INFO.company.name}
+                  {CONTACT_INFO.company.vatNumber && ` · P.IVA ${CONTACT_INFO.company.vatNumber}`}
+                </span>
+              )}
             </div>
           </div>
           {/* YouTube, Instagram e TikTok di KUMANI */}

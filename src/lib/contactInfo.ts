@@ -8,10 +8,11 @@ export const CONTACT_INFO = {
   whatsapp: null as string | null, // numero in formato internazionale, es. '+393331234567'
   responseTime: '24–48h',
   company: {
-    name: null as string | null, // ragione sociale del titolare
-    address: null as string | null, // sede legale
-    vatNumber: null as string | null, // P.IVA
+    name: 'MC TEKNOLOGY' as string | null, // ragione sociale del titolare
+    address: null as string | null, // sede legale (per ora non pubblicata)
+    vatNumber: '04117730046' as string | null, // P.IVA
     pec: null as string | null,
+    email: 'info@mcteknology.it' as string | null, // recapito del gestore
   },
 }
 

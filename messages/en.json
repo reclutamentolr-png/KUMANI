@@ -5402,7 +5402,8 @@
     "companyPec": "PEC (certified email)",
     "companyUpdating": "Being updated",
     "companyPending": "Company details will be published shortly.",
-    "tagline": "KUMANI — Hands that lend you a hand."
+    "tagline": "KUMANI — Hands that lend you a hand.",
+    "companyEmail": "Email"
   },
   "profileLock": {
     "gender": "Gender",
@@ -9636,7 +9637,7 @@
     "updated": "Last updated: {date}",
     "back": "Go back",
     "s1t": "Who processes the data",
-    "s1": "The data controller will be shown on this page with full details. For any question about your data you can already write to {email}.",
+    "s1": "The data controller is {company}, which runs KUMANI. For any question about your data you can write to {email}.",
     "s2t": "What data we process",
     "s2": "Account data: email and password (encrypted, nobody can read it).|Profile data: first name, last name, country, city and whatever you choose to add.|The content you create in the tools, such as agenda, expenses, deadlines, quotes or listings.|Payments: handled by Stripe; KUMANI never sees or stores card details.|Technical data, such as IP address and browser type, for the security of the service.|Usage data: when you use KUMANI and for how long (length of visits, phone or computer), for internal statistics on how the platform is used; deleted after 13 months.|Anti-scam reports: the details you report (numbers, websites, IBANs, emails, profiles) and your account of what happened; others only see the number of reports, the type of scam, the account and at most your city, never your name; screenshots are seen only by the Staff and deleted after the check.",
     "s3t": "Why we process it",
@@ -17266,5 +17267,36 @@
     "capturedLimited": "This is the “{name}” scam: you stopped it! But you already took a card today, so you can capture this one from tomorrow.",
     "backHome": "Back to home",
     "backDashboard": "My Home"
+  },
+  "kumiChat": {
+    "title": "Ask KUMI",
+    "subtitle": "I answer questions about KUMANI",
+    "close": "Close",
+    "bubble": "Hi! I’m KUMI 🐙 Got a question about KUMANI?",
+    "welcome": "Hi! I’m KUMI, the KUMANI octopus. Ask me anything you’d like to know: what it is, what you can do, how much it costs.",
+    "chip1": "What is KUMANI?",
+    "chip2": "How much does it cost?",
+    "chip3": "How does it protect me from scams?",
+    "chip4": "What can I do for free?",
+    "chip5": "How do I sign up?",
+    "placeholder": "Type your question…",
+    "send": "Send",
+    "thinking": "KUMI is thinking…",
+    "remaining": "{n, plural, =0 {No questions left today} one {# question left today} other {# questions left today}}",
+    "limit": "You’ve used all your questions for today. Come back tomorrow, or write to the Staff: a real person will answer.",
+    "limitShort": "No questions left today",
+    "busy": "Oops, my tentacles got tangled. Try again in a moment.",
+    "staffPreview": "Staff preview: visitors can’t see it yet",
+    "rateUp": "Helpful answer",
+    "rateDown": "Not helpful",
+    "thanks": "Thank you!",
+    "privacyNote": "Don’t share personal data",
+    "linkRegister": "Sign up for free",
+    "linkCatalog": "All services",
+    "linkAbout": "About us",
+    "linkContact": "Write to the Staff",
+    "linkPrivacy": "Privacy",
+    "linkTerms": "Terms",
+    "linkGuide": "Guide: {name}"
   }
 }

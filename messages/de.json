@@ -5402,7 +5402,8 @@
     "companyPec": "PEC (zertifizierte E-Mail)",
     "companyUpdating": "Wird aktualisiert",
     "companyPending": "Die Unternehmensdaten werden in Kürze veröffentlicht.",
-    "tagline": "KUMANI — Hände, die dir eine Hand reichen."
+    "tagline": "KUMANI — Hände, die dir eine Hand reichen.",
+    "companyEmail": "E-Mail"
   },
   "profileLock": {
     "gender": "Geschlecht",
@@ -9636,7 +9637,7 @@
     "updated": "Zuletzt aktualisiert: {date}",
     "back": "Zurück",
     "s1t": "Wer die Daten verarbeitet",
-    "s1": "Der Verantwortliche wird auf dieser Seite mit vollständigen Angaben genannt. Für Fragen zu deinen Daten kannst du schon jetzt an {email} schreiben.",
+    "s1": "Verantwortlicher ist {company}, Betreiber von KUMANI. Für Fragen zu deinen Daten kannst du an {email} schreiben.",
     "s2t": "Welche Daten wir verarbeiten",
     "s2": "Kontodaten: E-Mail und Passwort (verschlüsselt, niemand kann es lesen).|Profildaten: Vorname, Nachname, Land, Stadt und was du zusätzlich angibst.|Die Inhalte, die du in den Tools erstellst, z. B. Kalender, Ausgaben, Fristen, Angebote oder Anzeigen.|Zahlungen: laufen über Stripe; KUMANI sieht und speichert keine Kartendaten.|Technische Daten wie IP-Adresse und Browsertyp, für die Sicherheit des Dienstes.|Nutzungsdaten: wann und wie lange du KUMANI nutzt (Dauer der Besuche, Handy oder Computer), für interne Statistiken zur Nutzung der Plattform; sie werden nach 13 Monaten gelöscht.|Anti-Betrugs-Meldungen: die gemeldeten Angaben (Nummern, Websites, IBANs, E-Mails, Profile) und deine Schilderung; andere sehen nur die Zahl der Meldungen, die Betrugsart, die Schilderung und höchstens deine Stadt, nie deinen Namen; Screenshots sieht nur das Staff, sie werden nach der Prüfung gelöscht.",
     "s3t": "Warum wir sie verarbeiten",
@@ -17266,5 +17267,36 @@
     "capturedLimited": "Das ist die Masche „{name}“: Du hast sie gestoppt! Du hast heute aber schon eine Karte geholt, diese kannst du ab morgen fangen.",
     "backHome": "Zur Startseite",
     "backDashboard": "Meine Startseite"
+  },
+  "kumiChat": {
+    "title": "Frag KUMI",
+    "subtitle": "Ich beantworte Fragen zu KUMANI",
+    "close": "Schließen",
+    "bubble": "Hallo! Ich bin KUMI 🐙 Hast du eine Frage zu KUMANI?",
+    "welcome": "Hallo! Ich bin KUMI, der Krake von KUMANI. Frag mich, was du wissen möchtest: was es ist, was du tun kannst, was es kostet.",
+    "chip1": "Was ist KUMANI?",
+    "chip2": "Was kostet es?",
+    "chip3": "Wie schützt es mich vor Betrug?",
+    "chip4": "Was kann ich kostenlos machen?",
+    "chip5": "Wie melde ich mich an?",
+    "placeholder": "Schreib deine Frage…",
+    "send": "Senden",
+    "thinking": "KUMI denkt nach…",
+    "remaining": "{n, plural, =0 {Heute keine Fragen mehr} one {Heute noch # Frage} other {Heute noch # Fragen}}",
+    "limit": "Für heute hast du alle Fragen gestellt. Komm morgen wieder oder schreib dem Staff: Ein Mensch antwortet dir.",
+    "limitShort": "Heute keine Fragen mehr",
+    "busy": "Hoppla, meine Tentakel haben sich verknotet. Versuch es gleich noch einmal.",
+    "staffPreview": "Staff-Vorschau: Besucher sehen sie noch nicht",
+    "rateUp": "Hilfreiche Antwort",
+    "rateDown": "Nicht hilfreich",
+    "thanks": "Danke!",
+    "privacyNote": "Schreib keine persönlichen Daten",
+    "linkRegister": "Kostenlos anmelden",
+    "linkCatalog": "Alle Dienste",
+    "linkAbout": "Über uns",
+    "linkContact": "Dem Staff schreiben",
+    "linkPrivacy": "Datenschutz",
+    "linkTerms": "Regeln",
+    "linkGuide": "Anleitung: {name}"
   }
 }

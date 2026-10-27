@@ -5402,7 +5402,8 @@
     "companyPec": "PEC (e-mail certificado)",
     "companyUpdating": "Em atualização",
     "companyPending": "Os dados da empresa serão publicados em breve.",
-    "tagline": "KUMANI — Mãos que lhe dão uma mãozinha."
+    "tagline": "KUMANI — Mãos que lhe dão uma mãozinha.",
+    "companyEmail": "Email"
   },
   "profileLock": {
     "gender": "Género",
@@ -9636,7 +9637,7 @@
     "updated": "Última atualização: {date}",
     "back": "Voltar",
     "s1t": "Quem trata os dados",
-    "s1": "O responsável pelo tratamento será indicado nesta página com os seus dados completos. Para qualquer pergunta sobre os seus dados já pode escrever para {email}.",
+    "s1": "O responsável pelo tratamento é {company}, que gere a KUMANI. Para qualquer pergunta sobre os seus dados pode escrever para {email}.",
     "s2t": "Que dados tratamos",
     "s2": "Dados da conta: email e palavra-passe (cifrada, ninguém a pode ler).|Dados do perfil: nome, apelido, país, cidade e o que decidir acrescentar.|Os conteúdos que cria nas ferramentas, por exemplo agenda, despesas, prazos, orçamentos ou anúncios.|Pagamentos: feitos através da Stripe; a KUMANI não vê nem guarda os dados do cartão.|Dados técnicos, como o endereço IP e o tipo de navegador, para a segurança do serviço.|Dados de utilização: quando usa a KUMANI e durante quanto tempo (duração das visitas, telemóvel ou computador), para estatísticas internas sobre a utilização da plataforma; apagados ao fim de 13 meses.|Denúncias antifraude: os dados que denuncia (números, sites, IBAN, emails, perfis) e o seu relato; os outros só veem o número de denúncias, o tipo de burla, o relato e no máximo a sua cidade, nunca o seu nome; as capturas só o Staff as vê e são apagadas após a verificação.",
     "s3t": "Porque os tratamos",
@@ -17266,5 +17267,36 @@
     "capturedLimited": "É a burla «{name}»: travaste-a! Mas hoje já conquistaste uma carta, por isso esta podes capturá-la a partir de amanhã.",
     "backHome": "Voltar ao início",
     "backDashboard": "O meu início"
+  },
+  "kumiChat": {
+    "title": "Pergunte ao KUMI",
+    "subtitle": "Respondo a perguntas sobre a KUMANI",
+    "close": "Fechar",
+    "bubble": "Olá! Sou o KUMI 🐙 Tem alguma pergunta sobre a KUMANI?",
+    "welcome": "Olá! Sou o KUMI, o polvo da KUMANI. Pergunte-me o que quiser saber: o que é, o que pode fazer, quanto custa.",
+    "chip1": "O que é a KUMANI?",
+    "chip2": "Quanto custa?",
+    "chip3": "Como me protege das burlas?",
+    "chip4": "O que posso fazer grátis?",
+    "chip5": "Como me inscrevo?",
+    "placeholder": "Escreva a sua pergunta…",
+    "send": "Enviar",
+    "thinking": "O KUMI está a pensar…",
+    "remaining": "{n, plural, =0 {Sem perguntas por hoje} one {Resta-lhe # pergunta hoje} other {Restam-lhe # perguntas hoje}}",
+    "limit": "Já usou todas as perguntas de hoje. Volte amanhã, ou escreva ao Staff: vai responder-lhe uma pessoa.",
+    "limitShort": "Sem perguntas por hoje",
+    "busy": "Ups, os meus tentáculos ficaram enrolados. Tente de novo daqui a pouco.",
+    "staffPreview": "Pré-visualização Staff: os visitantes ainda não a veem",
+    "rateUp": "Resposta útil",
+    "rateDown": "Resposta pouco útil",
+    "thanks": "Obrigado!",
+    "privacyNote": "Não escreva dados pessoais",
+    "linkRegister": "Inscreva-se grátis",
+    "linkCatalog": "Todos os serviços",
+    "linkAbout": "Quem somos",
+    "linkContact": "Escrever ao Staff",
+    "linkPrivacy": "Privacidade",
+    "linkTerms": "Regulamento",
+    "linkGuide": "Guia: {name}"
   }
 }

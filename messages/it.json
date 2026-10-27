@@ -5402,7 +5402,8 @@
     "companyPec": "PEC",
     "companyUpdating": "In aggiornamento",
     "companyPending": "I dati societari saranno pubblicati a breve.",
-    "tagline": "KUMANI — Mani che ti danno una mano."
+    "tagline": "KUMANI — Mani che ti danno una mano.",
+    "companyEmail": "Email"
   },
   "profileLock": {
     "gender": "Genere",
@@ -9636,7 +9637,7 @@
     "updated": "Ultimo aggiornamento: {date}",
     "back": "Torna indietro",
     "s1t": "Chi tratta i dati",
-    "s1": "Il titolare del trattamento sarà indicato su questa pagina con i suoi dati completi. Per qualsiasi domanda sui tuoi dati puoi già scrivere a {email}.",
+    "s1": "Il titolare del trattamento è {company}, che gestisce KUMANI. Per qualsiasi domanda sui tuoi dati puoi scrivere a {email}.",
     "s2t": "Quali dati trattiamo",
     "s2": "Dati dell’account: email e password (cifrata, nessuno può leggerla).|Dati del profilo: nome, cognome, paese, città e quelli che scegli di aggiungere.|I contenuti che crei negli strumenti, ad esempio agenda, spese, scadenze, preventivi o annunci.|Pagamenti: avvengono tramite Stripe; KUMANI non vede né conserva i dati della carta.|Dati tecnici, come indirizzo IP e tipo di browser, per la sicurezza del servizio.|Dati di utilizzo: quando usi KUMANI e per quanto tempo (durata delle visite, telefono o computer), per statistiche interne su come viene usata la piattaforma; vengono cancellati dopo 13 mesi.|Segnalazioni anti-truffa: i dati che segnali (numeri, siti, IBAN, email, profili) e il tuo racconto; agli altri mostriamo solo il numero di segnalazioni, il tipo di truffa, il racconto e al più la tua città, mai il tuo nome; gli screenshot li vede solo lo Staff e si cancellano dopo il controllo.",
     "s3t": "Perché li trattiamo",
@@ -17266,5 +17267,36 @@
     "capturedLimited": "È la truffa «{name}»: l’hai fermata! Oggi però hai già preso una carta, quindi questa la potrai catturare da domani.",
     "backHome": "Torna alla home",
     "backDashboard": "La mia Home"
+  },
+  "kumiChat": {
+    "title": "Chiedi a KUMI",
+    "subtitle": "Rispondo alle domande su KUMANI",
+    "close": "Chiudi",
+    "bubble": "Ciao! Sono KUMI 🐙 Hai una domanda su KUMANI?",
+    "welcome": "Ciao! Sono KUMI, il polpo di KUMANI. Chiedimi quello che vuoi sapere: cos’è, cosa puoi fare, quanto costa.",
+    "chip1": "Cos’è KUMANI?",
+    "chip2": "Quanto costa?",
+    "chip3": "Come mi protegge dalle truffe?",
+    "chip4": "Cosa posso fare gratis?",
+    "chip5": "Come mi iscrivo?",
+    "placeholder": "Scrivi la tua domanda…",
+    "send": "Invia",
+    "thinking": "KUMI sta pensando…",
+    "remaining": "{n, plural, =0 {Domande finite per oggi} one {Ti resta # domanda oggi} other {Ti restano # domande oggi}}",
+    "limit": "Per oggi hai finito le domande. Torna domani, oppure scrivi allo Staff: ti risponde una persona.",
+    "limitShort": "Domande finite per oggi",
+    "busy": "Ops, mi si sono annodati i tentacoli. Riprova tra poco.",
+    "staffPreview": "Anteprima Staff: i visitatori non la vedono ancora",
+    "rateUp": "Risposta utile",
+    "rateDown": "Risposta non utile",
+    "thanks": "Grazie!",
+    "privacyNote": "Non scrivere dati personali",
+    "linkRegister": "Iscriviti gratis",
+    "linkCatalog": "Tutti i servizi",
+    "linkAbout": "Chi siamo",
+    "linkContact": "Scrivi allo Staff",
+    "linkPrivacy": "Privacy",
+    "linkTerms": "Regolamento",
+    "linkGuide": "Guida: {name}"
   }
 }
