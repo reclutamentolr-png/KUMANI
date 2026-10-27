@@ -86,6 +86,10 @@ export const NEED_PHRASES: Record<string, ToolPhrases> = {
     it: ['chatgpt dati personali', 'usare intelligenza artificiale', 'anonimizzare testo', 'togliere nomi', 'privacy ia'],
     en: ['chatgpt personal data', 'anonymize text', 'remove names'],
   },
+  'carte-antitruffa': {
+    it: ['carte antitruffa', 'imparare a riconoscere le truffe', 'quiz truffe', 'gioco truffe', 'carte da collezione', 'truffe più diffuse', 'album truffe'],
+    en: ['scam cards', 'learn to spot scams', 'scam quiz'],
+  },
   tutela: {
     it: ['profilo social sicuro', 'account instagram rubato', 'facebook hackerato', 'proteggere social'],
     en: ['social account hacked', 'secure instagram', 'protect social media'],

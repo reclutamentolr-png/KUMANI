@@ -82,6 +82,7 @@ export const SECTION_LABELS: Record<string, string> = {
   tempus: 'KUMANI TEMPUS',
   kids: 'Angolo Bambini',
   textShield: 'Testo Protetto',
+  scamCards: 'Carte Antitruffa',
   hopla: 'Hoplà',
   webinar: 'KUMANI Webinar',
   firmaPdf: 'Firma PDF',

@@ -11,6 +11,7 @@ import { msgToEml } from '@/lib/checkmail/msg'
 import { applyAiAssessment, assessWithAi, type AiAssessment } from '@/lib/checkmail/ai'
 import { MissingApiKeyError } from '@/lib/anthropic'
 import type { AiSkip, CheckMailResponse } from '@/lib/checkmail/types'
+import { captureScamCard, cardForEmail } from '@/lib/scamCards/capture'
 
 // KUMANI CheckMail: analisi di un'email sospetta (file .eml/.msg, sorgente
 // incollato, oppure mittente + testo dal telefono). L'email è analizzata in
@@ -177,6 +178,11 @@ export async function POST(request: NextRequest) {
     if (ai) verdict = applyAiAssessment(verdict, ai)
 
     await awardToolPoint('checkmail')
+    // Carte Antitruffa: un'email truffa fermata cattura la carta di quella truffa
+    const scamCard =
+      verdict.level === 'high'
+        ? await captureScamCard(user.id, cardForEmail(`${verdict.summary.subject ?? ''}\n${verdict.textSample}`, verdict.findings, ai?.category), 'checkmail')
+        : null
     return reply({
       status: 'ok',
       score: verdict.score,
@@ -188,6 +194,7 @@ export async function POST(request: NextRequest) {
       hasHeaders: verdict.summary.hasHeaders,
       leftToday,
       community: { sender: verdict.summary.fromAddress ?? null, domains: (verdict.summary.linkDomains ?? []).slice(0, 10) },
+      scamCard,
     })
   } catch (error) {
     console.error('[checkmail] analysis failed:', error instanceof Error ? error.message : 'unknown')

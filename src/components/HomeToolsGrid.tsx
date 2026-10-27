@@ -70,6 +70,7 @@ import {
   MonitorSmartphone,
   ShieldAlert,
   ScanText,
+  Layers,
 } from 'lucide-react'
 
 type Category = 'marketing' | 'security' | 'personal' | 'wellness' | 'lavoro' | 'svago' | 'bambini' | 'community'
@@ -152,6 +153,7 @@ export default function HomeToolsGrid({ freeToolNames = [] }: { freeToolNames?: 
     { name: 'scudo-dati', icon: ShieldUser, title: tc('scudoDati'), desc: tc('scudoDatiDescription'), category: 'security' },
     { name: 'documento-sicuro', icon: FileLock2, title: tc('documentoSicuro'), desc: tc('documentoSicuroDescription'), category: 'security' },
     { name: 'testo-protetto', icon: ScanText, title: tc('testoProtetto'), desc: tc('testoProtettoDescription'), category: 'security' },
+    { name: 'carte-antitruffa', icon: Layers, title: tc('carteAntitruffa'), desc: tc('carteAntitruffaDescription'), category: 'security' },
     { name: 'memolife', icon: Brain, title: t('toolMemolifeTitle'), desc: t('toolMemolifeDescription'), category: 'personal' },
     { name: 'life-calendar', icon: CalendarClock, title: t('toolLifeCalendarTitle'), desc: t('toolLifeCalendarDescription'), category: 'personal' },
     { name: 'garage', icon: CarFront, title: tc('garage'), desc: tc('garageDescription'), category: 'personal' },

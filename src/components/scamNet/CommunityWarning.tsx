@@ -6,6 +6,7 @@ import { Flag, ShieldAlert } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { contestScam, scamLookup, type ScamMatch } from '@/app/actions/scamNet'
 import { reportHref, type ScamKind } from '@/lib/scamNet'
+import ScamCardCaptured from '@/components/scamCards/ScamCardCaptured'
 
 // Avviso della Rete Anti-Truffa dentro un controllo (SVAT, QR, Verifica IBAN,
 // CheckMail): compare solo se il dato è stato segnalato e confermato. Sotto,
@@ -108,6 +109,7 @@ export default function CommunityWarning({ items, report }: { items: { kind: Sca
       {matches.map((m) => (
         <MatchCard key={m.targetId} match={m} />
       ))}
+      {matches.map((m) => m.card && <ScamCardCaptured key={`card-${m.targetId}`} card={m.card} />)}
       {report && report.value && (
         <Link href={reportHref(report.kind, report.value)} className="inline-flex min-h-10 items-center gap-1.5 text-sm font-bold text-[#7a5a14] hover:underline">
           <Flag className="h-4 w-4" aria-hidden="true" /> {matches.length ? t('warning.reportToo') : t('warning.report')}

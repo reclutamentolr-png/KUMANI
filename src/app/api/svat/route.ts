@@ -11,6 +11,7 @@ import { isIpLoggerHost } from '@/lib/checkmail/engine'
 import { fetchWhoisText, parseWhois } from '@/lib/whois'
 import { parseVatInput, prettyVat, registryLookupUrl, verifyVies } from '@/lib/vat'
 import { asksPassword, inPageRedirect, phishingBrand, sameOwner } from '@/lib/linkInspect'
+import { captureScamCard, cardForSite } from '@/lib/scamCards/capture'
 
 interface SVATCheck {
   id: string
@@ -203,12 +204,16 @@ export async function POST(request: NextRequest) {
   if (score < 40) badge = 'red'
   else if (score < 80) badge = 'yellow'
 
+  // Carte Antitruffa: un sito truffa fermato cattura la carta di quella truffa
+  const scamCard = badge === 'red' ? await captureScamCard(user.id, cardForSite(input, checks), 'svat') : null
+
   return NextResponse.json({
     input,
     domain,
     score,
     badge,
     checks,
+    scamCard,
     summary: {
       totalChecks: checks.length,
       okCount: checks.filter((r) => r.status === 'ok').length,

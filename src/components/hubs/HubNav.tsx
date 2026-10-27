@@ -71,6 +71,7 @@ import {
   HeartHandshake,
   PartyPopper,
   ScanText,
+  Layers,
   ScanLine,
   ScanFace,
 } from 'lucide-react'
@@ -111,6 +112,7 @@ const TAB_ICON: Record<string, LucideIcon> = {
   'proteggi.text': ScanText,
   'segnala.network': Users,
   'segnala.manual': BookOpenCheck,
+  'segnala.cards': Layers,
   'segnala.test': ShieldQuestion,
   'benessere.sounds': Music,
   'benessere.breathe': Wind,

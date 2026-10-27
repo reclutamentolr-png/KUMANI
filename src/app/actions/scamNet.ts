@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient as createServiceClient } from '@supabase/supabase-js'
+import { awardRareCard, captureScamCard, cardForCategory, type CapturedCard } from '@/lib/scamCards/capture'
 import { createClient } from '@/lib/supabase/server'
 import { verifyAdmin } from '@/lib/verifyAdmin'
 import { localizedPath, notifyUser } from '@/lib/push'
@@ -159,6 +160,8 @@ export type ScamMatch = {
   lastReportAt: string
   quotes: { text: string; city: string | null; at: string }[]
   targetId: string
+  // Carte Antitruffa: la carta di questa truffa, catturata da chi controlla
+  card?: CapturedCard | null
 }
 
 // Avvisi confermati per i dati di un controllo (SVAT, IBAN, CheckMail, QR, numero)
@@ -215,6 +218,9 @@ export async function scamLookup(items: { kind: string; value: string }[]): Prom
     }
   }
   if (found.length) await service.from('scam_hits').insert(found.map((f) => ({ target_id: f.targetId })))
+  // Carte Antitruffa: la prima truffa confermata di cui c'è la carta
+  const withCard = found.find((f) => cardForCategory(f.category) || f.kind === 'qr')
+  if (withCard) withCard.card = await captureScamCard(user.id, cardForCategory(withCard.category) ?? 15, 'community')
   return found
 }
 
@@ -470,8 +476,10 @@ export async function adminScamDecide(targetId: string, decision: 'confirm' | 'd
   if (!(await verifyAdmin('listings.write'))) return { success: false, error: 'Non autorizzato' }
   if (!UUID_RE.test(targetId) || !['confirm', 'dismiss', 'needs_info', 'remove'].includes(decision)) return { success: false, error: 'Dati non validi' }
   const service = db()
-  const { data: target } = await service.from('scam_targets').select('kind, display, value_key').eq('id', targetId).maybeSingle()
+  const { data: target } = await service.from('scam_targets').select('kind, display, value_key, status').eq('id', targetId).maybeSingle()
   if (!target) return { success: false, error: 'Segnalazione non trovata' }
+  // Caso nuovo: mai confermato prima (per la carta rara di chi l'ha scoperto)
+  const newCase = decision === 'confirm' && target.status !== 'confirmed'
   const { data, error } = await service.rpc('scam_staff_decide', { p_target: targetId, p_decision: decision, p_note: note?.trim() || null })
   if (error) return { success: false, error: error.message }
   const rows = (data ?? []) as { user_id: string | null; report_id: string; evidence_path: string | null; rewarded_ku: number }[]
@@ -486,6 +494,26 @@ export async function adminScamDecide(targetId: string, decision: 'confirm' | 'd
   // Racconto per la community: lo scrive o lo approva lo Staff alla conferma
   if (decision === 'confirm' && story !== undefined) await service.from('scam_targets').update({ public_story: cleanStory(story) }).eq('id', targetId)
   const value = shownValue(target.kind, target.display, target.value_key)
+  // Carte Antitruffa: la carta rara a chi l'ha segnalato per primo
+  if (newCase) {
+    const { data: first } = await service
+      .from('scam_reports')
+      .select('user_id, category')
+      .eq('target_id', targetId)
+      .eq('status', 'confirmed')
+      .order('created_at', { ascending: true })
+      .limit(1)
+      .maybeSingle()
+    const rare = first?.user_id ? await awardRareCard(first.user_id as string, first.category as ScamCategory) : null
+    if (rare?.isNew) {
+      await notifyUser(
+        first!.user_id as string,
+        'staff',
+        (t, locale) => ({ title: t('scamRareTitle'), body: t('scamRareBody', { name: rare.name }), url: localizedPath(locale, '/app/carte-antitruffa'), tag: `scam-rare-${targetId}` }),
+        { kind: 'scam_rare_card', ref: targetId }
+      )
+    }
+  }
   const kind = decision === 'confirm' ? 'Confirmed' : decision === 'dismiss' ? 'Dismissed' : 'NeedsInfo'
   for (const r of rows) {
     if (!r.user_id) continue

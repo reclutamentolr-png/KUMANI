@@ -8,6 +8,7 @@ import { webRiskLookup, worstThreat } from '@/lib/webRisk'
 import { isIpLoggerHost, lookalikeBrand } from '@/lib/checkmail/engine'
 import { asksPassword, inspectLink } from '@/lib/linkInspect'
 import { siteKeys } from '@/lib/scamNet'
+import { captureScamCard, type CapturedCard } from '@/lib/scamCards/capture'
 
 interface QRDecodeResult {
   type: 'url' | 'phone' | 'sms' | 'email' | 'vcard' | 'wifi' | 'geo' | 'payment' | 'text'
@@ -94,10 +95,12 @@ export async function POST(request: NextRequest) {
     // Get community signals
     const communitySignals = await getCommunitySignals(qrData)
 
-    const result: QRAnalysis = {
+    const result: QRAnalysis & { scamCard: CapturedCard | null } = {
       ...decoded,
       analysis,
       communitySignals,
+      // Carte Antitruffa: un QR pericoloso cattura «Il QR Truccato»
+      scamCard: analysis.badge === 'red' ? await captureScamCard(user.id, 15, 'qr') : null,
     }
 
     return NextResponse.json(result)

@@ -24,6 +24,7 @@ export const ORBIT_ENTRIES: OrbitEntry[] = [
   { key: 'docSafe', cat: 'security', tool: 'documento-sicuro' },
   { key: 'scamGuide', cat: 'security', tool: 'antitruffa' },
   { key: 'textShield', cat: 'security', tool: 'testo-protetto' },
+  { key: 'scamCards', cat: 'security', tool: 'carte-antitruffa' },
   // Vita di tutti i giorni
   { key: 'spendly', cat: 'personal', tool: 'spendly' },
   { key: 'deadlines', cat: 'personal', tool: 'life-calendar' },

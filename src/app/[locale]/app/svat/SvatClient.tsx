@@ -26,6 +26,8 @@ import {
 } from 'lucide-react'
 import QRCheckScanner from '@/components/QRCheckScanner'
 import CommunityWarning from '@/components/scamNet/CommunityWarning'
+import ScamCardCaptured from '@/components/scamCards/ScamCardCaptured'
+import type { CapturedCard } from '@/lib/scamCards/capture'
 import Link from '@/components/LocalizedLink'
 import { reportHref } from '@/lib/scamNet'
 import DossierButton, { type Dossier } from '@/components/scamNet/DossierButton'
@@ -48,6 +50,7 @@ interface SVATResult {
   score: number
   badge: 'green' | 'yellow' | 'red'
   checks: SVATCheck[]
+  scamCard?: CapturedCard | null
   summary: {
     totalChecks: number
     okCount: number
@@ -405,6 +408,8 @@ export default function SvatClient({
                 </div>
               )}
             </div>
+
+            <ScamCardCaptured card={result.scamCard} />
 
             {/* Summary */}
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">

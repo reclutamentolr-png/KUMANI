@@ -16,6 +16,7 @@ const GROUP_OF: Record<string, ServiceGroup> = {
   'testo-protetto': 'security',
   antitruffa: 'security',
   'rete-antitruffa': 'security',
+  'carte-antitruffa': 'security',
   // Soldi e organizzazione
   spendly: 'money',
   fincheck: 'money',

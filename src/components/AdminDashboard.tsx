@@ -70,6 +70,7 @@ import {
   Settings,
   Gauge,
   ShieldAlert,
+  Layers,
   Palette,
   Activity,
   BarChart3,
@@ -133,6 +134,7 @@ const SecurityPanel = dynamic(() => import('@/components/admin/SecurityPanel'), 
 const TimebankAdminPanel = dynamic(() => import('@/components/admin/TimebankAdminPanel'), { loading })
 const ProposalsAdminPanel = dynamic(() => import('@/components/admin/ProposalsAdminPanel'), { loading })
 const ScamAdminPanel = dynamic(() => import('@/components/admin/ScamAdminPanel'), { loading })
+const ScamCardsAdminPanel = dynamic(() => import('@/components/admin/ScamCardsAdminPanel'), { loading })
 const MosaicAdminPanel = dynamic(() => import('@/components/admin/MosaicAdminPanel'), { loading })
 const FabulaAdminPanel = dynamic(() => import('@/components/admin/FabulaAdminPanel'), { loading })
 const IdentityVerificationsPanel = dynamic(() => import('@/components/admin/IdentityVerificationsPanel'), { loading })
@@ -829,6 +831,7 @@ L'accesso viene registrato.`))) return
   { id: 'timebank', label: 'Time Bank', Icon: Hourglass, permission: 'listings.read' as Permission, group: 'community' },
   { id: 'proposals', label: 'Proposte', Icon: Lightbulb, permission: 'listings.read' as Permission, group: 'community' },
   { id: 'antitruffa', label: 'Rete Anti-Truffa', Icon: ShieldAlert, permission: 'listings.read' as Permission, group: 'community' },
+  { id: 'scamCards', label: 'Carte Antitruffa', Icon: Layers, permission: 'listings.read' as Permission, group: 'community' },
   { id: 'affinity', label: 'Affinity', Icon: Flag, permission: 'listings.read' as Permission, group: 'community' },
   { id: 'convivio', label: 'Segnalazioni', Icon: Flag, permission: 'listings.read' as Permission, group: 'kordata' },
   { id: 'convivioFees', label: 'Commissioni', Icon: HandCoins, permission: 'listings.read' as Permission, group: 'kordata' },
@@ -2077,6 +2080,7 @@ L'accesso viene registrato.`))) return
         {activeSection === 'timebank' && <TimebankAdminPanel />}
         {activeSection === 'proposals' && <ProposalsAdminPanel />}
         {activeSection === 'antitruffa' && <ScamAdminPanel />}
+        {activeSection === 'scamCards' && <ScamCardsAdminPanel />}
         {activeSection === 'mosaic' && <MosaicAdminPanel />}
         {activeSection === 'fabula' && <FabulaAdminPanel />}
         {activeSection === 'contactMessages' && <ContactMessagesPanel />}

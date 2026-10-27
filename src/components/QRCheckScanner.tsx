@@ -4,6 +4,8 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import Link from '@/components/LocalizedLink'
 import CommunityWarning from '@/components/scamNet/CommunityWarning'
+import ScamCardCaptured from '@/components/scamCards/ScamCardCaptured'
+import type { CapturedCard } from '@/lib/scamCards/capture'
 import { reportHref } from '@/lib/scamNet'
 import {
   Camera,
@@ -42,6 +44,7 @@ interface QRAnalysis {
     recommendations: string[]
     aiExplanation: string
   }
+  scamCard?: CapturedCard | null
   communitySignals?: {
     totalReports: number
     phishing: number
@@ -422,6 +425,7 @@ export default function QRCheckScanner() {
 
           {/* Avviso della Rete Anti-Truffa (link, numero o email del QR) */}
           <CommunityWarning items={[{ kind: 'qr', value: result.raw }]} />
+          <ScamCardCaptured card={result.scamCard} />
 
           {result.communitySignals && result.communitySignals.totalReports > 0 && (
             <div className="bg-red-50 border border-red-200 rounded-xl p-4">

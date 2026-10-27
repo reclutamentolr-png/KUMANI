@@ -192,6 +192,17 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       requiresSubscription: true,
     },
     {
+      toolName: 'carte-antitruffa',
+      href: '/app/carte-antitruffa',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'Layers',
+      title: t('carteAntitruffa'),
+      description: t('carteAntitruffaDescription'),
+      color: 'gold',
+      category: 'security',
+      requiresSubscription: true,
+    },
+    {
       toolName: 'memolife',
       href: '/app/memolife',
       gradient: 'bg-[var(--ink)]',

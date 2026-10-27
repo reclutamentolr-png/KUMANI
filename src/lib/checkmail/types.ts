@@ -1,5 +1,6 @@
 import type { Finding, RiskLevel } from '@/lib/checkmail/engine'
 import type { AiAssessment } from '@/lib/checkmail/ai'
+import type { CapturedCard } from '@/lib/scamCards/capture'
 
 // Perché la lettura con l'IA non è servita: nessun testo, truffa già evidente
 // dai controlli tecnici, mittente verificato senza nulla di sospetto
@@ -19,5 +20,7 @@ export type CheckMailResponse =
       leftToday: number
       // Per l'avviso della Rete Anti-Truffa: mittente e domini dei link (max 10)
       community?: { sender: string | null; domains: string[] }
+      // Carte Antitruffa: la carta della truffa fermata
+      scamCard?: CapturedCard | null
     }
   | { status: 'not_allowed' | 'user_limit' | 'empty' | 'too_large' | 'unreadable' | 'error'; leftToday?: number }

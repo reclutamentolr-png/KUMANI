@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import { ChevronDown, ClipboardPaste, FileUp, LoaderCircle, Lock, MailSearch, RotateCcw, ShieldAlert, ShieldCheck, Smartphone, Sparkles, TriangleAlert } from 'lucide-react'
 import type { CheckMailResponse } from '@/lib/checkmail/types'
 import CommunityWarning from '@/components/scamNet/CommunityWarning'
+import ScamCardCaptured from '@/components/scamCards/ScamCardCaptured'
 import DossierButton, { type Dossier, type DossierStatus } from '@/components/scamNet/DossierButton'
 import { MESSAGE_HANDOFF_KEY, messageParts } from '@/lib/quickCheck'
 
@@ -260,6 +261,7 @@ export function CheckMailResult({ result, onNew }: { result: OkResult; onNew: ()
           </div>
         </div>
       </div>
+      <ScamCardCaptured card={result.scamCard} />
 
       {/* Segnali trovati dai controlli */}
       <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">

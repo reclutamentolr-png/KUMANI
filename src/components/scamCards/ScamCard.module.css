@@ -1,0 +1,245 @@
+/* Carta Antitruffa: oggetto «stampato» 5:7, colori fissi (uguali in ogni tema).
+   --w: larghezza della carta; tutto il resto si adatta. */
+
+.card {
+  --w: 250px;
+  --ink: #171717;
+  --gold: #c79a3b;
+  --gold-bright: #e7c56a;
+  --paper: #fffdf7;
+  position: relative;
+  width: var(--w);
+  max-width: 100%;
+  aspect-ratio: 5 / 7;
+  border-radius: calc(var(--w) * 0.064);
+  color: var(--ink);
+  text-align: left;
+  line-height: 1.3;
+  font-size: calc(var(--w) * 0.056);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08), 0 14px 30px -12px rgba(30, 20, 0, 0.45);
+  transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.flipped {
+  transform: rotateY(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+}
+
+.face {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: calc(var(--w) * 0.036);
+  background: linear-gradient(145deg, var(--gold-bright), var(--gold) 55%, #9d7424);
+  display: flex;
+  flex-direction: column;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.back {
+  transform: rotateY(180deg);
+}
+
+.inner {
+  flex: 1;
+  min-height: 0;
+  border-radius: calc(var(--w) * 0.04);
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.back .inner {
+  background: var(--ink);
+  color: #f3ecdb;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4em;
+  padding: 0.55em 0.65em 0.35em;
+}
+
+.name {
+  font-weight: 800;
+  font-size: 1.05em;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+.num {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.72em;
+  font-weight: 700;
+  color: #6b6555;
+  white-space: nowrap;
+}
+
+.back .num {
+  color: #b0a993;
+}
+
+.art {
+  position: relative;
+  margin: 0 0.65em;
+  height: 40%;
+  border-radius: 0.55em;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+.art :global(svg) {
+  width: 92%;
+  height: auto;
+}
+
+.chan {
+  position: absolute;
+  left: 0.45em;
+  bottom: 0.45em;
+  font-size: 0.66em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: rgba(23, 23, 23, 0.82);
+  color: #fff;
+  padding: 0.15em 0.6em;
+  border-radius: 999px;
+}
+
+.danger {
+  position: absolute;
+  right: 0.45em;
+  bottom: 0.45em;
+  background: rgba(255, 253, 247, 0.92);
+  border-radius: 999px;
+  padding: 0.05em 0.45em;
+  font-size: 0.8em;
+  letter-spacing: 1px;
+  color: #b4372b;
+}
+
+.off {
+  color: #cfc6b0;
+}
+
+.body {
+  padding: 0.6em 0.7em 0.4em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45em;
+  flex: 1;
+  min-height: 0;
+}
+
+.label {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.64em;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8a6a22;
+}
+
+.back .label {
+  color: var(--gold-bright);
+}
+
+.bait {
+  font-size: 0.86em;
+  font-style: italic;
+  background: #f3ecdb;
+  border-radius: 0.45em;
+  padding: 0.35em 0.5em;
+}
+
+.move {
+  font-size: 0.82em;
+}
+
+.list {
+  margin: 0;
+  padding-left: 1.1em;
+  font-size: 0.82em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+  list-style: disc;
+}
+
+.defense {
+  background: var(--gold-bright);
+  color: var(--ink);
+  border-radius: 0.55em;
+  padding: 0.5em 0.6em;
+  font-size: 0.84em;
+  font-weight: 700;
+}
+
+.foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.35em 0.7em 0.5em;
+  border-top: 1px dashed #e0d6bf;
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.64em;
+  color: #6b6555;
+}
+
+.back .foot {
+  border-top-color: #3a372f;
+  color: #b0a993;
+}
+
+.brand {
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+}
+
+.back .brand {
+  color: var(--gold-bright);
+}
+
+.finder {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.66em;
+  font-weight: 700;
+  color: #8a6a22;
+}
+
+/* Carta non ancora presa: si vede, ma spenta */
+.missing .face {
+  background: linear-gradient(145deg, #d8d3c6, #a9a395);
+}
+
+.missing .art {
+  filter: grayscale(0.85);
+  opacity: 0.75;
+}
+
+/* Rarità (Passi successivi) */
+.catturata .face {
+  background: linear-gradient(145deg, #7fd3a6, #1f8a5b 55%, #0f5a3a);
+}
+
+.rara .face {
+  background: linear-gradient(145deg, #fff2c2, #e7c56a 30%, #b0821f 60%, #fff0b8 85%, #c79a3b);
+}
+
+.mese .face {
+  background: conic-gradient(from 210deg, #f6a6c8, #f7d97a, #9fe3c5, #8fc4f5, #c9a6f2, #f6a6c8);
+}
