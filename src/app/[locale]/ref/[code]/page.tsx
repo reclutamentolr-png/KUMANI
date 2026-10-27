@@ -13,8 +13,11 @@ const FLAGS: Record<string, string> = { IT: '🇮🇹', US: '🇺🇸', DE: '�
 
 // Pagina di invito personale (/ref/CODICE): chi arriva qui viene invitato
 // da un Kumano e si registra con il suo codice già compilato.
-export default async function ReferralPage({ params }: { params: Promise<{ code: string }> }) {
+export default async function ReferralPage({ params, searchParams }: { params: Promise<{ code: string }>; searchParams?: Promise<{ t?: string }> }) {
   const { code } = await params
+  // Posto prenotato dal polpo di un Kumano: passa all'iscrizione (lo controlla il database)
+  const { t: tentacle } = (await searchParams) ?? {}
+  const placement = typeof tentacle === 'string' && /^[0-9a-f]{8}$/i.test(tentacle) ? tentacle.toLowerCase() : ''
   const normalizedCode = code.toUpperCase()
   const t = await getTranslations('referralLanding')
 
@@ -46,7 +49,7 @@ export default async function ReferralPage({ params }: { params: Promise<{ code:
     )
   }
 
-  const registerUrl = `/register?invito=${encodeURIComponent(inviter.referral_code)}`
+  const registerUrl = `/register?invito=${encodeURIComponent(inviter.referral_code)}${placement ? `&t=${placement}` : ''}`
   const inviterName = inviter.first_name.trim()
 
   return (

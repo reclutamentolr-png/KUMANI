@@ -49,6 +49,10 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
   // Link di un Agente venditore (?agente=AG-XXXXXX): il cliente resta suo
   // (conta solo all'iscrizione; il codice lo verifica il server)
   const agentCode = (searchParams.get('agente') || '').trim().toUpperCase().slice(0, 12)
+  // Posto prenotato dal polpo di un Kumano (?t=<8 cifre del posto>): lo
+  // controlla il database, e vale al pagamento solo se quel Kumano ha posto
+  const tentacleParam = (searchParams.get('t') || '').trim().toLowerCase()
+  const placementNode = /^[0-9a-f]{8}$/.test(tentacleParam) ? tentacleParam : ''
   // "Registrati e scegli Pro" dalla pagina /pro arriva con ?plan=pro: dopo
   // l'iscrizione si torna lì per la prova. Nel modulo non c'è più la casella
   // «Sono un professionista», così i privati non la spuntano per sbaglio.
@@ -117,6 +121,7 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
         referral_code: referralCode,
         voucher_code: voucherCode,
         professional: formData.professional,
+        placement_node: placementNode,
         terms_accepted_at: new Date().toISOString(),
         terms_version: TERMS_VERSION,
         marketing_consent: formData.marketing,
@@ -192,6 +197,7 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
             voucher_code: cleanVoucherCode,
             professional: formData.professional,
             agent_code: agentCode,
+            placement_node: placementNode,
             signup_from: signupFrom,
             // Lingua dell'email con il codice (modello "Confirm signup" di Supabase)
             locale,

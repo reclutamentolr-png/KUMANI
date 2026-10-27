@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from 'react'
-import { ArrowRight, ArrowUp, ChevronRight, Crown, House, Users, UserRound } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { ArrowRight, ArrowUp, ChevronRight, House, Plus, Users, UserRound } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { useTranslations } from 'next-intl'
-import StarLines, { STAR_CENTER, STAR_POINTS } from '@/components/StarLines'
+import KumiTentacles, { NET_ASPECT, NET_OWNER, NET_POINTS } from '@/components/KumiTentacles'
+import InviteSheet, { type NetworkInvite } from '@/components/network/InviteSheet'
 
 type MatrixNode = {
   id: string
@@ -37,15 +38,21 @@ type MatrixTreeProps = {
   descendants: MatrixNode[]
   // Posti occupati da persone invitate da altri Kumani (dalla community)
   receivedIds?: string[]
-  // 'admin': lo Staff guarda la stella di un'altra persona
+  // 'admin': lo Staff guarda i Kumani di un'altra persona
   mode?: 'self' | 'admin'
+  // Link d'invito: con questo i «+» del proprio polpo aprono l'invito
+  invite?: NetworkInvite
 }
 
-// Si possono aprire le stelle fino al 4° livello, così si vedono le persone
+// Si possono aprire i Kumani fino al 4° livello, così si vedono le persone
 // fino al 5° livello sotto il titolare.
 const MAX_OPEN_LEVEL = 4
 
-export default function MatrixTree({ rootNode, descendants, receivedIds = [], mode = 'self' }: MatrixTreeProps) {
+// Quanti tentacoli di ogni Kumano sono già stati visti cresciuti su questo
+// telefono: i nuovi si allungano con un'animazione alla visita successiva
+const seenKey = (id: string) => `kumani:polpo:${id}`
+
+export default function MatrixTree({ rootNode, descendants, receivedIds = [], mode = 'self', invite }: MatrixTreeProps) {
   const t = useTranslations('dashboard')
   // Le stelle aperte, dalla prima sotto il titolare a quella al centro
   const [trail, setTrail] = useState<MatrixNode[]>([])
@@ -53,12 +60,37 @@ export default function MatrixTree({ rootNode, descendants, receivedIds = [], mo
   const centerLevel = trail.length
   const isOwnStar = centerLevel === 0
   const canOpen = centerLevel < MAX_OPEN_LEVEL
+  // Invito aperto: per un tentacolo libero (0-4) o per lo Spillover (null);
+  // nel polpo di un proprio Kumano prenota il posto sotto di lui
+  const [sheet, setSheet] = useState<{ slot: number | null; target?: { name: string; nodeId: string } } | null>(null)
+  const canInvite = Boolean(invite) && mode === 'self'
 
   const directMembers = descendants
     .filter((node) => node.parent_id === center.id)
     .sort((firstNode, secondNode) => firstNode.position - secondNode.position)
 
   const directSlots = Array.from({ length: 5 }, (_, index) => directMembers[index] || null)
+  const grown = directSlots.map(Boolean)
+  const grownCount = grown.filter(Boolean).length
+
+  // Tentacoli nuovi dall'ultima visita (solo nella propria rete)
+  const [fresh, setFresh] = useState<boolean[]>([])
+  useEffect(() => {
+    if (mode !== 'self') return
+    try {
+      const raw = localStorage.getItem(seenKey(center.id))
+      const seen = raw === null ? null : Number(raw)
+      localStorage.setItem(seenKey(center.id), String(grownCount))
+      // Prima visita: niente animazione, il polpo è già com'è
+      if (seen === null || !Number.isFinite(seen)) return
+      // Dati del browser: si leggono solo dopo il primo disegno
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setFresh(grown.map((isGrown, index) => isGrown && index >= seen))
+    } catch {
+      // Memoria del browser non disponibile: nessuna animazione
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [center.id, grownCount, mode])
 
   const getDownlineCount = (directMember: MatrixNode) =>
     typeof directMember.active_downline_count === 'number'
@@ -82,7 +114,7 @@ export default function MatrixTree({ rootNode, descendants, receivedIds = [], mo
     const isOccupied = Boolean(member)
     const received = Boolean(member && isReceived(member))
     const downlineCount = member ? getDownlineCount(member) : 0
-    const point = STAR_POINTS[slotIndex]
+    const point = NET_POINTS[slotIndex]
     const clickable = Boolean(member && canOpen)
 
     const circle = (
@@ -133,6 +165,25 @@ export default function MatrixTree({ rootNode, descendants, receivedIds = [], mo
 
     const className = 'absolute z-10 flex w-max -translate-x-1/2 -translate-y-6 flex-col items-center text-center sm:-translate-y-10'
     const style = { left: `${point.left}%`, top: `${point.top}%` }
+
+    if (!member && canInvite) {
+      return (
+        <button
+          key={`invite-slot-${slotIndex}`}
+          type="button"
+          onClick={() => setSheet(isOwnStar ? { slot: slotIndex } : { slot: slotIndex, target: { name: center.first_name || 'Kumano', nodeId: center.id } })}
+          aria-label={t('inviteSlotAria', { n: slotIndex + 1 })}
+          className={`group cursor-pointer outline-none ${className}`}
+          style={style}
+        >
+          <div className="relative flex h-12 w-12 items-center justify-center rounded-full border-[3px] border-dashed border-[var(--gold)] bg-[var(--gold-pale)] text-[var(--ink)] shadow-md transition-transform group-hover:-translate-y-1 group-hover:scale-105 group-focus-visible:ring-4 group-focus-visible:ring-[var(--gold)]/40 sm:h-20 sm:w-20 sm:border-4">
+            <Plus className="h-6 w-6 sm:h-9 sm:w-9" strokeWidth={2.4} />
+            <span className="absolute -bottom-2 rounded-full border border-[var(--gold)]/50 bg-white px-1.5 py-0.5 text-[9px] font-bold text-[var(--ink)] sm:px-2 sm:text-[10px]">{slotIndex + 1}</span>
+          </div>
+          <p className="mt-3 max-w-[84px] text-xs font-bold text-[var(--gold)] sm:max-w-[130px] sm:text-sm">{t('inviteSlotLabel')}</p>
+        </button>
+      )
+    }
 
     if (member && clickable) {
       return (
@@ -203,38 +254,47 @@ export default function MatrixTree({ rootNode, descendants, receivedIds = [], mo
           </div>
         )}
 
-        {/* Sul telefono il riquadro è più alto, così le punte in basso non
-            toccano il nome del titolare */}
-        <div key={center.id} className="animate-starZoom relative mx-auto aspect-[100/132] w-full max-w-[34rem] sm:aspect-[100/108]">
-          {/* La stella: raggi dal centro e contorno a cinque punte */}
-          <StarLines />
+        <div key={center.id} className="animate-starZoom relative mx-auto w-full max-w-[34rem]" style={{ aspectRatio: NET_ASPECT }}>
+          {/* Il polpo KUMI: la testa è il titolare, i tentacoli i 5 posti */}
+          <KumiTentacles grown={grown} fresh={fresh} />
 
-          {/* Il titolare (o il Kumano aperto) al centro della stella */}
+          {/* Il titolare (o il Kumano aperto) sopra la corona di KUMI */}
           <div
-            className="absolute z-20 flex -translate-x-1/2 -translate-y-8 flex-col items-center text-center sm:-translate-y-14"
-            style={{ left: `${STAR_CENTER.x}%`, top: `${STAR_CENTER.y}%` }}
+            className="absolute z-20 flex -translate-x-1/2 -translate-y-full flex-col items-center text-center"
+            style={{ left: `${NET_OWNER.left}%`, top: `${NET_OWNER.top}%` }}
           >
-            <div className={`flex h-16 w-16 items-center justify-center rounded-full border-4 shadow-[0_10px_30px_rgba(23,23,23,0.2)] sm:h-28 sm:w-28 ${
-              !isOwnStar && isReceived(center)
-                ? 'border-sky-400 bg-sky-950 text-sky-200'
-                : 'border-[var(--gold-bright)] bg-[var(--ink)] text-[var(--gold-bright)]'
+            <span className={`rounded-full px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.2em] sm:px-3 sm:py-1 sm:text-[10px] ${
+              !isOwnStar && isReceived(center) ? 'bg-sky-950 text-sky-200' : 'bg-[var(--ink)] text-[var(--gold-bright)]'
             }`}>
-              {isOwnStar ? <Crown className="h-7 w-7 sm:h-10 sm:w-10" strokeWidth={1.5} /> : <UserRound className="h-7 w-7 sm:h-10 sm:w-10" strokeWidth={1.5} />}
-            </div>
-            <span className="mt-2 rounded-full bg-[var(--ink)] px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--gold-bright)] sm:mt-3 sm:px-3 sm:py-1 sm:text-[10px]">
               {isOwnStar ? t('owner') : t('starLevel', { level: centerLevel })}
             </span>
-            <p className="mt-1 max-w-[80px] truncate text-sm font-bold text-[var(--ink)] sm:mt-2 sm:max-w-[180px] sm:text-lg">{displayName(center)}</p>
+            <p className="mt-0.5 max-w-[150px] truncate text-sm font-bold text-[var(--ink)] sm:mt-1 sm:max-w-[220px] sm:text-lg">{displayName(center)}</p>
             <p className="font-mono text-[10px] text-[var(--muted)] sm:text-xs">{centerCode || (isOwnStar ? t('myPosition') : '')}</p>
           </div>
 
           {directSlots.map(renderMember)}
         </div>
 
+        {/* Tentacoli pieni: chi inviti ora aiuta uno dei tuoi Kumani (Spillover) */}
+        {canInvite && isOwnStar && directMembers.length >= 5 && (
+          <div className="mt-2 flex flex-col items-center text-center">
+            <button
+              type="button"
+              onClick={() => setSheet({ slot: null })}
+              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[var(--ink)] px-5 text-sm font-bold text-[var(--gold-bright)] shadow-md transition hover:opacity-90"
+            >
+              <Plus className="h-4 w-4" strokeWidth={2.6} /> {t('inviteHelpButton')}
+            </button>
+            <p className="mt-2 max-w-sm text-xs text-[var(--muted)]">{t('inviteHelpHint')}</p>
+          </div>
+        )}
+
         <p className="mt-4 text-center text-xs text-[var(--muted)]">
           {canOpen ? t('starTapHint') : t('starLastLevel')}
         </p>
       </div>
+
+      {sheet && invite && <InviteSheet invite={invite} slot={sheet.slot} target={sheet.target} onClose={() => setSheet(null)} />}
 
       {/* Legenda dei colori */}
       <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-semibold text-[var(--ink)]">

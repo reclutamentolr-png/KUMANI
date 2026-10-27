@@ -18,6 +18,7 @@ import InviteShareBox from '@/components/network/InviteShareBox'
 import AppHeader from '@/components/nav/AppHeader'
 import { getSessionProfile, getSessionUser, preloadSession } from '@/lib/session'
 import { getInviteUrl } from '@/lib/shareLinksServer'
+import { LINK_TOKEN, NAME_TOKEN } from '@/components/network/InviteSheet'
 
 // Schede "Prossimi obiettivi": aspetto di ciascuna qualifica (soglie e testi dalle qualifiche della rete)
 const GOALS = [
@@ -214,7 +215,18 @@ export default async function DashboardRetePage({ params }: { params: Promise<{ 
               {t('matrixError')}: {downlineError.message}
             </p>
           ) : (
-            <MatrixTree rootNode={rootNode} descendants={activeDownlineForTree} receivedIds={receivedIds} />
+            <MatrixTree
+              rootNode={rootNode}
+              descendants={activeDownlineForTree}
+              receivedIds={receivedIds}
+              invite={{
+                url: shareUrl,
+                placeUrl: `${SITE_URL}${locale === defaultLocale ? '' : `/${locale}`}/ref/${profile?.referral_code}`,
+                message: t('inviteShareMessage', { link: LINK_TOKEN, ...appCounts }),
+                messageNamed: t('inviteShareMessageNamed', { name: NAME_TOKEN, link: LINK_TOKEN, ...appCounts }),
+                shareText: t('inviteShareMessage', { link: '', ...appCounts }).trim(),
+              }}
+            />
           )}
         </div>
 

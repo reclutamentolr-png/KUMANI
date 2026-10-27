@@ -49,6 +49,7 @@ export const KUMI_CSS = `
 .kumi-svg.e-happy .k-m-happy, .kumi-svg.e-happy .k-brows-n, .kumi-svg.e-o .k-m-o, .kumi-svg.e-o .k-brows-o, .kumi-svg.e-w .k-m-w, .kumi-svg.e-w .k-brows-w, .kumi-svg.e-wink .k-m-wink, .kumi-svg.e-wink .k-brows-n, .kumi-svg.e-wink .k-lidR { display: inline; }
 .kumi-svg.e-wink .k-eyeR { display: none; }
 .kumi-svg.no-deco .k-deco { display: none; }
+.kumi-svg.no-arms .tent { display: none; }
 .kumi-svg .k-kumi { transform-origin: 200px 420px; }
 .kumi-svg .k-head { transform-origin: 200px 290px; }
 .kumi-svg .k-armL { transform-origin: 156px 236px; } .kumi-svg .k-armR { transform-origin: 244px 236px; }

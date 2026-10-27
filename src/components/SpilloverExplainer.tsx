@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { ChevronDown, CornerDownRight, Crown, Pause, Play, RotateCcw, UserRound } from 'lucide-react'
-import StarLines, { STAR_CENTER, STAR_POINTS } from '@/components/StarLines'
+import { ChevronDown, CornerDownRight, Pause, Play, RotateCcw, UserRound } from 'lucide-react'
+import KumiTentacles, { NET_ASPECT, NET_OWNER, NET_POINTS } from '@/components/KumiTentacles'
 
 const stepLabels = [
   'spilloverStep1',
@@ -18,8 +18,8 @@ const stepLabels = [
   'spilloverStep10',
 ]
 
-// Mini guida animata: la stessa stella della matrice che si riempie passo
-// dopo passo (5 diretti sulle punte, poi i nuovi iscritti sotto i diretti).
+// Mini guida animata: lo stesso polpo KUMI della rete che si riempie passo
+// dopo passo (5 diretti sui tentacoli, poi i nuovi iscritti sotto i diretti).
 // Chiusa di default: si apre (e parte l'animazione) solo cliccandoci sopra.
 export default function SpilloverExplainer() {
   const t = useTranslations('dashboard')
@@ -96,22 +96,20 @@ export default function SpilloverExplainer() {
       {isOpen && (
         <div className="grid gap-6 px-5 py-6 lg:grid-cols-[1fr_220px] lg:items-center">
           <div className="rounded-xl border border-[var(--gold)]/20 bg-[var(--background)] px-3 pb-8 pt-4 sm:px-8">
-            <div className="relative mx-auto aspect-[100/124] w-full max-w-[24rem] sm:aspect-[100/108]">
-              <StarLines activeRays={STAR_POINTS.map((_, index) => index < filledDirects)} />
+            <div className="relative mx-auto w-full max-w-[24rem]" style={{ aspectRatio: NET_ASPECT }}>
+              {/* Ogni nuovo diretto fa crescere un tentacolo */}
+              <KumiTentacles grown={NET_POINTS.map((_, index) => index < filledDirects)} fresh={NET_POINTS.map(() => true)} />
 
-              {/* Il titolare al centro */}
+              {/* Il titolare sopra la corona di KUMI */}
               <div
-                className="absolute z-20 flex -translate-x-1/2 -translate-y-7 flex-col items-center sm:-translate-y-8"
-                style={{ left: `${STAR_CENTER.x}%`, top: `${STAR_CENTER.y}%` }}
+                className="absolute z-20 -translate-x-1/2 -translate-y-full"
+                style={{ left: `${NET_OWNER.left}%`, top: `${NET_OWNER.top}%` }}
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-full border-[3px] border-[var(--gold-bright)] bg-[var(--ink)] text-[var(--gold-bright)] shadow-md sm:h-16 sm:w-16">
-                  <Crown className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={1.5} />
-                </div>
-                <span className="mt-2 rounded-full bg-[var(--ink)] px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.15em] text-[var(--gold-bright)]">{t('owner')}</span>
+                <span className="rounded-full bg-[var(--ink)] px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.15em] text-[var(--gold-bright)]">{t('owner')}</span>
               </div>
 
-              {/* I 5 diretti sulle punte, con i nuovi iscritti sotto */}
-              {STAR_POINTS.map((point, index) => {
+              {/* I 5 diretti sui tentacoli, con i nuovi iscritti sotto */}
+              {NET_POINTS.map((point, index) => {
                 const isFilled = index < filledDirects
                 const spilloverMember = spilloverMembers[index]
                 const name = t('directN', { n: index + 1 })

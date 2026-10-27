@@ -109,7 +109,32 @@ body {
   animation: fadeIn 0.5s ease-in-out;
 }
 
-/* Stella della matrice: effetto zoom quando si apre la stella di un Kumano */
+/* Rete (polpo KUMI): un tentacolo appena cresciuto si allunga dal corpo */
+@keyframes tentacleGrow {
+  from {
+    transform: scale(0.2);
+    opacity: 0.4;
+  }
+  60% {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.animate-tentacleGrow {
+  transform-box: view-box;
+  animation: tentacleGrow 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-tentacleGrow {
+    animation: none;
+  }
+}
+
+/* Rete: effetto zoom quando si aprono i Kumani di un Kumano */
 @keyframes starZoom {
   from {
     opacity: 0;
