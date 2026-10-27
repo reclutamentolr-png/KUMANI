@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { verifyAdmin } from '@/lib/verifyAdmin'
 import { fetchAllRows } from '@/lib/fetchAllRows'
+import { DEFAULT_REMIND_TIME, REMIND_TIME_CHOICES } from '@/lib/agenda'
 import {
   PUSH_CATEGORIES,
   localizedPath,
@@ -87,6 +88,23 @@ export async function setPushPreference(category: PushCategory, enabled: boolean
   const { error } = await pushDb()
     .from('push_preferences')
     .upsert({ user_id: userId, [category]: Boolean(enabled), updated_at: new Date().toISOString() }, { onConflict: 'user_id' })
+  return { success: !error }
+}
+
+// Ora degli avvisi di scadenze, bollette e promemoria senza ora
+export async function getRemindTime(): Promise<string> {
+  const userId = await currentUserId()
+  if (!userId) return DEFAULT_REMIND_TIME
+  const { data } = await pushDb().from('push_preferences').select('remind_time').eq('user_id', userId).maybeSingle()
+  return (data?.remind_time as string | null) ?? DEFAULT_REMIND_TIME
+}
+
+export async function setRemindTime(time: string) {
+  const userId = await currentUserId()
+  if (!userId || !REMIND_TIME_CHOICES.includes(time)) return { success: false }
+  const { error } = await pushDb()
+    .from('push_preferences')
+    .upsert({ user_id: userId, remind_time: time, updated_at: new Date().toISOString() }, { onConflict: 'user_id' })
   return { success: !error }
 }
 

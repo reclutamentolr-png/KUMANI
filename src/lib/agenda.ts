@@ -33,7 +33,19 @@ export type AgendaEvent = {
   garageVehicleId?: string
   // KUMANI Casa: scadenza di una casa (voce di Life Calendar collegata)
   casaHomeId?: string
+  // Appuntamento: minuti di anticipo degli avvisi
+  remind?: number[]
 }
+
+// Avvisi di MemoLife. Appuntamenti: minuti di anticipo (1440 = il giorno
+// prima). Promemoria: giorni di anticipo (0 = il giorno stesso) a un'ora
+// scelta o, senza ora, all'ora degli avvisi del profilo.
+export const APPOINTMENT_REMIND_CHOICES = [15, 30, 60, 120, 1440] as const
+export const TASK_REMIND_DAYS = [0, 1] as const
+export const DEFAULT_REMIND_TIME = '09:00'
+export const TIME_RE = /^([01]\d|2[0-3]):[0-5]\d$/
+// Ore che si possono scegliere per gli avvisi del profilo (dalle 6 alle 22)
+export const REMIND_TIME_CHOICES = Array.from({ length: 33 }, (_, i) => `${String(6 + Math.floor(i / 2)).padStart(2, '0')}:${i % 2 ? '30' : '00'}`)
 
 // Giorno di calendario a Roma di un istante ('2026-10-16').
 export function dateKeyOf(instant: Date): string {

@@ -41,7 +41,27 @@ import {
   type TaskDraft,
 } from './MemoLifeForms'
 
-export type MemoTask = { id: string; title: string; description: string | null; due_date: string | null; priority: string | null; completed: boolean | null }
+export type MemoTask = {
+  id: string
+  title: string
+  description: string | null
+  due_date: string | null
+  priority: string | null
+  completed: boolean | null
+  remind_time: string | null
+  remind_days: number[] | null
+}
+
+// Scheda di un promemoria per il modulo
+const taskDraft = (task: MemoTask): TaskDraft => ({
+  id: task.id,
+  title: task.title,
+  dueDate: task.due_date ?? '',
+  priority: task.priority ?? 'medium',
+  description: task.description ?? '',
+  remindTime: task.remind_time ?? '',
+  remindDays: task.remind_days ?? [0],
+})
 export type MemoNote = { id: string; title: string | null; content: string; created_at: string }
 export type MemoContact = { id: string; name: string; phone: string | null; email: string | null; company: string | null; notes: string | null }
 
@@ -88,9 +108,9 @@ export default function MemoLifeApp({
   const [tab, setTab] = useState<Tab>('today')
   const [editor, setEditor] = useState<Editor>(
     initialAdd === 'appointment'
-      ? { kind: 'appointment', draft: { title: '', date: today, time: '09:00', description: '' } }
+      ? { kind: 'appointment', draft: { title: '', date: today, time: '09:00', description: '', remind: [60] } }
       : initialAdd === 'task'
-        ? { kind: 'task', draft: { title: '', dueDate: '', priority: 'medium', description: '' } }
+        ? { kind: 'task', draft: { title: '', dueDate: '', priority: 'medium', description: '', remindTime: '', remindDays: [0] } }
         : null
   )
   const [view, setView] = useState({ year: Number(today.slice(0, 4)), month: Number(today.slice(5, 7)) })
@@ -150,10 +170,15 @@ export default function MemoLifeApp({
   // Apre la scheda giusta toccando un evento
   const openEvent = (event: AgendaEvent) => {
     if (event.kind === 'appointment') {
-      setEditor({ kind: 'appointment', draft: { id: event.refId, title: event.title, date: event.date, time: event.time ?? '09:00', description: event.note ?? '' } })
+      setEditor({ kind: 'appointment', draft: { id: event.refId, title: event.title, date: event.date, time: event.time ?? '09:00', description: event.note ?? '', remind: event.remind ?? [60] } })
     } else if (event.kind === 'task') {
       const task = tasks.find((x) => x.id === event.refId)
-      setEditor({ kind: 'task', draft: { id: event.refId, title: event.title, dueDate: event.date, priority: task?.priority ?? 'medium', description: event.note ?? '' } })
+      setEditor({
+        kind: 'task',
+        draft: task
+          ? taskDraft(task)
+          : { id: event.refId, title: event.title, dueDate: event.date, priority: 'medium', description: event.note ?? '', remindTime: event.time ?? '', remindDays: [0] },
+      })
     }
   }
 
@@ -251,7 +276,7 @@ export default function MemoLifeApp({
               <p className="font-bold capitalize text-[var(--ink)]">{dayLabel(selectedDay)}</p>
               <button
                 type="button"
-                onClick={() => setEditor({ kind: 'appointment', draft: { title: '', date: selectedDay, time: '09:00', description: '' } })}
+                onClick={() => setEditor({ kind: 'appointment', draft: { title: '', date: selectedDay, time: '09:00', description: '', remind: [60] } })}
                 className="flex items-center gap-1 rounded-lg border border-[var(--gold)]/40 bg-white px-2.5 py-1.5 text-xs font-semibold text-[var(--ink)] hover:bg-[var(--gold-pale)]"
               >
                 <Plus className="h-3.5 w-3.5" /> {t('add_appointment')}
@@ -285,10 +310,7 @@ export default function MemoLifeApp({
                   <button
                     type="button"
                     onClick={() =>
-                      setEditor({
-                        kind: 'task',
-                        draft: { id: task.id, title: task.title, dueDate: task.due_date ?? '', priority: task.priority ?? 'medium', description: task.description ?? '' },
-                      })
+                      setEditor({ kind: 'task', draft: taskDraft(task) })
                     }
                     className="min-w-0 flex-1 text-left"
                   >
@@ -457,8 +479,8 @@ export default function MemoLifeApp({
         <Sheet title={t('addWhat')} onClose={() => setEditor(null)}>
           <div className="space-y-2">
             {[
-              { key: 'appointment', icon: CalendarClock, color: 'bg-sky-500', open: () => setEditor({ kind: 'appointment', draft: { title: '', date: tab === 'calendar' ? selectedDay : today, time: '09:00', description: '' } }) },
-              { key: 'task', icon: CheckCircle2, color: 'bg-violet-500', open: () => setEditor({ kind: 'task', draft: { title: '', dueDate: '', priority: 'medium', description: '' } }) },
+              { key: 'appointment', icon: CalendarClock, color: 'bg-sky-500', open: () => setEditor({ kind: 'appointment', draft: { title: '', date: tab === 'calendar' ? selectedDay : today, time: '09:00', description: '', remind: [60] } }) },
+              { key: 'task', icon: CheckCircle2, color: 'bg-violet-500', open: () => setEditor({ kind: 'task', draft: { title: '', dueDate: '', priority: 'medium', description: '', remindTime: '', remindDays: [0] } }) },
               { key: 'note', icon: NotebookPen, color: 'bg-amber-400', open: () => setEditor({ kind: 'note', draft: { title: '', content: '' } }) },
               { key: 'contact', icon: BookUser, color: 'bg-[var(--ink)]', open: () => setEditor({ kind: 'contact', draft: { name: '', phone: '', email: '', company: '', notes: '' } }) },
             ].map(({ key, icon: Icon, color, open }) => (

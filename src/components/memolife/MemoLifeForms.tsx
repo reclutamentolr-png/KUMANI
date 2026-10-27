@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { ArrowRight, FileBadge, LoaderCircle, Trash2, X } from 'lucide-react'
+import { ArrowRight, BellRing, FileBadge, LoaderCircle, Trash2, X } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { suggestLifeCalendarCategory } from '@/lib/lifeCalendarHints'
 import { deleteAppointment, deleteContact, deleteNote, deleteTask, saveAppointment, saveContact, saveNote, saveTask } from '@/app/actions/memolife'
 import { askConfirm } from '@/lib/confirm'
 import CancelButton, { SheetCloseContext } from '@/components/ui/CancelButton'
 import { limitTextOf } from '@/lib/limitText'
+import { APPOINTMENT_REMIND_CHOICES, TASK_REMIND_DAYS } from '@/lib/agenda'
 
 // Moduli di MemoLife in una finestra (dal basso su telefono). Salvano con le
 // azioni del server; "onDone" ricarica i dati.
@@ -86,7 +87,35 @@ function Actions({ busy, error, onDelete, deleteConfirm }: { busy: boolean; erro
   )
 }
 
-export type AppointmentDraft = { id?: string; title: string; date: string; time: string; description: string }
+// Scelte degli avvisi (caselle a pillola): si possono accendere più insieme
+function RemindChoices<T extends number>({ choices, value, onChange, labelOf }: { choices: readonly T[]; value: T[]; onChange: (next: T[]) => void; labelOf: (v: T) => string }) {
+  const t = useTranslations('agenda')
+  return (
+    <fieldset>
+      <legend className={`${label} flex items-center gap-1.5`}>
+        <BellRing className="h-4 w-4 text-[var(--gold)]" aria-hidden /> {t('remindLabel')}
+      </legend>
+      <div className="flex flex-wrap gap-2">
+        {choices.map((c) => {
+          const on = value.includes(c)
+          return (
+            <button
+              key={c}
+              type="button"
+              aria-pressed={on}
+              onClick={() => onChange(on ? value.filter((v) => v !== c) : choices.filter((x) => x === c || value.includes(x)))}
+              className={`min-h-9 rounded-full border px-3 text-sm font-semibold ${on ? 'border-[var(--ink)] bg-[var(--ink)] text-[var(--gold-bright)]' : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'}`}
+            >
+              {labelOf(c)}
+            </button>
+          )
+        })}
+      </div>
+    </fieldset>
+  )
+}
+
+export type AppointmentDraft = { id?: string; title: string; date: string; time: string; description: string; remind: number[] }
 
 export function AppointmentForm({ draft, onDone }: { draft: AppointmentDraft; onDone: () => void }) {
   const t = useTranslations('agenda')
@@ -114,16 +143,18 @@ export function AppointmentForm({ draft, onDone }: { draft: AppointmentDraft; on
           <input type="time" className={input} value={form.time} required onChange={(e) => setForm({ ...form, time: e.target.value })} />
         </div>
       </div>
+      <RemindChoices choices={APPOINTMENT_REMIND_CHOICES} value={form.remind} onChange={(remind) => setForm({ ...form, remind })} labelOf={(m) => t(`remind_${m}`)} />
       <div>
         <label className={label}>{t('fieldNotes')}</label>
         <textarea className={input} rows={2} value={form.description} maxLength={2000} onChange={(e) => setForm({ ...form, description: e.target.value })} />
       </div>
+      <p className="text-xs text-[var(--muted)]">{t('remindNote')}</p>
       <Actions busy={busy} error={error} deleteConfirm={t('deleteConfirm')} onDelete={form.id ? () => run(() => deleteAppointment(form.id!)) : undefined} />
     </form>
   )
 }
 
-export type TaskDraft = { id?: string; title: string; dueDate: string; priority: string; description: string }
+export type TaskDraft = { id?: string; title: string; dueDate: string; priority: string; description: string; remindTime: string; remindDays: number[] }
 
 export function TaskForm({ draft, onDone, lifeCalendar }: { draft: TaskDraft; onDone: () => void; lifeCalendar?: boolean }) {
   const t = useTranslations('agenda')
@@ -170,6 +201,22 @@ export function TaskForm({ draft, onDone, lifeCalendar }: { draft: TaskDraft; on
           </select>
         </div>
       </div>
+      {form.dueDate ? (
+        <div className="space-y-3 rounded-xl border border-[var(--gold)]/25 bg-[var(--paper)] p-3">
+          <RemindChoices choices={TASK_REMIND_DAYS} value={form.remindDays} onChange={(remindDays) => setForm({ ...form, remindDays })} labelOf={(d) => t(`taskRemind_${d}`)} />
+          <div>
+            <label htmlFor="task-remind-time" className={label}>
+              {t('taskRemindTime')}
+            </label>
+            <input id="task-remind-time" type="time" className={`${input} max-w-40`} value={form.remindTime} onChange={(e) => setForm({ ...form, remindTime: e.target.value })} />
+            <p className="mt-1 text-xs text-[var(--muted)]">{t('taskRemindTimeHint')}</p>
+          </div>
+        </div>
+      ) : (
+        <p className="flex items-center gap-1.5 text-xs text-[var(--muted)]">
+          <BellRing className="h-3.5 w-3.5" aria-hidden /> {t('taskRemindNeedsDate')}
+        </p>
+      )}
       <div>
         <label className={label}>{t('fieldNotes')}</label>
         <textarea className={input} rows={2} value={form.description} maxLength={2000} onChange={(e) => setForm({ ...form, description: e.target.value })} />

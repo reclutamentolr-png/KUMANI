@@ -37,7 +37,7 @@ export async function loadAgenda(supabase: SupabaseClient, userId: string, optio
         // Un giorno di margine per i fusi orari, poi filtro sul giorno italiano.
         const { data } = await supabase
           .from('appointments')
-          .select('id, title, description, date_time')
+          .select('id, title, description, date_time, remind_minutes')
           .eq('user_id', userId)
           .gte('date_time', `${addDays(from, -1)}T00:00:00Z`)
           .lte('date_time', `${addDays(to, 1)}T23:59:59Z`)
@@ -45,7 +45,7 @@ export async function loadAgenda(supabase: SupabaseClient, userId: string, optio
           const instant = new Date(a.date_time as string)
           const date = dateKeyOf(instant)
           if (date < from || date > to) continue
-          events.push({ key: `appointment:${a.id}`, kind: 'appointment', date, time: timeOf(instant), title: a.title, amount: null, done: false, refId: a.id, note: a.description })
+          events.push({ key: `appointment:${a.id}`, kind: 'appointment', date, time: timeOf(instant), title: a.title, amount: null, done: false, refId: a.id, note: a.description, remind: (a.remind_minutes as number[] | null) ?? [] })
         }
       })()
     )
@@ -53,7 +53,7 @@ export async function loadAgenda(supabase: SupabaseClient, userId: string, optio
       (async () => {
         const { data } = await supabase
           .from('tasks')
-          .select('id, title, description, due_date, priority, completed')
+          .select('id, title, description, due_date, priority, completed, remind_time')
           .eq('user_id', userId)
           .not('due_date', 'is', null)
           .gte('due_date', overdueSince)
@@ -63,7 +63,7 @@ export async function loadAgenda(supabase: SupabaseClient, userId: string, optio
           const inRange = date >= from
           if (t.completed && !(options.includeDone && inRange)) continue
           if (!t.completed && !inRange && date >= today) continue
-          events.push({ key: `task:${t.id}`, kind: 'task', date, time: null, title: t.title, amount: null, done: !!t.completed, refId: t.id, note: t.description, priority: t.priority })
+          events.push({ key: `task:${t.id}`, kind: 'task', date, time: (t.remind_time as string | null) ?? null, title: t.title, amount: null, done: !!t.completed, refId: t.id, note: t.description, priority: t.priority })
         }
       })()
     )

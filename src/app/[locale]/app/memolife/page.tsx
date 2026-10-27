@@ -46,7 +46,7 @@ export default async function MemoLifePage({
     loadAgenda(supabase, user.id, { from: month.from, to: month.to, sources, includeDone: true }),
     // Tutti i promemoria e le note (al massimo 1000 e 500 a persona): prima
     // quelli da fare, così un promemoria aperto non sparisce mai
-    supabase.from('tasks').select('id, title, description, due_date, priority, completed, created_at').eq('user_id', user.id).order('completed').order('created_at', { ascending: false }).limit(1000),
+    supabase.from('tasks').select('id, title, description, due_date, priority, completed, created_at, remind_time, remind_days').eq('user_id', user.id).order('completed').order('created_at', { ascending: false }).limit(1000),
     supabase.from('notes').select('id, title, content, created_at').eq('user_id', user.id).order('created_at', { ascending: false }).limit(1000),
     supabase.from('contacts').select('id, name, phone, email, company, notes').eq('user_id', user.id).order('name').limit(2000),
   ])

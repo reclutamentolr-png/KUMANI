@@ -3,7 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { awardToolPoint } from '@/lib/toolPoints'
-import { romeToInstant } from '@/lib/agenda'
+import { APPOINTMENT_REMIND_CHOICES, romeToInstant, TASK_REMIND_DAYS, TIME_RE } from '@/lib/agenda'
 import { appLimitValue, limitError } from '@/lib/appLimits'
 import { cleanContact, emailKey, phoneKey, type ImportedContact } from '@/lib/contactsImport'
 
@@ -44,24 +44,46 @@ async function remove(table: string, id: string): Promise<Result> {
   return error ? { success: false, message: 'saveError' } : { success: true }
 }
 
-export async function saveAppointment(input: { id?: string; title: string; date: string; time: string; description: string }): Promise<Result> {
+// Solo valori ammessi, senza doppioni, in ordine
+const pick = (values: unknown, allowed: readonly number[]) =>
+  Array.isArray(values) ? allowed.filter((v) => values.includes(v)) : null
+
+export async function saveAppointment(input: { id?: string; title: string; date: string; time: string; description: string; remind?: number[] }): Promise<Result> {
   const title = clean(input.title, 200)
   if (!title || !isDate(input.date) || !/^\d{2}:\d{2}$/.test(input.time)) return { success: false, message: 'invalid' }
-  return save('appointments', input.id, { title, description: clean(input.description, 2000), date_time: romeToInstant(input.date, input.time) })
+  const remind = pick(input.remind, APPOINTMENT_REMIND_CHOICES)
+  return save('appointments', input.id, {
+    title,
+    description: clean(input.description, 2000),
+    date_time: romeToInstant(input.date, input.time),
+    ...(remind ? { remind_minutes: remind } : {}),
+  })
 }
 
 export async function deleteAppointment(id: string): Promise<Result> {
   return remove('appointments', id)
 }
 
-export async function saveTask(input: { id?: string; title: string; dueDate: string; priority: string; description: string }): Promise<Result> {
+export async function saveTask(input: {
+  id?: string
+  title: string
+  dueDate: string
+  priority: string
+  description: string
+  remindTime?: string
+  remindDays?: number[]
+}): Promise<Result> {
   const title = clean(input.title, 200)
   if (!title || (input.dueDate && !isDate(input.dueDate))) return { success: false, message: 'invalid' }
+  if (input.remindTime && !TIME_RE.test(input.remindTime)) return { success: false, message: 'invalid' }
+  const remindDays = pick(input.remindDays, TASK_REMIND_DAYS)
   return save('tasks', input.id, {
     title,
     description: clean(input.description, 2000),
     due_date: input.dueDate || null,
     priority: ['low', 'medium', 'high'].includes(input.priority) ? input.priority : 'medium',
+    ...(input.remindTime !== undefined ? { remind_time: input.remindTime || null } : {}),
+    ...(remindDays ? { remind_days: remindDays } : {}),
   })
 }
 
