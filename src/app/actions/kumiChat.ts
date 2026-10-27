@@ -268,11 +268,11 @@ export async function rateKumi(id: string, rating: 1 | -1): Promise<void> {
 }
 
 // ── Admin → Chiedi a KUMI ──────────────────────────────────────────────────
-export type KumiQuestionRow = { id: string; created_at: string; locale: string | null; question: string; answer: string | null; source: string; answered: boolean; rating: number | null; visitor_tag: string | null; country: string | null }
+export type KumiQuestionRow = { id: string; created_at: string; locale: string | null; question: string; answer: string | null; source: string; answered: boolean; rating: number | null; visitor_tag: string | null; country: string | null; taught?: boolean }
 // Una conversazione: le domande di uno stesso visitatore (sigla anonima)
 export type KumiConversation = { tag: string; first: string; last: string; locale: string | null; country: string | null; live: boolean; questions: KumiQuestionRow[] }
 // Domande più comuni (stesso testo, maiuscole e accenti a parte)
-export type KumiTopQuestion = { question: string; count: number; answered: number; down: number; last: string }
+export type KumiTopQuestion = { question: string; count: number; answered: number; down: number; last: string; taught: boolean }
 export type KumiKnowledgeRow = { id: string; created_at: string; question: string; answer: string; locale: string | null }
 export type KumiAdminData = {
   settings: KumiSettings
@@ -293,11 +293,13 @@ export async function adminKumiData(): Promise<KumiAdminData> {
   const [settings, questions, knowledge, usage] = await Promise.all([
     readSettings(),
     s.from('kumi_chat_questions').select('id, created_at, locale, question, answer, source, answered, rating, visitor_tag, country').gte('created_at', since).order('created_at', { ascending: false }).limit(1000),
-    s.from('kumi_chat_knowledge').select('id, created_at, question, answer, locale').order('created_at', { ascending: false }).limit(300),
+    s.from('kumi_chat_knowledge').select('id, created_at, question, answer, locale, question_norm').order('created_at', { ascending: false }).limit(300),
     s.from('kumi_chat_usage').select('n').eq('key', 'total').eq('day', today).maybeSingle(),
   ])
   if (questions.error) return { ...empty, settings, error: questions.error.message }
-  const rows = (questions.data ?? []) as KumiQuestionRow[]
+  // Domande con una risposta insegnata dallo Staff (stesso testo)
+  const taughtNorms = new Set((knowledge.data ?? []).map((k) => k.question_norm as string))
+  const rows = ((questions.data ?? []) as KumiQuestionRow[]).map((r) => ({ ...r, taught: taughtNorms.has(normalize(r.question)) }))
   const asked = rows.filter((r) => r.source !== 'limit')
 
   // Conversazioni: domande dello stesso visitatore, la più recente in alto
@@ -322,7 +324,7 @@ export async function adminKumiData(): Promise<KumiAdminData> {
       g.count++
       if (r.answered) g.answered++
       if (r.rating === -1) g.down++
-    } else byText.set(key, { question: r.question, count: 1, answered: r.answered ? 1 : 0, down: r.rating === -1 ? 1 : 0, last: r.created_at })
+    } else byText.set(key, { question: r.question, count: 1, answered: r.answered ? 1 : 0, down: r.rating === -1 ? 1 : 0, last: r.created_at, taught: !!r.taught })
   }
   const top = [...byText.values()].sort((a, b) => b.count - a.count || b.last.localeCompare(a.last)).slice(0, 50)
   const live = Date.now() - 15 * 60_000
@@ -332,7 +334,7 @@ export async function adminKumiData(): Promise<KumiAdminData> {
     questions: rows,
     conversations,
     top,
-    knowledge: (knowledge.data ?? []) as KumiKnowledgeRow[],
+    knowledge: (knowledge.data ?? []).map((k) => ({ id: k.id, created_at: k.created_at, question: k.question, answer: k.answer, locale: k.locale })) as KumiKnowledgeRow[],
     stats: {
       total: asked.length,
       answered: asked.filter((r) => r.answered).length,
@@ -367,11 +369,21 @@ export async function adminKumiTeach(question: string, answer: string, locale: s
   const lang = locale && LOCALES.includes(locale) ? locale : null
   const norm = normalize(q)
   const s = db()
+  // Una sola risposta per domanda: «Correggi» sostituisce quella di prima
+  await s.from('kumi_chat_knowledge').delete().eq('question_norm', norm)
   const { error } = await s.from('kumi_chat_knowledge').insert({ question: q, question_norm: norm, answer: a, locale: lang })
   if (error) return { ok: false, error: error.message }
   // La vecchia risposta alla stessa domanda non vale più
   await s.from('kumi_chat_cache').delete().eq('question_norm', norm)
   return { ok: true }
+}
+
+// Cestino: toglie una domanda dall'elenco (resta quello che KUMI ha imparato)
+export async function adminKumiDeleteQuestion(id: string): Promise<{ ok: boolean; error?: string }> {
+  if (!(await verifyAdmin('support.write'))) return { ok: false, error: 'Non autorizzato' }
+  if (!/^[0-9a-f-]{36}$/.test(String(id))) return { ok: false, error: 'Domanda non valida' }
+  const { error } = await db().from('kumi_chat_questions').delete().eq('id', id)
+  return error ? { ok: false, error: error.message } : { ok: true }
 }
 
 export async function adminKumiForget(id: string): Promise<{ ok: boolean; error?: string }> {

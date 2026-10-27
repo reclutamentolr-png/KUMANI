@@ -17297,6 +17297,8 @@
     "linkContact": "Write to the Staff",
     "linkPrivacy": "Privacy",
     "linkTerms": "Terms",
-    "linkGuide": "Guide: {name}"
+    "linkGuide": "Guide: {name}",
+    "emptyHint": "Write me a question, or tap a suggestion below.",
+    "greetAgain": "Here I am! Ask me anything you’d like to know about KUMANI."
   }
 }

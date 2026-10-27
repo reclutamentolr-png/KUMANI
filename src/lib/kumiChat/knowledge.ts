@@ -73,6 +73,7 @@ const baseChunks = unstable_cache(
         ? `Paid plans are not open yet: they open on ${date} (${gate.openDate}). Until then everyone can sign up and use KUMANI for free (Free services, community, personal invite link); subscriptions, Passes and gifts can be bought from that day.`
         : 'Paid plans are open: Plus and Pro can be activated from the account.',
       'Signing up is free at kumani.io/register with email and password. Everyone signs up themselves.',
+      'KUMANI is NOT network marketing and not a pyramid scheme: people pay a subscription (or use the Free plan) for real services used every day. KUMANI pays no money, commissions or percentages for invitations. Inviting people is rewarded only with KU Points and vouchers, which are used inside KUMANI and cannot be turned into cash. Nobody earns just by bringing in other people: the value is in the services. The rules are public in the Terms (kumani.io/terms).',
       company.name ? `KUMANI is run by ${company.name}${company.vatNumber ? ` (VAT ${company.vatNumber})` : ''}${company.email ? `, contact ${company.email}` : ''}. Support: ${CONTACT_INFO.supportEmail ?? 'support@kumani.io'} and the contact form at kumani.io/contact.` : '',
     ]
       .filter(Boolean)

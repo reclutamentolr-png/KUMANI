@@ -22,10 +22,31 @@ const STORE_KEY = 'kumani:kumi-chat'
 const STORE_DAYS = 7
 
 type Msg =
-  | { from: 'kumi'; text: string; id?: string; links?: KumiLink[]; answered?: boolean; rated?: 1 | -1 }
+  | { from: 'kumi'; text: string; id?: string; links?: KumiLink[]; answered?: boolean; rated?: 1 | -1; intro?: boolean }
   | { from: 'me'; text: string }
 
 const CHIPS = ['chip1', 'chip2', 'chip3', 'chip4', 'chip5'] as const
+// Solo un saluto («Ciao!», «Buongiorno KUMI», «Hello»…): KUMI risponde da sé,
+// senza IA e senza contare una domanda
+// Minuscole, senza accenti (anche «й» → «и») e senza punteggiatura
+const plainWords = (s: string) =>
+  s
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-zЀ-ӿ ]+/g, ' ')
+    .split(/\s+/)
+    .filter(Boolean)
+const GREETINGS = new Set(
+  plainWords('ciao salve buongiorno buonasera buondì hey ehi hi hello hola buenas buenos días bonjour salut coucou hallo guten tag morgen abend olá oi bom dia boa tarde привет здравствуйте добрый день kumi a tutti all everyone')
+)
+const isGreeting = (s: string) => {
+  const words = plainWords(s)
+  return words.length > 0 && words.length <= 4 && words.every((w) => GREETINGS.has(w))
+}
+// Pausa minima prima della risposta, dopo la presentazione (sembra pensarci)
+const THINK_MS = 2200
+const wait = (ms: number) => new Promise((r) => setTimeout(r, ms))
 const HINT_KEY = 'kumani:kumi-chat:hint'
 
 function readStore(): { msgs: Msg[]; open: boolean } | null {
@@ -135,16 +156,32 @@ export default function KumiChat() {
     const q = question.trim()
     if (!q || busy) return
     setText('')
+    // La prima volta KUMI si presenta, poi risponde alla domanda
+    const first = !msgs.some((m) => m.from === 'kumi')
+    const greeting = isGreeting(q)
     setMsgs((m) => [...m, { from: 'me', text: q }])
     setBusy(true)
+    if (greeting) {
+      await wait(900)
+      setBusy(false)
+      setMsgs((m) => [...m, { from: 'kumi', text: first ? t('welcome') : t('greetAgain'), intro: true }])
+      return
+    }
     // Le ultime due domande e risposte, per capire «e quanto costa?»
+    const talk = msgs.filter((m) => !(m.from === 'kumi' && m.intro))
     const history: { q: string; a: string }[] = []
-    for (let i = 0; i < msgs.length - 1; i++) {
-      const a = msgs[i]
-      const b = msgs[i + 1]
+    for (let i = 0; i < talk.length - 1; i++) {
+      const a = talk[i]
+      const b = talk[i + 1]
       if (a.from === 'me' && b.from === 'kumi') history.push({ q: a.text, a: b.text })
     }
-    const res = await askKumi(q, locale, history.slice(-2)).catch(() => ({ ok: false as const, error: 'busy' as const, remaining: undefined }))
+    const asking = askKumi(q, locale, history.slice(-2)).catch(() => ({ ok: false as const, error: 'busy' as const, remaining: undefined }))
+    if (first) {
+      await wait(900)
+      setMsgs((m) => [...m, { from: 'kumi', text: t('welcome'), intro: true }])
+      await wait(THINK_MS)
+    }
+    const res = await asking
     setBusy(false)
     if (typeof res.remaining === 'number') setStatus((s) => (s ? { ...s, remaining: res.remaining! } : s))
     if (res.ok && res.answer) setMsgs((m) => [...m, { from: 'kumi', text: res.answer!, id: res.id, links: res.links, answered: res.answered }])
@@ -183,7 +220,7 @@ export default function KumiChat() {
           {status.staffPreview && <p className="bg-amber-100 px-4 py-1.5 text-center text-[11px] font-semibold text-amber-900">{t('staffPreview')}</p>}
 
           <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4" aria-live="polite">
-            <div className="max-w-[88%] rounded-2xl rounded-tl-sm bg-white px-3.5 py-2.5 text-sm leading-relaxed text-[var(--ink)] shadow-sm">{t('welcome')}</div>
+            {msgs.length === 0 && <p className="text-center text-xs text-[var(--muted)]">{t('emptyHint')}</p>}
             {msgs.length === 0 && (
               <div className="flex flex-wrap gap-2">
                 {CHIPS.map((c) => (

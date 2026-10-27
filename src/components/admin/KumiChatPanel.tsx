@@ -1,10 +1,11 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { BookOpen, GraduationCap, LoaderCircle, MessagesSquare, RefreshCw, ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react'
+import { BookOpen, CheckCircle2, GraduationCap, LoaderCircle, MessagesSquare, RefreshCw, ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react'
 import {
   adminKumiClearCache,
   adminKumiData,
+  adminKumiDeleteQuestion,
   adminKumiForget,
   adminKumiSaveSettings,
   adminKumiTeach,
@@ -77,7 +78,8 @@ export default function KumiChatPanel() {
 
   const { stats } = data
   const pct = (a: number, b: number) => (b ? Math.round((a / b) * 100) : 0)
-  const todo = data.questions.filter((q) => q.source !== 'limit' && (!q.answered || q.rating === -1))
+  // Da migliorare: senza risposta o con 👎, e non ancora insegnate
+  const todo = data.questions.filter((q) => q.source !== 'limit' && !q.taught && (!q.answered || q.rating === -1))
 
   const questionLine = (q: KumiQuestionRow) => (
     <li key={q.id} className="rounded-lg border border-gray-200 bg-white p-3">
@@ -87,12 +89,31 @@ export default function KumiChatPanel() {
         <span className={`rounded px-1.5 py-0.5 font-semibold ${q.answered ? 'bg-green-50 text-green-800' : 'bg-amber-50 text-amber-800'}`}>{SOURCE[q.source] ?? q.source}</span>
         {q.rating === 1 && <ThumbsUp className="h-3.5 w-3.5 text-green-600" />}
         {q.rating === -1 && <ThumbsDown className="h-3.5 w-3.5 text-red-600" />}
+        {q.taught && (
+          <span className="inline-flex items-center gap-1 rounded bg-green-600 px-1.5 py-0.5 font-semibold text-white">
+            <CheckCircle2 className="h-3 w-3" /> Insegnata
+          </span>
+        )}
+        <button
+          type="button"
+          onClick={async () => {
+            if (!window.confirm('Togliere questa domanda dall’elenco? Quello che KUMI ha imparato resta.')) return
+            const r = await adminKumiDeleteQuestion(q.id)
+            if (r.ok) setData((d) => (d ? { ...d, questions: d.questions.filter((x) => x.id !== q.id), conversations: d.conversations.map((c) => ({ ...c, questions: c.questions.filter((x) => x.id !== q.id) })).filter((c) => c.questions.length) } : d))
+            else setSaved(`Errore: ${r.error}`)
+          }}
+          aria-label="Togli dall’elenco"
+          title="Togli dall’elenco"
+          className="ml-auto rounded-lg p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-600"
+        >
+          <Trash2 className="h-3.5 w-3.5" />
+        </button>
       </div>
       <p className="mt-1.5 text-sm font-semibold text-gray-900">{q.question}</p>
       {q.answer && <p className="mt-1 whitespace-pre-line text-sm text-gray-600">{q.answer}</p>}
       {q.source !== 'limit' && (
         <button type="button" onClick={() => setTeach({ question: q.question, answer: q.answer ?? '' })} className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-[var(--gold)] hover:underline">
-          <GraduationCap className="h-3.5 w-3.5" /> Insegna a KUMI
+          <GraduationCap className="h-3.5 w-3.5" /> {q.taught ? 'Correggi quello che ha imparato' : 'Insegna a KUMI'}
         </button>
       )}
     </li>
@@ -252,7 +273,14 @@ export default function KumiChatPanel() {
               <tbody className="divide-y divide-gray-100">
                 {data.top.map((r) => (
                   <tr key={r.question}>
-                    <td className="px-3 py-2 text-gray-900">{r.question}</td>
+                    <td className="px-3 py-2 text-gray-900">
+                      {r.question}
+                      {r.taught && (
+                        <span className="ml-2 inline-flex items-center gap-1 rounded bg-green-600 px-1.5 py-0.5 text-xs font-semibold text-white">
+                          <CheckCircle2 className="h-3 w-3" /> Insegnata
+                        </span>
+                      )}
+                    </td>
                     <td className="px-3 py-2 text-right font-bold">{r.count}</td>
                     <td className={`px-3 py-2 text-right ${r.answered < r.count ? 'font-semibold text-amber-700' : 'text-gray-600'}`}>{pct(r.answered, r.count)}%</td>
                     <td className="px-3 py-2 text-right text-gray-600">{r.down || ''}</td>
